@@ -1,14 +1,23 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage webservices
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * SOAP handler
+ *
+ * @category Webservices
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
+/**
+ * CSoapHandler
+ */
 class CSoapHandler {
+  /**
+   * @var array Params specs
+   */
   static $paramSpecs = array(
     "calculatorAuth" => array(
       "parameters" => array(
@@ -21,7 +30,12 @@ class CSoapHandler {
       )
     ),
   );
-  
+
+  /**
+   * Get param specs
+   *
+   * @return array
+   */
   static function getParamSpecs() {
     return self::$paramSpecs;
   }
@@ -54,4 +68,3 @@ class CSoapHandler {
     return $result;
   }
 }
-?>

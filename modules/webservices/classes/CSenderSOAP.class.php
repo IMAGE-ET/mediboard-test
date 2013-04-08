@@ -3,7 +3,7 @@
 /**
  * Interop Sender SOAP
  *  
- * @category FTP
+ * @category Webservices
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -17,8 +17,13 @@
  */
 class CSenderSOAP extends CInteropSender {
   // DB Table key
-  var $sender_soap_id  = null;
-  
+  public $sender_soap_id;
+
+  /**
+   * Initialize object specification
+   *
+   * @return CMbObjectSpec the spec
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'sender_soap';
@@ -26,7 +31,14 @@ class CSenderSOAP extends CInteropSender {
 
     return $spec;
   }
-  
+
+  /**
+   * Get properties specifications as strings
+   *
+   * @see parent::getProps()
+   *
+   * @return array
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["expediteur_hprimxml"] = "CEchangeHprim sender_id";
@@ -40,16 +52,13 @@ class CSenderSOAP extends CInteropSender {
     
     return $backProps;
   }
-  
+
+  /**
+   * Load exchanges sources
+   *
+   * @return void
+   */
   function loadRefsExchangesSources() {
     $this->_ref_exchanges_sources[] = CExchangeSource::get("$this->_guid", "soap", true, $this->_type_echange, false);
   }
-  
-  function read() {
-    $this->loadRefsExchangesSources();
-    
-    
-  }
 }
-
-?>

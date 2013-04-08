@@ -16,11 +16,16 @@
  * Format RPC Encoded
  */
 class CWSDLRPCEncoded extends CWSDLRPC {
+  /**
+   * Add message
+   *
+   * @return void
+   */
   function addMessage() {
     $definitions = $this->documentElement;
     $this->addComment($definitions, "Partie 3 : Messages");
     
-    foreach($this->_soap_handler->getParamSpecs() as $_method => $_paramSpec) {
+    foreach ($this->_soap_handler->getParamSpecs() as $_method => $_paramSpec) {
       $message = $this->addElement($definitions, "message", null, "http://schemas.xmlsoap.org/wsdl/");
       $this->addAttribute($message, "name", $_method."Request");
       
@@ -40,7 +45,12 @@ class CWSDLRPCEncoded extends CWSDLRPC {
       }
     }
   }
-  
+
+  /**
+   * Add port type
+   *
+   * @return void
+   */
   function addPortType() {
     $definitions = $this->documentElement;
     $partie4 = $this->createComment("partie 4 : Port Type");
@@ -49,7 +59,7 @@ class CWSDLRPCEncoded extends CWSDLRPC {
     $portType = $this->addElement($definitions, "portType", null, "http://schemas.xmlsoap.org/wsdl/");
     $this->addAttribute($portType, "name", "MediboardPort");
     
-    foreach($this->_soap_handler->getParamSpecs() as $_method => $_paramSpec) {
+    foreach ($this->_soap_handler->getParamSpecs() as $_method => $_paramSpec) {
       $partie5 = $this->createComment("partie 5 : Operation");
       $portType->appendChild($partie5);
       $operation = $this->addElement($portType, "operation", null, "http://schemas.xmlsoap.org/wsdl/");
@@ -62,7 +72,12 @@ class CWSDLRPCEncoded extends CWSDLRPC {
       $this->addAttribute($output, "message", "typens:".$_method."Response");
     }
   }
-  
+
+  /**
+   * Add binding
+   *
+   * @return void
+   */
   function addBinding() {
     $definitions = $this->documentElement;
     $partie6 = $this->createComment("partie 6 : Binding");
@@ -76,7 +91,7 @@ class CWSDLRPCEncoded extends CWSDLRPC {
     $this->addAttribute($soap, "style", "rpc");
     $this->addAttribute($soap, "transport", "http://schemas.xmlsoap.org/soap/http");
 
-    foreach($this->_soap_handler->getParamSpecs() as $_method => $_paramSpec) {
+    foreach ($this->_soap_handler->getParamSpecs() as $_method => $_paramSpec) {
       $operation = $this->addElement($binding, "operation", null, "http://schemas.xmlsoap.org/wsdl/");
       
       $this->addAttribute($operation, "name", $_method);

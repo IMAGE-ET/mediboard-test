@@ -1,11 +1,13 @@
- <?php /* $Id $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage webservices
- * @version $Revision: 6287 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * View exchanges
+ *
+ * @category Webservices
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -53,7 +55,7 @@ if ($service) {
   $where['type'] = " = '".$service."'";
 }
 if ($fonction) {
-	$where['function_name'] = " = '".$fonction."'";
+  $where['function_name'] = " = '".$fonction."'";
 }
 if ($web_service) {
   $where["web_service_name"] = " = '".$web_service."'";
@@ -69,7 +71,8 @@ if (($service && $web_service) || ($service && $_date_min && $_date_max)) {
 }
   
   
-foreach ($echangesSoap as &$_echange_soap) {  
+foreach ($echangesSoap as $_echange_soap) {
+  /** @var $_echange_soap CEchangeSOAP  */
   $url = parse_url($_echange_soap->destinataire);
   $_echange_soap->destinataire = $url['host'];
 }
@@ -95,4 +98,3 @@ $smarty->assign("fonction"           , $fonction);
 $smarty->assign("services"           , $services);
 
 $smarty->display("vw_idx_echange_soap.tpl");
-?>

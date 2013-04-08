@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage webservices
- * @version $Revision: 6153 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Configure
+ *
+ * @category Webservices
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkAdmin();
@@ -20,5 +22,3 @@ if (!$mb_soap_server->_id) {
 $smarty = new CSmartyDP();
 $smarty->assign("mb_soap_server", $mb_soap_server);
 $smarty->display("configure.tpl");
-
-?>

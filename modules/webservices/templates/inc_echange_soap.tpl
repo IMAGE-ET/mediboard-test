@@ -17,7 +17,8 @@
    {{/if}}
   </td>
   <td>
-    <a target="blank" href="?m=webservices&a=download_echange&echange_soap_id={{$object->_id}}&dialog=1&suppressHeaders=1" class="button modify notext"></a>
+    <a target="blank" href="?m=webservices&a=download_echange&echange_soap_id={{$object->_id}}&dialog=1&suppressHeaders=1"
+       class="button modify notext"></a>
   </td>
   <td class="narrow">
     <button type="button" onclick="viewEchange('{{$object->_id}}')" class="search">

@@ -1,30 +1,42 @@
-<?php /* $Id:$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision: 6069 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Source SOAP
+ *
+ * @category Webservices
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
+/**
+ * Class CSourceSOAP
+ * Source SOAP
+ */
 class CSourceSOAP extends CExchangeSource {
   // DB Table key
-  var $source_soap_id   = null;
+  public $source_soap_id;
   
   // DB Fields
-  var $wsdl_mode        = null;
-  var $evenement_name   = null;
-  var $single_parameter = null;
-  var $encoding         = null;
-  var $stream_context   = null;
-  var $type_soap        = null;
-  var $local_cert       = null;
-  var $passphrase       = null;
-  var $iv_passphrase    = null;
-  
-  var $_headerbody      = array();
-   
+  public $wsdl_mode;
+  public $evenement_name;
+  public $single_parameter;
+  public $encoding;
+  public $stream_context;
+  public $type_soap;
+  public $local_cert;
+  public $passphrase;
+  public $iv_passphrase;
+
+  public $_headerbody = array();
+
+  /**
+   * Initialize object specification
+   *
+   * @return CMbObjectSpec the spec
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'source_soap';
@@ -32,6 +44,13 @@ class CSourceSOAP extends CExchangeSource {
     return $spec;
   }
 
+  /**
+   * Get properties specifications as strings
+   *
+   * @see parent::getProps()
+   *
+   * @return array
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["wsdl_mode"]        = "bool default|1";
@@ -46,12 +65,25 @@ class CSourceSOAP extends CExchangeSource {
     
     return $specs;
   }
-  
+
+  /**
+   * Calls a SOAP function
+   *
+   * @param string $function  Function name
+   * @param array  $arguments Arguments
+   *
+   * @return void
+   */
   function __call($function, $arguments) { 
     $this->setData(reset($arguments));
     $this->send($function);
   }
 
+  /**
+   * Encrypt fields
+   *
+   * @return void
+   */
   function updateEncryptedFields(){
     if ($this->passphrase === "") {
       $this->passphrase = null;
@@ -62,7 +94,18 @@ class CSourceSOAP extends CExchangeSource {
       }
     }
   }
-  
+
+  /**
+   * Set SOAP header
+   *
+   * @param string $namespace      The namespace of the SOAP header element.
+   * @param string $name           The name of the SoapHeader object
+   * @param array  $data           A SOAP header's content. It can be a PHP value or a SoapVar object
+   * @param bool   $mustUnderstand Value must understand
+   * @param null   $actor          Value of the actor attribute of the SOAP header element
+   *
+   * @return void
+   */
   function setHeaders($namespace, $name, $data, $mustUnderstand = false, $actor = null) {
     if ($actor) {
       $this->_headerbody[] = new SoapHeader($namespace, $name, $data, $mustUnderstand, $actor);
@@ -71,7 +114,16 @@ class CSourceSOAP extends CExchangeSource {
       $this->_headerbody[] = new SoapHeader($namespace, $name, $data);
     }
   }
- 
+
+  /**
+   * Send SOAP event
+   *
+   * @param string $evenement_name Event name
+   * @param bool   $flatten        Flat args
+   *
+   * @return bool|void
+   * @throws CMbException
+   */
   function send($evenement_name = null, $flatten = false) {
     if (!$this->_id) {
       throw new CMbException("CSourceSOAP-no-source", $this->name);
@@ -133,7 +185,12 @@ class CSourceSOAP extends CExchangeSource {
     
     return true;
   }
-  
+
+  /**
+   * If source is reachable
+   *
+   * @return bool|void
+   */
   function isReachableSource() {
     if (!url_exists($this->host)) {
       $this->_reachable = 0;
@@ -142,7 +199,12 @@ class CSourceSOAP extends CExchangeSource {
     }
     return true;
   }
-  
+
+  /**
+   * If is authentificate
+   *
+   * @return bool|void
+   */
   function isAuthentificate() {
     $options = array(
       "encoding" => $this->encoding
@@ -153,16 +215,22 @@ class CSourceSOAP extends CExchangeSource {
 
       $password   = $this->getPassword();
       $soap_client->make($this->host, $this->user, $password, $this->type_echange, $options);
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
       $this->_reachable = 1;
       $this->_message   = $e->getMessage();
       return false;
     }
+
     return true;
   }
-  
+
+  /**
+   * Get response time
+   *
+   * @return int
+   */
   function getResponseTime() {
-    $this->_response_time = url_response_time($this->host, 80);
+    return $this->_response_time = url_response_time($this->host, 80);
   }
 }
-?>

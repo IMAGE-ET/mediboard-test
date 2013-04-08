@@ -1,27 +1,39 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage webservices
- * @version $Revision: 6153 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Exchange SOAP
+ *
+ * @category Webservices
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
+/**
+ * Class CEchangeSOAP
+ * Exchange SOAP
+ */
 class CEchangeSOAP extends CExchangeTransportLayer {
   // DB Table key
-  var $echange_soap_id       = null;
+  public $echange_soap_id;
   
   // DB Fields
-  var $type                  = null;
-  var $web_service_name      = null;
-  var $soapfault             = null;
-  var $trace                 = null;
-  var $last_request_headers  = null;
-  var $last_response_headers = null;
-  var $last_request          = null;
-  var $last_response         = null;
-  
+  public $type;
+  public $web_service_name;
+  public $soapfault;
+  public $trace;
+  public $last_request_headers;
+  public $last_response_headers;
+  public $last_request;
+  public $last_response;
+
+  /**
+   * Initialize object specification
+   *
+   * @return CMbObjectSpec the spec
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->loggable = false;
@@ -29,7 +41,14 @@ class CEchangeSOAP extends CExchangeTransportLayer {
     $spec->key   = 'echange_soap_id';
     return $spec;
   }
-  
+
+  /**
+   * Get properties specifications as strings
+   *
+   * @see parent::getProps()
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["type"]                  = "str";
@@ -44,4 +63,3 @@ class CEchangeSOAP extends CExchangeTransportLayer {
     return $props;
   }
 }
-?>

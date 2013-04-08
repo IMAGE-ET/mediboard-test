@@ -3,7 +3,7 @@
 /**
  * SOAP Server EAI
  *  
- * @category EAI
+ * @category Webservices
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -63,14 +63,13 @@ else {
   // Lance le serveur
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $serverSOAP->handle();
-  } 
+  }
   else {
-     echo '<strong>This Mediboard SOAP server can handle following functions : </strong>';    
-     echo '<ul>';
-     foreach ($serverSOAP->getFunctions() as $_function) {
-       echo '<li>' , $_function , '</li>';
-     }     
-     echo '</ul>';
+    echo '<strong>This Mediboard SOAP server can handle following functions : </strong>';
+    echo '<ul>';
+    foreach ($serverSOAP->getFunctions() as $_function) {
+      echo '<li>' , $_function , '</li>';
+    }
+    echo '</ul>';
   }
 }
-?>

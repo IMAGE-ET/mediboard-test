@@ -16,6 +16,11 @@
  * Format RPC Literal
  */
 class CWSDLRPCLiteral extends CWSDLRPC {
+  /**
+   * Add types
+   *
+   * @return void
+   */
   function addTypes() {
     $definitions = $this->documentElement;
     $partie2 = $this->createComment("partie 2 : Types");
@@ -87,13 +92,18 @@ class CWSDLRPCLiteral extends CWSDLRPC {
     // Traitement final
     $this->purgeEmptyElements();
   }
-  
+
+  /**
+   * Add message
+   *
+   * @return void
+   */
   function addMessage() {
     $definitions = $this->documentElement;
     $partie3 = $this->createComment("partie 3 : Message");
     $definitions->appendChild($partie3);
     
-    foreach($this->_soap_handler->getParamSpecs() as $_method => $_paramSpec) {
+    foreach ($this->_soap_handler->getParamSpecs() as $_method => $_paramSpec) {
       $message = $this->addElement($definitions, "message", null, "http://schemas.xmlsoap.org/wsdl/");
       $this->addAttribute($message, "name", $_method."Request");
       
@@ -117,7 +127,12 @@ class CWSDLRPCLiteral extends CWSDLRPC {
       $this->addAttribute($message, "name", $_method."Fault");*/
     }
   }
-  
+
+  /**
+   * Add port type
+   *
+   * @return void
+   */
   function addPortType() {
     $definitions = $this->documentElement;
     $partie4 = $this->createComment("partie 4 : Port Type");
@@ -126,7 +141,7 @@ class CWSDLRPCLiteral extends CWSDLRPC {
     $portType = $this->addElement($definitions, "portType", null, "http://schemas.xmlsoap.org/wsdl/");
     $this->addAttribute($portType, "name", "MediboardPort");
     
-    foreach($this->_soap_handler->getParamSpecs() as $_method => $_paramSpec) {
+    foreach ($this->_soap_handler->getParamSpecs() as $_method => $_paramSpec) {
       $partie5 = $this->createComment("partie 5 : Operation");
       $portType->appendChild($partie5);
       $operation = $this->addElement($portType, "operation", null, "http://schemas.xmlsoap.org/wsdl/");
@@ -143,7 +158,12 @@ class CWSDLRPCLiteral extends CWSDLRPC {
       $this->addAttribute($fault, "message", "typens:".$_method."Fault");*/
     }
   }
-  
+
+  /**
+   * Add binding
+   *
+   * @return void
+   */
   function addBinding() {
     $definitions = $this->documentElement;
     $partie6 = $this->createComment("partie 6 : Binding");
@@ -157,7 +177,7 @@ class CWSDLRPCLiteral extends CWSDLRPC {
     $this->addAttribute($soap, "style", "rpc");
     $this->addAttribute($soap, "transport", "http://schemas.xmlsoap.org/soap/http");
 
-    foreach($this->_soap_handler->getParamSpecs() as $_method => $_paramSpec) {
+    foreach ($this->_soap_handler->getParamSpecs() as $_method => $_paramSpec) {
       $operation = $this->addElement($binding, "operation", null, "http://schemas.xmlsoap.org/wsdl/");
       
       $this->addAttribute($operation, "name", $_method);

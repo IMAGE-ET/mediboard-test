@@ -1,11 +1,13 @@
- <?php /* $Id $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage webservices
- * @version $Revision: 6287 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * View stats
+ *
+ * @category Webservices
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -74,7 +76,6 @@ if ($service) {
     'HtmlText' => false
     
   );
-  
 
   foreach ($datas as $_data) {
     $series[0]["data"][] = array (@count($series[0]["data"]), $_data["nb_echanges"]);
@@ -98,5 +99,3 @@ $smarty->assign("series" , $series);
 $smarty->assign("options", $options);
 
 $smarty->display("vw_stats.tpl");
- 
-?>

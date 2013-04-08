@@ -16,11 +16,35 @@
  * Format RPC
  */
 class CWSDLRPC extends CWSDL {
-  function addTypes() {}
-    
-  function addMessage() {}
-  
-  function addPortType() {}
-  
-  function addBinding() {}  
+  /**
+   * Add types
+   *
+   * @return void
+   */
+  function addTypes() {
+  }
+
+  /**
+   * Add message
+   *
+   * @return void
+   */
+  function addMessage() {
+  }
+
+  /**
+   * Add port type
+   *
+   * @return void
+   */
+  function addPortType() {
+  }
+
+  /**
+   * Add binding
+   *
+   * @return void
+   */
+  function addBinding() {
+  }
 }

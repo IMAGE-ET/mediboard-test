@@ -1,12 +1,12 @@
-<?php 
+<?php
 /**
- * Receive message EAI
- *  
- * @category EAI
+ * Dispatch event
+ *
+ * @category Webservices
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
  * @link     http://www.mediboard.org
  */
 
@@ -24,5 +24,3 @@ if (!$ack = $soap_handler->event($message, $sender_soap_id)) {
   
   mbTrace($ack);
 }
-
-?>

@@ -189,8 +189,16 @@ class CMbXMLDocument extends DOMDocument {
   protected function getUTF8($source) {
     return CMbString::isUTF8($source) ? utf8_decode($source) : $source;
   }
-  
-  function addElement($elParent, $elName, $elValue = null, $elNS = null) {
+
+  /**
+   * @param DOMNode $elParent
+   * @param string  $elName
+   * @param null    $elValue
+   * @param null    $elNS
+   *
+   * @return DOMNode
+   */
+  function addElement(DOMNode $elParent, $elName, $elValue = null, $elNS = null) {
     $elName  = utf8_encode($elName );
     $elValue = utf8_encode($elValue);
     return $elParent->appendChild(new DOMElement($elName, $elValue, $elNS));

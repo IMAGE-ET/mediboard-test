@@ -3,7 +3,7 @@
 /**
  * SOAPClient Factory
  *  
- * @category webservices
+ * @category Webservices
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -79,7 +79,7 @@ class CSOAPClient {
       }
     }
 
-    switch($this->type_client) {
+    switch ($this->type_client) {
       case 'CNuSOAPClient' :
         $this->client = new CNuSOAPClient($rooturl, $type, $options, $loggable, $local_cert, $passphrase);
         break;
@@ -96,21 +96,33 @@ class CSOAPClient {
     return $this->client;
   }
 
+  /** Calls a SOAP function
+   *
+   * @param string $function_name   The name of the SOAP function to call
+   * @param array  $arguments       An array of the arguments to pass to the function
+   * @param array  $options         An associative array of options to pass to the client
+   * @param mixed  $input_headers   An array of headers to be sent along with the SOAP request
+   * @param array  &$output_headers If supplied, this array will be filled with the headers from the SOAP response
+   *
+   * @throws Exception|SoapFault
+   *
+   * @return mixed SOAP functions may return one, or multiple values
+   */
   public function __soapCall($function_name, $arguments, $options = null, $input_headers = null, &$output_headers = null) {
     return $this->call($function_name, $arguments, $options, $input_headers, $output_headers);
   }
 
-  /**
-   * Call a SOAP function
+  /** Calls a SOAP function
    *
-   * @param string $function_name  The name of the SOAP function to call
-   * @param array  $arguments      An array of argument to pass to the function
-   * @param array  $options        An associative array of options to pass to the client
-   * @param array  $input_headers  An array of headers to be sent along with the SOAP request.
-   * @param array  $output_headers If supplied, this array will be filled with the headers from the SOAP response.
+   * @param string $function_name   The name of the SOAP function to call
+   * @param array  $arguments       An array of the arguments to pass to the function
+   * @param array  $options         An associative array of options to pass to the client
+   * @param mixed  $input_headers   An array of headers to be sent along with the SOAP request
+   * @param array  &$output_headers If supplied, this array will be filled with the headers from the SOAP response
    *
-   * @throws SoapFault
-   * @return string The result of the call
+   * @throws Exception|SoapFault
+   *
+   * @return mixed SOAP functions may return one, or multiple values
    */
   public function call($function_name, $arguments, $options = null, $input_headers = null, &$output_headers = null) {
     $client = $this->client;
@@ -202,6 +214,13 @@ class CSOAPClient {
     return $output;
   }
 
+  /**
+   * Truncate a string to a given maximum length
+   *
+   * @param string $string The string to truncate
+   *
+   * @return string The truncated string
+   */
   static public function truncate($string) {
     if (!is_string($string)) {
       return $string;

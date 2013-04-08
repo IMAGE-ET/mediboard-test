@@ -3,7 +3,7 @@
 /**
  * CMbSOAPClient
  *  
- * @category webservices
+ * @category Webservices
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -18,22 +18,26 @@ if (!class_exists("SoapClient")) {
  * The CMbSOAPClient class
  */
 class CMbSOAPClient extends SoapClient {
-  var $wsdl_url          = null;
-  var $type_echange_soap = null;
-  var $soap_client_error = false;
-  var $flatten           = null;
-  var $loggable          = null;
-  var $encoding          = null;
+  public $wsdl_url;
+  public $type_echange_soap;
+  public $soap_client_error = false;
+  public $flatten;
+  public $loggable;
+  public $encoding;
 
   /**
    * The constructor
-   * 
+   *
    * @param string  $rooturl    The URL of the wsdl file
    * @param string  $type       The type of exchange
    * @param array   $options    An array of options
    * @param boolean $loggable   True if you want to log all the exchanges with the web service
    * @param string  $local_cert Path of the certifacte
    * @param string  $passphrase Pass phrase for the certificate
+   *
+   * @throws CMbException
+   *
+   * @return CMbSOAPClient
    */
   function __construct($rooturl, $type = null, $options = array(), $loggable = null, $local_cert = null, $passphrase = null) {
     $this->wsdl_url = $rooturl;
@@ -70,7 +74,19 @@ class CMbSOAPClient extends SoapClient {
 
     parent::__construct($this->wsdl_url, $options);
   }
-    
+
+  /** Calls a SOAP function
+   *
+   * @param string $function_name   The name of the SOAP function to call
+   * @param array  $arguments       An array of the arguments to pass to the function
+   * @param array  $options         An associative array of options to pass to the client
+   * @param mixed  $input_headers   An array of headers to be sent along with the SOAP request
+   * @param array  &$output_headers If supplied, this array will be filled with the headers from the SOAP response
+   *
+   * @throws Exception|SoapFault
+   *
+   * @return mixed SOAP functions may return one, or multiple values
+   */
   public function call($function_name, $arguments, $options = null, $input_headers = null, &$output_headers = null) {
     try {
       return parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
@@ -106,4 +122,3 @@ class CMbSOAPClient extends SoapClient {
     $this->__setSoapHeaders($soapheaders);
   } 
 }
-?>

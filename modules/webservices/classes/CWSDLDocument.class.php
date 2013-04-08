@@ -16,11 +16,35 @@
  * Format Document
  */
 class CWSDLDocument extends CWSDL {
-  function addTypes() {}
-    
-  function addMessage($functions, $returns = array()) {}
-  
-  function addPortType($functions) {}
-  
-  function addBinding($functions) {}  
+  /**
+   * Add types
+   *
+   * @return void
+   */
+  function addTypes() {
+  }
+
+  /**
+   * Add message
+   *
+   * @return void
+   */
+  function addMessage() {
+  }
+
+  /**
+   * Add port type
+   *
+   * @return void
+   */
+  function addPortType() {
+  }
+
+  /**
+   * Add binding
+   *
+   * @return void
+   */
+  function addBinding() {
+  }
 }

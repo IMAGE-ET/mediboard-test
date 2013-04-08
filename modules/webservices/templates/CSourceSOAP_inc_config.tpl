@@ -11,7 +11,8 @@
 <table class="main"> 
   <tr>
     <td>
-      <form name="editSourceSOAP-{{$source->name}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}') } )">
+      <form name="editSourceSOAP-{{$source->name}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, {
+          onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}') } )">
         <input type="hidden" name="m" value="webservices" />
         <input type="hidden" name="dosql" value="do_source_soap_aed" />
         <input type="hidden" name="source_soap_id" value="{{$source->_id}}" />

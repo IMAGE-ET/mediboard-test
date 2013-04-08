@@ -16,6 +16,9 @@
  * Web Services Description Language
  */
 class CWSDL extends CMbXMLDocument {
+  /**
+   * @var array
+   */
   public $xsd = array(
     "string"       => "string",
     "bool"         => "boolean",
@@ -32,8 +35,16 @@ class CWSDL extends CMbXMLDocument {
     "xml"          => "anyType",
   );
 
+  /**
+   * @var CSOAPHandler
+   */
   public $_soap_handler;
-             
+
+  /**
+   * Construct
+   *
+   * @return CWSDL
+   */
   function __construct() {
     parent::__construct();
     $this->documentfilename = "tmp/document.wsdl";
@@ -42,8 +53,15 @@ class CWSDL extends CMbXMLDocument {
     $definitions = $this->addElement($this, "definitions", null, "http://schemas.xmlsoap.org/wsdl/");
     $this->addNameSpaces($definitions);
   }
- 
-  function addNameSpaces($elParent) {
+
+  /**
+   * Add namespaces
+   *
+   * @param DOMNode $elParent Parent element
+   *
+   * @return void
+   */
+  function addNameSpaces(DOMNode $elParent) {
     // Ajout des namespace
     $this->addAttribute($elParent, "name"           , "MediboardWSDL");
     $this->addAttribute($elParent, "targetNamespace", "http://soap.mediboard.org/wsdl/");
@@ -53,12 +71,33 @@ class CWSDL extends CMbXMLDocument {
     $this->addAttribute($elParent, "xmlns:soapenc"  , "http://schemas.xmlsoap.org/soap/encoding/");
     $this->addAttribute($elParent, "xmlns:wsdl"     , "http://schemas.xmlsoap.org/wsdl/");
   }
-  
+
+  /**
+   * Add text
+   *
+   * @param DOMNode $elParent  Parent element
+   * @param string  $elName    Element name
+   * @param string  $elValue   The value of the element.
+   * @param int     $elMaxSize Maximum size
+   *
+   * @return mixed
+   */
   function addTexte($elParent, $elName, $elValue, $elMaxSize = 100) {
     $elValue = substr($elValue, 0, $elMaxSize);
     return $this->addElement($elParent, $elName, $elValue);
   }
-  
+
+  /**
+   * Add service
+   *
+   * @param string $username  Username
+   * @param string $password  Password
+   * @param string $module    Module name
+   * @param string $tab       Tab name
+   * @param string $classname Class name
+   *
+   * @return void
+   */
   function addService($username, $password, $module, $tab, $classname) {
     $definitions = $this->documentElement;
     $this->addComment($definitions, "Partie 7 : Service");
@@ -75,9 +114,16 @@ class CWSDL extends CMbXMLDocument {
     $this->addAttribute($port, "binding", "typens:MediboardBinding");
     
     $soapaddress = $this->addElement($port, "soap:address", null, "http://schemas.xmlsoap.org/wsdl/soap/");
-    $this->addAttribute($soapaddress, "location", CApp::getBaseUrl()."/?login=1&username=$username&password=$password&m=$module&a=$tab&class=$classname&suppressHeaders=1");
+
+    $url = "/?login=1&username=$username&password=$password&m=$module&a=$tab&class=$classname&suppressHeaders=1";
+    $this->addAttribute($soapaddress, "location", CApp::getBaseUrl().$url);
   }
-  
+
+  /**
+   * Dumps the internal XML tree back into a string
+   *
+   * @return void
+   */
   function saveFileXML() {
     parent::saveXML();
   }
