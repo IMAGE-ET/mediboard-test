@@ -35,6 +35,9 @@ if ($userSel->_id) {
   $where["annulee"] = "= '1'";
   $nb_canceled += $operation->countList($where);
 
+  $sejours = CMbObject::massLoadFwdRef($list_urgences, "sejour_id");
+  CMbObject::massLoadFwdRef($sejours, "patient_id");
+
   foreach ($list_urgences as $curr_urg) {
     $curr_urg->canDo();
     $curr_urg->loadRefsFwd();
@@ -48,6 +51,10 @@ if ($userSel->_id) {
     $_sejour->canDo();
     $_sejour->_ref_patient->loadRefDossierMedical()->countAllergies();
     $_sejour->loadRefsDocs();
+
+    $presc = $_sejour->loadRefPrescriptionSejour();
+    $presc->countLinesMedsElements($userSel->_id);
+
     foreach ($_sejour->_ref_documents as $_document) {
       $_document->canDo();
     }
@@ -107,6 +114,10 @@ if ($userSel->_id) {
       $_sejour->loadRefsFwd();
       $_sejour->_ref_patient->loadRefDossierMedical()->countAllergies();
       $_sejour->loadRefsDocs();
+
+      $presc = $_sejour->loadRefPrescriptionSejour();
+      $presc->countLinesMedsElements($userSel->_id);
+
       foreach ($_sejour->_ref_documents as $_doc) {
         $_doc->canDo();
       }
