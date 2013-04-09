@@ -219,18 +219,15 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     // Sauvegarde des items cochés
     $items = $this->_items ? $this->_items : array();
 
-    $this->loadItemTypes();
-    foreach ($this->_ref_item_types as $type) {
-      $check_item = new CDailyCheckItem();
-      $check_item->list_id = $this->_id;
-      $check_item->item_type_id = $type->_id;
-      $check_item->loadMatchingObject();
-      $check_item->checked = (isset($items[$type->_id]) ? $items[$type->_id] : "");
-      if ($check_item->checked == "") {
-        mbTrace($check_item);
-      }
-      if ($msg = $check_item->store()) {
-        return $msg;
+    $types = $this->loadItemTypes();
+    if (!empty($items)) {
+      foreach ($types as $type) {
+        $check_item = new CDailyCheckItem();
+        $check_item->list_id      = $this->_id;
+        $check_item->item_type_id = $type->_id;
+        $check_item->loadMatchingObject();
+        $check_item->checked = (isset($items[$type->_id]) ? $items[$type->_id] : "");
+        $check_item->store(); // Don't return if the item was not present
       }
     }
   }
