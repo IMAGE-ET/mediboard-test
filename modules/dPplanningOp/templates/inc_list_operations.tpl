@@ -155,7 +155,7 @@
           <img src="images/icons/warning.png" style="float: right" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" />
         {{/if}}
         {{assign var=prescription value=$_operation->_ref_sejour->_ref_prescription_sejour}}
-        {{if $prescription && $prescription->_counts_by_chapitre|@array_sum}}
+        {{if $prescription->_id && $prescription->_counts_by_chapitre|@array_sum}}
           <img src="images/icons/ampoule_blue.png" style="float: right;" />
         {{/if}}
         {{if $_operation->annulee}}
@@ -233,6 +233,10 @@
       <td rowspan="2" class="narrow" style="{{$background}}"></td>
       
       <td class="top text" class="top" {{if !$board}}rowspan="2"{{/if}}>
+        {{assign var=prescription value=$_operation->_ref_sejour->_ref_prescription_sejour}}
+        {{if $prescription->_id && $prescription->_counts_by_chapitre|@array_sum}}
+          <img src="images/icons/ampoule_blue.png" style="float: right;" />
+        {{/if}}
         {{if $patient->_ref_dossier_medical->_id && $patient->_ref_dossier_medical->_count_allergies}}
           <img src="images/icons/warning.png" style="float: right" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" />
         {{/if}}
@@ -254,7 +258,7 @@
         
       </td>
       <td class="text top">
-        <button type="button" class="edit" style="float: right;" onclick="Operation.dossierBloc('{{$_operation->_id}}')">
+        <button type="button" class="edit" style="float: right;" onclick="Operation.dossierBloc('{{$_operation->_id}}', updateListOperations)">
           Dossier bloc
         </button>
         <a href="#1" onclick="Operation.edit('{{$_operation->_id}}', '{{$_operation->plageop_id}}')">
