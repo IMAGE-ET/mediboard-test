@@ -79,7 +79,7 @@
           {
             objectClass: '{{$compte_rendu->_class}}',
             contextUserId: User.id,
-            contextUserView: "{{$user_view}}",
+            contextUserView: "{{$user_view|smarty:nodefaults|JSAttribute}}",
             timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
             resetSearchField: false,
             resetDependFields: false,

@@ -9,27 +9,30 @@
   
   Main.add(function() {
     var oFormVisiteAnesth = getForm("visiteAnesth");
+    var contextUserId   = User.id;
+    var contextUserView = User.view;
+
     {{if $selOp->prat_visite_anesth_id}}
-      var oForm = getForm('visiteAnesth');
-      var contextUserId = {{$selOp->prat_visite_anesth_id}};
+      contextUserId = {{$selOp->prat_visite_anesth_id}};
+
       {{if $selOp->date_visite_anesth || $currUser->_is_anesth}}
-        var contextUserView = "{{mb_value object=$selOp field='prat_visite_anesth_id'}}"
+        contextUserView = "{{$selOp->_ref_anesth_visite->_view|smarty:nodefaults:JSAttribute}}";
       {{else}}
-        var contextUserView = oForm.prat_visite_anesth_id.options[oForm.prat_visite_anesth_id.selectedIndex].innerHTML.trim();
+        var oForm = getForm('visiteAnesth');
+        contextUserView = oForm.prat_visite_anesth_id.options[oForm.prat_visite_anesth_id.selectedIndex].innerHTML.trim();
       {{/if}}
-    {{else}}
-      var contextUserId = User.id;
-      var contextUserId = User.view;
     {{/if}}
+
     aideRquesAnesth = new AideSaisie.AutoComplete(oFormVisiteAnesth.rques_visite_anesth, {
       objectClass: "COperation",
       timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
       {{if $selOp->prat_visite_anesth_id}}
-      contextUserId: contextUserId,
-      contextUserView: contextUserView,
+        contextUserId: contextUserId,
+        contextUserView: contextUserView,
       {{/if}}
       validateOnBlur:0
     });
+
     {{if !$selOp->date_visite_anesth}}
       Calendar.regField(oFormVisiteAnesth.date_visite_anesth);
       

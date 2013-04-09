@@ -18,13 +18,13 @@
       <td>
         {{if $selOp->_ref_anesth->_id}}
           {{assign var=contextUserId value=$selOp->_ref_anesth->_id}}
-          {{assign var=contextUserView value=$selOp->_ref_anesth}}
+          {{assign var=contextUserView value=$selOp->_ref_anesth->_view|smarty:nodefaults:JSAttribute}}
         {{else}}
           {{assign var=contextUserId value=$app->_ref_user->_id}}
-          {{assign var=contextUserView value=$app->_ref_user}}
+          {{assign var=contextUserView value=$app->_ref_user->_view|smarty:nodefaults:JSAttribute}}
         {{/if}}
         {{mb_field object=$anesth_perop field="libelle" form="addAnesthPerop-$incident"
-          aidesaisie="contextUserId: '`$contextUserId`', contextUserView: '`$contextUserView`'"}}
+          aidesaisie="contextUserId: '$contextUserId', contextUserView: '$contextUserView'"}}
       </td>
     </tr>
     <tr>
