@@ -1,5 +1,6 @@
 {{mb_script module="mediusers" script="color_selector"}}
 {{mb_script module="system" script="object_selector"}}
+{{mb_script module="patients" script="autocomplete"}}
 
 <script type="text/javascript">
 

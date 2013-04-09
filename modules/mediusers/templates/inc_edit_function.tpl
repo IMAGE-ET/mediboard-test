@@ -1,5 +1,3 @@
-{{mb_script module="dPpatients" script="autocomplete"}}
-
 <script type="text/javascript">
   Main.add(function () {
     InseeFields.initCPVille("editFrm", "cp", "ville", "tel");
