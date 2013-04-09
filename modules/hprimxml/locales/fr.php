@@ -353,6 +353,7 @@ $locales['CHprimXMLConfig.sender_class.CSenderFileSystem'] = 'Expéditeur FS';
 $locales['CHprimXMLConfig.sender_class.CSenderMLLP'] = 'Expéditeur MLLP';
 $locales['CHprimXMLConfig.sender_class.CSenderSOAP'] = 'Expéditeur SOAP';
 $locales['CMbObject-back-'] = 'Objects id';
+$locales['CMbObject-back-echanges_hprim'] = 'Echanges H\'XML';
 $locales['CSourceSOAP-single_parameter'] = 'Paramètre unique';
 $locales['CSourceSOAP-single_parameter-desc'] = 'Nom du paramètre unique de la méthode';
 $locales['config-hprimxml-actes_ngap_excludes'] = 'Actes NGAP à exclure (séparé par des |) ';
