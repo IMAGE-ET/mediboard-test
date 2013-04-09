@@ -51,6 +51,14 @@ function viewList(date, id, sClass) {
   url.requestUpdate('viewTooltip');
 }
 
+updateListOperations = function() {
+  var url = new Url("dPplanningOp", "httpreq_vw_list_operations");
+  url.addParam("pratSel" , "{{$chirSel}}");
+  url.addParam("urgences", "0");
+  url.addParam("board"   , "1");
+  url.requestUpdate("viewTooltip");
+}
+
 Main.add(function () {
   Calendar.regField(getForm("changeDate").date, null, {noView: true});
 });
