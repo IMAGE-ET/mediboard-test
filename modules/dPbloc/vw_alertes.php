@@ -25,9 +25,10 @@ else {
 //alerts
 $nbAlertes = 0;
 $bloc = new CBlocOperatoire();
+$bloc->load($bloc_id);
 $where = array();
-if ($bloc_id) {
-  $where["bloc_operatoire_id"] = "= '$bloc_id'";
+if ($bloc->_id) {
+  $where["bloc_operatoire_id"] = "= '$bloc->_id'";
 }
 $listBlocs = $bloc->loadGroupList($where);
 
@@ -55,6 +56,7 @@ $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
 $where = array();
 $where["plagesop.date"]      = "BETWEEN '$date' AND '$fin'";
 if ($bloc->_id) {
+  $bloc->loadRefsSalles();
   $where["plagesop.salle_id"]  = CSQLDataSource::prepareIn(array_keys($bloc->_ref_salles));
 }
 $where["operations.annulee"] = "= '0'";
