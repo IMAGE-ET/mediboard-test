@@ -374,6 +374,10 @@ button.phone:before, a.button.phone:before {
   content: url(images/buttons/phone.png);
 }
 
+button.stats:before, a.button.stats:before {
+  content: url(images/buttons/stats.png);
+}
+
 button.cut:before, a.button.cut:before {
   content: url(images/buttons/cut.png);
 }
