@@ -392,9 +392,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Affectation de l'affectation au mouvement
     if ($movement && $affectation && $affectation->_id) {
       $movement->affectation_id = $affectation->_id;
-      if ($msg = $movement->store()) {
-        return $exchange_ihe->setAckAR($ack, "E208", $msg, $affectation);
-      }
+      $movement->store();
     }
     
     // Dans le cas d'une grossesse
@@ -835,9 +833,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Attribution de l'affectation au mouvement
     if ($movement && $affectation && $affectation->_id) {
       $movement->affectation_id = $affectation->_id;
-      if ($msg = $movement->store()) {
-        return $exchange_ihe->setAckAR($ack, "E208", $msg, $affectation);
-      }
+      $movement->store();
     }
     
     // Dans le cas d'une grossesse
