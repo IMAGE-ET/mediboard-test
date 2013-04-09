@@ -166,7 +166,7 @@
     <td>
       <select name="pour_compte_id" style="width: 15em;"  onchange="modifPourCompte(this.value);">
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-        {{mb_include module=mediusers template=inc_options_mediuser list=$listChirs selected=$plageSel->pour_compte_id}}
+        {{mb_include module=mediusers template=inc_options_mediuser list=$listChirs selected=$plageSel->pour_compte_id disabled=$chirSel}}
       </select>
     </td>
   </tr>
@@ -179,7 +179,7 @@
     <td>
       <select name="remplacant_id" style="width: 15em;{{if !$plageSel->desistee}}display:none;{{/if}}" class="remplacement_plage">
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-        {{mb_include module=mediusers template=inc_options_mediuser list=$listChirs selected=$plageSel->remplacant_id}}
+        {{mb_include module=mediusers template=inc_options_mediuser list=$listChirs selected=$plageSel->remplacant_id }}
       </select>
     </td>
     <th>
