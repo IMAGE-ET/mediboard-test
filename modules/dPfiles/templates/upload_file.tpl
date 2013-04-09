@@ -66,14 +66,14 @@ addFile = function(elt) {
 
 <table class="form">
   <tr>
-    <th class="title" colspan="{{if $named}} 6 {{else}} 7 {{/if}}">
+    <th class="title" colspan="7">
       Ajouter un fichier {{if $named}}'{{$_rename}}'{{/if}} pour 
       <br/>'{{$object->_view}}'
     </th>
   </tr>
 
   <tr>
-    <td class="button" colspan="4">
+    <td class="button" colspan="7">
       <div class="small-info">
         <div>{{tr}}config-dPfiles-upload_max_filesize{{/tr}} : <strong>{{$conf.dPfiles.upload_max_filesize}}</strong></div>
         <div>{{tr}}config-dPfiles-extensions_yoplet  {{/tr}} : <strong>{{$conf.dPfiles.extensions_yoplet  }}</strong></div>
