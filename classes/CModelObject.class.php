@@ -567,12 +567,12 @@ class CModelObject {
   /**
    * Merges the fields of an array of objects to $this
    *
-   * @param array $objects       An array of CMbObject
+   * @param array $objects       An array of CModelObject
    * @param bool  $getFirstValue Get first value ?
    *
    * @return $this or an error
    */
-  function mergePlainFields ($objects /*array(<CMbObject>)*/, $getFirstValue = false) {
+  function mergePlainFields ($objects /*array(<CModelObject>)*/, $getFirstValue = false) {
     $fields = $this->getPlainFields();
     $diffs = $fields;
     foreach ($diffs as &$diff) {
@@ -622,22 +622,22 @@ class CModelObject {
   /**
    * Extends object properties with target object (of the same class) properties
    *
-   * @param CMbObject $mbObject object to extend with
-   * @param bool      $gently   Gently preserve existing non-empty values
+   * @param CModelObject $object Object to extend with
+   * @param bool         $gently Gently preserve existing non-empty values
    *
    * @return void
    */
-  function extendsWith(CMbObject $mbObject, $gently = false) {
-    if ($this->_class !== $mbObject->_class) {
+  function extendsWith(CModelObject $object, $gently = false) {
+    if ($this->_class !== $object->_class) {
       trigger_error(
-        printf("Target object has not the same class (%s) as this (%s)", $mbObject->_class, $this->_class),
+        printf("Target object has not the same class (%s) as this (%s)", $object->_class, $this->_class),
         E_USER_WARNING
       );
 
       return;
     }
     
-    foreach ($mbObject->getProperties() as $name => $value) {
+    foreach ($object->getProperties() as $name => $value) {
       if ($value !== null && $value != "") {
         if (!$gently || $this->$name === null || $this->$name === "") {
           $this->$name = $value;
@@ -649,11 +649,11 @@ class CModelObject {
   /**
    * Clone object
    *
-   * @param CMbObject $mbObject
+   * @param CModelObject $object Object to clone
    *
    * @return void
    */
-  function cloneFrom(CMbObject $mbObject) {
+  function cloneFrom(CModelObject $object) {
     $this->extendsWith($mbObject);
     $this->_id = null;
   }
