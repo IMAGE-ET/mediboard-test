@@ -30,7 +30,7 @@ if (!$object->_id) {
 $object->canDo();
 
 // Praticien concerné
-if (!$user->isPraticien()) {
+if (!$user->isPraticien() && $user_id) {
   $user = new CMediusers();
   $user->load($user_id);
 }
