@@ -45,6 +45,7 @@ ModeleEtiquette = {
   },
 
   onSubmitComplete: function (guid, properties) {
+    Control.Modal.close();
     var id = guid.split('-')[1];
     ModeleEtiquette.edit(id);
   },

@@ -27,12 +27,16 @@ if (!$modele_etiquette_id || $modele_etiquette->group_id != $group_id) {
   $modele_etiquette->valueDefaults();
   $modele_etiquette->group_id = $group_id;
 }
+
+$classes = CCompteRendu::getTemplatedClasses();
+$classes["CRPU"] = CAppUI::tr("CRPU");
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("modele_etiquette"   , $modele_etiquette);
-$smarty->assign("classes"            , CCompteRendu::getTemplatedClasses());
+$smarty->assign("classes"            , $classes);
 $smarty->assign("fields"             , CModeleEtiquette::$fields);
 $smarty->assign("listfonts"          , CModeleEtiquette::$listfonts);
+
 $smarty->display("inc_edit_modele_etiquette.tpl");
-?>

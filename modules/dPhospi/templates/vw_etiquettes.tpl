@@ -1,7 +1,13 @@
 {{mb_script module=hospi script=modele_etiquette}}
 
 <script>
-Main.add(ModeleEtiquette.refreshList);
+  removeSelected = function() {
+    var list_etiq = $("list_etiq").select(".selected")[0];
+    if (list_etiq) {
+      list_etiq.removeClassName("selected");
+    }
+  }
+  Main.add(ModeleEtiquette.refreshList);
 </script>
 
 <table class="main">
