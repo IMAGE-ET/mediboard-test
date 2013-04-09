@@ -13,49 +13,55 @@
 
 class CBloodSalvage extends CMbObject {
   //DB Table Key
-  var $blood_salvage_id = null;
+  public $blood_salvage_id;
   
   //DB References 
-  var $operation_id = null;
-  var $cell_saver_id = null;     // The Cell Saver equipment
-  var $type_ei_id = null;        // Reference to an incident type
+  public $operation_id;
+  public $cell_saver_id;     // The Cell Saver equipment
+  public $type_ei_id;        // Reference to an incident type
   
   //DB Fields
-  var $wash_volume = null;       // *Volume de lavage*
-  var $saved_volume = null;      // *Volume récupéré pendant la manipulation*
-  var $hgb_pocket = null;        // *Hémoglobine de la poche récupérée*
-  var $hgb_patient = null;       // *Hémoglobine du patient post transfusion*
-  var $transfused_volume = null;
-  var $anticoagulant_cip = null; // *Code CIP de l'anticoagulant utilisé*
+  public $wash_volume;       // *Volume de lavage*
+  public $saved_volume;      // *Volume récupéré pendant la manipulation*
+  public $hgb_pocket;        // *Hémoglobine de la poche récupérée*
+  public $hgb_patient;       // *Hémoglobine du patient post transfusion*
+  public $transfused_volume;
+  public $anticoagulant_cip; // *Code CIP de l'anticoagulant utilisé*
   
-  var $receive_kit_ref = null;
-  var $receive_kit_lot = null;
+  public $receive_kit_ref;
+  public $receive_kit_lot;
   
-  var $wash_kit_ref    = null;
-  var $wash_kit_lot    = null;
+  public $wash_kit_ref;
+  public $wash_kit_lot;
   
-  var $sample = null;
+  public $sample;
   
   // Form Fields
-  var $_recuperation_start =null;
-  var $_recuperation_end =null;
-  var $_transfusion_start = null;
-  var $_transfusion_end = null;
+  public $_recuperation_start;
+  public $_recuperation_end;
+  public $_transfusion_start;
+  public $_transfusion_end;
    
   //Distants Fields
-  var $_datetime = null;
+  public $_datetime;
   
   //Timers for the operation
-  var $recuperation_start = null;
-  var $recuperation_end = null;
-  var $transfusion_start = null;
-  var $transfusion_end = null;
+  public $recuperation_start;
+  public $recuperation_end;
+  public $transfusion_start;
+  public $transfusion_end;
   
-  //Refs
-  var $_ref_operation = null;
-  var $_ref_cell_saver = null;
-  var $_ref_incident_type = null;
-  var $_ref_patient = null;
+  /** @var COperation */
+  public $_ref_operation;
+
+  /** @var CCellSaver */
+  public $_ref_cell_saver;
+
+  /** @var CTypeEi */
+  public $_ref_incident_type;
+
+  /** @var CPatient */
+  public $_ref_patient;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -63,43 +69,44 @@ class CBloodSalvage extends CMbObject {
     $spec->key   = 'blood_salvage_id';
     return $spec;
   }
+
   /*
    * Spécifications. Indique les formats des différents éléments et références de la classe.
    */
   function getProps() {
-    $specs= parent::getProps();
-    $specs["operation_id"]        = "ref notNull class|COperation";
-    $specs["cell_saver_id"]        = "ref class|CCellSaver";
-    $specs["type_ei_id"]          = "ref class|CTypeEi";
+    $props = parent::getProps();
+    $props["operation_id"]        = "ref notNull class|COperation";
+    $props["cell_saver_id"]       = "ref class|CCellSaver";
+    $props["type_ei_id"]          = "ref class|CTypeEi";
     
-    $specs["recuperation_start"]  = "dateTime";
-    $specs["recuperation_end"]    = "dateTime";
-    $specs["transfusion_start"]   = "dateTime";
-    $specs["transfusion_end"]     = "dateTime";
+    $props["recuperation_start"]  = "dateTime";
+    $props["recuperation_end"]    = "dateTime";
+    $props["transfusion_start"]   = "dateTime";
+    $props["transfusion_end"]     = "dateTime";
    
-    $specs["_recuperation_start"]  = "time";
-    $specs["_recuperation_end"]    = "time";
-    $specs["_transfusion_start"]   = "time";
-    $specs["_transfusion_end"]     = "time";
+    $props["_recuperation_start"] = "time";
+    $props["_recuperation_end"]   = "time";
+    $props["_transfusion_start"]  = "time";
+    $props["_transfusion_end"]    = "time";
     
-    $specs["wash_volume"]          = "num";
-    $specs["saved_volume"]        = "num";
-    $specs["transfused_volume"]   = "num";
-    $specs["hgb_pocket"]          = "num";
-    $specs["hgb_patient"]          = "num";
-    $specs["anticoagulant_cip"]    = "numchar length|7";
-    $specs["wash_kit_ref"]        = "str maxLength|32 autocomplete";
-    $specs["wash_kit_lot"]        = "str maxLength|32";
-    $specs["receive_kit_ref"]     = "str maxLength|32 autocomplete";
-    $specs["receive_kit_lot"]      = "str maxLength|32";
-    $specs["sample"]               = "enum notNull list|non|prel|trans default|non";
+    $props["wash_volume"]         = "num";
+    $props["saved_volume"]        = "num";
+    $props["transfused_volume"]   = "num";
+    $props["hgb_pocket"]          = "num";
+    $props["hgb_patient"]         = "num";
+    $props["anticoagulant_cip"]   = "numchar length|7";
+    $props["wash_kit_ref"]        = "str maxLength|32 autocomplete";
+    $props["wash_kit_lot"]        = "str maxLength|32";
+    $props["receive_kit_ref"]     = "str maxLength|32 autocomplete";
+    $props["receive_kit_lot"]     = "str maxLength|32";
+    $props["sample"]              = "enum notNull list|non|prel|trans default|non";
     
-    $specs["_datetime"]           = "dateTime";
+    $props["_datetime"]           = "dateTime";
     
-    return $specs;
+    return $props;
   }
 
-  function loadRefsFwd() {   
+  function loadRefsFwd() {
     $this->loadRefOperation();
     $this->loadRefPatient();
     $this->loadRefCellSaver(); 
@@ -108,7 +115,6 @@ class CBloodSalvage extends CMbObject {
   }
   
   function loadRefPatient() {
-    $this->_ref_patient = new CPatient();
     $this->_ref_operation->loadRefPatient(1);
     $this->_ref_patient = $this->_ref_operation->_ref_patient;
   }
@@ -135,69 +141,68 @@ class CBloodSalvage extends CMbObject {
     $this->_ref_operation->loadRefPlageOp(1);
     $this->_datetime = $this->_ref_operation->_datetime;
   }
+
   /*
    * Mise à jour des champs des formulaires (affichage des dateTime en time).
    */
-  
-  function updateFormFields() {    
-    if($this->recuperation_start){
+  function updateFormFields() {
+    if ($this->recuperation_start) {
       $this->_recuperation_start = CMbDT::time($this->recuperation_start);
     }
-    if($this->recuperation_end){
+    if ($this->recuperation_end) {
       $this->_recuperation_end = CMbDT::time($this->recuperation_end);
     }
-    if($this->transfusion_start){
+    if ($this->transfusion_start) {
       $this->_transfusion_start = CMbDT::time($this->transfusion_start);
     }
-    if($this->transfusion_end){
+    if ($this->transfusion_end) {
       $this->_transfusion_end = CMbDT::time($this->transfusion_end);
     }
   }
   
   function updatePlainFields() {
-    
     $this->loadRefPlageOp();
     
-    if($this->_recuperation_start =="current") {
+    if ($this->_recuperation_start =="current") {
       $this->_recuperation_start = CMbDT::time();
     }
-    if($this->_recuperation_end =="current") {
+    if ($this->_recuperation_end =="current") {
       $this->_recuperation_end = CMbDT::time();
     }
-    if($this->_transfusion_start =="current") {
+    if ($this->_transfusion_start =="current") {
       $this->_transfusion_start = CMbDT::time();
     }
-    if($this->_transfusion_end =="current") {
+    if ($this->_transfusion_end =="current") {
       $this->_transfusion_end = CMbDT::time();
     }
     
-    if($this->_recuperation_start !== null && $this->_recuperation_start !="") {
+    if ($this->_recuperation_start !== null && $this->_recuperation_start != "") {
       $this->_recuperation_start = CMbDT::time($this->_recuperation_start);
       $this->recuperation_start = CMbDT::addDateTime($this->_recuperation_start, CMbDT::date($this->_datetime));
     }
-    if($this->_recuperation_start === ""){
+    if ($this->_recuperation_start === "") {
         $this->recuperation_start= "";
     }
-    if($this->_recuperation_end !== null && $this->_recuperation_end !="") {
+    if ($this->_recuperation_end !== null && $this->_recuperation_end != "") {
       $this->_recuperation_end = CMbDT::time($this->_recuperation_end);
       $this->recuperation_end = CMbDT::addDateTime($this->_recuperation_end, CMbDT::date($this->_datetime));
     }
-    if($this->_recuperation_end === ""){
-        $this->recuperation_end= "";
+    if ($this->_recuperation_end === "") {
+      $this->recuperation_end= "";
     }
-    if($this->_transfusion_start !== null && $this->_transfusion_start !="") {
+    if ($this->_transfusion_start !== null && $this->_transfusion_start != "") {
       $this->_transfusion_start = CMbDT::time($this->_transfusion_start);
       $this->transfusion_start = CMbDT::addDateTime($this->_transfusion_start, CMbDT::date($this->_datetime));
     }
-    if($this->_transfusion_start === ""){
-        $this->transfusion_start= "";
+    if ($this->_transfusion_start === "") {
+      $this->transfusion_start= "";
     }
-    if($this->_transfusion_end !== null && $this->_transfusion_end !="") {
+    if ($this->_transfusion_end !== null && $this->_transfusion_end != "") {
       $this->_transfusion_end = CMbDT::time($this->_transfusion_end);
       $this->transfusion_end = CMbDT::addDateTime($this->_transfusion_end, CMbDT::date($this->_datetime));
     }
-    if($this->_transfusion_end === ""){
-        $this->transfusion_end= "";
+    if ($this->_transfusion_end === "") {
+      $this->transfusion_end= "";
     }
   }
   
@@ -225,13 +230,13 @@ class CBloodSalvage extends CMbObject {
     $template->addProperty("Cell Saver - Hémoglobine de la poche"             , $this->hgb_pocket." g/dl");    
     $template->addProperty("Cell Saver - Hémoglobine patient post-transfusion", $this->hgb_patient." g/dl"); 
        
-    if($this->_ref_incident_type->_view) {
+    if ($this->_ref_incident_type->_view) {
       $template->addProperty("Cell Saver - Incident transfusionnel", $this->_ref_incident_type->_view);    
-    } else {
+    }
+    else {
       $template->addProperty("Cell Saver - Incident transfusionnel", "Aucun incident signalé");    
     }
     
     $this->notify("AfterFillLimitedTemplate", $template);
   }
 }
-?>
