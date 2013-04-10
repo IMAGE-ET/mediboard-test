@@ -170,7 +170,7 @@ function update($action, $revision) {
           $fic = fopen($event, "w");
         }
         
-        fwrite($fic, "#".date('Y-m-d H:i:s'));
+        fwrite($fic, "\n#".date('Y-m-d H:i:s'));
         fwrite($fic, "\nMise a jour. ".$svn);
         fclose($fic);
       }

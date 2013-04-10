@@ -36,6 +36,8 @@ function baseBackup($method, $username, $password, $hostname, $port, $database, 
     $loginUsername, $loginPassword, $lockFilePath = null
 ) {
   $currentDir = dirname(__FILE__);
+  $event = $currentDir . "/../tmp/svnevent.txt";
+
   announce_script("Database daily backup");
     
   if ($hostname === "") {
@@ -274,6 +276,18 @@ function baseBackup($method, $username, $password, $hostname, $port, $database, 
   if ($lockFilePath) {
     unlink($lockFilePath);
   }
+
+  // Write into event file
+  if (file_exists($event)) {
+    $fic = fopen($event, "a");
+  }
+  else {
+    $fic = fopen($event, "w");
+  }
+
+  fwrite($fic, "\n#".date('Y-m-d H:i:s'));
+  fwrite($fic, "\n<strong>".$database."</strong> base backup: <strong>".$method."</strong> method");
+  fclose($fic);
 }
 
 /**

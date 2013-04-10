@@ -33,6 +33,9 @@ require_once dirname(__FILE__)."/classes/Procedure.class.php";
  * @return void
  */
 function replaceBase($srcLocation, $srcDir, $srcDB, $tgtDir, $tgtDB, $restart, $safeCopy, $mysqlDir, $port, $localCopy) {
+  $currentDir = dirname(__FILE__);
+  $event = $currentDir . "/../tmp/svnevent.txt";
+
   announce_script("Mediboard replace base");
   
   $restart = false; 
@@ -88,6 +91,7 @@ function replaceBase($srcLocation, $srcDir, $srcDB, $tgtDir, $tgtDB, $restart, $
     }
   }
   else {
+    unlink($tgtDir . "/" . $archive);
     $res = symlink($srcDir . "/" . $srcDB . "-db/" . $srcDB . "-latest.tar.gz", $tgtDir . "/" . $archive);
     
     if (!(check_errs($res, false, "Failed to symlink local archive", "Successfully symlinked local archive!"))) {
@@ -220,6 +224,18 @@ function replaceBase($srcLocation, $srcDir, $srcDB, $tgtDir, $tgtDB, $restart, $
   check_errs(
     ($res && $res2), false, "Failed to delete temporary archive", "Succesfully deleted temporary archive"
   );
+
+  // Write into event file
+  if (file_exists($event)) {
+    $fic = fopen($event, "a");
+  }
+  else {
+    $fic = fopen($event, "w");
+  }
+
+  fwrite($fic, "\n#".date('Y-m-d H:i:s'));
+  fwrite($fic, "\nreplaceBase: <strong>".$srcDB."</strong> to <strong>".$tgtDB."</strong>");
+  fclose($fic);
 }
 
 /**

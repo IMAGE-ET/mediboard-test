@@ -66,6 +66,8 @@ then
   touch $lock
 fi
 
+event=$BASH_PATH/../tmp/svnevent.txt
+
 # Make backup path
 BACKUP_PATH=$5
 force_dir $BACKUP_PATH
@@ -165,3 +167,7 @@ if [ -n "$lock" ]
 then
   rm $lock
 fi
+
+# Write event file
+echo "#$(date +%Y-%m-%dT%H:%M:%S)" >> $event
+echo "<strong>$database</strong> base backup: <strong>$method</strong> method" >> $event

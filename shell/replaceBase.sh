@@ -54,6 +54,8 @@ source_database=$3
 target_directory=$4
 target_database=$5
 
+event=$BASH_PATH/../tmp/svnevent.txt
+
 if [ $restart -eq 1 ]
 then
 echo "Warning !!!!!!!!!!!! This will restart the MySQL server"
@@ -74,6 +76,7 @@ if [ $distant  -eq 1 ]; then
   scp $source_location:$source_directory/$source_database-db/$source_database-latest.tar.gz $target_directory/$archive
   check_errs $? "Failed to retrieve remote archive" "Succesfully retrieved remote archive!"
 else
+  rm $target_directory/$archive
   cp -s $source_directory/$source_database-db/$source_database-latest.tar.gz $target_directory/$archive
   check_errs $? "Failed to symlink local archive" "Succesfully symlinked local archive!"
 fi
@@ -132,3 +135,7 @@ fi
 rm -rf $target_directory/$source_database
 rm $target_directory/$archive
 check_errs $? "Failed to delete temporary archive" "Succesfully deleted temporary archive"
+
+# Write event file
+echo "#$(date +%Y-%m-%dT%H:%M:%S)" >> $event
+echo "replaceBase: <strong>$source_database</strong> to <strong>$target_database</strong>" >> $event
