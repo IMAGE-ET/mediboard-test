@@ -1202,8 +1202,6 @@ class CMediusers extends CMbObject {
     return $this->_refs_source_pop = $this->loadBackRefs("sources_pop");
   }
 
-
-
   function fillTemplate(&$template) {
     $this->loadRefsFwd();
     $this->_ref_function->fillTemplate($template);
@@ -1237,7 +1235,8 @@ class CMediusers extends CMbObject {
   /**
    * Charge la liste de plages et interventions pour un jour donné
    * Analogue à CSalle::loadRefsForDay
-   * @param $date date Date to look for
+   *
+   * @param string $date Date to look for
    */
   function loadRefsForDay($date) {
     $this->loadBackRefs("secondary_functions");
@@ -1310,9 +1309,19 @@ class CMediusers extends CMbObject {
     }
   }
 
+  /**
+   * Builds a structure containing basic information about the user, to be used in JS in window.User
+   *
+   * @return array|null
+   */
   function getBasicInfo(){
+    if (!$this->_ref_module) {
+      return null;
+    }
+
     $this->updateFormFields();
     $this->loadRefFunction()->loadRefGroup();
+
     return $this->_basic_info = array (
       'id'    => $this->_id,
       'guid'  => $this->_guid,
