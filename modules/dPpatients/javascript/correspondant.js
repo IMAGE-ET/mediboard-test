@@ -3,7 +3,20 @@ Correspondant = {
     var url = new Url('dPpatients', 'ajax_form_correspondant');
     url.addParam('correspondant_id', correspondant_id);
     url.addParam("patient_id", patient_id);
-    url.requestModal(500);
+    url.requestModal(600, 410);
+    if (!Object.isUndefined(callback)) {
+      url.modalObject.observe("afterClose", function(){
+        callback();
+      });
+    }
+  },
+
+  duplicate: function(correspondant_id, patient_id, callback) {
+    var url = new Url('dPpatients', 'ajax_form_correspondant');
+    url.addParam('correspondant_id', correspondant_id);
+    url.addParam("patient_id"      , patient_id);
+    url.addParam("duplicate"       , true);
+    url.requestModal(600, 410);
     if (!Object.isUndefined(callback)) {
       url.modalObject.observe("afterClose", function(){
         callback();

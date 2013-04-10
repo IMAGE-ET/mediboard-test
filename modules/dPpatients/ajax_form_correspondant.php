@@ -11,12 +11,15 @@
 
 $correspondant_id = CValue::get("correspondant_id");
 $patient_id       = CValue::get("patient_id");
+$duplicate        = CValue::get("duplicate");
 
 $patient = new CPatient();
 $patient->load($patient_id);
 
-$correspondant = new CCorrespondantPatient;
+$correspondant             = new CCorrespondantPatient;
 $correspondant->patient_id = $patient_id;
+$correspondant->_duplicate = $duplicate;
+$correspondant->updatePlainFields();
 
 if ($correspondant_id) {
   $correspondant->load($correspondant_id);
@@ -29,5 +32,3 @@ $smarty = new CSmartyDP;
 $smarty->assign("correspondant" , $correspondant);
 $smarty->assign("patient"       , $patient);
 $smarty->display("inc_form_correspondant.tpl");
-
-?>

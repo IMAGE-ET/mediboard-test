@@ -3,7 +3,7 @@
     Veuillez créer la fiche patient avant de pouvoir ajouter ses correspondants.
   </div>
 {{else}}
-  <button type="button" class="new"
+  <button type="button" class="add"
     onclick="Correspondant.edit(0, '{{$patient->_id}}', Correspondant.refreshList.curry('{{$patient->_id}}'))">
       {{tr}}CCorrespondantPatient-title-create{{/tr}}
   </button>

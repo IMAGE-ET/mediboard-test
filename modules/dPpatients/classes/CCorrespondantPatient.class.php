@@ -16,40 +16,49 @@
 class CCorrespondantPatient extends CMbObject {
 
   // DB Table key
-  var $correspondant_patient_id = null;
+  public $correspondant_patient_id;
 
   // DB Fields
-  var $patient_id = null;
-  var $relation   = null;
-  var $relation_autre = null;
-  var $nom        = null;
-  var $nom_jeune_fille = null;
-  var $prenom     = null;
-  var $naissance  = null;
-  var $adresse    = null;
-  var $cp         = null;
-  var $ville      = null;
-  var $tel        = null;
-  var $mob        = null;
-  var $fax        = null;
-  var $urssaf     = null;
-  var $parente    = null;
-  var $parente_autre = null;
-  var $email      = null;
-  var $remarques  = null;
-  var $ean        = null;
-  var $assure_id  = null;
-  var $ean_id     = null;
-  var $date_debut = null;
-  var $date_fin   = null;
-  var $num_assure = null;
-  var $employeur  = null;
+  public $patient_id;
+  public $relation;
+  public $relation_autre;
+  public $nom;
+  public $nom_jeune_fille;
+  public $prenom;
+  public $naissance;
+  public $adresse;
+  public $cp;
+  public $ville;
+  public $tel;
+  public $mob;
+  public $fax;
+  public $urssaf;
+  public $parente;
+  public $parente_autre;
+  public $email;
+  public $remarques;
+  public $ean;
+  public $assure_id;
+  public $ean_id;
+  public $date_debut;
+  public $date_fin;
+  public $num_assure;
+  public $employeur;
 
-  var $_eai_initiateur_group_id = null;
+  public $_eai_initiateur_group_id;
 
   // Form fields
-  var $_ref_patient = null;
+  public $_duplicate;
+  public $_is_obsolete = false;
 
+  /** @var CPatient */
+  public $_ref_patient;
+
+  /**
+   * Initialize object specification
+   *
+   * @return CMbObjectSpec the spec
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "correspondant_patient";
@@ -57,55 +66,122 @@ class CCorrespondantPatient extends CMbObject {
     return $spec;
   }
 
+  /**
+   * Get properties specifications as strings
+   *
+   * @see parent::getProps()
+   * @return array
+   */
   function getProps() {
-    $specs = parent::getProps();
-    $specs["patient_id"] = "ref class|CPatient cascade";
-    $specs["relation"]   = "enum list|assurance|autre|confiance|employeur|inconnu|prevenir";
-    $specs["relation_autre"] = "str";
-    $specs["nom"]        = "str seekable confidential";
-    $specs["nom_jeune_fille"] = "str";
-    $specs["prenom"]     = "str";
-    $specs["naissance"]  = "birthDate mask|99/99/9999 format|$3-$2-$1";
-    $specs["adresse"]    = "text";
-    $specs["cp"]         = "numchar minLength|4 maxLength|5";
-    $specs["ville"]      = "str confidential";
-    $specs["tel"]        = "phone confidential";
-    $specs["mob"]        = "phone confidential";
-    $specs["fax"]        = "phone confidential";
-    $specs["urssaf"]     = "numchar length|11 confidential";
-    $specs["parente"]    = "enum list|ami|ascendant|autre|beau_fils|colateral|collegue|compagnon|conjoint|directeur|divers|employeur|employe|enfant|enfant_adoptif|entraineur|epoux|frere|grand_parent|mere|pere|petits_enfants|proche|proprietaire|soeur|tuteur";
-    $specs["parente_autre"] = "str";
-    $specs["email"]      = "str maxLength|255";
-    $specs["remarques"]  = "text";
-    $specs["ean"]        = "str maxLength|30";
-    $specs["assure_id"]  = "str maxLength|30";
-    $specs["ean_id"]     = "str maxLength|5";
-    $specs["date_debut"] = "date";
-    $specs["date_fin"]   = "date";
-    $specs["num_assure"] = "str maxLength|30";
-    $specs["employeur"]  = "ref class|CCorrespondantPatient";
-    return $specs;
+    $props = parent::getProps();
+
+    $props["patient_id"] = "ref class|CPatient cascade";
+    $props["relation"]   = "enum list|assurance|autre|confiance|employeur|inconnu|prevenir default|prevenir";
+    $props["relation_autre"] = "str";
+    $props["nom"]        = "str seekable confidential";
+    $props["nom_jeune_fille"] = "str";
+    $props["prenom"]     = "str";
+    $props["naissance"]  = "birthDate mask|99/99/9999 format|$3-$2-$1";
+    $props["adresse"]    = "text";
+    $props["cp"]         = "numchar minLength|4 maxLength|5";
+    $props["ville"]      = "str confidential";
+    $props["tel"]        = "phone confidential";
+    $props["mob"]        = "phone confidential";
+    $props["fax"]        = "phone confidential";
+    $props["urssaf"]     = "numchar length|11 confidential";
+    $props["parente"]    = "enum list|ami|ascendant|autre|beau_fils|colateral|collegue|compagnon|conjoint|directeur|divers|employeur|".
+      "employe|enfant|enfant_adoptif|entraineur|epoux|frere|grand_parent|mere|pere|petits_enfants|proche|proprietaire|soeur|tuteur";
+    $props["parente_autre"] = "str";
+    $props["email"]      = "email";
+    $props["remarques"]  = "text";
+    $props["ean"]        = "str maxLength|30";
+    $props["assure_id"]  = "str maxLength|30";
+    $props["ean_id"]     = "str maxLength|5";
+    $props["date_debut"] = "date";
+    $props["date_fin"]   = "date";
+    $props["num_assure"] = "str maxLength|30";
+    $props["employeur"]  = "ref class|CCorrespondantPatient";
+
+    return $props;
   }
 
+  /**
+   * Update the form (derived) fields plain fields
+   *
+   * @return void
+   */
   function updateFormFields() {
     parent::updateFormFields();
+
     $this->_view = $this->relation ?
       CAppUI::tr("CCorrespondantPatient.relation.".$this->relation) :
       $this->relation_autre;
+
+    $this->_longview = "$this->nom $this->prenom";
+
+    if ($this->date_fin && $this->date_fin < CMbDT::date()) {
+      $this->_is_obsolete = true;
+    }
   }
 
+  /**
+   * Update the plain fields from the form fields
+   *
+   * @return void
+   */
+  function updatePlainFields() {
+    parent::updatePlainFields();
 
+    if ($this->nom) {
+      $this->nom = CMbString::upper($this->nom);
+    }
+
+    if ($this->nom_jeune_fille) {
+      $this->nom_jeune_fille = CMbString::upper($this->nom_jeune_fille);
+    }
+
+    if ($this->prenom) {
+      $this->prenom = CMbString::capitalize(CMbString::lower($this->prenom));
+    }
+
+    if (!$this->_id) {
+      $this->date_debut = CMbDT::date();
+    }
+
+    if ($this->_duplicate) {
+      $this->nom .= " (Copy)";
+
+      $this->_id        = null;
+      $this->date_debut = CMbDT::date();
+      $this->date_fin   = "";
+
+      $this->_duplicate = null;
+    }
+  }
+
+  /**
+   * Get backward reference specifications
+   *
+   * @return array Array of form "collection-name" => "class join-field"
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
+
     $backProps["correspondants_courrier"] = "CCorrespondantCourrier object_id";
     $backProps["fact_consult_maladie"]    = "CFactureCabinet assurance_maladie";
     $backProps["fact_consult_accident"]   = "CFactureCabinet assurance_accident";
     $backProps["fact_sejour_maladie"]     = "CFactureEtablissement assurance_maladie";
     $backProps["fact_sejour_accident"]    = "CFactureEtablissement assurance_accident";
     $backProps["employeur"]               = "CCorrespondantPatient employeur";
+
     return $backProps;
   }
 
+  /**
+   * Load patient
+   *
+   * @return CPatient
+   */
   function loadRefPatient() {
     return $this->_ref_patient = $this->loadFwdRef("patient_id");
   }

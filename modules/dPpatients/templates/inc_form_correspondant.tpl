@@ -168,7 +168,7 @@
   }
 </script>
 
-<form name="editCorrespondant" method="post" action="?">
+<form name="editCorrespondant" method="post" action="?" onsubmit="return Correspondant.onSubmit(this);">
   <input type="hidden" name="m" value="dPpatients" />
   <input type="hidden" name="dosql" value="do_correspondant_patient_aed" />
   {{if $mode_modele}}
@@ -184,24 +184,32 @@
 
   <table class="form">
     <tr>
-      <th colspan="2" class="title {{if $correspondant->_id}}modify{{/if}}">
-        {{if $correspondant->_id}}
-          {{tr}}CCorrespondantPatient-title-modify{{/tr}}
-        {{else}}
-          <span style="float: right; {{if $correspondant->relation != "autre"}}display: none;{{/if}}" id="relation_autre">
-            {{mb_label object=$correspondant field=relation_autre}} :
-              <input type="text" name="relation_autre" value="{{$correspondant->relation_autre}}" />
-          </span>
-          <span style="float: left;">
-            {{mb_field object=$correspondant field=relation onchange="toggleRelationAutre(this); toggleUrrsafParente(this); toggleConfiancePrevenir(this); toggleAssurance(this);" alphabet=true}}
-          </span>
-          </th>
-        <tr>
-          <th class="title" colspan="2">
-            {{tr}}CCorrespondantPatient-title-create{{/tr}}
-        {{/if}}
+      {{if $correspondant->_id}}
+      <th class="title modify text" colspan="2">
+        {{mb_include module=system template=inc_object_idsante400 object=$correspondant}}
+        {{mb_include module=system template=inc_object_history object=$correspondant}}
+
+        {{tr}}CCorrespondantPatient-title-modify{{/tr}} '{{$correspondant}}'
       </th>
+      {{else}}
+      <th class="title" colspan="2">
+        {{tr}}CCorrespondantPatient-title-create{{/tr}}
+      </th>
+      {{/if}}
     </tr>
+
+    <tr>
+      <th>{{mb_label object=$correspondant field="relation"}}</th>
+      <td>
+        <span>
+          {{mb_field object=$correspondant field=relation onchange="toggleRelationAutre(this); toggleUrrsafParente(this); toggleConfiancePrevenir(this); toggleAssurance(this);" alphabet=true}}
+        </span>
+        <span style="{{if $correspondant->relation != "autre"}}display: none;{{/if}}" id="relation_autre">
+          <input type="text" name="relation_autre" value="{{$correspondant->relation_autre}}" size="30" />
+        </span>
+      </td>
+    </tr>
+
     <tr>
       <th style="width: 30%;">{{mb_label object=$correspondant field="nom"}}</th>
       <td>
@@ -289,7 +297,7 @@
 
     <tr>
       <th>{{mb_label object=$correspondant field="email"}}</th>
-      <td>{{mb_field object=$correspondant field="email"}}</th>
+      <td>{{mb_field object=$correspondant field="email"}}</td>
     </tr>
     <tr>
       <th>{{mb_label object=$correspondant field="remarques"}}</th>
@@ -315,7 +323,8 @@
     {{/if}}
 
     {{if !$mode_modele}}
-      <tr id="date_debut" {{if $correspondant->relation != "assurance" && $correspondant->relation != "employeur" && $correspondant->_id}} style="display: none;"{{/if}}>
+      <tr id="date_debut"
+        {{if $correspondant->relation != "assurance" && $correspondant->relation != "employeur" && $correspondant->_id}} style="display: none;"{{/if}}>
         <th>{{mb_label object=$correspondant field="date_debut"}}</th>
         <td>{{mb_field object=$correspondant field="date_debut"}}</td>
       </tr>
@@ -327,8 +336,8 @@
     {{/if}}
 
     <tr>
-      <td colspan="2" style="text-align:center;">
-        <button type="button" class="save" onclick="Correspondant.onSubmit(this.form);" style="margin: auto;">
+      <td colspan="2" class="button">
+        <button type="submit" class="save">
           {{if !$correspondant->_id}}
             {{tr}}Create{{/tr}}
           {{else}}

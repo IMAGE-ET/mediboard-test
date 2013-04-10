@@ -11,15 +11,10 @@
 <table style="width: 100%;" class="tbl">
   <thead>
     <tr>
-      <th class="category">{{mb_title class=CCorrespondantPatient field=nom}}</th>
-      <th class="category">{{mb_title class=CCorrespondantPatient field=prenom}}</th>
+      <th class="category">{{tr}}CCorrespondantPatient{{/tr}}</th>
       <th class="category">{{mb_title class=CCorrespondantPatient field=naissance}}</th>
       <th class="category">{{mb_title class=CCorrespondantPatient field=adresse}}</th>
-      <th class="category">
-        {{mb_title class=CCorrespondantPatient field=cp}} / {{mb_title class=CCorrespondantPatient field=ville}}
-      </th>
       <th class="category">{{mb_title class=CCorrespondantPatient field=tel}}</th>
-      <th class="category">{{mb_title class=CCorrespondantPatient field=mob}}</th>
       <th class="category">{{mb_title class=CCorrespondantPatient field=fax}}</th>
       <th class="category">{{mb_title class=CCorrespondantPatient field=parente}}</th>
       {{if $conf.ref_pays == 1}}
@@ -31,7 +26,7 @@
       <th class="category">{{mb_title class=CCorrespondantPatient field=date_fin}}</th>
 
       {{if !$readonly}}
-        <th class="category" style="width: 1%"></th>
+        <th class="category narrow"></th>
       {{/if}}
     </tr>
   </thead>
@@ -39,22 +34,28 @@
     {{foreach from=$correspondants_by_relation item=_correspondants key=relation}}
       {{if $_correspondants|@count}}
         <tr>
-          <th colspan="{{if $conf.ref_pays == 1}}15{{else}}14{{/if}}">
+          <th class="section" colspan="{{if $conf.ref_pays == 1}}14{{else}}13{{/if}}">
             {{tr}}CCorrespondantPatient.relation.{{$relation}}{{/tr}}
           </th>
         </tr>
         {{foreach from=$_correspondants item=_correspondant}}
-          <tr>
-            <td>{{mb_value object=$_correspondant field=nom}}</td>
-            <td>{{mb_value object=$_correspondant field=prenom}}</td>
-            <td>{{mb_value object=$_correspondant field=naissance}}</td>
-            <td>{{mb_value object=$_correspondant field=adresse}}</td>
-            <td>
-              {{mb_value object=$_correspondant field=cp}}
-              {{mb_value object=$_correspondant field=ville}}
+          <tr {{if $_correspondant->_is_obsolete}}class="hatching"{{/if}}>
+            <td class="text noted">
+              <div style="float: right;">
+                {{mb_include module=system template=inc_object_notes object=$_correspondant}}
+              </div>
+
+              {{$_correspondant->_longview}}
             </td>
-            <td>{{mb_value object=$_correspondant field=tel}}</td>
-            <td>{{mb_value object=$_correspondant field=mob}}</td>
+            <td>{{mb_value object=$_correspondant field=naissance}}</td>
+            <td class="text compact">
+              <span style="white-space: nowrap;">{{$_correspondant->adresse|spancate:30}}</span>
+              <span style="white-space: nowrap;">{{$_correspondant->cp}} {{$_correspondant->ville|spancate:20}}</span>
+            </td>
+            <td>
+              {{mb_value object=$_correspondant field=tel}} <br />
+              {{mb_value object=$_correspondant field=mob}}
+            </td>
             <td>{{mb_value object=$_correspondant field=fax}}</td>
             <td>
               {{if $_correspondant->relation != "employeur"}}
@@ -73,7 +74,7 @@
               </td>
             {{/if}}
             <td>{{mb_value object=$_correspondant field=email}}</td>
-            <td>
+            <td class="text compact">
               {{if $conf.ref_pays == 1}}
                 {{mb_value object=$_correspondant field=remarques}}
               {{else}}
@@ -88,7 +89,14 @@
 
             {{if !$readonly}}
             <td>
-              <button type="button" class="edit notext" onclick="Correspondant.edit('{{$_correspondant->_id}}', null, Correspondant.refreshList.curry('{{$patient_id}}'))"></button>
+              <button {{if $_correspondant->_is_obsolete}}disabled{{/if}} type="button" class="edit notext"
+                onclick="Correspondant.edit('{{$_correspondant->_id}}', null, Correspondant.refreshList.curry('{{$patient_id}}'))">
+              </button>
+              {{if $_correspondant->_is_obsolete}}
+                <button type="button" class="duplicate notext"
+                        onclick="Correspondant.duplicate('{{$_correspondant->_id}}', null, Correspondant.refreshList.curry('{{$patient_id}}'))">
+                </button>
+              {{/if}}
             </td>
             {{/if}}
           </tr>
