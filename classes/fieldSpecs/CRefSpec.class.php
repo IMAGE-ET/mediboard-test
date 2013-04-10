@@ -86,8 +86,8 @@ class CRefSpec extends CMbFieldSpec {
       }
     }
     else {
-      if (!is_subclass_of($class, "CMbObject")) {
-        return "La classe '$class' n'est pas une classe d'objet métier";
+      if (!is_subclass_of($class, "CStoredObject")) {
+        return "La classe '$class' n'est pas une classe d'objet enregistrée";
       }
       
       $ref = new $class;
