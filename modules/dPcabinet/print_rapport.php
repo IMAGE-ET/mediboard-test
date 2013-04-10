@@ -70,7 +70,7 @@ $listPrat = ($prat->_id) ?
 $where[] = "plageconsult.chir_id ".CSQLDataSource::prepareIn(array_keys($listPrat))
     ." OR plageconsult.pour_compte_id ".CSQLDataSource::prepareIn(array_keys($listPrat));
 
-$order = " plageconsult.chir_id, plageconsult.date, plageconsult.debut";
+$order = "plageconsult.date, plageconsult.debut, plageconsult.chir_id";
 
 // Initialisation du tableau de reglements
 $reglement = new CReglement();
@@ -126,6 +126,9 @@ $where["consultation.facture_id"] = "IS NOT NULL";
 
 $facture = new CFactureCabinet();
 $listFactures = $facture->loadList($where, $order, null, null, $ljoin);
+
+$factures = array();
+$listPlages = array();
 
 foreach ($listFactures as $_facture) {
   $_facture->loadRefPatient();
