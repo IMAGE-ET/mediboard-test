@@ -257,10 +257,10 @@ class CFacture extends CMbObject {
       else {
         $ngapccam = true;
         foreach ($this->_ref_items as $item) {
-          if($item->type != "CActeNGAP" && $item->type != "CActeCCAM") {
+          if ($item->type != "CActeNGAP" && $item->type != "CActeCCAM") {
             $ngapccam = false;
           }
-          if($item->type = "CActeNGAP") {
+          if ($item->type == "CActeNGAP") {
             $this->_secteur1      += $item->montant_base;
             $this->_secteur2      += $item->montant_depassement;
           } else {
@@ -269,7 +269,7 @@ class CFacture extends CMbObject {
           }
           
         }
-        if(!$ngapccam) {
+        if (!$ngapccam) {
           $this->du_patient += $this->_secteur1;
           $this->du_tiers   += $this->_secteur2;
         }
