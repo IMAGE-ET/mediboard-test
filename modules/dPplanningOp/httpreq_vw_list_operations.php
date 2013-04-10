@@ -53,8 +53,9 @@ if ($userSel->_id) {
     $_sejour->loadRefsDocs();
 
     $presc = $_sejour->loadRefPrescriptionSejour();
-    $presc->countLinesMedsElements($userSel->_id);
-
+    if ($presc->_id) {
+      $presc->countLinesMedsElements($userSel->_id);
+    }
     foreach ($_sejour->_ref_documents as $_document) {
       $_document->canDo();
     }
@@ -116,8 +117,9 @@ if ($userSel->_id) {
       $_sejour->loadRefsDocs();
 
       $presc = $_sejour->loadRefPrescriptionSejour();
-      $presc->countLinesMedsElements($userSel->_id);
-
+      if ($presc->_id) {
+        $presc->countLinesMedsElements($userSel->_id);
+      }
       foreach ($_sejour->_ref_documents as $_doc) {
         $_doc->canDo();
       }
