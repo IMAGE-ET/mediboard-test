@@ -169,7 +169,7 @@
           <tr>
             <td class="button" colspan="2">
               {{if $rpu->_id}}
-                <button class="modify" type="submit">Valider</button>
+                <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
                 {{mb_ternary var=annule_text test=$sejour->annule value="Rétablir" other="Annuler"}}
                 {{mb_ternary var=annule_class test=$sejour->annule value="change" other="cancel"}}
                 
