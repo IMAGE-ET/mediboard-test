@@ -31,9 +31,9 @@ if (!$do_import) {
   $count_users_ldap = $user->countList($where, null, $ljoin);
   $where = array();
   $where["users.template"]        = "= '0'";
-  $where["users_mediboard.actif"]  = "= '1'";
+  $where["users_mediboard.actif"] = "= '1'";
 
-  $count_users_all  = $user->countList($where);
+  $count_users_all  = $user->countList($where, null, $ljoin);
   CAppUI::stepAjax(($count_users_all - $count_users_ldap)." comptes qui ne sont pas associés");
 }
 else {
