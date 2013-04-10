@@ -18,7 +18,7 @@ if (!defined("PERM_DENY")) {
 /**
  * The CPermObject class
  */
-class CPermObject extends CStoredObject {
+class CPermObject extends CMbObject {
   
   // Constants
   const DENY = 0;

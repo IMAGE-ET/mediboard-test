@@ -12,7 +12,7 @@
 /**
  * The CPermModule class
  */
-class CPermModule extends CStoredObject {
+class CPermModule extends CMbObject {
   // Constants
   const DENY = 0;
   const READ = 1;
