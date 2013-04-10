@@ -12,10 +12,49 @@
   Main.add(function() {
     var form = getForm("filterPlanning");
     window.calendar_planning = Calendar.regField(form.date_planning);
-    refreshPlanning();
+    autorefreshPlanning.start();
   });
-  
-  refreshPlanning = function() {
+
+
+  togglePlayPause = function(button) {
+    button.toggleClassName("play");
+    button.toggleClassName("pause");
+    if (button.hasClassName("play")) {
+      autorefreshPlanning.stop();
+    }
+    else {
+      autorefreshPlanning.resume();
+    }
+  }
+
+  autorefreshPlanning = {
+    frequency: 90, //sec
+    updater: null,
+
+    start : function() {
+      this.stop();
+      this.updater = refreshPlanning();
+    },
+
+    stop: function(){
+      if (this.updater) {
+        this.updater.stop();
+      }
+    },
+
+    resume: function(){
+      if (this.updater) {
+        this.updater.resume();
+      } else {
+        this.updater = refreshPlanning(this.frequency);
+      }
+    }
+
+
+  }
+
+
+  refreshPlanning = function(period) {
     var form = getForm("filterPlanning");
     var url = new Url("reservation", "ajax_vw_planning");
     url.addParam("date_planning", $V(form.date_planning));
@@ -28,6 +67,11 @@
     
     if (week_container) {
       url.addParam("scroll_top", week_container.scrollTop);
+    }
+
+    if (period) {
+      return url.periodicalUpdate("planning", {
+        frequency: period});
     }
     url.requestUpdate("planning");
 
@@ -293,6 +337,7 @@
   <table class="form">
     <tr>
       <th class="category" colspan="5">
+        <span style="float:left;"><button class="play" title="Arrêter / Relancer le rafraîchissement automatique" onclick="togglePlayPause(this);" type="button">Rech. auto</button></span>
         Filtre
       </th>
       <th class="category">
