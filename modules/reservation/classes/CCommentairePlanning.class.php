@@ -11,41 +11,56 @@
 
 /**
  * Classe CCommentairePlanning
- * @ gère les commentaires sous la forme libellé + description dans le planning de réservation
+ * gère les commentaires sous la forme libellé + description dans le planning de réservation
  */
 class CCommentairePlanning extends CMbObject {
   // DB Table key
-  var $commentaire_planning_id = null;
+  public $commentaire_planning_id;
   
   // DB References
-  var $salle_id    = null;
+  public $salle_id;
   
   // DB Fields
-  var $libelle     = null;
-  var $commentaire = null;
-  var $color       = null;
-  var $debut       = null;
-  var $fin         = null;
-  
+  public $libelle;
+  public $commentaire;
+  public $color;
+  public $debut;
+  public $fin;
+
+  /**
+   * Specs
+   *
+   * @return CMbObjectSpec
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'commentaire_planning';
     $spec->key   = 'commentaire_planning_id';
     return $spec;
   }
-  
+
+  /**
+   * Properties
+   *
+   * @return array
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["salle_id"]    = "ref class|CSalle";
-    $specs["libelle"]     = "str notNull";
+    $specs["libelle"]     = "str autocomplete notNull";
     $specs["commentaire"] = "text helped";
     $specs["color"]       = "str length|6 default|DDDDDD";
     $specs["debut"]       = "dateTime notNull";
-    $specs["fin"]         = "dateTime notNull";
+    $specs["fin"]         = "dateTime notNull moreThan|debut";
     
     return $specs;
   }
-  
+
+  /**
+   * updateFormFields
+   *
+   * @return null
+   */
   function updateFormFields() {
     parent::updateFormFields();
     

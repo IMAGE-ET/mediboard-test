@@ -30,7 +30,7 @@
   {{mb_field object=$commentaire field=salle_id hidden=true}}
   
   <table class="form">
-    {{mb_include module=system template=inc_form_table_header object=$commentaire}}
+    {{mb_include module=system template=inc_form_table_header object=$commentaire duplicate=$clone}}
     
     <tr>
       <th>
@@ -70,7 +70,7 @@
         {{mb_label object=$commentaire field=libelle}}
       </th>
       <td>
-        {{mb_field object=$commentaire field=libelle}}
+        {{mb_field object=$commentaire field=libelle form="editCommentaire"}}
       </td>
     </tr>
     
@@ -79,7 +79,7 @@
         {{mb_label object=$commentaire field=commentaire}}
       </th>
       <td>
-        {{mb_field object=$commentaire field=commentaire form=editCommentaire}}  
+        {{mb_field object=$commentaire field=commentaire form="editCommentaire"}}
 
       </td>
     </tr>

@@ -13,7 +13,7 @@ CCanDo::checkRead();
 
 global $m, $current_m;
 
-if (!isset($current_m)){
+if (!isset($current_m)) {
   $current_m = CValue::get("current_m", $m);
 }
 
