@@ -467,12 +467,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function handleA14(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
-    // Mapping venue - création impossible
-    if (!$this->admitFound($newVenue, $data)) {
-      return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
-    }
-    
-    return $this->mapAndStoreVenue($ack, $newVenue, $data);
+    // Mapping venue - création possible
+    return $this->handleA05($ack, $newVenue, $data);
   }
 
   function handleA15(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
