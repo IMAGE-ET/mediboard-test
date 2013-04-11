@@ -953,7 +953,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function mapAndStoreMovement(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
-    if (!array_key_exists("ZBE", $data)) {
+    if (!array_key_exists("ZBE", $data) || !$data["ZBE"]) {
       return;
     }
 
@@ -1326,7 +1326,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }  
   
   function mappingMovement($data, CSejour $newVenue, CMovement $movement) {
-    // Segment ZBE    
+    if (!array_key_exists("ZBE", $data) || !$data["ZBE"]) {
+      return;
+    }
+
+    // Segment ZBE
     return $this->getZBE($data["ZBE"], $newVenue, $movement);
   }
   
