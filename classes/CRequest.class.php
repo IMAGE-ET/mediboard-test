@@ -399,6 +399,7 @@ class CRequest {
     }
     
     // Select clauses
+    $select = array();
     foreach ($arraySelect as $as => $column) {
       $select[$as] = is_string($as) ? "$column AS `$as`" : $column;
     }
