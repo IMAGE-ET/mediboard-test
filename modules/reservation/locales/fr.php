@@ -25,6 +25,7 @@ $locales['CCommentairePlanning-salle_id'] = 'Salle';
 $locales['CCommentairePlanning-salle_id-court'] = 'Salle';
 $locales['CCommentairePlanning-salle_id-desc'] = 'Salle';
 $locales['CCommentairePlanning-title-create'] = 'Création de commentaire';
+$locales['CCommentairePlanning-title-duplicate'] = 'Création (copie) d\'un commentaire';
 $locales['CCommentairePlanning-title-modify'] = 'Modification de commentaire';
 $locales['CCommentairePlanning.all'] = 'Tous les commentaires';
 $locales['CCommentairePlanning.none'] = 'Aucun commentaire';

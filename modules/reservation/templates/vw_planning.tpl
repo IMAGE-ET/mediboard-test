@@ -74,7 +74,6 @@
         frequency: period});
     }
     url.requestUpdate("planning");
-
   }
 
   modifPlage = function(plage_id, date) {
@@ -87,7 +86,7 @@
     });
   }
   
-  modifIntervention = function(date, hour, salle_id, operation_id, chir_id, enplage) {
+  modifIntervention = function(date, hour, salle_id, operation_id, enplage) {
     if (enplage) {
       var url = new Url("dPplanningOp", "vw_edit_planning");
     }
@@ -100,10 +99,8 @@
     }
 
     url.addParam("operation_id", operation_id);
-    url.addParam("chir_id", chir_id);
     url.addParam("dialog", 1);
     url.modal({width: 1000, height: 700});
-
     url.modalObject.observe("afterClose", function() {
       refreshPlanning();
     });
