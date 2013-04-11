@@ -94,7 +94,7 @@ Main.add(function () {
   </tr>
 
   <tr >
-    <td  id="semainiertdb" style="height:400px;">{{mb_include module=ssr template=inc_vw_week}}</td>
+    <td  id="semainiertdb" style="height:400px;">{{mb_include module=system template=calendars/vw_week}}</td>
     <td id="viewTooltip" style="min-width:300px;width:33%;"></td>
   </tr>
   

@@ -19,7 +19,7 @@
   };
 </script>
 
-<form name="editCommentaire" method="post" onsubmit="return onSubmitFormAjax(this)">
+<form name="editCommentaire" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close})">
   <input type="hidden" name="m" value="reservation" />
   <input type="hidden" name="dosql" value="do_commentaire_planning_aed" />
   <input type="hidden" name="del" value="0" />
@@ -87,7 +87,7 @@
     <tr>
       <td colspan="2" class="button">
         {{if !$commentaire->_id}}
-          <button type="button" class="save" onclick="this.form.onsubmit(); Control.Modal.close();">{{tr}}Create{{/tr}}</button>
+          <button type="submit" class="save">{{tr}}Create{{/tr}}</button>
         {{else}}
           <button type="button" class="save" onclick="this.form.onsubmit()">{{tr}}Save{{/tr}}</button>
           <button type="button" class="trash"
@@ -95,7 +95,7 @@
               typeName: 'le commentaire',
               objName: '{{$commentaire->libelle}}',
               ajax: true
-              })">{{tr}}Delete{{/tr}}</button>
+              });Control.Modal.close();">{{tr}}Delete{{/tr}}</button>
         {{/if}}
       </td>
     </tr>

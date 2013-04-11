@@ -10,6 +10,7 @@
 
 {{mb_default var=colspan value=2}}
 {{mb_default var=css_class value=""}}
+{{mb_default var=duplicate value=false}}
 
 <tr>
   {{if $object->_id}}
@@ -20,6 +21,10 @@
     {{tr}}{{$object->_class}}-title-modify{{/tr}} 
     <br />
     '{{$object}}'
+  </th>
+  {{elseif $duplicate}}
+  <th class="title duplicate" colspan="{{$colspan}}">
+    {{tr}}{{$object->_class}}-title-duplicate{{/tr}}
   </th>
   {{else}}
   <th class="title" colspan="{{$colspan}}">

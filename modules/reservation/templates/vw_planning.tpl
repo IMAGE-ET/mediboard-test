@@ -86,7 +86,7 @@
     });
   }
   
-  modifIntervention = function(date, hour, salle_id, operation_id, enplage) {
+  modifIntervention = function(date, hour, salle_id, operation_id, enplage, chir_id) {
     if (enplage) {
       var url = new Url("dPplanningOp", "vw_edit_planning");
     }
@@ -96,6 +96,10 @@
       url.addParam("hour_urgence", hour);
       url.addParam("salle_id"    , salle_id);
       url.addParam("min_urgence" , "00");
+    }
+
+    if (chir_id) {
+      url.addParam("chir_id", chir_id);
     }
 
     url.addParam("operation_id", operation_id);
@@ -244,7 +248,7 @@
     }
   }
   
-  modifCommentaire = function(date, hour, salle_id, commentaire_id, clone, callback) {
+  modifCommentaire = function(date, hour, salle_id, commentaire_id, clone) {
     var url = new Url("reservation", "ajax_edit_commentaire");
     
     if (commentaire_id) {
@@ -254,11 +258,7 @@
     if (clone) {
       url.addParam("clone", true);
     }
-    
-    if (callback) {
-      url.addParam("callback", callback);
-    }
-    
+
     url.addParam("date", date);
     url.addParam("hour", hour);
     url.addParam("salle_id", salle_id);

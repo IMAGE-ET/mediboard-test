@@ -53,7 +53,7 @@
   </div>
 {{/if}}
 <div id="planningInterventions">
-  {{mb_include module=ssr template=inc_vw_week}}
+  {{mb_include module=system template=calendars/vw_week}}
 </div>
 
 <script type="text/javascript">
@@ -75,7 +75,7 @@
         case 'edit':
           // Commentaire
           if (elem.up().up().hasClassName("commentaire_planning")) {
-            modifCommentaire(null, null, null, object_id, false, "Control.Modal.close");
+            modifCommentaire(null, null, null, object_id, false);
           }
 
           else if (elem.up().up().hasClassName("plage_planning")) {
@@ -97,7 +97,7 @@
         case 'cut':
         case 'copy':
           if (elem.up().up().hasClassName("commentaire_planning")) {
-            modifCommentaire(null, null, null, object_id, true,  "Control.Modal.close");
+            modifCommentaire(null, null, null, object_id, true);
             break;
           }
 
@@ -214,7 +214,7 @@
           var form = getForm("filterPlanning");
           
           if (form._comment_mode.checked) {
-            modifCommentaire("{{$date_planning}}", hour, salle_id, null, "Control.Modal.close");
+            modifCommentaire("{{$date_planning}}", hour, salle_id, null);
             return;
           }
           

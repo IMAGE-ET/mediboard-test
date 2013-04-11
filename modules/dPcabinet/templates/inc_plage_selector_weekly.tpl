@@ -95,11 +95,11 @@
     </tr>
     </table>
     <div id="plageSelectorTable">
-      {{mb_include module=ssr template=inc_vw_week}}
+      {{mb_include module=system template=calendars/vw_week}}
     </div>
 {{else}}
   <div id="plageSelectorTable">
-    {{mb_include module=ssr template=inc_vw_week print=1}}
+    {{mb_include module=system template=calendars/vw_week print=1}}
     <script type="text/javascript">
       // Pour l'impression, on cache les lignes vides
       // et on redimensionne les events

@@ -31,7 +31,7 @@
 
 {{assign var=chir_id value=$chirSel}}
 
-{{mb_include module=ssr template=inc_vw_week}}
+{{mb_include module=system template=calendars/vw_week}}
 
 <script type="text/javascript">
   Main.add(function() {
