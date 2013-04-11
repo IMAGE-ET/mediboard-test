@@ -10,13 +10,13 @@
     {{elseif $facture->_ref_last_consult->_date}}
       {{$facture->_ref_last_consult->_date|date_format:"%d/%m/%Y"}}
     {{else}}
-      {{$facture->_ref_last_sejour->date|date_format:"%d/%m/%Y"}}
+      {{$facture->_ref_last_sejour->entree_prevue|date_format:"%d/%m/%Y"}}
     {{/if}}
     </span>
   </td>
   {{if $_acte_tarmed->code}} 
   <td class="acte-{{$_acte_tarmed->_class}}">
-     {{mb_value object=$_acte_tarmed field="code"}}
+    {{mb_value object=$_acte_tarmed field="code"}}
   </td>
   {{else}}
   <td>

@@ -16,7 +16,7 @@
     {{elseif $facture->_ref_last_consult->_date}}
       {{$facture->_ref_last_consult->_date|date_format:"%d/%m/%Y"}}
     {{else}}
-      {{$facture->_ref_last_sejour->date|date_format:"%d/%m/%Y"}}
+      {{$facture->_ref_last_sejour->entree_prevue|date_format:"%d/%m/%Y"}}
     {{/if}}
     </span>
   </td>
