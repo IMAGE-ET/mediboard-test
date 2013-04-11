@@ -167,18 +167,25 @@ class CStoredObject extends CModelObject {
    */
   static function loadFromGuid($guid, $cached = false) {
     list($class, $id) = explode('-', $guid);
-    if ($class) {
-      $object = CExObject::getValidObject($class);
-      if (!$object) {
-        $object = new $class;
-      }
-      
-      if ($id && $id !== "none") {
-        return $cached ? $object->getCached($id) : $object->load($id);
-      }
-      
-      return $object;
+    if (!$class) {
+      return;
     }
+    
+    // Non existing class
+    if (!self::classExists($class)) {
+      return;
+    }
+
+    $object = CExObject::getValidObject($class);
+    if (!$object) {
+      $object = new $class;
+    }
+    
+    if ($id && $id !== "none") {
+      return $cached ? $object->getCached($id) : $object->load($id);
+    }
+    
+    return $object;
   }
   
   /**
@@ -1524,7 +1531,12 @@ class CStoredObject extends CModelObject {
    */
   function countBackRefs($backName, $where = array(), $ljoin = array(), $cache = true) {
     if (!$backSpec = $this->makeBackSpec($backName)) {
-      return null;
+      return;
+    }
+
+    // No existing class
+    if (!self::classExists($backSpec->class)) {
+      return;
     }
 
     $backObject = new $backSpec->class;
@@ -1532,7 +1544,7 @@ class CStoredObject extends CModelObject {
     
     // Cas du module non installé
     if (!$backObject->_ref_module) {
-      return null;
+      return;
     }
 
     // Empty object
@@ -1591,6 +1603,11 @@ class CStoredObject extends CModelObject {
     $object = reset($objects);
     if (!$backSpec = $object->makeBackSpec($backName)) {
       return null;
+    }
+
+    // No existing class
+    if (!self::classExists($backSpec->class)) {
+      return;
     }
 
     $backObject = new $backSpec->class;
@@ -1665,13 +1682,18 @@ class CStoredObject extends CModelObject {
    */
   function loadBackRefs($backName, $order = null, $limit = null, $group = null, $ljoin = null) {
     if (!$backSpec = $this->makeBackSpec($backName)) {
-      return null;
+      return;
     }
     
+    // No existing class
+    if (!self::classExists($backSpec->class)) {
+      return;
+    }
+
     // Module unavailable
     $backObject = new $backSpec->class;
     if (!$backObject->_ref_module) {
-      return null;
+      return;
     }
 
     // Empty object
@@ -1711,13 +1733,18 @@ class CStoredObject extends CModelObject {
    */
   function loadBackIds($backName, $order = null, $limit = null, $group = null, $ljoin = null) {
     if (!$backSpec = $this->makeBackSpec($backName)) {
-      return null;
+      return;
+    }
+
+    // No existing class
+    if (!self::classExists($backSpec->class)) {
+      return;
     }
 
     // Cas du module non installé
     $backObject = new $backSpec->class;
     if (!$backObject->_ref_module) {
-      return null;
+      return;
     }
 
     $backField = $backSpec->field;
@@ -1754,7 +1781,7 @@ class CStoredObject extends CModelObject {
    */
   function loadUniqueBackRef($backName, $order = null, $limit = null, $group = null, $ljoin = null) {
     if (null === $backRefs = $this->loadBackRefs($backName, $order, $limit, $group, $ljoin)) {
-      return null;
+      return;
     }
 
     $count = count($backRefs);
@@ -1799,6 +1826,11 @@ class CStoredObject extends CModelObject {
 
     $this->makeAllBackSpecs();
     foreach ($this->_backSpecs as $backSpec) {
+      // No existing class
+      if (!self::classExists($backSpec->class)) {
+        continue;
+      }
+      
       $backObject = new $backSpec->class;
       $backField = $backSpec->field;
 
@@ -1892,12 +1924,17 @@ class CStoredObject extends CModelObject {
       return;
     }
     
-    // Absence de la classe
+    // Undefined class
     $class = $spec->meta ? $this->{$spec->meta} : $spec->class;
     if (!$class) {
       return $this->_fwd[$field] = null;
     }
           
+    // Non existing class
+    if (!self::classExists($class)) {
+      return $this->_fwd[$field] = null;
+    }
+    
     $fwd = new $class;
     
     // Inactive module
@@ -1951,8 +1988,18 @@ class CStoredObject extends CModelObject {
       return array();
     }
 
+    // No existing class
+    if (!self::classExists($spec->class)) {
+      return;
+    }
+    
     $fwd = new $spec->class;
     
+    // Inactive module
+    if (!$fwd->_ref_module) {
+      return;
+    }
+
     if ($object_class) {
       $where[$object_class] = CSQLDataSource::prepareIn($fwd_ids);
     }

@@ -116,6 +116,24 @@ class CModelObject {
   public $_ref_module; // Parent module
 
   /**
+   * Tell wether class exists
+   * 
+   * @param class
+   * 
+   * @return bool
+   */
+  static function classExists($class) {
+    $context = array(__METHOD__, func_get_args());
+    if (CFunctionCache::exist($context)) {
+      return CFunctionCache::get($context);
+    }
+   
+    $value =  class_exists($class);
+    
+    return CFunctionCache::set($context, $value);
+  }
+
+  /**
    * Construct
    *
    * @return CModelObject
@@ -150,7 +168,7 @@ class CModelObject {
   function __toString() {
     return strip_tags($this->_view);
   }
-  
+    
   /**
    * Initialization factorisation for construction and unserialization
    *
@@ -303,7 +321,8 @@ class CModelObject {
   
   /**
    * Get the backrefs to export when using CMbObjecExport
-   *
+   * 
+   * @todo Should move back to CStoredObject
    * @return array
    */
   function getExportedBackRefs(){
