@@ -210,19 +210,11 @@ class CProtocole extends CMbObject {
   }
 
   function loadRefPrescriptionChir() {
-    if (!$this->protocole_prescription_chir_class && !$this->protocole_prescription_chir_id) {
-      return $this->_ref_protocole_prescription_chir = new CPrescription;
-    }
-    $this->_ref_protocole_prescription_chir = new $this->protocole_prescription_chir_class;
-    return $this->_ref_protocole_prescription_chir->load($this->protocole_prescription_chir_id);
+    return $this->_ref_protocole_prescription_chir = $this->loadFwdRef("protocole_prescription_chir_id", true);
   }
 
   function loadRefPrescriptionAnesth() {
-    if (!$this->protocole_prescription_anesth_class && !$this->protocole_prescription_anesth_id) {
-      return $this->_ref_protocole_prescription_anesth = new CPrescription;
-    }
-    $this->_ref_protocole_prescription_anesth = new $this->protocole_prescription_anesth_class;
-    return $this->_ref_protocole_prescription_anesth->load($this->protocole_prescription_anesth_id);
+    return $this->_ref_protocole_prescription_anesth = $this->loadFwdRef("protocole_prescription_anesth_id", true);
   }
 
   function loadExtCodesCCAM() {
