@@ -31,7 +31,8 @@ $etablissements = CMediusers::loadEtablissements(PERM_READ);
 $prestations = CPrestation::loadCurrentList();
 
 $operation_id = CValue::getOrSession("operation_id");
-$chir_id      = CValue::getOrSession("chir_id");
+$chir_id      = CAppUI::conf("dPplanningOp COperation use_session_praticien")
+  ? CValue::getOrSession("chir_id") : CValue::get("chir_id");
 $sejour_id    = CValue::get("sejour_id");
 $hour_urgence = CValue::get("hour_urgence");
 $min_urgence  = CValue::get("min_urgence");

@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
 * @package Mediboard
@@ -16,7 +16,9 @@ $etablissements = CMediusers::loadEtablissements(PERM_READ);
 $prestations = CPrestation::loadCurrentList();
 
 $operation_id = CValue::getOrSession("operation_id");
-$chir_id      = CValue::getOrSession("chir_id");
+$chir_id      = CAppUI::conf("dPplanningOp COperation use_session_praticien")
+  ? CValue::getOrSession("chir_id")
+  : CValue::get("chir_id");
 $sejour_id    = CValue::get("sejour_id");
 $patient_id   = CValue::get("pat_id");
 $today        = CMbDT::date();
@@ -79,7 +81,7 @@ if ($sejour_id && !$operation_id) {
 // Liste des types d'anesthésie
 $listAnesthType = new CTypeAnesth;
 $orderanesth = "name";
-$listAnesthType = $listAnesthType->loadList(null,$orderanesth);
+$listAnesthType = $listAnesthType->loadList(null, $orderanesth);
 
 // Liste des anesthésistes
 $anesthesistes = $user->loadAnesthesistes(PERM_READ);
@@ -105,11 +107,11 @@ if ($op->_id) {
   $patient =& $sejour->_ref_patient;
   
   global $m, $tab;
-//  // On vérifie que l'utilisateur a les droits sur l'operation et le sejour
-//  if(!$op->canEdit() || !$sejour->canEdit()) {
-//    CAppUI::setMsg("Vous n'avez pas accès à cette opération", UI_MSG_WARNING);
-//    CAppUI::redirect("m=$m&tab=$tab&operation_id=0");
-//  }
+  // On vérifie que l'utilisateur a les droits sur l'operation et le sejour
+  //  if(!$op->canEdit() || !$sejour->canEdit()) {
+  //    CAppUI::setMsg("Vous n'avez pas accès à cette opération", UI_MSG_WARNING);
+  //    CAppUI::redirect("m=$m&tab=$tab&operation_id=0");
+  //  }
   
   // Ancienne methode
   /*if (!array_key_exists($op->chir_id, $listPraticiens)) {
@@ -276,5 +278,3 @@ $smarty->assign("blocages_lit"          , $blocages_lit);
 $smarty->assign("exchange_source"       , $exchange_source);
 
 $smarty->display("vw_edit_planning.tpl");
-
-?>

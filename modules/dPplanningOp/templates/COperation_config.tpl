@@ -8,7 +8,8 @@
     <tr>
       <th class="title" colspan="2">Général</th>
     </tr>
-    
+
+    {{mb_include module=system template=inc_config_bool var=use_session_praticien}}
     {{mb_include module=system template=inc_config_bool var=use_ccam}}
     {{mb_include module=system template=inc_config_bool var=verif_cote}}
     {{mb_include module=system template=inc_config_bool var=delete_only_admin}}
