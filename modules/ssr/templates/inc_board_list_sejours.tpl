@@ -62,12 +62,12 @@ Main.add(function() {
 
     <td style="text-align: right;">
 		  {{assign var=count_evenements value=$_sejour->_count_evenements_ssr_week}}
-      {{$count_evenements|ternary:$count_evenements:"-"}}
+      {{$count_evenements|nozero}}
     </td>
 
     <td style="text-align: right;">
       {{assign var=count_evenements value=$_sejour->_count_evenements_ssr}}
-      {{$count_evenements|ternary:$count_evenements:"-"}}
+      {{$count_evenements|nozero}}
     </td>
   </tr>
 {{foreachelse}}

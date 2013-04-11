@@ -11,7 +11,9 @@
 CCanDo::checkRead();
 
 // Initialisation de la variable permettant de ne pas passer par les alertes manuelles
-CPrescriptionLine::$contexte_recent_modif = 'ssr';
+if (CModule::getActive("dPprescription")) {
+  CPrescriptionLine::$contexte_recent_modif = 'ssr';
+}
 
 $group_id = CGroups::loadCurrent()->_id;
 
@@ -38,7 +40,7 @@ if ($sejour_id && !$sejour->_id) {
 $fiche_autonomie = new CFicheAutonomie;
 $patient = new CPatient;
 $bilan = new CBilanSSR;
-$prescription_SSR = new CPrescription();
+$prescription_SSR = null;
 $lines = array();
 $medecin_adresse_par = "";
 $correspondantsMedicaux = array();
@@ -65,13 +67,10 @@ if ($sejour->_id) {
   $bilan->loadMatchingObject();
   
   // Prescription SSR
-  $prescription_SSR->object_id = $sejour->_id;
-  $presctiption_SSR->object_class = "CSejour";
-  $prescription_SSR->type = "sejour";
-  $prescription_SSR->loadMatchingObject();
-  
+  $prescription_SSR = $sejour->loadRefPrescriptionSejour();
+    
   // Chargement des lignes de la prescription
-  if ($prescription_SSR->_id){
+  if ($prescription_SSR && $prescription_SSR->_id) {
     $line = new CPrescriptionLineElement();
     $line->prescription_id = $prescription_SSR->_id;
     $_lines = $line->loadMatchingList("debut ASC");
@@ -97,14 +96,17 @@ else {
 }
 
 // Chargement des categories de prescription
-$categories = array();
-$category = new CCategoryPrescription();
-$where = array();
-$where[] = "chapitre = 'kine'";
-$where[] = "group_id = '$group_id' OR group_id IS NULL";
+$categories = null;
+if (CModule::getActive("dPprescription")) {$categories = array();
+  $category = new CCategoryPrescription();
+  $where = array();
+  $where[] = "chapitre = 'kine'";
+  $where[] = "group_id = '$group_id' OR group_id IS NULL";
+  
+  $order = "nom";
+  $categories = $category->loadList($where, $order);
 
-$order = "nom";
-$categories = $category->loadList($where, $order);
+}
 
 // Dossier médical visibile ?
 $can_view_dossier_medical =

@@ -10,7 +10,10 @@
 
 CCanDo::checkEdit();
 
-CPrescriptionLine::$contexte_recent_modif = 'ssr';
+// Initialisation de la variable permettant de ne pas passer par les alertes manuelles
+if (CModule::getActive("dPprescription")) {
+  CPrescriptionLine::$contexte_recent_modif = 'ssr';
+}
 
 // Sejour SSR
 $sejour = new CSejour;

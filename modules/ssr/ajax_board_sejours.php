@@ -10,7 +10,10 @@
 
 CCanDo::checkEdit();
 
-CPrescriptionLine::$contexte_recent_modif = 'ssr';
+// Initialisation de la variable permettant de ne pas passer par les alertes manuelles
+if (CModule::getActive("dPprescription")) {
+  CPrescriptionLine::$contexte_recent_modif = 'ssr';
+}
 
 $mode = CValue::get("mode", "count");
 $date    = CValue::getOrSession("date", CMbDT::date());
@@ -99,57 +102,62 @@ if ($mode == "count" || $mode == "planned") {
 
 // Sejours pour lesquels le rééducateur est exécutant pour des lignes prescrites mais n'a pas encore d'evenement planifiés
 if ($mode == "count" || $mode == "plannable") {
-  // Séjours élligibles
-  $where = array();
-  $where["sejour.type"  ] = "= 'ssr'";
-  $where["sejour.entree"] = "<= '$planning->date_max'";
-  $where["sejour.sortie"] = ">= '$planning->date_min'";
-  $where["sejour.annule"] = "= '0'";
-  $sejour_ids = $sejour->loadIds($where);
-  
-  // Identifiants de catégorie de prescriptions disponibles
-  $mediuser->loadRefFunction();
-  $function =& $mediuser->_ref_function;
-  $executants = $function->loadBackRefs("executants_prescription");
-  $category_ids = CMbArray::pluck($executants, "category_prescription_id");
-  
-  // Recherche des lignes de prescriptions executables
-  $line = new CPrescriptionLineElement;
-  $join = array();
-  $where = array();
-  $join["element_prescription"] = "element_prescription.element_prescription_id = prescription_line_element.element_prescription_id";
-  $where["element_prescription.category_prescription_id"] = $ds->prepareIn($category_ids);
-  $join["prescription"] = "prescription.prescription_id = prescription_line_element.prescription_id";
-  $where["prescription.type"] = "= 'sejour'";
-  $where["prescription.object_class"] = "= 'CSejour'";
-  $where["prescription.object_id"] = $ds->prepareIn($sejour_ids);
-  $line_ids = $line->loadIds($where, null, null, null, $join);
-  
-  // Prescriptions exécutables
-  $query = new CRequest;
-  $query->addSelect("DISTINCT prescription_id");
-  $query->addTable("prescription_line_element");
-  $query->addWhereClause("prescription_line_element_id", $ds->prepareIn($line_ids));
-  $prescription_ids = $ds->loadColumn($query->getRequest());
-  
-  // Séjours planifiables
-  $query = new CRequest;
-  $query->addSelect("DISTINCT object_id");
-  $query->addTable("prescription");
-  $query->addWhereClause("prescription_id", $ds->prepareIn($prescription_ids));
-  $sejour_ids = $ds->loadColumn($query->getRequest());
-  
-  $where = array();
-  $where["sejour_id"] = $ds->prepareIn($sejour_ids);
-  $join = array();
-  $join["patients"]  = "patients.patient_id = sejour.patient_id";
-  $order = "nom, prenom";
-  
-  if ($mode == "count") {
-    $counts["plannable"] = $sejour->countList($where, null, $join);
-  } 
+  if (!CModule::getActive("dPprescription")) {
+      $counts["plannable"] = null;
+      $sejours = array();
+  }
   else {
-    $sejours = $sejour->loadList($where, $order, null, null, $join);
+    // Séjours élligibles
+    $where = array();
+    $where["sejour.type"  ] = "= 'ssr'";
+    $where["sejour.entree"] = "<= '$planning->date_max'";
+    $where["sejour.sortie"] = ">= '$planning->date_min'";
+    $where["sejour.annule"] = "= '0'";
+    $sejour_ids = $sejour->loadIds($where);
+    
+    // Identifiants de catégorie de prescriptions disponibles
+    $function = $mediuser->loadRefFunction();
+    $executants = $function->loadBackRefs("executants_prescription");
+    $category_ids = CMbArray::pluck($executants, "category_prescription_id");
+    
+    // Recherche des lignes de prescriptions executables
+    $line = new CPrescriptionLineElement;
+    $join = array();
+    $where = array();
+    $join["element_prescription"] = "element_prescription.element_prescription_id = prescription_line_element.element_prescription_id";
+    $where["element_prescription.category_prescription_id"] = $ds->prepareIn($category_ids);
+    $join["prescription"] = "prescription.prescription_id = prescription_line_element.prescription_id";
+    $where["prescription.type"] = "= 'sejour'";
+    $where["prescription.object_class"] = "= 'CSejour'";
+    $where["prescription.object_id"] = $ds->prepareIn($sejour_ids);
+    $line_ids = $line->loadIds($where, null, null, null, $join);
+    
+    // Prescriptions exécutables
+    $query = new CRequest;
+    $query->addSelect("DISTINCT prescription_id");
+    $query->addTable("prescription_line_element");
+    $query->addWhereClause("prescription_line_element_id", $ds->prepareIn($line_ids));
+    $prescription_ids = $ds->loadColumn($query->getRequest());
+    
+    // Séjours planifiables
+    $query = new CRequest;
+    $query->addSelect("DISTINCT object_id");
+    $query->addTable("prescription");
+    $query->addWhereClause("prescription_id", $ds->prepareIn($prescription_ids));
+    $sejour_ids = $ds->loadColumn($query->getRequest());
+    
+    $where = array();
+    $where["sejour_id"] = $ds->prepareIn($sejour_ids);
+    $join = array();
+    $join["patients"]  = "patients.patient_id = sejour.patient_id";
+    $order = "nom, prenom";
+    
+    if ($mode == "count") {
+      $counts["plannable"] = $sejour->countList($where, null, $join);
+    } 
+    else {
+      $sejours = $sejour->loadList($where, $order, null, null, $join);
+    }
   }
 }
 

@@ -53,7 +53,10 @@
     {{foreach from=$_evenements_by_element item=_evenement}}
       <tr>
         <td class="text">
-          {{mb_ditto name="element-$sejour_id" value=$_evenement->_ref_prescription_line_element->_ref_element_prescription->_view}}
+          {{assign var=line value=$_evenement->_ref_prescription_line_element}}
+          {{if $line}}
+            {{mb_ditto name="element-$sejour_id" value=$line|ternary:$line->_ref_element_prescription->_view:'-'*}}
+          {{/if}}
         </td>
         <td style="text-align: right;">
           {{assign var=config_date value=$conf.date}}

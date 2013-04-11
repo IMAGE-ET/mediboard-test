@@ -14,8 +14,10 @@ $date    = CValue::get("date", CMbDT::date());
 $kine_id = CValue::getOrSession("kine_id", CAppUI::$instance->user_id);
 
 // Chargement de la liste des utilisateurs
-$mediuser = new CMediusers();
-$kines = CFunctionCategoryPrescription::getAllExecutants();
+$user = new CMediusers();
+$kines = CModule::getActive("dPprescription") ?
+  CFunctionCategoryPrescription::getAllExecutants() :
+  $user->loadKines();
 
 $kine = new CMediusers();
 $kine->load($kine_id);

@@ -53,9 +53,10 @@ foreach ($sejours as $_sejour) {
   $patient->loadIPP();
 	
   // Prescription
-	$prescription = $_sejour->loadRefPrescriptionSejour();
-	$prescription->loadRefsLinesElementByCat();
-  $prescription->countFastRecentModif();
+	if ($prescription = $_sejour->loadRefPrescriptionSejour()) {
+    $prescription->loadRefsLinesElementByCat();
+    $prescription->countFastRecentModif();
+	}
 
   // Chargement du planning du sejour
   $args_planning = array();

@@ -348,8 +348,13 @@ Main.add(function(){
   Control.Tabs.create('tabs-activites', true);
   
   {{if $selected_cat}}
-    selectActivite('{{$selected_cat->_guid}}');
-    $("technicien-{{$selected_cat->_id}}-{{$user->_id}}").onclick();
+  selectActivite('{{$selected_cat->_guid}}');
+  $("technicien-{{$selected_cat->_id}}-{{$user->_id}}").onclick();
+  {{/if}}
+  
+  {{if !$prescription}}
+  $('div_other_cdarr').show();
+  $('div_other_csarr').show();
   {{/if}}
 });
                   
