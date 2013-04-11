@@ -19,7 +19,8 @@ $actor_class = CValue::getOrSession("actor_class");
 if ($actor_class) {
   $actor = new $actor_class;
   $actor->updateFormFields();
-} else {
+}
+else {
   if ($actor_guid) {
     $actor = CMbObject::loadFromGuid($actor_guid);
     if ($actor->_id) {
@@ -34,5 +35,3 @@ if ($actor_class) {
 $smarty = new CSmartyDP();
 $smarty->assign("actor" , $actor);
 $smarty->display("inc_actor.tpl");
-
-?>
