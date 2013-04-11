@@ -14,7 +14,7 @@ global $locales;
 $list_all = CConstantesMedicales::$list_constantes;
 
 foreach ($list_all as $name => $params) {
-  $locales["config-dPpatients-CConstantesMedicales-important_constantes.$name"] = CAppUI::tr("CConstantesMedicales-$name");
+  $locales["config-dPpatients-CConstantesMedicales-selection-$name"] = CAppUI::tr("CConstantesMedicales-$name");
 }
 
 $list = array();
@@ -24,7 +24,21 @@ foreach ($list_all as $_const => $_params) {
   }
 }
 
-$list = implode("|", $list);
+$selection = array(
+  "poids"       => "num min|0 default|1",
+  "pouls"       => "num min|0 default|2",
+  "ta_gauche"   => "num min|0 default|3",
+  "temperature" => "num min|0 default|4",
+);
+
+CMbArray::removeValue("poids",       $list);
+CMbArray::removeValue("pouls",       $list);
+CMbArray::removeValue("ta_gauche",   $list);
+CMbArray::removeValue("temperature", $list);
+
+foreach ($list as $_constante) {
+  $selection[$_constante] = "num min|0 default|0";
+}
 
 CConfiguration::register(array(
   "CService CGroups.group_id" => array(
@@ -45,7 +59,7 @@ CConfiguration::register(array(
         "sonde_nephro_cumul_reset_hour"      => "num min|0 max|23 default|8",
         "sonde_vesicale_cumul_reset_hour"    => "num min|0 max|23 default|8",
 
-        "important_constantes"               => "set default|poids|pouls|ta_gauche|temperature list|$list",
+        "selection" => $selection
       ),
     ),
   ),

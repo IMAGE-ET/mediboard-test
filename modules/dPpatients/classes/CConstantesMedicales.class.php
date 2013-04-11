@@ -1026,6 +1026,13 @@ class CConstantesMedicales extends CMbObject {
     return $color;
   }
 
+  /**
+   * @param self[] $list            The list of CConstantesMedicales objects to build the grid from
+   * @param bool   $full            Display the full list of constantes
+   * @param bool   $only_with_value Only display not null values
+   *
+   * @return array
+   */
   static function buildGrid($list, $full = true, $only_with_value = false) {
     $grid = array();
     $selection = array_keys(CConstantesMedicales::$list_constantes);
@@ -1033,8 +1040,8 @@ class CConstantesMedicales extends CMbObject {
     $reset_hours = array();
 
     if (!$full) {
-      $conf_constantes = explode("|", CConstantesMedicales::getConfig("important_constantes"));
-      $selection = $conf_constantes;
+      $conf_constantes = array_filter(CConstantesMedicales::getConfig("selection"));
+      $selection = array_keys($conf_constantes);
 
       foreach ($list as $_constante_medicale) {
         foreach (CConstantesMedicales::$list_constantes as $_name => $_params) {
@@ -1161,16 +1168,22 @@ class CConstantesMedicales extends CMbObject {
     );
   }
 
-  static function sortConstNames($names) {
+  static function sortConstNames($names, CMbObject $host = null) {
     $new_names = array();
+    $constants = self::getConstantsByRank(false, $host);
+    foreach ($constants["all"] as $_constants) {
+      foreach ($_constants as $_constant) {
+        if (in_array($_constant, $names)) {
 
-    foreach (self::$list_constantes as $key => $params) {
-      if (in_array($key, $names)) {
-        $new_names[] = $key;
+          $new_names[] = $_constant;
+          if (isset(self::$list_constantes[$_constant]["cumul_in"])) {
+            $new_names = array_merge($new_names, self::$list_constantes[$_constant]["cumul_in"]);
+          }
+        }
       }
     }
 
-    return $new_names;
+    return array_unique($new_names);
   }
 
   static function getRelated($selection, CPatient $patient, CMbObject $context = null, $date_min = null, $date_max = null, $limit = null) {
@@ -1385,6 +1398,96 @@ class CConstantesMedicales extends CMbObject {
     }
 
     return CAppUI::conf("dPpatients CConstantesMedicales $name", $guid);
+  }
+
+  /**
+   * Return the selected constant, ordered by rank
+   *
+   * @param boolean   $order_by_types If false, the constants won't be oprdered by types,
+   *                                  even if the config show_cat_tabs is set to true
+   * @param CMbObject $host           Host from which we'll get the configuration
+   *
+   * @return array
+   */
+  static function getConstantsByRank($order_by_types = true, CMbObject $host = null) {
+    if ($host) {
+      $selection = CConstantesMedicales::getHostConfig("selection", $host);
+    }
+    else {
+      $selection = CConstantesMedicales::getConfig("selection");
+    }
+
+    $selection = CMbArray::flip($selection);
+    ksort($selection);
+
+    $result = array();
+    if (CConstantesMedicales::getConfig("show_cat_tabs") && $order_by_types) {
+      $list_constants = CConstantesMedicales::$list_constantes;
+      foreach ($selection as $_rank => $_constants) {
+        foreach ($_constants as $_constant) {
+          $_params = $list_constants[$_constant];
+          $_type = $_params["type"];
+
+          if (!array_key_exists($_type, $result)) {
+            $result["$_type"] = array();
+          }
+          if (!array_key_exists($_rank, $result["$_type"])) {
+            $result["$_type"][$_rank] = array();
+          }
+
+          $result["$_type"][$_rank][] = $_constant;
+        }
+      }
+    }
+    else {
+      $result["all"] = $selection;
+    }
+
+    foreach ($result as $_type => $_ranks) {
+      if (array_key_exists(0, $result[$_type])) {
+        $unselected_constants = $result[$_type][0];
+        unset($result[$_type][0]);
+        $result[$_type]["hidden"] = $unselected_constants;
+      }
+    }
+
+    return $result;
+  }
+
+  /**
+   * Return the selected constants in an formatted array (see getConstantsByRank to see the format)
+   *
+   * @param array $selection The constant you want to select
+   *
+   * @return array
+   */
+  static function selectConstants($selection) {
+    $result = array();
+
+    $constants_list = CConstantesMedicales::$list_constantes;
+    if (CConstantesMedicales::getConfig("show_cat_tabs")) {
+      foreach ($selection as $_constant) {
+        if (array_key_exists($_constant, $constants_list)) {
+          $_type = $constants_list[$_constant]["type"];
+
+          if (!array_key_exists($_type, $result)) {
+            $result[$_type] = array();
+          }
+          $result[$_type][] = array($_constant);
+        }
+      }
+    }
+    else {
+      $result["all"] = array();
+
+      foreach ($selection as $_constant) {
+        if (array_key_exists($_constant, $constants_list)) {
+          $result["all"][] = array($_constant);
+        }
+      }
+    }
+
+    return $result;
   }
 
   /**

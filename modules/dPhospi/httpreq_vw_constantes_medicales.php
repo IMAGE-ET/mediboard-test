@@ -7,6 +7,69 @@
 * @author Fabien Ménager
 */
 
+/**
+ * @param string|null $v
+ *
+ * @return float|null
+ */
+function getValue($v) {
+  return ($v === null) ? null : floatval($v);
+}
+
+/**
+ * @param float $n     Reference value
+ * @param array $array List of values to compare with
+ *
+ * @return float|mixed
+ */
+function getMax($n, $array) {
+  $orig_n = $n;
+
+  if (substr($n, 0, 1) == "@") {
+    $n = -10e6;
+  }
+
+  $max = $n;
+  foreach ($array as $a) {
+    if (isset($a[1])) {
+      $max = max($n, $a[1], $max);
+    }
+  }
+
+  if ($orig_n != $n) {
+    $max += floatval(substr($orig_n, 1));
+  }
+
+  return $max;
+}
+
+/**
+ * @param float $n     Reference value
+ * @param array $array List of values to compare with
+ *
+ * @return float|mixed
+ */
+function getMin($n, $array) {
+  $orig_n = $n;
+
+  if (substr($n, 0, 1) == "@") {
+    $n = +10e6;
+  }
+
+  $min = $n;
+  foreach ($array as $a) {
+    if (isset($a[1])) {
+      $min = min($n, $a[1], $min);
+    }
+  }
+
+  if ($orig_n != $n) {
+    $min += floatval(substr($orig_n, 1));
+  }
+
+  return $min;
+}
+
 global $m;
 
 $user = CMediusers::get();
@@ -50,29 +113,46 @@ if ($context_guid) {
   $current_context = CMbObject::loadFromGuid($context_guid);
 }
 
-//mbTrace($current_context->_view, "CONTEXT");
+/** @var CGroups|CService|CRPU $host */
 
-if (!$selection || $selected_context_guid === 'all') {
-  /** @var CGroups|CService|CRPU $host */
-
-  // On cherche le meilleur "hebergement" des constantes, pour charger les configurations adequat
-  if ($host_guid) {
-    $host = CMbObject::loadFromGuid($host_guid);
-  }
-  else {
-    $host = CConstantesMedicales::guessHost($current_context);
-  }
-
-  $important_constantes = CConstantesMedicales::getHostConfig("important_constantes", $host);
-  $conf_constantes = explode("|", $important_constantes);
-  $selection = array_intersect_key(CConstantesMedicales::$list_constantes, array_flip($conf_constantes));
+// On cherche le meilleur "hebergement" des constantes, pour charger les configurations adequat
+if ($host_guid) {
+  $host = CMbObject::loadFromGuid($host_guid);
 }
 else {
-  $selection_flip = array_flip($selection);
-  $selection = array_intersect_key(CConstantesMedicales::$list_constantes, $selection_flip);
+  $host = CConstantesMedicales::guessHost($current_context);
 }
 
-$constants_to_draw = ($print == 1 ? $selection : CConstantesMedicales::$list_constantes);
+if (!$selection || $selected_context_guid === 'all') {
+  $selection = CConstantesMedicales::getConstantsByRank(true, $host);
+}
+else {
+  $selection = CConstantesMedicales::selectConstants($selection);
+}
+
+$old_constants_to_draw = ($print == 1 ? $selection : CConstantesMedicales::$list_constantes);
+
+// Organisation differente que l'on affiche par volet ou pas
+if (CConstantesMedicales::getHostConfig("show_cat_tabs", $host)) {
+  $constants_to_draw = array("all" => array());
+  foreach ($selection as $_type => $_ranks) {
+    foreach ($_ranks as $_rank => $_constants) {
+      if (!array_key_exists($_rank, $constants_to_draw["all"])) {
+        $constants_to_draw["all"][$_rank] = $_constants;
+      }
+      else {
+        $constants_to_draw["all"][$_rank] = array_merge_recursive($constants_to_draw["all"][$_rank], $_constants);
+      }
+    }
+  }
+  $hidden_constants = $constants_to_draw["all"]["hidden"];
+  unset($constants_to_draw["all"]["hidden"]);
+  ksort($constants_to_draw["all"]);
+  $constants_to_draw["all"]["hidden"] = $hidden_constants;
+}
+else {
+  $constants_to_draw = $selection;
+}
 
 /** @var CMbObject|CPatient|CSejour $context */
 if ($selected_context_guid !== 'all') {
@@ -172,11 +252,13 @@ if ($context && $selected_context_guid !== 'all') {
 }
 
 $whereOr = array();
-foreach ($constants_to_draw as $name => $params) {
-  if ($name[0] === "_") {
-    continue;
+foreach ($constants_to_draw["all"] as $rank => $_constants) {
+  foreach ($_constants as $name) {
+    if ($name[0] === "_") {
+      continue;
+    }
+    $whereOr[] = "$name IS NOT NULL ";
   }
-  $whereOr[] = "$name IS NOT NULL ";
 }
 $where[] = implode(" OR ", $whereOr);
 
@@ -205,53 +287,6 @@ $standard_struct = array(
   )
 );
 
-// Petite fonction utilitaire de récupération des valeurs
-function getValue($v) {
-  return ($v === null) ? null : floatval($v);
-}
-
-function getMax($n, $array) {
-  $orig_n = $n;
-  
-  if (substr($n, 0, 1) == "@") {
-    $n = -10e6;
-  }
-  
-  $max = $n;
-  foreach ($array as $a) {
-    if (isset($a[1])) {
-      $max = max($n, $a[1], $max);
-    }
-  }
-    
-  if ($orig_n != $n) {
-    $max += floatval(substr($orig_n, 1));
-  }
-  
-  return $max;
-}
-
-function getMin($n, $array) {
-  $orig_n = $n;
-  
-  if (substr($n, 0, 1) == "@") {
-    $n = +10e6;
-  }
-  
-  $min = $n;
-  foreach ($array as $a) {
-    if (isset($a[1])) {
-      $min = min($n, $a[1], $min);
-    }
-  }
-    
-  if ($orig_n != $n) {
-    $min += floatval(substr($orig_n, 1));
-  }
-  
-  return $min;
-}
-
 $dates     = array();
 $hours     = array();
 $comments  = array();
@@ -259,22 +294,26 @@ $const_ids = array();
 $data      = array();
 $graphs    = array();
 
-foreach ($constants_to_draw as $name => $params) {
-  if ($name[0] === "_" && empty($params["plot"]) && empty($params["formula"])) {
-    continue;
-  }
-  
-  $data[$name] = $standard_struct;
-  
-  if (isset($params["formfields"]) && empty($params["candles"])) {
-    $serie = &$data[$name]["series"];
-    
-    $serie = array();
-    foreach ($params["formfields"] as $_field) {
-      $serie[] = array(
-        "data" => array(),
-        "label" => CAppUI::tr("CConstantesMedicales-$_field-court"),
-      );
+
+foreach ($constants_to_draw["all"] as $rank => $_constants) {
+  foreach ($_constants as $name) {
+    $params = CConstantesMedicales::$list_constantes[$name];
+    if ($name[0] === "_" && empty($params["plot"]) && empty($params["formula"])) {
+      continue;
+    }
+
+    $data[$name] = $standard_struct;
+
+    if (isset($params["formfields"]) && empty($params["candles"])) {
+      $serie = &$data[$name]["series"];
+
+      $serie = array();
+      foreach ($params["formfields"] as $_field) {
+        $serie[] = array(
+          "data" => array(),
+          "label" => CAppUI::tr("CConstantesMedicales-$_field-court"),
+        );
+      }
     }
   }
 }
@@ -292,133 +331,133 @@ if ($list_constantes) {
     $const_ids[] = $cst->_id;
     $cst->loadLogs();
     
-    foreach ($constants_to_draw as $name => $params) {
-      if ($name[0] === "_" && empty($params["plot"]) && empty($params["formula"])) {
-        continue;
-      }
-      
-      $candles = isset($params["candles"]);
-      
-      $d = &$data[$name];
+    foreach ($constants_to_draw["all"] as $rank => $_constants) {
+      foreach ($_constants as $name) {
+        $params = CConstantesMedicales::$list_constantes[$name];
 
-      $user_view = "";
-      
-      if ($cst->$name !== null && $name[0] !== "_") {
-        $log = $cst->loadLastLogForField($name);
-        if (!$log->_id && $cst->_ref_last_log) {
-          $log = $cst->_ref_last_log;
+        if ($name[0] === "_" && empty($params["plot"]) && empty($params["formula"])) {
+          continue;
         }
-        
-        $_user = $log->loadRefUser();
-        
-        if ($_user) {
-          $user_view = utf8_encode($_user->_view);
-        }
-      }
-      
-      // normal plots
-      if (empty($params["candles"])) {
-        if (isset($params["formfields"])) {
-          $fields = $params["formfields"];
-        }
-        else {
-          $fields = array($name);
-        }
-        
-        $i = count($d["series"][0]["data"]);
-        foreach ($fields as $n => $_field) {
-          $ya = $yb = $yc = $yd = null;
-          
-          $ya = getValue($cst->$_field);
-            
-          $d["series"][$n]["data"][] = array(
-            $i, 
-            $ya, $yb, $yc, $yd,
-            $user_view, 
-            $comment,
-            utf8_encode($params['unit']),
-          );
-          
-          if (isset($params["cumul_reset_config"])) {
-            if (!isset($reset_hours[$name])) {
-              $reset_hours[$name] = CConstantesMedicales::getResetHour($name);
-            }
-            $reset_hour = $reset_hours[$name];
 
-            $day_24h = CMbDT::transform("-$reset_hour hours", $cst->datetime, '%d/%m/%y');
-    
-            if (!isset($cumuls_day[$name][$day_24h])) {
-              $cumuls_day[$name][$day_24h] = array("n" => 0, "value" => null);
-            }
-            
-            if (isset($params["formula"])) {
-              $formula = $params["formula"];
-              
-              foreach ($formula as $_field => $_sign) {
-                $_value = $cst->$_field;
-                
-                if ($_value !== null && $_value !== "") {
-                  if ($_sign === "+") {
-                    $cumuls_day[$name][$day_24h]["value"] += $_value;
-                  }
-                  else {
-                    $cumuls_day[$name][$day_24h]["value"] -= $_value;
+        $candles = isset($params["candles"]);
+
+        $d = &$data[$name];
+
+        $user_view = "";
+
+        if ($cst->$name !== null && $name[0] !== "_") {
+          $log = $cst->loadLastLogForField($name);
+          if (!$log->_id && $cst->_ref_last_log) {
+            $log = $cst->_ref_last_log;
+          }
+
+          $_user = $log->loadRefUser();
+
+          if ($_user) {
+            $user_view = utf8_encode($_user->_view);
+          }
+        }
+
+        // normal plots
+        if (empty($params["candles"])) {
+          if (isset($params["formfields"])) {
+            $fields = $params["formfields"];
+          }
+          else {
+            $fields = array($name);
+          }
+
+          $i = count($d["series"][0]["data"]);
+          foreach ($fields as $n => $_field) {
+            $ya = $yb = $yc = $yd = null;
+
+            $ya = getValue($cst->$_field);
+
+            $d["series"][$n]["data"][] = array(
+              $i,
+              $ya, $yb, $yc, $yd,
+              $user_view,
+              $comment,
+              utf8_encode($params['unit']),
+            );
+
+            if (isset($params["cumul_reset_config"])) {
+              $reset_hour = CConstantesMedicales::getResetHour($name);
+              $day_24h = CMbDT::transform("-$reset_hour hours", $cst->datetime, '%d/%m/%y');
+
+              if (!isset($cumuls_day[$name][$day_24h])) {
+                $cumuls_day[$name][$day_24h] = array("n" => 0, "value" => null);
+              }
+
+              if (isset($params["formula"])) {
+                $formula = $params["formula"];
+
+                foreach ($formula as $_field => $_sign) {
+                  $_value = $cst->$_field;
+
+                  if ($_value !== null && $_value !== "") {
+                    if ($_sign === "+") {
+                      $cumuls_day[$name][$day_24h]["value"] += $_value;
+                    }
+                    else {
+                      $cumuls_day[$name][$day_24h]["value"] -= $_value;
+                    }
                   }
                 }
               }
-            }
-            else {
-              if ($ya !== null && $ya !== "") {
-                $cumuls_day[$name][$day_24h]["value"] += $ya;
+              else {
+                if ($ya !== null && $ya !== "") {
+                  $cumuls_day[$name][$day_24h]["value"] += $ya;
+                }
               }
+
+              $cumuls_day[$name][$day_24h]["n"]++;
             }
-            
-            $cumuls_day[$name][$day_24h]["n"]++;
           }
         }
-      }
-        
-      // composite plots (TA)
-      else {
-        $fields = $params["formfields"];
-        $first = true;
-        
-        $i = count($d["series"][0]["data"]);
-        foreach ($fields as $n => $_field) {
-          $ya = $yb = $yc = $yd = null;
-          
-          // first series : all values
-          if ($first) {
-            $ya = $yb = getValue($cst->{$fields[1]});
-            $yc = $yd = getValue($cst->{$fields[0]});
-            
-            $d["series"][$n]["candles"]["show"] = true;
-            $d["series"][$n]["markers"]["position"] = "cb";
+
+        // composite plots (TA)
+        else {
+          $fields = $params["formfields"];
+          $first = true;
+
+          $i = count($d["series"][0]["data"]);
+          foreach ($fields as $n => $_field) {
+            $ya = $yb = $yc = $yd = null;
+
+            // first series : all values
+            if ($first) {
+              $ya = $yb = getValue($cst->{$fields[1]});
+              $yc = $yd = getValue($cst->{$fields[0]});
+
+              $d["series"][$n]["candles"]["show"] = true;
+              $d["series"][$n]["markers"]["position"] = "cb";
+            }
+
+            // second series : only second value
+            else {
+              $ya = getValue($cst->$fields[0]);
+              $d["series"][$n]["markers"]["position"] = "ct";
+            }
+
+            $d["series"][$n]["markers"]["show"] = true;
+            $d["series"][$n]["lines"]["show"] = false;
+            $d["series"][$n]["points"]["show"] = false;
+
+            $d["series"][$n]["data"][] = array(
+              $i,
+              $ya, $yb, $yc, $yd,
+              $user_view,
+              $comment,
+              utf8_encode($params['unit']),
+            );
+
+            $first = false;
           }
-          
-          // second series : only second value
-          else {
-            $ya = getValue($cst->$fields[0]);
-            $d["series"][$n]["markers"]["position"] = "ct";
-          }
-          
-          $d["series"][$n]["markers"]["show"] = true;
-          $d["series"][$n]["lines"]["show"] = false;
-          $d["series"][$n]["points"]["show"] = false;
-            
-          $d["series"][$n]["data"][] = array(
-            $i, 
-            $ya, $yb, $yc, $yd,
-            $user_view, 
-            $comment,
-            utf8_encode($params['unit']),
-          );
-          
-          $first = false;
         }
+
+        $graphs[] = "constantes-medicales-$name";
       }
-     
-      $graphs[] = "constantes-medicales-$name";
     }
   }
 }

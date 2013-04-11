@@ -2081,12 +2081,69 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("1.77");
-    
+
     $query = "ALTER TABLE `constantes_medicales` 
                 ADD `douleur_evs` TINYINT (4) UNSIGNED";
     $this->addQuery($query);
-    $this->mod_version = "1.78";
+
+    $this->makeRevision("1.78");
     
+    function addConstantesRank($setup) {
+      $ds = $setup->ds;
+
+      $results = $ds->exec("SELECT * FROM `configuration` WHERE `feature` = 'dPpatients CConstantesMedicales important_constantes';");
+
+      $list = array();
+      foreach (CConstantesMedicales::$list_constantes as $_const => $_params) {
+        if (!isset($_params["cumul_for"])) {
+          $list[] = $_const;
+        }
+      }
+
+      if ($results) {
+        while ($row = $ds->fetchAssoc($results)) {
+          $constants = explode("|", $row["value"]);
+
+          $object_class = "NULL";
+          $object_id    = "NULL";
+
+          if ($row["object_class"]) {
+            $object_class = "'".$row["object_class"]."'";
+          }
+
+          if ($row["object_id"]) {
+            $object_id    = "'".$row["object_id"]."'";
+          }
+
+          // Ajout des constantes préselectionnées
+          foreach ($constants as $_key => $_name) {
+            $rank = $_key + 1;
+
+            $query = "INSERT INTO `configuration` (`feature`, `value`, `object_id`, `object_class`)
+                         VALUES (%1, %2, $object_id, $object_class)";
+            $query = $ds->prepare($query, "dPpatients CConstantesMedicales selection $_name", $rank);
+            $ds->exec($query);
+          }
+
+          // Valeur zéro pour les autres
+          foreach ($list as $_name) {
+            if (in_array($_name, $constants)) {
+              continue;
+            }
+
+            $query = "INSERT INTO `configuration` (`feature`, `value`, `object_id`, `object_class`)
+                         VALUES (%1, '0', $object_id, $object_class)";
+            $query = $ds->prepare($query, "dPpatients CConstantesMedicales selection $_name");
+            $ds->exec($query);
+          }
+        }
+      }
+
+      return true;
+    }
+    $this->addFunction("addConstantesRank");
+    $this->mod_version = "1.79";
+
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
     
