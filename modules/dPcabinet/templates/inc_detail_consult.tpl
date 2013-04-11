@@ -1,3 +1,5 @@
+{{mb_script module="dPcabinet" script="icone_selector" ajax=true}}
+
 {{mb_default var=mode_vue value=vertical}}
 {{assign var=patient value=$_consult->_ref_patient}}
   
@@ -14,6 +16,7 @@
 {{/if}}
 
 {{assign var=prat_id value=$_plage->chir_id}}
+{{assign var=consult_id value=$_consult->_id}}
 
 {{assign var=destinations value=""}}
 {{if @count($listPlages.$prat_id.destinations) && $canCabinet->edit}}
@@ -125,7 +128,10 @@
 
   {{if $categorie->nom_icone}}
     <td {{if $destinations || $_consult->motif}}rowspan="2"{{/if}} style="{{$style}}" class="narrow">
-      {{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$categorie title=$categorie->nom_categorie}}
+      {{mb_include module=cabinet template=inc_icone_categorie_consult
+        categorie=$categorie
+        title=$categorie->nom_categorie
+        onclick="IconeSelector.popChange('$consult_id')"}}
     </td>
   {{/if}}
 

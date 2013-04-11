@@ -1,6 +1,6 @@
 // $Id: $
 
-var IconeSelector = {
+IconeSelector = {
   sForm   : null,
   sView   : null,
   options : {
@@ -9,7 +9,7 @@ var IconeSelector = {
   },
 
   pop: function() {
-    var url = new Url("dPcabinet", "icone_selector");
+    var url = new Url("cabinet", "icone_selector");
     url.popup(this.options.width, this.options.height, "Icone");
   },
 
@@ -21,5 +21,11 @@ var IconeSelector = {
     
     // Affichage de l'icone
     $('iconeBackground').src = "./modules/dPcabinet/images/categories/"+view;
+  },
+  
+  popChange: function(consult_id) {
+    var url = new Url("cabinet", "change_categorie");
+    url.addParam("consult_id", consult_id);
+    url.requestModal(400, 100);
   }
 };

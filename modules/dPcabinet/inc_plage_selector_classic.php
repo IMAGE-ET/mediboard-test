@@ -57,6 +57,12 @@ switch ($period) {
     $refDate = CMbDT::date("+1 day", $minDate);
     break;
 
+  case "4weeks":
+    $minDate = CMbDT::date("last sunday", $date);
+    $maxDate = CMbDT::date("+ 3 weeks", CMbDT::date("next saturday", $date));
+    $refDate = CMbDT::date("+1 day", $minDate);
+    break;
+
   case "month":
     $minDate = CMbDT::transform(null, $date, "%Y-%m-01");
     $maxDate = CMbDT::transform("+1 month", $minDate, "%Y-%m-01");

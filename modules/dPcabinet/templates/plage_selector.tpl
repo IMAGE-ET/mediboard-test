@@ -63,7 +63,7 @@ Main.add(function () {
       <a style="float:right" href="#1" onclick="$V(getForm('Filter').plageconsult_id, ''); $V(getForm('Filter').date, '{{$ndate}}')">&gt;&gt;&gt;</a>
       <strong>
         {{if $period == "day"  }}{{$refDate|date_format:" %A %d %B %Y"}}{{/if}}
-        {{if $period == "week" }}{{$refDate|date_format:" semaine du %d %B %Y (%U)"}}{{/if}}
+        {{if $period == "week" || $period == "4weeks"}}{{$refDate|date_format:" semaine du %d %B %Y (%U)"}}{{/if}}
         {{if $period == "month"}}{{$refDate|date_format:" %B %Y"}}{{/if}}
       </strong>
       <input type="hidden" name="date" class="date" value="{{$date}}" onchange="$V(getForm('Filter').plageconsult_id, ''); this.form.submit()" />

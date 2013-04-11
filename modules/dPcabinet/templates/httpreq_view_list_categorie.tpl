@@ -30,7 +30,7 @@
     </script>
     
     {{if !empty($categories|smarty:nodefaults)}}
-    <select name="categorie_id" onchange="reloadIcone(this.value, true);">
+    <select name="categorie_id" style="width: 15em;" onchange="reloadIcone(this.value, true);">
       <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
       {{foreach from=$categories item="categorie"}}
         <option class="categorieConsult" {{if $categorie_id == $categorie->_id}} selected="selected"{{/if}}

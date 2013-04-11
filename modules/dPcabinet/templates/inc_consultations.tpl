@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module="dPcabinet" script="icone_selector" ajax=true}}
+
 <table class="tbl">
   <tr>
     <th class="title" colspan="6">
@@ -89,7 +91,6 @@
       {{assign var=categorie value=$_consult->_ref_categorie}}
 
       {{if $patient->_id}}
-        <a href="{{$href_consult}}" title="Voir la consultation">
           {{if $categorie->_id}}
           <div>
             {{mb_include
@@ -98,10 +99,12 @@
               categorie=$categorie
               alt=$categorie->nom_categorie
               title=$categorie->nom_categorie
+              onclick="IconeSelector.popChange('$consult_id')"
+              display_name=true
             }}
-            {{$categorie->nom_categorie}}
           </div>
           {{/if}}
+        <a href="{{$href_consult}}" title="Voir la consultation">
           {{$_consult->motif|truncate:35:"...":false|nl2br}}
         </a>
       {{else}}

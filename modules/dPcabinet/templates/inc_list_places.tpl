@@ -166,9 +166,11 @@ PlageConsult.addPlaceAfter = function(plage_id) {
         {{assign var=categorie value=$_consultation->_ref_categorie}}
         {{if $categorie->_id}}
           <div class="compact">
-            {{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$categorie alt=$categorie->nom_categorie
-              title=$categorie->nom_categorie}}
-            {{$categorie->nom_categorie|spancate}}
+            {{mb_include module=cabinet template=inc_icone_categorie_consult
+              categorie=$categorie
+              alt=$categorie->nom_categorie
+              title=$categorie->nom_categorie
+              display_name=true}}
           </div>
         {{/if}}
         {{if $_consultation->motif}}

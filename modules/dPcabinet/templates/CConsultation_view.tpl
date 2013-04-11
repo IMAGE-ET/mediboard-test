@@ -38,7 +38,7 @@
   {{if $object->_ref_categorie->_id}}
     <tr>
       <td colspan="2">
-        Catégorie : {{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$object->_ref_categorie}} {{$object->_ref_categorie}}
+        Catégorie : {{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$object->_ref_categorie display_name=true}}
       </td>
     </tr>
   {{/if}}

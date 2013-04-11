@@ -63,8 +63,7 @@
       {{if $categorie->_id}}
         <div>
           {{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$categorie alt=$categorie->nom_categorie
-            title=$categorie->nom_categorie}}
-          {{$categorie->nom_categorie}}
+            title=$categorie->nom_categorie display_name=true}}
         </div>
       {{/if}}
       {{mb_value object=$curr_consult field=motif}}

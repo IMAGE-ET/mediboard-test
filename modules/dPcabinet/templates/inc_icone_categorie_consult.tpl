@@ -12,6 +12,7 @@
 {{mb_default var=id value=null}}
 {{mb_default var=title value=null}}
 {{mb_default var=alt value=null}}
+{{mb_default var=display_name value=false}}
 
 <img {{if $onclick}}onclick="{{$onclick}}" {{/if}}
      {{if $id}}id="{{$id}}" {{/if}}
@@ -19,3 +20,6 @@
      {{if $title}} title="{{$title}}" {{/if}}
      {{if $alt}} alt="{{$alt}}" {{/if}}
 />
+{{if $display_name}}
+  {{$categorie|spancate}}
+{{/if}}
