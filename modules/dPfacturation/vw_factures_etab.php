@@ -36,7 +36,7 @@ $factures= array();
 $facture = new CFactureEtablissement();
 
 $where = array();
-$where["temporaire"] = " = '0'";
+//$where["temporaire"] = " = '0'";
 
 if ($etat_cloture && !$etat_ouvert) {
   $where["$type_date_search"] = "BETWEEN '$date_min' AND '$date_max'";
@@ -73,9 +73,9 @@ foreach ($factures as $key => $_facture) {
     unset($factures[$key]);
     $_facture->loadRefs();
   }
-  elseif ($nb_tarmed == 0 && $nb_caisse == 0 && $nb_ngap == 0 && $nb_ccam == 0) {
-    unset($factures[$key]);
-  }
+//  elseif ($nb_tarmed == 0 && $nb_caisse == 0 && $nb_ngap == 0 && $nb_ccam == 0) {
+//    unset($factures[$key]);
+//  }
 }
 
 if ($no_finish_reglement) {
