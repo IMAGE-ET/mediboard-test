@@ -9,6 +9,18 @@
  * @version    $Revision$
  */
 
+/**
+ * Class CPDOOracleDataSource
+ */
 class CPDOOracleDataSource extends CPDODataSource {
   protected $driver_name = "oci";
+
+  /**
+   * Get the used grammar
+   *
+   * @return CSQLGrammarOracle|mixed
+   */
+  function getQueryGrammar() {
+    return new CSQLGrammarOracle();
+  }
 }

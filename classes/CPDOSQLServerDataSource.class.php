@@ -15,6 +15,18 @@
  * http://www.codeproject.com/KB/database/migrate-mysql-to-mssql.aspx
  */
 
+/**
+ * Class CPDOSQLServerDataSource
+ */
 class CPDOSQLServerDataSource extends CPDODataSource {
   protected $driver_name = "sqlserv";
+
+  /**
+   * Get the used grammar
+   *
+   * @return CSQLGrammarSQLServer|mixed
+   */
+  function getQueryGrammar() {
+    return new CSQLGrammarSQLServer();
+  }
 }

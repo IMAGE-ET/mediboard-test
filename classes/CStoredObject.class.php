@@ -107,7 +107,7 @@ class CStoredObject extends CModelObject {
    * @return bool Result
    */
   function isInstalled() {
-    return $this->_spec->ds->loadTable($this->_spec->table);    
+    return $this->_spec->ds->loadTable($this->_spec->table);
   }
   
   /** 
@@ -125,9 +125,9 @@ class CStoredObject extends CModelObject {
     if (!$this->_id || !$this->_spec->table || !$this->_spec->key) {
       return false;
     }
-    
+
     $sql = "SELECT * FROM `{$this->_spec->table}` WHERE `{$this->_spec->key}` = '$this->_id'";
-    
+
     $object = $this->_spec->ds->loadObject($sql, $this);
     
     /* Not envisageable in standard load.
@@ -193,7 +193,7 @@ class CStoredObject extends CModelObject {
    *
    * @return void
    */
-  protected final function registerCache() {
+  public final function registerCache() {
     if (!self::$useObjectCache) {
       return;
     }
@@ -2414,4 +2414,28 @@ class CStoredObject extends CModelObject {
   function getDS(){
     return $this->_spec->ds;
   }
+
+  /**
+   * Create new QueryBuilder
+   *
+   * @return CSQLQuery
+   */
+  function query() {
+    $spec = $this->getSpec();
+
+    return new CSQLQuery($this->getDS(), $spec->table, $spec->key, $this->_class);
+  }
+
+  /**
+   * To call queryBuilder in static
+   *
+   * @return mixed
+   */
+  /*
+  static function q() {
+    $instance = new static;
+
+    return $instance->queryBuilder();
+  }
+  */
 }

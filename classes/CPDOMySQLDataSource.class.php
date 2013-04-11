@@ -9,6 +9,18 @@
  * @version    $Revision$
  */
 
+/**
+ * Class CPDOMySQLDataSource
+ */
 class CPDOMySQLDataSource extends CPDODataSource {
   protected $driver_name = "mysql";
+
+  /**
+   * Get the used grammar
+   *
+   * @return CSQLGrammarMySQL|mixed
+   */
+  function getQueryGrammar() {
+    return new CSQLGrammarMySQL();
+  }
 }
