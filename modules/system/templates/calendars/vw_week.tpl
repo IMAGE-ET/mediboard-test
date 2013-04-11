@@ -175,15 +175,15 @@ Main.add(function() {
                       {{if $_event->hour == $_hour}}
                       
                         {{assign var=draggable value=""}}
-                        {{if ($app->user_prefs.ssr_planning_dragndrop || $planning->dragndrop) && $_event->draggable}}
+                        {{if ($_event->draggable && ($planning->dragndrop || $app->user_prefs.planning_dragndrop))}}
                           {{assign var=draggable value=draggable}}
                         {{/if}}
-                        
+
                         {{assign var=resizable value=""}}
-                        {{if $app->user_prefs.ssr_planning_resize && $_event->resizable}}
+                        {{if $_event->resizable && $app->user_prefs.planning_resize}}
                           {{assign var=resizable value=resizable}}
                         {{/if}}
-                        
+
                         <div id="{{$_event->internal_id}}"t
                              class="event {{$draggable}} {{$resizable}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}} {{$_event->type}} {{if !$_event->important}}opacity-60{{/if}} {{if  isset($plageconsult_id|smarty:nodefaults) && $plageconsult_id == $_event->plage.id }}selected{{/if}}" 
                              style="background-color:{{$_event->color}}; {{if $_event->type == 'consultation' || $_event->type == 'operation'}}text-align:center;{{/if}} {{if $_event->useHeight}}z-index:{{math equation="20+y" y=$_event->height}};{{/if}}"
@@ -216,8 +216,7 @@ Main.add(function() {
                             </div>
                             {{/if}}
                             
-                          {{if (($app->user_prefs.ssr_planning_dragndrop || $planning->dragndrop ) && $_event->draggable) ||
-                               ($app->user_prefs.ssr_planning_resize && $_event->resizable)}}
+                          {{if ($_event->draggable && $planning->dragndrop) && ($app->user_prefs.planning_dragndrop || $app->user_prefs.planning_resize)}}
                             <div class="time-preview" style="display: none;"></div>
                           {{/if}}
                           
@@ -293,11 +292,11 @@ Main.add(function() {
                             </div>
                           {{/if}}
 
-                          {{if ($app->user_prefs.ssr_planning_resize || $planning->resizable) && $_event->resizable}}
+                          {{if  $_event->resizable && ($app->user_prefs.planning_resize || $planning->resizable)}}
                             <div class="footer"></div>
                           {{/if}}
 
-                          {{if ($app->user_prefs.ssr_planning_dragndrop || $planning->dragndrop) && $_event->draggable}}
+                          {{if  $_event->draggable && ($app->user_prefs.planning_dragndrop || $planning->dragndrop) }}
                             <div class="handle"></div>
                           {{/if}}
 

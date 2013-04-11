@@ -1,4 +1,4 @@
-<?php /* $Id: index.php 7320 2009-11-14 22:42:28Z lryo $ */
+<?php /** $Id: index.php 7320 2009-11-14 22:42:28Z lryo $ **/
 
 /**
  * @package Mediboard
@@ -25,4 +25,3 @@ $module->registerTab("vw_cdarr"               , TAB_READ);
 $module->registerTab("vw_csarr"               , TAB_READ);
 $module->registerTab("edit_codes_intervenants", TAB_ADMIN);
 $module->registerTab("vw_facturation_rhs"     , TAB_EDIT);
-?>

@@ -26,7 +26,9 @@ CPreferences::$modules["common"] = array (
   "showCounterTip",
   "textareaToolbarPosition",
   "sessionLifetime",
-);  
+  "planning_resize",
+  "planning_dragndrop"
+);
   
 CPreferences::$modules["system"] = array (
   "INFOSYSTEM",

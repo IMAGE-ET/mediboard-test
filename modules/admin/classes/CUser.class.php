@@ -75,7 +75,7 @@ class CUser extends CMbObject {
 
   static $types = array(
     // DEFAULT USER (nothing special)
-//    0  => "-- Choisir un type",
+    //    0  => "-- Choisir un type",
     // DO NOT CHANGE ADMINISTRATOR INDEX !
     1  => "Administrator",
     // you can modify the terms below to suit your organisation

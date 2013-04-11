@@ -1,4 +1,4 @@
-<?php /* $Id: vw_idx_sejour.php 7212 2009-11-03 12:32:02Z rhum1 $ */
+<?php /** $Id: vw_idx_sejour.php 7212 2009-11-03 12:32:02Z rhum1 $ **/
 
 /**
  * @package Mediboard

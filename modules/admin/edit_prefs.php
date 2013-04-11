@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
  * @package Mediboard
@@ -29,13 +29,13 @@ $prefs = array(
 
 // Classement par module et par préférences
 CPreferences::loadModules();
-foreach (CPreferences::$modules as $modname => $prefnames){
+foreach (CPreferences::$modules as $modname => $prefnames) {
   $module  = CModule::getActive($modname);
   $canRead = $module ? CPermModule::getPermModule($module->_id, PERM_READ, $user_id) : false;
   
   if ($modname == "common" || $user_id == "default" || $canRead) {
     $prefs[$modname] = array();
-    foreach ($prefnames as $prefname){
+    foreach ($prefnames as $prefname) {
       $prefs[$modname][$prefname] = array(
         "default"  => CMbArray::extract($prefvalues["default" ], $prefname),
         "template" => CMbArray::extract($prefvalues["template"], $prefname),
@@ -94,5 +94,3 @@ $smarty->assign("modules", $modules);
 $smarty->assign("prefs"  , $prefs);
 $smarty->assign("session_lifetime_enum"  , $session_lifetime_enum);
 $smarty->display("edit_prefs.tpl");
-
-?>

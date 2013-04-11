@@ -1286,7 +1286,11 @@ class CSetupsystem extends CSetup {
     $this->makeRevision("1.1.29");
     $this->addPrefQuery("sessionLifetime", "");
 
-    $this->mod_version = "1.1.30";
+    $this->makeRevision("1.1.30");
+    $this->addPrefQuery("planning_dragndrop", "0");
+    $this->addPrefQuery("planning_resize", "0");
+
+    $this->mod_version = "1.1.31";
     
     /*$query = "ALTER TABLE user_log
                 DROP INDEX object_id,
