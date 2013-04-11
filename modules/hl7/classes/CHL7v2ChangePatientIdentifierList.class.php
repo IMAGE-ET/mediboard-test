@@ -14,7 +14,7 @@
  * Change patient identifier list, message XML HL7
  */
 class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
-  static $event_codes = "A46 A47";
+  static $event_codes = array ("A46", "A47");
 
   /**
    * Get contents

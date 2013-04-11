@@ -14,7 +14,7 @@
  * Record appointment, message XML
  */
 class CHL7v2RecordAppointment extends CHL7v2MessageXML {
-  static $event_codes = "S12 S13 S14 S15";
+  static $event_codes = array ("S12", "S13", "S14", "S15");
 
   /**
    * Get data nodes

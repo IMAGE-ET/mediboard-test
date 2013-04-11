@@ -17,7 +17,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
   /**
    * @var string
    */
-  static $event_codes = "Q22 ZV1";
+  static $event_codes = array ("Q22", "ZV1");
 
   /**
    * Get data nodes

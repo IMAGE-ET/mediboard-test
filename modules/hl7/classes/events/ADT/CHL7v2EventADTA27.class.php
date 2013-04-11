@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A14 - Pending Admit - HL7
+ * A27 - Cancel Pending Admit - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,32 +12,32 @@
  */
 
 /**
- * Class CHL7v2EventADTA14
- * A14 - Pending Admit
+ * Class CHL7v2EventADTA27
+ * A27 - Cancel Pending Admit
  */
-class CHL7v2EventADTA14 extends CHL7v2EventADT implements CHL7EventADTA14 {
+class CHL7v2EventADTA27 extends CHL7v2EventADT implements CHL7EventADTA21 {
   /**
    * @var string
    */
-  public $code        = "A14";
+  public $code        = "A27";
   /**
    * @var string
    */
-  public $struct_code = "A05";
+  public $struct_code = "A21";
 
   /**
    * Get event planned datetime
    *
    * @param CSejour $sejour Admit
    *
-   * @return DateTime Event planned
+   * @return DateTime Event occured
    */
-  function getEVNPlannedDateTime(CSejour $sejour) {
-    return $sejour->entree_reelle;
+  function getEVNOccuredDateTime($sejour) {
+    return CMbDT::dateTime();
   }
 
   /**
-   * Build A14 event
+   * Build A27 event
    *
    * @param CSejour $sejour Admit
    *
@@ -56,12 +56,6 @@ class CHL7v2EventADTA14 extends CHL7v2EventADT implements CHL7EventADTA14 {
     // Patient Additional Demographic
     $this->addPD1($patient);
     
-    // Doctors
-    $this->addROLs($patient);
-    
-    // Next of Kin / Associated Parties
-    $this->addNK1s($patient);
-    
     // Patient Visit
     $this->addPV1($sejour);
     
@@ -70,9 +64,6 @@ class CHL7v2EventADTA14 extends CHL7v2EventADT implements CHL7EventADTA14 {
     
     // Build specific segments (i18n)
     $this->buildI18nSegments($sejour);
-    
-    // Guarantor
-    $this->addGT1($patient);
   }
 
   /**
@@ -85,7 +76,6 @@ class CHL7v2EventADTA14 extends CHL7v2EventADT implements CHL7EventADTA14 {
    * @return void
    */
   function buildI18nSegments($sejour) {
-    
     // Movement segment only used within the context of the "Historic Movement Management"
     if ($this->_receiver->_configs["iti31_historic_movement"]) {
       $this->addZBE($sejour);

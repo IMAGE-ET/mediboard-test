@@ -14,7 +14,7 @@
  * Link/Unlink patients, message XML HL7
  */
 class CHL7v2LinkUnlink extends CHL7v2MessageXML {
-  static $event_codes = "A24 A37";
+  static $event_codes = array ("A24", "A37");
 
   /**
    * Get contents

@@ -14,7 +14,8 @@
  * Record admit, message XML HL7
  */
 class CHL7v2RecordAdmit extends CHL7v2MessageXML {
-  static $event_codes = "A01 A02 A03 A04 A05 A06 A07 A08 A11 A12 A13 A14 A16 A21 A22 A25 A38 A52 A53 A54 A55 Z80 Z81 Z84 Z85 Z99";
+  static $event_codes = array ("A01", "A02", "A03", "A04", "05", "A06", "A07", "A08", "A11", "A12", "A13", "A14", "A15", "A16",
+    "A21", "A22", "A25", "A26", "A27", "A38", "A52", "A53", "A54", "A55", "Z80", "Z81", "Z84", "Z85", "Z99");
   
   public $_object_found_by_vn;
 
@@ -473,6 +474,15 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
+
+  function handleA15(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    // Mapping venue - création impossible
+    if (!$this->admitFound($newVenue, $data)) {
+      return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
+    }
+
+    return $this->mapAndStoreVenue($ack, $newVenue, $data);
+  }
   
   function handleA16(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
@@ -509,7 +519,25 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
-  
+
+  function handleA26(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    // Mapping venue - création impossible
+    if (!$this->admitFound($newVenue, $data)) {
+      return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
+    }
+
+    return $this->mapAndStoreVenue($ack, $newVenue, $data);
+  }
+
+  function handleA27(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    // Mapping venue - création impossible
+    if (!$this->admitFound($newVenue, $data)) {
+      return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
+    }
+
+    return $this->mapAndStoreVenue($ack, $newVenue, $data);
+  }
+
   function handleA38(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
@@ -834,6 +862,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if ($movement && $affectation && $affectation->_id) {
       $movement->affectation_id = $affectation->_id;
       $movement->store();
+      //if ($msg = $movement->store()) {
+      //  return $exchange_ihe->setAckAR($ack, "E208", $msg, $newVenue);
+      //}
     }
     
     // Dans le cas d'une grossesse
@@ -854,12 +885,36 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function mappingVenue($data, CSejour $newVenue) {
     $event_code = $this->_ref_exchange_ihe->code;
-    // Cas spécifique de certains segments 
+    // Cas spécifique de certains segments
+
+    // A14 : Demande de pré-admission
+    if ($event_code == "A14") {
+      $newVenue->recuse = -1;
+    }
+    // A27 : Annulation de la demande de pré-admission
     // A38 : Annulation du séjour
-    if ($event_code == "A38") {
+    if ($event_code == "A38" || $event_code == "A27") {
       $newVenue->annule = 1;
     }
-    
+
+    // A15 : Mutation prévisionnelle
+    if ($event_code == "A15") {
+      $newVenue->mode_sortie = "transfert";
+    }
+    // A26 : Annulation mutation prévisionnelle
+    if ($event_code == "A26") {
+      $newVenue->mode_sortie = "";
+    }
+
+    // A16 : Sortie définitive confirmée
+    if ($event_code == "A16") {
+      $newVenue->confirme = 1;
+    }
+    // A25 : Annulation de la confirmation de la sortie définitive
+    if ($event_code == "A25") {
+      $newVenue->confirme = 0;
+    }
+
     // Segment PV1
     $this->getSegment("PV1", $data, $newVenue);
     

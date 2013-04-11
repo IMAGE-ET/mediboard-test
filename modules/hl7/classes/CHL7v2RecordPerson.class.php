@@ -17,7 +17,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   /**
    * @var string
    */
-  static $event_codes = "A28 A29 A31";
+  static $event_codes = array("A28", "A29", "A31");
 
   /**
    * Get data nodes

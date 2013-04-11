@@ -17,7 +17,7 @@ class CHL7v2CancelPatientDemographicsQuery extends CHL7v2MessageXML {
   /**
    * @var string
    */
-  static $event_codes = "J01";
+  static $event_codes = array ("J01");
 
   /**
    * Get data nodes

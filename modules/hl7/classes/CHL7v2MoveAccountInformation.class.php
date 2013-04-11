@@ -14,7 +14,7 @@
  * Move account information, message XML HL7
  */
 class CHL7v2MoveAccountInformation extends CHL7v2MessageXML {
-  static $event_codes = "A44";
+  static $event_codes = array ("A44");
 
   /**
    * Get data nodes

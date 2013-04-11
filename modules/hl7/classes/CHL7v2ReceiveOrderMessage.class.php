@@ -14,7 +14,7 @@
  * Order message, message XML HL7
  */
 class CHL7v2ReceiveOrderMessage extends CHL7v2MessageXML {
-  static $event_codes = "O01";
+  static $event_codes = array ("O01");
 
   /**
    * Get contents
