@@ -24,15 +24,15 @@ $licenses = array(
 $license = CValue::read($licenses, $license, $licenses["GNU GPL"]);
 
 // Only alphanumeric caracters
-$name_canonical = preg_replace("/\W/", "", $name_canonical);
-$name_short = preg_replace("/\W/", "", $name_short);
-$name_long = preg_replace("/\W/", "", $name_long);
+$name_canonical = preg_replace("/[^\w\s]/", "", $name_canonical);
+$name_short     = preg_replace("/[^\w\s]/", "", $name_short);
+$name_long      = preg_replace("/[^\w\s]/", "", $name_long);
 
 if (is_dir("modules/$name_canonical")) {
   CAppui::stepAjax("Module '$name_canonical' existe déjà", UI_MSG_ERROR);
 }
 
-$zip_path = "dev/sample_module.zip";
+$zip_path    = "dev/sample_module.zip";
 $destination = "tmp/sample_module";
 
 if (false == $files_count = CMbPath::extract($zip_path, $destination)) {
