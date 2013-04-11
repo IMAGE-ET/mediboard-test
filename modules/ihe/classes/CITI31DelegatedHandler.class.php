@@ -440,12 +440,18 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Création d'une pré-admission
       if ($current_log->type == "create") {
         // Pending admit
-        /*if ($configs["iti31_pending_event_management"] && $sejour->recuse == -1) {
+        if ($configs["iti31_pending_event_management"] && $sejour->recuse == -1) {
           return "A14";
-        }*/
+        }
 
         return "A05";
-      } 
+      }
+
+      // Cancel the pending admission
+      if ($configs["iti31_pending_event_management"] && $sejour->recuse == -1 && $sejour->fieldModified("annule", "1")) {
+        return "A27";
+      }
+
       // Modification d'une pré-admission
       // Cas d'une annulation ? 
       if ($sejour->fieldModified("annule", "1")) {
@@ -524,6 +530,16 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Annulation de la sortie réelle
       if ($sejour->_old->sortie_reelle && !$sejour->sortie_reelle) {
         return "A13";
+      }
+
+      // Notification sur le transfert
+      if ($configs["iti31_pending_event_management"] && $sejour->fieldModified("mode_sortie")) {
+        return "A15";
+      }
+
+      // Annulation de la notification sur le transfert
+      if ($configs["iti31_pending_event_management"] && $sejour->_old->mode_sortie && !$sejour->mode_sortie) {
+        return "A26";
       }
       
       // Simple modification ? 

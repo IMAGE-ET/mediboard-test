@@ -11,5 +11,3 @@
  */
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
-
-?>

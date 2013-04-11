@@ -154,16 +154,15 @@ class CITI31Test extends CIHETestCase {
   /**
    * Test A05 - Pre-admit the inpatient
    *
-   * @param CCnStep $step Step
+   * @param CCnStep $step         Step
+   * @param bool    $notification Notification
    *
    * @throws CMbException
    *
    * @return void
    */
-  static function testA05(CCnStep $step) {
+  static function testA05(CCnStep $step, $notification = false) {
     $patient = self::loadPatientPES($step, $step->number);
-
-    $scenario = $step->_ref_test->_ref_scenario;
 
     $sejour              = new CSejour();
     $sejour->patient_id  = $patient->_id;
@@ -177,6 +176,11 @@ class CITI31Test extends CIHETestCase {
     $sejour->type          = "comp";
     $sejour->service_id    = $sejour->getRandomValue("service_id", true);
     $sejour->libelle       = "Séjour ITI-31 - $patient->nom";
+
+    // Pending admit
+    if ($notification) {
+      $sejour->recuse = -1;
+    }
 
     self::storeObject($sejour);
   }
@@ -310,7 +314,9 @@ class CITI31Test extends CIHETestCase {
    * @return void
    */
   static function testA14(CCnStep $step) {
+    // PES-PAM_Encounter_Management_PENDING
 
+    self::testA05($step, true);
   }
 
   /**
@@ -323,7 +329,13 @@ class CITI31Test extends CIHETestCase {
    * @return void
    */
   static function testA15(CCnStep $step) {
+    // PES-PAM_Encounter_Management_PENDING
+    $patient = self::loadPatientPES($step, 40);
+    $sejour  = self::loadAdmitPES($patient);
 
+    $sejour->mode_sortie = "transfert";
+
+    self::storeObject($sejour);
   }
 
   /**
@@ -336,7 +348,13 @@ class CITI31Test extends CIHETestCase {
    * @return void
    */
   static function testA16(CCnStep $step) {
+    // PES-PAM_Encounter_Management_PENDING
+    $patient = self::loadPatientPES($step, 40);
+    $sejour  = self::loadAdmitPES($patient);
 
+    $sejour->confirme      = 1;
+
+    self::storeObject($sejour);
   }
 
   /**
@@ -442,7 +460,13 @@ class CITI31Test extends CIHETestCase {
    * @return void
    */
   static function testA27(CCnStep $step) {
+    // PES-PAM_Encounter_Management_PENDING
+    $patient = self::loadPatientPES($step, 20);
+    $sejour  = self::loadAdmitPES($patient);
 
+    $sejour->annule = 1;
+
+    self::storeObject($sejour);
   }
 
   /**
