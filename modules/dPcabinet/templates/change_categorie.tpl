@@ -16,11 +16,6 @@
   {{mb_key object=$consult}}
 
   <table class="form">
-    <tr>
-      <th class="title" colspan="2">
-        Modification de catégorie
-      </th>
-    </tr>
     {{mb_include template="httpreq_view_list_categorie" 
       categorie_id=$consult->categorie_id 
       categories=$categories

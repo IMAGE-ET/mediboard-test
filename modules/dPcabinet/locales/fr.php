@@ -1424,6 +1424,7 @@ $locales['mod-cabinet-check_params-plages-desc'] = 'Nombre de plages consultatio
 $locales['mod-cabinet-check_params-tarifs'] = 'Tarifs';
 $locales['mod-cabinet-check_params-tarifs-desc'] = 'Tarifs de consultation pour le praticien et son cabinet';
 $locales['mod-cabinet-tab-ajax_link_sejour'] = 'Choix du séjour';
+$locales['mod-cabinet-tab-change_categorie'] = 'Changement de catégorie';
 $locales['mod-cabinet-tab-check_params'] = 'Vérification des paramètrages du cabinet';
 $locales['mod-cabinet-tab-edit_reglement'] = 'Formulaire de règlement';
 $locales['mod-cabinet-tab-macro_stats'] = 'Macro-statistiques de consultations';
