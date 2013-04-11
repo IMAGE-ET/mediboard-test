@@ -348,6 +348,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return $sejour->sortie_reelle;
       // Pré-admission
       case 'A05':
+      case 'A14' :
         // Date de la pré-admission
         return $sejour->entree_prevue;
       // Sortie en attente

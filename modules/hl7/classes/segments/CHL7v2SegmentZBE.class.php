@@ -22,8 +22,9 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
    */
   static $actions = array(
     "INSERT" => array(
-      "A05", "A01", "A14", "A04", "A06", "A07", "A54", "A02", "A15", 
-      "A03", "A16", "A21", "A22", "Z80", "Z82", "Z84", "Z86", "Z88"
+      "A05", "A01", "A14", "A04", "A06", "A07", "A54", "A02", "A14",
+      "A15", "A03", "A16", "A21", "A22", "Z80", "Z82", "Z84", "Z86",
+      "Z88"
     ),
     "UPDATE" => array(
       "Z99"
