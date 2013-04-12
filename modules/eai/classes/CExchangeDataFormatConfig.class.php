@@ -21,11 +21,11 @@ class CExchangeDataFormatConfig extends CMbObjectConfig {
   
   // DB Fields
   // Sender
-  var $sender_id      = null;
-  var $sender_class   = null;
+  public $sender_id;
+  public $sender_class;
   
   // Form fields
-  var $_config_fields = null;
+  public $_config_fields;
   
   function getProps() {
     $props = parent::getProps();

@@ -18,23 +18,23 @@
 
 class CGroupDomain extends CMbObject {
   // DB Table key
-  var $group_domain_id = null;
+  public $group_domain_id;
   
   // DB fields
-  var $object_class    = null;
-  var $group_id        = null;
-  var $domain_id       = null;
-  var $master          = null;
+  public $object_class;
+  public $group_id;
+  public $domain_id;
+  public $master;
   
   /**
    * @var CGroup
    */
-  var $_ref_group      = null; 
+  public $_ref_group; 
   
   /**
    * @var CDomain
    */
-  var $_ref_domain     = null;     
+  public $_ref_domain;     
   
   function getSpec() {
     $spec = parent::getSpec();

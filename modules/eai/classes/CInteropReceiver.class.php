@@ -17,8 +17,8 @@
  */
 class CInteropReceiver extends CInteropActor {
   // Form fields
-  var $_type_echange = null;
-  var $_exchanges_sources_save = 0;
+  public $_type_echange;
+  public $_exchanges_sources_save = 0;
 
   /**
    * Initialize object specification

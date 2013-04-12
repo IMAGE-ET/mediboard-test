@@ -24,7 +24,7 @@ class CExchangeAny extends CExchangeDataFormat {
   static $evenements = array();
   
   // DB Table key
-  var $echange_any_id     = null;
+  public $echange_any_id;
 
   function getSpec() {
     $spec = parent::getSpec();

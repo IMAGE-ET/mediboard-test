@@ -18,9 +18,9 @@
 
 class CExchangeTabular extends CExchangeDataFormat {
   // DB Fields
-  var $version              = null;
-  var $nom_fichier          = null;
-  var $identifiant_emetteur = null;
+  public $version;
+  public $nom_fichier;
+  public $identifiant_emetteur;
   
   function getProps() {
     $props = parent::getProps();

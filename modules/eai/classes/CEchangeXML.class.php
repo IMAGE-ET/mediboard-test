@@ -17,11 +17,11 @@
  */
 
 class CEchangeXML extends CExchangeDataFormat {
-  var $identifiant_emetteur    = null;
-  var $initiateur_id           = null;  
+  public $identifiant_emetteur;
+  public $initiateur_id;  
  
   // Forward references
-  var $_ref_notifications = null;
+  public $_ref_notifications;
   
   /**
    * @see parent::getSpec()

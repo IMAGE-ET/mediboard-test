@@ -16,13 +16,13 @@
  * Interoperability Sender
  */
 class CInteropSender extends CInteropActor {
-  var $user_id                  = null;
-  var $save_unsupported_message = null;
-  var $create_ack_file          = null;
-  var $delete_file              = null;
+  public $user_id;
+  public $save_unsupported_message;
+  public $create_ack_file;
+  public $delete_file;
   
   // Forward references
-  var $_ref_user = null;
+  public $_ref_user;
   
   function updateFormFields() {
     parent::updateFormFields();

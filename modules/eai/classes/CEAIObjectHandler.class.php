@@ -20,11 +20,11 @@ class CEAIObjectHandler extends CMbObjectHandler {
   /**
    * @var array
    */
-  static $handled               = array ();
+  static $handled = array ();
   /**
    * @var null
    */
-  var $_eai_initiateur_group_id = null;
+  public $_eai_initiateur_group_id;
 
 
   /**

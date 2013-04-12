@@ -48,10 +48,15 @@
         <td>{{mb_field object=$domain field="tag"}}</td>
       {{/if}}
     </tr>
-    
+
     <tr>
       <th>{{mb_label object=$domain field="libelle"}}</th>
       <td>{{mb_field object=$domain field="libelle"}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$domain field="OID"}}</th>
+      <td>{{mb_field object=$domain field="OID" size=50}}</td>
     </tr>
     
     <tr>

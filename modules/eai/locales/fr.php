@@ -1,5 +1,7 @@
 <?php
 $locales['CDomain'] = 'Domaine d\'identification';
+$locales['CDomain-OID'] = 'OID';
+$locales['CDomain-OID-desc'] = 'OID';
 $locales['CDomain-_count_objects-court'] = 'Objets associés';
 $locales['CDomain-_count_objects-desc'] = 'Nombre d\'objets associés';
 $locales['CDomain-_group_id'] = 'Établissement';
@@ -54,8 +56,8 @@ $locales['CDomain-is_derived_from_idex'] = 'Ce domaine a été créé depuis un tag 
 $locales['CDomain-libelle'] = 'Libellé';
 $locales['CDomain-libelle-court'] = 'Libellé';
 $locales['CDomain-libelle-desc'] = 'Libellé';
-$locales['CDomain-master_ipp'] = 'Ce domaine est le master des IPP';
-$locales['CDomain-master_nda'] = ' Ce domaine est le master des NDA';
+$locales['CDomain-master_ipp'] = 'Ce domaine est le <strong>master des IPP</strong>';
+$locales['CDomain-master_nda'] = ' Ce domaine est le <strong>master des NDA</strong>';
 $locales['CDomain-merge_impossible'] = 'Fusion de domaines impossible sans passer par l\'interface spécifique de fusion';
 $locales['CDomain-merge_incompatible-derived_from_idex'] = 'Fusion impossible car un domaine a été créé à partir d\'un idex et pas le second';
 $locales['CDomain-merge_incompatible-incrementer_actor'] = 'Fusion impossible car un domaine est lié à un incrémenteur et un autre à un acteur';

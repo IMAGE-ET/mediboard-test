@@ -242,9 +242,13 @@ class CSetupeai extends CSetup {
     $query = "ALTER TABLE `domain` 
                 ADD `derived_from_idex` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
-    
-    $this->mod_version = "0.14";
+
+    $this->makeRevision("0.14");
+
+    $query = "ALTER TABLE `domain`
+                ADD `OID` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.15";
   }
 }
-
-?>

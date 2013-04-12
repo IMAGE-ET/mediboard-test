@@ -17,10 +17,10 @@
  */
 
 class CMessageSupported extends CMbMetaObject {
-  var $message_supported_id = null;
+  public $message_supported_id;
   
-  var $message              = null;
-  var $active               = null;
+  public $message;
+  public $active;
 
   function getSpec() {
     $spec = parent::getSpec();

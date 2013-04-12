@@ -20,130 +20,130 @@ class CInteropActor extends CMbObject {
   /**
    * @var null
    */
-  var $nom                       = null;
+  public $nom;
 
   /**
    * @var null
    */
-  var $libelle                   = null;
+  public $libelle;
 
   /**
    * @var null
    */
-  var $group_id                  = null;
+  public $group_id;
 
   /**
    * @var null
    */
-  var $actif                     = null;
+  public $actif;
   
   // Form fields
   /**
    * @var null
    */
-  var $_reachable                = null;
+  public $_reachable;
 
   /**
    * @var null
    */
-  var $_parent_class             = null;
+  public $_parent_class;
 
   /**
    * @var bool
    */
-  var $_delete_file              = true;
+  public $_delete_file = true;
 
   /**
    * @var null
    */
-  var $_tag_patient              = null;
+  public $_tag_patient;
 
   /**
    * @var null
    */
-  var $_tag_sejour               = null;
+  public $_tag_sejour;
 
   /**
    * @var null
    */
-  var $_tag_mediuser             = null;
+  public $_tag_mediuser;
 
   /**
    * @var null
    */
-  var $_tag_service              = null;
+  public $_tag_service;
 
   /**
    * @var null
    */
-  var $_tag_chambre              = null;
+  public $_tag_chambre;
 
   /**
    * @var null
    */
-  var $_tag_lit                  = null;
+  public $_tag_lit;
 
   /**
    * @var null
    */
-  var $_tag_movement             = null;
+  public $_tag_movement;
 
   /**
    * @var null
    */
-  var $_tag_visit_number         = null;
+  public $_tag_visit_number;
 
   /**
    * @var null
    */
-  var $_tag_hprimxml             = null;
+  public $_tag_hprimxml;
 
   /**
    * @var null
    */
-  var $_tag_hl7                  = null;
+  public $_tag_hl7;
 
   /**
    * @var null
    */
-  var $_tag_consultation         = null;
+  public $_tag_consultation;
 
   /**
    * @var null
    */
-  var $_self_tag_patient         = null;
+  public $_self_tag_patient;
 
   /**
    * @var null
    */
-  var $_self_tag_sejour         = null;
+  public $_self_tag_sejour;
 
   /**
    * @var array
    */
-  var $_tags                     = array(); // All tags
+  public $_tags = array(); // All tags
   
   // Forward references
   /**
    * @var CGroups
    */
-  var $_ref_group                = null;
+  public $_ref_group;
   /**
    * @var null
    */
-  var $_ref_exchanges_sources    = null;
+  public $_ref_exchanges_sources;
   /**
    * @var null
    */
-  var $_ref_last_message         = null;
+  public $_ref_last_message;
   /**
    * @var null
    */
-  var $_ref_messages_supported   = null;
+  public $_ref_messages_supported;
   /**
    * @var array
    */
-  var $_ref_msg_supported_family = array();
+  public $_ref_msg_supported_family = array();
 
   public $_type_echange;
 

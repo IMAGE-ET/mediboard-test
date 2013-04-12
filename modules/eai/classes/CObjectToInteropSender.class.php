@@ -109,6 +109,13 @@ class CObjectToInteropSender extends CMbObject {
     return $this->_ref_object = $this->loadFwdRef("object_id", $cached);
   }
 
+  /**
+   * Load sender
+   *
+   * @param bool $cached Use object cache when possible
+   *
+   * @return CInteropSender
+   */
   function loadRefSender($cached = true) {
     return $this->_ref_sender = $this->loadFwdRef("sender_id", $cached);
   }
@@ -126,7 +133,7 @@ class CObjectToInteropSender extends CMbObject {
   /**
    * Load all the objects linked to the given sender
    *
-   * @param $sender_id integer The id of the sender
+   * @param string $sender_id integer The id of the sender
    *
    * @return CStoredObject[]
    */

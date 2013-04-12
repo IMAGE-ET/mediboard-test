@@ -11,5 +11,5 @@
 /**
  * Description
  */
-class CExchangeBinary extends CExchangeDataFormat {}
-?>
+class CExchangeBinary extends CExchangeDataFormat {
+}

@@ -18,62 +18,62 @@
 
 class CExchangeDataFormat extends CMbMetaObject {  
   // DB Fields
-  var $group_id                  = null;
-  var $date_production           = null;
-  var $sender_id                 = null;
-  var $sender_class              = null;
-  var $receiver_id               = null;
-  var $type                      = null;
-  var $sous_type                 = null;
-  var $date_echange              = null;
-  var $message_content_id        = null;
-  var $acquittement_content_id   = null;
-  var $statut_acquittement       = null;
-  var $message_valide            = null;
-  var $acquittement_valide       = null;
-  var $id_permanent              = null;
-  var $object_id                 = null;
-  var $object_class              = null;
-  var $reprocess                 = null;
+  public $group_id;
+  public $date_production;
+  public $sender_id;
+  public $sender_class;
+  public $receiver_id;
+  public $type;
+  public $sous_type;
+  public $date_echange;
+  public $message_content_id;
+  public $acquittement_content_id;
+  public $statut_acquittement;
+  public $message_valide;
+  public $acquittement_valide;
+  public $id_permanent;
+  public $object_id;
+  public $object_class;
+  public $reprocess;
   
   // Filter fields
-  var $_date_min                 = null;
-  var $_date_max                 = null;
+  public $_date_min;
+  public $_date_max;
   
   // Form fields
-  var $_self_sender              = null;
-  var $_self_receiver            = null;
-  var $_message                  = null;
-  var $_acquittement             = null;
-  var $_count_exchanges          = null;
-  var $_count_msg_invalide       = null;
-  var $_count_ack_invalide       = null;
-  var $_observations             = array();
-  var $_doc_errors_msg           = array();
-  var $_doc_errors_ack           = array();
-  var $_load_content             = true;
-  var $_messages_supported_class = array();
-  var $_family_message_class     = null;
-  var $_family_message           = null;
-  var $_configs_format           = null;
-  var $_delayed                  = null;
-  var $_exchange_ihe             = null;
-  var $_to_treatment             = true;
+  public $_self_sender;
+  public $_self_receiver;
+  public $_message;
+  public $_acquittement;
+  public $_count_exchanges;
+  public $_count_msg_invalide;
+  public $_count_ack_invalide;
+  public $_observations             = array();
+  public $_doc_errors_msg           = array();
+  public $_doc_errors_ack           = array();
+  public $_load_content             = true;
+  public $_messages_supported_class = array();
+  public $_to_treatment             = true;
+  public $_family_message_class;
+  public $_family_message;
+  public $_configs_format;
+  public $_delayed;
+  public $_exchange_ihe;
   
   /**
    * @var CGroups
    */
-  var $_ref_group      = null;
+  public $_ref_group;
   
   /**
    * @var CInteropSender
    */
-  var $_ref_sender     = null;
+  public $_ref_sender;
   
   /**
    * @var CInteropReceiver
    */
-  var $_ref_receiver   = null;
+  public $_ref_receiver;
 
   /**
    * Get properties specifications as strings

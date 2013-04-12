@@ -18,33 +18,39 @@
 
 class CDomain extends CMbObject {
   // DB Table key
-  var $domain_id      = null;
+  public $domain_id;
   
   // DB fields
-  var $incrementer_id    = null;
-  var $actor_id          = null;
-  var $actor_class       = null;
-  var $tag               = null;
-  var $libelle           = null;
-  var $derived_from_idex = null;
+  public $incrementer_id;
+  public $actor_id;
+  public $actor_class;
+  public $tag;
+  public $libelle;
+  public $derived_from_idex;
+  public $OID;
   
   // Form fields 
-  var $_is_master_ipp  = null;
-  var $_is_master_nda  = null;
-  var $_count_objects  = null;
-  var $_detail_objects = array();
-  var $_force_merge    = false;
+  public $_is_master_ipp;
+  public $_is_master_nda;
+  public $_count_objects;
+  public $_detail_objects = array();
+  public $_force_merge    = false;
   
   /**
    * @var CInteropActor
    */
-  var $_ref_actor       = null; 
+  public $_ref_actor; 
   /**
    * @var CIncrementer
    */
-  var $_ref_incrementer   = null;
-  var $_ref_group_domains = null; 
-  
+  public $_ref_incrementer;
+  public $_ref_group_domains;
+
+  /**
+   * Initialize object specification
+   *
+   * @return CMbObjectSpec the spec
+   */
   function getSpec() {
     $spec = parent::getSpec();
     
@@ -53,7 +59,13 @@ class CDomain extends CMbObject {
     
     return $spec;
   }
-  
+
+  /**
+   * Get properties specifications as strings
+   *
+   * @see parent::getProps()
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     
@@ -63,14 +75,20 @@ class CDomain extends CMbObject {
     $props["tag"]               = "str notNull";
     $props["libelle"]           = "str";
     $props["derived_from_idex"] = "bool";
+    $props["OID"]               = "str";
     
     $props["_is_master_ipp"] = "bool";
     $props["_is_master_nda"] = "bool";
     $props["_count_objects"] = "num";
 
     return $props;
-  } 
-  
+  }
+
+  /**
+   * Get backward reference specifications
+   *
+   * @return array Array of form "collection-name" => "class join-field"
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     
@@ -80,6 +98,8 @@ class CDomain extends CMbObject {
   }
   
   /**
+   * Load actor
+   *
    * @return CInteropActor
    */
   function loadRefActor() {
@@ -91,6 +111,8 @@ class CDomain extends CMbObject {
   }
   
   /**
+   * Load incrementer
+   *
    * @return CIncrementer
    */
   function loadRefIncrementer() {
@@ -102,7 +124,9 @@ class CDomain extends CMbObject {
   }
   
   /**
-   * @return array
+   * Load groups domains
+   *
+   * @return CGroupDomain[]
    */
   function loadRefsGroupDomains() {
     if ($this->_ref_group_domains) {
@@ -111,7 +135,12 @@ class CDomain extends CMbObject {
     
     return $this->_ref_group_domains = $this->loadBackRefs("group_domains");
   }
-  
+
+  /**
+   * Count objects
+   *
+   * @return int
+   */
   function countObjects() {
     $idex      = new CIdSante400();
     $idex->tag = $this->tag;
@@ -121,36 +150,41 @@ class CDomain extends CMbObject {
       "tag" => " = '$this->tag'"
     );    
 
-    $this->_detail_objects = $idex->countMultipleList($where, null, "object_class", null, array("object_class"), "tag");
-  }
-  
-  function store() {
-    // Standard store
-    if ($msg = parent::store()){
-      return $msg;
-    }
+    return $this->_detail_objects = $idex->countMultipleList($where, null, "object_class", null, array("object_class"), "tag");
   }
   
    /**
    * Merge an array of objects
-   * @param array An array of CMbObject to merge
-   * @param bool $fast Tell wether to use SQL (fast) or PHP (slow but checked and logged) algorithm
-   * @return CMbObject
+    *
+   * @param array $objects An array of CMbObject to merge
+   * @param bool  $fast    Tell wether to use SQL (fast) or PHP (slow but checked and logged) algorithm
+   *
+    * @return CMbObject
    */
   function merge($objects, $fast = false) {
     if (!$this->_force_merge) {
       return "CDomain-merge_impossible";
     }
     
-    parent::merge($objects, $fast);
+    return parent::merge($objects, $fast);
   }
-  
+
+  /**
+   * Update the form (derived) fields plain fields
+   *
+   * @return void
+   */
   function updateFormFields() {
     parent::updateFormFields();
     
     $this->_view = $this->libelle ? $this->libelle : $this->tag;
   }
-  
+
+  /**
+   * If domain is master
+   *
+   * @return bool
+   */
   function isMaster() {
     foreach ($this->loadRefsGroupDomains() as $_group_domain) {
       if ($_group_domain->isMasterIPP()) {
@@ -161,8 +195,18 @@ class CDomain extends CMbObject {
         return $this->_is_master_nda = true;
       }
     }
+
+    return false;
   }
-    
+
+  /**
+   * Get master domain tag
+   *
+   * @param string $domain_type Object class
+   * @param string $group_id    Group
+   *
+   * @return string
+   */
   static function getTagMasterDomain($domain_type, $group_id = null) {
     $group = CGroups::loadCurrent();
     if (!$group_id) {
