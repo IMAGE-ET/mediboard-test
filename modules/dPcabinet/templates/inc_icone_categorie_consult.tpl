@@ -14,7 +14,10 @@
 {{mb_default var=alt value=null}}
 {{mb_default var=display_name value=false}}
 
-<img {{if $onclick}}onclick="{{$onclick}}" {{/if}}
+<img {{if $onclick}}
+       onclick="{{$onclick}}"
+       style="cursor: pointer;"
+     {{/if}}
      {{if $id}}id="{{$id}}" {{/if}}
      src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone|basename}}"
      {{if $title}} title="{{$title}}" {{/if}}
