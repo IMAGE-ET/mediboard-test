@@ -896,19 +896,25 @@ div.rank.desired {
 
 
 ul li.user:before,
+ul li.prat:before,
+ul li.func:before,
 ul li.function:before,
+ul li.etab:before,
 ul li.group:before {
   float:right;
 }
 
-ul li.user:before {
+ul li.user:before,
+ul li.prat:before {
   content: url(../../images/icons/user.png);
 }
 
+ul li.func:before,
 ul li.function:before {
   content: url(../../images/icons/user-function.png);
 }
 
+ul li.etab:before,
 ul li.group:before {
   content: url(../../images/icons/group.png);
 }
