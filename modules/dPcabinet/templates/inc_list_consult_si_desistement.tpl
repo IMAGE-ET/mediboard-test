@@ -45,7 +45,9 @@
     <td>
       {{assign var=categorie value=$_consult->_ref_categorie}}
       {{if $categorie->_id}}
-        {{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$categorie title=$categorie->nom_categorie}}
+        {{mb_include module=cabinet template=inc_icone_categorie_consult 
+          categorie=$categorie
+        }}
       {{/if}}
     </td>
     

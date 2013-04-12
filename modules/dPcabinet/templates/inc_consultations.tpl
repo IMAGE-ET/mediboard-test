@@ -42,10 +42,11 @@
   </tr>
   {{foreach from=$plageSel->_ref_consultations item=_consult}}
   <tr {{if $_consult->chrono == $_consult|const:'TERMINE'}} class="hatching" {{/if}}>
-    {{assign var="consult_id" value=$_consult->_id}}
-    {{assign var=patient value=$_consult->_ref_patient}}
-    {{assign var="href_consult" value="?m=$m&tab=edit_consultation&selConsult=$consult_id"}}
-    {{assign var="href_planning" value="?m=$m&tab=edit_planning&consultation_id=$consult_id"}}
+    {{assign var=consult_id    value=$_consult->_id}}
+    {{assign var=patient       value=$_consult->_ref_patient}}
+    {{assign var=href_consult  value="?m=$m&tab=edit_consultation&selConsult=$consult_id"}}
+    {{assign var=href_planning value="?m=$m&tab=edit_planning&consultation_id=$consult_id"}}
+    {{assign var=href_patient  value="?m=patients&tab=vw_edit_patients&patient_id=$patient->_id"}}
 
     {{if !$patient->_id}}
       {{assign var="style" value="style='background: #ffa;'"}}          
@@ -78,8 +79,9 @@
     <td class="text" {{$style|smarty:nodefaults}}>
       {{if !$patient->_id}}
         [PAUSE]
+
       {{else}}
-      <a style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
+      <a style="float: right"  title="Modifier le dossier administratif" href="?m=patients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
         <img src="images/icons/edit.png" />
       </a>
       <a href="{{$href_consult}}">
@@ -87,36 +89,25 @@
       </a>
       {{/if}}
     </td>
+    
     <td class="text" {{$style|smarty:nodefaults}}>
       {{assign var=categorie value=$_consult->_ref_categorie}}
 
+      {{if $categorie->_id}}
+      <div>
+        {{mb_include module=cabinet template=inc_icone_categorie_consult
+          categorie=$categorie
+          onclick="IconeSelector.changeCategory('$consult_id', this)"
+          display_name=true
+        }}
+      </div>
+      {{/if}}
+
       {{if $patient->_id}}
-          {{if $categorie->_id}}
-          <div>
-            {{mb_include
-              module=cabinet
-              template=inc_icone_categorie_consult
-              categorie=$categorie
-              alt=$categorie->nom_categorie
-              title=$categorie->nom_categorie
-              onclick="IconeSelector.popChange('$consult_id')"
-              display_name=true
-            }}
-          </div>
-          {{/if}}
         <a href="{{$href_consult}}" title="Voir la consultation">
           {{$_consult->motif|truncate:35:"...":false|nl2br}}
         </a>
       {{else}}
-        {{if $categorie->_id}}
-          {{mb_include
-            module=cabinet
-            template=inc_icone_categorie_consult
-            categorie=$categorie
-            alt=$categorie->nom_categorie
-            title=$categorie->nom_categorie
-          }}
-        {{/if}}
         {{$_consult->motif|truncate:35:"...":false|nl2br}}
       {{/if}}
     </td>

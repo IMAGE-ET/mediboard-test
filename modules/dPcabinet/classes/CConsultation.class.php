@@ -931,7 +931,7 @@ TESTS A EFFECTUER
   }
 
   function loadRefCategorie($cache = false) {
-    $this->_ref_categorie = $this->loadFwdRef("categorie_id", $cache);
+    return $this->_ref_categorie = $this->loadFwdRef("categorie_id", $cache);
   }
 
   function loadComplete() {

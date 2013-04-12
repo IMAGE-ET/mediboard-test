@@ -9,8 +9,8 @@ IconeSelector = {
   },
 
   pop: function() {
-    var url = new Url("cabinet", "icone_selector");
-    url.popup(this.options.width, this.options.height, "Icone");
+    var url = new Url('cabinet', 'icone_selector');
+    url.popup(this.options.width, this.options.height, 'Icone');
   },
 
   set: function(view) {
@@ -20,12 +20,19 @@ IconeSelector = {
     $V(oForm[this.sView], view);
     
     // Affichage de l'icone
-    $('iconeBackground').src = "./modules/dPcabinet/images/categories/"+view;
+    $('iconeBackground').src = './modules/dPcabinet/images/categories/'+view;
   },
   
-  popChange: function(consult_id) {
-    var url = new Url("cabinet", "change_categorie");
-    url.addParam("consult_id", consult_id);
-    url.requestModal(400, 100);
+  changeCategory: function(consult_id, span) {
+    var url = new Url('cabinet', 'change_categorie');
+    url.addParam('consult_id', consult_id);
+    url.requestModal(300);
+    url.modalObject.observe('afterClose', IconeSelector.refreshCategory.curry(consult_id, span));
+  },
+
+  refreshCategory: function(consult_id, span) {
+    var url = new Url('cabinet', 'show_categorie');
+    url.addParam('consult_id', consult_id);
+    url.requestUpdate(span);
   }
 };

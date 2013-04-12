@@ -130,8 +130,7 @@
     <td {{if $destinations || $_consult->motif}}rowspan="2"{{/if}} style="{{$style}}" class="narrow">
       {{mb_include module=cabinet template=inc_icone_categorie_consult
         categorie=$categorie
-        title=$categorie->nom_categorie
-        onclick="IconeSelector.popChange('$consult_id')"}}
+        onclick="IconeSelector.changeCategory('$consult_id', this)"}}
     </td>
   {{/if}}
 

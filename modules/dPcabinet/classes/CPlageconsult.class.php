@@ -224,6 +224,10 @@ class CPlageconsult extends CPlageHoraire {
     $this->_ref_pour_compte = $this->loadFwdRef("pour_compte_id", $cache);
   }
 
+  function loadRefChir() {
+    return $this->_ref_chir = $this->loadFwdRef("chir_id", true);
+  }
+  
   function getPerm($permType) {
     if (!$this->_ref_chir) {
       $this->loadRefsFwd(1);

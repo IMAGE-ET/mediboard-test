@@ -8,15 +8,16 @@
     
     {{if $categorie->_id}}
     <td rowspan="2" style="{{$consult_background}}">
-      {{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$categorie alt=$categorie->nom_categorie
-        title=$categorie->nom_categorie}}
+      {{mb_include module=cabinet template=inc_icone_categorie_consult 
+        categorie=$categorie
+      }}
     </td>
     {{/if}}
     
     {{if $curr_consult->patient_id}}
     {{assign var=patient value=$curr_consult->_ref_patient}}
     <td rowspan="2" style="{{$consult_background}}">
-      {{$patient->_view}}
+      {{$patient}}
     </td>
     
       {{if $filter->_coordonnees}}
@@ -53,7 +54,7 @@
     {{/if}}
     
     {{else}}
-    <td rowspan="2" colspan="{{if $filter->_coordonnees}}4{{else}}2{{/if}}" style="{{$consult_background}}">
+    <td rowspan="2" colspan="{{$filter->_coordonnees|ternary:5:3}}" style="{{$consult_background}}">
       [PAUSE]
     </td>
     {{/if}}
@@ -62,8 +63,10 @@
     <td {{if !$consult_anesth->operation_id}}rowspan="2"{{/if}} class="text" style="{{$consult_background}}">
       {{if $categorie->_id}}
         <div>
-          {{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$categorie alt=$categorie->nom_categorie
-            title=$categorie->nom_categorie display_name=true}}
+          {{mb_include module=cabinet template=inc_icone_categorie_consult 
+            categorie=$categorie 
+            display_name=true
+          }}
         </div>
       {{/if}}
       {{mb_value object=$curr_consult field=motif}}

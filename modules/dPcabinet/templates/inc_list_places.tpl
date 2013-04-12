@@ -104,8 +104,9 @@ PlageConsult.addPlaceAfter = function(plage_id) {
       </div>
       <div style="float:right">
         {{if $_consultation->categorie_id}}
-          {{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$_consultation->_ref_categorie
-            alt=$_consultation->_ref_categorie->nom_categorie title=$_consultation->_ref_categorie->nom_categorie}}
+          {{mb_include module=cabinet template=inc_icone_categorie_consult 
+            categorie=$_consultation->_ref_categorie
+          }}
         {{/if}}
       </div>
     </td>
@@ -167,10 +168,9 @@ PlageConsult.addPlaceAfter = function(plage_id) {
         {{if $categorie->_id}}
           <div class="compact">
             {{mb_include module=cabinet template=inc_icone_categorie_consult
-              categorie=$categorie
-              alt=$categorie->nom_categorie
-              title=$categorie->nom_categorie
-              display_name=true}}
+              categorie=$categorie 
+              display_name=true
+            }}
           </div>
         {{/if}}
         {{if $_consultation->motif}}
@@ -204,13 +204,14 @@ PlageConsult.addPlaceAfter = function(plage_id) {
   {{foreach from=$listAfter item =_consultation}}
   <tr>
     <td>
-      <div style="float:left">
+      <div style="float: left;">
         {{$_consultation->heure|date_format:$conf.time}}
       </div>
-      <div style="float:right">
+      <div style="float: right;">
         {{if $_consultation->categorie_id}}
-          {{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$_consultation->_ref_categorie
-            alt=$_consultation->_ref_categorie->nom_categorie title=$_consultation->_ref_categorie->nom_categorie}}
+          {{mb_include module=cabinet template=inc_icone_categorie_consult 
+            categorie=$_consultation->_ref_categorie
+          }}
         {{/if}}
       </div>
     </td>

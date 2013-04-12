@@ -33,7 +33,11 @@
     {{foreach from=$categories item=_categorie}}
     <tr {{if $_categorie->_id == $categorie->_id}}class="selected"{{/if}}>
       <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;categorie_id={{$_categorie->_id}}">{{$_categorie->nom_categorie|spancate}}</a></td>
-      <td>{{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$_categorie}}</td>
+      <td>
+        {{mb_include module=cabinet template=inc_icone_categorie_consult 
+          categorie=$_categorie
+        }}
+      </td>
       <td>x{{$_categorie->duree}}</td>
     </tr>
     {{foreachelse}}
@@ -74,7 +78,11 @@
         <th>{{mb_label object=$categorie field="nom_icone"}}</th>
         <td>
         {{if $categorie->_id}}
-          {{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$categorie id="iconeBackground" onclick="IconeSelector.init()"}}
+          {{mb_include module=cabinet template=inc_icone_categorie_consult 
+            categorie=$categorie 
+            id="iconeBackground" 
+            onclick="IconeSelector.init()"
+          }}
         {{else}}
           <img id="iconeBackground" src="images/icons/search.png" onclick="IconeSelector.init()" />
          {{/if}}
