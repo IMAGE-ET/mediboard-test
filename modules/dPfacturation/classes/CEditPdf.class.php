@@ -17,6 +17,7 @@ class CEditPdf{
   public $pdf;
   public $facture;
   public $factures;
+  public $relance;
   public $font;
   public $fontb;
   public $size;
@@ -86,6 +87,16 @@ class CEditPdf{
     }
   }
   
+  function editRelance() {
+    $this->editFacture("relance");
+    if (count($this->factures)) {
+      $this->pdf->Output("Relance_".$this->facture->cloture."_".$this->patient_facture->nom.'.pdf', "I");
+    }
+    else {
+      $this->pdf->Output('Relances.pdf', "I");
+    }
+  }
+  
   function editFacture($nom) {
     // Creation du PDF
     $this->pdf = new CMbPdf('P', 'mm');
@@ -94,14 +105,20 @@ class CEditPdf{
     $this->font = "vera";
     $this->fontb = $this->font."b";
     
-    foreach ($this->factures as $this->facture) {
-      $this->facture->loadRefs();
-      $this->facture = $this->facture;
-      $this->praticien = $this->facture->_ref_praticien;
+    foreach ($this->factures as $the_facture) {
+      $this->facture = $the_facture;
+      
+      $this->patient_facture = $this->facture->loadRefPatient();
+      $this->facture->_ref_patient->loadRefsCorrespondantsPatient();
+      $this->praticien = $this->facture->loadRefPraticien();
+      $this->facture->loadRefAssurance();
+      $this->facture->loadRefsObjects();
+      $this->facture->loadRefsReglements();
+      $this->facture->loadRefsRelances();
+  
       $this->function_prat = $this->praticien->loadRefFunction();
       $this->group = $this->function_prat->loadRefGroup();
       $this->adherent = $this->praticien->adherent;
-      $this->patient_facture = $this->facture->_ref_patient;
       
       if ($nom == "BVR") {
         $this->loadTotaux();
@@ -115,7 +132,7 @@ class CEditPdf{
           }
         }
       }
-      else {
+      elseif ($nom == "justif") {
         $this->function_prat->adresse = str_replace("\r\n",' ', $this->function_prat->adresse);
         $this->patient_facture->adresse = str_replace("\r\n",' ', $this->patient_facture->adresse);
         
@@ -129,6 +146,10 @@ class CEditPdf{
         foreach ($this->facture->_montant_factures_caisse as $cle_facture => $montant_facture) {
           $this->editCenterJustificatif($cle_facture, $montant_facture);
         }
+      }
+      elseif ($nom == "relance") {
+        $this->editHautFacture(1, $this->relance->_montant, true);
+        $this->editBVR($this->relance->_montant);
       }
     }
   }
@@ -410,7 +431,7 @@ class CEditPdf{
     $this->pre_tab["Autres:"]   = sprintf("%.2f", $this->facture->_montant_sans_remise - $pm - $pt - $this->autre_tarmed);
   }
   
-  function editHautFacture($cle_facture, $montant_facture) {
+  function editHautFacture($cle_facture, $montant_facture, $relance = false) {
     //Création de la page de la facture
     $this->pdf->AddPage();
     $colonne1 = 10;
@@ -444,7 +465,7 @@ class CEditPdf{
       $this->group->cp." ".$this->group->ville,
       "80" => "Four. de prestations",
       "Dr. ".$this->praticien->_view,
-      "$this->function_prat->_view",
+      $this->function_prat->_view,
       $this->adresse_prat["group1"],
       $this->adresse_prat["group2"],
       $this->function_prat->cp." ".$this->function_prat->ville,
@@ -494,7 +515,12 @@ class CEditPdf{
     
     $tab[$colonne2] = $patient;
     $this->pdf->SetTextColor(80,80,80);
-    if ($this->facture->_reglements_total_patient) {
+  
+    if ($relance) {
+      $this->pdf->setFont($this->font, '', 25);
+      $this->pdf->Text(100,20, "RELANCE");
+    }
+    elseif ($this->facture->_reglements_total_patient) {
       $this->pdf->setFont($this->font, '', 25);
       $this->pdf->Text(100,20, "DUPLICATA");
     }
@@ -530,6 +556,10 @@ class CEditPdf{
     $this->editCell($colonne1, 120, 25, "Données de la facture", "L");
     $this->editCell($colonne1, $this->pdf->GetY()+5, 22, "Date facture:", "R");
     $this->pdf->Cell(25, "", CMbDT::transform(null, $this->facture->cloture, "%d %B %Y"), null, null, "L");
+    if ($relance) {
+      $this->editCell($colonne1, $this->pdf->GetY()+3, 22, "Date relance:", "R");
+      $this->pdf->Cell(25, "", CMbDT::transform(null, $this->relance->date, "%d %B %Y"), null, null, "L");
+    }
     $this->editCell($colonne1, $this->pdf->GetY()+3, 22, "N° facture:", "R");
     $this->pdf->Cell(25, "", $this->facture->_id, null, null, "L");
     $this->editCell($colonne1, $this->pdf->GetY()+3, 22, "Traitement du:", "R");
@@ -563,6 +593,9 @@ class CEditPdf{
       else {
         $tarif[$cles] = "0.00";
       }
+    }
+    if ($relance) {
+      $tarif["Relance:"]      = sprintf('%0.2f', $this->relance->_montant);
     }
     $tarif["Remise:"]         = sprintf('%0.2f', -$this->facture->remise);
     $tarif["Montant total:"]  = sprintf('%0.2f', $montant_total);
