@@ -77,9 +77,7 @@ else {
 $consult_anesth =& $consult->_ref_consult_anesth;
 $nextSejourAndOperation = $patient->getNextSejourAndOperation($consult->_ref_plageconsult->date);
 
-$listChirs = CAppUI::pref("pratOnlyForConsult", 1) ?
-  $userSel->loadPraticiens() :
-  $userSel->loadProfessionnelDeSante();
+$listChirs = $userSel->loadPraticiens(PERM_READ);
 
 // Création du template
 $smarty = new CSmartyDP();
