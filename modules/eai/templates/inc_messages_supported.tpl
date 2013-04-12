@@ -22,6 +22,16 @@
       countChecked('{{$_message}}');
     {{/foreach}}
   });
+
+  checkAll = function(type, message) {
+
+    $$("input.switch_on_"+message+type+"[value=1]").each(function(checkbox) {
+        checkbox.checked = true
+        checkbox.form.onsubmit()
+      });
+  }
+
+
 </script>
 
 <table>
@@ -45,7 +55,7 @@
             {{foreach from=$_categories key=_category_name item=_messages_supported}}
               {{if $_category_name != "none"}}
                 <tr>
-                  <th class="category" colspan="2">{{$_category_name}}</th>
+                  <th class="category" colspan="2"><button class="tick notext" onclick="checkAll('{{$_category_name}}', '{{$_message}}')"></button>{{$_category_name}}</th>
                 </tr>
               {{/if}}
               {{foreach from=$_messages_supported item=_message_supported}}
@@ -63,7 +73,7 @@
                     <input type="hidden" name="object_class" value="{{$_message_supported->object_class}}" />
                     <input type="hidden" name="message" value="{{$_message_supported->message}}" />
 
-                    {{mb_field object=$_message_supported field=active onchange="this.form.onsubmit();"}}
+                    {{mb_field object=$_message_supported class=switch_on_$_message$_category_name field=active onchange="this.form.onsubmit();"}}
                   </form>
                 </td>
               </tr>
