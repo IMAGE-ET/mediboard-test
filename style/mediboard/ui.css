@@ -914,22 +914,28 @@ ul li.group:before {
 }
 
 td.user,
+td.prat,
+td.func
 td.function,
+td.etab,
 td.group {
   background-position: top right;
   background-repeat: no-repeat;
   padding-right: 16px !important;
 }
 
-td.user {
+td.user,
+td.prat {
   background-image: url(../../images/icons/user.png);
 }
 
+td.func,
 td.function {
   background-image: url(../../images/icons/user-function.png);
 }
 
-td.group {
+td.group,
+td.etab {
   background-image: url(../../images/icons/group.png);
 }
 
