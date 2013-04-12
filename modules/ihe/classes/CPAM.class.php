@@ -34,8 +34,8 @@ class CPAM extends CIHE {
    * @var array
    */
   static $transaction_iti31 = array(
-    "A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A11", "A12", "A13", "A14", "A15", "A16", "A21", "A22", "A25", "A26",
-    "A27", "A38", "A44", "A52", "A53", "A54", "A55", "Z99"
+    "A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10", "A11", "A12", "A13", "A14", "A15", "A16", "A21", "A22",
+    "A25", "A26", "A27", "A32", "A33", "A38", "A44", "A52", "A53", "A54", "A55", "Z99"
   );
 
   /**
@@ -61,6 +61,8 @@ class CPAM extends CIHE {
     "A06" => "CHL7EventADTA06",
     "A07" => "CHL7EventADTA07",
     "A08" => "CHL7EventADTA08",
+    "A09" => "CHL7EventADTA09",
+    "A10" => "CHL7EventADTA10",
     "A11" => "CHL7EventADTA11",
     "A12" => "CHL7EventADTA12",
     "A13" => "CHL7EventADTA13",
@@ -72,6 +74,8 @@ class CPAM extends CIHE {
     "A25" => "CHL7EventADTA25",
     "A26" => "CHL7EventADTA26",
     "A27" => "CHL7EventADTA27",
+    "A32" => "CHL7EventADTA32",
+    "A33" => "CHL7EventADTA33",
     "A38" => "CHL7EventADTA38",
     "A44" => "CHL7EventADTA44",
     "A52" => "CHL7EventADTA52",
@@ -143,6 +147,4 @@ class CPAM extends CIHE {
 
     return null;
   }
-
-
 }

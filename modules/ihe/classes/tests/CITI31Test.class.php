@@ -434,7 +434,13 @@ class CITI31Test extends CIHETestCase {
    * @return void
    */
   static function testA25(CCnStep $step) {
+    // PES-PAM_Encounter_Management_PENDING
+    $patient = self::loadPatientPES($step, 40);
+    $sejour  = self::loadAdmitPES($patient);
 
+    $sejour->confirme = 0;
+
+    self::storeObject($sejour);
   }
 
   /**
@@ -447,7 +453,13 @@ class CITI31Test extends CIHETestCase {
    * @return void
    */
   static function testA26(CCnStep $step) {
+    // PES-PAM_Encounter_Management_PENDING
+    $patient = self::loadPatientPES($step, 40);
+    $sejour  = self::loadAdmitPES($patient);
 
+    $sejour->mode_sortie = "";
+
+    self::storeObject($sejour);
   }
 
   /**

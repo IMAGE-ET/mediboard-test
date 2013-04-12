@@ -1208,7 +1208,7 @@ class CSetupsystem extends CSetup {
                 `host` VARCHAR (50) NOT NULL,
                 `auth_ssl` ENUM ('None','SSL/TLS','STARTTLS') NOT NULL,
                 `timeout` INT NOT NULL
-              );";
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 
     $this->makeRevision("1.1.20");
