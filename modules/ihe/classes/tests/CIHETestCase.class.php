@@ -27,7 +27,7 @@ class CIHETestCase {
    * @return void
    */
   static function run($code, CCnStep $step) {
-    $transaction = CPAM::getTransaction($code);
+    $transaction = str_replace("-", "", $step->transaction);
 
     if (!$transaction) {
       throw new CMbException("CIHETestCase-no_transaction");

@@ -1,4 +1,3 @@
-
 <?php
 
 /**
@@ -534,12 +533,19 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
 
       // Notification sur le transfert
-      if ($configs["iti31_pending_event_management"] && $sejour->fieldModified("mode_sortie")) {
+      if ($configs["iti31_pending_event_management"]
+          && $sejour->fieldModified("mode_sortie")
+          && $sejour->mode_sortie == "transfert"
+      ) {
         return "A15";
       }
 
       // Annulation de la notification sur le transfert
-      if ($configs["iti31_pending_event_management"] && $sejour->_old->mode_sortie && !$sejour->mode_sortie) {
+      if ($configs["iti31_pending_event_management"]
+          && $sejour->_old->mode_sortie
+          && $sejour->_old->mode_sortie == "transfert"
+          && !$sejour->mode_sortie
+      ) {
         return "A26";
       }
       

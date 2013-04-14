@@ -16,7 +16,7 @@
   {{foreach from=$messages_supported item=_message_supported}}
     <tr>
       <th class="narrow">{{tr}}{{$_message_supported->message}}{{/tr}}</th>
-      <td> {{mb_value object=$_message_supported field=active}} </td>
+      <td class="text compact">{{tr}}{{$_message_supported->message}}-desc{{/tr}}</td>
     </tr>
   {{/foreach}}
   </table>

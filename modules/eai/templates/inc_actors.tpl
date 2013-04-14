@@ -27,7 +27,7 @@
   </tr>
   {{foreach from=$actors key=type_actor item=_actors}}
     <tr>
-      <th class="category" colspan="6">
+      <th class="section" colspan="6">
         <a style="float: right" class="button new notext" href="#" onclick="InteropActor.refreshActor(null, '{{$type_actor}}');" 
             title="Créer acteurs {{$type_actor}}">
           {{tr}}{{$type_actor}}-title-create{{/tr}}
@@ -37,7 +37,7 @@
     </tr>
     {{foreach from=$_actors item=_actor}}
     <tr {{if !$_actor->actif}} class="opacity-30" {{/if}}>
-      <td>
+      <td class="text">
         <a href="#" onclick="InteropActor.refreshActor('{{$_actor->_guid}}', null);" title="Modifier l'acteur d'intégration">
           {{$_actor->_view}}
         </a>
