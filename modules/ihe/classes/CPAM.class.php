@@ -119,12 +119,35 @@ class CPAM extends CIHE {
     if (in_array($code, self::$transaction_iti30)) {
       return "ITI30";
     }
-    
+
     if (in_array($code, self::$transaction_iti31)) {
       return "ITI31";
     }
 
     return null;
+  }
+
+  /**
+   * Retrieve transaction from actor
+   *
+   * @param string $actor_name Actor name
+   *
+   * @return array Messages
+   */
+  static function getTransactionFromActor($actor_name) {
+    $actors = array(
+      "PDC" => self::$transaction_iti30,
+      "PDS" => self::$transaction_iti30,
+
+      "PEC" => self::$transaction_iti31,
+      "PES" => self::$transaction_iti31
+    );
+
+    if (array_key_exists($actor_name, $actors)) {
+      return $actors[$actor_name];
+    }
+
+    return array();
   }
   
   /**
