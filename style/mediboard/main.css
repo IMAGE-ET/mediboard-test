@@ -70,9 +70,7 @@ div.compact,
 span.compact {
   line-height: 1;
   font-size: 0.9em; 
-  /*color: #666;*/
-  opacity: 0.6;
-  -ms-filter: "alpha(opacity=60)"; /* IE 8 */
+  color: #666;
 }
 
 td.compact strong,
