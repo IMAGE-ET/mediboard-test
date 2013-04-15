@@ -806,6 +806,7 @@ $locales['CReceiverIHEConfig.build_NDA.PV1_19'] = 'PV1_19';
 $locales['CReceiverIHEConfig.build_PID_31.avs'] = 'AVS';
 $locales['CReceiverIHEConfig.build_PID_31.none'] = 'Aucun';
 $locales['CReceiverIHEConfig.build_PID_34.actor'] = 'Acteur';
+$locales['CReceiverIHEConfig.build_PID_34.domain'] = 'Domaine';
 $locales['CReceiverIHEConfig.build_PID_34.finess'] = 'Finess';
 $locales['CReceiverIHEConfig.build_PV1_3_2.config_value'] = 'Valeur en config (HL7)';
 $locales['CReceiverIHEConfig.build_PV1_3_2.idex'] = 'Idex';

@@ -222,8 +222,17 @@ class CHL7v2Segment extends CHL7v2Entity {
     $this->getMessage()->appendChild($this);
   }
   
-  function getAssigningAuthority($name = "mediboard", $value= null, CInteropActor $actor = null) {
+  function getAssigningAuthority($name = "mediboard", $value= null, CInteropActor $actor = null, CGroupDomain $group_domain = null) {
     switch ($name) {
+      case "domain" :
+        $domain = $group_domain->loadRefDomain();
+
+        return array(
+          $domain->libelle,
+          $domain->OID,
+          "ISO"
+        );
+
       case "actor" :
         $configs = $actor->_configs;
         return array(
@@ -285,6 +294,15 @@ class CHL7v2Segment extends CHL7v2Entity {
 
     if (CValue::read($actor->_configs, "build_PID_34") === "actor") {
       $assigning_authority = $this->getAssigningAuthority("actor", null, $actor);
+    }
+    elseif (CValue::read($actor->_configs, "build_PID_34") === "domain") {
+      $group_domain = new CGroupDomain();
+      $group_domain->group_id     = $group->_id;
+      $group_domain->master       = 1;
+      $group_domain->object_class = "CPatient";
+      $group_domain->loadMatchingObject();
+
+      $assigning_authority = $this->getAssigningAuthority("domain", null, null, $group_domain);
     }
     
     // Table - 0203

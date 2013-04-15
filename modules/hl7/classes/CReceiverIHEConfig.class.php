@@ -231,7 +231,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
     
     // PID
     $props["build_PID_31"]  = "enum list|avs|none default|none";
-    $props["build_PID_34"]  = "enum list|finess|actor default|finess";
+    $props["build_PID_34"]  = "enum list|finess|actor|domain default|finess";
     
     // PV1
     $props["build_PV1_3_2"] = "enum list|name|config_value|idex default|name";
