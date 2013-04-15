@@ -11,7 +11,7 @@ announce_script "Mediboard request launcher"
 
 if [ "$#" -lt 4 ]
 then 
-  echo "Usage: $0 <root_url> <username> <password> \"<param>\" \[-t times\] \[-d delay\] \[-f file\]"
+  echo "Usage: $0 <root_url> <username> <password> \"<param>\" \[-t times\] \[-d delay\] \[-f file\] \[-T delay\]"
   echo "  <root_url> is root url for mediboard, ie https://localhost/mediboard"
   echo "  <username> is the name of the user requesting, ie cron"
   echo "  <password is the password of the user requesting, ie ****"
@@ -19,12 +19,15 @@ then
   echo "  [-t <times>] is the number of repetition, ie 4"
   echo "  [-d <delay>] is the time between each repetition, ie 2"
   echo "  [-f <file>] is the file for the output, ie log.txt"
+  echo "  [-T <delay>] is the time before stopping wget (server not responding or other problems)"
   exit 1
 fi
 
 times=1
 delay=1
-args=`getopt t:d:f: $*`
+timeout=""
+
+args=`getopt t:d:f:T: $*`
 if [ $? != 0 ] ; then
   echo "Invalid argument. Check your command line"; exit 0;
 fi
@@ -35,6 +38,7 @@ for i; do
     -t) times=$2; shift 2;;
     -d) delay=$2; shift 2;;
     -f) file="-O $2"; shift 2;;
+    -T) timeout="-T $2"; shift 2;;
     --) shift; break ;;
   esac
 done
@@ -60,6 +64,7 @@ mediboard_request()
         --append-output="$log"\
         --force-directories\
         --no-check-certificate\
+        $timeout\
         $file
    check_errs $? "Failed to request to Mediboard" "Mediboard requested!"   
    echo "wget URL : $url."
