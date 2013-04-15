@@ -159,8 +159,8 @@ class CModeleEtiquette extends CMbMetaObject {
       if ($i != 0 && $i % $increment == 0 && isset($textes[$current_text+1])) {
         $current_text++;
       }
-      
-      if (round($pdf->GetX()) >= ($this->largeur_page - 2 * $this->marge_horiz)) {
+
+      if (round($pdf->GetX()) >= round($this->largeur_page - 2 * $this->marge_horiz)) {
         $pdf->SetX(0);
         $pdf->SetLeftMargin($this->marge_horiz);
         $pdf->SetY($pdf->GetY() + $hauteur_etiq);
@@ -223,8 +223,7 @@ class CModeleEtiquette extends CMbMetaObject {
           }
           
         }
-        
-        //$pdf_ex->Output($this->nom.'.pdf', "I");
+
         $pdf_y = $pdf->getY();
         $pdf_ex_y = $pdf_ex->getY();
         
@@ -287,4 +286,3 @@ class CModeleEtiquette extends CMbMetaObject {
     }
   }
 }
-?>
