@@ -93,7 +93,12 @@ class CIHETestCase {
         $name = "FOUR";
         break;
       case 50 :
-        $name = "FIVE";
+        if ($step->number ==  80) {
+          $name = "UPDATE";
+        }
+        else {
+          $name = "FIVE";
+        }
         break;
     }
     $name = "PAM$name";

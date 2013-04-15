@@ -501,6 +501,19 @@ class CITI31Test extends CIHETestCase {
   }
 
   /**
+   * Test A40 - Merge the two patients
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA40(CCnStep $step) {
+    CITI30Test::testA40($step);
+  }
+
+  /**
    * Test A44 - Moves the account of patient#1 to patient#2
    *
    * @param CCnStep $step Step
