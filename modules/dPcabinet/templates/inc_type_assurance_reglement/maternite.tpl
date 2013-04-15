@@ -11,12 +11,13 @@
 
 <fieldset>
   <legend>{{tr}}type_assurance.maternite{{/tr}}</legend>
-  {{mb_form name="editCslt_maternite" method="post" onsubmit="return onSubmitFormAjax(this)" m="cabinet" dosql="do_consultation_aed"}}
-    {{mb_key object=$consult}}
+  {{mb_form name="editCslt_maternite" method="post" onsubmit="return onSubmitFormAjax(this)" m="maternite"}}
+    {{mb_class object=$consult->_ref_grossesse}}
+    {{mb_key object=$consult->_ref_grossesse}}
     <table>
       <tr>
-        <td><label title="Date d'accouchement effective ou à défaut date présumée de début de grossesse" class="" for="editCslt_maternite_date_at" id="labelFor_editConsultation_date_at">Date accouchement prévue</label></td>
-        <td>{{mb_field object=$consult field=date_at form=editCslt_maternite register=true onchange="this.form.onsubmit();"}}</td>
+        <td><label title="Date d'accouchement effective ou à défaut date présumée de début de grossesse">Date accouchement prévue</label></td>
+        <td>{{mb_field object=$consult->_ref_grossesse field=terme_prevu form=editCslt_maternite register=true onchange="this.form.onsubmit();"}}</td>
       </tr>
     </table>
   {{/mb_form}}
