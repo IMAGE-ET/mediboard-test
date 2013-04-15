@@ -237,7 +237,7 @@ class CITI31Test extends CIHETestCase {
     $patient = self::loadPatientPES($step, 50);
     $sejour  = self::loadAdmitPES($patient);
 
-    $patient->nom = "PAMUPDATE";
+    $patient->nom = str_replace("PAMFIVE", "PAMUPDATE", $patient->nom);
 
     if ($msg = $patient->store()) {
       throw new CMbException($msg);
