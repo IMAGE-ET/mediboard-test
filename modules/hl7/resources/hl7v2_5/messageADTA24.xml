@@ -7,8 +7,8 @@
         <segment minOccurs="0" maxOccurs="unbounded">SFT</segment>
         <segment>EVN</segment>
         <segment>PID</segment>
-        <segment minOccurs="0">PD1</segment>
-        <segment minOccurs="0">PV1</segment>
+        <segment minOccurs="0" forbidden="true">PD1</segment>
+        <segment minOccurs="0" forbidden="true">PV1</segment>
         <segment minOccurs="0" maxOccurs="unbounded" forbidden="true">DB1</segment>
         <segment>PID</segment>
         <segment minOccurs="0" forbidden="true">PD1</segment>
