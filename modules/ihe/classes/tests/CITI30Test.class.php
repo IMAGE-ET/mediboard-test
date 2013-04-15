@@ -107,7 +107,7 @@ class CITI30Test extends CIHETestCase {
    * @return void
    */
   static function testA40(CCnStep $step) {
-    if ($step == "ITI-30") {
+    if ($step->transaction == "ITI-30") {
       // PDS-PAM_Identification_Mgt_Merge : Récupération du step 10
       $patient_1        = self::loadPatientPDS($step, 10);
       $first_patient_id = $patient_1->_id;

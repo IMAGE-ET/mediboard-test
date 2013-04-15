@@ -63,11 +63,5 @@ class CHL7v2EventADTA37 extends CHL7v2EventADT implements CHL7EventADTA37 {
     
     // Patient link Identification
     $this->addPID($patient_link);
-    
-    // Patient link Additional Demographic
-    $this->addPD1($patient_link);
-    
-    // Patient link Visit
-    $this->addPV1();
   }
 }
