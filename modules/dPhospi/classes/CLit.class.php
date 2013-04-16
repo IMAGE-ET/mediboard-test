@@ -82,9 +82,7 @@ class CLit extends CMbObject {
     
     $this->_ref_affectations = new CAffectation;
     $this->_ref_affectations = $this->_ref_affectations->loadList($where, $order);
-    if(!count($this->_ref_affectations)) {
-      $this->checkDispo($date);
-    }
+    $this->checkDispo($date);
   }
   
   function updateFormFields() {
