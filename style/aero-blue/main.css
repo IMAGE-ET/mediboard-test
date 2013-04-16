@@ -75,7 +75,7 @@ table#main {
   padding: 4px;
   border: 1px solid transparent;
   border-radius: 2px;
-  background: url(../aero/images/icons/menu.png) no-repeat 6px 0;
+  background: url(../aero-blue/images/icons/menu.png) no-repeat 6px 0;
   text-indent: 20px;
 }
 
@@ -128,7 +128,7 @@ table#main {
 }
 
 #headerMenu .dropdown-menu:hover {
-  background-image: url(../aero/images/icons/menuHover.png);
+  background-image: url(../aero-blue/images/icons/menuHover.png);
 }
 
 #headerMenu .dropdown-menu a.selected {

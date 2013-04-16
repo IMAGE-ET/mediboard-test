@@ -31,7 +31,7 @@
           {{if $portal.help}}
           <li>
             <a href="{{$portal.help}}" target="_blank">
-              <img src="style/aero/images/icons/help.png" title="{{tr}}portal-help{{/tr}}" />
+              <img src="style/aero-blue/images/icons/help.png" title="{{tr}}portal-help{{/tr}}" />
               {{tr}}portal-help{{/tr}}
             </a>
           </li>
@@ -40,7 +40,7 @@
           {{if $portal.tracker}}
           <li>
             <a href="{{$portal.tracker}}" target="_blank">
-              <img src="style/aero/images/icons/modif.png" title="{{tr}}portal-tracker{{/tr}}" />
+              <img src="style/aero-blue/images/icons/modif.png" title="{{tr}}portal-tracker{{/tr}}" />
               {{tr}}portal-tracker{{/tr}}
             </a>
           </li>
@@ -48,21 +48,21 @@
           
           <li>
             <a href="#1" onclick="popChgPwd()">
-              <img src="style/aero/images/icons/passwd.png" title="{{tr}}menu-changePassword{{/tr}}" />
+              <img src="style/aero-blue/images/icons/passwd.png" title="{{tr}}menu-changePassword{{/tr}}" />
               {{tr}}menu-changePassword{{/tr}}
             </a>
           </li>
           
           <li>
             <a href="?m=mediusers&amp;a=edit_infos">
-              <img src="style/aero/images/icons/myinfos.png" title="{{tr}}menu-myInfo{{/tr}}" />
+              <img src="style/aero-blue/images/icons/myinfos.png" title="{{tr}}menu-myInfo{{/tr}}" />
               {{tr}}menu-myInfo{{/tr}}
             </a>
           </li>
           
           <li>
             <a href="#1" onclick="Session.lock()">
-              <img src="style/aero/images/icons/lock.png" title="{{tr}}menu-lockSession{{/tr}}" />
+              <img src="style/aero-blue/images/icons/lock.png" title="{{tr}}menu-lockSession{{/tr}}" />
               {{tr}}menu-lockSession{{/tr}}
             </a>
           </li>
@@ -76,7 +76,7 @@
           
           <li>
             <a href="?logout=-1">
-              <img src="style/aero/images/icons/logout.png" title="{{tr}}menu-logout{{/tr}}" />
+              <img src="style/aero-blue/images/icons/logout.png" title="{{tr}}menu-logout{{/tr}}" />
               {{tr}}menu-logout{{/tr}}
             </a>
           </li>
