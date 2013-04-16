@@ -21,3 +21,4 @@
     data-parente="{{$match->parente}}"
     data-email="{{$match->email}}"
     data-remarques="{{$match->remarques}}">{{if $show_view}}{{$match->_view}}{{else}}{{$match->$f|emphasize:$input}}{{/if}}</span>
+<div class="compact">{{$match->cp}} {{$match->ville}}</div>
