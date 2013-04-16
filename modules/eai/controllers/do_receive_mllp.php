@@ -16,12 +16,22 @@ CCanDo::checkEdit();
 $client_addr = CValue::post("client_addr");
 $message     = stripslashes(CValue::post("message"));
 
-$source_mllp          = new CSourceMLLP;
+$guid_prefix = "CSenderMLLP-";
 $where = array();
-$where["host"]   = " = '$client_addr'";
-$where["active"] = " = '1'";
-$where["name"]   = "LIKE 'CSenderMLLP%'";
-$source_mllp->loadObject($where);
+
+// Source
+$where["source_mllp.host"]   = " = '$client_addr'";
+$where["source_mllp.active"] = " = '1'";
+$where["source_mllp.name"]   = "LIKE '$guid_prefix%'";
+
+// Sender
+$where["sender_mllp.actif"] = " = '1'";
+
+$ljoin = array();
+$ljoin["sender_mllp"] = "sender_mllp.sender_mllp_id = SUBSTR(source_mllp.name, ".(strlen($guid_prefix)+1).")"; // 'CSenderMLLP-XX'
+
+$source_mllp = new CSourceMLLP();
+$source_mllp->loadObject($where, null, null, $ljoin);
 
 if (!$source_mllp->_id) {
   /*
