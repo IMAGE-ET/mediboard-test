@@ -24,8 +24,6 @@ $patient_cp                  = CValue::request("cp");
 $patient_day                 = CValue::request("Date_Day");
 $patient_month               = CValue::request("Date_Month");
 $patient_year                = CValue::request("Date_Year");
-$quantity_limited_request    = CValue::request("quantity_limited_request");
-$pointer                     = CValue::request("pointer");
 
 $person_id_number            = CValue::request("person_id_number");
 $person_namespace_id         = CValue::request("person_namespace_id");
@@ -33,29 +31,48 @@ $person_universal_id         = CValue::request("person_universal_id");
 $person_universal_id_type    = CValue::request("person_universal_id_type");
 $person_identifier_type_code = CValue::request("person_identifier_type_code");
 
+// Données de séjour
+$admit_class                 = CValue::request("admit_class");
+$admit_service               = CValue::request("admit_service");
+$admit_room                  = CValue::request("admit_room");
+$admit_bed                   = CValue::request("admit_bed");
+$admit_attending_doctor      = CValue::request("admit_attending_doctor");
+$admit_referring_doctor      = CValue::request("admit_referring_doctor");
+$admit_consulting_doctor     = CValue::request("admit_consulting_doctor");
+$admit_admitting_doctor      = CValue::request("admit_admitting_doctor");
+
+$admit_id_number             = CValue::request("admit_id_number");
+$admit_namespace_id          = CValue::request("admit_namespace_id");
+$admit_universal_id          = CValue::request("admit_universal_id");
+$admit_universal_id_type     = CValue::request("admit_universal_id_type");
+$admit_identifier_type_code  = CValue::request("admit_identifier_type_code");
+
 $continue                           = CValue::request("continue");
 $domains_returned_namespace_id      = CValue::request("domains_returned_namespace_id");
 $domains_returned_universal_id      = CValue::request("domains_returned_universal_id");
 $domains_returned_universal_id_type = CValue::request("domains_returned_universal_id_type");
+$quantity_limited_request           = CValue::request("quantity_limited_request");
+$pointer                            = CValue::request("pointer");
 
 $patient_naissance = null;
-if (($patient_year) || ($patient_month) || ($patient_day)) {
+if ($patient_year || $patient_month || $patient_day) {
   $patient_naissance = "on";
 }
 
 $naissance = null;
 if ($patient_naissance == "on") {
-  $year =($patient_year)?"$patient_year-":"%-";
-  $month =($patient_month)?"$patient_month-":"%-";
-  $day =($patient_day)?"$patient_day":"%";
-  if ($day!="%") {
+  $year  = $patient_year  ? "$patient_year-"  : "____-";
+  $month = $patient_month ? "$patient_month-" : "__-";
+  $day   = $patient_day   ? "$patient_day"    : "__";
+
+  if ($day != "__") {
     $day = str_pad($day, 2, "0", STR_PAD_LEFT);
   }
 
   $naissance = $year.$month.$day;
 }
 
-$patient                  = new CPatient();
+$patient = new CPatient();
 $patient->nom             = $patient_nom;
 $patient->prenom          = $patient_prenom;
 $patient->nom_jeune_fille = $patient_jeuneFille;
@@ -64,6 +81,16 @@ $patient->adresse         = $patient_adresse;
 $patient->ville           = $patient_ville;
 $patient->cp              = $patient_cp;
 $patient->sexe            = $patient_sexe;
+
+$sejour = new CSejour();
+$sejour->_admission = $admit_class;
+$sejour->_service   = $admit_service;
+$sejour->_chambre   = $admit_room;
+$sejour->_lit       = $admit_bed;
+$sejour->_praticien_attending  = $admit_attending_doctor;
+$sejour->_praticien_referring  = $admit_referring_doctor;
+$sejour->_praticien_consulting = $admit_consulting_doctor;
+$sejour->_praticien_admitting  = $admit_admitting_doctor;
 
 $receiver_ihe           = new CReceiverIHE();
 $receiver_ihe->actif    = 1;
@@ -74,6 +101,22 @@ $profil      = "PDQ";
 $transaction = "ITI21";
 $message     = "QBP";
 $code        = "Q22";
+
+if (
+    $admit_class ||
+    $admit_service ||
+    $admit_room ||
+    $admit_bed ||
+    //$admit_attending_doctor || // not used
+    $admit_referring_doctor || // praticien_id
+    //$admit_consulting_doctor || // not used
+    $admit_admitting_doctor // adresse_par_prat_id
+) {
+  $code = "ZV1";
+}
+
+// PV1.17.2.1 = medecin ayant admis le patient (praticien_id=)
+// PV1.8.2.1 = medecin referent (adresse_par)
 
 $ack_data    = null;
 
@@ -101,6 +144,7 @@ foreach ($receivers as $_receiver) {
     "domains_returned_universal_id"      => $domains_returned_universal_id,
     "domains_returned_universal_id_type" => $domains_returned_universal_id_type,
   );
+  $patient->_sejour = $sejour;
 
   $patient->_quantity_limited_request = $quantity_limited_request;
   $patient->_pointer                  = $pointer;

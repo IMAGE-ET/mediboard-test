@@ -56,12 +56,13 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
     $ds    = $patient->getDS();
     $where = array();
     foreach ($this->getRequestPatient($data["QPD"]) as $field => $value) {
-      if (!$value) {
+      if ($value == "") {
         continue;
       }
 
-      $value = preg_replace("/[^a-z]/i", "_", $value);
-      $where[$field] = $ds->prepareLike($value);
+      $value = preg_replace("/[^a-z\*]/i", "_", $value);
+      $value = preg_replace("/\*+/", "%", $value);
+      $where[$field] = $ds->prepare("LIKE %", $value);
     }
 
     $ljoin = null;
