@@ -66,6 +66,9 @@ class CHL7v2ReceivePatientDemographicsResponse extends CHL7v2MessageXML {
 
       $recordPerson->getPID($_PID, $patient);
 
+      $patient->_IPP = $this->queryTextNode("PID.3/CX.1", $_PID);
+      $patient->_OID = $this->queryTextNode("PID.3/CX.4/HD.2", $_PID);
+
       $patient->updateFormFields();
       $patient->loadRefsNotes();
 

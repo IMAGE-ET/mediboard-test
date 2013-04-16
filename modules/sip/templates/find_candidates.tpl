@@ -33,8 +33,8 @@
                     <th><label for="nom" title="Nom du patient à rechercher, au moins les premières lettres">Nom</label></th>
                     <td><input tabindex="1" type="text" name="nom" value="{{$nom|stripslashes}}" /></td>
 
-                    <th><label for="cp" title="Code postal du patient à rechercher">Code postal</label></th>
-                    <td><input tabindex="4" type="text" name="cp" value="{{$cp|stripslashes}}" /></td>
+                    <th><label for="adresse" title="Adresse du patient à rechercher">Adresse</label></th>
+                    <td><input tabindex="5" type="text" name="adresse" value="{{$adresse|stripslashes}}" /></td>
                   </tr>
 
                   <tr>
@@ -67,7 +67,8 @@
                       </select>
                     </td>
 
-                    <td colspan="2"></td>
+                    <th><label for="cp" title="Code postal du patient à rechercher">Code postal</label></th>
+                    <td><input tabindex="4" type="text" name="cp" value="{{$cp|stripslashes}}" /></td>
                   </tr>
 
                   <tr>

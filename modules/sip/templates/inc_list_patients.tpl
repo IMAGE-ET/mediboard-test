@@ -21,12 +21,15 @@
   <tr>
     <th>{{tr}}CPatient{{/tr}}</th>
     <th class="narrow">{{tr}}CPatient-naissance-court{{/tr}}</th>
+    <th>{{tr}}CPatient-sexe{{/tr}}</th>
     <th>{{tr}}CPatient-adresse{{/tr}}</th>
+    <th>{{tr}}CPatient-_IPP{{/tr}}</th>
+    <th>OID</th>
     <th class="narrow"></th>
   </tr>
 
   <tr>
-    <th class="section" colspan="4">{{$patients|@count}} résultats </th>
+    <th class="section" colspan="100">{{$patients|@count}} résultats </th>
   </tr>
 
   {{foreach from=$patients item=_patient}}
@@ -39,10 +42,15 @@
       <td>
         {{mb_value object=$_patient field="naissance"}}
       </td>
+      <td>
+        {{mb_value object=$_patient field="sexe"}}
+      </td>
       <td class="text compact">
         <span style="white-space: nowrap;">{{$_patient->adresse|spancate:30}}</span>
         <span style="white-space: nowrap;">{{$_patient->cp}} {{$_patient->ville|spancate:20}}</span>
       </td>
+      <td> {{mb_value object=$_patient field="_IPP"}} </td>
+      <td> {{$_patient->_OID}} </td>
       <td>
         <a class="button search notext" href="#" title="Afficher le dossier complet" style="margin: -1px;">
           {{tr}}Show{{/tr}}

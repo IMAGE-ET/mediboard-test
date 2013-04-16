@@ -151,8 +151,8 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
         $this->setDemographicsFields($patient, "sexe", "8", "1"),
 
         // PID-11 : Patient Adress
+        $this->setDemographicsFields($patient, "adresse", "11.1"),
         $this->setDemographicsFields($patient, "ville", "11.3"),
-        // $this->setDemographicsValues($patient, "", "11.4"),
         $this->setDemographicsFields($patient, "cp", "11.5"),
 
         // PID-13 : Phone Number
