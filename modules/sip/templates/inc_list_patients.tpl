@@ -29,15 +29,13 @@
   </tr>
 
   <tr>
-    <th class="section" colspan="100">{{$patients|@count}} résultats </th>
+    <th class="section" colspan="100">{{$objects|@count}} résultats </th>
   </tr>
 
-  {{foreach from=$patients item=_patient}}
+  {{foreach from=$objects item=_patient}}
     <tr>
       <td>
-        <div class="text noted">
-          {{mb_value object=$_patient field="_view"}}
-        </div>
+        {{mb_value object=$_patient field="_view"}}
       </td>
       <td>
         {{mb_value object=$_patient field="naissance"}}

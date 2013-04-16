@@ -93,8 +93,17 @@ Main.add(function(){
 
           <table class="form">
             <tr>
-              <th style="width: 200px"><label for="admit_class" title="Classe du patient">Classe du patient</label></th>
-              <td><input tabindex="20" type="text" name="admit_class" value="" /></td>
+              <th style="width: 200px"><label for="admit_class">Type d'admission</label></th>
+              <td>
+                <select name="admit_class">
+                  <option value="">&mdash;</option>
+                  {{foreach from=$sejour->_specs.type->_locales key=_type item=_spec}}
+                    <option value="{{$_type}}">
+                      {{tr}}CSejour.type.{{$_type}}{{/tr}}
+                    </option>
+                  {{/foreach}}
+                </select>
+              </td>
 
               <th><label for="admit_attending_doctor">Nom du praticien responsable</label></th>
               <td><input tabindex="24" type="text" name="admit_attending_doctor" value="" disabled /></td>

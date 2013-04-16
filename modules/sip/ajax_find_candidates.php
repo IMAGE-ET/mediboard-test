@@ -153,26 +153,32 @@ foreach ($receivers as $_receiver) {
   $ack_data = $iti_handler->sendITI($profil, $transaction, $message, $code, $patient);
 }
 
-$patients = array();
+$objects = array();
 $pointer  = null;
 
 if ($ack_data) {
   $ack_event = new CHL7v2EventQBPK22();
-  $patients  = $ack_event->handle($ack_data)->handle();
+  $objects  = $ack_event->handle($ack_data)->handle();
 
-  if (array_key_exists("pointer", $patients)) {
-    $pointer = $patients["pointer"];
+  if (array_key_exists("pointer", $objects)) {
+    $pointer = $objects["pointer"];
   }
 
-  unset($patients["pointer"]);
+  unset($objects["pointer"]);
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("patient"                 , $patient);
-$smarty->assign("patients"                , $patients);
+$smarty->assign("objects"                 , $objects);
 $smarty->assign("quantity_limited_request", $quantity_limited_request);
 $smarty->assign("pointer"                 , $pointer);
-$smarty->display("inc_list_patients.tpl");
+
+if ($code == "Q22") {
+  $smarty->display("inc_list_patients.tpl");
+}
+else {
+  $smarty->display("inc_list_sejours.tpl");
+}
 
 CApp::rip();

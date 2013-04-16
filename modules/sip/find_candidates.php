@@ -17,5 +17,7 @@ CCanDo::checkAdmin();
 $smarty = new CSmartyDP();
 
 $smarty->assign("pointer", null);
+$smarty->assign("sejour", new CSejour());
+$smarty->assign("patient", new CPatient());
 
 $smarty->display("find_candidates.tpl");
