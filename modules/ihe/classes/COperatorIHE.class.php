@@ -106,16 +106,18 @@ class COperatorIHE extends CEAIOperator {
       if (!$dom_evt->checkApplicationAndFacility($data, $sender)) {
         return;
       }
-      
-      CHL7v2Message::setHandleMode($sender->_configs["handle_mode"]); 
+
+      if (!empty($sender->_configs["handle_mode"])) {
+        CHL7v2Message::setHandleMode($sender->_configs["handle_mode"]);
+      }
 
       $dom_evt->_ref_exchange_ihe = $exchange_ihe;
       $ack->_ref_exchange_ihe     = $exchange_ihe;
 
       // Message PAM / DEC / PDQ / SWF
       $msgAck = self::handleEvent($exchange_ihe, $dom_evt, $ack, $data);
-      
-      CHL7v2Message::resetBuildMode(); 			
+
+      CHL7v2Message::resetBuildMode();
     }
     catch(Exception $e) {
       $exchange_ihe->populateExchange($data_format, $evt);

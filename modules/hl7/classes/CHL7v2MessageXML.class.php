@@ -627,7 +627,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
    * @return bool
    */
   function checkApplicationAndFacility($data, CInteropActor $actor) {
-    if (!$actor->_configs["check_receiving_application_facility"]) {
+    if (empty($actor->_configs["check_receiving_application_facility"])) {
       return true;
     }
 

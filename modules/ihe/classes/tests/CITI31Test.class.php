@@ -52,6 +52,7 @@ class CITI31Test extends CIHETestCase {
     $sejour->type          = "comp";
     $sejour->service_id    = $sejour->getRandomValue("service_id", true);
     $sejour->libelle       = "Séjour ITI-31 - $patient->nom";
+    $sejour->mode_sortie   = "";
 
     self::storeObject($sejour);
   }
@@ -70,8 +71,11 @@ class CITI31Test extends CIHETestCase {
     $patient = self::loadPatientPES($step, 40);
     $sejour  = self::loadAdmitPES($patient);
 
+    $lit = new CLit();
+    $lit->loadMatchingObject();
+
     $affectation             = new CAffectation();
-    $affectation->lit_id     = $affectation->getRandomValue("lit_id", true);
+    $affectation->lit_id     = $lit->_id;
     $affectation->sejour_id  = $sejour->_id;
     $affectation->entree     = $sejour->entree;
     $affectation->sortie     = CMbDT::dateTime("+2 day", $affectation->entree);
@@ -147,6 +151,7 @@ class CITI31Test extends CIHETestCase {
     $sejour->type          = "urg";
     $sejour->service_id    = $sejour->getRandomValue("service_id", true);
     $sejour->libelle       = "Séjour ITI-31 - $patient->nom";
+    $sejour->mode_sortie   = "";
 
     self::storeObject($sejour);
   }
