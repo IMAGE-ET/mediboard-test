@@ -1290,7 +1290,14 @@ class CSetupsystem extends CSetup {
     $this->addPrefQuery("planning_dragndrop", "0");
     $this->addPrefQuery("planning_resize", "0");
 
-    $this->mod_version = "1.1.31";
+    $this->makeRevision("1.1.31");
+    $query = "UPDATE `user_preferences`
+      SET `value` = 'aero-blue'
+      WHERE `key` = 'UISTYLE'
+      AND `value` = 'aero'";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.32";
     
     /*$query = "ALTER TABLE user_log
                 DROP INDEX object_id,
