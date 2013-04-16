@@ -51,7 +51,7 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
     $data[] = "IHE PDQ Query";
     
     // QPD-2: Query Tag (ST)
-    $data[] = "PDQPDC_$event->code";
+    $data[] = str_replace(".", "", uniqid("", true));
     
     // QPD-3: User Parameters (in successive fields) (Varies)
     $QPD3 = array();

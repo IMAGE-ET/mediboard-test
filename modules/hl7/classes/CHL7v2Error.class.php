@@ -85,8 +85,8 @@ class CHL7v2Error {
     
     $segment = $entity->getSegment();
     if ($segment) {
-      $path[] = $segment->name;
-      $path[] = null;
+      $path[] = $segment->name; // Segment name
+      $path[] = 1;              // Segment sequence
       
       CHL7v2FieldItem::$_get_path_full = true;
       $path = array_merge($path, $entity->getPath());
