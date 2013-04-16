@@ -86,28 +86,30 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
       }
     }
 
-    $QPD8 = $this->getQPD8($data["QPD"]);
-    // Requête sur un domaine particulier qui est inconnu
-    if ($QPD8) {
-      $domains_returned_namespace_id = $QPD8["domains_returned_namespace_id"];
-      if ($domains_returned_namespace_id) {
-        $idex               = new CIdSante400();
-        $idex->object_class = "CPatient";
-        $idex->tag          = $domains_returned_namespace_id;
-        $count = $idex->countMatchingListEsc();
+    $QPD8s = $this->getQPD8s($data["QPD"]);
+    foreach ($QPD8s as $_QPD8) {
+      // Requête sur un domaine particulier qui est inconnu
+      if ($_QPD8) {
+        $domains_returned_namespace_id = $_QPD8["domains_returned_namespace_id"];
+        if ($domains_returned_namespace_id) {
+          $idex               = new CIdSante400();
+          $idex->object_class = "CPatient";
+          $idex->tag          = $domains_returned_namespace_id;
+          $count = $idex->countMatchingListEsc();
 
-        // Si aucun domaine n'est retrouvé on retourne une erreur
-        if ($count == 0) {
-          return $exchange_ihe->setPDRAE($ack, null, $QPD8);
+          // Si aucun domaine n'est retrouvé on retourne une erreur
+          if ($count == 0) {
+            return $exchange_ihe->setPDRAE($ack, null, $_QPD8);
+          }
         }
       }
-    }
 
-    // Requête sur un domaine particulier
-    if ($QPD8) {
-      $ljoin[10] = "id_sante400 AS id1 ON id1.object_id = patients.patient_id";
-      if ($domains_returned_namespace_id) {
-        $where[]   = $ds->prepare("id1.tag = %", $domains_returned_namespace_id);
+      // Requête sur un domaine particulier
+      if ($_QPD8) {
+        $ljoin[10] = "id_sante400 AS id1 ON id1.object_id = patients.patient_id";
+        if ($domains_returned_namespace_id) {
+          $where[]   = $ds->prepare("id1.tag = %", $domains_returned_namespace_id);
+        }
       }
     }
 
@@ -174,13 +176,17 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    * @return string
    */
   function getRequestPatientIdentifierList(DOMNode $node) {
-    return array(
+    $QPD = array(
       "id_number"            => $this->getDemographicsFields($node, "CPatient", "3.1"),
       /*"namespace_id"         => $this->getDemographicsFields($node, "CPatient", "3.1"),
       "universal_id"         => $this->getDemographicsFields($node, "CPatient", "3.1"),
       "universal_id_type"    => $this->getDemographicsFields($node, "CPatient", "3.1"),
       "identifier_type_code" => $this->getDemographicsFields($node, "CPatient", "3.1"),*/
     );
+
+    CMbArray::removeValue("", $QPD);
+
+    return $QPD;
   }
 
   /**
@@ -191,9 +197,13 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    * @return string
    */
   function getRequestSejourIdentifierList(DOMNode $node) {
-    return array(
+    $QPD = array(
       "id_number" => $this->getDemographicsFields($node, "CPatient", "18.1")
     );
+
+    CMbArray::removeValue("", $QPD);
+
+    return $QPD;
   }
 
   /**
@@ -203,12 +213,18 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    *
    * @return string
    */
-  function getQPD8(DOMNode $node) {
-    return array (
-      "domains_returned_namespace_id"      => $this->queryTextNode("QPD.8/CX.4/HD.1", $node),
-      "domains_returned_universal_id"      => $this->queryTextNode("QPD.8/CX.4/HD.2", $node),
-      "domains_returned_universal_id_type" => $this->queryTextNode("QPD.8/CX.4/HD.3", $node)
-    );
+  function getQPD8s(DOMNode $node) {
+    $QPD8s = array();
+
+    foreach ($this->queryNodes("QPD.8", $node) as $_QPD_8) {
+      $QPD8s[] = array (
+        "domains_returned_namespace_id"      => $this->queryTextNode("CX.4/HD.1", $_QPD_8),
+        "domains_returned_universal_id"      => $this->queryTextNode("CX.4/HD.2", $_QPD_8),
+        "domains_returned_universal_id_type" => $this->queryTextNode("CX.4/HD.3", $_QPD_8)
+      );
+    }
+
+    return $QPD8s;
   }
 
   /**
