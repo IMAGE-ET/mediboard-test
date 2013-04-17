@@ -31,10 +31,14 @@ class CHL7v2ReceivePatientDemographicsResponse extends CHL7v2MessageXML {
 
     $this->queryNode("QPD", null, $data, true);
 
-    $query_response = $this->queryNodes("RSP_K22.QUERY_RESPONSE", null, $varnull, true);
+    $query_response = $this->queryNodes("RSP_K22.QUERY_RESPONSE|RSP_ZV2.QUERY_RESPONSE", null, $varnull, true);
     foreach ($query_response as $_query_response) {
       // Patient
       $this->queryNodes("PID", $_query_response, $data, true);
+
+      // Admit
+      $this->queryNodes("PV1", $_query_response, $data, true);
+      $this->queryNodes("PV2", $_query_response, $data, true);
     }
 
     $this->queryNode("DSC", null, $data, true);
@@ -57,34 +61,107 @@ class CHL7v2ReceivePatientDemographicsResponse extends CHL7v2MessageXML {
       return array();
     }
 
-    $patients = array();
+    $objects = array();
+
+    $i = 1;
 
     $recordPerson = new CHL7v2RecordPerson();
-    $i = 1;
-    foreach ($data["PID"] as $_PID) {
-      $patient = new CPatient();
 
-      $recordPerson->getPID($_PID, $patient);
+    if (!empty($data["PV1"])) {
+      foreach ($data["PV1"] as $key => $_PV1) {
+        $patient = new CPatient();
+        $sejour  = new CSejour();
 
-      $patient->_IPP = $this->queryTextNode("PID.3/CX.1", $_PID);
-      $patient->_OID = $this->queryTextNode("PID.3/CX.4/HD.2", $_PID);
+        $this->getAdmit($data, $key, $sejour, $recordPerson, $patient);
 
-      $patient->updateFormFields();
-      $patient->loadRefsNotes();
+        $objects[$i] = $sejour;
 
-      $patients[$i] = $patient;
+        $i++;
+      }
+    }
+    else {
+      foreach ($data["PID"] as $_PID) {
+        $patient = new CPatient();
+        $this->getPerson($_PID, $patient, $recordPerson);
 
-      $i++;
+        $objects[$i] = $patient;
+
+        $i++;
+      }
     }
 
     if ($DSC = $data["DSC"]) {
-      $patients["pointer"] = $this->getContinuationPointer($DSC);
+      $objects["pointer"] = $this->getContinuationPointer($DSC);
     }
 
-    return $patients;
+    return $objects;
   }
 
   /**
+   * Get PV1
+   *
+   * @param array              $data         data
+   * @param int                $key          Key
+   * @param CSejour            $sejour       Admit
+   * @param CHL7v2RecordPerson $recordPerson Record person
+   * @param CPatient           $patient      Person
+   *
+   * @return void
+   */
+  function getAdmit($data, $key, CSejour $sejour, CHL7v2RecordPerson $recordPerson, CPatient $patient) {
+    $PID = $data["PID"][$key];
+    $PV1 = $data["PV1"][$key];
+    $PV2 = $data["PV2"][$key];
+
+    $this->getPerson($PID, $patient, $recordPerson);
+
+    $sejour->_ref_patient = $patient;
+
+    $recordAdmit = new CHL7v2RecordAdmit();
+    $recordAdmit->getPatientClass($PV1, $sejour);
+
+    $sejour->entree_reelle = $this->queryTextNode("PV1.44", $PV1);
+    $sejour->sortie_reelle = $this->queryTextNode("PV1.45", $PV1);
+
+    $sejour->entree_prevue = $this->queryTextNode("PV2.8", $PV2);
+    $sejour->sortie_prevue = $this->queryTextNode("PV2.9", $PV2);
+
+    $sejour->_NDA = "";
+    $sejour->_OID = "";
+    foreach ($this->queryNodes("PID.18", $PID) as $_PID_18) {
+      $sejour->_NDA .= $this->queryTextNode("CX.1"     , $_PID_18) . "\n";
+      $sejour->_OID .= $this->queryTextNode("CX.4/HD.2", $_PID_18) . "\n";
+    }
+
+    $sejour->updateFormFields();
+    $sejour->updatePlainFields();
+    $sejour->loadRefsNotes();
+  }
+
+  /**
+   * Get PID
+   *
+   * @param DOMNode            $node         Node
+   * @param CPatient           $patient      Person
+   * @param CHL7v2RecordPerson $recordPerson Record person
+   *
+   * @return void
+   */
+  function getPerson(DOMNode $node, CPatient $patient, CHL7v2RecordPerson $recordPerson) {
+    $recordPerson->getPID($node, $patient);
+
+    $patient->_IPP = "";
+    $patient->_OID = "";
+    foreach ($this->queryNodes("PID.3", $node) as $_PID_3) {
+      $patient->_IPP .= $this->queryTextNode("CX.1", $_PID_3) . "\n";
+      $patient->_OID .= $this->queryTextNode("CX.4/HD.2", $_PID_3) . "\n";
+    }
+
+    $patient->updateFormFields();
+    $patient->loadRefsNotes();
+  }
+
+    /**
    * Get query response status
    *
    * @param DOMNode $node QAK element

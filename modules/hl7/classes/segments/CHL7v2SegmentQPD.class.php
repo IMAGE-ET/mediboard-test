@@ -178,15 +178,30 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
 
     $sejour->type = $sejour->_admission;
 
+    // PID-3 : Patient Identifier List
+    if (isset($sejour->_sejour_identifier_list)) {
+      $sejour_identifier_list = $sejour->_sejour_identifier_list;
+
+      $qpd3pid = array_merge(
+        $qpd3pid, array(
+          $this->setDemographicsValues($sejour, CMbArray::get($sejour_identifier_list, "admit_id_number")           , "18.1"),
+          $this->setDemographicsValues($sejour, CMbArray::get($sejour_identifier_list, "admit_namespace_id")        , "18.4.1"),
+          $this->setDemographicsValues($sejour, CMbArray::get($sejour_identifier_list, "admit_universal_id")        , "18.4.2"),
+          $this->setDemographicsValues($sejour, CMbArray::get($sejour_identifier_list, "admit_universal_id_type")   , "18.4.3"),
+          $this->setDemographicsValues($sejour, CMbArray::get($sejour_identifier_list, "admit_identifier_type_code"), "18.5")
+        )
+      );
+    }
+
     return array_merge(
       $qpd3pid, array(
         // Patient class
         $this->setDemographicsFields($sejour, "type", "2.1", "4"),
 
         // Assigned Patient Location
-        $this->setDemographicsValues($sejour, $sejour->_admission, "3.1"),
-        $this->setDemographicsValues($sejour, $sejour->_chambre  , "3.2"),
-        $this->setDemographicsValues($sejour, $sejour->_lit      , "3.3"),
+        $this->setDemographicsValues($sejour, $sejour->_service, "3.1"),
+        $this->setDemographicsValues($sejour, $sejour->_chambre, "3.2"),
+        $this->setDemographicsValues($sejour, $sejour->_lit    , "3.3"),
 
         $this->setDemographicsValues($sejour, $sejour->_praticien_admitting, "17.2.1"),
         $this->setDemographicsValues($sejour, $sejour->_praticien_attending, "8.2.1"),

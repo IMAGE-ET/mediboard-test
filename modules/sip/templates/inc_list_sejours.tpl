@@ -20,11 +20,12 @@
 <table class="tbl">
   <tr>
     <th>{{tr}}CPatient{{/tr}}</th>
-    <th class="narrow">{{tr}}CSejour-entree-court{{/tr}}</th>
-    <th class="narrow">{{tr}}CSejour-sortie-court{{/tr}}</th>
-    <th>{{tr}}CSejour-service_id-court{{/tr}}</th>
+    <th>{{tr}}CSejour-type-court{{/tr}}</th>
+    <th>{{tr}}CSejour-entree-court{{/tr}}</th>
+    <th>{{tr}}CSejour-sortie-court{{/tr}}</th>
     <th>{{tr}}CSejour-_NDA{{/tr}}</th>
     <th>OID</th>
+    <th class="narrow"></th>
   </tr>
 
   <tr>
@@ -34,7 +35,10 @@
   {{foreach from=$objects item=_sejour}}
     <tr>
       <td>
-        {{$_sejour->_ref_patient->_view}}
+        {{$_sejour->_ref_patient->_view}} ({{$_sejour->_ref_patient->naissance}})
+      </td>
+      <td>
+        {{mb_value object=$_sejour field="type"}}
       </td>
       <td>
         {{mb_value object=$_sejour field="entree"}}
@@ -42,14 +46,12 @@
       <td>
         {{mb_value object=$_sejour field="sortie"}}
       </td>
+      <td> {{$_sejour->_NDA|nl2br}} </td>
+      <td> {{$_sejour->_OID|nl2br}} </td>
       <td>
-        {{$_sejour->_service}}
-      </td>
-      <td>
-        {{mb_value object=$_sejour field="_NDA"}}
-      </td>
-      <td>
-        {{$_sejour->_OID}}
+        <a class="button search notext" href="#" title="Afficher le dossier complet" style="margin: -1px;">
+          {{tr}}Show{{/tr}}
+        </a>
       </td>
     </tr>
   {{foreachelse}}

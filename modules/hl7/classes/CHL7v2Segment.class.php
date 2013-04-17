@@ -359,7 +359,7 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
   
   function getXCN9(CMbObject $object, CIdSante400 $id400 = null, CInteropReceiver $actor = null) {
-    if (!$actor->_configs["send_assigning_authority"]) {
+    if (empty($actor->_configs["send_assigning_authority"])) {
       return;
     }
 
@@ -612,8 +612,13 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
 
   function getPL2 (CInteropReceiver $receiver, CSejour $sejour, CAffectation $affectation = null) {
+    $value = null;
+    if (!empty($receiver->_configs["build_PV1_3_2"])) {
+      $value = $receiver->_configs["build_PV1_3_2"];
+    }
+
     // Chambre
-    switch ($receiver->_configs["build_PV1_3_2"]) {
+    switch ($value) {
       // Valeur en config
       case 'config_value':
         return CAppUI::conf("hl7 CHL7v2Segment PV1_3_2");
@@ -635,8 +640,13 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
   
   function getPL3 (CInteropReceiver $receiver, CSejour $sejour, CAffectation $affectation = null) {
+    $value = null;
+    if (!empty($receiver->_configs["build_PV1_3_3"])) {
+      $value = $receiver->_configs["build_PV1_3_3"];
+    }
+
     // Lit
-    switch ($receiver->_configs["build_PV1_3_3"]) {
+    switch ($value) {
       // Valeur en config
       case 'config_value':
         return CAppUI::conf("hl7 CHL7v2Segment PV1_3_3");
@@ -657,8 +667,13 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
   
   function getPL5 (CInteropReceiver $receiver) {
+    $value = null;
+    if (!empty($receiver->_configs["build_PV1_3_5"])) {
+      $value = $receiver->_configs["build_PV1_3_5"];
+    }
+
     // Statut du lit
-    switch ($receiver->_configs["build_PV1_3_5"]) {
+    switch ($value) {
       // Ne rien envoyer
       case 'null':
         return null;
@@ -671,8 +686,13 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
   
   function getPV110 (CInteropReceiver $receiver, CSejour $sejour, CAffectation $affectation = null) {
+    $value = null;
+    if (!empty($receiver->_configs["build_PV1_10"])) {
+      $value = $receiver->_configs["build_PV1_10"];
+    }
+
     // Hospital Service
-    switch ($receiver->_configs["build_PV1_10"]) {
+    switch ($value) {
       // idex du service
       case 'service':
         if (!$affectation) {
@@ -709,8 +729,13 @@ class CHL7v2Segment extends CHL7v2Entity {
       return $sejour->loadRefModeEntree()->code;
     }
 
+    $value = null;
+    if (!empty($receiver->_configs["build_PV1_14"])) {
+      $value = $receiver->_configs["build_PV1_14"];
+    }
+
     // Admit source
-    switch ($receiver->_configs["build_PV1_14"]) {
+    switch ($value) {
       // Combinaison du ZFM
       // ZFM.1 + ZFM.3
       case 'ZFM' :
@@ -750,8 +775,13 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
 
   function getPV126 (CInteropReceiver $receiver, CSejour $sejour) {
+    $value = null;
+    if (!empty($receiver->_configs["build_PV1_26"])) {
+      $value = $receiver->_configs["build_PV1_26"];
+    }
+
     // Identifiant du mouvement
-    switch ($receiver->_configs["build_PV1_26"]) {
+    switch ($value) {
       case 'movement_id':
         return $sejour->_ref_hl7_movement->_id;
 
@@ -768,7 +798,12 @@ class CHL7v2Segment extends CHL7v2Entity {
     }
 
     // Discharge Disposition
-    switch ($receiver->_configs["build_PV1_36"]) {
+    $value = null;
+    if (!empty($receiver->_configs["build_PV1_36"])) {
+      $value = $receiver->_configs["build_PV1_36"];
+    }
+
+    switch ($value) {
       // Combinaison du ZFM
       // ZFM.2 + ZFM.4
       case 'ZFM':
@@ -797,8 +832,13 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
 
   function getPV245(CInteropReceiver $receiver, CSejour $sejour, COperation $operation = null) {
+    $value = null;
+    if (!empty($receiver->_configs["build_PV2_45"])) {
+      $value = $receiver->_configs["build_PV2_45"];
+    }
+
     // Advance Directive Code
-    switch ($receiver->_configs["build_PV2_45"]) {
+    switch ($value) {
       // Transmission de l'intervention
       case 'operation' :
         if (!$operation) {

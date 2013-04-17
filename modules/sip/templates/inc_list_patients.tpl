@@ -47,8 +47,8 @@
         <span style="white-space: nowrap;">{{$_patient->adresse|spancate:30}}</span>
         <span style="white-space: nowrap;">{{$_patient->cp}} {{$_patient->ville|spancate:20}}</span>
       </td>
-      <td> {{mb_value object=$_patient field="_IPP"}} </td>
-      <td> {{$_patient->_OID}} </td>
+      <td> {{$_patient->_IPP|nl2br}} </td>
+      <td> {{$_patient->_OID|nl2br}} </td>
       <td>
         <a class="button search notext" href="#" title="Afficher le dossier complet" style="margin: -1px;">
           {{tr}}Show{{/tr}}

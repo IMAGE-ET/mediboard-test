@@ -105,7 +105,7 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
     // Query Parameter Definition
     $this->addQPD();
 
-    $i = 0;
+    $i = 1;
     if (!$object->objects) {
       return;
     }
@@ -116,6 +116,20 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
         $_object->domains = $object->domains;
 
         $this->addPID($_object, $i);
+
+        $i++;
+      }
+      if ($_object instanceof CSejour) {
+        $_object->domains = $object->domains;
+
+        $patient          = $_object->loadRefPatient();
+        $patient->domains = $object->domains;
+        $patient->_sejour = $_object;
+        $this->addPID($patient, $i);
+
+        $this->addPV1($_object, $i);
+
+        $this->addPV2($_object, $i);
 
         $i++;
       }
@@ -209,10 +223,42 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
   function addPID(CPatient $patient, $set_id) {
     $PID = CHL7v2Segment::create("PID_RESP", $this->message);
     $PID->patient = $patient;
-    $patient->getCurrSejour();
-    $PID->sejour = reset($patient->_ref_sejours);
+    if (isset($patient->_sejour)) {
+      $PID->sejour = $patient->_sejour;
+    }
     $PID->set_id  = $set_id;
     $PID->domains_returned = $patient->domains;
     $PID->build($this);
+  }
+
+  /**
+   * Represents an HL7 PV1 message segment
+   *
+   * @param CSejour $sejour Admit
+   * @param string  $set_id Set ID
+   *
+   * @return void
+   */
+  function addPV1(CSejour $sejour, $set_id) {
+    $PV1 = CHL7v2Segment::create("PV1_RESP", $this->message);
+    $PV1->sejour = $sejour;
+    $PV1->set_id  = $set_id;
+    $PV1->domains_returned = $sejour->domains;
+    $PV1->build($this);
+  }
+
+  /**
+   * Represents an HL7 PV2 message segment
+   *
+   * @param CSejour $sejour Admit
+   * @param string  $set_id Set ID
+   *
+   * @return void
+   */
+  function addPV2(CSejour $sejour, $set_id) {
+    $PV2 = CHL7v2Segment::create("PV2_RESP", $this->message);
+    $PV2->sejour = $sejour;
+    $PV2->set_id = $set_id;
+    $PV2->build($this);
   }
 }

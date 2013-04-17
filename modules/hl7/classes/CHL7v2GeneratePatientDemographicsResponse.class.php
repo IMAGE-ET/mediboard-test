@@ -53,7 +53,8 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
     $quantity_limited_request = $this->getQuantityLimitedRequest($data["RCP"]);
     $quantity_limited_request = $quantity_limited_request ? $quantity_limited_request : 100;
 
-    $ds    = $patient->getDS();
+    $ds = $patient->getDS();
+
     $where = array();
     foreach ($this->getRequestPatient($data["QPD"]) as $field => $value) {
       if ($value == "") {
@@ -65,12 +66,13 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
         $value = preg_replace("/\*+/", "%", $value);
       }
 
-      $where[$field] = $ds->prepare("LIKE %", $value);
+      $where["patients.$field"] = $ds->prepare("LIKE %", $value);
     }
 
     $ljoin = null;
 
-    if ($identifier_list = $this->getRequestPatientIdentifierList($data["QPD"])) {
+    $identifier_list = $this->getRequestPatientIdentifierList($data["QPD"]);
+    if (count(array_filter($identifier_list)) > 0) {
       $ljoin[10] = "id_sante400 AS id_pat_list ON id_pat_list.object_id = patients.patient_id";
       $where[] = "`id_pat_list`.`object_class` = 'CPatient'";
       // Requête sur un IPP
@@ -130,7 +132,8 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
     }
 
     // Requête sur un NDA
-    if ($identifier_list = $this->getRequestSejourIdentifierList($data["QPD"])) {
+    $identifier_list = $this->getRequestSejourIdentifierList($data["QPD"]);
+    if (count(array_filter($identifier_list)) > 0) {
       /*$ljoin["sejour"] = "`sejour`.`patient_id` = `patients`.`patient_id`";
       $ljoin[]         = "id_sante400 AS id2 ON `id2`.`object_id` = `sejour`.`sejour_id`";
       if (isset($identifier_list["id_number"])) {
@@ -139,15 +142,20 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
       }*/
     }
 
-    /*foreach ($this->getRequestSejour($data["QPD"]) as $field => $value) {
+    $request_admit = false;
+    foreach ($this->getRequestSejour($data["QPD"]) as $field => $value) {
       if ($value == "") {
         continue;
       }
 
+      $ljoin[] = "patients AS p1 ON `p1`.`patient_id` = `sejour`.`patient_id`";
+
       $value = preg_replace("/[^a-z\*]/i", "_", $value);
       $value = preg_replace("/\*+/", "%", $value);
-      $where[$field] = $ds->prepare("LIKE %", $value);
-    }*/
+      $where["sejour.$field"] = $ds->prepare("LIKE %", $value);
+
+      $request_admit= true;
+    }
 
     $i = 1;
 
@@ -187,20 +195,31 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
       }
     }
 
-    // Pointeur pour continuer
-    if (isset($patient->_pointer)) {
-      // is_numeric
-      $where["patient_id"] = $ds->prepare(" > %", $patient->_pointer);
+    $objects = array();
+    if (!$request_admit) {
+      // Pointeur pour continuer
+      if (isset($patient->_pointer)) {
+        // is_numeric
+        $where["patients.patient_id"] = $ds->prepare(" > %", $patient->_pointer);
+      }
+
+      $order = "patients.patient_id ASC";
+
+      if (!empty($where)) {
+        $objects = $patient->loadList($where, $order, $quantity_limited_request, "patients.patient_id", $ljoin);
+      }
+    }
+    else {
+      /** @var $sejour CSejour */
+
+      $sejour = new CSejour();
+
+      if (!empty($where)) {
+        $objects = $sejour->loadList($where, null, $quantity_limited_request, "sejour.sejour_id", $ljoin);
+      }
     }
 
-    $order = "patient_id ASC";
-
-    $patients = array();
-    if (!empty($where)) {
-      $patients = $patient->loadList($where, $order, $quantity_limited_request, null, $ljoin);
-    }
-
-    return $exchange_ihe->setPDRAA($ack, $patients, null, $domains);
+    return $exchange_ihe->setPDRAA($ack, $objects, null, $domains);
   }
 
   /**
@@ -256,10 +275,10 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    */
   function getRequestPatientIdentifierList(DOMNode $node) {
     $QPD = array(
-      "id_number"            => $this->getDemographicsFields($node, "CPatient", "3.1"),
-      "namespace_id"         => $this->getDemographicsFields($node, "CPatient", "3.4.1"),
-      "universal_id"         => $this->getDemographicsFields($node, "CPatient", "3.4.2"),
-      "universal_id_type"    => $this->getDemographicsFields($node, "CPatient", "3.4.3"),
+      "id_number"         => $this->getDemographicsFields($node, "CPatient", "3.1"),
+      "namespace_id"      => $this->getDemographicsFields($node, "CPatient", "3.4.1"),
+      "universal_id"      => $this->getDemographicsFields($node, "CPatient", "3.4.2"),
+      "universal_id_type" => $this->getDemographicsFields($node, "CPatient", "3.4.3"),
     );
 
     return $QPD;
@@ -274,7 +293,10 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    */
   function getRequestSejourIdentifierList(DOMNode $node) {
     $QPD = array(
-      "id_number" => $this->getDemographicsFields($node, "CSejour", "18.1")
+      "id_number"         => $this->getDemographicsFields($node, "CSejour", "18.1"),
+      "namespace_id"      => $this->getDemographicsFields($node, "CSejour", "18.4.1"),
+      "universal_id"      => $this->getDemographicsFields($node, "CSejour", "18.4.2"),
+      "universal_id_type" => $this->getDemographicsFields($node, "CSejour", "18.4.3"),
     );
 
     return $QPD;
@@ -306,7 +328,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    *
    * @param DOMNode $node QPD element
    *
-   * @return string
+   * @return array
    */
   function getRequestSejour(DOMNode $node) {
     $PV1 = array();
@@ -321,7 +343,9 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
     // Admitting doctor
 
+
     // Attending doctor
+
 
     return $PV1;
   }

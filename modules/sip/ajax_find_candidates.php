@@ -146,6 +146,13 @@ foreach ($receivers as $_receiver) {
     "domains_returned_universal_id_type" => $domains_returned_universal_id_type,
   );
   $patient->_sejour = $sejour;
+  $patient->_sejour->_sejour_identifier_list = array(
+    "admit_id_number"            => $admit_id_number,
+    "admit_namespace_id"         => $admit_namespace_id,
+    "admit_universal_id"         => $admit_universal_id,
+    "admit_universal_id_type"    => $admit_universal_id_type,
+    "admit_identifier_type_code" => $admit_identifier_type_code
+  );
 
   $patient->_quantity_limited_request = $quantity_limited_request;
   $patient->_pointer                  = $pointer;
@@ -164,6 +171,7 @@ if ($ack_data) {
   else {
     $ack_event = new CHL7v2EventQBPZV2();
   }
+
   $objects  = $ack_event->handle($ack_data)->handle();
 
   if (array_key_exists("pointer", $objects)) {
