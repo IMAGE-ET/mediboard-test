@@ -402,7 +402,7 @@ class CPlageOp extends CMbObject {
       foreach ($oldPlage->_ref_operations as &$_operation) {
         if ($_operation->salle_id == $oldPlage->salle_id) {
           $_operation->salle_id = $this->salle_id;
-          $_operation->store();
+          $_operation->store(false);
         }
       }
     }
