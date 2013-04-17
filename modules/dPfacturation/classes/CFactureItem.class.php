@@ -40,6 +40,8 @@ class CFactureItem extends CMbMetaObject {
   // References
   public $_ref_facture;
   public $_montant_facture;
+  public $_montant_total_base;
+  public $_montant_total_depassement;
    
   public $_ttc;
   
@@ -91,6 +93,14 @@ class CFactureItem extends CMbMetaObject {
     parent::updateFormFields();
     $this->_montant_facture = $this->montant_base + $this->montant_depassement;
     $this->_view = $this->libelle;
+    if ($this->type == "CActeNGAP") {
+      $this->_montant_total_base        = $this->montant_base;
+      $this->_montant_total_depassement = $this->montant_depassement;
+    }
+    else {
+      $this->_montant_total_base        = $this->montant_base * $this->quantite * $this->coeff;
+      $this->_montant_total_depassement = $this->montant_depassement * $this->quantite * $this->coeff;
+    }
   }
   
   /**
