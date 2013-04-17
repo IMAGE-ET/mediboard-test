@@ -3,7 +3,7 @@
 
 <table class="form">
   <tr>
-    {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
+    {{mb_ternary var=object test=$consult->_refs_dossiers_anesth|@count value=$consult->_ref_consult_anesth other=$consult}}
     <td class="halfPane">
       <fieldset>
         <legend>{{tr}}CFile{{/tr}} - {{tr}}{{$object->_class}}{{/tr}}</legend>
