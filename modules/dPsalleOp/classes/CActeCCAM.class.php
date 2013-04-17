@@ -1,17 +1,18 @@
-<?php /* $Id:acteccam.class.php 8144 2010-02-25 11:05:27Z rhum1 $ */
-
+<?php 
 /**
- *  @package Mediboard
- *  @subpackage mediusers
- *  @version $Revision:8144 $
- *  @author Thomas Despoix
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPsalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 /**
  * Classe servant à gérer les enregistrements des actes CCAM pendant les
  * interventions
  */
-
 class CActeCCAM extends CActe {
   static $coef_associations = array (
     "1" => 100,
@@ -292,7 +293,7 @@ class CActeCCAM extends CActe {
     */
     
     // Cas des incompatibilités
-    if(CAppUI::conf("dPsalleOp CActeCCAM check_incompatibility")) {
+    if (CAppUI::conf("dPsalleOp CActeCCAM check_incompatibility")) {
       foreach ($this->_linked_actes as $_acte) {
         $_acte->loadRefCodeCCAM();
         $_acte->_ref_code_ccam->getActesIncomp();
@@ -886,6 +887,32 @@ class CActeCCAM extends CActe {
                 "coefficient_2" => $row["coefficient_2"]),
           array("code_ngap_3"   => $row["code_ngap_3"],
                 "coefficient_3" => $row["coefficient_3"])));
+    }
+  }
+  
+  /**
+   * Création d'un item de facture avec un code ccam
+   * 
+   * @param string $facture la facture
+   * @param string $date    date à défaut
+   * 
+   * @return void
+  **/
+  function creationItemsFacture($facture, $date){
+    $this->loadRefCodeCCAM();
+    $ligne = new CFactureItem();
+    $ligne->libelle       = $this->_ref_code_ccam->libelleCourt;
+    $ligne->code          = $this->code_acte;
+    $ligne->type          = $this->_class;
+    $ligne->object_id     = $facture->_id;
+    $ligne->object_class  = $facture->_class;
+    $ligne->date          = CMbDT::date($this->execution);
+    $ligne->montant_base  = $this->montant_base;
+    $ligne->montant_depassement = $this->montant_depassement;
+    $ligne->quantite      = 1;
+    $ligne->coeff         = $facture->_coeff;
+    if ($msg = $ligne->store()) {
+      return $msg;
     }
   }
 }

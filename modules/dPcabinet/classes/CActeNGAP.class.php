@@ -1,11 +1,13 @@
-<?php
-  
+<?php 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Alexis Granger
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPcabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ */
 
 class CActeNGAP extends CActe {
   // DB Table key
@@ -111,7 +113,7 @@ class CActeNGAP extends CActe {
    * @param string $code Serialised full code
    * @return void
    */
-  function setFullCode($code){
+  function setFullCode($code) {
     $details = explode("-", $code);
 
     $this->quantite    = $details[0];
@@ -122,20 +124,20 @@ class CActeNGAP extends CActe {
       $this->montant_base = $details[3];
     }
 
-    if (count($details) >= 5){
+    if (count($details) >= 5) {
       $this->montant_depassement = str_replace("*","-",$details[4]);
     }
     
-    if (count($details) >= 6){
-    	$this->demi = $details[5];
+    if (count($details) >= 6) {
+      $this->demi = $details[5];
     }
 
-    if (count($details) >= 7){
-    	$this->complement = $details[6];
+    if (count($details) >= 7) {
+      $this->complement = $details[6];
     }
     $this->getLibelle();
-    if(!$this->lettre_cle){
-    	$this->lettre_cle = 0;
+    if (!$this->lettre_cle) {
+      $this->lettre_cle = 0;
     }
     
     $this->updateFormFields();
@@ -145,8 +147,8 @@ class CActeNGAP extends CActe {
     return $this->quantite && $this->code && $this->coefficient;
   }
   
-  function check(){
-    if ($msg = $this->checkCoded()){
+  function check() {
+    if ($msg = $this->checkCoded()) {
       return $msg;
     }
     
@@ -154,44 +156,44 @@ class CActeNGAP extends CActe {
   }
  
   function canDeleteEx() {
-    if ($msg = $this->checkCoded()){
+    if ($msg = $this->checkCoded()) {
       return $msg;
     }
     
     return parent::canDeleteEx();
   }
   
-	function updateMontantBase() {
-		$ds = CSQLDataSource::get("ccamV2");
+  function updateMontantBase() {
+    $ds = CSQLDataSource::get("ccamV2");
     $query = "SELECT `tarif` 
-		  FROM `codes_ngap` 
-			WHERE `code` = %";
-		$query = $ds->prepare($query, $this->code);
-		
-		$this->montant_base = $ds->loadResult($query);
-		$this->montant_base *= $this->coefficient;
-	  $this->montant_base *= $this->quantite;
+      FROM `codes_ngap` 
+      WHERE `code` = %";
+    $query = $ds->prepare($query, $this->code);
+    
+    $this->montant_base = $ds->loadResult($query);
+    $this->montant_base *= $this->coefficient;
+    $this->montant_base *= $this->quantite;
 
-		if ($this->demi) {
-		  $this->montant_base /= 2;
-		}
-		
-	  if ($this->complement == "F") {
-	    $this->montant_base += 19.06;  
-	  }
-		
-	  if ($this->complement == "N") {
-	    $this->montant_base += 25; 
-	  }
-		
-		return $this->montant_base;
-	}
-	
+    if ($this->demi) {
+      $this->montant_base /= 2;
+    }
+    
+    if ($this->complement == "F") {
+      $this->montant_base += 19.06;  
+    }
+    
+    if ($this->complement == "N") {
+      $this->montant_base += 25; 
+    }
+    
+    return $this->montant_base;
+  }
+  
   function getLibelle() {
     $ds = CSQLDataSource::get("ccamV2");
     $query = "SELECT `libelle`, `lettre_cle`
-		  FROM codes_ngap 
-			WHERE CODE = % ";
+      FROM codes_ngap 
+      WHERE CODE = % ";
     $query = $ds->prepare($query, $this->code);
 
     $this->_libelle = "Acte inconnu ou supprimé";
@@ -204,6 +206,31 @@ class CActeNGAP extends CActe {
       */
      $this->lettre_cle = $hash['lettre_cle']; 
     }
-		return $this->_libelle;
+    return $this->_libelle;
+  }
+  
+  /**
+   * Création d'un item de facture pour un code ngap
+   * 
+   * @param string $facture la facture
+   * @param string $date    date à défaut
+   * 
+   * @return void
+  **/
+  function creationItemsFacture($facture, $date) {
+    $ligne = new CFactureItem();
+    $ligne->libelle       = $this->_libelle;
+    $ligne->code          = $this->code;
+    $ligne->type          = $this->_class;
+    $ligne->object_id     = $facture->_id;
+    $ligne->object_class  = $facture->_class;
+    $ligne->date          = $date;
+    $ligne->montant_base  = $this->montant_base;
+    $ligne->montant_depassement = $this->montant_depassement;
+    $ligne->quantite      = $this->quantite;
+    $ligne->coeff         = $this->coefficient;
+    if ($msg = $ligne->store()) {
+      return $msg;
+    }
   }
 } 
