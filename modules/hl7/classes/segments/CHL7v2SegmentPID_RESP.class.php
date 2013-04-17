@@ -65,24 +65,31 @@ class CHL7v2SegmentPID_RESP extends CHL7v2Segment {
 
     $identifiers = array();
     if (empty($domains_returned)) {
-      $group_domain = new CGroupDomain();
-      $group_domain->group_id     = $group->_id;
-      $group_domain->master       = 1;
-      $group_domain->object_class = "CPatient";
-      $group_domain->loadMatchingObject();
+      $idex = new CIdSante400();
+      $idex->object_id    = $patient->_id;
+      $idex->object_class = "CPatient";
 
-      $domain = $group_domain->loadRefDomain();
+      $ljoin   = array();
+      $ljoin[] = "group_domain AS g1 ON g1.domain_id = domain.domain_id AND g1.object_class = 'CPatient'";
 
-      $assigning_authority = $this->getAssigningAuthority("domain", null, null, $domain);
+      foreach ($idex->loadMatchingList() as $_idex) {
+        $domain = new CDomain();
+        $where["tag"] = " = '$_idex->tag'";
+        $domain->loadObject($where, null, null, $ljoin);
 
-      $identifiers[] = array(
-        CIdSante400::getValueFor($patient, $domain->tag),
-        null,
-        null,
-        // PID-3-4 Autorité d'affectation
-        $assigning_authority,
-        "PI"
-      );
+        if (!$domain->_id) {
+          continue;
+        }
+
+        $identifiers[] = array(
+          $_idex->id400,
+          null,
+          null,
+          // PID-3-4 Autorité d'affectation
+          $this->getAssigningAuthority("domain", null, null, $domain),
+          "MR"
+        );
+      }
     }
     else {
       foreach ($domains_returned as $_domain_returned) {
