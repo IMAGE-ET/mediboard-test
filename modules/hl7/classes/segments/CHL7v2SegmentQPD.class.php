@@ -203,8 +203,8 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
         $this->setDemographicsValues($sejour, $sejour->_chambre, "3.2"),
         $this->setDemographicsValues($sejour, $sejour->_lit    , "3.3"),
 
-        $this->setDemographicsValues($sejour, $sejour->_praticien_admitting, "17.2.1"),
         $this->setDemographicsValues($sejour, $sejour->_praticien_attending, "8.2.1"),
+        $this->setDemographicsValues($sejour, $sejour->_praticien_admitting, "17.2.1"),
       )
     );
   }

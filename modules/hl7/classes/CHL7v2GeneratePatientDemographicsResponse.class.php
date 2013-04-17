@@ -131,10 +131,11 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
       }
     }
 
+    $request_admit = false;
     // Requête sur un NDA
     $identifier_list = $this->getRequestSejourIdentifierList($data["QPD"]);
     if (count(array_filter($identifier_list)) > 0) {
-      $ljoin[10] = "id_sante400 AS id_pat_list ON id_sej_list.object_id = sejour.sejour_id";
+      $ljoin[10] = "id_sante400 AS id_sej_list ON id_sej_list.object_id = sejour.sejour_id";
       $where[] = "`id_sej_list`.`object_class` = 'CSejour'";
       // Requête sur un IPP
       if (!empty($identifier_list["id_number"])
@@ -190,19 +191,24 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
           $where[] = $ds->prepare("id_sej_list.tag = %", $domain->tag);
         }
       }
+
+      $request_admit= true;
     }
 
-    $request_admit = false;
     foreach ($this->getRequestSejour($data["QPD"]) as $field => $value) {
       if ($value == "") {
         continue;
       }
 
-      $ljoin[] = "patients ON `patients`.`patient_id` = `sejour`.`patient_id`";
-
       $value = preg_replace("/[^a-z\*]/i", "_", $value);
       $value = preg_replace("/\*+/", "%", $value);
       $where["sejour.$field"] = $ds->prepare("LIKE %", $value);
+
+      $request_admit= true;
+    }
+
+    if ($other_request = $this->getOtherRequestSejour($data["QPD"])) {
+      $where = array_merge($other_request, $where);
 
       $request_admit= true;
     }
@@ -260,6 +266,9 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
       }
     }
     else {
+      $ljoin[] = "patients ON `patients`.`patient_id` = `sejour`.`patient_id`";
+
+      /** @var $sejour CSejour */
       $sejour = new CSejour();
 
       if (!empty($where)) {
@@ -392,16 +401,51 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
       $PV1 = array_merge($PV1, array("type" => CHL7v2TableEntry::mapFrom(4, $PV1_2_1)));
     }
 
-    // Assigned Patient Location
-
-
-    // Admitting doctor
-
-
-    // Attending doctor
-
-
     return $PV1;
+  }
+
+  /**
+   * Get others PV1 QPD element
+   *
+   * @param DOMNode $node QPD element
+   *
+   * @return array
+   */
+  function getOtherRequestSejour(DOMNode $node) {
+    // Recherche du service
+    $service = new CService();
+    $ds      = $service->getDS();
+
+    $where_returns = array();
+    if ($service_name = $this->getDemographicsFields($node, "CSejour", "3.1")) {
+      $service_name = preg_replace("/\*+/", "%", $service_name);
+      $where["nom"] = $ds->prepare("LIKE %", $service_name);
+      $ids = $service->loadIds($where);
+
+      $where_returns["sejour.service_id"] = $ds->prepareIn($ids);
+    }
+
+    // Médecin adressant
+    if ($attending_doctor_name = $this->getDemographicsFields($node, "CSejour", "8.2.1")) {
+      $medecin = new CMedecin();
+      $attending_doctor_name = preg_replace("/\*+/", "%", $attending_doctor_name);
+      $where["nom"]          = $ds->prepare("LIKE %", $attending_doctor_name);
+      $ids = $medecin->loadIds($where);
+
+      $where_returns["sejour.adresse_par_prat_id"] = $ds->prepareIn($ids);
+    }
+
+    // Praticien
+    if ($admitting_doctor_name = $this->getDemographicsFields($node, "CSejour", "17.2.1")) {
+      $user = new CUser();
+      $admitting_doctor_name   = preg_replace("/\*+/", "%", $admitting_doctor_name);
+      $where["user_last_name"] = $ds->prepare("LIKE %", $admitting_doctor_name);
+      $ids = $user->loadIds($where);
+
+      $where_returns["sejour.praticien_id"] = $ds->prepareIn($ids);
+    }
+
+    return $where_returns;
   }
 
   /**

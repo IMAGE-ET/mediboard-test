@@ -87,10 +87,12 @@ $sejour->_admission = $admit_class;
 $sejour->_service   = $admit_service;
 $sejour->_chambre   = $admit_room;
 $sejour->_lit       = $admit_bed;
-$sejour->_praticien_attending  = $admit_attending_doctor;
-$sejour->_praticien_referring  = $admit_referring_doctor;
+
+$sejour->_praticien_admitting  = $admit_admitting_doctor; // Praticien
+$sejour->_praticien_referring  = $admit_referring_doctor; // Nom du médecin adressant
+
+$sejour->_praticien_attending  = $admit_attending_doctor; // Médecin traitant
 $sejour->_praticien_consulting = $admit_consulting_doctor;
-$sejour->_praticien_admitting  = $admit_admitting_doctor;
 
 $receiver_ihe           = new CReceiverIHE();
 $receiver_ihe->actif    = 1;

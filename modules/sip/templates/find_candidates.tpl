@@ -105,15 +105,15 @@ Main.add(function(){
                 </select>
               </td>
 
-              <th><label for="admit_attending_doctor">Nom du praticien responsable</label></th>
-              <td><input tabindex="24" type="text" name="admit_attending_doctor" value="" disabled /></td>
+              <th><label for="admit_admitting_doctor">Nom du praticien responsable</label></th>
+              <td><input tabindex="27" type="text" name="admit_admitting_doctor" value="" /></td>
             </tr>
 
             <tr>
               <th><label for="admit_service" title="Service">Service</label></th>
               <td><input tabindex="21" type="text" name="admit_service" value="" /></td>
 
-              <th><label for="admit_referring_doctor" title="Nom du praticien">Nom du praticien référent</label></th>
+              <th><label for="admit_referring_doctor">Nom du médecin adressant</label></th>
               <td><input tabindex="25" type="text" name="admit_referring_doctor" value="" /></td>
             </tr>
 
@@ -121,16 +121,16 @@ Main.add(function(){
               <th><label for="admit_room" title="Chambre">Chambre</label></th>
               <td><input tabindex="22" type="text" name="admit_room" value="" /></td>
 
-              <th><label for="admit_consulting_doctor">Nom du praticien consultant</label></th>
-              <td><input tabindex="26" type="text" name="admit_consulting_doctor" value="" disabled /></td>
+              <th><label for="admit_attending_doctor">Médecin traitant</label></th>
+              <td><input tabindex="24" type="text" name="admit_attending_doctor" /></td>
             </tr>
 
             <tr>
               <th><label for="admit_bed" title="Lit">Lit</label></th>
               <td><input tabindex="23" type="text" name="admit_bed" value="" /></td>
 
-              <th><label for="admit_admitting_doctor">Nom du praticien consultant</label></th>
-              <td><input tabindex="27" type="text" name="admit_admitting_doctor" value="" /></td>
+              <th><label for="admit_consulting_doctor">Nom du praticien consultant</label></th>
+              <td><input tabindex="26" type="text" name="admit_consulting_doctor" value="" disabled /></td>
             </tr>
 
             <tr>
