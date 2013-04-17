@@ -11,7 +11,7 @@
 
 <script>
   Main.add(function(){
-    var form = getForm("find");
+    var form = getForm("find_candidates");
     form.elements.finder.disabled = '{{$pointer}}' ? "" : "disabled";
     $V(form.pointer, '{{$pointer}}');
   });
