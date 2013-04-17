@@ -63,7 +63,6 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
     if ($sejour) {
       $QPD3 = array_merge($QPD3, $this->addQPD3PV1($sejour));
     }
-
     CMbArray::removeValue("", $QPD3);
     $data[] = $QPD3;
 
@@ -87,7 +86,6 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
         CMbArray::get($domains_returned, "domains_returned_universal_id"),
         CMbArray::get($domains_returned, "domains_returned_universal_id_type")
       );
-      CMbArray::removeValue(null, $QPD8);
 
       if (empty($QPD8)) {
         $data[] = null;
@@ -165,15 +163,28 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
   /**
    * Add PV1 in QPD segment
    *
-   * @param CSejour      $sejour      Visit
-   * @param CAffectation $affectation Location
+   * @param CSejour $sejour Visit
    *
    * @return array
    */
-  function addQPD3PV1(CSejour $sejour, CAffectation $affectation = null) {
-    return array(
-      // Patient class
-      $this->setDemographicsFields($sejour, "type", "2.1", "4"),
+  function addQPD3PV1(CSejour $sejour) {
+    $qpd3pid = array();
+
+    $sejour->type = $sejour->_admission;
+
+    return array_merge(
+      $qpd3pid, array(
+        // Patient class
+        $this->setDemographicsFields($sejour, "type", "2.1", "4"),
+
+        // Assigned Patient Location
+        $this->setDemographicsValues($sejour, $sejour->_admission, "3.1"),
+        $this->setDemographicsValues($sejour, $sejour->_chambre  , "3.2"),
+        $this->setDemographicsValues($sejour, $sejour->_lit      , "3.3"),
+
+        $this->setDemographicsValues($sejour, $sejour->_praticien_admitting, "17.2.1"),
+        $this->setDemographicsValues($sejour, $sejour->_praticien_attending, "8.2.1"),
+      )
     );
   }
 

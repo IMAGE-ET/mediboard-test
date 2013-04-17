@@ -32,7 +32,7 @@ class CHL7v2Error {
     CHL7v2Exception::UNEXPECTED_DATA_TYPE       => 207,
     CHL7v2Exception::DATA_TOO_LONG              => 102,
     CHL7v2Exception::UNKNOWN_TABLE_ENTRY        => 103,
-    CHL7v2Exception::UNKNOWN_KEY_IDENTIFIER     => 204,
+    CHL7v2Exception::UNKNOWN_DOMAINS_RETURNED   => 204,
   );
   
   /**

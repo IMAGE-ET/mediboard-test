@@ -88,7 +88,7 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
     // Error unrecognized domain
     if ($object->QPD8_error) {
       $error           = new CHL7v2Error();
-      $error->code     = CHL7v2Exception::UNKNOWN_KEY_IDENTIFIER;
+      $error->code     = CHL7v2Exception::UNKNOWN_DOMAINS_RETURNED;
       $error->location = array(
         "QPD",
         1,
@@ -113,6 +113,8 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
     // Results
     foreach ($object->objects as $_object) {
       if ($_object instanceof CPatient) {
+        $_object->domains = $object->domains;
+
         $this->addPID($_object, $i);
 
         $i++;
@@ -210,6 +212,7 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
     $patient->getCurrSejour();
     $PID->sejour = reset($patient->_ref_sejours);
     $PID->set_id  = $set_id;
+    $PID->domains_returned = $patient->domains;
     $PID->build($this);
   }
 }

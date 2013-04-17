@@ -74,6 +74,7 @@ class CHL7v2EventQBP extends CHL7v2Event implements CHL7EventQBP {
   function addQPD($patient) {
     $QPD = CHL7v2Segment::create("QPD", $this->message);
     $QPD->patient = $patient;
+    $QPD->sejour  = $patient->_sejour;
     $QPD->build($this);
   }
 

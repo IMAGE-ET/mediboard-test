@@ -554,6 +554,7 @@ $locales['CHL7v2Exception-19'] = 'Valeur inconnue dans la table';
 $locales['CHL7v2Exception-20'] = 'Événement inconnu';
 $locales['CHL7v2Exception-21'] = 'Champ interdit';
 $locales['CHL7v2Exception-22'] = 'Le code de l\'évènement est inconnu';
+$locales['CHL7v2Exception-23'] = 'Le domaine reçu n\'est pas connu par l\'application';
 $locales['CHL7v2Segment-config'] = 'Segments';
 $locales['CHL7v2SegmentPV1'] = 'Segment PV1';
 $locales['CHL7v2TableDescription'] = 'Table HL7v2';

@@ -30,11 +30,14 @@ class CHL7v2SegmentPID_RESP extends CHL7v2Segment {
    * @var CPatient
    */
   public $patient;
-  
+
   /**
    * @var CSejour
    */
   public $sejour;
+
+  /** @var array() */
+  public $domains_returned;
 
   /**
    * Build PID segement
@@ -46,9 +49,10 @@ class CHL7v2SegmentPID_RESP extends CHL7v2Segment {
   function build(CHL7v2Event $event) {
     parent::build($event);
     
-    $message  = $event->message;
-    $sender   = $event->_sender;
-    $group    = $sender->loadRefGroup();
+    $message          = $event->message;
+    $sender           = $event->_sender;
+    $group            = $sender->loadRefGroup();
+    $domains_returned = $this->domains_returned;
 
     $patient  = $this->patient;
     
@@ -58,9 +62,45 @@ class CHL7v2SegmentPID_RESP extends CHL7v2Segment {
     
     // PID-2: Patient ID (CX) (optional)
     $data[] = null;
-    
+
+    $identifiers = array();
+    if (empty($domains_returned)) {
+      $group_domain = new CGroupDomain();
+      $group_domain->group_id     = $group->_id;
+      $group_domain->master       = 1;
+      $group_domain->object_class = "CPatient";
+      $group_domain->loadMatchingObject();
+
+      $domain = $group_domain->loadRefDomain();
+
+      $assigning_authority = $this->getAssigningAuthority("domain", null, null, $domain);
+
+      $identifiers[] = array(
+        CIdSante400::getValueFor($patient, $domain->tag),
+        null,
+        null,
+        // PID-3-4 Autorité d'affectation
+        $assigning_authority,
+        "PI"
+      );
+    }
+    else {
+      foreach ($domains_returned as $_domain_returned) {
+        $assigning_authority = $this->getAssigningAuthority("domain", null, null, $_domain_returned);
+
+        $identifiers[] = array(
+          CIdSante400::getValueFor($patient, $_domain_returned->tag),
+          null,
+          null,
+          // PID-3-4 Autorité d'affectation
+          $assigning_authority,
+          "MR"
+        );
+      }
+    }
+
     // PID-3: Patient Identifier List (CX) (repeating)
-    $data[] = $this->getPersonIdentifiers($patient, $group, $sender);
+    $data[] = $identifiers;
     
     // PID-4: Alternate Patient ID - PID (CX) (optional repeating)
     $data[] = null;

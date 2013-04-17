@@ -87,30 +87,41 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
       }
     }
 
-    $QPD8s = $this->getQPD8s($data["QPD"]);
-    foreach ($QPD8s as $_QPD8) {
-      // Requête sur un domaine particulier qui est inconnu
-      if ($_QPD8) {
-        $domains_returned_namespace_id = $_QPD8["domains_returned_namespace_id"];
-        if ($domains_returned_namespace_id) {
-          $idex               = new CIdSante400();
-          $idex->object_class = "CPatient";
-          $idex->tag          = $domains_returned_namespace_id;
-          $count = $idex->countMatchingListEsc();
+    $i = 1;
 
-          // Si aucun domaine n'est retrouvé on retourne une erreur
-          if ($count == 0) {
-            return $exchange_ihe->setPDRAE($ack, null, $_QPD8);
-          }
-        }
+    $domains = array();
+    foreach ($this->getQPD8s($data["QPD"]) as $_QPD8) {
+      // Requête sur un domaine particulier
+      $domains_returned_namespace_id = $_QPD8["domains_returned_namespace_id"];
+      // Requête sur un OID particulié
+      $domains_returned_universal_id = $_QPD8["domains_returned_universal_id"];
+
+      $domain = new CDomain();
+      if ($domains_returned_namespace_id) {
+        $domain->tag = $domains_returned_namespace_id;
+      }
+      if ($domains_returned_universal_id) {
+        $domain->OID = $domains_returned_universal_id;
       }
 
-      // Requête sur un domaine particulier
-      if ($_QPD8) {
-        $ljoin[10] = "id_sante400 AS id1 ON id1.object_id = patients.patient_id";
-        if ($domains_returned_namespace_id) {
-          $where[]   = $ds->prepare("id1.tag = %", $domains_returned_namespace_id);
-        }
+      if ($domain->tag || $domain->OID) {
+        $domain->loadMatchingObject();
+      }
+
+      $value = $domain->OID ? $domain->OID : $domain->tag;
+
+      // Cas où le domaine n'est pas retrouvé
+      if (!$domain->_id) {
+        return $exchange_ihe->setPDRAE($ack, null, $value);
+      }
+
+      $domains[] = $domain;
+
+      if ($domains_returned_namespace_id) {
+        $ljoin[20+$i] = "id_sante400 AS id$i ON id$i.object_id = patients.patient_id";
+        $where[]   = $ds->prepare("id$i.tag = %", $domains_returned_namespace_id);
+
+        $i++;
       }
     }
 
@@ -127,7 +138,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
       $patients = $patient->loadList($where, $order, $quantity_limited_request, null, $ljoin);
     }
 
-    return $exchange_ihe->setPDRAA($ack, $patients);
+    return $exchange_ihe->setPDRAA($ack, $patients, null, $domains);
   }
 
   /**
@@ -212,7 +223,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    *
    * @param DOMNode $node QPD element
    *
-   * @return string
+   * @return array()
    */
   function getQPD8s(DOMNode $node) {
     $QPD8s = array();

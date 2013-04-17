@@ -222,11 +222,9 @@ class CHL7v2Segment extends CHL7v2Entity {
     $this->getMessage()->appendChild($this);
   }
   
-  function getAssigningAuthority($name = "mediboard", $value= null, CInteropActor $actor = null, CGroupDomain $group_domain = null) {
+  function getAssigningAuthority($name = "mediboard", $value= null, CInteropActor $actor = null, CDomain $domain = null) {
     switch ($name) {
       case "domain" :
-        $domain = $group_domain->loadRefDomain();
-
         return array(
           $domain->libelle,
           $domain->OID,
@@ -302,7 +300,9 @@ class CHL7v2Segment extends CHL7v2Entity {
       $group_domain->object_class = "CPatient";
       $group_domain->loadMatchingObject();
 
-      $assigning_authority = $this->getAssigningAuthority("domain", null, null, $group_domain);
+      $domain = $group_domain->loadRefDomain();
+
+      $assigning_authority = $this->getAssigningAuthority("domain", null, null, $domain);
     }
     
     // Table - 0203
@@ -345,7 +345,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         null,
         null,
         // PID-3-4 Autorité d'affectation
-        (!$actor->_configs["send_assigning_authority"]) ? null : $assigning_authority,
+        (empty($actor->_configs["send_assigning_authority"])) ? null : $assigning_authority,
         "PI"
       );
     }

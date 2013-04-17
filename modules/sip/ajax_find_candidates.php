@@ -157,7 +157,12 @@ $objects = array();
 $pointer  = null;
 
 if ($ack_data) {
-  $ack_event = new CHL7v2EventQBPK22();
+  if ($code == "Q22") {
+    $ack_event = new CHL7v2EventQBPK22();
+  }
+  else {
+    $ack_event = new CHL7v2EventQBPZV2();
+  }
   $objects  = $ack_event->handle($ack_data)->handle();
 
   if (array_key_exists("pointer", $objects)) {
