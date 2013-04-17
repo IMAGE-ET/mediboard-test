@@ -20,13 +20,13 @@ $singleType = CValue::get("singleType");
 // L'utilisateur est-il chirurgien ?
 $mediuser      = CMediusers::get();
 $is_praticien  = $mediuser->isPraticien();
-$listPrat      = $mediuser->loadPraticiens(PERM_EDIT);
+$listPrat      = $mediuser->loadPraticiens(PERM_READ);
 $chir_id       = CAppUI::conf("dPplanningOp COperation use_session_praticien")
   ? CValue::getOrSession("chir_id", $is_praticien ? $mediuser->user_id : reset($listPrat)->_id)
   : CValue::get("chir_id", $is_praticien ? $mediuser->user_id : reset($listPrat)->_id);
 $function_id   = CValue::getOrSession("function_id");
 $_function     = new CFunctions();
-$listFunc      = $_function->loadSpecialites(PERM_EDIT);
+$listFunc      = $_function->loadSpecialites(PERM_READ);
 $type          = CValue::getOrSession("type", "interv");
 $sejour_type   = CValue::get("sejour_type");
 $page          = CValue::get("page", array(
