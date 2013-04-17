@@ -213,7 +213,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
     foreach ($this->getQPD8s($data["QPD"]) as $_QPD8) {
       // Requête sur un domaine particulier
       $domains_returned_namespace_id = $_QPD8["domains_returned_namespace_id"];
-      // Requête sur un OID particulié
+      // Requête sur un OID particulier
       $domains_returned_universal_id = $_QPD8["domains_returned_universal_id"];
 
       $domain = new CDomain();
@@ -260,13 +260,17 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
       }
     }
     else {
-      /** @var $sejour CSejour */
-
       $sejour = new CSejour();
 
       if (!empty($where)) {
         $objects = $sejour->loadList($where, null, $quantity_limited_request, "sejour.sejour_id", $ljoin);
       }
+    }
+
+    // Save information indicating that we are doing an incremental query
+    $last = end($objects);
+    if ($last && $data["RCP"] && $this->queryTextNode("RCP.2/CQ.2/CE.1", $data["RCP"])) {
+      $last->_incremental_query = true;
     }
 
     return $exchange_ihe->setPDRAA($ack, $objects, null, $domains);
@@ -295,7 +299,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
       $PID = array_merge($PID, array("nom_jeune_fille" => $PID_6_1_1));
     }
 
-    // Date of birth"
+    // Date of birth
     if ($PID_7_1 = $this->getDemographicsFields($node, "CPatient", "7.1")) {
       $PID = array_merge($PID, array("naissance" => CMbDT::date($PID_7_1)));
     }

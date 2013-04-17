@@ -135,10 +135,11 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
       }
     }
 
-    //$last = end($object->objects);
-    /*if ($last) {
-      $last->_id
-    }*/
+    $last = end($object->objects);
+    if ($last && isset($last->_incremental_query)) {
+      $last->_pointer = $last->_id;
+      $this->addDSC($last);
+    }
   }
 
   /**
@@ -229,6 +230,19 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
     $PID->set_id  = $set_id;
     $PID->domains_returned = $patient->domains;
     $PID->build($this);
+  }
+
+  /**
+   * RCP - Represents an HL7 DSC message segment (Continuation Pointer)
+   *
+   * @param CPatient $patient Patient
+   *
+   * @return void
+   */
+  function addDSC($patient) {
+    $DSC = CHL7v2Segment::create("DSC", $this->message);
+    $DSC->patient = $patient;
+    $DSC->build($this);
   }
 
   /**
