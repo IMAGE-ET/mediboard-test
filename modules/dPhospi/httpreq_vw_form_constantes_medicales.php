@@ -36,7 +36,8 @@ if (!$selection) {
 
   $important_constantes = CConstantesMedicales::getHostConfig("important_constantes", $host);
   $conf_constantes = explode("|", $important_constantes);
-  $selection = array_intersect_key(CConstantesMedicales::$list_constantes, array_flip($conf_constantes));
+  $selection = CConstantesMedicales::getConstantsByRank(true, $host);
+  //$selection = array_intersect_key(CConstantesMedicales::$list_constantes, array_flip($conf_constantes));
 }
 else {
   $selection_flip = array_flip($selection);
