@@ -112,6 +112,7 @@ if (
     //$admit_consulting_doctor || // not used
     $admit_admitting_doctor // adresse_par_prat_id
 ) {
+  $transaction = "ITI22";
   $code = "ZV1";
 }
 
