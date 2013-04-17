@@ -265,9 +265,18 @@ class CHL7v2SegmentPID_RESP extends CHL7v2Segment {
     if ($this->sejour) {
       $sejour = $this->sejour;
       $sejour->loadNDA($group->_id);
+
+      $domain = new CDomain();
+      $domain->tag = $sejour->getTagNDA();
+      $domain->loadMatchingObject();
+
       $data[] = $sejour->_NDA ? array(
         array(
-          $sejour->_NDA
+          $sejour->_NDA,
+          null,
+          null,
+          // PID-3-4 Autorité d'affectation
+          $this->getAssigningAuthority("domain", null, null, $domain),
         )
       ) : null;
     }
