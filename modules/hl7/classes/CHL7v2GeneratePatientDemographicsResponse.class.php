@@ -60,8 +60,11 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
         continue;
       }
 
-      $value = preg_replace("/[^a-z\*]/i", "_", $value);
-      $value = preg_replace("/\*+/", "%", $value);
+      if (!in_array($field, array("naissance", "cp"))) {
+        $value = preg_replace("/[^a-z\d\*]/i", "_", $value);
+        $value = preg_replace("/\*+/", "%", $value);
+      }
+
       $where[$field] = $ds->prepare("LIKE %", $value);
     }
 
@@ -225,12 +228,12 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
     // Date of birth"
     if ($PID_7_1 = $this->getDemographicsFields($node, "CPatient", "7.1")) {
-      $PID = array_merge($PID, array("naissance" => CHL7v2::getDate($PID_7_1)));
+      $PID = array_merge($PID, array("naissance" => CMbDT::date($PID_7_1)));
     }
 
     // Sexe
     if ($PID_8 = $this->getDemographicsFields($node, "CPatient", "8")) {
-      $PID = array_merge($PID, array("sexe" => $PID_8));
+      $PID = array_merge($PID, array("sexe" => CHL7v2TableEntry::mapFrom(1, $PID_8)));
     }
 
     // Patient Adress
