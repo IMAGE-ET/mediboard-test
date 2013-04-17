@@ -66,14 +66,63 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
     }
 
     $ljoin = null;
-    // Requête sur un IPP
-    if ($identifier_list = $this->getRequestPatientIdentifierList($data["QPD"])) {
-      $ljoin[10] = "id_sante400 AS id1 ON id1.object_id = patients.patient_id";
-      $where[] = "`id1`.`object_class` = 'CPatient'";
 
-      if (isset($identifier_list["id_number"])) {
-        $id_number = $identifier_list["id_number"];
-        $where[]   = $ds->prepare("id1.id400 = %", $id_number);
+    if ($identifier_list = $this->getRequestPatientIdentifierList($data["QPD"])) {
+      $ljoin[10] = "id_sante400 AS id_pat_list ON id_pat_list.object_id = patients.patient_id";
+      $where[] = "`id_pat_list`.`object_class` = 'CPatient'";
+      // Requête sur un IPP
+      if (!empty($identifier_list["id_number"])
+          && empty($identifier_list["namespace_id"])
+          && empty($identifier_list["universal_id"])
+          && empty($identifier_list["universal_id_type"])
+      ) {
+        $where[] = $ds->prepare("id1.id400 = %", $identifier_list["id_number"]);
+      }
+
+      if (!empty($identifier_list["id_number"])
+          && (!empty($identifier_list["namespace_id"])
+          || !empty($identifier_list["universal_id"]))
+      ) {
+
+        $namespace_id = $identifier_list["namespace_id"];
+        $universal_id = $identifier_list["universal_id"];
+
+        $domain = new CDomain();
+        if ($namespace_id) {
+          $domain->tag = $namespace_id;
+        }
+        if ($universal_id) {
+          $domain->OID = $universal_id;
+        }
+
+        if ($domain->tag || $domain->OID) {
+          $domain->loadMatchingObject();
+        }
+
+        $where[] = $ds->prepare("id_pat_list.id400 = %", $identifier_list["id_number"]);
+        $where[] = $ds->prepare("id_pat_list.tag = %", $domain->tag);
+      }
+
+      if (empty($identifier_list["id_number"])
+          && (!empty($identifier_list["namespace_id"])
+          || !empty($identifier_list["universal_id"]))
+      ) {
+        $namespace_id = $identifier_list["namespace_id"];
+        $universal_id = $identifier_list["universal_id"];
+
+        $domain = new CDomain();
+        if ($namespace_id) {
+          $domain->tag = $namespace_id;
+        }
+        if ($universal_id) {
+          $domain->OID = $universal_id;
+        }
+
+        if ($domain->tag || $domain->OID) {
+          $domain->loadMatchingObject();
+
+          $where[] = $ds->prepare("id_pat_list.tag = %", $domain->tag);
+        }
       }
     }
 
@@ -135,7 +184,9 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
     $patients = array();
     if (!empty($where)) {
+      CSQLDataSource::$trace = true;
       $patients = $patient->loadList($where, $order, $quantity_limited_request, null, $ljoin);
+      CSQLDataSource::$trace = false;
     }
 
     return $exchange_ihe->setPDRAA($ack, $patients, null, $domains);
@@ -190,13 +241,10 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
   function getRequestPatientIdentifierList(DOMNode $node) {
     $QPD = array(
       "id_number"            => $this->getDemographicsFields($node, "CPatient", "3.1"),
-      /*"namespace_id"         => $this->getDemographicsFields($node, "CPatient", "3.1"),
-      "universal_id"         => $this->getDemographicsFields($node, "CPatient", "3.1"),
-      "universal_id_type"    => $this->getDemographicsFields($node, "CPatient", "3.1"),
-      "identifier_type_code" => $this->getDemographicsFields($node, "CPatient", "3.1"),*/
+      "namespace_id"         => $this->getDemographicsFields($node, "CPatient", "3.4.1"),
+      "universal_id"         => $this->getDemographicsFields($node, "CPatient", "3.4.2"),
+      "universal_id_type"    => $this->getDemographicsFields($node, "CPatient", "3.4.3"),
     );
-
-    CMbArray::removeValue("", $QPD);
 
     return $QPD;
   }

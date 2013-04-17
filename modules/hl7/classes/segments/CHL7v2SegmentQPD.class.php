@@ -86,6 +86,12 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
         CMbArray::get($domains_returned, "domains_returned_universal_id"),
         CMbArray::get($domains_returned, "domains_returned_universal_id_type")
       );
+      $QPD8_copy = $QPD8;
+
+      CMbArray::removeValue(null, $QPD8_copy);
+      if (count($QPD8_copy) == 0) {
+        $data[] = null;
+      }
 
       if (empty($QPD8)) {
         $data[] = null;
