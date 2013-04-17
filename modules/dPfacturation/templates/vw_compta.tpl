@@ -57,7 +57,7 @@ function viewActes(){
   return false;
 }
 
-printFacture = function(edit_justificatif, edit_bvr, facture_class) {
+function printFacture(type_pdf, facture_class) {
   var oForm = document.printFrm;
   if(!oForm.chir.value) {
     alert('Vous devez choisir un praticien');
@@ -65,41 +65,29 @@ printFacture = function(edit_justificatif, edit_bvr, facture_class) {
   }
   var url = new Url('facturation', 'ajax_edit_bvr');
   url.addParam('facture_class'   , facture_class);
-  url.addParam('edition_justificatif', edit_justificatif);
-  url.addParam('edition_bvr'     , edit_bvr);
-  url.addParam('_date_min'       , oForm._date_min.value);
-  url.addParam('_date_max'       , oForm._date_max.value);
+  url.addParam('type_pdf'        , type_pdf);
+  url.addElement(oForm._date_min);
+  url.addElement(oForm._date_max);
   url.addParam('prat_id'         , oForm.chir.value);
   url.addParam('suppressHeaders' , '1');
   url.popup(1000, 600);
 }
-checkBills = function(){
+
+function checkBills(facture_class){
   var oForm = getForm("printFrm");
   var url = new Url('tarmed', 'ajax_send_file_http');
   url.addParam('prat_id'  , oForm.chir.value);
   url.addParam('date_min' , $V(oForm._date_min));
   url.addParam('date_max' , $V(oForm._date_max));
+  url.addParam('facture_class'  , facture_class);
   url.addParam('check'    ,true);
+  url.addParam('suppressHeaders', '1');
+  url.popup(1000, 600);
 //  url.addParam('user'     , $V(oForm.user));
 //  url.addParam('pwd'      , $V(oForm.pwd));
-  url.requestUpdate("response_send_bill", sendBill);
-  
-}
-sendBill = function() {
-  if (!$('not_create')) {
-    var oForm = getForm("printFrm");
-    var url = new Url('tarmed', 'ajax_send_file_http');
-    url.addParam('prat_id', oForm.chir.value);
-    url.addParam('date_min', $V(oForm._date_min));
-    url.addParam('date_max', $V(oForm._date_max));
-//    url.addParam('user', $V(oForm.user));
-//    url.addParam('pwd', $V(oForm.pwd));
-    url.addParam('suppressHeaders', '1');
-    url.popup(1000, 600);
-  }
 }
 
-viewTotaux = function() {
+function viewTotaux() {
   var oForm = getForm("printFrm");
   var url = new Url("facturation", "ajax_total_cotation");
   url.addParam("chir_id", $V(oForm.chir));
@@ -242,8 +230,8 @@ viewTotaux = function() {
           </tr>
           <tr>
             <td class="button" colspan="2">
-              <button type="button" class="pdf" onclick="printFacture(0, 1, 'CFactureCabinet');">Impression des BVR</button>
-              <button type="button" class="pdf" onclick="printFacture(1, 0, 'CFactureCabinet');">Justificatifs de remboursement</button>
+              <button type="button" class="pdf" onclick="printFacture('bvr', 'CFactureCabinet');">Impression des BVR</button>
+              <button type="button" class="pdf" onclick="printFacture('justificatif', 'CFactureCabinet');">Justificatifs de remboursement</button>
             </td>
             <td colspan="2" rowspan="2" class="text">
               <div class="small-info" id="response_send_bill">
@@ -258,7 +246,7 @@ viewTotaux = function() {
               Mot de passe: <input name="pwd"  type="password" value="" /><br/>
               <button type="button" class="send" onclick="checkBills();">Envoi à la Caisse des Medecins</button>
               *}}
-              <button type="button" class="send" onclick="checkBills();">Générer dossier pour la Caisse des medecins</button>
+              <button type="button" class="send" onclick="checkBills('CFactureCabinet');">Générer dossier pour la Caisse des medecins</button>
             </td>
           </tr>
         {{/if}}
@@ -298,13 +286,18 @@ viewTotaux = function() {
           </tr>
           <tr>
             <td class="button" colspan="2">
-              <button type="button" class="pdf" onclick="printFacture(0, 1, 'CFactureEtablissement');">Impression des BVR</button>
-              <button type="button" class="pdf" onclick="printFacture(1, 0, 'CFactureEtablissement');">Justificatifs de remboursement</button>
+              <button type="button" class="pdf" onclick="printFacture('bvr', 'CFactureEtablissement');">Impression des BVR</button>
+              <button type="button" class="pdf" onclick="printFacture('justificatif', 'CFactureEtablissement');">Justificatifs de remboursement</button>
             </td>
-            <td colspan="2" class="text">
+            <td rowspan="2" colspan="2" class="text">
               <div class="small-info" id="response_send_bill">
                 Envoi des factures à la Caisse des Médecins et stockage au format pdf.
               </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="button" colspan="2">
+              <button type="button" class="send" onclick="checkBills('CFactureEtablissement');">Générer dossier pour la Caisse des medecins</button>
             </td>
           </tr>
         {{/if}}

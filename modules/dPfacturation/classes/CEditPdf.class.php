@@ -114,7 +114,9 @@ class CEditPdf{
       $this->facture->loadRefAssurance();
       $this->facture->loadRefsObjects();
       $this->facture->loadRefsReglements();
-      $this->facture->loadRefsRelances();
+      if ($nom == "relance") {
+        $this->facture->loadRefsRelances();
+      }
   
       $this->function_prat = $this->praticien->loadRefFunction();
       $this->group = $this->function_prat->loadRefGroup();
