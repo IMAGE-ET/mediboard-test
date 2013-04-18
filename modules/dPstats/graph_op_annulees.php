@@ -34,32 +34,41 @@ function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
   $series = array();
   $total = 0;
 
+  // Gestion du hors plage
+  if($hors_plage) {
+    $where_hors_plage = "AND (plagesop.date BETWEEN '$debut' AND '$fin'
+                              OR operations.date BETWEEN '$debut' AND '$fin')";
+  }
+  else {
+    $where_hors_plage = "AND plagesop.date BETWEEN '$debut' AND '$fin'
+                         AND operations.date IS NULL
+                         AND operations.plageop_id IS NOT NULL";
+  }
+
   foreach ($salles as $salle) {
     $serie = array(
       'label' => utf8_encode($bloc_id ? $salle->nom : $salle->_view),
       'data' => array()
     );
     $query = "SELECT COUNT(DISTINCT(operations.operation_id)) AS total,
-                DATE_FORMAT(plagesop.date, '%m/%Y') AS mois,
-                DATE_FORMAT(plagesop.date, '%Y-%m-01') AS orderitem
+                DATE_FORMAT(COALESCE(operations.date, plagesop.date), '%m/%Y') AS mois,
+                DATE_FORMAT(COALESCE(operations.date, plagesop.date), '%Y-%m-01') AS orderitem
               FROM operations
               LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
-              INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
+              LEFT JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
               LEFT JOIN plagesop ON plagesop.plageop_id = operations.plageop_id
               LEFT JOIN user_log ON user_log.object_id = operations.operation_id
                 AND user_log.object_class = 'COperation'
-              WHERE sejour.group_id = '".CGroups::loadCurrent()->_id."'
-                AND plagesop.date BETWEEN '$debut' AND '$fin'
+              WHERE operations.annulee = '1'
+                $where_hors_plage
+                AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
                 AND user_log.type = 'store'
                 AND DATE(user_log.date) = plagesop.date
-                AND user_log.fields LIKE '%annulee%'
-                AND operations.annulee = '1'";
+                AND user_log.fields LIKE '%annulee%'";
   
-    if ($type_hospi) {
-      $query .= "\nAND sejour.type = '$type_hospi'";
-    }
-    if ($prat_id)  $query .= "\nAND operations.chir_id = '$prat_id'";
-    if ($codeCCAM) $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+    if ($type_hospi) $query .= "\nAND sejour.type = '$type_hospi'";
+    if ($prat_id)    $query .= "\nAND operations.chir_id = '$prat_id'";
+    if ($codeCCAM)   $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
 
     $query .= "\nAND sallesbloc.salle_id = '$salle->_id'";
   
@@ -68,51 +77,10 @@ function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
 
     $result = $prat->_spec->ds->loadlist($query);
     
-    if ($hors_plage) {
-      $query_hors_plage = "SELECT COUNT(DISTINCT(operations.operation_id)) AS total,
-                DATE_FORMAT(operations.date, '%m/%Y') AS mois,
-                DATE_FORMAT(operations.date, '%Y-%m-01') AS orderitem
-              FROM operations
-              LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
-              INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
-              LEFT JOIN user_log ON user_log.object_id = operations.operation_id
-                AND user_log.object_class = 'COperation'
-              WHERE sejour.group_id = '".CGroups::loadCurrent()->_id."'
-                AND operations.plageop_id IS NULL
-                AND operations.date IS NOT NULL
-                AND operations.date BETWEEN '$debut' AND '$fin'
-                AND user_log.type = 'store'
-                AND DATE(user_log.date) = operations.date
-                AND user_log.fields LIKE '%annulee%'
-                AND operations.annulee = '1'";
-  
-      if ($type_hospi) {
-        $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
-      }
-      if ($prat_id)  $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
-      if ($codeCCAM) $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-  
-      $query_hors_plage .= "\nAND sallesbloc.salle_id = '$salle->_id'";
-    
-      $query_hors_plage .= "GROUP BY mois
-                 ORDER BY orderitem";
-  
-      $result_hors_plage = $prat->_spec->ds->loadlist($query_hors_plage);
-    }
-    
     foreach ($ticks as $i => $tick) {
       $f = true;
       foreach ($result as $r) {
         if ($tick[1] == $r["mois"]) {
-          if ($hors_plage) {
-            foreach ($result_hors_plage as &$_r_h) {
-              if ($tick[1] == $_r_h["mois"]) {
-                $r["total"] += $_r_h["total"];
-                unset($_r_h);
-                break;
-              }
-            }
-          }
           $serie["data"][] = array($i, $r["total"]);
           $serie_total["data"][$i][1] += $r["total"];
           $total += $r["total"];

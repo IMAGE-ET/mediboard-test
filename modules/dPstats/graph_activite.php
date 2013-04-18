@@ -17,8 +17,6 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
   
   $discipline = new CDiscipline;
   $discipline->load($discipline_id);
-
-  $group_id = CGroups::loadCurrent()->_id;
   
   $salle = new CSalle;
   $salle->load($salle_id);
@@ -68,7 +66,7 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
       LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
       WHERE operations.annulee = '0'
         $where_hors_plage
-        AND sejour.group_id = '$group_id'";
+        AND sejour.group_id = '".CGroups::loadCurrent()->_id."'";
         
     if ($type_hospi)
       $query .= "\nAND sejour.type = '$type_hospi'";

@@ -26,24 +26,35 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
     $ticks[] = array(count($ticks), CMbDT::transform("+0 DAY", $i, "%m/%Y"));
   }
 
+  // Gestion du hors plage
+  if($hors_plage) {
+    $where_hors_plage = "AND (plagesop.date BETWEEN '$debut' AND '$fin'
+                              OR operations.date BETWEEN '$debut' AND '$fin')";
+  }
+  else {
+    $where_hors_plage = "AND plagesop.date BETWEEN '$debut' AND '$fin'
+                         AND operations.date IS NULL
+                         AND operations.plageop_id IS NOT NULL";
+  }
+
   //$salles = CSalle::getSallesStats($salle_id, $bloc_id);
   $series = array();
   $serie = array('data' => array());
-
-  // @TODO : Ajouter les intervs hors plage
+  
   $query = "SELECT COUNT(operations.operation_id) AS total,
-    COUNT(DISTINCT(plagesop.date)) AS nb_days,
-    COUNT(DISTINCT(sallesbloc.salle_id)) AS nb_salles,
-    DATE_FORMAT(plagesop.date, '%m/%Y') AS mois,
-    DATE_FORMAT(plagesop.date, '%Y-%m-01') AS orderitem
+      COUNT(DISTINCT(COALESCE(operations.date, plagesop.date))) AS nb_days,
+      COUNT(DISTINCT(sallesbloc.salle_id)) AS nb_salles,
+      DATE_FORMAT(COALESCE(operations.date, plagesop.date), '%m/%Y') AS mois,
+      DATE_FORMAT(COALESCE(operations.date, plagesop.date), '%Y-%m-01') AS orderitem
     FROM operations
-    INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
+    LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
+    LEFT JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
-    WHERE 
-      sallesbloc.stats = '1' AND 
-      plagesop.date BETWEEN '$debut' AND '$fin' AND 
-      operations.annulee = '0'";
+    WHERE operations.annulee = '0'
+      $where_hors_plage 
+      AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
+      AND sallesbloc.stats = '1'";
   
   if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
   if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
@@ -59,53 +70,12 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
   $query .= "\nGROUP BY mois ORDER BY orderitem";
   
   $result = $prat->_spec->ds->loadlist($query);
-  
-  if ($hors_plage) {
-    $query_hors_plage = "SELECT COUNT(operations.operation_id) AS total,
-      COUNT(DISTINCT(operations.date)) AS nb_days,
-      COUNT(DISTINCT(sallesbloc.salle_id)) AS nb_salles,
-      DATE_FORMAT(operations.date, '%m/%Y') AS mois,
-      DATE_FORMAT(operations.date, '%Y-%m-01') AS orderitem
-      FROM operations
-      INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
-      LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
-      WHERE
-        operations.date IS NOT NULL AND
-        operations.plageop_id IS NULL AND
-        sallesbloc.stats = '1' AND 
-        operations.date BETWEEN '$debut' AND '$fin' AND 
-        operations.annulee = '0'";
-    
-    if ($prat_id)       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
-    if ($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-    if ($codeCCAM)      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-  
-    if ($salle_id) {
-      $query_hors_plage .= "\nAND sallesbloc.salle_id = '$salle_id'";
-    }
-    elseif($bloc_id) {
-      $query_hors_plage .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
-    }
-    $query_hors_plage .= "\nGROUP BY mois ORDER BY orderitem";
-    $result_hors_plage = $prat->_spec->ds->loadlist($query_hors_plage);
-
-  }
 
   foreach ($ticks as $i => $tick) {
     $f = true;
     foreach ($result as $r) {
       if ($tick[1] == $r["mois"]) {
         $res = $r["total"]/($r["nb_days"]*$r["nb_salles"]);
-        if ($hors_plage) {
-          foreach ($result_hors_plage as &$_r_h) {
-            if ($tick[1] == $_r_h["mois"]) {
-              $res_hors_plage = $_r_h["total"]/($_r_h["nb_days"]*$_r_h["nb_salles"]);
-              $res = ($res * $r["total"] + $res_hors_plage * $_r_h["total"]) / ($r["total"] + $_r_h["total"]);
-              unset($r_h);
-              break;
-            }
-          }
-        }
         //$nbjours = CMbDT::workDaysInMonth($r["orderitem"]);
         //$serie['data'][] = array($i, $r["total"]/($nbjours*count($salles)));
         $serie['data'][] = array($i, $res);
