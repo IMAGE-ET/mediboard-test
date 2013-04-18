@@ -14,7 +14,7 @@
  */
 class CPasswordKeeper extends CMbObject {
   /** Sample string */
-  const SAMPLE = "toto";
+  const SAMPLE = "Ceci est un chaîne témoin servant à vérifier la phrase de passe saisie.";
 
   /** @var  Password keeper ID */
   public $password_keeper_id;
