@@ -137,8 +137,8 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   );
   $query = "SELECT COUNT(*) AS nbInterv,
     SUM(TIME_TO_SEC(operations.sortie_salle)-TIME_TO_SEC(operations.entree_salle)) AS duree_total,
-    DATE_FORMAT(plagesop.date, '$date_format') AS $type_duree_fr,
-    DATE_FORMAT(plagesop.date, '$order_key') AS orderitem
+    DATE_FORMAT(COALESCE(operations.date, plagesop.date), '$date_format') AS $type_duree_fr,
+    DATE_FORMAT(COALESCE(operations.date, plagesop.date), '$order_key') AS orderitem
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
@@ -188,8 +188,8 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   );
   $query = "SELECT COUNT(*) AS nbInterv,
     SUM(TIME_TO_SEC(operations.sortie_reveil_possible)-TIME_TO_SEC(operations.entree_reveil)) AS duree_total,
-    DATE_FORMAT(plagesop.date, '$date_format') AS $type_duree_fr,
-    DATE_FORMAT(plagesop.date, '$order_key') AS orderitem
+    DATE_FORMAT(COALESCE(operations.date, plagesop.date), '$date_format') AS $type_duree_fr,
+    DATE_FORMAT(COALESCE(operations.date, plagesop.date), '$order_key') AS orderitem
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
