@@ -336,9 +336,14 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
     }
 
     // Patient Adress
+    if ($PID_11_1 = $this->getDemographicsFields($node, "CPatient", "11.1")) {
+      $PID = array_merge($PID, array("adresse" => $PID_11_1));
+    }
+
     if ($PID_11_3 = $this->getDemographicsFields($node, "CPatient", "11.3")) {
       $PID = array_merge($PID, array("ville" => $PID_11_3));
     }
+
     if ($PID_11_5 = $this->getDemographicsFields($node, "CPatient", "11.5")) {
       $PID = array_merge($PID, array("cp" => $PID_11_5));
     }
