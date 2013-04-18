@@ -38,6 +38,17 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
   $salles = CSalle::getSallesStats($salle_id, $bloc_id);
   $ds = $salle->_spec->ds;
   
+  // Gestion du hors plage
+  if($hors_plage) {
+    $where_hors_plage = "AND (plagesop.date BETWEEN '$debut' AND '$fin'
+                              OR operations.date BETWEEN '$debut' AND '$fin')";
+  }
+  else {
+    $where_hors_plage = "AND plagesop.date BETWEEN '$debut' AND '$fin'
+                         AND operations.date IS NULL
+                         AND operations.plageop_id IS NOT NULL";
+  }
+  
   $total = 0;
   $series = array();
   foreach ($salles as $salle) {
@@ -47,90 +58,38 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
     );
     
     $query = "SELECT COUNT(operations.operation_id) AS total,
-      DATE_FORMAT(plagesop.date, '%m/%Y') AS mois,
-      DATE_FORMAT(plagesop.date, '%Y%m') AS orderitem,
+      DATE_FORMAT(COALESCE(operations.date, plagesop.date), '%m/%Y') AS mois,
+      DATE_FORMAT(COALESCE(operations.date, plagesop.date), '%Y%m') AS orderitem,
       sallesbloc.nom AS nom
       FROM operations
       LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
-      INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
-      INNER JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
-      INNER JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
-      WHERE
-        sejour.group_id = '$group_id' AND
-        plagesop.date BETWEEN '$debut' AND '$fin' AND 
-        (operations.annulee = '0' OR operations.annulee IS NULL)";
+      LEFT JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
+      LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
+      LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
+      WHERE operations.annulee = '0'
+        $where_hors_plage
+        AND sejour.group_id = '$group_id'";
         
-    if ($type_hospi) {
+    if ($type_hospi)
       $query .= "\nAND sejour.type = '$type_hospi'";
-    }
-    if ($prat_id && !$prat->isFromType(array("Anesthésiste"))) {
+    if ($prat_id && !$prat->isFromType(array("Anesthésiste")))
       $query .= "\nAND operations.chir_id = '$prat_id'";
-    }
-    if ($prat_id && $prat->isFromType(array("Anesthésiste"))) {
+    if ($prat_id && $prat->isFromType(array("Anesthésiste")))
       $query .= "\nAND (operations.anesth_id = '$prat_id' OR 
                        (plagesop.anesth_id = '$prat_id' AND (operations.anesth_id = '0' OR operations.anesth_id IS NULL)))";
-    }
-    if ($discipline_id) {
+    if ($discipline_id)
       $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-    }
-    if ($codes_ccam) {
+    if ($codes_ccam)
       $query .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
-    }
     $query .= "\nAND sallesbloc.salle_id = '$salle->_id'";
     $query .= "\nGROUP BY mois ORDER BY orderitem";
     
     $result = $ds->loadlist($query);
     
-    if ($hors_plage) {
-      $query_hors_plage = "SELECT COUNT(operations.operation_id) AS total,
-      DATE_FORMAT(operations.date, '%m/%Y') AS mois,
-      DATE_FORMAT(operations.date, '%Y%m') AS orderitem,
-      sallesbloc.nom AS nom
-      FROM operations
-      LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
-      INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
-      INNER JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
-      WHERE
-        sejour.group_id = '".CGroups::loadCurrent()->_id."' AND
-        operations.plageop_id IS NULL AND
-        operations.date IS NOT NULL AND
-        operations.date BETWEEN '$debut' AND '$fin' AND 
-        (operations.annulee = '0' OR operations.annulee IS NULL)";
-        
-      if ($type_hospi) {
-        $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
-      }
-      if ($prat_id && !$prat->isFromType(array("Anesthésiste"))) {
-        $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
-      }
-      if ($prat_id && $prat->isFromType(array("Anesthésiste"))) {
-        $query_hors_plage .= "\nAND operations.anesth_id = '$prat_id'";
-      }
-      if ($discipline_id) {
-        $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-      }
-      if ($codes_ccam) {
-        $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
-      }
-      $query_hors_plage .= "\nAND sallesbloc.salle_id = '$salle->_id'";
-      $query_hors_plage .= "\nGROUP BY mois ORDER BY orderitem";
-      
-      $result_hors_plage = $ds->loadlist($query_hors_plage);
-    }
-    
     foreach ($ticks as $i => $tick) {
       $f = true;
       foreach ($result as $r) {
         if ($tick[1] == $r["mois"]) {
-          if ($hors_plage) {
-            foreach ($result_hors_plage as &$_r_h) {
-              if ($tick[1] == $_r_h["mois"]) {
-                $r["total"] += $_r_h["total"];
-                unset($_r_h); break;
-              }
-            }
-          }
-
           $serie["data"][] = array($i, $r["total"]);
           $serie_total["data"][$i][1] += $r["total"];
           $total += $r["total"];
