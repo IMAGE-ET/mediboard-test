@@ -92,9 +92,7 @@ $sejour->_lit       = $admit_bed;
 $sejour->_praticien_attending  = $admit_attending_doctor; // Praticien
 $sejour->_praticien_referring  = $admit_referring_doctor; // Nom du médecin adressant
 
-
 $sejour->_praticien_admitting  = $admit_admitting_doctor; // Médecin traitant
-
 $sejour->_praticien_consulting = $admit_consulting_doctor;
 
 $receiver_ihe           = new CReceiverIHE();
@@ -112,10 +110,10 @@ if (
     $admit_service ||
     $admit_room ||
     $admit_bed ||
-    //$admit_attending_doctor || // not used
-    $admit_referring_doctor || // praticien_id
+    $admit_attending_doctor || // praticien_id
+    $admit_referring_doctor || // adresse_par_prat_id
     //$admit_consulting_doctor || // not used
-    $admit_admitting_doctor // adresse_par_prat_id
+    //$admit_admitting_doctor // not used
 ) {
   $transaction = "ITI22";
   $code = "ZV1";
