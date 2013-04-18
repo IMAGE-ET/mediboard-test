@@ -46,12 +46,13 @@ class CHL7v2SegmentQAK extends CHL7v2Segment {
     $data[] = isset($QPD_request[1][0]) ? $QPD_request[1][0] : "PDQPDC_$event->code";
 
     // QAK-2: Query Response Status (ID) (optional)
-    if ($objects == null) {
-      $data[] = "AE";
-    }
-    elseif (count($objects) == 0) {
+    if (count($objects) == 0) {
       $data[] = "NF";
     }
+    elseif ($objects == null) { // FIXME
+      $data[] = "AE";
+    }
+
     else {
       $data[] = "OK";
     }
