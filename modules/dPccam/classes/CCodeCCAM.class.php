@@ -350,8 +350,12 @@ class CCodeCCAM {
     // recherche de la dernière date d'effet
     $query = "SELECT MAX(DATEEFFET) AS LASTDATE
               FROM modificateuracte
-              WHERE CODEACTE = %1
-              GROUP BY CODEACTE";
+              LEFT JOIN modificateurforfait
+                ON modificateuracte.MODIFICATEUR = modificateurforfait.CODE
+                AND modificateurforfait.DATEFIN = 00000000
+              WHERE modificateuracte.CODEACTE = %1
+                AND modificateurforfait.CODE IS NOT NULL
+              GROUP BY modificateuracte.CODEACTE";
     $query = $ds->prepare($query, $this->code, $activite->numero);
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
