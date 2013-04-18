@@ -33,5 +33,4 @@ if (!$source->_id) {
 //smarty
 $smarty = new CSmartyDP();
 $smarty->assign("source", $source);
-$smarty->assign("isadmin", $user->isAdmin());
 $smarty->display("inc_vw_edit_sourcePOP.tpl");

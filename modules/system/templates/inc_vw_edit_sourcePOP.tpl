@@ -54,7 +54,7 @@
       {{/if}}
       <td>{{mb_field object=$source field="password" placeholder=$placeholder}}</td>
     </tr>
-    <tr {{if !$isadmin}}style="display:none;"{{/if}}>
+    <tr {{if !$can->admin}}style="display:none;"{{/if}}>
       <th>{{mb_label object=$source field="timeout"}}</th>
       <td>{{mb_field object=$source field="timeout"}}</td>
     </tr>
