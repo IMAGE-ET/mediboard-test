@@ -433,24 +433,24 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
       $where_returns["sejour.service_id"] = $ds->prepareIn($ids);
     }
 
-    // Médecin adressant
-    if ($attending_doctor_name = $this->getDemographicsFields($node, "CSejour", "8.2.1")) {
-      $medecin = new CMedecin();
-      $attending_doctor_name = preg_replace("/\*+/", "%", $attending_doctor_name);
-      $where["nom"]          = $ds->prepare("LIKE %", $attending_doctor_name);
-      $ids = $medecin->loadIds($where);
-
-      $where_returns["sejour.adresse_par_prat_id"] = $ds->prepareIn($ids);
-    }
-
     // Praticien
-    if ($admitting_doctor_name = $this->getDemographicsFields($node, "CSejour", "17.2.1")) {
+    if ($attending_doctor_name = $this->getDemographicsFields($node, "CSejour", "7.2.1")) {
       $user = new CUser();
-      $admitting_doctor_name   = preg_replace("/\*+/", "%", $admitting_doctor_name);
-      $where["user_last_name"] = $ds->prepare("LIKE %", $admitting_doctor_name);
+      $attending_doctor_name   = preg_replace("/\*+/", "%", $attending_doctor_name);
+      $where["user_last_name"] = $ds->prepare("LIKE %", $attending_doctor_name);
       $ids = $user->loadIds($where);
 
       $where_returns["sejour.praticien_id"] = $ds->prepareIn($ids);
+    }
+
+    // Médecin adressant
+    if ($referring_doctor_name = $this->getDemographicsFields($node, "CSejour", "8.2.1")) {
+      $medecin = new CMedecin();
+      $referring_doctor_name = preg_replace("/\*+/", "%", $referring_doctor_name);
+      $where["nom"]          = $ds->prepare("LIKE %", $referring_doctor_name);
+      $ids = $medecin->loadIds($where);
+
+      $where_returns["sejour.adresse_par_prat_id"] = $ds->prepareIn($ids);
     }
 
     return $where_returns;
