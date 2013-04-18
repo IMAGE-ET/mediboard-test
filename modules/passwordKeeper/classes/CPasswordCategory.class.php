@@ -36,7 +36,7 @@ class CPasswordCategory extends CMbObject {
 
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["passwords"] = "CPasswordEntry password_id";
+    $backProps["passwords"] = "CPasswordEntry category_id";
 
     return $backProps;
   }
