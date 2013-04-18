@@ -173,7 +173,7 @@ Main.add(function() {
                     <div class="event-container">
                     {{foreach from=$_events item=_event}}
                       {{if $_event->hour == $_hour}}
-                      
+
                         {{assign var=draggable value=""}}
                         {{if ($_event->draggable && ($planning->dragndrop || $app->user_prefs.planning_dragndrop))}}
                           {{assign var=draggable value=draggable}}
@@ -215,8 +215,9 @@ Main.add(function() {
                               {{/foreach}}
                             </div>
                             {{/if}}
-                            
-                          {{if ($_event->draggable && $planning->dragndrop) && ($app->user_prefs.planning_dragndrop || $app->user_prefs.planning_resize)}}
+
+                          {{if (($app->user_prefs.planning_dragndrop || $planning->dragndrop ) && $_event->draggable) ||
+                          ($app->user_prefs.planning_resize && $_event->resizable)}}
                             <div class="time-preview" style="display: none;"></div>
                           {{/if}}
                           
