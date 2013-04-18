@@ -251,6 +251,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
     }
 
     $quantity_limited_request = $this->getQuantityLimitedRequest($data["RCP"]);
+    $limit_quantity = !!$quantity_limited_request;
     $quantity_limited_request = $quantity_limited_request ? $quantity_limited_request : 100;
 
     $pointer = null;
@@ -271,6 +272,14 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
       if (!empty($where)) {
         $objects = $patient->loadList($where, $order, $quantity_limited_request, "patients.patient_id", $ljoin);
+
+        // If we have no next match, we won't have to add a DSC segment
+        if ($limit_quantity) {
+          $next_one = $patient->loadList($where, $order, "$quantity_limited_request,1", "patients.patient_id", $ljoin);
+          if (count($next_one) == 0) {
+            $limit_quantity = false;
+          }
+        }
       }
     }
     else {
@@ -286,7 +295,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
     // Save information indicating that we are doing an incremental query
     $last = end($objects);
-    if ($last && $data["RCP"] && $this->queryTextNode("RCP.2/CQ.2/CE.1", $data["RCP"])) {
+    if ($last && $limit_quantity) {
       $last->_incremental_query = true;
     }
 
