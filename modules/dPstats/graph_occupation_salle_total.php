@@ -49,6 +49,17 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   $seriesTot = array();
   $totalMoy = 0;
   $totalTot = 0;
+
+  // Gestion du hors plage
+  if($hors_plage) {
+    $where_hors_plage = "AND (plagesop.date BETWEEN '$debut' AND '$fin'
+                              OR operations.date BETWEEN '$debut' AND '$fin')";
+  }
+  else {
+    $where_hors_plage = "AND plagesop.date BETWEEN '$debut' AND '$fin'
+                         AND operations.date IS NULL
+                         AND operations.plageop_id IS NOT NULL";
+  }
   
   // First serie : Interv
   $serieMoy = $serieTot = array(
@@ -64,9 +75,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
     WHERE operations.annulee = '0'
-      AND plagesop.date BETWEEN '$debut' AND '$fin'
-      AND operations.date IS NULL
-      AND operations.plageop_id IS NOT NULL
+      $where_hors_plage
       AND operations.debut_op IS NOT NULL
       AND operations.fin_op IS NOT NULL
       AND operations.debut_op < operations.fin_op
@@ -80,50 +89,12 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   
   $query .=  "\nGROUP BY $type_duree_fr ORDER BY orderitem";
   $result = $ds->loadList($query);
-
-  if ($hors_plage) {
-    $query_hors_plage = "SELECT COUNT(*) AS nbInterv,
-    SUM(TIME_TO_SEC(operations.fin_op)-TIME_TO_SEC(operations.debut_op)) AS duree_total,
-    DATE_FORMAT(operations.date, '$date_format') AS $type_duree_fr,
-    DATE_FORMAT(operations.date, '$order_key') AS orderitem
-    FROM operations
-    LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
-    LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
-    WHERE operations.annulee = '0'
-      AND plageop_id IS NULL
-      AND operations.date IS NOT NULL
-      AND operations.date BETWEEN '$debut' AND '$fin'
-      AND operations.debut_op IS NOT NULL
-      AND operations.fin_op IS NOT NULL
-      AND operations.debut_op < operations.fin_op
-      AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
-      AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
-    
-    if ($type_hospi)    $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
-    if ($prat_id)       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'"; 
-    if ($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'"; 
-    if ($codeCCAM)      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-  
-    $query_hors_plage .=  "\nGROUP BY $type_duree_fr ORDER BY orderitem";
-    
-    $result_hors_plage = $ds->loadList($query_hors_plage);
-  }
   
   foreach ($ticks as $i => $tick) {
     $f = true;
     foreach ($result as $j=>$r) {
       $nb_interv = $r["nbInterv"];
       if ($tick[1] == $r["$type_duree_fr"]) {
-        if ($hors_plage) {
-          foreach ($result_hors_plage as &$r_h) {
-            if ($tick[1] == $r_h["$type_duree_fr"]) {
-              $r["duree_total"] = $r_h["duree_total"] + $r["duree_total"];
-              $nb_interv += $r_h["nbInterv"];
-              unset($r_h);
-              break;
-            }
-          }
-        }
         $serieMoy['data'][] = array($i, $r["duree_total"]/(60*$nb_interv));
         $totalMoy += $r["duree_total"]/(60*$nb_interv);
         $serieTot['data'][] = array($i, $r["duree_total"]/(60*60));
@@ -154,9 +125,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
     WHERE operations.annulee = '0'
-      AND plagesop.date BETWEEN '$debut' AND '$fin'
-      AND operations.date IS NULL
-      AND operations.plageop_id IS NOT NULL
+      $where_hors_plage
       AND operations.entree_salle IS NOT NULL
       AND operations.sortie_salle IS NOT NULL
       AND operations.entree_salle < operations.sortie_salle
@@ -170,49 +139,12 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   
   $query .=  "\nGROUP BY $type_duree_fr ORDER BY orderitem";
   $result = $ds->loadList($query);
-
-  if ($hors_plage) {
-    $query_hors_plage = "SELECT COUNT(*) AS nbInterv,
-    SUM(TIME_TO_SEC(operations.sortie_salle)-TIME_TO_SEC(operations.entree_salle)) AS duree_total,
-    DATE_FORMAT(operations.date, '$date_format') AS $type_duree_fr,
-    DATE_FORMAT(operations.date, '$order_key') AS orderitem
-    FROM operations
-    LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
-    LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
-    WHERE operations.annulee = '0'
-    AND operations.date IS NOT NULL
-    AND operations.plageop_id IS NULL
-    AND operations.date BETWEEN '$debut' AND '$fin'
-    AND operations.entree_salle IS NOT NULL
-    AND operations.sortie_salle IS NOT NULL
-    AND operations.entree_salle < operations.sortie_salle
-    AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
-    AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
-    
-  if ($type_hospi)    $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
-  if ($prat_id)       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
-  if ($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if ($codeCCAM)      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-  
-  $query_hors_plage .=  "\nGROUP BY $type_duree_fr ORDER BY orderitem";
-  $result_hors_plage = $ds->loadList($query_hors_plage);
-  }
   
   foreach ($ticks as $i => $tick) {
     $f = true;
     foreach ($result as $j=>$r) {
       if ($tick[1] == $r["$type_duree_fr"]) {
         $nb_interv = $r["nbInterv"];
-        if ($hors_plage) {
-          foreach ($result_hors_plage as &$r_h) {
-            if ($tick[1] == $r_h["$type_duree_fr"]) {
-              $r["duree_total"] = $r_h["duree_total"] + $r["duree_total"];
-              $nb_interv += $r_h["nbInterv"];
-              unset($r_h);
-              break;
-            }
-          }
-        }
         $serieMoy['data'][] = array($i, $r["duree_total"]/(60*$nb_interv));
         $totalMoy += $r["duree_total"]/(60*$nb_interv);
         $serieTot['data'][] = array($i, $r["duree_total"]/(60*60));
@@ -243,9 +175,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
     WHERE operations.annulee = '0'
-      AND plagesop.date BETWEEN '$debut' AND '$fin'
-      AND operations.date IS NULL
-      AND operations.plageop_id IS NOT NULL
+      $where_hors_plage
       AND operations.entree_reveil IS NOT NULL
       AND operations.sortie_reveil_possible IS NOT NULL
       AND operations.entree_reveil < operations.sortie_reveil_possible
@@ -258,48 +188,12 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   
   $query .=  "\nGROUP BY $type_duree_fr ORDER BY orderitem";
   $result = $ds->loadList($query);
-  
-  if ($hors_plage) {
-    $query_hors_plage = "SELECT COUNT(*) AS nbInterv,
-      SUM(TIME_TO_SEC(operations.sortie_reveil_possible)-TIME_TO_SEC(operations.entree_reveil)) AS duree_total,
-      DATE_FORMAT(operations.date, '$date_format') AS $type_duree_fr,
-      DATE_FORMAT(operations.date, '$order_key') AS orderitem
-      FROM operations
-      LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
-      LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
-      WHERE operations.annulee = '0'
-        AND operations.date IS NOT NULL
-        AND operations.plageop_id IS NULL
-        AND operations.date BETWEEN '$debut' AND '$fin'
-        AND operations.entree_reveil IS NOT NULL
-        AND operations.sortie_reveil_possible IS NOT NULL
-        AND operations.entree_reveil < operations.sortie_reveil_possible
-        AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
-        AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
-      
-    if ($type_hospi)    $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
-    if ($prat_id)       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
-    if ($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-    $query_hors_plage .=  "\nGROUP BY $type_duree_fr ORDER BY orderitem";
-    $result_hors_plage = $ds->loadList($query_hors_plage);
-  }
 
   foreach ($ticks as $i => $tick) {
     $f = true;
     foreach ($result as $j=>$r) {
       if ($tick[1] == $r[$type_duree_fr]) {
         $nb_interv = $r["nbInterv"];
-        if ($hors_plage) {
-          foreach ($result_hors_plage as &$r_h) {
-            if ($tick[1] == $r[$type_duree_fr]) {
-              $r["duree_total"] = $r_h["duree_total"] + $r["duree_total"];
-              $nb_interv += $r_h["nbInterv"];
-              unset($r_h);
-              break;
-            }
-          }
-        }
-        
         $serieMoy['data'][] = array($i, $r["duree_total"]/(60*$nb_interv));
         $totalMoy += $r["duree_total"]/(60*$nb_interv);
         $serieTot['data'][] = array($i, $r["duree_total"]/(60*60));
