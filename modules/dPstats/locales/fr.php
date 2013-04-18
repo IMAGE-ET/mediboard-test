@@ -8,6 +8,7 @@ $locales['CTempsHospi.type.ssr'] = 'Soins de suite';
 $locales['CTempsOp'] = 'Temps Opératoire';
 $locales['CTempsPrepa'] = 'Temps de Préparation';
 $locales['mod-dPstats-tab-configure'] = 'Configuration';
+$locales['mod-dPstats-tab-print_tab_occupation_salle'] = 'Tableau d\'occupation de salle';
 $locales['mod-dPstats-tab-vw_bloc'] = 'Bloc opératoire';
 $locales['mod-dPstats-tab-vw_bloc2'] = 'Journée opératoire';
 $locales['mod-dPstats-tab-vw_cancelled_operations'] = 'Interventions annulées/ajoutées';

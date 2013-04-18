@@ -64,21 +64,21 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
     WHERE operations.annulee = '0'
-    AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
-    AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
+      AND plagesop.date BETWEEN '$debut' AND '$fin'
+      AND operations.date IS NULL
+      AND operations.plageop_id IS NOT NULL
+      AND operations.debut_op IS NOT NULL
+      AND operations.fin_op IS NOT NULL
+      AND operations.debut_op < operations.fin_op
+      AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
+      AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
     
   if ($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
-  if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
+  if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
   if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   
-  $query .=  "\nAND plagesop.date BETWEEN '$debut' AND '$fin'
-    AND operations.date IS NULL
-    AND operations.plageop_id IS NOT NULL
-    AND operations.debut_op IS NOT NULL
-    AND operations.fin_op IS NOT NULL
-    AND operations.debut_op < operations.fin_op
-    GROUP BY $type_duree_fr ORDER BY orderitem";
+  $query .=  "\nGROUP BY $type_duree_fr ORDER BY orderitem";
   $result = $ds->loadList($query);
 
   if ($hors_plage) {
@@ -90,21 +90,21 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
     WHERE operations.annulee = '0'
-    AND plageop_id IS NULL
-    AND operations.date IS NOT NULL
-    AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
-    AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
+      AND plageop_id IS NULL
+      AND operations.date IS NOT NULL
+      AND operations.date BETWEEN '$debut' AND '$fin'
+      AND operations.debut_op IS NOT NULL
+      AND operations.fin_op IS NOT NULL
+      AND operations.debut_op < operations.fin_op
+      AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
+      AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
     
     if ($type_hospi)    $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
     if ($prat_id)       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'"; 
     if ($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'"; 
     if ($codeCCAM)      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   
-    $query_hors_plage .=  "\nAND operations.date BETWEEN '$debut' AND '$fin'
-      AND operations.debut_op IS NOT NULL
-      AND operations.fin_op IS NOT NULL
-      AND operations.debut_op < operations.fin_op
-      GROUP BY $type_duree_fr ORDER BY orderitem";
+    $query_hors_plage .=  "\nGROUP BY $type_duree_fr ORDER BY orderitem";
     
     $result_hors_plage = $ds->loadList($query_hors_plage);
   }
@@ -154,21 +154,21 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
     WHERE operations.annulee = '0'
-    AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
-    AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
+      AND plagesop.date BETWEEN '$debut' AND '$fin'
+      AND operations.date IS NULL
+      AND operations.plageop_id IS NOT NULL
+      AND operations.entree_salle IS NOT NULL
+      AND operations.sortie_salle IS NOT NULL
+      AND operations.entree_salle < operations.sortie_salle
+      AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
+      AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
     
   if ($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
-  if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
+  if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
   if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   
-  $query .=  "\nAND plagesop.date BETWEEN '$debut' AND '$fin'
-    AND operations.date IS NULL
-    AND operations.plageop_id IS NOT NULL
-    AND operations.entree_salle IS NOT NULL
-    AND operations.sortie_salle IS NOT NULL
-    AND operations.entree_salle < operations.sortie_salle
-    GROUP BY $type_duree_fr ORDER BY orderitem";
+  $query .=  "\nGROUP BY $type_duree_fr ORDER BY orderitem";
   $result = $ds->loadList($query);
 
   if ($hors_plage) {
@@ -182,6 +182,10 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     WHERE operations.annulee = '0'
     AND operations.date IS NOT NULL
     AND operations.plageop_id IS NULL
+    AND operations.date BETWEEN '$debut' AND '$fin'
+    AND operations.entree_salle IS NOT NULL
+    AND operations.sortie_salle IS NOT NULL
+    AND operations.entree_salle < operations.sortie_salle
     AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
     
@@ -190,11 +194,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   if ($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   if ($codeCCAM)      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   
-  $query_hors_plage .=  "\nAND operations.date BETWEEN '$debut' AND '$fin'
-    AND operations.entree_salle IS NOT NULL
-    AND operations.sortie_salle IS NOT NULL
-    AND operations.entree_salle < operations.sortie_salle
-    GROUP BY $type_duree_fr ORDER BY orderitem";
+  $query_hors_plage .=  "\nGROUP BY $type_duree_fr ORDER BY orderitem";
   $result_hors_plage = $ds->loadList($query_hors_plage);
   }
   
@@ -243,20 +243,20 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
     WHERE operations.annulee = '0'
-    AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
-    AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
+      AND plagesop.date BETWEEN '$debut' AND '$fin'
+      AND operations.date IS NULL
+      AND operations.plageop_id IS NOT NULL
+      AND operations.entree_reveil IS NOT NULL
+      AND operations.sortie_reveil_possible IS NOT NULL
+      AND operations.entree_reveil < operations.sortie_reveil_possible
+      AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
+      AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
     
   if ($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
-  if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
+  if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
   if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   
-  $query .=  "\nAND plagesop.date BETWEEN '$debut' AND '$fin'
-    AND operations.date IS NULL
-    AND operations.plageop_id IS NOT NULL
-    AND operations.entree_reveil IS NOT NULL
-    AND operations.sortie_reveil_possible IS NOT NULL
-    AND operations.entree_reveil < operations.sortie_reveil_possible
-    GROUP BY $type_duree_fr ORDER BY orderitem";
+  $query .=  "\nGROUP BY $type_duree_fr ORDER BY orderitem";
   $result = $ds->loadList($query);
   
   if ($hors_plage) {
@@ -268,20 +268,19 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
       LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
       LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
       WHERE operations.annulee = '0'
-      AND operations.date IS NOT NULL
-      AND operations.plageop_id IS NULL
-      AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
-      AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
+        AND operations.date IS NOT NULL
+        AND operations.plageop_id IS NULL
+        AND operations.date BETWEEN '$debut' AND '$fin'
+        AND operations.entree_reveil IS NOT NULL
+        AND operations.sortie_reveil_possible IS NOT NULL
+        AND operations.entree_reveil < operations.sortie_reveil_possible
+        AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
+        AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
       
     if ($type_hospi)    $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
     if ($prat_id)       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
     if ($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-    $query_hors_plage .=  "\nAND operations.date BETWEEN '$debut' AND '$fin'
-    
-      AND operations.entree_reveil IS NOT NULL
-      AND operations.sortie_reveil_possible IS NOT NULL
-      AND operations.entree_reveil < operations.sortie_reveil_possible
-      GROUP BY $type_duree_fr ORDER BY orderitem";
+    $query_hors_plage .=  "\nGROUP BY $type_duree_fr ORDER BY orderitem";
     $result_hors_plage = $ds->loadList($query_hors_plage);
   }
 

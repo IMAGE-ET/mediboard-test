@@ -11,6 +11,20 @@
 {{mb_script module="dPplanningOp" script="ccam_selector"}}
 
 <script type="text/javascript">
+
+var printTabAllPrats = function() {
+  var oForm = getForm("filter-bloc");
+  var url = new Url("dPstats", "print_tab_occupation_salle");
+  url.addParam("date_debut"   , $V(oForm._date_min));
+  url.addParam("date_fin"     , $V(oForm._date_max));
+  url.addParam("CCAM"         , $V(oForm.codes_ccam));
+  url.addParam("type"         , $V(oForm.type_hospi));
+  url.addParam("discipline_id", $V(oForm.discipline_id));
+  url.addParam("bloc_id"      , $V(oForm.bloc_id));
+  url.addParam("salle_id"     , $V(oForm.salle_id));
+  url.addParam("hors_plage"   , $V(oForm.hors_plage_view));
+  url.popup(500, 500, "tableau");
+}
   
 var Details = {
   activite: function(date){
@@ -110,7 +124,7 @@ function drawGraphs(showLegend){
     <td>{{mb_field object=$filter field="_date_min" form="filter-bloc" canNull="false" register=true}}</td>
     <th>{{mb_label object=$filterSejour field="type"}}</th>
     <td>
-      <select name="type_hospi">
+      <select name="type_hospi" style="width: 15em;">
         <option value="">&mdash; Tous les types d'hospi</option>
         {{foreach from=$filterSejour->_specs.type->_locales key=key_hospi item=curr_hospi}}
         <option value="{{$key_hospi}}" {{if $key_hospi == $filterSejour->type}}selected="selected"{{/if}}>
@@ -121,8 +135,8 @@ function drawGraphs(showLegend){
     </td>
     <th>{{mb_label class=CSalle field="bloc_id"}}</th>
     <td>
-      <select name="bloc_id">
-        <option value="">&mdash; {{tr}}CBlocOperatoire.select{{/tr}}</option>
+      <select name="bloc_id" style="width: 15em;">
+        <option value="">&mdash; {{tr}}CBlocOperatoire.all{{/tr}}</option>
         {{foreach from=$listBlocs item=curr_bloc}}
         <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $bloc->_id }}selected="selected"{{/if}}>
           {{$curr_bloc->nom}}
@@ -136,7 +150,7 @@ function drawGraphs(showLegend){
     <td>{{mb_field object=$filter field="_date_max" form="filter-bloc" canNull="false" register=true}} </td>
     <th>{{mb_label object=$filter field="_prat_id"}}</th>
     <td>
-      <select name="prat_id">
+      <select name="prat_id" style="width: 15em;">
         <option value="0">&mdash; Tous les praticiens</option>
         {{foreach from=$listPrats item=curr_prat}}
         <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $filter->_prat_id}}selected="selected"{{/if}}>
@@ -144,10 +158,11 @@ function drawGraphs(showLegend){
         </option>
         {{/foreach}}
       </select>
+      <button type="button" class="print notext" onclick="printTabAllPrats()">Tous les praticiens</button>
     </td>
     <th>{{mb_label object=$filter field="salle_id"}}</th>
     <td>
-      <select name="salle_id">
+      <select name="salle_id" style="width: 15em;">
         <option value="">&mdash; {{tr}}CSalle.all{{/tr}}</option>
         {{foreach from=$listBlocsForSalles item=curr_bloc}}
         <optgroup label="{{$curr_bloc->nom}}">
@@ -180,7 +195,7 @@ function drawGraphs(showLegend){
     </td>
     <th>{{mb_label object=$filter field="_specialite"}}</th>
     <td colspan="3">
-      <select name="discipline_id">
+      <select name="discipline_id" style="width: 15em;">
         <option value="0">&mdash; Toutes les spécialités</option>
         {{foreach from=$listDisciplines item=curr_disc}}
         <option value="{{$curr_disc->discipline_id}}" {{if $curr_disc->discipline_id == $filter->_specialite }}selected="selected"{{/if}}>
