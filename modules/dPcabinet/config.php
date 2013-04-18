@@ -56,5 +56,8 @@ $dPconfig["dPcabinet"] = array(
   ),
   "Comptabilite" => array(
     "show_compta_tiers" => 1
+  ),
+  "Tarifs" => array(
+    "show_tarifs_etab" => 0
   )
 );

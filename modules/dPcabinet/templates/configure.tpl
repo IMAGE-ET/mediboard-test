@@ -10,7 +10,7 @@
 
 {{mb_script module="cabinet" script="consultation"}}
 
-<script type="text/javascript">
+<script>
 Main.add(function () {
   Control.Tabs.create('tabs-configure', true);
 });
@@ -25,6 +25,7 @@ Main.add(function () {
   {{if $user->user_username == "admin"}}
     <li><a href="#compta">{{tr}}compta-config{{/tr}}</a></li>
   {{/if}}
+  <li><a href="#tarifs">{{tr}}CTarif{{/tr}}</a></li>
   <li><a href="#tag">{{tr}}tag-config{{/tr}}</a></li>
   <li><a href="#actions">Autres actions</a></li>
   <li><a href="#offline">Mode offline</a></li>
@@ -62,6 +63,10 @@ Main.add(function () {
  {{mb_include template=inc_config_compta}}
 </div>
 {{/if}}
+
+<div id="tarifs" style="display: none;">
+ {{mb_include template=inc_config_tarifs}}
+</div>
 
 <div id="tag" style="display: none;">
  {{mb_include template=inc_config_tag}}
