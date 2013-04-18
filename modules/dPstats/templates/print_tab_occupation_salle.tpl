@@ -7,7 +7,7 @@
   <li>Spécialité : <strong>{{$discipline}}</strong></li>
   <li>Bloc opératoire : <strong>{{$bloc}}</strong></li>
   <li>Salle : <strong>{{$salle}}</strong></li>
-  <li>Salle : <strong>{{$hors_plage|ternary:"Oui":"non"}}</strong></li>
+  <li>Hors plage : <strong>{{$hors_plage|ternary:"Oui":"non"}}</strong></li>
 </ul>
 
 <table class="tbl">

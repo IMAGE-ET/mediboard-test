@@ -34,6 +34,7 @@ $discipline->load($discipline_id);
 
 $salles = CSalle::getSallesStats($salle_id, $bloc_id);
 
+// Chargement des praticiens
 $user = new CMediusers();
 $where = array();
 $where["users_mediboard.actif"] = "= '1'";

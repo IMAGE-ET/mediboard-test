@@ -22,7 +22,7 @@ var printTabAllPrats = function() {
   url.addParam("discipline_id", $V(oForm.discipline_id));
   url.addParam("bloc_id"      , $V(oForm.bloc_id));
   url.addParam("salle_id"     , $V(oForm.salle_id));
-  url.addParam("hors_plage"   , $V(oForm.hors_plage_view));
+  url.addParam("hors_plage"   , $V(oForm.hors_plage));
   url.popup(500, 500, "tableau");
 }
   

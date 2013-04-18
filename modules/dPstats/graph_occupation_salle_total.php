@@ -43,7 +43,25 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     $ticks[] = array(count($ticks), CMbDT::transform("+0 DAY", $i, $date_format));
   }
 
-  $salles = CSalle::getSallesStats($salle_id, $bloc_id);
+  $salles = CSalle::getSallesStats($salle_id, $bloc_id);$user = new CMediusers();
+  
+  // Chargement des praticiens
+  $where = array();
+  $where["users_mediboard.actif"] = "= '1'";
+  if($discipline->_id) {
+    $where["users_mediboard.discipline_id"] = "= '$discipline->_id'";
+  }
+  // Filter on user type
+  $utypes_flip = array_flip(CUser::$types);
+  $user_types = array("Chirurgien", "Anesthésiste", "Médecin", "Dentiste");
+  foreach ($user_types as &$_type) {
+    $_type = $utypes_flip[$_type];
+  }
+  $where["users.user_type"] = CSQLDataSource::prepareIn($user_types);
+  
+  $ljoin = array("users" => "users.user_id = users_mediboard.user_id");
+  $order = "users_mediboard.function_id, users_mediboard.discipline_id, users.user_last_name, users.user_first_name";
+  $listPrats = $user->loadList($where, $order, null, null, $ljoin);
 
   $seriesMoy = array();
   $seriesTot = array();
@@ -68,22 +86,23 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   );
   $query = "SELECT COUNT(*) AS nbInterv,
     SUM(TIME_TO_SEC(operations.fin_op)-TIME_TO_SEC(operations.debut_op)) AS duree_total,
-    DATE_FORMAT(plagesop.date, '$date_format') AS $type_duree_fr,
-    DATE_FORMAT(plagesop.date, '$order_key') AS orderitem
+    DATE_FORMAT(COALESCE(operations.date, plagesop.date), '$date_format') AS $type_duree_fr,
+    DATE_FORMAT(COALESCE(operations.date, plagesop.date), '$order_key') AS orderitem
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
+    LEFT JOIN users ON operations.chir_id = users.user_id
     WHERE operations.annulee = '0'
       $where_hors_plage
       AND operations.debut_op IS NOT NULL
       AND operations.fin_op IS NOT NULL
       AND operations.debut_op < operations.fin_op
       AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
-      AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
+      AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles))."
+      AND users.user_id ".CSQLDataSource::prepareIn(array_keys($listPrats), $prat_id);
     
   if ($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
-  if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
   if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   
@@ -93,8 +112,8 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   foreach ($ticks as $i => $tick) {
     $f = true;
     foreach ($result as $j=>$r) {
-      $nb_interv = $r["nbInterv"];
       if ($tick[1] == $r["$type_duree_fr"]) {
+        $nb_interv = $r["nbInterv"];
         $serieMoy['data'][] = array($i, $r["duree_total"]/(60*$nb_interv));
         $totalMoy += $r["duree_total"]/(60*$nb_interv);
         $serieTot['data'][] = array($i, $r["duree_total"]/(60*60));
@@ -124,16 +143,17 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
+    LEFT JOIN users ON operations.chir_id = users.user_id
     WHERE operations.annulee = '0'
       $where_hors_plage
       AND operations.entree_salle IS NOT NULL
       AND operations.sortie_salle IS NOT NULL
       AND operations.entree_salle < operations.sortie_salle
       AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
-      AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
+      AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles))."
+      AND users.user_id ".CSQLDataSource::prepareIn(array_keys($listPrats), $prat_id);
     
   if ($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
-  if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
   if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   
@@ -174,17 +194,19 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
+    LEFT JOIN users ON operations.chir_id = users.user_id
     WHERE operations.annulee = '0'
       $where_hors_plage
       AND operations.entree_reveil IS NOT NULL
       AND operations.sortie_reveil_possible IS NOT NULL
       AND operations.entree_reveil < operations.sortie_reveil_possible
       AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
-      AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
+      AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles))."
+      AND users.user_id ".CSQLDataSource::prepareIn(array_keys($listPrats), $prat_id);
     
   if ($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
-  if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
   if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   
   $query .=  "\nGROUP BY $type_duree_fr ORDER BY orderitem";
   $result = $ds->loadList($query);
