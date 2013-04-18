@@ -111,7 +111,10 @@ class CHL7v2ReceivePatientDemographicsResponse extends CHL7v2MessageXML {
   function getAdmit($data, $key, CSejour $sejour, CHL7v2RecordPerson $recordPerson, CPatient $patient) {
     $PID = $data["PID"][$key];
     $PV1 = $data["PV1"][$key];
-    $PV2 = $data["PV2"][$key];
+    $PV2 = null;
+    if (!empty($data["PV2"])) {
+      $PV2 = $data["PV2"][$key];
+    }
 
     $this->getPerson($PID, $patient, $recordPerson);
 
@@ -123,8 +126,10 @@ class CHL7v2ReceivePatientDemographicsResponse extends CHL7v2MessageXML {
     $sejour->entree_reelle = $this->queryTextNode("PV1.44", $PV1);
     $sejour->sortie_reelle = $this->queryTextNode("PV1.45", $PV1);
 
-    $sejour->entree_prevue = $this->queryTextNode("PV2.8", $PV2);
-    $sejour->sortie_prevue = $this->queryTextNode("PV2.9", $PV2);
+    if ($PV2) {
+      $sejour->entree_prevue = $this->queryTextNode("PV2.8", $PV2);
+      $sejour->sortie_prevue = $this->queryTextNode("PV2.9", $PV2);
+    }
 
     $sejour->_NDA = "";
     $sejour->_OID = "";
