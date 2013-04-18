@@ -31,6 +31,8 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
     $this->queryNode("RCP", null, $data, true);
 
+    $this->queryNode("DSC", null, $data, true);
+
     return $data;
   }
 
@@ -49,9 +51,6 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
     $sender->loadConfigValues();
 
     $this->_ref_sender = $sender;
-
-    $quantity_limited_request = $this->getQuantityLimitedRequest($data["RCP"]);
-    $quantity_limited_request = $quantity_limited_request ? $quantity_limited_request : 100;
 
     $ds = $patient->getDS();
 
@@ -251,12 +250,21 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
       }
     }
 
+    $quantity_limited_request = $this->getQuantityLimitedRequest($data["RCP"]);
+    $quantity_limited_request = $quantity_limited_request ? $quantity_limited_request : 100;
+
+    $pointer = null;
+    if (isset($data["DSC"])) {
+      $pointer = $this->getContinuationPointer($data["DSC"]);
+    }
+
     $objects = array();
     if (!$request_admit) {
       // Pointeur pour continuer
-      if (isset($patient->_pointer)) {
+      if ($pointer) {
+        $patient->_pointer = $pointer;
         // is_numeric
-        $where["patients.patient_id"] = $ds->prepare(" > %", $patient->_pointer);
+        $where["patients.patient_id"] = $ds->prepare(" > %", $pointer);
       }
 
       $order = "patients.patient_id ASC";
@@ -457,6 +465,17 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    */
   function getQuantityLimitedRequest(DOMNode $node) {
     return $this->queryTextNode("RCP.2/CQ.1", $node);
+  }
+
+  /**
+   * Get quantity limited request
+   *
+   * @param DOMNode $node RCP element
+   *
+   * @return int
+   */
+  function getContinuationPointer(DOMNode $node) {
+    return $this->queryTextNode("DSC.1", $node);
   }
 
   /**
