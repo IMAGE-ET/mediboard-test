@@ -280,7 +280,8 @@ if ($show_operations) {
       }
 
       $libelle = "<span style='display: none;' data-entree_prevue='$sejour->entree_prevue' ".
-        "data-sortie_prevue='$sejour->sortie_prevue' data-sejour_id='$sejour->_id' data-duree='$_operation->temp_operation'></span>";
+        "data-sortie_prevue='$sejour->sortie_prevue' data-sejour_id='$sejour->_id' data-duree='$_operation->temp_operation'
+         data-debut_interv='$_operation->time_operation'></span>";
 
       $libelle.= "<span onmouseover='ObjectTooltip.createEx(this, \"".CMbString::htmlEntities($patient->_guid)."\")'>".CMbString::htmlEntities($patient->nom. " " .$patient->prenom." (".$patient->sexe.")")."<br/>[".$patient->getFormattedValue("naissance")."] ".$lit."</span>";
 

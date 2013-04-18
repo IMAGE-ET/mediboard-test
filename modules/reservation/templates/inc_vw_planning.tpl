@@ -147,11 +147,10 @@
       var time = e.getTime();
       var temp_operation_date = new Date(1970, 1, 1, 0, time.length)
       var temp_operation = temp_operation_date.toTIME();
-      
-      var time_operation = time.start.toTIME();
+      var time_operation = /debut_interv='([0-9 \:-]*)'/.exec(e.title)[1];
       var index_salle = time.start.getFullYear()-2000;
       var salle_id = this.salles_ids[index_salle];
-      
+
       if (index_salle < 0 || index_salle > this.salles_ids.length) {
         return;
       }
