@@ -165,8 +165,8 @@ for ($i = 0; $i < 7; $i++) {
 
     //Menu des évènements
     $event->addMenuItem("list", "Voir le contenu de la plage");
-    if ((!$_plage->remplacant_id || $_plage->remplacant_id != $chirSel) && 
-        (!$_plage->pour_compte_id || $_plage->pour_compte_id != $chirSel)) {
+    if ((!$_plage->remplacant_id || $_plage->remplacant_id != $chirSel || ($_plage->remplacant_id == $chirSel && $_plage->chir_id == $chirSel)) && 
+        (!$_plage->pour_compte_id || $_plage->pour_compte_id != $chirSel|| ($_plage->pour_compte_id == $chirSel && $_plage->chir_id == $chirSel))) {
       $event->addMenuItem("edit", "Modifier cette plage");
     }
     $event->addMenuItem("clock", "Planifier une consultation dans cette plage");
