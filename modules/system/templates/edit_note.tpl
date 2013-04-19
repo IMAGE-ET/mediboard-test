@@ -17,6 +17,7 @@
     $("note_author").toggle();
     $("no_author").toggle();
     $("editFrm_public_1").checked = "checked";
+    $("editFrm_public_0").disabled = state ? "disabled" : "";
   }
   
   Main.add(function() {
@@ -61,7 +62,8 @@
   <tr>
     <td>
       <label>
-        <input type="checkbox" name="notes_anonymous" onclick="toggleAnonymous(this.checked);"/> Sans propriétaire
+        <input type="checkbox" name="notes_anonymous" onclick="toggleAnonymous(this.checked);" />
+        Sans propriétaire
       </label>
     </td>
   </tr>
