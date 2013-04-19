@@ -43,6 +43,18 @@ PlageConsultation  = {
         }
       }  
     }
+
+    //pour le compte de = chir sel
+    if ($V(form.chir_id) == $V(form.pour_compte_id)) {
+      alert("vous ne pouvez pas créer une plage pour le compte de vous-même");
+      return false;
+    }
+
+    // remplacement de sois même
+    if ($V(form.chir_id) == $V(form.remplacant_id)) {
+      alert("vous ne pouvez pas vous remplacer vous-même");
+      return false;
+    }
           
     return true;
   },
