@@ -133,7 +133,7 @@ $where[] = "chir_id = '$chirSel' OR remplacant_id = '$chirSel' OR pour_compte_id
 for ($i = 0; $i < 7; $i++) {
   $jour = CMbDT::date("+$i day", $debut);
   $where["date"] = "= '$jour'";
-  foreach ($plage->loadList($where) as $_plage) {
+  foreach ($plage->loadList($where, "date, debut") as $_plage) {
     $_plage->loadRefsBack();
     $_plage->countPatients();
     $debute = "$jour $_plage->debut";
