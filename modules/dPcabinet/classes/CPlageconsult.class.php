@@ -249,7 +249,11 @@ class CPlageconsult extends CPlageHoraire {
 
     //chir_id se remplace lui même
     if ($this->chir_id == $this->pour_compte_id) {
-      $msg .= "Vous ne pouvez vous remplacer vous même";
+      $msg .= CAppUI::tr("CPlageConsult-error-pour_compte-equal-chir_id");
+    }
+
+    if ($this->chir_id == $this->remplacant_id) {
+      $msg .= CAppUI::tr("CPlageConsult-error-remplacant_id-equal-chir_id");
     }
 
     return $msg . parent::check();
