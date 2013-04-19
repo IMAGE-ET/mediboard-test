@@ -8,7 +8,6 @@
 
 <script type="text/javascript">
 switchType = function(select) {
-  console.log("switch", $V(select));
   $$(".switch-type").each(function(type){
     type.hide().disableInputs();
   });
@@ -20,7 +19,6 @@ switchType = function(select) {
 }
 
 selectList = function(input) {
-  console.log("selectList", input.value);
   if (!$V(input.form.elements.name)) {
     $V(input.form.elements.name, input.form.ex_list_id_autocomplete_view.value);
   }
@@ -32,6 +30,7 @@ Main.add(function(){
   var form = getForm("edit-{{$object->_guid}}");
   ExConceptSpec.edit(form);
   Control.Tabs.create("ex-concept-tabs", true);
+  switchType(form._concept_type);
 
   {{if $conf.forms.CExConcept.native_field}}
     var url = new Url("forms", "ajax_autocomplete_native_fields");
