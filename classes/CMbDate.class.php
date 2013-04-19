@@ -62,6 +62,39 @@ class CMbDate {
     return $achieved;
   }
 
+
+  /**
+   * Compute duration between two date time
+   *
+   * @param string $from      From time (datetime)
+   * @param string $to        To time, now if null (datetime)
+   * @param int    $min_count return only positive units
+   *
+   * @return array array("unit" => string, "count" => int)
+   */
+  static function duration($from, $to = null, $min_count = 0) {
+    $duration = array();
+    if (!$from) {
+      return null;
+    }
+
+    if (!$to) {
+      $to = CMbDT::dateTime();
+    }
+
+    $diff = strtotime($to) - strtotime($from);
+
+    // Find the best unit
+    foreach (self::$secs_per as $unit => $secs) {
+      if (abs($diff / $secs) > $min_count) {
+        $duration[$unit] = intval($diff / $secs);
+        $diff= $diff / $secs + ($diff%$secs);
+      }
+    }
+
+    return $duration;
+  }
+
   /**
    * Compute user friendly approximative duration between two date time
    *
