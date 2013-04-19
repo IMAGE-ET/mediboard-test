@@ -1834,6 +1834,16 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("1.96");
     $this->addDependency("dPfacturation", "0.21");
 
-    $this->mod_version = "1.97";
+    $this->makeRevision("1.97");
+    
+    $query = "UPDATE plageconsult p
+              SET p.remplacant_id = NULL
+              WHERE p.chir_id = p.remplacant_id;";
+    $this->addQuery($query);
+    $query = "UPDATE plageconsult p
+              SET p.pour_compte_id = NULL
+              WHERE p.chir_id = p.pour_compte_id;";
+    $this->addQuery($query);
+    $this->mod_version = "1.98";
   }
 }
