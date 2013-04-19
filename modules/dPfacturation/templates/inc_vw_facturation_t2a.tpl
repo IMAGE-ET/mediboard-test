@@ -68,23 +68,5 @@
     <td colspan="2"><b>Montant Total</b></td>
     <td style="text-align:right;"><b>{{mb_value object=$facture field="_montant_avec_remise"}}</b></td>
   <tr>
-    
-  {{if !$facture->_reglements_total_patient}}
-    <tr>
-      <td colspan="7">
-        <form name="change_type_facture" method="post">
-          {{mb_class object=$facture}}
-          {{mb_key   object=$facture}}
-          <input type="hidden" name="facture_class" value="{{$facture->_class}}" />
-          <input type="hidden" name="cloture" value="{{if !$facture->cloture}}{{$date}}{{/if}}" />
-          <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
-          {{if !$facture->cloture}}
-            <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Cloturer la facture</button>
-          {{elseif !isset($reglement|smarty:nodefaults) || ($facture->_ref_reglements|@count == 0)}}
-            <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Réouvrir la facture</button> Cloturée le {{$facture->cloture|date_format:"%d/%m/%Y"}}
-          {{/if}}
-        </form>
-      </td>
-    </tr>
-  {{/if}}
+
 </tbody>
