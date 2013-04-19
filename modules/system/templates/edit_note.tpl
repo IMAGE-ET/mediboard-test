@@ -51,11 +51,18 @@
     {{/if}}
   </tr>
   <tr>
-    <th style="width: 135px;">{{mb_label object=$note field="user_id"}}</th>
+    <th style="width: 135px;" rowspan="2">{{mb_label object=$note field="user_id"}}</th>
     <td>
       <span id="note_author">{{$note->_ref_user->_view}} &mdash; {{$note->_ref_user->_ref_function->_view}}</span>
       <span id="no_author" style="display: none;">{{tr}}CNote.no_author{{/tr}}</span>
       {{mb_field object=$note field="user_id" hidden=1}}
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <label>
+        <input type="checkbox" name="notes_anonymous" onclick="toggleAnonymous(this.checked);"/> Sans propriétaire
+      </label>
     </td>
   </tr>
   <tr>
@@ -64,12 +71,7 @@
   </tr>
   <tr>
     <th>{{mb_label object=$note field="public"}}</th>
-    <td>
-      {{mb_field object=$note field="public"}}
-      <label>
-        <input type="checkbox" name="notes_anonymous" onclick="toggleAnonymous(this.checked);"/> Sans propriétaire
-      </label>
-    </td>
+    <td>{{mb_field object=$note field="public"}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$note field="degre"}}</th>
