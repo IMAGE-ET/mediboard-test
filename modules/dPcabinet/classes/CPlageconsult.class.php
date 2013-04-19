@@ -247,6 +247,11 @@ class CPlageconsult extends CPlageHoraire {
       }
     }
 
+    //chir_id se remplace lui même
+    if ($this->chir_id == $this->pour_compte_id) {
+      $msg .= "Vous ne pouvez vous remplacer vous même";
+    }
+
     return $msg . parent::check();
   }
 
