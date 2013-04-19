@@ -158,9 +158,9 @@ function viewTotaux() {
         </tr>
         <tr>
           <td colspan="2" class="button" style="width:50%;">
-            <button class="print" type="submit" onclick="document.printFrm.a.value='print_noncote';">Consultation non cotés</button>
+            <button class="print" type="submit" onclick="document.printFrm.a.value='print_noncote';">Consultations non cotées</button>
             <div class="small-info" style="text-align:center;">
-              Affichage des consultations non cotés, en fonction de la date de consultation.
+              Affichage des consultations non cotées, en fonction de la date de consultation.
             </div>
           </td>
           <td colspan="2" class="button">
