@@ -114,8 +114,8 @@ class COperatorIHE extends CEAIOperator {
 
       // Message PAM / DEC / PDQ / SWF
       $msgAck = self::handleEvent($exchange_ihe, $dom_evt, $ack, $data);
-      
-      CHL7v2Message::resetBuildMode(); 			
+
+      CHL7v2Message::resetBuildMode();
     }
     catch(Exception $e) {
       $exchange_ihe->populateExchange($data_format, $evt);

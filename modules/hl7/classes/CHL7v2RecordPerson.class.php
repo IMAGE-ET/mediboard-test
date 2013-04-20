@@ -411,14 +411,16 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     // Décès
     $this->getDeces($node, $newPatient);
 
-    // Mapping de l'INS-C
-    if ($data && array_key_exists("INSC", $data["personIdentifiers"])) {
-      $newPatient->INSC = $data["personIdentifiers"]["INSC"];
-    }
+    if ($data["personIdentifiers"]) {
+      // Mapping de l'INS-C
+      if ($data && array_key_exists("INSC", $data["personIdentifiers"])) {
+        $newPatient->INSC = $data["personIdentifiers"]["INSC"];
+      }
 
-    //NSS
-    if (array_key_exists("SS", $data["personIdentifiers"])) {
-      $newPatient->matricule = $data["personIdentifiers"]["SS"];
+      // NSS
+      if (array_key_exists("SS", $data["personIdentifiers"])) {
+        $newPatient->matricule = $data["personIdentifiers"]["SS"];
+      }
     }
 
     $sender = $this->_ref_sender;

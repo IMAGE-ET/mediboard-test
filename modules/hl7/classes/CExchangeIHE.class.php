@@ -364,11 +364,12 @@ class CExchangeIHE extends CExchangeTabular {
    * @param CHL7v2PatientDemographicsAndVisitResponse $ack        Acknowledgment
    * @param array                                     $objects    Objects
    * @param string                                    $QPD8_error QPD-8 that contained the unrecognized domain
+   * @param CDomain[]                                 $domains    Domains
    *
    * @return string
    */
-  function setPDRAA(CHL7v2PatientDemographicsAndVisitResponse $ack, $objects = array(), $QPD8_error = null) {
-    $ack->generateAcknowledgment("AA", "0", "I", $objects);
+  function setPDRAA(CHL7v2PatientDemographicsAndVisitResponse $ack, $objects = array(), $QPD8_error = null, $domains = array()) {
+    $ack->generateAcknowledgment("AA", "0", "I", $objects, null, $domains);
 
     return $this->populateExchangeACK($ack);
   }

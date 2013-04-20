@@ -78,12 +78,10 @@ ExchangeDataFormat = {
     url.requestUpdate("CExchangeDataFormat-treatment_exchanges");
   },
 
-  sendMessage : function(exchange_guid){
+  sendMessage : function(exchange_guid, callback){
     var url = new Url("eai", "ajax_send_message");
     url.addParam("exchange_guid", exchange_guid);
-    url.requestUpdate("systemMsg", { onComplete:
-      ExchangeDataFormat.refreshExchange.curry(exchange_guid) 
-    });
+    url.requestUpdate("systemMsg",  callback || ExchangeDataFormat.refreshExchange.curry(exchange_guid));
   },
   
   changePage : function(page) {

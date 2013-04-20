@@ -31,6 +31,8 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
     $this->queryNode("RCP", null, $data, true);
 
+    $this->queryNode("DSC", null, $data, true);
+
     return $data;
   }
 
@@ -50,81 +52,256 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
     $this->_ref_sender = $sender;
 
-    $quantity_limited_request = $this->getQuantityLimitedRequest($data["RCP"]);
-    $quantity_limited_request = $quantity_limited_request ? $quantity_limited_request : 100;
+    $ds = $patient->getDS();
 
     $ds    = $patient->getDS();
     $where = array();
     foreach ($this->getRequestPatient($data["QPD"]) as $field => $value) {
-      if (!$value) {
+      if ($value == "") {
         continue;
       }
 
-      $value = preg_replace("/[^a-z]/i", "_", $value);
-      $where[$field] = $ds->prepareLike($value);
+      if (!in_array($field, array("naissance", "cp"))) {
+        $value = preg_replace("/[^a-z\d\*]/i", "_", $value);
+        $value = preg_replace("/\*+/", "%", $value);
+      }
+
+      $where["patients.$field"] = $ds->prepare("LIKE %", $value);
     }
 
     $ljoin = null;
-    // Requête sur un IPP
-    if ($identifier_list = $this->getRequestPatientIdentifierList($data["QPD"])) {
-      $ljoin[10] = "id_sante400 AS id1 ON id1.object_id = patients.patient_id";
-      $where[] = "`id1`.`object_class` = 'CPatient'";
 
-      if (isset($identifier_list["id_number"])) {
-        $id_number = $identifier_list["id_number"];
-        $where[]   = $ds->prepare("id1.id400 = %", $id_number);
+    $identifier_list = $this->getRequestPatientIdentifierList($data["QPD"]);
+    if (count(array_filter($identifier_list)) > 0) {
+      $ljoin[10] = "id_sante400 AS id_pat_list ON id_pat_list.object_id = patients.patient_id";
+      $where[] = "`id_pat_list`.`object_class` = 'CPatient'";
+      // Requête sur un IPP
+      if (!empty($identifier_list["id_number"])
+          && empty($identifier_list["namespace_id"])
+          && empty($identifier_list["universal_id"])
+          && empty($identifier_list["universal_id_type"])
+      ) {
+        $where[] = $ds->prepare("id_pat_list.id400 = %", $identifier_list["id_number"]);
       }
-    }
 
-    // Requête sur un NDA
-    if ($identifier_list = $this->getRequestSejourIdentifierList($data["QPD"])) {
-      $ljoin["sejour"] = "`sejour`.`patient_id` = `patients`.`patient_id`";
-      $ljoin[]         = "id_sante400 AS id2 ON `id2`.`object_id` = `sejour`.`sejour_id`";
-      if (isset($identifier_list["id_number"])) {
-        $id_number = $identifier_list["id_number"];
-        $where[]   = $ds->prepare("id2.id400 = %", $id_number);
+      if (!empty($identifier_list["id_number"])
+          && (!empty($identifier_list["namespace_id"])
+          || !empty($identifier_list["universal_id"]))
+      ) {
+
+        $namespace_id = $identifier_list["namespace_id"];
+        $universal_id = $identifier_list["universal_id"];
+
+        $domain = new CDomain();
+        if ($namespace_id) {
+          $domain->tag = $namespace_id;
+        }
+        if ($universal_id) {
+          $domain->OID = $universal_id;
+        }
+
+        if ($domain->tag || $domain->OID) {
+          $domain->loadMatchingObject();
+        }
+
+        $where[] = $ds->prepare("id_pat_list.id400 = %", $identifier_list["id_number"]);
+        $where[] = $ds->prepare("id_pat_list.tag = %", $domain->tag);
       }
-    }
 
-    $QPD8 = $this->getQPD8($data["QPD"]);
-    // Requête sur un domaine particulier qui est inconnu
-    if ($QPD8) {
-      $domains_returned_namespace_id = $QPD8["domains_returned_namespace_id"];
-      if ($domains_returned_namespace_id) {
-        $idex               = new CIdSante400();
-        $idex->object_class = "CPatient";
-        $idex->tag          = $domains_returned_namespace_id;
-        $count = $idex->countMatchingListEsc();
+      if (empty($identifier_list["id_number"])
+          && (!empty($identifier_list["namespace_id"])
+          || !empty($identifier_list["universal_id"]))
+      ) {
+        $namespace_id = $identifier_list["namespace_id"];
+        $universal_id = $identifier_list["universal_id"];
 
-        // Si aucun domaine n'est retrouvé on retourne une erreur
-        if ($count == 0) {
-          return $exchange_ihe->setPDRAE($ack, null, $QPD8);
+        $domain = new CDomain();
+        if ($namespace_id) {
+          $domain->tag = $namespace_id;
+        }
+        if ($universal_id) {
+          $domain->OID = $universal_id;
+        }
+
+        if ($domain->tag || $domain->OID) {
+          $domain->loadMatchingObject();
+
+          $where[] = $ds->prepare("id_pat_list.tag = %", $domain->tag);
         }
       }
     }
 
-    // Requête sur un domaine particulier
-    if ($QPD8) {
-      $ljoin[10] = "id_sante400 AS id1 ON id1.object_id = patients.patient_id";
+    $request_admit = false;
+    // Requête sur un NDA
+    $identifier_list = $this->getRequestSejourIdentifierList($data["QPD"]);
+    if (count(array_filter($identifier_list)) > 0) {
+      $ljoin[10] = "id_sante400 AS id_sej_list ON id_sej_list.object_id = sejour.sejour_id";
+      $where[] = "`id_sej_list`.`object_class` = 'CSejour'";
+      // Requête sur un IPP
+      if (!empty($identifier_list["id_number"])
+          && empty($identifier_list["namespace_id"])
+          && empty($identifier_list["universal_id"])
+          && empty($identifier_list["universal_id_type"])
+      ) {
+        $where[] = $ds->prepare("id_sej_list.id400 = %", $identifier_list["id_number"]);
+      }
+
+      if (!empty($identifier_list["id_number"])
+          && (!empty($identifier_list["namespace_id"])
+          || !empty($identifier_list["universal_id"]))
+      ) {
+
+        $namespace_id = $identifier_list["namespace_id"];
+        $universal_id = $identifier_list["universal_id"];
+
+        $domain = new CDomain();
+        if ($namespace_id) {
+          $domain->tag = $namespace_id;
+        }
+        if ($universal_id) {
+          $domain->OID = $universal_id;
+        }
+
+        if ($domain->tag || $domain->OID) {
+          $domain->loadMatchingObject();
+        }
+
+        $where[] = $ds->prepare("id_sej_list.id400 = %", $identifier_list["id_number"]);
+        $where[] = $ds->prepare("id_sej_list.tag = %", $domain->tag);
+      }
+
+      if (empty($identifier_list["id_number"])
+          && (!empty($identifier_list["namespace_id"])
+          || !empty($identifier_list["universal_id"]))
+      ) {
+        $namespace_id = $identifier_list["namespace_id"];
+        $universal_id = $identifier_list["universal_id"];
+
+        $domain = new CDomain();
+        if ($namespace_id) {
+          $domain->tag = $namespace_id;
+        }
+        if ($universal_id) {
+          $domain->OID = $universal_id;
+        }
+
+        if ($domain->tag || $domain->OID) {
+          $domain->loadMatchingObject();
+
+          $where[] = $ds->prepare("id_sej_list.tag = %", $domain->tag);
+        }
+      }
+
+      $request_admit= true;
+    }
+
+    foreach ($this->getRequestSejour($data["QPD"]) as $field => $value) {
+      if ($value == "") {
+        continue;
+      }
+
+      $value = preg_replace("/[^a-z\*]/i", "_", $value);
+      $value = preg_replace("/\*+/", "%", $value);
+      $where["sejour.$field"] = $ds->prepare("LIKE %", $value);
+
+      $request_admit= true;
+    }
+
+    if ($other_request = $this->getOtherRequestSejour($data["QPD"])) {
+      $where = array_merge($other_request, $where);
+
+      $request_admit= true;
+    }
+
+    $i = 1;
+
+    $domains = array();
+    foreach ($this->getQPD8s($data["QPD"]) as $_QPD8) {
+      // Requête sur un domaine particulier
+      $domains_returned_namespace_id = $_QPD8["domains_returned_namespace_id"];
+      // Requête sur un OID particulier
+      $domains_returned_universal_id = $_QPD8["domains_returned_universal_id"];
+
+      $domain = new CDomain();
       if ($domains_returned_namespace_id) {
-        $where[]   = $ds->prepare("id1.tag = %", $domains_returned_namespace_id);
+        $domain->tag = $domains_returned_namespace_id;
+      }
+      if ($domains_returned_universal_id) {
+        $domain->OID = $domains_returned_universal_id;
+      }
+
+      if ($domain->tag || $domain->OID) {
+        $domain->loadMatchingObject();
+      }
+
+      $value = $domain->OID ? $domain->OID : $domain->tag;
+
+      // Cas où le domaine n'est pas retrouvé
+      if (!$domain->_id) {
+        return $exchange_ihe->setPDRAE($ack, null, $value);
+      }
+
+      $domains[] = $domain;
+
+      if ($domains_returned_namespace_id) {
+        $ljoin[20+$i] = "id_sante400 AS id$i ON id$i.object_id = patients.patient_id";
+        $where[]   = $ds->prepare("id$i.tag = %", $domains_returned_namespace_id);
+
+        $i++;
       }
     }
 
-    // Pointeur pour continuer
-    if (isset($patient->_pointer)) {
-      // is_numeric
-      $where["patient_id"] = $ds->prepare(" > %", $patient->_pointer);
+    $quantity_limited_request = $this->getQuantityLimitedRequest($data["RCP"]);
+    $limit_quantity = !!$quantity_limited_request;
+    $quantity_limited_request = $quantity_limited_request ? $quantity_limited_request : 100;
+
+    $pointer = null;
+    if (isset($data["DSC"])) {
+      $pointer = $this->getContinuationPointer($data["DSC"]);
     }
 
-    $order = "patient_id ASC";
+    $objects = array();
+    if (!$request_admit) {
+      // Pointeur pour continuer
+      if ($pointer) {
+        $patient->_pointer = $pointer;
+        // is_numeric
+        $where["patients.patient_id"] = $ds->prepare(" > %", $pointer);
+      }
+
+      $order = "patients.patient_id ASC";
 
     $patients = array();
-    if (!empty($where)) {
-      $patients = $patient->loadList($where, $order, $quantity_limited_request, null, $ljoin);
+      if (!empty($where)) {
+        $objects = $patient->loadList($where, $order, $quantity_limited_request, "patients.patient_id", $ljoin);
+
+        // If we have no next match, we won't have to add a DSC segment
+        if ($limit_quantity) {
+          $next_one = $patient->loadList($where, $order, "$quantity_limited_request,1", "patients.patient_id", $ljoin);
+          if (count($next_one) == 0) {
+            $limit_quantity = false;
+          }
+        }
+      }
+    }
+    else {
+      $ljoin[] = "patients ON `patients`.`patient_id` = `sejour`.`patient_id`";
+
+      /** @var $sejour CSejour */
+      $sejour = new CSejour();
+
+      if (!empty($where)) {
+        $objects = $sejour->loadList($where, null, $quantity_limited_request, "sejour.sejour_id", $ljoin);
+      }
     }
 
-    return $exchange_ihe->setPDRAA($ack, $patients);
+    // Save information indicating that we are doing an incremental query
+    $last = end($objects);
+    if ($last && $limit_quantity) {
+      $last->_incremental_query = true;
+    }
+
+    return $exchange_ihe->setPDRAA($ack, $objects, null, $domains);
   }
 
   /**
@@ -150,15 +327,25 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
       $PID = array_merge($PID, array("nom_jeune_fille" => $PID_6_1_1));
     }
 
-    // Date of birth"
+    // Date of birth
     if ($PID_7_1 = $this->getDemographicsFields($node, "CPatient", "7.1")) {
       $PID = array_merge($PID, array("naissance" => CMbDT::date($PID_7_1)));
     }
 
+    // Sexe
+    if ($PID_8 = $this->getDemographicsFields($node, "CPatient", "8")) {
+      $PID = array_merge($PID, array("sexe" => CHL7v2TableEntry::mapFrom(1, $PID_8)));
+    }
+
     // Patient Adress
+    if ($PID_11_1_1 = $this->getDemographicsFields($node, "CPatient", "11.1.1")) {
+      $PID = array_merge($PID, array("adresse" => $PID_11_1_1));
+    }
+
     if ($PID_11_3 = $this->getDemographicsFields($node, "CPatient", "11.3")) {
       $PID = array_merge($PID, array("ville" => $PID_11_3));
     }
+
     if ($PID_11_5 = $this->getDemographicsFields($node, "CPatient", "11.5")) {
       $PID = array_merge($PID, array("cp" => $PID_11_5));
     }
@@ -174,13 +361,14 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    * @return string
    */
   function getRequestPatientIdentifierList(DOMNode $node) {
-    return array(
-      "id_number"            => $this->getDemographicsFields($node, "CPatient", "3.1"),
-      /*"namespace_id"         => $this->getDemographicsFields($node, "CPatient", "3.1"),
-      "universal_id"         => $this->getDemographicsFields($node, "CPatient", "3.1"),
-      "universal_id_type"    => $this->getDemographicsFields($node, "CPatient", "3.1"),
-      "identifier_type_code" => $this->getDemographicsFields($node, "CPatient", "3.1"),*/
+    $QPD = array(
+      "id_number"         => $this->getDemographicsFields($node, "CPatient", "3.1"),
+      "namespace_id"      => $this->getDemographicsFields($node, "CPatient", "3.4.1"),
+      "universal_id"      => $this->getDemographicsFields($node, "CPatient", "3.4.2"),
+      "universal_id_type" => $this->getDemographicsFields($node, "CPatient", "3.4.3"),
     );
+
+    return $QPD;
   }
 
   /**
@@ -191,9 +379,14 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    * @return string
    */
   function getRequestSejourIdentifierList(DOMNode $node) {
-    return array(
-      "id_number" => $this->getDemographicsFields($node, "CPatient", "18.1")
+    $QPD = array(
+      "id_number"         => $this->getDemographicsFields($node, "CSejour", "18.1"),
+      "namespace_id"      => $this->getDemographicsFields($node, "CSejour", "18.4.1"),
+      "universal_id"      => $this->getDemographicsFields($node, "CSejour", "18.4.2"),
+      "universal_id_type" => $this->getDemographicsFields($node, "CSejour", "18.4.3"),
     );
+
+    return $QPD;
   }
 
   /**
@@ -201,14 +394,20 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    *
    * @param DOMNode $node QPD element
    *
-   * @return string
+   * @return array()
    */
-  function getQPD8(DOMNode $node) {
-    return array (
-      "domains_returned_namespace_id"      => $this->queryTextNode("QPD.8/CX.4/HD.1", $node),
-      "domains_returned_universal_id"      => $this->queryTextNode("QPD.8/CX.4/HD.2", $node),
-      "domains_returned_universal_id_type" => $this->queryTextNode("QPD.8/CX.4/HD.3", $node)
-    );
+  function getQPD8s(DOMNode $node) {
+    $QPD8s = array();
+
+    foreach ($this->queryNodes("QPD.8", $node) as $_QPD_8) {
+      $QPD8s[] = array (
+        "domains_returned_namespace_id"      => $this->queryTextNode("CX.4/HD.1", $_QPD_8),
+        "domains_returned_universal_id"      => $this->queryTextNode("CX.4/HD.2", $_QPD_8),
+        "domains_returned_universal_id_type" => $this->queryTextNode("CX.4/HD.3", $_QPD_8)
+      );
+    }
+
+    return $QPD8s;
   }
 
   /**
@@ -216,11 +415,61 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    *
    * @param DOMNode $node QPD element
    *
-   * @return string
+   * @return array
    */
   function getRequestSejour(DOMNode $node) {
+    $PV1 = array();
 
+    // Patient class
+    if ($PV1_2_1 = $this->getDemographicsFields($node, "CSejour", "2.1")) {
+      $PV1 = array_merge($PV1, array("type" => CHL7v2TableEntry::mapFrom(4, $PV1_2_1)));
+    }
 
+    return $PV1;
+  }
+
+  /**
+   * Get others PV1 QPD element
+   *
+   * @param DOMNode $node QPD element
+   *
+   * @return array
+   */
+  function getOtherRequestSejour(DOMNode $node) {
+    // Recherche du service
+    $service = new CService();
+    $ds      = $service->getDS();
+
+    $where_returns = array();
+    if ($service_name = $this->getDemographicsFields($node, "CSejour", "3.1")) {
+      $service_name = preg_replace("/\*+/", "%", $service_name);
+      $where["nom"] = $ds->prepare("LIKE %", $service_name);
+      $ids = $service->loadIds($where);
+
+      $where_returns["sejour.service_id"] = $ds->prepareIn($ids);
+    }
+
+    // Praticien
+    if ($attending_doctor_name = $this->getDemographicsFields($node, "CSejour", "7.2.1")) {
+      $user = new CUser();
+      $attending_doctor_name   = preg_replace("/\*+/", "%", $attending_doctor_name);
+      $where["user_last_name"] = $ds->prepare("LIKE %", $attending_doctor_name);
+      $ids = $user->loadIds($where);
+
+      $where_returns["sejour.praticien_id"] = $ds->prepareIn($ids);
+    }
+
+    // Médecin adressant
+    if ($referring_doctor_name = $this->getDemographicsFields($node, "CSejour", "8.2.1")) {
+      $medecin = new CMedecin();
+      $referring_doctor_name = preg_replace("/\*+/", "%", $referring_doctor_name);
+      $where["nom"]          = $ds->prepare("LIKE %", $referring_doctor_name);
+      $ids = $medecin->loadIds($where);
+
+      $where_returns["sejour.adresse_par_prat_id"] = $ds->prepareIn($ids);
+    }
+
+    return $where_returns;
   }
 
   /**
@@ -232,6 +481,17 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    */
   function getQuantityLimitedRequest(DOMNode $node) {
     return $this->queryTextNode("RCP.2/CQ.1", $node);
+  }
+
+  /**
+   * Get quantity limited request
+   *
+   * @param DOMNode $node RCP element
+   *
+   * @return int
+   */
+  function getContinuationPointer(DOMNode $node) {
+    return $this->queryTextNode("DSC.1", $node);
   }
 
   /**

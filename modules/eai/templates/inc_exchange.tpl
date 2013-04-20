@@ -83,7 +83,7 @@
     </label>
   </td>
   {{assign var=emetteur value=$object->_ref_sender}}
-  <td class="{{if $object->sender_id == '0'}}error{{/if}} narrow">
+  <td class="{{if $object->sender_id == '0'}}error{{/if}} narrow text">
      {{if $object->_self_sender}}
      <label title='[SELF]' style="font-weight:bold">
        [SELF]
@@ -95,7 +95,7 @@
      {{/if}}
   </td>
   {{assign var=destinataire value=$object->_ref_receiver}}
-  <td class="narrow">
+  <td class="narrow text">
     {{if $object->_self_receiver}}
      <label title='[SELF]' style="font-weight:bold">
        [SELF]

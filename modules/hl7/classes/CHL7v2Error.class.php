@@ -32,7 +32,7 @@ class CHL7v2Error {
     CHL7v2Exception::UNEXPECTED_DATA_TYPE       => 207,
     CHL7v2Exception::DATA_TOO_LONG              => 102,
     CHL7v2Exception::UNKNOWN_TABLE_ENTRY        => 103,
-    CHL7v2Exception::UNKNOWN_KEY_IDENTIFIER     => 204,
+    CHL7v2Exception::UNKNOWN_DOMAINS_RETURNED   => 204,
   );
   
   /**
@@ -85,8 +85,8 @@ class CHL7v2Error {
     
     $segment = $entity->getSegment();
     if ($segment) {
-      $path[] = $segment->name;
-      $path[] = null;
+      $path[] = $segment->name; // Segment name
+      $path[] = 1;              // Segment sequence
       
       CHL7v2FieldItem::$_get_path_full = true;
       $path = array_merge($path, $entity->getPath());

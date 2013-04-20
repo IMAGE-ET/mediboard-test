@@ -27,7 +27,7 @@ class CIHETestCase {
    * @return void
    */
   static function run($code, CCnStep $step) {
-    $transaction = CPAM::getTransaction($code);
+    $transaction = str_replace("-", "", $step->transaction);
 
     if (!$transaction) {
       throw new CMbException("CIHETestCase-no_transaction");
@@ -93,7 +93,12 @@ class CIHETestCase {
         $name = "FOUR";
         break;
       case 50 :
-        $name = "FIVE";
+        if ($step->number ==  80) {
+          $name = "UPDATE";
+        }
+        else {
+          $name = "FIVE";
+        }
         break;
     }
     $name = "PAM$name";

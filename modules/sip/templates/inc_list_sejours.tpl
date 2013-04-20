@@ -20,10 +20,10 @@
 <table class="tbl">
   <tr>
     <th>{{tr}}CPatient{{/tr}}</th>
-    <th class="narrow">{{tr}}CPatient-naissance-court{{/tr}}</th>
-    <th>{{tr}}CPatient-sexe{{/tr}}</th>
-    <th>{{tr}}CPatient-adresse{{/tr}}</th>
-    <th>{{tr}}CPatient-_IPP{{/tr}}</th>
+    <th>{{tr}}CSejour-type-court{{/tr}}</th>
+    <th>{{tr}}CSejour-entree-court{{/tr}}</th>
+    <th>{{tr}}CSejour-sortie-court{{/tr}}</th>
+    <th>{{tr}}CSejour-_NDA{{/tr}}</th>
     <th>OID</th>
     <th class="narrow"></th>
   </tr>
@@ -32,25 +32,22 @@
     <th class="section" colspan="100">{{$objects|@count}} résultats </th>
   </tr>
 
-  {{foreach from=$objects item=_patient}}
+  {{foreach from=$objects item=_sejour}}
     <tr>
       <td>
-        <div class="text noted">
-        {{mb_value object=$_patient field="_view"}}
-        </div>
+        {{$_sejour->_ref_patient->_view}} ({{$_sejour->_ref_patient->naissance}})
       </td>
       <td>
-        {{mb_value object=$_patient field="naissance"}}
+        {{mb_value object=$_sejour field="type"}}
       </td>
       <td>
-        {{mb_value object=$_patient field="sexe"}}
+        {{mb_value object=$_sejour field="entree"}}
       </td>
-      <td class="text compact">
-        <span style="white-space: nowrap;">{{$_patient->adresse|spancate:30}}</span>
-        <span style="white-space: nowrap;">{{$_patient->cp}} {{$_patient->ville|spancate:20}}</span>
+      <td>
+        {{mb_value object=$_sejour field="sortie"}}
       </td>
-      <td> {{$_patient->_IPP|nl2br}} </td>
-      <td> {{$_patient->_OID|nl2br}} </td>
+      <td> {{$_sejour->_NDA|nl2br}} </td>
+      <td> {{$_sejour->_OID|nl2br}} </td>
       <td>
         <a class="button search notext" href="#" title="Afficher le dossier complet" style="margin: -1px;">
           {{tr}}Show{{/tr}}
@@ -59,7 +56,7 @@
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="100" class="empty">{{tr}}dPpatients-CPatient-no-exact-results{{/tr}}</td>
+      <td colspan="100" class="empty">{{tr}}No result{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

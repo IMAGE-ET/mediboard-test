@@ -38,6 +38,7 @@ class CHL7v2PatientDemographicsAndVisitResponse implements CHL7Acknowledgment {
   public $comments;
   public $objects;
   public $QPD8_error;
+  public $domains;
 
   /**
    * @var CExchangeIHE
@@ -73,20 +74,24 @@ class CHL7v2PatientDemographicsAndVisitResponse implements CHL7Acknowledgment {
   /**
    * Generate acknowledgment
    *
-   * @param string     $ack_code       Acknowledgment code
-   * @param null       $hl7_error_code HL7 error code
-   * @param string     $severity       Severity
-   * @param array|null $objects        Objects
-   * @param array|null $QPD8_error     QPD-8 that contained the unrecognized domain
+   * @param string         $ack_code       Acknowledgment code
+   * @param null           $hl7_error_code HL7 error code
+   * @param string         $severity       Severity
+   * @param array|null     $objects        Objects
+   * @param array|null     $QPD8_error     QPD-8 that contained the unrecognized domain
+   * @param CDomain[]|null $domains        QPD-8 domains
    *
    * @return null|string
    */
-  function generateAcknowledgment($ack_code, $hl7_error_code = null, $severity = "E", $objects = null, $QPD8_error = null) {
+  function generateAcknowledgment(
+      $ack_code, $hl7_error_code = null, $severity = "E", $objects = null, $QPD8_error = null, $domains = null
+  ) {
     $this->ack_code       = $ack_code;
     $this->hl7_error_code = $hl7_error_code;
     $this->severity       = $severity;
     $this->objects        = $objects;
     $this->QPD8_error     = $QPD8_error;
+    $this->domains        = $domains;
 
     $this->event->_exchange_ihe = $this->_ref_exchange_ihe;
 

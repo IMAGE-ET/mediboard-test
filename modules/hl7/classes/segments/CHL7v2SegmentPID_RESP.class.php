@@ -46,9 +46,10 @@ class CHL7v2SegmentPID_RESP extends CHL7v2Segment {
   function build(CHL7v2Event $event) {
     parent::build($event);
     
-    $message  = $event->message;
-    $sender   = $event->_sender;
-    $group    = $sender->loadRefGroup();
+    $message          = $event->message;
+    $sender           = $event->_sender;
+    $group            = $sender->loadRefGroup();
+    $domains_returned = $this->domains_returned;
 
     $patient  = $this->patient;
     
@@ -58,9 +59,52 @@ class CHL7v2SegmentPID_RESP extends CHL7v2Segment {
     
     // PID-2: Patient ID (CX) (optional)
     $data[] = null;
-    
+
+    $identifiers = array();
+    if (empty($domains_returned)) {
+      $idex = new CIdSante400();
+      $idex->object_id    = $patient->_id;
+      $idex->object_class = "CPatient";
+
+      $ljoin   = array();
+      $ljoin[] = "group_domain AS g1 ON g1.domain_id = domain.domain_id AND g1.object_class = 'CPatient'";
+
+      foreach ($idex->loadMatchingList() as $_idex) {
+        $domain = new CDomain();
+        $where["tag"] = " = '$_idex->tag'";
+        $domain->loadObject($where, null, null, $ljoin);
+
+        if (!$domain->_id) {
+          continue;
+        }
+
+        $identifiers[] = array(
+          $_idex->id400,
+          null,
+          null,
+          // PID-3-4 Autorité d'affectation
+          $this->getAssigningAuthority("domain", null, null, $domain),
+          "MR"
+        );
+      }
+    }
+    else {
+      foreach ($domains_returned as $_domain_returned) {
+        $assigning_authority = $this->getAssigningAuthority("domain", null, null, $_domain_returned);
+
+        $identifiers[] = array(
+          CIdSante400::getValueFor($patient, $_domain_returned->tag),
+          null,
+          null,
+          // PID-3-4 Autorité d'affectation
+          $assigning_authority,
+          "MR"
+        );
+      }
+    }
+
     // PID-3: Patient Identifier List (CX) (repeating)
-    $data[] = $this->getPersonIdentifiers($patient, $group, $sender);
+    $data[] = $identifiers;
     
     // PID-4: Alternate Patient ID - PID (CX) (optional repeating)
     $data[] = null;
@@ -218,9 +262,18 @@ class CHL7v2SegmentPID_RESP extends CHL7v2Segment {
     if ($this->sejour) {
       $sejour = $this->sejour;
       $sejour->loadNDA($group->_id);
+
+      $domain = new CDomain();
+      $domain->tag = $sejour->getTagNDA();
+      $domain->loadMatchingObject();
+
       $data[] = $sejour->_NDA ? array(
         array(
-          $sejour->_NDA
+          $sejour->_NDA,
+          null,
+          null,
+          // PID-3-4 Autorité d'affectation
+          $this->getAssigningAuthority("domain", null, null, $domain),
         )
       ) : null;
     }
