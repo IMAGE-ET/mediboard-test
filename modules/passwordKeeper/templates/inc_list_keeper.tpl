@@ -16,10 +16,16 @@
     <th>{{tr}}CPasswordKeeper-is_public{{/tr}}</th>
   </tr>
   {{foreach from=$keepers item=_keeper}}
+    {{assign var=id value=$_keeper->_id}}
     <tr {{if $password_keeper_id == $_keeper->_id}}class='selected'{{/if}}>
       <td>
         <a href="#1" onclick="Keeper.showKeeper('{{$_keeper->_id}}', this)" title="{{tr}}CPasswordKeeper-title-modify{{/tr}}">
           {{mb_value object=$_keeper field="keeper_name"}}
+          {{if $counts.$id == 0}}
+            <span class="text compact">({{tr}}CPasswordCategory.none{{/tr}})</span>
+          {{else}}
+            <span class="text compact">({{$counts.$id}} {{tr}}CPasswordCategory{{/tr}})</span>
+          {{/if}}
         </a>
       </td>
       <td>

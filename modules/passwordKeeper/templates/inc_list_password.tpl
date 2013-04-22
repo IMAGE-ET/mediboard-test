@@ -24,6 +24,7 @@
       <td>
         <a href="#1" onclick="Keeper.showPasswordEntry('{{$_password->_id}}', '{{$password->category_id}}', this)" title="{{tr}}CPasswordEntry-title-modify{{/tr}}">
           {{mb_value object=$_password field="password_description"}}
+          <span class="text compact">{{mb_value object=$_password field="password_last_change" format=relative}}</span>
         </a>
       </td>
       <td>

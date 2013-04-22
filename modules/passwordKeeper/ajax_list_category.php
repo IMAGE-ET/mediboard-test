@@ -18,12 +18,15 @@ $category = new CPasswordCategory();
 $category->password_keeper_id = $password_keeper_id;
 
 $categories = $category->loadMatchingList();
+$counts     = array();
 foreach ($categories as $_category) {
   $_category->loadBackRefs("passwords", "password_description");
+  $counts[$_category->_id] = $_category->countBackRefs("passwords");
 }
 
 $smarty = new CSmartyDP();
 $smarty->assign("categories" , $categories);
 $smarty->assign("category"   , $category);
 $smarty->assign("category_id", $category_id);
+$smarty->assign("counts"     , $counts);
 $smarty->display("inc_list_category.tpl");

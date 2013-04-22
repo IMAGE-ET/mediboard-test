@@ -19,9 +19,15 @@
   </tr>
   {{foreach from=$categories item=_category}}
     <tr {{if $category_id == $_category->_id}}class='selected'{{/if}}>
+      {{assign var=id value=$_category->_id}}
       <td>
         <a href="#1" onclick="Keeper.showCategory('{{$_category->_id}}', '{{$_category->password_keeper_id}}', this)" title="{{tr}}CPasswordCategory-title-modify{{/tr}}">
           {{mb_value object=$_category field="category_name"}}
+          {{if $counts.$id == 0}}
+            <span class="text compact">({{tr}}CPasswordEntry.none{{/tr}})</span>
+          {{else}}
+            <span class="text compact">({{$counts.$id}} {{tr}}CPasswordEntry{{/tr}})</span>
+          {{/if}}
         </a>
       </td>
     </tr>

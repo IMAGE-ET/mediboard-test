@@ -73,8 +73,11 @@ class CPasswordEntry extends CMbObject {
     if (!$this->_id || $this->fieldModified("password")) {
       $this->generateIV();
 
-      // Date de création du mot de passe
-      $this->password_last_change = CMbDT::dateTime();
+      // Si la passphrase est donnée, c'est un renouvellement de chiffrement, pas de mot de passe
+      if (!$passphrase) {
+        // Date de création du mot de passe
+        $this->password_last_change = CMbDT::dateTime();
+      }
     }
 
     $this->password = $this->encrypt($passphrase);

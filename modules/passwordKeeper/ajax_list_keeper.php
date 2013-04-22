@@ -19,11 +19,14 @@ $user   = CMediusers::get();
 $keeper->user_id = $user->_id;
 
 $keepers = $keeper->loadList("user_id = '$user->_id'","keeper_name");
+$counts  = array();
 foreach ($keepers as $_keeper) {
   $_keeper->loadBackRefs("categories", "category_name");
+  $counts[$_keeper->_id] = $_keeper->countBackRefs("categories");
 }
 
 $smarty = new CSmartyDP();
 $smarty->assign("keepers"           , $keepers);
 $smarty->assign("password_keeper_id", $password_keeper_id);
+$smarty->assign("counts"            , $counts);
 $smarty->display("inc_list_keeper.tpl");
