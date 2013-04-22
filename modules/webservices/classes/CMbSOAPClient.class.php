@@ -120,5 +120,40 @@ class CMbSOAPClient extends SoapClient {
    */
   public function setHeaders($soapheaders) {
     $this->__setSoapHeaders($soapheaders);
-  } 
+  }
+
+  /**
+   * Check service availability
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  public function checkServiceAvailability() {
+    $xml = file_get_contents($this->wsdl_url);
+
+    $dom = new CMbXMLDocument();
+    $dom->loadXML($xml);
+
+    $xpath = new CMbXPath($dom);
+    $xpath->registerNamespace("wsdl", "http://schemas.xmlsoap.org/wsdl/");
+    $xpath->registerNamespace("soap", "http://schemas.xmlsoap.org/wsdl/soap/");
+
+    $service_nodes = $xpath->query("//wsdl:service");
+    foreach ($service_nodes as $_service_node) {
+      $service_name = $_service_node->getAttribute("name");
+
+      $port_nodes = $xpath->query("wsdl:port", $_service_node);
+      foreach ($port_nodes as $_port_node) {
+        $address = $xpath->queryAttributNode("soap:address", $_port_node, "location");
+
+        // Url exist
+        $url_exist = url_exists($address);
+
+        if (!$url_exist) {
+          throw new CMbException("Service '$service_name' injoignable à l'adresse : <em>$address</em>");
+        }
+      }
+    }
+  }
 }

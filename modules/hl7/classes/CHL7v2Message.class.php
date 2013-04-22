@@ -207,7 +207,7 @@ class CHL7v2Message extends CHMessage {
         $this->event_name = $message_type[0];
       }
       else {
-        if (isset($message_type[2]) && $message_type[2] && !preg_match("/^[A-Z]{3}_[A-Z]\d{2}$/", $message_type[2])) {
+        if (isset($message_type[2]) && $message_type[2] && !preg_match("/^[A-Z]{3}_[A-Z\d]{2}\d$/", $message_type[2])) {
           throw new CHL7v2Exception(CHL7v2Exception::WRONG_MESSAGE_TYPE, $message_type[2]);
         }
 

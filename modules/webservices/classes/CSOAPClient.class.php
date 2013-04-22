@@ -20,13 +20,13 @@ class CSOAPClient {
    * The type of the client
    * @var string
    */
-  var $type_client = null;
+  public $type_client;
   
   /**
    * The SOAP client
    * @var CMbSOAPClient | CNuSOAPClient
    */
-  var $client = null;
+  public $client;
   
   /**
    * The constructor
@@ -266,5 +266,5 @@ class CSOAPClient {
    */
   public function setHeaders($soapheaders) {
     $this->client->setHeaders($soapheaders);
-  } 
+  }
 }

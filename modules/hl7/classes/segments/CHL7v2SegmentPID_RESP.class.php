@@ -36,6 +36,9 @@ class CHL7v2SegmentPID_RESP extends CHL7v2Segment {
    */
   public $sejour;
 
+  /** @var array() */
+  public $domains_returned;
+
   /**
    * Build PID segement
    *

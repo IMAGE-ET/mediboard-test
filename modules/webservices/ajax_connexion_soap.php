@@ -42,3 +42,10 @@ if (!$soap_client || $soap_client->client->soap_client_error) {
 else {
   CAppUI::stepAjax("Connecté à la source '$exchange_source_name'");
 }
+
+try {
+  $soap_client->client->checkServiceAvailability();
+}
+catch (CMbException $e) {
+  $e->stepAjax();
+}

@@ -195,8 +195,10 @@ class CSourceSOAP extends CExchangeSource {
     if (!url_exists($this->host)) {
       $this->_reachable = 0;
       $this->_message   = CAppUI::tr("CSourceSOAP-unreachable-source", $this->host);
+
       return false;
     }
+
     return true;
   }
 
@@ -215,6 +217,8 @@ class CSourceSOAP extends CExchangeSource {
 
       $password   = $this->getPassword();
       $soap_client->make($this->host, $this->user, $password, $this->type_echange, $options);
+
+      $soap_client->checkServiceAvailability();
     }
     catch (Exception $e) {
       $this->_reachable = 1;

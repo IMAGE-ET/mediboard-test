@@ -31,7 +31,7 @@ class CHL7v2Exception extends Exception {
   const EVENT_UNKNOWN              = 20;
   const FIELD_FORBIDDEN            = 21;
   const UNKNOWN_MSG_CODE           = 22;
-  const UNKNOWN_KEY_IDENTIFIER     = 23;
+  const UNKNOWN_DOMAINS_RETURNED   = 23;
   
   public $extraData;
   

@@ -54,7 +54,6 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
     $ds = $patient->getDS();
 
-    $ds    = $patient->getDS();
     $where = array();
     foreach ($this->getRequestPatient($data["QPD"]) as $field => $value) {
       if ($value == "") {
@@ -271,7 +270,6 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
       $order = "patients.patient_id ASC";
 
-    $patients = array();
       if (!empty($where)) {
         $objects = $patient->loadList($where, $order, $quantity_limited_request, "patients.patient_id", $ljoin);
 

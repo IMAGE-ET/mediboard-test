@@ -106,8 +106,10 @@ class COperatorIHE extends CEAIOperator {
       if (!$dom_evt->checkApplicationAndFacility($data, $sender)) {
         return;
       }
-      
-      CHL7v2Message::setHandleMode($sender->_configs["handle_mode"]); 
+
+      if (!empty($sender->_configs["handle_mode"])) {
+        CHL7v2Message::setHandleMode($sender->_configs["handle_mode"]);
+      }
 
       $dom_evt->_ref_exchange_ihe = $exchange_ihe;
       $ack->_ref_exchange_ihe     = $exchange_ihe;
