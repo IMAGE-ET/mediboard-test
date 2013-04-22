@@ -9,18 +9,22 @@
  * @version    $Revision$
  */
 CCanDo::checkEdit();
-
 $facture_id   = CValue::getOrSession("facture_id");
 $patient_id   = CValue::getOrSession("patient_id");
-$object_class = CValue::getOrSession("object_class");
+$object_class = CValue::getOrSession("object_class", "CFactureCabinet");
 
 $facture = new $object_class;
 $assurances_patient = array();
 
 if ($facture_id) {
-  $facture->load($facture_id); 
-  $facture->loadRefs();
+  $facture->load($facture_id);
+  $facture->loadRefPatient();
   $facture->_ref_patient->loadRefsCorrespondantsPatient();
+  $facture->loadRefPraticien();
+  $facture->loadRefAssurance();
+  $facture->loadRefsObjects();
+  $facture->loadRefsReglements();
+  $facture->loadRefsRelances();
   $facture->loadRefsNotes();
 }
 

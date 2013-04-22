@@ -88,7 +88,10 @@ $listFactures = $facture->loadList($where, $order, null, null, $ljoin);
 //mbTrace(count($listFactures));
 $listPlages = array();
 foreach ($listFactures as $_facture) {
-  $_facture->loadRefs();
+  $_facture->loadRefPatient();
+  $_facture->loadRefPraticien();
+  $_facture->loadRefsObjects();
+  $_facture->loadRefsReglements();
   $_facture->loadRefsNotes();
   
   // Ajout de reglements

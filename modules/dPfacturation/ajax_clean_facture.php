@@ -25,7 +25,12 @@ if ($resolution == 1) {
   $factures = $facture->loadList($where, "praticien_id", null, $group, $ljoin);
   
   foreach ($factures as $fact) {
-    $fact->loadRefs();
+    $fact->loadRefPatient();
+    $fact->loadRefPraticien();
+    $fact->loadRefAssurance();
+    $fact->loadRefsObjects();
+    $fact->loadRefsReglements();
+    
     $where = array();
     $where["object_id"]  = " = '".$fact->_ref_first_consult->_id."'";
     $where["object_class"]  = " = 'CConsultation'";
@@ -57,7 +62,13 @@ elseif ($resolution == 2) {
   $liaisons = $liaison->loadList($where, null, null, $group);
   foreach ($liaisons as $lien) {
     $facture = $lien->loadRefFacture();
-    $facture->loadRefs();
+    $facture->loadRefPatient();
+    $facture->loadRefPraticien();
+    $facture->loadRefAssurance();
+    $facture->loadRefsObjects();
+    $facture->loadRefsReglements();
+    $facture->loadRefsRelances();
+    $facture->loadRefsNotes();
     if (count($facture->_ref_consults)>=2) {
       $consult = new CConsultation();
       $consult->load($facture->_ref_last_consult->_id);
@@ -94,7 +105,11 @@ $group = "facture_id HAVING COUNT(facture_id) >= 2";
 $liaison = new CFactureLiaison();
 $liaisons = $liaison->loadList($where, null, null, $group);
 foreach ($liaisons as $lien) {
-  $lien->loadRefFacture()->loadRefs();
+  $fact = $lien->loadRefFacture();
+  $fact->loadRefPatient();
+  $fact->loadRefPraticien();
+  $fact->loadRefsObjects();
+  $fact->loadRefsReglements();
 }
 
 $ljoin = array();
@@ -108,8 +123,12 @@ $group = "facture_liaison.object_id HAVING COUNT(facture_liaison.object_id) >= 2
 $facture = new CFactureCabinet();
 $factures = $facture->loadList($where, "praticien_id", null, $group, $ljoin);
 foreach ($factures as $fact) {
-  $fact->loadRefsObjects();
-  $fact->loadRefs();
+  $_facture->loadRefPatient();
+  $_facture->_ref_patient->loadRefsCorrespondantsPatient();
+  $_facture->loadRefPraticien();
+  $_facture->loadRefAssurance();
+  $_facture->loadRefsObjects();
+  $_facture->loadRefsReglements();
 }
 
 // Création du template

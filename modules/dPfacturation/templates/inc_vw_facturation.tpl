@@ -24,7 +24,14 @@
   {{/if}}
 </fieldset>
 
-<!-- Reglement -->
+{{if $facture->_ref_relances|@count && $conf.dPfacturation.CRelance.use_relances}}
+  <!-- Relances -->
+  <div id="relances">
+    {{mb_include module=dPfacturation template="inc_vw_relances"}}
+  </div>
+{{/if}}
+
+<!-- Reglements -->
 {{if $facture->_id && $facture->cloture}}
   <div id="reglements_facture">
     {{mb_include module=dPfacturation template="inc_vw_reglements"}}

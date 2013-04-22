@@ -194,7 +194,7 @@ class CSetupdPfacturation extends CSetup {
 
     $this->makeRevision("0.21");
 
-    // Ecrit les droits utilisateurs sur le module facturation
+     //Ecrit les droits utilisateurs sur le module facturation
     $query = "INSERT INTO `perm_module` (`user_id`, `mod_id`, `permission`, `view`)
               SELECT u.user_id, m.mod_id, 2, 0
               FROM perm_module AS p, modules AS m, modules AS n, users AS u
@@ -211,6 +211,25 @@ class CSetupdPfacturation extends CSetup {
                 AND p.permission = '2'
               );";
     $this->addQuery($query);
-    $this->mod_version = "0.22";
+    $this->makeRevision("0.22");
+    
+    $query = "CREATE TABLE `facture_relance` (
+              `relance_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `object_class` ENUM ('CFactureCabinet','CFactureEtablissement') NOT NULL DEFAULT 'CFactureCabinet',
+              `object_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+              `date` DATE,
+              `etat` ENUM ('emise','regle','renouvelle') NOT NULL DEFAULT 'emise',
+              `du_patient` DECIMAL (10,2),
+              `du_tiers` DECIMAL (10,2),
+              `numero` TINYINT (4) UNSIGNED NOT NULL DEFAULT '1'
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `facture_relance` 
+              ADD INDEX (`object_id`),
+              ADD INDEX (`date`);";
+    $this->addQuery($query);
+    $this->mod_version = "0.23";
+    
   }
 }

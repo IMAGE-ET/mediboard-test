@@ -38,19 +38,10 @@ class CFactureCabinet extends CFacture {
     $backProps = parent::getBackProps();
     $backProps["consultations"] = "CConsultation facture_id";
     $backProps["reglements"]    = "CReglement object_id";
+    $backProps["relance_fact_cabinet"] = "CRelance object_id";
     return $backProps;
   }
    
-  /**
-   * getProps
-   * 
-   * @return $props
-  **/
-  function getProps() {
-    $props = parent::getProps();
-    return $props;
-  }
-     
   /**
    * updateFormFields
    * 
@@ -74,30 +65,15 @@ class CFactureCabinet extends CFacture {
   }
   
   /**
-   * loadRefsFwd
-   * 
-   * @return void
-  **/
-  function loadRefsFwd(){
-    parent::loadRefsFwd();
-    $this->loadRefsConsults();
-  } 
-  
-  /**
    * Redéfinition du store
    * 
    * @return void
   **/
   function store() {
-    if (CModule::getActive("dPfacturation")) {
-      //Si on cloture la facture on créé les lignes de facture
-      if ($this->cloture && $this->fieldModified("cloture")) {
-        $this->creationLignesFacture();
-      }
-    }
+    $this->loadRefsConsultation();
     // A vérifier pour le == 0 s'il faut faire un traitement
-    if ($this->facture !== '0') {
-      foreach ($this->loadBackRefs("consultations") as $_consultation) {
+    if ($this->facture !== '0' && $this->_id) {
+      foreach ($this->_ref_consults as $_consultation) {
         if ($this->facture == -1 && $_consultation->facture == 1) {
           $_consultation->facture = 0;
           $_consultation->store();
@@ -108,54 +84,27 @@ class CFactureCabinet extends CFacture {
         }
       }
     }
-    
-    // Etat des règlement à propager sur les consultations
-    if ($this->fieldModified("patient_date_reglement") || $this->fieldModified("tiers_date_reglement")) {
-      foreach ($this->loadBackRefs("consultations") as $_consultation) {
-        $_consultation->patient_date_reglement = $this->patient_date_reglement;
-        $_consultation->tiers_date_reglement   = $this->tiers_date_reglement;
-        
-        if ($msg = $_consultation->store()) {
-          return $msg;
-        }
-      }
-    }
-    
+  
+    $this->loadRefsRelances();
+    $this->loadRefsReglements();
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
     }
-    
   }
-
+  
   /**
-   * Chargement des différentes consultations liées à la facture
-   * 
-   * @param bool $cache cache
+   * Redéfinition du delete
    * 
    * @return void
   **/
-  function loadRefsConsults($cache = 1) {
-    parent::loadRefsObjects();
-    
-    //@todo vérifier l'utilité de ceci...
-    if (!count($this->_ref_consults)) {
-      $this->_ref_consults = $this->loadBackRefs("consultations", "consultation_id");
+  function delete() {
+    $this->loadRefsReglements();
+    $this->loadRefsRelances();
+    // Standard delete
+    if ($msg = parent::delete()) {
+      return $msg;
     }
-    
-    return $this->_ref_consults;
-  }
-
-  /**
-   * loadRefs
-   * 
-   * @return void
-  **/
-  function loadRefs(){
-    $this->loadRefsFwd();
-    $this->loadRefsBack();
-    $this->updateMontants();
-    $this->loadNumerosBVR();
   }
   
   //Ne pas supprimer cette fonction!
@@ -182,6 +131,17 @@ class CFactureCabinet extends CFacture {
     return $facture;
   }
   
+  /**
+   * Chargement des relances de la facture
+   * 
+   * @return _ref_relances
+  **/
+  function loadRefsRelances(){
+    $this->_ref_relances = $this->loadBackRefs("relance_fact_cabinet", 'date');
+    $this->IsRelancable();
+    return $this->_ref_relances;
+  }
+
   /**
    * Fonction permettant l'ajout d'une consultation à une facture
    * 

@@ -2,8 +2,22 @@
   {{mb_return}}
 {{/if}}
 
+{{if $facture->_is_relancable && $conf.dPfacturation.CRelance.use_relances}}
+  <tr>
+    <td colspan="8">
+      <form name="facture_relance" method="post" action="" onsubmit="return Relance.create(this);">
+        {{mb_class object=$facture->_ref_last_relance}}
+        <input type="hidden" name="relance_id" value=""/>
+        <input type="hidden" name="object_id" value="{{$facture->_id}}"/>
+        <input type="hidden" name="object_class" value="{{$facture->_class}}"/>
+        <button class="add" type="submit">Créer une relance</button>
+      </form>
+    </td>
+  </tr>
+{{/if}}
+
 <tr>
-  <th class="category narrow" class="">Date</th>
+  <th class="category narrow">Date</th>
   <th class="category">Code</th>
   <th class="category">Libelle</th>
   <th class="category narrow">Base</th>
@@ -68,5 +82,24 @@
     <td colspan="2"><b>Montant Total</b></td>
     <td style="text-align:right;"><b>{{mb_value object=$facture field="_montant_avec_remise"}}</b></td>
   <tr>
+  {{assign var="classe" value=$facture->_class}}
+  {{if !$facture->_reglements_total_patient && !$conf.dPfacturation.$classe.use_auto_cloture}}
+    <tr>
+      <td colspan="7">
+        <form name="change_type_facture" method="post">
+          {{mb_class object=$facture}}
+          {{mb_key   object=$facture}}
+          <input type="hidden" name="facture_class" value="{{$facture->_class}}" />
+          <input type="hidden" name="cloture" value="{{if !$facture->cloture}}{{$date}}{{/if}}" />
+          <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
+          {{if !$facture->cloture}}
+            <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Cloturer la facture</button>
+          {{else}}
+            <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Réouvrir la facture</button> Cloturée le {{$facture->cloture|date_format:"%d/%m/%Y"}}
+          {{/if}}
+        </form>
+      </td>
+    </tr>
+  {{/if}}
 
 </tbody>

@@ -1,7 +1,7 @@
 {{if !@$modules.tarmed->_can->read || !$conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
   {{mb_return}}
 {{/if}}
-{{mb_script module=patients   script=correspondant ajax="true"}}
+{{mb_script module=patients script=correspondant ajax="true"}}
 
 <script>
   refreshAssurance = function() {
@@ -11,12 +11,30 @@
     url.addParam("patient_id"   , '{{$facture->patient_id}}');
     url.requestUpdate("refresh-assurance");
   }
+  
+  printFacture = function(facture_id, type_pdf) {
+    var url = new Url('facturation', 'ajax_edit_bvr');
+    url.addParam('facture_class', '{{$facture->_class}}');
+    url.addParam('facture_id'   , facture_id);
+    url.addParam('type_pdf'     , type_pdf);
+    url.addParam('suppressHeaders', '1');
+    url.popup(1000, 600);
+  }
 </script>
 {{if $facture->cloture && isset($factures|smarty:nodefaults) && count($factures)}}
   <tr>
     <td colspan="8">
-      <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 0, 1);">Edition des BVR</button>
-      <button class="print" onclick="printFacture('{{$facture->_id}}', 1, 0);">Justificatif de remboursement</button>
+      <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 'bvr');">Edition des BVR</button>
+      <button class="print" onclick="printFacture('{{$facture->_id}}', 'justificatif');">Justificatif de remboursement</button>
+      {{if $facture->_is_relancable && $conf.dPfacturation.CRelance.use_relances}}
+        <form name="facture_relance" method="post" action="" onsubmit="return Relance.create(this);">
+          {{mb_class object=$facture->_ref_last_relance}}
+          <input type="hidden" name="relance_id" value=""/>
+          <input type="hidden" name="object_id" value="{{$facture->_id}}"/>
+          <input type="hidden" name="object_class" value="{{$facture->_class}}"/>
+          <button class="add" type="submit">Créer une relance</button>
+        </form>
+      {{/if}}
       {{if !$facture->_ref_patient->avs}}
         <div class="small-warning" style="display:inline">N° AVS manquant pour le patient</div>
       {{/if}}
@@ -182,7 +200,8 @@
   </tr>
 </tbody>
 
-{{if !$facture->_reglements_total_patient}}
+{{assign var="classe" value=$facture->_class}}
+{{if !$facture->_reglements_total_patient && !$conf.dPfacturation.$classe.use_auto_cloture}}
   <tr>
     <td colspan="7">
       <form name="change_type_facture" method="post">
@@ -193,7 +212,7 @@
         <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
         {{if !$facture->cloture}}
           <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Cloturer la facture</button>
-        {{elseif !isset($reglement|smarty:nodefaults) || ($facture->_ref_reglements|@count == 0)}}
+        {{else}}
           <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Réouvrir la facture</button> Cloturée le {{$facture->cloture|date_format:"%d/%m/%Y"}}
         {{/if}}
       </form>

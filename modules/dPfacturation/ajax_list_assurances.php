@@ -8,7 +8,6 @@
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @version    $Revision$
  */
-
 CCanDo::checkEdit();
 $facture_id     = CValue::get("facture_id");
 $facture_class  = CValue::get("facture_class");
@@ -21,8 +20,14 @@ $patient->loadRefsCorrespondantsPatient();
 
 $facture = new $facture_class;
 $facture->load($facture_id);  
-$facture->loadRefs();
+$facture->loadRefPatient();
 $facture->_ref_patient->loadRefsCorrespondantsPatient();
+$facture->loadRefPraticien();
+$facture->loadRefAssurance();
+$facture->loadRefsObjects();
+$facture->loadRefsReglements();
+$facture->loadRefsRelances();
+$facture->loadRefsNotes();
 
 // Création du template
 $smarty = new CSmartyDP();

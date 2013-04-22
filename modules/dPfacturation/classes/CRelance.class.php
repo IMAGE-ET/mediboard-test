@@ -1,0 +1,145 @@
+<?php
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPfacturation
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ */
+
+/**
+ * Permet d'editer des relances pour les factures impayees
+ */
+class CRelance extends CMbMetaObject {
+  // DB Table key
+  public $relance_id;
+  
+  // DB Fields
+  public $object_id;
+  public $object_class;
+  public $date;
+  public $etat;
+  public $du_patient;
+  public $du_tiers;
+  public $numero;
+  
+  public $_montant;
+  // Object References
+  public $_ref_object;
+  
+  /**
+   * getSpec
+   * 
+   * @return $spec
+  **/
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'facture_relance';
+    $spec->key   = 'relance_id';
+    return $spec;
+  }
+  
+  /**
+   * getProps
+   * 
+   * @return $props
+  **/
+  function getProps() {
+    $props = parent::getProps();
+    $props["object_class"]  = "enum notNull list|CFactureCabinet|CFactureEtablissement default|CFactureCabinet";
+    $props["date"]          = "date";
+    $props["etat"]          = "enum notNull list|emise|regle|renouvelle default|emise";
+    $props["numero"]        = "num notNull min|1 max|10 default|1";
+    $props["du_patient"]    = "currency decimals|2";
+    $props["du_tiers"]      = "currency decimals|2";
+    $props["_montant"]      = "currency decimals|2";
+    return $props;
+  }
+  
+  /**
+   * updateFormFields
+   * 
+   * @return void
+  **/
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = "Relance du ".$this->date;
+    $this->_montant = $this->du_patient + $this->du_tiers;
+  }
+  
+  /**
+   * Chargement de l'objet facturable
+   * 
+   * @return $this->_ref_object
+  **/
+  function loadRefFacture() {
+    return $this->_ref_object =  $this->loadTargetObject();
+  }
+
+  /**
+   * Redefinition du store
+   * 
+   * @return void
+  **/
+  function store() {
+    if (!$this->_id && $this->object_class && $this->object_id) {
+      $this->_ref_object = new $this->object_class;
+      $this->_ref_object->load($this->object_id);
+      $this->_ref_object->loadRefPatient();
+      $this->_ref_object->loadRefPraticien();
+      $this->_ref_object->loadRefsObjects();
+      $this->_ref_object->loadRefsReglements();
+      $this->_ref_object->loadRefsRelances();
+  
+      $this->date       = CMbDT::date();
+      $this->du_patient = $this->_ref_object->_du_restant_patient;
+      $this->du_tiers   = $this->_ref_object->_du_restant_tiers;
+      $der_relance      = $this->_ref_object->_ref_last_relance;
+      if ($der_relance->_id) {
+        if ($der_relance->etat != "regle") {
+          $this->numero = $der_relance->numero + 1;
+          $der_relance->etat = "renouvelle";
+          $der_relance->store();
+        }
+        else {
+          return "La derniere relance est reglee";
+        }
+      }
+    }
+    
+    // Standard store
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+  }
+
+  /**
+   * Redefinition du delete
+   * 
+   * @return void
+  **/
+  function delete() {
+    //Supression possible que de la derniere relance d'une facture
+    $facture = $this->loadRefFacture();
+    $facture->loadRefsRelances();
+    if (count($facture->_ref_relances) > 1 && $this->_id != $facture->_ref_last_relance->_id) {
+      return "Vous ne pouvez supprimer que la derniere relance emise";
+    }
+    
+    //Une relance reglee, ne peut pas etre supprimee
+    if ($this->etat == "regle") {
+      return "La relance est reglee, vous ne pouvez pas la supprimer"; 
+    }
+    
+    // Standard store
+    if ($msg = parent::delete()) {
+      return $msg;
+    }
+    
+    $facture->loadRefsRelances();
+    $facture->_ref_last_relance->etat = "emise";
+    $facture->_ref_last_relance->store();
+  }
+}
