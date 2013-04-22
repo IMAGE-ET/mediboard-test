@@ -13,12 +13,21 @@ Keeper = {
     url.requestUpdate("vw_list_keeper");
   },
 
-  showKeeper : function(password_keeper_id) {
+  showKeeper : function(password_keeper_id, elmt) {
+    if (password_keeper_id == '0') {
+      $('keeperList').select('tr').invoke('removeClassName', 'selected');
+    }
     var url = new Url("passwordKeeper", "ajax_edit_keeper");
     url.addParam("password_keeper_id", password_keeper_id);
     url.requestUpdate("vw_edit_keeper", {
-      onComplete:function() {
-        if (password_keeper_id != 0) Keeper.showListCategory(password_keeper_id);
+      onComplete: function() {
+        if (password_keeper_id != 0) {
+          Keeper.showListCategory(password_keeper_id);
+        }
+        var tr = elmt.up('tr');
+        if (tr) {
+          tr.addUniqueClassName('selected');
+        }
       }
     });
   },
@@ -37,7 +46,10 @@ Keeper = {
     url.requestUpdate("vw_list_category");
   },
   
-  showCategory : function(category_id, password_keeper_id) {
+  showCategory : function(category_id, password_keeper_id, elmt) {
+    if (category_id == '0') {
+      $('categoryList').select('tr').invoke('removeClassName', 'selected');
+    }
     var url = new Url("passwordKeeper", "ajax_edit_category");
     url.addParam("category_id", category_id);
     url.addParam("password_keeper_id", password_keeper_id);
@@ -45,6 +57,10 @@ Keeper = {
       onComplete:function() {
         if (category_id != 0) {
           Keeper.showListPasswordEntry(category_id);
+        }
+        var tr = elmt.up('tr');
+        if (tr) {
+          tr.addUniqueClassName('selected');
         }
       }
     });
@@ -65,11 +81,21 @@ Keeper = {
     url.requestUpdate("vw_list_password");
   },
 
-  showPasswordEntry : function(password_id, category_id) {
+  showPasswordEntry : function(password_id, category_id, elmt) {
+    if (password_id == '0') {
+      $('passwordList').select('tr').invoke('removeClassName', 'selected');
+    }
     var url = new Url("passwordKeeper", "ajax_edit_password");
     url.addParam("password_id", password_id);
     url.addParam("category_id", category_id);
-    url.requestUpdate("vw_edit_password");
+    url.requestUpdate("vw_edit_password", {
+      onComplete: function() {
+        var tr = elmt.up('tr');
+        if (tr) {
+          tr.addUniqueClassName('selected');
+        }
+      }
+    });
   },
 
   submitPasswordEntry : function(form, category_id) {
@@ -82,14 +108,16 @@ Keeper = {
   },
 
   promptPassphrase : function(password_keeper_id) {
-    var passphrase = prompt("Entrez votre phrase de passe :");
+    var passphrase = prompt("Entrez votre phrase de passe :", "");
     if (passphrase != null) {
       var url = new Url("passwordKeeper", "ajax_edit_keeper");
       url.addParam("password_keeper_id", password_keeper_id);
       url.addParam("passphrase", passphrase);
       url.requestUpdate("vw_edit_keeper", {
-        onComplete:function() {
-          if (password_keeper_id != 0) Keeper.showListCategory(password_keeper_id);
+        onComplete: function() {
+          if (password_keeper_id != 0) {
+            Keeper.showListCategory(password_keeper_id);
+          }
         }
       });
     }
@@ -102,7 +130,7 @@ Keeper = {
   },
 
   checkKeeperDeletion : function(password_keeper_id) {
-    var passphrase = prompt("Entrez votre phrase de passe :");
+    var passphrase = prompt("Entrez votre phrase de passe :", "");
     if (passphrase != null) {
       var url = new Url("passwordKeeper", "ajax_edit_keeper");
       url.addParam("password_keeper_id", password_keeper_id);

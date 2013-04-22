@@ -79,10 +79,18 @@ class CPasswordKeeper extends CMbObject {
   }
 
   function store() {
-    // Si création : génération du vecteur d'initialisation
-    if (!$this->_id || $this->fieldModified("_passphrase")) {
-      CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/Random");
-      $this->iv = bin2hex(crypt_random_string(16));
+    $this->generateIV();
+
+    /*
+     * Lorsque le trousseau existe et que la phrase est modifiée
+     * Charge tous les mots de passe et les re-chiffre
+     */
+    $this->loadRefsBack();
+    foreach ($this->_ref_categories as $_category) {
+      $_category->loadRefsBack();
+      foreach ($_category->_ref_passwords as $_password) {
+        $_password->renew(CValue::sessionAbs("passphrase"), $this->_passphrase);
+      }
     }
 
     $this->sample = $this->encrypt();
@@ -92,6 +100,19 @@ class CPasswordKeeper extends CMbObject {
     }
   }
 
+  /**
+   * Génération d'un vecteur d'initialisation
+   */
+  function generateIV() {
+    CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/Random");
+    $this->iv = bin2hex(crypt_random_string(16));
+  }
+
+  /**
+   * Chiffrement de la chaîne témoin
+   *
+   * @return string
+   */
   function encrypt() {
     CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/AES");
 
@@ -104,6 +125,13 @@ class CPasswordKeeper extends CMbObject {
     return $crypted;
   }
 
+  /**
+   * Teste la validité de la phrase de passe via la chaîne témoin
+   *
+   * @param string $passphrase Phrase de passe saisie par l'utilisateur
+   *
+   * @return bool
+   */
   function testSample($passphrase) {
     CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/AES");
 

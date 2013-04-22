@@ -10,6 +10,8 @@
 
 CCanDo::checkAdmin();
 
+$password_keeper_id = CValue::getOrSession("password_keeper_id");
+
 // Recupération de la liste des trousseaux
 $keeper = new CPasswordKeeper();
 $user   = CMediusers::get();
@@ -22,5 +24,6 @@ foreach ($keepers as $_keeper) {
 }
 
 $smarty = new CSmartyDP();
-$smarty->assign("keepers", $keepers);
+$smarty->assign("keepers"           , $keepers);
+$smarty->assign("password_keeper_id", $password_keeper_id);
 $smarty->display("inc_list_keeper.tpl");

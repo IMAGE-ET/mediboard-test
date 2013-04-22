@@ -11,6 +11,7 @@
 CCanDo::checkAdmin();
 
 $category_id = CValue::getOrSession("category_id");
+$password_id = CValue::getOrSession("password_id");
 
 $password = new CPasswordEntry();
 $password->category_id = $category_id;
@@ -19,7 +20,8 @@ $password->category_id = $category_id;
 $passwords = $password->loadMatchingList();
 
 $smarty = new CSmartyDP();
-$smarty->assign("passwords", $passwords);
-$smarty->assign("password" , $password);
-$smarty->assign("revealed" , null);
+$smarty->assign("passwords"  , $passwords);
+$smarty->assign("password"   , $password);
+$smarty->assign("revealed"   , null);
+$smarty->assign("password_id", $password_id);
 $smarty->display("inc_list_password.tpl");

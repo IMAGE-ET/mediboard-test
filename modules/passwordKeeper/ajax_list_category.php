@@ -11,6 +11,7 @@
 CCanDo::checkAdmin();
 
 $password_keeper_id = CValue::getOrSession("password_keeper_id");
+$category_id        = CValue::getOrSession("category_id");
 
 // Récupération de la liste des catégories
 $category = new CPasswordCategory();
@@ -22,6 +23,7 @@ foreach ($categories as $_category) {
 }
 
 $smarty = new CSmartyDP();
-$smarty->assign("categories", $categories);
-$smarty->assign("category"  , $category);
+$smarty->assign("categories" , $categories);
+$smarty->assign("category"   , $category);
+$smarty->assign("category_id", $category_id);
 $smarty->display("inc_list_category.tpl");

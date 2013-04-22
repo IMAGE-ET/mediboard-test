@@ -7,7 +7,7 @@
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @link     http://www.mediboard.org*}}
 
-<table class="tbl">
+<table class="tbl" id="passwordList">
   <tr>
     <button type="button" class="new" onclick="Keeper.showPasswordEntry('0', '{{$password->category_id}}')">{{tr}}CPasswordEntry-title-create{{/tr}}</button>
   </tr>
@@ -20,9 +20,9 @@
     <th>{{tr}}CPasswordEntry-password_comments{{/tr}}</th>
   </tr>
   {{foreach from=$passwords item=_password}}
-    <tr>
+    <tr {{if $password_id == $_password->_id}}class='selected'{{/if}}>
       <td>
-        <a href="#1" onclick="Keeper.showPasswordEntry('{{$_password->_id}}', '{{$password->category_id}}')" title="{{tr}}CPasswordEntry-title-modify{{/tr}}">
+        <a href="#1" onclick="Keeper.showPasswordEntry('{{$_password->_id}}', '{{$password->category_id}}', this)" title="{{tr}}CPasswordEntry-title-modify{{/tr}}">
           {{mb_value object=$_password field="password_description"}}
         </a>
       </td>
