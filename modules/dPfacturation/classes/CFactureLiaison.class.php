@@ -66,13 +66,13 @@ class CFactureLiaison extends CMbMetaObject {
    * 
    * @param bool $cache cache
    * 
-   * @return void
+   * @return $this->_ref_facture
   **/
   function loadRefFacture($cache = 1) {
-    $facture = new $this->facture_class;
-    $facture->facture_id = $this->facture_id;
-    $facture->loadMatchingObject();
-    return $this->_ref_facture = $facture;
+    $this->_ref_facture = new $this->facture_class;
+    $this->_ref_facture->facture_id = $this->facture_id;
+    $this->_ref_facture->loadMatchingObject();
+    return $this->_ref_facture;
   }
      
   /**
@@ -95,6 +95,6 @@ class CFactureLiaison extends CMbMetaObject {
       return $msg;
     }
     
-    $facture = $this->loadRefFacture();
+    $this->loadRefFacture();
   } 
 }
