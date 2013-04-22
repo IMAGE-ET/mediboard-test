@@ -47,11 +47,7 @@ validTarif = function(){
   if ($V(form.tarif) == ""){
     $V(form.tarif, "manuel");
   }
-  Reglement.submit(form, true, loadFacture);
-}
-
-loadFacture = function() {
-  Facture.load(document.tarifFrm, '{{$consult->patient_id}}', '{{$pour_compte_praticien_id}}', '{{$consult->_id}}', 1);
+  Reglement.submit(form, true, reloadFacture);
 }
 
 reloadFacture = function() {

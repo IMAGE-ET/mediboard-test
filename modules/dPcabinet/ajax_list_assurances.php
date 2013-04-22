@@ -18,9 +18,15 @@ $patient->load($patient_id);
 $patient->loadRefsCorrespondantsPatient();
 
 $facture = new CFactureCabinet();
-$facture->load($facture_id);  
-$facture->loadRefs();
+$facture->load($facture_id);
+$facture->loadRefPatient();
 $facture->_ref_patient->loadRefsCorrespondantsPatient();
+$facture->loadRefPraticien();
+$facture->loadRefAssurance();
+$facture->loadRefsObjects();
+$facture->loadRefsReglements();
+$facture->loadRefsRelances();
+$facture->loadRefsNotes();
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -125,28 +125,28 @@ $reglement->montant = round($consult->_du_restant_patient, 2);
 // Codes et actes
 $consult->loadRefsActes();
 
-$facture = new CFactureCabinet();
-$where 	 = array();
-$where["patient_id"] = "= '$consult->patient_id'";
-if ($consult->_ref_plageconsult->pour_compte_id) {
-  $where["praticien_id"] = "= '".$consult->_ref_plageconsult->pour_compte_id."'";
-}
-else {
-  $where["praticien_id"] = "= '$prat_id'";
-}
-
 //Recherche de la facture pour cette consultation
-if ($consult->_ref_facture) {
-  $facture = $consult->_ref_facture;
-}
+$facture = $consult->loadRefFacture();
+
 //Si on a pas de facture on recherche d'une facture ouverte 
 if (!$facture->_id && CAppUI::conf("ref_pays") == 2) {
+  $where    = array();
+  $where["patient_id"] = "= '$consult->patient_id'";
+  $plage = $consult->_ref_plageconsult;
+  $praticien_id = $plage->pour_compte_id ? $plage->pour_compte_id : $prat_id;
+  $where["praticien_id"] = "= '$praticien_id'";
   $where["cloture"] = " IS NULL";
   $facture->loadObject($where);
 }
 
 if ($facture->_id) {
-  $facture->loadRefs();
+  $facture->loadRefPatient();
+  $facture->_ref_patient->loadRefsCorrespondantsPatient();
+  $facture->loadRefPraticien();
+  $facture->loadRefAssurance();
+  $facture->loadRefsObjects();
+  $facture->loadRefsReglements();
+  $facture->loadRefsNotes();
 }
 
 // Création du template

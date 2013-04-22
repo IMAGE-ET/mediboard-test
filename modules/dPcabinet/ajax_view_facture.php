@@ -8,9 +8,7 @@
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @version    $Revision$
  */
-
 CCanDo::checkEdit();
-
 $facture_id  = CValue::getOrSession("facture_id");
 $consult_id  = CValue::get("consult_id");
     
@@ -21,25 +19,23 @@ $consult = null;
 if ($consult_id) {
   $consult = new CConsultation();
   $consult->load($consult_id);
-  $consult->loadRefsReglements();
-  
-  if (!$facture->load($consult->facture_id) && $facture_id) {
-    $facture->load($facture_id);
-  }
-  $facture->_consult_id = $consult_id;
+  $facture = $consult->loadRefFacture();
 }
 elseif ($facture_id) {
   $facture->load($facture_id);
 }
 
-$facture->loadRefs();
+$facture->loadRefPatient();
+$facture->_ref_patient->loadRefsCorrespondantsPatient();
+$facture->loadRefPraticien();
+$facture->loadRefAssurance();
+$facture->loadRefsObjects();
+$facture->loadRefsReglements();
+$facture->loadRefsRelances();
 $facture->loadRefsNotes();
 if ($facture->_ref_consults) {
-  $last_consult = $facture->_ref_last_consult;
   $derconsult_id = $facture->_ref_last_consult->_id;
 }
-$facture->_ref_patient->loadRefsCorrespondantsPatient();
-$facture->loadRefsNotes();
 
 $reglement   = new CReglement();
 $banque      = new CBanque();

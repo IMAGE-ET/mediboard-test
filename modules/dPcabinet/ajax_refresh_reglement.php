@@ -8,13 +8,14 @@
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @version    $Revision$
  */
-
 CCanDo::checkEdit();
 $facture_id  = CValue::get("facture_id");
 
 $facture = new CFactureCabinet();
-$facture->load($facture_id); 
-$facture->loadRefs();
+$facture->load($facture_id);
+$facture->loadRefsObjects();
+$facture->loadRefsReglements();
+$facture->loadRefsNotes();
 
 $reglement = new CReglement();
 

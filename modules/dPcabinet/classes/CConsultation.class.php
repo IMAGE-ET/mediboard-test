@@ -862,7 +862,34 @@ TESTS A EFFECTUER
     if ($this->fieldModified("fin_at") && $this->fin_at) {
       $this->reprise_at = CMbDT::dateTime("+1 DAY", $this->fin_at);
     }
-
+    
+    //Lors de la validation de la consultation
+    // Enregistrement de la facture
+    if ($this->fieldModified("valide", "1")) {
+      $facture = new CFactureCabinet();
+      $facture->_consult_id = $this->_id;
+      $facture->du_patient  = $this->du_patient;
+      $facture->du_tiers    = $this->du_tiers;
+      $facture->store();
+      if (CModule::getActive("dPfacturation")) {
+        $ligne = new CFactureLiaison();
+        $ligne->facture_id    = $facture->_id;
+        $ligne->facture_class = $facture->_class;
+        $ligne->object_id     = $this->_id;
+        $ligne->object_class  = 'CConsultation';
+        $ligne->store();
+      }
+      else {
+        $this->facture_id = $facture->_id;
+      }
+    }
+    //Lors de dévalidation de la consultation 
+    if ($this->fieldModified("valide", "0")) {
+      $facture = $this->loadRefFacture();
+      $facture->_consult_id = $this->_id;
+      $facture->cancelConsult();
+    }
+    
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
