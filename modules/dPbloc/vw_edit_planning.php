@@ -22,9 +22,12 @@ if ($type_view_planning == "day") {
   $debut = $fin = $date;
 }
 else {
-  $debut = CMbDT::date("last sunday", $date);
-  $fin   = CMbDT::date("next sunday", $date);
-  $debut = CMbDT::date("+1 day", $debut);
+  //sunday = first day of week ...
+  if (date("w", strtotime($date)) == 0) {
+    $date = CMbDT::date("-1 DAY", $date);
+  }
+  $debut = CMbDT::date("this week", $date);
+  $fin   = CMbDT::date("next sunday", $debut);
 }
 
 // Liste des jours
