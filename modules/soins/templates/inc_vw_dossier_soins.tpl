@@ -363,12 +363,12 @@ Main.add(function () {
       {{if "dPprescription"|module_active}}
       <!-- Plan de soins journée -->
       <li onmousedown="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med', '{{$hide_close}}'); refreshTabState();">
-        <a href="#jour">Journée</a>
+        <a href="#jour">{{tr}}Soin-tabSuivi-tabViewDay{{/tr}}</a>
       </li>
       
       <!-- Plan de soins semaine -->
       <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');">
-        <a href="#semaine">Semaine</a></li>
+        <a href="#semaine">{{tr}}Soin-tabSuivi-tabViewWeek{{/tr}}</a></li>
         {{if $conf.dPprescription.CPrescription.show_perop_suivi_soins}}
           <li onmousedown="PlanSoins.showPeropAdministrations('{{$prescription_id}}')">
             <a href="#perop_adm" {{if $count_perop_adm == 0}}class="empty"{{/if}}>
