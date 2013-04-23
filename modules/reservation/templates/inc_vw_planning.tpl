@@ -146,15 +146,31 @@
       var heure_sortie_prevue = sortie_prevue.split(" ")[1];
       var time = e.getTime();
       var temp_operation_date = new Date(1970, 1, 1, 0, time.length)
-      var temp_operation = temp_operation_date.toTIME();
-      var time_operation = time.start.format("HH:mm");
+      var temp_operation = temp_operation_date
+      var time_operation = time.start
+
       var index_salle = time.start.getFullYear()-2000;
       var salle_id = this.salles_ids[index_salle];
 
       if (index_salle < 0 || index_salle > this.salles_ids.length) {
         return;
       }
-      
+
+      if (e.type != "commentaire_planning") {
+        var preop = /preop='([0-9 \:-]*)'/.exec(e.title)[1];
+        var preop_segmented = preop.split(":");
+        var postop = /postop='([0-9 \:-]*)'/.exec(e.title)[1];
+        var postop_segmented = postop.split(":");
+
+        temp_operation.addHours(-postop_segmented[0]);
+        temp_operation.addMinutes(-postop_segmented[1]);
+        time_operation.addHours(preop_segmented[0]);
+        time_operation.addMinutes(preop_segmented[1]);
+      }
+
+      time_operation = time_operation.format("HH:mm");
+      temp_operation = temp_operation.format("HH:mm");
+
       // Pour un commentaire
       if (e.type == "commentaire_planning") {
         var form = getForm("editCommentairePlanning");

@@ -279,8 +279,8 @@ if ($show_operations) {
 
       }
 
-      $libelle = "<span style='display: none;' data-entree_prevue='$sejour->entree_prevue' ".
-        "data-sortie_prevue='$sejour->sortie_prevue' data-sejour_id='$sejour->_id' data-duree='$_operation->temp_operation'></span>";
+      $libelle = "<span style='display: none;' data-entree_prevue='$sejour->entree_prevue'".
+        "data-sortie_prevue='$sejour->sortie_prevue' data-sejour_id='$sejour->_id' data-preop='".CMbDT::transform($_operation->presence_preop, null, "%H:%M")."' data-postop='".CMbDT::transform($_operation->presence_postop, null, "%H:%M")."'></span>";
 
       $libelle.= "<span onmouseover='ObjectTooltip.createEx(this, \"".CMbString::htmlEntities($patient->_guid)."\")'>".CMbString::htmlEntities($patient->nom. " " .$patient->prenom." (".$patient->sexe.")")."<br/>[".$patient->getFormattedValue("naissance")."] ".$lit."</span>";
 
