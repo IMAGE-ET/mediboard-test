@@ -175,5 +175,15 @@ class CNuSOAPClient extends nusoap_client {
    * @return boolean True on success or False on failure 
    */
   public function setHeaders($soapheaders) {
-  } 
+  }
+
+  /**
+   * Check service availability
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  public function checkServiceAvailability() {
+  }
 }

@@ -267,4 +267,14 @@ class CSOAPClient {
   public function setHeaders($soapheaders) {
     $this->client->setHeaders($soapheaders);
   }
+
+  /**
+   * Check service availability
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  public function checkServiceAvailability() {
+  }
 }
