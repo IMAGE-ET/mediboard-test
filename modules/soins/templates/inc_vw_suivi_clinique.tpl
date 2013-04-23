@@ -251,9 +251,28 @@
           </td>
         </tr>
         <tr>
-          <td colspan="2">
+          <td>
             <strong>{{mb_label object=$sejour field="type"}}</strong>
             {{mb_value object=$sejour field="type"}}
+          </td>
+          <td class="{{if $sejour->confirme}}ok{{else}}warning{{/if}}">
+            <form name="confirm-sortie-frm" method="post" action="?"
+              onsubmit="return onSubmitFormAjax(this, { onComplete: function() { loadSuiviClinique('{{$sejour->_id}}') } })">
+              <input type="hidden" name="m" value="dPplanningOp" />
+              <input type="hidden" name="dosql" value="do_sejour_aed" />
+              <input type="hidden" name="del" value="0" />
+              {{mb_key object=$sejour}}
+              {{mb_field object=$sejour field=entree_prevue hidden=true}}
+              <button class="change notext" type="submit" style="float: right;">{{tr}}Change{{/tr}}</button>
+              Sortie
+              {{if $sejour->confirme}}
+                confirmée
+                <input type="hidden" name="confirme" value="0" />
+              {{else}}
+                non confirmée
+                <input type="hidden" name="confirme" value="1" />
+              {{/if}}
+            </form>
           </td>
         </tr>
       </table>
