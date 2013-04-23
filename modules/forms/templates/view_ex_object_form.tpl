@@ -421,7 +421,7 @@ function switchMode(){
                   </td>
                 {{/if}}
               {{else}}
-                <td>
+                <td class="text">
                   {{mb_include module=forms template=inc_ex_message}}
                 </td>
               {{/if}}

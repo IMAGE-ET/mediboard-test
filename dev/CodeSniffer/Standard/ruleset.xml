@@ -90,6 +90,7 @@
   <rule ref="PEAR">
     <exclude name="PEAR.ControlStructures.ControlSignature" />
     <exclude name="PEAR.WhiteSpace.ScopeIndent" />
+    <exclude name="PEAR.WhiteSpace.ObjectOperatorIndent" />
   </rule>
 
   <rule ref="PEAR.Classes.ClassDeclaration.OpenBraceNewLine">
@@ -97,10 +98,6 @@
   </rule>
   
   <rule ref="PEAR.WhiteSpace.ScopeIndent.Incorrect">
-    <severity>0</severity>
-  </rule>
-
-  <rule ref="PEAR.WhiteSpace.ObjectOperatorIndent">
     <severity>0</severity>
   </rule>
   
