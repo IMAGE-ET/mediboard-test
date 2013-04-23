@@ -26,94 +26,89 @@ class CModelObject {
   static $ignoredHandlers = array();
     
   /**
-   * The object's class name
-   * @var string
+   * @var string The object's class name
    */
   public $_class;
   
   /**
-   * The object ID
-   * @var integer
+   * @var integer The object ID
    */
   public $_id;
   
   /**
-   * The object GUID ("_class-_id")
-   * @var string
+   * @var string The object GUID ("_class-_id")
    */
   public $_guid;
   
   /**
-   * The universal object view
-   * @var string
+   * @var string The universal object view
    */
-  public $_view          = '';
+  public $_view = '';
   
   /**
-   * The universal object shortview
-   * @var string
+   * @var string The universal object shortview
    */
-  public $_shortview     = '';
+  public $_shortview = '';
   
   /**
-   * The class specification
-   * @var CMbObjectSpec 
+   * @var CMbObjectSpec The class specification
    */
-  public $_spec;    // Class specification
+  public $_spec;
 
   /**
-   * @var CMbFieldSpec[]
+   * @var CMbFieldSpec[] Properties specifications as objects
    */
-  public $_specs         = array(); // Properties specifications as objects
-  /**
-   * @var array
-   */
-  public $_props         = array(); // Properties specifications as string
+  public $_specs = array();
 
   /**
-   * @var CMbBackSpec[]
+   * @var array Properties specifications as string
    */
-  public $_backSpecs     = array(); // Back reference specification as objects
-  /**
-   * @var array
-   */
-  public $_backProps     = array(); // Back reference specification as string
+  public $_props = array();
 
   /**
-   * @var array
+   * @var CMbBackSpec[] Back reference specification as objects
    */
-  public $_configs       = array(); // Object configs
+  public $_backSpecs = array();
+  /**
+   * @var array Back reference specification as string
+   */
+  public $_backProps = array();
 
   /**
-   * @var array
+   * @var array Object configs
    */
-  static $spec          = array();
-  /**
-   * @var array
-   */
-  static $props         = array();
-  /**
-   * @var array
-   */
-  static $specs         = array();
-  /**
-   * @var array
-   */
-  static $backProps     = array();
-  /**
-   * @var array
-   */
-  static $backSpecs     = array();
+  public $_configs = array();
 
   /**
    * @var array
    */
-  static $module_name   = array();
+  static $spec = array();
+  /**
+   * @var array
+   */
+  static $props = array();
+  /**
+   * @var array
+   */
+  static $specs = array();
+  /**
+   * @var array
+   */
+  static $backProps = array();
+  /**
+   * @var array
+   */
+  static $backSpecs = array();
+
+  /**
+   * @var array
+   */
+  static $module_name = array();
   
   /**
-   * @var CModule
+   * @var CModule Parent module
    */
-  public $_ref_module; // Parent module
+  public $_ref_module;
 
   /**
    * Tell wether class exists
@@ -224,9 +219,9 @@ class CModelObject {
     $this->_guid = "$this->_class-none";
 
     // @todo Move up to CStoredObject
-    $this->loadRefModule(self::$module_name[$class]);    
+    $this->loadRefModule(self::$module_name[$class]);
   }
-  
+
   /**
    * Get the module name corresponding to given path
    *
@@ -549,8 +544,6 @@ class CModelObject {
   /**
    * Get DB fields and there values
    *
-   * @todo Rename to plainFields
-   *
    * @return array Associative array
    */
   function getPlainFields() {
@@ -567,8 +560,6 @@ class CModelObject {
   
   /**
    * Update the plain fields from the form fields
-   *
-   * @todo Rename to PlainFields()
    *
    * @return void
    */
@@ -673,7 +664,7 @@ class CModelObject {
    * @return void
    */
   function cloneFrom(CModelObject $object) {
-    $this->extendsWith($mbObject);
+    $this->extendsWith($object);
     $this->_id = null;
   }
   
