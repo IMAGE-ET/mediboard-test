@@ -147,7 +147,7 @@
       var time = e.getTime();
       var temp_operation_date = new Date(1970, 1, 1, 0, time.length)
       var temp_operation = temp_operation_date.toTIME();
-      var time_operation = /debut_interv='([0-9 \:-]*)'/.exec(e.title)[1];
+      var time_operation = time.start.format("HH:mm");
       var index_salle = time.start.getFullYear()-2000;
       var salle_id = this.salles_ids[index_salle];
 
@@ -159,11 +159,11 @@
       if (e.type == "commentaire_planning") {
         var form = getForm("editCommentairePlanning");
         
-        var fin = time.start.addHours(temp_operation_date.getHours()).addMinutes(temp_operation_date.getMinutes());
+        var fin = time.end.format("HH:mm");
         
         $V(form.commentaire_planning_id, object_id);
         $V(form.debut, "{{$date_planning}} " + time_operation);
-        $V(form.fin, "{{$date_planning}} " + fin.toTIME());
+        $V(form.fin, "{{$date_planning}} " + fin);
         $V(form.salle_id, salle_id);
         
         onSubmitFormAjax(form, {onComplete: refreshPlanning});
