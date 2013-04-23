@@ -263,15 +263,8 @@
               <input type="hidden" name="del" value="0" />
               {{mb_key object=$sejour}}
               {{mb_field object=$sejour field=entree_prevue hidden=true}}
-              <button class="change notext" type="submit" style="float: right;">{{tr}}Change{{/tr}}</button>
-              Sortie
-              {{if $sejour->confirme}}
-                confirmée
-                <input type="hidden" name="confirme" value="0" />
-              {{else}}
-                non confirmée
-                <input type="hidden" name="confirme" value="1" />
-              {{/if}}
+              {{mb_field object=$sejour field=confirme typeEnum="checkbox" onchange="submitFormAjax(this.form);"}}
+              Confirmation de la sortie
             </form>
           </td>
         </tr>
