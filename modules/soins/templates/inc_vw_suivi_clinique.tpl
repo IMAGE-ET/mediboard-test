@@ -262,9 +262,8 @@
               <input type="hidden" name="dosql" value="do_sejour_aed" />
               <input type="hidden" name="del" value="0" />
               {{mb_key object=$sejour}}
-              {{mb_field object=$sejour field=entree_prevue hidden=true}}
               {{mb_field object=$sejour field=confirme typeEnum="checkbox" onchange="submitFormAjax(this.form);"}}
-              Confirmation de la sortie
+              {{mb_label object=$sejour field=confirme}}
             </form>
           </td>
         </tr>
