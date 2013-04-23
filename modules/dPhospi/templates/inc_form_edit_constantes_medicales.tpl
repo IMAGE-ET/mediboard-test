@@ -112,12 +112,13 @@ Main.add(function () {
   {{if $show_cat_tabs}}
   <ul id="constantes-by-type{{$tri}}" class="control_tabs small" style="min-width: 200px;">
     {{foreach from=$all_constantes key=_type item=_list}}
-      <li>
-        <a href="#type{{$tri}}-{{$_type}}">{{tr}}CConstantesMedicales.type.{{$_type}}{{/tr}}</a>
-      </li>
+      {{if array_key_exists($_type, $selection)}}
+        <li>
+          <a href="#type{{$tri}}-{{$_type}}">{{tr}}CConstantesMedicales.type.{{$_type}}{{/tr}}</a>
+        </li>
+      {{/if}}
     {{/foreach}}
   </ul>
-  <hr class="control_tabs" />
   {{/if}}
   
   <table class="main form constantes">
