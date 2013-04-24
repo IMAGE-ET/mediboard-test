@@ -97,7 +97,7 @@
         </span>
       </td>
       <td class="action" style="background:#{{$sejour->_ref_praticien->_ref_function->color}}" 
-        onmouseover="ObjectTooltip.createTimeHospi(this, '{{$sejour->praticien_id}}', '{{$sejour->_codes_ccam_operations}}' );">
+            onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_ref_praticien->_guid}}');">
         {{$sejour->_ref_praticien->_shortview}}
       </td>
       {{else}}
