@@ -264,6 +264,7 @@ class CExchangeIHE extends CExchangeTabular {
    * @return string|void
    */
   function populateExchange(CExchangeDataFormat $data_format, CHL7Event $event) {
+    $data_format->_ref_sender->loadRefsExchangesSources();
     $source = reset($data_format->_ref_sender->_ref_exchanges_sources);
 
     $this->group_id        = $data_format->group_id;
