@@ -9,37 +9,37 @@
  */
 
 class CSetupdPccam extends CSetup {
-  
+
   function __construct() {
     parent::__construct();
-    
+
     $this->mod_name = "dPccam";
-    
+
     $this->makeRevision("all");
     $query = "CREATE TABLE `ccamfavoris` (
-      `favoris_id` bigint(20) NOT NULL auto_increment,
-      `favoris_user` int(11) NOT NULL default '0',
-      `favoris_code` varchar(7) NOT NULL default '',
-      PRIMARY KEY  (`favoris_id`)
-      ) /*! ENGINE=MyISAM */ COMMENT='table des favoris'";
+                `favoris_id` bigint(20) NOT NULL auto_increment,
+                `favoris_user` int(11) NOT NULL default '0',
+                `favoris_code` varchar(7) NOT NULL default '',
+                PRIMARY KEY  (`favoris_id`)
+              ) /*! ENGINE=MyISAM */ COMMENT='table des favoris'";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.1");
     $query = "ALTER TABLE `ccamfavoris` 
-			CHANGE `favoris_id` `favoris_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-			CHANGE `favoris_user` `favoris_user` int(11) unsigned NOT NULL DEFAULT '0';";
+                CHANGE `favoris_id` `favoris_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `favoris_user` `favoris_user` int(11) unsigned NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
     $this->makeRevision("0.11");
     $query = "ALTER TABLE `ccamfavoris`
-			ADD `object_class` VARCHAR(25) NOT NULL DEFAULT 'COperation';";
+                ADD `object_class` VARCHAR(25) NOT NULL DEFAULT 'COperation';";
     $this->addQuery($query);
 
     $this->makeRevision("0.12");
     $query = "ALTER TABLE `ccamfavoris` 
                 ADD INDEX (`favoris_user`);";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.13");
     $query = "CREATE TABLE `frais_divers` (
                 `frais_divers_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
@@ -60,7 +60,7 @@ class CSetupdPccam extends CSetup {
                 ADD INDEX (`executant_id`),
                 ADD INDEX (`object_id`);";
     $this->addQuery($query);
-    
+
     $query = "CREATE TABLE `frais_divers_type` (
                 `frais_divers_type_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
                 `code` VARCHAR (16) NOT NULL,
@@ -69,33 +69,31 @@ class CSetupdPccam extends CSetup {
                 `facturable` ENUM ('0','1') NOT NULL DEFAULT '0'
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.14");
     $this->addPrefQuery("new_search_ccam", "1");
-    
+
     $this->makeRevision("0.15");
-    
+
     $query = "ALTER TABLE `frais_divers` 
-              CHANGE `facturable` `facturable` ENUM ('0','1') NOT NULL DEFAULT '1';";
+                CHANGE `facturable` `facturable` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
-    
+
     $this->makeRevision("0.16");
-    
+
     $this->addPrefQuery("multiple_select_ccam", "0");
-    
+
     $this->makeRevision("0.17");
-    
+
     $this->addPrefQuery("user_executant", "0");
 
     $this->mod_version = "0.18";
-		
-		// Data source query
+
+    // Data source query
     $query = "SELECT *
-              FROM `notes`
-              WHERE `CODEACTE` LIKE 'EBQF004'";
+              FROM `codes_ngap`
+              WHERE `code` LIKE 'MA'";
     //$query = "SHOW TABLES LIKE 'forfaits'";
     $this->addDatasource("ccamV2", $query);
-		
   }
 }
-?>
