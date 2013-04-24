@@ -224,8 +224,8 @@
           </th>
         </tr>
       {{/if}}
-      {{foreach from=$_mouvements_by_service item=_sortie}}
-        {{mb_include module=hospi template=inc_check_sortie_line}}
+      {{foreach from=$_mouvements_by_service item=_affectation}}
+        {{mb_include module=hospi template=inc_check_sortie_line affectation=$_affectation sejour=$_affectation->_ref_sejour}}
       {{/foreach}}
     {{foreachelse}}
       <tr><td colspan="100" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
@@ -299,8 +299,8 @@
             </th>
           </tr>
         {{/if}}
-        {{foreach from=$_mouvemementsNP_by_service item=_sortie}}
-          {{mb_include module=hospi template=inc_check_sortieNP_line}}
+        {{foreach from=$_mouvemementsNP_by_service item=_sejour}}
+          {{mb_include module=hospi template=inc_check_sortie_line affectation=0 sejour=$_sejour}}
         {{/foreach}}
       {{foreachelse}}
         <tr><td colspan="100" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
