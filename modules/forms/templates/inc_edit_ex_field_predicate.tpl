@@ -12,6 +12,18 @@ showField = function(field_id, field_name, value){
   url.addParam("form_name", "ex_field_predicate-form");
   url.addParam("value", value);
   url.requestUpdate("field-view", function(){
+    // Link label with input
+    var label = $$("#field-label label")[0];
+    if (label) {
+      label.htmlFor = field_name;
+      label.id = null;
+    }
+
+    // Enable notNull on the field
+    $$("#field-view input, #field-view select").each(function(element){
+      element.addClassName("notNull");
+    });
+
     form.removeClassName("prepared");
     prepareForm(form);
   });
