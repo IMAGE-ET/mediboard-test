@@ -145,28 +145,34 @@ class CIncrementer extends CMbObject {
     // Incrementation de l'idex
     $value = $incrementer->value;
 
+    // Valeur compatible avec la position dans le cluster
     do {
       $value++;
-    } while ($value % $cluster_count != $cluster_position);
+    }
+    while ($value % $cluster_count != $cluster_position);
+
+    do {
+      // Idex vraiment disponible ?
+      $idex = new CIdSante400();
+      $idex->object_class = $object->_class;
+      $idex->tag          = $tag;
+      $idex->id400 = self::formatValue($object, $incrementer->pattern, $value);
+      $idex->loadMatchingObject();
+    }
+    while ($idex->_id && ($value += $cluster_count));
 
     $incrementer->value = $value;
     $incrementer->last_update = CMbDT::dateTime();
     $incrementer->store();
 
+    // Création de l'identifiant externe
+    $idex->object_id   = $object->_id;
+    $idex->last_update = CMbDT::dateTime();
+    $idex->store();
+
     $mutex->release();
 
-    $format_value = self::formatValue($object, $incrementer->pattern, $incrementer->value);
-    
-    // Création de l'identifiant externe
-    $id400               = new CIdSante400();
-    $id400->object_id    = $object->_id;
-    $id400->object_class = $object->_class;
-    $id400->tag          = $tag;
-    $id400->id400        = $format_value;
-    $id400->last_update  = CMbDT::dateTime();
-    $id400->store();
-
-    return $id400;
+    return $idex;
   }
   
   static function getVars(CMbObject $object) {
