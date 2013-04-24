@@ -138,5 +138,24 @@ Keeper = {
       url.addParam("deletion", true);
       url.requestUpdate("vw_edit_keeper");
     }
+  },
+
+  exportKeeper : function(password_keeper_id) {
+    var oldPassphrase = prompt("Entrez votre phrase de passe :", "");
+    if (oldPassphrase != null) {
+      var newPassphrase = prompt("Entrez la NOUVELLE phrase de passe à utiliser :", "");
+      if (newPassphrase != null) {
+        var url = new Url("passwordKeeper", "vw_export_keeper", 'raw');
+        url.addParam("password_keeper_id", password_keeper_id);
+        url.addParam("oldPassphrase", oldPassphrase);
+        url.addParam("newPassphrase", newPassphrase);
+        url.popDirect(10, 10);
+      }
+    }
+  },
+
+  popupImport : function() {
+    var url = new Url("passwordKeeper", "vw_import_keeper");
+    url.pop(500, 400, "Importation d'un trousseau");
   }
 };
