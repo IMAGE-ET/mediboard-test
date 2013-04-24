@@ -264,11 +264,13 @@ class CExchangeIHE extends CExchangeTabular {
    * @return string|void
    */
   function populateExchange(CExchangeDataFormat $data_format, CHL7Event $event) {
+    $source = reset($data_format->_ref_sender->_ref_exchanges_sources);
+
     $this->group_id        = $data_format->group_id;
     $this->sender_id       = $data_format->sender_id;
     $this->sender_class    = $data_format->sender_class;
     $this->version         = $event->message->extension ? $event->message->extension : $event->message->version;
-    $this->nom_fichier     = ""; 
+    $this->nom_fichier     = isset($source->_receive_filename) ? $source->_receive_filename : "";
     $this->type            = $event->profil;
     $this->sous_type       = $event->transaction;
     $this->code            = $event->code;
