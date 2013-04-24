@@ -28,7 +28,7 @@ $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
 $function = new CFunctions();
 $listFunctions  = $function->loadSpecialites(PERM_EDIT);
 
-$protocole = new CProtocole;
+$protocole = new CProtocole();
 if ($protocole_id) {
   $protocole->load($protocole_id);
   // On vérifie que l'utilisateur a les droits sur le protocole
@@ -38,9 +38,9 @@ if ($protocole_id) {
   }
   $protocole->loadRefs();
   $protocole->loadRefsNotes();
+  $protocole->loadRefPrescriptionChir();
   $chir =& $protocole->_ref_chir;
 }
-
 
 // Durée d'une intervention
 $start = CAppUI::conf("dPplanningOp COperation duree_deb");
@@ -75,5 +75,3 @@ $smarty->assign("listServices"  , $listServices);
 $smarty->assign("listAnesthType"  , $listAnesthType);
 
 $smarty->display("vw_edit_protocole.tpl");
-
-?>

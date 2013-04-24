@@ -495,7 +495,7 @@ Main.add(function () {
           </th>
           <td>
             <input type="text" name="libelle_protocole" id="editProtocole_libelle_protocole" class="autocomplete str"
-              value="{{if $protocole->_id}}{{$protocole->_ref_protocole_prescription_chir->libelle}}{{/if}}"  style="width: 12em;"/>
+              value="{{if $protocole->_id && $protocole->_ref_protocole_prescription_chir}}{{$protocole->_ref_protocole_prescription_chir->libelle}}{{/if}}"  style="width: 12em;"/>
             <input type="hidden" name="protocole_prescription_chir_id" value="{{$protocole->protocole_prescription_chir_id}}"
               onchange="fillClass(this.form.protocole_prescription_chir_id, this.form.protocole_prescription_chir_class);
               submitFormAjax(this.form, 'systemMsg');"/>
