@@ -1,16 +1,15 @@
 {{mb_script module=cabinet script=tarif}}
 
-<script type="text/javascript">
-
+<script>
 Main.add(function () {
   Tarif.updateTotal();
   Tarif.chir_id     = '{{$prat->user_id}}';
   Tarif.function_id = '{{$prat->function_id}}';
+  Tarif.group_id    = '{{$prat->_ref_function->group_id}}';
   {{if $user->_is_praticien || ($user->_is_secretaire && $tarif->_id)}}
   Tarif.updateOwner();
   {{/if}}
 });
-
 </script>
 
 <table class="main">
@@ -28,7 +27,6 @@ Main.add(function () {
     
     <td>
       <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)" class="{{$tarif->_spec}}">
-
       {{mb_class object=$tarif}}
       {{mb_key   object=$tarif}}
 
@@ -41,10 +39,12 @@ Main.add(function () {
           <td>
             {{mb_field object=$tarif field="function_id" hidden=1}}
             <input type="hidden" name="chir_id" value="{{$prat->user_id}}" />
+            <input type="hidden" name="group_id" value="{{$prat->_ref_function->group_id}}" />
             
             <select name="_type" onchange="Tarif.updateOwner();">
               <option value="chir"     {{if $tarif->chir_id}}     selected="selected" {{/if}}>Tarif personnel</option>
               <option value="function" {{if $tarif->function_id}} selected="selected" {{/if}}>Tarif de cabinet</option>
+              <option value="group" {{if $tarif->group_id}}    selected="selected" {{/if}}>Tarif d'établissement</option>
             </select>
           </td>
         </tr>
@@ -135,7 +135,6 @@ Main.add(function () {
               {{else}}
                 {{mb_field object=$tarif field=_somme onchange="Tarif.updateSecteur2();"}}
               {{/if}}
-            
             </td>
           </tr>
         {{elseif @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
@@ -183,7 +182,7 @@ Main.add(function () {
             {{if $tarif->_id}}
               <button name="save" class="modify" type="submit">{{tr}}Save{{/tr}}</button>
 
-              {{if count($tarif->_new_actes) && !$tarif->_has_mto}}
+              {{if count($tarif->_new_actes) && !$tarif->_has_mto && $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
               <input type="hidden" name="_add_mto" value="0" />
               <button class="add" type="submit" onclick="$V(this.form._add_mto, '1');">
                 {{tr}}Add{{/tr}} MTO
@@ -196,7 +195,11 @@ Main.add(function () {
                 {{tr}}Recompute{{/tr}}
               </button>
               {{/if}}
-
+              {{if $conf.ref_pays == "2"}}
+                <button class="edit" type="button" onclick="Code.edit('{{$tarif->_id}}');">
+                  Gestion codes
+                </button>
+              {{/if}}
               <button class="trash" type="button" onclick="confirmDeletion(this.form, { typeName: 'le tarif', objName: this.form.description.value } )">
                 {{tr}}Delete{{/tr}}
               </button>
@@ -205,7 +208,6 @@ Main.add(function () {
             {{/if}}
           </td>
         </tr>
-        
       </table>
       
       </form>

@@ -112,6 +112,14 @@ if (!$consult->tarif || $consult->tarif == "pursue") {
   foreach ($tarifs["func"] as $_tarif) {
     $_tarif->getPrecodeReady();
   }
+  if (CAppui::conf("dPcabinet Tarifs show_tarifs_etab"))  {
+    $where = array();
+    $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+    $tarifs["group"] = $tarif->loadList($where, $order);
+    foreach ($tarifs["group"] as $_tarif) {
+      $_tarif->getPrecodeReady();
+    }
+  }
 }
 
 // Règlements

@@ -9,7 +9,7 @@
   {{assign var=pour_compte_praticien_id value=$praticien->_id}}
 {{/if}}
 
-<script type="text/javascript">
+<script>
 pursueTarif = function() {
   var form = document.tarifFrm;
   $V(form.tarif, "pursue");
@@ -207,6 +207,13 @@ Main.add( function(){
                       {{if $tarifs.func|@count}}
                         <optgroup label="Tarifs cabinet">
                         {{foreach from=$tarifs.func item=_tarif}}
+                          <option value="{{$_tarif->_id}}" {{if $_tarif->_precode_ready}}class="checked"{{/if}}>{{$_tarif}}</option>
+                        {{/foreach}}
+                        </optgroup>
+                      {{/if}}
+                      {{if $conf.dPcabinet.Tarifs.show_tarifs_etab && $tarifs.group|@count}}
+                        <optgroup label="Tarifs établissement">
+                        {{foreach from=$tarifs.group item=_tarif}}
                           <option value="{{$_tarif->_id}}" {{if $_tarif->_precode_ready}}class="checked"{{/if}}>{{$_tarif}}</option>
                         {{/foreach}}
                         </optgroup>

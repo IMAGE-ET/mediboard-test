@@ -38,4 +38,11 @@
     <th colspan="10" class="title">{{tr}}CFunctions-back-tarifs{{/tr}}</th>
   </tr>
   {{mb_include template=inc_list_tarifs_by_owner tarifs=$listeTarifsSpe}}
+  
+  {{if $listeTarifsEtab|@count}}
+    <tr>
+      <th colspan="10" class="title">{{tr}}CGroups-back-tarif_group{{/tr}}</th>
+    </tr>
+    {{mb_include template=inc_list_tarifs_by_owner tarifs=$listeTarifsEtab}}
+ {{/if}}
 </table>

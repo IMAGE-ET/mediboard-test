@@ -1,86 +1,122 @@
-<?php /* $Id$ */
+<?php 
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPcabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ */
 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
+ * Tarif
+ */
 class CTarif extends CMbObject {
   // DB Table key
-  var $tarif_id = null;
+  public $tarif_id;
 
   // DB References
-  var $chir_id     = null;
-  var $function_id = null;
+  public $chir_id;
+  public $function_id;
+  public $group_id;
 
   // DB fields
-  var $description = null;
-  var $secteur1    = null;
-  var $secteur2    = null;
-  var $codes_ccam  = null;
-  var $codes_ngap  = null;
-  var $codes_tarmed = null;
-  var $codes_caisse = null;
+  public $description;
+  public $secteur1;
+  public $secteur2;
+  public $codes_ccam;
+  public $codes_ngap;
+  public $codes_tarmed;
+  public $codes_caisse;
   
   // Form fields
-  var $_type       = null;
-  var $_somme      = null;
-  var $_codes_ngap = array();
-  var $_codes_ccam = array();
-  var $_codes_tarmed = array();
-  var $_codes_caisse = array();
-  var $_new_actes  = array();
+  public $_type;
+  public $_somme;
+  public $_codes_ngap = array();
+  public $_codes_ccam = array();
+  public $_codes_tarmed = array();
+  public $_codes_caisse = array();
+  public $_new_actes  = array();
   
   // Remote fields
-  var $_precode_ready = null;
-  var $_secteur1_uptodate = null;
-  var $_has_mto = null;
+  public $_precode_ready;
+  public $_secteur1_uptodate;
+  public $_has_mto;
   
   // Behaviour fields
-  var $_add_mto = null;
-	var $_update_montants = null;
+  public $_add_mto;
+  public $_add_code;
+  public $_dell_code;
+  public $_code;
+  public $_quantite;
+  public $_type_code;
+  public $_update_montants;
   
   // Object References
-  var $_ref_chir     = null;
-  var $_ref_function = null;
+  public $_ref_chir;
+  public $_ref_function;
+  public $_ref_group;
   
-  var $_bind_consult = null;
-  var $_consult_id  = null;
+  public $_bind_consult;
+  public $_consult_id;
   
+  /**
+   * getSpec
+   * 
+   * @return $spec
+  **/
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'tarifs';
     $spec->key   = 'tarif_id';
-    $spec->xor["owner"] = array("function_id", "chir_id");
+    $spec->xor["owner"] = array("function_id", "chir_id", "group_id");
     return $spec;
   }
   
+  /**
+   * getProps
+   * 
+   * @return $props
+  **/
   function getProps() {
-  	$specs = parent::getProps();
-    $specs["chir_id"]     = "ref class|CMediusers";
-    $specs["function_id"] = "ref class|CFunctions";
-    $specs["description"] = "str notNull confidential seekable";
-    $specs["secteur1"]    = "currency notNull min|0";
-    $specs["secteur2"]    = "currency";
-    $specs["codes_ccam"]  = "str";
-    $specs["codes_ngap"]  = "str";
-    $specs["codes_tarmed"]= "str";
-    $specs["codes_caisse"]= "str";
-    $specs["_somme"]      = "currency";
-    $specs["_type"]       = "";
+    $props = parent::getProps();
+    $props["chir_id"]     = "ref class|CMediusers";
+    $props["function_id"] = "ref class|CFunctions";
+    $props["group_id"]    = "ref class|CGroups";
+    $props["description"] = "str notNull confidential seekable";
+    $props["secteur1"]    = "currency notNull min|0";
+    $props["secteur2"]    = "currency";
+    $props["codes_ccam"]  = "str";
+    $props["codes_ngap"]  = "str";
+    $props["codes_tarmed"]= "str";
+    $props["codes_caisse"]= "str";
+    $props["_somme"]      = "currency";
+    $props["_type"]       = "";
     
-    $specs["_precode_ready"] = "bool";
-    $specs["_has_mto"]       = "bool";
+    $props["_precode_ready"] = "bool";
+    $props["_has_mto"]       = "bool";
     
-    return $specs;
+    return $props;
   }
-    
+  
+  /**
+   * updateFormFields
+   * 
+   * @return void
+  **/
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = $this->description; 	 
-    $this->_type = $this->chir_id == null ? "chir" : "function";
+    $this->_view = $this->description;
+    if ($this->chir_id) {
+      $this->_type = "chir";
+    }
+    elseif ($this->function_id) {
+      $this->_type = "function";
+    }
+    else {
+      $this->_type = "group"; 
+    }
     $this->_codes_ngap = explode("|", $this->codes_ngap);
     $this->_codes_ccam = explode("|", $this->codes_ccam);
     $this->_codes_tarmed = explode("|", $this->codes_tarmed);
@@ -92,18 +128,38 @@ class CTarif extends CMbObject {
     $this->_somme = $this->secteur1 + $this->secteur2;
   }
   
+  /**
+   * updatePlainFields
+   * 
+   * @return void
+  **/
   function updatePlainFields() {
-  	if ($this->_type !== null) {
-  		$other_field = $this->_type == "chir" ? "function_id" : "chir_id";
-      $this->$other_field = "";
-  	}
+    if ($this->_type !== null) {
+      if ($this->_type == "chir") {
+        $this->function_id = "";
+        $this->group_id = "";
+      }
+      if ($this->_type == "function") {
+        $this->chir_id = "";
+        $this->group_id = "";
+      }
+      if ($this->_type == "group") {
+        $this->function_id = "";
+        $this->chir_id = "";
+      }
+    }
 
     $this->updateMontants();
     $this->bindConsultation();
   }
   
+  /**
+   * Chargement de la consultation associée
+   * 
+   * @return void
+  **/
   function bindConsultation() {
-    if (!$this->_bind_consult){
+    if (!$this->_bind_consult) {
       return;
     }
 
@@ -113,10 +169,7 @@ class CTarif extends CMbObject {
     $consult = new CConsultation();
     $consult->load($this->_consult_id);
     $consult->loadRefPlageConsult();
-    $consult->loadRefsActesNGAP();
-    $consult->loadRefsActesCCAM();
-    $consult->loadRefsActesTarmed();
-    $consult->loadRefsActesCaisse();
+    $consult->loadRefsActes();
     
     // Affectation des valeurs au tarif
     $this->secteur1    = $consult->secteur1;
@@ -130,111 +183,88 @@ class CTarif extends CMbObject {
     $this->function_id = "";
   }
   
-  function store() { 
+  /**
+   * Redéfinition du store
+   * 
+   * @return void
+  **/
+  function store() {
     if ($this->_add_mto) {
       $this->completeField("codes_ngap");
       $this->codes_ngap .= "|1-MTO-1---0-";
     }
-    	    
+    
+    if ($this->_add_code || $this->_dell_code) {
+      $this->modifActes();
+    }
+    
     return parent::store();
   }
-	
-	function updateMontants() {
-		if (!$this->_update_montants) {
-			return;
-		}		
+  
+  /**
+   * Mise à jour du montant du tarif
+   * 
+   * @return $this->secteur1
+  **/
+  function updateMontants() {
+    if (!$this->_update_montants) {
+      return;
+    }
 
     $this->secteur1 = 0.00;
-		$secteur2 = $this->secteur2;
-
-    // Actes CCAM
-    $this->completeField("codes_ccam");
-    $this->_codes_ccam = explode("|", $this->codes_ccam);
-    CMbArray::removeValue("", $this->_codes_ccam);
-    foreach ($this->_codes_ccam as &$_code) {
-      $acte = new CActeCCAM;
-      $acte->setFullCode($_code);
-      $this->secteur1 += $acte->updateMontantBase(); 
-
-      // Affectation du secteur 2 au dépassement du premier acte trouvé
-      $acte->montant_depassement = $secteur2 ? $secteur2 : 0;
-      $secteur2 = 0;
-			
-      $_code = $acte->makeFullCode();
+    $secteur2 = $this->secteur2;
+  
+    $tab = array( "codes_ccam" => "CActeCCAM",
+                  "codes_ngap" => "CActeNGAP");
+    if (CModule::getActive("tarmed")) {
+      $tab["codes_tarmed"] = "CActeTarmed";
+      $tab["codes_caisse"] = "CActeCaisse";
     }
     
-		// Actes NGAP
-    $this->completeField("codes_ngap");
-    $this->_codes_ngap = explode("|", $this->codes_ngap);
-    CMbArray::removeValue("", $this->_codes_ngap);
-		foreach ($this->_codes_ngap as &$_code) {
-	    $acte = new CActeNGAP;
-	    $acte->setFullCode($_code);
-      $this->secteur1 += $acte->updateMontantBase();	
-			
-      // Affectation du secteur 2  au dépassement du premier acte trouvé
-      $acte->montant_depassement = $secteur2 ? $secteur2 : 0;
-      $secteur2 = 0;
-
-			$_code = $acte->makeFullCode();
+    foreach ($tab as $codes => $class_acte) {
+      $_codes = "_".$codes;
+      $this->completeField($codes);
+      $this->$_codes = explode("|", $this->$codes);
+      CMbArray::removeValue("", $this->$_codes);
+      foreach ($this->$_codes as &$_code) {
+        $acte = new $class_acte;
+        $acte->setFullCode($_code);
+        $this->secteur1 += $acte->updateMontantBase();
+        
+         // Affectation du secteur 2 au dépassement du premier acte trouvé
+        $acte->montant_depassement = $secteur2 ? $secteur2 : 0;
+        $secteur2 = 0;
+        
+        $_code = $acte->makeFullCode();
+      }
+      $this->$codes = implode("|", $this->$_codes);
     }
-    $this->codes_ngap = implode("|", $this->_codes_ngap);
     
-    if (CModule::getActive("tarmed")){
-	    // Actes Tarmed 
-	    $this->completeField("codes_tarmed");
-	    $this->_codes_tarmed = explode("|", $this->codes_tarmed);
-	    CMbArray::removeValue("", $this->_codes_tarmed);
-			foreach ($this->_codes_tarmed as &$_code) {
-		    $acte = new CActeTarmed;
-		    $acte->setFullCode($_code);
-	      $this->secteur1 += $acte->updateMontantBase();	
-				
-	      // Affectation du secteur 2  au dépassement du premier acte trouvé
-	      $acte->montant_depassement = $secteur2 ? $secteur2 : 0;
-	      $secteur2 = 0;
-	
-				$_code = $acte->makeFullCode();
-	    }
-	    $this->codes_tarmed = implode("|", $this->_codes_tarmed);
-	    
-	    // Actes Caisse
-	    $this->completeField("codes_caisse");
-	    $this->_codes_caisse = explode("|", $this->codes_caisse);
-	    CMbArray::removeValue("", $this->_codes_caisse);
-			foreach ($this->_codes_caisse as &$_code) {
-		    $acte = new CActeCaisse;
-		    $acte->setFullCode($_code);
-	      $this->secteur1 += $acte->updateMontantBase();	
-				
-	      // Affectation du secteur 2  au dépassement du premier acte trouvé
-	      $acte->montant_depassement = $secteur2 ? $secteur2 : 0;
-	      $secteur2 = 0;
-	
-				$_code = $acte->makeFullCode();
-	    }
-	    $this->codes_caisse = implode("|", $this->_codes_caisse);
+    return $this->secteur1;
+  }
+  
+  /**
+   * Chargement du secteur 1 du tarif
+   * 
+   * @return $this->_secteur1_uptodate
+  **/
+  function getSecteur1Uptodate() {
+    if ((!$this->codes_ngap && !$this->codes_ccam) || (!$this->codes_tarmed && !$this->codes_caisse)) {
+      return $this->_secteur1_uptodate = "1";
     }
-		return $this->secteur1;
-	}
-	
-	function getSecteur1Uptodate() {
-		if ((!$this->codes_ngap && !$this->codes_ccam) || (!$this->codes_tarmed && !$this->codes_caisse)) {
-			return $this->_secteur1_uptodate = "1";
-		}
-		
-		// Backup ...
-		$secteur1   = $this->secteur1;
+    
+    // Backup ...
+    $secteur1   = $this->secteur1;
     $codes_ccam = $this->_codes_ccam;
     $codes_ngap = $this->_codes_ngap;
     $codes_tarmed = $this->_codes_tarmed;
     $codes_caisse = $this->_codes_caisse;
     
-		// Compute...
+    // Compute...
     $this->_update_montants = true;
-		$new_secteur1 = $this->updateMontants();
+    $new_secteur1 = $this->updateMontants();
     
-		// ... and restore
+    // ... and restore
     $this->secteur1 = $secteur1;
     $this->_codes_ccam = $codes_ccam;
     $this->_codes_ngap = $codes_ngap;
@@ -242,8 +272,13 @@ class CTarif extends CMbObject {
     $this->_codes_caisse = $codes_caisse;
 
     return $this->_secteur1_uptodate = CFloatSpec::equals($secteur1, $new_secteur1, $this->_specs["secteur1"]) ? "1" : "0";
-	}
+  }
   
+  /**
+   * Precodage des tarifs
+   * 
+   * @return string
+  **/
   function getPrecodeReady() {
     $this->_has_mto = '0';
     $this->_new_actes = array();
@@ -252,61 +287,51 @@ class CTarif extends CMbObject {
       return $this->_precode_ready = '0';
     }
     
-    foreach ($this->_codes_ccam as $code) {
-      $acte = new CActeCCAM();
-      $acte->setFullCode($code);
-      $this->_new_actes[$code] = $acte;
-      if (!$acte->getPrecodeReady()) {
-        return $this->_precode_ready = '0';
-      }
+    $tab = array( "_codes_ccam" => "CActeCCAM",
+                  "_codes_ngap" => "CActeNGAP");
+    if (CModule::getActive("tarmed")) {
+      $tab["_codes_tarmed"] = "CActeTarmed";
+      $tab["_codes_caisse"] = "CActeCaisse";
     }
-
-    foreach ($this->_codes_ngap as $code) {
-      $acte = new CActeNGAP();
-      $acte->setFullCode($code);
-      $this->_new_actes["$code"] = $acte;
-      if (!$acte->getPrecodeReady()) {
-        return $this->_precode_ready = '0';
+    
+    foreach ($tab as $codes => $class_acte) {
+      foreach ($this->$codes as $code) {
+        $acte = new $class_acte;
+        $acte->setFullCode($code);
+        if ($class_acte == "CActeTarmed") $acte->loadRefTarmed(CTarmed::LITE);
+        if ($class_acte == "CActeCaisse") $acte->loadRefPrestationCaisse();
+        $this->_new_actes[$code] = $acte;
+        if (!$acte->getPrecodeReady()) {
+          return $this->_precode_ready = '0';
+        }
+        if ($class_acte == "CActeNGAP" && in_array($acte->code, array("MTO", "MPJ"))) {
+          $this->_has_mto = '1';
+        }
       }
-      
-      if (in_array($acte->code, array("MTO", "MPJ"))) {
-        $this->_has_mto = '1';
-      }
-    }
-
-    if(CModule::getActive("tarmed")){
-	    foreach ($this->_codes_tarmed as $code) {
-	      $acte = new CActeTarmed();
-	      $acte->setFullCode($code);
-	      $acte->loadRefTarmed(CTarmed::LITE);
-	      $this->_new_actes["$code"] = $acte;
-	      if (!$acte->getPrecodeReady()) {
-	        return $this->_precode_ready = '0';
-	      }
-	    }
-	    foreach ($this->_codes_caisse as $code) {
-	      $acte = new CActeCaisse();
-	      $acte->setFullCode($code);
-	      $acte->loadRefPrestationCaisse();
-	      $this->_new_actes["$code"] = $acte;
-	      if (!$acte->getPrecodeReady()) {
-	        return $this->_precode_ready = '0';
-	      }
-	    }
     }
     
     return $this->_precode_ready = '1';
   }
   
+  /**
+   * loadRefsFwd
+   * 
+   * @return void
+  **/
   function loadRefsFwd() {
-    $this->_ref_chir = new CMediusers();
-    $this->_ref_chir->load($this->chir_id);
-    $this->_ref_function = new CFunctions();
-    $this->_ref_function->load($this->function_id);
-    
+    $this->_ref_chir     = $this->loadFwdRef("chir_id");
+    $this->_ref_function = $this->loadFwdRef("function_id");
+    $this->loadRefGroup();
     $this->getPrecodeReady();
   }
   
+  /**
+   * Charge les permissions
+   * 
+   * @param string $permType Type de la permission
+   * 
+   * @return void
+   */
   function getPerm($permType) {
     if (!$this->_ref_chir || !$this->_ref_function) {
       $this->loadRefsFwd();
@@ -315,6 +340,77 @@ class CTarif extends CMbObject {
     return 
       $this->_ref_chir->getPerm($permType) || 
       $this->_ref_function->getPerm($permType);
+  }
+  
+  /**
+   * Charge l'établissement associé au tarif
+   * 
+   * @param boolean $cached Charge l'établissement depuis le cache
+   * 
+   * @return CGroups
+   */
+  function loadRefGroup($cached = true) {
+    return $this->_ref_group = $this->loadFwdRef("group_id", $cached);
+  }
+  
+  /**
+   * Permet d'ajouter ou supprimer un code au tarif
+   * 
+   * @return void
+   */
+  function modifActes() {
+    $tab_classes = array(
+      "tarmed" => "CActeTarmed",
+      "caisse" => "CActeCaisse");
+    $class_acte = $tab_classes[$this->_type_code]; 
+    
+    $codes  = "codes_".$this->_type_code;
+    $_codes = "_codes_".$this->_type_code;
+    
+    $this->completeField($codes);
+    $this->$_codes = explode("|", $this->$codes);
+    CMbArray::removeValue("", $this->$_codes);
+    foreach ($this->$_codes as &$_code) {
+      $acte = new $class_acte;
+      $acte->setFullCode($_code);
+      $acte->updateMontantBase();  
+      $acte->makeFullCode();
+      $_code = $this->_dell_code && $this->_code == $acte->$code_acte ? "" : $acte->_full_code;
+    }
+    if ($this->_add_code) {
+      $acte = new $class_acte;
+      $acte->code = $this->_code;
+      $acte->quantite = $this->_quantite;
+      $acte->updateMontantBase();
+      array_push($this->$_codes, $acte->makeFullCode());
+    }
+    $this->$codes = implode("|", $this->$_codes);
+    
+    // Recalcul des totaux du tarif
+    $this->_update_montants = true;
+    $this->updateMontants();
+  }
+  
+  function loadActes() {
+    $tab = array( "codes_ccam" => "CActeCCAM",
+                  "codes_ngap" => "CActeNGAP");
+    if (CModule::getActive("tarmed")) {
+      $tab["codes_tarmed"] = "CActeTarmed";
+      $tab["codes_caisse"] = "CActeCaisse";
+    }
+    
+    foreach ($tab as $codes => $class_acte) {
+      $_codes = "_".$codes;
+      $this->completeField($codes);
+      $this->$_codes = explode("|", $this->$codes);
+      CMbArray::removeValue("", $this->$_codes);
+      foreach ($this->$_codes as &$_code) {
+        $acte = new $class_acte;
+        $acte->setFullCode($_code);
+        $acte->updateMontantBase();
+        $_code = $acte;
+      }
+    }
   }
 }
 

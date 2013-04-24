@@ -11,44 +11,44 @@
 
 class CGroups extends CMbObject {
   // DB Table key
-  var $group_id       = null;
+  public $group_id;
 
   // DB Fields
-  var $text                = null;
-  var $raison_sociale      = null;
-  var $adresse             = null;
-  var $cp                  = null;
-  var $ville               = null;
-  var $tel                 = null;
-  var $fax                 = null;
-  var $mail                = null;
-  var $mail_apicrypt       = null;
-  var $web                 = null;
-  var $directeur           = null;
-  var $domiciliation       = null;
-  var $siret               = null;
-  var $ape                 = null;
-  var $tel_anesth          = null;
-  var $service_urgences_id = null;
-  var $pharmacie_id        = null;
-  var $finess              = null;
-  var $chambre_particuliere= null;
-  var $ean                 = null;
-  var $rcc                 = null;
+  public $text;
+  public $raison_sociale;
+  public $adresse;
+  public $cp;
+  public $ville;
+  public $tel;
+  public $fax;
+  public $mail;
+  public $mail_apicrypt;
+  public $web;
+  public $directeur;
+  public $domiciliation;
+  public $siret;
+  public $ape;
+  public $tel_anesth;
+  public $service_urgences_id;
+  public $pharmacie_id;
+  public $finess;
+  public $chambre_particuliere;
+  public $ean;
+  public $rcc;
 
   // Form fields
-  var $_cp_court           = null;
-  var $_is_ipp_supplier    = false;
-  var $_is_nda_supplier    = false;
+  public $_cp_court;
+  public $_is_ipp_supplier = false;
+  public $_is_nda_supplier = false;
 
   // Object References
-  var $_ref_functions      = null;
-  var $_ref_blocs          = null;
-  var $_ref_postes         = null;
-  var $_ref_dmi_categories = null;
-  var $_ref_services       = null;
-  var $_ref_pharmacie      = null;
-  var $_ref_service_urgences = null;
+  public $_ref_functions;
+  public $_ref_blocs;
+  public $_ref_postes;
+  public $_ref_dmi_categories;
+  public $_ref_services;
+  public $_ref_pharmacie;
+  public $_ref_service_urgences;
 
 
   static $_ref_current = null;
@@ -139,6 +139,7 @@ class CGroups extends CMbObject {
     $backProps["meal_menu"]                 = "CMealMenu group_id";
     $backProps["meal_type"]                 = "CMealType group_id";
     $backProps["regle_sectorisation_group"] = "CRegleSectorisation group_id";
+    $backProps["tarif_group"]               = "CTarif group_id";
     return $backProps;
   }
 

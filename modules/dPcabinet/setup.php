@@ -1844,6 +1844,15 @@ class CSetupdPcabinet extends CSetup {
               SET p.pour_compte_id = NULL
               WHERE p.chir_id = p.pour_compte_id;";
     $this->addQuery($query);
-    $this->mod_version = "1.98";
+    $this->makeRevision("1.98");
+    
+    $query = "ALTER TABLE `tarifs` 
+                ADD `group_id` INT (11) UNSIGNED";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `tarifs` 
+                    ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.99";
   }
 }

@@ -1,14 +1,15 @@
-<?php /* $Id$ */
-
-/**
- * @package Mediboard
+<?php 
+/*
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPcabinet
- * @version $Revision$
- * @author Thomas Despoix
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
-
 // Edite t'on un tarif ?
 $tarif_id = CValue::getOrSession("tarif_id");
 $tarif = new CTarif;
@@ -28,6 +29,7 @@ $user->loadRefFunction();
 
 $prat = new CMediusers();
 $prat->load($user->_id);
+$prat->loadRefFunction();
 
 // Liste des tarifs du praticien
 $listeTarifsChir = null;
@@ -78,6 +80,21 @@ foreach ($listeTarifsSpe as $_tarif) {
   $_tarif->getSecteur1Uptodate();
 }
 
+$listeTarifsEtab = array();
+if(CAppUI::conf("dPcabinet Tarifs show_tarifs_etab")) {
+  // Liste des tarifs de la spécialité
+  $where = array();
+  $where["chir_id"] = "IS NULL";
+  $where["function_id"] = "IS NULL";
+  $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+  $listeTarifsEtab = new CTarif();
+  $listeTarifsEtab = $listeTarifsEtab->loadList($where, $order);
+  foreach ($listeTarifsEtab as $_tarif) {
+    $_tarif->getPrecodeReady();
+    $_tarif->getSecteur1Uptodate();
+  }
+}
+
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
 if ($user->_is_secretaire) {
   $listPrat = CAppUI::pref("pratOnlyForConsult", 1) ?
@@ -94,6 +111,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("user"           , $user);
 $smarty->assign("listeTarifsChir", $listeTarifsChir);
 $smarty->assign("listeTarifsSpe" , $listeTarifsSpe);
+$smarty->assign("listeTarifsEtab", $listeTarifsEtab);
 $smarty->assign("tarif"          , $tarif);
 $smarty->assign("prat"           , $prat);
 $smarty->assign("listPrat"       , $listPrat);
