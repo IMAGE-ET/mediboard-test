@@ -221,56 +221,61 @@
       </table>
       
       <!--  Informations sur le séjour -->
-      <table class="tbl">
-        <tr>
-          <th class="category" colspan="2">
-            <span style="float: right">
-              <button type="button" class="search" onclick="modalViewComplete('{{$sejour->_guid}}', 'Détail du séjour')">Détail</button>
-            </span>
-            {{tr}}CSejour{{/tr}}
-          </th>
-        </tr>
-        <tr>
-          <td style="width: 50%;">
-            <strong>{{mb_label object=$sejour field="libelle"}}</strong>
-            {{mb_value object=$sejour field="libelle"}}
-          </td>
-          <td>
-            <strong>{{mb_label object=$sejour field="praticien_id"}}</strong>
-            {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <strong>{{mb_label object=$sejour field="entree"}}{{if $sejour->entree_reelle}} (effectuée){{/if}}</strong>
-            {{mb_value object=$sejour field="entree"}}
-          </td>
-          <td>
-            <strong>{{mb_label object=$sejour field="sortie"}}{{if $sejour->sortie_reelle}} (effectuée){{/if}}</strong>
-            {{mb_value object=$sejour field="sortie"}}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <strong>{{mb_label object=$sejour field="type"}}</strong>
-            {{mb_value object=$sejour field="type"}}
-          </td>
-          <td class="text {{if $sejour->confirme}}ok{{else}}warning{{/if}}">
-            <form name="confirm-sortie-frm" method="post" action="?"
-              onsubmit="return onSubmitFormAjax(this, { onComplete: function() { loadSuiviClinique('{{$sejour->_id}}') } })">
-              <input type="hidden" name="m" value="dPplanningOp" />
-              <input type="hidden" name="dosql" value="do_sejour_aed" />
-              <input type="hidden" name="del" value="0" />
-              {{mb_key object=$sejour}}
+      <form name="edit-sejour-frm" method="post" action="?"
+        onsubmit="return onSubmitFormAjax(this, { onComplete: function() { loadSuiviClinique('{{$sejour->_id}}') } })">
+        <input type="hidden" name="m" value="dPplanningOp" />
+        <input type="hidden" name="dosql" value="do_sejour_aed" />
+        <input type="hidden" name="del" value="0" />
+         {{mb_field object=$sejour field=entree_prevue hidden=true}}
+        {{mb_key object=$sejour}}
+        <table class="tbl">
+          <tr>
+            <th class="category" colspan="2">
+              <span style="float: right">
+                <button type="button" class="search" onclick="modalViewComplete('{{$sejour->_guid}}', 'Détail du séjour')">Détail</button>
+              </span>
+              {{tr}}CSejour{{/tr}}
+            </th>
+          </tr>
+          <tr>
+            <td style="width: 50%;">
+              <strong>{{mb_label object=$sejour field="libelle"}}</strong>
+              {{mb_value object=$sejour field="libelle"}}
+            </td>
+            <td>
+              <strong>{{mb_label object=$sejour field="praticien_id"}}</strong>
+              {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>{{mb_label object=$sejour field="entree"}}{{if $sejour->entree_reelle}} (effectuée){{/if}}</strong>
+              {{mb_value object=$sejour field="entree"}}
+            </td>
+            <td>
+              <strong>{{mb_label object=$sejour field="sortie"}}{{if $sejour->sortie_reelle}} (effectuée){{/if}}</strong>
+              {{if $sejour->sortie_reelle || $sejour->confirme}}
+                {{mb_value object=$sejour field="sortie"}}
+              {{else}}
+                {{mb_field object=$sejour field="sortie_prevue" register=true form="edit-sejour-frm" onchange="submitFormAjax(this.form);"}}
+              {{/if}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>{{mb_label object=$sejour field="type"}}</strong>
+              {{mb_value object=$sejour field="type"}}
+            </td>
+            <td class="text {{if $sejour->confirme}}ok{{else}}warning{{/if}}">
               {{mb_field object=$sejour field=confirme typeEnum="checkbox" onchange="submitFormAjax(this.form);"}}
               {{mb_label object=$sejour field=confirme}}
               {{if $sejour->confirme}}
                 par {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$user_confirm_sortie}}
               {{/if}}
-            </form>
-          </td>
-        </tr>
-      </table>
+            </td>
+          </tr>
+        </table>
+      </form>
       
       {{mb_include module=planningOp template=inc_infos_operation}}
       
