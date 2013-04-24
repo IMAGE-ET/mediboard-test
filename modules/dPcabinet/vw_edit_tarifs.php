@@ -81,7 +81,7 @@ foreach ($listeTarifsSpe as $_tarif) {
 }
 
 $listeTarifsEtab = array();
-if(CAppUI::conf("dPcabinet Tarifs show_tarifs_etab")) {
+if (CAppUI::conf("dPcabinet Tarifs show_tarifs_etab")) {
   // Liste des tarifs de la spécialité
   $where = array();
   $where["chir_id"] = "IS NULL";
@@ -105,6 +105,9 @@ else {
   $listPrat = array($user->_id => $user);
 }
 
+if (!$tarif->_id) {
+  $tarif->secteur1 = 0;
+}
 // Création du template
 $smarty = new CSmartyDP();
 
