@@ -272,6 +272,9 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
 
       $movement->movement_type = $movement_type;
+
+      // On ne recherche pas parmi les mouvements annulés
+      $movement->cancel = 0;
     }
 
     $order = "affectation_id DESC";
