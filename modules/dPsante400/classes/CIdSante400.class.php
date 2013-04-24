@@ -15,23 +15,21 @@
  * Class CIdSante400
  * Idex
  */
-
 class CIdSante400 extends CMbMetaObject {
-  // DB Table key
-  var $id_sante400_id = null;
+  public $id_sante400_id;
 
   // DB fields
-  var $id400         = null;
-  var $tag           = null;
-  var $last_update   = null;
+  public $id400;
+  public $tag;
+  public $last_update;
 
   // Derivate fields
-  var $_last_id      = null;
+  public $_last_id;
   
   // Filter fields
-  var $_start_date   = null;
-  var $_end_date     = null;
-  var $_type         = null;
+  public $_start_date;
+  public $_end_date;
+  public $_type;
 
   /**
    * Initialize object specification

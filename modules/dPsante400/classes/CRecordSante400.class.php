@@ -9,14 +9,16 @@
  */
 
 class CRecordSante400 {
+  /** @var PDO */
   static $dbh = null;
+
+  /** @var Chronometer */
   static $chrono = null;
   static $verbose = false;
   static $consumeUnsets = true;
  
-  // Fake data source for chrono purposes
+  /** @var CMySQLDataSource Fake data source for chrono purposes */
   static $ds = null;
-  
   
   public $data = array();
   public $value_prefix = "";
@@ -62,8 +64,8 @@ class CRecordSante400 {
   /**
    * Trace a query applying syntax coloring
    * 
-   * @param object $query             Query to execute
-   * @param object $values [optional] Values to prepare
+   * @param string $query  Query to execute
+   * @param array  $values Values to prepare
    * 
    * @return void
    */
@@ -85,12 +87,12 @@ class CRecordSante400 {
   /**
    * Prepare, execute a query and return multiple records
    * 
-   * @param object $query             Query to execute
-   * @param object $values [optional] Values to prepare
-   * @param object $max    [optional] Maximum records returned
-   * @param object $class  [optional] Records specific class instances
+   * @param string $query  Query to execute
+   * @param array  $values Values to prepare
+   * @param int    $max    Maximum records returned
+   * @param string $class  Records specific class instances
    * 
-   * @return array
+   * @return CMouvement400[]
    */
   static function loadMultiple($query, $values = array(), $max = 100, $class = "CRecordSante400") {
     if (!new $class instanceof CRecordSante400) {
@@ -130,8 +132,8 @@ class CRecordSante400 {
   /**
    * Prepare and execute query
    * 
-   * @param object $query             Query to execute
-   * @param object $values [optional] Values to prepare against
+   * @param string $query  Query to execute
+   * @param array  $values Values to prepare against
    *
    * @return int the number of affected rows (-1 for SELECTs), false on error;
    */
@@ -163,8 +165,8 @@ class CRecordSante400 {
    * Load a unique record from query
    * @throws Exception if no record fount
    * 
-   * @param object $query             Query to execute
-   * @param object $values [optional] Values to prepare against
+   * @param string $query  Query to execute
+   * @param array  $values Values to prepare against
    *
    * @return int the number of affected rows (-1 for SELECTs);
    */
@@ -195,12 +197,13 @@ class CRecordSante400 {
 
     return preg_replace($reg, "$3-$2-$1", $date);
   }
-  
-   /**
-   * Consume and return any value 
-   * 
+
+  /**
+   * Consume and return any value
+   *
    * @param string $valueName Value name
-   * 
+   *
+   * @throws Exception
    * @return string Trimmed and slashed value
    */
   function consume($valueName) {
@@ -222,12 +225,13 @@ class CRecordSante400 {
 
     return trim(addslashes($value));    
   }
-  
+
   /**
-   * Lookup any value 
-   * 
+   * Lookup any value
+   *
    * @param string $valueName Value name
-   * 
+   *
+   * @throws Exception
    * @return string Trimmed and slashed value, null if no value
    */
   function lookup($valueName) {
@@ -389,4 +393,3 @@ class CRecordSante400 {
     return "$date $time";
   }
 }
-?>

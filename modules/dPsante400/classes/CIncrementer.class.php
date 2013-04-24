@@ -10,27 +10,23 @@
 
 class CIncrementer extends CMbObject {
   // DB Table key
-  var $incrementer_id = null;
+  public $incrementer_id;
   
   // DB fields
-  var $last_update  = null;
-  var $value        = null;
-  var $pattern      = null;
-  var $range_min    = null;
-  var $range_max    = null;
+  public $last_update;
+  public $value;
+  public $pattern;
+  public $range_min;
+  public $range_max;
   
   // Form fields
-  var $_object_class = null;
+  public $_object_class;
   
-  /**
-   * @var CDomain
-   */
-  var $_ref_domain     = null;
+  /** @var CDomain */
+  public $_ref_domain;
   
-  /**
-   * @return CGroupDomain
-   */
-  var $_ref_group_domain = null;
+  /** @var CGroupDomain */
+  public $_ref_group_domain;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -148,8 +144,7 @@ class CIncrementer extends CMbObject {
     // Valeur compatible avec la position dans le cluster
     do {
       $value++;
-    }
-    while ($value % $cluster_count != $cluster_position);
+    } while ($value % $cluster_count != $cluster_position);
 
     do {
       // Idex vraiment disponible ?
@@ -158,8 +153,7 @@ class CIncrementer extends CMbObject {
       $idex->tag          = $tag;
       $idex->id400 = self::formatValue($object, $incrementer->pattern, $value);
       $idex->loadMatchingObject();
-    }
-    while ($idex->_id && ($value += $cluster_count));
+    } while ($idex->_id && ($value += $cluster_count));
 
     $incrementer->value = $value;
     $incrementer->last_update = CMbDT::dateTime();
@@ -174,7 +168,12 @@ class CIncrementer extends CMbObject {
 
     return $idex;
   }
-  
+
+  /**
+   * @param CMbObject|CPatient|CSejour $object Object to build the vars array
+   *
+   * @return array
+   */
   static function getVars(CMbObject $object) {
     $vars = $object->getIncrementVars();
     $default_vars = array(

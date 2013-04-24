@@ -79,6 +79,7 @@ class CMouvement400 extends CRecordSante400 {
    * Try and store trigger mark according to module config
    * 
    * @param string $mark Mark content
+   *
    * @return void
    */
   static function storeMark($mark) {
@@ -105,8 +106,8 @@ class CMouvement400 extends CRecordSante400 {
   /**
    * Load List of mouvements
    * 
-   * @param $marked bool Will load only marked (already processed)
-   * @param $max int maximum number of mouvements
+   * @param bool $marked Will load only marked (already processed)
+   * @param int  $max    Maximum number of mouvements
    * 
    * @return array|CMouvement400
    */
@@ -130,8 +131,9 @@ class CMouvement400 extends CRecordSante400 {
   /**
    * Mark obsolete triggers
    * 
-   * @param string $newest
+   * @param string  $newest
    * @param integer $max [optional]
+   *
    * @return integer Number of marks, store-like message on error
    */
   function markObsoleteTriggers($newest, $max = 100) {
@@ -141,9 +143,10 @@ class CMouvement400 extends CRecordSante400 {
     $where["done"] = "= '0'";
     $where["mark"] = "!= '========'";
     $where["trigger_number"] = "<= '$newest'";
-    
+
+    /** @var CTriggerMark[] $marks */
     $marks = $mark->loadList($where, null, $max);
-    foreach($marks as $_mark) {
+    foreach ($marks as $_mark) {
       $_mark->done = "1";    
       $_mark->mark = "obsolete"; 
       if ($msg = $_mark->store()) {
@@ -192,10 +195,10 @@ class CMouvement400 extends CRecordSante400 {
    * 
    * @param boolean $marked [optional] 
    * @param string  $oldest [optional]
-   * @return interger
+   *
+   * @return integer
    */
   function count($marked = false, $newest = null) {
-
     if ($marked) {
       $mark = new CTriggerMark();
       $mark->trigger_class = get_class($this);
@@ -230,6 +233,7 @@ class CMouvement400 extends CRecordSante400 {
    * Load latest with former marks
    * 
    * @param int $max Max rows
+   *
    * @return array
    */
   function loadListWithFormerMark($max)  {
@@ -247,6 +251,7 @@ class CMouvement400 extends CRecordSante400 {
   
   /**
    * Load latest succeded with former marks
+   *
    * @return array
    */
   function loadLatestSuccessWithFormerMark() {
@@ -262,6 +267,7 @@ class CMouvement400 extends CRecordSante400 {
    * Load and checkout mouvement for given record index
    * 
    * @param string $rec Record index
+   *
    * @param void
    */
   function load($rec) {
@@ -392,8 +398,10 @@ class CMouvement400 extends CRecordSante400 {
   /**
    * Trace value with given title
    * 
-   * @param mixed $value
-   * @param string title
+   * @param mixed  $value Value to trace
+   * @param string $title Optional title
+   *
+   * @return void
    */
   function trace($value, $title = null) {
     if (self::$verbose) {
@@ -455,4 +463,3 @@ class CMouvement400 extends CRecordSante400 {
     return in_array($field, $this->changedFields) && ($value !== null ? $newValue == $value : true);
   }
 }
-?>

@@ -9,15 +9,14 @@
  */
 
 class CTriggerMark extends CMbObject {
-  // Table key
-  var $mark_id        = null;
-  
+  public $mark_id;
+
   // DB Fields
-  var $trigger_class   = null;
-  var $trigger_number = null;
-  var $mark           = null;
-  var $done           = null;
-  
+  public $trigger_class;
+  public $trigger_number;
+  public $mark;
+  public $done;
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "trigger_mark";
@@ -27,18 +26,17 @@ class CTriggerMark extends CMbObject {
   }
 
   function getProps() {
-  	$props = parent::getProps();
+    $props = parent::getProps();
     $props["trigger_class"]  = "str notNull";
-  	$props["trigger_number"] = "numchar notNull maxLength|10";
+    $props["trigger_number"] = "numchar notNull maxLength|10";
     $props["done"]           = "bool notNull";
     $props["mark"]           = "str notNull";
     return $props;
   }
-  
+
   function updateFormFields() {
     parent::updateFormFields();
-    
+
     $this->_view = "Mark for trigger $this->trigger_class #$this->trigger_number";
   }
 }
-?>
