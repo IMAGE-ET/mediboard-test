@@ -1,14 +1,5 @@
 window.Facture = {
   modal: null,
-  load: function(oForm, patient_id, praticien_id, consult_id, not_load_banque) {
-    var url = new Url('dPcabinet' , 'ajax_add_consult_facture');
-    url.addParam('patient_id'     , patient_id);
-    url.addParam('executant_id'   , praticien_id);
-    url.addParam('consult_id'     , consult_id);
-    url.addParam('type_facture'   , oForm.type_facture.value);
-    url.addParam('not_load_banque', not_load_banque);
-    url.requestUpdate('load_facture');
-  },
   reload: function(patient_id, consult_id, not_load_banque, facture_id) {
     var url = new Url('dPcabinet' , 'ajax_view_facture');
     url.addParam('patient_id'     , patient_id);
