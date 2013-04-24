@@ -142,6 +142,20 @@ class CSourceFTP extends CExchangeSource {
     
     $ftp->close();
   }
+
+  function renameFile($oldname, $newname) {
+    $ftp = $this->init($this);
+
+    try {
+      $ftp->connect();
+
+      $ftp->renameFile($oldname, $newname);
+    } catch (CMbException $e) {
+      $e->stepAjax();
+    }
+
+    $ftp->close();
+  }
   
   function isReachableSource() {
     $ftp = new CFTP();

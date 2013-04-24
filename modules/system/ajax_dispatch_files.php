@@ -104,7 +104,11 @@ foreach ($files as $_filepath) {
   if ($fileextension_write_end && count(preg_grep("@$_filepath_no_ext.$fileextension_write_end$@", $files)) == 0) {
     continue;
   }
-  
+
+  $_old_filepath = $_filepath;
+  $_filepath     = "$_filepath.checkedout";
+  $source->renameFile($_old_filepath, $_filepath);
+
   try {
     $message  = $source->getData($_filepath); 
     if (!$message) {
@@ -112,6 +116,8 @@ foreach ($files as $_filepath) {
     }
   }
   catch (CMbException $e) {
+    $source->renameFile($_filepath, $_old_filepath);
+
     $e->stepAjax(UI_MSG_WARNING);
     continue;
   }   

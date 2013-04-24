@@ -227,6 +227,12 @@ class CSourceFileSystem extends CExchangeSource {
       throw new CMbException("CSourceFileSystem-file-not-deleted", $path);
     }    
   }
+
+  function renameFile($oldname, $newname) {
+    if (rename($oldname, $newname) === false) {
+      throw new CMbException("CSourceFileSystem-error-renaming", $oldname);
+    }
+  }
   
   function isReachableSource() {
     if (is_dir($this->host)) {

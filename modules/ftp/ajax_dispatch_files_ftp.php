@@ -56,13 +56,20 @@ foreach ($files as $_filepath) {
   if ($fileextension_write_end && count(preg_grep("@$_filepath_no_ext.$fileextension_write_end$@", $files)) == 0) {
     continue;
   }
-  
+
+  $_old_filepath = $_filepath;
+  $_filepath     = "$_filepath.checkedout";
+  $source->renameFile($_old_filepath, $_filepath);
+
   try {
     $message  = $source->getData($_filepath);
     if (!$message) {
       continue;
     }
-  } catch (CMbException $e) {
+  }
+  catch (CMbException $e) {
+    $source->renameFile($_filepath, $_old_filepath);
+
     $e->stepAjax(UI_MSG_WARNING);
     continue;
   }   
@@ -73,10 +80,11 @@ foreach ($files as $_filepath) {
   if ($acq = CEAIDispatcher::dispatch($message, $sender, null, $to_treatment)) {
     try {
       CEAIDispatcher::createFileACK($acq, $sender);
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
       if ($sender->_delete_file !== false) {
         $source->delFile($_filepath);
-      } 
+      }
       else {
         CAppUI::stepAjax("CEAIDispatcher-error_deleting_file", UI_MSG_WARNING);
       } 
@@ -104,5 +112,3 @@ foreach ($files as $_filepath) {
   
   CAppUI::stepAjax("Message retraité");
 }
-
-?>
