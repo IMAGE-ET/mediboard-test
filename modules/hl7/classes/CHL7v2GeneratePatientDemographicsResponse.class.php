@@ -316,7 +316,10 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
     if ($PID_5_1_1 = $this->getDemographicsFields($node, "CPatient", "5.1.1")) {
       $PID = array_merge($PID, array("nom" => $PID_5_1_1));
     }
-    if ($PID_5_2 = $this->getDemographicsFields($node, "CPatient", "5.2")) {
+    if (
+        ($PID_5_2 = $this->getDemographicsFields($node, "CPatient", "5.2")) ||
+        ($PID_5_2 = $this->getDemographicsFields($node, "CPatient", "5.2.1"))
+    ) {
       $PID = array_merge($PID, array("prenom" => $PID_5_2));
     }
 
@@ -419,8 +422,11 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
     $PV1 = array();
 
     // Patient class
-    if ($PV1_2_1 = $this->getDemographicsFields($node, "CSejour", "2.1")) {
-      $PV1 = array_merge($PV1, array("type" => CHL7v2TableEntry::mapFrom(4, $PV1_2_1)));
+    if (
+        ($PV1_2 = $this->getDemographicsFields($node, "CSejour", "2")) ||
+        ($PV1_2 = $this->getDemographicsFields($node, "CSejour", "2.1"))
+    ) {
+      $PV1 = array_merge($PV1, array("type" => CHL7v2TableEntry::mapFrom(4, $PV1_2)));
     }
 
     return $PV1;
@@ -442,17 +448,22 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
     if ($service_name = $this->getDemographicsFields($node, "CSejour", "3.1")) {
       $service_name = preg_replace("/\*+/", "%", $service_name);
       $where["nom"] = $ds->prepare("LIKE %", $service_name);
-      $ids = $service->loadIds($where);
+      $ids = array_unique($service->loadIds($where, null, 100));
+
+      // FIXME prendre les affectations en compte
 
       $where_returns["sejour.service_id"] = $ds->prepareIn($ids);
     }
 
     // Praticien
-    if ($attending_doctor_name = $this->getDemographicsFields($node, "CSejour", "7.2.1")) {
+    if (
+        ($attending_doctor_name = $this->getDemographicsFields($node, "CSejour", "7.2.1"))||
+        ($attending_doctor_name = $this->getDemographicsFields($node, "CSejour", "17.2.1"))
+    ) {
       $user = new CUser();
       $attending_doctor_name   = preg_replace("/\*+/", "%", $attending_doctor_name);
       $where["user_last_name"] = $ds->prepare("LIKE %", $attending_doctor_name);
-      $ids = $user->loadIds($where);
+      $ids = array_unique($user->loadIds($where, null, 100));
 
       $where_returns["sejour.praticien_id"] = $ds->prepareIn($ids);
     }
@@ -462,7 +473,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
       $medecin = new CMedecin();
       $referring_doctor_name = preg_replace("/\*+/", "%", $referring_doctor_name);
       $where["nom"]          = $ds->prepare("LIKE %", $referring_doctor_name);
-      $ids = $medecin->loadIds($where);
+      $ids = array_unique($medecin->loadIds($where, null, 100));
 
       $where_returns["sejour.adresse_par_prat_id"] = $ds->prepareIn($ids);
     }

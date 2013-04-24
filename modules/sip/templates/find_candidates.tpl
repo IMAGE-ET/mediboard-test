@@ -122,7 +122,7 @@ Main.add(function(){
               <td><input tabindex="22" type="text" name="admit_room" value="" /></td>
 
               <th><label for="admit_attending_doctor">Médecin traitant</label></th>
-              <td><input tabindex="24" type="text" name="admit_attending_doctor" disabled /></td>
+              <td><input tabindex="24" type="text" name="admit_attending_doctor" /></td>
             </tr>
 
             <tr>
@@ -130,7 +130,7 @@ Main.add(function(){
               <td><input tabindex="23" type="text" name="admit_bed" value="" /></td>
 
               <th><label for="admit_consulting_doctor">Nom du praticien consultant</label></th>
-              <td><input tabindex="26" type="text" name="admit_consulting_doctor" value="" disabled /></td>
+              <td><input tabindex="26" type="text" name="admit_consulting_doctor" value="" /></td>
             </tr>
 
             <tr>

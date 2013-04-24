@@ -112,9 +112,9 @@ if (
     $admit_room ||
     $admit_bed ||
     $admit_attending_doctor || // praticien_id
-    $admit_referring_doctor // adresse_par_prat_id
-    //$admit_consulting_doctor || // not used
-    //$admit_admitting_doctor // not used
+    $admit_referring_doctor || // adresse_par_prat_id
+    $admit_consulting_doctor || // not used
+    $admit_admitting_doctor // not used
 ) {
   $transaction = "ITI22";
   $code = "ZV1";
