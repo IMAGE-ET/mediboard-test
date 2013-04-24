@@ -14,26 +14,27 @@
  */
 class CPasswordKeeper extends CMbObject {
   /** Sample string */
-  const SAMPLE = "Ceci est un chaîne témoin servant à vérifier la phrase de passe saisie.";
+  const SAMPLE = "Ceci est une chaîne témoin servant à vérifier la phrase de passe saisie.";
 
-  /** @var  Password keeper ID */
+  /** @var int Password keeper ID */
   public $password_keeper_id;
 
+  /** @var string Keeper name */
   public $keeper_name;
 
-  /** @var  Is the password keeper public? */
+  /** @var bool Is the password keeper public? */
   public $is_public;
 
-  /** @var  Random initialisation vector */
+  /** @var string Random initialisation vector */
   public $iv;
 
-  /** @var  Sample string for testing passphrase */
+  /** @var string Sample string for testing passphrase */
   public $sample;
 
-  /** @var  CUser reference */
+  /** @var int CUser reference */
   public $user_id;
 
-  /** @var  CPasswordCategory references */
+  /** @var CPasswordCategory[] references */
   public $_ref_categories;
 
   /** @var  Passphrase, needed for testing sample string */

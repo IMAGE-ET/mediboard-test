@@ -13,16 +13,16 @@
  * Manage a password category
  */
 class CPasswordCategory extends CMbObject {
-  /** @var  Category ID */
+  /** @var int Category ID */
   public $category_id;
 
-  /** @var  Category name */
+  /** @var string Category name */
   public $category_name;
 
-  /** @var  CPasswordKeeper reference */
+  /** @var int CPasswordKeeper reference */
   public $password_keeper_id;
 
-  /** @var  CPasswordEntry references */
+  /** @var CPasswordEntry[] references */
   public $_ref_passwords;
 
   function getSpec() {

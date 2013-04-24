@@ -55,6 +55,9 @@
         <td class="button" colspan="3">
           <button class="submit" type="submit">{{tr}}Validate{{/tr}}</button>
           <button class="trash" type="button" onclick="Keeper.checkKeeperDeletion('{{$keeper->_id}}')">{{tr}}Delete{{/tr}}</button>
+          {{if $keeper->_id}}
+            <button class="hslip" type="button" onclick="Keeper.exportKeeper('{{$keeper->_id}}')">{{tr}}CPasswordKeeper-export{{/tr}}</button>
+          {{/if}}
         </td>
       </tr>
     </table>

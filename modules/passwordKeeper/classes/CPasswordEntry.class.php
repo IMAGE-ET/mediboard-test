@@ -13,25 +13,25 @@
  * Manage a password entry
  */
 class CPasswordEntry extends CMbObject {
-  /** @var  Password ID */
+  /** @var int Password ID */
   public $password_id;
 
-  /** @var  Password description */
+  /** @var string Password description */
   public $password_description;
 
-  /** @var  Password */
+  /** @var string Password */
   public $password;
 
-  /** @var  Datetime when password last changed */
+  /** @var datetime Datetime when password last changed */
   public $password_last_change;
 
-  /** @var  Random initialisation vector */
+  /** @var string Random initialisation vector */
   public $iv;
 
-  /** @var  Password comments */
+  /** @var string Password comments */
   public $password_comments;
 
-  /** @var  CPasswordCategory reference */
+  /** @var CPasswordCategory[] reference */
   public $category_id;
 
   function getSpec() {
@@ -68,7 +68,16 @@ class CPasswordEntry extends CMbObject {
     $this->_view = $this->password_description;
   }
 
-  function store($passphrase = null) {
+  function store($passphrase = null, $import = null) {
+    // Si importation en cours, on enregistre simplement en base
+    if ($import) {
+      if ($msg = parent::store()) {
+        return $msg;
+      }
+
+      return;
+    }
+
     // Si création : génération du vecteur d'initialisation
     if (!$this->_id || $this->fieldModified("password")) {
       $this->generateIV();

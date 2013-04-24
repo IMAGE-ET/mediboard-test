@@ -8,6 +8,11 @@
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @link     http://www.mediboard.org */
 
+if (empty($_SERVER["HTTPS"])) {
+  $msg = "Vous devez utiliser le protocole HTTPS pour utiliser ce module.";
+  CAppUI::stepAjax($msg, UI_MSG_ERROR);
+}
+
 CCanDo::checkAdmin();
 
 $category_id        = CValue::getOrSession("category_id");

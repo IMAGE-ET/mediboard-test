@@ -360,7 +360,9 @@ var Url = Class.create({
     
     var questionMark = true;
     if (!sBaseUrl) {
-      this.addParam("dialog", 1);
+      if (!this.oParams.raw) {
+        this.addParam("dialog", 1);
+      }
       questionMark = false;
     }
 

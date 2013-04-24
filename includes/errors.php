@@ -310,7 +310,7 @@ HTML;
 
   // We replace passwords with a mask
   $mask = "***";
-  $pattern = "/password/i";
+  $pattern = "/password|passphrase/i";
   foreach ($_all_params as $_type => $_params) {
     foreach ($_params as $_key => $_value) {
       if (!empty($_value) && preg_match($pattern, $_key)) {

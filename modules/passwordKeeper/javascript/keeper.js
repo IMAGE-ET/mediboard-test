@@ -20,6 +20,11 @@ Keeper = {
     var url = new Url("passwordKeeper", "ajax_edit_keeper");
     url.addParam("password_keeper_id", password_keeper_id);
     url.requestUpdate("vw_edit_keeper", {
+      method: "post",
+      getParameters: {
+        m: "passwordKeeper",
+        a: "ajax_edit_keeper"
+      },
       onComplete: function() {
         if (password_keeper_id != 0) {
           Keeper.showListCategory(password_keeper_id);
@@ -114,6 +119,11 @@ Keeper = {
       url.addParam("password_keeper_id", password_keeper_id);
       url.addParam("passphrase", passphrase);
       url.requestUpdate("vw_edit_keeper", {
+        method: "post",
+        getParameters: {
+          m: "passwordKeeper",
+          a: "ajax_edit_keeper"
+        },
         onComplete: function() {
           if (password_keeper_id != 0) {
             Keeper.showListCategory(password_keeper_id);
@@ -136,7 +146,14 @@ Keeper = {
       url.addParam("password_keeper_id", password_keeper_id);
       url.addParam("passphrase", passphrase);
       url.addParam("deletion", true);
-      url.requestUpdate("vw_edit_keeper");
+      url.requestUpdate("vw_edit_keeper",
+        { method: "post",
+          getParameters: {
+            m: "passwordKeeper",
+            a: "ajax_edit_keeper"
+          }
+        }
+      );
     }
   },
 
@@ -146,10 +163,9 @@ Keeper = {
       var newPassphrase = prompt("Entrez la NOUVELLE phrase de passe à utiliser :", "");
       if (newPassphrase != null) {
         var url = new Url("passwordKeeper", "vw_export_keeper", 'raw');
-        url.addParam("password_keeper_id", password_keeper_id);
-        url.addParam("oldPassphrase", oldPassphrase);
-        url.addParam("newPassphrase", newPassphrase);
-        url.popDirect(10, 10);
+        url.pop(10, 10, null, null, null,
+          { password_keeper_id: password_keeper_id, oldPassphrase: oldPassphrase, newPassphrase: newPassphrase }
+        );
       }
     }
   },

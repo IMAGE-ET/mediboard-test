@@ -8,11 +8,16 @@
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @link     http://www.mediboard.org */
 
+if (empty($_SERVER["HTTPS"])) {
+  $msg = "Vous devez utiliser le protocole HTTPS pour utiliser ce module.";
+  CAppUI::stepAjax($msg, UI_MSG_ERROR);
+}
+
 CCanDo::checkAdmin();
 
-$password_keeper_id = CValue::getOrSession("password_keeper_id");
-$_passphrase        = CValue::get("passphrase");
-$deletion           = CValue::get("deletion");
+$password_keeper_id = CValue::postOrSession("password_keeper_id");
+$_passphrase        = CValue::post("passphrase");
+$deletion           = CValue::post("deletion");
 
 $user   = CMediusers::get();
 $keeper = new CPasswordKeeper();
@@ -20,24 +25,14 @@ $keeper->load($password_keeper_id);
 
 if ($keeper->_id && $keeper->user_id != $user->_id) {
   $msg = "Vous n'avez pas droit d'accéder à ce trousseau.";
-
-  // Template d'erreur
-  $smarty = new CSmartyDP();
-  $smarty->assign("msg", $msg);
-  $smarty->display("inc_bad_keeper.tpl");
-  CApp::rip();
+  CAppUI::stepAjax($msg, UI_MSG_ERROR);
 }
 
 // Second passage, après avoir saisi la phrase de passe
 if ($keeper->_id && $_passphrase) {
   if (!$keeper->testSample($_passphrase)) {
     $msg = "Phrase de passe incorrecte.";
-
-    // Template d'erreur
-    $smarty = new CSmartyDP();
-    $smarty->assign("msg", $msg);
-    $smarty->display("inc_bad_keeper.tpl");
-    CApp::rip();
+    CAppUI::stepAjax($msg, UI_MSG_ERROR);
   }
 
   // Ecrit la phrase de passe en session

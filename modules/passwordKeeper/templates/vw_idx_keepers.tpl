@@ -10,7 +10,7 @@
 {{mb_script module="passwordKeeper" script="keeper"}}
 
 <script type="text/javascript">
-  Main.add(function(){
+  Main.add(function() {
     Keeper.showListKeeper();
   })
 </script>
@@ -19,6 +19,7 @@
   <tr>
     <td>
       <button type="button" class="new" onclick="Keeper.showKeeper('0')">{{tr}}CPasswordKeeper-title-create{{/tr}}</button>
+      <button type="button" class="hslip" onclick="Keeper.popupImport()">{{tr}}CPasswordKeeper-import{{/tr}}</button>
     </td>
   </tr>
   <tr>

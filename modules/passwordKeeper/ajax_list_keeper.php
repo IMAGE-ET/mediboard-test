@@ -8,11 +8,16 @@
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @link     http://www.mediboard.org */
 
+if (empty($_SERVER["HTTPS"])) {
+  $msg = "Vous devez utiliser le protocole HTTPS pour utiliser ce module.";
+  CAppUI::stepAjax($msg, UI_MSG_ERROR);
+}
+
 CCanDo::checkAdmin();
 
 $password_keeper_id = CValue::getOrSession("password_keeper_id");
 
-// Recupération de la liste des trousseaux
+// Récupération de la liste des trousseaux
 $keeper = new CPasswordKeeper();
 $user   = CMediusers::get();
 

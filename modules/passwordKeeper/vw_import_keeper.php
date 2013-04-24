@@ -1,11 +1,11 @@
 <?php
 /**
  * $Id$
- *
+ *  
  * @category Password Keeper
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
 
 if (empty($_SERVER["HTTPS"])) {
@@ -16,4 +16,4 @@ if (empty($_SERVER["HTTPS"])) {
 CCanDo::checkAdmin();
 
 $smarty = new CSmartyDP();
-$smarty->display("configure.tpl");
+$smarty->display("vw_import_keeper.tpl");
