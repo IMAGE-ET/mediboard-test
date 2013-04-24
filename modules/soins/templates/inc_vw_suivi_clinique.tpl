@@ -255,7 +255,7 @@
             <strong>{{mb_label object=$sejour field="type"}}</strong>
             {{mb_value object=$sejour field="type"}}
           </td>
-          <td class="{{if $sejour->confirme}}ok{{else}}warning{{/if}}">
+          <td class="text {{if $sejour->confirme}}ok{{else}}warning{{/if}}">
             <form name="confirm-sortie-frm" method="post" action="?"
               onsubmit="return onSubmitFormAjax(this, { onComplete: function() { loadSuiviClinique('{{$sejour->_id}}') } })">
               <input type="hidden" name="m" value="dPplanningOp" />
@@ -264,6 +264,9 @@
               {{mb_key object=$sejour}}
               {{mb_field object=$sejour field=confirme typeEnum="checkbox" onchange="submitFormAjax(this.form);"}}
               {{mb_label object=$sejour field=confirme}}
+              {{if $sejour->confirme}}
+                par {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$user_confirm_sortie}}
+              {{/if}}
             </form>
           </td>
         </tr>

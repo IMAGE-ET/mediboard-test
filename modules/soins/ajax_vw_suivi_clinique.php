@@ -97,6 +97,12 @@ if(CModule::getActive("dPprescription")){
   }
 }
 
+// Utilisateur ayant confirmé la sortie
+$logConfirme = $sejour->loadLastLogForField("confirme");
+$user_confirm_sortie = new CMediusers();
+$user_confirm_sortie->load($logConfirme->user_id);
+$user_confirm_sortie->loadRefFunction();
+
 if (CModule::getActive("dPprescription")){
   $date = CMbDT::dateTime();
   $days_config = CAppUI::conf("dPprescription CPrescription nb_days_prescription_current");
@@ -105,7 +111,8 @@ if (CModule::getActive("dPprescription")){
 }
 
 $smarty = new CSmartyDP;
-$smarty->assign("sejour", $sejour);
+$smarty->assign("sejour"             , $sejour);
+$smarty->assign("user_confirm_sortie", $user_confirm_sortie);
 
 if (CModule::getActive("dPprescription")){
 	$smarty->assign("date"  , $date);
