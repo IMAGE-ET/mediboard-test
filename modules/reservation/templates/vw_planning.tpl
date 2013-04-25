@@ -28,7 +28,7 @@
   }
 
   autorefreshPlanning = {
-    frequency: 90, //sec
+    frequency: 5, //sec
     updater: null,
 
     start : function() {
@@ -57,11 +57,6 @@
   refreshPlanning = function(period) {
     var form = getForm("filterPlanning");
     var url = new Url("reservation", "ajax_vw_planning");
-    url.addParam("date_planning", $V(form.date_planning));
-    url.addParam("praticien_id" , $V(form.praticien_id));
-    url.addParam("bloc_id"      , $V(form.bloc_id));
-    url.addParam("show_cancelled", form.show_cancelled.checked ? 1 : 0);
-    url.addParam("show_operations", form.show_operations.checked ? 1 : 0);
     url.addParam("current_m"    , "{{$current_m}}");
     var week_container = $$(".week-container")[0];
     
@@ -291,6 +286,18 @@
     var url = new Url("reservation", "ajax_legend_planning");
     url.requestModal();
   }
+
+
+  updateSession = function(variable, value) {
+    var url = new Url("reservation", "ajax_assign_session");
+    url.addParam("var", variable);
+    url.addParam("value", value);
+    url.requestUpdate("systemMsg", function() {
+      refreshPlanning();
+    });
+
+
+  }
 </script>
 
 <form name="editOperation" method="post">
@@ -348,14 +355,14 @@
       <td>
         <a href="#1" onclick="window.calendar_planning.datePicked(new Date(new Date(window.calendar_planning.altElement.defaultValue).setHours('-24')))">&lt;&lt;&lt;</a>
         <label>
-        Date <input name="date_planning" type="hidden" value="{{$date_planning}}" class="date" onchange="refreshPlanning();"/>
+        Date <input name="date_planning" type="hidden" value="{{$date_planning}}" class="date" onchange="updateSession('date_planning', this.value);"/>
         </label>
         <a href="#1" onclick="window.calendar_planning.datePicked(new Date(new Date(window.calendar_planning.altElement.defaultValue).setHours('+24')))">&gt;&gt;&gt;</a>
       </td>
       <td>
         <label>
           Praticien
-          <select name="praticien_id" onchange="refreshPlanning();">
+          <select name="praticien_id" onchange="updateSession('praticien_id', this.value);">
             <option value="">&mdash; Tous les praticiens</option>
             {{mb_include module=mediusers template=inc_options_mediuser list=$praticiens selected=$praticien_id}}
           </select>
@@ -364,7 +371,7 @@
       <td>
         <label>
           {{tr}}CBlocOperatoire{{/tr}}
-          <select name="bloc_id" onchange="refreshPlanning();">
+          <select name="bloc_id" onchange="updateSession('bloc_id', this.value);">
             <option value="">&mdash; {{tr}}CBlocOperatoire.all{{/tr}}</option>
             {{foreach from=$blocs item=_bloc}}
               <option value="{{$_bloc->_id}}" {{if $bloc_id == $_bloc->_id}}selected{{/if}}>{{$_bloc->nom}}</option>
@@ -374,13 +381,13 @@
       </td>
       <td>
         <label>
-          <input type="checkbox" name="show_cancelled" {{if $show_cancelled}}checked{{/if}} onclick="refreshPlanning()"/>
+          <input type="checkbox" name="show_cancelled" {{if $show_cancelled}}checked{{/if}} onclick="updateSession('show_cancelled', (this.checked) ? 1 : 0); console.log((this.value == 1) ? 0 : 1);"/>
             {{tr}}checkbox-COperation-show_cancelled{{/tr}}
         </label>
       </td>
       <td>
           <label>
-            <input type="checkbox" name="show_operations" {{if $show_operations}}checked{{/if}} onclick="refreshPlanning()"/>
+            <input type="checkbox" name="show_operations" {{if $show_operations}}checked{{/if}} onclick="updateSession('show_operations', (this.checked) ? 1 : 0);"/>
             {{tr}}checkbox-COperation-show_operations{{/tr}}
           </label>
       </td>

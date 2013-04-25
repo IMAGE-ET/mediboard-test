@@ -22,7 +22,7 @@ $date_planning = CValue::getOrSession("date_planning", CMbDT::date());
 $praticien_id  = CValue::getOrSession("praticien_id", "");
 $bloc_id       = CValue::getOrSession("bloc_id", "");
 $show_cancelled = CValue::getOrSession("show_cancelled", 0);
-$show_operations= CValue::get("show_operations", 1);
+$show_operations= CValue::getOrSession("show_operations", 1);
 
 $praticiens = new CMediusers;
 $praticiens = $praticiens->loadChirurgiens(); 

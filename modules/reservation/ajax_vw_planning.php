@@ -23,9 +23,9 @@ $m = $current_m;
 $date_planning    = CValue::getOrSession("date_planning");
 $praticien_id     = CValue::getOrSession("praticien_id");
 $scroll_top       = CValue::get("scroll_top", null);
-$bloc_id          = CValue::getOrSession("bloc_id", "");
+$bloc_id          = CValue::getOrSession("bloc_id");
 $show_cancelled   = CValue::getOrSession("show_cancelled", 0);
-$show_operations  = CValue::get("show_operations", 1);
+$show_operations  = CValue::getOrSession("show_operations", 1);
 
 //alerts
 $nbIntervHorsPlage  = 0;
@@ -127,8 +127,11 @@ $plages = $plageop->loadList($where);
 $planning = new CPlanningWeek(0, 0, count($salles), count($salles), false, "auto");
 $planning->title =  "Planning du ".CMbDT::transform(null, $date_planning, "%A %d %B %Y");
 
+
+//load the current bloc
 if ($bloc_id) {
-  $planning->title .= " - $bloc->nom";
+  $current_bloc = $bloc->load($bloc_id);
+  $planning->title .= " - $current_bloc->nom";
 }
 
 $planning->guid = "planning_interv";
