@@ -381,7 +381,7 @@
       </td>
       <td>
         <label>
-          <input type="checkbox" name="show_cancelled" {{if $show_cancelled}}checked{{/if}} onclick="updateSession('show_cancelled', (this.checked) ? 1 : 0); console.log((this.value == 1) ? 0 : 1);"/>
+          <input type="checkbox" name="show_cancelled" {{if $show_cancelled}}checked{{/if}} onclick="updateSession('show_cancelled', (this.checked) ? 1 : 0);"/>
             {{tr}}checkbox-COperation-show_cancelled{{/tr}}
         </label>
       </td>
