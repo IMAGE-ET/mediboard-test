@@ -5,7 +5,7 @@
 <script type="text/javascript">
 
 showFunction = function(function_id, element) {
-  if (element) {
+  if (element && !element._class) {
     element.up('tr').addUniqueClassName('selected');
   }
   var url = new Url("mediusers", "ajax_edit_function");
@@ -24,7 +24,7 @@ Main.add(showFunction.curry('{{$function_id}}'));
   {{if $can->edit}}
   <tr>
     <td style="width: 60%">
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;function_id=0" class="button new">
+      <a href="#" class="button new" onclick="showFunction(0);">
        {{tr}}CFunctions-title-create{{/tr}}
       </a>
     </td>

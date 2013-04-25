@@ -2,11 +2,6 @@
   Main.add(function () {
     Control.Tabs.create('tab_user', true);
   });
-  
-  function changePagePrimaryUsers(page) {
-    $V(getForm('listFilterPrimaryUsers').page_function,page);
-  }
-
 </script>
 
 {{if $function->_id}}
@@ -32,11 +27,7 @@
         <table class="tbl">
           <tr>
             <td colspan="6">
-              <form name="listFilterPrimaryUsers" action="?m=mediusers" method="get">
-                <input type="hidden" name="m" value="mediusers" />
-                <input type="hidden" name="tab" value="vw_idx_functions" />
-                <input type="hidden" name="page_function" value="{{$page_function}}" onchange="this.form.submit()"/>
-                
+              <form name="listFilterPrimaryUsers" action="?" method="get">
                 {{if $total_sec_functions != 0}}
                   {{mb_include module=system template=inc_pagination total=$total_sec_functions current=$page_function change_page='changePagePrimaryUsers' step=10}}
                 {{/if}}
@@ -80,7 +71,8 @@
       </div>
       <div id="list-secondary-users" style="display: none;">
         {{if $can->edit}}
-        <form name="addSecUser" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+        <form name="addSecUser" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: changePagePrimaryUsers})">
+        <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dosql" value="do_secondary_function_aed" />
         <input type="hidden" name="secondary_function_id" value="" />
         <input type="hidden" name="function_id" value="{{$function->_id}}" />
@@ -150,13 +142,19 @@
             </td>
             <td class="button">
               {{if $can->edit}}
-              <form name="delSecUser-{{$curr_function->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-              <input type="hidden" name="dosql" value="do_secondary_function_aed" />
-              <input type="hidden" name="secondary_function_id" value="{{$curr_function->secondary_function_id}}" />
-              <input type="hidden" name="del" value="1" />
-              <button class="trash notext" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'utilisateur secondaire',objName:'{{$curr_function->_ref_user->_view|smarty:nodefaults|JSAttribute}}'})">
-                {{tr}}Delete{{/tr}}
-              </button>
+              <form name="delSecUser-{{$curr_function->_id}}" action="?" method="post">
+                <input type="hidden" name="m" value="{{$m}}" />
+                <input type="hidden" name="dosql" value="do_secondary_function_aed" />
+                <input type="hidden" name="secondary_function_id" value="{{$curr_function->secondary_function_id}}" />
+                <input type="hidden" name="del" value="1" />
+                <button class="trash notext" type="button"
+                        onclick="confirmDeletion(this.form, {
+                          typeName: 'l\'utilisateur secondaire',
+                          objName: '{{$curr_function->_ref_user->_view|smarty:nodefaults|JSAttribute}}',
+                          ajax: true},
+                          {onComplete: changePagePrimaryUsers})">
+                  {{tr}}Delete{{/tr}}
+                </button>
               </form>
               {{/if}}
             </td>

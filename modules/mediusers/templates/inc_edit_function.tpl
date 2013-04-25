@@ -1,16 +1,25 @@
 <script type="text/javascript">
   Main.add(function () {
     InseeFields.initCPVille("editFrm", "cp", "ville", "tel");
+    changePagePrimaryUsers();
   });
+
+  changePagePrimaryUsers = function(page) {
+    var url = new Url("mediusers", "ajax_list_mediusers");
+    url.addParam("function_id", '{{$function->_id}}');
+    url.addParam("page_function", page);
+    url.requestUpdate("listUsers");
+  }
 </script>
 
-<form name="editFrm" action="?m={{$m}}" method="post" onSubmit="return checkForm(this)">
+<form name="editFrm" action="?m={{$m}}" method="post" onSubmit="return onSubmitFormAjax(this)">
   {{if !$can->edit}}
   <input name="_locked" value="1" hidden="hidden" />
   {{/if}}
   <input type="hidden" name="m" value="mediusers" />
   <input type="hidden" name="dosql" value="do_functions_aed" />
   <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="callback" value="showFunction" />
   {{mb_key object=$function}}
 
   <table class="form">
@@ -124,4 +133,4 @@
   </table>
 </form>
 
-{{include file="inc_prim_secon_users.tpl"}}
+<div id="listUsers"></div>

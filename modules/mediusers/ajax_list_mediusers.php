@@ -1,0 +1,51 @@
+<?php 
+
+/**
+ * Liste des users principaux et secondaires d'une fonction 
+ *  
+ * @category mediusers
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version  SVN: $Id:\$ 
+ * @link     http://www.mediboard.org
+ */
+
+CCanDo::checkRead();
+
+$function_id = CValue::getOrSession("function_id");
+$page_function = intval(CValue::get('page_function', 0));
+
+$step_sec_function = 10;
+$primary_users = array();
+$total_sec_functions = null;
+
+$function = new CFunctions();
+$function->load($function_id);
+
+$function->loadBackRefs("users");
+$total_sec_functions = $function->countBackRefs("users");
+$primary_users = $function->loadBackRefs("users", null, "$page_function, $step_sec_function");
+
+foreach ($primary_users as $_user) {
+  $_user->loadRefProfile();
+}
+
+$secondaries_functions = $function->loadBackRefs("secondary_functions");
+$users = CMbObject::massLoadFwdRef($secondaries_functions, "user_id");
+
+foreach ($function->_back["secondary_functions"] as &$_sec_function) {
+  $_sec_function->loadRefUser();
+  $_sec_function->_ref_user->loadRefProfile();
+}
+
+$smarty = new CSmartyDP();
+
+$smarty->assign("function"           , $function);
+$smarty->assign("primary_users"      , $primary_users);
+$smarty->assign("total_sec_functions", $total_sec_functions);
+$smarty->assign("page_function"      , $page_function);
+$smarty->assign("utypes"             , CUser::$types);
+$smarty->assign("secondary_function" , new CSecondaryFunction());
+
+$smarty->display("inc_prim_secon_users.tpl");
