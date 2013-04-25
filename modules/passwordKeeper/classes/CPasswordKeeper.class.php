@@ -145,4 +145,14 @@ class CPasswordKeeper extends CMbObject {
 
     return ($decrypted === self::SAMPLE);
   }
+
+  /**
+   * Check if HTTPS in use
+   */
+  static function checkHTTPS() {
+    if (empty($_SERVER["HTTPS"])) {
+      $msg = "passwordKeeper-HTTPS-required";
+      CAppUI::stepAjax($msg, UI_MSG_ERROR);
+    }
+  }
 }

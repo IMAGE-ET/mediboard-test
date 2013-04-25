@@ -112,12 +112,67 @@ Keeper = {
     return false;
   },
 
-  promptPassphrase : function(password_keeper_id) {
-    var passphrase = prompt("Entrez votre phrase de passe :", "");
+  promptPassphrase : function(password_keeper_id, deletion, exportKeeper) {
+    if (deletion) {
+      modal("modalPassphrase");
+      var form = getForm("passphrase");
+      form.passphraseInput.focus();
+      $V(form.password_keeper_id, password_keeper_id);
+      $V(form.deletion, true);
+      return;
+    }
+    if (exportKeeper) {
+      modal("modalPassphrase");
+      var form = getForm("passphrase");
+      form.passphraseInput.focus();
+      $V(form.password_keeper_id, password_keeper_id);
+      //form.passphraseInputExport.writeAttribute("type", "password");
+      $('passphrase2').show();
+      return;
+    }
+    modal("modalPassphrase");
+    var form = getForm("passphrase");
+    form.passphraseInput.focus();
+    $V(form.password_keeper_id, password_keeper_id);
+  },
+
+  getPassphrase : function(form, password_keeper_id, deletion, exportKeeper) {
+    passphrase = $V(form.passphraseInput);
     if (passphrase != null) {
       var url = new Url("passwordKeeper", "ajax_edit_keeper");
       url.addParam("password_keeper_id", password_keeper_id);
       url.addParam("passphrase", passphrase);
+
+      if (deletion) {
+        url.addParam("deletion", 1);
+        url.requestUpdate("vw_edit_keeper",
+          { method: "post",
+            getParameters: {
+              m: "passwordKeeper",
+              a: "ajax_edit_keeper"
+            },
+            onComplete: function() {
+              $V(form.passphraseInput, '');
+              Control.Modal.close();
+            }
+          }
+        );
+
+        return false;
+      }
+
+      if (exportKeeper) {
+        var url = new Url("passwordKeeper", "vw_export_keeper", 'raw');
+        url.pop(10, 10, null, null, null,
+          { password_keeper_id: password_keeper_id, oldPassphrase: passphrase, newPassphrase: exportKeeper }
+        );
+        $V(form.passphraseInput, '');
+        $V(form.passphraseInputExport, '');
+        Control.Modal.close();
+
+        return false;
+      }
+
       url.requestUpdate("vw_edit_keeper", {
         method: "post",
         getParameters: {
@@ -128,46 +183,19 @@ Keeper = {
           if (password_keeper_id != 0) {
             Keeper.showListCategory(password_keeper_id);
           }
+          $V(form.passphraseInput, '');
+          Control.Modal.close();
         }
       });
     }
+
+    return false;
   },
 
   revealPasswordEntry : function(password_id) {
     var url = new Url("passwordKeeper", "ajax_revealed");
     url.addParam("password_id", password_id);
     url.requestUpdate("vw_reveal_password");
-  },
-
-  checkKeeperDeletion : function(password_keeper_id) {
-    var passphrase = prompt("Entrez votre phrase de passe :", "");
-    if (passphrase != null) {
-      var url = new Url("passwordKeeper", "ajax_edit_keeper");
-      url.addParam("password_keeper_id", password_keeper_id);
-      url.addParam("passphrase", passphrase);
-      url.addParam("deletion", true);
-      url.requestUpdate("vw_edit_keeper",
-        { method: "post",
-          getParameters: {
-            m: "passwordKeeper",
-            a: "ajax_edit_keeper"
-          }
-        }
-      );
-    }
-  },
-
-  exportKeeper : function(password_keeper_id) {
-    var oldPassphrase = prompt("Entrez votre phrase de passe :", "");
-    if (oldPassphrase != null) {
-      var newPassphrase = prompt("Entrez la NOUVELLE phrase de passe à utiliser :", "");
-      if (newPassphrase != null) {
-        var url = new Url("passwordKeeper", "vw_export_keeper", 'raw');
-        url.pop(10, 10, null, null, null,
-          { password_keeper_id: password_keeper_id, oldPassphrase: oldPassphrase, newPassphrase: newPassphrase }
-        );
-      }
-    }
   },
 
   popupImport : function() {

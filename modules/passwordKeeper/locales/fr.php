@@ -29,9 +29,13 @@ $locales['CPasswordKeeper-title-create'] = 'Créer un trousseau';
 $locales['CPasswordKeeper-title-modify'] = 'Modifier le trousseau';
 $locales['CPasswordKeeper.is_public.0'] = 'Non';
 $locales['CPasswordKeeper.is_public.1'] = 'Oui';
+$locales['Passphrase'] = 'Phrase de passe';
+$locales['PassphraseExport'] = 'NOUVELLE phrase de passe';
 $locales['XML-Import'] = 'Importation d\'un fichier XML';
+$locales['mod-passwordKeeper-tab-configure'] = 'Configuration';
 $locales['mod-passwordKeeper-tab-vw_idx_keepers'] = 'Trousseaux';
 $locales['mod-passwordKeeper-tab-vw_import_keeper'] = 'Importation d\'un trousseau';
 $locales['module-passwordKeeper-court'] = 'Trousseau';
 $locales['module-passwordKeeper-long'] = 'Trousseau de clefs';
+$locales['passwordKeeper-HTTPS-required'] = 'Vous devez utiliser le protocole HTTPS pour utiliser ce module';
 ?>
