@@ -219,9 +219,7 @@ $can_edit = CCanDo::edit();
 
 $diff_hour_urgence = CAppUI::conf("reservation diff_hour_urgence");
 if ($show_operations) {
-  /**
-   * @var $_operation COperation
-   */
+  /** @var $_operation COperation */
   foreach ($operations_by_salle as $salle_id => $_operations) {
     $i = array_search($salle_id, $salles_ids);
     foreach ($_operations as $_operation) {
@@ -305,8 +303,17 @@ if ($show_operations) {
         $libelle .= "
               <span onmouseover=\"ObjectTooltip.createEx(this, '".$patient->_guid."', 'allergies');\" ><img src=\"images/icons/warning.png\" alt=\"WRN\"/></span>";
       }
-      if ((count($patient->_ref_dossier_medical->_ref_antecedents_by_type["anesth"]) + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["chir"]) + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["fam"]) + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["gyn"]) + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["med"]) + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["obst"]) + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["trans"])) > 0) {
-        $libelle.="<span onmouseover=\"ObjectTooltip.createEx(this, '".$patient->_ref_dossier_medical->_guid."', 'antecedents');\" ><img src=\"images/icons/antecedents.gif\" alt=\"WRN\"/></span>";
+
+      if (isset($patient->_ref_dossier_medical->_ref_antecedents_by_type)) {
+        if ((count($patient->_ref_dossier_medical->_ref_antecedents_by_type["anesth"])
+          + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["chir"])
+          + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["fam"])
+          + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["gyn"])
+          + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["med"])
+          + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["obst"])
+          + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["trans"])) > 0) {
+          $libelle.="<span onmouseover=\"ObjectTooltip.createEx(this, '".$patient->_ref_dossier_medical->_guid."', 'antecedents');\" ><img src=\"images/icons/antecedents.gif\" alt=\"WRN\"/></span>";
+        }
       }
       $libelle.="Sejour: <span onmouseover='ObjectTooltip.createEx(this, \"".$sejour->_guid."\")'>".$sejour->getFormattedValue("entree")."</span>";
       if ($_operation->materiel) {
@@ -326,7 +333,7 @@ if ($show_operations) {
       }
 
       if ($anesth->_id) {
-        $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$anesth->_guid."\")'>".CMbString::htmlEntities($anesth->_view)."</span>";
+        $libelle .= "\n<img src=\"images/icons/anesth.png\" alt=\"WRN\"/><span onmouseover='ObjectTooltip.createEx(this, \"".$anesth->_guid."\")'>".CMbString::htmlEntities($anesth->_view)."</span>";
       }
 
       $libelle .= "\n".CMbString::htmlEntities($_operation->rques);
