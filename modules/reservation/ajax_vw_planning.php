@@ -20,7 +20,7 @@ $save_m = $m;
 $current_m     = CValue::get("current_m");
 $m = $current_m;
 
-$date_planning    = CValue::getOrSession("date_planning");
+$date_planning    = CValue::getOrSession("date_planning", CMbDT::date());
 $praticien_id     = CValue::getOrSession("praticien_id");
 $scroll_top       = CValue::get("scroll_top", null);
 $bloc_id          = CValue::getOrSession("bloc_id");
