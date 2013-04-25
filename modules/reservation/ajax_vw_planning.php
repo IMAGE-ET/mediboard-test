@@ -40,6 +40,10 @@ if ($bloc_id) {
 }
 $blocs = $bloc->loadList($where);
 
+if (count($blocs) == 1) {
+  $current_bloc = reset($blocs);
+}
+
 foreach ($blocs as $_bloc) {
   $_bloc->canDo();
   $_bloc->loadRefsSalles();
@@ -129,8 +133,7 @@ $planning->title =  "Planning du ".CMbDT::transform(null, $date_planning, "%A %d
 
 
 //load the current bloc
-if ($bloc_id) {
-  $current_bloc = $bloc->load($bloc_id);
+if (isset($current_bloc)) {
   $planning->title .= " - $current_bloc->nom";
 }
 

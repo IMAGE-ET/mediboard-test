@@ -14,8 +14,13 @@
 CCanDo::checkRead();
 
 $var = CValue::get("var");
-$value = CValue::get("value");
+$value = CValue::get("value", null);
 
 if ($var) {
-  echo CValue::setSession($var, $value);
+  $ok = CValue::setSession($var, $value);
+  if ($ok) {
+    CAppUI::setMsg("Parameter-changed");
+  }
 }
+
+echo CAppUI::getMsg();
