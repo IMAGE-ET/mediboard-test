@@ -169,7 +169,7 @@ if ($filterSejour->type) {
   $whereOperations["sejour.type"] = "= '$filterSejour->type'";
 }
 
-$orderOperations = "date, salle_id, chir_id";
+$orderOperations = "date, salle_id, time_operation, chir_id";
 
 $operations = $operation->loadList($whereOperations, $orderOperations, null, null, $ljoin);
 CMbObject::massLoadFwdRef($operations, "plageop_id");
