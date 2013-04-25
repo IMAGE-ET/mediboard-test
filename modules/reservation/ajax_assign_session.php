@@ -14,7 +14,7 @@
 CCanDo::checkRead();
 
 $var = CValue::get("var");
-$value = CValue::get("value", null);
+$value = CValue::get("value");
 
 if ($var) {
   $ok = CValue::setSession($var, $value);
