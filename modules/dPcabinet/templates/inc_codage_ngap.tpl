@@ -44,6 +44,14 @@ ActesNGAP = {
         }
       }
     } );
+  },
+
+  checkNumTooth: function() {
+    var num_tooth = $V("editNGAP_numero_dent");
+
+    if (num_tooth < 11 || (num_tooth > 18 && num_tooth < 21) || (num_tooth > 28 && num_tooth < 31) || (num_tooth > 38 && num_tooth < 41) || (num_tooth > 48 && num_tooth < 51) || (num_tooth > 55 && num_tooth < 61) || (num_tooth > 65 && num_tooth < 71) || (num_tooth > 75 && num_tooth < 81) ||  num_tooth > 85) {
+      alert("Le numéro de dent saisi ne correspond pas à la numérotation internationale!");
+    }
   }
 }
 
@@ -123,6 +131,10 @@ ActesNGAP = {
         <th class="category">{{mb_title object=$acte_ngap field=ald}}</th>
       {{/if}}
 
+      {{if $_is_dentiste}}
+        <th class="category">{{mb_title object=$acte_ngap field=numero_dent}}</th>
+      {{/if}}
+
       <th class="category">{{mb_title object=$acte_ngap field=executant_id}}</th>
       {{if !$object->_coded}}
         {{if $can->edit}}
@@ -155,6 +167,10 @@ ActesNGAP = {
 
           {{if $object->_ref_patient->ald}}
             <td>{{mb_field object=$acte_ngap field="ald"}}</td>
+          {{/if}}
+
+          {{if $_is_dentiste}}
+            <td>{{mb_field object=$acte_ngap field=numero_dent onchange="ActesNGAP.checkNumTooth()"}}</td>
           {{/if}}
 
           <td>
@@ -207,6 +223,10 @@ ActesNGAP = {
 
       {{if $object->_ref_patient->ald}}
         <td>{{mb_value object=$_acte_ngap field="ald"}}</td>
+      {{/if}}
+
+      {{if $_is_dentiste}}
+        <td>{{mb_value object=$_acte_ngap field=numero_dent}}</td>
       {{/if}}
 
       {{assign var="executant" value=$_acte_ngap->_ref_executant}}

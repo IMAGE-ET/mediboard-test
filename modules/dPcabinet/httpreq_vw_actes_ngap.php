@@ -30,6 +30,8 @@ $smarty = new CSmartyDP();
 $smarty->assign("acte_ngap"      , $acte_ngap);
 $smarty->assign("object"         , $object);
 $smarty->assign("subject"        , $object);
+if ($object_class = "CConsultation") {
+  $smarty->assign("_is_dentiste"   , $object->_is_dentiste);
+}
 
 $smarty->display("inc_codage_ngap.tpl");
-?>

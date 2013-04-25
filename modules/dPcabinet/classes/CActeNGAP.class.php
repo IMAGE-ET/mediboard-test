@@ -22,7 +22,9 @@ class CActeNGAP extends CActe {
   public $lettre_cle; 
   public $lieu; 
   public $exoneration; 
-  public $ald; 
+  public $ald;
+  public $numero_dent;
+  public $comment;
 
   // Distant fields
   public $_libelle; 
@@ -55,6 +57,8 @@ class CActeNGAP extends CActe {
     $props["lieu"]                = "enum list|C|D default|C";
     $props["exoneration"]         = "enum list|N|13|17 default|N";
     $props["ald"]                 = "enum list|0|1 default|0";
+    $props["numero_dent"]         = "num min|11 max|85";
+    $props["comment"]             = "str";
     $props["_execution"]          = "dateTime";
 
     return $props;
