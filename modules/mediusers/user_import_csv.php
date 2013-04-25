@@ -40,8 +40,14 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $results[$i]["type"]            = CMbArray::get($line,  4);
     $results[$i]["function_name"]   = CMbArray::get($line,  5);
     $results[$i]["profil_name"]     = CMbArray::get($line,  6);
-    $results[$i]["adeli"]           = CMbArray::get($line,  7);
-    $results[$i]["rpps"]            = CMbArray::get($line,  8);
+    if (CAppUI::conf("ref_pays") == 1) {
+      $results[$i]["adeli"]           = CMbArray::get($line,  7);
+      $results[$i]["rpps"]            = CMbArray::get($line,  8);
+    }
+    else {
+      $results[$i]["ean"]           = CMbArray::get($line,  7);
+      $results[$i]["rcc"]            = CMbArray::get($line,  8);
+    }
     $results[$i]["spec_cpam_code"]  = CMbArray::get($line,  9);
     $results[$i]["discipline_name"] = CMbArray::get($line, 10);
     
@@ -52,8 +58,14 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $user->_user_last_name  = $results[$i]["lastname"];
     $user->_user_first_name = $results[$i]["firstname"];
     $user->_user_type       = $results[$i]["type"];
-    $user->adeli            = $results[$i]["adeli"];
-    $user->rpps             = $results[$i]["rpps"];
+    if (CAppUI::conf("ref_pays") == 1) {
+      $user->adeli            = $results[$i]["adeli"];
+      $user->rpps             = $results[$i]["rpps"];
+    }
+    else {
+      $user->ean              = $results[$i]["ean"];
+      $user->rcc              = $results[$i]["rcc"];
+    }
     $user->actif  = 1;
     $user->remote = 0;
     

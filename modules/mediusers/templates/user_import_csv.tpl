@@ -18,8 +18,13 @@
   <li><strong>{{mb_label class=CMediusers field=_user_type      }}</strong> (code numérique)</li>
   <li><strong>{{mb_label class=CMediusers field=function_id     }}</strong> ({{mb_label class=CFunctions field=text}}) : fonction créée si introuvable</li>
   <li>{{mb_label class=CMediusers field=_profile_id     }} ({{mb_label class=CUser field=user_username}}): profil non créé si introuvable</li>
-  <li>{{mb_label class=CMediusers field=adeli           }} </li>
-  <li>{{mb_label class=CMediusers field=rpps            }} </li>
+  {{if $conf.ref_pays == 1}}
+    <li>{{mb_label class=CMediusers field=adeli           }} </li>
+    <li>{{mb_label class=CMediusers field=rpps            }} </li>
+  {{else}}
+    <li>{{mb_label class=CMediusers field=ean           }} </li>
+    <li>{{mb_label class=CMediusers field=rcc            }} </li>
+  {{/if}}
   <li>{{mb_label class=CMediusers field=spec_cpam_id    }} (code à deux chiffres): spcécialité non créée si introuvable</li>
   <li>{{mb_label class=CMediusers field=discipline_id   }} : discipline non créée si introuvable</li>
 {{mb_include module=system template=inc_import_csv_info_outro}}
@@ -47,8 +52,13 @@
     <th>{{mb_label class=CMediusers field=_user_password  }}</th>
     <th>{{mb_label class=CMediusers field=_user_type      }}</th>
     <th>{{mb_label class=CMediusers field=function_id     }}</th>
-    <th>{{mb_label class=CMediusers field=adeli           }}</th>
-    <th>{{mb_label class=CMediusers field=rpps            }}</th>
+    {{if $conf.ref_pays == 1}}
+      <th>{{mb_label class=CMediusers field=adeli           }}</th>
+      <th>{{mb_label class=CMediusers field=rpps            }}</th>
+    {{else}}
+      <th>{{mb_label class=CMediusers field=ean           }}</th>
+      <th>{{mb_label class=CMediusers field=rcc            }}</th>
+    {{/if}}
     <th>
       {{mb_label class=CMediusers field=_profile_id     }} 
       {{if array_key_exists("profil_name", $unfound)}}      
@@ -92,8 +102,13 @@
     <td class="text">{{$_user.password}}       </td>
     <td class="text">{{$_user.type}}           </td>
     <td class="text">{{$_user.function_name}}  </td>
-    <td class="text">{{$_user.adeli}}          </td>
-    <td class="text">{{$_user.rpps}}          </td>
+    {{if $conf.ref_pays == 1}}
+      <td class="text">{{$_user.adeli}}          </td>
+      <td class="text">{{$_user.rpps}}          </td>
+    {{else}}
+      <td class="text">{{$_user.ean}}          </td>
+      <td class="text">{{$_user.rcc}}          </td>
+    {{/if}}
     <td class="text {{if array_key_exists($_user.profil_name    , $unfound.profil_name    )}}warning{{/if}}">{{$_user.profil_name    }}</td>
     <td class="text {{if array_key_exists($_user.spec_cpam_code , $unfound.spec_cpam_code )}}warning{{/if}}">{{$_user.spec_cpam_code }}</td>
     <td class="text {{if array_key_exists($_user.discipline_name, $unfound.discipline_name)}}warning{{/if}}">{{$_user.discipline_name}}</td>
