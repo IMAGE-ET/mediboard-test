@@ -16,7 +16,9 @@
       {{assign var="type_prot_chir" value="pack-"}}
     {{/if}}
     {{if $_protocole->_ref_protocole_prescription_chir}}
-      {{assign var=libelle}}
+      {{assign var=libelle value=$_protocole->_ref_protocole_prescription_chir->libelle}}
+    {{else}}
+      {{assign var=libelle value=""}}
     {{/if}}
 
 {{*
