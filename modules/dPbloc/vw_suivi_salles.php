@@ -26,14 +26,14 @@ foreach($listBlocs as $_bloc) {
 }
 
 // Chargement des Anesthésistes
-$listAnesths = new CMediusers;
+$listAnesths = new CMediusers();
 $listAnesths = $listAnesths->loadAnesthesistes(PERM_READ);
 
 // Chargement des Chirurgiens
-$listChirs = new CMediusers;
+$listChirs = new CMediusers();
 $listChirs = $listChirs->loadPraticiens(PERM_READ);
 
-$salle = new CSalle;
+$salle = new CSalle();
 $where = array("bloc_id" => "='$bloc->_id'");
 $bloc->_ref_salles = $salle->loadListWithPerms(PERM_READ, $where, "nom");
 
@@ -53,12 +53,15 @@ foreach ($bloc->_ref_salles as &$salle) {
 }
 
 // Interventions hors plages non traitées
-$non_traitee = new COperation();
+$op = new COperation();
 $where = array();
-$where["date"] = "= '$date_suivi'";
-$where["salle_id"] = "IS NULL";
-$where["plageop_id"] = "IS NULL";
-$non_traitees = $non_traitee->loadList($where);
+$ljoin = array();
+$ljoin["sejour"] = "operations.sejour_id = sejour.sejour_id";
+$where["operations.date"] = "= '$date_suivi'";
+$where["operations.salle_id"] = "IS NULL";
+$where["operations.plageop_id"] = "IS NULL";
+$where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+$non_traitees = $op->loadList($where, null, null, null, $ljoin);
 
 foreach ($non_traitees as $_operation) {
   $_operation->loadRefChir(1);
