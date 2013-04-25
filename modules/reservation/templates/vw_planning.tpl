@@ -28,7 +28,7 @@
   }
 
   autorefreshPlanning = {
-    frequency: 5, //sec
+    frequency: 90, //sec
     updater: null,
 
     start : function() {
