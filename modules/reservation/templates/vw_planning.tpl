@@ -366,7 +366,7 @@
       <td>
         <label>
           Praticien
-          <select name="praticien_id" onchange="updateSession('praticien_id', this.value);">
+          <select name="planning_chir_id" onchange="updateSession('planning_chir_id', this.value);">
             <option value="">&mdash; Tous les praticiens</option>
             {{mb_include module=mediusers template=inc_options_mediuser list=$praticiens selected=$praticien_id}}
           </select>
