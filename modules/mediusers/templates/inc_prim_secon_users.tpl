@@ -88,18 +88,29 @@
             <th>{{mb_label object=$secondary_function field="user_id"}}</th>
             <td>
               <input type="hidden" name="user_id" class="notNull" value=""/>
-              <input type="text" name="_view" value="" />
-              <input type="hidden" name="object_class" value="CMediusers" />
-              <button class="search" type="button" onclick="ObjectSelector.initEdit()">Chercher</button>
+              <input type="text" name="_view" value="" class="autocomplete"/>
               <script type="text/javascript">
-               ObjectSelector.initEdit = function(){
-                  this.sForm     = "addSecUser";
-                  this.sId       = "user_id";
-                  this.sClass    = "object_class";  
-                  this.onlyclass = "true";
-                  this.sView     = "_view";
-                  this.pop();
-                }
+                Main.add(function() {
+                  var form = getForm("addSecUser");
+                  var element = form._view;
+
+                  var url = new Url("system", "ajax_seek_autocomplete");
+                  url.addParam("object_class", "CMediusers");
+                  url.addParam("input_field", element.name);
+                  url.autoComplete(element, null, {
+                    minChars: 3,
+                    method: "get",
+                    select: "view",
+                    dropdown: true,
+                    afterUpdateElement: function(field, selected){
+                      var id = selected.getAttribute("id").split("-")[2];
+                      $V(form.user_id, id);
+                      if ($V(element) == "") {
+                        $V(element, selected.down('.view').innerHTML);
+                      }
+                    }
+                  });
+                });
               </script>
             </td>
           </tr>
@@ -161,7 +172,7 @@
           </tr>
           {{foreachelse}}
           <tr>
-            <td colspan="7">Aucun utilisateur secondaire</td>
+            <td colspan="7" class="empty">Aucun utilisateur secondaire</td>
           </tr>
           {{/foreach}}
         </table>
