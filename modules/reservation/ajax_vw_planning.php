@@ -140,7 +140,7 @@ if (isset($current_bloc)) {
 $planning->guid = "planning_interv";
 $planning->hour_min  = CMbDT::time(CAppUI::conf("reservation debut_planning").":00");
 $planning->dragndrop = $planning->resizable = CCanDo::edit();
-$planning->hour_divider = 60 / intval(CAppUI::conf("dPplanningOp COperation min_intervalle"));
+$planning->hour_divider = 12;
 $planning->show_half = true;
 $i = 0;
 $today = CMbDT::date();

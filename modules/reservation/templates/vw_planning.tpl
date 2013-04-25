@@ -27,6 +27,10 @@
     }
   }
 
+  function strpad(val){
+    return (!isNaN(val) && val.toString().length==1) ? "0" + val : val;
+  }
+
   autorefreshPlanning = {
     frequency: 90, //sec
     updater: null,

@@ -136,6 +136,16 @@
     }
     
     planning.onEventChange = function(e) {
+      var time = e.getTime();
+      var start = time.start;
+      var end = time.end;
+      var index_salle = start.getFullYear()-2000;
+      var salle_id = this.salles_ids[index_salle];
+
+      if (index_salle < 0 || index_salle > this.salles_ids.length) {
+        return;
+      }
+
       var object_guid = e.draggable_guid;
       var object_id = object_guid.split("-")[1];
       var entree_prevue = /entree_prevue='([0-9 \:-]*)'/.exec(e.title)[1];
@@ -144,42 +154,14 @@
       var heure_entree_prevue = prevue_split[1];
       var sortie_prevue = /sortie_prevue='([0-9 \:-]*)'/.exec(e.title)[1];
       var heure_sortie_prevue = sortie_prevue.split(" ")[1];
-      var time = e.getTime();
-      var temp_operation_date = new Date(1970, 1, 1, 0, time.length)
-      var temp_operation = temp_operation_date
-      var time_operation = time.start
-
-      var index_salle = time.start.getFullYear()-2000;
-      var salle_id = this.salles_ids[index_salle];
-
-      if (index_salle < 0 || index_salle > this.salles_ids.length) {
-        return;
-      }
-
-      if (e.type != "commentaire_planning") {
-        var preop = /preop='([0-9 \:-]*)'/.exec(e.title)[1];
-        var preop_segmented = preop.split(":");
-        var postop = /postop='([0-9 \:-]*)'/.exec(e.title)[1];
-        var postop_segmented = postop.split(":");
-
-        temp_operation.addHours(-postop_segmented[0]);
-        temp_operation.addMinutes(-postop_segmented[1]);
-        time_operation.addHours(preop_segmented[0]);
-        time_operation.addMinutes(preop_segmented[1]);
-      }
-
-      time_operation = time_operation.format("HH:mm");
-      temp_operation = temp_operation.format("HH:mm");
 
       // Pour un commentaire
       if (e.type == "commentaire_planning") {
         var form = getForm("editCommentairePlanning");
-        
-        var fin = time.end.format("HH:mm");
-        
+
         $V(form.commentaire_planning_id, object_id);
-        $V(form.debut, "{{$date_planning}} " + time_operation);
-        $V(form.fin, "{{$date_planning}} " + fin);
+        $V(form.debut, "{{$date_planning}} " + start.format("HH:mm"));
+        $V(form.fin, "{{$date_planning}} " + end.format("HH:mm"));
         $V(form.salle_id, salle_id);
         
         onSubmitFormAjax(form, {onComplete: refreshPlanning});
@@ -187,9 +169,27 @@
       }
       
       // Pour une DHE
-      
       var form = getForm("editOperation");
-      
+
+      var time_operation = start;
+      var preop = /preop='([0-9 \:-]*)'/.exec(e.title)[1];
+      var preop_segmented = preop.split(":");
+      var postop = /postop='([0-9 \:-]*)'/.exec(e.title)[1];
+      var postop_segmented = postop.split(":");
+
+      time_operation.addHours(preop_segmented[0]);
+      time_operation.addMinutes(preop_segmented[1]);
+
+      end.addHours(-postop_segmented[0]);
+      end.addMinutes(-postop_segmented[1]);
+
+      var temp_operation = (end - start) / 60000;
+      var hour = parseInt(temp_operation / 60);
+      var min = temp_operation - 60 * hour;
+      var temp_operation = strpad(hour) + ":"+strpad(min);
+
+      time_operation = time_operation.format("HH:mm");
+
       // Popup de modification des dates d'entrée et sortie prévue du séjour
       // dans le cas où la date et heure d'intervention n'est pas dans cet intervalle
       
