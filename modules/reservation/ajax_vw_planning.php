@@ -304,17 +304,16 @@ if ($show_operations) {
               <span onmouseover=\"ObjectTooltip.createEx(this, '".$patient->_guid."', 'allergies');\" ><img src=\"images/icons/warning.png\" alt=\"WRN\"/></span>";
       }
 
-      if (isset($patient->_ref_dossier_medical->_ref_antecedents_by_type)) {
-        if ((count($patient->_ref_dossier_medical->_ref_antecedents_by_type["anesth"])
-          + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["chir"])
-          + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["fam"])
-          + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["gyn"])
-          + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["med"])
-          + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["obst"])
-          + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["trans"])) > 0) {
-          $libelle.="<span onmouseover=\"ObjectTooltip.createEx(this, '".$patient->_ref_dossier_medical->_guid."', 'antecedents');\" ><img src=\"images/icons/antecedents.gif\" alt=\"WRN\"/></span>";
+      $count_atcd = 0;
+      foreach ($patient->_ref_dossier_medical->_ref_antecedents_by_type as $_type => $_atcd) {
+        if ($_type != "alle") {
+          $count_atcd += count($_atcd);
         }
       }
+      if ($count_atcd > 0) {
+        $libelle.="<span onmouseover=\"ObjectTooltip.createEx(this, '".$patient->_ref_dossier_medical->_guid."', 'antecedents');\" ><img src=\"images/icons/antecedents.gif\" alt=\"WRN\"/></span>";
+      }
+
       $libelle.="Sejour: <span onmouseover='ObjectTooltip.createEx(this, \"".$sejour->_guid."\")'>".$sejour->getFormattedValue("entree")."</span>";
       if ($_operation->materiel) {
         $libelle .="<hr/><span>".$_operation->materiel."</span>";
