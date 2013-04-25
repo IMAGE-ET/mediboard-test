@@ -18,6 +18,10 @@ if ($mediuser->isPraticien()) {
   $chir = $mediuser->createUser();
 }
 
+// Droit en écriture sur les plages
+$plage = new CPlageconsult();
+$canEditPlage = $plage->getPerm(PERM_EDIT);
+
 // Praticien selectionné
 $chirSel = CValue::getOrSession("chirSel", $chir ? $chir->user_id : null);
 
@@ -55,12 +59,14 @@ $next = CMbDT::date("+1 week", $debut);
 
 $smarty = new CSmartyDP();
 
-$smarty->assign("listChirs", $listChir);
-$smarty->assign("today"    , $today);
-$smarty->assign("debut"    , $debut);
-$smarty->assign("fin"      , $fin);
-$smarty->assign("prev"     , $prev);
-$smarty->assign("next"     , $next);
-$smarty->assign("chirSel"  , $chirSel);
+$smarty->assign("listChirs"           , $listChir);
+$smarty->assign("today"               , $today);
+$smarty->assign("debut"               , $debut);
+$smarty->assign("fin"                 , $fin);
+$smarty->assign("prev"                , $prev);
+$smarty->assign("next"                , $next);
+$smarty->assign("chirSel"             , $chirSel);
+$smarty->assign("canEditPlage"        , $canEditPlage);
 $smarty->assign("count_si_desistement", $count_si_desistement);
+
 $smarty->display("vw_planning_new.tpl");

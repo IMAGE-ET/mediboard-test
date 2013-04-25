@@ -151,8 +151,9 @@
   <table class="main">
     <tr>
       <th style="width: 25%; text-align: left;">
-        <button type="button" style="float: left;" class="new" onclick="PlageConsultation.edit('0');">Créer une nouvelle plage</button>
-        
+        {{if $canEditPlage}}
+          <button type="button" style="float: left;" class="new" onclick="PlageConsultation.edit('0');">{{tr}}CPlageconsult-title-create{{/tr}}</button>
+        {{/if}}
         <select name="chirSel" style="width: 15em;" onchange="refreshPlanning()">
           <option value="-1" {{if $chirSel == -1}} selected="selected" {{/if}}>&mdash; Choisir un professionnel</option>
           {{mb_include module=mediusers template=inc_options_mediuser selected=$chirSel list=$listChirs}}

@@ -130,13 +130,6 @@ function ajoutEvent(&$planning, $_plage, $date, $libelle, $color, $type) {
   $event = new CPlanningEvent($_plage->_guid, $debute, CMbDT::minutesRelative($_plage->debut, $_plage->fin), $libelle, $color, true, null, null);
     $event->resizable = true;
   
-    //Menu des évènements
-    $event->addMenuItem($_plage->_guid, $date);
-    $event->addMenuItem("", "");
-    $event->addMenuItem($date, $type);
-    $event->addMenuItem("", "");
-    $event->addMenuItem("", "");
-  
   //Paramètres de la plage de consultation
   $event->type = $type;
   $pct = $_plage->_fill_rate;
@@ -161,6 +154,10 @@ function ajoutEvent(&$planning, $_plage, $date, $libelle, $color, $type) {
     $event->plage["locked"] = 0;
     $event->plage["_nb_operations"] = $_plage->_nb_operations;
   }
+  $event->plage["list_class"] = $_plage->_guid;
+  $event->plage["add_class"]  = $date;
+  $event->plage["list_title"] = $date;
+  $event->plage["add_title"]  = $type;
   
   //Ajout de l'évènement au planning 
   $planning->addEvent($event);

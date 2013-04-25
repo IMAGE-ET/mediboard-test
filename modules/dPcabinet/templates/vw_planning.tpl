@@ -76,7 +76,9 @@ Main.add(function () {
         <a href="#1" onclick="$V($(this).getSurroundingForm().debut, '{{$today}}')">Aujourd'hui</a>
       </form>
       <br/>
-      <button style="float: left;" class="new" onclick="PlageConsultation.edit('0');">Créer une nouvelle plage</button>
+      {{if $canEditPlage}}
+      <button style="float: left;" class="new" onclick="PlageConsultation.edit('0');">{{tr}}CPlageconsult-title-create{{/tr}}</button>
+      {{/if}}
       <button style="float: right;" class="print" onclick="printPlanning();">{{tr}}Print{{/tr}}
     </th>
     <td style="min-width: 350px;">

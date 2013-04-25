@@ -110,12 +110,13 @@ Main.add(function () {
           
           if(oTd.title == "operation"){
             url = new Url("dPplanningOp", "vw_idx_planning", "tab");
+            url.addParam("selPrat" , "{{$chirSel}}");
           }
           else if(oTd.title == "consultation"){
             url = new Url("dPcabinet", "edit_consultation", "tab");
+            url.addParam("pratSel" , "{{$chirSel}}");
           }
           url.addParam("date" , guid);
-          url.addParam("pratSel" , "{{$chirSel}}");
           url.redirectOpener();
         }
        }

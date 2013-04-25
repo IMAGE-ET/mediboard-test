@@ -41,6 +41,7 @@ $suiv = CMbDT::date("+1 week", $debut);
 // Plage de consultation selectionnée
 $plageconsult_id = CValue::getOrSession("plageconsult_id", null);
 $plageSel = new CPlageconsult();
+$canEditPlage = $plageSel->getPerm(PERM_EDIT);
 if (($plageconsult_id === null) && $chirSel && $is_in_period) {
   $nowTime = CMbDT::time();
   $where = array(
@@ -89,18 +90,18 @@ $nbjours = 7;
 
 $dateArr = CMbDT::date("+6 day", $debut);
 
-$listPlage = new CPlageconsult();
+$plage = new CPlageconsult();
 
 $where = array();
 $where["date"] = "= '$dateArr'";
 $where["chir_id"] = " = '$chirSel'";
 
-if (!$listPlage->countList($where)) {
+if (!$plage->countList($where)) {
   $nbjours--;
   // Aucune plage le dimanche, on peut donc tester le samedi.
   $dateArr = CMbDT::date("+5 day", $debut);
   $where["date"] = "= '$dateArr'"; 
-  if (!$listPlage->countList($where)) {
+  if (!$plage->countList($where)) {
     $nbjours--;
   }
 }
@@ -124,8 +125,6 @@ $planning->guid = $mediuser->_guid;
 $planning->hour_min = "07";
 $planning->hour_max = "20";
 $planning->pauses = array("07", "12", "19");
-
-$plage = new CPlageconsult();
 
 $where = array();
 $where[] = "chir_id = '$chirSel' OR remplacant_id = '$chirSel' OR pour_compte_id = '$chirSel'";
@@ -165,8 +164,9 @@ for ($i = 0; $i < 7; $i++) {
 
     //Menu des évènements
     $event->addMenuItem("list", "Voir le contenu de la plage");
-    if ((!$_plage->remplacant_id || $_plage->remplacant_id != $chirSel || ($_plage->remplacant_id == $chirSel && $_plage->chir_id == $chirSel)) && 
-        (!$_plage->pour_compte_id || $_plage->pour_compte_id != $chirSel|| ($_plage->pour_compte_id == $chirSel && $_plage->chir_id == $chirSel))) {
+    $nonRemplace = !$_plage->remplacant_id || $_plage->remplacant_id != $chirSel || ($_plage->remplacant_id == $chirSel && $_plage->chir_id == $chirSel);
+    $nonDelegue = !$_plage->pour_compte_id || $_plage->pour_compte_id != $chirSel|| ($_plage->pour_compte_id == $chirSel && $_plage->chir_id == $chirSel);
+    if ($nonRemplace && $nonDelegue && $_plage->getPerm(PERM_EDIT)) {
       $event->addMenuItem("edit", "Modifier cette plage");
     }
     $event->addMenuItem("clock", "Planifier une consultation dans cette plage");
@@ -183,12 +183,16 @@ for ($i = 0; $i < 7; $i++) {
       $pct = 0;
     }
     
-    $event->plage["pct"] = $pct;
-    $event->plage["locked"] = $_plage->locked;
-    $event->plage["_affected"] = $_plage->_affected;
+    $event->plage["pct"]          = $pct;
+    $event->plage["locked"]       = $_plage->locked;
+    $event->plage["_affected"]    = $_plage->_affected;
     $event->plage["_nb_patients"] = $_plage->_nb_patients;
-    $event->plage["_total"] = $_plage->_total;
-    $event->plage["color"] = $_plage->color;
+    $event->plage["_total"]       = $_plage->_total;
+    $event->plage["color"]        = $_plage->color;
+    $event->plage["list_class"]   = "list";
+    $event->plage["add_class"]    = "clock";
+    $event->plage["list_title"]   = "Voir le contenu de la plage";
+    $event->plage["add_title"]    = "Planifier une consultation dans cette plage";
 
     //Ajout de l'évènement au planning 
     $planning->addEvent($event);
@@ -205,6 +209,7 @@ $smarty->assign("planning"            , $planning);
 $smarty->assign("show_payees"         , $show_payees);
 $smarty->assign("show_annulees"       , $show_annulees);
 $smarty->assign("chirSel"             , $chirSel);
+$smarty->assign("canEditPlage"        , $canEditPlage);
 $smarty->assign("plageSel"            , $plageSel);
 $smarty->assign("listChirs"           , $listChir);
 $smarty->assign("today"               , $today);
