@@ -62,12 +62,18 @@ class CCDACR extends CCDAANY {
   /**
    * Setter inverted
    *
-   * @param \CCDA_base_bn $inverted \CCDA_base_bn
+   * @param String $inverted String
    *
    * @return void
    */
   public function setInverted($inverted) {
-    $this->inverted = $inverted;
+    if (!$inverted) {
+      $this->inverted = null;
+      return;
+    }
+    $invert = new CCDA_base_bn();
+    $invert->setData($inverted);
+    $this->inverted = $invert;
   }
 
   /**
@@ -143,9 +149,8 @@ class CCDACR extends CCDAANY {
     /**
      * Test avec inverted incorrecte
      */
-    $bn = new CCDA_base_bn();
-    $bn->setData(" ");
-    $this->setInverted($bn);
+
+    $this->setInverted(" ");
     $tabTest[] = $this->sample("Test avec un inverted incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -153,9 +158,8 @@ class CCDACR extends CCDAANY {
     /**
      * Test avec inverted correcte
      */
-    $bn = new CCDA_base_bn();
-    $bn->setData("false");
-    $this->setInverted($bn);
+
+    $this->setInverted("false");
     $tabTest[] = $this->sample("Test avec un inverted correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -164,9 +168,7 @@ class CCDACR extends CCDAANY {
      * Test avec name incorrecte
      */
     $cv = new CCDACV();
-    $code = new CCDA_base_cs();
-    $code->setData(" ");
-    $cv->setCode($code);
+    $cv->setCode(" ");
     $this->setName($cv);
     $tabTest[] = $this->sample("Test avec un name incorrecte", "Document invalide");
 
@@ -175,8 +177,8 @@ class CCDACR extends CCDAANY {
     /**
      * Test avec name correcte
      */
-    $code->setData("test");
-    $cv->setCode($code);
+
+    $cv->setCode("test");
     $this->setName($cv);
     $tabTest[] = $this->sample("Test avec un name correcte", "Document valide");
 
@@ -185,10 +187,9 @@ class CCDACR extends CCDAANY {
     /**
      * Test avec value incorrecte
      */
+
     $valuetest = new CCDACD();
-    $code = new CCDA_base_cs();
-    $code->setData(" ");
-    $valuetest->setCode($code);
+    $valuetest->setCode(" ");
     $this->setValue($valuetest);
     $tabTest[] = $this->sample("Test avec une value incorrecte", "Document invalide");
 
@@ -197,10 +198,9 @@ class CCDACR extends CCDAANY {
     /**
      * Test avec value correcte
      */
+
     $valuetest = new CCDACD();
-    $code = new CCDA_base_cs();
-    $code->setData("test");
-    $valuetest->setCode($code);
+    $valuetest->setCode("test");
     $this->setValue($valuetest);
     $tabTest[] = $this->sample("Test avec une value correcte", "Document valide");
 

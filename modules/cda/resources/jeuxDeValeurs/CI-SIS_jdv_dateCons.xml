@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RetrieveValueSetResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:ihe:iti:svs:2008 SVS.xsd" xmlns="urn:ihe:iti:svs:2008">
+    <ValueSet id="1.2.250.1.213.1.1.4.255" displayName="CSE_DateCons" version="20100802">
+        <ConceptList>
+            <Concept code="XX-MCH160" displayName="1er trimestre" codeSystem="1.2.250.1.213.1.1.4.14"> </Concept>
+            <Concept code="XX-MCH161" displayName="2ème trimestre" codeSystem="1.2.250.1.213.1.1.4.14"> </Concept>
+            <Concept code="XX-MCH162" displayName="3ème trimestre" codeSystem="1.2.250.1.213.1.1.4.14"> </Concept>            
+        </ConceptList>
+    </ValueSet>
+</RetrieveValueSetResponse>
+
+ 	
+ 	
+ 	

@@ -16,5 +16,13 @@
     <tr>
     <th class="title" colspan="2">Configuration</th>
     </tr>
+    </tr>
+      {{mb_include module=system template=inc_config_str var=OID_root maxlength=64 cssClass="pattern|[0-2](\.([1-9][0-9]*\\x7C0))*"}}
+    <tr>
+    <tr>
+      <td colspan="2">
+        <button type="submit" class="save">{{tr}}Save{{/tr}}</button>
+      </td>
+    </tr>
   </table>
 </form>

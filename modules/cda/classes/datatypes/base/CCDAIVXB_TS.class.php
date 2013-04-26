@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * CCDAIVXB_TS class
  */
@@ -26,12 +26,18 @@ class CCDAIVXB_TS extends CCDATS {
   /**
    * Setter inclusive
    *
-   * @param \CCDA_base_bl $inclusive \CCDA_base_bl
+   * @param String $inclusive String
    *
    * @return void
    */
   public function setInclusive($inclusive) {
-    $this->inclusive = $inclusive;
+    if (!$inclusive) {
+      $this->inclusive = null;
+      return;
+    }
+    $bl = new CCDA_base_bl();
+    $bl->setData($inclusive);
+    $this->inclusive = $bl;
   }
 
   /**
@@ -56,10 +62,10 @@ class CCDAIVXB_TS extends CCDATS {
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["inclusive"] = "CCDA_base_bl xml|attribute default|true";
@@ -78,9 +84,7 @@ class CCDAIVXB_TS extends CCDATS {
      * test avec inclusive incorrecte
      */
 
-    $bl = new CCDA_base_bl();
-    $bl->setData("test");
-    $this->setInclusive($bl);
+    $this->setInclusive("test");
     $tabTest[] = $this->sample("Test avec un inclusive incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -89,9 +93,7 @@ class CCDAIVXB_TS extends CCDATS {
      * test avec inclusive correcte
      */
 
-    $bl = new CCDA_base_bl();
-    $bl->setData("true");
-    $this->setInclusive($bl);
+    $this->setInclusive("true");
     $tabTest[] = $this->sample("Test avec un inclusive correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

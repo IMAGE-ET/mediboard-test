@@ -10,7 +10,7 @@
 <div id="resultAction">
   <table class="tbl">
     <tr>
-      <th colspan="4">
+      <th colspan="5">
         {{tr}}Action{{/tr}}
       </th>
     </tr>
@@ -31,9 +31,14 @@
         </button>
       </td>
       <td>
-      <button type="button" class="button" onclick="Ccda.action('missClass')">
-        {{tr}}missClass{{/tr}}
-      </button>
+        <button type="button" class="button" onclick="Ccda.action('missClass')">
+          {{tr}}missClass{{/tr}}
+        </button>
+      </td>
+      <td>
+        <button type="button" class="button" onclick="Ccda.action('createClassXSD')">
+          {{tr}}createClassXSD{{/tr}}
+        </button>
       </td>
     </tr>
   </table>

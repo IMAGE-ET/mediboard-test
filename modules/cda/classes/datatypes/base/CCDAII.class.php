@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * An identifier that uniquely identifies a thing or object.
  * Examples are object identifier for HL7 RIM objects,
@@ -60,12 +60,18 @@ class CCDAII extends CCDAANY {
   /**
    * Setter assigningAuthorityName
    *
-   * @param \CCDA_base_st $assigningAuthorityName \CCDA_base_st
+   * @param String $assigningAuthorityName String
    *
    * @return void
    */
   public function setAssigningAuthorityName($assigningAuthorityName) {
-    $this->assigningAuthorityName = $assigningAuthorityName;
+    if (!$assigningAuthorityName) {
+      $this->assigningAuthorityName = null;
+      return;
+    }
+    $ts = new CCDA_base_ts();
+    $ts->setData($assigningAuthorityName);
+    $this->assigningAuthorityName = $ts;
   }
 
   /**
@@ -80,12 +86,18 @@ class CCDAII extends CCDAANY {
   /**
    * Setter displayable
    *
-   * @param \CCDA_base_bl $displayable \CCDA_base_bl
+   * @param String $displayable String
    *
    * @return void
    */
   public function setDisplayable($displayable) {
-    $this->displayable = $displayable;
+    if (!$displayable) {
+      $this->displayable = null;
+      return;
+    }
+    $bl = new CCDA_base_bl();
+    $bl->setData($displayable);
+    $this->displayable = $bl;
   }
 
   /**
@@ -100,12 +112,18 @@ class CCDAII extends CCDAANY {
   /**
    * Setter extension
    *
-   * @param \CCDA_base_st $extension \CCDA_base_st
+   * @param String $extension String
    *
    * @return void
    */
   public function setExtension($extension) {
-    $this->extension = $extension;
+    if (!$extension) {
+      $this->extension = null;
+      return;
+    }
+    $ts = new CCDA_base_ts();
+    $ts->setData($extension);
+    $this->extension = $ts;
   }
 
   /**
@@ -120,12 +138,18 @@ class CCDAII extends CCDAANY {
   /**
    * Setter root
    *
-   * @param \CCDA_base_uid $root \CCDA_base_uid
+   * @param String $root String
    *
    * @return void
    */
   public function setRoot($root) {
-    $this->root = $root;
+    if (!$root) {
+      $this->root = null;
+      return;
+    }
+    $uid = new CCDA_base_uid();
+    $uid->setData($root);
+    $this->root = $uid;
   }
 
   /**
@@ -138,10 +162,10 @@ class CCDAII extends CCDAANY {
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["root"] = "CCDA_base_uid xml|attribute";
@@ -162,9 +186,8 @@ class CCDAII extends CCDAANY {
     /**
      * Test avec un uid incorrect
      */
-    $uid = new CCDA_base_uid();
-    $uid->setData("4TESTTEST");
-    $this->setRoot($uid);
+
+    $this->setRoot("4TESTTEST");
     $tabTest[] = $this->sample("Test avec un root incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -172,8 +195,8 @@ class CCDAII extends CCDAANY {
     /**
      * Test avec un uid correct
      */
-    $uid->setData("HL7");
-    $this->setRoot($uid);
+
+    $this->setRoot("HL7");
     $tabTest[] = $this->sample("Test avec un root correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -181,18 +204,17 @@ class CCDAII extends CCDAANY {
     /**
      * Test avec un extension incorrect
      */
-    $st = new CCDA_base_st();
-    $st->setData("");
-    $this->setExtension($st);
-    $tabTest[] = $this->sample("Test avec un extension incorrecte", "Document invalide");
+
+    $this->setExtension("");
+    $tabTest[] = $this->sample("Test avec un extension incorrecte, null par défaut", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
     /**
      * Test avec un extension correct
      */
-    $st->setData("HL7");
-    $this->setExtension($st);
+
+    $this->setExtension("HL7");
     $tabTest[] = $this->sample("Test avec un extension correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -200,18 +222,17 @@ class CCDAII extends CCDAANY {
     /**
      * Test avec un assigningAuthorityName incorrect
      */
-    $st = new CCDA_base_st();
-    $st->setData("");
-    $this->setAssigningAuthorityName($st);
-    $tabTest[] = $this->sample("Test avec un assigningAuthorityName incorrecte", "Document invalide");
+
+    $this->setAssigningAuthorityName("");
+    $tabTest[] = $this->sample("Test avec un assigningAuthorityName incorrecte, null par défaut", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
     /**
      * Test avec un assigningAuthorityName correct
      */
-    $st->setData("HL7");
-    $this->setAssigningAuthorityName($st);
+
+    $this->setAssigningAuthorityName("HL7");
     $tabTest[] = $this->sample("Test avec un assigningAuthorityName correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -219,9 +240,8 @@ class CCDAII extends CCDAANY {
     /**
      * Test avec un displayable incorrect
      */
-    $bl = new CCDA_base_bl();
-    $bl->setData("TESTTEST");
-    $this->setDisplayable($bl);
+
+    $this->setDisplayable("TESTTEST");
     $tabTest[] = $this->sample("Test avec un displayable incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -229,8 +249,8 @@ class CCDAII extends CCDAANY {
     /**
      * Test avec un displayable correct
      */
-    $bl->setData("true");
-    $this->setDisplayable($bl);
+
+    $this->setDisplayable("true");
     $tabTest[] = $this->sample("Test avec un displayable correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

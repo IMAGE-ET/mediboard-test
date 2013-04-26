@@ -879,6 +879,11 @@ class CSetupdPcompteRendu extends CSetup {
     $query = self::replaceTemplateQuery("[Patient - Antécédents - Autres", "[Patient - Antécédents - Autres (type)", true);
     $this->addQuery($query);
 
-    $this->mod_version = "0.90";
+    $this->makeRevision("0.90");
+    $query = "ALTER TABLE `compte_rendu`
+                ADD `version` INT (11) DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.91";
   }
 }

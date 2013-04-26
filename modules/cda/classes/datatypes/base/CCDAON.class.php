@@ -8,17 +8,17 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * A name for an organization. A sequence of name parts.
  */
 class CCDAON extends CCDAEN {
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["family"] = "CCDA_en_family xml|element prohibited";
@@ -48,7 +48,7 @@ class CCDAON extends CCDAEN {
      * test avec un given correcte
      */
 
-    $this->razListdata("family");
+    $this->resetListdata("family");
     $enxp = new CCDA_en_given();
     $this->append("given", $enxp);
     $tabTest[] = $this->sample("Test avec un given correcte, interdit dans ce contexte", "Document invalide");

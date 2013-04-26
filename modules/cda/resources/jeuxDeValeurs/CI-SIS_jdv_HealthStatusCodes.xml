@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RetrieveValueSetResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:ihe:iti:svs:2008 SVS.xsd" xmlns="urn:ihe:iti:svs:2008">
+    <ValueSet id="1.2.250.1.213.1.1.4.2.283.1" displayName="PCC_HealthStatusCodes" version="20110727">
+        <ConceptList>
+            <Concept code="CDA_003" displayName="Bien portant" codeSystem="1.2.250.1.213.1.1.4.2.286"> </Concept>
+            <Concept code="G-A005" displayName="En rémission" codeSystem="1.2.250.1.213.2.12"> </Concept>
+            <Concept code="F-01255" displayName="Asymptomatique" codeSystem="1.2.250.1.213.2.12"> </Concept>      
+            <Concept code="CDA_004" displayName="Maladie chronique" codeSystem="1.2.250.1.213.1.1.4.2.286"> </Concept>
+            <Concept code="CDA_005" displayName="Sévèrement malade" codeSystem="1.2.250.1.213.1.1.4.2.286"> </Concept>
+            <Concept code="F-00140" displayName="Invalidé" codeSystem="1.2.250.1.213.2.12"> </Concept>
+            <Concept code="CDA_006" displayName="Sévèrement invalidé" codeSystem="1.2.250.1.213.1.1.4.2.286"> </Concept>
+            <Concept code="DF-D0000" displayName="Décédé" codeSystem="1.2.250.1.213.2.12"> </Concept>
+        </ConceptList>
+    </ValueSet>
+</RetrieveValueSetResponse>
+
+ 	
+ 	
+ 	
+ 		
+ 		

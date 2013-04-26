@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * A character string token representing a part of a name.
  * May have a type code signifying the role of the part in
@@ -40,12 +40,18 @@ class CCDAENXP extends CCDAST {
   /**
    * Setter partType
    *
-   * @param \CCDAEntityNamePartType $partType \CCDAEntityNamePartType
+   * @param String $partType String
    *
    * @return void
    */
   public function setPartType($partType) {
-    $this->partType = $partType;
+    if (!$partType) {
+      $this->partType = null;
+      return;
+    }
+    $partT = new CCDAEntityNamePartType();
+    $partT->setData($partType);
+    $this->partType = $partT;
   }
 
   /**
@@ -60,12 +66,16 @@ class CCDAENXP extends CCDAST {
   /**
    * Setter qualifier
    *
-   * @param \CCDAset_EntityNamePartQualifier $qualifier \CCDAset_EntityNamePartQualifier
+   * @param String[] $qualifier String[]
    *
    * @return void
    */
   public function setQualifier($qualifier) {
-    $this->qualifier = $qualifier;
+    $setEnti = new CCDAset_EntityNamePartQualifier();
+    foreach ($qualifier as $_qualifier) {
+      $setEnti->addData($_qualifier);
+    }
+    $this->qualifier = $setEnti;
   }
 
   /**
@@ -78,10 +88,10 @@ class CCDAENXP extends CCDAST {
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["partType"] = "CCDAEntityNamePartType xml|attribute";
@@ -105,9 +115,7 @@ class CCDAENXP extends CCDAST {
      * Test avec un parttype incorrecte
      */
 
-    $part = new CCDAEntityNamePartType();
-    $part->setData("TEstTEst");
-    $this->setPartType($part);
+    $this->setPartType("TEstTEst");
 
     $tabTest[] = $this->sample("Test avec un partType incorrecte", "Document invalide");
 
@@ -117,8 +125,7 @@ class CCDAENXP extends CCDAST {
      * Test avec un parttype correcte
      */
 
-    $part->setData("FAM");
-    $this->setPartType($part);
+    $this->setPartType("FAM");
 
     $tabTest[] = $this->sample("Test avec un partType correcte", "Document valide");
 
@@ -128,11 +135,7 @@ class CCDAENXP extends CCDAST {
      * Test avec un qualifier incorrecte
      */
 
-    $setEntity = new CCDAset_EntityNamePartQualifier();
-    $entity = new CCDAEntityNamePartQualifier();
-    $entity->setData("TESTTEST");
-    $setEntity->addData($entity);
-    $this->setQualifier($setEntity);
+    $this->setQualifier(array("TESTTEST"));
 
     $tabTest[] = $this->sample("Test avec un qualifier incorrecte", "Document invalide");
 
@@ -142,10 +145,7 @@ class CCDAENXP extends CCDAST {
      * Test avec un qualifier correcte
      */
 
-    $entity->setData("LS");
-    $setEntity->razlistData();
-    $setEntity->addData($entity);
-    $this->setQualifier($setEntity);
+    $this->setQualifier(array("LS"));
 
     $tabTest[] = $this->sample("Test avec un qualifier correcte", "Document valide");
 

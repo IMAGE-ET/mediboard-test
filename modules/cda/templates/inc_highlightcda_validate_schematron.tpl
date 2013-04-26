@@ -11,11 +11,26 @@
 
 <table class="tbl">
   <tr>
-    <th>{{tr}}Result{{/tr}}</th>
+    <th class="title" colspan="2">{{tr}}Result{{/tr}}</th>
   </tr>
   <tr>
-    <td>
-      Coming soon
-    </td>
+    <th>{{tr}}Location{{/tr}}</th>
+    <th>{{tr}}Error{{/tr}}</th>
   </tr>
+  {{foreach from=$treecda->validateSchematron item=_error}}
+    <tr>
+      <td>
+        {{$_error.location}}
+      </td>
+      <td>
+        {{$_error.error}}
+      </td>
+    </tr>
+    {{foreachelse}}
+    <tr>
+      <td>
+        {{tr}}Document valide{{/tr}}
+      </td>
+    </tr>
+  {{/foreach}}
 </table>

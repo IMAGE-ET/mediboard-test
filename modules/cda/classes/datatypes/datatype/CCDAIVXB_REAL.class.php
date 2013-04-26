@@ -38,12 +38,18 @@ class CCDAIVXB_REAL extends CCDAREAL {
   /**
    * Setter inclusive
    *
-   * @param \CCDA_base_bl $inclusive \CCDA_base_bl
+   * @param String $inclusive String
    *
    * @return void
    */
   public function setInclusive($inclusive) {
-    $this->inclusive = $inclusive;
+    if (!$inclusive) {
+      $this->inclusive = null;
+      return;
+    }
+    $bl = new CCDA_base_bl();
+    $bl->setData($inclusive);
+    $this->inclusive = $bl;
   }
 
   /**
@@ -78,9 +84,7 @@ class CCDAIVXB_REAL extends CCDAREAL {
      * Test avec un inclusive incorrecte
      */
 
-    $bl = new CCDA_base_bl();
-    $bl->setData("TESTTEST");
-    $this->setInclusive($bl);
+    $this->setInclusive("TESTTEST");
     $tabTest[] = $this->sample("Test avec un inclusive incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -89,8 +93,7 @@ class CCDAIVXB_REAL extends CCDAREAL {
      * Test avec un inclusive correcte
      */
 
-    $bl->setData("true");
-    $this->setInclusive($bl);
+    $this->setInclusive("true");
     $tabTest[] = $this->sample("Test avec un inclusive correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

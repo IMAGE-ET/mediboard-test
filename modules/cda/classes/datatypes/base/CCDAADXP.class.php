@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * A character string that may have a type-tag signifying its
  * role in the address. Typical parts that exist in about
@@ -34,12 +34,18 @@ class CCDAADXP extends CCDAST {
   /**
    * Setter partType
    *
-   * @param \CCDAAddressPartType $partType \CCDAAddressPartType
+   * @param String $partType String
    *
    * @return void
    */
   public function setPartType($partType) {
-    $this->partType = $partType;
+    if (!$partType) {
+      $this->partType = null;
+      return;
+    }
+    $part = new CCDAAddressPartType();
+    $part->setData($partType);
+    $this->partType = $part;
   }
 
   /**
@@ -52,10 +58,10 @@ class CCDAADXP extends CCDAST {
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["partType"] = "CCDAAdressPartType xml|attribute";
@@ -78,9 +84,7 @@ class CCDAADXP extends CCDAST {
      * Test avec un parttype incorrecte
      */
 
-    $part = new CCDAAddressPartType();
-    $part->setData("TEstTEst");
-    $this->setPartType($part);
+    $this->setPartType("TEstTEst");
 
     $tabTest[] = $this->sample("Test avec un parttype incorrecte", "Document invalide");
 
@@ -90,8 +94,7 @@ class CCDAADXP extends CCDAST {
      * Test avec un parttype correcte
      */
 
-    $part->setData("ZIP");
-    $this->setPartType($part);
+    $this->setPartType("ZIP");
 
     $tabTest[] = $this->sample("Test avec un parttype correcte", "Document valide");
 

@@ -205,7 +205,7 @@ StaticMifToXsd.xsl version 2.0</xs:documentation>
 			<xs:element name="setId" type="II" minOccurs="0"/>
 			<xs:element name="versionNumber" type="INT" minOccurs="0"/>
 			<xs:element name="copyTime" type="TS" minOccurs="0"/>
-			<xs:element name="recordTarget" type="POCD_MT000040.RecordTarget" maxOccurs="unbounded"/>
+			<xs:element name="recordTarget" type="POCD_MT000040.RecordTarget" minOccurs="1" maxOccurs="unbounded"/>
 			<xs:element name="author" type="POCD_MT000040.Author" maxOccurs="unbounded"/>
 			<xs:element name="dataEnterer" type="POCD_MT000040.DataEnterer" minOccurs="0"/>
 			<xs:element name="informant" type="POCD_MT000040.Informant12" minOccurs="0" maxOccurs="unbounded"/>

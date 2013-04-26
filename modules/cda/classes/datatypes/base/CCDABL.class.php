@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * The Boolean type stands for the values of two-valued logic.
  * A Boolean value can be either true or
@@ -19,25 +19,20 @@ class CCDABL extends CCDAANY {
   public $value;
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
-  function getProps() {
-    $props = parent::getProps();
-    $props["value"] = "CCDA_base_bl xml|attribute notNullFlavor";
-    return $props;
-  }
-
-  /**
    * Setter value
    *
-   * @param CCDA_base_bl $value CCDA_base_bl
+   * @param String $value String
    *
    * @return void
    */
   function setValue($value) {
-    $this->value = $value;
+    if (!$value) {
+      $this->value = null;
+      return;
+    }
+    $val = new CCDA_base_bl();
+    $val->setData($value);
+    $this->value = $val;
   }
 
   /**
@@ -47,6 +42,17 @@ class CCDABL extends CCDAANY {
    */
   function getValue() {
     return $this->value;
+  }
+
+  /**
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
+  function getProps() {
+    $props = parent::getProps();
+    $props["value"] = "CCDA_base_bl xml|attribute notNullFlavor";
+    return $props;
   }
 
   /**
@@ -60,9 +66,8 @@ class CCDABL extends CCDAANY {
     /**
      * Test avec une valeur incorrecte
      */
-    $bl = new CCDA_base_bl();
-    $bl->setData("TESTTEST");
-    $this->setValue($bl);
+
+    $this->setValue("TESTTEST");
 
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
 
@@ -72,8 +77,7 @@ class CCDABL extends CCDAANY {
      * Test avec une valeur correcte
      */
 
-    $bl->setData("true");
-    $this->setValue($bl);
+    $this->setValue("true");
 
     $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 
@@ -83,11 +87,8 @@ class CCDABL extends CCDAANY {
      * Test avec une valeur correcte et avec un nullflavor
      */
 
-    $nullFlavor = new CCDANullFlavor();
-    $bl->setData("true");
-    $this->setValue($bl);
-    $this->setNullFlavor($nullFlavor);
-    $tabTest[] = $this->sample("Test avec une valeur correcte et un nullflavor", "Document invalide");
+    $this->setNullFlavor("NP");
+    $tabTest[] = $this->sample("Test avec un nullFlavor correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 

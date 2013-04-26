@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * Mailing and home or office addresses. A sequence of
  * address parts, such as street or post office Box, city,
@@ -45,33 +45,33 @@
  */
 class CCDAAD extends CCDAANY {
 
-  var $delimiter = array();
-  var $country = array();
-  var $state = array();
-  var $county = array();
-  var $city = array();
-  var $postalCode = array();
-  var $streetAddressLine = array();
-  var $houseNumber = array();
-  var $houseNumberNumeric = array();
-  var $direction = array();
-  var $streetName = array();
-  var $streetNameBase = array();
-  var $streetNameType = array();
-  var $additionalLocator = array();
-  var $unitID = array();
-  var $unitType = array();
-  var $careOf = array();
-  var $censusTract = array();
-  var $deliveryAddressLine = array();
-  var $deliveryInstallationType = array();
-  var $deliveryInstallationArea = array();
-  var $deliveryInstallationQualifier = array();
-  var $deliveryMode = array();
-  var $deliveryModeIdentifier = array();
-  var $buildingNumberSuffix = array();
-  var $postBox = array();
-  var $precinct = array();
+  public $delimiter                     = array();
+  public $country                       = array();
+  public $state                         = array();
+  public $county                        = array();
+  public $city                          = array();
+  public $postalCode                    = array();
+  public $streetAddressLine             = array();
+  public $houseNumber                   = array();
+  public $houseNumberNumeric            = array();
+  public $direction                     = array();
+  public $streetName                    = array();
+  public $streetNameBase                = array();
+  public $streetNameType                = array();
+  public $additionalLocator             = array();
+  public $unitID                        = array();
+  public $unitType                      = array();
+  public $careOf                        = array();
+  public $censusTract                   = array();
+  public $deliveryAddressLine           = array();
+  public $deliveryInstallationType      = array();
+  public $deliveryInstallationArea      = array();
+  public $deliveryInstallationQualifier = array();
+  public $deliveryMode                  = array();
+  public $deliveryModeIdentifier        = array();
+  public $buildingNumberSuffix          = array();
+  public $postBox                       = array();
+  public $precinct                      = array();
 
   /**
    * A General Timing Specification (GTS) specifying the
@@ -82,7 +82,7 @@ class CCDAAD extends CCDAANY {
    *
    * @var array
    */
-  var $useablePeriod = array();
+  public $useablePeriod = array();
 
   /**
    * A set of codes advising a system or user which address
@@ -107,12 +107,18 @@ class CCDAAD extends CCDAANY {
   /**
    * Setter isNotOrdered
    *
-   * @param \CCDA_base_bl $isNotOrdered \CCDA_base_bl
+   * @param String $isNotOrdered String
    *
    * @return void
    */
   public function setIsNotOrdered($isNotOrdered) {
-    $this->isNotOrdered = $isNotOrdered;
+    if (!$isNotOrdered) {
+      $this->isNotOrdered = null;
+      return;
+    }
+    $isNotOrd = new CCDA_base_bl;
+    $isNotOrd->setData($isNotOrdered);
+    $this->isNotOrdered = $isNotOrd;
   }
 
   /**
@@ -127,12 +133,16 @@ class CCDAAD extends CCDAANY {
   /**
    * Setter use
    *
-   * @param \CCDAset_PostalAddressUse $use \CCDAset_PostalAddressUse
+   * @param String[] $use String[]
    *
    * @return void
    */
   public function setUse($use) {
-    $this->use = $use;
+    $setPost = new CCDAset_PostalAddressUse();
+    foreach ($use as $_use) {
+      $setPost->addData($_use);
+    }
+    $this->use = $setPost;
   }
 
   /**
@@ -174,15 +184,15 @@ class CCDAAD extends CCDAANY {
    *
    * @return void
    */
-  function razListdata($name) {
+  function resetListdata($name) {
     $this->$name = array();
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["delimiter"] = "CCDAadxp_delimiter xml|element";
@@ -240,11 +250,7 @@ class CCDAAD extends CCDAANY {
      * test avec use incorrecte
      */
 
-    $postal = new CCDAset_PostalAddressUse();
-    $post = new CCDAPostalAddressUse();
-    $post->setData("TESTTEST");
-    $postal->addData($post);
-    $this->setUse($postal);
+    $this->setUse(array("TESTTEST"));
 
     $tabTest[] = $this->sample("Test avec un use incorrecte", "Document invalide");
 
@@ -254,10 +260,7 @@ class CCDAAD extends CCDAANY {
      * test avec use correcte
      */
 
-    $post->setData("TMP");
-    $postal->razlistData();
-    $postal->addData($post);
-    $this->setUse($postal);
+    $this->setUse(array("TMP"));
 
     $tabTest[] = $this->sample("Test avec un use correcte", "Document valide");
 
@@ -267,9 +270,7 @@ class CCDAAD extends CCDAANY {
      * test avec isNotOrdered incorrecte
      */
 
-    $order = new CCDA_base_bl();
-    $order->setData("TESTTEST");
-    $this->setIsNotOrdered($order);
+    $this->setIsNotOrdered("TESTTEST");
 
     $tabTest[] = $this->sample("Test avec un isNotOrdered incorrecte", "Document invalide");
 
@@ -279,8 +280,7 @@ class CCDAAD extends CCDAANY {
      * test avec isNotOrdered correcte
      */
 
-    $order->setData("true");
-    $this->setIsNotOrdered($order);
+    $this->setIsNotOrdered("true");
 
     $tabTest[] = $this->sample("Test avec un isNotOrdered correcte", "Document valide");
 
@@ -571,9 +571,7 @@ class CCDAAD extends CCDAANY {
      */
 
     $useable = new CCDASXCM_TS();
-    $cs = new CCDA_base_ts();
-    $cs->setData("TESTEST");
-    $useable->setValue($cs);
+    $useable->setValue("TESTEST");
     $this->append("useablePeriod", $useable);
     $tabTest[] = $this->sample("Test avec un useablePeriod incorrecte", "Document invalide");
 
@@ -583,10 +581,8 @@ class CCDAAD extends CCDAANY {
      * test avec useablePeriod correcte
      */
 
-
-    $cs->setData("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
-    $useable->setValue($cs);
-    $this->razListdata("useablePeriod");
+    $useable->setValue("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
+    $this->resetListdata("useablePeriod");
     $this->append("useablePeriod", $useable);
     $tabTest[] = $this->sample("Test avec un useablePeriod correcte", "Document valide");
 

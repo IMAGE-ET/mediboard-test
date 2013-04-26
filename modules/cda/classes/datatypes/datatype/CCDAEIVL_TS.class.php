@@ -117,9 +117,7 @@ class CCDAEIVL_TS extends CCDASXCM_TS {
      */
 
     $ivl = new CCDAEIVL_event();
-    $timing = new CCDATimingEvent();
-    $timing->setData("TEST");
-    $ivl->setCode($timing);
+    $ivl->setCode("TEST");
     $this->setEvent($ivl);
     $tabTest[] = $this->sample("Test avec un event incorrecte", "Document invalide");
 
@@ -129,8 +127,7 @@ class CCDAEIVL_TS extends CCDASXCM_TS {
      * Test avec un event incorrecte
      */
 
-    $timing->setData("AC");
-    $ivl->setCode($timing);
+    $ivl->setCode("AC");
     $this->setEvent($ivl);
     $tabTest[] = $this->sample("Test avec un event correcte", "Document valide");
 
@@ -142,9 +139,7 @@ class CCDAEIVL_TS extends CCDASXCM_TS {
 
     $ivl = new CCDAIVL_PQ();
     $pq = new CCDAIVXB_PQ();
-    $bl = new CCDA_base_bl();
-    $bl->setData("TESTTEST");
-    $pq->setInclusive($bl);
+    $pq->setInclusive("TESTTEST");
     $ivl->setLow($pq);
     $this->setOffset($ivl);
     $tabTest[] = $this->sample("Test avec un offset incorrecte", "Document invalide");
@@ -155,8 +150,7 @@ class CCDAEIVL_TS extends CCDASXCM_TS {
      * Test avec un offset incorrecte
      */
 
-    $bl->setData("true");
-    $pq->setInclusive($bl);
+    $pq->setInclusive("true");
     $ivl->setLow($pq);
     $this->setOffset($ivl);
     $tabTest[] = $this->sample("Test avec un offset correcte", "Document valide");

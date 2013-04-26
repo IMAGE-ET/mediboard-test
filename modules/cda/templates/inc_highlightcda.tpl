@@ -28,7 +28,7 @@
       </a>
     </li>
     <li>
-      <a href="#message-cda-errors-schematron" {{if $treecda->validateSchematron !=1}}class="wrong"{{else}} class="special" {{/if}}>
+      <a href="#message-cda-errors-schematron" {{if $treecda->validateSchematron}}class="wrong"{{else}} class="special" {{/if}}>
         {{tr}}validation{{/tr}} schematron
       </a>
     </li>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RetrieveValueSetResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:ihe:iti:svs:2008 SVS.xsd" xmlns="urn:ihe:iti:svs:2008">
+    <ValueSet id="1.2.250.1.213.1.1.4.250" displayName="CSE_NivEtude" version="20100802">
+        <ConceptList>
+            <Concept code="XX-MCH148" displayName="Ecole primaire" codeSystem="1.2.250.1.213.1.1.4.14"> </Concept>
+            <Concept code="XX-MCH149" displayName="Secondaire" codeSystem="1.2.250.1.213.1.1.4.14"> </Concept>
+            <Concept code="XX-MCH150" displayName="Niveau bac" codeSystem="1.2.250.1.213.1.1.4.14"> </Concept>
+            <Concept code="XX-MCH151" displayName="Enseignement supérieur" codeSystem="1.2.250.1.213.1.1.4.14"> </Concept>
+        </ConceptList>
+    </ValueSet>
+</RetrieveValueSetResponse>

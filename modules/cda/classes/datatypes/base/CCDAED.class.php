@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * Data that is primarily intended for human interpretation
  * or for further machine processing is outside the scope of
@@ -80,18 +80,24 @@ class CCDAED extends CCDABIN {
   /**
    * Setter compressionAlgorithm
    *
-   * @param \CCDACompressionAlgorithm $compression \CCDACompressionAlgorithm
+   * @param String $compression String
    *
    * @return void
    */
   public function setCompression($compression) {
-    $this->compression = $compression;
+    if (!$compression) {
+      $this->compression = null;
+      return;
+    }
+    $comp = new CCDACompressionAlgorithm();
+    $comp->setData($compression);
+    $this->compression = $comp;
   }
 
   /**
    * Getter compressionAlgorithm
    *
-   * @return \CCDACompressionAlgorithm
+   * @return CCDACompressionAlgorithm
    */
   public function getCompression() {
     return $this->compression;
@@ -100,12 +106,18 @@ class CCDAED extends CCDABIN {
   /**
    * Setter integrityCheck
    *
-   * @param \CCDA_base_bin $integrityCheck \CCDA_base_bin
+   * @param String $integrityCheck String
    *
    * @return void
    */
   public function setIntegrityCheck($integrityCheck) {
-    $this->integrityCheck = $integrityCheck;
+    if (!$integrityCheck) {
+      $this->integrityCheck = null;
+      return;
+    }
+    $integ = new CCDA_base_bin();
+    $integ->setData($integrityCheck);
+    $this->integrityCheck = $integ;
   }
 
   /**
@@ -120,12 +132,18 @@ class CCDAED extends CCDABIN {
   /**
    * Setter integrityCheckAlgorithm
    *
-   * @param \CCDAIntegrityCheckAlgorithm $integrityCheckAlgorithm \CCDAIntegrityCheckAlgorithm
+   * @param String $integrityCheckAlgorithm String
    *
    * @return void
    */
   public function setIntegrityCheckAlgorithm($integrityCheckAlgorithm) {
-    $this->integrityCheckAlgorithm = $integrityCheckAlgorithm;
+    if (!$integrityCheckAlgorithm) {
+      $this->integrityCheckAlgorithm = null;
+      return;
+    }
+    $integ = new CCDAIntegrityCheckAlgorithm();
+    $integ->setData($integrityCheckAlgorithm);
+    $this->integrityCheckAlgorithm = $integ;
   }
 
   /**
@@ -140,12 +158,18 @@ class CCDAED extends CCDABIN {
   /**
    * Setter language
    *
-   * @param \CCDA_base_cs $language \CCDA_base_cs
+   * @param String $language String
    *
    * @return void
    */
   public function setLanguage($language) {
-    $this->language = $language;
+    if (!$language) {
+      $this->language = null;
+      return;
+    }
+    $lang = new CCDA_base_cs();
+    $lang->setData($language);
+    $this->language = $lang;
   }
 
   /**
@@ -160,12 +184,18 @@ class CCDAED extends CCDABIN {
   /**
    * Setter mediaType
    *
-   * @param \CCDA_base_cs $mediaType \CCDA_base_cs
+   * @param String $mediaType String
    *
    * @return void
    */
   public function setMediaType($mediaType) {
-    $this->mediaType = $mediaType;
+    if (!$mediaType) {
+      $this->mediaType = null;
+      return;
+    }
+    $media = new CCDA_base_cs();
+    $media->setData($mediaType);
+    $this->mediaType = $media;
   }
 
   /**
@@ -218,19 +248,19 @@ class CCDAED extends CCDABIN {
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
-    $props["reference"] = "CCDATEL xml|element max:1";
-    $props["thumbnail"] = "CCDAthumbnail xml|element max:1";
-    $props["mediaType"] = "CCDA_base_cs xml|attribute default:text/plain";
+    $props["reference"] = "CCDATEL xml|element max|1";
+    $props["thumbnail"] = "CCDAthumbnail xml|element max|1";
+    $props["mediaType"] = "CCDA_base_cs xml|attribute default|text/plain";
     $props["language"] = "CCDA_base_cs xml|attribute";
     $props["compression"] = "CCDACompressionAlgorithm xml|attribute";
     $props["integrityCheck"] = "CCDA_base_bin xml|attribute";
-    $props["integrityCheckAlgorithm"] = "CCDAintegrityCheckAlgorithm xml|attribute default:SHA-1";
+    $props["integrityCheckAlgorithm"] = "CCDAintegrityCheckAlgorithm xml|attribute default|SHA-1";
     return $props;
   }
 
@@ -247,9 +277,7 @@ class CCDAED extends CCDABIN {
      *
      */
 
-    $language = new CCDA_base_cs();
-    $language->setData(" ");
-    $this->setLanguage($language);
+    $this->setLanguage(" ");
 
     $tabTest[] = $this->sample("Test avec un language incorrecte", "Document invalide");
 
@@ -260,8 +288,7 @@ class CCDAED extends CCDABIN {
      *
      */
 
-    $language->setData("test");
-    $this->setLanguage($language);
+    $this->setLanguage("TEST");
 
     $tabTest[] = $this->sample("Test avec un language correcte", "Document valide");
 
@@ -276,9 +303,7 @@ class CCDAED extends CCDABIN {
      *
      */
 
-    $codeTest = new CCDA_base_cs();
-    $codeTest->setData(" ");
-    $this->setMediaType($codeTest);
+    $this->setMediaType(" ");
 
     $tabTest[] = $this->sample("Test avec un mediaType incorrecte", "Document invalide");
 
@@ -290,8 +315,7 @@ class CCDAED extends CCDABIN {
      */
 
 
-    $codeTest->setData("test");
-    $this->setMediaType($codeTest);
+    $this->setMediaType("TEST");
 
     $tabTest[] = $this->sample("Test avec un mediaType correcte", "Document valide");
 
@@ -302,9 +326,7 @@ class CCDAED extends CCDABIN {
      *
      */
 
-    $compression = new CCDACompressionAlgorithm();
-    $compression->setData(" ");
-    $this->setCompression($compression);
+    $this->setCompression(" ");
 
     $tabTest[] = $this->sample("Test avec une compression incorrecte", "Document invalide");
 
@@ -315,8 +337,7 @@ class CCDAED extends CCDABIN {
      *
      */
 
-    $compression->setData("GZ");
-    $this->setCompression($compression);
+    $this->setCompression("GZ");
 
     $tabTest[] = $this->sample("Test avec une compression correcte", "Document valide");
 
@@ -327,9 +348,7 @@ class CCDAED extends CCDABIN {
      *
      */
 
-    $integrity = new CCDA_base_bin();
-    $integrity->setData("111111111");
-    $this->setIntegrityCheck($integrity);
+    $this->setIntegrityCheck("111111111");
 
     $tabTest[] = $this->sample("Test avec un integrityCheck incorrecte", "Document invalide");
 
@@ -340,8 +359,7 @@ class CCDAED extends CCDABIN {
      *
      */
 
-    $integrity->setData("JVBERi0xLjUNCiW1tbW1DQoxIDAgb2Jq");
-    $this->setIntegrityCheck($integrity);
+    $this->setIntegrityCheck("JVBERi0xLjUNCiW1tbW1DQoxIDAgb2Jq");
 
     $tabTest[] = $this->sample("Test avec un integrityCheck correcte", "Document valide");
 
@@ -352,9 +370,7 @@ class CCDAED extends CCDABIN {
      *
      */
 
-    $integrityalgo = new CCDAintegrityCheckAlgorithm();
-    $integrityalgo->setData("SHA-25");
-    $this->setIntegrityCheckAlgorithm($integrityalgo);
+    $this->setIntegrityCheckAlgorithm("SHA-25");
 
     $tabTest[] = $this->sample("Test avec un integrityCheck incorrecte", "Document invalide");
 
@@ -365,9 +381,7 @@ class CCDAED extends CCDABIN {
      *
      */
 
-    $integrityalgo = new CCDAintegrityCheckAlgorithm();
-    $integrityalgo->setData("SHA-256");
-    $this->setIntegrityCheckAlgorithm($integrityalgo);
+    $this->setIntegrityCheckAlgorithm("SHA-256");
 
     $tabTest[] = $this->sample("Test avec un integrityCheck correcte", "Document valide");
 
@@ -379,11 +393,7 @@ class CCDAED extends CCDABIN {
      */
 
     $tel = new CCDATEL();
-    $com = new CCDAset_TelecommunicationAddressUse();
-    $addruse = new CCDATelecommunicationAddressUse();
-    $addruse->setData("test");
-    $com->addData($addruse);
-    $tel->setUse($com);
+    $tel->setUse(array("TEST"));
     $this->setReference($tel);
 
     $tabTest[] = $this->sample("Test avec une reference incorrecte", "Document invalide");
@@ -395,12 +405,7 @@ class CCDAED extends CCDABIN {
      *
      */
 
-    $tel = new CCDATEL();
-    $com = new CCDAset_TelecommunicationAddressUse();
-    $addruse = new CCDATelecommunicationAddressUse();
-    $addruse->setData("MC");
-    $com->addData($addruse);
-    $tel->setUse($com);
+    $tel->setUse(array("MC"));
     $this->setReference($tel);
 
     $tabTest[] = $this->sample("Test avec une reference correcte", "Document valide");
@@ -417,10 +422,7 @@ class CCDAED extends CCDABIN {
      */
 
     $thum = new CCDAthumbnail();
-    $integrityalgo = new CCDAintegrityCheckAlgorithm();
-    $integrityalgo->setData("SHA-25");
-    $thum->setIntegrityCheckAlgorithm($integrityalgo);
-
+    $thum->setIntegrityCheckAlgorithm("SHA-25");
     $this->setThumbnail($thum);
 
     $tabTest[] = $this->sample("Test avec un thumbnail incorrecte", "Document invalide");
@@ -432,9 +434,7 @@ class CCDAED extends CCDABIN {
      *
      */
 
-    $integrityalgo->setData("SHA-256");
-    $thum->setIntegrityCheckAlgorithm($integrityalgo);
-
+    $thum->setIntegrityCheckAlgorithm("SHA-256");
     $this->setThumbnail($thum);
 
     $tabTest[] = $this->sample("Test avec un thumbnail correcte", "Document valide");

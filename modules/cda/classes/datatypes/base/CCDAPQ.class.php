@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * A dimensioned quantity expressing the result of a
  * measurement act.
@@ -22,7 +22,7 @@ class CCDAPQ extends CCDAQTY {
    *
    * @var array
    */
-  var $translation = array();
+  public $translation = array();
 
   /**
    * The unit of measure specified in the Unified Code for
@@ -56,12 +56,18 @@ class CCDAPQ extends CCDAQTY {
   /**
    * Setter unit
    *
-   * @param \CCDA_base_cs $unit \CCDA_base_cs
+   * @param String $unit String
    *
    * @return void
    */
   public function setUnit($unit) {
-    $this->unit = $unit;
+    if (!$unit) {
+      $this->unit = null;
+      return;
+    }
+    $uni = new CCDA_base_cs();
+    $uni->setData($unit);
+    $this->unit = $uni;
   }
 
   /**
@@ -74,10 +80,27 @@ class CCDAPQ extends CCDAQTY {
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Setter value
+   *
+   * @param String $value String
+   *
+   * @return void
+   */
+  public function setValue($value) {
+    if (!$value) {
+      $this->value = null;
+      return;
+    }
+    $val = new CCDA_base_real();
+    $val->setData($value);
+    $this->value = $val;
+  }
+
+  /**
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["translation"] = "CCDAPQR xml|element";
@@ -99,9 +122,7 @@ class CCDAPQ extends CCDAQTY {
      * Test avec une valeur incorrecte
      */
 
-    $real = new CCDA_base_real();
-    $real->setData("test");
-    $this->setValue($real);
+    $this->setValue("test");
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -110,8 +131,7 @@ class CCDAPQ extends CCDAQTY {
      * Test avec une valeur correcte
      */
 
-    $real->setData("10.25");
-    $this->setValue($real);
+    $this->setValue("10.25");
     $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -120,9 +140,7 @@ class CCDAPQ extends CCDAQTY {
      * Test avec une unit incorrecte
      */
 
-    $cs = new CCDA_base_cs();
-    $cs->setData(" ");
-    $this->setUnit($cs);
+    $this->setUnit(" ");
     $tabTest[] = $this->sample("Test avec une unit incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -131,8 +149,7 @@ class CCDAPQ extends CCDAQTY {
      * Test avec une unit correcte
      */
 
-    $cs->setData("test");
-    $this->setUnit($cs);
+    $this->setUnit("test");
     $tabTest[] = $this->sample("Test avec une unit correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -142,9 +159,7 @@ class CCDAPQ extends CCDAQTY {
      */
 
     $pqr = new CCDAPQR();
-    $real = new CCDA_base_real();
-    $real->setData("test");
-    $pqr->setValue($real);
+    $pqr->setValue("test");
     $this->appendTranslation($pqr);
     $tabTest[] = $this->sample("Test avec une translation incorrecte", "Document invalide");
 
@@ -154,8 +169,7 @@ class CCDAPQ extends CCDAQTY {
      * Test avec une translation correcte
      */
 
-    $real->setData("10.25");
-    $pqr->setValue($real);
+    $pqr->setValue("10.25");
     $this->appendTranslation($pqr);
     $tabTest[] = $this->sample("Test avec une translation correcte", "Document valide");
 

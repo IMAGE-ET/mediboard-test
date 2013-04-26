@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * A restriction of entity name that is effectively a simple string used
  * for a simple name for things and places.
@@ -16,10 +16,10 @@
 class CCDATN extends CCDAEN {
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["delimiter"] = "CCDA_en_delimiter xml|element prohibited";
@@ -52,7 +52,7 @@ class CCDATN extends CCDAEN {
      * test avec un given correcte
      */
 
-    $this->razListdata("family");
+    $this->resetListdata("family");
     $enxp = new CCDA_en_given();
     $this->append("given", $enxp);
     $tabTest[] = $this->sample("Test avec un given correcte, interdit dans ce contexte", "Document invalide");
@@ -63,7 +63,7 @@ class CCDATN extends CCDAEN {
      * test avec un prefix correcte
      */
 
-    $this->razListdata("given");
+    $this->resetListdata("given");
     $enxp = new CCDA_en_prefix();
     $this->append("prefix", $enxp);
     $tabTest[] = $this->sample("Test avec un prefix correcte, interdit dans ce contexte", "Document invalide");
@@ -74,7 +74,7 @@ class CCDATN extends CCDAEN {
      * test avec un sufix correcte
      */
 
-    $this->razListdata("prefix");
+    $this->resetListdata("prefix");
     $enxp = new CCDA_en_suffix();
     $this->append("suffix", $enxp);
     $tabTest[] = $this->sample("Test avec un sufix correcte, interdit dans ce contexte", "Document invalide");
@@ -85,7 +85,7 @@ class CCDATN extends CCDAEN {
      * test avec un delimiter correcte
      */
 
-    $this->razListdata("sufix");
+    $this->resetListdata("sufix");
     $enxp = new CCDA_en_delimiter();
     $this->append("delimiter", $enxp);
     $tabTest[] = $this->sample("Test avec un delimiter correcte, interdit dans ce contexte", "Document invalide");

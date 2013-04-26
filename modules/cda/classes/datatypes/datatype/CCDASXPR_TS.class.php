@@ -17,7 +17,7 @@ class CCDASXPR_TS extends CCDASXCM_TS {
   /**
    * @var CCDASXCM_TS
    */
-  var $comp = array();
+  public $comp = array();
 
   /**
    * ADD a class
@@ -35,7 +35,7 @@ class CCDASXPR_TS extends CCDASXCM_TS {
    *
    * @return void
    */
-  function razlistData () {
+  function resetListData () {
     $this->comp = array();
   }
 
@@ -63,9 +63,7 @@ class CCDASXPR_TS extends CCDASXCM_TS {
      */
 
     $sx = new CCDASXCM_TS();
-    $op = new CCDASetOperator();
-    $op->setData("TESTTEST");
-    $sx->setOperator($op);
+    $sx->setOperator("TESTTEST");
     $this->addData($sx);
     $tabTest[] = $this->sample("Test avec une comp incorrecte", "Document invalide");
 
@@ -75,9 +73,8 @@ class CCDASXPR_TS extends CCDASXCM_TS {
      * Test avec une comp correcte, minimum non atteint
      */
 
-    $op->setData("E");
-    $sx->setOperator($op);
-    $this->razlistData();
+    $sx->setOperator("E");
+    $this->resetListData();
     $this->addData($sx);
     $tabTest[] = $this->sample("Test avec une comp correcte, minimum non atteint", "Document invalide");
 
@@ -88,9 +85,7 @@ class CCDASXPR_TS extends CCDASXCM_TS {
      */
 
     $sx2 = new CCDASXCM_TS();
-    $op2 = new CCDASetOperator();
-    $op2->setData("TESTTEST");
-    $sx2->setOperator($op2);
+    $sx2->setOperator("TESTTEST");
     $this->addData($sx2);
     $tabTest[] = $this->sample("Test avec une comp correcte et une incorrecte, minimum atteint", "Document invalide");
 
@@ -101,9 +96,8 @@ class CCDASXPR_TS extends CCDASXCM_TS {
      */
 
 
-    $op2->setData("P");
-    $sx2->setOperator($op2);
-    $this->razlistData();
+    $sx2->setOperator("P");
+    $this->resetListData();
     $this->addData($sx);
     $this->addData($sx2);
     $tabTest[] = $this->sample("Test avec deux comp correcte, minimum atteint", "Document valide");

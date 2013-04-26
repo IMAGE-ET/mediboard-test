@@ -13,7 +13,7 @@
  * Correspondants du patient
  */
 
-class CCorrespondantPatient extends CMbObject {
+class CCorrespondantPatient extends CPerson {
 
   // DB Table key
   public $correspondant_patient_id;
@@ -113,6 +113,8 @@ class CCorrespondantPatient extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
 
+    $this->mapPerson();
+
     $this->_view = $this->relation ?
       CAppUI::tr("CCorrespondantPatient.relation.".$this->relation) :
       $this->relation_autre;
@@ -184,5 +186,24 @@ class CCorrespondantPatient extends CMbObject {
    */
   function loadRefPatient() {
     return $this->_ref_patient = $this->loadFwdRef("patient_id");
+  }
+
+  /**
+   * Map the class variable with CPerson variable
+   *
+   * @return void
+   */
+  function mapPerson() {
+    $this->_pcity              = $this->ville;
+    $this->_ppostalCode        = $this->cp;
+    $this->_pstreetAddress     = $this->adresse;
+    $this->_pphoneNumber       = $this->tel;
+    $this->_pfaxNumber         = $this->fax;
+    $this->_pmobilePhoneNumber = $this->mob;
+    $this->_pemail             = $this->email;
+    $this->_pfirstName         = $this->prenom;
+    $this->_plastName          = $this->nom;
+    $this->_pbirthDate         = $this->naissance;
+    $this->_pmaidenName        = $this->nom_jeune_fille;
   }
 }

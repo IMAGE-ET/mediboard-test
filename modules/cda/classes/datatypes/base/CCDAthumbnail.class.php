@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * A thumbnail is an abbreviated rendition of the full
  * data. A thumbnail requires significantly fewer
@@ -21,12 +21,12 @@
  */
 class CCDAthumbnail extends CCDAED {
 
-  
+
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["thumbnail"] = "CCDAthumbnail xml|element prohibited";
@@ -46,10 +46,7 @@ class CCDAthumbnail extends CCDAED {
      */
 
     $thum = new CCDAthumbnail();
-    $integrityalgo = new CCDAintegrityCheckAlgorithm();
-    $integrityalgo->setData("SHA-256");
-    $thum->setIntegrityCheckAlgorithm($integrityalgo);
-
+    $thum->setIntegrityCheckAlgorithm("SHA-256");
     $this->setThumbnail($thum);
     $tabTest[] = $this->sample("Test avec un thumbnail correcte", "Document invalide");
 

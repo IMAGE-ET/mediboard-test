@@ -36,12 +36,18 @@ class CCDABXIT_IVL_PQ extends CCDAIVL_PQ {
   /**
    * Setter qty
    *
-   * @param \CCDA_base_int $qty \CCDA_base_int
+   * @param String $qty String
    *
    * @return void
    */
   public function setQty($qty) {
-    $this->qty = $qty;
+    if (!$qty) {
+      $this->qty = null;
+      return;
+    }
+    $int = new CCDA_base_int();
+    $int->setData($qty);
+    $this->qty = $int;
   }
 
   /**
@@ -77,9 +83,7 @@ class CCDABXIT_IVL_PQ extends CCDAIVL_PQ {
      * Test avec une quantity incorrecte
      */
 
-    $int = new CCDA_base_int();
-    $int->setData("10.25");
-    $this->setQty($int);
+    $this->setQty("10.25");
     $tabTest[] = $this->sample("Test avec une quantity incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -88,8 +92,7 @@ class CCDABXIT_IVL_PQ extends CCDAIVL_PQ {
      * Test avec une quantity correcte
      */
 
-    $int->setData("10");
-    $this->setQty($int);
+    $this->setQty("10");
     $tabTest[] = $this->sample("Test avec une quantity correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

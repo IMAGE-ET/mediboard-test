@@ -55,12 +55,18 @@ class CCDAPPD_PQ extends CCDAPQ {
   /**
    * Setter distributionType
    *
-   * @param \CCDAProbabilityDistributionType $distributionType \CCDAProbabilityDistributionType
+   * @param String $distributionType String
    *
    * @return void
    */
   public function setDistributionType($distributionType) {
-    $this->distributionType = $distributionType;
+    if (!$distributionType) {
+      $this->distributionType = null;
+      return;
+    }
+    $proba = new CCDAProbabilityDistributionType();
+    $proba->setData($distributionType);
+    $this->distributionType = $proba;
   }
 
   /**
@@ -116,9 +122,7 @@ class CCDAPPD_PQ extends CCDAPQ {
      * Test avec un distributionType incorrecte
      */
 
-    $prob = new CCDAProbabilityDistributionType();
-    $prob->setData("TESTTEST");
-    $this->setDistributionType($prob);
+    $this->setDistributionType("TESTTEST");
     $tabTest[] = $this->sample("Test avec un distributionType incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -127,8 +131,7 @@ class CCDAPPD_PQ extends CCDAPQ {
      * Test avec un distributionType correcte
      */
 
-    $prob->setData("F");
-    $this->setDistributionType($prob);
+    $this->setDistributionType("F");
     $tabTest[] = $this->sample("Test avec un distributionType correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -138,9 +141,7 @@ class CCDAPPD_PQ extends CCDAPQ {
      */
 
     $pq = new CCDAPQ();
-    $real = new CCDA_base_real();
-    $real->setData("test");
-    $pq->setValue($real);
+    $pq->setValue("test");
     $this->setStandardDeviation($pq);
     $tabTest[] = $this->sample("Test avec un standardDeviation incorrecte", "Document invalide");
 
@@ -150,9 +151,8 @@ class CCDAPPD_PQ extends CCDAPQ {
      * Test avec un standardDeviation correcte
      */
 
-    $real->setData("10.25");
-    $pq->setValue($real);
-    $this->setStandardDeviation($pq);;
+    $pq->setValue("10.25");
+    $this->setStandardDeviation($pq);
     $tabTest[] = $this->sample("Test avec un standardDeviation correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

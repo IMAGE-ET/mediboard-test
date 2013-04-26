@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RetrieveValueSetResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:ihe:iti:svs:2008 SVS.xsd" xmlns="urn:ihe:iti:svs:2008">
+    <ValueSet id="1.2.250.1.213.1.1.4.2.283.3" displayName="PCC_ProblemCodes" version="20110727">
+        <ConceptList>
+            <Concept code="F-01050" displayName="Condition préexistante" codeSystem="1.2.250.1.213.2.12"> </Concept>
+            <Concept code="F-01250" displayName="Symptôme" codeSystem="1.2.250.1.213.2.12"> </Concept>
+            <Concept code="CDA_001" displayName="Conclusions" codeSystem="1.2.250.1.213.1.1.4.2.286"> </Concept>      
+            <Concept code="F-01200" displayName="Affection, plainte" codeSystem="1.2.250.1.213.2.12"> </Concept>
+            <Concept code="F-01100" displayName="Trouble fonctionnel" codeSystem="1.2.250.1.213.2.12"> </Concept>
+            <Concept code="F-01000" displayName="Problème" codeSystem="1.2.250.1.213.2.12"> </Concept>
+            <Concept code="G-1009" displayName="Diagnostic" codeSystem="1.2.250.1.213.2.12"> </Concept>
+        </ConceptList>
+    </ValueSet>
+</RetrieveValueSetResponse>
+
+ 	
+ 	
+ 	
+ 		
+ 		

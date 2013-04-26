@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * A telephone number (voice or fax), e-mail address, or
  * other locator for a resource (information or service)
@@ -45,12 +45,16 @@ class CCDATEL extends CCDAURL {
   /**
    * Setter use
    *
-   * @param \CCDAset_TelecommunicationAddressUse $use set_TelecommunicationAddressUse
+   * @param String[] $use String[]
    *
    * @return void
    */
   public function setUse($use) {
-    $this->use = $use;
+    $setTel = new CCDAset_TelecommunicationAddressUse();
+    foreach ($use as $_use) {
+      $setTel->addData($_use);
+    }
+    $this->use = $setTel;
   }
 
   /**
@@ -65,7 +69,7 @@ class CCDATEL extends CCDAURL {
   /**
    * Setter useablePeriod
    *
-   * @param \CCDASXCM_TS $useablePeriod SXCM_TS
+   * @param CCDASXCM_TS $useablePeriod CCDASXCM_TS
    *
    * @return void
    */
@@ -76,17 +80,17 @@ class CCDATEL extends CCDAURL {
   /**
    * Getter useablePeriod
    *
-   * @return \CCDASXCM_TS
+   * @return CCDASXCM_TS
    */
   public function getUseablePeriod() {
     return $this->useablePeriod;
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["useablePeriod"] = "CCDASXCM_TS xml|element";
@@ -107,11 +111,9 @@ class CCDATEL extends CCDAURL {
      * Test avec un useablePeriod incorrecte
      */
 
-    $useable = new CCDASXCM_TS();
-    $op = new CCDASetOperator();
-    $op->setData("TESTEST");
-    $useable->setOperator($op);
-    $this->setUseablePeriod($useable);
+    $sx = new CCDASXCM_TS();
+    $sx->setOperator("TEST");
+    $this->setUseablePeriod($sx);
     $tabTest[] = $this->sample("Test avec une useablePeriod incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -120,9 +122,9 @@ class CCDATEL extends CCDAURL {
      * Test avec un useablePeriod correct
      */
 
-    $op->setData("H");
-    $useable->setOperator($op);
-    $this->setUseablePeriod($useable);
+    $sx = new CCDASXCM_TS();
+    $sx->setOperator("H");
+    $this->setUseablePeriod($sx);
     $tabTest[] = $this->sample("Test avec un useablePeriod correct", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -131,11 +133,8 @@ class CCDATEL extends CCDAURL {
      * Test avec un use incorrecte
      */
 
-    $us = new CCDAset_TelecommunicationAddressUse();
-    $tel = new CCDATelecommunicationAddressUse();
-    $tel->setData("TESTTEST");
-    $us->addData($tel);
-    $this->setUse($us);
+    $arrayUse = array("TESTTEST");
+    $this->setUse($arrayUse);
     $tabTest[] = $this->sample("Test avec un use incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -144,10 +143,8 @@ class CCDATEL extends CCDAURL {
      * Test avec un use correct
      */
 
-    $tel->setData("AS");
-    $us->razlistData();
-    $us->addData($tel);
-    $this->setUse($us);
+    $arrayUse = array("AS");
+    $this->setUse($arrayUse);
     $tabTest[] = $this->sample("Test avec un use correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

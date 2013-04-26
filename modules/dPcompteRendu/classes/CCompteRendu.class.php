@@ -16,72 +16,73 @@
  */
 class CCompteRendu extends CDocumentItem {
   // DB Table key
-  var $compte_rendu_id   = null;
+  public $compte_rendu_id;
   
   // DB References
-  var $user_id           = null; // not null when is a template associated to a user
-  var $function_id       = null; // not null when is a template associated to a function
-  var $group_id          = null; // not null when is a template associated to a group
-  var $content_id        = null;
-  var $header_id         = null;
-  var $footer_id         = null;
-  var $preface_id        = null;
-  var $ending_id         = null;
-  var $modele_id         = null;
+  public $user_id; // not null when is a template associated to a user
+  public $function_id; // not null when is a template associated to a function
+  public $group_id; // not null when is a template associated to a group
+  public $content_id;
+  public $header_id;
+  public $footer_id;
+  public $preface_id;
+  public $ending_id;
+  public $modele_id;
   
   // DB fields
-  var $nom               = null;
-  var $type              = null;
-  var $font              = null;
-  var $size              = null;
-  var $valide            = null;
-  var $height            = null;
-  var $margin_top        = null;
-  var $margin_bottom     = null;
-  var $margin_left       = null;
-  var $margin_right      = null;
-  var $page_height       = null;
-  var $page_width        = null;
-  var $private           = null;
-  var $fast_edit         = null;
-  var $fast_edit_pdf     = null;
-  var $date_print        = null;
-  var $purge_field       = null;
-  var $purgeable         = null;
-  var $fields_missing    = null;
+  public $nom;
+  public $type;
+  public $font;
+  public $size;
+  public $valide;
+  public $height;
+  public $margin_top;
+  public $margin_bottom;
+  public $margin_left;
+  public $margin_right;
+  public $page_height;
+  public $page_width;
+  public $private;
+  public $fast_edit;
+  public $fast_edit_pdf;
+  public $date_print;
+  public $purge_field;
+  public $purgeable;
+  public $fields_missing;
+  public $version;
   
   // Form fields
-  var $_is_document      = false;
-  var $_is_modele        = false;
-  var $_owner            = null;
-  var $_page_format      = null;
-  var $_orientation      = null;
-  var $_list_classes     = null;
-  var $_date             = null;
-  var $_count_utilisation = null;
+  public $_is_document      = false;
+  public $_is_modele        = false;
+  public $_owner;
+  public $_page_format;
+  public $_orientation;
+  public $_list_classes;
+  public $_date;
+  public $_count_utilisation;
   
   // Distant field
-  var $_source           = null;
+  public $_source;
   
   // Referenced objects
-  var $_ref_user         = null;
-  var $_ref_author       = null;
-  var $_ref_category     = null;
-  var $_ref_function     = null;
-  var $_ref_group        = null;
-  var $_ref_header       = null;
-  var $_ref_preface      = null;
-  var $_ref_ending       = null;
-  var $_ref_footer       = null;
-  var $_ref_file         = null;
-  var $_ref_modele       = null;
-  var $_ref_content      = null;
-  var $_refs_correspondants_courrier = null;
-  var $_refs_correspondants_courrier_by_tag_guid = null;
+  public $_ref_user;
+  public $_ref_author;
+  public $_ref_category;
+  public $_ref_function;
+  public $_ref_group;
+  public $_ref_header;
+  public $_ref_preface;
+  public $_ref_ending;
+  public $_ref_footer;
+  public $_ref_file;
+  public $_ref_modele;
+  public $_ref_content;
+  public $_refs_correspondants_courrier;
+  public $_refs_correspondants_courrier_by_tag_guid;
   
   // Other fields
-  var $_entire_doc       = null;
-  var $_ids_corres       = null;
+  public $_entire_doc;
+  public $_ids_corres;
   static $_page_formats = array(
     'a3'      => array(29.7 , 42),
     'a4'      => array(21   , 29.7),
@@ -182,6 +183,7 @@ class CCompteRendu extends CDocumentItem {
     $specs["purge_field"]      = "str show|0";
     $specs["purgeable"]        = "bool default|0 show|0";
     $specs["fields_missing"]   = "num default|0 show|0";
+    $specs["version"]          = "num default|0";
     $specs["_owner"]           = "enum list|prat|func|etab";
     $specs["_orientation"]     = "enum list|portrait|landscape";
     $specs["_page_format"]     = "enum list|".implode("|", array_keys(self::$_page_formats));
@@ -840,6 +842,8 @@ class CCompteRendu extends CDocumentItem {
     if (!$this->_id) {
       $this->author_id = CMediusers::get()->_id;
     }
+
+    $this->version++;
     
     return parent::store();
   }
@@ -1218,8 +1222,8 @@ class CCompteRendu extends CDocumentItem {
    * @return string 
    */
   static function restoreId($source) {
-    if (strpos($source, '<div id="body"') === false && 
-        strpos($source, "<div id='body'") === false && 
+    if (strpos($source, '<div id="body"') === false &&
+        strpos($source, "<div id='body'") === false &&
         strpos($source, "@media dompdf")  !== false
     ) {
           
@@ -1398,5 +1402,22 @@ class CCompteRendu extends CDocumentItem {
     $log->object_id = $this->content_id;
     $log->loadMatchingObject("date DESC");
     return $log;
+  }
+
+  /**
+   * Retourne le dernier utilisateur qui a modifié le document
+   *
+   * @return CUser
+   */
+  function loadLastWriter() {
+    $user = $this->loadLastLogForField("version")->_ref_user;
+    if (!$user) {
+      $this->loadRefsFwd();
+      $user = $this->_ref_user;
+    }
+
+    $user->loadFirstLog();
+
+    return $user;
   }
 }

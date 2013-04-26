@@ -12,7 +12,7 @@
 /**
  * The CMediusers class
  */
-class CMediusers extends CMbObject {
+class CMediusers extends CPerson {
   public $user_id;
 
   // DB Fields
@@ -455,6 +455,9 @@ class CMediusers extends CMbObject {
     }
 
     $this->_ref_user = $user;
+
+    $this->mapPerson();
+
     $this->updateSpecs();
   }
 
@@ -1446,5 +1449,20 @@ class CMediusers extends CMbObject {
     }
 
     return str_replace('$g', $group_id, $tag_mediusers);
+  }
+
+  /**
+   * Map the class variable with CPerson variable
+   *
+   * @return void
+   */
+  function mapPerson() {
+    $this->_pcity          = $this->_user_ville;
+    $this->_ppostalCode    = $this->_user_cp;
+    $this->_pstreetAddress = $this->_user_adresse;
+    $this->_pphoneNumber   = $this->_user_phone;
+    $this->_pemail         = $this->_user_email;
+    $this->_pfirstName     = $this->_user_first_name;
+    $this->_plastName      = $this->_user_last_name;
   }
 }

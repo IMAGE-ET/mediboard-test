@@ -15,19 +15,21 @@
  */
 class CCdaTools {
 
-  var $contain   = null;
-  var $validate  = null;
-  var $validateSchematron = null;
+  public $contain   = null;
+  public $validate  = null;
+  public $validateSchematron = null;
 
-  var $xml       = null;
+  public $xml       = null;
+
   /**
    * @var CMbXMLDocument
    */
-  var $domschema = null;
+  public $domschema = null;
+
   /**
    * @var CMbXPath
    */
-  var $xpath     = null;
+  public $xpath     = null;
 
   /**
    * Permet de récupérer les attributs d'un noeud xml sous forme de tableau
@@ -102,20 +104,24 @@ class CCdaTools {
     $this->xpath = new CMbXPath($this->domschema);
     $this->xpath->registerNamespace("xs", "http://www.w3.org/2001/XMLSchema");
 
+
     $dom = new CMbXMLDocument("UTF-8");
     $returnErrors = $dom->loadXMLSafe(utf8_encode($message), null, true);
     $tabErrors = array_filter(explode("\n", $returnErrors));
-
     $returnErrors = $dom->schemaValidate("modules/cda/resources/CDA.xsd", true, false);
     $tabErrors = array_merge($tabErrors, array_filter(explode("\n", $returnErrors)));
-
     $this->validate = array_unique($tabErrors);
 
     if ($this->validate[0] != "1") {
       $this->contain = null;
       return;
     }
-    $this->validate = array();
+
+    $this->validateSchematron($message);
+
+    if ($this->validate[0] === "1" && !CMbArray::get($this->validate, 1)) {
+      $this->validate = array();
+    }
     $this->contain = $this->parsedeep($dom->documentElement);
   }
 
@@ -217,6 +223,41 @@ class CCdaTools {
     return preg_replace('/\)$/', "  )", preg_replace("/\d+ => /", "  ", var_export($array, true)));
   }
 
+  function validateSchematron($xml) {
+    $baseDir = dirname(__DIR__)."/resources";
+    $cmd = escapeshellarg("java");
+
+    $styleSheet = "$baseDir/schematron/CI-SIS_StructurationCommuneCDAr2.xsl";
+
+    $temp = tempnam("temp", "xml");
+    file_put_contents($temp, $xml);
+
+    $cmd = $cmd." -jar $baseDir/saxon9he.jar -s:$temp -xsl:$styleSheet";
+    $processorInstance = proc_open($cmd, array(1 => array('pipe', 'w'), 2 => array('pipe', 'w')), $pipes);
+    $processorResult = stream_get_contents($pipes[1]);
+    $processorErrors = stream_get_contents($pipes[2]);
+    proc_close($processorInstance);
+    unlink($temp);
+
+    $dom = new CMbXMLDocument();
+    $dom->loadXMLSafe($processorResult);
+    $xpath = new CMbXPath($dom);
+    $xpath->registerNamespace("svrl", "http://purl.oclc.org/dsdl/svrl");
+    $nodeList = $xpath->query("//svrl:failed-assert");
+
+    $tabErrors = array();
+    if ($processorErrors) {
+      $tabErrors[] = array("error" => $processorErrors,
+                           "location" => "System");
+    }
+
+    foreach ($nodeList as $_node) {
+      $tabErrors[] = array("error" => utf8_decode($_node->textContent),
+                           "location" => $_node->attributes->getNamedItem("location")->nodeValue);
+    }
+    $this->validateSchematron = $tabErrors;
+  }
+
   /**
    * Permet de de retourner la portion xml du noeud choisi par le nom dans le schéma spécifié
    *
@@ -235,14 +276,35 @@ class CCdaTools {
     return $dom->saveXML($node);
   }
 
+
   /**
-   * Permet de créer le xsd contenant la définition d'élément pour tester les types
+   * Permet de lancer toutes les créations des schéma de test
    *
    * @return bool
    */
-  function createTestSchemaClasses() {
+  function createAllTestSchemaClasses() {
     //URI du fichier
     $nameFile = "modules/cda/resources/TestClasses.xsd";
+    $glob = "modules/cda/classes/datatypes/{voc,base,datatype}/*.class.php";
+    $this->createTestSchemaClasses($nameFile, $glob);
+
+    $nameFile = "modules/cda/resources/TestClassesCDA.xsd";
+    $glob = "modules/cda/classes/classesCDA/*.class.php";
+    $this->createTestSchemaClasses($nameFile, $glob);
+
+    return true;
+  }
+
+  /**
+   * Permet de créer le xsd contenant la définition d'élément pour tester les types
+   *
+   * @param String $nameFile String
+   * @param String $glob     String
+   *
+   * @return bool
+   */
+  function createTestSchemaClasses($nameFile, $glob) {
+
     $dom = new DOMDocument();
     //On enregistre aps les nodeText vide
     $dom->preserveWhiteSpace = false;
@@ -261,7 +323,7 @@ class CCdaTools {
     file_put_contents($nameFile, $dom->saveXML());
 
     //on récupère tous les class existant dans les dossier voc, base, datatype
-    $file = glob("modules/cda/classes/datatypes/{voc,base,datatype}/*.class.php", GLOB_BRACE);
+    $file = glob($glob, GLOB_BRACE);
 
     /**
      * Pour chacun des fichier on créé un élément avec sont type correspondant
@@ -330,7 +392,13 @@ class CCdaTools {
    * @return array
    */
   function createTest($test) {
-    $file = glob("modules/cda/classes/datatypes/$test/*.class.php", GLOB_BRACE);
+    $path = "modules/cda/classes/datatypes/$test/*.class.php";
+
+    if ($test == "CDA") {
+      $path = "modules/cda/classes/classesCDA/*.class.php";
+    }
+
+    $file = glob($path, GLOB_BRACE);
 
     $result = array();
     foreach ($file as $_file) {
@@ -340,7 +408,6 @@ class CCdaTools {
       $result[$class->getNameClass()] = $class->test();
     }
     return $result;
-
   }
 
   /**
@@ -378,7 +445,7 @@ class CCdaTools {
     $listAllType = $this->returnType("modules/cda/resources/datatypes-base.xsd");
     $listAllType = array_merge($listAllType, $this->returnType("modules/cda/resources/voc.xsd"));
     $listAllType = array_merge($listAllType, $this->returnType("modules/cda/resources/datatypes.xsd"));
-    $file = glob("modules/cda/classes/datatypes/{voc,base,datatype}/*.class.php", GLOB_BRACE);
+    $file = glob("modules/cda/classes/{classesCDA,datatypes}/{voc,base,datatype}/*.class.php", GLOB_BRACE);
 
     $result = array();
     /**
@@ -427,6 +494,126 @@ class CCdaTools {
     }
     file_put_contents($pathDest, $dom->saveXML());
 
+    return true;
+  }
+
+  /**
+   * Permet de créer les props pour une classe
+   *
+   * @param DOMNodeList $elements    DOMNodeList
+   * @param Array       $tabVariable Array
+   * @param Array       $tabProps    Array
+   *
+   * @return Array
+   */
+  function createPropsForElement($elements, $tabVariable, $tabProps) {
+    foreach ($elements as $_element) {
+      $attributes = $_element->attributes;
+      $typeXML = "xml|element";
+
+      if ($_element->nodeName == "xs:attribute") {
+        $typeXML = "xml|attribute";
+      }
+
+      $elementProps = "";
+      $maxOccurs = false;
+      $minOccurs = false;
+      foreach ($attributes as $_attribute) {
+        switch ($_attribute->nodeName) {
+          case "name":
+            $nameAttribute = $_attribute->nodeValue;
+            break;
+          case "type":
+            $name = str_replace(".", "_", $_attribute->nodeValue);
+            if (ctype_lower($name)) {
+              $name = "_base_$name";
+            }
+            $typeAttribute = $name;
+            $elementProps .= "CCDA$name $typeXML";
+            break;
+          case "minOccurs":
+            $minOccurs = true;
+            if ($_attribute->nodeValue > 0) {
+              $minOccurs = false;
+              $elementProps .= " min|$_attribute->nodeValue";
+            }
+            break;
+          case "maxOccurs":
+            if ($_attribute->nodeValue == "unbounded") {
+              $maxOccurs = true;
+            }
+            else {
+              if ($_attribute->nodeValue > 1) {
+                $maxOccurs = true;
+                $elementProps .= " max|$_attribute->nodeValue";
+              }
+            }
+            break;
+          case "default":
+            $elementProps .= " default|$_attribute->nodeValue";
+            break;
+          case "use":
+            if ($_attribute->nodeValue == "required") {
+              $elementProps .= " required";
+            }
+            break;
+          case "fixed":
+            $elementProps .= " fixed|$_attribute->nodeValue";
+            break;
+        }
+      }
+      $tabVariable[$nameAttribute]["type"] = $typeAttribute;
+      $tabVariable[$nameAttribute]["max"] = $maxOccurs;
+      if (!$maxOccurs && $typeXML == "xml|element") {
+        if ($minOccurs) {
+          $elementProps .= " max|1";
+        }
+        else {
+          $elementProps .= " required";
+        }
+      }
+      $tabProps[$nameAttribute] = $elementProps;
+    }
+    return array($tabVariable, $tabProps);
+  }
+
+  /**
+   * fonction permettant de créér la structure principal des classes d'un XSD
+   *
+   * @return bool
+   */
+  function createClassFromXSD() {
+    $pathXSD = "modules/cda/resources/POCD_MT000040.xsd";
+    $pathDir = "modules/cda/classes/classesCDA/classesGenerate/";
+    $dom = new DOMDocument();
+    $dom->load($pathXSD);
+
+    $xpath = new DOMXPath($dom);
+    $xpath->registerNamespace("xs", "http://www.w3.org/2001/XMLSchema");
+    $nodeList = $xpath->query("//xs:complexType[@name] | //xs:simpleType[@name]");
+
+    foreach ($nodeList as $_node) {
+      $tabVariable = array();
+      $tabProps = array();
+
+      $elements = $_node->getElementsByTagName("element");
+      $nodeAttributes = $_node->getElementsByTagName("attribute");
+      $nameNode = $_node->attributes->getNamedItem("name")->nodeValue;
+      $nameNode = str_replace(".", "_", $nameNode);
+
+      list($tabVariable, $tabProps) = $this->createPropsForElement($elements, $tabVariable, $tabProps);
+
+      list($tabVariable, $tabProps) = $this->createPropsForElement($nodeAttributes, $tabVariable, $tabProps);
+
+      $smarty = new CSmartyDP();
+      $smarty->assign("name", $nameNode);
+      $smarty->assign("variables", $tabVariable);
+      $smarty->assign("props", $tabProps);
+
+      $data = $smarty->fetch("defaultClassCDA.tpl");
+
+      file_put_contents($pathDir."CCDA".$nameNode.".class.php", $data);
+    }
     return true;
   }
 }

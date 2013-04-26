@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * CCDA_en_delimiter class
  */
@@ -16,14 +16,6 @@ class CCDA_en_delimiter extends CCDAENXP {
 
    private $XMLName = "en.delimiter";
 
-  /**
-   * Fixe la donnée
-   */
-  function __construct() {
-    $part = new CCDAEntityNamePartType();
-    $part->setData("DEL");
-    $this->setPartType($part);
-  }
   /**
    * Return the name of the class
    *
@@ -34,10 +26,10 @@ class CCDA_en_delimiter extends CCDAENXP {
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["partType"] = "CCDAEntityNamePartType xml|attribute fixe|DEL";

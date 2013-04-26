@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * Fractional numbers. Typically used whenever quantities
  * are measured, estimated, or computed from other real
@@ -23,11 +23,29 @@
  */
 class CCDAREAL extends CCDAQTY {
 
+
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Setter value
+   *
+   * @param String $value String
+   *
+   * @return void
+   */
+  public function setValue($value) {
+    if (!$value) {
+      $this->value = null;
+      return;
+    }
+    $real = new CCDA_base_real();
+    $real->setData($value);
+    $this->value = $real;
+  }
+
+  /**
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["value"] = "CCDA_base_real xml|attribute";
@@ -46,9 +64,7 @@ class CCDAREAL extends CCDAQTY {
      * Test avec une valeur incorrecte
      */
 
-    $real = new CCDA_base_real();
-    $real->setData("test");
-    $this->setValue($real);
+    $this->setValue("test");
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -57,8 +73,7 @@ class CCDAREAL extends CCDAQTY {
      * Test avec une valeur correcte
      */
 
-    $real->setData("10.5");
-    $this->setValue($real);
+    $this->setValue("10.5");
     $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

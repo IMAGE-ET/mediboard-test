@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RetrieveValueSetResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="urn:ihe:iti:svs:2008 SVS.xsd"  xmlns="urn:ihe:iti:svs:2008">
+    <ValueSet id="1.2.250.1.213.1.1.5.10" displayName="chapitresBiologie" version="20110721">
+    <ConceptList>
+        <Concept code="18723-7" displayName="Hématologie" codeSystem="2.16.840.1.113883.6.1"/>
+        <Concept code="18720-3" displayName="Hémostase, coagulation" codeSystem="2.16.840.1.113883.6.1"/>
+        <Concept code="18717-9" displayName="Immunohématologie" codeSystem="2.16.840.1.113883.6.1"/>
+        <Concept code="18725-2" displayName="Microbiologie" codeSystem="2.16.840.1.113883.6.1"/>
+        <Concept code="18716-1" displayName="Allergie" codeSystem="2.16.840.1.113883.6.1"/>
+        <Concept code="18727-8" displayName="Sérologies" codeSystem="2.16.840.1.113883.6.1"/>
+        <Concept code="18718-7" displayName="Protéines, marqueurs tumoraux, vitamines" codeSystem="2.16.840.1.113883.6.1"/>
+        <Concept code="18719-5" displayName="Biochimie" codeSystem="2.16.840.1.113883.6.1"/>
+        <Concept code="18767-4" displayName="Gaz du sang" codeSystem="2.16.840.1.113883.6.1"/>
+        <Concept code="18721-1" displayName="Dosages de médicaments  et substances" codeSystem="2.16.840.1.113883.6.1"/>
+        <Concept code="18728-6" displayName="Toxicologie" codeSystem="2.16.840.1.113883.6.1"/>
+        <Concept code="18722-9" displayName="Fertilité" codeSystem="2.16.840.1.113883.6.1"/>
+        <Concept code="18724-5" displayName="18724-5" codeSystem="2.16.840.1.113883.6.1"/>
+        <Concept code="26435-8" displayName="Génétique humaine" codeSystem="2.16.840.1.113883.6.1"/>
+        <Concept code="26436-6" displayName="Biologie" codeSystem="2.16.840.1.113883.6.1"/>
+    </ConceptList>
+    </ValueSet>
+</RetrieveValueSetResponse>

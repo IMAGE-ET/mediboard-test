@@ -17,15 +17,47 @@
 class CCDADomDocument extends DOMDocument {
 
   /**
+   * Création du xml en UTF-8
+   *
+   * @param String $encoding String
+   */
+  function __construct($encoding = "UTF-8") {
+    parent::__construct("1.0", $encoding);
+
+    $this->preserveWhiteSpace = false;
+    $this->formatOutput = true;
+  }
+
+  /**
    * Permet de créer le noeud root
    *
-   * @param String $name String
+   * @param String $name      String
+   * @param String $namespace String
    *
    * @return void
    */
-  function createNodeRoot($name) {
+  function createNodeRoot($name, $namespace = null) {
     $name = utf8_encode($name);
-    $this->appendChild($this->createElement($name));
+    if (empty($namespace)) {
+      $this->appendChild($this->createElement($name));
+    }
+    else {
+      $this->appendChild($this->createElementNS($namespace, $name));
+    }
+
+  }
+
+  /**
+   * Permet de créer le noeud root avec le namespace urn:hl7-org:v3
+   *
+   * @param String $namespace String
+   * @param String $name      String
+   *
+   * @return void
+   */
+  function createNodeRootNS($namespace, $name) {
+    $name = utf8_encode($name);
+    $this->appendChild($this->createElementNS($namespace, $name));
   }
 
   /**
@@ -96,4 +128,41 @@ class CCDADomDocument extends DOMDocument {
     $attribute->nodeValue = $value;
     $nodeParent->appendChild($attribute);
   }
+
+  /**
+   * Enlève les éléments vide du document
+   *
+   * @return void
+   */
+  function purgeEmptyElements() {
+    $this->purgeEmptyElementsNode($this->documentElement);
+  }
+
+  /**
+   * Enlève les élements vide d'un noeud
+   *
+   * @param DOMElement $node DOMElement
+   *
+   * @return void
+   */
+  function purgeEmptyElementsNode($node) {
+    // childNodes undefined for non-element nodes (eg text nodes)
+    if ($node->childNodes) {
+      // Copy childNodes array
+      $childNodes = array();
+      foreach ($node->childNodes as $childNode) {
+        $childNodes[] = $childNode;
+      }
+
+      // Browse with the copy (recursive call)
+      foreach ($childNodes as $childNode) {
+        $this->purgeEmptyElementsNode($childNode);
+      }
+    }
+    // Remove if empty
+    if (!$node->hasChildNodes() && !$node->hasAttributes() && $node->nodeValue === "") {
+      $node->parentNode->removeChild($node);
+    }
+  }
+
 }

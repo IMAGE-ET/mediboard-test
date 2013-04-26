@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RetrieveValueSetResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:ihe:iti:svs:2008 SVS.xsd" xmlns="urn:ihe:iti:svs:2008">
+    <ValueSet id="1.2.250.1.213.1.1.4.252" displayName="CSE_ActivProf" version="20100802">
+        <ConceptList>
+            <Concept code="XX-MCH152" displayName="Actif" codeSystem="1.2.250.1.213.1.1.4.14"> </Concept>
+            <Concept code="XX-MCH153" displayName="Retraité" codeSystem="1.2.250.1.213.1.1.4.14"> </Concept>
+            <Concept code="XX-MCH154" displayName="Au foyer" codeSystem="1.2.250.1.213.1.1.4.14"> </Concept>
+            <Concept code="XX-MCH155" displayName="Congé parental (mère)" codeSystem="1.2.250.1.213.1.1.4.14"> </Concept>
+            <Concept code="XX-MCH156" displayName="Congé parental (père)" codeSystem="1.2.250.1.213.1.1.4.14"> </Concept>
+            <Concept code="XX-MCH157" displayName="Chômeur" codeSystem="1.2.250.1.213.1.1.4.14"> </Concept>
+            <Concept code="XX-MCH158" displayName="Elève, étudiant ou en formation" codeSystem="1.2.250.1.213.1.1.4.14"> </Concept>
+            <Concept code="XX-MCH131" displayName="Activité professionnelle : inactif autre" codeSystem="1.2.250.1.213.1.1.4.14"> </Concept>
+        </ConceptList>
+    </ValueSet>
+</RetrieveValueSetResponse>

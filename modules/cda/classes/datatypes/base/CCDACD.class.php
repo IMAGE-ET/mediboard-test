@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * A concept descriptor represents any kind of concept usually
  * by giving a code defined in a code system.  A concept
@@ -35,14 +35,14 @@ class CCDACD extends CCDAANY {
    * specificity of the primary code.
    * @var CCDACR
    */
-  var $qualifier = array();
+  public $qualifier = array();
 
   /**
    * A set of other concept descriptors that translate
    * this concept descriptor into other code systems.
    * @var CCDACD
    */
-  var $translation = array();
+  public $translation = array();
 
   /**
    * The plain code symbol defined by the code system.
@@ -154,56 +154,86 @@ class CCDACD extends CCDAANY {
   /**
    * Setter Code
    *
-   * @param \CCDA_base_cs $code CCDA_base_cs
+   * @param String $code String
    *
    * @return void
    */
   public function setCode($code) {
-    $this->code = $code;
+    if (!$code) {
+      $this->code = null;
+      return;
+    }
+    $cod = new CCDA_base_cs();
+    $cod->setData($code);
+    $this->code = $cod;
   }
 
   /**
    * Setter CodeSystem
    *
-   * @param \CCDA_base_uid $codeSystem CCDA_base_uid
+   * @param String $codeSystem String
    *
    * @return void
    */
   public function setCodeSystem($codeSystem) {
-    $this->codeSystem = $codeSystem;
+    if (!$codeSystem) {
+      $this->codeSystem = null;
+      return;
+    }
+    $codeSys = new CCDA_base_uid();
+    $codeSys->setData($codeSystem);
+    $this->codeSystem = $codeSys;
   }
 
   /**
    * Setter codeSystemName
    *
-   * @param \CCDA_base_st $codeSystemName CCDA_base_st
+   * @param String $codeSystemName String
    *
    * @return void
    */
   public function setCodeSystemName($codeSystemName) {
-    $this->codeSystemName = $codeSystemName;
+    if (!$codeSystemName) {
+      $this->codeSystemName = null;
+      return;
+    }
+    $codeSysN = new CCDA_base_st();
+    $codeSysN->setData($codeSystemName);
+    $this->codeSystemName = $codeSysN;
   }
 
   /**
    * Setter codeSystemVersion
    *
-   * @param \CCDA_base_st $codeSystemVersion CCDA_base_st
+   * @param String $codeSystemVersion String
    *
    * @return void
    */
   public function setCodeSystemVersion($codeSystemVersion) {
-    $this->codeSystemVersion = $codeSystemVersion;
+    if (!$codeSystemVersion) {
+      $this->codeSystemVersion = null;
+      return;
+    }
+    $codeSysV = new CCDA_base_st();
+    $codeSysV->setData($codeSystemVersion);
+    $this->codeSystemVersion = $codeSysV;
   }
 
   /**
    * Setter displayName
    *
-   * @param \CCDA_base_st $displayName CCDA_base_st
+   * @param String $displayName String
    *
    * @return void
    */
   public function setDisplayName($displayName) {
-    $this->displayName = $displayName;
+    if (!$displayName) {
+      $this->displayName = null;
+      return;
+    }
+    $diplay = new CCDA_base_st();
+    $diplay->setData($displayName);
+    $this->displayName = $diplay;
   }
 
   /**
@@ -244,7 +274,7 @@ class CCDACD extends CCDAANY {
    *
    * @return void
    */
-  public function razListTranslation() {
+  public function resetListTranslation() {
     $this->translation = array();
   }
 
@@ -253,15 +283,15 @@ class CCDACD extends CCDAANY {
    *
    * @return void
    */
-  public function razListQualifier() {
+  public function resetListQualifier() {
     $this->qualifier = array();
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["originalText"] = "CCDAED xml|element max|1";
@@ -289,9 +319,8 @@ class CCDACD extends CCDAANY {
     /**
      * Test avec code incorrecte
      */
-    $codeTest = new CCDA_base_cs();
-    $codeTest->setData(" ");
-    $this->setCode($codeTest);
+
+    $this->setCode(" ");
 
     $tabTest[] = $this->sample("Test avec un code incorrecte", "Document invalide");
 
@@ -300,8 +329,8 @@ class CCDACD extends CCDAANY {
     /**
      * Test avec code correct
      */
-    $codeTest->setData("TEST");
-    $this->setCode($codeTest);
+
+    $this->setCode("TEST");
 
     $tabTest[] = $this->sample("Test avec un code correct", "Document valide");
 
@@ -311,9 +340,7 @@ class CCDACD extends CCDAANY {
      * Test avec codeSystem incorrecte
      */
 
-    $codeSystemTest = new CCDA_base_uid();
-    $codeSystemTest->setData("*");
-    $this->setCodeSystem($codeSystemTest);
+    $this->setCodeSystem("*");
 
     $tabTest[] = $this->sample("Test avec un codeSystem incorrecte", "Document invalide");
 
@@ -323,8 +350,7 @@ class CCDACD extends CCDAANY {
      * Test avec codeSystem correct
      */
 
-    $codeSystemTest->setData("HL7");
-    $this->setCodeSystem($codeSystemTest);
+    $this->setCodeSystem("HL7");
 
     $tabTest[] = $this->sample("Test avec un codeSystem correct", "Document valide");
 
@@ -333,11 +359,10 @@ class CCDACD extends CCDAANY {
     /**
      * Test avec codeSystemName incorrecte
      */
-    $codeSystemNameTest = new CCDA_base_st();
-    $codeSystemNameTest->setData("");
-    $this->setCodeSystemName($codeSystemNameTest);
 
-    $tabTest[] = $this->sample("Test avec un codeSystemName incorrecte", "Document invalide");
+    $this->setCodeSystemName("");
+
+    $tabTest[] = $this->sample("Test avec un codeSystemName incorrecte, null par défaut", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -345,9 +370,7 @@ class CCDACD extends CCDAANY {
      * Test avec codeSystemName correct
      */
 
-
-    $codeSystemNameTest->setData("test");
-    $this->setCodeSystemName($codeSystemNameTest);
+    $this->setCodeSystemName("test");
 
     $tabTest[] = $this->sample("Test avec un codeSystemName correct", "Document valide");
 
@@ -356,11 +379,10 @@ class CCDACD extends CCDAANY {
     /**
      * Test avec codeSystemVersion incorrecte
      */
-    $codeSystemVersionTest = new CCDA_base_st();
-    $codeSystemVersionTest->setData("");
-    $this->setCodeSystemVersion($codeSystemVersionTest);
 
-    $tabTest[] = $this->sample("Test avec un codeSystemVersion incorrecte", "Document invalide");
+    $this->setCodeSystemVersion("");
+
+    $tabTest[] = $this->sample("Test avec un codeSystemVersion incorrecte, null par défaut", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -368,8 +390,7 @@ class CCDACD extends CCDAANY {
      * Test avec codeSystemVersion correct
      */
 
-    $codeSystemVersionTest->setData("test");
-    $this->setCodeSystemVersion($codeSystemVersionTest);
+    $this->setCodeSystemVersion("test");
 
     $tabTest[] = $this->sample("Test avec un codeSystemVersion correct", "Document valide");
 
@@ -379,11 +400,9 @@ class CCDACD extends CCDAANY {
      * Test avec displayName incorrecte
      */
 
-    $displayNameTest = new CCDA_base_st();
-    $displayNameTest->setData("");
-    $this->setDisplayName($displayNameTest);
+    $this->setDisplayName("");
 
-    $tabTest[] = $this->sample("Test avec un displayName incorrecte", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un displayName incorrecte, null par défaut", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -391,8 +410,7 @@ class CCDACD extends CCDAANY {
      * Test avec displayName correct
      */
 
-    $displayNameTest->setData("test");
-    $this->setDisplayName($displayNameTest);
+    $this->setDisplayName("test");
 
     $tabTest[] = $this->sample("Test avec un displayName correct", "Document valide");
 
@@ -427,9 +445,7 @@ class CCDACD extends CCDAANY {
      */
 
     $cr = new CCDACR();
-    $bn = new CCDA_base_bn();
-    $bn->setData("TESTTEST");
-    $cr->setInverted($bn);
+    $cr->setInverted("TESTTEST");
     $this->setQualifier($cr);
 
     $tabTest[] = $this->sample("Test avec un qualifier incorrecte", "Document invalide");
@@ -440,8 +456,7 @@ class CCDACD extends CCDAANY {
      * Test avec un qualifier correct
      */
 
-    $bn->setData("true");
-    $cr->setInverted($bn);
+    $cr->setInverted("true");
     $this->setQualifier($cr);
 
     $tabTest[] = $this->sample("Test avec un qualifier correcte", "Document valide");
@@ -453,9 +468,7 @@ class CCDACD extends CCDAANY {
      */
 
     $cr2 = new CCDACR();
-    $bn2 = new CCDA_base_bn();
-    $bn2->setData("true");
-    $cr2->setInverted($bn2);
+    $cr2->setInverted("true");
     $this->setQualifier($cr2);
 
     $tabTest[] = $this->sample("Test avec deux qualifier correcte", "Document valide");
@@ -467,9 +480,7 @@ class CCDACD extends CCDAANY {
      */
 
     $ed = new CCDAED();
-    $language = new CCDA_base_cs();
-    $language->setData(" ");
-    $ed->setLanguage($language);
+    $ed->setLanguage(" ");
     $this->setOriginalText($ed);
 
     $tabTest[] = $this->sample("Test avec un originalText incorrecte", "Document invalide");
@@ -480,8 +491,7 @@ class CCDACD extends CCDAANY {
      * Test avec un originalText correct
      */
 
-    $language->setData("TEST");
-    $ed->setLanguage($language);
+    $ed->setLanguage("TEST");
     $this->setOriginalText($ed);
 
     $tabTest[] = $this->sample("Test avec un originalText correcte", "Document valide");

@@ -19,17 +19,31 @@ class CCDAEIVL_event extends CCDACE {
   private $name = "EIVL.event";
 
   /**
+   * Setter Code
+   *
+   * @param String $code String
+   *
+   * @return void
+   */
+  public function setCode($code) {
+    if (!$code) {
+      $this->code = null;
+      return;
+    }
+    $cod = new CCDATimingEvent();
+    $cod->setData($code);
+    $this->code = $cod;
+  }
+
+  /**
    * Fixe les données
    */
   function __construct() {
-    $codeSystemTest = new CCDA_base_uid();
-    $codeSystemTest->setData("2.16.840.1.113883.5.139");
-    $this->setCodeSystem($codeSystemTest);
 
-    $codeSystemNameTest = new CCDA_base_st();
-    $codeSystemNameTest->setData("TimingEvent");
-    $this->setCodeSystemName($codeSystemNameTest);
+    $this->setCodeSystem("2.16.840.1.113883.5.139");
+    $this->setCodeSystemName("TimingEvent");
   }
+
   /**
    * retourne le nom du type CDA
    *
@@ -47,8 +61,8 @@ class CCDAEIVL_event extends CCDACE {
   function getProps() {
     $props = parent::getProps();
     $props["code"] = "CCDATimigEvent xml|attribute";
-    $props["codeSystem"] = "CCDA_base_uid xml|attribute fixed|2.16.840.1.113883.5.139";
-    $props["codeSystemName"] = "CCDA_base_st xml|attribute fixed|TimingEvent";
+    $props["codeSystem"] = "CCDA_base_uid xml|attribute default|2.16.840.1.113883.5.139";
+    $props["codeSystemName"] = "CCDA_base_st xml|attribute default|TimingEvent";
     return $props;
   }
 
@@ -63,9 +77,8 @@ class CCDAEIVL_event extends CCDACE {
     /**
      * Test avec code incorrecte
      */
-    $codeTest = new CCDATimingEvent();
-    $codeTest->setData(" ");
-    $this->setCode($codeTest);
+
+    $this->setCode(" ");
 
     $tabTest[] = $this->sample("Test avec un code incorrecte", "Document invalide");
 
@@ -74,8 +87,8 @@ class CCDAEIVL_event extends CCDACE {
     /**
      * Test avec code correct
      */
-    $codeTest->setData("ICM");
-    $this->setCode($codeTest);
+
+    $this->setCode("ICM");
 
     $tabTest[] = $this->sample("Test avec un code correct", "Document valide");
 

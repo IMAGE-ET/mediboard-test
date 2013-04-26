@@ -15,6 +15,19 @@
 class CCDAset_EntityNameUse extends CCDA_Datatype_Set {
 
   /**
+   * ADD a class
+   *
+   * @param String $data String
+   *
+   * @return void
+   */
+  function addData($data) {
+    $ent = new CCDAEntityNameUse();
+    $ent->setData($data);
+    $this->listData[] = $ent;
+  }
+
+  /**
    * Get the properties of our class as strings
    *
    * @return array
@@ -36,9 +49,8 @@ class CCDAset_EntityNameUse extends CCDA_Datatype_Set {
     /**
      * Test avec un EntityNameUse incorrecte
      */
-    $post = new CCDAEntityNameUse();
-    $post->setData("TESTTEST");
-    $this->addData($post);
+
+    $this->addData("TESTTEST");
     $tabTest[] = $this->sample("Test avec un EntityNameUse incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -47,9 +59,8 @@ class CCDAset_EntityNameUse extends CCDA_Datatype_Set {
      * Test avec un EntityNameUse correcte
      */
 
-    $post->setData("C");
-    $this->razlistData();
-    $this->addData($post);
+    $this->resetListData();
+    $this->addData("C");
     $tabTest[] = $this->sample("Test avec un EntityNameUse correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -57,9 +68,7 @@ class CCDAset_EntityNameUse extends CCDA_Datatype_Set {
      * Test avec deux EntityNameUse correcte
      */
 
-    $post2 = new CCDAEntityNameUse();
-    $post2->setData("I");
-    $this->addData($post2);
+    $this->addData("I");
     $tabTest[] = $this->sample("Test avec deux EntityNameUse correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

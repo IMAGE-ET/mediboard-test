@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RetrieveValueSetResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="urn:ihe:iti:svs:2008 SVS.xsd"  xmlns="urn:ihe:iti:svs:2008">
+    <ValueSet id="1.2.250.1.213.1.1.5.3" displayName="healthcareFacilityTypeCode" version="20101116">
+    <ConceptList>
+        <Concept code="SA01" displayName="Etablissement Public de santé"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA02" displayName="Hôpital militaire du Service de Santé des Armées"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA03" displayName="Etablissement Privé PSPH" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA04" displayName="Etablissement Privé Non PSPH" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA05" displayName="Centre de santé" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA06" displayName="Autre structure du Service de Santé des Armées"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA07" displayName="Cabinet individuel" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA08" displayName="Cabinet de groupe" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA09" displayName="Exercice en Société" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA10" displayName="Transport sanitaire" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA11" displayName="Entreprise d'intérim" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA12" displayName="Etablissement de Soins et Prévention"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA13" displayName="Prévention et Soins en Entreprise"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA14" displayName="Etablissement scolaire ou universitaire"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA15" displayName="P.M.I. Planification familiale"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA16" displayName="Etablissement pour Handicapés"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA17" displayName="Etablissement Personnes Agées"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA18" displayName="Etablissement Aide à la famille"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA19" displayName="Etablissement d'enseignement" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA20" displayName="Etablissement Protection Enfance"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA21" displayName="Etablissement Hébergt Réadaptation"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA22" displayName="Recherche" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA23" displayName="Assurance Privée" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA24" displayName="Organisme de Sécurité Sociale"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA25" displayName="Laboratoire de Biologie Médicale"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA26" displayName="Ministère ou Service déconcentré"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA27" displayName="Collectivité Territoriale" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA28" displayName="Association ou organisme humanitaire"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA29" displayName="Laboratoire d'Analyses et de Biologie Médicale"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA30" displayName="Autre établissement Sanitaire"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA31" displayName="Répart. Distrib. de Médicaments et Dispositifs Médicaux"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA32" displayName="Fab. Exploit. Import de Médicaments et Dispositifs Médicaux"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA33" displayName="Pharmacie d'officine" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA34" displayName="Centre de dialyse" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA35" displayName="Para-pharmacie" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA36" displayName="Centre anti-cancer" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA37" displayName="Centre de transfusion sanguine"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA38" displayName="Pharmacie minière" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA39" displayName="Pharmacie mutualiste" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA40" displayName="Secteur privé PH temps plein" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA41" displayName="Autre établissement du domaine social"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA42" displayName="Appareillage médical" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA43" displayName="Secteur non défini" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA44" displayName="Recrutement et gestion RH" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA45" displayName="Communication/Marketing/Consulting/Media"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA46"
+            displayName="Répart. Distrib. Fab. Exploit. Import de Médicaments et Dispositifs Médicaux"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA47" displayName="Incendie et secours" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA48"
+            displayName="Entreprise industrielle et tertiaire hors industrie pharmaceutique"
+            codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA49" displayName="Entité d'un TOM" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA50" displayName="Structure d'urgence, hors établissement hospitalier" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA51" displayName="Réseau de santé" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA52" displayName="Maison de santé, Pôle de santé" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA53" displayName="Siège administratif d'un établissement de santé" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="SA54" displayName="Organisme de dépistage et de prévention" codeSystem="1.2.250.1.71.4.2.4"/>
+        <Concept code="EXP_PATIENT" displayName="Expression personnelle du patient"
+            codeSystem="1.2.250.1.213.1.1.4.6"/>
+    </ConceptList>
+    </ValueSet>
+</RetrieveValueSetResponse>

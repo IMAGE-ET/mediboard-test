@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * CCDASXCM_TS class
  */
@@ -26,12 +26,18 @@ class CCDASXCM_TS extends CCDATS {
   /**
    * Setter operator
    *
-   * @param \CCDASetOperator $operator CCDASetOperator
+   * @param String $operator String
    *
    * @return void
    */
   public function setOperator($operator) {
-    $this->operator = $operator;
+    if (!$operator) {
+      $this->operator = null;
+      return;
+    }
+    $setOP = new CCDASetOperator();
+    $setOP->setData($operator);
+    $this->operator = $setOP;
   }
 
   /**
@@ -56,10 +62,10 @@ class CCDASXCM_TS extends CCDATS {
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["operator"] = "CCDASetOperator xml|attribute default|I";
@@ -78,9 +84,7 @@ class CCDASXCM_TS extends CCDATS {
      * Test avec un operator incorrecte
      */
 
-    $op = new CCDASetOperator();
-    $op->setData("TESTTEST");
-    $this->setOperator($op);
+    $this->setOperator("TESTTEST");
     $tabTest[] = $this->sample("Test avec un operator correcte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -89,8 +93,7 @@ class CCDASXCM_TS extends CCDATS {
      * Test avec un operator correcte
      */
 
-    $op->setData("H");
-    $this->setOperator($op);
+    $this->setOperator("H");
     $tabTest[] = $this->sample("Test avec un operator correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

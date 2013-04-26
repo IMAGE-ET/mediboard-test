@@ -42,12 +42,16 @@ class CCDASLIST_TS extends CCDAANY {
   /**
    * Setter digits
    *
-   * @param \CCDAlist_int $digits \CCDAlist_int
+   * @param String[] $digits String[]
    *
    * @return void
    */
   public function setDigits($digits) {
-    $this->digits = $digits;
+    $listInt = new CCDAlist_int();
+    foreach ($digits as $_digits) {
+      $listInt->addData($_digits);
+    }
+    $this->digits = $listInt;
   }
 
   /**
@@ -145,9 +149,7 @@ class CCDASLIST_TS extends CCDAANY {
      */
 
     $ori= new CCDATS();
-    $ts = new CCDA_base_ts();
-    $ts->setData("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
-    $ori->setValue($ts);
+    $ori->setValue("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
     $this->setOrigin($ori);
     $tabTest[] = $this->sample("Test avec une origin correcte, séquence incorrecte", "Document invalide");
 
@@ -158,9 +160,7 @@ class CCDASLIST_TS extends CCDAANY {
      */
 
     $sca= new CCDAPQ();
-    $cs = new CCDA_base_cs();
-    $cs->setData("test");
-    $sca->setUnit($cs);
+    $sca->setUnit("test");
     $this->setScale($sca);
     $tabTest[] = $this->sample("Test avec un scale correcte, séquence incorrecte", "Document invalide");
 
@@ -170,11 +170,7 @@ class CCDASLIST_TS extends CCDAANY {
      * Test avec un digits correcte
      */
 
-    $dig= new CCDAlist_int();
-    $int = new CCDA_base_int();
-    $int->setData("10");
-    $dig->addData($int);
-    $this->setDigits($dig);
+    $this->setDigits(array("10"));
     $tabTest[] = $this->sample("Test avec un digts correcte, séquence correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

@@ -10,32 +10,32 @@
 /**
  * The CMedecin Class
  */
-class CMedecin extends CMbObject {
+class CMedecin extends CPerson {
   // DB Table key
-  var $medecin_id = null;
+  public $medecin_id;
 
   // DB Fields
-  var $nom                = null;
-  var $prenom             = null;
-  var $jeunefille         = null;
-  var $adresse            = null;
-  var $ville              = null;
-  var $cp                 = null;
-  var $tel                = null;
-  var $fax                = null;
-  var $portable           = null;
-  var $email              = null;
-  var $disciplines        = null;
-  var $orientations       = null;
-  var $complementaires    = null;
-  var $type               = null;
-  var $adeli              = null;
-  var $rpps               = null;
-  var $email_apicrypt     = null;
-  var $last_ldap_checkout = null;
+  public $nom;
+  public $prenom;
+  public $jeunefille;
+  public $adresse;
+  public $ville;
+  public $cp;
+  public $tel;
+  public $fax;
+  public $portable;
+  public $email;
+  public $disciplines;
+  public $orientations;
+  public $complementaires;
+  public $type;
+  public $adeli;
+  public $rpps;
+  public $email_apicrypt;
+  public $last_ldap_checkout;
 
   // Object References
-  var $_ref_patients = null;
+  public $_ref_patients;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -89,9 +89,12 @@ class CMedecin extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
+
     $this->nom = CMbString::upper($this->nom);
     $this->prenom = CMbString::capitalize(CMbString::lower($this->prenom));
-    
+
+    $this->mapPerson();
+
     if ($this->type == 'medecin') {
       $this->_view = "Dr $this->nom $this->prenom";
     }
@@ -149,5 +152,22 @@ class CMedecin extends CMbObject {
     $vcard->addEmail($this->email);
     $vcard->addAddress($this->adresse, $this->ville, $this->cp, $this->pays, 'WORK');
   }
+
+  /**
+   * Map the class variable with CPerson variable
+   *
+   * @return void
+   */
+  function mapPerson() {
+    $this->_pcity              = $this->ville;
+    $this->_ppostalCode        = $this->cp;
+    $this->_pstreetAddress     = $this->adresse;
+    $this->_pphoneNumber       = $this->tel;
+    $this->_pfaxNumber         = $this->fax;
+    $this->_pmobilePhoneNumber = $this->portable;
+    $this->_pemail             = $this->email;
+    $this->_pfirstName         = $this->prenom;
+    $this->_plastName          = $this->nom;
+    $this->_pmaidenName        = $this->jeunefille;
+  }
 }
-?>

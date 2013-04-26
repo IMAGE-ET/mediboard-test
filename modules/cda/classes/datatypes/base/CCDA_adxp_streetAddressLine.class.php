@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * CCDA_adxp_streetAddressLine class
  */
@@ -16,14 +16,6 @@ class CCDA_adxp_streetAddressLine extends CCDAADXP {
 
    private $XMLName = "adxp.streetAddressLine";
 
-  /**
-   * Fixe la donnée
-   */
-  function __construct() {
-    $part = new CCDAAddressPartType();
-    $part->setData("SAL");
-    $this->setPartType($part);
-  }
   /**
    * Return the name of the class
    *
@@ -34,10 +26,10 @@ class CCDA_adxp_streetAddressLine extends CCDAADXP {
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["partType"] = "CCDAAddressPartType xml|attribute fixe|SAL";

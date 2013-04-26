@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * A quantity specifying a point on the axis of natural time.
  * A point in time is most often represented as a calendar
@@ -17,10 +17,27 @@
 class CCDATS extends CCDAQTY{
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Setter value
+   *
+   * @param String $value String
+   *
+   * @return void
+   */
+  public function setValue($value) {
+    if (!$value) {
+      $this->value = null;
+      return;
+    }
+    $ts = new CCDA_base_ts();
+    $ts->setData($value);
+    $this->value = $ts;
+  }
+
+  /**
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["value"] = "CCDA_base_ts xml|attribute";
@@ -39,9 +56,7 @@ class CCDATS extends CCDAQTY{
      * Test avec une valeur incorrecte
      */
 
-    $ts = new CCDA_base_ts();
-    $ts->setData("TESTTEST");
-    $this->setValue($ts);
+    $this->setValue("TESTTEST");
     $tabTest[] = $this->sample("Test avec une valeur correcte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -50,8 +65,7 @@ class CCDATS extends CCDAQTY{
      * Test avec une valeur correcte
      */
 
-    $ts->setData("24141331462095.812975314545697850652375076363185459409261232419230495159675586");
-    $this->setValue($ts);
+    $this->setValue("24141331462095.812975314545697850652375076363185459409261232419230495159675586");
     $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

@@ -12,7 +12,7 @@
 /**
  *  NOTE: the user_type field in the users table must be changed to a TINYINT
  */
-class CUser extends CMbObject {
+class CUser extends CPerson {
   // DB key
   public $user_id;
 
@@ -344,6 +344,8 @@ class CUser extends CMbObject {
     $this->_view           = "$user_last_name $user_first_name";
     $this->_login_locked   = $this->user_login_errors >= CAppUI::conf('admin CUser max_login_attempts');
     $this->_user_type_view = CValue::read(self::$types, $this->user_type);
+
+    $this->mapPerson();
   }
 
   function check() {
@@ -611,4 +613,23 @@ class CUser extends CMbObject {
 
     return $new_user->_id != null;
   }
+
+  /**
+   * Map the class variable with CPerson variable
+   *
+   * @return void
+   */
+  function mapPerson() {
+    $this->_pcity              = $this->user_city;
+    $this->_ppostalCode        = $this->user_zip;
+    $this->_pstreetAddress     = $this->user_address1;
+    $this->_pcountry           = $this->user_country;
+    $this->_pphoneNumber       = $this->user_phone;
+    $this->_pmobilePhoneNumber = $this->user_mobile;
+    $this->_pemail             = $this->user_email;
+    $this->_pfirstName         = $this->user_first_name;
+    $this->_plastName          = $this->user_last_name;
+    $this->_pbirthDate         = $this->user_birthday;
+  }
+
 }

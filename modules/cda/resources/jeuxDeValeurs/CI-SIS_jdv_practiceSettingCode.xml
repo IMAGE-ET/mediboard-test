@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RetrieveValueSetResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="urn:ihe:iti:svs:2008 SVS.xsd"  xmlns="urn:ihe:iti:svs:2008">
+    <ValueSet id="1.2.250.1.213.1.1.5.4" displayName="practiceSettingCode" version="20101116">
+    <ConceptList>
+        <Concept code="AMBULATOIRE" displayName="Ambulatoire" codeSystem="1.2.250.1.213.1.1.4.9"/>
+        <Concept code="DEPISTAGE" displayName="Dépistage" codeSystem="1.2.250.1.213.1.1.4.9"/>
+        <Concept code="MAD" displayName="Maintien à domicile" codeSystem="1.2.250.1.213.1.1.4.9"/>
+        <Concept code="SAD" displayName="Soins à domicile" codeSystem="1.2.250.1.213.1.1.4.9"/>
+        <Concept code="HAD" displayName="Hospitalisation à domicile" codeSystem="1.2.250.1.213.1.1.4.9"/>
+        <Concept code="ETABLISSEMENT" displayName="Etablissement de santé" codeSystem="1.2.250.1.213.1.1.4.9"/>
+        <Concept code="PALLIATIF" displayName="Soins palliatifs" codeSystem="1.2.250.1.213.1.1.4.9"/>
+        <Concept code="SAMU_SMUR" displayName="SAMU/SMUR" codeSystem="1.2.250.1.213.1.1.4.9"/>
+        <Concept code="EXP_PATIENT" displayName="Expression personnelle du patient" codeSystem="1.2.250.1.213.1.1.4.6"/>
+    </ConceptList>
+    </ValueSet>
+</RetrieveValueSetResponse>

@@ -40,12 +40,18 @@ class CCDASXCM_PQ extends CCDAPQ {
   /**
    * Setter Operator
    *
-   * @param \CCDASetOperator $operator \CCDASetOperator
+   * @param String $operator String
    *
    * @return void
    */
   public function setOperator($operator) {
-    $this->operator = $operator;
+    if (!$operator) {
+      $this->operator = null;
+      return;
+    }
+    $op = new CCDASetOperator();
+    $op->setData($operator);
+    $this->operator = $op;
   }
 
   /**
@@ -80,9 +86,7 @@ class CCDASXCM_PQ extends CCDAPQ {
      * Test avec un operator incorrecte
      */
 
-    $op = new CCDASetOperator();
-    $op->setData("TESTTEST");
-    $this->setOperator($op);
+    $this->setOperator("TESTTEST");
     $tabTest[] = $this->sample("Test avec un operator incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -91,8 +95,7 @@ class CCDASXCM_PQ extends CCDAPQ {
      * Test avec un operator correcte
      */
 
-    $op->setData("I");
-    $this->setOperator($op);
+    $this->setOperator("I");
     $tabTest[] = $this->sample("Test avec un operator correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

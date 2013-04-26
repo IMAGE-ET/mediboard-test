@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * A monetary amount is a quantity expressing the amount of
  * money in some currency. Currencies are the units in which
@@ -31,12 +31,18 @@ class CCDAMO extends CCDAQTY {
   /**
    * Setter currency
    *
-   * @param \CCDA_base_cs $currency \CCDA_base_cs
+   * @param String $currency String
    *
    * @return void
    */
   public function setCurrency($currency) {
-    $this->currency = $currency;
+    if (!$currency) {
+      $this->currency = null;
+      return;
+    }
+    $cs = new CCDA_base_cs();
+    $cs->setData($currency);
+    $this->currency = $cs;
   }
 
   /**
@@ -49,10 +55,27 @@ class CCDAMO extends CCDAQTY {
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Setter value
+   *
+   * @param String $value String
+   *
+   * @return void
+   */
+  public function setValue($value) {
+    if (!$value) {
+      $this->value = null;
+      return;
+    }
+    $real = new CCDA_base_real();
+    $real->setData($value);
+    $this->value = $real;
+  }
+
+  /**
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["value"] = "CCDA_base_real xml|attribute";
@@ -72,9 +95,7 @@ class CCDAMO extends CCDAQTY {
      * Test avec une valeur incorrecte
      */
 
-    $real = new CCDA_base_real();
-    $real->setData("test");
-    $this->setValue($real);
+    $this->setValue("test");
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -83,8 +104,7 @@ class CCDAMO extends CCDAQTY {
      * Test avec une valeur correcte
      */
 
-    $real->setData("10.25");
-    $this->setValue($real);
+    $this->setValue("10.25");
     $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -93,9 +113,7 @@ class CCDAMO extends CCDAQTY {
      * Test avec un currency incorrecte
      */
 
-    $cs = new CCDA_base_cs();
-    $cs->setData(" ");
-    $this->setCurrency($cs);
+    $this->setCurrency(" ");
     $tabTest[] = $this->sample("Test avec un currency incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -104,8 +122,7 @@ class CCDAMO extends CCDAQTY {
      * Test avec un currency correcte
      */
 
-    $cs->setData("test");
-    $this->setCurrency($cs);
+    $this->setCurrency("test");
     $tabTest[] = $this->sample("Test avec un currency correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

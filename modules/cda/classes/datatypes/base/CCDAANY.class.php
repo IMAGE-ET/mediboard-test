@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * Defines the basic properties of every data value. This
  * is an abstract type, meaning that no value can be just
@@ -28,12 +28,18 @@ class CCDAANY extends CCDA_Datatype{
   /**
    * Setter nullFlavor
    *
-   * @param CCDANullFlavor $nullFlavor CCDANullFlavor
+   * @param String $nullFlavor String
    *
    * @return void
    */
   function setNullFlavor($nullFlavor) {
-    $this->nullFlavor = $nullFlavor;
+    if (!$nullFlavor) {
+      $this->nullFlavor = null;
+      return;
+    }
+    $null = new CCDANullFlavor();
+    $null->setData($nullFlavor);
+    $this->nullFlavor = $null;
   }
 
   /**
@@ -77,9 +83,8 @@ class CCDAANY extends CCDA_Datatype{
     /**
      * Test avec un nullFlavor incorrecte
      */
-    $nullFlavor = new CCDANullFlavor();
-    $nullFlavor->setData("TESTEST");
-    $this->setNullFlavor($nullFlavor);
+
+    $this->setNullFlavor("TESTEST");
 
     $tabTest[] = $this->sample("Test avec un nullFlavor incorrecte", "Document invalide");
 
@@ -92,8 +97,8 @@ class CCDAANY extends CCDA_Datatype{
     /**
      * Test avec un nullFlavor correct
      */
-    $nullFlavor->setData("NP");
-    $this->setNullFlavor($nullFlavor);
+
+    $this->setNullFlavor("NP");
 
     $tabTest[] = $this->sample("Test avec un nullFlavor correct", "Document valide");
 

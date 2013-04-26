@@ -12,7 +12,7 @@
 /**
  * The CPatient Class
  */
-class CPatient extends CMbObject {
+class CPatient extends CPerson {
   static $dossier_cabinet_prefix = array (
     "dPcabinet" => "?m=dPcabinet&tab=vw_dossier&patSel=",
     "dPpatients" => "?m=dPpatients&tab=vw_full_patients&patient_id="
@@ -666,6 +666,9 @@ class CPatient extends CMbObject {
     if ($this->csp) {
       $this->_csp_view = $this->getCSPName();
     }
+
+    $this->mapPerson();
+
   }
 
   /**
@@ -2012,7 +2015,7 @@ class CPatient extends CMbObject {
     return true;
   }
 
-  function calculINS_C($prenom=null, $naissance=null, $matricule=null) {
+  function calculINS_C($prenom = null, $naissance = null, $matricule = null) {
     // Fonction non implémentée avant php <= 5.1
     if (!function_exists("hash")) return;
 
@@ -2069,7 +2072,8 @@ class CPatient extends CMbObject {
     // check birthdate
     $birthdate = $naissance;
     if ($birthdate === null) {
-      $birthdate = CMbDT::transform($this->naissance, null, "%d/%m/%Y");
+      $birthdate = CMbDT::transform($this->naissance, null, "%y%m%d");
+      mbTrace($birthdate); exit();
     }
 
     if (!$birthdate) {
@@ -2115,7 +2119,7 @@ class CPatient extends CMbObject {
     }
 
     // Création de la graine
-    $seed = $norm.$birthdate.$code;
+    $seed = $norm.$birthdate.substr($matricule, 0, 13);
 
     // Hash de la graine
     $hash_seed = hash("sha256", $seed);
@@ -2177,5 +2181,24 @@ class CPatient extends CMbObject {
     if ($idex->tag == self::getTagIPP()) {
       return "IPP";
     }
+  }
+
+  /**
+   * Map the class variable with CPerson variable
+   *
+   * @return void
+   */
+  function mapPerson() {
+    $this->_pcity = $this->ville;
+    $this->_ppostalCode = $this->cp;
+    $this->_pstreetAddress = $this->adresse;
+    $this->_pcountry =  $this->pays;
+    $this->_pphoneNumber = $this->tel;
+    $this->_pmobilePhoneNumber = $this->tel2;
+    $this->_pemail = $this->email;
+    $this->_pfirstName = $this->prenom;
+    $this->_plastName = $this->nom;
+    $this->_pbirthDate = $this->naissance;
+    $this->_pmaidenName = $this->nom_jeune_fille;
   }
 }

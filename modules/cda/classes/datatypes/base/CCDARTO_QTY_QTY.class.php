@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * Description
  */
@@ -84,10 +84,10 @@ class CCDARTO_QTY_QTY extends CCDAQTY {
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["numerator"] = "CCDAQTY xml|element default|1 abstract";
@@ -116,9 +116,7 @@ class CCDARTO_QTY_QTY extends CCDAQTY {
     /*-------------------------------------------------------------------------------------*/
 
     $num = new CCDAINT();
-    $int = new CCDA_base_int();
-    $int->setData("10.25");
-    $num->setValue($int);
+    $num->setValue("10.25");
     $this->setNumerator($num);
     $tabTest[] = $this->sample("Test avec un numerator incorrecte", "Document invalide");
 
@@ -128,8 +126,7 @@ class CCDARTO_QTY_QTY extends CCDAQTY {
      * Test avec un numerator correcte
      */
 
-    $int->setData("10");
-    $num->setValue($int);
+    $num->setValue("10");
     $this->setNumerator($num);
     $tabTest[] = $this->sample("Test avec un numerator correcte, séquence incorrecte", "Document invalide");
 
@@ -140,9 +137,7 @@ class CCDARTO_QTY_QTY extends CCDAQTY {
      */
 
     $num = new CCDAINT();
-    $int = new CCDA_base_int();
-    $int->setData("10.25");
-    $num->setValue($int);
+    $num->setValue("10.25");
     $this->setDenominator($num);
     $tabTest[] = $this->sample("Test avec un denominator incorrecte", "Document invalide");
 
@@ -152,8 +147,7 @@ class CCDARTO_QTY_QTY extends CCDAQTY {
      * Test avec un denominator correcte
      */
 
-    $int->setData("15");
-    $num->setValue($int);
+    $num->setValue("15");
     $this->setDenominator($num);
     $tabTest[] = $this->sample("Test avec un denominator correcte", "Document valide");
 
@@ -164,9 +158,7 @@ class CCDARTO_QTY_QTY extends CCDAQTY {
      */
 
     $num = new CCDAREAL();
-    $real = new CCDA_base_real();
-    $real->setData("10.25");
-    $num->setValue($real);
+    $num->setValue("10.25");
     $this->setDenominator($num);
     $tabTest[] = $this->sample("Test avec un denominator correcte en real", "Document valide");
 

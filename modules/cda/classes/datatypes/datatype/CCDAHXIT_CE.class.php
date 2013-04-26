@@ -81,9 +81,7 @@ class CCDAHXIT_CE extends CCDACE {
 
     $ivl = new CCDAIVL_TS();
     $ivbx = new CCDAIVXB_TS();
-    $bl = new CCDA_base_bl();
-    $bl->setData("TESTTESt");
-    $ivbx->setInclusive($bl);
+    $ivbx->setInclusive("TESTTESt");
     $ivl->setLow($ivbx);
     $this->setValidTime($ivl);
     $tabTest[] = $this->sample("Test avec un validTime incorrecte", "Document invalide");
@@ -94,8 +92,7 @@ class CCDAHXIT_CE extends CCDACE {
      * Test avec une quantity correcte
      */
 
-    $bl->setData("true");
-    $ivbx->setInclusive($bl);
+    $ivbx->setInclusive("true");
     $ivl->setLow($ivbx);
     $this->setValidTime($ivl);
     $tabTest[] = $this->sample("Test avec un validTime correcte", "Document valide");

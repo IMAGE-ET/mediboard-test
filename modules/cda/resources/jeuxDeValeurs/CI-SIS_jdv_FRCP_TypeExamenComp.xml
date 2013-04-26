@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RetrieveValueSetResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:ihe:iti:svs:2008 SVS.xsd" xmlns="urn:ihe:iti:svs:2008">
+    <ValueSet id="1.2.250.1.213.1.1.4.2.281.14" displayName="RCP_TypeExamenComp" version="20120827">
+        <ConceptList>
+            <Concept code="RCP_042" displayName="Evaluation Oncogériatrique" codeSystem="1.2.250.1.213.1.1.4.2.281"/> 
+            <Concept code="RCP_050" displayName="Consultation génétique" codeSystem="1.2.250.1.213.1.1.4.2.281"/>
+            <Concept code="RCP_062" displayName="Autre examen/expertise complémentaire" codeSystem="1.2.250.1.213.1.1.4.2.281"/> 
+        </ConceptList>
+    </ValueSet>
+</RetrieveValueSetResponse>

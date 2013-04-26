@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * Coded data, consists of a code, display name, code system,
  * and original text. Used when a single code value must be sent.
@@ -42,13 +42,11 @@ class CCDACV extends CCDACE {
      * Test avec un translation correct avec valeur
      */
     $translation = new CCDACD();
-    $codeSystemNameTest = new CCDA_base_st();
-    $codeSystemNameTest->setData("test");
-    $translation->setCodeSystemName($codeSystemNameTest);
+    $translation->setCodeSystemName("test");
     $this->setTranslation($translation);
 
     $tabTest[] = $this->sample("Test avec une translation correct, interdit dans ce contexte", "Document invalide");
-    $this->razListTranslation();
+    $this->resetListTranslation();
     /*-------------------------------------------------------------------------------------*/
 
     return $tabTest;

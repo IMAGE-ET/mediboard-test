@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * A ST that optionally may have a code attached.
  * The text must always be present if a code is present. The
@@ -56,6 +56,7 @@ class CCDASC extends CCDAST {
    * @return CCDA_base_cs CCDA_base_cs code
    */
   public function getCode() {
+
     return $this->code;
   }
 
@@ -99,63 +100,93 @@ class CCDASC extends CCDAST {
   /**
    * Setter Code
    *
-   * @param \CCDA_base_cs $code CCDA_base_cs
+   * @param String $code String
    *
    * @return void
    */
   public function setCode($code) {
-    $this->code = $code;
+    if (!$code) {
+      $this->code = null;
+      return;
+    }
+    $cs = new CCDA_base_cs();
+    $cs->setData($code);
+    $this->code = $cs;
   }
 
   /**
    * Setter CodeSystem
    *
-   * @param \CCDA_base_uid $codeSystem CCDA_base_uid
+   * @param String $codeSystem String
    *
    * @return void
    */
   public function setCodeSystem($codeSystem) {
-    $this->codeSystem = $codeSystem;
+    if (!$codeSystem) {
+      $this->codeSystem = null;
+      return;
+    }
+    $uid = new CCDA_base_uid();
+    $uid->setData($codeSystem);
+    $this->codeSystem = $uid;
   }
 
   /**
    * Setter codeSystemName
    *
-   * @param \CCDA_base_st $codeSystemName CCDA_base_st
+   * @param String $codeSystemName String
    *
    * @return void
    */
   public function setCodeSystemName($codeSystemName) {
-    $this->codeSystemName = $codeSystemName;
+    if (!$codeSystemName) {
+      $this->codeSystemName = null;
+      return;
+    }
+    $st= new CCDA_base_st();
+    $st->setData($codeSystemName);
+    $this->codeSystemName = $st;
   }
 
   /**
    * Setter codeSystemVersion
    *
-   * @param \CCDA_base_st $codeSystemVersion CCDA_base_st
+   * @param String $codeSystemVersion String
    *
    * @return void
    */
   public function setCodeSystemVersion($codeSystemVersion) {
-    $this->codeSystemVersion = $codeSystemVersion;
+    if (!$codeSystemVersion) {
+      $this->codeSystemVersion = null;
+      return;
+    }
+    $st= new CCDA_base_st();
+    $st->setData($codeSystemVersion);
+    $this->codeSystemVersion = $st;
   }
 
   /**
    * Setter displayName
    *
-   * @param \CCDA_base_st $displayName CCDA_base_st
+   * @param String $displayName String
    *
    * @return void
    */
   public function setDisplayName($displayName) {
-    $this->displayName = $displayName;
+    if (!$displayName) {
+      $this->displayName = null;
+      return;
+    }
+    $st= new CCDA_base_st();
+    $st->setData($displayName);
+    $this->displayName = $st;
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["code"] = "CCDA_base_cs xml|attribute";
@@ -178,9 +209,8 @@ class CCDASC extends CCDAST {
     /**
      * Test avec code incorrecte
      */
-    $codeTest = new CCDA_base_cs();
-    $codeTest->setData(" ");
-    $this->setCode($codeTest);
+
+    $this->setCode(" ");
 
     $tabTest[] = $this->sample("Test avec un code incorrecte", "Document invalide");
 
@@ -189,8 +219,8 @@ class CCDASC extends CCDAST {
     /**
      * Test avec code correct
      */
-    $codeTest->setData("TEST");
-    $this->setCode($codeTest);
+
+    $this->setCode("TEST");
 
     $tabTest[] = $this->sample("Test avec un code correct", "Document valide");
 
@@ -200,9 +230,7 @@ class CCDASC extends CCDAST {
      * Test avec codeSystem incorrecte
      */
 
-    $codeSystemTest = new CCDA_base_uid();
-    $codeSystemTest->setData("*");
-    $this->setCodeSystem($codeSystemTest);
+    $this->setCodeSystem("*");
 
     $tabTest[] = $this->sample("Test avec un codeSystem incorrecte", "Document invalide");
 
@@ -212,8 +240,7 @@ class CCDASC extends CCDAST {
      * Test avec codeSystem correct
      */
 
-    $codeSystemTest->setData("HL7");
-    $this->setCodeSystem($codeSystemTest);
+    $this->setCodeSystem("HL7");
 
     $tabTest[] = $this->sample("Test avec un codeSystem correct", "Document valide");
 
@@ -222,11 +249,10 @@ class CCDASC extends CCDAST {
     /**
      * Test avec codeSystemName incorrecte
      */
-    $codeSystemNameTest = new CCDA_base_st();
-    $codeSystemNameTest->setData("");
-    $this->setCodeSystemName($codeSystemNameTest);
 
-    $tabTest[] = $this->sample("Test avec un codeSystemName incorrecte", "Document invalide");
+    $this->setCodeSystemName("");
+
+    $tabTest[] = $this->sample("Test avec un codeSystemName incorrecte, null par défaut", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -234,9 +260,7 @@ class CCDASC extends CCDAST {
      * Test avec codeSystemName correct
      */
 
-
-    $codeSystemNameTest->setData("test");
-    $this->setCodeSystemName($codeSystemNameTest);
+    $this->setCodeSystemName("test");
 
     $tabTest[] = $this->sample("Test avec un codeSystemName correct", "Document valide");
 
@@ -245,11 +269,10 @@ class CCDASC extends CCDAST {
     /**
      * Test avec codeSystemVersion incorrecte
      */
-    $codeSystemVersionTest = new CCDA_base_st();
-    $codeSystemVersionTest->setData("");
-    $this->setCodeSystemVersion($codeSystemVersionTest);
 
-    $tabTest[] = $this->sample("Test avec un codeSystemVersion incorrecte", "Document invalide");
+    $this->setCodeSystemVersion("");
+
+    $tabTest[] = $this->sample("Test avec un codeSystemVersion incorrecte, null par défaut", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -257,8 +280,7 @@ class CCDASC extends CCDAST {
      * Test avec codeSystemVersion correct
      */
 
-    $codeSystemVersionTest->setData("test");
-    $this->setCodeSystemVersion($codeSystemVersionTest);
+    $this->setCodeSystemVersion("test");
 
     $tabTest[] = $this->sample("Test avec un codeSystemVersion correct", "Document valide");
 
@@ -268,11 +290,9 @@ class CCDASC extends CCDAST {
      * Test avec displayName incorrecte
      */
 
-    $displayNameTest = new CCDA_base_st();
-    $displayNameTest->setData("");
-    $this->setDisplayName($displayNameTest);
+    $this->setDisplayName("");
 
-    $tabTest[] = $this->sample("Test avec un displayName incorrecte", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un displayName incorrecte, null par défaut", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -280,8 +300,7 @@ class CCDASC extends CCDAST {
      * Test avec displayName correct
      */
 
-    $displayNameTest->setData("test");
-    $this->setDisplayName($displayNameTest);
+    $this->setDisplayName("test");
 
     $tabTest[] = $this->sample("Test avec un displayName correct", "Document valide");
 

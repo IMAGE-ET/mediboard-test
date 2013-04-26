@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @link     http://www.mediboard.org */
- 
+
 /**
  * A name for a person, organization, place or thing. A
  * sequence of name parts, such as given name or family
@@ -21,11 +21,11 @@
  */
 class CCDAEN extends CCDAANY {
 
-  var $delimiter = array();
-  var $family = array();
-  var $given = array();
-  var $prefix = array();
-  var $suffix = array();
+  public $delimiter = array();
+  public $family = array();
+  public $given = array();
+  public $prefix = array();
+  public $suffix = array();
 
   /**
    * An interval of time specifying the time during which
@@ -51,12 +51,16 @@ class CCDAEN extends CCDAANY {
   /**
    * Setter use
    *
-   * @param \CCDAset_EntityNameUse $use \CCDAset_EntityNameUse
+   * @param String[] $use String[]
    *
    * @return void
    */
   public function setUse($use) {
-    $this->use = $use;
+    $setEn = new CCDAset_EntityNameUse();
+    foreach ($use as $_use) {
+      $setEn->addData($_use);
+    }
+    $this->use = $setEn;
   }
 
   /**
@@ -118,15 +122,15 @@ class CCDAEN extends CCDAANY {
    *
    * @return void
    */
-  function razListdata($name) {
+  function resetListdata($name) {
     $this->$name = array();
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["delimiter"] = "CCDA_en_delimiter xml|element";
@@ -161,11 +165,7 @@ class CCDAEN extends CCDAANY {
      * test avec un use incorrecte
      */
 
-    $us = new CCDAset_EntityNameUse();
-    $person = new CCDAEntityNameUse();
-    $person->setData("TESTTEST");
-    $us->addData($person);
-    $this->setUse($us);
+    $this->setUse(array("TESTTEST"));
     $tabTest[] = $this->sample("Test avec un use incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -174,10 +174,7 @@ class CCDAEN extends CCDAANY {
      * test avec un use correcte
      */
 
-    $person->setData("C");
-    $us->razlistData();
-    $us->addData($person);
-    $this->setUse($us);
+    $this->setUse(array("C"));
     $tabTest[] = $this->sample("Test avec un use correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -187,9 +184,7 @@ class CCDAEN extends CCDAANY {
      */
 
     $valid = new CCDAIVL_TS();
-    $ts = new CCDA_base_ts();
-    $ts->setData("TESTTEST");
-    $valid->setValue($ts);
+    $valid->setValue("TESTTEST");
     $this->setValidTime($valid);
     $tabTest[] = $this->sample("Test avec un validTime incorrecte", "Document invalide");
 
@@ -199,8 +194,7 @@ class CCDAEN extends CCDAANY {
      * test avec un validTime correcte
      */
 
-    $ts->setData("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
-    $valid->setValue($ts);
+    $valid->setValue("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
     $this->setValidTime($valid);
     $tabTest[] = $this->sample("Test avec un validTime correcte", "Document valide");
 

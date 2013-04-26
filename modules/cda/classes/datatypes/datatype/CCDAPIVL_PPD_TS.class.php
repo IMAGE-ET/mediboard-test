@@ -65,12 +65,18 @@ class CCDAPIVL_PPD_TS extends CCDASXCM_PPD_TS {
   /**
    * Setter Alignment
    *
-   * @param \CCDACalendarCycle $alignment $alignment
+   * @param String $alignment String
    *
    * @return void
    */
   public function setAlignment($alignment) {
-    $this->alignment = $alignment;
+    if (!$alignment) {
+      $this->alignment = null;
+      return;
+    }
+    $cale = new CCDACalendarCycle();
+    $cale->setData($alignment);
+    $this->alignment = $cale;
   }
 
   /**
@@ -85,12 +91,18 @@ class CCDAPIVL_PPD_TS extends CCDASXCM_PPD_TS {
   /**
    * Setter InstitutionSpecified
    *
-   * @param \CCDA_base_bl $institutionSpecified \CCDA_base_bl
+   * @param String $institutionSpecified String
    *
    * @return void
    */
   public function setInstitutionSpecified($institutionSpecified) {
-    $this->institutionSpecified = $institutionSpecified;
+    if (!$institutionSpecified) {
+      $this->institutionSpecified = null;
+      return;
+    }
+    $bl = new CCDA_base_bl();
+    $bl->setData($institutionSpecified);
+    $this->institutionSpecified = $bl;
   }
 
   /**
@@ -176,9 +188,7 @@ class CCDAPIVL_PPD_TS extends CCDASXCM_PPD_TS {
      * Test avec un alignment incorrecte
      */
 
-    $calendar = new CCDACalendarCycle();
-    $calendar->setData(" ");
-    $this->setAlignment($calendar);
+    $this->setAlignment(" ");
     $tabTest[] = $this->sample("Test avec un alignment incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -187,8 +197,7 @@ class CCDAPIVL_PPD_TS extends CCDASXCM_PPD_TS {
      * Test avec un alignment correcte
      */
 
-    $calendar->setData("CD");
-    $this->setAlignment($calendar);
+    $this->setAlignment("CD");
     $tabTest[] = $this->sample("Test avec un alignment correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -197,9 +206,7 @@ class CCDAPIVL_PPD_TS extends CCDASXCM_PPD_TS {
      * Test avec un institutionSpecified incorrecte
      */
 
-    $bool = new CCDA_base_bl();
-    $bool->setData("CD");
-    $this->setInstitutionSpecified($bool);
+    $this->setInstitutionSpecified("CD");
     $tabTest[] = $this->sample("Test avec un institutionSpecified incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -208,8 +215,7 @@ class CCDAPIVL_PPD_TS extends CCDASXCM_PPD_TS {
      * Test avec un institutionSpecified correcte
      */
 
-    $bool->setData("true");
-    $this->setInstitutionSpecified($bool);
+    $this->setInstitutionSpecified("true");
     $tabTest[] = $this->sample("Test avec un institutionSpecified correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -220,9 +226,7 @@ class CCDAPIVL_PPD_TS extends CCDASXCM_PPD_TS {
 
     $ivl = new CCDAIVL_PPD_TS();
     $xbts = new CCDAIVXB_PPD_TS();
-    $value = new CCDA_base_ts();
-    $value->setData("TESTTEST");
-    $xbts->setValue($value);
+    $xbts->setValue("TESTTEST");
     $ivl->setLow($xbts);
     $this->setPhase($ivl);
     $tabTest[] = $this->sample("Test avec une phase incorrecte", "Document invalide");
@@ -233,8 +237,7 @@ class CCDAPIVL_PPD_TS extends CCDASXCM_PPD_TS {
      * Test avec un phase correcte
      */
 
-    $value->setData("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
-    $xbts->setValue($value);
+    $xbts->setValue("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
     $ivl->setLow($xbts);
     $this->setPhase($ivl);
     $tabTest[] = $this->sample("Test avec une phase correcte", "Document valide");
@@ -246,9 +249,7 @@ class CCDAPIVL_PPD_TS extends CCDASXCM_PPD_TS {
      */
 
     $pq = new CCDAPPD_PQ();
-    $prob = new CCDAProbabilityDistributionType();
-    $prob->setData("TESTTEST");
-    $pq->setDistributionType($prob);
+    $pq->setDistributionType("TESTTEST");
     $this->setPeriod($pq);
     $tabTest[] = $this->sample("Test avec une period incorrecte", "Document invalide");
 
@@ -258,8 +259,7 @@ class CCDAPIVL_PPD_TS extends CCDASXCM_PPD_TS {
      * Test avec un period correcte
      */
 
-    $prob->setData("F");
-    $pq->setDistributionType($prob);
+    $pq->setDistributionType("F");
     $this->setPeriod($pq);
     $tabTest[] = $this->sample("Test avec une period correcte", "Document valide");
 

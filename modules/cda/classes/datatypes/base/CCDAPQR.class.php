@@ -27,12 +27,18 @@ class CCDAPQR extends CCDACV {
   /**
    * Setter value
    *
-   * @param CCDA_base_real $value CCDA_base_real
+   * @param String $value String
    *
    * @return void
    */
   public function setValue($value) {
-    $this->value = $value;
+    if (!$value) {
+      $this->value = null;
+      return;
+    }
+    $val = new CCDA_base_real();
+    $val->setData($value);
+    $this->value = $val;
   }
 
   /**
@@ -67,9 +73,8 @@ class CCDAPQR extends CCDACV {
     /**
      * Test avec une valeur incorrecte
      */
-    $real = new CCDA_base_real();
-    $real->setData("test");
-    $this->setValue($real);
+
+    $this->setValue("test");
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -78,8 +83,7 @@ class CCDAPQR extends CCDACV {
      * Test avec une valeur correcte
      */
 
-    $real->setData("10.5");
-    $this->setValue($real);
+    $this->setValue("10.5");
     $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

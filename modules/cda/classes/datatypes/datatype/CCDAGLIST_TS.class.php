@@ -60,12 +60,18 @@ class CCDAGLIST_TS extends CCDAANY {
   /**
    * Setter denominator
    *
-   * @param \CCDA_base_int $denominator \CCDA_base_int
+   * @param String $denominator String
    *
    * @return void
    */
   public function setDenominator($denominator) {
-    $this->denominator = $denominator;
+    if (!$denominator) {
+      $this->denominator = null;
+      return;
+    }
+    $int = new CCDA_base_int();
+    $int->setData($denominator);
+    $this->denominator = $int;
   }
 
   /**
@@ -120,12 +126,18 @@ class CCDAGLIST_TS extends CCDAANY {
   /**
    * Setter period
    *
-   * @param \CCDA_base_int $period \CCDA_base_int
+   * @param String $period String
    *
    * @return void
    */
   public function setPeriod($period) {
-    $this->period = $period;
+    if (!$period) {
+      $this->period = null;
+      return;
+    }
+    $int = new CCDA_base_int();
+    $int->setData($period);
+    $this->period = $int;
   }
 
   /**
@@ -184,9 +196,7 @@ class CCDAGLIST_TS extends CCDAANY {
      */
 
     $hea= new CCDATS();
-    $ts = new CCDA_base_ts();
-    $ts->setData("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
-    $hea->setValue($ts);
+    $hea->setValue("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
     $this->setHead($hea);
     $tabTest[] = $this->sample("Test avec une head correcte, séquence incorrecte", "Document invalide");
 
@@ -197,9 +207,7 @@ class CCDAGLIST_TS extends CCDAANY {
      */
 
     $inc= new CCDAPQ();
-    $cs = new CCDA_base_cs();
-    $cs->setData("test");
-    $inc->setUnit($cs);
+    $inc->setUnit("test");
     $this->setIncrement($inc);
     $tabTest[] = $this->sample("Test avec un increment correcte, séquence correcte", "Document valide");
 
@@ -209,9 +217,7 @@ class CCDAGLIST_TS extends CCDAANY {
      * Test avec une period correcte
      */
 
-    $int = new CCDA_base_int();
-    $int->setData("10.25");
-    $this->setPeriod($int);
+    $this->setPeriod("10.25");
     $tabTest[] = $this->sample("Test avec une period incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -220,8 +226,7 @@ class CCDAGLIST_TS extends CCDAANY {
      * Test avec une period correcte
      */
 
-    $int->setData("10");
-    $this->setPeriod($int);
+    $this->setPeriod("10");
     $tabTest[] = $this->sample("Test avec une period correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -230,9 +235,7 @@ class CCDAGLIST_TS extends CCDAANY {
      * Test avec un denominator correcte
      */
 
-    $int = new CCDA_base_int();
-    $int->setData("10.25");
-    $this->setPeriod($int);
+    $this->setPeriod("10.25");
     $tabTest[] = $this->sample("Test avec un denominator incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -241,8 +244,7 @@ class CCDAGLIST_TS extends CCDAANY {
      * Test avec un denominator correcte
      */
 
-    $int->setData("10");
-    $this->setPeriod($int);
+    $this->setPeriod("10");
     $tabTest[] = $this->sample("Test avec un denominator correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

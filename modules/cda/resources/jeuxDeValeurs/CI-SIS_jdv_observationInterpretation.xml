@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RetrieveValueSetResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:ihe:iti:svs:2008 SVS.xsd" xmlns="urn:ihe:iti:svs:2008">
+    <ValueSet id="1.2.250.1.213.1.1.5.11" displayName="observationInterpretation" version="20121015">
+        <ConceptList>
+            <Concept code="N" displayName="Normal" codeSystem="2.16.840.1.113883.5.83"/> 
+            <Concept code="A" displayName="Anormal" codeSystem="2.16.840.1.113883.5.83"/>
+            <Concept code="AA" displayName="Très anormal, alerte" codeSystem="2.16.840.1.113883.5.83"/> 
+            <Concept code="H" displayName="Anormalement haut" codeSystem="2.16.840.1.113883.5.83"/>
+            <Concept code="HH" displayName="Très anormalement haut, alerte" codeSystem="2.16.840.1.113883.5.83"/> 
+            <Concept code="&gt;" displayName="Au dessus, hors échelle instrument de mesure" codeSystem="2.16.840.1.113883.5.83"/>
+            <Concept code="L" displayName="Anormalement bas" codeSystem="2.16.840.1.113883.5.83"/> 
+            <Concept code="LL" displayName="Très anormalement bas, alerte" codeSystem="2.16.840.1.113883.5.83"/>
+            <Concept code="&lt;" displayName="Au dessous, hors échelle instrument de mesure" codeSystem="2.16.840.1.113883.5.83"/> 
+            <Concept code="B" displayName="Amélioration" codeSystem="2.16.840.1.113883.5.83"/>
+            <Concept code="W" displayName="Dégradation" codeSystem="2.16.840.1.113883.5.83"/> 
+            <Concept code="D" displayName="Diminution significative par rapport au résultat antérieur" codeSystem="2.16.840.1.113883.5.83"/>
+            <Concept code="U" displayName="Augmentation significative par rapport au résultat antérieur" codeSystem="2.16.840.1.113883.5.83"/> 
+            <Concept code="S" displayName="Sensible" codeSystem="2.16.840.1.113883.5.83"/>
+            <Concept code="MS" displayName="Modérément sensible" codeSystem="2.16.840.1.113883.5.83"/>
+            <Concept code="V" displayName="Très sensible" codeSystem="2.16.840.1.113883.5.83"/>
+            <Concept code="I" displayName="Intermédiaire" codeSystem="2.16.840.1.113883.5.83"/> 
+            <Concept code="R" displayName="Résistant" codeSystem="2.16.840.1.113883.5.83"/>
+            <Concept code="RCP_001" codeSystem="1.2.250.1.213.1.1.4.2.281"
+                displayName="Capable d'une activité identique à celle précédant la maladie sans aucune restriction"/>
+            <Concept code="RCP_002" codeSystem="1.2.250.1.213.1.1.4.2.281"
+                displayName="Activité physique diminuée mais ambulatoire et capable de mener un travail"/>
+            <Concept code="RCP_003" codeSystem="1.2.250.1.213.1.1.4.2.281"
+                displayName="Ambulatoire et capable de prendre soin de soi-même, inca-pable de travailler. Alité moins de 50 % de son temps"/>
+            <Concept code="RCP_004" codeSystem="1.2.250.1.213.1.1.4.2.281"
+                displayName="Capable seulement de quelques soins. Alité ou en chaise plus de 50 % du temps"/>
+            <Concept code="RCP_005" codeSystem="1.2.250.1.213.1.1.4.2.281"
+                displayName="Incapable de prendre soins de soi-même. Alité ou en chaise en permanence"/>
+        </ConceptList>
+    </ValueSet>
+</RetrieveValueSetResponse>

@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * A telecommunications address  specified according to
  * Internet standard RFC 1738
@@ -26,12 +26,18 @@ class CCDAURL extends CCDAANY {
   /**
    * Setter value
    *
-   * @param \String $value String
+   * @param String $value String
    *
    * @return void
    */
   public function setValue($value) {
-    $this->value = $value;
+    if (!$value) {
+      $this->value = null;
+      return;
+    }
+    $url = new CCDA_base_url();
+    $url->setData($value);
+    $this->value = $url;
   }
 
   /**
@@ -44,13 +50,13 @@ class CCDAURL extends CCDAANY {
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
-    $props["value"] = "url xml|attribute";
+    $props["value"] = "CCDA_base_url xml|attribute";
     return $props;
   }
 
@@ -67,9 +73,7 @@ class CCDAURL extends CCDAANY {
      * Test avec une valeur incorrecte
      */
 
-    $url = new CCDA_base_url();
-    $url->setData(":::$:!:");
-    $this->setValue($url);
+    $this->setValue(":::$:!:");
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -77,8 +81,7 @@ class CCDAURL extends CCDAANY {
      * Test avec une valeur correcte
      */
 
-    $url->setData("test");
-    $this->setValue($url);
+    $this->setValue("test");
     $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

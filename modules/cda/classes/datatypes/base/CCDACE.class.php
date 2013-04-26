@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * Coded data, consists of a coded value (CV)
  * and, optionally, coded value(s) from other coding systems
@@ -17,12 +17,12 @@
  */
 class CCDACE extends CCDACD {
 
-  
+
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["qualifier"] = "CCDACR xml|element prohibited";
@@ -41,13 +41,11 @@ class CCDACE extends CCDACD {
      */
 
     $cr = new CCDACR();
-    $bn = new CCDA_base_bn();
-    $bn->setData("true");
-    $cr->setInverted($bn);
+    $cr->setInverted("true");
     $this->setQualifier($cr);
 
     $tabTest[] = $this->sample("Test avec un qualifier correcte, interdit dans ce contexte", "Document invalide");
-    $this->razListQualifier();
+    $this->resetListQualifier();
     /*-------------------------------------------------------------------------------------*/
 
     return $tabTest;

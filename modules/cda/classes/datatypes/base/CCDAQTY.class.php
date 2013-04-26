@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * The quantity data type is an abstract generalization
  * for all data types (1) whose value set has an order
@@ -27,17 +27,6 @@ class CCDAQTY extends CCDAANY {
   public $value;
 
   /**
-   * Setter value
-   *
-   * @param mixed $value mixed
-   *
-   * @return void
-   */
-  public function setValue($value) {
-    $this->value = $value;
-  }
-
-  /**
    * Getter value
    *
    * @return mixed
@@ -47,13 +36,13 @@ class CCDAQTY extends CCDAANY {
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array()
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array()
+   */
   function getProps() {
     $props = parent::getProps();
-    
+
     return $props;
   }
 

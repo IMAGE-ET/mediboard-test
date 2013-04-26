@@ -2142,10 +2142,14 @@ class CSetupdPpatients extends CSetup {
       return true;
     }
     $this->addFunction("addConstantesRank");
-    $this->mod_version = "1.79";
+
+    $this->makeRevision("1.79");
+    $query = "UPDATE `patients` SET `INSC` = NULL, `INSC_date` = null;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.80";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
-    
   }
 }

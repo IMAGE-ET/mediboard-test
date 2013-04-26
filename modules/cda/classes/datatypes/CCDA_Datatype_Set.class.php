@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * Classe dont hériteront les classes set_*
  */
@@ -16,22 +16,11 @@ class CCDA_Datatype_Set extends CCDA_Datatype {
   public $listData = array();
 
   /**
-   * ADD a class
-   *
-   * @param mixed $listData mixed
-   *
-   * @return void
-   */
-  function addData($listData) {
-    $this->listData[] = $listData;
-  }
-
-  /**
    * Reinitialise la variable
    *
    * @return void
    */
-  function razlistData () {
+  function resetListData () {
     $this->listData = array();
   }
 
@@ -62,13 +51,13 @@ class CCDA_Datatype_Set extends CCDA_Datatype {
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
-    
+
     return $props;
   }
 

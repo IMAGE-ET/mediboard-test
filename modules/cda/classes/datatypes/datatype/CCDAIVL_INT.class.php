@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * CCDAIVL_INT class
  * Choix entre une séquence(low(1.1), [width(0.1)|high(0.1)]), element high(1.1), séquence(width(1.1), high(0.1)),
@@ -16,11 +16,11 @@
  */
 class CCDAIVL_INT extends CCDASXCM_INT {
 
-  private $propsHigh = "CCDAIVXB_INT xml|element max|1";
-  private $propsWidth = "CCDAINT xml|element max|1";
-  private $propsLow = "CCDAIVXB_INT xml|element max|1";
+  private $propsHigh   = "CCDAIVXB_INT xml|element max|1";
+  private $propsWidth  = "CCDAINT xml|element max|1";
+  private $propsLow    = "CCDAIVXB_INT xml|element max|1";
   private $propsCenter = "CCDAINT xml|element max|1";
-  private $_order = null;
+  private $_order      = null;
 
   /**
    * The low limit of the interval.
@@ -156,10 +156,10 @@ class CCDAIVL_INT extends CCDASXCM_INT {
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     switch ($this->_order) {
@@ -202,9 +202,7 @@ class CCDAIVL_INT extends CCDASXCM_INT {
      */
 
     $xbts = new CCDAIVXB_INT();
-    $bl = new CCDA_base_bl();
-    $bl->setData("TESTTEST");
-    $xbts->setInclusive($bl);
+    $xbts->setInclusive("TESTTEST");
     $this->setLow($xbts);
     $tabTest[] = $this->sample("Test avec un low incorrecte", "Document invalide");
 
@@ -214,8 +212,7 @@ class CCDAIVL_INT extends CCDASXCM_INT {
      * Test avec element low correcte, séquence low
      */
 
-    $bl->setData("true");
-    $xbts->setInclusive($bl);
+    $xbts->setInclusive("true");
     $this->setLow($xbts);
     $tabTest[] = $this->sample("Test avec un low correcte", "Document valide");
 
@@ -226,9 +223,7 @@ class CCDAIVL_INT extends CCDASXCM_INT {
      */
 
     $hi = new CCDAIVXB_INT();
-    $bl = new CCDA_base_bl();
-    $bl->setData("TESTTEST");
-    $hi->setInclusive($bl);
+    $hi->setInclusive("TESTTEST");
     $this->setHigh($hi);
     $tabTest[] = $this->sample("Test avec un high incorrecte", "Document invalide");
 
@@ -238,8 +233,7 @@ class CCDAIVL_INT extends CCDASXCM_INT {
      * Test avec element high correcte, séquence low
      */
 
-    $bl->setData("true");
-    $hi->setInclusive($bl);
+    $hi->setInclusive("true");
     $this->setHigh($hi);
     $tabTest[] = $this->sample("Test avec un high correcte", "Document valide");
 
@@ -250,9 +244,7 @@ class CCDAIVL_INT extends CCDASXCM_INT {
      */
 
     $wid = new CCDAINT();
-    $int = new CCDA_base_int();
-    $int->setData("10.25");
-    $wid->setValue($int);
+    $wid->setValue("10.25");
     $this->setWidth($wid);
     $tabTest[] = $this->sample("Test avec un width incorrecte, séquence incorrecte", "Document invalide");
 
@@ -262,8 +254,7 @@ class CCDAIVL_INT extends CCDASXCM_INT {
      * Test avec element width correcte, séquence low incorrecte
      */
 
-    $int->setData("10");
-    $wid->setValue($int);
+    $wid->setValue("10");
     $this->setWidth($wid);
     $tabTest[] = $this->sample("Test avec un width correcte, séquence incorrecte", "Document invalide");
 
@@ -277,9 +268,7 @@ class CCDAIVL_INT extends CCDASXCM_INT {
     $this->width = null;
     $this->center = null;
     $hi = new CCDAIVXB_INT();
-    $bl = new CCDA_base_bl();
-    $bl->setData("TESTTEST");
-    $hi->setInclusive($bl);
+    $hi->setInclusive("TESTTEST");
     $this->setHigh($hi);
     $tabTest[] = $this->sample("Test avec un high incorrecte", "Document invalide");
 
@@ -289,8 +278,7 @@ class CCDAIVL_INT extends CCDASXCM_INT {
      * Test avec element high correcte
      */
 
-    $bl->setData("true");
-    $hi->setInclusive($bl);
+    $hi->setInclusive("true");
     $this->setHigh($hi);
     $tabTest[] = $this->sample("Test avec un high correcte", "Document valide");
 
@@ -303,9 +291,7 @@ class CCDAIVL_INT extends CCDASXCM_INT {
     $this->high = null;
     $this->setOrder(null);
     $wid = new CCDAINT();
-    $int = new CCDA_base_int();
-    $int->setData("10.25");
-    $wid->setValue($int);
+    $wid->setValue("10.25");
     $this->setWidth($wid);
     $tabTest[] = $this->sample("Test avec un width incorrecte", "Document invalide");
 
@@ -315,8 +301,7 @@ class CCDAIVL_INT extends CCDASXCM_INT {
      * Test avec element width correcte, séquence width
      */
 
-    $int->setData("10");
-    $wid->setValue($int);
+    $wid->setValue("10");
     $this->setWidth($wid);
     $tabTest[] = $this->sample("Test avec un width correcte", "Document valide");
 
@@ -327,9 +312,7 @@ class CCDAIVL_INT extends CCDASXCM_INT {
      */
 
     $hi2 = new CCDAIVXB_INT();
-    $bl = new CCDA_base_bl();
-    $bl->setData("TESTTEST");
-    $hi2->setInclusive($bl);
+    $hi2->setInclusive("TESTTEST");
     $this->setHigh($hi2);
     $tabTest[] = $this->sample("Test avec un high incorrecte", "Document invalide");
 
@@ -339,8 +322,7 @@ class CCDAIVL_INT extends CCDASXCM_INT {
      * Test avec element high correcte, séquence width
      */
 
-    $bl->setData("true");
-    $hi2->setInclusive($bl);
+    $hi2->setInclusive("true");
     $this->setHigh($hi2);
     $tabTest[] = $this->sample("Test avec un high correcte", "Document valide");
 
@@ -353,9 +335,7 @@ class CCDAIVL_INT extends CCDASXCM_INT {
     $this->width = null;
     $this->high = null;
     $cen = new CCDAINT();
-    $intC = new CCDA_base_int();
-    $intC->setData("10.25");
-    $cen->setValue($intC);
+    $cen->setValue("10.25");
     $this->setCenter($cen);
     $tabTest[] = $this->sample("Test avec un center incorrecte", "Document invalide");
 
@@ -365,8 +345,7 @@ class CCDAIVL_INT extends CCDASXCM_INT {
      * Test avec element center correcte, séquence center
      */
 
-    $intC->setData("10");
-    $cen->setValue($intC);
+    $cen->setValue("10");
     $this->setCenter($cen);
     $tabTest[] = $this->sample("Test avec un center correcte", "Document valide");
 
@@ -377,9 +356,7 @@ class CCDAIVL_INT extends CCDASXCM_INT {
      */
 
     $cenW = new CCDAINT();
-    $intCW = new CCDA_base_int();
-    $intCW->setData("10.25");
-    $cenW->setValue($intCW);
+    $cenW->setValue("10.25");
     $this->setCenter($cenW);
     $tabTest[] = $this->sample("Test avec un width incorrecte", "Document invalide");
 
@@ -389,8 +366,7 @@ class CCDAIVL_INT extends CCDASXCM_INT {
      * Test avec element width correcte, séquence center
      */
 
-    $intCW->setData("10");
-    $cenW->setValue($intCW);
+    $cenW->setValue("10");
     $this->setCenter($cenW);
     $tabTest[] = $this->sample("Test avec un width correcte", "Document valide");
 

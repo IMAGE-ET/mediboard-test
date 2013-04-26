@@ -21,15 +21,19 @@ switch ($action) {
     break;
 
   case "createTest":
-    $result = $CCDATools->createTestSchemaClasses();
+    $result = $CCDATools->createAllTestSchemaClasses();
     break;
 
   case "clearXSD":
     $result = $CCDATools->clearXSD();
     break;
 
-  case "missClass";
+  case "missClass":
     $result = $CCDATools->missclass();
+    break;
+
+  case "createClassXSD":
+    $result = $CCDATools->createClassFromXSD();
     break;
 }
 

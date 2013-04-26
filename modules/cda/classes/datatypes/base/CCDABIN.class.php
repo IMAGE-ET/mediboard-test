@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * Binary data is a raw block of bits. Binary data is a
  * protected type that MUST not be used outside the data
@@ -23,16 +23,10 @@ class CCDABIN extends CCDAANY {
    */
   public $representation;
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
-  function getProps() {
-    $props = parent::getProps();
-    $props["representation"] = "CCDA_base_BinaryDataEncoding xml|attribute default|TXT";
-    $props["data"] = "str xml|data";
-    return $props;
-  }
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
 
   /**
    * Modifie la representation
@@ -42,8 +36,28 @@ class CCDABIN extends CCDAANY {
    * @return void
    */
   function setRepresentation($representation) {
-    $this->representation = $representation;
+    if (!$representation) {
+      $this->representation = null;
+      return;
+    }
+    $binary = new CCDA_base_BinaryDataEncoding();
+    $binary->setData($representation);
+    $this->representation = $binary;
   }
+
+  /**
+   * Props
+   *
+   * @return array
+   */
+  function getProps() {
+    $props = parent::getProps();
+    $props["representation"] = "CCDA_base_BinaryDataEncoding xml|attribute default|TXT";
+    $props["data"] = "str xml|data";
+    return $props;
+  }
+
+
 
   /**
    * Fonction permettant de tester la classe
@@ -71,9 +85,7 @@ class CCDABIN extends CCDAANY {
      * Test avec une valeur incorrecte
      */
 
-    $binaryDataEncoding = new CCDA_base_BinaryDataEncoding();
-    $binaryDataEncoding->setData("TESTTEST");
-    $this->setRepresentation($binaryDataEncoding);
+    $this->setRepresentation("TESTTEST");
 
     $tabTest[] = $this->sample("Test avec une representation incorrecte", "Document invalide");
 
@@ -83,8 +95,7 @@ class CCDABIN extends CCDAANY {
      * Test avec une valeur correcte
      */
 
-    $binaryDataEncoding->setData("B64");
-    $this->setRepresentation($binaryDataEncoding);
+    $this->setRepresentation("B64");
 
     $tabTest[] = $this->sample("Test avec une representation correcte", "Document valide");
 

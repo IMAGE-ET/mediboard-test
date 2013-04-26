@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * Coded data, where the domain from which the codeset comes
  * is ordered. The Coded Ordinal data type adds semantics
@@ -18,15 +18,15 @@
  */
 class CCDACO extends CCDACV {
 
-  
+
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
-    
+
     return $props;
   }
 }

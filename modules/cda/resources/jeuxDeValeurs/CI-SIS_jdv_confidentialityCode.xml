@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RetrieveValueSetResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:ihe:iti:svs:2008 SVS.xsd" xmlns="urn:ihe:iti:svs:2008">
+    <ValueSet id="1.2.250.1.213.1.1.5.12" displayName="confidentialityCode" version="20111219">
+        <ConceptList>
+            <Concept code="N" displayName="Normal" codeSystem="2.16.840.1.113883.5.25"/> 
+            <Concept code="R" displayName="Restreint" codeSystem="2.16.840.1.113883.5.25"/> 
+            <Concept code="V" displayName="Très restreint" codeSystem="2.16.840.1.113883.5.25"/> 
+        </ConceptList>
+    </ValueSet>
+</RetrieveValueSetResponse>

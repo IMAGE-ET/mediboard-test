@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * The BooleanNonNull type is used where a Boolean cannot
  * have a null value. A Boolean value can be either
@@ -19,25 +19,20 @@ class CCDABN extends CCDAANYNonNull {
   public $value;
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
-  function getProps() {
-    $props = parent::getProps();
-    $props["value"] = "CCDA_base_bn xml|attribute";
-    return $props;
-  }
-
-  /**
    * Setter value
    *
-   * @param CCDA_base_bn $value CCDA_base_bn
+   * @param String $value String
    *
    * @return CCDA_base_bn
    */
   function setValue($value) {
-    $this->value = $value;
+    if (!$value) {
+      $this->value = null;
+      return;
+    }
+    $val = new CCDA_base_bn();
+    $val->setData($value);
+    $this->value = $val;
   }
 
   /**
@@ -45,8 +40,19 @@ class CCDABN extends CCDAANYNonNull {
    *
    * @return CCDA_base_bn
    */
-  function getvalue() {
+  function getValue() {
     return $this->value;
+  }
+
+  /**
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
+  function getProps() {
+    $props = parent::getProps();
+    $props["value"] = "CCDA_base_bn xml|attribute";
+    return $props;
   }
 
   /**
@@ -62,9 +68,7 @@ class CCDABN extends CCDAANYNonNull {
      * Test avec une valeur incorrecte
      */
 
-    $bn = new CCDA_base_bn();
-    $bn->setData("TESTTEST");
-    $this->setValue($bn);
+    $this->setValue("TESTTEST");
 
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
 
@@ -74,8 +78,7 @@ class CCDABN extends CCDAANYNonNull {
      * Test avec une valeur correcte
      */
 
-    $bn->setData("true");
-    $this->setValue($bn);
+    $this->setValue("true");
 
     $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 

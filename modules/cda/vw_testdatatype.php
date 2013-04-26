@@ -15,6 +15,7 @@ $action = CValue::get("action", "null");
 $CCDATools = new CCdaTools();
 $result = null;
 $resultSynth = null;
+
 if ($action !== "null") {
   $result = $CCDATools->createTest($action);
   $resultSynth = $CCDATools->syntheseTest($result);

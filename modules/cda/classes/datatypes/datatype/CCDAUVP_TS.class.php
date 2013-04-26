@@ -25,12 +25,18 @@ class CCDAUVP_TS extends CCDATS {
   /**
    * Setter probability
    *
-   * @param \CCDA_base_probability $probability \CCDAprobability
+   * @param String $probability String
    *
    * @return void
    */
   public function setProbability($probability) {
-    $this->probability = $probability;
+    if (!$probability) {
+      $this->probability = null;
+      return;
+    }
+    $prob = new CCDA_base_probability();
+    $prob->setData($probability);
+    $this->probability = $prob;
   }
 
   /**
@@ -77,9 +83,7 @@ class CCDAUVP_TS extends CCDATS {
      * Test avec une probability incorrecte
      */
 
-    $prob = new CCDA_base_probability();
-    $prob->setData("2.0");
-    $this->setProbability($prob);
+    $this->setProbability("2.0");
     $tabTest[] = $this->sample("Test avec une probability incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -88,8 +92,7 @@ class CCDAUVP_TS extends CCDATS {
      * Test avec un probability correcte
      */
 
-    $prob->setData("0.80");
-    $this->setProbability($prob);
+    $this->setProbability("0.80");
     $tabTest[] = $this->sample("Test avec une probability correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

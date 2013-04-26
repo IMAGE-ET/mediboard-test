@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * CCDAIVL_TS class
  * Choix entre une séquence(low(1.1), [width(0.1)|high(0.1)]), element high(1.1), séquence(width(1.1), high(0.1)),
@@ -157,10 +157,10 @@ class CCDAIVL_TS extends CCDASXCM_TS {
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     switch ($this->_order) {
@@ -203,9 +203,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
      */
 
     $xbts = new CCDAIVXB_TS();
-    $value = new CCDA_base_ts();
-    $value->setData("TESTTEST");
-    $xbts->setValue($value);
+    $xbts->setValue("TESTTEST");
     $this->setLow($xbts);
     $tabTest[] = $this->sample("Test avec un low incorrecte", "Document invalide");
 
@@ -215,8 +213,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
      * Test avec element low correcte, séquence low
      */
 
-    $value->setData("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
-    $xbts->setValue($value);
+    $xbts->setValue("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
     $this->setLow($xbts);
     $tabTest[] = $this->sample("Test avec un low correcte", "Document valide");
 
@@ -227,9 +224,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
      */
 
     $hi = new CCDAIVXB_TS();
-    $value = new CCDA_base_ts();
-    $value->setData("TESTTEST");
-    $hi->setValue($value);
+    $hi->setValue("TESTTEST");
     $this->setHigh($hi);
     $tabTest[] = $this->sample("Test avec un high incorrecte", "Document invalide");
 
@@ -239,8 +234,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
      * Test avec element high correcte, séquence low
      */
 
-    $value->setData("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
-    $hi->setValue($value);
+    $hi->setValue("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
     $this->setHigh($hi);
     $tabTest[] = $this->sample("Test avec un high correcte", "Document valide");
 
@@ -251,9 +245,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
      */
 
     $pq = new CCDAPQ();
-    $real = new CCDA_base_real();
-    $real->setData("test");
-    $pq->setValue($real);
+    $pq->setValue("test");
     $this->setWidth($pq);
     $tabTest[] = $this->sample("Test avec un width incorrecte, séquence incorrecte", "Document invalide");
 
@@ -263,8 +255,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
      * Test avec element width correcte, séquence low incorrecte
      */
 
-    $real->setData("10.25");
-    $pq->setValue($real);
+    $pq->setValue("10.25");
     $this->setWidth($pq);
     $tabTest[] = $this->sample("Test avec un width correcte, séquence incorrecte", "Document invalide");
 
@@ -278,9 +269,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
     $this->width = null;
     $this->center = null;
     $hi = new CCDAIVXB_TS();
-    $value = new CCDA_base_ts();
-    $value->setData("TESTTEST");
-    $hi->setValue($value);
+    $hi->setValue("TESTTEST");
     $this->setHigh($hi);
     $tabTest[] = $this->sample("Test avec un high incorrecte", "Document invalide");
 
@@ -290,8 +279,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
      * Test avec element high correcte
      */
 
-    $value->setData("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
-    $hi->setValue($value);
+    $hi->setValue("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
     $this->setHigh($hi);
     $tabTest[] = $this->sample("Test avec un high correcte", "Document valide");
 
@@ -304,9 +292,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
     $this->high = null;
     $this->setOrder(null);
     $pq = new CCDAPQ();
-    $real = new CCDA_base_real();
-    $real->setData("test");
-    $pq->setValue($real);
+    $pq->setValue("test");
     $this->setWidth($pq);
     $tabTest[] = $this->sample("Test avec un width incorrecte", "Document invalide");
 
@@ -316,8 +302,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
      * Test avec element width correcte, séquence width
      */
 
-    $real->setData("10.25");
-    $pq->setValue($real);
+    $pq->setValue("10.25");
     $this->setWidth($pq);
     $tabTest[] = $this->sample("Test avec un width correcte", "Document valide");
 
@@ -328,9 +313,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
      */
 
     $hi = new CCDAIVXB_TS();
-    $value = new CCDA_base_ts();
-    $value->setData("TESTTEST");
-    $hi->setValue($value);
+    $hi->setValue("TESTTEST");
     $this->setHigh($hi);
     $tabTest[] = $this->sample("Test avec un high incorrecte", "Document invalide");
 
@@ -340,8 +323,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
      * Test avec element high correcte, séquence width
      */
 
-    $value->setData("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
-    $hi->setValue($value);
+    $hi->setValue("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
     $this->setHigh($hi);
     $tabTest[] = $this->sample("Test avec un high correcte", "Document valide");
 
@@ -354,9 +336,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
     $this->width = null;
     $this->high = null;
     $ts = new CCDATS();
-    $pTs = new CCDA_base_ts();
-    $pTs->setData("TESTTEST");
-    $ts->setValue($pTs);
+    $ts->setValue("TESTTEST");
     $this->setCenter($ts);
     $tabTest[] = $this->sample("Test avec un center incorrecte", "Document invalide");
 
@@ -366,8 +346,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
      * Test avec element center correcte, séquence center
      */
 
-    $pTs->setData("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
-    $ts->setValue($pTs);
+    $ts->setValue("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
     $this->setCenter($ts);
     $tabTest[] = $this->sample("Test avec un center correcte", "Document valide");
 
@@ -378,9 +357,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
      */
 
     $pq = new CCDAPQ();
-    $real = new CCDA_base_real();
-    $real->setData("test");
-    $pq->setValue($real);
+    $pq->setValue("test");
     $this->setWidth($pq);
     $tabTest[] = $this->sample("Test avec un width incorrecte", "Document invalide");
 
@@ -390,8 +367,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
      * Test avec element width correcte, séquence center
      */
 
-    $real->setData("10.25");
-    $pq->setValue($real);
+    $pq->setValue("10.25");
     $this->setWidth($pq);
     $tabTest[] = $this->sample("Test avec un width correcte", "Document valide");
 

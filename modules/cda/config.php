@@ -10,4 +10,5 @@
  */
 
 $dPconfig["cda"] = array(
+  "OID_root" => "",
 );

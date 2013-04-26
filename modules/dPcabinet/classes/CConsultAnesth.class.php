@@ -213,6 +213,13 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   }
 
   /**
+   * @return CPatient
+   */
+  function loadRefPatient(){
+    return $this->loadRelPatient();
+  }
+
+  /**
    * @return CConsultation
    */
   function loadRefConsultation() {

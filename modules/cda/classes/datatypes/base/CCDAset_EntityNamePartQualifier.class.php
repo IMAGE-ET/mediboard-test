@@ -8,17 +8,30 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * CCDAset_EntityNamePartQualifier Class
  */
 class CCDAset_EntityNamePartQualifier extends CCDA_Datatype_Set {
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * ADD a class
+   *
+   * @param String $data String
+   *
+   * @return void
+   */
+  function addData($data) {
+    $ent = new CCDAEntityNamePartQualifier();
+    $ent->setData($data);
+    $this->listData[] = $ent;
+  }
+
+  /**
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["listData"] = "CCDAEntityNamePartQualifier xml|data";
@@ -36,9 +49,8 @@ class CCDAset_EntityNamePartQualifier extends CCDA_Datatype_Set {
     /**
      * Test avec un EntityNamePartQualifier incorrecte
      */
-    $entity = new CCDAEntityNamePartQualifier();
-    $entity->setData("TESTTEST");
-    $this->addData($entity);
+
+    $this->addData("TESTTEST");
     $tabTest[] = $this->sample("Test avec un EntityNamePartQualifier incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -46,9 +58,9 @@ class CCDAset_EntityNamePartQualifier extends CCDA_Datatype_Set {
     /**
      * Test avec un EntityNamePartQualifier correcte
      */
-    $entity->setData("LS");
-    $this->razlistData();
-    $this->addData($entity);
+
+    $this->resetListData();
+    $this->addData("LS");
     $tabTest[] = $this->sample("Test avec un EntityNamePartQualifier correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -56,9 +68,7 @@ class CCDAset_EntityNamePartQualifier extends CCDA_Datatype_Set {
      * Test avec deux EntityNamePartQualifier correcte
      */
 
-    $entity2 = new CCDAEntityNamePartQualifier();
-    $entity2->setData("TITLE");
-    $this->addData($entity2);
+    $this->addData("TITLE");
     $tabTest[] = $this->sample("Test avec deux EntityNamePartQualifier correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
