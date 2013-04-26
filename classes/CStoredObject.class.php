@@ -43,7 +43,7 @@ class CStoredObject extends CModelObject {
 
   /**
    * History of the object
-   * @var CUserLog
+   * @var CUserLog[]
    */
   public $_ref_logs;
 
@@ -1195,9 +1195,9 @@ class CStoredObject extends CModelObject {
    * @return void
    */
   function loadLogs() {
-    $this->_ref_logs = $this->loadBackRefs("logs", "date DESC", 100);
+    $this->_ref_logs = $this->loadBackRefs("logs", "user_log_id DESC", 100);
 
-    foreach ($this->_ref_logs as &$_log) {
+    foreach ($this->_ref_logs as $_log) {
       $_log->loadRefUser();
       $_log->_ref_object = $this;
     }
@@ -1271,7 +1271,7 @@ class CStoredObject extends CModelObject {
       $where["fields"] = " LIKE '%$fieldName%'";
     }
     
-    return $log->loadList($where, "`date` DESC", $limit);
+    return $log->loadList($where, "`user_log_id` DESC", $limit);
   }
   
   /**
@@ -1340,7 +1340,7 @@ class CStoredObject extends CModelObject {
   function loadLastLog() {
     $log = new CUserLog;
     $log->setObject($this);
-    $log->loadMatchingObject("date DESC");
+    $log->loadMatchingObject("user_log_id DESC");
     return $this->_ref_last_log = $log;
   }
   
@@ -1352,7 +1352,7 @@ class CStoredObject extends CModelObject {
   function loadFirstLog() {
     $log = new CUserLog;
     $log->setObject($this);
-    $log->loadMatchingObject("date ASC");
+    $log->loadMatchingObject("user_log_id ASC");
     return $this->_ref_first_log = $log;
   }
 

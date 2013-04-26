@@ -756,7 +756,7 @@ class CExObject extends CMbMetaObject {
     );
     
     $log = new CUserLog();
-    $this->_ref_logs = $log->loadList($where, "date DESC", 100);
+    $this->_ref_logs = $log->loadList($where, "user_log_id DESC", 100);
 
     // loadRefsFwd will fail because the ExObject's class doesn't really exist
     foreach ($this->_ref_logs as &$_log) {
