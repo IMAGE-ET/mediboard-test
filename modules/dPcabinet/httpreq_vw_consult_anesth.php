@@ -75,7 +75,7 @@ else {
 }
 
 $consult_anesth =& $consult->_ref_consult_anesth;
-$nextSejourAndOperation = $patient->getNextSejourAndOperation($consult->_ref_plageconsult->date);
+$nextSejourAndOperation = $patient->getNextSejourAndOperation($consult->_ref_plageconsult->date, true, $consult->_id);
 
 $listChirs = $userSel->loadPraticiens(PERM_READ);
 

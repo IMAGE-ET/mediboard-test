@@ -876,7 +876,7 @@ class CPatient extends CMbObject {
    * Get the next sejour from today or from a given date
    * @return array(CSejour, COperation);
    */
-  function getNextSejourAndOperation($date = null, $withOperation = true) {
+  function getNextSejourAndOperation($date = null, $withOperation = true, $consult_id = null) {
     $sejour = new CSejour;
     $op     = new COperation;
     if (!$date) {
@@ -902,7 +902,7 @@ class CPatient extends CMbObject {
           }
           foreach ($_sejour->_ref_operations as $_op) {
             $consult_anesth = $_op->loadRefsConsultAnesth();
-            if ($consult_anesth->_id) {
+            if ($consult_id && $consult_anesth->consultation_id == $consult_id) {
               continue;
             }
             $_op->loadRefPlageOp();

@@ -306,7 +306,7 @@ if ($consult->_is_dentiste) {
 }
 
 if ($consult->_is_anesth) {
-  $nextSejourAndOperation = $consult->_ref_patient->getNextSejourAndOperation($consult->_ref_plageconsult->date);
+  $nextSejourAndOperation = $consult->_ref_patient->getNextSejourAndOperation($consult->_ref_plageconsult->date, true, $consult->_id);
   
   $secs = range(0, 60-1, 1);
   $mins = range(0, 15-1, 1);
