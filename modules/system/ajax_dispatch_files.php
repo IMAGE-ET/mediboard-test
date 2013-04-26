@@ -41,8 +41,8 @@ $source = reset($sender->_ref_exchanges_sources);
 $path = $source->getFullPath($source->_path);
 $filename_excludes = "$path/mb_excludes.txt";
 
-// Initialisation d'un fichier de verrou de 60 secondes
-$lock = new CMbLock("$path/mb_lock.txt", 60);
+// Initialisation d'un fichier de verrou de 240 secondes
+$lock = new CMbLock("$path/mb_lock.txt", 240);
 
 // On tente de verrouiller
 if (!$lock->acquire()) {
