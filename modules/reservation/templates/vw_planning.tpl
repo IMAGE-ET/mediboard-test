@@ -293,7 +293,7 @@
 
 
   updateSession = function(variable, value) {
-    var url = new Url("reservation", "ajax_assign_session");
+    var url = new Url("{{$current_m}}", "ajax_assign_session");
     url.addParam("var", variable);
     url.addParam("value", value);
     url.requestUpdate("systemMsg", function() {
