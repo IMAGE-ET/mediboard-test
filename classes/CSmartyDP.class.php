@@ -314,10 +314,10 @@ class CSmartyDP extends CSmartyMB {
 
     if ($function) {
       if ($css_class == "sorted") {
-        return "<a class='$css_class $order_way' onclick=$function('$order_col','$order_way_inv');>$sHtml</a>";
+        return "<a class='$css_class $order_way' onclick=\"$function('$order_col','$order_way_inv');\">$sHtml</a>";
       }
       if ($css_class == "sortable") {
-        return "<a class='$css_class' onclick=$function('$field','ASC');>$sHtml</a>";
+        return "<a class='$css_class' onclick=\"$function('$field','ASC');\">$sHtml</a>";
       }    
     }
   }

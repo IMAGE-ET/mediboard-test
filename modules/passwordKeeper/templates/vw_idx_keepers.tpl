@@ -26,6 +26,7 @@
     <td style="width: 30%" id="vw_list_keeper">
     </td>
     <td id="vw_edit_keeper">
+      &nbsp;
     </td>
   </tr>
 </table>
