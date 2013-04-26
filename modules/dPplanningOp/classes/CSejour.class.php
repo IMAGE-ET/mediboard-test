@@ -1988,8 +1988,14 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     if (is_array($affectations) && count($affectations)) {
       foreach ($affectations as $_affectation) {
-        $_affectation->loadRefLit()->loadCompleteView();
-        $_affectation->_view = $_affectation->_ref_lit->_view;
+        if (!$_affectation->lit_id) {
+          $_affectation->_view = $_affectation->loadRefService()->_view;
+        }
+        else {
+          $_affectation->loadRefLit()->loadCompleteView();
+          $_affectation->_view = $_affectation->_ref_lit->_view;
+        }
+
         $_affectation->loadRefParentAffectation();
       }
     }

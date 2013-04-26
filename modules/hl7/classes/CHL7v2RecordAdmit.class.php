@@ -376,15 +376,15 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         }
       }      
     }
-    
+
     $return_movement = $this->mapAndStoreMovement($ack, $newVenue, $data);
     if (is_string($return_movement)) {
       return $exchange_ihe->setAckAR($ack, "E206", $return_movement, $newVenue);
     }
     $movement = $return_movement;
-    
+
     // Mapping de l'affectation
-    $return_affectation = $this->mapAndStoreAffectation($ack, $newVenue, $data, $return_movement);
+    $return_affectation = $this->mapAndStoreAffectation($newVenue, $data, $return_movement);
     if (is_string($return_affectation)) {
       return $exchange_ihe->setAckAR($ack, "E208", $return_affectation, $newVenue);
     }
@@ -395,7 +395,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $movement->affectation_id = $affectation->_id;
       $movement->store();
     }
-    
+
     // Dans le cas d'une grossesse
     if ($return_grossesse = $this->storeGrossesse($newVenue, $data)) {
       return $exchange_ihe->setAckAR($ack, "E211", $return_grossesse, $newVenue);
@@ -848,7 +848,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $movement = $return_movement;
     
     // Mapping de l'affectation
-    $return_affectation = $this->mapAndStoreAffectation($ack, $newVenue, $data, $movement);
+    $return_affectation = $this->mapAndStoreAffectation($newVenue, $data, $movement);
     if (is_string($return_affectation)) {
       return $exchange_ihe->setAckAR($ack, "E208", $return_affectation, $newVenue);
     }
@@ -967,7 +967,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     return $movement;
   }
   
-  function mapAndStoreAffectation(CHL7Acknowledgment $ack, CSejour $newVenue, $data, CMovement $movement = null) {
+  function mapAndStoreAffectation(CSejour $newVenue, $data, CMovement $movement = null) {
     $sender = $this->_ref_sender;
 
     $PV1_3 = $this->queryNode("PV1.3", $data["PV1"]);
@@ -1140,6 +1140,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           return null;
         }
 
+        if (!$movement->affectation_id) {
+          return null;
+        }
+
         $affectation =  $newVenue->getCurrAffectation($datetime);
         // Si on le mouvement n'a pas d'affectation associée, et que l'on a déjà une affectation dans MB
         if (!$movement->affectation_id && $affectation->_id) {
@@ -1172,40 +1176,40 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         break;
     }
 
-    // Si pas de lit on retourne une affectation vide/couloir
+    // Si pas d'UF/service/chambre/lit on retourne une affectation vide
     if (!$PV1_3) {
       return $affectation;
     }
 
+    // Si pas de lit on affecte le service sur le séjour
     if (!$this->queryTextNode("PL.3", $PV1_3)) {
       // On essaye de récupérer le service dans ce cas depuis l'UF d'hébergement
-      $uf           = new CUniteFonctionnelle();
+      $uf = new CUniteFonctionnelle();
       $uf->group_id = $newVenue->group_id;
       $uf->code     = $this->queryTextNode("PL.1", $PV1_3);
       if (!$uf->loadMatchingObject()) {
         return $affectation;
       }
 
-      $affectation_uf               = new CAffectationUniteFonctionnelle();
+      $affectation_uf = new CAffectationUniteFonctionnelle();
       $affectation_uf->uf_id        = $uf->_id;
       $affectation_uf->object_class = "CService";
       $affectation_uf->loadMatchingObject();
+
       // Dans le cas où l'on retrouve un service associé à l'UF d'hébergement
       if ($affectation_uf->_id) {
         $newVenue->service_id        = $affectation_uf->object_id;
         $newVenue->uf_hebergement_id = $affectation_uf->uf_id;
       }
 
-      $newVenue->uf_medicale_id    = $this->mappingUFMedicale($data);
-      $newVenue->uf_soins_id       = $this->mappingUFSoins($data);
+      $newVenue->uf_medicale_id = $this->mappingUFMedicale($data);
+      $newVenue->uf_soins_id    = $this->mappingUFSoins($data);
 
       // On ne check pas la cohérence des dates des consults/intervs
       $newVenue->_skip_date_consistencies = true;
       if ($msgVenue = $newVenue->store()) {
         return $msgVenue;
       }
-
-      return $affectation;
     }
 
     // Récupération du Lit et UFs
@@ -1386,11 +1390,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     // Récupération de la chambre
     $nom_chambre = $this->queryTextNode("PL.2", $node);
-    $chambre     = new CChambre();
+    $chambre = new CChambre();
 
     // Récupération du lit
     $nom_lit = $this->queryTextNode("PL.3", $node);
-    $lit     = new CLit();
+    $lit = new CLit();
 
     switch ($sender->_configs["handle_PV1_3"]) {
       // idex du service
@@ -1424,14 +1428,15 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $affectation->service_id = $lit->loadRefService()->_id;
     }
 
-    $code_uf     = $this->queryTextNode("PL.1", $node);
+    $code_uf = $this->queryTextNode("PL.1", $node);
+
     // Affectation de l'UF hébergement
     $uf = CUniteFonctionnelle::getUF($code_uf);
     $affectation->uf_hebergement_id = $uf->_id;
     
     // Affectation du service (couloir)
     if (!$affectation->service_id) {
-      $affectation_uf               = new CAffectationUniteFonctionnelle();
+      $affectation_uf = new CAffectationUniteFonctionnelle();
       $affectation_uf->uf_id        = $uf->_id;
       $affectation_uf->object_class = "CService";
       $affectation_uf->loadMatchingObject();
@@ -1899,7 +1904,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $newVenue->transport = CHL7v2TableEntry::mapFrom("0430", $mode_arrival_code);
   }
   
-  function getZBE(DOMNode $node, CSejour $newVenue, CMovement $movement) {    
+  function getZBE(DOMNode $node, CSejour $newVenue, CMovement $movement) {
     $sender       = $this->_ref_sender;
     $id400_create = false;
     $event_code   = $this->_ref_exchange_ihe->code;
@@ -1922,6 +1927,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         continue;
       }    
     }
+
     if (!$own_movement && !$sender_movement) {
       return "Impossible d'identifier le mouvement";
     }
@@ -1940,7 +1946,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     $movement->sejour_id = $newVenue->_id;
     $movement->original_trigger_code = $original_trigger;
-    
+    $movement->cancel    = 0;
+
     // Notre propre ID de mouvement
     if ($own_movement) {
       $movement_id_split       = explode("-", $movement_id);
@@ -1975,7 +1982,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       
       $movement->movement_type = $newVenue->getMovementType($original_trigger);
     }
-    
+
     // Erreur dans le cas où le type du mouvement est UPDATE ou CANCEL et que l'on a pas retrouvé le mvt
     if (($action == "UPDATE" || $action == "CANCEL") && !$movement->_id) {
       return null;

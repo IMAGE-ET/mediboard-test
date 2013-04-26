@@ -120,8 +120,8 @@ foreach ($files as $_filepath) {
 
     $e->stepAjax(UI_MSG_WARNING);
     continue;
-  }   
-  
+  }
+
   $source->_receive_filename = $path_info["filename"];
 
   // Dispatch EAI 

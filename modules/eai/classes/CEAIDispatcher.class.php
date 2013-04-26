@@ -186,16 +186,16 @@ class CEAIDispatcher {
         
     $source       = reset($sender->_ref_exchanges_sources);
     $filename_ack = "ACK_".$source->_receive_filename;
-    
+
+    $source->setData($msg);
+
     if ($source instanceof CSourceFTP) {
-      $source->setData($msg);
       $source->send(null, $filename_ack);
     }
     elseif ($source instanceof CSourceFileSystem) {
-      $source->setData($msg, false, "$filename_ack.$source->fileextension");
+      $source->fileprefix = $filename_ack;
+
       $source->send();
     }
   }
 }
-
-?>
