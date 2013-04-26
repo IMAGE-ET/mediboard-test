@@ -28,16 +28,16 @@ $keeper = new CPasswordKeeper();
 $keeper->load($password_keeper_id);
 
 if ($keeper->_id && $keeper->user_id == $user->_id) {
-  $dom = new CMbXMLDocument("UTF-8");
+  $dom = new CMbXMLDocument("ISO-8859-1");
   $keeperNode = $dom->addElement($dom, "keeper");
-  $dom->addAttribute($keeperNode, "name", utf8_encode($keeper->keeper_name));
+  $dom->addAttribute($keeperNode, "name", $keeper->keeper_name);
 
   $categoriesNode = $dom->addElement($keeperNode, "categories");
 
   $categories = $keeper->loadRefsBack();
   foreach ($categories as $_category) {
     $categoryNode = $dom->addElement($categoriesNode, "category");
-    $dom->addAttribute($categoryNode, "name", utf8_encode($_category->category_name));
+    $dom->addAttribute($categoryNode, "name", $_category->category_name);
 
     $passwordsNode = $dom->addElement($categoryNode, "passwords");
 
@@ -51,11 +51,11 @@ if ($keeper->_id && $keeper->user_id == $user->_id) {
       $newPass = $_password->encrypt($newPassphrase);
 
       $passwordNode = $dom->addElement($passwordsNode, "password");
-      $dom->insertTextElement($passwordNode, "description", utf8_encode($_password->password_description));
-      $dom->insertTextElement($passwordNode, "crypted"    , utf8_encode($newPass));
-      $dom->insertTextElement($passwordNode, "last_change", utf8_encode($_password->password_last_change));
-      $dom->insertTextElement($passwordNode, "iv"         , utf8_encode($_password->iv));
-      $dom->insertTextElement($passwordNode, "comments"   , utf8_encode($_password->password_comments));
+      $dom->insertTextElement($passwordNode, "description", $_password->password_description);
+      $dom->insertTextElement($passwordNode, "crypted"    , $newPass);
+      $dom->insertTextElement($passwordNode, "last_change", $_password->password_last_change);
+      $dom->insertTextElement($passwordNode, "iv"         , $_password->iv);
+      $dom->insertTextElement($passwordNode, "comments"   , $_password->password_comments);
     }
   }
 

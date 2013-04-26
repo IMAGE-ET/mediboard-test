@@ -36,7 +36,7 @@ if ($keeperNode->nodeName != "keeper") {
 }
 
 $keeper = new CPasswordKeeper();
-$keeper->keeper_name = utf8_decode($keeperName);
+$keeper->keeper_name = $keeperName;
 $keeper->_passphrase = $passphrase;
 $keeper->user_id     = $user->_id;
 $keeper->store();
@@ -44,7 +44,7 @@ $keeper->store();
 $categoryNodes = $xpath->query("//category");
 foreach ($categoryNodes as $_categoryNode) {
   $category = new CPasswordCategory();
-  $category->category_name = utf8_decode($_categoryNode->getAttribute("name"));
+  $category->category_name = $_categoryNode->getAttribute("name");
   $category->password_keeper_id = $keeper->_id;
   $category->store();
 
@@ -53,19 +53,19 @@ foreach ($categoryNodes as $_categoryNode) {
     $password = new CPasswordEntry();
 
     $desc = $xpath->queryUniqueNode("description", $_passwordNode);
-    $password->password_description = utf8_decode($desc->nodeValue);
+    $password->password_description = $desc->nodeValue;
 
     $crypted = $xpath->queryUniqueNode("crypted", $_passwordNode);
-    $password->password = utf8_decode($crypted->nodeValue);
+    $password->password = $crypted->nodeValue;
 
     $last_change = $xpath->queryUniqueNode("last_change", $_passwordNode);
-    $password->password_last_change = utf8_decode($last_change->nodeValue);
+    $password->password_last_change = $last_change->nodeValue;
 
     $iv = $xpath->queryUniqueNode("iv", $_passwordNode);
-    $password->iv = utf8_decode($iv->nodeValue);
+    $password->iv = $iv->nodeValue;
 
     $comments = $xpath->queryUniqueNode("comments", $_passwordNode);
-    $password->password_comments = utf8_decode($comments->nodeValue);
+    $password->password_comments = $comments->nodeValue;
 
     $password->category_id = $category->_id;
     $password->store(null, true);
