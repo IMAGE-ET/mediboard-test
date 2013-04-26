@@ -15,7 +15,6 @@
  * Description
  */
 class CPerson extends CMbObject {
-
   public $_pcity;
   public $_ppostalCode;
   public $_pstreetAddress;
@@ -29,16 +28,22 @@ class CPerson extends CMbObject {
   public $_pbirthDate;
   public $_pmaidenName;
 
+  /**
+   * Get properties specifications as strings
+   *
+   * @see parent::getProps()
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
 
-    $props["_pcity"]              = "str notNull confidential seekable|begin";
-    $props["_ppostalCode"]        = "str notNull seekable|begin";
+    $props["_pcity"]              = "str notNull confidential";
+    $props["_ppostalCode"]        = "str notNull";
     $props["_pstreetAddress"]     = "str";
     $props["_pcountry"]           = "str";
     $props["_pphoneNumber"]       = "str";
-    $props["_pfaxNumber"]         = "str notNull confidential seekable|begin";
-    $props["_pmobilePhoneNumber"] = "str notNull seekable|begin";
+    $props["_pfaxNumber"]         = "str notNull confidential";
+    $props["_pmobilePhoneNumber"] = "str notNull";
     $props["_pemail"]             = "str";
     $props["_pfirstName"]         = "str";
     $props["_plastName"]          = "str";
