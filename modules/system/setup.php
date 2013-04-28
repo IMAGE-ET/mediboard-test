@@ -1295,7 +1295,7 @@ class CSetupsystem extends CSetup {
       SET `value` = 'aero-blue'
       WHERE `key` = 'UISTYLE'
       AND `value` = 'aero'";
-    $this->addQuery($query);
+    $this->addQuery($query, true);
 
     $this->mod_version = "1.1.32";
     
