@@ -1,10 +1,12 @@
 <?php
 /**
- *  @package Mediboard
- *  @subpackage dPfiles
- *  @version $Revision$
- *  @author Yohann Poiron
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Files
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -51,7 +53,7 @@ class CMedinetSender extends CDocumentSender {
     "m" => "M",
     "f" => "F",
   );  
-                       
+
   public static $descriptifStatus = array (
     10 => "Données reçues non traitées.",
     11 => "Données reçues traitées mais en erreur.",
@@ -61,9 +63,9 @@ class CMedinetSender extends CDocumentSender {
     31 => "Erreur à l'envoi du message. Fichier peut être supprimé.",
     32 => "Message envoyé correctement. Fichier peut être supprimé.",
   );
-                                                               
-  var $clientSOAP = null;
-  
+
+  public $clientSOAP;
+
   function initClientSOAP () {
     if ($this->clientSOAP instanceof SoapClient) {
       return;
@@ -74,96 +76,98 @@ class CMedinetSender extends CDocumentSender {
       trigger_error("Instanciation du SoapClient impossible : ".$e);
     }
   }
-  
+
   function send($docItem) {
     $this->initClientSOAP();
-    
+
     $docItem->loadTargetObject();
     $object = $docItem->_ref_object;
-    
+
     if ($object instanceof CConsultAnesth) {
       $object->loadRefConsultation();
       $object = $object->_ref_consultation;
     }
-    
+
     $object->loadRefPraticien();
     $object->loadRefPatient();
     $object->_ref_praticien->loadRefSpecCPAM();
-    
+
     if ($object instanceof CSejour) {
       $object->loadRefEtablissement();  
-      
+
       $sej_id = $object->_id;
-      
+
       $doc_type = 29;
-      
+
       $act_dateActe = CMbDT::date($object->entree_reelle);
       $act_dateValidationActe = CMbDT::date($object->entree_reelle);
-        
+
       $etab_id = $object->_ref_group->_id;
       $etab_nom = $object->_ref_group->text;
     }
-    
+
     if ($object instanceof COperation) {
       $object->_ref_sejour->loadRefEtablissement();
       $object->loadRefPlageOp();
-      
+
       $sej_id = $object->sejour_id;
-      
+
       $doc_type = 8;
-      
+
       $act_dateActe = CMbDT::date($object->_datetime);
       $act_dateValidationActe = CMbDT::date($object->_datetime);
-        
+
       $etab_id = $object->_ref_sejour->_ref_group->_id;
       $etab_nom = $object->_ref_sejour->_ref_group->text;
     }
-       
+
     if ($object instanceof CConsultation) {
-    	$object->loadRefConsultAnesth();
-    	
-    	$act_dateActe = CMbDT::date($object->_ref_plageconsult->date);
+      $object->loadRefConsultAnesth();
+
+      $act_dateActe = CMbDT::date($object->_ref_plageconsult->date);
       $act_dateValidationActe = CMbDT::date($object->_ref_plageconsult->date);
-      
-    	if ($object->_ref_consult_anesth instanceof CConsultAnesth) {
-    		$object->_ref_consult_anesth->loadRefSejour();
-    		$sejour = $object->_ref_consult_anesth->_ref_sejour;
-    		
-	      $doc_type = 67;	      
-	    } else { 
-	    	$object->loadRefSejour();   
-	    	$sejour = $object->_ref_sejour;
-	    	  
-	      $doc_type = 7;
-	    }
-	    
+
+      if ($object->_ref_consult_anesth instanceof CConsultAnesth) {
+        $object->_ref_consult_anesth->loadRefSejour();
+        $sejour = $object->_ref_consult_anesth->_ref_sejour;
+
+        $doc_type = 67;
+      }
+      else {
+        $object->loadRefSejour();
+        $sejour = $object->_ref_sejour;
+
+        $doc_type = 7;
+      }
+
       if ($sejour->sejour_id) {
         $sej_id = $sejour->sejour_id;
-        
+
         $sejour->loadRefEtablissement();
-          
+
         $etab_id = $sejour->_ref_group->_id;
         $etab_nom = $sejour->_ref_group->text;
-      } else {
+      }
+      else {
         $sej_id = -1;
-        
+
         $object->_ref_praticien->loadRefFunction();
         $object->_ref_praticien->_ref_function->loadRefGroup();
-      
+
         $etab_id = $object->_ref_praticien->_ref_function->_ref_group->_id;
         $etab_nom = $object->_ref_praticien->_ref_function->_ref_group->text;
       }
     }    
-       
+
     $praticien = $object->_ref_praticien;
-        
+
     $aut_id = $praticien->_id;
     $aut_nom = $praticien->_user_last_name;
     $aut_prenom = $praticien->_user_first_name;
     $aut_numOrdre = ($praticien->adeli) ? $praticien->adeli : "";
-    
+
     $patient = $object->_ref_patient;
-    
+
     $pat_id = $patient->_id;
     $pat_civilite = CMedinetSender::$civiliteConversion[$patient->sexe];
     $pat_nomNaissance = ($patient->nom_jeune_fille) ? $patient->nom_jeune_fille : $patient->nom; 
@@ -180,11 +184,11 @@ class CMedinetSender extends CDocumentSender {
     $pat_cinseePaysVie = ($patient->pays_insee) ? $patient->pays_insee : -1 ;
     $pat_telephone1 = $patient->tel;
     $pat_telephone2 = $patient->tel2;
-    
+
     $act_id = $object->_id;
-    
+
     $doc_id = $docItem->_id;
-     
+
     $spec_cpam_id = $praticien->_ref_spec_cpam->spec_cpam_id;
     $act_pathologie = isset(CMedinetSender::$cpamConversion[$spec_cpam_id]) ? CMedinetSender::$cpamConversion[$spec_cpam_id] : 0;
 
@@ -193,13 +197,13 @@ class CMedinetSender extends CDocumentSender {
       $doc_titre = $docItem->nom;
       $doc_nomReel = $docItem->nom;
       $doc_typeMime = "text/html";
-      
+
       $log = new CUserLog();
       $log->type = "create";
       $log->object_id = $docItem->_id;    
       $log->object_class = $docItem->_class;
       $log->loadMatchingObject();
-      
+
       $act_dateCreationActe = CMbDT::date($log->date);
       $fichier = base64_encode($docItem->getBinaryContent());
     }
@@ -208,21 +212,21 @@ class CMedinetSender extends CDocumentSender {
       $doc_titre = $docItem->file_name;
       $doc_nomReel = $docItem->file_real_filename;
       $doc_typeMime = $docItem->file_type;
-      
+
       $act_dateCreationActe = CMbDT::date($docItem->file_date);
       $fichier = base64_encode($docItem->getBinaryContent());
     }
     $doc_commentaire = "";
-                        
+
     $invalidation = 0;
 
     if ($messages = $this->checkParameters($object)) {
       CAppUI::setMsg($messages, UI_MSG_ERROR);
       return;
     }
-    
+
     $parameters = array ( 
-  		"sej_id" => $sej_id,
+      "sej_id" => $sej_id,
       "aut_id" => $aut_id,
       "aut_nom" => $aut_nom,
       "aut_prenom" => $aut_prenom,
@@ -259,139 +263,142 @@ class CMedinetSender extends CDocumentSender {
       "etab_nom" => $etab_nom,
       "invalidation" => $invalidation,
       "fichier" => $fichier,
-		);
-    
+    );
+
     $parameters = array_map("utf8_encode", $parameters);
 
     // Identifiant de la transaction
     if (null == $transactionId = $this->clientSOAP->saveNewDocument_withStringFile($parameters)) {
       return;
     }
-    
+
     $transactionId = $transactionId->saveNewDocument_withStringFileResult;
-    
+
     $parameters = array ( "transactionId" => $transactionId);
-    
+
     // Statut de la transaction
     if (null == $status = $this->clientSOAP->getStatus($parameters)) {
       return;
     }
-    
+
     $status = $status->getStatusResult;
-    
-    if(isset(CMedinetSender::$descriptifStatus[$status])) {
+
+    if (isset(CMedinetSender::$descriptifStatus[$status])) {
       CAppUI::setMsg(CMedinetSender::$descriptifStatus[$status]);
-    } else {
+    }
+    else {
       CAppUI::setMsg("Aucun statut n'a été transmis", UI_MSG_ALERT);
     }
-    
+
     // Création de l'identifiant externe 
     $id400 = new CIdSante400();
     //Paramétrage de l'id 400
     $id400->object_class = $docItem->_class;
     $id400->tag = CMedinetSender::$tag;
-            
+
     // Affectation de l'id400 a la transaction
     $id400->id400 = $transactionId;
-      
+
     $id400->object_id = $docItem->_id;
     $id400->_id = null;
     $id400->last_update = CMbDT::dateTime();
-    
+
     $id400->store();
 
     // Change l'etat du document
     $docItem->etat_envoi = "oui";
-                
+
     return true; 
   }
-  
+
   function cancel($docItem) {
     $this->initClientSOAP();
-    
+
     // Identifiant de la dernière transaction concernant le document
     if (null == $transactionId = $this->getTransactionId($docItem)) {
       return;
     }
-        
+
     $parameters = array ( "idTransaction" => $transactionId);
-    
+
     // Annulation de la transaction
     if (null == $transactionAnnulationId = $this->clientSOAP->cancelDocument($parameters)) {
       return;
     }
-    
+
     $transactionAnnulationId = $transactionAnnulationId->cancelDocumentResult;
-        
+
     // Création de l'identifiant externe 
     $id400 = new CIdSante400();
     //Paramétrage de l'id 400
     $id400->object_class = $docItem->_class;
     $id400->tag = CMedinetSender::$tag;
-            
+
     // Affectation de l'id400 a la transaction
     $id400->id400 = $transactionAnnulationId;
-      
+
     $id400->object_id = $docItem->_id;
     $id400->_id = null;
     $id400->last_update = CMbDT::dateTime();
-    
+
     $id400->store();
-    
+
     // Change l'etat du document
     $docItem->etat_envoi = "non"; 
-        
+
     return true;
   }
-  
+
   function resend($docItem) {
     $this->initClientSOAP();
-    
+
     // Annulation de la transaction
     if (null == $this->cancel($docItem)) {
       return;
     }
-    
+
     // Renvoi du document
     if (null == $this->send($docItem)) {
       return;
     }
-    
+
     return true;
   }
-  
+
   function getSendProblem(CDocumentItem $docItem) {
     $docItem->loadTargetObject();
-    
-    if ($docItem->_ref_object instanceOf COperation 
-     || $docItem->_ref_object instanceOf CSejour 
-     || $docItem->_ref_object instanceOf CConsultation 
-     || $docItem->_ref_object instanceOf CConsultAnesth)
-     return;
-     
-     return sprintf("Type d'objet '%s' non pris en charge", 
-       CAppUI::tr($docItem->_ref_object->_class));
+
+    if (
+        $docItem->_ref_object instanceOf COperation ||
+        $docItem->_ref_object instanceOf CSejour ||
+        $docItem->_ref_object instanceOf CConsultation ||
+        $docItem->_ref_object instanceOf CConsultAnesth
+    ) {
+      return;
+    }
+
+    return sprintf("Type d'objet '%s' non pris en charge", CAppUI::tr($docItem->_ref_object->_class));
   }
-  
+
   function getTransactionId($docItem) {
     $id400 = new CIdSante400();
     $id400->loadLatestFor($docItem, CMedinetSender::$tag);
-    
+
     $transactionId = $id400->id400;
-    
-    if(!$transactionId) {
+
+    if (!$transactionId) {
       return;
     }
-       
+
     return $transactionId;
   }
-  
+
   function checkParameters($object) {
-  	$messages = null;
-  	
+    $messages = null;
+
     $patient = $object->_ref_patient;
     if (!$patient->naissance) {
-    	$messages = "Date de naissance du patient manquante, ";
+      $messages = "Date de naissance du patient manquante, ";
     }
     if (!$patient->sexe) {
       $messages .= "Sexe du patient manquant, ";
@@ -399,8 +406,7 @@ class CMedinetSender extends CDocumentSender {
     if (!$patient->lieu_naissance) {
       $messages .= "Lieu de naissance du patient manquant, ";
     }
-    
+
     return $messages;
   }
 }
-?>

@@ -1,40 +1,42 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Files
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 class CFile extends CDocumentItem {
   static $directory = null;
   
   // DB Table key
-  var $file_id = null;
+  public $file_id;
   
   // DB Fields
-  var $file_real_filename = null;
-  var $file_name          = null;
-  var $file_type          = null;
-  var $file_date          = null;
-  var $file_size          = null;
-  var $private            = null;
-  var $rotation           = null;
+  public $file_real_filename;
+  public $file_name;
+  public $file_type;
+  public $file_date;
+  public $file_size;
+  public $private;
+  public $rotation;
   
   // Form fields
-  var $_extensioned   = null;
-  var $_file_size     = null;
-  var $_sub_dir       = null;
-  var $_absolute_dir  = null;
-  var $_file_path     = null;
-  var $_nb_pages      = null;
-  var $_old_file_path = null;
+  public $_extensioned;
+  public $_file_size;
+  public $_sub_dir;
+  public $_absolute_dir;
+  public $_file_path;
+  public $_nb_pages;
+  public $_old_file_path;
   
   // Behavior fields
-  var $_rotate      = null;
-  var $_rename      = null;
-  var $_merge_files = null;
+  public $_rotate;
+  public $_rename;
+  public $_merge_files;
 
   // Other fields
   static $rotable_extensions = array("bmp", "gif", "jpg", "jpeg", "png", "pdf");

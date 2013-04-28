@@ -1,10 +1,12 @@
 <?php
 /**
- *  @package Mediboard
- *  @subpackage dPfiles
- *  @version $Revision$
- *  @author Yohann Poiron
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Files
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -19,4 +21,3 @@ abstract class CDocumentSender {
   
   function getSendProblem(CDocumentItem $docItem) {}
 }
-?>

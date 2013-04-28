@@ -1,35 +1,37 @@
 <?php
 /**
- *  @package Mediboard
- *  @subpackage dPfiles
- *  @version $Revision$
- *  @author Yohann Poiron
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Files
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
  * The CDocumentItem class
  */
-
 class CDocumentItem extends CMbMetaObject {
+  public $file_category_id;
   
-  // DB Fields
-  var $file_category_id  = null;
-  var $etat_envoi        = null;
-  var $author_id         = null;
+  public $etat_envoi;
+  public $author_id;
   
   // Derivated fields
-  var $_extensioned      = null;
+  public $_extensioned;
 
-  // Distant field
-  var $_send_problem     = null;
-  var $_ref_author       = null;
+  public $_send_problem;
 
   // Behavior Field
-  var $_send             = null; 
-  var $_is_editable      = true;
-  // References
-  var $_ref_category     = null;
+  public $_send; 
+  public $_is_editable = true;
+
+  /** @var CMediusers */
+  public $_ref_author;
+
+  /** @var CFilesCategory */
+  public $_ref_category;
   
   function getProps() {
     $props = parent::getProps();
@@ -46,14 +48,16 @@ class CDocumentItem extends CMbMetaObject {
   
   /**
    * Retrieve content as binary data
-   * @return binary Content
+   *
+   * @return string Binary Content
    */
   function getBinaryContent() {
   }
 
   /**
    * Retrieve extensioned like file name
-   * @return binary Content
+   *
+   * @return string Binary Content
    */
   function getExtensioned() {
     return $this->_extensioned;
@@ -61,21 +65,21 @@ class CDocumentItem extends CMbMetaObject {
 
   /**
    * Try and instanciate document sender according to module configuration
+   *
    * @return CDocumentSender sender or null on error
    */
   static function getDocumentSender() {
     if (null == $system_sender = CAppUI::conf("dPfiles system_sender")) {
-      return;
+      return null;
     }
     
     if (!is_subclass_of($system_sender, "CDocumentSender")) {
       trigger_error("Instanciation du Document Sender impossible.");
-      return;
+      return null;
     }
     
     return new $system_sender;
   }
-  
   
   function updateFormFields() {
     parent::updateFormFields();
@@ -85,12 +89,13 @@ class CDocumentItem extends CMbMetaObject {
   
   /**
    * Retrieve send problem user friendly message
-   * @return string message Store-like problem message
+   *
+   * @return string Store-like problem message
    */
   function getSendProblem() {
     if ($sender = self::getDocumentSender()) {
-       $this->_send_problem = $sender->getSendProblem($this);
-     }
+      $this->_send_problem = $sender->getSendProblem($this);
+    }
   }
   
   function store() {
@@ -107,6 +112,7 @@ class CDocumentItem extends CMbMetaObject {
   
   /**
    * Handle document sending store behaviour
+   *
    * @return string Store-like error message 
    */
   function handleSend() {
@@ -122,15 +128,21 @@ class CDocumentItem extends CMbMetaObject {
     
     switch ($this->etat_envoi) {
       case "non" :
-        if (!$sender->send($this)) return "Erreur lors de l'envoi.";
+        if (!$sender->send($this)) {
+          return "Erreur lors de l'envoi.";
+        }
         CAppUI::setMsg("Document transmis.");
         break;
       case "oui" :
-        if (!$sender->cancel($this)) return "Erreur lors de l'invalidation de l'envoi."; 
+        if (!$sender->cancel($this)) {
+          return "Erreur lors de l'invalidation de l'envoi.";
+        }
         CAppUI::setMsg("Document annulé."); 
         break;
       case "obsolete" :
-        if (!$sender->resend($this)) return "Erreur lors du renvoi."; 
+        if (!$sender->resend($this)) {
+          return "Erreur lors du renvoi.";
+        }
         CAppUI::setMsg("Document annulé/transmis.");
         break;
       default:
@@ -143,14 +155,20 @@ class CDocumentItem extends CMbMetaObject {
     $this->loadRefCategory();
     $this->loadRefAuthor();
   }
-  
+
+  /**
+   * @return CFilesCategory
+   */
   function loadRefCategory() {
     return $this->_ref_category = $this->loadFwdRef("file_category_id", true);
   }
-  
+
+  /**
+   * @return CMediusers
+   */
   function loadRefAuthor() {
     if (!$this->_id) {
-      return;
+      return null;
     }
     
     return $this->_ref_author = $this->loadFwdRef("author_id", true);
@@ -161,16 +179,16 @@ class CDocumentItem extends CMbMetaObject {
       return parent::canRead();
     }
     
-    $this->loadRefAuthor();
+    $author = $this->loadRefAuthor();
 
     global $can;
-    return $this->_canRead = ($this->_ref_author->function_id == CAppUI::$user->function_id || $can->admin) && $this->getPerm(PERM_READ);
+    return $this->_canRead = ($author->function_id == CAppUI::$user->function_id || $can->admin) && $this->getPerm(PERM_READ);
   }
   
   /**
    * Load aggregated doc item ownership
-   * @return array collection of arrays with 
-   *   docs_count, docs_weight and author_id keys
+   *
+   * @return array collection of arrays with docs_count, docs_weight and author_id keys
    */
   function getUsersStats() {
     return array();
@@ -178,13 +196,12 @@ class CDocumentItem extends CMbMetaObject {
   
   /**
    * Load details doc item ownership for a user collection
-   * @param  array ID collection of CUser
-   * @return array collection of arrays with 
-   *   docs_count, docs_weight, object_class and category_id keys
+   *
+   * @param array $user_ids ID collection of CUser
+   *
+   * @return array collection of arrays with docs_count, docs_weight, object_class and category_id keys
    */
   function getUsersStatsDetails($user_ids) {
     return array();
   }
 }
-
-?>

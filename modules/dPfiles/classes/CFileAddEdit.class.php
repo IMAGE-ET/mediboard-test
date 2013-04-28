@@ -1,19 +1,21 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPfiles
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Files
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 class CFileAddEdit extends CDoObjectAddEdit {
   function CFileAddEdit() {
     $this->CDoObjectAddEdit("CFile", "file_id");
-    
+
     global $m;    
     $this->redirect = "m=$m"; 
-    
+
     if ($dialog = CValue::post("dialog")) {
       $this->redirect      .= "&a=upload_file&dialog=1";
       $this->redirectStore = "m=$m&a=upload_file&dialog=1&uploadok=1";
@@ -21,7 +23,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
   }
 
   function bindFilePart(){
-    
+
   }
 
   function doStore() {
@@ -29,48 +31,48 @@ class CFileAddEdit extends CDoObjectAddEdit {
     $multifiles = false;
 
     if (CValue::POST("_from_yoplet") == 1) {
-    	$obj = $this->_obj;
-    	$array_file_name = array();
-    	
-    	// On retire les backslashes d'escape
-    	$file_name = stripslashes($this->request['_file_path']);
-    	
-    	// Récupération du nom de l'image en partant de la fin de la chaîne
-    	// et en rencontrant le premier \ ou /
-    	preg_match('@[\\\/]([^\\\/]*)$@i', $file_name, $array_file_name);
-    	$file_name = $array_file_name[1];
-    	
-    	$extension = strrchr($file_name, '.');
-    	$_rename = $this->request['_rename'] ? $this->request['_rename'] : 'upload';
-    	$file_path = "tmp/". $this->request['_checksum'];
-      
-    	$obj->file_name = $_rename == 'upload' ? $file_name : $_rename . $extension;
+      $obj = $this->_obj;
+      $array_file_name = array();
+
+      // On retire les backslashes d'escape
+      $file_name = stripslashes($this->request['_file_path']);
+
+      // Récupération du nom de l'image en partant de la fin de la chaîne
+      // et en rencontrant le premier \ ou /
+      preg_match('@[\\\/]([^\\\/]*)$@i', $file_name, $array_file_name);
+      $file_name = $array_file_name[1];
+
+      $extension = strrchr($file_name, '.');
+      $_rename = $this->request['_rename'] ? $this->request['_rename'] : 'upload';
+      $file_path = "tmp/". $this->request['_checksum'];
+
+      $obj->file_name = $_rename == 'upload' ? $file_name : $_rename . $extension;
       $obj->_old_file_path = $this->request['_file_path'];
-    	$obj->file_size = filesize($file_path);
-    	$obj->author_id = CAppUI::$user->_id;
+      $obj->file_size = filesize($file_path);
+      $obj->author_id = CAppUI::$user->_id;
       $obj->fillFields();
       $obj->updateFormFields();
       $obj->file_type = CMbPath::guessMimeType($file_name);
-    	if ($msg = $obj->store()) {
-    	  CAppUI::setMsg($msg, UI_MSG_ERROR);
-    	} 
-    	else {
-    		$obj->forceDir();
-    	  $obj->moveFile($file_path);
-    	}
-    	return parent::doStore();
+      if ($msg = $obj->store()) {
+        CAppUI::setMsg($msg, UI_MSG_ERROR);
+      }
+      else {
+        $obj->forceDir();
+        $obj->moveFile($file_path);
+      }
+      return parent::doStore();
     }
-    
+
     if (isset($_FILES["formfile"])) {
       $aFiles = array();
       $upload =& $_FILES["formfile"];
       $_file_category_id = CValue::post("_file_category_id");
       $named = CValue::post("named");
       $rename = CValue::post("_rename");
-      
+
       CValue::setSession("_rename", $rename);
-      
-      foreach($upload["error"] as $fileNumber => $etatFile){
+
+      foreach ($upload["error"] as $fileNumber => $etatFile) {
         if (!$named) {
           $rename = $rename ? $rename . strrchr($upload["name"][$fileNumber], '.') : "";
         }
@@ -89,9 +91,9 @@ class CFileAddEdit extends CDoObjectAddEdit {
           );
         }
       }
-      
+
       $merge_files = CValue::post("_merge_files");
-      
+
       if ($merge_files) {
         CAppUI::requireLibraryFile("PDFMerger/PDFMerger");
         $pdf = new PDFMerger;
@@ -100,19 +102,19 @@ class CFileAddEdit extends CDoObjectAddEdit {
         $file_name = "";
         $nb_converted = 0;
 
-        foreach($aFiles as $key=>$file) {
+        foreach ($aFiles as $key => $file) {
           $converted = 0;
           if ($file["error"] == UPLOAD_ERR_NO_FILE) {
-              continue;
+            continue;
           }
-          
+
           if ($file["error"] != 0) {
             CAppUI::setMsg(CAppUI::tr("CFile-msg-upload-error-".$file["error"]), UI_MSG_ERROR);
             continue;
           }
-          
+
           // Si c'est un pdf, on le rajoute sans aucun traitement
-          if (substr(strrchr($file["name"], '.'),1) == "pdf") {
+          if (substr(strrchr($file["name"], '.'), 1) == "pdf") {
             $file_name .= substr($file["name"], 0, strpos($file["name"], '.'));
             $pdf->addPDF($file["tmp_name"], 'all');
             $nb_converted ++;
@@ -134,18 +136,18 @@ class CFileAddEdit extends CDoObjectAddEdit {
             $other_file->file_size = $file["size"];
             $other_file->fillFields();
             $other_file->private = CValue::post("private");
-            
+
             if (false == $res = $other_file->moveTemp($file)) {
               CAppUI::setMsg("Fichier non envoyé", UI_MSG_ERROR);
               continue;
             }
             $other_file->author_id = CAppUI::$user->_id;
-  
+
             if ($msg = $other_file->store()) {
               CAppUI::setMsg("Fichier non enregistré: $msg", UI_MSG_ERROR);
               continue;
             }
-  
+
             CAppUI::setMsg("Fichier enregistré", UI_MSG_OK);
           }
           // Pour le nom du pdf de fusion, on concatène les noms des fichiers
@@ -153,7 +155,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
             $file_name .= "-";
           }
         }
-        
+
         // Si des fichiers ont été convertis et ajoutés à PDFMerger,
         // création du cfile.
         if ($nb_converted) {
@@ -171,7 +173,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
           $obj->file_size = strlen(file_get_contents($tmpname));
           $obj->moveFile($tmpname);
           //rename($tmpname, $obj->_file_path . "/" .$obj->file_real_filename);
-          
+
           if ($msg = $obj->store()) {
             CAppUI::setMsg("Fichier non enregistré: $msg", UI_MSG_ERROR);
           }
@@ -185,24 +187,24 @@ class CFileAddEdit extends CDoObjectAddEdit {
           if ($file["error"] == UPLOAD_ERR_NO_FILE) {
             continue;
           }
-          
+
           if ($file["error"] != 0) {
             CAppUI::setMsg(CAppUI::tr("CFile-msg-upload-error-".$file["error"]), UI_MSG_ERROR);
             continue;
           }
-          
+
           // Reinstanciate
-  
+
           $this->_obj = new $this->_obj->_class;
           $obj = $this->_obj;
           $obj->bind($file);
           $obj->file_name = empty($file["_rename"]) ? $file["name"] : $file["_rename"];
           $obj->file_type = $file["type"];
-           
+
           if ($obj->file_type == "application/x-download") {
             $obj->file_type = CMbPath::guessMimeType($obj->file_name);
           }
-          
+
           $obj->file_size = $file["size"];
           $obj->fillFields();
           $obj->private   = CValue::post("private");
@@ -210,17 +212,17 @@ class CFileAddEdit extends CDoObjectAddEdit {
             CAppUI::setMsg("Fichier non envoyé", UI_MSG_ERROR);
             continue;
           }
-  
+
           // File owner on creation
           if (!$obj->file_id) {
             $obj->author_id = CAppUI::$user->_id;
           }
-  
+
           if ($msg = $obj->store()) {
             CAppUI::setMsg("Fichier non enregistré: $msg", UI_MSG_ERROR);
             continue;
           }
-  
+
           CAppUI::setMsg("Fichier enregistré", UI_MSG_OK);
         }
       }
@@ -228,7 +230,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
       if (CAppUI::isMsgOK() && $this->redirectStore) {
         $this->redirect =& $this->redirectStore;
       }
-      
+
       if (!CAppUI::isMsgOK() && $this->redirectError) {
         $this->redirect =& $this->redirectError;
       }
@@ -238,4 +240,3 @@ class CFileAddEdit extends CDoObjectAddEdit {
     }
   }  
 }
-?>
