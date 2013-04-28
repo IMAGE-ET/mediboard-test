@@ -20,15 +20,15 @@ $mark->load(CValue::getOrSession("mark_id"));
 $filter = new CTriggerMark();
 $where = array();
 if ($filter->trigger_class = CValue::getOrSession("trigger_class")) {
-  $where["trigger_class"] = "LIKE '$filter->trigger_class%'"; 
+  $where["trigger_class"] = "= '$filter->trigger_class'"; 
 }
 
 if ($filter->trigger_number = CValue::getOrSession("trigger_number")) {
-  $where["trigger_number"] = "LIKE '$filter->trigger_number%'"; 
+  $where["trigger_number"] = "= '$filter->trigger_number'"; 
 }
 
 if ($filter->mark = CValue::getOrSession("mark")) {
-  $where["mark"] = "LIKE '$filter->mark%'"; 
+  $where["mark"] = "= '$filter->mark'"; 
 }
 
 if ("" !== $filter->done = CValue::getOrSession("done", "")) {
@@ -36,7 +36,7 @@ if ("" !== $filter->done = CValue::getOrSession("done", "")) {
 }
 
 $count = $filter->countList($where);
-$marks = $filter->loadList($where, "trigger_class, trigger_number DESC", 100);
+$marks = $filter->loadList($where, "trigger_number DESC", 100);
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -35,7 +35,7 @@
   
   <tr>
     <th>{{mb_label object=$mark field=trigger_number}}</th>
-    <td>{{mb_field object=$mark field=trigger_number}}</td>
+    <td>{{mb_field object=$mark field=trigger_number size=8}}</td>
   </tr>
 
   <tr>

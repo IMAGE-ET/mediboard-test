@@ -30,7 +30,7 @@
     </td>
 
     <th>{{mb_label object=$filter field=trigger_number}}</th>
-    <td>{{mb_field object=$filter field=trigger_number canNull=true}}</td>
+    <td>{{mb_field object=$filter field=trigger_number canNull=true size=8}}</td>
   </tr>
 
   <tr>
