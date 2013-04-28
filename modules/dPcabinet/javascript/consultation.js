@@ -21,7 +21,7 @@ Consultation = {
     var url = new Url('cabinet', 'macro_stats');
     url.addElement(form.period);
     url.addElement(form.date);
-    url.addElement(form.type_stats);
+    url.addElement(form.type);
     url.requestModal(950, 600);
   },
   

@@ -41,7 +41,7 @@
           <option value="month">{{tr}}Month{{/tr}}</option>
           <option value="year" >{{tr}}Year {{/tr}}</option>
         </select>
-        <select name="type_stats">
+        <select name="type">
           <option value="RDV">RDV</option>
           <option value="consult">{{tr}}CConsultation{{/tr}}</option>
           <option value="FSE" style="display: none;">{{tr}}CFSE{{/tr}}</option>
