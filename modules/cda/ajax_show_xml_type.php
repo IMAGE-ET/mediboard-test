@@ -15,7 +15,7 @@ CCanDo::checkAdmin();
 
 $name = CValue::get("name");
 
-echo "<h1>$name</h1>";
+echo CMbString::purifyHTML("<h1>$name</h1>");
 
 $cdatools = new CCdaTools();
 
