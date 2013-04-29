@@ -39,7 +39,7 @@ switch($type) {
   case "AddArbre"    : addarbre(); break;
   
   default:
-  echo "<div class='error'>L'action '$type' n'existe pas";
+  echo "<div class='error'>L'action '", CMbString::purifyHTML($type), "' n'existe pas";
 }
 
 /** 
