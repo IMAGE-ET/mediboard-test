@@ -1,4 +1,10 @@
-<h1>{{tr}}{{$title}}{{/tr}}</h1>
+<h1>
+  {{tr}}{{$title}}{{/tr}}
+  <br />
+  par utilisateur
+  du {{$min_date|date_format:$conf.date}}
+  au {{$max_date|date_format:$conf.date}}
+</h1>
 
 <table class="tbl">
   <tr>

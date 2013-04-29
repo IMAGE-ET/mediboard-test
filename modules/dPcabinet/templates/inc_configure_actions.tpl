@@ -47,7 +47,7 @@
           <option value="FSE" style="display: none;">{{tr}}CFSE{{/tr}}</option>
         </select>
         <button class="modify" type="button" onclick="Consultation.macroStats(this);">
-          {{tr}}mod-cabinet-tab-macro_stats{{/tr}}
+          {{tr}}mod-cabinet-tab-user_stats{{/tr}}
         </button> 
       </form>
     </td>

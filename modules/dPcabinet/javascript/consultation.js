@@ -18,7 +18,7 @@ Consultation = {
 
   macroStats: function(button) { 
     var form = button.form;
-    var url = new Url('cabinet', 'macro_stats');
+    var url = new Url('cabinet', 'user_stats');
     url.addElement(form.period);
     url.addElement(form.date);
     url.addElement(form.type);

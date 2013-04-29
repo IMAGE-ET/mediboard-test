@@ -100,14 +100,14 @@ class CMediusersStats {
     
     $smarty->assign("period"   , $this->period);
     $smarty->assign("dates"    , $this->dates );
+    $smarty->assign("min_date" , reset($this->dates));
+    $smarty->assign("max_date" , CMbDT::date("+1 $this->period -1 day", end($this->dates)));
     $smarty->assign("totals"   , $this->totals);
     $smarty->assign("users"    , $users );
     $smarty->assign("functions", $functions);
     $smarty->assign("groups"   , $groups);
     $smarty->assign("title"    , $title);
     
-    $smarty->display("../../../modules/mediusers/templates/macro_stats.tpl");
+    $smarty->display("../../../modules/mediusers/templates/user_stats.tpl");
   }
 }
-
-?>
