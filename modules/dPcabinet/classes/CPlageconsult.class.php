@@ -229,10 +229,12 @@ class CPlageconsult extends CPlageHoraire {
   }
   
   function getPerm($permType) {
+    if (!$this->_id) {
+      return parent::getPerm($permType);
+    }
     if (!$this->_ref_chir) {
       $this->loadRefsFwd(1);
     }
-
     return $this->_ref_chir->getPerm($permType) 
       && parent::getPerm($permType);
   }
