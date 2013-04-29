@@ -75,7 +75,7 @@ class CPasswordKeeper extends CMbObject {
     $this->_view = $this->keeper_name;
   }
 
-  function loadRefsBack() {
+  function loadRefsCategories() {
     return $this->_ref_categories = $this->loadBackRefs("categories");
   }
 
@@ -86,10 +86,9 @@ class CPasswordKeeper extends CMbObject {
      * Lorsque le trousseau existe et que la phrase est modifiée
      * Charge tous les mots de passe et les re-chiffre
      */
-    $this->loadRefsBack();
-    foreach ($this->_ref_categories as $_category) {
-      $_category->loadRefsBack();
-      foreach ($_category->_ref_passwords as $_password) {
+
+    foreach ($this->loadRefsCategories() as $_category) {
+      foreach ($_category->loadRefsPasswords() as $_password) {
         $_password->renew(CValue::sessionAbs("passphrase"), $this->_passphrase);
       }
     }

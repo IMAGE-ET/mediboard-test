@@ -18,7 +18,7 @@ $category_id = CValue::getOrSession("category_id");
 // Récupération de la catégorie
 $category = new CPasswordCategory();
 $category->load($category_id);
-$category->loadRefsBack();
+$category->loadRefsPasswords();
 
 // Récupération du mot de passe
 $password = new CPasswordEntry();

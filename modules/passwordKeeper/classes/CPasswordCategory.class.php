@@ -55,7 +55,7 @@ class CPasswordCategory extends CMbObject {
     $this->_view = $this->category_name;
   }
 
-  function loadRefsBack() {
+  function loadRefsPasswords() {
     return $this->_ref_passwords = $this->loadBackRefs("passwords");
   }
 }

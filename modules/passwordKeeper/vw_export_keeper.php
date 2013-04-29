@@ -34,15 +34,13 @@ if ($keeper->_id && $keeper->user_id == $user->_id) {
 
   $categoriesNode = $dom->addElement($keeperNode, "categories");
 
-  $categories = $keeper->loadRefsBack();
-  foreach ($categories as $_category) {
+  foreach ($keeper->loadRefsCategories() as $_category) {
     $categoryNode = $dom->addElement($categoriesNode, "category");
     $dom->addAttribute($categoryNode, "name", $_category->category_name);
 
     $passwordsNode = $dom->addElement($categoryNode, "passwords");
 
-    $passwords = $_category->loadRefsBack();
-    foreach ($passwords as $_password) {
+    foreach ($_category->loadRefsPasswords() as $_password) {
       // Déchiffrement du mot de passe
       $_password->password = $_password->getPassword();
       // Génération d'un nouveau vecteur d'inistalisation
