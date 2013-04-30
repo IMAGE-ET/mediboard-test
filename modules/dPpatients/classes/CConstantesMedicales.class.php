@@ -17,28 +17,28 @@
  * @property string $ta
  */
 class CConstantesMedicales extends CMbObject {
-  // DB Table key
-  var $constantes_medicales_id = null;
+  public $constantes_medicales_id;
 
   // DB Fields
-  var $patient_id            = null;
-  var $datetime              = null;
-  var $context_class         = null;
-  var $context_id            = null;
-  var $comment               = null;
+  public $patient_id;
+  public $datetime;
+  public $context_class;
+  public $context_id;
+  public $comment;
 
-  // Object References
-  //    Single
-  var $_ref_context          = null;
-  var $_ref_patient          = null;
+  /** @var CConsultation|CSejour|CPatient */
+  public $_ref_context;
+
+  /** @var CPatient */
+  public $_ref_patient;
+
+  /** @var CUser */
+  public $_ref_user;
 
   // Forms fields
-  var $_imc_valeur           = null;
-  var $_vst                  = null;
-  var $_new_constantes_medicales = null;
-
-  // Other fields
-  var $_ref_user             = null;
+  public $_imc_valeur;
+  public $_vst;
+  public $_new_constantes_medicales;
 
   static $_specs_converted = false;
   static $_latest_values = array();
@@ -1027,6 +1027,8 @@ class CConstantesMedicales extends CMbObject {
   }
 
   /**
+   * Build constantes grid
+   *
    * @param self[] $list            The list of CConstantesMedicales objects to build the grid from
    * @param bool   $full            Display the full list of constantes
    * @param bool   $only_with_value Only display not null values
@@ -1274,8 +1276,8 @@ class CConstantesMedicales extends CMbObject {
   /**
    * Get the config from a host
    *
-   * @param string           $name The config name
-   * @param CGroups|CService $host The host object
+   * @param string                     $name The config name
+   * @param CMbObject|CGroups|CService $host The host object
    *
    * @return mixed
    */
@@ -1417,16 +1419,19 @@ class CConstantesMedicales extends CMbObject {
       $selection = CConstantesMedicales::getConfig("selection");
     }
 
+    $list_constants = CConstantesMedicales::$list_constantes;
+
+    // Keep only valid constant names
+    $selection = array_intersect_key($selection, $list_constants);
+
     $selection = CMbArray::flip($selection);
     ksort($selection);
 
     $result = array();
     if (CConstantesMedicales::getConfig("show_cat_tabs") && $order_by_types) {
-      $list_constants = CConstantesMedicales::$list_constantes;
       foreach ($selection as $_rank => $_constants) {
         foreach ($_constants as $_constant) {
-          $_params = $list_constants[$_constant];
-          $_type = $_params["type"];
+          $_type = $list_constants[$_constant]["type"];
 
           if (!array_key_exists($_type, $result)) {
             $result["$_type"] = array();

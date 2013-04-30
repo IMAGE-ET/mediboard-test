@@ -2087,7 +2087,7 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("1.78");
-    
+
     function addConstantesRank($setup) {
       $ds = $setup->ds;
 
@@ -2102,6 +2102,10 @@ class CSetupdPpatients extends CSetup {
 
       if ($results) {
         while ($row = $ds->fetchAssoc($results)) {
+          if ($row["value"] == "") {
+            continue;
+          }
+
           $constants = explode("|", $row["value"]);
 
           $object_class = "NULL";
