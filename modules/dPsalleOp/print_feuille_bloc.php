@@ -1,12 +1,13 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPsalleOp
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*/
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ */
 
 // @todo bloc n'est pas forcément actif
 global $can;
@@ -30,28 +31,28 @@ $sejour->loadRefsFwd();
 $sejour->loadRefPrescriptionSejour();
 
 $administrations = array();
-
+$prescription_id = null;
 if (CModule::getActive("dPprescription")) {
-	$prescription_id = $sejour->_ref_prescription_sejour->_id;
+  $prescription_id = $sejour->_ref_prescription_sejour->_id;
   $administrations = array();
-	if ($prescription_id) {
-  	$administration = new CAdministration();
-  	$ljoin["prescription_line_medicament"] = "prescription_line_medicament.prescription_line_medicament_id = administration.object_id AND administration.object_class = 'CPrescriptionLineMedicament'";
-  	$ljoin["prescription_line_element"]    = "prescription_line_element.prescription_line_element_id = administration.object_id AND administration.object_class = 'CPrescriptionLineElement'";
-  	$ljoin["prescription_line_mix_item"]   = "prescription_line_mix_item.prescription_line_mix_item_id = administration.object_id AND administration.object_class = 'CPrescriptionLineMixItem'";
-  	$ljoin["prescription_line_mix"]        = "prescription_line_mix.prescription_line_mix_id = prescription_line_mix_item.prescription_line_mix_id";
-  	                                                                                       
-  	$ljoin["prescription"] = "(prescription_line_medicament.prescription_id = prescription.prescription_id) OR
-  	                          (prescription_line_element.prescription_id = prescription.prescription_id) OR
-  	                          (prescription_line_mix.prescription_id = prescription.prescription_id)";
-  	
-  	$where["prescription.prescription_id"] = " = '$prescription_id'";
-  	
-  	$where[] = "prescription_line_medicament.perop = '1' OR 
-  	            prescription_line_element.perop = '1' OR
-  	            prescription_line_mix.perop = '1'";
-  	    
-  	$administrations = $administration->loadList($where, null, null, null, $ljoin);
+  if ($prescription_id) {
+    $administration = new CAdministration();
+    $ljoin["prescription_line_medicament"] = "prescription_line_medicament.prescription_line_medicament_id = administration.object_id AND administration.object_class = 'CPrescriptionLineMedicament'";
+    $ljoin["prescription_line_element"]    = "prescription_line_element.prescription_line_element_id = administration.object_id AND administration.object_class = 'CPrescriptionLineElement'";
+    $ljoin["prescription_line_mix_item"]   = "prescription_line_mix_item.prescription_line_mix_item_id = administration.object_id AND administration.object_class = 'CPrescriptionLineMixItem'";
+    $ljoin["prescription_line_mix"]        = "prescription_line_mix.prescription_line_mix_id = prescription_line_mix_item.prescription_line_mix_id";
+                                                                                           
+    $ljoin["prescription"] = "(prescription_line_medicament.prescription_id = prescription.prescription_id) OR
+                              (prescription_line_element.prescription_id = prescription.prescription_id) OR
+                              (prescription_line_mix.prescription_id = prescription.prescription_id)";
+    
+    $where["prescription.prescription_id"] = " = '$prescription_id'";
+    
+    $where[] = "prescription_line_medicament.perop = '1' OR 
+                prescription_line_element.perop = '1' OR
+                prescription_line_mix.perop = '1'";
+        
+    $administrations = $administration->loadList($where, null, null, null, $ljoin);
   }
 }
 
