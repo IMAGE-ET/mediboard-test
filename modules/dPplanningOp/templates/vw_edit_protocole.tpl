@@ -40,12 +40,15 @@ refreshListCCAMProtocole = function() {
   
   var aCodeNodes = [];
   var iCode = 0;
-  
-  while (sCode = aCcam[iCode++]) {
-    var sCodeNode = printf("<button class='remove' type='button' onclick='oCcamFieldProtocole.remove(\"%s\")'>%s<\/button>", sCode, sCode);
-    aCodeNodes.push(sCodeNode);
+
+  oCcamNode.update("");
+  while (var sCode = aCcam[iCode++]) {
+    oCcamNode.insert(DOM.button({
+      className: 'remove',
+      type: 'button',
+      onclick: 'oCcamFieldProtocole.remove(\"'+sCode+'\")'
+    }, sCode));
   }
-  oCcamNode.update(aCodeNodes.join(""));
 }
 
 checkFormSejour = function() {
@@ -56,7 +59,7 @@ checkFormSejour = function() {
 checkCCAMProtocole = function() {
   var oForm = getForm("editProtocole");
   if ($V(oForm.for_sejour) == 1) return true;
-  
+
   var sCcam = $V(oForm._codes_ccam);
   if(sCcam != "") {
     if(!oCcamFieldProtocole.add(sCcam,true)) {
@@ -67,7 +70,7 @@ checkCCAMProtocole = function() {
   var sCodesCcam = oForm.codes_ccam.value;
   var sLibelle = oForm.libelle.value;
   if(sCodesCcam == "" && sLibelle == "") {
-    alert("Vous indiquez un acte ou remplir le libellé");
+    alert("Veuillez indiquer un acte ou remplir le libellé");
     oForm.libelle.focus();
     return false;
   }
@@ -139,7 +142,7 @@ Main.add(function () {
   var form = getForm('editProtocole');
   refreshListCCAMProtocole();
   setOperationActive($V(form.for_sejour) == 0);
-  
+
   oCcamFieldProtocole = new TokenField(form.codes_ccam, { 
     onChange : refreshListCCAMProtocole,
     sProps : "notNull code ccam"
