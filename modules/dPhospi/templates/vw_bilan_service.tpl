@@ -513,7 +513,7 @@
                   {{/if}}
                    </td>
                 </tr>
-                {{if !$prescription_line_mix->signature_prat && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
+                {{if !$prescription_line_mix->signature_prat && "CAppUI::conf"|static_call:"dPprescription CPrescription show_unsigned_med_msg":"CGroups-$g"}}
                   <tr>
                     <td></td>
                     <td class="text">
@@ -581,7 +581,7 @@
                   {{/if}}
                   </td> 
                   
-                  {{if !$line->signee && $line->_class == "CPrescriptionLineMedicament" && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
+                  {{if !$line->signee && $line->_class == "CPrescriptionLineMedicament" && "CAppUI::conf"|static_call:"dPprescription CPrescription show_unsigned_med_msg":"CGroups-$g"}}
                     <td colspan="4">
                       <div class="small-warning">
                         Ligne non signée
