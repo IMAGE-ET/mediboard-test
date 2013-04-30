@@ -11,7 +11,7 @@
 {{mb_script module="patients" script="autocomplete" ajax=true}}
 {{mb_default var=mode_modele value=0}}
 
-<script type="text/javascript">
+<script>
   InseeFields.initCPVille("editCorrespondant", "cp", "ville", "tel");
 
   Main.add(function() {
@@ -56,6 +56,8 @@
             $V(form.fax, selected.get("fax"));
             $V(form.urssaf, selected.get("urssaf"));
             $V(form.ean, selected.get("ean"));
+            $V(form.ean_base, selected.get("ean_base"));
+            $V(form.type_pec, selected.get("type_ean"));
             $V(form.parente, selected.get("parente"));
             $V(form.email, selected.get("email"));
             $V(form.remarques, selected.get("remarques"));
@@ -131,6 +133,8 @@
       if ($V(elt) == "assurance") {
          {{if $conf.ref_pays == 2}}
           $("ean").setStyle({display: "table-row"});
+          $("ean_base").setStyle({display: "table-row"});
+          $("type_pec").setStyle({display: "table-row"});
           $("employeur").setStyle({display: "table-row"});
           $("num_assure").setStyle({display: "none"});
           $("ean_id").setStyle({display: "table-row"});
@@ -143,6 +147,8 @@
       else if ($V(elt) == "employeur") {
         {{if $conf.ref_pays == 2}}
           $("ean").setStyle({display: "none"});
+          $("ean_base").setStyle({display: "none"});
+          $("type_pec").setStyle({display: "none"});
           $("num_assure").setStyle({display: "table-row"});
           $("employeur").setStyle({display: "none"});
           $("ean_id").setStyle({display: "none"});
@@ -155,6 +161,8 @@
       else {
         {{if $conf.ref_pays == 2}}
           $("ean").setStyle({display: "none"});
+          $("ean_base").setStyle({display: "none"});
+          $("type_pec").setStyle({display: "none"});
           $("num_assure").setStyle({display: "none"});
           $("employeur").setStyle({display: "none"});
           $("ean_id").setStyle({display: "none"});
@@ -307,16 +315,24 @@
 
     {{* Switzerland *}}
     {{if $conf.ref_pays == 2}}
-      <tr id="ean">
+      <tr id="ean" {{if $correspondant->relation != "assurance"}} style="display: none;"{{/if}}>
         <th>{{mb_label object=$correspondant field="ean"}}</th>
         <td>{{mb_field object=$correspondant field="ean"}}</td>
       </tr>
-      <tr id="ean_id" {{if $correspondant->relation != "assurance" && $correspondant->_id}} style="display: none;"{{/if}}>
+      <tr id="ean_base" {{if $correspondant->relation != "assurance"}} style="display: none;"{{/if}}>
+        <th>{{mb_label object=$correspondant field="ean_base"}}</th>
+        <td>{{mb_field object=$correspondant field="ean_base"}}</td>
+      </tr>
+      <tr id="type_pec" {{if $correspondant->relation != "assurance"}} style="display: none;"{{/if}}>
+        <th>{{mb_label object=$correspondant field="type_pec"}}</th>
+        <td>{{mb_field object=$correspondant field="type_pec" emptyLabel="Choose"}}</td>
+      </tr>
+      <tr id="ean_id" {{if $correspondant->relation != "assurance"}} style="display: none;"{{/if}}>
         <th>{{mb_label object=$correspondant field="ean_id"}}</th>
         <td>{{mb_field object=$correspondant field="ean_id"}}</td>
       </tr>
 
-      <tr id="assure_id" {{if $correspondant->relation != "assurance" && $correspondant->_id}} style="display: none;"{{/if}}>
+      <tr id="assure_id" {{if $correspondant->relation != "assurance"}} style="display: none;"{{/if}}>
         <th>{{mb_label object=$correspondant field="assure_id"}}</th>
         <td>{{mb_field object=$correspondant field="assure_id"}}</td>
       </tr>

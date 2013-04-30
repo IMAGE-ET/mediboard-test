@@ -38,6 +38,8 @@ class CCorrespondantPatient extends CPerson {
   public $email;
   public $remarques;
   public $ean;
+  public $ean_base;
+  public $type_pec;
   public $assure_id;
   public $ean_id;
   public $date_debut;
@@ -95,6 +97,8 @@ class CCorrespondantPatient extends CPerson {
     $props["email"]      = "email";
     $props["remarques"]  = "text";
     $props["ean"]        = "str maxLength|30";
+    $props["ean_base"]   = "str maxLength|30";
+    $props["type_pec"]   = "enum list|TG|TP|TS";
     $props["assure_id"]  = "str maxLength|30";
     $props["ean_id"]     = "str maxLength|5";
     $props["date_debut"] = "date";

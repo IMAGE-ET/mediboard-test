@@ -25,6 +25,9 @@ if ($correspondant_id) {
   $correspondant->load($correspondant_id);
   $patient->load($correspondant->patient_id);
 }
+if (CAppUI::conf("ref_pays") == 2) {
+  $correspondant->relation = "assurance";
+}
 
 $patient->loadRefsCorrespondantsPatient();
 
