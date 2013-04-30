@@ -14,7 +14,7 @@
  * Record admit, message XML HL7
  */
 class CHL7v2RecordAdmit extends CHL7v2MessageXML {
-  static $event_codes = array ("A01", "A02", "A03", "A04", "05", "A06", "A07", "A08", "A09", "A10", "A11", "A12", "A13", "A14", "A15",
+  static $event_codes = array ("A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10", "A11", "A12", "A13", "A14", "A15",
     "A16", "A21", "A22", "A25", "A26", "A27", "A32", "A33", "A38", "A52", "A53", "A54", "A55", "Z80", "Z81", "Z84", "Z85", "Z99");
   
   public $_object_found_by_vn;
@@ -244,7 +244,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       if (!$newVenue->_id) {
         // Mapping du séjour
         $this->mappingVenue($data, $newVenue);
-
         // Séjour retrouvé ?
         if (CAppUI::conf("hl7 strictSejourMatch")) {
           // Recherche d'un num dossier déjà existant pour cette venue 
