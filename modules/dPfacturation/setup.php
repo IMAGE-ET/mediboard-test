@@ -229,7 +229,15 @@ class CSetupdPfacturation extends CSetup {
               ADD INDEX (`object_id`),
               ADD INDEX (`date`);";
     $this->addQuery($query);
-    $this->mod_version = "0.23";
+    $this->makeRevision("0.23");
     
+    $query = "ALTER TABLE `facture_liaison` 
+                CHANGE `facture_id` `facture_id` INT (11) UNSIGNED NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `facture_liaison` 
+                ADD INDEX (`facture_id`);";
+    $this->addQuery($query);
+    $this->mod_version = "0.24";
   }
 }

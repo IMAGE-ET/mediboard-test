@@ -55,9 +55,9 @@ class CFactureLiaison extends CMbMetaObject {
   **/
   function getProps() {
     $specs = parent::getProps();
-    $specs["facture_id"]        = "num notNull";
-    $specs["facture_class"]     = "enum notNull list|CFactureCabinet|CFactureEtablissement show|0 default|CFactureCabinet";
-    $specs["object_id"]         = "ref notNull class|CFacturable meta|object_class";
+    $specs["facture_id"]    = "ref notNull class|CFacture meta|facture_class";
+    $specs["facture_class"] = "enum notNull list|CFactureCabinet|CFactureEtablissement show|0 default|CFactureCabinet";
+    $specs["object_id"]     = "ref notNull class|CFacturable meta|object_class";
     return $specs;
   }
      
@@ -69,10 +69,7 @@ class CFactureLiaison extends CMbMetaObject {
    * @return $this->_ref_facture
   **/
   function loadRefFacture($cache = 1) {
-    $this->_ref_facture = new $this->facture_class;
-    $this->_ref_facture->facture_id = $this->facture_id;
-    $this->_ref_facture->loadMatchingObject();
-    return $this->_ref_facture;
+    return $this->_ref_facture = $this->loadFwdRef("facture_id", $cache);
   }
      
   /**
