@@ -55,7 +55,36 @@ class CMbPhone {
         break;
     }
 
-
     return false;
+  }
+
+
+  /**
+   * get the mobine phone of an user object
+   *
+   * @param string $guid MB guid
+   *
+   * @return string
+   */
+  static function getMobilePhoneFromGuid($guid) {
+    $object = CMbObject::loadFromGuid($guid);
+
+    switch ($object->_class) {
+      case 'CPatient':
+        return $object->tel2;
+      break;
+
+      case 'CMediuser':
+        return $object->_user_phone;
+        break;
+
+      case 'CUser':
+        return ($object->user_astreinte) ? $object->user_astreinte : $object->user_phone;
+        break;
+
+      default:
+        return;
+        break;
+    }
   }
 }
