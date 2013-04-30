@@ -38,11 +38,11 @@ refreshListCCAMProtocole = function() {
   // Si la chaine est vide, il crée un tableau à un élément vide donc :
   aCcam = aCcam.without("");
   
-  var aCodeNodes = [];
   var iCode = 0;
+  var sCode;
 
   oCcamNode.update("");
-  while (var sCode = aCcam[iCode++]) {
+  while (sCode = aCcam[iCode++]) {
     oCcamNode.insert(DOM.button({
       className: 'remove',
       type: 'button',
