@@ -9,26 +9,27 @@
 
 class CAntecedent extends CMbObject {
   // DB Table key
-  var $antecedent_id = null;
+  public $antecedent_id;
 
   // DB fields
-  var $type               = null;
-  var $appareil           = null;
-  var $date               = null;
-  var $rques              = null;
-  var $dossier_medical_id = null;
-  var $annule             = null;
+  public $type;
+  public $appareil;
+  public $date;
+  public $rques;
+  public $dossier_medical_id;
+  public $annule;
   
   // Form Fields
-  var $_search = null;
+  public $_search;
+  public $_aides_all_depends;
   
   // Distant fields
-  var $_count_rques_aides = null;
+  public $_count_rques_aides;
 
   /**
-   * @var CDossierMedical
+   * @public CDossierMedical
    */
-  var $_ref_dossier_medical = null;
+  public $_ref_dossier_medical;
   
   // Types
   static $types = array(
@@ -107,6 +108,8 @@ class CAntecedent extends CMbObject {
 
     // DossierMedical store
     $this->checkCodeCim10();
+
+    return null;
   }
   
   function delete() {

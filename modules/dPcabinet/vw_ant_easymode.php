@@ -28,7 +28,8 @@ if ($consult_id) {
 // Chargement des aides à la saisie
 $antecedent = new CAntecedent();
 $antecedent->loadAides($user->_id);
-$aides_antecedent = $antecedent->_aides_all_depends["rques"];
+
+$aides_antecedent = $antecedent->_aides_all_depends["rques"] ? $antecedent->_aides_all_depends["rques"] : array();
 
 // On charge le patient pour connaitre ses antécedents et traitements actuels
 $patient = new CPatient;
