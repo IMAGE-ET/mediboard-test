@@ -309,9 +309,8 @@ PlanSoins = {
         unite_prise = (unite_prise+"").replace(/[^a-z0-9_-]/gi, '_');
         
         var first_td = $('first_'+object_id+"_"+object_class+"_"+unite_prise);
-        console.log('first_'+object_id+"_"+object_class+"_"+unite_prise);
         var last_td = $('last_'+object_id+"_"+object_class+"_"+unite_prise);
-        console.log('last_'+object_id+"_"+object_class+"_"+unite_prise);
+
         // Suppression des td entre les 2 td bornes
         var td = first_td;
         var colSpan = 0;
