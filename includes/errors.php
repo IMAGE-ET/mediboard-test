@@ -265,6 +265,7 @@ function errorHandler($code, $text, $file, $line, $context, $backtrace = null) {
   }
   
   $time = date("Y-m-d H:i:s");
+  $text = htmlspecialchars($text);
   
   // CMbArray non chargé
   $divClass = isset($divClasses[$code]) ? $divClasses[$code] : null;
@@ -386,7 +387,7 @@ function exceptionHandler($exception) {
   $type = "Exception";
   $file = mbRelativePath($exception->getFile());
   $line = $exception->getLine();
-  $text = $exception->getMessage();
+  $text = htmlspecialchars($exception->getMessage());
   $log .= <<<HTML
 <strong>Time: </strong>$time
 <strong>Type: </strong>$type

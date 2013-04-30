@@ -55,7 +55,7 @@ switch ($evenement) {
     break;
    
   default:
-    echo "<div class='error'>Action '$evenement' inconnue</div>";
+    echo "<div class='error'>Action '", CMbString::purifyHTML($evenement), "' inconnue</div>";
 }
 
 function extractFiles($schemaDir, $schemaFile, $delOldDir = false) {
