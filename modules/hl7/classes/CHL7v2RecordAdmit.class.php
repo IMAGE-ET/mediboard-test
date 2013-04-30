@@ -1140,25 +1140,20 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           return null;
         }
 
-        if (!$movement->affectation_id) {
-          return null;
-        }
-
-        $affectation =  $newVenue->getCurrAffectation($datetime);
-        // Si on le mouvement n'a pas d'affectation associée, et que l'on a déjà une affectation dans MB
-        if (!$movement->affectation_id && $affectation->_id) {
-          return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
-        }
-
         // Si on a une affectation associée, alors on charge celle-ci
         if ($movement->affectation_id) {
           $affectation = $movement->loadRefAffectation();
         }
-        // Sinon on récupère et on met à jour la première affectation
         else {
-          $affectation->sejour_id = $newVenue->_id;
-          $affectation->entree    = $newVenue->entree;
-          $affectation->sortie    = $newVenue->sortie;
+          // On recherche l'affectation "courante"
+          $affectation = $newVenue->getCurrAffectation($datetime);
+
+          // Sinon on récupère et on met à jour la première affectation
+          if (!$affectation->_id) {
+            $affectation->sejour_id = $newVenue->_id;
+            $affectation->entree    = $newVenue->entree;
+            $affectation->sortie    = $newVenue->sortie;
+          }
         }
 
         break;
