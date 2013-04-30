@@ -23,18 +23,19 @@ class CEditPdf{
   public $size;
   
   //Elements de la facture
-  public $pre_tab      = array();
+  public $adresse_prat;
+  public $acompte;
+  public $adherent;
   public $autre_tarmed = 0;
-  public $praticien;
+  public $destinataire;
   public $function_prat;
   public $group;
-  public $adherent;
-  public $acompte;
   public $nb_factures;
   public $num_fact;
   public $patient_facture;
-  public $destinataire;
-  public $adresse_prat;
+  public $praticien;
+  public $pre_tab      = array();
+  public $type_rbt;
   
   //Elements pour le justificatif
   public $colonnes = array(20, 28, 25, 75, 30);
@@ -138,13 +139,6 @@ class CEditPdf{
         $this->function_prat->adresse = str_replace("\r\n",' ', $this->function_prat->adresse);
         $this->patient_facture->adresse = str_replace("\r\n",' ', $this->patient_facture->adresse);
         
-        if (strlen($this->patient_facture->cp)>4) {
-          $this->patient_facture->cp = substr($this->patient_facture->cp, 1);
-        }
-        if (strlen($this->function_prat->cp)>4) {
-          $this->function_prat->cp = substr($this->function_prat->cp, 1);
-        }
-        
         foreach ($this->facture->_montant_factures_caisse as $cle_facture => $montant_facture) {
           $this->editCenterJustificatif($cle_facture, $montant_facture);
         }
@@ -157,6 +151,7 @@ class CEditPdf{
   }
   
   function editCenterJustificatif($cle_facture, $montant_facture) {
+    $this->loadAllElements();
     $this->pdf->AddPage();
     $pm = $pt = 0;
     
@@ -434,6 +429,7 @@ class CEditPdf{
   }
   
   function editHautFacture($cle_facture, $montant_facture, $relance = false) {
+    $this->loadAllElements();
     //Création de la page de la facture
     $this->pdf->AddPage();
     $colonne1 = 10;
@@ -449,16 +445,6 @@ class CEditPdf{
     
     $this->pdf->setFont($this->font, '', 8);
     
-    //Auteur de la facture
-    $this->adresse_prat = $this->traitements($this->function_prat->adresse);
-    $this->group_adrr = $this->traitements($this->group->adresse);
-    
-    if (strlen($this->function_prat->cp)>4) {
-      $this->function_prat->cp =  substr($this->function_prat->cp, 1);
-    }
-    if (strlen($this->patient_facture->cp)>4) {
-      $this->patient_facture->cp =  substr($this->patient_facture->cp, 1);
-    }
     $auteur = array(
       "50" => "Auteur facture",
       $this->group->raison_sociale,
@@ -474,31 +460,6 @@ class CEditPdf{
     );
     $tab[$colonne1] = $auteur;
 
-    //Assurance
-    $assur = array();
-    $assurance_patient = null;
-    if ($this->facture->assurance_maladie && !$this->facture->send_assur_base && $this->facture->type_facture == "maladie") {
-      $assurance_patient = $this->facture->_ref_assurance_maladie;
-    }
-    elseif ($this->facture->assurance_accident && !$this->facture->send_assur_compl && $this->facture->type_facture == "accident") {
-      $assurance_patient = $this->facture->_ref_assurance_accident;
-    }
-    else {
-      $assurance_patient = $this->patient_facture;
-    }
-    
-    $assur["nom"]     = "$assurance_patient->_view";
-    $assur["adresse"] = "$assurance_patient->adresse";
-    $assur["cp"]      = "$assurance_patient->cp $assurance_patient->ville";
-    
-    $assur_adrr = $this->traitements($assur["adresse"]);
-    $this->destinataire = array(
-      "nom"       => $assur["nom"],
-      "adresse1"  => $assur_adrr["group1"],
-      "adresse2"  => $assur_adrr["group2"],
-      "cp"        => $assur["cp"],
-    );
-    
     $patient_adrr = $this->traitements($this->patient_facture->adresse);
     //Destinataire de la facture
     $patient = array(
@@ -732,23 +693,9 @@ class CEditPdf{
     }
     
     $loi = $this->facture->type_facture == "accident" ? "LAA" : "LAMal";
-    $typeRbt = $this->facture->type_facture == "accident" ? "TP" : "TG";
-    if ($this->facture->cession_creance) {
-      $typeRbt .= " avec cession";
-    }
     
+    $assurance_patient = $this->destinataire[0];
     $assur = array();
-    $assurance_patient = null;
-    if ($this->facture->assurance_maladie && !$this->facture->send_assur_base && $this->facture->type_facture == "maladie") {
-      $assurance_patient = $this->facture->_ref_assurance_maladie;
-    }
-    elseif ($this->facture->assurance_accident && !$this->facture->send_assur_compl && $this->facture->type_facture == "accident") {
-      $assurance_patient = $this->facture->_ref_assurance_accident;
-    }
-    else {
-      $assurance_patient = $this->patient_facture;
-    }
-    
     $assur["civilite"]  = isset($assurance_patient->civilite) ? ucfirst($this->patient_facture->civilite) : "";
     $assur["nom"]     = "$assurance_patient->nom $assurance_patient->prenom";
     $assur["adresse"] = "$assurance_patient->adresse";
@@ -771,7 +718,7 @@ class CEditPdf{
       array(""          , "Nom entreprise"  , $nom_entreprise),
       array(""          , "Canton"          , "GE"),
       array(""          , "Copie"           , "Non"),
-      array(""          , "Type de remb."   , $typeRbt),
+      array(""          , "Type de remb."   , $this->type_rbt),
       array(""          , "Loi"             , $loi),
       array(""          , "N° contrat"      , ""),
       array(""          , "Motif traitement", ucfirst($this->facture->type_facture)),
@@ -827,4 +774,60 @@ class CEditPdf{
     }
   }
   
+  /**
+   * Chargement de tous les éléments communs
+   * 
+   * @return void
+   */
+  function loadAllElements(){
+    //Auteur de la facture
+    $this->adresse_prat = $this->traitements($this->function_prat->adresse);
+    $this->group_adrr = $this->traitements($this->group->adresse);
+    
+    if (strlen($this->function_prat->cp)>4) {
+      $this->function_prat->cp =  substr($this->function_prat->cp, 1);
+    }
+    if (strlen($this->patient_facture->cp)>4) {
+      $this->patient_facture->cp =  substr($this->patient_facture->cp, 1);
+    }
+    
+    //Assurance
+    $assur = array();
+    $assurance_patient = null;
+    $view = "_longview";
+    $this->type_rbt = "TG";
+    
+    //@todo à faire valider par DAVID!!
+    //TP uniquement pour maladie 
+    //TG uniquement pour accident 
+    //TS (Tiers soldant ou TG avec cession) pour les 2
+    //     2 facture: première à l'assurance, seconde au patient avec le restant (un pct???)
+    if ($this->facture->assurance_maladie && !$this->facture->send_assur_base && $this->facture->_ref_assurance_maladie->type_pec != "TP" && $this->facture->type_facture == "maladie") {
+      $assurance_patient = $this->facture->_ref_assurance_maladie;
+      $this->type_rbt = $this->facture->_ref_assurance_maladie->type_pec;
+    }
+    elseif ($this->facture->assurance_accident && !$this->facture->send_assur_compl && $this->facture->_ref_assurance_accident->type_pec != "TG" && $this->facture->type_facture == "accident") {
+      $assurance_patient = $this->facture->_ref_assurance_accident;
+      $this->type_rbt = $this->facture->_ref_assurance_accident->type_pec;
+    }
+    else {
+      $assurance_patient = $this->patient_facture;
+      $view = "_view";
+    }
+    $this->type_rbt = $this->type_rbt == "" ? "TG" : $this->type_rbt;
+    
+    $assur["nom"]     = $assurance_patient->$view;
+    $assur["adresse"] = $assurance_patient->adresse;
+    $assur["cp"]      = $assurance_patient->cp." ".$assurance_patient->ville;
+    
+    $assur_adrr = $this->traitements($assur["adresse"]);
+    $this->destinataire = array(
+      "0"         => $assurance_patient,
+      "nom"       => $assur["nom"],
+      "adresse1"  => $assur_adrr["group1"],
+      "adresse2"  => $assur_adrr["group2"],
+      "cp"        => $assur["cp"],
+    );
+    
+  }
 }
