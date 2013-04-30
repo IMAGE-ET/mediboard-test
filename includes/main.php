@@ -197,16 +197,6 @@ $tab = $a == "index" ?
   CValue::getOrSession("tab", $tab) :
   CValue::get("tab");
 
-// Check whether the password is strong enough
-if (
-    CAppUI::$instance->weak_password && 
-    !CAppUI::$instance->user_remote && 
-    !($m      == "admin" && $tab == "chpwd") &&
-    !($m_post == "admin" && $dosql == "do_chpwd_aed")
-) {
-  CAppUI::redirect("m=admin&tab=chpwd&forceChange=1");
-}
-
 // set the group in use, put the user group if not allowed
 $g = CValue::getOrSessionAbs("g", CAppUI::$instance->user_group);
 $indexGroup = new CGroups;
@@ -215,21 +205,21 @@ if ($indexGroup->load($g) && !$indexGroup->canRead()) {
   CValue::setSessionAbs("g", $g);
 }
 
-// If we want to force user to periodically change password
-if (CAppUI::conf("admin CUser force_changing_password")) {
-  $user = CAppUI::$user;
-
-  // If account has a software tag
-  if ($user->_id && CIdSante400::getMatch($user->_class, CMediusers::getTagSoftware(), null, $user->_id)->_id) {
+$user = CAppUI::$user;
+// Check whether the password is strong enough
+// If account is not a robot
+if ($user->_id && !$user->isRobot() && (!($m == "admin" && $tab == "chpwd") && !($m_post == "admin" && $dosql == "do_chpwd_aed"))) {
+  if (
+    CAppUI::$instance->weak_password
+    && (!CAppUI::$instance->user_remote || CAppUI::conf("admin CUser apply_all_users"))
+  ) {
+    CAppUI::redirect("m=admin&tab=chpwd&forceChange=1");
+  }
+  // If we want to force user to periodically change password
+  if (CAppUI::conf("admin CUser force_changing_password")) {
     // Need to change
     if (CMbDT::dateTime("-".CAppUI::conf("admin CUser password_life_duration")) > $user->_ref_user->user_password_last_change) {
-      // To prevent from infinite redirection
-      if (
-          !($m      == "admin" && $tab   == "chpwd") &&
-          !($m_post == "admin" && $dosql == "do_chpwd_aed")
-      ) {
-        CAppUI::redirect("m=admin&tab=chpwd&forceChange=1&lifeDuration=1");
-      }
+      CAppUI::redirect("m=admin&tab=chpwd&forceChange=1&lifeDuration=1");
     }
   }
 }
@@ -250,7 +240,7 @@ if ($dosql) {
   // controller in controllers/ directory
   if (is_file("./modules/$m_post/controllers/$dosql.php")) {
     include "./modules/$m_post/controllers/$dosql.php";
-  } 
+  }
 }
 
 if ($class) {
@@ -260,7 +250,6 @@ if ($class) {
 
 // Checks if the current module is obsolete
 $obsolete_module = false;
-$user = CAppUI::$user;
 
 // We check only when not in the "system" module, and not in an "action" (ajax, etc)
 // And when user is undefined or admin

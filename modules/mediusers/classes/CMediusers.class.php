@@ -243,9 +243,11 @@ class CMediusers extends CPerson {
   function updateSpecs() {
     $oldSpec = $this->_specs['_user_password'];
 
-    $strongPassword = ((CAppUI::conf("admin CUser strong_password") == "1") && ($this->remote == 0));
+    // Determine if password length is sufficient
+    $strongPassword = ((CAppUI::conf("admin CUser strong_password") == "1")
+      && (($this->remote == 0) || CAppUI::conf("admin CUser apply_all_users")));
 
-    // If the global strong password config is set to TRUE and the user can connect remotely
+    // If the global strong password config is set to TRUE
     $this->_specs['_user_password'] = $strongPassword?
       $this->_specs['_user_password_strong']:
       $this->_specs['_user_password_weak'];
@@ -1449,6 +1451,10 @@ class CMediusers extends CPerson {
     }
 
     return str_replace('$g', $group_id, $tag_mediusers);
+  }
+
+  function isRobot() {
+    return (CIdSante400::getMatch($this->_class, CMediusers::getTagSoftware(), null, $this->_id)->_id != null);
   }
 
   /**

@@ -18,6 +18,7 @@
       <th class="category" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
     </tr>
     {{mb_include module=system template=inc_config_bool var=strong_password}}
+    {{mb_include module=system template=inc_config_bool var=apply_all_users}}
     {{mb_include module=system template=inc_config_str var=max_login_attempts}}
     {{mb_include module=system template=inc_config_bool var=allow_change_password}}
     {{mb_include module=system template=inc_config_bool var=force_changing_password}}

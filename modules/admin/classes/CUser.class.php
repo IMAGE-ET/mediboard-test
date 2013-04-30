@@ -185,7 +185,9 @@ class CUser extends CPerson {
       }
     }
 
-    $strongPassword = ((CAppUI::conf("admin CUser strong_password") == "1") && ($remote == 0));
+    // Determine if password length is sufficient
+    $strongPassword = ((CAppUI::conf("admin CUser strong_password") == "1")
+      && (($remote == 0) || CAppUI::conf("admin CUser apply_all_users")));
 
     // If the global strong password config is set to TRUE and the user can connect remotely
     $this->_specs['_user_password'] = $strongPassword ?
