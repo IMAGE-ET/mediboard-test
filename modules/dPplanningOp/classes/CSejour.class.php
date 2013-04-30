@@ -17,6 +17,10 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   //static lists
   static $types = array("comp", "ambu",  "exte", "seances", "ssr", "psy" ,"urg", "consult");
+  static $fields_etiq = array(
+    "NDOS", "DATE ENT", "HEURE ENT", "DATE SORTIE", "HEURE SORTIE",
+    "PRAT RESPONSABLE", "CODE BARRE NDOS", "CHAMBRE COURANTE"
+  );
 
   // DB Table key
   public $sejour_id;
@@ -2904,14 +2908,22 @@ class CSejour extends CFacturable implements IPatientRelated {
     $affectation = $this->getCurrAffectation();
     $affectation->loadView();
     $fields = array_merge($fields,
-                array("DATE ENT" => CMbDT::dateToLocale(CMbDT::date($this->entree)),
-                      "HEURE ENT" => CMbDT::time($this->entree),
-                      "DATE SORTIE" => CMbDT::dateToLocale(CMbDT::date($this->sortie)),
-                      "HEURE SORTIE" => CMbDT::time($this->sortie),
+                array("DATE ENT"         => CMbDT::dateToLocale(CMbDT::date($this->entree)),
+                      "HEURE ENT"        => CMbDT::transform($this->entree, null, "%H:%M"),
+                      "DATE SORTIE"      => CMbDT::dateToLocale(CMbDT::date($this->sortie)),
+                      "HEURE SORTIE"     => CMbDT::transform($this->sortie, null, "%H:%M"),
                       "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
-                      "NDOS"     => $this->_NDA,
-                      "CODE BARRE NDOS" => "@BARCODE_".$this->_NDA."@",
+                      "NDOS"             => $this->_NDA,
+                      "CODE BARRE NDOS"  => "@BARCODE_".$this->_NDA."@",
                       "CHAMBRE COURANTE" => $affectation->_view));
+
+    if (CAppUI::conf("ref_pays") == 2) {
+      $this->loadRefsFactureEtablissement();
+      $this->_ref_last_facture->loadRefAssurance();
+      $fields["MODE TRT"]       = $this->loadRefChargePriceIndicator()->code;
+      $fields["ASSUR MALADIE"]  = $this->_ref_last_facture->_ref_assurance_maladie->nom;
+      $fields["ASSUR ACCIDENT"] = $this->_ref_last_facture->_ref_assurance_accident->nom;
+    }
   }
 
   function checkMerge($sejours = array()/*<CSejour>*/) {
@@ -3168,4 +3180,10 @@ class CSejour extends CFacturable implements IPatientRelated {
       return "NDA";
     }
   }
+}
+
+if (CAppUI::conf("ref_pays") == 2) {
+  CSejour::$fields_etiq[] = "MODE TRT";
+  CSejour::$fields_etiq[] = "ASSUR MALADIE";
+  CSejour::$fields_etiq[] = "ASSUR ACCIDENT";
 }

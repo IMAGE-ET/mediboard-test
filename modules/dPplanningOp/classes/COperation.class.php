@@ -13,6 +13,9 @@
  * Opération
  */
 class COperation extends CCodable implements IPatientRelated {
+  // static lists
+  static $fields_etiq = array("ANESTH", "LIBELLE", "DATE", "COTE");
+
   // DB Table key
   var $operation_id  = null;
 
@@ -1440,5 +1443,18 @@ class COperation extends CCodable implements IPatientRelated {
         return $msg;
       }
     }
+  }
+
+  function completeLabelFields(&$fields) {
+    $this->loadRefSejour()->completeLabelFields($fields);
+    $this->loadRefPlageOp();
+    $this->loadRefAnesth();
+
+    $fields = array_merge($fields, array(
+        "ANESTH"  => $this->_ref_anesth->_view,
+        "LIBELLE" => $this->libelle,
+        "DATE"    => CMbDT::dateToLocale(CMbDT::date($this->_datetime_best)),
+        "COTE"    => $this->getFormattedValue("cote")
+      ));
   }
 }

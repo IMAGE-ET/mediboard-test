@@ -69,6 +69,12 @@ class CPatient extends CPerson {
     "11" => 6,
   );
 
+  static $fields_etiq = array(
+    "DATE NAISS", "IPP", "LIEU NAISSANCE",
+    "NOM", "NOM JF", "PRENOM", "SEXE", "CIVILITE", "CIVILITE LONGUE",
+    "ACCORD GENRE", "CODE BARRE IPP", "ADRESSE", "MED. TRAITANT"
+  );
+
   // DB Table key
   public $patient_id;
 
@@ -1998,17 +2004,31 @@ class CPatient extends CPerson {
     $fields = array_merge(
       $fields,
       array(
-        "DATE NAISS"     => CMbDT::dateToLocale($this->naissance), "IPP"    => $this->_IPP,
-        "LIEU NAISSANCE" => $this->lieu_naissance,
-        "NOM"            => $this->nom,       "NOM JF" => $this->nom_jeune_fille,
-        "NUM SECU"       => $this->matricule, "PRENOM" => $this->prenom,
-        "SEXE"           => $this->sexe, "CIVILITE" => $this->civilite,
-        "CIVILITE LONGUE" => $this->_civilite_long, "ACCORD GENRE" => $this->sexe == "f" ? "e" : "",
-        "CODE BARRE IPP" => "@BARCODE_" . $this->_IPP."@",
-        "ADRESSE"        => "$this->adresse \n$this->cp $this->ville",
-        "MED. TRAITANT"  => "Dr $medecin_traitant->nom $medecin_traitant->prenom",
+        "DATE NAISS"      => CMbDT::dateToLocale($this->naissance), "IPP"    => $this->_IPP,
+        "LIEU NAISSANCE"  => $this->lieu_naissance,
+        "NOM"             => $this->nom,
+        "NOM JF"          => $this->nom_jeune_fille,
+        "PRENOM"          => $this->prenom,
+        "SEXE"            => strtoupper($this->sexe),
+        "CIVILITE"        => $this->civilite,
+        "CIVILITE LONGUE" => $this->_civilite_long,
+        "ACCORD GENRE"    => $this->sexe == "f" ? "e" : "",
+        "CODE BARRE IPP"  => "@BARCODE_" . $this->_IPP."@",
+        "ADRESSE"         => "$this->adresse \n$this->cp $this->ville",
+        "MED. TRAITANT"   => "Dr $medecin_traitant->nom $medecin_traitant->prenom",
+        "TEL"             => $this->getFormattedValue("tel"),
+        "TEL PORTABLE"    => $this->getFormattedValue("tel2"),
+        "TEL ETRANGER"    => $this->getFormattedValue("tel_autre"),
+        "PAYS"            => $this->getFormattedValue("pays"),
       )
     );
+    switch (CAppUI::conf("ref_pays")) {
+      case 1:
+        $fields["NUM SECU"] = $this->matricule;
+        break;
+      case 2:
+        $fields["AVS"] = $this->getFormattedValue("avs");
+    }
   }
 
   function docsEditable() {
@@ -2202,3 +2222,5 @@ class CPatient extends CPerson {
     $this->_pmaidenName = $this->nom_jeune_fille;
   }
 }
+
+CPatient::$fields_etiq[] = CAppUI::conf("ref_pays") == 1 ? "NUM SECU" : "AVS";

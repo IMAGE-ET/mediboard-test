@@ -36,13 +36,7 @@ class CModeleEtiquette extends CMbMetaObject {
   // Form fields
   var $_write_bold   = null;
   
-  static $fields = array("CPatient" =>
-      array("DATE NAISS", "IPP", "LIEU NAISSANCE",
-            "NOM", "NOM JF",  "NUM SECU",
-            "PRENOM", "SEXE", "CIVILITE", "CIVILITE LONGUE",
-            "ACCORD GENRE", "CODE BARRE IPP", "ADRESSE", "MED. TRAITANT"),
-      "CSejour" => array("NDOS", "DATE ENT", "HEURE ENT", "DATE SORTIE", "HEURE SORTIE", "PRAT RESPONSABLE", "CODE BARRE NDOS", "CHAMBRE COURANTE"),
-      "General" => array("DATE COURANTE", "HEURE COURANTE"));
+  static $fields;
   
   static $listfonts =
       array("dejavusansmono" => "DejaVu Sans Mono",
@@ -102,8 +96,8 @@ class CModeleEtiquette extends CMbMetaObject {
   
   function completeLabelFields(&$fields) {
     $fields = array_merge($fields,array(
-      "DATE COURANTE" => CMbDT::dateToLocale(CMbDT::date()),
-      "HEURE COURANTE" => CMbDT::time()
+      "DATE COURANTE"  => CMbDT::dateToLocale(CMbDT::date()),
+      "HEURE COURANTE" => CMbDT::transform(null, null, "%H:%M")
     ));
   }
   
@@ -286,3 +280,9 @@ class CModeleEtiquette extends CMbMetaObject {
     }
   }
 }
+
+CModeleEtiquette::$fields =
+    array("CPatient"   => CPatient::$fields_etiq,
+          "CSejour"    => CSejour::$fields_etiq,
+          "COperation" => COperation::$fields_etiq,
+          "General"    => array("DATE COURANTE", "HEURE COURANTE"));
