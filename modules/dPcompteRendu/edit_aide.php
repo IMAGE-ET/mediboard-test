@@ -95,7 +95,7 @@ $orderby = "name";
 $aides = $aidebis->loadList($where, $orderby);
 
 $aide = new CAideSaisie();
-if($aide_id) {
+if ($aide_id) {
   // Chargement de l'aide
   $aide->load($aide_id);
   if ($aide->depend_value_1 && !array_key_exists($aide->depend_value_1, $dependValues)) {
@@ -104,7 +104,8 @@ if($aide_id) {
   if ($aide->depend_value_2 && !array_key_exists($aide->depend_value_2, $dependValues)) {
     $dependValues["depend_value_2"][$aide->depend_value_2] = $aide->depend_value_2;
   }
-} else {
+}
+else {
   // Nouvelle Aide à la saisie
   $aide->class        = $class;
   $aide->field        = $field;
@@ -145,5 +146,5 @@ $smarty->assign("depend_value_1", $depend_value_1);
 $smarty->assign("depend_value_2", $depend_value_2);
 $smarty->assign("class_depend_value_1", $class_depend_value_1);
 $smarty->assign("class_depend_value_2", $class_depend_value_2);
+
 $smarty->display("vw_edit_aides.tpl");
-?>

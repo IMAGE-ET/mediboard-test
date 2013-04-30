@@ -159,6 +159,7 @@ function changeUser(user_id) {
                   url.addParam("object_class", $V(form._ref_class_depend_value_{{$i}}));
                   url.addParam("field", "{{$key}}");
                   url.addParam("input_field", "_{{$key}}_view");
+                  url.addParam("show_view", true);
                   url.autoComplete(form.elements._depend_value_{{$i}}_view, null, {
                     minChars: 3,
                     method: "get",
