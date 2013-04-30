@@ -7,6 +7,7 @@ $dPconfig["dPccam"] = array (
   ),
   "CCodable" => array (
     "use_getMaxCodagesActes" => "1",
+    "precode_modificateur_7" => "0",
     "use_frais_divers" => array(
       "CConsultation" => "0",
       "COperation" => "0",

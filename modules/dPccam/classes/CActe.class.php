@@ -28,10 +28,17 @@ class CActe extends CMbMetaObject {
   public $_permissive;
   
   // Distant object
+  /** @var  CSejour */
   public $_ref_sejour;
+
+  /** @var  CPatient */
   public $_ref_patient;
-  public $_ref_praticien; // Probable user
-  public $_ref_executant; // Actual user
+
+  /** @var  CMediusers Probavle user*/
+  public $_ref_praticien;
+
+  /** @var  CMediusers Actual user*/
+  public $_ref_executant;
   
   public $_list_executants;
   
@@ -45,7 +52,7 @@ class CActe extends CMbMetaObject {
    */
   function loadRefSejour() {
     if (null == $object = $this->loadTargetObject()) {
-      return;
+      return null;
     }
 
     return $this->_ref_sejour = $object->loadRefSejour();
@@ -56,7 +63,7 @@ class CActe extends CMbMetaObject {
    */
   function loadRefPatient() {
     if (null == $object = $this->loadTargetObject()) {
-      return;
+      return null;
     }
 
     return $this->_ref_patient = $object->loadRefPatient();
@@ -67,12 +74,15 @@ class CActe extends CMbMetaObject {
    */
   function loadRefPraticien() {
     if (null == $object = $this->loadTargetObject()) {
-      return;
+      return null;
     }
     
     return $this->_ref_praticien = $object->loadRefPraticien();
   }
-  
+
+  /**
+   * @return CMediusers
+   */
   function loadRefExecutant() {
     $this->_ref_executant = $this->loadFwdRef("executant_id", true);
     $this->_ref_executant->loadRefFunction();
@@ -85,13 +95,13 @@ class CActe extends CMbMetaObject {
 
     // No executant guess for the existing acte
     if ($this->executant_id || $this->_id) {
-      return;
+      return null;
     }
     
     // User executant
     if (CAppUI::pref("user_executant")) {
       $this->executant_id = $user->_id;
-      return;
+      return null;
     }
 
     // Referring pratician executant
@@ -122,7 +132,7 @@ class CActe extends CMbMetaObject {
    */
   function checkCoded() {
     if (!$this->_check_coded || $this->_forwardRefMerging){
-      return;
+      return null;
     }
     
     $this->completeField("object_class");
@@ -132,6 +142,7 @@ class CActe extends CMbMetaObject {
     if ($object->_coded == "1") {
       return CAppUI::tr($object->_class) ." déjà validée : Impossible de coter l\'acte";
     }
+    return null;
   }
 
   /**
@@ -160,7 +171,7 @@ class CActe extends CMbMetaObject {
   
   function updateMontant(){
     if ($this->_preserve_montant || $this->_forwardRefMerging) {
-      return;
+      return null;
     }
 
     /** @var CCodable $object */
@@ -187,5 +198,6 @@ class CActe extends CMbMetaObject {
     if (!$this->_purge) {
       return $this->updateMontant();
     }
+    return null;
   }
 }

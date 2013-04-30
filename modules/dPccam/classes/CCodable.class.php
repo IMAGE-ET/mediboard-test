@@ -25,6 +25,7 @@ class CCodable extends CMbObject {
   public $_associationCodesActes;
   public $_count_actes;
   public $_actes_non_cotes;
+  public $_datetime;
 
   // Abstract fields
   public $_praticien_id;
@@ -34,30 +35,46 @@ class CCodable extends CMbObject {
   public $_text_codes_ccam;
   public $_codes_ccam;
   public $_tokens_ccam;
+
+  /** @var CActeCCAM[]  */
   public $_ref_actes_ccam;
 
   /** @var CCodeCCAM[] */
   public $_ext_codes_ccam;
 
+  public $_temp_ccam;
+
   // Actes NGAP
   public $_store_ngap;
+
+  /** @var CActeNGAP[] */
   public $_ref_actes_ngap;
+
   public $_codes_ngap;
   public $_tokens_ngap;
 
   // Actes Tarmed
   public $_codes_tarmed;
+
+  /** @var CActeTarmed[] */
   public $_ref_actes_tarmed;
+
   public $_tokens_tarmed;
 
   // Actes Caisse
   public $_codes_caisse;
+
+  /** @var CActeCaisse[] */
   public $_ref_actes_caisse;
+
   public $_tokens_caisse;
 
   // Back references
   public $_ref_actes;
   public $_ref_prescriptions;
+
+  /** @var  CFraisDivers[] */
+  public $_ref_frais_divers;
 
   // Distant references
   public $_ref_sejour;
@@ -112,6 +129,7 @@ class CCodable extends CMbObject {
       }
       $this->_tokens_caisse = "";
     }
+    return null;
   }
 
   /**
@@ -158,6 +176,7 @@ class CCodable extends CMbObject {
         return $msg;
       }
     }
+    return null;
   }
 
   /**
@@ -354,7 +373,7 @@ class CCodable extends CMbObject {
   /**
    * Charge les actes CCAM codés
    * 
-   * @return objects
+   * @return CActeCCAM[]
    */
   function loadRefsActesCCAM() {
     if ($this->_ref_actes_ccam) {
@@ -384,7 +403,7 @@ class CCodable extends CMbObject {
   /**
    * Charge les actes NGAP codés
    * 
-   * @return objects
+   * @return CActeNGAP[]
    */
   function loadRefsActesNGAP() {
     /** ajout d'un paramètre d'ordre à passer, ici "lettre_cle" qui vaut 0 ou 1
@@ -441,7 +460,7 @@ class CCodable extends CMbObject {
       }
 
       if (null === $this->_ref_actes_tarmed) {
-        return;
+        return null;
       }
 
       $this->_codes_tarmed = array();
@@ -478,7 +497,7 @@ class CCodable extends CMbObject {
       $this->_ref_actes_caisse = $acte_caisse->loadList($where, $order);
 
       if (null === $this->_ref_actes_caisse) {
-        return;
+        return null;
       }
 
       $this->_codes_caisse = array();
@@ -521,7 +540,7 @@ class CCodable extends CMbObject {
 
   function getMaxCodagesActes() {
     if (!$this->_id || $this->codes_ccam === null) {
-      return;
+      return null;
     }
 
     $oldObject = new $this->_class;
@@ -554,6 +573,7 @@ class CCodable extends CMbObject {
         return "Impossible de supprimer le code";
       }
     }
+    return null;
   }
 
   function checkCodeCcam() {
@@ -564,9 +584,10 @@ class CCodable extends CMbObject {
         return "Le code CCAM '$_code_ccam' n'est pas valide";
       }
     }
+    return null;
   }
 
-  function check(){
+  function check() {
     if ($msg = $this->checkCodeCcam()) {
       return $msg;
     }
@@ -608,9 +629,9 @@ class CCodable extends CMbObject {
   }
 
   function checkModificateur($code, $heure) {
-    $keys = array("A", "E",  "P", "S", "U");
+    $keys = array("A", "E",  "P", "S", "U", "7");
 
-    if (!in_array($code, $keys)) return;
+    if (!in_array($code, $keys)) return null;
 
     $patient   = $this->_ref_patient;
     $discipline = $this->_ref_praticien->_ref_discipline;
@@ -638,7 +659,11 @@ class CCodable extends CMbObject {
         $date_tomorrow = CMbDT::date("+1 day", $date_ref)." 08:00:00";
         return !in_array($discipline->text, array("MEDECINE GENERALE", "PEDIATRIE")) &&
           ($date > "$date_ref 20:00:00" && $date < $date_tomorrow);
+        break;
+      case "7":
+        return CAppUI::conf("dPccam CCodable precode_modificateur_7");
     }
+    return null;
   }
 
   /**
@@ -760,6 +785,7 @@ class CCodable extends CMbObject {
         }
       }
     }
+    return null;
   }
   
   /**
@@ -795,5 +821,6 @@ class CCodable extends CMbObject {
         }
       }
     }
+    return null;
   }
 }

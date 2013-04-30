@@ -50,7 +50,12 @@ class CActeCCAM extends CActe {
   public $_rembex;
   public $_anesth;
   public $_anesth_associe;
+  public $_tarif_sans_asso;
+  public $_tarif;
+
+  /** @var  CActeCCAM[] */
   public $_linked_actes;
+
   public $_guess_association;
   public $_guess_regle_asso;
 
@@ -59,7 +64,15 @@ class CActeCCAM extends CActe {
   public $_calcul_montant_base = false;
   
   // Object references
+
+  /** @var  CCodeCCAM */
   public $_ref_code_ccam;
+
+  /** @var  CActeCCAM[] */
+  public $_ref_siblings;
+
+  /** @var  CCodable */
+  public $_ref_object;
   
   public $_activite;
   public $_phase;
@@ -105,7 +118,7 @@ class CActeCCAM extends CActe {
   function checkEnoughCodes() {
     $this->loadTargetObject();
     if (!$this->_ref_object || !$this->_ref_object->_id) {
-      return;
+      return null;
     }
     
     $acte = new CActeCCAM();
@@ -140,6 +153,7 @@ class CActeCCAM extends CActe {
     if ($siblings >= $nbCode) {
       return "$this->_class-check-already-coded";
     }
+    return null;
   }
 
   function canDeleteEx(){
@@ -149,6 +163,7 @@ class CActeCCAM extends CActe {
     if ($msg = $this->checkCoded()) {
       return $msg;
     }
+    return null;
   }
 
   function check() {
@@ -270,12 +285,11 @@ class CActeCCAM extends CActe {
    */
   function checkCompat() {
     if ($this->object_class == "CConsultation" || $this->_permissive) {
-      return;
+      return null;
     }
     $this->loadRefCodeCCAM();
     $this->_ref_code_ccam->getChaps();
     $this->getLinkedActes(false);
-    $_acte = new CActeCCAM();
     
     /**
     // Cas du nombre d'actes
@@ -319,6 +333,7 @@ class CActeCCAM extends CActe {
         }
       }
     }
+    return null;
   }
 
   function checkFacturable() {
@@ -369,6 +384,7 @@ class CActeCCAM extends CActe {
     if ($msg = parent::store()) {
       return $msg;
     }
+    return null;
   }
   
   function loadRefObject(){
@@ -398,7 +414,7 @@ class CActeCCAM extends CActe {
         }
       }
     }
-    return;
+    return null;
   }
   
   function getFavoris($user_id, $class) {
@@ -458,30 +474,30 @@ class CActeCCAM extends CActe {
 
       return $this->_guess_association;
     }
-    foreach ($this->_linked_actes as &$acte) {
-      $acte->loadRefCodeCCAM();
+    foreach ($this->_linked_actes as $_acte) {
+      $_acte->loadRefCodeCCAM();
     }
     
     // Nombre d'actes
     $numActes = count($this->_linked_actes) + 1;
     
     // Calcul de la position tarifaire de l'acte
-//    $tarif = $this->_ref_code_ccam->activites[$this->code_activite]->phases[$this->code_phase]->tarif;
     $tarif = $this->getTarifSansAssociationNiCharge();
     $orderedActes = array();
     $orderedActes[$this->_id] = $tarif;
     foreach ($this->_linked_actes as $_acte) {
-//      $tarif = $acte->_ref_code_ccam->activites[$acte->code_activite]->phases[$acte->code_phase]->tarif;
-      $tarif = $acte->getTarifSansAssociationNiCharge();
-      $orderedActes[$acte->_id] = $tarif;
+      $tarif = $_acte->getTarifSansAssociationNiCharge();
+      $orderedActes[$_acte->_id] = $tarif;
     }
     ksort($orderedActes);
     arsort($orderedActes);
     $position = array_search($this->_id, array_keys($orderedActes));
+
+    $chapitre = $this->_ref_code_ccam->chapitres;
     
     // Nombre d'actes des chap. 12, 13 et 14 (chirurgie membres, tronc et cou)
     $numChap121314 = 0;
-    if (in_array($this->_ref_code_ccam->chapitres[0]["db"], array("000012", "000013", "000014"))) {
+    if (in_array($chapitre[0]["db"], array("000012", "000013", "000014"))) {
       $numChap121314++;
     }
     foreach ($this->_linked_actes as $linkedActe) {
@@ -492,7 +508,7 @@ class CActeCCAM extends CActe {
     
     // Nombre d'actes du chap. 18.01
     $numChap1801 = 0;
-    if ($this->_ref_code_ccam->chapitres[0]["db"] == "000018" && $this->_ref_code_ccam->chapitres[1]["db"] == "000001") {
+    if ($chapitre[0]["db"] == "000018" && $chapitre[1]["db"] == "000001") {
       $numChap1801++;
     }
     foreach ($this->_linked_actes as $linkedActe) {
@@ -503,7 +519,7 @@ class CActeCCAM extends CActe {
     
     // Nombre d'actes du chap. 18.02
     $numChap1802 = 0;
-    if ($this->_ref_code_ccam->chapitres[0]["db"] == "000018" && $this->_ref_code_ccam->chapitres[1]["db"] == "000002") {
+    if ($chapitre[0]["db"] == "000018" && $chapitre[1]["db"] == "000002") {
       $numChap1802++;
     }
     foreach ($this->_linked_actes as $linkedActe) {
@@ -512,12 +528,9 @@ class CActeCCAM extends CActe {
       }
     }
     
-    // Nombre d'actes du chap. 18
-    $numChap18 = $numChap1801 + $numChap1802;
-    
     // Nombre d'actes du chap. 19.01
     $numChap1901 = 0;
-    if ($this->_ref_code_ccam->chapitres[0]["db"] == "000019" && $this->_ref_code_ccam->chapitres[1]["db"] == "000001") {
+    if ($chapitre[0]["db"] == "000019" && $chapitre[1]["db"] == "000001") {
       $numChap1901++;
     }
     foreach ($this->_linked_actes as $linkedActe) {
@@ -528,7 +541,7 @@ class CActeCCAM extends CActe {
     
     // Nombre d'actes du chap. 19.02
     $numChap1902 = 0;
-    if ($this->_ref_code_ccam->chapitres[0]["db"] == "000019" && $this->_ref_code_ccam->chapitres[1]["db"] == "000002") {
+    if ($chapitre[0]["db"] == "000019" && $chapitre[1]["db"] == "000002") {
       $numChap1902++;
     }
     foreach ($this->_linked_actes as $linkedActe) {
@@ -540,7 +553,7 @@ class CActeCCAM extends CActe {
     // Nombre d'actes des chap. 02, 03, 05 à 10, 16, 17
     $numChap02 = 0;
     $listChaps = array("000002", "000003", "000005", "000006", "000007", "000008", "000009", "000010", "000016", "000017");
-    if (in_array($this->_ref_code_ccam->chapitres[0]["db"], $listChaps)) {
+    if (in_array($chapitre[0]["db"], $listChaps)) {
       $numChap02++;
     }
     foreach ($this->_linked_actes as $linkedActe) {
@@ -552,7 +565,7 @@ class CActeCCAM extends CActe {
     // Nombre d'actes des chap. 01, 04, 11, 15
     $numChap0115 = 0;
     $listChaps = array("000001", "000004", "000011", "000015");
-    if (in_array($this->_ref_code_ccam->chapitres[0]["db"], $listChaps)) {
+    if (in_array($chapitre[0]["db"], $listChaps)) {
       $numChap0115++;
     }
     foreach ($this->_linked_actes as $linkedActe) {
@@ -564,7 +577,7 @@ class CActeCCAM extends CActe {
     // Nombre d'actes des chap. 01, 04, 11, 12, 13, 14, 15, 16
     $numChap0116 = 0;
     $listChaps = array("000001", "000004", "000011", "000012", "000013", "000014", "000015", "000016");
-    if (in_array($this->_ref_code_ccam->chapitres[0]["db"], $listChaps)) {
+    if (in_array($chapitre[0]["db"], $listChaps)) {
       $numChap0116++;
     }
     foreach ($this->_linked_actes as $linkedActe) {
@@ -576,9 +589,8 @@ class CActeCCAM extends CActe {
     // Le praticien est-il un ORL
     $pratORL = false;
     if ($this->object_class == "COperation") {
-      $this->loadRefExecutant();
-      $this->_ref_executant->loadRefDiscipline();
-      if ($this->_ref_executant->_ref_discipline->_compat == "ORL") {
+      $discipline = $this->loadRefExecutant()->loadRefDiscipline();
+      if ($discipline->_compat == "ORL") {
         $pratORL = true;
       }
     }
@@ -888,15 +900,16 @@ class CActeCCAM extends CActe {
           array("code_ngap_3"   => $row["code_ngap_3"],
                 "coefficient_3" => $row["coefficient_3"])));
     }
+    return null;
   }
   
   /**
    * Création d'un item de facture avec un code ccam
    * 
-   * @param string $facture la facture
+   * @param CFacture $facture la facture
    * @param string $date    date à défaut
    * 
-   * @return void
+   * @return string
   **/
   function creationItemsFacture($facture, $date){
     $this->loadRefCodeCCAM();
@@ -914,5 +927,6 @@ class CActeCCAM extends CActe {
     if ($msg = $ligne->store()) {
       return $msg;
     }
+    return null;
   }
 }
