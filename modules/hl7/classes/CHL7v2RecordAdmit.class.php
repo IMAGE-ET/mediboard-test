@@ -1229,7 +1229,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return;
     }
     
-    $grossesse                 = new CGrossesse();
+    $grossesse = new CGrossesse();
     $grossesse->parturiente_id = $newVenue->patient_id;
     $grossesse->loadMatchingObject("terme_prevu desc"); 
     
@@ -1703,19 +1703,35 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
 
     // Uniquement pour les prestas expertes
+    $prestation = explode("#", $this->queryTextNode("PV1.20", $node));
 
-    $PV1_20 = $this->queryTextNode("PV1.20", $node);
+    $presta_name = CMbArray::get($prestation, 0);
+    $item_name   = CMbArray::get($prestation, 1);
+
+    $item_presta = new CItemPrestation();
+
+    if ($item_name) {
+      // Chargement de la prestation journalière
+      $presta_journa = new CPrestationJournaliere();
+      $presta_journa->nom = $presta_name;
+      $presta_journa->loadMatchingObject();
+
+      $item_presta->object_class = "CPrestationJournaliere";
+      $item_presta->object_id    = $presta_journa->_id;
+    }
+    else {
+      $item_name = $presta_name;
+    }
 
     // Chargement d'un item de prestation
-    $item_presta = new CItemPrestation();
-    $item_presta->nom = $PV1_20;
+    $item_presta->nom = $item_name;
     $item_presta->loadMatchingObject();
 
     if (!$item_presta->_id) {
       return;
     }
 
-    $item_liaison                  = new CItemLiaison();
+    $item_liaison = new CItemLiaison();
     $item_liaison->sejour_id       = $newVenue->_id;
     $item_liaison->item_souhait_id = $item_presta->_id;
 
