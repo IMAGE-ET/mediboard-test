@@ -241,6 +241,7 @@ $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"))
 $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("isImedsInstalled"       , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("codage_prat"            , $group->_configs["codage_prat"]);
+$smarty->assign("_is_dentiste"   , $selOp->_ref_chir->isDentiste());
 if (CModule::getActive("dPprescription")) {
   if (!isset($prescription)) {
     $prescription = new CPrescription();
