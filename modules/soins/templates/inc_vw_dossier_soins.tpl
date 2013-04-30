@@ -240,8 +240,7 @@ Main.add(function () {
 
 <form name="movePlanifs" action="" method="post">
   <input type="hidden" name="dosql" value="do_move_planifs_aed" />
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="m" value="prescription" />
   <input type="hidden" name="object_id" value="" />
   <input type="hidden" name="object_class" value="" />
   <input type="hidden" name="prise_id" value="" />
@@ -249,6 +248,7 @@ Main.add(function () {
   <input type="hidden" name="nb_hours" value="" />
   <input type="hidden" name="quantite" value="" />
   <input type="hidden" name="unite_prise" value="" />
+  <input type="hidden" name="type_move" value="" />
 </form>
       
 {{if "dPprescription"|module_active && $multiple_prescription|@count > 1}}

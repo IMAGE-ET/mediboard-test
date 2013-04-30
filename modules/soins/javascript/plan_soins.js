@@ -147,7 +147,7 @@ PlanSoins = {
     
     $V(oForm.object_id, object_id);
     $V(oForm.object_class, object_class);
-    
+
     var prise_id = !isNaN(key_tab) ? key_tab : '';
     var unite_prise = isNaN(key_tab) ? key_tab : '';
   
@@ -309,8 +309,9 @@ PlanSoins = {
         unite_prise = (unite_prise+"").replace(/[^a-z0-9_-]/gi, '_');
         
         var first_td = $('first_'+object_id+"_"+object_class+"_"+unite_prise);
+        console.log('first_'+object_id+"_"+object_class+"_"+unite_prise);
         var last_td = $('last_'+object_id+"_"+object_class+"_"+unite_prise);
-        
+        console.log('last_'+object_id+"_"+object_class+"_"+unite_prise);
         // Suppression des td entre les 2 td bornes
         var td = first_td;
         var colSpan = 0;
@@ -642,22 +643,28 @@ PlanSoins = {
     url.requestUpdate("show_task_"+prescription_line_element_id);
   },
 
-  moveAllPlanifs: function(prise_id, object_id, object_class, datetime, nb_hours, quantite, unite_prise) {
-    if(confirm("Voulez vous décaler les prises suivantes de "+nb_hours+" heures ?")){
-      var oForm = getForm("movePlanifs");
-      $V(oForm.prise_id, prise_id == null ? "" : prise_id);
-      $V(oForm.object_id, object_id);
-      $V(oForm.object_class, object_class);
-      $V(oForm.datetime, datetime);
-      $V(oForm.nb_hours, nb_hours);
-      $V(oForm.quantite, quantite);
-      $V(oForm.unite_prise, unite_prise);
-      return onSubmitFormAjax(oForm, { onComplete: function(){
-        PlanSoins.loadTraitement(null,PlanSoins.date, $V(getForm("click").nb_decalage), 'planification', object_id, object_class, prise_id);
-      } });
-    }
+  askMovePlanifs: function(prise_id, object_id, object_class, datetime, nb_hours, quantite, unite_prise) {
+    var oForm = getForm("movePlanifs");
+    $V(oForm.prise_id, prise_id == null ? "" : prise_id);
+    $V(oForm.object_id, object_id);
+    $V(oForm.object_class, object_class);
+    $V(oForm.datetime, datetime);
+    $V(oForm.nb_hours, nb_hours);
+    $V(oForm.quantite, quantite);
+    $V(oForm.unite_prise, unite_prise);
+    modal("modalMovePlanifs");
   },
-  
+
+  movePlanifs: function(type_move) {
+    var oForm = getForm("movePlanifs");
+    $V(oForm.type_move, type_move);
+
+    return onSubmitFormAjax(oForm, { onComplete: function() {
+      Control.Modal.close();
+      PlanSoins.loadTraitement(null,PlanSoins.date, $V(getForm("click").nb_decalage), 'planification', $V(oForm.object_id), $V(oForm.object_class), $V(oForm.prise_id) ? $V(oForm.prise_id) : $V(oForm.unite_prise));
+    } });
+  },
+
   showPeropAdministrations: function(prescription_id) {
     var url = new Url("soins", "ajax_vw_perop_administrations");
     url.addParam("prescription_id", prescription_id);
