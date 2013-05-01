@@ -853,8 +853,8 @@ class CAppUI {
   /**
    * Localize given statement
    *
-   * @param string $str  Statement to translate
-   * @param array  $args Array or any number of sprintf-like arguments
+   * @param string      $str  Statement to translate
+   * @param array|mixed $args Array or any number of sprintf-like arguments
    *
    * @return string translated statement
    */
