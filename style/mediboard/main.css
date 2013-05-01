@@ -971,7 +971,7 @@ div.about div.nav {
 #performance {
   position: fixed;
   bottom: 0;
-  right: 0;
+  right: 40px;
   border: 1px solid #ddd;
   border-width: 1px 0 0 1px;
   cursor: pointer;
@@ -1005,6 +1005,7 @@ div.about div.nav {
   width: 10em;
   vertical-align: middle;
   background: #fff;
+  padding: 2px;
   margin: 0;
   margin-right: -2px;
   height: 20px;
@@ -1085,7 +1086,10 @@ div.about div.nav {
 #performance > li > ul {
   display: none;
   background: #eee;
-  padding: 2px;
+}
+
+#performance > li > ul > li {
+  padding: 2px 6px;
 }
 
 #performance > li:hover {
