@@ -3,7 +3,7 @@
 /**
  * $Id: $
  *
- * @package    mediusers
+ * @package    Mediboard
  * @subpackage cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -16,7 +16,7 @@ $type   = CValue::get("type", "RDV");
 $date   = CValue::get("date");
 $period = CValue::get("period", "month");
 
-$stats = new CMediusersStats($date, $period);
+$stats = new CMediusersStats($date, $period, "date");
 
 $consult = new CConsultation();
 $group = CGroups::loadCurrent();
@@ -42,7 +42,7 @@ $query = "SELECT COUNT(*) total, user_id, $stats->sql_date AS refdate
   LEFT JOIN plageconsult AS plage ON plage.plageconsult_id = consultation.plageconsult_id
   LEFT JOIN users_mediboard AS user ON user.user_id = plage.chir_id
   LEFT JOIN functions_mediboard AS function ON function.function_id = user.function_id
-  WHERE $stats->sql_date >= '$stats->min_date'
+  WHERE $stats->sql_date BETWEEN '$stats->min_date' AND '$stats->max_date'
   AND function.group_id = '$group->_id'
   AND consultation.annule != '1'
   AND consultation.patient_id IS NOT NULL
