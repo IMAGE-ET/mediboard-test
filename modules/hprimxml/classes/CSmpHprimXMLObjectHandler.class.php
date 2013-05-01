@@ -1,20 +1,45 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage smp
- * @version $Revision: 12577 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * SMP H'XML Object handler
+ *
+ * @category SMP
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
+ */
+
+/**
+ * Class CSmpHprimXMLObjectHandler
+ * SMP H'XML Object handler
  */
 
 class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
+  /** @var array $handled */
   static $handled = array ("CSejour", "CAffectation");
 
+  /**
+   * If object is handled ?
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return bool
+   */
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
   }
 
+  /**
+   * Trigger after event store
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
   function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return;
@@ -48,9 +73,9 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
         $group->loadConfigValues();
         
         $mbObject->_id400 = null;
-        $id400Patient = new CIdSante400();
-        $id400Patient->loadLatestFor($sejour, $receiver->_tag_sejour);
-        $mbObject->_id400 = $id400Patient->id400;
+        $idexPatient = new CIdSante400();
+        $idexPatient->loadLatestFor($sejour, $receiver->_tag_sejour);
+        $mbObject->_id400 = $idexPatient->id400;
 
         $this->generateTypeEvenement("CHPrimXMLVenuePatient", $sejour, true, $initiateur);
       }
@@ -89,7 +114,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
         if ($receiver->isMessageSupported("CHPrimXMLMouvementPatient") && ($sejour->_ref_last_log->type == "create")) {
           $affectation = $sejour->loadRefFirstAffectation();
 
-         // $this->sendEvenementPatient("CHPrimXMLMouvementPatient", $affectation);
+          // $this->sendEvenementPatient("CHPrimXMLMouvementPatient", $affectation);
         }
 
         $sejour->_NDA = null;
@@ -111,77 +136,30 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     }
   }
 
+  /**
+   * Trigger before event merge
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
   function onBeforeMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
-    
-    // Traitement Séjour
-    if ($mbObject instanceof CSejour) { 
-      $sejour = $mbObject;
-
-      $sejour_eliminee = new CSejour();
-      $sejour_eliminee->load(reset($mbObject->_merging));
-      $sejour_eliminee->updateFormFields();
-      $sejour_eliminee->loadRefPatient();
-      $sejour_eliminee->loadRefPraticien();
-      $sejour_eliminee->loadLastLog();
-      $sejour_eliminee->loadRefAdresseParPraticien();
-      
-      // Si Client
-      if (!CAppUI::conf('smp server')) {
-        $mbObject->_fusion = array();
-        foreach (CGroups::loadGroups() as $_group) {
-          if ($mbObject->_eai_initiateur_group_id == $_group->_id) {
-            continue;
-          }
-          
-          $sejour->_NDA = null;
-          $sejour->loadNDA($_group->_id);
-          $sejour1_nda = $sejour->_NDA;
-
-          $sejour_eliminee->_NDA = null;
-          $sejour_eliminee->loadNDA($_group->_id);
-          $sejour2_nda = $sejour_eliminee->_NDA;
-          
-          // Passage en trash des NDA des séjours
-          $tap_NDA = CSejour::getTagNDA($_group->_id);
-
-          $id400Sejour               = new CIdSante400();
-          $id400Sejour->tag          = $tap_NDA;
-          $id400Sejour->object_class = "CSejour";
-          $id400Sejour->object_id    = $sejour->_id;
-          $id400sSejour = $id400Sejour->loadMatchingList();
-          
-          $id400SejourElimine               = new CIdSante400();
-          $id400SejourElimine->tag          = $tap_NDA;
-          $id400SejourElimine->object_class = "CSejour";
-          $id400SejourElimine->object_id    = $sejour_eliminee->_id;
-          $id400sSejourElimine = $id400SejourElimine->loadMatchingList();
-          
-          $id400s = array_merge($id400sSejour, $id400sSejourElimine);
-          if (count($id400s) > 1) {
-            foreach ($id400s as $_id_400) {
-              // On continue pour ne pas mettre en trash le NDA du séjour que l'on garde
-              if ($_id_400->id400 == $sejour1_nda) {
-                continue;
-              }
-              $_id_400->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$tap_NDA;
-              $_id_400->last_update = CMbDT::dateTime();
-              $_id_400->store();
-            }
-          }
-                      
-          $mbObject->_fusion[$_group->_id] = array (
-            "sejourEliminee" => $sejour_eliminee,
-            "sejour1_nda"    => $sejour1_nda,
-            "sejour2_nda"    => $sejour2_nda,
-          );
-        }       
-      }
-    }
   }
-  
+
+  /**
+   * Trigger after event merge
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
   function onAfterMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
@@ -222,8 +200,9 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
          
           // Cas 1 NDA : Pas de message de fusion mais d'une modification de la venue
           if ((!$sejour1_nda && $sejour2_nda) || ($sejour1_nda && !$sejour2_nda)) {
-            if ($sejour2_nda)
+            if ($sejour2_nda) {
               $sejour->_NDA = $sejour2_nda;
+            }
             
             $this->sendEvenementPatient("CHPrimXMLVenuePatient", $sejour);
             continue;
@@ -239,14 +218,28 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
         }        
       }
     }
-  }  
+  }
 
+  /**
+   * Trigger before event delete
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function onBeforeDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
   }
 
+  /**
+   * Trigger after event delete
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function onAfterDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;

@@ -17,6 +17,7 @@
  */
 
 class CSmpObjectHandler extends CEAIObjectHandler {
+  /** @var array $handled */
   static $handled = array ("CSejour", "CAffectation", "CNaissance");
 
   /**
@@ -100,29 +101,29 @@ class CSmpObjectHandler extends CEAIObjectHandler {
         // Passage en trash des NDA des séjours
         $tag_NDA = CSejour::getTagNDA($_group->_id);
         
-        $id400Sejour               = new CIdSante400();
-        $id400Sejour->tag          = $tag_NDA;
-        $id400Sejour->object_class = "CSejour";
-        $id400Sejour->object_id    = $sejour->_id;
-        $id400sSejour = $id400Sejour->loadMatchingList();
+        $idexSejour = new CIdSante400();
+        $idexSejour->tag          = $tag_NDA;
+        $idexSejour->object_class = "CSejour";
+        $idexSejour->object_id    = $sejour->_id;
+        $idexsSejour = $idexSejour->loadMatchingList();
 
-        $id400SejourElimine               = new CIdSante400();
-        $id400SejourElimine->tag          = $tag_NDA;
-        $id400SejourElimine->object_class = "CSejour";
-        $id400SejourElimine->object_id    = $sejour_elimine->_id;
-        $id400sSejourElimine = $id400SejourElimine->loadMatchingList();
+        $idexSejourElimine = new CIdSante400();
+        $idexSejourElimine->tag          = $tag_NDA;
+        $idexSejourElimine->object_class = "CSejour";
+        $idexSejourElimine->object_id    = $sejour_elimine->_id;
+        $idexsSejourElimine = $idexSejourElimine->loadMatchingList();
 
-        $id400s = array_merge($id400sSejour, $id400sSejourElimine);
-        if (count($id400s) > 1) {
-          foreach ($id400s as $_id_400) {
+        $idexs = array_merge($idexsSejour, $idexsSejourElimine);
+        if (count($idexs) > 1) {
+          foreach ($idexs as $_idex) {
             // On continue pour ne pas mettre en trash le NDA du séjour que l'on garde
-            if ($_id_400->id400 == $sejour1_nda) {
+            if ($_idex->id400 == $sejour1_nda) {
               continue;
             }
-            
-            $_id_400->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$tag_NDA;
-            $_id_400->last_update = CMbDT::dateTime();
-            $_id_400->store();
+
+            $_idex->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$tag_NDA;
+            $_idex->last_update = CMbDT::dateTime();
+            $_idex->store();
           }
         }
         

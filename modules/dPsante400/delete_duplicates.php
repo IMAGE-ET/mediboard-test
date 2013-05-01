@@ -11,7 +11,7 @@
 CCanDo::checkRead();
 
 $canSante400 = CModule::getCanDo("dPsante400");
-$dialog = CValue::get("dialog");
+$dialog      = CValue::get("dialog");
 
 // Chargement du filtre
 $filter = new CIdSante400;
@@ -29,10 +29,11 @@ $query = "SELECT COUNT(*) AS total, object_id, object_class, tag, id400,
     CAST(GROUP_CONCAT(id_sante400_id SEPARATOR ', ') AS CHAR) AS ids, '' AS msg
   FROM id_sante400
   WHERE 1";
-if($filter->object_id) {
+if ($filter->object_id) {
   $query .= " AND object_id = '".$filter->object_id."'";
 }
-if($filter->object_class) {
+
+if ($filter->object_class) {
   $query .= " AND object_class = '".$filter->object_class."'";
 }
 $query .= " AND last_update BETWEEN '".$filter->_start_date."' AND '".$filter->_end_date."'";
@@ -41,14 +42,15 @@ $query .= " GROUP BY object_id, tag, id400
   ORDER BY total DESC, last_update DESC";
 $list = $filter->_spec->ds->loadList($query, $limit_duplicates);
 
-if($do_delete) {
-  $idSante400 = new CIdSante400();
-  foreach($list as &$duplicate) {
+if ($do_delete) {
+  $idex = new CIdSante400();
+  foreach ($list as &$duplicate) {
     $delete_items = implode(", ", array_slice(explode(", ", $duplicate["ids"]), 1));
     $query = "DELETE FROM id_sante400 WHERE id_sante400_id IN ($delete_items)";
-    if($idSante400->_spec->ds->query($query)) {
+    if ($idex->_spec->ds->query($query)) {
       $duplicate["msg"] = "Identifiants supprimés : $delete_items"; 
-    } else {
+    }
+    else {
       $duplicate["msg"] = "Erreur : $query"; 
     }
   }
@@ -65,5 +67,3 @@ $smarty->assign("do_delete"        , $do_delete);
 $smarty->assign("listClasses"      , $listClasses);
 $smarty->assign("list"             , $list);
 $smarty->display("delete_duplicates.tpl");
-
-?>

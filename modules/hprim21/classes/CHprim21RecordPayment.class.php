@@ -161,9 +161,10 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
       }
       
       // Recherche d'un reglèment par tag + idex (nom fichier - id reg)
-      $id400 = $NDA."_".$segment_row;
-      $tag   = CHprim21::getTag($sender->group_id);
-      $idex  = CIdSante400::getMatch("CReglement", $tag, $id400);
+      $idex_value = $NDA."_".$segment_row;
+      $tag        = CHprim21::getTag($sender->group_id);
+
+      $idex = CIdSante400::getMatch("CReglement", $tag, $idex_value);
       
       // Mapping des règlements
       $return_payment = $this->mapAndStorePayment($_REG, $facture, $idex);

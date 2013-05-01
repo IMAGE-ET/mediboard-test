@@ -56,13 +56,13 @@ if ($user_username || $user_first_name || $user_last_name) {
     $users[$key]["user_first_name"] = CLDAP::getValue($_result, "givenname");
     $users[$key]["user_last_name"]  = CLDAP::getValue($_result, "sn");
     $users[$key]["actif"]           = (CLDAP::getValue($_result, "useraccountcontrol") == 66048) ? 1 : 0;
-    
-    $id400               = new CIdSante400();
-    $id400->tag          = CAppUI::conf("admin LDAP ldap_tag");
-    $id400->id400        = $objectguid;
-    $id400->object_class = "CUser";
-    $id400->loadMatchingObject();
-    $users[$key]["associate"] = $id400->_id ? $id400->object_id : null;
+
+    $idex = new CIdSante400();
+    $idex->tag          = CAppUI::conf("admin LDAP ldap_tag");
+    $idex->id400        = $objectguid;
+    $idex->object_class = "CUser";
+    $idex->loadMatchingObject();
+    $users[$key]["associate"] = $idex->_id ? $idex->object_id : null;
   }
   
   $mediuser = new CMediusers();
@@ -74,8 +74,7 @@ if ($user_username || $user_first_name || $user_last_name) {
   $smarty->assign("sn"            , strtoupper($user_last_name));
   $smarty->assign("samaccountname", strtolower($user_username)); 
   $smarty->display("inc_search_user_ldap.tpl");
-} else {
+}
+else {
   $smarty->display("inc_choose_filter_ldap.tpl");
 }
-
-?>

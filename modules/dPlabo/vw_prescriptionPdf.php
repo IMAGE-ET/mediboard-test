@@ -83,37 +83,43 @@ $tagCatalogue = CAppUI::conf('dPlabo CCatalogueLabo remote_name');
 // Chargement de l'id externe labo code4 du praticien
 // Chargement de l'id400 "labo code4" du praticien
 $tagCode4 = "labo code4";
-$idSantePratCode4 = new CIdSante400();
-$idSantePratCode4->loadLatestFor($praticien, $tagCode4);
+$idex = new CIdSante400();
+$idex->loadLatestFor($praticien, $tagCode4);
 
 
-if($idSantePratCode4->id400){
-	$numPrat = $idSantePratCode4->id400;
-	$numPrat = str_pad($numPrat, 4, '0', STR_PAD_LEFT);
-} else {
-	$numPrat = "xxxx";
+if ($idex->id400) {
+  $numPrat = $idex->id400;
+  $numPrat = str_pad($numPrat, 4, '0', STR_PAD_LEFT);
+}
+else {
+  $numPrat = "xxxx";
 }
 
 // Chargement de la valeur de l'id externe de la prescription ==> retourne uniquement l'id400
-if($prescription->verouillee){
-  $id400Presc = $prescription->loadIdPresc();
-  $id400Presc = str_pad($id400Presc, 4, '0', STR_PAD_LEFT);
-} else {
-  $id400Presc = "xxxx";
+if ($prescription->verouillee) {
+  $idex = $prescription->loadIdPresc();
+  $idex = str_pad($idex, 4, '0', STR_PAD_LEFT);
+}
+else {
+  $idex = "xxxx";
 }
 
-$num = $numPrat.$id400Presc;
-
+$num = $numPrat.$idex;
 
 // Initialisation du code barre, => utilisation par default du codage C128B
 // L'affichage du code barre est realisee dans la fonction redefinie Footer dans la classe CPrescriptionPdf
-$pdf->SetBarcode($num, $prescription->_ref_praticien->_user_last_name, substr($prescription->_ref_patient->_view, 0, 20), $prescription->_ref_patient->sexe,CMbDT::transform($prescription->_ref_patient->naissance,null,"%d-%m-%y"), CMbDT::transform($prescription->date,null,"%d-%m-%y %H:%M"));
-
-
+$pdf->SetBarcode(
+  $num,
+  $prescription->_ref_praticien->_user_last_name,
+  substr($prescription->_ref_patient->_view, 0, 20),
+  $prescription->_ref_patient->sexe,
+  CMbDT::transform($prescription->_ref_patient->naissance, null, "%d-%m-%y"),
+  CMbDT::transform($prescription->date, null, "%d-%m-%y %H:%M")
+);
 
 // Tableau de classement des analyses par pack
-foreach($prescription->_ref_prescription_items as $key => $item){
-  if($item->_ref_pack->_id){
+foreach ($prescription->_ref_prescription_items as $key => $item) {
+  if ($item->_ref_pack->_id) {
     $tab_pack_prescription[$item->_ref_pack->_view][] = $item;  
   }
   else {
@@ -121,23 +127,22 @@ foreach($prescription->_ref_prescription_items as $key => $item){
   }
 }
 
-
-foreach($tab_pack_prescription as $key => $pack){
-  if($key){
-    $pdf->Cell(0,7,utf8_encode($key),1,0,'C',1);
+foreach ($tab_pack_prescription as $key => $pack) {
+  if ($key) {
+    $pdf->Cell(0, 7, utf8_encode($key), 1, 0, 'C', 1);
     $pdf->Ln();
   }
-  foreach($pack as $key2 => $_item){
+  foreach ($pack as $key2 => $_item) {
     $examen_labo =& $_item->_ref_examen_labo;
-  	//$pdf->SetFillColor(230,245,255);
-	  $pdf->Cell(25,7,utf8_encode($examen_labo->identifiant),1,0,'L',0);
+    //$pdf->SetFillColor(230,245,255);
+    $pdf->Cell(25,7,utf8_encode($examen_labo->identifiant),1,0,'L',0);
     $pdf->Cell(105,7,utf8_encode($examen_labo->libelle),1,0,'L',0);
-	  $pdf->Cell(30,7,utf8_encode($examen_labo->type_prelevement),1,0,'L',0);
-	  if($examen_labo->_external) {
-  	  $pdf->Cell(20,7,"Externe",1,0,'L',0);
-	  } else {
-	    $pdf->Cell(20,7,"Interne",1,0,'L',0);
-	  }
+    $pdf->Cell(30,7,utf8_encode($examen_labo->type_prelevement),1,0,'L',0);
+    if($examen_labo->_external) {
+      $pdf->Cell(20,7,"Externe",1,0,'L',0);
+    } else {
+      $pdf->Cell(20,7,"Interne",1,0,'L',0);
+    }
     $pdf->Ln();
     
     // si on atteint y max de contenu de la page, on change de page
@@ -171,6 +176,4 @@ foreach($tab_prescription as $key => $_item){
 }
 
 // Nom du fichier: prescription-xxxxxxxx.pdf   / I : sortie standard
-$pdf->Output("prescription-$num.pdf","I");
-
-?>
+$pdf->Output("prescription-$num.pdf", "I");

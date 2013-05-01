@@ -1,20 +1,44 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprimxml
- * @version $Revision: 12588 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * SIP H'XML Object handler
+ *
+ * @category SMP
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
+ */
+
+/**
+ * Class CSipHprimXMLObjectHandler
+ * SIP H'XML Object handler
  */
 
 class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
   static $handled = array ("CPatient", "CCorrespondantPatient");
-  
+
+  /**
+   * If object is handled ?
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return bool
+   */
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
   }
- 
+
+  /**
+   * Trigger after event store
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
   function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
@@ -45,9 +69,9 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       }
       
       $mbObject->_id400 = null;
-      $id400Patient = new CIdSante400();
-      $id400Patient->loadLatestFor($mbObject, $receiver->_tag_patient);
-      $mbObject->_id400 = $id400Patient->id400;
+      $idexPatient = new CIdSante400();
+      $idexPatient->loadLatestFor($mbObject, $receiver->_tag_patient);
+      $mbObject->_id400 = $idexPatient->id400;
       
       $this->generateTypeEvenement("CHPrimXMLEnregistrementPatient", $mbObject, true, $initiateur);
     }
@@ -75,12 +99,30 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     }
   }
 
+  /**
+   * Trigger before event merge
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
   function onBeforeMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
   }
-  
+
+  /**
+   * Trigger after event merge
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
   function onAfterMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
@@ -115,8 +157,9 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
        
         // Cas 1 IPP : Pas de message de fusion mais d'une modification du patient
         if ((!$patient1_ipp && $patient2_ipp) || ($patient1_ipp && !$patient2_ipp)) {
-          if ($patient2_ipp)
+          if ($patient2_ipp) {
             $patient->_IPP = $patient2_ipp;
+          }
 
           $this->sendEvenementPatient("CHPrimXMLEnregistrementPatient", $patient);
           continue;
@@ -131,12 +174,18 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
         }
       }        
     }
-  }  
+  }
 
+  /**
+   * Trigger after event delete
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function onAfterDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
   }
 }
-?>

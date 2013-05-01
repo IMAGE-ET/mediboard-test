@@ -76,39 +76,38 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     
     // MAJ de l'IPP du patient
     elseif ($mbObject instanceof CIdSante400) {
-      $id400 = $mbObject;
+      $idex = $mbObject;
       
       // Concerne pas les patients / Pas en mode modification
-      if ($id400->object_class != "CPatient" || !$id400->_old->_id) {
+      if ($idex->object_class != "CPatient" || !$idex->_old->_id) {
         return;
       }
 
       // Pas un tag IPP
-      if ($id400->tag != CPatient::getTagIPP()) {
+      if ($idex->tag != CPatient::getTagIPP()) {
         return;
       }
      
       // Vraiment une modif de l'idex ?
-      if ($id400->id400 == $id400->_old->id400) {
+      if ($idex->id400 == $idex->_old->id400) {
         return;
       }
       
       $code = "A47";
       
       $patient = new CPatient();
-      $patient->load($id400->object_id);
+      $patient->load($idex->object_id);
       $patient->_receiver = $receiver;
       
       $patient->_patient_elimine = clone $patient;
       
       // Affecte le nouvel IPP au patient
-      $patient->_IPP = $id400->id400;
+      $patient->_IPP = $idex->id400;
       
       // Affecte l'ancien IPP au "patient éliminé"
-      $patient->_patient_elimine->_IPP = $id400->_old->id400;
+      $patient->_patient_elimine->_IPP = $idex->_old->id400;
 
       if (!$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
-       
         return;
       }
       

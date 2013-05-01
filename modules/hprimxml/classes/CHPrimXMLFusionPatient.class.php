@@ -62,10 +62,12 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
   
   /**
    * Fusion and recording a patient with an IPP in the system
+   *
    * @param CHPrimXMLAcquittementsPatients $dom_acq
    * @param CEchangeHprim $echg_hprim
    * @param CPatient $newPatient
    * @param array $data
+   *
    * @return string acquittement 
    **/
   function fusionPatient($dom_acq, $newPatient, $data) {
@@ -80,41 +82,49 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       $sender = $echg_hprim->_ref_sender;
 
       // Acquittement d'erreur : identifiants source et cible non fournis pour le patient / patientElimine
-      if (!$data['idSourcePatient'] && !$data['idCiblePatient'] && 
-			    !$data['idSourcePatientElimine'] && !$data['idCiblePatientElimine']) {
+      if (!$data['idSourcePatient'] &&
+          !$data['idCiblePatient'] &&
+          !$data['idSourcePatientElimine'] &&
+          !$data['idCiblePatientElimine']
+      ) {
         return $echg_hprim->setAckError($dom_acq, "E005", $commentaire, $newPatient);
       }
       
-      $id400Patient = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $data['idSourcePatient']);
+      $idexPatient = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $data['idSourcePatient']);
       if ($mbPatient->load($data['idCiblePatient'])) {
-        if ($mbPatient->_id != $id400Patient->object_id) {
-          $commentaire = "L'identifiant source fait référence au patient : $id400Patient->object_id et l'identifiant cible au patient : $mbPatient->_id.";
+        if ($mbPatient->_id != $idexPatient->object_id) {
+          $commentaire  = "L'identifiant source fait référence au patient : $idexPatient->object_id et l'identifiant cible";
+          $commentaire .= "au patient : $mbPatient->_id.";
           return $echg_hprim->setAckError($dom_acq, "E004", $commentaire, $newPatient);
         }
       } 
       if (!$mbPatient->_id) {
-        $mbPatient->load($id400Patient->object_id);
+        $mbPatient->load($idexPatient->object_id);
       }
       
-      $id400PatientElimine = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $data['idSourcePatientElimine']);
+      $idexPatientElimine = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $data['idSourcePatientElimine']);
       if ($mbPatientElimine->load($data['idCiblePatientElimine'])) {
-        if ($mbPatientElimine->_id != $id400PatientElimine->object_id) {
-          $commentaire = "L'identifiant source fait référence au patient : $id400PatientElimine->object_id et l'identifiant cible au patient : $mbPatientElimine->_id.";
+        if ($mbPatientElimine->_id != $idexPatientElimine->object_id) {
+          $commentaire  = "L'identifiant source fait référence au patient : $idexPatientElimine->object_id et l'identifiant cible";
+          $commentaire .= "au patient : $mbPatientElimine->_id.";
+
           return $echg_hprim->setAckError($dom_acq, "E041", $commentaire, $newPatient);
         }
       }
       if (!$mbPatientElimine->_id) {
-        $mbPatientElimine->load($id400PatientElimine->object_id);
+        $mbPatientElimine->load($idexPatientElimine->object_id);
       }
       
       if (!$mbPatient->_id || !$mbPatientElimine->_id) {
-        $commentaire = !$mbPatient->_id ? "Le patient $mbPatient->_id est inconnu dans Mediboard." : "Le patient $mbPatientElimine->_id est inconnu dans Mediboard.";
+        $commentaire = !$mbPatient->_id ?
+           "Le patient $mbPatient->_id est inconnu dans Mediboard." :
+           "Le patient $mbPatientElimine->_id est inconnu dans Mediboard.";
         return $echg_hprim->setAckError($dom_acq, "E012", $commentaire, $newPatient);
       }
 
       // Passage en trash de l'IPP du patient a éliminer
-      $id400PatientElimine->tag = CAppUI::conf('dPpatients CPatient tag_ipp_trash').$sender->_tag_patient;
-      $id400PatientElimine->store();
+      $idexPatientElimine->tag = CAppUI::conf('dPpatients CPatient tag_ipp_trash').$sender->_tag_patient;
+      $idexPatientElimine->store();
       
       $messages = array();
       $avertissement = null;
@@ -143,7 +153,8 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
         
       if ($msg) {
         $avertissement = $msg." ";
-      } else {
+      }
+      else {
         $commentaire = "Le patient $mbPatient->_id a été fusionné avec le patient $mbPatientElimine_id.";
       }
       
@@ -151,4 +162,3 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
     }
   }
 }
-?>

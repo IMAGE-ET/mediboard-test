@@ -291,19 +291,19 @@ class CMedinetSender extends CDocumentSender {
     }
 
     // Création de l'identifiant externe 
-    $id400 = new CIdSante400();
+    $idex = new CIdSante400();
     //Paramétrage de l'id 400
-    $id400->object_class = $docItem->_class;
-    $id400->tag = CMedinetSender::$tag;
+    $idex->object_class = $docItem->_class;
+    $idex->tag = CMedinetSender::$tag;
 
     // Affectation de l'id400 a la transaction
-    $id400->id400 = $transactionId;
+    $idex->id400 = $transactionId;
 
-    $id400->object_id = $docItem->_id;
-    $id400->_id = null;
-    $id400->last_update = CMbDT::dateTime();
+    $idex->object_id = $docItem->_id;
+    $idex->_id = null;
+    $idex->last_update = CMbDT::dateTime();
 
-    $id400->store();
+    $idex->store();
 
     // Change l'etat du document
     $docItem->etat_envoi = "oui";
@@ -329,19 +329,19 @@ class CMedinetSender extends CDocumentSender {
     $transactionAnnulationId = $transactionAnnulationId->cancelDocumentResult;
 
     // Création de l'identifiant externe 
-    $id400 = new CIdSante400();
+    $idex = new CIdSante400();
     //Paramétrage de l'id 400
-    $id400->object_class = $docItem->_class;
-    $id400->tag = CMedinetSender::$tag;
+    $idex->object_class = $docItem->_class;
+    $idex->tag = CMedinetSender::$tag;
 
     // Affectation de l'id400 a la transaction
-    $id400->id400 = $transactionAnnulationId;
+    $idex->id400 = $transactionAnnulationId;
 
-    $id400->object_id = $docItem->_id;
-    $id400->_id = null;
-    $id400->last_update = CMbDT::dateTime();
+    $idex->object_id = $docItem->_id;
+    $idex->_id = null;
+    $idex->last_update = CMbDT::dateTime();
 
-    $id400->store();
+    $idex->store();
 
     // Change l'etat du document
     $docItem->etat_envoi = "non"; 
@@ -381,10 +381,10 @@ class CMedinetSender extends CDocumentSender {
   }
 
   function getTransactionId($docItem) {
-    $id400 = new CIdSante400();
-    $id400->loadLatestFor($docItem, CMedinetSender::$tag);
+    $idex = new CIdSante400();
+    $idex->loadLatestFor($docItem, CMedinetSender::$tag);
 
-    $transactionId = $id400->id400;
+    $transactionId = $idex->id400;
 
     if (!$transactionId) {
       return;

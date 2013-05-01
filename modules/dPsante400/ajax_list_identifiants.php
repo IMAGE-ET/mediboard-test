@@ -11,15 +11,15 @@
  * @link     http://www.mediboard.org
  */
 
-$idSante400_id = CValue::get("idSante400_id");
-$dialog        = CValue::get("dialog");
+$idex_id = CValue::get("idex_id");
+$dialog  = CValue::get("dialog");
 
 // Chargement de la liste des id4Sante400 pour le filtre
 $filter = new CIdSante400;
-$filter->object_id    = CValue::get("object_id"   );
+$filter->object_id    = CValue::get("object_id");
 $filter->object_class = CValue::get("object_class");
-$filter->tag          = CValue::get("tag"         );
-$filter->id400        = CValue::get("id400"       );
+$filter->tag          = CValue::get("tag");
+$filter->id400        = CValue::get("id400");
 $filter->nullifyEmptyFields();
 
 // Chargement de la cible si objet unique
@@ -42,9 +42,11 @@ foreach ($idexs as $_idex) {
 
 // Création du template
 $smarty = new CSmartyDP;
-$smarty->assign("idexs"        , $idexs);
-$smarty->assign("filter"       , $filter);
-$smarty->assign("idSante400_id", $idSante400_id);
-$smarty->assign("dialog"       , $dialog);
-$smarty->assign("target"       , $target);
+
+$smarty->assign("idexs"  , $idexs);
+$smarty->assign("filter" , $filter);
+$smarty->assign("idex_id", $idex_id);
+$smarty->assign("dialog" , $dialog);
+$smarty->assign("target" , $target);
+
 $smarty->display("inc_list_identifiants.tpl");

@@ -20,23 +20,23 @@ class CEAIPatient extends CEAIMbObject {
   /**
    * Recording the external identifier of the CIP
    * 
-   * @param CIdSante400    $id400Patient    Object id400
+   * @param CIdSante400    $idex            Object id400
    * @param CInteropSender $sender          Sender
    * @param int            $idSourcePatient External identifier
    * @param CPatient       $newPatient      Patient
    * 
    * @return null|string null if successful otherwise returns and error message
    */ 
-  static function storeID400CIP(CIdSante400 $id400Patient, CInteropSender $sender, $idSourcePatient, CPatient $newPatient) {
+  static function storeID400CIP(CIdSante400 $idex, CInteropSender $sender, $idSourcePatient, CPatient $newPatient) {
     //Paramétrage de l'id 400
-    $id400Patient->object_class = "CPatient";
-    $id400Patient->tag          = $sender->_tag_patient;
-    $id400Patient->id400        = $idSourcePatient;
-    $id400Patient->object_id    = $newPatient->_id;
-    $id400Patient->_id          = null;
-    $id400Patient->last_update  = CMbDT::dateTime();
+    $idex->object_class = "CPatient";
+    $idex->tag          = $sender->_tag_patient;
+    $idex->id400        = $idSourcePatient;
+    $idex->object_id    = $newPatient->_id;
+    $idex->_id          = null;
+    $idex->last_update  = CMbDT::dateTime();
 
-    return $id400Patient->store();
+    return $idex->store();
   }
   
   /**
@@ -148,7 +148,7 @@ class CEAIPatient extends CEAIMbObject {
   /**
    * Recording patient
    * 
-   * @param CPatient       $patient     Patient
+   * @param CPatient       $newPatient  Patient
    * @param CInteropSender $sender      Sender
    * @param bool           $generateIPP Generate IPP ?
    * 
@@ -182,5 +182,3 @@ class CEAIPatient extends CEAIMbObject {
     return $newPatient->store();
   }
 }
-
-?>

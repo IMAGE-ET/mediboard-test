@@ -88,28 +88,28 @@ class CHL7v2MoveAccountInformation extends CHL7v2MessageXML {
       return $exchange_ihe->setAckAR($ack, "E100", null, $newPatient);
     }
 
-    $id400Patient = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
+    $idexPatient = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
     if ($mbPatient->load($patientRI)) {
-      if ($mbPatient->_id != $id400Patient->object_id) {
-        $comment  = "L'identifiant source fait référence au patient : $id400Patient->object_id";
+      if ($mbPatient->_id != $idexPatient->object_id) {
+        $comment  = "L'identifiant source fait référence au patient : $idexPatient->object_id";
         $comment .= " et l'identifiant cible au patient : $mbPatient->_id.";
         return $exchange_ihe->setAckAR($ack, "E601", $comment, $newPatient);
       }
     }
     if (!$mbPatient->_id) {
-      $mbPatient->load($id400Patient->object_id);
+      $mbPatient->load($idexPatient->object_id);
     }
 
-    $id400PatientChange = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientChangePI);
+    $idexPatientChange = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientChangePI);
     if ($mbPatientChange->load($patientChangeRI)) {
-      if ($mbPatientChange->_id != $id400PatientChange->object_id) {
-        $comment  = "L'identifiant source fait référence au patient : $id400PatientChange->object_id";
+      if ($mbPatientChange->_id != $idexPatientChange->object_id) {
+        $comment  = "L'identifiant source fait référence au patient : $idexPatientChange->object_id";
         $comment .= "et l'identifiant cible au patient : $mbPatientChange->_id.";
         return $exchange_ihe->setAckAR($ack, "E602", $comment, $newPatient);
       }
     }
     if (!$mbPatientChange->_id) {
-      $mbPatientChange->load($id400PatientChange->object_id);
+      $mbPatientChange->load($idexPatientChange->object_id);
     }
 
     if (!$mbPatient->_id || !$mbPatientChange->_id) {

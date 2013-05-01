@@ -109,7 +109,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $newVenue->group_id = $sender->group_id;
     
     $function_handle = "handle$exchange_ihe->code";
-    
+
     if (!method_exists($this, $function_handle)) {
       return $exchange_ihe->setAckAR($ack, "E006", null, $newVenue);
     }
@@ -1488,9 +1488,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         }
       default :
         // Recherche du praticien par son idex
-        $id400  = CIdSante400::getMatch($object->_class, $this->_ref_sender->_tag_mediuser, $id);
-        if ($id400->_id) {
-          return $id400->object_id;
+        $idex  = CIdSante400::getMatch($object->_class, $this->_ref_sender->_tag_mediuser, $id);
+        if ($idex->_id) {
+          return $idex->object_id;
         }
 
         if ($object instanceof CMediusers) {
@@ -1833,17 +1833,15 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (!CAppUI::conf("dPplanningOp CSejour use_dossier_rang")) {
       return;
     }
-    
-    //Paramétrage de l'id 400
-    $id400NRA               = new CIdSante400();
-    $id400NRA->object_class = "CSejour";
-    $id400NRA->object_id    = $newVenue->_id;
-    $id400NRA->tag          = $newVenue->getTagNRA($newVenue->group_id);
-    $id400NRA->id400        = $this->queryTextNode("PV1.50/CX.1", $node);
-    $id400NRA->loadMatchingObject();
-    $id400NRA->last_update  = CMbDT::dateTime();
 
-    $id400NRA->store();
+    $tag_NRA = $newVenue->getTagNRA($newVenue->group_id);
+    $PV1_50  = $this->queryTextNode("PV1.50/CX.1", $node);
+
+    //Paramétrage de l'id 400
+    $idexNRA = CIdSante400::getMatch($newVenue->_class, $tag_NRA, $PV1_50, $newVenue->_id);
+    $idexNRA->last_update  = CMbDT::dateTime();
+
+    $idexNRA->store();
   }
   
   function getPV2(DOMNode $node, CSejour $newVenue) {    
@@ -1915,9 +1913,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getZBE(DOMNode $node, CSejour $newVenue, CMovement $movement) {
-    $sender       = $this->_ref_sender;
-    $id400_create = false;
-    $event_code   = $this->_ref_exchange_ihe->code;
+    $sender      = $this->_ref_sender;
+    $idex_create = false;
+    $event_code  = $this->_ref_exchange_ihe->code;
     
     $own_movement    = null;
     $sender_movement = null;
@@ -1958,6 +1956,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $movement->original_trigger_code = $original_trigger;
     $movement->cancel    = 0;
 
+    $idexMovement = new CIdSante400();
+
     // Notre propre ID de mouvement
     if ($own_movement) {
       $movement_id_split       = explode("-", $movement_id);
@@ -1969,21 +1969,21 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       }
       
       if ($sender_movement) {
-        $id400Movement = CIdSante400::getMatch("CMovement", $sender->_tag_movement, $sender_movement);
-        if (!$id400Movement->_id) {
-          $id400_create = true;
+        $idexMovement = CIdSante400::getMatch("CMovement", $sender->_tag_movement, $sender_movement);
+        if (!$idexMovement->_id) {
+          $idex_create = true;
         }         
       }
     }
     // ID mouvement provenant d'un système tiers
     else {
-      $id400Movement = CIdSante400::getMatch("CMovement", $sender->_tag_movement, $movement_id); 
-      if ($id400Movement->_id) {
-        $movement->load($id400Movement->object_id);
+      $idexMovement = CIdSante400::getMatch("CMovement", $sender->_tag_movement, $movement_id);
+      if ($idexMovement->_id) {
+        $movement->load($idexMovement->object_id);
       }
       // Recherche d'un mouvement identique dans le cas ou il ne s'agit pas d'une mutation / absence
       else {
-        $id400_create = true;
+        $idex_create = true;
         if ($event_code != "A02" && $event_code != "A21") {
           $movement->cancel = 0;
           $movement->loadMatchingObjectEsc();
@@ -2008,10 +2008,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return $msg;
     }
     
-    if ($id400_create) {
-      $id400Movement->last_update = CMbDT::dateTime();
-      $id400Movement->object_id   = $movement->_id;
-      if ($msg = $id400Movement->store()) {
+    if ($idex_create) {
+      $idexMovement->last_update = CMbDT::dateTime();
+      $idexMovement->object_id   = $movement->_id;
+      if ($msg = $idexMovement->store()) {
         return $msg;
       } 
     }

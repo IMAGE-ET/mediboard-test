@@ -276,12 +276,12 @@ class CMbObject extends CStoredObject {
    * @return CIdSante400
    */
   function loadLastId400($tag = null) {
-    $id400 = new CIdSante400();
-    if ($id400->_ref_module) {
-      $id400->loadLatestFor($this, $tag);
-      $this->_ref_last_id400 = $id400;
+    $idex = new CIdSante400();
+    if ($idex->_ref_module) {
+      $idex->loadLatestFor($this, $tag);
+      $this->_ref_last_id400 = $idex;
     }
-    return $id400;
+    return $idex;
   } 
     
   /**

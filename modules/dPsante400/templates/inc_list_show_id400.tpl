@@ -40,9 +40,9 @@
       });
     });
     
-    trashNDA = function(idSante400_id) {
+    trashNDA = function(idex_id) {
       var url = new Url("dPsante400", "ajax_trash_id400");
-      url.addParam("idSante400_id", idSante400_id);
+      url.addParam("idex_id", idex_id);
       url.requestUpdate("systemMsg", {onComplete : function() {
         getForm("editTags").up("div").up("div").down("button.change").click();
       }});
@@ -61,29 +61,37 @@
         <th></th>
         <th>{{mb_title class=CIdSante400 field=object_class}}</th>  
         <th>{{mb_title class=CIdSante400 field=last_update}}</th>
-        <th>{{mb_title class=CSejour field=_NDA}}</th> 
+        <th>{{mb_title class=CSejour     field=_NDA}}</th>
         <th>{{mb_title class=CIdSante400 field=tag}}</th>
+        <th>{{tr}}CIdSante400-_type{{/tr}}</th>
       {{/if}}
     </tr>
-    {{foreach from=$listIdSante400 item=_idSante400}}
+    {{foreach from=$idexs item=_idex}}
       <tr>
         {{if $admin_admission && $sip_active}}
           <td>
-            <input type="radio" name="radio[]" {{if $_idSante400->_id == $idSante400_id}}checked="checked"{{/if}}
-              onchange="trashNDA('{{$_idSante400->_id}}');"/>
+            <input type="radio" name="radio[]" {{if $_idex->_id == $idex_id}}checked="checked"{{/if}}
+              onchange="trashNDA('{{$_idex->_id}}');"/>
           </td>
         {{else}}
           <td></td>
         {{/if}}
-        <td>{{$_idSante400->object_class}}</td>
+        <td>{{$_idex->object_class}}</td>
 
-        <td>{{$_idSante400->last_update|date_format:$conf.datetime}}</td>
-        <td>{{$_idSante400->id400}}</td>
-        <td>{{$_idSante400->tag}}</td>
+        <td>{{$_idex->last_update|date_format:$conf.datetime}}</td>
+        <td>{{$_idex->id400}}</td>
+        <td>{{$_idex->tag}}</td>
+        <td>
+          {{if $_idex->_type}}
+            <span class="idex-special idex-special-{{$_idex->_type}}">
+          {{$_idex->_type}}
+        </span>
+          {{/if}}
+        </td>
       </tr>
     {{foreachelse}}
       <tr>
-        <td colspan="5">{{tr}}CIdSante400.none{{/tr}}</td>
+        <td colspan="6">{{tr}}CIdSante400.none{{/tr}}</td>
       </tr>
     {{/foreach}}
   </table>

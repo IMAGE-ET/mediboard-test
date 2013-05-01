@@ -10,10 +10,10 @@
 
 CCanDo::checkAdmin();
 
-$id400 = new CIdSante400();
-$id400->object_class = "CPatient";
-$id400->tag = CAppUI::conf("dPpatients CPatient tag_conflict_ipp").CAppUI::conf("dPpatients CPatient tag_ipp");
-$ipp_conflicts = $id400->loadMatchingList();
+$idex = new CIdSante400();
+$idex->object_class = "CPatient";
+$idex->tag = CAppUI::conf("dPpatients CPatient tag_conflict_ipp").CAppUI::conf("dPpatients CPatient tag_ipp");
+$ipp_conflicts = $idex->loadMatchingList();
 
 $conflicts = array();
 foreach ($ipp_conflicts as $_conflict) {
@@ -44,4 +44,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("conflicts", $conflicts);
 
 $smarty->display("inc_ipp_conflicts.tpl");
-?>

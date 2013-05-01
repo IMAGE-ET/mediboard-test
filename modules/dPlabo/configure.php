@@ -7,30 +7,29 @@
 * @author Thomas Despoix
 */
 
-global $can;
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 $pratId    = CValue::getOrSession("object_id");
 $pratId400 = CValue::getOrSession("id400");
 $date      = CMbDT::dateTime();
 
 //Création d'un nouvel id400 pour le laboratoire
-$newId400 = new CIdSante400();
+$new_idex = new CIdSante400();
 
 $prat = new CMediusers();
 $listPrat = $prat->loadPraticiens();
 
 $remote_name = CAppUI::conf("dPlabo CCatalogueLabo remote_name");
 
-$id400 = new CIdSante400();
-$id400->object_class = "CMediusers";
-$id400->tag = $remote_name;
+$idex = new CIdSante400();
+$idex->object_class = "CMediusers";
+$idex->tag = $remote_name;
 $order = "last_update DESC";
 
-$list_idSante400 = $id400->loadMatchingList($order);
+$idexs = $idex->loadMatchingList($order);
 
-foreach ($list_idSante400 as $curr_idSante400) {
-  $curr_idSante400->loadRefs();
+foreach ($idexs as $_idex) {
+  $_idex->loadRefs();
 }
 
 $prescriptionlabo_source = CExchangeSource::get("prescriptionlabo", "ftp", true, null, false);
@@ -43,9 +42,7 @@ $smarty->assign("get_id_prescriptionlabo_source" , $get_id_prescriptionlabo_sour
 $smarty->assign("listPrat", $listPrat);
 $smarty->assign("date", $date);
 $smarty->assign("remote_name", $remote_name);
-$smarty->assign("newId400", $newId400);
-$smarty->assign("list_idSante400",$list_idSante400);
+$smarty->assign("newId400", $new_idex);
+$smarty->assign("list_idSante400", $idexs);
 
 $smarty->display("configure.tpl");
-
-?>

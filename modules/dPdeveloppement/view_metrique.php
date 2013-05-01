@@ -24,15 +24,15 @@ if ($view_current) {
   $tag_NDA = CSejour::getTagNDA($current_group);
   $where["tag"] = " = '$tag_NDA'";
   $where["object_class"] = " = 'CSejour'";
-  $id400 = new CIdSante400;
-  $res_current_etab["CSejour-_NDA"] = $id400->countList($where);
+  $idex = new CIdSante400;
+  $res_current_etab["CSejour-_NDA"] = $idex->countList($where);
   
   // - Patients IPP
   $tag_ipp = CPatient::getTagIPP($current_group);
   $where["tag"] = " = '$tag_ipp'";
   $where["object_class"] = " = 'CPatient'";
-  $id400 = new CIdSante400;
-  $res_current_etab["CPatient-_IPP"] = $id400->countList($where);
+  $idex = new CIdSante400;
+  $res_current_etab["CPatient-_IPP"] = $idex->countList($where);
   
   // - Nombre de consultations
   $where = array();
@@ -87,7 +87,7 @@ else {
   $result = array();
   $listeClasses = CApp::getInstalledClasses();
   
-  foreach ($listeClasses as $class){
+  foreach ($listeClasses as $class) {
     $object = new $class;
     if ($object->_spec->measureable) {
       $sql = "SHOW TABLE STATUS LIKE '{$object->_spec->table}'";
@@ -104,5 +104,3 @@ else {
   $smarty->assign("nb_etabs", $etab->countList());
   $smarty->display("view_metrique.tpl");
 }
-
-?>

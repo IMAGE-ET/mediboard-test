@@ -42,13 +42,13 @@ foreach ($results as $key => $_result) {
   $users[$key]["user_first_name"] = CLDAP::getValue($_result, "givenname");
   $users[$key]["user_last_name"]  = CLDAP::getValue($_result, "sn");
   $users[$key]["actif"]           = (CLDAP::getValue($_result, "useraccountcontrol") == 66048) ? 1 : 0;
-  
-  $id400               = new CIdSante400();
-  $id400->tag          = CAppUI::conf("admin LDAP ldap_tag");
-  $id400->id400        = $objectguid;
-  $id400->object_class = "CUser";
-  $id400->loadMatchingObject();
-  $users[$key]["associate"] = $id400->_id ? $id400->object_id : null;
+
+  $idex = new CIdSante400();
+  $idex->tag          = CAppUI::conf("admin LDAP ldap_tag");
+  $idex->id400        = $objectguid;
+  $idex->object_class = "CUser";
+  $idex->loadMatchingObject();
+  $users[$key]["associate"] = $idex->_id ? $idex->object_id : null;
 }
 
 // Création du template
@@ -60,5 +60,3 @@ $smarty->assign("givenname"     , CMbString::capitalize($mediuser->_user_first_n
 $smarty->assign("sn"            , strtoupper($mediuser->_user_last_name));
 $smarty->assign("samaccountname", strtolower($mediuser->_user_username));
 $smarty->display("inc_search_user_ldap.tpl");
-
-?>

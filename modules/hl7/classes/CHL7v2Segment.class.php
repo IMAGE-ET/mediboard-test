@@ -358,7 +358,7 @@ class CHL7v2Segment extends CHL7v2Entity {
   function fillOtherIdentifiers(&$identifiers, CPatient $patient, CInteropActor $actor = null) {
   }
   
-  function getXCN9(CMbObject $object, CIdSante400 $id400 = null, CInteropReceiver $actor = null) {
+  function getXCN9(CMbObject $object, CIdSante400 $idex = null, CInteropReceiver $actor = null) {
     if (empty($actor->_configs["send_assigning_authority"])) {
       return;
     }
@@ -374,7 +374,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     } 
     
     // Autorité d'affectation de l'idex
-    elseif ($id400 && $id400->id400) {
+    elseif ($idex && $idex->id400) {
       return $this->getAssigningAuthority("actor", null, $actor);
     }     
     
@@ -387,13 +387,13 @@ class CHL7v2Segment extends CHL7v2Entity {
     
     if ($object instanceof CMedecin) {
       $object->completeField("adeli", "rpps");
+
+      $idex = $object->loadLastId400();
       
-      $id400 = $object->loadLastId400();
-      
-      $xcn1  = CValue::first($object->adeli, $object->rpps, $id400->id400, $object->_id);
+      $xcn1  = CValue::first($object->adeli, $object->rpps, $idex->id400, $object->_id);
       $xcn2  = $object->nom;
       $xcn3  = $object->prenom;      
-      $xcn9  = $this->getXCN9($object, $id400, $actor);
+      $xcn9  = $this->getXCN9($object, $idex, $actor);
       $xcn13 = ($object->adeli ? "ADELI" : ($object->rpps ? "RPPS" : "RI"));
     }
     if ($object instanceof CUser) {
@@ -405,13 +405,13 @@ class CHL7v2Segment extends CHL7v2Entity {
     }
     if ($object instanceof CMediusers) {
       $object->completeField("adeli", "rpps");
-      
-      $id400 = CIdSante400::getMatch("CMediusers", $actor->_tag_mediuser, null, $object->_id);
 
-      $xcn1  = CValue::first($object->adeli, $object->rpps, $id400->id400, $object->_id);
+      $idex = CIdSante400::getMatch("CMediusers", $actor->_tag_mediuser, null, $object->_id);
+
+      $xcn1  = CValue::first($object->adeli, $object->rpps, $idex->id400, $object->_id);
       $xcn2  = $object->_user_last_name;
       $xcn3  = $object->_user_first_name;
-      $xcn9  = $this->getXCN9($object, $id400, $actor);
+      $xcn9  = $this->getXCN9($object, $idex, $actor);
       $xcn13 = ($object->adeli ? "ADELI" : ($object->rpps ? "RPPS" : "RI"));
     }
     
@@ -451,8 +451,8 @@ class CHL7v2Segment extends CHL7v2Entity {
         $xncs[] = $xcn; 
       }
       // Ajout de l'Idex
-      if ($id400->id400) {
-        $xcn[0]  = $id400->id400;
+      if ($idex->id400) {
+        $xcn[0]  = $idex->id400;
         $xcn[8]  = $this->getAssigningAuthority("actor", null, $actor);
         $xcn[12] = "RI";
         

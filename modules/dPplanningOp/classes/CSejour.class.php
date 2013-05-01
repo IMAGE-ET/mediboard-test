@@ -2080,7 +2080,13 @@ class CSejour extends CFacturable implements IPatientRelated {
      
     // Gestion du tag NDA par son domaine d'identification
     if (CAppUI::conf("eai use_domain")) {
-      return CDomain::getTagMasterDomain("CSejour", $group_id);
+      $tag_NDA = CDomain::getTagMasterDomain("CSejour", $group_id);
+
+      if ($type_tag != "tag_dossier") {
+        $tag_NDA = CAppUI::conf("dPplanningOp CSejour $type_tag") . $tag_NDA;
+      }
+
+      return $tag_NDA;
     }
 
     $tag_NDA = CAppUI::conf("dPplanningOp CSejour tag_dossier");

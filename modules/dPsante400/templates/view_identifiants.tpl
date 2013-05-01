@@ -1,28 +1,28 @@
 {{mb_script module="system" script="object_selector"}}
 
 <script type="text/javascript">
-  editId400 = function(idSante400_id) {
+  editId400 = function(idex_id) {
     new Url('sante400', 'ajax_edit_identifiant')
-      .addParam('idSante400_id'  , idSante400_id)
-      .addParam('object_class'   , '{{$filter->object_class}}')
-      .addParam('object_id'      , '{{$filter->object_id}}')
-      .addParam('tag'            , '{{$filter->tag}}')
-      .addParam('id400'          , '{{$filter->id400}}')
-      .addParam('dialog'         , 1)
+      .addParam('idex_id'     , idex_id)
+      .addParam('object_class', '{{$filter->object_class}}')
+      .addParam('object_id'   , '{{$filter->object_id}}')
+      .addParam('tag'         , '{{$filter->tag}}')
+      .addParam('id400'       , '{{$filter->id400}}')
+      .addParam('dialog'      , 1)
       .requestModal();
   }
 
-  refreshListId400 = function(idSante400_id) {
+  refreshListId400 = function(idex_id) {
     {{if !$dialog}}
       refreshListFilter();
     {{else}}
       new Url('sante400', "ajax_list_identifiants")
-        .addParam('object_class' , '{{$filter->object_class}}')
-        .addParam('object_id'    , '{{$filter->object_id}}')
-        .addParam('tag'          , '{{$filter->tag}}')
-        .addParam('id400'        , '{{$filter->id400}}')
-        .addParam('idSante400_id', idSante400_id)
-        .addParam("dialog"       , '{{$dialog}}')
+        .addParam('object_class', '{{$filter->object_class}}')
+        .addParam('object_id'   , '{{$filter->object_id}}')
+        .addParam('tag'         , '{{$filter->tag}}')
+        .addParam('id400'       , '{{$filter->id400}}')
+        .addParam('idex_id'     , idex_id)
+        .addParam("dialog"      , '{{$dialog}}')
         .requestUpdate("list_identifiants");
     {{/if}}
 
@@ -41,8 +41,8 @@
     return false;
   }
 
-  reloadId400 = function(idSante400_id) {
-    refreshListId400(idSante400_id);
+  reloadId400 = function(idex_id) {
+    refreshListId400(idex_id);
   }
   
   Main.add(refreshListId400);

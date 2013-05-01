@@ -199,22 +199,22 @@ class CLDAP {
     }
     
     $results = $results[0];
-    
-    $id400               = new CIdSante400();
-    $id400->tag          = CAppUI::conf("admin LDAP ldap_tag");
-    $id400->object_class = "CUser";
-    
-    $id400->id400        = self::getObjectGUID($results);
-    $id400->loadMatchingObject();
+
+    $idex = new CIdSante400();
+    $idex->tag          = CAppUI::conf("admin LDAP ldap_tag");
+    $idex->object_class = "CUser";
+
+    $idex->id400        = self::getObjectGUID($results);
+    $idex->loadMatchingObject();
     
     // On sauvegarde le password renseigné
     $user_password  = $user->user_password;
     $_user_password = $user->_user_password;
         
     // objectguid retrouvé on charge le user
-    if ($id400->_id) {
+    if ($idex->_id) {
       $user = new CUser();
-      $user->load($id400->object_id);
+      $user->load($idex->object_id);
     } 
     // objectguid non retrouvé on associe à l'user courant l'objectguid 
     else {
@@ -263,11 +263,10 @@ class CLDAP {
     $user->_user_fin_activite = $fin_activite;
     $user->_count_ldap = 1;
     
-    if (!$id400->_id) {
-      $id400->object_id   = $user->_id;
-      $id400->last_update = CMbDT::dateTime();
-      $msg = $id400->store();
-      if ($msg) {
+    if (!$idex->_id) {
+      $idex->object_id   = $user->_id;
+      $idex->last_update = CMbDT::dateTime();
+      if ($msg = $idex->store()) {
         throw new CMbException($msg);
       }
     }

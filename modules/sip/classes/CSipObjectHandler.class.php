@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -102,27 +102,27 @@ class CSipObjectHandler extends CEAIObjectHandler {
         // Passage en trash des IPP des patients
         $tap_IPP = CPatient::getTagIPP($_group->_id);
         
-        $id400Patient               = new CIdSante400();
-        $id400Patient->tag          = $tap_IPP;
-        $id400Patient->object_class = "CPatient";
-        $id400Patient->object_id    = $patient->_id;
-        $id400sPatient = $id400Patient->loadMatchingList();
+        $idexPatient = new CIdSante400();
+        $idexPatient->tag          = $tap_IPP;
+        $idexPatient->object_class = "CPatient";
+        $idexPatient->object_id    = $patient->_id;
+        $idexsPatient = $idexPatient->loadMatchingList();
         
-        $id400PatientElimine               = new CIdSante400();
-        $id400PatientElimine->tag          = $tap_IPP;
-        $id400PatientElimine->object_class = "CPatient";
-        $id400PatientElimine->object_id    = $patient_elimine->_id;
-        $id400sPatientElimine = $id400PatientElimine->loadMatchingList();
+        $idexPatientElimine = new CIdSante400();
+        $idexPatientElimine->tag          = $tap_IPP;
+        $idexPatientElimine->object_class = "CPatient";
+        $idexPatientElimine->object_id    = $patient_elimine->_id;
+        $idexsPatientElimine = $idexPatientElimine->loadMatchingList();
 
-        $id400s = array_merge($id400sPatient, $id400sPatientElimine);
-        if (count($id400s) > 1) {
-          foreach ($id400s as $_id_400) {
+        $idexs = array_merge($idexsPatient, $idexsPatientElimine);
+        if (count($idexs) > 1) {
+          foreach ($idexs as $_idex) {
             // On continue pour ne pas mettre en trash l'IPP du patient que l'on garde
-            if ($_id_400->id400 == $patient1_ipp) {
+            if ($_idex->id400 == $patient1_ipp) {
               continue;
             }
 
-            $patient_elimine->trashIPP($_id_400);
+            $patient_elimine->trashIPP($_idex);
           }
         }
         

@@ -12,25 +12,25 @@ CCanDo::checkRead();
 
 $canSante400 = CModule::getCanDo("dPsante400");
 
-$idSante400 = new CIdSante400;
-$idSante400->load(CValue::get("idSante400_id"));
-$idSante400->loadRefs();
+$idex = new CIdSante400;
+$idex->load(CValue::get("idex_id"));
+$idex->loadRefs();
 
 // Chargement du filtre
 $filter = new CIdSante400;
-$filter->object_id    = CValue::get("object_id"   );
+$filter->object_id    = CValue::get("object_id");
 $filter->object_class = CValue::get("object_class");
-$filter->tag          = CValue::get("tag"         );
+$filter->tag          = CValue::get("tag");
 $filter->id400        = CValue::get("id400");
 $filter->nullifyEmptyFields();
 
-$filter->last_update = CValue::first($idSante400->last_update, CMbDT::dateTime());
+$filter->last_update = CValue::first($idex->last_update, CMbDT::dateTime());
 
 // Rester sur le même filtre en mode dialogue
 $dialog = CValue::get("dialog");
-if ($dialog && $idSante400->_id) {
-  $filter->object_class = $idSante400->object_class;
-  $filter->object_id    = $idSante400->object_id   ;
+if ($dialog && $idex->_id) {
+  $filter->object_class = $idex->object_class;
+  $filter->object_id    = $idex->object_id   ;
 }
 
 // Récupération de la liste des classes disponibles
@@ -48,16 +48,16 @@ if ($filter->object_id && $filter->object_class) {
   $target->load($filter->object_id);
 }
 
-if (!$idSante400->_id) {
-  $idSante400 = $filter;
+if (!$idex->_id) {
+  $idex = $filter;
 }
 
 $smarty = new CSmartyDP;
-$smarty->assign("idSante400" , $idSante400);
+
+$smarty->assign("idex"       , $idex);
 $smarty->assign("canSante400", $canSante400);
 $smarty->assign("filter"     , $filter);
 $smarty->assign("target"     , $target);
 $smarty->assign("listClasses", $listClasses);
-$smarty->display("inc_edit_identifiant.tpl");
 
-?>
+$smarty->display("inc_edit_identifiant.tpl");

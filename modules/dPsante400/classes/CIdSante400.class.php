@@ -242,16 +242,16 @@ class CIdSante400 extends CMbMetaObject {
    *
    * @param string $object_class Object class
    * @param string $tag          Tag name
-   * @param string $id400        Idex
+   * @param string $value        Idex
    * @param string $object_id    Object ID
    *
    * @return CIdSante400 The matching external ID
    */
-  static function getMatch($object_class, $tag, $id400, $object_id = null) {
+  static function getMatch($object_class, $tag, $value, $object_id = null) {
     $idex               = new self;
     $idex->object_class = $object_class;
     $idex->tag          = $tag;
-    $idex->id400        = $id400;
+    $idex->id400        = $value;
     $idex->object_id    = $object_id;
 
     $order = "last_update DESC";
@@ -265,13 +265,13 @@ class CIdSante400 extends CMbMetaObject {
    *
    * @param string $object_class Object class
    * @param string $tag          Tag name
-   * @param string $id400        Idex
+   * @param string $value        Idex
    * @param string $object_id    Object ID
    *
    * @return string Value the matching external ID
    */
-  static function getValue($object_class, $tag, $id400, $object_id = null) {
-    return self::getMatch($object_class, $tag, $id400, $object_id)->id400;
+  static function getValue($object_class, $tag, $value, $object_id = null) {
+    return self::getMatch($object_class, $tag, $value, $object_id)->id400;
   }
 
   /**

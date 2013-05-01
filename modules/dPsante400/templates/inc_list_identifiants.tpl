@@ -20,13 +20,13 @@
     <th class="narrow">{{tr}}CIdSante400-last_update{{/tr}}</th>
     <th>{{tr}}CIdSante400-id400-court{{/tr}}</th> 
     <th>{{tr}}CIdSante400-tag{{/tr}}</th>
-      <th>{{tr}}CIdSante400-_type{{/tr}}</th>
+    <th>{{tr}}CIdSante400-_type{{/tr}}</th>
   </tr>
   
   {{assign var=href value="?m=sante400&$actionType=$action&dialog=$dialog"}}
   
   {{foreach from=$idexs item=_idex}}
-    <tr {{if $_idex->_id == $idSante400_id}}class="selected"{{/if}}>
+    <tr {{if $_idex->_id == $idex_id}}class="selected"{{/if}}>
       {{if !$dialog}}
         <td>{{$_idex->object_class}}</td>
         <td>{{$_idex->object_id}}</td>

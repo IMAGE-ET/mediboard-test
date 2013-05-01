@@ -95,13 +95,13 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
       CAppUI::conf("hl7 assigning_authority_universal_id"),
       CAppUI::conf("hl7 assigning_authority_universal_type_id"),
     );
-    
-    $id400Movement = CIdSante400::getMatch("CMovement", $receiver->_tag_movement, null, $movement->_id);
-    if ($id400Movement->_id) {
+
+    $idexMovement = CIdSante400::getMatch("CMovement", $receiver->_tag_movement, null, $movement->_id);
+    if ($idexMovement->_id) {
       $configs = $receiver->_configs;
       $identifiers[] = array(
         // Entity identifier
-        $id400Movement->id400,
+        $idexMovement->id400,
         // Autorité assignement
         $configs["assigning_authority_namespace_id"],
         $configs["assigning_authority_universal_id"],

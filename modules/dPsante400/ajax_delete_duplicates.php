@@ -13,32 +13,31 @@ CCanDo::checkAdmin();
 $object_id    = CValue::get("object_id");
 $object_class = CValue::get("object_class");
 $tag          = CValue::get("tag");
-$id400        = CValue::get("id400");
+$idex_value   = CValue::get("id400");
 
-$idSante400 = new CIdSante400();
 $where = array(
   "object_id"    => "= '$object_id'",
   "object_class" => "= '$object_class'",
   "tag"          => "= '$tag'",
-  "id400"        => "= '$id400'",
+  "id400"        => "= '$idex_value'",
 );
 
 $order = "last_update DESC";
 
-$listIdSante400 = $idSante400->loadList($where, $order);
+$idex  = new CIdSante400();
+$idexs = $idex->loadList($where, $order);
 
-$survivor = reset($listIdSante400)->_id;
+$survivor = reset($idexs)->_id;
 
-foreach($listIdSante400 as $idSante400) {
-  if($idSante400->_id != $survivor) {
-    if($msg = $idSante400->delete()) {
+foreach ($idexs as $_idex) {
+  if ($_idex->_id != $survivor) {
+    if ($msg = $_idex->delete()) {
       CAppUI::setMsg($msg, UI_MSG_WARNING);
-    } else {
+    }
+    else {
       CAppUI::setMsg("Identifiant supprimé", UI_MSG_OK);
     }
   }
 }
 
 echo CAppUI::getMsg();
-
-?>

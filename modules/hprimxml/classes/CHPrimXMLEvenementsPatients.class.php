@@ -499,12 +499,12 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
         
     $code = $xpath->queryTextNode("hprim:identification/hprim:code", $node);
     $mediuser = new CMediusers();
-    $id400 = new CIdSante400();
-    $id400->object_class = "CMediusers";
-    $id400->tag = $this->_ref_echange_hprim->_ref_sender->_tag_mediuser;
-    $id400->id400 = $code;
-    if ($id400->loadMatchingObject()) {
-      $mediuser->_id = $id400->object_id;
+    $idex = new CIdSante400();
+    $idex->object_class = "CMediusers";
+    $idex->tag = $this->_ref_echange_hprim->_ref_sender->_tag_mediuser;
+    $idex->id400 = $code;
+    if ($idex->loadMatchingObject()) {
+      $mediuser->_id = $idex->object_id;
     }
     else {
       // Récupération du typePersonne
@@ -513,10 +513,10 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       $mediuser = self::getPersonne($personne, $mediuser);
       
       $mediuser->_id = $this->createPraticien($mediuser);
-      
-      $id400->object_id = $mediuser->_id;
-      $id400->last_update = CMbDT::dateTime();
-      $id400->store(); 
+
+      $idex->object_id = $mediuser->_id;
+      $idex->last_update = CMbDT::dateTime();
+      $idex->store();
     }
     
     return $mediuser->_id;

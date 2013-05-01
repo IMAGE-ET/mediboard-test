@@ -18,60 +18,60 @@ $module->mod_name = "sip";
 $module->loadMatchingObject();
 $sip_active = $module->mod_active;
 
-$id400 = CValue::get("id400");
+$idex_value = CValue::get("id400");
 $object_id = CValue::get("object_id");
-$listIdSante400 = array();
-$idSante400_id  = null;
 $order = "last_update DESC";
 
-$idSante400 = new CIdSante400;
-$idSante400->id400 = $id400;
-$idSante400->object_id = $object_id;
-$idSante400->loadMatchingObject();
+$idex = new CIdSante400;
+$idex->id400     = $idex_value;
+$idex->object_id = $object_id;
+$idex->loadMatchingObject();
 
 $group_id = CGroups::loadCurrent()->_id;
 
-if ($idSante400->_id) {
+$idexs   = array();
+$idex_id = null;
+if ($idex->_id) {
   $filter = new CIdSante400;
-  $filter->object_class = $idSante400->object_class;
-  $filter->object_id    = $idSante400->object_id;
+  $filter->object_class = $idex->object_class;
+  $filter->object_id    = $idex->object_id;
   
   $filter->tag = CSejour::getTagNDA($group_id);
-  $listIdSante400  = $filter->loadMatchingList($order);
+  $idexs = $filter->loadMatchingList($order);
   
   $filter->tag = CSejour::getTagNDA($group_id, "tag_dossier_trash");
-  $listIdSante400 += $filter->loadMatchingList($order);
+  $idexs += $filter->loadMatchingList($order);
   
   $filter->tag = CSejour::getTagNDA($group_id, "tag_dossier_cancel");
-  $listIdSante400 += $filter->loadMatchingList($order);
+  $idexs += $filter->loadMatchingList($order);
   
   $filter->tag = CSejour::getTagNDA($group_id, "tag_dossier_pa");
-  $listIdSante400 += $filter->loadMatchingList($order);
+  $idexs += $filter->loadMatchingList($order);
   
   // Chargement de l'objet afin de récupérer l'id400 associé (le latest)
   $object = new $filter->object_class;
   $object->load($filter->object_id);
   $object->loadNDA($group_id);
   
-  foreach ($listIdSante400 as $key=>$_idSante400) {
-    $_idSante400->loadRefs();
-    if (!$idSante400_id && $_idSante400->id400 == $object->_NDA) {
-      $idSante400_id = $_idSante400->_id;
+  foreach ($idexs as $key => $_idex) {
+    $_idex->loadRefs();
+    $_idex->getSpecialType();
+    if (!$idex_id && $_idex->id400 == $object->_NDA) {
+      $idex_id = $_idex->_id;
     }
   }
   
-  ksort($listIdSante400);
+  ksort($idexs);
 }
 
 $smarty = new CSmartyDP;
 $smarty->assign("admin_admission", $admin_admission);
-$smarty->assign("listIdSante400" , $listIdSante400);
-$smarty->assign("idSante400_id"  , $idSante400_id);
+$smarty->assign("idexs"          , $idexs);
+$smarty->assign("idex_id"        , $idex_id);
 $smarty->assign("object_id"      , $object_id);
 $smarty->assign("sip_active"     , $sip_active);
-if ($idSante400->_id) {
-  $smarty->assign("patient_id"    , $object->patient_id);
+if ($idex->_id) {
+  $smarty->assign("patient_id"   , $object->patient_id);
 }
 
 $smarty->display("inc_list_show_id400.tpl");
-?>

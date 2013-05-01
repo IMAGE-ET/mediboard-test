@@ -20,23 +20,23 @@ class CEAISejour extends CEAIMbObject {
   /**
    * Recording the external identifier of the CIP
    * 
-   * @param CIdSante400    $id400Sejour    Object id400
+   * @param CIdSante400    $idex           Object id400
    * @param CInteropSender $sender         Sender
    * @param int            $idSourceSejour External identifier
    * @param CSejour        $newSejour      Admit
    * 
    * @return null|string null if successful otherwise returns and error message
    */ 
-  static function storeID400CIP(CIdSante400 $id400Sejour, CInteropSender $sender, $idSourceSejour, CSejour $newSejour) {
+  static function storeID400CIP(CIdSante400 $idex, CInteropSender $sender, $idSourceSejour, CSejour $newSejour) {
     //Paramétrage de l'id 400
-    $id400Sejour->object_class = "CSejour";
-    $id400Sejour->tag          = $sender->_tag_sejour;
-    $id400Sejour->id400        = $idSourceSejour;
-    $id400Sejour->object_id    = $newSejour->_id;
-    $id400Sejour->_id          = null;
-    $id400Sejour->last_update  = CMbDT::dateTime();
+    $idex->object_class = "CSejour";
+    $idex->tag          = $sender->_tag_sejour;
+    $idex->id400        = $idSourceSejour;
+    $idex->object_id    = $newSejour->_id;
+    $idex->_id          = null;
+    $idex->last_update  = CMbDT::dateTime();
 
-    return $id400Sejour->store();
+    return $idex->store();
   }
   
   /**
@@ -164,7 +164,4 @@ class CEAISejour extends CEAIMbObject {
     
     return $newSejour->store();
   }
-  
 }
-
-?>

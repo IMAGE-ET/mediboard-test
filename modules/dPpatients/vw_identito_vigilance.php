@@ -25,10 +25,10 @@ $naissance  = CValue::getOrSession("naissance", array(
 // Patient à analyser
 $patient = new CPatient();
 
-$id400 = new CIdSante400();
-$id400->object_class = "CPatient";
-$id400->tag = CAppUI::conf("dPpatients CPatient tag_conflict_ipp").CAppUI::conf("dPpatients CPatient tag_ipp");
-$count_conflicts = $id400->countMatchingList();
+$idex = new CIdSante400();
+$idex->object_class = "CPatient";
+$idex->tag = CAppUI::conf("dPpatients CPatient tag_conflict_ipp").CAppUI::conf("dPpatients CPatient tag_ipp");
+$count_conflicts = $idex->countMatchingList();
 
 $patient->load($patient_id);
 
@@ -42,7 +42,7 @@ if ($patient->_id) {
 }
 
 if ($patient->_id) {
-  foreach($patient->_ref_sejours as &$_sejour){
+  foreach ($patient->_ref_sejours as &$_sejour) {
     $_sejour->loadNDA();
   }
 }
@@ -67,7 +67,7 @@ foreach ($listSiblings as &$_sibling) {
       $cv->loadIdVitale($_sibling);
     }
   }
-  foreach($_sibling->_ref_sejours as &$_sejour){
+  foreach ($_sibling->_ref_sejours as &$_sejour) {
     $_sejour->loadNDA();
   }
 }
@@ -88,5 +88,3 @@ $smarty->assign("naissance"   , $naissance);
 $smarty->assign("count_conflicts", $count_conflicts);
 
 $smarty->display("vw_identito_vigilance.tpl");
-
-?>

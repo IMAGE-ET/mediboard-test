@@ -21,7 +21,7 @@ $d2_id    = CValue::request("domain_2_id");
 $idex_ids = CValue::request("idex_ids", array());
 
 /* Traitement prélable pour passer en "trash" les idexs en erreurs */
-foreach ($idex_ids as $id400 => $idex_id) {
+foreach ($idex_ids as $_idex => $idex_id) {
   $idex = new CIdSante400();
   $idex->load($idex_id);
   
@@ -45,7 +45,7 @@ foreach ($domains_id as $domain_id) {
   $domain = new CDomain();
   
   // the CMbObject is loaded
-  if (!$domain->load($domain_id)){
+  if (!$domain->load($domain_id)) {
     CAppUI::setMsg("Chargement impossible de l'objet [$domain_id]", UI_MSG_ERROR);
     continue;
   }
