@@ -1,11 +1,12 @@
-<?php /* $Id: ajax_vw_groups.php $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPetablissement
- * @version $Revision: 11630 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -21,5 +22,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("group" , $group);
 
 $smarty->display("inc_vw_groups.tpl");
-
-?>

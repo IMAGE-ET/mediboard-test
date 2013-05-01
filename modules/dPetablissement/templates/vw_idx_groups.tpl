@@ -22,7 +22,7 @@ Group = {
       row.addUniqueClassName('selected');
     }  
   }
-}
+};
 
 Main.add(Group.edit.curry('{{$group_id}}'));
 </script>

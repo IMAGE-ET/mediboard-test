@@ -13,7 +13,7 @@
     var url = new Url("system", "ajax_config_classes");
     url.addParam("module", "{{$m}}");
     url.requestUpdate("object-config");
-  };
+  }
    
   Main.add(Control.Tabs.create.curry('tabs-configure', true));
 </script>

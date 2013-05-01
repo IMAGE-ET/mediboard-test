@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPetablissement
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -49,13 +50,13 @@ else {
 
 $files = glob("$dir/*.csv");
 
-foreach($files as $_file) {
+foreach ($files as $_file) {
   $fp = fopen($_file, "r");
   
   $csv = new CCSVFile($fp);
   $csv->readLine(); // first line
   
-  while($line = $csv->readLine()) {
+  while ($line = $csv->readLine()) {
     if (!isset($line[1])) {
       continue;
     }

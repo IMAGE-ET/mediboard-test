@@ -1,11 +1,12 @@
-<?php /* $Id: ajax_etab_externe.php $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPetablissement
- * @version $Revision: 7208 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -15,7 +16,7 @@ $etab_id = CValue::getOrSession("etab_id");
 
 // Récupération des etablissements externes
 $etab_externe = new CEtabExterne();
-if ($etab_id){
+if ($etab_id) {
   $etab_externe->load($etab_id);
   $etab_externe->loadRefsNotes($etab_id);
 }

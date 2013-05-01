@@ -1,42 +1,48 @@
-<?php /* $Id: object_config.class.php 8220 2010-03-05 13:06:52Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPetablissement
- * @version $Revision: 8220 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * Group level configuration
+ *
+ * @deprecated It should migrate to CConfiguration
+ */
 class CGroupsConfig extends CMbObjectConfig {
-  var $groups_config_id = null;
+  public $groups_config_id;
   
-  var $object_id = null; // CGroups
+  public $object_id; // CGroups
   
   // Object configs
-  var $max_comp    = null;
-  var $max_ambu    = null;
-  var $codage_prat = null;
+  public $max_comp;
+  public $max_ambu;
+  public $codage_prat;
   
-  var $dPpatients_CPatient_nom_jeune_fille_mandatory = null;
+  public $dPpatients_CPatient_nom_jeune_fille_mandatory;
   
-  var $dPplanningOp_COperation_DHE_mode_simple       = null;
+  public $dPplanningOp_COperation_DHE_mode_simple;
   
-  var $ecap_CRPU_notes_creation = null;
+  public $ecap_CRPU_notes_creation;
   
   // SIP
-  var $sip_notify_all_actors = null;
-  var $sip_idex_generator    = null;
-  var $ipp_range_min         = null;
-  var $ipp_range_max         = null;
+  public $sip_notify_all_actors;
+  public $sip_idex_generator;
+  public $ipp_range_min;
+  public $ipp_range_max;
   
   // SMP
-  var $smp_notify_all_actors = null;
-  var $smp_idex_generator    = null;
-  var $nda_range_min         = null;
-  var $nda_range_max         = null;
+  public $smp_notify_all_actors;
+  public $smp_idex_generator;
+  public $nda_range_min;
+  public $nda_range_max;
   
-  var $dPprescription_CPrescription_show_trash_24h   = null;
+  public $dPprescription_CPrescription_show_trash_24h;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -47,34 +53,33 @@ class CGroupsConfig extends CMbObjectConfig {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs["object_id"]          = "ref class|CGroups";
+    $props = parent::getProps();
+    $props["object_id"]          = "ref class|CGroups";
     
-    $specs["max_comp"]    = "num min|0";
-    $specs["max_ambu"]    = "num min|0";
-    $specs["codage_prat"] = "bool default|0";
+    $props["max_comp"]    = "num min|0";
+    $props["max_ambu"]    = "num min|0";
+    $props["codage_prat"] = "bool default|0";
     
-    $specs["dPpatients_CPatient_nom_jeune_fille_mandatory"] = "bool default|0";
+    $props["dPpatients_CPatient_nom_jeune_fille_mandatory"] = "bool default|0";
     
-    $specs["dPplanningOp_COperation_DHE_mode_simple"]       = "bool default|0";
+    $props["dPplanningOp_COperation_DHE_mode_simple"]       = "bool default|0";
     
-    $specs["ecap_CRPU_notes_creation"] = "bool default|0";
+    $props["ecap_CRPU_notes_creation"] = "bool default|0";
     
     // SIP
-    $specs["sip_notify_all_actors"] = "bool default|0";
-    $specs["sip_idex_generator"]    = "bool default|0";
-    $specs["ipp_range_min"]         = "num min|0";
-    $specs["ipp_range_max"]         = "num moreThan|ipp_range_min";
+    $props["sip_notify_all_actors"] = "bool default|0";
+    $props["sip_idex_generator"]    = "bool default|0";
+    $props["ipp_range_min"]         = "num min|0";
+    $props["ipp_range_max"]         = "num moreThan|ipp_range_min";
     
     // SMP
-    $specs["smp_notify_all_actors"] = "bool default|0";
-    $specs["smp_idex_generator"]    = "bool default|0";
-    $specs["nda_range_min"]         = "num min|0";
-    $specs["nda_range_max"]         = "num moreThan|ipp_range_min";
+    $props["smp_notify_all_actors"] = "bool default|0";
+    $props["smp_idex_generator"]    = "bool default|0";
+    $props["nda_range_min"]         = "num min|0";
+    $props["nda_range_max"]         = "num moreThan|ipp_range_min";
     
-    $specs["dPprescription_CPrescription_show_trash_24h"] = "bool default|0";
+    $props["dPprescription_CPrescription_show_trash_24h"] = "bool default|0";
     
-    return $specs;
+    return $props;
   }
 }
-?>

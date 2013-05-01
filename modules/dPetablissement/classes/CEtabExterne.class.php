@@ -1,28 +1,31 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPetablissement
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * External group class (Etablissement externe)
+ */
 class CEtabExterne extends CMbObject {
-  // DB Table key
-  var $etab_id       = null;  
+  public $etab_id;  
 
   // DB Fields
-  var $nom            = null;
-  var $raison_sociale = null;
-  var $adresse        = null;
-  var $cp             = null;
-  var $ville          = null;
-  var $tel            = null;
-  var $fax            = null;
-  var $finess         = null;
-  var $siret          = null;
-  var $ape            = null;
+  public $nom;
+  public $raison_sociale;
+  public $adresse;
+  public $cp;
+  public $ville;
+  public $tel;
+  public $fax;
+  public $finess;
+  public $siret;
+  public $ape;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -39,23 +42,22 @@ class CEtabExterne extends CMbObject {
   }
   
   function getProps() {
-    $specs = parent::getProps();
-    $specs["nom"]            = "str notNull confidential seekable";
-    $specs["raison_sociale"] = "str maxLength|50";
-    $specs["adresse"]        = "text confidential";
-    $specs["cp"]             = "numchar length|5";
-    $specs["ville"]          = "str maxLength|50 confidential";
-    $specs["tel"]            = "phone";
-    $specs["fax"]            = "phone";
-    $specs["finess"]         = "numchar length|9 confidential mask|9xS9S99999S9 control|luhn";
-    $specs["siret"]          = "str length|14";
-    $specs["ape"]            = "str maxLength|6 confidential";
-    return $specs;
+    $props = parent::getProps();
+    $props["nom"]            = "str notNull confidential seekable";
+    $props["raison_sociale"] = "str maxLength|50";
+    $props["adresse"]        = "text confidential";
+    $props["cp"]             = "numchar length|5";
+    $props["ville"]          = "str maxLength|50 confidential";
+    $props["tel"]            = "phone";
+    $props["fax"]            = "phone";
+    $props["finess"]         = "numchar length|9 confidential mask|9xS9S99999S9 control|luhn";
+    $props["siret"]          = "str length|14";
+    $props["ape"]            = "str maxLength|6 confidential";
+    return $props;
   }
-  
+
   function updateFormFields () {
     parent::updateFormFields();
     $this->_view = $this->nom; 
   }
 }
-?>

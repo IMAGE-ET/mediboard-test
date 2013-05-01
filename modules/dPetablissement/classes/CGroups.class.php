@@ -1,16 +1,18 @@
-<?php 
+<?php
 /**
  * $Id$
  *
  * @package    Mediboard
  * @subpackage dPetablissement
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
+/**
+ * Group class (Etablissement)
+ */
 class CGroups extends CMbObject {
-  // DB Table key
   public $group_id;
 
   // DB Fields
@@ -41,16 +43,28 @@ class CGroups extends CMbObject {
   public $_is_ipp_supplier = false;
   public $_is_nda_supplier = false;
 
-  // Object References
+  /** @var CFunctions[] */
   public $_ref_functions;
+
+  /** @var CBlocOperatoire[] */
   public $_ref_blocs;
+
+  /** @var CPosteSSPI[] */
   public $_ref_postes;
+
+  /** @var CDMICategory[] */
   public $_ref_dmi_categories;
+
+  /** @var CService[] */
   public $_ref_services;
+
+  /** @var CFunctions */
   public $_ref_pharmacie;
+
+  /** @var CFunctions */
   public $_ref_service_urgences;
 
-
+  /** @var self */
   static $_ref_current = null;
 
   function getSpec() {
@@ -177,7 +191,7 @@ class CGroups extends CMbObject {
     parent::updateFormFields();
     $this->_view = $this->text;
     $this->_shortview = CMbString::truncate($this->text);
-    $this->_cp_court = substr($this->cp,0,2);
+    $this->_cp_court = substr($this->cp, 0, 2);
   }
 
   function store(){
@@ -191,10 +205,16 @@ class CGroups extends CMbObject {
       CConfigService::emptySHM();
       CConfigMomentUnitaire::emptySHM();
     }
+
+    return null;
   }
 
   /**
    * Load functions with given permission
+   *
+   * @param int $permType Permission level
+   *
+   * @return CFunctions[]
    */
   function loadFunctions($permType = PERM_READ) {
     return $this->_ref_functions = CMediusers::loadFonctions($permType, $this->_id);
@@ -202,55 +222,96 @@ class CGroups extends CMbObject {
 
   /**
    * Load blocs operatoires with given permission
+   *
+   * @param int  $permType    Permission level
+   * @param bool $load_salles Load salles
+   *
+   * @return CBlocOperatoire[]
    */
   function loadBlocs($permType = PERM_READ, $load_salles = true) {
     $bloc = new CBlocOperatoire();
-    $where = array('group_id' => "= '$this->_id'");
-    $this->_ref_blocs = $bloc->loadListWithPerms($permType, $where, "nom");
-    $use_poste = CAppUI::conf("dPplanningOp COperation use_poste");
+    $where = array(
+      'group_id' => "= '$this->_id'"
+    );
+
+    /** @var CBlocOperatoire[] $blocs */
+    $blocs = $bloc->loadListWithPerms($permType, $where, "nom");
 
     if ($load_salles) {
-      foreach ($this->_ref_blocs as &$bloc) {
-        $bloc->loadRefsSalles();
+      foreach ($blocs as $_bloc) {
+        $_bloc->loadRefsSalles();
       }
     }
-    return $this->_ref_blocs;
+
+    return $this->_ref_blocs = $blocs;
   }
 
+  /**
+   * Load postes SSPI
+   *
+   * @param int  $permType  Permission level
+   * @param bool $load_bloc Load blocs
+   *
+   * @return CPosteSSPI[]
+   */
   function loadPostes($permType = PERM_READ, $load_bloc = true) {
     $poste = new CPosteSSPI();
-    $where = array("group_id" => "= '$this->_id'");
-    $this->_ref_postes = $poste->loadListWithPerms($permType, $where, "nom");
+    $where = array(
+      "group_id" => "= '$this->_id'"
+    );
+
+    /** @var CPosteSSPI[] $postes */
+    $postes = $poste->loadListWithPerms($permType, $where, "nom");
 
     if ($load_bloc) {
-      foreach ($this->_ref_postes as $_poste) {
+      foreach ($postes as $_poste) {
         $_poste->loadRefBloc();
       }
     }
-    return $this->_ref_postes;
+
+    return $this->_ref_postes = $postes;
   }
 
   function loadRefsBack() {
     $this->loadFunctions();
   }
 
+  /**
+   * Get group's services
+   *
+   * @return CService[]
+   */
   function loadRefsServices(){
     return $this->_ref_services = $this->loadBackRefs("services", "nom");
   }
 
+  /**
+   * Get pharmacy function
+   *
+   * @return CFunctions
+   */
   function loadRefPharmacie(){
     return $this->_ref_pharmacie = $this->loadFwdRef("pharmacie_id");
   }
 
+  /**
+   * Get emergency function
+   *
+   * @return CFunctions
+   */
   function loadRefServiceUrgences(){
     return $this->_ref_service_urgences = $this->loadFwdRef("service_urgences_id");
   }
 
   /**
    * Load groups with given permission
+   *
+   * @param int $permType Permission level
+   *
+   * @return self[]
    */
   static function loadGroups($permType = PERM_READ) {
-    $group = new CGroups;
+    $group = new self();
     $groups = $group->loadList(null, "text");
     self::filterByPerm($groups, $permType);
     return $groups;
@@ -270,9 +331,11 @@ class CGroups extends CMbObject {
     $template->addProperty("Etablissement - Siret"           , $this->siret);
     $template->addProperty("Etablissement - Finess"          , $this->finess);
     $template->addProperty("Etablissement - Ape"             , $this->ape);
-    $template->addBarCode("Etablissement - Code Barre FINESS", $this->finess, array("barcode" => array(
+
+    $barcode = array("barcode" => array(
       "title" => CAppUI::tr("{$this->_class}-finess")
-    )));
+    ));
+    $template->addBarCode("Etablissement - Code Barre FINESS", $this->finess, $barcode);
 
     $this->notify("AfterFillLimitedTemplate", $template);
   }
@@ -283,6 +346,7 @@ class CGroups extends CMbObject {
 
   /**
    * Load the current group
+   *
    * @return CGroups
    */
   static function loadCurrent() {
@@ -291,21 +355,28 @@ class CGroups extends CMbObject {
       self::$_ref_current = new CGroups();
       self::$_ref_current->load($g);
     }
+
     return self::$_ref_current;
   }
 
+  /**
+   * Get DMI categories
+   *
+   * @return CDMICategory[]
+   */
   function loadRefsDMICategories() {
-    $this->_ref_dmi_categories = $this->loadBackRefs("dmi_categories", "nom");
+    return $this->_ref_dmi_categories = $this->loadBackRefs("dmi_categories", "nom");
   }
 
   /**
    * Construit le tag de l'établissement en fonction des variables de configuration
-   * @return string
+   *
+   * @return string|null
    */
   function getTagGroup() {
     // Pas de tag sur l'établiessement
     if (null == $tag_group = CAppUI::conf("dPetablissement tag_group")) {
-      return;
+      return null;
     }
 
     return str_replace('$g', $this->_id, $tag_group);
@@ -346,7 +417,8 @@ class CGroups extends CMbObject {
             break;
 
           case '12':  // Genève
-            $subdivisionHoliday[] = CMbDT::transform("next thursday", $firstSundaySeptember, "%Y-%m-%d");  //jeudi suivant le 1er dimanche de septembre
+            //jeudi suivant le 1er dimanche de septembre
+            $subdivisionHoliday[] = CMbDT::transform("next thursday", $firstSundaySeptember, "%Y-%m-%d");
             $subdivisionHoliday[] = CMbDT::transform("last friday", $paques, "%Y-%m-%d");  //vendredi saint
             $subdivisionHoliday[] = CMbDT::transform("+1 DAY", $paques, "%Y-%m-%d");  //lundi de paques
             $subdivisionHoliday[] = CMbDT::transform("+39 DAY", $paques, "%Y-%m-%d");  //Ascension
@@ -355,7 +427,6 @@ class CGroups extends CMbObject {
             break;
         }
         break;
-
     }
     return $subdivisionHoliday;
   }
@@ -418,12 +489,14 @@ class CGroups extends CMbObject {
 
   /**
    * Charge l'idex de l'établissement
+   *
+   * @return string|null
    */
   function loadIdex() {
     $tag_group = $this->getTagGroup();
 
     if (!$this->_id || !$tag_group) {
-      return;
+      return null;
     }
 
     // Récupération du premier idex créé
@@ -438,6 +511,13 @@ class CGroups extends CMbObject {
     return $idex->id400;
   }
 
+  /**
+   * Is the group a domain supplier ?
+   *
+   * @param string $domain_type Domain type (CSejour, CPatient, etc)
+   *
+   * @return bool
+   */
   function isNumberSupplier($domain_type) {
     if (!$this->_id) {
       return false;
@@ -458,12 +538,21 @@ class CGroups extends CMbObject {
     return $domain->loadRefIncrementer()->_id ? 1 : 0;
   }
 
+  /**
+   * Is the group an IPP supplier ?
+   *
+   * @return bool
+   */
   function isIPPSupplier() {
     return $this->_is_ipp_supplier = $this->isNumberSupplier("CPatient");
   }
 
+  /**
+   * Is the group an NDA supplier ?
+   *
+   * @return bool
+   */
   function isNDASupplier() {
     return $this->_is_nda_supplier = $this->isNumberSupplier("CSejour");
   }
 }
-?>

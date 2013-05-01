@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPetablissement
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -14,17 +15,14 @@ CCanDo::checkRead();
 $group_id = CValue::getOrSession("group_id");
 
 // Récupération des fonctions
-$group = new CGroups;
-$groups = $group->loadListWithPerms(PERM_READ);
+$groups = CGroups::loadGroups(PERM_READ);
 foreach ($groups as $_group) {
   $_group->loadFunctions();
 }
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("group_id" , $group_id);
-$smarty->assign("groups"   , $groups);
+$smarty->assign("group_id", $group_id);
+$smarty->assign("groups"  , $groups);
 
 $smarty->display("vw_idx_groups.tpl");
-
-?>
