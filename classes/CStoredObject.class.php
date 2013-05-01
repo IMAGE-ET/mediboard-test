@@ -2407,6 +2407,17 @@ class CStoredObject extends CModelObject {
   }
 
   /**
+   * Load object view information
+   *
+   * @return void
+   */
+  function loadView() {
+    $this->loadAllFwdRefs();
+    $this->canDo();
+  }
+
+
+  /**
    * Get the object's data source object
    *
    * @return CSQLDataSource The datasource object
