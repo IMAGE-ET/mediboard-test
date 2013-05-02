@@ -1852,15 +1852,17 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `tarifs` 
                     ADD INDEX (`group_id`);";
     $this->addQuery($query);
-
     $this->makeRevision("1.99");
 
     $query = "ALTER TABLE `acte_ngap`
                 ADD `numero_dent` TINYINT (4) UNSIGNED,
                 ADD `comment` VARCHAR (255);";
-
     $this->addQuery($query);
+    $this->makeRevision("2.00");
 
-    $this->mod_version = "2.00";
+    $query = "ALTER TABLE `facture_cabinet` 
+                CHANGE `statut_pro` `statut_pro` ENUM ('chomeur','etudiant','non_travailleur','independant','invalide','militaire','retraite','salarie_fr','salarie_sw','sans_emploi');";
+    $this->addQuery($query);
+    $this->mod_version = "2.01";
   }
 }

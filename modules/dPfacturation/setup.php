@@ -238,6 +238,11 @@ class CSetupdPfacturation extends CSetup {
     $query = "ALTER TABLE `facture_liaison` 
                 ADD INDEX (`facture_id`);";
     $this->addQuery($query);
-    $this->mod_version = "0.24";
+    $this->makeRevision("0.24");
+    
+    $query = "ALTER TABLE `facture_etablissement` 
+                CHANGE `statut_pro` `statut_pro` ENUM ('chomeur','etudiant','non_travailleur','independant','invalide','militaire','retraite','salarie_fr','salarie_sw','sans_emploi');";
+    $this->addQuery($query);
+    $this->mod_version = "0.25";
   }
 }
