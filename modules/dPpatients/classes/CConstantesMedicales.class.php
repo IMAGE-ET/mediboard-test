@@ -1506,12 +1506,12 @@ class CConstantesMedicales extends CMbObject {
   /**
    * Get the config from a host
    *
-   * @param string                     $name The config name
-   * @param CMbObject|CGroups|CService $host The host object
+   * @param string                                          $name The config name
+   * @param CMbObject|CGroups|CService|CConsultation|string $host The host object
    *
    * @return mixed
    */
-  static function getHostConfig($name, CMbObject $host) {
+  static function getHostConfig($name, $host) {
     $host = self::guessHost($host);
 
     $group_id = null;
@@ -1534,11 +1534,15 @@ class CConstantesMedicales extends CMbObject {
   /**
    * Find the host from a context object
    *
-   * @param CMbObject $context The context (séjour, rpu, service, etablissement)
+   * @param CMbObject|string $context The context (séjour, rpu, service, etablissement)
    *
-   * @return CGroups|CService
+   * @return CGroups|CService|string
    */
-  static function guessHost(CMbObject $context) {
+  static function guessHost($context) {
+    if ($context === "global") {
+      return "global";
+    }
+
     // Etablissement ou service (deja un HOST)
     if (
         $context instanceof CGroups ||
@@ -1599,6 +1603,14 @@ class CConstantesMedicales extends CMbObject {
       return $service;
     }
 
+    // Utiliser le contexte global dans la cas des consultations
+    if (
+        $context instanceof CConsultation ||
+        $context instanceof CConsultAnesth
+    ) {
+      return "global";
+    }
+
     return CGroups::loadCurrent();
   }
 
@@ -1635,13 +1647,13 @@ class CConstantesMedicales extends CMbObject {
   /**
    * Return the selected constant, ordered by rank
    *
-   * @param boolean   $order_by_types If false, the constants won't be oprdered by types,
-   *                                  even if the config show_cat_tabs is set to true
-   * @param CMbObject $host           Host from which we'll get the configuration
+   * @param boolean          $order_by_types If false, the constants won't be oprdered by types,
+   *                                         even if the config show_cat_tabs is set to true
+   * @param CMbObject|string $host           Host from which we'll get the configuration
    *
    * @return array
    */
-  static function getConstantsByRank($order_by_types = true, CMbObject $host = null) {
+  static function getConstantsByRank($order_by_types = true, $host = null) {
     if ($host) {
       $selection = CConstantesMedicales::getHostConfig("selection", $host);
     }
