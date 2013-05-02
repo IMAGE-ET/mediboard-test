@@ -22,11 +22,13 @@ if ($is_locked) {
   $_SESSION['locked'] = false; 
 }
 
+$allow_login_as_ldap = CAppUI::conf("admin LDAP allow_login_as_admin");
+
 if (!$username) {
   CAppUI::setMsg("Auth-failed-nousername", UI_MSG_ERROR);
 }
-else if (($user->user_type == 1) && !CAppUI::conf("admin LDAP ldap_connection")) {
-  // If admin: no need to  give a password
+else if (($user->user_type == 1) && (!CAppUI::conf("admin LDAP ldap_connection") || $allow_login_as_ldap)) {
+  // If admin: no need to give a password
   $_REQUEST['loginas'] = $username;
   CAppUI::login();
 }
@@ -38,7 +40,7 @@ else {
   
   if (CAppUI::conf("admin LDAP ldap_connection")) {
     $_REQUEST['passwordas'] = $password;
-    
+
     CAppUI::login(true);
   }
   else {

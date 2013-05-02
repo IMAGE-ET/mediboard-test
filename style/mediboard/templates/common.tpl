@@ -202,7 +202,7 @@
         <td><input name="username" tabIndex="1000" type="text" class="notNull" /></td>
       </tr>
       
-      {{if ($app->user_type != 1) || $conf.admin.LDAP.ldap_connection}}
+      {{if ($app->user_type != 1) || ($conf.admin.LDAP.ldap_connection && !$conf.admin.LDAP.allow_login_as_admin)}}
       <tr>
         <th><label for="password">{{tr}}Password{{/tr}}</label></th>
         <td><input name="password" tabIndex="1001" type="password" /></td>

@@ -479,7 +479,8 @@ class CAppUI {
    * @return boolean Job done
    */
   static function login($force_login = false) {
-    $ldap_connection = CAppUI::conf("admin LDAP ldap_connection");
+    $ldap_connection     = CAppUI::conf("admin LDAP ldap_connection");
+    $allow_login_as_ldap = CAppUI::conf("admin LDAP allow_login_as_admin");
 
     // Login as
     $loginas    = trim(CValue::request("loginas"));
@@ -507,6 +508,10 @@ class CAppUI {
       }
       $username = $loginas;
       $password = ($ldap_connection ? $passwordas : null);
+
+      if (self::$instance->user_type == 1 && $allow_login_as_ldap) {
+        $password = null;
+      }
 
       $user->user_username  = $username;
       $user->_user_password = $password;
@@ -572,9 +577,10 @@ class CAppUI {
       $user_ldap = new CUser();
       $user_ldap->user_username = $username;
       $user_ldap->loadMatchingObject();
-      $user_ldap->loadLastId400(CAppUI::conf("admin LDAP ldap_tag"));
+      $idex = $user_ldap->loadLastId400(CAppUI::conf("admin LDAP ldap_tag"));
 
-      if ($user_ldap->_ref_last_id400->_id) {
+      if ($idex->_id) {
+        $ldap_guid = $idex->id400;
         $user_ldap->_user_password = $password;
         $user_ldap->_bound = false;
 
