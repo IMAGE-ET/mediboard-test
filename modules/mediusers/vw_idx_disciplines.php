@@ -21,7 +21,7 @@ $specialite->loadGroupRefsBack();
 //Liste de toutes les disciplines
 $listDiscipline = new CDiscipline;
 $listDiscipline = $listDiscipline->loadList();
-foreach($listDiscipline as &$discipline) {
+foreach ($listDiscipline as &$discipline) {
   $discipline->loadGroupRefsBack();
 }
 
@@ -34,4 +34,4 @@ $smarty->assign("specialite"    , $specialite    );
 $smarty->assign("listDiscipline", $listDiscipline);
 
 $smarty->display("vw_idx_disciplines.tpl");
-?>
+

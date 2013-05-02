@@ -9,5 +9,3 @@
 
 $do = new CDoObjectAddEdit("CSecondaryFunction", "secondary_function_id");
 $do->doIt();
-
-?>

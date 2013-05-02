@@ -25,7 +25,7 @@ if (CValue::get("no_association")) {
   $object->actif        = CValue::get("ldap_user_actif", 1);
   $object->deb_activite = CValue::get("ldap_user_deb_activite");;
   $object->fin_activite = CValue::get("ldap_user_fin_activite");;
-} 
+}
 else {
   $object->load($user_id);
   $object->loadRefFunction();
@@ -62,7 +62,8 @@ $profile->template = 1;
 $profiles = $profile->loadMatchingList();
 
 // Creation du tableau de profil en fonction du type
-foreach ($profiles as $profil){
+$tabProfil = array();
+foreach ($profiles as $profil) {
   $tabProfil[$profil->user_type][] = $profil->_id;
 }
 
@@ -80,5 +81,3 @@ $smarty->assign("disciplines"  , $disciplines    );
 $smarty->assign("spec_cpam"    , $spec_cpam    );
 
 $smarty->display("inc_edit_mediuser.tpl");
-
-?>

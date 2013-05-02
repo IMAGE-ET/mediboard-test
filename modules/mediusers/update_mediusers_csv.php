@@ -20,7 +20,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
   $cols = fgetcsv($fp, null, ";");
 
   // Each line
-  while($line = fgetcsv($fp, null, ";")) {
+  while ($line = fgetcsv($fp, null, ";")) {
     if (!isset($line[0]) || $line[0] == "") {
       continue;
     }
@@ -47,7 +47,6 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $i++;
       continue;
     }
-    
     elseif ($count > 1) {
       $results[$i]["error"] = "Plusieurs utilisateurs correspondent à cette recherche";
       $i++;
@@ -74,5 +73,3 @@ CAppUI::callbackAjax('$("systemMsg").insert', CAppUI::getMsg());
 $smarty = new CSmartyDP();
 $smarty->assign("results", $results);
 $smarty->display("update_mediusers_csv.tpl");
-
-?>

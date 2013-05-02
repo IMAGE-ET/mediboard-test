@@ -42,7 +42,7 @@ if ($filter) {
   $re = "/(\d+)\s*(jour|mois|an)/i";
 
   foreach ($filters as $_filter) {
-    if(preg_match($re, $_filter, $matches)){
+    if (preg_match($re, $_filter, $matches)) {
       $map = array("an" => "YEAR", "mois" => "MONTH", "jour" => "DAY");
 
       $nouvelle_date=CMbDT::dateTime("-".$matches[1]." ".$map[$matches[2]]);
@@ -105,7 +105,7 @@ if ($order_col == "user_last_login") {
 
 $total_mediuser = $mediuser->countList($where, null, $ljoin);
 $mediusers = $mediuser->loadList($where, $order, "$page, $step", null, $ljoin);
-foreach($mediusers as $_mediuser) {
+foreach ($mediusers as $_mediuser) {
   $_mediuser->loadRefFunction();
   $_mediuser->loadRefProfile();
   $_mediuser->_ref_user->isLDAPLinked();
@@ -133,5 +133,3 @@ $smarty->assign("ldap_user_deb_activite", CValue::get("ldap_user_deb_activite"))
 $smarty->assign("ldap_user_fin_activite", CValue::get("ldap_user_fin_activite"));
 
 $smarty->display("vw_idx_mediusers.tpl");
-
-?>

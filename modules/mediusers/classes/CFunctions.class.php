@@ -218,7 +218,8 @@ class CFunctions extends CMbObject {
       $ljoin_secondary["functions_mediboard"] = "functions_mediboard.type = 'cabinet'
                                                  AND functions_mediboard.group_id = '$group_id'
                                                  AND functions_mediboard.function_id = secondary_functions.secondary_function_id";
-      $ljoin_secondary["users_mediboard"]     = "users_mediboard.actif = '1' AND users_mediboard.function_id = secondary_functions.secondary_function_id";
+      $ljoin_secondary["users_mediboard"] = "users_mediboard.actif = '1'
+                                             AND users_mediboard.function_id = secondary_functions.secondary_function_id";
       $group = "secondary_function.function_id";
       $sec_functions = $sec_function->loadListWithPerms($perm_type, $where_secondary, null, null, $group, $ljoin);
       $in_functions = CSQLDataSource::prepareIn(CMbArray::pluck($sec_functions, "function_id"));

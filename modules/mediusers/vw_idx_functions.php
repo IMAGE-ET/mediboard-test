@@ -55,5 +55,3 @@ $smarty->assign("order_col"          , $order_col);
 $smarty->assign("step"               , $step);
 
 $smarty->display("vw_idx_functions.tpl");
-
-?>

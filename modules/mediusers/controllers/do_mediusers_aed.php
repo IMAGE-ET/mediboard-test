@@ -28,8 +28,7 @@ class CDoMediuserAddEdit extends CDoObjectAddEdit {
       if ($this->redirectError) {
         CAppUI::redirect($this->redirectError);
       }
-    } 
-    
+    }
     else {
       // Keep trace for redirections
       CValue::setSession($this->objectKey, $obj->_id);
@@ -53,4 +52,3 @@ class CDoMediuserAddEdit extends CDoObjectAddEdit {
 
 $do = new CDoMediuserAddEdit();
 $do->doIt();
-?>

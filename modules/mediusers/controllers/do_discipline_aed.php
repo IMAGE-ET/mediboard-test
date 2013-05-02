@@ -9,5 +9,3 @@
 
 $do = new CDoObjectAddEdit("CDiscipline", "discipline_id");
 $do->doIt();
-
-?>

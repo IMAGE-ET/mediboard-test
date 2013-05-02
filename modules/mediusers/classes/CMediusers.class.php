@@ -1409,6 +1409,7 @@ class CMediusers extends CPerson {
     if ($idex->tag == self::getTagSoftware()) {
       return "software";
     }
+    return null;
   }
 
   /**
@@ -1420,7 +1421,7 @@ class CMediusers extends CPerson {
   static function getTagSoftware($group_id = null) {
     // Pas de tag Mediusers
     if (null == $tag_mediusers_software = CAppUI::conf("mediusers tag_mediuser_software")) {
-      return;
+      return null;
     }
 
     // Permettre des id externes en fonction de l'établissement
@@ -1442,7 +1443,7 @@ class CMediusers extends CPerson {
   static function getTagMediusers($group_id = null) {
     // Pas de tag Mediusers
     if (null == $tag_mediusers = CAppUI::conf("mediusers tag_mediuser")) {
-      return;
+      return null;
     }
 
     // Permettre des id externes en fonction de l'établissement

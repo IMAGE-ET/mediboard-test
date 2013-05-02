@@ -11,11 +11,9 @@ CCanDo::checkAdmin();
 
 $mediuser = new CMediusers();
 $mediusers = $mediuser->loadGroupList();
-foreach($mediusers as $mediuser) {
+foreach ($mediusers as $mediuser) {
   $mediuser->insFunctionPermission();
   $mediuser->insGroupPermission();
 }
 
 CAppUI::stepAjax(count($mediusers)." utilisateurs vérifiés");
-
-?>
