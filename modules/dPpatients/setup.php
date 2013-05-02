@@ -2156,8 +2156,34 @@ class CSetupdPpatients extends CSetup {
                 ADD `ean_base` VARCHAR (30),
                 ADD `type_pec` ENUM ('TG','TP','TS');";
     $this->addQuery($query);
-
-    $this->mod_version = "1.81";
+    $this->makeRevision("1.81");
+    
+    $query = "ALTER TABLE `constantes_medicales` 
+                ADD `ta_couche` VARCHAR (10),
+                ADD `ta_assis` VARCHAR (10),
+                ADD `ta_debout` VARCHAR (10),
+                ADD `redon_6` FLOAT UNSIGNED,
+                ADD `redon_7` FLOAT UNSIGNED,
+                ADD `redon_8` FLOAT UNSIGNED,
+                ADD `redon_accordeon_1` FLOAT UNSIGNED,
+                ADD `redon_accordeon_2` FLOAT UNSIGNED,
+                ADD `drain_thoracique_3` FLOAT UNSIGNED,
+                ADD `drain_thoracique_4` FLOAT UNSIGNED,
+                ADD `drain_dve` FLOAT UNSIGNED,
+                ADD `drain_kher` FLOAT UNSIGNED,
+                ADD `drain_crins` FLOAT UNSIGNED,
+                ADD `drain_sinus` FLOAT UNSIGNED,
+                ADD `drain_orifice_1` FLOAT UNSIGNED,
+                ADD `drain_orifice_2` FLOAT UNSIGNED,
+                ADD `drain_orifice_3` FLOAT UNSIGNED,
+                ADD `drain_orifice_4` FLOAT UNSIGNED,
+                ADD `drain_ileostomie` FLOAT UNSIGNED,
+                ADD `drain_colostomie` FLOAT UNSIGNED,
+                ADD `drain_gastrostomie` FLOAT UNSIGNED,
+                ADD `drain_jejunostomie` FLOAT UNSIGNED,
+                ADD `sonde_rectale` FLOAT UNSIGNED;";
+    $this->addQuery($query);
+    $this->mod_version = "1.82";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

@@ -96,6 +96,36 @@ class CConstantesMedicales extends CMbObject {
       "conversion" => array("mmHg" => 10),
       "candles" => true,
     ),
+    "ta_couche"          => array(
+      "type" => "physio",
+      "unit" => "cmHg",
+      "formfields" => array("_ta_couche_systole", "_ta_couche_diastole"),
+      "min" => 2, "max" => 16,
+      "standard" => 8,
+      "colors" => array("#00A8F0", "#C0D800"),
+      "conversion" => array("mmHg" => 10),
+      "candles" => true,
+    ),
+    "ta_assis"          => array(
+      "type" => "physio",
+      "unit" => "cmHg",
+      "formfields" => array("_ta_assis_systole", "_ta_assis_diastole"),
+      "min" => 2, "max" => 16,
+      "standard" => 8,
+      "colors" => array("#00A8F0", "#C0D800"),
+      "conversion" => array("mmHg" => 10),
+      "candles" => true,
+    ),
+    "ta_debout"          => array(
+      "type" => "physio",
+      "unit" => "cmHg",
+      "formfields" => array("_ta_debout_systole", "_ta_debout_diastole"),
+      "min" => 2, "max" => 16,
+      "standard" => 8,
+      "colors" => array("#00A8F0", "#C0D800"),
+      "conversion" => array("mmHg" => 10),
+      "candles" => true,
+    ),
     "_vst"              => array(
       "type" => "physio",
       "unit" => "ml",
@@ -305,6 +335,34 @@ class CConstantesMedicales extends CMbObject {
       "min" => 0, "max" => 100,
       "cumul_reset_config" => "redon_cumul_reset_hour",
     ),
+    "redon_6"           => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 100,
+      "cumul_reset_config" => "redon_cumul_reset_hour",
+    ),
+    "redon_7"           => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 100,
+      "cumul_reset_config" => "redon_cumul_reset_hour",
+    ),
+    "redon_8"           => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 100,
+      "cumul_reset_config" => "redon_cumul_reset_hour",
+    ),
+    "redon_accordeon_1"   => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 50,
+    ),
+    "redon_accordeon_2"   => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 50,
+    ),
     "lame_1"           => array(
       "type" => "drain",
       "unit" => "ml",
@@ -353,6 +411,18 @@ class CConstantesMedicales extends CMbObject {
       "min" => 0, "max" => 100,
       "cumul_reset_config" => "drain_thoracique_cumul_reset_hour",
     ),
+    "drain_thoracique_3" => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 100,
+      "cumul_reset_config" => "drain_thoracique_cumul_reset_hour",
+    ),
+    "drain_thoracique_4" => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 100,
+      "cumul_reset_config" => "drain_thoracique_cumul_reset_hour",
+    ),
     "drain_thoracique_flow" => array(
       "type" => "drain",
       "unit" => "ml",
@@ -381,6 +451,66 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "ml",
       "min" => 0, "max" => 100,
       "cumul_reset_config" => "drain_mediastinal_cumul_reset_hour",
+    ),
+    "drain_dve"     => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 500,
+    ),
+    "drain_kher"    => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 1000,
+    ),
+    "drain_crins"   => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 100,
+    ),
+    "drain_sinus"   => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 100,
+    ),
+    "drain_orifice_1" => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 1000,
+    ),
+    "drain_orifice_2" => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 1000,
+    ),
+    "drain_orifice_3" => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 1000,
+    ),
+    "drain_orifice_4" => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 1000,
+    ),
+    "drain_ileostomie" => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 3000,
+    ),
+    "drain_colostomie" => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 3000,
+    ),
+    "drain_gastrostomie" => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 3000,
+    ),
+    "drain_jejunostomie" => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 3000,
     ),
 
     // DIURESE ///////
@@ -438,6 +568,11 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "ml",
       "min" => 0, "max" => 200,
       "cumul_reset_config" => "sonde_vesicale_cumul_reset_hour",
+    ),
+    "sonde_rectale"   => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 3000,
     ),
     "catheter_suspubien" => array(
       "type" => "drain",
@@ -507,7 +642,7 @@ class CConstantesMedicales extends CMbObject {
       $unit = "mmHg";
 
       if (isset($_params["conversion"][$unit])) {
-        if (in_array($_constant, array("ta", "ta_gauche", "ta_droit"))) {
+        if (in_array($_constant, array("ta", "ta_gauche", "ta_droit", "ta_couche", "ta_assis", "ta_debout"))) {
           if (CAppUI::conf("dPpatients CConstantesMedicales unite_ta") == "cmHg") {
             continue;
           }
@@ -577,6 +712,18 @@ class CConstantesMedicales extends CMbObject {
     $specs['_ta_droit_systole']      = 'num pos max|50';
     $specs['_ta_droit_diastole']     = 'num pos max|50';
 
+    $specs['ta_couche']              = 'str maxLength|10';
+    $specs['_ta_couche_systole']     = 'num pos max|50';
+    $specs['_ta_couche_diastole']    = 'num pos max|50';
+
+    $specs['ta_assis']               = 'str maxLength|10';
+    $specs['_ta_assis_systole']      = 'num pos max|50';
+    $specs['_ta_assis_diastole']     = 'num pos max|50';
+
+    $specs['ta_debout']              = 'str maxLength|10';
+    $specs['_ta_debout_systole']     = 'num pos max|50';
+    $specs['_ta_debout_diastole']    = 'num pos max|50';
+
     $specs['pouls']                  = 'num pos';
     $specs['spo2']                   = 'float min|0 max|100';
     $specs['temperature']            = 'float min|20 max|50'; // Au cas ou il y aurait des malades très malades
@@ -624,6 +771,11 @@ class CConstantesMedicales extends CMbObject {
     $specs['redon_3']                = 'float min|0';
     $specs['redon_4']                = 'float min|0';
     $specs['redon_5']                = 'float min|0';
+    $specs['redon_6']                = 'float min|0';
+    $specs['redon_7']                = 'float min|0';
+    $specs['redon_8']                = 'float min|0';
+    $specs['redon_accordeon_1']      = 'float min|0';
+    $specs['redon_accordeon_2']      = 'float min|0';
     $specs['diurese']                = 'float min|0'; // Miction naturelle
     $specs['_diurese']               = 'float min|0'; // Vraie diurèse (calculée)
     $specs['sng']                    = 'float min|0';
@@ -635,16 +787,31 @@ class CConstantesMedicales extends CMbObject {
     $specs['drain_3']                = 'float min|0';
     $specs['drain_thoracique_1']     = 'float min|0';
     $specs['drain_thoracique_2']     = 'float min|0';
+    $specs['drain_thoracique_3']     = 'float min|0';
+    $specs['drain_thoracique_4']     = 'float min|0';
     $specs['drain_thoracique_flow']  = 'float min|0';
     $specs['drain_pleural_1']        = 'float min|0';
     $specs['drain_pleural_2']        = 'float min|0';
     $specs['drain_mediastinal']      = 'float min|0';
     $specs['drain_shirley']          = 'float min|0';
+    $specs['drain_dve']              = 'float min|0';
+    $specs['drain_kher']             = 'float min|0';
+    $specs['drain_crins']            = 'float min|0';
+    $specs['drain_sinus']            = 'float min|0';
+    $specs['drain_orifice_1']        = 'float min|0';
+    $specs['drain_orifice_2']        = 'float min|0';
+    $specs['drain_orifice_3']        = 'float min|0';
+    $specs['drain_orifice_4']        = 'float min|0';
+    $specs['drain_ileostomie']       = 'float min|0';
+    $specs['drain_colostomie']       = 'float min|0';
+    $specs['drain_gastrostomie']     = 'float min|0';
+    $specs['drain_jejunostomie']     = 'float min|0';
     $specs['sonde_ureterale_1']      = 'float min|0';
     $specs['sonde_ureterale_2']      = 'float min|0';
     $specs['sonde_nephro_1']         = 'float min|0';
     $specs['sonde_nephro_2']         = 'float min|0';
     $specs['sonde_vesicale']         = 'float min|0';
+    $specs['sonde_rectale']          = 'float min|0';
     $specs['catheter_suspubien']     = 'float min|0';
     $specs['bricker']                = 'float min|0';
     $specs['entree_lavage']          = 'float min|0';
@@ -735,6 +902,36 @@ class CConstantesMedicales extends CMbObject {
       }
     }
 
+    $_ta_couche = explode('|', $this->ta_couche);
+    if ($this->ta_couche && isset($_ta_couche[0]) && isset($_ta_couche[1])) {
+      $this->_ta_couche_systole  = $_ta_couche[0];
+      $this->_ta_couche_diastole = $_ta_couche[1];
+      if ($unite_ta == "mmHg") {
+        $this->_ta_couche_systole *= 10;
+        $this->_ta_couche_diastole *= 10;
+      }
+    }
+
+    $_ta_assis = explode('|', $this->ta_assis);
+    if ($this->ta_assis && isset($_ta_assis[0]) && isset($_ta_assis[1])) {
+      $this->_ta_assis_systole  = $_ta_assis[0];
+      $this->_ta_assis_diastole = $_ta_assis[1];
+      if ($unite_ta == "mmHg") {
+        $this->_ta_assis_systole *= 10;
+        $this->_ta_assis_diastole *= 10;
+      }
+    }
+
+    $_ta_debout = explode('|', $this->ta_debout);
+    if ($this->ta_debout && isset($_ta_debout[0]) && isset($_ta_debout[1])) {
+      $this->_ta_debout_systole  = $_ta_debout[0];
+      $this->_ta_debout_diastole = $_ta_debout[1];
+      if ($unite_ta == "mmHg") {
+        $this->_ta_debout_systole *= 10;
+        $this->_ta_debout_diastole *= 10;
+      }
+    }
+
     $_injection = explode('|', $this->injection);
     if ($this->injection && isset($_injection[0]) && isset($_injection[1])) {
       $this->_inj  = $_injection[0];
@@ -787,6 +984,39 @@ class CConstantesMedicales extends CMbObject {
     }
     if ($this->_ta_droit_systole === '' && $this->_ta_droit_diastole === '') {
       $this->ta_droit = '';
+    }
+
+    if (!empty($this->_ta_couche_systole) && !empty($this->_ta_couche_diastole)) {
+      if ($unite_ta ==  "mmHg") {
+        $this->_ta_couche_systole /= 10;
+        $this->_ta_couche_diastole /= 10;
+      }
+      $this->ta_couche = "$this->_ta_couche_systole|$this->_ta_couche_diastole";
+    }
+    if ($this->_ta_couche_systole === '' && $this->_ta_couche_diastole === '') {
+      $this->ta_couche = '';
+    }
+
+    if (!empty($this->_ta_assis_systole) && !empty($this->_ta_assis_diastole)) {
+      if ($unite_ta ==  "mmHg") {
+        $this->_ta_assis_systole /= 10;
+        $this->_ta_assis_diastole /= 10;
+      }
+      $this->ta_assis = "$this->_ta_assis_systole|$this->_ta_assis_diastole";
+    }
+    if ($this->_ta_assis_systole === '' && $this->_ta_assis_diastole === '') {
+      $this->ta_assis = '';
+    }
+
+    if (!empty($this->_ta_debout_systole) && !empty($this->_ta_debout_diastole)) {
+      if ($unite_ta ==  "mmHg") {
+        $this->_ta_debout_systole /= 10;
+        $this->_ta_debout_diastole /= 10;
+      }
+      $this->ta_debout = "$this->_ta_debout_systole|$this->_ta_debout_diastole";
+    }
+    if ($this->_ta_debout_systole === '' && $this->_ta_debout_diastole === '') {
+      $this->ta_debout = '';
     }
 
     if (!empty($this->_inj) && !empty($this->_inj_essai)) {
@@ -1232,7 +1462,7 @@ class CConstantesMedicales extends CMbObject {
       $unit = "mmHg";
 
       if (isset($_params["conversion"][$unit])) {
-        if (in_array($_constant, array("ta", "ta_gauche", "ta_droit"))) {
+        if (in_array($_constant, array("ta", "ta_gauche", "ta_droit", "ta_couche", "ta_assis", "ta_debout"))) {
           if (CAppUI::conf("dPpatients CConstantesMedicales unite_ta") == "cmHg") {
             continue;
           }
