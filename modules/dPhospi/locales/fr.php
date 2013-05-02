@@ -161,6 +161,7 @@ $locales['CCibleTransmission-description'] = 'Description';
 $locales['CCibleTransmission-description-desc'] = 'Description de la cible';
 $locales['CCibleTransmission-libelle'] = 'Libellé';
 $locales['CCibleTransmission-libelle-desc'] = 'Libellé de la cible';
+$locales['CDiscipline.categorie.GEN'] = 'GEN';
 $locales['CEmplacement'] = 'Emplacement';
 $locales['CEmplacement-chambre_id'] = 'Chambre';
 $locales['CEmplacement-chambre_id-court'] = 'Chambre';

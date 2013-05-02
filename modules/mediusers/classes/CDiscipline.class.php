@@ -77,6 +77,8 @@ class CDiscipline extends CMbObject {
       $this->addCompat($compat, "GYN", "RAD");
       $this->addCompat($compat, "GYN", "ARE");
       $this->addCompat($compat, "GYN", "GYN");
+
+      $this->addCompat($compat, "GEN", "GEN");
     }
     $this->_compat =& $compat;
   }
@@ -97,7 +99,7 @@ class CDiscipline extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs["text"]      = "str notNull seekable";
-    $specs["categorie"] = "enum list|ORT|ORL|OPH|DER|STO|GAS|ARE|RAD|GYN|EST";
+    $specs["categorie"] = "enum list|ORT|ORL|OPH|DER|STO|GAS|ARE|RAD|GYN|EST|GEN";
     return $specs;
   }
 
