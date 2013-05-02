@@ -322,8 +322,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addAttribute($part, "referent", $ref);
   }
     
-  function addUniteFonctionnelle($elParent, $mbOp) {
-    $this->addCodeLibelle($elParent, "uniteFonctionnelle", $mbOp->code_uf, $mbOp->libelle_uf);
+  function addUniteFonctionnelle($elParent, COperation $operation) {
+    $salle = $operation->updateSalle();
+
+    $this->addCodeLibelle($elParent, "uniteFonctionnelle", $salle->nom, $salle->_view);
   }
   
   function addUniteFonctionnelleResponsable($elParent, $mbOp) {
