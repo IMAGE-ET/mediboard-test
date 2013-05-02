@@ -176,18 +176,24 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
   
   function mappingPlage($node, COperation $operation) {
     $debut = $this->getDebutInterv($node);
-    $fin   = $this->getFinInterv($node);
-    
+
     // Traitement de la date/heure début, et durée de l'opération
     $date_op  = CMbDT::date($debut);
     $time_op  = CMbDT::time($debut);
 
-    // Recherche d'une éventuelle PlageOp
+    // Recherche d'une éventuelle plageOp avec la salle
     $plageOp           = new CPlageOp();  
     $plageOp->chir_id  = $operation->chir_id;
     $plageOp->salle_id = $operation->salle_id;
     $plageOp->date     = $date_op;
     $plageOps          = $plageOp->loadMatchingList();
+
+    // Si on a pas de plage on recherche éventuellement une plage dans une autre salle
+    if (count($plageOps) == 0) {
+      $plageOp->salle_id = null;
+      $plageOps          = $plageOp->loadMatchingList();
+    }
+
     foreach ($plageOps as $_plage) {
       // Si notre intervention est dans la plage Mediboard
       if (CMbRange::in($time_op, $_plage->debut, $_plage->fin)) {
