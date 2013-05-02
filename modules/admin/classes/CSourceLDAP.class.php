@@ -132,8 +132,8 @@ class CSourceLDAP extends CMbObject {
   
   /**
    * @param resource $ldapconn [optional]
-   * @param string   $filter [optional]
-   * @param array    $entry [optional]
+   * @param string   $dn       [optional]
+   * @param array    $entry    [optional]
    *
    * @return bool
    */
@@ -156,6 +156,7 @@ class CSourceLDAP extends CMbObject {
    * @param resource $ldapconn
    * @param string   $filter
    * @param array    $attributes [optional]
+   *
    * @return array
    */
   function ldap_search($ldapconn, $filter, $attributes = array(), $unbind = true) {

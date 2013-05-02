@@ -142,7 +142,7 @@ class CViewAccessToken extends CMbObject {
       unset($params["tab"]);
     }
 
-    foreach($params as $key => $value) {
+    foreach ($params as $key => $value) {
       $_GET[$key] = $value;
     }
   }

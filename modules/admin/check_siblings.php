@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage admin
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Admin
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkAdmin();
@@ -26,9 +29,9 @@ foreach ($user_counts as $user_name => $user_count) {
   if ($user_count == 1) {
     break;
   }
-  	
-	$user->user_username = $user_name;
-	$siblings[$user_name] = $user->loadMatchingList();
+
+  $user->user_username = $user_name;
+  $siblings[$user_name] = $user->loadMatchingList();
 }
 
 // Création du template
@@ -37,4 +40,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("siblings", $siblings);
 
 $smarty->display("check_siblings.tpl");
-?>

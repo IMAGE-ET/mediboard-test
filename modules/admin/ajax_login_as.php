@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage admin
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Admin
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 $user = CUser::get();
@@ -22,17 +25,14 @@ if ($is_locked) {
 if (!$username) {
   CAppUI::setMsg("Auth-failed-nousername", UI_MSG_ERROR);
 }
-
-// If admin: no need to  give a password
 else if (($user->user_type == 1) && !CAppUI::conf("admin LDAP ldap_connection")) {
+  // If admin: no need to  give a password
   $_REQUEST['loginas'] = $username;
   CAppUI::login();
 }
-
 else if (!$password) {
   CAppUI::setMsg("Auth-failed-nopassword", UI_MSG_ERROR);
 }
-
 else {
   $_REQUEST['loginas'] = $username;
   

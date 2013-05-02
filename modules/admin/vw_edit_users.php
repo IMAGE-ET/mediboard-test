@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage admin
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Admin
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkEdit();
@@ -32,16 +35,16 @@ if ($template != null)$where["template"]        = "= '$template'";
 // Query
 $users = null;
 if ($where) {
-	$order = "user_type, user_last_name, user_first_name, template";
-	$limit = 100;
+  $order = "user_type, user_last_name, user_first_name, template";
+  $limit = 100;
   $users = $user->loadList($where, $order, $limit);
   foreach ($users as $_user) {
-  	$_user->countBackRefs("profiled_users");
+    $_user->countBackRefs("profiled_users");
   }
   
   // Auto sélection du user s'il est unique
   if (count($users) == 1 && $user_id !== "0") {
-  	$user = reset($users);
+    $user = reset($users);
   }
 }
 
@@ -75,4 +78,3 @@ $smarty->assign("user"           , $user           );
 $smarty->assign("specs"          , $user->getProps());
 
 $smarty->display("vw_edit_users.tpl");
-?>

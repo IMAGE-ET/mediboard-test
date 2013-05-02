@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage admin
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Admin
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkEdit();
@@ -23,7 +26,7 @@ $modulesInstalled = CModule::getInstalled();
 $isAdminPermSet   = false;
 
 $profile = new CUser();
-if($user->profile_id){
+if ($user->profile_id) {
   $where["user_id"] = "= '$user->profile_id'";
   $profile->loadObject($where);
 }
@@ -50,14 +53,13 @@ foreach ($permModule->loadList($whereProfil, $order) as $_perm) {
   $permsModule[$_perm->mod_id]["profil"] = $_perm;
 }
 
-foreach($permModule->loadList($whereUser, $order) as $_perm) {
-	$permsModuleCount++;
+foreach ($permModule->loadList($whereUser, $order) as $_perm) {
+  $permsModuleCount++;
   $_perm->_owner = "user";
-	$module = $_perm->loadRefDBModule();
+  $module = $_perm->loadRefDBModule();
   if (!$module->_id) {
     $isAdminPermSet = true;
   }
-	
   $permsModule[$module->_id]["user"] = $_perm;
   unset($modulesInstalled[$module->mod_name]);
 }
@@ -69,15 +71,15 @@ $permsObjectCount = 0;
 $order = "object_class, object_id";
 
 // Droit sur le profil
-foreach($permObject->loadList($whereProfil, $order) as $_perm) {
-	$permsObjectCount++;
+foreach ($permObject->loadList($whereProfil, $order) as $_perm) {
+  $permsObjectCount++;
   $_perm->_owner = "template";
   $object = $_perm->loadRefDBObject();
   $permsObject[$object->_class][$object->_id]["profil"] = $_perm;
 }
 
 // Droit sur l'utilisateur
-foreach($permObject->loadList($whereUser, $order) as $_perm) {
+foreach ($permObject->loadList($whereUser, $order) as $_perm) {
   $permsObjectCount++;
   $_perm->_owner = "user";
   $object = $_perm->loadRefDBObject();
@@ -115,5 +117,3 @@ $smarty->assign("profile"         , $profile         );
 $smarty->assign("profilesList"    , $profilesList    );
 
 $smarty->display("edit_perms.tpl");
-
-?>

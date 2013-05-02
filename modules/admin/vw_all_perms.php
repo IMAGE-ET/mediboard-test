@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage admin
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Admin
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -15,7 +18,7 @@ $listModules = CModule::getActive();
 
 // Liste des utilisateurs
 $listFunctions = CGroups::loadCurrent()->loadFunctions(PERM_READ);
-foreach($listFunctions as &$curr_function) {
+foreach ($listFunctions as &$curr_function) {
   $curr_function->loadRefsUsers();
 }
 
@@ -41,9 +44,9 @@ $icons = array(
 $where = array();
 $whereGeneral = array("mod_id" => "IS NULL");
 $matrice = array();
-foreach($listFunctions as $curr_func) {
-  foreach($curr_func->_ref_users as $curr_user) {
-  	$curr_user->loadRefProfile();
+foreach ($listFunctions as $curr_func) {
+  foreach ($curr_func->_ref_users as $curr_user) {
+    $curr_user->loadRefProfile();
     $permModule = new CPermModule();
     
     $whereGeneral["user_id"] = "= '$curr_user->user_id'";
@@ -55,14 +58,15 @@ foreach($listFunctions as $curr_func) {
     
     $permModule->loadObject($whereGeneral);
     
-    if($permModule->_id) {
+    if ($permModule->_id) {
       $permGeneralPermission = $permModule->permission;
       $permGeneralView       = $permModule->view;
-    } else {
+    }
+    else {
       $permGeneralPermission = PERM_DENY;
       $permGeneralView       = PERM_DENY;
     }
-    foreach($listModules as $curr_mod) {
+    foreach ($listModules as $curr_mod) {
       $matrice[$curr_user->_id][$curr_mod->_id] = array(
         "text"     => $perms[$permGeneralPermission]."/".$views[$permGeneralView],
         "type"     => "général",
@@ -70,7 +74,7 @@ foreach($listFunctions as $curr_func) {
         "viewIcon" => $icons[$permGeneralView],
       );
     }
-    foreach($listPermsModulesProfil as $curr_perm) {
+    foreach ($listPermsModulesProfil as $curr_perm) {
       $matrice[$curr_user->_id][$curr_perm->mod_id] = array(
         "text"     => $perms[$curr_perm->permission]."/".$views[$curr_perm->view],
         "type"     => "profil",
@@ -78,7 +82,7 @@ foreach($listFunctions as $curr_func) {
         "viewIcon" => $icons[$curr_perm->view],
       );
     }
-    foreach($listPermsModules as $curr_perm) {
+    foreach ($listPermsModules as $curr_perm) {
       $matrice[$curr_user->_id][$curr_perm->mod_id] = array(
         "text"     => $perms[$curr_perm->permission]."/".$views[$curr_perm->view],
         "type"     => "spécifique",
@@ -97,5 +101,3 @@ $smarty->assign("listFunctions", $listFunctions);
 $smarty->assign("matrice"      , $matrice      );
 
 $smarty->display("vw_all_perms.tpl");
-
-?>

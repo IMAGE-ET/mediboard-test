@@ -20,7 +20,7 @@ class CPermModule extends CMbObject {
   
   // Stored permissions
   static $users_perms = null;    // OLD query system
-//  static $users_perms = array(); // NEW query system
+  // static $users_perms = array(); // NEW query system
   static $users_cache = array();
 
   static $pair_deny = array(

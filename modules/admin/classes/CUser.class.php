@@ -61,6 +61,8 @@ class CUser extends CPerson {
 
   // Form fields
   public $_user_type_view;
+  public $_bound;
+  public $_count_ldap;
 
   // Object references
   public $_ref_preferences;
@@ -432,12 +434,12 @@ class CUser extends CPerson {
   function purgeConnections() {
     // Behavioural condition
     if (!$this->_purge_connections) {
-      return;
+      return null;
     }
 
     // Pointless/dangerous if no key
     if (!$this->_id) {
-      return;
+      return null;
     }
 
     $query = "DELETE
@@ -452,6 +454,7 @@ class CUser extends CPerson {
     if (!$ds->exec($query)) {
       return CAppUI::tr("CUser-failed-purge_connections") . $ds->error();
     }
+    return null;
   }
 
   /**
@@ -461,7 +464,7 @@ class CUser extends CPerson {
    */
   function prepareLog() {
     if ($this->dont_log_connection && $this->fieldModified("user_last_login")) {
-      return;
+      return null;
     }
 
     return parent::prepareLog();
@@ -472,9 +475,9 @@ class CUser extends CPerson {
    * @see parent
    *
    * @param CUser[] $objects An array of CMbObject to merge
-   * @param bool  $fast    Tell wether to use SQL (fast) or PHP (slow but checked and logged) algorithm
+   * @param bool    $fast    Tell wether to use SQL (fast) or PHP (slow but checked and logged) algorithm
    *
-   * @return CMbObject
+   * @return CUser
    */
   function merge($objects, $fast = false) {
     if (!$this->_id) {
@@ -569,7 +572,7 @@ class CUser extends CPerson {
    */
   function isLDAPLinked() {
     if (!CAppUI::conf("admin LDAP ldap_connection") || !$this->_id) {
-      return;
+      return null;
     }
 
     $this->loadLastId400(CAppUI::conf("admin LDAP ldap_tag"));

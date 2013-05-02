@@ -27,5 +27,3 @@ $dPconfig["admin"] = array (
     "allow_login_as_admin"    => "0"
   ),
 );
-
-?>

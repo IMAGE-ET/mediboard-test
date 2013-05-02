@@ -215,9 +215,9 @@ class CLDAP {
     if ($idex->_id) {
       $user = new CUser();
       $user->load($idex->object_id);
-    } 
-    // objectguid non retrouvé on associe à l'user courant l'objectguid 
+    }
     else {
+      // objectguid non retrouvé on associe à l'user courant l'objectguid
       // Si on est pas en mode création on le recherche
       if (!$force_create) {
         // Suppression du password pour le loadMatchingObject
@@ -288,6 +288,7 @@ class CLDAP {
               ($utf8_decode ? utf8_decode($values[$name][0]) : $values[$name][0]) : 
               ($utf8_decode ? utf8_decode($values[$name]) : $values[$name]);
     }
+    return null;
   }
   
   /**

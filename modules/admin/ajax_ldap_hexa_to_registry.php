@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage admin
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Admin
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 $id_ext = new CIdSante400;
@@ -19,7 +22,7 @@ if (count($list) == 0) {
 
 $count = 0;
 
-foreach($list as $_id_ext) {
+foreach ($list as $_id_ext) {
   if (strpos($_id_ext->id400, "-") !== false) {
     continue;
   }
