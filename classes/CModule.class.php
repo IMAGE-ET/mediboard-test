@@ -138,6 +138,7 @@ class CModule extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps["messages"]            = "CMessage module_id";
     $backProps["permissions_modules"] = "CPermModule mod_id";
+    $backProps["etapes_didacticiel"]  = "CEtapeDidacticiel module_id";
     return $backProps;
   }
 

@@ -973,6 +973,11 @@ var Url = Class.create({
       onComplete();
       //element.prepareTouchEvents();
       Element.warnDuplicates();
+
+      //gestion du didacticiel.
+      if (window.Didacticiel && Didacticiel.main_didacticiel.state) {
+        Didacticiel.main_didacticiel.didacOnComplete();
+      }
     });
     
     // If we have a custom insertion, we should not touch the origin target

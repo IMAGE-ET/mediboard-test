@@ -646,7 +646,7 @@ function onSubmitFormAjax(oForm, oOptions, ioTarget) {
   var url = new Url;
   url.mergeParams(serializeForm(oForm, oOptions));
   url.requestUpdate(ioTarget, oOptions);
-  
+
   return false;
 }
 

@@ -65,20 +65,21 @@ class CSmartyMB extends Smarty {
     $this->default_modifiers = array("@cleanField");
 
     // Register mediboard functions
-    $this->register_block("tr"  , array($this, "tr"));
-    $this->register_block("main", array($this, "main"));
-
-    $this->register_function("mb_default"        , array($this, "mb_default"));
-    $this->register_function("mb_ditto"          , array($this, "mb_ditto"));
-    $this->register_function("mb_class"          , array($this, "mb_class"));
-    $this->register_function("mb_value"          , array($this, "mb_value"));
-    $this->register_function("mb_include"        , array($this, "mb_include"));
-    $this->register_function("mb_script"         , array($this, "mb_script"));
-    $this->register_function("thumb"             , array($this, "thumb"));
-    $this->register_function("unique_id"         , array($this, "unique_id"));
-
-    $this->register_modifier("idex"              , array($this, "idex"));
-    $this->register_modifier("conf"              , array($this, "conf"));
+    $this->register_block   ("tr"                , array($this,"tr")); 
+    $this->register_block   ("main"              , array($this,"main")); 
+    
+    $this->register_function("mb_default"        , array($this,"mb_default"));
+    $this->register_function("mb_ditto"          , array($this,"mb_ditto"));
+    $this->register_function("mb_class"          , array($this,"mb_class"));
+    $this->register_function("mb_value"          , array($this,"mb_value"));
+    $this->register_function("mb_include"        , array($this,"mb_include"));
+    $this->register_function("mb_script"         , array($this,"mb_script"));
+    $this->register_function("thumb"             , array($this,"thumb"));
+    $this->register_function("unique_id"         , array($this,"unique_id"));
+    $this->register_function("mb_didacticiel"    , array($this,"mb_didacticiel"));
+    
+    $this->register_modifier("idex"              , array($this,"idex"));
+    $this->register_modifier("conf"              , array($this,"conf"));
 
     $this->register_modifier("pad"               , array($this, "pad"));
     $this->register_modifier("json"              , array($this, "json"));
@@ -234,6 +235,27 @@ class CSmartyMB extends Smarty {
     return $spec->getHtmlValue($object, $smarty, $params);
   }
 
+  /**
+   *  convert into html of a given xml
+   * Module Didacticiel
+   */
+  function mb_didacticiel($params, &$smarty) {
+    if (!CModule::getActive("didacticiel")) {
+      return;
+    }
+
+    $module      = CMbArray::extract($params, "module",  null, true);
+    $didacticiel = CMbArray::extract($params, "didacticiel",  null, true);
+     
+    $html = CEtapeDidacticiel::convertxml($module, $didacticiel);
+    $html .= '<script>
+              Main.add(function () {
+                Didacticiel.init();
+              });
+             </script>';
+
+    return $html;
+  }
   /**
    * Put a random token into a form in order to prevent from CSRF attacks
    *

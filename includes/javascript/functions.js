@@ -1269,6 +1269,11 @@ Object.extend(Control.Modal,{
       Event.stopObserving(window, 'resize', this.outOfBoundsPositionHandler);
       
       Control.Overlay.positionIFrameShim();
+      
+      /* Gestion du didacticiel dans le cas où il est présent dans la page*/
+      if (window.Didacticiel && Didacticiel.main_didacticiel.state){
+        Didacticiel.main_didacticiel.isModalWindow = true;
+      }
     },
     
     afterClose: function(){
@@ -1304,6 +1309,11 @@ Object.extend(Control.Modal,{
       
       //Control.Modal.current = false;
       this.overlayFinishedOpening = false;
+      
+      /* Gestion du didacticiel dans le cas où il est présent dans la page*/
+      if (window.Didacticiel && Didacticiel.main_didacticiel.state) {
+        Didacticiel.main_didacticiel.closeAfterModal();
+      }
     }
   }
 });
