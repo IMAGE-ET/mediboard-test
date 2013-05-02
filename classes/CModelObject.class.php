@@ -531,7 +531,7 @@ class CModelObject {
   }
   
   /**
-   * Update the form (derived) fields plain fields
+   * Update form (derived) fields from plain fields
    *
    * @return void
    */

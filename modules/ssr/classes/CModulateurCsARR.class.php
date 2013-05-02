@@ -12,11 +12,15 @@
  * Modulateur d'activités CsARR
  */
 class CModulateurCsARR extends CCsARRObject {
-  
-  var $code       = null;
-  var $modulateur = null;
+
+  // DB Fields
+  public $code       = null;
+  public $modulateur = null;
+
+  // Derived Fields
+  public $_libelle;
     
-  var $_ref_code = null;
+  public $_ref_code = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -31,14 +35,23 @@ class CModulateurCsARR extends CCsARRObject {
     $props["code"       ] = "str notNull length|7";
     $props["modulateur" ] = "str notNull length|2";
 
+    // Plain Fields
+    $props["_libelle"] = "str";
+
     return $props;
   }
 
+  /**
+   * Override
+   *
+   * @see parent::updateFormFields()
+   * @return void
+   */
   function updateFormFields() {
     static $libelles = array(
       "ZV" => "Réalisation de l'acte au lit du patient",
       "ME" => "Réalisation de l'acte en salle de soins",
-      "QM" => "Réalisation de l'acte en piscine ou en balnéothe rapie",
+      "QM" => "Réalisation de l'acte en piscine ou en balnéotherapie",
       "TF" => "Réalisation de l'acte en établissement, en extérieur sans équipement",
       "RW" => "Réalisation de l'acte en établissement, en extérieur avec équipement",
       "HW" => "Réalisation de l'acte hors établissement en milieu urbain",
@@ -52,9 +65,14 @@ class CModulateurCsARR extends CCsARRObject {
     $this->_libelle = $libelles[$this->modulateur];
     $this->_view = "$this->modulateur: $this->_libelle";
   }
-  
+
+  /**
+   * Chargement du détail d'activité CsARR
+   *
+   * @return CActiviteCsARR
+   */
   function loadRefCode() {
-    return $this->_ref_code = CActiviteCdARR::get($this->code);
+    return $this->_ref_code = CActiviteCsARR::get($this->code);
   }
 	
 	function loadView(){
@@ -62,5 +80,3 @@ class CModulateurCsARR extends CCsARRObject {
     $this->loadRefCode();
   }
 }
-
-?>
