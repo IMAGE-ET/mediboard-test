@@ -33,7 +33,8 @@
       <tr>
         <td>
           <select name="prestation_id" style="width: 16em;" onchange="this.form.onsubmit()">
-            <option value="">&mdash; {{tr}}All{{/tr}}</option>
+            <option value="" {{if !$prestation_id}}selected{{/if}}>&mdash; {{tr}}None{{/tr}}</option>
+            <option value="all" {{if $prestation_id == "all"}}selected{{/if}}>{{tr}}All{{/tr}}</option>
             {{foreach from=$prestations_journalieres item=_prestation}}
               <option value="{{$_prestation->_id}}" {{if $_prestation->_id == $prestation_id}}selected{{/if}}>{{$_prestation}}</option>
             {{/foreach}}

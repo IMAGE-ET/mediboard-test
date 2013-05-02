@@ -3125,6 +3125,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   function loadLiaisonsForPrestation($prestation_id) {
+    if ($prestation_id == "all") {
+      $prestation_id = null;
+    }
     $item_liaison = new CItemLiaison();
     $where = array();
     $ljoin = array();
@@ -3135,7 +3138,9 @@ class CSejour extends CFacturable implements IPatientRelated {
       OR item_prestation.item_prestation_id = item_liaison.item_realise_id";
 
     $where["object_class"] = " = 'CPrestationJournaliere'";
-    $where["object_id"] = " = '$prestation_id'";
+    if ($prestation_id) {
+      $where["object_id"] = " = '$prestation_id'";
+    }
     $this->_liaisons_for_prestation = $item_liaison->loadList($where, "date ASC", null, null, $ljoin);
 
     CMbObject::massLoadFwdRef($this->_liaisons_for_prestation, "item_souhait_id");
