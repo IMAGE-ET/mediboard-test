@@ -1728,6 +1728,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $item_liaison = new CItemLiaison();
     $item_liaison->sejour_id       = $newVenue->_id;
     $item_liaison->item_souhait_id = $item_presta->_id;
+    $item_liaison->date            = CMbDT::date($newVenue->entree);
 
     $item_liaison->store();
   }
