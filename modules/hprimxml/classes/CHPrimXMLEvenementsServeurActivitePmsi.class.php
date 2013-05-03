@@ -192,6 +192,11 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     if (count($plageOps) == 0) {
       $plageOp->salle_id = null;
       $plageOps          = $plageOp->loadMatchingList();
+
+      // Si on retrouve des plages alors on ne prend pas en compte la salle du flux
+      if (count($plageOps) > 0) {
+        $operation->salle_id = "";
+      }
     }
 
     foreach ($plageOps as $_plage) {

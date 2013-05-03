@@ -381,9 +381,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     $props["repas_sans_residu"]        = "bool";
     $props["repas_sans_porc"]          = "bool";
 
-    $props["mode_entree"]              = "enum list|6|7|8 default|8";
+    $props["mode_entree"]              = "enum list|8|7|6";
     $props["mode_entree_id"]           = "ref class|CModeEntreeSejour autocomplete|libelle|true";
-    $props["mode_sortie"]              = "enum list|normal|transfert|mutation|deces default|normal";
+    $props["mode_sortie"]              = "enum list|normal|transfert|mutation|deces";
     $props["mode_sortie_id"]           = "ref class|CModeSortieSejour autocomplete|libelle|true";
 
     $props["confirme"]                 = "bool";

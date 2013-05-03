@@ -1645,6 +1645,12 @@ class CSetupdPplanningOp extends CSetup {
       $this->addQuery($query);
     }
 
-    $this->mod_version = "1.76";
+    $this->makeRevision("1.76");
+
+    $query = "ALTER TABLE `sejour`
+                CHANGE `mode_sortie` `mode_sortie` ENUM ('normal','transfert','mutation','deces');";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.77";
   }
 }

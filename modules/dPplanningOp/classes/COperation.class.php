@@ -976,7 +976,7 @@ class COperation extends CCodable implements IPatientRelated {
    * Met à jour les information sur la salle
    * Nécessiste d'avoir chargé la plage opératoire au préalable
    * 
-   * @return void
+   * @return CSalle
    */
   function updateSalle() {
     if ($this->plageop_id && $this->salle_id) {
