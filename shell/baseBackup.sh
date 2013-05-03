@@ -47,7 +47,7 @@ for i; do
     -l) login=$2; shift 2;;
     -f) lock=$2; shift 2;;
     -c) passphrase=$2; shift 2;;
-    -e) crptage=$2; shift 2;;
+    -e) cryptage=$2; shift 2;;
     -b) binary_log=1; shift;;
     --) shift ; break ;;
   esac
