@@ -330,7 +330,7 @@
 {{mb_include module=soins template=inc_vw_tasks_sejour mode_realisation=0 readonly=1}}
 
 {{if "forms"|module_active}}
-<div class="print_forms not-printable" style="page-break-after: always;">
+<div class="print_forms not-printable">
   <table class="main tbl">
     <tr>
       <th class="title">Formulaires</th>

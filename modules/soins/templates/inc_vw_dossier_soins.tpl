@@ -48,7 +48,7 @@ addCibleTransmission = function(sejour_id, object_class, object_id, libelle_ATC)
 
 
 editPerf = function(prescription_line_mix_id, date, mode_dossier, sejour_id){
-  var url = new Url("dPprescription", "edit_perf_dossier_soin");
+  var url = new Url("prescription", "edit_perf_dossier_soin");
   url.addParam("prescription_line_mix_id", prescription_line_mix_id);
   url.addParam("date", date);
   url.addParam("mode_dossier", mode_dossier);
@@ -84,7 +84,7 @@ viewLegend = function(){
 }
 
 calculSoinSemaine = function(date, prescription_id){
-  var url = new Url("dPprescription", "httpreq_vw_dossier_soin_semaine");
+  var url = new Url("prescription", "httpreq_vw_dossier_soin_semaine");
   url.addParam("date", date);
   url.addParam("prescription_id", prescription_id);
   url.requestUpdate("semaine");
@@ -274,7 +274,7 @@ Main.add(function () {
   
   <form name="addPlanif" action="" method="post">
     <input type="hidden" name="dosql" value="do_administration_aed" />
-    <input type="hidden" name="m" value="dPprescription" />
+    <input type="hidden" name="m" value="prescription" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="administration_id" value="" />
     <input type="hidden" name="planification" value="1" />
@@ -289,7 +289,7 @@ Main.add(function () {
   </form>
   
   <form name="addPlanifs" action="" method="post">
-    <input type="hidden" name="m" value="dPprescription" />
+    <input type="hidden" name="m" value="prescription" />
     <input type="hidden" name="dosql" value="do_administrations_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="decalage" value="" />
@@ -299,7 +299,7 @@ Main.add(function () {
   
   <form name="addManualPlanifPerf" action="" method="post">
     <input type="hidden" name="dosql" value="do_planif_line_mix_aed" />
-    <input type="hidden" name="m" value="dPprescription" />
+    <input type="hidden" name="m" value="prescription" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
     <input type="hidden" name="datetime" value="" />
@@ -465,11 +465,11 @@ Main.add(function () {
         <tr>
           <td style="white-space: nowrap;" class="narrow">
             <!-- Affichage des onglets du dossier de soins -->
-            {{mb_include module="dPprescription" template="inc_vw_tab_dossier_soins"}}
+            {{mb_include module="prescription" template="inc_vw_tab_dossier_soins"}}
           </td>
           <td>
             <!-- Affichage du contenu du dossier de soins -->
-            {{mb_include module="dPprescription" template="inc_vw_content_dossier_soins"}}
+            {{mb_include module="prescription" template="inc_vw_content_dossier_soins"}}
           </td>
         </tr>
       </table>
