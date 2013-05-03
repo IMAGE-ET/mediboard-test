@@ -48,7 +48,7 @@ $users = array();
 $last_trans_cible = array();
 
 foreach ($sejour->_ref_suivi_medical as $_key => $_suivi) {
-  if (is_array($_suivi)) { 
+  if (is_array($_suivi)) {
     $_suivi = $_suivi[0];
   }
   // Elements et commentaires
@@ -66,7 +66,7 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_suivi) {
     if ($user_id && $_suivi->user_id != $user_id) {
       unset($sejour->_ref_suivi_medical[$_suivi->date.$_suivi->_id.$type]);
     }
-    
+
     $_suivi->loadRefUser();
     if ($_suivi instanceof CTransmissionMedicale) {
       $trans = $_suivi;
@@ -93,7 +93,7 @@ foreach ($last_trans_cible as $_last) {
   $_last->_log_lock->loadRefUser()->loadRefMediuser()->loadRefFunction();
 }
 
-//TODO: Revoir l'ajout des constantes dans le suivi de soins 
+//TODO: Revoir l'ajout des constantes dans le suivi de soins
 //Ajout des constantes
 if (!$cible && CAppUI::conf("soins constantes_show") && $_show_const) {
   $sejour->loadRefConstantes($user_id);
@@ -153,18 +153,44 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_trans_const) {
 
     // Aggrégation à -1 sec
     if (array_key_exists($sort_key_before, $list_trans_const)) {
-      array_unshift($list_trans_const[$sort_key_before], $_trans_const);
+      $sort_key = $sort_key_before;
     }
     // à +1 sec
     else if (array_key_exists($sort_key_after, $list_trans_const)) {
-      array_unshift($list_trans_const[$sort_key_after], $_trans_const);
+      $sort_key = $sort_key_after;
     }
-    // au temps exact, ou unique
+
+    if (!isset($list_trans_const[$sort_key])) {
+      $list_trans_const[$sort_key] = array();
+      $list_trans_const[$sort_key][] = $_trans_const;
+    }
     else {
-      if (!array_key_exists($sort_key, $list_trans_const)) {
-        $list_trans_const[$sort_key] = array();
+      switch ($_trans_const->type) {
+        case "data":
+          @array_unshift($list_trans_const[$sort_key], $_trans_const);
+          break;
+        case "action":
+          switch (count($list_trans_const[$sort_key])) {
+            case 0:
+              @array_push($list_trans_const[$sort_key], $_trans_const);
+            case 1:
+              $_trans = array_shift($list_trans_const[$sort_key]);
+              @array_unshift($list_trans_const[$sort_key], $_trans_const);
+              if ($_trans->type == "data") {
+                @array_unshift($list_trans_const[$sort_key], $_trans);
+              }
+              else {
+                @array_push($list_trans_const[$sort_key], $_trans);
+              }
+            case 2:
+              $_trans = array_shift($list_trans_const[$sort_key]);
+              @array_unshift($list_trans_const[$sort_key], $_trans_const);
+              @array_unshift($list_trans_const[$sort_key], $_trans);
+          }
+          break;
+        case "result":
+          @array_push($list_trans_const[$sort_key], $_trans_const);
       }
-      array_unshift($list_trans_const[$sort_key], $_trans_const);
     }
   }
   elseif ($_trans_const instanceof CObservationMedicale) {
