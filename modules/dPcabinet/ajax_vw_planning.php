@@ -113,7 +113,7 @@ for ($i = 0; $i < $nbDays; $i++) {
             $color = "#faf";
           }
         }
-        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->_ref_patient->_view . "\n" . $_consult->motif, $color, true, "droppable", $_consult->_guid);
+        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->_ref_patient->_view . "\n" . $_consult->motif, $color, true, "droppable $debute", $_consult->_guid);
       }
       else {
         if ($color = "#cfc") {
@@ -141,6 +141,7 @@ for ($i = 0; $i < $nbDays; $i++) {
         if ($can_edit) {
           $event->addMenuItem("copy", "Copier cette consultation");
           $event->addMenuItem("cut" , "Couper cette consultation");
+          $event->addMenuItem("add" , "Ajouter une consultation");
         }
       }
       

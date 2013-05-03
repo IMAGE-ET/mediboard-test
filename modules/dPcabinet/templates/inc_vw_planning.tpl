@@ -54,12 +54,20 @@
       }
       else {
         elt.addClassName("opacity-50");
+
         if (action == "cut") {
           window.cut_consult_id = consultation_id;
         }
-        else {
+        if (action == "copy") {
           window.copy_consult_id = consultation_id;
         }
+        if (action == "add") {
+          var plageSel = elt.up(1);
+          var date =  plageSel.className.split(" ")[5];
+          var hour = plageSel.className.split(" ")[6];
+          modalPriseRDV(null, date, hour, plageconsult_id)
+        }
+
         window.save_elt = elt;
       }
       
