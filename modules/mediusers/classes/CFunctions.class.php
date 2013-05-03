@@ -99,7 +99,7 @@ class CFunctions extends CMbObject {
     $props["text"]               = "str notNull confidential seekable";
     $props["color"]              = "str notNull length|6 default|ffffff";
     $props["adresse"]            = "text";
-    $props["cp"]                 = "numchar length|5";
+    $props["cp"]                 = "numchar minLength|4 maxLength|5";
     $props["ville"]              = "str maxLength|50";
     $props["tel"]                = "phone";
     $props["fax"]                = "phone";
