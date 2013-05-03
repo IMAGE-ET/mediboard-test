@@ -11,88 +11,97 @@
 
 class CConsultAnesth extends CMbObject implements IPatientRelated {
   // DB Table key
-  var $consultation_anesth_id = null;
+  public $consultation_anesth_id = null;
 
   // DB References
-  var $consultation_id = null;
-  var $operation_id    = null;
-  var $sejour_id       = null;
-  var $chir_id         = null;
+  public $consultation_id;
+  public $operation_id;
+  public $sejour_id;
+  public $chir_id;
 
   // DB fields
-  var $date_interv    = null;
-  var $libelle_interv = null;
+  public $date_interv;
+  public $libelle_interv;
 
-  var $groupe         = null;
-  var $rhesus         = null;
-  var $groupe_ok      = null;
+  public $groupe;
+  public $rhesus;
+  public $groupe_ok;
 
   // @todo A supprimer
-  var $antecedents    = null;
-  var $traitements    = null;
-  var $tabac          = null;
-  var $oenolisme      = null;
+  public $antecedents;
+  public $traitements;
+  public $tabac;
+  public $oenolisme;
 
-  var $mallampati     = null;
-  var $bouche         = null;
-  var $distThyro      = null;
-  var $etatBucco      = null;
-  var $intub_difficile = null;
-  
-  var $examenCardio   = null;
-  var $examenPulmo    = null;
-  var $examenDigest   = null;
-  var $examenAutre    = null;
-  
-  var $conclusion     = null;
-  var $premedication  = null;
-  var $prepa_preop    = null;
-  var $date_analyse   = null;  
-  
-  var $rai            = null;
-  var $hb             = null;
-  var $tp             = null;
-  var $tca            = null;
-  var $tca_temoin     = null;
-  var $creatinine     = null;
-  var $fibrinogene    = null;
-  var $na             = null;
-  var $k              = null;
-  var $tsivy          = null;
-  var $plaquettes     = null;
-  var $ecbu           = null;
-  var $ht             = null;
-  var $ht_final       = null;
-  var $result_ecg     = null;
-  var $result_rp      = null;
+  // Intubation
+  public $mallampati;
+  public $bouche;
+  public $distThyro;
+  public $etatBucco;
+  public $intub_difficile;
+
+  // Criteres de ventilation
+  public $plus_de_55_ans;
+  public $imc_sup_26;
+  public $edentation;
+  public $ronflements;
+  public $barbe;
+
+  // Examen clinique
+  public $examenCardio;
+  public $examenPulmo;
+  public $examenDigest;
+  public $examenAutre;
+
+  public $conclusion;
+  public $premedication;
+  public $prepa_preop;
+  public $date_analyse;
+
+  public $rai;
+  public $hb;
+  public $tp;
+  public $tca;
+  public $tca_temoin;
+  public $creatinine;
+  public $fibrinogene;
+  public $na;
+  public $k;
+  public $tsivy;
+  public $plaquettes;
+  public $ecbu;
+  public $ht;
+  public $ht_final;
+  public $result_ecg;
+  public $result_rp;
   
   // Check sur les codes cim10 de préfixe pour non-fumeur:
   //  F17 - T652 - Z720 - Z864 - Z587
-  var $apfel_femme   = null;
-  var $apfel_non_fumeur = null;
-  var $apfel_atcd_nvp   = null;
-  var $apfel_morphine   = null;
+  public $apfel_femme;
+  public $apfel_non_fumeur;
+  public $apfel_atcd_nvp;
+  public $apfel_morphine;
   
   // Form fields
-  var $_date_consult    = null;
-  var $_date_op         = null;
-  var $_sec_tsivy       = null;
-  var $_min_tsivy       = null;
-  var $_sec_tca         = null;
-  var $_min_tca         = null;
-  var $_intub_difficile = null;
-  var $_clairance       = null;
-  var $_psa             = null;
-  var $_score_apfel     = null;
+  public $_date_consult;
+  public $_date_op;
+  public $_sec_tsivy;
+  public $_min_tsivy;
+  public $_sec_tca;
+  public $_min_tca;
+  public $_intub_difficile;
+  public $_clairance;
+  public $_psa;
+  public $_score_apfel;
   
   // Object References
-  var $_ref_consultation       = null;
-  var $_ref_chir               = null;
-  var $_ref_techniques         = null;
-  var $_ref_last_consultanesth = null;
-  var $_ref_operation          = null;
-  var $_ref_sejour             = null;
-  var $_ref_plageconsult       = null;
+  public $_ref_consultation;
+  public $_ref_chir;
+  public $_ref_techniques;
+  public $_ref_last_consultanesth;
+  public $_ref_operation;
+  public $_ref_sejour;
+  public $_ref_plageconsult;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -164,6 +173,11 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $props["distThyro"]        = "enum list|m65|p65";
     $props["etatBucco"]        = "text helped";
     $props["intub_difficile"]  = "bool";
+    $props["plus_de_55_ans"]   = "bool";
+    $props["imc_sup_26"]       = "bool";
+    $props["edentation"]       = "bool";
+    $props["ronflements"]      = "bool";
+    $props["barbe"]            = "bool";
     $props["examenCardio"]     = "text helped";
     $props["examenPulmo"]      = "text helped";
     $props["examenDigest"]     = "text helped";

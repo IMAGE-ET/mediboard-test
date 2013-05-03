@@ -1816,14 +1816,13 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `facture_cabinet` 
               DROP `consultation_id`;";
     $this->addQuery($query);
+
     $this->makeRevision("1.93");
-    
     $query = "ALTER TABLE `reglement` 
               CHANGE `object_class` `object_class` ENUM ('CFactureCabinet','CFactureEtablissement') NOT NULL DEFAULT 'CFactureCabinet';";
     $this->addQuery($query);
 
     $this->makeRevision("1.94");
-
     $query = "ALTER TABLE `acte_ngap`
               ADD `ald` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
@@ -1835,7 +1834,6 @@ class CSetupdPcabinet extends CSetup {
     $this->addDependency("dPfacturation", "0.21");
 
     $this->makeRevision("1.97");
-    
     $query = "UPDATE plageconsult p
               SET p.remplacant_id = NULL
               WHERE p.chir_id = p.remplacant_id;";
@@ -1844,25 +1842,35 @@ class CSetupdPcabinet extends CSetup {
               SET p.pour_compte_id = NULL
               WHERE p.chir_id = p.pour_compte_id;";
     $this->addQuery($query);
+
     $this->makeRevision("1.98");
-    
     $query = "ALTER TABLE `tarifs` 
                 ADD `group_id` INT (11) UNSIGNED";
     $this->addQuery($query);
     $query = "ALTER TABLE `tarifs` 
                     ADD INDEX (`group_id`);";
     $this->addQuery($query);
-    $this->makeRevision("1.99");
 
+    $this->makeRevision("1.99");
     $query = "ALTER TABLE `acte_ngap`
                 ADD `numero_dent` TINYINT (4) UNSIGNED,
                 ADD `comment` VARCHAR (255);";
     $this->addQuery($query);
-    $this->makeRevision("2.00");
 
+    $this->makeRevision("2.00");
     $query = "ALTER TABLE `facture_cabinet` 
                 CHANGE `statut_pro` `statut_pro` ENUM ('chomeur','etudiant','non_travailleur','independant','invalide','militaire','retraite','salarie_fr','salarie_sw','sans_emploi');";
     $this->addQuery($query);
-    $this->mod_version = "2.01";
+
+    $this->makeRevision("2.01");
+    $query = "ALTER TABLE `consultation_anesth`
+                ADD `plus_de_55_ans` ENUM ('0','1') DEFAULT '0' AFTER `intub_difficile`,
+                ADD `imc_sup_26` ENUM ('0','1') DEFAULT '0' AFTER `plus_de_55_ans`,
+                ADD `edentation` ENUM ('0','1') DEFAULT '0' AFTER `imc_sup_26`,
+                ADD `ronflements` ENUM ('0','1') DEFAULT '0' AFTER `edentation`,
+                ADD `barbe` ENUM ('0','1') DEFAULT '0' AFTER `ronflements`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.02";
   }
 }

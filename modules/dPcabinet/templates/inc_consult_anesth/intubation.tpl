@@ -124,20 +124,52 @@ Main.add(function () {
             </td>
           </tr>
           <tr>
-            <td colspan="2"><hr /></td>
-          </tr>
-          <tr>
-            <th class="narrow" style="vertical-align: top;">{{mb_label object=$consult_anesth field="bouche" defaultFor="bouche_m20"}}</th>
+            <td class="halfPane">
+              <fieldset>
+                <legend>{{mb_label object=$consult_anesth field="bouche" defaultFor="bouche_m20"}}</legend>
+                {{mb_field object=$consult_anesth field="bouche" typeEnum="radio" separator="<br />" onclick="\$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);"}}
+                <input type="radio" style="display: none;" name="bouche" value="" {{if !$consult_anesth->bouche}}checked="checked"{{/if}} onclick="$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);" />
+              </fieldset>
+            </td>
             <td>
-              {{mb_field object=$consult_anesth field="bouche" typeEnum="radio" separator="<br />" onclick="\$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);"}}
-              <input type="radio" style="display: none;" name="bouche" value="" {{if !$consult_anesth->bouche}}checked="checked"{{/if}} onclick="$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);" />
+              <fieldset>
+                <legend>{{mb_label object=$consult_anesth field="distThyro" defaultFor="distThyro_m65"}}</legend>
+                {{mb_field object=$consult_anesth field="distThyro" typeEnum="radio" separator="<br />" onclick="\$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);"}}
+                <input type="radio" style="display: none;" name="distThyro" value="" {{if !$consult_anesth->distThyro}}checked="checked"{{/if}} onclick="$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);" />
+              </fieldset>
             </td>
           </tr>
           <tr>
-            <th style="vertical-align: top;">{{mb_label object=$consult_anesth field="distThyro" defaultFor="distThyro_m65"}}</th>
-            <td>
-              {{mb_field object=$consult_anesth field="distThyro" typeEnum="radio" separator="<br />" onclick="\$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);"}}
-              <input type="radio" style="display: none;" name="distThyro" value="" {{if !$consult_anesth->distThyro}}checked="checked"{{/if}} onclick="$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);" />
+            <td colspan="2">
+              <fieldset>
+                <legend>Critères de ventilation</legend>
+                <table class="layout">
+                  <tr>
+                    <td>
+                      {{mb_field object=$consult_anesth field=plus_de_55_ans typeEnum=checkbox onchange="verifIntubDifficileAndSave(this.form);"}}
+                      {{mb_label object=$consult_anesth field=plus_de_55_ans}}
+                    </td>
+                    <td>
+                      {{mb_field object=$consult_anesth field=edentation typeEnum=checkbox onchange="verifIntubDifficileAndSave(this.form);"}}
+                      {{mb_label object=$consult_anesth field=edentation}}
+                    </td>
+                    <td>
+                      {{mb_field object=$consult_anesth field=barbe typeEnum=checkbox onchange="verifIntubDifficileAndSave(this.form);"}}
+                      {{mb_label object=$consult_anesth field=barbe}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      {{mb_field object=$consult_anesth field=imc_sup_26 typeEnum=checkbox onchange="verifIntubDifficileAndSave(this.form);"}}
+                      {{mb_label object=$consult_anesth field=imc_sup_26}}
+                    </td>
+                    <td>
+                      {{mb_field object=$consult_anesth field=ronflements typeEnum=checkbox onchange="verifIntubDifficileAndSave(this.form);"}}
+                      {{mb_label object=$consult_anesth field=ronflements}}
+                    </td>
+                  </tr>
+                </table>
+              </fieldset>
             </td>
           </tr>
           <tr>
@@ -174,8 +206,7 @@ Main.add(function () {
               {{if $consult_anesth->_intub_difficile}}style="display: none;"{{/if}}
                 onclick="$V(this.form.intub_difficile, '1'); verifIntubDifficileAndSave(this.form);">Difficile</button>
               <div id="divAlertIntubDiff"
-                style="float: right;
-                  color: {{if $consult_anesth->_intub_difficile}}
+                style="color: {{if $consult_anesth->_intub_difficile}}
                            #F00;
                          {{else}}
                            #000
