@@ -22,6 +22,8 @@ then
   echo "   [-b ] to create mysql binary log index"
   echo "   [-l <login>] user:pass login to send a mail when diskfull is detected"
   echo "   [-f <lock_file>] lock file path"
+  echo "   [-c <passphrase>] passphrase to encrypt the archive"
+  echo "   [-e <cryptage>] cryptage method to use"
   exit 1
 fi
 
@@ -29,7 +31,9 @@ login=''
 time=7
 binary_log=0
 lock=''
-args=`getopt t:l:f:b $*`
+passphrase=''
+cryptage='aes-128-cbc'
+args=`getopt t:l:f:c:e:b $*`
 
 if [ $? != 0 ] ; then
   echo "Invalid argument. Check your command line"; exit 0;
@@ -42,6 +46,8 @@ for i; do
     -t) time=$2; shift 2;;
     -l) login=$2; shift 2;;
     -f) lock=$2; shift 2;;
+    -c) passphrase=$2; shift 2;;
+    -e) crptage=$2; shift 2;;
     -b) binary_log=1; shift;;
     --) shift ; break ;;
   esac
@@ -155,9 +161,22 @@ tarball=$database-${DATETIME}.tar.gz
 tar cfz $tarball $result
 check_errs $? "Failed to create backup tarball" "Tarball packaged!"
 
-# create a symlink
-cp -s -f $tarball $database-latest.tar.gz
-check_errs $? "Failed to create symlink" "Symlink created!"
+# Crypt the tarball
+if [ -n "$passphrase" ]; then
+  cat $tarball|openssl $cryptage -salt -out $tarball.aes -k $passphrase
+  check_errs $? "Failed to crypt the archive" "Archive crypted!"
+  # create a symlink
+  cp -s -f $tarball.aes $database-latest.tar.gz.aes
+  check_errs $? "Failed to create symlink of archive crypted" "Symlink of crypted archive created!"
+  rm $tarball
+  check_errs $? "Failed to delete non-crypted archive" "Archive non-crypted deleted!"
+else
+  # create a symlink
+  cp -s -f $tarball $database-latest.tar.gz
+  check_errs $? "Failed to create symlink" "Symlink created!"
+fi
+
+
 
 # Remove temporary files
 rm -Rf $result
