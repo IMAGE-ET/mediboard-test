@@ -38,6 +38,10 @@ if ($type_pdf == "bvr") {
   $facture_pdf->editFactureBVR();
 }
 
+if ($type_pdf == "bvr_TS") {
+  $facture_pdf->editFactureBVR("TS");
+}
+
 if ($type_pdf == "justificatif") {
   $facture_pdf->editJustificatif();
 }

@@ -18,6 +18,22 @@
     {{assign var=class value=CFactureCabinet}}
     {{mb_include module=system template=inc_config_bool var=use_auto_cloture}}
     
+    {{if $conf.ref_pays == 2}}
+      <tr>
+        <th class="category" colspan="2">{{tr}}Other{{/tr}}</th>
+      </tr>
+      {{assign var=class value=CEditPdf}}
+      {{mb_include module=system template=inc_config_bool var=use_bill_etab}}
+      
+      {{mb_include module=system template=inc_config_str var=home_nom}}
+      {{mb_include module=system template=inc_config_str var=home_adresse}}
+      {{mb_include module=system template=inc_config_str var=home_cp}}
+      {{mb_include module=system template=inc_config_str var=home_ville}}
+      {{mb_include module=system template=inc_config_str var=home_EAN}}
+      {{mb_include module=system template=inc_config_str var=home_RCC}}
+      {{mb_include module=system template=inc_config_str var=home_tel}}
+      {{mb_include module=system template=inc_config_str var=home_fax}}
+    {{/if}}
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

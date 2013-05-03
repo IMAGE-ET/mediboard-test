@@ -26,6 +26,11 @@
     <td colspan="8">
       <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 'bvr');">Edition des BVR</button>
       <button class="print" onclick="printFacture('{{$facture->_id}}', 'justificatif');">Justificatif de remboursement</button>
+      {{if $facture->_ref_reglements|@count}}
+        {{if $facture->_ref_assurance_maladie->_id && $facture->type_facture == "maladie" && $facture->_ref_assurance_maladie->type_pec == "TS"}}
+          <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 'bvr_TS');">Facture Patient</button>
+        {{/if}}
+      {{/if}}
       {{if $facture->_is_relancable && $conf.dPfacturation.CRelance.use_relances}}
         <form name="facture_relance" method="post" action="" onsubmit="return Relance.create(this);">
           {{mb_class object=$facture->_ref_last_relance}}
@@ -46,6 +51,7 @@
     <form name="type_facture" method="post" action="">
       {{mb_class object=$facture}}
       {{mb_key   object=$facture}}
+      <input type="hidden" name="facture_class" value="{{$facture->_class}}" />
       <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
       <table class="main tbl">
         <tr>

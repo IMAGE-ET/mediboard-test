@@ -14,6 +14,7 @@
  */
 class CEditPdf{
   //Elements du PDF
+  public $type_pdf;
   public $pdf;
   public $facture;
   public $factures;
@@ -28,8 +29,11 @@ class CEditPdf{
   public $adherent;
   public $autre_tarmed = 0;
   public $destinataire;
+  public $auteur;
+  public $fourn_presta;
   public $function_prat;
   public $group;
+  public $group_adrr;
   public $nb_factures;
   public $num_fact;
   public $patient_facture;
@@ -67,8 +71,9 @@ class CEditPdf{
     $this->pdf->Cell($largeur, null, $text, null, null, $align);
   }
   
-  function editFactureBVR() {
-    $this->editFacture("BVR");
+  function editFactureBVR($ts = false) {
+    $this->type_pdf = $ts ? "BVR_TS" : "BVR"; 
+    $this->editFacture();
     //enregistrement pour chaque facture l'ensemble des factures
     if (count($this->factures)) {
       $this->pdf->Output($this->facture->cloture."_".$this->patient_facture->nom.'.pdf', "I");
@@ -78,8 +83,9 @@ class CEditPdf{
     }
   }
   
-  function editJustificatif() {
-    $this->editFacture("justif");
+  function editJustificatif($ts = false) {
+    $this->type_pdf = $ts ? "justif_TS" : "justif"; 
+    $this->editFacture();
     if (count($this->factures)) {
       $this->pdf->Output($this->facture->cloture."_".$this->patient_facture->nom.'.pdf', "I");
     }
@@ -89,7 +95,8 @@ class CEditPdf{
   }
   
   function editRelance() {
-    $this->editFacture("relance");
+    $this->type_pdf = "relance";
+    $this->editFacture();
     if (count($this->factures)) {
       $this->pdf->Output("Relance_".$this->facture->cloture."_".$this->patient_facture->nom.'.pdf', "I");
     }
@@ -98,7 +105,7 @@ class CEditPdf{
     }
   }
   
-  function editFacture($nom) {
+  function editFacture() {
     // Creation du PDF
     $this->pdf = new CMbPdf('P', 'mm');
     $this->pdf->setPrintHeader(false);
@@ -115,7 +122,7 @@ class CEditPdf{
       $this->facture->loadRefAssurance();
       $this->facture->loadRefsObjects();
       $this->facture->loadRefsReglements();
-      if ($nom == "relance") {
+      if ($this->type_pdf == "relance") {
         $this->facture->loadRefsRelances();
       }
   
@@ -123,7 +130,7 @@ class CEditPdf{
       $this->group = $this->function_prat->loadRefGroup();
       $this->adherent = $this->praticien->adherent;
       
-      if ($nom == "BVR") {
+      if ($this->type_pdf == "BVR") {
         $this->loadTotaux();
         $this->acompte = 0;
         $this->nb_factures = count($this->facture->_montant_factures_caisse);
@@ -135,7 +142,23 @@ class CEditPdf{
           }
         }
       }
-      elseif ($nom == "justif") {
+      if ($this->type_pdf == "BVR_TS") {
+        $this->loadTotaux();
+        $this->acompte = 0;
+        $this->nb_factures = count($this->facture->_montant_factures_caisse);
+        $this->num_fact = 0;
+        $montant = 0;
+        if ($this->acompte < $this->facture->_montant_avec_remise) {
+          $montant = $this->facture->_montant_avec_remise - $this->facture->_reglements_total_patient - $this->facture->_reglements_total_tiers;
+          $this->editHautFacture(" ", $montant);
+          $this->editBVR($montant);
+        }
+        $this->type_pdf = "justif_TS";
+        $this->function_prat->adresse = str_replace("\r\n",' ', $this->function_prat->adresse);
+        $this->patient_facture->adresse = str_replace("\r\n",' ', $this->patient_facture->adresse);
+        $this->editCenterJustificatif(0, $montant);
+      }
+      elseif ($this->type_pdf == "justif") {
         $this->function_prat->adresse = str_replace("\r\n",' ', $this->function_prat->adresse);
         $this->patient_facture->adresse = str_replace("\r\n",' ', $this->patient_facture->adresse);
         
@@ -143,7 +166,7 @@ class CEditPdf{
           $this->editCenterJustificatif($cle_facture, $montant_facture);
         }
       }
-      elseif ($nom == "relance") {
+      elseif ($this->type_pdf == "relance") {
         $this->editHautFacture(1, $this->relance->_montant, true);
         $this->editBVR($this->relance->_montant);
       }
@@ -155,7 +178,7 @@ class CEditPdf{
     $this->pdf->AddPage();
     $pm = $pt = 0;
     
-    $this->ajoutEntete1($cle_facture);
+    $this->ajoutEntete1();
     $this->pdf->setFont($this->font, '', 8);
     $tailles_colonnes = array(
       "Date" => 9,      "Tarif"=> 5,
@@ -447,16 +470,16 @@ class CEditPdf{
     
     $auteur = array(
       "50" => "Auteur facture",
-      $this->group->raison_sociale,
-      $this->group_adrr["group1"],
-      $this->group_adrr["group2"],
-      $this->group->cp." ".$this->group->ville,
+      $this->auteur["nom"],
+      $this->auteur["adresse1"],
+      $this->auteur["adresse2"],
+      $this->auteur["cp"]." ".$this->auteur["ville"],
       "80" => "Four. de prestations",
-      "Dr. ".$this->praticien->_view,
-      $this->function_prat->_view,
-      $this->adresse_prat["group1"],
-      $this->adresse_prat["group2"],
-      $this->function_prat->cp." ".$this->function_prat->ville,
+      $this->fourn_presta["nom_dr"],
+      $this->fourn_presta["fct"],
+      $this->fourn_presta["adresse1"],
+      $this->fourn_presta["adresse2"],
+      $this->fourn_presta["0"]->cp." ".$this->fourn_presta["0"]->ville
     );
     $tab[$colonne1] = $auteur;
 
@@ -483,18 +506,18 @@ class CEditPdf{
       $this->pdf->setFont($this->font, '', 25);
       $this->pdf->Text(100,20, "RELANCE");
     }
-    elseif ($this->facture->_reglements_total_patient) {
-      $this->pdf->setFont($this->font, '', 25);
-      $this->pdf->Text(100,20, "DUPLICATA");
-    }
-    if ($this->facture->type_facture == "accident") {
-      $this->pdf->setFont($this->font, '', 15);
-      $this->pdf->Text(80,40, "Accident");
-    }
-    if ($this->facture->cession_creance) {
-      $this->pdf->setFont($this->font, '', 15);
-      $this->pdf->Text(80,30, "Cession de créance");
-    }
+//    elseif ($this->facture->_reglements_total_patient) {
+//      $this->pdf->setFont($this->font, '', 25);
+//      $this->pdf->Text(100,20, "DUPLICATA");
+//    }
+//    if ($this->facture->type_facture == "accident") {
+//      $this->pdf->setFont($this->font, '', 15);
+//      $this->pdf->Text(80,40, "Accident");
+//    }
+//    if ($this->facture->cession_creance) {
+//      $this->pdf->setFont($this->font, '', 15);
+//      $this->pdf->Text(80,30, "Cession de créance");
+//    }
     $this->pdf->SetTextColor(0,0,0);
     $this->pdf->setFont($this->font, '', 8);
     
@@ -544,8 +567,13 @@ class CEditPdf{
     
     $montant_total = 0;
     $tarif = array( "Tarif"         => "CHF");
+    $acompte = $this->type_pdf == "BVR_TS" ? $this->facture->_montant_avec_remise - $montant_facture : "0.00";
     foreach ($this->pre_tab as $cles => $valeur) {
-      if (($cle_facture == 0 && $cles != "Autres:") || ($cle_facture == 1 && $cles == "Autres:")) {
+      if ($this->type_pdf == "BVR_TS") {
+        $tarif[$cles] = $valeur;
+        $montant_total += $valeur;
+      }
+      elseif (($cle_facture == 0 && $cles != "Autres:") || ($cle_facture == 1 && $cles == "Autres:")) {
         $tarif[$cles] = $valeur;
         $montant_total += $valeur;
       }
@@ -562,7 +590,7 @@ class CEditPdf{
     }
     $tarif["Remise:"]         = sprintf('%0.2f', -$this->facture->remise);
     $tarif["Montant total:"]  = sprintf('%0.2f', $montant_total);
-    $tarif["Acompte:"]        = "0.00";
+    $tarif["Acompte:"]        = sprintf('%0.2f', $acompte);
     $tarif["Montant dû $title_montant:"]  = $montant_facture;
     
     $this->acompte += $montant_facture;
@@ -673,11 +701,9 @@ class CEditPdf{
   /**
    * Création du premier type d'en-tête possible d'un justificatif 
    * 
-   * @param object $cle_facture clé de la facture
-   * 
    * @return void
    */
-  function ajoutEntete1($cle_facture){
+  function ajoutEntete1(){
     $this->ajoutEntete2(1);
     $this->pdf->SetFillColor(255, 255, 255);
     $this->pdf->SetDrawColor(0);
@@ -695,6 +721,20 @@ class CEditPdf{
     $loi = $this->facture->type_facture == "accident" ? "LAA" : "LAMal";
     
     $assurance_patient = $this->destinataire[0];
+    $assur_nom = "";
+    if ($this->facture->dialyse && $this->facture->_ref_assurance_accident) {
+      $assur_nom = $this->facture->_ref_assurance_accident->nom." ".$this->facture->_ref_assurance_accident->prenom;
+    }
+    if (isset($assurance_patient->type_pec) && $assurance_patient->type_pec == "TS") {
+      if (count($this->facture->_ref_reglements) && $this->type_pdf == "justif_TS") {
+        $assur_nom = $this->patient_facture->nom." ".$this->patient_facture->prenom;
+      }
+      else {
+        $assur_nom = "$assurance_patient->nom $assurance_patient->prenom";
+      }
+      $assurance_patient = $this->patient_facture;
+    }
+    
     $assur = array();
     $assur["civilite"]  = isset($assurance_patient->civilite) ? ucfirst($this->patient_facture->civilite) : "";
     $assur["nom"]     = "$assurance_patient->nom $assurance_patient->prenom";
@@ -704,7 +744,7 @@ class CEditPdf{
     $naissance =  CMbDT::transform(null, $this->patient_facture->naissance, "%d.%m.%Y");
     $colonnes = array(20, 28, 25, 25, 25, 50);
     $lignes = array(
-      array("Patient"   , "Nom"             , $this->patient_facture->nom     ,null, "Assurance", $assur["nom"]),
+      array("Patient"   , "Nom"             , $this->patient_facture->nom     ,null, "Assurance", $assur_nom),
       array(""          , "Prénom"          , $this->patient_facture->prenom),
       array(""          , "Rue"             , $this->patient_facture->adresse),
       array(""          , "NPA"             , $this->patient_facture->cp      , null, $assur["civilite"]),
@@ -745,7 +785,7 @@ class CEditPdf{
   /**
    * Création du second type d'en-tête possible d'un justificatif, celui-ci étant plus léger 
    * 
-   * @param object $nb le numéro de la page
+   * @param int $nb le numéro de la page
    * 
    * @return void
    */
@@ -757,12 +797,13 @@ class CEditPdf{
     $this->pdf->SetFillColor(255, 255, 255);
     $this->pdf->SetDrawColor(0);
     $this->pdf->Rect(10, 18, 180,20);
+    
     $lignes = array(
       array("Document"    , "Identification"  , $this->facture->_id." ".CMbDT::transform(null, null, "%d.%m.%Y %H:%M:%S"), "", "Page $nb"),
-      array("Auteur"      , "N° EAN(B)"       , $this->group->ean, $this->group->_view, " Tél: ".$this->group->tel),
-      array("Facture"     , "N° RCC(B)"       , $this->group->rcc, substr($this->group->adresse, 0, 29)." ". $this->group->cp." ".$this->group->ville, "Fax: ".$this->group->fax),
-      array("Four.de"     , "N° EAN(P)"       , $this->praticien->ean, "DR.".$this->praticien->_view, " Tél: ".$this->function_prat->tel),
-      array("prestations" , "N° RCC(B)"       , $this->praticien->rcc, substr($this->function_prat->adresse, 0, 29)." ". $this->function_prat->cp." ".$this->function_prat->ville, "Fax: ".$this->function_prat->fax)
+      array("Auteur"      , "N° EAN(B)"       , $this->auteur["EAN"], $this->auteur["nom"], " Tél: ".$this->auteur["tel"]),
+      array("Facture"     , "N° RCC(B)"       , $this->auteur["RCC"], substr($this->auteur["adresse1"], 0, 29)." ". $this->auteur["cp"]." ".$this->auteur["ville"], "Fax: ".$this->auteur["fax"]),
+      array("Four.de"     , "N° EAN(P)"       , $this->fourn_presta["EAN"], $this->fourn_presta["nom_dr"], " Tél: ".$this->fourn_presta["0"]->tel),
+      array("prestations" , "N° RCC(B)"       , $this->fourn_presta["RCC"], substr($this->fourn_presta["adresse1"], 0, 29)." ". $this->fourn_presta["0"]->cp." ".$this->fourn_presta["0"]->ville, "Fax: ".$this->fourn_presta["0"]->fax)
     );
     
     $this->pdf->setXY(10, $this->pdf->getY()-4);
@@ -797,16 +838,13 @@ class CEditPdf{
     $view = "_longview";
     $this->type_rbt = "TG";
     
-    //@todo à faire valider par DAVID!!
-    //TP uniquement pour maladie 
-    //TG uniquement pour accident 
-    //TS (Tiers soldant ou TG avec cession) pour les 2
-    //     2 facture: première à l'assurance, seconde au patient avec le restant (un pct???)
-    if ($this->facture->assurance_maladie && !$this->facture->send_assur_base && $this->facture->_ref_assurance_maladie->type_pec != "TP" && $this->facture->type_facture == "maladie") {
+    // TP uniquement pour accident 
+    // TP/TG/TS      pour maladie
+    if ($this->facture->assurance_maladie && !$this->facture->send_assur_base && $this->facture->_ref_assurance_maladie->type_pec != "TG" && $this->facture->type_facture == "maladie") {
       $assurance_patient = $this->facture->_ref_assurance_maladie;
       $this->type_rbt = $this->facture->_ref_assurance_maladie->type_pec;
     }
-    elseif ($this->facture->assurance_accident && !$this->facture->send_assur_compl && $this->facture->_ref_assurance_accident->type_pec != "TG" && $this->facture->type_facture == "accident") {
+    elseif ($this->facture->assurance_accident && !$this->facture->send_assur_compl && $this->facture->_ref_assurance_accident->type_pec == "TP" && $this->facture->type_facture == "accident") {
       $assurance_patient = $this->facture->_ref_assurance_accident;
       $this->type_rbt = $this->facture->_ref_assurance_accident->type_pec;
     }
@@ -814,7 +852,13 @@ class CEditPdf{
       $assurance_patient = $this->patient_facture;
       $view = "_view";
     }
+    if (count($this->facture->_ref_reglements) && $this->type_pdf == "BVR_TS") {
+      $assurance_patient = $this->patient_facture;
+      $view = "_view";
+    }
+    
     $this->type_rbt = $this->type_rbt == "" ? "TG" : $this->type_rbt;
+    $this->type_rbt = $this->type_rbt == "TS" ? "TG avec cession" : $this->type_rbt;
     
     $assur["nom"]     = $assurance_patient->$view;
     $assur["adresse"] = $assurance_patient->adresse;
@@ -829,5 +873,41 @@ class CEditPdf{
       "cp"        => $assur["cp"],
     );
     
+    $this->auteur = array(
+      "0"        =>  $this->group,
+      "nom"      =>  $this->group->raison_sociale,
+      "adresse1" =>  $this->group_adrr["group1"],
+      "adresse2" =>  $this->group_adrr["group2"],
+      "cp"       =>  $this->group->cp,
+      "ville"    =>  $this->group->ville,
+      "EAN"      =>  $this->group->ean,
+      "RCC"      =>  $this->group->rcc,
+      "tel"      =>  $this->group->tel,
+      "fax"      =>  $this->group->fax,
+    );
+    if (!CAppUI::conf("dPfacturation CEditPdf use_bill_etab")) {
+      $this->fourn_presta = array(
+        "0"        =>  $this->function_prat,
+        "nom_dr"   =>  "Dr. ".$this->praticien->_view,
+        "fct"      =>  $this->function_prat->_view,
+        "adresse1" =>  $this->adresse_prat["group1"],
+        "adresse2" =>  $this->adresse_prat["group2"],
+        "EAN"      =>  $this->praticien->ean,
+        "RCC"      =>  $this->praticien->rcc
+      );
+    }
+    else {
+      $this->fourn_presta = $this->auteur;
+      $this->fourn_presta["nom_dr"] = $this->group->raison_sociale;
+      $this->fourn_presta["fct"] = "";
+      $this->auteur["nom"]      = CAppUI::conf("dPfacturation CEditPdf home_nom");
+      $this->auteur["adresse1"] = CAppUI::conf("dPfacturation CEditPdf home_adresse");
+      $this->auteur["cp"]       = CAppUI::conf("dPfacturation CEditPdf home_cp");
+      $this->auteur["ville"]    = CAppUI::conf("dPfacturation CEditPdf home_ville");
+      $this->auteur["EAN"]      = CAppUI::conf("dPfacturation CEditPdf home_EAN");
+      $this->auteur["RCC"]      = CAppUI::conf("dPfacturation CEditPdf home_RCC");
+      $this->auteur["tel"]      = CAppUI::conf("dPfacturation CEditPdf home_tel");
+      $this->auteur["fax"]      = CAppUI::conf("dPfacturation CEditPdf home_fax"); 
+    }
   }
 }
