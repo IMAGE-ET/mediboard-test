@@ -78,28 +78,48 @@ $plage = new CPlageconsult();
 for ($i = 0; $i < $nbDays; $i++) {
   $jour = CMbDT::date("+$i day", $debut);
   $where["date"] = "= '$jour'";
-  $plages = $plage->loadList($where);
+  $plages = $plage->loadList($where, "date, debut");
   
   CMbObject::massLoadFwdRef($plages, "chir_id");
   
   foreach ($plages as $_plage) {
     $_plage->loadRefsFwd(1);
     $_plage->loadRefsConsultations(false);
-    
+
     // Affichage de la plage sur le planning
-    
     $range = new CPlanningRange($_plage->_guid, $jour." ".$_plage->debut, CMbDT::minutesRelative($_plage->debut, $_plage->fin), $_plage->libelle, $_plage->color);
-    
     $range->type = "plageconsult";
     $planning->addRange($range);
+
+    //colors
     $color = "#cfc";
     if ($_plage->remplacant_id && $_plage->remplacant_id != $chirSel) {
+      // Je suis remplacé par un autre médecin
       $color = "#FAA";
     }
     if ($_plage->remplacant_id && $_plage->remplacant_id == $chirSel) {
+      // Je remplace un autre médecin
       $color = "#FDA";
     }
-    
+
+    //RdvFree
+    $utilisation = $_plage->getUtilisation();
+    foreach ($utilisation as $_timing => $_nb) {
+      if (!$_nb) {
+        $debute = "$jour $_timing";
+        $event = new CPlanningEvent($debute, $debute, $_plage->_freq, "", $color, true, "droppable", null);
+        $event->type        = "rdvfree";
+        $event->plage["id"] = $_plage->_id;
+        if ($_plage->locked == 1) {
+          $event->disabled = true;
+        }
+        $event->plage["color"] = $_plage->color;
+        //Ajout de l'évènement au planning
+        $planning->addEvent($event);
+      }
+    }
+
+    //consultations
     foreach ($_plage->_ref_consultations as $_consult) {
       $debute = "$jour $_consult->heure";
       if ($_consult->patient_id) {
@@ -149,22 +169,7 @@ for ($i = 0; $i < $nbDays; $i++) {
       $event->plage["color"] = $_plage->color;
       $planning->addEvent($event);
     }
-    $utilisation = $_plage->getUtilisation();
-    foreach ($utilisation as $_timing => $_nb) {
-      if (!$_nb) {
-        $debute = "$jour $_timing";
-        $event = new CPlanningEvent($debute, $debute, $_plage->_freq, "", $color, true, "droppable", null);
-        $event->type        = "rdvfree";
-        $event->plage["id"] = $_plage->_id;
-        if ($_plage->locked == 1) {
-          $event->disabled = true;
-        }
-        $event->plage["color"] = $_plage->color;
-        //Ajout de l'évènement au planning 
-        $planning->addEvent($event);
-      }
-    }
-  }    
+  }
 }
 //mbTrace($planning->events);
 $smarty = new CSmartyDP();

@@ -126,6 +126,11 @@
     
     url.modalObject.observe("afterClose", refreshPlanning);
   }
+
+  function openLegend() {
+    var url = new Url("cabinet", "ajax_legend_planning_new");
+    url.requestModal(300);
+  }
 </script>
 
 <form name="cutCopyConsultFrm" method="post">
@@ -171,6 +176,7 @@
         <a href="#1" onclick="refreshPlanning('today')">Aujourd'hui</a>
       </th>
       <th style="width: 15%; text-align: right;">
+        <button class="help" onclick="openLegend();return false;">{{tr}}Legend{{/tr}}</button>
         <button type="button" class="print" onclick="printPlanning();">{{tr}}Print{{/tr}}</button>
         <br />
         <button type="button" class="lookup" id="desistement_count"
