@@ -1215,18 +1215,18 @@ class CSejour extends CFacturable implements IPatientRelated {
     if ($this->fieldModified("recuse", "-1")) $annule = "0";
     $this->annule = $annule;
 
-    // Détail heure d'entrée
+    // Détail d'horaire d'entrée, ne pas comparer la date_entree_prevue à null
     // @todo Passer au TimePicker
-    if ($this->_hour_entree_prevue !== null and $this->_min_entree_prevue !== null) {
+    if ($this->_date_entree_prevue && $this->_hour_entree_prevue !== null && $this->_min_entree_prevue !== null) {
       $this->entree_prevue = "$this->_date_entree_prevue";
       $this->entree_prevue.= " ".str_pad($this->_hour_entree_prevue, 2, "0", STR_PAD_LEFT);
       $this->entree_prevue.= ":".str_pad($this->_min_entree_prevue , 2, "0", STR_PAD_LEFT);
       $this->entree_prevue.= ":00";
     }
 
-    // Détail heure de sortie
+    // Détail d'horaire de sortie, ne pas comparer la date_sortie_prevue à null
     // @todo Passer au TimePicker
-    if ($this->_hour_sortie_prevue !== null and $this->_min_sortie_prevue !== null) {
+    if ($this->_date_sortie_prevue && $this->_hour_sortie_prevue !== null && $this->_min_sortie_prevue !== null) {
       $this->sortie_prevue = "$this->_date_sortie_prevue";
       $this->sortie_prevue.= " ".str_pad($this->_hour_sortie_prevue, 2, "0", STR_PAD_LEFT);
       $this->sortie_prevue.= ":".str_pad($this->_min_sortie_prevue , 2, "0", STR_PAD_LEFT);
