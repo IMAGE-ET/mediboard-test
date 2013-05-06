@@ -39,6 +39,7 @@ class CFactureCabinet extends CFacture {
     $backProps["consultations"] = "CConsultation facture_id";
     $backProps["reglements"]    = "CReglement object_id";
     $backProps["relance_fact_cabinet"] = "CRelance object_id";
+    $backProps["facture_liaison_cab"]  = "CFactureLiaison facture_id";
     return $backProps;
   }
    

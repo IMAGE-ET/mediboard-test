@@ -42,6 +42,7 @@ class CFactureEtablissement extends CFacture {
     $backProps = parent::getBackProps();
     $backProps["reglements_fact_etab"] = "CReglement object_id";
     $backProps["relance_fact_etab"]    = "CRelance object_id";
+    $backProps["facture_liaison_etab"] = "CFactureLiaison facture_id";
     return $backProps;
   }
    
@@ -100,7 +101,7 @@ class CFactureEtablissement extends CFacture {
    * 
    * @param bool $cache cache
    * 
-   * @return CReglements
+   * @return CReglement
   **/
   function loadRefsReglements($cache = 1) {
     $this->_ref_reglements = $this->loadBackRefs("reglements_fact_etab", 'date');
@@ -124,7 +125,7 @@ class CFactureEtablissement extends CFacture {
   /**
    * Relances emises pour la facture
    * 
-   * @return CRelances
+   * @return CRelance
   **/
   function loadRefsRelances(){
     $this->_ref_relances = $this->loadBackRefs("relance_fact_etab", 'date');
