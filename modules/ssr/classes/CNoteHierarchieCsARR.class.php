@@ -1,31 +1,32 @@
-<?php /* $Id $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
  * Note concernant une hiérarchie CsARR
  */
 class CNoteHierarchieCsARR extends CCsARRObject {
-  
-  var $hierarchie        = null;
-  var $idnote            = null;
-  var $typenote          = null;
-  var $niveau            = null;
-  var $libelle           = null;
-  var $ordre             = null;
-  var $hierarchie_exclue = null;
-  var $code_exclu        = null;
-  
-  var $_ref_hierarchie        = null;
-  var $_ref_hierarchie_exclue = null;
-  var $_ref_activite_exclue   = null;
-    
+
+  public $hierarchie;
+  public $idnote;
+  public $typenote;
+  public $niveau;
+  public $libelle;
+  public $ordre;
+  public $hierarchie_exclue;
+  public $code_exclu;
+
+  public $_ref_hierarchie;
+  public $_ref_hierarchie_exclue;
+  public $_ref_activite_exclue;
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'note_hierarchie';
@@ -53,7 +54,7 @@ class CNoteHierarchieCsARR extends CCsARRObject {
     $this->_view = "$this->hierarchie ($this->typenote): $this->libelle";
     $this->_shortview = $this->idnote;
   }
-  
+
   function loadRefHierarchie() {
     return $this->_ref_hierarchie = CHierarchieCsARR::get($this->hierarchie);
   }
@@ -61,17 +62,15 @@ class CNoteHierarchieCsARR extends CCsARRObject {
   function loadRefHierarchieExlue() {
     return $this->_ref_hierarchie_exclue = CHierarchieCsARR::get($this->code_exclus);
   }
-  
+
   function loadRefCodeExclu() {
     return $this->_ref_code_exclu = CActiviteCsARR::get($this->code_exclus);
   }
-  
-	function loadView(){
+
+  function loadView(){
     parent::loadView();
     $this->loadRefHierarchie();
     $this->loadRefHierarchieExlue();
     $this->loadRefCodeExclu();
   }
 }
-
-?>

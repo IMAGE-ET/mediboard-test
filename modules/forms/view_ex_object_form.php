@@ -55,6 +55,8 @@ if ($event_name) {
 $ex_class_event->ex_class_id = $ex_class_id;
 $ex_class_event->loadMatchingObject();
 
+/** @var CExObject $ex_object */
+
 if (!$ex_object_id) {
   $ex_class = new CExClass;
   $ex_class->load($ex_class_id);
@@ -73,6 +75,8 @@ else {
 if ($preview) {
   $ex_object->_preview = true;
 }
+
+$ex_object->_event_name = $event_name;
 
 // Host and reference objects
 $ex_object->setObject($object);

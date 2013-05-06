@@ -56,7 +56,7 @@ viewModal = function(){
   Element.cleanWhitespace($('modal_SSR'));
   // Si la modale contient du texte, on l'affiche
 	if($('modal_SSR').innerHTML != ''){
-	  modalWindow = modal($('modal_SSR'), {
+	  modalWindow = Modal.open($('modal_SSR'), {
 	    className: 'modal'
 	  });
 	} 

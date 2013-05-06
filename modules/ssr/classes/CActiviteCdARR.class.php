@@ -1,24 +1,25 @@
-<?php /* $Id $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
  * Activité CdARR
  */
 class CActiviteCdARR extends CCdARRObject {
-  var $code    = null;
-  var $type    = null;
-	var $libelle = null;
-	var $note    = null;
-	var $inclu   = null;
-	var $exclu   = null;
-	
+  public $code;
+  public $type;
+  public $libelle;
+  public $note;
+  public $inclu;
+  public $exclu;
+
   // Refs
   public $_ref_type_activite;
 
@@ -28,12 +29,12 @@ class CActiviteCdARR extends CCdARRObject {
   public $_count_actes_by_executant;
 
   // Distant refs
-	public $_ref_elements;
-	public $_ref_elements_by_cat;
+  public $_ref_elements;
+  public $_ref_elements_by_cat;
   public $_ref_all_executants;
-	
-	static $cached = array();
-	
+
+  static $cached = array();
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table       = 'activite';
@@ -53,18 +54,18 @@ class CActiviteCdARR extends CCdARRObject {
     $props["exclu"]   = "text";
     return $props;
   }
-  
+
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->code;
     $this->_shortview = $this->code;
   }
-  
+
   function loadRefTypeActivite() {
     return $this->_ref_type_activite = CTypeActiviteCdARR::get($this->type);
   }
-	
-	function loadView(){
+
+  function loadView(){
     parent::loadView();
     $this->loadRefTypeActivite();
   }
@@ -74,29 +75,29 @@ class CActiviteCdARR extends CCdARRObject {
     $element->code = $this->code;
     return $this->_count_elements = $element->countMatchingList();
   }
-    
-	function loadRefsElements() {
-		$element = new CElementPrescriptionToCdarr();
-		$element->code = $this->code;
-		return $this->_ref_elements = $element->loadMatchingList();
-	}
-	
-	function loadRefsElementsByCat() {
-	  $this->_ref_elements_by_cat = array();
-		foreach ($this->loadRefsElements() as $_element) {
+
+  function loadRefsElements() {
+    $element = new CElementPrescriptionToCdarr();
+    $element->code = $this->code;
+    return $this->_ref_elements = $element->loadMatchingList();
+  }
+
+  function loadRefsElementsByCat() {
+    $this->_ref_elements_by_cat = array();
+    foreach ($this->loadRefsElements() as $_element) {
       if ($element = $_element->loadRefElementPrescription()) {
         $this->_ref_elements_by_cat[$element->category_prescription_id][] = $_element;
       }
     }
     return $this->_ref_elements_by_cat;
-	}
-  
+  }
+
   function countActes() {
     $acte = new CActeCdARR();
     $acte->code = $this->code;
     return $this->_count_actes = $acte->countMatchingList();
   }
-    
+
   function loadRefsAllExecutants() {
     // Comptage par executant
     $query = "SELECT therapeute_id, COUNT(*)
@@ -108,45 +109,45 @@ class CActiviteCdARR extends CCdARRObject {
     $ds = $acte->getDS();
     $counts = $ds->loadHashList($query);
     arsort($counts);
-    
+
     // Chargement des executants
     $user = new CMediusers;
     $executants = $user->loadAll(array_keys($counts));
     foreach ($executants as $_executant) {
       $_executant->loadRefFunction();
     }
-    
+
     // Valeurs de retour
     $this->_count_actes_by_executant = $counts;
     return $this->_ref_all_executants = $executants;
   }
-  
- 	static function getLibelle($type) {
-	  $found = new self();
-	  $found->type = $type;
-	  $found->loadMatchingObject();
-	  
-	  return $found->libelle;
-	}
-	
-	/**
-	 * Get an instance from the code
-	 * @param $code string
-	 * @return CActiviteCdARR
-	 **/
+
+  static function getLibelle($type) {
+    $found = new self();
+    $found->type = $type;
+    $found->loadMatchingObject();
+
+    return $found->libelle;
+  }
+
+  /**
+   * Get an instance from the code
+   *
+   * @param string $code
+   *
+   * @return self
+   */
   static function get($code) {
-  	if (!$code) {
-  	  return new self(); 
-  	}
-  	
+    if (!$code) {
+      return new self();
+    }
+
     if (!isset(self::$cached[$code])) {
       $activite = new self();
       $activite->load($code);
       self::$cached[$code] = $activite;
     }
-    
+
     return self::$cached[$code];
   }
 }
-
-?>

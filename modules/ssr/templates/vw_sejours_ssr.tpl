@@ -31,7 +31,7 @@
       url.addParam("default_tab", default_tab);
     }
     url.requestUpdate($('dossier_sejour'));
-    modalWindow = modal($('dossier_sejour'));
+    modalWindow = Modal.open($('dossier_sejour'));
   }
   
   </script>

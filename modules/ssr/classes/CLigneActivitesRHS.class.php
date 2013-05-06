@@ -1,11 +1,12 @@
-<?php /* $Id $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: 6148 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -13,35 +14,33 @@
  */
 class CLigneActivitesRHS extends CMbObject {  
   // DB Table key
-  var $ligne_id = null;
-  
+  public $ligne_id;
+
   // DB Fields
-  var $rhs_id                 = null;
-  var $executant_id           = null;
-  var $auto                   = null;
-  var $code_activite_cdarr    = null;
-  var $code_activite_csarr    = null;  
-  var $code_intervenant_cdarr = null;
-	
-  var $qty_mon = null;
-  var $qty_tue = null;
-  var $qty_wed = null;
-  var $qty_thu = null;
-  var $qty_fri = null;
-  var $qty_sat = null;
-  var $qty_sun = null;
+  public $rhs_id;
+  public $executant_id;
+  public $auto;
+  public $code_activite_cdarr;
+  public $code_activite_csarr;
+  public $code_intervenant_cdarr;
+
+  public $qty_mon;
+  public $qty_tue;
+  public $qty_wed;
+  public $qty_thu;
+  public $qty_fri;
+  public $qty_sat;
+  public $qty_sun;
 
   // Form fields
-	var $_qty_total = null;
-	var $_executant = null;
-	
-	// Distant fields
+  public $_qty_total;
+  public $_executant;
 
-	// References
-	var $_ref_rhs               = null;
-	var $_ref_activite_cdarr    = null;
-	var $_ref_intervenant_cdarr = null;
-	
+  // References
+  public $_ref_rhs;
+  public $_ref_activite_cdarr;
+  public $_ref_intervenant_cdarr;
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "ligne_activites_rhs";
@@ -76,10 +75,10 @@ class CLigneActivitesRHS extends CMbObject {
     // Form fields
     $props["_qty_total"]             = "num min|0 max|99";
     $props["_executant"]             = "str maxLength|50";
-  
+
     return $props;
   }
-  
+
   function updateFormFields() {
     parent::updateFormFields();
 
@@ -91,16 +90,36 @@ class CLigneActivitesRHS extends CMbObject {
       $this->qty_fri + 
       $this->qty_sat + 
       $this->qty_sun;
-      
-    if (!$this->qty_mon) $this->qty_mon = "";
-    if (!$this->qty_tue) $this->qty_tue = "";
-    if (!$this->qty_wed) $this->qty_wed = "";
-    if (!$this->qty_thu) $this->qty_thu = "";
-    if (!$this->qty_fri) $this->qty_fri = "";
-    if (!$this->qty_sat) $this->qty_sat = "";
-    if (!$this->qty_sun) $this->qty_sun = "";
+
+    if (!$this->qty_mon) {
+      $this->qty_mon = "";
+    }
+
+    if (!$this->qty_tue) {
+      $this->qty_tue = "";
+    }
+
+    if (!$this->qty_wed) {
+      $this->qty_wed = "";
+    }
+
+    if (!$this->qty_thu) {
+      $this->qty_thu = "";
+    }
+
+    if (!$this->qty_fri) {
+      $this->qty_fri = "";
+    }
+
+    if (!$this->qty_sat) {
+      $this->qty_sat = "";
+    }
+
+    if (!$this->qty_sun) {
+      $this->qty_sun = "";
+    }
   }
-  
+
   function updatePlainFields() {
     return parent::updatePlainFields();
     if ($this->qty_mon == "") $this->qty_mon = "0";
@@ -111,23 +130,23 @@ class CLigneActivitesRHS extends CMbObject {
     if ($this->qty_sat == "") $this->qty_sat = "0";
     if ($this->qty_sun == "") $this->qty_sun = "0";
   }
-  
+
   function loadRefActiviteCdARR() {
-  	$activite = CActiviteCdARR::get($this->code_activite_cdarr);
-  	$this->_view = $activite->_view;
+    $activite = CActiviteCdARR::get($this->code_activite_cdarr);
+    $this->_view = $activite->_view;
     return $this->_ref_activite_cdarr = $activite;
   }
-  
+
   function loadRefActiviteCsARR() {
     $activite = CActiviteCsARR::get($this->code_activite_csarr);
     $this->_view = $activite->_view;
     return $this->_ref_activite_csarr = $activite;
   }
-  
+
   function loadRefIntervenantCdARR() {
     return $this->_ref_intervenant_cdarr = CIntervenantCdARR::get($this->code_intervenant_cdarr);
   }
-	
+
   /**
    * Load holding RHS
    * 
@@ -136,10 +155,10 @@ class CLigneActivitesRHS extends CMbObject {
   function loadRefRHS() {
     return $this->_ref_rhs = $this->loadFwdRef("rhs_id");
   }
-  
+
   function crementDay($datetime, $action) {
     $day = CMbDT::transform($datetime, null, "%u");
-    
+
     if ($day == 1) ($action == "inc") ? $this->qty_mon++ : $this->qty_mon--;
     if ($day == 2) ($action == "inc") ? $this->qty_tue++ : $this->qty_tue--;
     if ($day == 3) ($action == "inc") ? $this->qty_wed++ : $this->qty_wed--;
@@ -148,16 +167,16 @@ class CLigneActivitesRHS extends CMbObject {
     if ($day == 6) ($action == "inc") ? $this->qty_sat++ : $this->qty_sat--;
     if ($day == 7) ($action == "inc") ? $this->qty_sun++ : $this->qty_sun--;
   }
-  
+
   function store() {
     // RHS already charged
-  	$this->completeField("rhs_id");
-  	$rhs = $this->loadRefRHS();
-  	if ($rhs->facture) {
+    $this->completeField("rhs_id");
+    $rhs = $this->loadRefRHS();
+    if ($rhs->facture) {
       return "$this->_class-failed-rhs-facture";
-  	}
-    
-  	// Delete if total is 0
+    }
+
+    // Delete if total is 0
     $this->completeField(
       "qty_mon", 
       "qty_tue", 
@@ -168,13 +187,11 @@ class CLigneActivitesRHS extends CMbObject {
       "qty_sat", 
       "qty_sun"
     );
-  	$this->updateFormFields();
+    $this->updateFormFields();
     if ($this->_id && $this->_qty_total == 0) {
       return $this->delete();
     }
-    
+
     return parent::store();
   }
 }
-
-?>

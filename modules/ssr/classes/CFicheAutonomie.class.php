@@ -1,43 +1,44 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CFicheAutonomie extends CMbObject {
   // DB Table key
-  var $fiche_autonomie_id = null;
+  public $fiche_autonomie_id;
  
   // DB Fields
-  var $sejour_id              = null;
-  var $alimentation           = null;
-  var $toilette               = null;
-  var $habillage_haut         = null;
-  var $habillage_bas          = null;
-  var $toilettes              = null;
-  var $utilisation_toilette   = null;
-  var $transfert_lit          = null;
-  var $locomotion             = null;
-  var $locomotion_materiel    = null;
-  var $escalier               = null;
-  var $pansement              = null;
-  var $escarre                = null;
-  var $soins_cutanes          = null;
-  var $comprehension          = null;
-  var $expression             = null;
-  var $memoire                = null;
-  var $resolution_pb          = null;
-  var $antecedents            = null;
-  var $traitements            = null;
-  var $etat_psychique         = null;
-  var $devenir_envisage       = null;
+  public $sejour_id;
+  public $alimentation;
+  public $toilette;
+  public $habillage_haut;
+  public $habillage_bas;
+  public $toilettes;
+  public $utilisation_toilette;
+  public $transfert_lit;
+  public $locomotion;
+  public $locomotion_materiel;
+  public $escalier;
+  public $pansement;
+  public $escarre;
+  public $soins_cutanes;
+  public $comprehension;
+  public $expression;
+  public $memoire;
+  public $resolution_pb;
+  public $antecedents;
+  public $traitements;
+  public $etat_psychique;
+  public $devenir_envisage;
   
   // Object References
-  var $_ref_sejour    = null;
+  public $_ref_sejour;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -86,5 +87,3 @@ class CFicheAutonomie extends CMbObject {
     $this->_ref_sejour->loadRefsFwd();
   }
 }
-
-?>

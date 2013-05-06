@@ -1,11 +1,12 @@
-<?php /* $Id $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: 6148 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -13,20 +14,20 @@
  */
 class CDependancesRHS extends CMbObject {  
   // DB Table key
-  var $dependances_id = null;
+  public $dependances_id;
   
   // DB Fields
-  var $rhs_id = null;
+  public $rhs_id;
   
-  var $habillage    = null;
-  var $deplacement  = null;
-  var $alimentation = null;
-  var $continence   = null;
-  var $comportement = null;
-  var $relation     = null;
+  public $habillage;
+  public $deplacement;
+  public $alimentation;
+  public $continence;
+  public $comportement;
+  public $relation;
 
   // References
-  var $_ref_rhs = null;
+  public $_ref_rhs;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -59,5 +60,3 @@ class CDependancesRHS extends CMbObject {
     return $this->_ref_rhs = $this->loadFwdRef("rhs_id");
   }
 }
-
-?>

@@ -1,52 +1,53 @@
-<?php /* $Id $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CEvenementSSR extends CMbObject {
   // DB Table key
-  var $evenement_ssr_id        = null;
+  public $evenement_ssr_id;
   
   // DB Fields
-  var $prescription_line_element_id = null;
-  var $sejour_id               = null;
-  var $debut                   = null; // DateTime
-  var $duree                   = null; // Durée en minutes
-  var $therapeute_id           = null;
-  var $equipement_id           = null;
-  var $realise                 = null;
-  var $annule                  = null;
-  var $remarque                = null;
+  public $prescription_line_element_id;
+  public $sejour_id;
+  public $debut; // DateTime
+  public $duree; // Durée en minutes
+  public $therapeute_id;
+  public $equipement_id;
+  public $realise;
+  public $annule;
+  public $remarque;
 
   // Seances collectives
-  var $seance_collective_id    = null; // Evenement lié a une seance collective
-  var $_ref_element_prescription = null;
-  //var $element_prescription_id = null; // Une seance est liée à un element de prescription et non pas une ligne d'element
-  var $_ref_seance_collective = null;
+  public $seance_collective_id; // Evenement lié a une seance collective
+  public $_ref_element_prescription;
+  //public $element_prescription_id; // Une seance est liée à un element de prescription et non pas une ligne d'element
+  public $_ref_seance_collective;
   
   // Form Fields
-  var $_traite                  = null;
-  var $_heure_fin               = null; // Time
-  var $_heure_deb               = null; // Time
-  var $_nb_decalage_min_debut   = null;
-  var $_nb_decalage_heure_debut = null;
-  var $_nb_decalage_jour_debut  = null;
-  var $_nb_decalage_duree       = null;
+  public $_traite;
+  public $_heure_fin; // Time
+  public $_heure_deb; // Time
+  public $_nb_decalage_min_debut;
+  public $_nb_decalage_heure_debut;
+  public $_nb_decalage_jour_debut;
+  public $_nb_decalage_duree;
   
-  var $_ref_equipement        = null;
-  var $_ref_sejour            = null;
-  var $_ref_therapeute        = null;
-  var $_ref_actes_cdarr       = null;
-  var $_ref_actes_csarr       = null;
-  var $_ref_evenements_seance = null;
+  public $_ref_equipement;
+  public $_ref_sejour;
+  public $_ref_therapeute;
+  public $_ref_actes_cdarr;
+  public $_ref_actes_csarr;
+  public $_ref_evenements_seance;
   
   // Behaviour field
-  var $_traitement = null;
+  public $_traitement;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -130,9 +131,9 @@ class CEvenementSSR extends CMbObject {
     $this->loadRefTherapeute();
     
     // Si le therapeute n'est pas defini, c'est 
-    if($this->therapeute_id){
+    if ($this->therapeute_id) {
       $therapeute = $this->_ref_therapeute;
-    } 
+    }
     else {
       // Chargement du therapeute de la seance
       $evt_seance = new CEvenementSSR();
@@ -192,7 +193,7 @@ class CEvenementSSR extends CMbObject {
   }
   
   function canDeleteEx() {
-    if ($msg = parent::canDeleteEx()){
+    if ($msg = parent::canDeleteEx()) {
       return $msg;
     }
     
@@ -211,7 +212,7 @@ class CEvenementSSR extends CMbObject {
     $sejour = $this->loadRefSejour();
     $patient = $sejour->loadRefPatient();
     
-    if ($this->seance_collective_id){
+    if ($this->seance_collective_id) {
       $this->loadRefSeanceCollective();
       $this->debut = $this->_ref_seance_collective->debut;
       $this->duree = $this->_ref_seance_collective->duree;
@@ -222,9 +223,9 @@ class CEvenementSSR extends CMbObject {
     $this->loadRefsActesCdARR();
     $this->loadRefsActesCsARR();
     
-    if(!$this->sejour_id){
+    if (!$this->sejour_id) {
       $this->loadRefsEvenementsSeance();
-      foreach ($this->_ref_evenements_seance as $_evt_seance){
+      foreach ($this->_ref_evenements_seance as $_evt_seance) {
         $_evt_seance->loadRefSejour()->loadRefPatient();
       }
     }
@@ -306,12 +307,12 @@ class CEvenementSSR extends CMbObject {
     $nb_days = 7;
     
     // Si aucun evenement le dimanche
-    if(!$count_event_sunday){
+    if (!$count_event_sunday) {
       $nb_days = 6;
       $where["debut"] = "BETWEEN '$saturday 00:00:00' AND '$saturday 23:59:59'";
       $count_event_saturday= $_evt->countList($where);  
       // Aucun evenement le samedi et aucun le dimanche
-      if(!$count_event_saturday){
+      if (!$count_event_saturday) {
         $nb_days = 5;
       }
     }
@@ -372,5 +373,3 @@ class CEvenementSSR extends CMbObject {
   }
   
 }
-
-?>

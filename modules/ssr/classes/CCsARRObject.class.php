@@ -1,24 +1,22 @@
-<?php /* $Id $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
  * Object CsARR
  */
 class CCsARRObject extends CStoredObject {
-	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->dsn         = 'csarr';
-    $spec->incremented = 0;
+    $spec->incremented = false;
     return $spec;
   }
 }
-
-?>

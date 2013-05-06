@@ -24,6 +24,7 @@ class CExObject extends CMbMetaObject {
   public $_own_ex_class_id;
   public $_specs_already_set = false;
   public $_native_views;
+  public $_event_name;
   
   /** @var CExClass */
   public $_ref_ex_class;
@@ -696,6 +697,7 @@ class CExObject extends CMbMetaObject {
     $props = parent::getProps();
     $props["ex_object_id"]     = "ref class|$class show|0";
     $props["_ex_class_id"]     = "ref class|CExClass";
+    $props["_event_name"]      = "str";
     
     $props["group_id"]         = "ref class|CGroups notNull";
     

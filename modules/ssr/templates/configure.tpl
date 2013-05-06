@@ -15,6 +15,7 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
 
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#CBilanSSR">{{tr}}CBilanSSR{{/tr}}</a></li>
+  <li><a href="#CFicheAutonomie">{{tr}}CFicheAutonomie{{/tr}}</a></li>
   <li><a href="#CCdARRObject">{{tr}}CCdARRObject{{/tr}}</a></li>
   <li><a href="#CCsARRObject">{{tr}}CCsARRObject{{/tr}}</a></li>
   <li><a href="#CReplacement">{{tr}}CReplacement{{/tr}}</a></li>
@@ -23,10 +24,12 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
   <li><a href="#CPrescription">{{tr}}CPrescription{{/tr}}</a></li>
 </ul>
 
-<hr class="control_tabs" />
-
 <div id="CBilanSSR" style="display: none;">
   {{mb_include template=CBilanSSR_configure}}
+</div>
+
+<div id="CFicheAutonomie" style="display: none;">
+  {{mb_include template=CFicheAutonomie_configure}}
 </div>
 
 <div id="CCdARRObject" style="display: none;">

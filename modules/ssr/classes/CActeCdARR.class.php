@@ -1,19 +1,19 @@
-<?php /* $Id $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CActeCdARR extends CActeSSR {
-  // DB Table key
-  var $acte_cdarr_id = null;
+  public $acte_cdarr_id;
     
-  // References
-  var $_ref_activite_cdarr = null;
+  /** @var CActiviteCdARR */
+  public $_ref_activite_cdarr;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -39,5 +39,3 @@ class CActeCdARR extends CActeSSR {
     $this->loadRefActiviteCdARR();
   }
 }
-
-?>

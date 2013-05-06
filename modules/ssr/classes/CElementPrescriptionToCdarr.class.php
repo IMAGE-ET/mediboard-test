@@ -1,19 +1,20 @@
-<?php /* $Id $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CElementPrescriptionToCdarr extends CElementPrescriptionToReeducation {
   // DB Table key
-  var $element_prescription_to_cdarr_id = null;
+  public $element_prescription_to_cdarr_id;
     
-  var $_ref_activite_cdarr = null;
-  var $_count_cdarr_by_type = null;
+  public $_ref_activite_cdarr;
+  public $_count_cdarr_by_type;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -31,7 +32,7 @@ class CElementPrescriptionToCdarr extends CElementPrescriptionToReeducation {
   function check(){
     // Verification du code Cdarr saisi
     $code_cdarr = CActiviteCdARR::get($this->code);
-    if(!$code_cdarr->code){
+    if (!$code_cdarr->code) {
       return "Ce code n'est pas un code CdARR valide";
     }
     return parent::check();
@@ -48,5 +49,3 @@ class CElementPrescriptionToCdarr extends CElementPrescriptionToReeducation {
     $this->loadRefActiviteCdarr();
   }
 }
-
-?>

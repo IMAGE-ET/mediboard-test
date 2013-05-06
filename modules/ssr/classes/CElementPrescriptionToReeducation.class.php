@@ -1,20 +1,21 @@
-<?php /* $Id $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CElementPrescriptionToReeducation extends CMbObject {
   // DB Fields
-  var $element_prescription_id = null;
-  var $code = null;
-  var $commentaire = null;
+  public $element_prescription_id;
+  public $code;
+  public $commentaire;
   
-  var $_ref_element_prescription = null;
+  public $_ref_element_prescription;
   
   function getProps() {
     $props = parent::getProps();
@@ -32,7 +33,4 @@ class CElementPrescriptionToReeducation extends CMbObject {
     parent::updateFormFields();
     $this->_view = "Code $this->code";
   }
-  
 }
-
-?>

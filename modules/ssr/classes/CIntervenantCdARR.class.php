@@ -1,21 +1,22 @@
-<?php /* $Id $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
  * Intervenant d'activité CdARR
  */
 class CIntervenantCdARR extends CCdARRObject {  
-  var $code    = null;
-	var $libelle = null;
-	
-	static $cached = array();
+  public $code;
+  public $libelle;
+
+  static $cached = array();
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -30,21 +31,23 @@ class CIntervenantCdARR extends CCdARRObject {
     // DB Fields
     $props["code"]    = "str notNull length|2";
     $props["libelle"] = "str notNull maxLength|50";
-    
+
     return $props;
   }
-  
+
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = "$this->code - $this->libelle";
     $this->_shortview = $this->code;
   }
-	
-	/**
-	 * Get an instance from the code
-	 * @param $code string
-	 * @return CIntervenantCdARR
-	 **/
+
+  /**
+   * Get an instance from the code
+   *
+   * @param string $code
+   *
+   * @return CIntervenantCdARR
+   **/
   static function get($code) {
     if (!isset(self::$cached[$code])) {
       $intervenant = new CIntervenantCdARR();
@@ -54,5 +57,3 @@ class CIntervenantCdARR extends CCdARRObject {
     return self::$cached[$code];
   }
 }
-
-?>

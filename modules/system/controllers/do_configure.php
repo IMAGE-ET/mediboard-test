@@ -10,7 +10,7 @@
 
 global $mbpath, $dPconfig;
 
-CCAnDo::checkAdmin();
+CCanDo::checkAdmin();
 
 $mbpath = "";
 CMbArray::extract($_POST, "m");

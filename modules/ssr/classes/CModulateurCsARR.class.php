@@ -1,11 +1,12 @@
-<?php /* $Id $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -19,7 +20,7 @@ class CModulateurCsARR extends CCsARRObject {
 
   // Derived Fields
   public $_libelle;
-    
+
   public $_ref_code = null;
 
   function getSpec() {
@@ -60,7 +61,7 @@ class CModulateurCsARR extends CCsARRObject {
       "BN" => "Nécessité de recours à un interprète",
       "EZ" => "Réalisation fractionnée de l'acte",
     );
-    
+
     parent::updateFormFields();
     $this->_libelle = $libelles[$this->modulateur];
     $this->_view = "$this->modulateur: $this->_libelle";
@@ -74,8 +75,8 @@ class CModulateurCsARR extends CCsARRObject {
   function loadRefCode() {
     return $this->_ref_code = CActiviteCsARR::get($this->code);
   }
-	
-	function loadView(){
+
+  function loadView(){
     parent::loadView();
     $this->loadRefCode();
   }

@@ -292,7 +292,7 @@ updateModalCdarr = function(){
   url.addParam("token_evts", $V(oFormEvents.token_evts));
   url.requestUpdate("modal-cdarr", { onComplete: function(){
     if(!$("modal-cdarr").visible()){
-      modalWindow = modal($('modal-cdarr'), {
+      modalWindow = Modal.open($('modal-cdarr'), {
         className: 'modal'
       });
     }
@@ -379,7 +379,6 @@ Main.add(function(){
     <a href="#outils">{{tr}}Tools{{/tr}}</a>
   </li>
 </ul>
-<hr class="control_tabs" />
 
 <div id="add_ssr" style="display: none;">
   <!-- Modification du bilan SSR, brancardage -->
@@ -1051,7 +1050,7 @@ Main.add(function(){
   
   <table class="form">
     <tr>
-      <th class="category">Codes CdARR</td>
+      <th class="category">Codes CdARR</th>
     </tr>
     <tr>
       <td class="button">

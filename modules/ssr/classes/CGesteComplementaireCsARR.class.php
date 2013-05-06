@@ -1,23 +1,24 @@
-<?php /* $Id $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
  * Gestes (activités) complémentaires CsARR
  */
 class CGesteComplementaireCsARR extends CCsARRObject {
-  
-  var $code_source = null;
-  var $code_cible  = null;
-    
-  var $_ref_code_source = null;
-  var $_ref_code_cible  = null;
+
+  public $code_source;
+  public $code_cible;
+
+  public $_ref_code_source;
+  public $_ref_code_cible;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -39,7 +40,7 @@ class CGesteComplementaireCsARR extends CCsARRObject {
     parent::updateFormFields();
     $this->_view = "$this->code_source => $this->code_cible";
   }
-  
+
   function loadRefCodeSource() {
     return $this->_ref_code_source = CActiviteCdARR::get($this->code_source);
   }
@@ -47,12 +48,10 @@ class CGesteComplementaireCsARR extends CCsARRObject {
   function loadRefCodeCible() {
     return $this->_ref_code_cible = CActiviteCdARR::get($this->code_cible);
   }
-	
-	function loadView(){
+
+  function loadView(){
     parent::loadView();
     $this->loadRefCodeSource();
     $this->loadRefCodeCible();
   }
 }
-
-?>

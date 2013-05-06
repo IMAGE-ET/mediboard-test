@@ -95,6 +95,7 @@ Main.add(function(){
           onsubmit="return onSubmitFormAjax(this)"}}
   {{mb_key object=$ex_object}}
   {{mb_field object=$ex_object field=_ex_class_id hidden=true}}
+  {{mb_field object=$ex_object field=_event_name hidden=true}}
   {{mb_field object=$ex_object field=group_id hidden=true}}
 
   {{mb_field object=$ex_object field=object_class hidden=true}}

@@ -1,24 +1,29 @@
-<?php /* $Id $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CActeSSR extends CMbObject {
   // DB Fields
-  var $evenement_ssr_id = null;
-  var $administration_id = null;
-  var $sejour_id         = null;
-  var $code              = null;
+  public $evenement_ssr_id;
+  public $administration_id;
+  public $sejour_id;
+  public $code;
   
-  // References
-  var $_ref_administration = null;
-  var $_ref_evenement_ssr  = null;
-  var $_ref_sejour         = null;
+  /** @var CAdministration */
+  public $_ref_administration;
+
+  /** @var CEvenementSSR */
+  public $_ref_evenement_ssr;
+
+  /** @var CSejour */
+  public $_ref_sejour;
   
   function getProps() {
     $props = parent::getProps();
@@ -33,18 +38,25 @@ class CActeSSR extends CMbObject {
     parent::updateFormFields();
     $this->_view = $this->code;
   }
-  
+
+  /**
+   * @return CEvenementSSR
+   */
   function loadRefEvenementSSR(){
     return $this->_ref_evenement_ssr = $this->loadFwdRef("evenement_ssr_id", true);
   }
-  
+
+  /**
+   * @return CAdministration
+   */
   function loadRefAdministration(){
     return $this->_ref_administration = $this->loadFwdRef("administration_id", true);
   }
-  
+
+  /**
+   * @return CSejour
+   */
   function loadRefSejour(){
     return $this->_ref_sejour = $this->loadFwdRef("sejour_id", true);
   }
 }
-
-?>

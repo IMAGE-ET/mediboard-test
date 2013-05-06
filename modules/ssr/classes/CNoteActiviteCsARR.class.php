@@ -1,29 +1,30 @@
-<?php /* $Id $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
  * Note concernant une activite CsARR
  */
 class CNoteActiviteCsARR extends CCsARRObject {
-  
-  var $code       = null;
-  var $idnote     = null;
-  var $typenote   = null;
-  var $niveau     = null;
-  var $libelle    = null;
-  var $ordre      = null;
-  var $code_exclu = null;
-  
-  var $_ref_code       = null;
-  var $_ref_code_exclu = null;
-    
+
+  public $code;
+  public $idnote;
+  public $typenote;
+  public $niveau;
+  public $libelle;
+  public $ordre;
+  public $code_exclu;
+
+  public $_ref_code;
+  public $_ref_code_exclu;
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'note_activite';
@@ -50,7 +51,7 @@ class CNoteActiviteCsARR extends CCsARRObject {
     $this->_view = "$this->code ($this->typenote): $this->libelle";
     $this->_shortview = $this->idnote;
   }
-  
+
   function loadRefCode() {
     return $this->_ref_code = CActiviteCsARR::get($this->code);
   }
@@ -58,12 +59,10 @@ class CNoteActiviteCsARR extends CCsARRObject {
   function loadRefCodeExclu() {
     return $this->_ref_code_exclu = CActiviteCsARR::get($this->code_exclu);
   }
-	
-	function loadView(){
+
+  function loadView(){
     parent::loadView();
     $this->loadRefCode();
     $this->loadRefCodeExclu();
   }
 }
-
-?>

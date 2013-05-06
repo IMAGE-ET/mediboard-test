@@ -139,7 +139,7 @@ printOffline = function(element) {
   <tr class="{{$ssr_class}}">
     <td class="text">
       {{if @$offline}}
-        <button class="search notext not-printable" onclick="modalwindow = modal($('modal-view-{{$_sejour->_id}}'));" style="float: left;"></button>
+        <button class="search notext not-printable" onclick="modalwindow = Modal.open($('modal-view-{{$_sejour->_id}}'));" style="float: left;"></button>
       {{/if}}
       {{assign var=affectation value=$_sejour->_ref_curr_affectation}}
       {{if $affectation->_id}}

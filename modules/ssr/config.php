@@ -22,13 +22,16 @@ $dPconfig["ssr"] = array (
     "use_recuse"             => "1",
     "view_services_inactifs" => "1",
   ),
-	"repartition" => array (
+  "repartition" => array (
     "show_tabs" => "1",
-	),
-	"CBilanSSR" => array (
+  ),
+  "CBilanSSR" => array (
     "tolerance_sejour_demandeur" => "2",
-	),
+  ),
+  "CFicheAutonomie" => array (
+    "use_ex_form" => "0",
+  ),
   "CPrescription" => array(
-    "show_dossier_soins" => "0"
-  )
+    "show_dossier_soins" => "0",
+  ),
 );

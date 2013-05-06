@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -13,15 +14,15 @@
  */
 class CEquipement extends CMbObject {
   // DB Table key
-  var $equipement_id = null;
-  
+  public $equipement_id;
+
   // References
-  var $plateau_id = null;
+  public $plateau_id;
 
   // DB Fields
-  var $nom          = null;
-  var $visualisable = null;
-  var $actif        = null;
+  public $nom;
+  public $visualisable;
+  public $actif;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -38,17 +39,15 @@ class CEquipement extends CMbObject {
     $props["actif"]        = "bool notNull default|1";
     return $props;
   }
-	
-	 function getBackProps() {
+
+  function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["evenements_ssr"]  = "CEvenementSSR equipement_id";
     return $backProps;
   }
-	
+
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;
   }
 }
-
-?>

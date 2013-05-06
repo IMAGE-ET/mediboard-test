@@ -47,6 +47,7 @@ class CExClassEvent extends CMbObject {
     "CConsultAnesth",
     "CAdministration",
     "CRPU",
+    "CBilanSSR",
   );
 
   /**

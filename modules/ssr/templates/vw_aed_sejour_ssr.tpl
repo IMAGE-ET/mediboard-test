@@ -49,13 +49,13 @@ refreshSejoursSSR = function(sejour_id){
   var url = new Url("ssr", "ajax_vw_sejours_patient");
   url.addParam("sejour_id", sejour_id);
   url.requestUpdate("sejours_ssr");
-}
+};
 
 loadDocuments = function(sejour_id) {
   var url = new Url("dPhospi", "httpreq_documents_sejour");
   url.addParam("sejour_id" , sejour_id);
   url.requestUpdate("docs");
-}
+};
 
 </script>
 
@@ -109,7 +109,7 @@ loadDocuments = function(sejour_id) {
 
   {{/if}}
   <li>
-    <a href="#docs" onmousedown="loadDocuments('{{$sejour->_id}}')"$>
+    <a href="#docs" onmousedown="loadDocuments('{{$sejour->_id}}')">
       Documents
     </a>
   </li>
@@ -122,7 +122,23 @@ loadDocuments = function(sejour_id) {
 </div> 
 
 <div id="autonomie" style="display: none;">
-  {{mb_include template=inc_form_fiche_autonomie}}
+  {{if $fiche_autonomie->_id || !"forms"|module_active || ("forms"|module_active && !$conf.ssr.CFicheAutonomie.use_ex_form)}}
+    {{mb_include template=inc_form_fiche_autonomie}}
+  {{else}}
+    {{if !$bilan->_id}}
+      <div class="small-info">Veuillez enregistrer le bilan avant de pouvoir remplir la fiche d'autonomie</div>
+    {{else}}
+      {{unique_id var=unique_id_fich_autonomie}}
+
+      <script type="text/javascript">
+        Main.add(function(){
+          ExObject.loadExObjects("{{$bilan->_class}}", "{{$bilan->_id}}", "{{$unique_id_fich_autonomie}}", 0);
+        });
+      </script>
+
+      <div id="{{$unique_id_fich_autonomie}}"></div>
+    {{/if}}
+  {{/if}}
 </div>
 
 {{if $can_view_dossier_medical}}
