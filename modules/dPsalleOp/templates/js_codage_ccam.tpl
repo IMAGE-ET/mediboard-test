@@ -1,10 +1,10 @@
-{{mb_script module="dPplanningOp" script="ccam_selector"}}
+{{mb_script module=planningOp script=ccam_selector ajax=true}}
 
-<script type="text/javascript">
+<script>
 
 ActesCCAM = {
   notifyChange: function(subject_id, chir_id) {
-	  ActesCCAM.refreshList(subject_id, chir_id)
+    ActesCCAM.refreshList(subject_id, chir_id)
     if (window.Reglement) {
       Reglement.reload(false);
     }
@@ -50,7 +50,7 @@ ActesCCAM = {
     var oDefaultOptions = { 
       onComplete: ActesCCAM.notifyChange.curry(subject_id)
     }
-		
+    
     Object.extend(oDefaultOptions, oOptions);
     var oForm = getForm("manageCodes");
     var aListActes = null;
