@@ -305,7 +305,7 @@
     var url = new Url("dPsalleOp", "ajax_vw_operation");
     url.addParam("op", operation_id);
     url.addParam("hide_finished", 1);
-    url.requestModal(900,500);
+    url.requestModal(1000,500);
   }
 
 </script>
