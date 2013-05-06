@@ -20,7 +20,9 @@ $file = new CFile();
 $file->load($file_id);
 
 $destination = CStoredObject::loadFromGuid($destinationGuid);
-
+if (($file->object_class == $destination->_id) && ($file->object_class == $destination->_class)) {
+  return;
+}
 $file->object_id = $destination->_id;
 $file->object_class = $destination->_class;
 

@@ -14,6 +14,10 @@ Main.add(function () {
   {{else}}
   var tabs = Control.Tabs.create('tab-consult', true);
   {{/if}}
+
+  if ($("docItem_{{$object->_guid}}")) {
+    $("docItem_{{$object->_guid}}").update({{$nbItems}});
+  }
 });
 
 </script>
@@ -34,7 +38,7 @@ Main.add(function () {
 
 <hr class="control_tabs" />
 
-{{include file=inc_files_add_toolbar.tpl}}
+{{include file="inc_files_add_toolbar.tpl"}}
 
 {{foreach from=$affichageFile item=_cat key=_cat_id}}
   {{assign var=docCount value=$_cat.items|@count}}

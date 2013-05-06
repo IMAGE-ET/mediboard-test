@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
  * @package Mediboard
@@ -30,7 +30,7 @@ $canFile  = new CCanDo;
 $praticienId = null;
 $affichageFile = array();
 
-if($object_id && $object_class){
+if ($object_id && $object_class) {
   // Chargement de l'objet
   $object = new $object_class;
   $object->load($object_id);
@@ -55,10 +55,12 @@ if($object_id && $object_class){
   
   $affichageFile = CFile::loadDocItemsByObject($object);
 
-  foreach($affichageFile as $_cat) {
+  $nbItems = 0;
+  foreach ($affichageFile as $_cat) {
     if (!isset($_cat["items"])) break;
 
-    foreach($_cat["items"] as $_item) {
+    foreach ($_cat["items"] as $_item) {
+      $nbItems++;
       $_item->loadRefCategory();
       
       if ($_item->_class === "CCompteRendu") {
@@ -74,11 +76,12 @@ $smarty->assign("canFile"      , $canFile);
 $smarty->assign("listCategory" , $listCategory);
 $smarty->assign("praticienId"  , $praticienId);
 $smarty->assign("object"       , $object);
+$smarty->assign("nbItems"      , $nbItems);
 $smarty->assign("typeVue"      , $typeVue);
 $smarty->assign("accordDossier", $accordDossier);
 $smarty->assign("affichageFile", $affichageFile);
 
-switch($typeVue) {
+switch ($typeVue) {
   case 0 :
     if ($only_list) {
       $smarty->assign("category_id", $category_id ? $category_id : 0);
@@ -100,5 +103,3 @@ switch($typeVue) {
     }
     break;
 }
-
-?>

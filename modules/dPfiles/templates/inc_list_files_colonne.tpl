@@ -51,17 +51,19 @@
         onDrop: function(from, to, event) {
           Event.stop(event);
           var destGuid = to.get("guid");
-          var idFile = from.get("id");
+          var fromGuid = from.get("guid");
+          console.log(fromGuid);
+          var idFile   = from.get("id");
           var url = new Url("dPfiles","ajax_move_file");
           url.addParam("file_id", idFile);
           url.addParam("destinationGuid", destGuid );
           url.requestUpdate("systemMsg", function() {
-            window.location.reload();
-            //$$("docItem_"+destGuid).onclick();
+            $("docItem_"+destGuid).onclick();   //update destination
+            $("docItem_"+fromGuid).onclick();   //update provenance
           });
         },
         accept: 'draggable',
-        hoverclass: "atcd_hover"
+        hoverclass:'dropover'
       });
     });
 
@@ -95,7 +97,7 @@
             {{/if}}
 
             <a href="#" ondblclick="popFile('{{$object->_class}}', '{{$object->_id}}', '{{$_doc_item->_class}}', '{{$elementId}}', '0');">
-              <img class="thumbnail draggable" src="{{$srcImg}}" data-id="{{$elementId}}"/>
+              <img class="thumbnail draggable" src="{{$srcImg}}" data-id="{{$elementId}}" data-guid="{{$_doc_item->object_class}}-{{$_doc_item->object_id}}"/>
             </a>
           </td>
 
