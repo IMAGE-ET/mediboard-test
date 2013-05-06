@@ -36,6 +36,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
   public $assigning_authority_namespace_id;
   public $assigning_authority_universal_id;
   public $assigning_authority_universal_type_id;
+  public $country_code;
   
   // Actor Options
   public $iti30_option_merge;
@@ -107,6 +108,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
       "assigning_authority_namespace_id",
       "assigning_authority_universal_id",
       "assigning_authority_universal_type_id",
+      "country_code"
     ),
     "actor options" => array(
       "iti30_option_merge",
@@ -198,6 +200,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
     $props["assigning_authority_namespace_id"]      = "str";
     $props["assigning_authority_universal_id"]      = "str";
     $props["assigning_authority_universal_type_id"] = "str";
+    $props["country_code"] = "enum list|FRA";
     
     // Actor options
     $props["iti30_option_merge"]                        = "bool default|1";

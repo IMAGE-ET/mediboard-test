@@ -26,7 +26,8 @@ class CHL7v2Message extends CHMessage {
 
   public $extension;
   public $i18n_code;
-  public $version      = "2.5";
+  public $version = "2.5";
+  public $actor;
   
   function __construct($version = null) {
     if (preg_match("/([A-Z]{2})_(.*)/", $version, $matches)) {
@@ -123,10 +124,17 @@ class CHL7v2Message extends CHMessage {
     return true;
   }
 
-  function parse($data, $parse_body = true) {
+  function parse($data, $parse_body = true, CInteropActor $actor = null) {
+    if ($actor) {
+      $actor->loadConfigValues();
+    }
+
+    $this->actor = $actor;
+
     try {
       self::isWellFormed($data, $this->strict_segment_terminator);
-    } catch(CHL7v2Exception $e) {
+    }
+    catch(CHL7v2Exception $e) {
       $this->error($e->getMessage(), $e->extraData);
       //return false;
     }
@@ -191,6 +199,7 @@ class CHL7v2Message extends CHMessage {
     
     // version
     if (array_key_exists(16, $first_line)) {
+      mbTrace($first_line[16]);
       $this->parseRawVersion($first_line[11], $first_line[16]);
     }
     else {
@@ -239,11 +248,14 @@ class CHL7v2Message extends CHMessage {
   
   private function parseRawVersion($raw, $country_code = null){
     $parts = explode($this->componentSeparator, $raw);
-   
+
     CMbArray::removeValue("", $parts);
-    
+
     $this->version = $version = $parts[0];
-    
+
+    // On privilégie le code du pays sur l'acteur d'intégration
+    $country_code = isset($this->actor->_configs["country_code"]) ? $this->actor->_configs["country_code"] : $country_code;
+
     // Version spécifique française spécifiée
     if (count($parts) > 1) {
       $this->i18n_code = $parts[1];

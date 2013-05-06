@@ -36,6 +36,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "assigning_authority_namespace_id",
     "assigning_authority_universal_id",
     "assigning_authority_universal_type_id",
+    "country_code",
     
     // Format
     "encoding",
@@ -87,6 +88,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
   public $assigning_authority_namespace_id;
   public $assigning_authority_universal_id;
   public $assigning_authority_universal_type_id;
+  public $country_code;
 
   // Format
   public $encoding;
@@ -136,6 +138,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
       "assigning_authority_namespace_id",
       "assigning_authority_universal_id",
       "assigning_authority_universal_type_id",
+      "country_code"
     ),
     
     "actor options" => array(
@@ -219,7 +222,8 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["assigning_authority_namespace_id"]      = "str";
     $props["assigning_authority_universal_id"]      = "str";
     $props["assigning_authority_universal_type_id"] = "str";
-    
+    $props["country_code"] = "enum list|FRA";
+
     // Encoding
     $props["encoding"] = "enum list|UTF-8|ISO-8859-1 default|UTF-8";
     $props["strict_segment_terminator"] = "bool default|0";

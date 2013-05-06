@@ -73,5 +73,3 @@ class CEAISoapHandler extends CSoapHandler {
     return $acq;
   }
 }
-
-?>

@@ -129,7 +129,7 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
    *
    * @param array $fields Fields
    *
-   * return void
+   * @return void
    */
   function fill($fields) {
     $message = $this->getMessage();

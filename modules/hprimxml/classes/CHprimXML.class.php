@@ -36,5 +36,3 @@ class CHprimXML {
     return str_replace('$g', $group_id, $tag_hprimxml);
   } 
 }
-
-?>

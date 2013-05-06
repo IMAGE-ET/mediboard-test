@@ -47,9 +47,9 @@ $smarty->assign("exchange", $exchange);
 switch(true) {
   case $exchange instanceof CExchangeTabular:
     CMbObject::$useObjectCache = false;
-    
+
     $msg_segment_group = $exchange->getMessage();
-    
+
     if ($msg_segment_group) {
       $doc = $msg_segment_group->toXML();
       if (count($msg_segment_group->children) > $limit_size) {
@@ -60,7 +60,7 @@ switch(true) {
         $msg_segment_group->_xml = CMbString::highlightCode("xml", $doc->saveXML());
       }
     }
-    
+
     $ack_segment_group = $exchange->getACK();
 
     if ($ack_segment_group) {
@@ -73,7 +73,7 @@ switch(true) {
         $ack_segment_group->_xml = CMbString::highlightCode("xml", $doc->saveXML());
       }
     }
-    
+
     $smarty->assign("msg_segment_group", $msg_segment_group);
     $smarty->assign("ack_segment_group", $ack_segment_group);
     $smarty->assign("limit_size", $limit_size);

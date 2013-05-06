@@ -52,7 +52,7 @@ importConfig = function(format_config_guid, actor_guid) {
             {{mb_class object=$format_config}}
             <input type="hidden" name="callback" value="InteropActor.callbackConfigsFormats" />
             
-            {{mb_field object=$format_config field=$_field_name onchange="this.form.onsubmit();"}}
+            {{mb_field emptyLabel="Choose" object=$format_config field=$_field_name onchange="this.form.onsubmit();"}}
           </form>
         </td>
       </tr>

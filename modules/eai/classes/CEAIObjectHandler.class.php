@@ -75,16 +75,17 @@ class CEAIObjectHandler extends CMbObjectHandler {
         continue;
       }
       foreach ($_receivers as $_receiver) {
+        // Destinataire non actif on envoi pas
+        if (!$_receiver->actif) {
+          continue;
+        }
+
         if (!$format_object_handler_classname = $_receiver->getFormatObjectHandler($this)) {
           continue;
         }
 
         $_receiver->loadConfigValues();
         $_receiver->loadRefsMessagesSupported();
-        // Destinataire non actif on envoi pas
-        if (!$_receiver->actif) {
-          continue;
-        }
 
         // Affectation du receiver à l'objet
         $mbObject->_receiver = $_receiver;

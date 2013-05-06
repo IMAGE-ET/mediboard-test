@@ -184,19 +184,48 @@ class CExchangeIHE extends CExchangeTabular {
   /**
    * Get Message
    *
-   * @return CHL7v2Message|void
+   * @return CHL7v2Message|null
    */
   function getMessage() {
-    if ($this->_message !== null) {
-      $hl7_message = $this->parseMessage($this->_message);
-      
-      $this->_doc_errors_msg   = !$hl7_message->isOK(CHL7v2Error::E_ERROR);
-      $this->_doc_warnings_msg = !$hl7_message->isOK(CHL7v2Error::E_WARNING);
-      
-      $this->_message_object = $hl7_message;
-
-      return $hl7_message;
+    if ($this->_message === null) {
+      return null;
     }
+
+    $hl7_message = $this->parseMessage($this->_message);
+
+    $this->_doc_errors_msg   = !$hl7_message->isOK(CHL7v2Error::E_ERROR);
+    $this->_doc_warnings_msg = !$hl7_message->isOK(CHL7v2Error::E_WARNING);
+
+    $this->_message_object = $hl7_message;
+
+    return $hl7_message;
+  }
+
+  /**
+   * Get HL7 acquittement
+   *
+   * @return CHL7v2Message|null
+   */
+  function getACK() {
+    if ($this->_acquittement === null) {
+      return null;
+    }
+
+    $actor = null;
+    if (isset($this->_ref_sender->_id)) {
+      $actor = $this->_ref_sender;
+    }
+    if (isset($this->_ref_receiver->_id)) {
+      $actor = $this->_ref_receiver;
+    }
+
+    $hl7_ack = new CHL7v2Message();
+    $hl7_ack->parse($this->_acquittement, null, $actor);
+
+    $this->_doc_errors_ack   = !$hl7_ack->isOK(CHL7v2Error::E_ERROR);
+    $this->_doc_warnings_ack = !$hl7_ack->isOK(CHL7v2Error::E_WARNING);
+
+    return $hl7_ack;
   }
 
   /**
@@ -209,6 +238,13 @@ class CExchangeIHE extends CExchangeTabular {
    * @return CHL7v2Message
    */
   function parseMessage($string, $parse_body = true, $actor = null) {
+    if (!$actor && isset($this->_ref_sender->_id)) {
+      $actor = $this->_ref_sender;
+    }
+    if (!$actor && isset($this->_ref_receiver->_id)) {
+      $actor = $this->_ref_receiver;
+    }
+
     $hl7_message = new CHL7v2Message();
     
     if (!$this->_id && $actor) {
@@ -222,28 +258,9 @@ class CExchangeIHE extends CExchangeTabular {
       $hl7_message->strict_segment_terminator = ($this->_configs_format->strict_segment_terminator == 1);
     }
 
-    $hl7_message->parse($string, $parse_body);
+    $hl7_message->parse($string, $parse_body, $actor);
     
     return $hl7_message;
-  }
-
-  /**
-   * Get HL7 acquittement
-   *
-   * @return CHL7v2Message|void
-   */
-  function getACK() {
-    if ($this->_acquittement === null) {
-      return;
-    }
-
-    $hl7_ack = new CHL7v2Message();
-    $hl7_ack->parse($this->_acquittement);
-
-    $this->_doc_errors_ack   = !$hl7_ack->isOK(CHL7v2Error::E_ERROR);
-    $this->_doc_warnings_ack = !$hl7_ack->isOK(CHL7v2Error::E_WARNING);
-
-    return $hl7_ack;
   }
 
   /**

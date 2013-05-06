@@ -1032,7 +1032,17 @@ class CSetuphl7 extends CSetup {
                 CHANGE `build_PID_34` `build_PID_34` ENUM ('finess','actor','domain') DEFAULT 'finess';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.64";
+    $this->makeRevision("0.64");
+
+    $query = "ALTER TABLE `receiver_ihe_config`
+                ADD `country_code` ENUM ('FRA');";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `hl7_config`
+                ADD `country_code` ENUM ('FRA');";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.65";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
