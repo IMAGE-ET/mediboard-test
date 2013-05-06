@@ -14,6 +14,7 @@ class CTriggerMark extends CMbObject {
   // DB Fields
   public $trigger_class;
   public $trigger_number;
+  public $when;
   public $mark;
   public $done;
 
@@ -29,6 +30,7 @@ class CTriggerMark extends CMbObject {
     $props = parent::getProps();
     $props["trigger_class"]  = "str notNull";
     $props["trigger_number"] = "numchar notNull maxLength|10";
+    $props["when"]           = "dateTime";
     $props["done"]           = "bool notNull";
     $props["mark"]           = "str notNull";
     return $props;
@@ -37,6 +39,6 @@ class CTriggerMark extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
 
-    $this->_view = "Mark for trigger $this->trigger_class #$this->trigger_number";
+    $this->_view = "Mark for $this->trigger_class #$this->trigger_number";
   }
 }

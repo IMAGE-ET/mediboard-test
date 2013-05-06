@@ -328,6 +328,7 @@ class CMouvement400 extends CRecordSante400 {
     }
     
     $mark = $this->loadTriggerMark();
+    $mark->when = "now";
     $mark->mark = $this->status;
     $mark->done = in_array(null, $this->statuses, true) ? "0" : "1";
     self::storeMark($mark);
@@ -389,7 +390,67 @@ class CMouvement400 extends CRecordSante400 {
   }
 
   /**
+   * Plus ancienne mark pour ce trigger
+   *
+   * @return CTriggerMark
+   */
+  function loadOldestMark() {
+    $mark = new CTriggerMark();
+    $mark->trigger_class = $this->class;
+    $mark->loadMatchingObject(null, "trigger_number ASC");
+    return $mark;
+  }
+
+  /**
+   * Plus récente mark pour ce trigger
+   *
+   * @return CTriggerMark
+   */
+  function loadLatestMark() {
+    $mark = new CTriggerMark();
+    $mark->trigger_class = $this->class;
+    $mark->loadMatchingObject(null, "trigger_number DESC");
+    return $mark;
+  }
+
+  /**
+   * Count marks older than reference trigger
+   *
+   * @param int $number Reference trigger number
+   *
+   * @return int
+   */
+  function countOlderMarks($number) {
+    $mark = new CTriggerMark();
+    $where["trigger_class"] = "= '$this->class'";
+    $where["trigger_number"] = "< '$number'";
+    return $mark->countList($where);
+  }
+
+  /**
+   * Purge (DELETE) all marks older than specified number
+   *
+   * @param int $number Reference trigger number
+   *
+   * @return int Affected rows
+   */
+  function purgeOlderMarks($number) {
+    $mark = new CTriggerMark();
+    $ds = $mark->_spec->ds;
+    $table = $mark->spec->table;
+    $query = "DELETE FROM `$table`
+      WHERE trigger_class = '$this->class'
+      AND trigger_number < '$number'";
+    $ds->exec($query);
+    return $ds->affectedRows();
+  }
+
+  /**
    * Permet de notifier le fait qu'on passe une action
+   *
+   * @param int $rank Rank to star
+   *
+   * @return void
    */
   function starStatus($rank) {
     $this->markStatus($rank, "*");

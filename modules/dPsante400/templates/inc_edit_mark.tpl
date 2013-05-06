@@ -1,17 +1,15 @@
 <form name="Edit" action="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog={{$dialog}}" method="post" onsubmit="return checkForm(this)">
 
-<input type="hidden" name="m" value="{{$m}}" />
-<input type="hidden" name="dosql" value="do_triggermark_aed" />
-<input type="hidden" name="mark_id" value="{{$mark->_id}}" />
-<input type="hidden" name="del" value="0" />
+{{mb_class object=$mark}}
+{{mb_key   object=$mark}}
 
 <table class="form">
 
 <tr>
   {{if $mark->_id}}
   <th class="title modify text" colspan="2">
-    {{mb_include module=system template=inc_object_history object=$mark}}
-    {{tr}}CTriggerMark-title-modify{{/tr}} '{{$mark}}'
+    {{tr}}CTriggerMark-title-modify{{/tr}}
+    <div>'{{$mark}}'</div>
   </th>
   {{else}}
   <th class="title text" colspan="2">
@@ -25,17 +23,22 @@
       <select name="trigger_class" class="{{$mark->_props.trigger_class}}">
         <option value="">&mdash; {{tr}}All{{/tr}}</option>
         {{foreach from=$trigger_classes item=_class}}
-        <option value="{{$_class}}" {{if $_class == $mark->trigger_class}}selected="selected"{{/if}}>
+        <option value="{{$_class}}" {{if $_class == $mark->trigger_class}} selected="selected" {{/if}}>
           {{tr}}{{$_class}}{{/tr}}
         </option>
         {{/foreach}}
       </select>
     </td>
   </tr>
-  
+
   <tr>
     <th>{{mb_label object=$mark field=trigger_number}}</th>
-    <td>{{mb_field object=$mark field=trigger_number size=8}}</td>
+    <td>{{mb_field object=$mark field=trigger_number size=10}}</td>
+  </tr>
+
+  <tr>
+    <th>{{mb_label object=$mark field=when}}</th>
+    <td>{{mb_field object=$mark field=when form=Edit register=true}}</td>
   </tr>
 
   <tr>

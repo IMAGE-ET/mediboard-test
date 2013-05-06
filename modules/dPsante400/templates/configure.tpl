@@ -82,29 +82,45 @@
 <script type="text/javascript">
 
 var Moves = {
+  board: function() {
+    this.url = new Url('sante400', 'mouvements_board');
+    this.url.requestModal();
+  },
+  boardAction: function(action, type) {
+    var url = new Url('sante400', 'ajax_do_moves');
+    url.addParam('action', action);
+    url.addParam('type', type);
+    url.requestUpdate('doBoard', this.url.refreshModal.bind(this.url));
+  },
   doAction: function(action) {
-    var url = new Url("sante400", "ajax_do_moves");
-    url.addParam("action", action);
-    url.addElement($("ActionType"));
-    url.addElement($("ActionMarked"));
-    url.requestUpdate("purgeMoves");
+    var url = new Url('sante400', 'ajax_do_moves');
+    url.addParam('action', action);
+    url.addElement($('ActionType'));
+    url.addElement($('ActionMarked'));
+    url.requestUpdate('doMoves');
   },
   doImport: function() {
-    var url = new Url("sante400", "ajax_do_import");
-    url.addElement($("ImportType"));
-    url.addElement($("ImportOffset"));
-    url.addElement($("ImportStep"));
-    url.addElement($("ImportVerbose"));
-    var onComplete = $("ImportAuto").checked ? Moves.doImport : Prototype.emptyFunction;
-    url.requestUpdate("importMoves", onComplete);
+    var url = new Url('sante400', 'ajax_do_import');
+    url.addElement($('ImportType'));
+    url.addElement($('ImportOffset'));
+    url.addElement($('ImportStep'));
+    url.addElement($('ImportVerbose'));
+    var onComplete = $('ImportAuto').checked ? Moves.doImport : Prototype.emptyFunction;
+    url.requestUpdate('doImport', onComplete);
     
-    var offset = parseInt($V("ImportOffset"), 10);
-    var step   = parseInt($V("ImportStep"  ), 10);
-    $V("ImportOffset", offset+step);
+    var offset = parseInt($V('ImportOffset'), 10);
+    var step   = parseInt($V('ImportStep'  ), 10);
+    $V('ImportOffset', offset+step);
   }
 }
 
 </script>
+
+<button class="change singleclick" onclick="Moves.board();">
+  Board
+</button>
+
+
 <table class="tbl">
   <tr>
     <th class="narrow">Mouvements</th>
@@ -145,7 +161,7 @@ var Moves = {
         </button>
       </div>
     </td>
-    <td class="text" id="purgeMoves"></td>
+    <td class="text" id="doMoves"></td>
   </tr>
 
   <tr>
@@ -189,7 +205,7 @@ var Moves = {
         {{tr}}Import{{/tr}}
       </button>
     </td>
-    <td class="text" id="importMoves"></td>
+    <td class="text" id="doImport"></td>
   </tr>
 
 </table>

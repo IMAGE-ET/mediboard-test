@@ -1,30 +1,34 @@
-<?php /* $Id$ */
-
+<?php /** $Id$ */
 /**
- * @package Mediboard
+ * @package    Mediboard
  * @subpackage sante400
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ * @author     SARL OpenXtrem
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-
+/**
+ * Class CSetupdPsante400
+ */
 class CSetupdPsante400 extends CSetup {
-  
+
+  /**
+   * Standard constructor
+   */
   function __construct() {
     parent::__construct();
     
     $this->mod_name = "dPsante400";
     
     $this->makeRevision("all");
-    $query = "CREATE TABLE `id_sante400` (" .
-            "\n`id_sante400_id` INT NOT NULL AUTO_INCREMENT ," .
-            "\n`object_class` VARCHAR( 25 ) NOT NULL ," .
-            "\n`object_id` INT NOT NULL ," .
-            "\n`tag` VARCHAR( 80 ) ," .
-            "\n`last_update` DATETIME NOT NULL ," .
-            "\nPRIMARY KEY ( `id_sante400_id` ) ," .
-            "\nINDEX ( `object_class` , `object_id` , `tag` )) /*! ENGINE=MyISAM */;";
+    $query = "CREATE TABLE `id_sante400` (
+      `id_sante400_id` INT NOT NULL AUTO_INCREMENT ,
+      `object_class` VARCHAR( 25 ) NOT NULL ,
+      `object_id` INT NOT NULL ,
+       `tag` VARCHAR( 80 ) ,
+       `last_update` DATETIME NOT NULL ,
+        PRIMARY KEY ( `id_sante400_id` ) ,
+        INDEX ( `object_class` , `object_id` , `tag` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.1");
@@ -36,9 +40,9 @@ class CSetupdPsante400 extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("0.12");
-    $query = "ALTER TABLE `id_sante400` " .
-               "\nCHANGE `id_sante400_id` `id_sante400_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `object_id` `object_id` int(11) unsigned NOT NULL;";
+    $query = "ALTER TABLE `id_sante400`
+      CHANGE `id_sante400_id` `id_sante400_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+      CHANGE `object_id` `object_id` int(11) unsigned NOT NULL;";
     $this->addQuery($query);
 
     $this->makeRevision("0.13");
@@ -91,61 +95,66 @@ class CSetupdPsante400 extends CSetup {
     
     $this->makeRevision("0.18");
     $query = "ALTER TABLE `trigger_mark` 
-              CHANGE `trigger_number` `trigger_number` BIGINT (10) UNSIGNED ZEROFILL NOT NULL;";
+       CHANGE `trigger_number` `trigger_number` BIGINT (10) UNSIGNED ZEROFILL NOT NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.19");
     $query = "ALTER TABLE `id_sante400` 
-              CHANGE `id400` `id400` VARCHAR  (25) NOT NULL;";
+       CHANGE `id400` `id400` VARCHAR  (25) NOT NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.20");
     $query = "ALTER TABLE `id_sante400` 
-                CHANGE `id400` `id400` VARCHAR  (80) NOT NULL;";
+       CHANGE `id400` `id400` VARCHAR  (80) NOT NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.21");
     $query = "ALTER TABLE `id_sante400` 
-                CHANGE `object_class` `object_class` VARCHAR (40) NOT NULL;";
+       CHANGE `object_class` `object_class` VARCHAR (40) NOT NULL;";
     $this->addQuery($query);
      
     $this->makeRevision("0.22");
     $query = "CREATE TABLE `incrementer` (
-                `incrementer_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-                `type` ENUM ('IPP','NDA') NOT NULL,
-                `group_id` INT (11) UNSIGNED NOT NULL,
-                `last_update` DATETIME NOT NULL,
-                `value` VARCHAR (255) NOT NULL DEFAULT '1',
-                `pattern` VARCHAR (255) NOT NULL
-               ) /*! ENGINE=MyISAM */;";
+      `incrementer_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `type` ENUM ('IPP','NDA') NOT NULL,
+      `group_id` INT (11) UNSIGNED NOT NULL,
+      `last_update` DATETIME NOT NULL,
+      `value` VARCHAR (255) NOT NULL DEFAULT '1',
+      `pattern` VARCHAR (255) NOT NULL
+     ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `incrementer` 
-                ADD INDEX (`last_update`);";
+      ADD INDEX (`last_update`);";
     $this->addQuery($query);
     
     $this->makeRevision("0.23");
     $query = "ALTER TABLE `incrementer` 
-                CHANGE `type` `object_class` ENUM ('CPatient','CSejour') NOT NULL;";
+      CHANGE `type` `object_class` ENUM ('CPatient','CSejour') NOT NULL;";
     $this->addQuery($query);
     $query = "ALTER TABLE `incrementer` 
-                ADD INDEX (`object_class`),
-                ADD INDEX (`group_id`);";
+      ADD INDEX (`object_class`),
+      ADD INDEX (`group_id`);";
     $this->addQuery($query);
     
     $this->makeRevision("0.24");
     $query = "ALTER TABLE `trigger_mark` 
-                ADD INDEX ( `trigger_class` ),
-                ADD INDEX ( `trigger_number` );";
+      ADD INDEX ( `trigger_class` ),
+      ADD INDEX ( `trigger_number` );";
     $this->addQuery($query);
     
     $this->makeRevision("0.25");
     $query = "ALTER TABLE `incrementer` 
-                ADD `range_min` INT (11) UNSIGNED,
-                ADD `range_max` INT (11);";
+      ADD `range_min` INT (11) UNSIGNED,
+      ADD `range_max` INT (11);";
     $this->addQuery($query);
-              
-    $this->mod_version = "0.26";
+
+    $this->makeRevision("0.26");
+    $query = "ALTER TABLE `trigger_mark`
+      ADD `when` DATETIME,
+     CHANGE `done` `done` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.27";
   } 
 }
-?>

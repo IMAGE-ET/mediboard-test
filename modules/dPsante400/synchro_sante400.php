@@ -53,6 +53,7 @@ if ($type || $class) {
   $count = $mouv->count($marked);
 
   // Mouvements loading
+  /** @var CMouvement400[] $mouvs */
   $mouvs = array();
   if ($rec = CValue::get("rec")) {
     try {
