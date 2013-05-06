@@ -259,7 +259,7 @@ function reloadListSejours() {
   sejoursUrl.requestUpdate("selectSejours");
   
   // La liste des prescriptions doit etre rechargée
-  if (PrescriptionEditor) {
+  if (window.PrescriptionEditor) {
     PrescriptionEditor.refresh($V(oForm.sejour_id), "CSejour", $V(oForm.praticien_id));
   }
 }
