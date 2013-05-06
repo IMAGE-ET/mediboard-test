@@ -199,7 +199,6 @@ class CHL7v2Message extends CHMessage {
     
     // version
     if (array_key_exists(16, $first_line)) {
-      mbTrace($first_line[16]);
       $this->parseRawVersion($first_line[11], $first_line[16]);
     }
     else {
