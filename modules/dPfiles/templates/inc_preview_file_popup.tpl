@@ -15,6 +15,18 @@ function openWindowMail() {
 }
 
 window.destinataires = {{"utf8_encode"|array_map_recursive:$destinataires|@json|smarty:nodefaults}};
+
+  modifTitle = function(elt) {
+    $("fileName").hide();
+    $("modifTitlefrm").show();
+  }
+
+  updatetitle = function() {
+    var form = getForm('frm-file-name');
+    $("fileName").update($V(form.file_name));
+    $("fileName").show();
+    $("modifTitlefrm").hide();
+  }
 </script>
 
 <table class="main form">
@@ -31,13 +43,22 @@ window.destinataires = {{"utf8_encode"|array_map_recursive:$destinataires|@json|
   {{/if}}
 	<!-- Nom du fichier -->
   {{if $fileSel}}
-    <strong>
-      {{$fileSel->_view}}
+    <strong onclick="modifTitle(this)">
+      <span id="fileName">{{$fileSel->_view}}</span>
       {{if $fileSel->private}}
         &mdash; <em>{{tr}}CCompteRendu-private{{/tr}}</em>
       {{/if}}
     </strong>
-    
+
+    <div id="modifTitlefrm" style="display: none">
+      {{mb_form name="frm-file-name" m="files" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: updatetitle});"}}
+      {{mb_class object=$fileSel}}
+      {{mb_key object=$fileSel}}
+      {{mb_field object=$fileSel field=file_name}}
+        <button type="submit" class="save notext">{{tr}}Save{{/tr}}</button>
+      {{/mb_form}}
+    </div>
+
   	<!-- Category -->
     {{if $catFileSel->nom}}
       <br />
