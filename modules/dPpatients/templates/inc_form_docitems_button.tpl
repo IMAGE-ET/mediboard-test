@@ -1,9 +1,10 @@
-<button type="button" style="width: 3em; display: block" id="docItem_{{$object->_guid}}" class="rtl right{{if !$object->_nb_files_docs}}-disabled{{/if}}"
+<button type="button" style="width: 3em; display: block" id="docItem_{{$object->_guid}}" class="rtl right{{if !$object->_nb_files_docs}}-disabled{{/if}} droppable"
   onclick="setObject( {
     objClass: '{{$object->_class}}', 
     keywords: '', 
     id: {{$object->_id}}, 
     view: '{{$object->_view|smarty:nodefaults|JSAttribute}}' }); ViewFullPatient.select(this.up('tr').down('a'));"
-  title="{{$object->_nb_files_docs}} {{tr}}CDocumentItem{{/tr}}">
+  title="{{$object->_nb_files_docs}} {{tr}}CDocumentItem{{/tr}}"
+   data-guid="{{$object->_guid}}">
   {{$object->_nb_files_docs}}
 </button>

@@ -38,9 +38,42 @@
           tabPatient.removeClassName("empty");
         }
       }
+
     });
   </script>
 {{/if}}
+
+<!-- Draggable -->
+<script>
+  Main.add(function() {
+    $$(".droppable").each(function(li) {
+      Droppables.add(li, {
+        onDrop: function(from, to, event) {
+          Event.stop(event);
+          var destGuid = to.get("guid");
+          var idFile = from.get("id");
+          var url = new Url("dPfiles","ajax_move_file");
+          url.addParam("file_id", idFile);
+          url.addParam("destinationGuid", destGuid );
+          url.requestUpdate("systemMsg", function() {
+            window.location.reload();
+            //$$("docItem_"+destGuid).onclick();
+          });
+        },
+        accept: 'draggable',
+        hoverclass: "atcd_hover"
+      });
+    });
+
+    $$(".draggable").each(function(a) {
+      new Draggable(a, {
+        onEnd: function(element, event) {
+          Event.stop(event);
+        },
+        ghosting: true});
+    });
+  });
+</script>
 
 {{foreach from=$list item=_doc_item}}
   <div style="float: left; width: 220px;">
@@ -61,11 +94,11 @@
               {{assign var="srcImg" value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&w=64&h=92"}}
             {{/if}}
 
-            <a href="#" onclick="popFile('{{$object->_class}}', '{{$object->_id}}', '{{$_doc_item->_class}}', '{{$elementId}}', '0');">
-              <img class="thumbnail" src="{{$srcImg}}" />
+            <a href="#" ondblclick="popFile('{{$object->_class}}', '{{$object->_id}}', '{{$_doc_item->_class}}', '{{$elementId}}', '0');">
+              <img class="thumbnail draggable" src="{{$srcImg}}" data-id="{{$elementId}}"/>
             </a>
           </td>
-          
+
           <!-- Tooltip -->
           <td class="text" style="height: 35px; overflow: auto">
             <span onmouseover="ObjectTooltip.createEx(this, '{{$_doc_item->_guid}}');">
@@ -79,7 +112,7 @@
         <tr>
           <!-- Toolbar -->
           <td class="button" style="height: 1px;">
-            {{include file=inc_file_toolbar.tpl notext=notext}}
+            {{include file="inc_file_toolbar.tpl" notext=notext}}
           </td>
         </tr>
       </tbody>
