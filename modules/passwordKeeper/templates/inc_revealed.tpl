@@ -9,6 +9,6 @@
 
 {{if $revealed}}
     <script>
-      prompt("Votre mot de passe :", "{{$revealed}}");
+      prompt("Votre mot de passe :", {{$revealed|json|smarty:nodefaults}});
     </script>
 {{/if}}
