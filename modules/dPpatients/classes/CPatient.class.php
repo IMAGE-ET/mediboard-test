@@ -72,7 +72,8 @@ class CPatient extends CPerson {
   static $fields_etiq = array(
     "DATE NAISS", "IPP", "LIEU NAISSANCE",
     "NOM", "NOM JF", "PRENOM", "SEXE", "CIVILITE", "CIVILITE LONGUE",
-    "ACCORD GENRE", "CODE BARRE IPP", "ADRESSE", "MED. TRAITANT"
+    "ACCORD GENRE", "CODE BARRE IPP", "ADRESSE", "MED. TRAITANT",
+    "TEL", "TEL PORTABLE", "TEL ETRANGER", "PAYS"
   );
 
   // DB Table key
