@@ -243,6 +243,25 @@ class CSetupdPfacturation extends CSetup {
     $query = "ALTER TABLE `facture_etablissement` 
                 CHANGE `statut_pro` `statut_pro` ENUM ('chomeur','etudiant','non_travailleur','independant','invalide','militaire','retraite','salarie_fr','salarie_sw','sans_emploi');";
     $this->addQuery($query);
-    $this->mod_version = "0.25";
+    $this->makeRevision("0.25");
+    
+    $query = "CREATE TABLE `retrocession` (
+                `retrocession_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `praticien_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `nom` VARCHAR (255) NOT NULL,
+                `type` ENUM ('montant','pct','autre') DEFAULT 'montant',
+                `valeur` DECIMAL (10,2),
+                `pct_pm` FLOAT DEFAULT '0',
+                `pct_pt` FLOAT DEFAULT '0',
+                `code_class` ENUM ('CActeCCAM','CActeNAGP','CActeTarmed','CActeCaisse') DEFAULT 'CActeCCAM',
+                `code` VARCHAR (255)
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `retrocession` 
+                ADD INDEX (`praticien_id`);";
+    $this->addQuery($query);
+    $this->mod_version = "0.26";
+    
   }
 }

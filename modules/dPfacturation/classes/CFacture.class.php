@@ -63,6 +63,7 @@ class CFacture extends CMbObject {
   public $_num_bvr                 = array();
   public $_montant_factures_caisse = array();
   public $_is_relancable;
+  public $_montant_retrocession;
       
   // Object References
   public $_ref_assurance_accident;
@@ -141,6 +142,7 @@ class CFacture extends CMbObject {
     $props["_secteur2"]                 = "currency";
     $props["_montant_total"]            = "currency";
     $specs["_total"]                    = "currency";
+    $specs["_montant_retrocession"]     = "currency";
     return $props;
   }
   
@@ -308,7 +310,7 @@ class CFacture extends CMbObject {
     }
   }
   /**
-   * Mise à jour des montant secteur 1, 2 et totaux, utilisés pour la comtpa
+   * Mise à jour des montant secteur 1, 2 et totaux, utilisés pour la compta
    * 
    * @return void
   **/
@@ -361,7 +363,7 @@ class CFacture extends CMbObject {
   }
   
   /**
-   * Eclatement des montants de la facture utilisé uniquement en Suisse 
+   * Eclatement des montants de la facture utilisé uniquement en Suisse
    * 
    * @return void
   **/
@@ -404,11 +406,9 @@ class CFacture extends CMbObject {
   /**
    * Chargement des règlements de la facture
    * 
-   * @param bool $cache cache
-   * 
    * @return $this->_ref_reglements
   **/
-  function loadRefsReglements($cache = 1) {
+  function loadRefsReglements() {
     $this->_montant_sans_remise = 0;
     $this->_montant_avec_remise = 0;
     
@@ -881,5 +881,25 @@ class CFacture extends CMbObject {
       }
     }
     return $this->_is_relancable;
+  }
+  
+  /**
+   * Calcul du montant de la retrocession pour la facture
+   * 
+   * @return boolean
+  **/
+  function updateMontantRetrocession() {
+    $this->_montant_retrocession = 0;
+    $this->loadRefPraticien();
+    $this->loadRefsItems();
+    $retrocessions = $this->_ref_praticien->loadRefsRetrocessions();
+    foreach ($this->_ref_items as $item) {
+      foreach ($retrocessions as $retro) {
+        if ($retro->code_class == $item->type && $retro->code == $item->code) {
+          $this->_montant_retrocession += $retro->updateMontant();
+        }
+      }
+    }
+    return $this->_montant_retrocession;
   }
 }

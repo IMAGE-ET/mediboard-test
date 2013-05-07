@@ -20,3 +20,6 @@ if (CAppUI::conf("dPfacturation Other use_view_chainage")) {
 if (CAppUI::conf("dPfacturation CRelance use_relances")) {
   $module->registerTab("vw_relances"        , TAB_READ);
 }
+if (CAppUI::conf("dPfacturation CRetrocession use_retrocessions")) {
+  $module->registerTab("vw_retrocession_regles" , TAB_ADMIN);
+}
