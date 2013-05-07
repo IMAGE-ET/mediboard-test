@@ -1,11 +1,11 @@
 <?php
 /**
  * $Id$
- * 
+ *
  * @package    Mediboard
  * @subpackage hl7
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -853,13 +853,12 @@ class CHL7v2Segment extends CHL7v2Entity {
           $type_anesth = CIdSante400::getMatch("CTypeAnesth", $tag_hl7, null, $operation->type_anesth);
         }
         
-        $idex_chir   = CIdSante400::getMatchFor($operation->loadRefChir(), $receiver->_tag_mediuser);
+        $idex_chir = CIdSante400::getMatchFor($operation->loadRefChir(), $receiver->_tag_mediuser);
 
-        $operation->loadRefPlageOp();
-        $anesth      = $operation->_ref_anesth;
+        $anesth = $operation->loadRefAnesth();
         $idex_anesth = new CIdSante400();
         if ($anesth->_id) {
-          $idex_anesth = CIdSante400::getMatchFor($operation->loadRefAnesth(), $receiver->_tag_mediuser);  
+          $idex_anesth = CIdSante400::getMatchFor($anesth, $receiver->_tag_mediuser);
         }
 
         $libelle = $operation->libelle;
