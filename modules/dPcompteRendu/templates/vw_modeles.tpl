@@ -3,6 +3,14 @@
 Main.add(function () {
   Control.Tabs.create('tabs-owner', true);
 });
+
+Modele = {
+  showUtilisation: function(compte_rendu_id) {
+    var url = new Url('compteRendu', 'ajax_show_utilisation');
+    url.addParam('compte_rendu_id', compte_rendu_id);
+    url.requestModal(640, 480);
+  }
+}
 </script>
 
 <a class="button new" href="?m=compteRendu&tab=addedit_modeles&compte_rendu_id=0">

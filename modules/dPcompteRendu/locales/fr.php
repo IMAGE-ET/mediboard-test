@@ -483,6 +483,7 @@ $locales['CPack.object_class.COperation'] = 'Intervention';
 $locales['CPack.object_class.CPatient'] = 'Patient';
 $locales['CPack.object_class.CSejour'] = 'Séjour';
 $locales['CPack.one'] = 'Pack de documents';
+$locales['Stats'] = 'Stats';
 $locales['config-dPcompteRendu-CCompteRendu-arch_wkhtmltopdf'] = 'Architecture de wkhtmltoPDF';
 $locales['config-dPcompteRendu-CCompteRendu-arch_wkhtmltopdf-amd64'] = '64 bit';
 $locales['config-dPcompteRendu-CCompteRendu-arch_wkhtmltopdf-desc'] = 'Architecture de wkhtmltoPDF';

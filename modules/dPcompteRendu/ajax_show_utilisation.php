@@ -3,7 +3,7 @@
 /**
  * dPcompteRendu
  *  
- * @category dPcompteRendu
+ * @category CompteRendu
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -39,11 +39,29 @@ switch ($compte_rendu->type) {
     break;
 }
 
+$counts = array();
+$ds = $compte_rendu->getDS();
+if ($compte_rendu->type == "body") {
+  $query = "SELECT `author_id`, COUNT(*) AS `total`
+    FROM `compte_rendu`
+    WHERE `modele_id` = '$compte_rendu->_id'
+    GROUP BY `author_id`
+    ORDER BY `total` DESC
+  ";
+  $counts = $ds->loadHashList($query);
+}
+
+$user = CMediusers::get();
+$users = $user->loadAll(array_keys($counts));
+foreach ($users as $_user) {
+  $_user->loadRefFunction();
+}
+
 $smarty = new CSmartyDP;
 
-$smarty->assign("modeles", $modeles);
+$smarty->assign("modeles"     , $modeles);
+$smarty->assign("counts"      , $counts);
+$smarty->assign("users"       , $users);
 $smarty->assign("compte_rendu", $compte_rendu);
 
 $smarty->display("inc_vw_utilisation.tpl");
-
-?>

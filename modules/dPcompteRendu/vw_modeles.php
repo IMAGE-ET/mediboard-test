@@ -44,9 +44,11 @@ if ($user->isPraticien()) {
 $owners = $user->getOwners();
 $modeles = CCompteRendu::loadAllModelesFor($filtre->user_id, 'prat', $filtre->object_class, $filtre->type, 1, $order);
 foreach ($modeles as $_modeles) {
+  CStoredObject::massCountBackRefs($_modeles, "documents_generated");
   foreach ($_modeles as $_modele) {
+    $_modele->countBackRefs("documents_generated");
     if ($_modele->type == "body") {
-      $_modele->loadComponents(); 
+      $_modele->loadComponents();
     }
 
     if ($_modele->type == "header") {

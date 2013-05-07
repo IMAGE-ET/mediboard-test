@@ -568,20 +568,20 @@ class CCompteRendu extends CDocumentItem {
       }
     }
   }
-  
+
   /**
    * Charge tous les modèles pour une classe d'objets associés à un utilisateur
-   * 
+   *
    * @param integer $id           Identifiant du propriétaire
    * @param string  $owner        Type de propriétaire du modèle: prat, func ou etab
    * @param string  $object_class string  Nom de la classe d'objet, optionnel. Doit être un CMbObject
    * @param string  $type         Type de composant, optionnel
-   * @param boolean $fast_edit    Inclue les modèles en édition rapide
+   * @param bool    $fast_edit    Inclue les modèles en édition rapide
    * @param string  $order        Ordre de tri de la liste
-   * 
-   * @return array ("prat" => array<CCompteRendu>, "func" => array<CCompteRendu>, "etab" => array<CCompteRendu>)
+   *
+   * @return CCompteRendu[][] Par propriétaire: prat => CCompteRendu[], func => CCompteRendu[], etab => CCompteRendu[]
    */
-  static function loadAllModelesFor($id, $owner = 'prat', $object_class = null, $type = null, $fast_edit = 1, $order = "") {
+  static function loadAllModelesFor($id, $owner = 'prat', $object_class = null, $type = null, $fast_edit = true, $order = "") {
     $modeles = array(
       "prat" => array(),
       "func" => array(),

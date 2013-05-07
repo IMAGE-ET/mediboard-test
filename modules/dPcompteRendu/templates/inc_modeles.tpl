@@ -3,7 +3,8 @@
     <th>{{mb_colonne class=CCompteRendu field=nom          order_col=$order_col order_way=$order_way url="?m=dPcompteRendu&tab=vw_modeles"}}</th>
     <th>{{mb_colonne class=CCompteRendu field=object_class order_col=$order_col order_way=$order_way url="?m=dPcompteRendu&tab=vw_modeles"}}</th>
     <th>{{mb_colonne class=CCompteRendu field=type         order_col=$order_col order_way=$order_way url="?m=dPcompteRendu&tab=vw_modeles"}}</th>
-    <th>{{tr}}Action{{/tr}}</th>
+    <th class="narrow" colspan="2">{{tr}}Stats{{/tr}}</th>
+    <th class="narrow">{{tr}}Action{{/tr}}</th>
   </tr>
 
   {{foreach from=$modeles item=_modele}}
@@ -110,7 +111,14 @@
 
       </div>
     </td>
-    
+
+    <td style="text-align: center;">
+      <strong>{{$_modele->_count.documents_generated|nozero}}</strong>
+    </td>
+    <td>
+      <button class="notext stats" onclick="Modele.showUtilisation('{{$_modele->_id}}');">{{tr}}Stats{{/tr}}</button>
+    </td>
+
     <td>
       <form name="delete-{{$_modele->_guid}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="{{$m}}" />
