@@ -18,7 +18,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   //static lists
   static $types = array("comp", "ambu",  "exte", "seances", "ssr", "psy" ,"urg", "consult");
   static $fields_etiq = array(
-    "NDOS", "DATE ENT", "HEURE ENT", "DATE SORTIE", "HEURE SORTIE",
+    "NDOS", "NRA", "DATE ENT", "HEURE ENT", "DATE SORTIE", "HEURE SORTIE",
     "PRAT RESPONSABLE", "CODE BARRE NDOS", "CHAMBRE COURANTE"
   );
 
@@ -2914,6 +2914,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->loadRefPatient()->completeLabelFields($fields);
     $this->loadRefPraticien();
     $this->loadNDA();
+    $this->loadNRA();
     $affectation = $this->getCurrAffectation();
     $affectation->loadView();
     $fields = array_merge($fields,
@@ -2923,6 +2924,7 @@ class CSejour extends CFacturable implements IPatientRelated {
                       "HEURE SORTIE"     => CMbDT::transform($this->sortie, null, "%H:%M"),
                       "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
                       "NDOS"             => $this->_NDA,
+                      "NRA"              => $this->_ref_NRA->id400,
                       "CODE BARRE NDOS"  => "@BARCODE_".$this->_NDA."@",
                       "CHAMBRE COURANTE" => $affectation->_view));
 
