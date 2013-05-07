@@ -853,9 +853,10 @@ class CHL7v2Segment extends CHL7v2Entity {
           $type_anesth = CIdSante400::getMatch("CTypeAnesth", $tag_hl7, null, $operation->type_anesth);
         }
         
-        $idex_chir   = CIdSante400::getMatchFor($operation->loadRefChir(), $receiver->_tag_mediuser);  
-        
-        $anesth      = $operation->loadRefAnesth();
+        $idex_chir   = CIdSante400::getMatchFor($operation->loadRefChir(), $receiver->_tag_mediuser);
+
+        $operation->loadRefPlageOp();
+        $anesth      = $operation->_ref_anesth;
         $idex_anesth = new CIdSante400();
         if ($anesth->_id) {
           $idex_anesth = CIdSante400::getMatchFor($operation->loadRefAnesth(), $receiver->_tag_mediuser);  
