@@ -237,7 +237,6 @@
         </div>
         {{if !$readonly}}
           <script type="text/javascript">
-            console.log("aze");
             var container = $('affectation_temporel_{{$_affectation->_id}}');
             new Draggable(container, {
               constraint: "vertical",

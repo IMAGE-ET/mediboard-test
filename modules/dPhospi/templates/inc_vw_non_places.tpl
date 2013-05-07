@@ -104,12 +104,15 @@
     <col style="width: 15%;" />
     {{assign var=show_age_patient value=$conf.dPhospi.show_age_patient}}
     {{foreach from=$sejours_non_affectes item=_sejours_by_service key=_service_id}}
+      {{if $_service_id != "np"}}
+        {{assign var=service value=$services.$_service_id}}
+      {{/if}}
       <tr>
-        <th class="title" colspan="{{$colspan}}">
+        <th class="section {{if $_service_id != "np" && $service->externe}}service_externe{{/if}}" colspan="{{$colspan}}">
           {{if $_service_id == "np"}}
             Non placés
           {{else}}
-            {{$services.$_service_id}} - Couloir
+            {{$service}} - Couloir
           {{/if}}
         </th>
       </tr>

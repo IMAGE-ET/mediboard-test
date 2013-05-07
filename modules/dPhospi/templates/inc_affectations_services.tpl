@@ -1,6 +1,6 @@
 <table class="tbl">
   <tr>
-    <th>
+    <th {{if $curr_service->externe}}class="service_externe"{{/if}}>
       {{$curr_service->nom}}
       <br />
       <span style="font-size: 80%;">

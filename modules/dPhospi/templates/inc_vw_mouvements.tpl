@@ -182,7 +182,7 @@
   {{/if}}
   {{foreach from=$services item=_service}}
     <tr>
-      <th class="section" colspan="{{$colspan}}">{{$_service}}</th>
+      <th class="section {{if $_service->externe}}service_externe{{/if}}" colspan="{{$colspan}}">{{$_service}}</th>
     </tr>
     {{assign var=show_age_patient value=$conf.dPhospi.show_age_patient}}
     {{foreach from=$_service->_ref_chambres item=_chambre}}
