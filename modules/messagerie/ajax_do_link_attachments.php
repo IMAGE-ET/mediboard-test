@@ -66,7 +66,6 @@ foreach ($attachments as $_attachment) {
 
     $file = new CFile();
     $file->setObject($object);
-    $file->private = 0;
     $file->author_id  = CAppUI::$user->_id;
 
     $pop = new CPop($account);
@@ -101,7 +100,6 @@ if ($text_html || $text_plain) {
 
   $file = new CFile();
   $file->setObject($object);
-  $file->private = 0;
   $file->author_id = CAppUI::$user->_id;
   $file->file_name  = $mail->subject;
   $file->file_type = "text/html";

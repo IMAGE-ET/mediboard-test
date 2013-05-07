@@ -42,7 +42,6 @@ class CCompteRendu extends CDocumentItem {
   public $margin_right;
   public $page_height;
   public $page_width;
-  public $private;
   public $fast_edit;
   public $fast_edit_pdf;
   public $date_print;
@@ -176,7 +175,6 @@ class CCompteRendu extends CDocumentItem {
     $specs["page_height"]      = "float notNull min|1 default|29.7 show|0";
     $specs["page_width"]       = "float notNull min|1 default|21 show|0";
     $specs["valide"]           = "bool show|0";
-    $specs["private"]          = "bool notNull default|0";
     $specs["fast_edit"]        = "bool default|0 show|0";
     $specs["fast_edit_pdf"]    = "bool default|0 show|0";
     $specs["date_print"]       = "dateTime show|0";
@@ -267,7 +265,7 @@ class CCompteRendu extends CDocumentItem {
     $current_user->loadRefFunction();
 
     foreach ($docs as $_doc) {
-      if (!$docs[$key]->canRead()) {
+      if (!$docs[$_doc->_id]->canRead()) {
         unset($docs[$_doc->_id]);
       }
     }
@@ -326,16 +324,6 @@ class CCompteRendu extends CDocumentItem {
     }
   }
 
-  function updatePlainFields() {
-    parent::updatePlainFields();
-    
-    // Valeur par défaut pour private
-    $this->completeField("private");
-    if ($this->private === "") {
-      $this->private = 0;
-    }
-  }
-  
   /**
    * Charge le contenu html
    * 
@@ -1085,7 +1073,6 @@ class CCompteRendu extends CDocumentItem {
     // Création du CFile si inexistant
     if (!$file->_id) {
       $file->setObject($this);
-      $file->private = 0;
       $file->file_name  = $this->nom . ".pdf";
       $file->file_type  = "application/pdf";
       $file->author_id   = CMediusers::get()->_id;
@@ -1102,7 +1089,7 @@ class CCompteRendu extends CDocumentItem {
       $this->margin_left);
     $this->loadContent();
     $content = $this->loadHTMLcontent($this->_source, '', $margins, CCompteRendu::$fonts[$this->font], $this->size);
-    $htmltopdf = new CHtmlToPDF;
+    $htmltopdf = new CHtmlToPDF();
     $htmltopdf->generatePDF($content, 0, $this->_page_format, $this->_orientation, $file);
     $file->file_size = filesize($file->_file_path);
     $this->_ref_file = $file;
@@ -1149,15 +1136,14 @@ class CCompteRendu extends CDocumentItem {
     if ($preface->_id) {
       $source = "$preface->_source<br />".$source;
     }
-    
+
     if ($ending->_id) {
       $source .= "<br />$ending->_source";
     }
-    
+
     if ($header->_id || $footer->_id) {
       $header->height = isset($header->height) ? $header->height : 20;
       $footer->height = isset($footer->height) ? $footer->height : 20;
-    
       $style = "
         <style type='text/css'>
         #header {
@@ -1171,8 +1157,9 @@ class CCompteRendu extends CDocumentItem {
         }";
       
       if ($header->_id) {
+
         $header->loadContent();
-        $header->_source = "<div id='header'>$header->_source</div>";
+        $header->_source = "<div id=\"header\">$header->_source</div>";
         
         if (!CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") || !CAppUI::pref("pdf_and_thumbs")) {      
           $header->height += 20;
@@ -1181,7 +1168,7 @@ class CCompteRendu extends CDocumentItem {
     
       if ($footer->_id) {
         $footer->loadContent();
-        $footer->_source = "<div id='footer'>$footer->_source</div>";
+        $footer->_source = "<div id=\"footer\">$footer->_source</div>";
   
         if (!CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") || !CAppUI::pref("pdf_and_thumbs")) {
           $footer->height += 20;
@@ -1211,7 +1198,7 @@ class CCompteRendu extends CDocumentItem {
       $source = "<div id=\"body\">$source</div>";
       $source = $style . $header->_source . $footer->_source . $source;
     }
-    
+
     return $source;
   }
   
@@ -1420,5 +1407,104 @@ class CCompteRendu extends CDocumentItem {
     $user->loadFirstLog();
 
     return $user;
+  }
+
+  static function replaceComponent($source, $component_id, $type="header") {
+    if (strpos($source, "<style type=\"text/css\">") === false) {
+      $source = "<style type=\"text/css\">
+        #header {
+          height: 0px;
+          /*DOMPDF top: 0;*/
+        }
+
+        #footer {
+          height: 0px;
+          /*DOMPDF bottom: 0;*/
+        }
+        @media print {
+          body {
+            margin-top: 0px;
+          }
+          hr.pagebreak {
+            padding-top: 0px;
+          }
+        }
+        @media dompdf {
+          body {
+            margin-bottom: 0px;
+          }
+          hr.pagebreak {
+            padding-top: 0px;
+          }
+        }</style>
+        <div id=\"body\">".
+          $source.
+        "</div>";
+    };
+
+    switch ($type) {
+      case "header":
+        $header = new CCompteRendu();
+        $header->load($component_id);
+        $header->loadContent(true);
+
+
+        if ($header->_source) {
+          $header->_source = "<div id=\"header\">".$header->_source."</div>";
+        }
+
+        $height = $header->height ? $header->height : 0;
+        $source = preg_replace("/(#header\s*\{\s*height:\s*)([0-9]*[\.0-9]*)px;/", '${1}'.$height.'px;',   $source);
+        $source = preg_replace("/(body\s*\{\s*margin-top:\s*)([0-9]*[\.0-9]*)px;/", '${1}'.$height.'px;',  $source);
+        $source = preg_replace("/(body\s*\{\s*padding-top:\s*)([0-9]*[\.0-9]*)px;/", '${1}'.$height.'px;', $source);
+        $source = preg_replace("/(hr.pagebreak\s*\{\s*padding-top:\s*)([0-9]*[\.0-9]*)px;/", '${1}'.$height.'px;', $source, 1);
+
+        $pos_style  = strpos($source, "</style>") + 9;
+        $pos_header = strpos($source, "<div id=\"header\"");
+        $pos_footer = strpos($source, "<div id=\"footer\"");
+        $pos_body   = strpos($source, "<div id=\"body\">");
+
+        if ($pos_header) {
+          if ($pos_footer) {
+            $source = substr_replace($source, $header->_source, $pos_header, $pos_footer - $pos_header);
+          }
+          else {
+            $source = substr_replace($source, $header->_source, $pos_header, $pos_body - $pos_header);
+          }
+        }
+        else {
+          if ($pos_footer) {
+            $source = substr_replace($source, $header->_source, $pos_style, $pos_footer - $pos_style);
+          }
+          else {
+            $source = substr_replace($source, $header->_source, $pos_style, 0);
+          }
+        }
+        break;
+      case "footer":
+        $footer = new CCompteRendu();
+        $footer->load($component_id);
+        $footer->loadContent(true);
+
+        if ($footer->_source) {
+            $footer->_source = "<div id=\"footer\">".$footer->_source."</div>";
+        }
+        $height = $footer->height ? $footer->height : 0;
+        $source = preg_replace("/(#footer\s*\{\s*footer:\s*)([0-9]+[\.0-9]*)px;/", '${1}'.$height.'px;',     $source);
+        $source = preg_replace("/(body\s*\{\s*margin-bottom:\s*)([0-9]+[\.0-9]*)px;/", '${1}'.$height.'px;', $source);
+
+        $pos_style  = strpos($source, "</style>") + 9;
+        $pos_header = strpos($source, "<div id=\"header\"");
+        $pos_footer = strpos($source, "<div id=\"footer\"");
+        $pos_body   = strpos($source, "<div id=\"body\">");
+        if ($pos_footer) {
+          $source = substr_replace($source, $footer->_source, $pos_footer, $pos_body - $pos_footer);
+        }
+        else {
+          $source = substr_replace($source, $footer->_source, $pos_body, 0);
+        }
+    }
+
+    return $source;
   }
 }

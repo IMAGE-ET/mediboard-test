@@ -37,7 +37,6 @@ if ($attachment_id != 0) { //je récupère LA pièce jointe
   //CFile
   $file = new CFile();
   $file->setObject($attachment);
-  $file->private = 0;
   $file->author_id  = $user->_id;
   $file->loadMatchingObject();
 
@@ -66,7 +65,6 @@ else {  //je récupère TOUTES les pièces jointes
   foreach ($mail->_attachments as $_att) {
     $file = new CFile();
     $file->setObject($_att);
-    $file->private = 0;
     $file->author_id  = $user->_id;
     $file->loadMatchingObject();
 

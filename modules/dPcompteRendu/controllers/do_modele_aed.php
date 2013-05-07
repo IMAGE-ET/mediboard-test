@@ -19,12 +19,12 @@ if( isset($_POST["_do_empty_pdf"])) {
   CApp::rip();
 }
 
-$do = new CDoObjectAddEdit("CCompteRendu", "compte_rendu_id");
+$do = new CDoObjectAddEdit("CCompteRendu");
 $do->redirectDelete = "m=dPcompteRendu&new=1";
 
 // Récupération des marges du modele en fast mode
 if (isset($_POST["fast_edit"]) && $_POST["fast_edit"] == 1 && isset($_POST["object_id"]) && $_POST["object_id"] != '') {
-  $compte_rendu = new CCompteRendu;
+  $compte_rendu = new CCompteRendu();
   $compte_rendu->load($_POST["modele_id"]);
   
   if ($compte_rendu->_id) {
@@ -40,7 +40,7 @@ if (isset($_POST["_source"])) {
 }
 
 $check_to_empty_field = CAppUI::conf("dPcompteRendu CCompteRendu check_to_empty_field");
-//mbLog($_POST["_empty_texte_libre"]);
+
 // Remplacement des zones de texte libre
 if (isset($_POST["_texte_libre"])) {
   $compte_rendu = new CCompteRendu();
@@ -79,13 +79,45 @@ $do_merge = CValue::post("do_merge", 0);
 
 if (isset($_POST["_source"])) {
   // Ajout d'entête / pied de page à la volée
+  $modele = new CCompteRendu();
+  $modele->load($_POST["modele_id"]);
+
   $header_id = CValue::post("header_id");
   $footer_id = CValue::post("footer_id");
-  if (($header_id || $footer_id) && isset($_POST["object_id"]) && $_POST["object_id"] != null) {
-    $cr = new CCompteRendu;
-    $_POST["_source"] = $cr->generateDocFromModel($_POST["_source"], $header_id, $footer_id);
+
+  // Depuis un modèle
+  if (!$_POST["compte_rendu_id"]) {
+    // Présence d'un header / footer
+    if ($modele->header_id || $modele->footer_id) {
+      if ($header_id != $modele->header_id) {
+        $_POST["_source"] = CCompteRendu::replaceComponent($_POST["_source"], $header_id);
+      }
+      if ($footer_id != $modele->footer_id) {
+        $_POST["_source"] = CCompteRendu::replaceComponent($_POST["_source"], $footer_id, "footer");
+      }
+    }
+    else {
+      $_POST["_source"] = $modele->generateDocFromModel($_POST["_source"], $header_id, $footer_id);
+    }
   }
-  
+  // Document existant
+  else {
+    $cr = new CCompteRendu();
+    $cr->load($_POST["compte_rendu_id"]);
+
+    if (!$cr->header_id && !$cr->footer_id && !$header_id && !$footer_id) {
+      $_POST["_source"] = $cr->generateDocFromModel($_POST["_source"], $header_id, $footer_id);
+    }
+    else {
+      if ($header_id != $cr->header_id) {
+        $_POST["_source"] = CCompteRendu::replaceComponent($_POST["_source"], $header_id);
+      }
+      if ($footer_id != $cr->footer_id) {
+        $_POST["_source"] = CCompteRendu::replaceComponent($_POST["_source"], $footer_id, "footer");
+      }
+    }
+  }
+
   // Application des listes de choix
   $fields = array();
   $values = array();
@@ -369,4 +401,3 @@ else {
   }
   $do->doRedirect();
 }
-?>

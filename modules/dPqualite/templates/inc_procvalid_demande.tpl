@@ -131,7 +131,6 @@
       <input type="hidden" name="object_id" value="{{$docGed->doc_ged_id}}" />
       <input type="hidden" name="file_category_id" value="" />
       <input type="file" name="formfile[0]" size="0" class="str" />
-			<input type="hidden" name="private" value="0" />
     </td>
   </tr>
   <tr>

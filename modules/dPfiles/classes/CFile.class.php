@@ -21,9 +21,8 @@ class CFile extends CDocumentItem {
   public $file_type;
   public $file_date;
   public $file_size;
-  public $private;
   public $rotation;
-  
+
   // Form fields
   public $_extensioned;
   public $_file_size;
@@ -77,8 +76,7 @@ class CFile extends CDocumentItem {
     $props["file_real_filename"] = "str notNull show|0";
     $props["file_type"]          = "str";
     $props["file_name"]          = "str notNull show|0";
-    $props["private"]            = "bool notNull default|0";
-    $props["rotation"]           = "enum list|0|90|180|270";
+    $props["rotation"]           = "enum list|0|90|180|270 default|0";
 
     // Form Fields
     $props["_sub_dir"]      = "str";
@@ -229,23 +227,25 @@ class CFile extends CDocumentItem {
     }
 
     if ($this->_rotate !== null) {
-        $this->completeField("rotation");
+      $this->completeField("rotation");
+
+      if ($this->_rotate == "left") {
+        $this->rotation += 90;
+      }
+      if ($this->_rotate == "right") {
+        $this->rotation -= 90;
+      }
+      $this->rotation %= 360;
+      if ($this->rotation < 0) {
+        $this->rotation += 360;
+      }
+
+      $this->rotation = $this->rotation % 360;
+      if ($this->rotation < 0) {
+        $this->rotation += 360;
+      }
     }
-    if ($this->_rotate == "left") {
-      $this->rotation += 90;
-    }
-    if ($this->_rotate == "right") {
-      $this->rotation -= 90;
-    }
-    $this->rotation %= 360;
-    if ($this->rotation < 0) {
-      $this->rotation += 360;
-    }
-    
-    $this->rotation = $this->rotation % 360;
-    if ($this->rotation < 0) {
-      $this->rotation += 360;
-    }
+
     return parent::store();
   }
   

@@ -141,7 +141,6 @@ else {
   if (!$file->_id) {
     $file = new CFile();
     $file->setObject($compte_rendu);
-    $file->private = 0;
     $file->file_type  = "application/pdf";
     $file->author_id = $user_id;
     $file->fillFields();

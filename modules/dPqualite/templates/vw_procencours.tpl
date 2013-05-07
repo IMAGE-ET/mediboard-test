@@ -336,7 +336,6 @@ function popFile(objectClass, objectId, elementClass, elementId){
             <th><label for="formfile[0]">{{tr}}CFile{{/tr}}</label></th>
             <td>
               <input type="file" name="formfile[0]" size="0" class="notNull str" />
-              <input type="hidden" name="private" value="0" />
             </td>
           </tr>
           <tr>

@@ -1,5 +1,7 @@
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 {{assign var=choice_factory value=$app->user_prefs.choice_factory}}
+{{assign var=header_footer_fly value=$conf.dPcompteRendu.CCompteRendu.header_footer_fly}}
+
 {{mb_script module=compteRendu script=thumb}}
 
 <script type="text/javascript">
@@ -276,6 +278,24 @@ function toggleLock(button) {
   form.onsubmit();
 }
 
+function modalHeaderFooter(state) {
+  var form = getForm("editFrm");
+  if (state) {
+    window.save_header_id = $V(form.header_id);
+    window.save_footer_id = $V(form.footer_id);
+    Modal.open("header_footer_fly");
+  }
+  else {
+    Control.Modal.close();
+    $V(form.header_id, window.save_header_id);
+    $V(form.footer_id, window.save_footer_id);
+  }
+}
+
+function closeModalHeaderFooter() {
+  var form = getForm()
+}
+
 Main.add(function(){
   if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
     PageFormat.init(getForm("editFrm"));
@@ -443,7 +463,76 @@ Main.add(function(){
   {{mb_field object=$compte_rendu field="font" hidden=1}}
   {{mb_field object=$compte_rendu field="size" hidden=1}}
   {{mb_field object=$compte_rendu field="valide" hidden=1}}
-  
+
+  {{if $header_footer_fly}}
+    <div id="header_footer_fly" class="modal" style="display: none">
+      <table class="tbl">
+        <tr>
+          <th>
+            {{mb_label object=$compte_rendu field=header_id}} :
+          </th>
+          {{if $headers|@count && ($headers.prat|@count > 0 || $headers.func|@count > 0 || $headers.etab|@count > 0)}}
+            <td>
+              <select name="header_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.header_id}}" style="width: 15em;">
+                <option value="" {{if !$compte_rendu->header_id}}selected{{/if}}>&mdash; {{tr}}CCompteRendu-set-header{{/tr}}</option>
+                {{foreach from=$headers item=headersByOwner key=owner}}
+                  {{if $headersByOwner|@count}}
+                    <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
+                      {{foreach from=$headersByOwner item=_header}}
+                        <option value="{{$_header->_id}}" {{if $compte_rendu->header_id == $_header->_id}}selected="selected"{{/if}}>{{$_header->nom}}</option>
+                        {{foreachelse}}
+                        <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
+                      {{/foreach}}
+                    </optgroup>
+                  {{/if}}
+                {{/foreach}}
+              </select>
+            </td>
+          {{else}}
+            <td class="empty">
+              {{mb_field object=$compte_rendu field=header_id hidden=1}}
+              Pas d'entête
+            </td>
+          {{/if}}
+        </tr>
+        <tr>
+          <th>
+            {{mb_label object=$compte_rendu field=footer_id}} :
+          </th>
+          {{if $footers|@count && ($footers.prat|@count > 0 || $footers.func|@count > 0 || $footers.etab|@count > 0)}}
+            <td>
+              <select name="footer_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.footer_id}}" style="width: 15em;">
+                <option value="" {{if !$compte_rendu->footer_id}}selected{{/if}}>&mdash; {{tr}}CCompteRendu-set-footer{{/tr}}</option>
+                {{foreach from=$footers item=footersByOwner key=owner}}
+                  {{if $footersByOwner|@count}}
+                    <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
+                      {{foreach from=$footersByOwner item=_footer}}
+                        <option value="{{$_footer->_id}}" {{if $compte_rendu->footer_id == $_footer->_id}}selected="selected"{{/if}}>{{$_footer->nom}}</option>
+                        {{foreachelse}}
+                        <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
+                      {{/foreach}}
+                    </optgroup>
+                  {{/if}}
+                {{/foreach}}
+              </select>
+            </td>
+          {{else}}
+            <td class="empty">
+              {{mb_field object=$compte_rendu field=footer_id hidden=1}}
+              Pas de pied de page
+            </td>
+          {{/if}}
+        </tr>
+        <tr>
+          <td class="button" colspan="2">
+            <button type="button" class="tick" onclick="Control.Modal.close()">{{tr}}Validate{{/tr}}</button>
+            <button type="button" class="cancel" onclick="modalHeaderFooter(0);">{{tr}}Close{{/tr}}</button>
+          </td>
+        </tr>
+      </table>
+    {{/if}}
+  </div>
+
   <table class="form">
     <tr>
     <th class="category" colspan="2">
@@ -468,7 +557,7 @@ Main.add(function(){
       
       &mdash;
       {{mb_label object=$compte_rendu field=file_category_id}}
-      <select name="file_category_id">
+      <select name="file_category_id" style="width: 12em;">
         <option value=""{{if !$compte_rendu->file_category_id}} selected="selected"{{/if}}>&mdash; Aucune Catégorie</option>
         {{foreach from=$listCategory item=currCat}}
           <option value="{{$currCat->file_category_id}}"{{if $currCat->file_category_id==$compte_rendu->file_category_id}} selected="selected"{{/if}}>{{$currCat->nom}}</option>
@@ -482,11 +571,10 @@ Main.add(function(){
       </label>
       {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
         &mdash;
-        <button type="button" class="pagelayout" title="Mise en page"
+        <button type="button" class="pagelayout notext" title="{{tr}}CCompteRendu-Pagelayout{{/tr}}"
                 onclick="save_page_layout(); modal($('page_layout'), {
                 closeOnClick: $('page_layout').down('button.tick')
                 });">
-        {{tr}}CCompteRendu-Pagelayout{{/tr}}
         </button>
         {{if $compte_rendu->_id != null}}
           &mdash;
@@ -498,6 +586,11 @@ Main.add(function(){
           <button class="tick" type="button">{{tr}}Validate{{/tr}}</button>
           <button class="cancel" type="button" onclick="cancel_page_layout();">{{tr}}Cancel{{/tr}}</button>
         </div>
+      {{/if}}
+      {{if $header_footer_fly}}
+        &mdash;
+        <button type="button" class="header_footer notext" onclick="modalHeaderFooter(1)"
+          title="Entête / pied de page à la volée"></button>
       {{/if}}
       {{if $can_lock}}
         &mdash;
@@ -561,5 +654,4 @@ Main.add(function(){
     {{/if}}
   </tr>  
 </table>
-
 </form>

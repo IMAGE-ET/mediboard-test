@@ -17,7 +17,8 @@ class CDocumentItem extends CMbMetaObject {
   
   public $etat_envoi;
   public $author_id;
-  
+  public $private;
+
   // Derivated fields
   public $_extensioned;
 
@@ -39,7 +40,7 @@ class CDocumentItem extends CMbMetaObject {
     $props["file_category_id"] = "ref class|CFilesCategory";
     $props["etat_envoi"]       = "enum notNull list|oui|non|obsolete default|non";
     $props["author_id"]        = "ref class|CMediusers";
-    
+    $props["private"]          = "bool default|0";
     $props["_extensioned"]     = "str notNull";
     $props["_send_problem"]    = "text";
 

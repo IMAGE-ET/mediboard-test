@@ -734,6 +734,10 @@ button.idex:before, a.button.idex:before {
   content: url(images/icons/external.png);
 }
 
+button.header_footer:before, a.button.header_footer:before {
+  content: url(images/buttons/header_footer.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }

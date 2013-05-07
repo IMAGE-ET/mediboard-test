@@ -42,7 +42,6 @@ $content = $compte_rendu->loadHTMLcontent($content, "", $margins, CCompteRendu::
 
 $file = new CFile();
 $file->setObject($compte_rendu);
-$file->private = 0;
 $file->file_name  = $compte_rendu->nom . ".pdf";
 $file->file_type  = "application/pdf";
 $file->fillFields();

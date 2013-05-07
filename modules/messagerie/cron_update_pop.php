@@ -137,11 +137,9 @@ foreach ($sources as $_source) {
 
             $file = new CFile();
             $file->setObject($_attch);
-            $file->private = 0;
             $file->author_id  = CAppUI::$user->_id;
-            $file->loadMatchingObject();
 
-            if (!$file->_id) {
+            if (!$file->loadMatchingObject()) {
               $file_pop = $pop->decodeMail($_attch->encoding, $pop->openPart($mail_unseen->uid, $_attch->getpartDL()));
               $file->file_name  = $_attch->name;
               $file->file_type  = $_attch->getType($_attch->type, $_attch->subtype);
