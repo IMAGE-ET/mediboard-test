@@ -722,7 +722,7 @@ class CEditPdf{
     
     $assurance_patient = $this->destinataire[0];
     $assur_nom = "";
-    if ($this->facture->dialyse && $this->facture->_ref_assurance_accident) {
+    if ($this->facture->_class != "CFactureCabinet" && $this->facture->dialyse && $this->facture->_ref_assurance_accident) {
       $assur_nom = $this->facture->_ref_assurance_accident->nom." ".$this->facture->_ref_assurance_accident->prenom;
     }
     if (isset($assurance_patient->type_pec) && $assurance_patient->type_pec == "TS") {
