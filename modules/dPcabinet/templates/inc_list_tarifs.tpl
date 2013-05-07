@@ -31,18 +31,18 @@
   </tr>
   
   {{if $user->_is_praticien || $user->_is_secretaire}}
-  {{mb_include template=inc_list_tarifs_by_owner tarifs=$listeTarifsChir}}
+  {{mb_include module=cabinet template=inc_list_tarifs_by_owner tarifs=$listeTarifsChir}}
   {{/if}}
 
   <tr>
     <th colspan="10" class="title">{{tr}}CFunctions-back-tarifs{{/tr}}</th>
   </tr>
-  {{mb_include template=inc_list_tarifs_by_owner tarifs=$listeTarifsSpe}}
+  {{mb_include module=cabinet template=inc_list_tarifs_by_owner tarifs=$listeTarifsSpe}}
   
   {{if $listeTarifsEtab|@count}}
     <tr>
       <th colspan="10" class="title">{{tr}}CGroups-back-tarif_group{{/tr}}</th>
     </tr>
-    {{mb_include template=inc_list_tarifs_by_owner tarifs=$listeTarifsEtab}}
+    {{mb_include module=cabinet template=inc_list_tarifs_by_owner tarifs=$listeTarifsEtab}}
  {{/if}}
 </table>

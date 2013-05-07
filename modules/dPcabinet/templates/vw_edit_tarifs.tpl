@@ -22,7 +22,7 @@ Main.add(function () {
   </tr>
   <tr>
     <td class="halfPane">
-      {{mb_include template=inc_list_tarifs}}
+      {{mb_include module=cabinet template=inc_list_tarifs}}
     </td>
     
     <td>
