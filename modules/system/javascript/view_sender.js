@@ -57,7 +57,18 @@ ViewSender = {
     
     confirmDeletion(form, options, ajax);    
   },
-  
+
+  urlToParams: function(button) {
+    var area = button.form.params;
+    area.value = "";
+    var url = prompt('URL à importer');
+    Url.parse(url).query.split('&').each(function(param) {
+      if (param != 'dialog=1') {
+        area.value += param + '\n';
+      }
+    });
+  },
+
   refreshList: function() {
     var url = new Url('system', 'ajax_list_view_senders');
     url.requestUpdate('list-senders');

@@ -28,7 +28,11 @@
     </tr>
     
     <tr>
-      <th>{{mb_label object=$sender field=params}}</th>
+      <th>
+        {{mb_label object=$sender field=params}}
+        <br/>
+        <button class="add" type="button" onclick="ViewSender.urlToParams(this);">URL</button>
+      </th>
       <td>{{mb_field object=$sender field=params}}</td>
     </tr>
     
