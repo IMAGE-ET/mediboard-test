@@ -71,7 +71,7 @@ class CMbPhone {
     $object->updateFormFields();
 
     if ($object instanceof CPerson) {
-      return $object->_pmobilePhoneNumber;
+      return $object->_p_mobile_phone_number;
     }
 
     return null;
