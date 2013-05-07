@@ -272,7 +272,7 @@ App.readonly = false;
   {{mb_include module=hospi template=inc_legend_suivi}}
 </div>
 
-<button type="button" class="search" onclick="modal('legend_suivi')" style="float: right;">Légende</button>
+<button type="button" class="search" onclick="Modal.open('legend_suivi')" style="float: right;">Légende</button>
 
 {{if !$isPraticien}}
   <button class="add" onclick="addTransmission('{{$sejour->_id}}', '{{$user->_id}}', null, null, null, null, 1);">Ajouter une transmission</button>

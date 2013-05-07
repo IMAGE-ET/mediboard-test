@@ -210,7 +210,7 @@
            </tr>
            <tr>
              <td>
-               <a href="#1" onclick="modal('detail_med')"><strong>{{tr}}CPrescription._chapitres.med{{/tr}}</strong></a>
+               <a href="#1" onclick="Modal.open('detail_med')"><strong>{{tr}}CPrescription._chapitres.med{{/tr}}</strong></a>
              </td>
              <td>
                <span id="nb_elt_med">0</span> / 3
@@ -267,7 +267,7 @@
              {{if $categories_by_chap|@count}}
                <tr>
                  <td>
-                   <a href="#1" onclick="modal('detail_{{$name}}')"><strong>{{tr}}CCategoryPrescription.chapitre.{{$name}}{{/tr}}</strong></a>
+                   <a href="#1" onclick="Modal.open('detail_{{$name}}')"><strong>{{tr}}CCategoryPrescription.chapitre.{{$name}}{{/tr}}</strong></a>
                  </td>
                  <td>
                    <span id="nb_elt_{{$name}}">0</span> / {{$categories_by_chap|@count}}

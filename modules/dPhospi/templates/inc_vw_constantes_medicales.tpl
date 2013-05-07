@@ -7,7 +7,7 @@ dates = {{$dates|@json}};
 hours = {{$hours|@json}};
 comments = {{$comments|@json}};
 const_ids = {{$const_ids|@json}};
-keys_selection = {{$selection|@array_keys|@json}};
+keys_selection = {{$custom_selection|@array_keys|@json}};
 last_date = null;
 paginate = {{$paginate|@json}};
 

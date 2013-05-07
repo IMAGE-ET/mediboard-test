@@ -113,6 +113,8 @@ if ($context_guid) {
   $current_context = CMbObject::loadFromGuid($context_guid);
 }
 
+$custom_selection = $selection ? $selection : array();
+
 /** @var CGroups|CService|CRPU $host */
 
 // On cherche le meilleur "hebergement" des constantes, pour charger les configurations adequat
@@ -132,7 +134,10 @@ else {
 
 $old_constants_to_draw = ($print == 1 ? $selection : CConstantesMedicales::$list_constantes);
 
-// Organisation differente que l'on affiche par volet ou pas
+/*
+ * Organisation differente que l'on affiche par volet ou pas
+ * TODO on n'a pas déjà ça dans CConstantesMedicales ?
+ */
 if (CConstantesMedicales::getHostConfig("show_cat_tabs", $host)) {
   $constants_to_draw = array("all" => array());
   foreach ($selection as $_type => $_ranks) {
@@ -269,6 +274,8 @@ if ($date_min) {
 if ($date_max) {
   $where[] = "datetime <= '$date_max'";
 }
+
+/** @var CConstantesMedicales[] $list_constantes */
 
 // Les constantes qui correspondent (dans le contexte cette fois)
 $list_constantes = $constantes->loadList($where, "datetime DESC", $limit);
@@ -573,6 +580,7 @@ $smarty->assign('comments',      $comments);
 $smarty->assign('const_ids',     $const_ids);
 $smarty->assign('latest_constantes', $latest_constantes);
 $smarty->assign('selection',     $selection);
+$smarty->assign('custom_selection', $custom_selection);
 $smarty->assign('print',         $print);
 $smarty->assign('graphs',        $graphs);
 $smarty->assign('start',         $start);

@@ -21,7 +21,7 @@
       url.requestUpdate('topologique');
     },
     showLegend: function() {
-      modal("legend_" + this.tabs.activeLink.key);
+      Modal.open("legend_" + this.tabs.activeLink.key);
     },
     selectServices: function(view, services_ids_suggest) {
       var url = new Url("dPhospi", "ajax_select_services");
@@ -316,7 +316,7 @@
   
   chooseIntervSejour = function() {
     window.sejour_id_for_affectation = null;
-    modal("choose_interv_sejour");
+    Modal.open("choose_interv_sejour");
   }
   
   refreshMouvements = function(after_refresh, lit_id) {
