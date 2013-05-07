@@ -15,18 +15,18 @@
  * Description
  */
 class CPerson extends CMbObject {
-  public $_pcity;
-  public $_ppostalCode;
-  public $_pstreetAddress;
-  public $_pcountry;
-  public $_pphoneNumber;
-  public $_pfaxNumber;
-  public $_pmobilePhoneNumber;
-  public $_pemail;
-  public $_pfirstName;
-  public $_plastName;
-  public $_pbirthDate;
-  public $_pmaidenName;
+  public $_p_city;
+  public $_p_postal_code;
+  public $_p_street_address;
+  public $_p_country;
+  public $_p_phone_number;
+  public $_p_fax_number;
+  public $_p_mobile_phone_number;
+  public $_p_email;
+  public $_p_first_name;
+  public $_p_last_name;
+  public $_p_birth_date;
+  public $_p_maiden_name;
 
   /**
    * Get properties specifications as strings
@@ -37,18 +37,18 @@ class CPerson extends CMbObject {
   function getProps() {
     $props = parent::getProps();
 
-    $props["_pcity"]              = "str notNull confidential";
-    $props["_ppostalCode"]        = "str notNull";
-    $props["_pstreetAddress"]     = "str";
-    $props["_pcountry"]           = "str";
-    $props["_pphoneNumber"]       = "str";
-    $props["_pfaxNumber"]         = "str notNull confidential";
-    $props["_pmobilePhoneNumber"] = "str notNull";
-    $props["_pemail"]             = "str";
-    $props["_pfirstName"]         = "str";
-    $props["_plastName"]          = "str";
-    $props["_pbirthDate"]         = "str";
-    $props["_pmaidenName"]        = "str";
+    $props["_p_city"]                = "str";
+    $props["_p_postal_code"]         = "str";
+    $props["_p_street_address"]      = "str";
+    $props["_p_country"]             = "str";
+    $props["_p_phone_number"]        = "phone";
+    $props["_p_fax_number"]          = "phone";
+    $props["_p_mobile_phone_number"] = "phone";
+    $props["_p_email"]               = "str";
+    $props["_p_first_name"]          = "str";
+    $props["_p_last_name"]           = "str";
+    $props["_p_birth_date"]          = "birthDate";
+    $props["_p_maiden_name"]         = "str";
 
     return $props;
   }
