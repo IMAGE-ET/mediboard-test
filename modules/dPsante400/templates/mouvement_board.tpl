@@ -2,7 +2,7 @@
   <tr>
     <th class="title">Type</th>
     <th class="title" colspan="7">Triggers</th>
-    <th class="title" colspan="6">Marques</th>
+    <th class="title" colspan="7">Marques</th>
   </tr>
 
   <tr>
