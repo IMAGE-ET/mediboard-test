@@ -2210,17 +2210,17 @@ class CPatient extends CPerson {
    * @return void
    */
   function mapPerson() {
-    $this->_pcity = $this->ville;
-    $this->_ppostalCode = $this->cp;
-    $this->_pstreetAddress = $this->adresse;
-    $this->_pcountry =  $this->pays;
-    $this->_pphoneNumber = $this->tel;
-    $this->_pmobilePhoneNumber = $this->tel2;
-    $this->_pemail = $this->email;
-    $this->_pfirstName = $this->prenom;
-    $this->_plastName = $this->nom;
-    $this->_pbirthDate = $this->naissance;
-    $this->_pmaidenName = $this->nom_jeune_fille;
+    $this->_p_city                = $this->ville;
+    $this->_p_postal_code         = $this->cp;
+    $this->_p_street_address      = $this->adresse;
+    $this->_p_country             = $this->pays;
+    $this->_p_phone_number        = $this->tel;
+    $this->_p_mobile_phone_number = $this->tel2;
+    $this->_p_email               = $this->email;
+    $this->_p_first_name          = $this->prenom;
+    $this->_p_last_name           = $this->nom;
+    $this->_p_birth_date          = $this->naissance;
+    $this->_p_maiden_name         = $this->nom_jeune_fille;
   }
 }
 

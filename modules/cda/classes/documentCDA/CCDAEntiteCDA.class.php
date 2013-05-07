@@ -29,11 +29,11 @@ class CCDAEntiteCDA extends CCDADocumentCDA {
     $pn = new CCDAPN();
 
     $enxp = new CCDA_en_family();
-    $enxp->setData($mediUser->_plastName);
+    $enxp->setData($mediUser->_p_last_name);
     $pn->append("family", $enxp);
 
     $enxp = new CCDA_en_given();
-    $enxp->setData($mediUser->_pfirstName);
+    $enxp->setData($mediUser->_p_first_name);
     $pn->append("given", $enxp);
 
     $person->appendName($pn);
@@ -53,19 +53,19 @@ class CCDAEntiteCDA extends CCDADocumentCDA {
     $pn = new CCDAPN();
 
     $enxp = new CCDA_en_family();
-    $enxp->setData($patient->_plastName);
+    $enxp->setData($patient->_p_last_name);
     $enxp->setQualifier(array("BR"));
-    if ($patient->_pmaidenName) {
+    if ($patient->_p_maiden_name) {
       $enxp2 = new CCDA_en_given();
       $enxp2->setQualifier(array("BR"));
-      $enxp2->setData($patient->_pmaidenName);
+      $enxp2->setData($patient->_p_maiden_name);
       $pn->append("family", $enxp2);
       $enxp->setQualifier(array("SP"));
     }
     $pn->append("family", $enxp);
 
     $enxp = new CCDA_en_given();
-    $enxp->setData($patient->_pfirstName);
+    $enxp->setData($patient->_p_first_name);
     $pn->append("given", $enxp);
 
     $enxp = new CCDA_en_given();
@@ -85,7 +85,7 @@ class CCDAEntiteCDA extends CCDADocumentCDA {
     $gender = $this->getAdministrativeGenderCode($patient->sexe);
     $patientCDA->setAdministrativeGenderCode($gender);
 
-    $date = $this->getTimeToUtc($patient->_pbirthDate, true);
+    $date = $this->getTimeToUtc($patient->_p_birth_date, true);
     $ts = new CCDATS();
     $ts->setValue($date);
     if (!$date) {

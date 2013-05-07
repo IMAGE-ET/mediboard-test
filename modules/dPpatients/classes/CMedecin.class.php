@@ -159,15 +159,15 @@ class CMedecin extends CPerson {
    * @return void
    */
   function mapPerson() {
-    $this->_pcity              = $this->ville;
-    $this->_ppostalCode        = $this->cp;
-    $this->_pstreetAddress     = $this->adresse;
-    $this->_pphoneNumber       = $this->tel;
-    $this->_pfaxNumber         = $this->fax;
-    $this->_pmobilePhoneNumber = $this->portable;
-    $this->_pemail             = $this->email;
-    $this->_pfirstName         = $this->prenom;
-    $this->_plastName          = $this->nom;
-    $this->_pmaidenName        = $this->jeunefille;
+    $this->_p_city                = $this->ville;
+    $this->_p_postal_code         = $this->cp;
+    $this->_p_street_address      = $this->adresse;
+    $this->_p_phone_number        = $this->tel;
+    $this->_p_fax_number          = $this->fax;
+    $this->_p_mobile_phone_number = $this->portable;
+    $this->_p_email               = $this->email;
+    $this->_p_first_name          = $this->prenom;
+    $this->_p_last_name           = $this->nom;
+    $this->_p_maiden_name         = $this->jeunefille;
   }
 }

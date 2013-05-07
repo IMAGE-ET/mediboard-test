@@ -105,9 +105,9 @@ class CCDADocumentCDA extends CCDAClasseCda{
    * @return CCDAAD
    */
   function setAddress($user) {
-    $userCity =  $user->_pcountry;
-    $userPostalCode = $user->_ppostalCode;
-    $userStreetAddress = $user->_pstreetAddress;
+    $userCity =  $user->_p_country;
+    $userPostalCode = $user->_p_postal_code;
+    $userStreetAddress = $user->_p_street_address;
 
     $ad = new CCDAAD();
     if (!$userCity && !$userPostalCode && !$userStreetAddress) {
@@ -150,9 +150,9 @@ class CCDADocumentCDA extends CCDAClasseCda{
    * @return void
    */
   function setTelecom($object, $patient) {
-    $patientPhoneNumber = $patient->_pphoneNumber;
-    $patientMobilePhoneNumber = $patient->_pmobilePhoneNumber;
-    $patientEmail = $patient->_pemail;
+    $patientPhoneNumber = $patient->_p_phone_number;
+    $patientMobilePhoneNumber = $patient->_p_mobile_phone_number;
+    $patientEmail = $patient->_p_email;
 
     $tel = new CCDATEL();
     if (!$patientPhoneNumber && !$patientMobilePhoneNumber && !$patientEmail) {
@@ -315,6 +315,7 @@ class CCDADocumentCDA extends CCDAClasseCda{
 
     switch (get_class($object)) {
       case "CSejour":
+        /** @var CSejour $object CSejour */
         $documentationOf = new CCDAPOCD_MT000040_DocumentationOf();
         $serviceEvent = new CCDAPOCD_MT000040_ServiceEvent();
         $low = $object->entree_reelle;
@@ -324,8 +325,10 @@ class CCDADocumentCDA extends CCDAClasseCda{
         $ivlTs = $this->createIvlTs($low, $object->sortie_reelle);
         $serviceEvent->setEffectiveTime($ivlTs);
 
-        //@todo: faire le diagnostic principal et secondaire, plus code CCAM, cim10(s'il y a).
-        $object->DP;
+        $ii = new CCDAII();
+        $ii->setRoot("2.16.840.1.113883.6.3");
+        $ii->setExtension($object->DP);
+        $serviceEvent->appendId($ii);
 
         $performer = new CCDAPOCD_MT000040_Performer1();
         $performer->setTypeCode("PRF");
@@ -335,11 +338,66 @@ class CCDADocumentCDA extends CCDAClasseCda{
         $clinicalDoc->appendDocumentationOf($documentationOf);
         break;
       case "COperation":
+        /** @var COperation $object COperation */
+        $no_acte = 0;
         $object->loadRefsActesCCAM();
         foreach ($object->_ref_actes_ccam as $acteCcam) {
           if (!$acteCcam->_check_coded) {
             continue;
           }
+
+          $acteCcam->loadRefExecutant();
+          $documentationOf = new CCDAPOCD_MT000040_DocumentationOf();
+          $serviceEvent = new CCDAPOCD_MT000040_ServiceEvent();
+          $ce = new CCDACE();
+          $ce->setCode($acteCcam->code_acte);
+          $ce->setCodeSystem("1.2.250.1.213.2.5");
+          $serviceEvent->setCode($ce);
+          $ivl = $this->createIvlTs($acteCcam->execution, "");
+          $serviceEvent->setEffectiveTime($ivl);
+
+          if ($no_acte >= 1) {
+            continue;
+          }
+          $performer = new CCDAPOCD_MT000040_Performer1();
+          $performer->setTypeCode("PRF");
+          $performer->setAssignedEntity(self::$role->setAssignedEntity($acteCcam->_ref_executant, true));
+          $serviceEvent->appendPerformer($performer);
+          $documentationOf->setServiceEvent($serviceEvent);
+
+          $clinicalDoc->appendDocumentationOf($documentationOf);
+          $no_acte++;
+        }
+
+        if ($no_acte === 0) {
+          $documentationOf = new CCDAPOCD_MT000040_DocumentationOf();
+          $serviceEvent = new CCDAPOCD_MT000040_ServiceEvent();
+          $ii = new CCDAII();
+          $ii->setNullFlavor("UNK");
+          $serviceEvent->appendId($ii);
+          $ivl = $this->createIvlTs($object->debut_op, $object->fin_op);
+          $serviceEvent->setEffectiveTime($ivl);
+          $performer = new CCDAPOCD_MT000040_Performer1();
+          $performer->setTypeCode("PRF");
+          $performer->setAssignedEntity(self::$role->setAssignedEntity($object->_ref_chir, true));
+          $serviceEvent->appendPerformer($performer);
+          $documentationOf->setServiceEvent($serviceEvent);
+
+          $clinicalDoc->appendDocumentationOf($documentationOf);
+        }
+
+        break;
+      case "CConsultation":
+        /** @var CConsultation $object CConsultation */
+        $object->loadRefPlageConsult();
+
+        $no_acte = 0;
+        $object->loadRefsActesCCAM();
+        foreach ($object->_ref_actes_ccam as $acteCcam) {
+          if (!$acteCcam->_check_coded) {
+            continue;
+          }
+
           $acteCcam->loadRefExecutant();
           $documentationOf = new CCDAPOCD_MT000040_DocumentationOf();
           $serviceEvent = new CCDAPOCD_MT000040_ServiceEvent();
@@ -350,32 +408,45 @@ class CCDADocumentCDA extends CCDAClasseCda{
           $ivl = $this->createIvlTs($acteCcam->execution, "");
           $serviceEvent->setEffectiveTime($ivl);
 
+          if ($no_acte >= 1) {
+            continue;
+          }
           $performer = new CCDAPOCD_MT000040_Performer1();
           $performer->setTypeCode("PRF");
-          $performer->setAssignedEntity(self::$role->setAssignedEntity($acteCcam->_ref_executant));
+          $performer->setAssignedEntity(self::$role->setAssignedEntity($acteCcam->_ref_executant, true));
+          $serviceEvent->appendPerformer($performer);
+          $documentationOf->setServiceEvent($serviceEvent);
+
+          $clinicalDoc->appendDocumentationOf($documentationOf);
+          $no_acte++;
+        }
+
+        if ($no_acte === 0) {
+          $documentationOf = new CCDAPOCD_MT000040_DocumentationOf();
+          $serviceEvent = new CCDAPOCD_MT000040_ServiceEvent();
+          $ii = new CCDAII();
+          $ii->setNullFlavor("UNK");
+          $serviceEvent->appendId($ii);
+          $ivl = $this->createIvlTs($object->_datetime, $object->_date_fin);
+          $serviceEvent->setEffectiveTime($ivl);
+          $performer = new CCDAPOCD_MT000040_Performer1();
+          $performer->setTypeCode("PRF");
+          $performer->setAssignedEntity(self::$role->setAssignedEntity($object->_ref_chir, true));
           $serviceEvent->appendPerformer($performer);
           $documentationOf->setServiceEvent($serviceEvent);
 
           $clinicalDoc->appendDocumentationOf($documentationOf);
         }
-
-        $object->loadRefSejour();
-
-        //@todo: faire sejour
-
-        break;
-      case "CConsultation":
-
         break;
     }
-
   }
 
   /**
    * Création d'un ivl_ts avec une valeur basse et haute
    *
-   * @param String $low  String
-   * @param String $high String
+   * @param String  $low        String
+   * @param String  $high       String
+   * @param Boolean $nullFlavor false
    *
    * @return CCDAIVL_TS
    */

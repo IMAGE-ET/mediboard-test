@@ -142,7 +142,7 @@ class CUser extends CPerson {
     $props["user_city"]                 = "str maxLength|30";
     $props["user_zip"]                  = "str maxLength|11";
     $props["user_country"]              = "str maxLength|30";
-    $props["user_birthday"]             = "dateTime";
+    $props["user_birthday"]             = "birthDate";
     $props["user_last_login"]           = "dateTime";
     $props["user_login_errors"]         = "num notNull min|0 max|100 default|0";
     $props["template"]                  = "bool notNull default|0";
@@ -625,16 +625,16 @@ class CUser extends CPerson {
    * @return void
    */
   function mapPerson() {
-    $this->_pcity              = $this->user_city;
-    $this->_ppostalCode        = $this->user_zip;
-    $this->_pstreetAddress     = $this->user_address1;
-    $this->_pcountry           = $this->user_country;
-    $this->_pphoneNumber       = $this->user_phone;
-    $this->_pmobilePhoneNumber = $this->user_mobile;
-    $this->_pemail             = $this->user_email;
-    $this->_pfirstName         = $this->user_first_name;
-    $this->_plastName          = $this->user_last_name;
-    $this->_pbirthDate         = $this->user_birthday;
+    $this->_p_city                = $this->user_city;
+    $this->_p_postal_code         = $this->user_zip;
+    $this->_p_street_address      = $this->user_address1;
+    $this->_p_country             = $this->user_country;
+    $this->_p_phone_number        = $this->user_phone;
+    $this->_p_mobile_phone_number = $this->user_mobile;
+    $this->_p_email               = $this->user_email;
+    $this->_p_first_name          = $this->user_first_name;
+    $this->_p_last_name           = $this->user_last_name;
+    $this->_p_birth_date          = $this->user_birthday;
   }
 
 }

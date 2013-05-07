@@ -1465,12 +1465,12 @@ class CMediusers extends CPerson {
    * @return void
    */
   function mapPerson() {
-    $this->_pcity          = $this->_user_ville;
-    $this->_ppostalCode    = $this->_user_cp;
-    $this->_pstreetAddress = $this->_user_adresse;
-    $this->_pphoneNumber   = $this->_user_phone;
-    $this->_pemail         = $this->_user_email;
-    $this->_pfirstName     = $this->_user_first_name;
-    $this->_plastName      = $this->_user_last_name;
+    $this->_p_city           = $this->_user_ville;
+    $this->_p_postal_code    = $this->_user_cp;
+    $this->_p_street_address = $this->_user_adresse;
+    $this->_p_phone_number   = $this->_user_phone;
+    $this->_p_email          = $this->_user_email;
+    $this->_p_first_name     = $this->_user_first_name;
+    $this->_p_last_name      = $this->_user_last_name;
   }
 }
