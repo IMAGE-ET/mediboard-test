@@ -293,9 +293,17 @@ class CExObject extends CMbMetaObject {
       $ex_class->getLatestExObject($this->_ref_reference_object_2),
     );
 
-    $this->_ref_object->loadComplete();
-    $this->_ref_reference_object_1->loadComplete();
-    $this->_ref_reference_object_2->loadComplete();
+    if ($this->_ref_object->_id) {
+      $this->_ref_object->loadComplete();
+    }
+
+    if ($this->_ref_reference_object_1->_id) {
+      $this->_ref_reference_object_1->loadComplete();
+    }
+
+    if ($this->_ref_reference_object_2->_id) {
+      $this->_ref_reference_object_2->loadComplete();
+    }
     
     $fields = $ex_class->loadRefsAllFields(true);
     
