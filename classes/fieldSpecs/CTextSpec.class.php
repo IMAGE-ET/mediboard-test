@@ -39,4 +39,11 @@ class CTextSpec extends CMbFieldSpec {
   function getFormHtmlElement($object, $params, $value, $className){
     return $this->getFormElementTextarea($object, $params, $value, $className);
   }
+
+  function filter($value) {
+    if (CAppUI::conf("purify_text_input")) {
+      $value = CMbString::purifyHTML($value);
+    }
+    return parent::filter($value);
+  }
 }

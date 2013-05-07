@@ -1128,7 +1128,7 @@ class CMbFieldSpec {
    * 
    * @return string The trimmed value
    */
-  function trim($value) {
+  function filter($value) {
     return trim($value);
   }
 }

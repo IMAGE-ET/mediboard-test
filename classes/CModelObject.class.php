@@ -569,7 +569,7 @@ class CModelObject {
     
     foreach ($fields as $name => $value) {
       if ($value !== null) {
-        $this->$name = $specs[$name]->trim($value);
+        $this->$name = $specs[$name]->filter($value);
       }
     }
   }

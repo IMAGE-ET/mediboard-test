@@ -511,6 +511,12 @@ abstract class CMbString {
    * @return string
    */
   static function purifyHTML($html) {
+    static $cache = array();
+
+    if (isset($cache[$html])) {
+      return $cache[$html];
+    }
+
     if (!class_exists("HTMLPurifier", false)) {
       CAppUI::requireLibraryFile("htmlpurifier/library/HTMLPurifier.auto");
     }
@@ -520,6 +526,12 @@ abstract class CMbString {
     $config->set('Core.Encoding', CApp::$encoding);
     $purifier = new HTMLPurifier($config);
 
-    return $purifier->purify($html);
+    $purified = $purifier->purify($html);
+
+    if (isset($purified[5])) {
+      $cache[$html] = $purified;
+    }
+
+    return $purified;
   }
 }

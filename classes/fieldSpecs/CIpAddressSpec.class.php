@@ -27,7 +27,7 @@ class CIpAddressSpec extends CMbFieldSpec {
     return null;
   }
   
-  function trim($value){
+  function filter($value){
     return $value;
   }
   

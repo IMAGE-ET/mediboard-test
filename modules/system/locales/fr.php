@@ -1964,6 +1964,8 @@ $locales['config-offline_time_start'] = 'Heure début mode maintenance';
 $locales['config-offline_time_start-desc'] = 'Heure à partir de laquelle Mediboard sera hors ligne';
 $locales['config-page_title'] = 'Titre dans le navigateur';
 $locales['config-page_title-desc'] = 'Titre affiché en préfixe dans le navigateur';
+$locales['config-purify_text_input'] = 'Nettoyer les données textuelles';
+$locales['config-purify_text_input-desc'] = 'Purifie les données';
 $locales['config-readonly'] = 'Mode lecture seule';
 $locales['config-readonly-desc'] = 'Passe l\'application en lecture seule. Aucune donnée ne peut être mise à jour';
 $locales['config-ref_pays'] = 'Pays de référence';
@@ -2092,3 +2094,4 @@ $locales['utilities-source-file_system-connexion'] = 'Test d\'accessibilité';
 $locales['utilities-source-file_system-getFiles'] = 'Liste des fichiers';
 $locales['utilities-source-file_system-sendFile'] = 'Dépôt d\'un fichier';
 $locales['utilities-source-http'] = 'Utilitaires de la source HTTP';
+?>

@@ -57,6 +57,7 @@ Main.add(function(){
     </tr>
     {{mb_include module=system template=inc_config_bool var=csrf_protection}}
     {{mb_include module=system template=inc_config_str var=csrf_token_lifetime numeric=true}}
+    {{mb_include module=system template=inc_config_bool var=purify_text_input}}
     
     <tr>
       <th colspan="2" class="title">

@@ -154,4 +154,11 @@ class CStrSpec extends CMbFieldSpec {
     CMbArray::defaultValue($params, "maxlength", $maxLength);
     return $this->getFormElementText($object, $params, $value, $className);
   }
+
+  function filter($value) {
+    if (CAppUI::conf("purify_text_input")) {
+      $value = CMbString::purifyHTML($value);
+    }
+    return parent::filter($value);
+  }
 }
