@@ -414,6 +414,17 @@ class CMouvement400 extends CRecordSante400 {
   }
 
   /**
+   * Count all marks
+   *
+   * @return int
+   */
+  function countAllMarks() {
+    $mark = new CTriggerMark();
+    $where["trigger_class"] = "= '$this->class'";
+    return $mark->countList($where);
+  }
+
+  /**
    * Count marks older than reference trigger
    *
    * @param int $number Reference trigger number

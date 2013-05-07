@@ -30,9 +30,13 @@ foreach ($types as $_type) {
     $report[$_type]["triggers"]["marked"][$_marked] = $count;
   }
 
+  // Available
+  $report[$_type]["triggers"]["available"] = 0;
+
   // Marks
-  $report[$_type]["marks"]["oldest"] = $mouv->loadOldestMark();
-  $report[$_type]["marks"]["latest"] = $mouv->loadLatestMark();
+  $report[$_type]["marks"]["oldest"]    = $mouv->loadOldestMark();
+  $report[$_type]["marks"]["latest"]    = $mouv->loadLatestMark();
+  $report[$_type]["marks"]["all"]       = $mouv->countAllMarks();
   $report[$_type]["marks"]["purgeable"] = $mouv->countOlderMarks($report[$_type]["triggers"]["oldest"]->rec);
 
   // Obsolete marks in error

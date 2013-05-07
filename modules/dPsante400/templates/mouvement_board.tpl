@@ -1,7 +1,7 @@
 <table class="tbl" style="text-align: center;">
   <tr>
     <th class="title">Type</th>
-    <th class="title" colspan="6">Triggers</th>
+    <th class="title" colspan="7">Triggers</th>
     <th class="title" colspan="6">Marques</th>
   </tr>
 
@@ -9,11 +9,10 @@
     <th></th>
     <th colspan="2">Plus ancien</th>
     <th colspan="2">Plus récent</th>
-    <th colspan="2">Traitable</th>
+    <th colspan="3">Totaux</th>
     <th colspan="2">Plus ancien</th>
     <th colspan="2">Plus récent</th>
-    <th>Purgeable</th>
-    <th>Obsolète</th>
+    <th colspan="3">Totaux</th>
   </tr>
 
   <tr>
@@ -22,14 +21,16 @@
     <th class="section">horodatage</th>
     <th class="section">numéro</th>
     <th class="section">horodatage</th>
-    <th class="section">A traiter</th>
-    <th class="section">Avec erreur</th>
+    <th class="section">disponibles</th>
+    <th class="section">à traiter</th>
+    <th class="section">en erreur</th>
     <th class="section">numéro</th>
     <th class="section">horodatage</th>
     <th class="section">numéro</th>
     <th class="section">horodatage</th>
-    <th class="section">total</th>
-    <th class="section">deprecated</th>
+    <th class="section">traités</th>
+    <th class="section">purgeables</th>
+    <th class="section">obsolètes</th>
   </tr>
 
   {{foreach from=$report key=_type item=_report}}
@@ -41,6 +42,7 @@
     <td>{{$triggers.oldest->when|date_format:$conf.datetime}}</td>
     <td>{{$triggers.latest->rec}}</td>
     <td>{{$triggers.latest->when|date_format:$conf.datetime}}</td>
+    <td>{{$triggers.available}}</td>
     <td>{{$triggers.marked.0}}</td>
     <td>{{$triggers.marked.1}}</td>
 
@@ -49,6 +51,7 @@
     <td>{{$marks.oldest->when|date_format:$conf.datetime}}</td>
     <td>{{$marks.latest->trigger_number}}</td>
     <td>{{$marks.latest->when|date_format:$conf.datetime}}</td>
+    <td>{{$marks.all      }}</td>
     <td>{{$marks.purgeable}}</td>
     <td>{{$marks.obsolete }}</td>
 
