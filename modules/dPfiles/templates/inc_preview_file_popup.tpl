@@ -23,8 +23,7 @@ window.destinataires = {{"utf8_encode"|array_map_recursive:$destinataires|@json|
 
   updatetitle = function() {
     var form = getForm('frm-file-name');
-    $("fileName").update($V(form.file_name));
-    $("fileName").show();
+    $("fileName").update($V(form.file_name)).show();
     $("modifTitlefrm").hide();
   }
 </script>

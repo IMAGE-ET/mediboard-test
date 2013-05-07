@@ -52,11 +52,10 @@
           Event.stop(event);
           var destGuid = to.get("guid");
           var fromGuid = from.get("guid");
-          console.log(fromGuid);
           var idFile   = from.get("id");
-          var url = new Url("dPfiles","ajax_move_file");
+          var url = new Url("dPfiles","controllers/do_move_file");
           url.addParam("file_id", idFile);
-          url.addParam("destinationGuid", destGuid );
+          url.addParam("destination_guid", destGuid );
           url.requestUpdate("systemMsg", function() {
             $("docItem_"+destGuid).onclick();   //update destination
             $("docItem_"+fromGuid).onclick();   //update provenance
