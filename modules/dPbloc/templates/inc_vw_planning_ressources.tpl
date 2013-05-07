@@ -94,7 +94,7 @@
   <col style="width: 10%" />
   <tr>
     <th colspan="{{math equation=x+1 x=$hours|@count}}" class="title">
-      <button type="button" class="search" style="float: right;" onclick="modal('legend')">Légende</button>
+      <button type="button" class="search" style="float: right;" onclick="Modal.open('legend')">Légende</button>
       <span>
       <a href="#1" onclick="redirectPlanning('{{$date_before}}')" style="display: inline;">&lt;&lt;&lt;</a>
       {{$date|date_format:$conf.longdate}}

@@ -73,7 +73,7 @@ showDossierSoins = function(sejour_id, date){
   var url = new Url("soins", "ajax_vw_dossier_sejour");
   url.addParam("sejour_id", sejour_id);
   url.requestUpdate($('dossier_sejour'));
-	modalWindow = modal($('dossier_sejour'));
+	modalWindow = Modal.open($('dossier_sejour'));
 }
 
 

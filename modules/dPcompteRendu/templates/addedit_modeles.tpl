@@ -292,7 +292,7 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
           <td>
           {{if $droit}}
             {{mb_field object=$compte_rendu field="nom" style="width: 12em"}}
-            <button type="button" class="search notext" title="Choisir un nom réservé" onclick="modal('choose_template_name')"></button>
+            <button type="button" class="search notext" title="Choisir un nom réservé" onclick="Modal.open('choose_template_name')"></button>
           {{else}}
             {{mb_field object=$compte_rendu field="nom" readonly="readonly"}}
           {{/if}}

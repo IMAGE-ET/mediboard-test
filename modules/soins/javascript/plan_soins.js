@@ -651,7 +651,7 @@ PlanSoins = {
     $V(oForm.nb_hours, nb_hours);
     $V(oForm.quantite, quantite);
     $V(oForm.unite_prise, unite_prise);
-    modal("modalMovePlanifs");
+    Modal.open("modalMovePlanifs");
   },
 
   movePlanifs: function(type_move) {

@@ -1,6 +1,6 @@
 <tr>
   <td>
-    <button class="search notext" onclick="modalwindow = modal($('modal-{{$_sejour->_id}}'));"></button>
+    <button class="search notext" onclick="modalwindow = Modal.open($('modal-{{$_sejour->_id}}'));"></button>
     {{$_sejour->_ref_patient->_view}}
   </td>
   <td>{{mb_value object=$_sejour field="_entree"}}</td>

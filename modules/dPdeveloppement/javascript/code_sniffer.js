@@ -28,7 +28,7 @@ CodeSniffer = {
 	var run = $('sniff-run');
 	var tbody = run.down('table tbody.files');
 	tbody.update();
-    modal(run);
+    Modal.open(run);
     CodeSniffer.parse.bind(CodeSniffer).defer(button);
   },
   

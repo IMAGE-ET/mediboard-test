@@ -8,7 +8,7 @@
   openModal = function(id_div) {
     var div = $(id_div);
     window.save_checked = div.select("input").pluck("checked");
-    modal(id_div);
+    Modal.open(id_div);
   };
   
   closeModal = function(id_div) {

@@ -82,7 +82,7 @@
           </td>
           <td class="text">
             {{if $offline && $rpu->_id}}
-              <button class="search notext not-printable" onclick="$('modal-{{$sejour->_id}}').up('tr').show(); modalwindow = modal($('modal-{{$sejour->_id}}'));">
+              <button class="search notext not-printable" onclick="$('modal-{{$sejour->_id}}').up('tr').show(); modalwindow = Modal.open($('modal-{{$sejour->_id}}'));">
                 {{tr}}Show{{/tr}}
               </button>
              {{/if}}

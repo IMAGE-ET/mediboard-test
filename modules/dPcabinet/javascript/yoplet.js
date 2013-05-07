@@ -165,7 +165,7 @@ if (!window.File.applet) {
     modalOpen: function(object_guid) {
       clearTimeout(File.applet.timer);
       File.applet.isOpen = true;
-      this.modalWindow = modal($("modal-yoplet"));
+      this.modalWindow = Modal.open($("modal-yoplet"));
       $$(".uploadinmodal")[0].disabled = '';
       this.object_guid = object_guid;
       // Mise à jour de l'object_class dans l'autocomplete des catégories

@@ -170,7 +170,7 @@ Main.add(function() {
 
 <div id="search-results" style="width: 1000px; height: 750px; display: none; overflow-x: auto;" class="modal"></div>
 
-<form name="rechercheDossierClinique" method="get" action="?" onsubmit="Control.Modal.close(); Url.update(this, 'search-results'); modal_results=modal('search-results'); return false;" target="_blank">
+<form name="rechercheDossierClinique" method="get" action="?" onsubmit="Control.Modal.close(); Url.update(this, 'search-results'); modal_results=Modal.open('search-results'); return false;" target="_blank">
   <input type="hidden" name="m" value="dPpatients" />
   <input type="hidden" name="a" value="ajax_recherche_dossier_clinique" />
   <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />

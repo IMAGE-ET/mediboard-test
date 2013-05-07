@@ -338,7 +338,7 @@ function checkNewSejour(sDP,  sDateEntree, sHeureEntree, sMinutesEntree, sDateSo
     $('chooseSortie').hide();
   }
   if($V(oSejourChooserFrm.majDP) == 1 || $V(oSejourChooserFrm.majEntree) == 1 || $V(oSejourChooserFrm.majSortie) == 1) {
-    changeSejourModal = modal($('sejour-value-chooser'));
+    changeSejourModal = Modal.open($('sejour-value-chooser'));
   }
 }
 

@@ -28,7 +28,7 @@ function openCorrespondants(compte_rendu_id, object_guid, show_modal) {
     }
     
     if (show_modal) {
-      modal($("correspondants_courrier"));
+      Modal.open($("correspondants_courrier"));
     }
   } });
 }
@@ -572,7 +572,7 @@ Main.add(function(){
       {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
         &mdash;
         <button type="button" class="pagelayout notext" title="{{tr}}CCompteRendu-Pagelayout{{/tr}}"
-                onclick="save_page_layout(); modal($('page_layout'), {
+                onclick="save_page_layout(); Modal.open($('page_layout'), {
                 closeOnClick: $('page_layout').down('button.tick')
                 });">
         </button>

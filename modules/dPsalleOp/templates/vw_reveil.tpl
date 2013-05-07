@@ -90,7 +90,7 @@ showDossierSoins = function(sejour_id, operation_id, default_tab){
     url.addParam("default_tab", default_tab);
   }
   url.requestUpdate($('dossier_sejour'));
-  modalWindow = modal($('dossier_sejour'));
+  modalWindow = Modal.open($('dossier_sejour'));
   {{/if}}
 }
 

@@ -31,7 +31,7 @@
 </style>
 
 <script>
- // La div du dossier qui a été passé dans la fonction modal()
+ // La div du dossier qui a été passé dans la fonction Modal.open()
  // a du style supplémentaire, qu'il faut écraser lors de l'impression
  // d'un dossier seul.
   printOneDossier = function(sejour_id) {
@@ -95,7 +95,7 @@
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
       </td>
       <td>
-        <button class="search" onclick="modal($('dossier-{{$_sejour->_id}}'), {width: 1000, height: 800})">Dossier soins</button>
+        <button class="search" onclick="Modal.open($('dossier-{{$_sejour->_id}}'), {width: 1000, height: 800})">Dossier soins</button>
         <button class="print notext" onclick="printOneDossier('{{$_sejour->_id}}')" title="Imprimer le dossier"></button>
       </td>
     </tr>

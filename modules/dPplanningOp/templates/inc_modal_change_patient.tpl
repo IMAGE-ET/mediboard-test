@@ -12,7 +12,7 @@
 
 <script type="text/javascript">
   confirmChangePatient = function() {
-    var modalConfirm = modal($("confirmChangePatientModal"));
+    var modalConfirm = Modal.open($("confirmChangePatientModal"));
     modalConfirm.position();
   } 
 </script>

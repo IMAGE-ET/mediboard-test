@@ -107,7 +107,7 @@
           {{$patients_fetch.$patient_id|smarty:nodefaults}}
         </div>
         
-        <a href="#1" onclick="modalWindow = modal($('{{$patient->_guid}}-dossier'))">
+        <a href="#1" onclick="modalWindow = Modal.open($('{{$patient->_guid}}-dossier'))">
       {{elseif $canCabinet->edit}}
         <a href="#1" onclick="Consultation.edit('{{$_consult->_id}}'); return false;">
       {{else}}

@@ -198,7 +198,7 @@ Main.add(function () {
       </select>
     </form>
     <a href="#" onclick="printPlanning()" class="button print">{{tr}}Print{{/tr}}</a>
-    <a href="#" onclick="Admissions.beforePrint(); modal('area_prompt_modele')" class="button print">{{tr}}CCompteRendu-print_for_select{{/tr}}</a>
+    <a href="#" onclick="Admissions.beforePrint(); Modal.open('area_prompt_modele')" class="button print">{{tr}}CCompteRendu-print_for_select{{/tr}}</a>
     {{if "web100T"|module_active}}
       {{mb_include module=web100T template=inc_button_send_all_prestations type=admissions}}
     {{/if}}

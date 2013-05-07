@@ -40,7 +40,7 @@
     {{if $offline}}
       var fiche = $('fiche_anesth_{{$_operation->_id}}');
       if (fiche) {
-        modal(fiche);
+    Modal.open(fiche);
       }
     {{else}}
       printFicheAnesth('{{$_operation->_ref_consult_anesth->_id}}', '{{$_operation->_id}}');

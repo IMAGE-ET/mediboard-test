@@ -15,7 +15,7 @@ CancelAction = {
   confirm: function(button, action) {
     $$('div.confirm').invoke('hide');
     $$('div.'+action).invoke('show');
-    modal('following_consultations');
+    Modal.open('following_consultations');
     this.action = action;
     this.form = button.form;
   }, 

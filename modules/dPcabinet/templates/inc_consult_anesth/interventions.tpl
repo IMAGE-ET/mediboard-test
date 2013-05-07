@@ -21,7 +21,7 @@
   {{if !$consult_anesth->libelle_interv && !$consult_anesth->sejour_id && !$consult_anesth->operation_id && ($nextSejourAndOperation.COperation->_id || $nextSejourAndOperation.CSejour->_id)}}
   modalWindow = null;
   Main.add(function () {
-    modalWindow = modal($('evenement-chooser-modal'), {
+    modalWindow = Modal.open($('evenement-chooser-modal'), {
       className: 'modal'
     });
   });

@@ -114,7 +114,7 @@ Keeper = {
 
   promptPassphrase : function(password_keeper_id, deletion, exportKeeper) {
     if (deletion) {
-      modal("modalPassphrase");
+      Modal.open("modalPassphrase");
       var form = getForm("passphrase");
       form.passphraseInput.focus();
       $V(form.password_keeper_id, password_keeper_id);
@@ -122,7 +122,7 @@ Keeper = {
       return;
     }
     if (exportKeeper) {
-      modal("modalPassphrase");
+      Modal.open("modalPassphrase");
       var form = getForm("passphrase");
       form.passphraseInput.focus();
       $V(form.password_keeper_id, password_keeper_id);
@@ -130,7 +130,7 @@ Keeper = {
       $('passphrase2').show();
       return;
     }
-    modal("modalPassphrase");
+    Modal.open("modalPassphrase");
     var form = getForm("passphrase");
     form.passphraseInput.focus();
     $V(form.password_keeper_id, password_keeper_id);
