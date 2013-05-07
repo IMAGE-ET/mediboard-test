@@ -27,7 +27,7 @@
       <td>DEFAULT</td>
     {{else}}
       {{assign var=_profile value=$users.$profile_id}}
-      {{assign var=profile_pref value=$_user->_ref_preference}}
+      {{assign var=profile_pref value=$_profile->_ref_preference}}
       <td>
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_profile->_guid}}');">
           {{$_profile}}

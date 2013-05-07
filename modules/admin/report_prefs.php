@@ -22,10 +22,12 @@ $where["value"] = "IS NOT NULL";
 $preferences = $preference->loadList($where);
 
 // Mass preloading
+/** @var CUser[] $users */
 $users    = CMbObject::massLoadFwdRef($preferences, "user_id");
 $profiles = CMbObject::massLoadFwdRef($users, "profile_id");
 
 // Attach preferences to users
+$default = null;
 foreach ($preferences as $_preference) {
   if (!$_preference->user_id) {
     $default = $_preference;
@@ -47,9 +49,6 @@ foreach ($users as $_user) {
     $hierarchy["default"][] = $_user->_id;
   }
 }
-
-
-CSQLDataSource::$trace = false;
 
 // Création du template
 $smarty = new CSmartyDP();
