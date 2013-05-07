@@ -35,6 +35,9 @@ $dPconfig["dPfacturation"] = array (
     "home_RCC"      => "",
     "home_tel"      => "",
     "home_fax"      => ""
-  )
+  ),
+  "Other" => array(
+    "use_view_chainage" => "0"
+  ),
 );
 ?>
