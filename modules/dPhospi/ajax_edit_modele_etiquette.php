@@ -12,7 +12,7 @@ CCanDo::checkEdit();
 
 $modele_etiquette_id = CValue::getOrSession("modele_etiquette_id");
 
-$modele_etiquette = new CModeleEtiquette;
+$modele_etiquette = new CModeleEtiquette();
 $group_id = CGroups::loadCurrent()->_id;
 
 if ($modele_etiquette_id) {
@@ -23,7 +23,7 @@ if ($modele_etiquette_id) {
 // Nouveau modèle d'étiquette dans le cas d'un changement d'établissement
 if (!$modele_etiquette_id || $modele_etiquette->group_id != $group_id) {
   // Chargement des valeurs par défaut si pas de modele_etiquette_id
-  $modele_etiquette = new CModeleEtiquette;
+  $modele_etiquette = new CModeleEtiquette();
   $modele_etiquette->valueDefaults();
   $modele_etiquette->group_id = $group_id;
 }
@@ -34,9 +34,9 @@ $classes["CRPU"] = CAppUI::tr("CRPU");
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("modele_etiquette"   , $modele_etiquette);
-$smarty->assign("classes"            , $classes);
-$smarty->assign("fields"             , CModeleEtiquette::$fields);
-$smarty->assign("listfonts"          , CModeleEtiquette::$listfonts);
+$smarty->assign("modele_etiquette" , $modele_etiquette);
+$smarty->assign("classes"          , $classes);
+$smarty->assign("fields"           , CModeleEtiquette::$fields);
+$smarty->assign("listfonts"        , CModeleEtiquette::$listfonts);
 
 $smarty->display("inc_edit_modele_etiquette.tpl");

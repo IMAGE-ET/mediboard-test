@@ -11,31 +11,32 @@
 class CModeleEtiquette extends CMbMetaObject {
   
   // DB Table key
-  var $modele_etiquette_id = null;
+  public $modele_etiquette_id;
   
   // DB Fields
-  var $nom           = null;
-  var $texte         = null;
-  var $texte_2       = null;
-  var $texte_3       = null;
-  var $texte_4       = null;
-  var $largeur_page  = null;
-  var $hauteur_page  = null;
-  var $nb_lignes     = null;
-  var $nb_colonnes   = null;
-  var $marge_horiz   = null;
-  var $marge_vert    = null;
-  var $hauteur_ligne = null;
-  var $font          = null;
-  var $group_id      = null;
-  var $show_border   = null;
-  var $text_align    = null;
-  var $_width_etiq   = null;
-  var $_height_etiq  = null;
-  
+  public $nom;
+  public $texte;
+  public $texte_2;
+  public $texte_3;
+  public $texte_4;
+  public $largeur_page;
+  public $hauteur_page;
+  public $nb_lignes;
+  public $nb_colonnes;
+  public $marge_horiz;
+  public $marge_vert;
+  public $hauteur_ligne;
+  public $font;
+  public $group_id;
+  public $show_border;
+  public $text_align;
+
   // Form fields
-  var $_write_bold   = null;
-  
+  public $_write_bold;
+  public $_write_upper;
+  public $_width_etiq;
+  public $_height_etiq;
+
   static $fields;
   
   static $listfonts =
@@ -71,8 +72,9 @@ class CModeleEtiquette extends CMbMetaObject {
     $specs["show_border"]   = "bool default|0";
     $specs["text_align"]    = "enum list|top|middle|bottom default|top";
     $specs["_write_bold"]   = "bool";
+    $specs["_write_upper"]  = "bool";
     $specs["_width_etiq"]   = "float";
-    $specs["_height_etiq"]   = "float";
+    $specs["_height_etiq"]  = "float";
     return $specs;
   }
   
@@ -84,14 +86,27 @@ class CModeleEtiquette extends CMbMetaObject {
   }
   
   function replaceFields($array_fields) {
+    $search = array();
+    $replace = array();
     foreach($array_fields as $_key=>$_field) {
-      $search = array("[".$_key."]", "*".$_key."*");
-      $replace = array($_field, "<b>$_field</b>");
-      $this->texte = str_replace($search, $replace, $this->texte);
-      $this->texte_2 = str_replace($search, $replace, $this->texte_2);
-      $this->texte_3 = str_replace($search, $replace, $this->texte_3);
-      $this->texte_4 = str_replace($search, $replace, $this->texte_4);
+      # Normal
+      $search[]  = "[$_key]";
+      $replace[] = $_field;
+      # Gras
+      $search[]  = "*$_key*";
+      $replace[] = "<b>$_field</b>";
+      # Majuscule
+      $search[]  = "+$_key+";
+      $replace[] = strtoupper($_field);
+      # Gras + majuscule
+      $search[]  = "#$_key#";
+      $replace[] = "<b>".strtoupper($_field)."</b>";
     }
+
+    $this->texte   = str_replace($search, $replace, $this->texte);
+    $this->texte_2 = str_replace($search, $replace, $this->texte_2);
+    $this->texte_3 = str_replace($search, $replace, $this->texte_3);
+    $this->texte_4 = str_replace($search, $replace, $this->texte_4);
   }
   
   function completeLabelFields(&$fields) {
@@ -223,7 +238,7 @@ class CModeleEtiquette extends CMbMetaObject {
         
         switch($this->text_align) {
           case "middle":
-            $pdf->setY($pdf_y -0.2 + ($hauteur_etiq - $pdf_ex_y) / 2);
+            $pdf->setY($pdf_y - 0.2 + ($hauteur_etiq - $pdf_ex_y) / 2);
             break;
           case "bottom":
             $pdf->setY($pdf_y - 0.4 + $hauteur_etiq - $pdf_ex_y);

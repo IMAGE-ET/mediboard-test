@@ -174,18 +174,19 @@ Main.add(function() {
   </tr>
   <tr>
     <th>{{mb_label object=$modele_etiquette field="_write_bold"}}</th>
-    <td colspan="3">{{mb_field object=$modele_etiquette field="_write_bold" typeEnum="radio"}}
+    <td>{{mb_field object=$modele_etiquette field="_write_bold" typeEnum="radio"}}
+    <th>{{mb_label object=$modele_etiquette field="_write_upper"}}</th>
+    <td>{{mb_field object=$modele_etiquette field="_write_upper" typeEnum="radio"}}
   </tr>
   {{foreach from=$fields key=_class item=_by_class}}
-  <tr>
-    <th>{{tr}}{{$_class}}{{/tr}}</th>
-    <td class="text">
-    {{foreach from=$_by_class item=_field}}
-      <button class="add" type="button" value='{{$_field}}' onclick='ModeleEtiquette.insertField(this);'>{{$_field|lower}}</button>
-    {{/foreach}}
-    </td>
-  
-  </tr>
+    <tr>
+      <th>{{tr}}{{$_class}}{{/tr}}</th>
+      <td class="text" colspan="3">
+      {{foreach from=$_by_class item=_field}}
+        <button class="add" type="button" value='{{$_field}}' onclick='ModeleEtiquette.insertField(this);'>{{$_field|lower}}</button>
+      {{/foreach}}
+      </td>
+    </tr>
   {{/foreach}}
 </table>
 

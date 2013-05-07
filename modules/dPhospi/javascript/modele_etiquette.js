@@ -104,15 +104,25 @@ ModeleEtiquette = {
       texte_etiq = $("edit_etiq_texte");
     }
     var caret = texte_etiq.caret();
-    var oForm = getForm("edit_etiq");
-    var bold = oForm.elements["_write_bold"][0].checked;
+    var form = elem.form;
+    var bold  = $V(form._write_bold);
+    var upper = $V(form._write_upper);
     var content = elem.value;
-    if (bold) {
-      content = "*" + content + "*";
+    if (bold == "1") {
+      if (upper == "1") {
+        content = "#" + content + "#";
+      }
+      else {
+        content = "*" + content + "*";
+      }
+    }
+    else if (upper == "1") {
+      content = "+" + content + "+";
     }
     else {
       content = "[" + content + "]";
     }
+
     texte_etiq.caret(caret.begin, caret.end, content + " ");
     texte_etiq.caret(texte_etiq.value.length);
     texte_etiq.fire('ui:change');
