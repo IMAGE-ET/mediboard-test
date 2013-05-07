@@ -220,16 +220,16 @@ var Localize = {
     if (counter) {
       counter.addClassName('warning').update(" "+this.strings.length);
     }
-    
+
     // Add a row in form
     var name = 's['+string+']';
     var form = getForm('UnlocForm');
-    
+
     if (form) {
       var tbody = form.down('tbody');
       tbody.insert(
         DOM.tr({}, 
-          DOM.th({}, string),
+          DOM.th({}, string.escapeHTML()),
           DOM.td({}, 
             DOM.input({ size: '70', type: 'text', name: name, value: '' })
           )
