@@ -60,8 +60,8 @@ function confirmDeletion(oForm, oOptions, oOptionsAjax) {
 /**
  * Universal get/set function for form elements
  *
- * @param {HTMLInputElement,HTMLSelectElement,HTMLTextAreaElement,DOMNodeList} element A form element (Form.Element or id) :
- *                                                                             input, textarea, select, group of radio buttons, group of checkboxes
+ * @param {HTMLInputElement,HTMLSelectElement,HTMLTextAreaElement,NodeList} element A form element (Form.Element or id) :
+ *                                                                          input, textarea, select, group of radio buttons, group of checkboxes
  * @param {String,Number,Boolean=} value If set, sets the value to the element. Can be an array of values : ['elementvalue1', 'elementvalue2', ...]
  * @param {Boolean=false}          fire  Determines wether the onchange callback has to be called or not
  *
@@ -230,7 +230,9 @@ function prepareForm(oForm) {
 
   // Build label targets
   var aLabels = oForm.select("label"),
-      oLabel, sFor, i = 0;
+      oLabel,
+      sFor,
+      i = 0;
       
   while (oLabel = aLabels[i++]) {
     if ((sFor = oLabel.htmlFor) && (sFor.indexOf(sFormName) !== 0)) {
@@ -266,8 +268,10 @@ function prepareForm(oForm) {
     });
   }
 
+  i = 0;
+
   // For each element
-  var i = 0, oElement;
+  var oElement;
   while (oElement = $(oForm.elements[i++])) {
     var sType = oElement.type;
     var sTagName = oElement.tagName;
@@ -409,9 +413,9 @@ function prepareForm(oForm) {
               .observe("ui:change", notNullOK);
     }
     else {
-      var oLabel = Element.getLabel(oElement);
-      if (oLabel) {
-        oLabel.removeClassName("checkNull");
+      var label = Element.getLabel(oElement);
+      if (label) {
+        label.removeClassName("checkNull");
       }
     }
 

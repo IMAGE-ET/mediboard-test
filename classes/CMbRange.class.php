@@ -17,8 +17,10 @@
 abstract class CMbRange {
   /**
    * Tell whether range is void (empty)
-   * @param object $lower The lower bound
-   * @param object $upper The upper bound
+   *
+   * @param mixed $lower The lower bound
+   * @param mixed $upper The upper bound
+   *
    * @return boolean 
    */
   static function void($lower, $upper) {
@@ -27,8 +29,10 @@ abstract class CMbRange {
 
   /**
    * Tell whether range is finite
-   * @param object $lower The lower bound
-   * @param object $upper The upper bound
+   *
+   * @param mixed $lower The lower bound
+   * @param mixed $upper The upper bound
+   *
    * @return boolean 
    */
   static function finite($lower, $upper) {
@@ -37,9 +41,11 @@ abstract class CMbRange {
 
   /**
    * Tell whether given value is in range (permissive)
-   * @param object $value The value to check
-   * @param object $lower The lower bound
-   * @param object $upper The upper bound
+   *
+   * @param mixed $value The value to check
+   * @param mixed $lower The lower bound
+   * @param mixed $upper The upper bound
+   *
    * @return boolean 
    */
   static function in($value, $lower, $upper) {
@@ -50,11 +56,13 @@ abstract class CMbRange {
   
   /**
    * Tell whether two ranges collide (permissive)
-   * @param object $lower1
-   * @param object $upper1
-   * @param object $lower2
-   * @param object $upper2
-   * @param boolean permissive
+   *
+   * @param mixed   $lower1
+   * @param mixed   $upper1
+   * @param mixed   $lower2
+   * @param mixed   $upper2
+   * @param boolean $permissive
+   *
    * @return boolean
    */
   static function collides($lower1, $upper1, $lower2, $upper2, $permissive = true) {
@@ -69,10 +77,12 @@ abstract class CMbRange {
   /**
    * Get the intersection of two ranges (permissive)
    * Result intersection might be empty, that is with upper < lower bound
-   * @param object $lower1
-   * @param object $upper1
-   * @param object $lower2
-   * @param object $upper2
+   *
+   * @param mixed $lower1
+   * @param mixed $upper1
+   * @param mixed $lower2
+   * @param mixed $upper2
+   *
    * @return array($lower, $upper)
    */
   static function intersection($lower1, $upper1, $lower2, $upper2) {
@@ -84,24 +94,28 @@ abstract class CMbRange {
   
   /**
    * Tell whether range1 is inside range2 (permissive)
-   * @param object $lower1
-   * @param object $upper1
-   * @param object $lower2
-   * @param object $upper2
+   *
+   * @param mixed $lower1
+   * @param mixed $upper1
+   * @param mixed $lower2
+   * @param mixed $upper2
+   *
    * @return boolean
    */
   static function inside($lower1, $upper1, $lower2, $upper2) {
     list($lower, $upper) = self::intersection($lower1, $upper1, $lower2, $upper2);
-    return $lower == $lower1 && $upper = $upper1;
+    return $lower == $lower1 && $upper == $upper1;
   }
   
   /**
    * Crop a range with another, resulting in 0 to 2 range fragments
    * Limitation: cropper has to be finite
-   * @param object $lower1 Cropped range
-   * @param object $upper1 Cropped range
-   * @param object $lower2 Cropper range
-   * @param object $upper2 Cropper range
+   *
+   * @param mixed $lower1 Cropped range
+   * @param mixed $upper1 Cropped range
+   * @param mixed $lower2 Cropper range
+   * @param mixed $upper2 Cropper range
+   *
    * @return array Array of range fragments, false on infinite cropper
    */
   static function crop($lower1, $upper1, $lower2, $upper2) {
@@ -138,9 +152,11 @@ abstract class CMbRange {
   /**
    * Crop a range with many another, resulting in 0 to n range fragments
    * Limitation: cropper has to be finite
-   * @param object $lower Cropped range
-   * @param object $upper Cropped range
-   * @param array Array of cropper ranges
+   *
+   * @param mixed $lower    Cropped range
+   * @param mixed $upper    Cropped range
+   * @param array $croppers Array of cropper ranges
+   *
    * @return array Array of range fragments, false on infinite cropper
    */
   static function multiCrop($lower, $upper, $croppers) {
@@ -148,8 +164,8 @@ abstract class CMbRange {
 
     foreach ($croppers as $_cropper) {
       $new_fragments = array();
-      foreach ($fragments as $key => $_fragment) {
-        $new_fragments = array_merge($new_fragments, self::crop($_fragment[0],$_fragment[1], $_cropper[0], $_cropper[1]));
+      foreach ($fragments as $_fragment) {
+        $new_fragments = array_merge($new_fragments, self::crop($_fragment[0], $_fragment[1], $_cropper[0], $_cropper[1]));
       }
       $fragments = $new_fragments;
     }
