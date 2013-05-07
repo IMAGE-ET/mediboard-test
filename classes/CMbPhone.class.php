@@ -68,23 +68,12 @@ class CMbPhone {
    */
   static function getMobilePhoneFromGuid($guid) {
     $object = CMbObject::loadFromGuid($guid);
+    $object->updateFormFields();
 
-    switch ($object->_class) {
-      case 'CPatient':
-        return $object->tel2;
-      break;
-
-      case 'CMediuser':
-        return $object->_user_phone;
-        break;
-
-      case 'CUser':
-        return ($object->user_astreinte) ? $object->user_astreinte : $object->user_phone;
-        break;
-
-      default:
-        return;
-        break;
+    if ($object instanceof CPerson) {
+      return $object->_pmobilePhoneNumber;
     }
+
+    return null;
   }
 }
