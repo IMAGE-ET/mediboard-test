@@ -1766,7 +1766,8 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   /**
    * Load associated Group
-   * @return CGroup
+   *
+   * @return CGroups
    */
   function loadRefEtablissement($cache = true) {
     return $this->_ref_group = $this->loadFwdRef("group_id", $cache);
@@ -1774,6 +1775,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   /**
    * Load associated RPU
+   *
    * @return CRPU
    */
   function loadRefRPU() {
@@ -1782,6 +1784,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   /**
    * Load associated BilanSSR
+   *
    * @return CBilanSSR
    */
   function loadRefBilanSSR() {

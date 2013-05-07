@@ -44,7 +44,7 @@ class CBlocOperatoire extends CMbObject {
     $backProps["stock_locations"]         = "CProductStockLocation object_id";
     $backProps["postes"]                  = "CPosteSSPI bloc_id";
     $backProps["check_list_categories"]   = "CDailyCheckItemCategory target_id";
-    $backProps["check_list_types"]        = "CDailyCheckListType object_id";
+    $backProps["check_list_type_links"]   = "CDailyCheckListTypeLink object_id";
     $backProps["product_address_orders"]  = "CProductOrder address_id";
     return $backProps;
   }
