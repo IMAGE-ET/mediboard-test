@@ -72,7 +72,7 @@ class CProductStockService extends CProductStock /* extends CMbMetaObject */ {
     $where['product_stock_service.object_class'] = "= 'CService'"; // XXX
     
     if ($service_id) {
-      $where['product_stock_service.object_id'] = "= $service_id";
+      $where['product_stock_service.object_id'] = "= '$service_id'";
     }
     
     $ljoin = array();

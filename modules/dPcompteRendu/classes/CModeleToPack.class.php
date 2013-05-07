@@ -14,14 +14,14 @@
  */
 class CModeleToPack extends CMbObject {
   // DB Table key
-  var $modele_to_pack_id = null;
+  public $modele_to_pack_id;
   
   // DB References
-  var $modele_id       = null;
-  var $pack_id         = null;
+  public $modele_id;
+  public $pack_id;
   
   // Referenced objects
-  var $_ref_modele     = null;
+  public $_ref_modele;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -33,8 +33,8 @@ class CModeleToPack extends CMbObject {
   
   function getProps() {
     $specs = parent::getProps();
-    $specs["modele_id"]   = "ref class|CCompteRendu";
-    $specs["pack_id"]     = "ref class|CPack cascade";
+    $specs["modele_id"] = "ref class|CCompteRendu";
+    $specs["pack_id"]   = "ref class|CPack cascade";
     return $specs;
   }
   
@@ -61,8 +61,8 @@ class CModeleToPack extends CMbObject {
    */
   function loadAllModelesFor($pack_id) {
     $where = array();
-    $where["pack_id"] = " = $pack_id";
+    $where["pack_id"] = " = '$pack_id'";
+
     return $this->loadList($where);
   }
 }
-?>

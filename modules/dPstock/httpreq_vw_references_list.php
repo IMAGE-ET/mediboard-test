@@ -25,11 +25,13 @@ CValue::setSession("letter", $letter);
 
 $where = array();
 if ($category_id) {
-  $where['product.category_id'] = " = $category_id";
+  $where['product.category_id'] = " = '$category_id'";
 }
+
 if ($societe_id) {
-  $where['product_reference.societe_id'] = " = $societe_id";
+  $where['product_reference.societe_id'] = " = '$societe_id'";
 }
+
 if ($keywords) {
   $where[] = "product_reference.code LIKE '%$keywords%' OR 
               product.code LIKE '%$keywords%' OR 
@@ -37,9 +39,11 @@ if ($keywords) {
               product.classe_comptable LIKE '%$keywords%' OR 
               product.description LIKE '%$keywords%'";
 }
+
 if (!$show_all) {
   $where[] = "product_reference.cancelled = '0' OR product_reference.cancelled IS NULL";
 }
+
 $where["product.name"] = ($letter === "#" ? "RLIKE '^[^A-Z]'" : "LIKE '$letter%'");
 
 $orderby = 'product.name ASC';
@@ -48,23 +52,28 @@ $leftjoin = array();
 $leftjoin['product'] = 'product.product_id = product_reference.product_id';
 
 $reference = new CProductReference();
-$total = $reference->countList($where, null, $leftjoin);
-$list_references = $reference->loadList($where, $orderby, intval($start).",".CAppUI::conf("dPstock CProductReference pagination_size"), null, $leftjoin);
+$total     = $reference->countList($where, null, $leftjoin);
+
+$list_references =
+  $reference->loadList(
+    $where, $orderby, intval($start).",".CAppUI::conf("dPstock CProductReference pagination_size"),
+    null,
+    $leftjoin
+  );
+
 foreach($list_references as $ref) {
   $ref->loadRefsFwd();
   $ref->_ref_product->loadRefStock();
   $ref->_ref_product->getPendingOrderItems(false);
 }
 
-// Smarty template
 $smarty = new CSmartyDP();
 
 $smarty->assign('list_references', $list_references);
-$smarty->assign('total', $total);
-$smarty->assign('mode', $mode);
-$smarty->assign('start', $start);
-$smarty->assign('letter', $letter);
-$smarty->assign('reference_id', $reference_id);
-
+$smarty->assign('total',           $total);
+$smarty->assign('mode',            $mode);
+$smarty->assign('start',           $start);
+$smarty->assign('letter',          $letter);
+$smarty->assign('reference_id',    $reference_id);
 
 $smarty->display('inc_references_list.tpl');

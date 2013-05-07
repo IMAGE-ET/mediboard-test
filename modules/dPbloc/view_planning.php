@@ -124,7 +124,7 @@ $whereSalle["sallesbloc.bloc_id"] =
     array_keys($group->loadBlocs(PERM_READ)));
 
 if ($filter->salle_id) {
-  $whereSalle["sallesbloc.salle_id"] = "= $filter->salle_id";
+  $whereSalle["sallesbloc.salle_id"] = "= '$filter->salle_id'";
 }
 $listSalles = $salle->loadListWithPerms(PERM_READ, $whereSalle);
 if ($filter->salle_id || $filter->_bloc_id) {

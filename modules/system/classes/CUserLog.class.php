@@ -195,7 +195,7 @@ class CUserLog extends CMbMetaObject {
     $where = array(
       "object_id"           => "= '$this->object_id'",
       "object_class"        => "= '$this->object_class'",
-      "{$this->_spec->key}" => "> $this->_id",
+      "{$this->_spec->key}" => "> '$this->_id'",
     );
     
     return $this->_canUndo = ($this->countList($where) == 0);

@@ -232,7 +232,7 @@ class COperatorDicom extends CEAIOperator {
 
         $operation = new COperation;
         $where = array(
-          'salle_id' => " = $linked_object->object_id",
+          'salle_id' => " = '$linked_object->object_id'",
           'date'     => " = '" . CMbDT::date() . "'"
         );
 
@@ -243,10 +243,11 @@ class COperatorDicom extends CEAIOperator {
         );
 
         $where = array(
-          "plagesop.salle_id"   => " = $linked_object->object_id",
+          "plagesop.salle_id"   => " = '$linked_object->object_id'",
           "plagesop.date"       => " = '" . CMbDT::date() . "'",
-          "operations.salle_id" => " = $linked_object->object_id"
+          "operations.salle_id" => " = '$linked_object->object_id'"
         );
+
         $operations = $operation->loadList($where, null, null, null, $ljoin);
 
         $operations = array_merge($operations, $unplanned_operations);

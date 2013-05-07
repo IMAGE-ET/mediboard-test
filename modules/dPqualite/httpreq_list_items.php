@@ -14,13 +14,12 @@ $items = array();
 
 if ($ei_categorie_id) {
   $where = array();
-  $where["ei_categorie_id"] = " = $ei_categorie_id";
-  $item = new CEiItem;
+  $where["ei_categorie_id"] = " = '$ei_categorie_id'";
+
+  $item  = new CEiItem;
   $items = $item->loadList($where);
 }
 
 $smarty = new CSmartyDP();
 $smarty->assign("items", $items);
 $smarty->display("ajax_list_items.tpl");
-
-?>

@@ -14,15 +14,16 @@ if (isset ($_POST['_return']) && isset ($_POST['_code'])) {
   $stock_group   = CProductStockGroup::getFromCode($_POST['_code']);
   
   $_POST['quantity'] = -abs($_POST['quantity']);
-  $_POST['_code'] = null;
-  $_POST['_return'] = null;
+  $_POST['_code']    = null;
+  $_POST['_return']  = null;
     
   if ($stock_service && $stock_group) {
   	$delivery = new CProductDelivery();
+
   	$where = array(
-      'stock_id'    => "= $stock_group->_id",
+      'stock_id'    => "= '$stock_group->_id'",
       'stock_class' => "= 'CProductStockGroup'",
-      'service_id'  => "= $stock_service->service_id",
+      'service_id'  => "= '$stock_service->service_id'",
       'quantity'    => "< 0"
     );
     
@@ -45,5 +46,3 @@ if (isset ($_POST['_return']) && isset ($_POST['_code'])) {
 
 $do = new CDoObjectAddEdit('CProductDeliveryTrace');
 $do->doIt();
-
-?>

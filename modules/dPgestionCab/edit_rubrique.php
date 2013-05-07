@@ -24,31 +24,27 @@ $rubrique->load($rubrique_id);
 $function = new CFunctions();
 $listFunc = $function->loadListWithPerms(PERM_EDIT);
 
-$where = array();
+$where        = array();
 $itemRubrique = new CRubrique;
-$order = "nom DESC";
+$order        = "nom DESC";
  
 // Récupération de la liste des rubriques hors fonction
 $where["function_id"] = "IS NULL";
-$listRubriqueGroup = $itemRubrique->loadList($where,$order);
+$listRubriqueGroup    = $itemRubrique->loadList($where,$order);
  
 $listRubriqueFonction = array();
-
 // Récupération de la liste des rubriques liés aux fonctions
 foreach($listFunc as $function) {
-	$where["function_id"] = "= $function->function_id";
+	$where["function_id"] = "= '$function->function_id'";
 	$listRubriqueFonction[$function->text] = $itemRubrique->loadList($where,$order);
 }
 
-// Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("etablissement"       	, $etablissement);
-$smarty->assign("listFunc" 				, $listFunc);
-$smarty->assign("rubrique" 				, $rubrique);
-$smarty->assign("listRubriqueGroup" 	, $listRubriqueGroup);
-$smarty->assign("listRubriqueFonction" , $listRubriqueFonction);
+$smarty->assign("etablissement",        $etablissement);
+$smarty->assign("listFunc",             $listFunc);
+$smarty->assign("rubrique",             $rubrique);
+$smarty->assign("listRubriqueGroup",    $listRubriqueGroup);
+$smarty->assign("listRubriqueFonction", $listRubriqueFonction);
 
 $smarty->display("edit_rubrique.tpl");
-
-?>

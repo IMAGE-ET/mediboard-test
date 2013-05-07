@@ -90,7 +90,7 @@ if ($mods_available[$view][2] == 'sejour') {
     $date_sejour = CMbDT::dateTime($date_sejour);
     $where = array();
     $where[] = "'$date_sejour' BETWEEN entree AND sortie";
-    $where["patient_id"] = " = $patient->_id";
+    $where["patient_id"] = " = '$patient->_id'";
     $sejours = $sejour->countList($where);
     switch ($sejours) {
       case 0:

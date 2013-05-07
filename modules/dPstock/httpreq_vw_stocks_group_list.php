@@ -25,7 +25,7 @@ $where = array(
 );
 
 if ($category_id) {
-  $where['product.category_id'] = " = $category_id";
+  $where['product.category_id'] = " = '$category_id'";
 }
 
 if ($keywords) {
@@ -39,13 +39,15 @@ $leftjoin = array(
 );
 
 if ($only_ordered_stocks) {
-  $where['product_order.cancelled'] = '= 0'; // order not cancelled
-  $where['product_order.deleted']   = '= 0'; // order not deleted
+  $where['product_order.cancelled']    = '= 0'; // order not cancelled
+  $where['product_order.deleted']      = '= 0'; // order not deleted
   $where['product_order.date_ordered'] = 'IS NOT NULL'; // order not deleted
   $where['product_order_item.renewal'] = '= 1'; // renewal line
-  $leftjoin['product_reference']    = 'product_reference.product_id = product_stock_group.product_id'; // stock to reference
-  $leftjoin['product_order_item']   = 'product_order_item.reference_id = product_reference.reference_id'; // reference to order item
-  $leftjoin['product_order']        = 'product_order.order_id = product_order_item.order_id'; // order item to order
+
+  $leftjoin['product_reference']  = 'product_reference.product_id = product_stock_group.product_id'; // stock to reference
+  $leftjoin['product_order_item'] = 'product_order_item.reference_id = product_reference.reference_id'; // reference to order item
+  $leftjoin['product_order']      = 'product_order.order_id = product_order_item.order_id'; // order item to order
+
   $where[] = 'product_order_item.order_item_id NOT IN (
     SELECT product_order_item.order_item_id FROM product_order_item
     LEFT JOIN product_order_item_reception ON product_order_item_reception.order_item_id = product_order_item.order_item_id

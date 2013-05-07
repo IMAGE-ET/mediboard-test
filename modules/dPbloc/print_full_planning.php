@@ -88,7 +88,7 @@ for ($date_temp = $date_min ; $date_temp <= $date_max ; $date_temp = CMbDT::date
   foreach ($blocs as $_bloc) {
     foreach ($_bloc->_ref_salles as $_salle) {
       foreach ($dates[$date_temp] as $date) {
-        $where["salle_id"] = "= $_salle->_id";
+        $where["salle_id"] = "= '$_salle->_id'";
         $results[$date_temp][$_salle->_id][$date] = array("am" => "", "pm" => "");
         
         foreach ($results[$date_temp][$_salle->_id][$date] as $key => &$_result_by_creneau) {

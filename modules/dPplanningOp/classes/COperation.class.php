@@ -951,15 +951,19 @@ class COperation extends CCodable implements IPatientRelated {
    */
   function loadRefAffectation() {
     $this->loadRefPlageOp();
+
     $where = array();
-    $where["sejour_id"] = "= $this->sejour_id";
-    $where["entree"] = " <= '$this->_datetime'";
-    $where["sortie"] = " >= '$this->_datetime'";
+    $where["sejour_id"] = "= '$this->sejour_id'";
+    $where["entree"]    = " <= '$this->_datetime'";
+    $where["sortie"]    = " >= '$this->_datetime'";
+
     $this->_ref_affectation = new CAffectation();
+
     $this->_ref_affectation->loadObject($where);
     $this->_ref_affectation->loadRefsFwd();
     $this->_ref_affectation->_ref_lit->loadRefsFwd();
     $this->_ref_affectation->_ref_lit->_ref_chambre->loadRefsFwd();
+
     return $this->_ref_affectation;
   }
 

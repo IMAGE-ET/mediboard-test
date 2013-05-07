@@ -21,12 +21,13 @@ $ex_class->load($ex_class_id);
 $where = array(
   "ex_class_field_group.ex_class_id" => "= '$ex_class_id'",
 );
+
 $ljoin = array(
   "ex_class_field_group" => "ex_class_field_group.ex_class_field_group_id = ex_class_field.ex_group_id",
 );
 
 if ($exclude_ex_field_id) {
-  $where["ex_class_field.ex_class_field_id"] = "!= $exclude_ex_field_id";
+  $where["ex_class_field.ex_class_field_id"] = "!= '$exclude_ex_field_id'";
 }
 
 $ex_field = new CExClassField;

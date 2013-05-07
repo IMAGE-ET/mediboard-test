@@ -46,7 +46,7 @@ CExObject::$_load_lite = $detail < 2;
 
 $group_id = ($group_id ? $group_id : CGroups::loadCurrent()->_id);
 $where = array(
-  "group_id = $group_id OR group_id IS NULL",
+  "group_id = '$group_id' OR group_id IS NULL",
 );
 
 if ($ex_class_id) {
@@ -61,6 +61,7 @@ if (empty(CExClass::$_list_cache)) {
     foreach (CExClass::$_list_cache as $_ex_class) {
       foreach ($_ex_class->loadRefsGroups() as $_group) {
         $_group->loadRefsFields();
+
         foreach ($_group->_ref_fields as $_field) {
           $_field->updateTranslation();
         }
@@ -69,11 +70,11 @@ if (empty(CExClass::$_list_cache)) {
   }
 }
 
-$all_ex_objects = array();
-$ex_objects = array();
-$ex_classes = array();
-$ex_objects_counts = array();
-$ex_objects_results = array();
+$all_ex_objects      = array();
+$ex_objects          = array();
+$ex_classes          = array();
+$ex_objects_counts   = array();
+$ex_objects_results  = array();
 $ex_classes_creation = array();
 
 $limit = null;
@@ -87,15 +88,17 @@ else {
     case 2:
       $limit = ($search_mode ? 50 : ($ex_class_id ? 20 : 10));
       break;
+
     case 1:
       $limit = ($ex_class_id ? 50 : 25);
       break;
+
     default:
     case 0:
   }
 }
 
-$step = $limit;
+$step  = $limit;
 $total = 0;
 
 if ($limit) {
@@ -107,7 +110,7 @@ $ref_objects_cache = array();
 $search = null;
 if ($concept_search) {
   $concept_search = stripslashes($concept_search);
-  $search = CExConcept::parseSearch($concept_search);
+  $search         = CExConcept::parseSearch($concept_search);
 }
 
 $ex_class_event = new CExClassEvent();
@@ -167,6 +170,7 @@ foreach (CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
       "ex_class_event.host_class" => "= '$reference_class'",
       "ex_class_event.disabled"   => "= '0'",
     );
+
     $ljoin = array(
       "ex_class" => "ex_class.ex_class_id = ex_class_event.ex_class_id",
     );

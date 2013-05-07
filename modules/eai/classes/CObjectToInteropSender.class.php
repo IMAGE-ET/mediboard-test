@@ -126,7 +126,7 @@ class CObjectToInteropSender extends CMbObject {
    * @return CStoredObject[]
    */
   function loadAllObjects() {
-    $where = array("sender_id" => " = $this->sender_id");
+    $where = array("sender_id" => " = '$this->sender_id'");
     return $this->loadList($where);
   }
 
@@ -138,7 +138,7 @@ class CObjectToInteropSender extends CMbObject {
    * @return CStoredObject[]
    */
   static function loadAllObjectsFor($sender_id) {
-    $where = array("sender_id" => " = $sender_id");
+    $where = array("sender_id" => " = '$sender_id'");
     $tmp = new CObjectToInteropSender;
     return $tmp->loadList($where);
   }

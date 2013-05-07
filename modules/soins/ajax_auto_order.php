@@ -9,11 +9,11 @@
  */
 
 $service_id = CValue::get('service_id');
-$date_min = CValue::get('date_min');
-$date_max = CValue::get('date_max');
+$date_min   = CValue::get('date_min');
+$date_max   = CValue::get('date_max');
 
 $service = new CService();
-$orders = array();
+$orders  = array();
 
 if ($service->load($service_id) && $date_min && $date_max) {
   $stocks = $service->loadBackRefs('product_stock_services');
@@ -30,19 +30,21 @@ if ($service->load($service_id) && $date_min && $date_max) {
       
       $where = array(
         'product_delivery.date_dispensation' => "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'",
-        'product_delivery.stock_id'    => " =  $stock_group->_id",
+        'product_delivery.stock_id'    => " = '$stock_group->_id'",
         'product_delivery.stock_class' => " = '$stock_group->_class'",
         'product.category_id'          => " = '".CAppUI::conf('bcb CBcbProduitLivretTherapeutique product_category_id')."'"
       );
+
       $ljoin = array(
         'product_stock_group' => 'product_delivery.stock_id = product_stock_group.stock_id',
         'product' => 'product.product_id = product_stock_group.product_id',
       );
-      $delivery = new CProductDelivery;
+
+      $delivery   = new CProductDelivery;
       $deliveries = $delivery->loadList($where, null, null, null, $ljoin);
       
-      foreach($deliveries as $delivery) {
-        if ($delivery->order == 1 && $delivery->quantity > 0){
+      foreach ($deliveries as $delivery) {
+        if ($delivery->order == 1 && $delivery->quantity > 0) {
           $effective_quantity += $delivery->quantity;
         }
       }

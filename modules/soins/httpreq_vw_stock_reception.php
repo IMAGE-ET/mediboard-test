@@ -15,23 +15,27 @@ $mode       = CValue::get('mode');
 $start      = CValue::get('start');
 
 $order_by = 'service_id, patient_id, date_dispensation ASC';
+
 $where = array();
 if ($service_id) {
-  $where['service_id'] = " = $service_id";
+  $where['service_id'] = " = '$service_id'";
 }
+
 $where['date_delivery'] = "IS NULL";
-$where['quantity'] = " > 0";
+$where['quantity']      = " > 0";
+
 $delivery = new CProductDelivery();
-$deliveries = $delivery->loadList($where, $order_by, $mode ? null : intval($start).",30");
+
+$deliveries       = $delivery->loadList($where, $order_by, $mode ? null : intval($start).",30");
 $deliveries_count = $delivery->countList($where);
 
 $deliveries_nominatif = array();
-$deliveries_global = array();
+$deliveries_global    = array();
 
 // Creation d'un tableau de patient
 $patients = array();
 if (count($deliveries)) {
-  foreach($deliveries as $_delivery){
+  foreach ($deliveries as $_delivery) {
     $_delivery->loadRefsFwd();
     $_delivery->loadRefsBack();
     $_delivery->_ref_stock->loadRefsFwd();
@@ -50,12 +54,12 @@ if (count($deliveries)) {
   }
 }
 
-// Création du template
 $smarty = new CSmartyDP();
-$smarty->assign('deliveries', $deliveries);
+
+$smarty->assign('deliveries',       $deliveries);
 $smarty->assign('deliveries_count', $deliveries_count);
-$smarty->assign('service_id', $service_id);
-$smarty->assign('start', $start);
+$smarty->assign('service_id',       $service_id);
+$smarty->assign('start',            $start);
 
 if (!$mode) {
   $smarty->display('inc_stock_reception.tpl');
@@ -63,4 +67,3 @@ if (!$mode) {
 else {
   $smarty->display('print_stock_reception.tpl');
 }
-?>

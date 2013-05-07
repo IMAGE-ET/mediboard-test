@@ -73,7 +73,7 @@ $items = array();
 
 if ($evenements) {
 	$where = array();
-	$where["ei_categorie_id"] = " = $evenements";
+	$where["ei_categorie_id"] = " = '$evenements'";
 	$item = new CEiItem;
 	$items = $item->loadList($where);
 }
@@ -105,4 +105,3 @@ $smarty->assign("items"            , $items);
 $smarty->assign("filter_item"      , $filter_item);
 
 $smarty->display("vw_incidentvalid.tpl");
-?>

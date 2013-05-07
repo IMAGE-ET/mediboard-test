@@ -73,11 +73,13 @@ function getSession($addr, $port) {
   }
   
   $session = new CDicomSession();
+
   $where = array();
-  $where["sender_id"] = " = $dicom_sender->_id";
-  $where["status"] = " IS NULL";
-  $where["state"] = " != 'Sta13'";
-  $where["end_date"] = " IS NULL";
+  $where["sender_id"] = " = '$dicom_sender->_id'";
+  $where["status"]    = " IS NULL";
+  $where["state"]     = " != 'Sta13'";
+  $where["end_date"]  = " IS NULL";
+
   $session->loadObject($where);
   
   if (!$session->_id) {
