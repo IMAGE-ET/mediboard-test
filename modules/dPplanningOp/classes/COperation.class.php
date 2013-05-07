@@ -993,12 +993,23 @@ class COperation extends CCodable implements IPatientRelated {
     }
   }
 
+  /**
+   * Chargement de l'anesthesiste, sur l'opération si disponible, sinon sur la plage
+   *
+   * @param bool $cache Utilisation du cache
+   *
+   * @return CMediusers
+   */
   function loadRefAnesth($cache = true) {
     if ($this->anesth_id) {
       return $this->_ref_anesth = $this->loadFwdRef("anesth_id", $cache);
     }
     if ($this->plageop_id) {
-      return $this->_ref_anesth = $this->_ref_plageop->loadFwdRef("anesth_id", $cache);
+      $plage = $this->_ref_plageop ?
+        $this->_ref_plageop :
+        $this->loadFwdRef("plageop_id", $cache);
+
+      return $this->_ref_anesth = $plage->loadFwdRef("anesth_id", $cache);
     }
     return $this->_ref_anesth = new CMediusers();
   }
@@ -1017,20 +1028,20 @@ class COperation extends CCodable implements IPatientRelated {
     if (!$this->_ref_plageop) {
       $this->_ref_plageop = $this->loadFwdRef("plageop_id", $cache);
     }
-    $plageOp = $this->_ref_plageop;
+    $plage = $this->_ref_plageop;
 
     // Avec plage d'opération
-    if ($plageOp->_id) {
-      $plageOp->loadRefsFwd($cache);
+    if ($plage->_id) {
+      $plage->loadRefsFwd($cache);
 
       if ($this->anesth_id) {
         $this->loadRefAnesth();
       }
       else {
-        $this->_ref_anesth = $plageOp->_ref_anesth;
+        $this->_ref_anesth = $plage->_ref_anesth;
       }
 
-      $date = $plageOp->date;
+      $date = $plage->date;
     }
     // Hors plage
     else {
@@ -1050,8 +1061,8 @@ class COperation extends CCodable implements IPatientRelated {
     elseif ($this->horaire_voulu && $this->horaire_voulu != "00:00:00") {
       $this->_datetime = "$date $this->horaire_voulu";
     }
-    elseif ($plageOp->_id) {
-      $this->_datetime = "$date ".$plageOp->debut;
+    elseif ($plage->_id) {
+      $this->_datetime = "$date ".$plage->debut;
     }
     else {
       $this->_datetime = "$date 00:00:00";
