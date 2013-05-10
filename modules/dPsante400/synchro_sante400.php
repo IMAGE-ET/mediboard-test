@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ */
 
 /**
  * @package Mediboard
@@ -9,12 +9,6 @@
  */
 
 CCanDo::checkEdit();
-
-// @todo Make it a conf
-$time = CMbDT::time();
-if (CMbRange::in($time, "07:30", "08:15")) {
-  return;
-}
 
 CApp::setTimeLimit(90);
 
@@ -63,7 +57,7 @@ if ($type || $class) {
     catch (Exception $e) {
       trigger_error("Mouvement with id '$rec' has been deleted : " . $e->getMessage(), E_USER_ERROR);
     }
-  } 
+  }
   else {
     $mouvs = $mouv->loadList($marked, $max);
   }
@@ -89,5 +83,3 @@ $smarty->assign("mouvs", $mouvs);
 $smarty->assign("relaunch", CValue::get("relaunch"));
 
 $smarty->display("synchro_sante400.tpl");
-
-?>
