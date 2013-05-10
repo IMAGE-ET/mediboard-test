@@ -390,6 +390,7 @@ $locales['modules'] = 'Modules';
 $locales['month'] = 'mois';
 $locales['months'] = 'mois';
 $locales['msg-common-loading-soon'] = 'Chargement en attente';
+$locales['msg-common-system-muted'] = 'La vue est rendu inactive à   \'%s\' soit entre \'%s\' et \'%s\'';
 $locales['msg-purge'] = 'Purge effectuée';
 $locales['night'] = 'nuit';
 $locales['no_alternative_mode'] = 'Mode alternative non activé et obligatoire pour la synchronisation dans l\'EAI';

@@ -102,7 +102,7 @@ if (file_exists($support) && CModule::getActive("support")) {
   CJSLoader::$files[] = $support;
 }
 
-// check if we are logged in
+// Check if we are logged in
 if (!CAppUI::$instance->user_id) {
   $redirect = CValue::get("logout") ?  "" : CValue::read($_SERVER, "QUERY_STRING"); 
   $_SESSION["locked"] = null;
@@ -337,6 +337,25 @@ if (!$suppressHeaders) {
   );
   
   $tplHeader->display("header.tpl");
+}
+
+// Check muters
+if ($muters = CValue::get("muters")) {
+  $muters = explode("-", $muters);
+  if (count($muters) % 2 != 0) {
+    trigger_error("Muters should come by min-max intervals time pairs", E_USER_WARNING);
+  }
+  else {
+    $time_now = CMbDT::time();
+    while (count($muters)) {
+      $time_min = array_shift($muters);
+      $time_max = array_shift($muters);
+      if (CMbRange::in($time_now, $time_min, $time_max)) {
+        CAppUI::stepMessage(UI_MSG_OK, "msg-common-system-muted", $time_now, $time_min, $time_max);
+        return;
+      }
+    }
+  }
 }
 
 // Check whether we should trace SQL queries
