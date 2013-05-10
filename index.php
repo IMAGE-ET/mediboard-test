@@ -40,7 +40,7 @@ if ($dPconfig["offline_time_start"] && $dPconfig["offline_time_end"]) {
   $offline_time_end   = strtotime($dPconfig["offline_time_end"]);
 
   if ( ($time >= $offline_time_start) && ($time <= $offline_time_end) ) {
-    header("Location: offline.php");
+    header("Location: offline.php?reason=maintenance");
     die("Le système est actuellement en cours de maintenance");
   }
 }

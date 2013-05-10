@@ -13,6 +13,10 @@ require "includes/config_all.php";
 $reason = isset($_GET["reason"]) ? $_GET["reason"] : null;
 
 switch ($reason) {
+  case "maintenance":
+    $msg = "Le système est désactivé pour cause de maintenance.";
+    break;
+
   case "bdd":
     $msg = "La base de données n'est pas accessible.";
     break;

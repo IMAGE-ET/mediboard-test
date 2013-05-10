@@ -157,6 +157,20 @@ showHeader();
   </tr>
 
   <tr>
+    <th><label for="offline_time_start" title="Heure à partir de laquelle Mediboard sera hors ligne">Heure début mode maintenance</label></th>
+    <td>
+      <input type="time" name="offline_time_start" id="offline_time_start" <?php if ($dPconfig['offline_time_start']) echo "value='".$dPconfig['offline_time_start']."'"; ?> />
+    </td>
+  </tr>
+
+  <tr>
+    <th><label for="offline_time_end" title="Heure jusquà laquelle Mediboard sera hors ligne">Heure fin mode maintenance</label></th>
+    <td>
+      <input type="time" name="offline_time_end" id="offline_time_end" <?php if ($dPconfig['offline_time_end']) echo "value='".$dPconfig['offline_time_end']."'"; ?> />
+    </td>
+  </tr>
+
+  <tr>
     <th class="category" colspan="3">Configuration de la base de données principale</th>
   </tr>
 
