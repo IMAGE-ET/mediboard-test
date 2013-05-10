@@ -18,6 +18,7 @@ $frais_divers->loadListExecutants();
 $frais_divers->setObject($object);
 $frais_divers->quantite = 1;
 $frais_divers->coefficient = 1;
+$frais_divers->loadExecution();
 
 // Création du template
 $smarty = new CSmartyDP();

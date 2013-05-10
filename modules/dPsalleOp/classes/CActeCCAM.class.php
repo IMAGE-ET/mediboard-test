@@ -29,7 +29,6 @@ class CActeCCAM extends CActe {
   public $code_acte;
   public $code_activite;
   public $code_phase;
-  public $execution;
   public $modificateurs;
   public $motif_depassement;
   public $commentaire;
@@ -89,7 +88,6 @@ class CActeCCAM extends CActe {
     $props["code_acte"]              = "code notNull ccam seekable";
     $props["code_activite"]          = "num notNull min|0 max|99";
     $props["code_phase"]             = "num notNull min|0 max|99";
-    $props["execution"]              = "dateTime notNull";
     $props["modificateurs"]          = "str maxLength|4";
     $props["motif_depassement"]      = "enum list|d|e|f|n";
     $props["commentaire"]            = "text";

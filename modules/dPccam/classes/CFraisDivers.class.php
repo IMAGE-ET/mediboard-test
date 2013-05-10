@@ -16,7 +16,6 @@ class CFraisDivers extends CActe {
   public $coefficient;
   public $quantite;
 
-  public $_execution;
   public $_montant;
 
   public $_ref_type;
@@ -27,7 +26,6 @@ class CFraisDivers extends CActe {
     $props["coefficient"] = "float notNull default|1";
     $props["quantite"]    = "num min|0";
 
-    $props["_execution"]  = "dateTime";
     $props["_montant"]    = "currency";
     return $props;
   }
@@ -61,11 +59,5 @@ class CFraisDivers extends CActe {
     if ($this->object_class && $this->object_id) {
       $this->_view .= " de $this->object_class-$this->object_id";
     }
-  }
-
-  function loadExecution() {
-    $this->loadTargetObject();
-    $this->_ref_object->getActeExecution();
-    $this->_execution = $this->_ref_object->_acte_execution;
   }
 }

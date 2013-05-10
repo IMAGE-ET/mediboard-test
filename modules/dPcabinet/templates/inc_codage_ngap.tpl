@@ -121,7 +121,6 @@ ActesNGAP = {
         {{/if}}
       {{/if}}
       <th class="category">{{mb_title object=$acte_ngap field=complement}}</th>
-      <th class="category">{{mb_title object=$acte_ngap field=exoneration}}</th>
 
       {{if $m=="dPcabinet"}}
         <th class="category">{{mb_title object=$acte_ngap field=lieu}}</th>
@@ -134,6 +133,8 @@ ActesNGAP = {
       {{if $_is_dentiste}}
         <th class="category">{{mb_title object=$acte_ngap field=numero_dent}}</th>
       {{/if}}
+
+      <th class="category">{{mb_title object=$acte_ngap field=execution}}</th>
 
       <th class="category">{{mb_title object=$acte_ngap field=executant_id}}</th>
       {{if !$object->_coded}}
@@ -159,8 +160,6 @@ ActesNGAP = {
           </td>
           <td>{{mb_field object=$acte_ngap field="montant_depassement"}}</td>
           <td>{{mb_field object=$acte_ngap field="complement" onchange="refreshTarif()" onkeyup="refreshTarif()" emptyLabel="None"}}</td>
-          <td>{{mb_field object=$acte_ngap field="exoneration"}}</td>
-
           {{if $m=="dPcabinet"}}
             <td>{{mb_field object=$acte_ngap field="lieu"}}</td>
           {{/if}}
@@ -172,6 +171,8 @@ ActesNGAP = {
           {{if $_is_dentiste}}
             <td>{{mb_field object=$acte_ngap field=numero_dent onchange="ActesNGAP.checkNumTooth()"}}</td>
           {{/if}}
+
+          <td>{{mb_field object=$acte_ngap field=execution form="editNGAP" register=true}}</td>
 
           <td>
             <select name="executant_id" style="width: 120px;" class="{{$acte_ngap->_props.executant_id}}">
@@ -215,7 +216,6 @@ ActesNGAP = {
           Aucun
         {{/if}}
       </td>
-      <td>{{mb_value object=$_acte_ngap field="exoneration"}}</td>
 
       {{if $m=="dPcabinet"}}
         <td>{{mb_value object=$_acte_ngap field="lieu"}}</td>
@@ -228,6 +228,8 @@ ActesNGAP = {
       {{if $_is_dentiste}}
         <td>{{mb_value object=$_acte_ngap field=numero_dent}}</td>
       {{/if}}
+
+      <td>{{mb_value object=$_acte_ngap field=execution}}</td>
 
       {{assign var="executant" value=$_acte_ngap->_ref_executant}}
       <td>

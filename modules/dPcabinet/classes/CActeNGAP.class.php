@@ -27,8 +27,7 @@ class CActeNGAP extends CActe {
   public $comment;
 
   // Distant fields
-  public $_libelle; 
-  public $_execution; 
+  public $_libelle;
   
   static function createEmptyFor(CCodable $codable) {
     $acte = new self;
@@ -36,6 +35,7 @@ class CActeNGAP extends CActe {
     $acte->quantite    = 1;
     $acte->coefficient = 1;
     $acte->loadListExecutants();
+    $acte->loadExecution();
     return $acte;
   }
   
@@ -59,7 +59,6 @@ class CActeNGAP extends CActe {
     $props["ald"]                 = "enum list|0|1 default|0";
     $props["numero_dent"]         = "num min|11 max|85";
     $props["comment"]             = "str";
-    $props["_execution"]          = "dateTime";
 
     return $props;
   }
@@ -89,12 +88,6 @@ class CActeNGAP extends CActe {
     if ($this->code) {
       $this->code = strtoupper($this->code);
     }
-  }
-  
-  function loadExecution() {
-    $this->loadTargetObject();
-    $this->_ref_object->getActeExecution();
-    $this->_execution = $this->_ref_object->_acte_execution;
   }
   
   /**

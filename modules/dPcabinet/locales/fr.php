@@ -1,8 +1,8 @@
 <?php
 $locales['CActeNGAP'] = 'Acte NGAP';
-$locales['CActeNGAP-_execution'] = 'Exécution';
-$locales['CActeNGAP-_execution-court'] = 'Exécution';
-$locales['CActeNGAP-_execution-desc'] = 'Exécution';
+$locales['CActeNGAP-execution'] = 'Date d\'exécution';
+$locales['CActeNGAP-execution-court'] = 'Exécution';
+$locales['CActeNGAP-execution-desc'] = 'Date d\'exécution';
 $locales['CActeNGAP-_montant_facture'] = 'Montant facturé';
 $locales['CActeNGAP-_montant_facture-court'] = 'Montant';
 $locales['CActeNGAP-_montant_facture-desc'] = 'Montant total facturé';

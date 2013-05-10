@@ -87,7 +87,42 @@ class CSetupdPccam extends CSetup {
 
     $this->addPrefQuery("user_executant", "0");
 
-    $this->mod_version = "0.18";
+    $this->makeRevision("0.18");
+
+    $query = "ALTER TABLE `frais_divers`
+                ADD `execution` DATETIME NOT NULL;";
+
+    $this->addQuery($query);
+
+    $query = "UPDATE `frais_divers`
+                INNER JOIN `consultation` ON (`frais_divers`.`object_id` = `consultation`.`consultation_id`)
+                INNER JOIN `plageconsult` ON (`consultation`.`plageconsult_id` = `plageconsult`.`plageconsult_id`)
+                SET `frais_divers`.`execution` = CONCAT(`plageconsult`.`date`, ' ', `consultation`.`heure`)
+                WHERE `frais_divers`.`object_class` = 'CConsultation';";
+    $this->addQuery($query);
+
+    $query = "UPDATE `frais_divers`
+                INNER JOIN `operations` ON (`frais_divers`.`object_id` = `operations`.`operation_id`)
+                INNER JOIN `plagesop` ON (`operations`.`plageop_id` = `plagesop`.`plageop_id`)
+                SET `frais_divers`.`execution` = CONCAT(`plagesop`.`date`, ' ', `operations`.`time_operation`)
+                WHERE `frais_divers`.`object_class` = 'COperation'
+                AND `operations`.`date` IS NULL;";
+    $this->addQuery($query);
+
+    $query = "UPDATE `frais_divers`
+                INNER JOIN `operations` ON (`frais_divers`.`object_id` = `operations`.`operation_id`)
+                SET `frais_divers`.`execution` = CONCAT(`operations`.`date`, ' ', `operations`.`time_operation`)
+                WHERE `frais_divers`.`object_class` = 'COperation'
+                AND `operations`.`date` IS NOT NULL;";
+    $this->addQuery($query);
+
+    $query = "UPDATE `frais_divers`
+                INNER JOIN `sejour` ON (`frais_divers`.`object_id` = `sejour`.`sejour_id`)
+                SET `frais_divers`.`execution` = `sejour`.`entree`
+                WHERE `frais_divers`.`object_class` = 'CSejour';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.19";
 
     // Data source query
     $query = "SELECT *

@@ -11,6 +11,7 @@
 class CActe extends CMbMetaObject {
   public $montant_depassement;
   public $montant_base;
+  public $execution;
   
   // DB References
   public $executant_id;
@@ -119,6 +120,7 @@ class CActe extends CMbMetaObject {
     $props["executant_id"]        = "ref notNull class|CMediusers";
     $props["montant_base"]        = "currency";
     $props["montant_depassement"] = "currency";
+    $props["execution"]              = "dateTime notNull";
     $props["facturable"]          = "bool notNull default|1 show|0";
 
     $props["_montant_facture"]    = "currency";
@@ -181,7 +183,13 @@ class CActe extends CMbMetaObject {
     // Permet de mettre a jour le montant dans le cas d'une consultation
     return $object->doUpdateMontants();
   }
-  
+
+  function loadExecution() {
+    $this->loadTargetObject();
+    $this->_ref_object->getActeExecution();
+    $this->execution = $this->_ref_object->_acte_execution;
+  }
+
   function store(){
     if ($msg = parent::store()) {
       return $msg;

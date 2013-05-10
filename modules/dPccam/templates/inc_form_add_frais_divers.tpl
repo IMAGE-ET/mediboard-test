@@ -71,6 +71,7 @@ removeFraisDivers = function(id, form) {
       <th class="category">{{mb_label class=CFraisDivers field=coefficient}}</th>
       <th class="category">{{mb_label class=CFraisDivers field=facturable}}</th>
       <th class="category">{{mb_label class=CFraisDivers field=montant_base}}</th>
+      <th class="category">{{mb_label class=CFraisDivers field=execution}}</th>
       <th class="category">{{mb_label class=CFraisDivers field=executant_id}}</th>
       <th class="category narrow"></th>
     </tr>
@@ -84,6 +85,7 @@ removeFraisDivers = function(id, form) {
       <td>{{mb_field object=$frais_divers field=coefficient increment=true form=formAddFraisDivers size=2 onchange="updateMontant(this.form)"}}</td>
       <td>{{mb_field object=$frais_divers field=facturable typeEnum=select}}</td>
       <td>{{mb_field object=$frais_divers field=montant_base}}</td>
+      <td>{{mb_field object=$frais_divers field=execution form="formAddFraisDivers" register=true}}</td>
       <td>
         <select name="executant_id" style="width: 120px;" class="{{$frais_divers->_props.executant_id}}">
           <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
@@ -102,6 +104,7 @@ removeFraisDivers = function(id, form) {
         <td>{{mb_value object=$_frais field=coefficient}}</td>
         <td>{{mb_value object=$_frais field=facturable}}</td>
         <td>{{mb_value object=$_frais field=montant_base}}</td>
+        <td>{{mb_value object=$_frais field=execution}}</td>
         <td>{{mb_value object=$_frais field=executant_id}}</td>
         <td>
           <button type="button" class="trash notext" onclick="removeFraisDivers({{$_frais->_id}}, this.form)">

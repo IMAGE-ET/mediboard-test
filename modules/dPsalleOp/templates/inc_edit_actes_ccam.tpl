@@ -297,13 +297,6 @@
                 {{/if}}
               {{/if}}
 
-              <!-- Codes d'exonération -->
-              <tr class="{{$view}}">
-                <th>{{mb_label object=$acte field=exoneration}}</th>
-                <td>{{mb_field object=$acte field=exoneration style="width: 15em;"}}</td>
-              </tr>
-
-
               <!-- ALD -->
               {{if $subject->_ref_patient->ald}}
                 <tr class="{{$view}}">

@@ -472,8 +472,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $execute = $this->addElement($acteNGAP, "execute");
     $mbActeNGAP->loadExecution();
 
-    $this->addElement($execute, "date" , CMbDT::date($mbActeNGAP->_execution));
-    $this->addElement($execute, "heure", CMbDT::time($mbActeNGAP->_execution));
+    $this->addElement($execute, "date" , CMbDT::date($mbActeNGAP->execution));
+    $this->addElement($execute, "heure", CMbDT::time($mbActeNGAP->execution));
     
     $mbExecutant      = $mbActeNGAP->_ref_executant;
     $prestataire      = $this->addElement($acteNGAP, "prestataire");
@@ -1596,7 +1596,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
 
     // Date d'execution
     $execute = $this->addElement($fraisDivers, "execute");
-    $this->addDateHeure($execute, $mbFraisDivers->_execution);
+    $this->addDateHeure($execute, $mbFraisDivers->execution);
 
     // Montant des frais
     $montant = $this->addElement($fraisDivers, "montant");

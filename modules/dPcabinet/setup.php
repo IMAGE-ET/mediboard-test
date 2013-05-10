@@ -1816,13 +1816,14 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `facture_cabinet` 
               DROP `consultation_id`;";
     $this->addQuery($query);
-
     $this->makeRevision("1.93");
+    
     $query = "ALTER TABLE `reglement` 
               CHANGE `object_class` `object_class` ENUM ('CFactureCabinet','CFactureEtablissement') NOT NULL DEFAULT 'CFactureCabinet';";
     $this->addQuery($query);
 
     $this->makeRevision("1.94");
+
     $query = "ALTER TABLE `acte_ngap`
               ADD `ald` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
@@ -1834,6 +1835,7 @@ class CSetupdPcabinet extends CSetup {
     $this->addDependency("dPfacturation", "0.21");
 
     $this->makeRevision("1.97");
+    
     $query = "UPDATE plageconsult p
               SET p.remplacant_id = NULL
               WHERE p.chir_id = p.remplacant_id;";
@@ -1842,22 +1844,22 @@ class CSetupdPcabinet extends CSetup {
               SET p.pour_compte_id = NULL
               WHERE p.chir_id = p.pour_compte_id;";
     $this->addQuery($query);
-
     $this->makeRevision("1.98");
+    
     $query = "ALTER TABLE `tarifs` 
                 ADD `group_id` INT (11) UNSIGNED";
     $this->addQuery($query);
     $query = "ALTER TABLE `tarifs` 
                     ADD INDEX (`group_id`);";
     $this->addQuery($query);
-
     $this->makeRevision("1.99");
+
     $query = "ALTER TABLE `acte_ngap`
                 ADD `numero_dent` TINYINT (4) UNSIGNED,
                 ADD `comment` VARCHAR (255);";
     $this->addQuery($query);
-
     $this->makeRevision("2.00");
+
     $query = "ALTER TABLE `facture_cabinet` 
                 CHANGE `statut_pro` `statut_pro` ENUM ('chomeur','etudiant','non_travailleur','independant','invalide','militaire','retraite','salarie_fr','salarie_sw','sans_emploi');";
     $this->addQuery($query);
@@ -1871,6 +1873,41 @@ class CSetupdPcabinet extends CSetup {
                 ADD `barbe` ENUM ('0','1') DEFAULT '0' AFTER `ronflements`;";
     $this->addQuery($query);
 
-    $this->mod_version = "2.02";
+    $this->makeRevision("2.02");
+
+    $query = "ALTER TABLE `acte_ngap`
+                ADD `execution` DATETIME NOT NULL;";
+
+    $this->addQuery($query);
+
+    $query = "UPDATE `acte_ngap`
+                INNER JOIN `consultation` ON (`acte_ngap`.`object_id` = `consultation`.`consultation_id`)
+                INNER JOIN `plageconsult` ON (`consultation`.`plageconsult_id` = `plageconsult`.`plageconsult_id`)
+                SET `acte_ngap`.`execution` = CONCAT(`plageconsult`.`date`, ' ', `consultation`.`heure`)
+                WHERE `acte_ngap`.`object_class` = 'CConsultation';";
+    $this->addQuery($query);
+
+    $query = "UPDATE `acte_ngap`
+                INNER JOIN `operations` ON (`acte_ngap`.`object_id` = `operations`.`operation_id`)
+                INNER JOIN `plagesop` ON (`operations`.`plageop_id` = `plagesop`.`plageop_id`)
+                SET `acte_ngap`.`execution` = CONCAT(`plagesop`.`date`, ' ', `operations`.`time_operation`)
+                WHERE `acte_ngap`.`object_class` = 'COperation'
+                AND `operations`.`date` IS NULL;";
+    $this->addQuery($query);
+
+    $query = "UPDATE `acte_ngap`
+                INNER JOIN `operations` ON (`acte_ngap`.`object_id` = `operations`.`operation_id`)
+                SET `acte_ngap`.`execution` = CONCAT(`operations`.`date`, ' ', `operations`.`time_operation`)
+                WHERE `acte_ngap`.`object_class` = 'COperation'
+                AND `operations`.`date` IS NOT NULL;";
+    $this->addQuery($query);
+
+    $query = "UPDATE `acte_ngap`
+                INNER JOIN `sejour` ON (`acte_ngap`.`object_id` = `sejour`.`sejour_id`)
+                SET `acte_ngap`.`execution` = `sejour`.`entree`
+                WHERE `acte_ngap`.`object_class` = 'CSejour';";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.03";
   }
 }
