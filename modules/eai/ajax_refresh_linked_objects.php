@@ -14,7 +14,7 @@ $actor_guid  = CValue::getOrSession("actor_guid");
 if ($actor_guid) {
   $actor = CMbObject::loadFromGuid($actor_guid);
   if ($actor->_id) {
-    $objects = $actor->loadBackRefs("object_links");
+    $objects = $actor->loadRefObjectConfigs();
     $linked_objects = array();
 
     foreach ($objects as $_object) {

@@ -2445,7 +2445,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_last_operation = $operation;
   }
 
-  function getCurrOperation($date, $show_trace = true, $only_one = true) {
+  function getCurrOperation($date, $show_trace = false, $only_one = true) {
     $date = CMbDT::date($date);
 
     $where["operations.sejour_id"] = "= '$this->_id'";

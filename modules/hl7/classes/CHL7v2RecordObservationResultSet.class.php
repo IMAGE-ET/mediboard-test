@@ -16,6 +16,8 @@
 class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
   static $event_codes = array("R01");
 
+  public $codes = array();
+
   /**
    * Get data nodes
    *
@@ -39,7 +41,9 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
       // Venue
       $oru_visit = $this->queryNode("ORU_R01.VISIT", $oru_patient, $varnull);
       $PV1 = $this->queryNode("PV1", $oru_visit, $data, true);
-      $data["admitIdentifiers"] = $this->getAdmitIdentifiers($PV1, $sender);
+      if ($PV1) {
+        $data["admitIdentifiers"] = $this->getAdmitIdentifiers($PV1, $sender);
+      }
       
       // Observations
       $order_observations = $this->queryNodes("ORU_R01.ORDER_OBSERVATION", $_patient_result, $varnull);
@@ -74,6 +78,8 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
   function handle(CHL7Acknowledgment $ack, CPatient $patient, $data) {
     // Traitement du message des erreurs
     $comment = "";
+    $codes   = array();
+    $object  = null;
     
     $exchange_ihe = $this->_ref_exchange_ihe;
     $exchange_ihe->_ref_sender->loadConfigValues();
@@ -93,89 +99,84 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     }
     $patient->load($IPP->object_id);
 
-    // Récupération de la date du relevé
-    $first_observation = $data["observations"][0];
-    $observation_dt = $this->getOBRObservationDateTime($first_observation["OBR"]);
-
-    $NDA = null;
-    if ($venueAN) {
-      $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
-    }
-
-    // Séjour non retrouvé par son NDA
-    if ($NDA && $NDA->_id) {
-      /** @var CSejour $sejour */
-      $sejour = $NDA->loadTargetObject();
-    }
-    else {
-      $where = array(
-        "patient_id" => "= '$patient->_id'",
-        "annule"     => "= '0'",
-      );
-      $sejours = CSejour::loadListForDate(CMbDT::date($observation_dt), $where, null, 1);
-      $sejour = reset($sejours);
-
-      if (!$sejour) {
-        return $exchange_ihe->setAckAR($ack, "E205", null);
-      }
-    }
-
-    // Récupération de l'opération courante à la date du relevé
-    $operation = $sejour->getCurrOperation($observation_dt);
-    if (!$operation->_id) {
-      return $exchange_ihe->setAckAR($ack, "E301", null, $operation);
-    }
-
-    $codes = array(
-      "I301",
-    );
-    
     // Récupération des observations
     foreach ($data["observations"] as $_observation) {
-      $result_set                = new CObservationResultSet();
-      $result_set->patient_id    = $patient->_id;
-      $result_set->context_class = "COperation";
-      $result_set->context_id    = $operation->_id;
-      $result_set->datetime      = CMbDT::dateTime($this->getOBRObservationDateTime($_observation["OBR"]));
-      if ($msg = $result_set->store()) {
-        return $exchange_ihe->setAckAR($ack, "E302", $msg, $operation);
+      // Récupération de la date du relevé
+      $observation_dt = $this->getOBRObservationDateTime($_observation["OBR"]);
+
+      $NDA = null;
+      if ($venueAN) {
+        $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
       }
-      
+
+      // Séjour non retrouvé par son NDA
+      if ($NDA && $NDA->_id) {
+        /** @var CSejour $sejour */
+        $sejour = $NDA->loadTargetObject();
+      }
+      else {
+        $where = array(
+          "patient_id" => "= '$patient->_id'",
+          "annule"     => "= '0'",
+        );
+        $sejours = CSejour::loadListForDate(CMbDT::date($observation_dt), $where, null, 1);
+        $sejour = reset($sejours);
+
+        if (!$sejour) {
+          return $exchange_ihe->setAckAR($ack, "E205", null);
+        }
+      }
+
+      // Récupération de l'opération courante à la date du relevé
+      $operation = $sejour->getCurrOperation($observation_dt);
+
+      $this->codes = array(
+        "I301",
+      );
+
       foreach ($_observation["OBX"] as $_OBX) {
-        $dateTimeOBX = $this->getOBXObservationDateTime($_OBX);
-        if ($dateTimeOBX) {
-          $result_set                = new CObservationResultSet();
-          $result_set->patient_id    = $patient->_id;
-          $result_set->context_class = "COperation";
-          $result_set->context_id    = $operation->_id;
-          $result_set->datetime      = CMbDT::dateTime($dateTimeOBX);
-          if ($msg = $result_set->store()) {
-            $codes[] = "E302";
-            continue;
-          }
-        }
+        // OBX.2 : Value type
+        $value_type = $this->getOBXValueType($_OBX);
 
-        // Traiter le cas où ce sont des paramètres sans résultat utilisable
-        if ($this->getOBXResultStatus($_OBX) === "X") {
-          continue;
-        }
-        
-        $result = new CObservationResult();
-        $result->observation_result_set_id = $result_set->_id;
-        $this->mappingObservationResult($_OBX, $result);
+        switch ($value_type) {
+          // Reference Pointer to External Report
+          case "RP" :
+            $this->getReferencePointerToExternalReport($_OBX, $operation);
 
-        /* @todo à voir si on envoi un message d'erreur ou si on continu ... */
-        if ($msg = $result->store()) {
-          $codes[] = "E303";
+            break;
+
+          // Encapsulated PDF
+          case "ED" :
+            $this->getEncapsulatedPDF($_OBX, $patient, $operation);
+
+            break;
+
+          // Pulse Generator and Lead Observation Results
+          case "ST" :  case "CWE" :  case "DTM" :  case "NM" :  case "SN" :
+            if (!$operation->_id) {
+              return $exchange_ihe->setAckAR($ack, "E301", null, $operation);
+            }
+
+            $this->getPulseGeneratorAndLeadObservationResults($_OBX, $patient, $operation);
+
+            break;
+
+          // Not supported
+          default :
+            return $exchange_ihe->setAckAR($ack, "E302", null, $operation);
         }
       }
     }
     
-    return $exchange_ihe->setAckAA($ack, $codes, $comment, $operation);
+    return $exchange_ihe->setAckAA($ack, $codes, $comment, $object);
   }
   
   function getOBRObservationDateTime(DOMNode $node) {
     return $this->queryTextNode("OBR.7", $node);
+  }
+
+  function getOBXValueType(DOMNode $node) {
+    return $this->queryTextNode("OBX.2", $node);
   }
   
   function getOBXObservationDateTime(DOMNode $node) {
@@ -194,10 +195,10 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $this->getUnits($node, $result);
     
     // OBX-5: Observation Value (Varies)
-    $this->getObservationValue($node, $result);   
+    $result->value = $this->getObservationValue($node);
     
     // OBX-11: Observation Result Status
-    $this->getObservationResultStatus($node, $result);   
+    $result->status =$this->getObservationResultStatus($node);
   }
   
   function getObservationIdentifier(DOMNode $node, CObservationResult $result) {
@@ -218,11 +219,54 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $result->unit_id = $unit_type->loadMatch($identifier, $coding_system, $text);
   }
   
-  function getObservationValue(DOMNode $node, CObservationResult $result) {
-    $result->value = $this->queryTextNode("OBX.5", $node);
+  function getObservationValue(DOMNode $node) {
+    return $this->queryTextNode("OBX.5", $node);
   }
   
-  function getObservationResultStatus(DOMNode $node, CObservationResult $result) {
-    $result->status = $this->queryTextNode("OBX.11", $node);
-  }   
+  function getObservationResultStatus(DOMNode $node) {
+    return $this->queryTextNode("OBX.11", $node);
+  }
+
+  function getPulseGeneratorAndLeadObservationResults(DOMNode $OBX, CPatient $patient, COperation $operation) {
+    $result_set = new CObservationResultSet();
+
+    $dateTimeOBX = $this->getOBXObservationDateTime($OBX);
+    if ($dateTimeOBX) {
+      $result_set->patient_id    = $patient->_id;
+      $result_set->context_class = "COperation";
+      $result_set->context_id    = $operation->_id;
+      $result_set->datetime      = CMbDT::dateTime($dateTimeOBX);
+      if ($msg = $result_set->store()) {
+        $this->codes[] = "E302";
+      }
+    }
+
+    // Traiter le cas où ce sont des paramètres sans résultat utilisable
+    if ($this->getOBXResultStatus($OBX) === "X") {
+      return;
+    }
+
+    $result = new CObservationResult();
+    $result->observation_result_set_id = $result_set->_id;
+    $this->mappingObservationResult($OBX, $result);
+
+    /* @todo à voir si on envoi un message d'erreur ou si on continu ... */
+    if ($msg = $result->store()) {
+      $this->codes[] = "E304";
+    }
+  }
+
+  function getEncapsulatedPDF() {
+
+  }
+
+  function getReferencePointerToExternalReport(DOMNode $OBX, COperation $operation) {
+    $exchange_ihe = $this->_ref_exchange_ihe;
+    $sender       = $exchange_ihe->_ref_sender;
+
+    // Chargement de la source associée à l'expéditeur
+    $source = reset($sender->loadRefsObjectLinks());
+
+    $filename = $this->getObservationValue($OBX);
+  }
 }

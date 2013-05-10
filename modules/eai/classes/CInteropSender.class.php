@@ -23,6 +23,8 @@ class CInteropSender extends CInteropActor {
   
   // Forward references
   public $_ref_user;
+
+  public $_ref_object_links;
   
   function updateFormFields() {
     parent::updateFormFields();
@@ -54,7 +56,20 @@ class CInteropSender extends CInteropActor {
     $backProps["object_links"]         = "CObjectToInteropSender sender_id";
     return $backProps;
   }
-  
+
+  /**
+   * Load object links
+   *
+   * @return CObjectToInteropSender[]
+   */
+  function loadRefsObjectLinks() {
+    if ($this->_ref_object_links) {
+      return $this->_ref_object_links;
+    }
+
+    return $this->_ref_object_links = $this->loadBackRefs("object_links");
+  }
+
   function loadRefUser() {
     return $this->_ref_user = $this->loadFwdRef("user_id", 1);
   }
@@ -95,7 +110,8 @@ class CInteropSender extends CInteropActor {
     return $objects;
   }
   
-  function read() {}
+  function read() {
+  }
   
   function getConfigs(CExchangeDataFormat $data_format) {
     $data_format->getConfigs($this->_guid);
