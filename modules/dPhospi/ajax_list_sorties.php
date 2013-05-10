@@ -1,4 +1,4 @@
-<?php /* $Id: ajax_list_sorties.php $ */
+<?php /** $Id: ajax_list_sorties.php $ */
 
 /**
  * @package Mediboard
@@ -85,33 +85,37 @@ $whereNP["sejour.annule"]              = "= '0'";
 if (count($services_ids)) {
   // Tenir compte des affectations sans lit_id (dans le couloir du service)
   unset($whereNP["affectation.affectation_id"]);
-  $whereNP[] = "((sejour.service_id " . CSQLDataSource::prepareIn($services_ids) . " OR sejour.service_id IS NULL) AND affectation.affectation_id IS NULL) OR "
-              ."(affectation.lit_id IS NULL AND affectation.service_id " . CSQLDataSource::prepareIn($services_ids) . ")";
+  $whereNP[] = "((sejour.service_id " . CSQLDataSource::prepareIn($services_ids) .
+    " OR sejour.service_id IS NULL) AND affectation.affectation_id IS NULL) OR " .
+    "(affectation.lit_id IS NULL AND affectation.service_id " . CSQLDataSource::prepareIn($services_ids) . ")";
 }
 if ($praticien->_id) {
   $whereNP["sejour.praticien_id"] = "= '$praticien->_id'";
 }
 
 $order = $orderNP = null;
-if ($order_col == "_patient"){
+if ($order_col == "_patient") {
   $order = $orderNP = "patients.nom $order_way, patients.prenom, sejour.entree";
 }
-if ($order_col == "_praticien"){
+
+if ($order_col == "_praticien") {
   $order = $orderNP = "users.user_last_name $order_way, users.user_first_name";
 }
-if ($order_col == "_chambre"){
+
+if ($order_col == "_chambre") {
   $order = "chambre.nom $order_way, patients.nom, patients.prenom";
   $orderNP = "patients.nom ASC, patients.prenom, sejour.entree";
 }
-if ($order_col == "sortie"){
+
+if ($order_col == "sortie") {
   $order   = "affectation.sortie $order_way, patients.nom, patients.prenom";
   $orderNP = "sejour.sortie $order_way, patients.nom, patients.prenom";
 }
-if ($order_col == "entree"){
+
+if ($order_col == "entree") {
   $order   = "affectation.entree $order_way, patients.nom, patients.prenom";
   $orderNP = "sejour.entree $order_way, patients.nom, patients.prenom";
 }
-
 
 // Récupération des présents du jour
 if ($type == "presents") {
@@ -120,10 +124,13 @@ if ($type == "presents") {
   if ($vue) {
     $where["sejour.confirme"] = " = '0'";
   }
+  /** @var CAffectation[] $presents */
   $presents = $affectation->loadList($where, $order, null, null, $ljoin);
   
   // Patients non placés
   $whereNP[]  = "'$date' BETWEEN DATE(sejour.entree) AND DATE(sejour.sortie)";
+
+  /** @var CSejour[] $presentsNP */
   $presentsNP = $sejour->loadList($whereNP, $orderNP, null, null, $ljoinNP);
 
   $update_count = count($presents)."/".count($presentsNP);
@@ -190,8 +197,9 @@ if ($type == "presents") {
   
   $presentsNP = $presentsNP_by_service;
   
+}
 // Récupération des déplacements du jour
-} elseif ($type == "deplacements") {
+elseif ($type == "deplacements") {
   if ($vue) {
     $where["effectue"] = "= '0'";
   }
@@ -213,6 +221,9 @@ if ($type == "presents") {
   $whereSortants["sejour.group_id"]       = "= '$group->_id'";
   $whereSortants["sejour.group_id"]       = "= '$group->_id'";
 
+  /** @var CAffectation[] $deplacements */
+  /** @var CAffectation[] $dep_entrants */
+  /** @var CAffectation[] $dep_sortants */
   $dep_entrants = $affectation->loadList($whereEntrants, $order, null, null, $ljoin);
   $dep_sortants = $affectation->loadList($whereSortants, $order, null, null, $ljoin);
   $deplacements = array_merge($dep_entrants, $dep_sortants);
@@ -261,12 +272,15 @@ if ($type == "presents") {
   
   $dep_sortants = $dep_sortants_by_service;
   
+}
 // Récupération des entrées du jour
-} elseif ($type_mouvement == "entrees") {
+elseif ($type_mouvement == "entrees") {
   // Patients placés
   $where["affectation.entree"] = "BETWEEN '$limit1' AND '$limit2'";
   $where["sejour.entree"]      = "= affectation.entree";
   $where["sejour.type"]        = " = '$type'";
+
+  /** @var CAffectation[] $mouvements */
   $mouvements = $affectation->loadList($where, $order, null, null, $ljoin);
   
   // Chargements des détails des séjours
@@ -291,7 +305,7 @@ if ($type == "presents") {
     }
     
     if ($dmi_active) {
-      foreach($sejour->_ref_operations as $_interv) {
+      foreach ($sejour->_ref_operations as $_interv) {
         $_interv->getDMIAlert();
       }
     }
@@ -302,10 +316,11 @@ if ($type == "presents") {
   // Patients non placés
   $whereNP["sejour.entree"] = "BETWEEN '$limit1' AND '$limit2'";
   $whereNP["sejour.type"]   = " = '$type'";
+  /** @var CSejour[] $mouvementsNP */
   $mouvementsNP = $sejour->loadList($whereNP, $orderNP, null, null, $ljoinNP);
   
   // Chargements des détails des séjours
-  foreach($mouvementsNP as $sejour) {
+  foreach ($mouvementsNP as $sejour) {
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
     $sejour->checkDaysRelative($date);
@@ -323,7 +338,7 @@ if ($type == "presents") {
       }
     }
     if ($dmi_active) {
-      foreach($sejour->_ref_operations as $_interv) {
+      foreach ($sejour->_ref_operations as $_interv) {
         $_interv->getDMIAlert();
       }
     }
@@ -331,6 +346,8 @@ if ($type == "presents") {
 
   $update_count = count($mouvements)."/".count($mouvementsNP);
 
+  /** @var CAffectation[] $mouvements_by_service */
+  /** @var CAffectation[] $mouvementsNP_by_service */
   $mouvements_by_service = array();
   $mouvementsNP_by_service = array();
   
@@ -352,8 +369,9 @@ if ($type == "presents") {
   
   $mouvementsNP = $mouvementsNP_by_service;
   
+}
 // Récupération des sorties du jour
-} else {
+else {
   // Patients placés
   $where["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
   $where["sejour.sortie"]      = "= affectation.sortie";
@@ -361,6 +379,8 @@ if ($type == "presents") {
   if ($vue) {
     $where["sejour.confirme"] = " = '0'";
   }
+
+  /** @var CAffectation[] $mouvements */
   $mouvements = $affectation->loadList($where, $order, null, null, $ljoin);
 
   // Chargements des détails des séjours
@@ -385,7 +405,7 @@ if ($type == "presents") {
     }
 
     if ($dmi_active) {
-      foreach($sejour->_ref_operations as $_interv) {
+      foreach ($sejour->_ref_operations as $_interv) {
         $_interv->getDMIAlert();
       }
     }
@@ -396,6 +416,7 @@ if ($type == "presents") {
   // Patients non placés
   $whereNP["sejour.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
   $whereNP["sejour.type"]   = " = '$type'";
+  /** @var CSejour[] $mouvementsNP */
   $mouvementsNP = $sejour->loadList($whereNP, $orderNP, null, null, $ljoinNP);
   
   // Chargements des détails des séjours
@@ -418,7 +439,7 @@ if ($type == "presents") {
     }
 
     if ($dmi_active) {
-      foreach($sejour->_ref_operations as $_interv) {
+      foreach ($sejour->_ref_operations as $_interv) {
         $_interv->getDMIAlert();
       }
     }
@@ -477,7 +498,7 @@ if ($type == "deplacements") {
   $smarty->assign("dep_sortants", $dep_sortants);
   $smarty->assign("update_count", $update_count);
 }
-elseif($type == "presents") {
+elseif ($type == "presents") {
   $smarty->assign("mouvements"  , $presents);
   $smarty->assign("mouvementsNP", $presentsNP);
   $smarty->assign("update_count", $update_count);
