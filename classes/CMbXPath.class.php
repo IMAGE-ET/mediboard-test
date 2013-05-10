@@ -79,6 +79,11 @@ class CMbXPath extends DOMXPath {
     $text = "";
     if ($node = $this->queryUniqueNode($query, $contextNode)) {
       $text = $this->convertEncoding($node->textContent);
+
+      if ($text == '""') {
+        return "";
+      }
+
       $text = str_replace(str_split($purgeChars), "", $text);
       $text = trim($text);
 
