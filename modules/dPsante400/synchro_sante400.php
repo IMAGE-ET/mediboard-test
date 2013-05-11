@@ -40,12 +40,10 @@ if ($type || $class) {
   $lock = new CMbLock("synchro_sante400/{$type}");
 
   // On tente de verrouiller
-  if (!$lock->acquire(60)) {
+  if (!$lock->acquire()) {
     $lock->failedMessage();
     return;
   }
-
-  sleep(5);
 
   // Mouvement construction by factory
   $mouv =  $class ? new $class : CMouvFactory::create($type);
