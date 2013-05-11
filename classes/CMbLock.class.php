@@ -25,11 +25,10 @@ class CMbLock {
    */
   function __construct($key) {
     $this->path = CAppUI::conf("root_dir")."/tmp/locks";
-    CMbPath::forceDir($this->path);
     $this->process = getmypid();
     $this->key = $key;
-
     $this->filename = "$this->path/$this->key";
+    CMbPath::forceDir(dirname($this->filename));
   }
 
   /**
@@ -70,5 +69,14 @@ class CMbLock {
     }
 
     return true;
+  }
+
+  /**
+   * Renders a failed acquisition message
+   *
+   * @return void
+   */
+  function failedMessage() {
+    CAppUI::stepMessage(UI_MSG_OK, "CMbLock-failed-message", $this->key);
   }
 }

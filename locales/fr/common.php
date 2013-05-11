@@ -103,6 +103,7 @@ $locales['CMbObject-msg-nodelete-backrefs'] = 'Suppression impossible en raison 
 $locales['CMbObject-msg-store-failed'] = ': Enregistrement impossible,';
 $locales['CMbObject.none'] = 'Aucun objet';
 $locales['CModule'] = 'Module';
+$locales['CMbLock-failed-message'] = 'Lock \'%s\' detected, action aborted';
 $locales['CPlageCalendaire-collision-with-plageNb%d-start%s-end%s'] = 'Collision de plage avec la plage n°%d [%s - %s]';
 $locales['CPlageHoraire-collision_keys'] = 'La classe \'%s\' qui dérive de CPlageHoraire n\'a pas défini les clés de collision (collision_keys)';
 $locales['CSS-cache-ok'] = 'Cache de CSS vidé (%d fichiers)';
