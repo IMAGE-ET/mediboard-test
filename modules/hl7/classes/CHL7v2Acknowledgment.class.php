@@ -104,7 +104,7 @@ class CHL7v2Acknowledgment implements CHL7Acknowledgment {
     $this->event_ack->flatten();
     
     $this->event_ack->msg_hl7 = utf8_encode($this->event_ack->msg_hl7);
-    
+
     return $this->event_ack->msg_hl7;
   }
 

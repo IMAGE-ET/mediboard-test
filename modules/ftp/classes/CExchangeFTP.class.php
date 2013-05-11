@@ -13,10 +13,10 @@
 
 class CExchangeFTP extends CExchangeTransportLayer {
   // DB Table key
-  var $echange_ftp_id = null;
+  public $echange_ftp_id;
   
   // DB Fields
-  var $ftp_fault      = null;
+  public $ftp_fault;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -33,4 +33,3 @@ class CExchangeFTP extends CExchangeTransportLayer {
     return $props;
   }
 }
-?>

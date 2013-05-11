@@ -168,7 +168,7 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
       // ERR-12
       $data[] = null;
     }
-    
+
     $this->fill($data);
   }
 }

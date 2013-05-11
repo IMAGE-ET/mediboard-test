@@ -13,23 +13,23 @@
 
 class CSourceFTP extends CExchangeSource {
   // DB Table key
-  var $source_ftp_id = null;
+  public $source_ftp_id;
   
   // DB Fields
-  var $port          = null;
-  var $timeout       = null;
-  var $pasv          = null;
-  var $mode          = null;
-  var $fileprefix    = null;
-  var $fileextension = null;
-  var $filenbroll    = null;
-  var $fileextension_write_end = null;
-  var $counter       = null;
+  public $port;
+  public $timeout;
+  public $pasv;
+  public $mode;
+  public $fileprefix;
+  public $fileextension;
+  public $filenbroll;
+  public $fileextension_write_end;
+  public $counter;
   
   // Form fields
-  var $_source_file      = null;
-  var $_destination_file = null;
-  var $_path             = null;
+  public $_source_file;
+  public $_destination_file;
+  public $_path;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -77,7 +77,7 @@ class CSourceFTP extends CExchangeSource {
       $ftp->close();
       
       $this->store();
-			
+
       return true;
     }
   }
@@ -194,4 +194,3 @@ class CSourceFTP extends CExchangeSource {
     $this->_response_time = url_response_time($this->host, $this->port);
   }
 }
-?>

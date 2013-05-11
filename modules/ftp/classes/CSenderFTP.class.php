@@ -17,7 +17,7 @@
  */
 class CSenderFTP extends CInteropSender {
   // DB Table key
-  var $sender_ftp_id  = null;
+  public $sender_ftp_id;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -47,10 +47,5 @@ class CSenderFTP extends CInteropSender {
   }
   
   function read() {
-    $this->loadRefsExchangesSources();
-    
-    
   }
 }
-
-?>

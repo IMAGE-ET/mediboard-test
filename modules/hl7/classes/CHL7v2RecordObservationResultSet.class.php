@@ -130,9 +130,11 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
       // Récupération de l'opération courante à la date du relevé
       $operation = $sejour->getCurrOperation($observation_dt);
 
-      $this->codes = array(
-        "I301",
-      );
+      if (!$operation->_id) {
+        /*$this->codes = array(
+          "I301",
+        );*/
+      }
 
       foreach ($_observation["OBX"] as $_OBX) {
         // OBX.2 : Value type
@@ -141,13 +143,17 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
         switch ($value_type) {
           // Reference Pointer to External Report
           case "RP" :
-            $this->getReferencePointerToExternalReport($_OBX, $operation);
+            if (!$this->getReferencePointerToExternalReport($_OBX, $operation)) {
+              return $exchange_ihe->setAckAR($ack, $this->codes, null, $operation);
+            }
 
             break;
 
           // Encapsulated PDF
           case "ED" :
-            $this->getEncapsulatedPDF($_OBX, $patient, $operation);
+            if (!$this->getEncapsulatedPDF($_OBX, $patient, $operation)) {
+              return $exchange_ihe->setAckAR($ack, $this->codes, null, $operation);
+            }
 
             break;
 
@@ -157,7 +163,9 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
               return $exchange_ihe->setAckAR($ack, "E301", null, $operation);
             }
 
-            $this->getPulseGeneratorAndLeadObservationResults($_OBX, $patient, $operation);
+            if (!$this->getPulseGeneratorAndLeadObservationResults($_OBX, $patient, $operation)) {
+              return $exchange_ihe->setAckAR($ack, $this->codes, null, $operation);
+            }
 
             break;
 
@@ -168,7 +176,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
       }
     }
     
-    return $exchange_ihe->setAckAA($ack, $codes, $comment, $object);
+    return $exchange_ihe->setAckAA($ack, $this->codes, $comment, $object);
   }
   
   function getOBRObservationDateTime(DOMNode $node) {
@@ -227,6 +235,15 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     return $this->queryTextNode("OBX.11", $node);
   }
 
+  /**
+   * OBX Segment pulse generator and lead observation results
+   *
+   * @param DOMNode    $OBX       DOM node
+   * @param CPatient   $patient   Person
+   * @param COperation $operation Opération
+   *
+   * @return bool
+   */
   function getPulseGeneratorAndLeadObservationResults(DOMNode $OBX, CPatient $patient, COperation $operation) {
     $result_set = new CObservationResultSet();
 
@@ -243,7 +260,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
 
     // Traiter le cas où ce sont des paramètres sans résultat utilisable
     if ($this->getOBXResultStatus($OBX) === "X") {
-      return;
+      return true;
     }
 
     $result = new CObservationResult();
@@ -254,19 +271,79 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     if ($msg = $result->store()) {
       $this->codes[] = "E304";
     }
+
+    return true;
   }
 
+  /**
+   * OBX Segment with encapsulated PDF
+   *
+   * @return bool
+   */
   function getEncapsulatedPDF() {
 
   }
 
+  /**
+   * OBX Segment with reference pointer to external report
+   *
+   * @param DOMNode    $OBX       DOM node
+   * @param COperation $operation Opération
+   *
+   * @return bool
+   */
   function getReferencePointerToExternalReport(DOMNode $OBX, COperation $operation) {
     $exchange_ihe = $this->_ref_exchange_ihe;
     $sender       = $exchange_ihe->_ref_sender;
 
     // Chargement de la source associée à l'expéditeur
-    $source = reset($sender->loadRefsObjectLinks());
+    /** @var CInteropSender $sender_link */
+    $sender_link = reset($sender->loadRefsObjectLinks())->_ref_object;
+
+    // Aucun expéditeur permettant de récupérer les fichiers
+    if (!$sender_link->_id) {
+      $this->codes[] = "E340";
+
+      return false;
+    }
+
+    $authorized_sources = array(
+      "CSenderFileSystem",
+      "CSenderFTP"
+    );
+
+    // L'expéditeur n'est pas prise en charge pour la réception de fichiers
+    if (!CMbArray::in($sender_link->_class, $authorized_sources)) {
+      $this->codes[] = "E341";
+
+      return false;
+    }
+
+    $sender_link->loadRefsExchangesSources();
+    // Aucune source permettant de récupérer les fichiers
+    if (!$sender_link->_id) {
+      $this->codes[] = "E342";
+
+      return false;
+    }
+
+    $source = $sender_link->_ref_exchanges_sources[0];
 
     $filename = $this->getObservationValue($OBX);
+    $path     = $filename;
+
+    if ($source instanceof CSourceFileSystem) {
+      $path = $source->getFullPath()."/$path";
+    }
+
+    $content = $source->getData("$path");
+
+    // Gestion du CFile
+    $file = new CFile();
+    $file->setObject($operation);
+    $file->file_name  = $filename;
+    $file->file_type  = "application/pdf";
+
+
   }
 }
