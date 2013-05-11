@@ -42,10 +42,10 @@ $path = $source->getFullPath($source->_path);
 $filename_excludes = "$path/mb_excludes.txt";
 
 // Initialisation d'un fichier de verrou de 240 secondes
-$lock = new CMbLock("$path/mb_lock.txt", 240);
+$lock = new CMbLock("dispatch-files-$sender->_guid");
 
 // On tente de verrouiller
-if (!$lock->acquire()) {
+if (!$lock->acquire(240)) {
   return;
 }
 
