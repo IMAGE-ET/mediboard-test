@@ -157,6 +157,7 @@ Main.add(function () {
                 </label>
               </th>
 
+              {{assign var=_readonly value=null}}
               {{if array_key_exists("formfields", $_params)}}
                 {{if $real_context}}
                   <td>
@@ -179,8 +180,6 @@ Main.add(function () {
                   {{if array_key_exists("formula", $_params)}}
                     {{assign var=_hidden value=true}}
                   {{/if}}
-                {{else}}
-                  {{assign var=_readonly value=null}}
                 {{/if}}
 
                 {{if $real_context}}
