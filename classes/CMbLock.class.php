@@ -34,11 +34,11 @@ class CMbLock {
   /**
    * Try to acquire a lock file
    *
-   * @param float $lock_lifetime The max time in seconds to acquire the semaphore (max 10s)
+   * @param float $lock_lifetime The lock life time in seconds
    *
    * @return bool
    */
-  function acquire($lock_lifetime = 10.0) {
+  function acquire($lock_lifetime = 300.0) {
     // No lock, we acquire
     if (!file_exists($this->filename)) {
       return touch($this->filename);
