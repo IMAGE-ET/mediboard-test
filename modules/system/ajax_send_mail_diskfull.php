@@ -3,13 +3,14 @@
 /**
  * Send a mail concerning the diskfull problem while backuping
  *  
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * @package Mediboard
+ * @author  SARL OpenXtrem <dev@openxtrem.com>
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version SVN: $Id:$
+ * @link    http://www.mediboard.org
  */
 
+/** @var CSourceSMTP $source */
 $source = CExchangeSource::get("system-message", "smtp", true, null, true);
 
 try {
@@ -38,4 +39,3 @@ catch (CMbException $e) {
 }
 
 CAppUI::stepAjax("system-msg-email_sent");
-?>
