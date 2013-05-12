@@ -9,12 +9,18 @@
  * @version    $Revision$
  */
 
+/**
+ * Actes SSR de la nomenclature CdARR
+ */
 class CActeCdARR extends CActeSSR {
   public $acte_cdarr_id;
     
   /** @var CActiviteCdARR */
   public $_ref_activite_cdarr;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'acte_cdarr';
@@ -22,18 +28,29 @@ class CActeCdARR extends CActeSSR {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["code"] = "str notNull length|4 show|0";
     return $props;
   }
 
+  /**
+   * Chargement de l'activité associé
+   *
+   * @return CActiviteCdARR
+   */
   function loadRefActiviteCdARR() {
     $activite = CActiviteCdARR::get($this->code);
     $activite->loadRefTypeActivite();
     return $this->_ref_activite_cdarr = $activite;
   }
-  
+
+  /**
+   * @see parent::loadView()
+   */
   function loadView(){
     parent::loadView();
     $this->loadRefActiviteCdARR();
