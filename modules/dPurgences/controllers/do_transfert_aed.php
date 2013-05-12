@@ -1,17 +1,18 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 function viewMsg($msg, $action, $txt = ""){
   global $m, $tab;
   $action = CAppUI::tr($action);
-  if($msg){
+  if ($msg) {
     CAppUI::setMsg("$action: $msg", UI_MSG_ERROR );
     CAppUI::redirect("m=$m&tab=$tab");
     return;
@@ -24,7 +25,7 @@ $rpu_id = CValue::post("rpu_id");
 $rpu = new CRPU();
 $rpu->load($rpu_id);
 
-$sejour     = $rpu->loadRefSejour();;
+$sejour     = $rpu->loadRefSejour();
 $sejour_rpu = $sejour;
 
 // Creation d'un séjour reliquat
@@ -58,5 +59,3 @@ $msg = $sejour->store();
 viewMsg($msg, "CSejour-title-modify");
 
 CAppUI::redirect("m=dPplanningOp&tab=vw_edit_sejour&sejour_id=$sejour->_id");
-
-?>

@@ -3,13 +3,14 @@
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPurgences
+ * @subpackage Urgences
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
 CCanDo::checkRead();
+
 $motif_id     = CValue::getOrSession("motif_id");
 $chapitre_id  = CValue::getOrSession("chapitre_id");
 $liste        = CValue::get("liste");
@@ -18,10 +19,12 @@ $motif  = new CMotif();
 $motifs = $motif->loadList(null, "chapitre_id");
 
 $chapitre = new CChapitreMotif();
+
+/** @var CChapitreMotif[] $chapitres */
 $chapitres = $chapitre->loadList();
 
 foreach ($chapitres as $chap) {
- $chap->loadRefsMotifs(); 
+  $chap->loadRefsMotifs();
 }
 
 // Création du template
@@ -40,5 +43,3 @@ elseif ($liste == "chapitre") {
 else {
   $smarty->display("vw_motifs.tpl");
 }
-
-?>

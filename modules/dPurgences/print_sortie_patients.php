@@ -1,11 +1,12 @@
-<?php /* $Id $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 // Type d'affichage
@@ -46,6 +47,8 @@ if (in_array($view_sortie, array("normal", "mutation", "transfert", "deces"))) {
 $order = "consultation.heure $order_way";
 
 $sejour = new CSejour;
+
+/** @var CSejour[] $listSejours */
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
 foreach ($listSejours as &$_sejour) {
   $_sejour->loadRefsFwd();
@@ -62,7 +65,6 @@ foreach ($listSejours as &$_sejour) {
   // Détail du patient
   $patient =& $_sejour->_ref_patient; 
   $patient->loadIPP();
-
 }
 
 // Chargement des services
@@ -79,4 +81,3 @@ $smarty->assign("listSejours", $listSejours);
 $smarty->assign("services"   , $services);
 $smarty->assign("print"      , true);
 $smarty->display("print_sortie_patients.tpl");
-?>

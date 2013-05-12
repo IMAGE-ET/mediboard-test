@@ -1,11 +1,12 @@
-<?php /* $Id: httpreq_vw_main_courante.php 14578 2012-02-07 16:08:46Z alexis_granger $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: 14578 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -42,12 +43,12 @@ $where[] = CAppUI::pref("showMissingRPU") ?
 $where["sejour.group_id"] = "= '$group->_id'";
 $where["sejour.UHCD"] = "= '1'";
 
-if ($uhcd_affichage == "prendre_en_charge"){
+if ($uhcd_affichage == "prendre_en_charge") {
   $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
   $where["consultation.consultation_id"] = "IS NULL";
 } 
 
-if($uhcd_affichage == "presents"){
+if ($uhcd_affichage == "presents") {
   $where["sejour.sortie_reelle"] = "IS NULL";
   $where["sejour.annule"] = " = '0'";
   
@@ -76,6 +77,7 @@ if ($order_col == "_patient_id") {
   $order = "patients.nom $order_way, ccmu $order_way";
 }
 
+/** @var CSejour[] $listSejours */
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
 foreach ($listSejours as &$sejour) {
   // Chargement du numero de dossier
@@ -89,7 +91,7 @@ foreach ($listSejours as &$sejour) {
   $sejour->loadRefPrescriptionSejour();
 
   $prescription = $sejour->_ref_prescription_sejour;
-  if ($prescription){
+  if ($prescription) {
     $prescription->loadRefsPrescriptionLineMixes();
     $prescription->loadRefsLinesMedByCat();
     $prescription->loadRefsLinesElementByCat();
@@ -125,8 +127,12 @@ if ($order_col == "ccmu") {
   function ccmu_cmp($sejour1, $sejour2) {
     $ccmu1 = CValue::first($sejour1->_ref_rpu->ccmu, "9");
     $ccmu2 = CValue::first($sejour2->_ref_rpu->ccmu, "9");
-    if ($ccmu1 == "P") $ccmu1 = "1";
-    if ($ccmu2 == "P") $ccmu2 = "1";
+    if ($ccmu1 == "P") {
+      $ccmu1 = "1";
+    }
+    if ($ccmu2 == "P") {
+      $ccmu2 = "1";
+    }
     return $ccmu2 - $ccmu1;
   }
 
@@ -167,4 +173,3 @@ $smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::ge
 $smarty->assign("admin_urgences"  , $admin_urgences);
 $smarty->assign("type"        , "UHCD");
 $smarty->display("inc_main_courante.tpl");
-?>

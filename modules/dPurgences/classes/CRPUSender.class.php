@@ -1,10 +1,12 @@
 <?php
 /**
- *  @package Mediboard
- *  @subpackage dPurgences
- *  @version $Revision: 6345 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 abstract class CRPUSender {
@@ -16,4 +18,3 @@ abstract class CRPUSender {
   
   function transmit(CExtractPassages $extractPassages) {}
 }
-?>

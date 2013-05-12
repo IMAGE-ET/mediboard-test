@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $offline = CValue::get("offline");
@@ -32,6 +33,7 @@ $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
 $order = "sejour.entree ASC";
 
+/** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
 $stats = array (
@@ -130,5 +132,3 @@ $smarty->assign("dateTime"     , CMbDT::dateTime());
 $smarty->assign("offlines"     , $offlines);
 
 $smarty->display("print_main_courante.tpl");
-
-?>

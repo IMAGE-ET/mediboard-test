@@ -1,13 +1,14 @@
-<?php /* $Id: config.php 8507 2010-04-08 12:42:38Z alexis_granger $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: 8507 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
-  
+
 $dPconfig["dPurgences"] = array (
   "date_tolerance"            => "2",
   "old_rpu"                   => "0",
@@ -44,6 +45,3 @@ $dPconfig["dPurgences"] = array (
   "display_regule_par"        => "0",
   "use_blocage_lit"           => "0"
 );
-
-
-?>

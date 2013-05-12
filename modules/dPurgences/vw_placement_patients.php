@@ -1,11 +1,12 @@
-<?php  /** $Id: vw_placement_patients.php  $ **/
-
+<?php
 /**
- * @package Mediboard
- * @subpackage urgences
- * @version $Revision: 7320 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -43,7 +44,7 @@ $grille = array(
 $listSejours = array(
   "uhcd"    => array(),
   "urgence" => array(),
-  );
+);
 
 $ljoin = array();
 $ljoin["rpu"] = "rpu.sejour_id = sejour.sejour_id";
@@ -55,6 +56,7 @@ $temp["sejour.annule"]    = " = '0'";
 $temp["sejour.group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
 
 for ($num = 0; $num <= 1; $num++) {
+  /** @var CChambre[] $chambres */
   if ($num == 0) {
     $chambres = $chambres_uhcd;
     $temp["sejour.uhcd"] = " = '1'";
@@ -75,14 +77,14 @@ for ($num = 0; $num <= 1; $num++) {
     if ($emplacement->hauteur-1) {
       for ($a = 0; $a <= $emplacement->hauteur-1; $a++) {
         if ($emplacement->largeur-1) {
-         for ($b = 0; $b <= $emplacement->largeur-1; $b++) {
-           if ($b != 0) {
-             unset($grille[$nom][$emplacement->plan_y+$a][$emplacement->plan_x+$b]);
-           }
-           elseif ($a != 0) {
-             unset($grille[$nom][$emplacement->plan_y+$a][$emplacement->plan_x+$b]);
-           }
-         }
+          for ($b = 0; $b <= $emplacement->largeur-1; $b++) {
+            if ($b != 0) {
+              unset($grille[$nom][$emplacement->plan_y+$a][$emplacement->plan_x+$b]);
+            }
+            elseif ($a != 0) {
+              unset($grille[$nom][$emplacement->plan_y+$a][$emplacement->plan_x+$b]);
+            }
+          }
         }
         elseif ($a < $emplacement->hauteur-1) {
           $c = $a+1;
@@ -101,7 +103,9 @@ for ($num = 0; $num <= 1; $num++) {
     $where["rpu.box_id"] = CSQLDataSource::prepareIn(array_keys($chambre->_ref_lits));
     
     $sejour = new CSejour();
-    $sejours = $sejour->loadList($where, null, null,null, $ljoin);
+
+    /** @var CSejour[] $sejours */
+    $sejours = $sejour->loadList($where, null, null, null, $ljoin);
     if ($sejours) {
       foreach ($sejours as $sejour) {
         $sejour->loadRefRPU();
@@ -113,21 +117,29 @@ for ($num = 0; $num <= 1; $num++) {
   }
   
   //Traitement des lignes vides
-  $nb=0;  $total=0;
+  $nb = 0;
+  $total = 0;
+
   foreach ($grille[$nom] as $j => $value) {
-    $nb=0;
-      foreach ($value as $i => $valeur) {
-        if ($valeur == "0") {
-          if ($j == 0 || $j == 9) {
+    $nb = 0;
+    foreach ($value as $i => $valeur) {
+      if ($valeur == "0") {
+        if ($j == 0 || $j == 9) {
+          $nb++;
+        }
+        else {
+          if (
+              !isset($grille[$nom][$j-1][$i]) ||
+              $grille[$nom][$j-1][$i] == "0" ||
+              !isset($grille[$nom][$j+1][$i]) ||
+              $grille[$nom][$j+1][$i] == "0"
+          ) {
             $nb++;
-          }
-          else {
-            if (!isset($grille[$nom][$j-1][$i]) || $grille[$nom][$j-1][$i] == "0" || !isset($grille[$nom][$j+1][$i]) || $grille[$nom][$j+1][$i] == "0" ) {
-              $nb++;
-            }
           }
         }
       }
+    }
+
     //suppression des lignes inutiles
     if ($nb == $conf_nb_colonnes) {
       unset($grille[$nom][$j]);
@@ -145,8 +157,13 @@ for ($num = 0; $num <= 1; $num++) {
           $nb++; 
         }
         else {
-          if ((!isset($grille[$nom][$j][$i-1]) || $grille[$nom][$j][$i-1] == "0") || (!isset($grille[$nom][$j][$i+1]) || $grille[$nom][$j][$i+1] == "0")) {
-          $nb++;
+          if (
+              !isset($grille[$nom][$j][$i-1]) ||
+              $grille[$nom][$j][$i-1] == "0" ||
+              !isset($grille[$nom][$j][$i+1]) ||
+              $grille[$nom][$j][$i+1] == "0"
+          ) {
+            $nb++;
           }
         }
       }
@@ -154,7 +171,7 @@ for ($num = 0; $num <= 1; $num++) {
     //suppression des colonnes inutiles
     if ($nb == $total) {
       for ($a = 0; $a < $conf_nb_colonnes; $a++) {
-       unset($grille[$nom][$a][$i]);
+        unset($grille[$nom][$a][$i]);
       }
     }
   }
@@ -162,7 +179,7 @@ for ($num = 0; $num <= 1; $num++) {
 
 // Création du template
 $smarty = new CSmartyDP();
-//
+
 $smarty->assign("listSejours"    , $listSejours);
 $smarty->assign("grilles"        , $grille);
 $smarty->assign("date"           , $date);
@@ -170,4 +187,3 @@ $smarty->assign("suiv"           , CMbDT::date("+1 day", $date));
 $smarty->assign("prec"           , CMbDT::date("-1 day", $date));
 
 $smarty->display("vw_placement_patients.tpl");
-?>

@@ -3,9 +3,9 @@
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPurgences
+ * @subpackage Urgences
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -19,144 +19,145 @@ class CSetupdPurgences extends CSetup {
     $this->makeRevision("all");
     
     $query = "CREATE TABLE `rpu` (
-      `rpu_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
-      `sejour_id` INT(11) UNSIGNED NOT NULL, 
-      `diag_infirmier` TEXT, 
-      `mode_entree` ENUM('6','7','8'), 
-      `provenance` ENUM('1','2','3','4','5','8'), 
-      `transport` ENUM('perso','ambu','vsab','smur','heli','fo'), 
-      `prise_en_charge` ENUM('med','paramed','aucun'), 
-      `motif` TEXT, 
-      `ccmu` ENUM('1','2','3','4','5','P','D') NOT NULL, 
-      `sortie` DATETIME, 
-      `mode_sortie` ENUM('6','7','8','9'), 
-      `destination` ENUM('1','2','3','4','6','7'), 
-      `orientation` ENUM('HDT','HO','SC','SI','REA','UHCD','MED','CHIR','OBST','FUGUE','SCAM','PSA','REO'), 
-      KEY `sejour_id` (`sejour_id`),
-      KEY `ccmu` (`ccmu`),
-      KEY `sortie` (`sortie`),
-      PRIMARY KEY (`rpu_id`)) /*! ENGINE=MyISAM */;";
+                `rpu_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `sejour_id` INT(11) UNSIGNED NOT NULL,
+                `diag_infirmier` TEXT,
+                `mode_entree` ENUM('6','7','8'),
+                `provenance` ENUM('1','2','3','4','5','8'),
+                `transport` ENUM('perso','ambu','vsab','smur','heli','fo'),
+                `prise_en_charge` ENUM('med','paramed','aucun'),
+                `motif` TEXT,
+                `ccmu` ENUM('1','2','3','4','5','P','D') NOT NULL,
+                `sortie` DATETIME,
+                `mode_sortie` ENUM('6','7','8','9'),
+                `destination` ENUM('1','2','3','4','6','7'),
+                `orientation` ENUM('HDT','HO','SC','SI','REA','UHCD','MED','CHIR','OBST','FUGUE','SCAM','PSA','REO'),
+                KEY `sejour_id` (`sejour_id`),
+                KEY `ccmu` (`ccmu`),
+                KEY `sortie` (`sortie`),
+                PRIMARY KEY (`rpu_id`)
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.1");
     $query = "ALTER TABLE `rpu` 
-      CHANGE `ccmu` `ccmu` ENUM( '1', 'P', '2', '3', '4', '5', 'D' )";
+                CHANGE `ccmu` `ccmu` ENUM( '1', 'P', '2', '3', '4', '5', 'D' )";
     $this->addQuery($query);
     
     $this->makeRevision("0.11");
     $query = "ALTER TABLE `rpu`
-      ADD `radio_debut` DATETIME, 
-      ADD `radio_fin` DATETIME;";
+                ADD `radio_debut` DATETIME,
+                ADD `radio_fin` DATETIME;";
     $this->addQuery($query);
     
     $this->makeRevision("0.12");
     $query = "ALTER TABLE `rpu`
-      DROP `mode_sortie`,
-      DROP `sortie`";
+                DROP `mode_sortie`,
+                DROP `sortie`";
     $this->addQuery($query);
     
     $this->makeRevision("0.13");
     $query = "ALTER TABLE `rpu`
-      ADD `mutation_sejour_id` INT(11) UNSIGNED;";
+                ADD `mutation_sejour_id` INT(11) UNSIGNED;";
     $this->addQuery($query);
 
     $this->makeRevision("0.14");
     $query = "ALTER TABLE `rpu`
-      ADD `gemsa` ENUM('1','2','3','4','5','6');";
+                ADD `gemsa` ENUM('1','2','3','4','5','6');";
     $this->addQuery($query);
     
     $this->makeRevision("0.15");
     $query = "ALTER TABLE `rpu`
-      ADD `type_pathologie` ENUM('C','E','M','P','T');";
+                ADD `type_pathologie` ENUM('C','E','M','P','T');";
     $this->addQuery($query);
 
     $this->makeRevision("0.16");
     $query = "ALTER TABLE `rpu`
-      CHANGE `mode_entree` `mode_entree` ENUM('6','7','8') NOT NULL, 
-      CHANGE `transport` `transport` ENUM('perso','perso_taxi','ambu','ambu_vsl','vsab','smur','heli','fo') NOT NULL;";
+                CHANGE `mode_entree` `mode_entree` ENUM('6','7','8') NOT NULL,
+                CHANGE `transport` `transport` ENUM('perso','perso_taxi','ambu','ambu_vsl','vsab','smur','heli','fo') NOT NULL;";
     $this->addQuery($query);
 
     $this->makeRevision("0.17");
     $query = "ALTER TABLE `rpu`
-      CHANGE `prise_en_charge` `pec_transport` ENUM('med','paramed','aucun')";
+                CHANGE `prise_en_charge` `pec_transport` ENUM('med','paramed','aucun')";
     $this->addQuery($query);
 
     $this->makeRevision("0.18");
     $query = "ALTER TABLE `rpu`
-      ADD `urprov` ENUM('AM','AT','DO','EC','MT','OT','RA','RC','SP','VP'), 
-      ADD `urmuta` ENUM('A','D','M','P','X'), 
-      ADD `urtrau` ENUM('I','S','T');";
+                ADD `urprov` ENUM('AM','AT','DO','EC','MT','OT','RA','RC','SP','VP'),
+                ADD `urmuta` ENUM('A','D','M','P','X'),
+                ADD `urtrau` ENUM('I','S','T');";
     $this->addQuery($query);
 
     $this->makeRevision("0.19");
     $query = "ALTER TABLE `rpu`
-      ADD `box_id` INT(11) UNSIGNED";
+                ADD `box_id` INT(11) UNSIGNED";
     $this->addQuery($query);
     
     $this->makeRevision("0.20");
     $query = "ALTER TABLE `rpu`
-      ADD `sortie_autorisee` ENUM ('0','1') DEFAULT '0',
-      ADD INDEX (`radio_debut`),
-      ADD INDEX (`radio_fin`),
-      ADD INDEX (`mutation_sejour_id`),
-      ADD INDEX (`box_id`);";
+                ADD `sortie_autorisee` ENUM ('0','1') DEFAULT '0',
+                ADD INDEX (`radio_debut`),
+                ADD INDEX (`radio_fin`),
+                ADD INDEX (`mutation_sejour_id`),
+                ADD INDEX (`box_id`);";
     $this->addQuery($query);
     
     $this->makeRevision("0.21");
     $query = "ALTER TABLE `rpu`
-      ADD `accident_travail` DATE,
-      ADD INDEX (`accident_travail`);";
+                ADD `accident_travail` DATE,
+                ADD INDEX (`accident_travail`);";
     $this->addQuery($query);
     
     $this->makeRevision("0.22");
     $query = "ALTER TABLE `rpu` 
-      ADD `bio_depart` DATETIME,
-      ADD `bio_retour` DATETIME,
-      ADD INDEX (`bio_depart`),
-      ADD INDEX (`bio_retour`);";
+                ADD `bio_depart` DATETIME,
+                ADD `bio_retour` DATETIME,
+                ADD INDEX (`bio_depart`),
+                ADD INDEX (`bio_retour`);";
     $this->addQuery($query);
     
     $this->makeRevision("0.23");
       
     $query = "CREATE TABLE `extract_passages` (
-      `extract_passages_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-      `date_extract` DATETIME NOT NULL,
-      `debut_selection` DATETIME NOT NULL,
-      `fin_selection` DATETIME NOT NULL,
-      `date_echange` DATETIME,
-      `message` MEDIUMTEXT NOT NULL,
-      `message_valide` ENUM ('0','1'),
-      `nb_tentatives` INT (11)
-    ) /*! ENGINE=MyISAM */;";
+                `extract_passages_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `date_extract` DATETIME NOT NULL,
+                `debut_selection` DATETIME NOT NULL,
+                `fin_selection` DATETIME NOT NULL,
+                `date_echange` DATETIME,
+                `message` MEDIUMTEXT NOT NULL,
+                `message_valide` ENUM ('0','1'),
+                `nb_tentatives` INT (11)
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `extract_passages` 
-      ADD INDEX (`date_extract`),
-      ADD INDEX (`debut_selection`),
-      ADD INDEX (`fin_selection`),
-      ADD INDEX (`date_echange`);";
+                ADD INDEX (`date_extract`),
+                ADD INDEX (`debut_selection`),
+                ADD INDEX (`fin_selection`),
+                ADD INDEX (`date_echange`);";
     $this->addQuery($query);
       
     $query = "CREATE TABLE `rpu_passage` (
-      `rpu_passage_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-      `rpu_id` INT (11) UNSIGNED NOT NULL,
-      `extract_passages_id` INT (11) UNSIGNED NOT NULL
-    ) /*! ENGINE=MyISAM */;";
+                `rpu_passage_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `rpu_id` INT (11) UNSIGNED NOT NULL,
+                `extract_passages_id` INT (11) UNSIGNED NOT NULL
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `rpu_passage` 
-      ADD INDEX (`rpu_id`),
-      ADD INDEX (`extract_passages_id`);";
+                ADD INDEX (`rpu_id`),
+                ADD INDEX (`extract_passages_id`);";
     $this->addQuery($query);
     
     $this->makeRevision("0.24");
       
     $query = "ALTER TABLE `rpu` 
-      ADD `specia_att` DATETIME,
-      ADD `specia_arr` DATETIME;";
+                ADD `specia_att` DATETIME,
+                ADD `specia_arr` DATETIME;";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `rpu` 
-      ADD INDEX (`specia_att`),
-      ADD INDEX (`specia_arr`);";
+                ADD INDEX (`specia_att`),
+                ADD INDEX (`specia_arr`);";
     $this->addQuery($query);
         
     $this->makeRevision("0.25");
@@ -168,25 +169,25 @@ class CSetupdPurgences extends CSetup {
     $this->makeRevision("0.27");
     
     $query = "ALTER TABLE `extract_passages` 
-      ADD `type` ENUM ('rpu','urg') DEFAULT 'rpu';";
+                ADD `type` ENUM ('rpu','urg') DEFAULT 'rpu';";
     $this->addQuery($query);
     
     $this->makeRevision("0.28");
     $query = "ALTER TABLE `rpu`
-      ADD `pec_douleur` TEXT";
+                ADD `pec_douleur` TEXT";
     $this->addQuery($query);
    
     $this->makeRevision("0.29");
     $query = "ALTER TABLE `extract_passages` 
-      ADD `group_id` INT (11) UNSIGNED NOT NULL;";
+                ADD `group_id` INT (11) UNSIGNED NOT NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.30");
     $query = "CREATE TABLE `circonstance` (
-       `code` VARCHAR (15) NOT NULL,
-       `libelle` VARCHAR (100),
-       `commentaire` TEXT
-    ) /*! ENGINE=MyISAM */;";
+                `code` VARCHAR (15) NOT NULL,
+                `libelle` VARCHAR (100),
+                `commentaire` TEXT
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $query = "INSERT INTO `circonstance` VALUES ( 'AVP', 'AVP', 'Accident de transport de toute nature.');";
@@ -268,33 +269,36 @@ class CSetupdPurgences extends CSetup {
     $this->addQuery($query);
     
     $query = "ALTER TABLE `rpu`
-      ADD `circonstance` VARCHAR (50);";
+                ADD `circonstance` VARCHAR (50);";
     $this->addQuery($query);
     
     $this->makeRevision("0.31");
     $query = "ALTER TABLE `circonstance`
-      ADD `circonstance_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY FIRST;";
+                ADD `circonstance_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY FIRST;";
     $this->addQuery($query);
     
     $this->makeRevision("0.32");
-    $query = "ALTER TABLE `rpu` CHANGE `accident_travail` `date_at` DATE DEFAULT NULL";
+    $query = "ALTER TABLE `rpu`
+                CHANGE `accident_travail` `date_at` DATE DEFAULT NULL";
     $this->addQuery($query);
     
     $this->makeRevision("0.33");
     $this->addDependency("dPplanningOp", "1.23");
-    $query = "UPDATE `sejour`,`rpu` SET `sejour`.`mode_entree` = `rpu`.`mode_entree` WHERE `rpu`.`sejour_id` = `sejour`.`sejour_id`;";
+    $query = "UPDATE `sejour`,`rpu`
+                SET `sejour`.`mode_entree` = `rpu`.`mode_entree`
+                WHERE `rpu`.`sejour_id` = `sejour`.`sejour_id`;";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `rpu`
-      DROP `mode_entree`;";
+                DROP `mode_entree`;";
     $this->addQuery($query);
     
     $this->makeRevision("0.34");
     $this->addDependency("dPplanningOp", "1.28");
     $query = "ALTER TABLE `rpu`
-      DROP `provenance`,
-      DROP `destination`,
-      DROP `transport`;";
+                DROP `provenance`,
+                DROP `destination`,
+                DROP `transport`;";
     $this->addQuery($query);
     
     $this->makeRevision("0.35");
@@ -305,22 +309,23 @@ class CSetupdPurgences extends CSetup {
     
     $this->makeRevision("0.36");
     $query = "ALTER TABLE `rpu`
-      ADD `regule_par` ENUM ('centre_15','medecin');";
+                ADD `regule_par` ENUM ('centre_15','medecin');";
     $this->addQuery($query);
     
     $this->makeRevision("0.37");
     
     $query = "CREATE TABLE `box_urgences` (
-                 `box_urgences_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-                 `nom` VARCHAR(30) NOT NULL,
-                 `description` VARCHAR(50),
-                 `type` ENUM('Suture','Degravillonage','Dechockage','Traumatologie','Radio','Retour_radio','Imagerie','Bio','Echo','Attente','Resultats','Sortie') NOT NULL DEFAULT 'Attente',
-                 `plan_x` INT(11) NULL,
-                 `plan_y` INT(11) NULL,
-                 `color` VARCHAR(6) DEFAULT 'ABE',
-                 `hauteur` INT(11) NOT NULL DEFAULT '1',
-                 `largeur` INT(11) NOT NULL DEFAULT '1',
-                 PRIMARY KEY (`box_urgences_id`)) /*! ENGINE=MyISAM */;";
+                `box_urgences_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `nom` VARCHAR(30) NOT NULL,
+                `description` VARCHAR(50),
+                `type` ENUM('Suture','Degravillonage','Dechockage','Traumatologie','Radio','Retour_radio','Imagerie','Bio','Echo','Attente','Resultats','Sortie') NOT NULL DEFAULT 'Attente',
+                `plan_x` INT(11) NULL,
+                `plan_y` INT(11) NULL,
+                `color` VARCHAR(6) DEFAULT 'ABE',
+                `hauteur` INT(11) NOT NULL DEFAULT '1',
+                `largeur` INT(11) NOT NULL DEFAULT '1',
+                PRIMARY KEY (`box_urgences_id`)
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);     
     $this->makeRevision("0.38");
     
@@ -329,32 +334,30 @@ class CSetupdPurgences extends CSetup {
     $this->makeRevision("0.39");
     
     $query = "ALTER TABLE `rpu` 
-              ADD `code_diag` INT (11);";
+                ADD `code_diag` INT (11);";
     $this->addQuery($query); 
     $this->makeRevision("0.40");
     
     $query = "CREATE TABLE `motif_urgence` (
-              `motif_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-              `chapitre_id` INT (11) UNSIGNED,
-              `nom` VARCHAR (255),
-              `code_diag` INT (11),
-              `degre_min` INT (11),
-              `degre_max` INT (11)
+                `motif_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `chapitre_id` INT (11) UNSIGNED,
+                `nom` VARCHAR (255),
+                `code_diag` INT (11),
+                `degre_min` INT (11),
+                `degre_max` INT (11)
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `motif_urgence` 
-              ADD INDEX (`chapitre_id`);";
+                ADD INDEX (`chapitre_id`);";
     $this->addQuery($query);
     
     $query = "CREATE TABLE `motif_chapitre` (
-              `chapitre_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-              `nom` VARCHAR (255)
+                `chapitre_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `nom` VARCHAR (255)
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->mod_version = "0.41";
   }  
 }
-
-?>

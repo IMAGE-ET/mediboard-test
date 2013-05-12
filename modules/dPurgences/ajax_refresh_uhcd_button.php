@@ -1,11 +1,12 @@
-<?php /* $Id: httpreq_vw_main_courante.php 14578 2012-02-07 16:08:46Z alexis_granger $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: 14578 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -19,5 +20,3 @@ $sejour->load($sejour_id);
 $smarty = new CSmartyDP();
 $smarty->assign("sejour", $sejour);
 $smarty->display("inc_uhcd.tpl");
-
-?>

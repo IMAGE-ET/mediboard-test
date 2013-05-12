@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: 7212 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -32,10 +33,11 @@ if ($extract_passages_id) {
     CAppUI::stepAjax("Impossible de récupérer le document.", UI_MSG_ERROR);
   }
   $tentative = 5;
-  while($tentative-- && $rpuSender->transmit($extractPassages)) {
+  while ($tentative-- && $rpuSender->transmit($extractPassages)) {
     sleep($attente);
   }  
-} else {
+}
+else {
   $leftjoin["files_mediboard"] = "files_mediboard.object_id = extract_passages.extract_passages_id AND files_mediboard.object_class = 'CExtractPassages'";
   
   $where["files_mediboard.file_id"] = "IS NOT NULL";
@@ -48,9 +50,8 @@ if ($extract_passages_id) {
   $passages = $extractPassages->loadList($where, $order, null, null, $leftjoin);
   foreach ($passages as $_passage) {
     $tentative = 5;
-    while($tentative-- && $rpuSender->transmit($_passage)) {
+    while ($tentative-- && $rpuSender->transmit($_passage)) {
       sleep($attente);
     }
   }
 }
-?>

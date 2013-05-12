@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: 7212 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $sejour_id = CValue::getOrSession("sejour_id");
@@ -20,5 +21,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("sejour" , $sejour);
 
 $smarty->display("inc_diagnostic_principal.tpl");
-
-?>

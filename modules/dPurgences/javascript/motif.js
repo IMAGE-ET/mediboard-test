@@ -1,4 +1,4 @@
-Chapitre= {
+Chapitre = {
   modal: null,
   edit: function(chapitre_id) {
     var url = new Url('urgences', 'ajax_edit_chapitre_motif');
@@ -21,13 +21,15 @@ Chapitre= {
       typeName:'chapitre', 
       objName: $V(form.nom),
       ajax: 1
-     }
+    };
+
     var ajax = {
       onComplete: function() {
         Chapitre.refreshList();
         Chapitre.modal.close();
       }
-    }
+    };
+
     confirmDeletion(form, options, ajax);
   },
 
@@ -58,16 +60,16 @@ Motif= {
 
   confirmDeletion: function(form) {
     var options = {
-        typeName:'motif', 
-        objName: $V(form.nom),
-        ajax: 1
-    }
+      typeName:'motif',
+      objName: $V(form.nom),
+      ajax: 1
+    };
     var ajax = {
-        onComplete: function() {
+      onComplete: function() {
         Motif.refreshList();
         Motif.modal.close();
       }
-    }
+    };
     confirmDeletion(form, options, ajax);
   },
 

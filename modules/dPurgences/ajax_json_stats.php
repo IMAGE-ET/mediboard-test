@@ -1,11 +1,12 @@
-<?php /* $Id: vw_stats.php 7207 2009-11-03 12:03:30Z rhum1 $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage bloodSalvage
- * @version $Revision: 7207 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -29,7 +30,7 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
     $where[$end_field] = "IS NOT NULL";
       
   if (!$only_duration) {
-    foreach($areas as $key => $value) {
+    foreach ($areas as $key => $value) {
       
       // never when ljoin on consult (form field)
       if (isset($value[$start_field]) && strpos($start_field, "._") === false)

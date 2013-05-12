@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: 7212 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CRPUXMLSchema extends CMbXMLSchema {
@@ -19,7 +20,11 @@ class CRPUXMLSchema extends CMbXMLSchema {
 
   function purgeImportedNamespaces() {
     $xpath = new domXPath($this);
-    foreach ($xpath->query('//*[@type]') as $node) {
+
+    /** @var DOMElement[] $types */
+    $types = $xpath->query('//*[@type]');
+
+    foreach ($types as $node) {
       $matches = null;
       if (preg_match("/insee:(.*)/", $node->getAttribute("type"), $matches)) {
         $node->setAttribute("type", $matches[1]);
@@ -27,5 +32,3 @@ class CRPUXMLSchema extends CMbXMLSchema {
     }
   }
 }
-
-?>

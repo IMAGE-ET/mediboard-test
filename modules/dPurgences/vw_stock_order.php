@@ -1,11 +1,12 @@
-<?php /* $Id: vw_sortie_rpu.php 7561 2009-12-09 09:58:48Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: 7561 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
-include ("./modules/soins/vw_stocks_service.php");
+include "./modules/soins/vw_stocks_service.php";

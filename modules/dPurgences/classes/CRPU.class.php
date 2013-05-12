@@ -1,11 +1,11 @@
-<?php 
+<?php
 /**
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPurgences
+ * @subpackage Urgences
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -15,87 +15,93 @@
  */
 class CRPU extends CMbObject {
   // DB Table key
-  var $rpu_id = null;
+  public $rpu_id;
 
   // DB Fields
-  var $sejour_id       = null;
-  var $motif_entree    = null;
-  var $diag_infirmier  = null;
-  var $pec_transport   = null;
-  var $pec_douleur     = null;
-  var $motif           = null;
-  var $ccmu            = null;
-  var $gemsa           = null;
-  var $orientation     = null;
-  var $radio_debut     = null;
-  var $radio_fin       = null;
-  var $bio_depart      = null;
-  var $bio_retour      = null;
-  var $specia_att      = null;
-  var $specia_arr      = null;
-  var $mutation_sejour_id = null;
-  var $box_id          = null;
-  var $sortie_autorisee = null;
-  var $date_at         = null;
-  var $circonstance    = null;
-  var $regule_par      = null;
-  var $code_diag       = null;
+  public $sejour_id;
+  public $motif_entree;
+  public $diag_infirmier;
+  public $pec_transport;
+  public $pec_douleur;
+  public $motif;
+  public $ccmu;
+  public $gemsa;
+  public $orientation;
+  public $radio_debut;
+  public $radio_fin;
+  public $bio_depart;
+  public $bio_retour;
+  public $specia_att;
+  public $specia_arr;
+  public $mutation_sejour_id;
+  public $box_id;
+  public $sortie_autorisee;
+  public $date_at;
+  public $circonstance;
+  public $regule_par;
+  public $code_diag;
 
   // Legacy Sherpa fields
-  var $type_pathologie = null; // Should be $urtype
-  var $urprov = null;
-  var $urmuta = null;
-  var $urtrau = null;
+  public $type_pathologie; // Should be $urtype
+  public $urprov;
+  public $urmuta;
+  public $urtrau;
 
   // Form fields
-  var $_libelle_circonstance = null;
+  public $_libelle_circonstance;
 
   // Distant Fields
-  var $_attente           = null;
-  var $_presence          = null;
-  var $_can_leave         = null;
-  var $_can_leave_since   = null;
-  var $_can_leave_about   = null;
-  var $_can_leave_level   = null;
+  public $_attente;
+  public $_presence;
+  public $_can_leave;
+  public $_can_leave_since;
+  public $_can_leave_about;
+  public $_can_leave_level;
 
   // Patient
-  var $_patient_id = null;
-  var $_cp         = null;
-  var $_ville      = null;
-  var $_naissance  = null;
-  var $_sexe       = null;
+  public $_patient_id;
+  public $_cp;
+  public $_ville;
+  public $_naissance;
+  public $_sexe;
 
   // Sejour
-  var $_responsable_id = null;
-  var $_annule         = null;
-  var $_entree         = null;
-  var $_DP             = null;
-  var $_ref_actes_ccam = null;
-  var $_service_id     = null;
-  var $_UHCD           = null;
-  var $_etablissement_sortie_id = null;
-  var $_etablissement_entree_id = null;
-  var $_service_entree_id       = null;
-  var $_service_sortie_id       = null;
+  public $_responsable_id;
+  public $_annule;
+  public $_entree;
+  public $_DP;
+  public $_ref_actes_ccam;
+  public $_service_id;
+  public $_UHCD;
+  public $_etablissement_sortie_id;
+  public $_etablissement_entree_id;
+  public $_service_entree_id;
+  public $_service_sortie_id;
 
-  // Object References
-  var $_ref_sejour  = null;
-  var $_ref_consult = null;
-  var $_ref_sejour_mutation = null;
-  var $_ref_motif   = null;
+  /** @var CSejour */
+  public $_ref_sejour;
+
+  /** @var CConsultation */
+  public $_ref_consult;
+
+  /** @var CSejour */
+  public $_ref_sejour_mutation;
+
+  /** @var CMotif */
+  public $_ref_motif;
 
   /** @var CLit */
-  var $_ref_box     = null;
+  public $_ref_box;
 
   // Behaviour fields
-  var $_bind_sejour = null;
-  var $_sortie          = null;
-  var $_mode_entree     = null;
-  var $_mode_sortie     = null;
-  var $_date_at         = null;
-  var $_provenance      = null;
-  var $_destination     = null;
-  var $_transport       = null;
+  public $_bind_sejour;
+  public $_sortie;
+  public $_mode_entree;
+  public $_mode_sortie;
+  public $_date_at;
+  public $_provenance;
+  public $_destination;
+  public $_transport;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -112,6 +118,8 @@ class CRPU extends CMbObject {
   }
 
   function getProps() {
+    $impose_degre_urgence = CAppUI::conf("dPurgences CRPU impose_degre_urgence", CGroups::loadCurrent()) == 1;
+
     $specsParent = parent::getProps();
     $specs = array (
       "sejour_id"        => "ref notNull class|CSejour cascade",
@@ -120,7 +128,7 @@ class CRPU extends CMbObject {
       "pec_douleur"      => "text helped",
       "pec_transport"    => "enum list|med|paramed|aucun",
       "motif"            => "text helped",
-      "ccmu"             => "enum ".(CAppUI::conf("dPurgences CRPU impose_degre_urgence", CGroups::loadCurrent()->_guid) == 1 ? 'notNull ' : '')."list|1|P|2|3|4|5|D",
+      "ccmu"             => "enum ".($impose_degre_urgence ? 'notNull ' : '')."list|1|P|2|3|4|5|D",
       "gemsa"            => "enum list|1|2|3|4|5|6",
       "type_pathologie"  => "enum list|C|E|M|P|T",
       "orientation"      => "enum list|HDT|HO|SC|SI|REA|UHCD|MED|CHIR|OBST|FUGUE|SCAM|PSA|REO",
@@ -168,10 +176,10 @@ class CRPU extends CMbObject {
 
     // Legacy Sherpa fields
     if (CModule::getActive("sherpa")) {
-        $urgDro = new CSpUrgDro();
-        $specs["urprov"] = $urgDro->_props["urprov"] . " notNull";
-        $specs["urmuta"] = $urgDro->_props["urmuta"];
-        $specs["urtrau"] = $urgDro->_props["urtrau"];
+      $urgDro = new CSpUrgDro();
+      $specs["urprov"] = $urgDro->_props["urprov"] . " notNull";
+      $specs["urmuta"] = $urgDro->_props["urmuta"];
+      $specs["urtrau"] = $urgDro->_props["urtrau"];
     }
 
     return array_merge($specsParent, $specs);
@@ -250,21 +258,23 @@ class CRPU extends CMbObject {
 
   /**
    * Chargement du séjour
+   *
    * @return CSejour
    */
   function loadRefSejour() {
-    $this->_ref_sejour = $this->loadFwdRef("sejour_id", true);
-    $this->_ref_sejour->loadRefsFwd();
+    /** @var CSejour $sejour */
+    $sejour = $this->loadFwdRef("sejour_id", true);
+    $sejour->loadRefsFwd();
 
     // Calcul des temps d'attente et présence
-    $entree = CMbDT::time($this->_ref_sejour->_entree);
-    $this->_presence =  CMbDT::subTime($entree, CMbDT::time());
+    $entree = CMbDT::time($sejour->_entree);
+    $this->_presence = CMbDT::subTime($entree, CMbDT::time());
 
-    if ($this->_ref_sejour->sortie_reelle) {
-      $this->_presence  = CMbDT::subTime($entree, CMbDT::time($this->_ref_sejour->sortie_reelle));
+    if ($sejour->sortie_reelle) {
+      $this->_presence = CMbDT::subTime($entree, CMbDT::time($sejour->sortie_reelle));
     }
 
-    return $this->_ref_sejour;
+    return $this->_ref_sejour = $sejour;
   }
 
   function loadRefConsult() {
@@ -281,7 +291,7 @@ class CRPU extends CMbObject {
     $this->_attente  = $this->_presence;
     if ($this->_ref_consult->_id) {
       $entree = CMbDT::time($this->_ref_sejour->_entree);
-      $this->_attente  = CMbDT::subTime(CMbDT::transform($entree, null,"%H:%M:00"), CMbDT::transform(CMbDT::time($this->_ref_consult->heure), null, "%H:%M:00"));
+      $this->_attente  = CMbDT::subTime(CMbDT::transform($entree, null, "%H:%M:00"), CMbDT::transform(CMbDT::time($this->_ref_consult->heure), null, "%H:%M:00"));
     }
 
     $this->_can_leave_level = $sejour->sortie_reelle ? "" : "ok";
@@ -317,6 +327,7 @@ class CRPU extends CMbObject {
   }
 
   function loadRefSejourMutation() {
+    /** @var CSejour $sejour */
     $sejour = $this->loadFwdRef("mutation_sejour_id", true);
     $sejour->loadNDA();
     return $this->_ref_sejour_mutation = $sejour;
@@ -324,7 +335,7 @@ class CRPU extends CMbObject {
 
   function bindSejour() {
     if (!$this->_bind_sejour) {
-      return;
+      return null;
     }
 
     $this->completeField("sejour_id");
@@ -539,8 +550,8 @@ class CRPU extends CMbObject {
   /**
    * Chargement du motif de l'urgence
    * 
-   * @return object
-  **/
+   * @return CMotif
+   */
   function loadRefMotif() {
     $motif = new CMotif();
     if ($this->code_diag) {
@@ -552,7 +563,7 @@ class CRPU extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * @param bool $cache Use object cache
    *
    * @return CLit
    */

@@ -1,73 +1,91 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: 7212 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CExtractPassages extends CMbObject {
   // DB Table key
-  var $extract_passages_id     = null;
+  public $extract_passages_id;
   
   // DB Fields
-  var $date_extract    = null;
-  var $debut_selection = null;
-  var $fin_selection   = null;
-  var $date_echange    = null;
-  var $nb_tentatives   = null;
-  var $message         = null;
-  var $message_valide  = null;
-  var $type            = null;
-  var $group_id        = null;
+  public $date_extract;
+  public $debut_selection;
+  public $fin_selection;
+  public $date_echange;
+  public $nb_tentatives;
+  public $message;
+  public $message_valide;
+  public $type;
+  public $group_id;
   
   // Form fields
-  var $_nb_rpus        = null;
-  var $_nb_urgences    = null;  
+  public $_nb_rpus;
+  public $_nb_urgences;
 
-  var $_ref_group      = null;
-  
+  /** @var CGroups */
+  public $_ref_group;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'extract_passages';
     $spec->key   = 'extract_passages_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["passages_rpu"] = "CRPUPassage extract_passages_id";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
-    $specs = parent::getProps();
-    $specs["date_extract"]    = "dateTime notNull";
-    $specs["debut_selection"] = "dateTime notNull";
-    $specs["fin_selection"]   = "dateTime notNull";
-    $specs["date_echange"]    = "dateTime";
-    $specs["nb_tentatives"]   = "num";
-    $specs["message"]         = "xml show|0";
-    $specs["message_valide"]  = "bool";
-    $specs["type"]            = "enum list|rpu|urg default|rpu";
-    $specs["group_id"]        = "ref notNull class|CGroups";
+    $props = parent::getProps();
+    $props["date_extract"]    = "dateTime notNull";
+    $props["debut_selection"] = "dateTime notNull";
+    $props["fin_selection"]   = "dateTime notNull";
+    $props["date_echange"]    = "dateTime";
+    $props["nb_tentatives"]   = "num";
+    $props["message"]         = "xml show|0";
+    $props["message_valide"]  = "bool";
+    $props["type"]            = "enum list|rpu|urg default|rpu";
+    $props["group_id"]        = "ref notNull class|CGroups";
     
-    $specs["_nb_rpus"]        = "num";
-    return $specs;
+    $props["_nb_rpus"]        = "num";
+    return $props;
   }
-  
+
+  /**
+   * @return CGroups
+   */
   function loadRefGroup() {
-    $this->_ref_group = new CGroups;
-    $this->_ref_group->load($this->group_id);
+    return $this->_ref_group = $this->loadFwdRef("group_id");
   }
-  
+
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack() {
-    // Backward references
     $this->countDocItems();
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
         
@@ -80,7 +98,15 @@ class CExtractPassages extends CMbObject {
         
     return $rpu_passage->countMatchingList();
   }
-  
+
+  /**
+   * Store a CFile linked to $this
+   *
+   * @param string $filename File name
+   * @param string $filedata File contents
+   *
+   * @return bool
+   */
   function addFile($filename, $filedata) {
     $file = new CFile();
     $file->setObject($this);
@@ -99,19 +125,19 @@ class CExtractPassages extends CMbObject {
   
   /**
    * Try and instanciate document sender according to module configuration
-   * @return CRPUSender sender or null on error
+   *
+   * @return CRPUSender|null sender or null on error
    */
   static function getRPUSender() {
     if (null == $rpu_sender = CAppUI::conf("dPurgences rpu_sender")) {
-      return;
+      return null;
     }
     
     if (!is_subclass_of($rpu_sender, "CRPUSender")) {
       trigger_error("Instanciation du RPU Sender impossible.");
-      return;
+      return null;
     }
     
     return new $rpu_sender;
   }
 }
-?>

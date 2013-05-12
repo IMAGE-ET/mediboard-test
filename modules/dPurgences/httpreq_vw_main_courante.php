@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -41,15 +42,15 @@ $where[] = CAppUI::pref("showMissingRPU") ?
   "rpu.rpu_id IS NOT NULL";
 $where["sejour.group_id"] = "= '$group->_id'";
 
-if ($selAffichage == "prendre_en_charge"){
+if ($selAffichage == "prendre_en_charge") {
   $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
   $where["consultation.consultation_id"] = "IS NULL";
 } 
 
-if($selAffichage == "presents"){
+if ($selAffichage == "presents") {
   $where["sejour.sortie_reelle"] = "IS NULL";
   $where["sejour.annule"] = " = '0'";
-  
+
   if (CAppUI::conf("dPurgences create_sejour_hospit")) {
     $where["rpu.mutation_sejour_id"] = "IS NULL";
   }
@@ -76,6 +77,7 @@ if ($order_col == "_patient_id") {
   $order = "patients.nom $order_way, ccmu $order_way";
 }
 
+/** @var CSejour[] $listSejours */
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
 foreach ($listSejours as &$sejour) {
   // Chargement du numero de dossier
@@ -89,46 +91,50 @@ foreach ($listSejours as &$sejour) {
   $sejour->loadRefPrescriptionSejour();
 
   $prescription = $sejour->_ref_prescription_sejour;
-  if ($prescription){
-	  $prescription->loadRefsPrescriptionLineMixes();
-	  $prescription->loadRefsLinesMedByCat();
-	  $prescription->loadRefsLinesElementByCat();
-	      
-	  $sejour->_ref_prescription_sejour->countRecentModif();
+  if ($prescription) {
+    $prescription->loadRefsPrescriptionLineMixes();
+    $prescription->loadRefsLinesMedByCat();
+    $prescription->loadRefsLinesElementByCat();
+
+    $sejour->_ref_prescription_sejour->countRecentModif();
   }
 
   // Chargement de l'IPP
   $sejour->_ref_patient->loadIPP();
 
   // Séjours antérieurs  
-	$sejour->_veille = CMbDT::date($sejour->entree) != $date;
-	
-	// Ajout des documents de la consultation dans le compteur
-	$consult_atu = $sejour->_ref_consult_atu;
-  
-	if ($consult_atu->_id) {
-	  $sejour->_nb_files += $consult_atu->_nb_files;
+  $sejour->_veille = CMbDT::date($sejour->entree) != $date;
+
+  // Ajout des documents de la consultation dans le compteur
+  $consult_atu = $sejour->_ref_consult_atu;
+
+  if ($consult_atu->_id) {
+    $sejour->_nb_files += $consult_atu->_nb_files;
     $sejour->_nb_docs += $consult_atu->_nb_docs;
     $sejour->_nb_files_docs += $consult_atu->_nb_files + $consult_atu->_nb_docs;
-    
-	  $consult_atu->loadRefsPrescriptions();
-	  
-	  if (isset($consult_atu->_ref_prescriptions["externe"])) {
-	    $sejour->_nb_docs++;
-	    $sejour->_nb_files_docs++;
-	  }
-	}
+
+    $consult_atu->loadRefsPrescriptions();
+
+    if (isset($consult_atu->_ref_prescriptions["externe"])) {
+      $sejour->_nb_docs++;
+      $sejour->_nb_files_docs++;
+    }
+  }
 }
 
 // Tri pour afficher les sans CCMU en premier
 if ($order_col == "ccmu") {
-	function ccmu_cmp($sejour1, $sejour2) {
+  function ccmu_cmp($sejour1, $sejour2) {
     $ccmu1 = CValue::first($sejour1->_ref_rpu->ccmu, "9");
     $ccmu2 = CValue::first($sejour2->_ref_rpu->ccmu, "9");
-    if ($ccmu1 == "P") $ccmu1 = "1";
-    if ($ccmu2 == "P") $ccmu2 = "1";
-		return $ccmu2 - $ccmu1;
-	}
+    if ($ccmu1 == "P") {
+      $ccmu1 = "1";
+    }
+    if ($ccmu2 == "P") {
+      $ccmu2 = "1";
+    }
+    return $ccmu2 - $ccmu1;
+  }
 
   uasort($listSejours, "ccmu_cmp");
 }
@@ -167,4 +173,3 @@ $smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::ge
 $smarty->assign("admin_urgences", $admin_urgences);
 $smarty->assign("type"        , "MainCourante");
 $smarty->display("inc_main_courante.tpl");
-?>

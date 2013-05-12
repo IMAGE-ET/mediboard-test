@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: 7212 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -32,14 +33,14 @@ $extractPassages = $rpuSender->encrypt($extractPassages);
 
 if ($view) {
   $extractPassages->loadRefsFiles();
-  
+
   // Création du template
   $smarty = new CSmartyDP("modules/dPurgences");
   $smarty->assign("_passage", $extractPassages);
-    
+
   $smarty->display("inc_extract_file.tpl");
-} else {
-  echo "<script type='text/javascript'>extract_passages_id = $extractPassages->_id;</script>";
+}
+else {
+  echo "<script>extract_passages_id = $extractPassages->_id;</script>";
 }
 
-?>

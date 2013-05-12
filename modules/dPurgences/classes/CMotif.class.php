@@ -1,61 +1,39 @@
-<?php 
+<?php
 /**
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPurgences
+ * @subpackage Urgences
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
 /**
  * Motif de l'urgence
- *
  */
 class CMotif extends CMbObject {
-  
-  // DB Table key
-  var $motif_id   = null;
+  public $motif_id;
   
   // DB Fields
-  var $chapitre_id = null;
+  public $chapitre_id;
   
   // Form fields
-  var $nom        = null;
-  var $code_diag  = null;
-  var $degre_min  = null;
-  var $degre_max  = null;
+  public $nom;
+  public $code_diag;
+  public $degre_min;
+  public $degre_max;
   
-  // Object References
-  var $_ref_chapitre = null;
-  /**
-   * getSpec
-   * 
-   * @return $spec
-  **/
+  /** @var CChapitreMotif */
+  public $_ref_chapitre;
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'motif_urgence';
     $spec->key   = 'motif_id';
     return $spec;
   }
-    
-  /**
-   * getBackProps
-   * 
-   * @return $backProps
-  **/
-  function getBackProps() {
-    $backProps = parent::getBackProps();
-    return $backProps;
-  }
-   
-  /**
-   * getProps
-   * 
-   * @return $props
-  **/
+
   function getProps() {
     $props = parent::getProps();
     $props["chapitre_id"] = "ref class|CChapitreMotif notNull";
@@ -70,7 +48,7 @@ class CMotif extends CMbObject {
    * updateFormFields
    * 
    * @return void
-  **/
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;
@@ -81,9 +59,9 @@ class CMotif extends CMbObject {
    * 
    * @param bool $cache cache
    * 
-   * @return object
-  **/
+   * @return CChapitreMotif
+   */
   function loadRefChapitre($cache = true){
-    $this->_ref_chapitre = $this->loadFwdRef("chapitre_id", $cache);
+    return $this->_ref_chapitre = $this->loadFwdRef("chapitre_id", $cache);
   }
 }

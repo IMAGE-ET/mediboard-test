@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -51,6 +52,8 @@ $order_col = "_pec_transport";
 $order = "consultation.heure $order_way";
 
 $sejour = new CSejour;
+
+/** @var CSejour[] $listSejours */
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
 foreach ($listSejours as &$_sejour) {
   $_sejour->loadRefsFwd();
@@ -58,16 +61,15 @@ foreach ($listSejours as &$_sejour) {
   $_sejour->loadNDA();
   $_sejour->loadRefsConsultations();
   $_sejour->_veille = CMbDT::date($_sejour->entree) != $date;
-  
-	// Détail du RPU
-	$rpu =& $_sejour->_ref_rpu;
+
+  // Détail du RPU
+  $rpu =& $_sejour->_ref_rpu;
   $rpu->loadRefSejourMutation();
   $rpu->_ref_consult->loadRefsActes();
-   
-  // Détail du patient
-	$patient =& $_sejour->_ref_patient; 
-  $patient->loadIPP();
 
+  // Détail du patient
+  $patient =& $_sejour->_ref_patient;
+  $patient->loadIPP();
 }
 
 // Chargement des services
@@ -118,4 +120,3 @@ $smarty->assign("is_praticien", $is_praticien);
 $smarty->assign("today", CMbDT::date());
 
 $smarty->display("vw_sortie_rpu.tpl");
-?>

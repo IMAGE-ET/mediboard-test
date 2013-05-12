@@ -1,11 +1,12 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: 6518 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -24,9 +25,10 @@ $where["type"] = "= 'urg'";
 $where[] = "(rpu.radio_debut IS NOT NULL) OR (rpu.bio_depart IS NOT NULL) OR (rpu.specia_att IS NOT NULL)";
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
+/** @var CSejour[] $listSejours */
 $listSejours = $sejour->loadList($where, null, null, null, $ljoin);
 
-foreach($listSejours as &$_sejour) {
+foreach ($listSejours as &$_sejour) {
   $_sejour->loadRefsFwd();
   $_sejour->loadRefRPU();
   $_sejour->_ref_rpu->loadRefSejourMutation();
@@ -45,4 +47,3 @@ $smarty->assign("today"           , $today);
 $smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 
 $smarty->display("vw_attente.tpl");
-?>

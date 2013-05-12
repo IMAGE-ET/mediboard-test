@@ -3,13 +3,14 @@
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPurgences
+ * @subpackage Urgences
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
 CCanDo::checkRead();
+
 $group = CGroups::loadCurrent();
 $user = CAppUI::$user;
 $listResponsables = CAppUI::conf("dPurgences only_prat_responsable") ?

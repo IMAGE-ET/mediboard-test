@@ -1,16 +1,17 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: 6153 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
 
-$rpu_id         = CValue::get("rpu_id");
+$rpu_id = CValue::get("rpu_id");
 
 // Chargement du RPU
 $rpu = new CRPU();
@@ -25,7 +26,7 @@ $sejour->loadRefsConsultations();
 
 // Horaire par défaut
 if (!$sejour->sortie_reelle) {
-	$sejour->sortie_reelle = CMbDT::dateTime();
+  $sejour->sortie_reelle = CMbDT::dateTime();
 }
 
 $where = array();
@@ -38,16 +39,15 @@ $blocages_lit = $affectation->loadList($where);
 
 $where["function_id"] = "IS NULL";
 
-foreach($blocages_lit as $blocage){
-	$blocage->loadRefLit()->loadRefChambre()->loadRefService();
-	$where["lit_id"] = "= '$blocage->lit_id'";
-	
-	if($affectation->loadObject($where))
-	{
-		$affectation->loadRefSejour();
-		$affectation->_ref_sejour->loadRefPatient();
+foreach ($blocages_lit as $blocage) {
+  $blocage->loadRefLit()->loadRefChambre()->loadRefService();
+  $where["lit_id"] = "= '$blocage->lit_id'";
+
+  if ($affectation->loadObject($where)) {
+    $affectation->loadRefSejour();
+    $affectation->_ref_sejour->loadRefPatient();
     $blocage->_ref_lit->_view .= " indisponible jusqu'à ".CMbDT::transform($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
-	}
+  }
 }
 
 $list_mode_sortie = array();

@@ -1,26 +1,29 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: 7212 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
-
 class CRPUXMLDocument extends CMbXMLDocument {
-  var $schemapath             = null;
-  var $schemafilename         = null;
-  var $documentfilename       = null;
-  var $finalpath              = null;
-  var $documentfinalprefix    = null;
-  var $documentfinalfilename  = null;
-  var $now                    = null;
+  public $schemapath;
+  public $schemafilename;
+  public $documentfilename;
+  public $finalpath;
+  public $documentfinalprefix;
+  public $documentfinalfilename;
+  public $now;
   
-  var $datedebut              = null;
-  var $datefin                = null;
-  
+  public $datedebut;
+  public $datefin;
+
+  /**
+   * @see parent::__construct()
+   */
   function __construct($sender = null) {
     parent::__construct();
     
@@ -36,6 +39,7 @@ class CRPUXMLDocument extends CMbXMLDocument {
     if (!CAppUI::conf("dPurgences rpu_xml_validation")) {
       return true;
     }
+
     return parent::schemaValidate($filename, $returnErrors);
   }
   
@@ -135,5 +139,3 @@ class CRPUXMLDocument extends CMbXMLDocument {
     $this->addElement($elParent, "ACTE", str_replace(" ", "", $elValue));
   }
 }
-
-?>

@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: 6153 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Urgences
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $sejour_id = CValue::get("sejour_id");
@@ -17,5 +18,3 @@ $sejour->load($sejour_id);
 $smarty = new CSmartyDP();
 $smarty->assign("sejour" , $sejour);
 $smarty->display("inc_actes_rpu.tpl");
-
-?>
