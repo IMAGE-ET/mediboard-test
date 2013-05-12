@@ -91,6 +91,7 @@
     <exclude name="PEAR.ControlStructures.ControlSignature" />
     <exclude name="PEAR.WhiteSpace.ScopeIndent" />
     <exclude name="PEAR.WhiteSpace.ObjectOperatorIndent" />
+    <exclude name="PEAR.Commenting.FunctionComment" />
   </rule>
 
   <rule ref="PEAR.Classes.ClassDeclaration.OpenBraceNewLine">

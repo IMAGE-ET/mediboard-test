@@ -18,13 +18,6 @@ if (class_exists('PHP_CodeSniffer_Standards_AbstractPatternSniff', true) === fal
 
 /**
  * Verifies that control statements conform to their coding standards.
- *
- * @category PHP
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id: $ 
- * @link     http://www.mediboard.org
  */
 class Standard_Sniffs_ControlStructures_ControlSignatureSniff 
   extends PHP_CodeSniffer_Standards_AbstractPatternSniff
@@ -42,7 +35,7 @@ class Standard_Sniffs_ControlStructures_ControlSignatureSniff
    * @return array(string)
    */
   protected function getPatterns() {
-	  return array(
+    return array(
       'do {EOL...} while (...);EOL',
       'while (...) {EOL',
       'for (...) {EOL',
@@ -56,5 +49,3 @@ class Standard_Sniffs_ControlStructures_ControlSignatureSniff
     );
   }
 }
-
-?>

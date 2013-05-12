@@ -79,5 +79,3 @@ class Standard_Sniffs_Classes_PropertyDeclarationSniff extends PSR2_Sniffs_Class
     }//end processMemberVar()
 
 }//end class
-
-?>
