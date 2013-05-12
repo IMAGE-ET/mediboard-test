@@ -18,9 +18,11 @@ CApp::setTimeLimit(600);
 
 $sniffer = new CMbCodeSniffer;
 $files = $sniffer->getFilesTree();
+//unset($files["modules"]);
+
 $reports = $sniffer->checkReports($files);
 $stats = $sniffer->buildStats($files);
-//mbTrace($stats);
+//mbTrace($stats, "Stats");
 
 // Cuz sniffer changes work dir but restores it at destruction
 // Be aware that unset() won't call __destruct() anyhow

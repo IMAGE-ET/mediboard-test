@@ -75,14 +75,15 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
     $root_dir = CAppUI::conf("root_dir");
     $standard = $this->getStandardDir();
     $this->populateCustomRules($standard);
-    return CMbPath::getPathTreeUnder($root_dir, $this->ignorePatterns, $extensions);
+    return CMbPath::getPathTreeUnder($root_dir, array_keys($this->ignorePatterns), $extensions);
   }
   
   /**
    * Print a report into a file
    * 
-   * @param string $file       
+   * @param string $file       File path
    * @param string $reportType One of full xml checkstyle csv emacs source summary svnblame gitblame
+   *
    * @return int               Error and warning count
    */
   function report($file, $reportType = "xml") {
@@ -162,20 +163,20 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
   function buildStats($files) {
     $this->stats = array();
     $this->buildStat("", $files);
-    
+
     // Sum count arrays from recursive array count
     function sumCounts($key, &$value) {
       if ($key == "count" && is_array($value)) {
         $value = array_sum($value);
         return;
-	  }
-	  if (is_array($value)) {
-	  	foreach ($value as $_key => &$_value) {
-	  	  sumCounts($_key, $_value);
-	  	}
-	  }
-	}
-    
+      }
+
+      if (is_array($value)) {
+        foreach ($value as $_key => &$_value) {
+          sumCounts($_key, $_value);
+        }
+      }
+    }
     sumCounts(null, $this->stats);
     
     return $this->stats;
@@ -183,7 +184,7 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
   
   function buildStat($basedir, $file) {
     $stat = array();
-  	
+
     // Directory case
     if (is_array($file)) {
       $stats = array();
@@ -240,8 +241,8 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
   }
   
   function stat($file) {
-  	
-  	// Recursive increment routine
+    
+    // Recursive increment routine
     function increment(&$stats, $parts) {
       if (!isset ($stats)) {
         $stats = array (
@@ -249,28 +250,28 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
           "items" => null,
         );
       }
-    	
+      
       $stats["count"]++;
       if ($first = array_shift($parts)) {
         increment($stats["items"][$first], $parts);
       }
       
     }
-  	
+    
     // Recursive call
     $stats = null;
-  	foreach ($this->getFlattenAlerts() as $_alert) {
-  	  $parts = explode(".", $_alert["source"]);
-  	  increment($stats, $parts);
-  	}
-  	
+    foreach ($this->getFlattenAlerts() as $_alert) {
+      $parts = explode(".", $_alert["source"]);
+      increment($stats, $parts);
+    }
+    
     // Create the file
     $path = $this->makeReportPath($file, "json");
     CMbPath::forceDir(dirname($path));
     touch($path);
     file_put_contents($path, json_encode($stats));
-  	
-  	return $stats;
+    
+    return $stats;
   }
 }
 ?>
