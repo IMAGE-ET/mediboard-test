@@ -1,7 +1,18 @@
 // Used in big DOM with lots of IDs, check
 Element.warnDuplicates = Prototype.emptyFunction;
 
+Chrono = {
+  total: 0,
+  start: function() {
+    this.reference = new Date();
+  },
+  stop: function() {
+    return this.total += new Date().getTime() - this.reference.getTime();
+  }
+}
+
 CodeSniffer = {
+
   getFile: function (element) {
     var header = element.up('.tree-header');
     var path = header.id.match(/mediboard:(.*)-header/)[1];
@@ -40,7 +51,10 @@ CodeSniffer = {
     var content = button.up('.tree-header').next();
     var sniffed = content.select('.sniffed');
     this.files = [];
-    this.stats = {};
+    this.stats = {
+      obsolete: 0,
+      uptodate: 0
+    };
     
     sniffed.each(function(div) {
       var tag = $w(div.className)[1];
@@ -53,13 +67,13 @@ CodeSniffer = {
     });
     
     var run = $('sniff-run');
-    var count = run.down("th small.count");
+    var count = run.down("small.count");
     var stats = [];
     $H(this.stats).each(function(pair) { 
-      stats.push(pair.key + ': ' + pair.value);
-    });    
-    count.update('('+stats.join(', ')+')');
-    
+      $(pair.key).textContent = pair.value;
+    });
+    $('index').textContent = this.index;
+
     var tbody = run.down('table tbody.files');
     
     this.files.each(function(file) {
@@ -68,7 +82,9 @@ CodeSniffer = {
           DOM.td({}, file.path.replace(/\//g, ' / ')),
           DOM.td({}, 
             DOM.div({ className: 'sniffed ' + file.tag }),
-            DOM.div({ className: 'status' })
+            DOM.div({ className: 'status' },
+              DOM.div({ className: 'info' , style: 'visibility: hidden' }, 'todo')
+            )
           )
         )
       );
@@ -80,17 +96,20 @@ CodeSniffer = {
       return;
     }
 
+    Chrono.start();
+
     var file = this.files[this.index];
     
     var status = $(file.path.replace(/\//g, ':')).down('.status');
     status.update(DOM.div({ className: 'loading' }, 'Running'));
-    
+
     if (file.tag == 'uptodate' && !this.force) {
       status.update(DOM.div({ className: 'info' }, 'Skipped'));
     }
     else {
       var options = {
         onComplete: function() {
+          $('duration').textContent = printf('%.3f', Chrono.stop() / 1000);
           status.update(DOM.div({ className: 'info' }, 'Done'));
           if (CodeSniffer.auto) {
             CodeSniffer.start.bind(CodeSniffer).defer();
@@ -104,6 +123,8 @@ CodeSniffer = {
     }
     
     this.index++;
+    $('index').textContent = this.index;
+
     if (this.index == this.files.length) {
       $('sniff-run').down('button.change').disable();
     }

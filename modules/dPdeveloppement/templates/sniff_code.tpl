@@ -7,10 +7,18 @@ Main.add(function () {
 </script>
 
 <div id="sniff-run" style="display: none; width: 800px;">
+  <h1>
+    Files to go
+    <br />
+    uptodate: <span id="uptodate">&mdash;</span>,
+    obsolete: <span id="obsolete">&mdash;</span>,
+    index   : <span id="index"   >&mdash;</span>,
+    duration: <span id="duration">&mdash;</span>
+  </h1>
   <div id="sniff-list" style="height: 200px; overflow: auto">
     <table class="tbl">
       <tr>
-        <th>Files to go <small class="count">(&mdash;)</span></th>
+        <th>Path</th>
         <th style="width: 8em;">Status</th>
       </tr>
       <tbody class="files">
