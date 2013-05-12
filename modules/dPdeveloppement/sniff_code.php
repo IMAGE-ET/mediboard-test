@@ -18,7 +18,7 @@ CApp::setTimeLimit(600);
 
 $sniffer = new CMbCodeSniffer;
 $files = $sniffer->getFilesTree();
-unset($files["modules"]);
+//unset($files["modules"]);
 
 $reports = $sniffer->checkReports($files);
 $stats = $sniffer->buildStats($files);
