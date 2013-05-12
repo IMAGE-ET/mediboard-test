@@ -52,18 +52,16 @@
     </properties>
   </rule>
 
-  <!-- Use Unix newlines -->
-  <!--<rule ref="Generic.Files.LineEndings">
-    <properties>
-      <property name="eolChar" value="\r\n"/>
-    </properties>
-  </rule>-->
-
   <!-- Use warnings for inline control structures -->
   <rule ref="Generic.ControlStructures.InlineControlStructure">
     <properties>
       <property name="error" value="false"/>
     </properties>
+  </rule>
+
+  <!-- Don't bother line endings -->
+  <rule ref="Generic.Files.LineEndings.InvalidEOLChar">
+    <severity>0</severity>
   </rule>
 
   <!-- This message is not required as spaces are allowed for alignment -->
