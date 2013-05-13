@@ -15,11 +15,11 @@
     <tr>
       <td style="text-align:right;">{{mb_label object=$facture field=send_assur_base}}</td>
       <td>
-        {{mb_field object=$facture field=send_assur_base onchange="return onSubmitFormAjax(this.form);"}}
+        {{mb_field object=$facture field=send_assur_base onchange="return onSubmitFormAjax(this.form);" readonly=$facture->cloture}}
       </td>
       <td style="text-align:right;">{{mb_label object=$facture field=send_assur_compl}}</td>
       <td>
-        {{mb_field object=$facture field=send_assur_compl onchange="return onSubmitFormAjax(this.form);"}}
+        {{mb_field object=$facture field=send_assur_compl onchange="return onSubmitFormAjax(this.form);" readonly=$facture->cloture}}
     </td>
     </tr>
   </table>

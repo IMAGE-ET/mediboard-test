@@ -645,16 +645,23 @@ class CEditPdf{
       
       //Adresse du patient
       $this->pdf->SetTextColor(0);
-      $this->pdf->setFont($this->font, '', 8);
-      $this->pdf->Text($l_colonne + $decalage, $h_ligne*3+$haut_doc , $this->praticien->_view);
-      $this->pdf->Text($l_colonne + $decalage, $h_ligne*4+$haut_doc , $this->function_prat->_view);
+      $this->pdf->setFont($this->font, '', 8); $this->auteur["nom"]      = CAppUI::conf("dPfacturation CEditPdf home_nom");
+      
+      if (!$this->fourn_presta["fct"]) {
+        $this->pdf->Text($l_colonne + $decalage, $h_ligne*4+$haut_doc , $this->auteur["nom"]);
+      }
+      else {
+        $this->pdf->Text($l_colonne + $decalage, $h_ligne*3+$haut_doc , $this->auteur["nom"]);
+        $this->pdf->Text($l_colonne + $decalage, $h_ligne*4+$haut_doc , $this->fourn_presta["fct"]);
+      }
+      
       $j = 1;
-      $this->pdf->Text($l_colonne + $decalage, $h_ligne*5+$haut_doc , $this->adresse_prat["group1"]);
-      if ($this->adresse_prat["group2"]) {
-        $this->pdf->Text($l_colonne + $decalage, $h_ligne*6+$haut_doc , $this->adresse_prat["group2"]);
+      $this->pdf->Text($l_colonne + $decalage, $h_ligne*5+$haut_doc , $this->auteur["adresse1"]);
+      if ($this->auteur["adresse2"]) {
+        $this->pdf->Text($l_colonne + $decalage, $h_ligne*6+$haut_doc , $this->auteur["adresse2"]);
         $j = 2;
       }
-      $this->pdf->Text($l_colonne + $decalage, $h_ligne*(5+$j)+$haut_doc , $this->function_prat->cp." ".$this->function_prat->ville);
+      $this->pdf->Text($l_colonne + $decalage, $h_ligne*(5+$j)+$haut_doc , $this->auteur["cp"]." ".$this->auteur["ville"]);
       
       //Numéro adhérent, CHF, Montant1 et Montant2
       $this->pdf->Text($l_colonne*11 + $decalage, $h_ligne*10.75+$haut_doc , $this->adherent);
@@ -904,6 +911,7 @@ class CEditPdf{
       $this->fourn_presta["fct"] = "";
       $this->auteur["nom"]      = CAppUI::conf("dPfacturation CEditPdf home_nom");
       $this->auteur["adresse1"] = CAppUI::conf("dPfacturation CEditPdf home_adresse");
+      $this->auteur["adresse2"] = "";
       $this->auteur["cp"]       = CAppUI::conf("dPfacturation CEditPdf home_cp");
       $this->auteur["ville"]    = CAppUI::conf("dPfacturation CEditPdf home_ville");
       $this->auteur["EAN"]      = CAppUI::conf("dPfacturation CEditPdf home_EAN");

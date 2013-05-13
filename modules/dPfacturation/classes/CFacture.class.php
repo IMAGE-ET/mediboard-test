@@ -118,8 +118,8 @@ class CFacture extends CMbObject {
     $props["type_facture"]              = "enum notNull list|maladie|accident default|maladie";
     $props["patient_date_reglement"]    = "date";
     $props["tiers_date_reglement"]      = "date";
-    $props["npq"]                       = "bool notNull default|0";
-    $props["cession_creance"]           = "bool notNull default|0";
+    $props["npq"]                       = "bool default|0";
+    $props["cession_creance"]           = "bool default|0";
     $props["assurance_maladie"]         = "ref class|CCorrespondantPatient";
     $props["assurance_accident"]        = "ref class|CCorrespondantPatient";
     $props["rques_assurance_maladie"]   = "text helped";

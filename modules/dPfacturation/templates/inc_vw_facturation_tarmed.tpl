@@ -77,13 +77,17 @@
         <tr>
           <td>{{mb_label object=$facture field=envoi_xml}}</td>
           <td>{{mb_field object=$facture field=envoi_xml onchange="Facture.modifCloture(this.form);" readonly=$facture->cloture}}</td>
-          <td>{{mb_label object=$facture field=npq}}</td>
-          <td>{{mb_field object=$facture field=npq onchange="Facture.modifCloture(this.form);" readonly=$facture->cloture}}</td>
+          {{if $facture->type_facture == "CFactureCabinet"}}
+            <td>{{mb_label object=$facture field=npq}}</td>
+            <td>{{mb_field object=$facture field=npq onchange="Facture.modifCloture(this.form);" readonly=$facture->cloture}}</td>
+          {{else}}
+            <td></td>
+            <td></td>
+          {{/if}}
           <td>
             {{mb_label object=$facture field=statut_pro}}
             {{mb_field object=$facture field=statut_pro emptyLabel="Choisir un status" onchange="Facture.cut(this.form);" readonly=$facture->cloture}}
           </td>
-          <td></td>
         </tr>
       </table>
     </form>
