@@ -82,7 +82,7 @@
 {{if $_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment}}
   <td><strong>Presc</strong></td>
   <td class="narrow">
-    {{mb_include module=mediusers template=$_suivi->_ref_praticien initials=border}}
+    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi->_ref_praticien initials=border}}
   </td>
   <td style="text-align: center">
     {{mb_ditto name=date value=$_suivi->debut|date_format:$conf.date}}
