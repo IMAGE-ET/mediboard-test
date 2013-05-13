@@ -54,7 +54,7 @@
 {{if $_suivi instanceof CConstantesMedicales}}
   <td>Cst</td>
   <td class="narrow">
-    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi->_ref_user initials=border}}
+    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi->_ref_user->_ref_mediuser initials=border}}
   </td>
   <td style="text-align: center">
      {{mb_ditto name=date value=$_suivi->datetime|date_format:$conf.date}}

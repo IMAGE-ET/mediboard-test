@@ -79,41 +79,43 @@ $do_merge = CValue::post("do_merge", 0);
 
 if (isset($_POST["_source"])) {
   // Ajout d'entête / pied de page à la volée
-  $modele = new CCompteRendu();
-  $modele->load($_POST["modele_id"]);
+  if (CAppUI::conf("dPcompteRendu CCompteRendu header_footer_fly")) {
+    $modele = new CCompteRendu();
+    $modele->load($_POST["modele_id"]);
 
-  $header_id = CValue::post("header_id");
-  $footer_id = CValue::post("footer_id");
+    $header_id = CValue::post("header_id");
+    $footer_id = CValue::post("footer_id");
 
-  // Depuis un modèle
-  if (!$_POST["compte_rendu_id"]) {
-    // Présence d'un header / footer
-    if ($modele->header_id || $modele->footer_id) {
-      if ($header_id != $modele->header_id) {
-        $_POST["_source"] = CCompteRendu::replaceComponent($_POST["_source"], $header_id);
+    // Depuis un modèle
+    if (!$_POST["compte_rendu_id"]) {
+      // Présence d'un header / footer
+      if ($modele->header_id || $modele->footer_id) {
+        if ($header_id != $modele->header_id) {
+          $_POST["_source"] = CCompteRendu::replaceComponent($_POST["_source"], $header_id);
+        }
+        if ($footer_id != $modele->footer_id) {
+          $_POST["_source"] = CCompteRendu::replaceComponent($_POST["_source"], $footer_id, "footer");
+        }
       }
-      if ($footer_id != $modele->footer_id) {
-        $_POST["_source"] = CCompteRendu::replaceComponent($_POST["_source"], $footer_id, "footer");
+      else {
+        $_POST["_source"] = $modele->generateDocFromModel($_POST["_source"], $header_id, $footer_id);
       }
     }
+    // Document existant
     else {
-      $_POST["_source"] = $modele->generateDocFromModel($_POST["_source"], $header_id, $footer_id);
-    }
-  }
-  // Document existant
-  else {
-    $cr = new CCompteRendu();
-    $cr->load($_POST["compte_rendu_id"]);
+      $cr = new CCompteRendu();
+      $cr->load($_POST["compte_rendu_id"]);
 
-    if (!$cr->header_id && !$cr->footer_id && !$header_id && !$footer_id) {
-      $_POST["_source"] = $cr->generateDocFromModel($_POST["_source"], $header_id, $footer_id);
-    }
-    else {
-      if ($header_id != $cr->header_id) {
-        $_POST["_source"] = CCompteRendu::replaceComponent($_POST["_source"], $header_id);
+      if (!$cr->header_id && !$cr->footer_id && !$header_id && !$footer_id) {
+        $_POST["_source"] = $cr->generateDocFromModel($_POST["_source"], $header_id, $footer_id);
       }
-      if ($footer_id != $cr->footer_id) {
-        $_POST["_source"] = CCompteRendu::replaceComponent($_POST["_source"], $footer_id, "footer");
+      else {
+        if ($header_id != $cr->header_id) {
+          $_POST["_source"] = CCompteRendu::replaceComponent($_POST["_source"], $header_id);
+        }
+        if ($footer_id != $cr->footer_id) {
+          $_POST["_source"] = CCompteRendu::replaceComponent($_POST["_source"], $footer_id, "footer");
+        }
       }
     }
   }
