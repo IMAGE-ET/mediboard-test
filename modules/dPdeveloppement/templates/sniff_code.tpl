@@ -8,11 +8,12 @@ Main.add(function () {
 
 <div id="sniff-run" style="display: none; width: 800px;">
   <h1>
-    Files to go
+    Sniff reports status
     <br />
     uptodate: <span id="uptodate">&mdash;</span>,
     obsolete: <span id="obsolete">&mdash;</span>,
-    index   : <span id="index"   >&mdash;</span>,
+    none:     <span id="none"    >&mdash;</span>,
+    index:    <span id="index"   >&mdash;</span>,
     duration: <span id="duration">&mdash;</span>
   </h1>
   <div id="sniff-list" style="height: 200px; overflow: auto">
