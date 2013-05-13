@@ -44,6 +44,7 @@
         afterUpdateElement: function(field, selected){
           var form = field.form;
           var selected = selected.select(".view")[0];
+          console.log(selected);
           if (selected.innerHTML) {
             $V(form.nom, selected.get("nom"));
             $V(form.nom_jeune_fille, selected.get("nom_jeune_fille"));
@@ -61,6 +62,12 @@
             $V(form.parente, selected.get("parente"));
             $V(form.email, selected.get("email"));
             $V(form.remarques, selected.get("remarques"));
+
+            {{if $conf.ref_pays == 2}}
+              $V(form.ean, selected.get("ean"));
+              $V(form.ean_base, selected.get("ean_base"));
+              $V(form.type_pec, selected.get("type_pec"));
+            {{/if}}
           }
         }
       });
