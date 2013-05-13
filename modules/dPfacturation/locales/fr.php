@@ -385,6 +385,7 @@ $locales['mod-dPfacturation-tab-ajax_total_cotation'] = 'Totaux des cotations';
 $locales['mod-dPfacturation-tab-ajax_view_facture'] = 'Vue d\'une facture';
 $locales['mod-dPfacturation-tab-ajax_vw_list_facture'] = 'Vue de factures';
 $locales['mod-dPfacturation-tab-ajax_vw_relances'] = 'Relances';
+$locales['mod-dPfacturation-tab-ajax_vw_retrocessions'] = 'Rafraîchissement des rétrocessions';
 $locales['mod-dPfacturation-tab-configure'] = 'Configurer';
 $locales['mod-dPfacturation-tab-print_actes'] = 'Impression des actes';
 $locales['mod-dPfacturation-tab-print_bordereau'] = 'Impression bordereau';

@@ -139,7 +139,7 @@ class CFactureCabinet extends CFacture {
   **/
   function loadRefsRelances(){
     $this->_ref_relances = $this->loadBackRefs("relance_fact_cabinet", 'date');
-    $this->IsRelancable();
+    $this->isRelancable();
     return $this->_ref_relances;
   }
 }

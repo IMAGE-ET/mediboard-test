@@ -382,7 +382,9 @@ class CTarif extends CMbObject {
       $acte->code = $this->_code;
       $acte->quantite = $this->_quantite;
       $acte->updateMontantBase();
-      array_push($this->$_codes, $acte->makeFullCode());
+      if ($acte->montant_base) {
+        array_push($this->$_codes, $acte->makeFullCode());
+      }
     }
     $this->$codes = implode("|", $this->$_codes);
     

@@ -64,31 +64,24 @@
             {{if $facture->cloture}}disabled="disabled"{{/if}} onchange="Facture.modifCloture(this.form);" />
             <label for="accident">{{tr}}CFactureEtablissement.type_facture.accident{{/tr}}</label>
           </td>
-          <td class="narrow">
-            <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
-            <input type="hidden" name="cession_creance" value="{{if $facture->cession_creance == 1}}0{{else}}1{{/if}}" />
-            <input type="checkbox" name="cession_tmp" value="{{$facture->cession_creance}}" {{if $facture->cession_creance}}checked="checked"{{/if}}
-            {{if $facture->cloture}}disabled="disabled"{{/if}} onclick="Facture.modifCloture(this.form);" />
-            {{mb_label object=$facture field=cession_creance}}
-            <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
-            <input type="hidden" name="npq" value="{{if $facture->npq == 1}}0{{else}}1{{/if}}" />
-            <input type="checkbox" name="npq_tmp" value="{{$facture->npq}}" {{if $facture->npq}}checked="checked"{{/if}}
-            {{if $facture->cloture}}disabled="disabled"{{/if}} onclick="Facture.modifCloture(this.form);" />
-            {{mb_label object=$facture field=npq}}
+          <td class="narrow"> {{mb_label object=$facture field=cession_creance}}</td>
+          <td>{{mb_field object=$facture field=cession_creance onchange="Facture.modifCloture(this.form);" readonly=$facture->cloture}}</td>
           </td>
           <td style="width:400px;">
             {{if $facture->_class == "CFactureEtablissement"}}
               {{mb_label object=$facture field=dialyse}}
-              {{mb_field object=$facture field=dialyse onchange="Facture.modifCloture(this.form);"}} 
+              {{mb_field object=$facture field=dialyse onchange="Facture.modifCloture(this.form);" readonly=$facture->cloture}} 
             {{/if}}
           </td>
         </tr>
         <tr>
           <td>{{mb_label object=$facture field=envoi_xml}}</td>
-          <td>{{mb_field object=$facture field=envoi_xml onchange="Facture.modifCloture(this.form);"}}</td>
+          <td>{{mb_field object=$facture field=envoi_xml onchange="Facture.modifCloture(this.form);" readonly=$facture->cloture}}</td>
+          <td>{{mb_label object=$facture field=npq}}</td>
+          <td>{{mb_field object=$facture field=npq onchange="Facture.modifCloture(this.form);" readonly=$facture->cloture}}</td>
           <td>
             {{mb_label object=$facture field=statut_pro}}
-            {{mb_field object=$facture field=statut_pro emptyLabel="Choisir un status" onchange="Facture.cut(this.form);"}}
+            {{mb_field object=$facture field=statut_pro emptyLabel="Choisir un status" onchange="Facture.cut(this.form);" readonly=$facture->cloture}}
           </td>
           <td></td>
         </tr>

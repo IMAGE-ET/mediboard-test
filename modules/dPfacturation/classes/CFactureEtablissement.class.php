@@ -129,7 +129,7 @@ class CFactureEtablissement extends CFacture {
   **/
   function loadRefsRelances(){
     $this->_ref_relances = $this->loadBackRefs("relance_fact_etab", 'date');
-    $this->IsRelancable();
+    $this->isRelancable();
     return $this->_ref_relances;
   }
 }

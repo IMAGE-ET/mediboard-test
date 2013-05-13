@@ -118,8 +118,8 @@ class CFacture extends CMbObject {
     $props["type_facture"]              = "enum notNull list|maladie|accident default|maladie";
     $props["patient_date_reglement"]    = "date";
     $props["tiers_date_reglement"]      = "date";
-    $props["npq"]                       = "enum notNull list|0|1 default|0";
-    $props["cession_creance"]           = "enum notNull list|0|1 default|0";
+    $props["npq"]                       = "bool notNull default|0";
+    $props["cession_creance"]           = "bool notNull default|0";
     $props["assurance_maladie"]         = "ref class|CCorrespondantPatient";
     $props["assurance_accident"]        = "ref class|CCorrespondantPatient";
     $props["rques_assurance_maladie"]   = "text helped";
@@ -288,6 +288,11 @@ class CFacture extends CMbObject {
     }
   }
   
+  /**
+   * Suppression d'une consult dans la facture
+   * 
+   * @return void
+  **/
   function cancelConsult() {
     if ($this->_consult_id) {
       $this->loadRefPatient();
@@ -309,12 +314,13 @@ class CFacture extends CMbObject {
       }
     }
   }
+  
   /**
    * Mise à jour des montant secteur 1, 2 et totaux, utilisés pour la compta
    * 
    * @return void
   **/
-  function updateMontants() {
+  function updateMontants(){
     $this->_secteur1  = 0;
     $this->_secteur2  = 0;
     if (count($this->_ref_sejours) != 0 || count($this->_ref_consults) != 0) {
@@ -369,7 +375,7 @@ class CFacture extends CMbObject {
   **/
   function eclatementTarmed() {
     if ($this->npq) {
-      $this->remise = sprintf("%.2f",(10*(($this->du_patient+$this->du_tiers)*$this->_coeff))/100);
+      $this->remise = sprintf("%.2f", (10*(($this->du_patient+$this->du_tiers)*$this->_coeff))/100);
     }
     $this->_montant_factures   = array();
     $this->_montant_factures[] = $this->du_patient + $this->du_tiers;
@@ -396,7 +402,7 @@ class CFacture extends CMbObject {
    * 
    * @return void
   **/
-  function loadRefPraticien(){
+  function loadRefPraticien() {
     if (!$this->_ref_praticien) {
       $this->_ref_praticien = $this->loadFwdRef("praticien_id", true);
     }
@@ -658,8 +664,8 @@ class CFacture extends CMbObject {
     if (!$noatraiter) {
       $noatraiter = $this->du_patient + $this->du_tiers;
     }
-    $noatraiter = str_replace(' ','',$noatraiter);
-    $noatraiter = str_replace('-','',$noatraiter);
+    $noatraiter = str_replace(' ', '', $noatraiter);
+    $noatraiter = str_replace('-', '', $noatraiter);
     $report = 0;
     $cpt = strlen($noatraiter);
     for ($i = 0; $i < $cpt; $i++) {
@@ -688,7 +694,7 @@ class CFacture extends CMbObject {
         $montant_prem = 0;
       }
       if ($this->_total_tarmed || $this->_autre_tarmed) {
-         $this->_montant_factures_caisse[0] = sprintf("%.2f",$montant_prem - $this->remise);
+         $this->_montant_factures_caisse[0] = sprintf("%.2f", $montant_prem - $this->remise);
       }
       if ($this->_total_caisse > 0) {
         $this->_montant_factures_caisse[1] = $this->_total_caisse;
@@ -718,8 +724,8 @@ class CFacture extends CMbObject {
       }
       
       $genre = "01";
-      $adherent2 = str_replace(' ','',$this->_ref_praticien->adherent);
-      $adherent2 = str_replace('-','',$adherent2);
+      $adherent2 = str_replace(' ', '', $this->_ref_praticien->adherent);
+      $adherent2 = str_replace('-', '', $adherent2);
       foreach ($this->_montant_factures_caisse as $montant_facture) {
         $montant = sprintf('%010d', $montant_facture*100);
         $cle = $this->getNoControle($genre.$montant);
@@ -858,7 +864,7 @@ class CFacture extends CMbObject {
    * 
    * @return boolean
   **/
-  function IsRelancable() {
+  function isRelancable() {
     $date = CMbDT::date();
     $this->_is_relancable = false;
     $nb_first_relance  = CAppUI::conf("dPfacturation CRelance nb_days_first_relance");
@@ -874,7 +880,7 @@ class CFacture extends CMbObject {
       if (!count($this->_ref_relances) && CMbDT::daysRelative($this->cloture, $date) > $nb_first_relance) {
         $this->_is_relancable = true;
       }
-      elseif (count($this->_ref_relances)){
+      elseif (count($this->_ref_relances)) {
         if (CMbDT::daysRelative($this->_ref_last_relance->date, $date) > $nb_second_relance) {
           $this->_is_relancable = true;
         }
