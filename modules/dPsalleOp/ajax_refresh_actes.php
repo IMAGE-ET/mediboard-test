@@ -1,12 +1,12 @@
 <?php 
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPsalleOp
  * @author     Romain Ollivier <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    $Revision: 12659 $
+ * @version    $Revision$
  */
 
 $module       = CValue::getOrSession("module", "dPsalleOp");
@@ -25,6 +25,7 @@ foreach ($operation->_ext_codes_ccam as $key => $value) {
 $operation->getAssociationCodesActes();
 $operation->loadPossibleActes();
 $operation->_ref_plageop->loadRefsFwd();
+$operation->loadRefPraticien();
 
 // Chargement des praticiens
 $listAnesths = new CMediusers;
@@ -49,6 +50,7 @@ $smarty->assign("listAnesths", $listAnesths    );
 $smarty->assign("listChirs"  , $listChirs      );
 $smarty->assign("module"     , $module      );
 $smarty->assign("m"          , $module      );
+$smarty->assign("_is_dentiste" , $operation->_ref_chir->isDentiste());
 
 $smarty->display("inc_codage_actes.tpl");
 
