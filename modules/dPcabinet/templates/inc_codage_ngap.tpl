@@ -57,6 +57,7 @@ ActesNGAP = {
 
 </script>
 
+{{mb_default var=_is_dentiste value=false}}
 {{assign var=can_view_tarif value=true}}
 
 {{if $conf.dPsalleOp.CActeCCAM.restrict_display_tarif}}
