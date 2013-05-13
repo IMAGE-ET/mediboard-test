@@ -134,6 +134,9 @@ class CMediusers extends CPerson {
 
   /** @var CSourcePOP[] */
   public $_refs_source_pop;
+  
+  /** @var CRetrocession[] */
+  public $_ref_retrocessions;
 
   /**
    * Lazy access to a given user, defaultly connected user
@@ -348,6 +351,7 @@ class CMediusers extends CPerson {
     $backProps["CPS_pyxvital"]                    = "CPvCPS id_mediuser";
     $backProps["affectation"]                     = "CAffectation praticien_id";
     $backProps["regles_sectorisation_mediuser"]   = "CRegleSectorisation praticien_id";
+    $backProps["retrocession"]                    = "CRetrocession praticien_id";
     return $backProps;
   }
 
@@ -1472,5 +1476,14 @@ class CMediusers extends CPerson {
     $this->_p_email          = $this->_user_email;
     $this->_p_first_name     = $this->_user_first_name;
     $this->_p_last_name      = $this->_user_last_name;
+  }
+  
+  /**
+   * Fonction récupérant les rétrocessions du praticien
+   * 
+   * @return $this->_ref_retrocessions
+  **/
+  function loadRefsRetrocessions() {
+    return $this->_ref_retrocessions = $this->loadBackRefs("retrocession");
   }
 }
