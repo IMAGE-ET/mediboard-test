@@ -325,7 +325,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   function addUniteFonctionnelle($elParent, COperation $operation) {
     $salle = $operation->updateSalle();
 
-    $this->addCodeLibelle($elParent, "uniteFonctionnelle", $salle->nom, "");
+    $this->addCodeLibelle($elParent, "uniteFonctionnelle", substr($salle->nom, 0, 10), "");
   }
   
   function addUniteFonctionnelleResponsable($elParent, $mbOp) {
@@ -1215,9 +1215,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $fin = $this->addElement($elParent, "fin");
     $this->addElement($fin, "date" , CMbDT::date($mbOpFin));
     $this->addElement($fin, "heure", CMbDT::time($mbOpFin));
-    
-    $this->addUniteFonctionnelle($elParent, $operation);
-    
+
     if ($light) {
       // Ajout des participants
       $mbParticipants = array();
@@ -1237,7 +1235,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       // Libellé de l'opération
       $this->addTexte($elParent, "libelle", $operation->libelle, 80);
     }
-    else { 
+    else {
+      $this->addUniteFonctionnelle($elParent, $operation);
+
       // Uniquement le responsable de l’'intervention
       $participants = $this->addElement($elParent, "participants");
       $participant  = $this->addElement($participants, "participant");
