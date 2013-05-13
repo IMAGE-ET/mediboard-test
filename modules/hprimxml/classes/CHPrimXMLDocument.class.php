@@ -325,7 +325,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   function addUniteFonctionnelle($elParent, COperation $operation) {
     $salle = $operation->updateSalle();
 
-    $this->addCodeLibelle($elParent, "uniteFonctionnelle", $salle->nom, $salle->_view);
+    $this->addCodeLibelle($elParent, "uniteFonctionnelle", $salle->nom, "");
   }
   
   function addUniteFonctionnelleResponsable($elParent, $mbOp) {
