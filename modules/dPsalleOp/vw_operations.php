@@ -50,6 +50,7 @@ if ($op) {
   $selOp->canDo();
   $selOp->loadRefs();
   $selOp->loadRefPraticien();
+  $selOp->loadRefChir();
   $selOp->countExchanges();
   $selOp->isCoded();
   $selOp->_ref_consult_anesth->loadRefsTechniques();
