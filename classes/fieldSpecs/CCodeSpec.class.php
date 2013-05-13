@@ -59,6 +59,21 @@ class CCodeSpec extends CMbFieldSpec {
     ) + parent::getOptions();
   }
 
+  static function checkInsee($insee) {
+
+    $matches = null;
+    if (!preg_match("/^([12478][0-9]{2}[0-9]{2}[0-9][0-9ab][0-9]{3}[0-9]{3})([0-9]{2})$/i", $insee, $matches)) {
+      return "Matricule incorrect";
+    }
+
+    $code = preg_replace(array('/2A/i', '/2B/i'), array(19, 18), $matches[1]);
+    $cle  = $matches[2];
+
+    if (97 - bcmod($code, 97) != $cle) {
+      return "Matricule incorrect, la clé n'est pas valide";
+    }
+  }
+
   function checkProperty($object){
     $propValue = $object->{$this->fieldName};
 
@@ -117,22 +132,11 @@ class CCodeSpec extends CMbFieldSpec {
 
     // INSEE
     elseif ($this->insee) {
-
       if (preg_match("/^([0-9]{7,8}[A-Z])$/i", $propValue)) {
         return;
       }
 
-      $matches = null;
-      if (!preg_match("/^([12478][0-9]{2}[0-9]{2}[0-9][0-9ab][0-9]{3}[0-9]{3})([0-9]{2})$/i", $propValue, $matches)) {
-        return "Matricule incorrect";
-      }
-
-      $code = preg_replace(array('/2A/i', '/2B/i'), array(19, 18), $matches[1]);
-      $cle  = $matches[2];
-
-      if (97 - bcmod($code, 97) != $cle) {
-        return "Matricule incorrect, la clé n'est pas valide";
-      }
+      return self::checkInsee($propValue);
     }
 
     // siret

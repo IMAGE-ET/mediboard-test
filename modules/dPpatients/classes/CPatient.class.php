@@ -2036,145 +2036,56 @@ class CPatient extends CPerson {
     return true;
   }
 
-  function calculINS_C($prenom = null, $naissance = null, $matricule = null) {
-    // Fonction non implémentée avant php <= 5.1
-    if (!function_exists("hash")) return;
+  static function calculInsc($nir, $nir_key, $first_name = " ", $birth_date = "000000") {
+    $nir_complet = $nir.$nir_key;
 
-    $norm = $prenom;
+    //on vérifie que le nir est valide
+    if (CCodeSpec::checkInsee($nir_complet)) {
+      return;
+    }
 
-    if ($norm !== null) {
-      if (!$norm) {
-        $norm=" ";
-      }
+    //on vérifie que le nir n'est pas un nir temporaire
+    if (!preg_match("/^([12][0-9]{2}[0-9]{2}[0-9][0-9ab][0-9]{3}[0-9]{3})([0-9]{2})$/i", $nir_complet, $matches)) {
+      return;
+    }
+
+    if (empty($first_name)) {
+      $first_name = " ";
+    }
+
+    if (empty ($birth_date)) {
+      $birth_date = "000000";
+    }
+
+    $first_name = str_replace(" ", "", $first_name);
+
+    if (strlen($first_name) > 10) {
+      $first_name = mb_strimwidth($first_name, 0, 10);
     }
     else {
-      $norm = $this->prenom;
-
-      if ($this->prenom_2) {
-        $norm .= " " . $this->prenom_2;
-      }
-      if ($this->prenom_3) {
-        $norm .= " " . $this->prenom_3;
-      }
-      if ($this->prenom_4) {
-        $norm .= " " . $this->prenom_4;
-      }
-      if (!$norm) {
-        $norm = " ";
-      }
+      $first_name = str_pad($first_name, 10);
     }
 
-    // Normalisation des caractères
-    // Remplace les caractères accentués et spéciaux
-    $norm = CMbString::removeDiacritics($norm);
-    $norm = strtr($norm, "ÆæÐðÝýyßŠšŸ",
-                         "AADDYYYBSSY");
-    // Remplace les caractères confus (3 relevés 'NBSP','(c)'et'(r)') par un espace
-    $norm = preg_replace(array("/NBSP/","/\(c\)/","/\(r\)/")," ", $norm);
-    // Remplace tous les autres caractères par un espace
-    $norm = preg_replace("/([^A-Za-z])/"," ", $norm);
-    // Change les minuscules en majuscules
-    $norm = mb_strtoupper($norm);
+    list($year, $month, $day) = str_split($birth_date, 2);
 
-    /*...supprimer les espaces du prénom
-     * retenir les 10 premiers caractères
-     * tester si <10 ajouter des espaces
-     * .....*/
-    $norm = str_replace(" ", "", $norm);
-
-    if (strlen($norm) < 10) {
-      $norm = str_pad($norm, 10);
+    if (!checkdate($month, $day, $year) && $birth_date !== "000000" && strlen($birth_date) !== 6) {
+      return;
     }
 
-    if (strlen($norm) > 10) {
-      $norm = substr($norm, 0, 10);
+    $seed = $first_name.$birth_date.$nir;
+
+    $sha256 = hash("SHA256", $seed);
+    $sha256_hex = substr($sha256, 0, 16);
+    $insc = self::bchexdec($sha256_hex);
+
+    if (strlen($insc) < 20) {
+      $insc = str_pad($insc, 20, 0, STR_PAD_LEFT);
     }
 
-    // check birthdate
-    $birthdate = $naissance;
-    if ($birthdate === null) {
-      $birthdate = CMbDT::transform($this->naissance, null, "%y%m%d");
-      mbTrace($birthdate); exit();
-    }
+    $insc_key = 97 - bcmod($insc, 97);
+    $insc_key = str_pad($insc_key, 2, 0, STR_PAD_LEFT);
 
-    if (!$birthdate) {
-      $birthdate="000000";
-    }
-    elseif (preg_match("/^([0-3][0-9]\/[0-1][0-9]\/[1-2][0-9]{3})$/i", $birthdate)) {
-      $a = substr($birthdate, 6, 4); // conversion
-      $m = substr($birthdate, 3, 2); // de la date
-      $j = substr($birthdate, 0, 2);
-      $birthdate = $a.$m.$j;
-      $birthdate = substr($birthdate, 2, 6);
-    }
-    elseif (preg_match("/^([1-2][0-9]{3}[0-1][0-9][0-3][0-9][0]{4})$/i", $birthdate)) {
-      $birthdate = substr($birthdate, 2, 6);
-    }
-    elseif (preg_match("/^([0-9]{2}[0-1][0-9][0-3][0-9])$/i", $birthdate)) { // bon format
-    }
-    else {
-      return "date de naissance non valide";
-    }
-
-    // Check $nir
-    // Contrôler avec la clef
-    $nir = $matricule;
-    if ($nir === null) {
-      $nir = $this->matricule;
-    }
-
-    if (preg_match("/^([0-9]{7,8}[A-Z])$/i", $nir)) {
-      return "Matricule incomplet";
-    }
-
-    $matches = null;
-    if (!preg_match("/^([12478][0-9]{2}[0-9]{2}[0-9][0-9ab][0-9]{3}[0-9]{3})([0-9]{2})$/i", $nir, $matches)) {
-      return "Matricule incorrect";
-    }
-
-    $code = preg_replace(array('/2A/i', '/2B/i'), array(19, 18), $matches[1]);
-    $cle  = $matches[2];
-
-    if (97 - bcmod($code, 97) != $cle) {
-      return "Matricule incorrect, la clé n'est pas valide";
-    }
-
-    // Création de la graine
-    $seed = $norm.$birthdate.substr($matricule, 0, 13);
-
-    // Hash de la graine
-    $hash_seed = hash("sha256", $seed);
-
-    // Calcul de l'INS-C
-    $sha_hex = substr($hash_seed, 0, 16);
-    $sha_dec = CPatient::bchexdec($sha_hex);
-    $sha_dec = explode(".", $sha_dec);
-    $sha_dec = $sha_dec[0];
-
-    if (strlen($sha_dec) < 20) {
-      $sha_dec = str_pad($sha_dec, 20, "0", STR_PAD_LEFT);
-    }
-
-    $cle = 97 - bcmod($sha_dec, 97);
-
-    if (strlen($cle)<2) {
-      $cle = str_pad($cle, 2, "0", STR_PAD_LEFT);
-    }
-
-    if ($prenom !== null && $naissance !== null && $matricule !== null) {
-      return array(
-        "prenom_norm" => $norm,
-        "naissance_norm" => $birthdate,
-        "seed" => $seed,
-        "hash_seed" => $hash_seed,
-        "insc" => $sha_dec,
-        "cle_insc" => $cle
-      );
-    }
-    else {
-      $this->INSC = $sha_dec . $cle;
-      $this->INSC_date = CMbDT::dateTime();
-    }
+    return $insc.$insc_key;
   }
 
   function bchexdec($hex) {
