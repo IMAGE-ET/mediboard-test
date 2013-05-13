@@ -1,5 +1,8 @@
 <td colspan="{{if isset($colspan|smarty:nodefaults)}}{{$colspan}}{{/if}}">
-  {{if !$object->cloture}}
+  {{if ($object->_class == "CFactureEtablissement" || $object->_class == "CFactureCabinet") && $object->cloture}}
+    {{assign var="ref" value=_ref_$name}}
+    {{$object->$ref->nom}}
+  {{else}}
     <select name="{{$name}}" style="width: 15em;" 
       {{if $object->_class == "CFactureCabinet" || $object->_class == "CFactureEtablissement" }}onchange="return onSubmitFormAjax(this.form);"
       {{else}}
@@ -15,8 +18,5 @@
         </option>
       {{/foreach}}
     </select>
-  {{else}}
-    {{assign var="ref" value=_ref_$name}}
-    {{$object->$ref->nom}}
   {{/if}}
 </td>
