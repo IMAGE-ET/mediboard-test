@@ -1,11 +1,14 @@
-<?php /* $Id: httpreq_vw_main_courante.php 7212 2009-11-03 12:32:02Z rhum1 $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: 7212 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id: httpreq_vw_main_courante.php 7212 2009-11-03 12:32:02Z rhum1 $
+ *
+ * @category Admissions
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision: 7212 $
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkEdit();
@@ -133,4 +136,3 @@ $smarty->assign("guesses"         , $guesses );
 $smarty->assign("module"          , $module );
 
 $smarty->display("inc_identito_vigilance.tpl");
-?>

@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPadmissions
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Admissions
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -13,8 +16,8 @@ CCanDo::checkRead();
 // Filtres d'affichage
 
 $selSortis  = CValue::getOrSession("selSortis", "0");
-$order_col  = CValue::getOrSession("order_col","patient_id");
-$order_way  = CValue::getOrSession("order_way","ASC");
+$order_col  = CValue::getOrSession("order_col", "patient_id");
+$order_way  = CValue::getOrSession("order_way", "ASC");
 $date       = CValue::getOrSession("date", CMbDT::date());
 $type       = CValue::getOrSession("type");
 $service_id = CValue::getOrSession("service_id");
@@ -22,7 +25,7 @@ $prat_id    = CValue::getOrSession("prat_id");
 $period     = CValue::getOrSession("period");
 
 $date_actuelle = CMbDT::dateTime("00:00:00");
-$date_demain   = CMbDT::dateTime("00:00:00","+ 1 day");
+$date_demain   = CMbDT::dateTime("00:00:00", "+ 1 day");
 $hier          = CMbDT::date("- 1 day", $date);
 $demain        = CMbDT::date("+ 1 day", $date);
 

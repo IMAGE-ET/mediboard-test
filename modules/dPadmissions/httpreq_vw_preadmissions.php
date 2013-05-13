@@ -1,11 +1,14 @@
-<?php /* $Id: httpreq_vw_admissions.php 7207 2009-11-03 12:03:30Z rhum1 $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPadmissions
- * @version $Revision: 7207 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Admissions
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -18,7 +21,7 @@ $date          = CValue::getOrSession("date", CMbDT::date());
 $next          = CMbDT::date("+1 DAY", $date);
 
 $date_actuelle = CMbDT::dateTime("00:00:00");
-$date_demain   = CMbDT::dateTime("00:00:00","+ 1 day");
+$date_demain   = CMbDT::dateTime("00:00:00", "+ 1 day");
 
 $hier   = CMbDT::date("- 1 day", $date);
 $demain = CMbDT::date("+ 1 day", $date);
@@ -41,12 +44,14 @@ $where["consultation.patient_id"] = "IS NOT NULL";
 $where["consultation.annule"] = "= '0'";
 $where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($anesthesistes));
 $where["plageconsult.date"] = "= '$date'";
-if ($order_col_pre == "patient_id"){
+if ($order_col_pre == "patient_id") {
   $order = "patients.nom $order_way_pre, patients.prenom $order_way_pre, consultation.heure";
-} else {
+}
+else {
   $order = "consultation.".$order_col_pre." ".$order_way_pre;
 }
 
+/** @var CConsultation[] $listConsultations */
 $listConsultations = $consult->loadList($where, $order, null, null, $ljoin);
 
 foreach ($listConsultations as $key => $_consult) {
@@ -71,7 +76,7 @@ foreach ($listConsultations as $key => $_consult) {
       $_sejour->countPrestationsSouhaitees();
       $_sejour->loadRefsOperations();
       $_sejour->loadRefsAffectations();
-      foreach($_sejour->_ref_affectations as $_aff) {
+      foreach ($_sejour->_ref_affectations as $_aff) {
         $_aff->loadView();
       }
       $_sejour->getDroitsCMU();

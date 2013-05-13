@@ -1,11 +1,14 @@
-<?php /* $Id: httpreq_vw_all_admissions.php 11536 2011-03-08 15:02:14Z rhum1 $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPadmissions
- * @version $Revision: 11536 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Admissions
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -36,7 +39,7 @@ $selSortis     = CValue::getOrSession("selSortis", "0");
 $type          = CValue::getOrSession("type");
 $service_id    = CValue::getOrSession("service_id");
 $prat_id       = CValue::getOrSession("prat_id");
-$bank_holidays = CMbDT::bankHolidays($date);
+$bank_holidays = CGroups::loadCurrent()->getHolidays($date);
 $service_id    = explode(",", $service_id);
 CMbArray::removeValue("", $service_id);
 
@@ -72,7 +75,8 @@ if (count($service_id)) {
                       LEFT JOIN service
                         ON chambre.service_id = service.service_id";
   $filterService = "AND service.service_id " . CSQLDataSource::prepareIn($service_id);
-} else {
+}
+else {
   $leftjoinService = $filterService = "";
 }
 
@@ -134,5 +138,3 @@ $smarty->assign('nextmonth'    , $nextmonth);
 $smarty->assign('days'         , $days);
 
 $smarty->display('inc_vw_all_sorties.tpl');
-
-?>

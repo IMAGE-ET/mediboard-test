@@ -46,7 +46,7 @@ $recuse        = CValue::getOrSession("recuse", "-1");
 $envoi_mail    = CValue::getOrSession("envoi_mail", "0");
 $service_id    = CValue::getOrSession("service_id");
 $prat_id       = CValue::getOrSession("prat_id");
-$bank_holidays = CMbDT::bankHolidays($date);
+$bank_holidays = CGroups::loadCurrent()->getHolidays($date);
 
 $hier   = CMbDT::date("- 1 day", $date);
 $demain = CMbDT::date("+ 1 day", $date);
@@ -218,5 +218,3 @@ $smarty->assign('nextmonth'    , $nextmonth);
 $smarty->assign('days'         , $days);
 
 $smarty->display('inc_vw_all_sejours.tpl');
-
-?>

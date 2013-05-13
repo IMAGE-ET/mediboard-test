@@ -249,7 +249,7 @@
 <td>
   {{foreach from=$_sejour->_ref_operations item=_op}}
   {{if $_op->_ref_consult_anesth->_id}}
-  <div class="{{if $_op->_ref_consult_anesth->_ref_consultation->chrono == 64}}small-success{{else}}small-info{{/if}}" style="margin: 0px;">
+  <div class="{{if $_op->_ref_consult_anesth->_ref_consultation->chrono == 64}}small-success{{else}}small-info{{/if}}" style="margin: 0;">
     <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_consult_anesth->_ref_consultation->_guid}}');">
     {{$_op->_ref_consult_anesth->_date_consult|date_format:$conf.date}}
     </span>
@@ -271,27 +271,25 @@
   <td>
     {{foreach from=$_sejour->_ref_operations item=_op}}
     {{if $_op->_ref_actes_ccam|@count}}
-    <span style="color: #484;">
-    {{foreach from=$_op->_ref_actes_ccam item=_acte}}
-      {{if $_acte->montant_depassement}}
-        {{if $_acte->code_activite == 1}}
-        Chir :
-        {{elseif $_acte->code_activite == 4}}
-        Anesth :
-        {{else}}
-        Activité {{$_acte->code_activite}} :
+      <span style="color: #484;">
+      {{foreach from=$_op->_ref_actes_ccam item=_acte}}
+        {{if $_acte->montant_depassement}}
+          {{if $_acte->code_activite == 1}}
+          Chir :
+          {{elseif $_acte->code_activite == 4}}
+          Anesth :
+          {{else}}
+          Activité {{$_acte->code_activite}} :
+          {{/if}}
+          {{mb_value object=$_acte field=montant_depassement}}
+          <br />
         {{/if}}
-        {{mb_value object=$_acte field=montant_depassement}}
-        <br />
-      {{/if}}
-    {{/foreach}}
-    </span>
+      {{/foreach}}
+      </span>
     {{/if}}
     {{if $_op->depassement}}
-    {{* Pas de possibilité d'imprimer les dépassements pour l'instant
-      <a href="#" onclick="printDepassement({{$_sejour->sejour_id}})"></a>*}}
-    Prévu : {{mb_value object=$_op field="depassement"}}
-    <br />
+      Prévu : {{mb_value object=$_op field="depassement"}}
+      <br />
     {{/if}}
     {{foreachelse}}
     -

@@ -46,7 +46,7 @@ var changeEtablissementId = function(oForm) {
   $V(oForm._modifier_sortie, '0');
   var type = $V(oForm.type);
   submitSortie(oForm, type);
-}
+};
 
 function reloadFullSorties(filterFunction) {
   var oForm = getForm("selType");

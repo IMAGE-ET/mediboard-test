@@ -1,12 +1,14 @@
-<?php 
+<?php
+
 /**
  * $Id$
- * 
- * @package    Mediboard
- * @subpackage dPadmissions
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ *
+ * @category Admissions
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -33,7 +35,7 @@ $next           = CMbDT::date("+1 DAY", $date);
 $filterFunction = CValue::getOrSession("filterFunction");
 
 $date_actuelle = CMbDT::dateTime("00:00:00");
-$date_demain   = CMbDT::dateTime("00:00:00","+ 1 day");
+$date_demain   = CMbDT::dateTime("00:00:00", "+ 1 day");
 
 $hier   = CMbDT::date("- 1 day", $date);
 $demain = CMbDT::date("+ 1 day", $date);
@@ -51,10 +53,10 @@ $group = CGroups::loadCurrent();
 
 // Lien avec les patients et les praticiens
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
-$ljoin["users"] = "sejour.praticien_id = users.user_id";
+$ljoin["users"]    = "sejour.praticien_id = users.user_id";
 
 // Filtre sur les services
-if($service_id) {
+if ($service_id) {
   $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie_prevue";
   $ljoin["lit"]                = "affectation.lit_id = lit.lit_id";
   $ljoin["chambre"]            = "lit.chambre_id = chambre.chambre_id";
@@ -84,22 +86,23 @@ else {
     $where["sejour.annule"]   = "= '0'";
   }
 }
-if ($order_col != "patient_id" && $order_col != "entree_prevue" && $order_col != "praticien_id"){
-  $order_col = "patient_id";	
+if ($order_col != "patient_id" && $order_col != "entree_prevue" && $order_col != "praticien_id") {
+  $order_col = "patient_id";
 }
 
-if ($order_col == "patient_id"){
+if ($order_col == "patient_id") {
   $order = "patients.nom $order_way, patients.prenom $order_way, sejour.entree_prevue";
 }
 
-if ($order_col == "entree_prevue"){
+if ($order_col == "entree_prevue") {
   $order = "sejour.entree_prevue $order_way, patients.nom, patients.prenom";
 }
 
-if ($order_col == "praticien_id"){
+if ($order_col == "praticien_id") {
   $order = "users.user_last_name $order_way, users.user_first_name";
 }
 
+/** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
 CMbObject::massLoadFwdRef($sejours, "patient_id");
@@ -144,12 +147,13 @@ foreach ($sejours as $sejour_id => $_sejour) {
      "sejour" => "sejour.sejour_id = operations.sejour_id",
      "user_log" => "user_log.object_id = operations.operation_id AND user_log.object_class = 'COperation'"
     );
+    // @todo déclaration de la variable à réaliser
     $_sejour->_envoi_mail = $operation->countList($where, null, $ljoin);
   }
 }
 
 // Si la fonction selectionnée n'est pas dans la liste des fonction, on la rajoute
-if ($filterFunction && !array_key_exists($filterFunction, $functions)){
+if ($filterFunction && !array_key_exists($filterFunction, $functions)) {
   $_function = new CFunctions();
   $_function->load($filterFunction);
   $functions[$filterFunction] = $_function;
@@ -180,5 +184,3 @@ $smarty->assign("functions"     , $functions);
 $smarty->assign("filterFunction", $filterFunction);
 
 $smarty->display("inc_vw_sejours.tpl");
-
-?>

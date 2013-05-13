@@ -95,12 +95,19 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   public $_score_apfel;
   
   // Object References
+  /** @var  CConsultation */
   public $_ref_consultation;
+  /** @var  CMediusers */
   public $_ref_chir;
+  /** @var  CTechniqueComp[] */
   public $_ref_techniques;
+  /** @var  CConsultAnesth */
   public $_ref_last_consultanesth;
+  /** @var  COperation */
   public $_ref_operation;
+  /** @var  CSejour */
   public $_ref_sejour;
+  /** @var  CPlageconsult */
   public $_ref_plageconsult;
 
   function getSpec() {

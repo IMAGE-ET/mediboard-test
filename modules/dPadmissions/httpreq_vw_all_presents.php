@@ -1,11 +1,14 @@
-<?php /* $Id: httpreq_vw_all_admissions.php 12978 2011-08-29 10:11:28Z flaviencrochard $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPadmissions
- * @version $Revision: 12978 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Admissions
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -33,7 +36,7 @@ else {
 $type          = CValue::getOrSession("type");
 $service_id    = CValue::getOrSession("service_id");
 $prat_id       = CValue::getOrSession("prat_id");
-$bank_holidays = CMbDT::bankHolidays($date);
+$bank_holidays = CGroups::loadCurrent()->getHolidays($date);
 $service_id    = explode(",", $service_id);
 CMbArray::removeValue("", $service_id);
 
@@ -81,7 +84,7 @@ $where["sejour.annule"] = "= '0'";
 $where["sejour.group_id"] = "= '$group->_id'";
 
 // Liste des admissions par jour
-foreach($days as $_date => $num) {
+foreach ($days as $_date => $num) {
   $date_min = CMbDT::dateTime("00:00:00", $_date);
   $date_max = CMbDT::dateTime("23:59:00", $_date);
   $where["sejour.entree"] = "<= '$date_max'";
@@ -102,5 +105,3 @@ $smarty->assign('nextmonth'    , $nextmonth);
 $smarty->assign('days'         , $days);
 
 $smarty->display('inc_vw_all_presents.tpl');
-
-?>

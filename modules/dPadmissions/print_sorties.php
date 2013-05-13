@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPadmissions
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Admissions
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -25,17 +28,19 @@ $where["sejour.sortie"]   = "BETWEEN '$date' AND '$date_next'";
 $where["sejour.annule"]   = "= '0'";
 $where["sejour.group_id"] = "= '$group->_id'";
 
-if($type == "ambucomp") {
+if ($type == "ambucomp") {
   $where[] = "`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp'";
-} elseif($type) {
+}
+elseif($type) {
   $where["sejour.type"] = " = '$type'";
-} else {
+}
+else {
   $where[] = "`sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
 }
 
 $ljoin = array();
 $ljoin["users"] = "users.user_id = sejour.praticien_id";
-if($service->_id) {
+if ($service->_id) {
   $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
   $ljoin["lit"]                = "affectation.lit_id = lit.lit_id";
   $ljoin["chambre"]            = "lit.chambre_id = chambre.chambre_id";
@@ -70,5 +75,3 @@ $smarty->assign("listByPrat", $listByPrat);
 $smarty->assign("total"     , count($sejours));
 
 $smarty->display("print_sorties.tpl");
-
-?>

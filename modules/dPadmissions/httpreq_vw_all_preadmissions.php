@@ -1,11 +1,14 @@
-<?php /* $Id: */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPadmissions
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Admissions
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -32,7 +35,7 @@ else {
   }
 }
 
-$bank_holidays = CMbDT::bankHolidays($date);
+$bank_holidays = CGroups::loadCurrent()->getHolidays($date);
 $hier = CMbDT::date("- 1 day", $date);
 $demain = CMbDT::date("+ 1 day", $date);
 
@@ -69,7 +72,7 @@ $groupby = "plageconsult.date";
 $fields = array("plageconsult.date");
 
 $listMonth = $consult->countMultipleList($where, $order, $groupby, $ljoin, $fields);
-foreach($listMonth as $_day) {
+foreach ($listMonth as $_day) {
   $days[$_day["date"]]["total"] = $_day["total"];
 }
 
@@ -85,5 +88,3 @@ $smarty->assign("bank_holidays", $bank_holidays);
 $smarty->assign("days"         , $days);
 
 $smarty->display('inc_vw_all_preadmissions.tpl');
-
-?>

@@ -29,12 +29,6 @@ function printPlanning() {
   url.popup(700, 550, "Entrees");
 }
 
-function printDepassement(id) {
-  var url = new Url("dPadmissions", "print_depassement");
-  url.addParam("id", id);
-  url.popup(700, 550, "Depassement");
-}
-
 function reloadFullPresents(filterFunction) {
   var oForm = getForm("selType");
   var url = new Url("dPadmissions", "httpreq_vw_all_presents");
@@ -106,7 +100,7 @@ var ExtRefManager = {
   reloadNumdosForm: function() {
     reloadAdmission();
   }
-}
+};
 
 function setExternalIds(oForm) {
   SejourHprimSelector["init"+oForm.sejour_id.value]();
@@ -116,7 +110,7 @@ PatHprimSelector.doSet = function(){
   var oForm = document[PatHprimSelector.sForm];
   $V(oForm[PatHprimSelector.sId], PatHprimSelector.prepared.id);
   ExtRefManager.submitIPPForm(oForm.patient_id.value);
-}
+};
 
 SejourHprimSelector.doSet = function(){
   var oFormSejour = document[SejourHprimSelector.sForm];
@@ -128,7 +122,7 @@ SejourHprimSelector.doSet = function(){
     ExtRefManager.submitIPPForm(oFormIPP.object_id.value);
   }
   //submitAdmission(document["editAdmFrm"+oFormSejour.object_id.value]);
-}
+};
 
 Main.add(function () {
   var totalUpdater = new Url("dPadmissions", "httpreq_vw_all_presents");

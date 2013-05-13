@@ -30,12 +30,6 @@ function printPlanning() {
   url.popup(700, 550, "Entrees");
 }
 
-function printDepassement(id) {
-  var url = new Url("dPadmissions", "print_depassement");
-  url.addParam("id", id);
-  url.popup(700, 550, "Depassement");
-}
-
 function reloadFullAdmissions(filterFunction) {
   var oForm = getForm("selType");
   var url = new Url("dPadmissions", "httpreq_vw_all_admissions");
@@ -116,7 +110,7 @@ var ExtRefManager = {
   reloadNumdosForm: function() {
     reloadAdmission();
   }
-}
+};
 
 function changeEtablissementId(oForm) {
   $V(oForm._modifier_entree, '0');
@@ -131,7 +125,7 @@ PatHprimSelector.doSet = function(){
   var oForm = document[PatHprimSelector.sForm];
   $V(oForm[PatHprimSelector.sId], PatHprimSelector.prepared.id);
   ExtRefManager.submitIPPForm(oForm.patient_id.value);
-}
+};
 
 SejourHprimSelector.doSet = function(){
   var oFormSejour = document[SejourHprimSelector.sForm];
@@ -143,7 +137,7 @@ SejourHprimSelector.doSet = function(){
     ExtRefManager.submitIPPForm(oFormIPP.object_id.value);
   }
   //submitAdmission(document["editAdmFrm"+oFormSejour.object_id.value]);
-}
+};
 
 Main.add(function () {
   var totalUpdater = new Url("dPadmissions", "httpreq_vw_all_admissions");

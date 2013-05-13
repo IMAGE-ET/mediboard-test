@@ -43,7 +43,7 @@
   </span>
 </td>
 <td class="text">
-  <div class="{{if $curr_consult->chrono == 64}}small-success{{else}}small-info{{/if}}" style="margin: 0px;">
+  <div class="{{if $curr_consult->chrono == 64}}small-success{{else}}small-info{{/if}}" style="margin: 0;">
   {{$curr_consult->heure|date_format:$conf.time}}
   -
   {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_consult->_ref_plageconsult->_ref_chir}}
@@ -121,10 +121,8 @@
 <td style="{{$cell_style}}">
   {{foreach from=$curr_adm->_ref_operations item=curr_op}}
   {{if $curr_op->depassement}}
-  <!-- Pas de possibilité d'imprimer les dépassements pour l'instant -->
-  <!-- <a href="#" onclick="printDepassement({{$curr_adm->sejour_id}})"></a> -->
-  {{mb_value object=$curr_op field="depassement"}}
-  <br />
+    {{mb_value object=$curr_op field="depassement"}}
+    <br />
   {{/if}}
   {{foreachelse}}
   -

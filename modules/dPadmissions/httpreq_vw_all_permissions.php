@@ -1,11 +1,14 @@
-<?php /* $Id: httpreq_vw_all_admissions.php 11618 2011-03-20 20:22:54Z rhum1 $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPadmissions
- * @version $Revision: 11618 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Admissions
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -35,7 +38,7 @@ else {
 $type          = CValue::getOrSession("type");
 $type_externe  = CValue::getOrSession("type_externe", "depart");
 
-$bank_holidays = CMbDT::bankHolidays($date);
+$bank_holidays = CGroups::loadCurrent()->getHolidays($date);
 
 $hier   = CMbDT::date("- 1 day", $date);
 $demain = CMbDT::date("+ 1 day", $date);
@@ -58,11 +61,13 @@ $service = new CService();
 $services = $service->loadGroupList($where);
 
 // filtre sur les types d'admission
-if($type == "ambucomp") {
+if ($type == "ambucomp") {
   $filterType = "AND (`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp')";
-} elseif($type) {
+}
+elseif($type) {
   $filterType = "AND `sejour`.`type` = '$type'";
-} else {
+}
+else {
   $filterType = "AND `sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
 }
 
@@ -131,5 +136,3 @@ $smarty->assign('nextmonth'    , $nextmonth);
 $smarty->assign('days'         , $days);
 
 $smarty->display('inc_vw_all_permissions.tpl');
-
-?>

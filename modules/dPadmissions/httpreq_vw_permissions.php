@@ -1,11 +1,14 @@
-<?php /* $Id: httpreq_vw_admissions.php 11618 2011-03-20 20:22:54Z rhum1 $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPadmissions
- * @version $Revision: 11618 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Admissions
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -18,7 +21,7 @@ $next           = CMbDT::date("+1 DAY", $date);
 $filterFunction = CValue::getOrSession("filterFunction");
 
 $date_actuelle = CMbDT::dateTime("00:00:00");
-$date_demain   = CMbDT::dateTime("00:00:00","+ 1 day");
+$date_demain   = CMbDT::dateTime("00:00:00", "+ 1 day");
 
 $hier   = CMbDT::date("- 1 day", $date);
 $demain = CMbDT::date("+ 1 day", $date);
@@ -45,18 +48,21 @@ $ljoin["service"]  = "chambre.service_id = service.service_id";
 $where["service.externe"] = "= '1'";
 
 // Filtre sur le type du séjour
-if($type == "ambucomp") {
+if ($type == "ambucomp") {
   $where[] = "`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp'";
-} elseif($type) {
+}
+elseif ($type) {
   $where["sejour.type"] = " = '$type'";
-} else {
+}
+else {
   $where[] = "`sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
 }
 
 $where["sejour.group_id"] = "= '$group->_id'";
-if($type_externe == "depart") {
+if ($type_externe == "depart") {
   $where["affectation.entree"] = "BETWEEN '$date_min' AND '$date_max'";
-} else {
+}
+else {
   $where["affectation.sortie"] = "BETWEEN '$date_min' AND '$date_max'";
 }
 $where["sejour.annule"]   = "= '0'";
@@ -80,9 +86,9 @@ foreach ($affectations as $affectation_id => $affectation) {
   $sejour    =& $affectation->loadRefSejour();
   $praticien =& $sejour->loadRefPraticien();
   
-	if ($filterFunction && $filterFunction != $praticien->function_id) {
+  if ($filterFunction && $filterFunction != $praticien->function_id) {
     unset($sejours[$sejour_id]);
-	  continue;
+    continue;
   }
   
   // Chargement du patient
@@ -97,10 +103,10 @@ foreach ($affectations as $affectation_id => $affectation) {
 }
 
 // Si la fonction selectionnée n'est pas dans la liste des fonction, on la rajoute
-if ($filterFunction && !array_key_exists($filterFunction, $functions)){
-	$_function = new CFunctions();
-	$_function->load($filterFunction);
-	$functions[$filterFunction] = $_function;
+if ($filterFunction && !array_key_exists($filterFunction, $functions)) {
+  $_function = new CFunctions();
+  $_function->load($filterFunction);
+  $functions[$filterFunction] = $_function;
 }
 
 // Création du template
@@ -122,5 +128,3 @@ $smarty->assign("functions"     , $functions);
 $smarty->assign("filterFunction", $filterFunction);
 
 $smarty->display("inc_vw_permissions.tpl");
-
-?>

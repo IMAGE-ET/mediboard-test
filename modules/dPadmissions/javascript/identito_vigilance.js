@@ -86,7 +86,7 @@ IdentitoVigilance = {
 	        if (div_guessed) {
 	          div_guessed.addClassName("merge-possible");
 	        }
-	      } )
+	      } );
 	
 	      // Show sibling guesses
 	      this.guesses[object_id]['siblings'].each( function(sibling_id) {
@@ -120,4 +120,4 @@ IdentitoVigilance = {
 	    addParam("objects_id", [first_id, second_id].join('-'));
 	  url.popup(900, 700);
 	}	
-}
+};

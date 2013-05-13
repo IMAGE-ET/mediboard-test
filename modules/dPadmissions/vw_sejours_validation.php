@@ -1,18 +1,21 @@
-<?php /* $Id: vw_idx_admission.php $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPadmissions
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Admissions
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
 
 global $m, $current_m;
 
-if(!isset($current_m)){
+if (!isset($current_m)) {
   $current_m = CValue::get("current_m", $m);
 }
 
@@ -27,7 +30,7 @@ $service_id = CValue::getOrSession("service_id");
 $prat_id    = CValue::getOrSession("prat_id");
 
 $date_actuelle = CMbDT::dateTime("00:00:00");
-$date_demain   = CMbDT::dateTime("00:00:00","+ 1 day");
+$date_demain   = CMbDT::dateTime("00:00:00", "+ 1 day");
 $hier          = CMbDT::date("- 1 day", $date);
 $demain        = CMbDT::date("+ 1 day", $date);
 
@@ -80,5 +83,3 @@ $smarty->assign("demain"            , $demain);
 $smarty->assign("nb_sejours_attente", $nb_sejours_attente);
 
 $smarty->display("../../dPadmissions/templates/vw_sejours_validation.tpl");
-
-?>

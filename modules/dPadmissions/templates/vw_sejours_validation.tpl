@@ -104,7 +104,7 @@ var ExtRefManager = {
   reloadNumdosForm: function() {
     reloadAdmission();
   }
-}
+};
 
 function setExternalIds(oForm) {
   SejourHprimSelector["init"+oForm.sejour_id.value]();
@@ -114,7 +114,7 @@ PatHprimSelector.doSet = function(){
   var oForm = document[PatHprimSelector.sForm];
   $V(oForm[PatHprimSelector.sId], PatHprimSelector.prepared.id);
   ExtRefManager.submitIPPForm(oForm.patient_id.value);
-}
+};
 
 SejourHprimSelector.doSet = function(){
   var oFormSejour = document[SejourHprimSelector.sForm];
@@ -126,7 +126,7 @@ SejourHprimSelector.doSet = function(){
     ExtRefManager.submitIPPForm(oFormIPP.object_id.value);
   }
   //submitAdmission(document["editAdmFrm"+oFormSejour.object_id.value]);
-}  
+};
 
 Main.add(function () {
   var totalUpdater = new Url("dPadmissions", "ajax_vw_all_sejours");

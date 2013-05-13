@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPadmissions
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Admissions
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -36,7 +39,7 @@ $ljoin["lit"]         = "affectation.lit_id = lit.lit_id";
 $ljoin["chambre"]     = "lit.chambre_id = chambre.chambre_id";
 $ljoin["service"]     = "chambre.service_id = service.service_id";
 
-if($service_id){
+if ($service_id) {
   $where["service.service_id"] = " = '$service_id'";
 }
 
@@ -47,23 +50,24 @@ $where["sortie_prevue"]   = "BETWEEN '$limit1' AND '$limit2'";
 $where["type"]            = " = '$type'";
 $where["sejour.annule"]   = " = '0'";
 $where["sejour.group_id"] = " = '$group->_id'";
+/** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
-foreach($sejours as $key => $_sejour){
+foreach ($sejours as $key => $_sejour) {
   $_sejour->loadRefPatient();
   $_sejour->loadRefPraticien();
   $_sejour->loadRefsAffectations("sortie ASC");
   $_sejour->loadRefsOperations();
   $_sejour->_duree = CMbDT::subTime(CMbDT::time($_sejour->entree_reelle), CMbDT::time($_sejour->sortie_reelle));
   
-  $affectation =& $_sejour->_ref_last_affectation;
-  if($affectation->affectation_id){
-  	$affectation->loadReflit();
-  	$affectation->_ref_lit->loadCompleteView();
+  $affectation = $_sejour->_ref_last_affectation;
+  if ($affectation->_id) {
+    $affectation->loadReflit();
+    $affectation->_ref_lit->loadCompleteView();
   }
-  foreach($_sejour->_ref_affectations as $key => $affect){
-    $affect->loadRefLit();
-    $affect->_ref_lit->loadCompleteView();
+  foreach ($_sejour->_ref_affectations as $_affect) {
+    $_affect->loadRefLit();
+    $_affect->_ref_lit->loadCompleteView();
   }
 }
 
@@ -75,5 +79,3 @@ $smarty->assign("services", $services);
 $smarty->assign("date", $date);
 $smarty->assign("type", $type);
 $smarty->display("print_ambu.tpl");
-
-?>

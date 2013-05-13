@@ -1,11 +1,14 @@
-<?php /* $Id: httpreq_vw_admissions.php 15057 2012-03-29 08:07:50Z mytto $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPadmissions
- * @version $Revision: 15057 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Admissions
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -24,7 +27,7 @@ $service_id = explode(",", $service_id);
 CMbArray::removeValue("", $service_id);
 
 $date_actuelle = CMbDT::dateTime("00:00:00");
-$date_demain   = CMbDT::dateTime("00:00:00","+ 1 day");
+$date_demain   = CMbDT::dateTime("00:00:00", "+ 1 day");
 
 $hier   = CMbDT::date("- 1 day", $date);
 $demain = CMbDT::date("+ 1 day", $date);
@@ -51,11 +54,13 @@ if (count($service_id)) {
 }
 
 // Filtre sur le type du séjour
-if($type == "ambucomp") {
+if ($type == "ambucomp") {
   $where[] = "`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp'";
-} elseif($type) {
+}
+elseif ($type) {
   $where["sejour.type"] = " = '$type'";
-} else {
+}
+else {
   $where[] = "`sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
 }
 
@@ -69,23 +74,23 @@ $where["sejour.entree"]   = "<= '$date_max'";
 $where["sejour.sortie"]   = ">= '$date_min'";
 $where["sejour.annule"]   = "= '0'";
 
-if ($order_col != "patient_id" && $order_col != "entree" && $order_col != "sortie" && $order_col != "praticien_id"){
+if ($order_col != "patient_id" && $order_col != "entree" && $order_col != "sortie" && $order_col != "praticien_id") {
   $order_col = "patient_id";  
 }
 
-if ($order_col == "patient_id"){
+if ($order_col == "patient_id") {
   $order = "patients.nom $order_way, patients.prenom $order_way, sejour.entree";
 }
 
-if ($order_col == "entree"){
+if ($order_col == "entree") {
   $order = "sejour.entree $order_way, sejour.sortie $order_way, patients.nom, patients.prenom";
 }
 
-if ($order_col == "sortie"){
+if ($order_col == "sortie") {
   $order = "sejour.sortie $order_way, sejour.entree $order_way, patients.nom, patients.prenom";
 }
 
-if ($order_col == "praticien_id"){
+if ($order_col == "praticien_id") {
   $order = "users.user_last_name $order_way, users.user_first_name";
 }
 
@@ -150,7 +155,7 @@ if (CAppUI::conf("dPadmissions show_deficience")) {
 }
 
 // Si la fonction selectionnée n'est pas dans la liste des fonction, on la rajoute
-if ($filterFunction && !array_key_exists($filterFunction, $functions)){
+if ($filterFunction && !array_key_exists($filterFunction, $functions)) {
   $_function = new CFunctions();
   $_function->load($filterFunction);
   $functions[$filterFunction] = $_function;

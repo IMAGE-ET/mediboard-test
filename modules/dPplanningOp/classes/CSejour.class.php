@@ -189,8 +189,11 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   /** @var COperation */
   public $_ref_last_operation;
+  /** @var  CAffectation[] */
   public $_ref_affectations;
+  /** @var  CAffectation */
   public $_ref_first_affectation;
+  /** @var  CAffectation */
   public $_ref_last_affectation;
   public $_ref_GHM = array();
   public $_ref_group;

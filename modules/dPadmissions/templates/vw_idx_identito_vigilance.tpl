@@ -13,7 +13,7 @@
 <script type="text/javascript">
 onMergeComplete = function() {
   IdentitoVigilance.start(0, 80);
-}
+};
 
 togglePlayPause = function(button) {
   button.toggleClassName("play");
@@ -24,7 +24,7 @@ togglePlayPause = function(button) {
   else {
     IdentitoVigilance.resume();
   }
-}
+};
 Main.add(function () {
   IdentitoVigilance.date = "{{$date}}";
   IdentitoVigilance.start(2, 60);

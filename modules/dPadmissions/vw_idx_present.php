@@ -1,11 +1,14 @@
-<?php /* $Id: vw_idx_admission.php 14407 2012-01-23 12:53:35Z flaviencrochard $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPadmissions
- * @version $Revision: 14407 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Admissions
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -20,7 +23,7 @@ $service_id = CValue::getOrSession("service_id");
 $prat_id    = CValue::getOrSession("prat_id");
 
 $date_actuelle = CMbDT::dateTime("00:00:00");
-$date_demain   = CMbDT::dateTime("00:00:00","+ 1 day");
+$date_demain   = CMbDT::dateTime("00:00:00", "+ 1 day");
 $hier          = CMbDT::date("- 1 day", $date);
 $demain        = CMbDT::date("+ 1 day", $date);
 
@@ -55,5 +58,3 @@ $smarty->assign("hier"         , $hier);
 $smarty->assign("demain"       , $demain);
 
 $smarty->display("vw_idx_present.tpl");
-
-?>

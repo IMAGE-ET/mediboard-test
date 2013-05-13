@@ -129,6 +129,7 @@ class CConsultation extends CFacturable {
    * @var CConsultAnesth
    */
   public $_ref_consult_anesth;
+  /** @var  CConsultAnesth[] */
   public $_refs_dossiers_anesth;
   public $_ref_examaudio;
   public $_ref_examcomp;
@@ -148,6 +149,7 @@ class CConsultation extends CFacturable {
   public $_ref_group;
   
   // Distant fields
+  /** @var  CMediusers */
   public $_ref_chir;
   public $_date;
   public $_datetime;

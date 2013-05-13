@@ -15,7 +15,7 @@
     var selected = select.options[select.selectedIndex];
     var form = select.form;
     $V(form.elements.mode_sortie, selected.get("mode"));
-  }
+  };
 
   Main.add(function() {
     Admissions.restoreSelection('listSorties');
@@ -249,27 +249,25 @@
       <td>
         {{foreach from=$_sejour->_ref_operations item=curr_op}}
         {{if $curr_op->_ref_actes_ccam|@count}}
-        <span style="color: #484;">
-        {{foreach from=$curr_op->_ref_actes_ccam item=_acte}}
-          {{if $_acte->montant_depassement}}
-            {{if $_acte->code_activite == 1}}
-            Chir :
-            {{elseif $_acte->code_activite == 4}}
-            Anesth :
-            {{else}}
-            Activité {{$_acte->code_activite}} :
+          <span style="color: #484;">
+          {{foreach from=$curr_op->_ref_actes_ccam item=_acte}}
+            {{if $_acte->montant_depassement}}
+              {{if $_acte->code_activite == 1}}
+              Chir :
+              {{elseif $_acte->code_activite == 4}}
+              Anesth :
+              {{else}}
+              Activité {{$_acte->code_activite}} :
+              {{/if}}
+              {{mb_value object=$_acte field=montant_depassement}}
+              <br />
             {{/if}}
-            {{mb_value object=$_acte field=montant_depassement}}
-            <br />
-          {{/if}}
-        {{/foreach}}
-        </span>
+          {{/foreach}}
+          </span>
         {{/if}}
         {{if $curr_op->depassement}}
-        <!-- Pas de possibilité d'imprimer les dépassements pour l'instant -->
-        <!-- <a href="#" onclick="printDepassement({{$_sejour->sejour_id}})"></a> -->
-        Prévu : {{mb_value object=$curr_op field="depassement"}}
-        <br />
+          Prévu : {{mb_value object=$curr_op field="depassement"}}
+          <br />
         {{/if}}
         {{foreachelse}}
         -

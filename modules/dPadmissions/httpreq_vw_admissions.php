@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPadmissions
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @category Admissions
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -36,12 +39,12 @@ $date_max = CMbDT::dateTime("23:59:59", $date);
 
 if ($period) {
   $hour = CAppUI::conf("dPadmissions hour_matin_soir");
-  // Matin
   if ($period == "matin") {
+    // Matin
     $date_max = CMbDT::dateTime($hour, $date);
   }
-  // Soir
   else {
+    // Soir
     $date_min = CMbDT::dateTime($hour, $date);
   }
 }
@@ -109,6 +112,7 @@ if ($order_col == "praticien_id") {
   $order = "users.user_last_name $order_way, users.user_first_name";
 }
 
+/** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
 // Mass preloading
