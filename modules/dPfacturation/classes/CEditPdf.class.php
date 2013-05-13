@@ -57,7 +57,7 @@ class CEditPdf{
     if (stristr($adresse, "\r\n")) {
       $tab["group1"] = stristr($adresse, "\r\n", true);
       $tab["group2"] = stristr($adresse, "\r\n");
-      $tab["group2"] = str_replace("\r\n",'',$tab["group2"]);
+      $tab["group2"] = str_replace("\r\n", '', $tab["group2"]);
     }
     else {
       $tab["group1"] = substr($adresse, 0, 30);
@@ -154,13 +154,13 @@ class CEditPdf{
           $this->editBVR($montant);
         }
         $this->type_pdf = "justif_TS";
-        $this->function_prat->adresse = str_replace("\r\n",' ', $this->function_prat->adresse);
-        $this->patient_facture->adresse = str_replace("\r\n",' ', $this->patient_facture->adresse);
+        $this->function_prat->adresse = str_replace("\r\n", ' ', $this->function_prat->adresse);
+        $this->patient_facture->adresse = str_replace("\r\n", ' ', $this->patient_facture->adresse);
         $this->editCenterJustificatif(0, $montant);
       }
       elseif ($this->type_pdf == "justif") {
-        $this->function_prat->adresse = str_replace("\r\n",' ', $this->function_prat->adresse);
-        $this->patient_facture->adresse = str_replace("\r\n",' ', $this->patient_facture->adresse);
+        $this->function_prat->adresse = str_replace("\r\n", ' ', $this->function_prat->adresse);
+        $this->patient_facture->adresse = str_replace("\r\n", ' ', $this->patient_facture->adresse);
         
         foreach ($this->facture->_montant_factures_caisse as $cle_facture => $montant_facture) {
           $this->editCenterJustificatif($cle_facture, $montant_facture);
@@ -216,19 +216,19 @@ class CEditPdf{
           if ($this->pdf->getY()>=265) {
             $this->pdf->setFont($this->fontb, '', 8);
             $this->pdf->editCell($this->pdf->getX(), $debut_lignes + $ligne*3, 130, "Total Intermédiaire", "R");
-            $this->pdf->Cell(28, "",$montant_intermediaire , null, null, "R");
+            $this->pdf->Cell(28, "", $montant_intermediaire , null, null, "R");
             $this->pdf->setFont($this->font, '', 8);
             $this->pdf->AddPage();
             $nb_pages++;
             $this->ajoutEntete2($nb_pages);
-            $this->pdf->editCell(10,$this->pdf->getY()+4, $colonnes[0]+$colonnes[1], "Patient");
+            $this->pdf->editCell(10, $this->pdf->getY()+4, $colonnes[0]+$colonnes[1], "Patient");
             $this->pdf->Cell($colonnes[2], "", $this->patient_facture->nom." ".$this->patient_facture->prenom." ".$this->patient_facture->naissance);
             $this->pdf->Line(10, 42, 190, 42);
             $this->pdf->Line(10, 38, 10, 42);
             $this->pdf->Line(190, 38, 190, 42);
             $ligne = 0;
             $debut_lignes = 50;
-            $this->pdf->setXY(10,0);
+            $this->pdf->setXY(10, 0);
           }
           $this->pdf->setFont($this->fontb, '', 7);
           $this->pdf->setXY(37, $debut_lignes + $ligne*3);
@@ -281,12 +281,12 @@ class CEditPdf{
             $code = $acte->_class == "CActeCaisse" ? $acte->_ref_caisse_maladie->code : $code = $acte->code_caisse; ;
           }
           
-          $this->pdf->Write("<b>",substr($libelle, 0, 90));
+          $this->pdf->Write("<b>", substr($libelle, 0, 90));
           $ligne++;
           //Si le libelle est trop long
           if (strlen($libelle)>90) {
             $this->pdf->setXY(37, $debut_lignes + $ligne*3);
-            $this->pdf->Write("<b>",substr($libelle, 90));
+            $this->pdf->Write("<b>", substr($libelle, 90));
             $ligne++;
           }
           $x = 0;
@@ -440,7 +440,7 @@ class CEditPdf{
         }
       }
       elseif ($acte->use_tarmed_bill) {
-        $this->autre_tarmed += $acte->prix;
+        $this->autre_tarmed += $acte->montant_base;
       }
     }
     $pt = sprintf("%.2f", $pt * $this->facture->_coeff);
@@ -500,25 +500,27 @@ class CEditPdf{
     );
     
     $tab[$colonne2] = $patient;
-    $this->pdf->SetTextColor(80,80,80);
+    $this->pdf->SetTextColor(80, 80, 80);
   
     if ($relance) {
       $this->pdf->setFont($this->font, '', 25);
-      $this->pdf->Text(100,20, "RELANCE");
+      $this->pdf->Text(100, 20, "RELANCE");
     }
-//    elseif ($this->facture->_reglements_total_patient) {
-//      $this->pdf->setFont($this->font, '', 25);
-//      $this->pdf->Text(100,20, "DUPLICATA");
-//    }
-//    if ($this->facture->type_facture == "accident") {
-//      $this->pdf->setFont($this->font, '', 15);
-//      $this->pdf->Text(80,40, "Accident");
-//    }
-//    if ($this->facture->cession_creance) {
-//      $this->pdf->setFont($this->font, '', 15);
-//      $this->pdf->Text(80,30, "Cession de créance");
-//    }
-    $this->pdf->SetTextColor(0,0,0);
+    /*
+    elseif ($this->facture->_reglements_total_patient) {
+      $this->pdf->setFont($this->font, '', 25);
+      $this->pdf->Text(100,20, "DUPLICATA");
+    }
+    if ($this->facture->type_facture == "accident") {
+      $this->pdf->setFont($this->font, '', 15);
+      $this->pdf->Text(80,40, "Accident");
+    }
+    if ($this->facture->cession_creance) {
+      $this->pdf->setFont($this->font, '', 15);
+      $this->pdf->Text(80,30, "Cession de créance");
+    }
+    */
+    $this->pdf->SetTextColor(0, 0, 0);
     $this->pdf->setFont($this->font, '', 8);
     
     // Ecriture de C, D, E, F
@@ -619,9 +621,9 @@ class CEditPdf{
     $genre = "01";
     $montant = sprintf('%010d', $montant_facture*100);
     $cle = $this->facture->getNoControle($genre.$montant);
-    $this->adherent2 = str_replace(' ','',$this->praticien->adherent);
-    $this->adherent2 = str_replace('-','',$this->adherent2);
-    $_num_reference = str_replace(' ','',$this->facture->num_reference);
+    $this->adherent2 = str_replace(' ', '', $this->praticien->adherent);
+    $this->adherent2 = str_replace('-', '', $this->adherent2);
+    $_num_reference = str_replace(' ', '', $this->facture->num_reference);
     $bvr = $genre.$montant.$cle.">".$_num_reference."+ ".$this->adherent2.">";
     
     // Dimensions du bvr
