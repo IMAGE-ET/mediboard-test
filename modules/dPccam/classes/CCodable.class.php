@@ -778,6 +778,7 @@ class CCodable extends CMbObject {
         $acte->object_id = $this->_id;
         $acte->object_class = $this->_class;
         $acte->executant_id = $chir;
+        $acte->execution = $this->_datetime;
         if (!$acte->countMatchingList()) {
           if ($msg = $acte->store()) {
             return $msg;
