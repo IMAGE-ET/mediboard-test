@@ -375,7 +375,7 @@ class CTarif extends CMbObject {
       $acte->setFullCode($_code);
       $acte->updateMontantBase();  
       $acte->makeFullCode();
-      $_code = $this->_dell_code && $this->_code == $acte->$code_acte ? "" : $acte->_full_code;
+      $_code = $this->_dell_code && $this->_code == $acte->code ? "" : $acte->_full_code;
     }
     if ($this->_add_code) {
       $acte = new $class_acte;
