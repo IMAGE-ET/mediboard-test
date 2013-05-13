@@ -25,15 +25,19 @@ $message->loadRefsNotes();
 // Création du possible
 if ($update_moment) {
   $message->deb = CMbDT::dateTime("-8 hours", $update_moment);
-  $message->fin = CMbDT::dateTime("+5 minutes", $update_moment);
+  $message->fin = CMbDT::dateTime("+15 minutes", $update_moment);
   $message->titre = CAppUI::tr("CMessage-create_update-titre");
-  $message->corps = CAppUI::tr("CMessage-create_update-corps", 
-    CMbDT::transform(null, $update_moment, CAppUI::conf("datetime")));
+  $message->corps = CAppUI::tr(
+    "CMessage-create_update-corps",
+    CMbDT::transform(null, $update_moment, CAppUI::conf("datetime"))
+  );
   
-  $details = CAppUI::tr("CMessage-create_update-details", 
+  $details = CAppUI::tr(
+    "CMessage-create_update-details",
     stripslashes($update_initiator), 
-    stripslashes($update_benefits));
-  $message->_email_details = CMbString::br2nl($details); 
+    stripslashes($update_benefits)
+  );
+  $message->_email_details = CMbString::br2nl($details);
 }
 
 // Etablissements disponisbles

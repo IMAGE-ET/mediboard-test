@@ -139,6 +139,7 @@ class CMessage extends CMbObject {
     
     try {
       // Source init
+      /** @var CSourceSMTP $source */
       $source = CExchangeSource::get("system-message", "smtp");
       $source->init();
       $source->addTo($this->_email_to);
@@ -160,7 +161,6 @@ class CMessage extends CMbObject {
       $body.= $this->getFieldContent("corps");
       $body.= $this->getFieldContent("_email_details");
       $source->setBody($body);
-      
       // Do send
       $source->send();
     }
@@ -179,7 +179,7 @@ class CMessage extends CMbObject {
     
     // Build content
     $label = $this->getLabelElement($field);
-    $value = $this->getFormattedValue($field);
+    $value = $this->getHtmlValue($field);
     $content = "<br/ >$label : <strong>$value</strong>\n"; 
         
     return $content;

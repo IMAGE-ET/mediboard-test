@@ -449,7 +449,7 @@ class CModelObject {
 
     return $values;
   }
-  
+
   /**
    * Returns the field's formatted value
    *
@@ -460,6 +460,18 @@ class CModelObject {
    */
   function getFormattedValue($field, $options = array()) {
     return $this->_specs[$field]->getValue($this, new CSmartyDP, $options);
+  }
+
+  /**
+   * Returns the field's html value
+   *
+   * @param string $field   Field name
+   * @param array  $options Format options
+   *
+   * @return string The field's formatted value
+   */
+  function getHtmlValue($field, $options = array()) {
+    return $this->_specs[$field]->getHtmlValue($this, new CSmartyDP, $options);
   }
 
   /**
