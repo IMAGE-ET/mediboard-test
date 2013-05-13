@@ -41,6 +41,8 @@ Message = {
     url.addElement(form._update_initiator);
     url.addElement(form._update_benefits);
     url.requestModal(500);
+
+    return false;
   },
   
   duplicate: function(form) {
@@ -53,14 +55,14 @@ Message = {
       typeName:'message', 
       objName: $V(form.titre),
       ajax: 1
-    }
+    };
     
     var ajax = {
       onComplete: function() {
         Message.refreshList();
         Control.Modal.close();
       }
-    }
+    };
     
     confirmDeletion(form, options, ajax);    
   },
