@@ -35,6 +35,9 @@ class CActiviteCdARR extends CCdARRObject {
 
   static $cached = array();
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table       = 'activite';
@@ -42,6 +45,9 @@ class CActiviteCdARR extends CCdARRObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -55,33 +61,59 @@ class CActiviteCdARR extends CCdARRObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->code;
     $this->_shortview = $this->code;
   }
 
+  /**
+   * Chargement du type d'activité
+   *
+   * @return CTypeActiviteCdARR
+   */
   function loadRefTypeActivite() {
     return $this->_ref_type_activite = CTypeActiviteCdARR::get($this->type);
   }
 
+  /**
+   * @see parent::loadView()
+   */
   function loadView(){
     parent::loadView();
     $this->loadRefTypeActivite();
   }
 
+  /**
+   * Compte les liaisons avec de éléments de prescription
+   *
+   * @return int
+   */
   function countElements() {
     $element = new CElementPrescriptionToCdarr();
     $element->code = $this->code;
     return $this->_count_elements = $element->countMatchingList();
   }
 
+  /**
+   * Chargement des liaisons avec des éléments de prescription
+   *
+   * @return CStoredObject[]
+   */
   function loadRefsElements() {
     $element = new CElementPrescriptionToCdarr();
     $element->code = $this->code;
     return $this->_ref_elements = $element->loadMatchingList();
   }
 
+  /**
+   * Chargement des éléments de prescriptions associés par catégorie
+   *
+   * @return CElementPrescription[][]
+   */
   function loadRefsElementsByCat() {
     $this->_ref_elements_by_cat = array();
     foreach ($this->loadRefsElements() as $_element) {
@@ -92,12 +124,24 @@ class CActiviteCdARR extends CCdARRObject {
     return $this->_ref_elements_by_cat;
   }
 
+  /**
+   * Compte les actes CdARR pour ce code d'activité
+   *
+   * @return int
+   */
   function countActes() {
     $acte = new CActeCdARR();
     $acte->code = $this->code;
     return $this->_count_actes = $acte->countMatchingList();
   }
 
+  /**
+   * Charge les exécutants de cet activité et fournit le nombre d'occurences par exécutants
+   *
+   * @return CMediusers[]
+   *
+   * @see self::_count_actes_by_executant
+   */
   function loadRefsAllExecutants() {
     // Comptage par executant
     $query = "SELECT therapeute_id, COUNT(*)
@@ -112,6 +156,7 @@ class CActiviteCdARR extends CCdARRObject {
 
     // Chargement des executants
     $user = new CMediusers;
+    /** @var CMediusers[] $executants */
     $executants = $user->loadAll(array_keys($counts));
     foreach ($executants as $_executant) {
       $_executant->loadRefFunction();
@@ -122,18 +167,10 @@ class CActiviteCdARR extends CCdARRObject {
     return $this->_ref_all_executants = $executants;
   }
 
-  static function getLibelle($type) {
-    $found = new self();
-    $found->type = $type;
-    $found->loadMatchingObject();
-
-    return $found->libelle;
-  }
-
   /**
    * Get an instance from the code
    *
-   * @param string $code
+   * @param string $code Code d'activité
    *
    * @return self
    */

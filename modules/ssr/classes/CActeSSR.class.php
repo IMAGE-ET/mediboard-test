@@ -24,7 +24,10 @@ class CActeSSR extends CMbObject {
 
   /** @var CSejour */
   public $_ref_sejour;
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["evenement_ssr_id"]  = "ref class|CEvenementSSR cascade";
@@ -34,12 +37,17 @@ class CActeSSR extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
     $this->_view = $this->code;
   }
 
   /**
+   * Chargement l'évenement associé
+   *
    * @return CEvenementSSR
    */
   function loadRefEvenementSSR(){
@@ -47,6 +55,8 @@ class CActeSSR extends CMbObject {
   }
 
   /**
+   * Chargement de l'administration associée
+   *
    * @return CAdministration
    */
   function loadRefAdministration(){
@@ -54,6 +64,8 @@ class CActeSSR extends CMbObject {
   }
 
   /**
+   * Chargement du séjour associé
+   *
    * @return CSejour
    */
   function loadRefSejour(){

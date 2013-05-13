@@ -38,7 +38,7 @@ class CActeCdARR extends CActeSSR {
   }
 
   /**
-   * Chargement de l'activité associé
+   * Chargement de l'activité associée
    *
    * @return CActiviteCdARR
    */

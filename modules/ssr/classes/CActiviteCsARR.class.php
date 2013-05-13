@@ -179,7 +179,7 @@ class CActiviteCsARR extends CCsARRObject {
   /**
    * Get an instance from the code
    * @param $code string
-   * @return CActiviteCdARR
+   * @return CActiviteCsARR
    **/
   static function get($code) {
     if (!$code) {
