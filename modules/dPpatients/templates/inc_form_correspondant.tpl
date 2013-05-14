@@ -55,9 +55,6 @@
             $V(form.mob, selected.get("mob"));
             $V(form.fax, selected.get("fax"));
             $V(form.urssaf, selected.get("urssaf"));
-            $V(form.ean, selected.get("ean"));
-            $V(form.ean_base, selected.get("ean_base"));
-            $V(form.type_pec, selected.get("type_ean"));
             $V(form.parente, selected.get("parente"));
             $V(form.email, selected.get("email"));
             $V(form.remarques, selected.get("remarques"));
