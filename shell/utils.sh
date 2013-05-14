@@ -4,20 +4,20 @@
 # Utilities
 ########
 
-force_dir() 
-{
+force_dir() {
   DIRPATH=$1
   if [ ! -d $DIRPATH ]
   then mkdir $DIRPATH
   fi
 }
 
-check_errs()
-{
+check_errs() {
   RETURNCODE=$1
   FAILURETEXT=$2
   SUCCESSTEXT=$3
- 
+  DATETIME=$(date +%Y-%m-%dT%H-%M-%S)
+
+  echo "[${DATETIME}] \c"
   cecho ">> status: \c" bold
 
   if [ "${RETURNCODE}" -ne "0" ]
@@ -31,29 +31,27 @@ check_errs()
   cecho "${SUCCESSTEXT}"
 }
 
-announce_script()
-{
+announce_script() {
   SCRIPTNAME=$1
   cecho "--- $SCRIPTNAME ($(date)) ---" bold
 }
 
-info_script()
-{
+info_script() {
   INFO=$1
+  DATETIME=$(date +%Y-%m-%dT%H-%M-%S)
+  echo "[${DATETIME}] \c"
   cecho ">> info: \c" bold
   cecho "${INFO}"
 }
 
-force_file()
-{
+force_file() {
   FILE=$1
   if [ ! -e $FILE ]
   then touch $FILE
   fi
 }
 
-package_lib()
-{
+package_lib() {
   # $1 : library name
   # $2 : Url
   # $3 : Version
@@ -65,8 +63,7 @@ package_lib()
   mv ./tmp/$1-$3.tar.gz libpkg/;
 }
 
-cecho ()
-{
+cecho () {
   # $1 = message
   # $2 = color
   message=$1                   
@@ -98,4 +95,3 @@ cecho ()
 
   tput sgr0                    # Reset to normal.
 }
-

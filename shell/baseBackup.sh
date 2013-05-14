@@ -72,8 +72,6 @@ then
   touch $lock
 fi
 
-event=$BASH_PATH/../tmp/svnevent.txt
-
 # Make backup path
 BACKUP_PATH=$5
 force_dir $BACKUP_PATH
@@ -83,14 +81,18 @@ BASE_PATH=${BACKUP_PATH}/$database-db
 force_dir $BASE_PATH
 cd ${BASE_PATH}
 
-## If no enough free disk space (1.5 * size of database), send mail if provided and quit
-mysql_conf=`find /etc -name my.cnf 2>/dev/null|head -n 1`
+# Check free disk space
+mysql_conf=`find /etc/ -name my.cnf 2>/dev/null|head -n 1`
+if [ -z "$mysql_conf" ]
+then
+  check_errs 2 "MySQL configuration file not found"
+fi
 
 mysql_data_root=`cat $mysql_conf|grep datadir|tr -s ' '|cut -d"=" -f 2`
 mysql_data_base="$mysql_data_root/$database"
 database_size=`du -k $mysql_data_base|tail -n 1|sed -r 's/\s+/\ /g'|cut -d" " -f 1`
 
-# Expanded size (database + tar)
+# Expanded size (database + tarball)
 needed_size=$((database_size*3/2))
 available_size=`df -k $BACKUP_PATH|tail -n 1|sed -r 's/\s+/\ /g'|cut -d" " -f 4`
 available_size=$((available_size))
@@ -107,6 +109,8 @@ then
   fi
   check_errs 2 "Needed space ($needed_size) exceeds available space ($available_size)"
 fi
+
+info_script "Needed space ($needed_size) less than available space ($available_size)"
 
 ## Make MySQL medthod
 
@@ -176,8 +180,6 @@ else
   check_errs $? "Failed to create symlink" "Symlink created!"
 fi
 
-
-
 # Remove temporary files
 rm -Rf $result
 check_errs $? "Failed to clean MySQL files" "MySQL files cleansing done!"
@@ -188,5 +190,7 @@ then
 fi
 
 # Write event file
+event=$BASH_PATH/../tmp/svnevent.txt
+
 echo "#$(date +%Y-%m-%dT%H:%M:%S)" >> $event
 echo "<strong>$database</strong> base backup: <strong>$method</strong> method" >> $event
