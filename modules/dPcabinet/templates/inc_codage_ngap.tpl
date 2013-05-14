@@ -123,7 +123,7 @@ ActesNGAP = {
       {{/if}}
       <th class="category">{{mb_title object=$acte_ngap field=complement}}</th>
 
-      {{if $m=="dPcabinet"}}
+      {{if $object->_class == "CConsultation"}}
         <th class="category">{{mb_title object=$acte_ngap field=lieu}}</th>
       {{/if}}
 
@@ -161,7 +161,7 @@ ActesNGAP = {
           </td>
           <td>{{mb_field object=$acte_ngap field="montant_depassement"}}</td>
           <td>{{mb_field object=$acte_ngap field="complement" onchange="refreshTarif()" onkeyup="refreshTarif()" emptyLabel="None"}}</td>
-          {{if $m=="dPcabinet"}}
+          {{if $object->_class == "CConsultation"}}
             <td>{{mb_field object=$acte_ngap field="lieu"}}</td>
           {{/if}}
 
@@ -218,7 +218,7 @@ ActesNGAP = {
         {{/if}}
       </td>
 
-      {{if $m=="dPcabinet"}}
+      {{if $object->_class == "CConsultation"}}
         <td>{{mb_value object=$_acte_ngap field="lieu"}}</td>
       {{/if}}
 
