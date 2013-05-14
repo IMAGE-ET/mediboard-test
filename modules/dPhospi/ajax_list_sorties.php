@@ -214,9 +214,10 @@ elseif ($type == "deplacements") {
   // (avec service_id mais pas de lit_id)
   unset($whereEntrants["service.group_id"]);
   unset($whereSortants["service.group_id"]);
-  unset($ljoin["lit"]);
-  unset($ljoin["chambre"]);
-  unset($ljoin["service"]);
+
+  $ljoin["lit"]     = "lit.lit_id = affectation.lit_id OR affectation.lit_id IS NULL";
+  $ljoin["chambre"] = "chambre.chambre_id = lit.chambre_id OR lit.chambre_id IS NULL";
+  $ljoin["service"] = "service.service_id = chambre.service_id OR chambre.service_id IS NULL";
 
   $whereSortants["sejour.group_id"]       = "= '$group->_id'";
   $whereSortants["sejour.group_id"]       = "= '$group->_id'";
