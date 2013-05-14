@@ -28,7 +28,10 @@ class CDependancesRHS extends CMbObject {
 
   // References
   public $_ref_rhs;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'dependances_rhs';
@@ -36,6 +39,9 @@ class CDependancesRHS extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -54,6 +60,8 @@ class CDependancesRHS extends CMbObject {
   }
   
   /**
+   * Charge le RHS parent
+   *
    * @return CRHS
    */
   function loadRefRHS() {

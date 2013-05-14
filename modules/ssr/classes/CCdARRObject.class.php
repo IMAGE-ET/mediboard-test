@@ -13,6 +13,10 @@
  * Activité CdARR
  */
 class CCdARRObject extends CStoredObject {
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->dsn         = 'cdarr';

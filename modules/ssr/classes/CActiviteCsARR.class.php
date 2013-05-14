@@ -39,6 +39,9 @@ class CActiviteCsARR extends CCsARRObject {
 
   static $cached = array();
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'activite';
@@ -46,6 +49,9 @@ class CActiviteCsARR extends CCsARRObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -59,16 +65,29 @@ class CActiviteCsARR extends CCsARRObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->code;
     $this->_shortview = $this->code;
   }
 
+  /**
+   * Charge la hiérarchie parente
+   *
+   * @return CActiviteCdARR
+   */
   function loadRefHierarchie() {
     return $this->_ref_hierarchie = CHierarchieCsARR::get($this->hierarchie);
   }
 
+  /**
+   * Charge toutes les hiérarchies ancêtres
+   *
+   * @return CHierarchieCsARR[]
+   */
   function loadRefsHierarchies() {
     // Codes des hiérarchies intermédiaires
     $parts = explode(".", $this->hierarchie);
@@ -83,10 +102,16 @@ class CActiviteCsARR extends CCsARRObject {
     return $this->_ref_hierarchies = $hierarchies;
   }
 
+  /**
+   * Charge les notes associés, par type puis par ordre
+   *
+   * @return CNoteActiviteCsARR[][]
+   */
   function loadRefsNotesActivites() {
     $note = new CNoteActiviteCsARR;
     $note->code = $this->code;
     $notes = array();
+    /** @var CNoteActiviteCsARR $_note */
     foreach ($note->loadMatchingList("ordre") as $_note) {
       $notes[$_note->typenote][$_note->ordre] = $_note;
     }
@@ -94,6 +119,11 @@ class CActiviteCsARR extends CCsARRObject {
     return $this->_ref_notes_activites = $notes;
   }
 
+  /**
+   * Charge les modulateurs associés
+   *
+   * @return CModulateurCsARR[]
+   */
   function loadRefsModulateurs() {
     $modulateur = new CModulateurCsARR;
     $modulateur->code = $this->code;
@@ -101,6 +131,11 @@ class CActiviteCsARR extends CCsARRObject {
     return $this->_ref_modulateurs = $modulateurs;
   }
 
+  /**
+   * Chage les gestes complémentaires associés
+   *
+   * @return CActiviteCsARR[]
+   */
   function loadRefsGestesComplementaires() {
     // Chargement des gestes
     $geste = new CGesteComplementaireCsARR;
@@ -118,23 +153,41 @@ class CActiviteCsARR extends CCsARRObject {
 
   }
 
+  /**
+   * @see parent::loadView()
+   */
   function loadView(){
     parent::loadView();
     $this->loadRefHierarchie();
   }
 
+  /**
+   * Compte les liaisons avec de éléments de prescription
+   *
+   * @return int
+   */
   function countElements() {
     $element = new CElementPrescriptionToCsarr();
     $element->code = $this->code;
     return $this->_count_elements = $element->countMatchingList();
   }
 
+  /**
+   * Charge les liaisons avec des éléments de prescription
+   *
+   * @return CElementPrescriptionToCdarr[]
+   */
   function loadRefsElements() {
     $element = new CElementPrescriptionToCsarr();
     $element->code = $this->code;
     return $this->_ref_elements = $element->loadMatchingList();
   }
 
+  /**
+   * Charge les éléments de prescriptions associés par catégorie
+   *
+   * @return CElementPrescription[][]
+   */
   function loadRefsElementsByCat() {
     $this->_ref_elements_by_cat = array();
     foreach ($this->loadRefsElements() as $_element) {
@@ -145,12 +198,24 @@ class CActiviteCsARR extends CCsARRObject {
     return $this->_ref_elements_by_cat;
   }
 
+  /**
+   * Compte les actes CdARR pour ce code d'activité
+   *
+   * @return int
+   */
   function countActes() {
     $acte = new CActeCdARR();
     $acte->code = $this->code;
     return $this->_count_actes = $acte->countMatchingList();
   }
 
+  /**
+   * Charge les exécutants de cet activité et fournit le nombre d'occurences par exécutants
+   *
+   * @return CMediusers[]
+   *
+   * @see self::_count_actes_by_executant
+   */
   function loadRefsAllExecutants() {
     // Comptage par executant
     $query = "SELECT therapeute_id, COUNT(*)
@@ -165,6 +230,7 @@ class CActiviteCsARR extends CCsARRObject {
 
     // Chargement des executants
     $user = new CMediusers;
+    /** @var CMediusers[] $executants */
     $executants = $user->loadAll(array_keys($counts));
     foreach ($executants as $_executant) {
       $_executant->loadRefFunction();
@@ -177,10 +243,12 @@ class CActiviteCsARR extends CCsARRObject {
 
 
   /**
-   * Get an instance from the code
-   * @param $code string
-   * @return CActiviteCsARR
-   **/
+   * Charge une activité par le code
+   *
+   * @param string $code Code d'activité
+   *
+   * @return self
+   */
   static function get($code) {
     if (!$code) {
       return new self();

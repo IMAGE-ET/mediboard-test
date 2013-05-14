@@ -65,7 +65,7 @@ class CStoredObject extends CModelObject {
   
   /**
    * The object in database
-   * @var CMbObject
+   * @var CStoredObject
    */
   public $_old;
   

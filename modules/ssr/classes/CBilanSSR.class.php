@@ -111,6 +111,9 @@ class CBilanSSR extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     if ($this->hospit_de_jour) {
@@ -136,11 +139,12 @@ class CBilanSSR extends CMbObject {
     if ($this->technicien_id && $this->fieldAltered("technicien_id")) {
       $technicien = $this->loadRefTechnicien();
       $old_technicien = new CTechnicien;
-      $old_technicien->load($this->_old->technicien_id);
+      $old_technicien->load($this->_old->_id);
       $evenement = new CEvenementSSR();
       $evenement->therapeute_id = $old_technicien->kine_id;
       $evenement->sejour_id = $this->sejour_id;
       foreach ($evenement->loadMatchingList() as $_evenement) {
+        /** @var CEvenementSSR $_evenement */
         if (!$_evenement->_traite) {
           $_evenement->therapeute_id = $technicien->kine_id;
           $_evenement->store();
@@ -218,8 +222,7 @@ class CBilanSSR extends CMbObject {
         $_replacement->loadRefConge();
         $conge = $_replacement->_ref_conge;
         if (CMbRange::in(CValue::first($date, CMbDT::date()), $conge->date_debut, $conge->date_fin)) {
-          $_replacement->loadRefReplacer();
-          $replacer =& $_replacement->_ref_replacer;
+          $replacer = $_replacement->loadRefReplacer();
           $replacer->loadRefFunction();
           $this->_ref_kine_journee = $_replacement->_ref_replacer;
           break;
@@ -235,12 +238,12 @@ class CBilanSSR extends CMbObject {
    * Chargement du séjour probablement demandeur du séjour SSR
    * (dont la sortie est proche de l'entree du séjour SSR)
    *
-   * @return CSejour|null
+   * @return CSejour
    */
   function loadRefSejourDemandeur() {
     // Effet de cache
     if ($this->_ref_sejour_demandeur) {
-      return null; // FIXME really null ?
+      return $this->_ref_sejour_demandeur;
     }
 
     // Requête
@@ -260,7 +263,7 @@ class CBilanSSR extends CMbObject {
   }
 
   /**
-   * Chargement du praticien demandeur sur la base du séjour demandeur
+   * Charge le praticien demandeur sur la base du séjour demandeur
    *
    * @return CMediusers
    */
@@ -275,6 +278,10 @@ class CBilanSSR extends CMbObject {
 
   /**
    * Load Sejour for technicien at a date
+   *
+   * @param int  $technicien_id           Le technicien concerné
+   * @param date $date                    La date de référence
+   * @param bool $show_cancelled_services Afficher ou non les services inactifs
    *
    * @return CSejour[]
    */
@@ -299,7 +306,7 @@ class CBilanSSR extends CMbObject {
   }
 
   /**
-   * Calcul si la réeducation est en cours au jour donné au regard des jours ouvrés
+   * Calcule si la réeducation est en cours au jour donné au regard des jours ouvrés
    *
    * @param string $date Date de référence
    *
@@ -324,9 +331,11 @@ class CBilanSSR extends CMbObject {
   }
 
   /**
-   * @param CPlageConge $plage
-   * @param string      $date_min
-   * @param string      $date_max
+   * Charge les séjours sur le congés entre deux dates
+   *
+   * @param CPlageConge $plage    Plage de congés concernée
+   * @param string      $date_min Date minimale
+   * @param string      $date_max Date maximale
    *
    * @return CSejour[]
    */

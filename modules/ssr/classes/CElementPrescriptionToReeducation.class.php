@@ -24,7 +24,12 @@ class CElementPrescriptionToReeducation extends CMbObject {
     $props["commentaire"]             = "str";
     return $props;
   }
-  
+
+  /**
+   * Charge l'élément de prescription associé
+   *
+   * @return CElementPrescription
+   */
   function loadRefElementPrescription() {
     return $this->_ref_element_prescription = $this->loadFwdRef("element_prescription_id", true);
   }

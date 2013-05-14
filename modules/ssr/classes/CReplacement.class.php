@@ -142,6 +142,11 @@ class CReplacement extends CMbObject {
     return $this->_ref_conge = $this->loadFwdRef("conge_id", true);
   }
 
+  /**
+   * Charge le remplaçant
+   *
+   * @return CMediusers
+   */
   function loadRefReplacer() {
     return $this->_ref_replacer = $this->loadFwdRef("replacer_id", true);
   }  

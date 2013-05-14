@@ -9,13 +9,19 @@
  * @version    $Revision$
  */
 
+/**
+ * Classe d'association entre les élément de prescription et les code CdARR
+ */
 class CElementPrescriptionToCdarr extends CElementPrescriptionToReeducation {
   // DB Table key
   public $element_prescription_to_cdarr_id;
     
   public $_ref_activite_cdarr;
   public $_count_cdarr_by_type;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'element_prescription_to_cdarr';
@@ -23,13 +29,19 @@ class CElementPrescriptionToCdarr extends CElementPrescriptionToReeducation {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["code"]                    = "str notNull length|4";
     return $props;
   }
-  
-  function check(){
+
+  /**
+   * @see parent::check()
+   */
+  function check() {
     // Verification du code Cdarr saisi
     $code_cdarr = CActiviteCdARR::get($this->code);
     if (!$code_cdarr->code) {
@@ -37,14 +49,22 @@ class CElementPrescriptionToCdarr extends CElementPrescriptionToReeducation {
     }
     return parent::check();
   }
-  
-  function loadRefActiviteCdarr(){
+
+  /**
+   * Charge l'activité CdARR associée
+   *
+   * @return CActiviteCdARR
+   */
+  function loadRefActiviteCdarr() {
     $activite = CActiviteCdARR::get($this->code);
     $activite->loadRefTypeActivite();
     return $this->_ref_activite_cdarr = $activite;
   }
-  
-  function loadView(){
+
+  /**
+   * @see parent::loadView()
+   */
+  function loadView() {
     parent::loadView();
     $this->loadRefActiviteCdarr();
   }

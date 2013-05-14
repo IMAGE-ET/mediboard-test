@@ -31,9 +31,15 @@ class CEvenementSSR extends CMbObject {
   public $_ref_seance_collective;
   
   // Form Fields
+
+  /** @var  bool */
   public $_traite;
-  public $_heure_fin; // Time
-  public $_heure_deb; // Time
+
+  /** @var  time */
+  public $_heure_fin;
+  /** @var  time */
+  public $_heure_deb;
+
   public $_nb_decalage_min_debut;
   public $_nb_decalage_heure_debut;
   public $_nb_decalage_jour_debut;

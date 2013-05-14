@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Actes SSR abstraits
+ */
 class CActeSSR extends CMbObject {
   // DB Fields
   public $evenement_ssr_id;

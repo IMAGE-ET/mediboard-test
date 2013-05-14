@@ -99,9 +99,9 @@ class CActiviteCdARR extends CCdARRObject {
   }
 
   /**
-   * Chargement des liaisons avec des éléments de prescription
+   * Charge les liaisons avec des éléments de prescription
    *
-   * @return CStoredObject[]
+   * @return CElementPrescriptionToCdarr[]
    */
   function loadRefsElements() {
     $element = new CElementPrescriptionToCdarr();
@@ -110,7 +110,7 @@ class CActiviteCdARR extends CCdARRObject {
   }
 
   /**
-   * Chargement des éléments de prescriptions associés par catégorie
+   * Charge les éléments de prescriptions associés par catégorie
    *
    * @return CElementPrescription[][]
    */
@@ -168,7 +168,7 @@ class CActiviteCdARR extends CCdARRObject {
   }
 
   /**
-   * Get an instance from the code
+   * Charge une activité par le code
    *
    * @param string $code Code d'activité
    *
