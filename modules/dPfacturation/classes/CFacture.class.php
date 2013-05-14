@@ -613,6 +613,7 @@ class CFacture extends CMbObject {
     if (count($this->_ref_sejours) > 0) {
       $this->_ref_last_sejour  = end($this->_ref_sejours);
       $this->_ref_first_sejour = reset($this->_ref_sejours);
+      $this->_ref_last_sejour->loadRefLastOperation();
     }
     else {
       $this->_ref_last_sejour = new CSejour();
@@ -744,14 +745,14 @@ class CFacture extends CMbObject {
     $this->loadRefsItems();
     if ($this->cloture && count($this->_ref_items)) {
       foreach ($this->_ref_actes_tarmed as $acte_tarmed) {
-        $this->_total_tarmed += $acte_tarmed->montant_base;
+        $this->_total_tarmed += $acte_tarmed->montant_base * $acte_tarmed->quantite;
       }
       foreach ($this->_ref_actes_caisse as $acte_caisse) {
         $this->completeField("type_facture");
         $coeff = "coeff_".$this->type_facture;
         $coeff = $acte_caisse->_class == "CActeCaisse" ? $acte_caisse->_ref_caisse_maladie->$coeff : $acte_caisse->coeff ;
         $use   = $acte_caisse->_class == "CActeCaisse" ? $acte_caisse->_ref_caisse_maladie->use_tarmed_bill : $acte_caisse->use_tarmed_bill;
-        $tarif_acte_caisse = ($acte_caisse->_montant_facture)* $coeff;
+        $tarif_acte_caisse = ($acte_caisse->_montant_facture)* $coeff *$acte_caisse->quantite ;
         if ($use) {
           $this->_autre_tarmed += $tarif_acte_caisse;
         }
@@ -786,13 +787,13 @@ class CFacture extends CMbObject {
   **/
   function loadTotauxObject($object) {
     foreach ($object->_ref_actes_tarmed as $acte_tarmed) {
-      $this->_total_tarmed += $acte_tarmed->_montant_facture;
+      $this->_total_tarmed += $acte_tarmed->_montant_facture * $acte_tarmed->quantite;
     }
     foreach ($object->_ref_actes_caisse as $acte_caisse) {
       $coeff = "coeff_".$this->type_facture;
-      $tarif_acte_caisse = ($acte_caisse->_montant_facture)*$acte_caisse->_ref_caisse_maladie->$coeff;
+      $tarif_acte_caisse = ($acte_caisse->_montant_facture)*$acte_caisse->_ref_caisse_maladie->$coeff * $acte_caisse->quantite;
       if ($acte_caisse->_ref_caisse_maladie->use_tarmed_bill) {
-        $this->_autre_tarmed += $tarif_acte_caisse;
+        $this->_autre_tarmed += $tarif_acte_caisse ;
       }
       else {
         $this->_total_caisse +=  $tarif_acte_caisse;

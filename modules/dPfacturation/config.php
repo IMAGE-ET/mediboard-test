@@ -37,7 +37,8 @@ $dPconfig["dPfacturation"] = array (
     "home_fax"      => ""
   ),
   "Other" => array(
-    "use_view_chainage" => "0"
+    "use_view_chainage" => "0",
+    "use_view_quantitynull" => "0"
   ),
 );
 ?>

@@ -45,6 +45,15 @@
       {{/if}}
     </td>
   </tr>
+{{elseif !$facture->cloture && isset($factures|smarty:nodefaults) && count($factures) && $facture->_class == "CFactureEtablissement"}}
+  <tr>
+    <td colspan="8">
+      {{mb_script module=planningOp script=operation ajax="true"}}
+      <button type="button" class="edit" onclick="Operation.dossierBloc('{{$facture->_ref_last_sejour->_ref_last_operation->_id}}', Facture.reload('{{$facture->patient_id}}', '{{$facture->_class}}', 0 , '{{$facture->_id}}'));">
+        Dossier bloc
+      </button>
+    </td>
+  </tr>
 {{/if}}
 <tr>
   <td colspan="8">
@@ -131,23 +140,25 @@
 
 {{if $facture->_ref_items|@count}}
   {{foreach from=$facture->_ref_items item=item}}
-    <tr>
-      <td style="text-align:center;width:100px;">
-        {{if $facture->_ref_last_sejour->_id}}
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$facture->_ref_last_sejour->_guid}}')">
-        {{else}}
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$facture->_ref_last_consult->_guid}}')">
-        {{/if}}
-        {{mb_value object=$item field="date"}}
-        </span>
-      </td>
-      <td class="acte-{{$item->type}}" style="width:140px;">{{mb_value object=$item field="code"}}</td>
-      <td style="white-space: pre-line;" class="compact">{{mb_value object=$item field="libelle"}}</td>
-      <td style="text-align:right;">{{mb_value object=$item field="montant_base"}}</td>
-      <td style="text-align:right;">{{mb_value object=$item field="quantite"}}</td>
-      <td style="text-align:right;">{{mb_value object=$item field="coeff"}} </td>
-      <td style="text-align:right;">{{$item->montant_base*$item->coeff|string_format:"%0.2f"|currency}}</td>
-    </tr>
+    {{if !$conf.dPfacturation.Other.use_view_quantitynull || ($conf.dPfacturation.Other.use_view_quantitynull && $item->quantite != 0)}}
+      <tr>
+        <td style="text-align:center;width:100px;">
+          {{if $facture->_ref_last_sejour->_id}}
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$facture->_ref_last_sejour->_guid}}')">
+          {{else}}
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$facture->_ref_last_consult->_guid}}')">
+          {{/if}}
+          {{mb_value object=$item field="date"}}
+          </span>
+        </td>
+        <td class="acte-{{$item->type}}" style="width:140px;">{{mb_value object=$item field="code"}}</td>
+        <td style="white-space: pre-line;" class="compact">{{mb_value object=$item field="libelle"}}</td>
+        <td style="text-align:right;">{{mb_value object=$item field="montant_base"}}</td>
+        <td style="text-align:right;">{{mb_value object=$item field="quantite"}}</td>
+        <td style="text-align:right;">{{mb_value object=$item field="coeff"}} </td>
+        <td style="text-align:right;">{{$item->montant_base*$item->coeff|string_format:"%0.2f"|currency}}</td>
+      </tr>
+    {{/if}}
   {{/foreach}}
 {{else}}
   {{foreach from=$facture->_ref_actes_tarmed item=_acte_tarmed}}
