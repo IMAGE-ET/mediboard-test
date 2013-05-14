@@ -44,7 +44,6 @@
         afterUpdateElement: function(field, selected){
           var form = field.form;
           var selected = selected.select(".view")[0];
-          console.log(selected);
           if (selected.innerHTML) {
             $V(form.nom, selected.get("nom"));
             $V(form.nom_jeune_fille, selected.get("nom_jeune_fille"));
@@ -94,7 +93,6 @@
     else {
       $("parente").setStyle({display: "table-row"});
       $("urssaf").setStyle({display: "none"});
-      console.log(elt);
       $V(elt.form.urrsaf, "");
     }
   }
