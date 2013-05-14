@@ -97,38 +97,46 @@ class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
     $this->_ref_sender = $sender;
     
     $incorrect_identifier = null;
-    
+
+    // Traitement du mode simple, cad
     if (CHL7v2Message::$handle_mode == "simple") {
       $MRG_4 = $this->queryNodes("MRG.4", $data["MRG"])->item(0);
       
       $incorrect_identifier = $this->queryTextNode("CX.1", $MRG_4);
+
+      $patient->load($incorrect_identifier);
+
+      // ID non connu (non fourni ou non retrouvé)
+      if (!$incorrect_identifier || !$patient->_id) {
+        return $exchange_ihe->setAckAR($ack, "E141", null, $patient);
+      }
     }
     else {
       $MRG_1 = $this->queryNodes("MRG.1", $data["MRG"])->item(0);
-      
+
       if ($this->queryTextNode("CX.5", $MRG_1) == "PI") {
         $incorrect_identifier = $this->queryTextNode("CX.1", $MRG_1);
       }
-    }
-    
-    // Chargement de l'IPP   
-    $IPP_incorrect = new CIdSante400();
-    if ($incorrect_identifier) {
-      $IPP_incorrect = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $incorrect_identifier);
-    }
-    
-    // PI non connu (non fourni ou non retrouvé)
-    if (!$incorrect_identifier || !$IPP_incorrect->_id) {
-      return $exchange_ihe->setAckAR($ack, "E141", null, $patient);
+
+      // Chargement de l'IPP
+      $IPP_incorrect = new CIdSante400();
+      if ($incorrect_identifier) {
+        $IPP_incorrect = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $incorrect_identifier);
+      }
+
+      // PI non connu (non fourni ou non retrouvé)
+      if (!$incorrect_identifier || !$IPP_incorrect->_id) {
+        return $exchange_ihe->setAckAR($ack, "E141", null, $patient);
+      }
+
+      $patient->load($IPP_incorrect->object_id);
+
+      // Passage en trash de l'IPP du patient a éliminer
+      if ($msg = $patient->trashIPP($IPP_incorrect)) {
+        return $exchange_ihe->setAckAR($ack, "E140", $msg, $patient);
+      }
     }
 
-    $patient->load($IPP_incorrect->object_id);
-
-    // Passage en trash de l'IPP du patient a éliminer
-    if ($msg = $patient->trashIPP($IPP_incorrect)) {
-      return $exchange_ihe->setAckAR($ack, "E140", $msg, $patient);
-    }  
-    
     // Sauvegarde du nouvel IPP
     $IPP = new CIdSante400();
     $IPP->object_id    = $patient->_id;
