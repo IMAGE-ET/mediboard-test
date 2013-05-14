@@ -107,7 +107,7 @@ foreach ($evenements as $_evenement){
   if ($line = $_evenement->loadRefPrescriptionLineElement()) {
     $element = $line->_ref_element_prescription;
     $category = $element->loadRefCategory();
-    $title = $category->_view;
+    $title .= $category->_view;
   
     // Color
     $color = $element->_color ? "#$element->_color" : null;
