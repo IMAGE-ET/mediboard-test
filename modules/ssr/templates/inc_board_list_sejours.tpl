@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if !"dPrescription"|module_active && $mode == "plannable"}}
+{{if !"dPprescription"|module_active && $mode == "plannable"}}
   <div class="small-warning">
     <div>Le module <strong>Param. Prescription</strong> n'est pas installé ou activé.</div>
     <div>La prescription de rééducation n'est donc pas possible.</div>
