@@ -8,7 +8,7 @@
     <th class="title">
      {{$banque}}
     </th>
-    <th class="title" colspan="6">
+    <th class="title" colspan="8">
       Remise de chèques
     </th>
   </tr>
@@ -19,7 +19,7 @@
     <th>Code Guichet</th>
     <th>N° Compte</th>
     <th>Clé RIB</th>
-    <th colspan="2">Titulaire</th>
+    <th colspan="4">Titulaire</th>
   </tr>
   
   <tr style="text-align: center">
@@ -28,25 +28,27 @@
     <td>{{$compte_guichet}}</td>
     <td>{{$compte_numero}}</td>
     <td>{{$compte_cle}}</td>
-    <td colspan="2">{{$praticien}}</td>
+    <td colspan="3">{{$praticien}}</td>
   </tr>
   
   <tr>
-    <th colspan="3" class="title">Tireur</th>
+    <th colspan="2" class="title">Tireur</th>
+    <th colspan="2" class="title">Référence</th>
     <th colspan="3" class="title">Etablissement payeur</th>
     <th class="title narrow">Montant</th>
   </tr>
   
   {{foreach from=$reglements item=_reglement}}
   <tr>
-    <td colspan="3">{{$_reglement->_ref_object->_ref_patient}}</td>
+    <td colspan="2">{{$_reglement->_ref_object->_ref_patient}}</td>
+    <td colspan="2">{{$_reglement->reference}}</td>
     <td colspan="3">{{$_reglement->_ref_banque}}</td>
     <td style="text-align: right;">{{mb_value object=$_reglement field=montant}}</td>
   </tr>
   {{/foreach}}
   
   <tr style="text-align: right; font-weight: bold;">
-    <td colspan="3"></td>
+    <td colspan="4"></td>
     <td>Nombre de remises</td>
     <td>{{$nbRemise}}</td>
     <td>Montant total</td>
