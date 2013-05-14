@@ -3,7 +3,7 @@
     <name>MRG</name>
     <description>Merge Patient Information</description>
     <elements>
-        <field minOccurs="1" maxOccurs="unbounded">
+        <field minOccurs="0" maxOccurs="unbounded">
             <name>MRG.1</name>
             <description>Prior Patient Identifier List</description>
             <datatype>CX</datatype>
