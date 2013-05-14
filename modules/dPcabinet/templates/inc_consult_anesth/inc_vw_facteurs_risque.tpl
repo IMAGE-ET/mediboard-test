@@ -2,12 +2,13 @@
 {{assign var=dossier_medical_sejour value=$sejour->_ref_dossier_medical}}
 <table class="form">
   <tr>
-    <th class="category">Facteur de risque</th>
+    <th class="category" style="width: 40%;">Facteur de risque</th>
     <th class="category">Patient</th>
     <th class="category">Chirurgie</th>
   </tr>
+
   <tr>
-    <th>Maladie thrombo-embolique</th>
+    <th>Maladie thromboembolique</th>
     <td style="text-align: center;">
       <form name="editThromboPatient" method="post" action="?">
         <input type="hidden" name="m" value="dPpatients" />
@@ -38,8 +39,9 @@
     </td>
     {{/if}}
   </tr>
+
   <tr>
-    <th>MCJ</th>
+    <th>Maladie de Creutzfeldt-Jakob</th>
     <td style="text-align: center;">
       <form name="editMCJPatient" method="post" action="?">
         <input type="hidden" name="m" value="dPpatients" />
@@ -63,8 +65,9 @@
     </td> 
     {{/if}}
   </tr>
+
   <tr>
-    <th>Risque Anesthesique - Antibioprophylaxie</th>
+    <th><strong>Risque Anesthésique</strong>: Antibioprophylaxie</th>
     <td style="text-align: center;">&mdash;</td>
     {{if $sejour->_id}}
     <td style="text-align: center;">
@@ -79,8 +82,9 @@
     </td> 
     {{/if}}
   </tr>
+
   <tr>
-    <th>Risque Anesthesique - Thrombo prophylaxie</th>
+    <th><strong>Risque Anesthésique</strong>: Thromboprophylaxie</th>
     <td style="text-align: center;">&mdash;</td>
     {{if $sejour->_id}}
     <td style="text-align: center;">
@@ -95,9 +99,10 @@
     </td>  
    {{/if}}
   </tr>
+
   <tr>
-    <th>{{tr}}{{mb_label object=$dossier_medical_patient field="facteurs_risque"}}{{/tr}}</th>
-    <td style="text-align: center;">
+    <th>{{mb_label object=$dossier_medical_patient field="facteurs_risque"}}</th>
+    <td colspan="2" style="text-align: center;">
       <form name="editFacteursRisque" method="post" action="?">
         <input type="hidden" name="m" value="dPpatients" />
         <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
@@ -105,9 +110,8 @@
         <input type="hidden" name="object_id" value="{{$patient->_id}}" />
         <input type="hidden" name="object_class" value="CPatient" />
         {{mb_field object=$dossier_medical_patient field="facteurs_risque" onchange="onSubmitFormAjax(this.form);" 
-          form="editFacteursRisque" aidesaisie="validateOnBlur: 0"}}
+          form="editFacteursRisque" aidesaisie="validateOnBlur: 0" rows=5}}
       </form>
     </td>
-    <td></td>
   </tr>
 </table>
