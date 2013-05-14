@@ -347,6 +347,21 @@ class CExchangeSource extends CMbObject {
 
   function renameFile($oldname, $newname) {
   }
+
+  function changeDirectory($directory_name) {
+  }
+
+  function getCurrentDirectory($directory = null) {
+  }
+
+  function getListDirectory($current_directory) {
+  }
+
+  function getListFilesDetails($directory) {
+  }
+
+  function addFile($file, $file_name, $directory) {
+  }
   
   /**
    * Source is reachable ?

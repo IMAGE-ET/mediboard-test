@@ -182,13 +182,13 @@ class CFTP {
     return true;
   }
   
-  private function _getListFiles($folder = ".") {
+  private function _getListFiles($folder = ".", $information = false) {
     if (!$this->connexion) {
       throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
     }
     
     $files = ftp_nlist($this->connexion, $folder);
-    
+
     if ($files === false) {
       throw new CMbException("CSourceFTP-getlistfiles-failed", $this->hostname);
     }
@@ -200,15 +200,90 @@ class CFTP {
     if ($folder && (substr($folder, -1) != "/")) {
       $folder = "$folder/";
     }
-    
+
+    $tabFileDir = array();
     foreach ($files as &$_file) {
+      $tabFileDir[] = array("path" => $_file, "size" => ftp_size($this->connexion, $_file));
       // Some FTP servers do not retrieve whole paths
       if ($folder && $folder != "." && strpos($_file, $folder) !== 0) {
         $_file = "$folder/$_file";
+        $tabFileDir[]["path"] = $_file;
       }
     }
 
+    if ($information) {
+      return $tabFileDir;
+    }
+
     return $files;
+  }
+
+  private function _getListFilesDetails($folder = ".") {
+    if (!$this->connexion) {
+      throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
+    }
+
+    $files = ftp_rawlist($this->connexion, $folder);
+
+    if ($files === false) {
+      throw new CMbException("CSourceFTP-getlistfiles-failed", $this->hostname);
+    }
+
+    $fileInfo = array();
+    foreach ($files as $_file) {
+      $pregInfo = preg_split("/[\s]+/", $_file, 9);
+      if (strpos($pregInfo[0], "d") !== false) {
+        continue;
+      }
+      $fileInfo[] = array("type"  => $pregInfo[0],
+                          "user"  => $pregInfo[2]." ".$pregInfo[3],
+                          "size"  => CMbString::toDecaBinary($pregInfo[4]),
+                          "date"  => $pregInfo[5]."-".$pregInfo[6]."-".$pregInfo[7],
+                          "name"  => $pregInfo[8]);
+    }
+
+    return $fileInfo;
+  }
+
+  private function _getListDirectory($folder = ".") {
+    if (!$this->connexion) {
+      throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
+    }
+
+    $files = ftp_rawlist($this->connexion, $folder);
+
+    if ($files === false) {
+      throw new CMbException("CSourceFTP-getlistfiles-failed", $this->hostname);
+    }
+
+    $fileInfo = array();
+    foreach ($files as $_file) {
+      $pregInfo = preg_split("/[\s]+/", $_file, 9);
+      if (strpos($pregInfo[0], "d") === false) {
+        continue;
+      }
+      $fileInfo[] = $pregInfo[8];
+    }
+
+    return $fileInfo;
+  }
+
+  private function _getCurrentDirectory() {
+    if (!$this->connexion) {
+      throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
+    }
+
+    $pwd = ftp_pwd($this->connexion);
+
+    if ($pwd === false) {
+      throw new CMbException("CSourceFTP-getlistfiles-failed", $this->hostname);
+    }
+
+    if ($pwd === "/") {
+      return "$pwd";
+    }
+
+    return "$pwd/";
   }
   
   private function _delFile($file) {
@@ -263,22 +338,48 @@ class CFTP {
       throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
     }
 
-    // Check for path, try to build it if needed 
+    // Check for path, try to build it if needed
     // @todo Make it recursive
     $dir = dirname($destination_file);
     if ($dir != ".") {
       $pwd = ftp_pwd($this->connexion);
       if (!@ftp_chdir($this->connexion, $dir)) {
         @ftp_mkdir($this->connexion, $dir);
-      }  
+      }
       ftp_chdir($this->connexion, $pwd);
     }
-    
+
     // Upload the file
     if (!@ftp_put($this->connexion, $destination_file, $source_file, constant($this->mode))) {
       throw new CMbException("CSourceFTP-upload-file-failed", $source_file, $destination_file);
     }
-    
+
+    return true;
+  }
+
+  private function _addFile($source_file, $file_name) {
+    if (!$this->connexion) {
+      throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
+    }
+
+    // Upload the file
+    if (!@ftp_put($this->connexion, $file_name, $source_file, constant($this->mode))) {
+      throw new CMbException("CSourceFTP-upload-file-failed", $source_file);
+    }
+
+    return true;
+  }
+
+  private function _changeDirectory($directory) {
+    if (!$this->connexion) {
+      throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
+    }
+
+    // Change the directory
+    if (!@ftp_chdir($this->connexion, $directory)) {
+      throw new CMbException("CSourceFTP-change-directory-failed", $directory);
+    }
+
     return true;
   }
   

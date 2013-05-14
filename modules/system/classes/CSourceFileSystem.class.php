@@ -233,6 +233,21 @@ class CSourceFileSystem extends CExchangeSource {
       throw new CMbException("CSourceFileSystem-error-renaming", $oldname);
     }
   }
+
+  function changeDirectory($directory_name) {
+  }
+
+  function getCurrentDirectory() {
+  }
+
+  function getListDirectory($current_directory) {
+  }
+
+  function getListFilesDetails($directory) {
+  }
+
+  function addFile($file, $file_name) {
+  }
   
   function isReachableSource() {
     if (is_dir($this->host)) {

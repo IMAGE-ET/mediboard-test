@@ -33,7 +33,7 @@ if ($ftp->passif_mode) {
 }
 
 try {
-  $files = $ftp->getListFiles($ftp->fileprefix);
+  $files = $ftp->getListFiles($ftp->fileprefix, true);
 } catch (CMbException $e) {
   $e->stepAjax();
   return;
@@ -46,5 +46,3 @@ $smarty->assign("exchange_source", $exchange_source);
 $smarty->assign("files", $files);
 
 $smarty->display("inc_ftp_files.tpl");
-
-?>

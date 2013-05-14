@@ -14,16 +14,22 @@
       <table class="tbl">
         {{if is_array($files)}}
           <tr>
-            <th colspan="2"> Liste des fichiers du dossier </th>
+            <th> Liste des fichiers du dossier </th>
           </tr>
           {{foreach from=$files item=_file}}
           <tr>
-            <td class="narrow">
-              <a target="blank" href="?m=system&a=download_file&filename={{$_file}}&exchange_source_guid={{$exchange_source->_guid}}&dialog=1&suppressHeaders=1" class="button download notext">
-                {{tr}}Download{{/tr}}
-              </a>    
+            <td class="text">
+              {{if $_file.size === "-1"}}
+                <img src="modules/ftp/images/directory.png"/>
+              {{else}}
+                <a target="blank"
+                   href="?m=system&a=download_file&filename={{$_file.path}}&exchange_source_guid={{$exchange_source->_guid}}&dialog=1&suppressHeaders=1"
+                   class="button download notext">
+                    {{tr}}Download{{/tr}}
+                </a>
+              {{/if}}
+              {{$_file.path}}
             </td>
-            <td class="text"> {{$_file}} </td>
           </tr>
           {{/foreach}}
         {{else}}

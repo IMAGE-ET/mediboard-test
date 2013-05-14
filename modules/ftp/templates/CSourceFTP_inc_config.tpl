@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module=ftp script=action_ftp ajax=true}}
+
 <table class="main"> 
   <tr>
     <td>
@@ -92,21 +94,6 @@
       </form>
     </td>
     <td class="greedyPane">
-      <script type="text/javascript">
-        FTP = {
-          connexion: function (exchange_source_name) {
-            var url = new Url("ftp", "ajax_connexion_ftp");
-            url.addParam("exchange_source_name", exchange_source_name);
-            url.requestUpdate("utilities-source-ftp-connexion-" + exchange_source_name);
-          },
-          
-          getFiles: function (exchange_source_name) {
-            var url = new Url("ftp", "ajax_getFiles_ftp");
-            url.addParam("exchange_source_name", exchange_source_name);
-            url.requestUpdate("utilities-source-ftp-getFiles-" + exchange_source_name);
-          }
-        }
-      </script>
       <table class="tbl">
         <tr>
           <th class="category" colspan="100">
@@ -131,7 +118,14 @@
           <td>
             <button type="button" class="search" onclick="FTP.getFiles('{{$source->name}}');">
               {{tr}}utilities-source-ftp-getFiles{{/tr}}
-            </button> 
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button type="button" class="search" onclick="ExchangeSource.manageFiles('{{$source->_guid}}');">
+              {{tr}}utilities-source-ftp-manageFiles{{/tr}}
+            </button>
           </td>
         </tr>
         <tr>
