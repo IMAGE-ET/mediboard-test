@@ -105,9 +105,9 @@ foreach ($files as $_filepath) {
     continue;
   }
 
-  $_old_filepath = $_filepath;
-  $_filepath     = "$_filepath.checkedout";
-  $source->renameFile($_old_filepath, $_filepath);
+  //$_old_filepath = $_filepath;
+  //$_filepath     = "$_filepath.checkedout";
+  //$source->renameFile($_old_filepath, $_filepath);
 
   try {
     $message  = $source->getData($_filepath); 
