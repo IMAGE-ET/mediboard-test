@@ -9,5 +9,6 @@
         <segment>PID</segment>
         <segment minOccurs="0">PD1</segment>
         <segment>MRG</segment>
+        <segment minOccurs="0">PV1</segment>
     </segments>
 </message>
