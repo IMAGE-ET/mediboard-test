@@ -1605,12 +1605,12 @@ class CConstantesMedicales extends CMbObject {
     }
 
     // Utiliser le contexte global dans la cas des consultations
-    if (
+    /*if (
         $context instanceof CConsultation ||
         $context instanceof CConsultAnesth
     ) {
       return "global";
-    }
+    }*/
 
     return CGroups::loadCurrent();
   }
