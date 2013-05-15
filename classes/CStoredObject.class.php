@@ -976,7 +976,7 @@ class CStoredObject extends CModelObject {
   /**
    * Check all properties according to specification
    *
-   * @return string Store-like message
+   * @return string|null Store-like message, null when no problem
    */
   function check() {
     $debug = CAppUI::conf("debug");
