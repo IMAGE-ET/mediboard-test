@@ -103,10 +103,10 @@
   </td>
 </tr>
 <tr>
-  <td colspan="3" id="refresh-assurance">
+  <td colspan="{{if $facture->dialyse}}3{{else}}2{{/if}}" id="refresh-assurance">
     {{mb_include module=facturation template="inc_vw_assurances"}}
   </td>
-  <td colspan="4"></td>
+  <td colspan="{{if $facture->dialyse}}4{{else}}5{{/if}}"></td>
 </tr>
 
 {{if $facture->type_facture == "accident"}}
@@ -225,7 +225,11 @@
         <input type="hidden" name="cloture" value="{{if !$facture->cloture}}{{$date}}{{/if}}" />
         <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
         {{if !$facture->cloture}}
-          <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Cloturer la facture</button>
+          <button class="submit" type="button" onclick="Facture.modifCloture(this.form);"
+          {{if $conf.dPfacturation.Other.use_strict_cloture && !$facture->statut_pro || (!$facture->assurance_maladie && !$facture->assurance_accident)}}
+          disabled
+          {{/if}}
+          >Cloturer la facture</button>
         {{else}}
           <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Réouvrir la facture</button> Cloturée le {{$facture->cloture|date_format:"%d/%m/%Y"}}
         {{/if}}

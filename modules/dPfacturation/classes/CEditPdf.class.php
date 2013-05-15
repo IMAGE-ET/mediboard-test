@@ -786,6 +786,9 @@ class CEditPdf{
     if ($this->facture->type_facture == "accident" && $this->facture->_coeff == CAppUI::conf("tarmed CCodeTarmed pt_maladie")) {
       $loi = "LAMal";
     }
+    if ($this->facture->statut_pro == "invalide") {
+      $loi = "LAI";
+    }
     
     $assurance_patient = $this->destinataire[0];
     $assur_nom = "";
@@ -814,6 +817,16 @@ class CEditPdf{
     }
     $naissance =  CMbDT::transform(null, $this->patient_facture->naissance, "%d.%m.%Y");
     $colonnes = array(20, 28, 25, 25, 25, 50);
+    $traitement = CMbDT::transform(null, $this->facture->_ref_first_consult->_date, "%d.%m.%Y")." - ".CMbDT::transform(null, $this->facture->cloture, "%d.%m.%Y");
+    if (CAppUI::conf("dPfacturation CRelance use_relances")) {
+      $name_rappel = "Date rappel";
+      $date_rappel = CMbDT::date("+".CAppUI::conf("dPfacturation CRelance nb_days_first_relance")." DAY" , $this->facture->cloture);
+      $date_rappel = CMbDT::transform(null, $date_rappel, "%d.%m.%Y");
+    }
+   $ean2 = $this->group->ean;
+    if ($this->facture->_class == "CFactureEtablissement") {
+    	$ean2 = $this->facture->_ref_last_sejour->_ref_last_operation->_ref_anesth->ean;
+    }
     $lignes = array(
       array("Patient"   , "Nom"             , $this->patient_facture->nom     ,null, "Assurance", $assur_nom),
       array(""          , "Prénom"          , $this->patient_facture->prenom),
@@ -832,12 +845,12 @@ class CEditPdf{
       array(""          , "Type de remb."   , $this->type_rbt),
       array(""          , "Loi"             , $loi),
       array(""          , "N° contrat"      , ""),
-      array(""          , "Motif traitement", $motif),
-      array(""          , "Traitement"      , CMbDT::transform(null, $this->facture->_ref_first_consult->_date, "%d.%m.%Y")." - ".CMbDT::transform(null, $this->facture->cloture, "%d.%m.%Y")),
+      array(""          , "Motif traitement", $motif  , null, "N° facture", $this->facture->_id),
+      array(""          , "Traitement"      , $traitement, null, $name_rappel, $date_rappel),
       array(""          , "Rôle/ Localité"  , "-"),
-      array("Mandataire", "N° EAN/N° RCC"   , $this->praticien->ean." - ".$this->praticien->rcc),
-      array("Diagnostic", "Contrat"         , "ICD--"),
-      array("Liste EAN" , "", "1/".$this->praticien->ean." 2/".$this->group->ean),
+      array("Mandataire", "N° EAN/N° RCC"   , $this->praticien->ean." - ".$this->praticien->rcc, null, $this->praticien->_view),
+      array("Diagnostic", "U / Toute demande d'information est à adresser au chirurgien ".$this->praticien->_view),
+      array("Liste EAN" , "", "1/".$this->praticien->ean." 2/".$ean2),
       array("Commentaire")
     );
     

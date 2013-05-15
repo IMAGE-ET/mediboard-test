@@ -489,6 +489,9 @@ class CFacture extends CMbObject {
       if ($this->statut_pro && ($this->statut_pro == "sans_emploi" || $this->statut_pro == "etudiant" || $this->statut_pro == "non_travailleur") && $this->type_facture == "accident") {
         $this->_coeff = CAppUI::conf("tarmed CCodeTarmed pt_maladie");
       }
+      elseif ($this->statut_pro && $this->statut_pro == "invalide") {
+        $this->_coeff = CAppUI::conf("tarmed CCodeTarmed pt_invalidite");
+      }
       else {
         $this->_coeff = $this->type_facture == "accident" ?
           CAppUI::conf("tarmed CCodeTarmed pt_accident") :
@@ -614,6 +617,7 @@ class CFacture extends CMbObject {
       $this->_ref_last_sejour  = end($this->_ref_sejours);
       $this->_ref_first_sejour = reset($this->_ref_sejours);
       $this->_ref_last_sejour->loadRefLastOperation();
+      $this->_ref_last_sejour->_ref_last_operation->loadRefAnesth();
     }
     else {
       $this->_ref_last_sejour = new CSejour();
@@ -866,28 +870,30 @@ class CFacture extends CMbObject {
    * @return boolean
   **/
   function isRelancable() {
-    $date = CMbDT::date();
-    $this->_is_relancable = false;
-    $nb_first_relance  = CAppUI::conf("dPfacturation CRelance nb_days_first_relance");
-    $nb_second_relance = CAppUI::conf("dPfacturation CRelance nb_days_second_relance");
-  
-    if (!count($this->_ref_relances)) {
-      $this->_ref_last_relance = new CRelance();
-    }
-    else {
-      $this->_ref_last_relance = end($this->_ref_relances);
-    }
-    if (($this->_du_restant_patient > 0 || $this->_du_restant_tiers > 0) && $this->cloture) {
-      if (!count($this->_ref_relances) && CMbDT::daysRelative($this->cloture, $date) > $nb_first_relance) {
-        $this->_is_relancable = true;
+    if (CAppUI::conf("dPfacturation CRelance use_relances")) {
+      $date = CMbDT::date();
+      $this->_is_relancable = false;
+      $nb_first_relance  = CAppUI::conf("dPfacturation CRelance nb_days_first_relance");
+      $nb_second_relance = CAppUI::conf("dPfacturation CRelance nb_days_second_relance");
+    
+      if (!count($this->_ref_relances)) {
+        $this->_ref_last_relance = new CRelance();
       }
-      elseif (count($this->_ref_relances)) {
-        if (CMbDT::daysRelative($this->_ref_last_relance->date, $date) > $nb_second_relance) {
+      else {
+        $this->_ref_last_relance = end($this->_ref_relances);
+      }
+      if (($this->_du_restant_patient > 0 || $this->_du_restant_tiers > 0) && $this->cloture) {
+        if (!count($this->_ref_relances) && CMbDT::daysRelative($this->cloture, $date) > $nb_first_relance) {
           $this->_is_relancable = true;
         }
+        elseif (count($this->_ref_relances)) {
+          if (CMbDT::daysRelative($this->_ref_last_relance->date, $date) > $nb_second_relance) {
+            $this->_is_relancable = true;
+          }
+        }
       }
+      return $this->_is_relancable;
     }
-    return $this->_is_relancable;
   }
   
   /**

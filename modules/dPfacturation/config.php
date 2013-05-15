@@ -38,7 +38,8 @@ $dPconfig["dPfacturation"] = array (
   ),
   "Other" => array(
     "use_view_chainage" => "0",
-    "use_view_quantitynull" => "0"
+    "use_view_quantitynull" => "0",
+    "use_strict_cloture" => "0"
   ),
 );
 ?>
