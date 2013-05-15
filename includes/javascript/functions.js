@@ -536,8 +536,13 @@ Object.extend(TogglePairEffect, {
  * View port manipulation object
  *   Handle view ported objects
  */
-
 var ViewPort = {
+  /**
+   *
+   * @param {HTMLElement} element DOM element
+   * @param {float}       pct     Percentage of available height
+   * @constructor
+   */
   SetAvlHeight: function (element, pct) {
     element = $(element);
     if (!element) return;
