@@ -808,6 +808,10 @@ class CEditPdf{
     $assur["adresse"] = "$assurance_patient->adresse";
     $assur["cp"]      = "$assurance_patient->cp $assurance_patient->ville";
     
+    $motif = $this->facture->type_facture;
+    if ($this->facture->type_facture == "accident" && $this->facture->_coeff == CAppUI::conf("tarmed CCodeTarmed pt_maladie")) {
+      $motif = "Accident (Caisse-Maladie)";
+    }
     $naissance =  CMbDT::transform(null, $this->patient_facture->naissance, "%d.%m.%Y");
     $colonnes = array(20, 28, 25, 25, 25, 50);
     $lignes = array(
@@ -828,7 +832,7 @@ class CEditPdf{
       array(""          , "Type de remb."   , $this->type_rbt),
       array(""          , "Loi"             , $loi),
       array(""          , "N° contrat"      , ""),
-      array(""          , "Motif traitement", ucfirst($this->facture->type_facture)),
+      array(""          , "Motif traitement", $motif),
       array(""          , "Traitement"      , CMbDT::transform(null, $this->facture->_ref_first_consult->_date, "%d.%m.%Y")." - ".CMbDT::transform(null, $this->facture->cloture, "%d.%m.%Y")),
       array(""          , "Rôle/ Localité"  , "-"),
       array("Mandataire", "N° EAN/N° RCC"   , $this->praticien->ean." - ".$this->praticien->rcc),

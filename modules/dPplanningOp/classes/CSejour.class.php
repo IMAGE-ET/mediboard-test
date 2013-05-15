@@ -426,7 +426,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $props["_type_sejour"]              = "enum list|maladie|accident default|maladie";
     $props["_dialyse"]                  = "bool default|0";
     $props["_cession_creance"]          = "bool default|0";
-    $props["_statut_pro"]               = "enum list|chomeur|etudiant|non_travailleur|independant|salarie|sans_emploi";
+    $props["_statut_pro"]               = "enum list|chomeur|etudiant|non_travailleur|independant|invalide|militaire|retraite|salarie_fr|salarie_sw|sans_emploi";
     
     $props["_time_entree_prevue"] = "time";
     $props["_time_sortie_prevue"] = "time";
@@ -1038,6 +1038,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->_ref_factures = $facture->loadList($where, "ouverture ASC", null, null, $ljoin);
      if (count($this->_ref_factures) > 0) {
         $this->_ref_last_facture = end($this->_ref_factures);
+        $this->_ref_last_facture->loadRefsReglements();
       }
       else {
         $this->_ref_last_facture = new CFactureEtablissement();
