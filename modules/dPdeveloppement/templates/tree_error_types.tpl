@@ -11,10 +11,10 @@
   {{if $count}}
     {{math assign=width equation='100*min(1,(log10(count+1)/4))' count=$count format="%.0f"}}
     {{assign var=color value=lightgreen}}
-    {{if $width > 25}}{{assign var=color value=orange}}{{/if}}
-    {{if $width > 50}}{{assign var=color value=red   }}{{/if}}
-    {{if $width > 75}}{{assign var=color value=brown }}{{/if}}
-    {{if $width > 99}}{{assign var=color value=black }}{{/if}}
+    {{if $count >=    10}}{{assign var=color value=orange}}{{/if}}
+    {{if $count >=   100}}{{assign var=color value=red   }}{{/if}}
+    {{if $count >=  1000}}{{assign var=color value=brown }}{{/if}}
+    {{if $count >= 10000}}{{assign var=color value=black }}{{/if}}
     
     <div class="sniff-bar" title="{{$count}} warnings">
       <div style="width:{{$width}}%; background: {{$color}};"></div>
