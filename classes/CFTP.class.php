@@ -33,6 +33,21 @@ class CFTP {
     'nbget' => 'nb_get',
     'nbput' => 'nb_put',
   );
+
+  static $month_to_number = array(
+    'Jan' => '01',
+    'Feb' => '02',
+    'Mar' => '03',
+    'Apr' => '04',
+    'May' => '05',
+    'Jun' => '06',
+    'Jul' => '07',
+    'Aug' => '08',
+    'Sep' => '09',
+    'Oct' => '10',
+    'Nov' => '11',
+    'Dec' => '12',
+  );
   
   /**
    * Magic method (do not call directly).
@@ -235,13 +250,20 @@ class CFTP {
       if (strpos($pregInfo[0], "d") !== false) {
         continue;
       }
+      $month = self::$month_to_number[$pregInfo[5]];
+      $day = $pregInfo[6];
+      $year = $pregInfo[7];
+      if (strpos($year, ":")) {
+        $year = explode("-", CMbDT::date());
+        $year = $year[0]." $pregInfo[7]";
+      }
       $fileInfo[] = array("type"  => $pregInfo[0],
                           "user"  => $pregInfo[2]." ".$pregInfo[3],
                           "size"  => CMbString::toDecaBinary($pregInfo[4]),
-                          "date"  => $pregInfo[5]."-".$pregInfo[6]."-".$pregInfo[7],
-                          "name"  => $pregInfo[8]);
+                          "date"  => $day."-".$month."-".$year,
+                          "name"  => $pregInfo[8],
+                          "relativeDate" => CMbDT::daysRelative($day."-".$month."-".$year, CMbDT::date()));
     }
-
     return $fileInfo;
   }
 

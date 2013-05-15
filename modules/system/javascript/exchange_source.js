@@ -49,7 +49,7 @@ ExchangeSource = {
   manageFiles: function (source_guid) {
     new Url("system", "ajax_manage_files")
       .addParam("source_guid", source_guid)
-      .requestModal(1000, 600);
+      .requestModal(1000, 500);
   },
 
   showDirectory: function (source_guid) {
@@ -105,6 +105,33 @@ ExchangeSource = {
     new Url('system', 'ajax_add_file')
       .addParam("source_guid", source_guid)
       .addParam("current_directory", current_directory)
-      .popup(700, 550);
+      .requestModal(700, 300)
+      .modalObject.observe("afterClose", function () {ExchangeSource.showFiles(source_guid, current_directory)});
+  },
+
+  closeAfterSubmit : function(message) {
+    var div = "";
+    if (message["resultNumber"] != '0'  ) {
+      div = message["result"]+" x"+message["resultNumber"]+"<br/>";
+    }
+    var length = message["error"].length;
+    if (length !==0) {
+      for (var i =0; i<length; i++) {
+        div += message["error"][i]+"<br/>";
+      }
+    }
+    window.parent.$("systemMsg").update(DOM.div({class:"error"}, div)).show();
+    //window.parent.Control.Modal.close();
+  },
+
+  addInputFile : function(elt) {
+    var name = elt.name;
+    var number_file = name.substring(name.lastIndexOf("[")+1,name.lastIndexOf("]"));
+    number_file = parseInt(number_file);
+    number_file += 1;
+    var form = elt.up();
+    var br = form.insertBefore(DOM.br(), elt.nextSibling);
+    form.insertBefore(DOM.input({type: "file", name: "import["+number_file +"]", size: 0, onchange: "ExchangeSource.addInputFile(this); this.onchange=''"})
+      , br.nextSibling);
   }
 };

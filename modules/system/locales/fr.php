@@ -1,4 +1,5 @@
 <?php
+$locales['CExhangeFile-error'] = 'Le fichier \'%s\' n\'a pu être téléversé';
 $locales['CAccessLog'] = 'Logs d\'accès';
 $locales['CAccessLog-_average_duration'] = 'Durée moyenne';
 $locales['CAccessLog-_average_duration-desc'] = 'Durée moyenne de production de la page';

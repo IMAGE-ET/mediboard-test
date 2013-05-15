@@ -15,22 +15,14 @@ CCanDo::checkAdmin();
 
 $source_guid       = CValue::get("source_guid");
 $current_directory = CValue::get("current_directory");
-$file              = CValue::read($_FILES, "import");
 
+$max_size = ini_get("upload_max_filesize");
 $source = CMbObject::loadFromGuid($source_guid);
 
 //template
 $smarty = new CSmartyDP();
 $smarty->assign("source_guid"      , $source_guid);
 $smarty->assign("current_directory", $current_directory);
-
-if (!$file) {
-  $smarty->display("inc_add_file.tpl");
-  CApp::rip();
-}
-
-if ($source->addFile($file["tmp_name"], $file["name"], $current_directory)) {
-  CAppUI::setMsg("Ajout du fichier");
-}
+$smarty->assign("max_size"         , $max_size);
 
 $smarty->display("inc_add_file.tpl");

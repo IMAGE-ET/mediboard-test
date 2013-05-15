@@ -9,9 +9,7 @@
  * @link     http://www.mediboard.org
 *}}
 
-<button type="button" class="add notext" onclick="ExchangeSource.addFileForm('{{$source_guid}}', '{{$current_directory}}')">
-  {{tr}}Add{{/tr}} {{tr}}File{{/tr}}
-</button>
+
 <table class="tbl">
   <tr>
     <th class="title" colspan="5">
@@ -41,7 +39,7 @@
         <tr>
           <td class="text">
             <button type="button"
-                    class="edit notext"
+                    class="edit notext compact"
                     onclick="return ExchangeSource.renameFile('{{$source_guid}}', '{{$_file.name}}', '{{$current_directory}}')">
               {{tr}}Delete{{/tr}}
             </button>
@@ -51,7 +49,7 @@
             {{$_file.size}}
           </td>
           <td>
-            {{$_file.date}}
+            <label title="{{$_file.date}}">{{$_file.date|rel_datetime}}</label>
           </td>
           <td>
             {{$_file.user}}
@@ -59,11 +57,11 @@
           <td class="narrow compact">
             <a target="blank"
                href="?m=system&a=download_file&filename={{$current_directory}}{{$_file.name}}&exchange_source_guid={{$source_guid}}&dialog=1&suppressHeaders=1"
-               class="button download notext">
+               class="button download notext compact">
               {{tr}}Download{{/tr}}
             </a>
             <button type="button"
-                    class="close notext"
+                    class="close notext compact"
                     onclick="ExchangeSource.deleteFile('{{$source_guid}}', '{{$_file.name}}', '{{$current_directory}}')">
               {{tr}}Delete{{/tr}}
             </button>
@@ -83,3 +81,6 @@
     </tr>
   {{/if}}
 </table>
+<button type="button" class="upload" onclick="ExchangeSource.addFileForm('{{$source_guid}}', '{{$current_directory}}')">
+  {{tr}}Upload File{{/tr}}
+</button>

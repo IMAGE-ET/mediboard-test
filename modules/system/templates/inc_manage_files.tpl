@@ -16,13 +16,13 @@
   })
 </script>
 
-<table class="tbl">
+<table class="layout" style="width: 100%">
   <tr>
-    <td style="vertical-align: top">
+    <td style="vertical-align: top; width: 25%">
       <div id="listDirectory">
       </div>
     </td>
-    <td style="vertical-align: top">
+    <td style="vertical-align: top; width: 75%">
       <div id="listFiles">
       </div>
     </td>

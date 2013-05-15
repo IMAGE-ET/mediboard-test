@@ -12,7 +12,6 @@
   Main.add(function(){
     Control.Tabs.create("message-tab-cda", true);
     var tree = new TreeView("treeDirectory");
-    //tree.collapseAll();
   });
 </script>
 
@@ -26,26 +25,30 @@
     <td id="treeDirectory">
       {{foreach from=$root item=_root name=foreachroot}}
         <ul>
-        <a href="#1"
-           onclick="ExchangeSource.changeDirectory('{{$source_guid}}', '{{$_root.path}}')">
-          {{$_root.name}}
-        </a>
-        <li>
-          {{if $smarty.foreach.foreachroot.last}}
-            {{foreach from=$directory item=_directory}}
-              <li>
-                <a href="#1"
-                   onclick="ExchangeSource.changeDirectory('{{$source_guid}}', '{{$current_directory}}{{$_directory}}')">
-                  {{$_directory|utf8_decode}}
-                </a>
-              </li>
-            {{/foreach}}
-          {{/if}}
+          <li>
+            <a href="#1"
+                onclick="ExchangeSource.changeDirectory('{{$source_guid}}', '{{$_root.path}}')">
+              {{if $smarty.foreach.foreachroot.first}}
+                <img src="modules/system/images/homeIcon.png"/>
+              {{else}}
+                {{$_root.name}}
+              {{/if}}
+            </a>
       {{/foreach}}
-      {{foreach from=$root item=_root name=foreachroot}}
+      <ul>
+      {{foreach from=$directory item=_directory}}
+        <li>
+          <a href="#1"
+            onclick="ExchangeSource.changeDirectory('{{$source_guid}}', '{{$current_directory}}{{$_directory}}')">
+              {{$_directory|utf8_decode}}
+          </a>
         </li>
-      </ul>
-    {{/foreach}}
+      {{/foreach}}
+        </ul>
+      {{foreach from=$root item=_root name=foreachroot}}
+         </li>
+        </ul>
+      {{/foreach}}
     </td>
   </tr>
 </table>
