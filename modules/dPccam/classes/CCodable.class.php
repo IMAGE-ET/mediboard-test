@@ -473,7 +473,7 @@ class CCodable extends CMbObject {
         $_acte_tarmed->loadRefExecutant();
         $_acte_tarmed->loadRefTarmed();
         $_acte_tarmed->countActesAssocies();
-        $totaux["base"] += $_acte_tarmed->montant_base;
+        $totaux["base"] += $_acte_tarmed->montant_base * $_acte_tarmed->quantite;
         $totaux["dh"]   += $_acte_tarmed->montant_depassement;
       }
       $this->_tokens_tarmed = implode("|", $this->_codes_tarmed);
@@ -510,7 +510,7 @@ class CCodable extends CMbObject {
         $_acte_caisse->loadRefExecutant();
         $_acte_caisse->loadRefPrestationCaisse();
         $_acte_caisse->loadRefCaisseMaladie();
-        $totaux["base"] += $_acte_caisse->montant_base;
+        $totaux["base"] += $_acte_caisse->montant_base * $_acte_caisse->quantite;
         $totaux["dh"]   += $_acte_caisse->montant_depassement;
       }
       $this->_tokens_caisse = implode("|", $this->_codes_caisse);
@@ -716,7 +716,7 @@ class CCodable extends CMbObject {
             CMediusers::get()->_id :
             $this->getExecutantId($possible_acte->code_activite);
           
-          if($possible_acte->code_activite == 4) {
+          if ($possible_acte->code_activite == 4) {
             $possible_acte->extension_documentaire = $this->getExtensionDocumentaire();
           }
 
