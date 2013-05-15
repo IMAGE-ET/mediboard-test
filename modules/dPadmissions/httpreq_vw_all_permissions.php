@@ -64,7 +64,7 @@ $services = $service->loadGroupList($where);
 if ($type == "ambucomp") {
   $filterType = "AND (`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp')";
 }
-elseif($type) {
+elseif ($type) {
   $filterType = "AND `sejour`.`type` = '$type'";
 }
 else {

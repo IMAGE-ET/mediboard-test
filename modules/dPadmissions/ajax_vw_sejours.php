@@ -113,7 +113,7 @@ $functions  = CMbObject::massLoadFwdRef($praticiens, "function_id");
 $operation = new COperation;
 
 foreach ($sejours as $sejour_id => $_sejour) {
-  $_sejour->loadRefPraticien(1);
+  $praticien = $_sejour->loadRefPraticien();
   $_sejour->loadRefFicheAutonomie();
   
   if ($filterFunction && $filterFunction != $praticien->function_id) {

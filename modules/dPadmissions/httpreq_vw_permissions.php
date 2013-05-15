@@ -70,6 +70,7 @@ $where["sejour.annule"]   = "= '0'";
 $affectation = new CAffectation();
 $order = "entree, sortie";
 
+/** @var CAffectation[] $affectations */
 $affectations = $affectation->loadList($where, $order, null, null, $ljoin);
 $sejours      = CMbObject::massLoadFwdRef($affectations, "sejour_id");
 $praticiens   = CMbObject::massLoadFwdRef($sejours     , "praticien_id");
@@ -87,7 +88,7 @@ foreach ($affectations as $affectation_id => $affectation) {
   $praticien =& $sejour->loadRefPraticien();
   
   if ($filterFunction && $filterFunction != $praticien->function_id) {
-    unset($sejours[$sejour_id]);
+    unset($sejours[$sejour->_id]);
     continue;
   }
   

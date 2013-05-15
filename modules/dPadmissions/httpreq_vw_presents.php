@@ -96,6 +96,7 @@ if ($order_col == "praticien_id") {
 
 $show_curr_affectation = CAppUI::conf("dPadmissions show_curr_affectation");
 
+/** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
 CMbObject::massLoadFwdRef($sejours, "patient_id");

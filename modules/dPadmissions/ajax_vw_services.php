@@ -16,7 +16,9 @@ CCanDo::checkRead();
 // Chargement su séjour s'il y en a un
 $sejour = new CSejour();
 $sejour->load(CValue::get("sejour_id"));
-$service = $sejour->service_sortie_id;
+$service_id = $sejour->service_sortie_id;
+$service = new CService();
+$service->load($service_id);
 
 // Chargement des services
 $order = "nom";

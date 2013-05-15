@@ -35,17 +35,16 @@ if ($consult->consultation_id) {
   CValue::setSession("date", $date);
 }
 
-
 // Récupération des plages de consultation du jour et chargement des références
 $listPlages = array();
 foreach ($anesthesistes as $anesth) {
   $listPlages[$anesth->_id]["anesthesiste"] = $anesth;
-  $listPlage = new CPlageconsult();
+  $plage = new CPlageconsult();
   $where = array();
   $where["chir_id"] = "= '$anesth->_id'";
   $where["date"] = "= '$date'";
   $order = "debut";
-  $listPlage = $listPlage->loadList($where, $order);
+  $listPlage = $plage->loadList($where, $order);
   if (count($listPlage)) {
     $listPlages[$anesth->_id]["plages"] = $listPlage;
   }
@@ -57,6 +56,7 @@ foreach ($anesthesistes as $anesth) {
 
 foreach ($listPlages as &$element) {
   foreach ($element["plages"] as &$plage) {
+    /** @var  CPlageconsult $plage */
     $plage->_ref_chir =& $element["anesthesiste"];
     $plage->loadRefsBack();
     foreach ($plage->_ref_consultations as $keyConsult => &$consultation) {

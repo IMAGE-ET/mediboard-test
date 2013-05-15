@@ -31,7 +31,7 @@ $where["sejour.group_id"] = "= '$group->_id'";
 if ($type == "ambucomp") {
   $where[] = "`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp'";
 }
-elseif($type) {
+elseif ($type) {
   $where["sejour.type"] = " = '$type'";
 }
 else {
@@ -49,6 +49,7 @@ if ($service->_id) {
 }
 $order = "users.user_last_name, users.user_first_name, sejour.sortie";
 
+/** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
 $listByPrat = array();

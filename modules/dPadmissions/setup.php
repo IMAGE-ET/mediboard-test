@@ -15,7 +15,8 @@
  * Setup of the Admission module
  * */
 class CSetupdPadmissions extends CSetup {
-  
+
+  /** Constructor */
   function __construct() {
     parent::__construct();
   

@@ -36,8 +36,10 @@ if ($see_cancelled == 0) {
 }
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $order = "entree";
+/** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, $order);
 $guesses = array();
+/** @var CPatient[] $patients */
 $patients = array();
 foreach ($sejours as &$_sejour) {
   if ($module == "dPurgences") {

@@ -21,6 +21,7 @@ $sejour = new CSejour();
 $where = array();
 $where["sejour_id"] = "IN ($sejours_ids)";
 
+/** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where);
 
 $result = "";
