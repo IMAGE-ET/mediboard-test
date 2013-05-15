@@ -22,7 +22,9 @@ $files = $sniffer->getFilesTree();
 
 $reports = $sniffer->checkReports($files);
 $stats = $sniffer->buildStats($files);
+$types = $stats["-root-"];
 //mbTrace($stats, "Stats");
+//mbTrace($types, "Types");
 
 // Cuz sniffer changes work dir but restores it at destruction
 // Be aware that unset() won't call __destruct() anyhow
@@ -31,6 +33,7 @@ $sniffer->__destruct();
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("files", $files);
+$smarty->assign("types", $types);
 $smarty->assign("reports", $reports);
 $smarty->assign("stats", $stats);
 $smarty->display("sniff_code.tpl");
