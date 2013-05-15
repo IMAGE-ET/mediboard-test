@@ -42,6 +42,10 @@ foreach ($trans as $_trans) {
   $_trans->loadRefUser()->loadRefFunction();
   $_trans->loadTargetObject();
 
+  if ($_trans->_ref_object instanceof CAdministration) {
+    $_trans->_ref_object->loadRefsFwd();
+  }
+
   $sort_key_pattern = "$_trans->date $_trans->_class $_trans->user_id $_trans->object_id $_trans->object_class $_trans->libelle_ATC";
 
   $sort_key = "$_trans->date $sort_key_pattern";

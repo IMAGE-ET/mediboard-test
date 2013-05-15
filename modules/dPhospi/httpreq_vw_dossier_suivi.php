@@ -71,6 +71,7 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_suivi) {
     if ($_suivi instanceof CTransmissionMedicale) {
       $trans = $_suivi;
       $trans->calculCibles($cibles);
+
       if ($cible && $_suivi->_cible != $cible) {
         unset($sejour->_ref_suivi_medical[$_suivi->date.$_suivi->_id.$type]);
       }
@@ -173,6 +174,7 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_trans_const) {
           switch (count($list_trans_const[$sort_key])) {
             case 0:
               @array_push($list_trans_const[$sort_key], $_trans_const);
+              break;
             case 1:
               $_trans = array_shift($list_trans_const[$sort_key]);
               @array_unshift($list_trans_const[$sort_key], $_trans_const);
@@ -182,6 +184,7 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_trans_const) {
               else {
                 @array_push($list_trans_const[$sort_key], $_trans);
               }
+              break;
             case 2:
               $_trans = array_shift($list_trans_const[$sort_key]);
               @array_unshift($list_trans_const[$sort_key], $_trans_const);
