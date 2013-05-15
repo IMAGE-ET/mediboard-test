@@ -222,7 +222,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["assigning_authority_namespace_id"]      = "str";
     $props["assigning_authority_universal_id"]      = "str";
     $props["assigning_authority_universal_type_id"] = "str";
-    $props["country_code"] = "enum list|FRA";
+    $props["country_code"] = "enum list|FRA|INT";
 
     // Encoding
     $props["encoding"] = "enum list|UTF-8|ISO-8859-1 default|UTF-8";

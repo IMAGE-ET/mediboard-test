@@ -1042,7 +1042,23 @@ class CSetuphl7 extends CSetup {
                 ADD `country_code` ENUM ('FRA');";
     $this->addQuery($query);
 
-    $this->mod_version = "0.65";
+    $this->makeRevision("0.65");
+
+    $query = "ALTER TABLE `receiver_ihe_config`
+                CHANGE `country_code` `country_code` ENUM ('FRA','INT');";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `hl7_config`
+                CHANGE `country_code` `country_code` ENUM ('FRA','INT');";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.66");
+
+    $query = "ALTER TABLE `receiver_ihe_config`
+                ADD `build_other_residence_number` ENUM ('ORN','WPN') DEFAULT 'ORN';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.67";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

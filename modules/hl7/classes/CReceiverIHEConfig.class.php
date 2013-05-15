@@ -67,6 +67,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
   public $build_NDA;
   public $build_telephone_number;
   public $build_cellular_phone;
+  public $build_other_residence_number;
   
   // PID
   public $build_PID_31;
@@ -123,7 +124,8 @@ class CReceiverIHEConfig extends CMbObjectConfig {
       "build_mode",
       "build_NDA",
       "build_telephone_number",
-      "build_cellular_phone"
+      "build_cellular_phone",
+      "build_other_residence_number"
     ),
     "send" => array(
       "modification_admit_code",
@@ -200,7 +202,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
     $props["assigning_authority_namespace_id"]      = "str";
     $props["assigning_authority_universal_id"]      = "str";
     $props["assigning_authority_universal_type_id"] = "str";
-    $props["country_code"] = "enum list|FRA";
+    $props["country_code"] = "enum list|FRA|INT";
     
     // Actor options
     $props["iti30_option_merge"]                        = "bool default|1";
@@ -227,10 +229,11 @@ class CReceiverIHEConfig extends CMbObjectConfig {
     $props["send_update_patient_information"]    = "enum list|A08|A31 default|A31";
     
     // Build
-    $props["build_mode"]             = "enum list|normal|simple default|normal";
-    $props["build_NDA"]              = "enum list|PID_18|PV1_19 default|PID_18";
-    $props["build_telephone_number"] = "enum list|XTN_1|XTN_12 default|XTN_12";
-    $props["build_cellular_phone"]   = "enum list|PRN|ORN default|PRN";
+    $props["build_mode"]                   = "enum list|normal|simple default|normal";
+    $props["build_NDA"]                    = "enum list|PID_18|PV1_19 default|PID_18";
+    $props["build_telephone_number"]       = "enum list|XTN_1|XTN_12 default|XTN_12";
+    $props["build_cellular_phone"]         = "enum list|PRN|ORN default|PRN";
+    $props["build_other_residence_number"] = "enum list|ORN|WPN default|ORN";
     
     // PID
     $props["build_PID_31"]  = "enum list|avs|none default|none";

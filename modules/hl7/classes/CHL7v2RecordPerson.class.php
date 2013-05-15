@@ -378,11 +378,6 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       
       // Prenom(s)
       $this->getFirstNames($_PID5, $newPatient);
-      
-      // Civilité
-      $newPatient->civilite = "guess";
-      /* @todo Voir comment faire ! Nouvelle table HL7 ? */
-      //$newPatient->civilite = $this->queryTextNode("XPN.5", $_PID5);
     }
     
     // Date de naissance
@@ -395,6 +390,11 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     
     // Sexe
     $newPatient->sexe = CHL7v2TableEntry::mapFrom("1", $this->queryTextNode("PID.8", $node));
+
+    // Civilité
+    $newPatient->civilite = $newPatient->civilite ? $newPatient->civilite : "guess";
+    /* @todo Voir comment faire ! Nouvelle table HL7 ? */
+    //$newPatient->civilite = $this->queryTextNode("XPN.5", $_PID5);
     
     // Adresse(s)
     $this->getAdresses($node, $newPatient);
@@ -585,7 +585,13 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
             $newPatient->tel2 = $this->getPhone($tel_number);
           }
           break;
-          
+
+        case "WPN" :
+          if ($this->queryTextNode("XTN.3", $_PID13) == "PH") {
+            $newPatient->tel_autre  = $this->getPhone($tel_number);
+          }
+          break;
+
         default :
           $newPatient->tel_autre = $tel_number;
           break;
