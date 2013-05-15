@@ -25,7 +25,7 @@ log=$MB_PATH/tmp/svnlog.txt
 tmp=$MB_PATH/tmp/svnlog.tmp
 dif=$MB_PATH/tmp/svnlog.dif
 status=$MB_PATH/tmp/svnstatus.txt
-event=$MB_PATH/tmp/svnevent.txt
+event=$MB_PATH/tmp/monitevent.txt
 prefixes="erg|fnc|fct|bug|war|edi|sys|svn"
 revision=HEAD
 

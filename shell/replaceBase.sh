@@ -54,7 +54,7 @@ source_database=$3
 target_directory=$4
 target_database=$5
 
-event=$BASH_PATH/../tmp/svnevent.txt
+event=$BASH_PATH/../tmp/monitevent.txt
 
 if [ $restart -eq 1 ]
 then

@@ -34,7 +34,7 @@ require_once dirname(__FILE__)."/classes/Procedure.class.php";
  */
 function replaceBase($srcLocation, $srcDir, $srcDB, $tgtDir, $tgtDB, $restart, $safeCopy, $mysqlDir, $port, $localCopy) {
   $currentDir = dirname(__FILE__);
-  $event = $currentDir . "/../tmp/svnevent.txt";
+  $event = $currentDir . "/../tmp/monitevent.txt";
 
   announce_script("Mediboard replace base");
   

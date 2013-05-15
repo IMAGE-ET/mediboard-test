@@ -55,7 +55,7 @@ then
         check_errs $? "Failed to rsync $line" "Succesfully rsync-ed $line"
         eval rsync -avzp $BASH_PATH/../tmp/svnlog.txt $line/tmp/
         eval rsync -avzp $BASH_PATH/../tmp/svnstatus.txt $line/tmp/
-        eval rsync -avzp $BASH_PATH/../tmp/svnevent.txt $line/tmp/
+        eval rsync -avzp $BASH_PATH/../tmp/monitevent.txt $line/tmp/
       fi
     fi
   done < $BASH_PATH/rsyncupdate.conf

@@ -190,7 +190,7 @@ then
 fi
 
 # Write event file
-event=$BASH_PATH/../tmp/svnevent.txt
+event=$BASH_PATH/../tmp/monitevent.txt
 
 echo "#$(date +%Y-%m-%dT%H:%M:%S)" >> $event
 echo "<strong>$database</strong> base backup: <strong>$method</strong> method" >> $event

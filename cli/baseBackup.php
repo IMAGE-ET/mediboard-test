@@ -36,7 +36,7 @@ function baseBackup($method, $username, $password, $hostname, $port, $database, 
     $loginUsername, $loginPassword, $lockFilePath = null
 ) {
   $currentDir = dirname(__FILE__);
-  $event = $currentDir . "/../tmp/svnevent.txt";
+  $event = $currentDir . "/../tmp/monitevent.txt";
 
   announce_script("Database daily backup");
     

@@ -46,7 +46,7 @@ function update($action, $revision) {
   $tmp = $MB_PATH . "/tmp/svnlog.tmp";
   $dif = $MB_PATH . "/tmp/svnlog.dif";
   $status = $MB_PATH . "/tmp/svnstatus.txt";
-  $event = $MB_PATH . "/tmp/svnevent.txt";
+  $event = $MB_PATH . "/tmp/monitevent.txt";
   $prefixes = array("erg", "fnc", "fct", "bug", "war", "edi", "sys", "svn");
 
   if ($revision === "") {
