@@ -6,9 +6,11 @@
 <script type="text/javascript">
 
 Document.refreshList = function() {
-  new Url("dPpatients", "httpreq_vw_patient").
-    addParam("patient_id", document.actionPat.patient_id.value).
-    requestUpdate('vwPatient');
+  if (document.actionPat) {
+    new Url("dPpatients", "httpreq_vw_patient").
+      addParam("patient_id", document.actionPat.patient_id.value).
+      requestUpdate('vwPatient');
+  }
 }
 
 </script>

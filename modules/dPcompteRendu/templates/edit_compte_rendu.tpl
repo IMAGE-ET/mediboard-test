@@ -430,7 +430,7 @@ Main.add(function(){
 
 <!-- Formulaire pour streamer le pdf -->
 <form style="display: none;" name="download-pdf-form" target="{{if $choice_factory == "CDomPDFConverter"}}download_pdf{{else}}_blank{{/if}}" method="post" action="?m=dPcompteRendu&amp;a=ajax_pdf"
-      onsubmit="completeLayout(); this.submit();">
+      onsubmit="{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}completeLayout();{{/if}} this.submit();">
   <input type="hidden" name="content" value=""/>
   <input type="hidden" name="compte_rendu_id" value='{{if $compte_rendu->_id != ''}}{{$compte_rendu->_id}}{{else}}{{$modele_id}}{{/if}}' />
   <input type="hidden" name="object_id" value="{{$compte_rendu->object_id}}"/>
