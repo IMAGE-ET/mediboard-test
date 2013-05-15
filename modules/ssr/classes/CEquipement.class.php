@@ -24,6 +24,9 @@ class CEquipement extends CMbObject {
   public $visualisable;
   public $actif;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'equipement';
@@ -31,6 +34,9 @@ class CEquipement extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["plateau_id"]   = "ref notNull class|CPlateauTechnique";
@@ -40,12 +46,18 @@ class CEquipement extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["evenements_ssr"]  = "CEvenementSSR equipement_id";
     return $backProps;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;

@@ -10,7 +10,7 @@
  */
 
 /**
- * Classe d'association entre les élément de prescription et les code CsARR
+ * Classe d'association entre éléments de prescription et codes CsARR
  */
 class CElementPrescriptionToCsarr extends CElementPrescriptionToReeducation {
   // DB Table key

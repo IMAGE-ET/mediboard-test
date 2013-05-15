@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Classe abstraite d'association entre éléments de prescription et codes des nomenclatures SSR
+ */
 class CElementPrescriptionToReeducation extends CMbObject {
   // DB Fields
   public $element_prescription_id;
@@ -16,7 +19,10 @@ class CElementPrescriptionToReeducation extends CMbObject {
   public $commentaire;
   
   public $_ref_element_prescription;
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["element_prescription_id"] = "ref notNull class|CElementPrescription";
@@ -26,16 +32,19 @@ class CElementPrescriptionToReeducation extends CMbObject {
   }
 
   /**
+   * @see parent::updateFormFields()
+   */
+  function updateFormFields(){
+    parent::updateFormFields();
+    $this->_view = "Code $this->code";
+  }
+
+  /**
    * Charge l'élément de prescription associé
    *
    * @return CElementPrescription
    */
   function loadRefElementPrescription() {
     return $this->_ref_element_prescription = $this->loadFwdRef("element_prescription_id", true);
-  }
-    
-  function updateFormFields(){
-    parent::updateFormFields();
-    $this->_view = "Code $this->code";
   }
 }
