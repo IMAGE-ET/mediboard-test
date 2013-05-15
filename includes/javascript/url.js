@@ -204,7 +204,7 @@ var Url = Class.create({
    * Won't work with radio button, use addRadio() instead
    * 
    * @param {HTMLInputElement,HTMLSelectElement,HTMLTextAreaElement} oElement The element to add to the data
-   * @param {String}      sParamName The parameter name
+   * @param {String=}      sParamName The parameter name
    *
    * @return {Url}
    */

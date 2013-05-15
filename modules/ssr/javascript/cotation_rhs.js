@@ -29,7 +29,7 @@ CotationRHS = {
       addParam('recalculate', recalculate) .
       requestUpdate('totaux-' + rhs_id);
   },
-  
+
   printRHS: function(form) {
     var url = new Url("ssr", "print_sejour_rhs_no_charge");
     url.addParam("sejour_ids", form.select('input.rhs:checked').pluck('value').join("-"));

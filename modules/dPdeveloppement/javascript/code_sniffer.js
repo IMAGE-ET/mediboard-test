@@ -9,7 +9,7 @@ Chrono = {
   stop: function() {
     return this.total += new Date().getTime() - this.reference.getTime();
   }
-}
+};
 
 CodeSniffer = {
 
@@ -68,8 +68,7 @@ CodeSniffer = {
     
     var run = $('sniff-run');
     var count = run.down("small.count");
-    var stats = [];
-    $H(this.stats).each(function(pair) { 
+    $H(this.stats).each(function(pair) {
       $(pair.key).textContent = pair.value;
     });
     $('index').textContent = this.index;
@@ -115,7 +114,7 @@ CodeSniffer = {
             CodeSniffer.start.bind(CodeSniffer).defer();
           }
         }
-      }
+      };
 
       new Url('developpement', 'sniff_file') .
       addParam('file', file.path) .
@@ -154,4 +153,4 @@ CodeSniffer = {
       addParam('file', this.getFile(button)) .
       requestModal(800, 400);
   }
-}
+};
