@@ -930,7 +930,7 @@ class CEditPdf{
     
     $this->type_rbt = $this->type_rbt == "" ? "TG" : $this->type_rbt;
     $this->type_rbt = $this->type_rbt == "TS" ? "TG avec cession" : $this->type_rbt;
-    if ($this->facture->type_facture == "accident") {
+    if ($this->facture->type_facture == "accident" && $this->facture->_coeff != CAppUI::conf("tarmed CCodeTarmed pt_maladie")) {
       $this->type_rbt = "TP";
     }
     
