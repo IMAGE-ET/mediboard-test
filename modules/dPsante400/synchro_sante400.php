@@ -36,14 +36,8 @@ if (!in_array($type, $types)) {
 
 // Mouvement type (or class) provided
 if ($type || $class) {
-  // Initialisation d'un fichier de verrou de 240 secondes
+  // Initialisation d'un fichier de verrou
   $lock = new CMbLock("synchro_sante400/{$type}");
-
-  // On tente de verrouiller
-  if (!$lock->acquire()) {
-    $lock->failedMessage();
-    return;
-  }
 
   // Mouvement construction by factory
   $mouv =  $class ? new $class : CMouvFactory::create($type);
@@ -68,6 +62,12 @@ if ($type || $class) {
     }
   }
   else {
+    // On tente de verrouiller seuement pour les traitements de masse
+    if (!$lock->acquire()) {
+      $lock->failedMessage();
+      return;
+    }
+
     $mouvs = $mouv->loadList($marked, $max);
   }
   
