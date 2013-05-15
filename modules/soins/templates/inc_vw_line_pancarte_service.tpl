@@ -1,4 +1,4 @@
-<td>
+<td style="width: 20%">
   {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$_prescription->_ref_patient size=14 nodebug=true}}
      <a href="#1" onclick="showDossierSoins('{{$_prescription->_ref_object->_id}}','{{$date}}')" style="display: inline;">
      {{assign var=sejour value=$_prescription->_ref_object}}
@@ -8,11 +8,11 @@
      </span>
    </a>
 </td>
-<td>
+<td style="width: 10%">
 	{{$_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_ref_chambre->_view}}
   {{$_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_shortview}}
 </td>
-<td>
+<td style="width: 10%">
   <div class="mediuser" style="border-color: #{{$_prescription->_ref_praticien->_ref_function->color}};">
   <label title="{{$_prescription->_ref_praticien->_view}}">
   {{$_prescription->_ref_praticien->_shortview}}
@@ -24,7 +24,7 @@
     {{foreach from=$_dates key=_date_reelle item=_hours}}
       {{foreach from=$_hours key=_heure_reelle item=_hour}}
         {{assign var=_date_hour value="$_date_reelle $_heure_reelle"}}                        
-        <td style="text-align: center; {{if $smarty.now|date_format:"%Y-%m-%d %H:00:00" == $_date_hour}}background-color: #ccc;{{/if}}" class="narrow">
+        <td style="text-align: center; {{if $smarty.now|date_format:"%Y-%m-%d %H:00:00" == $_date_hour}}background-color: #ccc;{{/if}}" class="{{$_date}}-{{$moment_journee}}">
           {{if @$pancarte.$_prescription_id.$_date_hour}}
             <span style="height: 16px;" onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-prises-{{$_prescription_id}}-{{$_date_reelle}}-{{$_heure_reelle}}");'>
               {{if @$new.$_prescription_id.$_date_hour}}

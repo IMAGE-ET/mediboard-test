@@ -105,6 +105,18 @@ loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const
 Main.add(function () {
   var tab_sejour = Control.Tabs.create('tab-pancarte', false);
   viewTransmissions($V(document.selService.service_id), null, null, '1', '1');
+
+  {{if "dPprescription"|module_active}}
+    PlanSoins.init({
+      composition_dossier: {{$composition_dossier|@json}},
+      date: "{{$date}}",
+      manual_planif: "{{$manual_planif}}",
+      bornes_composition_dossier:  {{$bornes_composition_dossier|@json}},
+      nb_postes: {{$bornes_composition_dossier|@count}}
+    });
+
+  PlanSoins.moveDossierSoin($('plan_soin'));
+  {{/if}}
 });
 
 </script>
@@ -112,6 +124,10 @@ Main.add(function () {
 {{if "dPprescription"|module_active}}
   {{mb_script module="dPprescription" script="prescription"}}
 {{/if}}
+
+<form name="click">
+  <input type="hidden" name="nb_decalage" value="{{$nb_decalage}}"/>
+</form>
 
 <form name="viewSoin" method="get" action="?">
   <input type="hidden" name="m" value="soins" />
@@ -155,11 +171,11 @@ Main.add(function () {
 	    </th>
 	  </tr>
 	</table>
-	<table class="tbl">
+	<table id="plan_soin" class="tbl">
 	  <tr>
-	    <th rowspan="2" class="title narrow">Patient</th>
-	    <th rowspan="2" class="title narrow">Lit</th>
-	    <th rowspan="2" class="title narrow">Prat.</th>
+	    <th rowspan="2" class="title" style="width: 20%">Patient</th>
+	    <th rowspan="2" class="title" style="width: 10%">Lit</th>
+	    <th rowspan="2" class="title" style="width: 10%">Prat.</th>
 	     {{foreach from=$count_composition_dossier key=_date item=_hours_by_moment}}
          {{foreach from=$_hours_by_moment key=moment_journee item=_count}}
 				
@@ -172,8 +188,14 @@ Main.add(function () {
 		          {{assign var=view_poste value=$configs.$libelle_poste}}
 						{{/if}}	
 					
-	          <th class="{{$_date}}-{{$moment_journee}} title" colspan="{{$_count}}">
-		            <strong>{{$view_poste}} du {{$_date|date_format:"%d/%m"}}</strong>
+	          <th class="{{$_date}}-{{$moment_journee}} title" colspan="{{$_count}}" style="width: 60%">
+              <a href="#1" onclick="PlanSoins.showBefore()" class="prevPeriod" style="float: left">
+                <img src="images/icons/prev.png" alt="&lt;"/>
+              </a>
+              <a href="#1" onclick="PlanSoins.showAfter()" class="nextPeriod" style="float: right">
+                <img src="images/icons/next.png" alt="&gt;" />
+              </a>
+              <strong>{{$view_poste}} du {{$_date|date_format:"%d/%m"}}</strong>
 						</th>
 			    {{/foreach}} 
 		    {{/foreach}}
@@ -183,7 +205,7 @@ Main.add(function () {
 	      {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
 	         {{foreach from=$_dates key=_date_reelle item=_hours}}
 	           {{foreach from=$_hours key=_heure_reelle item=_hour}}
-	             <th style="font-size: 0.8em;">{{$_hour}}h</th>   
+	             <th class="{{$_date}}-{{$moment_journee}}" style="font-size: 0.8em;">{{$_hour}}h</th>
 		        {{/foreach}}
 		      {{/foreach}}
 		    {{/foreach}} 

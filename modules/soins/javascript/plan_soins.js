@@ -26,7 +26,7 @@ PlanSoins = {
     Object.extend(PlanSoins, options);
     PlanSoins.formClick = getForm("click");
   },
-  
+
   selColonne: function(hour){
     $('plan_soin').select('div.non_administre:not(.perfusion), div.a_administrer:not(.perfusion)').each(function(oDiv){
       if(oDiv.up("tbody").visible() && oDiv.up("td").hasClassName(hour)){
@@ -357,43 +357,45 @@ PlanSoins = {
     }
   },
   viewDossierSoin: function(element){
-    // recuperation du mode d'affichage du dossier (administration ou planification)
-    var mode_dossier = $V(document.mode_dossier_soin.mode_dossier);
-    
     if (PlanSoins.manual_planif) {
       var periode_visible = PlanSoins.composition_dossier[PlanSoins.formClick.nb_decalage.value];
       PlanSoins.toggleManualPlanif(periode_visible);
     }
-    
-    // Dossier en mode Administration
-    if(mode_dossier == "administration" || mode_dossier == ""){
-      $('button_administration').update("Appliquer les administrations sélectionnées");
-      element.select('.colorPlanif').invoke("setStyle", {backgroundColor: '#FFD'});
-      element.select('.draggablePlanif').each(function(elt){
-         elt.removeClassName("draggable");
-         elt.onmousedown = null;
-      });
-      element.select('.canDropPlanif').invoke("removeClassName", "canDrop");
-    }
-    
-    // Dossier en mode planification
-    if(mode_dossier == "planification"){      
-      $('button_administration').update("Appliquer les planifications sélectionnées");
-      element.select('.colorPlanif').invoke("setStyle", {backgroundColor: '#CAFFBA'});
-      
-      element.select('.draggablePlanif').each(function(elt){
-         elt.addClassName("draggable");
-         
-         elt.onmousedown = function(){
+
+    // recuperation du mode d'affichage du dossier (administration ou planification)
+    if (getForm("mode_dossier_soin") != null) {
+      var mode_dossier = $V(document.mode_dossier_soin.mode_dossier);
+
+      // Dossier en mode Administration
+      if(mode_dossier == "administration" || mode_dossier == ""){
+        $('button_administration').update("Appliquer les administrations sélectionnées");
+        element.select('.colorPlanif').invoke("setStyle", {backgroundColor: '#FFD'});
+        element.select('.draggablePlanif').each(function(elt){
+          elt.removeClassName("draggable");
+          elt.onmousedown = null;
+        });
+        element.select('.canDropPlanif').invoke("removeClassName", "canDrop");
+      }
+
+      // Dossier en mode planification
+      if(mode_dossier == "planification"){
+        $('button_administration').update("Appliquer les planifications sélectionnées");
+        element.select('.colorPlanif').invoke("setStyle", {backgroundColor: '#CAFFBA'});
+
+        element.select('.draggablePlanif').each(function(elt){
+          elt.addClassName("draggable");
+
+          elt.onmousedown = function(){
             if(elt.hasClassName('perfusion')){
-             PlanSoins.addDroppablesPerfDiv(elt);
-           } else {
-             PlanSoins.addDroppablesDiv(elt);
-           }
-         }
-      });
-      
-      element.select('.canDropPlanif').invoke("addClassName", "canDrop");
+              PlanSoins.addDroppablesPerfDiv(elt);
+            } else {
+              PlanSoins.addDroppablesDiv(elt);
+            }
+          }
+        });
+
+        element.select('.canDropPlanif').invoke("addClassName", "canDrop");
+      }
     }
   },
   

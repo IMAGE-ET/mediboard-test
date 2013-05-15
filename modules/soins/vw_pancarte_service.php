@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+$group = CGroups::loadCurrent();
+
 $service_id = CValue::getOrSession("service_id");
 
 if($service_id == "NP"){
@@ -94,20 +96,28 @@ if($prescription_id){
 // Recuperation de l'heure courante
 $time = CMbDT::transform(null,null,"%H");
 
-$tabHours = CAdministration::getTimingPlanSoins($date, $configs, array("00"), "0", "0");
+$tabHours = CAdministration::getTimingPlanSoins($date, $configs);
+$nb_decalage = $configs["Nombre postes avant"];
+$planif_manuelle = CAppUI::conf("dPprescription CPrescription planif_manuelle", $group->_guid);
 $composition_dossier = array();
+$bornes_composition_dossier = array();
+$count_composition_dossier = array();
+
 $date_min = "";
 $date_max = "";
 foreach($tabHours as $_key_date => $_period_date){
   foreach($_period_date as $_key_periode => $_period_dates){
-    $count_composition_dossier[$_key_date][$_key_periode] = 0;
+    $count_composition_dossier[$_key_date][$_key_periode] = $planif_manuelle ? 3 : 2;
     $first_date = reset(array_keys($_period_dates));
     $first_time = reset(reset($_period_dates));
     $last_date = end(array_keys($_period_dates));
     $last_time = end(end($_period_dates));
     
     $composition_dossier[] = "$_key_date-$_key_periode";
-        
+
+    $bornes_composition_dossier["$_key_date-$_key_periode"]["min"] = "$first_date $first_time:00:00";
+    $bornes_composition_dossier["$_key_date-$_key_periode"]["max"] = "$last_date $last_time:00:00";
+
     foreach($_period_dates as $_key_real_date => $_period_hours){
       foreach($_period_hours as $_key_hour => $_hour){
         if(!$date_min){
@@ -427,7 +437,6 @@ foreach($lits as $_prescription_id){
   $_prescriptions[$_prescription_id] = $prescriptions[$_prescription_id];
 }
 
-
 // Smarty template
 $smarty = new CSmartyDP();
 $smarty->assign("pancarte", $pancarte);
@@ -445,6 +454,9 @@ $smarty->assign("alertes", $alertes);
 $smarty->assign("configs", $configs);
 $smarty->assign("nb_adm", $nb_adm);
 $smarty->assign("composition_dossier", $composition_dossier);
+$smarty->assign("bornes_composition_dossier", $bornes_composition_dossier);
+$smarty->assign("nb_decalage", abs($nb_decalage));
+$smarty->assign("manual_planif", $planif_manuelle);
 $smarty->assign("new", $new);
 $smarty->assign("urgences", $urgences);
 $smarty->assign("filter_line", $filter_line);
@@ -458,5 +470,3 @@ if($prescription_id){
 } else {
   $smarty->display('vw_pancarte_service.tpl');
 }
-
-?>
