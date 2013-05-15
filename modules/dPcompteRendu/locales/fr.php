@@ -634,4 +634,5 @@ $locales['pref-saveOnPrint-0'] = 'Non';
 $locales['pref-saveOnPrint-1'] = 'Oui';
 $locales['pref-saveOnPrint-2'] = 'Oui, sans confirmation';
 $locales['pref-saveOnPrint-desc'] = 'demande de sauvegarde lors de l\'impression';
+$locales['class%s-not-instanceof-CMbObject'] = 'La classe %s n\'est pas une instance de CMbObject';
 ?>

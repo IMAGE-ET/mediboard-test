@@ -11,14 +11,14 @@
 
 {{mb_script module="compteRendu" script="field_selector" ajax=true}}
 
+<form>
+  <label><input type="text" id="searchInput">
+  <button type="submit" onclick="FieldSelector.searchField($V('searchInput'), '{{$class}}');return false;" class="search" >{{tr}}Search{{/tr}}</button>
+  </label>
+</form>
 
-<table class="main" style="display:none;" id="autocompleteField"></table>
-<table class="main">
-  <tr>
-    <th colspan="3">
-      <input type="text">
-    </th>
-  </tr>
+<table class="tbl" style="display:none;" id="FieldSearchResultTable" onchange="FieldSelector.autocomplete($V(this))"></table>
+<table class="main" id="FieldSelectorTable">
   <tr>
     <th style="width: 30%;">{{tr}}Category{{/tr}}</th>
     <th style="width: 30%;">{{tr}}Field{{/tr}}</th>

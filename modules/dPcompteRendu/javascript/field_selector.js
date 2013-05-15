@@ -37,5 +37,20 @@ FieldSelector = {
     texte_etiq.caret(caret.begin, caret.end, elt + " ");
     texte_etiq.caret(caret.begin + elt.length+1);
     texte_etiq.fire('ui:change');
+  },
+
+  searchField : function(element, oclass) {
+    var url = new Url("compteRendu","ajax_search_field");
+    url.addParam("search", element);
+    url.addParam("class", oclass);
+    if (element) {
+      $("FieldSelectorTable").hide();
+      url.requestUpdate("FieldSearchResultTable");
+      $("FieldSearchResultTable").show();
+    }
+    else {
+      $("FieldSearchResultTable").hide();
+      $("FieldSelectorTable").show();
+    }
   }
 }

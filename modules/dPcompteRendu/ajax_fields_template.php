@@ -20,11 +20,9 @@ $object = new $object_class;
 $template = new CTemplateManager();
 $object->fillTemplate($template);
 
-
-//mbTrace($template);
-
 //smarty
 $smarty = new CSmartyDP();
 $smarty->assign("template", $template);
+$smarty->assign("class",    $object_class);
 $smarty->display("vw_fields_template_selector.tpl");
 
