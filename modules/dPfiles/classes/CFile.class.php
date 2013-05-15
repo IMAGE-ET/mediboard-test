@@ -224,6 +224,7 @@ class CFile extends CDocumentItem {
     if (!$this->_id && $this->rotation === null) {
       $this->loadNbPages();
       $this->rotation = $this->rotation === null ? 0 : $this->rotation;
+      $this->rotation %= 360;
     }
 
     if ($this->_rotate !== null) {
