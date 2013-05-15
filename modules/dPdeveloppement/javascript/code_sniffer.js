@@ -129,8 +129,17 @@ CodeSniffer = {
       $('sniff-run').down('button.change').disable();
     }
 
+    $('duration').textContent = printf('%.3f', Chrono.stop() / 1000);
+
     if (file.tag == 'uptodate' && this.auto && !this.force) {
-      CodeSniffer.start.bind(CodeSniffer).defer();
+      // Help the browser breath, once per hundred
+      if (this.index % 100 == 0) {
+        CodeSniffer.start.bind(CodeSniffer).defer();
+        return;
+      }
+
+      // Otherwise, run as fast as you can
+      CodeSniffer.start();
     }
   },
   
