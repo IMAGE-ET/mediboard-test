@@ -3,7 +3,7 @@
 /**
  * dPbloc
  *  
- * @category dPbloc
+ * @category Bloc
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -44,7 +44,7 @@ if ($bloc_id) {
   $ljoin["sallesbloc"] = "sallesbloc.salle_id = operations.salle_id";
   $where["sallesbloc.bloc_id"] = "= '$bloc_id'";
 }
-
+/** @var COperation[] $operations */
 $operations = array_merge($operation->loadList($where, null, null, null, $ljoin), $operations);
 
 $sejours = CMbObject::massLoadFwdRef($operations, "sejour_id");
@@ -65,10 +65,10 @@ foreach ($operations as $_operation) {
 // Tri à posteriori
 switch ($order_col) {
   case "nom" :
-  	$sorter = CMbArray::pluck($operations, "_ref_sejour", "_ref_patient", "nom");
+    $sorter = CMbArray::pluck($operations, "_ref_sejour", "_ref_patient", "nom");
     break;
   case "time_operation":
-  	$sorter = CMbArray::pluck($operations, "time_operation");
+    $sorter = CMbArray::pluck($operations, "time_operation");
     break;
   case "salle_id":
     $sorter = CMbArray::pluck($operations, "salle_id");
@@ -87,4 +87,3 @@ $smarty->assign("order_col" , $order_col);
 
 $smarty->display("inc_vw_departs_us.tpl");
 
-?>

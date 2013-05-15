@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPbloc
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPbloc
+ *
+ * @category Bloc
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
  
 CCanDo::checkRead();
@@ -46,23 +49,22 @@ $where["commande_mat"] = "!= '1'";
 $where["annulee"]      = "!= '1'";
 $operations["0"] = $operation->loadList($where, $order, null, null, $ljoin);
 
-foreach($operations as &$_operations) {
-	foreach($_operations as $_operation) {
-	  $_operation->loadRefPatient(1);
-	  $_operation->loadRefChir(1);
-	  $_operation->_ref_chir->loadRefFunction();
-	  $_operation->loadRefPlageOp(1);
-	  $_operation->loadExtCodesCCAM();
-	}
+foreach ($operations as &$_operations) {
+  /** @var COperation[] $_operations */
+  foreach ($_operations as $_operation) {
+    $_operation->loadRefPatient();
+    $_operation->loadRefChir();
+    $_operation->_ref_chir->loadRefFunction();
+    $_operation->loadRefPlageOp();
+    $_operation->loadExtCodesCCAM();
+  }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("filter", $filter);
-$smarty->assign("bloc", $bloc);
+$smarty->assign("filter"    , $filter);
+$smarty->assign("bloc"      , $bloc);
 $smarty->assign("operations", $operations);
 
 $smarty->display("print_materiel.tpl");
-
-?>

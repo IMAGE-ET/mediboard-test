@@ -31,7 +31,7 @@
     url.addParam("object_id", object_id);
     url.addParam("usage", "{{$usage}}");
     url.requestModal(500, 380);
-    
+
     url.modalObject.observe("afterClose", function() {
       {{if !$object_id}}
         {{if $type == "operation_id"}}
@@ -50,12 +50,12 @@
         checkRessources(object_id);
       {{/if}}
     });
-    
-  }
+
+  };
   
   synchronizeTypes = function(types) {
     window.besoins_non_stored = types.split(",");
-  }
+  };
   
   checkRessources = function(object_id) {
     var url = new Url("dPbloc", "ajax_check_ressources");

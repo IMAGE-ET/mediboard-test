@@ -3,7 +3,7 @@
 /**
  * dPbloc
  *  
- * @category dPbloc
+ * @category Bloc
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -53,8 +53,9 @@ if (!$prat_id && !$specialite) {
   if (!$user->isFromType(array("Anesthésiste"))) {
     $functions  = $function->loadListWithPerms(PERM_READ);
     $praticiens = $user->loadPraticiens();
-  } else {
-    $functions = $function->loadList();
+  }
+  else {
+    $functions  = $function->loadList();
     $praticiens = $praticien->loadList();
   }
   $where[] = "plagesop.chir_id ".CSQLDataSource::prepareIn(array_keys($praticiens)) .
@@ -71,10 +72,11 @@ if ($specialite) {
 
 $salle = new CSalle();
 $whereSalle = array();
-$whereSalle["bloc_id"] =
-  CSQLDataSource::prepareIn(count($bloc_id) ?
-    $bloc_id :
-    array_keys(CGroups::loadCurrent()->loadBlocs(PERM_READ)));
+$whereSalle["bloc_id"] = CSQLDataSource::prepareIn(
+  count($bloc_id) ?
+  $bloc_id :
+  array_keys(CGroups::loadCurrent()->loadBlocs(PERM_READ))
+);
 
 if ($salle_id) {
   $whereSalle["sallesbloc.salle_id"] = "= '$salle_id'";
@@ -84,6 +86,7 @@ $listSalles = $salle->loadListWithPerms(PERM_READ, $whereSalle);
 $where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
 $order = "date, salle_id, debut";
 
+/** @var CPlageOp[] $plages */
 $plages = $plage->loadList($where, $order);
 
 $planning   = array();
@@ -93,7 +96,8 @@ $personnels = array();
 
 foreach ($plages as $_plage) {
   $affectations = $_plage->loadAffectationsPersonnel();
-   
+
+  /** @var COperation[] $operations */
   $operations = $_plage->loadRefsOperations(0);
   
   CMbObject::massLoadFwdRef($operations, "plageop_id");
@@ -101,9 +105,9 @@ foreach ($plages as $_plage) {
   CMbObject::massLoadFwdRef($praticiens, "function_id");
   
   foreach ($operations as $_operation) {
-    $_operation->loadRefPlageOp(1);
-    $_operation->loadRefPatient(1);
-    $_operation->loadRefChir(1)->loadRefFunction();
+    $_operation->loadRefPlageOp();
+    $_operation->loadRefPatient();
+    $_operation->loadRefChir()->loadRefFunction();
     $_operation->updateSalle();
   }
   
@@ -160,5 +164,3 @@ $smarty->assign("planning"  , $planning);
 $smarty->assign("personnels", $personnels);
 
 $smarty->display("print_planning_personnel.tpl");
-
-?>

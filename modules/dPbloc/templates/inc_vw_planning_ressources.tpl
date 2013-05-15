@@ -16,7 +16,7 @@
       window.parent.Control.Modal.close();
       window.parent.reloadModal();
     });
-  }
+  };
   
   Main.add(function() {
     var form = getForm("filterDate");

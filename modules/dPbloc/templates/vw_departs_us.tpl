@@ -7,7 +7,7 @@
     url.addParam("order_col", order_col);
     url.addParam("order_way", order_way);
     url.requestUpdate("list_operations"); 
-  }
+  };
   
   Main.add(function() {
     Calendar.regField(getForm("filterOperations").date_depart);

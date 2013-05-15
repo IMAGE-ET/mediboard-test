@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPbloc
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPbloc
+ *
+ * @category Bloc
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkEdit();
@@ -27,5 +30,3 @@ $smarty->assign("bloc_id"   , $bloc_id);
 $smarty->assign("listBlocs" , $listBlocs);
 
 $smarty->display("vw_idx_materiel.tpl");
-
-?>

@@ -44,11 +44,12 @@ $where["annulee"]      = "= '1'";
 $operations["1"] = $operation->loadList($where, $order, null, null, $ljoin);
 
 foreach ($operations as &$_operations) {
+  /** @var COperation[] $_operations */
   foreach ($_operations as $_operation) {
-    $_operation->loadRefPatient(1);
-    $_operation->loadRefChir(1);
+    $_operation->loadRefPatient();
+    $_operation->loadRefChir();
     $_operation->_ref_chir->loadRefFunction();
-    $_operation->loadRefPlageOp(1);
+    $_operation->loadRefPlageOp();
     $_operation->loadExtCodesCCAM();
   }
 }

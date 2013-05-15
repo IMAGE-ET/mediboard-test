@@ -3,7 +3,7 @@
 /**
  * dPbloc
  *  
- * @category dPbloc
+ * @category Bloc
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -31,5 +31,3 @@ $smarty = new CSmartyDP;
 $smarty->assign("ressource_materielle", $ressource_materielle);
 
 $smarty->display("inc_edit_ressource.tpl");
-
-?>

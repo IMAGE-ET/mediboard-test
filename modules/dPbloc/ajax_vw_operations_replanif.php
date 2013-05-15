@@ -3,7 +3,7 @@
 /**
  * dPbloc
  *  
- * @category dPbloc
+ * @category Bloc
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -19,7 +19,7 @@ $plage = new CPlageOp;
 
 $where = array();
 $where["date"] = "= '$date_replanif'";
-
+/** @var CPlageOp[] $plages */
 $plages = $plage->loadList($where);
 
 $plages_by_salle = array();
@@ -54,5 +54,3 @@ $smarty->assign("date_replanif_before", CMbDT::date("-1 day", $date_replanif));
 $smarty->assign("date_replanif_after" , CMbDT::date("+1 day", $date_replanif));
 
 $smarty->display("inc_vw_operations_replanif.tpl");
-
-?>

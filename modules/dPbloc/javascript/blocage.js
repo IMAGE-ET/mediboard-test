@@ -31,4 +31,4 @@ var Blocage = {
     url.addParam("fin"     , $V(form.fin));
     url.requestUpdate("plages_deleted");
   }
-}
+};

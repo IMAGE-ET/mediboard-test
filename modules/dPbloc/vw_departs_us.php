@@ -2,12 +2,12 @@
 
 /**
  * dPbloc
- *  
- * @category dPbloc
+ *
+ * @category Bloc
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
  * @link     http://www.mediboard.org
  */
 
@@ -29,5 +29,3 @@ $smarty->assign("order_col"  , $order_col);
 $smarty->assign("order_way"  , $order_way);
 
 $smarty->display("vw_departs_us.tpl");
-
-?>

@@ -1,11 +1,14 @@
-<?php /* $Id: vw_edit_interventions.php 7678 2009-12-21 15:04:55Z alexis_granger $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPbloc
- * @version $Revision: 7678 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPbloc
+ *
+ * @category Bloc
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkEdit();
@@ -44,6 +47,7 @@ $where = array(
   "chir_id" => "= '$plage->chir_id'",
 );
 
+/** @var CPlageOp[] $list_plages */
 $list_plages = $plage->loadList($where);
 CMbObject::massLoadFwdRef($list_plages, "salle_id");
 foreach ($list_plages as $_plage) {

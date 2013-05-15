@@ -16,30 +16,30 @@
     url.addParam("dossier_anesth_id", dossier_anesth_id);
     url.addParam("operation_id", operation_id);
     url.popup(700, 500, "printFicheAnesth");
-  }
+  };
 
   chooseAnesthCallback = function() {
     location.reload(); 
-  }
+  };
   
   var reloadAllLists = function() {
     reloadLeftList();
     reloadRightList();
-  }
+  };
   
   reloadLeftList = function() {
     var url = new Url("bloc", "ajax_list_intervs");
     url.addParam("plageop_id", {{$plage->_id}});
     url.addParam("list_type" , "left");
     url.requestUpdate("left_list");
-  }
+  };
   
   reloadRightList = function() {
     var url = new Url("bloc", "ajax_list_intervs");
     url.addParam("plageop_id", {{$plage->_id}});
     url.addParam("list_type" , "right");
     url.requestUpdate("right_list");
-  }
+  };
   
   submitOrder = function(oForm, side) {
     var callback = reloadAllLists;
@@ -52,33 +52,33 @@
     }
     
     return onSubmitFormAjax(oForm, callback);
-  }
+  };
 
   extraInterv = function(op_id) {
     var url = new Url("bloc", "ajax_edit_extra_interv");
     url.addParam("op_id", op_id);
     url.requestModal(700, 400);
     url.modalObject.observe("afterClose", reloadAllLists);
-  }
+  };
   
   reloadModifPlage = function() {
     var url = new Url("bloc", "ajax_modif_plage");
     url.addParam("plageop_id", {{$plage->_id}});
     url.requestUpdate("modif_plage", reloadAllLists);
-  }
+  };
   
   reloadPersonnelPrevu = function() {
     var url = new Url("bloc", "ajax_view_personnel_plage");
     url.addParam("plageop_id", {{$plage->_id}});
     url.requestUpdate("personnel_en_salle");
-  }
+  };
 
   reloadPersonnel = function(operation_id){
     var url = new Url("salleOp", "httpreq_vw_personnel");
     url.addParam("operation_id", operation_id);
     url.addParam("in_salle", 0);
     url.requestUpdate("listPersonnel");
-  }
+  };
 
   Main.add(function(){
     reloadModifPlage();

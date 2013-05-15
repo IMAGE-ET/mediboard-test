@@ -1,12 +1,17 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPbloc
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPbloc
+ *
+ * @category Bloc
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
+
+global $m;
 
 // Object binding
 $obj = new CPlageOp();
@@ -53,7 +58,8 @@ if ($del) {
   }
   $_SESSION["dPbloc"]["id"] = null;
   
-} else {
+}
+else {
   //Modification des plages
   if ($obj->_id != 0) {
     $oldObj = new CPlageOp();
@@ -77,8 +83,8 @@ if ($del) {
       $repeat -= $obj->becomeNext($salle_id, $chir_id, $spec_id, $secondary_function_id);
     }
   }
-  // Création des plages
   else {
+    // Création des plages
     while ($repeat > 0) {
       
       if ($msg = $obj->store()) {
@@ -156,7 +162,7 @@ function managePersonnel($obj) {
     }
   }
 }
-if($ajax) {
+if ($ajax) {
   echo CAppUI::getMsg();
   CApp::rip();
 }

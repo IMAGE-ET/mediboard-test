@@ -250,7 +250,7 @@ function showCheckboxAnesth(element){
               this.sChir  = "_chir";
               this.sView  = "_codes_ccam";
               this.pop();
-            }
+            };
             var oForm = getForm('paramFrm');
             Main.add(function() {
               var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");

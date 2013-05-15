@@ -30,6 +30,7 @@ $where = array();
 if ($bloc->_id) {
   $where["bloc_operatoire_id"] = "= '$bloc->_id'";
 }
+/** @var CBlocOperatoire[] $listBlocs */
 $listBlocs = $bloc->loadGroupList($where);
 
 foreach ($listBlocs as $_bloc) {
@@ -63,6 +64,7 @@ $where["operations.annulee"] = "= '0'";
 $where["operations.rank"]    = "= '0'";
 $order = "plagesop.date, plagesop.chir_id";
 
+/** @var COperation[] $listNonValidees */
 $listNonValidees = $operation->loadList($where, $order, null, null, $ljoin);
 
 foreach ($listNonValidees as &$op) {
@@ -81,11 +83,13 @@ $where = array();
 $where["operations.date"]    = "BETWEEN '$date' AND '$fin'";
 $where["operations.annulee"] = "= '0'";
 if ($bloc->_id) {
-  $where[]                   = "operations.salle_id IS NULL OR operations.salle_id ". CSQLDataSource::prepareIn(array_keys($bloc->_ref_salles));
+  $where[]                   = "operations.salle_id IS NULL OR operations.salle_id ".
+    CSQLDataSource::prepareIn(array_keys($bloc->_ref_salles));
 }
 $where["sejour.group_id"]    = "= '".CGroups::loadCurrent()->_id."'";
 $order = "operations.date, operations.chir_id";
 
+/** @var COperation[] $listHorsPlage */
 $listHorsPlage = $operation->loadList($where, $order, null, null, $ljoin);
 
 foreach ($listHorsPlage as &$op) {

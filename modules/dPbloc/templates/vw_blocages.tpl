@@ -7,7 +7,7 @@
       url.addParam("blocage_id", blocage_id);
     }
     url.requestUpdate("blocages");
-  }
+  };
   
   viewReplanifications = function(date_replanif) {
     var url = new Url("dPbloc", "ajax_vw_replanifications");
@@ -15,7 +15,7 @@
       url.addParam("date_replanif", date_replanif);
     }
     url.requestUpdate("replanifs");
-  }
+  };
   Main.add(function() {
     Control.Tabs.create("tabs_blocage", true);
     var tab_name = Control.Tabs.loadTab("tabs_blocage");

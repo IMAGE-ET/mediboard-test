@@ -1,15 +1,18 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPbloc
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Réaffectation automatique des plages opératoires
+ *
+ * Script à lancer entre minuit et 6h du matin
+ * pour que les dates limites soient respectées
+ *
+ * @category Bloc
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
-
-// Script à lancer entre minuit et 6h du matin
-// pour que les dates limites soient respectées
 
 global $can;
 
@@ -29,35 +32,41 @@ $limit = null;
 $group = null;
 $ljoin = array();
 $ljoin["operations"] = "operations.plageop_id = plagesop.plageop_id AND operations.annulee = '0'";
+/** @var CPlageOp[] $listPlages */
 $listPlages = $plageop->loadList($where, $order, $limit, $group, $ljoin);
-if($mode_real) {
+if ($mode_real) {
   CAppUI::getMsg("Lancement à : ".CMbDT::dateTime()." en mode réel");
-} else {
+}
+else {
   CAppUI::setMsg("Lancement à : ".CMbDT::dateTime()." en mode test");
 }
-foreach($listPlages as $curr_plage) {
-  if($mode_real) {
+foreach ($listPlages as $curr_plage) {
+  if ($mode_real) {
     // Suppression des interventions annulées de cette plage pour les mettre en hors plannifié
-    $curr_plage->loadRefsBack();
-    foreach($curr_plage->_ref_operations as $curr_op) {
+    $curr_plage->loadRefsOperations();
+    foreach ($curr_plage->_ref_operations as $curr_op) {
       $curr_op->plageop_id = "";
-      $curr_op->date       = $curr_plage->date;
+      $curr_op->date = $curr_plage->date;
       $curr_op->store();
     }
     // Réaffectation de la plage
-    $curr_plage->spec_id      = $curr_plage->spec_repl_id;
-    $curr_plage->chir_id   = "";
-    if($msg = $curr_plage->store()) {
+    $curr_plage->spec_id = $curr_plage->spec_repl_id;
+    $curr_plage->chir_id = "";
+    if ($msg = $curr_plage->store()) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
-    } else {
+    }
+    else {
       CAppUI::setMsg("Plage $curr_plage->_id mise à jour", UI_MSG_OK);
     }
-  } else {
-    $curr_plage->loadRefsFwd(1);
-    $curr_plage->loadRefSpecRepl(1);
-    if($curr_plage->chir_id) {
+  }
+  else {
+    $curr_plage->loadRefChir();
+    $curr_plage->loadRefSpec();
+    $curr_plage->loadRefSpecRepl();
+    if ($curr_plage->chir_id) {
       $from = "Dr ".$curr_plage->_ref_chir->_view;
-    } else {
+    }
+    else {
       $from = $curr_plage->_ref_spec->_view;
     }
     $msg = "plage du $curr_plage->date de $curr_plage->debut à $curr_plage->fin : $from vers ".$curr_plage->_ref_spec_repl->_view;
@@ -66,5 +75,3 @@ foreach($listPlages as $curr_plage) {
 }
 
 echo CAppUI::getMsg();
-
-?>

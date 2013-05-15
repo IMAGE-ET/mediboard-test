@@ -1,16 +1,19 @@
-<?php /* $Id: $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPbloc
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPbloc
+ *
+ * @category Bloc
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkEdit();
 
-if(!($plageop_id = CValue::getOrSession("plageop_id"))) {
+if (!($plageop_id = CValue::getOrSession("plageop_id"))) {
   CAppUI::setMsg("Vous devez choisir une plage opératoire", UI_MSG_WARNING);
   CAppUI::redirect("m=dPbloc&tab=vw_edit_planning");
 }
@@ -19,7 +22,7 @@ if(!($plageop_id = CValue::getOrSession("plageop_id"))) {
 $plage = new CPlageOp();
 $plage->load($plageop_id);
 $plage->loadRefSalle();
-if(!$plage->temps_inter_op) {
+if (!$plage->temps_inter_op) {
   $plage->temps_inter_op = "00:00:00";
 }
 
@@ -27,5 +30,3 @@ if(!$plage->temps_inter_op) {
 $smarty = new CSmartyDP();
 $smarty->assign("plage", $plage);
 $smarty->display("inc_modif_plage.tpl");
-
-?>

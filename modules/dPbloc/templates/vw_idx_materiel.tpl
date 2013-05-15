@@ -20,13 +20,13 @@ checkFormPrint = function() {
   url.addElement(form._date_min);
   url.addElement(form._date_max);
   url.popup(900, 750, 'Materiel');
-}
+};
 
 refreshLists = function() {
   var url = new Url("dPbloc", "ajax_vw_materiel");
   url.addFormData(getForm("selectBloc"));
   url.requestUpdate("list_materiel");
-}
+};
 
 Main.add(function() {
   refreshLists();

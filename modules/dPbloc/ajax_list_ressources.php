@@ -3,7 +3,7 @@
 /**
  * dPbloc
  *  
- * @category dPbloc
+ * @category Bloc
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -37,5 +37,3 @@ $smarty->assign("ressource_id", $ressource_id);
 $smarty->assign("ressources_materielles", $ressources_materielles);
 
 $smarty->display("inc_list_ressources.tpl");
-
-?>

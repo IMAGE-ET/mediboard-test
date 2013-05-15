@@ -99,7 +99,7 @@ for ($date_temp = $date_min ; $date_temp <= $date_max ; $date_temp = CMbDT::date
           else {
             $where["debut"] = "> '$hour_midi:00:00'";
           }
-          
+          /** @var CPlageOp[] $plages */
           $plages = $plage->loadList($where);
           
           foreach ($plages as $_plage) {
@@ -162,5 +162,3 @@ $smarty->assign("dates" , $dates);
 $smarty->assign("dates_planning" , $dates_planning);
 
 $smarty->display("print_full_planning.tpl");
-
-?>

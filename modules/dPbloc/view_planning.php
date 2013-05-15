@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPbloc
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * dPbloc
+ *
+ * @category Bloc
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -13,7 +16,7 @@ CCanDo::checkRead();
 $ds = CSQLDataSource::get("std");
 
 $now       = CMbDT::date();
-$filter = new COperation;
+$filter = new COperation();
 $filter->_date_min       = CValue::get("_date_min", $now);
 $filter->_date_max       = CValue::get("_date_max", $now);
 $filter->_prat_id        = CValue::get("_prat_id");
@@ -35,7 +38,7 @@ if (is_array($filter->_bloc_id)) {
   CMbArray::removeValue("0", $filter->_bloc_id);
 }
 
-$filterSejour = new CSejour;
+$filterSejour = new CSejour();
 $filterSejour->type = CValue::get("type");
 
 $group = CGroups::loadCurrent();
@@ -81,9 +84,9 @@ if (!$filter->_specialite && !$filter->_prat_id) {
     $functions = $function->loadList();
     $praticiens = $praticien->loadList();
   }
-// Filtre sur la specialité : la spec et ses chirs primaires et secondaires
 }
 elseif ($filter->_specialite) {
+  // Filtre sur la specialité : la spec et ses chirs primaires et secondaires
   $function->load($filter->_specialite);
   $function->loadBackRefs("users");
   $function->loadBackRefs("secondary_functions");
@@ -95,9 +98,9 @@ elseif ($filter->_specialite) {
       $praticiens[$sec_func->user_id] = $sec_func->_ref_user;
     }
   }
-// Filtre sur le chir : le chir et ses specs primaires et secondaires
 }
 elseif ($filter->_prat_id) {
+  // Filtre sur le chir : le chir et ses specs primaires et secondaires
   $praticien->loadRefFunction();
   $praticien->loadBackRefs("secondary_functions");
   $praticiens[$praticien->_id] = $praticien;
@@ -111,17 +114,21 @@ elseif ($filter->_prat_id) {
 }
 
 // Liste des praticiens et fonctions à charger
-$wherePlagesop[]                       = "plagesop.chir_id ".CSQLDataSource::prepareIn(array_keys($praticiens))." OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($functions));
+$wherePlagesop[] = "plagesop.chir_id ".
+  CSQLDataSource::prepareIn(array_keys($praticiens)).
+  " OR plagesop.spec_id ".
+  CSQLDataSource::prepareIn(array_keys($functions));
 $whereOperations["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($praticiens));
 
 // En fonction de la salle
 $salle = new CSalle();
 $whereSalle = array();
 
-$whereSalle["sallesbloc.bloc_id"] =
-  CSQLDataSource::prepareIn(count($filter->_bloc_id) ?
-    $filter->_bloc_id :
-    array_keys($group->loadBlocs(PERM_READ)));
+$whereSalle["sallesbloc.bloc_id"] = CSQLDataSource::prepareIn(
+  count($filter->_bloc_id) ?
+  $filter->_bloc_id :
+  array_keys($group->loadBlocs(PERM_READ))
+);
 
 if ($filter->salle_id) {
   $whereSalle["sallesbloc.salle_id"] = "= '$filter->salle_id'";
@@ -137,7 +144,8 @@ $wherePlagesop["plagesop.salle_id"] = CSQLDataSource::prepareIn(array_keys($list
 
 $orderPlagesop = "date, salle_id, debut";
 
-$plagesop   = $plagesop->loadList($wherePlagesop, $orderPlagesop);
+/** @var CPlageOp[] $plagesop */
+$plagesop = $plagesop->loadList($wherePlagesop, $orderPlagesop);
 
 $ljoin = array();
 $ljoin["sejour"] = "operations.sejour_id = sejour.sejour_id";
@@ -171,6 +179,7 @@ if ($filterSejour->type) {
 
 $orderOperations = "date, salle_id, time_operation, chir_id";
 
+/** @var COperation[] $operations */
 $operations = $operation->loadList($whereOperations, $orderOperations, null, null, $ljoin);
 CMbObject::massLoadFwdRef($operations, "plageop_id");
 CMbObject::massLoadFwdRef($operations, "sejour_id");
@@ -186,23 +195,24 @@ foreach ($plagesop as &$plage) {
 
   $where["operations.plageop_id"] = "= '$plage->_id'";
 
-  $listOp = new COperation();
-  $listOp = $listOp->loadList($where, $order, null, null, $ljoin);
+  $op = new COperation();
+  /** @var COperation[] $listOp */
+  $listOp = $op->loadList($where, $order, null, null, $ljoin);
 
   $chirs   = CMbObject::massLoadFwdRef($listOp, "chir_id");
   $sejours = CMbObject::massLoadFwdRef($listOp, "sejour_id");
   CMbObject::massLoadFwdRef($sejours, "patient_id");
 
   foreach ($listOp as $operation) {
-    $operation->loadRefPlageOp(1);
+    $operation->loadRefPlageOp();
     $operation->loadRefsConsultAnesth();
-    $operation->loadRefPraticien(1);
+    $operation->loadRefPraticien();
     $operation->loadExtCodesCCAM();
     $operation->updateHeureUS();
     $operation->updateSalle();
     $operation->loadAffectationsPersonnel();
-    $sejour = $operation->loadRefSejour(1);
-    $sejour->loadRefsFwd(1);
+    $sejour = $operation->loadRefSejour();
+    $sejour->loadRefsFwd();
     if ($_print_ipp) {
       $sejour->_ref_patient->loadIPP();
     }
@@ -243,14 +253,14 @@ foreach ($plagesop as &$plage) {
 }
 
 foreach ($operations as $operation) {
-  $operation->loadRefPlageOp(1);
+  $operation->loadRefPlageOp();
   $operation->loadRefsConsultAnesth();
-  $operation->loadRefPraticien(1);
+  $operation->loadRefPraticien();
   $operation->loadExtCodesCCAM();
   $operation->updateHeureUS();
   $operation->loadAffectationsPersonnel();
-  $sejour = $operation->loadRefSejour(1);
-  $sejour->loadRefsFwd(1);
+  $sejour = $operation->loadRefSejour();
+  $sejour->loadRefsFwd();
   if ($_print_numdoss) {
     $sejour->loadNDA();
   }

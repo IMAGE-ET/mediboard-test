@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPbloc
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPbloc
+ *
+ * @category Bloc
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
@@ -28,5 +31,3 @@ $module->registerTab("vw_blocages"          , TAB_EDIT);
 
 $module->registerTab("vw_idx_blocs"         , TAB_ADMIN);
 $module->registerTab("print_planning"       , TAB_READ);
-
-?>

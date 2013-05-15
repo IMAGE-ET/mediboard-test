@@ -2,12 +2,12 @@
 
 /**
  * dPbloc
- *  
- * @category dPbloc
+ *
+ * @category Bloc
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
  * @link     http://www.mediboard.org
  */
 
@@ -37,4 +37,3 @@ if ($_POST["del"] == 0) {
 
 $do = new CDoObjectAddEdit("CBlocage");
 $do->doIt();
-?>

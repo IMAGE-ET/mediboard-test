@@ -13,7 +13,7 @@ checkPlage = function() {
   }
   
   return true;
-}
+};
 
 toggleDel = function(input) {
   if (input.disabled) {
@@ -23,7 +23,7 @@ toggleDel = function(input) {
     input.disable();
   }
   input.up('span').toggleClassName('opacity-40');
-}
+};
 
 refreshFunction = function(chir_id) {
   var url = new Url("dPcabinet", "ajax_refresh_secondary_functions");
@@ -32,7 +32,7 @@ refreshFunction = function(chir_id) {
   url.addParam("empty_function_principale", 1);
   url.addParam("change_active", 0);
   url.requestUpdate("secondary_functions");
-}
+};
 
 Main.add(function(){
   var oForm = getForm('editFrm');

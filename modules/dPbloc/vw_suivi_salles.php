@@ -1,27 +1,31 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPbloc
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPbloc
+ *
+ * @category Bloc
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
 
-$date_suivi = CAppUI::pref("suivisalleAutonome") ? CValue::get("date", CMbDT::date()) : CValue::getOrSession("date", CMbDT::date());
+/** @var CBlocOperatoire[] $listBlocs */
 $listBlocs  = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
+$date_suivi = CAppUI::pref("suivisalleAutonome") ? CValue::get("date", CMbDT::date()) : CValue::getOrSession("date", CMbDT::date());
 $bloc_id    = CValue::getOrSession("bloc_id", reset($listBlocs)->_id);
-if(!key_exists($bloc_id, $listBlocs)) {
+if (!key_exists($bloc_id, $listBlocs)) {
   $bloc_id = reset($listBlocs)->_id;
 }
 $bloc = new CBlocOperatoire();
 $bloc->load($bloc_id);
-$bloc->loadRefs();
+$bloc->loadRefsSalles();
 
 // Chargement de la liste des salles de chaque bloc
-foreach($listBlocs as $_bloc) {
+foreach ($listBlocs as $_bloc) {
   $_bloc->loadRefsSalles();
 }
 
@@ -40,6 +44,7 @@ $bloc->_ref_salles = $salle->loadListWithPerms(PERM_READ, $where, "nom");
 $systeme_materiel_expert = CAppUI::conf("dPbloc CPlageOp systeme_materiel") == "expert";
 
 foreach ($bloc->_ref_salles as &$salle) {
+  /** @var CSalle $salle */
   $salle->loadRefsForDay($date_suivi);
   if ($systeme_materiel_expert) {
     foreach ($salle->_ref_urgences as $_operation) {
@@ -61,13 +66,15 @@ $where["operations.date"] = "= '$date_suivi'";
 $where["operations.salle_id"] = "IS NULL";
 $where["operations.plageop_id"] = "IS NULL";
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+
+/** @var COperation[] $non_traitees */
 $non_traitees = $op->loadList($where, null, null, null, $ljoin);
 
 foreach ($non_traitees as $_operation) {
-  $_operation->loadRefChir(1);
-  $_operation->loadRefPatient(1);
+  $_operation->loadRefChir();
+  $_operation->loadRefPatient();
   $_operation->loadExtCodesCCAM();
-  $_operation->loadRefPlageOp(1);
+  $_operation->loadRefPlageOp();
 }
 
 // Création du template
@@ -82,4 +89,3 @@ $smarty->assign("operation_id"   , 0);
 $smarty->assign("non_traitees"   , $non_traitees);
 
 $smarty->display("vw_suivi_salles.tpl");
-?>

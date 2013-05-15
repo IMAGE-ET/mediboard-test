@@ -1,11 +1,14 @@
-<?php /* $Id: prat_import_csv.php 6103 2009-04-16 13:36:52Z yohann $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPbloc
- * @version $Revision: 6153 $
- * @author SARL OpenXtrem
- * @license GNU GPL
+ * dPbloc
+ *
+ * @category Bloc
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkAdmin();
@@ -20,7 +23,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
   $cols = fgetcsv($fp, null, ";");
 
   // Each line
-  while($line = fgetcsv($fp, null, ";")) {
+  while ($line = fgetcsv($fp, null, ";")) {
     if (!isset($line[0]) || $line[0] == "") {
       continue;
     }
@@ -36,9 +39,9 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $bloc->nom      = $results[$i]["bloc"];
     $bloc->group_id = CGroups::loadCurrent()->_id;
     $bloc->loadMatchingObject();
-    if(!$bloc->_id) {
+    if (!$bloc->_id) {
       $msg = $bloc->store();
-      if($msg) {
+      if ($msg) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
         $results[$i]["error"] = $msg;
         $i++;
@@ -52,7 +55,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $salle->nom = $results[$i]["nom"];
     $salle->bloc_id = $bloc->_id;
     $salle->loadMatchingObject();
-    if($salle->_id) {
+    if ($salle->_id) {
       $msg = "Salle existante";
       CAppUI::setMsg($msg, UI_MSG_ERROR);
       $results[$i]["error"] = $msg;
@@ -62,7 +65,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $salle->stats = 1;
     $salle->dh    = 0;
     $msg = $salle->store();
-    if($msg) {
+    if ($msg) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
       $results[$i]["error"] = $msg;
       $i++;

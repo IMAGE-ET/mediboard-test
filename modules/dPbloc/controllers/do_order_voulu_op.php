@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPbloc
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPbloc
+ *
+ * @category Bloc
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 $plageop_id = CValue::post("plageop_id");
@@ -15,10 +18,12 @@ $plageop->load($plageop_id);
 
 $plageop->loadRefsOperations(false, "rank, rank_voulu, horaire_voulu", true);
 
-foreach($plageop->_ref_operations as $_id => $_interv) {
-  if (!$_interv->rank && 
-      !$_interv->rank_voulu && 
-      !$_interv->horaire_voulu) {
+foreach ($plageop->_ref_operations as $_id => $_interv) {
+  if (
+      !$_interv->rank &&
+      !$_interv->rank_voulu &&
+      !$_interv->horaire_voulu
+  ) {
     unset($plageop->_ref_operations[$_id]);
   }
 }

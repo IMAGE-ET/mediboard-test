@@ -17,17 +17,17 @@ $plagesel = new CPlageOp;
 $plagesel->load($plageop_id);
 $plagesel->loadRefSalle();
 
-$listBlocs  = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
-$bloc_id    = CValue::getOrSession("bloc_id", ($plagesel->_ref_salle->bloc_id) ? $plagesel->_ref_salle->bloc_id : reset($listBlocs)->_id);
+$listBlocs       = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
+$default_bloc_id = $plagesel->_ref_salle->bloc_id ? $plagesel->_ref_salle->bloc_id : reset($listBlocs)->_id;
+$bloc_id         = CValue::getOrSession("bloc_id", $default_bloc_id);
 
-
-if(!array_key_exists($bloc_id, $listBlocs)) {
+if (!array_key_exists($bloc_id, $listBlocs)) {
   $bloc_id = reset($listBlocs)->_id;
 }
 
 $listSalles = array();
 
-foreach($listBlocs as &$curr_bloc) {
+foreach ($listBlocs as &$curr_bloc) {
   $curr_bloc->loadRefsSalles();
 }
 
@@ -38,19 +38,19 @@ $bloc->loadRefsSalles();
 $listSalles = $bloc->_ref_salles;
   
 
-if(!$plagesel->temps_inter_op) {
+if (!$plagesel->temps_inter_op) {
   $plagesel->temps_inter_op = "00:00:00";
 }
-if($plagesel->_id){
+if ($plagesel->_id) {
   $arrKeySalle = array_keys($listSalles);
-  if(!in_array($plagesel->salle_id, $arrKeySalle) || $plagesel->date != $date) {
+  if (!in_array($plagesel->salle_id, $arrKeySalle) || $plagesel->date != $date) {
     $plageop_id = 0;
     $plagesel = new CPlageOp;
   }
   $plagesel->loadAffectationsPersonnel();
 }
 
-if(!$plagesel->_id) {
+if (!$plagesel->_id) {
   $plagesel->debut = CPlageOp::$hours_start.":00:00";
   $plagesel->fin   = CPlageOp::$hours_start.":00:00";
 }
@@ -67,13 +67,13 @@ $specs = $function->loadSpecialites(PERM_READ, 1);
 // Liste des Anesthésistes
 $mediuser = new CMediusers();
 $anesths = $mediuser->loadAnesthesistes();
-foreach($anesths as $_anesth) {
+foreach ($anesths as $_anesth) {
   $_anesth->loadRefFunction();
 }
 
 // Liste des praticiens
 $chirs = $mediuser->loadChirurgiens();
-foreach($chirs as $_chir) {
+foreach ($chirs as $_chir) {
   $_chir->loadRefFunction();
 }
 
@@ -83,21 +83,21 @@ $listPersAideOp   = CPersonnel::loadListPers("op");
 $listPersPanseuse = CPersonnel::loadListPers("op_panseuse");
 
 if ($plagesel->_id) {
-  $affectations_plage["iade"] = $plagesel->_ref_affectations_personnel["iade"];
-  $affectations_plage["op"] = $plagesel->_ref_affectations_personnel["op"];
+  $affectations_plage["iade"]        = $plagesel->_ref_affectations_personnel["iade"];
+  $affectations_plage["op"]          = $plagesel->_ref_affectations_personnel["op"];
   $affectations_plage["op_panseuse"] = $plagesel->_ref_affectations_personnel["op_panseuse"];
-  foreach($affectations_plage["iade"] as $key => $affectation){
-    if(array_key_exists($affectation->personnel_id, $listPersIADE)){
+  foreach ($affectations_plage["iade"] as $key => $affectation) {
+    if (array_key_exists($affectation->personnel_id, $listPersIADE)) {
       unset($listPersIADE[$affectation->personnel_id]);
     }
   }
-  foreach($affectations_plage["op"] as $key => $affectation){
-    if(array_key_exists($affectation->personnel_id, $listPersAideOp)){
+  foreach ($affectations_plage["op"] as $key => $affectation) {
+    if (array_key_exists($affectation->personnel_id, $listPersAideOp)) {
       unset($listPersAideOp[$affectation->personnel_id]);
     }
   }
-  foreach($affectations_plage["op_panseuse"] as $key => $affectation){
-    if(array_key_exists($affectation->personnel_id, $listPersPanseuse)){
+  foreach ($affectations_plage["op_panseuse"] as $key => $affectation) {
+    if (array_key_exists($affectation->personnel_id, $listPersPanseuse)) {
       unset($listPersPanseuse[$affectation->personnel_id]);
     }
   }

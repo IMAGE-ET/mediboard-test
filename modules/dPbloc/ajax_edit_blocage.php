@@ -3,7 +3,7 @@
 /**
  * dPbloc
  *  
- * @category dPbloc
+ * @category Bloc
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -24,6 +24,7 @@ if (!$blocage->_id) {
 
 $bloc = new CBlocOperatoire();
 $where = array("group_id" => "= '".CGroups::loadCurrent()->_id."'");
+/** @var CBlocOperatoire[] $blocs */
 $blocs = $bloc->loadListWithPerms(PERM_READ, $where, "nom");
 
 foreach ($blocs as $_bloc) {
@@ -36,5 +37,3 @@ $smarty->assign("blocage", $blocage);
 $smarty->assign("blocs"  , $blocs);
 
 $smarty->display("inc_edit_blocage.tpl");
-
-?>

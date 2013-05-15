@@ -41,7 +41,7 @@
     afterEditTypeRessource: function(type_ressource_id) {
       Control.Modal.close();
       this.refreshListTypeRessources(type_ressource_id);
-    },
+    }
   };
   
   Indispo = {
@@ -73,12 +73,12 @@
     if (tr) {
       tr.addClassName('selected');
     }
-  }
+  };
   
   refreshCommandes = function() {
     var url = new Url("dPbloc", "vw_idx_materiel");
     url.requestUpdate("list_commandes");
-  }
+  };
   
   Main.add(function() {
     Control.Tabs.create("manage_ressources", true);

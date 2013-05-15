@@ -32,8 +32,9 @@ if (!$date) {
   $date = CMbDT::date($debut_op);
 }
 
-$date_min = $date." 00:00:00";
-$date_max = CMbDT::date("+1 day", $date)." 00:00:00";
+$date_min   = $date." 00:00:00";
+$date_max   = CMbDT::date("+1 day", $date)." 00:00:00";
+$min_fin_op = min($date_max, CMbDT::addDateTime($operation->temp_operation, $debut_op));
 
 $date_before = CMbDT::date("-1 day", $date);
 $date_after = CMbDT::date("+1 day", $date);
@@ -47,11 +48,11 @@ while ($date_temp < $date_max) {
 }
 
 $operation->_debut_offset = CMbDate::position($debut_op, $date_min, "1hour");
-$operation->_fin_offset   = CMbDate::position(min($date_max, CMbDT::addDateTime($operation->temp_operation, $debut_op)), $date_min, "1hour");
+$operation->_fin_offset   = CMbDate::position($min_fin, $date_min, "1hour");
 $operation->_width        = $operation->_fin_offset - $operation->_debut_offset;
 
 
-$ressource = new CRessourceMaterielle;
+$ressource = new CRessourceMaterielle();
 $ressource->type_ressource_id = $type_ressource_id;
 
 // Les usages sur la période définie

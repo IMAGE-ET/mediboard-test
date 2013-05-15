@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPbloc
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPbloc
+ *
+ * @category Bloc
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 class CSalle extends CMbObject {
@@ -78,9 +81,12 @@ class CSalle extends CMbObject {
     $this->_view .= $this->nom;
     $this->_shortview = $this->nom;
   }
-  
+
   /**
    * Load list overlay for current group
+   *
+   * @see parent::loadGroupList()
+   *
    */
   function loadGroupList($where = array(), $order = 'bloc_id, nom', $limit = null, $groupby = null, $ljoin = array()) {
     $list_blocs = CGroups::loadCurrent()->loadBlocs(PERM_READ, false);
@@ -90,16 +96,18 @@ class CSalle extends CMbObject {
     
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
-  
+
   function getPerm($permType) {
     $this->loadRefBloc();
     return $this->_ref_bloc->getPerm($permType) && parent::getPerm($permType);
   }
 
   /**
+   * Chargement du bloc opératoire
+   *
    * @return CBlocOperatoire
    */
-  function loadRefBloc(){
+  function loadRefBloc() {
     return $this->_ref_bloc = $this->loadFwdRef("bloc_id", true);
   }
   
@@ -124,16 +132,17 @@ class CSalle extends CMbObject {
     $order = "debut";
     $this->_ref_plages = $plages->loadList($where, $order);
     foreach ($this->_ref_plages as &$plage) {
-      $plage->loadRefs(0, 1);
+      /** @var CPlageOp $plage */
+      $plage->loadRefs();
       $plage->loadRefsNotes();
       $plage->loadAffectationsPersonnel();
       $plage->_unordered_operations = array();
       foreach ($plage->_ref_operations as &$operation) {
-        $operation->loadRefAnesth(1);
-        $operation->loadRefChir(1);
-        $operation->loadRefPatient(1);
+        $operation->loadRefAnesth();
+        $operation->loadRefChir();
+        $operation->loadRefPatient();
         $operation->loadExtCodesCCAM();
-        $operation->loadRefPlageOp(1);
+        $operation->loadRefPlageOp();
 
         if (CAppUI::conf("dPbloc CPlageOp chambre_operation")) {
           $operation->loadRefAffectation();
@@ -159,10 +168,11 @@ class CSalle extends CMbObject {
     $order = "operations.time_operation";
     $this->_ref_deplacees = $deplacees->loadList($where, $order, null, null, $ljoin);
     foreach ($this->_ref_deplacees as &$deplacee) {
-      $deplacee->loadRefChir(1);
-      $deplacee->loadRefPatient(1);
+      /** @var COperation $deplacee */
+      $deplacee->loadRefChir();
+      $deplacee->loadRefPatient();
       $deplacee->loadExtCodesCCAM();
-      $deplacee->loadRefPlageOp(1);
+      $deplacee->loadRefPlageOp();
     }
 
     // Urgences
@@ -173,10 +183,11 @@ class CSalle extends CMbObject {
     $order = "time_operation, chir_id";
     $this->_ref_urgences = $urgences->loadList($where, $order);
     foreach ($this->_ref_urgences as &$urgence) {
-      $urgence->loadRefChir(1);
-      $urgence->loadRefPatient(1);
+      /** @var COperation $urgence */
+      $urgence->loadRefChir();
+      $urgence->loadRefPatient();
       $urgence->loadExtCodesCCAM();
-      $urgence->loadRefPlageOp(1);
+      $urgence->loadRefPlageOp();
     }
   }
 
@@ -192,7 +203,9 @@ class CSalle extends CMbObject {
     $where["alert.object_class"] = "= 'COperation'";
     $where["alert.tag"] = "= 'mouvement_intervention'";
     $where["alert.handled"]   = "= '0'";
-    $where[] = "operations.salle_id = '$this->salle_id' OR plagesop.salle_id = '$this->salle_id' OR (plagesop.salle_id IS NULL AND operations.salle_id IS NULL)";
+    $where[] = "operations.salle_id = '$this->salle_id'
+      OR plagesop.salle_id = '$this->salle_id'
+      OR (plagesop.salle_id IS NULL AND operations.salle_id IS NULL)";
     $order = "operations.date, operations.chir_id";
     return $this->_alertes_intervs = $alerte->loadList($where, $order, null, null, $ljoin);
   }

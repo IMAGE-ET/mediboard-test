@@ -12,7 +12,7 @@
 $type      = CValue::get("type");
 $object_id = CValue::get("object_id");
 
-$besoins = new CBesoinRessource;
+$besoins = new CBesoinRessource();
 $besoins->$type = $object_id;
 $besoins = $besoins->loadMatchingList();
 

@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPbloc
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPbloc
+ *
+ * @category Bloc
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 ?>
@@ -13,7 +16,7 @@
 <table class="tbl">
   <tr>
     <td class="patient-not-arrived">M. PATIENT Patient</td>
-    <td class="text">Patient pas encore dans l'établissement</td>
+    <td class="text">Patient non encore dans l'établissement</td>
   </tr>
   <tr>
     <td class="septique">M. PATIENT Patient</td>

@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPbloc
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPbloc
+ *
+ * @category Bloc
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 class CBlocOperatoire extends CMbObject {
@@ -25,6 +28,9 @@ class CBlocOperatoire extends CMbObject {
 
   /** @var CGroups */
   public $_ref_group;
+
+  /** @var  CAlert */
+  public $_alertes_intervs;
 
   // Form field
   public $_date_min;
@@ -74,7 +80,7 @@ class CBlocOperatoire extends CMbObject {
     // Filtre sur l'établissement
     $g = CGroups::loadCurrent();
     $where["group_id"] = "= '$g->_id'";
-
+    /** @var CBlocOperatoire[] $list */
     $list = $this->loadListWithPerms(PERM_READ, $where, $order, $limit, $groupby, $ljoin);
     foreach ($list as &$bloc) {
       $bloc->loadRefsSalles();
@@ -101,6 +107,11 @@ class CBlocOperatoire extends CMbObject {
     return $this->_ref_salles = $this->loadBackRefs('salles', 'nom');
   }
 
+  /**
+   * @return CSalle[]
+   * @deprecated use loadRefsSalles instead
+   */
+
   function loadRefsBack() {
     return $this->loadRefsSalles();
   }
@@ -119,7 +130,9 @@ class CBlocOperatoire extends CMbObject {
     $where["alert.object_class"] = "= 'COperation'";
     $where["alert.tag"] = "= 'mouvement_intervention'";
     $where["alert.handled"]   = "= '0'";
-    $where[] = "operations.salle_id ".$inSalles." OR plagesop.salle_id ".$inSalles." OR (plagesop.salle_id IS NULL AND operations.salle_id IS NULL)";
+    $where[] = "operations.salle_id ".$inSalles.
+      " OR plagesop.salle_id ".$inSalles.
+      " OR (plagesop.salle_id IS NULL AND operations.salle_id IS NULL)";
     $order = "operations.date, operations.chir_id";
     return $this->_alertes_intervs = $alerte->loadList($where, $order, null, null, $ljoin);
   }

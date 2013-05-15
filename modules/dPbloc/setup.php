@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPbloc
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPbloc
+ *
+ * @category Bloc
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 class CSetupdPbloc extends CSetup {
@@ -338,10 +341,6 @@ class CSetupdPbloc extends CSetup {
       CHANGE `besoin_id` `besoin_ressource_id` INT (11) UNSIGNED NOT NULL;";
     $this->addQuery($query);
     
-    $query = "ALTER TABLE `indispo_ressource`
-      CHANGE `deb` `deb` DATETIME NOT NULL,
-      CHANGE `fin` `fin` DATETIME NOT NULL;";
-    
     $this->makeRevision("0.33");
     $query = "ALTER TABLE `ressource_materielle` 
       CHANGE `retablissement` `retablissement` TIME;";
@@ -394,6 +393,12 @@ class CSetupdPbloc extends CSetup {
                 ADD `fax` VARCHAR (20);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.39";
+    $this->makeRevision("0.39");
+    $query = "ALTER TABLE `indispo_ressource`
+      CHANGE `deb` `deb` DATETIME NOT NULL,
+      CHANGE `fin` `fin` DATETIME NOT NULL;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.40";
   }
 }

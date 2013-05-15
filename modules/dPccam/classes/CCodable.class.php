@@ -77,9 +77,13 @@ class CCodable extends CMbObject {
   public $_ref_frais_divers;
 
   // Distant references
+  /** @var  CSejour */
   public $_ref_sejour;
+  /** @var  CPatient */
   public $_ref_patient;
+  /** @var  CMediusers */
   public $_ref_praticien;
+  /** @var  CMediusers */
   public $_ref_executant;
 
   // Behaviour fields

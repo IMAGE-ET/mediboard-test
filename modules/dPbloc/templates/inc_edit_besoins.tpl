@@ -52,34 +52,34 @@
     var form = getForm("delBesoin");
     $V(form.besoin_ressource_id, besoin_id);
     confirmDeletion(form, {objName: nom, ajax: 1}, {onComplete: function() { reloadModal(); } });
-  }
+  };
   
   onDelUsage = function(usage_id, nom) {
     var form = getForm("delUsage");
     $V(form.usage_ressource_id, usage_id);
     confirmDeletion(form, {objName: nom, ajax: 1}, {onComplete: function() { reloadModal(); } });
-  }
+  };
   
   reloadModal = function() {
     getForm('delBesoin').up('div.modal').down('button.change').onclick();
-  }
+  };
   
   addBesoinNonStored = function(type_ressource_id) {
     window.besoins_non_stored.push(type_ressource_id);
     refreshBesoinsNonStored();
-  }
+  };
   
   delBesoinNonStored = function(type_ressource_id) {
     window.besoins_non_stored.splice(window.besoins_non_stored.indexOf(type_ressource_id), 1);
     refreshBesoinsNonStored();
-  }
+  };
   
   refreshBesoinsNonStored = function() {
     var url = new Url("bloc", "ajax_list_besoins_non_stored");
     url.addParam("types_ressources_ids", window.besoins_non_stored.join(","));
-    url.addParam("type", '{{$type}}')
+    url.addParam("type", '{{$type}}');
     url.requestUpdate("list_besoins");
-  }
+  };
   
   showPlanning = function(type_ressource_id, operation_id, usage_ressource_id, besoin_ressource_id, usage) {
    var url = new Url("dPbloc", "ajax_vw_planning_ressources");

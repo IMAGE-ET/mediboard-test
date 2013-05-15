@@ -3,7 +3,7 @@
 /**
  * dPbloc
  *  
- * @category dPbloc
+ * @category Bloc
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -24,5 +24,3 @@ $smarty->assign("type_ressource_id", $type_ressource_id);
 $smarty->assign("date_indispo", $date_indispo);
 
 $smarty->display("vw_ressources.tpl");
-
-?>

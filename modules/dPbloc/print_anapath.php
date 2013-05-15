@@ -1,11 +1,14 @@
-<?php /* $Id: $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPbloc
- * @version $Revision: 13011 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPbloc
+ *
+ * @category Bloc
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -26,8 +29,9 @@ $where[] = "operations.salle_id $inSalle OR plagesop.salle_id $inSalle";
 $where[] = "operations.date = '$date' OR plagesop.date = '$date'";
 $where["anapath"] = "= 1";
 $order = "entree_salle, time_operation";
+/** @var COperation[] $operations */
 $operations = $op->loadList($where, $order, null, null, $ljoin);
-foreach($operations as $_op) {
+foreach ($operations as $_op) {
   $_op->loadRefsFwd();
   $_op->updateSalle();
   $_op->_ref_sejour->loadRefPatient();
@@ -41,5 +45,3 @@ $smarty->assign("bloc", $bloc);
 $smarty->assign("operations", $operations);
 
 $smarty->display("print_anapath.tpl");
-
-?>

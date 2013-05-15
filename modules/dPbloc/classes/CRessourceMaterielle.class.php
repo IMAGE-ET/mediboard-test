@@ -2,12 +2,12 @@
 
 /**
  * dPbloc
- *  
- * @category dPbloc
+ *
+ * @category Bloc
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
  * @link     http://www.mediboard.org
  */
 
@@ -109,12 +109,12 @@ class CRessourceMaterielle extends CMbObject {
       if ($this->_id) {
         $where["usage_ressource.ressource_materielle_id"] = " = '$this->_id'";
       }
-      // Ou sur son type si nouvel objet
-      else if ($this->type_ressource_id){
+      elseif ($this->type_ressource_id) {
+        // Ou sur son type si nouvel objet
         $ljoin["ressource_materielle"] = "ressource_materielle.type_ressource_id = besoin_ressource.type_ressource_id";
         $where["ressource_materielle.type_ressource_id"] = "= '$this->type_ressource_id'";
       }
-
+      /** @var CUsageRessource[] $usages */
       $usages = $usage->loadList($where, null, null, null, $ljoin);
       $besoins = CMbObject::massLoadFwdRef($usages, "besoin_ressource_id");
       CMbObject::massLoadFwdRef($besoins, "operation_id");
@@ -152,8 +152,8 @@ class CRessourceMaterielle extends CMbObject {
       if ($this->_id) {
         $where["ressource_materielle_id"] = "= '$this->_id'";
       }
-      // Ou sur son type si nouvel objet
       elseif ($this->type_ressource_id) {
+        // Ou sur son type si nouvel objet
         $ljoin["ressource_materielle"] = "ressource_materielle.ressource_materielle_id = indispo_ressource.ressource_materielle_id";
         $where["ressource_materielle.type_ressource_id"] = "= '$this->type_ressource_id'";
       }
@@ -191,7 +191,7 @@ class CRessourceMaterielle extends CMbObject {
       $ljoin["ressource_materielle"] = "ressource_materielle.type_ressource_id = besoin_ressource.type_ressource_id";
       $where["ressource_materielle.type_ressource_id"] = "= '$this->type_ressource_id'";
     }
-
+    /** @var CBesoinRessource[] $besoins */
     $besoins = $besoin->loadList($where, null, null, null, $ljoin);
     CMbObject::massLoadFwdRef($besoins, "operation_id");
 

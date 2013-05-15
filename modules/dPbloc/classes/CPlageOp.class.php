@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPbloc
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPbloc
+ *
+ * @category Bloc
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 class CPlageOp extends CMbObject {
@@ -181,7 +184,9 @@ class CPlageOp extends CMbObject {
     $this->makeView();
   }
   
-  function loadRefsOperations($annulee = true, $order = "rank, rank_voulu, horaire_voulu", $sorted = false, $validated = null, $where = array()) {
+  function loadRefsOperations(
+      $annulee = true, $order = "rank, rank_voulu, horaire_voulu",$sorted = false, $validated = null, $where = array()
+  ) {
     $where += array(
       "plageop_id" => "= '$this->plageop_id'",
     );
@@ -231,6 +236,15 @@ class CPlageOp extends CMbObject {
     return $this->_ref_operations = $intervs;
   }
 
+  /**
+   * Chargement des back references
+   *
+   * @param bool   $annulee prise en compte des interventions annulées
+   * @param string $order   ordre du chargement
+   *
+   * @return COperation[]
+   * @deprecated use loadRefsOperations instead
+   */
   function loadRefsBack($annulee = true, $order = "rank, rank_voulu, horaire_voulu") {
     $this->loadRefsOperations($annulee, $order);
   }
@@ -281,11 +295,10 @@ class CPlageOp extends CMbObject {
           $op->salle_id = $this->salle_id;
         }
       }
-      
-      // Plage monopraticien
       elseif (!$plage_multipraticien && 
               ($action & self::RANK_REORDER) && 
               ($op->horaire_voulu || $this->_reorder_up_to_interv_id)) {
+        // Plage monopraticien
         $op->rank_voulu = ++$i;
         $op->horaire_voulu = $new_time;
       }
@@ -342,12 +355,15 @@ class CPlageOp extends CMbObject {
     $where["salle_id"]   = "= '$this->salle_id'";
     $where["date"]       = "= '$this->date'";
     $where["plageop_id"] = "!= '$this->plageop_id'";
+    /** @var CPlageOp $plages */
     $plages = $this->loadList($where);
     $msg = null;
     foreach ($plages as $plage) {
-      if (($plage->debut < $this->fin and $plage->fin > $this->fin)
-        or($plage->debut < $this->debut and $plage->fin > $this->debut)
-        or($plage->debut >= $this->debut and $plage->fin <= $this->fin)) {
+      if (
+          ($plage->debut < $this->fin and $plage->fin > $this->fin)
+          or($plage->debut < $this->debut and $plage->fin > $this->debut)
+          or($plage->debut >= $this->debut and $plage->fin <= $this->fin)
+      ) {
         $msg .= "Collision avec la plage du $plage->date, de $plage->debut à $plage->fin. ";
       }
     }
@@ -374,8 +390,8 @@ class CPlageOp extends CMbObject {
       $oldPlage->load($this->_id);
       $oldPlage->loadRefsBack();
     }
-    // Erreur si on est en multi-praticiens, qu'il y a des interventions et qu'on veut mettre un praticien
     if (null !== $this->chir_id && $this->_id && !$this->unique_chir) {
+      // Erreur si on est en multi-praticiens, qu'il y a des interventions et qu'on veut mettre un praticien
       if (count($oldPlage->_ref_operations) && $oldPlage->spec_id && $this->chir_id) {
         $msg = "Impossible de selectionner un praticien : ".count($oldPlage->_ref_operations)." intervention(s) déjà présentes dans une plage multi-praticiens";
         return $msg;
