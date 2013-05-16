@@ -14,6 +14,7 @@ refreshList = function(){
   url.addElement(oForm._date_min);
   url.addElement(oForm._date_max);
   url.addElement(oForm.type_date_search);
+  url.addElement(oForm.num_facture);
   {{if $conf.dPfacturation.CRelance.use_relances}}
     url.addParam("etat_relance" , $V(oForm.etat_relance) ? 1 : 0 );
   {{/if}}
@@ -46,8 +47,21 @@ Main.add(function () {
     <table class="form" name="choix_type_facture">
       {{assign var="classe" value=$facture->_class}}
       <tr>
-        <th>Depuis le</th>
-        <td>{{mb_field object=$filter field="_date_min" form="choice-facture" canNull="false" register=true}}</td>
+        <th class="narrow">Patient</th>
+        <td class="narrow">
+          {{mb_field object=$patient field="patient_id" hidden=1}}
+          <input type="text" name="_pat_name" style="width: 15em;" value="{{$patient->_view}}" readonly="readonly" ondblclick="PatSelector.init()" />
+          <button class="cancel notext" type="button" onclick="$V(this.form._pat_name,''); $V(this.form.patient_id,'')"></button>
+          <button class="search notext" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
+          <script>
+            PatSelector.init = function(){
+              this.sForm = "choice-facture";
+              this.sId   = "patient_id";
+              this.sView = "_pat_name";
+              this.pop();
+            }
+          </script>
+        </td>
         {{if !$conf.dPfacturation.$classe.use_auto_cloture}}
           <th>Etat</th>
           <td>
@@ -62,27 +76,22 @@ Main.add(function () {
           <th></th>
           <td><input type="hidden" name="etat_cloture" value="0" /></td>
         {{/if}}
-        <th>Patient</th>
-        <td>
-          {{mb_field object=$patient field="patient_id" hidden=1}}
-          <input type="text" name="_pat_name" style="width: 15em;" value="{{$patient->_view}}" readonly="readonly" ondblclick="PatSelector.init()" />
-          <button class="cancel notext" type="button" onclick="$V(this.form._pat_name,''); $V(this.form.patient_id,'')"></button>
-          <button class="search notext" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
-          <script>
-            PatSelector.init = function(){
-              this.sForm = "choice-facture";
-              this.sId   = "patient_id";
-              this.sView = "_pat_name";
-              this.pop();
-            }
-          </script>
-        </td>
+        <th>Depuis le</th>
+        <td>{{mb_field object=$filter field="_date_min" form="choice-facture" canNull="false" register=true}}</td>
       </tr>
       <tr>
-        <th>Jusqu'au</th>
-        <td>{{mb_field object=$filter field="_date_max" form="choice-facture" canNull="false" register=true}}</td>
-        <th></th>
+        <th>Praticien</th>
         <td>
+          <select name="chirSel" style="width: 15em;">
+            <option value="0" {{if !$chirSel}} selected="selected" {{/if}}>&mdash; Choisir un professionnel</option>
+            {{if $facture->_class == "CFactureEtablissement"}} 
+              <b><option value="-1" {{if $chirSel == "-1"}} selected="selected" {{/if}}>&mdash; Tous</option></b>
+            {{/if}}
+            {{mb_include module=mediusers template=inc_options_mediuser selected=$chirSel list=$listChirs}}
+          </select>
+        </td>
+        <th></th>
+        <td class="narrow">
           <label>
             <input type="checkbox" name="no_finish_reglement" value="0" {{if $no_finish_reglement }}checked="checked"{{/if}}/>
             Uniquement réglées
@@ -94,37 +103,15 @@ Main.add(function () {
             </label>
           {{/if}}
         </td>
-        <th>Praticien</th>
-        <td>
-          <select name="chirSel" style="width: 15em;">
-            <option value="0" {{if !$chirSel}} selected="selected" {{/if}}>&mdash; Choisir un professionnel</option>
-            {{if $facture->_class == "CFactureEtablissement"}} 
-              <b><option value="-1" {{if $chirSel == "-1"}} selected="selected" {{/if}}>&mdash; Tous</option></b>
-            {{/if}}
-            {{mb_include module=mediusers template=inc_options_mediuser selected=$chirSel list=$listChirs}}
-          </select>
-        </td>
+        <th>Jusqu'au</th>
+        <td>{{mb_field object=$filter field="_date_max" form="choice-facture" canNull="false" register=true}}</td>
       </tr>
       
       <tr>
-        {{if !$conf.dPfacturation.$classe.use_auto_cloture}}
-        <th>Date de</th>
-        <td>
-          <select name="type_date_search">
-            <option value="cloture" {{if $type_date_search == "cloture"}} selected="selected" {{/if}}>
-              Cloture
-            </option>
-            <option value="ouverture" {{if $type_date_search == "ouverture"}} selected="selected" {{/if}}>
-              Ouverture
-            </option>
-          </select>
-        </td>
-        {{else}}
-          <th></th>
-          <td><input type="hidden" name="type_date_search" value="ouverture" /></td>
-        {{/if}}
+        <th>Numéro de facture</th>
+        <td><input name="num_facture" value="{{$num_facture}}" type="text" /></td>
         <th></th>
-        <td colspan="3">
+        <td>
           {{if $facture->_class == "CFactureEtablissement"}}
             <label>
               <input name="etat_cotation" value="1" type="checkbox" {{if $etat_cotation == 1}}checked="checked"{{/if}}/>
@@ -132,6 +119,22 @@ Main.add(function () {
             </label>
           {{/if}}
         </td>
+        {{if !$conf.dPfacturation.$classe.use_auto_cloture}}
+          <th>Date de</th>
+          <td>
+            <select name="type_date_search">
+              <option value="cloture" {{if $type_date_search == "cloture"}} selected="selected" {{/if}}>
+                Cloture
+              </option>
+              <option value="ouverture" {{if $type_date_search == "ouverture"}} selected="selected" {{/if}}>
+                Ouverture
+              </option>
+            </select>
+          </td>
+        {{else}}
+          <th></th>
+          <td><input type="hidden" name="type_date_search" value="ouverture" /></td>
+        {{/if}}
       </tr>
       <tr>
         <td class="button" colspan="6">

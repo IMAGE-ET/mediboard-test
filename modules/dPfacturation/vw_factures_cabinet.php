@@ -19,6 +19,7 @@ $patient_id         = CValue::getOrSession("patient_id");
 $no_finish_reglement= CValue::getOrSession("no_finish_reglement", 0);
 $type_date_search   = CValue::getOrSession("type_date_search", "cloture");
 $chirSel            = CValue::getOrSession("chirSel", "-1");
+$num_facture        = CValue::getOrSession("num_facture", "");
 
 //Patient sélectionné
 $patient = new CPatient();
@@ -46,6 +47,12 @@ if ($chirSel) {
 }
 if ($patient_id) {
   $where["patient_id"] =" = '$patient_id' ";
+}
+
+if ($num_facture) {
+  $ljoin = array();
+  $where = array();
+  $where["facture_id"] =" = '$num_facture' ";
 }
 
 $facture = new CFactureCabinet();
@@ -112,5 +119,6 @@ $smarty->assign("date"          , CMbDT::date());
 $smarty->assign("filter"        , $filter);
 $smarty->assign("no_finish_reglement" , $no_finish_reglement);
 $smarty->assign("type_date_search"    , $type_date_search);
+$smarty->assign("num_facture"    , $num_facture);
 
 $smarty->display("vw_factures.tpl");

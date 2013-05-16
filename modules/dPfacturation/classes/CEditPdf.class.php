@@ -795,7 +795,7 @@ class CEditPdf{
     if ($this->facture->_class != "CFactureCabinet" && $this->facture->dialyse && $this->facture->_ref_assurance_accident) {
       $assur_nom = $this->facture->_ref_assurance_accident->nom." ".$this->facture->_ref_assurance_accident->prenom;
     }
-    if (isset($assurance_patient->type_pec) && $assurance_patient->type_pec == "TS") {
+    if (isset($assurance_patient->type_pec) && $assurance_patient->type_pec == "TS" && $this->type_rbt == "TG avec cession") {
       if (count($this->facture->_ref_reglements) && $this->type_pdf == "justif_TS") {
         $assur_nom = $this->patient_facture->nom." ".$this->patient_facture->prenom;
       }
@@ -931,7 +931,7 @@ class CEditPdf{
     }
     elseif ($this->facture->assurance_accident && !$this->facture->send_assur_compl && $this->facture->type_facture == "accident") {
       $assurance_patient = $this->facture->_ref_assurance_accident;
-      $this->type_rbt = $this->facture->_ref_assurance_accident->type_pec;
+      $this->type_rbt = "TP";
     }
     else {
       $assurance_patient = $this->patient_facture;
@@ -944,9 +944,6 @@ class CEditPdf{
     
     $this->type_rbt = $this->type_rbt == "" ? "TG" : $this->type_rbt;
     $this->type_rbt = $this->type_rbt == "TS" ? "TG avec cession" : $this->type_rbt;
-    if ($this->facture->type_facture == "accident" && $this->facture->_coeff != CAppUI::conf("tarmed CCodeTarmed pt_maladie")) {
-      $this->type_rbt = "TP";
-    }
     
     $assur["nom"]     = $assurance_patient->$view;
     $assur["adresse"] = $assurance_patient->adresse;

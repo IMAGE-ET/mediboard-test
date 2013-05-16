@@ -482,7 +482,7 @@ class CFacture extends CMbObject {
   function loadRefCoeffFacture() {
     $this->_coeff = 1;
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
-      if ($this->statut_pro && ($this->statut_pro == "sans_emploi" || $this->statut_pro == "etudiant" || $this->statut_pro == "non_travailleur") && $this->type_facture == "accident") {
+      if ($this->statut_pro && ($this->statut_pro == "sans_emploi" || $this->statut_pro == "etudiant" || $this->statut_pro == "non_travailleur" || $this->statut_pro == "independant") && $this->type_facture == "accident") {
         $this->_coeff = CAppUI::conf("tarmed CCodeTarmed pt_maladie");
       }
       elseif ($this->statut_pro && $this->statut_pro == "invalide") {
