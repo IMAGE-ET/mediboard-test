@@ -84,10 +84,6 @@
           </tr>
         </tbody>
       {{/if}}
-    {{/foreach}}
-    
-    {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
-    
     {{foreachelse}}
       <tr>
         <td colspan="10" class="empty">

@@ -30,11 +30,11 @@ if ($filter->plageconsult_id) {
   $plage->load($filter->plageconsult_id);
   $filter->_date_min = $filter->_date_max = $plage->date;
   $filter->_ref_plageconsult = $plage;
-	$where["plageconsult_id"] = "= '$filter->plageconsult_id'";
-} 
+  $where["plageconsult_id"] = "= '$filter->plageconsult_id'";
+}
 else {
   $where["date"] = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
-  
+
   // Liste des praticiens
   $mediusers = new CMediusers();
   if (CAppUI::pref("pratOnlyForConsult", 1)) {
@@ -43,11 +43,11 @@ else {
   else {
     $listPrat = $mediusers->loadProfessionnelDeSante(PERM_EDIT);
   }
-  
+
   $where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat), $chir);
 }
 
-$order = array();
+$order   = array();
 $order[] = "date";
 $order[] = "chir_id";
 $order[] = "debut";
@@ -55,24 +55,26 @@ $listPlage = $plage->loadList($where, $order);
 
 // Pour chaque plage on selectionne les consultations
 foreach ($listPlage as $plage_id => &$plage) {
-  $plage->listPlace = array();
-  $plage->listBefore  = array();
-  $plage->listAfter   = array();
+  $plage->listPlace     = array();
+  $plage->listPlace2     = array();
+  $plage->listBefore    = array();
+  $plage->listAfter     = array();
+  $plage->listHorsPlace = array();
   $listPlage[$plage_id]->loadRefs(false, 1);
-  
-  for ($i = 0; $i < $plage->_total; $i++) {
+
+  CMbObject::massLoadFwdRef($plage->_ref_consultations, "sejour_id");
+
+  for ($i = 0; $i <= $plage->_total; $i++) {
     $minutes = $plage->_freq * $i;
     $plage->listPlace[$i]["time"] = CMbDT::time("+ $minutes minutes", $plage->debut);
     $plage->listPlace[$i]["consultations"] = array();
   }
-  
-  CMbObject::massLoadFwdRef($plage->_ref_consultations, "sejour_id");
-  
+
   foreach ($plage->_ref_consultations as $keyConsult => $valConsult) {
     $consultation =& $plage->_ref_consultations[$keyConsult];
-    
+
     $patient = $consultation->loadRefPatient(1);
-    
+
     if ($consultation->sejour_id) {
       $patient->_ref_curr_affectation = $consultation->loadRefSejour()->loadRefCurrAffectation(CMbDT::date($consultation->_datetime));
       $patient->_ref_curr_affectation->loadView();
@@ -80,7 +82,7 @@ foreach ($listPlage as $plage_id => &$plage) {
         $show_lit = true;
       }
     }
-    
+
     // Chargement de la categorie
     $consultation->loadRefCategorie(1);
     $consultation->loadRefConsultAnesth();
@@ -92,11 +94,17 @@ foreach ($listPlage as $plage_id => &$plage) {
       $consult_anesth->_ref_operation->loadExtCodesCCAM();
       $consult_anesth->_date_op =& $consult_anesth->_ref_operation->_ref_plageop->date;
     } 
-    
+
     $keyPlace = CMbDT::timeCountIntervals($plage->debut, $consultation->heure, $plage->freq);
-    
+
     for ($i = 0;  $i < $consultation->duree; $i++) {
-      @$plage->listPlace[($keyPlace + $i)]["consultations"][] =& $consultation;
+      if (!isset($plage->listPlace[($keyPlace + $i)]["time"])) {
+        $plage->listPlace[($keyPlace + $i)]["time"] = CMbDT::time("+ ".$plage->_freq*$i." minutes", $consultation->heure);
+        @$plage->listPlace[($keyPlace + $i)]["consultations"][] =& $consultation;
+      }
+      else {
+        @$plage->listPlace[($keyPlace + $i)]["consultations"][] =& $consultation;
+      }
     }
   }
 }
@@ -111,13 +119,10 @@ if (!$filter->_plages_vides) {
 }
 
 
-
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("filter"     , $filter);
-$smarty->assign("listPlage"  , $listPlage);
-$smarty->assign("show_lit"   , $show_lit);
+$smarty->assign("filter"   , $filter);
+$smarty->assign("listPlage", $listPlage);
+$smarty->assign("show_lit" , $show_lit);
 $smarty->display("print_plages.tpl");
-
-?>

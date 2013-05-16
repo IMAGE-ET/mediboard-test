@@ -29,7 +29,7 @@ window.aProtocoles = {
 
 chooseProtocole = function(protocole_id) {
   {{if $dialog}}
-  if(protocole_id == 0) {
+  if(protocole_id == 0 || !protocole_id) {
     var url =  new Url('planningOp', 'vw_edit_protocole');
     url.addParam('protocole_id', protocole_id);
     var protocoleModal = url.requestModal(800);
@@ -191,7 +191,7 @@ Main.add(function(){
       </form>
     </td>
   </tr>
-  
+
   <tr>
     <td>
       {{if !$dialog}}

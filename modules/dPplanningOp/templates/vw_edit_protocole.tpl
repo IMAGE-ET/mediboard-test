@@ -454,7 +454,7 @@ Main.add(function () {
         {{if $conf.dPplanningOp.CSejour.show_type_pec}}
           <tr>
             <th>{{mb_label object=$protocole field="type_pec"}}</th>
-            <td>{{mb_field object=$protocole field="type_pec" typeEnum=radio" }}</td>
+            <td>{{mb_field object=$protocole field="type_pec" typeEnum="radio"}}</td>
           </tr>
         {{/if}}
         <tr>
