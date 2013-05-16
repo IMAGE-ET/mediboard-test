@@ -90,7 +90,7 @@ class CCDADocumentCDA extends CCDAClasseCda{
    */
   function getTimeToUtc($date, $naissance = false) {
     $timezone = new DateTimeZone(CAppUI::conf("timezone"));
-    $date = new DateTime($date, $timezone);
+    $date     = new DateTime($date, $timezone);
     if ($naissance) {
       return $date->format("Ymd");
     }
@@ -138,14 +138,15 @@ class CCDADocumentCDA extends CCDAClasseCda{
     if ($object instanceof CPatient) {
       return self::$patient = $object;
     }
+    /** @var CConsultation $object CConsultation*/
     return self::$patient = $object->loadRefPatient();
   }
 
   /**
    * Ajoute les téléphone de la personne dans l'objet qui a appelé cette méthode
    *
-   * @param Object  $object  Object
-   * @param CPerson $patient CPerson
+   * @param CCDAPOCD_MT000040_PatientRole $object  CCDAPOCD_MT000040_PatientRole
+   * @param CPerson                       $patient CPerson
    *
    * @return void
    */
@@ -247,8 +248,8 @@ class CCDADocumentCDA extends CCDAClasseCda{
   /**
    * Attribution de l'id au PS
    *
-   * @param Object  $assigned Object
-   * @param IPerson $user     IPerson
+   * @param Object           $assigned Object
+   * @param CUser|CMediUsers $user     CUser|CMediUsers
    *
    * @return void
    */
@@ -279,8 +280,10 @@ class CCDADocumentCDA extends CCDAClasseCda{
   /**
    * Affectation id à l'établissement
    *
-   * @param Object  $entite Object
-   * @param CGroups $etab   CGroups
+   * @param CCDAPOCD_MT000040_CustodianOrganization $entite CCDAPOCD_MT000040_CustodianOrganization
+   * @param CGroups                                 $etab   CGroups
+   *
+   * @return void
    */
   function setIdEtablissement($entite, $etab) {
 
@@ -310,6 +313,7 @@ class CCDADocumentCDA extends CCDAClasseCda{
    */
   function setDocumentationOF($clinicalDoc) {
     $docItem = self::$docItem;
+    /** @var CConsultation $object CConsultation*/
     $object = $docItem->_ref_object;
     $object->loadRefPraticien();
 

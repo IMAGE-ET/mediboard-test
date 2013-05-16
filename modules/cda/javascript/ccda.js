@@ -36,19 +36,19 @@ Ccda = {
   testInsc : function(action) {
     switch (action) {
       case "auto" :
-        var url = new Url("cda", "ajax_test_insc_auto");
-        url.requestUpdate("test_insc");
+        new Url("cda", "ajax_test_insc_auto")
+          .requestUpdate("test_insc");
         break;
       case "manuel" :
         Ccda.readCarte(function (data) {
-          var url = new Url("cda", "ajax_test_insc_manuel");
-          url.addParam("listPerson", data);
-          url.requestUpdate("test_insc");
+          new Url("cda", "ajax_test_insc_manuel")
+            .addParam("listPerson", data)
+            .requestUpdate("test_insc");
         });
         break;
       case "saisi" :
-        var url = new Url("cda", "ajax_test_insc_saisi");
-        url.requestUpdate("test_insc");
+        new Url("cda", "ajax_test_insc_saisi")
+          .requestUpdate("test_insc");
         break;
     }
   },

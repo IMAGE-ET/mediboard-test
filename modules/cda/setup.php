@@ -9,7 +9,13 @@
  * @version    $Revision$
  */
 
+/**
+ * Class CSetupcda
+ */
 class CSetupcda extends CSetup {
+  /**
+   * @see parent::__construct
+   */
   function __construct() {
     parent::__construct();
     

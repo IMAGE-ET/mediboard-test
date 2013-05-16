@@ -29,17 +29,6 @@ class CCDAActRelationshipCDA extends CCDADocumentCDA {
   }
 
   /**
-   * Création documentOf
-   *
-   * @return CCDAPOCD_MT000040_DocumentationOf
-   */
-  function setDocumentOf() {
-    $documentOf = new CCDAPOCD_MT000040_DocumentationOf();
-    $documentOf->setServiceEvent(parent::$act->setServiceEvent());
-    return $documentOf;
-  }
-
-  /**
    * Création componentOf
    *
    * @return CCDAPOCD_MT000040_Component1

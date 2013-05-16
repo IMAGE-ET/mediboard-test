@@ -44,6 +44,7 @@ class CCDA_Datatype_Set extends CCDA_Datatype {
   public function getData() {
     $listdata = "";
     foreach ($this->listData as $_tel) {
+      /** @var CCDA_Datatype $_tel*/
       $listdata .= $_tel->getData()." ";
     }
     $listdata = substr($listdata, 0, strlen($listdata)-1);

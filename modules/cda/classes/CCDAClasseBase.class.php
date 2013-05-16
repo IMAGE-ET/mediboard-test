@@ -17,6 +17,30 @@
 class CCDAClasseBase {
 
   /**
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
+  function getProps() {
+  }
+
+  /**
+   * Récupère le nom de la classe
+   *
+   * @return String
+   */
+  function getNameClass() {
+  }
+
+  /**
+   * Retourne la données
+   *
+   * @return String
+   */
+  function getData(){
+  }
+
+  /**
    * Retourne le résultat de la validation par le xsd de la classe appellée
    *
    * @return bool
@@ -62,7 +86,7 @@ class CCDAClasseBase {
    * @param null $nameParent String
    * @param null $namespace  String
    *
-   * @return DOMDocument
+   * @return CCDADomDocument
    */
   function toXML($nameParent = null, $namespace = null) {
 
@@ -86,6 +110,7 @@ class CCDAClasseBase {
     //On parcours les specs
     foreach ($spec as $key => $value) {
       //on récupère une instance d'une classe stocké dans la variable
+      /** @var CCDA_Datatype $classInstance */
       $classInstance = $this->$key;
       //on effectue différente action selon ce qui est définir dans la prop XML
       switch ($value["xml"]) {
@@ -112,6 +137,7 @@ class CCDAClasseBase {
           //on vérifie si l'instance est un tableau
           if (is_array($classInstance)) {
             //on parcours les différentes instance
+            /** @var CCDA_Datatype[] $classInstance */
             foreach ($classInstance as $_class) {
               //on récupère le code xml de l'instance en spécifiant le nom du noeud racine
               $xmlClass = $_class->toXML($key, $namespace);

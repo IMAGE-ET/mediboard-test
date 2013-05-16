@@ -151,9 +151,11 @@ class CCDAActCDA extends CCDADocumentCDA {
 
     $docItem = parent::$docItem;
     $object = $docItem->_ref_object;
-
+    $ivl = "";
+    $praticien = "";
     switch (get_class($object)) {
       case "CSejour":
+        /** @var CSejour $object CSejour*/
         $praticien = $object->loadRefPraticien();
         $low = $object->entree_reelle;
         if (!$low) {
@@ -169,12 +171,14 @@ class CCDAActCDA extends CCDADocumentCDA {
 
         break;
       case "COperation":
+        /** @var COperation $object COperation*/
         $praticien = $object->loadRefChir();
         $ivl = $this->createIvlTs($object->debut_op, $object->fin_op);
         $encompassingEncounter->setEffectiveTime($ivl);
 
         break;
       case "CConsultation":
+        /** @var CConsultation $object CConsultation*/
         $object->loadRefPlageConsult();
         $praticien = $object->loadRefPraticien();
         $ivl = $this->createIvlTs($object->_datetime, $object->_date_fin, true);

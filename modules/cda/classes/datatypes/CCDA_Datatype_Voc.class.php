@@ -58,6 +58,7 @@ class CCDA_Datatype_Voc extends CCDA_base_cs {
     $enumerations = array_merge($this->_enumeration, $enumerations);
     foreach ($this->_union as $_union) {
       $_union = "CCDA".$_union;
+      /** @var CCDA_Datatype_voc $_truc */
       $_truc = new $_union;
       $enumerations = array_merge($enumerations, $_truc->getEnumeration());
     }
@@ -112,7 +113,9 @@ class CCDA_Datatype_Voc extends CCDA_base_cs {
     $union = $this->getUnion();
     if ($union) {
       $unionName = "CCDA".$union[0];
+      /** @var CCDA_Datatype_Voc $unionClass */
       $unionClass = new $unionName;
+
       $unionEnum = $unionClass->getEnumeration(true);
       if ($unionEnum) {
         $this->setData($unionEnum[0]);

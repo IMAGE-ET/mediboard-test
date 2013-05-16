@@ -19,8 +19,8 @@ class CCDARoleCDA extends CCDADocumentCDA {
   /**
    * Affectation champ pour les fonction de type assigned
    *
-   * @param Object  &$assigned Object
-   * @param IPerson $mediUser  Iperson
+   * @param CCDAPOCD_MT000040_AssignedAuthor $assigned CCDAPOCD_MT000040_AssignedAuthor
+   * @param CPerson                          $mediUser Cperson
    *
    * @return void
    */
@@ -41,7 +41,7 @@ class CCDARoleCDA extends CCDADocumentCDA {
   /**
    * Création du role de l'auteur
    *
-   * @param CUser $mediUser CUser
+   * @param CUser|CMediUsers $mediUser CUser|CMediUsers
    *
    * @return CCDAPOCD_MT000040_AssignedAuthor
    */
@@ -119,8 +119,8 @@ class CCDARoleCDA extends CCDADocumentCDA {
   /**
    * Création de l'assignedEntity
    *
-   * @param CUser   $user         CUser
-   * @param boolean $organization false
+   * @param CUser|CMediUsers $user         CUser|CMediUsers
+   * @param boolean          $organization false
    *
    * @return CCDAPOCD_MT000040_AssignedEntity
    */
@@ -137,6 +137,11 @@ class CCDARoleCDA extends CCDADocumentCDA {
     return $assignedEntity;
   }
 
+  /**
+   * Retourne un HealthCareFacility
+   *
+   * @return CCDAPOCD_MT000040_HealthCareFacility
+   */
   function setHealthCareFacility() {
     $healt = new CCDAPOCD_MT000040_HealthCareFacility();
 

@@ -113,7 +113,7 @@ class CCDAEntiteCDA extends CCDADocumentCDA {
     $birthPostalCode = $patient->cp_naissance;
 
     if (!$birthPlace && !$birthPostalCode) {
-      return;
+      return null;
     }
 
     $ad = new CCDAAD();

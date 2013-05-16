@@ -47,4 +47,3 @@ $locales['test automatic'] = 'Test automatique';
 $locales['test manuel'] = 'Test manuel';
 $locales['test saisi'] = 'Test avec saisie';
 $locales['validation'] = 'Validation';
-?>

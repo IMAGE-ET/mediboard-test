@@ -57,12 +57,12 @@ class CCDARIMAct extends CCDAClasseCda{
   public $statusCode;
 
   /**
-   * @var CCDAGTS
+   * @var CCDAIVL_TS
    */
   public $effectiveTime;
 
   /**
-   * @var CCDAGTS
+   * @var CCDAIVL_TS
    */
   public $activityTime;
 

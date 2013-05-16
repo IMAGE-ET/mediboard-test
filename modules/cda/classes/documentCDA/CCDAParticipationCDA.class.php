@@ -25,14 +25,18 @@ class CCDAParticipationCDA extends CCDADocumentCDA {
     $docItem = parent::$docItem;
     $author = new CCDAPOCD_MT000040_Author();
     $object = $docItem->loadTargetObject();
+    $praticien = "";
     switch (get_class($object)) {
       case "CSejour":
+        /** @var CSejour $object CSejour*/
         $praticien = $object->loadRefPraticien();
         break;
       case "COperation":
+        /** @var COperation $object COperation*/
         $praticien = $object->loadRefChir();
         break;
       case "CConsultation":
+        /** @var CConsultation $object CConsultation*/
         $praticien = $object->loadRefPraticien();
         break;
     }
@@ -83,14 +87,18 @@ class CCDAParticipationCDA extends CCDADocumentCDA {
     $cs->setCode("S");
     $legalAuthenticator->setSignatureCode($cs);
     $object = $docItem->loadTargetObject();
+    $praticien = "";
     switch (get_class($object)) {
       case "CSejour":
+        /** @var CSejour $object CSejour*/
         $praticien = $object->loadRefPraticien();
         break;
       case "COperation":
+        /** @var COperation $object COperation*/
         $praticien = $object->loadRefChir();
         break;
       case "CConsultation":
+        /** @var CConsultation $object CConsultation*/
         $praticien = $object->loadRefPraticien();
         break;
     }
@@ -98,6 +106,13 @@ class CCDAParticipationCDA extends CCDADocumentCDA {
     return $legalAuthenticator;
   }
 
+  /**
+   * Création de la location
+   *
+   * @param CUser|CMediUsers $user CUser|CMediUsers
+   *
+   * @return CCDAPOCD_MT000040_Location
+   */
   function setLocation($user) {
     $location = new CCDAPOCD_MT000040_Location();
 

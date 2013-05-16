@@ -15,21 +15,20 @@
  */
 class CCdaTools {
 
-  public $contain   = null;
-  public $validate  = null;
-  public $validateSchematron = null;
-
-  public $xml       = null;
+  public $contain;
+  public $validate;
+  public $validateSchematron;
+  public $xml;
 
   /**
    * @var CMbXMLDocument
    */
-  public $domschema = null;
+  public $domschema;
 
   /**
    * @var CMbXPath
    */
-  public $xpath     = null;
+  public $xpath;
 
   /**
    * Permet de récupérer les attributs d'un noeud xml sous forme de tableau
@@ -223,6 +222,13 @@ class CCdaTools {
     return preg_replace('/\)$/', "  )", preg_replace("/\d+ => /", "  ", var_export($array, true)));
   }
 
+  /**
+   * Valide le xml avec le schématron
+   *
+   * @param String $xml String
+   *
+   * @return void;
+   */
   function validateSchematron($xml) {
     $baseDir = dirname(__DIR__)."/resources";
     $cmd = escapeshellarg("java");
@@ -335,6 +341,7 @@ class CCdaTools {
       $_file = CMbArray::get(explode(".", $_file), 0);
       $_file = substr($_file, strrpos($_file, "/")+1);
       //on créé une instance de la classe
+      /** @var CCDAClasseBase $instanceClass */
       $instanceClass = new $_file;
       //on récupère le nom quisera égale au type et au nom de l'élément
       $_file = $instanceClass->getNameClass();
@@ -404,6 +411,7 @@ class CCdaTools {
     foreach ($file as $_file) {
       $_file = CMbArray::get(explode(".", $_file), 0);
       $_file = substr($_file, strrpos($_file, "/")+1);
+      /** @var CCDA_Datatype_Base $class */
       $class = new $_file;
       $result[$class->getNameClass()] = $class->test();
     }
@@ -454,6 +462,7 @@ class CCdaTools {
     foreach ($file as $_file) {
       $_file = CMbArray::get(explode(".", $_file), 0);
       $_file = substr($_file, strrpos($_file, "/")+1);
+      /** @var CCDAClasseBase $class */
       $class = new $_file;
       array_push($result, $class->getNameClass());
     }
@@ -485,6 +494,7 @@ class CCdaTools {
     $nodeList = $xpath->query("//xs:complexType[@abstract]|xs:simpleType[@abstract]");
 
     foreach ($nodeList as $_node) {
+      /** @var DOMElement $_node */
       $_node->removeAttribute("abstract");
     }
 
@@ -507,6 +517,8 @@ class CCdaTools {
    * @return Array
    */
   function createPropsForElement($elements, $tabVariable, $tabProps) {
+    $nameAttribute = "";
+    $typeAttribute = "";
     foreach ($elements as $_element) {
       $attributes = $_element->attributes;
       $typeXML = "xml|element";
@@ -595,7 +607,7 @@ class CCdaTools {
     foreach ($nodeList as $_node) {
       $tabVariable = array();
       $tabProps = array();
-
+      /** @var DOMElement $_node */
       $elements = $_node->getElementsByTagName("element");
       $nodeAttributes = $_node->getElementsByTagName("attribute");
       $nameNode = $_node->attributes->getNamedItem("name")->nodeValue;

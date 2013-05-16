@@ -8,7 +8,7 @@
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
- 
+
 /**
  * A unique identifier string is a character string which
  * identifies an object in a globally unique and timeless
@@ -34,6 +34,7 @@ class CCDA_base_uid extends CCDA_Datatype_Base {
     $pattern = "";
     foreach ($this->union as $_union) {
       $_union = "CCDA_base_".$_union;
+      /** @var CCDAClasseBase $class */
       $class = new $_union;
       $spec = $class->getSpecs();
       $pattern .= $spec["data"]["pattern"];
@@ -42,10 +43,10 @@ class CCDA_base_uid extends CCDA_Datatype_Base {
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
 
