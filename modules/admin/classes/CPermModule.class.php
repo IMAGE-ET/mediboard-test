@@ -40,29 +40,39 @@ class CPermModule extends CMbObject {
   // Distant fields
   public $_owner;
   
-  // References
+  /** @var CUser */
   public $_ref_db_user;
+
+  /** @var CModule */
   public $_ref_db_module;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'perm_module';
     $spec->key   = 'perm_module_id';
     return $spec;
   }
-  
-  function getProps() {
-    $specs = parent::getProps();
-    $specs["user_id"]     = "ref notNull class|CUser cascade";
-    $specs["mod_id"]      = "ref class|CModule";
-    $specs["permission"]  = "enum list|0|1|2";
-    $specs["view"]        = "enum list|0|1|2";
 
-    $specs["_owner"]        = "enum list|user|template";
-    return $specs;
+  /**
+   * @see parent::getProps()
+   */
+  function getProps() {
+    $props = parent::getProps();
+    $props["user_id"]     = "ref notNull class|CUser cascade";
+    $props["mod_id"]      = "ref class|CModule";
+    $props["permission"]  = "enum list|0|1|2";
+    $props["view"]        = "enum list|0|1|2";
+
+    $props["_owner"]        = "enum list|user|template";
+    return $props;
   }
 
   /**
+   * Load module
+   *
    * @return CModule
    */
   function loadRefDBModule() {
@@ -70,20 +80,31 @@ class CPermModule extends CMbObject {
   }
 
   /**
+   * Load user
+   *
    * @return CUser
    */
   function loadRefDBUser() {
     return $this->_ref_db_user = $this->loadFwdRef("user_id", true);
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadRefDBModule();
     $this->loadRefDBUser();
   }
   
-  // Chargement des droits du user
+  /**
+   * Chargement des droits du user
+   *
+   * @param int $user_id The user to load the perms of
+   *
+   * @return self[]
+   */
   static function loadExactPerms($user_id = null){
-    $perm = new CPermModule;
+    $perm = new self();
     $where = array(
       "user_id" => "= '$user_id'"
     );
@@ -106,7 +127,7 @@ class CPermModule extends CMbObject {
       return;
     }
     
-    $perm = new CPermModule;
+    $perm = new self();
 
     // Profile specific permissions
     $perms["prof"] = array();
@@ -128,22 +149,33 @@ class CPermModule extends CMbObject {
         );
       }
     }
-  }  
-  
+  }
+
+  /**
+   * Load user permissions
+   *
+   * @param int $user_id The user's ID
+   *
+   * @return self[]
+   */
   static function loadUserPerms($user_id = null) {
     global $userPermsModules;
     
     // Déclaration du user
     $user = CUser::get($user_id);
 
-    // Declaration des tableaux de droits
+    /** @var self[] $permsFinal */
     $permsFinal = array();
+
+    /** @var self[] $tabModProfil */
     $tabModProfil = array();
+
+    /** @var self[] $tabModSelf */
     $tabModSelf = array();
     
     // Chargement des droits
     $permsProfil = CPermModule::loadExactPerms($user->profile_id);
-    $permsSelf = CPermModule::loadExactPerms($user->user_id);
+    $permsSelf   = CPermModule::loadExactPerms($user->user_id);
     
     // Creation du tableau de droit de permsSelf
     foreach ($permsSelf as $value) {
@@ -168,6 +200,8 @@ class CPermModule extends CMbObject {
 
     $listPermsModules = $permsFinal;
     if ($user_id !== null) {
+
+      /** @var self[] $currPermsModules */
       $currPermsModules = array();
       foreach ($listPermsModules as $perm_mod) {
         if (!$perm_mod->mod_id) {
@@ -180,6 +214,8 @@ class CPermModule extends CMbObject {
       return $currPermsModules;
     }
     else {
+
+      /** @var self[] $userPermsModules */
       $userPermsModules = array();
       foreach ($listPermsModules as $perm_mod) {
         if (!$perm_mod->mod_id) {
@@ -193,15 +229,43 @@ class CPermModule extends CMbObject {
       return $userPermsModules;
     }
   }
-  
+
+  /**
+   * Gets the permission on the module
+   *
+   * @param int $mod_id   Module ID
+   * @param int $permType Permission level
+   * @param int $user_id  User ID
+   *
+   * @return bool
+   */
   static function getPermModule($mod_id, $permType = null, $user_id = null) {
     return CPermModule::getInfoModule("permission", $mod_id, $permType, $user_id);
   }
-  
+
+  /**
+   * Gets the view access on the module
+   *
+   * @param int $mod_id   Module ID
+   * @param int $permType View level
+   * @param int $user_id  User ID
+   *
+   * @return bool
+   */
   static function getViewModule($mod_id, $permType = null, $user_id = null) {
     return CPermModule::getInfoModule("view", $mod_id, $permType, $user_id);
   }
-  
+
+  /**
+   * Gets the specifed access
+   *
+   * @param string $field    The type of acces to get information about
+   * @param int    $mod_id   Module ID
+   * @param int    $permType Permission level
+   * @param int    $user_id  User ID
+   *
+   * @return bool
+   */
   static function getInfoModule($field, $mod_id, $permType = null, $user_id = null) {
     $user = CUser::get($user_id);
   
@@ -253,7 +317,7 @@ class CPermModule extends CMbObject {
   }
 
   /**
-   *  Return the first visible module
+   * Return the first visible module
    *
    * @return bool|string The module name or false
    */
@@ -270,7 +334,7 @@ class CPermModule extends CMbObject {
   }
   
   /**
-   *  Return all the visible modules
+   * Return all the visible modules
    *
    * @return CModule[]
    */

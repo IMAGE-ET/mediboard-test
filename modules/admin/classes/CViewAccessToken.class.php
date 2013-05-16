@@ -24,7 +24,10 @@ class CViewAccessToken extends CMbObject {
   
   public $_ref_user;
   public $_url;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "view_access_token";
@@ -33,6 +36,9 @@ class CViewAccessToken extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["user_id"]        = "ref notNull class|CMediusers";
@@ -44,6 +50,9 @@ class CViewAccessToken extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     
@@ -63,6 +72,9 @@ class CViewAccessToken extends CMbObject {
     }
   }
 
+  /**
+   * @see parent::store()
+   */
   function store() {
     $this->completeField("datetime_start");
     if (!$this->datetime_start) {
@@ -75,7 +87,14 @@ class CViewAccessToken extends CMbObject {
     
     return parent::store();
   }
-  
+
+  /**
+   * Load a token by it's hash
+   *
+   * @param string $hash The hash
+   *
+   * @return CViewAccessToken
+   */
   static function getByHash($hash) {
     $token = new self;
     $token->hash = $hash;
@@ -146,7 +165,12 @@ class CViewAccessToken extends CMbObject {
       $_GET[$key] = $value;
     }
   }
-  
+
+  /**
+   * Marks the token as used
+   *
+   * @return void
+   */
   function useIt(){
     $this->completeField("first_use");
     
@@ -156,8 +180,12 @@ class CViewAccessToken extends CMbObject {
     
     $this->store();
   }
-  
+
   /**
+   * Load the token's user
+   *
+   * @param bool $cache Use object cache
+   *
    * @return CMediusers The user object
    */
   function loadRefUser($cache = true){

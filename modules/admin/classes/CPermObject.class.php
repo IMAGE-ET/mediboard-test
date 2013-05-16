@@ -42,47 +42,75 @@ class CPermObject extends CMbObject {
   // Distant fields
   public $_owner;
   
-  // References
+  /** @var CUser */
   public $_ref_db_user;
+
+  /** @var CStoredObject */
   public $_ref_db_object;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'perm_object';
     $spec->key   = 'perm_object_id';
     return $spec;
   }
-  
-  function getProps() {
-    $specs = parent::getProps();
-    $specs["user_id"]      = "ref notNull class|CUser cascade";
-    $specs["object_id"]    = "ref class|CStoredObject meta|object_class cascade";
-    $specs["object_class"] = "str notNull";
-    $specs["permission"]   = "enum list|0|1|2";
 
-    $specs["_owner"]        = "enum list|user|template";
-    return $specs;
+  /**
+   * @see parent::getProps()
+   */
+  function getProps() {
+    $props = parent::getProps();
+    $props["user_id"]      = "ref notNull class|CUser cascade";
+    $props["object_id"]    = "ref class|CStoredObject meta|object_class cascade";
+    $props["object_class"] = "str notNull";
+    $props["permission"]   = "enum list|0|1|2";
+
+    $props["_owner"]        = "enum list|user|template";
+    return $props;
   }
-  
+
+  /**
+   * Load referenced object
+   *
+   * @return CStoredObject
+   */
   function loadRefDBObject() {
     return $this->_ref_db_object = $this->loadFwdRef("object_id");
   }
 
+  /**
+   * Load the user
+   *
+   * @return CUser
+   */
   function loadRefDBUser() {
     return $this->_ref_db_user = $this->loadFwdRef("user_id");
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadRefDBObject();
     $this->loadRefDBUser();
   }
   
-  // Chargement des droits du user
+  /**
+   * Chargement des droits du user
+   *
+   * @param ref $user_id User ID
+   *
+   * @return self[]
+   */
   static function loadExactPermsObject($user_id = null){
-    $perm = new CPermObject;
+    $perm = new self();
     $where = array(
       "user_id" => "= '$user_id'"
     );
+
     return $perm->loadList($where);
   }
   
@@ -102,7 +130,7 @@ class CPermObject extends CMbObject {
       return;
     }
     
-    $perm = new CPermObject;
+    $perm = new self();
 
     // Profile specific permissions
     $perms["prof"] = array();
@@ -122,22 +150,30 @@ class CPermObject extends CMbObject {
       }
     }
   }
-  
-  // Those functions are statics
+
+  /**
+   * Load user permissions
+   *
+   * @param int $user_id The user's ID
+   *
+   * @return void FIXME Everything is put into global $userPermsObjects
+   */
   static function loadUserPerms($user_id = null) {
     global $userPermsObjects;
     
     // Déclaration du user
     $user = CUser::get($user_id);
 
-    //Declaration des tableaux de droits 
+    /** @var self[] $permsObjectFinal */
     $permsObjectFinal = array();
-    
-    // Declaration des tableaux de droits
+
+    /** @var self[] $tabObjectProfil */
     $tabObjectProfil = array();
+
+    /** @var self[] $tabObjectSelf */
     $tabObjectSelf = array();
     
-    //Chargement des droits
+    // Chargement des droits
     $permsObjectSelf = CPermObject::loadExactPermsObject($user->user_id);
     
     // Creation du tableau de droits du user
@@ -171,9 +207,18 @@ class CPermObject extends CMbObject {
         $userPermsObjects[$perm_obj->object_class][$perm_obj->object_id] = $perm_obj;
       }
     }
-    
   }
-  
+
+  /**
+   * Gets the permission on the module
+   *
+   * @param CStoredObject $object        Object to load the permissions of
+   * @param int           $permType      Permission level
+   * @param CStoredObject $defaultObject Default object to load the permissions from
+   * @param int           $user_id       User ID
+   *
+   * @return bool
+   */
   static function getPermObject(CStoredObject $object, $permType, $defaultObject = null, $user_id = null) {
     $user = CUser::get($user_id);
     
@@ -224,7 +269,10 @@ class CPermObject extends CMbObject {
       $defaultObject->getPerm($permType) :
       $object->_ref_module->getPerm($permType);
   }
-  
+
+  /**
+   * @see parent::check()
+   */
   function check() {
     $msg = null;
     $ds = $this->_spec->ds;
