@@ -1,33 +1,40 @@
 <?php
+/**
+ * $Id: CCompteRendu.class.php 19055 2013-05-07 14:09:27Z mytto $
+ *
+ * @package    Mediboard
+ * @subpackage CompteRendu
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: 19055 $
+ */
 
 /**
- * @package Mediboard
- * @subpackage dPcompteRendu
- * @version $Revision: $
- * @author
- */ 
-
+ * WkHtmlToPDF Converter
+ */
 class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
-  
-  var $file           = null;
-  var $width          = null;
-  var $height         = null;
-  var $format         = null;
-  var $header         = null;
-  var $header_height  = null;
-  var $header_spacing = 0;
-  var $footer         = null;
-  var $footer_height  = null;
-  var $footer_spacing = 0;
-  var $body           = null;
-  var $margins        = null;
-  var $temp_name      = null;
-  
+  public $file;
+  public $width;
+  public $height;
+  public $format;
+  public $header;
+  public $header_height;
+  public $header_spacing = 0;
+  public $footer;
+  public $footer_height;
+  public $footer_spacing = 0;
+  public $body;
+  public $margins;
+  public $temp_name;
+
+  /**
+   * @see parent::prepare()
+   */
   function prepare($format, $orientation) {
     global $rootName;
     
     // Changer les srs pour les images
-    $this->html = preg_replace("/src=\"\/".$rootName."/","src=\"../", $this->html);
+    $this->html = preg_replace("/src=\"\/".$rootName."/", "src=\"../", $this->html);
     
     if (is_array($format)) {
       $this->width  = $format[2];
@@ -42,14 +49,14 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     $this->temp_name = tempnam("./tmp", "wkhtmltopdf");
     
     // Extraire les marges
-    preg_match("/@page\s*{\s*margin-top:\s*([0-9.]+)cm;\s*margin-right:\s*([0-9.]+)cm;\s*margin-bottom:\s*([0-9.]+)cm;\s*margin-left:\s*([0-9.]+)cm;/", $this->html,$matches);
+    preg_match("/@page\s*{\s*margin-top:\s*([0-9.]+)cm;\s*margin-right:\s*([0-9.]+)cm;\s*margin-bottom:\s*([0-9.]+)cm;\s*margin-left:\s*([0-9.]+)cm;/", $this->html, $matches);
     
     // Le facteur 10 est pour la conversion en mm
     $this->margins = array(
       "top"    => $matches[1] * 10,
       "right"  => $matches[2] * 10,
       "bottom" => $matches[3] * 10,
-      "left"   => $matches[4] * 10
+      "left"   => $matches[4] * 10,
     );
     
     $pos_header = strpos($this->html, "<div id=\"header\"");
@@ -199,7 +206,6 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     
     $this->result = file_get_contents($result);
     
-    
     // Supression des fichiers temporaires
     @unlink($this->temp_name);
     @unlink($this->header);
@@ -207,6 +213,4 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     @unlink($this->file);
     @unlink($result);
   }
-
 }
-?>

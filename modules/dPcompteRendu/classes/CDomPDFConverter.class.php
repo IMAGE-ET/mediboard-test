@@ -14,8 +14,8 @@
  * Cette classe n'est pas un MbObject et les objets ne sont pas enregistrés en base
  */
 class CDomPDFConverter extends CHtmlToPDFConverter {
-  
-  var $dompdf = null;
+  /** @var DOMPDF */
+  public $dompdf;
   
   /**
    * Préparation de dompdf pour la conversion
@@ -48,6 +48,4 @@ class CDomPDFConverter extends CHtmlToPDFConverter {
     $this->dompdf->render();
     $this->result = $this->dompdf->output();
   }
-  
 }
-?>

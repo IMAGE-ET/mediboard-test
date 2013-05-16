@@ -13,27 +13,27 @@
  * Gestion avancée de documents (destinataires, listes de choix, etc.)
  */
 class CTemplateManager {
-  var $editor = "ckeditor";
+  public $editor = "ckeditor";
 
-  var $sections      = array();
-  var $helpers       = array();
-  var $lists         = array();
-  var $graphs        = array();
-  var $textes_libres = array();
+  public $sections      = array();
+  public $helpers       = array();
+  public $lists         = array();
+  public $graphs        = array();
+  public $textes_libres = array();
 
-  var $template      = null;
-  var $document      = null;
-  var $usedLists     = array();
-  var $isCourrier    = null;
+  public $template;
+  public $document;
+  public $usedLists     = array();
+  public $isCourrier;
 
-  var $valueMode     = true; // @todo : changer en applyMode
-  var $isModele      = true;
-  var $printMode     = false;
-  var $simplifyMode  = false;
-  var $parameters    = array();
-  var $font          = null;
-  var $size          = null;
-  var $destinataires = array();
+  public $valueMode     = true; // @todo : changer en applyMode
+  public $isModele      = true;
+  public $printMode     = false;
+  public $simplifyMode  = false;
+  public $parameters    = array();
+  public $font;
+  public $size;
+  public $destinataires = array();
 
   private static $barcodeCache = array();
 
@@ -323,7 +323,7 @@ class CTemplateManager {
    */
   function makeList($items) {
     if (!$items) {
-      return;
+      return null;
     }
 
     // Make a list out of a string
@@ -437,11 +437,6 @@ class CTemplateManager {
       $this->renderDocument($template->_source);
     }
     else {
-      /** FIXME: ?? */
-      if (!$this->valueMode) {
-        $this->setFields("hospitalisation");
-      }
-
       $this->renderDocument($template->_source);
     }
   }
@@ -522,8 +517,14 @@ class CTemplateManager {
 
     // Chargement des aides
     $aide = new CAideSaisie();
+
+    /** @var CAideSaisie $aidesUser */
     $aidesUser   = $aide->loadList($whereUser, $order);
+
+    /** @var CAideSaisie $aidesFunc */
     $aidesFunc   = $aide->loadList($whereFunc, $order);
+
+    /** @var CAideSaisie $aidesGroup */
     $aidesGroup  = $aide->loadList($whereGroup, $order);
 
     $this->helpers["Aide de l'utilisateur"] = array();
@@ -546,9 +547,17 @@ class CTemplateManager {
     }
   }
 
+  /**
+   * Get the data URI of a barcode
+   *
+   * @param string $code    Code
+   * @param array  $options Options
+   *
+   * @return null|string
+   */
   function getBarcodeDataUri($code, $options) {
     if (!$code) {
-      return;
+      return null;
     }
 
     $size = "{$options['width']}x{$options['width']}";
@@ -618,11 +627,17 @@ class CTemplateManager {
     }
   }
 
-  // Obtention des listes utilisées dans le document
+  /**
+   * Obtention des listes utilisées dans le document
+   *
+   * @param CListeChoix[] $lists Listes de choix
+   *
+   * @return CListeChoix[]
+   */
   function getUsedLists($lists) {
     $this->usedLists = array();
-    foreach ($lists as $value) {
 
+    foreach ($lists as $value) {
       // Remplacer 039 par 39 car ckeditor remplace ' par &#39;
       $nom = str_replace("#039;", "#39;", CMbString::htmlEntities(stripslashes("[Liste - $value->nom]"), ENT_QUOTES));
       $pos = strpos($this->document, $nom);
@@ -630,11 +645,16 @@ class CTemplateManager {
         $this->usedLists[$pos] = $value;
       }
     }
+
     ksort($this->usedLists);
     return $this->usedLists;
   }
 
-  // Vérification s'il s'agit d'un courrier
+  /**
+   * Vérification s'il s'agit d'un courrier
+   *
+   * @return bool
+   */
   function isCourrier() {
     $pos = strpos($this->document, "[Courrier -");
     if ($pos) {

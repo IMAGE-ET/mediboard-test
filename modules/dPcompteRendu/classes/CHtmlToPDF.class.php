@@ -18,10 +18,10 @@ if (!is_dir("lib/dompdf")) {
  * Cette classe n'est pas un MbObject et les objets ne sont pas enregistrés en base
  */
 class CHtmlToPDF {
+  public $nbpages;
+  public $content;
 
-  var $nbpages = null;
-  var $content = null;
-  var $display_elem = array (
+  public $display_elem = array (
     "inline" => array(
       "b", "strong", "big", "blink", "cite", "code", "del", "dfn",
       "em", "font", "i", "ins", "kbd", "nobr", "q", "s", "samp", "small",
@@ -61,7 +61,9 @@ class CHtmlToPDF {
   );
   
   /**
-   * Constructeur standard
+   * Constructeur à partir d'une factory
+   *
+   * @param string $factory Factory name
    */
   function __construct($factory = null) {
     if (!$factory) {
@@ -218,11 +220,11 @@ class CHtmlToPDF {
    * Correction récursive d'éléments de display inline qui imbriquent
    * des éléments de display block
    * 
-   * @param DomNode &$node noeud à parcourir
+   * @param DOMElement|DOMNode &$node noeud à parcourir
    * 
    * @return void
    */
-  function recursiveRemove(DomNode &$node) {
+  function recursiveRemove(DOMNode &$node) {
     if (!$node->hasChildNodes()) {
       return;
     }
@@ -250,15 +252,16 @@ class CHtmlToPDF {
    *   largeur en cm : 21
    *   largeur en pixels : 595.28
    *   
-   * @param DomNode &$node noeud à parcourir
+   * @param DOMElement|DOMNode &$node noeud à parcourir
    * 
    * @return void
    */
-  function resizeTable(DomNode &$node) {
+  function resizeTable(DOMNode &$node) {
     if (!$node->hasChildNodes()) {
       return;
     }
-    
+
+    /** @var DOMElement $_child */
     foreach ($node->childNodes as $_child) {
       if ($_child->nodeName == "table") {
         $width = $_child->getAttribute("width");
@@ -280,14 +283,16 @@ class CHtmlToPDF {
   /**
    * Suppression d'attribut d'aligmement de tableau
    * 
-   * @param DomNode &$node noeud à parcourir
+   * @param DOMElement|DOMNode &$node noeud à parcourir
    * 
    * @return void
    */
-  function removeAlign(DomNode &$node) {
+  function removeAlign(DOMNode &$node) {
     if (!$node->hasChildNodes()) {
       return;
     }
+
+    /** @var DOMElement $_child */
     foreach ($node->childNodes as $_child) {
       if ($_child->nodeName == "table") {
         if ($_child->getAttribute("align") == "left" || $_child->getAttribute("align") == "right") {
@@ -301,14 +306,15 @@ class CHtmlToPDF {
   /**
    * Suppression des balises fonts imbriquées
    *  
-   * @param DomNode &$node noeud à parcourir
+   * @param DOMNode &$node noeud à parcourir
    * 
    * @return void
    */
-  function recursiveRemoveNestedFont(DomNode &$node) {
+  function recursiveRemoveNestedFont(DOMNode &$node) {
     if (!$node->hasChildNodes()) {
       return;
     }
+
     foreach ($node->childNodes as $child) {
       if ($node->nodeName == "font" && $child->nodeName == "font" &&
           $node->firstChild && 

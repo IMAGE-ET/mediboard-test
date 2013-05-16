@@ -20,9 +20,12 @@ class CModeleToPack extends CMbObject {
   public $modele_id;
   public $pack_id;
   
-  // Referenced objects
+  /** @var CCompteRendu */
   public $_ref_modele;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'modele_to_pack';
@@ -30,14 +33,20 @@ class CModeleToPack extends CMbObject {
     $spec->uniques['document'] = array('modele_id', 'pack_id');
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["modele_id"] = "ref class|CCompteRendu";
     $specs["pack_id"]   = "ref class|CPack cascade";
     return $specs;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
     $this->_view = $this->loadRefModele()->nom;

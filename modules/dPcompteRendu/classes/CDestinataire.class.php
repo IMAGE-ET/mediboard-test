@@ -1,9 +1,9 @@
 <?php
 /**
  * $Id$
- * 
+ *
  * @package    Mediboard
- * @subpackage dPcompteRendu
+ * @subpackage CompteRendu
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
@@ -14,13 +14,13 @@
  * Cette classe n'est pas un MbObject et les objets ne sont pas enregistrés en base
  */
 class CDestinataire {
-  var $nom = null;
-  var $adresse = null;
-  var $cpville = null;
-  var $email = null;
-  var $email_apicrypt = null;
-  var $tag = null;
-  var $_guid_object = null;
+  public $nom;
+  public $adresse;
+  public $cpville;
+  public $email;
+  public $email_apicrypt;
+  public $tag;
+  public $_guid_object;
   
   static $destByClass = array();
   static $_patient = null;
@@ -43,8 +43,6 @@ class CDestinataire {
    * @return void
    */
   static function makeFor(CMbObject &$mbObject, $tag = null) {
-    $destinataires = array();
-
     if (!$mbObject->_id) {
       return;
     }
@@ -103,7 +101,6 @@ class CDestinataire {
       $dest->_guid_object = $medecin->_guid;
       self::$destByClass[$mbObject->_class][$medecin->_id] = $dest;
     }
-    
   }
 
   /**
@@ -162,4 +159,3 @@ class CDestinataire {
     }
   }
 }
-?>

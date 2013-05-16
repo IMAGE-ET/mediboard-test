@@ -15,39 +15,48 @@
  */
 class CAideSaisie extends CMbObject {
   // DB Table key
-  var $aide_id = null;
+  public $aide_id;
 
   // DB References
-  var $user_id            = null;
-  var $function_id        = null;
-  var $group_id           = null;
+  public $user_id;
+  public $function_id;
+  public $group_id;
 
   // DB fields
-  var $class              = null;
-  var $field              = null;
-  var $name               = null;
-  var $text               = null;
-  var $depend_value_1     = null;
-  var $depend_value_2     = null;
-  
+  public $class;
+  public $field;
+  public $name;
+  public $text;
+  public $depend_value_1;
+  public $depend_value_2;
+
   // Form Fields
-  var $_depend_field_1    = null;
-  var $_depend_field_2    = null;
-  var $_owner             = null;
-  var $_vw_depend_field_1 = null;
-  var $_vw_depend_field_2 = null;
-  var $_is_ref_dp_1       = null;
-  var $_is_ref_dp_2       = null;
-  var $_class_dp_1        = null;
-  var $_class_dp_2        = null;
-  var $_applied           = null;
-  
-  // Referenced objects
-  var $_ref_user          = null;
-  var $_ref_function      = null;
-  var $_ref_group         = null;
-  var $_ref_owner         = null;
-  
+  public $_depend_field_1;
+  public $_depend_field_2;
+  public $_owner;
+  public $_vw_depend_field_1;
+  public $_vw_depend_field_2;
+  public $_is_ref_dp_1;
+  public $_is_ref_dp_2;
+  public $_class_dp_1;
+  public $_class_dp_2;
+  public $_applied;
+
+  /** @var CMediusers */
+  public $_ref_user;
+
+  /** @var CFunctions */
+  public $_ref_function;
+
+  /** @var CGroups */
+  public $_ref_group;
+
+  /** @var CMediusers|CFunctions|CGroups */
+  public $_ref_owner;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'aide_saisie';
@@ -55,29 +64,32 @@ class CAideSaisie extends CMbObject {
     $spec->xor["owner"] = array("user_id", "function_id", "group_id");
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
-    $specs = parent::getProps();
-    $specs["user_id"]      = "ref class|CMediusers";
-    $specs["function_id"]  = "ref class|CFunctions";
-    $specs["group_id"]     = "ref class|CGroups";
-    
-    $specs["class"]        = "str notNull";
-    $specs["field"]        = "str notNull";
-    $specs["name"]         = "str notNull seekable";
-    $specs["text"]         = "text notNull seekable";
-    $specs["depend_value_1"] = "str";
-    $specs["depend_value_2"] = "str";
-    
-    $specs["_depend_field_1"] = "str";
-    $specs["_depend_field_2"] = "str";
-    $specs["_vw_depend_field_1"] = "str";
-    $specs["_vw_depend_field_2"] = "str";
-    $specs["_owner"]          = "enum list|user|func|etab";
-    
-    return $specs;
+    $props = parent::getProps();
+    $props["user_id"]      = "ref class|CMediusers";
+    $props["function_id"]  = "ref class|CFunctions";
+    $props["group_id"]     = "ref class|CGroups";
+
+    $props["class"]        = "str notNull";
+    $props["field"]        = "str notNull";
+    $props["name"]         = "str notNull seekable";
+    $props["text"]         = "text notNull seekable";
+    $props["depend_value_1"] = "str";
+    $props["depend_value_2"] = "str";
+
+    $props["_depend_field_1"] = "str";
+    $props["_depend_field_2"] = "str";
+    $props["_vw_depend_field_1"] = "str";
+    $props["_vw_depend_field_2"] = "str";
+    $props["_owner"]          = "enum list|user|func|etab";
+
+    return $props;
   }
-  
+
   /**
    * Vérifie l'unicité d'une aide à la saisie
    * 
@@ -85,9 +97,9 @@ class CAideSaisie extends CMbObject {
    */
   function check() {
     $msg = "";
-    
+
     $ds = $this->_spec->ds;
-    
+
     $where = array();
     if ($this->user_id) {
       $where["user_id"] = $ds->prepare("= %", $this->user_id);
@@ -98,33 +110,36 @@ class CAideSaisie extends CMbObject {
     else {
       $where["group_id"] = $ds->prepare("= %", $this->group_id);
     }
-      
+
     $where["class"]          = $ds->prepare("= %",  $this->class);
     $where["field"]          = $ds->prepare("= %",  $this->field);
     $where["depend_value_1"] = $ds->prepare("= %",  $this->depend_value_1);
     $where["depend_value_2"] = $ds->prepare("= %",  $this->depend_value_2);
     $where["text"]           = $ds->prepare("= %",  $this->text);
     $where["aide_id"]        = $ds->prepare("!= %", $this->aide_id);
-    
+
     $sql = new CRequest();
     $sql->addSelect("count(aide_id)");
     $sql->addTable("aide_saisie");
     $sql->addWhere($where);
-    
+
     $nb_result = $ds->loadResult($sql->getRequest());
-    
+
     if ($nb_result) {
       $msg .= "Cette aide existe déjà<br />";
     }
-    
+
     return $msg . parent::check();
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
-    
+
     $this->_view = $this->name;
-    
+
     // Owner
     if ($this->user_id ) {
       $this->_owner = "user";
@@ -135,22 +150,22 @@ class CAideSaisie extends CMbObject {
     if ($this->group_id) {
       $this->_owner = "etab"; 
     }
-    
+
     // Depend fields
     if ($this->class) {
       $object = new $this->class;
       $helped = $object->_specs[$this->field]->helped;
       $this->_depend_field_1 = isset($helped[0]) ? $helped[0] : null; 
       $this->_depend_field_2 = isset($helped[1]) ? $helped[1] : null;
-      
-      switch($this->class) {
+
+      switch ($this->class) {
         case "CTransmissionMedicale":
           $this->_class_dp_2 = "CCategoryPrescription";
           break;
       }
     }
   }
-  
+
   /**
    * Charge l'utilisateur associé à l'aide
    * 
@@ -161,7 +176,7 @@ class CAideSaisie extends CMbObject {
   function loadRefUser($cached = true){
     return $this->_ref_user = $this->loadFwdRef("user_id", $cached);
   }
-  
+
   /**
    * Charge la fonction associée à l'aide
    * 
@@ -172,7 +187,7 @@ class CAideSaisie extends CMbObject {
   function loadRefFunction($cached = true){
     return $this->_ref_function = $this->loadFwdRef("function_id", $cached);
   }
-  
+
   /**
    * Charge l'établissement associé à l'aide
    * 
@@ -183,18 +198,21 @@ class CAideSaisie extends CMbObject {
   function loadRefGroup($cached = true){
     return $this->_ref_group = $this->loadFwdRef("group_id", $cached);
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadRefUser(true);
     $this->loadRefFunction(true);
     $this->loadRefGroup(true);
     $this->searchRefsObject();
   }
-  
+
   /**
    * Charge le propriétaire de l'aide
    * 
-   * @return CMediusers || CFunctions || CGroups
+   * @return CMediusers|CFunctions|CGroups|null
    */
   function loadRefOwner(){
     $this->loadRefsFwd();
@@ -207,12 +225,14 @@ class CAideSaisie extends CMbObject {
     if ($this->group_id) {
       return $this->_ref_owner = $this->_ref_group;
     }
+
+    return null;
   }
-  
+
   /**
    * Permission generic check
    * 
-   * @param Const $permType Type of permission : PERM_READ|PERM_EDIT|PERM_DENY
+   * @param int $permType Type of permission : PERM_READ|PERM_EDIT|PERM_DENY
    * 
    * @return boolean
    */
@@ -220,9 +240,10 @@ class CAideSaisie extends CMbObject {
     if (!$this->_ref_user) {
       $this->loadRefsFwd();
     }
+
     return $this->_ref_user->getPerm($permType);
   }
-  
+
   /**
    * Traduit les depend fields
    * 
@@ -231,16 +252,13 @@ class CAideSaisie extends CMbObject {
    * @return void
    */
   function loadViewDependValues($object) {
-    $this->_vw_depend_field_1 =
-      CAppUI::isTranslated("$object->_class.$this->_depend_field_1.$this->depend_value_1") ?
-        CAppUI::tr("$object->_class.$this->_depend_field_1.$this->depend_value_1") : 
-        $this->_vw_depend_field_1 = $this->depend_value_1;
-    $this->_vw_depend_field_2 =
-      CAppUI::isTranslated("$object->_class.$this->_depend_field_2.$this->depend_value_2") ?
-        CAppUI::tr("$object->_class.$this->_depend_field_2.$this->depend_value_2") : 
-        $this->_vw_depend_field_2 = $this->depend_value_2;
+    $locale = "$object->_class.$this->_depend_field_1.$this->depend_value_1";
+    $this->_vw_depend_field_1 = (CAppUI::isTranslated($locale) ? CAppUI::tr($locale) : $this->depend_value_1);
+
+    $locale = "$object->_class.$this->_depend_field_2.$this->depend_value_2";
+    $this->_vw_depend_field_2 = (CAppUI::isTranslated($locale) ? CAppUI::tr($locale) : $this->depend_value_2);
   }
-  
+
   /**
    * Charge les objets référencés par l'aide
    * 
@@ -249,7 +267,7 @@ class CAideSaisie extends CMbObject {
   function searchRefsObject() {
     $this->_is_ref_dp_1 = false;
     $this->_is_ref_dp_2 = false;
-    
+
     $object = new $this->class;
     $field = $this->field;
     $helped = array();
@@ -270,5 +288,3 @@ class CAideSaisie extends CMbObject {
     }
   }
 }
-
-?>

@@ -14,37 +14,46 @@
  */
 class CPack extends CMbObject {
   // DB Table key
-  var $pack_id       = null;
+  public $pack_id;
 
   // DB References
-  var $user_id       = null;
-  var $function_id   = null;
-  var $group_id      = null;
+  public $user_id;
+  public $function_id;
+  public $group_id;
 
   // DB fields
-  var $nom           = null;
-  var $object_class  = null;
-  var $fast_edit     = null;
-  var $fast_edit_pdf = null;
-  var $merge_docs    = null;
+  public $nom;
+  public $object_class;
+  public $fast_edit;
+  public $fast_edit_pdf;
+  public $merge_docs;
   
   // Form fields
-  var $_modeles      = null;
-  var $_new          = null;
-  var $_del          = null;
-  var $_source       = null;
-  var $_object_class = null;
-  var $_owner        = null;
-  var $_header_found = null;
-  var $_footer_found = null;
-  var $_modeles_ids  = null;
-  
-  // Referenced objects
-  var $_ref_owner    = null;
-  var $_ref_user     = null;
-  var $_ref_function = null;
-  var $_ref_group    = null;
-  
+  public $_modeles;
+  public $_new;
+  public $_del;
+  public $_source;
+  public $_object_class;
+  public $_owner;
+  public $_header_found;
+  public $_footer_found;
+  public $_modeles_ids;
+
+  /** @var CMediusers */
+  public $_ref_user;
+
+  /** @var CFunctions */
+  public $_ref_function;
+
+  /** @var CGroups */
+  public $_ref_group;
+
+  /** @var CMediusers|CFunctions|CGroups */
+  public $_ref_owner;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'pack';
@@ -53,6 +62,9 @@ class CPack extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["user_id"]       = "ref class|CMediusers";
@@ -66,7 +78,10 @@ class CPack extends CMbObject {
     $specs["_owner"]        = "enum list|user|func|etab";
     return $specs;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["modele_links"] = "CModeleToPack pack_id";
@@ -74,21 +89,35 @@ class CPack extends CMbObject {
   }
   
   function loadRefOwner() {
-    $this->_ref_user     = $this->loadFwdRef("user_id"    );
+    $this->_ref_user     = $this->loadFwdRef("user_id");
     $this->_ref_function = $this->loadFwdRef("function_id");
-    $this->_ref_group    = $this->loadFwdRef("group_id"   );
+    $this->_ref_group    = $this->loadFwdRef("group_id");
     
-    if ($this->_ref_user->_id    ) $this->_ref_owner = $this->_ref_user    ;
-    if ($this->_ref_function->_id) $this->_ref_owner = $this->_ref_function;
-    if ($this->_ref_group->_id   ) $this->_ref_owner = $this->_ref_group   ;
+    if ($this->_ref_user->_id) {
+      $this->_ref_owner = $this->_ref_user;
+    }
+
+    if ($this->_ref_function->_id) {
+      $this->_ref_owner = $this->_ref_function;
+    }
+
+    if ($this->_ref_group->_id) {
+      $this->_ref_owner = $this->_ref_group;
+    }
     
     return $this->_ref_owner;
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadRefOwner();
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;
@@ -96,12 +125,15 @@ class CPack extends CMbObject {
     if ($this->user_id) {
       $this->_owner = "user";
     }
+
     if ($this->function_id) {
       $this->_owner = "func";
     }
+
     if ($this->group_id) {
       $this->_owner = "etab";
     }
+
     if (!$this->_object_class) {
       $this->_object_class = "COperation";
     }
@@ -118,6 +150,8 @@ class CPack extends CMbObject {
 
     if (count($this->_back['modele_links']) > 0) {
       $last_key = end(array_keys($this->_back['modele_links']));
+
+      /** @var CModeleToPack $_modeletopack */
       foreach ($this->_back['modele_links'] as $key => $_modeletopack) {
         $modele = $_modeletopack->_ref_modele;
         $modele->loadContent();
@@ -153,9 +187,9 @@ class CPack extends CMbObject {
   /**
    * Charge les packs pour un propriétaire donné
    * 
-   * @param object $id           identifiant du propriétaire
-   * @param object $owner        [optional]
-   * @param object $object_class [optional]
+   * @param int    $id           identifiant du propriétaire
+   * @param string $owner        [optional]
+   * @param string $object_class [optional]
    * 
    * @todo: refactor this to be in a super class
    * 
@@ -250,7 +284,7 @@ class CPack extends CMbObject {
     $header_id = null;
     $footer_id = null;
     
-    foreach($this->_back['modele_links'] as $mod) {
+    foreach ($this->_back['modele_links'] as $mod) {
       $modele = $mod->_ref_modele;
       
       if ($modele->header_id || $modele->footer_id) {
@@ -278,7 +312,10 @@ class CPack extends CMbObject {
       $this->_footer_found->load($footer_id);
     }
   }
-  
+
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     if (!$this->_ref_user) {
       $this->loadRefsFwd();
@@ -296,5 +333,3 @@ class CPack extends CMbObject {
     $this->_modeles_ids = $ds->loadColumn($request->getRequest());
   }
 }
-
-?>

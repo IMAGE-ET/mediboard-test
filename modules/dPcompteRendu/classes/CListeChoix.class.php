@@ -1,38 +1,52 @@
-<?php /* $Id$ */
+<?php
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage CompteRendu
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
+ * Listes de choix
+ */
 class CListeChoix extends CMbObject {
   // DB Table key
-  var $liste_choix_id = null;
+  public $liste_choix_id;
 
   // DB References
-  var $user_id     = null; // not null when associated to a user
-  var $function_id = null; // not null when associated to a function
-  var $group_id    = null; // not null when associated to a group
+  public $user_id; // not null when associated to a user
+  public $function_id; // not null when associated to a function
+  public $group_id; // not null when associated to a group
 
   // DB fields
-  var $nom             = null;
-  var $valeurs         = null;
-  var $compte_rendu_id = null;
+  public $nom;
+  public $valeurs;
+  public $compte_rendu_id;
   
   // Form fields
-  var $_valeurs = null;
-  var $_new     = null;
-  var $_del     = null;
-  var $_owner   = null;
+  public $_valeurs;
+  public $_new;
+  public $_del;
+  public $_owner;
   
-  // Referenced objects
-  var $_ref_user     = null;
-  var $_ref_function = null;
-  var $_ref_group    = null;
-  var $_ref_modele   = null;
+  /** @var CMediusers */
+  public $_ref_user;
 
+  /** @var CFunctions */
+  public $_ref_function;
+
+  /** @var CGroups */
+  public $_ref_group;
+
+  /** @var CCompteRendu */
+  public $_ref_modele;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'liste_choix';
@@ -41,6 +55,9 @@ class CListeChoix extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["user_id"]         = "ref class|CMediusers";
@@ -53,19 +70,33 @@ class CListeChoix extends CMbObject {
     $props["_owner"]           = "enum list|prat|func|etab";
     return $props;
   }
-  
+
+  /**
+   * @return CMediusers
+   */
   function loadRefUser() {
     return $this->_ref_user = $this->loadFwdRef("user_id", true);
   }
-  
+
+  /**
+   * @return CFunctions
+   */
   function loadRefFunction() {
     return $this->_ref_function = $this->loadFwdRef("function_id", true);
   }
-  
+
+  /**
+   * @return CGroups
+   */
   function loadRefGroup() {
     return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
-  
+
+  /**
+   * Charge le propriétaire de la liste
+   *
+   * @return CMediusers|CFunctions|CGroups
+   */
   function loadRefOwner() {
     return CValue::first(
       $this->loadRefUser(),
@@ -73,45 +104,75 @@ class CListeChoix extends CMbObject {
       $this->loadRefGroup()
     );
   }
-  
+
+  /**
+   * Charge le modèle associé
+   *
+   * @return CCompteRendu
+   */
   function loadRefModele() {
     return $this->_ref_modele = $this->loadFwdRef("compte_rendu_id", true);
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;
     $this->_valeurs = $this->valeurs != "" ? explode("|", $this->valeurs) : array();
     natcasesort($this->_valeurs);
 
-    if ($this->user_id    ) $this->_owner = "prat";
-    if ($this->function_id) $this->_owner = "func";
-    if ($this->group_id   ) $this->_owner = "etab";
+    if ($this->user_id) {
+      $this->_owner = "prat";
+    }
 
+    if ($this->function_id) {
+      $this->_owner = "func";
+    }
+
+    if ($this->group_id) {
+      $this->_owner = "etab";
+    }
   }
-  
+
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
-    if($this->_new !== null) {
+    if ($this->_new !== null) {
       $this->updateFormFields();
       $this->_valeurs[] = trim($this->_new);
       natcasesort($this->_valeurs);
       $this->valeurs = implode("|", $this->_valeurs);
     }
-    if($this->_del !== null) {
+
+    if ($this->_del !== null) {
       $this->updateFormFields();
-      foreach($this->_valeurs as $key => $value) {
-        if(trim($this->_del) == trim($value))
+      foreach ($this->_valeurs as $key => $value) {
+        if (trim($this->_del) == trim($value)) {
           unset($this->_valeurs[$key]);
+        }
       }
       $this->valeurs = implode("|", $this->_valeurs);
     }
   }
-  
+
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
-    $owner = $this->loadRefsOwner();
+    $owner = $this->loadRefOwner();
     return $owner->getPerm($permType);
   }
-  
+
+  /**
+   * Charge les listes d'un utilisateur
+   *
+   * @param int $user_id User ID
+   *
+   * @return self[]
+   */
   static function loadAllFor($user_id) {
     $user = new CMediusers;
     $user->load($user_id);
@@ -123,5 +184,3 @@ class CListeChoix extends CMbObject {
     return $listes;
   }
 }
-
-?>
