@@ -30,7 +30,7 @@ foreach ($files["name"] as $index => $_file) {
   }
 
   try {
-    $source->addFile($files["tmp_name"][$index], "", $current_directory);
+    $source->addFile($files["tmp_name"][$index], $_file, $current_directory);
     $message["resultNumber"]++;
   }
   catch(CMbException $e) {
