@@ -103,10 +103,10 @@
   </td>
 </tr>
 <tr>
-  <td colspan="{{if $facture->dialyse}}3{{else}}2{{/if}}" id="refresh-assurance">
+  <td colspan="{{if $facture->_class == 'CFactureCabinet'}}2{{elseif $facture->dialyse}}3{{/if}}" id="refresh-assurance">
     {{mb_include module=facturation template="inc_vw_assurances"}}
   </td>
-  <td colspan="{{if $facture->dialyse}}4{{else}}5{{/if}}"></td>
+  <td colspan="{{if $facture->_class == 'CFactureCabinet'}}5{{elseif $facture->dialyse}}4{{/if}}"></td>
 </tr>
 
 {{if $facture->type_facture == "accident"}}

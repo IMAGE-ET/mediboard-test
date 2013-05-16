@@ -6,7 +6,7 @@
     <tr>
       <td style="text-align:right;">
       <button style="" type="button" class="add notext" onclick="Correspondant.edit(0, '{{$facture->_ref_patient->_id}}', refreshAssurance);"></button>
-      {{if !$facture->dialyse}}
+      {{if $facture->_class == "CFactureCabinet" || !$facture->dialyse}}
         {{assign var="type_assur" value=assurance_maladie}}
         {{if $facture->type_facture == "accident"}}
           {{assign var="type_assur" value=assurance_accident}}
@@ -27,7 +27,7 @@
       {{/if}}
     </tr>
     <tr>
-      {{if !$facture->dialyse}}
+      {{if $facture->_class == "CFactureCabinet" || !$facture->dialyse}}
         {{assign var="type_assur" value=send_assur_base}}
         {{if $facture->type_facture == "accident"}}
           {{assign var="type_assur" value=send_assur_compl}}
