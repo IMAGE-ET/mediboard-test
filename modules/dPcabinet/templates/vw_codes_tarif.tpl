@@ -54,11 +54,11 @@ Main.add(function () {
           <input type="text" name="quantite_{{$nom}}" value="1" style="width:20px;"/>
           <script>
             Main.add(function () {
-              getForm("modifTarif")["quantite_{{$nom}}"].addSpinner({min:1, step:1});
+              getForm("modifTarif")["quantite_{{$nom}}"].addSpinner({min:0, step:1});
             });
           </script>
         </td>
-        <td class="button"><button class="add notext" type="button" onclick="Code.addCode(this.form, this.form.code_{{$nom}}.value, '1', '{{$nom}}')"></button></td>
+        <td class="button"><button class="add notext" type="button" onclick="Code.addCode(this.form, this.form.code_{{$nom}}.value, this.form.quantite_{{$nom}}.value, '{{$nom}}')"></button></td>
       </tr>
       {{assign var=nom_code value=_codes_$nom}}
       {{foreach from=$tarif->$nom_code item=code}}
