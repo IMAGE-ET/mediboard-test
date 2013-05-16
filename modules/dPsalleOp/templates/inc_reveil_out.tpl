@@ -32,23 +32,26 @@
     <th>{{tr}}SSPI.SortieSalle{{/tr}}</th>
     <th>{{tr}}SSPI.EntreeReveil{{/tr}}</th>
     <th style="width: 15%">
-      <label style="float: right;">
-          <input type="checkbox" name="present_only_view" {{if $present_only}}checked{{/if}}
-                 onclick="$V($('present_only'), this.checked ? 1 : 0); refreshTabReveil('out');"/>
-          Présents seulement
+      {{tr}}SSPI.SortieReveil{{/tr}}
+      <br/>
+      <label>
+        <input type="checkbox" name="present_only_view" {{if $present_only}}checked{{/if}}
+               onclick="$V($('present_only'), this.checked ? 1 : 0); refreshTabReveil('out');"
+          />
+        Présents seulement
         <input type="hidden" id="present_only" value="{{$present_only}}" />
       </label>
-      {{tr}}SSPI.SortieReveil{{/tr}}
     </th>
     {{if $use_sortie_reveil_reel}}
       <th style="width: 15%">
-        <label style="float: right;">
+        {{tr}}SSPI.SortieReveilReel{{/tr}}
+        <br/>
+        <label>
           <input type="checkbox" name="present_only_reel_view" {{if $present_only_reel}}checked{{/if}}
                  onclick="$V($('present_only_reel'), this.checked ? 1 : 0); refreshTabReveil('out');"/>
           Présents seulement
           <input type="hidden" id="present_only_reel" value="{{$present_only_reel}}" />
         </label>
-        {{tr}}SSPI.SortieReveilReel{{/tr}}
       </th>
     {{/if}}
     <th class="narrow"></th>
