@@ -349,7 +349,7 @@ class Standard_Sniffs_Commenting_FunctionCommentSniff implements PHP_CodeSniffer
       $longestType        = 0;
       $longestVar         = 0;
 
-      foreach ($params as $param) {
+      foreach ($params as $paramPos => $param) {
 
         $paramComment = trim($param->getComment());
         $errorPos     = ($param->getLine() + $commentStart);
@@ -408,7 +408,16 @@ class Standard_Sniffs_Commenting_FunctionCommentSniff implements PHP_CodeSniffer
 
         // Make sure the names of the parameter comment matches the
         // actual parameter.
-        if (isset($realParams[($pos - 1)]) === true) {
+        if ($paramName == "...") {
+          if ($paramPos + 1 != count($params)) {
+            $data = array(
+              $pos,
+            );
+            $error = 'Non final variadic param doc comment at position %s';
+            $this->currentFile->addError($error, $errorPos, 'NonFinalVariadicParamComment', $data);
+          }
+        }
+        elseif (isset($realParams[($pos - 1)]) === true) {
           $realName      = $realParams[($pos - 1)]['name'];
           $foundParams[] = $realName;
 
@@ -425,20 +434,24 @@ class Standard_Sniffs_Commenting_FunctionCommentSniff implements PHP_CodeSniffer
               $pos,
             );
 
-            $error  = 'Doc comment for var %s does not match ';
+            $error  = 'Doc comment for var \'%s\' does not match ';
             if (strtolower($paramName) === strtolower($realName)) {
               $error .= 'case of ';
               $code   = 'ParamNameNoCaseMatch';
             }
 
-            $error .= 'actual variable name %s at position %s';
+            $error .= 'actual variable name \'%s\' at position %s';
 
             $this->currentFile->addError($error, $errorPos, $code, $data);
           }
         } else {
           // We must have an extra parameter comment.
-          $error = 'Superfluous doc comment at position '.$pos;
-          $this->currentFile->addError($error, $errorPos, 'ExtraParamComment');
+          $data = array(
+            $paramName == "...",
+            $pos,
+          );
+          $error = 'Superfluous \'%s\' doc comment at position %s';
+          $this->currentFile->addError($error, $errorPos, 'ExtraParamComment', $data);
         }
 
         if ($param->getVarName() === '') {
