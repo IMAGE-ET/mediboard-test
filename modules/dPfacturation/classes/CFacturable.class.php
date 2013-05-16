@@ -14,12 +14,10 @@
  *
  */
 class CFacturable extends CCodable {
-  
+
   /**
-   * getBackProps
-   * 
-   * @return $backProps
-  **/
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["facturable"]  = "CFactureLiaison object_id";

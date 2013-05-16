@@ -110,7 +110,7 @@ $smarty->assign("etat_cloture"  , $etat_cloture);
 $smarty->assign("etat_relance"  , $etat_relance);
 $smarty->assign("date"          , CMbDT::date());
 $smarty->assign("filter"        , $filter);
-$smarty->assign("no_finish_reglement" ,$no_finish_reglement);
-$smarty->assign("type_date_search"    ,$type_date_search);
+$smarty->assign("no_finish_reglement" , $no_finish_reglement);
+$smarty->assign("type_date_search"    , $type_date_search);
 
 $smarty->display("vw_factures.tpl");

@@ -28,24 +28,20 @@ class CRelance extends CMbMetaObject {
   public $_montant;
   // Object References
   public $_ref_object;
-  
+
   /**
-   * getSpec
-   * 
-   * @return $spec
-  **/
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'facture_relance';
     $spec->key   = 'relance_id';
     return $spec;
   }
-  
+
   /**
-   * getProps
-   * 
-   * @return $props
-  **/
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["object_class"]  = "enum notNull list|CFactureCabinet|CFactureEtablissement default|CFactureCabinet";
@@ -59,10 +55,8 @@ class CRelance extends CMbMetaObject {
   }
   
   /**
-   * updateFormFields
-   * 
-   * @return void
-  **/
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = "Relance du ".$this->date;

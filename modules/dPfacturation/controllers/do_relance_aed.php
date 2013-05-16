@@ -27,9 +27,9 @@ if ($_date_min) {
   $factures = $facture->loadList($where);
   
   foreach ($factures as $key => $_facture) {
-  $_facture->loadRefsObjects();
-  $_facture->loadRefsReglements();
-  $_facture->loadRefsRelances();
+    $_facture->loadRefsObjects();
+    $_facture->loadRefsReglements();
+    $_facture->loadRefsRelances();
     if (!$_facture->_is_relancable || count($_facture->_ref_relances)+1 < $type_relance) {
       unset($factures[$key]);
     }

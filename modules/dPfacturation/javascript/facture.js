@@ -8,13 +8,12 @@ window.Facture = {
     url.addParam('facture_id'		, facture_id);
     url.requestUpdate('load_facture');
   },
-  modifCloture: function(oForm) {
-    onSubmitFormAjax(oForm, {
+  modifCloture: function(form) {
+    onSubmitFormAjax(form, {
       onComplete : function() {
         var url = new Url('facturation' , 'ajax_view_facture');
-        url.addParam('facture_id'		  , oForm.facture_id.value);
-        url.addParam('facture_class'	  , oForm.facture_class.value);
-        url.addParam('not_load_banque'    , oForm.not_load_banque.value);
+        url.addElement(form.facture_id);
+        url.addParam('object_class'	, form.facture_class.value);
         url.requestUpdate('load_facture');
     }
     });
@@ -25,12 +24,12 @@ window.Facture = {
     url.addParam('facture_class' , facture_class);
     url.requestUpdate('reglements_facture');
   },
-  cut: function(oForm) {
-    onSubmitFormAjax(oForm, {
+  cut: function(form) {
+    onSubmitFormAjax(form, {
       onComplete : function() {
         var url = new Url('facturation', 'ajax_view_facture');
-        url.addParam('facture_id'    , oForm.facture_id.value);
-        url.addParam('object_class'  , oForm.facture_class.value);
+        url.addElement(form.facture_id);
+        url.addParam('object_class'  , form.facture_class.value);
         url.requestUpdate("load_facture");
         Facture.modal.close();
       }

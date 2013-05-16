@@ -20,24 +20,20 @@ class CFactureEtablissement extends CFacture {
   // DB Fields
   public $dialyse;
   public $temporaire;
-      
+  
   /**
-   * getSpec
-   * 
-   * @return $spec
-  **/
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'facture_etablissement';
     $spec->key   = 'facture_id';
     return $spec;
   }
-    
+  
   /**
-   * getBackProps
-   * 
-   * @return $backProps
-  **/
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["reglements_fact_etab"] = "CReglement object_id";
@@ -45,24 +41,20 @@ class CFactureEtablissement extends CFacture {
     $backProps["facture_liaison_etab"] = "CFactureLiaison facture_id";
     return $backProps;
   }
-   
+  
   /**
-   * getProps
-   * 
-   * @return $props
-  **/
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["dialyse"]     = "bool default|0";
     $props["temporaire"]  = "bool default|0";
     return $props;
   }
-     
+  
   /**
-   * updateFormFields
-   * 
-   * @return void
-  **/
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = sprintf("SE%08d", $this->_id);

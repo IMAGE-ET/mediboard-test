@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
 onSubmitReglement = function(form) {
   return onSubmitFormAjax(form, { 
     onComplete: function() { 
@@ -20,14 +20,12 @@ onSubmitReglement = function(form) {
             </a>
           </th>
         </tr>
-
         <!-- Praticiens concernés -->
         {{foreach from=$listPrat item=_prat}}
         <tr>
           <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_prat}}</td>
         </tr>
         {{/foreach}}
-
       </table>
     </td>
     

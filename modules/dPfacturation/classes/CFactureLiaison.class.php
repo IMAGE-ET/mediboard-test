@@ -26,33 +26,28 @@ class CFactureLiaison extends CMbMetaObject {
   // Object References
   public $_ref_facture;
   public $_ref_facturable;
+  
   /**
-   * getSpec
-   * 
-   * @return $spec
-  **/
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'facture_liaison';
     $spec->key   = 'facture_liaison_id';
     return $spec;
   }
-    
+  
   /**
-   * getBackProps
-   * 
-   * @return $backProps
-  **/
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     return $backProps;
   }
-   
+  
   /**
-   * getProps
-   * 
-   * @return $props
-  **/
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["facture_id"]    = "ref notNull class|CFacture meta|facture_class";

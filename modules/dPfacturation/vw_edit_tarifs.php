@@ -1,5 +1,5 @@
 <?php 
-/*
+/**
  * $Id$
  *
  * @package    Mediboard

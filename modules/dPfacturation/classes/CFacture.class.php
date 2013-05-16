@@ -90,21 +90,17 @@ class CFacture extends CMbObject {
   public $_ref_actes_ccam   = array();
   
   /**
-   * getBackProps
-   * 
-   * @return $backProps
-  **/
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["items"] = "CFactureItem object_id";
     return $backProps;
   }
-   
+  
   /**
-   * getProps
-   * 
-   * @return $props
-  **/
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["patient_id"]    = "ref class|CPatient purgeable seekable notNull show|1";

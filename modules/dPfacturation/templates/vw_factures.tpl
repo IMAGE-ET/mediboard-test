@@ -68,7 +68,7 @@ Main.add(function () {
           <input type="text" name="_pat_name" style="width: 15em;" value="{{$patient->_view}}" readonly="readonly" ondblclick="PatSelector.init()" />
           <button class="cancel notext" type="button" onclick="$V(this.form._pat_name,''); $V(this.form.patient_id,'')"></button>
           <button class="search notext" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
-          <script type="text/javascript">
+          <script>
             PatSelector.init = function(){
               this.sForm = "choice-facture";
               this.sId   = "patient_id";

@@ -63,13 +63,9 @@
               </td>
               <td>
                 {{if $_plage->_ref_remplacant->_id}}
-                  <span class="mediuser" onmouseover="ObjectTooltip.createEx(this, '{{$_plage->_ref_remplacant->_guid}}')">
-                    {{$_plage->_ref_remplacant->_view}}
-                  </span>
+                  {{mb_include module=mediusers template=inc_vw_mediuser  mediuser=$_plage->_ref_remplacant}}
                 {{elseif $_plage->_ref_pour_compte->_id}}
-                  <span class="mediuser" onmouseover="ObjectTooltip.createEx(this, '{{$_plage->_ref_chir->_guid}}')">
-                    {{$_plage->_ref_chir->_view}}
-                  </span>
+                  {{mb_include module=mediusers template=inc_vw_mediuser  mediuser=$_plage->_ref_chir}}
                 {{/if}}
               </td>
               <td class="text">

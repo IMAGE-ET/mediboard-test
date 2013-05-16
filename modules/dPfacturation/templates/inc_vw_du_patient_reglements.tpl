@@ -24,7 +24,7 @@
       case "BVR":
         BVR.show();
         $V(banque_id, "");
-        
+        break;
       default:
         $V(banque_id, "");
     }
@@ -150,7 +150,7 @@
       <td>
         <input type="hidden" name="date_{{$_reglement->_id}}" class="{{$_reglement->_props.date}}" value="{{$_reglement->date}}" />
         <button type="button" class="submit notext" onclick="editReglementDate('{{$_reglement->_id}}', this.up('td').down('input[name=date_{{$_reglement->_id}}]').value);"></button>
-        <script type="text/javascript">
+        <script>
           Main.add(function(){
             Calendar.regField(getForm("reglement-add").date_{{$_reglement->_id}});
           });

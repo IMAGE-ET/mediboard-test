@@ -23,7 +23,7 @@ $reglement = new CReglement();
 // Chargement des banques
 $orderBanque = "nom ASC";
 $banque = new CBanque();
-$banques = $banque->loadList(null,$orderBanque);
+$banques = $banque->loadList(null, $orderBanque);
 
 // Création du template
 $smarty = new CSmartyDP();

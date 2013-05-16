@@ -46,10 +46,8 @@ class CFactureItem extends CMbMetaObject {
   public $_ttc;
   
   /**
-   * getSpec
-   * 
-   * @return $spec
-  **/
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'factureitem';
@@ -58,10 +56,8 @@ class CFactureItem extends CMbMetaObject {
   }
   
   /**
-   * getProps
-   * 
-   * @return $props
-  **/
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["object_id"] = "ref notNull class|CFacture meta|object_class";
@@ -85,10 +81,8 @@ class CFactureItem extends CMbMetaObject {
   }
   
   /**
-   * getSpec
-   * 
-   * @return $spec
-  **/
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_montant_facture = $this->montant_base + $this->montant_depassement;

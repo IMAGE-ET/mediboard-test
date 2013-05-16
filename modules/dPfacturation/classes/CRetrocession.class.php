@@ -32,34 +32,20 @@ class CRetrocession extends CMbObject {
   // Object References
   public $_ref_praticien;
   public $_ref_acte;
-  
+
   /**
-   * getSpec
-   * 
-   * @return $spec
-  **/
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'retrocession';
     $spec->key   = 'retrocession_id';
     return $spec;
   }
-    
+
   /**
-   * getBackProps
-   * 
-   * @return $backProps
-  **/
-  function getBackProps() {
-    $backProps = parent::getBackProps();
-    return $backProps;
-  }
-   
-  /**
-   * getProps
-   * 
-   * @return $props
-  **/
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["praticien_id"]= "ref notNull class|CMediusers";
@@ -76,10 +62,8 @@ class CRetrocession extends CMbObject {
   }
   
   /**
-   * updateFormFields
-   * 
-   * @return void
-  **/
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;
@@ -90,7 +74,7 @@ class CRetrocession extends CMbObject {
    * Chargement du praticien de la rétrocession
    * 
    * @return $this->_ref_praticien
-  **/
+   */
   function loadRefPraticien(){
     if (!$this->_ref_praticien) {
       $this->_ref_praticien = $this->loadFwdRef("praticien_id", true);
@@ -102,7 +86,7 @@ class CRetrocession extends CMbObject {
    * Chargement de l'acte correspondant au code
    * 
    * @return $this->_ref_acte
-  **/
+   */
   function loadRefCode(){
     if (!$this->_ref_acte) {
       $this->_ref_acte = new $this->code_class;
@@ -115,8 +99,10 @@ class CRetrocession extends CMbObject {
   /**
    * Mise à jour du montant total de la rétrocession
    * 
+   * @param string $code code pour mettre à jour
+   * 
    * @return $this->_ref_acte
-  **/
+   */
   function updateMontant ($code = "") {
     $this->_montant_total = 0;
     if ($code == $this->code || !$code) {
@@ -131,13 +117,14 @@ class CRetrocession extends CMbObject {
       elseif (($this->code_class == "CActeTarmed" || $this->code_class == "CActeCaisse") &&
             CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
         $_code = $this->loadRefCode();
-        $pm = $this->code_class == "CActeTarmed" ? $_code->_ref_tarmed->tp_al * $_code->_ref_tarmed->f_al : $_code->_ref_prestation_caisse->pt_medical;
-        $pt = $this->code_class == "CActeTarmed" ? $_code->_ref_tarmed->tp_tl * $_code->_ref_tarmed->f_tl : $_code->_ref_prestation_caisse->pt_technique;
+        $tarmed = $_code->_ref_tarmed;
+        $pm = $this->code_class == "CActeTarmed" ? $tarmed->tp_al * $tarmed->f_al : $_code->_ref_prestation_caisse->pt_medical;
+        $pt = $this->code_class == "CActeTarmed" ? $tarmed->tp_tl * $tarmed->f_tl : $_code->_ref_prestation_caisse->pt_technique;
         
         $this->_montant_total = $pm * $this->pct_pm + $pt * $this->pct_pt;
       }
     }
-    $this->_montant_total = round($this->_montant_total ,2);
+    $this->_montant_total = round($this->_montant_total, 2);
     return $this->_montant_total;
   }
   

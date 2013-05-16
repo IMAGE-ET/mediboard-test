@@ -18,7 +18,7 @@ $etat_relance       = CValue::getOrSession("etat_relance", 0);
 $facture_id         = CValue::getOrSession("facture_id");
 $patient_id         = CValue::getOrSession("patient_id");
 $no_finish_reglement= CValue::getOrSession("no_finish_reglement", 0);
-$type_date_search   = CValue::getOrSession("type_date_search", "cloture");
+$type_date_search   = CValue::getOrSession("type_date_search", "ouverture");
 $chirSel            = CValue::getOrSession("chirSel", "-1");
 
 // Liste des chirurgiens
@@ -114,7 +114,7 @@ $smarty->assign("etat_cotation"  , $etat_cotation);
 $smarty->assign("etat_relance"  , $etat_relance);
 $smarty->assign("date"          , CMbDT::date());
 $smarty->assign("filter"        , $filter);
-$smarty->assign("no_finish_reglement" ,$no_finish_reglement);
+$smarty->assign("no_finish_reglement" , $no_finish_reglement);
 $smarty->assign("type_date_search"    , $type_date_search);
 
 $smarty->display("vw_factures.tpl");
