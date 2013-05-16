@@ -1,45 +1,59 @@
 <?php
-
 /**
- * @package Mediboard
- * @subpackage dPcabinet
- * @version $Revision$
- * @author Alexis Granger
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * Class CBanque
+ */
 class CBanque extends CMbObject {
-  // DB Table key
-  var $banque_id = null;
+  public $banque_id;
 
   // DB fields
-  var $nom         = null;
-  var $description = null;
-  
+  public $nom;
+  public $description;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'banque';
     $spec->key   = 'banque_id';
     return $spec;
   }
-  
-  function getProps() {
-  	$specs = parent::getProps();
-    $specs["nom"]         = "str notNull seekable";
-    $specs["description"] = "str seekable";
-    return $specs;
-  }
-  
-	function getBackProps() {
-	  $backProps = parent::getBackProps();
-	  $backProps['users']      = 'CMediusers banque_id';
-	  $backProps['reglements'] = 'CReglement banque_id';
-	  return $backProps;
-	}
 
+  /**
+   * @see parent::getProps()
+   */
+  function getProps() {
+    $props = parent::getProps();
+    $props["nom"]         = "str notNull seekable";
+    $props["description"] = "str seekable";
+    return $props;
+  }
+
+  /**
+   * @see parent::getBackProps()
+   */
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps['users']      = 'CMediusers banque_id';
+    $backProps['reglements'] = 'CReglement banque_id';
+    return $backProps;
+  }
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;
   }
 }
-
-?>

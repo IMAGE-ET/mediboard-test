@@ -68,8 +68,8 @@ class CFactureCabinet extends CFacture {
   /**
    * Redéfinition du store
    * 
-   * @return void
-  **/
+   * @return string|null
+   */
   function store() {
     $this->loadRefsConsultation();
     // A vérifier pour le == 0 s'il faut faire un traitement
@@ -88,24 +88,20 @@ class CFactureCabinet extends CFacture {
   
     $this->loadRefsRelances();
     $this->loadRefsReglements();
-    // Standard store
-    if ($msg = parent::store()) {
-      return $msg;
-    }
+
+    return parent::store();
   }
   
   /**
    * Redéfinition du delete
-   * 
-   * @return void
-  **/
+   *
+   * @return string|null
+   */
   function delete() {
     $this->loadRefsReglements();
     $this->loadRefsRelances();
-    // Standard delete
-    if ($msg = parent::delete()) {
-      return $msg;
-    }
+
+    return parent::delete();
   }
   
   //Ne pas supprimer cette fonction!

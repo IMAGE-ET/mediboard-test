@@ -1,13 +1,14 @@
-<?php 
+<?php
 /**
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPcabinet
+ * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
+
 
 /**
  * Les règlements
@@ -29,8 +30,10 @@ class CReglement extends CMbMetaObject {
   public $reference;
   public $num_bvr;
   
-  // Fwd References
+  /** @var CBanque */
   public $_ref_banque;
+
+  /** @var CFacture */
   public $_ref_facture;
   
   var $_update_facture = true;
@@ -53,32 +56,32 @@ class CReglement extends CMbMetaObject {
    * @return $props
   **/
   function getProps() {
-    $specs = parent::getProps();
-    $specs['object_class']    = 'enum notNull list|CFactureCabinet|CFactureEtablissement show|0 default|CFactureCabinet';
-    $specs['banque_id']       = 'ref class|CBanque';
-    $specs['date']            = 'dateTime notNull';
-    $specs['montant']         = 'currency notNull';
-    $specs['emetteur']        = 'enum notNull list|patient|tiers';
-    $specs['mode']            = 'enum notNull list|cheque|CB|especes|virement|BVR|autre default|cheque';
-    $specs['reference']       = 'str';
-    $specs['num_bvr']         = 'str';
-    return $specs;
+    $props = parent::getProps();
+    $props['object_class']    = 'enum notNull list|CFactureCabinet|CFactureEtablissement show|0 default|CFactureCabinet';
+    $props['banque_id']       = 'ref class|CBanque';
+    $props['date']            = 'dateTime notNull';
+    $props['montant']         = 'currency notNull';
+    $props['emetteur']        = 'enum notNull list|patient|tiers';
+    $props['mode']            = 'enum notNull list|cheque|CB|especes|virement|BVR|autre default|cheque';
+    $props['reference']       = 'str';
+    $props['num_bvr']         = 'str';
+    return $props;
   }
   
   /**
    * Accesseur sur la banque
    * 
-   * @return array La banque
+   * @return CBanque La banque
    */
   function loadRefBanque() {
-    $this->_ref_banque = $this->loadFwdRef("banque_id", true);
+    return $this->_ref_banque = $this->loadFwdRef("banque_id", true);
   }
   
   /**
    * loadRefsFwd
    * 
    * @return void
-  **/
+   */
   function loadRefsFwd() {
     $this->loadTargetObject();
     $this->loadRefBanque();
@@ -87,8 +90,8 @@ class CReglement extends CMbMetaObject {
   /**
    * Vérification des champs
    * 
-   * @return void
-  **/
+   * @return string|null
+   */
   function check() {
     if ($msg = parent::check()) {
       return $msg;
@@ -103,6 +106,7 @@ class CReglement extends CMbMetaObject {
     if (!$this->mode) {
       return 'Le mode de paiment ne doit pas être nul';
     }
+
     $this->loadRefsFwd();
   }
   
@@ -122,7 +126,7 @@ class CReglement extends CMbMetaObject {
   /**
    * Acquite la facture automatiquement
    * 
-   * @return Store-like message
+   * @return string|null
    */
   function acquiteFacture() {
     $this->loadRefsFwd();
@@ -146,21 +150,22 @@ class CReglement extends CMbMetaObject {
   /**
    * Redéfinition du store
    * 
-   * @return void
-  **/
+   * @return string|null
+   */
   function store() {
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
     }
+
     return $this->acquiteFacture();
   }
   
   /**
    * Redéfinition du delete
    * 
-   * @return void
-  **/
+   * @return string|null
+   */
   function delete() {
     // Preload consultation
     $this->load();
@@ -170,6 +175,7 @@ class CReglement extends CMbMetaObject {
     if ($msg = parent::delete()) {
       return $msg;
     }
+
     return $this->acquiteFacture();
   }
   
@@ -177,5 +183,3 @@ class CReglement extends CMbMetaObject {
     return $this->loadTargetObject()->getPerm($permType);
   }
 }
-
-?>

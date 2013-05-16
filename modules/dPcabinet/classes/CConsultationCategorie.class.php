@@ -1,31 +1,36 @@
 <?php
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Alexis Granger
-*/
-
+ * Class CConsultationCategorie
+ */
 class CConsultationCategorie extends CMbObject {
-  var $categorie_id = null;
+  public $categorie_id;
 
   // DB References
-  var $function_id = null;
-   
+  public $function_id;
+
   // DB fields
-  var $nom_categorie = null;
-  var $nom_icone     = null;
-  var $duree         = null;
-  var $commentaire   = null;
-  
+  public $nom_categorie;
+  public $nom_icone;
+  public $duree;
+  public $commentaire;
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'consultation_cat';
     $spec->key   = 'categorie_id';
     return $spec;
   }
-  
+
   function getProps() {
     $specs = parent::getProps();
     $specs["function_id"]   = "ref notNull class|CFunctions";
@@ -35,7 +40,7 @@ class CConsultationCategorie extends CMbObject {
     $specs["commentaire"]   = "text helped seekable";
     return $specs;
   }
-  
+
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["consultations"] = "CConsultation categorie_id";

@@ -1,16 +1,15 @@
-<?php 
+<?php
 /**
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPcabinet
+ * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
 class CActeNGAP extends CActe {
-  // DB Table key
   public $acte_ngap_id; 
   
   // DB fields
@@ -92,6 +91,7 @@ class CActeNGAP extends CActe {
   
   /**
    * CActe redefinition
+   *
    * @return string Serialised full code
    */
   function makeFullCode() {
@@ -100,14 +100,16 @@ class CActeNGAP extends CActe {
         "-". $this->code.
         "-". $this->coefficient.
         "-". $this->montant_base.
-        "-". str_replace("-","*", $this->montant_depassement).
+        "-". str_replace("-", "*", $this->montant_depassement).
         "-". $this->demi.
         "-". $this->complement; 
   }
 
   /**
    * CActe redefinition
+   *
    * @param string $code Serialised full code
+   *
    * @return void
    */
   function setFullCode($code) {
@@ -122,7 +124,7 @@ class CActeNGAP extends CActe {
     }
 
     if (count($details) >= 5) {
-      $this->montant_depassement = str_replace("*","-",$details[4]);
+      $this->montant_depassement = str_replace("*", "-", $details[4]);
     }
     
     if (count($details) >= 6) {
@@ -197,11 +199,11 @@ class CActeNGAP extends CActe {
      
     $hash = $ds->loadHash($query);
     if ($hash) {
-     $this->_libelle   = $hash['libelle'];
-     /* on récupère au passage la lettre cle pour l'utiliser 
-      * dans le remplissage automatique de ce champ dans la cotation 
-      */
-     $this->lettre_cle = $hash['lettre_cle']; 
+      $this->_libelle = $hash['libelle'];
+      /* on récupère au passage la lettre cle pour l'utiliser
+       * dans le remplissage automatique de ce champ dans la cotation
+       */
+      $this->lettre_cle = $hash['lettre_cle'];
     }
     return $this->_libelle;
   }
@@ -209,11 +211,11 @@ class CActeNGAP extends CActe {
   /**
    * Création d'un item de facture pour un code ngap
    * 
-   * @param string $facture la facture
-   * @param string $date    date à défaut
+   * @param CFacture $facture la facture
+   * @param string   $date    date à défaut
    * 
-   * @return void
-  **/
+   * @return string|null
+   */
   function creationItemsFacture($facture, $date) {
     $ligne = new CFactureItem();
     $ligne->libelle       = $this->_libelle;
@@ -226,8 +228,6 @@ class CActeNGAP extends CActe {
     $ligne->montant_depassement = $this->montant_depassement;
     $ligne->quantite      = $this->quantite;
     $ligne->coeff         = $this->coefficient;
-    if ($msg = $ligne->store()) {
-      return $msg;
-    }
+    return $ligne->store();
   }
 } 

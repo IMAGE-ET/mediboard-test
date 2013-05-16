@@ -1,11 +1,14 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
+
 
 class CPlageconsult extends CPlageHoraire {
   static $minutes = array();
@@ -15,46 +18,52 @@ class CPlageconsult extends CPlageHoraire {
   static $minutes_interval = null;
 
   // DB Table key
-  var $plageconsult_id = null;
+  public $plageconsult_id;
 
   // DB References
-  var $chir_id = null;
-  var $remplacant_id = null;
-  var $pour_compte_id = null;
+  public $chir_id;
+  public $remplacant_id;
+  public $pour_compte_id;
 
   // DB fields
-  var $freq    = null;
-  var $libelle = null;
-  var $locked  = null;
-  var $remplacant_ok = null;
-  var $desistee = null;
-  var $color = null;
-  var $pct_retrocession = null;
+  public $freq;
+  public $libelle;
+  public $locked;
+  public $remplacant_ok;
+  public $desistee;
+  public $color;
+  public $pct_retrocession;
 
   // Form fields
-  var $_freq                 = null;
-  var $_affected             = null;
-  var $_total                = null;
-  var $_fill_rate            = null;
-  var $_nb_patients          = null;
-  var $_consult_by_categorie = null;
-  var $_type_repeat          = null;
+  public $_freq;
+  public $_affected;
+  public $_total;
+  public $_fill_rate;
+  public $_nb_patients;
+  public $_consult_by_categorie;
+  public $_type_repeat;
 
   // Field pour le calcul de collision (fin à 00:00:00)
-  var $_fin = null;
+  public $_fin;
 
   // Filter fields
-  var $_date_min = null;
-  var $_date_max = null;
-  var $_function_id = null;
-  var $_other_function_id = null;
-  var $_user_id  = null;
+  public $_date_min;
+  public $_date_max;
+  public $_function_id;
+  public $_other_function_id;
+  public $_user_id;
 
-  // Object References
-  var $_ref_chir          = null;
-  var $_ref_consultations = null;
-  var $_ref_remplacant    = null;
-  var $_ref_pour_compte    = null;
+  /** @var CMediusers */
+  public $_ref_chir;
+
+  /** @var CConsultation[] */
+  public $_ref_consultations;
+
+  /** @var CMediusers */
+  public $_ref_remplacant;
+
+  /** @var CMediusers */
+  public $_ref_pour_compte;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -177,6 +186,7 @@ class CPlageconsult extends CPlageHoraire {
   function getUtilisation() {
     $this->loadRefsConsultations(false);
 
+    $utilisation = array();
     for ($i = $this->debut; $i < $this->fin; $i = CMbDT::addTime("+".$this->freq, $i)) {
       $utilisation[$i] = 0;
     }

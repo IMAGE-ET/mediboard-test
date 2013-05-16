@@ -1,57 +1,59 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 class CExamComp extends CMbObject {
-  // DB Table key
-  var $exam_id = null;
+  public $exam_id;
 
   // DB References
-  var $consultation_id = null;
+  public $consultation_id;
 
   // DB fields
-  var $examen      = null;
-  var $realisation = null;
-  var $fait        = null;
+  public $examen;
+  public $realisation;
+  public $fait;
 
-  // Fwd References
-  var $_ref_consult = null;
-  
+  /** @var CConsultation */
+  public $_ref_consult;
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'exams_comp';
     $spec->key   = 'exam_id';
     return $spec;
   }
-  
+
   function getProps() {
-  	$props = parent::getProps();
-		
+    $props = parent::getProps();
+
     $props["consultation_id"] = "ref notNull class|CConsultation";
-		$props["examen"]          = "text helped";
-		$props["realisation"]     = "enum notNull list|avant|pendant";
+    $props["examen"]          = "text helped";
+    $props["realisation"]     = "enum notNull list|avant|pendant";
     $props["fait"]            = "num min|0 max|1";
 
     return $props;
   }
-  
-	function updateFormFields() {
-		parent::updateFormFields();
-		$this->_view = $this->examen;
-	}
-	
+
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = $this->examen;
+  }
+
+  /**
+   * @return CConsultation
+   */
   function loadRefConsult() {
     return $this->_ref_consult = $this->loadFwdRef("consultation_id", true);
   }
-  
+
   function getPerm($permType) {
     return $this->loadRefConsult()->getPerm($permType);
   }
 }
-
-?>
