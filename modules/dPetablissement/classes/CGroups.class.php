@@ -67,6 +67,9 @@ class CGroups extends CMbObject {
   /** @var self */
   static $_ref_current = null;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'groups_mediboard';
@@ -74,6 +77,9 @@ class CGroups extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["aides_saisie"]              = "CAideSaisie group_id";
@@ -157,6 +163,9 @@ class CGroups extends CMbObject {
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -187,6 +196,9 @@ class CGroups extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields () {
     parent::updateFormFields();
     $this->_view = $this->text;
@@ -194,6 +206,9 @@ class CGroups extends CMbObject {
     $this->_cp_court = substr($this->cp, 0, 2);
   }
 
+  /**
+   * @see parent::store()
+   */
   function store(){
     $is_new = !$this->_id;
 
@@ -272,6 +287,9 @@ class CGroups extends CMbObject {
     return $this->_ref_postes = $postes;
   }
 
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack() {
     $this->loadFunctions();
   }
@@ -317,6 +335,9 @@ class CGroups extends CMbObject {
     return $groups;
   }
 
+  /**
+   * @see parent::fillLimitedTemplate()
+   */
   function fillLimitedTemplate(&$template) {
     $this->notify("BeforeFillLimitedTemplate", $template);
 
@@ -340,6 +361,9 @@ class CGroups extends CMbObject {
     $this->notify("AfterFillLimitedTemplate", $template);
   }
 
+  /**
+   * @see parent::fillTemplate()
+   */
   function fillTemplate(&$template) {
     $this->fillLimitedTemplate($template);
   }

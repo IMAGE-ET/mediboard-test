@@ -12,7 +12,14 @@
 CCanDo::checkAdmin();
 
 CMbObject::$useObjectCache = false;
- 
+
+/**
+ * Get the value matching ^="(.*)"$
+ *
+ * @param string $value The value to get the result from
+ *
+ * @return string
+ */
 function getValue($value) {
   if (preg_match('/^="(.*)"$/', $value, $matches)) {
     $value = $matches[1];
@@ -21,6 +28,13 @@ function getValue($value) {
   return trim($value, " \t\n\r\0\"'");
 }
 
+/**
+ * Removes all all numeric chars from a string
+ *
+ * @param string $value The value to get the number of
+ *
+ * @return string
+ */
 function getNum($value) {
   return preg_replace("/[^0-9]/", "", $value);
 }

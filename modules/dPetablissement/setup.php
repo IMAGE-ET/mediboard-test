@@ -9,7 +9,13 @@
  * @version    $Revision$
  */
 
+/**
+ * dPetablissement Setup class
+ */
 class CSetupdPetablissement extends CSetup {
+  /**
+   * @see parent::__construct();
+   */
   function __construct() {
     parent::__construct();
     

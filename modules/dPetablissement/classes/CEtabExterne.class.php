@@ -26,21 +26,30 @@ class CEtabExterne extends CMbObject {
   public $finess;
   public $siret;
   public $ape;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'etab_externe';
     $spec->key   = 'etab_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["transferts_sortie"] = "CSejour etablissement_sortie_id";
     $backProps["transferts_entree"] = "CSejour etablissement_entree_id";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["nom"]            = "str notNull confidential seekable";
@@ -56,6 +65,9 @@ class CEtabExterne extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields () {
     parent::updateFormFields();
     $this->_view = $this->nom; 

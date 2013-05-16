@@ -43,7 +43,10 @@ class CGroupsConfig extends CMbObjectConfig {
   public $nda_range_max;
   
   public $dPprescription_CPrescription_show_trash_24h;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "groups_config";
@@ -52,6 +55,9 @@ class CGroupsConfig extends CMbObjectConfig {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["object_id"]          = "ref class|CGroups";
