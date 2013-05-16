@@ -51,10 +51,12 @@
         onDrop: function(from, to, event) {
           Event.stop(event);
           var destGuid = to.get("guid");
-          var fromGuid = from.get("guid");
+          var fromGuid = from.get("targetFrom");
           var idFile   = from.get("id");
-          var url = new Url("dPfiles","controllers/do_move_file");
-          url.addParam("file_id", idFile);
+          var classFile   = from.get("class");
+          var url = new Url("files","controllers/do_move_file");
+          url.addParam("object_id", idFile);
+          url.addParam("object_class", classFile);
           url.addParam("destination_guid", destGuid );
           url.requestUpdate("systemMsg", function() {
             $("docItem_"+destGuid).onclick();   //update destination
@@ -96,7 +98,7 @@
             {{/if}}
 
             <a href="#" ondblclick="popFile('{{$object->_class}}', '{{$object->_id}}', '{{$_doc_item->_class}}', '{{$elementId}}', '0');">
-              <img class="thumbnail {{if $_doc_item->_class == "CFile"}} draggable{{/if}}" src="{{$srcImg}}" data-id="{{$elementId}}" data-guid="{{$_doc_item->object_class}}-{{$_doc_item->object_id}}"/>
+              <img class="thumbnail draggable" src="{{$srcImg}}" data-id="{{$elementId}}" data-class="{{$_doc_item->_class}}" data-targetFrom="{{$_doc_item->object_class}}-{{$_doc_item->object_id}}"/>
             </a>
           </td>
 

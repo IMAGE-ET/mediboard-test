@@ -13,10 +13,18 @@
  
  CCanDo::checkEdit();
 
-$file_id = CValue::get("file_id");
+$file_id          = CValue::get("object_id");
+$file_class       = CValue::get("object_class");
 $destination_guid = CValue::get("destination_guid");
 
-$file = new CFile();
+$allowed = array("CFile", "CCompteRendu");
+
+if (!in_array($file_class, $allowed)) {
+  return;
+}
+
+/** @var CFile|CCompteRendu $file */
+$file = new $file_class();
 $file->load($file_id);
 
 $destination = CStoredObject::loadFromGuid($destination_guid);
