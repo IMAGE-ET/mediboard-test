@@ -3,7 +3,7 @@
 /**
  * $Id$
  *
- * @category Password Keeper
+ * @category Password_Keeper
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -40,6 +40,11 @@ class CPasswordKeeper extends CMbObject {
   /** @var  Passphrase, needed for testing sample string */
   public $_passphrase;
 
+  /**
+   * @see parent::getSpec()
+   *
+   * @return CMbObjectSpec
+   */
   function getSpec() {
     $spec = parent::getSpec();
 
@@ -49,6 +54,11 @@ class CPasswordKeeper extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   *
+   * @return array
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["categories"] = "CPasswordCategory password_keeper_id";
@@ -56,6 +66,11 @@ class CPasswordKeeper extends CMbObject {
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -69,16 +84,29 @@ class CPasswordKeeper extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
     $this->_view = $this->keeper_name;
   }
 
+  /**
+   * Load all the categories of a CPasswordKeeper
+   *
+   * @return CPasswordCategories[]
+   */
   function loadRefsCategories() {
     return $this->_ref_categories = $this->loadBackRefs("categories");
   }
 
+  /**
+   * @see parent::store()
+   *
+   * @return null|string
+   */
   function store() {
     $this->generateIV();
 
@@ -102,6 +130,8 @@ class CPasswordKeeper extends CMbObject {
 
   /**
    * Génération d'un vecteur d'initialisation
+   *
+   * @return void
    */
   function generateIV() {
     CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/Random");
@@ -147,6 +177,8 @@ class CPasswordKeeper extends CMbObject {
 
   /**
    * Check if HTTPS in use
+   *
+   * @return void
    */
   static function checkHTTPS() {
     if (empty($_SERVER["HTTPS"])) {

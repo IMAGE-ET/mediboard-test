@@ -3,7 +3,7 @@
 /**
  * $Id$
  *
- * @category Password Keeper
+ * @category Password_Keeper
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -34,6 +34,11 @@ class CPasswordEntry extends CMbObject {
   /** @var CPasswordCategory[] reference */
   public $category_id;
 
+  /**
+   * @see parent::getSpec()
+   *
+   * @return CMbObjectSpec
+   */
   function getSpec() {
     $spec = parent::getSpec();
 
@@ -43,12 +48,22 @@ class CPasswordEntry extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   *
+   * @return array
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
 
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -62,12 +77,23 @@ class CPasswordEntry extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
     $this->_view = $this->password_description;
   }
 
+  /**
+   * @see parent::store()
+   *
+   * @param string $passphrase Passphrase to use
+   * @param bool   $import     Is import
+   *
+   * @return null|string
+   */
   function store($passphrase = null, $import = null) {
     // Si importation en cours, on enregistre simplement en base
     if ($import) {
@@ -98,6 +124,8 @@ class CPasswordEntry extends CMbObject {
 
   /**
    * Génération d'un vecteur d'initialisation
+   *
+   * @return void
    */
   function generateIV() {
     CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/Random");
@@ -132,7 +160,7 @@ class CPasswordEntry extends CMbObject {
    *
    * @param string $passphrase Phrase de passe à appliquer
    *
-   * @return bool|int|string
+   * @return string
    */
   function getPassword($passphrase = null) {
     if (!$passphrase) {
@@ -156,6 +184,8 @@ class CPasswordEntry extends CMbObject {
    *
    * @param string $oldPassphrase Old passphrase to use for uncrypting
    * @param string $newPassphrase New passphrase to use for crypting
+   *
+   * @return void
    */
   function renew($oldPassphrase, $newPassphrase) {
     // Déchiffrement pour mot de passe avec l'ancienne phrase de passe
