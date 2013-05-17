@@ -43,6 +43,7 @@ Main.add(function () {
 
 <script type="text/javascript">
   Main.add(ViewPort.SetAvlHeight.curry('tree-files', 1));
+  Main.add(ViewPort.SetAvlHeight.curry('tree-types', 1));
 </script>
 
 <div style="width: 45%; float: left;">
