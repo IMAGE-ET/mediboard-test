@@ -72,6 +72,8 @@ class CListeChoix extends CMbObject {
   }
 
   /**
+   * Charge l'utilisateur associé à la liste de choix
+   *
    * @return CMediusers
    */
   function loadRefUser() {
@@ -79,6 +81,8 @@ class CListeChoix extends CMbObject {
   }
 
   /**
+   * Charge la fonction associée à la liste de choix
+   *
    * @return CFunctions
    */
   function loadRefFunction() {
@@ -86,6 +90,8 @@ class CListeChoix extends CMbObject {
   }
 
   /**
+   * Charge l'établissement associé associée à la liste de choix
+   *
    * @return CGroups
    */
   function loadRefGroup() {

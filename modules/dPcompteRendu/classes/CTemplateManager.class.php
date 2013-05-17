@@ -233,7 +233,7 @@ class CTemplateManager {
       $file = new CFile();
       $file->load($_field['value']);
       $src = $this->valueMode ? $file->getDataURI() :$_field['fieldHTML'];
-      $_field["field"] = "<img src=\"$src\" />";
+      $_field["field"] = "<img src=\"".$src."\" />";
     }
   }
 
@@ -398,19 +398,29 @@ class CTemplateManager {
    * @return void
    */
   function addBarcode($field, $data, $options = array()) {
-    $options = array_replace_recursive(array(
+    $options = array_replace_recursive(
+      array(
       "barcode" => array(
         "width"  => 220,
         "height" => 60,
         "class"  => "barcode",
         "title"  => "",
       )
-    ), $options);
+    ),
+      $options
+    );
 
     $this->addProperty($field, $data, $options, false);
   }
 
-  function addList($name, $choice = null) {
+  /**
+   * Ajoute un champ de type liste
+   *
+   * @param string $name Nom de la liste
+   *
+   * @return void
+   */
+  function addList($name) {
     $this->lists[$name] = array (
       "name" => $name,
       // @todo : passer en regexp
@@ -419,10 +429,25 @@ class CTemplateManager {
     );
   }
 
+  /**
+   * Ajoute une aide à la saisie au templateManager
+   *
+   * @param string $name Nom de l'aide à la saisie
+   * @param string $text Texte de remplacement de l'aide
+   *
+   * @return void
+   */
   function addHelper($name, $text) {
     $this->helpers[$name] = $text;
   }
 
+  /**
+   * Applique les champs variable sur un document
+   *
+   * @param CTemplateManager $template TemplateManager sur lequel s'applique le document
+   *
+   * @return void
+   */
   function applyTemplate($template) {
     assert($template instanceof CCompteRendu || $template instanceof CPack);
 
@@ -441,6 +466,11 @@ class CTemplateManager {
     }
   }
 
+  /**
+   * Affiche l'éditeur de texte avec le contenu du document
+   *
+   * @return void
+   */
   function initHTMLArea () {
     // Don't use CValue::setSession which uses $m
     $_SESSION["dPcompteRendu"]["templateManager"] = gzcompress(serialize($this));
@@ -450,13 +480,29 @@ class CTemplateManager {
     $smarty->display("init_htmlarea.tpl");
   }
 
+  /**
+   * Applique les champs variable d'un objet
+   *
+   * @param string $modeleType classe de l'objet
+   *
+   * @return void
+   */
   function setFields($modeleType) {
     if ($modeleType) {
       $object = new $modeleType;
+      /** @var CMbObject $object */
       $object->fillTemplate($this);
     }
   }
 
+  /**
+   * Charge les listes de choix pour un utilisateur, ou la fonction et l'établissement de l'utilisateur connecté
+   *
+   * @param int $user_id         identifiant de l'utilisateur
+   * @param int $compte_rendu_id identifiant du compte-rendu
+   *
+   * @return void
+   */
   function loadLists($user_id, $compte_rendu_id = 0) {
     // Liste de choix
     $compte_rendu = new CCompteRendu();
@@ -484,10 +530,20 @@ class CTemplateManager {
     $lists = new CListeChoix();
     $lists = $lists->loadList($where, $order);
     foreach ($lists as $list) {
+      /** @var CListeChoix $list */
       $this->addList($list->nom);
     }
   }
 
+  /**
+   * Charge les listes de choix d'une classe pour un utilisateur, sa fonction et son établissement
+   *
+   * @param int    $user_id           identifiant de l'utilisateur
+   * @param string $modeleType        classe ciblée
+   * @param string $other_function_id autre fonction
+   *
+   * @return void
+   */
   function loadHelpers($user_id, $modeleType, $other_function_id = "") {
     $compte_rendu = new CCompteRendu();
     $ds = $compte_rendu->_spec->ds;
@@ -542,7 +598,8 @@ class CTemplateManager {
     $this->helpers["Aide de l'&eacute;tablissement"] = array();
     foreach ($aidesGroup as $aideGroup) {
       if ($aideGroup->depend_value_1 == $modeleType || $aideGroup->depend_value_1 == "") {
-        $this->helpers["Aide de l'&eacute;tablissement"][CMbString::htmlEntities($aideGroup->name)] = CMbString::htmlEntities($aideGroup->text);
+        $this->helpers["Aide de l'&eacute;tablissement"][CMbString::htmlEntities($aideGroup->name)] =
+          CMbString::htmlEntities($aideGroup->text);
       }
     }
   }
@@ -588,6 +645,13 @@ class CTemplateManager {
     return self::$barcodeCache[$code][$size] = $image;
   }
 
+  /**
+   * Applique les champs variables sur une source html
+   *
+   * @param string $_source source html
+   *
+   * @return void
+   */
   function renderDocument($_source) {
     $fields = array();
     $values = array();

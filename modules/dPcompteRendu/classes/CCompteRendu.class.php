@@ -53,6 +53,7 @@ class CCompteRendu extends CDocumentItem {
   // Form fields
   public $_is_document      = false;
   public $_is_modele        = false;
+  public $_is_locked        = false;
   public $_owner;
   public $_page_format;
   public $_orientation;
@@ -192,8 +193,10 @@ class CCompteRendu extends CDocumentItem {
     $props["content_id"]       = "ref class|CContentHTML show|0";
     $props["object_class"]     = "str notNull class show|0";
     $props["nom"]              = "str notNull show|0 seekable";
-    $props["font"]             = "enum list|arial|calibri|comic|courier|georgia|lucida|symbol|tahoma|times|trebuchet|verdana|zapfdingbats show|0";
-    $props["size"]             = "enum list|xx-small|x-small|small|medium|large|x-large|xx-large|8pt|9pt|10pt|11pt|12pt|14pt|16pt|18pt|20pt|22pt|24pt|26pt|28pt|36pt|48pt|72pt show|0";
+    $props["font"]             = "enum list|arial|calibri|comic|courier|georgia|lucida|symbol|".
+                                 "tahoma|times|trebuchet|verdana|zapfdingbats show|0";
+    $props["size"]             = "enum list|xx-small|x-small|small|medium|large|x-large|xx-large|".
+                                 "8pt|9pt|10pt|11pt|12pt|14pt|16pt|18pt|20pt|22pt|24pt|26pt|28pt|36pt|48pt|72pt show|0";
     $props["type"]             = "enum list|header|preface|body|ending|footer default|body";
     $props["_list_classes"]    = "enum list|".implode("|", array_keys(CCompteRendu::getTemplatedClasses()));
     $props["header_id"]        = "ref class|CCompteRendu";
@@ -1340,6 +1343,11 @@ class CCompteRendu extends CDocumentItem {
     return CMbString::htmlToText($this->_source, $encoding);
   }
 
+  /**
+   * Retourne la source d'un document générée depuis le modèle
+   *
+   * @return string
+   */
   function getFullContentFromModel() {
     $this->loadContent();
     $margins = array(
@@ -1347,7 +1355,6 @@ class CCompteRendu extends CDocumentItem {
       $this->margin_right, 
       $this->margin_bottom, 
       $this->margin_left);
-    $this->loadContent();
     $content = $this->generateDocFromModel();
     return $this->loadHTMLcontent($content, '', $margins, CCompteRendu::$fonts[$this->font], $this->size);
   }
@@ -1356,7 +1363,7 @@ class CCompteRendu extends CDocumentItem {
    * Stream document for object
    *
    * @param CCompteRendu $compte_rendu Document
-   * @param CModelObject $object       Object
+   * @param CMbObject    $object       Object
    * @param string       $factory      Factory name
    *
    * @return void
@@ -1373,9 +1380,11 @@ class CCompteRendu extends CDocumentItem {
   }
 
   /**
-   * @param CMediusers $user
-   * @param string     $object_class
-   * @param string     $name
+   * Retourne un modèle de nom prédéfini pour un utilisateur et une classe donnés
+   *
+   * @param CMediusers $user         User
+   * @param string     $object_class Target Class
+   * @param string     $name         Model Name
    *
    * @return CCompteRendu|null
    */
@@ -1420,6 +1429,11 @@ class CCompteRendu extends CDocumentItem {
     return $model;
   }
 
+  /**
+   * Retourne le dernier log de modification d'un document
+   *
+   * @return CUserLog
+   */
   function loadLastLogForContent() {
     $log = new CUserLog();
     $log->object_class = "CContentHTML";
@@ -1445,6 +1459,15 @@ class CCompteRendu extends CDocumentItem {
     return $user;
   }
 
+  /**
+   * Remplace l'entête ou le pied de page dans une source html
+   *
+   * @param string $source       HTML source
+   * @param int    $component_id Id of the component
+   * @param string $type         Type of the component
+   *
+   * @return string
+   */
   static function replaceComponent($source, $component_id, $type="header") {
     if (strpos($source, "<style type=\"text/css\">") === false) {
       $source = "<style type=\"text/css\">

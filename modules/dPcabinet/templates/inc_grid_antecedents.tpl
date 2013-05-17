@@ -3,7 +3,7 @@ function addAntecedent(event, rques, type, appareil, input) {
   if (event && event.ctrlKey) {
     window.save_params = { 'input': input, 'type': type, 'appareil': appareil};
     var complete_atcd = $('complete_atcd');
-    complete_atcd.down("textarea").innerHTML = rques;
+    $V(complete_atcd.down("textarea"), rques);
     Modal.open(complete_atcd);
     return;
   }

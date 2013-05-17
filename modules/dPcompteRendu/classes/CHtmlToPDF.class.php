@@ -201,6 +201,7 @@ class CHtmlToPDF {
       }
       foreach ($elements as $_element) {
         foreach ($_element->childNodes as $child) {
+          /** @var DOMElement $child */
           $_element->parentNode->insertBefore($child->cloneNode(true), $_element);
         }
         $_element->parentNode->removeChild($_element);
@@ -316,6 +317,7 @@ class CHtmlToPDF {
     }
 
     foreach ($node->childNodes as $child) {
+      /** @var DOMElement $node->firstChild */
       if ($node->nodeName == "font" && $child->nodeName == "font" &&
           $node->firstChild && 
           $node->firstChild === $node->lastChild
