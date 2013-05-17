@@ -152,7 +152,7 @@ $library->description = "Composant de génération de fichiers PDF avec codes barr
 $library->sourceDir = "tcpdf";
 $library->targetDir = "tcpdf";
 $library->versionFile = "tcpdf.php";
-$library->versionString = "xres * 25";
+$library->versionString = '$k = $this->k';
 
 $patch = new CLibraryPatch;
 $patch->dirName = "tcpdf";

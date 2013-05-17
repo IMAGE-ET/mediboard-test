@@ -3597,7 +3597,7 @@ if(!class_exists('TCPDF', false)) {
 		 * @param int $xres x resolution
 		 * @param string $code code to print
 		 */
-		public function writeBarcode($x, $y, $w, $h, $type, $style, $font, $xres, $code) {
+		public function writeBarcode($x, $y, $w, $h, $type, $style, $font, $xres, $code, $k = null) {
 			require_once(dirname(__FILE__)."/barcode/barcode.php");
 			require_once(dirname(__FILE__)."/barcode/i25object.php");
 			require_once(dirname(__FILE__)."/barcode/c39object.php");
@@ -3621,8 +3621,12 @@ if(!class_exists('TCPDF', false)) {
 			}
 			if (empty($font)) {$font = BCD_DEFAULT_FONT;}
 			if (empty($xres)) {$xres = BCD_DEFAULT_XRES;}
-			
-			$scale_factor = 1.5 * $xres * 25;
+
+      if ($k === null) {
+        $k = $this->k;
+      }
+
+			$scale_factor = 1.5 * $xres * $k;
 			$bc_w = round($w * $scale_factor); //width in points
 			$bc_h = round($h * $scale_factor); //height in points
 			

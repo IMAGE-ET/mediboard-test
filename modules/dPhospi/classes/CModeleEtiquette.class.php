@@ -210,7 +210,7 @@ class CModeleEtiquette extends CMbMetaObject {
             $barcode_y = $pdf_ex->getY();
             $barcode = $matches[1];
             $barcode_width = strlen($barcode) * 0.4 + 0.4;
-            $pdf_ex->writeBarcode($barcode_x, $barcode_y, $barcode_width, 0.8, "C128B", 1, null, null, $barcode);
+            $pdf_ex->writeBarcode($barcode_x, $barcode_y, $barcode_width, 0.8, "C128B", 1, null, null, $barcode, 25);
 
             $pdf_ex->setX($barcode_x + $barcode_width);
             $was_barcode = 1;
