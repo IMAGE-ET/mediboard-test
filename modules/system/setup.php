@@ -1305,7 +1305,14 @@ class CSetupsystem extends CSetup {
       AND  users.user_id IS NULL";
     $this->addQuery($query, true);
 
-    $this->mod_version = "1.1.33";
+    $this->makeRevision("1.1.33");
+    $query = "ALTER TABLE `session`
+      DROP `date_creation`,
+      DROP `date_modification`,
+      ADD `expire` INT(11) NOT NULL DEFAULT '0'";
+    $this->addQuery($query, true);
+
+    $this->mod_version = "1.1.34";
     
     /*$query = "ALTER TABLE user_log
                 DROP INDEX object_id,
