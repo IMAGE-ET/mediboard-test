@@ -121,7 +121,7 @@ ExchangeSource = {
       }
     }
     window.parent.$("systemMsg").update(DOM.div({class:"error"}, div)).show();
-    //window.parent.Control.Modal.close();
+    window.parent.Control.Modal.close();
   },
 
   addInputFile : function(elt) {
