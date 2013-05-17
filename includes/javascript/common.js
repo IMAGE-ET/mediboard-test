@@ -240,7 +240,7 @@ var Localize = {
   
   showForm: function() {
     var form = getForm('UnlocForm');
-    modal(form, { 
+    Modal.open(form, {
       closeOnClick: form.down('button.close')
     } );
   },

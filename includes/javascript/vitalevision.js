@@ -113,7 +113,7 @@ var VitaleVision = {
           $('msg-confirm-benef').show();
           $$('#benef-nom span')[0].update(beneficiaireSelect.options[0].innerHTML);
         }
-        VitaleVision.modalWindow = modal($('modal-beneficiaire'), {
+        VitaleVision.modalWindow = Modal.open($('modal-beneficiaire'), {
           className: 'modal'
         });
       }
