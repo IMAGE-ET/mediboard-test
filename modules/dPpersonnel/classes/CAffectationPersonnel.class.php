@@ -53,7 +53,10 @@ class CAffectationPersonnel extends CMbMetaObject {
     parent::loadRefsFwd();
     $this->loadRefPersonnel();
   }
-  
+
+  /**
+   * @return CPersonnel|null
+   */
   function loadRefPersonnel() {
     return $this->_ref_personnel = $this->loadFwdRef("personnel_id");
   }

@@ -17,11 +17,17 @@
 class CMbObject extends CStoredObject {
   public $_aides         = array(); // Aides à la saisie
   public $_aides_new     = array(); // Nouveau tableau des aides (sans hierarchie)
+
+  /** @var CAideSaisie[][][] */
+  public $_aides_all_depends;
+
+
   public $_nb_files_docs;
   public $_nb_files;
   public $_nb_docs;
   public $_nb_exchanges;
   public $_nb_exchanges_by_format = array();
+  public $_degree_notes;
 
   /** @var CIdSante400 */
   public $_ref_last_id400;
@@ -65,6 +71,7 @@ class CMbObject extends CStoredObject {
 
       // Find present levels
       foreach ($this->_ref_notes as $_note) {
+        /** @var CNote $_note */
         $notes_levels[$_note->degre] = true;
       }
       
@@ -88,15 +95,17 @@ class CMbObject extends CStoredObject {
   /**
    * Load files for object with PERM_READ
    * 
-   * @return int file count
+   * @return int|null Files count, null if unavailable
    */
   function loadRefsFiles() {
     if (null == $this->_ref_files = $this->loadBackRefs("files", "file_name")) {
-      return;
+      return null;
     }
+
     $is_editable = $this->docsEditable();
     // Read permission
     foreach ($this->_ref_files as $_file) {
+      /** @var CFile $_file */
       $_file->canDo();
       $this->_ref_files_by_name[$_file->file_name] = $_file;
       $_file->_is_editable = $is_editable;
@@ -120,53 +129,46 @@ class CMbObject extends CStoredObject {
   }
 
   /**
-   * Load documents for object
+   * Load documents for object with PERM_READ
    *
-   * @return int document count
+   * @return int|null Files count, null if unavailable
    */
   function loadRefsDocs() {
-    if (!$this->_id) {
-      return;
+    if (null == $this->_ref_documents = $this->loadBackRefs("documents", "nom")) {
+      return null;
     }
+
+    $is_editable = $this->docsEditable();
+
+    $days = CAppUI::conf("compteRendu CCompteRendu days_to_lock");
+    $days = isset($days[$this->_class]) ? $days[$this->_class] : $days["base"];
+
     global $can;
-    $curr_user = CAppUI::$user;
+    $user = CAppUI::$user;
+    foreach ($this->_ref_documents as $_doc) {
+      /** @var CCompteRendu $_doc */
+      $_doc->canDo();
 
-    $document = new CCompteRendu();
-    if ($document->_ref_module) {
-      $document->object_class = $this->_class;
-      $document->object_id    = $this->_id;
-      $this->_ref_documents = $document->loadMatchingList("nom");
-      $is_editable = $this->docsEditable();
+      if (!$can->admin) {
+        $_doc->_is_editable = $is_editable;
 
+        $last_log = $_doc->loadLastLogForContent();
 
-      $days = CAppUI::conf("dPcompteRendu CCompteRendu days_to_lock");
-      $days = isset($days[$this->_class]) ?
-        $days[$this->_class] : $days["base"];
+        // Document verrouillé
+        if (($_doc->valide && $_doc->author_id != $user->_id) ||
+            (CMbDT::daysRelative($last_log->date, CMbDT::dateTime()) > $days)
+        ) {
+          $_doc->_is_editable = false;
+          $_doc->_can->edit = false;
+        }
 
-      foreach ($this->_ref_documents as $_doc) {
-        $_doc->canDo();
-
-        if (!$can->admin) {
-          $_doc->_is_editable = $is_editable;
-
-          $last_log = $_doc->loadLastLogForContent();
-
-          // Document verrouillé
-          if (($_doc->valide && $_doc->author_id != $curr_user->_id) ||
-              (CMbDT::daysRelative($last_log->date, CMbDT::dateTime()) > $days)
-          ) {
-            $_doc->_is_editable = false;
-            $_doc->_can->edit = false;
-          }
-
-          if (!$_doc->canRead()) {
-             unset($this->_ref_documents[$_doc->_id]);
-          }
+        if (!$_doc->canRead()) {
+           unset($this->_ref_documents[$_doc->_id]);
         }
       }
-
-      return count($this->_ref_documents);
     }
+
+    return count($this->_ref_documents);
   }
   
   /**
@@ -247,6 +249,7 @@ class CMbObject extends CStoredObject {
    */
   function countExchanges($type = null, $subtype = null) {
     foreach (CExchangeDataFormat::getAll() as $_data_format) {
+      /** @var CExchangeDataFormat $data_format */
       $data_format = new $_data_format;
       if (!$data_format->hasTable()) {
         continue;
@@ -300,7 +303,7 @@ class CMbObject extends CStoredObject {
    * @return void
    */
   function loadEditView() {
-    return $this->loadView();
+    $this->loadView();
   }
   
   /**
@@ -317,7 +320,7 @@ class CMbObject extends CStoredObject {
    * Back references global loader
    * DEPRECATED: out of control resouce consumption
    *
-   * @return id Object id
+   * @return ref Object id
    */
   function loadRefsBack() {
     parent::loadRefsBack();
@@ -442,9 +445,9 @@ class CMbObject extends CStoredObject {
   /**
    * Order aides
    *
-   * @param array $aides          Aides
-   * @param null  $depend_value_1 Valeur de la dépendance 1 lié à l'aide
-   * @param null  $depend_value_2 Valeur de la dépendance 2 lié à l'aide
+   * @param CAideSaisie[] $aides          Aides à la saisie
+   * @param string        $depend_value_1 Valeur de la dépendance 1 lié à l'aide
+   * @param string        $depend_value_2 Valeur de la dépendance 2 lié à l'aide
    *
    * @return void
    */
@@ -493,7 +496,7 @@ class CMbObject extends CStoredObject {
   /**
    * Chargement des affectations de personnel par emplacements
    *
-   * @return array
+   * @return CAffectationPersonnel[]|null Affections, null if unavailable
    */
   function loadAffectationsPersonnel() {
     // Initialisation
@@ -504,17 +507,18 @@ class CMbObject extends CStoredObject {
     
     // Module actif
     if (null == $affectations = $this->loadBackRefs("affectations_personnel")) {
-      return;
+      return null;
     }
     
     $this->_count_affectations_personnel = count($affectations);
     
     // Chargement et classement
-    foreach ($affectations as $key => $affectation) {
-      $affectation->loadRefPersonnel();
-      $affectation->_ref_personnel->loadRefUser();
-      $affectation->_ref_personnel->_ref_user->loadRefFunction();
-      $this->_ref_affectations_personnel[$affectation->_ref_personnel->emplacement][$affectation->_id] = $affectation;
+
+    foreach ($affectations as $affectation) {
+      /** @var CAffectationPersonnel $affectation */
+      $personnel = $affectation->loadRefPersonnel();
+      $personnel->loadRefUser()->loadRefFunction();
+      $this->_ref_affectations_personnel[$personnel->emplacement][$affectation->_id] = $affectation;
     }
     
     return $this->_ref_affectations_personnel;
@@ -543,7 +547,7 @@ class CMbObject extends CStoredObject {
    * @return array
    */
   function getTags($cache = true) {
-    $tag_items = $this->loadRefsTagItems($cache = true);
+    $tag_items = $this->loadRefsTagItems($cache);
     return CMbArray::pluck($tag_items, "_ref_tag");
   }
   
@@ -604,6 +608,7 @@ class CMbObject extends CStoredObject {
     // Chargement des configs de la classe
     $where = array();
     $where["object_id"]    = " IS NULL";
+    /** @var CMbObjectConfig $class_config */
     $class_config = new $object_class;
     $class_config->loadObject($where);
 
@@ -622,7 +627,7 @@ class CMbObject extends CStoredObject {
   /**
    * Get value of the object config
    *
-   * @return void
+   * @return string[]
    */
   function getConfigValues() {
     $configs = array();
@@ -666,11 +671,11 @@ class CMbObject extends CStoredObject {
    * 
    * @param string $type view|autocomplete|edit
    *
-   * @return string
+   * @return string|null
    */
   function getTypedTemplate($type) {
     if (!in_array($type, array("view", "autocomplete", "edit"))) {
-      return;
+      return null;
     }
     
     $mod_name = $this->_ref_module->mod_name;
@@ -688,13 +693,15 @@ class CMbObject extends CStoredObject {
    *
    * @param string $name One of "view" and "complete"
    *
-   * @return string Path to wanted template, null if module undefined for object
+   * @return string|null Path to wanted template, null if module undefined for object
    */
   function makeTemplatePath($name) {
-    if ($module = $this->_ref_module) {
-      $path = "$module->mod_name/templates/$this->_class";
-      return "{$path}_{$name}.tpl";
+    if (null == $module = $this->_ref_module) {
+      return null;
     }
+
+    $path = "$module->mod_name/templates/$this->_class";
+    return "{$path}_{$name}.tpl";
   }
   
   /**

@@ -51,7 +51,6 @@ if ($spec instanceof CRefSpec) {
       );
       $perm = $permsTable[$spec->perm] ? $permsTable[$spec->perm] : null;
       $matches = $target_object->loadListWithPerms($perm, $where, $view_field, $limit, $view_field);
-      //$total = $target_object->_totalWithPerms;
     }
     else {
       $matches = $target_object->loadList($where, $view_field, $limit, $view_field);

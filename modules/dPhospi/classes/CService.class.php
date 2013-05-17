@@ -250,12 +250,12 @@ class CService extends CMbObject {
     return $service;
   }
 
-  function loadListWithPerms($permType = PERM_READ, $where = array(), $order = "nom", $limit = null, $group = null, $leftjoin = null) {
+  function loadListWithPerms($permType = PERM_READ, $where = array(), $order = "nom", $limit = null, $group = null, $ljoin = null) {
     if ($where !== null && !isset($where["group_id"])) {
       $where["group_id"] = "='".CGroups::loadCurrent()->_id."'";
     }
 
-    return parent::loadListWithPerms($permType, $where, $order, $limit, $group, $leftjoin);
+    return parent::loadListWithPerms($permType, $where, $order, $limit, $group, $ljoin);
   }
 
   /**

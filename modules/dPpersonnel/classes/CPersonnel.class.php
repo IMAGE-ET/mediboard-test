@@ -54,7 +54,10 @@ class CPersonnel extends CMbObject {
     parent::loadRefsFwd();
     $this->loadRefUser();
   }
-  
+
+  /**
+   * @return CMediusers|null
+   */
   function loadRefUser() {
     $this->_ref_user = $this->loadFwdRef("user_id");
     $this->_view = $this->getFormattedValue("emplacement") . ": " . $this->_ref_user->_view;

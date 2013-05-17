@@ -10,7 +10,7 @@
  */
 
 /**
- * @abstract Mediboard ORM persistance layer 
+ * Mediboard ORM persistance layer
  * - Persistance: storage, navigation, querying, checking, merging, seeking, cache, userlog 
  * - Configuration: permissions, object configs 
  * - Classification: modules
@@ -32,35 +32,38 @@ class CStoredObject extends CModelObject {
   public $_external; // true if object is has remote ids
   public $_locked; // true if object is locked
   public $_totalSeek;
+  public $_totalWithPerms;
   
   /**
    * References
    */
-  public $_back           = array(); // Back references collections
-  public $_count          = array(); // Back references counts
-  public $_fwd            = array(); // Forward references
-  public $_history; // Array representation of the object's evolution
+
+  /** @var self[][] Back references collections */
+  public $_back = array();
+
+  /** @var int[] Back references counts */
+  public $_count = array();
+
+  /** @var self[] Forward references */
+  public $_fwd = array();
+
+  /** @var  self[] Array representation of the object's evolution */
+  public $_history;
 
   /**
-   * History of the object
-   * @var CUserLog[]
+   * User logs utility references
    */
+
+  /** @var CUserLog[] */
   public $_ref_logs;
 
-  /**
-   * @var CUserLog
-   */
+  /** @var CUserLog */
   public $_ref_first_log;
 
-  /**
-   * @var CUserLog
-   */
+  /** @var CUserLog */
   public $_ref_last_log;
 
-  /**
-   * Log related to the current store or delete
-   * @var CUserLog
-   */
+  /** @var CUserLog Log related to the current store or delete */
   public $_ref_current_log;
   
   /**
@@ -168,12 +171,12 @@ class CStoredObject extends CModelObject {
   static function loadFromGuid($guid, $cached = false) {
     list($class, $id) = explode('-', $guid);
     if (!$class) {
-      return;
+      return null;
     }
     
     // Non existing class
     if (!self::classExists($class)) {
-      return;
+      return null;
     }
 
     $object = CExObject::getValidObject($class);
@@ -365,7 +368,9 @@ class CStoredObject extends CModelObject {
   /**
    * Complete fields with base value if missing
    *
-   * @param [...] string Field names or an array of field names
+   * @param string[] ... Field names or an array of field names
+   *
+   * @return void
    */
   function completeField() {
     if (!$this->_id) {
@@ -422,7 +427,12 @@ class CStoredObject extends CModelObject {
   function getPerm($permType) {
     return CPermObject::getPermObject($this, $permType);
   }
-  
+
+  /**
+   * Load class level permission
+   *
+   * @return CPermObject
+   */
   function loadPermClass() {
     global $userPermsObjects;
     
@@ -509,26 +519,26 @@ class CStoredObject extends CModelObject {
   }
   
   /**
-   * Permission wise load list alternative, with limit simulatio when necessary
+   * Permission wise load list alternative, with limit simulation when necessary
    * 
-   * @param $permType
-   * @param $where
-   * @param $order
-   * @param $limit
-   * @param $group
-   * @param $leftjoin
-   * 
+   * @param int    $permType One of PERM_READ, PERM_EDIT
+   * @param array  $where    Where SQL statement
+   * @param array  $order    Order SQL statement
+   * @param string $limit    Limit SQL statement
+   * @param array  $group    Group by SQL statement
+   * @param array  $ljoin    Left join SQL statement collection
+   *
    * @return self[]
    */
-  function loadListWithPerms($permType = PERM_READ, $where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
+  function loadListWithPerms($permType = PERM_READ, $where = null, $order = null, $limit = null, $group = null, $ljoin = null) {
     // Filter with permission
     if (!$permType) {
-      $this->_totalWithPerms = $this->countList($where, $group, $leftjoin);
-      return $this->loadList($where, $order, $limit, $group, $leftjoin);
+      $this->_totalWithPerms = $this->countList($where, $group, $ljoin);
+      return $this->loadList($where, $order, $limit, $group, $ljoin);
     }
 
     // Load with no limit
-    $list = $this->loadList($where, $order, null, $group, $leftjoin);
+    $list = $this->loadList($where, $order, null, $group, $ljoin);
     self::filterByPerm($list, $permType);
     $this->_totalWithPerms = count($list);
     
@@ -543,8 +553,8 @@ class CStoredObject extends CModelObject {
   /**
    * Filters an object collection according to given permission
    * 
-   * @param array &$objects Objects to be filtered
-   * @param int   $permType One of PERM_READ, PERM_EDIT
+   * @param CStoredObject[] &$objects Objects to be filtered
+   * @param int             $permType One of PERM_READ, PERM_EDIT
    *
    * @return self[] Collection of filtered objects
    */
@@ -735,17 +745,16 @@ class CStoredObject extends CModelObject {
   /**
    * Object list by a request constructor
    *
-   * @param array   $where      Where SQL statement
-   * @param array   $order      Order SQL statement
-   * @param string  $limit      Limit SQL statement
-   * @param array   $group      Group by SQL statement
-   * @param array   $ljoin      Left join SQL statement collection
-   * @param boolean $index      Add the forceindex SQL statement
-   * @param boolean $found_rows Count and put found rows in $this->_found_rows
+   * @param array  $where Where SQL statement
+   * @param array  $order Order SQL statement
+   * @param string $limit Limit SQL statement
+   * @param array  $group Group by SQL statement
+   * @param array  $ljoin Left join SQL statement collection
+   * @param array  $index Force index
    *
    * @return self[] List of found objects, null if module is not installed
    */
-  function loadList($where = null, $order = null, $limit = null, $group = null, $ljoin = null, $index = null, $found_rows = false) {
+  function loadList($where = null, $order = null, $limit = null, $group = null, $ljoin = null, $index = null) {
     if (!$this->_ref_module) {
       return null;
     }
@@ -758,11 +767,7 @@ class CStoredObject extends CModelObject {
     $request->setLimit($limit);
     $request->addForceIndex($index);
 
-    $query_list = $this->loadQueryList($request->getRequest($this, $found_rows));
-    if ($found_rows) {
-      $this->_found_rows = $this->_spec->ds->foundRows();
-    }
-    return $query_list;
+    return $this->loadQueryList($request->getRequest($this));
   }
   
   /**
@@ -837,12 +842,12 @@ class CStoredObject extends CModelObject {
     return $ds->loadResult($request->getCountRequest($this));
   }
   
-  /*
+  /**
    * Object count of a multiple list by an SQL request constructor using group-by statement
    *
    * @param array        $where  Array of where clauses
    * @param array|string $order  Order statement
-   * @param array|string $order  Group by statement
+   * @param array|string $group  Group by statement
    * @param array        $ljoin  Array of left join clauses
    * @param array        $fields Append fields to the SELECT
    * @param array|string $index  Force index
@@ -898,6 +903,7 @@ class CStoredObject extends CModelObject {
 
     $list = array();
     foreach ($list_rows as $_row) {
+      /** @var self $newObject */
       $newObject = new $this->_class;
       $newObject->bind($_row, false);
       
@@ -1008,11 +1014,10 @@ class CStoredObject extends CModelObject {
     }
 
     // Class level unique checking
-    // @todo Move this checking up to CStoredObject (mind the _merging escape)
     foreach ($this->_spec->uniques as $unique => $names) {
       /** @var self $other */
       $other = new $this->_class;
-      
+      $values = array();
       foreach ($names as $name) {
         $this->completeField($name);
         $other->$name = addslashes($this->$name);
@@ -1092,14 +1097,14 @@ class CStoredObject extends CModelObject {
   /**
    * Prepare the user log before object persistence
    *
-   * @return CUserLog null if not loggable
+   * @return CUserLog|null null if not loggable
    */
   protected function prepareLog() {
     $this->_ref_current_log = null;
     
     // If the object is not loggable
     if (!$this->_spec->loggable || $this->_purge) {
-      return;
+      return null;
     }
 
     // Find changed fields
@@ -1134,7 +1139,7 @@ class CStoredObject extends CModelObject {
 
     if (!count($fields) && $type === "store") {
       $this->_ref_last_log = null;
-      return;
+      return null;
     }
    
     if ($type === "store" || $type === "merge") {
@@ -1190,13 +1195,14 @@ class CStoredObject extends CModelObject {
   }
 
   /**
-   * Load logs
+   * Load user logs for object
    *
    * @return void
    */
   function loadLogs() {
     $this->_ref_logs = $this->loadBackRefs("logs", "user_log_id DESC", 100);
 
+    /** @var CUserLog $_log */
     foreach ($this->_ref_logs as $_log) {
       $_log->loadRefUser();
       $_log->_ref_object = $this;
@@ -1495,11 +1501,11 @@ class CStoredObject extends CModelObject {
   /**
    * Merges an array of objects
    *
-   * @param array $objects An array of CMbObject to merge
+   * @param self[] $objects An array of objects to merge
    *
    * @return string Store-like message
    */
-  function checkMerge($objects = array/*<CMbObject>*/()) {
+  function checkMerge($objects = array()) {
     $object_class = null;
     foreach ($objects as $object) {
       if (!$object instanceof CMbObject) {
@@ -1515,28 +1521,28 @@ class CStoredObject extends CModelObject {
         return 'mergeDifferentType';
       }
     }
+
+    return null;
   }
 
   /**
-   * Count number back refreferecing object
+   * Count number back reference colletion object
    * 
    * @param string $backName name the of the back references to count
    * @param array  $where    Additional where clauses
    * @param array  $ljoin    Additionnal ljoin clauses
    * @param bool   $cache    Cache
    * 
-   * @return int the count null if back references module is not installed
-   * 
-   * @todo Add the missing arguments (the same as loadbackRefs)
+   * @return int|null The count, null if collection count is unavailable
    */
   function countBackRefs($backName, $where = array(), $ljoin = array(), $cache = true) {
     if (!$backSpec = $this->makeBackSpec($backName)) {
-      return;
+      return null;
     }
 
     // No existing class
     if (!self::classExists($backSpec->class)) {
-      return;
+      return null;
     }
 
     $backObject = new $backSpec->class;
@@ -1544,7 +1550,7 @@ class CStoredObject extends CModelObject {
     
     // Cas du module non installé
     if (!$backObject->_ref_module) {
-      return;
+      return null;
     }
 
     // Empty object
@@ -1586,14 +1592,14 @@ class CStoredObject extends CModelObject {
   }
 
   /**
-   * Mass count mechanism for backward references of an object collection
+   * Mass count mechanism for back reference collections of an object collection
    *
    * @param self[] $objects  Array of objects
    * @param string $backName Name of backward reference
    * @param array  $where    Additional where clauses
    * @param array  $ljoin    Additionnal ljoin clauses
    *
-   * @return total count among objects, null on error
+   * @return int|null Total count among objects, null if collection count is unavailable
    */
   static function massCountBackRefs($objects, $backName, $where = array(), $ljoin = array()) {
     if (!count($objects)) {
@@ -1607,9 +1613,10 @@ class CStoredObject extends CModelObject {
 
     // No existing class
     if (!self::classExists($backSpec->class)) {
-      return;
+      return null;
     }
 
+    /** @var self $backObject */
     $backObject = new $backSpec->class;
     $backField = $backSpec->field;
     
@@ -1648,7 +1655,8 @@ class CStoredObject extends CModelObject {
     }
     
     // Meta objects case
-    $backSpec =& $backObject->_specs[$backField];
+    /** @var CRefSpec $backSpec */
+    $backSpec = $backObject->_specs[$backField];
     $backMeta = $backSpec->meta;
     if ($backMeta) {
       $query .= "\nAND `$backMeta` = '$object->_class'";
@@ -1678,22 +1686,24 @@ class CStoredObject extends CModelObject {
    * @param array|string $group    Group by SQL statement
    * @param array        $ljoin    Array of left join clauses
    *
-   * @return self[] the collection
+   * @return self[]|null Total count among objects, null if collection is unavailable
    */
   function loadBackRefs($backName, $order = null, $limit = null, $group = null, $ljoin = null) {
     if (!$backSpec = $this->makeBackSpec($backName)) {
-      return;
+      return null;
     }
     
     // No existing class
     if (!self::classExists($backSpec->class)) {
-      return;
+      return null;
     }
 
-    // Module unavailable
+    /** @var self $backObject */
     $backObject = new $backSpec->class;
+
+    // Module unavailable
     if (!$backObject->_ref_module) {
-      return;
+      return null;
     }
 
     // Empty object
@@ -1711,7 +1721,8 @@ class CStoredObject extends CModelObject {
     $where[$backField] = "= '$this->_id'";    
     
     // Meta object case
-    $fwdSpec =& $backObject->_specs[$backField];
+    /** @var CRefSpec $fwdSpec */
+    $fwdSpec = $backObject->_specs[$backField];
     $backMeta = $fwdSpec->meta;
     if ($backMeta) {
       $where[$backMeta] = "= '$this->_class'";
@@ -1729,26 +1740,29 @@ class CStoredObject extends CModelObject {
    * @param array|string $group    Group by SQL statement
    * @param array        $ljoin    Array of left join clauses
    *
-   * @return array the IDs collection
+   * @return ref[]|null IDs collection, null if colletion is unavailable
    */
   function loadBackIds($backName, $order = null, $limit = null, $group = null, $ljoin = null) {
     if (!$backSpec = $this->makeBackSpec($backName)) {
-      return;
+      return null;
     }
 
     // No existing class
     if (!self::classExists($backSpec->class)) {
-      return;
+      return null;
     }
 
-    // Cas du module non installé
+    /** @var self $backObject */
     $backObject = new $backSpec->class;
+
+    // Cas du module non installé
     if (!$backObject->_ref_module) {
-      return;
+      return null;
     }
 
     $backField = $backSpec->field;
-    $fwdSpec =& $backObject->_specs[$backField];
+    /** @var CRefSpec $fwdSpec */
+    $fwdSpec = $backObject->_specs[$backField];
     $backMeta = $fwdSpec->meta;
     
     // Cas des meta objects
@@ -1771,23 +1785,31 @@ class CStoredObject extends CModelObject {
    * Load the unique back reference for given collection name
    * Will check for uniqueness
    *
-   * @param string $backName The collection name
+   * @param string       $backName The collection name
    * @param array|string $order    Order SQL statement
    * @param string       $limit    MySQL limit clause
    * @param array|string $group    Group by SQL statement
    * @param array        $ljoin    Array of left join clauses
    *
-   * @return CMbObject Unique back reference if exist, concrete type empty object otherwise 
+   * @return CMbObject Unique back reference if exist, concrete type empty object otherwise, null if unavailable
    */
   function loadUniqueBackRef($backName, $order = null, $limit = null, $group = null, $ljoin = null) {
     if (null === $backRefs = $this->loadBackRefs($backName, $order, $limit, $group, $ljoin)) {
-      return;
+      return null;
     }
 
     $count = count($backRefs);
     if ($count > 1) {
       $ids = array_keys($backRefs);
-      trigger_error("'$backName' back reference should be unique (actually $count: ".implode(", ", $ids).") for object '$this->_view' of class '$this->_class'", E_USER_WARNING);
+      $msg = CAppUI::tr(
+        "'%s' back reference should be unique (actually counting %s: %s) for object '%s' of class '%s'",
+        $backName,
+        $count,
+        implode(", ", $ids),
+        $this->_view,
+        $this->_class
+      );
+      trigger_error($msg, E_USER_WARNING);
     }
     
     if (!$count) {
@@ -1801,7 +1823,7 @@ class CStoredObject extends CModelObject {
   /**
    * Load and count all back references collections
    *
-   * @param $limit string Limit DB query option
+   * @param string $limit Limit SQL query option
    *
    * @return void
    */
@@ -1864,28 +1886,30 @@ class CStoredObject extends CModelObject {
    *
    * @param CMbObject &$object The object to transfer back objects from
    *
-   * @return string store-like error message if failed, null if successful
+   * @return string|null store-like error message if failed, null if successful
    */
   function transferBackRefsFrom(CMbObject &$object) {
     if (!$object->_id) {
       trigger_error("transferNoId");
     }
+
     if ($object->_class !== $this->_class) {
       trigger_error("An object from type '$object->_class' can't be merge with an object from type '$this->_class'", E_USER_ERROR);
     }
     
     $object->loadAllBackRefs();
     foreach ($object->_back as $backName => $backObjects) {
+      /** @var self[] $backObjects */
       if (count($backObjects)) {
         $backSpec = $this->_backSpecs[$backName];
         $backObject = new $backSpec->class;
         $backField = $backSpec->field;
-        $fwdSpec =& $backObject->_specs[$backField];
+        $fwdSpec = $backObject->_specs[$backField];
         $backMeta = $fwdSpec->meta;      
         
         // Change back field and store back objects
         foreach ($backObjects as $backObject) {
-          // Use a dummy tranferer object to prevent checks on all values
+          /** @var self $transferer Dummy tranferer object to prevent checks on all values */
           $transferer = new $backObject->_class;
           $transferer->_id = $backObject->_id;
           $transferer->$backField = $this->_id;
@@ -1902,6 +1926,8 @@ class CStoredObject extends CModelObject {
         }
       }
     }
+
+    return null;
   }
   
   /**
@@ -1910,7 +1936,7 @@ class CStoredObject extends CModelObject {
    * @param string $field  Field name
    * @param bool   $cached Use object cache when possible
    *
-   * @return CMbObject concrete loaded object 
+   * @return CMbObject|null concrete loaded object, null if reference unavailable
    */
   function loadFwdRef($field, $cached = false) {
     // Object scope cache
@@ -1921,7 +1947,7 @@ class CStoredObject extends CModelObject {
     // Not a ref spec
     $spec = $this->_specs[$field];
     if (!$spec instanceof CRefSpec) {
-      return;
+      return null;
     }
     
     // Undefined class
@@ -1934,7 +1960,8 @@ class CStoredObject extends CModelObject {
     if (!self::classExists($class)) {
       return $this->_fwd[$field] = null;
     }
-    
+
+    /** @var self $fwd */
     $fwd = new $class;
     
     // Inactive module
@@ -1960,7 +1987,7 @@ class CStoredObject extends CModelObject {
    * @param string $field        Field to load
    * @param string $object_class Object class
    *
-   * @return self[] Loaded collection
+   * @return self[] Loaded collection, null if unavailable
    */
   static function massLoadFwdRef($objects, $field, $object_class = null) {
     if (!count($objects)) {
@@ -1971,33 +1998,34 @@ class CStoredObject extends CModelObject {
     $spec = $object->_specs[$field];
     
     if (!$spec instanceof CRefSpec) {
-      trigger_error("Can't mass load not ref '$field' for object class '$object->_class'", E_USER_WARNING);
-      return;
+      trigger_error("Can't mass load not ref '$field' for class '$object->_class'", E_USER_WARNING);
+      return null;
     }
 
     if ($spec->meta && !$object_class) {
-      trigger_error("Can't mass load (yet!) ref '$field' with meta field '$spec->meta' for object class '$object->_class'", E_USER_WARNING);
-      return;
+      trigger_error("No mass load yet fir ref '$field' with meta field '$spec->meta' for class '$object->_class'", E_USER_WARNING);
+      return null;
     }
     
-    // Trim real values
+    // No existing class
+    if (!self::classExists($spec->class)) {
+      return null;
+    }
+
+    /** @var self $fwd */
+    $fwd = new $spec->class;
+    
+    // Inactive module
+    if (!$fwd->_ref_module) {
+      return null;
+    }
+
+    // Trim real ids
     $fwd_ids = CMbArray::pluck($objects, $field);
     $fwd_ids = array_unique($fwd_ids);
     CMbArray::removeValue("", $fwd_ids);
     if (!count($fwd_ids)) {
       return array();
-    }
-
-    // No existing class
-    if (!self::classExists($spec->class)) {
-      return;
-    }
-    
-    $fwd = new $spec->class;
-    
-    // Inactive module
-    if (!$fwd->_ref_module) {
-      return;
     }
 
     if ($object_class) {
@@ -2036,9 +2064,12 @@ class CStoredObject extends CModelObject {
     $issues = array();
     $this->makeAllBackSpecs();
     foreach ($this->_backSpecs as $backName => &$backSpec) {
+      /** @var self $backObject */
       $backObject = new $backSpec->class;
       $backField = $backSpec->field;
-      $fwdSpec =& $backObject->_specs[$backField];
+
+      /** @var CRefSpec $fwdSpec */
+      $fwdSpec = $backObject->_specs[$backField];
       $backMeta = $fwdSpec->meta;
 
       // Cas du module non installé
@@ -2119,10 +2150,12 @@ class CStoredObject extends CModelObject {
 
     // Deleting backSpecs
     foreach ($this->_backSpecs as $backSpec) {
-      /** @var CStoredObject $backObject */
+      /** @var self $backObject */
       $backObject = new $backSpec->class;
       $backField  = $backSpec->field;
-      $fwdSpec    =& $backObject->_specs[$backField];
+
+      /** @var CRefSpec $fwdSpec */
+      $fwdSpec    = $backObject->_specs[$backField];
       $backMeta   = $fwdSpec->meta;
       
       /* Cas du module non installé, 
@@ -2191,6 +2224,7 @@ class CStoredObject extends CModelObject {
     $this->loadAllBackRefs();
     foreach ($this->_back as $backName => $backRefs) {
       foreach ($backRefs as $backRef) {
+        /** @var self $backRef */
         $backSpec = $this->_backSpecs[$backName];
         if ($backSpec->_notNull || $backSpec->_purgeable || $backSpec->_cascade || $backSpec->cascade) {
           if ($msg = $backRef->purge()) {
@@ -2215,7 +2249,7 @@ class CStoredObject extends CModelObject {
   /**
    * Retrieve seekable specs from object
    *
-   * @return string[]
+   * @return CMbFieldSpec[]
    */
   function getSeekables() {
     $seekables = array();
@@ -2299,7 +2333,7 @@ class CStoredObject extends CModelObject {
       foreach ($keywords as $keyword) {
         $query .= "\nAND (0";
         foreach ($seekables as $field => $spec) {
-          // Note: a swith won't work du to boolean trus value
+          // Note: a swith won't work du to boolean true value
           if ($spec->seekable === "equal") {
             $query .= "\nOR `{$this->_spec->table}`.`$field` = '$keyword'";
           }
@@ -2316,7 +2350,8 @@ class CStoredObject extends CModelObject {
               if (isset($spec->meta)) {
                 $class = $this->{$spec->meta};
               }
-              
+
+              /** @var self $object */
               $object = new $class;
               $objects = $object->seek($keywords);
               
@@ -2368,23 +2403,30 @@ class CStoredObject extends CModelObject {
   /**
    * Returns a list of objects for autocompleted fields
    * 
-   * @param string $keywords
-   * @param array  $where [optional]
-   * @param string $limit [optional]
-   * @param array  $ljoin [optional]
-   * @param string $order [optional]
+   * @param string $keywords Autocomplete seek fields
+   * @param array  $where    Where statements
+   * @param int    $limit    Limit the number of results
+   * @param array  $ljoin    Left join statements
+   * @param array  $order    Order by
    *
    * @return self[]
    */
   function getAutocompleteList($keywords, $where = null, $limit = null, $ljoin = null, $order = null) {
     return $this->seek($keywords, $where, $limit, false, $ljoin, $order);
   }
-  
+
+  /**
+   * Load similar objects, ie unexpectetly having the same first unique tuple
+   *
+   * @param string[] $values Unique tuple values
+   *
+   * @return CStoredObject[]|null Similar objects, null when unavailble
+   */
   function getSimilar($values) {
     $spec = $this->_spec;
     
     if (empty($spec->uniques)) {
-      return;
+      return null;
     }
     
     // @todo only the first unique is used
@@ -2397,7 +2439,7 @@ class CStoredObject extends CModelObject {
     $where = array();
     foreach ($first_unique as $field_name) {
       if (!array_key_exists($field_name, $values)) {
-        return;
+        return null;
       }
       
       $where[$field_name] = $spec->ds->prepare("=%", $values[$field_name]);
@@ -2434,6 +2476,7 @@ class CStoredObject extends CModelObject {
   function query() {
     $spec = $this->getSpec();
 
+    /** @fixme Really a CSQLDataSource, not a CPDODataSource ? */
     return new CSQLQuery($this->getDS(), $spec->table, $spec->key, $this->_class);
   }
 

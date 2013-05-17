@@ -261,7 +261,7 @@ class CExchangeDataFormat extends CMbMetaObject {
    *
    * @param string $class Classname
    * 
-   * @return array CExchangeDataFormat collection 
+   * @return string[] Data format classes collection
    */
   static function getAll($class = "CExchangeDataFormat") {    
     return CApp::getChildClasses($class, array(), true);

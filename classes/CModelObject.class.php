@@ -113,7 +113,7 @@ class CModelObject {
   /**
    * Tell wether class exists
    * 
-   * @param class
+   * @param klass $class Class name
    * 
    * @return bool
    */
@@ -134,7 +134,7 @@ class CModelObject {
    * @return CModelObject
    */
   function __construct() {
-    return $this->initialize();
+    $this->initialize();
   }
   
   /**
@@ -175,9 +175,10 @@ class CModelObject {
     $in_cache = isset(self::$spec[$class]);
 
     if (!$in_cache) {
-      self::$spec[$class] = $this->getSpec();
-      self::$spec[$class]->init();
-      
+      $spec = $this->getSpec();
+      $spec->init();
+      self::$spec[$class] = $spec;
+
       if (isset(CApp::$classPaths[$class])) {
         $module = self::getModuleName(CApp::$classPaths[$class]);
       }
@@ -339,6 +340,8 @@ class CModelObject {
     if ($backSpec = CMbBackSpec::make($this->_class, $backName, $this->_backProps[$backName])) {
       return $this->_backSpecs[$backName] = $backSpec;
     }
+
+    return null;
   }
   
   /**
@@ -736,14 +739,14 @@ class CModelObject {
   
   
   private static $sortField = null;
-  
+
   /**
    * Comparison callback for natural sorting
-   * 
-   * CModelObject $a Object having a self::$sortField property
-   * CModelObject $a Object having a self::$sortField property
-   * 
-   * return int Comparison result 
+   *
+   * @param CModelObject $a Object having a self::$sortField property
+   * @param CModelObject $b Object having a self::$sortField property
+   *
+   * @return int Comparison result
    */
   protected static function _cmpFieldNatural($a, $b) {
     $sort_field = self::$sortField;
@@ -752,23 +755,25 @@ class CModelObject {
   
   /**
    * Diacritic insensitive comparison callback for natural sorting
-   * 
-   * CModelObject $a Object having a self::$sortField property
-   * CModelObject $a Object having a self::$sortField property
-   * 
-   * return int Comparison result 
+   *
+   * @param CModelObject $a Object having a self::$sortField property
+   * @param CModelObject $b Object having a self::$sortField property
+   *
+   * @return int Comparison result
    */
   protected static function _cmpFieldNaturalAccentsDiacritics($a, $b) {
     $sort_field = self::$sortField;
     return strnatcasecmp(CMbString::removeDiacritics($a->$sort_field), CMbString::removeDiacritics($b->$sort_field));
   }
-  
+
   /**
    * Collection natural sort utility with diacritic sensitiveness options
-   * 
-   * CModelObject[] $object Collection to be sorted
-   * string[]       $fields Fields to sort on
-   * 
+   *
+   * @param CModelObject[] $objects    Object collection to be sorted
+   * @param string[]       $fields     Fields to sort on
+   * @param bool           $diacritics Take diacritics (accents and more) into account
+   *
+   * @return array
    */
   public static function naturalSort($objects, $fields, $diacritics = false) {
     if (empty($objects)) {
