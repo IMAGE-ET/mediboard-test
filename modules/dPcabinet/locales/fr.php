@@ -202,6 +202,7 @@ $locales['CConsultAnesth-mallampati'] = 'Mallampati';
 $locales['CConsultAnesth-mallampati-court'] = 'Mallampati';
 $locales['CConsultAnesth-mallampati-desc'] = 'Mallampati';
 $locales['CConsultAnesth-msg-create'] = 'Consultation anesthésique créée';
+$locales['CConsultAnesth-msg-duplicate'] = 'Dossier d\'anesthésie dupliqué';
 $locales['CConsultAnesth-msg-delete'] = 'Consultation anesthésique supprimée';
 $locales['CConsultAnesth-msg-modify'] = 'Consultation anesthésique modifiée';
 $locales['CConsultAnesth-na'] = 'Na+';

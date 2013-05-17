@@ -225,7 +225,7 @@ if ($consult->_ref_sejour && $sejour->_id) {
 
   // Cas des urgences
   $rpu = $sejour->loadRefRPU();
-  if ($rpu->_id) {
+  if ($rpu && $rpu->_id) {
     // Mise en session du rpu_id
     $_SESSION["dPurgences"]["rpu_id"] = $rpu->_id;
     $rpu->loadRefSejourMutation();

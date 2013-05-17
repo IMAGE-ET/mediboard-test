@@ -13,11 +13,14 @@
 {{mb_default var=onlycreate value=false}}
 
 <script type="text/javascript">
-  createDossier = function(consult_id) {
+  createDossier = function(consult_id, duplicate) {
     var form = getForm("manageDossierAnesth");
     $V(form.del, 0);
     form.consultation_id.writeAttribute("disabled", null);
     $V(form.consultation_id, consult_id);
+    if (duplicate == 1) {
+      $V(form.dosql, "do_duplicate_dossier_anesth_aed");
+    }
     form.submit();
   }
 
@@ -59,4 +62,5 @@
             onclick="delDossier($V(this.form._consult_anesth_id))">{{tr}}Delete{{/tr}}</button>
   {{/if}}
   <button type="button" class="add {{if !$onlycreate}}notext{{/if}}" onclick="createDossier('{{$consult->_id}}')">Ajouter un dossier d'anesthésie</button>
+  <button type="button" class="add" title="Dupliquer le dossier courant" onclick="createDossier('{{$consult->_id}}', 1)">Dupliquer</button>
 </form>
