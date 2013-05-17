@@ -931,7 +931,12 @@ class CEditPdf{
     }
     elseif ($this->facture->assurance_accident && !$this->facture->send_assur_compl && $this->facture->type_facture == "accident") {
       $assurance_patient = $this->facture->_ref_assurance_accident;
-      $this->type_rbt = "TP";
+      if ($this->facture->_coeff == CAppUI::conf("tarmed CCodeTarmed pt_maladie")) {
+        $this->type_rbt = $this->facture->_ref_assurance_accident->type_pec;
+      }
+      else {
+        $this->type_rbt = "TP";
+      }
     }
     else {
       $assurance_patient = $this->patient_facture;
