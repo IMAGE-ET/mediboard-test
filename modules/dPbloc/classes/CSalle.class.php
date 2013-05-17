@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -124,11 +124,19 @@ class CSalle extends CMbObject {
    * @return void
    */
   function loadRefsForDay($date) {
+    // Liste des utilisateurs
+    $user      = new CMediusers();
+    $listPrats = $user->loadPraticiens(PERM_READ);
+    // Liste des fonctions
+    $function      = new CFunctions();
+    $listFunctions = $function->loadListWithPerms(PERM_READ);
     // Plages d'opérations
-    $plages = new CPlageOp;
+    $plages = new CPlageOp();
     $where = array();
-    $where["date"] = "= '$date'";
-    $where["salle_id"] = "= '$this->_id'";
+    $where["plagesop.date"]     = "= '$date'";
+    $where["plagesop.salle_id"] = "= '$this->_id'";
+    $where[]                    = "`plagesop`.`chir_id` ".CSQLDataSource::prepareIn(array_keys($listPrats)).
+      " OR `plagesop`.`spec_id` ".CSQLDataSource::prepareIn(array_keys($listFunctions));
     $order = "debut";
     $this->_ref_plages = $plages->loadList($where, $order);
     foreach ($this->_ref_plages as &$plage) {
@@ -157,7 +165,7 @@ class CSalle extends CMbObject {
     }
     
     // Interventions déplacés
-    $deplacees = new COperation;
+    $deplacees = new COperation();
     $ljoin = array();
     $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
     $where = array();
@@ -165,6 +173,8 @@ class CSalle extends CMbObject {
     $where["plagesop.salle_id"]     = "!= operations.salle_id";
     $where["plagesop.date"]         = "= '$date'";
     $where["operations.salle_id"]   = "= '$this->_id'";
+    $where[]                        = "`plagesop`.`chir_id` ".CSQLDataSource::prepareIn(array_keys($listPrats)).
+      " OR `plagesop`.`spec_id` ".CSQLDataSource::prepareIn(array_keys($listFunctions));
     $order = "operations.time_operation";
     $this->_ref_deplacees = $deplacees->loadList($where, $order, null, null, $ljoin);
     foreach ($this->_ref_deplacees as &$deplacee) {
@@ -175,11 +185,14 @@ class CSalle extends CMbObject {
       $deplacee->loadRefPlageOp();
     }
 
-    // Urgences
-    $urgences = new COperation;
+    // Hors plage
+    $urgences = new COperation();
+    $ljoin = array();
+    $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
     $where = array();
-    $where["date"]     = "= '$date'";
-    $where["salle_id"] = "= '$this->_id'";
+    $where["operations.date"]     = "= '$date'";
+    $where["operations.salle_id"] = "= '$this->_id'";
+    $where["operations.chir_id"]  = CSQLDataSource::prepareIn(array_keys($listPrats));
     $order = "time_operation, chir_id";
     $this->_ref_urgences = $urgences->loadList($where, $order);
     foreach ($this->_ref_urgences as &$urgence) {

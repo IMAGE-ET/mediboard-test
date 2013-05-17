@@ -17,222 +17,195 @@ class COperation extends CCodable implements IPatientRelated {
   static $fields_etiq = array("ANESTH", "LIBELLE", "DATE", "COTE");
 
   // DB Table key
-  var $operation_id  = null;
+  public $operation_id;
 
   // Clôture des actes
-  var $cloture_activite_1    = null;
-  var $cloture_activite_4    = null;
+  public $cloture_activite_1;
+  public $cloture_activite_4;
 
   // DB References
-  var $sejour_id  = null;
-  var $chir_id    = null;
-  var $chir_2_id  = null;
-  var $chir_3_id  = null;
-  var $chir_4_id  = null;
-  var $anesth_id  = null;
-  var $plageop_id = null;
-  var $salle_id   = null;
-  var $poste_sspi_id = null;
-  var $examen_operation_id = null;
+  public $sejour_id;
+  public $chir_id;
+  public $chir_2_id;
+  public $chir_3_id;
+  public $chir_4_id;
+  public $anesth_id;
+  public $plageop_id;
+  public $salle_id;
+  public $poste_sspi_id;
+  public $examen_operation_id;
 
   // DB Fields S@nté.com communication
-  var $code_uf    = null;
-  var $libelle_uf = null;
+  public $code_uf;
+  public $libelle_uf;
 
   // DB Fields
-  var $date                 = null;
-  var $libelle              = null;
-  var $cote                 = null;
-  var $temp_operation       = null;
-  var $pause                = null;
-  var $time_operation       = null;
-  var $exam_extempo         = null;
-  var $examen               = null;
-  var $materiel             = null;
-  var $commande_mat         = null;
-  var $info                 = null;
-  var $type_anesth          = null;
-  var $rques                = null;
-  var $rank                 = null;
-  var $rank_voulu           = null;
-  var $anapath              = null;
-  var $flacons_anapath      = null;
-  var $labo_anapath         = null;
-  var $description_anapath  = null;
-  var $labo                 = null;
-  var $flacons_bacterio     = null;
-  var $labo_bacterio         = null;
-  var $description_bacterio = null;
-  var $prothese             = null;
-  var $ASA                  = null;
-  var $position             = null;
+  public $date;
+  public $libelle;
+  public $cote;
+  public $temp_operation;
+  public $pause;
+  public $time_operation;
+  public $exam_extempo;
+  public $examen;
+  public $materiel;
+  public $commande_mat;
+  public $info;
+  public $type_anesth;
+  public $rques;
+  public $rank;
+  public $rank_voulu;
+  public $anapath;
+  public $flacons_anapath;
+  public $labo_anapath;
+  public $description_anapath;
+  public $labo;
+  public $flacons_bacterio;
+  public $labo_bacterio;
+  public $description_bacterio;
+  public $prothese;
+  public $ASA;
+  public $position;
 
-  var $depassement        = null;
-  var $conventionne       = null;
-  var $forfait            = null;
-  var $fournitures        = null;
-  var $depassement_anesth = null;
+  public $depassement;
+  public $conventionne;
+  public $forfait;
+  public $fournitures;
+  public $depassement_anesth;
 
-  var $annulee = null;
+  public $annulee;
 
-  var $horaire_voulu      = null;
-  var $_horaire_voulu     = null;
-  var $duree_uscpo        = null;
-  var $passage_uscpo      = null;
-  var $duree_preop        = null;
-  var $presence_preop     = null;
-  var $presence_postop    = null;
-  var $envoi_mail         = null;
+  public $horaire_voulu;
+  public $_horaire_voulu;
+  public $duree_uscpo;
+  public $passage_uscpo;
+  public $duree_preop;
+  public $presence_preop;
+  public $presence_postop;
+  public $envoi_mail;
 
   // Timings enregistrés
-  var $debut_prepa_preop = null;
-  var $fin_prepa_preop   = null;
-  var $entree_bloc       = null;
-  var $entree_salle      = null;
-  var $pose_garrot       = null;
-  var $debut_op          = null;
-  var $fin_op            = null;
-  var $retrait_garrot    = null;
-  var $sortie_salle      = null;
-  var $entree_reveil     = null;
-  var $sortie_reveil_possible = null;
-  var $sortie_reveil_reel = null;
-  var $induction_debut   = null;
-  var $induction_fin     = null;
+  public $debut_prepa_preop;
+  public $fin_prepa_preop;
+  public $entree_bloc;
+  public $entree_salle;
+  public $pose_garrot;
+  public $debut_op;
+  public $fin_op;
+  public $retrait_garrot;
+  public $sortie_salle;
+  public $entree_reveil;
+  public $sortie_reveil_possible;
+  public $sortie_reveil_reel;
+  public $induction_debut;
+  public $induction_fin;
 
   // Vérification du côté
-  var $cote_admission      = null;
-  var $cote_consult_anesth = null;
-  var $cote_hospi          = null;
-  var $cote_bloc           = null;
+  public $cote_admission;
+  public $cote_consult_anesth;
+  public $cote_hospi;
+  public $cote_bloc;
 
   // Visite de préanesthésie
-  var $date_visite_anesth    = null;
-  var $prat_visite_anesth_id = null;
-  var $rques_visite_anesth   = null;
-  var $autorisation_anesth   = null;
+  public $date_visite_anesth;
+  public $prat_visite_anesth_id;
+  public $rques_visite_anesth;
+  public $autorisation_anesth;
 
   // Form fields
-  var $_hour_op         = null;
-  var $_min_op          = null;
-  var $_hour_urgence    = null;
-  var $_min_urgence     = null;
-  var $_lu_type_anesth  = null;
-  var $_codes_ccam      = array();
-  var $_duree_interv    = null;
-  var $_duree_garrot    = null;
-  var $_duree_induction = null;
-  var $_presence_salle  = null;
-  var $_duree_sspi      = null;
-  var $_hour_voulu      = null;
-  var $_min_voulu       = null;
-  var $_deplacee        = null;
-  var $_compteur_jour   = null;
-  var $_pause_min       = null;
-  var $_pause_hour      = null;
-  var $_protocole_prescription_anesth_id = null;
-  var $_protocole_prescription_chir_id   = null;
-  var $_move                   = null;
-  var $_reorder_rank_voulu     = null;
-  var $_password_visite_anesth = null;
-  var $_patient_id      = null;
-  var $_dmi_alert       = null;
-  var $_offset_uscpo    = array();
-  var $_width_uscpo     = array();
-  var $_width           = array();
-  var $_debut_offset    = array();
-  var $_fin_offset      = array();
-  var $_place_after_interv_id = null;
-  var $_heure_us        = null;
-  var $_types_ressources_ids = null;
-  var $_is_urgence      = null;
+  public $_hour_op;
+  public $_min_op;
+  public $_hour_urgence;
+  public $_min_urgence;
+  public $_lu_type_anesth;
+  public $_codes_ccam = array();
+  public $_duree_interv;
+  public $_duree_garrot;
+  public $_duree_induction;
+  public $_presence_salle;
+  public $_duree_sspi;
+  public $_hour_voulu;
+  public $_min_voulu;
+  public $_deplacee;
+  public $_compteur_jour;
+  public $_pause_min;
+  public $_pause_hour;
+  public $_protocole_prescription_anesth_id;
+  public $_protocole_prescription_chir_id;
+  public $_move;
+  public $_reorder_rank_voulu;
+  public $_password_visite_anesth;
+  public $_patient_id;
+  public $_dmi_alert;
+  public $_offset_uscpo = array();
+  public $_width_uscpo  = array();
+  public $_width        = array();
+  public $_debut_offset = array();
+  public $_fin_offset   = array();
+  public $_place_after_interv_id;
+  public $_heure_us;
+  public $_types_ressources_ids;
+  public $_is_urgence;
 
   // Distant fields
-  var $_datetime          = null;
-  var $_datetime_reel     = null;
-  var $_datetime_reel_fin = null;
-  var $_datetime_best     = null;
-  var $_ref_affectation   = null;
-  var $_ref_besoins       = null;
+  public $_datetime;
+  public $_datetime_reel;
+  public $_datetime_reel_fin;
+  public $_datetime_best;
+  public $_ref_affectation;
+  /** @var CBesoinRessource[]  */
+  public $_ref_besoins;
 
   // Tarif
   public $_bind_tarif;
   public $_tarif_id;
   
   // EAI Fields
-  var $_eai_initiateur_group_id  = null; // group initiateur du message EAI
+  public $_eai_initiateur_group_id; // group initiateur du message EAI
 
   // Links
-  var $_link_editor = null;
-  var $_link_viewer = null;
+  public $_link_editor;
+  public $_link_viewer;
 
-  /**
-   * @var CMediusers
-   */
-  var $_ref_chir           = null;
-
-  /**
-   * @var CMediusers
-   */
-  var $_ref_chir_2         = null;
-
-  /**
-   * @var CMediusers
-   */
-  var $_ref_chir_3         = null;
-
-  /**
-   * @var CMediusers
-   */
-  var $_ref_chir_4         = null;
-
-  /**
-   * @var CPosteSSPI
-   */
-  var $_ref_poste          = null;
-
-  /**
-   * @var CPlageOp
-   */
-  var $_ref_plageop         = null;
-
-  /**
-   * @var CSalle
-   */
-  var $_ref_salle           = null;
-
-  /**
-   * @var CMediusers
-   */
-  var $_ref_anesth          = null;
-  /**
-   * @var CTypeAnesth
-   */
-  var $_ref_type_anesth     = null;
-  var $_ref_consult_anesth  = null;
-  var $_ref_anesth_visite   = null;
-
-  /**
-   * @var CActeCCAM[]
-   */
-  var $_ref_actes_ccam      = array();
-  var $_ref_echange_hprim   = null;
-  var $_ref_anesth_perops   = null;
-  var $_ref_naissances      = null;
-  var $_ref_poses_disp_vasc = null;
+  /** @var CMediusers */
+  public $_ref_chir;
+  /** @var CMediusers */
+  public $_ref_chir_2;
+  /** @var CMediusers */
+  public $_ref_chir_3;
+  /** @var CMediusers */
+  public $_ref_chir_4;
+  /** @var CPosteSSPI */
+  public $_ref_poste;
+  /** @var CPlageOp */
+  public $_ref_plageop;
+  /** @var CSalle */
+  public $_ref_salle;
+  /** @var CMediusers */
+  public $_ref_anesth;
+  /** @var CTypeAnesth */
+  public $_ref_type_anesth;
+  public $_ref_consult_anesth;
+  public $_ref_anesth_visite;
+  /** @var CActeCCAM[] */
+  public $_ref_actes_ccam = array();
+  public $_ref_echange_hprim;
+  public $_ref_anesth_perops;
+  public $_ref_naissances;
+  public $_ref_poses_disp_vasc;
 
   // Filter Fields
-  var $_date_min      = null;
-  var $_date_max      = null;
-  var $_plage         = null;
-  var $_service       = null;
-  var $_ranking       = null;
-  var $_cotation      = null;
-  var $_specialite    = null;
-  var $_scodes_ccam   = null;
-  var $_prat_id       = null;
-  var $_bloc_id       = null;
-  var $_ccam_libelle  = null;
+  public $_date_min;
+  public $_date_max;
+  public $_plage;
+  public $_service;
+  public $_ranking;
+  public $_cotation;
+  public $_specialite;
+  public $_scodes_ccam;
+  public $_prat_id;
+  public $_bloc_id;
+  public $_ccam_libelle;
 
   function COperation() {
     parent::__construct();
@@ -1188,6 +1161,9 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_view = "Intervention de {$this->_ref_sejour->_ref_patient->_view} par le Dr {$this->_ref_chir->_view}";
   }
 
+  /**
+   * @return CBesoinRessource[]
+   */
   function loadRefsBesoins() {
     return $this->_ref_besoins = $this->loadBackRefs("besoins_ressources");
   }

@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -75,6 +75,8 @@ class CPlageOp extends CMbObject {
 
   /** @var COperation[] */
   public $_ref_operations;
+  /** @var COperation[] */
+  public $_unordered_operations;
 
   function getSpec() {
     $spec = parent::getSpec();

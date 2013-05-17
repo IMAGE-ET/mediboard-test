@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -30,12 +30,12 @@ foreach ($listBlocs as $_bloc) {
 }
 
 // Chargement des Anesthésistes
-$listAnesths = new CMediusers();
-$listAnesths = $listAnesths->loadAnesthesistes(PERM_READ);
+$anesth      = new CMediusers();
+$listAnesths = $anesth->loadAnesthesistes(PERM_READ);
 
 // Chargement des Chirurgiens
-$listChirs = new CMediusers();
-$listChirs = $listChirs->loadPraticiens(PERM_READ);
+$chir      = new CMediusers();
+$listChirs = $chir->loadPraticiens(PERM_READ);
 
 $salle = new CSalle();
 $where = array("bloc_id" => "='$bloc->_id'");
@@ -59,13 +59,14 @@ foreach ($bloc->_ref_salles as &$salle) {
 
 // Interventions hors plages non traitées
 $op = new COperation();
-$where = array();
 $ljoin = array();
 $ljoin["sejour"] = "operations.sejour_id = sejour.sejour_id";
-$where["operations.date"] = "= '$date_suivi'";
-$where["operations.salle_id"] = "IS NULL";
+$where = array();
+$where["operations.date"]       = "= '$date_suivi'";
+$where["operations.salle_id"]   = "IS NULL";
 $where["operations.plageop_id"] = "IS NULL";
-$where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+$where["operations.chir_id"]    = CSQLDataSource::prepareIn(array_keys($listChirs));
+$where["sejour.group_id"]       = "= '".CGroups::loadCurrent()->_id."'";
 
 /** @var COperation[] $non_traitees */
 $non_traitees = $op->loadList($where, null, null, null, $ljoin);
