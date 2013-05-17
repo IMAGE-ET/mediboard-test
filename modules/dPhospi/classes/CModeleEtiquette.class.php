@@ -128,7 +128,7 @@ class CModeleEtiquette extends CMbMetaObject {
     // Création du PDF
     $pdf = new CMbPdf('P', 'cm', array($this->largeur_page, $this->hauteur_page));
     $pdf->setFont($this->font, '', $this->hauteur_ligne);
-    
+
     $pdf->setPrintHeader(false);
     $pdf->setPrintFooter(false);
     
@@ -206,12 +206,12 @@ class CModeleEtiquette extends CMbMetaObject {
         
         foreach ($fragments as $fragment) {
           if (preg_match("/BARCODE_(.*)/", $fragment, $matches) == 1) {
-            $barcode_x = $pdf_ex->getX();
+            $barcode_x = $pdf_ex->getX() + 0.15;
             $barcode_y = $pdf_ex->getY();
             $barcode = $matches[1];
-            $barcode_width = strlen($barcode) * 0.4 + 0.1;
+            $barcode_width = strlen($barcode) * 0.4 + 0.4;
             $pdf_ex->writeBarcode($barcode_x, $barcode_y, $barcode_width, 0.8, "C128B", 1, null, null, $barcode);
-            
+
             $pdf_ex->setX($barcode_x + $barcode_width);
             $was_barcode = 1;
           }
@@ -247,12 +247,12 @@ class CModeleEtiquette extends CMbMetaObject {
       
       foreach ($fragments as $fragment) {
         if (preg_match("/BARCODE_(.*)/", $fragment, $matches) == 1) {
-          $barcode_x = $pdf->getX();
+          $barcode_x = $pdf->getX() + 0.15;
           $barcode_y = $pdf->getY();
           $barcode = $matches[1];
-          $barcode_width = strlen($barcode) * 0.4 + 0.1;
+          $barcode_width = strlen($barcode) * 0.4 + 0.4;
           $pdf->writeBarcode($barcode_x, $barcode_y, $barcode_width, 0.8, "C128B", 1, null, null, $barcode);
-          
+
           $pdf->setX($barcode_x + $barcode_width);
           $was_barcode = 1;
         }

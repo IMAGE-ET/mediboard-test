@@ -3622,7 +3622,7 @@ if(!class_exists('TCPDF', false)) {
 			if (empty($font)) {$font = BCD_DEFAULT_FONT;}
 			if (empty($xres)) {$xres = BCD_DEFAULT_XRES;}
 			
-			$scale_factor = 1.5 * $xres * $this->k;
+			$scale_factor = 1.5 * $xres * 25;
 			$bc_w = round($w * $scale_factor); //width in points
 			$bc_h = round($h * $scale_factor); //height in points
 			

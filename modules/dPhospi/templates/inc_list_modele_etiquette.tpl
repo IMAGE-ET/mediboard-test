@@ -40,7 +40,7 @@
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="2" class="empty">
+      <td colspan="5" class="empty">
       {{tr}}CModeleEtiquette.none{{/tr}}
       </td>
     </tr>

@@ -151,8 +151,8 @@ $library->fileName = "tcpdf_1_53_0_TC034.zip";
 $library->description = "Composant de génération de fichiers PDF avec codes barres";
 $library->sourceDir = "tcpdf";
 $library->targetDir = "tcpdf";
-$library->versionFile = "barcode/cmb128bobject.php";
-$library->versionString = "public function DrawObject";
+$library->versionFile = "tcpdf.php";
+$library->versionString = "xres * 25";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "tcpdf";
