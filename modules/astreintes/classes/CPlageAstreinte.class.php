@@ -1,114 +1,180 @@
-<?php /* $Id */
+<?php /** $Id **/
 
 /**
- * @package Mediboard
- * @subpackage dPpersonnel
- * @version $Revision: 6194 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * CPlageAstreinte class
+ *
+ * @category Astreintes
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
-class CPlageAstreinte extends CMbObject {
+class CPlageAstreinte extends CPlageCalendaire {
   // DB Table key
-  var $plage_id = null;
+  public $plage_id;
 
   // DB Fields
-  var $date_debut  = null;
-  var $date_fin    = null;
-  var $libelle     = null;
-  var $user_id     = null;
+  public $libelle;
+  public $user_id;
+  public $type;
+  public $phone_astreinte;
 
+
+  static $astreintes_type = array(
+    "medical",
+    "admin",
+    "personnelsoignant"
+  );
   // Object References
-  var $_num_astreinte  = null;
-  var $_ref_user       = null;
+  public $_num_astreinte;
+  public $_ref_user;
+  public $_type;
 
 
   // Form fields
-  var $_duree      = null;
-  var $_type      = null;
+  public $_duree;   //00:00:00
+  public $_hours;   // 29.5 hours
+  public $_duration;
+  public $_color;
 
-  // Behaviour fields
-
+  /** Behaviour fields
+   *
+   * @return string $specs
+   *
+   */
   function getSpec() {
     $specs = parent::getSpec();
-    $specs->table = "plage_astreinte";
+    $specs->table = "astreinte_plage";
     $specs->key   = "plage_id";
+    $specs->collision_keys = array("type", "user_id");
     return $specs;
   }
 
-  //spécification des propriétés
+  /**
+   * spécification des propriétés
+   *
+   * @return array $specs
+   **/
   function getProps() {
     $specs = parent::getProps();
     $specs["user_id"]         = "ref class|CMediusers notNull";
-    $specs["_ref_user"]       = "ref class|CMediusers";
-    $specs["date_debut"]      = "date notNull";
-    $specs["date_fin"]        = "date moreEquals|date_debut notNull";
+    $specs["type"]           = "enum list|".implode("|", self::$astreintes_type)." notNull";
     $specs["libelle"]         = "str";
-    $specs["_duree"]          = "num";
-    $specs["_num_astreinte"]  = "phone";
-    $specs["_type"]           = "enum list|medical|admin";
+    $specs["phone_astreinte"] = "phone notNull";
     return $specs;
   }
 
+  /**
+   * get backprops
+   *
+   * @return array
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     return $backProps;
   }
 
+  /**
+   * loadView
+   *
+   * @return null
+   */
   function loadView() {
     parent::loadView();
+    $this->getDuree();
+    $this->getDuration();
     $this->_ref_user = $this->loadRefUser();  //I need the Phone Astreinte
   }
 
-  function updateFormFields() {
-    parent::updateFormFields();
-    $this->_shortview = $this->_view = $this->libelle;
-  }
-
-  function check() {
-    $this->completeField("date_debut", "date_fin", "user_id");
-    $plage_astreinte  = new CPlageAstreinte();
-    $plage_astreinte->user_id = $this->user_id;
-    $plages_astreinte = $plage_astreinte->loadMatchingList();
-    unset($plages_astreinte[$this->_id]);
-
-    foreach($plages_astreinte as $_plage) {
-      if (CMbRange::collides($this->date_debut, $this->date_fin, $_plage->date_debut, $_plage->date_fin)) {
-        return CAppUI::tr("CPlageConge-conflit %s", $_plage->_view);
-      }
-    }
-    return parent::check();
-  }
-
-  function loadFor($user_id, $date) {
-    $where["user_id"] = "= '$user_id'";
-    $where[] = "'$date' BETWEEN date_debut AND date_fin";
-    $this->loadObject($where);
-  }
-
+  /**
+   * load list of Astreinte for a specified range
+   *
+   * @param int    $user_id user_id
+   * @param string $min     date min
+   * @param string $max     date max
+   *
+   * @return CStoredObject[]
+   */
   function loadListForRange($user_id, $min, $max) {
     $where["user_id"] = "= '$user_id'";
-    $where["date_debut"] = "<= '$max'";
-    $where["date_fin"  ] = ">= '$min'";
-    $order = "date_debut";
+    $where["start"] = "<= '$max'";
+    $where["end"  ] = ">= '$min'";
+    $order = "end";
     return $this->loadList($where, $order);
   }
 
-  function loadDays($debut, $fin) {
-    $this->_duree = CMbDT::daysRelative($date_debut,$date_fin);
-  }
-
-  function loadType() {
-    if($this->_ref_user->isMedical()) {
-      $_plage->_type = 'medical';
+  /**
+   * get the permission type
+   *
+   * @param int $permType permission type
+   *
+   * @return bool
+   */
+  function getPerm($permType) {
+    if (CAppUI::$user->isAdmin()) {
+      return true;
     }
 
-    if($this->_ref_user->isSecretaire()) {
-      $_plage->_type = 'admin';
+    if ($this->_ref_user->_id == CAppUI::$user->_id) {
+      return true;
     }
 
-    return $_plage->_type;
+    if (CModule::getCanDo('astreintes')->edit && $this->_ref_user->getPerm($permType)) {
+      return true;
+    }
+
+    if (CModule::getCanDo("astreintes")->read && $permType <= READ) {
+      return true;
+    }
+
+    return false;
   }
 
+  /**
+   * get the duration
+   *
+   * @return string
+   */
+  function getDuree() {
+    $duree = CMbDate::duration($this->start, $this->end, 0);
+    return $this->_duree = $duree;
+  }
+
+  /**
+   * get the number of hours between start & end
+   *
+   * @return float
+   */
+  function getHours() {
+    $duree = CMbDT::minutesRelative($this->start, $this->end)/60;
+    return $this->_hours = $duree;
+  }
+
+  /**
+   * get duration for the current plage
+   *
+   * @return array
+   */
+  function getDuration() {
+    return $this->_duration = CMbDate::duration($this->start, $this->end);
+  }
+
+  /**
+   * load color for astreinte
+   *
+   * @return mixed
+   */
+  function loadRefColor() {
+
+    return $this->_color = CAppUI::conf("astreintes astreinte_".$this->type."_color");
+  }
+
+  /**
+   * load ref user
+   *
+   * @return CMbObject
+   */
   function loadRefUser() {
     $this->_ref_user = $this->loadFwdRef("user_id", true);
     $this->_ref_user->loadRefFunction();
@@ -117,56 +183,13 @@ class CPlageAstreinte extends CMbObject {
     return $this->_ref_user;
   }
 
+  /**
+   * load phone for astreinte
+   *
+   * @return CMbObject
+   */
   function loadRefPhoneAstreinte() {
     $this->_num_astreinte = $this->loadFwdRef("_user_astreinte", true);
     return $this->_num_astreinte;
   }
-
-  function getPerm($permType) {
-    if ($this->user_id == CAppUI::$user->_id) {
-      return true;
-    }
-
-    return $this->loadRefUser()->getPerm($permType);
-  }
-
-  /**
-   * Make a pseudo plage corresponding to activity deb/fin for given user
-   *
-   * @param ref[CUser] $user_id  User
-   * @param string     $type     Either deb or fin
-   * @param date       $limit    Limit date to build pseudo plage
-   * @return CPlageConge
-   */
-  static function makePseudoPlage($user_id, $activite, $limit) {
-    // Parameter check
-    if (!in_array($activite, array("deb", "fin"))) {
-      trigger_error("Activite '$activite' should be one of 'deb' or 'fin'", E_USER_WARNING);
-    }
-
-    // Make plage
-    $plage = new self;
-    $plage->_id = "$activite-$user_id";
-    $plage->user_id = $user_id;
-    $plage->_activite = $activite;
-    $plage->libelle   = CAppUI::tr("$plage->_class._activite.$activite");
-
-    // Concerned user
-    $user = CMediusers::get($user_id);
-
-    // Dates for deb case
-    if ($activite == "deb") {
-      $plage->date_debut = $limit;
-      $plage->date_fin = CMbDT::date("-1 DAY", $user->deb_activite);
-    }
-
-    // Dates for fin case
-    if ($activite == "fin") {
-      $plage->date_debut = CMbDT::date("+1 DAY", $user->fin_activite);
-      $plage->date_fin   = $limit;
-    }
-
-    return $plage;
-  }
 }
-?>
