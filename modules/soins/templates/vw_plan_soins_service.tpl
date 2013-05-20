@@ -123,10 +123,6 @@ Main.add(function(){
   <input type="hidden" name="_administrations">
 </form>
 
-<form name="click" action="?" method="get">
-  <input type="hidden" name="nb_decalage" value="{{$nb_decalage}}" />
-</form>
-
 <form name="addPlanif" action="" method="post">
   <input type="hidden" name="dosql" value="do_administration_aed" />
   <input type="hidden" name="m" value="prescription" />

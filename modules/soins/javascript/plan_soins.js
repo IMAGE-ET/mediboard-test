@@ -9,7 +9,6 @@
  */
  
 PlanSoins = {
-  formClick:           null,
   composition_dossier: null,
   timeOutBefore:       null,
   timeOutAfter:        null,
@@ -21,10 +20,11 @@ PlanSoins = {
   time_anciennete:     [],
   timer_anciennete:    [],
   with_navigation:     null,
+  nb_decalage:         null,
+  save_nb_decalage:    null,
 
   init: function(options){
     Object.extend(PlanSoins, options);
-    PlanSoins.formClick = getForm("click");
   },
 
   selColonne: function(hour){
@@ -168,7 +168,7 @@ PlanSoins = {
     
     if(original_date != dateTime || PlanSoins.manual_planif){
       submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
-        PlanSoins.loadTraitement(null,PlanSoins.date, $V(getForm("click").nb_decalage), 'planification', object_id, object_class, key_tab);
+        PlanSoins.loadTraitement(null,PlanSoins.date,PlanSoins.nb_decalage, 'planification', object_id, object_class, key_tab);
       } } ); 
     }
   },
@@ -228,7 +228,7 @@ PlanSoins = {
     $V(oFormPlanifPerf.original_datetime, original_datetime);
     
     return onSubmitFormAjax(oFormPlanifPerf, { onComplete: function(){
-      PlanSoins.loadTraitement(null, PlanSoins.date, $V(getForm("click").nb_decalage), 'planification', prescription_line_mix_id, 'CPrescriptionLineMix','');  
+      PlanSoins.loadTraitement(null, PlanSoins.date, PlanSoins.nb_decalage, 'planification', prescription_line_mix_id, 'CPrescriptionLineMix','');
     } });
   },
   
@@ -358,7 +358,7 @@ PlanSoins = {
   },
   viewDossierSoin: function(element){
     if (PlanSoins.manual_planif) {
-      var periode_visible = PlanSoins.composition_dossier[PlanSoins.formClick.nb_decalage.value];
+      var periode_visible = PlanSoins.composition_dossier[PlanSoins.nb_decalage];
       PlanSoins.toggleManualPlanif(periode_visible);
     }
 
@@ -424,7 +424,7 @@ PlanSoins = {
   
   // Deplacement du dossier de soin
   moveDossierSoin: function(element, hack_ie){
-    var periode_visible = PlanSoins.composition_dossier[PlanSoins.formClick.nb_decalage.value];
+    var periode_visible = PlanSoins.composition_dossier[PlanSoins.nb_decalage];
     
     // To prevent IE to crash
     if (hack_ie && Prototype.Browser.IE) {
@@ -533,29 +533,29 @@ PlanSoins = {
   
   // Deplacement du dossier vers la gauche
   showBefore: function(){
-    if(PlanSoins.formClick.nb_decalage.value >= 1){
-      PlanSoins.formClick.nb_decalage.value = parseInt(PlanSoins.formClick.nb_decalage.value) - 1;
+    if(PlanSoins.nb_decalage >= 1){
+      PlanSoins.nb_decalage = parseInt(PlanSoins.nb_decalage) - 1;
       PlanSoins.moveDossierSoin($('plan_soin'), true);
     }
     PlanSoins.togglePeriodNavigation();
   },
-  
+
   // Deplacement du dossier de soin vers la droite
   showAfter: function(){
-    if(PlanSoins.formClick.nb_decalage.value < (PlanSoins.nb_postes - 1)){
-      PlanSoins.formClick.nb_decalage.value = parseInt(PlanSoins.formClick.nb_decalage.value) + 1;
+    if(PlanSoins.nb_decalage < (PlanSoins.nb_postes - 1)){
+      PlanSoins.nb_decalage = parseInt(PlanSoins.nb_decalage) + 1;
       PlanSoins.moveDossierSoin($('plan_soin'), true);
     }
     PlanSoins.togglePeriodNavigation();
   },
-  
+
   togglePeriodNavigation: function(){
-    if(PlanSoins.formClick.nb_decalage.value >= 1){
+    if(PlanSoins.nb_decalage >= 1){
       $("plan_soin").select("a.prevPeriod").invoke("show");
     } else {
       $("plan_soin").select("a.prevPeriod").invoke("hide");
     }
-    if(PlanSoins.formClick.nb_decalage.value < (PlanSoins.nb_postes - 1)){
+    if(PlanSoins.nb_decalage < (PlanSoins.nb_postes - 1)){
       $("plan_soin").select("a.nextPeriod").invoke("show");
     } else {
       $("plan_soin").select("a.nextPeriod").invoke("hide");
@@ -662,7 +662,7 @@ PlanSoins = {
 
     return onSubmitFormAjax(oForm, { onComplete: function() {
       Control.Modal.close();
-      PlanSoins.loadTraitement(null,PlanSoins.date, $V(getForm("click").nb_decalage), 'planification', $V(oForm.object_id), $V(oForm.object_class), $V(oForm.prise_id) ? $V(oForm.prise_id) : $V(oForm.unite_prise));
+      PlanSoins.loadTraitement(null,PlanSoins.date, PlanSoins.nb_decalage, 'planification', $V(oForm.object_id), $V(oForm.object_class), $V(oForm.prise_id) ? $V(oForm.prise_id) : $V(oForm.unite_prise));
     } });
   },
 

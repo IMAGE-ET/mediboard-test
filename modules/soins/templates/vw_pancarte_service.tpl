@@ -69,6 +69,7 @@ function viewTransmissions(service_id, user_id, degre, observations, transmissio
 }       
 
 showDossierSoins = function(sejour_id, date){
+  PlanSoins.save_nb_decalage = PlanSoins.nb_decalage;
   $('dossier_sejour').update("");
   var url = new Url("soins", "ajax_vw_dossier_sejour");
   url.addParam("sejour_id", sejour_id);
@@ -78,9 +79,17 @@ showDossierSoins = function(sejour_id, date){
 
 
 refreshLinePancarte = function(prescription_id){
+  PlanSoins.init({
+    composition_dossier: {{$composition_dossier|@json}},
+    date: "{{$date}}",
+    manual_planif: "{{$manual_planif}}",
+    bornes_composition_dossier:  {{$bornes_composition_dossier|@json}},
+    nb_postes: {{$bornes_composition_dossier|@count}},
+    nb_decalage: PlanSoins.save_nb_decalage ? PlanSoins.save_nb_decalage : {{$nb_decalage}}
+  });
   var url = new Url("soins", "vw_pancarte_service");
 	url.addParam("prescription_id", prescription_id);
-  url.requestUpdate("pancarte_line_"+prescription_id);
+  url.requestUpdate("pancarte_line_"+prescription_id, {onComplete: PlanSoins.moveDossierSoin.curry($('plan_soin_pancarte'))});
 }
 
 loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
@@ -112,10 +121,11 @@ Main.add(function () {
       date: "{{$date}}",
       manual_planif: "{{$manual_planif}}",
       bornes_composition_dossier:  {{$bornes_composition_dossier|@json}},
-      nb_postes: {{$bornes_composition_dossier|@count}}
+      nb_postes: {{$bornes_composition_dossier|@count}},
+      nb_decalage: {{$nb_decalage}}
     });
 
-  PlanSoins.moveDossierSoin($('plan_soin'));
+  PlanSoins.moveDossierSoin($('plan_soin_pancarte'));
   {{/if}}
 });
 
@@ -124,10 +134,6 @@ Main.add(function () {
 {{if "dPprescription"|module_active}}
   {{mb_script module="dPprescription" script="prescription"}}
 {{/if}}
-
-<form name="click">
-  <input type="hidden" name="nb_decalage" value="{{$nb_decalage}}"/>
-</form>
 
 <form name="viewSoin" method="get" action="?">
   <input type="hidden" name="m" value="soins" />
@@ -171,7 +177,7 @@ Main.add(function () {
 	    </th>
 	  </tr>
 	</table>
-	<table id="plan_soin" class="tbl">
+	<table id="plan_soin_pancarte" class="tbl">
 	  <tr>
 	    <th rowspan="2" class="title" style="width: 20%">Patient</th>
 	    <th rowspan="2" class="title" style="width: 10%">Lit</th>

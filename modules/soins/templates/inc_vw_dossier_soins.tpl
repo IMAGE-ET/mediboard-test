@@ -30,14 +30,14 @@ addManualPlanification = function(date, time, key_tab, object_id, object_class, 
   $V(oForm.original_dateTime, original_date);
   
   submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
-    PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, 'planification', object_id, object_class, key_tab);
+    PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}',PlanSoins.nb_decalage, 'planification', object_id, object_class, key_tab);
   } } );
 }
 
 refreshDossierSoin = function(mode_dossier, chapitre, force_refresh){
   PlanSoins.toggleAnciennete(chapitre);
   if(!window[chapitre+'SoinLoaded'] || force_refresh) {
-    PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, mode_dossier, null, null, null, chapitre);
+    PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}',PlanSoins.nb_decalage, mode_dossier, null, null, null, chapitre);
     window[chapitre+'SoinLoaded'] = true;
   }
 }
@@ -61,7 +61,7 @@ submitPosePerf = function(oFormPerf){
     $V(oFormPerf.date_pose, 'current');
     $V(oFormPerf.time_pose, 'current');
     submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){ 
-      PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
+      PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}', PlanSoins.nb_decalage,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
     } } )
   }
 }
@@ -72,7 +72,7 @@ submitRetraitPerf = function(oFormPerf){
     $V(oFormPerf.date_retrait, 'current');
     $V(oFormPerf.time_retrait, 'current');
     submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){ 
-      PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
+      PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}', PlanSoins.nb_decalage,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
     } } )
   }
 }
@@ -185,7 +185,8 @@ Main.add(function () {
     date: "{{$date}}", 
     manual_planif: "{{$manual_planif}}",
     bornes_composition_dossier:  {{$bornes_composition_dossier|@json}},
-    nb_postes: {{$bornes_composition_dossier|@count}}
+    nb_postes: {{$bornes_composition_dossier|@count}},
+    nb_decalage: {{$nb_decalage}}
   });
   {{/if}}
   
@@ -266,10 +267,6 @@ Main.add(function () {
   <form name="adm_multiple" action="?" method="get">
     <input type="hidden" name="_administrations">
     <input type="hidden" name="_administrations_mix">
-  </form>
-  
-  <form name="click" action="?" method="get">
-    <input type="hidden" name="nb_decalage" value="{{$nb_decalage}}" />
   </form>
   
   <form name="addPlanif" action="" method="post">
