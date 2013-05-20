@@ -246,16 +246,16 @@ class CEditPdf{
           $ligne++;
           $this->pdf->setXY(37, $debut_lignes + $ligne*3);
           //Traitement pour le bas de la page et début de la suivante
-          if ($this->pdf->getY()>=265) {
+          if ($this->pdf->getY() >= 265) {
             $this->pdf->setFont($this->fontb, '', 8);
-            $this->pdf->editCell($this->pdf->getX(), $debut_lignes + $ligne*3, 130, "Total Intermédiaire", "R");
-            $this->pdf->Cell(28, "", $montant_intermediaire , null, null, "R");
+            $this->editCell($this->pdf->getX(), $debut_lignes + $ligne*3, 130, "Total Intermédiaire", "R");
+            $this->pdf->Cell(28, "", round($montant_intermediaire, 2) , null, null, "R");
             $this->pdf->setFont($this->font, '', 8);
             $this->pdf->AddPage();
             $nb_pages++;
             $this->ajoutEntete2($nb_pages);
-            $this->pdf->editCell(10, $this->pdf->getY()+4, $colonnes[0]+$colonnes[1], "Patient");
-            $this->pdf->Cell($colonnes[2], "", $this->patient_facture->nom." ".$this->patient_facture->prenom." ".$this->patient_facture->naissance);
+            $this->editCell(10, $this->pdf->getY()+4, $this->colonnes[0]+$this->colonnes[1], "Patient");
+            $this->pdf->Cell($this->colonnes[2], "", $this->patient_facture->nom." ".$this->patient_facture->prenom." ".$this->patient_facture->naissance);
             $this->pdf->Line(10, 42, 190, 42);
             $this->pdf->Line(10, 38, 10, 42);
             $this->pdf->Line(190, 38, 190, 42);
