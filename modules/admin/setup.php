@@ -146,6 +146,12 @@ class CSetupadmin extends CSetup {
                 CHANGE `user_birthday` `user_birthday` CHAR (10)";
     $this->addQuery($query);
 
-    $this->mod_version = "1.0.31";
+    $this->makeRevision("1.0.31");
+    $query = "UPDATE `users`
+                SET `user_birthday` = NULL
+                WHERE `user_birthday` = '0000-00-00'";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.0.32";
   }
 }
