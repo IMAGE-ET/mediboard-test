@@ -157,7 +157,7 @@
         <td style="text-align:right;">{{mb_value object=$item field="montant_base"}}</td>
         <td style="text-align:right;">{{mb_value object=$item field="quantite"}}</td>
         <td style="text-align:right;">{{mb_value object=$item field="coeff"}} </td>
-        <td style="text-align:right;">{{$item->montant_base*$item->coeff|string_format:"%0.2f"|currency}}</td>
+        <td style="text-align:right;">{{$item->montant_base*$item->coeff*$item->quantite|string_format:"%0.2f"|currency}}</td>
       </tr>
     {{/if}}
   {{/foreach}}
