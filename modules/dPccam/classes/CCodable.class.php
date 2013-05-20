@@ -147,10 +147,12 @@ class CCodable extends CMbObject {
       $this->loadOldObject();
       $this->completeField("cloture_activite_1", "cloture_activite_4");
 
-      if (!$can->admin && CAppUI::conf("dPsalleOp CActeCCAM signature") &&
+      if (
+          !$can->admin && CAppUI::conf("dPsalleOp CActeCCAM signature") &&
           ($this->cloture_activite_1 || $this->cloture_activite_4) &&
           $this->fieldModified("codes_ccam") &&
-          strcmp($this->codes_ccam, $this->_old->codes_ccam)) {
+          strcmp($this->codes_ccam, $this->_old->codes_ccam)
+      ) {
         $new_code = substr($this->codes_ccam, strlen($this->_old->codes_ccam)+1);
 
         $code_ccam = new CCodeCCAM($new_code);
@@ -420,6 +422,7 @@ class CCodable extends CMbObject {
 
     $this->_codes_ngap = array();
     foreach ($this->_ref_actes_ngap as $_acte_ngap) {
+      /** @var CActeNGAP $_acte_ngap */
       $this->_codes_ngap[] = $_acte_ngap->makeFullCode();
       $_acte_ngap->loadRefExecutant();
       $_acte_ngap->getLibelle();
@@ -455,8 +458,8 @@ class CCodable extends CMbObject {
 
         $this->_ref_actes_tarmed = $acte_tarmed->loadList($where, $order, null, null, $ljoin );
       }
-      //Dans les cas d'un séjour ou d'une intervention
       else {
+        //Dans les cas d'un séjour ou d'une intervention
         $where["object_class"] = " = '$this->_class'";
         $where["object_id"]    = " = '$this->_id'";
         $order = "code ASC";
@@ -469,6 +472,7 @@ class CCodable extends CMbObject {
 
       $this->_codes_tarmed = array();
       foreach ($this->_ref_actes_tarmed as $_acte_tarmed) {
+        /** @var CActeTarmed $_acte_tarmed */
         $this->_codes_tarmed[] = $_acte_tarmed->makeFullCode();
         $_acte_tarmed->loadRefExecutant();
         $_acte_tarmed->loadRefTarmed();
@@ -506,6 +510,7 @@ class CCodable extends CMbObject {
 
       $this->_codes_caisse = array();
       foreach ($this->_ref_actes_caisse as $_acte_caisse) {
+        /** @var CActeCaisse $_acte_caisse */
         $this->_codes_caisse[] = $_acte_caisse->makeFullCode();
         $_acte_caisse->loadRefExecutant();
         $_acte_caisse->loadRefPrestationCaisse();
@@ -635,7 +640,9 @@ class CCodable extends CMbObject {
   function checkModificateur($code, $heure) {
     $keys = array("A", "E",  "P", "S", "U", "7");
 
-    if (!in_array($code, $keys)) return null;
+    if (!in_array($code, $keys)) {
+      return null;
+    }
 
     $patient   = $this->_ref_patient;
     $discipline = $this->_ref_praticien->_ref_discipline;
@@ -726,9 +733,11 @@ class CCodable extends CMbObject {
 
           // Affect a loaded acte if exists
           foreach ($this->_ref_actes_ccam as $_acte) {
-            if ($_acte->code_acte     == $possible_acte->code_acte
+            if (
+                $_acte->code_acte     == $possible_acte->code_acte
                 && $_acte->code_activite == $possible_acte->code_activite
-                && $_acte->code_phase    == $possible_acte->code_phase) {
+                && $_acte->code_phase    == $possible_acte->code_phase
+            ) {
               if (!isset($used_actes[$_acte->acte_id])) {
                 $possible_acte = $_acte;
                 $used_actes[$_acte->acte_id] = true;

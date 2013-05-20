@@ -1,11 +1,14 @@
-<?php /* $Id:codeCCAM.class.php 8143 2010-02-25 10:59:37Z rhum1 $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPccam
- * @version $Revision:8143 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPccam
+ *
+ * @category Ccam
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
 class CCodeCCAM {
@@ -37,7 +40,7 @@ class CCodeCCAM {
    */
   public $_spec;
 
-  var $_couleursChap = array(
+  public $_couleursChap = array(
     1  => "669966",
     2  => "6666cc",
     3  => "6699ee",
@@ -66,6 +69,7 @@ class CCodeCCAM {
 
   // table de chargement
   static $loadLevel = array();
+  /** @var array CCodeCCAM[] */
   static $loadedCodes = array();
   static $cacheCount = 0;
   static $useCount = array(
@@ -105,6 +109,7 @@ class CCodeCCAM {
     else {
       $this->code = strtoupper($code);
     }
+    return null;
   }
 
   /*function __sleep(){
@@ -129,6 +134,7 @@ class CCodeCCAM {
       self::$loadLevel[$code] = null;
     } 
 
+    /** @var CCodeCCAM $code_ccam */
     $code_ccam =& self::$loadedCodes[$code];
 
     // Si le niveau demandé est inférieur au niveau courant, on retourne le code 
@@ -147,6 +153,8 @@ class CCodeCCAM {
   /**
    * Should use clone with appropriate behaviour
    * But a bit complicated to implement
+   *
+   * @return CCodeCCAM
    */
   function copy() {
     $obj = unserialize(serialize($this));
@@ -363,16 +371,17 @@ class CCodeCCAM {
     // Extraction des modificateurs
     $activite->modificateurs = array();
     $modificateurs =& $activite->modificateurs;
-    $query = "SELECT * FROM modificateuracte
-              WHERE CODEACTE = %1
-              AND CODEACTIVITE = %2
-              AND DATEEFFET = '$lastDate'
-              GROUP BY MODIFICATEUR";
+    $query = "SELECT modificateuracte.MODIFICATEUR
+              FROM modificateuracte
+              WHERE modificateuracte.CODEACTE = %1
+                AND modificateuracte.CODEACTIVITE = %2
+                AND modificateuracte.DATEEFFET = '$lastDate'
+              GROUP BY modificateuracte.MODIFICATEUR";
     $query = $ds->prepare($query, $this->code, $activite->numero);
     $result = $ds->exec($query);
 
     while ($row = $ds->fetchArray($result)) {
-      $query = "SELECT CODE AS code, LIBELLE AS libelle
+      $query = "SELECT modificateur.CODE AS code, modificateur.LIBELLE AS libelle
                 FROM modificateur
                 WHERE CODE = %
                 ORDER BY CODE";
@@ -386,12 +395,14 @@ class CCodeCCAM {
     // Extraction des phases
     $activite->phases = array();
     $phases =& $activite->phases;
-    $query = "SELECT PHASE AS phase, PRIXUNITAIRE AS tarif, CHARGESCAB charges
+    $query = "SELECT phaseacte.PHASE AS phase,
+                phaseacte.PRIXUNITAIRE AS tarif,
+                phaseacte.CHARGESCAB charges
               FROM phaseacte
-              WHERE CODEACTE = %1
-              AND ACTIVITE = %2
-              GROUP BY PHASE
-              ORDER BY PHASE, DATE1 DESC";
+              WHERE phaseacte.CODEACTE = %1
+                AND phaseacte.ACTIVITE = %2
+              GROUP BY phaseacte.PHASE
+              ORDER BY phaseacte.PHASE, phaseacte.DATE1 DESC";
     $query = $ds->prepare($query, $this->code, $activite->numero);
     $result = $ds->exec($query);
 
@@ -402,8 +413,8 @@ class CCodeCCAM {
       $phase->libelle = "Phase Principale";
       $phase->charges = floatval($obj->charges)/100;
 
-      // Copie des modificateurs pour chaque phase. Utile pour dPsalleOp
-      $phase->_modificateurs = $activite->modificateurs;
+      // Copie des modificateurs pour chaque phase. Utile pour la salle d'op
+      $phase->_modificateurs = $phase->tarif ? $activite->modificateurs : array();
     }
 
     // Libellés des phases
@@ -418,7 +429,10 @@ class CCodeCCAM {
 
   function getActesAsso($code = null, $limit = null) {
     $ds =& $this->_spec->ds;
-    $queryEffet = $ds->prepare("SELECT MAX(DATEEFFET) as LASTDATE FROM associabilite WHERE CODEACTE = % GROUP BY CODEACTE", $this->code);
+    $queryEffet = $ds->prepare(
+      "SELECT MAX(DATEEFFET) as LASTDATE FROM associabilite WHERE CODEACTE = % GROUP BY CODEACTE",
+      $this->code
+    );
     $resultEffet = $ds->exec($queryEffet);
     $rowEffet = $ds->fetchArray($resultEffet);
     $lastDate = $rowEffet["LASTDATE"];
@@ -438,7 +452,10 @@ class CCodeCCAM {
         GROUP BY ACTEASSO";
     }
     else {
-      $query = $ds->prepare("SELECT * FROM associabilite WHERE CODEACTE = % AND DATEEFFET = '$lastDate' GROUP BY ACTEASSO", $this->code);
+      $query = $ds->prepare(
+        "SELECT * FROM associabilite WHERE CODEACTE = % AND DATEEFFET = '$lastDate' GROUP BY ACTEASSO",
+        $this->code
+      );
     }
     if ($limit) {
       $query .= " LIMIT $limit";
@@ -457,11 +474,17 @@ class CCodeCCAM {
 
   function getActesIncomp() {
     $ds =& $this->_spec->ds;
-    $queryEffet = $ds->prepare("SELECT MAX(DATEEFFET) as LASTDATE FROM incompatibilite WHERE CODEACTE = % GROUP BY CODEACTE", $this->code);
+    $queryEffet = $ds->prepare(
+      "SELECT MAX(DATEEFFET) as LASTDATE FROM incompatibilite WHERE CODEACTE = % GROUP BY CODEACTE",
+      $this->code
+    );
     $resultEffet = $ds->exec($queryEffet);
     $rowEffet = $ds->fetchArray($resultEffet);
     $lastDate = $rowEffet["LASTDATE"];
-    $query = $ds->prepare("SELECT * FROM incompatibilite WHERE CODEACTE = % AND DATEEFFET = '$lastDate' GROUP BY INCOMPATIBLE", $this->code);
+    $query = $ds->prepare(
+      "SELECT * FROM incompatibilite WHERE CODEACTE = % AND DATEEFFET = '$lastDate' GROUP BY INCOMPATIBLE",
+      $this->code
+    );
     $result = $ds->exec($query);
     $i = 0;
     while ($row = $ds->fetchArray($result)) {
@@ -513,14 +536,17 @@ class CCodeCCAM {
     }
 
     $ds =& $this->_spec->ds;
-    $query = $ds->prepare("SELECT * FROM association WHERE CODE = % AND DATEFIN = '00000000'", $code);
+    $query = $ds->prepare(
+      "SELECT * FROM association WHERE CODE = % AND DATEFIN = '00000000'",
+      $code
+    );
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
     $valeur = $row["COEFFICIENT"] / 10;
     return $valeur;
   }
 
-// Recherche de codes
+  // Recherche de codes
   function findCodes($code='', $keys='', $max_length = null, $where = null) {
     $ds =& $this->_spec->ds;
 
@@ -539,8 +565,8 @@ class CCodeCCAM {
       foreach ($keywords as $value) {
         $listLike[] = "LIBELLELONG LIKE '%".addslashes($value)."%'";
       }
-      // Combiner la recherche de code et libellé
       if ($code != "") {
+        // Combiner la recherche de code et libellé
         foreach ($codes as $value) {
           $codeLike[] = "CODE LIKE '".addslashes($value) . "%'";
         }
@@ -548,8 +574,8 @@ class CCodeCCAM {
         $query .= implode(" OR ", $codeLike);
         $query .= ") OR (";
       }
-      // Ou que le libellé
       else {
+        // Ou uniquement le libellé
         $query .= " AND (";
       }
       $query .= implode(" AND ", $listLike);
@@ -558,8 +584,8 @@ class CCodeCCAM {
       }
 
     }
-    // Ou que le code
     if ($code && !$keys) {
+      // Ou uniquement le code
       $codeLike = array();
       foreach ($codes as $value) {
         $codeLike[] = "CODE LIKE '".addslashes($value) . "%'";

@@ -1,11 +1,15 @@
-<?php /* $Id: */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision:$
-* @author SARL Openxtrem
-*/
+ * dPccam
+ *
+ * @category Ccam
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 
 CCanDo::checkAdmin();
 
@@ -30,4 +34,3 @@ if (null == $lineCount = $ds->queryDump($targetTables, true)) {
   CAppUI::stepAjax("Import des tables - erreur de requête SQL: $msg", UI_MSG_ERROR);
 }
 CAppUI::stepAjax("Table importée", UI_MSG_OK);
-?>

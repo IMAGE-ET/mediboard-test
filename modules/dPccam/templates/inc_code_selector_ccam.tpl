@@ -8,7 +8,7 @@
     url.addParam("codeacte", code);
     url.addParam("object_class", "{{$object_class}}");
     url.requestModal(600, 400);
-  }
+  };
   
   addMultiples = function() {
     var div = $("code_area");

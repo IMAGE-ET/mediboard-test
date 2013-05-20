@@ -42,7 +42,7 @@ updateMontant = function(form){
     $V(form.montant_base, $V(form.montant_base) / oldValue * newValue);
     
   $V(form._last_coefficient, newValue);
-}
+};
 
 removeFraisDivers = function(id, form) {
   if (!confirm("Voulez vous réelement supprimer de frais divers ?")) return;

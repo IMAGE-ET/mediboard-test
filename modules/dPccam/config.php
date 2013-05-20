@@ -15,5 +15,3 @@ $dPconfig["dPccam"] = array (
     ),
   ),
 );
-
-?>

@@ -56,6 +56,7 @@ class CFavoriCCAM extends CMbObject {
       }
 
       $fav = new CFavoriCCAM();
+      /** @var CFavoriCCAM[] $favoris */
       $favoris = $fav->loadList($where, "favoris_code", null, null, $ljoin);
 
       foreach ($favoris as $_favori) {

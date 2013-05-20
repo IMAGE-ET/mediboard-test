@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPccam
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPccam
+ *
+ * @category Ccam
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkAdmin();
@@ -71,15 +74,16 @@ function addFileIntoDB($file, $table) {
   $handle = fopen($file, "r");
   
   // Ne pas utiliser fgetcsv, qui refuse de prendre en compte les caractères en majusucules accentués (et d'autres caractères spéciaux)
-  while($line = fgets($handle)) {
+  while ($line = fgets($handle)) {
     $line = str_replace("'", "\'", $line);
     $datas = explode("|", $line);
     $query = "INSERT INTO $table VALUES('".implode("','", $datas)."')";
     
     $ds->exec($query);
-    if($msg = $ds->error()) {
+    if ($msg = $ds->error()) {
       $echoue++;
-    } else {
+    }
+    else {
       $reussi++;
     }
   }
@@ -87,8 +91,7 @@ function addFileIntoDB($file, $table) {
   fclose($handle);
 }
 
-foreach($listTables as $table => $file) {
+foreach ($listTables as $table => $file) {
   addFileIntoDB("$targetDir/$file", $table);
 }
 
-?>

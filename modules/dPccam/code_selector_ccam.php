@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: 7212 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * dPccam
+ *
+ * @category Ccam
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
 $chir           = CValue::get("chir");
@@ -88,14 +91,14 @@ foreach ($profiles as $profile => $_user_id) {
     }
     $where = "CODE ".$ds->prepareIn($codes_keys);
   }
-  
-  // Si pas de stat et pas de favoris, et que la recherche se fait sur ceux-ci,
-  // alors le tableau de résultat est vide
+
   if (!$_all_codes && count($codes_stats) == 0 && count($codes_favoris) == 0) {
+    // Si pas de stat et pas de favoris, et que la recherche se fait sur ceux-ci,
+    // alors le tableau de résultat est vide
     $codes = array();
   }
-  // Sinon recherche de codes
   else {
+    // Sinon recherche de codes
     $codes = $code->findCodes($_keywords_code, $_keywords_code, null, $where);
   }
   

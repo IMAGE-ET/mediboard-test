@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPccam
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPccam
+ *
+ * @category Ccam
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
 class CActe extends CMbMetaObject {
@@ -130,10 +133,11 @@ class CActe extends CMbMetaObject {
   
   /**
    * Check if linked object is already coded
+   *
    * @return bool
    */
   function checkCoded() {
-    if (!$this->_check_coded || $this->_forwardRefMerging){
+    if (!$this->_check_coded || $this->_forwardRefMerging) {
       return null;
     }
     
@@ -149,6 +153,7 @@ class CActe extends CMbMetaObject {
 
   /**
    * Tell wether acte is ready for precoding
+   *
    * @return bool
    */
   function getPrecodeReady() {
@@ -157,6 +162,7 @@ class CActe extends CMbMetaObject {
   
   /**
    * Return a full serialised code
+   *
    * @return string Serialised full code
    */
   function makeFullCode() {
@@ -165,7 +171,9 @@ class CActe extends CMbMetaObject {
     
   /**
    * Precode with a full serialised code for the act
+   *
    * @param string $code Serialised full code
+   *
    * @return void
    */
   function setFullCode($details) {

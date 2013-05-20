@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPccam
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPccam
+ *
+ * @category Ccam
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -20,10 +23,10 @@ $code = CCodeCCAM::get($codeacte, CCodeCCAM::FULL);
 $codeComplet = false;
 $codeacte = $code->code;
 
-if($code->_activite != ""){
+if ($code->_activite != "") {
   $codeComplet = true;
   $codeacte .= "-$code->_activite";  
-  if($code->_phase != ""){
+  if ($code->_phase != "") {
     $codeacte .= "-$code->_phase";
   }
 }
@@ -55,5 +58,3 @@ $smarty->assign("incomp"       , $code->incomps);
 $smarty->assign("object_class" , $object_class);
 $smarty->assign("hideSelect"   , $hideSelect);
 $smarty->display("vw_full_code.tpl");
-
-?>

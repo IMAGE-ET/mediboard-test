@@ -23,7 +23,7 @@ $i = 0;
 if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
   $cols = fgetcsv($fp, null, ";");
   
-  while($line = fgetcsv($fp, null, ";")) {
+  while ($line = fgetcsv($fp, null, ";")) {
     if (!isset($line[0]) || $line[0] == "") {
       continue;
     }

@@ -2,12 +2,12 @@
 
 /**
  * Autocomplete d'un code ccam sur les codes associés
- *  
- * @category dPccam
+ *
+ * @category Ccam
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:\$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
  * @link     http://www.mediboard.org
  */
 
