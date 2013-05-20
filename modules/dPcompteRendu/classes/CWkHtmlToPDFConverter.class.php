@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: CCompteRendu.class.php 19055 2013-05-07 14:09:27Z mytto $
+ * $Id: CWkHtmlToPDFConverter.class.php 19055 2013-05-07 14:09:27Z mytto $
  *
  * @package    Mediboard
  * @subpackage CompteRendu
@@ -17,6 +17,7 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
   public $width;
   public $height;
   public $format;
+  public $orientation;
   public $header;
   public $header_height;
   public $header_spacing = 0;
@@ -49,7 +50,13 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     $this->temp_name = tempnam("./tmp", "wkhtmltopdf");
     
     // Extraire les marges
-    preg_match("/@page\s*{\s*margin-top:\s*([0-9.]+)cm;\s*margin-right:\s*([0-9.]+)cm;\s*margin-bottom:\s*([0-9.]+)cm;\s*margin-left:\s*([0-9.]+)cm;/", $this->html, $matches);
+    preg_match(
+      "/@page\s*{\s*margin-top:\s*([0-9.]+)cm;\s*".
+      "margin-right:\s*([0-9.]+)cm;\s*".
+      "margin-bottom:\s*([0-9.]+)cm;\s*margin-left:\s*([0-9.]+)cm;/",
+      $this->html,
+      $matches
+    );
     
     // Le facteur 10 est pour la conversion en mm
     $this->margins = array(
@@ -73,13 +80,19 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     $header_footer_common = null;
     $page_number = "<script type='text/javascript'>
       function subst() {
-        var vars={};
-        var x=document.location.search.substring(1).split('&');
-        for (var i in x) {var z=x[i].split('=',2);vars[z[0]] = unescape(z[1]);}
-        var x=['page'];
+        var vars = {},
+            x = document.location.search.substring(1).split('&');
         for (var i in x) {
-          var y = document.getElementsByClassName(x[i]);
-          for(var j=0; j<y.length; ++j) y[j].textContent = vars[x[i]];
+          var z = x[i].split('=', 2);
+          vars[z[0]] = decodeURI(z[1]);
+        }
+        x = ['page'];
+        for (var j in x) {
+          z = x[j];
+          var y = document.getElementsByClassName(z);
+          for (var k = 0; k < y.length; ++k) {
+            y[k].textContent = vars[z];
+          }
         }
       }
     </script>";
@@ -159,7 +172,12 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     file_put_contents($this->file, $this->html);
     
   }
-  
+
+  /**
+   * Génération pdf d'une source HTML
+   *
+   * @return void
+   */
   function render() {
     global $root_dir;
 

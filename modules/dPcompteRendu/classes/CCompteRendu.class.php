@@ -324,9 +324,11 @@ class CCompteRendu extends CDocumentItem {
    * @return void
    */
   function loadContent($field_source = true) {
-    global $can;
     $curr_user = CMediusers::get();
-    $this->_ref_content = $this->loadFwdRef("content_id", true);
+
+    $content = $this->loadFwdRef("content_id", true);;
+    /** @var  CContentHTML $content */
+    $this->_ref_content = $content;
 
     $this->_ref_content->content = preg_replace("/#body\s*{\s*padding/", "body { margin", $this->_ref_content->content);
 
@@ -337,7 +339,7 @@ class CCompteRendu extends CDocumentItem {
     $last_log = $this->_ref_content->loadLastLogForField("content");
     if (
         (CMbDT::daysRelative($last_log->date, CMbDT::dateTime()) > $days) ||
-        (!$can->admin && $this->valide && $this->author_id != $curr_user->_id)
+        (!CCAnDo::admin() && $this->valide && $this->author_id != $curr_user->_id)
     ) {
       $this->_is_locked = true;
     }
@@ -423,7 +425,7 @@ class CCompteRendu extends CDocumentItem {
     $this->_ref_object->loadRefsFwd();
 
     // Utilisateur
-    $this->_ref_user = new CMediusers;
+    $this->_ref_user = new CMediusers();
     if ($this->user_id) {
       $this->_ref_user->load($this->user_id);
     }

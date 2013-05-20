@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Contenu HTML
+ */
 class CContentHTML extends CMbObject {
   // DB Table key
   public $content_id;
@@ -19,6 +22,9 @@ class CContentHTML extends CMbObject {
   // Form fields
   public $_list_classes;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'content_html';
@@ -26,6 +32,9 @@ class CContentHTML extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() { 
     $props = parent::getProps();
     $specs["_list_classes"] = "enum list|".implode("|", array_keys(CCompteRendu::getTemplatedClasses()));
@@ -33,6 +42,9 @@ class CContentHTML extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::check()
+   */
   function check() {
     if ($this->fieldModified("content", "")) {
       return "CContentHTML-failed-emptytext";
@@ -41,6 +53,9 @@ class CContentHTML extends CMbObject {
     return parent::check();
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["compte_rendus"] = "CCompteRendu content_id";

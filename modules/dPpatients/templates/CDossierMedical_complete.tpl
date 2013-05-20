@@ -88,7 +88,7 @@
         
       </td>
     {{else}}
-      <td>
+      <td class="top">
         <div class="empty">{{tr}}CTraitement.none{{/tr}}</div>
       </td>
     {{/if}}

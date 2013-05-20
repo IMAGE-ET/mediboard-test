@@ -79,7 +79,7 @@ $do_merge = CValue::post("do_merge", 0);
 
 if (isset($_POST["_source"])) {
   // Ajout d'entête / pied de page à la volée
-  if (CAppUI::conf("dPcompteRendu CCompteRendu header_footer_fly")) {
+  if (CAppUI::conf("dPcompteRendu CCompteRendu header_footer_fly") && $_POST["object_id"]) {
     $modele = new CCompteRendu();
     $modele->load($_POST["modele_id"]);
 
