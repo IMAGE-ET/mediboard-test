@@ -45,8 +45,7 @@ class CPlageHoraire extends CMbObject {
     // Check whether mandatory collision keys are defined
     $keys = $this->_spec->collision_keys;
     if (!is_array($keys)) {
-      trigger_error(CAppUI::tr("CPlageHoraire-collision_keys", $this->_class), E_USER_ERROR);
-      return;
+      CModelObject::error("CPlageHoraire-collision_keys", $this->_class);
     }
     
     $keys = $this->_spec->collision_keys;

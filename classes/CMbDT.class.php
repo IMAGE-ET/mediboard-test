@@ -293,11 +293,11 @@ class CMbDT {
    *
    * @param string $date The relative date, used to calculate the bank holidays of a specific year
    *
-   * @deprecated Use CGroups::loadCurrent()->getHolidays($date) instead
+   * @deprecated Use CMbDate::getHolidays($date) instead
    * @return array List of bank holidays as dates
    **/
   static function bankHolidays($date = null) {
-    return CGroups::loadCurrent()->getHolidays($date);
+    return CMbDate::getHolidays($date);
   }
 
   /**

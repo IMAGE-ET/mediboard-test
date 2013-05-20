@@ -27,14 +27,16 @@ class CMbDay {
    *
    * @param string $date date chosen
    */
-  public function __construct($date=null) {
+  public function __construct($date = null) {
     if (!$date) {
       $date = CMbDT::date();
     }
 
     $this->date = $date;
     $this->number = (int) CMbDT::transform("", $date, "%j");
-    $this->name = CMbDate::$days_name[$this->number];
+    $dateTmp = explode("-", $date);
+    $this->name = CMbDate::$days_name[(int) $dateTmp[1]][(int) ($dateTmp[2]-1)];
+
 
     //jour férie ?
     $holidays = CMbDate::getHolidays($this->date);

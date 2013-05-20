@@ -243,4 +243,519 @@ class CMbDate {
 
     return $datetime;
   }
+
+
+  /**
+   * return an array of dates non worked
+   *
+   * @param string  $date          date to check (used to analyse the year)
+   *
+   * @param bool    $includeRegion add region holidays (cantons, regions)
+   *
+   * @param CGroups $group         group used for the check, null = current
+   *
+   * @return array
+   */
+  static function getHolidays($date = null, $includeRegion = true, $group = null) {
+    $calendar = array();
+
+    //no date => today
+    if (!$date) {
+      $date = CMbDT::date();
+    }
+
+    $year = CMbDT::transform("+0 DAY", $date, "%Y");
+    $code_pays = CAppUI::conf("ref_pays");
+
+    switch ($code_pays) {
+      case '2': // Switzerland
+        $calendar["$year-01-01"] = "Jour de l'an";                // Jour de l'an
+        $calendar["$year-08-01"] = "Fête Nationnale Suisse";      // fete nationnale suisse
+        $calendar["$year-12-25"] = "Noël";                        // Noël
+        break;
+
+      case '1':  // France
+        $paques = CMbDT::getEasterDate($date);
+        $calendar["$year-01-01"] = "Jour de l'an";                            // Jour de l'an
+        $calendar[CMbDT::date("+1 DAY", $paques)] = "Lundi de paques";        // Lundi de paques
+        $calendar["$year-05-01"] = "Fête du travail";                         // Fête du travail
+        $calendar["$year-05-08"] = "Victoire de 1945";                        // Victoire de 1945
+        $calendar[CMbDT::date("+39 DAYS", $paques)] = "Jeudi de l'ascension"; // Jeudi de l'ascension
+        $calendar[CMbDT::date("+50 DAYS", $paques)] = "Lundi de pentecôte";   // Lundi de pentecôte
+        $calendar["$year-07-14"] = "Fête Nationnale";                         // Fête nationnale
+        $calendar["$year-08-15"] = "Assomption";                              // Assomption
+        $calendar["$year-11-01"] = "Toussain";                                // Toussaint
+        $calendar["$year-11-11"] = "Armistice 1918";                          // Armistice 1918
+        $calendar["$year-12-25"] = "Noël";                                    // Noël
+        break;
+
+      default:
+        break;
+    }
+
+    if ($includeRegion) {
+      $holidaysSub = self::getCpHolidays($date, $group); //récupération des régions
+      $calendar = array_merge($calendar, $holidaysSub);
+    }
+
+    return $calendar;
+  }
+
+  /**
+   * Get the holidays by region
+   *
+   * @param string       $date  date to check
+   *
+   * @param null|CGroups $group group, null = current
+   *
+   * @return array
+   */
+  static function getCpHolidays($date, $group = null) {
+    $subdivisionHoliday = array();
+    $pays = CAppUI::conf("ref_pays");
+
+    //no group, load current
+    if (!$group) {
+      $group = CGroups::loadCurrent();
+    }
+
+    //no CP, abord
+    if (!$group->cp) {
+      return $subdivisionHoliday;
+    }
+
+    $year = CMbDT::transform("+0 DAY", $date, "%Y");
+    $paques = CMbDT::getEasterDate($date);
+
+    switch ($pays) {
+
+      // France
+      case '1':
+        //nothing to do here...
+        break;
+
+      // Switzerland
+      case '2':
+        $firstSundaySeptember = CMbDT::transform("next sunday", $year."-09-00", "%Y-%m-%d");
+        $thirdSundaySeptember = CMbDT::transform("+2 WEEK", $firstSundaySeptember, "%Y-%m-%d");
+
+        $canton = substr($group->cp, 0, 2);
+        switch ($canton) {
+          case '10':  // Vaud
+            $subdivisionHoliday["$year-01-02"] = "Saint-Berchtold";
+            $subdivisionHoliday[CMbDT::transform("last friday", $paques, "%Y-%m-%d")] = "vendredi saint";
+            $subdivisionHoliday[CMbDT::transform("+1 DAY", $paques, "%Y-%m-%d")] = "lundi de paques";
+            $subdivisionHoliday[CMbDT::transform("+39 DAY", $paques, "%Y-%m-%d")] = "Ascension";
+            $subdivisionHoliday[CMbDT::transform("+50 DAY", $paques, "%Y-%m-%d")] = "lundi de pantecote";
+            $subdivisionHoliday[CMbDT::transform("+1 DAY", $thirdSundaySeptember, "%Y-%m-%d")] = "Lundi du Jeûne fédéral";
+            break;
+
+          case '12':  // Genève
+            $subdivisionHoliday[ CMbDT::transform("next thursday", $firstSundaySeptember, "%Y-%m-%d")] = "Jeûne Genevois";
+            $subdivisionHoliday[CMbDT::transform("last friday", $paques, "%Y-%m-%d")] = "vendredi saint";
+            $subdivisionHoliday[CMbDT::transform("+1 DAY", $paques, "%Y-%m-%d")] = "lundi de paques";
+            $subdivisionHoliday[CMbDT::transform("+39 DAY", $paques, "%Y-%m-%d")] = "Ascension";
+            $subdivisionHoliday[CMbDT::transform("+50 DAY", $paques, "%Y-%m-%d")] = "lundi de pantecote";
+            $subdivisionHoliday["$year-12-31"] = "fete du travail";
+            break;
+        }
+        break;
+    }
+    return $subdivisionHoliday;
+  }
+
+  static $days_name = array(
+    1 => array(
+      'Jour de l\'an',
+      'Basile',
+      'Geneviève',
+      'Odilon',
+      'Edouard',
+      'Epiphanie',
+      'Raymond',
+      'Lucien',
+      'Alix',
+      'Guillaume',
+      'Paulin',
+      'Tatiana',
+      'Yvette',
+      'Nina',
+      'Rémi',
+      'Marcel',
+      'Roseline',
+      'Prisca',
+      'Marius',
+      'Sébastien',
+      'Agnès',
+      'Vincent',
+      'Barnard',
+      'Fr. de Sales',
+      'Conv. S. Paul',
+      'Paule',
+      'Angèle',
+      'Th. d\'Aquin, Maureen',
+      'Gildas',
+      'Martine',
+      'Marcelle'
+    ),
+    2 => array(
+      'Ella',
+      'Chandeleur',
+      'Blaise',
+      'Véronique',
+      'Agathe',
+      'Gaston',
+      'Eugénie',
+      'Jacqueline',
+      'Apolline',
+      'Arnaud',
+      'N-D Lourdes',
+      'Félix',
+      'Béatrice',
+      'Valentin',
+      'Claude',
+      'Julienne',
+      'Alexis',
+      'Bernadette',
+      'Gabin',
+      'Aimée',
+      'P. Damien',
+      'Isabelle',
+      'Lazare',
+      'Modeste',
+      'Roméo',
+      'Nestor',
+      'Honorine',
+      'Romain',
+      'August'
+    ),
+    3 => array(
+      "Aubin",
+      "Charles le B.",
+      "Guénolé",
+      "Casimir",
+      "Olive",
+      "Colette",
+      "Félicité",
+      "Jean de Dieu",
+      "Françoise",
+      "Vivien",
+      "Rosine",
+      "Justine",
+      "Rodrigue",
+      "Mathilde",
+      "Louise",
+      "Bénédicte",
+      "Patrice",
+      "Cyrille",
+      "Joseph",
+      "Alessandra",
+      "Clémence",
+      "Léa",
+      "Victorien",
+      "Catherine De Suède",
+      "Humbert",
+      "Larissa",
+      "Habib",
+      "Gontran",
+      "Gwladys",
+      "Amédée",
+      "Benjamin",
+    ),
+    4 => array(
+      "Lundi de Pâques",
+      "Sandrine",
+      "Richard",
+      "Isidore",
+      "Irène",
+      "Marcellin",
+      "Jean-Baptiste de la Salle",
+      "Julie",
+      "Gautier",
+      "Fulbert",
+      "Stanislas",
+      "Jules",
+      "Ida",
+      "Maxime",
+      "Paterne16",
+      "Benoît-Joseph",
+      "Anicet",
+      "Parfait",
+      "Emma",
+      "Odette",
+      "Anselme",
+      "Alexandre",
+      "Georges",
+      "Fidèle",
+      "Marc",
+      "Alida",
+      "Zita",
+      "Jour du Souv.",
+      "Cath. de Si",
+      "Robert"
+    ),
+    5 => array(
+      "Fête du Travail",
+      "Boris",
+      "Phil., Jacq.",
+      "Sylvain",
+      "Judith",
+      "Prudence19",
+      "Gisèle",
+      "Victoire 1945",
+      "Ascension",
+      "Solange",
+      "Estelle",
+      "Achille",
+      "Rolande",
+      "Matthias",
+      "Denise",
+      "Honoré",
+      "Pascal",
+      "Éric",
+      "Yves",
+      "Bernardin",
+      "Constantin",
+      "Emile",
+      "Didier",
+      "Donatien",
+      "Sophie",
+      "Fête des Mères",
+      "Augustin",
+      "Germain",
+      "Aymar",
+      "Ferdinand",
+      "Visitation"
+    ),
+    6 => array(
+      "Justin",
+      "Blandine",
+      "Kévin",
+      "Clotilde",
+      "Igor",
+      "Norbert",
+      "Gilbert",
+      "Médard",
+      "Diane",
+      "Landry",
+      "Barnabé",
+      "Guy",
+      "AntoindP",
+      "Elisée",
+      "Germaine",
+      "Aurélien",
+      "Hervé",
+      "Léonce",
+      "Romuald",
+      "Fête des Pères",
+      "Rodolphe",
+      "Alban",
+      "Audrey",
+      "Jean-Baptiste",
+      "Prosper",
+      "Anthelme",
+      "Fernand",
+      "Irénée",
+      "Pierre, Paul",
+      "Martial"
+    ),
+    7 => array(
+      "Thierry",
+      "Martinien",
+      "Thomas",
+      "Florent",
+      "Antoine",
+      "Mariette",
+      "Raoul",
+      "Thibault",
+      "Amandine",
+      "Ulrich",
+      "Benoît",
+      "Olivier",
+      "Henri, Joël",
+      "Fête Nationale",
+      "Donald",
+      "N-Mt-Carmel",
+      "Charlotte",
+      "Frédéric",
+      "Arsène",
+      "Marina",
+      "Victor",
+      "Marie-Mad",
+      "Brigitte",
+      "Christine",
+      "Jacques",
+      "Anne,Joach",
+      "Nathalie",
+      "Samson",
+      "Marthe",
+      "Juliette",
+      "IgnacdL"
+    ),
+    8 => array(
+      "Alphonse",
+      "Julien-Eym",
+      "Lydie",
+      "Jean-Marie, Vianney",
+      "Abel",
+      "Transfiguration",
+      "Gaétan",
+      "Dominique",
+      "Amour",
+      "Laurent",
+      "Claire",
+      "Clarisse",
+      "Hippolyte",
+      "Evrard",
+      "Assomption",
+      "Armel",
+      "Hyacinthe",
+      "Hélène",
+      "Jean-Eudes",
+      "Bernard",
+      "Christophe",
+      "Fabrice",
+      "RosdL",
+      "Barthélemy",
+      "Louis",
+      "Natacha",
+      "Monique",
+      "Augustin",
+      "Sabine",
+      "Fiacre",
+      "Aristide"
+    ),
+    9 => array(
+      "Gilles",
+      "Ingrid",
+      "Grégoire",
+      "Rosalie",
+      "Raïssa",
+      "Bertrand",
+      "Reine",
+      "Nativité N.-D",
+      "Alain",
+      "Inès",
+      "Adelphe",
+      "Apollinaire",
+      "Aimé",
+      "LCroix",
+      "Roland",
+      "Edith",
+      "Renaud",
+      "Nadège",
+      "Émilie",
+      "Davy",
+      "Matthieu",
+      "Maurice",
+      "Constant",
+      "Thècle",
+      "Hermann",
+      "Côme, Damien",
+      "Vinc. dP",
+      "Venceslas",
+      "Michel",
+      "Jérôme"
+    ),
+    10 => array(
+      "Thér.de l'E",
+      "Léger",
+      "Gérard",
+      "Fr. d'Assise",
+      "Fleur",
+      "Bruno",
+      "Serge",
+      "Pélagie",
+      "Denis",
+      "Ghislain",
+      "Firmin",
+      "Wilfried",
+      "Géraud",
+      "Juste",
+      "Thér. d'Avila",
+      "Edwige",
+      "Baudoin",
+      "Luc",
+      "René",
+      "Adeline",
+      "Céline",
+      "Elodie",
+      "JeadC.",
+      "Florentin",
+      "Crépin",
+      "Dimitri",
+      "Emeline",
+      "Simon, Jude",
+      "Narcisse",
+      "Bienvenue",
+      "Quentin"
+    ),
+    11 => array(
+      "Toussaint",
+      "Défunt",
+      "Hubert",
+      "Charles",
+      "Sylvie",
+      "Bertille",
+      "Carine",
+      "Geoffroy",
+      "Théodore",
+      "Léon",
+      "Armistice 1918",
+      "Christian",
+      "Brice",
+      "Sidoine",
+      "Albert",
+      "Marguerite",
+      "Elisabeth",
+      "Aude",
+      "Tanguy",
+      "Edmond",
+      "Prés. Marie",
+      "Cécile",
+      "Christ Roi",
+      "Flora",
+      "Cath. L.",
+      "Delphine",
+      "Séverin",
+      "Jacq. de la M.",
+      "Saturnin",
+      "Avent"
+    ),
+    12 => array(
+      "Florence",
+      "Viviane",
+      "François-Xavier",
+      "Barbara",
+      "Gérald",
+      "Nicolas",
+      "Ambroise",
+      "Imm. Conception",
+      "Guadalupe",
+      "Romaric",
+      "Daniel",
+      "Chantal",
+      "Lucie",
+      "Odile",
+      "Ninon",
+      "Alice",
+      "Gaël",
+      "Gatien",
+      "Urbain",
+      "Théophile",
+      "PierrCan.",
+      "Fr.-Xavière",
+      "Armand",
+      "Adèle",
+      "Noël",
+      "Etienne",
+      "Jean",
+      "Innocents",
+      "David",
+      "Roger",
+      "Sylvestre"
+    ),
+  );
 }
+
+
