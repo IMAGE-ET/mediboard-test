@@ -1,10 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dPpatients
- *  @version $Revision$
- *  @author Fabien Ménager
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPpatients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -357,11 +359,13 @@ class CConstantesMedicales extends CMbObject {
       "type" => "drain",
       "unit" => "ml",
       "min" => 0, "max" => 50,
+      "cumul_reset_config" => "redon_accordeon_cumul_reset_hour",
     ),
     "redon_accordeon_2"   => array(
       "type" => "drain",
       "unit" => "ml",
       "min" => 0, "max" => 50,
+      "cumul_reset_config" => "redon_accordeon_cumul_reset_hour",
     ),
     "lame_1"           => array(
       "type" => "drain",
@@ -456,61 +460,73 @@ class CConstantesMedicales extends CMbObject {
       "type" => "drain",
       "unit" => "ml",
       "min" => 0, "max" => 500,
+      "cumul_reset_config" => "drain_dve_cumul_reset_hour",
     ),
     "drain_kher"    => array(
       "type" => "drain",
       "unit" => "ml",
       "min" => 0, "max" => 1000,
+      "cumul_reset_config" => "drain_kher_cumul_reset_hour",
     ),
     "drain_crins"   => array(
       "type" => "drain",
       "unit" => "ml",
       "min" => 0, "max" => 100,
+      "cumul_reset_config" => "drain_crins_cumul_reset_hour",
     ),
     "drain_sinus"   => array(
       "type" => "drain",
       "unit" => "ml",
       "min" => 0, "max" => 100,
+      "cumul_reset_config" => "drain_sinus_cumul_reset_hour",
     ),
     "drain_orifice_1" => array(
       "type" => "drain",
       "unit" => "ml",
       "min" => 0, "max" => 1000,
+      "cumul_reset_config" => "drain_orifice_cumul_reset_hour",
     ),
     "drain_orifice_2" => array(
       "type" => "drain",
       "unit" => "ml",
       "min" => 0, "max" => 1000,
+      "cumul_reset_config" => "drain_orifice_cumul_reset_hour",
     ),
     "drain_orifice_3" => array(
       "type" => "drain",
       "unit" => "ml",
       "min" => 0, "max" => 1000,
+      "cumul_reset_config" => "drain_orifice_cumul_reset_hour",
     ),
     "drain_orifice_4" => array(
       "type" => "drain",
       "unit" => "ml",
       "min" => 0, "max" => 1000,
+      "cumul_reset_config" => "drain_orifice_cumul_reset_hour",
     ),
     "drain_ileostomie" => array(
       "type" => "drain",
       "unit" => "ml",
       "min" => 0, "max" => 3000,
+      "cumul_reset_config" => "drain_ileostomie_cumul_reset_hour",
     ),
     "drain_colostomie" => array(
       "type" => "drain",
       "unit" => "ml",
       "min" => 0, "max" => 3000,
+      "cumul_reset_config" => "drain_colostomie_cumul_reset_hour",
     ),
     "drain_gastrostomie" => array(
       "type" => "drain",
       "unit" => "ml",
       "min" => 0, "max" => 3000,
+      "cumul_reset_config" => "drain_gastrostomie_cumul_reset_hour",
     ),
     "drain_jejunostomie" => array(
       "type" => "drain",
       "unit" => "ml",
       "min" => 0, "max" => 3000,
+      "cumul_reset_config" => "drain_jejunostomie_cumul_reset_hour",
     ),
 
     // DIURESE ///////
@@ -573,6 +589,7 @@ class CConstantesMedicales extends CMbObject {
       "type" => "drain",
       "unit" => "ml",
       "min" => 0, "max" => 3000,
+      "cumul_reset_config" => "sonde_rectale_cumul_reset_hour",
     ),
     "catheter_suspubien" => array(
       "type" => "drain",
@@ -689,6 +706,9 @@ class CConstantesMedicales extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs['patient_id']             = 'ref notNull class|CPatient';
@@ -820,12 +840,18 @@ class CConstantesMedicales extends CMbObject {
     return $specs;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["administrations"]   = "CAdministration constantes_medicales_id";
     return $backProps;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
