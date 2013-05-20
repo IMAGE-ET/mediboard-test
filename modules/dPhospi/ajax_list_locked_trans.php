@@ -18,6 +18,11 @@ $from_compact = CValue::get("from_compact", 0);
 
 $transmission = new CTransmissionMedicale();
 $transmission->load($transmission_id);
+$transmission->loadTargetObject();
+
+if ($transmission->_ref_object instanceof CAdministration) {
+  $transmission->_ref_object->loadRefsFwd();
+}
 
 $trans = new CTransmissionMedicale();
 $trans->sejour_id = $transmission->sejour_id;

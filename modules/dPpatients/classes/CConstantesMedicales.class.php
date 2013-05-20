@@ -1047,7 +1047,7 @@ class CConstantesMedicales extends CMbObject {
   function loadRefUser() {
     $first_log = $this->loadFirstLog();
     $this->_ref_user = $first_log->loadRefUser();
-    $this->_ref_user->loadRefMediuser();
+    $this->_ref_user->loadRefMediuser()->loadRefFunction();
   }
 
   function check() {
