@@ -1,5 +1,5 @@
 <div class="grille">
-  <table class="main" div="table_grille">
+  <table class="main" id="table_grille">
     {{foreach from=$grilles.$name_grille item=ligne}}
     <tr>
       {{foreach from=$ligne item=_zone }}
@@ -30,6 +30,7 @@
                  <div class="libelle compact" >
                     {{$rpu->motif|truncate:30|lower}}
                     <div>({{$patient->_age}}) Arrivée: {{mb_value object=$_sejour field=_entree date=$date}}</div>
+                    <div>{{$rpu->diag_infirmier|spancate:60:"..."|lower}}</div>
                  </div>
                  
                   {{if $rpu->radio_debut}}
