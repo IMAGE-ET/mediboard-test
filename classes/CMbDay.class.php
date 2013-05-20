@@ -39,7 +39,7 @@ class CMbDay {
     //jour férie ?
     $holidays = CMbDate::getHolidays($this->date);
     if (array_key_exists($this->date, $holidays)) {
-      $this->is_ferie = $holidays[$this->date];
+      $this->ferie = $holidays[$this->date];
     }
   }
 }
