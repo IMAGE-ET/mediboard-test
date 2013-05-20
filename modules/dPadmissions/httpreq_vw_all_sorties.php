@@ -39,7 +39,7 @@ $selSortis     = CValue::getOrSession("selSortis", "0");
 $type          = CValue::getOrSession("type");
 $service_id    = CValue::getOrSession("service_id");
 $prat_id       = CValue::getOrSession("prat_id");
-$bank_holidays = CGroups::loadCurrent()->getHolidays($date);
+$bank_holidays = CMbDate::getHolidays($date);
 $service_id    = explode(",", $service_id);
 CMbArray::removeValue("", $service_id);
 

@@ -35,7 +35,7 @@ else {
   }
 }
 
-$bank_holidays = CGroups::loadCurrent()->getHolidays($date);
+$bank_holidays = CMbDate::getHolidays($date);
 $hier = CMbDT::date("- 1 day", $date);
 $demain = CMbDT::date("+ 1 day", $date);
 

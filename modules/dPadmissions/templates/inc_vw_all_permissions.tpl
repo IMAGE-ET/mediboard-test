@@ -38,7 +38,7 @@
   <tr {{if $day == $date}}class="selected"{{/if}}>
     {{assign var=day_number value=$day|date_format:"%w"}}
     <td align="right"
-      {{if in_array($day, $bank_holidays)}}
+      {{if array_key_exists($day, $bank_holidays)}}
         style="background-color: #fc0"
       {{elseif $day_number == '0' || $day_number == '6'}}
         style="background-color: #ccc;"

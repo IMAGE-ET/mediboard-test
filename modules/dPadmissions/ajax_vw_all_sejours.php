@@ -46,7 +46,7 @@ $recuse        = CValue::getOrSession("recuse", "-1");
 $envoi_mail    = CValue::getOrSession("envoi_mail", "0");
 $service_id    = CValue::getOrSession("service_id");
 $prat_id       = CValue::getOrSession("prat_id");
-$bank_holidays = CGroups::loadCurrent()->getHolidays($date);
+$bank_holidays = CMbDate::getHolidays($date);
 
 $hier   = CMbDT::date("- 1 day", $date);
 $demain = CMbDT::date("+ 1 day", $date);
@@ -200,6 +200,7 @@ if ($current_m == "reservation") {
 }
 
 $m = $save_m;
+
 
 // Création du template
 $smarty = new CSmartyDP();
