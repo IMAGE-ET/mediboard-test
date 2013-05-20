@@ -22,6 +22,8 @@ class CMbDay {
   public $name;         // local name of the day. ex: Fête nationnale
   public $ferie;        // null|string (if set, the day is an holiday one.
 
+  public $_nbDaysYear;
+
   /**
    * constructor
    *
@@ -36,6 +38,9 @@ class CMbDay {
     $this->number = (int) CMbDT::transform("", $date, "%j");
     $dateTmp = explode("-", $date);
     $this->name = CMbDate::$days_name[(int) $dateTmp[1]][(int) ($dateTmp[2]-1)];
+
+    $this->_nbDaysYear = (CMbDT::transform(null, $date, "L")) ? 366 : 365;
+    $this->days_left = $this->_nbDaysYear - $this->number;
 
 
     //jour férie ?
