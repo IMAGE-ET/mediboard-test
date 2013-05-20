@@ -19,11 +19,17 @@ $listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
 $salle = new CSalle();
 $listSalles = $salle->loadListWithPerms(PERM_READ);
 
+// Chargement des Chirurgiens
+$chir      = new CMediusers();
+$listChirs = $chir->loadPraticiens(PERM_READ);
+
 // Listes des interventions hors plage
 $operation = new COperation();
-$where = array (
-  "date" => "= '$date'",
-);
+$where = array ();
+$where["date"]               = "= '$date'";
+$where["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($listChirs));
+
+/** @var COperation[] $urgences */
 $urgences = $operation->loadGroupList($where, "salle_id, chir_id");
 
 $reservation_installed = CModule::getActive("reservation");
@@ -48,12 +54,12 @@ foreach ($urgences as &$urgence) {
   // Chargement des plages disponibles pour cette intervention
   $urgence->_ref_chir->loadBackRefs("secondary_functions");
   $secondary_functions = array();
-  foreach($urgence->_ref_chir->_back["secondary_functions"] as $curr_sec_func) {
+  foreach ($urgence->_ref_chir->_back["secondary_functions"] as $curr_sec_func) {
     $secondary_functions[$curr_sec_func->function_id] = $curr_sec_func;
   }
   $where = array();
   $selectPlages  = "(plagesop.chir_id = %1 OR plagesop.spec_id = %2 OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($secondary_functions)).")";
-  $where[]       = $ds->prepare($selectPlages ,$urgence->chir_id, $urgence->_ref_chir->function_id);
+  $where[]       = $ds->prepare($selectPlages, $urgence->chir_id, $urgence->_ref_chir->function_id);
   $where["date"] = "= '$date'";
   $where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
   $order = "salle_id, debut";

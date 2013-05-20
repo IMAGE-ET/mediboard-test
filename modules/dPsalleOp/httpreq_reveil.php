@@ -17,6 +17,10 @@ $present_only = CValue::getOrSession("present_only", 0);
 $present_only_reel = CValue::getOrSession("present_only_reel", 0);
 $modif_operation = CCanDo::edit() || $date >= CMbDT::date();
 
+// Chargement des Chirurgiens
+$chir      = new CMediusers();
+$listChirs = $chir->loadPraticiens(PERM_READ);
+
 // Selection des plages opératoires de la journée
 $plage = new CPlageOp();
 $plage->date = $date;
@@ -29,6 +33,7 @@ $listSalles = $salle->loadListWithPerms(PERM_READ, $whereSalle);
 
 $where = array();
 $where["annulee"] = "= '0'";
+$where["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($listChirs));
 $ljoin = array();
 
 if (CAppUI::conf("dPplanningOp COperation use_poste")) {

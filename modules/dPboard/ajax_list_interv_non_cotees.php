@@ -39,7 +39,7 @@ $where[] = "operations.date BETWEEN '$debut' AND '$fin' OR plagesop.date BETWEEN
 $where["operations.annulee"] = "= '0'";
 
 if ($all_prats) {
-  $prats = $user->loadPraticiens();
+  $prats = $user->loadPraticiens(PERM_READ);
   
   $where["operations.chir_id"]   = CSQLDataSource::prepareIn(array_keys($prats));
   $where[] = "operations.anesth_id IS NULL OR operations.anesth_id ".CSQLDataSource::prepareIn(array_keys($prats));
