@@ -86,9 +86,14 @@ class CPlageCalendaire extends CMbObject{
     // Get all other plages the same day
     //chevauchement & inside
     $where[$this->_spec->key]   = "!= '$this->_id'";
-    $where[] = "(`start` < '$this->start' AND `end` > '$this->start') OR
+
+    // OLD METHOD
+    /*$where[] = "(`start` < '$this->start' AND `end` > '$this->start') OR
     (`start` < '$this->end' AND `end` > '$this->end') OR
-    (`start` > '$this->end' AND `end` < '$this->end')";
+    (`start` > '$this->end' AND `end` < '$this->end')";*/
+
+    $where["start"] = "< '$this->end'";
+    $where["end"] = "> '$this->start'";
 
     // Append collision keys clauses
     foreach ($keys as $_key) {
