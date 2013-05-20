@@ -1,3 +1,14 @@
+{{*
+  * File viewer
+  *
+  * @category dPfiles
+  * @package  Mediboard
+  * @author   SARL OpenXtrem <dev@openxtrem.com>
+  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+  * @version  SVN: $Id:$
+  * @link     http://www.mediboard.org
+*}}
+
 {{mb_script module="system" script="object_selector"}}
 {{mb_script module="dPcompteRendu" script="modele_selector"}}
 {{mb_script module="dPcompteRendu" script="document"}}
@@ -59,7 +70,7 @@
         <tr>
           {{if $typeVue==1}}
           <td colspan="2" id="listView">
-            {{include file="inc_list_view_colonne.tpl" praticienId=0}}
+            {{mb_include module=files template=inc_list_view_colonne praticienId=0}}
           {{else}}
           <td style="width: 400px;" id="listView">
             {{mb_include module=files template=inc_list_view}}

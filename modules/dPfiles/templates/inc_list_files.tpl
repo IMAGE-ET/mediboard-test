@@ -26,7 +26,7 @@
         {{/if}}
       </strong>
       <hr />
-      {{include file=inc_file_toolbar.tpl notext=notext}}
+      {{mb_include module=files template=inc_file_toolbar notext=notext}}
     </td>
   </tr>
 {{foreachelse}}

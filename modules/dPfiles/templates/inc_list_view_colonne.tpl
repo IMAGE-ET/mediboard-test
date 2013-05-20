@@ -1,3 +1,14 @@
+{{*
+  * List docitems by category with thumbnail
+  *
+  * @category dPfiles
+  * @package  Mediboard
+  * @author   SARL OpenXtrem <dev@openxtrem.com>
+  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+  * @version  SVN: $Id:$
+  * @link     http://www.mediboard.org
+*}}
+
 {{mb_script module=compteRendu script=modele_selector}}
 {{if $object}}
   {{assign var=object_class value=$object->_class}}
@@ -38,7 +49,7 @@ Main.add(function () {
 
 <hr class="control_tabs" />
 
-{{include file="inc_files_add_toolbar.tpl"}}
+{{mb_include module=files template=inc_files_add_toolbar}}
 
 {{foreach from=$affichageFile item=_cat key=_cat_id}}
   {{assign var=docCount value=$_cat.items|@count}}

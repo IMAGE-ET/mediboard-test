@@ -1,3 +1,13 @@
+{{*
+  * CFile's tooltip
+  *
+  * @category dPfiles
+  * @package  Mediboard
+  * @author   SARL OpenXtrem <dev@openxtrem.com>
+  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+  * @version  SVN: $Id:$
+  * @link     http://www.mediboard.org
+*}}
 {{if !$object->_can->read}}
   <div class="small-info">
     {{tr}}{{$object->_class}}{{/tr}} : {{tr}}access-forbidden{{/tr}}
@@ -16,7 +26,7 @@
       </div>
     </td>
     <td>
-      {{include file=CMbObject_view.tpl}}
+      {{mb_include module=system template=CMbObject_view}}
     </td>
   </tr>
 </table>

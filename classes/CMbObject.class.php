@@ -38,14 +38,23 @@ class CMbObject extends CStoredObject {
   /** @var CCompteRendu[] */
   public $_ref_documents      = array();
 
+  /** @var CCompteRendu[] */
+  public $_ref_documents_by_cat = array();
+
   /** @var CFile[] */
   public $_ref_files          = array();
+
+  /** @var CFile[][] */
+  public $_ref_files_by_cat   = array();
 
   /** @var CFile[] */
   public $_ref_named_files    = array();
 
   /** @var CTagItem[] */
   public $_ref_tag_items      = array();
+
+  /** @var CDocumentItem[][] */
+  public $_refs_docitems_by_cat = array();
 
   /** @var CMbObjectConfig */
   public $_ref_object_configs;
@@ -170,9 +179,9 @@ class CMbObject extends CStoredObject {
 
     return count($this->_ref_documents);
   }
-  
+
   /**
-   * Load documents and files for object
+   * Load documents and files for object and sort by category
    *
    * @return int document + files count
    */
@@ -180,6 +189,23 @@ class CMbObject extends CStoredObject {
     $this->_nb_files = $this->loadRefsFiles();
     $this->_nb_docs  = $this->loadRefsDocs();
     $this->_nb_files_docs = $this->_nb_files + $this->_nb_docs;
+
+    $categories_files = CMbObject::massLoadFwdRef($this->_ref_files, "file_category_id");
+    $categories_docs  = CMbObject::massLoadFwdRef($this->_ref_documents, "file_category_id");
+    $categories = $categories_docs + $categories_files;
+
+    foreach ($this->_ref_documents as $_document) {
+      $cat_name = $_document->file_category_id ? $categories[$_document->file_category_id]->nom : "";
+      @$this->_ref_documents_by_cat[$cat_name][] = $_document;
+      @$this->_refs_docitems_by_cat[$cat_name][] = $_document;
+    }
+    foreach ($this->_ref_files as $_file) {
+      $cat_name = $_file->file_category_id ? $categories[$_file->file_category_id]->nom : "";
+      @$this->_ref_files_by_cat[$cat_name][] = $_file;
+      @$this->_refs_docitems_by_cat[$cat_name][] = $_file;
+    }
+
+    ksort(@$this->_refs_docitems_by_cat);
   }
   
   /**

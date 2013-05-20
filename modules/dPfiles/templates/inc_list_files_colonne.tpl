@@ -1,3 +1,14 @@
+{{*
+  * List docitems
+  *
+  * @category dPfiles
+  * @package  Mediboard
+  * @author   SARL OpenXtrem <dev@openxtrem.com>
+  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+  * @version  SVN: $Id:$
+  * @link     http://www.mediboard.org
+*}}
+
 {{if isset($category_id|smarty:nodefaults)}}
   <script type="text/javascript">
     // Mise à jour des compteurs des documents
@@ -115,7 +126,7 @@
         <tr>
           <!-- Toolbar -->
           <td class="button" style="height: 1px;">
-            {{include file="inc_file_toolbar.tpl" notext=notext}}
+            {{mb_include module=files template=inc_file_toolbar notext=notext}}
           </td>
         </tr>
       </tbody>

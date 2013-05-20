@@ -1,3 +1,14 @@
+{{*
+  * File preview
+  *
+  * @category dPfiles
+  * @package  Mediboard
+  * @author   SARL OpenXtrem <dev@openxtrem.com>
+  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+  * @version  SVN: $Id:$
+  * @link     http://www.mediboard.org
+*}}
+
 {{if $fileSel && $fileSel->_id}}
   <h4>{{$fileSel->_view}}</h4>
   
@@ -37,14 +48,14 @@
     Visualiser
     </a>
     {{if $includeInfosFile}}
-      {{include file="../../dPfiles/templates/inc_preview_contenu_file.tpl"}}
+      {{mb_include module=files template=inc_preview_contenu_file}}
     {{else}}
       <img class="preview" src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$fileSel->_id}}&amp;phpThumb=1&amp;hp=450&amp;wl=450{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" title="Afficher le grand aperçu" border="0" />
     {{/if}}
   {{else}}
     <a href="#popFile" onclick="popFile('{{$objectClass}}', '{{$objectId}}', '{{$elementClass}}', '{{$elementId}}',{{if $sfn}}{{$sfn}}{{else}}0{{/if}})">
       {{if $includeInfosFile}}
-        {{include file="../../dPfiles/templates/inc_preview_contenu_file.tpl"}}
+        {{mb_include module=files template=inc_preview_contenu_file}}
       {{else}}
         <img class="preview" src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$fileSel->_id}}&amp;phpThumb=1&amp;hp=450&amp;wl=450{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" title="Afficher le grand aperçu" border="0" />
       {{/if}}

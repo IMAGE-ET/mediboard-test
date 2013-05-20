@@ -18,7 +18,6 @@ function newExam(sAction, consultation_id) {
 </script>
 
 {{mb_script module=dPcompteRendu script=document}}
-{{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 
 <table style="width: 100%; border-spacing: 0; border-collapse: collapse; padding: 2px; vertical-align: middle; white-space: nowrap;">
   <thead>
@@ -42,23 +41,11 @@ function newExam(sAction, consultation_id) {
           <th style="width: 50%;">Documents du patient</th>
         </tr>
         <tr>
-          <td>
-            {{foreach from=$patient->_ref_documents item=_doc}}
-            <a href="#document-{{$_doc->_id}}" onclick="return popFile('{{$_doc->object_class}}','{{$_doc->object_id}}','{{$_doc->_class}}','{{$_doc->_id}}')">
-              {{$_doc->nom}}
-            </a>
-            {{foreachelse}}
-            <div class="empty">{{tr}}None{{/tr}}</div>
-            {{/foreach}}
+          <td class="top">
+            {{mb_include module=files template=inc_list_docitems list=$patient->_ref_files_by_cat}}
           </td>
-          <td>
-            {{foreach from=$patient->_ref_files item=_file}}
-            <a href="#file-{{$_file->_id}}" onclick="return popFile('{{$patient->_class}}','{{$patient->_id}}','{{$_file->_class}}','{{$_file->_id}}')">
-              {{$_file->file_name}}
-            </a>
-            {{foreachelse}}
-            <div class="empty">{{tr}}None{{/tr}}</div>
-            {{/foreach}}
+          <td class="top">
+            {{mb_include module=files template=inc_list_docitems list=$patient->_ref_documents_by_cat}}
           </td>
         </tr>
       </table>
@@ -108,7 +95,7 @@ function newExam(sAction, consultation_id) {
         {{foreach from=$patient->_ref_consultations item=_consult}}
           {{if !$_consult->annule}}
             <tr>
-              <td class="text" valign="top">
+              <td class="text top">
                 {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consult->_ref_plageconsult->_ref_chir}}
                 
                 &mdash; {{$_consult->_ref_plageconsult->date|date_format:$conf.date}}
@@ -149,28 +136,9 @@ function newExam(sAction, consultation_id) {
                   </a>
                 {{/if}}
               </td>
-              <td valign="top">
-                {{foreach from=$_consult->_ref_documents item=_doc}}
-                  <div>
-                    <button type="button" class="print notext"
-                      onclick="{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
-                        Document.printPDF({{$_doc->_id}}, '{{$app->user_prefs.choice_factory}}');
-                      {{else}}
-                        Document.print({{$_doc->_id}})
-                      {{/if}}">
-                    </button>
-                    <a href="#" onclick="return popFile('{{$_doc->object_class}}','{{$_doc->object_id}}','{{$_doc->_class}}','{{$_doc->_id}}')" style="display: inline">
-                      {{$_doc->nom}}
-                    </a>
-                  </div>
-                {{/foreach}}
-                {{foreach from=$_consult->_ref_files item=_file}}
-                  <div>
-                    <a href="#" onclick="return popFile('{{$_file->object_class}}','{{$_file->object_id}}','{{$_file->_class}}','{{$_file->_id}}')">
-                      {{$_file->file_name}}
-                    </a>
-                  </div>
-                {{/foreach}}
+              <td class="top">
+                {{mb_include module=files template=inc_list_docitems list=$_consult->_refs_docitems_by_cat}}
+
                 {{if isset($_consult->_ref_prescriptions.externe|smarty:nodefaults)}}
                   {{assign var=_prescription value=$_consult->_ref_prescriptions.externe}}
                   {{foreach from=$_prescription->_ref_files item=_file}}
@@ -222,7 +190,7 @@ function newExam(sAction, consultation_id) {
         {{foreach from=$patient->_ref_sejours item=_sejour}}
           {{if !$_sejour->annule}}
             <tr>
-              <td class="text" valign="top">
+              <td class="text top">
                 Hospitalisation 
                 {{mb_include module=system template=inc_interval_date from=$_sejour->entree to=$_sejour->sortie}} <br />
                 <strong>{{tr}}CSejour-_type_admission{{/tr}} : </strong> {{tr}}CSejour.type.{{$_sejour->type}}{{/tr}}
@@ -252,47 +220,14 @@ function newExam(sAction, consultation_id) {
                   {{/foreach}}
                 </ul>
               </td>
-              <td colspan="2" valign="top">
-                {{foreach from=$_sejour->_ref_documents item=_doc}}
-                  <div>
-                    <button type="button" class="print notext"
-                      onclick="{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
-                        Document.printPDF({{$_doc->_id}}, '{{$app->user_prefs.choice_factory}}');
-                      {{else}}
-                        Document.print({{$_doc->_id}})
-                      {{/if}}">
-                    </button>
-                    <a href="#" onclick="return popFile('{{$_doc->object_class}}','{{$_doc->object_id}}','{{$_doc->_class}}','{{$_doc->_id}}')" style="display: inline">
-                      {{$_doc->nom}}
-                    </a>
-                  </div>
-                {{/foreach}}
-                {{foreach from=$_sejour->_ref_files item=_file}}
-                  <a href="#" onclick="return popFile('{{$_file->object_class}}','{{$_file->object_id}}','{{$_file->_class}}','{{$_file->_id}}')">
-                    {{$_file->file_name}}
-                  </a>
-                {{/foreach}}
+              <td colspan="2" class="top text">
+                <strong>Séjour {{mb_include module=system template=inc_interval_date from=$_sejour->entree to=$_sejour->sortie}}</strong>
+                {{mb_include module=files template=inc_list_docitems list=$_sejour->_refs_docitems_by_cat}}
+
                 {{foreach from=$_sejour->_ref_operations item=_op}}
                   {{if !$_op->annulee}}
-                    {{foreach from=$_op->_ref_documents item=_doc}}
-                    <div>
-                      <button type="button" class="print notext"
-                        onclick="{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
-                          Document.printPDF({{$_doc->_id}}, '{{$app->user_prefs.choice_factory}}');
-                        {{else}}
-                          Document.print({{$_doc->_id}})
-                        {{/if}}">
-                      </button>
-                      <a href="#" onclick="return popFile('{{$_doc->object_class}}','{{$_doc->object_id}}','{{$_doc->_class}}','{{$_doc->_id}}')" style="display: inline">
-                        {{$_doc->nom}}
-                      </a>
-                    </div>
-                    {{/foreach}}
-                    {{foreach from=$_op->_ref_files item=_file}}
-                    <a href="#" onclick="return popFile('{{$_file->object_class}}','{{$_file->object_id}}','{{$_file->_class}}','{{$_file->_id}}')">
-                      {{$_file->file_name}}
-                    </a>
-                    {{/foreach}}
+                    <strong>Intervention du {{$_op->_datetime_best|date_format:$conf.date}}</strong>
+                    {{mb_include module=files template=inc_list_docitems list=$_op->_refs_docitems_by_cat}}
                   {{/if}}
                 {{/foreach}}
               </td>

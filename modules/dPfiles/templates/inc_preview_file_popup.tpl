@@ -1,3 +1,14 @@
+{{*
+  * File preview
+  *
+  * @category dPfiles
+  * @package  Mediboard
+  * @author   SARL OpenXtrem <dev@openxtrem.com>
+  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+  * @version  SVN: $Id:$
+  * @link     http://www.mediboard.org
+*}}
+
 {{assign var="href" value="?m=dPfiles&a=preview_files&popup=1&dialog=1&objectClass=$objectClass&objectId=$objectId"}}
 <script type="text/javascript">
 
@@ -130,7 +141,7 @@ window.destinataires = {{"utf8_encode"|array_map_recursive:$destinataires|@json|
 
     <br />
     {{if $includeInfosFile}}
-      {{include file="inc_preview_contenu_file.tpl"}}
+      {{mb_include module=files template=inc_preview_contenu_file}}
     {{else}}
       <a target="_blank" href="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$fileSel->_id}}" title="{{tr}}CFile.download{{/tr}}">
         <img id="thumb" style="border: 1px solid #000;" src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$fileSel->_id}}&amp;phpThumb=1&amp;w=700{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" />

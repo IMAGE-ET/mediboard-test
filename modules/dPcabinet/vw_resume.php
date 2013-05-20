@@ -23,8 +23,8 @@ else {
   $listPrat = $user->loadProfessionnelDeSante(PERM_EDIT, null, null, null, false);
 }
 
-$patient->loadRefsFiles();
-$patient->loadRefsDocs();
+$patient->loadRefsDocItems();
+
 $where = array();
 $where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat));
 $patient->loadRefsConsultations($where);
@@ -64,13 +64,11 @@ foreach ($patient->_ref_sejours as $sejour) {
   $sejour->loadRefPraticien();
   $sejour->loadRefsPrescriptions();
   $sejour->loadRefsOperations($where);
-  $sejour->loadRefsFiles();
-  $sejour->loadRefsDocs();
+  $sejour->loadRefsDocItems();
   foreach ($sejour->_ref_operations as $operation) {
     $operation->loadRefPlageOp();
     $operation->loadRefChir();
-    $operation->loadRefsFiles();
-    $operation->loadRefsDocs();
+    $operation->loadRefsDocItems();
     $operation->loadExtCodesCCAM();
   }
 }
