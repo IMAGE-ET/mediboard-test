@@ -15,8 +15,8 @@
     <th rowspan="2">Spécialité</th>
     <th rowspan="2">fonction</th>
     <th rowspan="2">Praticien</th>
-    <th colspan="4">Durées totales (en heure)</th>
-    <th colspan="4">Durée moyennes / interv. (en minutes)</th>
+    <th colspan="4">Durée totale (en heure)</th>
+    <th colspan="4">Durée moyenne / interv. (en minutes)</th>
   </tr>
   <tr>
     <th>Intervention</th>
