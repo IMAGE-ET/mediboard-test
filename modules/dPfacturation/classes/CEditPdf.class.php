@@ -361,11 +361,11 @@ class CEditPdf{
                 $cote = "R";
                 break;
               case "fPT":
-                $valeur = $acte_pt;
+                $valeur = $acte_coeffpt;
                 break;
               case "Montant":
                 $this->pdf->setX($this->pdf->getX()+3);
-                $valeur = sprintf("%.2f", $acte->montant_base * $coeff_fact);
+                $valeur = sprintf("%.2f", $acte->montant_base * $coeff_fact * $acte->quantite);
                 $cote = "R";
                 break;
               case "E":
