@@ -2530,6 +2530,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $template->addLongDateProperty("Sejour - Date entrée (longue)", $this->entree);
     $template->addTimeProperty("Sejour - Heure entrée"        , $this->entree);
     $template->addDateProperty("Sejour - Date sortie"         , $this->sortie);
+    $template->addLongDateProperty("Sejour - Date sortie (longue)", $this->sortie);
     $template->addTimeProperty("Sejour - Heure sortie"        , $this->sortie);
 
     $template->addDateProperty("Sejour - Date entrée réelle"  , $this->entree_reelle);
