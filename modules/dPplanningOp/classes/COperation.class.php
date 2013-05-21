@@ -185,6 +185,7 @@ class COperation extends CCodable implements IPatientRelated {
   public $_ref_anesth;
   /** @var CTypeAnesth */
   public $_ref_type_anesth;
+  /** @var  CConsultAnesth */
   public $_ref_consult_anesth;
   public $_ref_anesth_visite;
   /** @var CActeCCAM[] */
@@ -618,7 +619,7 @@ class COperation extends CCodable implements IPatientRelated {
 
       // Aucune alerte
       else {
-        return;
+        return null;
       }
 
       // Complément d'alerte
@@ -642,7 +643,7 @@ class COperation extends CCodable implements IPatientRelated {
    */
   function createAlert($comments) {
     if (!$comments) {
-      return;
+      return null;
     }
 
     $alerte = new CAlert();
@@ -806,7 +807,9 @@ class COperation extends CCodable implements IPatientRelated {
         if ($place_after_interv_id == -1) {
           $reorder = true;
           $reorder_rank_voulu = true;
-          $plage->_ref_operations = CMbArray::mergeKeys(array($this->_id => $this), $plage->_ref_operations); // To preserve keys (array_unshift does not)
+          $plage->_ref_operations = CMbArray::mergeKeys(
+            array($this->_id => $this), $plage->_ref_operations
+          ); // To preserve keys (array_unshift does not)
         }
         elseif (isset($plage->_ref_operations[$place_after_interv_id])) {
           $reorder = true;
@@ -841,6 +844,7 @@ class COperation extends CCodable implements IPatientRelated {
         return $msg;
       }
     }
+    return null;
   }
 
   /**
@@ -858,6 +862,7 @@ class COperation extends CCodable implements IPatientRelated {
   function loadView() {
     parent::loadView();
     $this->loadRefPraticien()->loadRefFunction();
+    $this->loadRefAnesth()->loadRefFunction();
     $this->loadRefPatient();
     $this->_ref_sejour->_ref_patient->loadRefPhotoIdentite();
   }
@@ -1317,12 +1322,13 @@ class COperation extends CCodable implements IPatientRelated {
 
   function getDMIAlert(){
     if (!CModule::getActive("dmi")) {
-      return;
+      return null;
     }
 
     $this->_dmi_prescription_id = null;
     $this->_dmi_praticien_id    = null;
 
+    /** @var CPrescriptionLineDMI[] $lines */
     $lines = $this->loadBackRefs("prescription_dmis");
 
     if (empty($lines)) {
@@ -1434,6 +1440,7 @@ class COperation extends CCodable implements IPatientRelated {
         return $msg;
       }
     }
+    return null;
   }
 
   function completeLabelFields(&$fields) {

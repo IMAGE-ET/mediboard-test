@@ -54,6 +54,14 @@
       {{mb_label object=$object field=cote}} {{mb_value object=$object field=cote}}
     </td>
   </tr>
+  {{if $object->_ref_anesth->_id}}
+  <tr>
+    <td colspan="3">
+      {{mb_label object=$object field=anesth_id}}
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$object->_ref_anesth}}
+    </td>
+  </tr>
+  {{/if}}
   {{if $object->type_anesth}}
   <tr>
     <td colspan="3">
