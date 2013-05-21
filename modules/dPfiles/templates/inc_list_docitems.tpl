@@ -31,15 +31,16 @@
                 {{else}}
                 Document.print({{$_docitem->_id}})
                 {{/if}}">{{tr}}Print{{/tr}}</button>
-        {{/if}}
-        <a href="#document-{{$_docitem->_id}}" style="display: inline;"
-             onclick="return popFile('{{$_docitem->object_class}}','{{$_docitem->object_id}}','{{$_docitem->_class}}','{{$_docitem->_id}}')">
-          {{if $_docitem instanceof CCompteRendu}}
-            {{$_docitem->nom}}
-          {{else}}
+          <a href="#document-{{$_docitem->_id}}" style="display: inline;"
+             onclick="Document.edit('{{$_docitem->_id}}')">
+              {{$_docitem->nom}}
+          </a>
+        {{else}}
+          <a href="#document-{{$_docitem->_id}}" style="display: inline;"
+               onclick="return popFile('{{$_docitem->object_class}}','{{$_docitem->object_id}}','{{$_docitem->_class}}','{{$_docitem->_id}}')">
             {{$_docitem->file_name}}
-          {{/if}}
-        </a>
+          </a>
+        {{/if}}
       </li>
     {{/foreach}}
   </ul>
