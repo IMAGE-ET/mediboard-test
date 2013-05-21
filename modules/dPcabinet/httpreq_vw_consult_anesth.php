@@ -44,15 +44,18 @@ if ($selConsult) {
   // Chargement de la consult anesthésie
   $consult->loadRefConsultAnesth();
   $consultAnesth = $consult->_ref_consult_anesth;
-  
+
+  foreach ($consult->_refs_dossiers_anesth as $_dossier) {
+    $_dossier->loadRefConsultation();
+    $_dossier->loadRefOperation()->loadRefPlageOp();
+  }
+
   if ($dossier_anesth_id) {
     $consultAnesth = $consult->_refs_dossiers_anesth[$dossier_anesth_id];
     $consult->_ref_consult_anesth = $consultAnesth;
   }
   
   if ($consultAnesth->_id) {
-    $consultAnesth->loadRefOperation();
-    $consultAnesth->loadRefConsultation();
     $consultAnesth->_ref_consultation->loadRefPraticien();
     $consultAnesth->_ref_operation->loadRefChir(true);
     $consultAnesth->_ref_sejour->loadRefDossierMedical();
