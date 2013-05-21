@@ -22,6 +22,9 @@ class CExClassFieldTranslation extends CMbObject {
   /** @var CExClassField */
   public $_ref_ex_class_field;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "ex_class_field_translation";
@@ -30,6 +33,9 @@ class CExClassFieldTranslation extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["ex_class_field_id"] = "ref notNull class|CExClassField cascade";
@@ -70,7 +76,10 @@ class CExClassFieldTranslation extends CMbObject {
     
     return $trans;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
 
@@ -100,12 +109,17 @@ class CExClassFieldTranslation extends CMbObject {
   function loadRefExClassField($cache = true){
     return $this->_ref_ex_class_field = $this->loadFwdRef("ex_class_field_id", $cache);
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store(){
     if ($msg = parent::store()) {
       return $msg;
     }
     
     CExObject::clearLocales();
+
+    return null;
   }
 }

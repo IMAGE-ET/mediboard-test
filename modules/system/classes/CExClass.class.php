@@ -65,7 +65,7 @@ class CExClass extends CMbObject {
    * Compare values with each other with a comparison operator
    *
    * @param string|float $a        Operand A
-   * @param strin        $operator Operator
+   * @param string       $operator Operator
    * @param string|float $b        Operand B
    *
    * @return bool
@@ -109,6 +109,9 @@ class CExClass extends CMbObject {
     }
   }
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "ex_class";
@@ -117,6 +120,9 @@ class CExClass extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     //$props["host_class"]   = "str notNull protected";
@@ -182,6 +188,9 @@ class CExClass extends CMbObject {
     $this->_host_objects = $instances;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["field_groups"] = "CExClassFieldGroup ex_class_id";
@@ -304,7 +313,10 @@ class CExClass extends CMbObject {
   function getExClassName(){
     return "CExObject_{$this->_id}";
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
     $this->getFormulaField();
@@ -618,7 +630,10 @@ class CExClass extends CMbObject {
       "groups"      => $groups,
     );
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store(){
     if ($this->_id && $this->_duplicate) {
       $this->_duplicate = null;
@@ -678,7 +693,10 @@ class CExClass extends CMbObject {
     
     return parent::store();
   }
-  
+
+  /**
+   * @see parent::delete()
+   */
   function delete(){
     if ($msg = $this->canDeleteEx()) {
       return $msg;

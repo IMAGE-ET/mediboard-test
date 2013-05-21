@@ -31,6 +31,9 @@ class CExClassHostField extends CMbObject {
   public $_ref_ex_group;
   public $_ref_host_object;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "ex_class_host_field";
@@ -39,6 +42,9 @@ class CExClassHostField extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["ex_group_id"]       = "ref notNull class|CExClassFieldGroup cascade";
@@ -59,7 +65,10 @@ class CExClassHostField extends CMbObject {
     $props["coord_height"] = "num min|1";
     return $props;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
     

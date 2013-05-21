@@ -40,6 +40,9 @@ class CExClassFieldProperty extends CMbMetaObject {
     "text-decoration" => array("underline", "overline", "line-through"),
   );
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "ex_class_field_property";
@@ -48,6 +51,9 @@ class CExClassFieldProperty extends CMbMetaObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["object_class"] = "enum notNull list|CExClassField|CExClassMessage|CExClassFieldSubgroup";
@@ -58,7 +64,10 @@ class CExClassFieldProperty extends CMbMetaObject {
     $props["_value"]       = "str";
     return $props;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
@@ -88,7 +97,7 @@ class CExClassFieldProperty extends CMbMetaObject {
   /**
    * Get default styles
    *
-   * @param CExClassField|CExClassMessage|CExClassFieldSubgroup $object Object to get the default styles of
+   * @param CExClassField|CExClassMessage|CExClassFieldSubgroup|CMbObject $object Object to get the default styles of
    *
    * @return array
    */

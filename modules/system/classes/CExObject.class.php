@@ -615,6 +615,9 @@ class CExObject extends CMbMetaObject {
     $this->_fields_default_properties = $default;
   }
 
+  /**
+   * @see parent::store()
+   */
   function store(){
     if ($msg = $this->check()) {
       return $msg;
@@ -683,6 +686,9 @@ class CExObject extends CMbMetaObject {
   }
   /// End low level methods /////////
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->key = "ex_object_id";
@@ -696,7 +702,10 @@ class CExObject extends CMbMetaObject {
   function getTableName(){
     return "ex_object_".$this->getClassId();
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $this->loadRefExClass();
     $this->_spec->table = $this->getTableName();
@@ -734,7 +743,10 @@ class CExObject extends CMbMetaObject {
     
     return $props;
   }
-  
+
+  /**
+   * @see parent::getSpecs()
+   */
   function getSpecs(){
     $ex_class_id = $this->getClassId();
     $this->_class = get_class($this)."_$ex_class_id";

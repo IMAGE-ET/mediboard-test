@@ -18,7 +18,7 @@ class CExClassConstraint extends CMbObject {
   public $operator;
   public $value;
 
-  /** @var CExClass */
+  /** @var CExClassEvent */
   public $_ref_ex_class_event;
 
   /** @var CMbObject */
@@ -27,6 +27,9 @@ class CExClassConstraint extends CMbObject {
   /** @var CMbFieldSpec */
   public $_ref_target_spec;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "ex_class_constraint";
@@ -35,6 +38,9 @@ class CExClassConstraint extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     //$props["ex_class_id"] = "ref notNull class|CExClass";
@@ -187,6 +193,9 @@ class CExClassConstraint extends CMbObject {
     return $this->_ref_target_object;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
 
@@ -250,6 +259,7 @@ class CExClassConstraint extends CMbObject {
 
     $object->loadView();
 
+    /** @var CMbObject $object */
     $object = $object_field["object"];
     $field  = $object_field["field"];
 

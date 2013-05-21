@@ -37,6 +37,9 @@ class CExClassMessage extends CMbObject {
   public $_default_properties;
   public $_no_size = false;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "ex_class_message";
@@ -45,6 +48,9 @@ class CExClassMessage extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["ex_group_id"] = "ref notNull class|CExClassFieldGroup cascade";
@@ -68,12 +74,18 @@ class CExClassMessage extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["properties"] = "CExClassFieldProperty object_id";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
     

@@ -79,7 +79,10 @@ class CExConcept extends CExListItemsOwner {
     
     return $search;
   }
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "ex_concept";
@@ -88,6 +91,9 @@ class CExConcept extends CExListItemsOwner {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["ex_list_id"]   = "ref class|CExList autocomplete|name";
@@ -96,14 +102,20 @@ class CExConcept extends CExListItemsOwner {
     $props["native_field"] = "str show|0";
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["class_fields"] = "CExClassField concept_id";
     $backProps["list_items"]   = "CExListItem concept_id";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
     
@@ -225,7 +237,10 @@ class CExConcept extends CExListItemsOwner {
   function loadRefClassFields(){
     return $this->_ref_class_fields = $this->loadBackRefs("class_fields");
   }
-  
+
+  /**
+   * @see parent::loadView()
+   */
   function loadView(){
     parent::loadView();
     $this->loadConceptSpec();
@@ -278,7 +293,10 @@ class CExConcept extends CExListItemsOwner {
   static function orderSpecs(&$options) {
     uksort($options, array("CExConcept", "compareSpecs"));
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store(){
     $prop_changed = $this->fieldModified("prop");
     

@@ -42,6 +42,9 @@ class CExClassFieldSubgroup extends CMbObject {
 
   public $_default_properties;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "ex_class_field_subgroup";
@@ -49,6 +52,9 @@ class CExClassFieldSubgroup extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["parent_class"] = "enum notNull list|CExClassFieldGroup|CExClassFieldSubgroup";
@@ -63,7 +69,10 @@ class CExClassFieldSubgroup extends CMbObject {
     $props["coord_height"] = "num min|1";
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["children_groups"]   = "CExClassFieldSubgroup parent_id";
@@ -73,7 +82,10 @@ class CExClassFieldSubgroup extends CMbObject {
     $backProps["properties"]        = "CExClassFieldProperty object_id";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
     $this->_view = ($this->title != "" ? $this->title : "[Sans titre]");

@@ -80,6 +80,9 @@ class CExClassEvent extends CMbObject {
     return array_filter($classes, "class_exists");
   }
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "ex_class_event";
@@ -88,6 +91,9 @@ class CExClassEvent extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["ex_class_id"] = "ref notNull class|CExClass cascade";
@@ -98,13 +104,19 @@ class CExClassEvent extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["constraints"]  = "CExClassConstraint ex_class_event_id";
     //$backProps["ex_triggers"]  = "CExClassFieldTrigger ex_class_event_triggered_id";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
     
@@ -299,7 +311,10 @@ class CExClassEvent extends CMbObject {
     
     return $spec;
   }
-  
+
+  /**
+   * @see parent::check()
+   */
   function check(){
     if ($msg = parent::check()) {
       return $msg;
@@ -311,6 +326,8 @@ class CExClassEvent extends CMbObject {
         return "Impossible de changer le type d'objet hôte de ce formulaire car il possède $count_constraints contrainte(s)";
       }
     }
+
+    return null;
   }
 
   static function getAvailableFieldsOfObject(CMbObject $object, $class_fields = null) {

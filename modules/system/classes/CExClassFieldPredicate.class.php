@@ -25,6 +25,9 @@ class CExClassFieldPredicate extends CMbObject {
 
   static $_load_lite = false;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "ex_class_field_predicate";
@@ -33,6 +36,9 @@ class CExClassFieldPredicate extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["ex_class_field_id"] = "ref notNull class|CExClassField cascade seekable";
@@ -41,7 +47,10 @@ class CExClassFieldPredicate extends CMbObject {
     $props["_value"]            = "str";
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["display_fields"]    = "CExClassField predicate_id";
@@ -50,7 +59,10 @@ class CExClassFieldPredicate extends CMbObject {
     $backProps["properties"]        = "CExClassFieldProperty predicate_id";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
 
@@ -106,11 +118,14 @@ class CExClassFieldPredicate extends CMbObject {
     
     return $real_list;
   }
-  
+
   function checkValue($value){
     return CExClass::compareValues($value, $this->operator, $this->value);
   }
 
+  /**
+   * @see parent::store()
+   */
   function store(){
     CExObject::$_locales_cache_enabled = false;
 

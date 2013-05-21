@@ -20,6 +20,9 @@ class CExClassFieldEnumTranslation extends CMbObject {
   /** @var CExClassField */
   public $_ref_ex_class_field;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "ex_class_field_enum_translation";
@@ -28,6 +31,9 @@ class CExClassFieldEnumTranslation extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["ex_class_field_id"] = "ref notNull class|CExClassField cascade";

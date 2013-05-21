@@ -21,6 +21,9 @@ class CExListItem extends CMbObject {
   
   public $_ref_list;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "ex_list_item";
@@ -30,6 +33,9 @@ class CExListItem extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["list_id"]    = "ref class|CExList cascade";
@@ -43,7 +49,10 @@ class CExListItem extends CMbObject {
   function loadRefList($cache = true) {
     return $this->_ref_list = $this->loadFwdRef("list_id", $cache);
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
     
@@ -54,7 +63,10 @@ class CExListItem extends CMbObject {
       $this->_view .= " [$this->code]";
     }
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store(){
     $is_new = !$this->_id;
     
@@ -65,5 +77,7 @@ class CExListItem extends CMbObject {
     if ($is_new || $this->fieldModified("name")) {
       CExObject::clearLocales();
     }
+
+    return null;
   }
 }

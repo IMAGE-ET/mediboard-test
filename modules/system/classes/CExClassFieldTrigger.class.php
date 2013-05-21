@@ -22,6 +22,9 @@ class CExClassFieldTrigger extends CMbObject {
   /** @var CExClassField */
   public $_ref_ex_class_triggered;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "ex_class_field_trigger";
@@ -30,6 +33,9 @@ class CExClassFieldTrigger extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["ex_class_field_id"]     = "ref notNull class|CExClassField cascade";
@@ -38,6 +44,9 @@ class CExClassFieldTrigger extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::loadView()
+   */
   function loadView(){
     parent::loadView();
     $this->loadRefExClassField();

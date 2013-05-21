@@ -16,6 +16,9 @@ class CExList extends CExListItemsOwner {
   public $coded;
   public $multiple;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "ex_list";
@@ -24,6 +27,9 @@ class CExList extends CExListItemsOwner {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["name"]  = "str notNull seekable";
@@ -32,18 +38,27 @@ class CExList extends CExListItemsOwner {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["concepts"] = "CExConcept ex_list_id";
     $backProps["list_items"] = "CExListItem list_id";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::loadView()
+   */
   function loadView(){
     parent::loadView();
     $this->loadBackRefs("concepts");
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
     $this->_view  = $this->coded ? "# " : "";

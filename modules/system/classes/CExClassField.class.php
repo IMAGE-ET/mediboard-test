@@ -212,6 +212,9 @@ class CExClassField extends CExListItemsOwner {
     return self::$_property_fields;
   }
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "ex_class_field";
@@ -224,6 +227,9 @@ class CExClassField extends CExListItemsOwner {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["ex_group_id"] = "ref class|CExClassFieldGroup cascade";
@@ -266,6 +272,9 @@ class CExClassField extends CExListItemsOwner {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["enum_translations"]  = "CExClassFieldEnumTranslation ex_class_field_id";
@@ -278,6 +287,9 @@ class CExClassField extends CExListItemsOwner {
     return $backProps;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
 
@@ -480,10 +492,16 @@ class CExClassField extends CExListItemsOwner {
     $this->_formula = $formula;
   }
 
+  /**
+   * @see parent::check()
+   */
   function checkFormula(){
     return $this->formulaToDB(false);
   }
 
+  /**
+   * @see parent::check()
+   */
   function check(){
     if ($msg = $this->checkFormula(false)) {
       return $msg;
@@ -682,6 +700,9 @@ class CExClassField extends CExListItemsOwner {
     return $db_spec;
   }
 
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields(){
     //$coord_modified = $this->fieldModified("coord_field_x") || $this->fieldModified("coord_field_y");
     $group_modified = $this->fieldModified("ex_group_id");
@@ -728,6 +749,9 @@ class CExClassField extends CExListItemsOwner {
     return $uniqid;
   }
 
+  /**
+   * @see parent::store()
+   */
   function store(){
     if (!$this->_id && $this->concept_id) {
       $this->prop = $this->loadRefConcept()->prop;
@@ -822,6 +846,9 @@ class CExClassField extends CExListItemsOwner {
     }
   }
 
+  /**
+   * @see parent::delete()
+   */
   function delete(){
     if ($msg = $this->canDeleteEx()) {
       return $msg;

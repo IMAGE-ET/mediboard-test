@@ -103,7 +103,10 @@ class CExListItemsOwner extends CMbObject {
     
     return $spec;
   }
-  
+
+  /**
+   * @see parent::loadView()
+   */
   function loadView(){
     parent::loadView();
     $this->loadRefItems();

@@ -42,6 +42,9 @@ class CExClassFieldGroup extends CMbObject {
   /** @var CExClassField[] */
   static $_fields_cache = array();
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "ex_class_field_group";
@@ -50,6 +53,9 @@ class CExClassFieldGroup extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["ex_class_id"] = "ref class|CExClass cascade";
@@ -57,7 +63,10 @@ class CExClassFieldGroup extends CMbObject {
     $props["rank"]        = "num min|0";
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["class_fields"]   = "CExClassField ex_group_id";
@@ -67,7 +76,10 @@ class CExClassFieldGroup extends CMbObject {
     $backProps["identifiants"]   = "CIdSante400 object_id cascade";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
     $this->_view = $this->name;
@@ -141,7 +153,10 @@ class CExClassFieldGroup extends CMbObject {
     
     return $this->_ref_fields;
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store(){
     if ($this->_move && $this->_id) {
       $this->completeField("ex_class_id");
