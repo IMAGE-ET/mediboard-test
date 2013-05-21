@@ -30,6 +30,12 @@ class CCodeCCAM {
   // Variable calculées
   public $_code7; // Possibilité d'ajouter le modificateur 7 (0 : non, 1 : oui)
   public $_default;
+  public $occ;
+
+  // Distant field
+  public $class;
+  public $favoris_id;
+  public $_ref_favori;
 
   // Activités et phases recuperées depuis le code CCAM
   public $_activite;

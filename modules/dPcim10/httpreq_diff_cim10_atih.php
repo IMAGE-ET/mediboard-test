@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPcim10
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPcim10
+ *
+ * @category Cim10
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 global $can;
@@ -38,7 +41,7 @@ CAppUI::stepAjax("Extraction de $nbFiles fichier(s) [CIM10 ATIH]", UI_MSG_OK);
 $list_diff = array();
 $fp = fopen($targetPath, 'r');
 
-while($line = fgetcsv($fp, null, '|')) {
+while ($line = fgetcsv($fp, null, '|')) {
   // Remove dots, replace + by X
   $line[0] = str_replace(array('.', '+'), array('', 'X'), trim($line[0]));
   
@@ -50,12 +53,14 @@ while($line = fgetcsv($fp, null, '|')) {
 
 fclose($fp);
 
-if (count($list_diff))
+if (count($list_diff)) {
   CAppUI::stepAjax("Il existe ".count($list_diff)." codes supplémentaires dans la CIM v.11", UI_MSG_WARNING);
-else
+}
+else {
   CAppUI::stepAjax("Il n'y a pas de code supplémentaires dans la CIM v.11", UI_MSG_OK);
+}
 
-foreach($list_diff as $diff) {
+foreach ($list_diff as $diff) {
   $abbrev = $diff[0];
   $full_code = CCodeCIM10::addPoint($abbrev);
   
@@ -76,7 +81,7 @@ foreach($list_diff as $diff) {
   for ($i = 1; $i <= 7; $i++) {
     if ($i <= 2) {
       $query = "SELECT * FROM master WHERE abbrev LIKE('%".substr($abbrev, 0, $i)."%') ORDER BY code ASC LIMIT 1";
-    } 
+    }
     else {
       $query = "SELECT * FROM master WHERE abbrev = '".substr($abbrev, 0, $i)."' LIMIT 1";
     }
@@ -89,7 +94,9 @@ foreach($list_diff as $diff) {
       $ds->exec($query);
       $prev_SID = $level_SID;
     }
-    else $offset++; 
+    else {
+      $offset++;
+    }
   }
   
   $label = str_replace("'", "\\'", CMbString::removeDiacritics($diff[3], CMbString::UPPERCASE));
@@ -115,5 +122,3 @@ foreach($list_diff as $diff) {
 }
 
 CAppUI::stepAjax(count($list_diff)." codes supplémentaires ont été ajoutés dans la CIM10", UI_MSG_OK);
-
-?>

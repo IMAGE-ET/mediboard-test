@@ -19,8 +19,8 @@
   }
   function clearCodeAndKeys() {
     var oForm = getForm('findCode');
-    $V(findCode.code, '');
-    $V(findCode.keys, '');
+    $V(oForm.code, '');
+    $V(oForm.keys, '');
   }
 </script>
 

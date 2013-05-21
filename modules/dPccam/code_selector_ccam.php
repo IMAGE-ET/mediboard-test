@@ -59,7 +59,7 @@ foreach ($profiles as $profile => $_user_id) {
 
   // Favoris
 
-  $code = new CFavoriCCAM;
+  $code = new CFavoriCCAM();
   $where = array();
   $where["ccamfavoris.favoris_user"] = " = '$_user_id'";
   $where["ccamfavoris.object_class"] = " = '$object_class'";
@@ -70,6 +70,7 @@ foreach ($profiles as $profile => $_user_id) {
     $ljoin["tag_item"] = "tag_item.object_id = ccamfavoris.favoris_id AND tag_item.object_class = 'CFavoriCCAM'";
   }
 
+  /** @var CFavoriCCAM[] $codes_favoris */
   $codes_favoris = $code->loadList($where, null, 100, null, $ljoin);
 
   foreach ($codes_favoris as $key => $_code) {

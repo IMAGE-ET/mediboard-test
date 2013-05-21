@@ -57,17 +57,17 @@ function modalImportFavoris() {
   
 <tr>
   <td><button class="tick" onclick="startCIM10()">Importer la base de données CIM10</button></td>
-  <td id="cim10" />
+  <td id="cim10"></td>
 </tr>
 
 <tr>
   <td><button class="tick" onclick="diffCIM10Atih()">Ajouter les modifications de l'ATIH</button></td>
-  <td id="cim10_add" />
+  <td id="cim10_add"></td>
 </tr>
 
 <tr>
   <td><button class="tick" onclick="diffCIM10Atih(true)">Supprimer les modifications de l'ATIH</button></td>
-  <td id="cim10_remove" />
+  <td id="cim10_remove"></td>
 </tr>
 
 </table>

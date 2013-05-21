@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPcim10
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPcim10
+ *
+ * @category Cim10
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -16,7 +19,7 @@ $lang   = CValue::getOrSession("lang", CCodeCIM10::LANG_FR);
 $tag_id = CValue::getOrSession("tag_id");
 
 // Recherche des codes favoris
-$favoris = new CFavoriCIM10();
+$favori = new CFavoriCIM10();
 $where = array();
 $where["favoris_user"] = "= '$user->_id'";
 
@@ -26,7 +29,8 @@ if ($tag_id) {
   $where["tag_item.tag_id"] = "= '$tag_id'";
 }
 
-$favoris = $favoris->loadList($where, "favoris_code", null, null, $ljoin);
+/** @var CFavoriCIM10[] $favoris */
+$favoris = $favori->loadList($where, "favoris_code", null, null, $ljoin);
 
 $codes = array();
 foreach ($favoris as $_favori) {

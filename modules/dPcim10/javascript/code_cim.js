@@ -5,4 +5,4 @@ CodeCIM = {
     url.addParam("code", code);
     url.modal();
   }
-}
+};

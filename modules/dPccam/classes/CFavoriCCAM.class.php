@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPccam
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPccam
+ *
+ * @category Ccam
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 class CFavoriCCAM extends CMbObject {
@@ -60,6 +63,7 @@ class CFavoriCCAM extends CMbObject {
       $favoris = $fav->loadList($where, "favoris_code", null, null, $ljoin);
 
       foreach ($favoris as $_favori) {
+        /** @var CCodeCCAM $code */
         $code = CCodeCCAM::get($_favori->favoris_code, CCodeCCAM::LITE);
         $code->getChaps();
 

@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPcim10
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPcim10
+ *
+ * @category Cim10
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -16,11 +19,11 @@ $keys   = CValue::getOrSession("keys", "");
 $level1 = CValue::getOrSession("level1", "");
 $level2 = CValue::getOrSession("level2", "");
 
-if(CValue::session("code") || CValue::session("keys")) {
+if (CValue::session("code") || CValue::session("keys")) {
   $level1 = "";
   CValue::setSession("level1");
 }
-if(!$level1) {
+if (!$level1) {
   $level2 = "";
   CValue::setSession("level2");
 }
@@ -32,12 +35,14 @@ $listLevel2 = array();
 
 $master = array();
 
-if($code || $keys) {
+if ($code || $keys) {
   $master = $cim10->findCodes($code, $keys, $lang);
-} elseif($level2) {
+}
+elseif ($level2) {
   $listLevel2 = $cim10->getSubCodes($level1, $lang);
   $master = $cim10->getSubCodes($level2, $lang);
-} elseif($level1) {
+}
+elseif ($level1) {
   $listLevel2 = $cim10->getSubCodes($level1, $lang);
   $master = $listLevel2;
 }
@@ -59,5 +64,3 @@ $smarty->assign("master"    , $master);
 $smarty->assign("numresults", $numresults);
 
 $smarty->display("vw_find_code.tpl");
-
-?>

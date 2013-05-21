@@ -1,11 +1,14 @@
-<?php /* $Id: acte.class.php 8867 2010-05-07 07:21:19Z MyttO $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPccam
- * @version $Revision: 8867 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPccam
+ *
+ * @category Ccam
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 class CFraisDiversType extends CMbObject {

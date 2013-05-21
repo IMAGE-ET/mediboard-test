@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPcim10
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPcim10
+ *
+ * @category Cim10
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 class CCodeCIM10 {
@@ -31,9 +34,19 @@ class CCodeCIM10 {
   public $notes;
   
   // Références
+  /** @var  CCodeCIM10[] */
   public $_exclude;
+  /** @var  CCodeCIM10[] */
   public $_levelsSup;
+  /** @var  CCodeCIM10[] */
   public $_levelsInf;
+
+  // Calculated field
+  public $occ;
+
+  // Distant fields
+  public $_favoris_id;
+  public $_ref_favori;
 
   // Langue
   public $_lang;
@@ -248,7 +261,7 @@ class CCodeCIM10 {
     $row = $ds->fetchArray($result);
 
     // Niveaux superieurs
-    $this->_levelsup = array();
+    $this->_levelsSup = array();
     for ($index = 1; $index <= 7; $index++) {
       $code_cim10_id = $row["id$index"];
       if ($code_cim10_id) {
@@ -285,6 +298,7 @@ class CCodeCIM10 {
     }
     
     ksort($this->_levelsInf);
+    return true;
   }
   
   // Sommaire

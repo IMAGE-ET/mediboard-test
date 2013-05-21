@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPcim10
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPcim10
+ *
+ * @category Cim10
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -24,5 +27,3 @@ $smarty->assign("lang" , $lang);
 $smarty->assign("cim10", $cim10);
 
 $smarty->display("vw_full_code.tpl");
-
-?>

@@ -2,12 +2,12 @@
 
 /**
  * dPcim10
- *  
- * @category dPcim10
+ *
+ * @category Cim10
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
  * @link     http://www.mediboard.org
  */
 
@@ -73,7 +73,7 @@ foreach ($profiles as $profile => $_user_id) {
     }
   }
   // Favoris
-  $code = new CFavoriCIM10;
+  $code = new CFavoriCIM10();
   $where = array();
   $where["favoris_user"] = " = '$_user_id'";
 
@@ -83,6 +83,7 @@ foreach ($profiles as $profile => $_user_id) {
     $ljoin["tag_item"] = "tag_item.object_id = cim10favoris.favoris_id AND tag_item.object_class = 'CFavoriCIM10'";
   }
 
+  /** @var CFavoriCIM10[] $codes_favoris */
   $codes_favoris = $code->loadList($where, null, 100, null, $ljoin);
   
   foreach ($codes_favoris as $key => $_code) {
@@ -98,14 +99,14 @@ foreach ($profiles as $profile => $_user_id) {
     $codes_keys = array_keys(array_merge($codes_stats, $codes_favoris));
     $where = "master.abbrev ".$ds->prepareIn($codes_keys);
   }
-  
-  // Si pas de stat et pas de favoris, et que la recherche se fait sur ceux-ci,
-  // alors le tableau de résultat est vide
+
   if (!$_all_codes && count($codes_stats) == 0 && count($codes_favoris) == 0) {
+    // Si pas de stat et pas de favoris, et que la recherche se fait sur ceux-ci,
+    // alors le tableau de résultat est vide
     $codes = array();
   }
-  // Sinon recherche de codes
   else {
+    // Sinon recherche de codes
     $codes = $code->findCodes($_keywords_code, $_keywords_code, CCodeCIM10::LANG_FR, null, $where);
   }
   

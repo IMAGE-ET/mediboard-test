@@ -45,13 +45,16 @@ updateMontant = function(form){
 };
 
 removeFraisDivers = function(id, form) {
-  if (!confirm("Voulez vous réelement supprimer de frais divers ?")) return;
+  if (!confirm("Voulez vous réelement supprimer de frais divers ?")) {
+    return false;
+  }
   
   form.del.value = 1;
   form.frais_divers_id.value = id;
   
-  return onSubmitFormAjax(form, {check: function(){return true}, onComplete: refreshFraisDivers})
-}
+  return onSubmitFormAjax(form, {check: function(){return true}, onComplete: refreshFraisDivers});
+};
+
 </script>
 
 <form name="formAddFraisDivers" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshFraisDivers})">
