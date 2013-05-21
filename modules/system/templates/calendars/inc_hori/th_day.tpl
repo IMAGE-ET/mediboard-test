@@ -32,7 +32,7 @@
 <div id="tooltip-CMbDay-{{$_name}}" style="display: none;">
   <table class="tbl">
     <tr>
-      <th colspan="2">{{$_name|date_format:$conf.longdate}}</th>
+      <th colspan="2" class="title">{{$_name|date_format:$conf.longdate}}</th>
     </tr>
     <tr>
       <th>Jour numéro :</th><td>{{$daySel->number}} / {{$daySel->_nbDaysYear}}</td>

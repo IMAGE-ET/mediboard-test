@@ -60,48 +60,49 @@
             <!-- hours division -->
             {{foreach from=$planning->_hours key=num item=_hour}}
             <td class="division hoveringTd" style="
-              width:{{math equation="100/b" b=$planning->_hours|@count}}%;
-              left:{{math equation="a*100/b" a=$num b=$planning->_hours|@count}}%;">
+              width:{{math equation="100/b" b=$planning->_hours|@count}}%;"
+              >
               <span class="hourLabel">{{$_hour}}h</span>
             </td>
           {{/foreach}}
           </tr>
           {{/if}}
+
+          <div class="day">
+            <!-- events -->
+            {{foreach from=$_day item=_event}}
+              <div class="event {{$_event->css_class}} {{$_event->guid}} {{$_event->type}}" style="
+                top:{{math equation="(80*a)+40" a=$_event->height}}px;
+                left:{{math equation="(((a*60)+b) * (100/1440))" a=$_event->hour b=$_event->minutes}}%;
+                width:{{math equation="(a * (100/1440))" a=$_event->length}}%;
+                min-width:{{math equation="(a * (100/1440))" a=$_event->length}}%!important;
+                background:{{$_event->color}};
+                ">
+                {{if $_event->menu|@count > 0}}
+                  <div class="toolbar" style="background:{{$_event->color}} ">
+                    {{foreach from=$_event->menu item=element}}
+                      <a class="button {{$element.class}} notext"
+                         onclick="window['planning-{{$planning->guid}}'].onMenuClick('{{$element.class}}','{{$_event->guid}}', this)"
+                         title="{{$element.title}}"></a>
+                    {{/foreach}}
+                  </div>
+                {{/if}}
+
+                {{if $_event->display_hours}}
+                  <span class="startTime incline" style="background:{{$_event->color}}; {{if $_event->start|date_format:"%H:%M" == "00:00"}}left:-10px;{{/if}}">{{$_event->start|date_format:"%H:%M"}}</span>
+                {{/if}}
+
+                <span class="event_libelle" onmouseover="ObjectTooltip.createEx(this,'{{$_event->_ref_object->_guid}}')">{{$_event->title|smarty:nodefaults}}</span>
+
+                {{if $_event->display_hours}}
+                  <span class="endTime incline" style="background:{{$_event->color}};
+                  {{if $_event->end|date_format:"%H%M" >= "2350"}}right:-10px;{{/if}}">{{$_event->end|date_format:"%H:%M"}}</span>
+                {{/if}}
+              </div>
+            {{/foreach}}
+          </div>
+
         </table>
-
-        <div class="day">
-          <!-- events -->
-          {{foreach from=$_day item=_event}}
-            <div class="event {{$_event->css_class}} {{$_event->guid}} {{$_event->type}}" style="
-              top:{{math equation="(80*a)+15" a=$_event->height}}px;
-              left:{{math equation="(((a*60)+b) * (100/1440))" a=$_event->hour b=$_event->minutes}}%;
-              width:{{math equation="(a * (100/1440))" a=$_event->length}}%;
-              min-width:{{math equation="(a * (100/1440))" a=$_event->length}}%!important;
-              background:{{$_event->color}};
-            ">
-              {{if $_event->menu|@count > 0}}
-                <div class="toolbar" style="background:{{$_event->color}} ">
-                  {{foreach from=$_event->menu item=element}}
-                    <a class="button {{$element.class}} notext"
-                       onclick="window['planning-{{$planning->guid}}'].onMenuClick('{{$element.class}}','{{$_event->guid}}', this)"
-                       title="{{$element.title}}"></a>
-                  {{/foreach}}
-                </div>
-              {{/if}}
-
-              {{if $_event->display_hours}}
-                <span class="startTime incline" style="background:{{$_event->color}}; {{if $_event->start|date_format:"%H:%M" == "00:00"}}left:-10px;{{/if}}">{{$_event->start|date_format:"%H:%M"}}</span>
-              {{/if}}
-
-              <span class="event_libelle" onmouseover="ObjectTooltip.createEx(this,'{{$_event->_ref_object->_guid}}')">{{$_event->title|smarty:nodefaults}}</span>
-
-              {{if $_event->display_hours}}
-                <span class="endTime incline" style="background:{{$_event->color}};
-                 {{if $_event->end|date_format:"%H%M" >= "2350"}}right:-10px;{{/if}}">{{$_event->end|date_format:"%H:%M"}}</span>
-              {{/if}}
-            </div>
-          {{/foreach}}
-        </div>
       </td>
     {{/foreach}}
   </tr>
