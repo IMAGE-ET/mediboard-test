@@ -1,3 +1,136 @@
 td#treeDirectory ul, td#treeDirectory li{
   background-color: transparent;
 }
+
+/* PLANNING HORIZONTAL */
+table.calendar_horizontal, table.calendar_horizontal, table.calendar_horizontal {
+  border-collapse: collapse;
+  width: 100%;
+  position: relative;
+  table-layout: fixed;
+}
+
+.calendar_horizontal .dayLabel{
+  overflow: hidden;
+}
+
+.calendar_horizontal .nonworking{
+  background: yellow;
+}
+
+.calendar_horizontal td.column{
+  border:solid 1px grey;
+  vertical-align: top;
+  text-align: center;
+  position:relative;
+}
+
+.calendar_horizontal td.column table {
+  table-layout: fixed;
+}
+
+.calendar_horizontal td.column div.day{
+  position:relative;
+  width:100%;
+}
+
+.calendar_horizontal .divisions{
+  width:100%;
+}
+
+.calendar_horizontal .divisions th{
+  border-bottom: solid 1px black;
+}
+
+
+/* HOURS */
+table.calendar_horizontal td.division {
+  text-align: left;
+  vertical-align: top;
+  border-left:solid 1px lightsteelblue;
+}
+
+table.calendar_horizontal td.division span{
+  left:-10px;
+}
+
+table.calendar_horizontal td.division table {
+  table-layout: fixed;
+}
+
+table.calendar_horizontal .hoveringTd:hover {
+  background: #ccc;
+}
+
+table.calendar_horizontal .weekEnd {
+  background-color: #bbdce8;
+}
+
+table.calendar_horizontal div.event{
+  position: absolute;
+  text-align: center;
+  opacity: 0.9;
+  border-radius: 3px ;
+  box-shadow: 1px 1px 4px grey;
+  height: 70px;
+  text-overflow: clip;
+  overflow: hidden;
+  border:solid 1px black;
+}
+
+table.calendar_horizontal div.event:hover{
+  opacity: 1;
+  overflow: visible;
+  box-shadow: 1px 1px 10px black;
+  z-index: 30;
+  width:auto!important;
+  padding: 0 3px;
+  margin-left:-3px;
+}
+
+table.calendar_horizontal .startTime,table.calendar_horizontal  .endTime{
+  display: none;
+  padding:5px;
+  border: solid 1px black;
+}
+
+table.calendar_horizontal .startTime {
+  left:-30px;
+}
+table.calendar_horizontal .endTime{
+  right:-30px;
+}
+
+.calendar_horizontal div.event:hover span.startTime, .calendar_horizontal div.event:hover span.endTime {
+  display: block;
+  position: absolute;
+  top:50%;
+}
+
+table.calendar_horizontal .incline {
+  -webkit-transform: rotate(+90deg);
+  -moz-transform: rotate(+90deg);
+}
+
+
+table.calendar_horizontal td.today_astreinte_indicator{
+  position: absolute;
+  border:solid 1px red;
+  top:15px;
+}
+
+/** TOOLBAR **/
+
+table.calendar_horizontal div.event div.toolbar {
+  border:solid 1px black;
+  border-bottom-width: 0;
+  padding:0 5px;
+  position: absolute;
+  top:-20px;
+  left:0;
+  display: none;
+}
+
+table.calendar_horizontal div.event:hover div.toolbar {
+  display:block;
+}
