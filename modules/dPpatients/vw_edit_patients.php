@@ -1,15 +1,15 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpatients
- * @version $Revision$
- * @author Romain Ollivier
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
-global $can;
-
-$can->needsEdit();
+CCanDo::checkEdit();
 
 $patient_id = CValue::getOrSession("patient_id");
 $name       = CValue::get("name");
@@ -38,12 +38,12 @@ if (CModule::getActive("fse")) {
 if (!$patient_id) {
   $patient->nom    = $name;
   $patient->prenom = $firstName;
-	$patient->assure_nom    = $name;
+  $patient->assure_nom    = $name;
   $patient->assure_prenom = $firstName;
 
-	if ($naissance_day && $naissance_month && $naissance_year) {
-		$patient->naissance = sprintf('%04d-%02d-%02d', $naissance_year, $naissance_month, $naissance_day);
-	}
+  if ($naissance_day && $naissance_month && $naissance_year) {
+    $patient->naissance = sprintf('%04d-%02d-%02d', $naissance_year, $naissance_month, $naissance_day);
+  }
 }
 
 // Peut etre pas besoin de verifier si on n'utilise pas VitaleVision
@@ -61,14 +61,15 @@ if ($useVitale && !CAppUI::pref('VitaleVision') && CModule::getActive("fse")) {
 
 if ($covercard && CModule::getActive("covercard")) {
   $covercardExec = CCoverCard::process($covercard);
-  if($covercardExec->queryNumber){
+  if ($covercardExec->queryNumber) {
     CCoverCard::updatePatientFromCC($patient, $covercardExec);
   }
 }
 
 // Chargement du nom_fr du pays de naissance
-if($patient_id)
+if ($patient_id) {
   $patient->updateNomPaysInsee();
+}
 
 $group = CGroups::loadCurrent();
 $group->loadConfigValues();

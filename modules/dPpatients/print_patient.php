@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -21,16 +23,16 @@ $patient->updateNomPaysInsee();
 $patient->loadRefsSejours();
 foreach ($patient->_ref_sejours as $sejour) {
   $sejour->loadRefPraticien();
-	$sejour->loadRefsOperations();
+  $sejour->loadRefsOperations();
   $sejour->loadNDA();
-  foreach($sejour->_ref_operations as $operation) {
+  foreach ($sejour->_ref_operations as $operation) {
     $operation->loadRefPlageOp();
-		$operation->loadRefChir();
+    $operation->loadRefChir();
   }
 }
 
 $patient->loadRefsConsultations();
-foreach($patient->_ref_consultations as $consultation) {
+foreach ($patient->_ref_consultations as $consultation) {
   $consultation->loadRefPlageConsult();
 }
 
@@ -44,9 +46,9 @@ $smarty = new CSmartyDP();
 $smarty->assign("patient", $patient);
 $smarty->assign("today"  , $today  );
 
-if (CAppUI::conf('dPpatients CPatient extended_print'))
+if (CAppUI::conf('dPpatients CPatient extended_print')) {
   $smarty->display("print_patient_extended.tpl");
-else
+}
+else {
   $smarty->display("print_patient.tpl");
-
-?>
+}

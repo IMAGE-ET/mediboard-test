@@ -1,12 +1,17 @@
-<?php /* $Id$ */
+<?php
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
+ * Antecedent
+ */
 class CAntecedent extends CMbObject {
   // DB Table key
   public $antecedent_id;
@@ -26,9 +31,7 @@ class CAntecedent extends CMbObject {
   // Distant fields
   public $_count_rques_aides;
 
-  /**
-   * @public CDossierMedical
-   */
+  /** @var CDossierMedical */
   public $_ref_dossier_medical;
   
   // Types
@@ -52,7 +55,10 @@ class CAntecedent extends CMbObject {
     'pulmonaire', 'uro_nephrologique', 'orl', 'gyneco_obstetrique', 'orthopedique',
     'ophtalmologique', 'locomoteur',
   );
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'antecedent';
@@ -60,6 +66,9 @@ class CAntecedent extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["type"]  = "enum list|".CAppUI::conf("patients CAntecedent types");
@@ -71,26 +80,37 @@ class CAntecedent extends CMbObject {
     $props["_search"] = "str";
     return $props;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->rques;
   }
 
   /**
+   * Charge le dossier médical associé
+   *
    * @return CDossierMedical
    */
   function loadRefDossierMedical() { 
     $this->_ref_dossier_medical = new CDossierMedical();
     return $this->_ref_dossier_medical->load($this->dossier_medical_id);
   }
-  
+
+  /**
+   * @see parent::loadView()
+   */
   function loadView(){
     parent::loadView();
     $this->loadLogs();
     $this->loadRefDossierMedical();
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store() {
     $this->completeField("type");
     if ($this->type == "alle") {
@@ -111,7 +131,10 @@ class CAntecedent extends CMbObject {
 
     return null;
   }
-  
+
+  /**
+   * @see parent::delete()
+   */
   function delete() {
     $this->completeField("type", "dossier_medical_id");
     
@@ -125,7 +148,12 @@ class CAntecedent extends CMbObject {
     
     return parent::delete();
   }
-  
+
+  /**
+   * Vérifie et extrait les codes CIM des remarques pour les sauvegarder dans le dossier médical
+   *
+   * @return void
+   */
   function checkCodeCim10(){
     preg_match_all("/[A-Z]\d{2}\.?\d{0,2}/i", $this->rques, $matches);
     

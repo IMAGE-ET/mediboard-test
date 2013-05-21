@@ -1,6 +1,8 @@
 <?php 
 /**
- * @category system
+ * $Id$
+ *
+ * @category System
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -8,9 +10,13 @@
  */
 
 $inherit = CValue::get("inherit");
-$module = CValue::get("module");
+$module  = CValue::get("module");
 
-$all_inherits = array_keys(CConfiguration::getModel($module));
+if (!is_array($inherit)) {
+  $inherit = array($inherit);
+}
+
+$all_inherits = array_keys(CConfiguration::getModel($inherit));
 
 $smarty = new CSmartyDP();
 $smarty->assign("module",       $module);

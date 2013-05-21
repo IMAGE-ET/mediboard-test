@@ -1,28 +1,32 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
  * A supervision graph
  */
 class CSupervisionGraph extends CSupervisionTimedEntity {
-  var $supervision_graph_id;
+  public $supervision_graph_id;
 
-  var $height;
+  public $height;
 
   /**
    * @var CSupervisionGraphAxis[]
    */
-  var $_ref_axes;
+  public $_ref_axes;
 
-  var $_graph_data = array();
-  
+  public $_graph_data = array();
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "supervision_graph";
@@ -30,12 +34,18 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["height"] = "num notNull min|20 default|200";
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["axes"] = "CSupervisionGraphAxis supervision_graph_id";
@@ -44,6 +54,8 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
   }
 
   /**
+   * Load axes
+   *
    * @return CSupervisionGraphAxis[]
    */
   function loadRefsAxes(){
@@ -51,7 +63,9 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
   }
 
   /**
-   * @param array $results
+   * Get minimal value from a results set
+   *
+   * @param array $results The results as array of two values
    *
    * @return float
    */
@@ -60,7 +74,9 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
   }
 
   /**
-   * @param array $results
+   * Get maximal value from a results set
+   *
+   * @param array $results The results as array of two values
    *
    * @return float
    */
@@ -69,9 +85,11 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
   }
 
   /**
-   * @param array  $results
-   * @param string $time_min
-   * @param string $time_max
+   * Build the graph data to be used by jQuery Flot
+   *
+   * @param array  $results  Results
+   * @param string $time_min Minimal datetime
+   * @param string $time_max Maximal datetime
    *
    * @return array
    */
@@ -170,7 +188,9 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
   }
 
   /**
-   * @param CMbObject $object
+   * Get all the graphs from an object
+   *
+   * @param CMbObject $object The object to get the graphs from
    *
    * @return self[]
    */
@@ -185,6 +205,11 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
     return $graph->loadList($where, "title");
   }
 
+  /**
+   * Include jQuery Flot
+   *
+   * @return void
+   */
   static function includeFlot(){
     CJSLoader::$files = array(
       "lib/flot/jquery.min.js",

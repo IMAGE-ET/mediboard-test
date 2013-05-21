@@ -1,14 +1,15 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpatients
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
-ini_set("memory_limit", "768M");
+CApp::setMemoryLimit("768M");
 
 $where = array();
 $ljoin = array();
@@ -95,16 +96,16 @@ $sejour_filled  = false;
 $consult_filled = false;
 $interv_filled  = false;
 
-
 $from = null;
 $to   = null;
+$data = array();
 
 foreach ($fields as $_class => $_fields) {
   $data[$_class] = array_intersect_key($_GET, $_fields);
   $object = new $_class;
   $prefix = $object->_spec->table;
   
-  foreach($data[$_class] as $_field => $_value) {
+  foreach ($data[$_class] as $_field => $_value) {
     CValue::setSession($_field, $_value);
     
     if ( $_value !== "" ) {
@@ -129,8 +130,13 @@ switch ($section) {
   case "consult":
     $consult_data = $data["CConsultation"];
     
-    if (empty($consult_data["motif"]) && empty($consult_data["_rques_consult"]) &&
-        empty($consult_data["_examen_consult"]) && empty($consult_data["conclusion"]) && !$one_field_presc) {
+    if (
+        empty($consult_data["motif"]) &&
+        empty($consult_data["_rques_consult"]) &&
+        empty($consult_data["_examen_consult"]) &&
+        empty($consult_data["conclusion"]) &&
+        !$one_field_presc
+    ) {
       break;
     }
     
@@ -174,8 +180,13 @@ switch ($section) {
   case "sejour":
     $sejour_data = $data["CSejour"];
     
-    if (empty($sejour_data["libelle"]) && empty($sejour_data["type"])
-        && empty($sejour_data["_rques_sejour"]) && empty($sejour_data["convalescence"]) && !$one_field_presc) {
+    if (
+        empty($sejour_data["libelle"]) &&
+        empty($sejour_data["type"]) &&
+        empty($sejour_data["_rques_sejour"]) &&
+        empty($sejour_data["convalescence"]) &&
+        !$one_field_presc
+    ) {
       break;
     }
     
@@ -219,8 +230,14 @@ switch ($section) {
     // COperations ---------------------------
     $interv_data = $data["COperation"];
     
-    if (empty($interv_data["_libelle_interv"]) && empty($interv_data["_rques_interv"])
-    && empty($interv_data["examen"]) && empty($interv_data["materiel"]) && empty($interv_data["codes_ccam"]) && !$one_field_presc) {
+    if (
+        empty($interv_data["_libelle_interv"]) &&
+        empty($interv_data["_rques_interv"]) &&
+        empty($interv_data["examen"]) &&
+        empty($interv_data["materiel"]) &&
+        empty($interv_data["codes_ccam"]) &&
+        !$one_field_presc
+    ) {
       break;
     }
     
@@ -234,7 +251,7 @@ switch ($section) {
       $codes = preg_split("/[\s,]+/", $interv_data["codes_ccam"]);
       
       $where_code = array();
-      foreach($codes as $_code) {
+      foreach ($codes as $_code) {
         $where_code[] = "operations.codes_ccam ".$ds->prepareLike("%$_code%");
       }
       
@@ -343,7 +360,8 @@ if ($one_field_presc) {
   
   if (!$commentaire) {
     $rjoinMix["prescription_line_mix"] = "prescription_line_mix.prescription_id = prescription.prescription_id";
-    $rjoinMix["prescription_line_mix_item"] = "prescription_line_mix_item.prescription_line_mix_id = prescription_line_mix.prescription_line_mix_id";
+    $rjoinMix["prescription_line_mix_item"] =
+      "prescription_line_mix_item.prescription_line_mix_id = prescription_line_mix.prescription_line_mix_id";
   }
   
   if ($code_cis) {
@@ -546,13 +564,15 @@ if ($one_field) {
 
 if ($export) {
   $csv = new CCSVFile();
-  $csv->writeLine(array(
+
+  $titles = array(
     "Patient",
     "Age à l'époque",
     "Dossier Médical",
     "Evenement",
     "Prescription"
-  ));
+  );
+  $csv->writeLine($titles);
   
   foreach ($list_patient as $_patient) {
     
@@ -588,7 +608,10 @@ if ($export) {
             " à ".CMbDT::transform(null, $object->heure, "%Hh:%M");
           break;
         case "CSejour":
-          $object_view = "Séjour du " . CMbDT::dateToLocale(CMbDT::date($object->entree)) . "au " . CMbDT::dateToLocale(CMbDT::date($object->sortie));
+          $object_view = "Séjour du " .
+            CMbDT::dateToLocale(CMbDT::date($object->entree)) . "au " .
+            CMbDT::dateToLocale(CMbDT::date($object->sortie));
+          break;
         case "COperation":
           $object_view = "Intervention du " . CMbDT::dateToLocale(CMbDT::date($object->_datetime_best));
       }
@@ -599,14 +622,16 @@ if ($export) {
     if (isset($_patient->_distant_line)) {
       $content_line = $_patient->_distant_line->_view;
     }
-    
-    $csv->writeLine(array(
+
+    $data_line = array(
       $_patient->_view . " (".strtoupper($_patient->sexe).")",
       $_patient->_age_epoque,
       $dossier_medical,
       $object_view,
       $content_line
-    ));
+    );
+
+    $csv->writeLine($data_line);
   }
   
   $csv->stream("recherche_dossiers_clinique");

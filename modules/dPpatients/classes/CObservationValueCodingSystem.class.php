@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -13,11 +14,14 @@
  * http://www.interfaceware.com/hl7-standard/hl7-segment-OBX.html
  */
 class CObservationValueCodingSystem extends CMbObject {
-  var $code                      = null;
-  var $label                     = null;
-  var $desc                      = null;
-  var $coding_system             = null;
-  
+  public $code;
+  public $label;
+  public $desc;
+  public $coding_system;
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["code"]          = "str notNull";
@@ -26,7 +30,10 @@ class CObservationValueCodingSystem extends CMbObject {
     $props["coding_system"] = "str notNull";
     return $props;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
     
@@ -36,7 +43,17 @@ class CObservationValueCodingSystem extends CMbObject {
       $this->_view .= " [$this->desc]";
     }
   }
-  
+
+  /**
+   * Load a matching coding system, creates one if unknown
+   *
+   * @param string $code          The code
+   * @param string $coding_system The coding system
+   * @param string $label         Label
+   * @param string $desc          Optional description
+   *
+   * @return int The cding system ID
+   */
   function loadMatch($code, $coding_system, $label, $desc = null) {
     $ds = $this->_spec->ds;
     

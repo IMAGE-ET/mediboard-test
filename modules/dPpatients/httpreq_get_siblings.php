@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -19,10 +21,10 @@ $prenom_4        = CValue::get("prenom_4"  , null);
 $naissance       = CValue::get("naissance" , "0000-00-00");
 
 $textDifferent = null;
-if($patient_id) {
+if ($patient_id) {
   $oldPat = new CPatient();
   $oldPat->load($patient_id);
-  if(!$oldPat->checkSimilar($nom, $prenom)) {
+  if (!$oldPat->checkSimilar($nom, $prenom)) {
     $textDifferent = "Le nom et/ou le prénom sont très différents de" .
         "\n\t$oldPat->_view" .
         "\nVoulez-vous tout de même sauvegarder ?";
@@ -41,36 +43,38 @@ $patientMatch->naissance  = $naissance;
 
 $textMatching = $textSiblings = '';
 if (CAppUI::conf('dPpatients CPatient identitovigilence') == "doublons" ) {
-  if($patientMatch->loadMatchingPatient(true) > 0) {
+  if ($patientMatch->loadMatchingPatient(true) > 0) {
     $textMatching = "Doublons détectés.";
     $textMatching .= "\nVous ne pouvez pas sauvegarder le patient.";
   }
-	
+
   if (!$textMatching) {
-  	$textSiblings = patientGetSiblings($patientMatch);
+    $textSiblings = patientGetSiblings($patientMatch);
   }
-} else {
-	$textSiblings = patientGetSiblings($patientMatch);
+}
+else {
+  $textSiblings = patientGetSiblings($patientMatch);
 }
 
 function patientGetSiblings($patientMatch) {
   $siblings = $patientMatch->getSiblings();
-  
+
   $textSiblings = null;
-  
-  if(count($siblings) != 0) {
+
+  if (count($siblings) != 0) {
     $textSiblings = "Risque de doublons :";
-    foreach($siblings as $key => $value) {
+    foreach ($siblings as $value) {
       $textSiblings .= "\n\t - $value->nom $value->prenom ";
-      if ($value->nom_jeune_fille)
+      if ($value->nom_jeune_fille) {
         $textSiblings .= "($value->nom_jeune_fille)";
-      
+      }
+
       $textSiblings .= " né(e) le ". CMbDT::dateToLocale($value->naissance) .
       "\n\t\thabitant ". strtr($value->adresse, "\n", "-") .
       "- $value->cp $value->ville";
     }
   }
-  
+
   return $textSiblings;
 }
 
@@ -81,4 +85,3 @@ $smarty->assign("textSiblings", $textSiblings);
 $smarty->assign("textMatching", $textMatching );
 
 $smarty->display("httpreq_get_siblings.tpl");
-?>

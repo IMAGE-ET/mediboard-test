@@ -1,69 +1,76 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 /**
  * Dossier Médical liés aux notions d'antécédents, traitements et diagnostics
  */
 class CDossierMedical extends CMbMetaObject {
   // DB Fields
-  var $dossier_medical_id        = null;
-  var $codes_cim                 = null;
+  public $dossier_medical_id;
+  public $codes_cim;
   
   // Dossier medical Patient
-  var $risque_thrombo_patient    = null;
-  var $risque_MCJ_patient        = null;
-  var $facteurs_risque           = null;
+  public $risque_thrombo_patient;
+  public $risque_MCJ_patient;
+  public $facteurs_risque;
 
   // Dossier medical Sejour
-  var $risque_thrombo_chirurgie  = null;
-  var $risque_antibioprophylaxie = null;
-  var $risque_prophylaxie        = null;
-  var $risque_MCJ_chirurgie      = null;
+  public $risque_thrombo_chirurgie;
+  public $risque_antibioprophylaxie;
+  public $risque_prophylaxie;
+  public $risque_MCJ_chirurgie;
   
   // TODO Activer ces champs
-  //var $groupe_sanguin            = null;
-  //var $rhesus                    = null;
+  //public $groupe_sanguin;
+  //public $rhesus;
   
   // Form Fields
-  var $_added_code_cim           = null;
-  var $_deleted_code_cim         = null;
-  var $_codes_cim                = null;
-  var $_ext_codes_cim            = null;
+  public $_added_code_cim;
+  public $_deleted_code_cim;
+  public $_codes_cim;
+  public $_ext_codes_cim;
 
   // Back references
-  var $_all_antecedents          = null;
-  var $_ref_antecedents_by_type  = null;
-  var $_ref_antecedents_by_appareil = null;
-  var $_ref_antecedents_by_type_appareil = null;
-  var $_ref_traitements          = null;
-  var $_ref_etats_dents          = null;
-  var $_ref_prescription         = null;
-  var $_ref_allergies            = null;
-  var $_ref_deficiences          = null;
+  public $_all_antecedents;
+  public $_ref_antecedents_by_type;
+  public $_ref_antecedents_by_appareil;
+  public $_ref_antecedents_by_type_appareil;
+  public $_ref_traitements;
+  public $_ref_etats_dents;
+  public $_ref_prescription;
+  public $_ref_allergies;
+  public $_ref_deficiences;
   
   // Derived back references
-  var $_count_antecedents = null;
-  var $_count_antecedents_by_type = null;
-  var $_count_traitements = null;
-  var $_count_cancelled_antecedents = null;
-  var $_count_cancelled_traitements = null;
+  public $_count_antecedents;
+  public $_count_antecedents_by_type;
+  public $_count_traitements;
+  public $_count_cancelled_antecedents;
+  public $_count_cancelled_traitements;
 
-  var $_count_allergies          = null;
-  
+  public $_count_allergies;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'dossier_medical';
     $spec->key   = 'dossier_medical_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["object_class"]   = "enum list|CPatient|CSejour";
@@ -83,6 +90,9 @@ class CDossierMedical extends CMbMetaObject {
     return $specs;
   }  
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["antecedents"] = "CAntecedent dossier_medical_id";
@@ -91,7 +101,10 @@ class CDossierMedical extends CMbMetaObject {
     $backProps["prescription"] = "CPrescription object_id";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     $basePerm = CModule::getCanDo('soins')->edit      ||
                 CModule::getCanDo('dPurgences')->edit ||
@@ -101,6 +114,9 @@ class CDossierMedical extends CMbMetaObject {
     return $basePerm && parent::getPerm($permType);
   }
 
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack() {
     parent::loadRefsBack();
     $this->loadRefsAntecedents();
@@ -122,7 +138,10 @@ class CDossierMedical extends CMbMetaObject {
     $this->_ref_object = new $this->object_class;
     $this->_ref_object->load($this->object_id);
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     
@@ -150,7 +169,10 @@ class CDossierMedical extends CMbMetaObject {
     
     $this->codes_cim = implode('|', $codes_cim_array);
   }
-  
+
+  /**
+   * @see parent::loadView()
+   */
   function loadView() {
     parent::loadView();
     $this->loadComplete();
@@ -326,6 +348,9 @@ class CDossierMedical extends CMbMetaObject {
     return $dossier->_id;
   }
 
+  /**
+   * @see parent::store()
+   */
   function store() {
     $this->completeField("codes_cim");
     $this->_codes_cim = $this->codes_cim ? explode("|", $this->codes_cim) : array();

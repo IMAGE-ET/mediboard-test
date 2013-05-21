@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpatients
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -16,11 +17,13 @@ if (CAppUI::$user->_user_type =! 1) {
 }
 
 $patient_id = CValue::getOrSession("patient_id");
-$naissance  = CValue::getOrSession("naissance", array(
-  "day"   => 1,
-  "month" => 1,
-  "year"  => 1,
-));
+$naissance  = CValue::getOrSession(
+  "naissance", array(
+    "day"   => 1,
+    "month" => 1,
+    "year"  => 1,
+  )
+);
 
 // Patient à analyser
 $patient = new CPatient();
@@ -38,7 +41,7 @@ if ($patient->_id) {
   $listPrat = new CMediusers();
   $listPrat = $listPrat->loadPraticiens(PERM_READ);
   $patient->loadDossierComplet();
-  
+
 }
 
 if ($patient->_id) {

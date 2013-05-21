@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -13,27 +14,39 @@
  * http://www.interfaceware.com/hl7-standard/hl7-segment-OBX.html
  */
 class CObservationResult extends CMbObject {
-  var $observation_result_id;
-  
-  var $observation_result_set_id;
-  var $value_type_id; // OBX.3
-  var $unit_id;       // OBX.6
-  var $value;         // OBX.2
-  var $method;        // OBX.17
-  var $status;        // OBX.11
-  
-  var $_ref_context;
-  var $_ref_value_type;
-  var $_ref_value_unit;
-  var $_ref_result_set;
-  
+  public $observation_result_id;
+
+  public $observation_result_set_id;
+  public $value_type_id; // OBX.3
+  public $unit_id;       // OBX.6
+  public $value;         // OBX.2
+  public $method;        // OBX.17
+  public $status;        // OBX.11
+
+  public $_ref_context;
+
+  /** @var CObservationValueType */
+  public $_ref_value_type;
+
+  /** @var CObservationValueUnit */
+  public $_ref_value_unit;
+
+  /** @var CObservationResultSet */
+  public $_ref_result_set;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "observation_result";
     $spec->key   = "observation_result_id";
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["observation_result_set_id"] = "ref notNull class|CObservationResultSet";
@@ -46,7 +59,9 @@ class CObservationResult extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Load result set
+   *
+   * @param bool $cache Use object cache
    *
    * @return CObservationResultSet
    */
@@ -55,7 +70,9 @@ class CObservationResult extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Load value type
+   *
+   * @param bool $cache Use object cache
    *
    * @return CObservationValueType
    */
@@ -64,12 +81,17 @@ class CObservationResult extends CMbObject {
   }
 
   /**
+   * Load value unit
+   *
    * @return CObservationValueUnit
    */
   function loadRefValueUnit() {
     return $this->_ref_value_unit = CObservationValueUnit::get($this->unit_id);
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
     

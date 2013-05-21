@@ -1,36 +1,33 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
  * A supervision graph Y axis
  */
 class CSupervisionGraphAxis extends CMbObject {
-  var $supervision_graph_axis_id;
+  public $supervision_graph_axis_id;
   
-  var $supervision_graph_id;
-  var $title;
-  var $limit_low;
-  var $limit_high;
-  var $display;
-  var $show_points;
-  var $symbol;
+  public $supervision_graph_id;
+  public $title;
+  public $limit_low;
+  public $limit_high;
+  public $display;
+  public $show_points;
+  public $symbol;
 
-  /**
-   * @var CSupervisionGraphSeries[]
-   */
-  var $_ref_series;
+  /** @var CSupervisionGraphSeries[] */
+  public $_ref_series;
 
-  /**
-   * @var CSupervisionGraph
-   */
-  var $_ref_graph;
+  /** @var CSupervisionGraph */
+  public $_ref_graph;
   
   static $default_yaxis = array(
     "position"     => "left",
@@ -49,6 +46,9 @@ class CSupervisionGraphAxis extends CMbObject {
     "triangle" => "&#x25B3;",
   );
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "supervision_graph_axis";
@@ -56,6 +56,9 @@ class CSupervisionGraphAxis extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["supervision_graph_id"] = "ref notNull class|CSupervisionGraph cascade";
@@ -115,7 +118,10 @@ class CSupervisionGraphAxis extends CMbObject {
     
     return $axis_data;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["series"] = "CSupervisionGraphSeries supervision_graph_axis_id";
@@ -123,7 +129,9 @@ class CSupervisionGraphAxis extends CMbObject {
   }
 
   /**
-   * @param bool $cache Use cache
+   * Load the graph
+   *
+   * @param bool $cache Use object cache
    *
    * @return CSupervisionGraph
    */
@@ -132,12 +140,17 @@ class CSupervisionGraphAxis extends CMbObject {
   }
 
   /**
+   * Load series
+   *
    * @return CSupervisionGraphSeries[]
    */
   function loadRefsSeries() {
     return $this->_ref_series = $this->loadBackRefs("series");
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
     

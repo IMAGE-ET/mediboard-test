@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpatients
- * @version $Revision: 7138 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::Admin();
@@ -18,9 +19,9 @@ $error = 0;
 $qte = CValue::get("qte", 1);
 $listPatients = $patient->loadList(null, null, $qte);
 
-foreach($listPatients as $_patient) {
+foreach ($listPatients as $_patient) {
   CAppUI::setMsg($_patient->_view, UI_MSG_OK);
-  if($msg = $_patient->purge()) {
+  if ($msg = $_patient->purge()) {
     CAppUI::setMsg($msg, UI_MSG_ALERT);
     $error++;
     continue;
@@ -42,5 +43,3 @@ $smarty->assign("nb_patients", $nb_patients);
 
 $smarty->display("inc_purge_patients.tpl");
 
- 
-?>

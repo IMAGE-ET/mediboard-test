@@ -1,11 +1,13 @@
-<?php /* $Id: vw_recherche.php 8520 2010-04-09 14:27:59Z phenxdesign $ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision: 8520 $
-* @author Alexis Granger
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 $user_id = CValue::getOrSession("user_id", CAppUI::$user->_id);
 

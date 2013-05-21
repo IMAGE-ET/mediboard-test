@@ -1,18 +1,22 @@
-<?php /* $Id: mouvattendueecap.class.php 9406 2010-07-09 15:47:39Z MyttO $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ecap
- * @version $Revision: 9406 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
  * Handle patient syncing with medecin table
  */
-class CMouvMedecinPatient extends CMouvement400 {  
-  
+class CMouvMedecinPatient extends CMouvement400 {
+
+  /**
+   * Object constructor
+   */
   function __construct() {
     parent::__construct();
     $this->base   = CAppUI::conf("sante400 dsn");
@@ -29,12 +33,18 @@ class CMouvMedecinPatient extends CMouvement400 {
     $this->origin_prefix = "";
   }
 
+  /**
+   * @see parent::initialize()
+   */
   function initialize() {
     parent::initialize();
 
     $this->value_prefix = $this->type == "delete" ? $this->old_prefix : $this->new_prefix;
   }
 
+  /**
+   * @see parent::synchronize()
+   */
   function synchronize() {    
     $this->syncPatient();
 
@@ -77,4 +87,4 @@ class CMouvMedecinPatient extends CMouvement400 {
   }
   
 }
-?>
+

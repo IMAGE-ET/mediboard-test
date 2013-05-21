@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpatients
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -26,7 +27,7 @@ $graphs = $graph->loadList(array(
 $n = 500;
 $datetime = $datetime_start;
 $times = array();
-while(--$n > 0 && ($datetime < $datetime_end)) {
+while (--$n > 0 && ($datetime < $datetime_end)) {
   $observation_result_set = new CObservationResultSet;
   $observation_result_set->context_class = $context_class;
   $observation_result_set->context_id    = $context_id;
@@ -40,16 +41,16 @@ while(--$n > 0 && ($datetime < $datetime_end)) {
   $datetime = CMbDT::dateTime("+$period SECONDS", $datetime);
 }
 
-foreach($graphs as $_graph) {
+foreach ($graphs as $_graph) {
   $_axes = $_graph->loadRefsAxes();
   
-  foreach($_axes as $_axis) {
+  foreach ($_axes as $_axis) {
     $_series = $_axis->loadRefsSeries();
     
-    foreach($_series as $_serie) {
+    foreach ($_series as $_serie) {
       $_samples = $_serie->getSampleData(array_keys($times));
       
-      foreach($_samples as $_sample) {
+      foreach ($_samples as $_sample) {
         list($_datetime, $_value) = $_sample;
         
         $result = new CObservationResult;

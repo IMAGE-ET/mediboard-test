@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpatients
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -23,10 +24,10 @@ $start = 1291196760000;
 $end   = $start + $minute*45;
 $times = range($start, $end, $minute);
 
-foreach($axes as $_axis) {
+foreach ($axes as $_axis) {
   $_series = $_axis->loadRefsSeries();
   
-  foreach($_series as $_serie) {
+  foreach ($_series as $_serie) {
     $sample[$_serie->value_type_id][$_serie->value_unit_id] = $_serie->getSampleData($times);
   }
 }

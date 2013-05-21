@@ -1,12 +1,14 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
- 
+
 // Préférences par Module
 CPreferences::$modules["dPpatients"] = array (
   "VitaleVisionDir", 
@@ -14,4 +16,3 @@ CPreferences::$modules["dPpatients"] = array (
   "vCardExport",
   "medecin_cps_pref"
 );
-?>

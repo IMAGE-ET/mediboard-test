@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpatients
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $patient_id = CValue::get("patient_id");
@@ -33,4 +34,3 @@ $smarty->assign("has_tutelle", $has_tutelle);
 $smarty->assign("tutelle"    , $tutelle);
 
 $smarty->display("inc_check_correspondant_tutelle.tpl");
-?>

@@ -3,7 +3,7 @@
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPpatients
+ * @subpackage Patients
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
@@ -12,9 +12,7 @@
 /**
  * Correspondants du patient
  */
-
 class CCorrespondantPatient extends CPerson {
-
   // DB Table key
   public $correspondant_patient_id;
 
@@ -69,10 +67,7 @@ class CCorrespondantPatient extends CPerson {
   }
 
   /**
-   * Get properties specifications as strings
-   *
    * @see parent::getProps()
-   * @return array
    */
   function getProps() {
     $props = parent::getProps();
@@ -110,9 +105,7 @@ class CCorrespondantPatient extends CPerson {
   }
 
   /**
-   * Update the form (derived) fields plain fields
-   *
-   * @return void
+   * @see parent::updateFormFields()
    */
   function updateFormFields() {
     parent::updateFormFields();
@@ -131,9 +124,7 @@ class CCorrespondantPatient extends CPerson {
   }
 
   /**
-   * Update the plain fields from the form fields
-   *
-   * @return void
+   * @see parent::updatePlainFields()
    */
   function updatePlainFields() {
     parent::updatePlainFields();
@@ -166,9 +157,7 @@ class CCorrespondantPatient extends CPerson {
   }
 
   /**
-   * Get backward reference specifications
-   *
-   * @return array Array of form "collection-name" => "class join-field"
+   * @see parent::getBackProps()
    */
   function getBackProps() {
     $backProps = parent::getBackProps();

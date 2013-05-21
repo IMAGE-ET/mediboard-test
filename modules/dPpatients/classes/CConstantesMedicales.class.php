@@ -3,7 +3,7 @@
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPpatients
+ * @subpackage Patients
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
@@ -281,7 +281,7 @@ class CConstantesMedicales extends CMbObject {
       "min" => 0, "max" => 32,
       "plot" => true,
     ),
-    
+
     // Vision
     "vision_oeil_droit" => array(
       "type" => "physio",
@@ -633,6 +633,9 @@ class CConstantesMedicales extends CMbObject {
     "biolo" => array(),
   );
 
+  /**
+   * Constructeur de la classe, créé dynamiquement tous les champs
+   */
   function __construct() {
     foreach (self::$list_constantes as $_constant => $_params) {
       $this->$_constant = null;
@@ -699,6 +702,9 @@ class CConstantesMedicales extends CMbObject {
     self::$_specs_converted = true;
   }
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'constantes_medicales';
@@ -710,134 +716,134 @@ class CConstantesMedicales extends CMbObject {
    * @see parent::getProps()
    */
   function getProps() {
-    $specs = parent::getProps();
-    $specs['patient_id']             = 'ref notNull class|CPatient';
-    $specs['datetime']               = 'dateTime notNull';
-    $specs['context_class']          = 'str'; // CConsultation|CSejour|CPatient (import)
-    $specs['context_id']             = 'ref class|CMbObject meta|context_class cascade';
-    $specs['comment']                = 'text';
+    $props = parent::getProps();
+    $props['patient_id']             = 'ref notNull class|CPatient';
+    $props['datetime']               = 'dateTime notNull';
+    $props['context_class']          = 'str'; // CConsultation|CSejour|CPatient (import)
+    $props['context_id']             = 'ref class|CMbObject meta|context_class cascade';
+    $props['comment']                = 'text';
 
-    $specs['poids']                  = 'float pos';
-    $specs['taille']                 = 'float pos';
+    $props['poids']                  = 'float pos';
+    $props['taille']                 = 'float pos';
 
-    $specs['ta']                     = 'str maxLength|10';
-    $specs['_ta_systole']            = 'num pos max|50';
-    $specs['_ta_diastole']           = 'num pos max|50';
+    $props['ta']                     = 'str maxLength|10';
+    $props['_ta_systole']            = 'num pos max|50';
+    $props['_ta_diastole']           = 'num pos max|50';
 
-    $specs['ta_gauche']              = 'str maxLength|10';
-    $specs['_ta_gauche_systole']     = 'num pos max|50';
-    $specs['_ta_gauche_diastole']    = 'num pos max|50';
+    $props['ta_gauche']              = 'str maxLength|10';
+    $props['_ta_gauche_systole']     = 'num pos max|50';
+    $props['_ta_gauche_diastole']    = 'num pos max|50';
 
-    $specs['ta_droit']               = 'str maxLength|10';
-    $specs['_ta_droit_systole']      = 'num pos max|50';
-    $specs['_ta_droit_diastole']     = 'num pos max|50';
+    $props['ta_droit']               = 'str maxLength|10';
+    $props['_ta_droit_systole']      = 'num pos max|50';
+    $props['_ta_droit_diastole']     = 'num pos max|50';
 
-    $specs['ta_couche']              = 'str maxLength|10';
-    $specs['_ta_couche_systole']     = 'num pos max|50';
-    $specs['_ta_couche_diastole']    = 'num pos max|50';
+    $props['ta_couche']              = 'str maxLength|10';
+    $props['_ta_couche_systole']     = 'num pos max|50';
+    $props['_ta_couche_diastole']    = 'num pos max|50';
 
-    $specs['ta_assis']               = 'str maxLength|10';
-    $specs['_ta_assis_systole']      = 'num pos max|50';
-    $specs['_ta_assis_diastole']     = 'num pos max|50';
+    $props['ta_assis']               = 'str maxLength|10';
+    $props['_ta_assis_systole']      = 'num pos max|50';
+    $props['_ta_assis_diastole']     = 'num pos max|50';
 
-    $specs['ta_debout']              = 'str maxLength|10';
-    $specs['_ta_debout_systole']     = 'num pos max|50';
-    $specs['_ta_debout_diastole']    = 'num pos max|50';
+    $props['ta_debout']              = 'str maxLength|10';
+    $props['_ta_debout_systole']     = 'num pos max|50';
+    $props['_ta_debout_diastole']    = 'num pos max|50';
 
-    $specs['pouls']                  = 'num pos';
-    $specs['spo2']                   = 'float min|0 max|100';
-    $specs['temperature']            = 'float min|20 max|50'; // Au cas ou il y aurait des malades très malades
-    $specs['score_sensibilite']      = 'float min|0 max|5';
-    $specs['score_motricite']        = 'float min|0 max|5';
-    $specs['EVA']                    = 'float min|0 max|10';
-    $specs['score_sedation']         = 'float';
-    $specs['frequence_respiratoire'] = 'float pos';
-    $specs['glycemie']               = 'float pos max|10';
-    $specs['cetonemie']              = 'float pos max|10';
-    $specs['hemoglobine_rapide']     = 'float';
-    $specs['PVC']                    = 'float min|0';
-    $specs['perimetre_abdo']         = 'float min|0';
-    $specs['perimetre_cranien']      = 'float min|0';
-    $specs['perimetre_cuisse']       = 'float min|0';
-    $specs['perimetre_cou']          = 'float min|0';
-    $specs['perimetre_thoracique']   = 'float min|0';
-    $specs['hauteur_uterine']        = 'float min|0';
-    $specs['peak_flow']              = 'float min|0';
-    $specs['_imc']                   = 'float pos';
-    $specs['_vst']                   = 'float pos';
+    $props['pouls']                  = 'num pos';
+    $props['spo2']                   = 'float min|0 max|100';
+    $props['temperature']            = 'float min|20 max|50'; // Au cas ou il y aurait des malades très malades
+    $props['score_sensibilite']      = 'float min|0 max|5';
+    $props['score_motricite']        = 'float min|0 max|5';
+    $props['EVA']                    = 'float min|0 max|10';
+    $props['score_sedation']         = 'float';
+    $props['frequence_respiratoire'] = 'float pos';
+    $props['glycemie']               = 'float pos max|10';
+    $props['cetonemie']              = 'float pos max|10';
+    $props['hemoglobine_rapide']     = 'float';
+    $props['PVC']                    = 'float min|0';
+    $props['perimetre_abdo']         = 'float min|0';
+    $props['perimetre_cranien']      = 'float min|0';
+    $props['perimetre_cuisse']       = 'float min|0';
+    $props['perimetre_cou']          = 'float min|0';
+    $props['perimetre_thoracique']   = 'float min|0';
+    $props['hauteur_uterine']        = 'float min|0';
+    $props['peak_flow']              = 'float min|0';
+    $props['_imc']                   = 'float pos';
+    $props['_vst']                   = 'float pos';
 
-    $specs['injection']              = 'str maxLength|10';
-    $specs['_inj']                   = 'num pos';
-    $specs['_inj_essai']             = 'num pos moreEquals|_inj';
+    $props['injection']              = 'str maxLength|10';
+    $props['_inj']                   = 'num pos';
+    $props['_inj_essai']             = 'num pos moreEquals|_inj';
 
-    $specs['gaz']                    = 'num min|0';
-    $specs['selles']                 = 'num min|0';
+    $props['gaz']                    = 'num min|0';
+    $props['selles']                 = 'num min|0';
 
     // Douleur
-    $specs['douleur_en']             = 'float min|0 max|10';
-    $specs['douleur_doloplus']       = 'num min|0 max|30';
-    $specs['douleur_algoplus']       = 'num min|0 max|5';
-    $specs['douleur_evs']            = 'num min|0 max|4';
-    $specs['ecpa_avant']             = 'num min|0 max|16';
-    $specs['ecpa_apres']             = 'num min|0 max|16';
-    $specs['_ecpa_total']            = 'num min|0 max|32';
+    $props['douleur_en']             = 'float min|0 max|10';
+    $props['douleur_doloplus']       = 'num min|0 max|30';
+    $props['douleur_algoplus']       = 'num min|0 max|5';
+    $props['douleur_evs']            = 'num min|0 max|4';
+    $props['ecpa_avant']             = 'num min|0 max|16';
+    $props['ecpa_apres']             = 'num min|0 max|16';
+    $props['_ecpa_total']            = 'num min|0 max|32';
 
     // Vision
-    $specs['vision_oeil_droit']      = 'num min|0 max|10';
-    $specs['vision_oeil_gauche']     = 'num min|0 max|10';
+    $props['vision_oeil_droit']      = 'num min|0 max|10';
+    $props['vision_oeil_gauche']     = 'num min|0 max|10';
 
-    $specs['redon']                  = 'float min|0';
-    $specs['redon_2']                = 'float min|0';
-    $specs['redon_3']                = 'float min|0';
-    $specs['redon_4']                = 'float min|0';
-    $specs['redon_5']                = 'float min|0';
-    $specs['redon_6']                = 'float min|0';
-    $specs['redon_7']                = 'float min|0';
-    $specs['redon_8']                = 'float min|0';
-    $specs['redon_accordeon_1']      = 'float min|0';
-    $specs['redon_accordeon_2']      = 'float min|0';
-    $specs['diurese']                = 'float min|0'; // Miction naturelle
-    $specs['_diurese']               = 'float min|0'; // Vraie diurèse (calculée)
-    $specs['sng']                    = 'float min|0';
-    $specs['lame_1']                 = 'float min|0';
-    $specs['lame_2']                 = 'float min|0';
-    $specs['lame_3']                 = 'float min|0';
-    $specs['drain_1']                = 'float min|0';
-    $specs['drain_2']                = 'float min|0';
-    $specs['drain_3']                = 'float min|0';
-    $specs['drain_thoracique_1']     = 'float min|0';
-    $specs['drain_thoracique_2']     = 'float min|0';
-    $specs['drain_thoracique_3']     = 'float min|0';
-    $specs['drain_thoracique_4']     = 'float min|0';
-    $specs['drain_thoracique_flow']  = 'float min|0';
-    $specs['drain_pleural_1']        = 'float min|0';
-    $specs['drain_pleural_2']        = 'float min|0';
-    $specs['drain_mediastinal']      = 'float min|0';
-    $specs['drain_shirley']          = 'float min|0';
-    $specs['drain_dve']              = 'float min|0';
-    $specs['drain_kher']             = 'float min|0';
-    $specs['drain_crins']            = 'float min|0';
-    $specs['drain_sinus']            = 'float min|0';
-    $specs['drain_orifice_1']        = 'float min|0';
-    $specs['drain_orifice_2']        = 'float min|0';
-    $specs['drain_orifice_3']        = 'float min|0';
-    $specs['drain_orifice_4']        = 'float min|0';
-    $specs['drain_ileostomie']       = 'float min|0';
-    $specs['drain_colostomie']       = 'float min|0';
-    $specs['drain_gastrostomie']     = 'float min|0';
-    $specs['drain_jejunostomie']     = 'float min|0';
-    $specs['sonde_ureterale_1']      = 'float min|0';
-    $specs['sonde_ureterale_2']      = 'float min|0';
-    $specs['sonde_nephro_1']         = 'float min|0';
-    $specs['sonde_nephro_2']         = 'float min|0';
-    $specs['sonde_vesicale']         = 'float min|0';
-    $specs['sonde_rectale']          = 'float min|0';
-    $specs['catheter_suspubien']     = 'float min|0';
-    $specs['bricker']                = 'float min|0';
-    $specs['entree_lavage']          = 'float min|0';
-    $specs['creatininemie']          = 'float min|0';
-    $specs['glasgow']                = 'float min|0';
-    return $specs;
+    $props['redon']                  = 'float min|0';
+    $props['redon_2']                = 'float min|0';
+    $props['redon_3']                = 'float min|0';
+    $props['redon_4']                = 'float min|0';
+    $props['redon_5']                = 'float min|0';
+    $props['redon_6']                = 'float min|0';
+    $props['redon_7']                = 'float min|0';
+    $props['redon_8']                = 'float min|0';
+    $props['redon_accordeon_1']      = 'float min|0';
+    $props['redon_accordeon_2']      = 'float min|0';
+    $props['diurese']                = 'float min|0'; // Miction naturelle
+    $props['_diurese']               = 'float min|0'; // Vraie diurèse (calculée)
+    $props['sng']                    = 'float min|0';
+    $props['lame_1']                 = 'float min|0';
+    $props['lame_2']                 = 'float min|0';
+    $props['lame_3']                 = 'float min|0';
+    $props['drain_1']                = 'float min|0';
+    $props['drain_2']                = 'float min|0';
+    $props['drain_3']                = 'float min|0';
+    $props['drain_thoracique_1']     = 'float min|0';
+    $props['drain_thoracique_2']     = 'float min|0';
+    $props['drain_thoracique_3']     = 'float min|0';
+    $props['drain_thoracique_4']     = 'float min|0';
+    $props['drain_thoracique_flow']  = 'float min|0';
+    $props['drain_pleural_1']        = 'float min|0';
+    $props['drain_pleural_2']        = 'float min|0';
+    $props['drain_mediastinal']      = 'float min|0';
+    $props['drain_shirley']          = 'float min|0';
+    $props['drain_dve']              = 'float min|0';
+    $props['drain_kher']             = 'float min|0';
+    $props['drain_crins']            = 'float min|0';
+    $props['drain_sinus']            = 'float min|0';
+    $props['drain_orifice_1']        = 'float min|0';
+    $props['drain_orifice_2']        = 'float min|0';
+    $props['drain_orifice_3']        = 'float min|0';
+    $props['drain_orifice_4']        = 'float min|0';
+    $props['drain_ileostomie']       = 'float min|0';
+    $props['drain_colostomie']       = 'float min|0';
+    $props['drain_gastrostomie']     = 'float min|0';
+    $props['drain_jejunostomie']     = 'float min|0';
+    $props['sonde_ureterale_1']      = 'float min|0';
+    $props['sonde_ureterale_2']      = 'float min|0';
+    $props['sonde_nephro_1']         = 'float min|0';
+    $props['sonde_nephro_2']         = 'float min|0';
+    $props['sonde_vesicale']         = 'float min|0';
+    $props['sonde_rectale']          = 'float min|0';
+    $props['catheter_suspubien']     = 'float min|0';
+    $props['bricker']                = 'float min|0';
+    $props['entree_lavage']          = 'float min|0';
+    $props['creatininemie']          = 'float min|0';
+    $props['glasgow']                = 'float min|0';
+    return $props;
   }
 
   /**
@@ -974,6 +980,9 @@ class CConstantesMedicales extends CMbObject {
     }
   }
 
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     // TODO: Utiliser les specs
 
@@ -1065,17 +1074,30 @@ class CConstantesMedicales extends CMbObject {
     $this->_ref_patient = $this->_ref_patient->getCached($this->patient_id);
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadRefContext();
     $this->loadRefPatient();
   }
 
+  /**
+   * Charge l'utilisateur qui a enregistré la première fois la constante
+   *
+   * @return CUser
+   */
   function loadRefUser() {
     $first_log = $this->loadFirstLog();
     $this->_ref_user = $first_log->loadRefUser();
     $this->_ref_user->loadRefMediuser()->loadRefFunction();
+
+    return $this->_ref_user;
   }
 
+  /**
+   * @see parent::check()
+   */
   function check() {
     if ($msg = parent::check()) {
       return $msg;
@@ -1093,12 +1115,20 @@ class CConstantesMedicales extends CMbObject {
     if (!$ok) {
       return CAppUI::tr("CConstantesMedicales-min_one_constant");
     }
+
+    return null;
   }
 
+  /**
+   * @see parent::store()
+   */
   function store () {
     // S'il ne reste plus qu'un seul champ et que sa valeur est passée à vide,
     // alors on supprime la constante.
-    if (($this->_id && ($this->fieldModified("taille") || $this->fieldModified("poids"))) || (!$this->_id && ($this->taille || $this->poids))) {
+    if (
+        $this->_id && ($this->fieldModified("taille") || $this->fieldModified("poids")) ||
+        !$this->_id && ($this->taille || $this->poids)
+    ) {
       $this->completeField("patient_id");
       SHM::remKeys("bcb-alertes-*-CPatient-".$this->patient_id);
     }
@@ -1136,6 +1166,9 @@ class CConstantesMedicales extends CMbObject {
     return parent::store();
   }
 
+  /**
+   * @see parent::delete()
+   */
   function delete() {
     $this->completeField("taille", "poids", "patient_id");
     if ($this->taille || $this->poids) {
@@ -1259,6 +1292,15 @@ class CConstantesMedicales extends CMbObject {
     return array($constante, $list_datetimes);
   }
 
+  /**
+   * Détermine la couleur à afficher en fonction des seuils d'alerte définis dans les paramètres
+   *
+   * @param float  $value         La valeur à vérifier
+   * @param array  $params        Les paramètres concernés
+   * @param string $default_color Couleur par défaut
+   *
+   * @return string
+   */
   static function getColor($value, $params, $default_color = "#4DA74D") {
     $color = CValue::read($params, "color", $default_color);
 
@@ -1541,6 +1583,11 @@ class CConstantesMedicales extends CMbObject {
   static function getHostConfig($name, $host) {
     $host = self::guessHost($host);
 
+    if ($name === "selection" && $host instanceof CFunctions) {
+      $name = "selection_cabinet";
+      return CAppUI::conf("dPpatients CConstantesMedicales $name", $host);
+    }
+
     $group_id = null;
     $service_id = null;
 
@@ -1563,17 +1610,18 @@ class CConstantesMedicales extends CMbObject {
    *
    * @param CMbObject|string $context The context (séjour, rpu, service, etablissement)
    *
-   * @return CGroups|CService|string
+   * @return CGroups|CService|CFunctions|string
    */
   static function guessHost($context) {
     if ($context === "global") {
       return "global";
     }
 
-    // Etablissement ou service (deja un HOST)
+    // Etablissement, service ou cabinet (deja un HOST)
     if (
         $context instanceof CGroups ||
-        $context instanceof CService
+        $context instanceof CService ||
+        $context instanceof CFunctions
     ) {
       return $context;
     }
@@ -1630,13 +1678,15 @@ class CConstantesMedicales extends CMbObject {
       return $service;
     }
 
-    // Utiliser le contexte global dans la cas des consultations
-    /*if (
-        $context instanceof CConsultation ||
-        $context instanceof CConsultAnesth
-    ) {
-      return "global";
-    }*/
+    // Utiliser le contexte de la consultation dans la cas des dossiers d'anesth
+    if ($context instanceof CConsultAnesth) {
+      $context = $context->loadRefConsultation();
+    }
+
+    // Utiliser le contexte du cabinet dans le cas des consultations
+    if ($context instanceof CConsultation) {
+      return $context->loadRefPlageConsult()->loadRefChir()->loadRefFunction();
+    }
 
     return CGroups::loadCurrent();
   }

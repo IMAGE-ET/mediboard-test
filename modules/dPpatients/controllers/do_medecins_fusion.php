@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 $ds = CSQLDataSource::get("std");
 $medecin1 = new CMedecin;
@@ -19,7 +21,8 @@ $do->doBind();
 // Création du nouveau medecin
 if (intval(CValue::post("del"))) {
   $do->doDelete();
-} else {
+}
+else {
   $do->doStore();
 }
 
@@ -47,5 +50,3 @@ $medecin1->delete();
 $medecin2->delete();
 
 $do->doRedirect();
-
-?>

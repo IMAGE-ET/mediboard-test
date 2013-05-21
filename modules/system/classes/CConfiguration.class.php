@@ -23,6 +23,9 @@ class CConfiguration extends CMbMetaObject {
 
   private static $values = array();
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->key      = "configuration_id";
@@ -31,6 +34,9 @@ class CConfiguration extends CMbMetaObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["feature"]      = "str notNull";
@@ -56,10 +62,22 @@ class CConfiguration extends CMbMetaObject {
     return $spec;
   }
 
+  /**
+   * Register a configuration tree
+   *
+   * @param array $configs The config tree with the specs
+   *
+   * @return void
+   */
   static function register($configs) {
     self::$model_raw = array_merge_recursive(self::$model_raw, $configs);
   }
 
+  /**
+   * Build the configuration tree
+   *
+   * @return void
+   */
   static protected function buildTree() {
     foreach (self::$model_raw as $_inherit => $_tree) {
       $list = array();
@@ -73,6 +91,15 @@ class CConfiguration extends CMbMetaObject {
     }
   }
 
+  /**
+   * Build configuration subtree
+   *
+   * @param $list
+   * @param $path
+   * @param $tree
+   *
+   * @return void
+   */
   protected static function _buildConfigs(&$list, $path, $tree) {
     foreach ($tree as $key => $subtree) {
       $_path = $path;
@@ -168,9 +195,11 @@ class CConfiguration extends CMbMetaObject {
   /**
    * Get the up to date model
    *
+   * @param array $inherits An optional selection of inheritance paths
+   *
    * @return array The up to date model
    */
-  static function getModel() {
+  static function getModel($inherits = array()) {
     if (empty(self::$model)) {
       if (($model = SHM::get("config-model")) && !self::_isModelCacheDirty($model["hash"])) {
         self::$model = $model["content"];
@@ -187,6 +216,19 @@ class CConfiguration extends CMbMetaObject {
           )
         );
       }
+    }
+
+    if (!empty($inherits)) {
+      if (!is_array($inherits)) {
+        $inherits = array($inherits);
+      }
+
+      $subset = array();
+      foreach ($inherits as $_inherit) {
+        $subset[$_inherit] = self::$model[$_inherit];
+      }
+
+      return $subset;
     }
 
     return self::$model;
@@ -329,9 +371,13 @@ class CConfiguration extends CMbMetaObject {
   }
 
   /**
+   * Unflatten a feature list so that it becames a tree
+   *
    * @param string $path  Config path
    * @param string $value Config value
-   * @param array  $tree  Subtree
+   * @param array  &$tree Subtree
+   *
+   * @return void
    */
   static protected function _unflattenFeatureList($path, $value, &$tree) {
     $level = array_shift($path);
@@ -352,8 +398,8 @@ class CConfiguration extends CMbMetaObject {
     }
   }
 
-  static function getModuleConfigs($module = null) {
-    $model = self::getModel();
+  static function getModuleConfigs($module = null, $inherit = null) {
+    $model = self::getModel($inherit);
 
     if (!$module) {
       return $model;
@@ -379,16 +425,16 @@ class CConfiguration extends CMbMetaObject {
     return $configs;
   }
 
-  static function getClassConfigs($class, $module = null, $flatten = true) {
+  static function getClassConfigs($class, $module = null, $inherit = null, $flatten = true) {
     $configs = array();
 
-    $model = self::getModuleConfigs($module);
+    $model = self::getModuleConfigs($module, $inherit);
 
     $patterns = array("$class ", "$class.");
 
     foreach ($model as $_inherit => $_configs) {
       foreach ($patterns as $_patt) {
-        // Faster than preg_match ?
+        // Faster than preg_match
         if ($_inherit === $class || strpos($_inherit, $_patt) !== false) {
           if ($flatten) {
             $configs = array_merge($configs, $_configs);
@@ -751,6 +797,9 @@ class CConfiguration extends CMbMetaObject {
     return self::setConfig($feature, self::INHERIT, $object);
   }
 
+  /**
+   * @see parent::store()
+   */
   function store() {
     if ($msg = parent::store()) {
       return $msg;
@@ -761,6 +810,9 @@ class CConfiguration extends CMbMetaObject {
     return null;
   }
 
+  /**
+   * @see parent::delete()
+   */
   function delete() {
     if ($msg = parent::delete()) {
       return $msg;

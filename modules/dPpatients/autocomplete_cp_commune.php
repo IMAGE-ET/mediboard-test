@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage admin
- * @version $Revision: 7138 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 // Column 
@@ -30,22 +31,22 @@ $needle  = $column == "code_postal" ? "$keyword%" : "%$keyword%";
 $where       = "WHERE $column LIKE '$needle'";
 
 // France
-if(CAppUI::conf("dPpatients INSEE france")) {
+if (CAppUI::conf("dPpatients INSEE france")) {
   $nbPays++;
   $queryFrance = "SELECT commune, code_postal, departement, 'France' AS pays FROM communes_france $where";
 }
 
 // Suisse
-if(CAppUI::conf("dPpatients INSEE suisse")) {
+if (CAppUI::conf("dPpatients INSEE suisse")) {
   $nbPays++;
   $querySuisse = "SELECT commune, code_postal, '' AS departement, 'Suisse' AS pays FROM communes_suisse $where";
 }
 
-if(CAppUI::conf("dPpatients INSEE france")) {
+if (CAppUI::conf("dPpatients INSEE france")) {
   $france = $ds->loadList($queryFrance, intval($max/$nbPays));
   $matches = array_merge($matches, $france); 
 }
-if(CAppUI::conf("dPpatients INSEE suisse")) {
+if (CAppUI::conf("dPpatients INSEE suisse")) {
   $suisse =  $ds->loadList($querySuisse, intval($max/$nbPays));
   $matches = array_merge($matches, $suisse);
 }
@@ -58,5 +59,5 @@ $smarty = new CSmartyDP();
 $smarty->assign("keyword", $keyword);
 $smarty->assign("matches", $matches);
 $smarty->assign("nodebug", true);
-	
+
 $smarty->display("autocomplete_cp_commune.tpl");

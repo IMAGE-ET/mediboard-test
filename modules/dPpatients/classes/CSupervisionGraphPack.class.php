@@ -1,35 +1,35 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
  * A supervision graph
  */
 class CSupervisionGraphPack extends CMbObject {
-  var $supervision_graph_pack_id;
+  public $supervision_graph_pack_id;
 
-  var $owner_class;
-  var $owner_id;
+  public $owner_class;
+  public $owner_id;
 
-  var $title;
-  var $disabled;
+  public $title;
+  public $disabled;
+
+  /** @var CSupervisionGraphToPack[] */
+  public $_ref_graph_links;
+
+  /** @var CGroups|CFunctions */
+  public $_ref_owner;
 
   /**
-   * @var CSupervisionGraphToPack[]
+   * @see parent::getSpec()
    */
-  var $_ref_graph_links;
-
-  /**
-   * @var CGroups|CFunctions
-   */
-  var $_ref_owner;
-  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "supervision_graph_pack";
@@ -37,7 +37,10 @@ class CSupervisionGraphPack extends CMbObject {
     $spec->uniques["title"] = array("owner_class", "owner_id", "title");
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["owner_class"] = "enum notNull list|CGroups";
@@ -46,7 +49,10 @@ class CSupervisionGraphPack extends CMbObject {
     $props["disabled"]    = "bool notNull default|1";
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["graph_links"] = "CSupervisionGraphToPack pack_id";
@@ -54,12 +60,17 @@ class CSupervisionGraphPack extends CMbObject {
   }
 
   /**
+   * Load graph links
+   *
    * @return CSupervisionGraphToPack[]
    */
   function loadRefsGraphLinks(){
     return $this->_ref_graph_links = $this->loadBackRefs("graph_links", "rank, supervision_graph_to_pack_id");
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
     
@@ -67,6 +78,8 @@ class CSupervisionGraphPack extends CMbObject {
   }
 
   /**
+   * Load owner
+   *
    * @return CGroups|CFunctions
    */
   function loadRefOwner(){
@@ -74,7 +87,9 @@ class CSupervisionGraphPack extends CMbObject {
   }
 
   /**
-   * @param CMbObject $object
+   * Get all pakcs from an object
+   *
+   * @param CMbObject $object The object to get the packs of
    *
    * @return self[]
    */

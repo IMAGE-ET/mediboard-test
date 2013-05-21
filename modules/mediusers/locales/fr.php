@@ -321,6 +321,7 @@ $locales['This week'] = 'Semaine actuelle';
 $locales['This year'] = 'Année actuelle';
 $locales['Update-Mediusers-CSV'] = 'Mise à jour des utilisateurs';
 $locales['actions-mediusers'] = 'Actions des Mediusers';
+$locales['config-inherit-CFunctions CGroups.group_id'] = 'Cabinet / Etablissement';
 $locales['config-mediusers'] = 'Configuration des Mediusers';
 $locales['config-mediusers-tag_mediuser'] = 'Tag Mediusers';
 $locales['config-mediusers-tag_mediuser-desc'] = 'Tag Mediusers';
@@ -365,4 +366,3 @@ $locales['pref-sessionLifetime-desc'] = 'Durée de vie de la session de l\'utilis
 $locales['utilities-source-pop'] = 'Outils de test de la connexion';
 $locales['utilities-source-pop-connexion'] = 'Test de connexion';
 $locales['utilities-source-pop-envoi'] = 'Test de reception';
-?>

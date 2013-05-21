@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -13,24 +14,33 @@
  * http://www.interfaceware.com/hl7-standard/hl7-segment-OBX.html
  */
 class CObservationValueType extends CObservationValueCodingSystem {
-  var $observation_value_type_id = null;
+  public $observation_value_type_id;
   
-  var $datatype                  = null;
-  
+  public $datatype;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "observation_value_type";
     $spec->key   = "observation_value_type_id";
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     // AD|CF|CK|CN|CP|CWE|CX|DT|DTM|ED|FT|MO|NM|PN|RP|SN|ST|TM|TN|TX|XAD|XCN|XON|XPN|XTN
     $props["datatype"] = "enum notNull list|NM|ST|TX";
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["observation_results"] = "CObservationResult value_type_id";

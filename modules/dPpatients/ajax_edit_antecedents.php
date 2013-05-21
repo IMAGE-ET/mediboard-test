@@ -1,14 +1,12 @@
 <?php
-
 /**
- * dPpatients
- *  
- * @category dPpatients
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $patient_id = CValue::get("patient_id");
@@ -43,5 +41,3 @@ $smarty->assign("antecedent" , $antecedent);
 $smarty->assign("type"       , $type);
 
 $smarty->display("inc_edit_antecedents.tpl");
-
-?>

@@ -1,18 +1,20 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
-CCanDo::Admin();
+CCanDo::checkAdmin();
 
 // Types et Appareils
-$active_types     = explode('|', CAppUI::conf("dPpatients CAntecedent types"    ));
+$active_types     = explode('|', CAppUI::conf("dPpatients CAntecedent types"));
 $active_appareils = explode('|', CAppUI::conf("dPpatients CAntecedent appareils"));
-$all_types     = array_unique(array_merge(CAntecedent::$types    , $active_types    ));
+$all_types     = array_unique(array_merge(CAntecedent::$types    , $active_types));
 $all_appareils = array_unique(array_merge(CAntecedent::$appareils, $active_appareils));
 
 // Départements des correspondants

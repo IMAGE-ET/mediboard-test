@@ -1,20 +1,28 @@
-<?php /* $Id$ */
+<?php
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision$
-* @author Thomas Despoix
-*/
-
+ * Pays Insee
+ */
 class CPaysInsee extends CMbObject {
   // DB Fields
-  var $numerique = null;
-  var $alpha_2 = null;
-  var $alpha_3 = null;
-  var $nom_fr = null;
-  var $nom_ISO = null;
+  public $numerique;
+  public $alpha_2;
+  public $alpha_3;
+  public $nom_fr;
+  public $nom_ISO;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->dsn         = 'INSEE';
@@ -23,7 +31,10 @@ class CPaysInsee extends CMbObject {
     $spec->key         = 'numerique';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["numerique"] = "numchar length|3";
@@ -33,7 +44,14 @@ class CPaysInsee extends CMbObject {
     $specs["nom_ISO"  ] = "str";
     return $specs;
   }
-  
+
+  /**
+   * Retourne le code Alpha-3 du pays
+   *
+   * @param int $numerique Numero de pays
+   *
+   * @return string
+   */
   static function getAlpha3($numerique) {
     $pays = new self;
     $pays->load($numerique);
@@ -41,4 +59,3 @@ class CPaysInsee extends CMbObject {
     return $pays->alpha_3;
   }
 }
-?>

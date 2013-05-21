@@ -41,7 +41,7 @@ interface ISharedMemory {
    * @param string $key   Key of value to store
    * @param mixed  $value The value
    *
-   * @return void
+   * @return bool job-done
    */
   function put($key, $value);
 
@@ -98,7 +98,7 @@ class DiskSharedMemory implements ISharedMemory {
   }
 
   function put($key, $value) {
-    return file_put_contents($this->dir.$key, serialize($value));
+    return file_put_contents($this->dir.$key, serialize($value)) !== false;
   }
 
   function rem($key) {
@@ -173,14 +173,10 @@ class APCSharedMemory implements ISharedMemory {
 abstract class SHM {
   const GZ = "__gz__";
 
-  /**
-   * @var ISharedMemory
-   */
+  /** @var ISharedMemory */
   static private $engine;
 
-  /**
-   * @var string
-   */
+  /** @var string */
   static private $prefix;
 
   /**
@@ -196,17 +192,18 @@ abstract class SHM {
   /**
    * Initialize the shared memory
    *
-   * @param string $engine Engine type
-   * @param string $prefix Prefix to use
+   * @param string $engine_name Engine type
+   * @param string $prefix      Prefix to use
    *
    * @return void
    */
-  static function init($engine = "disk", $prefix = "") {
-    if (!isset(self::$availableEngines[$engine])) {
-      $engine = "disk";
+  static function init($engine_name = "disk", $prefix = "") {
+    if (!isset(self::$availableEngines[$engine_name])) {
+      $engine_name = "disk";
     }
 
-    $engine = new self::$availableEngines[$engine];
+    /** @var ISharedMemory $engine */
+    $engine = new self::$availableEngines[$engine_name];
     if (!$engine->init()) {
       $engine = new self::$availableEngines["disk"];
       $engine->init();

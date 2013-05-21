@@ -1,10 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpatients
- * @version $Revision$
- * @author Romain Ollivier
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CSetupdPpatients extends CSetup {
@@ -2183,7 +2185,18 @@ class CSetupdPpatients extends CSetup {
                 ADD `drain_jejunostomie` FLOAT UNSIGNED,
                 ADD `sonde_rectale` FLOAT UNSIGNED;";
     $this->addQuery($query);
-    $this->mod_version = "1.82";
+
+    $this->makeRevision("1.82");
+    $query = "INSERT INTO `configuration` (`feature`, `value`, `object_id`, `object_class`)
+                SELECT REPLACE(`feature`, ' selection ', ' selection_cabinet '), `value`, `object_id`, `object_class`
+                FROM `configuration`
+                WHERE `feature` LIKE 'dPpatients CConstantesMedicales selection %'
+                AND (
+                  `object_class` = 'CGroups' OR `object_class` IS NULL AND `object_id` IS NULL
+                )";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.83";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

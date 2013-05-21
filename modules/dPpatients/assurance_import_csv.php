@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPplanningOp
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU GPL
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -20,7 +21,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
   $cols = fgetcsv($fp, null, ";");
 
   // Each line
-  while($line = fgetcsv($fp, null, ";")) {
+  while ($line = fgetcsv($fp, null, ";")) {
     if (!isset($line[0]) || $line[0] == "") {
       continue;
     }
@@ -30,12 +31,11 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $results[$i]["nom"]       = addslashes(trim($line[1]));
     $results[$i]["adress"]    = addslashes(trim($line[2]));
     $results[$i]["rue"]       = addslashes(trim($line[3]));
-    $explode                  = explode(" ",addslashes(trim($line[4])),2);
+    $explode                  = explode(" ", addslashes(trim($line[4])), 2);
     $results[$i]["cp"]        = $explode[0];
     $results[$i]["localite"]  = $explode[1];
     $results[$i]["ean"]       = addslashes(trim($line[9]));
     $results[$i]["error"]     = 0;
-
 
     // Fonction
     $corres = new CCorrespondantPatient();
@@ -44,7 +44,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $corres->relation     = "assurance";
     $corres->loadMatchingObject();
 
-    if($corres->_id) {
+    if ($corres->_id) {
       //update
 
       $corres->nom = $results[$i]["nom"];
@@ -52,24 +52,24 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $corres->cp = $results[$i]["cp"];
       $corres->ville = $results[$i]["localite"];
 
-      if($corres->ean == "" || $corres->nom == "") {
+      if ($corres->ean == "" || $corres->nom == "") {
         $msg = "CCorrespondant-import-missing1";
       }
       else {
         $msg = $corres->store();
-        if(!$msg){
+        if (!$msg) {
           $msg = "update";
         }
       }
 
-      if($msg) {
+      if ($msg) {
         CAppUI::setMsg($msg, UI_MSG_WARNING);
         $results[$i]["error"] = $msg;
         $i++;
         continue;
       }
-
-    } else {
+    }
+    else {
       // create
       $corres->nom = $results[$i]["nom"];
       $corres->adresse = $results[$i]["rue"];
@@ -77,13 +77,13 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $corres->ville = $results[$i]["localite"];
       $corres->ean = $results[$i]["ean"];
 
-      if(!$corres->nom  && !$corres->ean ) {
+      if (!$corres->nom  && !$corres->ean ) {
         $msg="CCorrespondant-import-missing2";
         continue;
       }
       $msg = $corres->store();
 
-      if($msg) {
+      if ($msg) {
         CAppUI::setMsg($msg, UI_MSG_WARNING);
         $results[$i]["error"] = $msg;
         $i++;

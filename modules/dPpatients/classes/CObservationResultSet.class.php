@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -13,35 +14,35 @@
  * http://www.interfaceware.com/hl7-standard/hl7-segment-OBR.html
  */
 class CObservationResultSet extends CMbObject {
-  var $observation_result_set_id = null;
+  public $observation_result_set_id;
   
-  var $patient_id            = null;
-  var $datetime              = null;
-  var $context_class         = null;
-  var $context_id            = null;
+  public $patient_id;
+  public $datetime;
+  public $context_class;
+  public $context_id;
+
+  /** @var CMbObject */
+  public $_ref_context;
+
+  /** @var CPatient */
+  public $_ref_patient;
+
+  /** @var CObservationResult[] */
+  public $_ref_results;
 
   /**
-   * @var CMbObject
+   * @see parent::getSpec()
    */
-  var $_ref_context          = null;
-
-  /**
-   * @var CPatient
-   */
-  var $_ref_patient          = null;
-
-  /**
-   * @var CObservationResult[]
-   */
-  var $_ref_results          = null;
-  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "observation_result_set";
     $spec->key   = "observation_result_set_id";
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["patient_id"]    = "ref notNull class|CPatient";
@@ -50,13 +51,19 @@ class CObservationResultSet extends CMbObject {
     $props["context_id"]    = "ref class|CMbObject meta|context_class";
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["observation_results"] = "CObservationResult observation_result_set_id";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
     

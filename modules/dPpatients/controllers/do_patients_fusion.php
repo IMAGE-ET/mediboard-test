@@ -1,13 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
-global $m;
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 class CDoPatientMerge extends CDoObjectAddEdit {
   function CDoPatientMerge() {
@@ -32,10 +32,12 @@ class CDoPatientMerge extends CDoObjectAddEdit {
     $isNew = !CValue::post("patient_id");
     $patient_id = $this->_obj->patient_id;
     
-    if ($isNew)
+    if ($isNew) {
       $this->redirectStore .= "&patient_id=$patient_id&created=$patient_id";
-    elseif($dialog)
+    }
+    elseif ($dialog) {
       $this->redirectStore .= "&name=".$this->_obj->nom."&firstname=".$this->_obj->prenom;
+    }
   }
 }
 
@@ -64,7 +66,7 @@ $patients = array($patient1, $patient2);
 if ($base_object_id) {
   $do->_obj->load($base_object_id);
   
-  foreach($patients as $key => $patient) {
+  foreach ($patients as $key => $patient) {
     if ($base_object_id == $patient->_id) {
       unset($patients[$key]);
       unset($_POST["_merging"][$base_object_id]);
@@ -81,5 +83,3 @@ if ($msg = $do->_obj->merge($patients)) {
 }
   
 $do->doRedirect();
-
-?>

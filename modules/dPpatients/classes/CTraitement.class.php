@@ -1,26 +1,37 @@
-<?php /* $Id$ */
+<?php
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
+ * Traitement
+ */
 class CTraitement extends CMbObject {
   // DB Table key
-  var $traitement_id = null;
+  public $traitement_id;
 
   // DB fields
-  var $debut              = null;
-  var $fin                = null;
-  var $traitement         = null;
-  var $dossier_medical_id = null;
-  var $annule             = null;
+  public $debut;
+  public $fin;
+  public $traitement;
+  public $dossier_medical_id;
+  public $annule;
 
   // Form Fields
-  var $_search = null;
-  
+  public $_search;
+
+  /** @var CDossierMedical */
+  public $_ref_dossier_medical;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'traitement';
@@ -28,6 +39,9 @@ class CTraitement extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["debut"       ] = "date progressive";
@@ -40,24 +54,27 @@ class CTraitement extends CMbObject {
     
     return $specs;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->traitement;
   }
-  
-  function store() {
-    // Standard store
-    if ($msg = parent::store()) {
-      return $msg;
-    }
+
+  /**
+   * Charge le dossier médical
+   *
+   * @return CDossierMedical
+   */
+  function loadRefDossierMedical() {
+    return $this->_ref_dossier_medical = $this->loadFwdRef("dossier_medical_id");
   }
-  
-  function loadRefDossierMedical(){ 
-    $this->_ref_dossier_medical = new CDossierMedical();
-    $this->_ref_dossier_medical->load($this->dossier_medical_id);
-  }
-  
+
+  /**
+   * @see parent::loadView()
+   */
   function loadView(){
     parent::loadView();
     $this->loadLogs();
@@ -65,4 +82,3 @@ class CTraitement extends CMbObject {
   }
 }
 
-?>

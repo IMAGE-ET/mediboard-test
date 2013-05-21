@@ -1,48 +1,49 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
  * A supervision graph Y axis
  */
 class CSupervisionGraphSeries extends CMbObject {
-  var $supervision_graph_series_id = null;
+  public $supervision_graph_series_id;
   
-  var $supervision_graph_axis_id   = null;
-  var $title                       = null;
-  var $value_type_id               = null;
-  var $value_unit_id               = null;
-  var $color                       = null;
-  var $integer_values              = null;
+  public $supervision_graph_axis_id;
+  public $title;
+  public $value_type_id;
+  public $value_unit_id;
+  public $color;
+  public $integer_values;
+
+  /** @var CObservationValueType */
+  public $_ref_value_type;
+
+  /** @var CObservationValueUnit */
+  public $_ref_value_unit;
+
+  /** @var CSupervisionGraphAxis */
+  public $_ref_axis;
 
   /**
-   * @var CObservationValueType
+   * @see parent::getSpec()
    */
-  var $_ref_value_type             = null;
-
-  /**
-   * @var CObservationValueUnit
-   */
-  var $_ref_value_unit             = null;
-
-  /**
-   * @var CSupervisionGraphAxis
-   */
-  var $_ref_axis                   = null;
-  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "supervision_graph_series";
     $spec->key   = "supervision_graph_series_id";
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["supervision_graph_axis_id"] = "ref notNull class|CSupervisionGraphAxis cascade";
@@ -53,7 +54,14 @@ class CSupervisionGraphSeries extends CMbObject {
     $props["integer_values"]       = "bool notNull default|0";
     return $props;
   }
-  
+
+  /**
+   * Initializes series data structure
+   *
+   * @param int $yaxes_count Number of y-axes
+   *
+   * @return array
+   */
   function initSeriesData($yaxes_count){
     $axis = $this->loadRefAxis();
     $unit = $this->loadRefValueUnit()->label;
@@ -95,7 +103,9 @@ class CSupervisionGraphSeries extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Load axis
+   *
+   * @param bool $cache Use object cache
    *
    * @return CSupervisionGraphAxis
    */
@@ -104,7 +114,9 @@ class CSupervisionGraphSeries extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Load value type
+   *
+   * @param bool $cache Use object cache
    *
    * @return CObservationValueType
    */
@@ -113,14 +125,19 @@ class CSupervisionGraphSeries extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Load value unit
+   *
+   * @param bool $cache Use object cache
    *
    * @return CObservationValueUnit
    */
   function loadRefValueUnit($cache = true) {
     return $this->_ref_value_unit = $this->loadFwdRef("value_unit_id", $cache);
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
     
@@ -132,7 +149,14 @@ class CSupervisionGraphSeries extends CMbObject {
     
     $this->_view = $title;
   }
-  
+
+  /**
+   * Builds a set of sample value data
+   *
+   * @param array $times A list of time values to get sample data for
+   *
+   * @return array
+   */
   function getSampleData($times) {
     $axis  = $this->loadRefAxis();
     

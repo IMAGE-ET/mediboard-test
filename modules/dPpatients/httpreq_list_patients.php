@@ -1,11 +1,13 @@
-<?php /* $Id$*/
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision$
-* @author Romain OLLIVIER
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 /// @todo: Ce fichier ressemble beaucoup à vw_idx_patient.php, il faudrait factoriser
 
@@ -60,7 +62,7 @@ if ($useVitale && CModule::getActive("fse")) {
 }
 
 // Recherhche par IPP
-if ($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
+if ($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")) {
   // Initialisation dans le cas d'une recherche par IPP
   $patients = array();
   $patientsSoundex = array();

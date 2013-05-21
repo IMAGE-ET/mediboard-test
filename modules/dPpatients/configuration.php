@@ -14,7 +14,9 @@ global $locales;
 $list_all = CConstantesMedicales::$list_constantes;
 
 foreach ($list_all as $name => $params) {
-  $locales["config-dPpatients-CConstantesMedicales-selection-$name"] = CAppUI::tr("CConstantesMedicales-$name");
+  $tr = CAppUI::tr("CConstantesMedicales-$name");
+  $locales["config-dPpatients-CConstantesMedicales-selection-$name"]         = $tr;
+  $locales["config-dPpatients-CConstantesMedicales-selection_cabinet-$name"] = $tr;
 }
 
 $list = array();
@@ -70,6 +72,14 @@ CConfiguration::register(array(
         "sonde_rectale_cumul_reset_hour"     => "num min|0 max|23 default|8",
 
         "selection" => $selection
+      ),
+    ),
+  ),
+
+  "CFunctions CGroups.group_id" => array(
+    "dPpatients" => array(
+      "CConstantesMedicales" => array(
+        "selection_cabinet" => $selection
       ),
     ),
   ),

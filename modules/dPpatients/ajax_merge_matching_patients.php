@@ -1,22 +1,25 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpatients
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
 
 $do_merge = CValue::get("do_merge");
 
-$naissance = CValue::getOrSession("naissance", array(
-  "day"   => 1,
-  "month" => 1,
-  "year"  => 1,
-));
+$naissance = CValue::getOrSession(
+  "naissance", array(
+    "day"   => 1,
+    "month" => 1,
+    "year"  => 1,
+  )
+);
 
 $ds = CSQLDataSource::get("std");
 
@@ -58,11 +61,11 @@ CAppUI::stepAjax(intval($ds->numRows($res))." patients identiques");
 $patient_siblings = array();
 if (!$do_merge) {
   $n = 100;
-  while($n-- && ($l = $ds->fetchAssoc($res))){
+  while ($n-- && ($l = $ds->fetchAssoc($res))) {
     $patient_ids = explode("|", $l["ids"]);
     
     $patients = array();
-    foreach($patient_ids as $_id) {
+    foreach ($patient_ids as $_id) {
       $_patient = new CPatient;
       $_patient->load($_id);
       $patients[] = $_patient;

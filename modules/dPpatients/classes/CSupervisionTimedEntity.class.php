@@ -1,34 +1,39 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
  * A supervision graph
  */
 class CSupervisionTimedEntity extends CMbObject {
-  var $owner_class;
-  var $owner_id;
+  public $owner_class;
+  public $owner_id;
 
-  var $title;
-  var $disabled;
+  public $title;
+  public $disabled;
+
+  /** @var CMbObject */
+  public $_ref_owner;
 
   /**
-   * @var CMbObject
+   * @see parent::getSpec()
    */
-  var $_ref_owner;
-
   function getSpec() {
     $spec = parent::getSpec();
     $spec->uniques["title"] = array("owner_class", "owner_id", "title");
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["owner_class"] = "enum notNull list|CGroups";
@@ -39,7 +44,9 @@ class CSupervisionTimedEntity extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Load the owner entity
+   *
+   * @param bool $cache Use object cache
    *
    * @return CGroups
    */
@@ -47,6 +54,9 @@ class CSupervisionTimedEntity extends CMbObject {
     return $this->_ref_owner = $this->loadFwdRef("owner_id", $cache);
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
 

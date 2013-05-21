@@ -1,15 +1,16 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
-global $can;
+CCanDo::checkAdmin();
 
-$can->needsAdmin();
 $sourcePath = "modules/dPpatients/INSEE/insee.tar.gz";
 $targetDir = "tmp/insee";
 $targetPath = "tmp/insee/insee.sql";
@@ -28,5 +29,3 @@ if (null == $lineCount = $ds->queryDump($targetPath, true)) {
 }
 
 CAppUI::stepAjax("import effectué avec succès de $lineCount lignes", UI_MSG_OK);
-
-?>

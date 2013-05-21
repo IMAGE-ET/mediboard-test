@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpatients
- * @version $Revision$
- * @author Thomas Despoix
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -14,42 +15,49 @@
 class CCorrespondant extends CMbObject {
   
   // DB Table key
-  var $correspondant_id = null;
+  public $correspondant_id;
 
   // DB Fields
-  var $medecin_id = null;
-  var $patient_id = null;
+  public $medecin_id;
+  public $patient_id;
+
+  /** @var CMedecin */
+  public $_ref_medecin;
+  
+  /** @var CPatient */
+  public $_ref_patient;
 
   /**
-   * @var CMedecin
+   * @see parent::getSpec()
    */
-  var $_ref_medecin = null;
-  
-  /**
-   * @var CPatient
-   */
-  var $_ref_patient = null;
-  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "correspondant";
     $spec->key   = "correspondant_id";
     return $spec;
   }
-    
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["medecin_id"] = "ref notNull class|CMedecin";
     $specs["patient_id"] = "ref notNull class|CPatient";
     return $specs;
   }
-    
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadRefPatient();
     $this->loadRefMedecin();
   }
   
   /**
+   * Charge le patient
+   *
    * @return CPatient
    */
   function loadRefPatient() {
@@ -57,6 +65,8 @@ class CCorrespondant extends CMbObject {
   }
   
   /**
+   * Charge le médecin
+   *
    * @return CMedecin
    */
   function loadRefMedecin() {

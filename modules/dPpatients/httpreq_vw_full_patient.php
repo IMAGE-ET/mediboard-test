@@ -1,17 +1,19 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
 $patient_id = CValue::getOrSession("patient_id", 0);
 
-if(!$patient_id) {
+if (!$patient_id) {
   CAppUI::setMsg("Vous devez selectionner un patient", UI_MSG_ALERT);
   CAppUI::redirect("m=dPpatients&tab=0");
 }
@@ -31,8 +33,8 @@ $patient->_ref_dossier_medical->loadRefsTraitements();
 $userSel = CMediusers::get();
 
 // Suppression des consultations d'urgences
-foreach($patient->_ref_consultations as $keyConsult => $consult){
-  if($consult->motif == "Passage aux urgences"){
+foreach ($patient->_ref_consultations as $keyConsult => $consult) {
+  if ($consult->motif == "Passage aux urgences") {
     unset($patient->_ref_consultations[$keyConsult]);
   }
 }
@@ -54,4 +56,3 @@ $smarty->assign("can_view_dossier_medical", $can_view_dossier_medical);
 $smarty->assign("isImedsInstalled"        , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 
 $smarty->display("inc_vw_full_patients.tpl");
-?>

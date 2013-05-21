@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -13,15 +14,21 @@
  * http://www.interfaceware.com/hl7-standard/hl7-segment-OBX.html
  */
 class CObservationValueUnit extends CObservationValueCodingSystem {
-  var $observation_value_unit_id = null;
-  
+  public $observation_value_unit_id;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "observation_value_unit";
     $spec->key   = "observation_value_unit_id";
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["observation_results"] = "CObservationResult unit_id";
@@ -30,7 +37,9 @@ class CObservationValueUnit extends CObservationValueCodingSystem {
   }
 
   /**
-   * @param int $unit_id
+   * Get a unit by its ID
+   *
+   * @param int $unit_id The unit ID
    *
    * @return CObservationValueUnit
    */

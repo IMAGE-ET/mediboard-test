@@ -1,21 +1,25 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
  * A supervision timed data representation
  */
 class CSupervisionTimedData extends CSupervisionTimedEntity {
-  var $supervision_timed_data_id;
+  public $supervision_timed_data_id;
 
-  var $period;
+  public $period;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "supervision_timed_data";
@@ -23,12 +27,18 @@ class CSupervisionTimedData extends CSupervisionTimedEntity {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["period"] = "enum notNull list|1|5|10|15|20|30|60";
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["pack_links"] = "CSupervisionGraphToPack graph_id";
@@ -36,7 +46,9 @@ class CSupervisionTimedData extends CSupervisionTimedEntity {
   }
 
   /**
-   * @param CMbObject $object
+   * Get all the timed data for an object
+   *
+   * @param CMbObject $object The object to get timed data of
    *
    * @return self[]
    */

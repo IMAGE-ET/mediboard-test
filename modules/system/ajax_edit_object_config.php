@@ -15,7 +15,7 @@ $object = null;
 
 if ($object_guid && $object_guid != "global") {
   $object = CMbObject::loadFromGuid($object_guid);
-  $configs = CConfiguration::getClassConfigs($object->_class, $module);
+  $configs = CConfiguration::getClassConfigs($object->_class, $module, $inherit);
 }
 else {
   if (!CAppUI::$user->isAdmin()) {
@@ -24,7 +24,7 @@ else {
     return;
   }
 
-  $model = CConfiguration::getModuleConfigs($module);
+  $model = CConfiguration::getModuleConfigs($module, $inherit);
   
   $configs = array();
   foreach ($model as $_model) {

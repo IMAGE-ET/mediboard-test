@@ -1,36 +1,36 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
  * A supervision graph
  */
 class CSupervisionGraphToPack extends CMbObject {
-  var $supervision_graph_to_pack_id ;
+  public $supervision_graph_to_pack_id;
 
-  var $graph_class;
-  var $graph_id;
+  public $graph_class;
+  public $graph_id;
 
-  var $pack_id;
+  public $pack_id;
 
-  var $rank;
+  public $rank;
+
+  /** @var CSupervisionTimedEntity */
+  public $_ref_graph;
+
+  /** @var CSupervisionGraphPack */
+  public $_ref_pack;
 
   /**
-   * @var CSupervisionTimedEntity
+   * @see parent::getSpec()
    */
-  var $_ref_graph;
-
-  /**
-   * @var CSupervisionGraphPack
-   */
-  var $_ref_pack;
-  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "supervision_graph_to_pack";
@@ -38,7 +38,10 @@ class CSupervisionGraphToPack extends CMbObject {
     $spec->uniques["title"] = array("graph_class", "graph_id", "pack_id");
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["graph_class"] = "enum list|CSupervisionGraph|CSupervisionTimedData";
@@ -49,6 +52,8 @@ class CSupervisionGraphToPack extends CMbObject {
   }
 
   /**
+   * Get the graph
+   *
    * @return CSupervisionTimedEntity|CSupervisionGraph|CSupervisionTimedData
    */
   function loadRefGraph(){
@@ -56,6 +61,8 @@ class CSupervisionGraphToPack extends CMbObject {
   }
 
   /**
+   * Get the pack
+   *
    * @return CSupervisionGraphPack
    */
   function loadRefPack(){

@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 $patient_id = CValue::get("patient_id", 0);
 $consultation_id = CValue::get("consultation_id", 0);
@@ -66,5 +68,3 @@ if (CCanDo::read()) {
 
   $smarty->display("httpreq_get_last_refs.tpl");
 }
-
-?>

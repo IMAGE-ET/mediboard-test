@@ -3,7 +3,7 @@
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPpatients
+ * @subpackage Patients
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
@@ -288,6 +288,9 @@ class CPatient extends CPerson {
   // Distant fields
   public $_ref_praticiens; // Praticiens ayant participé à la pec du patient
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'patients';
@@ -296,6 +299,9 @@ class CPatient extends CPerson {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["constantes"]            = "CConstantesMedicales patient_id";
@@ -321,6 +327,9 @@ class CPatient extends CPerson {
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -514,6 +523,9 @@ class CPatient extends CPerson {
     }
   }
 
+  /**
+   * @see parent::check()
+   */
   function check() {
     // Standard check
     if ($msg = parent::check()) {
@@ -528,6 +540,9 @@ class CPatient extends CPerson {
     }
   }
 
+  /**
+   * @see parent::store()
+   */
   function store() {
     //$this->INSC      = "1075102722581011056235";
     //$this->INSC_date = " 2012-03-12 16:59:21";
@@ -610,6 +625,9 @@ class CPatient extends CPerson {
     }
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
@@ -770,6 +788,9 @@ class CPatient extends CPerson {
     return CMbDT::daysRelative($this->naissance, $date);
   }
 
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     parent::updatePlainFields();
 
@@ -854,7 +875,7 @@ class CPatient extends CPerson {
     $group_id = CGroups::loadCurrent()->_id;
     
     $where["patient_id"] = "= '$this->_id'";
-    if(CAppUI::conf("dPpatients CPatient multi_group") == "hidden") {
+    if (CAppUI::conf("dPpatients CPatient multi_group") == "hidden") {
       $where["sejour.group_id"] = "= '$group_id'";
     }
     $order = "entree DESC";
@@ -1104,7 +1125,7 @@ class CPatient extends CPerson {
                     (functions_mediboard.consults_partagees = '0' && functions_mediboard.function_id = '$curr_user->function_id')";
       }
       $where["patient_id"] = "= '$this->_id'";
-      if(CAppUI::conf("dPpatients CPatient multi_group") == "hidden") {
+      if (CAppUI::conf("dPpatients CPatient multi_group") == "hidden") {
         $where["functions_mediboard.group_id"] = "= '$group_id'";
       }
       $order = "plageconsult.date DESC";
@@ -1200,6 +1221,9 @@ class CPatient extends CPerson {
     return $this->_ref_grossesses = $this->loadBackRefs("grossesses", $order);
   }
 
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack() {
     parent::loadRefsBack();
     $this->loadRefsFiles();
@@ -1225,6 +1249,9 @@ class CPatient extends CPerson {
     $this->loadIdVitale();
   }
 
+  /**
+   * @see parent::loadComplete()
+   */
   function loadComplete(){
     parent::loadComplete();
     $this->loadIPP();
@@ -1774,28 +1801,28 @@ class CPatient extends CPerson {
 
     // Horizontal
     $smarty->assign("constantes_medicales_grid", $grid_complet);
-    $constantes_complet_horiz = $smarty->fetch("print_constantes.tpl",'','',0);
+    $constantes_complet_horiz = $smarty->fetch("print_constantes.tpl", '', '', 0);
     $constantes_complet_horiz = preg_replace('`([\\n\\r])`', '', $constantes_complet_horiz);
 
     $smarty->assign("constantes_medicales_grid" , $grid_minimal);
-    $constantes_minimal_horiz = $smarty->fetch("print_constantes.tpl",'','',0);
+    $constantes_minimal_horiz = $smarty->fetch("print_constantes.tpl", '', '', 0);
     $constantes_minimal_horiz = preg_replace('`([\\n\\r])`', '', $constantes_minimal_horiz);
 
     $smarty->assign("constantes_medicales_grid" , $grid_valued);
-    $constantes_valued_horiz  = $smarty->fetch("print_constantes.tpl",'','',0);
+    $constantes_valued_horiz  = $smarty->fetch("print_constantes.tpl", '', '', 0);
     $constantes_valued_horiz  = preg_replace('`([\\n\\r])`', '', $constantes_valued_horiz);
 
     // Vertical
     $smarty->assign("constantes_medicales_grid", $grid_complet);
-    $constantes_complet_vert  = $smarty->fetch("print_constantes_vert.tpl",'','',0);
+    $constantes_complet_vert  = $smarty->fetch("print_constantes_vert.tpl", '', '', 0);
     $constantes_complet_vert  = preg_replace('`([\\n\\r])`', '', $constantes_complet_vert);
 
     $smarty->assign("constantes_medicales_grid" , $grid_minimal);
-    $constantes_minimal_vert  = $smarty->fetch("print_constantes_vert.tpl",'','',0);
+    $constantes_minimal_vert  = $smarty->fetch("print_constantes_vert.tpl", '', '', 0);
     $constantes_minimal_vert  = preg_replace('`([\\n\\r])`', '', $constantes_minimal_vert);
 
     $smarty->assign("constantes_medicales_grid" , $grid_valued);
-    $constantes_valued_vert   = $smarty->fetch("print_constantes_vert.tpl",'','',0);
+    $constantes_valued_vert   = $smarty->fetch("print_constantes_vert.tpl", '', '', 0);
     $constantes_valued_vert   = preg_replace('`([\\n\\r])`', '', $constantes_valued_vert);
 
     // Liste des fichiers
@@ -1982,6 +2009,9 @@ class CPatient extends CPerson {
     return intval($ds->numRows($res));
   }
 
+  /**
+   * @see parent::loadView()
+   */
   function loadView() {
     parent::loadView();
     $this->loadIPP();

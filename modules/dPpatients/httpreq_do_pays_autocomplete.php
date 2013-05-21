@@ -1,11 +1,14 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPpatient
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
+
 global $can;
 
 $ds = CSQLDataSource::get("INSEE");
@@ -36,6 +39,3 @@ if ($can->read && $query) {
   
   $smarty->display("httpreq_do_pays_autocomplete.tpl");
 }
-
-
-?>

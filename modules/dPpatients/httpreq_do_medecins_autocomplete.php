@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPpatient
-* @version $Revision$
-* @author Fabien Ménager
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -30,12 +32,12 @@ if ($medecin_cps_prefs != "") {
   CMbArray::removeValue("", $cps);
   
   $where_cp = array();
-  foreach($cps as $cp) {
+  foreach ($cps as $cp) {
     $where_cp[] = "cp LIKE '".$cp."___'";
   }
   $where[] = "(".implode(" OR ", $where_cp).")";
 }
-else if($indexGroup->_cp_court && !$all_departements) {
+else if ($indexGroup->_cp_court && !$all_departements) {
   $where['cp'] = "LIKE '".$indexGroup->_cp_court."___'"; 
 }
 

@@ -1,15 +1,17 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 class CDoCopyAntecedent extends CDoObjectAddEdit {
   function CDoCopyAntecedent() {
-    $this->CDoObjectAddEdit("CAntecedent", "antecedent_id");
+    $this->CDoObjectAddEdit("CAntecedent");
   }  
   
   function doBind() {
@@ -19,7 +21,7 @@ class CDoCopyAntecedent extends CDoObjectAddEdit {
     $_sejour_id = CValue::post("_sejour_id"  , null);
 
     // si pas de sejour_id, redirection
-    if (!$_sejour_id){
+    if (!$_sejour_id) {
        $this->doRedirect();
     }
     
@@ -30,9 +32,9 @@ class CDoCopyAntecedent extends CDoObjectAddEdit {
     $this->_obj->antecedent_id = null;
     
     // Calcul de la valeur de l'id du dossier_medical du sejour
-    $this->_obj->dossier_medical_id = CDossierMedical::dossierMedicalId($_sejour_id,"CSejour");
+    $this->_obj->dossier_medical_id = CDossierMedical::dossierMedicalId($_sejour_id, "CSejour");
   }
 }
-$do = new CDoCopyAntecedent;
+
+$do = new CDoCopyAntecedent();
 $do->doIt();
-?>

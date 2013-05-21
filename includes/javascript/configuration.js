@@ -7,7 +7,7 @@ Configuration = {
     }
 
     if (inherit) {
-      url.addParam("inherit", inherit);
+      url.addParam("inherit[]", inherit, true);
     }
 
     if (container = $(container)) {

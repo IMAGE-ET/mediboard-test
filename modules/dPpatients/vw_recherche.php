@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision$
-* @author Alexis Granger
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 // Droit sur les consultations
 $canCabinet = CModule::getCanDo("dPcabinet");
@@ -33,9 +35,9 @@ $remarque_intervention = CValue::getOrSession("remarque_intervention");
 $libelle_intervention  = CValue::getOrSession("libelle_intervention");
 $ccam_intervention     = CValue::getOrSession("ccam_intervention");
 
-$recherche_consult      = CValue::getOrSession("recherche_consult","or");
-$recherche_sejour       = CValue::getOrSession("recherche_sejour","or");
-$recherche_intervention = CValue::getOrSession("recherche_intervention","or");
+$recherche_consult      = CValue::getOrSession("recherche_consult", "or");
+$recherche_sejour       = CValue::getOrSession("recherche_sejour", "or");
+$recherche_intervention = CValue::getOrSession("recherche_intervention", "or");
 
 $page_sejour         = CValue::get('page_sejour', 0);
 $page_interv         = CValue::get('page_interv', 0);
@@ -47,11 +49,14 @@ $page_dossierMedical = CValue::get('page_dossierMedical', 0);
 
 // Recherche sur les antecedents
 $ant = new CAntecedent();
+
+/** @var CAntecedent[] $antecedents */
 $antecedents = array();
 $patients_ant = array();
 $where_ant = array();
+
 $ljoin["dossier_medical"] = "dossier_medical.object_id = antecedent.antecedent_id";
-if ($antecedent_patient){
+if ($antecedent_patient) {
   $where_ant["rques"]   = "LIKE '%$antecedent_patient%'";
   $where_ant["object_class"] = " = 'CPatient'";
 }
@@ -62,10 +67,10 @@ if ($where_ant) {
   $antecedents = $ant->loadList($where_ant, $order_ant, "$page_antecedent, 30", null, $ljoin);
 }
 
-foreach($antecedents as $key => $value){
+foreach ($antecedents as $key => $value) {
   // Chargement du dossier medical du patient pour chaque antecedent
   $value->loadRefDossierMedical();
- 
+
   $value->_ref_dossier_medical->loadRefObject();
   $antecedents_[$key] = $value->_ref_dossier_medical->object_id;
   $value->loadRefsFwd();
@@ -73,12 +78,15 @@ foreach($antecedents as $key => $value){
 
 // Recherche sur les traitements
 $trait = new CTraitement();
+
+/** @var CTraitement[] $traitements */
 $traitements = array();
+
 $patients_trait = array();
 $where_trait = array();
 $ljoin["dossier_medical"] = "dossier_medical.object_id = traitement.traitement_id";
 
-if ($traitement_patient){ 
+if ($traitement_patient) {
   $where_trait["traitement"] = "LIKE '%$traitement_patient%'";
   $where_trait["object_class"] = " ='CPatient'";
 }
@@ -89,7 +97,7 @@ if ($where_trait) {
   $traitements = $trait->loadList($where_trait, $order_trait, "$page_traitement, 30", null, $ljoin);
 }
 
-foreach($traitements as $key=>$value){
+foreach ($traitements as $key => $value) {
    $value->loadRefDossierMedical();
    $value->_ref_dossier_medical->loadRefObject();
    $traitements_[$key] = $value->_ref_dossier_medical->object_id;
@@ -97,10 +105,11 @@ foreach($traitements as $key=>$value){
 }
 
 // Recherche sur les diagnostics
+/** @var CDossierMedical[] $dossiersMed */
 $dossiersMed = array();
 $where_diag = array();
 
-if($diagnostic_patient){
+if ($diagnostic_patient) {
   $where_diag["codes_cim"] = "LIKE '%$diagnostic_patient%'";
   $where_diag["object_class"] = " = 'CPatient'";
 }
@@ -109,14 +118,14 @@ $order_diag = "object_id";
 $dossierMedical = new CDossierMedical();
 $pat_diag = new CPatient();
 $total_dossierMedicals = null;
-if ($where_diag){
+if ($where_diag) {
   $total_dossierMedicals = $dossierMedical->countList($where_diag);
   $dossiersMed = $dossierMedical->loadList($where_diag, $order_diag, "$page_dossierMedical, 30");
 }
 
-foreach($dossiersMed as $key=>$value){
-   $value->loadRefObject();
-   $value->loadRefsFwd();
+foreach ($dossiersMed as $value) {
+  $value->loadRefObject();
+  $value->loadRefsFwd();
 }
 
 $where_motif      = null;
@@ -126,21 +135,22 @@ $where_traitement = null;
 $where_consult    = null;
 
 // Recherche sur les Consultations
+/** @var CConsultation[] $consultations */
 $consultations = array();
 $consult = new CConsultation();
 $patient_consult = array();
 
-if($recherche_consult == "and") {
-  if ($motif_consult){
+if ($recherche_consult == "and") {
+  if ($motif_consult) {
     $where_consult["motif"]     = "LIKE '%$motif_consult%'";
   }
-  if ($remarque_consult){
+  if ($remarque_consult) {
     $where_consult["rques"]      = "LIKE '%$remarque_consult%'";
   }  
-  if ($examen_consult){
+  if ($examen_consult) {
     $where_consult["examen"]     = "LIKE '%$examen_consult%'";
   }
-  if ($traitement_consult){ 
+  if ($traitement_consult) {
     $where_consult["traitement"] = "LIKE '%$traitement_consult%'";
   }
   if ($conclusion_consult) {
@@ -148,24 +158,24 @@ if($recherche_consult == "and") {
   }
 }
 
-if($recherche_consult == "or") {
-  if ($motif_consult){
+if ($recherche_consult == "or") {
+  if ($motif_consult) {
     $where_motif = "`motif` LIKE '%$motif_consult%'";
     $where_consult[] = $where_motif;  
   }
-  if ($remarque_consult){
+  if ($remarque_consult) {
     $where_remarque = "`rques` LIKE '%$remarque_consult%'";
     $where_consult[] = $where_remarque; 
   }
-  if ($examen_consult){
+  if ($examen_consult) {
     $where_examen = "`examen` LIKE '%$examen_consult%'";	
     $where_consult[] = $where_examen;  
   }
-  if ($traitement_consult){
+  if ($traitement_consult) {
     $where_traitement = "`traitement` LIKE '%$traitement_consult%'";	
     $where_consult[] = $where_traitement;  
   }
-  if ($where_consult){
+  if ($where_consult) {
     $where_consult = implode(" OR ", $where_consult);
   }
 }
@@ -174,120 +184,122 @@ $patients_consult = array();
 
 $order_consult = "patient_id";
 $total_consults = null;
-if ($where_consult){
+if ($where_consult) {
   $total_consults = $consult->countList($where_consult);
   $consultations = $consult->loadList($where_consult, $order_consult, "$page_consult, 30"); 
 }
 
-foreach($consultations as $key=>$value){
+foreach ($consultations as $value) {
   $value->loadRefPatient();
 }
 
 // Recherche sur les sejours
+/** @var CSejour[] $sejours */
 $sejours = array();
 $sejour = new CSejour();
 $patients_sejour = array();
 $where_sejour = null;
 
-if($recherche_sejour == "and"){
-  if($typeAdmission_sejour){
+if ($recherche_sejour == "and") {
+  if ($typeAdmission_sejour) {
     $where_sejour["type"]         = "LIKE '%$typeAdmission_sejour%'";
   }
-  if($convalescence_sejour){
-   $where_sejour["convalescence"] = "LIKE '%$convalescence_sejour%'";
+  if ($convalescence_sejour) {
+    $where_sejour["convalescence"] = "LIKE '%$convalescence_sejour%'";
   }  
-  if($remarque_sejour){
-   $where_sejour["rques"]         = "LIKE '%$remarque_sejour%'";
+  if ($remarque_sejour) {
+    $where_sejour["rques"]         = "LIKE '%$remarque_sejour%'";
   }
 }
 
-if($recherche_sejour == "or") {
-  if($type){
+if ($recherche_sejour == "or") {
+  if ($type) {
     $where_type = "`type` LIKE '%$type%'";
     $where_sejour[] = $where_type;   
   }
-  if($convalescence_sejour){
+  if ($convalescence_sejour) {
     $where_convalescence = "`convalescence` LIKE '%$convalescence_sejour%'";
     $where_sejour[] = $where_convalescence;  
   }
-  if($remarque_sejour){
+  if ($remarque_sejour) {
     $where_remarque = "`rques` LIKE '%$remarque_sejour%'";	
     $where_sejour[] = $where_remarque;  
   }
-  if($where_sejour){
+  if ($where_sejour) {
     $where_sejour = implode(" OR ", $where_sejour);
   }
 }
 
 $order_sejour = "patient_id";
 $total_sejours = null;
-if($where_sejour){
+if ($where_sejour) {
   $total_sejours = $sejour->countList($where_sejour);
   $sejours = $sejour->loadList($where_sejour, $order_sejour, "$page_sejour, 30");
 }
 
-foreach($sejours as $key=>$value){
+foreach ($sejours as $value) {
   $value->loadRefPatient();
 }
 
 // Recherches sur les Interventions
+/** @var COperation[] $interventions */
 $interventions = array();
 $intervention = new COperation();
 $patients_intervention = array();
 $where_intervention = null;
 
-if($recherche_intervention == "and") {
-  if($materiel_intervention){
+if ($recherche_intervention == "and") {
+  if ($materiel_intervention) {
     $where_intervention["materiel"]   = "LIKE '%$materiel_intervention%'";
   }
-  if($examen_intervention){
+  if ($examen_intervention) {
     $where_intervention["examen"]     = "LIKE '%$examen_intervention%'";
   }  
-  if($remarque_intervention){
+  if ($remarque_intervention) {
     $where_intervention["rques"]      = "LIKE '%$remarque_intervention%'";
   }
-  if($libelle_intervention){
+  if ($libelle_intervention) {
     $where_intervention["libelle"]    = "LIKE '%$libelle_intervention%'";
   }
-  if($ccam_intervention){
+  if ($ccam_intervention) {
     $where_intervention["codes_ccam"] = "LIKE '%$ccam_intervention%'";
   }
 }
 
-if($recherche_intervention == "or"){
-  if($materiel_intervention){
-  	  $where_materiel = "`materiel` LIKE '%$materiel_intervention%'";
-  $where_intervention[] = $where_materiel;
-  } 
-  if($examen_intervention){
-    $where_examen = "`examen` LIKE '%$examen_intervention%'";
-  $where_intervention[] = $where_examen;
+if ($recherche_intervention == "or") {
+  if ($materiel_intervention) {
+    $where_materiel = "`materiel` LIKE '%$materiel_intervention%'";
+    $where_intervention[] = $where_materiel;
   }
-  if($remarque_intervention){
-  	  $where_remarque = "`rques` LIKE '%$remarque_intervention%'";
+  if ($examen_intervention) {
+    $where_examen = "`examen` LIKE '%$examen_intervention%'";
+    $where_intervention[] = $where_examen;
+  }
+  if ($remarque_intervention) {
+      $where_remarque = "`rques` LIKE '%$remarque_intervention%'";
     $where_intervention[] = $where_remarque;
   }
-  if($libelle_intervention){
-  $where_libelle = "`libelle` LIKE '%$libelle_intervention%'";
+  if ($libelle_intervention) {
+    $where_libelle = "`libelle` LIKE '%$libelle_intervention%'";
     $where_intervention[] = $where_libelle;
   }
-  if($ccam_intervention){
-  $where_ccam = "`codes_ccam` LIKE '%$ccam_intervention%'";
+  if ($ccam_intervention) {
+    $where_ccam = "`codes_ccam` LIKE '%$ccam_intervention%'";
     $where_intervention[] = $where_ccam;
   }
-  if($where_intervention){
+  if ($where_intervention) {
     $where_intervention = implode(" OR ", $where_intervention);
   } 
 }
 
 $order_intervention = "rques";
 $total_intervs = null;
-if($where_intervention){
+if ($where_intervention) {
   $total_intervs = $intervention->countList($where_intervention);
   $interventions = $intervention->loadlist($where_intervention, $order_intervention, "$page_interv, 30");
 }
 
-foreach($interventions as &$intervention){
+foreach ($interventions as &$intervention) {
   $intervention->loadRefSejour();
   $intervention->_ref_sejour->loadRefPatient();
 }
@@ -356,5 +368,3 @@ $smarty->assign("patients_intervention" , $patients_intervention);
 $smarty->assign("user_id"               , $user->_id);
 
 $smarty->display("vw_recherche.tpl");
-
-?>

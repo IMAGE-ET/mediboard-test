@@ -1,15 +1,15 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpatients
- * @version $Revision$
- * @author Fabien Ménager
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Patients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
-global $can;  
-$can->needsEdit();
+CCanDo::checkEdit();
 
 $patient_id = CValue::getOrSession("patient_id");
 $widget_id = CValue::get("widget_id");
@@ -27,5 +27,3 @@ $smarty->assign("patient", $patient);
 $smarty->assign("widget_id", $widget_id);
 
 $smarty->display("inc_widget_correspondants.tpl");
-
-?>
