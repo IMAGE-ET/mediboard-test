@@ -122,7 +122,7 @@ $group = "facture_liaison.object_id HAVING COUNT(facture_liaison.object_id) >= 2
 
 $facture = new CFactureCabinet();
 $factures = $facture->loadList($where, "praticien_id", null, $group, $ljoin);
-foreach ($factures as $fact) {
+foreach ($factures as $_facture) {
   $_facture->loadRefPatient();
   $_facture->_ref_patient->loadRefsCorrespondantsPatient();
   $_facture->loadRefPraticien();

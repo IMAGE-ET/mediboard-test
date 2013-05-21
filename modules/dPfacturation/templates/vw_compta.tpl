@@ -95,6 +95,11 @@ function viewTotaux() {
   url.addParam('date_max', $V(oForm._date_max));
   url.popup(1000, 600);
 }
+function popupImport(facture_class) {
+  var url = new Url('facturation', 'vw_rapprochement_banc');
+  url.addParam('facture_class', facture_class);
+  url.popup(1200, 600, 'Import des règlements');
+}
 </script>
 
 {{if count($listPrat)}}
@@ -152,154 +157,188 @@ function viewTotaux() {
           <th>{{mb_label object=$filter field="_date_max"}}</th>
           <td>{{mb_field object=$filter field="_date_max" form="printFrm" canNull="false" register=true}} </td>
         </tr> 
-        
-        <tr>
-          <th class="category" colspan="4">Comptabilité Cabinet</th>
-        </tr>
-        <tr>
-          <td colspan="2" class="button" style="width:50%;">
-            <button class="print" type="submit" onclick="document.printFrm.a.value='print_noncote';">Consultations non cotées</button>
-            <div class="small-info" style="text-align:center;">
-              Affichage des consultations non cotées, en fonction de la date de consultation.
-            </div>
-          </td>
-          <td colspan="2" class="button">
-            <button class="print" type="submit" onclick="document.printFrm.a.value='print_retrocession';">Rétrocession des remplacements</button>
-            <div class="small-info" style="text-align:center;">
-              Affichage des consultations effectuées par un remplaçant, en fonction de la date de consultation.
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td class="button" colspan="4" style="padding-top:5px;padding-bottom:5px;">
-            <hr />
-          </td>
-        </tr>
-        <tr>
-          <th>Consultations gratuites</th>
-          <td>
-            Oui<input type="radio" name="cs" value="1" checked="checked"/>
-            Non<input type="radio" name="cs" value="0" />
-          </td>
-          <td colspan="2"></td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$filter field="_etat_reglement_patient"}}</th>
-          <td>{{mb_field object=$filter field="_etat_reglement_patient" emptyLabel="All" canNull="true"}}</td>
-          <th>{{mb_label object=$filter_reglement field="mode"}}</th>
-          <td>{{mb_field object=$filter_reglement field="mode" emptyLabel="All" canNull="true"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$filter field="_etat_reglement_tiers"}}</th>
-          <td>{{mb_field object=$filter field="_etat_reglement_tiers" emptyLabel="All" canNull="true"}}</td>
-          <th>{{mb_label object=$filter field="_type_affichage"}}</th>
-          <td>{{mb_field object=$filter field="_type_affichage" canNull="true"}}</td>
-        </tr>
-        <tr>
-          <td class="button" colspan="2">
-            <button class="search" type="submit" onclick="document.printFrm.a.value='print_rapport';">Validation paiements</button>
-            {{if $app->user_prefs.GestionFSE}}
-              <button class="search" type="submit" onclick="document.printFrm.a.value='print_noemie';">Rapprochements Noemie</button>
-            {{/if}}
-          </td>
-          <td>
-            <button class="print" type="submit" onclick="document.printFrm.a.value='print_compta';" style="float:right;">Impression compta</button>
-          </td>
-          <td>
-            <button class="print" type="submit" onclick="document.printFrm.a.value='print_bordereau';" style="float:left;">Impression bordereau</button>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            <div class="small-info" style="text-align:center;">
-              Affichage de l'état des paiements, en fonction des dates de consultation.<br/>
-              Permet de rentrer de nouveaux paiements.
-            </div>
-          </td>
-          <td colspan="2">
-            <div class="small-info" style="text-align:center;">
-              Affichage des règlements effectués, en fonction de la date de paiement.
-            </div>
-          </td>
-        </tr>
-        {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+        {{if $conf.dPfacturation.CFactureCabinet.view_bill}}
           <tr>
-            <td class="button" colspan="4">
+            <th class="category" colspan="4">Comptabilité Cabinet</th>
+          </tr>
+          <tr>
+            <td colspan="2" class="button" style="width:50%;">
+              <button class="print" type="submit" onclick="document.printFrm.a.value='print_noncote';">Consultations non cotées</button>
+              <div class="small-info" style="text-align:center;">
+                Affichage des consultations non cotées, en fonction de la date de consultation.
+              </div>
+            </td>
+            <td colspan="2" class="button">
+              <button class="print" type="submit" onclick="document.printFrm.a.value='print_retrocession';">Rétrocession des remplacements</button>
+              <div class="small-info" style="text-align:center;">
+                Affichage des consultations effectuées par un remplaçant, en fonction de la date de consultation.
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="button" colspan="4" style="padding-top:5px;padding-bottom:5px;">
               <hr />
             </td>
           </tr>
           <tr>
+            <th>Consultations gratuites</th>
+            <td>
+              Oui<input type="radio" name="cs" value="1" checked="checked"/>
+              Non<input type="radio" name="cs" value="0" />
+            </td>
+            <td colspan="2"></td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$filter field="_etat_reglement_patient"}}</th>
+            <td>{{mb_field object=$filter field="_etat_reglement_patient" emptyLabel="All" canNull="true"}}</td>
+            <th>{{mb_label object=$filter_reglement field="mode"}}</th>
+            <td>{{mb_field object=$filter_reglement field="mode" emptyLabel="All" canNull="true"}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$filter field="_etat_reglement_tiers"}}</th>
+            <td>{{mb_field object=$filter field="_etat_reglement_tiers" emptyLabel="All" canNull="true"}}</td>
+            <th>{{mb_label object=$filter field="_type_affichage"}}</th>
+            <td>{{mb_field object=$filter field="_type_affichage" canNull="true"}}</td>
+          </tr>
+          <tr>
             <td class="button" colspan="2">
-              <button type="button" class="pdf" onclick="printFacture('bvr', 'CFactureCabinet');">Impression des BVR</button>
-              <button type="button" class="pdf" onclick="printFacture('justificatif', 'CFactureCabinet');">Justificatifs de remboursement</button>
+              <button class="search" type="submit" onclick="document.printFrm.a.value='print_rapport';">Validation paiements</button>
+              {{if $app->user_prefs.GestionFSE}}
+                <button class="search" type="submit" onclick="document.printFrm.a.value='print_noemie';">Rapprochements Noemie</button>
+              {{/if}}
+            </td>
+            <td>
+              <button class="print" type="submit" onclick="document.printFrm.a.value='print_compta';" style="float:right;">Impression compta</button>
+            </td>
+            <td>
+              <button class="print" type="submit" onclick="document.printFrm.a.value='print_bordereau';" style="float:left;">Impression bordereau</button>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <div class="small-info" style="text-align:center;">
+                Affichage de l'état des paiements, en fonction des dates de consultation.<br/>
+                Permet de rentrer de nouveaux paiements.
+              </div>
+            </td>
+            <td colspan="2">
+              <div class="small-info" style="text-align:center;">
+                Affichage des règlements effectués, en fonction de la date de paiement.
+              </div>
+            </td>
+          </tr>
+          {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+            <tr>
+              <td class="button" colspan="4">
+                <hr />
+              </td>
+            </tr>
+            <tr>
+              <td class="button" colspan="2">
+                <button type="button" onclick="popupImport('CFactureCabinet');" class="hslip">Importer un fichier V11</button>
+              </td>
+              <td colspan="2" class="text">
+                <div class="small-info" id="response_send_bill">
+                  Rapprochement bancaire des règlements grace au fichier V11 pour les factures de cabinet
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="button" colspan="4">
+                <hr />
+              </td>
+            </tr>
+            <tr>
+              <td class="button" colspan="2">
+                <button type="button" class="pdf" onclick="printFacture('bvr', 'CFactureCabinet');">Impression des BVR</button>
+                <button type="button" class="pdf" onclick="printFacture('justificatif', 'CFactureCabinet');">Justificatifs de remboursement</button>
+              </td>
+              <td colspan="2" rowspan="2" class="text">
+                <div class="small-info" id="response_send_bill">
+                  Envoi des factures à la Caisse des Médecins et stockage au format pdf.
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="button" colspan="2">
+                {{*
+                Identifiant:  <input name="user" type="text" value="" /><br/>
+                Mot de passe: <input name="pwd"  type="password" value="" /><br/>
+                <button type="button" class="send" onclick="checkBills();">Envoi à la Caisse des Medecins</button>
+                *}}
+                <button type="button" class="send" onclick="checkBills('CFactureCabinet');">Générer dossier pour la Caisse des medecins</button>
+              </td>
+            </tr>
+          {{/if}}
+        {{/if}}
+        {{if $conf.dPfacturation.CFactureEtablissement.view_bill}}
+          <tr>
+            <th class="category" colspan="4">Comptabilité Etablissement</th>
+          </tr>
+          <tr>
+            <th>
+              <label for="typeVue">Type d'affichage</label>
+            </th>
+            <td>
+              <select name="typeVue">
+              <option value="1">Liste complète</option>
+              <option value="2">Totaux</option>
+              </select>
             </td>
             <td colspan="2" rowspan="2" class="text">
-              <div class="small-info" id="response_send_bill">
-                Envoi des factures à la Caisse des Médecins et stockage au format pdf.
+              <div class="small-info">
+                Affichage de l'état des règlements de la liste des actes réalisés par l'établissement.
               </div>
             </td>
           </tr>
           <tr>
             <td class="button" colspan="2">
-              {{*
-              Identifiant:  <input name="user" type="text" value="" /><br/>
-              Mot de passe: <input name="pwd"  type="password" value="" /><br/>
-              <button type="button" class="send" onclick="checkBills();">Envoi à la Caisse des Medecins</button>
-              *}}
-              <button type="button" class="send" onclick="checkBills('CFactureCabinet');">Générer dossier pour la Caisse des medecins</button>
+              {{if $conf.ref_pays == 1}}
+                <button type="button" class="search" onclick="viewActes();">Validation paiements</button>
+              {{else}}
+                <button class="print" type="submit" onclick="document.printFrm.a.value='print_actes';">Validation paiements</button>
+              {{/if}}
             </td>
           </tr>
-        {{/if}}
-        <tr>
-          <th class="category" colspan="4">Comptabilité Etablissement</th>
-        </tr>
-        <tr>
-          <th>
-            <label for="typeVue">Type d'affichage</label>
-          </th>
-          <td>
-            <select name="typeVue">
-            <option value="1">Liste complète</option>
-            <option value="2">Totaux</option>
-            </select>
-          </td>
-          <td colspan="2" rowspan="2" class="text">
-            <div class="small-info">
-              Affichage de l'état des règlements de la liste des actes réalisés par l'établissement.
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td class="button" colspan="2">
-            {{if $conf.ref_pays == 1}}
-              <button type="button" class="search" onclick="viewActes();">Validation paiements</button>
-            {{else}}
-              <button class="print" type="submit" onclick="document.printFrm.a.value='print_actes';">Validation paiements</button>
-            {{/if}}
-          </td>
-        </tr>
-        {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
-          <tr>
-            <td class="button" colspan="4">
-              <hr />
-            </td>
-          </tr>
-          <tr>
-            <td class="button" colspan="2">
-              <button type="button" class="pdf" onclick="printFacture('bvr', 'CFactureEtablissement');">Impression des BVR</button>
-              <button type="button" class="pdf" onclick="printFacture('justificatif', 'CFactureEtablissement');">Justificatifs de remboursement</button>
-            </td>
-            <td rowspan="2" colspan="2" class="text">
-              <div class="small-info" id="response_send_bill">
-                Envoi des factures à la Caisse des Médecins et stockage au format pdf.
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="button" colspan="2">
-              <button type="button" class="send" onclick="checkBills('CFactureEtablissement');">Générer dossier pour la Caisse des medecins</button>
-            </td>
-          </tr>
+          {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+            <tr>
+              <td class="button" colspan="4">
+                <hr />
+              </td>
+            </tr>
+            <tr>
+            <tr>
+              <td class="button" colspan="2">
+                <button type="button" onclick="popupImport('CFactureEtablissement');" class="hslip">Importer un fichier V11</button>
+              </td>
+              <td colspan="2" class="text">
+                <div class="small-info" id="response_send_bill">
+                  Rapprochement bancaire des règlements grace au fichier V11 pour les factures de cabinet
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="button" colspan="4">
+                <hr />
+              </td>
+            </tr>
+            <tr>
+              <td class="button" colspan="2">
+                <button type="button" class="pdf" onclick="printFacture('bvr', 'CFactureEtablissement');">Impression des BVR</button>
+                <button type="button" class="pdf" onclick="printFacture('justificatif', 'CFactureEtablissement');">Justificatifs de remboursement</button>
+              </td>
+              <td rowspan="2" colspan="2" class="text">
+                <div class="small-info" id="response_send_bill">
+                  Envoi des factures à la Caisse des Médecins et stockage au format pdf.
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="button" colspan="2">
+                <button type="button" class="send" onclick="checkBills('CFactureEtablissement');">Générer dossier pour la Caisse des medecins</button>
+              </td>
+            </tr>
+          {{/if}}
         {{/if}}
         <tr>
           <th class="category" colspan="4">

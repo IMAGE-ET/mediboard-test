@@ -12,10 +12,12 @@
 $dPconfig["dPfacturation"] = array (
   "CFactureEtablissement" => array(
     "use_temporary_bill"  => "0",
-    "use_auto_cloture"    => "0"
+    "use_auto_cloture"    => "0",
+    "view_bill"           => "1"
   ),
   "CFactureCabinet" => array(
-    "use_auto_cloture"  => "1"
+    "use_auto_cloture"  => "1",
+    "view_bill"         => "1"
   ),
   "CRelance" => array(
     "use_relances"   => "0",

@@ -11,13 +11,15 @@
     {{assign var=class value=CFactureEtablissement}}
     {{mb_include module=system template=inc_config_bool var=use_temporary_bill}}
     {{mb_include module=system template=inc_config_bool var=use_auto_cloture}}
-    
+    {{mb_include module=system template=inc_config_bool var=view_bill}}
+
     <tr>
       <th class="category" colspan="2">{{tr}}CFactureCabinet{{/tr}}</th>
     </tr>
     {{assign var=class value=CFactureCabinet}}
     {{mb_include module=system template=inc_config_bool var=use_auto_cloture}}
-    
+    {{mb_include module=system template=inc_config_bool var=view_bill}}
+
     {{if $conf.ref_pays == 2}}
       <tr>
         <th class="category" colspan="2">{{tr}}Other{{/tr}}</th>
