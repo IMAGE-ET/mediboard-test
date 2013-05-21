@@ -1,11 +1,14 @@
-<?php /* $ */
+<?php
 
 /**
- *  @package Mediboard
- *  @subpackage dPcompteRendu
- *  @version $Revision: $
- *  @author SARL OpenXtrem
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Liste des modèles d'un pack de modèles
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkEdit();
@@ -19,6 +22,7 @@ $pack->loadBackRefs("modele_links", "modele_to_pack_id");
 
 // Création du template
 $smarty = new CSmartyDP();
+
 $smarty->assign("pack", $pack);
-$smarty->display("inc_list_modeles_links.tpl"); 
-?>
+
+$smarty->display("inc_list_modeles_links.tpl");

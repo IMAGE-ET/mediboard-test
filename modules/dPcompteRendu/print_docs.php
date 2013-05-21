@@ -1,12 +1,14 @@
-<?php 
+<?php
+
 /**
- * $Id$
- * 
- * @package    Mediboard
- * @subpackage dPcompteRendu
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * Impression d'une sélection de documents
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
 CAppUI::requireLibraryFile("PDFMerger/PDFMerger");
@@ -15,7 +17,7 @@ $nbDoc     = CValue::get("nbDoc");
 $documents = array();
 $pdf       = new PDFMerger();
 
-foreach ($nbDoc as $compte_rendu_id => $nb_print){
+foreach ($nbDoc as $compte_rendu_id => $nb_print) {
   if ($nb_print > 0) {
     $compte_rendu = new CCompteRendu();
     $compte_rendu->load($compte_rendu_id);
@@ -34,4 +36,6 @@ foreach ($nbDoc as $compte_rendu_id => $nb_print){
 try {
   $pdf->merge('browser', 'documents.pdf');
 }
-catch(Exception $e) {}
+catch(Exception $e) {
+  CApp::rip();
+}

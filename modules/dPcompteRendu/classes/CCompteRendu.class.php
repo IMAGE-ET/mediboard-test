@@ -1,12 +1,13 @@
 <?php
+
 /**
  * $Id$
- * 
- * @package    Mediboard
- * @subpackage dPcompteRendu
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$ 
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @link     http://www.mediboard.org
  */
 
 /**
@@ -422,7 +423,8 @@ class CCompteRendu extends CDocumentItem {
   function loadRefsFwd() {
     parent::loadRefsFwd();
 
-    $this->_ref_object->loadRefsFwd();
+    $object = $this->_ref_object;
+    $object->loadRefsFwd();
 
     // Utilisateur
     $this->_ref_user = new CMediusers();
@@ -432,14 +434,17 @@ class CCompteRendu extends CDocumentItem {
     elseif ($this->object_id) {
       switch ($this->object_class) {
         case "CConsultation" :
-          $this->_ref_user->load($this->_ref_object->_ref_plageconsult->chir_id);
+          /** @var $object CConsultation */
+          $this->_ref_user->load($object->_ref_plageconsult->chir_id);
           break;
         case "CConsultAnesth" :
-          $this->_ref_object->_ref_consultation->loadRefsFwd();
-          $this->_ref_user->load($this->_ref_object->_ref_consultation->_ref_plageconsult->chir_id);
+          /** @var $object CConsultAnesth */
+          $object->_ref_consultation->loadRefsFwd();
+          $this->_ref_user->load($object->_ref_consultation->_ref_plageconsult->chir_id);
           break;
         case "COperation" :
-          $this->_ref_user->load($this->_ref_object->chir_id);
+          /** @var $object COperation */
+          $this->_ref_user->load($object->chir_id);
           break;
       }
     }
@@ -1005,7 +1010,6 @@ class CCompteRendu extends CDocumentItem {
         case "footer":
           $position = $position[$type];
           $sizeheader = $sizeheader != '' ? $sizeheader : 50;
-          $hauteur_position = 0;
 
           $style .= "
             #{$type} {
@@ -1554,8 +1558,6 @@ class CCompteRendu extends CDocumentItem {
         $source = preg_replace("/(#footer\s*\{\s*footer:\s*)([0-9]+[\.0-9]*)px;/", '${1}'.$height.'px;',     $source);
         $source = preg_replace("/(body\s*\{\s*margin-bottom:\s*)([0-9]+[\.0-9]*)px;/", '${1}'.$height.'px;', $source);
 
-        $pos_style  = strpos($source, "</style>") + 9;
-        $pos_header = strpos($source, "<div id=\"header\"");
         $pos_footer = strpos($source, "<div id=\"footer\"");
         $pos_body   = strpos($source, "<div id=\"body\">");
         if ($pos_footer) {

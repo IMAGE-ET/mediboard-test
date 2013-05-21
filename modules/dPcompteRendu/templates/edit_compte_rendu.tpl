@@ -133,7 +133,7 @@ function refreshZones(id, obj) {
     if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
       Thumb.compte_rendu_id = id;
       Thumb.modele_id = 0;
-      var refresh = function() { window.thumbs_timeout = setTimeout(function() {
+      refresh = function() { window.thumbs_timeout = setTimeout(function() {
         Thumb.refreshThumbs(0, Thumb.print);
       }, 0)};
     }
@@ -314,7 +314,7 @@ Main.add(function(){
   {{/if}}
   
   window.onbeforeunload = function(e) {
-    var e = e || window.event;
+    e = e || window.event;
     
     if (Thumb.contentChanged == false) return;
 
@@ -369,7 +369,7 @@ Main.add(function(){
 
 </script>
 
-<iframe name="download_pdf" style="width: 0px; height: 0px; position: absolute; top: -1000px;">
+<iframe name="download_pdf" style="width: 0; height: 0; position: absolute; top: -1000px;">
 </iframe>
 
 <div style="position: absolute; top: -1500px;">

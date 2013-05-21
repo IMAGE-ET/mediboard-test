@@ -32,12 +32,13 @@
             {{/if}}
           </button>
         </span>
+        Cible :
         {{if $transmission->object_id && $transmission->object_class}}
           {{assign var=classes value=' '|explode:"CPrescriptionLineMedicament CPrescriptionLineElement CAdministration CPrescriptionLineMix"}}
           {{if in_array($transmission->object_class, $classes)}}
             <span
               title="{{$transmission->_ref_object->_view}} {{if $transmission->_ref_object instanceof CPrescriptionLineElement && $transmission->_ref_object->commentaire}}({{$transmission->_ref_object->commentaire}}){{/if}}"
-              style="float: left; border: 2px solid #800; width: 5px; height: 11px; margin-right: 3px;">
+              style="border: 2px solid #800; padding-left: 2px; padding-right: 2px; margin-right: 3px;">
             </span>
           {{/if}}
 

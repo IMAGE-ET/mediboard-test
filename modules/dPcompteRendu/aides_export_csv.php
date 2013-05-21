@@ -1,13 +1,15 @@
-<?php /* $Id: cellSaver.class.php 6103 2009-04-16 13:36:52Z phenxdesign $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPcompteRendu
- * @version $Revision: 6103 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Export CSV des aides à la saisie
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
-
 CCanDo::checkRead();
 
 $list  = CValue::get('id', array());
@@ -20,7 +22,10 @@ if (!is_array($list)) {
 
 $out = fopen('php://output', 'w');
 header('Content-Type: application/csv');
-header('Content-Disposition: attachment; filename="Aides saisie'. ($owner ? " - $owner" : '') . ($object_class ? " - ".CAppUI::tr($object_class) : '') . '.csv"');
+header(
+  'Content-Disposition: attachment;'.
+  'filename="Aides saisie'. ($owner ? " - $owner" : '') . ($object_class ? " - ".CAppUI::tr($object_class) : '') . '.csv"'
+);
 
 $aide = new CAideSaisie();
 fputcsv($out, array_keys($aide->getCSVFields()));

@@ -1,21 +1,31 @@
-<?php /* $Id$ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * Setup CompteRendu
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 
+/**
+ * Class CSetupdPcompteRendu
+ * Setup CompteRendu
+ */
 class CSetupdPcompteRendu extends CSetup {
   
   /**
    * Build an SQL query to replace a template string
    * Will check over content_html table to specify update query
-   * @param string $search
-   * @param string $newname
-   * @param bool $force_content_table
-   * @return string The SQL Query
+   *
+   * @param string $search              text to search
+   * @param string $replace             text to replace
+   * @param bool   $force_content_table Update content_html or compte_rendu table [optional]
+   *
+   * @return string The sql query
    */
   static function replaceTemplateQuery($search, $replace, $force_content_table = false) {
     static $_compte_rendu = null;
@@ -48,16 +58,20 @@ class CSetupdPcompteRendu extends CSetup {
   /**
    * Build an SQL query to rename a template field 
    * Will check over content_html table to specify update query
-   * @param string $search
-   * @param string $newname
-   * @param bool $force_content_table
+   *
+   * @param string $oldname             text to search
+   * @param string $newname             text to replace
+   * @param bool   $force_content_table update content_html or compte_rendu table [optional]
+   *
    * @return string The SQL Query
    */
   static function renameTemplateFieldQuery($oldname, $newname, $force_content_table = false) {
     return self::replaceTemplateQuery("[$oldname]", "[$newname]", $force_content_table);
   }
 
-  
+  /**
+   * @see parent::__construct()
+   */
   function __construct() {
     parent::__construct();
     
@@ -150,12 +164,15 @@ class CSetupdPcompteRendu extends CSetup {
     
     $this->makeRevision("0.19");
     $this->setTimeLimit(1800);
-    $query = "ALTER TABLE `compte_rendu` CHANGE `type` `type` ENUM('consultation', 'consultAnesth', 'operation', 'hospitalisation', 'autre') DEFAULT 'autre' NOT NULL";
+    $query = "ALTER TABLE `compte_rendu`
+      CHANGE `type` `type` ENUM('consultation', 'consultAnesth', 'operation', 'hospitalisation', 'autre') DEFAULT 'autre' NOT NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.20");
     $this->setTimeLimit(1800);
-    $query = "ALTER TABLE `compte_rendu` CHANGE `type` `type` ENUM('patient', 'consultation', 'consultAnesth', 'operation', 'hospitalisation', 'autre') DEFAULT 'autre' NOT NULL";
+    $query = "ALTER TABLE `compte_rendu`
+      CHANGE `type` `type` ENUM('patient', 'consultation', 'consultAnesth', 'operation', 'hospitalisation', 'autre')
+      DEFAULT 'autre' NOT NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.21");
@@ -169,7 +186,7 @@ class CSetupdPcompteRendu extends CSetup {
     
     $this->makeRevision("0.23");
     $this->setTimeLimit(1800);
-    $this->addDependency("dPfiles","0.14");
+    $this->addDependency("dPfiles", "0.14");
     $query = "ALTER TABLE `compte_rendu` CHANGE `type` `object_class` VARCHAR(30) DEFAULT NULL;";
     $this->addQuery($query);
     $query = "ALTER TABLE `compte_rendu` ADD `file_category_id` INT(11) DEFAULT 0;";
@@ -188,8 +205,8 @@ class CSetupdPcompteRendu extends CSetup {
       
       // Création de nouvelle catégories
       if ($sNom = $aValue["nom"]) {
-       $query = "INSERT INTO files_category (`nom`,`class`) VALUES ('$sNom','$sClass')";
-       $this->addQuery($query);
+        $query = "INSERT INTO files_category (`nom`,`class`) VALUES ('$sNom','$sClass')";
+        $this->addQuery($query);
       }
       
       // Passage des types aux classes
@@ -219,7 +236,8 @@ class CSetupdPcompteRendu extends CSetup {
                "\nCHANGE `object_id` `object_id` int(11) unsigned NULL," .
                "\nCHANGE `nom` `nom` varchar(255) NOT NULL," .
                "\nCHANGE `source` `source` mediumtext NULL," .
-               "\nCHANGE `object_class` `object_class` enum('CPatient','CConsultAnesth','COperation','CConsultation') NOT NULL DEFAULT 'CPatient'," .
+               "\nCHANGE `object_class` `object_class` enum('CPatient','CConsultAnesth','COperation','CConsultation')
+                  NOT NULL DEFAULT 'CPatient'," .
                "\nCHANGE `valide` `valide` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0'," .
                "\nCHANGE `file_category_id` `file_category_id` int(11) unsigned NOT NULL DEFAULT '0';";
     $this->addQuery($query);
@@ -282,12 +300,13 @@ class CSetupdPcompteRendu extends CSetup {
     
     $this->makeRevision("0.31");
     $this->setTimeLimit(1800);
-    $query = "ALTER TABLE `compte_rendu` CHANGE `object_class` `object_class` ENUM('CPatient','CConsultAnesth','COperation','CConsultation','CSejour') NOT NULL;";
+    $query = "ALTER TABLE `compte_rendu`
+      CHANGE `object_class` `object_class` ENUM('CPatient','CConsultAnesth','COperation','CConsultation','CSejour') NOT NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.32");
     $query = "ALTER TABLE `pack`
-            ADD `object_class` ENUM('CPatient','CConsultAnesth','COperation','CConsultation','CSejour') NOT NULL DEFAULT 'COperation';";
+      ADD `object_class` ENUM('CPatient','CConsultAnesth','COperation','CConsultation','CSejour') NOT NULL DEFAULT 'COperation';";
     $this->addQuery($query);
     
     $this->makeRevision("0.33");
@@ -368,7 +387,8 @@ class CSetupdPcompteRendu extends CSetup {
     $this->makeRevision("0.43");
     $this->setTimeLimit(1800);
     $query = "ALTER TABLE `compte_rendu` 
-            CHANGE `object_class` `object_class` ENUM ('CPatient','CConsultation','CConsultAnesth','COperation','CSejour','CPrescription') NOT NULL;";
+    CHANGE `object_class` `object_class` ENUM ('CPatient','CConsultation','CConsultAnesth','COperation','CSejour','CPrescription')
+    NOT NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.44");
@@ -481,20 +501,30 @@ class CSetupdPcompteRendu extends CSetup {
     $this->addQuery($query);
     
    
-    // Insertion des modèles par référence pour les packs
-    function setup_addmodeles() {
+    /**
+     * Insertion des modèles par référence pour les packs
+     *
+     * @return boolean
+     */
+    function setupAddmodeles() {
       $ds = CSQLDataSource::get("std");
       $query = "SELECT * from pack;";  
       $packs = $ds->loadList($query);
 
-      foreach($packs as $_pack) {
-        if ($_pack['modeles'] == '') continue;
+      foreach ($packs as $_pack) {
+        if ($_pack['modeles'] == '') {
+          continue;
+        }
         $modeles = explode("|", $_pack['modeles']);
-        if (count($modeles) == 0) continue;
+        if (count($modeles) == 0) {
+          continue;
+        }
         
         $compterendu = new CCompteRendu;
-        foreach($modeles as $_modele) {
-          if (!$compterendu->load($_modele)) continue;
+        foreach ($modeles as $_modele) {
+          if (!$compterendu->load($_modele)) {
+            continue;
+          }
           $query = "INSERT INTO modele_to_pack (modele_id, pack_id)
                   VALUES ($_modele, {$_pack['pack_id']})";
           $ds->exec($query);
@@ -503,7 +533,7 @@ class CSetupdPcompteRendu extends CSetup {
       return true;
     }
     
-    $this->addFunction("setup_addmodeles");
+    $this->addFunction("setupAddmodeles");
     
     $this->makeRevision("0.56");
     
@@ -823,8 +853,10 @@ class CSetupdPcompteRendu extends CSetup {
     $this->delPrefQuery("default_size");
     
     $query = "ALTER TABLE `compte_rendu` 
-              ADD `font` ENUM ('arial','comic','courier','georgia','lucida','tahoma','times','trebuchet','verdana') AFTER `object_class`,
-              ADD `size` ENUM ('xx-small','x-small','small','medium','large','x-large','xx-large','8pt','9pt','10pt','11pt','12pt','14pt','16pt','18pt','20pt','22pt','24pt','26pt','28pt','36pt','48pt','72pt') AFTER `font`";
+      ADD `font` ENUM ('arial','comic','courier','georgia','lucida','tahoma','times','trebuchet','verdana') AFTER `object_class`,
+      ADD `size` ENUM ('xx-small','x-small','small','medium','large','x-large','xx-large',
+                       '8pt','9pt','10pt','11pt','12pt','14pt','16pt','18pt','20pt','22pt','24pt','26pt','28pt','36pt','48pt','72pt')
+      AFTER `font`";
     $this->addQuery($query);
     
     $this->makeRevision("0.84");
@@ -841,7 +873,8 @@ class CSetupdPcompteRendu extends CSetup {
     
     $this->makeRevision("0.86");
     $query = "ALTER TABLE `compte_rendu`
-      CHANGE `font` `font` ENUM ('arial','calibri','comic','courier','georgia','lucida','symbol','tahoma','times','trebuchet','verdana','zapfdingbats')";
+      CHANGE `font` `font` ENUM ('arial','calibri','comic','courier','georgia','lucida','symbol','tahoma',
+                                 'times','trebuchet','verdana','zapfdingbats')";
     $this->addQuery($query);
     
     $this->makeRevision("0.87");

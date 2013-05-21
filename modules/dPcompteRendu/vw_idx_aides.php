@@ -1,13 +1,15 @@
-<?php /* $Id$ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision$
-* @author Thomas Despoix
-*/
-
-global $m;
+ * Interface des aides à la saisie
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 
 CCanDo::checkRead();
 
@@ -26,34 +28,36 @@ $classes = array_flip(CApp::getInstalledClasses());
 $listTraductions = array();
 
 // Chargement des champs d'aides a la saisie
-foreach ($classes as $class => &$infos) {  
+foreach ($classes as $class => &$infos) {
   $listTraductions[$class] = CAppUI::tr($class);
   $object = new $class;
   $infos = array();
   foreach ($object->_specs as $field => $spec) {
-   	if (isset($spec->helped)) {
-   	  $info =& $infos[$field];
-   	  $helped = $spec->helped;
+    if (isset($spec->helped)) {
+      $info =& $infos[$field];
+      $helped = $spec->helped;
 
-   	  if (!is_array($helped)) {
-   	    $info = null;
-   	    continue;
-   	  }
-   	  
-   	  foreach($helped as $i => $depend_field) {
-   	    $key = "depend_value_" . ($i+1);
-   	    $info[$key] = array();
-   	    $list = &$info[$key];
-   	    $list = array();
-   	    // Because some depend_fields are not enums (like object_class from CCompteRendu)
-        if (!isset($object->_specs[$depend_field]->_list)) continue;
-   	    foreach ($object->_specs[$depend_field]->_list as $value) {
-   	      $locale = "$class.$depend_field.$value";
-   	      $list[$value] = $locale;
-   	      $listTraductions[$locale] = CAppUI::tr($locale);
-   	    }
-   	  }
-   	}
+      if (!is_array($helped)) {
+        $info = null;
+        continue;
+      }
+
+      foreach ($helped as $i => $depend_field) {
+        $key = "depend_value_" . ($i+1);
+        $info[$key] = array();
+        $list = &$info[$key];
+        $list = array();
+        // Because some depend_fields are not enums (like object_class from CCompteRendu)
+        if (!isset($object->_specs[$depend_field]->_list)) {
+          continue;
+        }
+        foreach ($object->_specs[$depend_field]->_list as $value) {
+          $locale = "$class.$depend_field.$value";
+          $list[$value] = $locale;
+          $listTraductions[$locale] = CAppUI::tr($locale);
+        }
+      }
+    }
   }
 }
 
@@ -73,6 +77,7 @@ $order = "`users`.`user_last_name`, `users`.`user_first_name`";
 
 $listPrat = $listPrat->loadList($where, $order, null, null, $ljoin);
 
+/** @var $mediuser CMediusers */
 foreach ($listPrat as $keyUser => $mediuser) {
   $mediuser->_ref_function =& $listFct[$mediuser->function_id];
 }
@@ -119,4 +124,3 @@ $smarty->assign("order_way"       , $order_way);
 $smarty->assign("aide_id"         , $aide_id);
 
 $smarty->display("vw_idx_aides.tpl");
-?>

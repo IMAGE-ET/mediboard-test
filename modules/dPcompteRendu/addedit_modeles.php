@@ -1,11 +1,15 @@
-<?php /* $Id$ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * Création / Modification d'un modèle
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 
 CCanDo::checkRead();
 
@@ -49,7 +53,7 @@ if (!$compte_rendu->_id) {
 if ($compte_rendu->object_id) {
   $compte_rendu = new CCompteRendu();
 }
-else{
+else {
   $compte_rendu->loadRefCategory();
 }
 
@@ -85,14 +89,14 @@ if ($compte_rendu->_id) {
 $listObjectClass     = array();
 $listObjectAffichage = array();
 
-foreach (CCompteRendu::getTemplatedClasses() as $valueClass => $localizedClassName){
+foreach (CCompteRendu::getTemplatedClasses() as $valueClass => $localizedClassName) {
   $listObjectClass[$valueClass]     = array();
   $listObjectAffichage[$valueClass] = utf8_encode($localizedClassName);
 }
 
 foreach ($listObjectClass as $keyClass => $value) {
   $listCategory = CFilesCategory::listCatClass($keyClass);
-  foreach($listCategory as $keyCat=>$valueCat){
+  foreach ($listCategory as $keyCat=>$valueCat) {
     $listObjectClass[$keyClass][$keyCat] = utf8_encode($listCategory[$keyCat]->nom);
   }
 }
@@ -117,7 +121,8 @@ if ($compte_rendu->_id) {
   else if ($compte_rendu->group_id) {
     $owner = 'etab';
     $id = $compte_rendu->group_id;
-  } else {
+  }
+  else {
     $owner = 'etab';
     $id = CGroups::loadCurrent()->_id;
   }
@@ -151,7 +156,7 @@ if ($compte_rendu->_id) {
     case "body":
       $compte_rendu->_count_utilisation = $compte_rendu->countBackRefs("pack_links");
       break;
-    case "preface":
+    case "ending":
       $compte_rendu->_count_utilisation = $compte_rendu->countBackRefs("modeles_ended");
       break;
     case "footer":

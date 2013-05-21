@@ -1,12 +1,13 @@
 <?php
+
 /**
  * $Id$
  *
- * @package    Mediboard
- * @subpackage dPcompteRendu
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @link     http://www.mediboard.org
  */
 
 /**
@@ -444,7 +445,7 @@ class CTemplateManager {
   /**
    * Applique les champs variable sur un document
    *
-   * @param CTemplateManager $template TemplateManager sur lequel s'applique le document
+   * @param CCompteRendu|CPack $template TemplateManager sur lequel s'applique le document
    *
    * @return void
    */

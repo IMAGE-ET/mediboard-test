@@ -1,19 +1,23 @@
-<?php /* $Id$ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * CCompteRendu aed
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 
-if( isset($_POST["_do_empty_pdf"])) {
+if (isset($_POST["_do_empty_pdf"])) {
   $compte_rendu_id = CValue::post("compte_rendu_id");
   $compte_rendu = new CCompteRendu();
   $compte_rendu->load($compte_rendu_id);
 
   $compte_rendu->loadRefsFiles();
-  foreach($compte_rendu->_ref_files as $_file) {
+  foreach ($compte_rendu->_ref_files as $_file) {
     $_file->file_empty();
   }
   CApp::rip();
@@ -48,10 +52,11 @@ if (isset($_POST["_texte_libre"])) {
   $values = array();
 
   // Remplacement des \n par des <br>
-  foreach($_POST["_texte_libre"] as $key=>$_texte_libre) {
+  foreach ($_POST["_texte_libre"] as $key=>$_texte_libre) {
     $is_empty = false;
     if (($check_to_empty_field && isset($_POST["_empty_texte_libre"][$key])) ||
-        (!$check_to_empty_field && !isset($_POST["_empty_texte_libre"][$key]))) {
+        (!$check_to_empty_field && !isset($_POST["_empty_texte_libre"][$key]))
+    ) {
       $values[] = "";
       $is_empty = true;
     }
@@ -79,7 +84,7 @@ $do_merge = CValue::post("do_merge", 0);
 
 if (isset($_POST["_source"])) {
   // Ajout d'entête / pied de page à la volée
-  if (CAppUI::conf("dPcompteRendu CCompteRendu header_footer_fly") && $_POST["object_id"]) {
+  if (CAppUI::conf("dPcompteRendu CCompteRendu header_footer_fly") && $_POST["object_id"] && !isset($_POST["fast_edit"])) {
     $modele = new CCompteRendu();
     $modele->load($_POST["modele_id"]);
 
@@ -101,8 +106,8 @@ if (isset($_POST["_source"])) {
         $_POST["_source"] = $modele->generateDocFromModel($_POST["_source"], $header_id, $footer_id);
       }
     }
-    // Document existant
     else {
+      // Document existant
       $cr = new CCompteRendu();
       $cr->load($_POST["compte_rendu_id"]);
 
@@ -131,7 +136,8 @@ if (isset($_POST["_source"])) {
       $list->load($list_id);
       $is_empty = false;
       if (($check_to_empty_field && isset($_POST["_empty_list"][$list_id])) ||
-          (!$check_to_empty_field && !isset($_POST["_empty_list"][$list_id]))) {
+          (!$check_to_empty_field && !isset($_POST["_empty_list"][$list_id]))
+      ) {
         $values[] = "";
         $is_empty = true;
       }
@@ -167,15 +173,16 @@ if (isset($_POST["_source"])) {
   }
   
   // Application des destinataires
-  foreach($_POST as $key => $value) {
+  foreach ($_POST as $key => $value) {
     // Remplacement des destinataires
-    if(preg_match("/_dest_([\w]+)_([0-9]+)/", $key, $dest)) {
+    if (preg_match("/_dest_([\w]+)_([0-9]+)/", $key, $dest)) {
       $destinataires[] = $dest;
     }
   }
   
   if (count($destinataires) && $do_merge) {
     $object = new $_POST["object_class"];
+    /** @var $object CMbObject */
     $object->load($_POST["object_id"]);
     CDestinataire::makeAllFor($object);
     $allDest = CDestinataire::$destByClass;
@@ -190,7 +197,7 @@ if (isset($_POST["_source"])) {
     // On sort l'en-tête et le pied de page
     $posBody      = strpos($_POST["_source"], $bodyTag);
 
-    if($posBody) {
+    if ($posBody) {
       $headerfooter = substr($_POST["_source"], 0, $posBody);
       $index_div    = strrpos($_POST["_source"], "</div>")-($posBody+strlen($bodyTag));
       $body         = substr($_POST["_source"], $posBody+strlen($bodyTag), $index_div);
@@ -209,7 +216,7 @@ if (isset($_POST["_source"])) {
     $modele_base = clone $do->_obj;
     $source_base = $body;
     
-    foreach($destinataires as &$curr_dest) {
+    foreach ($destinataires as &$curr_dest) {
       $fields = array(
         CMbString::htmlEntities("[Courrier - nom destinataire]"),
         CMbString::htmlEntities("[Courrier - adresse destinataire]"),
@@ -226,7 +233,7 @@ if (isset($_POST["_source"])) {
       $copyToComplet = "";
       $copyToCompletMulti = "";
       
-      foreach($destinataires as $_dest) {
+      foreach ($destinataires as $_dest) {
         if ($curr_dest[0] == $_dest[0]) {
           continue;
         }
@@ -280,13 +287,13 @@ if (isset($_POST["_source"])) {
         if ($do->_obj->_id && $curr_dest === reset($destinataires)) {
           $compte_rendu = $do->_obj;
         }
-        // Sinon clone du modèle
         else {
+          // Sinon clone du modèle
           $compte_rendu = clone $modele_base;
           $compte_rendu->_id     = null;
           $compte_rendu->_ref_content = null;
           $compte_rendu->user_id    = null;
-          $comte_rendu->function_id = null;
+          $compte_rendu->function_id = null;
           $compte_rendu->group_id   = null;
           $do->_obj = $compte_rendu;
         }
@@ -327,12 +334,18 @@ if (!count($destinataires) || !$do_merge || !CAppUI::conf("dPcompteRendu CCompte
       $do->_obj->margin_right,
       $do->_obj->margin_bottom,
       $do->_obj->margin_left);
-    $do->_obj->_entire_doc = CCompteRendu::loadHTMLcontent($do->_obj->_source, "", $margins, CCompteRendu::$fonts[$do->_obj->font], $do->_obj->size);
+    $do->_obj->_entire_doc = CCompteRendu::loadHTMLcontent(
+      $do->_obj->_source,
+      "",
+      $margins,
+      CCompteRendu::$fonts[$do->_obj->font],
+      $do->_obj->size);
   }
 }
 
 // On supprime les correspondants
 $correspondants_courrier = $do->_obj->loadRefsCorrespondantsCourrier();
+/** @var $_corres CCorrespondantCourrier */
 foreach ($correspondants_courrier as $_corres) {
   if ($msg = $_corres->delete()) {
     CAppUI::setMsg($msg, UI_MSG_ERROR);
@@ -350,7 +363,9 @@ if (!$do_merge && !intval(CValue::post("del")) && strpos($do->_obj->_source, "[C
   
   foreach ($allDest as $class => $_dest_by_class) {
     foreach ($_dest_by_class as $i => $_dest) {
-      if (!isset($_POST["_dest_{$class}_$i"])) continue;
+      if (!isset($_POST["_dest_{$class}_$i"])) {
+        continue;
+      }
       list($object_class, $object_id) = split("-", $_dest->_guid_object);
       $corres = new CCorrespondantCourrier;
       $corres->compte_rendu_id = $do->_obj->_id;
@@ -391,14 +406,14 @@ if ($do->ajax) {
 }
 else {
   // Si c'est un compte rendu
-  if($do->_obj->object_id && !intval(CValue::post("del"))) {
+  if ($do->_obj->object_id && !intval(CValue::post("del"))) {
     $do->redirect = "m=dPcompteRendu&a=edit_compte_rendu&dialog=1&compte_rendu_id=".$do->_obj->_id;
   }
   else if (intval(CValue::post("del") && isset($_POST["_tab"]))) {
     $do->redirect = "m=dPcompteRendu&a=vw_modeles";
   }
-  // Si c'est un modèle de compte rendu
-  else { 
+  else {
+    // Si c'est un modèle de compte rendu
     $do->redirect = "m=dPcompteRendu&tab=addedit_modeles&compte_rendu_id=".$do->_obj->_id;
   }
   $do->doRedirect();

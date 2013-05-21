@@ -1,11 +1,14 @@
-<?php /* $ */
+<?php
 
 /**
- *  @package Mediboard
- *  @subpackage dPcompteRendu
- *  @version $Revision: $
- *  @author SARL OpenXtrem
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Modale des destinataires possibles pour un docitem
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();

@@ -1,21 +1,15 @@
-<?php /* $Id$ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision$
-* @author Romain OLLIVIER
-*/
+ * CListeChoix aed
+ *
+ * @category DPcompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 
-$do = new CDoObjectAddEdit("CListeChoix", "liste_choix_id");
-$do->doBind();
-if (intval(CValue::post('del'))) {
-  $do->doDelete();
-  $do->redirect = "m=dPcompteRendu&liste_id=0";
-} else {
-  $do->doStore();
-  $do->redirect = "m=dPcompteRendu&liste_id=".$do->_obj->liste_choix_id;
-}
-$do->doRedirect();
-
-?>
+$do = new CDoObjectAddEdit("CListeChoix");
+$do->doIt();

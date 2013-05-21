@@ -1,36 +1,53 @@
-<?php /* $Id: $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPpersonnel
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * CCorrespondantCourrier aed
+ *
+ * @category Printing
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
+/**
+ * Lien entre une imprimante réseau et une fonction
+ */
 class CPrinter extends CMbMetaObject {
   // DB Table key
-  var $printer_id = null;
+  public $printer_id;
   
   // DB Fields
-  var $function_id = null;
+  public $function_id;
   
   // Ref fields
-  var $_ref_function = null;
-  var $_ref_source   = null;
-  
+  public $_ref_function;
+  public $_ref_source;
+
+  /**
+   * @see parent::getSpec
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'printer';
     $spec->key   = 'printer_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::loadTargetObject
+   */
   function loadTargetObject() {
     parent::loadTargetObject();
-    $this->_view = $this->_ref_object->name;
+    $object = $this->_ref_object;
+    /** @var  $object CFunctions */
+    $this->_view = $object->text;
   }
-  
+
+  /**
+   * @see parent::getProps
+   */
   function getProps() {
     $props = parent::getProps();
     
@@ -40,15 +57,25 @@ class CPrinter extends CMbMetaObject {
     
     return $props;
   }
-  
+
+  /**
+   * Charge la fonction associée à l'imprimante
+   *
+   * @param bool $cached Load from cache
+   *
+   * @return CFunctions
+   */
   function loadRefFunction($cached = true){
     return $this->_ref_function = $this->loadFwdRef("function_id", $cached);
   }
-  
+
+  /**
+   * Charge la source d'impression
+   *
+   * @return CSourcePrinter
+   */
   function loadRefSource() {
     $source_guid = $this->object_class.'-'.$this->object_id;
     return $this->_ref_source = CMbObject::loadFromGuid($source_guid);
   }
 }
-
-?>

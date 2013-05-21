@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPcompteRendu
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Import CSV des aides à la saisie
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -15,6 +18,7 @@ $user_id      = CValue::get("user_id");
 $property     = CValue::get("property");
 
 $object = new $object_class;
+/** @var CMbObject $object */
 $object->loadAides($user_id);
 
 // Tableau de depend value

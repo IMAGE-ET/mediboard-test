@@ -1,11 +1,15 @@
-<?php /* $Id: vw_idx_listes.php 12241 2011-05-20 10:29:53Z flaviencrochard $ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision: 12241 $
-* @author Romain OLLIVIER
-*/
+ * Affichage d'une liste de listes de choix
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 
 CCanDo::checkRead();
 
@@ -20,6 +24,7 @@ $listes  = CListeChoix::loadAllFor($user->_id);
 // Modèles associés
 foreach ($listes as $_listes) {
   foreach ($_listes as $_liste) {
+    /** @var $_liste CListeChoix */
     $_liste->loadRefModele();
   }
 }
@@ -33,5 +38,3 @@ $smarty->assign("owners"  , $owners);
 $smarty->assign("listes"  , $listes);
 
 $smarty->display("inc_list_listes_choix.tpl");
-
-?>

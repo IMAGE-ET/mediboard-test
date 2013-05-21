@@ -1,11 +1,14 @@
-<?php /* $Id: $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPcompteRendu
- * @version $Revision:  $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Génération du PDF d'un compte-rendu et stream au client ou envoi vers une imprimante réseau
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
 // Si on a un file_id, on stream le pdf
@@ -51,7 +54,13 @@ $file->file_name  = $compte_rendu->nom . ".pdf";
 $file->author_id = CAppUI::$user->_id;
 
 $htmltopdf = new CHtmlToPDF;
-$htmltopdf->generatePDF($content, 0, $compte_rendu->_page_format, @isset(CCompteRendu::$_page_formats[$compte_rendu->_page_format]) ? $compte_rendu->_orientation : null, $file);
+$htmltopdf->generatePDF(
+  $content,
+  0,
+  $compte_rendu->_page_format,
+  @isset(CCompteRendu::$_page_formats[$compte_rendu->_page_format]) ? $compte_rendu->_orientation : null,
+  $file
+);
 
 $file->file_size = filesize($file->_file_path);
 $msg = $file->store();
@@ -61,7 +70,7 @@ echo CAppUI::getMsg();
 
 // Un callback pour le stream du pdf
 if ($stream) {
-  echo "\n<script type=\"text/javascript\">streamPDF($file->_id)</script>";
+  echo "\n<script type=\"text/javascript\">streamPDF(".$file->_id.")</script>";
 }
 
 // Un callback pour l'impression server side
@@ -72,8 +81,7 @@ if ($print_to_server) {
     CAppUI::setMsg($msg, UI_MSG_ERROR);
   }
   
-  echo "\n<script type=\"text/javascript\">printToServer($file->_id)</script>";
+  echo "\n<script type=\"text/javascript\">printToServer(".$file->_id.")</script>";
 }
 
 CApp::rip();
-?>

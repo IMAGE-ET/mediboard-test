@@ -1,17 +1,20 @@
-<?php /* $ */
+<?php
 
 /**
- *  @package Mediboard
- *  @subpackage dPcompteRendu
- *  @version $Revision: $
- *  @author SARL OpenXtrem
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Modification des correspondants d'un document
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
 $object_guid     = CValue::get("object_guid");
 $compte_rendu_id = CValue::get("compte_rendu_id");
 
-$compte_rendu = new CCompteRendu;
+$compte_rendu = new CCompteRendu();
 $compte_rendu->load($compte_rendu_id);
 
 $object = CMbObject::loadFromGuid($object_guid);
@@ -30,10 +33,10 @@ if (!isset($destinataires["CMedecin"])) {
 // Fusion avec les correspondants ajoutés par l'autocomplete
 $compte_rendu->mergeCorrespondantsCourrier($destinataires);
 
-$empty_corres = new CCorrespondantCourrier;
+$empty_corres = new CCorrespondantCourrier();
 $empty_corres->valueDefaults();
 
-$patient = new CPatient;
+$patient = new CPatient();
 
 if (CDestinataire::$_patient != null) {
   $patient = CDestinataire::$_patient;

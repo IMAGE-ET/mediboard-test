@@ -1,11 +1,14 @@
-<?php /* $Id: $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPcompteRendu
- * @version $Revision:  $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Pack multiple docs aed
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
 // Génération d'un document pour chaque modèle du pack
@@ -18,6 +21,7 @@ $user_id = CMediusers::get()->_id;
 $pack = new CPack;
 $pack->load($pack_id);
 
+/** @var $object CMbObject */
 $object = new $pack->object_class;
 $object->load($object_id);
 
@@ -31,6 +35,7 @@ $first = reset($modeles_to_pack);
 
 $cr_to_push = null;
 
+/** @var $_modele_to_pack  CModeleToPack */
 foreach ($modeles_to_pack as $_modele_to_pack) {
   $modele = $_modele_to_pack->loadRefModele();
   $modele->loadContent();
@@ -70,7 +75,7 @@ foreach ($modeles_to_pack as $_modele_to_pack) {
 
 if ($callback && $cr_to_push) {
   $fields = $cr_to_push->getProperties();
-  echo CAppUI::callbackAjax($callback, $cr_to_push->_id, $fields);
+  CAppUI::callbackAjax($callback, $cr_to_push->_id, $fields);
 }
 
 CAppUI::setMsg(CAppUI::tr("CPack-msg-create"), UI_MSG_OK);
@@ -78,5 +83,3 @@ CAppUI::setMsg(CAppUI::tr("CPack-msg-create"), UI_MSG_OK);
 echo CAppUI::getMsg();
 
 CApp::rip();
-
-?>

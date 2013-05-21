@@ -1,11 +1,14 @@
-<?php /* $ */
+<?php
 
 /**
- *  @package Mediboard
- *  @subpackage dPcompteRendu
- *  @version $Revision: $
- *  @author SARL OpenXtrem
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Modification de pack de documents
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkEdit();
@@ -48,4 +51,3 @@ $smarty->assign("functions", $functions);
 $smarty->assign("groups"   , $groups);
 
 $smarty->display("inc_edit_pack.tpl"); 
-?>

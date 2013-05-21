@@ -1,11 +1,15 @@
-<?php /* $Id$ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision$
-* @author Romain OLLIVIER
-*/
+ * Interface des packs de documents
+ *
+ * @category DPcompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 
 CCanDo::checkRead();
 
@@ -25,5 +29,3 @@ $smarty->assign("user_id"     , $user_id);
 $smarty->assign("object_class", $object_class);
 
 $smarty->display("vw_idx_packs.tpl");
-
-?>

@@ -4,7 +4,7 @@
   Thumb.file_id = {{$file_id}};
 	// @FIXME: Pourquoi rafraichir la widget ici ???
   Main.add(function() {
-  if(Thumb.compte_rendu_id) {
+  if (Thumb.compte_rendu_id) {
     if (window.opener.reloadListFileEditPatient) {
       window.opener.reloadListFileEditPatient("load", "{{$category_id}}"); 
     }
@@ -33,7 +33,7 @@
       <!--  Firefox refuse le min-width et min-height pour une image avec un src vide.  -->
         <img id="thumb_{{$index}}" class="thumb_empty thumbnail"
           src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP4zwAAAgEBAKEeXHUAAAAASUVORK5CYII="
-          style="margin-bottom: 0px; min-width: 138px; max-width: 138px; min-height: 195px;max-height: 195px; color: blank; cursor: pointer;"
+          style="margin-bottom: 0; min-width: 138px; max-width: 138px; min-height: 195px;max-height: 195px; color: blank; cursor: pointer;"
           onclick="return false;"/>
     	<br/>
       {{$index}}

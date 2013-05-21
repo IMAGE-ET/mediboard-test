@@ -1,11 +1,15 @@
-<?php /* $Id: vw_idx_aides.php 9837 2010-08-18 13:42:01Z lryo $ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision: 9837 $
-* @author Thomas Despoix
-*/
+ * Widget des documents
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 
 CCanDo::checkRead();
 

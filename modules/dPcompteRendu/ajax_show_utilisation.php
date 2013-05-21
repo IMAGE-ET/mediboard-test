@@ -1,13 +1,13 @@
 <?php
 
 /**
- * dPcompteRendu
- *  
+ * Utilisation d'un modèle
+ *
  * @category CompteRendu
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
  * @link     http://www.mediboard.org
  */
 
@@ -53,11 +53,12 @@ if ($compte_rendu->type == "body") {
 
 $user = CMediusers::get();
 $users = $user->loadAll(array_keys($counts));
+/** @var $_user CMediusers */
 foreach ($users as $_user) {
   $_user->loadRefFunction();
 }
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("modeles"     , $modeles);
 $smarty->assign("counts"      , $counts);

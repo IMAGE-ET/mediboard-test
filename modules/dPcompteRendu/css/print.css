@@ -18,7 +18,7 @@ div.header,
 div.footer {
   position: fixed; 
   background: #ddd;
-  border: 0px solid #aaa;
+  border: 0 solid #aaa;
   width: 100%;
   opacity: 0.9;
   overflow: hidden;
@@ -55,12 +55,12 @@ td.center {
 
 
 div.header {
-  top: 0em;
+  top: 0;
   border-bottom-width: 1px;
 }
 
 div.footer {
-  bottom: 0em;
+  bottom: 0;
   border-top-width: 1px;
 }
 
@@ -76,7 +76,7 @@ div.header table {
   }
   div.middle {
     margin-top: 270px;
-    height: 0px;
+    height: 0;
   } 
 }
 

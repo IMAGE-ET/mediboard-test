@@ -1,11 +1,15 @@
-<?php /* $Id$ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * Impression de compte-rendu
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 
 // Récupération du compte-rendu
 $compte_rendu_id = CValue::get("compte_rendu_id", 0);

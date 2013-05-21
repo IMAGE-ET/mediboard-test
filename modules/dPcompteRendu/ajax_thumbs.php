@@ -1,13 +1,17 @@
-<?php /* $Id: */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision:$
-* @author SARL Openxtrem
-*/
+ * Affichage en base64 d'une vignette d'un PDF
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 
-include_once('lib/phpThumb/phpThumb.config.php');
+CAppUI::requireLibraryFile("phpThumb/phpThumb.config");
 CAppUI::requireLibraryFile("phpThumb/phpthumb.class");
 
 $file_id = CValue::get("file_id");
@@ -42,6 +46,3 @@ $thumbs->GenerateThumbnail();
 $vignette = base64_encode($thumbs->IMresizedData);
 
 echo json_encode($vignette);
-
-
-?>

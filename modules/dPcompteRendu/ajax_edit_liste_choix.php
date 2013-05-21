@@ -1,11 +1,15 @@
-<?php /* $Id: vw_idx_listes.php 12241 2011-05-20 10:29:53Z flaviencrochard $ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision: 12241 $
-* @author Romain OLLIVIER
-*/
+ * Modification de liste de choix
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 
 CCanDo::checkRead();
 
@@ -54,5 +58,3 @@ $smarty->assign("user"   , $user );
 $smarty->assign("liste"  , $liste);
 
 $smarty->display("inc_edit_liste_choix.tpl");
-
-?>

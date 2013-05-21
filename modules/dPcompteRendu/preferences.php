@@ -1,11 +1,16 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Préférences utilisateur
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
+
 
 // Préférences par Module
 CPreferences::$modules["dPcompteRendu"] = array(
@@ -25,4 +30,3 @@ CPreferences::$modules["dPcompteRendu"] = array(
   "multiple_docs",
   "auto_capitalize",
 );
-?>

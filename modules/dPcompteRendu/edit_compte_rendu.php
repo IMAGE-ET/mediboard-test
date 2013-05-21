@@ -1,11 +1,15 @@
-<?php /* $Id$ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision$
-* @author Romain OLLIVIER
-*/
+ * Création / Modification d'un document (généré à partir d'un modèle)
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 
 $compte_rendu_id = CValue::get("compte_rendu_id", 0);
 $modele_id       = CValue::get("modele_id"      , null);
@@ -82,7 +86,9 @@ else {
     $footer_id = $pack->_footer_found->_id;
     
     // Marges et format
-    $first_modele = reset($pack->_back['modele_links']);
+    /** @var $links CModeleToPack[] */
+    $links = $pack->_back['modele_links'];
+    $first_modele = reset($links);
     $first_modele = $first_modele->_ref_modele;
     $compte_rendu->margin_top    = $first_modele->margin_top;
     $compte_rendu->margin_left   = $first_modele->margin_left;
@@ -117,6 +123,7 @@ if (!$user->isPraticien()) {
 
   switch ($object->_class) {
     case "CConsultAnesth" :
+      /** @var $object CConsultAnesth */
       $operation = $object->loadRefOperation();
       $anesth = $operation->_ref_anesth;
       if ($operation->_id && $anesth->_id) {
@@ -129,14 +136,17 @@ if (!$user->isPraticien()) {
       break;
 
     case "CConsultation" :
+      /** @var $object CConsultation */
       $user_id = $object->loadRefPraticien()->_id;
       break;
 
     case "CSejour" :
+      /** @var $object CSejour */
       $user_id = $object->praticien_id;
       break;
 
     case "COperation" :
+      /** @var $object COperation */
       $user_id = $object->chir_id;
       break;
 
@@ -171,8 +181,9 @@ $where[] = "(
   group_id = '{$user->_ref_function->group_id}'
 )";
 $order = "user_id, function_id, group_id";
-$userLists = new CListeChoix;
+$userLists = new CListeChoix();
 $userLists = $userLists->loadList($where, $order);
+/** @var $userLists CListeChoix[] */
 $lists = $templateManager->getUsedLists($userLists);
 
 // Afficher le bouton correpondant si on détecte un élément de publipostage
@@ -227,7 +238,7 @@ $smarty->assign("pack_id"       , $pack_id);
 $smarty->assign("destinataires" , $destinataires);
 $smarty->assign("can_lock"      , $can_lock);
 
-preg_match_all("/(:?\[\[Texte libre - ([^\]]*)\]\])/i",$compte_rendu->_source, $matches);
+preg_match_all("/(:?\[\[Texte libre - ([^\]]*)\]\])/i", $compte_rendu->_source, $matches);
 
 $templateManager->textes_libres = $matches[2];
 
@@ -269,11 +280,16 @@ $pdf_and_thumbs = CAppUI::pref("pdf_and_thumbs");
 if (CValue::get("reloadzones") == 1) {
   $smarty->display("inc_zones_fields.tpl");
 }
-else if (!$compte_rendu_id && !$switch_mode && ($compte_rendu->fast_edit || $force_fast_edit || ($compte_rendu->fast_edit_pdf && $pdf_thumbnails && $pdf_and_thumbs))) {
+else if (
+    !$compte_rendu_id &&
+    !$switch_mode &&
+    ($compte_rendu->fast_edit || $force_fast_edit || ($compte_rendu->fast_edit_pdf && $pdf_thumbnails && $pdf_and_thumbs))
+) {
   $printers = $function->loadBackRefs("printers");
   
   if (is_array($printers)) {
-    foreach($printers as $_printer) {
+    /** @var $_printer CPrinter */
+    foreach ($printers as $_printer) {
         $_printer->loadTargetObject();
     }
   }

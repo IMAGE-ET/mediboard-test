@@ -1,12 +1,15 @@
-<?php /* $Id$ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
+ * Interface des modèles
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 CCanDo::checkRead();
 
 $order_col = CValue::getOrSession("order_col", "object_class");
@@ -21,7 +24,7 @@ switch ($order_col) {
     $order = "nom $order_way, object_class, type";
     break;
   case "type":
-   $order = "type $order_way, object_class, nom";
+    $order = "type $order_way, object_class, nom";
 }
 
 // Liste des praticiens et cabinets accessibles
@@ -44,7 +47,9 @@ if ($user->isPraticien()) {
 $owners = $user->getOwners();
 $modeles = CCompteRendu::loadAllModelesFor($filtre->user_id, 'prat', $filtre->object_class, $filtre->type, 1, $order);
 foreach ($modeles as $_modeles) {
+  /** @var $_modeles CStoredObject[] */
   CStoredObject::massCountBackRefs($_modeles, "documents_generated");
+  /** @var $_modele CCompteRendu */
   foreach ($_modeles as $_modele) {
     $_modele->countBackRefs("documents_generated");
     if ($_modele->type == "body") {
@@ -85,5 +90,3 @@ $smarty->assign("order_col"    , $order_col);
 $smarty->assign("special_names", CCompteRendu::$special_names);
 
 $smarty->display("vw_modeles.tpl");
-
-?>

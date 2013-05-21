@@ -219,7 +219,7 @@ function changeUser(user_id) {
 <div id="list" style="display: none;">
   <table class="tbl">
     <tr>
-      <th/>
+      <th></th>
       <th>{{mb_label object=$aide field="name"}}</th>
       <th>{{mb_label object=$aide field="text"}}</th>
       <th>{{mb_label object=$aide field="depend_value_1"}}</th>

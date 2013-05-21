@@ -134,19 +134,19 @@ function reloadHeadersFooters() {
       url.addParam("type", "header");
       url.requestUpdate(oForm.header_id);
       
-      var url = new Url("dPcompteRendu", "ajax_headers_footers");
+      url = new Url("dPcompteRendu", "ajax_headers_footers");
       url.addParam("compte_rendu_id", compte_rendu_id);
       url.addParam("object_class", object_class);
       url.addParam("type", "preface");
       url.requestUpdate(oForm.preface_id);
       
-      var url = new Url("dPcompteRendu", "ajax_headers_footers");
+      url = new Url("dPcompteRendu", "ajax_headers_footers");
       url.addParam("compte_rendu_id", compte_rendu_id);
       url.addParam("object_class", object_class);
       url.addParam("type", "ending");
       url.requestUpdate(oForm.ending_id);
       
-      var url = new Url("dPcompteRendu", "ajax_headers_footers");
+      url = new Url("dPcompteRendu", "ajax_headers_footers");
       url.addParam("compte_rendu_id", compte_rendu_id);
       url.addParam("object_class", object_class);
       url.addParam("type", "footer");

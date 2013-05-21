@@ -1,11 +1,15 @@
-<?php /* $Id$ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * Widget des documents
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 
 $user = CMediusers::get();
 
@@ -40,7 +44,7 @@ $user->_ref_function->loadRefGroup();
 $user->canDo();
 
 if ($object->loadRefsDocs()) {
-  foreach($object->_ref_documents as $_doc) {
+  foreach ($object->_ref_documents as $_doc) {
     $_doc->loadRefCategory();
     $_doc->canDo();
   }

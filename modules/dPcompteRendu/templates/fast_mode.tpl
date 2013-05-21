@@ -301,7 +301,7 @@ Main.add(function() {
               <button class="tick oneclick printer" type="button" onclick="lockAllButtons(); this.form.onsubmit();">
                 {{tr}}Save{{/tr}}
               </button>
-              <fieldset style="display: inline; whitespace: normal;">
+              <fieldset style="display: inline; white-space: normal;">
                 <legend>{{tr}}Save{{/tr}} {{tr}}and{{/tr}}...</legend>
                 <button class="printPDF printer oneclick" type="button"
                   onclick="lockAllButtons(); $V(getForm('create-pdf-form-{{$uid_fast_mode}}').stream, 1); this.form.onsubmit();">

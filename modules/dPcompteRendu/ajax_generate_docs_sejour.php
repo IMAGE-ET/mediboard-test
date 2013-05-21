@@ -1,11 +1,14 @@
-<?php /* $ */
+<?php
 
 /**
- *  @package Mediboard
- *  @subpackage dPcompteRendu
- *  @version $Revision: $
- *  @author SARL OpenXtrem
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Génération en masse de documents pour un séjour
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -20,9 +23,9 @@ $where = array();
 $where["sejour_id"] = "IN ($sejours_ids)";
 
 $sejours = $sejour->loadList($where);
-
 CMbObject::massLoadFwdRef($sejours, "patient_id");
 
+/** @var $sejours CSejour[] */
 foreach ($sejours as $_sejour) {
   $_sejour->loadRefPatient();
 }
@@ -72,5 +75,3 @@ foreach ($sejours as $_sejour) {
 }
 
 echo CApp::fetch("dPcompteRendu", "print_docs", array("nbDoc" => $nbDoc));
-
-?>

@@ -109,7 +109,7 @@ var PageFormat = {
     var tab_margin = new Array("top", "right", "bottom", "left");
     var dform = getForm('download-pdf-form');
     if($("input_margin_top") != null) {
-      for(var i=0; i < 4; i++) {
+      for (var i = 0; i < 4; i++) {
         $("input_margin_"+tab_margin[i]).remove();
       }
     }
@@ -120,7 +120,7 @@ var PageFormat = {
     $V(dform.height, this.form.height.value);
     {{if $compte_rendu->type == "body"}}
       var page_format = this.form._page_format.value;
-      for(var i=0; i < 4; i++) {
+      for (i=0; i < 4; i++) {
         dform.insert({bottom: new Element("input",{id: "input_margin_"+tab_margin[i],type: 'hidden', name: 'margins[]', value: $("editFrm_margin_"+tab_margin[i]).value})});
       }
       $V(dform.page_format, page_format);

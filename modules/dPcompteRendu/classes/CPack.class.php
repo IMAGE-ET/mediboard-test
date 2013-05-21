@@ -295,7 +295,7 @@ class CPack extends CMbObject {
         $header_id = $modele->header_id;
       }
       if (!$footer_id && $modele->footer_id) {
-        $footer = $modele->footer_id;
+        $footer_id = $modele->footer_id;
       }
       if ($header_id && $footer_id) {
         break;

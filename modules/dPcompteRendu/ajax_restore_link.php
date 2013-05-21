@@ -1,15 +1,18 @@
-<?php /* $ */
+<?php
 
 /**
- *  @package Mediboard
- *  @subpackage dPcompteRendu
- *  @version $Revision: $
- *  @author SARL OpenXtrem
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Restauration du lien entre un modèle et les documents de même nom
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
 $modele_id = CValue::get("modele_id");
-$do_it      = CValue::get("do_it", 0);
+$do_it     = CValue::get("do_it", 0);
 
 $modele = new CCompteRendu;
 $modele->load($modele_id);
@@ -24,6 +27,7 @@ $nb = $modele->countList($where);
 
 if ($do_it) {
   $docs = $modele->loadList($where, null, "100");
+  /** @var  $docs CCompteRendu[] */
   $converted = 0;
   if ($nb == 0) {
     CApp::rip();
@@ -54,4 +58,3 @@ else {
     CAppUI::stepAjax($nb . " compte-rendus trouvés qui peuvent être associés (modèle $modele->nom)");
   }
 }
-?>

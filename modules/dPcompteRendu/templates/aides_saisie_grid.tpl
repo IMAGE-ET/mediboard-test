@@ -53,7 +53,7 @@ Main.add(function(){
                          title="{{$_aide->_ref_owner}}" />
                   
                     <label>
-                      <button type="button" class="tick notext" onclick='applyHelper("{{$_aide->name}}","{{$_aide->text}}")'"></button>
+                      <button type="button" class="tick notext" onclick='applyHelper("{{$_aide->name}}","{{$_aide->text}}")'></button>
                       {{$_aide->name}}
                     </label>
                   </td>

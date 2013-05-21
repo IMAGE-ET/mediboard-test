@@ -1,11 +1,15 @@
-<?php /* $Id$ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision$
-* @author Romain OLLIVIER
-*/
+ * Création / Modification d'une aide à la saisie
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 
 CCanDo::checkRead();
 
@@ -40,19 +44,19 @@ $dependValues = array();
 $helped = array();
 
 if ($object->_specs[$field]->helped && !is_bool($object->_specs[$field]->helped)) {
-	if (!is_array($object->_specs[$field]->helped)) {
-	  $helped = array($object->_specs[$field]->helped);
-	}
-	else {
-	  $helped = $object->_specs[$field]->helped;
-	}
+  if (!is_array($object->_specs[$field]->helped)) {
+    $helped = array($object->_specs[$field]->helped);
+  }
+  else {
+    $helped = $object->_specs[$field]->helped;
+  }
 }
 
 foreach ($helped as $i => $depend_field) {
   $key = "depend_value_" . ($i+1);
   $spec = $object->_specs[$depend_field];
 
-  switch(get_class($spec)) {
+  switch (get_class($spec)) {
     case "CEnumSpec":
       $dependValues[$key] = $spec->_locales;
       break;

@@ -1,24 +1,33 @@
-<?php /* $Id: */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision:$
-* @author SARL Openxtrem
-*/
+ * Retourne la source d'un document
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 
 CCanDo::checkRead();
 
-$cr_id = CValue::get("compte_rendu_id");
+$cr_id             = CValue::get("compte_rendu_id");
 $update_date_print = CValue::get("update_date_print", 0);
+
 $cr = new CCompteRendu();
 $cr->load($cr_id);
 
-if (!$cr->_id) return;
+if (!$cr->_id) {
+  return;
+}
 
 $cr->loadContent();
 
-if (!$cr->canRead()) return;
+if (!$cr->canRead()) {
+  return;
+}
 
 // Mise à jour de la date d'impression
 if ($update_date_print) {

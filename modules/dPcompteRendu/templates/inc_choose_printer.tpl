@@ -49,7 +49,7 @@
            {{/if}}"
            class="print printer" {{if !$mode_etiquette}}disabled="disabled"{{/if}}>
            {{$_printer->_view}}
-         </a>
+         </button>
       </td>
     </tr>
     {{/foreach}}

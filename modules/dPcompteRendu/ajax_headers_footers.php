@@ -1,11 +1,14 @@
-<?php /* $ */
+<?php
 
 /**
- *  @package Mediboard
- *  @subpackage dPcompteRendu
- *  @version $Revision: $
- *  @author SARL OpenXtrem
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Entête et pied de page à la volée
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
 $compte_rendu_id = CValue::get("compte_rendu_id");
@@ -26,15 +29,17 @@ else if ($compte_rendu->function_id) {
 else if ($compte_rendu->group_id) {
   $owner = 'etab';
   $id = $compte_rendu->group_id;
-} else {
+}
+else {
   $owner = 'etab';
   $id = CGroups::loadCurrent()->_id;
 }
 
 $components = CCompteRendu::loadAllModelesFor($id, $owner, $object_class, $type);
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
+
 $smarty->assign("type"        , $type);
 $smarty->assign("components"  , $components);
+
 $smarty->display("inc_headers_footers.tpl");
-?>

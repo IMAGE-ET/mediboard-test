@@ -1,12 +1,15 @@
-<?php /* $Id$ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision$
-* @author Alexis Granger
-* @abstract Permet de choisir des modèles pour constituer des packs
-*/
+ * Ajout de modèles à un pack de modèles
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 
 CCanDo::checkRead();
 
@@ -24,8 +27,9 @@ $owner_types = array(
 
 $modeles = CCompteRendu::loadAllModelesFor($object->_id, $owner_types[$object->_class], $filter_class, "body");
 
-$link = new CModeleToPack;
+$link = new CModeleToPack();
 $link->pack_id = $pack_id;
+
 // Création du template
 $smarty = new CSmartyDP();
 

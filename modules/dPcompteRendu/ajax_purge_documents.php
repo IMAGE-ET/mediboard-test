@@ -1,14 +1,19 @@
-<?php /* $ */
+<?php
 
 /**
- *  @package Mediboard
- *  @subpackage dPcompteRendu
- *  @version $Revision: $
- *  @author SARL OpenXtrem
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Tâche automatique de suppression de documents déclarés temporaires
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
-$modele = new CCompteRendu;
+CCanDo::checkEdit();
+
+$modele = new CCompteRendu();
 $limit = CValue::get("limit", 100);
 
 $where = array();
@@ -23,5 +28,3 @@ foreach ($modeles as $_modele) {
     $_doc->delete();
   }
 }
-
-?>

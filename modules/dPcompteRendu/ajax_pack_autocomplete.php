@@ -1,11 +1,15 @@
-<?php /* $Id: ajax_pack_autocomplete.php $ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision: $
-* @author Thomas Despoix
-*/
+ * Autocomplete des packs de modèles
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 
 $user_id      = CValue::get("user_id");
 $function_id  = CValue::get("function_id");
@@ -28,6 +32,7 @@ $order = "nom";
 $pack = new CPack();
 $packs = $pack->seek($keywords, $where, null, null, null, $order);
 
+/** @var $_pack CPack */
 foreach ($packs as $_pack) {
   $_pack->getModelesIds();
 }

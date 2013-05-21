@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage CompteRendu
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Liste d'aides à la saisie
+ *
+ * @category CompteRendu
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
 CCanDO::checkRead();
@@ -21,7 +24,7 @@ $aide_id        = CValue::getOrSession("aide_id", "0");
 
 $order_by = $order_col . " " . $order_way;
 
-$userSel = new CMediusers;
+$userSel = new CMediusers();
 $userSel->load($filter_user_id);
 
 if (!$userSel->_id) {
@@ -60,7 +63,7 @@ if ($userSel->user_id) {
   $aides["user_ids"] = array_keys($_aide->seek($keywords, $where, 1000));
   $aides["user"] = $_aide->seek($keywords, $where, $start["user"].", 30", true, null, $order_by);
   $aidesCount["user"] = $_aide->_totalSeek;
-  foreach($aides["user"] as $aide) {
+  foreach ($aides["user"] as $aide) {
     $aide->loadRefsFwd();
   }
   unset($where["user_id"]);
@@ -69,7 +72,7 @@ if ($userSel->user_id) {
   $aides["func_ids"] = array_keys($_aide->seek($keywords, $where, 1000));
   $aides["func"] = $_aide->seek($keywords, $where, $start["func"].", 30", true, null, $order_by);
   $aidesCount["func"] = $_aide->_totalSeek;
-  foreach($aides["func"] as $aide) {
+  foreach ($aides["func"] as $aide) {
     $aide->loadRefsFwd();
   }
   unset($where["function_id"]);
@@ -78,7 +81,7 @@ if ($userSel->user_id) {
   $aides["etab_ids"] = array_keys($_aide->seek($keywords, $where, 1000));
   $aides["etab"] = $_aide->seek($keywords, $where, $start["etab"].", 30", true, null, $order_by);
   $aidesCount["etab"] = $_aide->_totalSeek;
-  foreach($aides["etab"] as $aide) {
+  foreach ($aides["etab"] as $aide) {
     $aide->loadRefsFwd();
   }
   unset($where["group_id"]);
