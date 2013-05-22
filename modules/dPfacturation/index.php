@@ -17,13 +17,14 @@ if (CAppUI::conf("dPfacturation CFactureCabinet view_bill")) {
 if (CAppUI::conf("dPfacturation CFactureEtablissement view_bill")) {
   $module->registerTab("vw_factures_etab"   , TAB_READ);
 }
-$module->registerTab("vw_compta"          , TAB_READ);
+$module->registerTab("vw_compta"            , TAB_READ);
 if (CAppUI::conf("dPfacturation Other use_view_chainage")) {
-  $module->registerTab("vw_edit_tarifs", TAB_READ);
+  $module->registerTab("vw_edit_tarifs"     , TAB_READ);
 }
 if (CAppUI::conf("dPfacturation CRelance use_relances")) {
   $module->registerTab("vw_relances"        , TAB_READ);
 }
 if (CAppUI::conf("dPfacturation CRetrocession use_retrocessions")) {
+  $module->registerTab("vw_retrocessions"   , TAB_READ);
   $module->registerTab("vw_retrocession_regles" , TAB_ADMIN);
 }
