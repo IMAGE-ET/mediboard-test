@@ -97,6 +97,7 @@ function showHeader() {
   <meta name="Version" content="<?php echo $version["string"]; ?>" />
   <link rel="stylesheet" type="text/css" href="../style/mediboard/main.css" />
   <link rel="stylesheet" type="text/css" href="../style/e-cap/main.css" />
+  <script src="./includes/common.js"></script>
 </head>
 
 <body class="wizard">
