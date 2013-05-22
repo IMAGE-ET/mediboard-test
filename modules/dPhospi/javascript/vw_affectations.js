@@ -197,9 +197,10 @@ reloadTableau = function() {
   selected_lit = null;
   
   var oForm  = getForm("chgAff");
-  url = new Url;
+  var form = getForm("chgFilter");
+  url = new Url("dPhospi", "ajax_tableau_affectations_lits");
   url.addElement(oForm.date);
-  url.addElement(oForm.mode)
-  url.setModuleAction("dPhospi", "ajax_tableau_affectations_lits");
+  url.addElement(oForm.mode);
+  url.addElement(form.prestation_id);
   url.requestUpdate("tableauAffectations");
 }
