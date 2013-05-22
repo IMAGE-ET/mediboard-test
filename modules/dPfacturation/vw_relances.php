@@ -28,27 +28,21 @@ $month_fin       = CMbDT::date("-1 day"         , $month_fin);
 // L'utilisateur est-il praticien ?
 $mediuser = CMediusers::get();
 $mediuser->loadRefFunction();
-
-$is_praticien = $mediuser->isPraticien();
-$is_admin     = in_array(CUser::$types[$mediuser->_user_type], array("Administrator"));
-$is_admin_or_secretaire = in_array(CUser::$types[$mediuser->_user_type], array("Administrator", "Secr�taire"));
-$listPrat     = $mediuser->loadPraticiensCompta();
+$listPrat = $mediuser->loadPraticiensCompta();
 
 // Creation du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("filter"                , $filter);
-$smarty->assign("mediuser"              , $mediuser);
-$smarty->assign("is_praticien"          , $is_praticien);
-$smarty->assign("is_admin_or_secretaire", $is_admin_or_secretaire);
-$smarty->assign("listPrat"              , $listPrat);
-$smarty->assign("chir_id"               , CValue::getOrSession("chir", 0));
-$smarty->assign("now"                   , $now);
-$smarty->assign("yesterday"             , $yesterday);
-$smarty->assign("week_deb"              , $week_deb);
-$smarty->assign("week_fin"              , $week_fin);
-$smarty->assign("month_deb"             , $month_deb);
-$smarty->assign("three_month_deb"       , $three_month_deb);
-$smarty->assign("month_fin"             , $month_fin);
+$smarty->assign("filter"          , $filter);
+$smarty->assign("mediuser"        , $mediuser);
+$smarty->assign("listPrat"        , $listPrat);
+$smarty->assign("chir_id"         , CValue::getOrSession("chir", 0));
+$smarty->assign("now"             , $now);
+$smarty->assign("yesterday"       , $yesterday);
+$smarty->assign("week_deb"        , $week_deb);
+$smarty->assign("week_fin"        , $week_fin);
+$smarty->assign("month_deb"       , $month_deb);
+$smarty->assign("three_month_deb" , $three_month_deb);
+$smarty->assign("month_fin"       , $month_fin);
 
 $smarty->display("vw_relances.tpl");

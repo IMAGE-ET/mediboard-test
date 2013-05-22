@@ -36,7 +36,7 @@ class CEditPdf{
   public $group_adrr;
   public $nb_factures;
   public $num_fact;
-  public $patient_facture;
+  public $patient;
   public $praticien;
   public $pre_tab      = array();
   public $type_rbt;
@@ -83,7 +83,7 @@ class CEditPdf{
     $this->editFacture();
     //enregistrement pour chaque facture l'ensemble des factures
     if (count($this->factures)) {
-      $this->pdf->Output($this->facture->cloture."_".$this->patient_facture->nom.'.pdf', "I");
+      $this->pdf->Output($this->facture->cloture."_".$this->patient->nom.'.pdf', "I");
     }
     else {
       $this->pdf->Output('Factures.pdf', "I");
@@ -101,7 +101,7 @@ class CEditPdf{
     $this->type_pdf = $ts ? "justif_TS" : "justif"; 
     $this->editFacture();
     if (count($this->factures)) {
-      $this->pdf->Output($this->facture->cloture."_".$this->patient_facture->nom.'.pdf', "I");
+      $this->pdf->Output($this->facture->cloture."_".$this->patient->nom.'.pdf', "I");
     }
     else {
       $this->pdf->Output('Justificatifs.pdf', "I");
@@ -117,7 +117,7 @@ class CEditPdf{
     $this->type_pdf = "relance";
     $this->editFacture();
     if (count($this->factures)) {
-      $this->pdf->Output("Relance_".$this->facture->cloture."_".$this->patient_facture->nom.'.pdf', "I");
+      $this->pdf->Output("Relance_".$this->facture->cloture."_".$this->patient->nom.'.pdf', "I");
     }
     else {
       $this->pdf->Output('Relances.pdf', "I");
@@ -139,8 +139,12 @@ class CEditPdf{
     
     foreach ($this->factures as $the_facture) {
       $this->facture = $the_facture;
+      $this->facture->loadRefsItems();
+      if ($this->facture->cloture && !count($this->facture->_ref_items)) {
+        $this->facture->creationLignesFacture();
+      }
       
-      $this->patient_facture = $this->facture->loadRefPatient();
+      $this->patient = $this->facture->loadRefPatient();
       $this->facture->_ref_patient->loadRefsCorrespondantsPatient();
       $this->praticien = $this->facture->loadRefPraticien();
       $this->facture->loadRefAssurance();
@@ -179,12 +183,12 @@ class CEditPdf{
         }
         $this->type_pdf = "justif_TS";
         $this->function_prat->adresse = str_replace("\r\n", ' ', $this->function_prat->adresse);
-        $this->patient_facture->adresse = str_replace("\r\n", ' ', $this->patient_facture->adresse);
+        $this->patient->adresse = str_replace("\r\n", ' ', $this->patient->adresse);
         $this->editCenterJustificatif(0, $montant);
       }
       elseif ($this->type_pdf == "justif") {
         $this->function_prat->adresse = str_replace("\r\n", ' ', $this->function_prat->adresse);
-        $this->patient_facture->adresse = str_replace("\r\n", ' ', $this->patient_facture->adresse);
+        $this->patient->adresse = str_replace("\r\n", ' ', $this->patient->adresse);
         
         foreach ($this->facture->_montant_factures_caisse as $cle_facture => $montant_facture) {
           $this->editCenterJustificatif($cle_facture, $montant_facture);
@@ -239,10 +243,11 @@ class CEditPdf{
     );
     foreach ($tab_actes as $keytab => $tab_acte) {
       foreach ($tab_acte as $acte) {
-        if ( (($cle_facture == 0 && $keytab == "tarmed") ||
-            ($keytab == "caisse" && ($cle_facture == 1 || ($acte->_class == "CActeCaisse" && $acte->_ref_caisse_maladie->use_tarmed_bill) || 
-            ( $acte->_class == "CFactureItem" && $acte->use_tarmed_bill))))
-            && (($acte->quantite != 0 && CAppUI::conf("dPfacturation Other use_view_quantitynull")) || !CAppUI::conf("dPfacturation Other use_view_quantitynull"))) {
+        $use_qte_null = CAppUI::conf("dPfacturation Other use_view_quantitynull");
+        $qte_null = ($acte->quantite != 0 && $use_qte_null) || !$use_qte_null;
+        $tab_tarmed = $cle_facture == 0 && $keytab == "tarmed";
+        $tab_caisse = $cle_facture == 1 || ($acte->_class == "CFactureItem" && $acte->use_tarmed_bill);
+        if (($tab_tarmed || ($keytab == "caisse" && $tab_caisse)) && $qte_null) {
           $ligne++;
           $this->pdf->setXY(37, $debut_lignes + $ligne*3);
           //Traitement pour le bas de la page et début de la suivante
@@ -255,7 +260,7 @@ class CEditPdf{
             $nb_pages++;
             $this->ajoutEntete2($nb_pages);
             $this->editCell(10, $this->pdf->getY()+4, $this->colonnes[0]+$this->colonnes[1], "Patient");
-            $this->pdf->Cell($this->colonnes[2], "", $this->patient_facture->nom." ".$this->patient_facture->prenom." ".$this->patient_facture->naissance);
+            $this->pdf->Cell($this->colonnes[2], "", $this->patient->nom." ".$this->patient->prenom." ".$this->patient->naissance);
             $this->pdf->Line(10, 42, 190, 42);
             $this->pdf->Line(10, 38, 10, 42);
             $this->pdf->Line(190, 38, 190, 42);
@@ -266,60 +271,17 @@ class CEditPdf{
           $this->pdf->setFont($this->fontb, '', 7);
           $this->pdf->setXY(37, $debut_lignes + $ligne*3);
          
-          $acte_pm = $acte_coeffpm = $acte_pt = $acte_coeffpt = $code_ref = $libelle = "";
-          $coeff_fact = 1;
           $code = "001";
-          if ($acte->_class == "CActeTarmed") {
-            $libelle = $acte->_ref_tarmed->libelle;
-            $code_ref = ($acte->code_ref) ? $acte->code_ref : $acte->_ref_tarmed->procedure_associe[0][0];
-            if ($acte->code_ref && (preg_match("/Réduction/", $acte->libelle) || preg_match("/Majoration/", $acte->libelle))) {
-              $acte_ref = null;
-              foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
-                if ($acte_tarmed->code == $acte->code_ref) {
-                  $acte_ref = $acte_tarmed;break;
-                }
-              }
-              $acte_ref->loadRefTarmed();
-              $acte_pm = $acte_ref->_ref_tarmed->tp_al;
-              $acte_pt = $acte_ref->_ref_tarmed->tp_tl;
-              $acte_coeffpm = $acte_ref->_ref_tarmed->f_al;
-              $acte_coeffpt = $acte_ref->_ref_tarmed->f_tl;
-            }
-            else {
-              $acte_pm = $acte->_ref_tarmed->tp_al;
-              $acte_pt = $acte->_ref_tarmed->tp_tl;
-              $acte_coeffpm = $acte->_ref_tarmed->f_al;
-              $acte_coeffpt = $acte->_ref_tarmed->f_tl;
-            }
-            $coeff_fact = $this->facture->_coeff;
-          }
-          elseif ($acte->_class == "CActeCaisse") {
-            $libelle = $acte->_ref_prestation_caisse->libelle;
-            $nom_coeff = "coeff_".$this->facture->type_facture;
-            $coeff = $acte->_ref_caisse_maladie->$nom_coeff;
-            $acte_pm = sprintf("%.2f", $acte->_ref_prestation_caisse->pt_medical);
-            $acte_pt = sprintf("%.2f", $acte->_ref_prestation_caisse->pt_technique);
-            $coeff_fact = $coeff;
-          }
-          else {
-            $libelle = $acte->libelle;
-            $acte_pm = $acte->pm;
-            $acte_pt = $acte->pt;
-            $acte_coeffpm = $acte->coeff_pm;
-            $acte_coeffpt = $acte->coeff_pt;
-            $coeff_fact = $acte->coeff;
-          }
-          
           if ($keytab == "caisse") {
-            $code = $acte->_class == "CActeCaisse" ? $acte->_ref_caisse_maladie->code : $code = $acte->code_caisse; ;
+            $code = $acte->code_caisse;
           }
           
-          $this->pdf->Write("<b>", substr($libelle, 0, 90));
+          $this->pdf->Write("<b>", substr($acte->libelle, 0, 90));
           $ligne++;
           //Si le libelle est trop long
-          if (strlen($libelle)>90) {
+          if (strlen($acte->libelle)>90) {
             $this->pdf->setXY(37, $debut_lignes + $ligne*3);
-            $this->pdf->Write("<b>", substr($libelle, 90));
+            $this->pdf->Write("<b>", substr($acte->libelle, 90));
             $ligne++;
           }
           $x = 0;
@@ -337,7 +299,7 @@ class CEditPdf{
                 $valeur = $code;
                 break;
               case "Code réf":
-                $valeur = $code_ref;
+                $valeur = $acte->code_ref;
                 break;
               case "Sé Cô":
                 $valeur = "1";
@@ -346,26 +308,26 @@ class CEditPdf{
                 $valeur = $acte->quantite;
                 break;
               case "Pt PM/Prix":
-                $valeur = $acte_pm;
+                $valeur = $acte->pm;
                 $cote = "R";
                 break;
               case "fPM":
-                $valeur = $acte_coeffpm;
+                $valeur = $acte->coeff_pm;
                 break;
               case "VPtPM":
               case "VPtPT":
-                $valeur = $coeff_fact;
+                $valeur = $acte->coeff;
                 break;
               case "Pt PT":
-                $valeur = $acte_pt;
+                $valeur = $acte->pt;
                 $cote = "R";
                 break;
               case "fPT":
-                $valeur = $acte_coeffpt;
+                $valeur = $acte->coeff_pt;
                 break;
               case "Montant":
                 $this->pdf->setX($this->pdf->getX()+3);
-                $valeur = sprintf("%.2f", $acte->montant_base * $coeff_fact * $acte->quantite);
+                $valeur = sprintf("%.2f", $acte->montant_base * $acte->coeff * $acte->quantite);
                 $cote = "R";
                 break;
               case "E":
@@ -383,11 +345,11 @@ class CEditPdf{
             $this->editCell($this->pdf->getX()+$x, $debut_lignes + $ligne*3, $largeur, $valeur, $cote);
             $x = $largeur;
           }
-          $this_pt = ($acte_pt * $acte_coeffpt * $acte->quantite * $coeff_fact);
-          $this_pm = ($acte_pm * $acte_coeffpm * $acte->quantite * $coeff_fact);
-          if (round($acte->montant_base, 2) != round(($this_pt + $this_pm)/$coeff_fact, 2)) {
+          $this_pt = ($acte->pt * $acte->coeff_pt * $acte->quantite * $acte->coeff);
+          $this_pm = ($acte->pm * $acte->coeff_pm * $acte->quantite * $acte->coeff);
+          if (round($acte->montant_base, 2) != round(($this_pt + $this_pm)/$acte->coeff, 2)) {
             $this_pt = 0;
-            $this_pm = $acte->montant_base * $acte->quantite * $coeff_fact;
+            $this_pm = $acte->montant_base * $acte->quantite * $acte->coeff;
           }
           $pt += $this_pt;
           $pm += $this_pm;
@@ -439,45 +401,12 @@ class CEditPdf{
     $pm = 0;
     $pt = 0;
     foreach ($this->facture->_ref_actes_tarmed as $acte) {
-      if ($acte->_class == "CActeTarmed") {
-        if ($acte->_ref_tarmed->tp_al == 0.00 && $acte->_ref_tarmed->tp_tl == 0.00) {
-          if ($acte->code_ref && (preg_match("Reduction", $acte->libelle) || preg_match("Majoration", $acte->libelle))) {
-            $acte_ref = null;
-            foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
-              if ($acte_tarmed->code == $acte->code_ref) {
-                $acte_ref = $acte_tarmed;break;
-              }
-            }
-            $acte_ref->loadRefTarmed();
-            $acte->_ref_tarmed->tp_al = $acte_ref->_ref_tarmed->tp_al;
-            $acte->_ref_tarmed->tp_tl = $acte_ref->_ref_tarmed->tp_tl;
-          }
-          elseif ($acte->montant_base) {
-            $acte->_ref_tarmed->tp_al = $acte->montant_base;
-          }
-        }
-        $somme = ($acte->_ref_tarmed->tp_tl * $acte->_ref_tarmed->f_tl + $acte->_ref_tarmed->tp_al * $acte->_ref_tarmed->f_al)  * $acte->quantite;
-        if ($acte->montant_base != $somme) {
-          $pm += $acte->montant_base;
-        }
-        else {
-          $pt += $acte->_ref_tarmed->tp_tl * $acte->_ref_tarmed->f_tl * $acte->quantite;
-          $pm += $acte->_ref_tarmed->tp_al * $acte->_ref_tarmed->f_al * $acte->quantite;
-        }
-      }
-      else {
-        $pt += $acte->pt * $acte->coeff_pt * $acte->quantite;
-        $pm += $acte->pm * $acte->coeff_pm * $acte->quantite;
-      }
+      $pt += $acte->pt * $acte->coeff_pt * $acte->quantite;
+      $pm += $acte->pm * $acte->coeff_pm * $acte->quantite;
     }
     
     foreach ($this->facture->_ref_actes_caisse as $acte) {
-      if ($acte->_class == "CActeCaisse") {
-        if ($acte->_ref_caisse_maladie->use_tarmed_bill) {
-          $this->autre_tarmed += $acte->montant_base;
-        }
-      }
-      elseif ($acte->use_tarmed_bill) {
+      if ($acte->use_tarmed_bill) {
         $this->autre_tarmed += $acte->montant_base;
       }
     }
@@ -530,7 +459,7 @@ class CEditPdf{
     );
     $tab[$colonne1] = $auteur;
 
-    $patient_adrr = $this->traitements($this->patient_facture->adresse);
+    $patient_adrr = $this->traitements($this->patient->adresse);
     //Destinataire de la facture
     $patient = array(
       "50" => "Destinataire",
@@ -539,11 +468,11 @@ class CEditPdf{
       $this->destinataire["adresse2"],
       $this->destinataire["cp"],
       "80" => "Patient",
-      "n° AVS: ".$this->patient_facture->avs,
-      $this->patient_facture->_view,
+      "n° AVS: ".$this->patient->avs,
+      $this->patient->_view,
       $patient_adrr["group1"],
       $patient_adrr["group2"],
-      $this->patient_facture->cp." ".$this->patient_facture->ville
+      $this->patient->cp." ".$this->patient->ville
     );
     
     $tab[$colonne2] = $patient;
@@ -722,7 +651,7 @@ class CEditPdf{
       $this->pdf->Text($l_colonne*11 + $decalage, $h_ligne*10.75+$haut_doc , $this->adherent);
       
       $this->pdf->setFont($this->font, '', 10);
-      $this->pdf->Text($l_colonne*(17-strlen($montant_facture*100)) + $decalage, $h_ligne*13+$haut_doc , sprintf("%d", $montant_facture));
+      $this->pdf->Text($l_colonne*(17-strlen($montant_facture*100)) + $decalage, $h_ligne*13+$haut_doc, sprintf("%d", $montant_facture));
       
       $cents = floor(sprintf("%.2f", $montant_facture - sprintf("%d", $montant_facture))*100);
       if ($cents<10) {
@@ -797,16 +726,16 @@ class CEditPdf{
     }
     if (isset($assurance_patient->type_pec) && $assurance_patient->type_pec == "TS" && $this->type_rbt == "TG avec cession") {
       if (count($this->facture->_ref_reglements) && $this->type_pdf == "justif_TS") {
-        $assur_nom = $this->patient_facture->nom." ".$this->patient_facture->prenom;
+        $assur_nom = $this->patient->nom." ".$this->patient->prenom;
       }
       else {
         $assur_nom = "$assurance_patient->nom $assurance_patient->prenom";
       }
-      $assurance_patient = $this->patient_facture;
+      $assurance_patient = $this->patient;
     }
     
     $assur = array();
-    $assur["civilite"]  = isset($assurance_patient->civilite) ? ucfirst($this->patient_facture->civilite) : "";
+    $assur["civilite"]  = isset($assurance_patient->civilite) ? ucfirst($this->patient->civilite) : "";
     $assur["nom"]     = "$assurance_patient->nom $assurance_patient->prenom";
     $assur["adresse"] = "$assurance_patient->adresse";
     $assur["cp"]      = "$assurance_patient->cp $assurance_patient->ville";
@@ -815,30 +744,31 @@ class CEditPdf{
     if ($this->facture->type_facture == "accident" && $this->facture->_coeff == CAppUI::conf("tarmed CCodeTarmed pt_maladie")) {
       $motif = "Accident (Caisse-Maladie)";
     }
-    $naissance =  CMbDT::transform(null, $this->patient_facture->naissance, "%d.%m.%Y");
+    $naissance =  CMbDT::transform(null, $this->patient->naissance, "%d.%m.%Y");
     $colonnes = array(20, 28, 25, 25, 25, 50);
-    $traitement = CMbDT::transform(null, $this->facture->_ref_first_consult->_date, "%d.%m.%Y")." - ".CMbDT::transform(null, $this->facture->cloture, "%d.%m.%Y");
+    $traitement = CMbDT::transform(null, $this->facture->_ref_first_consult->_date, "%d.%m.%Y")." - ";
+    $traitement .= CMbDT::transform(null, $this->facture->cloture, "%d.%m.%Y");
     $name_rappel = $date_rappel = null;
     if (CAppUI::conf("dPfacturation CRelance use_relances")) {
       $name_rappel = "Date rappel";
       $date_rappel = CMbDT::date("+".CAppUI::conf("dPfacturation CRelance nb_days_first_relance")." DAY" , $this->facture->cloture);
       $date_rappel = CMbDT::transform(null, $date_rappel, "%d.%m.%Y");
     }
-   $ean2 = $this->group->ean;
+    $ean2 = $this->group->ean;
     if ($this->facture->_class == "CFactureEtablissement") {
       $ean2 = $this->facture->_ref_last_sejour->_ref_last_operation->_ref_anesth->ean;
     }
     $lignes = array(
-      array("Patient"   , "Nom"             , $this->patient_facture->nom     ,null, "Assurance", $assur_nom),
-      array(""          , "Prénom"          , $this->patient_facture->prenom),
-      array(""          , "Rue"             , $this->patient_facture->adresse),
-      array(""          , "NPA"             , $this->patient_facture->cp      , null, $assur["civilite"]),
-      array(""          , "Localité"        , $this->patient_facture->ville   , null, $assur["nom"]),
+      array("Patient"   , "Nom"             , $this->patient->nom     ,null, "Assurance", $assur_nom),
+      array(""          , "Prénom"          , $this->patient->prenom),
+      array(""          , "Rue"             , $this->patient->adresse),
+      array(""          , "NPA"             , $this->patient->cp      , null, $assur["civilite"]),
+      array(""          , "Localité"        , $this->patient->ville   , null, $assur["nom"]),
       array(""          , "Date de naissance",$naissance        , null, $assur["adresse"]),
-      array(""          , "Sexe"            , strtoupper($this->patient_facture->sexe) , null, $assur["cp"]),
+      array(""          , "Sexe"            , strtoupper($this->patient->sexe) , null, $assur["cp"]),
       array(""          , "Date cas"        , CMbDT::transform(null, $this->facture->cloture, "%d.%m.%Y")),
       array(""          , "N° cas"          , $this->facture->ref_accident),
-      array(""          , "N° AVS"          , $this->patient_facture->avs),
+      array(""          , "N° AVS"          , $this->patient->avs),
       array(""          , "N° assuré"       , $_ref_assurance),
       array(""          , "Nom entreprise"  , $nom_entreprise),
       array(""          , "Canton"          , "GE"),
@@ -913,8 +843,8 @@ class CEditPdf{
     if (strlen($this->function_prat->cp)>4) {
       $this->function_prat->cp =  substr($this->function_prat->cp, 1);
     }
-    if (strlen($this->patient_facture->cp)>4) {
-      $this->patient_facture->cp =  substr($this->patient_facture->cp, 1);
+    if (strlen($this->patient->cp)>4) {
+      $this->patient->cp =  substr($this->patient->cp, 1);
     }
     
     //Assurance
@@ -938,18 +868,18 @@ class CEditPdf{
       }
 
       if ($this->type_rbt == "TG") {
-        $assurance_patient = $this->patient_facture;
+        $assurance_patient = $this->patient;
       }
       else {
         $assurance_patient = $this->facture->_ref_assurance_accident;
       }
     }
     else {
-      $assurance_patient = $this->patient_facture;
+      $assurance_patient = $this->patient;
       $view = "_view";
     }
     if (count($this->facture->_ref_reglements) && $this->type_pdf == "BVR_TS") {
-      $assurance_patient = $this->patient_facture;
+      $assurance_patient = $this->patient;
       $view = "_view";
     }
     

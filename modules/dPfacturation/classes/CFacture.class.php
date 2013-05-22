@@ -330,10 +330,10 @@ class CFacture extends CMbObject {
                 $this->_secteur1      += $acte->montant_base;
                 $this->_secteur2      += $acte->montant_depassement;
               }
-              foreach ($sejour->_ref_actes as $acte) {
-                $this->_secteur1      += $acte->montant_base;
-                $this->_secteur2      += $acte->montant_depassement;
-              }
+            }
+            foreach ($sejour->_ref_actes as $acte) {
+              $this->_secteur1      += $acte->montant_base;
+              $this->_secteur2      += $acte->montant_depassement;
             }
             $this->du_patient += $this->_secteur1;
             $this->du_tiers   += $this->_secteur2;
@@ -482,7 +482,8 @@ class CFacture extends CMbObject {
   function loadRefCoeffFacture() {
     $this->_coeff = 1;
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
-      if ($this->statut_pro && ($this->statut_pro == "sans_emploi" || $this->statut_pro == "etudiant" || $this->statut_pro == "non_travailleur" || $this->statut_pro == "independant") && $this->type_facture == "accident") {
+      $statuts_maladie = array("sans_emploi", "etudiant", "non_travailleur", "independant");
+      if ($this->statut_pro && in_array($this->statut_pro, $statuts_maladie, 1) && $this->type_facture == "accident") {
         $this->_coeff = CAppUI::conf("tarmed CCodeTarmed pt_maladie");
       }
       elseif ($this->statut_pro && $this->statut_pro == "invalide") {
@@ -639,6 +640,7 @@ class CFacture extends CMbObject {
       $this->_ref_actes_ccam = array();
       $this->rangeActes($this, false);
     }
+    return $this->_ref_items;
   }
   
   /**
@@ -682,7 +684,8 @@ class CFacture extends CMbObject {
    * @return void
   **/
   function loadNumerosBVR(){
-    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") && !count($this->_montant_factures_caisse)) {
+    $use_tarmed = CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed");
+    if ($use_tarmed && !count($this->_montant_factures_caisse)) {
       $this->_total_tarmed = 0;
       $this->_total_caisse = 0;
       $this->_autre_tarmed = 0;
@@ -750,8 +753,15 @@ class CFacture extends CMbObject {
       foreach ($this->_ref_actes_caisse as $acte_caisse) {
         $this->completeField("type_facture");
         $coeff = "coeff_".$this->type_facture;
-        $coeff = $acte_caisse->_class == "CActeCaisse" ? $acte_caisse->_ref_caisse_maladie->$coeff : $acte_caisse->coeff ;
-        $use   = $acte_caisse->_class == "CActeCaisse" ? $acte_caisse->_ref_caisse_maladie->use_tarmed_bill : $acte_caisse->use_tarmed_bill;
+        if ($acte_caisse->_class == "CActeCaisse") {
+          $coeff = $acte_caisse->_ref_caisse_maladie->$coeff;
+          $use   = $acte_caisse->_ref_caisse_maladie->use_tarmed_bill;
+        }
+        else {
+          $coeff = $acte_caisse->coeff ;
+          $use   = $acte_caisse->use_tarmed_bill;
+        }
+
         $tarif_acte_caisse = ($acte_caisse->_montant_facture)* $coeff *$acte_caisse->quantite ;
         if ($use) {
           $this->_autre_tarmed += $tarif_acte_caisse;

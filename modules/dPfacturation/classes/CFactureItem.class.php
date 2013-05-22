@@ -106,4 +106,3 @@ class CFactureItem extends CMbMetaObject {
     return $this->loadTargetObject();
   }
 }
-?>
