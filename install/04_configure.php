@@ -105,7 +105,7 @@ showHeader();
   </tr>
 
   <tr>
-    <th><label for="session_handler" title="Choisir quelle mode de gestion de session ou souhaite utiliser (celle-ci doit être installée)">Gestionnaire de session</label></th>
+    <th><label for="session_handler" title="Choisir quel mode de gestion de sessions utiliser (celui-ci doit être installé)">Gestionnaire de sessions</label></th>
     <td>
       <select name="session_handler" size="1">
         <option value="files"    <?php if ($dPconfig['session_handler'] == 'files'   ) { echo 'selected="selected"'; } ?> >Fichiers</option>
@@ -158,14 +158,14 @@ showHeader();
 
   <tr>
     <th><label for="offline_time_start" title="Heure à partir de laquelle Mediboard sera hors ligne">Heure début mode maintenance</label></th>
-    <td>
+    <td colspan="2">
       <input type="time" name="offline_time_start" id="offline_time_start" <?php if ($dPconfig['offline_time_start']) echo "value='".$dPconfig['offline_time_start']."'"; ?> />
     </td>
   </tr>
 
   <tr>
     <th><label for="offline_time_end" title="Heure jusquà laquelle Mediboard sera hors ligne">Heure fin mode maintenance</label></th>
-    <td>
+    <td colspan="2">
       <input type="time" name="offline_time_end" id="offline_time_end" <?php if ($dPconfig['offline_time_end']) echo "value='".$dPconfig['offline_time_end']."'"; ?> />
     </td>
   </tr>
