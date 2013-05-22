@@ -38,6 +38,7 @@ $dPconfig["locale_alert"]         = "^";
 $dPconfig["debug"]                = "1";
 $dPconfig["readonly"]             = "0";
 $dPconfig["shared_memory"]        = "none";
+$dPconfig["shared_memory_params"] = "";
 $dPconfig["session_handler"]      = "files";
 $dPconfig["log_js_errors"]        = "1";
 $dPconfig["weinre_debug_host"]    = "";

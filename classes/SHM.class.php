@@ -162,7 +162,10 @@ class APCSharedMemory implements ISharedMemory {
 
     $keys = array();
     foreach ($cache_list as $_cache) {
-      $keys[] = substr($_cache["info"], $len);
+      $_key = $_cache["info"];
+      if (strpos($_key, $prefix) === 0) {
+        $keys[] = substr($_key, $len);
+      }
     }
 
     return $keys;
@@ -185,8 +188,10 @@ abstract class SHM {
    * @var array
    */
   static $availableEngines = array(
-    "disk" => "DiskSharedMemory",
-    "apc"  => "APCSharedMemory",
+    "disk"      => "DiskSharedMemory",
+    "apc"       => "APCSharedMemory",
+    "memcached" => "MemcachedSharedMemory",
+    "redis"     => "RedisSharedMemory",
   );
 
   /**
@@ -295,6 +300,128 @@ abstract class SHM {
     }
 
     return $n;
+  }
+}
+
+class MemcachedSharedMemory implements ISharedMemory {
+  /** @var Memcached|\Xenzilla\Memcached */
+  public $conn;
+
+  private function getServerAddresses(){
+    $conf = CAppUI::conf("shared_memory_params");
+    $servers = preg_split("/\s*,\s*/", $conf);
+    $list = array();
+    foreach ($servers as $_server) {
+      $list[] = explode(":", $_server);
+    }
+    return $list;
+  }
+
+  function init() {
+    if (class_exists('Memcached', false)) {
+      $conn = new Memcached();
+
+      $servers = $this->getServerAddresses();
+      foreach ($servers as $_server) {
+        $conn->addServer($_server[0], $_server[1]);
+      }
+
+      return (bool) $this->conn = $conn;
+    }
+
+    include dirname(__FILE__)."/../lib/xenzilla-memcached/Memcached.php";
+
+    $conn = new \Xenzilla\Memcached();
+    $conn->addServer("127.0.0.1", 11211);
+    return (bool) $this->conn = $conn;
+  }
+
+  function get($key) {
+    return $this->conn->get($key);
+  }
+
+  function put($key, $value) {
+    return $this->conn->set($key, $value);
+  }
+
+  function rem($key) {
+    return $this->conn->delete($key);
+  }
+
+  /*function clear() {
+    return $this->conn->flush();
+  }*/
+
+  function listKeys($prefix) {
+    // Memcached 2.0+
+    if (method_exists($this->conn, "getAllKeys")) {
+      return $this->conn->getAllKeys();
+    }
+
+    return array();
+  }
+}
+
+/**
+ * Description
+ */
+class RedisSharedMemory implements ISharedMemory {
+  /** @var Yampee_Redis_Client */
+  public $conn;
+
+  private function getServerAddress(){
+    $conf = CAppUI::conf("shared_memory_params");
+    return explode(":", $conf);
+  }
+
+  function init() {
+    include dirname(__FILE__)."/../lib/Redis-master/autoloader.php";
+
+    if (class_exists('Yampee_Redis_Client')) {
+      $server = $this->getServerAddress();
+
+      $this->conn = new Yampee_Redis_Client($server[0], $server[1]);
+      $this->conn->connect();
+
+      return true;
+    }
+
+    return false;
+  }
+
+  function get($key) {
+    if ($this->conn->has($key)) {
+      return unserialize($this->conn->get($key));
+    }
+
+    return null;
+  }
+
+  function put($key, $value) {
+    return $this->conn->set($key, serialize($value));
+  }
+
+  function rem($key) {
+    return $this->conn->remove($key);
+  }
+
+  /*function clear() {
+    return apc_clear_cache('user');
+  }*/
+
+  function listKeys($prefix) {
+    $cache_list = $this->conn->findKeys("*");
+    $len = strlen($prefix);
+
+    $keys = array();
+    foreach ($cache_list as $_cache) {
+      $_key = $_cache["info"];
+      if (strpos($_key, $prefix) === 0) {
+        $keys[] = substr($_key, $len);
+      }
+    }
+
+    return $keys;
   }
 }
 
