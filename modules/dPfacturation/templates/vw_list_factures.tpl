@@ -61,9 +61,9 @@ showLegend = function() {
               </a>
             </td>
             {{if $conf.dPfacturation.CEditPdf.use_bill_etab}}
-              <td style="text-align: right;">{{$facture->_id|string_format:"%08d"}}</td>
-              <td>{{$facture->_ref_last_sejour->entree_prevue|date_format:"%d/%m/%Y"}}</td>
-              <td style="text-align: right;">{{$facture->_ref_last_sejour->_id}}</td>
+              <td style="text-align: right;">{{$_facture->_id|string_format:"%08d"}}</td>
+              <td>{{$_facture->_ref_last_sejour->entree_prevue|date_format:"%d/%m/%Y"}}</td>
+              <td style="text-align: right;">{{$_facture->_ref_last_sejour->_id}}</td>
             {{/if}}
           </tr>
         {{foreachelse}}
