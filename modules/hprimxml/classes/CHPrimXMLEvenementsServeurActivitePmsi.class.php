@@ -191,11 +191,11 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     // Si on a pas de plage on recherche éventuellement une plage dans une autre salle
     if (count($plageOps) == 0) {
       $plageOp->salle_id = null;
-      $plageOps          = $plageOp->loadMatchingList();
+      $plageOps = $plageOp->loadMatchingList();
 
       // Si on retrouve des plages alors on ne prend pas en compte la salle du flux
       if (count($plageOps) > 0) {
-        $operation->salle_id = "";
+        $operation->salle_id = null;
       }
     }
 
@@ -214,7 +214,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
       // Dans le cas où l'on avait une plage sur l'interv on la supprime
       $operation->plageop_id = "";
       
-      $operation->date       = $date_op;
+      $operation->date = $date_op;
     }
   }
   
