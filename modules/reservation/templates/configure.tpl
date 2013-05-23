@@ -51,6 +51,11 @@
     
     {{mb_include module=system template=inc_config_str var=subject_mail size=100}}
     {{mb_include module=system template=inc_config_str var=text_mail textarea=1}}
+
+    <tr>
+      <th class="title" colspan="2">Affichage</th>
+    </tr>
+    {{mb_include module=system template=inc_config_bool var=display_dossierBloc_button}}
     
     <tr>
       <td class="button" colspan="2">
