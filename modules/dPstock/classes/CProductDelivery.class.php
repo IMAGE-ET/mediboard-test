@@ -337,6 +337,8 @@ class CProductDelivery extends CMbObject {
       }
     }
 
+    $order_to_0 = $this->fieldModified("order", "0");
+
     if ($msg = parent::store()) {
       return $msg;
     }
@@ -359,11 +361,11 @@ class CProductDelivery extends CMbObject {
       $this->_prises = null;
     }
 
-    if (!$is_new) {
-      return;
-    }
-
-    if ($this->manual || $this->_auto_trace) {
+    // Sortie manuelle ou autotrace et passage de "commande" à "pas commande"
+    if (
+        $is_new && $this->manual ||
+        $this->_auto_trace && $order_to_0
+    ) {
       $delivery_trace = new CProductDeliveryTrace;
       $delivery_trace->delivery_id = $this->_id;
       $delivery_trace->quantity = $this->quantity;
@@ -391,6 +393,10 @@ class CProductDelivery extends CMbObject {
       else {
         CAppUI::setMsg("CProductDeliveryTrace-msg-create");
       }
+    }
+
+    if (!$is_new) {
+      return null;
     }
 
     $this->loadRefStock()->loadRefsFwd();
