@@ -40,8 +40,13 @@ class CChambre extends CMbObject {
   var $_conflits_pathologies = null;
 
   // Object references
+  /** @var CService */
   var $_ref_service     = null;
+
+  /** @var CLit[] */
   var $_ref_lits        = null;
+
+  /** @var CEmplacement */
   var $_ref_emplacement  = null;
   
   function getSpec() {
