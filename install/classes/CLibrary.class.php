@@ -466,3 +466,15 @@ $library->versionFile = "NEWS";
 $library->versionString = "4.5.0, released 2013-02-17";
 
 CLibrary::$all[$library->name] = $library;
+
+$library = new CLibrary;
+$library->name = "Yampee Redis client";
+$library->url = "https://github.com/yampee/Redis";
+$library->fileName = "yampee-redis.zip";
+$library->description = "Client Redis compatible PHP 5.2";
+$library->sourceDir = "yampee-redis";
+$library->targetDir = "yampee-redis";
+$library->versionFile = "src/Yampee/Redis/Client.php";
+$library->versionString = 'class Yampee_Redis_Client';
+
+CLibrary::$all[$library->name] = $library;

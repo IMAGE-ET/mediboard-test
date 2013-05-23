@@ -1310,9 +1310,14 @@ class CSetupsystem extends CSetup {
       DROP `date_creation`,
       DROP `date_modification`,
       ADD `expire` INT(11) NOT NULL DEFAULT '0'";
-    $this->addQuery($query, true);
+    $this->addQuery($query);
 
-    $this->mod_version = "1.1.34";
+    $this->makeRevision("1.1.34");
+    $query = "ALTER TABLE `session`
+      CHANGE `data` `data` LONGBLOB";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.35";
     
     /*$query = "ALTER TABLE user_log
                 DROP INDEX object_id,

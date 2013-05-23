@@ -11,7 +11,7 @@
 
 // Use $dPconfig for both application and install wizard to use it
 global $dPconfig, $rootName;
-require_once "{$dPconfig['root_dir']}/classes/CMbPath.class.php";
+require_once dirname(__FILE__)."/CMbPath.class.php";
 
 /**
  * Shared Memory interface
@@ -77,11 +77,17 @@ interface ISharedMemory {
 class DiskSharedMemory implements ISharedMemory {
   private $dir = null;
 
+  /**
+   * @see parent::__construct()
+   */
   function __construct() {
     global $dPconfig;
     $this->dir = "{$dPconfig['root_dir']}/tmp/shared/";
   }
 
+  /**
+   * @see parent::init()
+   */
   function init() {
     if (!CMbPath::forceDir($this->dir)) {
       trigger_error("Shared memory could not be initialized, ensure that '$this->dir' is writable");
@@ -90,6 +96,9 @@ class DiskSharedMemory implements ISharedMemory {
     return true;
   }
 
+  /**
+   * @see parent::get()
+   */
   function get($key) {
     if (file_exists($this->dir.$key)) {
       return unserialize(file_get_contents($this->dir.$key));
@@ -97,10 +106,16 @@ class DiskSharedMemory implements ISharedMemory {
     return false;
   }
 
+  /**
+   * @see parent::put()
+   */
   function put($key, $value) {
     return file_put_contents($this->dir.$key, serialize($value)) !== false;
   }
 
+  /**
+   * @see parent::rem()
+   */
   function rem($key) {
     if (is_writable($this->dir.$key)) {
       return unlink($this->dir.$key);
@@ -117,6 +132,9 @@ class DiskSharedMemory implements ISharedMemory {
       unlink($file);
   }*/
 
+  /**
+   * @see parent::listKeys()
+   */
   function listKeys($prefix){
     $list = array_map("basename", glob($this->dir.$prefix."*"));
     $len = strlen($prefix);
@@ -133,20 +151,32 @@ class DiskSharedMemory implements ISharedMemory {
  * Alternative PHP Cache (APC) based Memory class
  */
 class APCSharedMemory implements ISharedMemory {
+  /**
+   * @see parent::init()
+   */
   function init() {
     return function_exists('apc_fetch') &&
            function_exists('apc_store') &&
            function_exists('apc_delete');
   }
 
+  /**
+   * @see parent::get()
+   */
   function get($key) {
     return apc_fetch($key);
   }
 
+  /**
+   * @see parent::put()
+   */
   function put($key, $value) {
     return apc_store($key, $value);
   }
 
+  /**
+   * @see parent::rem()
+   */
   function rem($key) {
     return apc_delete($key);
   }
@@ -155,6 +185,9 @@ class APCSharedMemory implements ISharedMemory {
     return apc_clear_cache('user');
   }*/
 
+  /**
+   * @see parent::listKeys()
+   */
   function listKeys($prefix) {
     $info = apc_cache_info("user");
     $cache_list = $info["cache_list"];
@@ -172,7 +205,9 @@ class APCSharedMemory implements ISharedMemory {
   }
 }
 
-/** Shared memory container */
+/**
+ * Shared memory container
+ */
 abstract class SHM {
   const GZ = "__gz__";
 
@@ -303,12 +338,23 @@ abstract class SHM {
   }
 }
 
+/**
+ * Memcached based Shared Memory
+ */
 class MemcachedSharedMemory implements ISharedMemory {
   /** @var Memcached|\Xenzilla\Memcached */
   public $conn;
 
+  /**
+   * Get Memcached servers addresses
+   *
+   * @return array
+   */
   private function getServerAddresses(){
-    $conf = CAppUI::conf("shared_memory_params");
+    global $dPconfig;
+
+    $conf = $dPconfig["shared_memory_params"];
+
     $servers = preg_split("/\s*,\s*/", $conf);
     $list = array();
     foreach ($servers as $_server) {
@@ -317,6 +363,9 @@ class MemcachedSharedMemory implements ISharedMemory {
     return $list;
   }
 
+  /**
+   * @see parent::init()
+   */
   function init() {
     if (class_exists('Memcached', false)) {
       $conn = new Memcached();
@@ -336,14 +385,23 @@ class MemcachedSharedMemory implements ISharedMemory {
     return (bool) $this->conn = $conn;
   }
 
+  /**
+   * @see parent::get()
+   */
   function get($key) {
     return $this->conn->get($key);
   }
 
+  /**
+   * @see parent::put()
+   */
   function put($key, $value) {
     return $this->conn->set($key, $value);
   }
 
+  /**
+   * @see parent::rem()
+   */
   function rem($key) {
     return $this->conn->delete($key);
   }
@@ -352,6 +410,9 @@ class MemcachedSharedMemory implements ISharedMemory {
     return $this->conn->flush();
   }*/
 
+  /**
+   * @see parent::listKeys()
+   */
   function listKeys($prefix) {
     // Memcached 2.0+
     if (method_exists($this->conn, "getAllKeys")) {
@@ -363,19 +424,29 @@ class MemcachedSharedMemory implements ISharedMemory {
 }
 
 /**
- * Description
+ * Redis based Shared Memory
  */
 class RedisSharedMemory implements ISharedMemory {
   /** @var Yampee_Redis_Client */
   public $conn;
 
+  /**
+   * Get Redis server address
+   *
+   * @return array
+   */
   private function getServerAddress(){
-    $conf = CAppUI::conf("shared_memory_params");
+    global $dPconfig;
+
+    $conf = $dPconfig["shared_memory_params"];
     return explode(":", $conf);
   }
 
+  /**
+   * @see parent::init()
+   */
   function init() {
-    include dirname(__FILE__)."/../lib/Redis-master/autoloader.php";
+    include dirname(__FILE__)."/../lib/yampee-redis/autoloader.php";
 
     if (class_exists('Yampee_Redis_Client')) {
       $server = $this->getServerAddress();
@@ -389,6 +460,9 @@ class RedisSharedMemory implements ISharedMemory {
     return false;
   }
 
+  /**
+   * @see parent::get()
+   */
   function get($key) {
     if ($this->conn->has($key)) {
       return unserialize($this->conn->get($key));
@@ -397,18 +471,23 @@ class RedisSharedMemory implements ISharedMemory {
     return null;
   }
 
+  /**
+   * @see parent::put()
+   */
   function put($key, $value) {
     return $this->conn->set($key, serialize($value));
   }
 
+  /**
+   * @see parent::rem()
+   */
   function rem($key) {
     return $this->conn->remove($key);
   }
 
-  /*function clear() {
-    return apc_clear_cache('user');
-  }*/
-
+  /**
+   * @see parent::listKeys()
+   */
   function listKeys($prefix) {
     $cache_list = $this->conn->findKeys("*");
     $len = strlen($prefix);
