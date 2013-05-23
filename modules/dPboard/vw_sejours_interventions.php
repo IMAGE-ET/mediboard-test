@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPboard
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPboard
+ *
+ * @category Board
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CAppUI::requireModuleFile('dPstats', 'graph_patpartypehospi');
@@ -32,8 +35,14 @@ $filterSejour->type = CValue::getOrSession("type", 1);
 $filterOperation->_codes_ccam = strtoupper(CValue::getOrSession("_codes_ccam", ""));
 
 $graphs = array(
-	graphPatParTypeHospi($filterSejour->_date_min_stat, $filterSejour->_date_max_stat, $filterSejour->praticien_id, null, $filterSejour->type),
-	graphActivite($filterSejour->_date_min_stat, $filterSejour->_date_max_stat, $filterSejour->praticien_id, null, null, null, $filterOperation->_codes_ccam, null, 0),
+  graphPatParTypeHospi(
+    $filterSejour->_date_min_stat, $filterSejour->_date_max_stat, $filterSejour->praticien_id,
+    null, $filterSejour->type
+  ),
+  graphActivite(
+    $filterSejour->_date_min_stat, $filterSejour->_date_max_stat, $filterSejour->praticien_id,
+    null, null, null, $filterOperation->_codes_ccam, null, 0
+  ),
 );
 
 // Variables de templates
@@ -45,5 +54,3 @@ $smarty->assign("prat",            $prat);
 $smarty->assign("graphs",          $graphs);
 
 $smarty->display("vw_sejours_interventions.tpl");
-
-?>

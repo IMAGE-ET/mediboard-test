@@ -1,11 +1,14 @@
-<?php /* $Id: vw_agenda.php $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPbloc
- * @version $Revision: 7878 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPboard
+ *
+ * @category Board
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 // Récupération des paramètres
@@ -28,4 +31,3 @@ $smarty->assign("login"       , $login);
 $smarty->assign("url"         , $url);
 
 $smarty->display("vw_agenda.tpl");
-?>

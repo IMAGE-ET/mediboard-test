@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPboard
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPboard
+ *
+ * @category Board
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 global $prat;
@@ -24,10 +27,10 @@ $filterConsultation->_date_max = CMbDT::date("-$rectif DAYS", $filterConsultatio
 $filterConsultation->_date_max = CMbDT::date("+ 1 MONTH", $filterConsultation->_date_max);
 $filterConsultation->_date_max = CMbDT::date("-1 DAY", $filterConsultation->_date_max);
 
-$filterConsultation->praticien_id = $prat->_id;
+$filterConsultation->_praticien_id = $prat->_id;
 
 $graphs = array(
-  graphConsultations($filterConsultation->_date_min, $filterConsultation->_date_max, $filterConsultation->praticien_id),
+  graphConsultations($filterConsultation->_date_min, $filterConsultation->_date_max, $filterConsultation->_praticien_id),
 );
 
 // Variables de templates
@@ -38,5 +41,3 @@ $smarty->assign("prat"              , $prat);
 $smarty->assign("graphs"            , $graphs);
 
 $smarty->display("vw_stats_consultations.tpl");
-
-?>

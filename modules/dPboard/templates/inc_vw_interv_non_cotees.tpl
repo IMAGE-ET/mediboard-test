@@ -9,7 +9,7 @@ updateActes = function() {
   url.addParam("debut"       , "{{$debut}}");
   url.addParam("fin"         , "{{$fin}}");
   url.requestUpdate("list_interv_non_cotees");
-}
+};
 
 Main.add(function() {
   var form = getForm('changeDate');

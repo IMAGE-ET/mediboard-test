@@ -2,12 +2,12 @@
 
 /**
  * dPboard
- *   
- * @category dPboard
+ *
+ * @category Board
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
  * @link     http://www.mediboard.org
  */
 
@@ -55,10 +55,13 @@ else {
   }
 }
 
+/** @var COperation[] $interventions */
 $interventions = $operation->loadList($where, null, null, null, $ljoin);
 CMbObject::massLoadFwdRef($interventions, "plageop_id");
+/** @var CSejour[] $sejours */
 $sejours = CMbObject::massLoadFwdRef($interventions, "sejour_id");
 CMbObject::massLoadFwdRef($sejours, "patient_id");
+/** @var CMediusers[] $chirs */
 $chirs = CMbObject::massLoadFwdRef($interventions, "chir_id");
 CMbObject::massLoadFwdRef($chirs, "function_id");
 
@@ -99,10 +102,10 @@ foreach ($interventions as $key => $_interv) {
       continue;
     }
     foreach ($_activite as $_key_activite => $_type_activite) {
-      if($user->_is_anesth && $_key_activite == 4) {
+      if ($user->_is_anesth && $_key_activite == 4) {
         $nbCodes++;
       }
-      if(!$user->_is_anesth && $_key_activite != 4) {
+      if (!$user->_is_anesth && $_key_activite != 4) {
         $nbCodes++;
       }
     }

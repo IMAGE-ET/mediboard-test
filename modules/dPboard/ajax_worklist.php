@@ -1,11 +1,14 @@
-<?php /* $Id: httpreq_vw_hospi.php 12302 2011-05-27 13:08:17Z rhum1 $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPboard
- * @version $Revision: 12302 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPboard
+ *
+ * @category Board
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -21,5 +24,3 @@ $smarty->assign("date"   , $date);
 $smarty->assign("chirSel", $chirSel);
 
 $smarty->display("inc_worklist.tpl");
- 
-?>

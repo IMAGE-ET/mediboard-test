@@ -64,7 +64,7 @@ Main.add(function(){
           this.sChir = "_chir";
           this.sClass = "_class";
           this.pop();
-        }
+        };
         Main.add(function() {
           var oForm = getForm("filters");
           var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");

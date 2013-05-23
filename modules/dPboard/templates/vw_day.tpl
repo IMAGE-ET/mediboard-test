@@ -36,7 +36,7 @@ updateListConsults = function() {
   url.addParam("selConsult", "");
   url.addParam("board"     , "1");
   url.requestUpdate("consultations");
-}
+};
 
 initUpdateListConsults = function() {
   var url = new Url("dPcabinet", "httpreq_vw_list_consult");
@@ -46,7 +46,7 @@ initUpdateListConsults = function() {
   url.addParam("selConsult", "");
   url.addParam("board"     , "1");
   url.periodicalUpdate("consultations", { frequency: 120 } );
-}
+};
 
 updateListOperations = function() {
   var url = new Url("dPplanningOp", "httpreq_vw_list_operations");
@@ -55,7 +55,7 @@ updateListOperations = function() {
   url.addParam("urgences", "0");
   url.addParam("board"   , "1");
   url.requestUpdate("operations");
-}
+};
 
 initUpdateListOperations = function() {
   var url = new Url("dPplanningOp", "httpreq_vw_list_operations");
@@ -64,21 +64,21 @@ initUpdateListOperations = function() {
   url.addParam("urgences", "0");
   url.addParam("board"   , "1");
   url.periodicalUpdate("operations", { frequency: 120 } );
-}
+};
 
 updateListHospi = function() {
   var url = new Url("dPboard", "httpreq_vw_hospi");
   url.addParam("chirSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.requestUpdate("hospi");
-}
+};
 
 updateWorkList = function() {
   var url = new Url("dPboard", "ajax_worklist");
   url.addParam("chirSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.requestUpdate("worklist");
-}
+};
 
 showDossierSoins = function(sejour_id, date, default_tab){
   $('dossier_sejour').update("");
@@ -90,7 +90,7 @@ showDossierSoins = function(sejour_id, date, default_tab){
   url.requestUpdate($('dossier_sejour'));
   modalWindow = Modal.open($('dossier_sejour'));
   modalWindow.observe("afterClose", updatePrescriptions);
-}
+};
 
 Main.add(function () {
   {{if $prat->_id}}

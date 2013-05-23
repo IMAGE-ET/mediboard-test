@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPboard
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPboard
+ *
+ * @category Board
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -30,7 +33,7 @@ if ($user->_is_secretaire) {
 }
 
 // Si le user est un praticien
-if ($user->_is_praticien){
+if ($user->_is_praticien) {
   $prat = $user;
 }
 
@@ -44,5 +47,3 @@ $smarty->assign("prat"      , $prat);
 $smarty->assign("praticiens", $praticiens);
 
 $smarty->display("inc_board.tpl");
-
-?>

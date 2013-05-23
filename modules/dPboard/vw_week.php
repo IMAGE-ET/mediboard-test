@@ -88,6 +88,7 @@ $where["chir_id"] = "= '$chirSel'";
 for ($i = 0; $i < 7; $i++) {
   $date             = CMbDT::date("+$i day", $debut);
   $where["date"]    = "= '$date'";
+  /** @var CPlageconsult[] $plagesConsult */
   $plagesConsult = $plageConsult->loadList($where);
   
   foreach ($plagesConsult as $_consult) {
@@ -104,6 +105,7 @@ $operation = new COperation();
 for ($i = 0; $i < 7; $i++) {
   $date             = CMbDT::date("+$i day", $debut);
   $where["date"]    = "= '$date'";
+  /** @var CPlageOp[] $plagesOp */
   $plagesOp = $plageOp->loadList($where);
   
   // Affichage en label du nombre d'interventions hors plage dans la journée
@@ -125,33 +127,46 @@ for ($i = 0; $i < 7; $i++) {
   }
 }
 
+/**
+ * Ajout d'un évènement à un planning
+ *
+ * @param CPlanningWeek &$planning planning concerné
+ * @param CPlageHoraire $_plage    plage à afficher
+ * @param string        $date      date de l'évènement
+ * @param string        $libelle   libellé de l'évènement
+ * @param string        $color     couleur de l'évènement
+ * @param string        $type      type de l'évènement
+ *
+ * @return void
+ */
 function ajoutEvent(&$planning, $_plage, $date, $libelle, $color, $type) {
   $debute = "$date $_plage->debut";
-  $event = new CPlanningEvent($_plage->_guid, $debute, CMbDT::minutesRelative($_plage->debut, $_plage->fin), $libelle, $color, true, null, null);
-    $event->resizable = true;
+  $event = new CPlanningEvent(
+    $_plage->_guid, $debute, CMbDT::minutesRelative($_plage->debut, $_plage->fin),
+    $libelle, $color, true, null, null
+  );
+  $event->resizable = true;
   
   //Paramètres de la plage de consultation
   $event->type = $type;
   $pct = $_plage->_fill_rate;
-    if ($pct > "100") {
-      $pct = "100";
-    }
-    if ($pct == "") {
-      $pct = 0;
-    }
-    
+  if ($pct > "100") {
+    $pct = "100";
+  }
+  if ($pct == "") {
+    $pct = 0;
+  }
+
+  $event->plage["id"]  = $_plage->_id;
+  $event->plage["pct"] = $pct;
   if ($type == "consultation") {
-    $event->plage["id"] = $_plage->plageconsult_id; 
-    $event->plage["pct"] = $pct;
-    $event->plage["locked"] = $_plage->locked;
-    $event->plage["_affected"] = $_plage->_affected;
+    $event->plage["locked"]       = $_plage->locked;
+    $event->plage["_affected"]    = $_plage->_affected;
     $event->plage["_nb_patients"] = $_plage->_nb_patients;
-    $event->plage["_total"] = $_plage->_total;
+    $event->plage["_total"]       = $_plage->_total;
   }
   else {
-    $event->plage["id"] = $_plage->plageop_id; 
-    $event->plage["pct"] = $pct;
-    $event->plage["locked"] = 0;
+    $event->plage["locked"]         = 0;
     $event->plage["_nb_operations"] = $_plage->_nb_operations;
   }
   $event->plage["list_class"] = $_plage->_guid;

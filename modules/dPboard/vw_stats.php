@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPboard
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPboard
+ *
+ * @category Board
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CAppUI::requireModuleFile("dPboard", "inc_board");
@@ -20,11 +23,11 @@ $stats = array(
   "vw_prescripteurs"
 );
 
-if(CModule::getActive("dPprescription")){
-	$stats[] = "vw_stats_prescriptions";
+if (CModule::getActive("dPprescription")) {
+  $stats[] = "vw_stats_prescriptions";
 }
 
-if(CAppUI::conf("dPplanningOp COperation verif_cote")) {
+if (CAppUI::conf("dPplanningOp COperation verif_cote")) {
   $stats[] = "vw_trace_cotes";
 }
 
@@ -44,5 +47,3 @@ $smarty->assign("stat" , $stat);
 $smarty->display("vw_stats.tpl");
 
 CAppUI::requireModuleFile("dPboard", "$stat");
-
-?>

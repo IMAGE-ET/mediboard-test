@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPboard
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPboard
+ *
+ * @category Board
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 $user = CUser::get();
@@ -31,12 +34,13 @@ $ljoin["transmission_medicale"] = "transmission_medicale.sejour_id = sejour.sejo
 $ljoin["observation_medicale"] = "observation_medicale.sejour_id = sejour.sejour_id";
 
 $where[] = "(transmission_medicale.date BETWEEN '$date_min' and '$date_max') OR
-						(observation_medicale.date BETWEEN '$date_min' and '$date_max')";
+  (observation_medicale.date BETWEEN '$date_min' and '$date_max')";
 
 $where["sejour.praticien_id"] = " = '$praticien_id'";
+/** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, null, null, null, $ljoin);
 
-foreach($sejours as $_sejour){
+foreach ($sejours as $_sejour) {
   $_sejour->loadRefPatient();
 }
 
@@ -46,6 +50,3 @@ $smarty->assign("sejours", $sejours);
 $smarty->assign("praticiens", $praticiens);
 $smarty->assign("praticien_id", $praticien_id);
 $smarty->display("vw_bilan_transmissions.tpl");
-
-
-?>

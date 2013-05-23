@@ -2,12 +2,12 @@
 
 /**
  * dPboard
- *  
- * @category dPboard
+ *
+ * @category Board
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
  * @link     http://www.mediboard.org
  */
 
@@ -37,5 +37,3 @@ $smarty->assign("debut", $debut);
 $smarty->assign("fin", $fin);
 $smarty->assign("all_prats", $all_prats);
 $smarty->display("../../dPboard/templates/inc_vw_interv_non_cotees.tpl");
-
-?>

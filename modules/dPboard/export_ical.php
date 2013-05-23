@@ -1,12 +1,14 @@
 <?php
+
 /**
- * $Id: $
- * 
- * @package    Mediboard
- * @subpackage board
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    $Revision: $
+ * dPboard
+ *
+ * @category Board
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 /**
@@ -38,13 +40,15 @@ $fin          = CMbDT::date("+$weeks_after week", $date);
 $fin          = CMbDT::date("next sunday", $fin);
 
 // Liste des Salles
-$listSalles = new CSalle();
-$listSalles = $listSalles->loadGroupList();
+$salle = new CSalle();
+/** @var CSalle[] $listSalles */
+$listSalles = $salle->loadGroupList();
 
 // Plages de Consultations
 $plageConsult   = new CPlageconsult();
 $plageOp        = new CPlageOp();
 $listDays       = array();
+/** @var CPlageconsult[] $plagesConsult */
 $plagesConsult  = array();
 $plagesOp       = array();
 $plagesPerDayOp = array();
@@ -54,7 +58,8 @@ for ($i = 0; CMbDT::date("+$i day", $debut)!=$fin ; $i++) {
   $where["chir_id"] = "= '$prat_id'";
   $date             = CMbDT::date("+$i day", $debut);
   $where["date"]    = "= '$date'";
-  
+
+  /** @var CPlageconsult[] $plagesPerDayConsult */
   $plagesPerDayConsult = $plageConsult->loadList($where);
   $nb_oper        = 0;
   $where          = array();
@@ -67,16 +72,16 @@ for ($i = 0; CMbDT::date("+$i day", $debut)!=$fin ; $i++) {
     $nb_oper = $nb_oper + count($plagesPerDayOp[$salle->_id]);
   }
   
-  foreach ($plagesPerDayConsult as $value) {
-    $value->countPatients();
+  foreach ($plagesPerDayConsult as $plageConsult) {
+    $plageConsult->countPatients();
   }
   
   if (in_array("consult", $export) && count($plagesPerDayConsult)) {
-    foreach ($plagesPerDayConsult as $value) {
-      $value->loadFillRate();
+    foreach ($plagesPerDayConsult as $plageConsult) {
+      $plageConsult->loadFillRate();
       
       if ($details) {
-        $value->loadRefsConsultations();
+        $plageConsult->loadRefsConsultations();
       }
     }
     
@@ -84,21 +89,22 @@ for ($i = 0; CMbDT::date("+$i day", $debut)!=$fin ; $i++) {
   }
   
   if (in_array("interv", $export) && $nb_oper) {
-    foreach ($plagesPerDayOp as $key => $valuePlages) {
-      if (!count($valuePlages)) {
+    foreach ($plagesPerDayOp as $key => $listPlages) {
+      /** @var CPlageOp[] $listPlages */
+      if (!count($listPlages)) {
         unset($plagesPerDayOp[$key]);
         continue;
       }
 
-      foreach ($valuePlages as $keyPlage=>$value) {
-        $value->loadRefSalle();
-        $value->_ref_salle->loadRefBloc();
-        $value->_ref_salle->_ref_bloc->loadRefGroup();
+      foreach ($listPlages as $keyPlage => $plage) {
+        $plage->loadRefSalle();
+        $plage->_ref_salle->loadRefBloc();
+        $plage->_ref_salle->_ref_bloc->loadRefGroup();
         if ($details) {
-          $value->loadRefsOperations();
+          $plage->loadRefsOperations();
         }
-        
-        $value->getNbOperations();
+
+        $plage->getNbOperations();
       }
         
       $plagesOp[$key][$date] = $plagesPerDayOp[$key];
@@ -114,10 +120,11 @@ if (in_array("consult", $export)) {
   foreach ($plagesConsult as $curr_day => $plagesPerDay) {
     foreach ($plagesPerDay as $rdv) {
       $description = "$rdv->_nb_patients patient(s)";
-			
+
       // Evènement détaillé
       if ($details) {
         foreach ($rdv->_ref_consultations as $consult) {
+          /** @var CConsultation $consult */
           $when = ical_time($consult->heure);
           $patient = $consult->loadRefPatient();
           $what = $patient->_id ? "$patient->_civilite $patient->nom" : "Pause: $consult->motif"; 
@@ -142,6 +149,7 @@ if (in_array("interv", $export)) {
         // Evènement détaillé
         if ($details) {
           foreach ($rdv->_ref_operations as $op) {
+            /** @var COperation $op */
             $op->loadComplete();
             $duration = ical_time($op->temp_operation);
             $when     = ical_time(CMbDT::time($op->_datetime));

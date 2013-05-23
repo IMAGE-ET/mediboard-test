@@ -1,11 +1,14 @@
-<?php /* $Id: $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPboard
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPboard
+ *
+ * @category Board
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 global $prat;
@@ -23,11 +26,13 @@ $listPlages = $plage->loadList($where, $order);
 
 $interv = new COperation();
 $where = array();
-$where[] = "(plageop_id " . CSQLDataSource::prepareIn(array_keys($listPlages)) . " OR (operations.date = '$date_interv' AND operations.chir_id = '" . $prat->_id . "'))";
+$where[] = "(plageop_id " . CSQLDataSource::prepareIn(array_keys($listPlages)) .
+  " OR (operations.date = '$date_interv' AND operations.chir_id = '" . $prat->_id . "'))";
 
+/** @var COperation[] $listIntervs */
 $listIntervs = $interv->loadList($where);
 
-foreach($listIntervs as &$_interv) {
+foreach ($listIntervs as &$_interv) {
   $_interv->loadRefsFwd();
 }
 
@@ -40,5 +45,3 @@ $smarty->assign("prec", CMbDT::date("-1 DAYS", $date_interv));
 $smarty->assign("suiv", CMbDT::date("+1 DAYS", $date_interv));
 
 $smarty->display("vw_trace_cotes.tpl");
-
-?>

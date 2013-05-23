@@ -314,10 +314,10 @@ class CPlanningWeek {
   /**
    * Add a label to a day
    *
-   * @param object $day     The label's day
-   * @param object $text    The label
-   * @param object $detail  [optional] Details about the label
-   * @param object $color   [optional] The label's color
+   * @param string $day     The label's day
+   * @param string $text    The label
+   * @param string $detail  [optional] Details about the label
+   * @param string $color   [optional] The label's color
    * @param string $onclick [optional] a function for the onclick event
    *
    * @return void

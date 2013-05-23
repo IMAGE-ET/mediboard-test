@@ -57,7 +57,7 @@ updateListOperations = function() {
   url.addParam("urgences", "0");
   url.addParam("board"   , "1");
   url.requestUpdate("viewTooltip");
-}
+};
 
 Main.add(function () {
   Calendar.regField(getForm("changeDate").date, null, {noView: true});

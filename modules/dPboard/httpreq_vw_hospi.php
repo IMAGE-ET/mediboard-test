@@ -1,11 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPboard
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * dPboard
+ *
+ * @category Board
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -24,7 +27,8 @@ if ($praticien->isAnesth()) {
   $ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
   $ljoin["plagesop"]   = "operations.plageop_id = plagesop.plageop_id";
   $where[] = "operations.anesth_id = '$chirSel' OR (operations.anesth_id IS NULL AND plagesop.anesth_id = '$chirSel')";
-} else {
+}
+else {
   $where["sejour.praticien_id"] = "= '$chirSel'";
 }
 $where["sejour.entree"]   = "<= '$date 23:59:59'";
@@ -40,9 +44,10 @@ $ljoin["service"]     = "service.service_id = chambre.service_id";
 $order = "`service`.`nom`, `chambre`.`nom`, `lit`.`nom`, `sejour`.`sortie` ASC, `sejour`.`entree` DESC";
 
 $sejour = new CSejour();
+/** @var CSejour[] $listSejours */
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
-foreach($listSejours as &$_sejour) {
+foreach ($listSejours as &$_sejour) {
   $_sejour->loadRefsFwd();
   $_sejour->loadRefsOperations();
   $_sejour->loadRefCurrAffectation($date);
@@ -58,5 +63,3 @@ $smarty->assign("praticien"  , $praticien);
 $smarty->assign("listSejours", $listSejours);
 
 $smarty->display("inc_vw_hospi.tpl");
-
-?>

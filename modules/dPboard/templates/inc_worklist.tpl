@@ -7,7 +7,7 @@ initUpdatePrescriptions = function() {
   url.addParam("_date_sortie_prevue", "{{$date}}");
   url.addParam("board" , "1");
   url.periodicalUpdate("prescriptions_non_signees", { frequency: 120 } );
-}
+};
 
 updatePrescriptions = function() {
   var url = new Url("soins", "httpreq_vw_bilan_list_prescriptions");
@@ -16,11 +16,11 @@ updatePrescriptions = function() {
   url.addParam("_date_sortie_prevue", "{{$date}}");
   url.addParam("board" , "1");
   url.requestUpdate("prescriptions_non_signees");
-}
+};
 
 updateNbPrescriptions = function(nb) {
   $('nb_prescriptions').update('('+nb+')');
-}
+};
 
 initUpdateActes = function() {
   var url = new Url("board", "ajax_list_interv_non_cotees");
@@ -28,7 +28,7 @@ initUpdateActes = function() {
   url.addParam("fin", "{{$date}}");
   url.addParam("board"       , "1");
   url.periodicalUpdate("actes_non_cotes", { frequency: 120 } );
-}
+};
 
 updateActes = function() {
   var url = new Url("board", "ajax_list_interv_non_cotees");
@@ -36,11 +36,11 @@ updateActes = function() {
   url.addParam("fin", "{{$date}}");
   url.addParam("board"       , "1");
   url.requestUpdate("actes_non_cotes");
-}
+};
 
 updateNbActes = function(nb) {
   $('nb_actes').update('('+nb+')');
-}
+};
 
 Main.add(function () {
   var tabs = Control.Tabs.create('tab-worklist', true);

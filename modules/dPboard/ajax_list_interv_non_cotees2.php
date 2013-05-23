@@ -3,7 +3,7 @@
 /**
  * dPboard
  *  
- * @category dPboard
+ * @category Board
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -55,6 +55,7 @@ else {
     $where["chir_id"] = "= '$user->_id'";
   }
 }
+/** @var CPlageOp[] $plages */
 $plages = $plage->loadList($where, "date");
 
 foreach ($plages as $_plage_id => $_plage) {
@@ -86,7 +87,7 @@ foreach ($plages as $_plage_id => $_plage) {
     }
     
     $_operation->_actes_non_cotes = $nbCodes - count($actes_ccam);
-    $_operation->loadRefPlageOp(1);
+    $_operation->loadRefPlageOp();
     $_operation->loadRefPatient();
   }
   
@@ -99,6 +100,7 @@ foreach ($plages as $_plage_id => $_plage) {
 $where["plageop_id"] = "IS NULL";
 $where["annulee"]    = " = '0'";
 
+/** @var COperation[] $hors_plage */
 $hors_plage = $operation->loadList($where);
 
 foreach ($hors_plage as $key => $_operation) {
@@ -121,7 +123,7 @@ foreach ($hors_plage as $key => $_operation) {
   }
   
   $_operation->_actes_non_cotes = $nbCodes - count($actes_ccam);
-  $_operation->loadRefPlageOp(1);
+  $_operation->loadRefPlageOp();
 }
 
 $smarty = new CSmartyDP;
@@ -132,5 +134,3 @@ $smarty->assign("debut", $debut);
 $smarty->assign("fin", $fin);
 $smarty->assign("all_prats", $all_prats);
 $smarty->display("../../dPboard/templates/inc_list_interv_non_cotees.tpl");
-
-?>
