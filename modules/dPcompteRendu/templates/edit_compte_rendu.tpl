@@ -292,8 +292,18 @@ function modalHeaderFooter(state) {
   }
 }
 
-function closeModalHeaderFooter() {
-  var form = getForm()
+function duplicateDoc(form) {
+  $V(form.compte_rendu_id, '');
+  CKEDITOR.instances.htmlarea.element.$.disabled=false;
+  CKEDITOR.instances.htmlarea.element.$.contentEditable=true;
+  CKEDITOR.instances.htmlarea.element.$.designMode="On";
+  $V(form.callback, "afterDuplicate");
+  form.onsubmit();
+}
+
+function afterDuplicate(cr_id) {
+  window.opener.Document.edit(cr_id);
+  window.close();
 }
 
 Main.add(function(){
@@ -595,7 +605,10 @@ Main.add(function(){
       {{if $can_lock}}
         &mdash;
         <button type="button" class="{{if $compte_rendu->valide}}unlock{{else}}lock{{/if}} notext"
-                onclick="toggleLock(this)" title="Verrouiller / Déverouiller le document"></button>
+                onclick="toggleLock(this)">Verrouiller / Déverouiller le document</button>
+      {{/if}}
+      {{if $is_locked}}
+        <button type="button" class="add" onclick="duplicateDoc(this.form)">Dupliquer le document</button>
       {{/if}}
     </th>
   </tr>

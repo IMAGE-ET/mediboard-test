@@ -202,9 +202,6 @@ if ($curr_user->isAdmin()) {
   $can_lock = true;
 }
 else {
-  // Droit de lock du fichier
-  $can_lock = !$compte_rendu->_id || ($curr_user->_id == $compte_rendu->author_id);
-
   // Vérification de la date de dernière modification (lock si trop ancien et pas admin)
   if ($compte_rendu->_id) {
     $days = CAppUI::conf("dPcompteRendu CCompteRendu days_to_lock");
@@ -216,6 +213,8 @@ else {
       $is_locked = true;
     }
   }
+  // Droit de lock du fichier
+  $can_lock = (!$compte_rendu->_id || ($curr_user->_id == $compte_rendu->author_id)) && !$is_locked;
   if ($is_locked || (!$can_lock && $compte_rendu->valide)) {
     $templateManager->printMode = true;
   }
@@ -237,6 +236,7 @@ $smarty->assign("nb_printers"   , $nb_printers);
 $smarty->assign("pack_id"       , $pack_id);
 $smarty->assign("destinataires" , $destinataires);
 $smarty->assign("can_lock"      , $can_lock);
+$smarty->assign("is_locked"     , $is_locked);
 
 preg_match_all("/(:?\[\[Texte libre - ([^\]]*)\]\])/i", $compte_rendu->_source, $matches);
 
