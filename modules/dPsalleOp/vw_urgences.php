@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
 * @package Mediboard
@@ -37,6 +37,7 @@ $diff_hour_urgence = CAppUI::conf("reservation diff_hour_urgence");
 
 foreach ($urgences as &$urgence) {
   $urgence->loadRefsFwd();
+  $urgence->loadRefAnesth();
   $patient = $urgence->_ref_sejour->loadRefPatient();
   $dossier_medical = $patient->loadRefDossierMedical();
   $dossier_medical->loadRefsAntecedents();
@@ -70,6 +71,9 @@ foreach ($urgences as &$urgence) {
   }
 }
 
+$anesth = new CMediusers();
+$anesths = $anesth->loadAnesthesistes(PERM_READ);
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -78,8 +82,7 @@ $smarty->debugging = false;
 $smarty->assign("urgences"  , $urgences);
 $smarty->assign("listBlocs",  $listBlocs);
 $smarty->assign("listSalles", $listSalles);
-$smarty->assign("date",$date);
+$smarty->assign("anesths",    $anesths);
+$smarty->assign("date", $date);
 
 $smarty->display("../../dPsalleOp/templates/vw_urgences.tpl");
-
-?>
