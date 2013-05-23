@@ -243,16 +243,18 @@ class CApp {
     
     // Ordered paths
     $dirs = array(
-       // Require all global classes
+      // Require all global classes
+      "classes/*.class.php",
       "classes/*/*.class.php",
-      "classes/*.class.php", 
-      "*/*/*.class.php",
+
+      // Require mobile classes
+      "mobile/*/*.class.php",
 
       // Require all modules classes
       // Don't include classes in subdirectories (there are a lot !)
-      //"modules/*/classes/*/*/*.class.php",
-      //"modules/*/classes/*/*.class.php",
       "modules/*/classes/*.class.php",
+      //"modules/*/classes/*/*.class.php",
+      //"modules/*/classes/*/*/*.class.php",
 
       // Require all modules setups 
       "modules/*/setup.php",

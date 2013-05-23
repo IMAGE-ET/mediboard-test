@@ -959,11 +959,11 @@ class CAppUI {
    * @param string $path  Configuration path
    * @param null   $value New value
    *
-   * @return mixed Old value
+   * @return mixed|null Old value
    */
   static function setConf($path = "", $value = null) {
     if (!CAppUI::$user->isAdmin()) {
-      return;
+      return null;
     }
 
     $config = new CMbConfig;

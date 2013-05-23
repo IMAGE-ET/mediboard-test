@@ -145,9 +145,9 @@ class CSetup {
   /**
    * Associates an SQL query to a module revision
    * 
-   * @param string $query  SQL query
-   * @param bool   $ignore Ignore errors if true
-   * @param string $dsn    Data source name
+   * @param string $query         SQL query
+   * @param bool   $ignore_errors Ignore errors if true
+   * @param string $dsn           Data source name
    * 
    * @return void
    */
@@ -308,7 +308,14 @@ class CSetup {
     $query = "DELETE FROM `config_service` WHERE `name` = '$name'";
     $this->addQuery($query);
   }
-  
+
+  /**
+   * Tells if we are still in the old preferences system
+   *
+   * @param bool $core_upgrade True if core upgrading (after initial install)
+   *
+   * @return bool
+   */
   static function isOldPrefSystem($core_upgrade = false){
     if (self::$_old_pref_system === null || $core_upgrade) {
       $ds = CSQLDataSource::get("std");
@@ -317,13 +324,14 @@ class CSetup {
     
     return self::$_old_pref_system;
   }
-  
+
   /**
    * Launches module upgrade process
-   * 
-   * @param string $oldRevision revision before upgrade
-   * 
-   * @return void
+   *
+   * @param string $oldRevision  Revision before upgrade
+   * @param bool   $core_upgrade True if it's a core module upgrade
+   *
+   * @return string|null New revision, null on error
    */
   function upgrade($oldRevision, $core_upgrade = false) {
     /*if (array_key_exists($this->mod_version, $this->queries)) {
@@ -331,10 +339,12 @@ class CSetup {
       return;
     }*/
 
-    if (!array_key_exists($oldRevision, $this->queries) && 
-        !array_key_exists($oldRevision, $this->config_moves)) {
+    if (
+        !array_key_exists($oldRevision, $this->queries) &&
+        !array_key_exists($oldRevision, $this->config_moves
+    )) {
       CAppUI::setMsg("No queries or config moves for '%s' setup at revision '%s'", UI_MSG_WARNING, $this->mod_name, $oldRevision);
-      return;
+      return null;
     }
     
     // Point to the current revision
@@ -412,23 +422,16 @@ class CSetup {
           if (!$pref->loadObject($where)) {
             $pref->key = $_name;
             $pref->value = $_default;
-            $msg = $pref->store();
+            $pref->store();
           }
         }
       }
       
       // Config moves
       if (count($this->config_moves[$currRevision])) {
-        $mbConfig = new CMbConfig;
-        $mbConfig->load();
-        // Move conf
         foreach ($this->config_moves[$currRevision] as $config) {
-          if ($mbConfig->get($config[0]) !== false) {
-            $mbConfig->set($config[1], $mbConfig->get($config[0]));
-          }
-          //$mbConfig->set($config[0], null); // FIXME : vide les DEUX parties
+          CAppUI::setConf($config[1], CAppUI::conf($config[0]));
         }
-        $mbConfig->update($mbConfig->values);
       }
 
     } while ($currRevision = next($this->revisions));
