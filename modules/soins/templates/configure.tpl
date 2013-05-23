@@ -88,7 +88,7 @@
     {{mb_include module=system template=inc_config_bool var=show_charge_soins}}
     {{mb_include module=system template=inc_config_enum var=max_time_modif_suivi_soins values=$listHours skip_locales=1}}
     {{mb_include module=system template=inc_config_bool var=show_only_lit_bilan}}
-    {{mb_include module=system template=inc_config_str var=ignore_allergies}}
+    {{mb_include module=system template=inc_config_str var=ignore_allergies textarea=true}}
 
     <tr>
       <td class="button" colspan="2">
