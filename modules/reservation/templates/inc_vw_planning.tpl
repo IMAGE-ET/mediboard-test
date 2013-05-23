@@ -37,8 +37,14 @@
     line-height: 120% !important;
   }
 
+  /* below events, force up */
   .event-container div.now {
     z-index: 50!important;
+  }
+
+  /* bug with tooltip */
+  .planning .event.draggable .handle{
+   left:-15px;
   }
 </style>
   {{if $can->edit && ($nbIntervNonPlacees || $nbIntervHorsPlage || $nbAlertesInterv)}}
