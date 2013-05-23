@@ -286,6 +286,23 @@ class CDossierMedical extends CMbMetaObject {
   function loadRefsAllergies(){
     return $this->_ref_allergies = $this->loadRefsAntecedentsOfType("alle");
   }
+
+  /**
+   * load the allergies not matching "ignore_allergies" (config)
+   *
+   * @return CAntecedent[] allergie list
+   */
+  function loadRefsActiveAllergies() {
+    self::loadRefsAllergies();
+    $allergies = array();
+    $ignores = array_map('trim', explode("|", CAppUI::conf("soins ignore_allergies")));
+    foreach ($this->_ref_allergies as $_allergie) {
+      if (!in_array(trim($_allergie->rques), $ignores)) {
+        $allergies[] = $_allergie;
+      }
+    }
+    return $this->_ref_allergies = $allergies;
+  }
   
   function loadRefsDeficiences(){
     return $this->_ref_deficiences = $this->loadRefsAntecedentsOfType("deficience");
