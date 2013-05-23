@@ -36,6 +36,10 @@
     color: #000 !important;
     line-height: 120% !important;
   }
+
+  .event-container div.now {
+    z-index: 50!important;
+  }
 </style>
   {{if $can->edit && ($nbIntervNonPlacees || $nbIntervHorsPlage || $nbAlertesInterv)}}
   <div class="warning" style="margin:0 auto">
