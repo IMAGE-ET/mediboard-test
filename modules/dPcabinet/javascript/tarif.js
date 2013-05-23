@@ -76,16 +76,17 @@ Code = {
   edit: function (tarif_id) {
     var url = new Url('dPcabinet', 'vw_codes_tarif');
     url.addParam('tarif_id'    , tarif_id);
-    url.requestModal(500, 500);
+    url.requestModal(600, 500);
     this.modal = url.modalObject;
     Code.url = url;
   },
-  addCode: function (form, code, quantite, type) {
+  addCode: function (form, code, quantite, type, code_ref) {
     form._add_code.value 	= 1;
     form._dell_code.value 	= 0;
     form._code.value 		= code;
     form._quantite.value 	= quantite;
     form._type_code.value 	= type;
+    form._code_ref.value 	= code_ref;
     return onSubmitFormAjax(form, {
       onComplete : function() {
         Code.url.refreshModal();

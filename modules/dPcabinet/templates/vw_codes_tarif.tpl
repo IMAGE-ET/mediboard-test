@@ -36,12 +36,14 @@ Main.add(function () {
   <input type="hidden" name="_code"       value="0">
   <input type="hidden" name="_quantite"   value="0">
   <input type="hidden" name="_type_code"  value="">
+  <input type="hidden" name="_code_ref"  value="">
   <table class="tbl">
-  {{mb_include module=system template=inc_form_table_header object=$tarif colspan="4"}}
+  {{mb_include module=system template=inc_form_table_header object=$tarif colspan="5"}}
     <tr>
       <td></td>
       <th>Code</th>
       <th>Quantité</th>
+      <th>Code Ref</th>
       <th>Action</th>
     </tr>
     {{foreach from=$tab item=code_libelle key=nom}}
@@ -58,7 +60,25 @@ Main.add(function () {
             });
           </script>
         </td>
-        <td class="button"><button class="add notext" type="button" onclick="Code.addCode(this.form, this.form.code_{{$nom}}.value, this.form.quantite_{{$nom}}.value, '{{$nom}}')"></button></td>
+        <td>
+          {{if $nom == "tarmed"}}
+            {{assign var=nom_code value=_codes_$nom}}
+            <select name="code_ref_{{$nom}}">
+              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+              {{foreach from=$tarif->$nom_code item=code}}
+                <option value="{{$code->code}}">
+                  {{$code->code}}
+                </option>
+              {{/foreach}}
+            </select>
+          {{else}}
+            <input type="hidden" name="code_ref_{{$nom}}" value=""/>
+          {{/if}}
+        </td>
+        <td class="button">
+          <button onclick="Code.addCode(this.form, this.form.code_{{$nom}}.value, this.form.quantite_{{$nom}}.value, '{{$nom}}', this.form.code_ref_{{$nom}}.value)"
+                  class="add notext" type="button"></button>
+        </td>
       </tr>
       {{assign var=nom_code value=_codes_$nom}}
       {{foreach from=$tarif->$nom_code item=code}}
@@ -70,12 +90,17 @@ Main.add(function () {
             {{$code->$code_libelle->libelle|truncate:50:"..."}}
           </td>
           <td>{{$code->quantite}}</td>
+          <td>
+            {{if $nom == "tarmed"}}
+              {{$code->code_ref}}
+            {{/if}}
+          </td>
           <td class="button"><button class="trash notext" type="button" onclick="Code.dellCode(this.form, '{{$code_acte}}', '{{$nom}}')"></button></td>
         </tr>
       {{/foreach}}
     {{/foreach}}
     <tr>
-      <td class="button" colspan="4">
+      <td class="button" colspan="5">
         <button class="close" onclick="Code.modal.close();">{{tr}}Close{{/tr}}</button>
       </td>
     </tr>

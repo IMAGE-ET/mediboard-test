@@ -49,6 +49,7 @@ class CTarif extends CMbObject {
   public $_add_code;
   public $_dell_code;
   public $_code;
+  public $_code_ref;
   public $_quantite;
   public $_type_code;
   public $_update_montants;
@@ -298,8 +299,12 @@ class CTarif extends CMbObject {
       foreach ($this->$codes as $code) {
         $acte = new $class_acte;
         $acte->setFullCode($code);
-        if ($class_acte == "CActeTarmed") $acte->loadRefTarmed(CTarmed::LITE);
-        if ($class_acte == "CActeCaisse") $acte->loadRefPrestationCaisse();
+        if ($class_acte == "CActeTarmed") {
+          $acte->loadRefTarmed(CTarmed::LITE);
+        }
+        elseif ($class_acte == "CActeCaisse") {
+          $acte->loadRefPrestationCaisse();
+        }
         $this->_new_actes[$code] = $acte;
         if (!$acte->getPrecodeReady()) {
           return $this->_precode_ready = '0';
@@ -380,6 +385,9 @@ class CTarif extends CMbObject {
     if ($this->_add_code) {
       $acte = new $class_acte;
       $acte->code = $this->_code;
+      if ($class_acte == "CActeTarmed") {
+        $acte->code_ref = $this->_code_ref;
+      }
       $acte->quantite = $this->_quantite;
       $acte->updateMontantBase();
       if ($acte->montant_base) {
@@ -392,7 +400,12 @@ class CTarif extends CMbObject {
     $this->_update_montants = true;
     $this->updateMontants();
   }
-  
+
+  /**
+   * Permet le chargement des actes du tarif
+   *
+   * @return void
+   */
   function loadActes() {
     $tab = array( "codes_ccam" => "CActeCCAM",
                   "codes_ngap" => "CActeNGAP");
