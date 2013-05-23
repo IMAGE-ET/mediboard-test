@@ -20,6 +20,15 @@
     url.addParam('suppressHeaders', '1');
     url.popup(1000, 600);
   }
+
+  dossierBloc = function(operation_id) {
+    var url = new Url("salleOp", "ajax_vw_operation");
+    url.addParam("op", operation_id);
+    url.requestModal(1000, 700);
+    url.modalObject.observe("afterClose", function(){
+      Facture.reload('{{$facture->patient_id}}', '{{$facture->_class}}', 0, '{{$facture->_id}}');
+    });
+  }
 </script>
 {{if $facture->cloture && isset($factures|smarty:nodefaults) && count($factures)}}
   <tr>
@@ -49,8 +58,7 @@
 {{elseif !$facture->cloture && isset($factures|smarty:nodefaults) && count($factures) && $facture->_class == "CFactureEtablissement"}}
   <tr>
     <td colspan="8">
-      {{mb_script module=planningOp script=operation ajax="true"}}
-      <button type="button" class="edit" onclick="Operation.dossierBloc('{{$facture->_ref_last_sejour->_ref_last_operation->_id}}', Facture.reload('{{$facture->patient_id}}', '{{$facture->_class}}', 0 , '{{$facture->_id}}'));">
+      <button type="button" class="edit" onclick="dossierBloc('{{$facture->_ref_last_sejour->_ref_last_operation->_id}}');">
         Dossier bloc
       </button>
     </td>
