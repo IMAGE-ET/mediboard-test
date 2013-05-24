@@ -171,6 +171,7 @@ foreach ($groupSejourNonAffectes as $_keyGroup => $_group) {
     continue;
   }
   foreach ($_group as $_key => $_sejour) {
+    $_sejour->loadRefChargePriceIndicator();
     $functions_filter[$_sejour->_ref_praticien->function_id] = $_sejour->_ref_praticien->_ref_function;
     if ($filterFunction && $filterFunction != $_sejour->_ref_praticien->function_id) {
       unset($groupSejourNonAffectes[$_keyGroup][$_key]);
