@@ -17,7 +17,7 @@
     var url = new Url("patients", "do_anonymous_patient", "dosql");
     url.addParam("callback", "fillPatAnonyme");
     url.requestUpdate("systemMsg", {method: "post"});
-  }
+  };
   fillPatAnonyme = function(pat_id, pat_view) {  
     var form = getForm('{{$form}}');
     

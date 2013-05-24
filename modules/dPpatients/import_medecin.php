@@ -142,6 +142,7 @@ if (in_array($mode, array("get", "xml"))) {
   $last_page = $xpath->query($query)->length == 2;
 
   $query = "/html/body//table[@id]/tr";
+  /** @var CMedecin[] $medecins */
   $medecins = array();
   foreach ($xpath->query($query) as $key => $nodeMainTr) {
     $ndx = intval($key / 4);
@@ -155,7 +156,7 @@ if (in_array($mode, array("get", "xml"))) {
 
     // Création du médecin
     if (!array_key_exists($ndx, $medecins)) {
-      $medecins[$ndx] = new CMedecin;
+      $medecins[$ndx] = new CMedecin();
     }
 
     $medecin =& $medecins[$ndx];

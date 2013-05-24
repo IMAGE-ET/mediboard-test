@@ -162,7 +162,7 @@
         <strong>{{mb_label object=$prevenir field="parente"}}</strong>
         {{mb_value object=$prevenir field="parente"}}
       </td>
-      <td class="text" />
+      <td class="text"></td>
     </tr>
   {{/foreach}}
   {{foreach from=$object->_ref_cp_by_relation.confiance item=confiance}}
@@ -206,7 +206,7 @@
         <strong>{{mb_label object=$confiance field="parente"}}</strong>
         {{mb_value object=$confiance field="parente"}}
       </td>
-      <td class="text" />
+      <td class="text"></td>
     </tr>
   {{/foreach}}
   <tr>

@@ -22,7 +22,7 @@ function startINSEE() {
         Importer les codes INSEE / ISO
       </button>
     </td>
-    <td id="action-insee" />
+    <td id="action-insee"></td>
   </tr>
 </table>
 

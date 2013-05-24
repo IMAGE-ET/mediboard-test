@@ -19,6 +19,7 @@ $patient->load($patient_id);
 $dossier_medical = $patient->loadRefDossierMedical();
 $dossier_medical->loadRefsAntecedents();
 
+/** @var CAntecedent[] $antecedents */
 $antecedents = $dossier_medical->_all_antecedents;
 
 foreach ($antecedents as &$_antecedent) {

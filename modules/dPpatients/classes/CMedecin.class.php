@@ -39,6 +39,11 @@ class CMedecin extends CPerson {
   // Object References
   public $_ref_patients;
 
+  // Calculated fields
+  public $_count_patients_traites;
+  public $_count_patients_correspondants;
+  public $_has_siblings;
+
   /**
    * @see parent::getSpec()
    */
@@ -186,12 +191,12 @@ class CMedecin extends CPerson {
    * @return void
    */
   function toVcard(CMbvCardExport $vcard) {
-    $vcard->addName($this->prenom, $this->nom, ucfirst($this->civilite));
+    $vcard->addName($this->prenom, $this->nom, "");
     $vcard->addPhoneNumber($this->tel     , 'WORK');
     $vcard->addPhoneNumber($this->portable, 'CELL');
     $vcard->addPhoneNumber($this->fax     , 'FAX');
     $vcard->addEmail($this->email);
-    $vcard->addAddress($this->adresse, $this->ville, $this->cp, $this->pays, 'WORK');
+    $vcard->addAddress($this->adresse, $this->ville, $this->cp, "", 'WORK');
   }
 
   /**

@@ -14,6 +14,7 @@ CCanDo::checkAdmin();
 $idex = new CIdSante400();
 $idex->object_class = "CPatient";
 $idex->tag = CAppUI::conf("dPpatients CPatient tag_conflict_ipp").CAppUI::conf("dPpatients CPatient tag_ipp");
+/** @var CIdSante400[] $ipp_conflicts */
 $ipp_conflicts = $idex->loadMatchingList();
 
 $conflicts = array();

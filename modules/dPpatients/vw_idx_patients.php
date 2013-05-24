@@ -49,8 +49,8 @@ $patient_prenom_search = null;
 
 $patVitale = new CPatient();
 
-// Recherche par IPP
 if ($patient_ipp && CModule::getInstalled("dPsante400")) {
+  // Recherche par IPP
   // Initialisation dans le cas d'une recherche par IPP
   $patients = array();
   $patientsSoundex = array();
@@ -65,11 +65,10 @@ if ($patient_ipp && CModule::getInstalled("dPsante400")) {
     $patients[$patient->_id] = $patient;
   }
 }
-
-// Recheche par traits classiques
 else {
-  // Champs vitale
+  // Recheche par traits classiques
   if ($useVitale && !CAppUI::pref('VitaleVision') && CModule::getActive("fse")) {
+    // Champs vitale
     $cv = CFseFactory::createCV();
     if ($cv) {
       $cv->getPropertiesFromVitale($patVitale);
@@ -147,7 +146,9 @@ else {
     $where["id_sante400.id400"] = " = '$patient_nda'";
   }
 
+  /** @var CPatient[] $patients */
   $patients        = array();
+  /** @var CPatient[] $patientsSoundex */
   $patientsSoundex = array();
 
   $order = "nom, prenom, naissance";

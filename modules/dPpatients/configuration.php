@@ -42,7 +42,8 @@ foreach ($list as $_constante) {
   $selection[$_constante] = "num min|0 default|0";
 }
 
-CConfiguration::register(array(
+CConfiguration::register(
+  array(
   "CService CGroups.group_id" => array(
     "dPpatients" => array(
       "CConstantesMedicales" => array(

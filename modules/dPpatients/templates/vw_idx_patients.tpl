@@ -8,7 +8,7 @@ markAsSelected = function(anchor) {
   if (anchor) {
     $(anchor).up('tr').addUniqueClassName('selected');
   }
-}
+};
 
 {{if $patient->_id}}
 Main.add(function(){

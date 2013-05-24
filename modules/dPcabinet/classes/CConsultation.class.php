@@ -91,6 +91,8 @@ class CConsultation extends CFacturable {
   public $_type;  // Type de la consultation
   public $_duree;
   public $_force_create_sejour;
+  public $_rques_consult;
+  public $_examen_consult;
 
   // Fwd References
   /**

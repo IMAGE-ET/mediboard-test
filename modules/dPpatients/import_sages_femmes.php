@@ -129,14 +129,14 @@ while ($continue) {
           }
           break;
         case "4":
-          // Adresse
           if ($_info->nodeName == "#text") {
+            // Adresse
             $first_space = strpos($_info->nodeValue, " ");
             $medecin->cp = substr($_info->nodeValue, 0, $first_space);
             $medecin->ville = substr($_info->nodeValue, $first_space+1);
           }
-          // Téléphone
           elseif ($_info->nodeName == "div") {
+            // Téléphone
             foreach (explode("\n", $_info->nodeValue) as $_ligne_tel) {
               $_ligne_tel = trim($_ligne_tel);
               if (!$_ligne_tel) {
@@ -179,8 +179,8 @@ while ($continue) {
               }
             }
           }
-          // Email
           elseif ($_info->nodeName == "a") {
+            // Email
             $medecin->email = trim($_info->nodeValue);
           }
           break;

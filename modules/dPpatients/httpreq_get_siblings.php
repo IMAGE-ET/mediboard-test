@@ -56,6 +56,13 @@ else {
   $textSiblings = patientGetSiblings($patientMatch);
 }
 
+/**
+ * Informations sur les possibilité de doublons d'un patient
+ *
+ * @param CPatient $patientMatch Patient à vérifier
+ *
+ * @return null|string
+ */
 function patientGetSiblings($patientMatch) {
   $siblings = $patientMatch->getSiblings();
 

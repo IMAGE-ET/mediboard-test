@@ -10,9 +10,9 @@
  */
 
 $ds = CSQLDataSource::get("std");
-$medecin1 = new CMedecin;
+$medecin1 = new CMedecin();
 $medecin1->load($_POST["medecin1_id"]);
-$medecin2 = new CMedecin;
+$medecin2 = new CMedecin();
 $medecin2->load($_POST["medecin2_id"]);
 
 $do = new CDoObjectAddEdit("CMedecin", "medecin_id");
@@ -26,6 +26,7 @@ else {
   $do->doStore();
 }
 
+/** @var CMedecin $newMedecin */
 $newMedecin =& $do->_obj;
 
 // Transfert de toutes les backrefs

@@ -527,7 +527,8 @@ class CSetupdPpatients extends CSetup {
              consultation_id INT( 11 ) ,
              ligne_antecedent TEXT
             ) AS
-              SELECT consultation_anesth.consultation_id, CONCAT_WS(' - ', antecedent.type, antecedent.date, antecedent.rques ) AS ligne_antecedent
+              SELECT consultation_anesth.consultation_id,
+                CONCAT_WS(' - ', antecedent.type, antecedent.date, antecedent.rques ) AS ligne_antecedent
               FROM `antecedent`, `consultation_anesth`
               WHERE antecedent.object_id = consultation_anesth.consultation_anesth_id
               AND antecedent.dossier_medical_id IS NULL;";
@@ -579,7 +580,8 @@ class CSetupdPpatients extends CSetup {
              consultation_id INT( 11 ) ,
              ligne_traitement TEXT
             ) AS
-              SELECT consultation_anesth.consultation_id, CONCAT_WS(' - ', traitement.debut, traitement.fin, traitement.traitement ) AS ligne_traitement
+              SELECT consultation_anesth.consultation_id,
+                CONCAT_WS(' - ', traitement.debut, traitement.fin, traitement.traitement ) AS ligne_traitement
               FROM `traitement`, `consultation_anesth`
               WHERE traitement.object_id = consultation_anesth.consultation_anesth_id
               AND traitement.dossier_medical_id IS NULL;";
@@ -657,7 +659,14 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("0.57");
     $query = "ALTER TABLE `antecedent`
             CHANGE `type` `type`
-            ENUM('med','alle','trans','obst','chir','fam','anesth','gyn','cardio','pulm','stomato','plast','ophtalmo','digestif','gastro','stomie','uro','ortho','traumato','amput','neurochir','greffe','thrombo','cutane','hemato','rhumato','neuropsy','infect','endocrino','carcino')
+            ENUM('med','alle','trans','obst',
+              'chir','fam','anesth','gyn','cardio',
+              'pulm','stomato','plast','ophtalmo',
+              'digestif','gastro','stomie','uro',
+              'ortho','traumato','amput','neurochir',
+              'greffe','thrombo','cutane','hemato',
+              'rhumato','neuropsy','infect','endocrino',
+              'carcino')
             NOT NULL;";
     $this->addQuery($query);
 
@@ -700,7 +709,14 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("0.62");
     $query = "ALTER TABLE `antecedent`
             CHANGE `type` `type`
-            ENUM('med','alle','trans','obst','chir','fam','anesth','gyn','cardio','pulm','stomato','plast','ophtalmo','digestif','gastro','stomie','uro','ortho','traumato','amput','neurochir','greffe','thrombo','cutane','hemato','rhumato','neuropsy','infect','endocrino','carcino','orl');";
+            ENUM('med','alle','trans','obst',
+              'chir','fam','anesth','gyn','cardio',
+              'pulm','stomato','plast','ophtalmo',
+              'digestif','gastro','stomie','uro',
+              'ortho','traumato','amput','neurochir',
+              'greffe','thrombo','cutane','hemato',
+              'rhumato','neuropsy','infect','endocrino',
+              'carcino','orl');";
     $this->addQuery($query);
     $query = "ALTER TABLE `addiction`
             CHANGE `type` `type`
@@ -843,7 +859,14 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("0.72");
     $query = "ALTER TABLE `antecedent`
             CHANGE `type` `type`
-            ENUM('med','alle','trans','obst','chir','fam','anesth','gyn','cardio','pulm','stomato','plast','ophtalmo','digestif','gastro','stomie','uro','ortho','traumato','amput','neurochir','greffe','thrombo','cutane','hemato','rhumato','neuropsy','infect','endocrino','carcino','orl','addiction','habitus');";
+            ENUM('med','alle','trans','obst',
+              'chir','fam','anesth','gyn',
+              'cardio','pulm','stomato','plast','ophtalmo',
+              'digestif','gastro','stomie','uro',
+              'ortho','traumato','amput','neurochir',
+              'greffe','thrombo','cutane','hemato',
+              'rhumato','neuropsy','infect','endocrino',
+              'carcino','orl','addiction','habitus');";
     $this->addQuery($query);
 
     // If there is a type
@@ -883,14 +906,30 @@ class CSetupdPpatients extends CSetup {
                AND `depend_value` IS NULL";
     $this->addQuery($query);*/
 
-    $this->addQuery(CSetupdPcompteRendu::renameTemplateFieldQuery("Sejour - Addictions -- toutes", "Sejour - Antécédents - Addictions"));
-    $this->addQuery(CSetupdPcompteRendu::renameTemplateFieldQuery("Patient - Addictions -- toutes", "Patient - Antécédents - Addictions"));
+    $this->addQuery(
+      CSetupdPcompteRendu::renameTemplateFieldQuery(
+        "Sejour - Addictions -- toutes", "Sejour - Antécédents - Addictions"
+      )
+    );
+    $this->addQuery(
+      CSetupdPcompteRendu::renameTemplateFieldQuery(
+        "Patient - Addictions -- toutes", "Patient - Antécédents - Addictions"
+      )
+    );
 
     $addiction_types = array('tabac', 'oenolisme', 'cannabis');
     foreach ($addiction_types as $type) {
       $typeTrad = CAppUI::tr("CAddiction.type.$type");
-      $this->addQuery(CSetupdPcompteRendu::renameTemplateFieldQuery("Sejour - Addictions - $typeTrad", "Sejour - Antécédents - Addictions"));
-      $this->addQuery(CSetupdPcompteRendu::renameTemplateFieldQuery("Patient - Addictions - $typeTrad", "Patient - Antécédents - Addictions"));
+      $this->addQuery(
+        CSetupdPcompteRendu::renameTemplateFieldQuery(
+          "Sejour - Addictions - $typeTrad", "Sejour - Antécédents - Addictions"
+        )
+      );
+      $this->addQuery(
+        CSetupdPcompteRendu::renameTemplateFieldQuery(
+          "Patient - Addictions - $typeTrad", "Patient - Antécédents - Addictions"
+        )
+      );
     }
 
     /*$query = "DROP TABLE `addiction`";
@@ -996,7 +1035,10 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("0.82");
     $query = "ALTER TABLE `antecedent`
             CHANGE `appareil` `appareil`
-            ENUM('cardiovasculaire','digestif','endocrinien','neuro_psychiatrique','pulmonaire','uro_nephrologique','orl','gyneco_obstetrique','orthopedique');";
+            ENUM('cardiovasculaire','digestif','endocrinien',
+              'neuro_psychiatrique','pulmonaire',
+              'uro_nephrologique','orl','gyneco_obstetrique',
+              'orthopedique');";
     $this->addQuery($query);
 
     $this->makeRevision("0.83");
@@ -1216,7 +1258,9 @@ class CSetupdPpatients extends CSetup {
 
     $this->makeRevision("1.08");
     $query = "ALTER TABLE `medecin`
-      CHANGE `type` `type` ENUM ('medecin','kine','sagefemme','infirmier','dentiste','podologue', 'pharmacie', 'maison_medicale', 'autre');";
+      CHANGE `type` `type` ENUM ('medecin','kine','sagefemme',
+        'infirmier','dentiste','podologue', 'pharmacie',
+        'maison_medicale', 'autre');";
     $this->addQuery($query);
 
     $this->makeRevision("1.09");
@@ -1320,17 +1364,26 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($query);
 
     $query = "INSERT INTO correspondant_patient (patient_id, relation, nom, adresse, cp, ville, tel, urssaf)
-      SELECT patient_id, 'employeur', employeur_nom, employeur_adresse, employeur_cp, employeur_ville, employeur_tel, employeur_urssaf
+      SELECT patient_id, 'employeur',
+        employeur_nom, employeur_adresse,
+        employeur_cp, employeur_ville,
+        employeur_tel, employeur_urssaf
       FROM patients";
     $this->addQuery($query);
 
     $query = "INSERT INTO correspondant_patient (patient_id, relation, nom, prenom, adresse, cp, ville, tel, parente)
-      SELECT patient_id, 'prevenir', prevenir_nom, prevenir_prenom, prevenir_adresse, prevenir_cp, prevenir_ville, prevenir_tel, prevenir_parente
+      SELECT patient_id, 'prevenir',
+        prevenir_nom, prevenir_prenom,
+        prevenir_adresse, prevenir_cp,
+        prevenir_ville, prevenir_tel, prevenir_parente
       FROM patients";
     $this->addQuery($query);
 
     $query = "INSERT INTO correspondant_patient (patient_id, relation, nom, prenom, adresse, cp, ville, tel, parente)
-      SELECT patient_id, 'confiance', confiance_nom, confiance_prenom, confiance_adresse, confiance_cp, confiance_ville, confiance_tel, confiance_parente
+      SELECT patient_id, 'confiance',
+        confiance_nom, confiance_prenom,
+        confiance_adresse, confiance_cp,
+        confiance_ville, confiance_tel, confiance_parente
       FROM patients";
     $this->addQuery($query);
 
@@ -1439,35 +1492,36 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($query);
 
     $conf = CAppUI::conf("dPpatients CConstantesMedicales");
-    $query = $this->ds->prepare("INSERT INTO `config_constantes_medicales` (
-                `important_constantes` ,
-                `diuere_24_reset_hour` ,
-                `redon_cumul_reset_hour` ,
-                `sng_cumul_reset_hour` ,
-                `lame_cumul_reset_hour` ,
-                `drain_cumul_reset_hour` ,
-                `drain_thoracique_cumul_reset_hour` ,
-                `drain_pleural_cumul_reset_hour` ,
-                `drain_mediastinal_cumul_reset_hour` ,
-                `sonde_ureterale_cumul_reset_hour` ,
-                `sonde_vesicale_cumul_reset_hour` ,
-                `show_cat_tabs`
-              )
-              VALUES (
-              %1 , %2 , %3 , %4 , %5 , %6 , %7 , %8 , %9 , %10 , %11 , '0'
-              );",
-                CValue::read($conf, "important_constantes"),
-                CValue::read($conf, "diuere_24_reset_hour"),
-                CValue::read($conf, "redon_cumul_reset_hour"),
-                CValue::read($conf, "sng_cumul_reset_hour"),
-                CValue::read($conf, "lame_cumul_reset_hour"),
-                CValue::read($conf, "drain_cumul_reset_hour"),
-                CValue::read($conf, "drain_thoracique_cumul_reset_hour"),
-                CValue::read($conf, "drain_pleural_cumul_reset_hour"),
-                CValue::read($conf, "drain_mediastinal_cumul_reset_hour"),
-                CValue::read($conf, "sonde_ureterale_cumul_reset_hour"),
-                CValue::read($conf, "sonde_vesicale_cumul_reset_hour")
-              );
+    $query = $this->ds->prepare(
+      "INSERT INTO `config_constantes_medicales` (
+         `important_constantes` ,
+         `diuere_24_reset_hour` ,
+         `redon_cumul_reset_hour` ,
+         `sng_cumul_reset_hour` ,
+         `lame_cumul_reset_hour` ,
+         `drain_cumul_reset_hour` ,
+         `drain_thoracique_cumul_reset_hour` ,
+         `drain_pleural_cumul_reset_hour` ,
+         `drain_mediastinal_cumul_reset_hour` ,
+         `sonde_ureterale_cumul_reset_hour` ,
+         `sonde_vesicale_cumul_reset_hour` ,
+         `show_cat_tabs`
+       )
+       VALUES (
+         %1 , %2 , %3 , %4 , %5 , %6 , %7 , %8 , %9 , %10 , %11 , '0'
+       );",
+      CValue::read($conf, "important_constantes"),
+      CValue::read($conf, "diuere_24_reset_hour"),
+      CValue::read($conf, "redon_cumul_reset_hour"),
+      CValue::read($conf, "sng_cumul_reset_hour"),
+      CValue::read($conf, "lame_cumul_reset_hour"),
+      CValue::read($conf, "drain_cumul_reset_hour"),
+      CValue::read($conf, "drain_thoracique_cumul_reset_hour"),
+      CValue::read($conf, "drain_pleural_cumul_reset_hour"),
+      CValue::read($conf, "drain_mediastinal_cumul_reset_hour"),
+      CValue::read($conf, "sonde_ureterale_cumul_reset_hour"),
+      CValue::read($conf, "sonde_vesicale_cumul_reset_hour")
+    );
     $this->addQuery($query);
 
     $this->makeRevision("1.25");
@@ -1488,7 +1542,11 @@ class CSetupdPpatients extends CSetup {
     $query = "ALTER TABLE `correspondant_patient`
               CHANGE `relation` `relation` ENUM ('assurance','autre','confiance','employeur','inconnu','prevenir'),
               ADD `relation_autre` VARCHAR (255),
-              CHANGE `parente` `parente` ENUM ('ami','ascendant','autre','beau_fils','colateral','collegue','compagnon','conjoint','directeur','divers','employeur','employe','enfant','enfant_adoptif','entraineur','epoux','frere','grand_parent','mere','pere','petits_enfants','proche','proprietaire','soeur','tuteur'),
+              CHANGE `parente` `parente` ENUM ('ami','ascendant','autre','beau_fils',
+                'colateral','collegue','compagnon','conjoint','directeur','divers',
+                'employeur','employe','enfant','enfant_adoptif','entraineur','epoux',
+                'frere','grand_parent','mere','pere','petits_enfants','proche',
+                'proprietaire','soeur','tuteur'),
               ADD `parente_autre` VARCHAR (255);";
     $this->addQuery($query);
 
@@ -1629,7 +1687,8 @@ class CSetupdPpatients extends CSetup {
       list($_label, $_desc) = $_labels;
       $values[] = "('MDIL', '$_code', '$_label', '$_desc', 'NM')";
     }
-    $query = "INSERT INTO `observation_value_type` (`coding_system`, `code`, `label`, `desc`, `datatype`) VALUES ".implode("\n, ", $values);
+    $query = "INSERT INTO `observation_value_type` (`coding_system`, `code`, `label`, `desc`, `datatype`) VALUES ".
+      implode("\n, ", $values);
     $this->addQuery($query);
 
     $mdil_units = array(
@@ -1748,7 +1807,14 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("1.44");
     $query = "ALTER TABLE `antecedent`
             CHANGE `type` `type`
-            ENUM('med','alle','trans','obst','chir','fam','anesth','gyn','cardio','pulm','stomato','plast','ophtalmo','digestif','gastro','stomie','uro','ortho','traumato','amput','neurochir','greffe','thrombo','cutane','hemato','rhumato','neuropsy','infect','endocrino','carcino','orl','addiction','habitus', 'deficience');";
+            ENUM('med','alle','trans','obst',
+              'chir','fam','anesth','gyn','cardio',
+              'pulm','stomato','plast','ophtalmo',
+              'digestif','gastro','stomie','uro','ortho',
+              'traumato','amput','neurochir','greffe','thrombo',
+              'cutane','hemato','rhumato','neuropsy',
+              'infect','endocrino','carcino','orl',
+              'addiction','habitus', 'deficience');";
     $this->addQuery($query);
 
     $this->makeRevision("1.45");
@@ -1865,7 +1931,10 @@ class CSetupdPpatients extends CSetup {
       `mob` VARCHAR (20),
       `fax` VARCHAR (20),
       `urssaf` BIGINT (11) UNSIGNED ZEROFILL,
-      `parente` ENUM ('ami','ascendant','autre','beau_fils','colateral','collegue','compagnon','conjoint','directeur','divers','employeur','employe','enfant','enfant_adoptif','entraineur','epoux','frere','grand_parent','mere','pere','petits_enfants','proche','proprietaire','soeur','tuteur'),
+      `parente` ENUM ('ami','ascendant','autre','beau_fils','colateral','collegue',
+        'compagnon','conjoint','directeur','divers','employeur','employe','enfant',
+        'enfant_adoptif','entraineur','epoux','frere','grand_parent','mere','pere',
+        'petits_enfants','proche','proprietaire','soeur','tuteur'),
       `parente_autre` VARCHAR (255),
       `email` VARCHAR (255),
       `remarques` TEXT,
@@ -2091,6 +2160,7 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("1.78");
 
     function addConstantesRank($setup) {
+      /** @var CSQLDataSource $ds */
       $ds = $setup->ds;
 
       $results = $ds->exec("SELECT * FROM `configuration` WHERE `feature` = 'dPpatients CConstantesMedicales important_constantes';");

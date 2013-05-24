@@ -19,13 +19,13 @@ class CMbvCardExport {
   }
 
   function addAddress($address, $city, $postal, $country, $type){
-    $this->addElement("ADR;$type",";;$address;$city;;$postal;$country");
+    $this->addElement("ADR;$type", ";;$address;$city;;$postal;$country");
   }
   
   function addName($first_name, $last_name, $prefix){
     $this->name = str_replace(' ', '_', $first_name.'_'.$last_name);
-    $this->addElement('N',$last_name.';'.$first_name.';;'.$prefix );
-    $this->addElement('FN',"$prefix $first_name $last_name");
+    $this->addElement('N', $last_name.';'.$first_name.';;'.$prefix );
+    $this->addElement('FN', "$prefix $first_name $last_name");
   }
   
   function addEmail($address){

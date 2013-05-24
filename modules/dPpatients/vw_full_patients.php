@@ -55,7 +55,7 @@ foreach ($patient->_ref_consultations as $consult) {
   }
 }
 
-$patient->_ref_dossier_medical->canRead();
+$patient->_ref_dossier_medical->canDo();
 
 $can_view_dossier_medical = 
   CModule::getCanDo('dPcabinet')->edit ||

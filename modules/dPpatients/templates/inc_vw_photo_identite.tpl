@@ -14,11 +14,11 @@ deletePhoto = function(file_id){
   var options = {
     typeName: 'la photo',
     objName: 'identite.jpg'
-  }
+  };
 
   var ajax = {
     onComplete: reloadAfterUploadFile
-  }
+  };
   
   var form = getForm('delete-photo-identite-form');
   $V(form.file_id, file_id);

@@ -17,7 +17,7 @@ var ViewFullPatient = {
     this.idCurrent = $(eLink).up(1).identify();
     $(this.idCurrent).addClassName("selected");
   }
-}
+};
 
 function popEtatSejour(sejour_id) {
   var url = new Url("dPhospi", "vw_parcours");
@@ -34,7 +34,7 @@ checkOnlyTwoSelected = function(checkbox) {
     
   if (checkedMerge.length > 2)
     checkedMerge.shift().checked = false;
-}
+};
 
 function doMerge(oForm) {
   var operation_checkbox = $V(oForm["operation_ids[]"]);
@@ -58,7 +58,7 @@ function doMerge(oForm) {
 
 onMergeComplete = function() {
   location.reload();
-} 
+};
 
 {{if $isImedsInstalled}}
   Main.add(function(){

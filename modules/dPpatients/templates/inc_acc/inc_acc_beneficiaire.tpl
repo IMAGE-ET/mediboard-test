@@ -17,7 +17,7 @@ checkFinAmo = function(){
     warning.hide();
     tab.removeClassName("wrong");
   }
-}
+};
 
 Main.add(checkFinAmo);
 

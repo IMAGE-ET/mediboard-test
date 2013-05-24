@@ -67,13 +67,13 @@ if ($where_ant) {
   $antecedents = $ant->loadList($where_ant, $order_ant, "$page_antecedent, 30", null, $ljoin);
 }
 
-foreach ($antecedents as $key => $value) {
+foreach ($antecedents as $key => $_antecedent) {
   // Chargement du dossier medical du patient pour chaque antecedent
-  $value->loadRefDossierMedical();
+  $_antecedent->loadRefDossierMedical();
 
-  $value->_ref_dossier_medical->loadRefObject();
-  $antecedents_[$key] = $value->_ref_dossier_medical->object_id;
-  $value->loadRefsFwd();
+  $_antecedent->_ref_dossier_medical->loadRefObject();
+  $antecedents_[$key] = $_antecedent->_ref_dossier_medical->object_id;
+  $_antecedent->loadRefsFwd();
 }
 
 // Recherche sur les traitements
@@ -97,11 +97,11 @@ if ($where_trait) {
   $traitements = $trait->loadList($where_trait, $order_trait, "$page_traitement, 30", null, $ljoin);
 }
 
-foreach ($traitements as $key => $value) {
-   $value->loadRefDossierMedical();
-   $value->_ref_dossier_medical->loadRefObject();
-   $traitements_[$key] = $value->_ref_dossier_medical->object_id;
-   $value->loadRefsFwd();
+foreach ($traitements as $key => $_traitement) {
+  $_traitement->loadRefDossierMedical();
+  $_traitement->_ref_dossier_medical->loadRefObject();
+   $traitements_[$key] = $_traitement->_ref_dossier_medical->object_id;
+  $_traitement->loadRefsFwd();
 }
 
 // Recherche sur les diagnostics

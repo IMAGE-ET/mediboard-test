@@ -207,6 +207,8 @@ class COperation extends CCodable implements IPatientRelated {
   public $_prat_id;
   public $_bloc_id;
   public $_ccam_libelle;
+  public $_libelle_interv;
+  public $_rques_interv;
 
   function COperation() {
     parent::__construct();

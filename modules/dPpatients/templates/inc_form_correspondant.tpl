@@ -92,7 +92,7 @@
       $("urssaf").setStyle({display: "none"});
       $V(elt.form.urrsaf, "");
     }
-  }
+  };
 
   toggleRelationAutre = function(elt) {
     if ($V(elt) == "autre") {
@@ -101,7 +101,7 @@
     else {
       $("relation_autre").setStyle({display: "none"});
     }
-  }
+  };
 
   toggleParenteAutre = function(elt) {
     if ($V(elt) == "autre") {
@@ -111,7 +111,7 @@
       $("parente_autre").setStyle({display: "none"});
       $V(getForm("editCorrespondant").parente_autre, '');
     }
-  }
+  };
 
   toggleConfiancePrevenir = function(elt) {
     if ($V(elt) == "confiance") {
@@ -129,7 +129,7 @@
       $("prenom").setStyle({display: "none"});
       $("naissance").setStyle({display: "none"});
     }
-  }
+  };
 
   toggleAssurance = function(elt) {
       if ($V(elt) == "assurance") {

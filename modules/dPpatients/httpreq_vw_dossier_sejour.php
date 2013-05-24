@@ -16,7 +16,7 @@ $sejour = new CSejour();
 $sejour->load($sejour_id);
 $sejour->loadComplete();
 
-$sejour->canRead();
+$sejour->canDo();
 
 // Smarty template
 $smarty = new CSmartyDP();

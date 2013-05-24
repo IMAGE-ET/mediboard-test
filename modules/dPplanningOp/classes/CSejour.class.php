@@ -155,6 +155,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_count_tasks;
   public $_count_pending_tasks;
   public $_collisions = array();
+  public $_rques_sejour;
 
   // Behaviour fields
   public $_check_bounds  = true;
@@ -207,6 +208,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_ref_bilan_ssr;
   public $_ref_fiche_autonomie;
   public $_ref_consult_anesth;
+  /** @var  CConsultation[] */
   public $_ref_consultations;
   public $_ref_consult_atu;
   public $_ref_prescriptions;
@@ -1821,6 +1823,8 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   /**
    * Charge les consultations, en particulier l'ATU dans le cas UPATOU
+   *
+   * @return CConsultation[]
    */
   function loadRefsConsultations() {
     $this->_ref_consultations = $this->loadBackRefs("consultations");

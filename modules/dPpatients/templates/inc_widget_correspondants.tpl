@@ -45,14 +45,14 @@ submitMedecin = function(form) {
   return onSubmitFormAjax(form, {
     onComplete: function() {$('{{$widget_id}}').widget.refresh()} 
   });
-}
+};
 
 updateMedTraitant = function(form) {
   if ($V(form.medecin_traitant)) {
     Control.Tabs.setTabCount('medecins', '+1');
   }  
   return submitMedecin(form);
-}
+};
 
 Main.add(function () { 
   var formTraitant = getForm("traitant-edit-{{$patient->_id}}");

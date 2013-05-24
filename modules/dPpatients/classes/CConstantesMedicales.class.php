@@ -1243,8 +1243,8 @@ class CConstantesMedicales extends CMbObject {
         if (isset($_params["cumul_for"]) || isset($_params["formula"])) {
           $day_defore = CMbDT::dateTime("-24 hours", $datetime);
 
-          // cumul simple sur le meme champ
           if (isset($_params["cumul_for"])) {
+            // cumul simple sur le meme champ
             $cumul_for = $_params["cumul_for"];
 
             $_where = $where;
@@ -1256,9 +1256,8 @@ class CConstantesMedicales extends CMbObject {
               $constante->$_name += $_const->$cumul_for;
             }
           }
-
-          // cumul de plusieurs champs (avec formule)
           else {
+            // cumul de plusieurs champs (avec formule)
             $formula = $_params["formula"];
 
             foreach ($formula as $_field => $_sign) {
@@ -1372,9 +1371,8 @@ class CConstantesMedicales extends CMbObject {
       foreach (CConstantesMedicales::$list_constantes as $_name => $_params) {
         if (in_array($_name, $selection) || $_constante_medicale->$_name != '') {
           $value = null;
-
-          // cumul
           if (isset($_params["cumul_for"]) || isset($_params["formula"])) {
+            // cumul
             if (!isset($reset_hours[$_name])) {
               $reset_hours[$_name] = self::getResetHour($_name);
             }
@@ -1393,17 +1391,16 @@ class CConstantesMedicales extends CMbObject {
               );
             }
 
-            // cumul simple sur le meme champ
             if (isset($_params["cumul_for"])) {
+              // cumul simple sur le meme champ
               $cumul_for  = $_params["cumul_for"];
 
               if ($_constante_medicale->$cumul_for !== null) {
                 $cumuls_day[$_name][$day_24h]["value"] += $_constante_medicale->$cumul_for;
               }
             }
-
-            // cumul de plusieurs champs (avec formule)
             else {
+              // cumul de plusieurs champs (avec formule)
               $formula  = $_params["formula"];
 
               foreach ($formula as $_field => $_sign) {
@@ -1424,9 +1421,8 @@ class CConstantesMedicales extends CMbObject {
 
             $value = "__empty__";
           }
-
-          // valeur normale
           else {
+            // valeur normale
             $spec = self::$list_constantes[$_name];
             $value = $_constante_medicale->$_name;
 
@@ -1487,7 +1483,9 @@ class CConstantesMedicales extends CMbObject {
     return array_unique($new_names);
   }
 
-  static function getRelated($selection, CPatient $patient, CMbObject $context = null, $date_min = null, $date_max = null, $limit = null) {
+  static function getRelated(
+    $selection, CPatient $patient, CMbObject $context = null, $date_min = null, $date_max = null, $limit = null
+  ) {
     $where = array(
       "patient_id" => " = '$patient->_id'"
     );

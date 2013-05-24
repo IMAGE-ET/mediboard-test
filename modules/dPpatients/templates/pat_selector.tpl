@@ -43,7 +43,7 @@ var Patient = {
     window.launcher.PatSelector.set(patient_id, patient_view, sexe);
     window._close();
   }
-}
+};
 
 {{if $modFSE && $modFSE->canRead() && !$app->user_prefs.VitaleVision}}
   var urlFSE = new Url("dPpatients", "pat_selector");

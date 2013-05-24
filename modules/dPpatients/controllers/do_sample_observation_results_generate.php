@@ -19,10 +19,13 @@ $datetime_start = CValue::post("datetime_start");
 $datetime_end   = CValue::post("datetime_end");
 $period         = CValue::post("period", 30); // in seconds
 
-$graph = new CSupervisionGraph;
-$graphs = $graph->loadList(array(
+$graph = new CSupervisionGraph();
+/** @var CSupervisionGraph[] $graphs */
+$graphs = $graph->loadList(
+  array(
   "disabled" => "= '0'",
-));
+  )
+);
 
 $n = 500;
 $datetime = $datetime_start;

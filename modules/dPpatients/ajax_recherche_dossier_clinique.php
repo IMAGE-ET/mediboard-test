@@ -510,9 +510,8 @@ if ($one_field) {
       $_atcd->load($_result["antecedent_id"]);
       $pat->_ref_antecedent = $_atcd;
     }
-    
-    // On affiche tous les antécédents du patient
     else {
+      // On affiche tous les antécédents du patient
       $dossier_medical = $pat->loadRefDossierMedical(false);
       $pat->_refs_antecedents = $dossier_medical->loadRefsAntecedents();
       $pat->_refs_allergies   = $dossier_medical->loadRefsAllergies();

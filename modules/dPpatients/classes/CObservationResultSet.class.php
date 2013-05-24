@@ -71,7 +71,7 @@ class CObservationResultSet extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * @param bool $cache Utilisation du cache
    *
    * @return CMbObject
    */
@@ -80,7 +80,7 @@ class CObservationResultSet extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * @param bool $cache Utilisation du cache
    *
    * @return CPatient
    */
@@ -104,13 +104,17 @@ class CObservationResultSet extends CMbObject {
     $request = new CRequest;
     $request->addTable("observation_result");
     $request->addSelect("*");
-    $request->addLJoin(array(
-      "observation_result_set" => "observation_result_set.observation_result_set_id = observation_result.observation_result_set_id",
-    ));
-    $request->addWhere(array(
-      "observation_result_set.context_class" => "= '$object->_class'",
-      "observation_result_set.context_id"    => "= '$object->_id'",
-    ));
+    $request->addLJoin(
+      array(
+        "observation_result_set" => "observation_result_set.observation_result_set_id = observation_result.observation_result_set_id",
+      )
+    );
+    $request->addWhere(
+      array(
+        "observation_result_set.context_class" => "= '$object->_class'",
+        "observation_result_set.context_id"    => "= '$object->_id'",
+      )
+    );
     $request->addOrder("observation_result.observation_result_id");
     
     $results = $object->_spec->ds->loadList($request->getRequest());
@@ -132,7 +136,11 @@ class CObservationResultSet extends CMbObject {
   }
 
   /**
-   * @param COperation $interv
+   * Chargement des graphiques d'intervention
+   *
+   * @param COperation $interv  Intervention
+   *
+   * @param int        $pack_id Pack de graphiques
    *
    * @return array
    */
@@ -188,7 +196,10 @@ class CObservationResultSet extends CMbObject {
     foreach ($graphs as $_graph) {
       if ($_graph instanceof CSupervisionGraph) {
         if (count($_graph->_graph_data["yaxes"]) < $yaxes_count) {
-          $_graph->_graph_data["yaxes"] = array_pad($_graph->_graph_data["yaxes"], $yaxes_count, CSupervisionGraphAxis::$default_yaxis);
+          $_graph->_graph_data["yaxes"] = array_pad(
+            $_graph->_graph_data["yaxes"],
+            $yaxes_count, CSupervisionGraphAxis::$default_yaxis
+          );
         }
       }
     }

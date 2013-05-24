@@ -40,10 +40,9 @@ if ($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")) {
     CValue::setSession("patient_id", $patient->_id);
     $patients[$patient->_id] = $patient; 
   }
-} 
-
-// Recherche par traits classiques
+}
 else {
+  // Recherche par traits classiques
   // Gestion du cas vitale
   if ($useVitale && CModule::getActive("fse") && !CAppUI::pref('VitaleVision')) {
     $patVitale = new CPatient();  
@@ -93,7 +92,9 @@ else {
   $order = "patients.nom, patients.prenom";
 
   $pat             = new CPatient();
+  /** @var CPatient[] $patients */
   $patients        = array();
+  /** @var CPatient[] $patientsSoundex */
   $patientsSoundex = array();
 
   if ($where) {
@@ -105,7 +106,13 @@ else {
     }
   }
 
-  // Chargement des consultations du jour
+  /**
+   * Chargement des consultations du jour pour une liste de patients donnés
+   *
+   * @param CPatient[] &$patients Liste des patients
+   *
+   * @return void
+   */
   function loadConsultationsDuJour(&$patients) {
     $today = CMbDT::date();
     $where = array();
@@ -116,10 +123,15 @@ else {
         $consult->loadRefPraticien()->loadRefFunction();
       }
     }
-
   }
 
-  // Chargement des admissions du jour
+  /**
+   * Chargement des admissions du jour
+   *
+   * @param CPatient[] &$patients Liste des patient
+   *
+   * @return void
+   */
   function loadAdmissionsDuJour(&$patients) {
     $today = CMbDT::date();
     $where = array();

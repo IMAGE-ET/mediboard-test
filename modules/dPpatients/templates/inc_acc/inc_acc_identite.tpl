@@ -3,7 +3,7 @@
 togglePrenomsList = function(element) {
   var list = $("patient_identite").select('.prenoms_list').invoke('toggle');
   Element.classNames(element).flip('up', 'down');
-}
+};
 
 toggleNomNaissance = function(element) {
 {{if $nom_jeune_fille_mandatory}}
@@ -37,7 +37,7 @@ toggleNomNaissance = function(element) {
       .stopObserving("ui:change", notNullOK);
   }
 {{/if}}
-}
+};
 
 selectFirstEnabled = function(select){
   var found = false;
@@ -47,7 +47,7 @@ selectFirstEnabled = function(select){
       found = true;
     }
   });
-}
+};
 
 disableOptions = function (select, list) {
   $A(select.options).each(function (o) {
@@ -57,7 +57,7 @@ disableOptions = function (select, list) {
   if (select.value == '' || select.options[select.selectedIndex].disabled) {
     selectFirstEnabled(select);
   }
-}
+};
 
 changeCiviliteForSexe = function(element, assure) {
   var form = document.editFrm.elements;
@@ -77,7 +77,7 @@ changeCiviliteForSexe = function(element, assure) {
     disableOptions($(form[civilite]), $w('m mme mlle enf dr pr me vve'));
     break;
   }
-}
+};
 
 var adult_age = {{$conf.dPpatients.CPatient.adult_age}};
 
@@ -92,12 +92,12 @@ changeCiviliteForDate = function(element, assure) {
       changeCiviliteForSexe(element.form.sexe);
     }
   }
-}
+};
 
 anonymous = function() {
   $V("editFrm_nom"   , "anonyme");
   $V("editFrm_prenom", "anonyme");
-}
+};
 
 checkDoublon = function() {
   var oForm = document.editFrm;
@@ -106,7 +106,7 @@ checkDoublon = function() {
     SiblingsChecker.submit = false;
     SiblingsChecker.request(oForm);
   }
-}
+};
 
 refreshInfoTutelle = function(tutelle) {
   var url = new Url("dPpatients", "ajax_check_correspondant_tutelle");
@@ -115,7 +115,7 @@ refreshInfoTutelle = function(tutelle) {
   {{/if}}
   url.addParam("tutelle", tutelle);
   url.requestUpdate('alert_tutelle');
-}
+};
 
 Main.add(function() {
   var i,
@@ -160,7 +160,7 @@ Main.add(function() {
           <td>
             {{mb_field object=$patient field="nom" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}}
             {{if !$patient->_id}}
-              <button type="button" style="padding: 0px" onclick="anonymous()" tabIndex="1000">
+              <button type="button" style="padding: 0" onclick="anonymous()" tabIndex="1000">
                 <img src="modules/dPpatients/images/anonyme.png" alt="Anonyme" />
               </button>
             {{/if}}

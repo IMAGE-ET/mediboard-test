@@ -92,7 +92,7 @@ Main.add(function() {
     this.sId        = "patient_id";
     this.sView      = "_pat_name";
     this.pop();
-  }
+  };
   
   // Autocomplete des medicaments
   var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");

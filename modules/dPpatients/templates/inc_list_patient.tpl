@@ -30,7 +30,7 @@
         $("useVitale").value = 0;
         return true;
       }
-    }
+    };
 
     doMerge = function(oForm) {
       var url = new Url();
@@ -38,11 +38,11 @@
       url.addParam("objects_class", "CPatient");
       url.addParam("objects_id", $V(oForm["objects_id[]"]).join("-"));
       url.popup(800, 600, "merge_patients");
-    }
+    };
 
     onMergeComplete = function() {
       location.reload();
-    }
+    };
 
     window.checkedMerge = [];
     checkOnlyTwoSelected = function(checkbox) {
@@ -53,7 +53,7 @@
 
       if (checkedMerge.length > 2)
         checkedMerge.shift().checked = false;
-    }
+    };
 
     doLink = function(oForm) {
       var url = new Url();
@@ -79,12 +79,12 @@ reloadPatient = function(patient_id, link){
     url.addParam('patient_id', patient_id);
     url.requestUpdate('vwPatient', { onComplete: markAsSelected.curry(link) } );
   {{/if}}
-}
+};
 
 toggleSearch = function() {
   $$(".field_advanced").each(function(elt){ elt.toggle();});
   $$(".field_basic").each(function(elt){ elt.toggle();});
-}
+};
 
 emptyForm = function() {
   var form = getForm("find");
@@ -96,7 +96,7 @@ emptyForm = function() {
     $V(elt, '');
   });
   form.nom.focus();
-}
+};
 {{if $cp || $ville || ($conf.dPpatients.CPatient.tag_ipp && $patient_ipp) || $prat_id || $sexe || ($conf.dPplanningOp.CSejour.tag_dossier && $patient_nda) }}
   Main.add(toggleSearch);
 {{/if}}
@@ -165,7 +165,7 @@ emptyForm = function() {
       <input tabindex="8" type="text" name="patient_ipp" value="{{$patient_ipp}}" />
     </td>
     {{else}}
-    <td colspan="2" />
+    <td colspan="2"></td>
     {{/if}}
   </tr>
 
@@ -205,14 +205,14 @@ emptyForm = function() {
 
   <tr>
     {{if $conf.dPplanningOp.CSejour.tag_dossier && $dPsanteInstalled}}
-    <th style="display: none;" class="field_advanced">NDA</th>
-    <td style="display: none;" class="field_advanced">
-      <input tabindex="8" type="text" name="patient_nda" value="{{$patient_nda}}" />
-    </td>
+      <th style="display: none;" class="field_advanced">NDA</th>
+      <td style="display: none;" class="field_advanced">
+        <input tabindex="8" type="text" name="patient_nda" value="{{$patient_nda}}" />
+      </td>
     {{else}}
-    <td colspan="2" />
+      <td colspan="2"></td>
     {{/if}}
-      <td colspan="2" />
+    <td colspan="2"></td>
   </tr>
 
   <tr>

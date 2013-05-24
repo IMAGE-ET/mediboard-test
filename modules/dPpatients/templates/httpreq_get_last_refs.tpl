@@ -1,4 +1,4 @@
-<table width="100%">
+<table style="width: 100%;">
   <tr>
     <td style="font-weight: bold;">
       <a href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}">

@@ -30,7 +30,9 @@ class CDoPatientAddEdit extends CDoObjectAddEdit {
     $dialog = CValue::post("dialog");
 
     if ($dialog) {
-      $this->redirectStore .= "&a=pat_selector&dialog=1&name=".$this->_obj->nom."&firstName=".$this->_obj->prenom."&useVitale=".$this->_obj->_bind_vitale;
+      $this->redirectStore .= "&a=pat_selector&dialog=1&name=".$this->_obj->nom.
+        "&firstName=".$this->_obj->prenom.
+        "&useVitale=".$this->_obj->_bind_vitale;
     }
     else {
       $this->redirectStore .= "m=dPpatients&tab=vw_idx_patients&id=".$this->_obj->patient_id."&nom=&prenom=";

@@ -75,7 +75,7 @@ var Process = {
     form.departement.selectedIndex++;
     this.endStep();
   }
-}
+};
 
 function importSF(form) {
   var url = new Url("patients", "import_sages_femmes");
@@ -206,10 +206,10 @@ function installMouvMedecinPatient() {
 
   <tr id="total" style="text-align: right">
     <th>Total</th>
-    <td id="total-medecins" />
-    <td id="total-time" />
-    <td id="total-updates" />
-    <td id="total-errors" />
+    <td id="total-medecins"></td>
+    <td id="total-time"></td>
+    <td id="total-updates"></td>
+    <td id="total-errors"></td>
   </tr>
 </table>
 

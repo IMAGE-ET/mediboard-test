@@ -34,9 +34,12 @@ $patient_nda         = CValue::get("patient_nda");;
 $useVitale           = CValue::get("useVitale",  CModule::getActive("fse") || CAppUI::pref('VitaleVision') ? 1 : 0);
 $prat_id             = CValue::get("prat_id");
 
-$patVitale = new CPatient;
+$patVitale = new CPatient();
+$patient   = new CPatient();
 
-$patient = new CPatient;
+$patient_nom_search    = "";
+$patient_prenom_search = "";
+
 if ($new = CValue::get("new")) {
   $patient->load(null);
   CValue::setSession("patient_id", null);

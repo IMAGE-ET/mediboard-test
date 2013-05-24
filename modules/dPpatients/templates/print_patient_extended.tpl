@@ -188,7 +188,7 @@ function toggleList(list, button) {
         {{/if}}
       {{/foreach}}
     </td>
-    <td colspan="2" style="width: 50%; width: 100%;">
+    <td colspan="2" style="width: 50%;">
       {{foreach from=$patient->_ref_cp_by_relation.employeur item=employeur name=foreach_employeur}}
         <table class="print" style="font-size: 11px;">
           <tr>
@@ -260,7 +260,7 @@ function toggleList(list, button) {
     
     <th>{{mb_label object=$patient field="assure_tel"}}</th>
     <td>{{mb_value object=$patient field="assure_tel"}}</td>
-	</td>
+	</tr>
   <tr>
     <th></th>
     <td></td>

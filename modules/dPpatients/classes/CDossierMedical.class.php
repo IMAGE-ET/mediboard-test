@@ -43,8 +43,10 @@ class CDossierMedical extends CMbMetaObject {
   public $_ref_antecedents_by_type;
   public $_ref_antecedents_by_appareil;
   public $_ref_antecedents_by_type_appareil;
+  /** @var  CTraitement[] */
   public $_ref_traitements;
   public $_ref_etats_dents;
+  /** @var  CPrescription */
   public $_ref_prescription;
   public $_ref_allergies;
   public $_ref_deficiences;
@@ -168,6 +170,8 @@ class CDossierMedical extends CMbMetaObject {
     }
     
     $this->codes_cim = implode('|', $codes_cim_array);
+
+    return null;
   }
 
   /**
@@ -182,7 +186,7 @@ class CDossierMedical extends CMbMetaObject {
     // Initialisation du classement
     $order = "CAST(type AS CHAR), CAST(appareil AS CHAR), rques";
     if (null === $this->_all_antecedents = $this->loadBackRefs("antecedents", $order)) {
-      return;
+      return null;
     }
 
     // Filtrage sur les annulés
@@ -215,7 +219,12 @@ class CDossierMedical extends CMbMetaObject {
     
     return $this->_all_antecedents;
   }
-  
+
+  /**
+   * Chargement de l'état des dents
+   *
+   * @return CEtatDent[]
+   */
   function loadRefsEtatsDents() {
     return $this->_ref_etats_dents = $this->loadBackRefs("etats_dent");
   }
@@ -376,7 +385,7 @@ class CDossierMedical extends CMbMetaObject {
       $da = new CCodeCIM10($this->_added_code_cim, 1);
       if (!$da->exist) {
         CAppUI::setMsg("Le code CIM saisi n'est pas valide", UI_MSG_WARNING);
-        return;
+        return null;
       }
       $this->_codes_cim[] = $this->_added_code_cim;
     }
@@ -498,9 +507,13 @@ class CDossierMedical extends CMbMetaObject {
       if ($etat->etat) {
         switch ($etat->dent) {
           case 10: 
-          case 50: $position = 'Central haut'; break;
+          case 50:
+            $position = 'Central haut';
+            break;
           case 30: 
-          case 70: $position = 'Central bas'; break;
+          case 70:
+            $position = 'Central bas';
+            break;
           default: $position = $etat->dent;
         }
         if (!isset ($etats[$etat->etat])) {
@@ -532,15 +545,36 @@ class CDossierMedical extends CMbMetaObject {
     // Facteurs de risque
     switch ($champ) {
       case "Sejour":
-        $template->addProperty("Anesthésie - Maladie thrombo embolique - Chirurgie", $this->getFormattedValue("risque_thrombo_chirurgie"));
-        $template->addProperty("Anesthésie - MCJ - Chirurgie", $this->getFormattedValue("risque_MCJ_chirurgie"));
-        $template->addProperty("Anesthésie - Risque Anesthesique - Antibioprophylaxie", $this->getFormattedValue("risque_antibioprophylaxie"));
-        $template->addProperty("Anesthésie - Risque Anesthesique - Thrombo prophylaxie", $this->getFormattedValue("risque_prophylaxie"));
+        $template->addProperty(
+          "Anesthésie - Maladie thrombo embolique - Chirurgie",
+          $this->getFormattedValue("risque_thrombo_chirurgie")
+        );
+        $template->addProperty(
+          "Anesthésie - MCJ - Chirurgie",
+          $this->getFormattedValue("risque_MCJ_chirurgie")
+        );
+        $template->addProperty(
+          "Anesthésie - Risque Anesthesique - Antibioprophylaxie",
+          $this->getFormattedValue("risque_antibioprophylaxie")
+        );
+        $template->addProperty(
+          "Anesthésie - Risque Anesthesique - Thrombo prophylaxie",
+          $this->getFormattedValue("risque_prophylaxie")
+        );
         break;
       case "Patient":
-        $template->addProperty("Anesthésie - Maladie thrombo embolique - Patient"  , $this->getFormattedValue("risque_thrombo_patient"));
-        $template->addProperty("Anesthésie - MCJ - Patient", $this->getFormattedValue("risque_MCJ_patient"));
-        $template->addProperty("Anesthésie - Facteurs de risque", $this->getFormattedValue("facteurs_risque"));
+        $template->addProperty(
+          "Anesthésie - Maladie thrombo embolique - Patient",
+          $this->getFormattedValue("risque_thrombo_patient")
+        );
+        $template->addProperty(
+          "Anesthésie - MCJ - Patient",
+          $this->getFormattedValue("risque_MCJ_patient")
+        );
+        $template->addProperty(
+          "Anesthésie - Facteurs de risque",
+          $this->getFormattedValue("facteurs_risque")
+        );
     }
     
     $template->addListProperty("$champ - Diagnostics", $list);

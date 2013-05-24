@@ -8,7 +8,7 @@
 
   onMergeComplete = function() {
     IPPconflict();
-  }
+  };
     
   Main.add(Control.Tabs.create.curry('tabs-identito-vigilance', true));
   

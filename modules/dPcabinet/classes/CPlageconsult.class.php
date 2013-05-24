@@ -234,6 +234,11 @@ class CPlageconsult extends CPlageHoraire {
     $this->_ref_pour_compte = $this->loadFwdRef("pour_compte_id", $cache);
   }
 
+  /**
+   * Chargement du praticien
+   *
+   * @return CMediusers
+   */
   function loadRefChir() {
     return $this->_ref_chir = $this->loadFwdRef("chir_id", true);
   }

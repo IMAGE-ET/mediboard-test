@@ -227,21 +227,15 @@ class CPatient extends CPerson {
   public $_pays;
   public $_IPP;
   public $_fusion; // fusion
-  /**
-   * @var CPatient
-   */
+  /**  @var CPatient */
   public $_patient_elimine; // fusion
 
   public $_nb_docs;
 
-  /**
-   * @var CSejour[]
-   */
+  /** @var CSejour[] */
   public $_ref_sejours;
 
-  /**
-   * @var CConsultation[]
-   */
+  /**  @var CConsultation[] */
   public $_ref_consultations;
   public $_ref_prescriptions;
   public $_ref_grossesses;
@@ -249,35 +243,26 @@ class CPatient extends CPerson {
   public $_ref_first_constantes;
   public $_ref_patient_links;
 
-  /**
-   * @var CAffectation
-   */
+  /** @var  CFile */
+  public $_ref_photo_identite;
+
+  /** @var CAffectation */
   public $_ref_curr_affectation;
 
-  /**
-   * @var CAffectation
-   */
+  /** @var CAffectation */
   public $_ref_next_affectation;
 
-  /**
-   * @var CMedecin
-   */
+  /** @var CMedecin */
   public $_ref_medecin_traitant;
 
-  /**
-   * @var CCorrespondant[]
-   */
+  /** @var CCorrespondant[] */
   public $_ref_medecins_correspondants;
 
-  /**
-   * @var CCorrespondantPatient[]
-   */
+  /** @var CCorrespondantPatient[] */
   public $_ref_correspondants_patient;
   public $_ref_cp_by_relation;
 
-  /**
-   * @var CDossierMedical
-   */
+  /** @var CDossierMedical*/
   public $_ref_dossier_medical;
   public $_refs_devenirs_dentaires;
   /** @var CIdSante400 */
@@ -304,26 +289,27 @@ class CPatient extends CPerson {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["constantes"]            = "CConstantesMedicales patient_id";
-    $backProps["consultations"]         = "CConsultation patient_id";
-    $backProps["correspondants"]        = "CCorrespondant patient_id";
-    $backProps["correspondants_patient"] = "CCorrespondantPatient patient_id";
-    $backProps["hprim21_patients"]      = "CHprim21Patient patient_id";
-    $backProps["prescriptions_labo"]    = "CPrescriptionLabo patient_id";
-    $backProps["product_deliveries"]    = "CProductDelivery patient_id";
-    $backProps["sejours"]               = "CSejour patient_id";
-    $backProps["dossier_medical"]       = "CDossierMedical object_id";
-    $backProps["echanges_hprim"]        = "CEchangeHprim object_id";
-    $backProps["echanges_hprim21"]      = "CEchangeHprim21 object_id";
-    $backProps["echanges_ihe"]          = "CExchangeIHE object_id";
-    $backProps["devenirs_dentaires"]    = "CDevenirDentaire patient_id";
-    $backProps["correspondants_courrier"] = "CCorrespondantCourrier object_id";
-    $backProps["grossesses"]            = "CGrossesse parturiente_id";
-    $backProps["facture_patient_consult"] = "CFactureCabinet patient_id";
-    $backProps["facture_patient_sejour"]  = "CFactureEtablissement patient_id";
-    $backProps["patient_observation_result_sets"] = "CObservationResultSet patient_id"; // interfere avec CMbObject-back-observation_result_sets
-    $backProps["patient_links"]         = "CPatient patient_link_id";
-    $backProps["CV_pyxvital"]           = "CPvCV id_patient";
+    $backProps["constantes"]                      = "CConstantesMedicales patient_id";
+    $backProps["consultations"]                   = "CConsultation patient_id";
+    $backProps["correspondants"]                  = "CCorrespondant patient_id";
+    $backProps["correspondants_patient"]          = "CCorrespondantPatient patient_id";
+    $backProps["hprim21_patients"]                = "CHprim21Patient patient_id";
+    $backProps["prescriptions_labo"]              = "CPrescriptionLabo patient_id";
+    $backProps["product_deliveries"]              = "CProductDelivery patient_id";
+    $backProps["sejours"]                         = "CSejour patient_id";
+    $backProps["dossier_medical"]                 = "CDossierMedical object_id";
+    $backProps["echanges_hprim"]                  = "CEchangeHprim object_id";
+    $backProps["echanges_hprim21"]                = "CEchangeHprim21 object_id";
+    $backProps["echanges_ihe"]                    = "CExchangeIHE object_id";
+    $backProps["devenirs_dentaires"]              = "CDevenirDentaire patient_id";
+    $backProps["correspondants_courrier"]         = "CCorrespondantCourrier object_id";
+    $backProps["grossesses"]                      = "CGrossesse parturiente_id";
+    $backProps["facture_patient_consult"]         = "CFactureCabinet patient_id";
+    $backProps["facture_patient_sejour"]          = "CFactureEtablissement patient_id";
+    // interfere avec CMbObject-back-observation_result_sets
+    $backProps["patient_observation_result_sets"] = "CObservationResultSet patient_id";
+    $backProps["patient_links"]                   = "CPatient patient_link_id";
+    $backProps["CV_pyxvital"]                     = "CPvCV id_patient";
     return $backProps;
   }
 
@@ -468,17 +454,19 @@ class CPatient extends CPerson {
 
     $sejour = new CSejour;
     $where["patient_id"] = CSQLDataSource::prepareIn(CMbArray::pluck($patients, "_id"));
+    /** @var CSejour[] $sejours */
     $sejours = $sejour->loadList($where);
 
     foreach ($sejours as $_sejour1) {
       foreach ($sejours as $_sejour2) {
         if ($_sejour1->collides($_sejour2)) {
-          $_sejour1->loadRefPatient(1);
-          $_sejour2->loadRefPatient(1);
+          $_sejour1->loadRefPatient();
+          $_sejour2->loadRefPatient();
           return CAppUI::tr("CPatient-merge-warning-venue-conflict", $_sejour1->_view, $_sejour2->_view);
         }
       }
     }
+    return null;
   }
 
   /**
@@ -521,6 +509,7 @@ class CPatient extends CPerson {
       $dossier_medical->object_id = $this->_id;
       return $dossier_medical->merge($list);
     }
+    return null;
   }
 
   /**
@@ -538,6 +527,7 @@ class CPatient extends CPerson {
         return "Doublons détectés";
       }
     }
+    return null;
   }
 
   /**
@@ -584,22 +574,24 @@ class CPatient extends CPerson {
         return $msg;
       }
     }
+    return null;
   }
 
   function generateIPP() {
     $group = CGroups::loadCurrent();
     if (!$group->isIPPSupplier()) {
-      return;
+      return null;
     }
 
     $this->loadIPP($group->_id);
     if ($this->_IPP) {
-      return;
+      return null;
     }
     
     if (!$IPP = CIncrementer::generateIdex($this, self::getTagIPP($group->_id), $group->_id)) {
       return CAppUI::tr("CIncrementer_undefined");
     }
+    return null;
   }
 
   function guessExoneration(){
@@ -865,7 +857,13 @@ class CPatient extends CPerson {
     }
   }
 
-  // Backward references
+  /**
+   * Backward references
+   *
+   * @param array $where Tableau de conditions SQL
+   *
+   * @return CSejour[]
+   */
   function loadRefsSejours($where = array()) {
     if (!$this->_id) {
       return $this->_ref_sejours = array();
@@ -899,7 +897,7 @@ class CPatient extends CPerson {
     if ($this->patient_link_id) {
       return $this->_ref_patient_links = array($this->loadFwdRef("patient_link_id"));
     }
-
+    return null;
     // return $this->_ref_patient_links = $this->loadBackRefs("patient_links");
   }
 
@@ -1112,7 +1110,14 @@ class CPatient extends CPerson {
     }
   }
 
-  function loadRefsConsultations($where = null) {
+  /**
+   * Chargement de la liste des consultations
+   *
+   * @param array $where Tableau de conditions SQL
+   *
+   * @return CConsultation[]
+   */
+  function loadRefsConsultations($where = array()) {
     $consultation = new CConsultation();
     $group_id = CGroups::loadCurrent()->_id;
     $curr_user = CAppUI::$user;
@@ -1140,6 +1145,10 @@ class CPatient extends CPerson {
   }
 
   /**
+   * Chargement du dossier médical
+   *
+   * @param bool $load_refs_back Chargement des références
+   *
    * @return CDossierMedical
    */
   function loadRefDossierMedical($load_refs_back = true) {
@@ -1258,7 +1267,7 @@ class CPatient extends CPerson {
     $this->loadRefPhotoIdentite();
     $this->loadRefsCorrespondantsPatient();
     $this->loadRefDossierMedical();
-    $this->_ref_dossier_medical->canRead();
+    $this->_ref_dossier_medical->canDo();
     $this->_ref_dossier_medical->loadRefsAntecedents();
     $this->_ref_dossier_medical->loadRefsTraitements();
     $prescription = $this->_ref_dossier_medical->loadRefPrescription();
@@ -1310,8 +1319,7 @@ class CPatient extends CPerson {
     }
 
     // Patient permission
-    $this->canRead();
-    $this->canEdit();
+    $this->canDo();
 
     // Doc items
     $this->loadRefsFiles();
@@ -1385,8 +1393,7 @@ class CPatient extends CPerson {
     // Sejours
     foreach ($this->_ref_sejours as $_sejour) {
       // Permission
-      $_sejour->canRead();
-      $_sejour->canEdit();
+      $_sejour->canDo();
 
       //
       $_sejour->loadNDA();
@@ -1404,8 +1411,7 @@ class CPatient extends CPerson {
 
       $_sejour->loadRefsOperations();
       foreach ($_sejour->_ref_operations as $_operation) {
-        $_operation->canRead();
-        $_operation->canEdit();
+        $_operation->canDo();
 
         // Praticien
         $praticien = $_operation->loadRefPraticien(1);
@@ -1444,8 +1450,7 @@ class CPatient extends CPerson {
         $_consult->getType();
         $_consult->_ref_chir->loadRefFunction();
         $_consult->_ref_chir->_ref_function->loadRefGroup();
-        $_consult->canRead();
-        $_consult->canEdit();
+        $_consult->canDo();
       }
     }
   }
@@ -1501,7 +1506,7 @@ class CPatient extends CPerson {
     
     // Pas de tag IPP => pas d'affichage d'IPP
     if (null == $tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp")) {
-      return;
+      return null;
     }
 
     // Permettre des IPP en fonction de l'établissement
@@ -1879,7 +1884,9 @@ class CPatient extends CPerson {
     $template->addProperty("Patient - Bénéficiaire de soin - cmu"        , $this->getFormattedValue("cmu"));
     $template->addProperty("Patient - Bénéficiaire de soin - ATNC"       , $this->getFormattedValue("ATNC"));
     $template->addDateProperty("Patient - Bénéficiaire de soin - validité vitale", $this->fin_validite_vitale);
-    $template->addProperty("Patient - Bénéficiaire de soin - médecin traitant déclaré", $this->getFormattedValue("medecin_traitant_declare"));
+    $template->addProperty(
+      "Patient - Bénéficiaire de soin - médecin traitant déclaré", $this->getFormattedValue("medecin_traitant_declare")
+    );
     $template->addProperty("Patient - Bénéficiaire de soin - types contrat mutuelle", addslashes($this->mutuelle_types_contrat));
     $template->addProperty("Patient - Bénéficiaire de soin - notes amo"  , addslashes($this->notes_amo));
     $template->addProperty("Patient - Bénéficiaire de soin - libellé exo", addslashes($this->libelle_exo));
@@ -1976,7 +1983,7 @@ class CPatient extends CPerson {
   function isIPPConflict($ipp) {
     // Pas de tag IPP => pas d'affichage d'IPP
     if (null == $tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp")) {
-      return;
+      return null;
     }
 
     $idex = new CIdSante400();
@@ -2071,12 +2078,12 @@ class CPatient extends CPerson {
 
     //on vérifie que le nir est valide
     if (CCodeSpec::checkInsee($nir_complet)) {
-      return;
+      return null;
     }
 
     //on vérifie que le nir n'est pas un nir temporaire
     if (!preg_match("/^([12][0-9]{2}[0-9]{2}[0-9][0-9ab][0-9]{3}[0-9]{3})([0-9]{2})$/i", $nir_complet, $matches)) {
-      return;
+      return null;
     }
 
     if (empty($first_name)) {
@@ -2099,7 +2106,7 @@ class CPatient extends CPerson {
     list($year, $month, $day) = str_split($birth_date, 2);
 
     if (!checkdate($month, $day, $year) && $birth_date !== "000000" && strlen($birth_date) !== 6) {
-      return;
+      return null;
     }
 
     $seed = $first_name.$birth_date.$nir;
@@ -2143,6 +2150,7 @@ class CPatient extends CPerson {
     if ($idex->tag == self::getTagIPP()) {
       return "IPP";
     }
+    return null;
   }
 
   /**
