@@ -80,21 +80,24 @@ $bank_holidays = array_merge(CMbDT::bankHolidays($minDate), CMbDT::bankHolidays(
 $where["date"] = $ds->prepare("BETWEEN %1 AND %2", $minDate, $maxDate);
 $where[] = "libelle != 'automatique' OR libelle IS NULL";
 
-$order = "date, debut";
+$ljoin["users"] = "users.user_id = plageconsult.chir_id OR users.user_id = plageconsult.remplacant_id ";
+
+$order = "date, user_last_name, user_first_name, debut";
 
 // Chargement des plages disponibles
-$listPlage = $listPlage->loadList($where, $order);
+/** @var CPlageconsult[] $listPlage */
+$listPlage = $plage->loadList($where, $order, null, null, $ljoin);
 
 if (!array_key_exists($plageconsult_id, $listPlage)) {
   $plage->_id = $plageconsult_id = null;
 }
 $currPlage = new CPlageconsult();
-foreach ($listPlage as $keyPlage => &$currPlage) {
+foreach ($listPlage as $currPlage) {
   if (!$plageconsult_id && $date == $currPlage->date) {
-    $plageconsult_id = $currPlage->plageconsult_id;
+    $plageconsult_id = $currPlage->_id;
   }
 
-  $currPlage->_ref_chir =& $listPrat[$currPlage->chir_id];
+  $currPlage->_ref_chir = $listPrat[$currPlage->chir_id];
   $currPlage->loadFillRate();
   $currPlage->loadCategorieFill();
   $currPlage->loadRefsNotes();
