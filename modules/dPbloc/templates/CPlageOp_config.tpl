@@ -71,6 +71,8 @@
         </select>
       </td>
     </tr>
+
+    {{mb_include module=system template=inc_config_bool var=view_prepost_suivi}}
     
     <tr>
       <td class="button" colspan="100">

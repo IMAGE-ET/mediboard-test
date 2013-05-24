@@ -345,6 +345,8 @@ $locales['config-dPbloc-CPlageOp-systeme_materiel'] = 'Système de gestion de mat
 $locales['config-dPbloc-CPlageOp-systeme_materiel-desc'] = 'Heure de séparation matin / midi pour l\'impression complète des plannings de blocs';
 $locales['config-dPbloc-CPlageOp-systeme_materiel-expert'] = 'Expert (ressources et types de ressources, indisponibilités)';
 $locales['config-dPbloc-CPlageOp-systeme_materiel-standard'] = 'Standard (champ texte sur l\'intervention)';
+$locales['config-dPbloc-CPlageOp-view_prepost_suivi'] = 'Afficher pré/post op dans suivi salles';
+$locales['config-dPbloc-CPlageOp-view_prepost_suivi-desc'] = 'Afficher les données pré et post opératoires dans la vue suivi salles';
 $locales['config-reaffectation_plageop'] = 'Réaffectation des plages opératoires';
 $locales['mod-dPbloc-tab-ajax_edit_besoins'] = 'Besoins en matériel';
 $locales['mod-dPbloc-tab-ajax_edit_extra_interv'] = 'Changement de salle et ajout de personnel sur l\'intervention';
@@ -381,3 +383,4 @@ $locales['mod-dPdPbloc-tab-ajax_edit_extra_interv'] = 'Changement de salle et aj
 $locales['module-dPbloc-court'] = 'Bloc opératoire';
 $locales['module-dPbloc-long'] = 'Planning du bloc opératoire';
 $locales['pref-suivisalleAutonome'] = 'Date du suivi de salle autonome';
+?>

@@ -17,4 +17,5 @@ $dPconfig["dPbloc"]["CPlageOp"] = array (
   "impression_suivi"     => "0",
   "id_salles_impression" => "",
   "hour_midi_fullprint"  => "12",
+  "view_prepost_suivi"   => false,
 );
