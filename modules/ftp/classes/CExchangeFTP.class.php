@@ -17,7 +17,10 @@ class CExchangeFTP extends CExchangeTransportLayer {
   
   // DB Fields
   public $ftp_fault;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->loggable = false;
@@ -25,7 +28,10 @@ class CExchangeFTP extends CExchangeTransportLayer {
     $spec->key   = 'echange_ftp_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["ftp_fault"] = "bool";

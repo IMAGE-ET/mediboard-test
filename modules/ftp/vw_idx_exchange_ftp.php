@@ -78,4 +78,4 @@ $smarty->assign("function"          , $function);
 $smarty->assign("functions"         , $functions);
 
 $smarty->display("vw_idx_exchange_ftp.tpl");
-?>
+

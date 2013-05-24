@@ -14,4 +14,3 @@ CCanDo::checkAdmin();
 $smarty = new CSmartyDP();
 $smarty->display("configure.tpl");
 
-?>

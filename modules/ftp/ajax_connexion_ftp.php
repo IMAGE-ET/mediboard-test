@@ -47,4 +47,4 @@ try {
 catch (CMbException $e) {
   $e->stepAjax();
 }
-?>
+

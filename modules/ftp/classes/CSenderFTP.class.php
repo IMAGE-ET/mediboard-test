@@ -18,7 +18,10 @@
 class CSenderFTP extends CInteropSender {
   // DB Table key
   public $sender_ftp_id;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'sender_ftp';
@@ -26,7 +29,10 @@ class CSenderFTP extends CInteropSender {
 
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["expediteur_hprimxml"] = "CEchangeHprim sender_id";

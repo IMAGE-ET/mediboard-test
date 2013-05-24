@@ -14,4 +14,3 @@ $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
 $module->registerTab("vw_idx_exchange_ftp", TAB_READ);
 
-?>

@@ -11,4 +11,3 @@
 $do = new CDoObjectAddEdit("CSourceFTP", "source_ftp_id");
 $do->doIt();
 
-?>

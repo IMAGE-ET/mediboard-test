@@ -234,4 +234,3 @@ $locales['mod-ftp-tab-ajax_purge_echange'] = 'Purge échanges FTP';
 $locales['mod-ftp-tab-ajax_read_ftp_files'] = 'Lecture fichiers FTP';
 $locales['mod-ftp-tab-configure'] = 'Configurer';
 $locales['mod-ftp-tab-vw_idx_exchange_ftp'] = 'Echanges FTP';
-?>

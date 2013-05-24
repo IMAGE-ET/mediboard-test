@@ -31,6 +31,9 @@ class CSourceFTP extends CExchangeSource {
   public $_destination_file;
   public $_path;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'source_ftp';
@@ -38,6 +41,9 @@ class CSourceFTP extends CExchangeSource {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["port"]       = "num default|21";

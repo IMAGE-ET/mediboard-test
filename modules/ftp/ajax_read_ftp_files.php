@@ -35,4 +35,3 @@ foreach ($senders_ftp as $_sender_ftp) {
 }
 
 
-?>
