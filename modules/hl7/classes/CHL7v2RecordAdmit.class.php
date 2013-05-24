@@ -1429,7 +1429,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $affectation->uf_hebergement_id = $uf->_id;
     
     // Affectation du service (couloir)
-    if (!$affectation->service_id) {
+    if (!$affectation->lit_id) {
       $affectation_uf = new CAffectationUniteFonctionnelle();
       $affectation_uf->uf_id        = $uf->_id;
       $affectation_uf->object_class = "CService";
