@@ -218,6 +218,11 @@ foreach ($plages as $_plage) {
 $can_edit = CCanDo::edit();
 
 $diff_hour_urgence = CAppUI::conf("reservation diff_hour_urgence");
+
+//prestations
+$prestations_journalieres = CPrestationJournaliere::loadCurrentList();
+$prestation_id   = CAppUI::pref("prestation_id_hospi");
+
 if ($show_operations) {
   /** @var $_operation COperation */
   foreach ($operations_by_salle as $salle_id => $_operations) {
@@ -241,11 +246,22 @@ if ($show_operations) {
 
       $anesth  = $_operation->_ref_anesth = $_operation->loadFwdRef("anesth_id");
       $sejour  = $_operation->loadRefSejour();
+      $charge = $sejour->loadRefChargePriceIndicator();
+      $sejour->loadLiaisonsForPrestation($prestation_id);
       $patient = $sejour->loadRefPatient();
       $patient->loadRefDossierMedical();
       $patient->_ref_dossier_medical->countAllergies();
       $patient->_ref_dossier_medical->loadRefsAntecedents();
       $besoins = $_operation->loadRefsBesoins();
+
+
+      //liaisons
+      $liaison_sejour = "";
+      foreach ($sejour->_liaisons_for_prestation as $_liaison) {
+        if ($date_planning == $_liaison->date) {
+          $liaison_sejour .= $_liaison->_ref_item->nom." ";
+        }
+      }
 
       //en plage & non validé, skip
       if ($_operation->plageop_id && !$_operation->rank) {
@@ -288,9 +304,24 @@ if ($show_operations) {
         ($_operation->presence_preop ? CMbDT::transform($_operation->presence_preop, null, "%H:%M") : "00:00")."' data-postop='".
         ($_operation->presence_postop ? CMbDT::transform($_operation->presence_postop, null, "%H:%M") : "00:00")."'></span>";
 
-      if (CAppUI::conf("reservation display_dossierBloc_button")) {
-        $libelle.= "<button class=\"bistouri notext\" style=\"float:right\" onclick=\"modalDossierBloc($_operation->_id)\">Dossier Bloc</button>";
+      /** CADRE DROIT */
+      $libelle .="<span style=\"float:right; text-align: right\">";
+
+      //only switzerland
+      if (CAppUI::conf("ref_pays") == 2) {
+        if (count($sejour->_liaisons_for_prestation) && $liaison_sejour) {
+          $libelle .= "<strong>$liaison_sejour</strong><br/>";
+        }
+        if (CAppUI::conf("dPplanningOp CSejour use_charge_price_indicator") && $charge->_id) {
+          $libelle .= "<strong>$charge->code</strong><br/>";
+        }
       }
+      if (CAppUI::conf("reservation display_dossierBloc_button")) {
+        $libelle.= "<button class=\"bistouri notext\" onclick=\"modalDossierBloc($_operation->_id)\">Dossier Bloc</button>";
+      }
+      $libelle .="</span>";
+      /** FIN CADRE DROIT */
+
       $libelle.= "<span onmouseover='ObjectTooltip.createEx(this, \"".CMbString::htmlEntities($patient->_guid)."\")'>".CMbString::htmlEntities($patient->nom. " " .$patient->prenom." (".$patient->sexe.")")."<br/>[".$patient->getFormattedValue("naissance")."] ".$lit."</span>";
 
       if (abs(CMbDT::hoursRelative("$_operation->date $debut_op", $first_log->date)) <= $diff_hour_urgence) {
@@ -485,6 +516,7 @@ $smarty->assign("scroll_top",           $scroll_top);
 $smarty->assign("show_cancelled",       $show_cancelled);
 $smarty->assign("show_operations",      $show_operations);
 $smarty->assign("bloc_id",              $bloc_id );
+$smarty->assign("prestations",          $prestations_journalieres);
 
 $smarty->assign("nbIntervNonPlacees",   $nbIntervNonPlacees);
 $smarty->assign("nbIntervHorsPlage" ,   $nbIntervHorsPlage );

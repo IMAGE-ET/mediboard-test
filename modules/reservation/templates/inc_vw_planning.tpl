@@ -42,10 +42,11 @@
     z-index: 50!important;
   }
 
-  /* bug with tooltip */
-  .planning .event.draggable .handle{
-   left:-15px;
+  .event-container div.body {
+    text-indent:15px;
   }
+
+
 </style>
   {{if $can->edit && ($nbIntervNonPlacees || $nbIntervHorsPlage || $nbAlertesInterv)}}
   <div class="warning" style="margin:0 auto">
