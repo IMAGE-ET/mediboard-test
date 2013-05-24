@@ -1,4 +1,4 @@
-<?php /* $Id:$ */
+<?php /** $Id:$ **/
 
 /**
  * @package Mediboard
@@ -15,23 +15,33 @@
  */
 class CChargePriceIndicator extends CMbObject {
   // DB Table key
-  var $charge_price_indicator_id = null; 
+  public $charge_price_indicator_id;
     
   // DB Table key
-  var $code     = null;
-  var $type     = null;
-  var $type_pec = null;
-  var $group_id = null;
-  var $libelle  = null;
-  var $actif    = null;
-  
+  public $code;
+  public $type;
+  public $type_pec;
+  public $group_id;
+  public $libelle;
+  public $actif;
+
+  /**
+   * specs
+   *
+   * @return CMbObjectSpec
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'charge_price_indicator';
     $spec->key   = 'charge_price_indicator_id';
     return $spec;
   }
-  
+
+  /**
+   * props
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["code"]     = "str notNull";
@@ -46,13 +56,23 @@ class CChargePriceIndicator extends CMbObject {
     
     return $props;
   }
-  
+
+  /**
+   * get back props
+   *
+   * @return array
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["sejours"] = "CSejour charge_id";
     return $backProps;
   }
-  
+
+  /**
+   * updateformfields
+   *
+   * @return void
+   */
   function updateFormFields() {
     parent::updateFormFields();
     
