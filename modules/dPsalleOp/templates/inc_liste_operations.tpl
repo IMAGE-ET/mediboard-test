@@ -72,28 +72,30 @@
       <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;op={{$_operation->_id}}" title="Coder l'intervention">
     {{/if}}
       {{if ($urgence && $salle) || $_operation->_ref_plageop->spec_id}}
-        {{$_operation->_ref_chir->_view}} -
+        {{$_operation->_ref_chir->_view}}
       {{if $vueReduite && $_operation->_ref_anesth->_id}}
         {{$_operation->_ref_anesth->_view}} -
       {{/if}}
       {{/if}}
       {{if $_operation->time_operation != "00:00:00"}}
-        {{$_operation->time_operation|date_format:$conf.time}}
+        {{$_operation->time_operation|date_format:$conf.time}}{{if $_operation->fin_op}}/{{$_operation->fin_op|date_format:$conf.time}}{{/if}}
       {{else}}
         NP
       {{/if}}
       {{if $vueReduite && $urgence && $salle}}
-        - {{$_operation->temp_operation|date_format:$conf.time}}
-        
-        {{if $_operation->presence_preop}}
-          <div>
-            Pré-op : {{$_operation->presence_preop|date_format:$conf.time}}
-          </div>
-        {{/if}}
-        {{if $_operation->presence_postop}}
-          <div>
-            Post-op : {{$_operation->presence_postop|date_format:$conf.time}}
-          </div>
+        ({{$_operation->temp_operation|date_format:$conf.time}})
+
+        {{if $conf.dPbloc.CPlageOp.view_prepost_suivi}}
+          {{if $_operation->presence_preop}}
+            <div>
+              Pré-op : {{$_operation->presence_preop|date_format:$conf.time}}
+            </div>
+          {{/if}}
+          {{if $_operation->presence_postop}}
+            <div>
+              Post-op : {{$_operation->presence_postop|date_format:$conf.time}}
+            </div>
+          {{/if}}
         {{/if}}
       {{/if}}
     {{if $salle}}
