@@ -293,6 +293,7 @@ function modalHeaderFooter(state) {
 }
 
 function duplicateDoc(form) {
+  $V(form.modele_id, $V(form.compte_rendu_id));
   $V(form.compte_rendu_id, '');
   CKEDITOR.instances.htmlarea.element.$.disabled=false;
   CKEDITOR.instances.htmlarea.element.$.contentEditable=true;
@@ -567,8 +568,8 @@ Main.add(function(){
       
       &mdash;
       {{mb_label object=$compte_rendu field=file_category_id}}
-      <select name="file_category_id" style="width: 12em;">
-        <option value=""{{if !$compte_rendu->file_category_id}} selected="selected"{{/if}}>&mdash; Aucune Catégorie</option>
+      <select name="file_category_id" style="width: 8em;">
+        <option value=""{{if !$compte_rendu->file_category_id}} selected="selected"{{/if}}>&mdash; Aucune</option>
         {{foreach from=$listCategory item=currCat}}
           <option value="{{$currCat->file_category_id}}"{{if $currCat->file_category_id==$compte_rendu->file_category_id}} selected="selected"{{/if}}>{{$currCat->nom}}</option>
         {{/foreach}}
@@ -607,9 +608,7 @@ Main.add(function(){
         <button type="button" class="{{if $compte_rendu->valide}}unlock{{else}}lock{{/if}} notext"
                 onclick="toggleLock(this)">Verrouiller / Déverouiller le document</button>
       {{/if}}
-      {{if $is_locked}}
-        <button type="button" class="add" onclick="duplicateDoc(this.form)">Dupliquer le document</button>
-      {{/if}}
+      <button type="button" class="add" onclick="duplicateDoc(this.form)">Dupliquer le document</button>
     </th>
   </tr>
 
