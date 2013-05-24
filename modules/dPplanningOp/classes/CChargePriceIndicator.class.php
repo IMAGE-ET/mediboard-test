@@ -28,7 +28,7 @@ class CChargePriceIndicator extends CMbObject {
   /**
    * specs
    *
-   * @return CMbObjectSpec
+   * @see parent::getSpec()
    */
   function getSpec() {
     $spec = parent::getSpec();
@@ -40,7 +40,7 @@ class CChargePriceIndicator extends CMbObject {
   /**
    * props
    *
-   * @return array
+   * @see parent::getProps()
    */
   function getProps() {
     $props = parent::getProps();
@@ -60,7 +60,7 @@ class CChargePriceIndicator extends CMbObject {
   /**
    * get back props
    *
-   * @return array
+   * @see parent::getBackProps()
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
@@ -71,7 +71,7 @@ class CChargePriceIndicator extends CMbObject {
   /**
    * updateformfields
    *
-   * @return void
+   * @see parent::updateFormFields()
    */
   function updateFormFields() {
     parent::updateFormFields();
