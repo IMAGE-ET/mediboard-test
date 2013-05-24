@@ -608,7 +608,9 @@ Main.add(function(){
         <button type="button" class="{{if $compte_rendu->valide}}unlock{{else}}lock{{/if}} notext"
                 onclick="toggleLock(this)">Verrouiller / Déverouiller le document</button>
       {{/if}}
-      <button type="button" class="add" onclick="duplicateDoc(this.form)">Dupliquer le document</button>
+      {{if $compte_rendu->_id}}
+        <button type="button" class="add" onclick="duplicateDoc(this.form)">Dupliquer le document</button>
+      {{/if}}
     </th>
   </tr>
 
