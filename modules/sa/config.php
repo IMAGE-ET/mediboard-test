@@ -16,4 +16,3 @@ $dPconfig["sa"] = array (
   "send_diags_with_actes"  => "0"
 );
 
-?>

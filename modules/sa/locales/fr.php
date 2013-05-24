@@ -49,4 +49,3 @@ $locales['config-traitement-sa'] = 'Traitement du mode SA';
 $locales['mod-sa-tab-configure'] = 'Configuration';
 $locales['module-sa-court'] = 'SA';
 $locales['module-sa-long'] = 'Serveur d\'actes';
-?>

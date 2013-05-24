@@ -18,4 +18,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("sejour_types", $sejour_types);
 $smarty->display("configure.tpl");
 
-?>

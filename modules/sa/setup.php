@@ -19,4 +19,3 @@ class CSetupsa extends CSetup {
     $this->mod_version = "0.01";
   }
 }
-?>
