@@ -19,4 +19,3 @@ class CHPrimXMLAcquittementsServeurIntervention extends CHPrimXMLAcquittementsSe
   }
 }
 
-?>

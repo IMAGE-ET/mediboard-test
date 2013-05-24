@@ -584,4 +584,3 @@ $locales['mod-hprimxml-tab-vw_idx_dest_hprim'] = 'Destinataires H\'XML';
 $locales['mod-hprimxml-tab-vw_idx_echange_hprim'] = 'Echanges H\'XML';
 $locales['module-hprimxml-court'] = 'HPRIM XML';
 $locales['module-hprimxml-long'] = 'HPRIM XML';
-?>

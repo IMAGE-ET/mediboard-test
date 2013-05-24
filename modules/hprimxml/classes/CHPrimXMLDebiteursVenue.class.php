@@ -127,4 +127,3 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
   }
 }
 
-?>

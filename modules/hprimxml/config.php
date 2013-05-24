@@ -60,4 +60,3 @@ $dPconfig["hprimxml"] = array (
 );
 
 
-?>

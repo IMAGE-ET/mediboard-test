@@ -27,4 +27,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("echange_hprim", $echange_hprim);
 $smarty->display("echangeviewer.tpl");
 
-?>

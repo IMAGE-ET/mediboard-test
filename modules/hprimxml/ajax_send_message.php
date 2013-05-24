@@ -109,4 +109,3 @@ if (!$echange_hprim_id) {
   }
 }
 
-?>

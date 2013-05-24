@@ -96,7 +96,10 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
       "repair_patient"
     )
   );
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "hprimxml_config";
@@ -105,6 +108,9 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     
@@ -138,4 +144,3 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
     return $this->_config_fields = self::$config_fields;
   }
 }
-?>

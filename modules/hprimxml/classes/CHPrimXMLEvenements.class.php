@@ -89,4 +89,3 @@ class CHPrimXMLEvenements extends CHPrimXMLDocument {
     return $this->getDate($node)." ".$this->getHeure($node);
   }
 }
-?>

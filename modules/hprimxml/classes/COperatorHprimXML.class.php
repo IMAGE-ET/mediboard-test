@@ -205,4 +205,3 @@ class COperatorHprimXML extends CEAIOperator {
     return $dom_evt->handle($dom_acq, $operation, $data);
   }
 }
-?>

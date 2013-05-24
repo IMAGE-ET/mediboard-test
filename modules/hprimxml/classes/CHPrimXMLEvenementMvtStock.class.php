@@ -16,4 +16,3 @@ class CHPrimXMLEvenementMvtStock extends CHPrimXMLEvenements {
     parent::__construct("mvtStock", "msgEvenementsMvtStocks$version");
   }
 }
-?>

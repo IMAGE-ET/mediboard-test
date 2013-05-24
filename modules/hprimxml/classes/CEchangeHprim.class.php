@@ -17,6 +17,9 @@ class CEchangeHprim extends CEchangeXML {
   // DB Table key
   public $echange_hprim_id;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->loggable = false;
@@ -24,7 +27,10 @@ class CEchangeHprim extends CEchangeXML {
     $spec->key   = 'echange_hprim_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     
@@ -34,14 +40,20 @@ class CEchangeHprim extends CEchangeXML {
     
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['notifications'] = "CEchangeHprim initiateur_id";
     
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack() {
     parent::loadRefsBack();
     
@@ -108,7 +120,10 @@ class CEchangeHprim extends CEchangeXML {
       }
     }
   }
-  
+
+  /**
+   * @see parent::loadView()
+   */
   function loadView() {
     parent::loadView();
     
@@ -203,4 +218,3 @@ class CEchangeHprim extends CEchangeXML {
     return $this->_configs_format = $hprimxml_config;
   }
 }
-?>

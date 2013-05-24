@@ -31,4 +31,4 @@ class CHPrimXMLSchema extends CMbXMLSchema {
   }
 }
 
-?>
+

@@ -26,4 +26,3 @@ class CHPrimXMLAcquittements extends CHPrimXMLDocument {
   function generateAcquittements($statut, $codes, $commentaires = null, $mbObject = null) {
   }
 }
-?>

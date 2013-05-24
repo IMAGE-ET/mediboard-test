@@ -129,4 +129,3 @@ function extractFiles($schemaDir, $schemaFile, $delOldDir = false) {
   }
 }
 
-?>

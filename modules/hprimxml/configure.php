@@ -27,4 +27,3 @@ $smarty->assign("status"    , $status);
 $smarty->assign("evenements", $evenements);
 
 $smarty->display("configure.tpl");
-?>

@@ -196,4 +196,3 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
   } 
 }
 
-?>

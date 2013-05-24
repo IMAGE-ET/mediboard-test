@@ -73,4 +73,3 @@ else
   echo '<div class="error">Fichiers manquants</div>';
 
 
-?>
