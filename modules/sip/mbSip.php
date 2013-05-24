@@ -14,4 +14,3 @@ $_REQUEST["class"] = "CHprimSoapHandler";
 
 include_once('modules/webservices/soap_server.php');
 
-?>

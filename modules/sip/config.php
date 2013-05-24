@@ -14,4 +14,3 @@ $dPconfig["sip"] = array (
   "tag_ipp"                  => "mb_sip",
 );
 
-?>

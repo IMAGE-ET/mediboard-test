@@ -18,4 +18,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("receivers", $receivers);
 $smarty->display("configure.tpl");
 
-?>

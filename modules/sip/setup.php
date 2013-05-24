@@ -24,4 +24,3 @@ class CSetupsip extends CSetup {
     $this->mod_version = "0.23.1";
   }
 }
-?>

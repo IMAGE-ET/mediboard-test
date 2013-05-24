@@ -44,4 +44,3 @@ $locales['sip-export-class'] = 'Export de la table';
 $locales['sip-export-classes'] = 'Export';
 $locales['sip_config-actions'] = 'Actions';
 $locales['sip_config-actions-export'] = 'Export';
-?>
