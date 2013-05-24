@@ -1,13 +1,16 @@
 {{*
- * $Id$
+ * $Id:$
  * 
  * @package    Mediboard
  * @subpackage reservation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  *}}
- 
+
+{{if "dPfacturation"|module_active}}
+  {{mb_script module=facturation script=facture}}
+{{/if}}
 <script type="text/javascript">
   Main.add(function() {
     var form = getForm("filterPlanning");

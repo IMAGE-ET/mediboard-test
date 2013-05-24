@@ -1,11 +1,11 @@
 {{*
- * $Id$
+ * $Id:$
  * 
  * @package    Mediboard
  * @subpackage reservation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  *}}
 
 <script type="text/javascript">
@@ -56,7 +56,8 @@
       <th class="title" colspan="2">Affichage</th>
     </tr>
     {{mb_include module=system template=inc_config_bool var=display_dossierBloc_button}}
-    
+    {{mb_include module=system template=inc_config_bool var=display_facture_button}}
+
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

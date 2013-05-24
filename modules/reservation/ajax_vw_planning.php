@@ -1,12 +1,12 @@
 <?php 
 /**
- * $Id$
+ * $Id:$
  * 
  * @package    Mediboard
  * @subpackage reservation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
@@ -318,6 +318,15 @@ if ($show_operations) {
       }
       if (CAppUI::conf("reservation display_dossierBloc_button")) {
         $libelle.= "<button class=\"bistouri notext\" onclick=\"modalDossierBloc($_operation->_id)\">Dossier Bloc</button>";
+      }
+      if (CAppUI::conf("dPplanningOp CFactureEtablissement use_facture_etab") && CAppUI::conf("reservation display_facture_button")) {
+        $sejour->loadRefsFactureEtablissement();
+        $facture = $sejour->_ref_last_facture;
+        if ($facture->_id) {
+          $couleur = $facture->cloture ? "blue" : "#FF0";
+          $action_fact = "Facture.edit($facture->_id, '$facture->_class')";
+          $libelle.= "<button class=\"calcul notext\" onclick=\"$action_fact\" style=\"border: $couleur 1px solid;\">Facture</button>";
+        }
       }
       $libelle .="</span>";
       /** FIN CADRE DROIT */
