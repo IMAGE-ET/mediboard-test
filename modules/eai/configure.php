@@ -43,4 +43,3 @@ $smarty->assign("object_servers", $object_servers);
 $smarty->assign("groups"        , $groups);
 $smarty->display("configure.tpl");
 
-?>

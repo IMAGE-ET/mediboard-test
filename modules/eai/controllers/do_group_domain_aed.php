@@ -11,4 +11,3 @@
 $do = new CDoObjectAddEdit("CGroupDomain");
 $do->doIt();
 
-?>

@@ -45,4 +45,3 @@ if (CValue::get("ack") == 1) {
   echo $exchange;
 }
 
-?>

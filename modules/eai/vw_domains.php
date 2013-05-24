@@ -50,4 +50,3 @@ $smarty->assign("group_domain", $group_domain);
 $smarty->assign("groups"      , $groups);
 $smarty->display("vw_domains.tpl");
 
-?>

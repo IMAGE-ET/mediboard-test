@@ -105,4 +105,3 @@ class CExchangeAny extends CExchangeDataFormat {
   }
 }
 
-?>

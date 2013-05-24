@@ -31,4 +31,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("exchanges_classes", $exchanges_classes);
 $smarty->display("vw_idx_exchange_data_format.tpl");
 
-?>

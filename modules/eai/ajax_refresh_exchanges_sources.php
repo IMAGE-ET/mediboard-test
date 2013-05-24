@@ -22,4 +22,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("actor", $actor);
 $smarty->display($actor->_parent_class."_exchanges_source.tpl");
 
-?>

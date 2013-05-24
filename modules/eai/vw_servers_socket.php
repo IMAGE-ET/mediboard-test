@@ -20,4 +20,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("processes", $processes);
 $smarty->display("vw_servers_socket.tpl");
 
-?>

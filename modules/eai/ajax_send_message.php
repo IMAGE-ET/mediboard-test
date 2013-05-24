@@ -114,4 +114,3 @@ $exchange->store();
 
 CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' a été réexpédié");
 
-?>

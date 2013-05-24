@@ -36,4 +36,3 @@ $smarty->assign("domains"     , $domains);
 $smarty->assign("domain"      , $domain);
 $smarty->display("inc_list_domains.tpl");
 
-?>

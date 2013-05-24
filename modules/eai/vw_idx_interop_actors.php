@@ -29,4 +29,3 @@ $smarty->assign("senders", $senders);
 
 $smarty->display("vw_idx_interop_actors.tpl");
 
-?>

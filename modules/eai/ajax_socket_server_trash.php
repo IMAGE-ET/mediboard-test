@@ -42,4 +42,3 @@ $smarty->assign("_process"  , $processes[$process_id]);
 $smarty->display("inc_server_socket.tpl"); 
     
 
-?>

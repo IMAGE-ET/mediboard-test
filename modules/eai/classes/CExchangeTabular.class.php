@@ -82,4 +82,3 @@ class CExchangeTabular extends CExchangeDataFormat {
   function getACK() {}
 }
 
-?>

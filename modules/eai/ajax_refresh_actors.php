@@ -23,4 +23,3 @@ $smarty->assign("actor" , $actor);
 $smarty->assign("actors", $actors);
 $smarty->display("inc_actors.tpl");
 
-?>

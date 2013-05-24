@@ -38,4 +38,3 @@ $smarty->assign("actor"        , $actor);
 $smarty->assign("actor_guid"   , $actor_guid);
 $smarty->display("inc_configs_format.tpl");
 
-?>

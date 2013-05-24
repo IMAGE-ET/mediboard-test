@@ -114,4 +114,3 @@ switch ($tool) {
 
 CAppUI::js("next$tool()");
 
-?>

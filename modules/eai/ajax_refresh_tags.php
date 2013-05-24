@@ -22,4 +22,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("actor", $actor);
 $smarty->display("inc_tags.tpl");
 
-?>

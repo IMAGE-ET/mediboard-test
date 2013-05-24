@@ -7,4 +7,3 @@ $dPconfig["eai"] = array (
   "use_domain"              => "0" 
 );
 
-?>

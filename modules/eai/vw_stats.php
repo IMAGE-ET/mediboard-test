@@ -47,4 +47,3 @@ $smarty->assign("exchanges_classes", $exchanges_classes);
 $smarty->assign("criteres", $criteres);
 
 $smarty->display("vw_stats.tpl");
-?>

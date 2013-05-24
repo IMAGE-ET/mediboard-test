@@ -137,4 +137,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("options", $options);
 $smarty->assign("series", $series);
 $smarty->display("inc_graph.tpl");
-?>

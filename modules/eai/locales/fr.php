@@ -454,4 +454,3 @@ $locales['mod-eai-tab-vw_tools'] = 'Outils';
 $locales['module-eai-court'] = 'EAI';
 $locales['module-eai-long'] = 'Enterprise Application Integration';
 $locales['utilities-source-http'] = 'Utilitaires de la source HTTP';
-?>

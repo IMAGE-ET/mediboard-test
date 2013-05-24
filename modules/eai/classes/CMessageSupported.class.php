@@ -39,4 +39,3 @@ class CMessageSupported extends CMbMetaObject {
     return $props;
   }
 }
-?>

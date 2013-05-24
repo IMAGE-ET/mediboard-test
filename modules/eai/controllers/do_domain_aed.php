@@ -14,4 +14,3 @@
 $do = new CDoObjectAddEdit("CDomain");
 $do->doIt();
 
-?>

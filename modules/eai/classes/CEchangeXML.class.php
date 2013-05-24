@@ -119,4 +119,4 @@ class CEchangeXML extends CExchangeDataFormat {
   }
 }
 
-?>
+

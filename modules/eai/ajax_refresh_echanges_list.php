@@ -121,4 +121,3 @@ $smarty->assign("order_way"          , $order_way);
 
 $smarty->display("inc_exchanges.tpl");
 
-?>

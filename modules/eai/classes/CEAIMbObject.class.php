@@ -125,5 +125,3 @@ class CEAIMbObject {
     return $idex->store();
   }
 }
-
-?>

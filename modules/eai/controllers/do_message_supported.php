@@ -14,4 +14,3 @@
 $do = new CDoObjectAddEdit("CMessageSupported");
 $do->doIt();
 
-?>

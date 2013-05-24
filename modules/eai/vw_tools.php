@@ -64,4 +64,3 @@ $smarty->assign("receivers"        , $receivers);
 $smarty->assign("movement"         , $movement);
 $smarty->display("vw_tools.tpl");
 
-?>

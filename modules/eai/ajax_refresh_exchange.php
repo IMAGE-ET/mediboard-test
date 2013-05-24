@@ -35,4 +35,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("object", $exchange);
 $smarty->display("inc_exchange.tpl");
 
-?>

@@ -66,4 +66,4 @@ $smarty->assign("exchanges"  , $exchanges);
 $smarty->assign("exchange_df", $exchange_df);
 $smarty->display("inc_vw_all_exchanges.tpl");
 
-?>
+

@@ -63,4 +63,3 @@ class CExchangeDataFormatConfig extends CMbObjectConfig {
   }
 }
 
-?>

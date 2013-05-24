@@ -74,4 +74,3 @@ $smarty->assign("messages_binary" , $messages_binary);
 
 $smarty->display("inc_formats_available.tpl");
 
-?>
