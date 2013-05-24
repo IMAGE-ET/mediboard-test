@@ -125,10 +125,6 @@ class CHL7v2Message extends CHMessage {
   }
 
   function parse($data, $parse_body = true, CInteropActor $actor = null) {
-    if ($actor) {
-      $actor->loadConfigValues();
-    }
-
     $this->actor = $actor;
 
     try {
@@ -252,18 +248,30 @@ class CHL7v2Message extends CHMessage {
 
     $this->version = $version = $parts[0];
 
+    $actor = $this->actor;
+
+    $configs = new CHL7Config();
+    if ($actor instanceof CInteropSender) {
+      $exchange_ihe = new CExchangeIHE();
+      $configs = $exchange_ihe->getConfigs($actor->_guid);
+    }
+
     // On privilégie le code du pays sur l'acteur d'intégration
-    $country_code = isset($this->actor->_configs["country_code"]) ? $this->actor->_configs["country_code"] : $country_code;
+    $country_code = $configs->country_code ? $configs->country_code : $country_code;
+
+    // Recherche depuis le code du pays
+    switch ($country_code) {
+      case "FRA" :
+        $this->i18n_code = "FR";
+        $this->extension = $version = "FR_2.3";
+
+        break;
+    }
 
     // Version spécifique française spécifiée
-    if (count($parts) > 1) {
+    if (!$country_code && count($parts) > 1) {
       $this->i18n_code = $parts[1];
       $this->extension = $version = "$parts[1]_$parts[2]";
-    } 
-    // Recherche depuis le code du pays
-    elseif ($country_code == "FRA") {
-      $this->i18n_code = "FR";
-      $this->extension = $version = "FR_2.3";
     }
 
     // Dans le cas où la version passée est incorrecte on met par défaut 2.5
