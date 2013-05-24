@@ -14,9 +14,9 @@
  * Message XML HPR
  */
 class CHPrim21MessageXML extends CMbXMLDocument {
-  var $_ref_exchange_hpr = null;
-  var $_ref_sender       = null;
-  var $_ref_receiver     = null;
+  public $_ref_exchange_hpr;
+  public $_ref_sender;
+  public $_ref_receiver;
   
   static function getEventType($event_name = null, $encoding = "utf-8") {
     if (!$event_name) {

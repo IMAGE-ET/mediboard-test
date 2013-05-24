@@ -15,8 +15,11 @@ class CEchangeHprim21 extends CExchangeTabular {
   );
   
   // DB Table key
-  var $echange_hprim21_id = null;
+  public $echange_hprim21_id;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->loggable = false;
@@ -24,7 +27,10 @@ class CEchangeHprim21 extends CExchangeTabular {
     $spec->key   = 'echange_hprim21_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     
@@ -35,7 +41,10 @@ class CEchangeHprim21 extends CExchangeTabular {
     
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -190,4 +199,3 @@ class CEchangeHprim21 extends CExchangeTabular {
     return $this->populateExchangeACK($ack, $object);               
   }
 }
-?>

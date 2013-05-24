@@ -73,4 +73,4 @@ $smarty->assign("types"                , $types);
 $smarty->assign("type_message"         , $type_message);
 $smarty->display("vw_idx_echange_hprim21.tpl");
 
-?>
+

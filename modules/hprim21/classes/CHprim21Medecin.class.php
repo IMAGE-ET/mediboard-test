@@ -13,29 +13,35 @@
  */
 class CHprim21Medecin extends CHprim21Object {
   // DB Table key
-	var $hprim21_medecin_id = null;
+	public $hprim21_medecin_id;
   
   // DB references
-  var $user_id = null;
+  public $user_id;
 	
   // DB Fields
-  var $nom       = null;
-  var $prenom    = null;
-  var $prenom2   = null;
-  var $alias     = null;
-  var $civilite  = null;
-  var $diplome   = null;
-  var $type_code = null;
+  public $nom;
+  public $prenom;
+  public $prenom2;
+  public $alias;
+  public $civilite;
+  public $diplome;
+  public $type_code;
   
-  var $_ref_user = null;
-  
+  public $_ref_user;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'hprim21_medecin';
     $spec->key   = 'hprim21_medecin_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
   	$specsParent = parent::getProps();
     $specs = array (
@@ -51,6 +57,9 @@ class CHprim21Medecin extends CHprim21Object {
     return array_merge($specsParent, $specs);
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
 	  $backProps = parent::getBackProps();
 	  $backProps["hprim21_sejours"] = "CHprim21Sejour hprim21_medecin_id";
@@ -81,15 +90,20 @@ class CHprim21Medecin extends CHprim21Object {
     
     return true;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     $this->_view = $this->nom;
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd(){
     // Chargement du séjour correspondant
     $this->_ref_user = new CMediusers();
     $this->_ref_user->load($this->user_id);
   }
 }
-?>

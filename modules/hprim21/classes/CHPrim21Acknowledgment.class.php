@@ -14,19 +14,19 @@
  * Acknowledgment HPR
  */
 class CHPrim21Acknowledgment {
-  var $event              = null;
-  var $event_err          = null;
+  public $event;
+  public $event_err;
   
-  var $message            = null;
-  var $dom_message        = null;
+  public $message;
+  public $dom_message;
   
-  var $message_control_id = null;
-  var $ack_code           = null;
-  var $errors             = null;
-  var $object             = null;
+  public $message_control_id;
+  public $ack_code;
+  public $errors;
+  public $object;
   
-  var $_ref_exchange_hpr  = null;
-  var $_errors            = null;
+  public $_ref_exchange_hpr;
+  public $_errors;
     
   function __construct(CHPREvent $event = null) {
     $this->event = $event;

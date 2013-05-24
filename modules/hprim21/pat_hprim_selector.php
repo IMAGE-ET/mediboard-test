@@ -107,4 +107,3 @@ $smarty->assign("IPP"            , $IPP);
 
 $smarty->display("pat_hprim_selector.tpl");
 
-?>

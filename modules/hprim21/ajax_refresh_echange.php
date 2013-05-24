@@ -21,4 +21,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("object", $echg_hprim21);
 $smarty->display("inc_echange_hprim21.tpl");
 
-?>

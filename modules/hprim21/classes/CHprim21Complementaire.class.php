@@ -13,25 +13,31 @@
  */
 class CHprim21Complementaire extends CHprim21Object {
   // DB Table key
-	var $hprim21_complementaire_id = null;
+	public $hprim21_complementaire_id;
   
   // DB references
-  var $hprim21_patient_id = null;
+  public $hprim21_patient_id;
 	
   // DB Fields
-  var $code_organisme  = null;
-  var $numero_adherent = null;
-  var $debut_droits    = null;
-  var $fin_droits      = null;
-  var $type_contrat    = null;
+  public $code_organisme;
+  public $numero_adherent;
+  public $debut_droits;
+  public $fin_droits;
+  public $type_contrat;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'hprim21_complementaire';
     $spec->key   = 'hprim21_complementaire_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
   	$specsParent = parent::getProps();
     $specs = array (
@@ -70,4 +76,3 @@ class CHprim21Complementaire extends CHprim21Object {
     return true;
   }
 }
-?>

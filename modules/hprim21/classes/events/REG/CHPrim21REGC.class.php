@@ -23,4 +23,3 @@ class CHPrim21REGC extends CHPrim21REG {
   }
 }
 
-?>

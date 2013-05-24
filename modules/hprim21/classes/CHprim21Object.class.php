@@ -14,13 +14,16 @@
 class CHprim21Object extends CMbObject {
 	
   // DB Fields
-  var $emetteur_id        = null;
-  var $external_id        = null;
-  var $echange_hprim21_id = null;
+  public $emetteur_id;
+  public $external_id;
+  public $echange_hprim21_id;
 
   // Back reference
-  var $_ref_echange_hprim21 = null;
-  
+  public $_ref_echange_hprim21;
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     
@@ -30,7 +33,10 @@ class CHprim21Object extends CMbObject {
     
     return $specs;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
   	parent::updateFormFields();
   	
@@ -87,4 +93,3 @@ class CHprim21Object extends CMbObject {
     }
   }
 }
-?>

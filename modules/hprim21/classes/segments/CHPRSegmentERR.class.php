@@ -22,12 +22,12 @@ class CHPRSegmentERR extends CHL7v2Segment {
   /**
    * @var CHPrim21Acknowledgment
    */
-  var $acknowledgment = null;
+  public $acknowledgment;
   
   /**
    * @var CHL7v2Error
    */
-  var $error          = null;
+  public $error;
   
   function build(CHPREvent $event) {
     parent::build($event);
@@ -111,4 +111,3 @@ class CHPRSegmentERR extends CHL7v2Segment {
     $this->fill($data);
   }
 }
-?>

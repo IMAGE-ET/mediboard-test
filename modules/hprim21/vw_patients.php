@@ -123,4 +123,3 @@ $smarty->assign("patient"             , $patient                  );
 
 $smarty->display("vw_patients.tpl");
 
-?>

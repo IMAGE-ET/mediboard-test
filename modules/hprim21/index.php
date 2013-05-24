@@ -15,4 +15,3 @@ $module->registerTab("pat_hprim_selector"      , TAB_READ);
 $module->registerTab("vw_hprim_files"          , TAB_READ);
 $module->registerTab("vw_display_hprim_message", TAB_READ);
 
-?>

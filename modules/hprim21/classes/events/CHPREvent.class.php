@@ -16,33 +16,33 @@
  * Event H'2.1
  */
 class CHPREvent {
-  var $event_type    = null;
-  var $object        = null;
-  var $last_log      = null;
-  var $type          = null;
-  var $type_liaison  = null;
-  var $version       = null;
+  public $event_type;
+  public $object;
+  public $last_log;
+  public $type;
+  public $type_liaison;
+  public $version;
   
   /**
    * @var CHPrim21Message
    */
-  var $message       = null;
+  public $message;
   
-  var $msg_hpr       = null;
+  public $msg_hpr;
 
   var $msg_codes     = array();
   
   /**
    * @var CDestinataireHprim21
    */
-  var $_receiver     = null;
+  public $_receiver;
   
   /**
    * @var CInteropSender
    */
-  var $_sender       = null;
+  public $_sender;
   
-  var $_exchange_hpr = null; 
+  public $_exchange_hpr;
   
   /**
    * Build HPR message
@@ -71,4 +71,3 @@ class CHPREvent {
   }
 }
 
-?>

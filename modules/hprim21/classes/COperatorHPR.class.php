@@ -101,4 +101,3 @@ class COperatorHPR extends CEAIOperator {
   }
 }
 
-?>

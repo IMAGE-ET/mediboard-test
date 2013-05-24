@@ -24,4 +24,3 @@ header("Content-Length: ".strlen($message));
 
 echo $message;
 
-?>

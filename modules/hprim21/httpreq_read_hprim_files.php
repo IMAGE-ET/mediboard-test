@@ -77,4 +77,3 @@ foreach($list as $filepath) {
   }
 }
 
-?>

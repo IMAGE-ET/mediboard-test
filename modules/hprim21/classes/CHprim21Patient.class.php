@@ -13,88 +13,94 @@
  */
 class CHprim21Patient extends CHprim21Object {
   // DB Table key
-  var $hprim21_patient_id = null;
+  public $hprim21_patient_id;
   
   // DB references
-  var $patient_id = null;
+  public $patient_id;
   
   // Patient DB Fields
-  var $nom                       = null;
-  var $prenom                    = null;
-  var $prenom2                   = null;
-  var $alias                     = null;
-  var $civilite                  = null;
-  var $diplome                   = null;
-  var $nom_jeune_fille           = null;
-  var $nom_soundex2              = null;
-  var $prenom_soundex2           = null;
-  var $nomjf_soundex2            = null;
-  var $naissance                 = null;
-  var $sexe                      = null;
-  var $adresse1                  = null;
-  var $adresse2                  = null;
-  var $ville                     = null;
-  var $departement               = null;
-  var $cp                        = null;
-  var $pays                      = null;
-  var $telephone1                = null;
-  var $telephone2                = null;
-  var $traitement_local1         = null;
-  var $traitement_local2         = null;
-  var $taille                    = null;
-  var $poids                     = null;
-  var $diagnostic                = null;
-  var $traitement                = null;
-  var $regime                    = null;
-  var $commentaire1              = null;
-  var $commentaire2              = null;
-  var $classification_diagnostic = null;
-  var $situation_maritale        = null;
-  var $precautions               = null;
-  var $langue                    = null;
-  var $statut_confidentialite    = null;
-  var $date_derniere_modif       = null;
-  var $date_deces                = null;
+  public $nom;
+  public $prenom;
+  public $prenom2;
+  public $alias;
+  public $civilite;
+  public $diplome;
+  public $nom_jeune_fille;
+  public $nom_soundex2;
+  public $prenom_soundex2;
+  public $nomjf_soundex2;
+  public $naissance;
+  public $sexe;
+  public $adresse1;
+  public $adresse2;
+  public $ville;
+  public $departement;
+  public $cp;
+  public $pays;
+  public $telephone1;
+  public $telephone2;
+  public $traitement_local1;
+  public $traitement_local2;
+  public $taille;
+  public $poids;
+  public $diagnostic;
+  public $traitement;
+  public $regime;
+  public $commentaire1;
+  public $commentaire2;
+  public $classification_diagnostic;
+  public $situation_maritale;
+  public $precautions;
+  public $langue;
+  public $statut_confidentialite;
+  public $date_derniere_modif;
+  public $date_deces;
   
   // Assuré primaire DB Fields
-  var $nature_assurance       = null;
-  var $debut_validite         = null;
-  var $fin_validite           = null;
-  var $matricule              = null;
-  var $rang_beneficiaire      = null;
-  var $rang_naissance         = null;
-  var $code_regime            = null;
-  var $caisse_gest            = null;
-  var $centre_gest            = null;
-  var $origine_droits         = null;
-  var $nature_exoneration     = null;
-  var $nom_assure             = null;
-  var $prenom_assure          = null;
-  var $nom_jeune_fille_assure = null;
-  var $taux_PEC               = null;
-  var $numero_AT              = null;
-  var $AT_par_tiers           = null;
-  var $fin_droits             = null;
-  var $date_accident          = null;
-  var $nom_employeur          = null;
-  var $adresse1_employeur     = null;
-  var $adresse2_employeur     = null;
-  var $ville_employeur        = null;
-  var $departement_employeur  = null;
-  var $cp_employeur           = null;
-  var $pays_employeur         = null;
-  var $date_debut_grossesse   = null;
+  public $nature_assurance;
+  public $debut_validite;
+  public $fin_validite;
+  public $matricule;
+  public $rang_beneficiaire;
+  public $rang_naissance;
+  public $code_regime;
+  public $caisse_gest;
+  public $centre_gest;
+  public $origine_droits;
+  public $nature_exoneration;
+  public $nom_assure;
+  public $prenom_assure;
+  public $nom_jeune_fille_assure;
+  public $taux_PEC;
+  public $numero_AT;
+  public $AT_par_tiers;
+  public $fin_droits;
+  public $date_accident;
+  public $nom_employeur;
+  public $adresse1_employeur;
+  public $adresse2_employeur;
+  public $ville_employeur;
+  public $departement_employeur;
+  public $cp_employeur;
+  public $pays_employeur;
+  public $date_debut_grossesse;
   
-  var $_ref_patient = null;
-  var $_ref_hprim21_sejours = null;
+  public $_ref_patient;
+  public $_ref_hprim21_sejours;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'hprim21_patient';
     $spec->key   = 'hprim21_patient_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specsParent = parent::getProps();
     $specs = array (
@@ -167,7 +173,10 @@ class CHprim21Patient extends CHprim21Object {
     );
     return array_merge($specsParent, $specs);
   }
-    
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["hprim21_complementaires"] = "CHprim21Complementaire hprim21_patient_id";
@@ -175,6 +184,9 @@ class CHprim21Patient extends CHprim21Object {
     return $backProps;
   }
 
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     
     parent::updatePlainFields();
@@ -294,12 +306,18 @@ class CHprim21Patient extends CHprim21Object {
     
     return true;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = "$this->civilite $this->nom $this->prenom [$this->external_id]";
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd(){
     // Chargement du patient correspondant
     $this->_ref_patient = new CPatient();
@@ -312,10 +330,12 @@ class CHprim21Patient extends CHprim21Object {
     $order = "date_mouvement";
     $this->_ref_hprim21_sejours = $sejour->loadList($where, $order);
   }
-  
+
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack() {
     parent::loadRefsBack();
     $this->loadRefHprim21Sejours();
   }
 }
-?>

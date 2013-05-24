@@ -40,4 +40,3 @@ CAppUI::setMsg("Message HPRIM 2.1 retraité", UI_MSG_OK);
 
 echo CAppUI::getMsg();
 
-?>

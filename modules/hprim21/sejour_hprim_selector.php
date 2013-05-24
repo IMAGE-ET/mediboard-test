@@ -113,4 +113,3 @@ $smarty->assign("IPP"              , $IPP );
 
 $smarty->display("sejour_hprim_selector.tpl");
 
-?>

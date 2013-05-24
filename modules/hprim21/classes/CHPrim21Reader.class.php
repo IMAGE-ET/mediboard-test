@@ -13,31 +13,31 @@ class CHPrim21Reader {
   var $has_header                 = false;
   
   // Champs header
-  var $separateur_champ           = null;
-  var $separateur_sous_champ      = null;
-  var $repetiteur                 = null;
-  var $echappement                = null;
-  var $separateur_sous_sous_champ = null;
-  var $nom_fichier                = null;
-  var $mot_de_passe               = null;
-  var $id_emetteur                = null;
-  var $sous_type                  = null;
-  var $tel_emetteur               = null;
-  var $carac_trans                = null;
-  var $id_recepteur               = null;
-  var $commentaire                = null;
-  var $mode_traitement            = null;
-  var $version                    = null;
-  var $type                       = null;
-  var $date                       = null;
+  public $separateur_champ;
+  public $separateur_sous_champ;
+  public $repetiteur;
+  public $echappement;
+  public $separateur_sous_sous_champ;
+  public $nom_fichier;
+  public $mot_de_passe;
+  public $id_emetteur;
+  public $sous_type;
+  public $tel_emetteur;
+  public $carac_trans;
+  public $id_recepteur;
+  public $commentaire;
+  public $mode_traitement;
+  public $version;
+  public $type;
+  public $date;
   
   // Nombre d'éléments
-   var $nb_patients  = null;
+   public $nb_patients;
   
   // Log d'erreur
   var $error_log     = array();
   
-  var $_echange_hprim21 = null;
+  public $_echange_hprim21;
   
   function bindEchange($fileName = null) {
     $this->_echange_hprim21->date_production   = CMbDT::dateTime($this->date);
@@ -330,4 +330,4 @@ class CHPrim21Reader {
 
 }
 
-?>
+

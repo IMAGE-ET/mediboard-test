@@ -11,4 +11,3 @@
 $do = new CDoObjectAddEdit("CEchangeHprim21");
 $do->doIt();
 
-?>

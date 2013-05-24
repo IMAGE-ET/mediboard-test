@@ -13,35 +13,41 @@
  */
 class CHprim21Sejour extends CHprim21Object {
   // DB Table key
-	var $hprim21_sejour_id = null;
+	public $hprim21_sejour_id;
   
   // DB references
-  var $hprim21_patient_id = null;
-  var $hprim21_medecin_id = null;
-  var $sejour_id          = null;
+  public $hprim21_patient_id;
+  public $hprim21_medecin_id;
+  public $sejour_id;
 	
   // DB Fields
-  var $date_mouvement       = null;
-  var $statut_admission     = null;
-  var $localisation_lit     = null;
-  var $localisation_chambre = null;
-  var $localisation_service = null;
-  var $localisation4        = null;
-  var $localisation5        = null;
-  var $localisation6        = null;
-  var $localisation7        = null;
-  var $localisation8        = null;
+  public $date_mouvement;
+  public $statut_admission;
+  public $localisation_lit;
+  public $localisation_chambre;
+  public $localisation_service;
+  public $localisation4;
+  public $localisation5;
+  public $localisation6;
+  public $localisation7;
+  public $localisation8;
   
-  var $_ref_sejour          = null;
-  var $_ref_hprim21_medecin = null;
+  public $_ref_sejour;
+  public $_ref_hprim21_medecin;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'hprim21_sejour';
     $spec->key   = 'hprim21_sejour_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
   	$specsParent = parent::getProps();
     $specs = array (
@@ -105,7 +111,10 @@ class CHprim21Sejour extends CHprim21Object {
     }
     return true;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     $this->_view = "Séjour du ".CMbDT::transform(null, $this->date_mouvement, "%d/%m/%Y")." [".$this->external_id."]";
   }
@@ -114,7 +123,10 @@ class CHprim21Sejour extends CHprim21Object {
     $this->_ref_hprim21_medecin = new CHprim21Medecin();
     $this->_ref_hprim21_medecin->load($this->hprim21_medecin_id);
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd(){
     // Chargement du séjour correspondant
     $this->_ref_sejour = new CSejour();
@@ -122,4 +134,3 @@ class CHprim21Sejour extends CHprim21Object {
     $this->loadRefHprim21Medecin();
   }
 }
-?>

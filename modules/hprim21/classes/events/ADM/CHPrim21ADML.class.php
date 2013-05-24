@@ -23,4 +23,3 @@ class CHPrim21ADML extends CHPrim21ADM {
   }
 }
 
-?>

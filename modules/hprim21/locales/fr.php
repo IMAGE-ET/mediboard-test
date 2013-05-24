@@ -421,4 +421,3 @@ $locales['mod-hprim21-tab-vw_patients'] = 'Patients';
 $locales['module-hprim21-court'] = 'HPRIM 2.1';
 $locales['module-hprim21-long'] = 'Gestion des objets HPRIM 2.1';
 $locales['read_hprim_files'] = 'Lecture fichiers HPRIM 2.1';
-?>

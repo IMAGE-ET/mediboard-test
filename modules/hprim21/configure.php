@@ -17,4 +17,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("hprim21_source" , $hprim21_source);
 $smarty->display("configure.tpl");
 
-?>

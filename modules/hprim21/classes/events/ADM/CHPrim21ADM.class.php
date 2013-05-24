@@ -30,4 +30,3 @@ class CHPrim21ADM extends CHPREvent {
   }
 }
 
-?>

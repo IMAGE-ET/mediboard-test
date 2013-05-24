@@ -42,4 +42,3 @@ class CHPRSegmentL extends CHL7v2Segment {
     $this->fill($data);
   }
 }
-?>

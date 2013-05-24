@@ -13,8 +13,11 @@
 
 class CDestinataireHprim21 extends CInteropReceiver {
   // DB Table key
-  var $dest_hprim21_id  = null;
-      
+  public $dest_hprim21_id;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'destinataire_hprim21';
@@ -26,13 +29,19 @@ class CDestinataireHprim21 extends CInteropReceiver {
 
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
    
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['echanges'] = "CEchangeHprim21 receiver_id";
@@ -50,4 +59,3 @@ class CDestinataireHprim21 extends CInteropReceiver {
   }  
 }
 
-?>

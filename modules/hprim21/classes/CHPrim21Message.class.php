@@ -20,9 +20,9 @@ class CHPrim21Message extends CHMessage {
   protected $keep_original = array("H.1");
 
   var $version      = "2.1";
-  var $type         = null;
-  var $extension    = null;
-  var $type_liaison = null;
+  public $type;
+  public $extension;
+  public $type_liaison;
 
   function getHeaderSegmentName() {
     return self::$header_segment_name;
