@@ -131,9 +131,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
       $operation = $sejour->getCurrOperation($observation_dt);
 
       if (!$operation->_id) {
-        /*$this->codes = array(
-          "I301",
-        );*/
+        return $exchange_ihe->setAckAR($ack, "E301", null, $operation);
       }
 
       foreach ($_observation["OBX"] as $_OBX) {
@@ -159,10 +157,6 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
 
           // Pulse Generator and Lead Observation Results
           case "ST" :  case "CWE" :  case "DTM" :  case "NM" :  case "SN" :
-            if (!$operation->_id) {
-              return $exchange_ihe->setAckAR($ack, "E301", null, $operation);
-            }
-
             if (!$this->getPulseGeneratorAndLeadObservationResults($_OBX, $patient, $operation)) {
               return $exchange_ihe->setAckAR($ack, $this->codes, null, $operation);
             }
@@ -178,23 +172,59 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     
     return $exchange_ihe->setAckAA($ack, $this->codes, $comment, $object);
   }
-  
+
+  /**
+   * Get observation date time
+   *
+   * @param DOMNode $node DOM node
+   *
+   * @return string
+   */
   function getOBRObservationDateTime(DOMNode $node) {
     return $this->queryTextNode("OBR.7", $node);
   }
 
+  /**
+   * Get value type
+   *
+   * @param DOMNode $node DOM node
+   *
+   * @return string
+   */
   function getOBXValueType(DOMNode $node) {
     return $this->queryTextNode("OBX.2", $node);
   }
-  
+
+  /**
+   * Get observation date time
+   *
+   * @param DOMNode $node DOM node
+   *
+   * @return string
+   */
   function getOBXObservationDateTime(DOMNode $node) {
     return $this->queryTextNode("OBX.14/TS.1", $node);
   }
 
+  /**
+   * Get result status
+   *
+   * @param DOMNode $node DOM node
+   *
+   * @return string
+   */
   function getOBXResultStatus(DOMNode $node) {
     return $this->queryTextNode("OBX.11", $node);
   }
-  
+
+  /**
+   * Get observation date time
+   *
+   * @param DOMNode            $node   DOM node
+   * @param CObservationResult $result Result
+   *
+   * @return string
+   */
   function mappingObservationResult(DOMNode $node, CObservationResult $result) {
     // OBX-3: Observation Identifier
     $this->getObservationIdentifier($node, $result);
@@ -208,7 +238,15 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     // OBX-11: Observation Result Status
     $result->status =$this->getObservationResultStatus($node);
   }
-  
+
+  /**
+   * Get observation identifier
+   *
+   * @param DOMNode            $node   DOM node
+   * @param CObservationResult $result Result
+   *
+   * @return string
+   */
   function getObservationIdentifier(DOMNode $node, CObservationResult $result) {
     $identifier    = $this->queryTextNode("OBX.3/CE.1", $node);
     $text          = $this->queryTextNode("OBX.3/CE.2", $node);
@@ -217,7 +255,15 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $value_type = new CObservationValueType();
     $result->value_type_id = $value_type->loadMatch($identifier, $coding_system, $text);
   }
-  
+
+  /**
+   * Get unit
+   *
+   * @param DOMNode            $node   DOM node
+   * @param CObservationResult $result Result
+   *
+   * @return string
+   */
   function getUnits(DOMNode $node, CObservationResult $result) {
     $identifier    = $this->queryTextNode("OBX.6/CE.1", $node);
     $text          = $this->queryTextNode("OBX.6/CE.2", $node);
@@ -226,11 +272,25 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $unit_type = new CObservationValueUnit();
     $result->unit_id = $unit_type->loadMatch($identifier, $coding_system, $text);
   }
-  
+
+  /**
+   * Get observation value
+   *
+   * @param DOMNode $node DOM node
+   *
+   * @return string
+   */
   function getObservationValue(DOMNode $node) {
     return $this->queryTextNode("OBX.5", $node);
   }
-  
+
+  /**
+   * Get observation result status
+   *
+   * @param DOMNode $node DOM node
+   *
+   * @return string
+   */
   function getObservationResultStatus(DOMNode $node) {
     return $this->queryTextNode("OBX.11", $node);
   }
@@ -341,9 +401,24 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     // Gestion du CFile
     $file = new CFile();
     $file->setObject($operation);
-    $file->file_name  = $filename;
-    $file->file_type  = "application/pdf";
+    $file->file_name = $filename;
+    $file->file_type = "application/pdf";
+    $file->loadMatchingObject();
 
+    $file->file_date = "now";
+    $file->file_size = strlen($content);
 
+    $file->fillFields();
+    $file->updateFormFields();
+
+    $file->putContent($content);
+
+    if ($msg = $file->store()) {
+      $this->codes[] = "E343";
+    }
+
+    $this->codes[] = "I340";
+
+    return true;
   }
 }
