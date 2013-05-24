@@ -21,4 +21,3 @@ $dPconfig["smp"] = array (
   "create_object_by_vn" => "0",
 );
 
-?>

@@ -43,4 +43,3 @@ $locales['smp-export-class'] = 'Export de la table';
 $locales['smp-export-classes'] = 'Export';
 $locales['smp_config-actions'] = 'Actions';
 $locales['smp_config-actions-export'] = 'Export';
-?>

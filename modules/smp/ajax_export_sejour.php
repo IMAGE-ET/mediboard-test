@@ -192,4 +192,3 @@ if (@$sejour->_id) {
 
 CAppUI::stepAjax("Import terminé avec  '$errors' erreurs", $errors ? UI_MSG_WARNING : UI_MSG_OK);
 
-?>
