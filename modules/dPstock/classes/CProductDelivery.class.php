@@ -364,7 +364,7 @@ class CProductDelivery extends CMbObject {
     // Sortie manuelle ou autotrace et passage de "commande" à "pas commande"
     if (
         $is_new && $this->manual ||
-        $this->_auto_trace && $order_to_0
+        ($is_new || $order_to_0) && $this->_auto_trace
     ) {
       $delivery_trace = new CProductDeliveryTrace;
       $delivery_trace->delivery_id = $this->_id;
