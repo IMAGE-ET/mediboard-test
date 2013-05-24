@@ -566,6 +566,8 @@ table#weeklyPlanning th.today {
   box-sizing: border-box;
 }
 
+
+
 .planning .event .footer {
   display: none;
 }
@@ -592,7 +594,7 @@ table#weeklyPlanning th.today {
   width: 15px;
   height: 15px;
   cursor: move;
-  opacity: 0.5;
+  /*opacity: 0.5;*/
   border: 1px solid #666;
   background: #fff url(../../images/buttons/move-black.png) no-repeat center center;
   border-bottom-right-radius: 6px;
@@ -605,6 +607,7 @@ table#weeklyPlanning th.today {
 .planning .event:hover {
   outline: none;
   border-color: #666;
+  /*z-index:40;*/
 }
 
 .planning .event.selected:hover {
