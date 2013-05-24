@@ -17,4 +17,3 @@ $module->registerTab("vw_test_hl7v2_data_type" , TAB_EDIT);
 $module->registerTab("vw_hl7v2_tables"         , TAB_EDIT);
 $module->registerTab("vw_hl7v2_schemas"        , TAB_READ);
 
-?>

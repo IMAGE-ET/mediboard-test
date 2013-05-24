@@ -14,4 +14,3 @@ CCanDo::checkRead();
 $smarty = new CSmartyDP();
 $smarty->display("vw_read_hl7v2_files.tpl");
 
-?>

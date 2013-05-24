@@ -28,4 +28,3 @@ $dPconfig["db"]["hl7v2"] = array(
   "dbpass" => "",
 );
 
-?>

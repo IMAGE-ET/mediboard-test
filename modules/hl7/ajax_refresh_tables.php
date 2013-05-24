@@ -36,4 +36,3 @@ $smarty->assign("keywords"         , $keywords);
 $smarty->assign("table_description", $table_description);
 $smarty->display("inc_list_hl7v2_tables.tpl");
 
-?>

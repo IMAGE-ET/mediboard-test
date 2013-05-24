@@ -44,4 +44,3 @@ if ($check) {
   $status ? CAppUI::stepAjax("Fichiers présents") : CAppUI::stepAjax("Fichiers manquants", UI_MSG_ERROR);
 }
 
-?>

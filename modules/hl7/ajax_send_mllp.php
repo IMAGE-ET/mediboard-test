@@ -22,4 +22,3 @@ try {
   CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
 } 
 
-?>

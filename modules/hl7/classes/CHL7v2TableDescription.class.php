@@ -24,7 +24,10 @@ class CHL7v2TableDescription extends CHL7v2TableObject {
   
   // Form fields
   public $_count_entries;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table       = 'table_description';
@@ -32,6 +35,9 @@ class CHL7v2TableDescription extends CHL7v2TableObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -44,11 +50,17 @@ class CHL7v2TableDescription extends CHL7v2TableObject {
     $props["_count_entries"] = "num";
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     return array();
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     

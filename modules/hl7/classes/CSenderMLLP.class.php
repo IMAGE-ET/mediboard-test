@@ -18,7 +18,10 @@ class CSenderMLLP extends CInteropSender {
   public $sender_mllp_id;
   
   public $_duplicate;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'sender_mllp';
@@ -26,7 +29,10 @@ class CSenderMLLP extends CInteropSender {
 
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["expediteur_ihe"]  = "CExchangeIHE sender_id";
@@ -43,7 +49,10 @@ class CSenderMLLP extends CInteropSender {
   function read() {
     $this->loadRefsExchangesSources();
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store(){
     if ($msg = parent::store()) {
       return $msg;

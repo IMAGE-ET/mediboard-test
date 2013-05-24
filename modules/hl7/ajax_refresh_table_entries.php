@@ -28,4 +28,3 @@ $smarty->assign("table_description", $table_description);
 $smarty->assign("table_entries"    , $table_entries);
 $smarty->display("inc_hl7v2_table_entries.tpl");
 
-?>

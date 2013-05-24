@@ -71,4 +71,3 @@ $smarty->assign("version", $version);
 $smarty->assign("versions", $versions);
 $smarty->display("vw_hl7v2_schemas.tpl");
 
-?>

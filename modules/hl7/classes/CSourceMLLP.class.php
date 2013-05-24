@@ -29,7 +29,10 @@ class CSourceMLLP extends CExchangeSource {
   public $iv_passphrase;
   
   private $_socket_client = null;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'source_mllp';
@@ -37,6 +40,9 @@ class CSourceMLLP extends CExchangeSource {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["port"]            = "num default|7001";
@@ -47,7 +53,10 @@ class CSourceMLLP extends CExchangeSource {
 
     return $specs;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->port;

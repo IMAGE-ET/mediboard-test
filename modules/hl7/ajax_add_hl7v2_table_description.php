@@ -18,4 +18,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("table_description", $table_description);
 $smarty->display("inc_add_hl7v2_table_description.tpl");
 
-?>

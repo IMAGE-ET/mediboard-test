@@ -17,4 +17,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("hl7v2_source" , $hl7v2_source);
 $smarty->display("configure.tpl");
 
-?>

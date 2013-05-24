@@ -27,7 +27,10 @@ class CHL7v2TableEntry extends CHL7v2TableObject {
   
   public $description;
   public $user;
-      
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "table_entry";
@@ -37,6 +40,9 @@ class CHL7v2TableEntry extends CHL7v2TableObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["number"]        = "num notNull maxLength|5 seekable";
@@ -48,11 +54,17 @@ class CHL7v2TableEntry extends CHL7v2TableObject {
     $props["user"]          = "bool notNull default|0";
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     return array();
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     

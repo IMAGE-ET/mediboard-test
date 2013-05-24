@@ -44,4 +44,3 @@ $smarty->assign("table_description", $table_description);
 $smarty->assign("keywords"         , $keywords);
 $smarty->display("vw_hl7v2_tables.tpl");
 
-?>

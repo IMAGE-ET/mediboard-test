@@ -1094,4 +1094,3 @@ $locales['module-hl7-long'] = 'HL7';
 $locales['utilities-source-mllp'] = 'Utilitaires MLLP';
 $locales['utilities-source-mllp-connexion'] = 'Test de la connexion';
 $locales['utilities-source-mllp-send'] = 'Test d\'envoi';
-?>
