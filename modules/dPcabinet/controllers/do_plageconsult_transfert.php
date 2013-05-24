@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Thomas Despoix
-*/
+ * $Id:$
+ *
+ * @package    Mediboard
+ * @subpackage dPcabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
+ */
 
 // Filtre des plages
 $chir_id = $_POST['_old_chir_id'];
@@ -31,7 +33,7 @@ foreach ($plages as $_plage) {
 
   // Do it !
   $do = new CDoObjectAddEdit("CPlageconsult", "plageconsult_id");
-	$do->redirect = null;
+  $do->redirect = null;
   $do->doIt();
 }
 

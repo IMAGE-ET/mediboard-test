@@ -1,11 +1,12 @@
-<?php /* $Id:  $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage dPcabinet
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 $prat_id = CValue::post("prat_id");
@@ -34,7 +35,7 @@ $where["debut"]   = "<= '$time_now'";
 $where["fin"]     = "> '$time_now'";
 $plage->loadObject($where);
 
-if(!$plage->_id) {
+if (!$plage->_id) {
   // Cas ou on a des plage en collision
   $where = array();
   $where["chir_id"] = "= '$prat_id'";
@@ -45,17 +46,20 @@ if(!$plage->_id) {
   $where["debut"]   = "<= '$hour_next'";
   $where["fin"]     = ">= '$hour_next'";
   $plageAfter->loadObject($where);
-  if($plageBefore->_id) {
-    if($plageAfter->_id) {
+  if ($plageBefore->_id) {
+    if ($plageAfter->_id) {
       $plageBefore->fin = $plageAfter->debut;
-    } else {
+    }
+    else {
       $plageBefore->fin = max($plageBefore->fin, $hour_next);
     }
     $plage =& $plageBefore;
-  } elseif($plageAfter->_id) {
+  }
+  elseif ($plageAfter->_id) {
     $plageAfter->debut = min($plageAfter->debut, $hour_now);
     $plage =& $plageAfter;
-  } else {
+  }
+  else {
     $plage->chir_id = $prat_id;
     $plage->date    = $day_now;
     $plage->freq    = "00:".CPlageconsult::$minutes_interval.":00";
@@ -64,19 +68,20 @@ if(!$plage->_id) {
     $plage->libelle = "automatique";
   }
   $plage->updateFormFields();
-  if($msg = $plage->store()) {
+  if ($msg = $plage->store()) {
     CAppUI::setMsg($msg, UI_MSG_ERROR);
   }
 }
 
 $consult->plageconsult_id = $plage->_id;
-if($msg = $consult->store()) {
+if ($msg = $consult->store()) {
   CAppUI::setMsg($msg, UI_MSG_ERROR);
 }
 
-if($current_m == "dPurgences") {
+if ($current_m == "dPurgences") {
   CAppUI::redirect("m=dPurgences&tab=edit_consultation&selConsult=$consult->_id&ajax=$ajax");
-} else {
+}
+else {
   CAppUI::redirect("m=dPcabinet&tab=edit_consultation&selConsult=$consult->_id&ajax=$ajax");
 }
 

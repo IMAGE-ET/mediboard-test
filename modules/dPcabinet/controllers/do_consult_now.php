@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id:$
+ *
+ * @package    Mediboard
+ * @subpackage dPcabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
+ */
 
 global $m;
 
@@ -45,7 +47,7 @@ if ($sejour->type === "urg" && !$_in_suivi) {
   // Changement de praticien pour le sejour
   if (CAppUI::conf("dPurgences pec_change_prat")) {
     $sejour->praticien_id = $prat_id;
-    if($msg = $sejour->store()) {
+    if ($msg = $sejour->store()) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
       CAppUI::redirect("m=dPurgences");
     }
@@ -55,7 +57,7 @@ if ($sejour->type === "urg" && !$_in_suivi) {
 
 $chir = new CMediusers;
 $chir->load($prat_id);
-if(!$chir->_id) {
+if (!$chir->_id) {
   CAppUI::setMsg("Vous devez choisir un praticien pour la consultation", UI_MSG_ERROR);
 }
 
@@ -77,7 +79,7 @@ $where["debut"]   = "<= '$time_now'";
 $where["fin"]     = "> '$time_now'";
 $plage->loadObject($where);
 
-if(!$plage->_id) {
+if (!$plage->_id) {
   // Cas ou on a des plage en collision
   $where = array();
   $where["chir_id"] = "= '$chir->_id'";
@@ -88,17 +90,20 @@ if(!$plage->_id) {
   $where["debut"]   = "<= '$hour_next'";
   $where["fin"]     = ">= '$hour_next'";
   $plageAfter->loadObject($where);
-  if($plageBefore->_id) {
-    if($plageAfter->_id) {
+  if ($plageBefore->_id) {
+    if ($plageAfter->_id) {
       $plageBefore->fin = $plageAfter->debut;
-    } else {
+    }
+    else {
       $plageBefore->fin = max($plageBefore->fin, $hour_next);
     }
     $plage =& $plageBefore;
-  } elseif($plageAfter->_id) {
+  }
+  elseif ($plageAfter->_id) {
     $plageAfter->debut = min($plageAfter->debut, $hour_now);
     $plage =& $plageAfter;
-  } else {
+  }
+  else {
     $plage->chir_id = $chir->_id;
     $plage->date    = $day_now;
     $plage->freq    = "00:".CPlageconsult::$minutes_interval.":00";
@@ -107,7 +112,7 @@ if(!$plage->_id) {
     $plage->libelle = "automatique";
   }
   $plage->updateFormFields();
-  if($msg = $plage->store()) {
+  if ($msg = $plage->store()) {
     CAppUI::setMsg($msg, UI_MSG_ERROR);
   }
 }
@@ -162,9 +167,10 @@ if ($ajax) {
   CApp::rip();
 }
 
-if($current_m = CValue::post("_m_redirect")) {
+if ($current_m = CValue::post("_m_redirect")) {
   CAppUI::redirect("m=$current_m");
-} else {
+}
+else {
   $current_m = ($sejour->type == "urg") ? "dPurgences" : "dPcabinet";
   CAppUI::redirect("m=$current_m&tab=edit_consultation&selConsult=$consult->consultation_id&chirSel=$chir->user_id");
 }
