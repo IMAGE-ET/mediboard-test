@@ -15,4 +15,3 @@ $locales['evenementsPatient'] = 'PAM';
 $locales['evenementsPatient-desc'] = 'Patient Administration Management';
 $locales['module-ihe-court'] = 'IHE';
 $locales['module-ihe-long'] = 'Integrating the Healthcare Enterprise';
-?>

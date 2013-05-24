@@ -254,4 +254,3 @@ class CSetupihe extends CSetup {
   }
 }
 
-?>
