@@ -139,11 +139,12 @@ class CModeleEtiquette extends CMbMetaObject {
     
     $distinct_texts = 1;
     $textes = array();
-    
+    $pays = CAppUI::conf("ref_pays");
+
     // La fonction nl2br ne fait qu'ajouter la balise <br />, elle ne supprime pas le \n.
     // Il faut donc le faire manuellement.
     $textes[1] = preg_replace("/[\t\r\n\f]/", '', utf8_encode(nl2br($this->texte)));
-    
+
     if ($this->texte_2) {
       $distinct_texts++;
       $textes[] = preg_replace("/[\t\r\n\f]/", '', utf8_encode(nl2br($this->texte_2)));
@@ -158,7 +159,7 @@ class CModeleEtiquette extends CMbMetaObject {
       $distinct_texts++;
       $textes[] = preg_replace("/[\t\r\n\f]/", '', utf8_encode(nl2br($this->texte_4)));
     }
-    
+
     $nb_etiqs = $this->nb_lignes * $this->nb_colonnes;
     $increment = floor( $nb_etiqs/ $distinct_texts);
     $current_text = 1;
@@ -206,18 +207,29 @@ class CModeleEtiquette extends CMbMetaObject {
         
         foreach ($fragments as $fragment) {
           if (preg_match("/BARCODE_(.*)/", $fragment, $matches) == 1) {
-            $barcode_x = $pdf_ex->getX() + 0.15;
-            $barcode_y = $pdf_ex->getY();
-            $barcode = $matches[1];
-            $barcode_width = strlen($barcode) * 0.4 + 0.4;
-            $pdf_ex->writeBarcode($barcode_x, $barcode_y, $barcode_width, 0.8, "C128B", 1, null, null, $barcode, 25);
-
-            $pdf_ex->setX($barcode_x + $barcode_width);
+            switch ($pays) {
+              case "2":
+                $save_x = $pdf_ex->getX();
+                $pdf_ex->setY($pdf_ex->getY() + 0.4);
+                $pdf_ex->setX($save_x);
+                $barcode = $matches[1];
+                $pdf_ex->setFont("C39HrP24DhTt", '', 30);
+                $pdf_ex->WriteHTML($barcode, false);
+                $pdf_ex->setFont($this->font, '', $this->hauteur_ligne);
+                break;
+              default:
+                $barcode_x = $pdf_ex->getX() + 0.15;
+                $barcode_y = $pdf_ex->getY();
+                $barcode = $matches[1];
+                $barcode_width = strlen($barcode) * 0.4 + 0.4;
+                $pdf_ex->writeBarcode($barcode_x, $barcode_y, $barcode_width, 0.8, "C128B", 1, null, null, $barcode, 25);
+                $pdf_ex->setX($barcode_x + $barcode_width);
+            }
             $was_barcode = 1;
           }
           else {
             if ($was_barcode) {
-              $sub_fragments = explode("<br />", $fragment,2);
+              $sub_fragments = explode("<br />", $fragment, 2);
               $pdf_ex->WriteHTML($sub_fragments[0], false);
               if (isset($sub_fragments[1])) {
                 $actual_y = $pdf_ex->getY();
@@ -244,16 +256,28 @@ class CModeleEtiquette extends CMbMetaObject {
             $pdf->setY($pdf_y - 0.4 + $hauteur_etiq - $pdf_ex_y);
         }
       }
-      
+
       foreach ($fragments as $fragment) {
         if (preg_match("/BARCODE_(.*)/", $fragment, $matches) == 1) {
-          $barcode_x = $pdf->getX() + 0.15;
-          $barcode_y = $pdf->getY();
-          $barcode = $matches[1];
-          $barcode_width = strlen($barcode) * 0.4 + 0.4;
-          $pdf->writeBarcode($barcode_x, $barcode_y, $barcode_width, 0.8, "C128B", 1, null, null, $barcode);
-
-          $pdf->setX($barcode_x + $barcode_width);
+          switch ($pays) {
+            case "2":
+              // La position x est à remettre car perdue lors de la méthode setY
+              $save_x = $pdf->getX();
+              $pdf->setY($pdf->getY() + 0.4);
+              $pdf->setX($save_x);
+              $barcode = $matches[1];
+              $pdf->setFont("C39HrP24DhTt", '', 30);
+              $pdf->WriteHTML("*47013*", false);
+              $pdf->setFont($this->font, '', $this->hauteur_ligne);
+              break;
+            default:
+              $barcode_x = $pdf->getX() + 0.15;
+              $barcode_y = $pdf->getY();
+              $barcode = $matches[1];
+              $barcode_width = strlen($barcode) * 0.4 + 0.4;
+              $pdf->writeBarcode($barcode_x, $barcode_y, $barcode_width, 0.8, "C128B", 1, null, null, $barcode);
+              $pdf->setX($barcode_x + $barcode_width);
+          }
           $was_barcode = 1;
         }
         else {

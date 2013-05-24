@@ -151,8 +151,8 @@ $library->fileName = "tcpdf_1_53_0_TC034.zip";
 $library->description = "Composant de génération de fichiers PDF avec codes barres";
 $library->sourceDir = "tcpdf";
 $library->targetDir = "tcpdf";
-$library->versionFile = "tcpdf.php";
-$library->versionString = '$k = $this->k';
+$library->versionFile = "fonts/c39hrp24dhtt.php";
+$library->versionString = "TrueTypeUnicode";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "tcpdf";

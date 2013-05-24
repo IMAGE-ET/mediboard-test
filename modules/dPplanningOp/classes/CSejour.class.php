@@ -2931,16 +2931,19 @@ class CSejour extends CFacturable implements IPatientRelated {
                       "HEURE SORTIE"     => CMbDT::transform($this->sortie, null, "%H:%M"),
                       "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
                       "NDOS"             => $this->_NDA,
-                      "NRA"              => $this->_ref_NRA->id400,
+                      "NRA"              => $this->_ref_NRA ? $this->_ref_NRA->id400 : "",
                       "CODE BARRE NDOS"  => "@BARCODE_".$this->_NDA."@",
                       "CHAMBRE COURANTE" => $affectation->_view));
 
     if (CAppUI::conf("ref_pays") == 2) {
-      $this->loadRefsFactureEtablissement();
-      $this->_ref_last_facture->loadRefAssurance();
       $fields["MODE TRT"]       = $this->loadRefChargePriceIndicator()->code;
-      $fields["ASSUR MALADIE"]  = $this->_ref_last_facture->_ref_assurance_maladie->nom;
-      $fields["ASSUR ACCIDENT"] = $this->_ref_last_facture->_ref_assurance_accident->nom;
+      $this->loadRefsFactureEtablissement();
+
+      if ($this->_ref_last_facture) {
+        $this->_ref_last_facture->loadRefAssurance();
+        $fields["ASSUR MALADIE"]  = $this->_ref_last_facture->_ref_assurance_maladie->nom;
+        $fields["ASSUR ACCIDENT"] = $this->_ref_last_facture->_ref_assurance_accident->nom;
+      }
     }
   }
 
