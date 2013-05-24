@@ -42,10 +42,6 @@
     z-index: 50!important;
   }
 
-  .event-container div.body {
-    text-indent:15px;
-  }
-
 
 </style>
   {{if $can->edit && ($nbIntervNonPlacees || $nbIntervHorsPlage || $nbAlertesInterv)}}
