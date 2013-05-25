@@ -115,7 +115,7 @@ info_script "Needed space ($needed_size) less than available space ($available_s
 ## Make MySQL medthod
 
 # removes previous hotcopy/dump if something went wrong
-rm -Rvf $database
+rm -Rf $database
 
 DATETIME=$(date +%Y-%m-%dT%H-%M-%S)
 
