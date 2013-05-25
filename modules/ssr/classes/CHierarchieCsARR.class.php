@@ -16,13 +16,20 @@ class CHierarchieCsARR extends CCsARRObject {
   public $code;
   public $libelle;
 
+  /** @var self[] */
   public $_ref_parent_hierarchies;
+  /** @var self[] */
   public $_ref_child_hierarchies;
+  /** @var CActiviteCsARR */
   public $_ref_activites;
-  public $_ref_notes_hierarchie;
+  /** @var CNoteHierarchieCsARR */
+  public $_ref_notes_hierarchies;
 
   static $cached = array();
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'hierarchie';
@@ -30,6 +37,9 @@ class CHierarchieCsARR extends CCsARRObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -40,19 +50,27 @@ class CHierarchieCsARR extends CCsARRObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->code;
     $this->_shortview = $this->code;
   }
 
+  /**
+   * Charge les hiérarchies CsARR parentes
+   *
+   * @return self[]
+   */
   function loadRefsParentHierarchies() {
     // Codes des hiérarchies intermédiaires
     $parts = explode(".", $this->code);
     array_pop($parts);
     $codes = array();
     foreach ($parts as $_part) {
-      $last = $codes[] = count($codes) ? end($codes) . ".$_part" : $_part;
+      $codes[] = count($codes) ? end($codes) . ".$_part" : $_part;
     }
 
     // Chargement des hiérarchies intermédiaires
@@ -61,6 +79,11 @@ class CHierarchieCsARR extends CCsARRObject {
     return $this->_ref_parent_hierarchies = $hierarchies;
   }
 
+  /**
+   * Charge les hiérarchies CsARR filles
+   *
+   * @return self[]
+   */
   function loadRefsChildHierarchies() {
     $where["code"] = "LIKE '$this->code.__'";
     $hierarchie = new self;
@@ -68,6 +91,11 @@ class CHierarchieCsARR extends CCsARRObject {
     return $this->_ref_child_hierarchies = $hierarchies;
   }
 
+  /**
+   * Charge les activités de la hiérarchie
+   *
+   * @return CActiviteCsARR[]
+   */
   function loadRefsActivites() {
     $activite = new CActiviteCsARR;
     $activite->hierarchie = $this->code;
@@ -75,6 +103,11 @@ class CHierarchieCsARR extends CCsARRObject {
     return $this->_ref_activites = $activite;
   }
 
+  /**
+   * Charge les notes de la hiérarchie
+   *
+   * @return array
+   */
   function loadRefsNotesHierarchies() {
     $note = new CNoteHierarchieCsARR;
     $note->hierarchie = $this->code;
@@ -89,9 +122,9 @@ class CHierarchieCsARR extends CCsARRObject {
   /**
    * Get an instance from the code
    *
-   * @param string $code
+   * @param string $code Code
    *
-   * @return CActiviteCdARR
+   * @return self
    **/
   static function get($code) {
     if (!$code) {

@@ -23,12 +23,18 @@ class CModulateurCsARR extends CCsARRObject {
 
   public $_ref_code = null;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'modulateur';
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -43,10 +49,15 @@ class CModulateurCsARR extends CCsARRObject {
   }
 
   /**
-   * Override
-   *
+   * @see parent::loadView()
+   */
+  function loadView(){
+    parent::loadView();
+    $this->loadRefCode();
+  }
+
+  /**
    * @see parent::updateFormFields()
-   * @return void
    */
   function updateFormFields() {
     static $libelles = array(
@@ -74,10 +85,5 @@ class CModulateurCsARR extends CCsARRObject {
    */
   function loadRefCode() {
     return $this->_ref_code = CActiviteCsARR::get($this->code);
-  }
-
-  function loadView(){
-    parent::loadView();
-    $this->loadRefCode();
   }
 }

@@ -18,6 +18,9 @@ class CIntervenantCdARR extends CCdARRObject {
 
   static $cached = array();
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table       = 'intervenant';
@@ -25,6 +28,9 @@ class CIntervenantCdARR extends CCdARRObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -35,6 +41,9 @@ class CIntervenantCdARR extends CCdARRObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = "$this->code - $this->libelle";
@@ -44,7 +53,7 @@ class CIntervenantCdARR extends CCdARRObject {
   /**
    * Get an instance from the code
    *
-   * @param string $code
+   * @param string $code Code
    *
    * @return CIntervenantCdARR
    **/

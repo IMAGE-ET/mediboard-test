@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Le plateaux techniques sont composés d'équipements et de techniciens référents
+ */
 class CPlateauTechnique extends CMbObject {
   // DB Table key
   public $plateau_id;
@@ -21,9 +24,14 @@ class CPlateauTechnique extends CMbObject {
   public $repartition;
 
   // Collections
+  /** @var CEquipement */
   public $_ref_equipements;
+  /** @var CTechnicien */
   public $_ref_techniciens;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'plateau_technique';
@@ -31,6 +39,9 @@ class CPlateauTechnique extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["group_id"]    = "ref notNull class|CGroups";
@@ -39,6 +50,9 @@ class CPlateauTechnique extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["equipements"] = "CEquipement plateau_id";
@@ -47,36 +61,55 @@ class CPlateauTechnique extends CMbObject {
     return $backProps;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;
   }
 
+  /**
+   * Charge les équipements du plateau
+   *
+   * @param bool $actif Si oui, seulement les actifs
+   *
+   * @return CEquipement[]
+   */
   function loadRefsEquipements($actif = true) {
     $order = "nom ASC";
-    $this->_ref_equipements = $this->loadBackRefs("equipements", $order);
-    foreach ($this->_ref_equipements as $_equipement) {
+    /** @var CEquipement[] $equipements */
+    $equipements = $this->loadBackRefs("equipements", $order);
+    foreach ($equipements as $_equipement) {
       if ($actif && !$_equipement->actif) {
-        unset($this->_ref_equipements[$_equipement->_id]);
+        unset($equipements[$_equipement->_id]);
         continue;
       }
     }
 
-    return $this->_ref_equipements;
+    return $this->_ref_equipements = $equipements;
   }
 
+  /**
+   * Charge les techniciens du plateau
+   *
+   * @param bool $actif Si oui, seulement les actifs
+   *
+   * @return CTechnicien[]
+   */
   function loadRefsTechniciens($actif = true) {
-    $this->_ref_techniciens = $this->loadBackRefs("techniciens");
-    foreach ($this->_ref_techniciens as $_technicien) {
+    /** @var CTechnicien[] $techniciens */
+    $techniciens = $this->loadBackRefs("techniciens");
+    foreach ($techniciens as $_technicien) {
       if ($actif && !$_technicien->actif) {
-        unset($this->_ref_techniciens[$_technicien->_id]);
+        unset($techniciens[$_technicien->_id]);
         continue;
       }
       $_technicien->loadRefKine();
     }
 
-    $sorter = CMbArray::pluck($this->_ref_techniciens, "_view");
-    array_multisort($sorter, SORT_ASC, $this->_ref_techniciens);
-    return $this->_ref_techniciens;
+    $sorter = CMbArray::pluck($techniciens, "_view");
+    array_multisort($sorter, SORT_ASC, $techniciens);
+    return $this->_ref_techniciens = $techniciens;
   }
 }

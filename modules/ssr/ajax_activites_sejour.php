@@ -1,11 +1,12 @@
-<?php /* $Id: vw_idx_sejour.php 7212 2009-11-03 12:32:02Z rhum1 $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: 7212 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
@@ -25,6 +26,7 @@ $date = CValue::getOrSession("date", CMbDT::date());
 $monday = CMbDT::date("last monday", CMbDT::date("+1 day", $date));
 $sunday = CMbDT::date("next sunday", $date);
 
+$week_days = array();
 for ($i = 0; $i < 7; $i++) {
   $week_days[$i] = CMbDT::transform("+$i day", $monday, "%a");
 }
@@ -36,15 +38,17 @@ $lines_by_cat = $prescription ?
   array();
 
 // Prescription lines for SSR codes
+/** @var CCategoryPrescription[] $categories */
 $categories = array();
 foreach ($lines_by_cat as $chapter => $_lines_by_chap) {
   foreach ($_lines_by_chap as $_lines_by_cat) {
+    /** @var CPrescriptionLineElement $_line */
     foreach ($_lines_by_cat['element'] as $_line) {
       $element = $_line->_ref_element_prescription;
       $category = $element->_ref_category_prescription;
       
       // All categories
-      if (!array_key_exists($category->_id, $categories)){
+      if (!array_key_exists($category->_id, $categories)) {
         $categories[$category->_id] = $category;
       }
       
@@ -57,8 +61,8 @@ foreach ($lines_by_cat as $chapter => $_lines_by_chap) {
 
 // Creation d'un nouveau tableau pour stocker les lignes par elements de prescription
 $lines_by_element = array(); 
-foreach ($lines_by_cat as $chap => $_lines_by_chap){
-  foreach ($_lines_by_chap as $cat => $_lines_by_cat){
+foreach ($lines_by_cat as $chap => $_lines_by_chap) {
+  foreach ($_lines_by_chap as $cat => $_lines_by_cat) {
     foreach ($_lines_by_cat['element'] as $line_id => $_line) {
       $lines_by_element[$chap][$cat][$_line->element_prescription_id][$_line->_id] = $_line;
     }
@@ -79,6 +83,7 @@ $technicien = new CTechnicien;
 $plateau = new CPlateauTechnique;
 if ($technicien->_id = $bilan->technicien_id) {
   $technicien->loadMatchingObject();
+  /** @var CPlateauTechnique $plateau */
   $plateau = $technicien->loadFwdRef("plateau_id");
   $plateau->loadRefsEquipements();
   $plateau->loadRefsTechniciens();
@@ -87,6 +92,7 @@ if ($technicien->_id = $bilan->technicien_id) {
 // Chargement de tous les plateaux et des equipements et techniciens associés
 $plateau_tech = new CPlateauTechnique();
 $plateau_tech->group_id = CGroups::loadCurrent()->_id;
+/** @var CPlateauTechnique[] $plateaux */
 $plateaux = $plateau_tech->loadMatchingList();
 foreach ($plateaux as $_plateau) {
   $_plateau->loadRefsEquipements();
@@ -104,12 +110,13 @@ foreach ($categories as $_category) {
   $associations[$_category->_id] = $_category->loadBackRefs("functions_category");
     
   // Parcours des associations trouvées et chargement des utilisateurs
+  /** @var CFunctionCategoryPrescription $_association */
   foreach ($associations[$_category->_id] as $_association) {
     $function = $_association->loadRefFunction();
     $function->loadRefsUsers();
-    foreach($function->_ref_users as $_user){
+    foreach ($function->_ref_users as $_user) {
       $_user->_ref_function = $function;
-       if ($_user->_id == $user->_id && !$selected_cat){
+      if ($_user->_id == $user->_id && !$selected_cat) {
         $selected_cat = $_category;
       }
       $executants[$_category->_id][$_user->_id] = $_user;
@@ -141,5 +148,3 @@ $smarty->assign("selected_cat", $selected_cat);
 $smarty->assign("user", $user);
 $smarty->assign("lines_by_element", $lines_by_element);
 $smarty->display("inc_activites_sejour.tpl");
-
-?>

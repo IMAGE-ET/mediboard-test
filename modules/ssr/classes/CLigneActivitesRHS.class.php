@@ -37,10 +37,18 @@ class CLigneActivitesRHS extends CMbObject {
   public $_executant;
 
   // References
+  /** @var CRHS */
   public $_ref_rhs;
-  public $_ref_activite_cdarr;
+  /** @var CIntervenantCdARR */
   public $_ref_intervenant_cdarr;
+  /** @var CActiviteCdARR */
+  public $_ref_activite_cdarr;
+  /** @var CActiviteCsARR */
+  public $_ref_activite_csarr;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "ligne_activites_rhs";
@@ -54,6 +62,9 @@ class CLigneActivitesRHS extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -79,6 +90,9 @@ class CLigneActivitesRHS extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
@@ -120,29 +134,33 @@ class CLigneActivitesRHS extends CMbObject {
     }
   }
 
-  function updatePlainFields() {
-    return parent::updatePlainFields();
-    if ($this->qty_mon == "") $this->qty_mon = "0";
-    if ($this->qty_tue == "") $this->qty_tue = "0";
-    if ($this->qty_wed == "") $this->qty_wed = "0";
-    if ($this->qty_thu == "") $this->qty_thu = "0";
-    if ($this->qty_fri == "") $this->qty_fri = "0";
-    if ($this->qty_sat == "") $this->qty_sat = "0";
-    if ($this->qty_sun == "") $this->qty_sun = "0";
-  }
-
+  /**
+   * Charge l'activité CdARR associée
+   *
+   * @return CActiviteCdARR
+   */
   function loadRefActiviteCdARR() {
     $activite = CActiviteCdARR::get($this->code_activite_cdarr);
     $this->_view = $activite->_view;
     return $this->_ref_activite_cdarr = $activite;
   }
 
+  /**
+   * Charge l'activité CsARR associée
+   *
+   * @return CActiviteCsARR
+   */
   function loadRefActiviteCsARR() {
     $activite = CActiviteCsARR::get($this->code_activite_csarr);
     $this->_view = $activite->_view;
     return $this->_ref_activite_csarr = $activite;
   }
 
+  /**
+   * Chargement l'intervenant CdARR associé
+   *
+   * @return CIntervenantCdARR
+   */
   function loadRefIntervenantCdARR() {
     return $this->_ref_intervenant_cdarr = CIntervenantCdARR::get($this->code_intervenant_cdarr);
   }
@@ -156,18 +174,33 @@ class CLigneActivitesRHS extends CMbObject {
     return $this->_ref_rhs = $this->loadFwdRef("rhs_id");
   }
 
+  /**
+   * Incremente ou décrement le compteur journalier de la ligne
+   *
+   * @param datetime $datetime Moment
+   * @param string   $action   Soit inc soit dec
+   *
+   * @return void
+   */
   function crementDay($datetime, $action) {
     $day = CMbDT::transform($datetime, null, "%u");
-
-    if ($day == 1) ($action == "inc") ? $this->qty_mon++ : $this->qty_mon--;
-    if ($day == 2) ($action == "inc") ? $this->qty_tue++ : $this->qty_tue--;
-    if ($day == 3) ($action == "inc") ? $this->qty_wed++ : $this->qty_wed--;
-    if ($day == 4) ($action == "inc") ? $this->qty_thu++ : $this->qty_thu--;
-    if ($day == 5) ($action == "inc") ? $this->qty_fri++ : $this->qty_fri--;
-    if ($day == 6) ($action == "inc") ? $this->qty_sat++ : $this->qty_sat--;
-    if ($day == 7) ($action == "inc") ? $this->qty_sun++ : $this->qty_sun--;
+    $days = array(
+      "1" => "qty_mon",
+      "2" => "qty_tue",
+      "3" => "qty_wed",
+      "4" => "qty_thu",
+      "5" => "qty_fri",
+      "6" => "qty_sat",
+      "7" => "qty_sun",
+    );
+    $day = $days[$day];
+    $crement = $action == "inc" ? 1 : -1;
+    $this->$day += $crement;
   }
 
+  /**
+   * @see parent::store()
+   */
   function store() {
     // RHS already charged
     $this->completeField("rhs_id");

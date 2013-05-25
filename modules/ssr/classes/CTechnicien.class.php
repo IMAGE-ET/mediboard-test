@@ -28,14 +28,20 @@ class CTechnicien extends CMbObject {
   public $_count_sejours_date;
 
   // References
+  /** @var CMediusers */
   public $_ref_kine;
+  /** @var CPlateauTechnique */
   public $_ref_plateau;
 
-
-  // Derived references
+  // Distant references
+  /** @var CPlageConge */
   public $_ref_conge_date;
+  /** @var CSejour[] */
   public $_ref_sejours_date;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'technicien';
@@ -43,6 +49,9 @@ class CTechnicien extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["plateau_id"] = "ref notNull class|CPlateauTechnique";
@@ -55,12 +64,18 @@ class CTechnicien extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["bilan_ssr"] = "CBilanSSR technicien_id";
     return $backProps;
   }
 
+  /**
+   * @see parent::store()
+   */
   function store() {
     // Transfert de séjours vers un autre technicien
     if ($this->_transfer_id) {
@@ -76,6 +91,11 @@ class CTechnicien extends CMbObject {
     return parent::store();
   }
 
+  /**
+   * Update view under certain changes
+   *
+   * @return void
+   */
   function updateView() {
     $parts = array();
     if ($this->_ref_kine && $this->_ref_kine->_id) {
@@ -86,29 +106,54 @@ class CTechnicien extends CMbObject {
       $parts[] = $this->_ref_plateau->_view;
     }
 
-    $this->_view = implode(" &ndash; ",$parts);
+    $this->_view = implode(" &ndash; ", $parts);
   }
 
+  /**
+   * Charge le plateau technique
+   *
+   * @return CPlateauTechnique
+   */
   function loadRefPlateau() {
-    $this->_ref_plateau = $this->loadFwdRef("plateau_id", true);
+    $plateau = $this->loadFwdRef("plateau_id", true);
     $this->updateView();
-    return $this->_ref_plateau;
-  }	
-
-
-  function loadRefKine() {
-    $this->_ref_kine = $this->loadFwdRef("kine_id", true);
-    $this->_ref_kine->loadRefFunction();
-    $this->updateView();
-    return $this->_ref_kine;
+    return $this->_ref_plateau = $plateau;
   }
 
+
+  /**
+   * Charge le kiné technicien
+   *
+   * @return CMediusers
+   */
+  function loadRefKine() {
+    /** @var CMediusers $kine */
+    $kine = $this->loadFwdRef("kine_id", true);
+    $kine->loadRefFunction();
+    $this->updateView();
+    return $this->_ref_kine = $kine;
+  }
+
+  /**
+   * Charge la plage de congés pour un technicien à une date donnée
+   *
+   * @param date $date Date de référence
+   *
+   * @return CPlageConge
+   */
   function loadRefCongeDate($date) {
     $this->_ref_conge_date = new CPlageConge;
     $this->_ref_conge_date->loadFor($this->kine_id, $date);
     return $this->_ref_conge_date;
   }
 
+  /**
+   * Compte les séjours pour le technicien à une date de référence
+   *
+   * @param date $date Date de référence
+   *
+   * @return int
+   */
   function countSejoursDate($date) {
     $group = CGroups::loadCurrent();
     $leftjoin["bilan_ssr"] = "bilan_ssr.sejour_id = sejour.sejour_id";
@@ -119,6 +164,13 @@ class CTechnicien extends CMbObject {
     return $this->_count_sejours_date = CSejour::countForDate($date, $where, $leftjoin);
   }
 
+  /**
+   * Charge les séjours pour ce technicien en tant que référent à une date donnée
+   *
+   * @param date $date Date de reference
+   *
+   * @return CSejour[]
+   */
   function loadRefsSejours($date) {
     $group = CGroups::loadCurrent();
     $leftjoin["bilan_ssr"] = "bilan_ssr.sejour_id = sejour.sejour_id";

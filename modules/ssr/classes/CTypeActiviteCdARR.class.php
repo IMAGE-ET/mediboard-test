@@ -19,6 +19,9 @@ class CTypeActiviteCdARR extends CCdARRObject {
 
   static $cached = array();
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table       = 'type_activite';
@@ -26,6 +29,9 @@ class CTypeActiviteCdARR extends CCdARRObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -37,6 +43,9 @@ class CTypeActiviteCdARR extends CCdARRObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view      = "($this->code) $this->libelle";
@@ -45,7 +54,9 @@ class CTypeActiviteCdARR extends CCdARRObject {
 
   /**
    * Get an instance from the code
-   * @param $code string
+   *
+   * @param string $code Code CdARR
+   *
    * @return CTypeActiviteCdARR
    **/
   static function get($code) {

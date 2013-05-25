@@ -52,13 +52,28 @@ class CRHS extends CMbObject {
   public $_in_bounds_sun;
 
   // Object References
+  /** @var  CSejour */
   public $_ref_sejour;
+  /** @var  CDependancesRHS */
   public $_ref_dependances;
+  /** @var  CDependancesRHS[] */
   public $_ref_dependances_chonology;
-
   /** @var CLigneActivitesRHS[] */
-  public $_ref_lignes_activites;
 
+  // Distant references
+  public $_ref_lignes_activites;
+  /** @var CMediusers[] */
+  public $_ref_executants;
+  /** @var CLigneActivitesRHS[][] */
+  public $_ref_lines_by_executant;
+  /** @var CTypeActiviteCdARR */
+  public $_ref_types_activite;
+  /** @var int[] */
+  public $_totaux;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "rhs";
@@ -67,6 +82,9 @@ class CRHS extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -97,6 +115,9 @@ class CRHS extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["lines"]       = "CLigneActivitesRHS rhs_id";
@@ -104,6 +125,9 @@ class CRHS extends CMbObject {
     return $backProps;
   }
 
+  /**
+   * @see parent::check()
+   */
   function check() {
     if ($this->date_monday && CMbDT::transform(null, $this->date_monday, "%w") != "1") {
       return CAppUI::tr("CRHS-failed-monday", $this->date_monday);
@@ -111,6 +135,9 @@ class CRHS extends CMbObject {
     return parent::check();
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_week_number = CMbDT::transform(null, $this->date_monday, "%U");
@@ -125,56 +152,45 @@ class CRHS extends CMbObject {
     $this->_view = CAppUI::tr("Week") . " $this->_week_number";
   }
 
+  /**
+   * Charge le séjour et vérifie les dates liées
+   *
+   * @return CSejour
+   */
   function loadRefSejour() {
-    $this->_ref_sejour = $sejour = $this->loadFwdRef("sejour_id", true);
+    /** @var CSejour $sejour */
+    $sejour = $this->loadFwdRef("sejour_id", true);
     $sejour->loadRefPatient();
 
-    $this->_in_bounds =
-      $this->date_monday <= CMbDT::date(null, $sejour->_sortie) &&
-      $this->_date_sunday >= CMbDT::date(null, $sejour->_entree);
+    $entree = CMbDT::date($sejour->_entree);
+    $sortie = CMbDT::date($sejour->_sortie);
 
-    $this->_in_bounds_mon = 
-      $this->date_monday <= CMbDT::date($sejour->_sortie) &&
-      $this->date_monday >= CMbDT::date($sejour->_entree);
+    $this->_in_bounds = CMbRange::collides($this->date_monday, $this->_date_sunday, $entree, $sortie, false);
+    $this->_in_bounds_mon = CMbRange::in($this->date_monday    , $entree, $sortie);
+    $this->_in_bounds_tue = CMbRange::in($this->_date_tuesday  , $entree, $sortie);
+    $this->_in_bounds_wed = CMbRange::in($this->_date_wednesday, $entree, $sortie);
+    $this->_in_bounds_thu = CMbRange::in($this->_date_thursday , $entree, $sortie);
+    $this->_in_bounds_fri = CMbRange::in($this->_date_friday   , $entree, $sortie);
+    $this->_in_bounds_sat = CMbRange::in($this->_date_saturday , $entree, $sortie);
+    $this->_in_bounds_sun = CMbRange::in($this->_date_sunday   , $entree, $sortie);
 
-    $this->_in_bounds_tue = 
-      $this->_date_tuesday <= CMbDT::date($sejour->_sortie) &&
-      $this->_date_tuesday >= CMbDT::date($sejour->_entree);
-
-    $this->_in_bounds_wed = 
-      $this->_date_wednesday <= CMbDT::date($sejour->_sortie) &&
-      $this->_date_wednesday >= CMbDT::date($sejour->_entree);
-
-    $this->_in_bounds_thu = 
-      $this->_date_thursday <= CMbDT::date($sejour->_sortie) &&
-      $this->_date_thursday >= CMbDT::date($sejour->_entree);
-
-    $this->_in_bounds_fri = 
-      $this->_date_friday <= CMbDT::date($sejour->_sortie) &&
-      $this->_date_friday >= CMbDT::date($sejour->_entree);
-
-    $this->_in_bounds_sat = 
-      $this->_date_saturday <= CMbDT::date($sejour->_sortie) &&
-      $this->_date_saturday >= CMbDT::date($sejour->_entree);
-
-    $this->_in_bounds_sun = 
-      $this->_date_sunday <= CMbDT::date($sejour->_sortie) &&
-      $this->_date_sunday >= CMbDT::date($sejour->_entree);
-
-    return $this->_ref_sejour;
+    return $this->_ref_sejour = $sejour;
   }
 
   /**
    * Get all possible and existing RHS for given sejour, by date as keys
-   * @param CSejour $sejour
-   * @return array[CRHS], null if not applyable
+   *
+   * @param CSejour $sejour Sejour
+   *
+   * @return CRHS[],null Null if not applyable
    */
   static function getAllRHSsFor(CSejour $sejour) {
     if (!$sejour->_id || $sejour->type != "ssr") {
-      return;
+      return null;
     }
 
     $rhss = array();
+    /** @var CRHS $_rhs */
     foreach ($sejour->loadBackRefs("rhss") as $_rhs) {
       $rhss[$_rhs->date_monday] = $_rhs;
     }
@@ -198,18 +214,20 @@ class CRHS extends CMbObject {
     return $rhss;
   }
 
+  /**
+   * Charge le relevé de dépendances
+   *
+   * @return CDependancesRHS
+   */
   function loadRefDependances() {
-    if ($this->_ref_dependances) {
-      return $this->_ref_dependances;
-    }
-
-    $order = "dependances_id ASC";
-    $this->_ref_dependances = new CDependancesRHS();
-    $this->_ref_dependances->rhs_id = $this->_id;
-    $this->_ref_dependances->loadMatchingObject($order);
-    return $this->_ref_dependances;
+    return $this->_ref_dependances = $this->loadUniqueBackRef("dependances");
   }
 
+  /**
+   * Charge la chronologie de relevés de dépendances autout du RHS
+   *
+   * @return CDependancesRHS[]
+   */
   function loadDependancesChronology(){
     $sejour = $this->loadRefSejour();
     $all_rhs = CRHS::getAllRHSsFor($sejour);
@@ -243,16 +261,20 @@ class CRHS extends CMbObject {
     return $this->_ref_dependances_chonology = $chrono;
   }
 
+  /**
+   * Charge les lignes d'activité qui composent le RHS
+   *
+   * @return CLigneActivitesRHS[]
+   */
   function loadRefLignesActivites() {
-    if ($this->_ref_lignes_activites) {
-      return;
-    }
-
-    $ligneActivitesRHS = new CLigneActivitesRHS();
-    $ligneActivitesRHS->rhs_id = $this->_id;
-    $this->_ref_lignes_activites = $ligneActivitesRHS->loadMatchingList();
+    return $this->_ref_lignes_activites = $this->loadBackRefs("lines");
   }
 
+  /**
+   * Calcul les totaux par type d'activité CdARR
+   *
+   * @return int[]
+   */
   function countTypeActivite() {
     $totaux = array();
 
@@ -278,10 +300,15 @@ class CRHS extends CMbObject {
     return $totaux;
   }
 
+  /**
+   * Recalcul le RHS à partir des événements validés
+   *
+   * @return void
+   */
   function recalculate() {
     // Suppression des lignes d'activités du RHS
-    $this->loadBackRefs("lines");
-    foreach($this->_back["lines"] as $_line) {
+    /** @var CLigneActivitesRHS $_line */
+    foreach ($this->loadBackRefs("lines") as $_line) {
       if ($_line->auto) {
         $_line->delete();
       }
@@ -295,6 +322,8 @@ class CRHS extends CMbObject {
     $evenementSSR = new CEvenementSSR();
     $evenementSSR->sejour_id = $sejour->_id;
     $evenementSSR->realise = 1;
+
+    /** @var CEvenementSSR[] $evenements */
     $evenements = $evenementSSR->loadMatchingList();
 
     foreach ($evenements as $_evenement) {
@@ -334,13 +363,15 @@ class CRHS extends CMbObject {
         $ligne->auto = "1";
         $ligne->store();
       }
-    }  
+    }
 
     // Gestion des administrations
-    foreach ($sejour->loadBackRefs("actes_cdarr") as $_acte_cdarr_adm){
+    /** @var CActeCdARR $_acte_cdarr_adm */
+    foreach ($sejour->loadBackRefs("actes_cdarr") as $_acte_cdarr_adm) {
       $administration = $_acte_cdarr_adm->loadRefAdministration();
-      $administration->loadRefAdministrateur();
-      $therapeute = $_evenement->loadRefTherapeute();
+      $therapeute = $administration->loadRefAdministrateur();
+      $intervenant = $therapeute->loadRefIntervenantCdARR();
+      $code_intervenant_cdarr = $intervenant->code;
 
       $ligne = new CLigneActivitesRHS();
       $ligne->rhs_id                 = $this->_id;
@@ -354,10 +385,16 @@ class CRHS extends CMbObject {
     }
   }
 
+  /**
+   * Constuit les totaux
+   *
+   * @return int[]
+   */
   function buildTotaux() {
     // Initialisation des totaux
     $totaux = array();
     $type_activite = new CTypeActiviteCdARR();
+    /** @var CTypeActiviteCdARR[] $types_activite */
     $types_activite = $type_activite->loadList();
     foreach ($types_activite as $_type) {
       $totaux[$_type->code] = 0;
@@ -366,8 +403,9 @@ class CRHS extends CMbObject {
     // Comptage et classement par executants
     $executants = array();
     $lines_by_executant = array();
+    /** @var CLigneActivitesRHS $_line */
     foreach ($this->loadBackRefs("lines") as $_line) {
-      // Cas des actes CdARR  
+      // Cas des actes CdARR
       if ($_line->code_activite_cdarr) {
         $activite = $_line->loadRefActiviteCdARR();
         $type = $activite->loadRefTypeActivite();
@@ -381,6 +419,7 @@ class CRHS extends CMbObject {
       }
 
       $_line->loadRefIntervenantCdARR();
+      /** @var CMediusers $executant */
       $executant = $_line->loadFwdRef("executant_id", true);
       $executant->loadRefsFwd();
       $executant->loadRefIntervenantCdARR();

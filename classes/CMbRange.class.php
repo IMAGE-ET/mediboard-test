@@ -68,8 +68,8 @@ abstract class CMbRange {
   static function collides($lower1, $upper1, $lower2, $upper2, $permissive = true) {
     return 
       $permissive ?
-        ($lower1 < $upper2 || $lower1 === null || $upper2 === null) && 
-      ($upper1 > $lower2 || $upper1 === null || $lower2 === null) :
+        ($lower1 <  $upper2 || $lower1 === null || $upper2 === null) &&
+        ($upper1 >  $lower2 || $upper1 === null || $lower2 === null) :
         ($lower1 <= $upper2 || $lower1 === null || $upper2 === null) && 
         ($upper1 >= $lower2 || $upper1 === null || $lower2 === null);
   }

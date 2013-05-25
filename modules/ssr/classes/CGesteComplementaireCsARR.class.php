@@ -20,12 +20,18 @@ class CGesteComplementaireCsARR extends CCsARRObject {
   public $_ref_code_source;
   public $_ref_code_cible;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'geste_complementaire';
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -36,22 +42,39 @@ class CGesteComplementaireCsARR extends CCsARRObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = "$this->code_source => $this->code_cible";
   }
 
-  function loadRefCodeSource() {
-    return $this->_ref_code_source = CActiviteCdARR::get($this->code_source);
-  }
-
-  function loadRefCodeCible() {
-    return $this->_ref_code_cible = CActiviteCdARR::get($this->code_cible);
-  }
-
+  /**
+   * @see parent::loadView()
+   */
   function loadView(){
     parent::loadView();
     $this->loadRefCodeSource();
     $this->loadRefCodeCible();
   }
+
+  /**
+   * Charge le code source de l'association
+   *
+   * @return CActiviteCdARR
+   */
+  function loadRefCodeSource() {
+    return $this->_ref_code_source = CActiviteCdARR::get($this->code_source);
+  }
+
+  /**
+   * Charge le code cible de l'association
+   *
+   * @return CActiviteCdARR
+   */
+  function loadRefCodeCible() {
+    return $this->_ref_code_cible = CActiviteCdARR::get($this->code_cible);
+  }
+
 }

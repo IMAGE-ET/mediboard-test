@@ -25,12 +25,18 @@ class CNoteActiviteCsARR extends CCsARRObject {
   public $_ref_code;
   public $_ref_code_exclu;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'note_activite';
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -46,23 +52,39 @@ class CNoteActiviteCsARR extends CCsARRObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = "$this->code ($this->typenote): $this->libelle";
     $this->_shortview = $this->idnote;
   }
 
-  function loadRefCode() {
-    return $this->_ref_code = CActiviteCsARR::get($this->code);
-  }
-
-  function loadRefCodeExclu() {
-    return $this->_ref_code_exclu = CActiviteCsARR::get($this->code_exclu);
-  }
-
+  /**
+   * @see parent::loadView()
+   */
   function loadView(){
     parent::loadView();
     $this->loadRefCode();
     $this->loadRefCodeExclu();
+  }
+
+  /**
+   * Charge l'activité CsARR associée
+   *
+   * @return CActiviteCsARR
+   */
+  function loadRefCode() {
+    return $this->_ref_code = CActiviteCsARR::get($this->code);
+  }
+
+  /**
+   * Charge l'activité CsARR exclue
+   *
+   * @return CActiviteCsARR
+   */
+  function loadRefCodeExclu() {
+    return $this->_ref_code_exclu = CActiviteCsARR::get($this->code_exclu);
   }
 }

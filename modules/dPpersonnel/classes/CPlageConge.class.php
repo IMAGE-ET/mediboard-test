@@ -125,7 +125,7 @@ class CPlageConge extends CMbObject {
    * @param string $min     date min
    * @param string $max     date max
    *
-   * @return CStoredObject[]
+   * @return CPlageConge[]
    */
   function loadListForRange($user_id, $min, $max) {
     $where["user_id"] = "= '$user_id'";

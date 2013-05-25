@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Fiche d'autonomie saisie en amont de l'hospitalisation SSR pour déterminer l'acceptation ou récusion du dossier
+ */
 class CFicheAutonomie extends CMbObject {
   // DB Table key
   public $fiche_autonomie_id;
@@ -38,8 +41,12 @@ class CFicheAutonomie extends CMbObject {
   public $devenir_envisage;
   
   // Object References
+  /** @var CSejour */
   public $_ref_sejour;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'fiche_autonomie';
@@ -48,42 +55,54 @@ class CFicheAutonomie extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
-    $specs = parent::getProps();
-    $specs["sejour_id"]      = "ref notNull class|CSejour cascade";
-    $specs["alimentation"]   = "enum notNull list|autonome|partielle|totale";
-    $specs["toilette"]       = "enum notNull list|autonome|partielle|totale";
-    $specs["habillage_haut"] = "enum notNull list|autonome|partielle|totale";
-    $specs["habillage_bas"]  = "enum notNull list|autonome|partielle|totale";
-    $specs["transfert_lit"]  = "enum notNull list|autonome|partielle|totale";
-    $specs["locomotion"]     = "enum notNull list|autonome|partielle|totale";
-    $specs["escalier"]       = "enum notNull list|autonome|partielle|totale";
-    $specs["toilettes"]      = "enum notNull list|autonome|partielle|totale";
-    $specs["utilisation_toilette"]   = "enum list|sonde|couche|bassin|stomie";
-    $specs["locomotion_materiel"]    = "enum list|canne|cadre|fauteuil";
-    $specs["pansement"]              = "bool notNull";
-    $specs["escarre"]                = "bool notNull";
-    $specs["soins_cutanes"]          = "text";
-    $specs["comprehension"]          = "enum notNull list|intacte|alteree";
-    $specs["expression"]             = "enum notNull list|intacte|alteree";
-    $specs["memoire"]                = "enum notNull list|intacte|alteree";
-    $specs["resolution_pb"]          = "enum notNull list|intacte|alteree";
-    $specs["etat_psychique"]         = "text";
-    $specs["antecedents"]            = "text";
-    $specs["traitements"]            = "text";
-    $specs["devenir_envisage"]       = "text";
+    $props = parent::getProps();
+    $props["sejour_id"]      = "ref notNull class|CSejour cascade";
+    $props["alimentation"]   = "enum notNull list|autonome|partielle|totale";
+    $props["toilette"]       = "enum notNull list|autonome|partielle|totale";
+    $props["habillage_haut"] = "enum notNull list|autonome|partielle|totale";
+    $props["habillage_bas"]  = "enum notNull list|autonome|partielle|totale";
+    $props["transfert_lit"]  = "enum notNull list|autonome|partielle|totale";
+    $props["locomotion"]     = "enum notNull list|autonome|partielle|totale";
+    $props["escalier"]       = "enum notNull list|autonome|partielle|totale";
+    $props["toilettes"]      = "enum notNull list|autonome|partielle|totale";
+    $props["utilisation_toilette"]   = "enum list|sonde|couche|bassin|stomie";
+    $props["locomotion_materiel"]    = "enum list|canne|cadre|fauteuil";
+    $props["pansement"]              = "bool notNull";
+    $props["escarre"]                = "bool notNull";
+    $props["soins_cutanes"]          = "text";
+    $props["comprehension"]          = "enum notNull list|intacte|alteree";
+    $props["expression"]             = "enum notNull list|intacte|alteree";
+    $props["memoire"]                = "enum notNull list|intacte|alteree";
+    $props["resolution_pb"]          = "enum notNull list|intacte|alteree";
+    $props["etat_psychique"]         = "text";
+    $props["antecedents"]            = "text";
+    $props["traitements"]            = "text";
+    $props["devenir_envisage"]       = "text";
 
-    return $specs;
+    return $props;
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     parent::loadRefsFwd();
     $this->loadRefSejour();
   }
-  
+
+  /**
+   * Charge le séjour associé
+   *
+   * @return CSejour
+   */
   function loadRefSejour() {
     $this->_ref_sejour = new CSejour;
     $this->_ref_sejour->load($this->sejour_id);
     $this->_ref_sejour->loadRefsFwd();
+    return $this->_ref_sejour;
   }
 }

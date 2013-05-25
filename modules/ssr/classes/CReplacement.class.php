@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Le remplacement permet d'associer un nouveau référent lorsque le référent d'un sejour SSR est en congés
+ */
 class CReplacement extends CMbObject {
   // DB Table key
   public $replacement_id;
@@ -23,7 +26,9 @@ class CReplacement extends CMbObject {
 
   /** @var CSejour */
   public $_ref_sejour;
+  /** @var CPlageConge */
   public $_ref_conge;
+  /** @var CMediusers */
   public $_ref_replacer;
 
   // Distant fields
@@ -31,9 +36,14 @@ class CReplacement extends CMbObject {
   public $_max_fin;
 
   // Distant collections
+  /** @var CPlageConge[] */
   public $_ref_replacer_conges;
+  /** @var array */
   public $_ref_replacement_fragments;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "replacement";
@@ -42,6 +52,9 @@ class CReplacement extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -60,6 +73,9 @@ class CReplacement extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::check()
+   */
   function check() {
     if ($msg = parent::check()) {
       return $msg;
@@ -71,8 +87,13 @@ class CReplacement extends CMbObject {
     if ($this->_ref_conge->user_id == $this->replacer_id) {
       return "$this->_class-failed-same_user";
     }
+
+    return null;
   }
 
+  /**
+   * @see parent::store()
+   */
   function store() {
     if ($msg = parent::store()) {
       return $msg;
@@ -80,13 +101,11 @@ class CReplacement extends CMbObject {
 
     // Lors de la creation du remplacement, on reaffecte les evenements du kine principal
     $this->completeField("sejour_id", "conge_id");
-    $this->loadRefConge();
-    $this->loadRefSejour();
-    $conge =& $this->_ref_conge;
-    $sejour =& $this->_ref_sejour;
-    $sejour->loadRefBilanSSR();
-    $sejour->_ref_bilan_ssr->loadRefTechnicien();
-    $kine_id = $sejour->_ref_bilan_ssr->_ref_technicien->kine_id;
+    $conge = $this->loadRefConge();
+    $sejour = $this->loadRefSejour();
+    $bilan = $sejour->loadRefBilanSSR();
+    $technicien = $bilan->loadRefTechnicien();
+    $kine_id = $technicien->kine_id;
 
     $date_debut = $conge->date_debut;
     $date_fin = CMbDT::date("+1 DAY", $conge->date_fin);
@@ -95,6 +114,8 @@ class CReplacement extends CMbObject {
     $where["therapeute_id"] = " = '$kine_id'";
     $where["sejour_id"] = " = '$this->sejour_id'";
     $where["debut"] = "BETWEEN '$date_debut' AND '$date_fin'";
+
+    /** @var CEvenementSSR[] $evenements */
     $evenements = $evenement_ssr->loadList($where);
 
     foreach ($evenements as $_evenement) {
@@ -103,17 +124,20 @@ class CReplacement extends CMbObject {
         CAppUI::setMsg($msg, UI_MSG_WARNING);
       }
     }
+
+    return null;
   }
 
-  function delete(){
+  /**
+   * @see parent::delete()
+   */
+  function delete() {
     // Lors de la suppression du remplacant, on reaffecte les evenements au kine principal
     $this->completeField("sejour_id", "conge_id", "replacer_id");
-    $this->loadRefConge();
-    $this->loadRefSejour();
-    $conge =& $this->_ref_conge;
-    $sejour =& $this->_ref_sejour;
-    $sejour->loadRefBilanSSR();
-    $sejour->_ref_bilan_ssr->loadRefTechnicien();
+    $conge = $this->loadRefConge();
+    $sejour = $this->loadRefSejour();
+    $bilan = $sejour->loadRefBilanSSR();
+    $bilan->loadRefTechnicien();
 
     $date_debut = $conge->date_debut;
     $date_fin = CMbDT::date("+1 DAY", $conge->date_fin);
@@ -122,6 +146,8 @@ class CReplacement extends CMbObject {
     $where["therapeute_id"] = " = '$this->replacer_id'";
     $where["sejour_id"] = " = '$this->sejour_id'";
     $where["debut"] = "BETWEEN '$date_debut' AND '$date_fin'";
+
+    /** @var CEvenementSSR[] $evenements */
     $evenements = $evenement_ssr->loadList($where);
 
     foreach ($evenements as $_evenement) {
@@ -134,10 +160,20 @@ class CReplacement extends CMbObject {
     return parent::delete();
   }
 
+  /**
+   * Charge le séjour concerné
+   *
+   * @return CSejour
+   */
   function loadRefSejour(){
     return $this->_ref_sejour = $this->loadFwdRef("sejour_id", true);
   }
 
+  /**
+   * Charge le congé concerné
+   *
+   * @return CPlageConge
+   */
   function loadRefConge(){
     return $this->_ref_conge = $this->loadFwdRef("conge_id", true);
   }
@@ -149,8 +185,13 @@ class CReplacement extends CMbObject {
    */
   function loadRefReplacer() {
     return $this->_ref_replacer = $this->loadFwdRef("replacer_id", true);
-  }  
+  }
 
+  /**
+   * Calcul les bornes min et max des dates concernées par ce remplacement
+   *
+   * @return void
+   */
   function loadDates() {
     $conge  = $this->loadRefConge();
     $sejour = $this->loadRefSejour();
@@ -161,6 +202,11 @@ class CReplacement extends CMbObject {
     );
   }
 
+  /**
+   * Charge les possibles congés du remplacant pendant le remplacement
+   *
+   * @return CPlageConge[]
+   */
   function checkCongesRemplacer() {
     $this->loadDates();
 
@@ -168,6 +214,11 @@ class CReplacement extends CMbObject {
     return $this->_ref_replacer_conges = $conge->loadListForRange($this->replacer_id, $this->_min_deb, $this->_max_fin);
   }
 
+  /**
+   * Fragment un remplacement par des congés du remplacant
+   *
+   * @return array Fragments d'intervales de dates
+   */
   function makeFragments() {
     $fragments = array();
     $croppers = array();
@@ -188,8 +239,10 @@ class CReplacement extends CMbObject {
   }
 
   /**
-   * @param $user_id
-   * @param $date
+   * Charge les remplacements d'un utilisateur à une date
+   *
+   * @param ref  $user_id Utilisateur
+   * @param date $date    Date
    *
    * @return self[]
    */

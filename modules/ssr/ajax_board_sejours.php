@@ -1,12 +1,14 @@
-<?php /* $Id: vw_idx_sejour.php 7212 2009-11-03 12:32:02Z rhum1 $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: 7212 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
+
 
 CCanDo::checkEdit();
 
@@ -27,6 +29,10 @@ $planning = new CPlanningWeek($date);
 
 // Sejour SSR
 $sejour = new CSejour;
+$counts = array();
+
+/** @var CSejour[] $sejours */
+$sejours = array();
 
 $ds = CSQLDataSource::get("std");
 
@@ -46,7 +52,7 @@ if ($mode == "count" || $mode == "referenced") {
   
   if ($mode == "count") {
     $counts["referenced"] = $sejour->countList($where, null, $join);
-  } 
+  }
   else {
     $sejours = $sejour->loadList($where, $order, null, null, $join);
   }
@@ -71,7 +77,7 @@ if ($mode == "count" || $mode == "replaced") {
   
   if ($mode == "count") {
     $counts["replaced"] = $sejour->countList($where, null, $join);
-  } 
+  }
   else {
     $sejours = $sejour->loadList($where, $order, null, null, $join);
   }
@@ -94,7 +100,7 @@ if ($mode == "count" || $mode == "planned") {
   if ($mode == "count") {
     // Do not use countList which won't work due to group by statement
     $counts["planned"] = count($sejour->loadIds($where, $order, null, $group, $join));
-  } 
+  }
   else {
     $sejours = $sejour->loadList($where, $order, null, $group, $join);
   }
@@ -154,7 +160,7 @@ if ($mode == "count" || $mode == "plannable") {
     
     if ($mode == "count") {
       $counts["plannable"] = $sejour->countList($where, null, $join);
-    } 
+    }
     else {
       $sejours = $sejour->loadList($where, $order, null, null, $join);
     }
@@ -193,4 +199,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("sejours", $sejours);
 $smarty->assign("mode", $mode);
 $smarty->display("inc_board_list_sejours.tpl");
-?>

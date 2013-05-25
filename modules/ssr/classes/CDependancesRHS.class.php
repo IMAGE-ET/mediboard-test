@@ -10,7 +10,7 @@
  */
 
 /**
- * Ligne d'activités RHS
+ * Ligne de dépendance RHS
  */
 class CDependancesRHS extends CMbObject {  
   // DB Table key

@@ -23,16 +23,25 @@ class CNoteHierarchieCsARR extends CCsARRObject {
   public $hierarchie_exclue;
   public $code_exclu;
 
+  /** @var CHierarchieCsARR */
   public $_ref_hierarchie;
+  /** @var CHierarchieCsARR */
   public $_ref_hierarchie_exclue;
+  /** @var CActiviteCsARR */
   public $_ref_activite_exclue;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'note_hierarchie';
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -49,28 +58,49 @@ class CNoteHierarchieCsARR extends CCsARRObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = "$this->hierarchie ($this->typenote): $this->libelle";
     $this->_shortview = $this->idnote;
   }
 
-  function loadRefHierarchie() {
-    return $this->_ref_hierarchie = CHierarchieCsARR::get($this->hierarchie);
-  }
-
-  function loadRefHierarchieExlue() {
-    return $this->_ref_hierarchie_exclue = CHierarchieCsARR::get($this->code_exclus);
-  }
-
-  function loadRefCodeExclu() {
-    return $this->_ref_code_exclu = CActiviteCsARR::get($this->code_exclus);
-  }
-
+  /**
+   * @see parent::loadView()
+   */
   function loadView(){
     parent::loadView();
     $this->loadRefHierarchie();
     $this->loadRefHierarchieExlue();
     $this->loadRefCodeExclu();
+  }
+
+  /**
+   * Charge la hiérarchie associée
+   *
+   * @return CHierarchieCsARR
+   */
+  function loadRefHierarchie() {
+    return $this->_ref_hierarchie = CHierarchieCsARR::get($this->hierarchie);
+  }
+
+  /**
+   * Charge la hiérarchie exclue
+   *
+   * @return CHierarchieCsARR
+   */
+  function loadRefHierarchieExlue() {
+    return $this->_ref_hierarchie_exclue = CHierarchieCsARR::get($this->code_exclus);
+  }
+
+  /**
+   * Charge l'activité exclue
+   *
+   * @return CActiviteCsARR
+   */
+  function loadRefCodeExclu() {
+    return $this->_ref_activite_exclue = CActiviteCsARR::get($this->code_exclus);
   }
 }

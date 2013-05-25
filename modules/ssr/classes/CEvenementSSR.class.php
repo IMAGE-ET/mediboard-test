@@ -10,7 +10,7 @@
  */
 
 /**
- * Elément centrale de la planification d'évenements (aka séances) SSR par un rééducateur
+ * Elément central de la planification d'évenements (aka séances) SSR par un rééducateur
  * et concernant un séjour et une ligne de prescription de ce séjour, pour une date donnée
  */
 class CEvenementSSR extends CMbObject {
@@ -27,11 +27,10 @@ class CEvenementSSR extends CMbObject {
   public $realise;
   public $annule;
   public $remarque;
+  public $seance_collective_id; // Evenement lié a une seance collective
 
   // Seances collectives
-  public $seance_collective_id; // Evenement lié a une seance collective
   public $_ref_element_prescription;
-  //public $element_prescription_id; // Une seance est liée à un element de prescription et non pas une ligne d'element
   public $_ref_seance_collective;
   
   // Form Fields

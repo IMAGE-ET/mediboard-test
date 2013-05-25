@@ -55,8 +55,8 @@ class CMbDT {
   /**
    * Transforms absolute or relative date into DB friendly DATETIME format
    *
-   * @param string $relative Modifies the date (eg '+1 DAY')
-   * @param string $ref      The reference date time fo transform
+   * @param string $relative [optional] Modifies the date (eg '+1 DAY')
+   * @param string $ref      [optional] The reference date time fo transform
    *
    * @return string The date
    **/
