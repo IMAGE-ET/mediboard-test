@@ -17,7 +17,7 @@ check_errs() {
   SUCCESSTEXT=$3
   DATETIME=$(date +%Y-%m-%dT%H-%M-%S)
 
-  echo "[${DATETIME}] \c"
+  cecho "[${DATETIME}] \c"
   cecho ">> status: \c" bold
 
   if [ "${RETURNCODE}" -ne "0" ]
@@ -39,7 +39,7 @@ announce_script() {
 info_script() {
   INFO=$1
   DATETIME=$(date +%Y-%m-%dT%H-%M-%S)
-  echo "[${DATETIME}] \c"
+  cecho "[${DATETIME}] \c"
   cecho ">> info: \c" bold
   cecho "${INFO}"
 }
