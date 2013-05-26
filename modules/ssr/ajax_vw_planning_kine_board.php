@@ -1,12 +1,14 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision:  $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
+
 
 CCanDo::checkRead();
 
@@ -30,5 +32,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("kine_id", $kine_id);
 $smarty->assign("count_evts", $count_evts);
 $smarty->display("inc_vw_planning_kine_board.tpl");
-
-?>

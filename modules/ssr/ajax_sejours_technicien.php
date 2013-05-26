@@ -1,12 +1,14 @@
-<?php /* $Id: vw_idx_sejour.php 7212 2009-11-03 12:32:02Z rhum1 $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: 7212 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
+
 
 CCanDo::checkRead();
 
@@ -33,7 +35,7 @@ foreach ($sejours as $_sejour) {
     unset($sejours[$_sejour->_id]);
     continue;
   }
-	
+  
   $all_sejours[] = $_sejour;
   $_sejour->checkDaysRelative($date);
   $_sejour->loadRefPatient(1);
@@ -57,29 +59,27 @@ foreach ($replacements as $_replacement) {
   // Détails des séjours remplacés
   $_replacement->loadRefSejour();
   $sejour =& $_replacement->_ref_sejour;
-	if ($sejour->sortie < $date) {
-		unset($replacements[$_replacement->_id]);
-		continue;
-	}
-	
+  if ($sejour->sortie < $date) {
+    unset($replacements[$_replacement->_id]);
+    continue;
+  }
+  
   $all_sejours[] = $sejour;
   $sejour->checkDaysRelative($date);
   $sejour->loadRefPatient(1);
   $sejour->loadRefBilanSSR();
 
   // Détail sur le congé
-  $_replacement->loadRefConge();
-  $_replacement->_ref_conge->loadRefUser();
-  $_replacement->_ref_conge->_ref_user->loadRefFunction();	
+  $_replacement->loadRefConge()->loadRefUser()->loadRefFunction();
 }
 
 // Chargement du séjours potentiellement remplacés
 $technicien->loadRefCongeDate($date);
 $conge = $technicien->_ref_conge_date;
 if ($conge->_id) {
-	foreach($sejours as $_sejour) {
-		$_sejour->loadRefReplacement($conge->_id);
-	}
+  foreach ($sejours as $_sejour) {
+    $_sejour->loadRefReplacement($conge->_id);
+  }
 }
 
 // Nombre de séjours
@@ -99,4 +99,3 @@ $smarty->assign("sejours_count", $sejours_count);
 $smarty->assign("services", $services);
 $smarty->assign("replacements", $replacements);
 $smarty->display("inc_sejours_technicien.tpl");
-?>

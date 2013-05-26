@@ -1,20 +1,17 @@
 <?php
-
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision:
-* @author 
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
-  
-$object_id = CValue::get("object_id");
-$object_class = CValue::get("object_class");
 
-// Chargement de l'objet
-$object = new $object_class;
-$object->load($object_id);
+$object = mbGetObjectFromGet("object_class", "object_id", "object_guid");
 
 // Chargement des fichiers
 $object->loadRefsFiles();
@@ -26,5 +23,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("object", $object);
 $smarty->assign("count_object", count($object->_ref_files));
 $smarty->display("inc_vw_list_files.tpl");
-
-?>

@@ -1,11 +1,12 @@
-<?php /** $Id: index.php 7320 2009-11-14 22:42:28Z lryo $ **/
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: 7320 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));

@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -38,6 +39,14 @@ $listTables = array(
   "activite"      => "CATSSR.TXT"
 );
 
+/**
+ * Parse le fichier et remplit la table correspondante
+ *
+ * @param string $file  File path
+ * @param string $table Table name
+ *
+ * @return void
+ */
 function addFileIntoDB($file, $table) {
   $reussi = 0;
   $echoue = 0;
@@ -45,15 +54,16 @@ function addFileIntoDB($file, $table) {
   $handle = fopen($file, "r");
   
   // Ne pas utiliser fgetcsv, qui refuse de prendre en compte les caractères en majusucules accentués (et d'autres caractères spéciaux)
-  while($line = fgets($handle)) {
+  while ($line = fgets($handle)) {
     $line = str_replace("'", "\'", $line);
     $datas = explode("|", $line);
     $query = "INSERT INTO $table VALUES('".implode("','", $datas)."')";
     
     $ds->exec($query);
-    if($msg = $ds->error()) {
+    if ($msg = $ds->error()) {
       $echoue++;
-    } else {
+    }
+    else {
       $reussi++;
     }
   }
@@ -62,8 +72,6 @@ function addFileIntoDB($file, $table) {
   CAppUI::stepAjax("ssr-import-cdarr-report", UI_MSG_OK, $file, $table, $reussi, $echoue);
 }
 
-foreach($listTables as $table => $file) {
+foreach ($listTables as $table => $file) {
   addFileIntoDB("$targetDir/$file", $table);
 }
-
-?>

@@ -1,12 +1,14 @@
-<?php /* $Id: vw_idx_sejour.php 7212 2009-11-03 12:32:02Z rhum1 $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: 7212 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
+
 
 CCanDo::checkRead();
 
@@ -19,6 +21,8 @@ $join['patients'] = "patients.patient_id = sejour.patient_id";
 $where['sejour.annule'] = " = '0'";
 $where['date_monday'] = " = '$rhs_date_monday'";
 $order = "nom, prenom";
+
+/** @var CRHS[] $sejours_rhs */
 $sejours_rhs = $rhs->loadList($where, $order, null, null, $join);
 foreach ($sejours_rhs as $_rhs) {
   $_rhs->loadRefsNotes();
@@ -38,5 +42,3 @@ $smarty->assign("rhs_date_monday"        , $rhs_date_monday);
 $smarty->assign("read_only"              , true);
 
 $smarty->display("inc_vw_rhs_sejour.tpl");
-
-?>

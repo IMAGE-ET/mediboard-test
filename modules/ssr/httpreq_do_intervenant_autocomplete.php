@@ -1,11 +1,12 @@
-<?php /* $Id: httpreq_do_element_autocomplete.php 8169 2010-03-02 15:31:33Z alexis_granger $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPprescription
- * @version $Revision: 8169 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -25,9 +26,9 @@ $where["functions_mediboard.group_id"] = "= '" . CGroups::loadCurrent()->_id . "
 
 $order = "users.user_last_name ASC, users.user_first_name ASC";
 
+/** @var CMediusers[] $intervenants */
 $intervenants = $intervenant->seek($needle, $where, 100, false, $ljoin, $order);
-
-foreach($intervenants as &$_intervenant) {
+foreach ($intervenants as &$_intervenant) {
   $_intervenant->loadRefFunction();
   $_intervenant->loadRefIntervenantCdARR();
 }
@@ -40,5 +41,3 @@ $smarty->assign("needle"      , $needle);
 $smarty->assign("nodebug"     , true);
 
 $smarty->display("inc_do_intervenant_autocomplete.tpl");
-
-?>

@@ -1,11 +1,12 @@
-<?php /* $Id:  $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision:  $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
@@ -22,7 +23,9 @@ $plage_conge = new CPlageConge();
 $where = array();
 $where["date_debut"] = "<= '$sunday'"; 
 $where["date_fin"  ] = ">= '$monday'"; 
-$order="date_debut DESC, date_fin DESC";
+$order = "date_debut DESC, date_fin DESC";
+
+/** @var CPlageConge[] $plages_conge */
 $plages_conge = $plage_conge->loadList($where, $order);
 
 // Début et fin d'activite
@@ -40,13 +43,14 @@ foreach (CEvenementSSR::getActiveTherapeutes($monday, $sunday) as $_therapeute) 
   }
 }
 
+/** @var CSejour[] $sejours */
 $sejours = array();
 $_sejours = array();
 $count_evts = array();
 $sejours_count = 0;
 
 // Pour chaque plage de conge, recherche 
-foreach ($plages_conge as $_plage_conge){
+foreach ($plages_conge as $_plage_conge) {
   $kine = $_plage_conge->loadRefUser();
   $_sejours = array();
 
@@ -64,13 +68,15 @@ foreach ($plages_conge as $_plage_conge){
     $where = array();
     $where["debut"] = " BETWEEN '$date_min' AND '$date_max'";
     $where["therapeute_id"] = " = '$_plage_conge->user_id'";
+
+    /** @var CEvenementSSR[] $evenements */
     $evenements = $evenement->loadList($where);
     
-    foreach ($evenements as $_evenement){
+    foreach ($evenements as $_evenement) {
       $sejour = $_evenement->loadRefSejour();
       $bilan = $sejour->loadRefBilanSSR();
       $bilan->loadRefTechnicien();
-      $_sejours[$_evenement->sejour_id] = $_evenement->_ref_sejour;
+      $_sejours[$sejour->_id] = $sejour;
     }
   }
   
@@ -84,8 +90,7 @@ foreach ($plages_conge as $_plage_conge){
     $count_evts["$_plage_conge->_id-$_sejour->_id"] = $evenement_ssr->countList($where);
     
     $_sejour->checkDaysRelative($date);
-    $_sejour->loadRefReplacement($_plage_conge->_id);
-    $replacement =& $_sejour->_ref_replacement;
+    $replacement = $_sejour->loadRefReplacement($_plage_conge->_id);
     if (!$replacement->_id || $type == "reeducateur") {
       $sejours_count++;
     }
@@ -100,12 +105,12 @@ foreach ($plages_conge as $_plage_conge){
     }
 
     // Bilan SSR
-    $bilan = $_sejour->loadRefBilanSSR();;
-    $bilan->loadFwdRef("technicien_id");
-    
+    $bilan = $_sejour->loadRefBilanSSR();
+
     // Kine principal
-    $technicien =& $bilan->_fwd["technicien_id"];
-    $technicien->loadRefKine()->loadRefFunction(); 
+    /** @var CTechnicien $technicien */
+    $technicien = $bilan->loadFwdRef("technicien_id");
+    $technicien->loadRefKine()->loadRefFunction();
     
     // Patient
     $patient = $_sejour->loadRefPatient();
@@ -125,5 +130,3 @@ $smarty->assign("plages_conge", $plages_conge);
 $smarty->assign("type", $type);
 $smarty->assign("count_evts", $count_evts);
 $smarty->display("inc_vw_list_sejours.tpl");
-
-?>

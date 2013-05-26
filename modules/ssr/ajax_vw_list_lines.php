@@ -1,11 +1,12 @@
-<?php /* $Id:  $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision:  $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -28,7 +29,7 @@ $where["prescription_id"] = " = '$prescription_id'";
 $where["element_prescription.category_prescription_id"] = " = '$category_id'";
 $_lines[$category_id] = $line->loadList($where, $order, null, null, $ljoin);
 
-foreach($_lines[$category_id] as $_line){
+foreach ($_lines[$category_id] as $_line) {
   $lines[$category_id][$_line->element_prescription_id][] = $_line;	
 }
 
@@ -43,5 +44,3 @@ $smarty->assign("category_id", $category_id);
 $smarty->assign("nodebug", true);
 $smarty->assign("can_edit_prescription", $can_edit_prescription);
 $smarty->display("inc_list_lines.tpl");
-
-?>

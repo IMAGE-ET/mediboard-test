@@ -9,7 +9,6 @@
  * @version    $Revision$
  */
 
-
 CCanDo::checkAdmin();
 
 $replacement = new CReplacement;

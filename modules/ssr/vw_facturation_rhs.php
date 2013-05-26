@@ -1,13 +1,13 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
-
 
 CCanDo::checkEdit();
 
@@ -23,13 +23,11 @@ $req->addWhereClause("sejour.annule", " = '0'");
 $req->addGroup("date_monday");
 $ds = $rhs->_spec->ds;
 $rhs_counts = $ds->loadList($req->getRequest());
-foreach($rhs_counts as &$_rhs_count) {
-	$_rhs_count["sundate"] = CMbDT::date("+6 DAYS", $_rhs_count["mondate"]);
+foreach ($rhs_counts as &$_rhs_count) {
+  $_rhs_count["sundate"] = CMbDT::date("+6 DAYS", $_rhs_count["mondate"]);
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("rhs_counts", $rhs_counts);
 $smarty->display("vw_facturation_rhs.tpl");
-
-?>

@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision:  $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -15,12 +16,10 @@ $sejour_id = CValue::getOrSession("sejour_id");
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
-$sejour->loadRefBilanSSR();
 $sejour->loadRefPatient();
 $sejour->loadRefPraticien();
-$bilan_ssr =& $sejour->_ref_bilan_ssr;
-$bilan_ssr->loadRefTechnicien();
-$technicien =& $bilan_ssr->_ref_technicien;
+$bilan = $sejour->loadRefBilanSSR();
+$technicien = $bilan->loadRefTechnicien();
 $technicien->loadRefKine();
 
 // Chargement des evenement SSR 
@@ -31,18 +30,18 @@ $evenement_ssr = new CEvenementSSR();
 $where = array();
 $where["sejour_id"] = " = '$sejour_id'";
 $where["debut"] = "BETWEEN '$monday 00:00:00' AND '$sunday 23:59:59'";
+
+/** @var CEvenementSSR[] $evenements */
 $evenements = $evenement_ssr->loadList($where);
 
 $elements = array();
 $intervenants = array();
-foreach($evenements as $_evenement){
-	$_evenement->loadRefPrescriptionLineElement();
-	$_evenement->loadRefTherapeute();
-
-  $element_prescription =& $_evenement->_ref_prescription_line_element->_ref_element_prescription;
-
-  $elements[$element_prescription->_id] = $element_prescription;
-	$intervenants[$element_prescription->_id][$_evenement->therapeute_id] = $_evenement->_ref_therapeute;
+foreach ($evenements as $_evenement) {
+  $line = $_evenement->loadRefPrescriptionLineElement();
+  $element = $line->_ref_element_prescription;
+  $_evenement->loadRefTherapeute();
+  $elements[$element->_id] = $element;
+  $intervenants[$element->_id][$_evenement->therapeute_id] = $_evenement->_ref_therapeute;
 }
 
 // Création du template
@@ -52,5 +51,3 @@ $smarty->assign("elements", $elements);
 $smarty->assign("intervenants", $intervenants);
 $smarty->assign("sejour", $sejour);
 $smarty->display("print_planning_sejour.tpl");
-
-?>

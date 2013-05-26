@@ -521,6 +521,10 @@ class CMediusers extends CPerson {
     return $this->_ref_intervenant_cdarr = CIntervenantCdARR::get($this->code_intervenant_cdarr);
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   * @deprecated
+   */
   function loadRefsFwd() {
     $this->loadRefFunction();
     $this->loadRefSpecCPAM();

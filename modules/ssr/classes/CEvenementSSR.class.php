@@ -33,21 +33,23 @@ class CEvenementSSR extends CMbObject {
   public $_ref_element_prescription;
   public $_ref_seance_collective;
   
-  // Form Fields
-
-  /** @var  bool */
+  // Derived Fields
+  /** @var bool */
   public $_traite;
-
-  /** @var  time */
+  /** @var time */
   public $_heure_fin;
-  /** @var  time */
+  /** @var time */
   public $_heure_deb;
+  /** @var int */
+  public $_count_actes;
 
+  // Behaviour Fields
   public $_nb_decalage_min_debut;
   public $_nb_decalage_heure_debut;
   public $_nb_decalage_jour_debut;
   public $_nb_decalage_duree;
 
+  // References
   /** @var  CEquipement */
   public $_ref_equipement;
   /** @var  CSejour */
@@ -405,7 +407,7 @@ class CEvenementSSR extends CMbObject {
    * @param ref $patient_id  Patient
    * @param ref $function_id May restrict to a function
    * 
-   * @return array[CMediusers]
+   * @return CMediusers[]
    */
   static function getAllTherapeutes($patient_id, $function_id = null) {
     // Filter on patient

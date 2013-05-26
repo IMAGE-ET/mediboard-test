@@ -1,11 +1,12 @@
-<?php /* $Id:  $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision:  $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -28,18 +29,14 @@ $bilan->sejour_id = $sejour->_id;
 $bilan->loadMatchingObject();
 
 // Prescription SSR
-$prescription_SSR = new CPrescription();
-$prescription_SSR->object_id = $sejour->_id;
-$presctiption_SSR->object_class = "CSejour";
-$prescription_SSR->type = "sejour";
-$prescription_SSR->loadMatchingObject();
+$prescription = $sejour->loadRefPrescriptionSejour();
 
 // Chargement des lignes de la prescription
-if ($prescription_SSR->_id){
+if ($prescription->_id) {
   $line = new CPrescriptionLineElement();
-  $line->prescription_id = $prescription_SSR->_id;
+  $line->prescription_id = $prescription->_id;
   $_lines = $line->loadMatchingList("debut ASC");
-  foreach($_lines as $_line){
+  foreach ($_lines as $_line) {
     $lines[$_line->_ref_element_prescription->category_prescription_id][$_line->element_prescription_id][] = $_line;
   }
 }
@@ -65,9 +62,9 @@ $can_view_dossier_medical =
 $can_edit_prescription = $user->isPraticien() || $user->isAdmin();
 
 // Suppression des categories vides
-if(!$can_edit_prescription){
-  foreach($categories as $_cat_id => $_category){
-    if(!array_key_exists($_cat_id, $lines)){
+if (!$can_edit_prescription) {
+  foreach ($categories as $_cat_id => $_category) {
+    if (!array_key_exists($_cat_id, $lines)) {
       unset($categories[$_cat_id]); 
     }
   }
@@ -75,11 +72,10 @@ if(!$can_edit_prescription){
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("sejour"              , $sejour);
-$smarty->assign("bilan"               , $bilan);
-$smarty->assign("categories"          , $categories);
-$smarty->assign("prescription_SSR"    , $prescription_SSR);
-$smarty->assign("lines"               , $lines);
+$smarty->assign("sejour"               , $sejour);
+$smarty->assign("bilan"                , $bilan);
+$smarty->assign("categories"           , $categories);
+$smarty->assign("prescription"         , $prescription);
+$smarty->assign("lines"                , $lines);
 $smarty->assign("can_edit_prescription", $can_edit_prescription);
 $smarty->display("inc_form_bilan_ssr.tpl");
-?>

@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -39,26 +40,22 @@ if ($interv) {
 $limit = "$current, $step";
 $order = "users.user_last_name ASC, users.user_first_name ASC";
 $total = $mediuser->countList($where, null, $ljoin);
-$mediusers = $mediuser->loadList($where, $order, $limit, null, $ljoin);
 
-foreach($mediusers as &$_mediuser) {
-  $_mediuser->loadRefsFwd();
+/** @var CMediusers[] $mediusers */
+$mediusers = $mediuser->loadList($where, $order, $limit, null, $ljoin);
+foreach ($mediusers as $_mediuser) {
+  $_mediuser->loadRefFunction();
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("mediuser"    , $mediuser);
-
 $smarty->assign("intervenants", $intervenants);
 $smarty->assign("mediusers"   , $mediusers);
-
 $smarty->assign("current"     , $current);
 $smarty->assign("step"        , $step);
 $smarty->assign("total"       , $total);
-
 $smarty->assign("exclude_without_code", $exclude_without_code);
 
 $smarty->display("edit_codes_intervenants.tpl");
-
-?>

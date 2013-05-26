@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision:  $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -51,12 +52,12 @@ foreach ($sejours as $_sejour) {
   // Patient
   $patient = $_sejour->loadRefPatient();
   $patient->loadIPP();
-	
+  
   // Prescription
-	if ($prescription = $_sejour->loadRefPrescriptionSejour()) {
+  if ($prescription = $_sejour->loadRefPrescriptionSejour()) {
     $prescription->loadRefsLinesElementByCat();
     $prescription->countFastRecentModif();
-	}
+  }
 
   // Chargement du planning du sejour
   $args_planning = array();
@@ -82,5 +83,3 @@ $smarty->assign("order_col", "");
 $smarty->assign("order_way", "");
 $smarty->assign("plannings", $plannings);
 $smarty->display("offline_sejours.tpl");
-
-?>

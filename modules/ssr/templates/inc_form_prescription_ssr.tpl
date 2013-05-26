@@ -112,7 +112,7 @@ Main.add( function(){
       },
 			callback: 
         function(input, queryString){
-          return (queryString + "&prescription_id={{$prescription_SSR->_id}}&praticien_id={{$app->user_id}}"); 
+          return (queryString + "&prescription_id={{$prescription->_id}}&praticien_id={{$app->user_id}}");
         }
     } );  
   }
@@ -130,7 +130,7 @@ refreshFormBilanSSR = function(){
 }
 
 refreshAfterDuplicate = function(line_id){
-  updateListLines(null, "{{$prescription_SSR->_id}}", line_id);
+  updateListLines(null, "{{$prescription->_id}}", line_id);
 	$V(getForm("addLineSSR").callback, "");
 }
 
@@ -154,7 +154,7 @@ duplicateSSRLine = function(element_prescription_id, category_id){
   <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
   <input type="hidden" name="prescription_line_element_id" value=""/>
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="prescription_id" value="{{$prescription_SSR->_id}}" 
+  <input type="hidden" name="prescription_id" value="{{$prescription->_id}}"
 	       onchange="return onSubmitFormAjax(this.form, { 
 				   onComplete: function(){ 
 					   if(getForm('searchElement')){ 
@@ -207,7 +207,7 @@ duplicateSSRLine = function(element_prescription_id, category_id){
 	              <input type="hidden" name="m" value="dPprescription" />
                 <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
                 <input type="hidden" name="del" value="0" />
-                <input type="hidden" name="prescription_id" value="{{$prescription_SSR->_id}}" onchange="this.form.onsubmit();"/>
+                <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" onchange="this.form.onsubmit();"/>
                 <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
                 <input type="hidden" name="pratSel_id" value="" />
                 <input type="hidden" name="_active" value="1" />

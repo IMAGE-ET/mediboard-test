@@ -1,11 +1,12 @@
-<?php /* $Id: httpreq_do_element_autocomplete.php 8169 2010-03-02 15:31:33Z alexis_granger $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPprescription
- * @version $Revision: 8169 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -16,6 +17,7 @@ if (!$needle) {
 }
 
 $activite = new CActiviteCsARR();
+/** @var CActiviteCsARR[] $activites */
 $activites = $activite->seek($needle, null, 300);
 foreach ($activites as $_activite) {
   $_activite->loadRefHierarchie();

@@ -1,11 +1,12 @@
-<?php /* $Id:  $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision:  $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -36,10 +37,9 @@ $where["annule"] = " = '0'";
 $where["sejour_id"] = " != '$sejour->_id'";
 $where["sortie"] = " <= '$sejour->entree'";
 
-$sejours = new CSejour();
-$sejours = $sejours->loadList($where);
-
-foreach ($sejours as $_sejour){
+/** @var CSejour[] $sejours */
+$sejours = $sejour->loadList($where);
+foreach ($sejours as $_sejour) {
   $_sejour->loadRefBilanSSR()->loadRefPraticienDemandeur();
   $_sejour->loadRefPraticien(1);
 
@@ -56,5 +56,3 @@ $smarty->assign("sejour", $sejour);
 $smarty->assign("sejours", $sejours);
 $smarty->assign("colors", $colors);
 $smarty->display("inc_vw_sejours_patient.tpl");
-
-?>

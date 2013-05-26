@@ -1,11 +1,12 @@
-<?php /* $Id: vw_aed_rpu.php 7346 2009-11-16 22:51:04Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: 7346 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -40,7 +41,7 @@ if ($sejour_id && !$sejour->_id) {
 $fiche_autonomie = new CFicheAutonomie;
 $patient = new CPatient;
 $bilan = new CBilanSSR;
-$prescription_SSR = null;
+$prescription = null;
 $lines = array();
 $medecin_adresse_par = "";
 $correspondantsMedicaux = array();
@@ -67,14 +68,15 @@ if ($sejour->_id) {
   $bilan->loadMatchingObject();
   
   // Prescription SSR
-  $prescription_SSR = $sejour->loadRefPrescriptionSejour();
+  $prescription = $sejour->loadRefPrescriptionSejour();
     
   // Chargement des lignes de la prescription
-  if ($prescription_SSR && $prescription_SSR->_id) {
+  if ($prescription && $prescription->_id) {
     $line = new CPrescriptionLineElement();
-    $line->prescription_id = $prescription_SSR->_id;
+    $line->prescription_id = $prescription->_id;
+    /** @var CPrescriptionLineElement $_lines */
     $_lines = $line->loadMatchingList("debut ASC");
-    foreach($_lines as $_line) {
+    foreach ($_lines as $_line) {
       $lines[$_line->_ref_element_prescription->category_prescription_id][$_line->element_prescription_id][] = $_line;
     }
   }
@@ -83,10 +85,10 @@ if ($sejour->_id) {
     $correspondantsMedicaux["traitant"] = $patient->_ref_medecin_traitant;
   }
   
-  foreach($patient->_ref_medecins_correspondants as $correspondant) {
+  foreach ($patient->_ref_medecins_correspondants as $correspondant) {
     $correspondantsMedicaux["correspondants"][] = $correspondant->_ref_medecin;
   }
-} 
+}
 else {
   $sejour->group_id = $group_id;
   $sejour->praticien_id = $user->_id;
@@ -97,7 +99,8 @@ else {
 
 // Chargement des categories de prescription
 $categories = null;
-if (CModule::getActive("dPprescription")) {$categories = array();
+if (CModule::getActive("dPprescription")) {
+  $categories = array();
   $category = new CCategoryPrescription();
   $where = array();
   $where[] = "chapitre = 'kine'";
@@ -105,7 +108,6 @@ if (CModule::getActive("dPprescription")) {$categories = array();
   
   $order = "nom";
   $categories = $category->loadList($where, $order);
-
 }
 
 // Dossier médical visibile ?
@@ -118,8 +120,8 @@ $can_edit_prescription =
 
 // Suppression des categories vides
 if (!$can_edit_prescription) {
-  foreach($categories as $_cat_id => $_category){
-    if(!array_key_exists($_cat_id, $lines)){
+  foreach ($categories as $_cat_id => $_category) {
+    if (!array_key_exists($_cat_id, $lines)) {
       unset($categories[$_cat_id]);
     }
   }
@@ -137,11 +139,10 @@ $smarty->assign("patient"                 , $patient);
 $smarty->assign("prats"                   , $prats);
 $smarty->assign("services"                , $services);
 $smarty->assign("categories"              , $categories);
-$smarty->assign("prescription_SSR"        , $prescription_SSR);
+$smarty->assign("prescription"            , $prescription);
 $smarty->assign("lines"                   , $lines);
 $smarty->assign("medecin_adresse_par"     , $medecin_adresse_par);
 $smarty->assign("can_edit_prescription"   , $can_edit_prescription);
 $smarty->assign("correspondantsMedicaux"  , $correspondantsMedicaux);
 
 $smarty->display("vw_aed_sejour_ssr.tpl");
-?>

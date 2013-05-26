@@ -24,9 +24,9 @@ class CPlateauTechnique extends CMbObject {
   public $repartition;
 
   // Collections
-  /** @var CEquipement */
+  /** @var CEquipement[] */
   public $_ref_equipements;
-  /** @var CTechnicien */
+  /** @var CTechnicien[] */
   public $_ref_techniciens;
 
   /**

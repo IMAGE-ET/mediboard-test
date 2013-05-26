@@ -1,11 +1,12 @@
-<?php /* $Id */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpersonnel
- * @version $Revision: 6194 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage personnel
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -23,9 +24,10 @@ class CPlageConge extends CMbObject {
   public $replacer_id;
 
   // Object References
+  /** @var CMediusers */
   public $_ref_user;
+  /** @var CMediusers */
   public $_ref_replacer;
-  public $_ref_replacant;
 
   // Form fields
   public $_duree;
@@ -107,7 +109,6 @@ class CPlageConge extends CMbObject {
    * loadFor
    *
    * @param string $user_id user_id
-   *
    * @param string $date    date to check
    *
    * @return null
@@ -151,27 +152,18 @@ class CPlageConge extends CMbObject {
   }
 
   /**
-   * load the user who is replaced
-   *
-   * @return CMediusers
-   */
-  function loadRefReplacer(){
-    return $this->_ref_replacer = $this->loadUniqueBackRef("replacement");
-  }
-
-  /**
-   * load the user replacing this->user
+   * load the user replacing
    *
    * @return CMediusers|null
    */
-  function loadRefReplacant() {
-    return $this->_ref_replacant = $this->loadFwdRef("replacer_id", true);
+  function loadRefReplacer() {
+    return $this->_ref_replacer = $this->loadFwdRef("replacer_id", true);
   }
 
   /**
    * load the user informations
    *
-   * @return CMbObject|null
+   * @return CMediusers|null
    */
   function loadRefUser() {
     $this->_ref_user = $this->loadFwdRef("user_id", true);

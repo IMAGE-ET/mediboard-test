@@ -1,15 +1,21 @@
-<?php /** $Id: setup.php 6144 2009-04-21 14:22:50Z phenxdesign $ **/
-
+<?php
 /**
- * @package Mediboard
- * @subpackage soins
- * @version $Revision: 6144 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * Setup du module SSR
+ */
 class CSetupssr extends CSetup {
-
+  /**
+   * Standard constructor
+   */
   function __construct() {
     parent::__construct();
 
@@ -508,5 +514,3 @@ class CSetupssr extends CSetup {
     $this->addDatasource("csarr", $query);
   }
 }
-
-?>

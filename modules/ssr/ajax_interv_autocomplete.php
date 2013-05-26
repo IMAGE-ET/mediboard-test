@@ -1,17 +1,16 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
-$keywords = CValue::post("keywords_nom");
+$keywords = CValue::post("keywords_nom", "%%");
 $exclude_without_code = CValue::post("exclude_without_code");
-
-if ($keywords == '') $keywords = '%%';
 
 $mediuser = new CMediusers;
 
@@ -41,5 +40,3 @@ $smarty->assign("nodebug"  , true);
 $smarty->assign("keywords" , $keywords);
 
 $smarty->display("inc_interv_autocomplete.tpl");
-
-?>

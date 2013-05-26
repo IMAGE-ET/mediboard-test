@@ -38,6 +38,8 @@ class CReplacement extends CMbObject {
   // Distant collections
   /** @var CPlageConge[] */
   public $_ref_replacer_conges;
+  /** @var CMediusers[] */
+  public $_ref_guessed_replacers;
   /** @var array */
   public $_ref_replacement_fragments;
 
@@ -241,7 +243,7 @@ class CReplacement extends CMbObject {
   /**
    * Charge les remplacements d'un utilisateur à une date
    *
-   * @param ref  $user_id Utilisateur
+   * @param int  $user_id Utilisateur
    * @param date $date    Date
    *
    * @return self[]

@@ -1,12 +1,14 @@
-<?php /* $Id:  $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision:  $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
+
 
 CCanDo::checkEdit();
 
@@ -33,24 +35,20 @@ $query->addGroup("sejour.sejour_id");
 $sejour = new CSejour;
 $ds = $sejour->_spec->ds;
 $evenements_counts = array();
-foreach($ds->loadList($query->getRequest()) as $row) {
-	$evenements_counts[$row["sejour_id"]] = $row["evenements_count"];
+foreach ($ds->loadList($query->getRequest()) as $row) {
+  $evenements_counts[$row["sejour_id"]] = $row["evenements_count"];
 }
 
 // Chargement des séjours concernés
+/** @var CSejour[] $sejours */
 $sejours = $sejour->loadAll(array_keys($evenements_counts));
 $sejours_count = count($sejours);
 
 // Détails sur les séjours concernés
-foreach ($sejours as $_sejour){  
+foreach ($sejours as $_sejour) {
   $_sejour->checkDaysRelative($date);
-
-  // Patient
-  $_sejour->loadRefPatient();
-  $patient =& $_sejour->_ref_patient;
-  $patient->loadIPP();
+  $_sejour->loadRefPatient()->loadIPP();
 }
-
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -58,5 +56,3 @@ $smarty->assign("sejours", $sejours);
 $smarty->assign("sejours_count", $sejours_count);
 $smarty->assign("evenements_counts", $evenements_counts);
 $smarty->display("inc_evenements_hors_sejours.tpl");
-
-?>

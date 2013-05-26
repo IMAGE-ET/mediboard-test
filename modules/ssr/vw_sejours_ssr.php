@@ -1,11 +1,12 @@
-<?php /** $Id: vw_idx_sejour.php 7212 2009-11-03 12:32:02Z rhum1 $ **/
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -46,15 +47,15 @@ if ($order_col == "patient_id") {
 }
 
 if ($order_col == "praticien_id") {
-	$order = "sejour.praticien_id $order_way, patients.nom, patients.prenom";
+  $order = "sejour.praticien_id $order_way, patients.nom, patients.prenom";
 }
 
 if ($order_col == "libelle") {
-	$order = "sejour.libelle $order_way, patients.nom, patients.prenom";
+  $order = "sejour.libelle $order_way, patients.nom, patients.prenom";
 }
 
 if ($order_col == "service_id") {
-	$order = "sejour.service_id $order_way, patients.nom, patients.prenom";
+  $order = "sejour.service_id $order_way, patients.nom, patients.prenom";
 }
 
 $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id AND '$date' BETWEEN affectation.entree AND affectation.sortie";
@@ -68,11 +69,11 @@ if ($order_col == "lit_id") {
 
 // Masquer les services inactifs
 if (!$show_cancelled_services) {
-	$service = new CService;
-	$service->group_id = $group->_id;
-	$service->cancelled = "1";
-	$services = $service->loadMatchingList();
-	$where["sejour.service_id"] = CSQLDataSource::prepareNotIn(array_keys($services));
+  $service = new CService;
+  $service->group_id = $group->_id;
+  $service->cancelled = "1";
+  $services = $service->loadMatchingList();
+  $where["sejour.service_id"] = CSQLDataSource::prepareNotIn(array_keys($services));
 }
 
 $sejours = CSejour::loadListForDate($date, $where, $order, null, null, $ljoin);
@@ -88,20 +89,20 @@ $sejours_by_kine = array(
 
 // Chargement du détail des séjour
 foreach ($sejours as $_sejour) {
-	// Filtre sur service
-	$service = $_sejour->loadFwdRef("service_id", true);
+  // Filtre sur service
+  $service = $_sejour->loadFwdRef("service_id", true);
   $services[$service->_id] = $service;
   if ($filter->service_id && $_sejour->service_id != $filter->service_id) {
     unset($sejours[$_sejour->_id]);
     continue;
-	}
+  }
 
   // Filtre sur prescription, pas nécessairement actif
   $prescription = $_sejour->loadRefPrescriptionSejour();
-	if ($show == "nopresc" && $prescription && $prescription->_id) {
-		unset($sejours[$_sejour->_id]);
-		continue;
-	}
+  if ($show == "nopresc" && $prescription && $prescription->_id) {
+    unset($sejours[$_sejour->_id]);
+    continue;
+  }
 
   // Filtre sur praticien
   $praticien = $_sejour->loadRefPraticien();
@@ -120,9 +121,9 @@ foreach ($sejours as $_sejour) {
   $kines[$kine_journee->_id] = $kine_journee;
 
   $kine_referent = $bilan->_ref_kine_referent;
-	if (!$kine_journee->_id) {
-	  $kines[$kine_referent->_id] = $kine_referent;
-	}
+  if (!$kine_journee->_id) {
+    $kines[$kine_referent->_id] = $kine_referent;
+  }
 
   if ($filter->referent_id && $kine_referent->_id != $filter->referent_id && $kine_journee->_id != $filter->referent_id) {
     unset($kines[$kine_journee->_id]);
@@ -136,7 +137,7 @@ foreach ($sejours as $_sejour) {
   // Regroupement par kine
   $sejours_by_kine[$kine_referent->_id][] = $_sejour;
   if ($kine_journee->_id && $kine_journee->_id != $kine_referent->_id) {
-  	$sejours_by_kine[$kine_journee->_id ][] = $_sejour;
+    $sejours_by_kine[$kine_journee->_id ][] = $_sejour;
   }
 
   // Détail du séjour
@@ -146,7 +147,7 @@ foreach ($sejours as $_sejour) {
 
   // Patient
   $patient = $_sejour->loadRefPatient();
-	$patient->loadIPP();
+  $patient->loadIPP();
 
   // Modification des prescription
   if ($prescription) {
@@ -154,10 +155,10 @@ foreach ($sejours as $_sejour) {
   }
 
   // Praticien demandeur
-	$bilan->loadRefPraticienDemandeur();
+  $bilan->loadRefPraticienDemandeur();
 
-	// Chargement du lit
-	$_sejour->loadRefCurrAffectation();
+  // Chargement du lit
+  $_sejour->loadRefCurrAffectation();
 }
 
 // Ajustements services
@@ -200,5 +201,3 @@ $smarty->assign("order_way"              , $order_way);
 $smarty->assign("order_col"              , $order_col);
 
 $smarty->display("vw_sejours_ssr.tpl");
-
-?>

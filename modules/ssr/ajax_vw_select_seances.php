@@ -1,12 +1,14 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision:  $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
+
 
 CCanDo::checkRead();
 
@@ -27,7 +29,8 @@ $element_prescription_id = $line_element->element_prescription_id;
 $seance = new CEvenementSSR();
 $ljoin = array();
 $ljoin[] = "evenement_ssr AS evt_seance ON (evt_seance.seance_collective_id = evenement_ssr.evenement_ssr_id)";
-$ljoin["prescription_line_element"] = "evt_seance.prescription_line_element_id = prescription_line_element.prescription_line_element_id";
+$ljoin["prescription_line_element"] =
+  "evt_seance.prescription_line_element_id = prescription_line_element.prescription_line_element_id";
 
 $where = array();
 $where["evenement_ssr.sejour_id"] = " IS NULL";
@@ -42,5 +45,3 @@ $seances = $seance->loadList($where, null, null, null, $ljoin);
 $smarty = new CSmartyDP();
 $smarty->assign("seances", $seances);
 $smarty->display("inc_vw_select_seance.tpl");
-
-?>

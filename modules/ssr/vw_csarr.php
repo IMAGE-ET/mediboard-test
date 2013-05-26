@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -20,6 +21,7 @@ $limit = "$current, $step";
 
 $where = array();
 $order = "";
+/** @var CActiviteCsARR[] $listActivites */
 $listActivites = $activite->seek($activite->code, $where, $limit, true);
 $total = $activite->_totalSeek;
 
@@ -40,5 +42,3 @@ $smarty->assign("step"   , $step);
 $smarty->assign("total"  , $total);
 
 $smarty->display("vw_csarr.tpl");
-
-?>

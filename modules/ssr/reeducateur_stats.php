@@ -1,13 +1,12 @@
 <?php
-
 /**
- * $Id: $
+ * $Id$
  *
  * @package    Mediboard
- * @subpackage ssr
+ * @subpackage SSR
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision: $
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -22,10 +21,6 @@ $consult = new CConsultation();
 $ds = $consult->_spec->ds;
 
 $group = CGroups::loadCurrent();
-
-if ($type == "CEvenementSSR") {
-
-}
 
 switch ($type) {
   case "CEvenementSSR":

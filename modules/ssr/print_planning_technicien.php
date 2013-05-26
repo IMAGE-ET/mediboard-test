@@ -1,11 +1,12 @@
-<?php /* $Id: vw_idx_sejour.php 7212 2009-11-03 12:32:02Z rhum1 $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: 7212 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCando::checkRead();
@@ -15,5 +16,3 @@ $kine_id = CValue::get("kine_id");
 $smarty = new CSmartyDP();
 $smarty->assign("kine_id", $kine_id);
 $smarty->display("print_planning_technicien.tpl");
-
-?>

@@ -1,11 +1,12 @@
-<?php /* $Id: httpreq_do_element_autocomplete.php 7211 2009-11-03 12:27:08Z rhum1 $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPprescription
- * @version $Revision: 7211 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -28,8 +29,8 @@ $lines = $line->loadList($where, null, null, null, $ljoin);
 $warning = false;
 /*
 foreach($lines as $_line){
-  if($element_prescription_id == $_line->element_prescription_id){
-  	$warning = true;
+  if ($element_prescription_id == $_line->element_prescription_id){
+    $warning = true;
   }
 }
 */
@@ -44,5 +45,3 @@ $smarty->assign("last_line", $last_line);
 $smarty->assign("nodebug", true);
 $smarty->assign("current_date", CMbDT::date());
 $smarty->display("inc_vw_modal.tpl");
-
-?>

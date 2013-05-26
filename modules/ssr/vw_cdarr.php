@@ -1,13 +1,13 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
-
 
 CCanDo::checkRead();
 
@@ -23,12 +23,13 @@ $type_activite = new CTypeActiviteCdARR();
 $listTypes = $type_activite->loadList(null, "code");
 
 $where = array();
-if($activite->type) {
+if ($activite->type) {
   $where["type"] = "= '$activite->type'";
 }
 
 $limit = "$current, $step";
 $order = "type, code";
+/** @var CActiviteCdARR[] $listActivites */
 $listActivites = $activite->seek($activite->code, $where, $limit, true);
 $total = $activite->_totalSeek;
 
@@ -50,5 +51,3 @@ $smarty->assign("step"   , $step);
 $smarty->assign("total"  , $total);
 
 $smarty->display("vw_cdarr.tpl");
-
-?>

@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision:  $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -66,9 +67,9 @@ $all_sejours = array();
 foreach ($sejours as $_sejour) {
   $patient = $_sejour->loadRefPatient();
   foreach ($patient->loadRefsSejours() as $_other_sejour) {
-  	$_other_sejour->loadRefPatient();
-  	$all_sejours[$_other_sejour->_id] = $_other_sejour;
-  	$_other_sejour->loadRefBilanSSR()->loadRefTechnicien();
+    $_other_sejour->loadRefPatient();
+    $all_sejours[$_other_sejour->_id] = $_other_sejour;
+    $_other_sejour->loadRefBilanSSR()->loadRefTechnicien();
     $therapeutes += CEvenementSSR::getAllTherapeutes($_other_sejour->patient_id, $user->function_id); 
   }
 }
@@ -78,6 +79,7 @@ $evenements_counts = array();
 $evenement = new CEvenementSSR();
 $where["sejour_id"    ] = CSQLDataSource::prepareIn(array_keys($all_sejours));
 $where["therapeute_id"] = CSQLDataSource::prepareIn(array_keys($therapeutes));
+/** @var CEvenementSSR $_evenement */
 foreach ($evenement->loadList($where) as $_evenement) {
   @$evenements_counts[$_evenement->sejour_id][$_evenement->therapeute_id]++;
 }
@@ -87,15 +89,15 @@ if (!$replacement->_id) {
   $replacement->sejour_id = $sejour_id;
 }
 
+$transfer_count = 0;
+$transfer_counts = array();
+
 // Transfer event count
 if ($type == 'kine') {
-  $transfer_count = 0;
-  $transfer_counts = array();
-    
   $date_min = $conge->date_debut;
   $date_max = CMbDT::date("+1 DAY", $conge->date_fin);
   foreach ($sejours as $_sejour) {
-  	$bilan = $_sejour->loadRefBilanSSR();
+    $bilan = $_sejour->loadRefBilanSSR();
     $tech = $bilan->loadRefTechnicien();
     $where = array();
     $where["sejour_id"]     = " = '$_sejour->_id'";
@@ -112,8 +114,7 @@ if ($type == "reeducateur") {
   $where = array();
   $where["sejour_id"]     = " = '$sejour->_id'";
   $where["therapeute_id"] = " = '$conge->user_id'";
-  $transfer_count = 0;
-  foreach (range(0,6) as $weekday) {
+  foreach (range(0, 6) as $weekday) {
     $day = CMbDT::date("+$weekday DAYS", $monday);
     if (!CMbRange::in($day, $date_min, $date_max)) {
       $transfer_counts[$day] = 0;
@@ -143,5 +144,3 @@ $smarty->assign("conge", $conge);
 $smarty->assign("user", $user);
 $smarty->assign("type", $type);
 $smarty->display("inc_vw_replacement.tpl");
-
-?>

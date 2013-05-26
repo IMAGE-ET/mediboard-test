@@ -1,40 +1,41 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision:  $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
 
 CApp::setMemoryLimit("256M");
 
-$plateau_tech = new CPlateauTechnique();
-$plateau_tech->group_id = CGroups::loadCurrent()->_id;
-$plateaux = $plateau_tech->loadMatchingList();
-foreach($plateaux as $_plateau_tech){
-  $_plateau_tech->loadRefsEquipements();
-}
-
 $date = CMbDT::date();
+$plannings = array();
+$equipements = array();
 
-foreach($plateaux as $_plateau){
-	$_plateau->loadRefsEquipements();
-	
-	foreach($_plateau->_ref_equipements as $_equipement){
-		if(!$_equipement->visualisable){
-		  unset($_plateau->_ref_equipements[$_equipement->_id]);
-			continue;
-		}
-		$equipements[$_equipement->_id] = $_equipement;
-	  $args_planning = array();
-	  $args_planning["equipement_id"] = $_equipement->_id;
-	  $args_planning["date"] = $date;
-	  $plannings[$_equipement->_id] = CApp::fetch("ssr", "ajax_planning_equipement", $args_planning);
-	}
+$plateau = new CPlateauTechnique();
+$plateau->group_id = CGroups::loadCurrent()->_id;
+
+/** @var CPlateauTechnique[] $plateaux */
+$plateaux = $plateau->loadMatchingList();
+foreach ($plateaux as $_plateau) {
+  $_plateau->loadRefsEquipements();
+  
+  foreach ($_plateau->_ref_equipements as $_equipement) {
+    if (!$_equipement->visualisable) {
+      unset($_plateau->_ref_equipements[$_equipement->_id]);
+      continue;
+    }
+    $equipements[$_equipement->_id] = $_equipement;
+    $args_planning = array();
+    $args_planning["equipement_id"] = $_equipement->_id;
+    $args_planning["date"] = $date;
+    $plannings[$_equipement->_id] = CApp::fetch("ssr", "ajax_planning_equipement", $args_planning);
+  }
 }
 $monday = CMbDT::date("last monday", CMbDT::date("+1 day", $date));
 $sunday = CMbDT::date("next sunday", CMbDT::date("-1 DAY", $date));
@@ -48,5 +49,3 @@ $smarty->assign("date", $date);
 $smarty->assign("monday", $monday);
 $smarty->assign("sunday", $sunday);
 $smarty->display("offline_plannings_equipements.tpl");
-
-?>

@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -41,6 +42,14 @@ $listTables = array(
   "note_hierarchie"      => "note_hier_csarr_v0.txt",
 );
 
+/**
+ * Parse le fichier et remplit la table correspondante
+ *
+ * @param string $file  File path
+ * @param string $table Table name
+ *
+ * @return void
+ */
 function addFileIntoDB($file, $table) {
   $reussi = 0;
   $echoue = 0;
@@ -115,7 +124,8 @@ function addFileIntoDB($file, $table) {
     $ds->exec($query);
     if ($ds->error()) {
       $echoue++;
-    } else {
+    }
+    else {
       $reussi++;
     }
   }
@@ -124,8 +134,6 @@ function addFileIntoDB($file, $table) {
   CAppUI::stepAjax("ssr-import-csarr-report", UI_MSG_OK, $file, $table, $ignore, $reussi, $echoue);
 }
 
-foreach($listTables as $table => $file) {
+foreach ($listTables as $table => $file) {
   addFileIntoDB("$targetDir/$file", $table);
 }
-
-?>

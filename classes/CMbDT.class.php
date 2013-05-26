@@ -58,7 +58,7 @@ class CMbDT {
    * @param string $relative [optional] Modifies the date (eg '+1 DAY')
    * @param string $ref      [optional] The reference date time fo transform
    *
-   * @return string The date
+   * @return string|date The date
    **/
   static function date($relative = null, $ref = null) {
     return self::transform($relative, $ref, self::ISO_DATE);
@@ -70,7 +70,7 @@ class CMbDT {
    * @param string $relative Modifies the time (eg '+1 DAY')
    * @param string $ref      The reference time time fo transform
    *
-   * @return string The time
+   * @return string|time The time
    **/
   static function time($relative = null, $ref = null) {
     return self::transform($relative, $ref, self::ISO_TIME);
@@ -82,7 +82,7 @@ class CMbDT {
    * @param string $relative Modifies the datetime (eg '+1 DAY')
    * @param string $ref      The reference datetime fo transform
    *
-   * @return string The datetime
+   * @return string|datetime The datetime
    **/
   static function dateTime($relative = null, $ref = null) {
     return self::transform($relative, $ref, self::ISO_DATETIME);
