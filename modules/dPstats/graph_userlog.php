@@ -1,11 +1,12 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision: 12486 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 function graphUserLog($startx, $endx, $interval, $user_id) {
@@ -117,7 +118,7 @@ function graphUserLog($startx, $endx, $interval, $user_id) {
 }
 
 function graphUserLogV2($module_name, $action_name, $startx, $endx, $interval = 'day', $left) {
-  switch($interval) {
+  switch ($interval) {
     case "day":
       $step = "+1 HOUR";
       $period_format = "%Hh";
@@ -152,7 +153,7 @@ function graphUserLogV2($module_name, $action_name, $startx, $endx, $interval = 
   
   $datax = array();
   $i = 0;
-  for($d = $startx; $d <= $endx; $d = CMbDT::dateTime($step, $d)) {
+  for ($d = $startx; $d <= $endx; $d = CMbDT::dateTime($step, $d)) {
     $datax[] = array($i, CMbDT::transform(null, $d, $period_format));
     $i++;
   }
@@ -175,7 +176,7 @@ function graphUserLogV2($module_name, $action_name, $startx, $endx, $interval = 
         }
         
         foreach ($logs as $log) {
-          if($x[1] == $log['gperiod']) {
+          if ($x[1] == $log['gperiod']) {
             $count[$log['object_class']][$x[0]] = array($x[0], $log['count']);
           }
         }
@@ -190,7 +191,7 @@ function graphUserLogV2($module_name, $action_name, $startx, $endx, $interval = 
         }
         
         foreach ($logs as $log) {
-          if($x[1] == $log['gperiod']) {
+          if ($x[1] == $log['gperiod']) {
             $count[$log['type']][$x[0]] = array($x[0], $log['count']);
           }
         }
@@ -198,12 +199,12 @@ function graphUserLogV2($module_name, $action_name, $startx, $endx, $interval = 
     }
   }
   else {
-    foreach($datax as $x) {
+    foreach ($datax as $x) {
       // Needed
       $count[$x[0]]    = array($x[0], 0);
       
       foreach ($logs as $log) {
-        if($x[1] == $log['gperiod']) {
+        if ($x[1] == $log['gperiod']) {
           $count[$x[0]] = array($x[0], $log['count']);
         }
       }
@@ -212,7 +213,7 @@ function graphUserLogV2($module_name, $action_name, $startx, $endx, $interval = 
 
   
   if ($interval == 'month') {
-    foreach($datax as $i => &$x) {
+    foreach ($datax as $i => &$x) {
       if ($i % 2) $x[1] = '';
     }
   }

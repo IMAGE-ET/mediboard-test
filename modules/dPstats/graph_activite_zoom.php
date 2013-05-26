@@ -1,15 +1,18 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = 0, $codes_ccam = '', $hors_plage) {
-  if (!$date) $date = CMbDT::transform("+0 DAY", CMbDT::date(), "%m/%Y");
+  if (!$date) {
+    $date = CMbDT::transform("+0 DAY", CMbDT::date(), "%m/%Y");
+  }
 
   $prat = new CMediusers;
   $prat->load($prat_id);
@@ -21,7 +24,7 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
   $discipline->load($discipline_id);
   
   // Gestion de la date
-  $debut = substr($date,3,7)."-".substr($date,0,2)."-01";
+  $debut = substr($date, 3, 7)."-".substr($date, 0, 2)."-01";
   $fin = CMbDT::date("+1 MONTH", $debut);
   $fin = CMbDT::date("-1 DAY", $fin);
   $step = "+1 DAY";
@@ -70,8 +73,12 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
       $query .= "\nAND (operations.anesth_id = '$prat_id' OR 
                        (plagesop.anesth_id = '$prat_id' AND (operations.anesth_id = '0' OR operations.anesth_id IS NULL)))";
     }
-    if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-    if ($codes_ccam)    $query .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
+    if ($discipline_id) {
+      $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    }
+    if ($codes_ccam) {
+      $query .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
+    }
     
     $query .= "\nGROUP BY jour ORDER BY jour";
     
@@ -97,8 +104,12 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
       if ($prat_id && $prat->isFromType(array("Anesthésiste"))) {
         $query_hors_plage .= "\nAND operations.anesth_id = '$prat_id'"; 
       }
-      if ($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-      if ($codes_ccam)    $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
+      if ($discipline_id) {
+        $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+      }
+      if ($codes_ccam) {
+        $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
+      }
       
       $query_hors_plage .= "\nGROUP BY jour ORDER BY jour";
       
@@ -144,9 +155,15 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
     $subtitle = "$total interventions";
   }
 
-  if ($prat_id)       $subtitle .= " - Dr $prat->_view";
-  if ($discipline_id) $subtitle .= " - $discipline->_view";
-  if ($codes_ccam)    $subtitle .= " - CCAM : $codes_ccam";
+  if ($prat_id) {
+    $subtitle .= " - Dr $prat->_view";
+  }
+  if ($discipline_id) {
+    $subtitle .= " - $discipline->_view";
+  }
+  if ($codes_ccam) {
+    $subtitle .= " - CCAM : $codes_ccam";
+  }
 
   $options = CFlotrGraph::merge("bars", array(
     'title' => utf8_encode($title),

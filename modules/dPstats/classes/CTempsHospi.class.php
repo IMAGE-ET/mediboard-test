@@ -1,36 +1,43 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CTempsHospi extends CMbObject {
   // DB Table key
-  var $temps_hospi_id = null;
-  
-  // DB Fields
-  var $praticien_id = null;
-  var $type         = null;
-  var $ccam         = null;
-  var $nb_sejour    = null;
-  var $duree_moy    = null;
-  var $duree_ecart  = null;
-  
-  // Object References
-  var $_ref_praticien = null;
-	
-  // Derived Fields
-  var $_codes = null;
+  public $temps_hospi_id;
 
+  // DB Fields
+  public $praticien_id;
+  public $type;
+  public $ccam;
+  public $nb_sejour;
+  public $duree_moy;
+  public $duree_ecart;
+
+  /** @var CMediusers */
+  public $_ref_praticien;
+
+  // Derived Fields
+  public $_codes;
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_codes = explode("|", strtoupper($this->ccam));
   }
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'temps_hospi';
@@ -38,8 +45,11 @@ class CTempsHospi extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["praticien_id"] = "ref notNull class|CMediusers";
     $specs["type"]         = "enum notNull list|comp|ambu|seances|ssr|psy";
     $specs["nb_sejour"]    = "num pos";
@@ -49,7 +59,10 @@ class CTempsHospi extends CMbObject {
     return $specs;
   } 
 
-  function loadRefsFwd() { 
+  /**
+   * @see parent::loadRefsFwd()
+   */
+  function loadRefsFwd() {
     $this->_ref_praticien = $this->loadFwdRef("praticien_id", 1);
     $this->_ref_praticien->loadRefFunction();
   }
@@ -61,7 +74,7 @@ class CTempsHospi extends CMbObject {
    * @param array|string $ccam         [optional]
    * @param string       $type
    *
-   * @return int Durée en jours, 0 si aucun séjour, false si temps non calculé
+   * @return int|bool Durée en jours, 0 si aucun séjour, false si temps non calculé
    */
   static function getTime($praticien_id = 0, $ccam = null, $type = null){
     $where = array();
@@ -72,19 +85,19 @@ class CTempsHospi extends CMbObject {
     if ($type) {
       $where["type"] = "= '$type'";
     }
-    
+
     if (is_array($ccam)) {
-      foreach ($ccam as $code){
+      foreach ($ccam as $code) {
         $where[] = "ccam LIKE '%".strtoupper($code)."%'";
       }
     }
     elseif ($ccam) {
       $where["ccam"] = "LIKE '%".strtoupper($ccam)."%'";
     }
-    
+
     $temp = new CTempsHospi;
     if (null == $liste = $temp->loadList($where)) {
-      return;
+      return false;
     }
 
     foreach ($liste as $temps) {

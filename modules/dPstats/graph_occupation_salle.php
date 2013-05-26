@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = null, $codeCCAM = "", $type_hospi = "", $hors_plage, $type_duree) {
@@ -224,18 +225,22 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     AND operations.plageop_id IS NULL
     AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
-  if ($type_hospi) {
-    $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
-  }
-  if ($prat_id)       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
-  if ($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if ($codeCCAM)      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-  $query_hors_plage .=  "\nAND operations.date BETWEEN '$debut' AND '$fin'
-    AND operations.entree_salle IS NOT NULL
-    AND operations.sortie_salle IS NOT NULL
-    AND operations.entree_salle < operations.sortie_salle
-    GROUP BY $type_duree_fr ORDER BY orderitem";
-  $result_hors_plage = $ds->loadList($query_hors_plage);
+
+    if ($type_hospi) {
+      $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
+    }
+
+    if ($prat_id)       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
+    if ($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    if ($codeCCAM)      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+
+    $query_hors_plage .=  "\nAND operations.date BETWEEN '$debut' AND '$fin'
+      AND operations.entree_salle IS NOT NULL
+      AND operations.sortie_salle IS NOT NULL
+      AND operations.entree_salle < operations.sortie_salle
+      GROUP BY $type_duree_fr ORDER BY orderitem";
+
+    $result_hors_plage = $ds->loadList($query_hors_plage);
   }
   
   foreach ($ticks as $i => $tick) {

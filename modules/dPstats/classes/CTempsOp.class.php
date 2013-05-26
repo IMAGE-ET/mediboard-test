@@ -1,35 +1,39 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CTempsOp extends CMbObject {
   // DB Table key
-  var $temps_op_id = null;
-  
-  // DB Fields
-  var $chir_id         = null;
-  var $ccam            = null;
-  var $nb_intervention = null;
-  var $estimation      = null;
-  var $occup_moy       = null;
-  var $occup_ecart     = null;
-  var $duree_moy       = null;
-  var $duree_ecart     = null;
-  var $reveil_moy       = null;
-  var $reveil_ecart     = null;
-  
-  // Object References
-  var $_ref_praticien = null;
-	
-	// Derived Fields
-	var $_codes = null;
+  public $temps_op_id;
 
+  // DB Fields
+  public $chir_id;
+  public $ccam;
+  public $nb_intervention;
+  public $estimation;
+  public $occup_moy;
+  public $occup_ecart;
+  public $duree_moy;
+  public $duree_ecart;
+  public $reveil_moy;
+  public $reveil_ecart;
+
+  // Object References
+  public $_ref_praticien;
+
+  // Derived Fields
+  public $_codes;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'temps_op';
@@ -37,8 +41,11 @@ class CTempsOp extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["chir_id"]         = "ref class|CMediusers";
     $specs["nb_intervention"] = "num pos";
     $specs["estimation"]      = "time";
@@ -50,13 +57,19 @@ class CTempsOp extends CMbObject {
     $specs["reveil_ecart"]     = "time";
     $specs["ccam"]            = "str";
     return $specs;
-  }	
-  
-	function updateFormFields() {
-		parent::updateFormFields();
-		$this->_codes = explode("|", strtoupper($this->ccam));
-	}
-	
+  }
+
+  /**
+   * @see parent::updateFormFields()
+   */
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_codes = explode("|", strtoupper($this->ccam));
+  }
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() { 
     $this->_ref_praticien = $this->loadFwdRef("chir_id", 1);
     $this->_ref_praticien->loadRefFunction();
@@ -68,7 +81,7 @@ class CTempsOp extends CMbObject {
    * @param int          $chir_id [optional]
    * @param array|string $ccam    [optional]
    *
-   * @return int Durée en minutes, 0 si aucune intervention, false si temps non calculé
+   * @return int|bool Durée en minutes, 0 si aucune intervention, false si temps non calculé
    */
   static function getTime($chir_id = 0, $ccam = null){
     $where = array();
@@ -76,33 +89,33 @@ class CTempsOp extends CMbObject {
     $total["occup_somme"] = 0;
     $total["nbInterventions"] = 0;
     $where["chir_id"] = "= '$chir_id'";
-    
-    if (is_array($ccam)){
-      foreach ($ccam as $code){
+
+    if (is_array($ccam)) {
+      foreach ($ccam as $code) {
         $where[] = "ccam LIKE '%".strtoupper($code)."%'";
       }
     }
-    elseif ($ccam){
+    elseif ($ccam) {
       $where["ccam"] = "LIKE '%".strtoupper($ccam)."%'";
     }
-    
+
     $temp = new CTempsOp;
     if (null == $liste = $temp->loadList($where)) {
-    	return;
+      return false;
     }
-		
+
     foreach ($liste as $temps) {
       $total["nbInterventions"] += $temps->nb_intervention;
       $total["occup_somme"] += $temps->nb_intervention * strtotime($temps->occup_moy);
     }
-		
+
     if ($total["nbInterventions"]) {
       $time = $total["occup_somme"] / $total["nbInterventions"];
     }
     else {
       $time = 0;
     }
-		
+
     return $time;
   }
 }

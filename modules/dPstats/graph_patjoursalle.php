@@ -1,23 +1,24 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = null, $codeCCAM = '', $hors_plage) {
   if (!$debut) $debut = CMbDT::date("-1 YEAR");
   if (!$fin) $fin = CMbDT::date();
-  
+
   $prat = new CMediusers;
   $prat->load($prat_id);
-  
+
   $salle = new CSalle;
   $salle->load($salle_id);
-  
+
   $discipline = new CDiscipline;
   $discipline->load($discipline_id);
 
@@ -27,7 +28,7 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
   }
 
   // Gestion du hors plage
-  if($hors_plage) {
+  if ($hors_plage) {
     $where_hors_plage = "AND (plagesop.date BETWEEN '$debut' AND '$fin'
                               OR operations.date BETWEEN '$debut' AND '$fin')";
   }
@@ -40,7 +41,7 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
   //$salles = CSalle::getSallesStats($salle_id, $bloc_id);
   $series = array();
   $serie = array('data' => array());
-  
+
   $query = "SELECT COUNT(operations.operation_id) AS total,
       COUNT(DISTINCT(COALESCE(operations.date, plagesop.date))) AS nb_days,
       COUNT(DISTINCT(sallesbloc.salle_id)) AS nb_salles,
@@ -55,7 +56,7 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
       $where_hors_plage 
       AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
       AND sallesbloc.stats = '1'";
-  
+
   if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
   if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
@@ -66,9 +67,9 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
   elseif ($bloc_id) {
     $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
   }
-  
+
   $query .= "\nGROUP BY mois ORDER BY orderitem";
-  
+
   $result = $prat->_spec->ds->loadlist($query);
 
   foreach ($ticks as $i => $tick) {
@@ -83,13 +84,13 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
         $f = false;
       }
     }
-    if($f) {
+    if ($f) {
       $serie["data"][] = array(count($serie["data"]), 0);
     }
   }
 
   $series[] = $serie;
-  
+
   // Set up the title for the graph
   $title = "Patients / jour / salle active dans le mois";
   $subtitle = "Uniquement les jours d'activité";
@@ -119,6 +120,6 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
       'toolbarSelectAll' => utf8_encode('Sélectionner tout le tableau')
     )
   );
-  
+
   return array('series' => $series, 'options' => $options);
 }

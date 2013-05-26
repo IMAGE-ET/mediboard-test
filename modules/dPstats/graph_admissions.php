@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CAppUI::requireLibraryFile("jpgraph/src/mbjpgraph");
@@ -22,6 +23,7 @@ $pratSel->load($prat_id);
 $service = new CSalle;
 $service->load($service_id);
 
+$datax = array();
 for ($i = $debut; $i <= $fin; $i = CMbDT::date("+1 MONTH", $i)) {
   $datax[] = CMbDT::transform("+0 DAY", $i, "%m/%Y");
 }
@@ -72,8 +74,8 @@ foreach ($services as $service) {
 }
 
 // Setup the graph.
-$graph = new Graph(480,300,"auto");    
-$graph->img->SetMargin(50,40,50,70);
+$graph = new Graph(480, 300, "auto");
+$graph->img->SetMargin(50, 40, 50, 70);
 $graph->SetScale("textlin");
 $graph->SetMarginColor("lightblue");
 
@@ -94,16 +96,16 @@ if ($subtitle) {
   $graph->subtitle->Set($subtitle);
 }
 $graph->title->Set($title);
-$graph->title->SetFont(FF_ARIAL,FS_NORMAL,10);
+$graph->title->SetFont(FF_ARIAL, FS_NORMAL, 10);
 $graph->title->SetColor("darkred");
-$graph->subtitle->SetFont(FF_ARIAL,FS_NORMAL,7);
+$graph->subtitle->SetFont(FF_ARIAL, FS_NORMAL, 7);
 $graph->subtitle->SetColor("black");
 //$graph->img->SetAntiAliasing();
 $graph->SetScale("textint");
 
 // Setup font for axis
-$graph->xaxis->SetFont(FF_ARIAL,FS_NORMAL,8);
-$graph->yaxis->SetFont(FF_ARIAL,FS_NORMAL,8);
+$graph->xaxis->SetFont(FF_ARIAL, FS_NORMAL, 8);
+$graph->yaxis->SetFont(FF_ARIAL, FS_NORMAL, 8);
 
 // Show 0 label on Y-axis (default is not to show)
 $graph->yscale->ticks->SupressZeroLabel(false);
@@ -116,8 +118,8 @@ $graph->xaxis->SetLabelAngle(50);
 
 // Legend
 $graph->legend->SetMarkAbsSize(5);
-$graph->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
-$graph->legend->Pos(0.02,0.02, "right", "top");
+$graph->legend->SetFont(FF_ARIAL, FS_NORMAL, 7);
+$graph->legend->Pos(0.02, 0.02, "right", "top");
 
 // Create the bar pot
 $colors = array("#aa5500",
@@ -137,12 +139,12 @@ foreach ($opbysalle as $key => $value) {
   $bplot = new BarPlot($value["sejour"]);
   $from = $colors[$key];
   $to = "#EEEEEE";
-  $bplot->SetFillGradient($from,$to,GRAD_LEFT_REFLECTION);
+  $bplot->SetFillGradient($from, $to, GRAD_LEFT_REFLECTION);
   $bplot->SetColor("white");
   $bplot->setLegend($value["nom"]);
   $bplot->value->SetFormat("%01.0f");
   $bplot->value->SetColor($colors[$key]);
-  $bplot->value->SetFont(FF_ARIAL,FS_NORMAL, 8); 
+  $bplot->value->SetFont(FF_ARIAL, FS_NORMAL, 8);
   //$bplot->value->show();
   $listPlots[] = $bplot;
 }

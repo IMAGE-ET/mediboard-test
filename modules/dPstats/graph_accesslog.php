@@ -1,15 +1,16 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 'day', $left, $right, $DBorNotDB = false) {
-  switch($interval) {
+  switch ($interval) {
     case "day":
       $step = "+1 HOUR";
       $period_format = "%Hh";
@@ -98,13 +99,19 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
     
     if ($interval == 'month') {
       foreach ($datax as $i => &$x) {
-        if ($i % 2) $x[1] = '';
+        if ($i % 2) {
+          $x[1] = '';
+        }
       }
     }
     
     $title = '';
-    if ($module_name) $title .= CAppUI::tr("module-$module_name-court");
-    if ($action_name) $title .= " - $action_name";
+    if ($module_name) {
+      $title .= CAppUI::tr("module-$module_name-court");
+    }
+    if ($action_name) {
+      $title .= " - $action_name";
+    }
     
     $subtitle = CMbDT::transform(null, $endx, CAppUI::conf("longdate"));
     
@@ -258,13 +265,19 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
     
     if ($interval == 'month') {
       foreach ($datax as $i => &$x) {
-        if ($i % 2) $x[1] = '';
+        if ($i % 2) {
+          $x[1] = '';
+        }
       }
     }
     
     $title = '';
-    if ($module_name) $title .= CAppUI::tr("module-$module_name-court");
-    if ($action_name) $title .= " - $action_name";
+    if ($module_name) {
+      $title .= CAppUI::tr("module-$module_name-court");
+    }
+    if ($action_name) {
+      $title .= " - $action_name";
+    }
     
     $subtitle = CMbDT::transform(null, $endx, CAppUI::conf("longdate"));
     

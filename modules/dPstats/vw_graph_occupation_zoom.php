@@ -18,7 +18,7 @@ $discipline_id = CValue::getOrSession("discipline_id", 0);
 $codes_ccam    = strtoupper(CValue::getOrSession("codes_ccam", ""));
 $hors_plage    = CValue::getOrSession("hors_plage", 1);
 $type_hospi    = CValue::getOrSession("type_hospi", '');
-$debut = substr($date,3,7)."-".substr($date,0,2)."-01";
+$debut = substr($date, 3, 7)."-".substr($date, 0, 2)."-01";
 $fin = CMbDT::date("+1 MONTH", $debut);
 $fin = CMbDT::date("-1 DAY", $fin);
 

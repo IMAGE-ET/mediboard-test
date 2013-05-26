@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $total["nbPrep"] = 0;
@@ -25,7 +26,7 @@ $order = "users.user_last_name ASC, users.user_first_name ASC";
 $listTemps = new CTempsPrepa;
 $listTemps = $listTemps->loadList($where, $order, null, null, $ljoin);
 
-foreach($listTemps as $temps) {
+foreach ($listTemps as $temps) {
   $temps->loadRefsFwd();
   $total["nbPrep"  ] += $temps->nb_prepa;
   $total["nbPlages"] += $temps->nb_plages;

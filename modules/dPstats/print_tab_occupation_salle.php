@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
  
  
@@ -38,7 +39,7 @@ $salles = CSalle::getSallesStats($salle_id, $bloc_id);
 $user = new CMediusers();
 $where = array();
 $where["users_mediboard.actif"] = "= '1'";
-if($discipline->_id) {
+if ($discipline->_id) {
   $where["users_mediboard.discipline_id"] = "= '$discipline->_id'";
 }
 // Filter on user type
@@ -55,7 +56,7 @@ $listPrats = $user->loadList($where, $order, null, null, $ljoin);
 
 // Gestion du hors plage
 
-if($hors_plage) {
+if ($hors_plage) {
   $where_hors_plage = "AND (plagesop.date BETWEEN '$debut' AND '$fin'
                             OR operations.date BETWEEN '$debut' AND '$fin')";
 }
@@ -94,7 +95,7 @@ $nb_interv_intervs       = 0;
 $duree_totale_occupation = 0;
 $nb_interv_occupation    = 0;
 
-foreach($result as $praticien) {
+foreach ($result as $praticien) {
   $prat = new CMediusers();
   $prat->load($praticien["user_id"]);
   $prat->loadRefFunction();
@@ -136,7 +137,7 @@ if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
 $query .=  "\nGROUP BY users.user_id";
 $result = $ds->loadList($query);
 
-foreach($result as $item) {
+foreach ($result as $item) {
   $duree_totale_intervs += $item["duree_totale"];
   $tableau[$item["user_id"]]["duree_totale_intervs"]  = $item["duree_totale"]/(60*60);
   $tableau[$item["user_id"]]["duree_moyenne_intervs"] = $item["duree_totale"]/(60*$item["nbInterv"]);
@@ -170,7 +171,7 @@ if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
 $query .=  "\nGROUP BY users.user_id";
 $result = $ds->loadList($query);
 
-foreach($result as $item) {
+foreach ($result as $item) {
   $duree_totale_occupation += $item["duree_totale"];
   $tableau[$item["user_id"]]["duree_totale_occupation"]  = $item["duree_totale"]/(60*60);
   $tableau[$item["user_id"]]["duree_moyenne_occupation"] = $item["duree_totale"]/(60*$item["nbInterv"]);

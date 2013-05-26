@@ -1,16 +1,21 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 function graphJoursParService($debut = null, $fin = null, $prat_id = 0, $service_id = 0, $type_adm = 0, $discipline_id = 0, $septique = 0, $type_data = "prevue") {
-  if (!$debut) $debut = CMbDT::date("-1 YEAR");
-  if (!$fin) $fin = CMbDT::date();
+  if (!$debut) {
+    $debut = CMbDT::date("-1 YEAR");
+  }
+  if (!$fin) {
+    $fin = CMbDT::date();
+  }
   
   $prat = new CMediusers;
   $prat->load($prat_id);
@@ -74,15 +79,23 @@ function graphJoursParService($debut = null, $fin = null, $prat_id = 0, $service
                   AND affectation.entree <= '$end_month 23:59:59'
                   AND service.service_id = '$service->_id'";
         
-      if ($prat_id)       $query .= "\nAND sejour.praticien_id = '$prat_id'";
-      if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-      if ($septique)      $query .= "\nAND sejour.septique = '$septique'";
+      if ($prat_id) {
+        $query .= "\nAND sejour.praticien_id = '$prat_id'";
+      }
+      if ($discipline_id) {
+        $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+      }
+      if ($septique) {
+        $query .= "\nAND sejour.septique = '$septique'";
+      }
     
       if ($type_adm) {
-      if($type_adm == 1)
-        $query .= "\nAND (sejour.type = 'comp' OR sejour.type = 'ambu')";
-      else
-        $query .= "\nAND sejour.type = '$type_adm'";
+        if ($type_adm == 1) {
+          $query .= "\nAND (sejour.type = 'comp' OR sejour.type = 'ambu')";
+        }
+        else {
+          $query .= "\nAND sejour.type = '$type_adm'";
+        }
       }
       $query .= "\nGROUP BY mois ORDER BY orderitem";
       
@@ -121,7 +134,7 @@ function graphJoursParService($debut = null, $fin = null, $prat_id = 0, $service
 
   // Patients non placés
   
-  if(!$service_id) {
+  if (!$service_id) {
     $serie = array(
       'data' => array(),
       'label' => utf8_encode("Non placés")
@@ -131,10 +144,18 @@ function graphJoursParService($debut = null, $fin = null, $prat_id = 0, $service
   $series[] = $serie_total;
   
   $subtitle = "$total nuits";
-  if ($prat_id)       $subtitle .= " - Dr $prat->_view";
-  if ($discipline_id) $subtitle .= " - $discipline->_view";
-  if ($type_adm)      $subtitle .= " - ".$listHospis[$type_adm];
-  if($septique)      $subtitle .= " - Septiques";
+  if ($prat_id) {
+    $subtitle .= " - Dr $prat->_view";
+  }
+  if ($discipline_id) {
+    $subtitle .= " - $discipline->_view";
+  }
+  if ($type_adm) {
+    $subtitle .= " - ".$listHospis[$type_adm];
+  }
+  if ($septique) {
+    $subtitle .= " - Septiques";
+  }
   
   $options = array(
     'title' => utf8_encode("Nombre de nuits par service"),

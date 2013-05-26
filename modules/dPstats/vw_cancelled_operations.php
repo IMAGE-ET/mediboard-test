@@ -1,21 +1,23 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
 
 $type_modif = CValue::getOrSession("type_modif", "annule");
 $date_max   = CValue::getOrSession("_date_max", CMbDT::date());
-if(phpversion() >= "5.3") {
+if (phpversion() >= "5.3") {
   $date_max   = CMbDT::date("last day of +0 months", $date_max);
   $date_min   = CMbDT::date("first day of -0 months", $date_max);
-} else {
+}
+else {
   $date_max = CMbDT::transform("+ 1 month", $date_max, "%Y-%m-01");
   $date_min = CMbDT::date("- 1 month", $date_max);
   $date_max = CMbDT::date("- 1 day", $date_max);
@@ -37,7 +39,7 @@ $salles = $salle->loadGroupList();
 $list = array();
 
 
-if($type_modif == "annule") {
+if ($type_modif == "annule") {
   $queryInPlage   = "SELECT DISTINCT(operations.operation_id) AS op_id,
                        DATE_FORMAT(plagesop.date, '%Y - %m') AS mois,
                        plagesop.date AS orderitem
@@ -94,11 +96,11 @@ else {
                        AND operations.annulee = '0'";
 }
 
-if($prat_id) {
+if ($prat_id) {
   $queryInPlage   .= "\nAND operations.chir_id = '$prat_id'";
   $queryHorsPlage .= "\nAND operations.chir_id = '$prat_id'";
 }
-if($codeCCAM) {
+if ($codeCCAM) {
   $queryInPlage   .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   $queryHorsPlage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
 }
@@ -111,14 +113,14 @@ $queryHorsPlage .= "\nORDER BY orderitem, bloc_operatoire.nom, sallesbloc.nom";
 $resultInPlage   = $prat->_spec->ds->loadlist($queryInPlage);
 $resultHorsPlage = $prat->_spec->ds->loadlist($queryHorsPlage);
 
-for($rangeDate = $date_min; $rangeDate <= $date_max; $rangeDate = CMbDT::date("+1 month", $rangeDate)) {
+for ($rangeDate = $date_min; $rangeDate <= $date_max; $rangeDate = CMbDT::date("+1 month", $rangeDate)) {
   $month = CMbDT::transform(null, $rangeDate, "%Y - %m");
   $list[$month]['total'] = 0;
   $list[$month]['inPlage'] = array();
   $list[$month]['horsPlage'] = array();
 }
 
-foreach($resultInPlage as $res) {
+foreach ($resultInPlage as $res) {
   $operation = new COperation();
   $operation->load($res['op_id']);
   $operation->loadRefPatient(true);
@@ -129,7 +131,7 @@ foreach($resultInPlage as $res) {
   $list[$res['mois']]['inPlage'][$operation->_id] = $operation;
 }
 
-foreach($resultHorsPlage as $res) {
+foreach ($resultHorsPlage as $res) {
   $operation = new COperation();
   $operation->load($res['op_id']);
   $operation->loadRefsFwd();

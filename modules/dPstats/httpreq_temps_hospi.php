@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 date_default_timezone_set("UTC");
@@ -51,7 +52,7 @@ $sql .= "\nGROUP BY sejour.type, sejour.praticien_id, operations.codes_ccam";
 $listSejours = $ds->loadList($sql); 
 
 // Mémorisation des données dans MySQL
-foreach($listSejours as $keylistSejours => $curr_listSejours){
+foreach ($listSejours as $keylistSejours => $curr_listSejours) {
   // Mémorisation des données dans MySQL
   $sql = "INSERT INTO `temps_hospi` (`temps_hospi_id`, `praticien_id`, `ccam`, `type`, `nb_sejour`, `duree_moy`, `duree_ecart`)
           VALUES (NULL, 
@@ -61,7 +62,8 @@ foreach($listSejours as $keylistSejours => $curr_listSejours){
                 '".$curr_listSejours["total"]."',
                 '".$curr_listSejours["duree_hospi"]."',
                 '".$curr_listSejours["ecart_hospi"]."');";
-  $ds->exec( $sql ); $ds->error();
+  $ds->exec($sql);
+  $ds->error();
 }
 
 echo "Liste des temps d'hospitalisation mise à jour (".count($listSejours)." lignes trouvées)";

@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -74,13 +75,14 @@ $listDisciplines = $listDisciplines->loadUsedDisciplines();
 // $horaires = $ds->loadList(file_get_contents("modules/dPstats/sql/horaires_salles.sql"));
 
 $graphs = array();
-if($type_view_bloc == "nbInterv") {
+if ($type_view_bloc == "nbInterv") {
   $graphs["activite"]    = graphActivite($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi, $hors_plage);
   $graphs["op_annulees"] = graphOpAnnulees($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam, $type_hospi, $hors_plage);
-  if($discipline_id) {
+  if ($discipline_id) {
     $graphs["praticien_discipline"] = graphPraticienDiscipline($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi, $hors_plage);
   }
-} else {
+}
+else {
   $listOccupation = graphOccupationSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi, $hors_plage, 'MONTH');
   $graphs["occupation_total"]   = $listOccupation["total"];
   $graphs["occupation_moyenne"] = $listOccupation["moyenne"];

@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = 0, $codeCCAM = "", $type_hospi = "", $hors_plage) {
@@ -33,7 +34,7 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
   $user = new CMediusers;
   $ljoin = array("users" => "users.user_id = users_mediboard.user_id", "functions_mediboard" => "functions_mediboard.function_id = users_mediboard.function_id");
   $where = array("functions_mediboard.group_id" => "= '".CGroups::loadCurrent()->_id."'");
-  if($discipline_id) {
+  if ($discipline_id) {
     $where["discipline_id"] = " = '$discipline_id'";
   }
   
@@ -51,7 +52,7 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
   $users = $user->loadList($where, $order, null, null, $ljoin);
 
   // Gestion du hors plage
-  if($hors_plage) {
+  if ($hors_plage) {
     $where_hors_plage = "AND (plagesop.date BETWEEN '$debut' AND '$fin'
                               OR operations.date BETWEEN '$debut' AND '$fin')";
   }
@@ -63,7 +64,7 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
   
   $total = 0;
   $series = array();
-  foreach($users as $user) {
+  foreach ($users as $user) {
     $serie = array(
       'data' => array(),
       'label' => utf8_encode($user->_view)
@@ -88,9 +89,10 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
     if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
     if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
     
-    if($salle_id) {
+    if ($salle_id) {
       $query .= "\nAND sallesbloc.salle_id = '$salle_id'";
-    } elseif($bloc_id) {
+    }
+    elseif ($bloc_id) {
       $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
     }
     
@@ -98,9 +100,9 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
   
     $result = $user->_spec->ds->loadlist($query);
     
-    foreach($ticks as $i => $tick) {
+    foreach ($ticks as $i => $tick) {
       $f = true;
-      foreach($result as $r) {
+      foreach ($result as $r) {
         if ($tick[1] == $r["mois"]) {
           $serie['data'][] = array($i, $r["total"]);
           $serie_total["data"][$i][1] += $r["total"];
@@ -117,9 +119,9 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
 
   $title = "Nombre d'interventions par praticien";
   $subtitle = "$total opérations";
-  if($discipline_id) $subtitle .= " - $discipline->_view";
-  if($codeCCAM)      $subtitle .= " - CCAM : $codeCCAM";
-  if($type_hospi)    $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_hospi");
+  if ($discipline_id) $subtitle .= " - $discipline->_view";
+  if ($codeCCAM)      $subtitle .= " - CCAM : $codeCCAM";
+  if ($type_hospi)    $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_hospi");
   
   $options = array(
     'title' => utf8_encode($title),

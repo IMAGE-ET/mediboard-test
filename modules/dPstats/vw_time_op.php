@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 date_default_timezone_set("UTC");
@@ -20,16 +21,16 @@ $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);
 
 // Stat des temps de préparation
-if ($typeVue == 0){
-  include("inc_vw_timeop_op.php");
+if ($typeVue == 0) {
+  include "inc_vw_timeop_op.php";
 } 
 // Stat des temps opératoires
-elseif($typeVue == 1) {
-  include("inc_vw_timeop_prepa.php");
+elseif ($typeVue == 1) {
+  include "inc_vw_timeop_prepa.php";
 } 
 // Stat des temps d'hospitalisation
 else {
-  include("inc_vw_timehospi.php");
+  include "inc_vw_timehospi.php";
 }
 
 

@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -31,7 +32,7 @@ $total["personnel"] = array(
 // Récupération des plages
 $plage = new CPlageOp;
 $listPlages = array();
-if($prat_personnel) {
+if ($prat_personnel) {
   $where = array();
   $where["date"] = "BETWEEN '$deb_personnel' AND '$fin_personnel'";
   $where["chir_id"] = "= '$prat_personnel'";
@@ -39,7 +40,7 @@ if($prat_personnel) {
   $listPlages = $plage->loadList($where, $order);
 
   // Récupération des interventions
-  foreach($listPlages as &$curr_plage) {
+  foreach ($listPlages as &$curr_plage) {
     /*
      * Chargement des interventions et des éléments suivants :
      * - durée prévue
@@ -59,9 +60,9 @@ if($prat_personnel) {
     
     // Personnel de la plage
     $curr_plage->loadAffectationsPersonnel();
-    foreach($curr_plage->_ref_operations as $curr_op) {
+    foreach ($curr_plage->_ref_operations as $curr_op) {
       // Durées
-      if($curr_op->debut_op && $curr_op->fin_op && ($curr_op->debut_op < $curr_op->fin_op)) {
+      if ($curr_op->debut_op && $curr_op->fin_op && ($curr_op->debut_op < $curr_op->fin_op)) {
         $curr_plage->_first_op       = min($curr_plage->_first_op, $curr_op->debut_op);
         $curr_plage->_last_op        = max($curr_plage->_last_op, $curr_op->fin_op);
         $duree_op = CMbDT::timeRelative($curr_op->debut_op, $curr_op->fin_op);
@@ -71,15 +72,15 @@ if($prat_personnel) {
       // Personnel réel
       $curr_op->loadAffectationsPersonnel();
       
-      foreach($curr_op->_ref_affectations_personnel as $_key_cat => $_curr_cat) {
+      foreach ($curr_op->_ref_affectations_personnel as $_key_cat => $_curr_cat) {
         
-        if(!isset($curr_plage->_duree_total_personnel[$_key_cat])) {
+        if (!isset($curr_plage->_duree_total_personnel[$_key_cat])) {
           $curr_plage->_duree_total_personnel[$_key_cat]["duree"] = "00:00:00";
           $curr_plage->_duree_total_personnel[$_key_cat]["days_duree"] = "0";
         }
         
-        foreach($_curr_cat as $_curr_aff) {
-          if($_curr_aff->debut && $_curr_aff->fin) {
+        foreach ($_curr_cat as $_curr_aff) {
+          if ($_curr_aff->debut && $_curr_aff->fin) {
             $duree = CMbDT::timeRelative($_curr_aff->debut, $_curr_aff->fin);
             $new_total = CMbDT::addTime($duree, $curr_plage->_duree_total_personnel[$_key_cat]["duree"]);
             if ($new_total < $curr_plage->_duree_total_personnel[$_key_cat]["duree"]) {
@@ -93,39 +94,39 @@ if($prat_personnel) {
     // Totaux
     // Durée prévue
     $newTotalPrevu = CMbDT::addTime($curr_plage->_duree_prevue, $total["duree_prevue"]);
-    if($newTotalPrevu < $total["duree_prevue"]) {
+    if ($newTotalPrevu < $total["duree_prevue"]) {
       $total["days_duree_prevue"]++;
     }
     $total["duree_prevue"] = $newTotalPrevu;
     // Durée première à la dernière
-    if($curr_plage->_first_op && $curr_plage->_last_op && ($curr_plage->_first_op < $curr_plage->_last_op)) {
+    if ($curr_plage->_first_op && $curr_plage->_last_op && ($curr_plage->_first_op < $curr_plage->_last_op)) {
       $curr_plage->_duree_first_to_last = CMbDT::timeRelative($curr_plage->_first_op, $curr_plage->_last_op);
       
       $newTotalFirstToLast = CMbDT::addTime($curr_plage->_duree_first_to_last, $total["duree_first_to_last"]);
-      if($newTotalFirstToLast < $total["duree_first_to_last"]) {
+      if ($newTotalFirstToLast < $total["duree_first_to_last"]) {
         $total["days_duree_first_to_last"]++;
       }
       $total["duree_first_to_last"] = $newTotalFirstToLast;
     }
     // Durée réèlle
     $newTotalReel = CMbDT::addTime($curr_plage->_duree_total_op, $total["duree_reelle"]);
-    if($newTotalReel < $total["duree_reelle"]) {
+    if ($newTotalReel < $total["duree_reelle"]) {
       $total["days_duree_reelle"]++;
     }
     $total["duree_reelle"] = $newTotalReel;
     // Durée du personnel
 
-    foreach($curr_plage->_duree_total_personnel as $_key_cat => $_curr_cat) {
-      if(!isset($total["personnel"][$_key_cat])) {
-          $total["personnel"][$_key_cat]["duree"]      = "00:00:00";
-          $total["personnel"][$_key_cat]["days_duree"] = 0;
+    foreach ($curr_plage->_duree_total_personnel as $_key_cat => $_curr_cat) {
+      if (!isset($total["personnel"][$_key_cat])) {
+        $total["personnel"][$_key_cat]["duree"]      = "00:00:00";
+        $total["personnel"][$_key_cat]["days_duree"] = 0;
       }
       $newTotalPersonnel = CMbDT::addTime($curr_plage->_duree_total_personnel[$_key_cat]["duree"], $total["personnel"][$_key_cat]["duree"]);
       $total["personnel"][$_key_cat]["days_duree"] += $curr_plage->_duree_total_personnel[$_key_cat]["days_duree"];
-      if($newTotalPersonnel < $total["personnel"][$_key_cat]["duree"]) {
+      if ($newTotalPersonnel < $total["personnel"][$_key_cat]["duree"]) {
         $total["personnel"][$_key_cat]["days_duree"]++;
       }
-    $total["personnel"][$_key_cat]["duree"] = $newTotalPersonnel;
+      $total["personnel"][$_key_cat]["duree"] = $newTotalPersonnel;
     }
   }
 }

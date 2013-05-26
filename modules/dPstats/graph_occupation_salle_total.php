@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = null, $codeCCAM = "", $type_hospi = "", $hors_plage, $type_duree) {
@@ -48,7 +49,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   // Chargement des praticiens
   $where = array();
   $where["users_mediboard.actif"] = "= '1'";
-  if($discipline->_id) {
+  if ($discipline->_id) {
     $where["users_mediboard.discipline_id"] = "= '$discipline->_id'";
   }
   // Filter on user type
@@ -69,7 +70,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   $totalTot = 0;
 
   // Gestion du hors plage
-  if($hors_plage) {
+  if ($hors_plage) {
     $where_hors_plage = "AND (plagesop.date BETWEEN '$debut' AND '$fin'
                               OR operations.date BETWEEN '$debut' AND '$fin')";
   }

@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $codeCCAM = "", $type_hospi = "", $hors_plage) {
@@ -35,7 +36,7 @@ function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
   $total = 0;
 
   // Gestion du hors plage
-  if($hors_plage) {
+  if ($hors_plage) {
     $where_hors_plage = "AND (plagesop.date BETWEEN '$debut' AND '$fin'
                               OR operations.date BETWEEN '$debut' AND '$fin')";
   }
