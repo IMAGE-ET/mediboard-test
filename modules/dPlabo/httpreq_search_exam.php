@@ -1,10 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- *	@package Mediboard
- *	@subpackage dPlabo
- *	@version $Revision$
- *  @author Alexis Granger
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Labo
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $listExams = array();
@@ -30,4 +32,3 @@ $smarty->assign("countExams", $countExams );
 $smarty->assign("catalogue" , new CCatalogueLabo());
 
 $smarty->display("inc_vw_examens_catalogues.tpl");
-?>

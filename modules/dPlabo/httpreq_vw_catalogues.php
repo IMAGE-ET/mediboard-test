@@ -1,10 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- *	@package Mediboard
- *	@subpackage dPlabo
- *	@version $Revision$
- *  @author Romain Ollivier
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Labo
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -29,7 +31,7 @@ $where[] = "function_id IS NULL OR function_id ".CSQLDataSource::prepareIn(array
 $where["obsolete"] = " = '0'";
 $order = "identifiant";
 $listCatalogues = $catalogue->loadList($where, $order);
-foreach($listCatalogues as &$_catalogue) {
+foreach ($listCatalogues as &$_catalogue) {
   $_catalogue->loadRefsDeep();
 }
 
@@ -40,4 +42,3 @@ $smarty->assign("listCatalogues", $listCatalogues);
 $smarty->assign("catalogue"     , $catalogue    );
 
 $smarty->display("inc_vw_catalogues.tpl");
-?>

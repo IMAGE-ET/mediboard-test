@@ -1,10 +1,12 @@
 <?php
-
 /**
- *	@package Mediboard
- *	@subpackage dPlabo
- *	@version $Revision$
- *  @author Alexis Granger
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Labo
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 global $uistyle;
@@ -34,7 +36,7 @@ $etab = CGroups::loadCurrent();
 $image = "../../style/$uistyle/images/pictures/logo.jpg";
 
 // Si le style ne possede pas de logo, on applique le logo par defaut de mediboard
-if(!is_file("./style/$uistyle/images/pictures/logo.jpg")){
+if (!is_file("./style/$uistyle/images/pictures/logo.jpg")) {
   $image = "logo.jpg";
 }
 
@@ -55,28 +57,41 @@ $praticien =& $prescription->_ref_praticien;
 $patient =& $prescription->_ref_patient;
 
 // Affichage du praticien et du patient à l'aide d'un tableau
-$pdf->createTab($pdf->viewPraticien($praticien->_view,$praticien->_ref_function->_view, $praticien->_ref_function->_ref_group->_view),
-                $pdf->viewPatient($patient->_view, CMbDT::transform($patient->naissance,null,'%d-%m-%y'), $patient->adresse, $patient->cp, $patient->ville, $patient->tel));
+$pdf->createTab(
+  $pdf->viewPraticien(
+    $praticien->_view, 
+    $praticien->_ref_function->_view, 
+    $praticien->_ref_function->_ref_group->_view
+  ), 
+  $pdf->viewPatient(
+    $patient->_view, 
+    CMbDT::transform($patient->naissance, null, '%d-%m-%y'), 
+    $patient->adresse, 
+    $patient->cp, 
+    $patient->ville, 
+    $patient->tel
+  )
+);
 
 $urgent = "";
-if($prescription->urgence){
-	$urgent = "(URGENT)";
+if ($prescription->urgence) {
+  $urgent = "(URGENT)";
 }
 $pdf->setY(65);
-$pdf->writeHTML(utf8_encode("<b>Prélèvement du ".(CMbDT::transform($prescription->date,null,'%d-%m-%y à %H:%M'))." ".$urgent."</b>"));
+$pdf->writeHTML(
+  utf8_encode("<b>Prélèvement du ".(CMbDT::transform($prescription->date, null, '%d-%m-%y à %H:%M'))." ".$urgent."</b>")
+);
 
 $pdf->setY(80);
 // Affichage des analyses
 $pdf->writeHTML(utf8_encode("<b>Analyses demandées:</b>"));
-	
-$pdf->SetFillColor(246,246,246);
-$pdf->Cell(25,7,utf8_encode("Identifiant"),1,0,'C',1);
-$pdf->Cell(105,7,utf8_encode("Libellé de l'analyse"),1,0,'C',1);
-$pdf->Cell(30,7,utf8_encode("Type"),1,0,'C',1);
-$pdf->Cell(20,7,utf8_encode("Loc."),1,0,'C',1);
+
+$pdf->SetFillColor(246, 246, 246);
+$pdf->Cell(25, 7, utf8_encode("Identifiant"), 1, 0, 'C', 1);
+$pdf->Cell(105, 7, utf8_encode("Libellé de l'analyse"), 1, 0, 'C', 1);
+$pdf->Cell(30, 7, utf8_encode("Type"), 1, 0, 'C', 1);
+$pdf->Cell(20, 7, utf8_encode("Loc."), 1, 0, 'C', 1);
 $pdf->Ln();
-
-
 
 $tagCatalogue = CAppUI::conf('dPlabo CCatalogueLabo remote_name');
 
@@ -109,21 +124,21 @@ $num = $numPrat.$idex;
 // Initialisation du code barre, => utilisation par default du codage C128B
 // L'affichage du code barre est realisee dans la fonction redefinie Footer dans la classe CPrescriptionPdf
 $pdf->SetBarcode(
-  $num,
-  $prescription->_ref_praticien->_user_last_name,
-  substr($prescription->_ref_patient->_view, 0, 20),
-  $prescription->_ref_patient->sexe,
-  CMbDT::transform($prescription->_ref_patient->naissance, null, "%d-%m-%y"),
+  $num, 
+  $prescription->_ref_praticien->_user_last_name, 
+  substr($prescription->_ref_patient->_view, 0, 20), 
+  $prescription->_ref_patient->sexe, 
+  CMbDT::transform($prescription->_ref_patient->naissance, null, "%d-%m-%y"), 
   CMbDT::transform($prescription->date, null, "%d-%m-%y %H:%M")
 );
 
 // Tableau de classement des analyses par pack
 foreach ($prescription->_ref_prescription_items as $key => $item) {
   if ($item->_ref_pack->_id) {
-    $tab_pack_prescription[$item->_ref_pack->_view][] = $item;  
+    $tab_pack_prescription[$item->_ref_pack->_view][] = $item;
   }
   else {
-    $tab_prescription[] = $item;    
+    $tab_prescription[] = $item;
   }
 }
 
@@ -134,43 +149,45 @@ foreach ($tab_pack_prescription as $key => $pack) {
   }
   foreach ($pack as $key2 => $_item) {
     $examen_labo =& $_item->_ref_examen_labo;
-    //$pdf->SetFillColor(230,245,255);
-    $pdf->Cell(25,7,utf8_encode($examen_labo->identifiant),1,0,'L',0);
-    $pdf->Cell(105,7,utf8_encode($examen_labo->libelle),1,0,'L',0);
-    $pdf->Cell(30,7,utf8_encode($examen_labo->type_prelevement),1,0,'L',0);
-    if($examen_labo->_external) {
-      $pdf->Cell(20,7,"Externe",1,0,'L',0);
-    } else {
-      $pdf->Cell(20,7,"Interne",1,0,'L',0);
+    //$pdf->SetFillColor(230, 245, 255);
+    $pdf->Cell(25, 7, utf8_encode($examen_labo->identifiant), 1, 0, 'L', 0);
+    $pdf->Cell(105, 7, utf8_encode($examen_labo->libelle), 1, 0, 'L', 0);
+    $pdf->Cell(30, 7, utf8_encode($examen_labo->type_prelevement), 1, 0, 'L', 0);
+    if ($examen_labo->_external) {
+      $pdf->Cell(20, 7, "Externe", 1, 0, 'L', 0);
+    }
+    else {
+      $pdf->Cell(20, 7, "Interne", 1, 0, 'L', 0);
     }
     $pdf->Ln();
-    
+
     // si on atteint y max de contenu de la page, on change de page
-    if($pdf->getY() > 200){
+    if ($pdf->getY() > 200) {
       $pdf->AddPage();
     }
   }
 }
 
-if($tab_pack_prescription && $tab_prescription){
-  $pdf->Cell(0,7,"Autres analyses",1,0,'C',1);
+if ($tab_pack_prescription && $tab_prescription) {
+  $pdf->Cell(0, 7, "Autres analyses", 1, 0, 'C', 1);
   $pdf->Ln();
 }
-  
-foreach($tab_prescription as $key => $_item){
+
+foreach ($tab_prescription as $key => $_item) {
   $examen_labo =& $_item->_ref_examen_labo;
-  //$pdf->SetFillColor(230,245,255);
-	$pdf->Cell(25,7,utf8_encode($examen_labo->identifiant),1,0,'L',0);
-  $pdf->Cell(105,7,utf8_encode($examen_labo->libelle),1,0,'L',0);
-	$pdf->Cell(30,7,utf8_encode($examen_labo->type_prelevement),1,0,'L',0);
-  if($examen_labo->_external) {
-    $pdf->Cell(20,7,"Externe",1,0,'L',0);
-	} else {
-	  $pdf->Cell(20,7,"Interne",1,0,'L',0);
-	}
-	$pdf->Ln();
-	
-  if($pdf->getY() > 200){
+  //$pdf->SetFillColor(230, 245, 255);
+  $pdf->Cell(25, 7, utf8_encode($examen_labo->identifiant), 1, 0, 'L', 0);
+  $pdf->Cell(105, 7, utf8_encode($examen_labo->libelle), 1, 0, 'L', 0);
+  $pdf->Cell(30, 7, utf8_encode($examen_labo->type_prelevement), 1, 0, 'L', 0);
+  if ($examen_labo->_external) {
+    $pdf->Cell(20, 7, "Externe", 1, 0, 'L', 0);
+  }
+  else {
+    $pdf->Cell(20, 7, "Interne", 1, 0, 'L', 0);
+  }
+  $pdf->Ln();
+
+  if ($pdf->getY() > 200) {
     $pdf->AddPage();
   }
 }

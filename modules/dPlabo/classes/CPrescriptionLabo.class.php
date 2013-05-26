@@ -1,14 +1,16 @@
 <?php
-
 /**
-* @package Mediboard
-* @subpackage dPlabo
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Labo
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 class CPrescriptionLabo extends CMbObject {
-  
+
   // Status const
   const VIERGE       = 16;
   const PRELEVEMENTS = 32;
@@ -17,41 +19,47 @@ class CPrescriptionLabo extends CMbObject {
   const SAISIE       = 80;
   const VALIDEE      = 96;
   const FERMEE       = 112;
-  
+
   // DB Table key
-  var $prescription_labo_id = null;
-  
+  public $prescription_labo_id;
+
   // DB Fields
-  var $date       = null;
-  var $verouillee = null;
-  var $validee    = null;
-  var $urgence    = null;
-  
+  public $date;
+  public $verouillee;
+  public $validee;
+  public $urgence;
+
   // DB references
-  var $patient_id   = null;
-  var $praticien_id = null;
-  
+  public $patient_id;
+  public $praticien_id;
+
   // Form Fields
-  var $_status = null;
-  
+  public $_status;
+
   // Forward references
-  var $_ref_patient   = null;
-  var $_ref_praticien = null;
-  
+  public $_ref_patient;
+  public $_ref_praticien;
+
   // Back references
-  var $_ref_prescription_items = null;
-  
+  public $_ref_prescription_items;
+
   // Distant references
-  var $_ref_examens = null;
-  var $_ref_classification_roots = null;
-  
+  public $_ref_examens;
+  public $_ref_classification_roots;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'prescription_labo';
     $spec->key   = 'prescription_labo_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specsParent = parent::getProps();
     $specs = array (
@@ -64,42 +72,48 @@ class CPrescriptionLabo extends CMbObject {
     );
     return array_merge($specsParent, $specs);
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["prescription_labo_examen"] = "CPrescriptionLaboExamen prescription_labo_id";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_shortview = $this->date;
     $this->_view      = "Prescription du ".CMbDT::transform(null, $this->date, "%d/%m/%Y %Hh%M");
   }
-  
+
   function loadIdPresc(){
     $tagCatalogue = CAppUI::conf('dPlabo CCatalogueLabo remote_name');
-  
+
     $this->loadRefsFwd();
     $prat =& $this->_ref_praticien;
-    
+
     $tagCode4 = "labo code4";
     $idSantePratCode4 = new CIdSante400();
     $idSantePratCode4->loadLatestFor($prat, $tagCode4);
-  
+
     $idPresc = new CIdSante400();
     $idPresc->tag = "$tagCatalogue Prat:".str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT); // tag LABO Prat: 0017
     $idPresc->object_class = "CPrescriptionLabo";
     $idPresc->loadMatchingObject("id400 DESC");
-    
+
     return $idPresc->id400;
   }
-  
+
   function getIdExterne() {
     $idExterne = new CIdSante400();
     // Chargement de l'id externe de la prescription (tag: Imeds)
     $idExterne->loadLatestFor($this, "iMeds");
-    if(!$idExterne->_id) {
+    if (!$idExterne->_id) {
       // Afactoriser : assez complexe (concatenation du code 4 praticien et du code 4 prescription)
       $tagCatalogue = CAppUI::conf('dPlabo CCatalogueLabo remote_name');
       $this->loadRefsFwd();
@@ -108,18 +122,18 @@ class CPrescriptionLabo extends CMbObject {
       $tagCode4 = "labo code4";
       $idSantePratCode4 = new CIdSante400();
       $idSantePratCode4->loadLatestFor($prat, $tagCode4);
-  
+
       $idPresc = new CIdSante400();
       $idPresc->tag = "$tagCatalogue Prat:".str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT); // tag LABO Prat: 0017
       $idPresc->object_class = "CPrescriptionLabo";
       $idPresc->loadMatchingObject("id400 DESC");
       $numprovisoire = str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT).str_pad($idPresc->id400, 4, '0', STR_PAD_LEFT);
-  
+
       // Envoi à la source créée 'get_id_prescriptionlabo' (SOAP)
       $exchange_source = CExchangeSource::get("get_id_prescriptionlabo", "soap");
       $exchange_source->setData(array("NumMedi" => $numprovisoire, "pwd" =>$exchange_source->password));
       $exchange_source->send("NDOSLAB");
-      
+
       $idExterne->tag = "iMeds";
       $idExterne->object_class = "CPrescriptionLabo";
       $idExterne->object_id = $this->_id;
@@ -129,19 +143,25 @@ class CPrescriptionLabo extends CMbObject {
     }
     return $idExterne;
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     if (!$this->_ref_patient) {
       $this->_ref_patient = new CPatient();
       $this->_ref_patient->load($this->patient_id);
     }
-    
+
     if (!$this->_ref_praticien) {
       $this->_ref_praticien = new CMediusers();
       $this->_ref_praticien->load($this->praticien_id);
     }
   }
-  
+
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack() {
     if (!$this->_ref_prescription_items) {
       // Chargement des items
@@ -149,7 +169,7 @@ class CPrescriptionLabo extends CMbObject {
       $item->prescription_labo_id = $this->_id;
       $this->_ref_prescription_items = $item->loadMatchingList();
       $this->_ref_examens = array();
-      
+
       // Classement des examens
       foreach ($this->_ref_prescription_items as &$_item) {
         $_item->_ref_prescription_labo =& $this;
@@ -157,14 +177,14 @@ class CPrescriptionLabo extends CMbObject {
         $examen =& $_item->_ref_examen_labo;
         $this->_ref_examens[$examen->_id] =& $examen; 
       }
-      
+
       // Classement des items internes et externes
       $this->_ref_external_items = array();          
       $this->_ref_internal_items = array();          
       foreach ($this->_ref_prescription_items as &$_item) {
         $examen =& $_item->_ref_examen_labo;
         $examen->loadExternal();
-        
+
         // Remplissage des collections
         if ($examen->_external) {
           $this->_ref_external_items[$_item->_id] =& $_item;          
@@ -176,16 +196,16 @@ class CPrescriptionLabo extends CMbObject {
     }
     $this->checkStatus();
   }
-  
+
   function checkStatus() {
     $numFiles = $this->countFiles();
-    
+
     // Vérification de l'état validée
-    if($this->validee) {
+    if ($this->validee) {
       $this->_status = self::VALIDEE;
       return $this->_status;
     }
-    
+
     // Vérification de l'etat saisie
     $saisie = count($this->_ref_prescription_items);
     foreach ($this->_ref_internal_items as $_item) {
@@ -194,12 +214,12 @@ class CPrescriptionLabo extends CMbObject {
         break;
       }
     }
-    
+
     if ($saisie && ($numFiles || !count($this->_ref_external_items))) {
       $this->_status = self::SAISIE;
       return $this->_status;
     }
-    
+
     // Vérification de l'état transmise
     if ($numFiles) {
       $this->_status = self::TRANSMISE;
@@ -213,13 +233,13 @@ class CPrescriptionLabo extends CMbObject {
         self::TRANSMISE;
       return $this->_status;
     }
-    
+
     // Vérification de l'état prélèvements
     if ($this->countBackRefs("prescription_labo_examen")) {
       $this->_status = self::PRELEVEMENTS;
       return $this->_status;
     }
-    
+
     // Sinon vierge
     $this->_status = self::VIERGE;
     return $this->_status;
@@ -230,7 +250,7 @@ class CPrescriptionLabo extends CMbObject {
    */
   function loadClassification() {
     $catalogues = array();
-    
+
     // Load needed catalogues
     foreach ($this->_ref_examens as $examen) {
       $catalogue_id = $examen->catalogue_labo_id;
@@ -273,7 +293,7 @@ class CPrescriptionLabo extends CMbObject {
         $link_catalogue->_ref_pere =& $parent_catalogue;
       } 
     }
-    
+
     // Find classifications roots
     foreach ($catalogues as &$root_catalogue) {
       if ($root_catalogue->computeLevel() == 0) {
@@ -281,11 +301,12 @@ class CPrescriptionLabo extends CMbObject {
       }
     }
   } 
-   
+
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     $this->loadRefsFwd();
     return $this->_ref_praticien->getPerm($permType);
   }
 }
-
-?>

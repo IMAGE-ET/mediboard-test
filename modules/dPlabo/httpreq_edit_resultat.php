@@ -1,10 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- *	@package Mediboard
- *	@subpackage dPlabo
- *	@version $Revision$
- *  @author Romain Ollivier
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Labo
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -22,12 +24,12 @@ if ($prescriptionItem->_id) {
 
 $siblingItems = array();
 if ($prescriptionItem->loadRefs()) {
-  
+
   $siblingItems = $prescriptionItem->loadSiblings();
   $prescriptionItem->_ref_prescription_labo->loadRefs();
   $prescriptionItem->_ref_examen_labo->loadRefsFwd();
   $prescriptionItem->_ref_examen_labo->loadExternal();
-  if($prescriptionItem->_ref_prescription_labo->_status >= CPrescriptionLabo::VALIDEE) {
+  if ($prescriptionItem->_ref_prescription_labo->_status >= CPrescriptionLabo::VALIDEE) {
     $prescriptionItem->_locked = 1;
   }
 }
@@ -40,4 +42,3 @@ $smarty->assign("siblingItems", $siblingItems);
 $smarty->assign("user_id", $user->_id);
 
 $smarty->display("inc_edit_resultat.tpl");
-?>

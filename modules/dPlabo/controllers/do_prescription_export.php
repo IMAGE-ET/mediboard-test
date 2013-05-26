@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage hprim21
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Labo
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 function redirect() {
@@ -32,7 +33,7 @@ $mbPrescription = new CPrescriptionLabo();
 
 // Chargement de la prescription
 $mb_prescription_id = CValue::post("prescription_labo_id", null);
-if(!$mb_prescription_id) {
+if (!$mb_prescription_id) {
   CAppUI::setMsg("Veuillez spécifier une prescription", UI_MSG_ERROR );
   redirect();
 }
@@ -52,7 +53,7 @@ $idSantePratCode9 = new CIdSante400();
 $idSantePratCode9->loadLatestFor($prat, $tagCode9);
 
 // Si le praticien n'a pas d'id400, il ne peut pas envoyer la prescription
-if (!$idSantePratCode4->_id || !$idSantePratCode9->_id){
+if (!$idSantePratCode4->_id || !$idSantePratCode9->_id) {
   CAppUI::setMsg("Le praticien n'a pas d'id400 pour le catalogue LABO", UI_MSG_ERROR );
   redirect();
 }
@@ -69,29 +70,29 @@ $transSexe["f"] = "2";
 $mbPatient =& $mbPrescription->_ref_patient;
 
 // Gestion du titre du patient
-if($mbPatient->sexe == "m"){
-  if($mbPatient->_annees >= 0 && $mbPatient->_annees <= 3){
+if ($mbPatient->sexe == "m") {
+  if ($mbPatient->_annees >= 0 && $mbPatient->_annees <= 3) {
     $titre_ = "Bébé garçon";
   }
-  if($mbPatient->civilite == "enf") {
+  if ($mbPatient->civilite == "enf") {
     $titre_ = "Enfant garçon";
   }
-  if($mbPatient->civilite == "m") {
+  if ($mbPatient->civilite == "m") {
     $titre_ = "Monsieur";
   }
 }
 
-if($mbPatient->sexe == "f"){
-  if($mbPatient->_annees >= 0 && $mbPatient->_annees <= 3){
+if ($mbPatient->sexe == "f") {
+  if ($mbPatient->_annees >= 0 && $mbPatient->_annees <= 3) {
     $titre_ = "Bébé fille";
   }
-  if($mbPatient->civilite == "enf") {
+  if ($mbPatient->civilite == "enf") {
     $titre_ = "Enfant fille";
   }
-  if($mbPatient->civilite == "mlle") {
+  if ($mbPatient->civilite == "mlle") {
     $titre_ = "Mademoiselle";
   }
-  if($mbPatient->civilite == "mme") {
+  if ($mbPatient->civilite == "mme") {
     $titre_ = "Madame";
   }
 }
@@ -105,7 +106,6 @@ $transTitre["Bébé garçon"]   = "6";
 $transTitre["Bébé fille"]    = "7"; 
 $transTitre["Docteur"]       = "8"; 
 $transTitre["Doctoresse"]    = "A"; 
-
 
 $doc->setDocument("tmp/Prescription-".$mbPrescription->_id.".xml");
 
@@ -136,12 +136,12 @@ $assurance        = $doc->addElement($patient, "assurance", $mbPatient->regime_s
 
 // Prescription --> Dossier 
 $dossier          = $doc->addElement($prescription, "Dossier");
-$dateprelevement  = $doc->addElement($dossier,"dateprelevement", CMbDT::transform(null, CMbDT::date($mbPrescription->date), "%Y%m%d"));
-$heureprelevement = $doc->addElement($dossier,"heureprelevement", CMbDT::time($mbPrescription->date));
-$urgent           = $doc->addElement($dossier,"urgent", $mbPrescription->urgence);
-$afaxer           = $doc->addElement($dossier,"afaxer", "");
-$atelephoner      = $doc->addElement($dossier,"atelephoner", "");
- 
+$dateprelevement  = $doc->addElement($dossier, "dateprelevement", CMbDT::transform(null, CMbDT::date($mbPrescription->date), "%Y%m%d"));
+$heureprelevement = $doc->addElement($dossier, "heureprelevement", CMbDT::time($mbPrescription->date));
+$urgent           = $doc->addElement($dossier, "urgent", $mbPrescription->urgence);
+$afaxer           = $doc->addElement($dossier, "afaxer", "");
+$atelephoner      = $doc->addElement($dossier, "atelephoner", "");
+
 // Prescription --> Analyse
 $analyse          = $doc->addElement($prescription, "Analyse"); 
 
@@ -150,23 +150,23 @@ $analyse          = $doc->addElement($prescription, "Analyse");
 $tab_prescription = array();
 
 // Parcours des analyses
-foreach($mbPrescription->_ref_prescription_items as $key => $item){
+foreach ($mbPrescription->_ref_prescription_items as $key => $item) {
   // Si l'analyse fait parti d'un pack, on stocke le code du pack
-  if($item->_ref_pack->_id){
+  if ($item->_ref_pack->_id) {
     $tab_prescription[$item->_ref_pack->_id] = $item->_ref_pack->code;  
   }
   // Sinon, on stocke l'identifiant de l'analyse si elle est externe
   else {
     $examen =& $item->_ref_examen_labo;
-    if($examen->_external){
+    if ($examen->_external) {
       $tab_prescription[] = $examen->identifiant;    
     }
   }
 }
 
 // Ajout des codes dans le fichier xml
-foreach($tab_prescription as $curr_analyse){
-  $code = $doc->addElement($analyse,"code", $curr_analyse);
+foreach ($tab_prescription as $curr_analyse) {
+  $code = $doc->addElement($analyse, "code", $curr_analyse);
 }
 
 // Prescription -> Prescripteur
@@ -193,7 +193,7 @@ $prescriptionlabo_source = CExchangeSource::get("prescriptionlabo", "ftp");
 $ftp = new CFTP;
 $ftp->init($prescriptionlabo_source);
 
-if (!$ftp->hostname){
+if (!$ftp->hostname) {
   CAppUI::setMsg("Le document n'a pas pu être envoyé, configuration FTP manquante", UI_MSG_ERROR );
   redirect();
 }
@@ -220,5 +220,3 @@ if ($msg = $doc->addFile($mbPrescription)) {
   CAppUI::setMsg("Document non attaché à la prescription: $msg", UI_MSG_ERROR );
 }
 redirect();
-
-?>

@@ -1,13 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPlabo
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Labo
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
-$do = new CDoObjectAddEdit("CPackExamensLabo", "pack_examens_labo_id");
+$do = new CDoObjectAddEdit("CPackExamensLabo");
 $do->doIt();
-
-?>

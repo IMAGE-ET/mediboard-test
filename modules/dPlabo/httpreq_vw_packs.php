@@ -1,10 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- *	@package Mediboard
- *	@subpackage dPlabo
- *	@version $Revision$
- *  @author Romain Ollivier
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Labo
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -29,7 +31,7 @@ $where["obsolete"] = " = '0'";
 
 $order = "libelle";
 $listPacks = $pack->loadList($where, $order);
-foreach($listPacks as $key => $curr_pack) {
+foreach ($listPacks as $key => $curr_pack) {
   $listPacks[$key]->loadRefs();
 }
 
@@ -41,5 +43,3 @@ $smarty->assign("pack"     , $pack     );
 $smarty->assign("dragPacks", $dragPacks);
 
 $smarty->display("inc_vw_packs.tpl");
-
-?>

@@ -1,10 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- *	@package Mediboard
- *	@subpackage dPlabo
- *	@version $Revision$
- *  @author Romain Ollivier
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Labo
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -17,9 +19,10 @@ $listFunctions = $function->loadListWithPerms(PERM_EDIT);
 // Chargement du pack demandé
 $pack = new CPackExamensLabo;
 $pack->load(CValue::getOrSession("pack_examens_labo_id"));
-if($pack->_id && $pack->getPerm(PERM_EDIT)) {
+if ($pack->_id && $pack->getPerm(PERM_EDIT)) {
   $pack->loadRefs();
-} else {
+}
+else {
   $pack = new CPackExamensLabo;
 }
 
@@ -28,7 +31,7 @@ $where = array("function_id IS NULL OR function_id ".CSQLDataSource::prepareIn(a
 $where["obsolete"] = " = '0'";
 $order = "libelle";
 $listPacks = $pack->loadList($where, $order);
-foreach($listPacks as $key => $curr_pack) {
+foreach ($listPacks as $key => $curr_pack) {
   $listPacks[$key]->loadRefs();
 }
 
@@ -40,4 +43,3 @@ $smarty->assign("listPacks"    , $listPacks    );
 $smarty->assign("pack"         , $pack         );
 
 $smarty->display("vw_edit_packs.tpl");
-?>

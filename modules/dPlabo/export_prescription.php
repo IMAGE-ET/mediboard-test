@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage Labo
-* @version $Revision$
-* @author Thomas Despoix
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Labo
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 if (!class_exists("DOMDocument")) {
   trigger_error("sorry, DOMDocument is needed");
@@ -42,7 +44,7 @@ $nomPatient      = $doc->addElement($prescription, "nomPatient"     , $mbPrescri
 $prenomPatient   = $doc->addElement($prescription, "prenomPatient"  , $mbPrescription->_ref_patient->prenom);
 $date            = $doc->addElement($prescription, "date"           , CMbDT::date($mbPrescription->date));
 $analyses       = $doc->addElement($prescription, "analyses");
-foreach($mbPrescription->_ref_examens as $curr_analyse) {
+foreach ($mbPrescription->_ref_examens as $curr_analyse) {
   $analyse = $doc->addElement($analyses, "analyse");
   $doc->addAttribute($analyse, "id", $curr_analyse->_id);
   $identifiant = $doc->addElement($analyse, "identifiant", $curr_analyse->identifiant);
@@ -53,5 +55,3 @@ $docReference->schemaValidate();
 $doc->schemaValidate();
 
 $doc->addFile($mbPrescription);
-
-?>

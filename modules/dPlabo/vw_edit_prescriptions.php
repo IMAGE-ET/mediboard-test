@@ -1,10 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- *	@package Mediboard
- *	@subpackage dPlabo
- *	@version $Revision$
- *  @author Romain Ollivier
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Labo
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -16,7 +18,6 @@ $typeListe  = CValue::getOrSession("typeListe");
 CValue::getOrSession("prescription_labo_id");
 
 // Chargement du patient
-
 $patient = new CPatient;
 $patient->load($patient_id);
 
@@ -27,5 +28,3 @@ $smarty->assign("patient"  , $patient);
 $smarty->assign("typeListe", $typeListe);
 
 $smarty->display("vw_edit_prescriptions.tpl");
-
-?>

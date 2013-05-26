@@ -1,10 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- *	@package Mediboard
- *	@subpackage dPlabo
- *	@version $Revision$
- *  @author Romain Ollivier
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Labo
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -15,11 +17,11 @@ $examen_labo_id = CValue::getOrSession("examen_labo_id");
 $examen = new CExamenLabo;
 
 // Chargement du catalogue demandé
-if(CValue::get("catalogue_labo_id")) {
+if (CValue::get("catalogue_labo_id")) {
   $examen_labo_id = null;
   CValue::setSession("examen_labo_id");
 }
-if($examen_labo_id) {
+if ($examen_labo_id) {
   $examen->load($examen_labo_id);
   $examen->loadRefs();
   $examen->getSiblings();
@@ -29,7 +31,8 @@ if($examen_labo_id) {
   }
   $examen->loadClassification();
   $catalogue =& $examen->_ref_catalogue_labo;
-} else {
+}
+else {
   $catalogue_labo_id = CValue::getOrSession("catalogue_labo_id");
   $catalogue = new CCatalogueLabo;
   $catalogue->load($catalogue_labo_id);
@@ -42,9 +45,10 @@ $groups = CGroups::loadGroups();
 foreach ($groups as &$group) {
   $group->loadFunctions(null);
   foreach ($group->_ref_functions as $keyFunc => &$function) {
-    if($function->getPerm(PERM_EDIT)) {
+    if ($function->getPerm(PERM_EDIT)) {
       $function->loadRefsUsers();
-    } else {
+    }
+    else {
       unset($group->_ref_functions[$keyFunc]);
     }
   }
@@ -61,7 +65,7 @@ $where["pere_id"] = "IS NULL";
 $where[] = "function_id IS NULL OR function_id ".CSQLDataSource::prepareIn(array_keys($functions));
 $order = "identifiant";
 $listCatalogues = $catalogue->loadList($where, $order);
-foreach($listCatalogues as &$_catalogue) {
+foreach ($listCatalogues as &$_catalogue) {
   $_catalogue->loadRefsDeep();
 }
 
@@ -74,4 +78,3 @@ $smarty->assign("catalogue"     , $catalogue);
 $smarty->assign("listCatalogues", $listCatalogues);
 
 $smarty->display("vw_edit_examens.tpl");
-?>

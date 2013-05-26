@@ -1,12 +1,14 @@
-<?php /* $Id$ */
-
+<?php
 /**
- *	@package Mediboard
- *	@subpackage dPlabo
- *	@version $Revision$
- *  @author Thomas Despoix
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Labo
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
- 
+
 CCanDo::checkRead();
 
 // Chargement de la prescription
@@ -23,7 +25,7 @@ $patient->load($patient_id);
 $patient->loadRefsPrescriptions(PERM_EDIT);
 
 // Chargement de la première prescription dans le cas ou il n'y en a pas
-if(!$prescription->_id && $patient->_id && count($patient->_ref_prescriptions)) {
+if (!$prescription->_id && $patient->_id && count($patient->_ref_prescriptions)) {
   $prescription->load(reset($patient->_ref_prescriptions)->_id);
   $prescription->loadRefsBack();
   $prescription->loadClassification();
@@ -36,5 +38,3 @@ $smarty->assign("patient"  , $patient);
 $smarty->assign("prescription"  , $prescription);
 
 $smarty->display("vw_resultats.tpl");
-
-?>

@@ -1,10 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- *	@package Mediboard
- *	@subpackage dPlabo
- *	@version $Revision$
- *  @author Romain Ollivier
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Labo
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -21,10 +23,11 @@ $functions = $functions->loadListWithPerms(PERM_EDIT, null, $order);
 // Chargement du catalogue demandé
 $catalogue = new CCatalogueLabo;
 $catalogue->load(CValue::getOrSession("catalogue_labo_id"));
-if($catalogue->_id && $catalogue->getPerm(PERM_EDIT)) {
+if ($catalogue->_id && $catalogue->getPerm(PERM_EDIT)) {
   $catalogue->loadRefs();
   $function_id = $catalogue->function_id;
-} else {
+}
+else {
   $catalogue = new CCatalogueLabo;
 }
 
@@ -36,7 +39,7 @@ $where[] = "function_id IS NULL OR function_id ".CSQLDataSource::prepareIn(array
 $order = "identifiant";
 $listCatalogues = $catalogue->loadList($where, $order);
 
-foreach($listCatalogues as &$_catalogue) {
+foreach ($listCatalogues as &$_catalogue) {
   $_catalogue->loadRefsDeep();
 }
 
@@ -51,4 +54,3 @@ $smarty->assign("function_id"   , $function_id   );
 $smarty->assign("functions"     , $functions     );
 
 $smarty->display("vw_edit_catalogues.tpl");
-?>
