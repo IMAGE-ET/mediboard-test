@@ -205,10 +205,13 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_ref_service_mutation;
   public $_ref_dossier_medical;
   public $_ref_rpu;
+  /** @var CBilanSSR */
   public $_ref_bilan_ssr;
+  /** @var CFicheAutonomie */
   public $_ref_fiche_autonomie;
+  /** @var CConsultAnesth */
   public $_ref_consult_anesth;
-  /** @var  CConsultation[] */
+  /** @var CConsultation[] */
   public $_ref_consultations;
   public $_ref_consult_atu;
   public $_ref_prescriptions;
@@ -218,6 +221,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_ref_NRA;
   public $_ref_prescripteurs;
   public $_ref_adresse_par_prat;
+  /** @var CPrescription */
   public $_ref_prescription_sejour;
   public $_ref_replacements;
   public $_ref_replacement;
@@ -1799,6 +1803,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_bilan_ssr = $this->loadUniqueBackRef("bilan_ssr");
   }
 
+  /**
+   * Charge la fiche d'autonomie associé
+   *
+   * @return CFicheAutonomie
+   */
   function loadRefFicheAutonomie() {
     return $this->_ref_fiche_autonomie = $this->loadUniqueBackRef("fiche_autonomie");
   }

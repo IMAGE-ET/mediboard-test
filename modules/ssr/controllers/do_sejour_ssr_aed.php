@@ -1,14 +1,13 @@
-<?php /* $Id: do_rpu_aed.php 6473 2009-06-24 15:18:19Z lryo $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: 6473 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SSR
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $do = new CDoObjectAddEdit("CSejour", "sejour_id");
 $do->doIt();
-
-?>
