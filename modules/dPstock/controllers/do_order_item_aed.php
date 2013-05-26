@@ -1,32 +1,33 @@
-<?php /* $Id: do_order_item_aed.php 7914 2010-01-25 13:56:02Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision: 7914 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $do = new CDoObjectAddEdit('CProductOrderItem');
 
-if(CValue::post("_create_order")) {
+if (CValue::post("_create_order")) {
   $reference_id = CValue::post("reference_id");
   $reference = new CProductReference;
   $reference->reference_id = $reference_id;
-  
+
   if (!$reference_id || !$reference->loadMatchingObject()) {
     CAppUI::setMsg("Impossible de créer l'article, la réference n'existe pas", UI_MSG_ERROR);
   }
-  
+
   $where = array(
     "product_order.societe_id" => "= '$reference->societe_id'",
     "product_order.object_class" => "IS NULL",
   );
-  
+
   $septic = null;
-	$comments = null;
-  
+  $comments = null;
+
   // If a context is provided
   if ($context_guid = CValue::post("_context_guid")) {
     list($object_class, $object_id) = explode("-", $context_guid);
@@ -40,12 +41,12 @@ if(CValue::post("_create_order")) {
       $where["product_order_item.septic"] = "= '0'";
     }
   }
-  elseif($comments = CValue::read($_POST, "_comments")) {
+  elseif ($comments = CValue::read($_POST, "_comments")) {
     $where["product_order.comments"] = "LIKE '$comments%'";
   }
-  
+
   $where["product_order.group_id"] = "= '".CProductStockGroup::getHostGroup()."'";
-	
+
   $order = new CProductOrder;
   $orders = $order->search("waiting", null, 1, $where);
 
@@ -60,28 +61,28 @@ if(CValue::post("_create_order")) {
       $order->setObject($context);
       $order->locked = 1;
     }
-    
+
     $comments = CValue::read($_POST, "_comments");
-    
+
     $order->societe_id = $reference->societe_id;
     $order->group_id = CProductStockGroup::getHostGroup();
     $order->comments = $comments;
-    
+
     if (strpos(CProductOrder::$_return_form_label, $comments) === 0) {
       $order->locked = 1;
     }
-    
+
     $product = $reference->loadRefProduct();
     $count_dmi = $product->countBackRefs("dmis");
     $order->_context_bl = $count_dmi > 0;
     $order->_septic = $septic;
-    
+
     if ($msg = $order->store()) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
     }
-    
+
     $order->order_number = $order->getUniqueNumber();
-    
+
     if ($msg = $order->store()) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
     }
@@ -89,12 +90,12 @@ if(CValue::post("_create_order")) {
   else {
     $order = reset($orders);
   }
-  
+
   if ($order->_id && !$order->bill_number) {
     $order->bill_number = CValue::post("_bill_number");
     $order->store();
   }
-  
+
   $_POST["order_id"] = $order->_id;
 }
 

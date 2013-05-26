@@ -9,16 +9,21 @@
  * @version    $Revision$
  */
 
+/**
+ * Service Product Stock
+ */
 class CProductStockService extends CProductStock /* extends CMbMetaObject */ {
   // DB Fields
   public $object_class;
   public $object_id;
   public $common;
 
-  // Object References
-  //    Single
+  /** @var CService|CBlocOperatoire */
   public $_ref_object;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_stock_service';
@@ -27,6 +32,9 @@ class CProductStockService extends CProductStock /* extends CMbMetaObject */ {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs['object_class'] = 'enum notNull list|CService'; //|CBlocOperatoire';
@@ -34,34 +42,54 @@ class CProductStockService extends CProductStock /* extends CMbMetaObject */ {
     $specs['common']       = 'bool';
     return $specs;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["administrations"] = "CAdministration stock_id";
     return $backProps;
   }
-  
-  // <CMbMetaObject>
+
+  /**
+   * Set object_class and object_id
+   *
+   * @param CMbObject $object Object
+   *
+   * @return void
+   */
   function setObject(CMbObject $object) {
     $this->_ref_object  = $object;
     $this->object_id    = $object->_id;
     $this->object_class = $object->_class;
   }
-  
+
+  /**
+   * Load target object
+   *
+   * @param bool $cache Use object cache
+   *
+   * @return CService|CBlocOperatoire
+   */
   function loadTargetObject($cache = true) {
     return $this->_ref_object = $this->loadFwdRef("object_id", $cache);
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd(){
     parent::loadRefsFwd();
     $this->loadTargetObject();
   }
-  // </CMbMetaObject> 
   
   /**
-   * 
-   * @param string $code
-   * @param int $service_id [optional]
+   * Get Stock from product code and service ID
+   *
+   * @param string $code       Product code
+   * @param int    $service_id Service ID
+   *
    * @return CProductStockService
    */
   static function getFromCode($code, $service_id = null) {
@@ -81,7 +109,15 @@ class CProductStockService extends CProductStock /* extends CMbMetaObject */ {
     $stock->loadObject($where, null, null, $ljoin);
     return $stock;
   }
-  
+
+  /**
+   * Get a stock from a product and a host
+   *
+   * @param CProduct  $product Product
+   * @param CMbObject $host    Host
+   *
+   * @return CProductStockService
+   */
   static function getFromProduct(CProduct $product, CMbObject $host) {
     $stock = new self;
     $stock->setObject($host);
@@ -90,11 +126,19 @@ class CProductStockService extends CProductStock /* extends CMbMetaObject */ {
     return $stock;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = "$this->_ref_product ($this->_ref_object)";
   }
-  
+
+  /**
+   * Load locations
+   *
+   * @return CProductStockLocation[]
+   */
   function loadRelatedLocations(){
     $where = array(
       "object_class" => "= '$this->object_class'",
@@ -104,7 +148,10 @@ class CProductStockService extends CProductStock /* extends CMbMetaObject */ {
     $location = new CProductStockLocation;
     return $this->_ref_related_locations = $location->loadList($where, "name");
   }
-  
+
+  /**
+   * @see parent::check()
+   */
   function check(){
     if ($msg = parent::check()) {
       return $msg;
@@ -114,17 +161,27 @@ class CProductStockService extends CProductStock /* extends CMbMetaObject */ {
       $this->completeField("object_id", "object_class");
       $location = $this->loadRefLocation();
       
-      if ($location->object_class !== $this->object_class || 
-          $location->object_id    !=  $this->object_id) {
+      if (
+          $location->object_class !== $this->object_class ||
+          $location->object_id    !=  $this->object_id
+      ) {
         return "Le stock doit être associé à un emplacement de '".$this->loadTargetObject()."'";
       }
     }
+
+    return null;
   }
-  
+
+  /**
+   * @see parent::loadRefHost()
+   */
   function loadRefHost(){
     return $this->loadTargetObject();
   }
-  
+
+  /**
+   * @see parent::setHost()
+   */
   function setHost(CMbObject $host){
     $this->setObject($host);
   }

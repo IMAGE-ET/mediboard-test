@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Product
+ */
 class CProduct extends CMbObject {
   public $product_id;
 
@@ -54,6 +57,9 @@ class CProduct extends CMbObject {
 
   /** @var CProductOrderItemReception[] */
   public $_ref_lots;
+
+  /** @var CProductSelection[] */
+  public $_ref_selections;
   
   // Undividable quantity
   public $_unit_quantity;
@@ -69,7 +75,10 @@ class CProduct extends CMbObject {
   
   /** @var CProductStockGroup This group's stock id */
   public $_ref_stock_group;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product';
@@ -83,6 +92,9 @@ class CProduct extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['references']     = 'CProductReference product_id';
@@ -95,6 +107,9 @@ class CProduct extends CMbObject {
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props['name']          = 'str notNull seekable show|0';
@@ -132,6 +147,9 @@ class CProduct extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->name;
@@ -162,7 +180,9 @@ class CProduct extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Load references
+   *
+   * @param bool $cache Use object cache
    *
    * @return CProductReference[]
    */
@@ -173,6 +193,9 @@ class CProduct extends CMbObject {
     return $this->_ref_references = $this->loadBackRefs('references');
   }
 
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack() {
     $this->loadRefsReferences();
     $this->_ref_stocks_group = $this->loadBackRefs('stocks_group');
@@ -185,20 +208,39 @@ class CProduct extends CMbObject {
     $this->_ref_selections     = $this->loadBackRefs('selections');
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadRefCategory();
     $this->loadRefSociete();
   }
-  
+
+  /**
+   * Load category
+   *
+   * @return CProductCategory
+   */
   function loadRefCategory() {
     return $this->_ref_category = $this->loadFwdRef("category_id", true);
   }
-  
+
+  /**
+   * Load manufacturer
+   *
+   * @return CSociete
+   */
   function loadRefSociete() {
     return $this->_ref_societe = $this->loadFwdRef("societe_id" , true);
   }
   
-  // Loads the stock associated to the current group
+  /**
+   * Loads the stock associated to the current group
+   *
+   * @param bool $cache Use object cache
+   *
+   * @return CProductStockGroup
+   */
   function loadRefStock($cache = true) {
     if ($this->_ref_stock_group && $cache) {
       return $this->_ref_stock_group;
@@ -215,13 +257,21 @@ class CProduct extends CMbObject {
     return $this->_ref_stock_group;
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     if (!$this->_ref_category) {
       $this->loadRefsFwd();
     }
     return $this->_ref_category->getPerm($permType);
   }
-  
+
+  /**
+   * Load lots
+   *
+   * @return CProductOrderItemReception[]
+   */
   function loadRefsLots(){
     $ljoin = array(
       "product_order_item" => "product_order_item_reception.order_item_id = product_order_item.order_item_id",
@@ -236,7 +286,10 @@ class CProduct extends CMbObject {
     $lot = new CProductOrderItemReception;
     return $this->_ref_lots = $lot->loadList($where, "date DESC", null, null, $ljoin);
   }
-  
+
+  /**
+   * @see parent::loadView()
+   */
   function loadView(){
     parent::loadView();
     $this->getConsumption("-3 MONTHS");
@@ -285,16 +338,26 @@ class CProduct extends CMbObject {
     
     return $this->_consumption = $total;
   }
-  
-  /** 
+
+  /**
    * Computes this product's consumption between two dates
-   * 
-   * @param string $since    [optional]
-   * @param string $date_max [optional]
-   * 
-   * @return float
+   *
+   * @param CProduct[] $products     Products list
+   * @param string     $since        [optional] Start offset
+   * @param string     $date_max     [optional] Max date
+   *
+   * @param CService[] $services     Services
+   * @param bool       $include_loss Include lost items
+   *
+   * @return float[]
    */
-  static function getConsumptionMultipleProducts($products, $since = "-1 MONTH", $date_max = null, $services = null, $include_loss = true){
+  static function getConsumptionMultipleProducts(
+      $products,
+      $since = "-1 MONTH",
+      $date_max = null,
+      $services = null,
+      $include_loss = true
+  ) {
     $ds = CSQLDataSource::get("std");
     
     $where = array(
@@ -371,7 +434,16 @@ class CProduct extends CMbObject {
     
     return $this->_supply = $this->_spec->ds->loadResult($sql->getRequest());
   }
-  
+
+  /**
+   * Get supply stats
+   *
+   * @param CProduct[] $products List of products
+   * @param string     $since    Date start offset
+   * @param string     $date_max Max date
+   *
+   * @return array
+   */
   static function getSupplyMultiple($products, $since = "-1 MONTH", $date_max = null){
     $ds = CSQLDataSource::get("std");
     
@@ -399,13 +471,14 @@ class CProduct extends CMbObject {
     
     return $ds->loadHashList($sql->getRequest());
   }
-  
-  /** 
+
+  /**
    * Computes the weighted average price (PMP)
-   * 
+   *
    * @param string $since    [optional]
    * @param string $date_max [optional]
-   * 
+   * @param bool   $ttc      Include taxes
+   *
    * @return float
    */
   function getWAP($since = "-1 MONTH", $date_max = null, $ttc = false){
@@ -444,11 +517,12 @@ class CProduct extends CMbObject {
     
     $total = $this->_spec->ds->loadResult($sql->getRequest());
     
-    //mbTrace($total, $this->code);
-    
     return $total / $qty;
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store() {
     $this->completeField("code", 'quantity', 'unit_quantity');
     
@@ -500,8 +574,17 @@ class CProduct extends CMbObject {
       
       $this->_create_stock_quantity = null;
     }
+
+    return null;
   }
-  
+
+  /**
+   * Get or count items in pending orders
+   *
+   * @param bool $count Count instead of load
+   *
+   * @return CProductOrderItem[]|int[]
+   */
   function getPendingOrderItems($count = true){
     $leftjoin = array();
     $leftjoin['product_order']      = 'product_order.order_id = product_order_item.order_id';
@@ -543,7 +626,19 @@ class CProduct extends CMbObject {
     
     return $this->_in_order;
   }
-  
+
+  /**
+   * Fill a flow struct
+   *
+   * @param array      &$array   The flow struct to fill
+   * @param CProduct[] $products Products
+   * @param int        $n        N*$unit
+   * @param string     $start    Start date
+   * @param string     $unit     Time unit
+   * @param CService[] $services Services
+   *
+   * @return void
+   */
   private static function fillFlow(&$array, $products, $n, $start, $unit, $services) {
     foreach ($services as $_key => $_service) {
       $array["out"]["total"][$_key] = array(0, 0);
@@ -554,8 +649,6 @@ class CProduct extends CMbObject {
     // Y init
     for ($i = 0; $i < 12; $i++) {
       $from = CMbDT::date("+$i $unit", $start);
-      $to   = CMbDT::date("+1 $unit", $from);
-      
       $d[$from] = array();
     }
     $d["total"] = array(
@@ -581,10 +674,12 @@ class CProduct extends CMbObject {
       foreach ($all_counts as $_data) {
         $by_product[$_data["product_id"]][$_data["service_id"]] = $_data["sum"];
       }
-      
+
+      /** @var CProduct $_product */
+
       foreach ($products as $_product) {
-        $counts = CValue::read($by_product, $_product->_id, array()); 
-        
+        $counts = CValue::read($by_product, $_product->_id, array());
+
         $coeff = 1;
         $ref = reset($_product->loadRefsReferences(true));
         if ($ref) {
@@ -623,11 +718,27 @@ class CProduct extends CMbObject {
     
     $d = CMbArray::transpose($d);
   }
-  
+
+  /**
+   * Round to 2 digits
+   *
+   * @param float $val Value to round
+   *
+   * @return float
+   */
   static function round2($val) {
     return round($val, 2);
   }
-  
+
+  /**
+   * Build stock flow graph
+   *
+   * @param array      $flow     A flow struct
+   * @param string     $title    Graph title
+   * @param CService[] $services Services
+   *
+   * @return array
+   */
   static function getFlowGraph($flow, $title, $services) {
     $options = CFlotrGraph::merge(
       "lines", 
@@ -684,7 +795,17 @@ class CProduct extends CMbObject {
     
     return $graph;
   }
-  
+
+  /**
+   * Compute stock balance
+   *
+   * @param CProduct[] $products Products
+   * @param CService[] $services Services
+   * @param int        $year     Year
+   * @param int        $month    Month
+   *
+   * @return array
+   */
   static function computeBalance(array $products, array $services, $year, $month = null){
     $flows = array();
     

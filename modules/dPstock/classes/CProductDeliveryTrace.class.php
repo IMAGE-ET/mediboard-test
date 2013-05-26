@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Product Delivery Trace
+ */
 class CProductDeliveryTrace extends CMbObject {
   public $delivery_trace_id;
 
@@ -40,6 +43,9 @@ class CProductDeliveryTrace extends CMbObject {
   public $_code_cis;
   public $_code_cip;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_delivery_trace';
@@ -47,12 +53,18 @@ class CProductDeliveryTrace extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['echanges_phast']  = 'CExchangePhast object_id';
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs[$this->_spec->key] .= " show|1";
@@ -70,6 +82,9 @@ class CProductDeliveryTrace extends CMbObject {
     return $specs;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
@@ -77,6 +92,9 @@ class CProductDeliveryTrace extends CMbObject {
     $this->_view = $this->_ref_delivery->_view;
   }
 
+  /**
+   * @see parent::store()
+   */
   function store() {
     $this->completeField('delivery_id', 'quantity');
 
@@ -94,8 +112,10 @@ class CProductDeliveryTrace extends CMbObject {
     //$stock_service->location_id = $this->target_location_id;
     $stock_service->loadMatchingObject();
 
-    if ($this->date_delivery && !$negative_allowed && !$infinite_group_stock &&
-        (($this->quantity == 0) || ($stock->quantity < $this->quantity))) {
+    if (
+        $this->date_delivery && !$negative_allowed && !$infinite_group_stock &&
+        (($this->quantity == 0) || ($stock->quantity < $this->quantity))
+    ) {
       $unit = $stock->_ref_product->_unit_title ? $stock->_ref_product->_unit_title : $stock->_ref_product->_view;
       return "Impossible de délivrer ce nombre de $unit";
     }
@@ -110,7 +130,7 @@ class CProductDeliveryTrace extends CMbObject {
         return parent::store();
       }
 
-      return;
+      return null;
     }
 
     // If we want to deliver, just provide a delivery date
@@ -135,7 +155,7 @@ class CProductDeliveryTrace extends CMbObject {
     // if not dispensation nominative
     if ($this->date_reception && !$this->_ref_delivery->patient_id) {
 
-    /*if (!$this->_ref_delivery->patient_id && (
+      /*if (!$this->_ref_delivery->patient_id && (
           !$this->_id && $this->date_reception || $this->fieldModified("date_reception")
         )) {*/
 
@@ -216,6 +236,9 @@ class CProductDeliveryTrace extends CMbObject {
     return parent::store();
   }
 
+  /**
+   * @see parent::delete()
+   */
   function delete(){
     $this->completeField('delivery_id', 'quantity', 'date_delivery', 'date_reception');
 
@@ -258,7 +281,8 @@ class CProductDeliveryTrace extends CMbObject {
         $where["product_delivery.sejour_id"] = $ds->prepare("= '{$this->_ref_delivery->sejour_id}'");
 
         $ljoin = array();
-        $ljoin["product_stock_group"] = "product_stock_group.stock_id = product_delivery.stock_id AND product_delivery.stock_class = 'CProductStockGroup'";
+        $ljoin["product_stock_group"] = "product_stock_group.stock_id = product_delivery.stock_id
+                                           AND product_delivery.stock_class = 'CProductStockGroup'";
         $ljoin["product"]             = "product.product_id = product_stock_group.product_id";
 
         $delivery = new CProductDelivery();
@@ -291,18 +315,25 @@ class CProductDeliveryTrace extends CMbObject {
   }
 
   /**
+   * Get stock
+   *
    * @return CProductStock
    */
   function getStock() {
     return $this->_ref_delivery->loadRefStock();
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadRefDelivery();
     $this->loadRefTargetLocation();
   }
 
   /**
+   * Load delivery
+   *
    * @return CProductDelivery
    */
   function loadRefDelivery() {
@@ -310,17 +341,24 @@ class CProductDeliveryTrace extends CMbObject {
   }
 
   /**
+   * Load location
+   *
    * @return CProductStockLocation
    */
   function loadRefTargetLocation() {
     return $this->_ref_target_location = $this->loadFwdRef("target_location_id", true);
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     return $this->getStock()->getPerm($permType);
   }
 
   /**
+   * Get preparateur
+   *
    * @return CMediusers
    */
   function loadRefPreparateur() {

@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -24,12 +25,15 @@ if ($keywords) {
   $where['name'] = "LIKE '%$keywords%'";
   $list_categories = $category->loadList($where, 'name', 20);
   $total = $category->countList($where);
-} else {
+}
+else {
   $list_categories = $category->loadList(null, 'name');
   $total = count($list_categories);
 }
 $count = count($list_categories);
-if ($total == $count) $total = null;
+if ($total == $count) {
+  $total = null;
+}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -42,4 +46,3 @@ $smarty->assign('total', $total);
 
 $smarty->display('inc_product_selector_categories_list.tpl');
 
-?>

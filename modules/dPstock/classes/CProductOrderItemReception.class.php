@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Product Order Item Reception
+ */
 class CProductOrderItemReception extends CMbObject {
   // DB Table key
   public $order_item_reception_id;
@@ -24,15 +27,10 @@ class CProductOrderItemReception extends CMbObject {
   public $barcode_printed;
   public $cancelled;
 
-  // Object References
-  //    Single
-  /**
-   * @var CProductOrderItem
-   */
+  /** @var CProductOrderItem */
   public $_ref_order_item;
-  /**
-   * @var CProductReception
-   */
+
+  /** @var CProductReception */
   public $_ref_reception;
   
   public $_cancel;
@@ -44,6 +42,9 @@ class CProductOrderItemReception extends CMbObject {
   
   static $_load_lite = false;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_order_item_reception';
@@ -51,6 +52,9 @@ class CProductOrderItemReception extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs['order_item_id'] = 'ref notNull class|CProductOrderItem';
@@ -69,7 +73,10 @@ class CProductOrderItemReception extends CMbObject {
     $specs['orig_quantity'] = 'num show|0';
     return $specs;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['lines_dmi']  = 'CPrescriptionLineDMI order_item_reception_id';
@@ -77,7 +84,10 @@ class CProductOrderItemReception extends CMbObject {
     $backProps['order_items']= 'CProductOrderItem lot_id';
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->quantity;
@@ -85,13 +95,20 @@ class CProductOrderItemReception extends CMbObject {
       $this->_view .= " [$this->code]";
     }
   }
-  
+
+  /**
+   * Compite price
+   *
+   * @return float
+   */
   function computePrice(){
     $this->loadRefOrderItem();
     return $this->_price = $this->quantity * $this->_ref_order_item->unit_price;
   }
 
   /**
+   * Load order item
+   *
    * @return CProductOrderItem
    */
   function loadRefOrderItem() {
@@ -99,12 +116,17 @@ class CProductOrderItemReception extends CMbObject {
   }
 
   /**
+   * Load reception
+   *
    * @return CProductReception
    */
   function loadRefReception() {
     return $this->_ref_reception = $this->loadFwdRef("reception_id", true);
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     parent::loadRefsFwd();
     
@@ -115,7 +137,10 @@ class CProductOrderItemReception extends CMbObject {
     $this->loadRefOrderItem();
     $this->loadRefReception();
   }
-  
+
+  /**
+   * @see parent::delete()
+   */
   function delete(){
     $this->completeField("order_item_id", "quantity");
     
@@ -158,8 +183,15 @@ class CProductOrderItemReception extends CMbObject {
     if ($order && $order->_id) {
       $order->store();
     }
+
+    return null;
   }
- 
+
+  /**
+   * Get used quantity (for DMIs)
+   *
+   * @return int
+   */
   function getUsedQuantity(){
     $query = "SELECT SUM(prescription_line_dmi.quantity) 
               FROM prescription_line_dmi
@@ -168,7 +200,10 @@ class CProductOrderItemReception extends CMbObject {
     $row = $ds->fetchRow($ds->query($query));
     return intval(reset($row));
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store() {
     $this->completeField("reception_id");
     
@@ -250,5 +285,7 @@ class CProductOrderItemReception extends CMbObject {
         }
       }
     }
+
+    return null;
   }
 }

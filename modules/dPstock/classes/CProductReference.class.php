@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Product Reference
+ */
 class CProductReference extends CMbObject {
   public $reference_id;
 
@@ -39,6 +42,9 @@ class CProductReference extends CMbObject {
   public $orig_quantity;
   public $orig_price;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_reference';
@@ -48,6 +54,9 @@ class CProductReference extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs['product_id']  = 'ref notNull class|CProduct seekable show|0';
@@ -69,16 +78,24 @@ class CProductReference extends CMbObject {
     return $specs;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["order_items"] = "CProductOrderItem reference_id";
     return $backProps;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     
-    if (self::$_load_lite) return;
+    if (self::$_load_lite) {
+      return;
+    }
     
     $this->loadRefProduct(false);
     
@@ -91,20 +108,43 @@ class CProductReference extends CMbObject {
     }
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd($cache = true){
     $this->loadRefProduct($cache);
     $this->loadRefSociete($cache);
   }
-  
+
+  /**
+   * Load product
+   *
+   * @param bool $cache Use object cache
+   *
+   * @return CProduct
+   */
   function loadRefProduct($cache = true){
     return $this->_ref_product = $this->loadFwdRef("product_id", $cache);
   }
-  
+
+  /**
+   * Load societe
+   *
+   * @param bool $cache Use object cache
+   *
+   * @return CSociete
+   */
   function loadRefSociete($cache = true){
     return $this->_ref_societe = $this->loadFwdRef("societe_id", $cache);
   }
-  
+
+  /**
+   * Load all references objects (products, orders, etc)
+   *
+   * @return array
+   */
   function loadRefsObjects() {
+    /** @var CProductOrderItem[] $items */
     $items = $this->loadBackRefs("order_items");
     $lists = array(
       "orders" => array(),
@@ -117,9 +157,10 @@ class CProductReference extends CMbObject {
         $_item->loadOrder();
         $lists["orders"][$_item->order_id] = $_item->_ref_order;
       }
-      
-      $_item->loadBackRefs("receptions");
-      foreach ($_item->_back["receptions"] as $_reception) {
+
+      /** @var CProductOrderItemReception[] $_receptions */
+      $_receptions = $_item->loadBackRefs("receptions");
+      foreach ($_receptions as $_reception) {
         if ($_reception->reception_id) {
           $_reception->loadRefReception();
           $lists["receptions"][$_reception->reception_id] = $_reception->_ref_reception;
@@ -129,7 +170,10 @@ class CProductReference extends CMbObject {
     
     return $lists;
   }
-  
+
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     return $this->loadRefProduct()->getPerm($permType);
   }

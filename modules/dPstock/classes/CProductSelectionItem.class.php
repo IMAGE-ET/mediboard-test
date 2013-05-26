@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Product Selection Item
+ */
 class CProductSelectionItem extends CMbObject {
   // DB Table key
   public $selection_item_id;
@@ -22,7 +25,10 @@ class CProductSelectionItem extends CMbObject {
 
   /** @var CProductSelection */
   public $_ref_selection;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_selection_item';
@@ -31,18 +37,27 @@ class CProductSelectionItem extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["product_id"]   = "ref notNull class|CProduct autocomplete|name dependsOn|cancelled";
     $specs["selection_id"] = "ref notNull class|CProductSelection";
     return $specs;
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd(){
     $this->_ref_product = $this->loadFwdRef("product_id", true);
     $this->_ref_selection = $this->loadFwdRef("selection_id", true);
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();

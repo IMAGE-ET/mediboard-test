@@ -1,11 +1,12 @@
-<?php /* $Id: vw_idx_stock_location.php 7809 2010-01-12 15:05:03Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision: 7809 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -23,4 +24,3 @@ $smarty = new CSmartyDP();
 $smarty->assign('endowment', $endowment);
 $smarty->display('print_endowment.tpl');
 
-?>

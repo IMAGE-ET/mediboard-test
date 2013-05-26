@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Product Category
+ */
 class CProductCategory extends CMbObject {
   public $category_id;
   
@@ -20,6 +23,9 @@ class CProductCategory extends CMbObject {
   /** @var CProduct[] */
   public $_ref_products;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_category';
@@ -27,12 +33,18 @@ class CProductCategory extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['products'] = 'CProduct category_id';
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs['name'] = 'str notNull maxLength|50 seekable show|0';
@@ -40,22 +52,36 @@ class CProductCategory extends CMbObject {
     return $specs;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->name;
   }
-  
+
+  /**
+   * @see parent::loadView()
+   */
   function loadView(){
     parent::loadView();
     
     $this->countProducts();
   }
 
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack() {
     $this->_ref_products = $this->loadBackRefs('products');
   }
-  
+
+  /**
+   * Count products
+   *
+   * @return int
+   */
   function countProducts(){
-    $this->_count_products = $this->countBackRefs("products");
+    return $this->_count_products = $this->countBackRefs("products");
   }
 }

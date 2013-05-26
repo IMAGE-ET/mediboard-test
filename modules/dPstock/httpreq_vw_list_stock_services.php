@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 global $g;
@@ -18,7 +19,7 @@ $product->load($product_id);
 
 $list_services = CProductStockGroup::getServicesList();
 
-foreach($list_services as $_service) {
+foreach ($list_services as $_service) {
   $stock_service = CProductStockService::getFromProduct($product, $_service);
   if (!$stock_service->_id) {
     $stock_service->quantity = $product->quantity;

@@ -1,11 +1,12 @@
-<?php /* $Id: httpreq_vw_products_list.php 8116 2010-02-22 11:37:54Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision: 8116 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
  
 CCanDo::checkEdit();
@@ -18,12 +19,12 @@ $societe->load($societe_id);
 $societe->loadRefsBack();
 
 // Loads every reference supplied by this societe
-foreach($societe->_ref_product_references as $key => $value) {
+foreach ($societe->_ref_product_references as $key => $value) {
   $value->loadRefsFwd();
 }
 
 // Loads every product made by this societe
-foreach($societe->_ref_products as $key => $value) {
+foreach ($societe->_ref_products as $key => $value) {
   $value->loadRefsFwd();
 }
 

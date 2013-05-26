@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Product Order Item
+ */
 class CProductOrderItem extends CMbObject {
   // DB Table key
   public $order_item_id;
@@ -23,20 +26,19 @@ class CProductOrderItem extends CMbObject {
   public $renewal;
   public $septic;
 
-  // Object References
-  //    Single
-  /**
-   * @var CProductOrder
-   */
+  /** @var CProductOrder*/
   public $_ref_order;
-  /**
-   * @var CProductReference
-   */
+
+  /** @var CProductReference */
   public $_ref_reference;
+
+  /** @var CProductOrderItemReception */
   public $_ref_lot;
+
+  /** @var CProductStockGroup */
   public $_ref_stock_group;
   
-  //    Multiple
+  /** @var CProductOrderItemReception[] */
   public $_ref_receptions;
 
   // Form fields
@@ -53,6 +55,9 @@ class CProductOrderItem extends CMbObject {
   
   static $_load_lite = false;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_order_item';
@@ -60,6 +65,9 @@ class CProductOrderItem extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs['reference_id']       = 'ref notNull class|CProductReference';
@@ -81,6 +89,14 @@ class CProductOrderItem extends CMbObject {
     return $specs;
   }
 
+  /**
+   * Receive the order item
+   *
+   * @param int  $quantity Quantity
+   * @param null $code     Code
+   *
+   * @return null|string
+   */
   function receive($quantity, $code = null) {
     if ($this->_id) {
       $reception = new CProductOrderItemReception();
@@ -94,7 +110,12 @@ class CProductOrderItem extends CMbObject {
       return "$this->_class::receive failed : order_item must be stored before";
     }
   }
-  
+
+  /**
+   * Is the item received ?
+   *
+   * @return bool
+   */
   function isReceived() {
     $this->completeField("renewal");
     
@@ -107,6 +128,8 @@ class CProductOrderItem extends CMbObject {
   }
 
   /**
+   * Get the related stock
+   *
    * @return CProductStockGroup
    */
   function getStock() {
@@ -124,7 +147,12 @@ class CProductOrderItem extends CMbObject {
     
     return $this->_ref_stock_group = $stock;
   }
-  
+
+  /**
+   * Update reception date
+   *
+   * @return void
+   */
   function updateReceived() {
     $this->loadRefsReceptions();
     
@@ -134,7 +162,10 @@ class CProductOrderItem extends CMbObject {
     }
     $this->_quantity_received = $quantity;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     
@@ -150,6 +181,8 @@ class CProductOrderItem extends CMbObject {
   }
 
   /**
+   * Load reference
+   *
    * @return CProductReference
    */
   function loadReference() {
@@ -157,6 +190,8 @@ class CProductOrderItem extends CMbObject {
   }
 
   /**
+   * Load item reception
+   *
    * @return CProductOrderItemReception
    */
   function loadRefLot() {
@@ -164,7 +199,9 @@ class CProductOrderItem extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Load order
+   *
+   * @param bool $cache Use object cache
    *
    * @return CProductOrder
    */
@@ -174,12 +211,17 @@ class CProductOrderItem extends CMbObject {
   }
 
   /**
+   * Load reception items
+   *
    * @return CProductOrderItemReception[]
    */
   function loadRefsReceptions() {
     return $this->_ref_receptions = $this->loadBackRefs('receptions', 'date DESC');
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     parent::loadRefsFwd();
     
@@ -191,23 +233,36 @@ class CProductOrderItem extends CMbObject {
     $this->loadOrder();
     $this->loadRefLot();
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['receptions'] = 'CProductOrderItemReception order_item_id';
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack() {
     $this->loadRefsReceptions();
   }
 
+  /**
+   * @see parent::store()
+   */
   function store() {
     $this->completeField("order_id", "reference_id", "renewal", "septic");
     
     if (!$this->_id) {
-      if ($this->renewal === null) $this->renewal = "1";
-      if ($this->septic  === null) $this->septic  = "0";
+      if ($this->renewal === null) {
+        $this->renewal = "1";
+      }
+      if ($this->septic  === null) {
+        $this->septic  = "0";
+      }
     }
     
     if ($this->order_id && $this->reference_id && !$this->_id) {
@@ -259,7 +314,10 @@ class CProductOrderItem extends CMbObject {
     
     return parent::store();
   }
-  
+
+  /**
+   * @see parent::delete()
+   */
   function delete(){
     $order = $this->loadOrder(false);
     
@@ -270,5 +328,7 @@ class CProductOrderItem extends CMbObject {
     if ($order->countBackRefs("order_items") == 0) {
       return $order->delete();
     }
+
+    return null;
   }
 }

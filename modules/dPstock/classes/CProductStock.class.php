@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Product Stock
+ */
 class CProductStock extends CMbObject {
   public $stock_id;
 
@@ -39,10 +42,14 @@ class CProductStock extends CMbObject {
   /** @var CProductStockLocation */
   public $_ref_location;
 
+  /** @var CProductStockLocation[]  */
   public $_ref_related_locations;
 
   static $allow_quantity_fractions = false;
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props['product_id']               = 'ref notNull class|CProduct seekable autocomplete|name show|0 dependsOn|cancelled';
@@ -66,6 +73,9 @@ class CProductStock extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["discrepancies"] = "CProductDiscrepancy object_id";
@@ -73,6 +83,11 @@ class CProductStock extends CMbObject {
     return $backProps;
   }
 
+  /**
+   * Compute optimum quantity
+   *
+   * @return float
+   */
   function getOptimumQuantity(){
     $this->completeField(
       "order_threshold_optimum",
@@ -91,6 +106,9 @@ class CProductStock extends CMbObject {
     }
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
@@ -138,6 +156,9 @@ class CProductStock extends CMbObject {
     }
   }
 
+  /**
+   * @see parent::store()
+   */
   function store(){
     $this->completeField("location_id");
 
@@ -150,7 +171,7 @@ class CProductStock extends CMbObject {
   }
 
   /**
-   * @param boolean $cache [optional]
+   * Load location
    *
    * @return CProductStockLocation
    */
@@ -159,7 +180,9 @@ class CProductStock extends CMbObject {
   }
 
   /**
-   * @param boolean $cache [optional]
+   * Load product
+   *
+   * @param boolean $cache Use object cache
    *
    * @return CProduct
    */
@@ -167,11 +190,17 @@ class CProductStock extends CMbObject {
     return $this->_ref_product = $this->loadFwdRef("product_id", $cache);
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd(){
     $this->loadRefLocation();
     $this->loadRefProduct();
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     return $this->loadRefProduct()->getPerm($permType) &&
            $this->loadRefHost()->getPerm($permType);
@@ -188,6 +217,8 @@ class CProductStock extends CMbObject {
 
   /**
    * Sets the host object
+   *
+   * @param CMbObject $host Host object
    *
    * @return void
    */

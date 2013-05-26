@@ -1,13 +1,14 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
- 
+
 CCanDo::checkEdit();
 
 $category_id = CValue::getOrSession('category_id');
@@ -25,8 +26,8 @@ $list_societes = CSociete::getSuppliers(false);
 $order = new CProductOrder;
 $list_orders = $order->search("waiting", null, 30);
 
-foreach($list_orders as $_order) {
-	$_order->countBackRefs("order_items");
+foreach ($list_orders as $_order) {
+  $_order->countBackRefs("order_items");
   $_order->loadRefsOrderItems();
 }
 

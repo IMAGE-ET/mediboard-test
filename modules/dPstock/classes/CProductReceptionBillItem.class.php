@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Product Reception Bill Item
+ */
 class CProductReceptionBillItem extends CMbObject {
   // DB Table key
   public $reception_bill_item_id;
@@ -28,6 +31,9 @@ class CProductReceptionBillItem extends CMbObject {
   // Form fields
   public $_price;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_reception_bill_item';
@@ -35,6 +41,9 @@ class CProductReceptionBillItem extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs['bill_id']           = 'ref class|CProductReceptionBill';

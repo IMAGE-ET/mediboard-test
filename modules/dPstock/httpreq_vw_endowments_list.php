@@ -1,13 +1,14 @@
-<?php /* $Id: httpreq_vw_products_list.php 8116 2010-02-22 11:37:54Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision: 8116 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
- 
+
 CCanDo::checkEdit();
 
 $endowment_id = CValue::getOrSession('endowment_id');
@@ -24,8 +25,8 @@ $endowment->load($endowment_id);
 $list = $endowment->seek($keywords, $where, "$start,20", true, null, "service_id, name");
 $total = $endowment->_totalSeek;
 
-foreach($list as $_item) {
-	//$_item->loadRefs();
+foreach ($list as $_item) {
+  //$_item->loadRefs();
   $_item->countBackRefs("endowment_items");
 }
 

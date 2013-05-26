@@ -1,13 +1,14 @@
-<?php /* $Id: httpreq_vw_products_list.php 8116 2010-02-22 11:37:54Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision: 8116 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
- 
+
 CCanDo::checkEdit();
 
 $selection_id = CValue::getOrSession('selection_id');
@@ -24,8 +25,8 @@ $selection->load($selection_id);
 $list = $selection->seek($keywords, $where, "$start,20", true, null, "name");
 $total = $selection->_totalSeek;
 
-foreach($list as $_item) {
-	$_item->loadRefs();
+foreach ($list as $_item) {
+  $_item->loadRefs();
   $_item->countBackRefs("selection_items");
 }
 

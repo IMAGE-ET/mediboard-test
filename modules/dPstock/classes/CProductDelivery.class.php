@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Product Delivery
+ */
 class CProductDelivery extends CMbObject {
   public $delivery_id;
 
@@ -63,6 +66,8 @@ class CProductDelivery extends CMbObject {
   public $_ref_delivery_traces;
   public $_ref_prises_dispensation;
   public $_ref_prises_dispensation_med;
+
+  /** @var CMediusers */
   public $_ref_preparateur;
 
   public $_date_min;
@@ -87,6 +92,9 @@ class CProductDelivery extends CMbObject {
 
   public $_auto_trace;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_delivery';
@@ -95,6 +103,9 @@ class CProductDelivery extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -137,6 +148,9 @@ class CProductDelivery extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
@@ -149,6 +163,9 @@ class CProductDelivery extends CMbObject {
     }
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['delivery_traces'] = 'CProductDeliveryTrace delivery_id';
@@ -158,6 +175,8 @@ class CProductDelivery extends CMbObject {
   }
 
   /**
+   * Count delivered items
+   *
    * @return int
    */
   function countDelivered() {
@@ -173,6 +192,8 @@ class CProductDelivery extends CMbObject {
   }
 
   /**
+   * Is it delivered ?
+   *
    * @return bool
    */
   function isDelivered() {
@@ -180,6 +201,8 @@ class CProductDelivery extends CMbObject {
   }
 
   /**
+   * Is it received ?
+   *
    * @return bool
    */
   function isReceived() {
@@ -195,11 +218,16 @@ class CProductDelivery extends CMbObject {
     return ($sum >= $this->quantity);
   }
 
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack(){
     $this->loadRefsDeliveryTraces();
   }
 
   /**
+   * Load traces
+   *
    * @return CProductDeliveryTrace[]
    */
   function loadRefsDeliveryTraces(){
@@ -207,6 +235,10 @@ class CProductDelivery extends CMbObject {
   }
 
   /**
+   * Load prises dispensation
+   *
+   * @deprecated
+   *
    * @return CPriseDispensation[]
    */
   function loadRefsPrisesDispensation(){
@@ -214,6 +246,8 @@ class CProductDelivery extends CMbObject {
   }
 
   /**
+   * Load preparateur
+   *
    * @return CMediusers
    */
   function loadRefPreparateur() {
@@ -223,8 +257,10 @@ class CProductDelivery extends CMbObject {
   }
 
   /**
-   * @param $date_min
-   * @param $date_max
+   * Load prises dispensation
+   *
+   * @param string $date_min Min date
+   * @param string $date_max Max date
    *
    * @return CPriseDispensation[]
    */
@@ -239,6 +275,8 @@ class CProductDelivery extends CMbObject {
   }
 
   /**
+   * Load target stock
+   *
    * @return CProductStockService
    */
   function loadRefTargetStock(){
@@ -259,6 +297,8 @@ class CProductDelivery extends CMbObject {
   }
 
   /**
+   * Load target service
+   *
    * @return CService
    */
   function loadRefService(){
@@ -266,6 +306,8 @@ class CProductDelivery extends CMbObject {
   }
 
   /**
+   * Load target patient
+   *
    * @return CPatient
    */
   function loadRefPatient(){
@@ -273,6 +315,8 @@ class CProductDelivery extends CMbObject {
   }
 
   /**
+   * Load target séjour
+   *
    * @return CSejour
    */
   function loadRefSejour(){
@@ -280,6 +324,8 @@ class CProductDelivery extends CMbObject {
   }
 
   /**
+   * Load endowment item on which it is based
+   *
    * @return CProductEndowmentItem
    */
   function loadRefEndowmentItem(){
@@ -287,18 +333,26 @@ class CProductDelivery extends CMbObject {
   }
 
   /**
+   * Load source stock
+   *
    * @return CProductStock
    */
   function loadRefStock(){
     return $this->_ref_stock = $this->loadFwdRef("stock_id", true);
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadRefStock();
     $this->loadRefService();
     $this->loadRefPatient();
   }
 
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields(){
     parent::updatePlainFields();
 
@@ -308,6 +362,11 @@ class CProductDelivery extends CMbObject {
     }
   }
 
+  /**
+   * Get the original quantity
+   *
+   * @return float
+   */
   function getInitialQuantity(){
     $logs = $this->loadLogsForField("quantity", true, null, true);
     $first = end($logs);
@@ -324,6 +383,9 @@ class CProductDelivery extends CMbObject {
     return $this->_initial_quantity = $quantity;
   }
 
+  /**
+   * @see parent::store()
+   */
   function store(){
     $is_new = !$this->_id;
 
@@ -405,8 +467,13 @@ class CProductDelivery extends CMbObject {
       $this->order = 0;
       return parent::store();
     }
+
+    return null;
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     if (!$this->_ref_stock || !$this->_ref_service) {
       $this->loadRefsFwd();
@@ -419,10 +486,14 @@ class CProductDelivery extends CMbObject {
     return $this->_ref_stock->getPerm($permType);
   }
 
+  /**
+   * @see parent::delete()
+   */
   function delete(){
     $this->completeField("manual");
 
     //if ($this->manual) {
+    /** @var CProductDeliveryTrace[] $traces */
     $traces = $this->loadBackRefs("delivery_traces");
     foreach ($traces as $_trace) {
       $_trace->_code_cis = $this->_code_cis;

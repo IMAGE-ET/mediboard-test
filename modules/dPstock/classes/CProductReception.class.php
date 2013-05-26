@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Product Reception
+ */
 class CProductReception extends CMbObject {
   // DB Table key
   public $reception_id;
@@ -34,7 +37,10 @@ class CProductReception extends CMbObject {
 
   /** @var CGroups */
   public $_ref_group;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "product_reception";
@@ -43,12 +49,18 @@ class CProductReception extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["reception_items"] = "CProductOrderItemReception reception_id";
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props['date']       = 'dateTime seekable';
@@ -61,7 +73,12 @@ class CProductReception extends CMbObject {
     $props['_total']     = 'currency';
     return $props;
   }
-  
+
+  /**
+   * Get unique order number
+   *
+   * @return string
+   */
   private function getUniqueNumber() {
     $format = CAppUI::conf('dPstock CProductOrder order_number_format');
     
@@ -72,7 +89,15 @@ class CProductReception extends CMbObject {
     $format = str_replace('%id', str_pad($this->_id?$this->_id:0, 4, '0', STR_PAD_LEFT), $format);
     return CMbDT::transform(null, null, $format);
   }
-  
+
+  /**
+   * Find a reception from an order ID
+   *
+   * @param int  $order_id Order ID
+   * @param bool $locked   Look among locked receptions
+   *
+   * @return array
+   */
   function findFromOrder($order_id, $locked = false) {
     $receptions_prob = array();
     $receptions = array();
@@ -115,20 +140,29 @@ class CProductReception extends CMbObject {
     return $receptions;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefSociete();
     $this->_view = $this->reference . ($this->societe_id ? " - {$this->_ref_societe->_view}" : "");
   }
-  
+
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields(){
     if (!$this->_id && $this->locked === null) {
       $this->locked = "0";
     }
     
-    return parent::updatePlainFields();
+    parent::updatePlainFields();
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store () {
     if (!$this->_id && empty($this->reference)) {
       $this->reference = uniqid(rand());
@@ -141,6 +175,9 @@ class CProductReception extends CMbObject {
     return parent::store();
   }
 
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack(){
     $this->_ref_reception_items = $this->loadBackRefs('reception_items');
   }
@@ -154,20 +191,37 @@ class CProductReception extends CMbObject {
     $this->_total = $total;
   }
 
-  // @todo: supprimer ceci
+  /**
+   * Count repcetion items
+   *
+   * @todo supprimer ceci
+   *
+   * @return int
+   */
   function countReceptionItems(){
-    $this->_count_reception_items = $this->countBackRefs('reception_items');
+    return $this->_count_reception_items = $this->countBackRefs('reception_items');
   }
-  
+
+  /**
+   * Load societe
+   *
+   * @return CSociete
+   */
   function loadRefSociete(){
-    $this->_ref_societe = $this->loadFwdRef("societe_id", true);
+    return $this->_ref_societe = $this->loadFwdRef("societe_id", true);
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd(){
     $this->loadRefSociete();
     $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     if (!$this->_ref_reception_items) {
       $this->loadRefsBack();

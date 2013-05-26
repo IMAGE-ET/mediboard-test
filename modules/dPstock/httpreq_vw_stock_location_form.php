@@ -1,11 +1,12 @@
-<?php /* $Id: httpreq_vw_products_list.php 8116 2010-02-22 11:37:54Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision: 8116 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
  
 CCanDo::checkEdit();
@@ -24,7 +25,7 @@ $where = array(
 );
 
 $types = array();
-foreach($classes as $_class => $_locale) {
+foreach ($classes as $_class => $_locale) {
   $object = new $_class;
   $types[$_locale] = $object->loadListWithPerms(PERM_READ, $where);
 }

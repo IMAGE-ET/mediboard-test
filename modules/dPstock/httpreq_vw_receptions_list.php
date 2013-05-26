@@ -1,13 +1,14 @@
-<?php /* $Id:  $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
- 
+
 CCanDo::checkEdit();
 
 $start    = intval(CValue::get("start", 0));
@@ -27,8 +28,8 @@ if (!$without_supplier) {
 $receptions = $reception->seek($keywords, $where, "$start, 25", true, null, "date DESC");
 $total = $reception->_totalSeek;
 
-foreach($receptions as $_reception){
-	$_reception->countReceptionItems();
+foreach ($receptions as $_reception) {
+  $_reception->countReceptionItems();
 }
 
 // Smarty template
@@ -39,4 +40,3 @@ $smarty->assign("total", $total);
 $smarty->assign("start", $start);
 $smarty->display('inc_receptions_list.tpl');
 
-?>

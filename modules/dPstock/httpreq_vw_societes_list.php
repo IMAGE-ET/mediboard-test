@@ -1,11 +1,12 @@
-<?php /* $Id: httpreq_vw_products_list.php 7403 2009-11-23 15:42:32Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision: 7403 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
  
 CCanDo::checkRead();
@@ -29,7 +30,7 @@ $societe = new CSociete();
 $list = $societe->seek($keywords, null, 1000, true);
 $list_count = $societe->_totalSeek;
 
-foreach($list as $_id => $_societe) {
+foreach ($list as $_id => $_societe) {
   if (!($manufacturers && $_societe->_is_manufacturer || 
         $suppliers && $_societe->_is_supplier ||
         $inactive && (!$_societe->_is_supplier && !$_societe->_is_manufacturer))) {
@@ -52,4 +53,4 @@ $smarty->assign('list_count', $list_count);
 $smarty->assign('start',      $start);
 
 $smarty->display('inc_societes_list.tpl');
-?>
+

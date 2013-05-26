@@ -1,11 +1,12 @@
-<?php /* $Id: do_order_aed.php 7346 2009-11-16 22:51:04Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision: 7346 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $callback     = CValue::post('callback');
@@ -15,7 +16,7 @@ if ($_order_items) {
   $_order_items = stripslashes($_order_items);
   $_order_items = json_decode($_order_items, true);
   
-  foreach($_order_items as $_i => $_data) {
+  foreach ($_order_items as $_i => $_data) {
     $do = new CDoObjectAddEdit('CProductOrderItemReception');
     unset($do->request); // breaks the reference, don't remove this line !
     $do->request = $_data;

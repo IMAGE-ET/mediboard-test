@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Product Reception Bill
+ */
 class CProductReceptionBill extends CMbObject {
   // DB Table key
   public $bill_id;
@@ -21,14 +24,18 @@ class CProductReceptionBill extends CMbObject {
 
   public $_total;
 
-  // Object References
-  //    Multiple
+  /** @var CProductReceptionBillItem[] */
   public $_ref_bill_items;
 
-  //    Single
+  /** @var CProductReception */
   public $_ref_reception_item;
+
+  /** @var CGroups */
   public $_ref_group;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "product_bill";
@@ -37,12 +44,18 @@ class CProductReceptionBill extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["bill_items"] = "CProductReceptionBillItem bill_id";
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs['date']        = 'dateTime seekable';
@@ -53,6 +66,11 @@ class CProductReceptionBill extends CMbObject {
     return $specs;
   }
 
+  /**
+   * Get a unique order number
+   *
+   * @return string
+   */
   private function getUniqueNumber() {
     $format = CAppUI::conf('dPstock CProductOrder order_number_format');
 
@@ -64,12 +82,18 @@ class CProductReceptionBill extends CMbObject {
     return CMbDT::transform(null, null, $format);
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefSociete();
     $this->_view = $this->reference . ($this->societe_id ? " - $this->_ref_societe" : "");
   }
 
+  /**
+   * @see parent::store()
+   */
   function store () {
     if (!$this->_id && empty($this->reference)) {
       $this->reference = uniqid(rand());
@@ -82,10 +106,18 @@ class CProductReceptionBill extends CMbObject {
     return parent::store();
   }
 
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack(){
     $this->_ref_bill_items = $this->loadBackRefs('bill_items');
   }
 
+  /**
+   * Update total
+   *
+   * @return void
+   */
   function updateTotal(){
     $this->loadRefsBack();
     $total = 0;
@@ -96,15 +128,26 @@ class CProductReceptionBill extends CMbObject {
     $this->_total = $total;
   }
 
+  /**
+   * Load societe
+   *
+   * @return CSociete
+   */
   function loadRefSociete(){
-    $this->_ref_societe = $this->loadFwdRef("societe_id", true);
+    return $this->_ref_societe = $this->loadFwdRef("societe_id", true);
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd(){
     $this->loadRefSociete();
     $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     if (!$this->_ref_bill_items) {
       $this->loadRefsBack();

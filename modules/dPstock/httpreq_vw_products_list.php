@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
  
 CCanDo::checkRead();
@@ -45,7 +46,7 @@ $product = new CProduct();
 $total = $product->countList($where);
 $list_products = $product->loadList($where, $orderby, intval($start).",".CAppUI::conf("dPstock CProduct pagination_size"));
 
-foreach($list_products as $prod) {
+foreach ($list_products as $prod) {
   $prod->loadRefs();
   $prod->getPendingOrderItems(false);
 }
@@ -60,4 +61,4 @@ $smarty->assign('start', $start);
 $smarty->assign('letter', $letter);
 
 $smarty->display('inc_products_list.tpl');
-?>
+

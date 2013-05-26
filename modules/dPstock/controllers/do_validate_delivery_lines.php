@@ -1,17 +1,18 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage Stock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $list = explode("-", CValue::post("list", ""));
 CMbArray::removeValue("", $list);
 
-foreach($list as $_id) {
+foreach ($list as $_id) {
   $delivery = new CProductDelivery;
   $delivery->load($_id);
   $delivery->date_delivery = CMbDT::dateTime();

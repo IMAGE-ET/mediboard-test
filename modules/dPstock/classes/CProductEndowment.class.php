@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Product Endowment
+ */
 class CProductEndowment extends CMbObject {
   public $endowment_id;
   
@@ -21,7 +24,10 @@ class CProductEndowment extends CMbObject {
 
   /** @var CProductEndowmentItem[] */
   public $_ref_endowment_items;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_endowment';
@@ -30,6 +36,9 @@ class CProductEndowment extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["name"]       = "str notNull";
@@ -37,13 +46,19 @@ class CProductEndowment extends CMbObject {
     $props["_duplicate_to_service_id"] = $props["service_id"];
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["endowment_items"] = "CProductEndowmentItem endowment_id";
     return $backProps;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = "$this->name";
@@ -53,6 +68,9 @@ class CProductEndowment extends CMbObject {
     }
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd(){
     parent::loadRefsFwd();
     
@@ -60,17 +78,24 @@ class CProductEndowment extends CMbObject {
   }
   
   /**
+   * Load service
+   *
    * @return CService
    */
   function loadRefService(){
     return $this->_ref_service = $this->loadFwdRef("service_id", true);
   }
 
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack(){
     $this->loadRefsEndowmentItems();
   }
 
   /**
+   * Load items
+   *
    * @return CProductEndowmentItem[]
    */
   function loadRefsEndowmentItems() {
@@ -79,16 +104,24 @@ class CProductEndowment extends CMbObject {
       "product_stock_group"    => "product_stock_group.product_id = product.product_id",
       "product_stock_location" => "product_stock_location.stock_location_id = product_stock_group.location_id"
     );
+
+    $order = "product_stock_location.position, product.name";
     
-    return $this->_ref_endowment_items = $this->loadBackRefs('endowment_items', "product_stock_location.position, product.name", null, null, $ljoin);
+    return $this->_ref_endowment_items = $this->loadBackRefs('endowment_items', $order, null, null, $ljoin);
   }
-  
+
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     $this->loadRefsFwd();
     
     return parent::getPerm($permType) && $this->_ref_service->getPerm($permType);
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store(){
     if ($this->_id && $this->_duplicate_to_service_id) {
       $this->completeField("name");
@@ -115,7 +148,8 @@ class CProductEndowment extends CMbObject {
       }
       
       $this->_duplicate_to_service_id = null;
-      return;
+
+      return null;
     }
     
     return parent::store();

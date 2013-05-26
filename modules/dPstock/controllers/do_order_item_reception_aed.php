@@ -1,11 +1,12 @@
-<?php /* $Id: do_order_item_reception_aed.php 8015 2010-02-05 10:22:51Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision: 8015 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $do = new CDoObjectAddEdit('CProductOrderItemReception');
@@ -13,9 +14,9 @@ $do = new CDoObjectAddEdit('CProductOrderItemReception');
 $reference_id = CValue::post("_reference_id");
 $quantity     = CValue::post("quantity");
 
-if($reference_id) {
+if ($reference_id) {
   // If it is a societe id
-  if(!is_numeric($reference_id)) {
+  if (!is_numeric($reference_id)) {
     list($societe_id, $product_id) = explode("-", $reference_id);
     
     $societe = new CSociete;
@@ -54,4 +55,3 @@ if($reference_id) {
 
 $do->doIt();
 
-?>

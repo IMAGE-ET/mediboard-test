@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Product Stock Location
+ */
 class CProductStockLocation extends CMbMetaObject {
   // DB Table key
   public $stock_location_id;
@@ -19,17 +22,18 @@ class CProductStockLocation extends CMbMetaObject {
   public $position;
   public $group_id;
 
-  // Object References
+  /** @var CProductStockGroup[] */
   public $_ref_group_stocks;
   
-  /**
-   * @var CGroups
-   */
+  /** @var CGroups */
   public $_ref_group;
   
   public $_before;
   public $_type;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_stock_location';
@@ -37,7 +41,10 @@ class CProductStockLocation extends CMbMetaObject {
     $spec->uniques["name"] = array("name", "object_class", "object_id");
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs['name'] = 'str notNull seekable';
@@ -50,6 +57,9 @@ class CProductStockLocation extends CMbMetaObject {
     return $specs;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["group_stocks"]    = "CProductStockGroup location_id";
@@ -58,6 +68,9 @@ class CProductStockLocation extends CMbMetaObject {
     return $backProps;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadTargetObject(false);
@@ -65,7 +78,10 @@ class CProductStockLocation extends CMbMetaObject {
     $this->_shortview = ($this->position ? "[".str_pad($this->position, 3, "0", STR_PAD_LEFT)."] " : "") . $this->name;
     $this->_view = ($this->_ref_object ? "{$this->_ref_object->_view} - " : "") . $this->_shortview;
   }
-  
+
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     parent::updatePlainFields();
     
@@ -96,6 +112,8 @@ class CProductStockLocation extends CMbMetaObject {
         );
         
         $this->position = $next_object->position;
+
+        /** @var self[] $next_objects */
         $next_objects = $this->loadList($where);
         foreach ($next_objects as &$object) {
           $object->position++;
@@ -121,7 +139,14 @@ class CProductStockLocation extends CMbMetaObject {
       }
     }
   }
-  
+
+  /**
+   * Get stock class from host class
+   *
+   * @param string $host_class Host class
+   *
+   * @return string
+   */
   static function getStockClass($host_class) {
     switch ($host_class) {
       case "CGroups": 
@@ -132,16 +157,26 @@ class CProductStockLocation extends CMbMetaObject {
         return "CProductStockService";
     }
   }
-  
+
+  /**
+   * Get stock type
+   *
+   * @return null|string
+   */
   function getStockType(){
     if (!$this->_id) {
-      return;
+      return null;
     }
     
     $this->completeField("object_class");
     return self::getStockClass($this->object_class);
   }
-  
+
+  /**
+   * Load stocks by type
+   *
+   * @return void
+   */
   function loadRefsStocks(){
     $ljoin = array(
       "product" => "product_stock_group.product_id = product.product_id",
@@ -170,6 +205,9 @@ class CProductStockLocation extends CMbMetaObject {
     }
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd(){
     $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
@@ -178,8 +216,8 @@ class CProductStockLocation extends CMbMetaObject {
    * Returns the existing location for the product in the host,
    * if it doesn't exist, will return the first location found in the host
    * 
-   * @param CGroups|CService|CBlocOperatoire $host    Stock location's host object
-   * @param CProduct                         $product Product
+   * @param CGroups|CService|CBlocOperatoire|CMbObject $host    Stock location's host object
+   * @param CProduct                                   $product Product
    * 
    * @return CProductStockLocation The location
    */
@@ -216,13 +254,16 @@ class CProductStockLocation extends CMbMetaObject {
   }
 
   /**
-   * @param $product_id
+   * Find a stock from a product ID
+   *
+   * @param int $product_id Product ID
    *
    * @return CProductStock
    */
   function loadRefStock($product_id) {
     $class = $this->getStockType();
-    
+
+    /** @var CProductStock $stock */
     $stock = new $class;
     $stock->product_id = $product_id;
     
@@ -239,7 +280,14 @@ class CProductStockLocation extends CMbMetaObject {
     $stock->loadMatchingObject();
     return $stock;
   }
-  
+
+  /**
+   * Get a group's stock locations
+   *
+   * @param int $group_id Group ID
+   *
+   * @return CStoredObject[]
+   */
   static function getGroupStockLocations($group_id) {
     $where = "
       (product_stock_location.object_id = '$group_id' AND product_stock_location.object_class = 'CGroups') OR 

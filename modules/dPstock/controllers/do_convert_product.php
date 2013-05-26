@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -20,8 +21,10 @@ $list_product = $product->loadList($where);
 CAppUI::stepAjax(count($list_product) . " produit(s) à remplacer (Physiol Micro AY)");
 
 $errors = 0;
-foreach($list_product as $_product) {
-  if (!preg_match('/^MICRO AY ([+-])(\d{2}).([05])$/', $_product->code, $matches)) continue;
+foreach ($list_product as $_product) {
+  if (!preg_match('/^MICRO AY ([+-])(\d{2}).([05])$/', $_product->code, $matches)) {
+    continue;
+  }
   
   $old_code = $_product->code;
   
@@ -46,8 +49,10 @@ $list_product = $product->loadList($where);
 CAppUI::stepAjax(count($list_product) . " produit(s) à remplacer (ALCON SN60WF)");
 
 $errors = 0;
-foreach($list_product as $_product) {
-  if (!preg_match('/(SN60WF)\ \+([0123]\d)(?:\.([05]))?/', $_product->code, $matches)) continue;
+foreach ($list_product as $_product) {
+  if (!preg_match('/(SN60WF)\ \+([0123]\d)(?:\.([05]))?/', $_product->code, $matches)) {
+    continue;
+  }
   
   $old_code = $_product->code;
   

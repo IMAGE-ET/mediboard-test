@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Societe
+ */
 class CSociete extends CMbObject {
   // DB Table key
   public $societe_id;
@@ -35,12 +38,18 @@ class CSociete extends CMbObject {
   public $_is_supplier;
   public $_is_manufacturer;
 
-  // Object References
-  //     Multiple
+  /** CProductReference */
   public $_ref_product_references;
+
+  /** @var CProductOrder[] */
   public $_ref_product_orders;
+
+  /** @var CProduct[] */
   public $_ref_products;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'societe';
@@ -49,6 +58,9 @@ class CSociete extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["products"]           = "CProduct societe_id";
@@ -60,6 +72,9 @@ class CSociete extends CMbObject {
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs['name']            = 'str notNull maxLength|50 seekable show|0';
@@ -81,6 +96,9 @@ class CSociete extends CMbObject {
     return $specs;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->name;
@@ -94,7 +112,14 @@ class CSociete extends CMbObject {
     $this->_is_supplier = $this->countBackRefs("product_references") > 0;
     $this->_is_manufacturer = $this->countBackRefs("products") > 0;
   }
-  
+
+  /**
+   * Get manufacturers
+   *
+   * @param bool $also_inactive Load also inactive ones
+   *
+   * @return CSociete[]
+   */
   static function getManufacturers($also_inactive = true){
     $societe = new self;
     $list = $societe->loadList(null, "name");
@@ -105,7 +130,14 @@ class CSociete extends CMbObject {
     }
     return $list;
   }
-  
+
+  /**
+   * Get suppliers
+   *
+   * @param bool $also_inactive Load also inactive ones
+   *
+   * @return CSociete[]
+   */
   static function getSuppliers($also_inactive = true){
     $societe = new self;
     $list = $societe->loadList(null, "name");
@@ -116,7 +148,10 @@ class CSociete extends CMbObject {
     }
     return $list;
   }
-  
+
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     parent::updatePlainFields();
     if ($this->_departments) {
@@ -127,6 +162,9 @@ class CSociete extends CMbObject {
     }
   }
 
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack() {
     $ljoin = array(
       "product" => "product_reference.product_id = product.product_id"

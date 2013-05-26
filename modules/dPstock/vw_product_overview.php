@@ -1,11 +1,12 @@
-<?php /* $Id: vw_idx_product.php 7924 2010-01-27 14:23:35Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision: 7924 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
  
 CCanDo::checkEdit();
@@ -17,15 +18,15 @@ $product = new CProduct();
 if ($product->load($product_id)) {
   $product->loadRefs();
   
-  foreach($product->_ref_references as $_item) {
+  foreach ($product->_ref_references as $_item) {
     $_item->loadRefs();
   }
   
-  foreach($product->_ref_stocks_group as $_item) {
+  foreach ($product->_ref_stocks_group as $_item) {
     $_item->loadRefs();
   }
   
-  foreach($product->_ref_stocks_service as $_item) {
+  foreach ($product->_ref_stocks_service as $_item) {
     $_item->loadRefs();
   }
 }

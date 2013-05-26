@@ -1,11 +1,12 @@
-<?php /* $Id: vw_idx_reference.php 12390 2011-06-09 08:55:13Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision: 12390 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
  
 CCanDo::checkEdit();
@@ -45,7 +46,7 @@ $changes_struct = array();
 $references = array();
 $references_cahpp = array();
 
-foreach($changes as $_change) {
+foreach ($changes as $_change) {
   if (!isset($references[$_change["reference_id"]])) {
     $_reference = new CProductReference;
     $_reference->load($_change["reference_id"]);
@@ -86,4 +87,3 @@ $smarty->assign('ratio',             $ratio);
 
 $smarty->display('vw_reference_price_changes.tpl');
 
-?>

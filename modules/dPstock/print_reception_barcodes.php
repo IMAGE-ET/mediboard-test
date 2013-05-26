@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -15,7 +16,7 @@ $lot_id = CValue::get('lot_id');
 $force_print  = CValue::get('force_print');
 
 $reception = new CProductReception();
-if($reception_id) {
+if ($reception_id) {
   $reception->load($reception_id);
   $reception->loadRefsFwd();
   $reception->loadRefsBack();
@@ -55,7 +56,7 @@ foreach ($lots as &$item) {
   $reference->loadRefsFwd();
   $reference->_ref_product->loadRefsFwd();
   
-  if(!$item->barcode_printed || $force_print) {
+  if (!$item->barcode_printed || $force_print) {
     for ($i = 0; $i < $item->quantity / $reference->quantity; $i++) {
       $data[$j] = array();
       $d = &$data[$j];
@@ -78,4 +79,4 @@ foreach ($lots as &$item) {
 $pdf->WriteBarcodeGrid(8, 8, 210-16, 297-16, 3, 10, $data);
 
 // Nom du fichier: prescription-xxxxxxxx.pdf   / I : sortie standard
-$pdf->Output("barcodes.pdf","I");
+$pdf->Output("barcodes.pdf", "I");

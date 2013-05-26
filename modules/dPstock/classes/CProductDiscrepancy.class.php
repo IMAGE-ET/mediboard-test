@@ -9,13 +9,19 @@
  * @version    $Revision$
  */
 
-class CProductDiscrepancy extends CMbMetaObject { // Ecart d'inventaire
+/**
+ * Product Discrepancy (Ecart d'inventaire)
+ */
+class CProductDiscrepancy extends CMbMetaObject {
   public $discrepancy_id;
   
   public $quantity;
   public $date;
   public $description;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_discrepancy';
@@ -23,6 +29,9 @@ class CProductDiscrepancy extends CMbMetaObject { // Ecart d'inventaire
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs['quantity']     = 'num notNull';
@@ -32,6 +41,9 @@ class CProductDiscrepancy extends CMbMetaObject { // Ecart d'inventaire
     return $specs;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();

@@ -2,7 +2,7 @@
 
 {{*
  * @package Mediboard
- * @subpackage dPstock
+ * @subpackage Stock
  * @version $Revision: 7667 $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html

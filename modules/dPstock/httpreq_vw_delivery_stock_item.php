@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -18,8 +19,8 @@ $stock = new $stock_class;
 if ($stock_id) {
   $stock->stock_id = $stock_id;
   if ($stock->loadMatchingObject()) {
-	  $stock->loadRefsFwd();
-	}
+    $stock->loadRefsFwd();
+  }
 }
 
 $list_services = CProductStockGroup::getServicesList();
@@ -32,4 +33,3 @@ $smarty->assign('list_services',  $list_services);
 
 $smarty->display('inc_aed_delivery_stock_item.tpl');
 
-?>

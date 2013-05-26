@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
  
 CCanDo::checkRead();
@@ -30,7 +31,7 @@ $count = $order->_search_count;
 $total = 0;
 $total_ttc = 0;
 
-foreach($orders as $_order) {
+foreach ($orders as $_order) {
   $_order->countRenewedItems();
   
   foreach ($_order->_ref_order_items as $item) {

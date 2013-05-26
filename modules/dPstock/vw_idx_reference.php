@@ -1,13 +1,14 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
- 
+
 CCanDo::checkEdit();
 
 $reference_id = CValue::getOrSession('reference_id');
@@ -32,26 +33,28 @@ $reference = new CProductReference();
 if ($reference->load($reference_id)) {
   $reference->loadRefsFwd();
   $reference->_ref_product->loadRefsFwd();
-	$reference->loadRefsNotes();
+  $reference->loadRefsNotes();
+}
 
-// else, if a product_id has been provided, 
+// else, if a product_id has been provided,
 // we load it and its associated reference
-} else if($product_id) {
+else if ($product_id) {
   $reference->product_id = $product_id;
   $product = new CProduct();
   $product->load($product_id);
   $reference->_ref_product = $product;
+}
 
 // If a supplier ID is provided, we make a corresponding reference
-} else if ($societe_id) {
+else if ($societe_id) {
   $reference->societe_id = $societe_id;
 }
 
 $reference->loadRefsFwd();
 
 if (!$reference->_id) {
-	$reference->quantity = 1;
-	$reference->price = 0;
+  $reference->quantity = 1;
+  $reference->price = 0;
 }
 
 // Categories list
@@ -74,4 +77,3 @@ $smarty->assign('show_all',        $show_all);
 
 $smarty->display('vw_idx_reference.tpl');
 
-?>

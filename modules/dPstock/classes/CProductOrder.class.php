@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Product Order
+ */
 class CProductOrder extends CMbMetaObject {
   public $order_id;
 
@@ -63,7 +66,10 @@ class CProductOrder extends CMbMetaObject {
   public $_reset;
   
   static $_return_form_label = "Bon de retour";
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_order';
@@ -71,12 +77,18 @@ class CProductOrder extends CMbMetaObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['order_items'] = 'CProductOrderItem order_id';
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props['date_ordered']    = 'dateTime seekable';
@@ -129,6 +141,8 @@ class CProductOrder extends CMbMetaObject {
   }
 
   /**
+   * Count renewed items
+   *
    * @return int
    */
   function countRenewedItems(){
@@ -144,6 +158,8 @@ class CProductOrder extends CMbMetaObject {
   }
 
   /**
+   * If it contains renewal lines
+   *
    * @return bool
    */
   function containsRenewalLines() {
@@ -178,10 +194,14 @@ class CProductOrder extends CMbMetaObject {
         }
       }
     }
+
+    return null;
   }
   
   /**
    * Fills the order in function of the stocks and future stocks
+   *
+   * @return void
    */
   function autofill() {
     $this->updateFormFields();
@@ -238,6 +258,8 @@ class CProductOrder extends CMbMetaObject {
   
   /**
    * Fills a new order with the same articles
+   *
+   * @return void
    */
   function redo() {
     $this->load();
@@ -262,7 +284,12 @@ class CProductOrder extends CMbMetaObject {
       $new_item->store();
     }
   }
-  
+
+  /**
+   * Resets the order
+   *
+   * @return void
+   */
   function reset() {
     $this->load();
     $this->date_ordered = '';
@@ -285,7 +312,7 @@ class CProductOrder extends CMbMetaObject {
    * @param integer $limit    = 30 [optional]
    * @param array   $where    Where additionnal
    *
-   * @return array The list of orders
+   * @return self[] The list of orders
    */
   function search($type, $keywords = "", $limit = 30, $where = array()) {
     global $g;
@@ -324,7 +351,8 @@ class CProductOrder extends CMbMetaObject {
     $where['product_order.received']     = " != '1'";
     
     // Exclude return orders (Bon de retour)
-    $where['product_order.comments']     = $this->_spec->ds->prepare("!= % OR product_order.comments IS NULL", CProductOrder::$_return_form_label);
+    $query = "!= % OR product_order.comments IS NULL";
+    $where['product_order.comments']     = $this->_spec->ds->prepare($query, CProductOrder::$_return_form_label);
     
     switch ($type) {
       case 'waiting':
@@ -359,6 +387,8 @@ class CProductOrder extends CMbMetaObject {
     }
     
     $groupby = "product_order.order_id";
+
+    /** @var self[] $orders_list */
     $orders_list  = $this->loadList($where, $orderby, $limit, $groupby, $leftjoin);
     
     // bons de facturation seulement
@@ -402,7 +432,12 @@ class CProductOrder extends CMbMetaObject {
     
     return $orders_list;
   }
-  
+
+  /**
+   * Get unique order number
+   *
+   * @return string
+   */
   function getUniqueNumber() {
     $format     = CAppUI::conf('dPstock CProductOrder order_number_format');
     $contextual = CAppUI::conf('dPstock CProductOrder order_number_contextual');
@@ -422,16 +457,24 @@ class CProductOrder extends CMbMetaObject {
  
     return $number;
   }
-  
+
+  /**
+   * Get receptions
+   *
+   * @return CProductReception[]
+   */
   function getReceptions(){
     if (!$this->_id) {
       return $this->_ref_receptions = array();
     }
       
-    $rec = new CProductReception;
+    $rec = new CProductReception();
     return $this->_ref_receptions = $rec->findFromOrder($this->_id);
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     
@@ -480,7 +523,12 @@ class CProductOrder extends CMbMetaObject {
     }
     $this->_customer_code = $customer_code;
   }
-  
+
+  /**
+   * Update total price
+   *
+   * @return void
+   */
   function updateTotal(){
     $this->_total = 0;
     $this->_total_tva = 0;
@@ -491,7 +539,12 @@ class CProductOrder extends CMbMetaObject {
       $this->_total_tva += $item->_price + ($item->_price * $item->tva / 100);
     }
   }
-  
+
+  /**
+   * Update counts
+   *
+   * @return void
+   */
   function updateCounts(){
     $this->countReceivedItems(); // makes loadRefsOrderItems
     $this->countRenewedItems(); // makes loadRefsOrderItems
@@ -518,7 +571,9 @@ class CProductOrder extends CMbMetaObject {
   }
 
   /**
-   * @param bool $force
+   * Load order items
+   *
+   * @param bool $force Force load
    *
    * @return CProductOrderItem[]
    */
@@ -538,6 +593,8 @@ class CProductOrder extends CMbMetaObject {
   }
 
   /**
+   * Load postal address object
+   *
    * @return CGroups|CFunctions|CBlocOperatoire
    */
   function loadRefAddress(){
@@ -549,7 +606,10 @@ class CProductOrder extends CMbMetaObject {
 
     return $this->_ref_address;
   }
-  
+
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     $this->updateFormFields();
     
@@ -581,7 +641,10 @@ class CProductOrder extends CMbMetaObject {
       $this->reset();
     }
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store () {
     if (!$this->_id && $this->object_class && $this->object_id && empty($this->comments)) {
       $this->loadTargetObject();
@@ -631,10 +694,16 @@ class CProductOrder extends CMbMetaObject {
     return parent::store();
   }
 
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack(){
     $this->loadRefsOrderItems();
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd(){
     parent::loadRefsFwd();
 
@@ -643,7 +712,9 @@ class CProductOrder extends CMbMetaObject {
   }
 
   /**
-   * @param bool $cache
+   * Load group
+   *
+   * @param bool $cache Use object cache
    *
    * @return CGroups
    */
@@ -652,14 +723,19 @@ class CProductOrder extends CMbMetaObject {
   }
 
   /**
-   * @param bool $cache
+   * Load societe
+   *
+   * @param bool $cache Use object cache
    *
    * @return CSociete
    */
   function loadRefSociete($cache = true) {
     return $this->_ref_societe = $this->loadFwdRef("societe_id", $cache);
   }
-  
+
+  /**
+   * @see parent::delete()
+   */
   function delete() {
     $items_count = $this->countBackRefs("order_items");
     
@@ -674,7 +750,10 @@ class CProductOrder extends CMbMetaObject {
 
     return "This order cannot be deleted";
   }
-  
+
+  /**
+   * @see parent::loadView()
+   */
   function loadView(){
     parent::loadView();
     
@@ -704,9 +783,7 @@ class CProductOrder extends CMbMetaObject {
   }
 
   /**
-   * @param int $permType
-   *
-   * @return bool
+   * @see parent::getPerm()
    */
   function getPerm($permType) {
     $this->loadRefsOrderItems();
