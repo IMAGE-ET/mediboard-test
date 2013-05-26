@@ -9,8 +9,10 @@
  * @version    $Revision$
  */
 
+/**
+ * Tabular content
+ */
 class CContentTabular extends CMbObject {
-  // DB Table key
   public $content_id;
   
   // DB Fields
@@ -18,6 +20,9 @@ class CContentTabular extends CMbObject {
   public $import_id;
   public $separator;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'content_tabular';
@@ -25,7 +30,10 @@ class CContentTabular extends CMbObject {
     $spec->loggable = false;
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() { 
     $props = parent::getProps();
     $props["content"]   = "text show|0";
@@ -34,7 +42,10 @@ class CContentTabular extends CMbObject {
     
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["messages_hprim21"]      = "CEchangeHprim21 message_content_id";

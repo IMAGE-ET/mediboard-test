@@ -9,13 +9,18 @@
  * @version    $Revision$
  */
 
+/**
+ * HTTP exchange
+ */
 class CExchangeHTTP extends CExchangeTransportLayer {
-  // DB Table key
   public $echange_http_id;
   
   // DB Fields
   public $http_fault;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->loggable = false;
@@ -23,12 +28,13 @@ class CExchangeHTTP extends CExchangeTransportLayer {
     $spec->key   = 'echange_http_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["http_fault"] = "bool";
-    
     return $props;
   }
-  
 }

@@ -1,13 +1,14 @@
-<?php 
+<?php
 /**
  * Receive files EAI
- *  
- * @category system
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ *
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -44,7 +45,7 @@ if (file_exists($filename_excludes)) {
   $files_excludes = array_flip(array_map('trim', file($filename_excludes)));
 }
 
-while($count > 0 && ($_filepath = $source->receiveOne())) {
+while ($count > 0 && ($_filepath = $source->receiveOne())) {
   // Fichier exclus car non géré par le Sender
   if (isset($files_excludes[$_filepath])) {
     continue;
@@ -84,7 +85,7 @@ while($count > 0 && ($_filepath = $source->receiveOne())) {
     } catch (Exception $e) {
       if ($sender->_delete_file !== false) {
         $source->delFile($_filepath);
-      } 
+      }
       else {
         dispatchError($sender, $filename_excludes, $_filepath);
       }
@@ -120,5 +121,3 @@ function dispatchError(CInteropSender $sender, $filename_excludes, $filepath) {
   fwrite($file, "$filepath\n");
   fclose($file);
 }
-
-?>

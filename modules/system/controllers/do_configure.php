@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 global $mbpath, $dPconfig;
@@ -49,9 +50,10 @@ if ($config_db) {
   CMbConfig::buildConf($list, $configs, null);
 
   foreach ($list as $key => $value) {
-    $query = $ds->prepare("INSERT INTO `config_db`
+    $query = "INSERT INTO `config_db`
       VALUES (%1, %2)
-      ON DUPLICATE KEY UPDATE value = %3", $key, $value, $value);
+      ON DUPLICATE KEY UPDATE value = %3";
+    $query = $ds->prepare($query, $key, $value, $value);
 
     if ($ds->exec($query) === false) {
       CAppUI::setMsg("Configure-failed-modify", UI_MSG_ERROR);

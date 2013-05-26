@@ -1,69 +1,67 @@
 <?php
-
 /**
- * CPlanningWeek class
+ * $Id: CAccessLog.class.php 18445 2013-03-17 16:08:44Z phenxdesign $
  *
- * @category Ssr
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:\$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: 18445 $
  */
-
-
 /**
  * Class CPlanningWeek
  */
 class CPlanningWeek {
-  var $guid = null;
-  var $title = null;
+  public $guid;
+  public $title;
   
-  var $date        = null;
-  var $selectable  = null;
-  var $height      = null;
-  var $large       = null;
-  var $adapt_range = null;
+  public $date;
+  public $selectable;
+  public $height;
+  public $large;
+  public $adapt_range;
   
-  var $date_min    = null; // Monday
-  var $date_max    = null; // Sunday
+  public $date_min; // Monday
+  public $date_max; // Sunday
   
-  var $date_min_active = null;
-  var $date_max_active = null;
+  public $date_min_active;
+  public $date_max_active;
 
-  var $allow_superposition = false;
+  public $allow_superposition = false;
   
-  var $hour_min = "09";
-  var $hour_max = "16";
-  var $hour_divider = 6;
-  var $maximum_load = 6;
-  var $has_load  = false;
-  var $has_range = false;
-  var $show_half = false;
-  var $dragndrop = 0;
-  var $resizable = 0;
-  var $no_dates  = 0;
+  public $hour_min = "09";
+  public $hour_max = "16";
+  public $hour_divider = 6;
+  public $maximum_load = 6;
+  public $has_load  = false;
+  public $has_range = false;
+  public $show_half = false;
+  public $dragndrop = 0;
+  public $resizable = 0;
+  public $no_dates  = 0;
   
-  var $events = array();
-  var $events_sorted = array();
-  var $ranges = array();
+  public $events = array();
+  public $events_sorted = array();
+  public $ranges = array();
+  public $ranges_sorted = array();
   
-  var $pauses = array("08", "12", "16");
-  var $unavailabilities = array();
-  var $day_labels = array();
-  var $load_data = array();
+  public $pauses = array("08", "12", "16");
+  public $unavailabilities = array();
+  public $day_labels = array();
+  public $load_data = array();
   
-  var $_date_min_planning = null;
-  var $_date_max_planning = null;
+  public $_date_min_planning;
+  public $_date_max_planning;
   
   // Periods
-  var $hours = array(
+  public $hours = array(
     "00", "01", "02", "03", "04", "05", 
     "06", "07", "08", "09", "10", "11", 
     "12", "13", "14", "15", "16", "17", 
     "18", "19", "20", "21", "22", "23", 
   );
-  var $days = array();
+
+  public $days = array();
 
   /**
    * constructor
@@ -77,7 +75,16 @@ class CPlanningWeek {
    * @param bool   $large       [optional] is the planning a large one
    * @param bool   $adapt_range [optional] can the planning adapt the range
    */
-  function __construct($date, $date_min = null, $date_max = null, $nb_days = 7, $selectable = false, $height = "auto", $large = false, $adapt_range = false) {
+  function __construct(
+      $date,
+      $date_min = null,
+      $date_max = null,
+      $nb_days = 7,
+      $selectable = false,
+      $height = "auto",
+      $large = false,
+      $adapt_range = false
+  ) {
     $this->date = $date;
     $this->selectable = $selectable;
     $this->height = $height ? $height : "auto";
@@ -148,6 +155,7 @@ class CPlanningWeek {
     
     $colliding = array($event);
     foreach ($this->days[$event->day] as $_event) {
+      /** @var CPlanningEvent $_event */
       if ($_event->collides($event)) {
         $colliding[] = $_event;
         if (count($this->events_sorted[$_event->day][$_event->hour])) {
@@ -236,10 +244,10 @@ class CPlanningWeek {
 
           // lines uncollided
           //TODO: fix collisions problems
-          if ((in_array($event->internal_id, array_keys($uncollided))) && ($_line_number < ($lines_count-1)) && !$event->below) {
-            //$event->width = (($lines_count - ($_line_number)) / $lines_count);
-            //$event->width = ($_line_number == 0) ? $event->width-0.1 :$event->width +.05;
-          }
+          /*if ((in_array($event->internal_id, array_keys($uncollided))) && ($_line_number < ($lines_count-1)) && !$event->below) {
+            $event->width = (($lines_count - ($_line_number)) / $lines_count);
+            $event->width = ($_line_number == 0) ? $event->width-0.1 :$event->width +.05;
+          }*/
         }
       }
     }
@@ -371,7 +379,7 @@ class CPlanningWeek {
 
     for ($i = $min; $i <= $max; $i++) {
       $div_min = CMbDT::dateTime("+".($i*$div_size)." MINUTES", $day);
-      $div_max = CMbDT::dateTime("+".(($i+1)*$div_size)." MINUTES", $day);
+      //$div_max = CMbDT::dateTime("+".(($i+1)*$div_size)." MINUTES", $day);
       
       // FIXME: ameliorer ce calcul
       if ($div_min >= $start && $div_min < $end) {

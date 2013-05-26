@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $data     = CValue::post("data");
@@ -16,7 +17,7 @@ $data = json_decode(utf8_encode($data), true);
 
 $csv = new CCSVFile(null, "excel");
 
-foreach($data as $_line) {
+foreach ($data as $_line) {
   $csv->writeLine($_line);
 }
 

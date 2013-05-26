@@ -1,13 +1,14 @@
 <?php
-
 /**
  * Send a mail concerning the diskfull problem while backuping
- *  
- * @package Mediboard
- * @author  SARL OpenXtrem <dev@openxtrem.com>
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version SVN: $Id:$
- * @link    http://www.mediboard.org
+ *
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /** @var CSourceSMTP $source */
@@ -16,9 +17,9 @@ $source = CExchangeSource::get("system-message", "smtp", true, null, true);
 try {
   // Source init
   $source->init();
-  $source->addTo (CAppUI::conf("system CMessage default_email_to"  ));
+  $source->addTo(CAppUI::conf("system CMessage default_email_to"));
   $source->addBcc(CAppUI::conf("system CMessage default_email_from"));
-  $source->addRe (CAppUI::conf("system CMessage default_email_from"));
+  $source->addRe(CAppUI::conf("system CMessage default_email_from"));
   
   // Email subject
   $page_title = CAppUI::conf("page_title");

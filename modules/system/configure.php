@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -34,24 +35,27 @@ $php_config_important = array(
 $php_config_tree = array(
   "general" => array()
 );
-foreach($php_config as $key => $value) {
+foreach ($php_config as $key => $value) {
   $parts = explode(".", $key, 2);
   $value["user"] = $value["access"] & 1;
   if (count($parts) == 1) {
     $php_config_tree["general"][$key] = $value;
   }
   else {
-    if (!isset($php_config_tree[$parts[0]])) 
+    if (!isset($php_config_tree[$parts[0]])) {
       $php_config_tree[$parts[0]] = array();
+    }
+
     $php_config_tree[$parts[0]][$key] = $value;
   }
 }
 
 $browser_compat = array(
-  'firefox' => array('2.0', '3.0', '3.5', '3.6', '4.0', '5.0', '6.0', '7.0', '8.0', '9.0', '10.0', '11.0', '12.0', '13.0', '14.0'),
+  'firefox' => array('3.0', '3.5', '3.6', '4', '5', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21'),
   'msie'    => array('7.0', '8.0', '9.0', '10.0'),
   'opera'   => array('9.0', '9.6', '10.0', '10.1', '10.7', '11.0', '12.0'),
-  'chrome'  => array('5.0', '6.0', '7.0', '8.0', '9.0', '10.0', '11.0', '12.0', '13.0', '14.0', '15.0', '16.0', '17.0', '18.0', '19.0', '20.0'),
+  'chrome'  => array(
+    '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30'),
   'safari'  => array(
     '525.26' => '3.2',
     '525.27' => '3.2.1',
@@ -78,5 +82,3 @@ $smarty->assign("message_smtp"        , $message_smtp);
 CModelObject::makeHandlers();
 $smarty->assign("handlers"            , CModelObject::getHandlers());
 $smarty->display("configure.tpl");
-
-?>

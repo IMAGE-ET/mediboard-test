@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CSetupsystem extends CSetup {
@@ -822,9 +823,9 @@ class CSetupsystem extends CSetup {
         
         $field_class = null;
         $field_id = null;
-        switch($hash["host_class"]) {
+        switch ($hash["host_class"]) {
           case "CMbObject": 
-          break;
+            break;
           
           case "CPrescriptionLineElement":
           case "CPrescriptionLineMedicament":
@@ -834,7 +835,7 @@ class CSetupsystem extends CSetup {
           case "CAdministration":
             $field_class = "reference_class";
             $field_id    = "reference_id";
-          break;
+            break;
           
           case "CSejour":
             $field_class = "object_class";
@@ -1092,7 +1093,7 @@ class CSetupsystem extends CSetup {
                       WHERE ex_group_id = '$_ex_group_id' AND report_level = '$i'";
             $ds->query($query);
             
-          // Ex class host field (REF)
+            // Ex class host field (REF)
             $query = "UPDATE ex_class_host_field
                       SET host_class = '$_class' 
                       WHERE ex_group_id = '$_ex_group_id' AND host_type = 'reference$i'";

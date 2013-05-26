@@ -1,11 +1,12 @@
-<?php /* $Id: view_messages.php 10359 2010-10-12 16:30:43Z rhum1 $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision: 10359 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -13,13 +14,15 @@ CCanDo::checkRead();
 // Chargement des senders
 $sender  = new CViewSender();
 $sender->active = "1";
+
+/** @var CViewSender[] $senders */
 $senders = $sender->loadMatchingList("name");
 
 // Détails des senders
 foreach ($senders as $_sender) {
   $senders_source = $_sender->loadRefSendersSource();
   foreach ($senders_source as $_sender_source) {
-  	$_sender_source->loadRefSender();
+    $_sender_source->loadRefSender();
   }
 }
 

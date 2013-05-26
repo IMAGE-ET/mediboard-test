@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -64,33 +65,39 @@ $left   = array($left_mode, $left_sampling);
 $right  = array($right_mode, $right_sampling);
 
 if (!$DBorNotDB) {
-  foreach($logs as $log) {
-    switch($groupmod) {
-      case 0: $graphs[] = graphAccessLog($log->module, $log->action, $from, $to,$interval, $left, $right, $DBorNotDB); break;
-      case 1: $graphs[] = graphAccessLog($log->module, null        , $from, $to,$interval, $left, $right, $DBorNotDB); break;
-      case 2: $graphs[] = graphAccessLog(null        , null        , $from, $to,$interval, $left, $right, $DBorNotDB); break;
+  foreach ($logs as $log) {
+    switch ($groupmod) {
+      case 0:
+        $graphs[] = graphAccessLog($log->module, $log->action, $from, $to, $interval, $left, $right, $DBorNotDB);
+        break;
+      case 1:
+        $graphs[] = graphAccessLog($log->module, null        , $from, $to, $interval, $left, $right, $DBorNotDB);
+        break;
+      case 2:
+        $graphs[] = graphAccessLog(null        , null        , $from, $to, $interval, $left, $right, $DBorNotDB);
+        break;
     }
   }
 }
 else {
-  foreach($logs as $log) {
-    switch($groupmod) {
+  foreach ($logs as $log) {
+    switch ($groupmod) {
       case 0:
-        $graph = graphAccessLog($log['module'], $log['action'], $from, $to,$interval, $left, $right, $DBorNotDB);
+        $graph = graphAccessLog($log['module'], $log['action'], $from, $to, $interval, $left, $right, $DBorNotDB);
         if ($graph["series"]) {
           $graphs[] = $graph;
         }
         break;
         
       case 1:
-        $graph = graphAccessLog($log['module'], null, $from, $to,$interval, $left, $right, $DBorNotDB);
+        $graph = graphAccessLog($log['module'], null, $from, $to, $interval, $left, $right, $DBorNotDB);
         if ($graph["series"]) {
           $graphs[] = $graph;
         }
         break;
         
       case 2:
-        $graph = graphAccessLog(null, null, $from, $to,$interval, $left, $right, $DBorNotDB);
+        $graph = graphAccessLog(null, null, $from, $to, $interval, $left, $right, $DBorNotDB);
         if ($graph["series"]) {
           $graphs[] = $graph;
         }
@@ -124,5 +131,3 @@ $smarty->assign("listModules", CModule::getInstalled());
 $smarty->assign("DBorNotDB", $DBorNotDB);
 
 $smarty->display("view_access_logs.tpl");
-
-?>

@@ -1,34 +1,47 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
-class CPlanningRange  {
-  var $guid        = null;
-  var $internal_id = null;
+/**
+ * Weekly planning range
+ */
+class CPlanningRange {
+  public $guid;
+  public $internal_id;
   
-  var $title     = null;
+  public $title;
+  public $type;
   
-  var $type      = null;
+  public $start;
+  public $end;
+  public $length;
+  public $day;
   
-  var $start     = null;
-  var $end       = null;
-  var $length    = null;
-  var $day       = null;
+  public $hour;
+  public $minutes;
   
-  var $hour      = null;
-  var $minutes   = null;
-  
-  var $width     = null;
-  var $offset    = null;
-  var $color     = null;
-  var $important = null;
-  
+  public $width;
+  public $offset;
+  public $color;
+  public $important;
+
+  /**
+   * Range constructor
+   *
+   * @param string $guid      GUID
+   * @param string $date      Date
+   * @param int    $length    Length
+   * @param string $title     Title
+   * @param null   $color     Color
+   * @param null   $css_class CSS class
+   */
   function __construct ($guid, $date, $length = 0, $title = "", $color = null, $css_class = null) {
     $this->guid = $guid;
     $this->internal_id = "CPlanningRange-".uniqid();
@@ -53,12 +66,21 @@ class CPlanningRange  {
       $this->minutes = CMbDT::transform(null, $date, "%M");
     }
   }
-  
-  function collides(self $event) {
-    if ($event == $this || $this->length == 0 || $event->length == 0) return false;
+
+  /**
+   * Check range collision
+   *
+   * @param CPlanningRange $range The range to test colission with
+   *
+   * @return bool
+   */
+  function collides(self $range) {
+    if ($range == $this || $this->length == 0 || $range->length == 0) {
+      return false;
+    }
     
-    return ($event->start <  $this->end   && $event->end >  $this->end  ) || 
-           ($event->start <  $this->start && $event->end >  $this->start) || 
-           ($event->start >= $this->start && $event->end <= $this->end  );
+    return ($range->start <  $this->end   && $range->end >  $this->end  ) ||
+           ($range->start <  $this->start && $range->end >  $this->start) ||
+           ($range->start >= $this->start && $range->end <= $this->end  );
   }
 }

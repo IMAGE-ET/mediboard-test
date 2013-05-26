@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 global $can;
@@ -44,6 +45,7 @@ if ($filter->object_id && $filter->object_class) {
   $object = new $filter->object_class;
 
   if ($ex_class_id && $filter->object_class == "CExObject") {
+    /** @var CExObject $object */
     $object->_ex_class_id = $ex_class_id;
     $object->setExClass();
     $filter->object_class .= "_$ex_class_id";

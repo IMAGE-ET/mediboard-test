@@ -1,14 +1,21 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * Custom controller for CExObject
+ */
 class CDoExObjectAddEdit extends CDoObjectAddEdit {
+  /**
+   * @see parent::onAfterInstanciation()
+   */
   function onAfterInstanciation(){
     $_ex_class_id = CValue::read($this->request, "_ex_class_id");
     

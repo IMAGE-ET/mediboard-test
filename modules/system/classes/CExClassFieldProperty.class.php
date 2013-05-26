@@ -97,7 +97,7 @@ class CExClassFieldProperty extends CMbMetaObject {
   /**
    * Get default styles
    *
-   * @param CExClassField|CExClassMessage|CExClassFieldSubgroup|CMbObject $object Object to get the default styles of
+   * @param CExClassField|CExClassMessage|CExClassFieldSubgroup $object Object to get the default styles of
    *
    * @return array
    */

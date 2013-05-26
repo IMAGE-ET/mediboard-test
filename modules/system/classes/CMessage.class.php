@@ -52,7 +52,10 @@ class CMessage extends CMbObject {
     "present" => "En cours de publication",
     "future"  => "Publications à venir",
   );
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'message';
@@ -60,6 +63,9 @@ class CMessage extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["deb"]       = "dateTime notNull";
@@ -87,7 +93,7 @@ class CMessage extends CMbObject {
    * @param string $mod_name Module name restriction, null for all
    * @param int    $group_id Group ID
    *
-   * @return array          Published messages
+   * @return self[] Published messages
    */
   function loadPublications($status = null, $mod_name = null, $group_id = null) {
     $now = CMbDT::dateTime();
@@ -109,7 +115,8 @@ class CMessage extends CMbObject {
     if ($group_id) {
       $where[] = "group_id = '$group_id' OR group_id IS NULL";
     }
-    
+
+    /** @var self[] $messages */
     $messages = $this->loadList($where, "deb DESC");
     
     // Module name restriction
@@ -125,13 +132,21 @@ class CMessage extends CMbObject {
     
     return $messages;
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store() {
     $msg = parent::store();
     $this->sendEmail();
     return $msg;
   }
-  
+
+  /**
+   * Sends the email
+   *
+   * @return void
+   */
   function sendEmail() {
     if (!$this->_email_send) {
       return;
@@ -171,10 +186,17 @@ class CMessage extends CMbObject {
     
     CAppUI::setMsg("CMessage-email_sent");
   }
-  
+
+  /**
+   * Builds user readable data
+   *
+   * @param string $field Field name
+   *
+   * @return null|string
+   */
   function getFieldContent($field) {
     if (!$this->$field) {
-      return;
+      return null;
     }
     
     // Build content
@@ -184,19 +206,31 @@ class CMessage extends CMbObject {
         
     return $content;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->titre;
   }
-  
+
+  /**
+   * Load module references by the message
+   *
+   * @return CModule
+   */
   function loadRefModule() {
     $module = $this->loadFwdRef("module_id", true);
     $this->_view = ($module->_id ? "[$module] - " : "") . $this->titre;
     return $this->_ref_module = $module;
-  
   }
-  
+
+  /**
+   * Load group
+   *
+   * @return CGroups
+   */
   function loadRefGroup() {
     return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }

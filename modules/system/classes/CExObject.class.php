@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Form data
+ */
 class CExObject extends CMbMetaObject {
   public $ex_object_id;
   
@@ -52,6 +55,11 @@ class CExObject extends CMbMetaObject {
   static $_locales_ready = false;
   static $_locales_cache_enabled = true;
 
+  /**
+   * Custom constructor
+   *
+   * @param ref $ex_class_id CExClass id
+   */
   function __construct($ex_class_id = null){
     parent::__construct();
   
@@ -69,6 +77,13 @@ class CExObject extends CMbMetaObject {
     }
   }
 
+  /**
+   * Sets the CExClass ID of $this
+   *
+   * @param ref $ex_class_id CExClass ID
+   *
+   * @return void
+   */
   function setExClass($ex_class_id = null) {
     if ($ex_class_id) {
       $this->_ex_class_id = $ex_class_id;
@@ -97,7 +112,14 @@ class CExObject extends CMbMetaObject {
     
     $this->_specs_already_set = true;
   }
-  
+
+  /**
+   * Load Ex class
+   *
+   * @param bool $cache Use object cache
+   *
+   * @return CExClass
+   */
   function loadRefExClass($cache = true){
     if ($cache && $this->_ref_ex_class && $this->_ref_ex_class->_id) {
       return $this->_ref_ex_class;
@@ -113,7 +135,12 @@ class CExObject extends CMbMetaObject {
     
     return $this->_ref_ex_class = $ex_class; // can't use loadFwdRef here
   }
-  
+
+  /**
+   * Clears locales cache
+   *
+   * @return void
+   */
   static function clearLocales() {
     $languages = CAppUI::getAvailableLanguages();
 
@@ -123,7 +150,12 @@ class CExObject extends CMbMetaObject {
 
     self::$_locales_ready = false;
   }
-  
+
+  /**
+   * Inits locale cache
+   *
+   * @return void
+   */
   static function initLocales(){
     if (self::$_locales_ready) {
       return;
@@ -256,7 +288,7 @@ class CExObject extends CMbMetaObject {
    * etre dans le meme champ dans un autre formulaire (cas d'un concept)
    *
    * @return string
-  **/
+   */
   static function typeSetSpecIntersect($field, $value) {
     $field_spec = $field->getSpecObject();
     

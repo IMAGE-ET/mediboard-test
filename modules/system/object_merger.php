@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $objects_class  = CValue::getOrSession('objects_class');
@@ -24,10 +25,11 @@ $statuses = array();
 
 if (class_exists($objects_class) && count($objects_id)) {
   foreach ($objects_id as $object_id) {
+    /** @var CMbObject $object */
     $object = new $objects_class;
     
     // the CMbObject is loaded
-    if (!$object->load($object_id)){
+    if (!$object->load($object_id)) {
       CAppUI::setMsg("Chargement impossible de l'objet [$object_id]", UI_MSG_ERROR);
       continue;
     }
@@ -49,9 +51,11 @@ if (class_exists($objects_class) && count($objects_id)) {
     $no_extid = array();
     $extid = array();
     
-    foreach($objects as $_object) {
-      if ($_object instanceof CSejour && $_object->_NDA ||
-            $_object instanceof CPatient && $_object->_IPP) {
+    foreach ($objects as $_object) {
+      if (
+          $_object instanceof CSejour && $_object->_NDA ||
+          $_object instanceof CPatient && $_object->_IPP
+      ) {
         $extid[] = $_object;
       }
       else {
@@ -62,7 +66,7 @@ if (class_exists($objects_class) && count($objects_id)) {
     if (count($no_extid) < count($objects)) {
       // Selection disabled for idex less objects
       if (CAppUI::conf("merge_prevent_base_without_idex") == 1) {
-        foreach($no_extid as $_object) {
+        foreach ($no_extid as $_object) {
           $_object->_disabled = true;
         }
 
@@ -75,6 +79,7 @@ if (class_exists($objects_class) && count($objects_id)) {
   $_selected->_selected = true;
   
   // Check merge
+  /** @var CMbObject $result */
   $result = new $objects_class;
   $checkMerge = $result->checkMerge($objects);
 

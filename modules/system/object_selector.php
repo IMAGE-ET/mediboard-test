@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $selClass  = CValue::get("selClass");
@@ -17,11 +18,13 @@ $object_id = CValue::get("object_id");
 $classes = array();
 
 if ($onlyclass != "true") {
-	$installed_classes = CApp::getInstalledClasses();
+  $installed_classes = CApp::getInstalledClasses();
 }
 else {
-	$installed_classes = array($selClass);
+  $installed_classes = array($selClass);
 }
+
+/** @var CMbObject $object */
 
 foreach ($installed_classes as $class) {
   $object = @new $class;
@@ -36,16 +39,16 @@ if ($selClass) {
   }
 
   $object = new $selClass;
-  
+
   // Search with keywords
   if ($keywords) {
     $list = $object->seek($keywords);
-	  foreach ($list as $key => $value) {
-	    $list[$key]->loadRefsFwd();
-	    if(!$list[$key]->canRead()) {
-	      unset($list[$key]);
-	    }
-	  }
+    foreach ($list as $key => $value) {
+      $list[$key]->loadRefsFwd();
+      if (!$list[$key]->canRead()) {
+        unset($list[$key]);
+      }
+    }
   }
 
   // Search with id
@@ -58,7 +61,7 @@ if ($selClass) {
 // Création du template
 $smarty = new CSmartyDP();
 
-if ($selClass){
+if ($selClass) {
   $smarty->assign("list"     , $list);
 }
 
@@ -68,4 +71,3 @@ $smarty->assign("object_id", $object_id);
 $smarty->assign("selClass" , $selClass );
 $smarty->assign("onlyclass", $onlyclass);
 $smarty->display("object_selector.tpl");
-?>

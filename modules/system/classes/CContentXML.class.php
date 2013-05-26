@@ -9,14 +9,19 @@
  * @version    $Revision$
  */
 
+/**
+ * XML content
+ */
 class CContentXML extends CMbObject {
-  // DB Table key
   public $content_id;
   
   // DB Fields
   public $content;
   public $import_id;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'content_xml';
@@ -24,14 +29,20 @@ class CContentXML extends CMbObject {
     $spec->loggable = false;
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() { 
     $props = parent::getProps();
     $props["content"]   = "xml show|0";
     $props["import_id"] = "num";
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["messages"]            = "CEchangeHprim message_content_id";

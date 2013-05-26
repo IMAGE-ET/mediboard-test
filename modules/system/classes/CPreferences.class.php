@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * User preferences
+ */
 class CPreferences extends CMbObject {
   static $modules = array();
 
@@ -18,12 +21,20 @@ class CPreferences extends CMbObject {
   public $key;
   public $value;
 
+  /**
+   * Load preferences files from each module
+   *
+   * @return void
+   */
   static function loadModules() {
     foreach (glob("./modules/*/preferences.php") as $file) {
       include_once $file;
     }
   }
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "user_preferences";
@@ -32,6 +43,9 @@ class CPreferences extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["user_id"] = "ref class|CUser";
@@ -40,6 +54,13 @@ class CPreferences extends CMbObject {
     return $props;
   }
 
+  /**
+   * Load user preferences as an associative array
+   *
+   * @param null $user_id The user to load the preferences from
+   *
+   * @return array
+   */
   static function get($user_id = null) {
     $where["user_id"] = "IS NULL";
     if ($user_id) {
@@ -58,13 +79,18 @@ class CPreferences extends CMbObject {
     }
 
     return $preferences;
-  } 
+  }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd(){
     $this->loadRefUser();
   }
 
   /**
+   * Load ref user
+   *
    * @return CUser
    */
   function loadRefUser(){

@@ -1,11 +1,12 @@
-<?php /* $Id: do_configure.php 11968 2011-04-22 09:04:52Z mytto $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision: 11968 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin(); // for now

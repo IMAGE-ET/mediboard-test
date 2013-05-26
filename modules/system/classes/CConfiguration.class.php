@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * General purpose configuration
+ */
 class CConfiguration extends CMbMetaObject {
   const INHERIT = "@@INHERIT@@";
 
@@ -94,9 +97,9 @@ class CConfiguration extends CMbMetaObject {
   /**
    * Build configuration subtree
    *
-   * @param $list
-   * @param $path
-   * @param $tree
+   * @param array  &$list List to fill
+   * @param string $path  Configuration path
+   * @param array  $tree  Model tree
    *
    * @return void
    */
@@ -135,6 +138,11 @@ class CConfiguration extends CMbMetaObject {
     }
   }
 
+  /**
+   * Get model cache status
+   *
+   * @return string Can be "empty", "dirty" or "ok"
+   */
   static function getModelCacheStatus() {
     $model = SHM::get("config-model");
 
@@ -390,6 +398,14 @@ class CConfiguration extends CMbMetaObject {
     }
   }
 
+  /**
+   * Flattend an object tree
+   *
+   * @param array &$all     The tree to flattend
+   * @param array $children The children
+   *
+   * @return void
+   */
   static protected function _flattenObjectTree(&$all, $children) {
     $all = array_merge($all, CMbArray::pluck($children, "object"));
 
@@ -398,6 +414,14 @@ class CConfiguration extends CMbMetaObject {
     }
   }
 
+  /**
+   * Get module configurations
+   *
+   * @param string $module  The module
+   * @param string $inherit The inherit schema
+   *
+   * @return array
+   */
   static function getModuleConfigs($module = null, $inherit = null) {
     $model = self::getModel($inherit);
 
@@ -425,6 +449,16 @@ class CConfiguration extends CMbMetaObject {
     return $configs;
   }
 
+  /**
+   * Get class configs
+   *
+   * @param string $class   Class name
+   * @param string $module  Module
+   * @param string $inherit Inheritance schema
+   * @param bool   $flatten Flatten output
+   *
+   * @return array
+   */
   static function getClassConfigs($class, $module = null, $inherit = null, $flatten = true) {
     $configs = array();
 
@@ -506,10 +540,12 @@ class CConfiguration extends CMbMetaObject {
   /**
    * Recursive method to build the object tree
    *
-   * @param array  $subtree
-   * @param array  $classes
-   * @param string $parent_fwd
-   * @param int    $parent_id
+   * @param array  &$subtree   Sub tree to fill
+   * @param array  $classes    Classes or inheritance schema
+   * @param string $parent_fwd Parent forward ref
+   * @param int    $parent_id  Parent ID
+   *
+   * @return void
    */
   static protected function _getObjectTree(&$subtree, $classes, $parent_fwd = null, $parent_id = null) {
     if (empty($classes)) {

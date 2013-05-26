@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $guid    = CValue::get("guid");
@@ -14,17 +15,20 @@ $options = CValue::get("options");
 
 $object = CMbObject::loadFromGuid($guid);
 
-if (!$object || !$object->canRead())
+if (!$object || !$object->canRead()) {
   return;
+}
 
 $result = "";
 
 if ($field) {
-  if ($options)
+  if ($options) {
     $result = $object->getFormattedValue($field, $options);
-  else
+  }
+  else {
     $result = $object->$field;
-  
+  }
+
   $result = utf8_encode($result);
 }
 else {

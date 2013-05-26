@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 global $can;
@@ -18,7 +19,7 @@ $object_guid = CValue::get("object_guid");
 $note = new CNote;
 if ($note_id) {
   $note->load($note_id);
-} 
+}
 else {
   $note->setObject(CMbObject::loadFromGuid($object_guid));
   $note->user_id = $user->_id;
@@ -35,5 +36,3 @@ $can->needsRead();
 $smarty = new CSmartyDP();
 $smarty->assign("note", $note);
 $smarty->display("edit_note.tpl");
-
-?>

@@ -9,16 +9,14 @@
  * @version    $Revision$
  */
 
+/**
+ * Form class
+ */
 class CExClass extends CMbObject {
   public $ex_class_id;
-  
-  //public $host_class;
-  //public $event;
+
   public $name;
-  //public $disabled;
   public $conditional;
-  //public $required;
-  //public $unicity;
   public $group_id;
   public $native_views;
   
@@ -60,6 +58,9 @@ class CExClass extends CMbObject {
 
   /** @var array */
   public $_out_of_grid;
+
+  /** @var CMbObject[] */
+  public $_host_objects;
 
   /**
    * Compare values with each other with a comparison operator
@@ -125,19 +126,17 @@ class CExClass extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    //$props["host_class"]   = "str notNull protected";
-    //$props["event"]        = "str notNull protected canonical";
     $props["name"]         = "str notNull seekable";
-    //$props["disabled"]     = "bool notNull default|1";
     $props["conditional"]  = "bool notNull default|0";
     $props["pixel_positionning"] = "bool notNull default|0";
-    //$props["required"]     = "bool default|0";
-    //$props["unicity"]      = "enum notNull list|no|host default|no vertical"; //"enum notNull list|no|host|reference1|reference2 default|no vertical";
     $props["group_id"]     = "ref class|CGroups";
     $props["native_views"] = "set vertical list|".implode("|", array_keys(self::$_native_views));
     return $props;
   }
-  
+
+  /**
+   * @see parent::loadEditView()
+   */
   function loadEditView() {
     parent::loadEditView();
 
@@ -199,7 +198,10 @@ class CExClass extends CMbObject {
     $backProps["identifiants"] = "CIdSante400 object_id cascade";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::getExportedBackRefs()
+   */
   function getExportedBackRefs(){
     $export = parent::getExportedBackRefs();
     $export["CExClass"]           = array("field_groups");
@@ -208,7 +210,14 @@ class CExClass extends CMbObject {
     $export["CExList"]            = array("list_items");
     return $export;
   }
-  
+
+  /**
+   * Builds a WHERE statement from search data
+   *
+   * @param array $search Structure containign search data
+   *
+   * @return array
+   */
   function getWhereConceptSearch($search) {
     $comp_map = array(
       "eq"  => "=",
@@ -261,7 +270,9 @@ class CExClass extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Get a CExObject instance
+   *
+   * @param bool $cache Use cache
    *
    * @return CExObject
    */
@@ -282,8 +293,10 @@ class CExClass extends CMbObject {
   }
   
   /**
-   * @var CMbObject $object The host object
-   * 
+   * Gets the latest CExObject for the given CMbObject host object
+   *
+   * @param CMbObject $object The host object
+   *
    * @return CExObject The resolved CExObject
    */
   function getLatestExObject(CMbObject $object){
@@ -324,6 +337,11 @@ class CExClass extends CMbObject {
     $this->_view = $this->name;
   }
 
+  /**
+   * Get the list of formula fields of the form
+   *
+   * @return array|null
+   */
   function getFormulaField(){
     if ($this->_formula_field) {
       return $this->_formula_field;
@@ -347,6 +365,14 @@ class CExClass extends CMbObject {
     return $this->_formula_field = $ds->loadResult($request->getRequest());
   }
 
+  /**
+   * Get the formula field
+   *
+   * @param string $field_name Field name
+   * @param array  $where      The WHERE statement
+   *
+   * @return array|null
+   */
   function getFormulaResult($field_name, $where) {
     $ds = $this->getDS();
 
@@ -359,7 +385,9 @@ class CExClass extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Load the "field_groups" back refs
+   *
+   * @param bool $cache Use cache
    *
    * @return CExClassFieldGroup[]
    */
@@ -380,7 +408,9 @@ class CExClass extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Load the fields
+   *
+   * @param bool $cache Use cache
    *
    * @return CExClassField[]
    */
@@ -393,12 +423,10 @@ class CExClass extends CMbObject {
     }
     return $fields;
   }
-  
-  /*function loadRefsConstraints(){
-    return $this->_ref_constraints = $this->loadBackRefs("constraints");
-  }*/
 
   /**
+   * Load the "events" back refs
+   *
    * @return CExClassEvent[]
    */
   function loadRefsEvents(){
@@ -406,6 +434,8 @@ class CExClass extends CMbObject {
   }
 
   /**
+   * Get the table name
+   *
    * @return string
    */
   function getTableName(){
@@ -413,8 +443,10 @@ class CExClass extends CMbObject {
   }
 
   /**
-   * @param CMbObject $object
-   * @param null      $ex_object
+   * Load CExObjects and inject the CExObject instance into $ex_object
+   *
+   * @param CMbObject $object     The host object
+   * @param null      &$ex_object The variable where the CExObject will be injected
    *
    * @return CExObject[]
    */
@@ -434,6 +466,8 @@ class CExClass extends CMbObject {
   }
 
   /**
+   * Load the predicates
+   *
    * @return CExClassFieldPredicate[]
    */
   function loadRefsDisplayConditions(){
@@ -445,11 +479,13 @@ class CExClass extends CMbObject {
       "ex_class_field_group" => "ex_class_field_group.ex_class_field_group_id = ex_class_field.ex_group_id",
     );
     
-    $ex_field_predicate = new CExClassFieldPredicate;
+    $ex_field_predicate = new CExClassFieldPredicate();
     return $ex_field_predicate->loadList($where, null, null, null, $ljoin);
   }
 
   /**
+   * Load all the elements to be pu on the pixel grid
+   *
    * @return CExClassFieldGroup[]
    */
   function getPixelGrid(){
@@ -480,6 +516,15 @@ class CExClass extends CMbObject {
     return $groups;
   }
 
+  /**
+   * Build the grid
+   *
+   * @param int  $w      Grid width
+   * @param int  $h      Grid height
+   * @param bool $reduce Reduced the grid if it contains empty rows or empty columns
+   *
+   * @return array
+   */
   function getGrid($w = 4, $h = 30, $reduce = true) {
     $big_grid = array();
     $big_out_of_grid = array();
@@ -721,6 +766,8 @@ class CExClass extends CMbObject {
   }
   
   /**
+   * Duplicates the object
+   *
    * - field_groups
    *   - class_fields
    *     - enum_translations
@@ -734,10 +781,12 @@ class CExClass extends CMbObject {
    * 
    * - constraints
    * - ex_triggers
+   *
+   * @return null|string Store-like message
    */
   function duplicate(){
     if (!$this->_id) {
-      return;
+      return null;
     }
     
     // Load all field values
@@ -798,8 +847,21 @@ class CExClass extends CMbObject {
     $this->duplicateBackRefs($this, "ex_triggers", "ex_class_triggered_id", $new->_id);
     
     CExObject::clearLocales();
+
+    return null;
   }
 
+  /**
+   * Duplicates an object
+   *
+   * @param CMbObject $object         The object to duplicate
+   * @param string    $fwd_field      Forward field
+   * @param mixed     $fwd_value      Forward value
+   * @param CMbObject &$new           The new object (input)
+   * @param array     $exclude_fields Excluded fields
+   *
+   * @return null|string
+   */
   private function duplicateObject(CMbObject $object, $fwd_field, $fwd_value, &$new = null, $exclude_fields = array()) {
     $class = $object->_class;
 
@@ -815,7 +877,17 @@ class CExClass extends CMbObject {
     
     return $new->store();
   }
-  
+
+  /**
+   * Duplicate back refs
+   *
+   * @param CMbObject $object    Object to duplicate back refs of
+   * @param string    $backname  Back reference name
+   * @param string    $fwd_field Forward field name
+   * @param mixed     $fwd_value Forward field value
+   *
+   * @return void
+   */
   private function duplicateBackRefs(CMbObject $object, $backname, $fwd_field, $fwd_value) {
     foreach ($object->loadBackRefs($backname) as $_back) {
       $this->duplicateObject($_back, $fwd_field, $fwd_value);

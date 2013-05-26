@@ -1,14 +1,12 @@
 <?php
-
 /**
  * $Id$
  *
- * @category ftp
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -20,6 +18,7 @@ $new_name          = CValue::get("new_name");
 $file              = CValue::get("file");
 $source_guid       = CValue::get("source_guid");
 
+/** @var CSourceFTP $source */
 $source = CMbObject::loadFromGuid($source_guid);
 
 if ($delete && $file) {

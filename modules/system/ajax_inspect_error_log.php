@@ -1,9 +1,9 @@
-<?php 
+<?php
 /**
  * $Id$
- * 
+ *
  * @package    Mediboard
- * @subpackage reservation
+ * @subpackage System
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
@@ -18,8 +18,11 @@ $graphs = array();
 
 $format = $format_regexp = null;
 $formats = array(
-  "d/M/Y:H:i:s" => "/[0-9][0-9]\/[A-Z][a-z][a-z]\/[0-9][0-9][0-9][0-9]:[0-9][0-9]:[0-9][0-9]:[0-9][0-9]/", /* 05/Dec/2012:00:00:00 */ 
-  "D M d H:i:s Y" => "/[A-Z][a-z][a-z]\s*[A-Z][a-z][a-z]\s*[0-9]*\s*[0-9][0-9]:[0-9][0-9]:[0-9][0-9]\s*[0-9][0-9][0-9][0-9]/", /* Sat Dec 01 04:36:44 2012 */
+  /* 05/Dec/2012:00:00:00 */
+  "d/M/Y:H:i:s" => "/[0-9][0-9]\/[A-Z][a-z][a-z]\/[0-9][0-9][0-9][0-9]:[0-9][0-9]:[0-9][0-9]:[0-9][0-9]/",
+
+  /* Sat Dec 01 04:36:44 2012 */
+  "D M d H:i:s Y" => "/[A-Z][a-z][a-z]\s*[A-Z][a-z][a-z]\s*[0-9]*\s*[0-9][0-9]:[0-9][0-9]:[0-9][0-9]\s*[0-9][0-9][0-9][0-9]/",
 );
 
 $mode = CValue::get("mode", "error_log");

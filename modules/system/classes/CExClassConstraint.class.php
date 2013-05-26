@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Form constraint
+ */
 class CExClassConstraint extends CMbObject {
   public $ex_class_constraint_id;
 
@@ -43,7 +46,6 @@ class CExClassConstraint extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    //$props["ex_class_id"] = "ref notNull class|CExClass";
     $props["ex_class_event_id"] = "ref notNull class|CExClassEvent";
     $props["field"]       = "str notNull";
     $props["operator"]    = "enum notNull list|=|!=|>|>=|<|<=|startsWith|endsWith|contains default|=";
@@ -76,7 +78,7 @@ class CExClassConstraint extends CMbObject {
   /**
    * @param CModelObject $ref_object
    *
-   * @return CMbFieldSpec
+   * @return CMbFieldSpec|null
    */
   function resolveSpec(CModelObject $ref_object){
     /** @var CModelObject $ref_object */
@@ -109,7 +111,7 @@ class CExClassConstraint extends CMbObject {
       }
       else {
         if (!$_spec->class) {
-          return;
+          return null;
         }
 
         $class = $_spec->class;
@@ -128,6 +130,14 @@ class CExClassConstraint extends CMbObject {
     return $spec;
   }
 
+  /**
+   * Resolve an object from an object and a formard ref path
+   *
+   * @param CMbObject $object The object to resolve forward ref object
+   * @param string    $field  The path to resolve
+   *
+   * @return array|null
+   */
   static function resolveObjectFieldStatic(CMbObject $object, $field) {
     $parts = explode("-", $field);
 
@@ -144,7 +154,7 @@ class CExClassConstraint extends CMbObject {
       $_spec = $object->_specs[$_field];
 
       if (count($subparts) <= 1 && !$_spec->class) {
-        return;
+        return null;
       }
 
       return array(

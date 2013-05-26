@@ -13,7 +13,6 @@
  * The CAlert Class
  */
 class CAlert extends CMbMetaObject {
-  // DB Table key
   public $alert_id;
   
   // DB Fields
@@ -22,6 +21,9 @@ class CAlert extends CMbMetaObject {
   public $comments;
   public $handled;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'alert';
@@ -29,6 +31,9 @@ class CAlert extends CMbMetaObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["tag"]      = "str notNull";

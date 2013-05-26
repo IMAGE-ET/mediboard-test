@@ -37,6 +37,9 @@ class CUserLog extends CMbMetaObject {
   
   public $_merged_ids; // Tableau d'identifiants des objets fusionnés
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->loggable = false;
@@ -46,6 +49,9 @@ class CUserLog extends CMbMetaObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["object_id"]    = "ref notNull class|CMbObject meta|object_class unlink";
@@ -61,21 +67,32 @@ class CUserLog extends CMbMetaObject {
     $props["_date_max"]    = "dateTime moreEquals|_date_min";
     return $props;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     if ($this->fields) {
       $this->_fields = explode(" ", $this->fields);
     }
   }
-  
+
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     parent::updatePlainFields();
     if ($this->_fields) {
       $this->fields = implode(" ", $this->_fields);
     }
   }
-  
+
+  /**
+   * Gets old values (before the change happened)
+   *
+   * @return array
+   */
   function getOldValues() {
     $this->completeField("extra");
     
@@ -88,19 +105,27 @@ class CUserLog extends CMbMetaObject {
   }
   
   /**
-   * @param bool $cache [optional]
+   * Load the user who did the change
+   *
+   * @param bool $cache Use object cache
    *
    * @return CUser
    */
   function loadRefUser($cache = true) {
     return $this->_ref_user = $this->loadFwdRef("user_id", $cache);
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     parent::loadRefsFwd();
     $this->loadRefUser();
   }
-  
+
+  /**
+   * @see parent::loadView()
+   */
   function loadView(){
     parent::loadView();
     
@@ -108,7 +133,12 @@ class CUserLog extends CMbMetaObject {
     $this->canUndo();
     $this->loadTargetObject()->loadHistory();
   }
-  
+
+  /**
+   * Gets all the IDs implied in the merging
+   *
+   * @return ref[]
+   */
   function loadMergedIds(){
     if ($this->type === "merge") {
       $date_max = CMbDT::dateTime("+3 seconds", $this->date);
@@ -117,6 +147,8 @@ class CUserLog extends CMbMetaObject {
         "type" => " = 'delete'",
         "date" => "BETWEEN '$this->date' AND '$date_max'"
       );
+
+      /** @var self[] $logs */
       $logs = $this->loadList($where);
       
       foreach ($logs as $_log) {
@@ -124,7 +156,16 @@ class CUserLog extends CMbMetaObject {
       }
     }
   }
-   
+
+  /**
+   * Counts the recent user logs
+   *
+   * @param string   $object_class The object class
+   * @param ref[]    $ids          The list of IDs
+   * @param datetime $recent       The date considered as recent
+   *
+   * @return int
+   */
   static function countRecentFor($object_class, $ids, $recent){
     $log = new CUserLog();
     $where = array();
@@ -133,7 +174,16 @@ class CUserLog extends CMbMetaObject {
     $where["object_id"] = CSQLDataSource::prepareIn($ids);
     return $log->countList($where);
   }
-  
+
+  /**
+   * Gets the object value at a specific date
+   *
+   * @param CMbObject $object The object to get the value of
+   * @param datetime  $date   The date
+   * @param string    $field  Field name
+   *
+   * @return mixed
+   */
   static function getObjectValueAtDate(CMbObject $object, $date, $field) {
     $where = array(
       "object_class" => "= '$object->_class'",
@@ -161,7 +211,10 @@ class CUserLog extends CMbMetaObject {
     
     return CValue::read($user_log->_old_values, $field, $object->$field);
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store(){
     if ($msg = $this->check()) {
       return $msg;
@@ -174,7 +227,10 @@ class CUserLog extends CMbMetaObject {
     
     return parent::store();
   }
-  
+
+  /**
+   * @see parent::canDeleteEx()
+   */
   function canDeleteEx(){
     if (!$this->canEdit() || !$this->_ref_module->canAdmin()) {
       return false;
@@ -182,7 +238,12 @@ class CUserLog extends CMbMetaObject {
     
     return parent::canDeleteEx();
   }
-  
+
+  /**
+   * Tells if we can undo the change
+   *
+   * @return bool
+   */
   function canUndo(){
     $this->completeField("type", "extra");
     
@@ -200,7 +261,12 @@ class CUserLog extends CMbMetaObject {
     
     return $this->_canUndo = ($this->countList($where) == 0);
   }
-  
+
+  /**
+   * Undo the change
+   *
+   * @return null|string
+   */
   function undo(){
     if (!$this->canUndo()) {
       return "CUserLog-undo-ko";
@@ -229,7 +295,16 @@ class CUserLog extends CMbMetaObject {
     
     return $this->delete();
   }
-  
+
+  /**
+   * @param $start
+   * @param $end
+   * @param $period_format
+   * @param $module_name
+   * @param $action_name
+   *
+   * @return array
+   */
   static function loadPeriodAggregation($start, $end, $period_format, $module_name, $action_name) {
     $query = "SELECT
         COUNT(*) AS count,
@@ -240,8 +315,6 @@ class CUserLog extends CMbMetaObject {
       FROM `user_log`
       USE INDEX (date)
       WHERE `date` BETWEEN '$start' AND '$end'";
-          
-    
     
     if ($action_name) {
       // If is_array, then we have to show one graph per class, with all types

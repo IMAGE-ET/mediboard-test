@@ -1,18 +1,17 @@
 <?php
-
 /**
  * Exchange Source
- *  
- * @category system
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id$ 
- * @link     http://www.mediboard.org
+ *
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
- * Class CExchangeSource 
  * Exchange Source
  */
 class CExchangeSource extends CMbObject {
@@ -57,9 +56,7 @@ class CExchangeSource extends CMbObject {
   public $_acquittement;
 
   /**
-   * db properties
-   *
-   * @return array
+   * @see parent::getProps()
    */
   function getProps() {
     $props = parent::getProps();

@@ -1,12 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * Activate or move a module entry
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -27,9 +27,7 @@ if ($cmd == "upgrade-core") {
   foreach ($list_modules as $module) {
     $setupClass = "CSetup$module->mod_name";
     
-    /**
-     * @var CSetup
-     */
+    /** @var CSetup $setup */
     $setup = new $setupClass;
     if ($module->mod_version = $setup->upgrade($module->mod_version, true)) {
       $module->mod_type = $setup->mod_type;
@@ -39,7 +37,13 @@ if ($cmd == "upgrade-core") {
         CAppUI::setMsg("Installation de '%s' à la version %s", UI_MSG_OK, $module->mod_name, $setup->mod_version);
       }
       else {
-        CAppUI::setMsg("Installation de '%s' à la version %s sur %s", UI_MSG_WARNING, $module->mod_name, $module->mod_version, $setup->mod_version);
+        CAppUI::setMsg(
+          "Installation de '%s' à la version %s sur %s",
+          UI_MSG_WARNING,
+          $module->mod_name,
+          $module->mod_version,
+          $setup->mod_version
+        );
       }
     }
     else {
@@ -96,21 +100,21 @@ switch ($cmd) {
   case "movedn":
     $module->move($cmd);
     CAppUI::setMsg("CModule-msg-reordered", UI_MSG_OK);
-  break;
+    break;
     
   case "toggle":
     // just toggle the active state of the table entry
     $module->mod_active = 1 - $module->mod_active;
     $module->store();
     CAppUI::setMsg("CModule-msg-state-changed", UI_MSG_OK);
-  break;
+    break;
 
   case "toggleMenu":
     // just toggle the active state of the table entry
     $module->mod_ui_active = 1 - $module->mod_ui_active;
     $module->store();
     CAppUI::setMsg("CModule-msg-state-changed", UI_MSG_OK);
-  break;
+    break;
 
   case "remove":
     $success = ($module->_files_missing ? true : $setup->remove());
@@ -119,7 +123,7 @@ switch ($cmd) {
       $module->remove();
       CAppUI::setMsg("CModule-msg-removed", $success ? UI_MSG_OK : UI_MSG_ERROR, true);
     }
-  break;
+    break;
 
   case "install":
     if ($module->mod_version = $setup->upgrade($module->mod_version)) {
@@ -130,16 +134,22 @@ switch ($cmd) {
         CAppUI::setMsg("Installation de '%s' à la version %s", UI_MSG_OK, $module->mod_name, $setup->mod_version);
       }
       else {
-        CAppUI::setMsg("Installation de '%s' à la version %s sur %s", UI_MSG_WARNING, $module->mod_name, $module->mod_version, $setup->mod_version);
+        CAppUI::setMsg(
+          "Installation de '%s' à la version %s sur %s",
+          UI_MSG_WARNING,
+          $module->mod_name,
+          $module->mod_version,
+          $setup->mod_version
+        );
       }
-    } 
+    }
     else {
       CAppUI::setMsg("Module '$module->mod_name' non installé", UI_MSG_ERROR, true);
     }
     
     // In case the setup has added some user prefs
     CAppUI::buildPrefs();
-  break;
+    break;
 
   case "upgrade":
     if ($module->mod_version = $setup->upgrade($module->mod_version)) {
@@ -150,22 +160,28 @@ switch ($cmd) {
         CAppUI::setMsg("Installation de '%s' à la version %s", UI_MSG_OK, $module->mod_name, $setup->mod_version);
       }
       else {
-        CAppUI::setMsg("Installation de '%s' à la version %s sur %s", UI_MSG_WARNING, $module->mod_name, $module->mod_version, $setup->mod_version);
+        CAppUI::setMsg(
+          "Installation de '%s' à la version %s sur %s",
+          UI_MSG_WARNING,
+          $module->mod_name,
+          $module->mod_version,
+          $setup->mod_version
+        );
       }
-    } 
+    }
     else {
       CAppUI::setMsg("Module '%s' non mis à jour", UI_MSG_WARNING, $module->mod_name);
     }
   
     // In case the setup has added some user prefs
     CAppUI::buildPrefs();
-  break;
+    break;
     
   case "configure":
     if (!$setup->configure()) { //returns true if configure succeeded
       CAppUI::setMsg("CModule-msg-config-failed", UI_MSG_ERROR);
     }
-  break;
+    break;
 
   default: 
     CAppUI::setMsg("Unknown Command", UI_MSG_ERROR);

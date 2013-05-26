@@ -16,12 +16,21 @@ class CTag extends CMbObject {
   public $object_class;
   public $name;
   public $color;
-  
+
+  /** @var self */
   public $_ref_parent;
+
+  /** @var CTagItem[] */
   public $_ref_items;
+
+  /** @var CTag[] */
+  public $_ref_children;
   
   public $_deepness;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "tag";
@@ -30,6 +39,9 @@ class CTag extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["parent_id"]    = "ref class|CTag autocomplete|name dependsOn|object_class";
@@ -39,6 +51,9 @@ class CTag extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["children"] = "CTag parent_id";
@@ -46,6 +61,9 @@ class CTag extends CMbObject {
     return $backProps;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $parent = $this->loadRefParent();
@@ -53,6 +71,8 @@ class CTag extends CMbObject {
   }
 
   /**
+   * Load tag items
+   *
    * @return CTagItem[]
    */
   function loadRefItems(){
@@ -60,6 +80,8 @@ class CTag extends CMbObject {
   }
 
   /**
+   * Load children
+   *
    * @return self[]
    */
   function loadRefChildren(){
@@ -67,6 +89,8 @@ class CTag extends CMbObject {
   }
 
   /**
+   * Count children tags
+   *
    * @return int
    */
   function countChildren(){
@@ -74,19 +98,24 @@ class CTag extends CMbObject {
   }
 
   /**
+   * Load parent tag
+   *
    * @return self
    */
   function loadRefParent(){
     return $this->_ref_parent = $this->loadFwdRef("parent_id");
   }
-  
+
+  /**
+   * @see parent::check()
+   */
   function check(){
     if ($msg = parent::check()) {
       return $msg;
     }
     
     if (!$this->parent_id) {
-      return;
+      return null;
     }
     
     $tag = $this;
@@ -97,8 +126,17 @@ class CTag extends CMbObject {
       }
       $tag = $parent;
     }
+
+    return null;
   }
-  
+
+  /**
+   * Get objects matching the keywords having the current tag
+   *
+   * @param string $keywords Keywords
+   *
+   * @return CMbObject[]
+   */
   function getObjects($keywords = ""){
     if (!$keywords) {
       $items = $this->loadRefItems();
@@ -115,7 +153,10 @@ class CTag extends CMbObject {
     CMbArray::invoke($items, "loadTargetObject");
     return CMbArray::pluck($items, "_ref_object");
   }
-  
+
+  /**
+   * @see parent::getAutocompleteList()
+   */
   function getAutocompleteList($keywords, $where = null, $limit = null) {
     $list = array();
     
@@ -178,7 +219,8 @@ class CTag extends CMbObject {
     
     $tree["parent"] = $parent;
     $tree["children"] = array();
-    
+
+    /** @var self[] $tags */
     $tags = $tag->loadList($where, "name");
     
     foreach ($tags as $_tag) {

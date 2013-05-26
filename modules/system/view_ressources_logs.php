@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -19,7 +20,7 @@ $numelem  = CValue::getOrSession("numelem" , 6);
 CAppUI::requireModuleFile('dPstats', 'graph_ressourceslog');
 
 $next     = CMbDT::date("+1 DAY", $date);
-switch($interval) {
+switch ($interval) {
   case "day":
     $from = CMbDT::date("-1 DAY", $next);
     break;
@@ -33,17 +34,16 @@ switch($interval) {
     $from = CMbDT::date("-1 DAY", $next);
 }
 
-
 $graphs = array();
 if ($groupres == 1) {
-  if($element != "_average_duration" && $element != "_average_request") {
+  if ($element != "_average_duration" && $element != "_average_request") {
     $graphs[] = graphRessourceLog('modules', $date, $element, $interval, $numelem);
   }
   $graphs[] = graphRessourceLog('total', $date, $element, $interval, $numelem);
 }
 else {
   $logs = CAccessLog::loadAgregation($from, $next, ($groupres + 1), 0);
-  foreach($logs as $log){
+  foreach ($logs as $log) {
     $graphs[] = graphRessourceLog($log->module, $date, $element, $interval, $numelem);
   }
 }
@@ -60,5 +60,3 @@ $smarty->assign("numelem"    , $numelem);
 $smarty->assign("listModules", CModule::getInstalled());
 
 $smarty->display("view_ressources_logs.tpl");
-
-?>

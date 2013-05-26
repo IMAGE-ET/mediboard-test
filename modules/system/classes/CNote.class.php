@@ -26,9 +26,12 @@ class CNote extends CMbMetaObject {
   public $libelle;
   public $text;
 
-  // References
+  /** @var CMediusers */
   public $_ref_user;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'note';
@@ -36,6 +39,9 @@ class CNote extends CMbMetaObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["user_id"]    = "ref class|CMediusers";
@@ -48,6 +54,9 @@ class CNote extends CMbMetaObject {
     return $props;
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     parent::loadRefsFwd();
     $this->_ref_user = new CMediusers;
@@ -55,13 +64,16 @@ class CNote extends CMbMetaObject {
     $this->_view = "Note écrite par ".$this->_ref_user->_view;
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($perm) {
     if (!isset($this->_ref_object->_id)) {
       $this->loadRefsFwd();
     }
+
     return $this->public ?
       $this->_ref_object->getPerm($perm) :
       $this->_ref_object->getPerm($perm) && $this->_ref_user->getPerm($perm);
   }
-
 }

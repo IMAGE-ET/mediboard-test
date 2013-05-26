@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $class       = CValue::get('class');
@@ -19,10 +20,11 @@ $wholeString = CValue::get('wholeString', 'false') == 'true';
 $where       = CValue::get('where', array());
 $min_occurences = CValue::get('min_occurences', 1);
 
+/** @var CMbObject $object */
 $object = new $class;
 $ds = $object->_spec->ds;
 
-foreach($where as $key => $value) {
+foreach ($where as $key => $value) {
   $where[$key] = $ds->prepare("= %", $value);
 }
 
@@ -35,6 +37,7 @@ $count = 0;
 $template = null;
 
 if ($spec instanceof CRefSpec) {
+  /** @var CMbObject $target_object */
   $target_object = new $spec->class;
   
   if ($view_field == "_view") {
@@ -101,5 +104,3 @@ $smarty->assign('nodebug',    true);
 $smarty->assign('ref_spec',   $spec instanceof CRefSpec);
 
 $smarty->display('inc_field_autocomplete.tpl');
-
-?>

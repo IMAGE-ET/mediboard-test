@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Access Log
+ */
 class CAccessLog extends CMbObject {
   public $accesslog_id;
   
@@ -38,7 +41,10 @@ class CAccessLog extends CMbObject {
   public $_average_errors      = 0;
   public $_average_warnings    = 0;
   public $_average_notices     = 0;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->loggable = false;
@@ -47,6 +53,9 @@ class CAccessLog extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["module"]      = "str notNull";
@@ -76,6 +85,11 @@ class CAccessLog extends CMbObject {
   function fastStore() {
     $fields = $this->getPlainFields();
     unset($fields[$this->_spec->key]);
+
+    $columns = array();
+    $inserts = array();
+    $updates = array();
+
     foreach ($fields as $_name => $_value) {
       $columns[] = "$_name";
       $inserts[] = "'$_value'";
@@ -96,8 +110,13 @@ class CAccessLog extends CMbObject {
     if (!$ds->exec($query)) {
       return $ds->error();
     }
+
+    return null;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     if ($this->hits) {
@@ -114,7 +133,18 @@ class CAccessLog extends CMbObject {
     $this->_average_hits = $this->hits / 60;   // hits per min
     $this->_average_size = $this->size / 3600; // size per sec
   }
-  
+
+  /**
+   * Load aggregated statistics
+   *
+   * @param string $start     Start date
+   * @param string $end       End date
+   * @param int    $groupmod  Grouping mode
+   * @param null   $module    Module name
+   * @param bool   $DBorNotDB Load database stats or not
+   *
+   * @return array|CStoredObject[]
+   */
   static function loadAgregation($start, $end, $groupmod = 0, $module = null, $DBorNotDB = false) {
     $query = "SELECT 
         accesslog_id, 
@@ -185,7 +215,19 @@ class CAccessLog extends CMbObject {
     $log = new self;
     return $log->loadQueryList($query);
   }
-  
+
+  /**
+   * Build aggregated stats for a period
+   *
+   * @param string $start         Start date time
+   * @param string $end           End date time
+   * @param string $period_format Period format
+   * @param string $module_name   Module name
+   * @param string $action_name   Action name
+   * @param bool   $DBorNotDB     Include database logs stats
+   *
+   * @return array|CStoredObject[]
+   */
   static function loadPeriodAggregation($start, $end, $period_format, $module_name, $action_name, $DBorNotDB = false) {
     $query = "SELECT 
         `accesslog_id`,

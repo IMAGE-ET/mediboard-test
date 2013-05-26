@@ -1,11 +1,12 @@
-<?php /* $Id: ajax_test_dsn.php 6069 2009-04-14 10:17:11Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision: 6069 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -55,4 +56,3 @@ $smarty->assign("default_config", $default_config);
 $smarty->assign("fields"        , $fields);
 $smarty->assign("categories"    , $categories);
 $smarty->display("inc_config_object_values.tpl");
-?>

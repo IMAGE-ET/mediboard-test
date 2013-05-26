@@ -1,11 +1,12 @@
-<?php /* $Id: view_messages.php 10359 2010-10-12 16:30:43Z rhum1 $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision: 10359 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -32,7 +33,6 @@ $query = "SELECT module, action, COUNT(*) AS total FROM `access_log`
   WHERE duration / hits > '$ratio'
   GROUP BY module, action";
 $logs = $ds->loadList($query);
-
 
 // Création du template
 $smarty = new CSmartyDP();

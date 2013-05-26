@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -38,9 +39,9 @@ if ($date) {
 
 $where["type"] = "= 'store'";
 
-if ($fields){
+if ($fields) {
   $whereField = array();
-  foreach($fields as $_field) {
+  foreach ($fields as $_field) {
     $whereField[] = "
       fields LIKE '$_field %' OR 
       fields LIKE '% $_field %' OR 
@@ -52,21 +53,21 @@ if ($fields){
 
 $logs = $user_log->loadList($where, "date ASC", null, "object_id");
 
-foreach($logs as $_log) {
+foreach ($logs as $_log) {
   $_log->loadTargetObject();
   $_log->getOldValues();
 }
 
-foreach($logs as $_log) {
-  foreach($_log->_old_values as $_field => $_value) {
+foreach ($logs as $_log) {
+  foreach ($_log->_old_values as $_field => $_value) {
     if (count($fields) == 0 || in_array($_field, $fields)) {
       $_log->_ref_object->$_field = $_value;
     }
   }
   
-  if($do_it) {
+  if ($do_it) {
     $_log->_ref_object->repair();
-    if($msg = $_log->_ref_object->store()) {
+    if ($msg = $_log->_ref_object->store()) {
       CAppUI::setMsg($msg);
     }
   }
