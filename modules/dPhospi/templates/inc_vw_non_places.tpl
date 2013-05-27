@@ -159,8 +159,12 @@
                       {{if $_object->type == "ambu"}}style="font-style: italic;"{{/if}}>
                         
                         {{if $_object->recuse == "-1"}}[Att] {{/if}} {{$patient->nom}} {{if $patient->nom_jeune_fille}}({{$patient->nom_jeune_fille}}) {{/if}}{{$patient->prenom}}
-                        
+
                       </span>{{if $show_age_patient}}({{$patient->_age}}){{/if}}
+
+                      {{if $conf.ref_pays == 2}}
+                        <strong>{{$_object->_ref_charge_price_indicator->code}}</strong>
+                      {{/if}}
                       {{if $_object->type != "ambu" && $_object->type != "exte"}}
                         ({{$_object->_duree}}j - {{$_object->_ref_praticien->_shortview}})
                       {{else}}

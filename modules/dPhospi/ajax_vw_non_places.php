@@ -184,6 +184,7 @@ foreach ($sejours as $_key => $_sejour) {
     $_sejour->_entree_offset = CMbDate::position(max($date_min, $_sejour->entree), $date_min, $period);
     $_sejour->_sortie_offset = CMbDate::position(min($date_max, $_sejour->sortie), $date_min, $period);
     $_sejour->_width = $_sejour->_sortie_offset - $_sejour->_entree_offset;
+    $_sejour->loadRefChargePriceIndicator();
     $patient = $_sejour->loadRefPatient();
     $patient->loadRefPhotoIdentite();
     $patient->loadRefDossierMedical(false);
@@ -277,6 +278,7 @@ CMbObject::massCountBackRefs($affectations, "affectations_enfant");
 $operations = array();
 $suivi_affectation = false;
 
+/** @var $affectations CAffectation[] */
 foreach ($affectations as $_affectation) {
   $lit = new CLit();
   $lit->_selected_item = new CItemPrestation;
@@ -288,6 +290,7 @@ foreach ($affectations as $_affectation) {
   $_affectation->loadRefsAffectations();
   $_affectation->_affectations_enfant_ids = CMbArray::pluck($_affectation->loadBackRefs("affectations_enfant"), "affectation_id");
   $sejour = $_affectation->loadRefSejour();
+  $affectation->_ref_sejour->loadRefChargePriceIndicator();
   $sejour->loadRefPraticien()->loadRefFunction();
   $patient = $sejour->loadRefPatient();
   $patient->loadRefPhotoIdentite();
