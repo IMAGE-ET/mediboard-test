@@ -1,5 +1,7 @@
 <div>
-  {{$acte->code_acte}} 
+  <span onmouseover="ObjectTooltip.createEx(this, '{{$acte->_guid}}');">
+    {{$acte->code_acte}}
+  </span>
   {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$acte->_ref_executant}}
 
   <div class="compact">

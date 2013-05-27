@@ -122,7 +122,10 @@
           </td>
           <td class="text">
             {{foreach from=$_operation->_ref_actes_ccam item=_acte}}
-            {{mb_include module=salleOp template=inc_view_acte_compact acte=$_acte}}
+              {{mb_include module=salleOp template=inc_view_acte_ccam_compact acte=$_acte}}
+            {{/foreach}}
+            {{foreach from=$_operation->_ref_actes_ngap item=_acte}}
+              {{mb_include module=cabinet template=inc_view_acte_ngap_compact acte=$_acte}}
             {{/foreach}}
           </td>
         </tr>

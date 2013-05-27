@@ -27,14 +27,14 @@ $filter->_ccam_libelle = CValue::get("_ccam_libelle", 1);
 
 $filterSejour = new CSejour();
 $filterSejour->type = CValue::get("type");
-$filterSejour->ald = CValue::get("ald");
+$filterSejour->ald  = CValue::get("ald");
 
 $group = CGroups::loadCurrent();
 
 //On sort les plages opératoires
 //  Chir - Salle - Horaires
 
-$plagesop = new CPlageOp();
+$plage = new CPlageOp();
 
 $where = array();
 $where["date"] =  $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
@@ -58,7 +58,8 @@ $listSalles = $salle->loadListWithPerms(PERM_READ, $whereSalle);
 
 $where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles), $filter->salle_id);
 
-$plagesop = $plagesop->loadList($where, $order);
+/** @var CPlageOp[] $plagesop */
+$plagesop = $plage->loadList($where, $order);
 $plagesop["urgences"] = new CPlageOp();
 
 $prats = CMbObject::massLoadFwdRef($plagesop, "chir_id");
@@ -97,8 +98,10 @@ foreach ($plagesop as $_plage) {
 
   // Cas des plages normales
   if ($_plage->_id) {
-
-    $_plage->loadRefsFwd();
+    $_plage->loadRefChir();
+    $_plage->loadRefAnesth();
+    $_plage->loadRefSpec();
+    $_plage->loadRefSalle();
 
     // Opérations normale
     $joins = array();
@@ -141,6 +144,7 @@ foreach ($plagesop as $_plage) {
     $where["date"]         = $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
     $where["operation_id"] = $ds->prepareNotIn($listUrgencesTraitees);
     $order = "date, chir_id";
+
     $_plage->_ref_operations = $tempOp->loadList($where, $order, null, null, $ljoin);
     if (!count($_plage->_ref_operations)) {
       unset($plagesop["urgences"]);
@@ -148,11 +152,13 @@ foreach ($plagesop as $_plage) {
     }
   }
 
+  /** @var COperation $_operation */
   foreach ($_plage->_ref_operations as $_operation) {
     $sejour = $_operation->loadRefSejour();
     $_operation->loadRefPraticien()->loadRefFunction();
     $_operation->loadExtCodesCCAM();
-    foreach ($_operation->loadRefsActesCCAM() as $_acte) {
+
+    foreach ($_operation->loadRefsActes() as $_acte) {
       $_acte->loadRefExecutant();
     }
 
