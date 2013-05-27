@@ -9,6 +9,13 @@
  * @version    $Revision$
  */
 
+/**
+ * Fichiers téléversés vers l'application.
+ * Egalement :
+ *  - pièces jointes d'email
+ *  - conversion de fichiers en PDF
+ *  - aperçus PDFde documents
+ */
 class CFile extends CDocumentItem {
   static $directory = null;
   
@@ -22,6 +29,7 @@ class CFile extends CDocumentItem {
   public $file_date;
   public $file_size;
   public $rotation;
+  public $annule;
 
   // Form fields
   public $_extensioned;
@@ -50,7 +58,10 @@ class CFile extends CDocumentItem {
     sxd sxg sxi sxm sxw txt uof uop uos uot wb2 wk1 wks
     wmf wpd wpg wps xlc xlm xls xlsb xlsm xlsx xlt xltm
     xltx xlw";
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'files_mediboard';
@@ -58,7 +69,10 @@ class CFile extends CDocumentItem {
     $spec->measureable = true;
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["documents_ged_suivi"] = "CDocGedSuivi file_id";
@@ -67,7 +81,10 @@ class CFile extends CDocumentItem {
 
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     
@@ -76,7 +93,8 @@ class CFile extends CDocumentItem {
     $props["file_real_filename"] = "str notNull show|0";
     $props["file_type"]          = "str";
     $props["file_name"]          = "str notNull show|0";
-    $props["rotation"]           = "enum list|0|90|180|270 default|0";
+    $props["rotation"]           = "enum list|0|90|180|270 default|0 show|0";
+    $props["annule"]             = "bool default|0 show|0";
 
     // Form Fields
     $props["_sub_dir"]      = "str";
@@ -111,7 +129,12 @@ class CFile extends CDocumentItem {
     $file->loadMatchingObject();
     return $file;    
   }
-  
+
+  /**
+   * Force directories creation for file upload
+   *
+   * @return void
+   */
   function forceDir() {
     // Check global directory
     if (!CMbPath::forceDir(self::$directory)) {
@@ -122,11 +145,23 @@ class CFile extends CDocumentItem {
     // Checks complete file directory
     CMbPath::forceDir($this->_absolute_dir);
   }
-  
+
+  /**
+   * Get the content of the file
+   *
+   * @return string
+   */
   function getBinaryContent() {
     return file_get_contents($this->_file_path);
   }
-  
+
+  /**
+   * Put a content in a file
+   *
+   * @param String $filedata String of content
+   *
+   * @return boolean
+   */
   function putContent($filedata) {
     if (!$this->file_real_filename) {
       return false;
@@ -141,7 +176,10 @@ class CFile extends CDocumentItem {
     $this->file_size = filesize($this->_file_path);
     return $result;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     
@@ -160,7 +198,10 @@ class CFile extends CDocumentItem {
     
     $this->_shortview = $this->_view = str_replace("_", " ", $this->file_name);
   }
-  
+
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     // Delegate on target object
     $this->loadTargetObject();
@@ -177,7 +218,10 @@ class CFile extends CDocumentItem {
     }
     return false;
   }
-  
+
+  /**
+   * @see parent::fillFields()
+   */
   function fillFields(){
     if (!$this->_id) {
       if (!$this->file_date) {
@@ -188,7 +232,10 @@ class CFile extends CDocumentItem {
       }
     }
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store() {
     if ($this->_id && ($this->fieldModified("object_id") || $this->fieldModified("object_class"))) {
       $this->_old->updateFormFields();
@@ -249,7 +296,10 @@ class CFile extends CDocumentItem {
 
     return parent::store();
   }
-  
+
+  /**
+   * @see parent::delete()
+   */
   function delete() {
     // Remove previews
     $this->loadRefsFiles();
@@ -269,6 +319,8 @@ class CFile extends CDocumentItem {
     if (!$this->_spec->ds->exec($query)) {
       return $this->_spec->ds->error();
     }
+
+    return null;
   }
 
   /**
@@ -315,18 +367,28 @@ class CFile extends CDocumentItem {
 
     return copy($file, $this->_file_path);
   }
-    
+
+  /**
+   * Detect on old ImageMagick version on the server
+   *
+   * @return boolean
+   */
   function oldImageMagick() {
     exec("convert --version", $ret);
     if (!isset($ret[0])) {
-      return;
+      return false;
     }
 
     preg_match("/ImageMagick ([0-9\.-]+)/", $ret[0], $matches);
     return $matches[1] < "6.5.8";
   }
-  
-  function loadNbPages(){
+
+  /**
+   * Find the pages count of a pdf file
+   *
+   * @return void
+   */
+  function loadNbPages() {
     if (strpos($this->file_type, "pdf") !== false && file_exists($this->_file_path)) {
       // Fichier PDF Tentative de récupération
       $string_recherche = "/Count";
@@ -342,22 +404,25 @@ class CFile extends CDocumentItem {
         $splitFile = preg_split("/obj\r<</", $dataFile);
         
         foreach ($splitFile as $splitval) {
-          if (!$this->_nb_pages) {
-            $splitval = str_replace(array("\r", "\n"), "", $splitval);
-            $position_fin = stripos($splitval, ">>");
-            if ($position_fin !== false) {
-              $splitval = substr($splitval, 0, $position_fin);
-              if (strpos($splitval, "/Title") === false
-                  && strpos($splitval, "/Parent") === false
-                  && strpos($splitval, "/Pages") !== false
-                  && strpos($splitval, $string_recherche) !== false
-              ) {
-                // Nombre de page ici
-                $position_count = strripos($splitval, $string_recherche) + strlen($string_recherche);
-                $nombre_temp = explode(" ", trim(substr($splitval, $position_count, strlen($splitval)-$position_count)), 2);
-                $this->_nb_pages = intval(trim($nombre_temp[0]));
-              }
-            }
+          if ($this->_nb_pages) {
+            break;
+          }
+
+          $splitval = str_replace(array("\r", "\n"), "", $splitval);
+          $position_fin = stripos($splitval, ">>");
+          if ($position_fin === false) {
+            continue;
+          }
+          $splitval = substr($splitval, 0, $position_fin);
+          if (strpos($splitval, "/Title") === false
+              && strpos($splitval, "/Parent") === false
+              && strpos($splitval, "/Pages") !== false
+              && strpos($splitval, $string_recherche) !== false
+          ) {
+            // Nombre de page ici
+            $position_count = strripos($splitval, $string_recherche) + strlen($string_recherche);
+            $nombre_temp = explode(" ", trim(substr($splitval, $position_count, strlen($splitval)-$position_count)), 2);
+            $this->_nb_pages = intval(trim($nombre_temp[0]));
           }
         }
       }
@@ -374,9 +439,15 @@ class CFile extends CDocumentItem {
       }
     }
   }
-  
+
+  /**
+   * Load files for on object
+   *
+   * @param CMbObject $object object to load the files
+   *
+   * @return array[][]
+   */
   static function loadDocItemsByObject(CMbObject $object) {
-    global $can;
     if (!$object->_ref_files) {
       $object->loadRefsFiles();
     }
@@ -424,7 +495,10 @@ class CFile extends CDocumentItem {
 
     return $affichageFile;
   }
-  
+
+  /**
+   * @see parent::handleSend()
+   */
   function handleSend() {
     $this->completeField("file_name");
     $this->completeField("file_real_filename");
@@ -434,40 +508,72 @@ class CFile extends CDocumentItem {
     
     return parent::handleSend();
   }
-  
-  function file_empty() {
+
+  /**
+   * Empty a file
+   *
+   * @return void
+   */
+  function fileEmpty() {
     if (file_exists($this->_file_path)) {
       file_put_contents($this->_file_path, '');
     }
   }
-  
+
+  /**
+   * Thanks to the extension, detect if a file can be PDF convertible
+   *
+   * @param string $file_name the name of the file
+   *
+   * @return bool
+   */
   function isPDFconvertible($file_name = null) {
     if (!$file_name) {
       $file_name = $this->file_name;
     }
     return
-      in_array(substr(strrchr(strtolower($file_name), '.'),1), preg_split("/[\s]+/", CFile::$file_types)) &&
+      in_array(substr(strrchr(strtolower($file_name), '.'), 1), preg_split("/[\s]+/", CFile::$file_types)) &&
       (CAppUI::conf("dPfiles CFile ooo_active") == 1);
   }
- 
-  static function openoffice_launched() {
+
+  /**
+   * Test the execution of the soffice process
+   *
+   * @return bool
+   */
+  static function openofficeLaunched() {
     return exec("pgrep soffice");
   }
-  
-  static function openoffice_overload($force_restart = 0) {
+
+  /**
+   * Test the load of the soffice process and optionnaly can restart it
+   *
+   * @param int $force_restart Tell if it restarts or not
+   *
+   * @return void
+   */
+  static function openofficeOverload($force_restart = 0) {
     exec("sh shell/ooo_overload.sh $force_restart");
   }
-  
+
+  /**
+   * PDF conversion of a file
+   *
+   * @param string $file_path path to the file
+   * @param string $pdf_path  path the pdf file
+   *
+   * @return bool
+   */
   function convertToPDF($file_path = null, $pdf_path = null) {
     global $rootName;
     
     // Vérifier si openoffice est lancé
-    if (!CFile::openoffice_launched()) {
+    if (!CFile::openofficeLaunched()) {
       return 0;
     }
     
     // Vérifier sa charge en mémoire
-    CFile::openoffice_overload();
+    CFile::openofficeOverload();
     
     if (!$file_path && !$pdf_path) {
       $file = new CFile();
@@ -506,15 +612,17 @@ class CFile extends CDocumentItem {
     session_write_close();
     
     // Le header Connection: close permet de forcer a couper la connexion lorsque la requête est effectuée
-    $ctx = stream_context_create(array(
-      'http' => array(
-        'method'  => 'POST',
-        'header'  => "Content-type: application/x-www-form-urlencoded charset=UTF-8\r\n".
-                     "Connection: close\r\n".
-                     "Cookie: mediboard=".session_id()."\r\n",
-        'content' => http_build_query($data),
+    $ctx = stream_context_create(
+      array(
+        'http' => array(
+          'method'  => 'POST',
+          'header'  => "Content-type: application/x-www-form-urlencoded charset=UTF-8\r\n".
+                       "Connection: close\r\n".
+                       "Cookie: mediboard=".session_id()."\r\n",
+          'content' => http_build_query($data),
+        )
       )
-    ));
+    );
     
     // La requête post réouvre la session
     $res = file_get_contents($url, false, $ctx);
@@ -529,12 +637,19 @@ class CFile extends CDocumentItem {
     // Si la conversion a échoué
     // on relance le service s'il ne répond plus.
     if ( $res != 1) {
-      CFile::openoffice_overload(1);
+      CFile::openofficeOverload(1);
     }
     
     return $res;
   }
-  
+
+  /**
+   * Convert tif files to pdf
+   *
+   * @param array[] $tif_files array of tif files
+   *
+   * @return bool
+   */
   static function convertTifPagesToPDF($tif_files){
     if (!class_exists("FPDF")) {
       CAppUI::requireLibraryFile("PDFMerger/fpdf/fpdf");
@@ -560,7 +675,14 @@ class CFile extends CDocumentItem {
     
     return $out;
   }
-  
+
+  /**
+   * Convert a tif to a png
+   *
+   * @param string $path path to the tif file
+   *
+   * @return string
+   */
   static function convertTifToPng($path) {
     $tmp_tmp = tempnam(sys_get_temp_dir(), "mb_");
     unlink($tmp_tmp);
@@ -575,7 +697,12 @@ class CFile extends CDocumentItem {
     
     return $tmp;
   }
-  
+
+  /**
+   * Load a pdf file conversion
+   *
+   * @return CFile
+   */
   function loadPDFconverted() {
     $file = new CFile();
     $file->object_class = "CFile";
@@ -583,13 +710,23 @@ class CFile extends CDocumentItem {
     $file->loadMatchingObject();
     return $file;
   }
-  
+
+  /**
+   * Return the data uri's content of a file
+   *
+   * @return string
+   */
   function getDataURI() {
     return $this->_file_path ? 
       "data:".$this->file_type.";base64,".urlencode(base64_encode(file_get_contents($this->_file_path))) :
       "";
   }
-  
+
+  /**
+   * Stream a file to a client
+   *
+   * @return string
+   */
   function streamFile() {
     header("Pragma: ");
     header("Cache-Control: ");

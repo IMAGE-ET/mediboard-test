@@ -203,8 +203,12 @@ class CSetupdPfiles extends CSetup {
     $query = "ALTER TABLE `files_mediboard`
       CHANGE `file_owner` `author_id` INT(11);";
     $this->addQuery($query);
-    
-    $this->mod_version = "0.29";
+
+    $this->makeRevision("0.29");
+    $query = "ALTER TABLE `files_mediboard`
+      ADD `annule` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.30";
   }
 }
-?>

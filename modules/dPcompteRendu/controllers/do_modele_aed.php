@@ -18,7 +18,7 @@ if (isset($_POST["_do_empty_pdf"])) {
 
   $compte_rendu->loadRefsFiles();
   foreach ($compte_rendu->_ref_files as $_file) {
-    $_file->file_empty();
+    $_file->fileEmpty();
   }
   CApp::rip();
 }

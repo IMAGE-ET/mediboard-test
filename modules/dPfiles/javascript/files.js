@@ -96,3 +96,14 @@ submitFileChangt = function(oForm){
 if (window.Document) {
   Document.refreshList = reloadAfterUploadFile;
 }
+
+showCancelled = function(button) {
+  $('listView').select('div.file_cancelled').invoke('toggle');
+}
+
+cancelFile = function(form, category_id) {
+  if (confirm($T('CFile-comfirm_cancel'))) {
+    onSubmitFormAjax(form, reloadAfterDeleteFile.curry(category_id));
+  }
+  return false;
+}

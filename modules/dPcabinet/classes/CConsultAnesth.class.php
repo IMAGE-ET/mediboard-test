@@ -93,6 +93,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   public $_clairance;
   public $_psa;
   public $_score_apfel;
+  public $_docitems_from_consult;
   
   // Object References
   /** @var  CConsultation */
@@ -285,15 +286,62 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   }
 
   function loadRefsFiles(){
-    if (!$this->_ref_consultation) {
-      $this->loadRefConsultation();
+    parent::loadRefsFiles();
+
+    if (!$this->_docitems_from_consult) {
+      if (!$this->_ref_consultation) {
+        $this->loadRefConsultation();
+      }
+      $this->_ref_consultation->_docitems_from_dossier_anesth = true;
+      $this->_ref_consultation->loadRefsFiles();
+      $this->_nb_cancelled_files += $this->_ref_consultation->_nb_cancelled_files;
+      $this->_ref_files = $this->_ref_files + $this->_ref_consultation->_ref_files;
+    }
+  }
+
+  function loadRefsDocs(){
+    parent::loadRefsDocs();
+
+    if (!$this->_docitems_from_consult) {
+      if (!$this->_ref_consultation) {
+        $this->loadRefConsultation();
+      }
+      $this->_ref_consultation->_docitems_from_dossier_anesth = true;
+      $this->_ref_consultation->loadRefsDocs();
+      $this->_ref_documents = $this->_ref_documents + $this->_ref_consultation->_ref_documents;
+    }
+  }
+
+  function countDocs(){
+    $nbDocs = parent::countDocs();
+
+    if (!$this->_docitems_from_consult) {
+      // Ajout des documents des dossiers d'anesthésie
+      if (!$this->_ref_consultation) {
+        $this->loadRefConsultation();
+      }
+      $this->_ref_consultation->_docitems_from_dossier_anesth = true;
+      $nbDocs += $this->_ref_consultation->countDocs();
     }
 
-    $this->_ref_consultation->loadRefsFiles();
-    parent::loadRefsFiles();
-    $this->_ref_files = $this->_ref_files + $this->_ref_consultation->_ref_files;
+    return $this->_nb_docs = $nbDocs;
   }
-  
+
+  function countFiles(){
+    $nbFiles = parent::countFiles();
+
+    if (!$this->_docitems_from_consult) {
+      // Ajout des fichiers des dossiers d'anesthésie
+      if (!$this->_ref_consultation) {
+        $this->loadRefConsultation();
+      }
+      $this->_ref_consultation->_docitems_from_dossier_anesth = true;
+      $nbFiles += $this->_ref_consultation->countFiles();
+    }
+
+    return $this->_nb_files = $nbFiles;
+  }
+
   function loadView() {
     parent::loadView();
     $this->_ref_consultation = $this->_fwd["consultation_id"];
@@ -487,6 +535,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   }
 
   function canDeleteEx() {
+    return "";
     // Date dépassée
     $this->completeField("consultation_id");
 

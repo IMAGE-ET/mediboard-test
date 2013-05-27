@@ -50,6 +50,7 @@ $locales['CFile-_total_weight-court'] = 'Pds';
 $locales['CFile-author_id'] = 'Propriétaire';
 $locales['CFile-author_id-court'] = 'Prop.';
 $locales['CFile-author_id-desc'] = 'Propriétaire du fichier, c\'est-à-dire la personne qui l\'a ajouté';
+$locales['CFile-comfirm_cancel'] = 'Confirmez-vous l\'annulation de ce fichier ?';
 $locales['CFile-convert_files'] = 'Conversion de fichiers';
 $locales['CFile-etat_envoi'] = 'Envoyé';
 $locales['CFile-etat_envoi-court'] = 'Envoi';

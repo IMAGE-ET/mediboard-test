@@ -24,6 +24,7 @@ class CMbObject extends CStoredObject {
 
   public $_nb_files_docs;
   public $_nb_files;
+  public $_nb_cancelled_files;
   public $_nb_docs;
   public $_nb_exchanges;
   public $_nb_exchanges_by_format = array();
@@ -116,10 +117,14 @@ class CMbObject extends CStoredObject {
     foreach ($this->_ref_files as $_file) {
       /** @var CFile $_file */
       $_file->canDo();
-      $this->_ref_files_by_name[$_file->file_name] = $_file;
-      $_file->_is_editable = $is_editable;
       if (!$_file->canRead()) {
         unset($this->_ref_files[$_file->_id]);
+        continue;
+      }
+      $this->_ref_files_by_name[$_file->file_name] = $_file;
+      $_file->_is_editable = $is_editable;
+      if ($_file->annule) {
+        $this->_nb_cancelled_files++;
       }
     }
     
@@ -159,6 +164,10 @@ class CMbObject extends CStoredObject {
       $_doc->canDo();
 
       if (!$can->admin) {
+        if (!$_doc->canRead()) {
+          unset($this->_ref_documents[$_doc->_id]);
+          continue;
+        }
         $_doc->_is_editable = $is_editable;
 
         $last_log = $_doc->loadLastLogForContent();
@@ -169,10 +178,6 @@ class CMbObject extends CStoredObject {
         ) {
           $_doc->_is_editable = false;
           $_doc->_can->edit = false;
-        }
-
-        if (!$_doc->canRead()) {
-           unset($this->_ref_documents[$_doc->_id]);
         }
       }
     }

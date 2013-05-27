@@ -161,7 +161,7 @@ class CModeleEtiquette extends CMbMetaObject {
     }
 
     $nb_etiqs = $this->nb_lignes * $this->nb_colonnes;
-    $increment = floor( $nb_etiqs/ $distinct_texts);
+    $increment = floor($nb_etiqs / $distinct_texts);
     $current_text = 1;
 
     // Création de la grille d'étiquettes et écriture du contenu.
@@ -177,7 +177,7 @@ class CModeleEtiquette extends CMbMetaObject {
       }
       
       if ($this->show_border) {
-        $pdf->Rect($pdf->GetX(),$pdf->GetY(),$largeur_etiq, $hauteur_etiq, 'D');
+        $pdf->Rect($pdf->GetX(), $pdf->GetY(), $largeur_etiq, $hauteur_etiq, 'D');
       }
       
       $x = $pdf->GetX();
@@ -248,7 +248,7 @@ class CModeleEtiquette extends CMbMetaObject {
         $pdf_y = $pdf->getY();
         $pdf_ex_y = $pdf_ex->getY();
         
-        switch($this->text_align) {
+        switch ($this->text_align) {
           case "middle":
             $pdf->setY($pdf_y - 0.2 + ($hauteur_etiq - $pdf_ex_y) / 2);
             break;
@@ -283,7 +283,7 @@ class CModeleEtiquette extends CMbMetaObject {
         else {
           if ($was_barcode) {
             
-            $sub_fragments = explode("<br />", $fragment,2);
+            $sub_fragments = explode("<br />", $fragment, 2);
             
             $pdf->WriteHTML($sub_fragments[0], false);
             if (isset($sub_fragments[1])) {

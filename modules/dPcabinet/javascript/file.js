@@ -12,6 +12,13 @@ var File = {
     url.requestModal(700, 300);
   },
   
+  cancel: function(form, object_id, object_class){
+    if (confirm($T('CFile-comfirm_cancel'))) {
+      onSubmitFormAjax(form, File.refresh.curry(object_id, object_class, 0));
+    }
+    return false;
+  },
+
   remove: function(oButton, object_id, object_class){
     var oOptions = {
       typeName: 'le fichier',
@@ -20,11 +27,11 @@ var File = {
       target: 'systemMsg'
     };
     var oAjaxOptions = {
-      onComplete: function() { File.refresh(object_id, object_class); } 
+      onComplete: function() { File.refresh(object_id, object_class); }
     };
     confirmDeletion(oButton.form, oOptions, oAjaxOptions);
   },
-  
+
   removeAll: function(oButton, object_guid){
     var oOptions = {
       typeName: 'tous les fichiers',
@@ -166,5 +173,9 @@ var File = {
     }
 
     return false;
+  },
+
+  showCancelled: function(button, table) {
+    table.select("tr.file_cancelled").invoke("toggle");
   }
 };

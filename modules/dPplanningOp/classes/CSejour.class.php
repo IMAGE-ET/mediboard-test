@@ -2949,6 +2949,7 @@ class CSejour extends CFacturable implements IPatientRelated {
                       "CHAMBRE COURANTE" => $affectation->_view));
 
     if (CAppUI::conf("ref_pays") == 2) {
+      $fields["NATURE SEJOUR"]  = $this->getFormattedValue("_type_sejour");
       $fields["MODE TRT"]       = $this->loadRefChargePriceIndicator()->code;
       $this->loadRefsFactureEtablissement();
 
@@ -3222,6 +3223,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 }
 
 if (CAppUI::conf("ref_pays") == 2) {
+  CSejour::$fields_etiq[] = "NATURE SEJOUR";
   CSejour::$fields_etiq[] = "MODE TRT";
   CSejour::$fields_etiq[] = "ASSUR MALADIE";
   CSejour::$fields_etiq[] = "ASSUR ACCIDENT";

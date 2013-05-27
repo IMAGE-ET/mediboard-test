@@ -1,6 +1,6 @@
 <table class="form">
-  <tr>
-    <td class="text">
+  <tr {{if $_file->annule}}style="display: none;" class="file_cancelled"{{/if}}>
+    <td class="text {{if $_file->annule}}cancelled{{/if}}">
       <a href="#" class="action" id="readonly_{{$_file->_guid}}"
          onclick="File.popup('{{$object_class}}','{{$object_id}}','{{$_file->_class}}','{{$_file->_id}}');"
          onmouseover="ObjectTooltip.createEx(this, '{{$_file->_guid}}', 'objectView')">{{$_file}}</a>
@@ -37,7 +37,6 @@
           onsubmit="return checkForm(this)">
           <input type="hidden" name="m" value="dPfiles" />
           <input type="hidden" name="dosql" value="do_file_aed" />
-          <input type="hidden" name="del" value="1" />
           {{mb_key object=$_file}}
           {{mb_field object=$_file field="_view" hidden=1}}
           <span style="white-space: nowrap;">
@@ -45,9 +44,17 @@
               <button class="edit notext" id="edit_{{$_file->_guid}}" type="button"
                 onclick="File.editNom('{{$_file->_guid}}'); File.toggleClass(this);">{{tr}}Modify{{/tr}}</button>
             {{/if}}
-            <button class="trash notext" type="button" onclick="File.remove(this, '{{$object_id}}', '{{$object_class}}')">
-              {{tr}}Delete{{/tr}}
-            </button>
+            {{if $can->admin}}
+              <input type="hidden" name="del" value="1" />
+              <button class="trash notext" type="button" onclick="File.remove(this, '{{$object_id}}', '{{$object_class}}')">
+                {{tr}}Delete{{/tr}}
+              </button>
+            {{elseif !$_file->annule}}
+              <input type="hidden" name="annule" value="1" />
+              <button class="trash notext" type="button" onclick="File.cancel(this.form, '{{$object_id}}', '{{$object_class}}')">
+                {{tr}}Delete{{/tr}}
+              </button>
+            {{/if}}
             <a class="button print notext" target="_blank"
               href="?m=files&a=fileviewer&file_id={{$_file->_id}}"></a>
           </span>

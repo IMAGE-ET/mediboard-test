@@ -11,6 +11,9 @@
       {{tr}}Upload{{/tr}}
     </button>
   {{/if}}
+  {{if $object && $object->_nb_cancelled_files}}
+    <button class="hslip" onclick="showCancelled(this)">Voir / Masquer {{$object->_nb_cancelled_files}} fichier(s) annulé(s)</button>
+  {{/if}}
   <div style="float: left" id="document-add-{{$object_guid}}"></div>
   
   <script type="text/javascript">

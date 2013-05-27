@@ -64,18 +64,24 @@
       {{assign var="confirmDeleteName" value=$_doc_item->file_name|smarty:nodefaults|JSAttribute}}
     {{/if}}
 
-    <!-- Deletion -->
-    <button type="button" class="trash  {{$notext}}" onclick="file_deleted={{$elementId}};confirmDeletion(
-      this.form, {
+    {{if $can->admin || $_doc_item->_class == "CCompteRendu"}}
+      <!-- Deletion -->
+      <button type="button" class="trash  {{$notext}}" onclick="file_deleted={{$elementId}};confirmDeletion(
+        this.form, {
         typeName:'{{$confirmDeleteType}}',
         objName:'{{$confirmDeleteName}}',
         ajax:1,
         target:'systemMsg'
-      },{
+        },{
         onComplete:reloadAfterDeleteFile.curry('{{$_doc_item->file_category_id}}')
-      } );">
-      {{tr}}Delete{{/tr}}
-    </button>
+        } );">
+        {{tr}}Delete{{/tr}}
+      </button>
+    {{elseif $_doc_item->_class == "CFile" && $_doc_item->annule == "0"}}
+      <input type="hidden" name="annule" value="1" />
+      <button type="button" class="trash notext" onclick="cancelFile(this.form, '{{$_doc_item->file_category_id}}')">{{tr}}Delete{{/tr}}</button>
+    {{/if}}
+
 
     <!-- Send File -->
     {{assign var=doc_class   value=$_doc_item->_class}}

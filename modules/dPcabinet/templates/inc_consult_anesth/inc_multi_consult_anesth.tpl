@@ -62,5 +62,7 @@
             onclick="delDossier($V(this.form._consult_anesth_id))">{{tr}}Delete{{/tr}}</button>
   {{/if}}
   <button type="button" class="add {{if !$onlycreate}}notext{{/if}}" onclick="createDossier('{{$consult->_id}}')">Ajouter un dossier d'anesthésie</button>
-  <button type="button" class="add" title="Dupliquer le dossier courant" onclick="createDossier('{{$consult->_id}}', 1)">Dupliquer</button>
+  {{if $dossiers_anesth|@count}}
+    <button type="button" class="add" title="Dupliquer le dossier courant" onclick="createDossier('{{$consult->_id}}', 1)">Dupliquer</button>
+  {{/if}}
 </form>

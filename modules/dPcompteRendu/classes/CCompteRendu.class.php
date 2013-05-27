@@ -807,7 +807,7 @@ class CCompteRendu extends CDocumentItem {
       // Empty PDF File
       /** @var CFile $_file */
       foreach ($this->loadBackRefs("files") as $_file) {
-        $_file->file_empty();
+        $_file->fileEmpty();
       }
 
       // Send status to obsolete

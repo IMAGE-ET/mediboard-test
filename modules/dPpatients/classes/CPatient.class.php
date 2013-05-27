@@ -73,7 +73,9 @@ class CPatient extends CPerson {
     "DATE NAISS", "IPP", "LIEU NAISSANCE",
     "NOM", "NOM JF", "PRENOM", "SEXE", "CIVILITE", "CIVILITE LONGUE",
     "ACCORD GENRE", "CODE BARRE IPP", "ADRESSE", "MED. TRAITANT",
-    "TEL", "TEL PORTABLE", "TEL ETRANGER", "PAYS"
+    "TEL", "TEL PORTABLE", "TEL ETRANGER", "PAYS",
+    "PREVENIR - NOM", "PREVENIR - PRENOM", "PREVENIR - ADRESSE",
+    "PREVENIR - TEL", "PREVENIR - PORTABLE", "PREVENIR - CP VILLE"
   );
 
   // DB Table key
@@ -1366,7 +1368,9 @@ class CPatient extends CPerson {
       $consult->loadRefConsultAnesth();
       $consult->loadRefsFichesExamen();
       $consult->loadExamsComp();
-      $consult->countDocItems($permType);
+      if (!count($consult->_refs_dossiers_anesth)) {
+        $consult->countDocItems($permType);
+      }
 
       // Praticien
       $consult->getType();
@@ -1376,8 +1380,8 @@ class CPatient extends CPerson {
       $praticien->loadRefFunction()->loadRefGroup();
 
       foreach ($consult->_refs_dossiers_anesth as $_dossier_anesth) {
+        $_dossier_anesth->_ref_consultation = $consult;
         $_dossier_anesth->countDocItems();
-        $_dossier_anesth->_nb_files_docs += $consult->_nb_files;
       }
       
       // Grossesse
@@ -2037,6 +2041,12 @@ class CPatient extends CPerson {
     $this->loadIPP();
     $medecin_traitant = new CMedecin();
     $medecin_traitant->load($this->medecin_traitant);
+    $this->loadRefsCorrespondantsPatient();
+    $prevenir = new CCorrespondantPatient();
+
+    if (count($this->_ref_cp_by_relation["prevenir"])) {
+      $prevenir = reset($this->_ref_cp_by_relation["prevenir"]);
+    }
 
     $fields = array_merge(
       $fields,
@@ -2057,6 +2067,12 @@ class CPatient extends CPerson {
         "TEL PORTABLE"    => $this->getFormattedValue("tel2"),
         "TEL ETRANGER"    => $this->getFormattedValue("tel_autre"),
         "PAYS"            => $this->getFormattedValue("pays"),
+        "PREVENIR - NOM"  => $prevenir->nom,
+        "PREVENIR - PRENOM" => $prevenir->prenom,
+        "PREVENIR - ADRESSE" => $prevenir->adresse,
+        "PREVENIR - TEL"  => $prevenir->getFormattedValue("tel"),
+        "PREVENIR - PORTABLE"  => $prevenir->getFormattedValue("mob"),
+        "PREVENIR - CP VILLE" => "$prevenir->cp $prevenir->ville",
       )
     );
     switch (CAppUI::conf("ref_pays")) {

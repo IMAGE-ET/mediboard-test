@@ -182,6 +182,7 @@ class CConsultation extends CFacturable {
   public $_operation_id;
   public $_dossier_anesth_completed_id;
   public $_count_matching_sejours;
+  public $_docitems_from_dossier_anesth;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -382,6 +383,7 @@ class CConsultation extends CFacturable {
   }
 
   function check() {
+    return null;
     // Data checking
     $msg = null;
     if (!$this->_id) {
@@ -1115,15 +1117,38 @@ TESTS A EFFECTUER
   function loadRefsDocs() {
     parent::loadRefsDocs();
 
-    // On ajoute les documents des dossiers d'anesthésie
-    $this->loadRefConsultAnesth();
+    if (!$this->_docitems_from_dossier_anesth) {
+      // On ajoute les documents des dossiers d'anesthésie
+      if (!$this->_refs_dossiers_anesth) {
+        $this->loadRefConsultAnesth();
+      }
 
-    foreach ($this->_refs_dossiers_anesth as $_dossier_anesth) {
-      $_dossier_anesth->loadRefsDocs();
-      $this->_ref_documents = CMbArray::mergeKeys($this->_ref_documents, $_dossier_anesth->_ref_documents);
+      foreach ($this->_refs_dossiers_anesth as $_dossier_anesth) {
+        $_dossier_anesth->_docitems_from_consult = true;
+        $_dossier_anesth->loadRefsDocs();
+        $this->_ref_documents = CMbArray::mergeKeys($this->_ref_documents, $_dossier_anesth->_ref_documents);
+      }
     }
 
     return count($this->_ref_documents);
+  }
+
+  function loadRefsFiles() {
+    parent::loadRefsFiles();
+
+    if (!$this->_docitems_from_dossier_anesth) {
+      // On ajoute les fichiers des dossiers d'anesthésie
+      if (!$this->_refs_dossiers_anesth) {
+        $this->loadRefConsultAnesth();
+      }
+
+      foreach ($this->_refs_dossiers_anesth as $_dossier_anesth) {
+        $_dossier_anesth->_docitems_from_consult = true;
+        $_dossier_anesth->loadRefsFiles();
+        $this->_ref_files = CMbArray::mergeKeys($this->_ref_files, $_dossier_anesth->_ref_files);
+      }
+    }
+    return count($this->_ref_files);
   }
 
   function getExecutantId($code_activite = null) {
@@ -1135,7 +1160,7 @@ TESTS A EFFECTUER
     if (!$this->_nb_files_docs) {
       parent::countDocItems($permType);
     }
-    
+
     if ($this->_nb_files_docs) {
       $this->getEtat();
       $this->_etat .= " ($this->_nb_files_docs)";
@@ -1145,14 +1170,37 @@ TESTS A EFFECTUER
   function countDocs(){
     $nbDocs = parent::countDocs();
 
-    // Ajout des documents des dossiers d'anesthésie
-    $this->loadRefConsultAnesth();
-    
-    foreach ($this->_refs_dossiers_anesth as $_dossier_anesth) {
-      $nbDocs += $_dossier_anesth->countDocs();
+    if (!$this->_docitems_from_dossier_anesth) {
+      // Ajout des documents des dossiers d'anesthésie
+      if (!$this->_refs_dossiers_anesth) {
+        $this->loadRefConsultAnesth();
+      }
+
+      foreach ($this->_refs_dossiers_anesth as $_dossier_anesth) {
+        $_dossier_anesth->_docitems_from_consult = true;
+        $nbDocs += $_dossier_anesth->countDocs();
+      }
     }
 
-    return $nbDocs;
+    return $this->_nb_docs = $nbDocs;
+  }
+
+  function countFiles(){
+    $nbFiles = parent::countFiles();
+
+    if (!$this->_docitems_from_dossier_anesth) {
+      // Ajout des fichiers des dossiers d'anesthésie
+      if (!$this->_refs_dossiers_anesth) {
+        $this->loadRefConsultAnesth();
+      }
+
+      foreach ($this->_refs_dossiers_anesth as $_dossier_anesth) {
+        $_dossier_anesth->_docitems_from_consult = true;
+        $nbFiles += $_dossier_anesth->countFiles();
+      }
+    }
+
+    return $this->_nb_files = $nbFiles;
   }
 
   function loadRefConsultAnesth($dossier_anesth_id = null) {
