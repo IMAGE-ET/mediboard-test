@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  *}}
 
-<h2>Rapport de préférence: <strong>{{$key}}</strong></h2>
+<h2>{{tr}}mod-admin-tab-report_prefs{{/tr}}: <strong>{{$key}}</strong></h2>
 <strong>{{tr}}pref-{{$key}}{{/tr}}</strong>
 <div>{{tr}}pref-{{$key}}-desc{{/tr}}</div>
 <hr />
