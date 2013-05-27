@@ -50,8 +50,7 @@
     
     {{mb_include module=system template=inc_config_bool var=locked}}
     
-    {{mb_include module=system template=inc_config_bool var=chambre_operation}}
-    
+
     {{mb_include module=system template=inc_config_enum var=systeme_materiel values="standard|expert"}}
     
     <tr>
@@ -72,8 +71,13 @@
       </td>
     </tr>
 
+    <tr>
+      <th colspan="2" class="title">Affichage</th>
+    </tr>
     {{mb_include module=system template=inc_config_bool var=view_prepost_suivi}}
-    
+    {{mb_include module=system template=inc_config_bool var=chambre_operation}}
+
+
     <tr>
       <td class="button" colspan="100">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
