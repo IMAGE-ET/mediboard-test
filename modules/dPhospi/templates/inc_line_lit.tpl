@@ -156,6 +156,11 @@
                       {{if $_sejour->recuse == "-1"}}[Att] {{/if}}{{$_patient->nom}} {{if $_patient->nom_jeune_fille}}({{$_patient->nom_jeune_fille}}) {{/if}}{{$_patient->prenom}}
                     </span>
 
+                    <!-- Traitement (suisse)-->
+                    {{if $conf.ref_pays == 2}}
+                      <strong>{{$_sejour->_ref_charge_price_indicator->code}}</strong>
+                    {{/if}}
+
                     {{if $show_age_patient}}({{$_patient->_age}}){{/if}}
 
                     {{if ($_affectation->entree == $_sejour->entree && !$_sejour->entree_reelle) ||

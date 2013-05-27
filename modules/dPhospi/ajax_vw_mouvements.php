@@ -211,6 +211,7 @@ $operations = array();
 
 $suivi_affectation = false;
 
+/** @var $affectations CAffectation[] */
 foreach ($affectations as $_affectation) {
   if (!$suivi_affectation && $_affectation->parent_affectation_id) {
     $suivi_affectation = true;
@@ -219,6 +220,7 @@ foreach ($affectations as $_affectation) {
   $_affectation->_sortie = $_affectation->sortie;
   $_affectation->loadRefsAffectations();
   $sejour = $_affectation->loadRefSejour();
+  $_affectation->_ref_sejour->loadRefChargePriceIndicator();    //switzerland
   $sejour->loadRefPraticien()->loadRefFunction();
   $patient = $sejour->loadRefPatient();
   $patient->loadRefPhotoIdentite();

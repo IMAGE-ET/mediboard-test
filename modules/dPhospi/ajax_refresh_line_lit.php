@@ -139,6 +139,7 @@ $operations = array();
 
 $suivi_affectation = false;
 
+/** @var $affectations CAffectation[] */
 foreach ($affectations as $_affectation) {
   if (!$suivi_affectation && $_affectation->parent_affectation_id) {
     $suivi_affectation = true;
@@ -151,6 +152,7 @@ foreach ($affectations as $_affectation) {
   $_affectation->loadRefsAffectations();
   $sejour = $_affectation->loadRefSejour();
   $sejour->loadRefPraticien()->loadRefFunction();
+  $_affectation->_ref_sejour->loadRefChargePriceIndicator();
   $patient = $sejour->loadRefPatient();
   $patient->loadRefPhotoIdentite();
   $patient->loadRefDossierMedical(false)->loadRefsAntecedentsOfType("deficience");
@@ -234,7 +236,8 @@ foreach ($lits as $_lit_id) {
   $_sejours = CMbObject::massLoadFwdRef($_affectations, "sejour_id");
   CMbObject::massLoadFwdRef($_sejours, "patient_id");
   CMbObject::massLoadFwdRef($_sejours, "praticien_id");
-  
+
+  /** @var $_affectations CAffectation[] */
   foreach ($_affectations as $_affectation) {
     $_sejour = $_affectation->loadRefSejour();
     $_sejour->loadRefPraticien();
