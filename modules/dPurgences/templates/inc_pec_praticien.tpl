@@ -84,7 +84,7 @@
           &mdash;
         {{/if}}
       {{else}}
-        <em>{{tr}}CRPU-ATU-missing{{/tr}}</em>
+        <div class="empty">{{tr}}CRPU-ATU-missing{{/tr}}</div>
       {{/if}}
     {{else}}
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$consult->_ref_praticien}}

@@ -66,7 +66,7 @@
     
     <td class="{{if $sejour->type != "urg"}} arretee {{/if}}">
       {{if !$rpu->_ref_consult->_id}}
-        <em>{{tr}}CRPU-ATU-missing{{/tr}}</em>
+        <div class="empty">{{tr}}CRPU-ATU-missing{{/tr}}</div>
       {{else}}
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
       {{/if}}
