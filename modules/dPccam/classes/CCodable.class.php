@@ -9,18 +9,20 @@
  * @version    $Revision$
  */
 
-/*
- * CCodable
+/**
+ * Classe non persistente permettant d'associer des manières abstraites des collections d'actes
+ *
+ * @see CActe
  */
 class CCodable extends CMbObject {
   public $codes_ccam;
-  public $facture; // Séjour facturé ou non
+  /** @var bool Séjour facturé ou non  */
+  public $facture;
 
   // Form fields
   public $_acte_execution;
   public $_acte_depassement;
   public $_acte_depassement_anesth;
-  public $_ref_anesth;
   public $_anesth;
   public $_associationCodesActes;
   public $_count_actes;
@@ -29,52 +31,51 @@ class CCodable extends CMbObject {
 
   // Abstract fields
   public $_praticien_id;
-  public $_coded = 0;    // Initialisation à 0 => codable qui peut etre codé !
+  /** @var bool Initialisation à 0 => codable qui peut etre codé ! */
+  public $_coded = 0;
 
   // Actes CCAM
   public $_text_codes_ccam;
   public $_codes_ccam;
   public $_tokens_ccam;
-
-  /** @var CActeCCAM[]  */
-  public $_ref_actes_ccam;
-
-  /** @var CCodeCCAM[] */
-  public $_ext_codes_ccam;
-
   public $_temp_ccam;
 
   // Actes NGAP
   public $_store_ngap;
-
-  /** @var CActeNGAP[] */
-  public $_ref_actes_ngap;
-
   public $_codes_ngap;
   public $_tokens_ngap;
 
   // Actes Tarmed
   public $_codes_tarmed;
-
-  /** @var CActeTarmed[] */
-  public $_ref_actes_tarmed;
-
   public $_tokens_tarmed;
 
   // Actes Caisse
   public $_codes_caisse;
-
-  /** @var CActeCaisse[] */
-  public $_ref_actes_caisse;
-
   public $_tokens_caisse;
 
-  // Back references
-  public $_ref_actes;
-  public $_ref_prescriptions;
+  // References
+  /** @var CMediusers */
+  public $_ref_anesth;
+  /** @var CCodeCCAM[] */
+  public $_ext_codes_ccam;
 
-  /** @var  CFraisDivers[] */
+
+  // Back references
+  /** @var CActe */
+  public $_ref_actes;
+  /** @var CActeCCAM[] */
+  public $_ref_actes_ccam;
+  /** @var CActeNGAP[] */
+  public $_ref_actes_ngap;
+  /** @var CFraisDivers[] */
   public $_ref_frais_divers;
+  /** @var CActeCaisse[] */
+  public $_ref_actes_caisse;
+  /** @var CActeTarmed[] */
+  public $_ref_actes_tarmed;
+
+  /** @var CPrescription[] */
+  public $_ref_prescriptions;
 
   // Distant references
   /** @var  CSejour */
@@ -137,9 +138,7 @@ class CCodable extends CMbObject {
   }
 
   /**
-   * Store redefinition
-   *
-   * @return string Store-like message
+   * @see parent::store()
    */
   function store() {
     if ($this instanceof CSejour || $this instanceof COperation) {
@@ -186,18 +185,24 @@ class CCodable extends CMbObject {
   }
 
   /**
+   * Charge le séjour associé
+   *
    * @return CSejour
    */
   function loadRefSejour() {
   }
 
   /**
+   * Charge le patient associé
+   *
    * @return CPatient
    */
   function loadRefPatient() {
   }
 
   /**
+   * Charge le praticien responsable associé
+   *
    * @return CMediusers
    */
   function loadRefPraticien() {
@@ -345,7 +350,12 @@ class CCodable extends CMbObject {
     }
   }
 
-  function loadRefsActes(){
+  /**
+   * Charge tous les actes du codable, quelque soit leur type
+   *
+   * @return CActe[] collection d'actes concrets
+   */
+  function loadRefsActes() {
     $this->_ref_actes = array();
 
     $this->loadRefsActesCCAM();
@@ -374,6 +384,8 @@ class CCodable extends CMbObject {
     }
 
     $this->_count_actes = count($this->_ref_actes);
+
+    return $this->_ref_actes;
   }
 
   /**
