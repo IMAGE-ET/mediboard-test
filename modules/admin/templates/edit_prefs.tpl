@@ -55,10 +55,10 @@ Main.add(Control.Tabs.create.curry('tab-modules', true));
   {{/if}}
   
   <tr>
-    <th class="category" {{if $can->admin}} colspan="2" {{/if}} >
+    <th class="title" {{if $can->admin}} colspan="2" {{/if}} >
       {{tr}}Preference{{/tr}}
     </th>
-    <th class="category">
+    <th class="title">
       {{if $can->admin && $user_id != "default"}}
       <a href="?m={{$m}}&amp;tab=edit_prefs&amp;user_id=default" class="button edit">
         {{tr}}Default{{/tr}}
@@ -72,7 +72,7 @@ Main.add(Control.Tabs.create.curry('tab-modules', true));
     {{if $user_id != "default"}} 
 
     {{if !$user->template}}
-    <th class="category">
+    <th class="title">
       {{tr}}User template{{/tr}} :
       <br />
       {{if $can->edit && $prof->_id}}
@@ -85,7 +85,7 @@ Main.add(Control.Tabs.create.curry('tab-modules', true));
     </th>
     {{/if}}
     
-    <th class="category">
+    <th class="title">
       {{tr}}{{$user->template|ternary:"User template":"CUser"}}{{/tr}} :
       <br/>{{if $user->_id}}{{$user}}{{else}}{{tr}}None{{/tr}}{{/if}}
     </th>
