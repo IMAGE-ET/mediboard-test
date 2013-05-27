@@ -1,12 +1,12 @@
 <?php 
 /**
- * $Id:$
+ * $Id$
  * 
  * @package    Mediboard
  * @subpackage reservation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -359,7 +359,7 @@ if ($show_operations) {
 
       $libelle.="Sejour: <span onmouseover='ObjectTooltip.createEx(this, \"".$sejour->_guid."\")'>".$sejour->getFormattedValue("entree")."</span>";
       if ($_operation->materiel) {
-        $libelle .="<hr/><span>".$_operation->materiel."</span>";
+        $libelle .="<hr/><span>".CMbString::htmlEntities($_operation->materiel)."</span>";
       }
 
       if ($chir_2->_id) {
