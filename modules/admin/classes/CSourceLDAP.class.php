@@ -10,10 +10,8 @@
  */
 
 /**
- * Class CSourceLDAP
  * Source LDAP
  */
-
 class CSourceLDAP extends CMbObject {
   public $source_ldap_id;
   
@@ -30,14 +28,20 @@ class CSourceLDAP extends CMbObject {
 
   public $_options = array();
   public $_ldapconn;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'source_ldap';
     $spec->key   = 'source_ldap_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["name"]                      = "str notNull";
@@ -51,7 +55,10 @@ class CSourceLDAP extends CMbObject {
     $props["secured"]                   = "bool default|0";
     return $props;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     
@@ -60,9 +67,12 @@ class CSourceLDAP extends CMbObject {
       "LDAP_OPT_PROTOCOL_VERSION" => $this->ldap_opt_protocol_version,
     ); 
   }
-  
+
   /**
-   * @return resource link_identifier 
+   * Connect to the LDAP
+   *
+   * @throws CMbException
+   * @return resource Link identifier
    */
   function ldap_connect() {
     if (!function_exists("ldap_connect")) {
@@ -107,13 +117,14 @@ class CSourceLDAP extends CMbObject {
     if ($this->bind_rdn_suffix) {
       $ldaprdn = $ldaprdn.$this->bind_rdn_suffix;
     }
-    
-    $ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);
+
+    $ldapbind = ldap_bind($ldapconn, $ldaprdn, $ldappass);
     $error = ldap_errno($ldapconn);
-    
+
+    // 49 == LDAP_INVALID_CREDENTIALS
     if (!$showInvalidCredentials && ($error == 49)) {
-      $error = $this->get_error_message($ldapconn);
-      throw new CMbException("CSourceLDAP-invalid_credentials", $error);
+      $error = $this->get_error_message($ldapconn, false);
+      throw new CMbInvalidCredentialsException("CSourceLDAP-invalid_credentials", $error);
     }
     
     if (!$ldapbind) {
@@ -124,10 +135,17 @@ class CSourceLDAP extends CMbObject {
     return true;
   }
   
-  function get_error_message($ldapconn) {
+  function get_error_message($ldapconn, $advanced = true) {
     $error = ldap_errno($ldapconn);
-    ldap_get_option($ldapconn, 0x0032, $extended_error);
-    return ldap_err2str($error). " ($extended_error)";
+
+    $message = ldap_err2str($error);
+
+    if ($advanced) {
+      ldap_get_option($ldapconn, LDAP_OPT_ERROR_STRING, $extended_error);
+      $message .= " ($extended_error)";
+    }
+
+    return $message;
   }
   
   /**
@@ -151,11 +169,14 @@ class CSourceLDAP extends CMbObject {
     
     return true;
   }
-  
+
   /**
-   * @param resource $ldapconn
-   * @param string   $filter
-   * @param array    $attributes [optional]
+   * Query the LDAP
+   *
+   * @param resource $ldapconn   LDAP connection identifier
+   * @param string   $filter     Search filter
+   * @param array    $attributes LDAP attributes
+   * @param bool     $unbind     Unbind after the query
    *
    * @return array
    */
@@ -172,7 +193,15 @@ class CSourceLDAP extends CMbObject {
     
     return $results;
   }
-  
+
+  /**
+   * Get the DN of a specific user
+   *
+   * @param string $username Name of the user to get the DN of
+   *
+   * @return string
+   * @throws CMbException
+   */
   function get_dn($username) {
     $results = $this->ldap_search($this->_ldapconn, "(samaccountname=$username)", array(), false);
     
@@ -182,7 +211,12 @@ class CSourceLDAP extends CMbObject {
     
     return $results[0]["dn"];
   }
-  
+
+  /**
+   * Start TLS transaction
+   *
+   * @return void
+   */
   function start_tls(){
     ldap_start_tls($this->_ldapconn);
   }

@@ -22,7 +22,7 @@ class CLDAP {
    * @return CUser The user
    */
   static function login(CUser $user, $ldap_guid) {
-    if (!$ldap_guid) {
+    if (!$ldap_guid || $user->_user_password) {
       $source_ldap = self::bind($user);
     }
     else {
@@ -46,12 +46,14 @@ class CLDAP {
    */
   static function connect() {
     $source_ldap = new CSourceLDAP();
+
+    /** @var CSourceLDAP[] $sources_ldap */
     $sources_ldap = $source_ldap->loadList(null, "priority DESC");
-    
+
     if (empty($sources_ldap)) {
       throw new CMbException("CSourceLDAP_undefined");
     }
-    
+
     foreach ($sources_ldap as $_source) {
       try {
         $ldapconn = $_source->ldap_connect();
@@ -62,7 +64,7 @@ class CLDAP {
         CAppUI::setMsg($e->getMessage(), UI_MSG_WARNING);
       }
     }
-    
+
     return false;
   }
 
@@ -78,27 +80,27 @@ class CLDAP {
    */
   static function bind(CUser $user = null, $ldaprdn = null, $ldappass = null) {
     $source_ldap = CLDAP::connect();
-    
+
     if (!$source_ldap) {
       throw new CMbException("CSourceLDAP_all-unreachable", "ANY");
     }
-    
+
     $ldapconn = $source_ldap->_ldapconn;
-    
+
     if (!$ldaprdn) {
       $ldaprdn  = $user->user_username;
     }
-    
+
     if (!$ldappass) {
       $ldappass = $user->_user_password;
     }
 
     $bound = $source_ldap->ldap_bind($ldapconn, $ldaprdn, $ldappass);
-    
+
     if ($user) {
       $user->_bound = $bound;
     }
-    
+
     return $source_ldap;
   }
 
@@ -116,25 +118,25 @@ class CLDAP {
     if (!in_array($encryption, array("Unicode", "MD5", "SHA"))) {
       return false;
     }
-    
+
     $source_ldap = CLDAP::connect();
-    
+
     if (!$source_ldap) {
       return false;
     }
-    
+
     if (!$source_ldap->secured) {
       $source_ldap->start_tls();
     }
-    
+
     $bound = $source_ldap->ldap_bind($source_ldap->_ldapconn, $user->user_username, $old_pass);
-    
+
     if (!$bound) {
       return false;
     }
-    
+
     $entry = array();
-    
+
     switch ($encryption) {
       case "Unicode":
         $entry["unicodePwd"][0] = self::encodeUnicodePassword($new_pass);
@@ -150,7 +152,7 @@ class CLDAP {
         $entry["userPassword"] = "\{$encryption\}".base64_encode(pack("H*", $new_pass));
         break;
     }
-    
+
     $dn = $source_ldap->get_dn($user->user_username);
     return $source_ldap->ldap_mod_replace($source_ldap->_ldapconn, $dn, $entry);
   }
@@ -158,22 +160,22 @@ class CLDAP {
   private static function encodeUnicodePassword($password) {
     $password = "\"$password\"";
     $encoded = "";
-    
+
     for ($i = 0; $i < strlen($password); $i++) {
-      $encoded .= "{$password[$i]}\000"; 
+      $encoded .= "{$password[$i]}\000";
     }
-    
+
     return $encoded;
   }
-  
+
   /**
    * Search and map a user inside the LDAP
    *
    * @param CUser       $user
    * @param CSourceLDAP $source_ldap
    * @param resource    $ldapconn
-   * @param string      $person [optional]
-   * @param string      $filter [optional]
+   * @param string      $person       [optional]
+   * @param string      $filter       [optional]
    * @param boolean     $force_create [optional]
    *
    * @return CUser
@@ -193,11 +195,11 @@ class CLDAP {
       $user->_count_ldap = 0;
       return $user;
     }
-    
+
     if ($results["count"] > 1) {
       throw new CMbException("CSourceLDAP_too-many-results");
     }
-    
+
     $results = $results[0];
 
     $idex = new CIdSante400();
@@ -206,11 +208,11 @@ class CLDAP {
 
     $idex->id400        = self::getObjectGUID($results);
     $idex->loadMatchingObject();
-    
+
     // On sauvegarde le password renseigné
     $user_password  = $user->user_password;
     $_user_password = $user->_user_password;
-        
+
     // objectguid retrouvé on charge le user
     if ($idex->_id) {
       $user = new CUser();
@@ -223,24 +225,24 @@ class CLDAP {
         // Suppression du password pour le loadMatchingObject
         $user->user_password  = null;
         $user->_user_password = null;
-        
+
         $user->loadMatchingObject();
         if (!$user->_id) {
           throw new CMbException("Auth-failed-user-unknown");
         }
       }
-    } 
+    }
     $user->_bound = true;
     $user = self::mapTo($user, $results);
-    
+
     // Save Mediuser variables
     $actif        = $user->_user_actif;
     $deb_activite = $user->_user_deb_activite;
     $fin_activite = $user->_user_fin_activite;
-    
+
     // Restore User password variables
     $user->user_password  = $user_password;
-    $user->_user_password = $_user_password; 
+    $user->_user_password = $_user_password;
     if (!$user->user_type) {
       $user->user_type = 0;
     }
@@ -256,13 +258,13 @@ class CLDAP {
     if ((!$force_create && !$user->_ref_mediuser->actif) || ($force_create && !$actif)) {
       throw new CMbException("Auth-failed-user-deactivated");
     }
-    
+
     // Restore Mediuser variables
     $user->_user_actif = $actif;
     $user->_user_deb_activite = $deb_activite;
     $user->_user_fin_activite = $fin_activite;
     $user->_count_ldap = 1;
-    
+
     if (!$idex->_id) {
       $idex->object_id   = $user->_id;
       $idex->last_update = CMbDT::dateTime();
@@ -270,22 +272,22 @@ class CLDAP {
         throw new CMbException($msg);
       }
     }
-        
+
     return $user;
   }
-  
+
   /**
-   * @param array   $values [optional]
+   * @param array   $values      [optional]
    * @param string  $name
-   * @param boolean $single [optional]
+   * @param boolean $single      [optional]
    * @param boolean $utf8_decode [optional]
    *
    * @return string
    */
   static function getValue($values = array(), $name, $single = true, $utf8_decode = true) {
     if (array_key_exists($name, $values)) {
-      return $single ? 
-              ($utf8_decode ? utf8_decode($values[$name][0]) : $values[$name][0]) : 
+      return $single ?
+              ($utf8_decode ? utf8_decode($values[$name][0]) : $values[$name][0]) :
               ($utf8_decode ? utf8_decode($values[$name]) : $values[$name]);
     }
     return null;
@@ -343,11 +345,11 @@ class CLDAP {
     // Passage en hexadécimal de l'objectguid
     $objectguid = unpack('H*', self::getValue($values, "objectguid", true, false));
     $objectguid = $objectguid[1];
-    
+
     if (CAppUI::conf("admin LDAP object_guid_mode") == "registry") {
       $objectguid = self::convertHexaToRegistry($objectguid);
     }
-    
+
     return $objectguid;
   }
 
@@ -358,12 +360,12 @@ class CLDAP {
     $fourth_segment = substr($objectguid, 12, 4);
     $fifth_segment  = substr($objectguid, 16, 4);
     $sixth_segment  = substr($objectguid, 20, 12);
-    
+
     $first_segment  = implode("", array_reverse(str_split($first_segment, 2)));
     $second_segment = implode("", array_reverse(str_split($second_segment, 2)));
     $third_segment  = implode("", array_reverse(str_split($third_segment, 2)));
     $fourth_segment = implode("", array_reverse(str_split($fourth_segment, 2)));
-  
+
     return "$first_segment$second_segment-$third_segment-$fourth_segment-$fifth_segment-$sixth_segment";
   }
   

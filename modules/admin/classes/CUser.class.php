@@ -103,6 +103,9 @@ class CUser extends CPerson {
 
   static $ps_types = array(3, 4, 13, 16, 17, 19);
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'users';
@@ -112,6 +115,9 @@ class CUser extends CPerson {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["favoris_CCAM"]       = "CFavoriCCAM favoris_user";
@@ -126,13 +132,16 @@ class CUser extends CPerson {
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
     // Plain fields
     $props["user_username"]             = "str notNull maxLength|20";
-    $props["user_password"]             = "str maxLength|64 show|0";
-    $props["user_salt"]                 = "str maxLength|64 show|0";
+    $props["user_password"]             = "str maxLength|64 show|0 loggable|0";
+    $props["user_salt"]                 = "str maxLength|64 show|0 loggable|0";
     $props["user_type"]                 = "num notNull min|0 max|20 default|0";
     $props["user_first_name"]           = "str maxLength|50 seekable|begin";
     $props["user_last_name"]            = "str notNull maxLength|50 confidential seekable|begin";
@@ -217,6 +226,9 @@ class CUser extends CPerson {
     return $user->getCached(CValue::first($user_id, CAppUI::$instance->user_id));
   }
 
+  /**
+   * @see parent::loadView()
+   */
   function loadView() {
     parent::loadView();
     $this->loadRefMediuser();
@@ -254,6 +266,9 @@ class CUser extends CPerson {
     return $this->_spec->ds->loadField($this->_spec->table, "user_salt");
   }
 
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     parent::updatePlainFields();
 
@@ -291,7 +306,7 @@ class CUser extends CPerson {
     // If user exists, we compare hashes
     if ($_user->_id) {
       // Password is a SHA256 hash, we get user's salt
-      if (strlen($_user->user_password) == 64) {
+      if ($this->_user_password && strlen($_user->user_password) == 64) {
         $this->user_password = hash("SHA256", $_user->user_salt.$this->_user_password);
         return;
       }
@@ -341,6 +356,9 @@ class CUser extends CPerson {
     $this->user_password = hash("SHA256", $this->user_salt.$this->_user_password);
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields () {
     parent::updateFormFields();
 
@@ -354,6 +372,9 @@ class CUser extends CPerson {
     $this->mapPerson();
   }
 
+  /**
+   * @see parent::check()
+   */
   function check() {
     // Chargement des specs des attributs du mediuser
     $this->updateSpecs();
@@ -394,6 +415,9 @@ class CUser extends CPerson {
     return parent::check();
   }
 
+  /**
+   * @see parent::store()
+   */
   function store() {
     $this->updateSpecs();
 

@@ -579,30 +579,41 @@ class CAppUI {
       $user_ldap->loadMatchingObject();
       $idex = $user_ldap->loadLastId400(CAppUI::conf("admin LDAP ldap_tag"));
 
+      // The user in linked to the LDAP
       if ($idex->_id) {
         $ldap_guid = $idex->id400;
         $user_ldap->_user_password = $password;
         $user_ldap->_bound = false;
 
         try {
-          $user_ldap = CLDAP::login($user_ldap, $ldap_guid);
+          $user = CLDAP::login($user_ldap, $ldap_guid);
 
-          if (!$user_ldap->_bound) {
+          if (!$user->_bound) {
             self::setMsg("Auth-failed-combination", UI_MSG_ERROR);
             return false;
           }
         }
+
+        // InvalidCredentials
+        catch (CMbInvalidCredentialsException $e) {
+          self::setMsg($e->getMessage(), UI_MSG_WARNING);
+          return false;
+        }
+
+        // Maybe source unreachable ?
         catch (CMbException $e) {
-          // Maybe source unreachable ?
           // No UI_MSG_ERROR nor $e->stepAjax as it needs to run through!
           self::setMsg($e->getMessage(), UI_MSG_WARNING);
         }
       }
     }
 
-    if (!self::checkPasswordAttempt($user)) {
+    if (!$user->_bound && !self::checkPasswordAttempt($user)) {
       return false;
     }
+
+    $user->user_login_errors = 0;
+    $user->store();
 
     // Put user_group in AppUI
     self::$instance->user_remote = 1;
@@ -751,9 +762,6 @@ class CAppUI {
       return false;
     }
 
-    // Logging succesfull
-    $user->user_login_errors = 0;
-    $user->store();
     return true;
   }
 
