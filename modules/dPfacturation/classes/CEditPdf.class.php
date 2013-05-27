@@ -753,8 +753,15 @@ class CEditPdf{
     }
     $naissance =  CMbDT::transform(null, $this->patient->naissance, "%d.%m.%Y");
     $colonnes = array(20, 28, 25, 25, 35, 50);
-    $traitement = CMbDT::transform(null, $this->facture->_ref_first_consult->_date, "%d.%m.%Y")." - ";
-    $traitement .= CMbDT::transform(null, $this->facture->cloture, "%d.%m.%Y");
+    if ($this->facture->_class == "CFactureCabinet") {
+      $traitement = CMbDT::transform(null, $this->facture->_ref_first_consult->_date, "%d.%m.%Y")." - ";
+      $traitement .= CMbDT::transform(null, $this->facture->cloture, "%d.%m.%Y");
+    }
+    else {
+      $traitement = CMbDT::transform(null, $this->facture->_ref_first_sejour->entree, "%d.%m.%Y")." - ";
+      $traitement .= CMbDT::transform(null, $this->facture->_ref_first_sejour->sortie, "%d.%m.%Y");
+    }
+
     $name_rappel = $date_rappel = null;
     if (CAppUI::conf("dPfacturation CRelance use_relances")) {
       $name_rappel = "Date rappel / facture";
