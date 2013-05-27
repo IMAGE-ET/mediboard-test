@@ -249,7 +249,7 @@ Main.add(function(){
   document.title = "{{$ex_object->_ref_ex_class->name}} - {{$object}}".htmlDecode();
 
   {{if $autoprint}}
-    if (document.execCommand) {
+    if (Prototype.Browser.IE && document.execCommand) {
       window.focus();
       document.execCommand('print', false, null);
     }
