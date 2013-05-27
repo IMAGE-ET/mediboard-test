@@ -217,8 +217,8 @@ class CEditPdf{
     $this->ajoutEntete1();
     $this->pdf->setFont($this->font, '', 8);
     $tailles_colonnes = array(
-      "Date" => 9,      "Tarif"=> 5,
-      "Code" => 7,      "Code réf" => 7,
+      "Date" => 7,      "Tarif"=> 4,
+      "Code" => 10,      "Code réf" => 7,
       "Sé Cô" => 5,     "Quantité" => 9,
       "Pt PM/Prix" => 8,"fPM" => 5,
       "VPtPM" => 6,     "Pt PT" => 7,
@@ -245,8 +245,10 @@ class CEditPdf{
       foreach ($tab_acte as $acte) {
         $use_qte_null = CAppUI::conf("dPfacturation Other use_view_quantitynull");
         $qte_null = ($acte->quantite != 0 && $use_qte_null) || !$use_qte_null;
+
         $tab_tarmed = $cle_facture == 0 && $keytab == "tarmed";
-        $tab_caisse = $cle_facture == 1 || ($acte->_class == "CFactureItem" && $acte->use_tarmed_bill);
+        $tab_caisse = ($cle_facture == 1 && !$acte->use_tarmed_bill) || ($cle_facture == 0 &&$acte->type == "CActeCaisse" && $acte->use_tarmed_bill);
+
         if (($tab_tarmed || ($keytab == "caisse" && $tab_caisse)) && $qte_null) {
           $ligne++;
           $this->pdf->setXY(37, $debut_lignes + $ligne*3);
@@ -351,14 +353,17 @@ class CEditPdf{
             $this_pt = 0;
             $this_pm = $acte->montant_base * $acte->quantite * $acte->coeff;
           }
-          $pt += $this_pt;
-          $pm += $this_pm;
+
+          if ($acte->type == "CActeTarmed") {
+            $pt += $this_pt;
+            $pm += $this_pm;
+          }
           $montant_intermediaire += $this_pt;
           $montant_intermediaire += $this_pm;
         }
       }
     }
-    
+
     $pt = sprintf("%.2f", $pt);
     $pm = sprintf("%.2f", $pm);
     
@@ -370,9 +375,9 @@ class CEditPdf{
     
     $this->editCell(20, $ligne+6, $l, "", "Tarmed PT", "R");
     $this->pdf->Cell($l, "", $pt, null, null, "R");
-        
+
     $autre_temp = $cle_facture == 0 ? $montant_facture - $pm - $pt : $montant_facture;
-    $autre_temp = round("%.2f", $autre_temp);
+    $autre_temp = sprintf("%.2f", $autre_temp);
     $autre = ($autre_temp <= 0.05) ? 0.00 : $autre_temp;
     $this->editCell(70, $ligne+3, $l, "Autres", "R");
     $this->pdf->Cell($l, "",  sprintf("%.2f", $autre), null, null, "R");
@@ -560,9 +565,11 @@ class CEditPdf{
         $montant_total += sprintf('%0.2f', $this->autre_tarmed);
       }
       else {
-        $tarif[$cles] = "0.00";
+        $tarif[$cles] = $valeur;
+        $montant_total += $valeur;
       }
     }
+
     if ($relance) {
       $tarif["Relance:"]      = sprintf('%0.2f', $this->relance->_montant);
     }
@@ -745,14 +752,15 @@ class CEditPdf{
       $motif = "Accident (Caisse-Maladie)";
     }
     $naissance =  CMbDT::transform(null, $this->patient->naissance, "%d.%m.%Y");
-    $colonnes = array(20, 28, 25, 25, 25, 50);
+    $colonnes = array(20, 28, 25, 25, 35, 50);
     $traitement = CMbDT::transform(null, $this->facture->_ref_first_consult->_date, "%d.%m.%Y")." - ";
     $traitement .= CMbDT::transform(null, $this->facture->cloture, "%d.%m.%Y");
     $name_rappel = $date_rappel = null;
     if (CAppUI::conf("dPfacturation CRelance use_relances")) {
-      $name_rappel = "Date rappel";
-      $date_rappel = CMbDT::date("+".CAppUI::conf("dPfacturation CRelance nb_days_first_relance")." DAY" , $this->facture->cloture);
-      $date_rappel = CMbDT::transform(null, $date_rappel, "%d.%m.%Y");
+      $name_rappel = "Date rappel / facture";
+      //$date_rappel = CMbDT::date("+".CAppUI::conf("dPfacturation CRelance nb_days_first_relance")." DAY" , $this->facture->cloture);
+      //$date_rappel = CMbDT::transform(null, $date_rappel, "%d.%m.%Y");
+      $date_rappel = CMbDT::transform(null, $this->facture->cloture, "%d.%m.%Y");
     }
     $ean2 = $this->group->ean;
     if ($this->facture->_class == "CFactureEtablissement") {
