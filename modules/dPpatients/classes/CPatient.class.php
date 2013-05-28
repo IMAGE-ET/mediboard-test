@@ -71,7 +71,8 @@ class CPatient extends CPerson {
 
   static $fields_etiq = array(
     "DATE NAISS", "IPP", "LIEU NAISSANCE",
-    "NOM", "NOM JF", "PRENOM", "SEXE", "CIVILITE", "CIVILITE LONGUE",
+    "NOM", "NOM JF", "FORMULE NOM JF", "PRENOM", "SEXE",
+    "CIVILITE", "CIVILITE LONGUE",
     "ACCORD GENRE", "CODE BARRE IPP", "ADRESSE", "MED. TRAITANT",
     "TEL", "TEL PORTABLE", "TEL ETRANGER", "PAYS",
     "PREVENIR - NOM", "PREVENIR - PRENOM", "PREVENIR - ADRESSE",
@@ -2055,6 +2056,7 @@ class CPatient extends CPerson {
         "LIEU NAISSANCE"  => $this->lieu_naissance,
         "NOM"             => $this->nom,
         "NOM JF"          => $this->nom_jeune_fille,
+        "FORMULE NOM JF"  => $this->sexe == "f" && $this->nom_jeune_fille ? "née $this->nom_jeune_fille" : "",
         "PRENOM"          => $this->prenom,
         "SEXE"            => strtoupper($this->sexe),
         "CIVILITE"        => $this->civilite,
