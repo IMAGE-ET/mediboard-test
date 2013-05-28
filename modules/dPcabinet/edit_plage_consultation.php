@@ -34,7 +34,7 @@ $is_in_period = ($today >= $debut) && ($today <= $fin);
 // Plage de consultation selectionnée
 $plageconsult_id = CValue::getOrSession("plageconsult_id", null);
 $plageSel = new CPlageconsult();
-if(($plageconsult_id === null) && $chirSel && $is_in_period) {
+if (($plageconsult_id === null) && $chirSel && $is_in_period) {
   $nowTime = CMbDT::time();
   $where = array(
     "chir_id" => "= '$chirSel'",
@@ -44,9 +44,10 @@ if(($plageconsult_id === null) && $chirSel && $is_in_period) {
   );
   $plageSel->loadObject($where);
 }
-if(!$plageSel->plageconsult_id) {
+if (!$plageSel->plageconsult_id) {
   $plageSel->load($plageconsult_id);
-} else {
+}
+else {
   $plageconsult_id = $plageSel->plageconsult_id;
 }
 $plageSel->loadRefsFwd(1);
@@ -87,14 +88,15 @@ CValue::setSession("plageconsult_id", $plageconsult_id);
 
 // Liste des chirurgiens
 $mediusers = new CMediusers();
-if(CAppUI::pref("pratOnlyForConsult", 1)) {
+if (CAppUI::pref("pratOnlyForConsult", 1)) {
   $listChirs = $mediusers->loadPraticiens(PERM_EDIT);
-} else {
+}
+else {
   $listChirs = $mediusers->loadProfessionnelDeSante(PERM_EDIT);
 }
 
 $listDaysSelect = array();
-for($i = 0; $i < 7; $i++) {
+for ($i = 0; $i < 7; $i++) {
   $dateArr = CMbDT::date("+$i day", $debut);
   $listDaysSelect[$dateArr] = $dateArr;    
 }
@@ -114,19 +116,19 @@ $min_hour = sprintf("%01d", CMbDT::transform($min, null, "%H"));
 $max_hour = sprintf("%01d", CMbDT::transform($max, null, "%H"));
 
 if (!isset($hours[$min_hour])) {
-  for($i = $min_hour; $i < CPlageconsult::$hours_start; $i++) {
+  for ($i = $min_hour; $i < CPlageconsult::$hours_start; $i++) {
     $hours[$i] = sprintf("%02d", $i);
   }
 }
 
 if (!isset($hours[$max_hour])) {
-  for($i = CPlageconsult::$hours_stop + 1; $i < $max_hour + 1; $i++) {
+  for ($i = CPlageconsult::$hours_stop + 1; $i < ($max_hour + 1); $i++) {
     $hours[$i] = sprintf("%02d", $i);
   }
 }
 
 // Vérifier le droit d'écriture sur la plage sélectionnée
-$plageSel->canEdit();
+$plageSel->canDo();
 
 ksort($hours);
 
@@ -146,5 +148,4 @@ $smarty->assign("listMins"          , CPlageconsult::$minutes);
 $smarty->assign("nb_intervals_hour" , intval(60/CPlageconsult::$minutes_interval));
 
 $smarty->display("edit_plage_consultation.tpl");
-  
-?>
+

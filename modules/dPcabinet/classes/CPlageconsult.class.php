@@ -139,6 +139,7 @@ class CPlageconsult extends CPlageHoraire {
   
     if (!$withPayees) {
       foreach ($this->_ref_consultations as $key => $consult) {
+        /** @var CConsultation $consult */
         $facture = $consult->loadRefFacture();
         if ($facture->_id && $facture->patient_date_reglement) {
           unset($this->_ref_consultations[$key]);
@@ -149,6 +150,8 @@ class CPlageconsult extends CPlageHoraire {
   }
 
   /**
+   * Calcul du nombre de patient dans la plage
+   *
    * @return int The patient count
    */
   function countPatients(){
@@ -172,7 +175,7 @@ class CPlageconsult extends CPlageHoraire {
 
     $query = "SELECT SUM(`consultation`.`duree`)
               FROM `consultation`
-              WHERE `consultation`.`plageconsult_id` = $this->_id
+              WHERE `consultation`.`plageconsult_id` = '$this->_id'
                 AND `consultation`.`patient_id` IS NOT NULL
                 AND `consultation`.`annule` = '0'";
 
@@ -215,7 +218,7 @@ class CPlageconsult extends CPlageHoraire {
               FROM `consultation`
               LEFT JOIN `consultation_cat`
                 ON `consultation`.`categorie_id` = `consultation_cat`.`categorie_id`
-              WHERE `consultation`.`plageconsult_id` = $this->_id
+              WHERE `consultation`.`plageconsult_id` = '$this->_id'
                 AND `consultation`.`annule` = '0'
                 AND `consultation`.`categorie_id` IS NOT NULL
               GROUP BY `consultation`.`categorie_id`
@@ -385,6 +388,7 @@ class CPlageconsult extends CPlageHoraire {
         $facture->store();
       }
     }
+    return null;
   }
 }
 

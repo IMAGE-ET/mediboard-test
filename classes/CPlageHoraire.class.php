@@ -13,6 +13,9 @@ class CPlageHoraire extends CMbObject {
   public $debut;
   public $fin;
 
+  // Behaviour fields
+  public $_skip_collisions;
+
   /**
    * @var self[]
    */
@@ -20,9 +23,10 @@ class CPlageHoraire extends CMbObject {
   
   function getProps() {
     $props = parent::getProps();
-    $props["date"]  = "date notNull";
-    $props["debut"] = "time notNull";
-    $props["fin"]   = "time notNull moreThan|debut";
+    $props["date"]             = "date notNull";
+    $props["debut"]            = "time notNull";
+    $props["fin"]              = "time notNull moreThan|debut";
+    $props["_skip_collisions"] = "bool default|0";
     return $props;
   }
   
@@ -42,6 +46,9 @@ class CPlageHoraire extends CMbObject {
    * @return string Collision message
    */
   function hasCollisions() {
+    if ($this->_skip_collisions) {
+      return null;
+    }
     // Check whether mandatory collision keys are defined
     $keys = $this->_spec->collision_keys;
     if (!is_array($keys)) {
@@ -64,12 +71,14 @@ class CPlageHoraire extends CMbObject {
     }
 
     // Load collision
-    $plages = new $this->_class;
-    $this->_colliding_plages = $plages->loadList($where);
+    /** @var CPlageHoraire $plage */
+    $plage = new $this->_class;
+    $this->_colliding_plages = $plage->loadList($where);
     
     // Build collision message
     $msgs = array();
     foreach ($this->_colliding_plages as $_plage) {
+      /** @var CPlageHoraire $_plage */
       $msgs[] = "Collision avec la plage de '$_plage->debut' à '$_plage->fin'";
     }
     
