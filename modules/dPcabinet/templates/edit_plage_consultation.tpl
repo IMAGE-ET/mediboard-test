@@ -83,8 +83,17 @@
             <td>{{mb_field object=$plageSel field="libelle" style="width: 15em;"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$plageSel field="debut"}}</th>
-            <td>{{mb_field object=$plageSel field="debut"}}</td>
+            <th>{{mb_label object=$plageSel field="date"}}</th>
+            <td>
+              <select name="date" class="{{$plageSel->_props.date}}" style="width: 15em;">
+                <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+                {{foreach from=$listDaysSelect item=curr_day}}
+                  <option value="{{$curr_day}}" {{if $curr_day == $plageSel->date}} selected="selected" {{/if}}>
+                    {{$curr_day|date_format:"%A"}}
+                  </option>
+                {{/foreach}}
+              </select>
+            </td>
             <th>{{mb_label object=$plageSel field="color"}}</th>
             <td>
               <script>
@@ -105,10 +114,24 @@
             </td>
           </tr>
           <tr>
-            <th>{{mb_label object=$plageSel field="fin"}}</th>
-            <td>{{mb_field object=$plageSel field="fin"}}</td>
+            <th>{{mb_label object=$plageSel field="debut"}}</th>
+            <td>{{mb_field object=$plageSel field="debut"}}</td>
             <th>{{mb_label object=$plageSel field="locked"}}</th>
             <td>{{mb_field object=$plageSel field="locked" typeEnum="checkbox"}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$plageSel field="fin"}}</th>
+            <td>{{mb_field object=$plageSel field="fin"}}</td>
+            <th></th>
+            <td>
+              {{if $plageSel->_affected}}
+                Déjà <strong>{{$plageSel->_affected}} consultations</strong> planifiées
+                de <strong>{{$_firstconsult_time}}</strong> à <strong>{{$_lastconsult_time}}</strong>
+              {{/if}}
+              <input type='hidden' name='nbaffected' value='{{$plageSel->_affected}}' />
+              <input type='hidden' name='_firstconsult_time' value='{{$_firstconsult_time}}' />
+              <input type='hidden' name='_lastconsult_time' value='{{$_lastconsult_time}}' />
+            </td>
           </tr>
           <tr>
             <th>{{mb_label object=$plageSel field="_freq"}}</th>
@@ -122,29 +145,6 @@
                 <option value="45" {{if ($plageSel->_freq == "45")}} selected="selected" {{/if}}>45</option>
                 <option value="60" {{if ($plageSel->_freq == "60")}} selected="selected" {{/if}}>60</option>
               </select> min
-            </td>
-            <th></th>
-            <td>
-              {{if $plageSel->_affected}}
-                Déjà <strong>{{$plageSel->_affected}} consultations</strong> planifiées
-                de <strong>{{$_firstconsult_time}}</strong> à <strong>{{$_lastconsult_time}}</strong>
-              {{/if}}
-              <input type='hidden' name='nbaffected' value='{{$plageSel->_affected}}' />
-              <input type='hidden' name='_firstconsult_time' value='{{$_firstconsult_time}}' />
-              <input type='hidden' name='_lastconsult_time' value='{{$_lastconsult_time}}' />
-            </td>
-          </tr>
-          <tr>
-            <th>{{mb_label object=$plageSel field="date"}}</th>
-            <td>
-              <select name="date" class="{{$plageSel->_props.date}}" style="width: 15em;">
-                <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-                {{foreach from=$listDaysSelect item=curr_day}}
-                  <option value="{{$curr_day}}" {{if $curr_day == $plageSel->date}} selected="selected" {{/if}}>
-                    {{$curr_day|date_format:"%A"}}
-                  </option>
-                {{/foreach}}
-              </select>
             </td>
             <th>{{mb_label object=$plageSel field="_skip_collisions"}}</th>
             <td>{{mb_field object=$plageSel field="_skip_collisions" typeEnum=checkbox}}</td>
