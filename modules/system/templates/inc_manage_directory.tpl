@@ -27,7 +27,7 @@
         <ul>
           <li>
             <a href="#1"
-                onclick="ExchangeSource.changeDirectory('{{$source_guid}}', '{{$_root.path}}')">
+                onclick="ExchangeSource.changeDirectory('{{$source_guid}}', '{{$_root.path|addslashes}}')">
               {{if $smarty.foreach.foreachroot.first}}
                 <img src="modules/system/images/homeIcon.png"/>
               {{else}}

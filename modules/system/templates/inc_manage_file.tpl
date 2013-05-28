@@ -13,7 +13,7 @@
 <table class="tbl">
   <tr>
     <th class="title" colspan="5">
-      {{tr}}List of file{{/tr}}
+      {{tr}}List-of-file{{/tr}}
     </th>
   </tr>
   <tr>
@@ -71,16 +71,16 @@
       {{foreachelse}}
       <tr>
         <td colspan="5">
-          {{tr}}None file{{/tr}}
+          {{tr}}No-file{{/tr}}
         </td>
       </tr>
     {{/foreach}}
   {{else}}
     <tr>
-      <td colspan="5">{{tr}}Error file{{/tr}}</td>
+      <td colspan="5">{{tr}}Error-file{{/tr}}</td>
     </tr>
   {{/if}}
 </table>
 <button type="button" class="upload" onclick="ExchangeSource.addFileForm('{{$source_guid}}', '{{$current_directory}}')">
-  {{tr}}Upload File{{/tr}}
+  {{tr}}Upload-file{{/tr}}
 </button>
