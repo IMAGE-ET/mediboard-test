@@ -22,13 +22,14 @@ PlanSoins = {
   with_navigation:     null,
   nb_decalage:         null,
   save_nb_decalage:    null,
+  plan_soin_id:        null,// L'id de l'element plan de soin
 
   init: function(options){
     Object.extend(PlanSoins, options);
   },
 
   selColonne: function(hour){
-    $('plan_soin').select('div.non_administre:not(.perfusion), div.a_administrer:not(.perfusion)').each(function(oDiv){
+    $(PlanSoins.plan_soin_id).select('div.non_administre:not(.perfusion), div.a_administrer:not(.perfusion)').each(function(oDiv){
       if(oDiv.up("tbody").visible() && oDiv.up("td").hasClassName(hour)){
         if(Object.isFunction(oDiv.onclick)){
           oDiv.onclick();
@@ -36,7 +37,7 @@ PlanSoins = {
       }
     });
     
-    $('plan_soin').select('div.first_line_mix_item').each(function(oDiv){
+    $(PlanSoins.plan_soin_id).select('div.first_line_mix_item').each(function(oDiv){
       if(oDiv.up("tbody").visible() && oDiv.up("td").hasClassName(hour)){
         oDiv = oDiv.up("div");
         if(Object.isFunction(oDiv.onclick)){
@@ -443,13 +444,13 @@ PlanSoins = {
   },
   
   addDroppablesDiv: function(draggable){
-    $('plan_soin').select('.before').each(function(td_before) {
+    $(PlanSoins.plan_soin_id).select('.before').each(function(td_before) {
       td_before.onmouseover = function(){
         PlanSoins.timeOutBefore = setTimeout(PlanSoins.showBefore, 1000);
       }
     });
     
-    $('plan_soin').select('.after').each(function(td_after) {
+    $(PlanSoins.plan_soin_id).select('.after').each(function(td_after) {
       td_after.onmouseover = function(){
         PlanSoins.timeOutAfter = setTimeout(PlanSoins.showAfter, 1000);
       }
@@ -482,10 +483,10 @@ PlanSoins = {
             }
             // Suppression des zones droppables
             Droppables.drops.clear(); 
-            $('plan_soin').select('.before').each(function(td_before) {
+            $(PlanSoins.plan_soin_id).select('.before').each(function(td_before) {
               td_before.onmouseover = null;
             });
-            $('plan_soin').select('.after').each(function(td_after) {
+            $(PlanSoins.plan_soin_id).select('.after').each(function(td_after) {
               td_after.onmouseover = null;
             });
           },
@@ -497,12 +498,12 @@ PlanSoins = {
   
   // Ajouts des zones droppables pour les perfusions
   addDroppablesPerfDiv: function(draggable){
-    $('plan_soin').select('.before').each(function(td_before) {
+    $(PlanSoins.plan_soin_id).select('.before').each(function(td_before) {
       td_before.onmouseover = function(){
         PlanSoins.timeOutBefore = setTimeout(PlanSoins.showBefore, 1000);
       }
     });
-    $('plan_soin').select('.after').each(function(td_after) {
+    $(PlanSoins.plan_soin_id).select('.after').each(function(td_after) {
       td_after.onmouseover = function(){
         PlanSoins.timeOutAfter = setTimeout(PlanSoins.showAfter, 1000);
       }
@@ -519,10 +520,10 @@ PlanSoins = {
             PlanSoins.addPlanificationPerf(planif_id, dateTime, prescription_line_mix_id, original_dateTime);
             // Suppression des zones droppables
             Droppables.drops.clear(); 
-            $('plan_soin').select('.before').each(function(td_before) {
+            $(PlanSoins.plan_soin_id).select('.before').each(function(td_before) {
               td_before.onmouseover = null;
             });
-            $('plan_soin').select('.after').each(function(td_after) {
+            $(PlanSoins.plan_soin_id).select('.after').each(function(td_after) {
               td_after.onmouseover = null;
             });
           },
@@ -535,7 +536,7 @@ PlanSoins = {
   showBefore: function(){
     if(PlanSoins.nb_decalage >= 1){
       PlanSoins.nb_decalage = parseInt(PlanSoins.nb_decalage) - 1;
-      PlanSoins.moveDossierSoin($('plan_soin'), true);
+      PlanSoins.moveDossierSoin($(PlanSoins.plan_soin_id), true);
     }
     PlanSoins.togglePeriodNavigation();
   },
@@ -544,21 +545,21 @@ PlanSoins = {
   showAfter: function(){
     if(PlanSoins.nb_decalage < (PlanSoins.nb_postes - 1)){
       PlanSoins.nb_decalage = parseInt(PlanSoins.nb_decalage) + 1;
-      PlanSoins.moveDossierSoin($('plan_soin'), true);
+      PlanSoins.moveDossierSoin($(PlanSoins.plan_soin_id), true);
     }
     PlanSoins.togglePeriodNavigation();
   },
 
   togglePeriodNavigation: function(){
     if(PlanSoins.nb_decalage >= 1){
-      $("plan_soin").select("a.prevPeriod").invoke("show");
+      $(PlanSoins.plan_soin_id).select("a.prevPeriod").invoke("show");
     } else {
-      $("plan_soin").select("a.prevPeriod").invoke("hide");
+      $(PlanSoins.plan_soin_id).select("a.prevPeriod").invoke("hide");
     }
     if(PlanSoins.nb_decalage < (PlanSoins.nb_postes - 1)){
-      $("plan_soin").select("a.nextPeriod").invoke("show");
+      $(PlanSoins.plan_soin_id).select("a.nextPeriod").invoke("show");
     } else {
-      $("plan_soin").select("a.nextPeriod").invoke("hide");
+      $(PlanSoins.plan_soin_id).select("a.nextPeriod").invoke("hide");
     }
   },
   
