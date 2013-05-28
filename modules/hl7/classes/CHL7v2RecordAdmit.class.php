@@ -177,6 +177,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       // NPA fourni
       if (!$found && $venueNPA) {
         /* @todo Gérer ce cas */
+        $venueRI = $venueNPA;
       }
       
       // VN fourni
