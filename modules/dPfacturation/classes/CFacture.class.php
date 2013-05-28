@@ -185,6 +185,8 @@ class CFacture extends CMbObject {
           return $msg;
         }
       }
+
+      $this->isRelancable();
       if ($this->_ref_last_relance->_id) {
         $this->_ref_last_relance->etat = $this->patient_date_reglement ? "regle" : "emise";
         $this->_ref_last_relance->store();
