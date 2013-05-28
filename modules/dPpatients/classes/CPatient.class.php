@@ -1288,6 +1288,8 @@ class CPatient extends CPerson {
   }
 
   function loadRefsPraticiens() {
+    $this->_ref_praticiens = array();
+
     // Consultations
     $this->loadRefsConsultations();
     foreach ($this->_ref_consultations as $_consult) {
