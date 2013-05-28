@@ -177,6 +177,7 @@ class CUser extends CPerson {
     $props["_is_logging"]        = "bool";
     $props["_is_changing"]       = "bool";
     $props["_user_salt"]         = "str";
+    $props["_login_locked"]     = "bool";
 
     return $props;
   }

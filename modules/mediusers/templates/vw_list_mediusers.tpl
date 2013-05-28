@@ -1,7 +1,6 @@
 <table class="tbl">
   <tr>
     <th>
-      
       {{mb_colonne class="CUser" field="user_username" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}
     </th>
     <th>
@@ -24,6 +23,7 @@
     <th>
       {{mb_colonne class="CUser" field="user_last_login" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}
     </th>
+    <th>{{mb_title class="CUser" field="_login_locked"}}</th>
   </tr>
 
   {{foreach from=$mediusers item=_user}}
@@ -78,6 +78,8 @@
          {{mb_value object=$_user field=_user_last_login format=relative}}
        </label>
        {{/if}}
+     </td>
+     <td class="narrow">
        {{mb_include module=admin template=unlock _user=$_user->_ref_user}}
      </td>
           
