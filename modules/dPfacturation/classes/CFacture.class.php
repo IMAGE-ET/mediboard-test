@@ -186,8 +186,7 @@ class CFacture extends CMbObject {
         }
       }
 
-      $this->isRelancable();
-      if ($this->_ref_last_relance->_id) {
+      if ($this->isRelancable() && $this->_ref_last_relance->_id) {
         $this->_ref_last_relance->etat = $this->patient_date_reglement ? "regle" : "emise";
         $this->_ref_last_relance->store();
       }
@@ -404,6 +403,7 @@ class CFacture extends CMbObject {
     if (!$this->_ref_praticien) {
       $this->_ref_praticien = $this->loadFwdRef("praticien_id", true);
     }
+
     return $this->_ref_praticien;
   }
   
@@ -878,30 +878,31 @@ class CFacture extends CMbObject {
    * @return boolean
   **/
   function isRelancable() {
+    $this->_is_relancable = false;
+
     if (CAppUI::conf("dPfacturation CRelance use_relances")) {
-      $date = CMbDT::date();
-      $this->_is_relancable = false;
-      $nb_first_relance  = CAppUI::conf("dPfacturation CRelance nb_days_first_relance");
-      $nb_second_relance = CAppUI::conf("dPfacturation CRelance nb_days_second_relance");
-    
-      if (!count($this->_ref_relances)) {
-        $this->_ref_last_relance = new CRelance();
-      }
-      else {
-        $this->_ref_last_relance = end($this->_ref_relances);
-      }
-      if (($this->_du_restant_patient > 0 || $this->_du_restant_tiers > 0) && $this->cloture) {
-        if (!count($this->_ref_relances) && CMbDT::daysRelative($this->cloture, $date) > $nb_first_relance) {
-          $this->_is_relancable = true;
-        }
-        elseif (count($this->_ref_relances)) {
-          if (CMbDT::daysRelative($this->_ref_last_relance->date, $date) > $nb_second_relance) {
-            $this->_is_relancable = true;
-          }
-        }
-      }
       return $this->_is_relancable;
     }
+
+    $date = CMbDT::date();
+
+    $nb_first_relance  = CAppUI::conf("dPfacturation CRelance nb_days_first_relance");
+    $nb_second_relance = CAppUI::conf("dPfacturation CRelance nb_days_second_relance");
+
+    $this->_ref_last_relance = !count($this->_ref_relances) ? new CRelance() : end($this->_ref_relances);
+
+    if (($this->_du_restant_patient > 0 || $this->_du_restant_tiers > 0) && $this->cloture) {
+      if (!count($this->_ref_relances) && CMbDT::daysRelative($this->cloture, $date) > $nb_first_relance) {
+        $this->_is_relancable = true;
+      }
+      elseif (count($this->_ref_relances)) {
+        if (CMbDT::daysRelative($this->_ref_last_relance->date, $date) > $nb_second_relance) {
+          $this->_is_relancable = true;
+        }
+      }
+    }
+
+    return $this->_is_relancable;
   }
   
   /**
