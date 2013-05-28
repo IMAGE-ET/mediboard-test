@@ -1,5 +1,4 @@
 <?php
-$locales['Address'] = 'Adresse';
 $locales['CDMPServiceTD03'] = 'Autorisation';
 $locales['CDMPServiceTD03-desc'] = 'Mise à jour de l\'autorisation';
 $locales['CDMPServiceTD15'] = 'Accès patient';
@@ -434,14 +433,9 @@ $locales['CSourceFileSystem.sort_files_by.size'] = 'Taille';
 $locales['CSourceHTTP._reachable.0'] = 'Non';
 $locales['CSourceHTTP._reachable.1'] = 'Partiellement';
 $locales['CSourceHTTP._reachable.2'] = 'Oui';
-$locales['Directory'] = 'Répertoire';
-$locales['Error file'] = 'Impossible d\'afficher la liste des fichiers';
-$locales['File'] = 'Fichier';
-$locales['List of file'] = 'Liste des fichiers';
-$locales['None file'] = 'Aucun fichier';
-$locales['Size'] = 'Taille';
-$locales['Upload File'] = 'Téléverser des fichiers';
-$locales['^CSourceFTP-change-directory-failed^'] = 'Impossible de changer de répertoire';
+$locales['Error-file'] = 'Impossible d\'afficher la liste des fichiers';
+$locales['List-of-file'] = 'Liste des fichiers';
+$locales['No-file'] = 'Aucun fichier';
 $locales['config-eai'] = 'EAI';
 $locales['config-eai-exchange_format_delayed'] = 'Temps de retard d\'un message';
 $locales['config-eai-exchange_format_delayed-desc'] = 'Temps de retard d\'un message (minute)';
