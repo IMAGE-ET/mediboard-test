@@ -36,17 +36,23 @@ showLegend = function() {
           <th colspan="{{if $conf.dPfacturation.CEditPdf.use_bill_etab}}5{{else}}2{{/if}}" class="title">Factures</th>
         </tr>
         <tr>
+          {{if $conf.dPfacturation.CEditPdf.use_bill_etab}}
+            <th>Date séjour</th>
+            <th>Numéro</th>
+          {{/if}}
           <th>Date</th>
           <th>Patient</th>
           {{if $conf.dPfacturation.CEditPdf.use_bill_etab}}
-            <th>Numéro</th>
-            <th>Date séjour</th>
             <th>Numéro séjour</th>
           {{/if}}
         </tr>
         {{foreach from=$factures item=_facture}}
           <tr class="{{if $facture->_id == $_facture->_id}}selected{{/if}}" >
             {{assign var="classe" value=$facture->_class}}
+            {{if $conf.dPfacturation.CEditPdf.use_bill_etab}}
+              <td>{{$_facture->_ref_last_sejour->entree_prevue|date_format:"%d/%m/%Y"}}</td>
+              <td style="text-align: right;">{{$_facture->_id|string_format:"%08d"}}</td>
+            {{/if}}
             <td class=" narrow {{if !$_facture->cloture}}cloture{{/if}} {{if $_facture->patient_date_reglement}}reglee{{/if}}">
               {{if $_facture->cloture}}
                 {{mb_value object=$_facture field="cloture"}}
@@ -61,8 +67,6 @@ showLegend = function() {
               </a>
             </td>
             {{if $conf.dPfacturation.CEditPdf.use_bill_etab}}
-              <td style="text-align: right;">{{$_facture->_id|string_format:"%08d"}}</td>
-              <td>{{$_facture->_ref_last_sejour->entree_prevue|date_format:"%d/%m/%Y"}}</td>
               <td style="text-align: right;">{{$_facture->_ref_last_sejour->_id}}</td>
             {{/if}}
           </tr>
