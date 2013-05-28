@@ -231,8 +231,9 @@ class CMouvement400 extends CRecordSante400 {
 
   function countAvailable() {
     $record = new CRecordSante400();
+    // Some DB2 drivers won't allow WHERE 1 syntax, WHERE 1 = 1 working better
     $query = "SELECT COUNT(*) AS TOTAL FROM $this->base.$this->table
-      WHERE 1
+      WHERE 1 = 1
     ";
     $query.= $this->getFilterClause();
 
