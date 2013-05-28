@@ -48,26 +48,34 @@ showLegend = function() {
         </tr>
         {{foreach from=$factures item=_facture}}
           <tr class="{{if $facture->_id == $_facture->_id}}selected{{/if}}" >
+            {{assign var="cloture" value=""}}
+            {{assign var="reglee" value=""}}
+            {{if !$_facture->cloture}}
+              {{assign var="cloture" value="cloture"}}
+            {{/if}}
+            {{if $_facture->patient_date_reglement}}
+              {{assign var="reglee" value="reglee"}}
+            {{/if}}
             {{assign var="classe" value=$facture->_class}}
             {{if $conf.dPfacturation.CEditPdf.use_bill_etab}}
-              <td>{{$_facture->_ref_last_sejour->entree_prevue|date_format:"%d/%m/%Y"}}</td>
-              <td style="text-align: right;">{{$_facture->_id|string_format:"%08d"}}</td>
+              <td class="{{$reglee}} {{$cloture}}">{{$_facture->_ref_last_sejour->entree_prevue|date_format:"%d/%m/%Y"}}</td>
+              <td style="text-align: right;" class="{{$reglee}} {{$cloture}}">{{$_facture->_id|string_format:"%08d"}}</td>
             {{/if}}
-            <td class=" narrow {{if !$_facture->cloture}}cloture{{/if}} {{if $_facture->patient_date_reglement}}reglee{{/if}}">
+            <td class=" narrow {{$reglee}} {{$cloture}}">
               {{if $_facture->cloture}}
                 {{mb_value object=$_facture field="cloture"}}
               {{else}}
                 {{$_facture->ouverture|date_format:"%d/%m/%Y"}}
               {{/if}}
             </td>
-            <td class="text {{if !$_facture->cloture}}cloture{{/if}} {{if $_facture->patient_date_reglement}}reglee{{/if}}">
+            <td class="text {{$reglee}} {{$cloture}}">
               <a onclick="viewFacture(this, '{{$_facture->facture_id}}', '{{$_facture->_class}}');" href="#"
                 onmouseover="ObjectTooltip.createEx(this, '{{$_facture->_ref_patient->_guid}}')">
                 {{$_facture->_ref_patient->_view|truncate:30:"...":true}}
               </a>
             </td>
             {{if $conf.dPfacturation.CEditPdf.use_bill_etab}}
-              <td style="text-align: right;">{{$_facture->_ref_last_sejour->_id}}</td>
+              <td style="text-align: right;" class="{{$reglee}} {{$cloture}}">{{$_facture->_ref_last_sejour->_id}}</td>
             {{/if}}
           </tr>
         {{foreachelse}}
