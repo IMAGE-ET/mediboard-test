@@ -90,15 +90,9 @@ var Moves = {
     var url = new Url('sante400', 'ajax_do_moves');
     url.addParam('action', action);
     url.addParam('type', type);
-    url.requestUpdate('doBoard', this.url.refreshModal.bind(this.url));
+    url.requestUpdate(SystemMessage.id, this.url.refreshModal.bind(this.url));
   },
-  doAction: function(action) {
-    var url = new Url('sante400', 'ajax_do_moves');
-    url.addParam('action', action);
-    url.addElement($('ActionType'));
-    url.addElement($('ActionMarked'));
-    url.requestUpdate('doMoves');
-  },
+
   doImport: function() {
     var url = new Url('sante400', 'ajax_do_import');
     url.addElement($('ImportType'));
@@ -116,52 +110,19 @@ var Moves = {
 
 </script>
 
-<button class="change singleclick" onclick="Moves.board();">
-  Board
+<div style="margin: auto;">
+
+<button class="search singleclick" onclick="Moves.board();">
+  Tableau de bord
 </button>
 
+</div>
 
 <table class="tbl">
   <tr>
     <th class="narrow">Mouvements</th>
     <th class="narrow">Action</th>
     <th>Status</th>
-  </tr>
-
-  <tr>
-    <td>
-      <label for="ActionType" title="{{tr}}CMouvement400-type-desc{{/tr}}">{{tr}}CMouvement400-type{{/tr}}</label>
-      <select id="ActionType" name="type">
-        <option value="all">&mdash; {{tr}}All{{/tr}}</option>
-        {{foreach from=$types item=_type}}
-        <option value="{{$_type}}">{{tr}}CMouvement400-type-{{$_type}}{{/tr}}</option>
-        {{foreachelse}}
-        <option value="">Pas de type disponible</option>
-        {{/foreach}}
-      </select>
-      
-      <br />
-
-	    <label for="marked" title="{{tr}}CMouvement400-marked-desc{{/tr}}">{{tr}}CMouvement400-marked{{/tr}}</label>
-	    <select id="ActionMarked" name="marked">
-        <option value="all">&mdash; {{tr}}All{{/tr}}</option>
-	      <option value="0">{{tr}}CMouvement400-marked-0{{/tr}}</option>
-	      <option value="1">{{tr}}CMouvement400-marked-1{{/tr}}</option>
-	    </select>
-    </td>
-    <td>
-      <div>
-        <button class="search singleclick" onclick="Moves.doAction('count')">
-          {{tr}}Count{{/tr}}
-        </button>
-      </div>
-      <div>
-        <button class="search singleclick" onclick="Moves.doAction('obsolete')">
-          {{tr}}Obsolete{{/tr}}
-        </button>
-      </div>
-    </td>
-    <td class="text" id="doMoves"></td>
   </tr>
 
   <tr>
@@ -201,7 +162,7 @@ var Moves = {
     </td>
     <td>
 
-      <button class="search singleclick" onclick="Moves.doImport()">
+      <button class="change singleclick" onclick="Moves.doImport()">
         {{tr}}Import{{/tr}}
       </button>
     </td>

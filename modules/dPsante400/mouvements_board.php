@@ -31,7 +31,7 @@ foreach ($types as $_type) {
   }
 
   // Available
-  $report[$_type]["triggers"]["available"] = 0;
+  $report[$_type]["triggers"]["available"] = $mouv->countAvailable();
 
   // Marks
   $report[$_type]["marks"]["oldest"]    = $mouv->loadOldestMark();

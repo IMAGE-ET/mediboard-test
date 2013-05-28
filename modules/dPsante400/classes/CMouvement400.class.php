@@ -228,7 +228,16 @@ class CMouvement400 extends CRecordSante400 {
     
     return $total;
   }
-  
+
+  function countAvailable() {
+    $record = new CRecordSante400();
+    $query = "SELECT COUNT(*) AS TOTAL FROM $this->base.$this->table";
+    $query.= $this->getFilterClause();
+
+    $record->query($query);
+    return $record->consume("TOTAL");
+  }
+
   /**
    * Load latest with former marks
    * 
@@ -448,7 +457,7 @@ class CMouvement400 extends CRecordSante400 {
   function purgeOlderMarks($number) {
     $mark = new CTriggerMark();
     $ds = $mark->_spec->ds;
-    $table = $mark->spec->table;
+    $table = $mark->_spec->table;
     $query = "DELETE FROM `$table`
       WHERE trigger_class = '$this->class'
       AND trigger_number < '$number'";

@@ -68,7 +68,7 @@ foreach ($types as $_type) {
     }
   }
 
-  if ($action == "purgeable") {
+  if ($action == "purge") {
     $mouv->loadOldest();
     CAppUI::stepAjax(
       "Oldest available trigger for type '%s' is '%s' dating '%s'", UI_MSG_OK,
@@ -79,18 +79,18 @@ foreach ($types as $_type) {
 
     $count = $mouv->countOlderMarks($mouv->rec);
     CAppUI::stepAjax(
-      "Counting '%s' obsolete marked triggers",
+      "Counting '%s' purgeable trigger marks ",
       $count ? UI_MSG_WARNING : UI_MSG_OK,
       $count
     );
 
     $max = 1000;
-    $count = $mouv->markObsoleteTriggers($mouv->rec, $max);
+    $count = $mouv->purgeOlderMarks($mouv->rec);
     if (is_string($count)) {
-      CAppUI::stepAjax("Error marking obsolete trigger: %s", UI_MSG_WARNING, $count);
+      CAppUI::stepAjax("Error purging old marks: %s", UI_MSG_WARNING, $count);
     }
     else {
-      CAppUI::stepAjax("Marked '%s' obsolete triggers", UI_MSG_OK, $count);
+      CAppUI::stepAjax("Purged '%s' old marks", UI_MSG_OK, $count);
     }
   }
 }

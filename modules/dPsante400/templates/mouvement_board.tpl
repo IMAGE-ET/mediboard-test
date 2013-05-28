@@ -52,9 +52,16 @@
     <td>{{$marks.latest->trigger_number}}</td>
     <td>{{$marks.latest->when|date_format:$conf.datetime}}</td>
     <td>{{$marks.all      }}</td>
-    <td>{{$marks.purgeable}}</td>
-    <td>{{$marks.obsolete }}</td>
-
+    <td>
+      <button class="change singleclick" onclick="Moves.boardAction('purge', '{{$_type}}')">
+        {{$marks.purgeable}}
+      </button>
+    </td>
+    <td>
+      <button class="change singleclick" onclick="Moves.boardAction('obsolete', '{{$_type}}')">
+        {{$marks.obsolete }}
+      </button>
+    </td>
 
   </tr>
 
@@ -63,7 +70,3 @@
   {{/foreach}}
 
 </table>
-
-<div id="doBoard" style="height: 4em;">
-
-</div>
