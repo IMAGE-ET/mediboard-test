@@ -412,8 +412,8 @@ class CMediusers extends CPerson {
   }
 
   function updateFormFields() {
-    $this->loadRefUser();
     parent::updateFormFields();
+    $this->loadRefUser();
   }
 
   function loadView() {
