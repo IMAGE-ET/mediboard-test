@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPqualite
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Qualite
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -33,16 +34,16 @@ if ($elem_concerne) {
   $where["fiches_ei.elem_concerne"] = "= '$elem_concerne'";
 }
 
-if($selected_user_id){
+if ($selected_user_id) {
   $where["fiches_ei.user_id"] = "= '$selected_user_id'";
 }
 
-if($selected_service_valid_user_id){
+if ($selected_service_valid_user_id) {
   $where["fiches_ei.service_valid_user_id"] = "= '$selected_service_valid_user_id'";
 }
 
 $user_id = null;
-if($type == "AUTHOR" || (CCanDo::edit() && !CCanDo::admin())){
+if ($type == "AUTHOR" || (CCanDo::edit() && !CCanDo::admin())) {
   $user_id = $user->_id;
 }
 
@@ -52,19 +53,18 @@ if ($evenements) {
   $item->ei_categorie_id = $evenements;
   $listTypes = array_keys($item->loadMatchingList());
 
-  foreach($listeFiches as $id => $fiche) {
+  foreach ($listeFiches as $id => $fiche) {
     if (count(array_intersect($fiche->_ref_evenement, $listTypes)) == 0) {
       unset($listeFiches[$id]);
     }
-    if ($filter_item != "")
-      if (strrpos($fiche->evenements, $filter_item) === false)
-        unset($listeFiches[$id]);
+    if ($filter_item != "" && strrpos($fiche->evenements, $filter_item) === false) {
+      unset($listeFiches[$id]);
+    }
   }
 
   $countFiches = count($listeFiches);
   $listeFiches = array_slice($listeFiches, intval($first), 20, true); // PHP's LIMIT
 }
-
 else {
   $countFiches = CFicheEi::loadFichesEtat($type, $user_id, $where, 0, true);
   $listeFiches = CFicheEi::loadFichesEtat($type, $user_id, $where, 0, false, $countFiches > 20 ? $first : null);
@@ -82,5 +82,3 @@ $smarty->assign("first"            , $first);
 $smarty->assign("selected_fiche_id", $selected_fiche_id);
 
 $smarty->display("inc_ei_liste.tpl");
-
-?>

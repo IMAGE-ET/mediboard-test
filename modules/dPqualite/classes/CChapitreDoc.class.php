@@ -1,58 +1,78 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPqualite
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Qualite
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * Chapitre des documents qualité
+ * Class CChapitreDoc
+ */
 class CChapitreDoc extends CMbObject {
   // DB Table key
-  var $doc_chapitre_id = null;
+  public $doc_chapitre_id;
     
   // DB Fields
-  var $pere_id  = null;
-  var $group_id = null;
-  var $nom      = null;
-  var $code     = null;
+  public $pere_id;
+  public $group_id;
+  public $nom;
+  public $code;
   
   // Fwd refs
-  var $_ref_pere  = null;
-  var $_ref_group = null;
+  /** @var CChapitreDoc */
+  public $_ref_pere;
+  /** @var  CGroups */
+  public $_ref_group;
   
   // Back Refs
-  var $_ref_chapitres_doc = null;
+  /** @var  CChapitreDoc[] */
+  public $_ref_chapitres_doc;
   
   // Other fields
-  var $_level              = null;
-  var $_path               = null;
-  var $_chaps_and_subchaps = null;
-  
+  public $_level;
+  public $_path;
+  public $_chaps_and_subchaps;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'doc_chapitres';
     $spec->key   = 'doc_chapitre_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["chapitres_doc"] = "CChapitreDoc pere_id";
     $backProps["chapitres_ged"] = "CDocGed doc_chapitre_id";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["pere_id"]  = "ref class|CChapitreDoc";
     $specs["group_id"] = "ref class|CGroups";
     $specs["nom"]      = "str notNull maxLength|50";
     $specs["code"]     = "str notNull maxLength|10";
     return $specs;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = "[$this->code] $this->nom";
@@ -72,7 +92,10 @@ class CChapitreDoc extends CMbObject {
       $this->_ref_group->load($this->group_id);
     }
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadParent();
     $this->loadRefGroup();
@@ -103,7 +126,7 @@ class CChapitreDoc extends CMbObject {
   function loadChapsDeep($n = 0) {
     $this->_chaps_and_subchaps = array($this->_id);
     $this->_level = $n;
-    if(CAppUI::conf("dPqualite CChapitreDoc profondeur") > ($this->_level + 1)) {
+    if (CAppUI::conf("dPqualite CChapitreDoc profondeur") > ($this->_level + 1)) {
       $this->loadSections();
       foreach ($this->_ref_chapitres_doc as &$_chapitre) {
         $_chapitre->_ref_pere =& $this;
@@ -113,4 +136,3 @@ class CChapitreDoc extends CMbObject {
     return $this->_chaps_and_subchaps;
   }
 }
-?>

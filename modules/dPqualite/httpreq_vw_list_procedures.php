@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPqualite
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Qualite
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -26,16 +27,16 @@ $where[] = "annule = '0' OR annule IS NULL";
 $where[] = "doc_ged.group_id = '$group->_id' OR doc_ged.group_id IS NULL";
 $where["actif"]    = "= '1'";
 $where[] = "date = (SELECT max(date) FROM doc_ged_suivi d1 WHERE d1.doc_ged_id = doc_ged.doc_ged_id AND actif = '1')";
-if($theme_id){
+if ($theme_id) {
   $where["doc_theme_id"] = "= '$theme_id'";
 }
-if($chapitre_id){
+if ($chapitre_id) {
   $chapitre = new CChapitreDoc();
   $chapitre->load($chapitre_id);
   $chapitre->loadChapsDeep();
   $where["doc_ged.doc_chapitre_id"] = CSQLDataSource::prepareIn($chapitre->_chaps_and_subchaps);
 }
-if($keywords){
+if ($keywords) {
   $where["doc_ged.titre"] = "LIKE '%$keywords%'";
 }
 $ljoin = array();
@@ -44,36 +45,39 @@ $ljoin["doc_categories"] = "doc_ged.doc_categorie_id = doc_categories.doc_catego
 $ljoin["doc_chapitres"]  = "doc_ged.doc_chapitre_id = doc_chapitres.doc_chapitre_id";
 $group = "doc_ged.doc_ged_id";
 if ($sort_by == 'ref') {
-	$sort_way = "ASC";
-  if(CAppUI::conf("dPqualite CDocGed _reference_doc")) {
+  $sort_way = "ASC";
+  if (CAppUI::conf("dPqualite CDocGed _reference_doc")) {
     $sort_by = $group = "doc_categories.code, doc_chapitres.code, doc_ged.num_ref";
-  } else {
-  	$sort_by = $group = "doc_chapitres.code, doc_categories.code, doc_ged.num_ref";
+  }
+  else {
+    $sort_by = $group = "doc_chapitres.code, doc_categories.code, doc_ged.num_ref";
   }
 }
 else {
-	// Tri par date
-	$sort_way = "DESC";
-	$sort_by = " doc_ged_suivi.$sort_by";
+  // Tri par date
+  $sort_way = "DESC";
+  $sort_by = " doc_ged_suivi.$sort_by";
 }
 
-$procedure = new CDocGed;
+$procedure = new CDocGed();
 
-
+/** @var CDocGed[] $list_procedures */
 $list_procedures = $procedure->loadList($where, "$sort_by $sort_way", "$first,20", $group, $ljoin);
 
  
-foreach($list_procedures as &$curr_proc){
-	$curr_proc->loadRefs();
+foreach ($list_procedures as $curr_proc) {
+  $curr_proc->loadRefs();
   $curr_proc->loadLastActif();
 }
 
 $count_procedures = $procedure->countList($where, null, $ljoin);
 
-if ($count_procedures >= 20)
+if ($count_procedures >= 20) {
   $pages = range(0, $count_procedures, 20);
-else 
+}
+else {
   $pages = array();
+}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -84,5 +88,3 @@ $smarty->assign("pages", $pages);
 $smarty->assign("first", $first);
 
 $smarty->display("inc_list_procedures.tpl");
-
-?>

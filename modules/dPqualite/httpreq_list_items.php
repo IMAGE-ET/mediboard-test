@@ -1,11 +1,12 @@
-<?php /* $Id: ficheEi.class.php 10176 2010-09-27 12:35:33Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPqualite
- * @version $Revision: 10176 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Qualite
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $ei_categorie_id = CValue::get("categorie_id");

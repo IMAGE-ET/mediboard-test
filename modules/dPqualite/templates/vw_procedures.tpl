@@ -13,7 +13,7 @@ function refreshProceduresList() {
   var form = getForm("filter-procedures");
   var url = new Url("dPqualite", "httpreq_vw_list_procedures");
   $(form).getElements().each(function(e) {
-	  if (!e.name) return;
+    if (!e.name) return;
     url.addParam(e.name, $V(e));
   });
   url.requestUpdate('list_procedures');
@@ -78,12 +78,12 @@ Main.add(refreshProceduresList);
             <th><label for="chapitre_id" title="{{tr}}CDocGed-doc_chapitre_id-desc{{/tr}}">{{tr}}CDocGed-doc_chapitre_id{{/tr}}</label></th>
             <td>
               <select name="chapitre_id" onchange="resetFirst(); this.form.onsubmit();">
-        				<option value="0">&mdash; {{tr}}CChapitreDoc.all{{/tr}}</option>
-                {{include file=inc_options_chapitres.tpl chapitres=$listChapitres chapitre_id=$chapitre_id}}
+                <option value="0">&mdash; {{tr}}CChapitreDoc.all{{/tr}}</option>
+                {{mb_include module=qualite tmplate=inc_options_chapitres chapitres=$listChapitres chapitre_id=$chapitre_id}}
               </select>
             </td>
           <tr>
-            <th><label for="sort_by">Trier par</label>
+            <th><label for="sort_by">Trier par</label></th>
             <td>
               <select name="sort_by" onchange="resetFirst(); this.form.onsubmit();">
                 <option value="date" {{if $sort_by == "date"}}selected="selected"{{/if}}>{{tr}}CDocGedSuivi-date{{/tr}}</option>

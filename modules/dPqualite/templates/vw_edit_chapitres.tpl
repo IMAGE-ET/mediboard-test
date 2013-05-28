@@ -63,7 +63,7 @@
         {{/if}}
         {{foreach from=$listChapitres item=curr_chapitre}}
         <tr>
-          <td />
+          <td></td>
           <td>
             {{if $nav_chapitre->_level < $maxDeep}}
             <a href="?m=dPqualite&amp;tab=vw_edit_classification&amp;nav_chapitre_id={{$curr_chapitre->_id}}" title="Ouvrir">
@@ -90,7 +90,7 @@
     <td class="halfPane">
       <form name="editChapitre" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_chapitre_aed" />
-	  <input type="hidden" name="doc_chapitre_id" value="{{$chapitre->doc_chapitre_id}}" />
+    <input type="hidden" name="doc_chapitre_id" value="{{$chapitre->doc_chapitre_id}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>

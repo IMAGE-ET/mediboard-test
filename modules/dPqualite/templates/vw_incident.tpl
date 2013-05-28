@@ -139,15 +139,15 @@ Main.add(function () {
           <th colspan="4" class="category">{{mb_label object=$fiche field="evenements"}}</th>
         </tr>
        
-       	<!-- Choix de la catégorie -->
-      	{{if !count($listCategories)}}
+        <!-- Choix de la catégorie -->
+        {{if !count($listCategories)}}
         <tr>
-					<td colspan="10">
-					  <div class="small-warning">{{tr}}CEiCategorie.none{{/tr}}</div>
-					</td>
-					{{/if}}
-				</tr>
-				<tr>
+          <td colspan="10">
+            <div class="small-warning">{{tr}}CEiCategorie.none{{/tr}}</div>
+          </td>
+          {{/if}}
+        </tr>
+        <tr>
           <td colspan="2"rowspan="2" class="halfPane" id="listChoix"></td>
           <th> <label for="_cat_evenement" title="{{tr}}CFicheEi-_cat_evenement-desc{{/tr}}">{{tr}}CFicheEi-_cat_evenement{{/tr}}</label>
           </th>
@@ -156,11 +156,11 @@ Main.add(function () {
             <input type="hidden" name="_elemOpen" value="{{$firstdiv}}" />
             
             <select name="_cat_evenement" onchange="viewItems(this.value);">
-	            {{foreach from=$listCategories item=curr_evenement}}
-	            <option value="{{$curr_evenement->ei_categorie_id}}"{{if $curr_evenement->ei_categorie_id==$firstdiv}} selected="selected"{{/if}}>
-	              {{$curr_evenement->nom}}
-	            </option>
-	            {{/foreach}}
+              {{foreach from=$listCategories item=curr_evenement}}
+              <option value="{{$curr_evenement->ei_categorie_id}}"{{if $curr_evenement->ei_categorie_id==$firstdiv}} selected="selected"{{/if}}>
+                {{$curr_evenement->nom}}
+              </option>
+              {{/foreach}}
             </select>
           </td>
         </tr>
@@ -168,7 +168,7 @@ Main.add(function () {
         <tr>
          <td colspan="2">
            {{foreach from=$listCategories item=curr_evenement}}
-           <input type="hidden" name="_ItemsSel_cat_{{$curr_evenement->ei_categorie_id}}" value="{{$curr_evenement->checked}}" />
+           <input type="hidden" name="_ItemsSel_cat_{{$curr_evenement->ei_categorie_id}}" value="{{$curr_evenement->_checked}}" />
            <table class="tbl" id="Items{{$curr_evenement->ei_categorie_id}}" {{if $curr_evenement->ei_categorie_id!=$firstdiv}}style="display:none;"{{/if}}>
              {{counter start=0 skip=1 assign=curr_data}}
              {{foreach name=itemEvenement from=$curr_evenement->_ref_items item=curr_item}}
@@ -176,7 +176,7 @@ Main.add(function () {
              <tr>
              {{/if}}
                <td class="text">
-                 <input type="checkbox" name="{{$curr_item->ei_item_id}}" onclick="toggleCode(this.name, this.checked);" {{if $curr_item->checked}}checked="checked"{{/if}}/>
+                 <input type="checkbox" name="{{$curr_item->ei_item_id}}" onclick="toggleCode(this.name, this.checked);" {{if $curr_item->_checked}}checked="checked"{{/if}}/>
                  <label for="{{$curr_item->ei_item_id}}" id="titleItem{{$curr_item->ei_item_id}}" title="{{$curr_item->nom}}">{{$curr_item->nom}}</label>
                </td>
              {{if (($curr_data+1) is div by 3 || $smarty.foreach.itemEvenement.last)}}

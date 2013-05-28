@@ -80,9 +80,9 @@ function printIncident(ficheId){
 }
 
 function reloadItems(categorie_id){
-	var url = new Url("dPqualite", "httpreq_list_items");
-	url.addParam("categorie_id", categorie_id);
-	url.requestUpdate("items");
+  var url = new Url("dPqualite", "httpreq_list_items");
+  url.addParam("categorie_id", categorie_id);
+  url.requestUpdate("items");
 }
 
 var tab;
@@ -294,9 +294,9 @@ Main.add(function() {
         {{if !$fiche->qualite_date_validation}}
         <tr>
           <td colspan="2" class="button">
-			    	<script type="text/javascript">
-			    		Main.add(function() { Calendar.regField(getForm("ProcEditFrm").qualite_date_controle); } );
-			    	</script>
+            <script type="text/javascript">
+              Main.add(function() { Calendar.regField(getForm("ProcEditFrm").qualite_date_controle); } );
+            </script>
           
             <input type="hidden" name="qualite_user_id" value="{{$app->user_id}}" />
             <input type="hidden" name="qualite_date_controle" value="" />
@@ -331,9 +331,9 @@ Main.add(function() {
             <button type="button" class="tick" onclick="this.form.qualite_date_verification.name = 'qualite_date_controle'; this.form.submit();">
               {{tr}}button-CFicheEi-classer{{/tr}}
             </button>
-			    	<script type="text/javascript">
-			    		Main.add(function() { Calendar.regField(getForm("ProcEditFrm").qualite_date_verification); } );
-			    	</script>
+            <script type="text/javascript">
+              Main.add(function() { Calendar.regField(getForm("ProcEditFrm").qualite_date_verification); } );
+            </script>
             
           </td>
         </tr>

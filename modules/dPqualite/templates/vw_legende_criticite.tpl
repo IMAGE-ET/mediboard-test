@@ -10,9 +10,9 @@
 
 <table>
   <tr>
-    <th colspan="2" rowspan="2" />
+    <th colspan="2" rowspan="2"></th>
     <th colspan="{{$fiche->_specs.vraissemblance->_list|@count}}">
-    	{{mb_label object=$fiche field=vraissemblance}}
+      {{mb_label object=$fiche field=vraissemblance}}
     </th>
   </tr>
   <tr>
@@ -26,8 +26,8 @@
     <tr>
       {{if $smarty.foreach.gravite.first}}
       <th rowspan="{{$fiche->_specs.gravite->_list|@count}}" style="vertical-align: middle;" class="narrow">
-      	{{mb_label object=$fiche field=gravite}}
-      </th>	
+        {{mb_label object=$fiche field=gravite}}
+      </th>
       {{/if}}
       <th>{{$gravite}}</th>
       {{foreach from=$fiche->_specs.vraissemblance->_list item=vraissemblance}}

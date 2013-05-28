@@ -1,57 +1,62 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPqualite
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Qualite
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
 
-$doc_ged_id        = CValue::getOrSession("doc_ged_id",0);
-$procAnnuleVisible = CValue::getOrSession("procAnnuleVisible" , 0);
+$doc_ged_id        = CValue::getOrSession("doc_ged_id", 0);
+$procAnnuleVisible = CValue::getOrSession("procAnnuleVisible", 0);
 $lastactif         = CValue::get("lastactif", 0);
 
-$docGed = new CDocGed;
+$docGed = new CDocGed();
 $listCategories = array();
 $listThemes     = array();
 $listChapitres  = array();
-if(!$docGed->load($doc_ged_id) || $docGed->etat==0){
+if (!$docGed->load($doc_ged_id) || $docGed->etat==0) {
   // Ce document n'est pas valide
   $doc_ged_id = null;
   CValue::setSession("doc_ged_id");
-  $docGed = new CDocGed;
-}else{
+  $docGed = new CDocGed();
+}
+else {
   $docGed->loadLastActif();
   $docGed->loadRefs();
 
   // Liste des Catégories
-  $categorie = new CCategorieDoc;
-  $listCategories = $categorie->loadlist(null,"code");
+  $categorie = new CCategorieDoc();
+  $listCategories = $categorie->loadlist(null, "code");
   
   // Liste des Thèmes
-  $theme = new CThemeDoc;
+  $theme = new CThemeDoc();
   $where = array();
-  if($docGed->group_id) {
+  if ($docGed->group_id) {
     $where [] = "group_id = '$docGed->group_id' OR group_id IS NULL";
-  } else {
+  }
+  else {
     $where ["group_id"] = "IS NULL";
   }
-  $listThemes = $theme->loadlist($where,"group_id, nom");
+  $listThemes = $theme->loadlist($where, "group_id, nom");
   
   // Liste des Chapitres
-  $chapitre = new CChapitreDoc;
+  $chapitre = new CChapitreDoc();
   $where = array();
   $where ["pere_id"]  = "IS NULL";
-  if($docGed->group_id) {
+  if ($docGed->group_id) {
     $where [] = "group_id = '$docGed->group_id' OR group_id IS NULL";
-  } else {
+  }
+  else {
     $where ["group_id"] = "IS NULL";
   }
-  $listChapitres = $chapitre->loadlist($where,"group_id, code");
-  foreach($listChapitres as &$_chapitre) {
+  /** @var CChapitreDoc[] $listChapitres */
+  $listChapitres = $chapitre->loadlist($where, "group_id, code");
+  foreach ($listChapitres as &$_chapitre) {
     $_chapitre->loadChapsDeep(); 
   }
 }
@@ -59,9 +64,8 @@ if(!$docGed->load($doc_ged_id) || $docGed->etat==0){
 $docGed->loadLastEntry();
 
 // Procédure en Cours de demande
-$procDemande = new CDocGed;
-$procDemande = $procDemande->loadProcDemande();
-foreach($procDemande as $keyProc => $currProc){
+$procDemande = CDocGed::loadProcDemande();
+foreach ($procDemande as $keyProc => $currProc) {
   $procDemande[$keyProc]->loadRefs();
   $procDemande[$keyProc]->getEtatRedac();
   $procDemande[$keyProc]->loadLastActif();
@@ -69,32 +73,32 @@ foreach($procDemande as $keyProc => $currProc){
 }
 
 // Procédure non terminé Hors demande
-$procEnCours = new CDocGed;
-$procEnCours = $procEnCours->loadProcRedacAndValid();
-foreach($procEnCours as $keyProc => $currProc){
-  $procEnCours[$keyProc]->loadRefs();
-  $procEnCours[$keyProc]->getEtatValid();
-  $procEnCours[$keyProc]->loadLastEntry();
+$procEnCours = CDocGed::loadProcRedacAndValid();
+foreach ($procEnCours as $_proc) {
+  $_proc->loadRefs();
+  $_proc->getEtatValid();
+  $_proc->loadLastEntry();
 }
 
 // Procédures Terminée et Annulée
-$procTermine = new CDocGed;
 $where = array();
 $where["annule"] = "= '1'";
-$procTermine = $procTermine->loadList($where);
-if($procAnnuleVisible){
-  foreach($procTermine as $keyProc => $currProc){
-    $procTermine[$keyProc]->loadRefs();
-    $procTermine[$keyProc]->getEtatValid();
-    $procTermine[$keyProc]->loadLastEntry();
+/** @var CDocGed[] $procTermine */
+$procTermine = $docGed->loadList($where);
+if ($procAnnuleVisible) {
+  foreach ($procTermine as $_proc) {
+    $_proc->loadRefs();
+    $_proc->getEtatValid();
+    $_proc->loadLastEntry();
   }
 }
 
 $versionDoc = array();
-if($docGed->version){
+if ($docGed->version) {
   $versionDoc[] = ($docGed->version)+ 0.1;
   $versionDoc[] = intval($docGed->version)+1;
-}else{
+}
+else {
   $versionDoc[] = "1";
 }
 // Création du template
@@ -112,4 +116,4 @@ $smarty->assign("docGed"            , $docGed);
 $smarty->assign("versionDoc"        , $versionDoc);
 
 $smarty->display("vw_procvalid.tpl");
-?>
+

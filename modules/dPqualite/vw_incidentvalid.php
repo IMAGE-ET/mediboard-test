@@ -1,17 +1,18 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPqualite
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Qualite
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
 $user = CUser::get();
 
-$fiche_ei_id         = CValue::getOrSession("fiche_ei_id",null);
+$fiche_ei_id         = CValue::getOrSession("fiche_ei_id", null);
 $ficheAnnuleVisible  = CValue::getOrSession("ficheAnnuleVisible" , 0);
 $ficheTermineVisible = CValue::getOrSession("ficheTermineVisible" , 0);
 
@@ -26,13 +27,16 @@ $fiche = new CFicheEi();
 
 $droitFiche = !$fiche->load($fiche_ei_id);
 $droitFiche = $droitFiche || (!CCanDo::edit() && $fiche->user_id != $user->_id);
-$droitFiche = $droitFiche || (CCanDo::edit() && !CCanDo::admin() && $fiche->user_id != $user->_id && $fiche->service_valid_user_id != $user->_id);
+$droitFiche = $droitFiche || (CCanDo::edit() && !CCanDo::admin()
+    && $fiche->user_id != $user->_id
+    && $fiche->service_valid_user_id != $user->_id);
 
 // Liste des Catégories d'EI
-$listCategories = new CEiCategorie;
-$listCategories = $listCategories->loadList(null, "nom");
+$categorie = new CEiCategorie();
+/** @var CEiCategorie[] $listCategories */
+$listCategories = $categorie->loadList(null, "nom");
 
-if($droitFiche){
+if ($droitFiche) {
   // Cette fiche n'est pas valide
   $fiche_ei_id = null;
   CValue::setSession("fiche_ei_id");
@@ -42,46 +46,48 @@ else {
   $fiche->loadRefsFwd();
   $fiche->loadRefItems();
   
-  foreach($listCategories as $keyCat => $valueCat){
-    foreach($fiche->_ref_items as $keyItem => $valueItem){
-      if($fiche->_ref_items[$keyItem]->ei_categorie_id == $keyCat){
-        if(!isset($catFiche[$listCategories[$keyCat]->nom])){
-          $catFiche[$listCategories[$keyCat]->nom] = array();
+  foreach ($listCategories as $keyCat => $_categorie) {
+    foreach ($fiche->_ref_items as $keyItem => $_item) {
+      if ($_item->ei_categorie_id == $keyCat) {
+        if (!isset($catFiche[$_categorie->nom])) {
+          $catFiche[$_categorie->nom] = array();
         }
-        $catFiche[$listCategories[$keyCat]->nom][] = $fiche->_ref_items[$keyItem];
+        $catFiche[$_categorie->nom][] = $_item;
       }
     }
   }
 }
 
-$listUsersTermine = new CMediusers;
-$listUsersTermine = $listUsersTermine->loadListFromType();
+$user = new CMediusers();
+/** @var CMediusers[] $listUsersTermine */
+$listUsersTermine = $user->loadListFromType();
 
 // Chargement de la liste des Chef de services / utilisateur
 $module = CModule::getInstalled("dPqualite");
-$perm = new CPermModule;
+$perm = new CPermModule();
 
-$listUsersEdit = new CMediusers;
-$listUsersEdit = $listUsersEdit->loadListFromType(null, PERM_READ);
-foreach($listUsersEdit as $keyUser => $infoUser){
-  if(!$perm->getInfoModule("permission", $module->mod_id, PERM_EDIT, $keyUser)){
+/** @var CMediusers[] $listUsersEdit */
+$listUsersEdit = $user->loadListFromType(null, PERM_READ);
+foreach ($listUsersEdit as $keyUser => $_user) {
+  if (!$perm->getInfoModule("permission", $module->mod_id, PERM_EDIT, $keyUser)) {
     unset($listUsersEdit[$keyUser]);
   }
 }
 
+/** @var CEiItem[] $items */
 $items = array();
 
 if ($evenements) {
-	$where = array();
-	$where["ei_categorie_id"] = " = '$evenements'";
-	$item = new CEiItem;
-	$items = $item->loadList($where);
+  $where = array();
+  $where["ei_categorie_id"] = " = '$evenements'";
+  $item = new CEiItem();
+  $items = $item->loadList($where);
 }
 
 $selectedUser = new CMediusers();
 $selectedUser->load($selected_user_id);
 
-$filterFiche = new CFicheEi;
+$filterFiche = new CFicheEi();
 $filterFiche->elem_concerne = $elem_concerne;
 
 // Création du template

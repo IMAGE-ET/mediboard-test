@@ -16,7 +16,7 @@
 
 <table class="tbl">
   <tr>
-    {{if $can->edit}}<th />{{/if}}
+    {{if $can->edit}}<th></th>{{/if}}
     <th class="narrow">{{tr}}CDocGed-_reference_doc{{/tr}}</th>
     <th>V.</th>
     <th>{{tr}}CDocGed-titre{{/tr}}</th>

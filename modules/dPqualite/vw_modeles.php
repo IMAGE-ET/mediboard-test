@@ -1,43 +1,46 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPqualite
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Qualite
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
 $group = CGroups::loadCurrent();
 
-$doc_ged_id = CValue::getOrSession("doc_ged_id",0);
+$doc_ged_id = CValue::getOrSession("doc_ged_id", 0);
 $fileSel = new CFile;
 
-$docGed = new CDocGed;
-if(!$docGed->load($doc_ged_id) || $docGed->etat!=0){
+$docGed = new CDocGed();
+if (!$docGed->load($doc_ged_id) || $docGed->etat!=0) {
   // Ce document n'est pas valide ou n'est pas un modèle
   $doc_ged_id = null;
   CValue::setSession("doc_ged_id");
-  $docGed = new CDocGed;
-}else{
+  $docGed = new CDocGed();
+}
+else {
   $docGed->loadLastEntry();
-  if(!$docGed->_lastentry->doc_ged_suivi_id){
+  if (!$docGed->_lastentry->doc_ged_suivi_id) {
     // Ce document n'a pas de modèle
     $doc_ged_id = null;
     CValue::setSession("doc_ged_id");
     $docGed = new CDocGed;  
-  }else{
+  }
+  else {
     $docGed->_lastentry->loadFile();
   }
 }
 
-if(!$docGed->_lastentry){
+if (!$docGed->_lastentry) {
   $docGed->loadLastEntry();
 }
 
 // Modèles de procédure
-$modeles = new CDocGed;
+$modele = new CDocGed();
 $where = array();
 $where["doc_ged.etat"]   = "= '0'";
 $where["group_id"] = "= '$group->_id'";
@@ -45,14 +48,15 @@ $order = "titre ASC";
 $ljoin = array();
 $ljoin["doc_ged_suivi"] = "doc_ged.doc_ged_id = doc_ged_suivi.doc_ged_id";
 
-$modeles = $modeles->loadList($where, $order, null, null, $ljoin);
-foreach($modeles as $keyProc=>$currProc){
-  $modeles[$keyProc]->loadLastEntry();
+/** @var CDocGed[] $modeles */
+$modeles = $modele->loadList($where, $order, null, null, $ljoin);
+foreach ($modeles as $_proc) {
+  $_proc->loadLastEntry();
 }
 
 // Liste des Etablissements selon Permissions
-$etablissements = new CMediusers();
-$etablissements = $etablissements->loadEtablissements(PERM_READ);
+$user = new CMediusers();
+$etablissements = $user->loadEtablissements(PERM_READ);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -63,4 +67,4 @@ $smarty->assign("docGed"         , $docGed);
 $smarty->assign("fileSel"        , $fileSel);
 
 $smarty->display("vw_modeles.tpl");
-?>
+

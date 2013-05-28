@@ -283,6 +283,7 @@ $locales['CThemeDoc.create'] = 'Créer un nouveau thème';
 $locales['CThemeDoc.modify'] = 'Modifier le thème';
 $locales['CThemeDoc.none'] = 'thèmes de procédure';
 $locales['CThemeDoc.one'] = 'le thème';
+$locales['Identity'] = 'Identité';
 $locales['Modele'] = 'Modèle';
 $locales['_CChapitreDoc_classification_chap'] = 'Gestion des Chapitres';
 $locales['_CDocGed_DEMANDE'] = 'Procédure Demandée';

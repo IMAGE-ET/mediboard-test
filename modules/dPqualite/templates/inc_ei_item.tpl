@@ -33,7 +33,7 @@
     <td>{{mb_field object=$item field="nom"}}</td>
   </tr>
   <tr>
-  	<th>{{mb_label object=$item field="ei_categorie_id"}}</th>
+    <th>{{mb_label object=$item field="ei_categorie_id"}}</th>
     <td>
       <select name="ei_categorie_id" class="{{$item->_props.ei_categorie_id}}">
         <option value="">&mdash; {{tr}}CEiItem-ei_categorie_id-desc{{/tr}}</option>

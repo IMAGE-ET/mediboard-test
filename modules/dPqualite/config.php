@@ -19,5 +19,3 @@ $dPconfig["dPqualite"] = array (
     "profondeur" => 1,
   ),
 );
-
-?>

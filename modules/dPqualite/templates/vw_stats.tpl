@@ -84,8 +84,8 @@ function refreshGraph(size) {
 
 var graph = [];
 function drawGraph(id) {
-	titles[id] = titles[id] || $('stats-'+id).innerHTML;
-	$('stats-'+id).innerHTML = '';
+  titles[id] = titles[id] || $('stats-'+id).innerHTML;
+  $('stats-'+id).innerHTML = '';
   graph[id] = Flotr.draw(
     $('stats-'+id),
     graphs[id], Object.extend({
@@ -229,7 +229,7 @@ var filterForm = null;
            {{foreach from=$curr_evenement->_ref_items item=curr_item name=evt_item}}
              <tr>
                <td class="text">
-                 <input type="checkbox" name="{{$curr_item->ei_item_id}}" onclick="toggleEvt('{{$curr_evenement->ei_categorie_id}}', this.name, this.checked); " {{if $curr_item->checked}}checked="checked"{{/if}}/>
+                 <input type="checkbox" name="{{$curr_item->ei_item_id}}" onclick="toggleEvt('{{$curr_evenement->ei_categorie_id}}', this.name, this.checked); " {{if $curr_item->_checked}}checked="checked"{{/if}}/>
                  <label for="{{$curr_item->ei_item_id}}" id="titleItem{{$curr_item->ei_item_id}}" title="{{$curr_item->nom}}">{{$curr_item->nom}}</label>
                </td>
              </tr>

@@ -53,7 +53,7 @@
     <td class="halfPane">
       <form name="editThème" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_theme_aed" />
-	  <input type="hidden" name="doc_theme_id" value="{{$theme->_id}}" />
+    <input type="hidden" name="doc_theme_id" value="{{$theme->_id}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>

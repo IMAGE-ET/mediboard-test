@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPqualite
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Qualite
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 global $can, $m, $g;
@@ -35,28 +36,29 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
   function doStore() {
     global $doc_ged_id, $file_id, $_validation;
     
-    if($this->_obj->doc_ged_id){
+    if ($this->_obj->doc_ged_id) {
       // Procédure Existante --> Verification
 
-      //if($this->_old->etat == CDocGed::REDAC && $_validation === null){
-      if(isset($_FILES["formfile"])){
+      //if ($this->_old->etat == CDocGed::REDAC && $_validation === null) {
+      if (isset($_FILES["formfile"])) {
         // Test d'upload du fichier
-        $objFile = new CFileAddEdit;
+        $objFile = new CFileAddEdit();
         $objFile->redirect = null;
         $objFile->doIt();
-        if(!CAppUI::isMsgOK()){
+        if (!CAppUI::isMsgOK()) {
           // Erreur sur le fichier !
           if ($this->redirectError) {
             $this->redirect =& $this->redirectError;
           }
           $this->doRedirect();
-        }else{
+        }
+        else {
           $file_id = $objFile->_obj->file_id;
         }
       }      
     }
     
-    if($this->_old->group_id && $this->_obj->doc_chapitre_id && $this->_obj->doc_categorie_id && !$this->_old->num_ref){
+    if ($this->_old->group_id && $this->_obj->doc_chapitre_id && $this->_obj->doc_categorie_id && !$this->_old->num_ref) {
       // Nouvelle Procédure
       $this->_obj->version = 1;
       
@@ -68,12 +70,12 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
       $where["annule"]           = "= '0'";
       $order = "num_ref DESC";
         
-      if($this->_obj->num_ref) {
+      if ($this->_obj->num_ref) {
         // Numérotée manuellement
         $where["num_ref"] = "= '".$this->_obj->num_ref."'";
-        $sameNumRef = new CDocGed;
-        $sameNumRef->loadObject($where,$order);
-        if($sameNumRef->_id) {
+        $sameNumRef = new CDocGed();
+        $sameNumRef->loadObject($where, $order);
+        if ($sameNumRef->_id) {
           $this->_obj->num_ref = null;
         }
       }
@@ -81,16 +83,17 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
         // Pas de numéro : Récup n° dernier doc dans meme chapitre et catégorie
         $where["num_ref"] = "IS NOT NULL";
         $lastNumRef = new CDocGed;
-        $lastNumRef->loadObject($where,$order);
-        if(!$lastNumRef->_id){
+        $lastNumRef->loadObject($where, $order);
+        if (!$lastNumRef->_id) {
           $this->_obj->num_ref = 1;
-        }else{
+        }
+        else {
           $this->_obj->num_ref = $lastNumRef->num_ref + 1;
         }
       }
     }
 
-    if(!($this->_old->etat == CDocGed::VALID && $this->_obj->etat == CDocGed::TERMINE)){
+    if (!($this->_old->etat == CDocGed::VALID && $this->_obj->etat == CDocGed::TERMINE)) {
       // Annulation changement de version
       $this->_obj->version = $this->_old->version;
     }
@@ -100,7 +103,8 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
       if ($this->redirectError) {
         $this->redirect =& $this->redirectError;
       }
-    }else{
+    }
+    else {
       $this->redirect = null;
       $doc_ged_id = $this->_obj->doc_ged_id;
     } 
@@ -128,10 +132,10 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
 
   function doStore() {
     global $doc_ged_id, $file_id, $_validation;
-	
+
     $this->_obj->date       = CValue::post("date");
     $this->_obj->doc_ged_id = $doc_ged_id;
-    if($file_id !== null){
+    if ($file_id !== null) {
       $this->_obj->file_id  = $file_id;
     }
     if ($msg = $this->_obj->store()) {
@@ -146,9 +150,7 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
 $do1 = new CDoDocGedAddEdit;
 $do1->doIt();
 
-if(!$_validation){
+if (!$_validation) {
   $do2 = new CDoDocGedSuiviAddEdit;
   $do2->doIt();
 }
-
-?>

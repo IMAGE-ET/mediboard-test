@@ -10,7 +10,7 @@
 
 {{*1er niveau*}}
 {{foreach from=$chapitres item=_chapitre}}
-<option style="padding-left: 0em;" value="{{$_chapitre->_id}}" {{if $chapitre_id == $_chapitre->_id}}selected="selected"{{/if}} >
+<option style="padding-left: 0;" value="{{$_chapitre->_id}}" {{if $chapitre_id == $_chapitre->_id}}selected="selected"{{/if}} >
   {{$_chapitre->_view}}
 </option>
 {{*2ème niveau*}}

@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPqualite
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Qualite
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $doc_ged_id = 0;
@@ -47,20 +48,21 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
       if ($this->redirectError) {
         $this->redirect =& $this->redirectError;
       }
-      $objFile->delete();
-    }else{
+    }
+    else {
       $this->redirect = null;
       $doc_ged_id = $this->_obj->doc_ged_id;
-      if(isset($_FILES["formfile"]) && $_FILES["formfile"]["name"]!="") {
+      if (isset($_FILES["formfile"]) && $_FILES["formfile"]["name"]!="") {
         $objFile = new CFileAddEdit;
         $objFile->redirect = null;
         $objFile->doBind();
         $_POST["object_id"] = $doc_ged_id;
         $objFile->dostore();
-        if(CAppUI::isMsgOK()){
+        if (CAppUI::isMsgOK()) {
           $file_upload_ok = true;
           $file_id = $objFile->_obj->file_id;
-        }else{
+        }
+        else {
           // Erreur Upload
           if ($this->redirectError) {
             $this->redirect =& $this->redirectError;
@@ -101,7 +103,7 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
     $this->_obj->date       = CMbDT::dateTime();
     $this->_obj->remarques  = CAppUI::tr("Modele");
     $this->_obj->doc_ged_id = $doc_ged_id;
-    if($file_id !== null){
+    if ($file_id !== null) {
       $this->_obj->file_id  = $file_id;
       $this->_obj->doc_ged_suivi_id = null;
     }
@@ -116,16 +118,16 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
 
 
 $do1 = new CDoDocGedAddEdit;
-if(!CCanDo::admin()){
+if (!CCanDo::admin()) {
   $do1->doRedirect();
 }
 $do1->doIt();
 
-if($file_id){
+if ($file_id) {
   $do2 = new CDoDocGedSuiviAddEdit;
   $do2->doIt();
-}elseif($_firstModeleGed){
+}
+elseif ($_firstModeleGed) {
   $do1->dodelete();
   CAppUI::setMsg("CDocGed-msg-error_file", UI_MSG_ERROR );
 }
-?>

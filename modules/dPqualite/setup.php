@@ -1,13 +1,21 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage dPqualite
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Setup du module Qualité
+ *
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Qualite
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
- 
+
+/**
+ * Setup du module qualité
+ * Class CSetupdPqualite
+ */
 class CSetupdPqualite extends CSetup {
   
   function __construct() {
@@ -274,4 +282,3 @@ class CSetupdPqualite extends CSetup {
     $this->mod_version = "0.21";
   }
 }
-?>

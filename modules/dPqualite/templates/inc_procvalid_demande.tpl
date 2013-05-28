@@ -92,7 +92,7 @@
     <td>
       <select name="ged[doc_chapitre_id]" class="notNull {{$docGed->_props.doc_chapitre_id}}">
         <option value="">&mdash; {{tr}}CDocGed-doc_chapitre_id-desc{{/tr}}</option>
-        {{include file=inc_options_chapitres.tpl chapitres=$listChapitres chapitre_id=$docGed->doc_chapitre_id}}
+        {{mb_include module=qualite template=inc_options_chapitres chapitres=$listChapitres chapitre_id=$docGed->doc_chapitre_id}}
       </select>
     </td>
   </tr>
