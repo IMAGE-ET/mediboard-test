@@ -412,8 +412,25 @@ class CMediusers extends CPerson {
   }
 
   function updateFormFields() {
+    $this->loadRefUser();
     parent::updateFormFields();
+  }
 
+  function loadView() {
+    parent::loadView();
+    $this->isPraticien();
+    $this->loadRefFunction();
+    $this->loadRefSpecCPAM();
+    $this->loadRefDiscipline();
+    $this->loadNamedFile("identite.jpg");
+  }
+
+  /**
+   * Chargement de l'utilisateur système
+   *
+   * @return CUser
+   */
+  function loadRefUser() {
     $user = new CUser();
 
     // Usefull hack for mass preloading
@@ -466,15 +483,6 @@ class CMediusers extends CPerson {
     $this->mapPerson();
 
     $this->updateSpecs();
-  }
-
-  function loadView() {
-    parent::loadView();
-    $this->isPraticien();
-    $this->loadRefFunction();
-    $this->loadRefSpecCPAM();
-    $this->loadRefDiscipline();
-    $this->loadNamedFile("identite.jpg");
   }
 
   /**
@@ -1268,6 +1276,7 @@ class CMediusers extends CPerson {
     $order = "debut";
     $this->_ref_plages = $plages->loadList($where, $order);
     foreach ($this->_ref_plages as $plage) {
+      /** @var CPlageOp $plage */
       $plage->loadRefs(0);
       $plage->_unordered_operations = array();
       foreach ($plage->_ref_operations as $key_op => &$operation) {
@@ -1290,7 +1299,7 @@ class CMediusers extends CPerson {
     }
 
     // Interventions déplacés
-    $deplacees = new COperation;
+    $deplacees = new COperation();
     $ljoin = array();
     $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
     $where = array();
@@ -1301,14 +1310,15 @@ class CMediusers extends CPerson {
     $where["plagesop.chir_id"]      = "= '$this->_id'";
     $order = "operations.time_operation";
     $this->_ref_deplacees = $deplacees->loadList($where, $order, null, null, $ljoin);
-    foreach ($this->_ref_deplacees as &$deplacee) {
+    foreach ($this->_ref_deplacees as $deplacee) {
+      /** @var COperation $deplacee */
       $deplacee->loadRefChir();
       $deplacee->loadRefPatient();
       $deplacee->loadExtCodesCCAM();
     }
 
     // Urgences
-    $urgences = new COperation;
+    $urgences = new COperation();
     $where = array();
     $where["plageop_id"] = "IS NULL";
     $where["date"]       = "= '$date'";
@@ -1316,7 +1326,8 @@ class CMediusers extends CPerson {
     $where["annulee"]    = "= '0'";
 
     $this->_ref_urgences = $urgences->loadList($where);
-    foreach ($this->_ref_urgences as &$urgence) {
+    foreach ($this->_ref_urgences as $urgence) {
+      /** @var COperation $urgence */
       $urgence->loadRefChir();
       $urgence->loadRefPatient();
       $urgence->loadExtCodesCCAM();

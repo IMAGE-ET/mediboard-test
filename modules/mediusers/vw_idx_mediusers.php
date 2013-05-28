@@ -104,10 +104,12 @@ if ($order_col == "user_last_login") {
 }
 
 $total_mediuser = $mediuser->countList($where, null, $ljoin);
+/** @var CMediusers[] $mediusers */
 $mediusers = $mediuser->loadList($where, $order, "$page, $step", null, $ljoin);
 foreach ($mediusers as $_mediuser) {
   $_mediuser->loadRefFunction();
   $_mediuser->loadRefProfile();
+  $_mediuser->loadRefUser();
   $_mediuser->_ref_user->isLDAPLinked();
 }
 

@@ -26,11 +26,21 @@ $template        = CValue::getOrSession("template"       );
 
 // Where clause
 $where = null;
-if ($user_last_name ) $where["user_last_name"]  = "LIKE '$user_last_name%'";
-if ($user_first_name) $where["user_first_name"] = "LIKE '$user_first_name%'";
-if ($user_username  ) $where["user_username"]   = "LIKE '$user_username%'";
-if ($user_type      ) $where["user_type"]       = "= '$user_type'";
-if ($template != null)$where["template"]        = "= '$template'";
+if ($user_last_name) {
+  $where["user_last_name"]  = "LIKE '$user_last_name%'";
+}
+if ($user_first_name) {
+  $where["user_first_name"] = "LIKE '$user_first_name%'";
+}
+if ($user_username) {
+  $where["user_username"]   = "LIKE '$user_username%'";
+}
+if ($user_type) {
+  $where["user_type"]       = "= '$user_type'";
+}
+if ($template != null) {
+  $where["template"]        = "= '$template'";
+}
 
 // Query
 $users = null;

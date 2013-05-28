@@ -78,6 +78,7 @@
          {{mb_value object=$_user field=_user_last_login format=relative}}
        </label>
        {{/if}}
+       {{mb_include module=admin template=unlock _user=$_user->_ref_user}}
      </td>
           
      {{else}}
