@@ -231,7 +231,9 @@ class CMouvement400 extends CRecordSante400 {
 
   function countAvailable() {
     $record = new CRecordSante400();
-    $query = "SELECT COUNT(*) AS TOTAL FROM $this->base.$this->table";
+    $query = "SELECT COUNT(*) AS TOTAL FROM $this->base.$this->table
+      WHERE 1
+    ";
     $query.= $this->getFilterClause();
 
     $record->query($query);
