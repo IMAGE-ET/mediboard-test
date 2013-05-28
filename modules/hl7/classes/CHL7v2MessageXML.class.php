@@ -391,10 +391,14 @@ class CHL7v2MessageXML extends CMbXMLDocument {
    * @return void
    */
   function getNPAIdentifiers(DOMNode $node, &$data) {
-    if (($this->queryTextNode("CX.5", $node) == "RI") && 
-        ($this->queryTextNode("CX.4/HD.2", $node) == CAppUI::conf("hl7 assigning_authority_universal_id"))
-    ) {
+    if (CHL7v2Message::$handle_mode == "simple") {
       $data["NPA"] = $this->queryTextNode("CX.1", $node);
+    }
+    else {
+      $assigning_authority_id = CAppUI::conf("hl7 assigning_authority_universal_id");
+      if (($this->queryTextNode("CX.5", $node) == "RI") && ($this->queryTextNode("CX.4/HD.2", $node) == $assigning_authority_id)) {
+        $data["NPA"] = $this->queryTextNode("CX.1", $node);
+      }
     }
   }
 
