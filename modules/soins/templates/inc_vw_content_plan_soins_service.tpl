@@ -7,7 +7,8 @@ Main.add(function(){
 		manual_planif: "{{$manual_planif}}",
 	  bornes_composition_dossier:  {{$bornes_composition_dossier|@json}},
 		nb_postes: {{$bornes_composition_dossier|@count}},
-    nb_decalage: {{$nb_decalage}}
+    nb_decalage: {{$nb_decalage}},
+    plan_soin_id: 'plan_soin'
 	});
 
   $("plan_soin").show();

@@ -85,7 +85,8 @@ refreshLinePancarte = function(prescription_id){
     manual_planif: "{{$manual_planif}}",
     bornes_composition_dossier:  {{$bornes_composition_dossier|@json}},
     nb_postes: {{$bornes_composition_dossier|@count}},
-    nb_decalage: PlanSoins.save_nb_decalage ? PlanSoins.save_nb_decalage : {{$nb_decalage}}
+    nb_decalage: PlanSoins.save_nb_decalage ? PlanSoins.save_nb_decalage : {{$nb_decalage}},
+    plan_soin_id: 'plan_soin_pancarte'
   });
   var url = new Url("soins", "vw_pancarte_service");
 	url.addParam("prescription_id", prescription_id);
@@ -122,7 +123,8 @@ Main.add(function () {
       manual_planif: "{{$manual_planif}}",
       bornes_composition_dossier:  {{$bornes_composition_dossier|@json}},
       nb_postes: {{$bornes_composition_dossier|@count}},
-      nb_decalage: {{$nb_decalage}}
+      nb_decalage: {{$nb_decalage}},
+      plan_soin_id: 'plan_soin_pancarte'
     });
 
   PlanSoins.moveDossierSoin($('plan_soin_pancarte'));
@@ -201,7 +203,16 @@ Main.add(function () {
               <a href="#1" onclick="PlanSoins.showAfter()" class="nextPeriod" style="float: right">
                 <img src="images/icons/next.png" alt="&gt;" />
               </a>
-              <strong>{{$view_poste}} du {{$_date|date_format:"%d/%m"}}</strong>
+              <strong>
+                {{assign var=key_borne value="$_date-$moment_journee"}}
+                {{assign var=bornes_poste value=$bornes_composition_dossier.$key_borne}}
+                {{$view_poste}} du
+                {{if $bornes_poste.min|iso_date != $bornes_poste.max|iso_date}}
+                  {{$bornes_poste.min|date_format:"%d/%m"}} au {{$bornes_poste.max|date_format:"%d/%m"}}
+                {{else}}
+                  {{$_date|date_format:"%d/%m"}}
+                {{/if}}
+              </strong>
 						</th>
 			    {{/foreach}} 
 		    {{/foreach}}

@@ -176,7 +176,7 @@ Main.add(function(){
 	<tr>
 		<td style="width: 20%;" id="categories">
 			<form name="selectElts" action="?" method="get">
-				<!-- Checkbox vide permettant d'eviter que le $V considere qu'il faut retourner true ou false s'il n'y a qu'une seule checkbox -->
+        <!-- Checkbox vide permettant d'eviter que le $V considere qu'il faut retourner true ou false s'il n'y a qu'une seule checkbox -->
 				<input type="checkbox" name="elts" value="" style="display: none;"/>
                       
 				<table class="tbl" >
@@ -199,9 +199,10 @@ Main.add(function(){
 				        {{assign var=category value=$_element->_ref_category_prescription}}
 				        <tr>
 				          <td>
+                    <span style="float: right;"><strong>(<span id="countSelected_{{$category->_guid}}" class="counter">0</span>/{{$_elements|@count}})</strong></span>
 										<input type="checkbox" onclick="selectCategory(this);" value="{{$category->_guid}}" />
 			              <strong onclick="toggleElements('{{$category->_guid}}');">
-			              	<a href="#" style="display: inline;">{{$category}} (<span id="countSelected_{{$category->_guid}}" class="counter">0</span>/{{$_elements|@count}})</a>
+			              	<a href="#" style="display: inline;">{{$category}}</a>
 										</strong>
 				          </td>
 				        </tr>

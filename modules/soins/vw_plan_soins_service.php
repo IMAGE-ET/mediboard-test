@@ -18,18 +18,18 @@ $service = new CService();
 $service->load($service_id);
 
 // Si le service en session n'est pas dans l'etablissement courant
-if(CGroups::loadCurrent()->_id != $service->group_id){
+if (CGroups::loadCurrent()->_id != $service->group_id) {
   $service_id = "";
   $service = new CService();
 }
 
 // Chargement des configs de services
-if(!$service_id){
+if (!$service_id) {
   $service_id = "none";
 }
 $configs = CConfigService::getAllFor($service_id);
 
-if(!$nb_decalage){
+if (!$nb_decalage) {
   $nb_decalage = $configs["Nombre postes avant"];
 }
 
@@ -50,7 +50,7 @@ $affectations = $affectation->loadList($where, null, null, null, $ljoin);
 
 CMbObject::massLoadFwdRef($affectations, "sejour_id");
 
-foreach($affectations as $_affectation){
+foreach ($affectations as $_affectation) {
   $_affectation->loadRefLit()->loadCompleteView();
   $_affectation->_view = $_affectation->_ref_lit->_view;
   
@@ -85,10 +85,22 @@ CMbObject::massLoadFwdRef($elements, "category_prescription_id");
 
 // Chargement des catégories des elements
 $categories = array();
-foreach($elements as $_element){
-	$_element->loadRefCategory();
-	$_category = $_element->_ref_category_prescription;
-	$categories[$_category->chapitre][$_category->_id][$_element->_id] = $_element;
+$categories_by_names = array();
+foreach ($elements as $_element) {
+  $_element->loadRefCategory();
+  $_category = $_element->_ref_category_prescription;
+  $categories[$_category->chapitre][$_category->_id][$_element->_id] = $_element;
+  $categories_by_names[$_category->chapitre][$_category->nom] = $_category->_id;
+}
+
+// Tri par chapitre
+$sorted_category = array('med', 'med_elt', 'anapath', 'biologie', 'imagerie', 'consult', 'kine', 'soin', 'dm', 'dmi', 'ds');
+$categories = CMbArray::ksortByArray($categories, $sorted_category);
+
+// Tri par catégorie
+foreach ($categories_by_names as $key => $category) {
+  ksort($category);
+  $categories[$key] = CMbArray::ksortByArray($categories[$key], $category);
 }
 
 // Récupération de la liste des services
@@ -97,7 +109,7 @@ $where["externe"]   = "= '0'";
 $where["cancelled"] = "= '0'";
 $_service = new CService();
 $services = $_service->loadGroupList($where);
- 
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("service", $service);
