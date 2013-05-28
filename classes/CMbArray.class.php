@@ -490,4 +490,24 @@ abstract class CMbArray {
 
     return $result;
   }
+
+  /**
+   * Sort an array by using another array.
+   * The values of the $order must be the keys of the $array, in the right order.
+   *
+   * @param array $array The array to sort
+   * @param array $order The
+   *
+   * @return array The sorted array
+   */
+  static function ksortByArray($array, $order) {
+    $ordered = array();
+    foreach ($order as $key) {
+      if (array_key_exists($key, $array)) {
+        $ordered[$key] = $array[$key];
+        unset($array[$key]);
+      }
+    }
+    return $ordered;
+  }
 }
