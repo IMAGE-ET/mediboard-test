@@ -39,32 +39,32 @@
        </a>
      </td>
      
-		 <td class="text">
+     <td class="text">
        <a href="#{{$_user->_guid}}" onclick="showMediuser('{{$_user->_id}}', this)">
          {{mb_value object=$_user field=_user_last_name}}
        </a>
      </td>
      
-		 <td class="text">
+     <td class="text">
        <a href="#{{$_user->_guid}}" onclick="showMediuser('{{$_user->_id}}', this)">
          {{mb_value object=$_user field=_user_first_name}}
        </a>
      </td>
-		
+    
      <td class="text" style="text-align: center">
-     	{{mb_ditto name=function_view value=$_user->_ref_function->_view}}
-		 </td>
+       {{mb_ditto name=function_view value=$_user->_ref_function->_view}}
+     </td>
 
      <td class="text" style="text-align: center">
        {{assign var=type value=$_user->_user_type}}
        {{if array_key_exists($type, $utypes)}}
        {{mb_ditto name=type_name value=$utypes.$type}}
-			 {{/if}}
+       {{/if}}
      </td>
       
      <td class="text" style="text-align: center">
        {{mb_ditto name=profile_name value=$_user->_ref_profile->user_username}}
-		 </td>
+     </td>
      
      <td class="text">{{mb_value object=$_user field=remote}}</td>
      
