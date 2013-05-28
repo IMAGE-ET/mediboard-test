@@ -1348,8 +1348,9 @@ TESTS A EFFECTUER
   }
 
   function getPerm($permType) {
+    return $this->_ref_plageconsult->_ref_chir->getPerm($permType) && parent::getPerm($permType);
     // Délégation sur la plage
-    return $this->loadRefPlageConsult()->getPerm($permType);
+    //return $this->loadRefPlageConsult()->getPerm($permType);
   }
 
   function fillTemplate(&$template) {
