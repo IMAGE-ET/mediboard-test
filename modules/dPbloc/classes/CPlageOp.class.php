@@ -11,6 +11,10 @@
  * @link     http://www.mediboard.org
  */
 
+/**
+ * Plage opératoire (vacations au bloc)
+ * Class CPlageOp
+ */
 class CPlageOp extends CMbObject {
   const RANK_VALIDATE = 1;
   const RANK_REORDER  = 2;
@@ -78,6 +82,9 @@ class CPlageOp extends CMbObject {
   /** @var COperation[] */
   public $_unordered_operations;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'plagesop';
@@ -85,13 +92,19 @@ class CPlageOp extends CMbObject {
     $spec->xor["owner"] = array("spec_id", "chir_id");
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["operations"] = "COperation plageop_id";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["chir_id"]          = "ref class|CMediusers";
@@ -113,14 +126,23 @@ class CPlageOp extends CMbObject {
     $props["_type_repeat"]     = "enum list|simple|double|triple|quadruple|sameweek";
     return $props;
   }
-  
+
+  /**
+   * Chargement des back références
+   *
+   * @param bool|int $annulee Prise en compte des interventions annulées
+   *
+   * @return void
+   */
   function loadRefs($annulee = true) {
     $this->loadRefsFwd();
     $this->loadRefsBack($annulee);
   }
 
   /**
-   * @param bool $cache
+   * Chargement du praticien correspondant
+   *
+   * @param bool $cache Utilisation du cache
    *
    * @return CMediusers
    */
@@ -129,7 +151,9 @@ class CPlageOp extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Chargement de l'anesthésisite correspondant
+   *
+   * @param bool $cache Utilisation du cache
    *
    * @return CMediusers
    */
@@ -138,7 +162,9 @@ class CPlageOp extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Chargement de la spécialité correspondante
+   *
+   * @param bool $cache Utilisation du cache
    *
    * @return CFunctions
    */
@@ -147,7 +173,9 @@ class CPlageOp extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Chargement de la spacialité de remplacement correspondante
+   *
+   * @param bool $cache Utilisation du cache
    *
    * @return CFunctions
    */
@@ -156,14 +184,21 @@ class CPlageOp extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Chargement de la salle correspondante
+   *
+   * @param bool $cache Utilisation du cache
    *
    * @return CSalle
    */
   function loadRefSalle($cache = true) {
     return $this->_ref_salle = $this->loadFwdRef("salle_id", $cache);
   }
-  
+
+  /**
+   * Création de la vue de la plage
+   *
+   * @return void
+   */
   function makeView(){
     if ($this->spec_id) {
       $this->_view = $this->_ref_spec->_shortview;
@@ -178,6 +213,9 @@ class CPlageOp extends CMbObject {
     }  
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd($cache = false) {
     $this->loadRefChir($cache);
     $this->loadRefAnesth($cache);
@@ -185,7 +223,18 @@ class CPlageOp extends CMbObject {
     $this->loadRefSalle($cache);
     $this->makeView();
   }
-  
+
+  /**
+   * Chargement des interventions
+   *
+   * @param bool   $annulee   Prise en compte des interventions annulées
+   * @param string $order     Paramètre ORDER SQL
+   * @param bool   $sorted    Utilisation du paramètre ORDER SQL passé en paramètre
+   * @param null   $validated Uniquement les validées
+   * @param array  $where     Tableau de paramètres WHERE SQL
+   *
+   * @return COperation[]
+   */
   function loadRefsOperations(
       $annulee = true, $order = "rank, rank_voulu, horaire_voulu",$sorted = false, $validated = null, $where = array()
   ) {
@@ -254,6 +303,10 @@ class CPlageOp extends CMbObject {
   /** 
    * Mise à jour des horaires en fonction de l'ordre des operations, 
    * et mise a jour des rank, de sorte qu'ils soient consecutifs
+   *
+   * @param int $action
+   *
+   * @return bool
    */
   function reorderOp($action = null) {
     $this->completeField("debut", "temps_inter_op");
@@ -322,6 +375,11 @@ class CPlageOp extends CMbObject {
     return true;
   }
 
+  /**
+   * Calcul de l'horaire souhaité de l'intervention
+   *
+   * @return bool
+   */
   function guessHoraireVoulu() {
     if ($this->spec_id && !$this->unique_chir) {
       return false;
@@ -373,6 +431,9 @@ class CPlageOp extends CMbObject {
     return $msg;   
   }
 
+  /**
+   * @see parent::check()
+   */
   function check() {
     // Data checking
     $msg = null;
@@ -381,7 +442,10 @@ class CPlageOp extends CMbObject {
     }
     return $msg . parent::check();
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store() {
     $this->updatePlainFields();
     if ($msg = $this->hasCollisions()) {
@@ -395,7 +459,9 @@ class CPlageOp extends CMbObject {
     if (null !== $this->chir_id && $this->_id && !$this->unique_chir) {
       // Erreur si on est en multi-praticiens, qu'il y a des interventions et qu'on veut mettre un praticien
       if (count($oldPlage->_ref_operations) && $oldPlage->spec_id && $this->chir_id) {
-        $msg = "Impossible de selectionner un praticien : ".count($oldPlage->_ref_operations)." intervention(s) déjà présentes dans une plage multi-praticiens";
+        $msg = "Impossible de selectionner un praticien : ".
+          count($oldPlage->_ref_operations).
+          " intervention(s) déjà présentes dans une plage multi-praticiens";
         return $msg;
       }
     }
@@ -435,6 +501,9 @@ class CPlageOp extends CMbObject {
     return parent::store();
   }
 
+  /**
+   * @see parent::delete()
+   */
   function delete() {
     $this->completeField("salle_id", "date");
     $this->loadRefsOperations();
@@ -450,17 +519,25 @@ class CPlageOp extends CMbObject {
 
     return parent::delete();
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_duree_prevue = CMbDT::timeRelative($this->debut, $this->fin);
     $this->_view = "Plage du ".$this->getFormattedValue("date");
-  }  
-  
+  }
+
   /**
    * find the next plageop according
    * to the current plageop parameters
    * return the number of weeks jumped
+   *
+   * @param int $init_salle_id              Salle initiale
+   * @param int $init_chir_id               Chirurgien intial
+   * @param int $init_spec_id               Spécialité intiale
+   * @param int $init_secondary_function_id Spécialité secondaire initiale
    *
    * @return int
    */
@@ -562,6 +639,15 @@ class CPlageOp extends CMbObject {
     return $week_jumped;
   }
 
+  /**
+   * Récupération du taux d'occupation de la plage
+   * et du nombre d'interventions
+   *
+   * @param string $addedTime      Durée ajouté manuellement
+   * @param bool   $useTimeInterOp Utilisation des durées ajoutées entre chaque intervention
+   *
+   * @return void
+   */
   function getNbOperations($addedTime = null, $useTimeInterOp = true) {
     if ($useTimeInterOp == true) {
       $select_time = "\nSUM(TIME_TO_SEC(`operations`.`temp_operation`) + TIME_TO_SEC(`plagesop`.`temps_inter_op`)) AS time";
@@ -617,7 +703,10 @@ class CPlageOp extends CMbObject {
     }
     
   }
-  
+
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     if (!$this->_ref_salle) {
       $this->loadRefSalle();

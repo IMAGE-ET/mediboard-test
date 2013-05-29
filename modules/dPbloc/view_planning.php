@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -45,9 +45,6 @@ $group = CGroups::loadCurrent();
 
 // On sort les plages opératoires et les interventions hors plage
 //  date - salle - horaires
-
-$plagesop   = new CPlageOp();
-$operation = new COperation();
 
 $numOp = 0;
 
@@ -144,8 +141,9 @@ $wherePlagesop["plagesop.salle_id"] = CSQLDataSource::prepareIn(array_keys($list
 
 $orderPlagesop = "date, salle_id, debut";
 
+$plageop   = new CPlageOp();
 /** @var CPlageOp[] $plagesop */
-$plagesop = $plagesop->loadList($wherePlagesop, $orderPlagesop);
+$plagesop = $plageop->loadList($wherePlagesop, $orderPlagesop);
 
 $ljoin = array();
 $ljoin["sejour"] = "operations.sejour_id = sejour.sejour_id";
@@ -179,6 +177,7 @@ if ($filterSejour->type) {
 
 $orderOperations = "date, salle_id, time_operation, chir_id";
 
+$operation = new COperation();
 /** @var COperation[] $operations */
 $operations = $operation->loadList($whereOperations, $orderOperations, null, null, $ljoin);
 CMbObject::massLoadFwdRef($operations, "plageop_id");

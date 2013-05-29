@@ -73,6 +73,7 @@ foreach ($listDays as $keyDate => $valDate) {
   
   // Détermination des bornes de chaque plage
   foreach ($listPlages[$keyDate] as $plage) {
+    /** @var CPlageOp $plage */
     $plage->loadRefsFwd();
     $plage->loadRefsNotes();
     $plage->_ref_chir->loadRefsFwd();

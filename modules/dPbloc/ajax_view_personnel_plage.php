@@ -62,7 +62,7 @@ foreach ($affectations_plage["op"] as $key => $affectation) {
   }
 }
 foreach ($affectations_plage["op_panseuse"] as $key => $affectation) {
-  if(array_key_exists($affectation->personnel_id, $listPersPanseuse)){
+  if (array_key_exists($affectation->personnel_id, $listPersPanseuse)) {
     unset($listPersPanseuse[$affectation->personnel_id]);
   }
 }

@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -49,7 +49,7 @@ if ($del) {
       if ($msg = $obj->delete()) {
         CAppUI::setMsg("Plage non supprimée", UI_MSG_ERROR);
         CAppUI::setMsg("Plage du $obj->date: $msg", UI_MSG_ERROR);
-      } 
+      }
       else {
         CAppUI::setMsg("Plage supprimée", UI_MSG_OK);
       }
@@ -90,7 +90,7 @@ else {
       if ($msg = $obj->store()) {
         CAppUI::setMsg("Plage non créée", UI_MSG_ERROR);
         CAppUI::setMsg("Plage du $obj->date: $msg", UI_MSG_ERROR);
-      } 
+      }
       else {
         CAppUI::setMsg("Plage créée", UI_MSG_OK);
       }

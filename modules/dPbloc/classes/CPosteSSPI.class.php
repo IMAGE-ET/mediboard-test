@@ -11,6 +11,10 @@
  * @link     http://www.mediboard.org
  */
 
+/**
+ * Poste de SSPI (lit en salle de reveil)
+ * Class CPosteSSPI
+ */
 class CPosteSSPI extends CMbObject {
   public $poste_sspi_id;
   
@@ -23,14 +27,20 @@ class CPosteSSPI extends CMbObject {
   
   /** @var CBlocOperatoire */
   public $_ref_bloc;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'poste_sspi';
     $spec->key   = 'poste_sspi_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["bloc_id"]  = "ref class|CBlocOperatoire";
@@ -38,13 +48,19 @@ class CPosteSSPI extends CMbObject {
     $props["nom"]      = "str notNull seekable";
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["operations"] = "COperation poste_sspi_id";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     
@@ -52,6 +68,8 @@ class CPosteSSPI extends CMbObject {
   }
 
   /**
+   * Chargement du bloc opératoire concerné
+   *
    * @return CBlocOperatoire
    */
   function loadRefBloc() {

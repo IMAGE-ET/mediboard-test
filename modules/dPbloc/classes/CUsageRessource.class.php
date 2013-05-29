@@ -11,6 +11,10 @@
  * @link     http://www.mediboard.org
  */
 
+/**
+ * Utilisation des ressources materielles au bloc
+ * Class CUsageRessource
+ */
 class CUsageRessource extends CMbObject{
   public $usage_ressource_id;
 
@@ -22,11 +26,17 @@ class CUsageRessource extends CMbObject{
   /** @var CRessourceMaterielle */
   public $_ref_ressource;
 
+  /** @var  CBesoinRessource */
+  public $_ref_besoin;
+
   // Form Fields
   public $_debut_offset;
   public $_fin_offset;
   public $_width;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'usage_ressource';
@@ -34,6 +44,9 @@ class CUsageRessource extends CMbObject{
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -45,6 +58,8 @@ class CUsageRessource extends CMbObject{
   }
 
   /**
+   * Chargement de la ressource materielle
+   *
    * @return CRessourceMaterielle
    */
   function loadRefRessource() {
@@ -52,6 +67,8 @@ class CUsageRessource extends CMbObject{
   }
 
   /**
+   * Chargement du besoin de la ressource
+   *
    * @return CBesoinRessource
    */
   function loadRefBesoin() {

@@ -11,6 +11,10 @@
  * @link     http://www.mediboard.org
  */
 
+/**
+ * Besoin en ressource materielle
+ * Class CBesoinRessource
+ */
 class CBesoinRessource extends CMbObject {
   public $besoin_ressource_id;
 
@@ -38,6 +42,9 @@ class CBesoinRessource extends CMbObject {
   public $_debut_offset;
   public $_fin_offset;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'besoin_ressource';
@@ -46,6 +53,9 @@ class CBesoinRessource extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["type_ressource_id"] = "ref class|CTypeRessource notNull";
@@ -55,6 +65,9 @@ class CBesoinRessource extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["usages"] = "CUsageRessource besoin_ressource_id";
@@ -62,6 +75,8 @@ class CBesoinRessource extends CMbObject {
   }
 
   /**
+   * Chargement du type de ressource correspondant
+   *
    * @return CTypeRessource
    */
   function loadRefTypeRessource() {
@@ -69,6 +84,8 @@ class CBesoinRessource extends CMbObject {
   }
 
   /**
+   * Chargement de l'intervention correspondante
+   *
    * @return COperation
    */
   function loadRefOperation() {
@@ -76,6 +93,8 @@ class CBesoinRessource extends CMbObject {
   }
 
   /**
+   * Chargement du protocole correspondant
+   *
    * @return CProtocole
    */
   function loadRefProtocole() {
@@ -83,6 +102,8 @@ class CBesoinRessource extends CMbObject {
   }
 
   /**
+   * Chargement de l'utilisation de la ressource correspondante
+   *
    * @return CUsageRessource
    */
   function loadRefUsage() {

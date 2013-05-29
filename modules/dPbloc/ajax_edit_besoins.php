@@ -15,9 +15,10 @@ $type      = CValue::get("type");
 $object_id = CValue::get("object_id");
 $usage     = CValue::get("usage", 0);
 
-$besoins = new CBesoinRessource;
-$besoins->$type = $object_id;
-$besoins = $besoins->loadMatchingList();
+$besoin = new CBesoinRessource();
+$besoin->$type = $object_id;
+/** @var CBesoinRessource[] $besoins */
+$besoins = $besoin->loadMatchingList();
 CMbObject::massLoadFwdRef($besoins, "type_ressource_id");
 
 $operation = new COperation;

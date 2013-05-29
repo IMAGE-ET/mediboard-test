@@ -11,6 +11,10 @@
  * @link     http://www.mediboard.org
  */
 
+/**
+ * Types de ressource materielles utilisées au bloc opératoire
+ * Class CTypeRessource
+ */
 class CTypeRessource extends CMbObject{
   public $type_ressource_id;
   
@@ -23,14 +27,20 @@ class CTypeRessource extends CMbObject{
   
   /** @var CRessourceMaterielle */
   public $_ref_ressources;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'type_ressource';
     $spec->key   = 'type_ressource_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["group_id"]    = "ref notNull class|CGroups";
@@ -38,7 +48,10 @@ class CTypeRessource extends CMbObject{
     $props["description"] = "text helped";
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["ressources_materielles"]  = "CRessourceMaterielle type_ressource_id";
@@ -46,7 +59,10 @@ class CTypeRessource extends CMbObject{
     
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     
@@ -54,6 +70,8 @@ class CTypeRessource extends CMbObject{
   }
 
   /**
+   * Chargement des ressources materielles correspondantes
+   *
    * @return CRessourceMaterielle[]
    */
   function loadRefsRessources() {

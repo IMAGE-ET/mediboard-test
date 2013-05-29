@@ -15,7 +15,7 @@ CCanDo::checkEdit();
 
 $ressource_id = CValue::getOrSession("ressource_id");
 
-$ressource_materielle = new CRessourceMaterielle;
+$ressource_materielle = new CRessourceMaterielle();
 
 $where = array();
 $where["ressource_materielle.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
@@ -23,6 +23,7 @@ $where["ressource_materielle.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $ljoin = array();
 $ljoin["type_ressource"] = "ressource_materielle.type_ressource_id = type_ressource.type_ressource_id";
 
+/** @var CRessourceMaterielle[] $ressources_materielles */
 $ressources_materielles = $ressource_materielle->loadList($where, "type_ressource.libelle", null, null, $ljoin);
 
 CMbObject::massLoadFwdRef($ressources_materielles, "type_ressource_id");

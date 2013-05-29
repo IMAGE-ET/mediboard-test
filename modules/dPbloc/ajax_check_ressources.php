@@ -12,15 +12,17 @@
 $type      = CValue::get("type");
 $object_id = CValue::get("object_id");
 
-$besoins = new CBesoinRessource();
-$besoins->$type = $object_id;
-$besoins = $besoins->loadMatchingList();
+$besoin = new CBesoinRessource();
+$besoin->$type = $object_id;
+/** @var CBesoinRessource[] $besoins */
+$besoins = $besoin->loadMatchingList();
 
 // Vert : tout va bien
 $color = "";
 
 if (count($besoins)) {
   $color = "0a0";
+  /** @var COperation $operation */
   $operation = reset($besoins)->loadRefOperation();
   $operation->loadRefPlageOp();
   $deb_op = $operation->_datetime;

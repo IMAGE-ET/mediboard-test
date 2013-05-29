@@ -19,13 +19,14 @@ if ($deb > $fin) {
   list($deb, $fin) = array($fin, $deb);
 }
 
-$plage = new CPlageOp;
+$plage = new CPlageOp();
 
 $where = array();
 
 $where["salle_id"] = "= '$salle_id'";
 $where["date"]     = "BETWEEN '$deb' AND '$fin'";
 
+/** @var CPlageOp[] $plages */
 $plages = $plage->loadList($where);
 
 foreach ($plages as $_key => $_plage) {

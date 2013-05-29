@@ -11,6 +11,10 @@
  * @link     http://www.mediboard.org
  */
 
+/**
+ * Blocage dans le temps d'une salle de bloc
+ * Class CBlocage
+ */
 class CBlocage extends CMbObject {
   public $blocage_id;
 
@@ -25,6 +29,9 @@ class CBlocage extends CMbObject {
   /** @var CSalle */
   public $_ref_salle;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'blocage';
@@ -32,6 +39,9 @@ class CBlocage extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["salle_id"] = "ref class|CSalle notNull";
@@ -41,6 +51,9 @@ class CBlocage extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
@@ -48,6 +61,8 @@ class CBlocage extends CMbObject {
   }
 
   /**
+   * Chargement de la salle concernée
+   *
    * @return CSalle
    */
   function loadRefSalle() {

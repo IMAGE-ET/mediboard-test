@@ -48,7 +48,7 @@ while ($date_temp < $date_max) {
 }
 
 $operation->_debut_offset = CMbDate::position($debut_op, $date_min, "1hour");
-$operation->_fin_offset   = CMbDate::position($min_fin, $date_min, "1hour");
+$operation->_fin_offset   = CMbDate::position($min_fin_op, $date_min, "1hour");
 $operation->_width        = $operation->_fin_offset - $operation->_debut_offset;
 
 

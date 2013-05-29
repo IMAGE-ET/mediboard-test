@@ -37,7 +37,7 @@ foreach ($listBlocs as $_bloc) {
   $_bloc->loadRefsSalles();
   $_bloc->loadRefsAlertesIntervs();
 
-  foreach ($_bloc->_alertes_intervs  as &$_alerte) {
+  foreach ($_bloc->_alertes_intervs  as $_alerte) {
     $nbAlertes++;
     $_alerte->loadTargetObject();
     $_alerte->_ref_object->loadExtCodesCCAM();

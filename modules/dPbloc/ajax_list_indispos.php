@@ -19,8 +19,9 @@ $date_max = CMbDT::date("-1 day", CMbDT::date("+1 month", $date_min));
 
 $group_id = CGroups::loadCurrent()->_id;
 
-$type_ressource = new CTypeRessource;
+$type_ressource = new CTypeRessource();
 $where = array("group_id" => "= '$group_id'");
+/** @var CTypeRessource[] $types_ressources */
 $types_ressources = $type_ressource->loadList($where);
 
 $ressources = array();

@@ -11,6 +11,10 @@
  * @link     http://www.mediboard.org
  */
 
+/**
+ * Ressource materielle utilisée pour les interventions
+ * Class CRessourceMaterielle
+ */
 class CRessourceMaterielle extends CMbObject {
   public $ressource_materielle_id;
 
@@ -36,6 +40,9 @@ class CRessourceMaterielle extends CMbObject {
   /** @var CBesoinRessource[] */
   public $_ref_besoins;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'ressource_materielle';
@@ -43,6 +50,9 @@ class CRessourceMaterielle extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props['group_id']          = "ref class|CGroups notNull";
@@ -54,6 +64,9 @@ class CRessourceMaterielle extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["indispos"] = "CIndispoRessource ressource_materielle_id";
@@ -61,12 +74,18 @@ class CRessourceMaterielle extends CMbObject {
     return $backProps;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
     $this->_view = $this->libelle;
   }
 
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     parent::updatePlainFields();
 
@@ -76,6 +95,8 @@ class CRessourceMaterielle extends CMbObject {
   }
 
   /**
+   * Chargement du type de ressource correspondant
+   *
    * @return CTypeRessource
    */
   function loadRefTypeRessource() {
@@ -83,6 +104,8 @@ class CRessourceMaterielle extends CMbObject {
   }
 
   /**
+   * Chargement des utilisations reliées
+   *
    * @param string $from Date min
    * @param string $to   Date max
    *
@@ -139,9 +162,17 @@ class CRessourceMaterielle extends CMbObject {
     return $this->_ref_usages = $this->loadBackRefs("usages");
   }
 
+  /**
+   * Chargement des périodes d'indisponibilité
+   *
+   * @param string $from date de début
+   * @param string $to   date de fin
+   *
+   * @return CIndispoRessource[]
+   */
   function loadRefsIndispos($from = null, $to = null) {
     if ($from && $to) {
-      $indispo = new CIndispoRessource;
+      $indispo = new CIndispoRessource();
       $where = array();
       $ljoin = array();
 
@@ -163,6 +194,14 @@ class CRessourceMaterielle extends CMbObject {
     return $this->_ref_indispos = $this->loadBackRefs("indispos");
   }
 
+  /**
+   * Chargement des besoins
+   *
+   * @param string $from Date de début
+   * @param string $to   Date de fin
+   *
+   * @return CBesoinRessource[]
+   */
   function loadRefsBesoins($from, $to) {
     if (!$from && !$to) {
       return $this->_ref_besoins = array();

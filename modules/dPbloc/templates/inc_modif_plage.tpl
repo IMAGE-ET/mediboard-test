@@ -33,7 +33,7 @@
   <input type="hidden" name="plageop_id" value="{{$plage->_id}}" />
   <input type="hidden" name="_repeat" value="1" />
   <input type="hidden" name="_type_repeat" value="simple" />
-  <table le class="form">
+  <table class="form">
     <tr>
       <th>{{mb_label object=$plage field="debut"}}</th>
       <td>{{mb_field object=$plage field="debut" hidden=true onchange="submitFormAjax(this.form, 'systemMsg', {onComplete: reloadModifPlage});"}}</td>

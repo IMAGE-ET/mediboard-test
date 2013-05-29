@@ -11,6 +11,10 @@
  * @link     http://www.mediboard.org
  */
 
+/**
+ * Plage d'indisponibilité de ressources materielles
+ * Class CIndispoRessource
+ */
 class CIndispoRessource extends CMbObject {
   public $indispo_ressource_id;
 
@@ -30,6 +34,9 @@ class CIndispoRessource extends CMbObject {
   public $_fin_offset;
   public $_width;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'indispo_ressource';
@@ -37,6 +44,9 @@ class CIndispoRessource extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["ressource_materielle_id"] = "ref notNull class|CRessourceMaterielle autocomplete|libelle";
@@ -46,6 +56,9 @@ class CIndispoRessource extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = "Indisponibilité du " . CMbDT::dateToLocale($this->deb);
@@ -55,6 +68,8 @@ class CIndispoRessource extends CMbObject {
   }
 
   /**
+   * Chargement de la ressource materielle correspondante
+   *
    * @return CRessourceMaterielle
    */
   function loadRefRessource() {

@@ -7,10 +7,14 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
+/**
+ * Bloc opératoire
+ * Class CBlocOperatoire
+ */
 class CBlocOperatoire extends CMbObject {
   public $bloc_operatoire_id;
 
@@ -29,12 +33,15 @@ class CBlocOperatoire extends CMbObject {
   /** @var CGroups */
   public $_ref_group;
 
-  /** @var  CAlert */
+  /** @var  CAlert[] */
   public $_alertes_intervs;
 
   // Form field
   public $_date_min;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'bloc_operatoire';
@@ -42,6 +49,9 @@ class CBlocOperatoire extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["salles"]                  = "CSalle bloc_id";
@@ -55,6 +65,9 @@ class CBlocOperatoire extends CMbObject {
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["group_id"]    = "ref notNull class|CGroups";
@@ -66,6 +79,9 @@ class CBlocOperatoire extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;
@@ -73,6 +89,12 @@ class CBlocOperatoire extends CMbObject {
 
   /**
    * Load list overlay for current group
+   *
+   * @param array  $where   Tableau de clauses WHERE MYSQL
+   * @param string $order   paramètre ORDER SQL
+   * @param null   $limit   paramètre LIMIT SQL
+   * @param null   $groupby paramètre GROUP BY SQL
+   * @param array  $ljoin   Tableau de clauses LEFT JOIN SQL
    *
    * @return self[]
    */
@@ -89,6 +111,8 @@ class CBlocOperatoire extends CMbObject {
   }
 
   /**
+   * Chargement de l'établissement correspondant
+   *
    * @return CGroups
    */
   function loadRefGroup(){
@@ -96,11 +120,16 @@ class CBlocOperatoire extends CMbObject {
     return $this->_ref_group = $group->getCached($this->group_id);
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd(){
     return $this->loadRefGroup();
   }
 
   /**
+   * Chargement des salles du bloc
+   *
    * @return CSalle[]
    */
   function loadRefsSalles() {
@@ -108,15 +137,18 @@ class CBlocOperatoire extends CMbObject {
   }
 
   /**
+   * Chargement des salles du bloc
+   *
    * @return CSalle[]
    * @deprecated use loadRefsSalles instead
    */
-
   function loadRefsBack() {
     return $this->loadRefsSalles();
   }
 
   /**
+   * Chargement des alertes sur le bloc
+   *
    * @return CAlert[]
    */
   function loadRefsAlertesIntervs() {

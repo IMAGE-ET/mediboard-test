@@ -11,6 +11,10 @@
  * @link     http://www.mediboard.org
  */
 
+/**
+ * Salle de bloc opératoire
+ * Class CSalle
+ */
 class CSalle extends CMbObject {
   public $salle_id;
   
@@ -33,10 +37,16 @@ class CSalle extends CMbObject {
 
   /** @var COperation[] */
   public $_ref_deplacees;
+
+  /** @var  CAlert[] */
+  public $_alertes_intervs;
   
   // Form fields
   public $_blocage = array();
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'sallesbloc';
@@ -44,7 +54,10 @@ class CSalle extends CMbObject {
     $spec->measureable = true;
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["operations"]   = "COperation salle_id";
@@ -56,7 +69,10 @@ class CSalle extends CMbObject {
     $backProps["check_list_type_links"] = "CDailyCheckListTypeLink object_id";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["bloc_id"] = "ref notNull class|CBlocOperatoire";
@@ -65,7 +81,10 @@ class CSalle extends CMbObject {
     $props["dh"]      = "bool notNull default|0";
     return $props;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
@@ -97,6 +116,9 @@ class CSalle extends CMbObject {
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     $this->loadRefBloc();
     return $this->_ref_bloc->getPerm($permType) && parent::getPerm($permType);
@@ -110,7 +132,10 @@ class CSalle extends CMbObject {
   function loadRefBloc() {
     return $this->_ref_bloc = $this->loadFwdRef("bloc_id", true);
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd(){
     $this->loadRefBloc();
   }
@@ -205,6 +230,8 @@ class CSalle extends CMbObject {
   }
 
   /**
+   * Récupération des alertes sur les interventions de la salle
+   *
    * @return CAlert[]
    */
   function loadRefsAlertesIntervs() {
@@ -224,7 +251,9 @@ class CSalle extends CMbObject {
   }
 
   /**
-   * @param string $date
+   * Récupération des blocages de la salle
+   *
+   * @param string $date Date de vérification des blocages
    *
    * @return CBlocage[]
    */
@@ -243,8 +272,10 @@ class CSalle extends CMbObject {
   }
 
   /**
-   * @param int $salle_id
-   * @param int $bloc_id
+   * Récupération des salles activers pour les stats
+   *
+   * @param int $salle_id Limitation du retour à une seule salle
+   * @param int $bloc_id  Limitation du retour à un seul bloc
    *
    * @return self[]
    */

@@ -16,7 +16,7 @@ $can->needsRead();
 
 $operation_id  = CValue::getOrSession("operation_id", null);
 
-$operation = new COperation;
+$operation = new COperation();
 $operation->load($operation_id);
 $operation->loadRefsAnesthPerops();
 $operation->loadRefsFwd();
@@ -30,6 +30,7 @@ $sejour =& $operation->_ref_sejour;
 $sejour->loadRefsFwd();
 $sejour->loadRefPrescriptionSejour();
 
+/** @var CAdministration[] $administrations */
 $administrations = array();
 $prescription_id = null;
 if (CModule::getActive("dPprescription")) {
@@ -37,10 +38,13 @@ if (CModule::getActive("dPprescription")) {
   $administrations = array();
   if ($prescription_id) {
     $administration = new CAdministration();
-    $ljoin["prescription_line_medicament"] = "prescription_line_medicament.prescription_line_medicament_id = administration.object_id AND administration.object_class = 'CPrescriptionLineMedicament'";
-    $ljoin["prescription_line_element"]    = "prescription_line_element.prescription_line_element_id = administration.object_id AND administration.object_class = 'CPrescriptionLineElement'";
-    $ljoin["prescription_line_mix_item"]   = "prescription_line_mix_item.prescription_line_mix_item_id = administration.object_id AND administration.object_class = 'CPrescriptionLineMixItem'";
-    $ljoin["prescription_line_mix"]        = "prescription_line_mix.prescription_line_mix_id = prescription_line_mix_item.prescription_line_mix_id";
+    $ljoin["prescription_line_medicament"] = "prescription_line_medicament.prescription_line_medicament_id = administration.object_id
+      AND administration.object_class = 'CPrescriptionLineMedicament'";
+    $ljoin["prescription_line_element"] = "prescription_line_element.prescription_line_element_id = administration.object_id
+      AND administration.object_class = 'CPrescriptionLineElement'";
+    $ljoin["prescription_line_mix_item"] = "prescription_line_mix_item.prescription_line_mix_item_id = administration.object_id
+      AND administration.object_class = 'CPrescriptionLineMixItem'";
+    $ljoin["prescription_line_mix"] = "prescription_line_mix.prescription_line_mix_id = prescription_line_mix_item.prescription_line_mix_id";
                                                                                            
     $ljoin["prescription"] = "(prescription_line_medicament.prescription_id = prescription.prescription_id) OR
                               (prescription_line_element.prescription_id = prescription.prescription_id) OR
@@ -64,11 +68,11 @@ $sejour->loadListConstantesMedicales($whereConst);
   
 // Tri des gestes et administrations perop par ordre chronologique
 $perops = array();
-foreach($administrations as $_administration){
+foreach ($administrations as $_administration) {
   $_administration->loadRefsFwd();
   $perops[$_administration->dateTime][$_administration->_guid] = $_administration;
 }
-foreach($operation->_ref_anesth_perops as $_perop){
+foreach ($operation->_ref_anesth_perops as $_perop) {
   $perops[$_perop->datetime][$_perop->_guid] = $_perop;
 }
 
@@ -84,14 +88,15 @@ if ($prescription_id) {
   $prescription_line_mix = new CPrescriptionLineMix();
   $prescription_line_mix->prescription_id = $prescription_id;
   $prescription_line_mix->perop = 1;
+  /** @var CPrescriptionLineMix[] $mixes */
   $mixes = $prescription_line_mix->loadMatchingList();
   
-  foreach($mixes as $_mix){
+  foreach ($mixes as $_mix) {
     $_mix->loadRefsLines();
-    if($_mix->date_pose && $_mix->time_pose){
+    if ($_mix->date_pose && $_mix->time_pose) {
       $perops[$_mix->_pose][$_mix->_guid] = $_mix;
     }
-    if($_mix->date_retrait && $_mix->time_retrait){
+    if ($_mix->date_retrait && $_mix->time_retrait) {
       $perops[$_mix->_retrait][$_mix->_guid] = $_mix;
     } 
   }
@@ -118,11 +123,11 @@ if (CAppUI::conf("dPsalleOp enable_surveillance_perop")) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("patient"  , $operation->_ref_sejour->_ref_patient);
-$smarty->assign("operation", $operation);
-$smarty->assign("perops"   , $perops);
-$smarty->assign("perop_graphs", $perop_graphs);
+$smarty->assign("patient"      , $operation->_ref_sejour->_ref_patient);
+$smarty->assign("operation"    , $operation);
+$smarty->assign("perops"       , $perops);
+$smarty->assign("perop_graphs" , $perop_graphs);
 $smarty->assign("time_debut_op", $time_debut_op);
-$smarty->assign("time_fin_op", $time_fin_op);
+$smarty->assign("time_fin_op"  , $time_fin_op);
 
 $smarty->display("print_feuille_bloc.tpl");
