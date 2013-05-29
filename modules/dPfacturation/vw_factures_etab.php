@@ -86,8 +86,8 @@ foreach ($factures as $key => $_facture) {
 $assurances_patient = array();
 if ($facture_id && isset($factures[$facture_id])) {
   $facture->load($facture_id);
-  if ($patient_id && $facture->patient_id != $facture) {
-
+  if ($patient_id && $facture->patient_id != $patient_id) {
+    $facture = null;
   }
   else {
     $facture->loadRefPatient();
