@@ -68,8 +68,11 @@ class CAppUI {
   // Language alert mask
   static $unlocalized  = array();
 
-  //mobile flag
+  //mobile flag => use mobile folder
   static $mobile = false;
+  //device used
+  public $touch_device = false;
+
 
   static $token_expiration = null;
 
