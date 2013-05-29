@@ -78,9 +78,10 @@ Ccda = {
     for (var i = 0; i < listBeneficiaires.length; i++) {
       var person = {};
       var ident = listBeneficiaires[i].getElementsByTagName("ident")[0];
-      person["date"] = getNodeValue("dateEnCarte", ident);
+      person["date"]   = getNodeValue("dateEnCarte", ident);
       person["prenom"] = getNodeValue("prenomUsuel", ident);
-      person["nir"] = getNodeValue("nir", ident);
+      person["nir"]    = getNodeValue("nir", ident);
+      person["nom"]    = getNodeValue("nomUsuel", ident);
 
       listPerson.push(person);
     }

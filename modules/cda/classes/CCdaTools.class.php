@@ -205,7 +205,7 @@ class CCdaTools {
       $data = $smarty->fetch("defaultClassVoc.tpl");
 
       //on créé le fichier
-      file_put_contents($cheminBase.$nameFichier, $data);
+      file_put_contents($cheminBase.$nameFichier, str_replace("\r\n", "\n", $data));
     }
 
     return true;
