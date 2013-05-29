@@ -39,7 +39,7 @@ CKEDITOR.editorConfig = function(config) {
   config.pasteFromWordPromptCleanup = true;
   config.pasteFromWordRemoveFontStyles = "{{$clean_word}}";
   config.pasteFromWordRemoveStyles = "{{$clean_word}}";
-  config.fontSize_sizes  = '8/8px;9/9px;10/10px;11/11px;12/12px;14/14px;16/16px;18/18px;20/20px;22/22px;24/24px;26/26px;28/28px;36/36px;48/48px;72/72px;';
+  config.fontSize_sizes  = '8/8pt;9/9pt;10/10pt;11/11pt;12/12pt;14/14pt;16/16pt;18/18pt;20/20pt;22/22pt;24/24pt;26/26pt;28/28pt;36/36pt;48/48pt;72/72pt;';
   config.fontSize_sizes += 'xx-small/xx-small;x-small/x-small;small/small;medium/medium;large/large;x-large/x-large;xx-large/xx-large';
   
   CKEDITOR.config.font_names =
