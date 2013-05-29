@@ -47,6 +47,12 @@ function loadActesNGAP(sejour_id){
   url.requestUpdate('listActesNGAP');
 }
 
+function loadTarifsSejour(sejour_id) {
+  var url = new Url("soins", "ajax_tarifs_sejour");
+  url.addParam("sejour_id", sejour_id);
+  url.requestUpdate("tarif");
+}
+
 function loadSuiviClinique(sejour_id) {
   var url = new Url("soins", "ajax_vw_suivi_clinique");
   url.addParam("sejour_id", sejour_id);
@@ -126,6 +132,9 @@ window.tabLoaders = {
       }
       if($('cim')){
         reloadDiagnostic(sejour_id, '1');
+      }
+      if ($('tarif')) {
+        loadTarifsSejour(sejour_id);
       }
     },
   {{/if}}
@@ -665,36 +674,43 @@ checkAnesth = function(oField){
       
       {{if $app->user_prefs.ccam_sejour == 1 }}
       <div id="Actes" style="display: none;">
-        <ul id="tab-actes" class="control_tabs">
-          <li><a href="#one">Actes CCAM</a></li>
-          <li><a href="#two">Actes NGAP</a></li>
-          <li><a href="#three">Diagnostics</a></li>
-        </ul>
-        <hr class="control_tabs" />
-        
         <table class="form">
-          <tr id="one" style="display: none;">
-            <td id="ccam">
-              <div class="small-info">
-                Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
-                ajouter des actes CCAM au patient concerné.
-              </div>
-            </td>
-          </tr>
-          <tr id="two" style="display: none;">
-            <td id="listActesNGAP">
-              <div class="small-info">
-                Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
-                ajouter des actes NGAP au patient concerné.
-              </div>
-            </td>
-          </tr>
-          <tr id="three" style="display: none;">
-            <td id="cim">
-              <div class="small-info">
-                Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
-                ajouter des actes diagnostics CIM au patient concerné.
-              </div>
+          <tr>
+            <td style="">
+              <ul id="tab-actes" class="control_tabs">
+                <li id="tarif" style="float: right;"></li>
+                <li><a href="#one">Actes CCAM</a></li>
+                <li><a href="#two">Actes NGAP</a></li>
+                <li><a href="#three">Diagnostics</a></li>
+              </ul>
+              <hr class="control_tabs" />
+
+              <table class="form">
+                <tr id="one" style="display: none;">
+                  <td id="ccam">
+                    <div class="small-info">
+                      Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
+                      ajouter des actes CCAM au patient concerné.
+                    </div>
+                  </td>
+                </tr>
+                <tr id="two" style="display: none;">
+                  <td id="listActesNGAP">
+                    <div class="small-info">
+                      Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
+                      ajouter des actes NGAP au patient concerné.
+                    </div>
+                  </td>
+                </tr>
+                <tr id="three" style="display: none;">
+                  <td id="cim">
+                    <div class="small-info">
+                      Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
+                      ajouter des actes diagnostics CIM au patient concerné.
+                    </div>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
         </table>

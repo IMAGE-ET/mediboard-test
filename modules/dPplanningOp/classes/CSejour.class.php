@@ -934,11 +934,18 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->mode_sortie = $mode->mode;
     }
 
+    // Gestion du tarif et precodage des actes
+    if ($this->_bind_tarif && $this->_id) {
+      if ($msg = $this->bindTarif()) {
+        return $msg;
+      }
+    }
+
     // On fait le store du séjour
     if ($msg = parent::store()) {
       return $msg;
     }
-    
+
     if (CModule::getActive("dPfacturation") && CAppUI::conf("dPplanningOp CFactureEtablissement use_facture_etab")) {
       if (count($this->_ref_factures) ==0) {
         $liaison = new CFactureLiaison();

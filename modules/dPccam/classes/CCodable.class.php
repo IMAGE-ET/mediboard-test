@@ -29,6 +29,10 @@ class CCodable extends CMbObject {
   public $_actes_non_cotes;
   public $_datetime;
 
+  // Tarif
+  public $_bind_tarif;
+  public $_tarif_id;
+
   // Abstract fields
   public $_praticien_id;
   /** @var bool Initialisation à 0 => codable qui peut etre codé ! */
@@ -235,8 +239,8 @@ class CCodable extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["codes_ccam"]   = "str show|0";
-    $props["facture"]      = "bool default|0";
+    $props["codes_ccam"]      = "str show|0";
+    $props["facture"]         = "bool default|0";
 
     $props["_tokens_ccam"]    = "";
     $props["_tokens_ngap"]    = "";
@@ -538,7 +542,7 @@ class CCodable extends CMbObject {
   /**
    * Charge les codes CCAM en tant qu'objets externes
    * 
-   * @param string $full niveau de chargement
+   * @param bool $full niveau de chargement
    * 
    * @return void
    */
@@ -685,6 +689,59 @@ class CCodable extends CMbObject {
         break;
       case "7":
         return CAppUI::conf("dPccam CCodable precode_modificateur_7");
+    }
+    return null;
+  }
+
+  /**
+   * Bind the tarif to the codable
+   *
+   * @return null|string
+   */
+  function bindTarif() {
+    if ($this->_class != "COperation") {
+      $this->completeField("praticien_id");
+    }
+    $this->_bind_tarif = false;
+    $this->loadRefPraticien();
+
+    // Chargement du tarif
+    $tarif = new CTarif();
+    $tarif->load($this->_tarif_id);
+
+    // Mise à jour de codes CCAM prévus, sans information serialisée complémentaire
+    $this->_codes_ccam = array();
+    foreach ($tarif->_codes_ccam as $_code_ccam) {
+      $this->_codes_ccam[] = substr($_code_ccam, 0, 7);
+    }
+
+    $this->codes_ccam = implode("|", $this->_codes_ccam);
+    if ($msg = $this->store()) {
+      return $msg;
+    }
+
+    // Precodage des actes NGAP avec information sérialisée complète
+    $this->_tokens_ngap = $tarif->codes_ngap;
+    if ($msg = $this->precodeActe("_tokens_ngap", "CActeNGAP", $this->_ref_praticien->_id)) {
+      return $msg;
+    }
+
+    $this->codes_ccam = $tarif->codes_ccam;
+    // Precodage des actes CCAM avec information sérialisée complète
+    if ($msg = $this->precodeCCAM($this->_ref_praticien->_id)) {
+      return $msg;
+    }
+    $this->codes_ccam = implode("|", $this->_codes_ccam);
+
+    if (CModule::getActive("tarmed")) {
+      $this->_tokens_tarmed = $tarif->codes_tarmed;
+      if ($msg = $this->precodeActe("_tokens_tarmed", "CActeTarmed", $this->_ref_praticien->_id)) {
+        return $msg;
+      }
+      $this->_tokens_caisse = $tarif->codes_caisse;
+      if ($msg = $this->precodeActe("_tokens_caisse", "CActeCaisse", $this->_ref_praticien->_id)) {
+        return $msg;
+      }
     }
     return null;
   }

@@ -9,7 +9,7 @@
  * @version    $Revision$
  */
 
-/*
+/**
  * Opération
  */
 class COperation extends CCodable implements IPatientRelated {
@@ -155,10 +155,6 @@ class COperation extends CCodable implements IPatientRelated {
   public $_ref_affectation;
   /** @var CBesoinRessource[]  */
   public $_ref_besoins;
-
-  // Tarif
-  public $_bind_tarif;
-  public $_tarif_id;
   
   // EAI Fields
   public $_eai_initiateur_group_id; // group initiateur du message EAI
@@ -1411,38 +1407,6 @@ class COperation extends CCodable implements IPatientRelated {
     $fix_edit_doc = CAppUI::conf("dPplanningOp CSejour fix_doc_edit");
     $this->loadRefSejour();
     return !$fix_edit_doc ? true : $this->_ref_sejour->sortie_reelle === null;
-  }
-  
-  function bindTarif(){
-    $this->_bind_tarif = false;
-
-    // Chargement du tarif
-    $tarif = new CTarif();
-    $tarif->load($this->_tarif_id);
-
-    // Precodage des actes NGAP avec information sérialisée complète
-    $this->_tokens_ngap = $tarif->codes_ngap;
-    if ($msg = $this->precodeActe("_tokens_ngap", "CActeNGAP", $this->chir_id)) {
-      return $msg;
-    }
-
-    $this->codes_ccam = $tarif->codes_ccam;
-    // Precodage des actes CCAM avec information sérialisée complète
-    if ($msg = $this->precodeCCAM($this->chir_id)) {
-      return $msg;
-    }
-
-    if (CModule::getActive("tarmed")) {
-      $this->_tokens_tarmed = $tarif->codes_tarmed;
-      if ($msg = $this->precodeActe("_tokens_tarmed", "CActeTarmed", $this->chir_id)) {
-        return $msg;
-      }
-      $this->_tokens_caisse = $tarif->codes_caisse;
-      if ($msg = $this->precodeActe("_tokens_caisse", "CActeCaisse", $this->chir_id)) {
-        return $msg;
-      }
-    }
-    return null;
   }
 
   function completeLabelFields(&$fields) {

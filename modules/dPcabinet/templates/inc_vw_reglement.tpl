@@ -165,8 +165,9 @@ Main.add( function(){
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="_tab" value="vw_edit_tarifs" />
             <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="_bind_consult" value="1" />
-            <input type="hidden" name="_consult_id" value="{{$consult->_id}}" />
+            <input type="hidden" name="_bind_codable" value="1" />
+            <input type="hidden" name="_codable_id" value="{{$consult->_id}}" />
+            <input type="hidden" name="_codable_class" value="CConsultation"/>
           </form>
           {{/if}}
         

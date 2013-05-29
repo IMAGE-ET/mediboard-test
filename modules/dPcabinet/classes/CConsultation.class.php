@@ -122,10 +122,6 @@ class CConsultation extends CFacturable {
   public $_current_fse;
   public $_fse_intermax;
 
-  // Tarif
-  public $_bind_tarif;
-  public $_tarif_id;
-
   // Back References
   /**
    * @var CConsultAnesth
@@ -479,7 +475,12 @@ class CConsultation extends CFacturable {
     }
   }
 
-  function bindTarif(){
+  /**
+   * Bind the tarif to the consultation
+   *
+   * @return null|string
+   */
+  function bindTarif() {
     $this->_bind_tarif = false;
 
     // Chargement du tarif

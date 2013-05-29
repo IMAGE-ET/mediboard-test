@@ -59,13 +59,14 @@ class CTarif extends CMbObject {
   public $_ref_function;
   public $_ref_group;
   
-  public $_bind_consult;
-  public $_consult_id;
+  public $_bind_codable;
+  public $_codable_class;
+  public $_codable_id;
   
   /**
    * getSpec
    * 
-   * @return $spec
+   * @return CMbObjectSpec the spec
   **/
   function getSpec() {
     $spec = parent::getSpec();
@@ -78,7 +79,7 @@ class CTarif extends CMbObject {
   /**
    * getProps
    * 
-   * @return $props
+   * @return array
   **/
   function getProps() {
     $props = parent::getProps();
@@ -151,7 +152,7 @@ class CTarif extends CMbObject {
     }
 
     $this->updateMontants();
-    $this->bindConsultation();
+    $this->bindCodable();
   }
   
   /**
@@ -159,35 +160,40 @@ class CTarif extends CMbObject {
    * 
    * @return void
   **/
-  function bindConsultation() {
-    if (!$this->_bind_consult) {
+  function bindCodable() {
+    if (!$this->_bind_codable || is_null($this->_codable_class) || is_null($this->_codable_id)) {
       return;
     }
 
-    $this->_bind_consult = false;
-    
+    $this->_bind_codable = false;
+
     // Chargement de la consultation
-    $consult = new CConsultation();
-    $consult->load($this->_consult_id);
-    $consult->loadRefPlageConsult();
-    $consult->loadRefsActes();
-    
+    $codable = new $this->_codable_class();
+    $codable->load($this->_codable_id);
+
+    $codable->loadRefsActes();
+    $codable->loadRefPraticien();
+
     // Affectation des valeurs au tarif
-    $this->secteur1    = $consult->secteur1;
-    $this->secteur2    = $consult->secteur2;
-    $this->description = $consult->tarif;
-    $this->codes_ccam  = $consult->_tokens_ccam;
-    $this->codes_ngap  = $consult->_tokens_ngap;
-    $this->codes_tarmed= $consult->_tokens_tarmed;
-    $this->codes_caisse= $consult->_tokens_caisse;
-    $this->chir_id     = $consult->_ref_chir->_id;
+    $this->codes_ccam  = $codable->_tokens_ccam;
+    $this->codes_ngap  = $codable->_tokens_ngap;
+    $this->codes_tarmed= $codable->_tokens_tarmed;
+    $this->codes_caisse= $codable->_tokens_caisse;
+    $this->chir_id     = $codable->_ref_praticien->_id;
     $this->function_id = "";
+
+    if ($this->_codable_class == "CConsultation") {
+      $codable->loadRefPlageConsult();
+      $this->secteur1    = $codable->secteur1;
+      $this->secteur2    = $codable->secteur2;
+      $this->description = $codable->tarif;
+    }
   }
   
   /**
    * Redéfinition du store
    * 
-   * @return void
+   * @return null
   **/
   function store() {
     if ($this->_add_mto) {
@@ -205,11 +211,11 @@ class CTarif extends CMbObject {
   /**
    * Mise à jour du montant du tarif
    * 
-   * @return $this->secteur1
+   * @return integer|null
   **/
   function updateMontants() {
     if (!$this->_update_montants) {
-      return;
+      return null;
     }
 
     $this->secteur1 = 0.00;
@@ -335,7 +341,7 @@ class CTarif extends CMbObject {
    * 
    * @param string $permType Type de la permission
    * 
-   * @return void
+   * @return bool
    */
   function getPerm($permType) {
     if (!$this->_ref_chir || !$this->_ref_function) {
@@ -428,5 +434,3 @@ class CTarif extends CMbObject {
     }
   }
 }
-
-?>
