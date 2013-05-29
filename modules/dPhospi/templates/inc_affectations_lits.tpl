@@ -85,7 +85,7 @@
           {{/if}}
           {{mb_include module=patients template=inc_vw_antecedents type=deficience readonly=1}}
         </span>
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')" {{if $sejour->recuse == "-1"}}class="opacity-70"{{/if}}>
+        <span {{if $app->touch_device}}onclick{{else}}onmouseover{{/if}}="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')" {{if $sejour->recuse == "-1"}}class="opacity-70"{{/if}}>
           <strong {{if $sejour->type == "ambu"}}style="font-style: italic;"{{/if}}>
             {{if $sejour->recuse == "-1"}}[Att] {{/if}}{{$patient}}
           </strong>
