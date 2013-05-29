@@ -58,8 +58,6 @@ if ($patient_id) {
 }
 
 if ($num_facture) {
-  $ljoin = array();
-  $where = array();
   $where["facture_id"] =" = '$num_facture' ";
 }
 
@@ -86,19 +84,14 @@ foreach ($factures as $key => $_facture) {
 $assurances_patient = array();
 if ($facture_id && isset($factures[$facture_id])) {
   $facture->load($facture_id);
-  if ($patient_id && $facture->patient_id != $patient_id) {
-    $facture = null;
-  }
-  else {
-    $facture->loadRefPatient();
-    $facture->_ref_patient->loadRefsCorrespondantsPatient();
-    $facture->loadRefPraticien();
-    $facture->loadRefAssurance();
-    $facture->loadRefsObjects();
-    $facture->loadRefsReglements();
-    $facture->loadRefsRelances();
-    $facture->loadRefsNotes();
-  }
+  $facture->loadRefPatient();
+  $facture->_ref_patient->loadRefsCorrespondantsPatient();
+  $facture->loadRefPraticien();
+  $facture->loadRefAssurance();
+  $facture->loadRefsObjects();
+  $facture->loadRefsReglements();
+  $facture->loadRefsRelances();
+  $facture->loadRefsNotes();
 }
 
 $reglement = new CReglement();
