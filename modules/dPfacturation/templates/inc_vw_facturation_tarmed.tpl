@@ -2,7 +2,6 @@
   {{mb_return}}
 {{/if}}
 {{mb_script module=patients script=correspondant ajax="true"}}
-
 <script>
   refreshAssurance = function() {
     var url = new Url("facturation", "ajax_list_assurances");
@@ -11,7 +10,7 @@
     url.addParam("patient_id"   , '{{$facture->patient_id}}');
     url.requestUpdate("refresh-assurance");
   }
-  
+
   printFacture = function(facture_id, type_pdf) {
     var url = new Url('facturation', 'ajax_edit_bvr');
     url.addParam('facture_class', '{{$facture->_class}}');
@@ -28,6 +27,12 @@
     url.modalObject.observe("afterClose", function(){
       Facture.reload('{{$facture->patient_id}}', '{{$facture->_class}}', 0, '{{$facture->_id}}');
     });
+  }
+
+  viewInterv = function(operation_id) {
+    var url = new Url("planningOp", "vw_edit_planning", "tab");
+    url.addParam("operation_id", operation_id);
+    url.redirect();
   }
 </script>
 {{if $facture->cloture && isset($factures|smarty:nodefaults) && count($factures)}}
@@ -53,14 +58,18 @@
       {{if !$facture->_ref_patient->avs}}
         <div class="small-warning" style="display:inline">N° AVS manquant pour le patient</div>
       {{/if}}
+      {{if $facture->_class == "CFactureEtablissement"}}
+        {{assign var="last_op_id" value=$facture->_ref_last_sejour->_ref_last_operation->_id}}
+        <button type="button" class="edit" onclick="viewInterv('{{$last_op_id}}');"> Infos interv. </button>
+      {{/if}}
     </td>
   </tr>
 {{elseif !$facture->cloture && isset($factures|smarty:nodefaults) && count($factures) && $facture->_class == "CFactureEtablissement"}}
   <tr>
     <td colspan="8">
-      <button type="button" class="edit" onclick="dossierBloc('{{$facture->_ref_last_sejour->_ref_last_operation->_id}}');">
-        Dossier bloc
-      </button>
+      {{assign var="last_op_id" value=$facture->_ref_last_sejour->_ref_last_operation->_id}}
+      <button type="button" class="edit" onclick="dossierBloc('{{$last_op_id}}');"> Dossier bloc </button>
+      <button type="button" class="new" onclick="viewInterv('{{$last_op_id}}');"> Infos interv. </button>
     </td>
   </tr>
 {{/if}}

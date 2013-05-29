@@ -34,6 +34,15 @@ printFacture = function(facture_id, type_pdf) {
   url.popup(1000, 600);
 }
 
+viewPatient = function() {
+  var form = getForm("choice-facture");
+  if (form.patient_id.value) {
+    var url = new Url('patients', 'vw_edit_patients', 'tab');
+    url.addElement(form.patient_id);
+    url.redirect();
+  }
+}
+
 Main.add(function () {
   Calendar.regField(getForm("choice-facture")._date_min);
   Calendar.regField(getForm("choice-facture")._date_max);
@@ -61,6 +70,7 @@ Main.add(function () {
               this.pop();
             }
           </script>
+          <button class="edit notext" type="button" onclick="viewPatient();">{{tr}}View{{/tr}}</button>
         </td>
         {{if !$conf.dPfacturation.$classe.use_auto_cloture}}
           <th>Etat</th>

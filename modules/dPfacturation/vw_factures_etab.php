@@ -9,9 +9,7 @@
  * @version    $Revision$
  */
 CCanDo::checkEdit();
-$rectif             = CMbDT::transform("+0 DAY", CMbDT::date(), "%d")-1;
-$month_deb          = CMbDT::date("-$rectif DAYS"  , CMbDT::date());
-$date_min           = CValue::getOrSession("_date_min", $month_deb);
+$date_min           = CValue::getOrSession("_date_min", "01/01/1970");
 $date_max           = CValue::getOrSession("_date_max", CMbDT::date());
 $etat               = CValue::getOrSession("etat", "ouvert");
 $etat_cloture       = CValue::getOrSession("etat_cloture", 0);

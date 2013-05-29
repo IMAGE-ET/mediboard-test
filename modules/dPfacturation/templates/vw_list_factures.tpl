@@ -80,7 +80,9 @@ showLegend = function() {
           </tr>
         {{foreachelse}}
           <tr>
-            <td colspan="2" class="empty">{{tr}}{{$facture->_class}}.none{{/tr}}</td>
+            <td colspan="{{if $conf.dPfacturation.CEditPdf.use_bill_etab}}5{{else}}2{{/if}}" class="empty">
+              {{tr}}{{$facture->_class}}.none{{/tr}}
+            </td>
           </tr>
         {{/foreach}}
       </table>
