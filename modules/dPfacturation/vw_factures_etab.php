@@ -86,14 +86,19 @@ foreach ($factures as $key => $_facture) {
 $assurances_patient = array();
 if ($facture_id && isset($factures[$facture_id])) {
   $facture->load($facture_id);
-  $facture->loadRefPatient();
-  $facture->_ref_patient->loadRefsCorrespondantsPatient();
-  $facture->loadRefPraticien();
-  $facture->loadRefAssurance();
-  $facture->loadRefsObjects();
-  $facture->loadRefsReglements();
-  $facture->loadRefsRelances();
-  $facture->loadRefsNotes();
+  if ($patient_id && $facture->patient_id != $facture) {
+
+  }
+  else {
+    $facture->loadRefPatient();
+    $facture->_ref_patient->loadRefsCorrespondantsPatient();
+    $facture->loadRefPraticien();
+    $facture->loadRefAssurance();
+    $facture->loadRefsObjects();
+    $facture->loadRefsReglements();
+    $facture->loadRefsRelances();
+    $facture->loadRefsNotes();
+  }
 }
 
 $reglement = new CReglement();
