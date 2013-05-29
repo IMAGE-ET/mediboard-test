@@ -50,17 +50,22 @@ $files = array_merge(
   glob("$path/templates/*")
 );
 
-foreach($files as $_file) {
+$translate = array(
+  '{NAME_CANONICAL}' => $name_canonical,
+  '{NAME_SHORT}'     => $name_short,
+  '{NAME_LONG}'      => $name_long,
+  '{LICENSE}'        => $license,
+);
+
+foreach ($files as $_file) {
   if (is_dir($_file)) {
     continue;
   }
   
-  file_put_contents($_file, strtr(file_get_contents($_file), array(
-    '{NAME_CANONICAL}' => $name_canonical,
-    '{NAME_SHORT}'     => $name_short,
-    '{NAME_LONG}'      => $name_long,
-    '{LICENSE}'        => $license,
-  )));
+  file_put_contents(
+    $_file,
+    strtr(file_get_contents($_file), $translate)
+  );
 }
 
 rename("$destination/$name_canonical", "modules/$name_canonical");
