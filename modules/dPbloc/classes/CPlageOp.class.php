@@ -296,7 +296,7 @@ class CPlageOp extends CMbObject {
    * @return COperation[]
    * @deprecated use loadRefsOperations instead
    */
-  function loadRefsBack($annulee = true, $order = "rank, rank_voulu, horaire_voulu") {
+  function loadRefsBack($annulee = true, $order = "rank, time_operation, rank_voulu, horaire_voulu") {
     $this->loadRefsOperations($annulee, $order);
   }
   

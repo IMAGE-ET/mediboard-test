@@ -78,7 +78,12 @@
       {{/if}}
       {{/if}}
       {{if $_operation->time_operation != "00:00:00"}}
-        {{$_operation->time_operation|date_format:$conf.time}}&rarr;{{if $_operation->fin_op}}{{$_operation->fin_op}}{{else}}{{$_operation->_acte_execution|date_format:$conf.time}}*{{/if}}
+        {{$_operation->time_operation|date_format:$conf.time}}
+        {{if $_operation->fin_op}}
+          {{$_operation->fin_op|date_format:$conf.time}}
+        {{else}}
+          {{$_operation->_acte_execution|date_format:$conf.time}}*
+        {{/if}}
       {{else}}
         NP
       {{/if}}
