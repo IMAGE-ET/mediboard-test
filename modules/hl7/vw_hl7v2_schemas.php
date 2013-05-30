@@ -13,7 +13,7 @@ CCanDo::checkRead();
 $version = CValue::getOrSession("version", "hl7v2_5");
 
 if (preg_match('/^([a-z]{2})_(v[\d_]+)$/', $version, $matches)) {
-	$version_dir = "/extensions/$matches[1]/$matches[2]/";
+  $version_dir = "/extensions/$matches[1]/$matches[2]/";
 }
 else {
   $version_dir = "/$version/";
@@ -27,10 +27,14 @@ $schemas = array(
   "composite" => null,
 );
 
-foreach($schemas as $type => $composite) {
+foreach ($schemas as $type => $composite) {
   $paths = glob($schema_path."$type*.xml");
   
-  foreach($paths as $path) {
+  foreach ($paths as $path) {
+    if (preg_match('/hl7v3/', $path)) {
+      continue;
+    }
+
     preg_match("/$type(.+)\.xml$/", $path, $matches);
     $name = $matches[1];
     
@@ -52,14 +56,14 @@ $versions = array(
   "ext" => array(),
 );
 
-$versions_int_paths = glob(CHL7v2::LIB_HL7."/hl7v*");
-foreach($versions_int_paths as $path) {
-	$versions["int"][] = basename($path);
+$versions_int_paths = glob(CHL7v2::LIB_HL7."/hl7v2*");
+foreach ($versions_int_paths as $path) {
+  $versions["int"][] = basename($path);
 }
 
 $versions_int_paths = glob(CHL7v2::LIB_HL7."/extensions/*/*");
-foreach($versions_int_paths as $path) {
-	$_version = basename($path);
+foreach ($versions_int_paths as $path) {
+  $_version = basename($path);
   $_language = basename(dirname($path));
   $versions["ext"][] = "{$_language}_{$_version}";
 }
@@ -70,4 +74,3 @@ $smarty->assign("schemas", $schemas);
 $smarty->assign("version", $version);
 $smarty->assign("versions", $versions);
 $smarty->display("vw_hl7v2_schemas.tpl");
-
