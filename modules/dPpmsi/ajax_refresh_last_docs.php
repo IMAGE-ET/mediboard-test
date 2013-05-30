@@ -39,49 +39,40 @@ if (($cat_docs || $specialite_docs || $prat_docs || ($date_docs_min && $date_doc
     case "sejour":
       $ljoin["sejour"] = "sejour.sejour_id = compte_rendu.object_id OR sejour.sejour_id IS NULL";
       $where["compte_rendu.object_class"] = "= 'CSejour'";
+
       if ($type) {
         $where["sejour.type"] = "= '$type'";
       }
       if ($entree_min) {
-        if ($entree_max) {
-          $where[] = "sejour.entree BETWEEN '$entree_min 00:00:00' AND '$entree_max 23:59:59'";
-        }
-        else {
-          $where[] = "sejour.entree >= '$entree_min 00:00:00'";
-        }
+        $where[] = "sejour.entree >= '$entree_min 00:00:00'";
       }
-      else if ($entree_max) {
+
+      if ($entree_max) {
         $where[] = "sejour.entree <= '$entree_max 23:59:59'";
       }
       
       if ($sortie_min) {
-        if ($sortie_max) {
-          $where[] = "sejour.sortie BETWEEN '$sortie_min 00:00:00' AND '$sortie_max 23:59:59'";
-        }
-        else {
-          $where[] = "sejour.sortie >= '$sortie_min 00:00:00'";
-        }
+        $where[] = "sejour.sortie >= '$sortie_min 00:00:00'";
       }
-      else if ($sortie_max) {
+
+      if ($sortie_max) {
         $where[] = "sejour.sortie <= '$sortie_max '23:59:59'";
       }
       
       break;
+
     case "intervention":
       $ljoin["operations"] = "operations.operation_id = compte_rendu.object_id OR operations.operation_id IS NULL";
       $where["compte_rendu.object_class"] = "= 'COperation'";
       if ($intervention_min || $intervention_max) {
         $ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
         if ($intervention_min) {
-          if ($intervention_max) {
-            $where[] = "(operations.plageop_id IS NULL AND operations.date BETWEEN '$intervention_min' AND '$intervention_max') OR (plagesop.date BETWEEN '$intervention_min' AND '$intervention_max')";
-          }
-          else {
-            $where[] = "(operations.plageop_id IS NULL AND operations.date >= '$intervention_min') OR (plagesop.date >= '$intervention_min')";
-          }
+          $where[] = "(operations.plageop_id IS NULL AND operations.date >= '$intervention_min')
+            OR (plagesop.date >= '$intervention_min')";
         }
-        else if ($intervention_max) {
-          $where[] = "(operations.plageop_id IS NULL AND operations.date <= '$intervention_max') OR (plagesop.date <= '$intervention_max')";
+        if ($intervention_max) {
+          $where[] = "(operations.plageop_id IS NULL AND operations.date <= '$intervention_max')
+            OR (plagesop.date <= '$intervention_max')";
         }
       }
       if ($prat_interv) {
@@ -94,7 +85,9 @@ if (($cat_docs || $specialite_docs || $prat_docs || ($date_docs_min && $date_doc
   }
   
   if ($date_docs_min && $date_docs_max) {
-    $ljoin["user_log"] = "compte_rendu.compte_rendu_id = user_log.object_id AND user_log.object_class = 'CCompteRendu' AND user_log.type = 'create'";
+    $ljoin["user_log"] = "compte_rendu.compte_rendu_id = user_log.object_id
+      AND user_log.object_class = 'CCompteRendu'
+      AND user_log.type = 'create'";
     $where["user_log.date"] = "BETWEEN '$date_docs_min 00:00:00' AND '$date_docs_max 23:59:59'";
   }
   
@@ -103,13 +96,16 @@ if (($cat_docs || $specialite_docs || $prat_docs || ($date_docs_min && $date_doc
   }
   else if ($specialite_docs) {
     if (!isset($ljoin["user_log"])) {
-      $ljoin["user_log"] = "compte_rendu.compte_rendu_id = user_log.object_id AND user_log.object_class = 'CCompteRendu' AND user_log.type = 'create'";
+      $ljoin["user_log"] = "compte_rendu.compte_rendu_id = user_log.object_id
+       AND user_log.object_class = 'CCompteRendu'
+       AND user_log.type = 'create'";
     }
     $ljoin["users_mediboard"] = "user_log.user_id = users_mediboard.user_id";
     $where["users_mediboard.function_id"] = " = '$specialite_docs'";
   }
   
   $total_docs = $cr->countList($where, null, $ljoin);
+  /** @var CCompteRendu[] $docs */
   $docs = $cr->loadList($where, "user_log.date desc", "$page, 30", null, $ljoin);
   
   switch ($section_search) {
@@ -118,6 +114,7 @@ if (($cat_docs || $specialite_docs || $prat_docs || ($date_docs_min && $date_doc
       CMbObject::massLoadFwdRef($sejours, "patient_id");
       
       foreach ($docs as $_doc) {
+        /** @var CSejour $sejour */
         $sejour = $_doc->loadTargetObject();
         $sejour->loadRefPatient();
         $sejour->loadNDA();
@@ -132,6 +129,7 @@ if (($cat_docs || $specialite_docs || $prat_docs || ($date_docs_min && $date_doc
       CMbObject::massLoadFwdRef($prats, "function_id");
       
       foreach ($docs as $_doc) {
+        /** @var COperation $operation */
         $operation = $_doc->loadTargetObject();
         $operation->loadExtCodesCCAM();
         $operation->loadRefPlageOp();
@@ -145,15 +143,15 @@ if (($cat_docs || $specialite_docs || $prat_docs || ($date_docs_min && $date_doc
 
 $smarty = new CSmartyDP;
 
-$smarty->assign("cat_docs", $cat_docs);
+$smarty->assign("cat_docs"       , $cat_docs);
 $smarty->assign("specialite_docs", $specialite_docs);
-$smarty->assign("prat_docs", $prat_docs);
-$smarty->assign("date_docs_min", $date_docs_min);
-$smarty->assign("date_docs_max", $date_docs_max);
-$smarty->assign("docs"     , $docs);
-$smarty->assign("long_period", $long_period);
-$smarty->assign("page"     , $page);
-$smarty->assign("total_docs", $total_docs);
-$smarty->assign("section_search", $section_search);
+$smarty->assign("prat_docs"      , $prat_docs);
+$smarty->assign("date_docs_min"  , $date_docs_min);
+$smarty->assign("date_docs_max"  , $date_docs_max);
+$smarty->assign("docs"           , $docs);
+$smarty->assign("long_period"    , $long_period);
+$smarty->assign("page"           , $page);
+$smarty->assign("total_docs"     , $total_docs);
+$smarty->assign("section_search" , $section_search);
 
 $smarty->display("inc_refresh_last_docs.tpl");

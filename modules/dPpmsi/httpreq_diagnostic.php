@@ -24,5 +24,3 @@ $smarty->assign("sejour" , $sejour);
 $smarty->assign("modeDAS", $modeDAS);
 
 $smarty->display("inc_diagnostic.tpl");
-
-?>

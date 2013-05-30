@@ -11,5 +11,3 @@
 
 $do = new CDoObjectAddEdit("CGHM", "ghm_id");
 $do->doIt();
-
-?>

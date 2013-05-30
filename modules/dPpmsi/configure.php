@@ -9,11 +9,8 @@
  * @version    $Revision$
  */
 
-global $can;
-$can->needsAdmin();
+CCAnDo::checkAdmin();
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->display("configure.tpl");
-
-?>

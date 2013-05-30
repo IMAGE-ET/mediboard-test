@@ -55,5 +55,3 @@ $smarty->assign("listChirs"  , $listChirs  );
 $smarty->assign("module"     , "dPpmsi"    );
 
 $smarty->display("edit_actes.tpl");
-
-?>

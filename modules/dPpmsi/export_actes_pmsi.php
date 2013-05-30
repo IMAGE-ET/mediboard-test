@@ -9,14 +9,14 @@
  * @version    $Revision$
  */
 
-global $m;
+global $m, $tab;
 
 $module = CValue::get("module");
 if (!$module) {
   $module = $m;
 }
 
-$canUnlockActes = $module == "dPpmsi" || CModule::$active["dPplanningOp"]->canAdmin();
+$canUnlockActes = $module == "dPpmsi" || CModule::getCanDo("dPsalleOp")->admin;
 
 if (null == $object_class = CValue::get("object_class")) {
   CAppUI::stepMessage(UI_MSG_WARNING, "$tab-msg-mode-missing");

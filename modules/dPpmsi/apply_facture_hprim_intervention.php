@@ -9,8 +9,7 @@
  * @version    $Revision$
  */
 
-global $can;
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 CAppUI::stepAjax("Fonctionnalité désactivée pour le moment", UI_MSG_ERROR);
 return;
@@ -28,10 +27,10 @@ $start = 30000;
 $max = 100;
 $limit = "$start, $max";
 
+/** @var COperation $_operation */
 foreach ($operation->loadMatchingList(null, $limit) as $_operation) {
-	$operation->loadHprimFiles();
-	if ($count = count($_operation->_ref_hprim_files)) {
+  $_operation->loadHprimFiles();
+  if ($count = count($_operation->_ref_hprim_files)) {
     CAppUI::stepAjax("'%s' HPRIM files for operation '%s'", UI_MSG_OK, $count, $_operation->_view);
-	}
+  }
 }
-?>

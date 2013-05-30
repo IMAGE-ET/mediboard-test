@@ -9,7 +9,6 @@
  * @version    $Revision$
  */
 
-
 CCanDo::checkEdit();
 
 $sejour_id = CValue::getOrSession("sejour_id");
@@ -25,17 +24,17 @@ $sejour->loadRefPatient();
 $patient = $sejour->_ref_patient;
 $patient->loadRefsFwd();
 $patient->loadRefPhotoIdentite();
-$patient->loadRefDossierMedical();
-$patient->_ref_dossier_medical->updateFormFields();
-$patient->_ref_dossier_medical->loadRefsAntecedents();
-$patient->_ref_dossier_medical->loadRefsTraitements();
+$dossier_medical = $patient->loadRefDossierMedical();
+$dossier_medical->updateFormFields();
+$dossier_medical->loadRefsAntecedents();
+$dossier_medical->loadRefsTraitements();
 $patient->loadIPP();
 
-$sejour->loadRefDossierMedical();
 $sejour->loadRefPrescriptionSejour();
-$sejour->_ref_dossier_medical->updateFormFields();
-$sejour->_ref_dossier_medical->loadRefsAntecedents();
-$sejour->_ref_dossier_medical->loadRefsTraitements();
+$dossier_medical = $sejour->loadRefDossierMedical();
+$dossier_medical->updateFormFields();
+$dossier_medical->loadRefsAntecedents();
+$dossier_medical->loadRefsTraitements();
 $sejour->loadRefsAffectations();
 $sejour->loadExtDiagnostics();
 $sejour->loadRefs();
@@ -55,15 +54,15 @@ foreach ($sejour->_ref_operations as $_operation) {
     $_acte->loadRefsFwd();
     $_acte->guessAssociation();
   }
-  if($_operation->plageop_id) {
-    $plage =& $_operation->_ref_plageop;
+  if ($_operation->plageop_id) {
+    $plage = $_operation->_ref_plageop;
     $plage->loadRefsFwd();
   }
   
-  $consultAnest =& $_operation->_ref_consult_anesth;
-  if ($consultAnest->consultation_anesth_id) {
-    $consultAnest->loadRefsFwd();
-    $consultAnest->_ref_plageconsult->loadRefsFwd();
+  $consult_anest = $_operation->_ref_consult_anesth;
+  if ($consult_anest->consultation_anesth_id) {
+    $consult_anest->loadRefsFwd();
+    $consult_anest->_ref_plageconsult->loadRefsFwd();
   }
 }
 
@@ -80,5 +79,3 @@ $smarty->assign("sejour" , $sejour );
 $smarty->assign("listPrat", $listPrat);
 
 $smarty->display("inc_vw_sejour.tpl");
-
-?>
