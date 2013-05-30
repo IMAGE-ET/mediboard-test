@@ -212,7 +212,7 @@ class CEditPdf{
   function editCenterJustificatif($cle_facture, $montant_facture) {
     $this->loadAllElements();
     $this->pdf->AddPage();
-    $pm = $pt = $medicaments = 0;
+    $pm = $pm_notcoeff = $pt = $pt_notcoeff = $medicaments = 0;
     
     $this->ajoutEntete1();
     $this->pdf->setFont($this->font, '', 8);
@@ -357,6 +357,8 @@ class CEditPdf{
           if ($acte->type == "CActeTarmed") {
             $pt += $this_pt;
             $pm += $this_pm;
+            $pt_notcoeff += ($this_pt/$acte->coeff);
+            $pm_notcoeff += ($this_pm/$acte->coeff);
           }
           else {
             if ($acte->code_caisse) {
@@ -376,40 +378,41 @@ class CEditPdf{
 
     $pt = sprintf("%.2f", $pt);
     $pm = sprintf("%.2f", $pm);
-    
+    $pm_notcoeff = sprintf("%.2f", $pm_notcoeff);
+    $pt_notcoeff = sprintf("%.2f", $pt_notcoeff);
+
     $this->pdf->setFont($this->fontb, '', 8);
     $ligne = 265;
-    $l = 20;
+    $l = 35;
     $this->editCell(20, $ligne+3, $l, "Tarmed PM", "R");
-    $this->pdf->Cell($l, "", $pm, null, null, "R");
+    $this->pdf->Cell($l, "", "$pm ($pm_notcoeff)", null, null, "R");
     
     $this->editCell(20, $ligne+6, $l, "Tarmed PT", "R");
-    $this->pdf->Cell($l, "", $pt, null, null, "R");
+    $this->pdf->Cell($l, "", "$pt ($pt_notcoeff)", null, null, "R");
 
     $montant_facture = (abs($montant_intermediaire-$montant_facture) <= 0.09) ? $montant_intermediaire : $montant_facture;
     $autre_temp = $cle_facture == 0 ? $montant_facture - $pm - $pt - $medicaments : $montant_facture;
     $autre_temp = sprintf("%.2f", $autre_temp);
     $autre = ($autre_temp <= 0.05) ? 0.00 : $autre_temp;
 
-    $this->editCell(70, $ligne+3, $l, "Médicaments", "R");
-    $this->pdf->Cell($l, "",  sprintf("%.2f", $medicaments), null, null, "R");
+    $this->editCell(80, $ligne+3, $l, "Médicaments", "R");
+    $this->pdf->Cell(20, "",  sprintf("%.2f", $medicaments), null, null, "R");
 
-    $this->editCell(70, $ligne+6, $l, "Autres", "R");
-    $this->pdf->Cell($l, "",  sprintf("%.2f", $autre), null, null, "R");
+    $this->editCell(80, $ligne+6, $l, "Autres", "R");
+    $this->pdf->Cell(20, "",  sprintf("%.2f", $autre), null, null, "R");
 
     $this->editCell(20, $ligne+9, $l, "Montant total/CHF", "R");
-    $this->pdf->Cell($l, "", sprintf("%.2f", $montant_intermediaire), null, null, "R");
+    $this->pdf->Cell(20, "", sprintf("%.2f", $montant_intermediaire), null, null, "R");
     
     $acompte = sprintf("%.2f", $this->facture->_reglements_total_patient);
-    $this->pdf->Cell(30, "", "Acompte", null, null, "R");
-    $this->pdf->Cell($l, "", "".$acompte, null, null, "R");
-    $this->pdf->Cell($l, "", "", null, null, "R");
+    $this->editCell(80, $ligne+9, $l, "Acompte", "R");
+    $this->pdf->Cell(20, "", "".$acompte, null, null, "R");
     
     $total_temp = $montant_intermediaire - $this->facture->_reglements_total_patient;
     $total = $total_temp<0 ? 0.00 : $total_temp;
     
-    $this->pdf->Cell($l, "", "Montant dû", null, null, "R");
-    $this->pdf->Cell($l, "", sprintf("%.2f", $total), null, null, "R");
+    $this->editCell(130, $ligne+9, $l, "Montant dû", "R");
+    $this->pdf->Cell(20, "", sprintf("%.2f", $total), null, null, "R");
   }
   
   /**
