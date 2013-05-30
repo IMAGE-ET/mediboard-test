@@ -474,7 +474,11 @@ class CDossierMedical extends CMbMetaObject {
     $this->loadRefsTraitements();
     if (is_array($this->_ref_traitements)) {
       $list = array();
+      /** @var $_traitement CTraitement */
       foreach ($this->_ref_traitements as $_traitement) {
+        if ($_traitement->fin && $_traitement->fin <= CMbDT::date()) {
+          continue;
+        }
         $debut     = $_traitement->debut ? " depuis "   . $_traitement->getFormattedValue("debut") : "";
         $fin       = $_traitement->fin ? " jusqu'au " . $_traitement->getFormattedValue("fin"    ) : "";
         $colon  = $debut || $fin ? ": " : "";

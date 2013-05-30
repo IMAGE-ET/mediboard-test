@@ -93,6 +93,7 @@ $now = CMbDT::time();
 
 $use_sortie_reveil_reel = CAppUI::conf("dPsalleOp COperation use_sortie_reveil_reel");
 
+/** @var $op COperation */
 foreach ($listOperations as $key => $op) {
   $sejour = $op->loadRefSejour(1);
   $sejour->loadNDA();
@@ -141,7 +142,7 @@ foreach ($listOperations as $key => $op) {
   }
   
   if ($type == "reveil" || $type == "out") {
-    if (!$sejour->sortie_reelle) {
+    if (!$op->sortie_reveil_reel) {
       $nb_sorties_non_realisees++;
     }
 

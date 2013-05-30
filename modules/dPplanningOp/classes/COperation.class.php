@@ -190,6 +190,8 @@ class COperation extends CCodable implements IPatientRelated {
   public $_ref_anesth_perops;
   public $_ref_naissances;
   public $_ref_poses_disp_vasc;
+  /** @var  CBloodSalvage */
+  public $blood_salvage;
 
   // Filter Fields
   public $_date_min;
