@@ -61,13 +61,6 @@ if ($user->isSecretaire()) {
   }
 }
 
-if ($listeTarifsChir) {
-  foreach ($listeTarifsChir as $_tarif) {
-    $_tarif->getPrecodeReady();
-    $_tarif->getSecteur1Uptodate();
-  }
-}
-
 // Liste des tarifs de la spécialité
 $where                = array();
 $where["chir_id"]     = "IS NULL";
@@ -75,10 +68,6 @@ $where["function_id"] = "= '$prat->function_id'";
 
 $listeTarifsSpe = new CTarif();
 $listeTarifsSpe = $listeTarifsSpe->loadList($where, $order);
-foreach ($listeTarifsSpe as $_tarif) {
-  $_tarif->getPrecodeReady();
-  $_tarif->getSecteur1Uptodate();
-}
 
 $listeTarifsEtab = array();
 if (CAppUI::conf("dPcabinet Tarifs show_tarifs_etab")) {
@@ -89,10 +78,6 @@ if (CAppUI::conf("dPcabinet Tarifs show_tarifs_etab")) {
   $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
   $listeTarifsEtab = new CTarif();
   $listeTarifsEtab = $listeTarifsEtab->loadList($where, $order);
-  foreach ($listeTarifsEtab as $_tarif) {
-    $_tarif->getPrecodeReady();
-    $_tarif->getSecteur1Uptodate();
-  }
 }
 
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...

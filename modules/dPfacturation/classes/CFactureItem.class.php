@@ -36,7 +36,8 @@ class CFactureItem extends CMbMetaObject {
   public $use_tarmed_bill;
   public $code_ref;
   public $code_caisse;
-  
+  public $seance;
+
   // References
   public $_ref_facture;
   public $_montant_facture;
@@ -67,7 +68,7 @@ class CFactureItem extends CMbMetaObject {
     $specs["type"]      = "enum notNull list|CActeNGAP|CFraisDivers|CActeCCAM|CActeTarmed|CActeCaisse default|CActeCCAM";
     $specs["montant_base"]        = "currency notNull";
     $specs["montant_depassement"] = "currency";
-    $specs["reduction"]	= "currency";
+    $specs["reduction"]  = "currency";
     $specs["quantite"]  = "num notNull";
     $specs["coeff"]     = "currency notNull";
     $specs["pm"]        = "currency";
@@ -75,8 +76,9 @@ class CFactureItem extends CMbMetaObject {
     $specs["coeff_pm"]  = "currency";
     $specs["coeff_pt"]  = "currency";
     $specs["use_tarmed_bill"] = "bool default|0";
-    $specs["code_ref"]    = "text";
-    $specs["code_caisse"] = "text";
+    $specs["code_ref"]        = "text";
+    $specs["code_caisse"]     = "text";
+    $specs["seance"]          = "num";
     return $specs;
   }
   
@@ -104,5 +106,32 @@ class CFactureItem extends CMbMetaObject {
   **/
   function loadRefFacture(){
     return $this->loadTargetObject();
+  }
+
+  /**
+   * Clonage de l'item de facture
+   *
+   * @return void
+  **/
+  function cloneFrom($item, $new_id){
+    $this->object_id    = $new_id;
+    $this->object_class = $item->object_class;
+    $this->libelle      = $item->libelle;
+    $this->montant_base = $item->montant_base;
+    $this->montant_depassement = $item->montant_depassement;
+    $this->reduction    = $item->reduction;
+    $this->quantite     = $item->quantite;
+    $this->coeff        = $item->coeff;
+    $this->date         = $item->date;
+    $this->code         = $item->code;
+    $this->type         = $item->type;
+    $this->pm           = $item->pm;
+    $this->pt           = $item->pt;
+    $this->coeff_pm     = $item->coeff_pm;
+    $this->coeff_pt     = $item->coeff_pt;
+    $this->use_tarmed_bill = $item->use_tarmed_bill;
+    $this->code_ref     = $item->code_ref;
+    $this->code_caisse  = $item->code_caisse;
+    $this->seance       = $item->seance;
   }
 }

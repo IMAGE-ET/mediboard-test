@@ -40,7 +40,7 @@ Main.add(function () {
             {{mb_field object=$tarif field="function_id" hidden=1}}
             <input type="hidden" name="chir_id" value="{{$prat->user_id}}" />
             <input type="hidden" name="group_id" value="{{$prat->_ref_function->group_id}}" />
-            
+
             <select name="_type" onchange="Tarif.updateOwner();">
               <option value="chir"     {{if $tarif->chir_id}}     selected="selected" {{/if}}>Tarif personnel</option>
               <option value="function" {{if $tarif->function_id}} selected="selected" {{/if}}>Tarif de cabinet</option>
@@ -169,10 +169,14 @@ Main.add(function () {
           <tr>
             <th>Total</th>
             <td>
+              {{if $conf.ref_pays == 1}}
                 {{mb_field object=$tarif field=secteur1 onchange="Tarif.updateTotal();"}}
                 <input type="hidden" name="secteur2" />
                 <input type="hidden" name="_tarif" />
                 <input type="hidden" name="_somme" />
+              {{else}}
+                {{$tarif->secteur1}} Pts
+              {{/if}}
             </td>
           </tr>
         {{/if}}

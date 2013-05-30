@@ -212,7 +212,7 @@ class CEditPdf{
   function editCenterJustificatif($cle_facture, $montant_facture) {
     $this->loadAllElements();
     $this->pdf->AddPage();
-    $pm = $pt = 0;
+    $pm = $pt = $medicaments = 0;
     
     $this->ajoutEntete1();
     $this->pdf->setFont($this->font, '', 8);
@@ -304,7 +304,7 @@ class CEditPdf{
                 $valeur = $acte->code_ref;
                 break;
               case "Sé Cô":
-                $valeur = "1";
+                $valeur = $acte->seance;
                 break;
               case "Quantité":
                 $valeur = $acte->quantite;
@@ -358,6 +358,16 @@ class CEditPdf{
             $pt += $this_pt;
             $pm += $this_pm;
           }
+          else {
+            if ($acte->code_caisse) {
+              $caisse = new CActeCaisse();
+              $caisse->code = $acte->code;
+              $caisse->loadRefPrestationCaisse();
+              if ($caisse->_ref_caisse_maladie->nom == "Medicament") {
+                $medicaments += $acte->montant_base;
+              }
+            }
+          }
           $montant_intermediaire += $this_pt;
           $montant_intermediaire += $this_pm;
         }
@@ -373,15 +383,20 @@ class CEditPdf{
     $this->editCell(20, $ligne+3, $l, "Tarmed PM", "R");
     $this->pdf->Cell($l, "", $pm, null, null, "R");
     
-    $this->editCell(20, $ligne+6, $l, "", "Tarmed PT", "R");
+    $this->editCell(20, $ligne+6, $l, "Tarmed PT", "R");
     $this->pdf->Cell($l, "", $pt, null, null, "R");
 
-    $autre_temp = $cle_facture == 0 ? $montant_facture - $pm - $pt : $montant_facture;
+    $montant_facture = (abs($montant_intermediaire-$montant_facture) <= 0.09) ? $montant_intermediaire : $montant_facture;
+    $autre_temp = $cle_facture == 0 ? $montant_facture - $pm - $pt - $medicaments : $montant_facture;
     $autre_temp = sprintf("%.2f", $autre_temp);
     $autre = ($autre_temp <= 0.05) ? 0.00 : $autre_temp;
-    $this->editCell(70, $ligne+3, $l, "Autres", "R");
+
+    $this->editCell(70, $ligne+3, $l, "Médicaments", "R");
+    $this->pdf->Cell($l, "",  sprintf("%.2f", $medicaments), null, null, "R");
+
+    $this->editCell(70, $ligne+6, $l, "Autres", "R");
     $this->pdf->Cell($l, "",  sprintf("%.2f", $autre), null, null, "R");
-    
+
     $this->editCell(20, $ligne+9, $l, "Montant total/CHF", "R");
     $this->pdf->Cell($l, "", sprintf("%.2f", $montant_intermediaire), null, null, "R");
     
@@ -405,13 +420,24 @@ class CEditPdf{
   function loadTotaux(){
     $pm = 0;
     $pt = 0;
+    $medicaments = 0;
     foreach ($this->facture->_ref_actes_tarmed as $acte) {
       $pt += $acte->pt * $acte->coeff_pt * $acte->quantite;
       $pm += $acte->pm * $acte->coeff_pm * $acte->quantite;
     }
     
     foreach ($this->facture->_ref_actes_caisse as $acte) {
-      if ($acte->use_tarmed_bill) {
+      $add = true;
+      if ($acte->code_caisse) {
+        $caisse = new CActeCaisse();
+        $caisse->code = $acte->code;
+        $caisse->loadRefPrestationCaisse();
+        if ($caisse->_ref_caisse_maladie->nom == "Medicament") {
+          $medicaments += $acte->montant_base;
+          $add = false;
+        }
+      }
+      if ($acte->use_tarmed_bill && $add) {
         $this->autre_tarmed += $acte->montant_base;
       }
     }
@@ -420,7 +446,9 @@ class CEditPdf{
     
     $this->pre_tab["Medical:"]  = $pm;
     $this->pre_tab["Tarmed:"]   = $pt;
-    $this->pre_tab["Autres:"]   = sprintf("%.2f", $this->facture->_montant_sans_remise - $pm - $pt - $this->autre_tarmed);
+    $this->pre_tab["Médicaments:"] = sprintf("%.2f", $medicaments);
+    $autres =  $pm + $pt + $this->autre_tarmed + $medicaments;
+    $this->pre_tab["Autres:"]   = sprintf("%.2f", $this->facture->_montant_sans_remise - $autres);
   }
   
   /**
@@ -580,7 +608,6 @@ class CEditPdf{
     
     $this->acompte += $montant_facture;
     $this->pdf->Line($colonne2, 122, $colonne2+50, 122);
-    
     $x = 0;
     foreach ($tarif as $key => $value) {
       $this->editCell($colonne2, 120+$x, 25, $key, "R");

@@ -36,9 +36,9 @@ window.Facture = {
     });
   },
   edit: function(facture_id, facture_class) {
-      var url = new Url('facturation', 'ajax_view_facture');
-      url.addParam('facture_id'    , facture_id);
-      url.addParam("object_class", facture_class);
-      url.requestModal(1000);
+    var url = new Url('facturation', 'ajax_view_facture');
+    url.addParam('facture_id'    , facture_id);
+    url.addParam("object_class", facture_class);
+    url.requestModal(1000, 550);
   }
 };

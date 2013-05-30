@@ -261,7 +261,15 @@ class CSetupdPfacturation extends CSetup {
     $query = "ALTER TABLE `retrocession` 
                 ADD INDEX (`praticien_id`);";
     $this->addQuery($query);
-    $this->mod_version = "0.26";
+    $this->makeRevision("0.26");
+
+    $query = "ALTER TABLE `facture_etablissement`
+                ADD `annule` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `factureitem`
+                ADD `seance` INT (11);";
+    $this->addQuery($query);
+    $this->mod_version = "0.27";
     
   }
 }
