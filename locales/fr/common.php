@@ -286,6 +286,7 @@ $locales['Star'] = 'Marquer';
 $locales['Start'] = 'Commencer';
 $locales['Starts'] = 'Débuts';
 $locales['State'] = 'Etat';
+$locales['Statistics'] = 'Statistiques';
 $locales['Status'] = 'Statut';
 $locales['Stop'] = 'Stop';
 $locales['Submit'] = 'Envoyer';
