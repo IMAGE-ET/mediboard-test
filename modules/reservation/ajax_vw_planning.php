@@ -258,8 +258,8 @@ if ($show_operations) {
       //liaisons
       $liaison_sejour = "";
       foreach ($sejour->_liaisons_for_prestation as $_liaison) {
-        if ($date_planning == $_liaison->date) {
-          $liaison_sejour .= $_liaison->_ref_item->nom." ";
+        if ($date_planning == $_liaison->date && ($_liaison->_ref_item->_id)) {
+          $liaison_sejour = $_liaison->_ref_item->nom.' ';
         }
       }
 
@@ -309,11 +309,11 @@ if ($show_operations) {
 
       //only switzerland
       if (CAppUI::conf("ref_pays") == 2) {
-        if (count($sejour->_liaisons_for_prestation) && $liaison_sejour) {
-          $libelle .= "<strong>$liaison_sejour</strong><br/>";
+        if ($liaison_sejour) {
+          $libelle .= "<strong>$liaison_sejour</strong> |";
         }
         if (CAppUI::conf("dPplanningOp CSejour use_charge_price_indicator") && $charge->_id) {
-          $libelle .= "<strong>$charge->code</strong><br/>";
+          $libelle .= " <strong>$charge->code</strong><br/>";
         }
       }
       if (CAppUI::conf("reservation display_dossierBloc_button")) {
