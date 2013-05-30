@@ -119,6 +119,7 @@ class COperation extends CCodable implements IPatientRelated {
   public $_min_urgence;
   public $_lu_type_anesth;
   public $_codes_ccam = array();
+  public $_fin_prevue;
   public $_duree_interv;
   public $_duree_garrot;
   public $_duree_induction;
@@ -214,6 +215,9 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_locked = CAppUI::conf("dPplanningOp COperation locked");
   }
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'operations';
@@ -244,6 +248,9 @@ class COperation extends CCodable implements IPatientRelated {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $protocole = new CProtocole();
     $props = parent::getProps();
@@ -387,6 +394,9 @@ class COperation extends CCodable implements IPatientRelated {
     return $this->_ref_type_anesth->ext_doc;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["blood_salvages"]           = "CBloodSalvage operation_id";
@@ -425,6 +435,9 @@ class COperation extends CCodable implements IPatientRelated {
     return $tab;
   }
 
+  /**
+   * @see parent::check()
+   */
   function check() {
     $msg = null;
     $this->completeField("chir_id", "plageop_id", "sejour_id");
@@ -458,6 +471,9 @@ class COperation extends CCodable implements IPatientRelated {
     return $msg . parent::check();
   }
 
+  /**
+   * @see parent::delete()
+   */
   function delete() {
     $msg = parent::delete();
     $this->loadRefPlageOp();
@@ -465,6 +481,9 @@ class COperation extends CCodable implements IPatientRelated {
     return $msg;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_hour_op = intval(substr($this->temp_operation, 0, 2));
@@ -486,20 +505,22 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_ref_type_anesth = $this->loadFwdRef("type_anesth", true);
     $this->_lu_type_anesth = $this->_ref_type_anesth->name;
 
+    $this->_fin_prevue = CMbDT::addTime($this->time_operation, $this->temp_operation);
+
     if ($this->debut_op && $this->fin_op && $this->fin_op > $this->debut_op) {
-      $this->_duree_interv = CMbDT::subTime($this->debut_op,$this->fin_op);
+      $this->_duree_interv = CMbDT::subTime($this->debut_op, $this->fin_op);
     }
     if ($this->pose_garrot && $this->retrait_garrot && $this->retrait_garrot > $this->pose_garrot) {
-      $this->_duree_garrot = CMbDT::subTime($this->pose_garrot,$this->retrait_garrot);
+      $this->_duree_garrot = CMbDT::subTime($this->pose_garrot, $this->retrait_garrot);
     }
     if ($this->induction_debut && $this->induction_fin && $this->induction_fin > $this->induction_debut) {
-      $this->_duree_induction = CMbDT::subTime($this->induction_debut,$this->induction_fin);
+      $this->_duree_induction = CMbDT::subTime($this->induction_debut, $this->induction_fin);
     }
     if ($this->entree_salle && $this->sortie_salle && $this->sortie_salle>$this->entree_salle) {
-      $this->_presence_salle = CMbDT::subTime($this->entree_salle,$this->sortie_salle);
+      $this->_presence_salle = CMbDT::subTime($this->entree_salle, $this->sortie_salle);
     }
     if ($this->entree_reveil && $this->sortie_reveil_possible && $this->sortie_reveil_possible > $this->entree_reveil) {
-      $this->_duree_sspi = CMbDT::subTime($this->entree_reveil,$this->sortie_reveil_possible);
+      $this->_duree_sspi = CMbDT::subTime($this->entree_reveil, $this->sortie_reveil_possible);
     }
 
     if ($this->plageop_id) {
@@ -513,6 +534,9 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_acte_depassement_anesth = $this->depassement_anesth;
   }
 
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     if (is_array($this->_codes_ccam) && count($this->_codes_ccam)) {
       $this->codes_ccam = implode("|", $this->_codes_ccam);
@@ -656,6 +680,9 @@ class COperation extends CCodable implements IPatientRelated {
     return $alerte->store();
   }
 
+  /**
+   * @see parent::store()
+   */
   function store($reorder = true) {
     $old_object = $this->loadOldObject();
 
@@ -682,6 +709,7 @@ class COperation extends CCodable implements IPatientRelated {
     }
 
     // Cas d'une plage que l'on quitte
+    /** @var CPlageOp $old_plage */
     $old_plage = null;
     if ($this->fieldAltered("plageop_id") && $this->_old->rank) {
       $old_plage = $this->_old->loadRefPlageOp();
@@ -860,6 +888,9 @@ class COperation extends CCodable implements IPatientRelated {
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
 
+  /**
+   * @see parent::loadView()
+   */
   function loadView() {
     parent::loadView();
     $this->loadRefPraticien()->loadRefFunction();
@@ -868,6 +899,9 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_ref_sejour->_ref_patient->loadRefPhotoIdentite();
   }
 
+  /**
+   * @see parent::loadComplete()
+   */
   function loadComplete() {
     parent::loadComplete();
     $this->loadRefPatient();
@@ -1086,6 +1120,8 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   /**
+   * Chargement du dossier d'anesthésie
+   *
    * @return CConsultAnesth
    */
   function loadRefsConsultAnesth() {
@@ -1129,6 +1165,7 @@ class COperation extends CCodable implements IPatientRelated {
 
     if ($count_check_lists) {
       foreach ($this->_ref_poses_disp_vasc as $_pose) {
+        /** @var CPoseDispositifVasculaire $_pose */
         $_pose->countSignedCheckLists();
       }
     }
@@ -1137,6 +1174,8 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   /**
+   * Chargement du patient concerné
+   *
    * @param bool $cache Utilisation du cache
    * 
    * @return CPatient
@@ -1150,6 +1189,9 @@ class COperation extends CCodable implements IPatientRelated {
     return $patient;
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd($cache = true) {
     $consult_anesth = $this->loadRefsConsultAnesth();
     $consult_anesth->countDocItems();
@@ -1168,12 +1210,17 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   /**
+   * Chargement des besoins en ressources materielles
+   *
    * @return CBesoinRessource[]
    */
   function loadRefsBesoins() {
     return $this->_ref_besoins = $this->loadBackRefs("besoins_ressources");
   }
 
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack() {
     $this->loadRefsFiles();
     $this->loadRefsActes();
@@ -1181,6 +1228,9 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   /**
+   * Vérifie si une intervention est considérée
+   * comme terminée concernant le codage des actes
+   *
    * @return bool
    */
   function isCoded() {
@@ -1192,6 +1242,9 @@ class COperation extends CCodable implements IPatientRelated {
     return $this->_coded;
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     switch ($permType) {
       case PERM_EDIT :

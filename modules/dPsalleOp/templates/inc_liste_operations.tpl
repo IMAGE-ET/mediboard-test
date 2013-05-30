@@ -77,12 +77,15 @@
         {{$_operation->_ref_anesth->_view}} -
       {{/if}}
       {{/if}}
-      {{if $_operation->time_operation != "00:00:00"}}
+      {{if $_operation->time_operation != "00:00:00" && !$_operation->entree_salle}}
         {{$_operation->time_operation|date_format:$conf.time}}
-        {{if $_operation->fin_op}}
-          {{$_operation->fin_op|date_format:$conf.time}}
-        {{else}}
-          {{$_operation->_acte_execution|date_format:$conf.time}}*
+        <br />
+        {{$_operation->_fin_prevue|date_format:$conf.time}}
+      {{elseif $_operation->entree_salle}}
+        {{$_operation->entree_salle|date_format:$conf.time}}
+        {{if $_operation->sortie_salle}}
+          <br />
+          {{$_operation->sortie_salle|date_format:$conf.time}}
         {{/if}}
       {{else}}
         NP
@@ -199,7 +202,13 @@
   {{/if}}
   </td>
   {{if !$vueReduite}}
-  <td>{{$_operation->temp_operation|date_format:$conf.time}}</td>
+  <td {{if $_operation->_presence_salle}}style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"{{/if}}>
+    {{if $_operation->_presence_salle}}
+      {{$_operation->_presence_salle|date_format:$conf.time}}
+    {{else}}
+      {{$_operation->temp_operation|date_format:$conf.time}}
+    {{/if}}
+  </td>
   {{/if}}
   {{/if}}
 </tr>

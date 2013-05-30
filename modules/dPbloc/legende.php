@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -28,11 +28,19 @@
   </tr>       
   <tr>
     <td style="background-color:#cfc"></td>
-    <td class="text">Intervention en cours</td>
+    <td class="text">
+      Intervention en cours
+      <br />
+      (heure d'entrée en salle réelle affichée)
+    </td>
   </tr>
   <tr>
     <td style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"></td>
-    <td class="text">Intervention terminée</td>
+    <td class="text">
+      Intervention terminée
+      <br />
+      (heure d'entrée en salle, de sortie de salle et durée réelles affichées)
+    </td>
   </tr> 
   <tr>
     <td style="background-color:#fcc"></td>
