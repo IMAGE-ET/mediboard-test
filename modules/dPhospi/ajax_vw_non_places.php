@@ -290,7 +290,7 @@ foreach ($affectations as $_affectation) {
   $_affectation->loadRefsAffectations();
   $_affectation->_affectations_enfant_ids = CMbArray::pluck($_affectation->loadBackRefs("affectations_enfant"), "affectation_id");
   $sejour = $_affectation->loadRefSejour();
-  $affectation->_ref_sejour->loadRefChargePriceIndicator();
+  $_affectation->_ref_sejour->loadRefChargePriceIndicator();
   $sejour->loadRefPraticien()->loadRefFunction();
   $patient = $sejour->loadRefPatient();
   $patient->loadRefPhotoIdentite();
