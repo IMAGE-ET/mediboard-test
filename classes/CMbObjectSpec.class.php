@@ -15,13 +15,19 @@ class CMbObjectSpec {
   public $loggable            = true;
   public $nullifyEmptyStrings = true;
   public $dsn                 = "std";
+
+  /** @var string|null Table name */
   public $table               = null;
+  /** @var string|null Primary key colemn name */
   public $key                 = null;
+  /** @var array|null [experimental] Temporary loading restrain to a field collection when defined */
+  public $columns              = null;
+
   public $measureable         = false;
   public $uniques             = array();
   public $xor                 = array();
   public $events              = array();
-  
+
   /** @var CSQLDataSource */
   public $ds = null;
   

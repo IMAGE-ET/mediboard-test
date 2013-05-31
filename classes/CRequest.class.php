@@ -384,8 +384,17 @@ class CRequest {
       if (count($this->select)) {
         trigger_error("You have to choose either an object or select(s)", E_USER_ERROR);
       }
-      
-      $arraySelect[] = "`{$obj->_spec->table}`.*";
+
+      // Restrain loading to a column collection
+      if (is_array($obj->_spec->columns)) {
+        $arraySelect[] = "`{$obj->_spec->table}`.`{$obj->_spec->key}`";
+        foreach ($obj->_spec->columns as $_column) {
+          $arraySelect[] = "`{$obj->_spec->table}`.`$_column`";
+        }
+      }
+      else {
+        $arraySelect[] = "`{$obj->_spec->table}`.*";
+      }
       
       if (count($this->table)) {
         trigger_error("You have to choose either an object or table(s)");
