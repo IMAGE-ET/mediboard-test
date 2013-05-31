@@ -10,8 +10,9 @@
  */
 /**
  * Class CPlanningWeek
+ * @Deprecated use CPlanningWeekNew instead
  */
-class CPlanningWeek {
+class CPlanningWeek extends CPlanning {
   public $guid;
   public $title;
   
@@ -44,6 +45,8 @@ class CPlanningWeek {
   public $events_sorted = array();
   public $ranges = array();
   public $ranges_sorted = array();
+
+  public $_nb_collisions_ranges_sorted = array();
   
   public $pauses = array("08", "12", "16");
   public $unavailabilities = array();
@@ -266,10 +269,19 @@ class CPlanningWeek {
     }
     
     $this->has_range = true;
-    
+
+    foreach ($this->ranges as $_range) {
+      if (!isset($this->_nb_collisions_ranges_sorted[$range->day])) {
+        $this->_nb_collisions_ranges_sorted[$range->day] = 0;
+      }
+      if ($_range->collides($range)) {
+        $this->_nb_collisions_ranges_sorted[$_range->day]++;
+      }
+    }
+
     $this->ranges[] = $range;
     $this->ranges_sorted[$range->day][$range->hour][] = $range;
-    
+
     $range->offset = 0.0;
     $range->width = 1.0;
   }

@@ -117,7 +117,7 @@ Main.add(function() {
             {{else}}
               {{assign var=disabled value=false}}
             {{/if}}
-            
+
             {{if array_key_exists($_day, $planning->unavailabilities)}}
               {{assign var=unavail value=true}}
             {{else}}
@@ -152,12 +152,17 @@ Main.add(function() {
                   
                   {{if $has_range}}
                     <div class="range-container">
-                      {{foreach from=$planning->ranges_sorted.$_day.$_hour item=_range key=_key}}
+                      {{foreach from=$planning->ranges_sorted.$_day.$_hour item=_range key=_key name=_nRange}}
                         <div id="{{$_range->internal_id}}" class="range"
                           {{assign var=explode_guid value="-"|explode:$_range->guid}}
+                             style="background-color: #{{$_range->color}};
+                               width:{{if $planning->_nb_collisions_ranges_sorted.$_day > 0}}50{{else}}100{{/if}}%;
                           {{if $_range->type == "plageconsult"}}
-                            style="cursor: help; background: #{{$_range->color}}";
+                            cursor: help;
+                            left:{{if $planning->_nb_collisions_ranges_sorted.$_day > 0}}50%{{else}}0{{/if}};"
                             onclick="PlageConsultation.edit('{{$explode_guid.1}}', refreshPlanning)"
+                          {{else}}
+                          "
                           {{/if}}>
                           {{if $_range->title}}
                             <div class="libelle">
