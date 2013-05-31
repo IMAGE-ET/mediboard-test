@@ -33,9 +33,13 @@ $bank_holidays = array_merge(CMbDT::bankHolidays($debut), CMbDT::bankHolidays($f
 // Nombre de jours
 $nbDays = 5;
 $plage  = new CPlageconsult();
-$where  = array();
+$whereInterv = array();
+$whereHP = array();
+$where = array();
+$whereInterv["chir_id"] = $whereHP["chir_id"] =  " = '$chir_id'";
 $where[] = "chir_id = '$chir_id' OR remplacant_id = '$chir_id'";
-$where["date"] = "= '$fin'";
+$where["date"] = $whereInterv["date"] = $whereHP["date"] = "= '$fin'";
+
 if ($plage->countList($where)) {
   $nbDays = 7;
 }
@@ -54,13 +58,41 @@ $planning->hour_min = "07";
 $planning->hour_max = "20";
 $planning->pauses   = array("07", "12", "19");
 
+$whereHP["plageop_id"] = " IS NULL";
+
 for ($i = 0; $i < $nbDays; $i++) {
   $jour = CMbDT::date("+$i day", $debut);
-  $where["date"] = "= '$jour'";
+  $where["date"] = $whereInterv["date"] = $whereHP["date"] = "= '$jour'";
+
+  if (CAppUI::pref("showIntervPlanning")) {
+    //HORS PLAGE
+    $horsPlage = new COperation();
+    /** @var COperation[] $horsPlages */
+    $horsPlages = $horsPlage->loadList($whereHP);
+    CMbObject::massLoadFwdRef($horsPlages, "chir_id");
+    foreach ($horsPlages as $_horsplage) {
+      $lenght = (CMBDT::minutesRelative("00:00:00", $_horsplage->temp_operation));
+      $op = new CPlanningRange($_horsplage->_guid, $jour." ".$_horsplage->time_operation, $lenght, $_horsplage,"3c75ea", "horsplage");
+      $planning->addRange($op);
+    }
+
+
+    //INTERVENTIONS
+    /** @var CPlageOp[] $intervs */
+    $interv = new CPlageOp();
+    $intervs = $interv->loadList($whereInterv);
+    CMbObject::massLoadFwdRef($intervs, "chir_id");
+    foreach ($intervs as $_interv) {
+      $range = new CPlanningRange($_interv->_guid, $jour." ".$_interv->debut, CMbDT::minutesRelative($_interv->debut, $_interv->fin), CAppUI::tr($_interv->_class),"bbccee", "plageop");
+      $planning->addRange($range);
+    }
+  }
+
+
+
+
   $plages = $plage->loadList($where);
-  
   CMbObject::massLoadFwdRef($plages, "chir_id");
-  
   foreach ($plages as $_plage) {
     $_plage->loadRefsFwd(1);
     $_plage->loadRefsConsultations(false);
