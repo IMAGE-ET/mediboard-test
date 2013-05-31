@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
  * @package Mediboard
@@ -32,4 +32,5 @@ CPreferences::$modules["dPcabinet"] = array (
   "new_semainier",
   "order_mode_grille",
   "create_dossier_anesth",
+  "showIntervPlanning",
 );

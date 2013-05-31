@@ -1914,6 +1914,9 @@ class CSetupdPcabinet extends CSetup {
                 WHERE `plageconsult`.`freq` < '00:05:00';";
     $this->addQuery($query);
 
-    $this->mod_version = "2.04";
+    $this->makeRevision("2.04");
+    $this->addPrefQuery("showIntervPlanning", "0");
+
+    $this->mod_version = "2.05";
   }
 }

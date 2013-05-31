@@ -38,8 +38,11 @@ $dateArr = CMbDT::date("+6 day", $debut);
 $nbDays = 7;
 $listPlage = new CPlageconsult();
 
+$whereInterv = array();
+$whereHP = array();
 $where = array();
-$where["date"] = "= '$dateArr'";
+$where["date"] = $whereInterv["date"] = $whereHP["date"] = "= '$dateArr'";
+$whereInterv["chir_id"] = $whereHP["chir_id"] =  " = '$chirSel'";
 $where[] = "chir_id = '$chirSel' OR remplacant_id = '$chirSel'";
 
 if (!$listPlage->countList($where)) {
@@ -52,7 +55,7 @@ if (!$listPlage->countList($where)) {
   }
 }
 
-$bank_holidays = array_merge(CMbDT::bankHolidays($debut), CMbDT::bankHolidays($fin));
+$bank_holidays = array_merge(CMbDate::getHolidays($debut), CMbDate::getHolidays($fin));
 
 // Planning Week
 $planning = new CPlanningWeek($debut, $debut, $fin, $nbDays, false, "auto");
@@ -75,13 +78,40 @@ $planning->hour_divider = 60 / CAppUI::conf("dPcabinet CPlageconsult minutes_int
 
 $plage = new CPlageconsult();
 
+$whereHP["plageop_id"] = " IS NULL";
+
 for ($i = 0; $i < $nbDays; $i++) {
   $jour = CMbDT::date("+$i day", $debut);
-  $where["date"] = "= '$jour'";
+  $where["date"] = $whereInterv["date"] = $whereHP["date"] = "= '$jour'";
+
+  if (CAppUI::pref("showIntervPlanning")) {
+    //HORS PLAGE
+    $horsPlage = new COperation();
+    /** @var COperation[] $horsPlages */
+    $horsPlages = $horsPlage->loadList($whereHP);
+    CMbObject::massLoadFwdRef($horsPlages, "chir_id");
+    foreach ($horsPlages as $_horsplage) {
+      $lenght = (CMBDT::minutesRelative("00:00:00", $_horsplage->temp_operation));
+      $op = new CPlanningRange($_horsplage->_guid, $jour." ".$_horsplage->time_operation, $lenght, $_horsplage,"3c75ea", "horsplage");
+      $planning->addRange($op);
+    }
+
+
+    //INTERVENTIONS
+    /** @var CPlageOp[] $intervs */
+    $interv = new CPlageOp();
+    $intervs = $interv->loadList($whereInterv);
+    CMbObject::massLoadFwdRef($intervs, "chir_id");
+    foreach ($intervs as $_interv) {
+      $range = new CPlanningRange($_interv->_guid, $jour." ".$_interv->debut, CMbDT::minutesRelative($_interv->debut, $_interv->fin), CAppUI::tr($_interv->_class),"bbccee", "plageop");
+      $planning->addRange($range);
+    }
+  }
+
+  //PLAGES CONSULT
+  /** @var CPlageConsult[] $plages */
   $plages = $plage->loadList($where, "date, debut");
-  
   CMbObject::massLoadFwdRef($plages, "chir_id");
-  
   foreach ($plages as $_plage) {
     $_plage->loadRefsFwd(1);
     $_plage->loadRefsConsultations(false);
@@ -171,7 +201,8 @@ for ($i = 0; $i < $nbDays; $i++) {
     }
   }
 }
-//mbTrace($planning->events);
+
+$planning->rearrange();
 $smarty = new CSmartyDP();
 
 $smarty->assign("planning" , $planning);

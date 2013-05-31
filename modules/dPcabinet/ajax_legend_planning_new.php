@@ -15,4 +15,5 @@
 
 //smarty
 $smarty = new CSmartyDP();
+$smarty->assign("view_operations", CAppUI::pref("showIntervPlanning"));
 $smarty->display("vw_legend_planning_new.tpl");

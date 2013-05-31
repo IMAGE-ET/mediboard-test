@@ -19,8 +19,11 @@
 <table class="tbl" id="legendPlanningCabinetNew">
   <tbody>
     <tr>
-      <th>{{tr}}Color{{/tr}}</th>
-      <th>{{tr}}Legend{{/tr}}</th>
+      <th class="title">{{tr}}Color{{/tr}}</th>
+      <th class="title">{{tr}}Legend{{/tr}}</th>
+    </tr>
+    <tr>
+      <th class="category" colspan="2">{{tr}}CPlageconsult{{/tr}}</th>
     </tr>
     <tr>
       <td style="background: #cfc;" class="color"></td>
@@ -50,5 +53,18 @@
       <td style="background: #fda;" class="color"></td>
       <td>remplace un autre praticien</td>
     </tr>
+    {{if $view_operations}}
+      <tr>
+        <th colspan="2" class="category">Plages {{tr}}COperation{{/tr}}</th>
+      </tr>
+      <tr>
+        <td style="background: #3c75ea;" class="color"></td>
+        <td>Intervention hors plage</td>
+      </tr>
+      <tr>
+        <td style="background: #bbccee;" class="color"></td>
+        <td>Plage opératoire</td>
+      </tr>
+    {{/if}}
   </tbody>
 </table>
