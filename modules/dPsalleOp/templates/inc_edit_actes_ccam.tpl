@@ -172,8 +172,9 @@
               <tr {{if !$can->edit}}style="display: none;"{{/if}}>
                 <th>{{mb_label object=$acte field=execution}}</th>
                 <td colspan="10">
-                  {{if $acte->commentaire == ""}}
-                    <button type="button" class="edit" style="float: right;" onclick="this.up('tbody').down('tr.commentaire').toggle()">Commentaire</button>
+                  {{if $acte->_id}}
+                    {{mb_include module=system template=inc_object_idsante400 object=$acte}}
+                    {{mb_include module=system template=inc_object_history object=$acte}}
                   {{/if}}
                   {{mb_field object=$acte field=execution form="formActe-$view" register=true}}
                 </td>
@@ -183,6 +184,9 @@
               <tr class="{{$key}}">
                 <th>{{mb_label object=$acte field=executant_id}}</th>
                 <td colspan="10">
+                  {{if $acte->commentaire == ""}}
+                    <button type="button" class="edit" style="float: right;" onclick="this.up('tbody').down('tr.commentaire').toggle()">Commentaire</button>
+                  {{/if}}
                   {{mb_ternary var=listExecutants test=$acte->_anesth value=$listAnesths other=$listChirs}}
                   <select name="executant_id" class="{{$acte->_props.executant_id}}" style="width: 15em;">
                     <option value="">&mdash; Choisir un professionnel de santé</option>
@@ -244,14 +248,13 @@
                 <th>{{mb_label object=$acte field=montant_depassement}}</th>
                 <td>{{mb_field object=$acte field=montant_depassement}}</td>
                 {{/if}}
-                 
-                 {{if $_phase->charges}}
-                 <th />
-                <td>
-                  {{mb_field object=$acte field=charges_sup typeEnum="checkbox"}}
-                  {{mb_label object=$acte field=charges_sup}}
-                  ({{$_phase->charges|currency}})
-                </td>
+                {{if $_phase->charges}}
+                 <th></th>
+                  <td>
+                    {{mb_field object=$acte field=charges_sup typeEnum="checkbox"}}
+                    {{mb_label object=$acte field=charges_sup}}
+                    ({{$_phase->charges|currency}})
+                  </td>
                 {{/if}}
               {{/if}}
               </tr>

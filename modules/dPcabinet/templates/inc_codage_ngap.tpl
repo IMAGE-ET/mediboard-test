@@ -9,7 +9,7 @@ refreshTarif = function(){
   url.addElement(oForm.demi);
   url.addElement(oForm.complement);
   url.requestUpdate('tarifActe');
-}
+};
   
 ActesNGAP = {
   refreshList: function() {
@@ -149,7 +149,7 @@ ActesNGAP = {
       {{if $can->edit}}
         <tr>
           <td>{{mb_field object=$acte_ngap field="quantite" onchange="refreshTarif()" onkeyup="refreshTarif()"}}</td>
-          <td> 
+          <td>
             {{mb_field object=$acte_ngap field="code" onchange="refreshTarif()"}}
             <div style="display: none; width: 300px;" class="autocomplete" id="code_auto_complete"></div>
           </td>
@@ -193,7 +193,11 @@ ActesNGAP = {
     {{foreach from=$object->_ref_actes_ngap item="_acte_ngap"}}
     <tr {{if $_acte_ngap->lettre_cle == '1'}}style="font-weight: bold;"{{/if}}>
       <td>{{mb_value object=$_acte_ngap field="quantite"}}</td>
-      <td>{{mb_value object=$_acte_ngap field="code"}}</td>
+      <td>
+        {{mb_include module=system template=inc_object_idsante400 object=$_acte_ngap}}
+        {{mb_include module=system template=inc_object_history object=$_acte_ngap}}
+        {{mb_value object=$_acte_ngap field="code"}}
+      </td>
       <td>{{mb_value object=$_acte_ngap field="coefficient"}}</td>
       <td>{{mb_value object=$_acte_ngap field="demi"}}</td>
       {{if !$object->_coded}}

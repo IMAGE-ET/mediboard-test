@@ -43,7 +43,13 @@
         {{/if}}
         
         {{mb_ternary var=listExecutants test=$acte->_anesth value=$listAnesths other=$listChirs}}
-        <td style="{{if $acte->_id && $acte->code_association == $acte->_guess_association}}background-color: #9f9;{{elseif $acte->_id}}background-color: #fc9;{{else}}background-color: #f99;{{/if}}">{{$curr_code->code}}-{{$curr_activite->numero}}-{{$curr_phase->phase}}</td>
+        <td style="{{if $acte->_id && $acte->code_association == $acte->_guess_association}}background-color: #9f9;{{elseif $acte->_id}}background-color: #fc9;{{else}}background-color: #f99;{{/if}}">
+          {{if $acte->_id}}
+            {{mb_include module=system template=inc_object_idsante400 object=$acte}}
+            {{mb_include module=system template=inc_object_history object=$acte}}
+          {{/if}}
+          {{$curr_code->code}}-{{$curr_activite->numero}}-{{$curr_phase->phase}}
+        </td>
         {{if $acte->_id}}
         <td>
           {{assign var="executant_id" value=$acte->executant_id}}
