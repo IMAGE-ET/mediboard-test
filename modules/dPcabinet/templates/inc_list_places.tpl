@@ -1,4 +1,5 @@
-{{if $online && $plage->_id}}
+{{if $online && !$plage->locked}}
+
 <script type="text/javascript">
 
 PlageConsult.setClose = function(time) {
@@ -12,28 +13,30 @@ PlageConsult.setClose = function(time) {
     window.parent.PatSelector.init();
   }
 };
-PlageConsult.addPlaceBefore = function(plage_id) {
-  var oForm = getForm("editPlage");
+
+PlageConsult.addPlaceBefore = function() {
+  var form = getForm("editPlage");
   var date = new Date();
   date.setHours({{$plage->debut|date_format:"%H"}});
   date.setMinutes({{$plage->debut|date_format:"%M"}} - {{$plage->freq|date_format:"%M"}});
   date.setSeconds({{$plage->debut|date_format:"%S"}});
-  oForm.debut.value = printf('%02d:%02d:%02d',date.getHours(), date.getMinutes(), date.getSeconds());
-  submitFormAjax(oForm, "systemMsg", { onComplete: function() { PlageConsult.refreshPlage(); } });
+  form.debut.value = printf('%02d:%02d:%02d',date.getHours(), date.getMinutes(), date.getSeconds());
+  console.log('Passé par là');
+  return onSubmitFormAjax(form, function() { PlageConsult.refreshPlage(); });
 };
-PlageConsult.addPlaceAfter = function(plage_id) {
-  var oForm = getForm("editPlage");
+
+PlageConsult.addPlaceAfter = function() {
+  var form = getForm("editPlage");
   var date = new Date();
   date.setHours({{$plage->fin|date_format:"%H"}});
   date.setMinutes({{$plage->fin|date_format:"%M"}} + {{$plage->freq|date_format:"%M"}});
   date.setSeconds({{$plage->fin|date_format:"%S"}});
-  oForm.fin.value = printf('%02d:%02d:%02d', date.getHours(), date.getMinutes(), date.getSeconds());
-  submitFormAjax(oForm, "systemMsg", { onComplete: function() { PlageConsult.refreshPlage(); } });
+  form.fin.value = printf('%02d:%02d:%02d', date.getHours(), date.getMinutes(), date.getSeconds());
+  return onSubmitFormAjax(form, function() { PlageConsult.refreshPlage(); });
 };
-{{/if}}
 
 </script>
-{{if $online && !$plage->locked}}
+
 <form action="?m=dPcabinet" method="post" name="editPlage" onsubmit="return checkForm(this);">
   <input type="hidden" name="m" value="dPcabinet" />
   <input type="hidden" name="dosql" value="do_plageconsult_aed" />
@@ -44,7 +47,9 @@ PlageConsult.addPlaceAfter = function(plage_id) {
   <input type="hidden" name="chir_id" value="{{$plage->chir_id}}" />
   <input type="hidden" name="_repeat" value="1" />
 </form>
+
 {{/if}}
+
 <table class="tbl">
   {{assign var=display_nb_consult value=$conf.dPcabinet.display_nb_consult}}
   {{if $plage->_id}}
@@ -53,13 +58,15 @@ PlageConsult.addPlaceAfter = function(plage_id) {
       {{if $online}}
         {{mb_include module=system template=inc_object_notes object=$plage}}
       {{/if}}
-      Dr {{$plage->_ref_chir->_view}}
+      Dr {{$plage->_ref_chir}}
       <br />
       {{if $app->user_prefs.viewFunctionPrats}}
-        {{$plage->_ref_chir->_ref_function->_view}}
+        {{$plage->_ref_chir->_ref_function}}
         <br />
       {{/if}}
-      Plage du {{$plage->date|date_format:$conf.longdate}} de {{$plage->debut|date_format:$conf.time}} à {{$plage->fin|date_format:$conf.time}}
+      Plage du {{$plage->date|date_format:$conf.longdate}}
+      de {{$plage->debut|date_format:$conf.time}}
+      à {{$plage->fin|date_format:$conf.time}}
     </th>
   </tr>
   {{if $online && !$plage->locked}}

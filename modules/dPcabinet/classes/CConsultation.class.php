@@ -964,7 +964,14 @@ TESTS A EFFECTUER
     }
   }
 
-  function loadRefCategorie($cache = false) {
+  /**
+   * Charge la catégorie de la consultation
+   *
+   * @param bool $cache Utilise le cache
+   *
+   * @return CConsultationCategorie
+   */
+  function loadRefCategorie($cache = true) {
     return $this->_ref_categorie = $this->loadFwdRef("categorie_id", $cache);
   }
 

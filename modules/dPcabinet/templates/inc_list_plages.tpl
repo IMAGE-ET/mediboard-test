@@ -1,18 +1,18 @@
     <table class="tbl">
       <tr>
-        <th style="width: 7em;">Date</th>
-        <th>Praticien</th>
-        <th>Libelle</th>
-        <th colspan="2">Etat</th>
+        <th style="width: 7em;">{{mb_title class=CPlageconsult field=date}}</th>
+        <th>{{mb_title class=CPlageconsult field=chir_id}}</th>
+        <th>{{mb_title class=CPlageconsult field=libelle}}</th>
+        <th colspan="2">{{tr}}Status{{/tr}}</th>
       </tr>
       {{foreach from=$listPlage item=_plage}}
       <tr {{if $_plage->_id == $plageconsult_id}}class="selected"{{/if}} id="plage-{{$_plage->_id}}">
         <td {{if in_array($_plage->date, $bank_holidays)}}style="background: #fc0"{{/if}}>
-          {{include file=inc_plage_etat.tpl}}
+          {{mb_include template=inc_plage_etat}}
         </td>
         <td class="text">
           <div class="mediuser" style="border-color: #{{$_plage->_ref_chir->_ref_function->color}};">
-            {{$_plage->_ref_chir->_view}}
+            {{$_plage->_ref_chir}}
           </div>
         </td>
         <td class="text">
@@ -24,7 +24,7 @@
           {{/if}}
           {{$_plage->libelle}}
         </td>
-        <td>
+        <td style="text-align: center;">
           {{$_plage->_affected}}/{{$_plage->_total|string_format:"%.0f"}}
         </td>
         <td>

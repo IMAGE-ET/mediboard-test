@@ -10,67 +10,96 @@
 
 CCanDo::checkRead();
 
+CApp::setMemoryLimit("512M");
+
 $ds = CSQLDataSource::get("std");
 
-// Initialisation des variables
-$chir_id     = CValue::get("chir_id");
 $function_id = CValue::get("function_id");
+$chir_ids    = CValue::get("chir_ids");
 $date        = CValue::get("date", CMbDT::date());
-$nb_months   = CValue::get("nb_months", 3);
-$period      = CValue::get("period", CAppUI::pref("DefaultPeriod"));
-
-// Récupération des plages de consultation disponibles
-$plage = new CPlageconsult();
-$listPlage = array();
-$where = array();
+$period      = CValue::get("period", "12-weeks");
 
 // Praticiens sélectionnés
-$praticien = new CMediusers;
-if (CAppUI::pref("pratOnlyForConsult", 1)) {
-  $listPrat = $praticien->loadPraticiens(PERM_EDIT, $function_id);
-}
-else {
-  $listPrat = $praticien->loadProfessionnelDeSante(PERM_EDIT, $function_id);
+$user = new CMediusers;
+$praticiens = array();
+if ($function_id) {
+  $praticiens = CAppUI::pref("pratOnlyForConsult", 1) ?
+    $user->loadPraticiens(PERM_EDIT, $function_id) :
+    $user->loadProfessionnelDeSante(PERM_EDIT, $function_id);
 }
 
-$where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat), $chir_id);
+if ($chir_ids) {
+  $praticiens = $user->loadAll(explode("-", $chir_ids));
+}
 
+// Bornes de dates
+list($period_count, $period_type) = explode("-", $period);
+$period_count++;
+$date_min = CMbDT::date($date);
+$date_max = CMbDT::date("first day of this month", $date);
+$date_max = CMbDT::date("+ $period_count $period_type - 1 day", $date_max);
+
+// Chargement de toutes les plages concernées
+$where["chir_id"] = CSQLDataSource::prepareIn(array_keys($praticiens));
+$where["date"] = $ds->prepare("BETWEEN %1 AND %2", $date_min, $date_max);
 $order = "date, debut";
 
-// Chargement des plages par date
-$maxDate = CMbDT::date("-1 DAYS", $date);
+$plage = new CPlageconsult();
+/** @var CPlageconsult[] $plages */
+$plages = $plage->loadList($where, $order);
 
-for ($i = 1; $i <= $nb_months; $i++) {
-  $minDate = CMbDT::date("+1 DAYS", $maxDate);
-  $maxDate = CMbDT::transform("+1 MONTH", $minDate, "%Y-%m-01");
-  $maxDate = CMbDT::date("-1 DAYS", $maxDate);
-  $where["date"] = $ds->prepare("BETWEEN %1 AND %2", $minDate, $maxDate);
-  $listPlages[CMbDT::transform(null, $minDate, "%B %Y")] = $plage->loadList($where, $order);
-}
+/** @var CPlageconsult[][] $plages Plages par mois*/
+$listPlages = array();
 
-$bank_holidays = array_merge(CMbDT::bankHolidays($date), CMbDT::bankHolidays($maxDate));
+$bank_holidays = array_merge(CMbDate::getHolidays($date_min), CMbDate::getHolidays($date_max));
+
+$totals = array();
 
 // Chargement des places disponibles pour chaque plage
-foreach ($listPlages as &$curr_month) {
-  foreach ($curr_month as &$curr_plage) {
-    $curr_plage->_ref_chir =& $listPrat[$curr_plage->chir_id];
-    $curr_plage->loadRefs(false);
-    $curr_plage->_ref_chir->loadRefFunction();
-    $curr_plage->_listPlace = array();
-    for ($i = 0; $i < $curr_plage->_total; $i++) {
-      $minutes = $curr_plage->_freq * $i;
-      $curr_plage->_listPlace[$i]["time"] = CMbDT::time("+ $minutes minutes", $curr_plage->debut);
-      $curr_plage->_listPlace[$i]["consultations"] = array();
-    }
-    foreach ($curr_plage->_ref_consultations as &$consultation) {
-      $consultation->loadRefPatient();
-      // Chargement de la categorie
-      $consultation->loadRefCategorie();
-      $keyPlace = CMbDT::timeCountIntervals($curr_plage->debut, $consultation->heure, $curr_plage->freq);
-      for ($i = 0;  $i < $consultation->duree; $i++) {
-        if (isset($curr_plage->_listPlace[($keyPlace + $i)])) {
-          $curr_plage->_listPlace[($keyPlace + $i)]["consultations"][] =& $consultation;
-        }
+foreach ($plages as $_plage) {
+  // Classement par mois
+  $month = CMbDT::transform(null, $_plage->date, "%B %Y");
+  $listPlages[$month][] = $_plage;
+
+  // Praticien
+  $_plage->_ref_chir = $praticiens[$_plage->chir_id];
+  $_plage->_ref_chir->loadRefFunction();
+
+  // Totaux
+  if (!isset($totals[$month])) {
+    $totals[$month] = array(
+      "affected" => 0,
+      "total"    => 0,
+    );
+  }
+
+  $_plage->loadFillRate();
+  $totals[$month]["affected"] += $_plage->_affected;
+  $totals[$month]["total"   ] += $_plage->_total   ;
+
+  // Détails des consultations
+  $_plage->_listPlace = array();
+  for ($i = 0; $i < $_plage->_total; $i++) {
+    $minutes = $_plage->_freq * $i;
+    $_plage->_listPlace[$i]["time"] = CMbDT::time("+ $minutes minutes", $_plage->debut);
+    $_plage->_listPlace[$i]["consultations"] = array();
+  }
+
+  // Optimisation du chargement patient
+  $patient = new CPatient();
+  $patient->_spec->columns = array("nom", "prenom", "nom_jeune_fille", "civilite");
+
+  $consultations = $_plage->loadRefsConsultations();
+  CStoredObject::massLoadFwdRef($consultations, "patient_id");
+  CStoredObject::massLoadFwdRef($consultations, "categorie_id");
+  foreach ($consultations as $_consultation) {
+    $_consultation->loadRefPatient();
+    $_consultation->loadRefCategorie();
+
+    $place = CMbDT::timeCountIntervals($_plage->debut, $_consultation->heure, $_plage->freq);
+    for ($i = 0;  $i < $_consultation->duree; $i++) {
+      if (isset($_plage->_listPlace[($place + $i)])) {
+        $_plage->_listPlace[($place + $i)]["consultations"][] = $_consultation;
       }
     }
   }
@@ -79,11 +108,15 @@ foreach ($listPlages as &$curr_month) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("print_date"     , CMbDT::dateTime());
-$smarty->assign("chir_id"        , $chir_id);
+$smarty->assign("period_count"   , $period_count);
+$smarty->assign("period_type"    , $period_type);
+$smarty->assign("date_min"       , $date_min);
+$smarty->assign("date_max"       , $date_max);
+$smarty->assign("praticiens"     , $praticiens);
 $smarty->assign("plageconsult_id", null);
 $smarty->assign("listPlages"     , $listPlages);
-$smarty->assign("online"         , false);
+$smarty->assign("totals"         , $totals);
 $smarty->assign("bank_holidays"  , $bank_holidays);
+$smarty->assign("online"         , false);
 
 $smarty->display("offline_programme_consult.tpl");
