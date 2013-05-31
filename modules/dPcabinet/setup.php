@@ -1908,6 +1908,12 @@ class CSetupdPcabinet extends CSetup {
                 WHERE `acte_ngap`.`object_class` = 'CSejour';";
     $this->addQuery($query);
 
-    $this->mod_version = "2.03";
+    $this->makeRevision("2.03");
+    $query = "UPDATE `plageconsult`
+                SET `plageconsult`.`freq` = '00:15:00'
+                WHERE `plageconsult`.`freq` < '00:05:00';";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.04";
   }
 }
