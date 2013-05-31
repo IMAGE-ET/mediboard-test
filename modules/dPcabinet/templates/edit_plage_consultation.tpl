@@ -164,6 +164,7 @@
               <input type="text" size="2" name="_repeat" value="1"
                      onchange="this.form._type_repeat.disabled = this.value <= 1 ? 'disabled' : '';"
                      onKeyUp="this.form._type_repeat.disabled = this.value <= 1 ? 'disabled' : '';" />
+              (max. 100)
             </td>
             <td rowspan="3" class="text">
               <div class="small-info">

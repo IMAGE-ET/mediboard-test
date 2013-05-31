@@ -10,6 +10,8 @@
  */
 
 class CTimeSpec extends CMbFieldSpec {
+  public $min;
+  public $max;
   
   function getSpecType() {
     return "time";
@@ -21,8 +23,11 @@ class CTimeSpec extends CMbFieldSpec {
   
   function checkProperty($object){
     $propValue = &$object->{$this->fieldName};
-  
-    if (!preg_match("/^\d{1,2}:\d{1,2}(:\d{1,2})?$/", $propValue)) { 
+
+    $time_format = "/^\d{1,2}:\d{1,2}(:\d{1,2})?$/";
+
+    // Format
+    if (!preg_match($time_format, $propValue)) {
       if ($propValue === 'current' || $propValue ===  'now') {
         $propValue = CMbDT::time();
         return null;
@@ -30,6 +35,36 @@ class CTimeSpec extends CMbFieldSpec {
       
       return "Format d'heure invalide";
     }
+
+    // min
+    if ($this->min) {
+      if (!preg_match($time_format, $this->min)) {
+        trigger_error("Spécification de minimum time invalide (min = $this->min)", E_USER_WARNING);
+        return "Erreur système";
+      }
+      if ($propValue < $this->min) {
+        return "Doit avoir une valeur minimale de $this->min";
+      }
+    }
+
+    // max
+    if ($this->max) {
+      if (!preg_match($time_format, $this->max)) {
+        trigger_error("Spécification de maximum time invalide (max = $this->max)", E_USER_WARNING);
+        return "Erreur système";
+      }
+      if ($propValue > $this->max) {
+        return "Doit avoir une valeur maximale de $this->max";
+      }
+    }
+    return null;
+  }
+
+  function getOptions(){
+    return array(
+      'min' => 'time',
+      'max' => 'time'
+    ) + parent::getOptions();
   }
   
   function getValue($object, $smarty = null, $params = array()) {

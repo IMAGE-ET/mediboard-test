@@ -86,7 +86,7 @@ class CPlageconsult extends CPlageHoraire {
     $props["remplacant_id"]    = "ref class|CMediusers seekable";
     $props["pour_compte_id"]   = "ref class|CMediusers seekable";
     $props["date"]             = "date notNull";
-    $props["freq"]             = "time notNull";
+    $props["freq"]             = "time notNull min|00:05:00";
     $props["debut"]            = "time notNull";
     $props["fin"]              = "time notNull moreThan|debut";
     $props["libelle"]          = "str seekable";
@@ -293,7 +293,7 @@ class CPlageconsult extends CPlageHoraire {
 
   function updatePlainFields() {
     parent::updatePlainFields();
-
+    $this->completeField("freq");
     if ($this->_freq !== null) {
       if ($this->_freq == "60") {
         $this->freq = "01:00:00";

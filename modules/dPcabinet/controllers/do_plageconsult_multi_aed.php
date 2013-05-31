@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPcabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 // Object binding
@@ -14,7 +14,7 @@ $obj = new CPlageconsult();
 $obj->bind($_POST);
 
 $del    = CValue::post("del"    , 0);
-$repeat = CValue::post("_repeat", 0);
+$repeat = min(CValue::post("_repeat", 0), 100);
    
 if ($del) {
   // Suppression des plages
