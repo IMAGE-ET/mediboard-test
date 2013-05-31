@@ -12,7 +12,7 @@
  * Class CPlanningWeek
  * @Deprecated use CPlanningWeekNew instead
  */
-class CPlanningWeek extends CPlanning {
+class CPlanningWeek{
   public $guid;
   public $title;
   
