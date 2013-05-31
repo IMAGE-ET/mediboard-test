@@ -169,7 +169,7 @@ Main.add(function () {
           <tr>
             <th>Total</th>
             <td>
-              {{if $conf.ref_pays == 1}}
+              {{if $conf.ref_pays == 1 || !$tarif->_id}}
                 {{mb_field object=$tarif field=secteur1 onchange="Tarif.updateTotal();"}}
                 <input type="hidden" name="secteur2" />
                 <input type="hidden" name="_tarif" />
