@@ -36,15 +36,20 @@
     
     return confirmDeletion(oForm, { ajax: true, typeName:'le règlement' }, {
        onComplete : function() {
-        {{if $facture->_ref_reglements|@count == 1 && !isset($factures|smarty:nodefaults)}}
-          Reglement.reload(true);
-        {{else}}
-          Facture.reloadReglement('{{$facture->_id}}', '{{$facture->_class}}');
-          var url = new Url('dPfacturation', 'ajax_view_facture');
-          url.addParam('facture_id'   , '{{$facture->_id}}');
-          url.addParam('facture_class', '{{$facture->_class}}');
-          url.requestUpdate("load_facture");
-        {{/if}}
+         if (!$('load_facture')) {
+           Facture.url.refreshModal();
+         }
+         else {
+          {{if $facture->_ref_reglements|@count == 1 && !isset($factures|smarty:nodefaults)}}
+            Reglement.reload(true);
+          {{else}}
+             Facture.reloadReglement('{{$facture->_id}}', '{{$facture->_class}}');
+             var url = new Url('dPfacturation', 'ajax_view_facture');
+             url.addParam('facture_id'   , '{{$facture->_id}}');
+             url.addParam('facture_class', '{{$facture->_class}}');
+             url.requestUpdate("load_facture");
+          {{/if}}
+         }
       }
     });
   }
@@ -73,6 +78,12 @@
   addReglement = function (oForm){
     return onSubmitFormAjax(oForm, function() {
       Facture.reloadReglement('{{$facture->_id}}', '{{$facture->_class}}');
+      {{if !$facture->_ref_reglements|@count}}
+        var url = new Url('dPfacturation', 'ajax_view_facture');
+        url.addParam('facture_id'   , '{{$facture->_id}}');
+        url.addParam('facture_class', '{{$facture->_class}}');
+        url.requestUpdate("load_facture");
+      {{/if}}
     });
   }
   
