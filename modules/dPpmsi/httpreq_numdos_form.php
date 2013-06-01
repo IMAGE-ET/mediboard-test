@@ -13,7 +13,6 @@ CCanDo::checkEdit();
 
 $sejour_id = CValue::getOrSession("sejour_id");
 
-
 // Chargement du dossier patient
 $sejour = new CSejour;
 $sejour->load($sejour_id);

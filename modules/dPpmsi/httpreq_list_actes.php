@@ -26,5 +26,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("curr_op", $operation);
 
 $smarty->display("inc_confirm_actes_ccam.tpl");
-
-?>

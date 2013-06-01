@@ -21,5 +21,3 @@ $sejour->countExchanges();
 $smarty = new CSmartyDP();
 $smarty->assign("sejour" , $sejour);
 $smarty->display("inc_vw_GHM.tpl");
-
-?>

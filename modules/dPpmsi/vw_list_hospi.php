@@ -25,10 +25,10 @@ $order = array();
 $order[] = "sortie";
 $order[] = "entree";
 
+/** @var CSejour[] $listSejours */
 $listSejours = $sejour->loadList($where, $order);
 
-foreach ($listSejours as $keySejour => $valueSejour) {
-  $sejour =& $listSejours[$keySejour];
+foreach ($listSejours as $_sejour) {
   $sejour->loadRefsFwd();
   $sejour->loadNDA();
   $sejour->_ref_patient->loadIPP();
@@ -43,5 +43,3 @@ $smarty->assign("date"       , $date       );
 $smarty->assign("listSejours", $listSejours);
 
 $smarty->display("vw_list_hospi.tpl");
-
-?>

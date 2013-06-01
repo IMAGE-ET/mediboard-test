@@ -12,22 +12,22 @@ Main.add(function () {
 </script>
 
 <ul id="tabs-category" class="control_tabs">
-	{{foreach from=$counts key=category item=count}}
+  {{foreach from=$counts key=category item=count}}
   <li>
     <a href="#{{$category}}"
-		  {{if !$count.total}}class="empty"{{/if}} 
-			{{if $count.facturees != $count.total}}class="wrong"{{/if}}>
+      {{if !$count.total}}class="empty"{{/if}} 
+      {{if $count.facturees != $count.total}}class="wrong"{{/if}}>
       {{tr}}COperation-{{$category}}{{/tr}}
-		  <small>
-		 	{{if $count.facturees == $count.total}}
-			({{$count.total}})
-		 	{{else}}
+      <small>
+       {{if $count.facturees == $count.total}}
+      ({{$count.total}})
+       {{else}}
       ({{$count.facturees}}/{{$count.total}})
-		 	{{/if}}
-		 </small>
+       {{/if}}
+     </small>
     </a>
   </li>
-	{{/foreach}}
+  {{/foreach}}
 </ul>
 
 <hr class="control_tabs" />
@@ -50,25 +50,25 @@ Main.add(function () {
     <th>{{mb_label class=CSejour field=patient_id}}</th>
     <th>{{mb_label class=$operation field=time_operation}}</th>
     <th>
-    	{{mb_label object=$operation field=libelle}} +
-			{{mb_label object=$operation field=codes_ccam}}
-		</th>
-		<th>Docs</th>
+      {{mb_label object=$operation field=libelle}} +
+      {{mb_label object=$operation field=codes_ccam}}
+    </th>
+    <th>Docs</th>
     <th>{{mb_title object=$operation field=labo}}</th>
     <th>{{mb_title object=$operation field=anapath}}</th>
   </tr>
-	
+  
   <tbody id="operations" style="display: none;">
   {{foreach from=$plages item=_plage}}
   {{foreach from=$_plage->_ref_operations item=_operation}}
-	{{mb_include template=inc_list_interv}}
-	{{/foreach}}
-  {{/foreach}}
-  </tbody>
-	
-	<tbody id="urgences" style="display: none;">
-  {{foreach from=$urgences item=_operation}}
   {{mb_include template=inc_list_interv}}
   {{/foreach}}
-	</tbody>
+  {{/foreach}}
+  </tbody>
+  
+  <tbody id="horsplages" style="display: none;">
+  {{foreach from=$horsplages item=_operation}}
+  {{mb_include template=inc_list_interv}}
+  {{/foreach}}
+  </tbody>
 </table>

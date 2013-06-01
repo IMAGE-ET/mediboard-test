@@ -13,7 +13,6 @@ CCanDo::checkEdit();
 
 $pat_id = CValue::getOrSession("pat_id");
 
-
 // Chargement du dossier patient
 $patient = new CPatient;
 $patient->load($pat_id);

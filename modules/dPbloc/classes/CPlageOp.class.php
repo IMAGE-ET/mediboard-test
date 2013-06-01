@@ -236,7 +236,11 @@ class CPlageOp extends CMbObject {
    * @return COperation[]
    */
   function loadRefsOperations(
-      $annulee = true, $order = "rank, rank_voulu, horaire_voulu",$sorted = false, $validated = null, $where = array()
+      $annulee = true,
+      $order = "rank, rank_voulu, horaire_voulu",
+      $sorted = false,
+      $validated = null,
+      $where = array()
   ) {
     $where += array(
       "plageop_id" => "= '$this->plageop_id'",
@@ -246,20 +250,20 @@ class CPlageOp extends CMbObject {
       $where["annulee"] = "= '0'";
     }
 
-    /** @var COperation[] $intervs */
-    $intervs = array();
+    /** @var COperation[] $operations */
+    $operations = array();
 
     $op = new COperation;
     
     if (!$sorted) {
-      $intervs = $op->loadList($where, $order);
+      $operations = $op->loadList($where, $order);
     }
     else {
       $order = "rank, rank_voulu, horaire_voulu";
       
       if ($validated === null || $validated === true) {
         $where["rank"] = "> 0";
-        $intervs = CMbArray::mergeKeys($intervs, $op->loadList($where, $order));
+        $operations = CMbArray::mergeKeys($operations, $op->loadList($where, $order));
       }
       
       if ($validated === null || $validated === false) {
@@ -267,24 +271,24 @@ class CPlageOp extends CMbObject {
         $where["rank"] = "= 0";
         
         $where["rank_voulu"] = "> 0";
-        $intervs = CMbArray::mergeKeys($intervs, $op->loadList($where, $order));
+        $operations = CMbArray::mergeKeys($operations, $op->loadList($where, $order));
           
         // Sans rank voulu
         $where["rank_voulu"] = "= 0";
         
         $where["horaire_voulu"] = "IS NOT NULL";
-        $intervs = CMbArray::mergeKeys($intervs, $op->loadList($where, $order));
+        $operations = CMbArray::mergeKeys($operations, $op->loadList($where, $order));
         
         $where["horaire_voulu"] = "IS NULL";
-        $intervs = CMbArray::mergeKeys($intervs, $op->loadList($where, $order));
+        $operations = CMbArray::mergeKeys($operations, $op->loadList($where, $order));
       }
     }
     
-    foreach ($intervs as $operation) {
-      $operation->_ref_plageop = $this;
+    foreach ($operations as $_operation) {
+      $_operation->_ref_plageop = $this;
     }
     
-    return $this->_ref_operations = $intervs;
+    return $this->_ref_operations = $operations;
   }
 
   /**
