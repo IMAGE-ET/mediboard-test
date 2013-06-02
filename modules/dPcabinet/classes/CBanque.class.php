@@ -10,7 +10,7 @@
  */
 
 /**
- * Class CBanque
+ * Les banques permettent aux règlements d'être regroupés pour produire des borderaux
  */
 class CBanque extends CMbObject {
   public $banque_id;

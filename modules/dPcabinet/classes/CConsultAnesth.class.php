@@ -3,12 +3,18 @@
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPcabinet
+ * @subpackage Cabinet
  * @author     Romain Ollivier <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @version    $Revision$
  */
 
+/**
+ * Le dossier d'anesthésie est une liaison entre une intervention et une consultation pré-anesthésique
+ * Le dossier contient toutes les informations nécessaires à l'impression de fiches d'anesthésie pour le bloc
+ *
+ * @todo Renommer en CDossierAnesthesie
+ */
 class CConsultAnesth extends CMbObject implements IPatientRelated {
   // DB Table key
   public $consultation_anesth_id = null;
@@ -111,6 +117,9 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   /** @var  CPlageconsult */
   public $_ref_plageconsult;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'consultation_anesth';
@@ -124,12 +133,18 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["techniques"] = "CTechniqueComp consultation_anesth_id";
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -202,6 +217,9 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     
@@ -217,7 +235,10 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     
     $this->_score_apfel = $this->apfel_femme + $this->apfel_non_fumeur + $this->apfel_atcd_nvp + $this->apfel_morphine;
   }
-   
+
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     if ($this->_min_tsivy !== null && $this->_sec_tsivy !== null) {
       $this->tsivy  = '00:'.($this->_min_tsivy ? sprintf("%02d", $this->_min_tsivy):'00').':';
@@ -228,13 +249,15 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   }
   
   /**
-   * @return CPatient
+   * @see parent::loadRelPatient()
    */
-  function loadRelPatient(){
+  function loadRelPatient() {
     return $this->loadRefConsultation()->loadRefPatient();
   }
 
   /**
+   * Charge le patient associé
+   *
    * @return CPatient
    */
   function loadRefPatient(){
@@ -242,15 +265,20 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   }
 
   /**
+   * Charge la consultation associée
+   *
+   * @todo Remettre en place le cache
    * @return CConsultation
    */
   function loadRefConsultation() {
-    $this->_ref_consultation = $this->loadFwdRef("consultation_id", false);
-    $this->_view = $this->_ref_consultation->_view;
-    return $this->_ref_consultation;
+    $consultation = $this->loadFwdRef("consultation_id", false);
+    $this->_view = $consultation->_view;
+    return $this->_ref_consultation = $consultation;
   }
 
   /**
+   * Charge la chirurgien associé
+   *
    * @return CMediusers
    */
   function loadRefChir() {
@@ -258,25 +286,31 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   }
 
   /**
+   * Charge l'opération associée
+   * Value également le séjour associé
+   *
+   * @todo Remettre en place le cache
    * @return COperation
    */
   function loadRefOperation() {
-    $this->_ref_operation = $this->loadFwdRef("operation_id", false);
+    /** @var COperation $operation */
+    $operation = $this->loadFwdRef("operation_id", false);
     
     // Chargement du séjour associé
-    if ($this->_ref_operation->_id) {
-      $this->_ref_operation->loadRefSejour();
-      $this->_ref_operation->loadRefPlageOp();
-      $this->_ref_sejour = $this->_ref_operation->_ref_sejour;
+    if ($operation->_id) {
+      $operation->loadRefPlageOp();
+      $this->_ref_sejour = $operation->loadRefSejour();
     }
     else {
       $this->loadRefSejour();
     }
     
-    return $this->_ref_operation;
+    return $this->_ref_operation = $operation;
   }
 
   /**
+   * Charge le séjour associé
+   *
    * @return CSejour
    */
   function loadRefSejour() {
@@ -285,7 +319,10 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     return $this->_ref_sejour;
   }
 
-  function loadRefsFiles(){
+  /**
+   * @see parent::loadRefsFiles()
+   */
+  function loadRefsFiles() {
     parent::loadRefsFiles();
 
     if (!$this->_docitems_from_consult) {
@@ -299,6 +336,9 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     }
   }
 
+  /**
+   * @see parent::loadRefsDocs()
+   */
   function loadRefsDocs(){
     parent::loadRefsDocs();
 
@@ -312,6 +352,9 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     }
   }
 
+  /**
+   * @see parent::countDocs()
+   */
   function countDocs(){
     $nbDocs = parent::countDocs();
 
@@ -327,6 +370,9 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     return $this->_nb_docs = $nbDocs;
   }
 
+  /**
+   * @see parent::countFiles()
+   */
   function countFiles(){
     $nbFiles = parent::countFiles();
 
@@ -342,12 +388,18 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     return $this->_nb_files = $nbFiles;
   }
 
+  /**
+   * @see parent::loadView()
+   */
   function loadView() {
     parent::loadView();
     $this->_ref_consultation = $this->_fwd["consultation_id"];
     $this->_ref_consultation->loadView();
   }
-   
+
+  /**
+   * @see parent::loadComplete()
+   */
   function loadComplete(){
     parent::loadComplete();
     
@@ -357,14 +409,13 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     
     $this->loadRefOperation();    
     
-    $this->_ref_sejour->loadRefDossierMedical();
-    $this->_ref_sejour->_ref_dossier_medical->loadRefsAntecedents();
-    $this->_ref_sejour->_ref_dossier_medical->loadRefstraitements();
+    $dossier_medical = $this->_ref_sejour->loadRefDossierMedical();
+    $dossier_medical->loadRefsAntecedents();
+    $dossier_medical->loadRefstraitements();
     
-    // Chargement des actes CCAM 
-    $this->_ref_consultation->loadRefsActesCCAM();
-    foreach ($this->_ref_consultation->_ref_actes_ccam as &$acte_ccam) {
-      $acte_ccam->loadRefsFwd();
+    // Chargement des actes CCAM
+    foreach ($this->_ref_consultation->loadRefsActesCCAM() as $_acte) {
+      $_acte->loadRefsFwd();
     }
   }
 

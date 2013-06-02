@@ -76,7 +76,7 @@
       {{foreach from=$_code->activites item=_activite}}
         {{foreach from=$_activite->phases item=_phase}}
           {{assign var="acte" value=$_phase->_connected_acte}}
-          {{assign var="view" value=$acte->_viewUnique}}
+          {{assign var="view" value=$acte->_id|default:$acte->_view}}
           {{assign var="key" value="$_key$view"}}
           <form name="formActe-{{$view}}" action="?m={{$module}}" method="post" onsubmit="return checkForm(this)">
           <input type="hidden" name="m" value="dPsalleOp" />

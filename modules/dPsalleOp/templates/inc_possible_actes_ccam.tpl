@@ -32,11 +32,8 @@
     {{foreach from=$curr_code->activites item=curr_activite}}
       {{foreach from=$curr_activite->phases item=curr_phase}}
       <tr>
-        {{assign var="acte" value=$curr_phase->_connected_acte}}
-        {{assign var="view" value=$acte->_viewUnique}}
-        {{assign var="key" value="$curr_key$view"}}
-        
-                  
+        {{assign var=acte value=$curr_phase->_connected_acte}}
+
         {{assign var=can_view_dh value=true}}
         {{if $conf.dPsalleOp.CActeCCAM.restrict_display_tarif && $acte->_id && ($acte->_ref_executant->function_id != $app->_ref_user->function_id)}}
           {{assign var=can_view_dh value=false}}

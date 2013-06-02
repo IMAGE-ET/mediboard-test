@@ -44,17 +44,15 @@ class CActeCCAM extends CActe {
   public $lieu;
   public $ald;
 
-  // Form fields
+  // Derived fields
   public $_modificateurs = array();
   public $_rembex;
   public $_anesth;
   public $_anesth_associe;
   public $_tarif_sans_asso;
   public $_tarif;
-
-  /** @var  CActeCCAM[] */
-  public $_linked_actes;
-
+  public $_activite;
+  public $_phase;
   public $_guess_association;
   public $_guess_regle_asso;
 
@@ -62,29 +60,35 @@ class CActeCCAM extends CActe {
   public $_adapt_object = false;
   public $_calcul_montant_base = false;
   
-  // Object references
-
+  // References
   /** @var  CCodeCCAM */
   public $_ref_code_ccam;
-
-  /** @var  CActeCCAM[] */
-  public $_ref_siblings;
-
   /** @var  CCodable */
   public $_ref_object;
-  
-  public $_activite;
-  public $_phase;
-  
+
+  // Collections
+  /** @var  CActeCCAM[] */
+  public $_ref_siblings;
+  /** @var  CActeCCAM[] */
+  public $_linked_actes;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'acte_ccam';
     $spec->key   = 'acte_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
+
+    // DB fields
     $props["code_acte"]              = "code notNull ccam seekable";
     $props["code_activite"]          = "num notNull min|0 max|99";
     $props["code_phase"]             = "num notNull min|0 max|99";
@@ -103,6 +107,7 @@ class CActeCCAM extends CActe {
     $props["exoneration"]            = "enum list|N|13|17 default|N";
     $props["ald"]                    = "bool";
 
+    // Derived fields
     $props["_rembex"]             = "bool";
     
     return $props;
@@ -154,6 +159,9 @@ class CActeCCAM extends CActe {
     return null;
   }
 
+  /**
+   * @see parent::canDeleteEx()
+   */
   function canDeleteEx(){
     parent::canDeleteEx();
    
@@ -164,6 +172,9 @@ class CActeCCAM extends CActe {
     return null;
   }
 
+  /**
+   * @see parent::check()
+   */
   function check() {
     // Test si la consultation est validée
     if ($msg = $this->checkCoded()) {
@@ -195,9 +206,7 @@ class CActeCCAM extends CActe {
   }
   
   /**
-   * CActe redefinition
-   *
-   * @return string Serialised full code
+   * @see parent::makeFullCode();
    */
   function makeFullCode() {
     return $this->_full_code = 
@@ -253,32 +262,42 @@ class CActeCCAM extends CActe {
       $this->updateFormFields();
     }
   }
-  
-  
+
+  /**
+   * @see parent::getPrecodeReady()
+   */
   function getPrecodeReady() {
     return $this->code_acte && $this->code_activite && $this->code_phase !== null;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_modificateurs = str_split($this->modificateurs);
     CMbArray::removeValue("", $this->_modificateurs);
     $this->_shortview  = $this->code_acte;
     $this->_view       = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs";
-    $this->_viewUnique = $this->_id ? $this->_id : $this->_view;
     $this->_anesth = ($this->code_activite == 4);
     
     // Remboursement exceptionnel
     $code = CCodeCCAM::get($this->code_acte, CCodeCCAM::LITE);
     $this->_rembex = $this->rembourse && $code->remboursement == 3 ? '1' : '0';
   }
-  
+
+  /**
+   * Calcule le montant de base de l'acte
+   *
+   * @return float
+   */
   function updateMontantBase() {
     return $this->montant_base = $this->getTarif();  
   }
   
   /**
-   * Check if acte is compatible with others already coded
+   * Check wether acte is compatible with others already coded
+   *
    * @return bool
    */
   function checkCompat() {
@@ -334,6 +353,11 @@ class CActeCCAM extends CActe {
     return null;
   }
 
+  /**
+   * Check wether acte is facturable
+   *
+   * @return bool
+   */
   function checkFacturable() {
     $this->completeField("facturable");
 
@@ -349,7 +373,10 @@ class CActeCCAM extends CActe {
       $this->_calcul_montant_base = true;
     }
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store() {
     // On test si l'acte CCAM est facturable
     $this->checkFacturable();
@@ -384,26 +411,46 @@ class CActeCCAM extends CActe {
     }
     return null;
   }
-  
-  function loadRefObject(){
-    $this->loadTargetObject(true);
+
+  /**
+   * Charge le codable asssocié
+   *
+   * @todo Rename as CActe::loadRefCodable()
+   * @return CCodable
+   */
+  function loadRefObject() {
+    $this->loadTargetObject();
   }
 
+  /**
+   * Charge le code CCAM complet tel que décrit par la nomenclature
+   *
+   * @return CCodeCCAM
+   */
   function loadRefCodeCCAM() {
     return $this->_ref_code_ccam = CCodeCCAM::get($this->code_acte, CCodeCCAM::FULL);
   }
-   
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     parent::loadRefsFwd();
 
     $this->loadRefExecutant();
     $this->loadRefCodeCCAM();
   }
-  
+
+  /**
+   * Trouve le code CCAM d'anesthésie associée
+   *
+   * @return string|null
+   */
   function getAnesthAssocie() {
     if (!$this->_ref_code_ccam) {
       $this->loadRefsFwd();
     }
+
     if ($this->code_activite != 4 && !isset($this->_ref_code_ccam->activites[4])) {
       foreach ($this->_ref_code_ccam->assos as $code_anesth) {
         if (substr($code_anesth["code"], 0, 4) == "ZZLP") {
@@ -414,26 +461,42 @@ class CActeCCAM extends CActe {
     }
     return null;
   }
-  
+
+  /**
+   * Charge les codes favoris d'un utilisateur
+   *
+   * @param ref    $user_id Idenfiant d'utilisateur
+   * @param string $class   Classe de contexte codable
+   *
+   * @return string[]
+   */
   function getFavoris($user_id, $class) {
     $condition = ( $class == "" ) ? "executant_id = '$user_id'" : "executant_id = '$user_id' AND object_class = '$class'";
     $sql = "SELECT code_acte, object_class, COUNT(code_acte) as nb_acte
-            FROM acte_ccam
-            WHERE $condition
-            GROUP BY code_acte
-            ORDER BY nb_acte DESC
-            LIMIT 20";
+      FROM acte_ccam
+      WHERE $condition
+      GROUP BY code_acte
+      ORDER BY nb_acte DESC
+      LIMIT 20";
     $codes = $this->_spec->ds->loadlist($sql);
     return $codes;
   }
-  
+
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
-    if (!$this->_ref_object) {
-      $this->loadRefObject();
-    }
-    return $this->_ref_object->getPerm($permType);
+    return $this->loadRefObject()->getPerm($permType);
   }
-  
+
+
+  /**
+   * Charge les autre actes du même codable
+   *
+   * @param bool $same_executant Seulement les actes du même exécutant si vrai
+   *
+   * @return CActeCCAM[]
+   */
   function getLinkedActes($same_executant = true) {
     $acte = new CActeCCAM();
     
@@ -442,7 +505,6 @@ class CActeCCAM extends CActe {
     $where["object_class"]  = "= '$this->object_class'";
     $where["object_id"]     = "= '$this->object_id'";
     $where["facturable"]    = "= '1'";
-    //$where["code_activite"] = "= '$this->code_activite'";
     if ($same_executant) {
       $where["executant_id"]  = "= '$this->executant_id'";
     }
@@ -450,7 +512,12 @@ class CActeCCAM extends CActe {
     $this->_linked_actes = $acte->loadList($where);
     return $this->_linked_actes;
   }
-  
+
+  /**
+   * Devine les associations de l'acte en fonction des autres actes du même codable
+   *
+   * @return string
+   */
   function guessAssociation() {
     /*
      * Calculs initiaux
@@ -491,59 +558,65 @@ class CActeCCAM extends CActe {
     arsort($orderedActes);
     $position = array_search($this->_id, array_keys($orderedActes));
 
-    $chapitre = $this->_ref_code_ccam->chapitres;
+    $chapitres = $this->_ref_code_ccam->chapitres;
     
     // Nombre d'actes des chap. 12, 13 et 14 (chirurgie membres, tronc et cou)
     $numChap121314 = 0;
-    if (in_array($chapitre[0]["db"], array("000012", "000013", "000014"))) {
+    if (in_array($chapitres[0]["db"], array("000012", "000013", "000014"))) {
       $numChap121314++;
     }
-    foreach ($this->_linked_actes as $linkedActe) {
-      if (in_array($linkedActe->_ref_code_ccam->chapitres[0]["db"], array("000012", "000013", "000014"))) {
+
+    foreach ($this->_linked_actes as $_linked_acte) {
+      $linked_chapitres = $_linked_acte->_ref_code_ccam->chapitres;
+      if (in_array($linked_chapitres[0]["db"], array("000012", "000013", "000014"))) {
         $numChap121314++;
       }
     }
     
     // Nombre d'actes du chap. 18.01
     $numChap1801 = 0;
-    if ($chapitre[0]["db"] == "000018" && $chapitre[1]["db"] == "000001") {
+    if ($chapitres[0]["db"] == "000018" && $chapitres[1]["db"] == "000001") {
       $numChap1801++;
     }
-    foreach ($this->_linked_actes as $linkedActe) {
-      if ($linkedActe->_ref_code_ccam->chapitres[0]["db"] == "000018" && $linkedActe->_ref_code_ccam->chapitres[1]["db"] == "000001") {
+    foreach ($this->_linked_actes as $_linked_acte) {
+      $linked_chapitres = $_linked_acte->_ref_code_ccam->chapitres;
+      if ($linked_chapitres[0]["db"] == "000018" && $linked_chapitres[1]["db"] == "000001") {
         $numChap1801++;
       }
     }
     
     // Nombre d'actes du chap. 18.02
     $numChap1802 = 0;
-    if ($chapitre[0]["db"] == "000018" && $chapitre[1]["db"] == "000002") {
+    if ($chapitres[0]["db"] == "000018" && $chapitres[1]["db"] == "000002") {
       $numChap1802++;
     }
-    foreach ($this->_linked_actes as $linkedActe) {
-      if ($linkedActe->_ref_code_ccam->chapitres[0]["db"] == "000018" && $linkedActe->_ref_code_ccam->chapitres[1]["db"] == "000002") {
+    foreach ($this->_linked_actes as $_linked_acte) {
+      $linked_chapitres = $_linked_acte->_ref_code_ccam->chapitres;
+      if ($linked_chapitres[0]["db"] == "000018" && $linked_chapitres[1]["db"] == "000002") {
         $numChap1802++;
       }
     }
     
     // Nombre d'actes du chap. 19.01
     $numChap1901 = 0;
-    if ($chapitre[0]["db"] == "000019" && $chapitre[1]["db"] == "000001") {
+    if ($chapitres[0]["db"] == "000019" && $chapitres[1]["db"] == "000001") {
       $numChap1901++;
     }
-    foreach ($this->_linked_actes as $linkedActe) {
-      if ($linkedActe->_ref_code_ccam->chapitres[0]["db"] == "000019" && $linkedActe->_ref_code_ccam->chapitres[1]["db"] == "000001") {
+    foreach ($this->_linked_actes as $_linked_acte) {
+      $linked_chapitres = $_linked_acte->_ref_code_ccam->chapitres;
+      if ($linked_chapitres[0]["db"] == "000019" && $linked_chapitres[1]["db"] == "000001") {
         $numChap1901++;
       }
     }
     
     // Nombre d'actes du chap. 19.02
     $numChap1902 = 0;
-    if ($chapitre[0]["db"] == "000019" && $chapitre[1]["db"] == "000002") {
+    if ($chapitres[0]["db"] == "000019" && $chapitres[1]["db"] == "000002") {
       $numChap1902++;
     }
-    foreach ($this->_linked_actes as $linkedActe) {
-      if ($linkedActe->_ref_code_ccam->chapitres[0]["db"] == "000019" && $linkedActe->_ref_code_ccam->chapitres[1]["db"] == "000002") {
+    foreach ($this->_linked_actes as $_linked_acte) {
+      $linked_chapitres = $_linked_acte->_ref_code_ccam->chapitres;
+      if ($linked_chapitres[0]["db"] == "000019" && $linked_chapitres[1]["db"] == "000002") {
         $numChap1902++;
       }
     }
@@ -551,11 +624,13 @@ class CActeCCAM extends CActe {
     // Nombre d'actes des chap. 02, 03, 05 à 10, 16, 17
     $numChap02 = 0;
     $listChaps = array("000002", "000003", "000005", "000006", "000007", "000008", "000009", "000010", "000016", "000017");
-    if (in_array($chapitre[0]["db"], $listChaps)) {
+    if (in_array($chapitres[0]["db"], $listChaps)) {
       $numChap02++;
     }
-    foreach ($this->_linked_actes as $linkedActe) {
-      if (in_array($linkedActe->_ref_code_ccam->chapitres[0]["db"], $listChaps)) {
+
+    foreach ($this->_linked_actes as $_linked_acte) {
+      $linked_chapitres = $_linked_acte->_ref_code_ccam->chapitres;
+      if (in_array($linked_chapitres[0]["db"], $listChaps)) {
         $numChap02++;
       }
     }
@@ -563,11 +638,12 @@ class CActeCCAM extends CActe {
     // Nombre d'actes des chap. 01, 04, 11, 15
     $numChap0115 = 0;
     $listChaps = array("000001", "000004", "000011", "000015");
-    if (in_array($chapitre[0]["db"], $listChaps)) {
+    if (in_array($chapitres[0]["db"], $listChaps)) {
       $numChap0115++;
     }
-    foreach ($this->_linked_actes as $linkedActe) {
-      if (in_array($linkedActe->_ref_code_ccam->chapitres[0]["db"], $listChaps)) {
+    foreach ($this->_linked_actes as $_linked_acte) {
+      $linked_chapitres = $_linked_acte->_ref_code_ccam->chapitres;
+      if (in_array($linked_chapitres[0]["db"], $listChaps)) {
         $numChap0115++;
       }
     }
@@ -575,11 +651,12 @@ class CActeCCAM extends CActe {
     // Nombre d'actes des chap. 01, 04, 11, 12, 13, 14, 15, 16
     $numChap0116 = 0;
     $listChaps = array("000001", "000004", "000011", "000012", "000013", "000014", "000015", "000016");
-    if (in_array($chapitre[0]["db"], $listChaps)) {
+    if (in_array($chapitres[0]["db"], $listChaps)) {
       $numChap0116++;
     }
-    foreach ($this->_linked_actes as $linkedActe) {
-      if (in_array($linkedActe->_ref_code_ccam->chapitres[0]["db"], $listChaps)) {
+    foreach ($this->_linked_actes as $_linked_acte) {
+      $linked_chapitres = $_linked_acte->_ref_code_ccam->chapitres;
+      if (in_array($linked_chapitres[0]["db"], $listChaps)) {
         $numChap0116++;
       }
     }
@@ -600,10 +677,9 @@ class CActeCCAM extends CActe {
     $membresDiff = false;
     
     if ($this->object_class == "COperation") {
-      $this->loadRefObject();
-      $operation =& $this->_ref_object;
-      $operation->loadRefSejour();
-      $sejour =& $operation->_ref_sejour;
+      /** @var COperation $operation */
+      $operation = $this->loadRefObject();
+      $sejour = $operation->loadRefSejour();
       if ($sejour->DP) {
         if ($sejour->DP[0] == "S" || $sejour->DP[0] == "T") {
           $DPST = true;
@@ -623,30 +699,32 @@ class CActeCCAM extends CActe {
     $assoCur = false;
     $assoRec = false;
     if ($numActes == 3) {
-      if (stripos($this->_ref_code_ccam->libelleLong, "exérèse")) {
+      $libelle = $this->_ref_code_ccam->libelleLong;
+      if (stripos($libelle, "exérèse") !== false) {
         $assoEx = true;
       }
-      if (stripos($this->_ref_code_ccam->libelleLong, "curage")) {
+      if (stripos($libelle, "curage") !== false) {
         $assoCur = true;
       }
-      if (stripos($this->_ref_code_ccam->libelleLong, "reconstruction")) {
+      if (stripos($libelle, "reconstruction") !== false) {
         $assoRec = true;
       }
-      foreach ($this->_linked_actes as $linkedActe) {
-        if (stripos($linkedActe->_ref_code_ccam->libelleLong, "exérèse")) {
+
+      foreach ($this->_linked_actes as $_linked_acte) {
+        $linked_libelle = $_linked_acte->_ref_code_ccam->libelleLong;
+        if (stripos($linked_libelle, "exérèse") !== false) {
           $assoEx = true;
         }
-        if (stripos($linkedActe->_ref_code_ccam->libelleLong, "curage")) {
+        if (stripos($linked_libelle, "curage") !== false) {
           $assoCur = true;
         }
-        if (stripos($linkedActe->_ref_code_ccam->libelleLong, "reconstruction")) {
+        if (stripos($linked_libelle, "reconstruction") !== false) {
           $assoRec = true;
         }
       }
     }
     $assoExCurRec = $assoEx && $assoCur && $assoRec;
-    
-    
+
     /*
      * Application des règles
      */
@@ -718,7 +796,7 @@ class CActeCCAM extends CActe {
           $this->_guess_regle_asso  = "F";
           break;
         case 1 :
-          if (($this->_ref_code_ccam->chapitres[0] == "18" || $this->_ref_code_ccam->chapitres[0] == "19") && $this->_ref_code_ccam->chapitres[1] == "02") {
+          if (($chapitres[0] == "18" || $chapitres[0] == "19") && $chapitres[1] == "02") {
             $this->_guess_association = "1";
             $this->_guess_regle_asso  = "F";
           }
@@ -728,7 +806,7 @@ class CActeCCAM extends CActe {
           }
           break;
         case 2 :
-          if (($this->_ref_code_ccam->chapitres[0] == "18" || $this->_ref_code_ccam->chapitres[0] == "19") && $this->_ref_code_ccam->chapitres[1] == "02") {
+          if (($chapitres[0] == "18" || $chapitres[0] == "19") && $chapitres[1] == "02") {
             $this->_guess_association = "1";
             $this->_guess_regle_asso  = "F";
           }
@@ -843,7 +921,12 @@ class CActeCCAM extends CActe {
     
     return $this->_guess_association;
   }
-  
+
+  /**
+   * Calcul le tarif de l'acte sans association ni charge
+   *
+   * @return float
+   */
   function getTarifSansAssociationNiCharge() {
     // Tarif de base
     $code = $this->loadRefCodeCCAM();
@@ -861,7 +944,12 @@ class CActeCCAM extends CActe {
     
     return $this->_tarif_sans_asso = ($this->_tarif_sans_asso * ($coefficient / 100) + $forfait);    
   }
-  
+
+  /**
+   * Calcul le tarif final de l'acte
+   *
+   * @return float
+   */
   function getTarif() {
     $this->_tarif = $this->getTarifSansAssociationNiCharge();
     
@@ -877,7 +965,15 @@ class CActeCCAM extends CActe {
     
     return $this->_tarif;
   }
-  
+
+  /**
+   * Récupère les codes NGAP associés à un code CCAM
+   * Utile pour les cotations dentaires et stomatologiques
+   *
+   * @param string $code Code CCAM
+   *
+   * @return array|null Tableau d'information sur les codes NGAP, null si non trouvé
+   */
   static function getNGAP($code) {
     $ds = CSQLDataSource::get("ccamV2");
     $query = $ds->prepare("SELECT * FROM ccam_ngap WHERE code_ccam = %", $code);
@@ -888,24 +984,33 @@ class CActeCCAM extends CActe {
       return array(
         "fd" => array(
           "montant_enfant" => $row["montant_enfant"],
-          "montant_adulte" => $row["montant_adulte"]
+          "montant_adulte" => $row["montant_adulte"],
         ),
         "ngap" => array(
-          array("code_ngap_1"   => $row["code_ngap_1"],
-                "coefficient_1" => $row["coefficient_1"]),
-          array("code_ngap_2"   => $row["code_ngap_2"],
-                "coefficient_2" => $row["coefficient_2"]),
-          array("code_ngap_3"   => $row["code_ngap_3"],
-                "coefficient_3" => $row["coefficient_3"])));
+          array(
+            "code_ngap_1"   => $row["code_ngap_1"],
+            "coefficient_1" => $row["coefficient_1"],
+          ),
+          array(
+            "code_ngap_2"   => $row["code_ngap_2"],
+            "coefficient_2" => $row["coefficient_2"],
+          ),
+          array(
+            "code_ngap_3"   => $row["code_ngap_3"],
+            "coefficient_3" => $row["coefficient_3"],
+          )
+        )
+      );
     }
+
     return null;
   }
   
   /**
    * Création d'un item de facture avec un code ccam
    * 
-   * @param CFacture $facture la facture
-   * @param string $date    date à défaut
+   * @param CFacture $facture La facture
+   * @param string   $date    Date à défaut
    * 
    * @return string
   **/

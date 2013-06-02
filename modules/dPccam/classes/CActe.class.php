@@ -1,7 +1,7 @@
 <?php
 
 /**
- * dPccam
+ * $Id$
  *
  * @category Ccam
  * @package  Mediboard
@@ -11,6 +11,11 @@
  * @link     http://www.mediboard.org
  */
 
+/**
+ * Classe non persistente d'acte pouvant être associées à un codable
+ *
+ * @see CCodable
+ */
 class CActe extends CMbMetaObject {
   public $montant_depassement;
   public $montant_base;
@@ -32,29 +37,33 @@ class CActe extends CMbMetaObject {
   public $_permissive;
   
   // Distant object
-  /** @var  CSejour */
+  /** @var CSejour */
   public $_ref_sejour;
-
-  /** @var  CPatient */
+  /** @var CPatient */
   public $_ref_patient;
-
-  /** @var  CMediusers Probavle user*/
+  /** @var CMediusers Probable user */
   public $_ref_praticien;
-
-  /** @var  CMediusers Actual user*/
+  /** @var CMediusers Actual user */
   public $_ref_executant;
-  
+
+  /** @var CMediusers[] */
   public $_list_executants;
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_montant_facture = $this->montant_base + $this->montant_depassement;
   }
   
   /**
+   * Charge le séjour associé
+   *
    * @return CSejour
    */
   function loadRefSejour() {
+    /** @var CCodable $object */
     if (null == $object = $this->loadTargetObject()) {
       return null;
     }
@@ -63,9 +72,12 @@ class CActe extends CMbMetaObject {
   }
   
   /**
+   * Charge le patient associé
+   *
    * @return CPatient
    */
   function loadRefPatient() {
+    /** @var CCodable $object */
     if (null == $object = $this->loadTargetObject()) {
       return null;
     }
@@ -74,9 +86,12 @@ class CActe extends CMbMetaObject {
   }
   
   /**
+   * Charge le praticien associé
+   *
    * @return CMediusers
    */
   function loadRefPraticien() {
+    /** @var CCodable $object */
     if (null == $object = $this->loadTargetObject()) {
       return null;
     }
@@ -85,14 +100,22 @@ class CActe extends CMbMetaObject {
   }
 
   /**
+   * Charge l'exécutant associé
+   *
    * @return CMediusers
    */
   function loadRefExecutant() {
-    $this->_ref_executant = $this->loadFwdRef("executant_id", true);
-    $this->_ref_executant->loadRefFunction();
-    return $this->_ref_executant;
+    /** @var CMediusers $executant */
+    $executant = $this->loadFwdRef("executant_id", true);
+    $executant->loadRefFunction();
+    return $this->_ref_executant = $executant;
   }
-  
+
+  /**
+   * Charge les exécutants possibles
+   *
+   * @return CMediusers[]|null Exécutants possible, null si exécutant déterminé
+   */
   function loadListExecutants() {
     $user = CMediusers::get(); 
     $this->_list_executants = $user->loadProfessionnelDeSante(PERM_READ);
@@ -112,10 +135,15 @@ class CActe extends CMbMetaObject {
     $praticien = $this->loadRefPraticien();
     if ($praticien && $praticien->_id) {
       $this->executant_id = $praticien->_id;
-      return;
+      return null;
     }
+
+    return $this->_list_executants;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -123,7 +151,7 @@ class CActe extends CMbMetaObject {
     $props["executant_id"]        = "ref notNull class|CMediusers";
     $props["montant_base"]        = "currency";
     $props["montant_depassement"] = "currency";
-    $props["execution"]              = "dateTime notNull";
+    $props["execution"]           = "dateTime notNull";
     $props["facturable"]          = "bool notNull default|1 show|0";
 
     $props["_montant_facture"]    = "currency";
@@ -134,7 +162,7 @@ class CActe extends CMbMetaObject {
   /**
    * Check if linked object is already coded
    *
-   * @return bool
+   * @return string|null Error message, null when succesfull
    */
   function checkCoded() {
     if (!$this->_check_coded || $this->_forwardRefMerging) {
@@ -143,11 +171,13 @@ class CActe extends CMbMetaObject {
     
     $this->completeField("object_class");
     $this->completeField("object_id");
+    /** @var CCodable $object */
     $object = new $this->object_class;
     $object->load($this->object_id);
     if ($object->_coded == "1") {
-      return CAppUI::tr($object->_class) ." déjà validée : Impossible de coter l\'acte";
+      return CAppUI::tr($object->_class) ." déjà validée : Impossible de coter l'acte";
     }
+
     return null;
   }
 
@@ -168,7 +198,7 @@ class CActe extends CMbMetaObject {
   function makeFullCode() {
     return $this->_full_code = "";
   }
-    
+
   /**
    * Precode with a full serialised code for the act
    *
@@ -176,9 +206,14 @@ class CActe extends CMbMetaObject {
    *
    * @return void
    */
-  function setFullCode($details) {
+  function setFullCode($code) {
   }
-  
+
+  /**
+   * Update montant
+   *
+   * @return string|null Error message
+   */
   function updateMontant(){
     if ($this->_preserve_montant || $this->_forwardRefMerging) {
       return null;
@@ -192,21 +227,33 @@ class CActe extends CMbMetaObject {
     return $object->doUpdateMontants();
   }
 
+  /**
+   * Charge l'exécution
+   *
+   * @return void
+   */
   function loadExecution() {
-    $this->loadTargetObject();
-    $this->_ref_object->getActeExecution();
-    $this->execution = $this->_ref_object->_acte_execution;
+    /** @var CCodable $object */
+    $object = $this->loadTargetObject();
+    $object->getActeExecution();
+    $this->execution = $object->_acte_execution;
   }
 
-  function store(){
+  /**
+   * @see parent::store()
+   */
+  function store() {
     if ($msg = parent::store()) {
       return $msg;
     }
     
     return $this->updateMontant();
   }
-  
-  function delete(){
+
+  /**
+   * @see parent::delete()
+   */
+  function delete() {
     if ($msg = parent::delete()) {
       return $msg;
     }
