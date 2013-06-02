@@ -13,7 +13,7 @@
 require_once "includes/checkauth.php";
 
 $mbpath = "../";
-if (!file_exists($mbpath."classes/CMbPath.class.php")){
+if (!file_exists($mbpath."classes/CMbPath.class.php")) {
   $mbpath = "./";
 }
 

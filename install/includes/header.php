@@ -30,7 +30,7 @@ if (defined("E_DEPRECATED")) {
 
 $mbpath = "../";
 
-if (!file_exists($mbpath."classes/CMbArray.class.php")){
+if (!file_exists($mbpath."classes/CMbArray.class.php")) {
   $mbpath = "./";
 }
 

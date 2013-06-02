@@ -13,9 +13,9 @@
 /**
  * URL restriction
  */
-class CUrlRestriction extends CCheckable {
-  var $url = "";
-  var $description = "";
+class CUrlRestriction extends CPrerequisite {
+  public $url = "";
+  public $description = "";
 
   /**
    * Get the last HTTP code from a requested URL (follow redirection)
@@ -41,14 +41,17 @@ class CUrlRestriction extends CCheckable {
     
     return $response;
   }
-  
+
+  /**
+   * @see parent::check()
+   */
   function check($strict = true){
     $code = substr($this->getHTTPResponseCode($this->url), 0, 3);
     return $code == 403;
   }
 
   /**
-   * @return self[]
+   * @see parent::getAll()
    */
   function getAll(){
     $http = "http://";

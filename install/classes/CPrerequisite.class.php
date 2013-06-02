@@ -13,11 +13,11 @@
 /**
  * Prerequisite abstract class
  */
-abstract class CPrerequisite extends CCheckable {
-  var $name = "";
-  var $description = "";
-  var $mandatory = false;
-  var $reasons = array();
+abstract class CPrerequisite {
+  public $name = "";
+  public $description = "";
+  public $mandatory = false;
+  public $reasons = array();
 
   /**
    * Check prerequisite
@@ -34,4 +34,21 @@ abstract class CPrerequisite extends CCheckable {
    * @return self[]
    */
   abstract function getAll();
+
+  /**
+   * Check all items
+   *
+   * @param bool $strict Make strict checking
+   *
+   * @return bool
+   */
+  function checkAll($strict = true){
+    foreach ($this->getAll() as $item) {
+      if (!$item->check($strict)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
 }

@@ -29,9 +29,8 @@ class CPHPVersion extends CPrerequisite {
   }
 
   /**
-   * @return self[]
+   * @see parent::getAll()
    */
-
   function getAll() {
     $versions = array();
 

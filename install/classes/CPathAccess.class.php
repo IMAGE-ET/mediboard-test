@@ -16,9 +16,9 @@
  *  - path and description of path
  *  - checking
  */
-class CPathAccess extends CCheckable {
-  var $path = "";
-  var $description = "";
+class CPathAccess extends CPrerequisite {
+  public $path = "";
+  public $description = "";
 
   /**
    * Actually check path is writable
@@ -33,7 +33,7 @@ class CPathAccess extends CCheckable {
   }
 
   /**
-   * @return self[]
+   * @see parent::getAll()
    */
   function getAll() {
     $pathAccesses = array();

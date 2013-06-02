@@ -117,14 +117,13 @@ class CApp {
   /**
    * Set memory limit in megabytes
    *
-   * @param integer $megabytes The memory limit in megabytes
+   * @param string $megabytes The memory limit, suffixed with K, M, G
    *
    * @return string
    */
   static function setMemoryLimit($megabytes) {
     return self::setMaxPhpConfig("memory_limit", $megabytes);
   }
-
 
   /**
    * set a php configuration limit with a minimal value

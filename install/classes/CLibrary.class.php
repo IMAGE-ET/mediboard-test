@@ -10,30 +10,33 @@
  * @link       http://www.mediboard.org
  */
 
+/**
+ * Vendor library
+ */
 class CLibrary {
-  /**
-   * @var self[]
-   */
+  /** @var self[] */
   static $all = array();
 
-  var $name = "";
-  var $url = "";
-  var $fileName = "";
-  var $extraDir = "";
-  var $description = "";
-  var $nbFiles = 0;
-  var $sourceDir = null;
-  var $targetDir = null;
-  var $versionFile = "";
-  var $versionString = "";
+  public $name = "";
+  public $url = "";
+  public $fileName = "";
+  public $extraDir = "";
+  public $description = "";
+  public $nbFiles = 0;
+  public $sourceDir = null;
+  public $targetDir = null;
+  public $versionFile = "";
+  public $versionString = "";
+
+  /** @var CLibraryPatch[] */
+  public $patches = array();
 
   /**
-   * @var CLibraryPatch[]
-   */
-  var $patches = array();
-
-  /**
+   * Remove installed libraries
+   *
    * @param string $libSel Library to clear
+   *
+   * @return void
    */
   function clearLibraries($libSel = null) {
     global $mbpath;
@@ -57,6 +60,11 @@ class CLibrary {
     }
   }
 
+  /**
+   * Get update status of the libraries
+   *
+   * @return bool|null True if installed and up to date, null otherwise
+   */
   function getUpdateState() {
     global $mbpath;
     $dir = $mbpath."lib/$this->targetDir";
@@ -68,16 +76,31 @@ class CLibrary {
     return null;
   }
 
+  /**
+   * Is the library installed
+   *
+   * @return bool
+   */
   function isInstalled() {
     global $mbpath;
     return is_dir($mbpath."lib/$this->targetDir");
   }
-    
+
+  /**
+   * Count installed libraries
+   *
+   * @return int
+   */
   function countLibraries() {
     global $mbpath;
     return count(glob($mbpath."lib/*"));
   }
-  
+
+  /**
+   * Install the library
+   *
+   * @return int The number of extracted files
+   */
   function install() {
     global $mbpath;
     $pkgsDir = $mbpath."libpkg";
@@ -91,7 +114,12 @@ class CLibrary {
     
     return CMbPath::extract($filePath, $libsDir);
   }
-  
+
+  /**
+   * Apply the library patch
+   *
+   * @return bool
+   */
   function apply() {
     global $mbpath;
     $libsDir = $mbpath."lib";
@@ -100,7 +128,14 @@ class CLibrary {
     assert(is_dir($sourceDir));
     return rename($sourceDir, $targetDir);
   }
-  
+
+  /**
+   * Check update status of all the libraries
+   *
+   * @param bool $strict Use strict checking, not used
+   *
+   * @return bool
+   */
   function checkAll($strict = true) {
     foreach (CLibrary::$all as $library) {
       if (!$library->getUpdateState()) {

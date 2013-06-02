@@ -1069,8 +1069,8 @@ var Url = Class.create({
   /**
    * Make a repetitive Ajax request and update a DOM element with the result
    *
-   * @param {HTMLElement} ioTarget The element to update
-   * @param {Object=}     oOptions Various options
+   * @param {HTMLElement,String} ioTarget The element to update
+   * @param {Object=}            oOptions Various options
    *
    * @return {Ajax.PeriodicalUpdater,null}
    */

@@ -14,7 +14,7 @@
  * PEAR package prerequisite
  */
 class CPearPackage extends CPrerequisite {
-  var $status = "stable";
+  public $status = "stable";
 
   /**
    * Check file inclusion
@@ -34,7 +34,7 @@ class CPearPackage extends CPrerequisite {
   }
 
   /**
-   * @return self[]
+   * @see parent::getAll()
    */
   function getAll(){
     $packages = array();

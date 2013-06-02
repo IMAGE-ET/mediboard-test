@@ -15,13 +15,7 @@
  */
 class CPHPExtension  extends CPrerequisite {
   /**
-   * Check extension load
-   *
-   * @param bool $strict Check also warnings
-   *
-   * @see parent::check
-   *
-   * @return bool
+   * @see parent::check()
    */
   function check($strict = true) {
     if ($strict) {
@@ -32,7 +26,7 @@ class CPHPExtension  extends CPrerequisite {
   }
 
   /**
-   * @return self[]
+   * @see parent::getAll()
    */
   function getAll(){
     $extensions = array();
@@ -43,6 +37,13 @@ class CPHPExtension  extends CPrerequisite {
     $extension->mandatory = true;
     $extension->reasons[] = "Accès à la base de donnée de principale Mediboard";
     $extension->reasons[] = "Accès aux bases de données de codage CCAM, CIM et GHM";
+    $extensions[] = $extension;
+
+    $extension = new CPHPExtension;
+    $extension->name = "PDO";
+    $extension->description = "Extension de connectivité aux bases de données";
+    $extension->mandatory = true;
+    $extension->reasons[] = "Accès à la base de donnée de principale Mediboard";
     $extensions[] = $extension;
     
     $extension = new CPHPExtension;
@@ -114,12 +115,6 @@ class CPHPExtension  extends CPrerequisite {
     $extension->reasons[] = "GD version 2 est recommandée car elle permet un meilleur rendu";
     $extension->reasons[] = "Module de statistiques graphiques";
     $extension->reasons[] = "Fonction d'audiogrammes";
-    $extensions[] = $extension;
-    
-    $extension = new CPHPExtension;
-    $extension->name = "PDO";
-    $extension->description = "Extension de connectivité aux bases de données";
-    $extension->reasons[] = "Interopérabilité avec des systèmes tiers";
     $extensions[] = $extension;
     
     $extension = new CPHPExtension;

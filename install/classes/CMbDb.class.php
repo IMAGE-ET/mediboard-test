@@ -20,17 +20,17 @@ require_once "DB.php";
  *  - error reporting
  */
 class CMbDb {
-  var $dsn = array();
+  public $dsn = array();
 
   /**
    * @var DB_common
    */
-  var $_db;
+  public $_db;
 
   /**
    * @var string[]
    */
-  var $_errors = array();
+  public $_errors = array();
 
   /**
    * Constructor

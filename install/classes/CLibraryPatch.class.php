@@ -10,12 +10,20 @@
  * @link       http://www.mediboard.org
  */
 
+/**
+ * Library patch. Modification of the original library
+ */
 class CLibraryPatch {
-  var $dirName    = "";
-  var $subDirName = "";
-  var $sourceName = "";
-  var $targetDir  = "";
-  
+  public $dirName    = "";
+  public $subDirName = "";
+  public $sourceName = "";
+  public $targetDir  = "";
+
+  /**
+   * Apply the patch to the library
+   *
+   * @return bool
+   */
   function apply() {
     global $mbpath;
     $pkgsDir = $mbpath."libpkg";
