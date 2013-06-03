@@ -190,6 +190,42 @@ class CExObject extends CMbMetaObject {
     $ds = CSQLDataSource::get("std");
     $list = $ds->loadList($request->getRequest());
 
+    // Chargement des list_items par concept, field ou list
+    $request = new CRequest();
+    $request->addTable("ex_list_item");
+    $request->addSelect(array(
+      "ex_list_item_id",
+
+      "list_id",
+      "concept_id",
+      "field_id",
+
+      "name",
+    ));
+    $list_items = $ds->loadList($request->getRequest());
+
+    // Chargement en une seule requete de toutes les traductions de champs
+    $enum_list_cache = array(
+      "list"    => array(),
+      "concept" => array(),
+      "field"   => array(),
+    );
+    $mapper = array(
+      "list_id"    => "list",
+      "concept_id" => "concept",
+      "field_id"   => "field",
+    );
+    foreach ($list_items as $_item) {
+      $_item_id = $_item["ex_list_item_id"];
+      $_item_name = $_item["name"];
+
+      foreach ($mapper as $_field_name => $_to) {
+        if ($_field_value = $_item[$_field_name]) {
+          $enum_list_cache[$_to][$_field_value][$_item_id] = $_item_name;
+        }
+      }
+    }
+
     foreach ($list as $_item) {
       $key = "CExObject_{$_item['ex_class_id']}-{$_item['name']}";
       $_locales[$key]         = $_item["std"];
@@ -204,37 +240,34 @@ class CExObject extends CMbMetaObject {
       $key = "CExObject_{$_item['ex_class_id']}.{$_item['name']}";
       $_locales["$key."] = CAppUI::tr("Undefined");
 
-      $request = new CRequest();
-      $request->addTable("ex_list_item");
-      $request->addSelect(array(
-        "ex_list_item_id",
-        "name",
-      ));
+      $concept_id = $_item["concept_id"];
+      $ex_list_id = $_item["ex_list_id"];
+      $field_id   = $_item["field_id"];
 
-      if ($concept_id = $_item["concept_id"]) {
-        if ($list_id = $_item["ex_list_id"]) {
-          $request->addWhere(array(
-            "list_id" => "= '$list_id'"
-          ));
+      $enum_list = array();
+      if ($concept_id) {
+        if ($ex_list_id) {
+          if (isset($enum_list_cache["list"][$ex_list_id])) {
+            $enum_list = $enum_list_cache["list"][$ex_list_id];
+          }
         }
         else {
-          $request->addWhere(array(
-            "concept_id" => "= '$concept_id'"
-          ));
+          if (isset($enum_list_cache["concept"][$concept_id])) {
+            $enum_list = $enum_list_cache["concept"][$concept_id];
+          }
         }
       }
       else {
-        $request->addWhere(array(
-          "field_id" => "= '{$_item['field_id']}'"
-        ));
+        if (isset($enum_list_cache["field"][$field_id])) {
+          $enum_list = $enum_list_cache["field"][$field_id];
+        }
       }
 
-      $enum_list = $ds->loadHashList($request->getRequest());
       foreach ($enum_list as $_value => $_locale) {
         $_locales["$key.$_value"] = $_locale;
       }
     }
-    
+
     global $locales;
     $locales = array_merge($locales, $_locales);
     
