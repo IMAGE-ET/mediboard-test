@@ -11,7 +11,7 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireLibraryFile("yampee-redis/autoloader");
+CAppUI::requireLibraryFile("yampee-redis/autoloader", false);
 
 if (!class_exists("Yampee_Redis_Client", false)) {
   return;
