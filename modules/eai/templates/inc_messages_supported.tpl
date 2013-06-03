@@ -59,7 +59,9 @@
             {{foreach from=$_categories key=_category_name item=_messages_supported}}
               {{if $_category_name != "none"}}
                 <tr>
-                  <th class="category" colspan="3"><button class="tick notext" onclick="checkAll('{{$_category_name}}', '{{$_message}}')"></button>{{$_category_name}}</th>
+                  <th class="category" colspan="3">
+                    <button class="tick notext" onclick="checkAll('{{$_category_name}}', '{{$_message}}')"></button>
+                    {{tr}}{{$_category_name}}{{/tr}} ({{$_category_name}})</th>
                 </tr>
               {{/if}}
               {{foreach from=$_messages_supported item=_message_supported}}
