@@ -35,7 +35,8 @@
     url.redirect();
   }
 </script>
-{{if $facture->cloture && isset($factures|smarty:nodefaults) && count($factures)}}
+
+{{if $facture->cloture && isset($factures|smarty:nodefaults) && count($factures) && !$facture->annule}}
   <tr>
     <td colspan="8">
       <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 'bvr');">Edition des BVR</button>
@@ -58,9 +59,17 @@
       {{if !$facture->_ref_patient->avs}}
         <div class="small-warning" style="display:inline">N° AVS manquant pour le patient</div>
       {{/if}}
+      {{if !count($facture->_ref_reglements) && !count($facture->_ref_relances)}}
+        <form name="facture_extourne" method="post" action="" style="float:right;">
+          {{mb_class object=$facture}}
+          {{mb_key   object=$facture}}
+          <input type="hidden" name="_duplicate" value="1"/>
+          <button class="duplicate" type="submit">Extourner</button>
+        </form>
+      {{/if}}
       {{if $facture->_class == "CFactureEtablissement"}}
         {{assign var="last_op_id" value=$facture->_ref_last_sejour->_ref_last_operation->_id}}
-        <button type="button" class="edit" onclick="viewInterv('{{$last_op_id}}');"> Infos interv. </button>
+        <button type="button" class="edit" onclick="viewInterv('{{$last_op_id}}');" style="float:right;"> Infos interv. </button>
       {{/if}}
     </td>
   </tr>
@@ -233,7 +242,7 @@
 </tbody>
 
 {{assign var="classe" value=$facture->_class}}
-{{if !$facture->_reglements_total_patient && !$conf.dPfacturation.$classe.use_auto_cloture}}
+{{if !$facture->_reglements_total_patient && !$conf.dPfacturation.$classe.use_auto_cloture && !$facture->annule}}
   <tr>
     <td colspan="7">
       <form name="change_type_facture" method="post">

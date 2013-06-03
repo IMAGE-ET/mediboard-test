@@ -111,6 +111,9 @@ class CFactureItem extends CMbMetaObject {
   /**
    * Clonage de l'item de facture
    *
+   * @param object $item   l'item
+   * @param object $new_id l'identifant de la facture
+   *
    * @return void
   **/
   function cloneFrom($item, $new_id){

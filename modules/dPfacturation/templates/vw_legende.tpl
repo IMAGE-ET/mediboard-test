@@ -12,4 +12,8 @@
     <td style="background-color:#cfc;width:40px;"></td>
     <td class="text">Facture réglée</td>
   </tr>
+  <tr>
+    <td class="hatching"></td>
+    <td class="text">Facture annulée</td>
+  </tr>
 </table>

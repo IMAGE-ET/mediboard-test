@@ -56,6 +56,9 @@ showLegend = function() {
             {{if $_facture->patient_date_reglement}}
               {{assign var="reglee" value="reglee"}}
             {{/if}}
+            {{if $_facture->annule}}
+              {{assign var="cloture" value="hatching"}}
+            {{/if}}
             {{assign var="classe" value=$facture->_class}}
             {{if $conf.dPfacturation.CEditPdf.use_bill_etab}}
               <td class="{{$reglee}} {{$cloture}}">{{$_facture->_ref_last_sejour->entree_prevue|date_format:"%d/%m/%Y"}}</td>

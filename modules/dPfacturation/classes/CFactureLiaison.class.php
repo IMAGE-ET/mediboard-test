@@ -62,7 +62,7 @@ class CFactureLiaison extends CMbMetaObject {
    * @param bool $cache cache
    * 
    * @return $this->_ref_facture
-  **/
+   */
   function loadRefFacture($cache = 1) {
     return $this->_ref_facture = $this->loadFwdRef("facture_id", $cache);
   }
@@ -70,7 +70,7 @@ class CFactureLiaison extends CMbMetaObject {
   /**
    * Chargement de l'objet facturable
    * 
-   * @return void
+   * @return CFacturable
   **/
   function loadRefFacturable() {
     return $this->_ref_facturable =  $this->loadTargetObject();
@@ -79,8 +79,8 @@ class CFactureLiaison extends CMbMetaObject {
   /**
    * Redéfinition du store
    * 
-   * @return void
-  **/
+   * @return void|string
+   */
   function store() {
     // Standard store
     if ($msg = parent::store()) {
@@ -88,5 +88,20 @@ class CFactureLiaison extends CMbMetaObject {
     }
     
     $this->loadRefFacture();
-  } 
+  }
+
+  /**
+   * Clonage de la liaison de la facture
+   *
+   * @param object $item   l'item
+   * @param object $new_id l'identifant de la facture
+   *
+   * @return void
+   */
+  function cloneFrom($item, $new_id){
+    $this->object_id     = $item->object_id;
+    $this->object_class  = $item->object_class;
+    $this->facture_id    = $new_id;
+    $this->facture_class = $item->facture_class;
+  }
 }
