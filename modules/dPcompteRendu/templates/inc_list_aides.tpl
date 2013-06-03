@@ -1,6 +1,18 @@
 {{if $can->admin}}
+  <script>
+    exportAidesCSV = function(owner, object_class, aides_ids){
+      var url = new Url("compteRendu", "aides_export_csv", "raw");
+      url.addParam("owner",        owner);
+      url.addParam("object_class", object_class);
+      url.pop(400, 300, "export_csv", null, null, {
+        id: aides_ids.join("-"),
+        owner: owner,
+        object_class: object_class
+      });
+    };
+  </script>
   <button class="hslip"
-          onclick="window.open('?m=dPcompteRendu&amp;a=aides_export_csv&amp;suppressHeaders=1&amp;owner={{$owner}}&amp;object_class={{$filter_class}}&amp;id={{"-"|implode:$aides_ids}}')">
+          onclick="exportAidesCSV('{{$owner}}', '{{$filter_class}}', {{$aides_ids|@json}})">
     {{tr}}Export-CSV{{/tr}}
   </button>
   

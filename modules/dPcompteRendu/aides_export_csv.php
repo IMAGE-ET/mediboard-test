@@ -10,22 +10,24 @@
  * @version  SVN: $Id:\$
  * @link     http://www.mediboard.org
  */
+
 CCanDo::checkRead();
 
-$list  = CValue::get('id', array());
-$owner = CValue::get('owner');
-$object_class = CValue::get('object_class');
+$list         = CValue::post('id', array());
+$owner        = CValue::post('owner');
+$object_class = CValue::post('object_class');
+
+CMbObject::$useObjectCache = false;
 
 if (!is_array($list)) {
   $list = explode("-", $list);
 }
 
-$out = fopen('php://output', 'w');
-header('Content-Type: application/csv');
-header(
-  'Content-Disposition: attachment;'.
-  'filename="Aides saisie'. ($owner ? " - $owner" : '') . ($object_class ? " - ".CAppUI::tr($object_class) : '') . '.csv"'
-);
+$filename = 'Aides saisie'. ($owner ? " - $owner" : '') . ($object_class ? " - ".CAppUI::tr($object_class) : '') . '.csv';
+
+$out = fopen("php://output", "w");
+header("Content-Type: application/csv");
+header("Content-Disposition: attachment; filename=\"$filename\"");
 
 $aide = new CAideSaisie();
 fputcsv($out, array_keys($aide->getCSVFields()));
