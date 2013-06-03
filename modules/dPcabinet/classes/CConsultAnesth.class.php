@@ -419,6 +419,9 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     }
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadRefChir();
     
@@ -442,7 +445,8 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     if ($const_med->poids && $this->creatinine && 
         $age && $age >= 18 && $age <= 110 && 
         $const_med->poids >= 35 && $const_med->poids <= 120 && 
-        $this->creatinine >= 6 && $this->creatinine <= 70) {
+        $this->creatinine >= 6 && $this->creatinine <= 70
+    ) {
           $this->_clairance = $const_med->poids * (140-$age) / (7.2 * $this->creatinine);
       if ($patient->sexe == 'm') {
         $this->_clairance *= 1.04;
@@ -459,6 +463,11 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     }
   }
 
+  /**
+   * Charge les techniques complémentaires
+   *
+   * @return array
+   */
   function loadRefsTechniques() {
     $techniques = new CTechniqueComp;
     $where = array(
@@ -467,11 +476,19 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     return $this->_ref_techniques = $techniques->loadList($where, "technique");
   }
 
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack() {
     parent::loadRefsBack();
     $this->loadRefsTechniques();
   }
 
+  /**
+   * Retourne les classes de template pour les modèles
+   *
+   * @return array
+   */
   function getTemplateClasses(){
     $this->loadRefsFwd();
 
@@ -487,6 +504,9 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     return $tab;
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     if (!$this->_ref_consultation) {
       $this->loadRefConsultation();
@@ -520,6 +540,13 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     }
   }
 
+  /**
+   * Charge les objets pour les champs variables pour le template de document
+   *
+   * @param CTemplateManager &$template Template de document
+   *
+   * @return void
+   */
   function fillTemplate(&$template) {
     $this->loadRefsFwd();
     $this->_ref_consultation->fillTemplate($template);
@@ -527,9 +554,17 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $this->_ref_sejour->fillLimitedTemplate($template);
     $this->_ref_operation->fillLimitedTemplate($template);
     $this->_ref_sejour->loadRefDossierMedical();
+
     $this->_ref_sejour->_ref_dossier_medical->fillTemplate($template, "Sejour");
   }
 
+  /**
+   * Value les champs pour le template de document
+   *
+   * @param CTemplateManager &$template Template de document
+   *
+   * @return void
+   */
   function fillLimitedTemplate(&$template) {
     global $rootName;
     $this->updateFormFields();
@@ -575,7 +610,8 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $template->addProperty("Anesthésie - Etat bucco-dentaire"       , $this->etatBucco);
     $img = "";
     if ($this->mallampati) {
-      $img = $this->mallampati.'<br /><img src="/'.$rootName.'/images/pictures/'.$this->mallampati.'.png" alt="'.$this->mallampati.'" />';
+      $img = $this->mallampati.'<br /><img src="/'.$rootName.'/images/pictures/'.
+             $this->mallampati.'.png" alt="'.$this->mallampati.'" />';
     }
     $template->addProperty("Anesthésie - Mallampati", $img, null, false);
     $template->addProperty("Anesthésie - Mallampati (texte seul)", $this->getFormattedValue("mallampati"));
@@ -585,8 +621,10 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $this->notify("AfterFillLimitedTemplate", $template);
   }
 
+  /**
+   * @see parent::canDeleteEx()
+   */
   function canDeleteEx() {
-    return "";
     // Date dépassée
     $this->completeField("consultation_id");
 
@@ -600,6 +638,9 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     return parent::canDeleteEx();
   }
 
+  /**
+   * @see parent::store()
+   */
   function store() {
     $this->completeField("operation_id");
 
@@ -612,6 +653,9 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     return parent::store();
   }
 
+  /**
+   * @see parent::docsEditable
+   */
   function docsEditable() {
     if (parent::docsEditable()) {
       return true;
