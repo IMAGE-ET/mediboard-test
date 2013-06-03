@@ -899,10 +899,11 @@ class CStoredObject extends CModelObject {
     // @todo should replace fetchAssoc, instanciation and bind
     // while ($newObject = $ds->fetchObject($res, $this->_class)) {
 
-    $list_rows = $ds->loadList($query);
+    $rows = $ds->loadList($query);
 
-    $list = array();
-    foreach ($list_rows as $_row) {
+    $objects = array();
+
+    foreach ($rows as $_row) {
       /** @var self $newObject */
       $newObject = new $this->_class;
       $newObject->bind($_row, false);
@@ -913,14 +914,18 @@ class CStoredObject extends CModelObject {
       
       // Some external classes do not have primary keys
       if ($newObject->_id) {
-        $list[$newObject->_id] = $newObject;
+        $objects[$newObject->_id] = $newObject;
       }
       else {
-        $list[] = $newObject;
+        $objects[] = $newObject;
       }
     }
 
-    return $list;
+    if (count($objects) != count($rows)) {
+      mbLog($query,  "Missing group by");
+    }
+
+    return $objects;
   }
   
   /**
