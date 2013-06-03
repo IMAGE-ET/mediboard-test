@@ -258,7 +258,7 @@ if ($show_operations) {
       //liaisons
       $liaison_sejour = "";
       foreach ($sejour->_liaisons_for_prestation as $_liaison) {
-        if ($date_planning == $_liaison->date && ($_liaison->_ref_item->_id)) {
+        if ($date_planning >= $_liaison->date && ($_liaison->_ref_item->_id)) {
           $liaison_sejour = $_liaison->_ref_item->nom.' ';
         }
       }
