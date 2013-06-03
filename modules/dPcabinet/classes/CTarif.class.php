@@ -72,7 +72,7 @@ class CTarif extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'tarifs';
     $spec->key   = 'tarif_id';
-    $spec->xor["owner"] = array("function_id", "chir_id", "group_id");
+    //$spec->xor["owner"] = array("chir_id", "function_id", "group_id");
     return $spec;
   }
   
@@ -117,7 +117,7 @@ class CTarif extends CMbObject {
       $this->_type = "function";
     }
     else {
-      $this->_type = "group"; 
+      $this->_type = "group";
     }
     $this->_codes_ngap = explode("|", $this->codes_ngap);
     $this->_codes_ccam = explode("|", $this->codes_ccam);
@@ -300,7 +300,7 @@ class CTarif extends CMbObject {
       $tab["_codes_tarmed"] = "CActeTarmed";
       $tab["_codes_caisse"] = "CActeCaisse";
     }
-    
+
     foreach ($tab as $codes => $class_acte) {
       foreach ($this->$codes as $code) {
         $acte = new $class_acte;
@@ -419,7 +419,6 @@ class CTarif extends CMbObject {
       $tab["codes_tarmed"] = "CActeTarmed";
       $tab["codes_caisse"] = "CActeCaisse";
     }
-    
     foreach ($tab as $codes => $class_acte) {
       $_codes = "_".$codes;
       $this->completeField($codes);

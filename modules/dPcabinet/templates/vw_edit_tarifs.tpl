@@ -44,7 +44,9 @@ Main.add(function () {
             <select name="_type" onchange="Tarif.updateOwner();">
               <option value="chir"     {{if $tarif->chir_id}}     selected="selected" {{/if}}>Tarif personnel</option>
               <option value="function" {{if $tarif->function_id}} selected="selected" {{/if}}>Tarif de cabinet</option>
-              <option value="group" {{if $tarif->group_id}}    selected="selected" {{/if}}>Tarif d'établissement</option>
+              {{if $conf.dPcabinet.Tarifs.show_tarifs_etab}}
+                <option value="group" {{if $tarif->group_id}}    selected="selected" {{/if}}>Tarif d'établissement</option>
+              {{/if}}
             </select>
           </td>
         </tr>
