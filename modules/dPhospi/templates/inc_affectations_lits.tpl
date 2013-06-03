@@ -13,152 +13,153 @@
 </tr>
 <tr>
   <td colspan="2" style="padding: 0px;">
-  {{foreach from=$curr_lit->_ref_affectations item=curr_affectation}}
-  {{assign var="sejour" value=$curr_affectation->_ref_sejour}}
-  {{assign var="patient" value=$sejour->_ref_patient}}
-  {{assign var="aff_prev" value=$curr_affectation->_ref_prev}}
-  {{assign var="aff_next" value=$curr_affectation->_ref_next}}
-  <form name="addAffectationaffectation_{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" class="prepared">
-    <input type="hidden" name="m" value="dPhospi" />
-    <input type="hidden" name="dosql" value="do_affectation_aed" />
-    <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
-    <input type="hidden" name="lit_id" value="" />
-    <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-    <input type="hidden" name="entree" value="{{$curr_affectation->entree}}" />
-    <input type="hidden" name="sortie" value="{{$curr_affectation->sortie}}" />
-  </form>
+    {{foreach from=$curr_lit->_ref_affectations item=curr_affectation}}
+      {{assign var="sejour" value=$curr_affectation->_ref_sejour}}
+      {{assign var="patient" value=$sejour->_ref_patient}}
+      {{assign var="aff_prev" value=$curr_affectation->_ref_prev}}
+      {{assign var="aff_next" value=$curr_affectation->_ref_next}}
+      <form name="addAffectationaffectation_{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" class="prepared">
+        <input type="hidden" name="m" value="dPhospi" />
+        <input type="hidden" name="dosql" value="do_affectation_aed" />
+        <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
+        <input type="hidden" name="lit_id" value="" />
+        <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+        <input type="hidden" name="entree" value="{{$curr_affectation->entree}}" />
+        <input type="hidden" name="sortie" value="{{$curr_affectation->sortie}}" />
+      </form>
   
-  <table class="tbl" id="affectation_{{$curr_affectation->_id}}">
-    <tr class="patient">
-      {{if $curr_affectation->sejour_id}}
-      <td class="text button" style="width: 1%;">
-        {{if $can->edit}}
-        <script type="text/javascript">new Draggable('affectation_{{$curr_affectation->_id}}', {revert:true})</script>
-        {{/if}}
-        <!--
-        <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
-          <img src="images/icons/planning.png" title="Modifier le séjour">
-        </a>
-        -->
-        {{if $sejour->_couvert_cmu}}
-        <div><strong>CMU</strong></div>
-        {{/if}}
-        {{if $sejour->_couvert_ald}}
-        <div><strong {{if $sejour->ald}}style="color: red;"{{/if}}>ALD</strong></div>
-        {{/if}}
-        {{if $conf.dPhospi.CLit.alt_icons_sortants}}
-          {{assign var=suffixe_icons value="2"}}
-        {{else}}
-          {{assign var=suffixe_icons value=""}}
-        {{/if}}
-        {{if $sejour->type == "ambu"}}
-        <img src="modules/dPhospi/images/X{{$suffixe_icons}}.png" alt="X" title="Ambulatoire" />
-        {{elseif $curr_affectation->sortie|iso_date == $demain}}
-          {{if $aff_next->_id}}
-        <img src="modules/dPhospi/images/OC{{$suffixe_icons}}.png" alt="OC" title="Déplacé demain" />
+      <table class="tbl" id="affectation_{{$curr_affectation->_id}}">
+        <tr class="patient">
+          {{if $curr_affectation->sejour_id}}
+          <td class="text button" style="width: 1%;">
+            {{if $can->edit}}
+            <script type="text/javascript">new Draggable('affectation_{{$curr_affectation->_id}}', {revert:true})</script>
+            {{/if}}
+            <!--
+            <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
+              <img src="images/icons/planning.png" title="Modifier le séjour">
+            </a>
+            -->
+            {{if $sejour->_couvert_cmu}}
+            <div><strong>CMU</strong></div>
+            {{/if}}
+            {{if $sejour->_couvert_ald}}
+            <div><strong {{if $sejour->ald}}style="color: red;"{{/if}}>ALD</strong></div>
+            {{/if}}
+            {{if $conf.dPhospi.CLit.alt_icons_sortants}}
+              {{assign var=suffixe_icons value="2"}}
+            {{else}}
+              {{assign var=suffixe_icons value=""}}
+            {{/if}}
+            {{if $sejour->type == "ambu"}}
+            <img src="modules/dPhospi/images/X{{$suffixe_icons}}.png" alt="X" title="Ambulatoire" />
+            {{elseif $curr_affectation->sortie|iso_date == $demain}}
+              {{if $aff_next->_id}}
+            <img src="modules/dPhospi/images/OC{{$suffixe_icons}}.png" alt="OC" title="Déplacé demain" />
+              {{else}}
+            <img src="modules/dPhospi/images/O{{$suffixe_icons}}.png" alt="O" title="Sortant demain" />
+              {{/if}}
+            {{elseif $curr_affectation->sortie|iso_date == $date}}
+              {{if $aff_next->_id}}
+            <img src="modules/dPhospi/images/OoC{{$suffixe_icons}}.png" alt="OoC" title="Déplacé aujourd'hui" />
+              {{else}}
+            <img src="modules/dPhospi/images/Oo{{$suffixe_icons}}.png" alt="Oo" title="Sortant aujourd'hui" />
+              {{/if}}
+            {{/if}}
+          </td>
+          {{if $sejour->confirme}}
+            <td class="text" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
           {{else}}
-        <img src="modules/dPhospi/images/O{{$suffixe_icons}}.png" alt="O" title="Sortant demain" />
+            <td class="text">
           {{/if}}
-        {{elseif $curr_affectation->sortie|iso_date == $date}}
-          {{if $aff_next->_id}}
-        <img src="modules/dPhospi/images/OoC{{$suffixe_icons}}.png" alt="OoC" title="Déplacé aujourd'hui" />
+          {{if !$sejour->entree_reelle || ($aff_prev->_id && $aff_prev->effectue == 0)}}
+            <span class="patient-not-arrived">
+          {{elseif $sejour->septique}}
+            <span class="septique">
           {{else}}
-        <img src="modules/dPhospi/images/Oo{{$suffixe_icons}}.png" alt="Oo" title="Sortant aujourd'hui" />
+            <span>
           {{/if}}
-        {{/if}}
-      </td>  
-      {{if $sejour->confirme}}
-      <td class="text" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
-      {{else}}
-      <td class="text">
-      {{/if}}
-        {{if !$sejour->entree_reelle || ($aff_prev->_id && $aff_prev->effectue == 0)}}
-          <span class="patient-not-arrived">
-        {{elseif $sejour->septique}}
-          <span class="septique">
-        {{else}}
-          <span>
-        {{/if}}
-        <span style="float: right;">
-          {{if $prestation_id && $sejour->_liaisons_for_prestation|@count}}
-            {{mb_include module=hospi template=inc_vw_liaisons_prestation liaisons=$sejour->_liaisons_for_prestation}}
-          {{/if}}
-          {{mb_include module=patients template=inc_vw_antecedents type=deficience readonly=1}}
-        </span>
-        <span {{if $app->touch_device}}onclick{{else}}onmouseover{{/if}}="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')" {{if $sejour->recuse == "-1"}}class="opacity-70"{{/if}}>
-          <strong {{if $sejour->type == "ambu"}}style="font-style: italic;"{{/if}}>
-            {{if $sejour->recuse == "-1"}}[Att] {{/if}}{{$patient}}
-          </strong>
-        </span>
 
-        {{if (!$sejour->entree_reelle) || ($aff_prev->_id && $aff_prev->effectue == 0)}}
-          {{$curr_affectation->entree|date_format:"%d/%m %Hh%M"}}
-        {{/if}}
-        </span>
-      </td>
-      <td class="action" style="background:#{{$sejour->_ref_praticien->_ref_function->color}}" 
-            onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_ref_praticien->_guid}}');">
-        {{$sejour->_ref_praticien->_shortview}}
-      </td>
-      {{else}}
-      <td colspan="2">
-        <strong><em>[LIT BLOQUE]</em></strong>
-      </td>
-      {{/if}}
+          <span style="float: right;">
+            {{if $prestation_id && $sejour->_liaisons_for_prestation|@count}}
+              {{mb_include module=hospi template=inc_vw_liaisons_prestation liaisons=$sejour->_liaisons_for_prestation}}
+            {{/if}}
+            {{mb_include module=patients template=inc_vw_antecedents type=deficience readonly=1}}
+          </span>
+          <span {{if $app->touch_device}}onclick{{else}}onmouseover{{/if}}="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')" {{if $sejour->recuse == "-1"}}class="opacity-70"{{/if}}>
+            <strong {{if $sejour->type == "ambu"}}style="font-style: italic;"{{/if}}>
+              {{if $sejour->recuse == "-1"}}[Att] {{/if}}{{$patient}}
+            </strong>
+          </span>
+
+          {{if (!$sejour->entree_reelle) || ($aff_prev->_id && $aff_prev->effectue == 0)}}
+            {{$curr_affectation->entree|date_format:"%d/%m %Hh%M"}}
+          {{/if}}
+          </span>
+          </td>
+          <td class="action" style="background:#{{$sejour->_ref_praticien->_ref_function->color}}"
+                onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_ref_praticien->_guid}}');">
+            {{$sejour->_ref_praticien->_shortview}}
+          </td>
+          {{else}}
+          <td colspan="2">
+            <strong><em>[LIT BLOQUE]</em></strong>
+          </td>
+          {{/if}}
     </tr>
     {{if !$curr_affectation->sejour_id}}
-    <tr class="dates">   
-      <td class="text" colspan="2">
-        {{if $can->edit}}
-        <form name="entreeAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;" class="prepared">
-          <input type="hidden" name="m" value="dPhospi" />
-          <input type="hidden" name="dosql" value="do_affectation_aed" />
-          <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
-          <input type="hidden" name="entree" class="dateTime notNull" value="{{$curr_affectation->entree}}" />
-        </form>
-        {{/if}}
-        <strong>Du</strong>:
-        {{$curr_affectation->entree|date_format:"%a %d %b %Hh%M"}}
-        ({{$curr_affectation->_entree_relative}}j)
-      </td>
-      <td class="action">
-        {{if $can->edit}}
-        <form name="rmvAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" class="prepared">
-          <input type="hidden" name="m" value="dPhospi" />
-          <input type="hidden" name="dosql" value="do_affectation_aed" />
-          <input type="hidden" name="del" value="1" />
-          <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
-        </form>
-        <a href="#" onclick="confirmDeletion(document.rmvAffectation{{$curr_affectation->_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|smarty:nodefaults|JSAttribute}}'})">
-          <img src="images/icons/trash.png" alt="trash" title="Supprimer l'affectation" />
-        </a>
-        {{/if}}
-      </td>
-    </tr>
-    <tr class="dates">
-      <td class="text" colspan="2">
-        {{if $can->edit && (!$sejour->sortie_reelle || $aff_next->_id)}}
-        <form name="sortieAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;" class="prepared">
-          <input type="hidden" name="m" value="dPhospi" />
-          <input type="hidden" name="dosql" value="do_affectation_aed" />
-          <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
-          <input type="hidden" name="sortie" class="dateTime notNull" value="{{$curr_affectation->sortie}}" />
-        </form>
-        {{/if}}
-        <strong>Au</strong>:
-        {{$curr_affectation->sortie|date_format:"%a %d %b %Hh%M"}}
-        ({{$curr_affectation->_sortie_relative}}j)
-      </td>
-      <td class="action">
-      </td>
-    </tr>
+      <tr class="dates">
+        <td class="text" colspan="2">
+          {{if $can->edit}}
+          <form name="entreeAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;" class="prepared">
+            <input type="hidden" name="m" value="dPhospi" />
+            <input type="hidden" name="dosql" value="do_affectation_aed" />
+            <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
+            <input type="hidden" name="entree" class="dateTime notNull" value="{{$curr_affectation->entree}}" onchange="this.form.submit()" />
+          </form>
+          {{/if}}
+          <strong>Du</strong>:
+          {{$curr_affectation->entree|date_format:"%a %d %b %Hh%M"}}
+          ({{$curr_affectation->_entree_relative}}j)
+        </td>
+        <td class="action">
+          {{if $can->edit}}
+          <form name="rmvAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" class="prepared">
+            <input type="hidden" name="m" value="dPhospi" />
+            <input type="hidden" name="dosql" value="do_affectation_aed" />
+            <input type="hidden" name="del" value="1" />
+            <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
+          </form>
+          <a href="#" onclick="confirmDeletion(document.rmvAffectation{{$curr_affectation->_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|smarty:nodefaults|JSAttribute}}'})">
+            <img src="images/icons/trash.png" alt="trash" title="Supprimer l'affectation" />
+          </a>
+          {{/if}}
+        </td>
+      </tr>
+      <tr class="dates">
+        <td class="text" colspan="2">
+          {{if $can->edit && (!$sejour->sortie_reelle || $aff_next->_id)}}
+          <form name="sortieAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;" class="prepared">
+            <input type="hidden" name="m" value="dPhospi" />
+            <input type="hidden" name="dosql" value="do_affectation_aed" />
+            <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
+            <input type="hidden" name="sortie" class="dateTime notNull" value="{{$curr_affectation->sortie}}" onchange="this.form.submit()" />
+          </form>
+          {{/if}}
+          <strong>Au</strong>:
+          {{$curr_affectation->sortie|date_format:"%a %d %b %Hh%M"}}
+          ({{$curr_affectation->_sortie_relative}}j)
+        </td>
+        <td class="action">
+        </td>
+      </tr>
 
-    {{if $curr_affectation->rques}}
-    <tr class="dates">
-      <td class="text highlight" colspan="3">
-        <strong>Remarques:</strong> {{$curr_affectation->rques|nl2br}}
-      </td>
-    </tr>
+      {{if $curr_affectation->rques}}
+      <tr class="dates">
+        <td class="text highlight" colspan="3">
+          <strong>Remarques:</strong> {{$curr_affectation->rques|nl2br}}
+        </td>
+      </tr>
     {{/if}}
     {{else}}
 
