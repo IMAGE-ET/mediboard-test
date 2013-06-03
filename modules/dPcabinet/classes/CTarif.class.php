@@ -53,21 +53,21 @@ class CTarif extends CMbObject {
   public $_quantite;
   public $_type_code;
   public $_update_montants;
-  
-  // Object References
-  public $_ref_chir;
-  public $_ref_function;
-  public $_ref_group;
-  
   public $_bind_codable;
   public $_codable_class;
   public $_codable_id;
-  
+
+  // Object References
+  /** @var CMediusers */
+  public $_ref_chir;
+  /** @var CFunctions */
+  public $_ref_function;
+  /** @var CGroups */
+  public $_ref_group;
+
   /**
-   * getSpec
-   * 
-   * @return CMbObjectSpec the spec
-  **/
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'tarifs';
@@ -77,10 +77,8 @@ class CTarif extends CMbObject {
   }
   
   /**
-   * getProps
-   * 
-   * @return array
-  **/
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["chir_id"]     = "ref class|CMediusers";
@@ -103,10 +101,8 @@ class CTarif extends CMbObject {
   }
   
   /**
-   * updateFormFields
-   * 
-   * @return void
-  **/
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->description;
@@ -129,12 +125,10 @@ class CTarif extends CMbObject {
     CMbArray::removeValue("", $this->_codes_caisse);
     $this->_somme = $this->secteur1 + $this->secteur2;
   }
-  
+
   /**
-   * updatePlainFields
-   * 
-   * @return void
-  **/
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     if ($this->_type !== null) {
       if ($this->_type == "chir") {
@@ -159,7 +153,7 @@ class CTarif extends CMbObject {
    * Chargement de la consultation associée
    * 
    * @return void
-  **/
+   */
   function bindCodable() {
     if (!$this->_bind_codable || is_null($this->_codable_class) || is_null($this->_codable_id)) {
       return;
@@ -167,7 +161,7 @@ class CTarif extends CMbObject {
 
     $this->_bind_codable = false;
 
-    // Chargement de la consultation
+    /** @var CCodable $codable */
     $codable = new $this->_codable_class();
     $codable->load($this->_codable_id);
 
@@ -182,19 +176,19 @@ class CTarif extends CMbObject {
     $this->chir_id     = $codable->_ref_praticien->_id;
     $this->function_id = "";
 
-    if ($this->_codable_class == "CConsultation") {
-      $codable->loadRefPlageConsult();
-      $this->secteur1    = $codable->secteur1;
-      $this->secteur2    = $codable->secteur2;
-      $this->description = $codable->tarif;
+    if ($codable instanceof CConsultation) {
+      /** @var CConsultation $consultation */
+      $consultation = $codable;
+      $consultation->loadRefPlageConsult();
+      $this->secteur1    = $consultation->secteur1;
+      $this->secteur2    = $consultation->secteur2;
+      $this->description = $consultation->tarif;
     }
   }
   
   /**
-   * Redéfinition du store
-   * 
-   * @return null
-  **/
+   * @see parent::store()
+   */
   function store() {
     if ($this->_add_mto) {
       $this->completeField("codes_ngap");
@@ -221,19 +215,23 @@ class CTarif extends CMbObject {
     $this->secteur1 = 0.00;
     $secteur2 = $this->secteur2;
   
-    $tab = array( "codes_ccam" => "CActeCCAM",
-                  "codes_ngap" => "CActeNGAP");
+    $types_code = array(
+      "codes_ccam" => "CActeCCAM",
+      "codes_ngap" => "CActeNGAP"
+    )
+    ;
     if (CModule::getActive("tarmed")) {
-      $tab["codes_tarmed"] = "CActeTarmed";
-      $tab["codes_caisse"] = "CActeCaisse";
+      $types_code["codes_tarmed"] = "CActeTarmed";
+      $types_code["codes_caisse"] = "CActeCaisse";
     }
     
-    foreach ($tab as $codes => $class_acte) {
+    foreach ($types_code as $codes => $class_acte) {
       $_codes = "_".$codes;
       $this->completeField($codes);
       $this->$_codes = explode("|", $this->$codes);
       CMbArray::removeValue("", $this->$_codes);
       foreach ($this->$_codes as &$_code) {
+        /** @var CActe $acte */
         $acte = new $class_acte;
         $acte->setFullCode($_code);
         $this->secteur1 += $acte->updateMontantBase();
@@ -294,8 +292,11 @@ class CTarif extends CMbObject {
       return $this->_precode_ready = '0';
     }
     
-    $tab = array( "_codes_ccam" => "CActeCCAM",
-                  "_codes_ngap" => "CActeNGAP");
+    $tab = array(
+      "_codes_ccam" => "CActeCCAM",
+      "_codes_ngap" => "CActeNGAP"
+    );
+
     if (CModule::getActive("tarmed")) {
       $tab["_codes_tarmed"] = "CActeTarmed";
       $tab["_codes_caisse"] = "CActeCaisse";
@@ -303,18 +304,22 @@ class CTarif extends CMbObject {
 
     foreach ($tab as $codes => $class_acte) {
       foreach ($this->$codes as $code) {
+        /** @var CActe $acte */
         $acte = new $class_acte;
         $acte->setFullCode($code);
+
         if ($class_acte == "CActeTarmed") {
           $acte->loadRefTarmed(CTarmed::LITE);
         }
-        elseif ($class_acte == "CActeCaisse") {
+        if ($class_acte == "CActeCaisse") {
           $acte->loadRefPrestationCaisse();
         }
+
         $this->_new_actes[$code] = $acte;
         if (!$acte->getPrecodeReady()) {
           return $this->_precode_ready = '0';
         }
+
         if ($class_acte == "CActeNGAP" && in_array($acte->code, array("MTO", "MPJ"))) {
           $this->_has_mto = '1';
         }
@@ -323,12 +328,10 @@ class CTarif extends CMbObject {
     
     return $this->_precode_ready = '1';
   }
-  
+
   /**
-   * loadRefsFwd
-   * 
-   * @return void
-  **/
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->_ref_chir     = $this->loadFwdRef("chir_id");
     $this->_ref_function = $this->loadFwdRef("function_id");
@@ -337,11 +340,7 @@ class CTarif extends CMbObject {
   }
   
   /**
-   * Charge les permissions
-   * 
-   * @param string $permType Type de la permission
-   * 
-   * @return bool
+   * @see parent::getPerm()
    */
   function getPerm($permType) {
     if (!$this->_ref_chir || !$this->_ref_function) {
@@ -356,12 +355,10 @@ class CTarif extends CMbObject {
   /**
    * Charge l'établissement associé au tarif
    * 
-   * @param boolean $cached Charge l'établissement depuis le cache
-   * 
    * @return CGroups
    */
-  function loadRefGroup($cached = true) {
-    return $this->_ref_group = $this->loadFwdRef("group_id", $cached);
+  function loadRefGroup() {
+    return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
   
   /**
@@ -382,13 +379,16 @@ class CTarif extends CMbObject {
     $this->$_codes = explode("|", $this->$codes);
     CMbArray::removeValue("", $this->$_codes);
     foreach ($this->$_codes as &$_code) {
+      /** @var CActe $acte */
       $acte = new $class_acte;
       $acte->setFullCode($_code);
       $acte->updateMontantBase();  
       $acte->makeFullCode();
       $_code = $this->_dell_code && $this->_code == $acte->code ? "" : $acte->_full_code;
     }
+
     if ($this->_add_code) {
+      /** @var CActe $acte */
       $acte = new $class_acte;
       $acte->code = $this->_code;
       if ($class_acte == "CActeTarmed") {
@@ -425,6 +425,7 @@ class CTarif extends CMbObject {
       $this->$_codes = explode("|", $this->$codes);
       CMbArray::removeValue("", $this->$_codes);
       foreach ($this->$_codes as &$_code) {
+        /** @var CActe $acte */
         $acte = new $class_acte;
         $acte->setFullCode($_code);
         $acte->updateMontantBase();

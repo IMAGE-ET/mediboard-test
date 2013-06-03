@@ -228,6 +228,15 @@ class CActe extends CMbMetaObject {
   }
 
   /**
+   * Calcule le montant de base de l'acte
+   *
+   * @return float
+   */
+  function updateMontantBase() {
+
+  }
+
+  /**
    * Charge l'exécution
    *
    * @return void

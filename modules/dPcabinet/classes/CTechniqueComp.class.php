@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Les techniques complémentaires permettent de préciser les gestes d'anesthésie
+ */
 class CTechniqueComp extends CMbObject {
   // DB Table key
   public $technique_id;
@@ -19,9 +22,13 @@ class CTechniqueComp extends CMbObject {
   // DB fields
   public $technique;
 
+  // References
   /** @var CConsultAnesth */
   public $_ref_consult_anesth;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'techniques_anesth';
@@ -29,6 +36,9 @@ class CTechniqueComp extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["consultation_anesth_id"] = "ref notNull class|CConsultAnesth";
@@ -36,15 +46,19 @@ class CTechniqueComp extends CMbObject {
     return $props;
   }
 
-  function loadRefsFwd() {
-    $this->_ref_consult_anesth = new CConsultAnesth;
-    $this->_ref_consult_anesth->load($this->consultation_anesth_id);
+  /**
+   * Charge la consultation d'anesthésie associée
+   *
+   * @return CConsultAnesth
+   */
+  function loadRefConsultAnesth() {
+    return $this->loadFwdRef("consultation_anesth_id", true);
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
-    if (!$this->_ref_consult_anesth) {
-      $this->loadRefsFwd();
-    }
-    return $this->_ref_consult_anesth->getPerm($permType);
+    return $this->loadRefConsultAnesth()->getPerm($permType);
   }
 }
