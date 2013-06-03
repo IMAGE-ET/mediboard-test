@@ -1,4 +1,4 @@
-<?php /* $Id: CItemPrestation.class.php $ */
+<?php /** $Id: CItemPrestation.class.php $ **/
 
 /**
  * @package Mediboard
@@ -10,19 +10,21 @@
 
 class CItemLiaison extends CMbObject{
   // DB Table key
-  var $item_liaison_id  = null;
+  public $item_liaison_id;
   
   // DB Fields
-  var $sejour_id       =  null;
-  var $item_souhait_id = null;
-  var $item_realise_id = null;
-  var $date            = null;
-  var $quantite        = null;
+  public $sejour_id;
+  public $item_souhait_id;
+  public $item_realise_id;
+  public $date;
+  public $quantite;
   
   // Ref Fields
-  var $_ref_affectation  = null;
-  var $_ref_item         = null;
-  var $_ref_item_realise = null;
+  public $_ref_affectation;
+  public $_ref_item;
+  public $_ref_item_realise;
+
+  public $_ref_sejour;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -54,4 +56,3 @@ class CItemLiaison extends CMbObject{
     return $this->_ref_sejour = $this->loadFwdRef("sejour_id", true);
   }
 }
-?>
