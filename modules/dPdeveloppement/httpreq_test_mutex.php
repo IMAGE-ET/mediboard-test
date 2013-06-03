@@ -10,38 +10,38 @@
 CCanDo::checkRead();
 
 $action = CValue::get("action");
+
+$duration = 10;
+
+// Remove session lock
+session_write_close();
+
 CAppUI::stepAjax("test_mutex-try", UI_MSG_OK, $action);
 
-$mutex = new CMbSemaphore("test");
-
-CAppUI::stepAjax("test_mutex-process", UI_MSG_OK, $mutex->process);
+$mutex = new CMbMutex("test");
 
 switch ($action) {
   case "stall" :
-  CAppUI::stepAjax("test_mutex-acquired", UI_MSG_OK, $mutex->acquire());
-  sleep(5);
-  $mutex->release();
-  break;
+    CAppUI::stepAjax("test_mutex-acquired", UI_MSG_OK, $mutex->acquire($duration));
+    sleep(5);
+    $mutex->release();
+    break;
 
   case "die" : 
-  CAppUI::stepAjax("test_mutex-acquired", UI_MSG_OK, $mutex->acquire());
-  sleep(5);
-  CApp::rip();
-  break;
+    CAppUI::stepAjax("test_mutex-acquired", UI_MSG_OK, $mutex->acquire($duration));
+    sleep(5);
+    CApp::rip();
+    break;
 
   case "run" :
-  CAppUI::stepAjax("test_mutex-acquired", UI_MSG_OK, $mutex->acquire());
-  $mutex->release();
-  break;
+    CAppUI::stepAjax("test_mutex-acquired", UI_MSG_OK, $mutex->acquire($duration));
+    $mutex->release();
+    break;
 
   case "dummy" :
-  break;
+    break;
   
   default:
-  CAppUI::stepAjax("test_mutex-fail", UI_MSG_WARNING, $action);
-  return;
+    CAppUI::stepAjax("test_mutex-fail", UI_MSG_WARNING, $action);
+    return;
 }
-
-CAppUI::stepAjax("test_mutex-end", UI_MSG_OK, $action);
-
-?>

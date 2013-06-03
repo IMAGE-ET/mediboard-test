@@ -23,6 +23,12 @@ if (isset($_POST["password"])) {
   unset($_POST["password"]);
 }
 
+$mutex_drivers = array(
+  "CMbRedisMutex" => "Redis (Serveur local)" ,
+  "CMbAPCMutex"   => "APC",
+  "CMbFileMutex"  => "Fichier",
+);
+
 $mbConfig = new CMbConfig;
 $mbConfig->update($_POST);
 $mbConfig->load();
@@ -205,6 +211,36 @@ showHeader();
           <input type="text" size="90" id="shared_memory_params" name="shared_memory_params" value="<?php echo $dPconfig["shared_memory_params"]; ?>" />
         </td>
       </tr>
+    </table>
+  </fieldset>
+
+  <fieldset>
+    <legend>Drivers de mutex</legend>
+
+    <table class="form">
+      <col style="width: 25%" />
+
+      <?php foreach ($mutex_drivers as $_driver_class => $_title) { ?>
+        <tr>
+          <th class="narrow">
+            <?php echo $_title; ?>
+          </th>
+          <td>
+            <label>
+              <input type="radio" name="mutex_drivers[<?php echo $_driver_class; ?>]" value="1"
+                <?php if (!empty($dPconfig['mutex_drivers'][$_driver_class])) echo 'checked'; ?> />
+              Oui
+            </label>
+
+            <label>
+              <input type="radio" name="mutex_drivers[<?php echo $_driver_class; ?>]" value="0"
+                <?php if (empty($dPconfig['mutex_drivers'][$_driver_class])) echo 'checked'; ?> />
+              Non
+            </label>
+          </td>
+        </tr>
+      <?php } ?>
+
     </table>
   </fieldset>
 

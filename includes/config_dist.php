@@ -40,6 +40,9 @@ $dPconfig["readonly"]             = "0";
 $dPconfig["shared_memory"]        = "none";
 $dPconfig["shared_memory_params"] = "";
 $dPconfig["session_handler"]      = "files";
+$dPconfig["mutex_drivers"]       = array(
+  "CMbFileMutex" => "1",
+);
 $dPconfig["log_js_errors"]        = "1";
 $dPconfig["weinre_debug_host"]    = "";
 
@@ -61,10 +64,10 @@ $dPconfig["alternative_mode"]  = "1";
 $dPconfig["merge_prevent_base_without_idex"]  = "1";
 
 $dPconfig["browser_compat"]    = array(
-  'firefox' => '3.0',
+  'firefox' => '8.0',
   'msie'    => '8.0',
-  'opera'   => '9.6',
-  'chrome'  => '5.0',
+  'opera'   => '10.0',
+  'chrome'  => '20.0',
   'safari'  => '525.26', // 3.2
 );
 $dPconfig["browser_enable_ie9"]  = "0";
