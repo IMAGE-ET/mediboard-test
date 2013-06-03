@@ -1058,7 +1058,60 @@ class CSetuphl7 extends CSetup {
                 ADD `build_other_residence_number` ENUM ('ORN','WPN') DEFAULT 'ORN';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.67";
+    $this->makeRevision("0.67");
+
+    $query = "CREATE TABLE `receiver_hl7_v3` (
+                `receiver_hl7_v3_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `nom` VARCHAR (255) NOT NULL,
+                `libelle` VARCHAR (255),
+                `group_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `actif` ENUM ('0','1') NOT NULL DEFAULT '0'
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `receiver_hl7_v3`
+                ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.68");
+
+    $query = "CREATE TABLE `exchange_hl7v3` (
+                `exchange_hl7v3_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `identifiant_emetteur` VARCHAR (255),
+                `initiateur_id` INT (11) UNSIGNED,
+                `group_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `date_production` DATETIME NOT NULL,
+                `sender_id` INT (11) UNSIGNED,
+                `sender_class` ENUM ('CSenderFTP','CSenderSOAP','CSenderFileSystem'),
+                `receiver_id` INT (11) UNSIGNED,
+                `type` VARCHAR (255),
+                `sous_type` VARCHAR (255),
+                `date_echange` DATETIME,
+                `message_content_id` INT (11) UNSIGNED,
+                `acquittement_content_id` INT (11) UNSIGNED,
+                `statut_acquittement` VARCHAR (255),
+                `message_valide` ENUM ('0','1') DEFAULT '0',
+                `acquittement_valide` ENUM ('0','1') DEFAULT '0',
+                `id_permanent` VARCHAR (255),
+                `object_id` INT (11) UNSIGNED,
+                `object_class` ENUM ('CPatient','CSejour','COperation','CAffectation','CConsultation'),
+                `reprocess` TINYINT (4) UNSIGNED DEFAULT '0'
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `exchange_hl7v3`
+                ADD INDEX (`initiateur_id`),
+                ADD INDEX (`group_id`),
+                ADD INDEX (`date_production`),
+                ADD INDEX (`sender_id`),
+                ADD INDEX (`receiver_id`),
+                ADD INDEX (`date_echange`),
+                ADD INDEX (`message_content_id`),
+                ADD INDEX (`acquittement_content_id`),
+                ADD INDEX (`object_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.69";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
