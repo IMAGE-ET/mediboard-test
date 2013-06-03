@@ -5,12 +5,12 @@
   <table class="main tbl">
     <tr>
       <td style="text-align:center;">
-        <a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$_facture->_ref_patient->_guid}}')">
+        <a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$facture->_ref_patient->_guid}}')">
           Patient : {{$facture->_ref_patient}}
         </a>
       </td>
       <td style="text-align:center;">
-        <a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$_facture->_ref_patient->_guid}}')">
+        <a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$facture->_ref_praticien->_guid}}')">
           Praticien: {{$facture->_ref_praticien}}
         </a>
       </td>
