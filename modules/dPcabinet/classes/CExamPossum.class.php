@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Formulaire du score POSSUM
+ */
 class CExamPossum extends CMbObject {
   // DB Table key
   public $exampossum_id;
@@ -50,7 +53,10 @@ class CExamPossum extends CMbObject {
   /** @var CConsultation */
   public $_ref_consult;
 
-  function CExamPossum() {
+  /**
+   * Standard constructor
+   */
+  function __construct() {
     parent::__construct();
 
     static $score_possum_physio = null;
@@ -66,6 +72,9 @@ class CExamPossum extends CMbObject {
     $this->_score_possum_oper =& $score_possum_oper;
   }
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'exampossum';
@@ -73,8 +82,13 @@ class CExamPossum extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
+
+    // DB Fields
     $props["consultation_id"]      = "ref notNull class|CConsultation";
     $props["age"]                  = "enum list|inf60|61|sup71";
     $props["ouverture_yeux"]       = "enum list|spontane|bruit|douleur|jamais";
@@ -105,9 +119,15 @@ class CExamPossum extends CMbObject {
     $props["_mortalite"]           = "";
     $props["_score_possum_oper"]   = "";
     $props["_score_possum_physio"] = "";
+
     return $props;
   }
 
+  /**
+   * Donne les scores pour chaque valeur physio
+   *
+   * @return array
+   */
   function getScorePhysio() {
     return array(
       "age" => array(
@@ -217,6 +237,11 @@ class CExamPossum extends CMbObject {
     );
   }
 
+  /**
+   * Donne les scores pour chaque valeur opératoire
+   *
+   * @return array
+   */
   function getScoreOper() {
     return array(
       "gravite" => array(
@@ -257,6 +282,9 @@ class CExamPossum extends CMbObject {
     );
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
 
@@ -305,26 +333,30 @@ class CExamPossum extends CMbObject {
       }
     }
 
-    //Calcul de la morbidité
+    // Calcul de la morbidité
     $temp = (0.16 * $this->_score_physio) + (0.19 * $this->_score_oper) - 5.91;
     $this->_morbidite = round(100 / (1 + exp(-$temp)), 1);
 
-    //Calcul de la Mortalité
+    // Calcul de la Mortalité
     $temp = (0.13 * $this->_score_physio) + (0.16 * $this->_score_oper) - 7.04;
     $this->_mortalite = round(100 / (1 + exp(-$temp)), 1);
 
     $this->_view = "Scores POSSUM (morb./mort.) : $this->_morbidite / $this->_mortalite";
   }
 
-  function loadRefsFwd() {
-    $this->_ref_consult = new CConsultation;
-    $this->_ref_consult->load($this->consultation_id);
+  /**
+   * Charge la consultation associée
+   *
+   * @return CConsultation
+   */
+  function loadRefConsult() {
+    return $this->_ref_consult = $this->loadFwdRef("consultation_id", true);
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
-    if (!$this->_ref_consult) {
-      $this->loadRefsFwd();
-    }
-    return $this->_ref_consult->getPerm($permType);
+    return $this->loadRefConsult()->getPerm($permType);
   }
 }

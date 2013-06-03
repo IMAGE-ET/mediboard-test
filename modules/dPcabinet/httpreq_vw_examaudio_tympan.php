@@ -8,7 +8,7 @@
 */
 
 global $m;
-global $frequences, $pressions, $exam_audio, $reloadGraph;
+global $exam_audio, $reloadGraph;
 
 $examaudio_id = CValue::getOrSession("examaudio_id");
 $side         = CValue::getOrSession("side");

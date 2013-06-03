@@ -29,7 +29,7 @@ abstract class CValue {
   }
 
   /**
-   * Returns the first arguments that do not evaluate to null (0, null, "")
+   * Returns the first argument that do not evaluate to false (0, null, "", ...)
    * 
    * @return mixed The first value evaluated to TRUE
    */
@@ -80,7 +80,7 @@ abstract class CValue {
   /**
    * Returns the value of a FILE variable retrieved from HTTP POST
    * 
-   * @param string $name    The FILE key of the value to get from HTTP POST
+   * @param string $name The FILE key of the value to get from HTTP POST
    * 
    * @return mixed The FILE value associated to $name in the HTTP REQUEST (POST or GET)
    */

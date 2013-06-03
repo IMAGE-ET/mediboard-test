@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Examen IGS
+ */
 class CExamIgs extends CMbObject {
   public $examigs_id;
 
@@ -34,19 +37,22 @@ class CExamIgs extends CMbObject {
   public $admission;
   public $scoreIGS;
   
-  /** @var CConsultation */
-  public $_ref_consult;
-  
-  static $fields = array("age", "FC", "TA", "temperature", "PAO2_FIO2", "diurese", "uree", "globules_blancs", 
-                            "kaliemie", "natremie", "HCO3" , "billirubine", "glasgow", "maladies_chroniques", "admission");
+  static $fields = array("age", "FC", "TA", "temperature", "PAO2_FIO2", "diurese", "uree", "globules_blancs",
+    "kaliemie", "natremie", "HCO3" , "billirubine", "glasgow", "maladies_chroniques", "admission");
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'examigs';
     $spec->key   = 'examigs_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["date"]                = "dateTime notNull";
@@ -69,7 +75,10 @@ class CExamIgs extends CMbObject {
     $props["scoreIGS"]            = "num";
     return $props;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
     $this->_view = "Score IGS: $this->scoreIGS";  

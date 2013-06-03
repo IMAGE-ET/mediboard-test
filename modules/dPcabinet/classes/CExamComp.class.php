@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Examens complémentaires prévus pendant la consultation, en particulier pour un anesthésiste
+ */
 class CExamComp extends CMbObject {
   public $exam_id;
 
@@ -23,6 +26,9 @@ class CExamComp extends CMbObject {
   /** @var CConsultation */
   public $_ref_consult;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'exams_comp';
@@ -30,6 +36,9 @@ class CExamComp extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -41,18 +50,26 @@ class CExamComp extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->examen;
   }
 
   /**
+   * Charge la consultation associée
+   *
    * @return CConsultation
    */
   function loadRefConsult() {
     return $this->_ref_consult = $this->loadFwdRef("consultation_id", true);
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     return $this->loadRefConsult()->getPerm($permType);
   }

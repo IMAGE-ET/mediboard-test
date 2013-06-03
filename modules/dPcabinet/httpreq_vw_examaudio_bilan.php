@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $frequences;
+$frequences = CExamAudio::$frequences;
 
 $examaudio_id = CValue::getOrSession("examaudio_id");
 

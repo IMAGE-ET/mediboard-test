@@ -308,9 +308,12 @@ class CCodable extends CMbObject {
     }
   }
 
-
+  /**
+   * Update montant and store object
+   *
+   * @return string Store-like message
+   */
   function doUpdateMontants(){
-
   }
 
   function updatePlainFields() {
@@ -880,13 +883,13 @@ class CCodable extends CMbObject {
    */
   function precodeCCAM($chir) {
     // Explode des codes_ccam du tarif
-    $listCodesCCAM = explode("|", $this->codes_ccam);
-    foreach ($listCodesCCAM as $code) {
+    $codes_ccam = explode("|", $this->codes_ccam);
+    foreach ($codes_ccam as $_code) {
       $acte = new CActeCCAM();
       $acte->_adapt_object = true;
 
       $acte->_preserve_montant = true;
-      $acte->setFullCode($code);
+      $acte->setFullCode($_code);
 
       // si le code ccam est composé de 3 elements, on le precode
       if ($acte->code_activite != "" && $acte->code_phase != "") {

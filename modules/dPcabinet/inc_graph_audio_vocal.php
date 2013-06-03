@@ -105,8 +105,6 @@ class AudiogrammeVocal extends Graph {
   }
   
   function addAudiogramme($points, $title, $mark_color, $mark_type) {
-    global $frequences;
-    
     CMbArray::removeValue(array("", ""), $points);
 
     // Empty plot case

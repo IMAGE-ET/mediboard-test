@@ -278,15 +278,17 @@ class CPatient extends CPerson {
   public $_ref_correspondants_patient;
   public $_ref_cp_by_relation;
 
-  /**
-   * @var CDossierMedical
-   */
+  /** @var CDossierMedical */
   public $_ref_dossier_medical;
-  public $_refs_devenirs_dentaires;
   /** @var CIdSante400 */
   public $_ref_IPP;
+  /** @var CIdSante400 */
   public $_ref_vitale_idsante400;
+  /** @var CConstantesMedicales */
   public $_ref_constantes_medicales;
+  /** @var CDevenirDentaire[] */
+  public $_refs_devenirs_dentaires;
+
 
   // Distant fields
   public $_ref_praticiens; // Praticiens ayant participé à la pec du patient
@@ -1370,7 +1372,7 @@ class CPatient extends CPerson {
 
       $consult->loadRefConsultAnesth();
       $consult->loadRefsFichesExamen();
-      $consult->loadExamsComp();
+      $consult->loadRefsExamsComp();
       if (!count($consult->_refs_dossiers_anesth)) {
         $consult->countDocItems($permType);
       }
@@ -1449,7 +1451,7 @@ class CPatient extends CPerson {
       foreach ($_sejour->_ref_consultations as $_consult) {
         $_consult->loadRefConsultAnesth();
         $_consult->loadRefsFichesExamen();
-        $_consult->loadExamsComp();
+        $_consult->loadRefsExamsComp();
         $_consult->countDocItems($permType);
 
         $_consult->loadRefsFwd(1);

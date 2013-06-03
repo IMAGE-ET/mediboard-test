@@ -9,25 +9,13 @@
  * @version    $Revision$
  */
 
-global $frequences, $pressions;
-
-$frequences = array(
-  "125Hz",
-  "250Hz",
-  "500Hz",
-  "1kHz",
-  "2kHz",
-  "4kHz",
-  "8kHz",
-  "16kHz",
-);
-
-$nb_pressions = 8;
-for ($i = 0; $i < $nb_pressions; $i++) {
-  $pressions[] = 100*$i - 400;
-}
-
+/**
+ * Audiogramme associé à une consultation
+ */
 class CExamAudio extends CMbObject {
+  static $frequences = array("125Hz", "250Hz", "500Hz", "1kHz", "2kHz", "4kHz", "8kHz", "16kHz");
+  static $pressions = array(-400, -300, -200, -100, 0, 100, 200, 300);
+
   // DB Table key
   public $examaudio_id;
 
@@ -76,8 +64,12 @@ class CExamAudio extends CMbObject {
   public $_moyenne_droite_osseux;
 
   // Fwd References
+  /** @var CConsultation */
   public $_ref_consult;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'examaudio';
@@ -85,29 +77,37 @@ class CExamAudio extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
-    $specsParent = parent::getProps();
-    $specs = array (
-      "consultation_id" => "ref notNull class|CConsultation",
-      "remarques"       => "text helped",
-      "gauche_aerien"   => "str maxLength|64",
-      "gauche_osseux"   => "str maxLength|64",
-      "gauche_conlat"   => "str maxLength|64",
-      "gauche_ipslat"   => "str maxLength|64",
-      "gauche_pasrep"   => "str maxLength|64",
-      "gauche_tympan"   => "str maxLength|64",
-      "gauche_vocale"   => "str maxLength|64",
-      "droite_aerien"   => "str maxLength|64",
-      "droite_osseux"   => "str maxLength|64",
-      "droite_conlat"   => "str maxLength|64",
-      "droite_ipslat"   => "str maxLength|64",
-      "droite_pasrep"   => "str maxLength|64",
-      "droite_tympan"   => "str maxLength|64",
-      "droite_vocale"   => "str maxLength|64"
-    );
-    return array_merge($specsParent, $specs);
+    $props = parent::getProps();
+    $props["consultation_id"] = "ref notNull class|CConsultation";
+    $props["remarques"] = "text helped";
+    $props["gauche_aerien"] = "str maxLength|64";
+    $props["gauche_osseux"] = "str maxLength|64";
+    $props["gauche_conlat"] = "str maxLength|64";
+    $props["gauche_ipslat"] = "str maxLength|64";
+    $props["gauche_pasrep"] = "str maxLength|64";
+    $props["gauche_tympan"] = "str maxLength|64";
+    $props["gauche_vocale"] = "str maxLength|64";
+    $props["droite_aerien"] = "str maxLength|64";
+    $props["droite_osseux"] = "str maxLength|64";
+    $props["droite_conlat"] = "str maxLength|64";
+    $props["droite_ipslat"] = "str maxLength|64";
+    $props["droite_pasrep"] = "str maxLength|64";
+    $props["droite_tympan"] = "str maxLength|64";
+    $props["droite_vocale"] = "str maxLength|64";
+    return $props;
   }
 
+  /**
+   * Vérifie que les abscisses des points vocaux sont conformes
+   *
+   * @param array $vocal_points Points vocaux
+   *
+   * @return bool
+   */
   function checkAbscisse($vocal_points) {
     $dBs = array();
     foreach ($vocal_points as $point) {
@@ -125,6 +125,9 @@ class CExamAudio extends CMbObject {
     return true;
   }
 
+  /**
+   * @see parent::check();
+   */
   function check() {
     $msg = "Deux points ont la même abscisse dans l'audiogramme vocal de l'oreille ";
     if (!$this->checkAbscisse($this->_gauche_vocale)) {
@@ -138,53 +141,28 @@ class CExamAudio extends CMbObject {
     return parent::check();
   }
 
+  /**
+   * @see parent::updateFormFields();
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
     // Initialisations
-    if (!$this->gauche_aerien) {
-      $this->gauche_aerien = "|||||||";
-    }
-    if (!$this->gauche_osseux) {
-      $this->gauche_osseux = "|||||||";
-    }
-    if (!$this->gauche_conlat) {
-      $this->gauche_conlat = "|||||||";
-    }
-    if (!$this->gauche_ipslat) {
-      $this->gauche_ipslat = "|||||||";
-    }
-    if (!$this->gauche_pasrep) {
-      $this->gauche_pasrep = "|||||||";
-    }
-    if (!$this->gauche_tympan) {
-      $this->gauche_tympan = "|||||||";
-    }
-    if (!$this->gauche_vocale) {
-      $this->gauche_vocale = "|||||||";
-    }
+    $this->gauche_aerien = CValue::first($this->gauche_aerien, "|||||||");
+    $this->gauche_osseux = CValue::first($this->gauche_osseux, "|||||||");
+    $this->gauche_conlat = CValue::first($this->gauche_conlat, "|||||||");
+    $this->gauche_ipslat = CValue::first($this->gauche_ipslat, "|||||||");
+    $this->gauche_pasrep = CValue::first($this->gauche_pasrep, "|||||||");
+    $this->gauche_tympan = CValue::first($this->gauche_tympan, "|||||||");
+    $this->gauche_vocale = CValue::first($this->gauche_vocale, "|||||||");
 
-    if (!$this->droite_aerien) {
-      $this->droite_aerien = "|||||||";
-    }
-    if (!$this->droite_osseux) {
-      $this->droite_osseux = "|||||||";
-    }
-    if (!$this->droite_conlat) {
-      $this->droite_conlat = "|||||||";
-    }
-    if (!$this->droite_ipslat) {
-      $this->droite_ipslat = "|||||||";
-    }
-    if (!$this->droite_pasrep) {
-      $this->droite_pasrep = "|||||||";
-    }
-    if (!$this->droite_tympan) {
-      $this->droite_tympan = "|||||||";
-    }
-    if (!$this->droite_vocale) {
-      $this->droite_vocale = "|||||||";
-    }
+    $this->droite_aerien = CValue::first($this->droite_aerien, "|||||||");
+    $this->droite_osseux = CValue::first($this->droite_osseux, "|||||||");
+    $this->droite_conlat = CValue::first($this->droite_conlat, "|||||||");
+    $this->droite_ipslat = CValue::first($this->droite_ipslat, "|||||||");
+    $this->droite_pasrep = CValue::first($this->droite_pasrep, "|||||||");
+    $this->droite_tympan = CValue::first($this->droite_tympan, "|||||||");
+    $this->droite_vocale = CValue::first($this->droite_vocale, "|||||||");
 
     $this->_gauche_aerien = explode("|", $this->gauche_aerien);
     $this->_gauche_osseux = explode("|", $this->gauche_osseux);
@@ -202,10 +180,14 @@ class CExamAudio extends CMbObject {
     $this->_droite_vocale = explode("|", $this->droite_vocale);
     $this->_droite_tympan = explode("|", $this->droite_tympan);
 
-    $this->_moyenne_gauche_aerien = ($this->_gauche_aerien[2] + $this->_gauche_aerien[3] + $this->_gauche_aerien[4] + $this->_gauche_aerien[5]) / 4;
-    $this->_moyenne_gauche_osseux = ($this->_gauche_osseux[2] + $this->_gauche_osseux[3] + $this->_gauche_osseux[4] + $this->_gauche_osseux[5]) / 4;
-    $this->_moyenne_droite_aerien = ($this->_droite_aerien[2] + $this->_droite_aerien[3] + $this->_droite_aerien[4] + $this->_droite_aerien[5]) / 4;
-    $this->_moyenne_droite_osseux = ($this->_droite_osseux[2] + $this->_droite_osseux[3] + $this->_droite_osseux[4] + $this->_droite_osseux[5]) / 4;
+    $this->_moyenne_gauche_aerien =
+      ($this->_gauche_aerien[2] + $this->_gauche_aerien[3] + $this->_gauche_aerien[4] + $this->_gauche_aerien[5]) / 4;
+    $this->_moyenne_gauche_osseux =
+      ($this->_gauche_osseux[2] + $this->_gauche_osseux[3] + $this->_gauche_osseux[4] + $this->_gauche_osseux[5]) / 4;
+    $this->_moyenne_droite_aerien =
+      ($this->_droite_aerien[2] + $this->_droite_aerien[3] + $this->_droite_aerien[4] + $this->_droite_aerien[5]) / 4;
+    $this->_moyenne_droite_osseux =
+      ($this->_droite_osseux[2] + $this->_droite_osseux[3] + $this->_droite_osseux[4] + $this->_droite_osseux[5]) / 4;
 
     foreach ($this->_gauche_vocale as $key => $value) {
       $item =& $this->_gauche_vocale[$key]; 
@@ -218,23 +200,27 @@ class CExamAudio extends CMbObject {
     }
   }
 
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     parent::updatePlainFields();
 
     // Tris
     $dBs_gauche = array();
     foreach ($this->_gauche_vocale as $key => $value) {
-      $dBs_gauche[] = @$value[0] ? @$value[0] : "end sort";
-      $this->_gauche_vocale[$key] = @$value[0] . "-" . @$value[1];
+      $dBs_gauche[] = CMbArray::get($value, 0, "end sort");
+      $this->_gauche_vocale[$key] = CMbArray::get($value, 0) . "-" . CMbArray::get($value, 1);
     }
 
     array_multisort($dBs_gauche, SORT_ASC, $this->_gauche_vocale);
 
     $dBs_droite = array();
     foreach ($this->_droite_vocale as $key => $value) {
-      $dBs_droite[] = @$value[0] ? @$value[0] : "end sort";
-      $this->_droite_vocale[$key] = @$value[0] . "-" . @$value[1];
+      $dBs_droite[] = CMbArray::get($value, 0, "end sort");
+      $this->_droite_vocale[$key] = CMbArray::get($value, 0) . "-" . CMbArray::get($value, 1);
     }
+
     array_multisort($dBs_droite, SORT_ASC, $this->_droite_vocale);
 
     // Implodes
@@ -255,15 +241,19 @@ class CExamAudio extends CMbObject {
     $this->droite_tympan = implode("|", $this->_droite_tympan);
   }
 
-  function loadRefsFwd() {
-    $this->_ref_consult = new CConsultation;
-    $this->_ref_consult->load($this->consultation_id);
+  /**
+   * Charge la consultation hôte
+   *
+   * @return CConsultation
+   */
+  function loadRefConsult() {
+    return $this->_ref_consult = $this->loadFwdRef("consultation_id", true);
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
-    if (!$this->_ref_consult) {
-      $this->loadRefsFwd();
-    }
-    return $this->_ref_consult->getPerm($permType);
+    return $this->loadRefConsult()->getPerm($permType);
   }
 }

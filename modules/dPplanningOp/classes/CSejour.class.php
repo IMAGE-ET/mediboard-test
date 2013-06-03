@@ -9,9 +9,7 @@
  */
 
 /**
- * Classe CSejour.
- *
- * @abstract Gère les séjours en établissement
+ * Séjour d'un patient dans un établissement
  */
 class CSejour extends CFacturable implements IPatientRelated {
 
@@ -141,7 +139,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_etat;
   public $_entree_relative;
   public $_sortie_relative;
-  public $_not_collides       = array ("urg", "consult", "seances", "exte"); // Séjour dont on ne test pas la collision
+  public $_not_collides = array ("urg", "consult", "seances", "exte"); // Séjour dont on ne test pas la collision
   public $_is_proche;
   public $_motif_complet;
   public $_grossesse;
@@ -178,32 +176,30 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_dialyse;
   public $_cession_creance;
   
-  // Object References
-  /** @var CPatient Patient */
-  public $_ref_patient; // Declared in CCodable
-
-  /** @var CMediusers */
-  public $_ref_praticien;
-
-  /** @var COperation[] */
-  public $_ref_operations;
-
+  // References
   /** @var COperation */
   public $_ref_last_operation;
-  /** @var  CAffectation[] */
+  /** @var CAffectation[] */
   public $_ref_affectations;
-  /** @var  CAffectation */
+  /** @var CAffectation */
   public $_ref_first_affectation;
-  /** @var  CAffectation */
+  /** @var CAffectation */
   public $_ref_last_affectation;
-  /** @var  CAffectation */
+  /** @var CAffectation */
   public $_ref_curr_affectation;
-  public $_ref_GHM = array();
+  /** @var CGHM */
+  public $_ref_GHM;
+  /** @var CGroups */
   public $_ref_group;
+  /** @var CEtabExterne */
   public $_ref_etablissement_transfert;
+  /** @var CEtabExterne */
   public $_ref_etablissement_provenance;
+  /** @var CService */
   public $_ref_service_mutation;
+  /** @var CDossierMedical */
   public $_ref_dossier_medical;
+  /** @var CRPU */
   public $_ref_rpu;
   /** @var CBilanSSR */
   public $_ref_bilan_ssr;
@@ -211,42 +207,80 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_ref_fiche_autonomie;
   /** @var CConsultAnesth */
   public $_ref_consult_anesth;
+  /** @var CConsultation */
+  public $_ref_consult_atu;
+  /** @var CPrescription */
+  public $_ref_last_prescription;
+  /** @var CMedecin */
+  public $_ref_adresse_par_prat;
+  /** @var CIdSante400 */
+  public $_ref_NDA;
+  /** @var CIdSante400 */
+  public $_ref_NPA;
+  /** @var CIdSante400 */
+  public $_ref_NRA;
+  /** @var CReplacement */
+  public $_ref_replacement;
+  /** @var CMovement */
+  public $_ref_hl7_movement;
+  /** @var CAffectation */
+  public $_ref_hl7_affectation;
+  /** @var CGrossesse */
+  public $_ref_grossesse;
+  /** @var COperation */
+  public $_ref_curr_operation;
+  /** @var CChargePriceIndicator */
+  public $_ref_charge_price_indicator;
+  /** @var CModeEntreeSejour */
+  public $_ref_mode_entree;
+  /** @var CModeSortieSejour */
+  public $_ref_mode_sortie;
+  /** @var CFactureEtablissement */
+  public $_ref_last_facture;
+  /** @var CPrestation */
+  public $_ref_prestation;
+  /** @var CEchangeHprim */
+  public $_ref_echange_hprim;
+
+  // Collections
+  /** @var COperation[] */
+  public $_ref_operations;
   /** @var CConsultation[] */
   public $_ref_consultations;
-  public $_ref_consult_atu;
+  /** @var CPrescription[] */
   public $_ref_prescriptions;
-  public $_ref_last_prescription;
-  public $_ref_NDA;
-  public $_ref_NPA;
-  public $_ref_NRA;
+  /** @var CMediusers[] */
   public $_ref_prescripteurs;
-  public $_ref_adresse_par_prat;
   /** @var CPrescription */
   public $_ref_prescription_sejour;
+  /** @var CReplacement[] */
   public $_ref_replacements;
-  public $_ref_replacement;
+  /** @var CSejourTask[] */
   public $_ref_tasks;
+  /** @var CPrescriptionLineElement[] */
   public $_ref_tasks_not_created;
+  /** @var CTransmissionMedicale[] */
   public $_ref_transmissions;
+  /** @var CObservationMedicale[] */
   public $_ref_observations;
-  public $_ref_hl7_movement;
-  public $_ref_hl7_affectation;
-  public $_ref_grossesse;
-  public $_ref_curr_operation;
+  /** @var COperation[] */
   public $_ref_curr_operations;
+  /** @var CExamIgs[] */
   public $_ref_exams_igs;
-  public $_ref_charge_price_indicator; // Type d'activité
+  /** @var CMovement[] */
   public $_ref_movements;
-  public $_ref_mode_entree;
-  public $_ref_mode_sortie;
+  /** @var CFactureEtablissement[] */
   public $_ref_factures;
-  public $_ref_last_facture;
-  public $_ref_prestation;
+  /** @var CMbObject[] */
+  public $_ref_suivi_medical;
+  /** @var CItemPrestation[] */
+  public $_ref_prestations;
 
   // External objects
+  /** @var CCodeCIM10 */
   public $_ext_diagnostic_principal;
+  /** @var CCodeCIM10 */
   public $_ext_diagnostic_relie;
-  public $_ref_echange_hprim;
 
   // Distant fields
   public $_dates_operations;
@@ -257,9 +291,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_NPA; // Numéro Pré-Admission
   public $_list_constantes_medicales;
   public $_cancel_alerts;
-  public $_ref_suivi_medical;
   public $_diagnostics_associes;
-  public $_ref_prestations;
   public $_liaisons_for_prestation;
   public $_first_liaison_for_prestation;
 

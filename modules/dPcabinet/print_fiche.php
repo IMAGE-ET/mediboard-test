@@ -91,7 +91,7 @@ if ($pdf) {
 }
 
 $consult->loadRefsFwd();
-$consult->loadExamsComp();
+$consult->loadRefsExamsComp();
 $consult->loadRefsExamNyha();
 $consult->loadRefsExamPossum();
 

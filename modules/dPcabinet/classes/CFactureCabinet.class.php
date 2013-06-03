@@ -58,9 +58,9 @@ class CFactureCabinet extends CFacture {
    * 
    * @param bool $cache cache
    * 
-   * @return $this->_ref_reglements
+   * @return CReglement[]
   **/
-  function loadRefsReglements($cache = 1) {
+  function loadRefsReglements($cache = true) {
     $this->_ref_reglements = $this->loadBackRefs("reglements", 'date');
     return parent::loadRefsReglements($cache);
   }

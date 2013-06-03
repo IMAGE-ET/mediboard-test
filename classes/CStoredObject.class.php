@@ -472,7 +472,7 @@ class CStoredObject extends CModelObject {
    *
    * @deprecated
    * @todo Should not be used, use canDo()->edit instead
-   * @return CCanDo 
+   * @return bool
    */ 
   function canEdit() {
     return $this->_canEdit = $this->getPerm(PERM_EDIT);
@@ -1824,7 +1824,31 @@ class CStoredObject extends CModelObject {
     
     return reset($backRefs);
   }
-  
+
+  /**
+   * Load the first back reference for given collection name
+   *
+   * @param string       $backName The collection name
+   * @param array|string $order    Order SQL statement
+   * @param string       $limit    MySQL limit clause
+   * @param array|string $group    Group by SQL statement
+   * @param array        $ljoin    Array of left join clauses
+   *
+   * @return CMbObject Unique back reference if exist, concrete type empty object otherwise, null if unavailable
+   */
+  function loadFirstBackRef($backName, $order = null, $limit = null, $group = null, $ljoin = null) {
+    if (null === $backRefs = $this->loadBackRefs($backName, $order, $limit, $group, $ljoin)) {
+      return null;
+    }
+
+    if (!count($backRefs)) {
+      $backSpec = $this->_backSpecs[$backName];
+      return new $backSpec->class;
+    }
+
+    return reset($backRefs);
+  }
+
   /**
    * Load and count all back references collections
    *

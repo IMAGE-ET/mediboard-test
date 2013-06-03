@@ -7,10 +7,13 @@
 * @author Romain Ollivier
 */
 
-global $can, $m;
-global $frequences, $pressions, $exam_audio;
+global $m;
+global $exam_audio;
 
-$can->needsEdit();
+CCanDo::checkEdit();
+
+$frequences = CExamAudio::$frequences;
+$pressions  = CExamAudio::$pressions;
 
 $_conduction = CValue::getOrSession("_conduction", "aerien");
 $_oreille = CValue::getOrSession("_oreille", "gauche");

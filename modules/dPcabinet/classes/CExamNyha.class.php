@@ -30,6 +30,9 @@ class CExamNyha extends CMbObject {
   // Form fields
   public $_classeNyha;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'examnyha';
@@ -37,8 +40,13 @@ class CExamNyha extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
+
+    // DB Fields
     $props["consultation_id"] = "ref notNull class|CConsultation";
     $props["q1"]              = "bool default|none";
     $props["q2a"]             = "bool";
@@ -47,10 +55,15 @@ class CExamNyha extends CMbObject {
     $props["q3b"]             = "bool";
     $props["hesitation"]      = "bool notNull";
 
+    // Derives fields
     $props["_classeNyha"] = "";
+
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
@@ -82,16 +95,19 @@ class CExamNyha extends CMbObject {
     $this->_view = "Classification NYHA : $this->_classeNyha"; 
   }
 
-  function loadRefsFwd() {
-    $this->_ref_consult = new CConsultation;
-    $this->_ref_consult->load($this->consultation_id);
+  /**
+   * Charge la consultation associée
+   *
+   * @return CConsultation
+   */
+  function loadRefConsult() {
+    return $this->_ref_consult = $this->loadFwdRef("consultation_id", true);
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
-    if (!$this->_ref_consult) {
-      $this->loadRefsFwd();
-    }
-
-    return $this->_ref_consult->getPerm($permType);
+    return $this->loadRefConsult()->getPerm($permType);
   }
 }

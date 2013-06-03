@@ -10,7 +10,8 @@
  */
 
 /**
- * Consultation
+ * Consultation d'un patient par un praticien, éventuellement pendant un séjour
+ * Un des évenements fondamentaux du dossier patient avec l'intervention
  */
 class CConsultation extends CFacturable {
   const PLANIFIE       = 16;
@@ -94,26 +95,48 @@ class CConsultation extends CFacturable {
   public $_rques_consult;
   public $_examen_consult;
 
-  // Fwd References
-  /**
-   * @var CPatient
-   */
-  public $_ref_patient; // Declared in CCodable
-  /**
-   * @var CSejour
-   */
-  public $_ref_sejour; // Declared in CCodable
-
-  /**
-   * @var CPlageconsult
-   */
+  // References
+  /** @var CMediusers */
+  public $_ref_chir;
+  /** @var CPlageconsult */
   public $_ref_plageconsult;
+  /** @var CMedecin */
   public $_ref_adresse_par_prat;
+  /** @var CGroups */
+  public $_ref_group;
+  /** @var CConsultAnesth */
+  public $_ref_consult_anesth;
+  /** @var CExamAudio */
+  public $_ref_examaudio;
+  /** @var CExamNyha */
+  public $_ref_examnyha;
+  /** @var CExamPossum */
+  public $_ref_exampossum;
+  /** @var CGrossesse */
+  public $_ref_grossesse;
+  /** @var CFactureCabinet */
+  public $_ref_facture;
+  /** @var CPrescription */
+  public $_ref_prescription;
+  /** @var CConsultationCategorie */
+  public $_ref_categorie;
 
-  /**
-   * @var CMediusers
-   */
-  public $_ref_praticien;
+  // Collections
+  /** @var CConsultAnesth[] */
+  public $_refs_dossiers_anesth;
+  /** @var CReglement[] */
+  public $_ref_reglements;
+  /** @var CReglement[] */
+  public $_ref_reglements_patient;
+  /** @var CReglement[] */
+  public $_ref_reglements_tiers;
+  /** @var  CExamComp[] */
+  public $_ref_examcomp;
+
+  // Counts
+  public $_count_fiches_examen;
+  public $_count_matching_sejours;
+  public $_count_prescriptions;
 
   // FSE
   public $_bind_fse;
@@ -122,37 +145,12 @@ class CConsultation extends CFacturable {
   public $_current_fse;
   public $_fse_intermax;
 
-  // Back References
-  /**
-   * @var CConsultAnesth
-   */
-  public $_ref_consult_anesth;
-  /** @var  CConsultAnesth[] */
-  public $_refs_dossiers_anesth;
-  public $_ref_examaudio;
-  public $_ref_examcomp;
-  public $_ref_examnyha;
-  public $_ref_exampossum;
-  public $_count_fiches_examen;
-  public $_ref_reglements;
-  public $_ref_reglements_patient;
-  public $_ref_reglements_tiers;
-  public $_ref_grossesse;
-  public $_ref_facture;
-  public $_ref_prescription;
-  public $_ref_categorie;
-  /**
-   * @var CGroups
-   */
-  public $_ref_group;
-  
   // Distant fields
-  /** @var  CMediusers */
-  public $_ref_chir;
   public $_date;
   public $_datetime;
   public $_date_fin;
   public $_is_anesth;
+  public $_is_dentiste;
   public $_du_restant_patient;
   public $_du_restant_tiers;
   public $_reglements_total_patient;
@@ -175,11 +173,14 @@ class CConsultation extends CFacturable {
   public $_non_pourvues;
 
   // Behaviour fields
+  public $_adjust_sejour;
   public $_operation_id;
   public $_dossier_anesth_completed_id;
-  public $_count_matching_sejours;
   public $_docitems_from_dossier_anesth;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     
@@ -196,6 +197,9 @@ class CConsultation extends CFacturable {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     
@@ -213,6 +217,9 @@ class CConsultation extends CFacturable {
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     
@@ -221,9 +228,8 @@ class CConsultation extends CFacturable {
     $props["patient_id"]        = "ref class|CPatient purgeable seekable show|1";
     $props["categorie_id"]      = "ref class|CConsultationCategorie show|1";
     $props["grossesse_id"]      = "ref class|CGrossesse show|0 unlink";
-    $props["facture_id"] 				= "ref class|CFactureCabinet show|0 nullify";
-    $props["_praticien_id"]     ="ref class|CMediusers show|1"; //is put here for view
-    $props["_function_secondary_id"] = "ref class|CFunctions";
+    $props["facture_id"]        = "ref class|CFactureCabinet show|0 nullify";
+
     $props["motif"]             = "text helped seekable";
     $props["type"]              = "enum list|classique|entree|chimio default|classique";
     $props["heure"]             = "time notNull show|0";
@@ -297,26 +303,42 @@ class CConsultation extends CFacturable {
     $props["_check_adresse"]    = "";
     $props["_somme"]            = "currency";
     $props["_type"]             = "enum list|urg|anesth";
-    $props["_prat_id"]          = "ref class|CMediusers";
-    $props["_acte_dentaire_id"] = "ref class|CActeDentaire";
-    $props["_ref_grossesse"]    = "ref class|CGrossesse";
+
+    $props["_prat_id"]               = "ref class|CMediusers";
+    $props["_acte_dentaire_id"]      = "ref class|CActeDentaire";
+    $props["_praticien_id"]          = "ref class|CMediusers show|1";
+    $props["_function_secondary_id"] = "ref class|CFunctions";
+
     return $props;
   }
 
+  /**
+   * Calcule l'état visible d'une consultation
+   *
+   * @return string
+   */
   function getEtat() {
     $etat = array();
     $etat[self::PLANIFIE]       = "Plan.";
     $etat[self::PATIENT_ARRIVE] = CMbDT::transform(null, $this->arrivee, "%Hh%M");
     $etat[self::EN_COURS]       = "En cours";
     $etat[self::TERMINE]        = "Term.";
-    if ($this->chrono)
+
+    if ($this->chrono) {
       $this->_etat = $etat[$this->chrono];
+    }
+
     if ($this->annule) {
       $this->_etat = "Ann.";
     }
+
+    return $this->_etat;
   }
 
-  function getTemplateClasses(){
+  /**
+   * @see parent::getTemplateClasses()
+   */
+  function getTemplateClasses() {
     $this->loadRefsFwd();
 
     $tab = array();
@@ -332,19 +354,24 @@ class CConsultation extends CFacturable {
     return $tab;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_somme = $this->secteur1 + $this->secteur2;
     if ($this->patient_date_reglement === "0000-00-00") {
       $this->patient_date_reglement = null;
     }
+
     $this->du_patient = round($this->du_patient, 2);
     $this->du_tiers   = round($this->du_tiers  , 2);
+
     $this->_hour = intval(substr($this->heure, 0, 2));
     $this->_min  = intval(substr($this->heure, 3, 2));
     $this->_check_adresse = $this->adresse;
-    $this->getEtat();
-    $this->_view = "Consultation ".$this->_etat;
+
+    $this->_view = "Consultation " . $this->getEtat();
 
     // si _coded vaut 1 alors, impossible de modifier la cotation
     $this->_coded = $this->valide;
@@ -361,6 +388,9 @@ class CConsultation extends CFacturable {
     $this->_exam_fields = $this->getExamFields();
   }
 
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     if (($this->_hour !== null) && ($this->_min !== null)) {
       $this->heure = sprintf("%02d:%02d:00", $this->_hour, $this->_min);
@@ -378,8 +408,10 @@ class CConsultation extends CFacturable {
     }
   }
 
+  /**
+   * @see parent::check()
+   */
   function check() {
-    return null;
     // Data checking
     $msg = null;
     if (!$this->_id) {
@@ -398,31 +430,26 @@ class CConsultation extends CFacturable {
       $this->loadRefPlageConsult();
       $sejour = $this->loadRefSejour();
 
-      if ($sejour->type != "consult" &&
-          ($this->_date < CMbDT::date($sejour->entree) || CMbDT::date($this->_date) > $sejour->sortie)) {
+      if (
+          $sejour->type != "consult" &&
+          ($this->_date < CMbDT::date($sejour->entree) || CMbDT::date($this->_date) > $sejour->sortie)
+      ) {
         $msg .= "Consultation en dehors du séjour<br />";
         return $msg . parent::check();
       }
     }
 
+    /** @var self $old */
+    $old = $this->_old;
     // Dévalidation avec règlement déjà effectué
     if ($this->fieldModified("valide", "0")) {
       // Bien tester sur _old car valide = 0 s'accompagne systématiquement d'un facture_id = 0
-      if ($this->_old->loadRefFacture()->countBackRefs("reglements")) {
+      if ($old->loadRefFacture()->countBackRefs("reglements")) {
         $msg .= "Vous ne pouvez plus dévalider le tarif, des règlements de factures ont déjà été effectués";
       }
     }
 
-    /*
-    if ($this->_old->valide === "0") {
-      // Règlement sans validation
-      if ($this->fieldModified("tiers_date_reglement")
-       || ($this->fieldModified("patient_date_reglement") && $this->patient_date_reglement !== "")) {
-        $msg .= "Vous ne pouvez pas effectuer le règlement si le tarif n'a pas été validé";
-      }
-    }
-    */
-    if (!($this->_merging || $this->_mergeDeletion) && $this->_old->valide === "1" && $this->valide === "1") {
+    if (!($this->_merging || $this->_mergeDeletion) && $old->valide === "1" && $this->valide === "1") {
       // Modification du tarif déjà validé
       if (
           $this->fieldModified("secteur1") ||
@@ -433,7 +460,6 @@ class CConsultation extends CFacturable {
           $this->fieldModified("du_patient") ||
           $this->fieldModified("du_tiers")
       ) {
-        //$msg .= $this->du_patient." vs. ".$this->_old->du_patient." (".$this->fieldModified("du_patient").")";
         $msg .= "Vous ne pouvez plus modifier le tarif, il est déjà validé";
       }
     }
@@ -441,6 +467,9 @@ class CConsultation extends CFacturable {
     return $msg . parent::check();
   }
 
+  /**
+   * @see parent::loadView()
+   */
   function loadView() {
     parent::loadView();
     $this->loadRefPatient()->loadRefPhotoIdentite();
@@ -452,9 +481,7 @@ class CConsultation extends CFacturable {
   }
 
   /**
-   * deleteActes() Redefinition
-   * 
-   * @return string Store-like message
+   * @see parent::deleteActes()
    */
   function deleteActes() {
     if ($msg = parent::deleteActes()) {
@@ -463,22 +490,18 @@ class CConsultation extends CFacturable {
 
     $this->secteur1 = "";
     $this->secteur2 = "";
-//    $this->valide = 0; // Ne devrait pas être nécessaire
+    // $this->valide = 0;  Ne devrait pas être nécessaire
     $this->total_assure = 0.0;
     $this->total_amc = 0.0;
     $this->total_amo = 0.0;
     $this->du_patient = 0.0;
     $this->du_tiers = 0.0;
 
-    if ($msg = $this->store()) {
-      return $msg;
-    }
+    return $this->store();
   }
 
   /**
-   * Bind the tarif to the consultation
-   *
-   * @return null|string
+   * @see parent::bindTarif()
    */
   function bindTarif() {
     $this->_bind_tarif = false;
@@ -533,14 +556,24 @@ class CConsultation extends CFacturable {
         return $msg;
       }
     }
+
+    return null;
   }
 
+  /**
+   * Précode les actes CCAM prévus de la consultation
+   *
+   * @return string Store-like message
+   */
   function precodeActeCCAM() {
     $this->loadRefPlageConsult();
     $this->precodeCCAM($this->_ref_chir->_id);
   }
 
-  function doUpdateMontants(){
+  /**
+   * @see parent::doUpdateMontants()
+   */
+  function doUpdateMontants() {
     // Initialisation des montants
     $secteur1_NGAP    = 0;
     $secteur1_CCAM    = 0;
@@ -600,67 +633,66 @@ class CConsultation extends CFacturable {
   }
 
   /**
-   * @todo: refactoring complet de la fonction store de la consultation
+   * @see parent::store()
+   * @todo Refactoring complet de la fonction store de la consultation
+   *
+   *   ANALYSE DU CODE
+   *  1. Gestion du désistement
+   *  2. Premier if : creation d'une consultation à laquelle on doit attacher
+   *     un séjour (conf active): comportement DEPART / ARRIVEE
+   *  3. Mise en cache du forfait FSE et facturable : uniquement dans le cas d'un séjour
+   *  4. On load le séjour de la consultation
+   *  5. On initialise le _adjust_sejour à false
+   *  6. Dans le cas ou on a un séjour
+   *   6.1. S'il est de type consultation, on ajuste le séjour en fonction du comportement DEPART / ARRIVEE
+   *   6.2. Si la plage de consultation a été modifiée, adjust_sejour passe à true et on ajuste le séjour
+   *        en fonction du comportement DEPART / ARRIVEE (en passant par l'adjustSejour() )
+   *   6.3. Si on a un id (à virer) et que le chrono est modifié en PATIENT_ARRIVE,
+   *        si on gère les admissions auto (conf) on met une entrée réelle au séjour
+   *  7. Si le patient est modifié, qu'on est pas en train de merger et qu'on a un séjour,
+   *     on empeche le store
+   *  8. On appelle le parent::store()
+   *  9. On passe le forfait SE et facturable au séjour
+   * 10. On propage la modification du patient de la consultation au séjour
+   * 11. Si on a ajusté le séjour et qu'on est dans un séjour de type conclut et que le séjour
+   *     n'a plus de consultations, on essaie de le supprimer, sinon on l'annule
+   * 12. Gestion du tarif et précodage des actes (bindTarif)
+   * 13. Bind FSE
 
-ANALYSE DU CODE
- 1. Gestion du désistement
- 2. Premier if : creation d'une consultation à laquelle on doit attacher
-    un séjour (conf active): comportement DEPART / ARRIVEE
- 3. Mise en cache du forfait FSE et facturable : uniquement dans le cas d'un séjour
- 4. On load le séjour de la consultation
- 5. On initialise le _adjust_sejour à false
- 6. Dans le cas ou on a un séjour
-  6.1. S'il est de type consultation, on ajuste le séjour en fonction du
-       comportement DEPART / ARRIVEE
-  6.2. Si la plage de consultation a été modifiée, adjust_sejour passe à
-       true et on ajuste le séjour en fonction du comportement DEPART / ARRIVEE
-       (en passant par l'adjustSejour() )
-  6.3. Si on a un id (à virer) et que le chrono est modifié en PATIENT_ARRIVE,
-       si on gère les admissions auto (conf) on met une entrée réelle au séjour
- 7. Si le patient est modifié, qu'on est pas en train de merger et qu'on a un séjour,
-    on empeche le store
- 8. On appelle le parent::store()
- 9. On passe le forfait SE et facturable au séjour
-10. On propage la modification du patient de la consultation au séjour
-11. Si on a ajusté le séjour et qu'on est dans un séjour de type conclut et que le séjour
-    n'a plus de consultations, on essaie de le supprimer, sinon on l'annule
-12. Gestion du tarif et précodage des actes (bindTarif)
-13. Bind FSE
-
-ACTIONS :
-- Faire une fonction comportement_DEPART_ARRIVEE()
-- Merger le 2, le 6.1 et le 6.2 (et le passer en 2 si possible)
-- Faire une fonction pour le 6.3, le 7, le 10, le 11
-- Améliorer les fonctions 12 et 13 en incluant le test du behaviour fields
-
-COMPORTEMENT DEPART ARRIVEE
-modif de la date d'une consultation ayant un séjour sur le modèle DEPART / ARRIVEE:
-1. Pour le DEPART :
--> on décroche la consultation de son ancien séjour
--> on ne touche pas à l'ancien séjour si :
-- il est de type autre que consultation
-- il a une entrée réelle
-- il a d'autres consultations
--> sinon on l'annule
-
-2. Pour l'ARRIVEE
--> si on a un séjour qui englobe : on la colle dedans
--> sinon on crée un séjour de consultation
-
-TESTS A EFFECTUER
- 0. Création d'un pause
- 0.1. Déplacement d'une pause
- 1. Création d'une consultation simple C1 (Séjour S1)
- 2. Création d'une deuxième consultation le même jour / même patient C2 (Séjour S1)
- 3. Création d'une troisième consultation le même jour / même patient C3 (Séjour S1)
- 4. Déplacement de la consultation C1 un autre jour (Séjour S2)
- 5. Changement du nom du patient C2 (pas de modification car une autre consultation)
- 6. Déplacement de C3 au même jour (Toujours séjour S1)
- 7. Annulation de C1 (Suppression ou annulation de S1)
- 8. Déplacement de C2 et C3 à un autre jour (séjour S3 créé, séjour S1 supprimé ou annulé)
- 9. Arrivée du patient pour C2 (S3 a une entrée réelle)
-10. Déplacement de C3 dans un autre jour (S4)
-11. Déplacement de C2 dans un autre jour (S5 et S3 reste tel quel)
+   * ACTIONS
+   * - Faire une fonction comportement_DEPART_ARRIVEE()
+   * - Merger le 2, le 6.1 et le 6.2 (et le passer en 2 si possible)
+   * - Faire une fonction pour le 6.3, le 7, le 10, le 11
+   * - Améliorer les fonctions 12 et 13 en incluant le test du behaviour fields
+   *
+   * COMPORTEMENT DEPART ARRIVEE
+   * modif de la date d'une consultation ayant un séjour sur le modèle DEPART / ARRIVEE:
+   * 1. Pour le DEPART :
+   * -> on décroche la consultation de son ancien séjour
+   * -> on ne touche pas à l'ancien séjour si :
+   * - il est de type autre que consultation
+   * - il a une entrée réelle
+   * - il a d'autres consultations
+   * -> sinon on l'annule
+   *
+   *   2. Pour l'ARRIVEE
+   * -> si on a un séjour qui englobe : on la colle dedans
+   * -> sinon on crée un séjour de consultation
+   *
+   *   TESTS A EFFECTUER
+   *  0. Création d'un pause
+   *  0.1. Déplacement d'une pause
+   *  1. Création d'une consultation simple C1 (Séjour S1)
+   *  2. Création d'une deuxième consultation le même jour / même patient C2 (Séjour S1)
+   *  3. Création d'une troisième consultation le même jour / même patient C3 (Séjour S1)
+   *  4. Déplacement de la consultation C1 un autre jour (Séjour S2)
+   *  5. Changement du nom du patient C2 (pas de modification car une autre consultation)
+   *  6. Déplacement de C3 au même jour (Toujours séjour S1)
+   *  7. Annulation de C1 (Suppression ou annulation de S1)
+   *  8. Déplacement de C2 et C3 à un autre jour (séjour S3 créé, séjour S1 supprimé ou annulé)
+   *  9. Arrivée du patient pour C2 (S3 a une entrée réelle)
+   * 10. Déplacement de C3 dans un autre jour (S4)
+   * 11. Déplacement de C2 dans un autre jour (S5 et S3 reste tel quel)
    */
   function store() {
     $this->completeField('sejour_id', 'heure', 'plageconsult_id', 'si_desistement');
@@ -670,16 +702,17 @@ TESTS A EFFECTUER
     }
 
     // Consultation dans un séjour
-    if ((!$this->_id && !$this->sejour_id &&
-        CAppUI::conf("dPcabinet CConsultation attach_consult_sejour") && $this->patient_id) || $this->_force_create_sejour) {
-
-      $sejour = new CSejour();
-
+    $sejour = new CSejour();
+    if (
+        (!$this->_id && !$this->sejour_id && CAppUI::conf("dPcabinet CConsultation attach_consult_sejour") && $this->patient_id)
+        || $this->_force_create_sejour
+    ) {
       // Recherche séjour englobant
       $facturable = $this->_facturable;
       if ($facturable === null) {
         $facturable = 1;
       }
+
       $this->loadRefPlageConsult();
 
       $function = new CFunctions;
@@ -700,9 +733,9 @@ TESTS A EFFECTUER
       $where['type']       = " != 'seances'";
       $where['patient_id'] = " = '$this->patient_id'";
       if (!CAppUI::conf("dPcabinet CConsultation search_sejour_all_groups")) {
-        $where['group_id']   = " = '$function->group_id'";
+        $where['group_id'] = " = '$function->group_id'";
       }
-      $where['facturable']     = " = '$facturable'";
+      $where['facturable'] = " = '$facturable'";
       $datetime_before     = CMbDT::dateTime("+$minutes_before_consult_sejour minute", "$this->_date $this->heure");
       $where[] = "`sejour`.`entree` <= '$datetime_before' AND `sejour`.`sortie` >= '$datetime'";
 
@@ -737,16 +770,14 @@ TESTS A EFFECTUER
     $forfait_se  = $this->_forfait_se;
     $forfait_sd  = $this->_forfait_sd;
 
-    $this->loadRefSejour();
     $this->_adjust_sejour = false;
-
+    $this->loadRefSejour();
     if ($this->sejour_id) {
       $this->loadRefPlageConsult();
 
       // Si le séjour est de type consult
       if ($this->_ref_sejour->type == 'consult') {
         $this->_ref_sejour->loadRefsConsultations();
-        $nb_consults_dans_sejour = count($this->_ref_sejour->_ref_consultations);
         $this->_ref_sejour->_hour_entree_prevue = null;
         $this->_ref_sejour->_min_entree_prevue  = null;
         $this->_ref_sejour->_hour_sortie_prevue = null;
@@ -770,9 +801,11 @@ TESTS A EFFECTUER
 
         // S'il n'y a qu'une seule consultation dans le séjour, et que le praticien de la consultation est modifié
         // (changement de plage), alors on modifie également le praticien du séjour
-        if ($this->_id && $this->fieldModified("plageconsult_id") &&
-            count($this->_ref_sejour->_ref_consultations) == 1 &&
-            !$this->_ref_sejour->entree_reelle) {
+        if (
+            $this->_id && $this->fieldModified("plageconsult_id")
+            && count($this->_ref_sejour->_ref_consultations) == 1
+            && !$this->_ref_sejour->entree_reelle
+        ) {
           $this->_ref_sejour->praticien_id = $this->_ref_plageconsult->chir_id;
         }
 
@@ -781,7 +814,6 @@ TESTS A EFFECTUER
         foreach ($this->_ref_sejour->_ref_consultations as $_consultation) {
           if ($_consultation->_id != $this->_id) {
             $_consultation->loadRefPlageConsult();
-
             if ($_consultation->_datetime < $entree) {
               $entree = $_consultation->_datetime;
             }
@@ -805,8 +837,10 @@ TESTS A EFFECTUER
 
         // Pas le permettre si admission est déjà faite
         $max_hours = CAppUI::conf("dPcabinet CConsultation hours_after_changing_prat");
-        if ($this->_ref_sejour->entree_reelle &&
-            (CMbDT::dateTime("+ $max_hours HOUR", $this->_ref_sejour->entree_reelle) < CMbDT::dateTime())) {
+        if (
+            $this->_ref_sejour->entree_reelle
+            && CMbDT::dateTime("+ $max_hours HOUR", $this->_ref_sejour->entree_reelle) < CMbDT::dateTime()
+        ) {
           return CAppUI::tr("CConsultation-denyPratChange", $max_hours);
         }
 
@@ -890,6 +924,7 @@ TESTS A EFFECTUER
         $this->facture_id = $facture->_id;
       }
     }
+
     //Lors de dévalidation de la consultation 
     if ($this->fieldModified("valide", "0")) {
       $facture = $this->loadRefFacture();
@@ -962,6 +997,8 @@ TESTS A EFFECTUER
         }
       }
     }
+
+    return null;
   }
 
   /**
@@ -975,11 +1012,14 @@ TESTS A EFFECTUER
     return $this->_ref_categorie = $this->loadFwdRef("categorie_id", $cache);
   }
 
+  /**
+   * @see parent::loadComplete()
+   */
   function loadComplete() {
     parent::loadComplete();
     $this->_ref_patient->loadRefConstantesMedicales();
-    foreach ($this->_ref_actes_ccam as &$acte_ccam) {
-      $acte_ccam->loadRefsFwd();
+    foreach ($this->_ref_actes_ccam as $_acte) {
+      $_acte->loadRefExecutant();
     }
     $this->loadRefConsultAnesth();
     foreach ($this->_refs_dossiers_anesth as $_dossier_anesth) {
@@ -988,6 +1028,8 @@ TESTS A EFFECTUER
   }
 
   /**
+   * Charge le patient
+   *
    * @param bool $cache Use cache
    *
    * @return CPatient
@@ -1004,26 +1046,38 @@ TESTS A EFFECTUER
    * @return CSejour
    */
   function loadRefSejour($cache = true) {
-    $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
-    $this->_ref_sejour->loadRefRPU();
+    /** @var CSejour $sejour */
+    $sejour = $this->loadFwdRef("sejour_id", $cache);
+    $sejour->loadRefRPU();
 
     if (CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {
-      $this->_forfait_se = $this->_ref_sejour->forfait_se;
-      $this->_forfait_sd = $this->_ref_sejour->forfait_sd;
-      $this->_facturable = $this->_ref_sejour->facturable;
+      $this->_forfait_se = $sejour->forfait_se;
+      $this->_forfait_sd = $sejour->forfait_sd;
+      $this->_facturable = $sejour->facturable;
     }
 
-    return $this->_ref_sejour;
+    return $this->_ref_sejour = $sejour;
   }
 
+  /**
+   * Charge la grossesse associée au séjour
+   *
+   * @return CGrossesse
+   */
   function loadRefGrossesse() {
     return $this->_ref_grossesse = $this->loadFwdRef("grossesse_id", true);
   }
 
+  /**
+   * Charge la facture de cabinet associée à la consultation
+   *
+   * @return CFactureCabinet
+   */
   function loadRefFacture() {
     if ($this->_ref_facture) {
       return $this->_ref_facture;
     }
+
     if (CModule::getActive("dPfacturation")) {
       $where = array();
       $where["object_id"]     = "= '$this->_id'";
@@ -1042,43 +1096,71 @@ TESTS A EFFECTUER
         return $this->_ref_facture = new CFactureCabinet();
       }
     }
-  }
-  
-  function loadRefGroup() {
-    return $this->_ref_group = $this->loadRefPraticien()->loadRefFunction()->loadRefGroup();
-  }
-  
-  function getActeExecution() {
-    $this->loadRefPlageConsult();
+
+    return $this->_ref_facture;
   }
 
   /**
-   * @param boolean $cache [optional]
+   * Charge l'établissement indirectement associée à la consultation
+   *
+   * @todo Prendre en compte le cas de la consultation liée à un séjour dans un établissement
+   * @return CGroups
+   */
+  function loadRefGroup() {
+    return $this->_ref_group = $this->loadRefPraticien()->loadRefFunction()->loadRefGroup();
+  }
+
+  /**
+   * @see parent::getActeExecution()
+   */
+  function getActeExecution() {
+    $this->loadRefPlageConsult();
+    return $this->_acte_execution;
+  }
+
+  /**
+   * @see parent::getExecutantId()
+   */
+  function getExecutantId($code_activite = null) {
+    $this->loadRefPlageConsult();
+    return $this->_praticien_id;
+  }
+
+  /**
+   * Charge la plage de consultation englobante
+   *
+   * @param boolean $cache [optional] Use cache
+   *
    * @return CPlageconsult
    */
-  function loadRefPlageConsult($cache = 1) {
+  function loadRefPlageConsult($cache = true) {
     if ($this->_ref_plageconsult) {
       return $this->_ref_plageconsult;
     }
 
-    $this->_ref_plageconsult = $this->loadFwdRef("plageconsult_id", $cache);
-    $this->_ref_plageconsult->loadRefsFwd($cache);
+    /** @var CPlageConsult $plage */
+    $plage = $this->loadFwdRef("plageconsult_id", $cache);
+    $plage->loadRefsFwd($cache);
 
     // Distant fields
-    $this->_ref_chir = $this->_ref_plageconsult->_ref_remplacant->_id ?
-      $this->_ref_plageconsult->_ref_remplacant :
-      $this->_ref_plageconsult->_ref_chir;
+    $chir = $plage->_ref_remplacant->_id ?
+      $plage->_ref_remplacant :
+      $plage->_ref_chir;
 
-    $this->_date     = $this->_ref_plageconsult->date;
-    $this->_datetime = CMbDT::addDateTime($this->heure,$this->_date);
+    $this->_date     = $plage->date;
+    $this->_datetime = CMbDT::addDateTime($this->heure, $this->_date);
     $this->_acte_execution = $this->_datetime;
-    $this->_is_anesth    = $this->_ref_chir->isAnesth();
-    $this->_is_dentiste  = $this->_ref_chir->isDentiste();
-    $this->_praticien_id = $this->_ref_chir->_id;
+    $this->_is_anesth    = $chir->isAnesth();
+    $this->_is_dentiste  = $chir->isDentiste();
+    $this->_praticien_id = $chir->_id;
 
-    return $this->_ref_plageconsult;
+    $this->_ref_chir = $chir;
+    return $this->_ref_plageconsult = $plage;
   }
 
+  /**
+   * @see parent::loadRefPraticien()
+   */
   function loadRefPraticien(){
     $this->loadRefPlageConsult();
     $this->_ref_executant = $this->_ref_plageconsult->_ref_chir;
@@ -1086,6 +1168,11 @@ TESTS A EFFECTUER
     return $this->_ref_praticien = $this->_ref_chir;
   }
 
+  /**
+   * Détermine le type de la consultation
+   *
+   * @return string Un des types possibles urg, anesth
+   */
   function getType() {
     $praticien = $this->loadRefPraticien();
     $sejour = $this->_ref_sejour;
@@ -1109,11 +1196,17 @@ TESTS A EFFECTUER
     }
   }
 
+  /**
+   * @see parent::preparePossibleActes()
+   */
   function preparePossibleActes() {
     $this->loadRefPlageConsult();
   }
 
-  function loadRefsFwd($cache = 1) {
+  /**
+   * @see parent::loadRefsFwd()
+   */
+  function loadRefsFwd($cache = true) {
     $this->loadRefPatient($cache);
     $this->_ref_patient->loadRefConstantesMedicales();
     $this->loadRefPlageConsult($cache);
@@ -1122,6 +1215,9 @@ TESTS A EFFECTUER
     $this->loadExtCodesCCAM();
   }
 
+  /**
+   * @see parent::loadRefsDocs()
+   */
   function loadRefsDocs() {
     parent::loadRefsDocs();
 
@@ -1141,6 +1237,9 @@ TESTS A EFFECTUER
     return count($this->_ref_documents);
   }
 
+  /**
+   * @see parent::loadRefsFiles()
+   */
   function loadRefsFiles() {
     parent::loadRefsFiles();
 
@@ -1159,11 +1258,9 @@ TESTS A EFFECTUER
     return count($this->_ref_files);
   }
 
-  function getExecutantId($code_activite = null) {
-    $this->loadRefPlageConsult();
-    return $this->_praticien_id;
-  }
-
+  /**
+   * @see parent::countDocItems()
+   */
   function countDocItems($permType = null){
     if (!$this->_nb_files_docs) {
       parent::countDocItems($permType);
@@ -1175,7 +1272,10 @@ TESTS A EFFECTUER
     }
   }
 
-  function countDocs(){
+  /**
+   * @see parent::countDocs()
+   */
+  function countDocs() {
     $nbDocs = parent::countDocs();
 
     if (!$this->_docitems_from_dossier_anesth) {
@@ -1193,6 +1293,9 @@ TESTS A EFFECTUER
     return $this->_nb_docs = $nbDocs;
   }
 
+  /**
+   * @see parent::countFiles()
+   */
   function countFiles(){
     $nbFiles = parent::countFiles();
 
@@ -1211,61 +1314,100 @@ TESTS A EFFECTUER
     return $this->_nb_files = $nbFiles;
   }
 
+  /**
+   * Charge un dossier d'anesthésie classique
+   *
+   * @param ref $dossier_anesth_id Identifiant de dossier à charge explicitement
+   *
+   * @return CConsultAnesth
+   */
   function loadRefConsultAnesth($dossier_anesth_id = null) {
     $this->loadRefsDossiersAnesth();
     if ($dossier_anesth_id !== null) {
       return $this->_ref_consult_anesth = $this->_refs_dossiers_anesth[$dossier_anesth_id];
     }
-    return $this->_ref_consult_anesth = @$this->loadUniqueBackRef("consult_anesth");
+    return $this->_ref_consult_anesth = $this->loadFirstBackRef("consult_anesth");
   }
-  
+
+  /**
+   * Charge tous les dossiers d'anesthésie
+   *
+   * @return CConsultAnesth[]
+   */
   function loadRefsDossiersAnesth() {
     return $this->_refs_dossiers_anesth = $this->loadBackRefs("consult_anesth");
   }
-  
-  function loadRefsExamAudio(){
-    // @todo Ne pas utiliser la backref => ne fonctionne pas
-    //$this->_ref_examaudio = $this->loadUniqueBackRef("examaudio");
 
-    $this->_ref_examaudio = new CExamAudio;
-    $where = array();
-    $where["consultation_id"] = "= '$this->consultation_id'";
-    $this->_ref_examaudio->loadObject($where);
+  /**
+   * Charge l'audiogramme
+   *
+   * @return CExamAudio
+   */
+  function loadRefsExamAudio(){
+    return $this->_ref_examaudio = $this->loadUniqueBackRef("examaudio");
   }
 
+  /**
+   * Charge l'audiogramme
+   *
+   * @return CExamAudio
+   */
   function loadRefsExamNyha(){
     $this->_ref_examnyha = $this->loadUniqueBackRef("examnyha");
   }
 
+  /**
+   * Charge le score possum
+   *
+   * @return CExamPossum
+   */
   function loadRefsExamPossum(){
     $this->_ref_exampossum = $this->loadUniqueBackRef("exampossum");
   }
 
+  /**
+   * Charge toutes les fiches d'examens associées
+   *
+   * @return int Nombre de fiche
+   */
   function loadRefsFichesExamen() {
     $this->loadRefsExamAudio();
     $this->loadRefsExamNyha();
     $this->loadRefsExamPossum();
     $this->_count_fiches_examen = 0;
-    $this->_count_fiches_examen += $this->_ref_examaudio->_id ? 1 : 0;
-    $this->_count_fiches_examen += $this->_ref_examnyha->_id ? 1 : 0;
+    $this->_count_fiches_examen += $this->_ref_examaudio->_id  ? 1 : 0;
+    $this->_count_fiches_examen += $this->_ref_examnyha->_id   ? 1 : 0;
     $this->_count_fiches_examen += $this->_ref_exampossum->_id ? 1 : 0;
+    return $this->_count_fiches_examen;
   }
 
-  // Chargement des prescriptions liées à la consultation
+  /**
+   * Chargement des prescriptions liées à la consultation
+   *
+   * @return CPrescription[] Les prescription, classées par type, pas par identifiant
+   */
   function loadRefsPrescriptions() {
     $prescriptions = $this->loadBackRefs("prescriptions");
+
     // Cas du module non installé
     if (!is_array($prescriptions)) {
-      $this->_ref_prescriptions = null;
-      return;
+      return $this->_ref_prescriptions = null;
     }
+
     $this->_count_prescriptions = count($prescriptions);
 
-    foreach ($prescriptions as &$prescription) {
-      $this->_ref_prescriptions[$prescription->type] = $prescription;
+    foreach ($prescriptions as $_prescription) {
+      $this->_ref_prescriptions[$_prescription->type] = $_prescription;
     }
+
+    return $this->_ref_prescriptions;
   }
 
+  /**
+   * Charge l'ensemble des reglements sur la consultation, les classe par émetteur et calcul les dus résiduels
+   *
+   * @return CReglement[]
+   */
   function loadRefsReglements() {
     // Classement reglements patient et tiers 
     $this->_ref_reglements_patient = array();
@@ -1275,7 +1417,7 @@ TESTS A EFFECTUER
     if ($this->_ref_facture) {
       $this->_ref_reglements = $this->_ref_facture->loadRefsReglements();
       foreach ($this->_ref_reglements as $_reglement) {
-        $_reglement->loadRefBanque(1);
+        $_reglement->loadRefBanque();
         if ($_reglement->emetteur == "patient") {
           $this->_ref_reglements_patient[$_reglement->_id] = $_reglement;
         }
@@ -1308,13 +1450,17 @@ TESTS A EFFECTUER
     return $this->_ref_reglements;
   }
 
+  /**
+   * @see parent::loadRefsBack()
+   * @deprecated
+   */
   function loadRefsBack() {
     // Backward references
     $this->loadRefsDocItems();
     $this->countDocItems();
     $this->loadRefConsultAnesth();
 
-    $this->loadExamsComp();
+    $this->loadRefsExamsComp();
 
     $this->loadRefsFichesExamen();
     $this->loadRefsActesCCAM();
@@ -1322,23 +1468,34 @@ TESTS A EFFECTUER
     $this->loadRefsReglements();
   }
 
-  function loadExamsComp(){
-    $this->_ref_examcomp = new CExamComp;
-    $where = array();
-    $where["consultation_id"] = "= '$this->consultation_id'";
+  /**
+   * Charge les examens complémentaires à réaliser
+   *
+   * @return CExamComp[]
+   */
+  function loadRefsExamsComp(){
     $order = "examen";
-    $this->_ref_examcomp = $this->_ref_examcomp->loadList($where,$order);
+    /** @var CExamComp $examcomps */
+    $examcomps = $this->loadBackRefs("examcomp", $order);
 
-    foreach ($this->_ref_examcomp as $keyExam => &$currExam) {
-      $this->_types_examen[$currExam->realisation][$keyExam] = $currExam;
+    foreach ($examcomps as $_exam) {
+      $this->_types_examen[$_exam->realisation][$_exam->_id] = $_exam;
     }
+
+    return $this->_ref_examcomp = $examcomps;
   }
 
+  /**
+   * Champs d'examen à afficher
+   *
+   * @return string[] Noms interne des champs
+   */
   function getExamFields() {
     $fields = array(
       "motif",
       "rques",
     );
+
     if (CAppUI::conf("dPcabinet CConsultation show_histoire_maladie")) {
       $fields[] = "histoire_maladie";
     }
@@ -1355,6 +1512,9 @@ TESTS A EFFECTUER
     return $fields;
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     $this->loadRefPlageConsult();
     $this->_ref_plageconsult->loadRefChir();
@@ -1363,6 +1523,9 @@ TESTS A EFFECTUER
     //return $this->loadRefPlageConsult()->getPerm($permType);
   }
 
+  /**
+   * @see parent::fillTemplate()
+   */
   function fillTemplate(&$template) {
     $this->updateFormFields();
     $this->loadRefsFwd();
@@ -1373,7 +1536,9 @@ TESTS A EFFECTUER
     if (CModule::getActive('dPprescription')) {
       // Chargement du fillTemplate de la prescription
       $this->loadRefsPrescriptions();
-      $prescription = isset($this->_ref_prescriptions["externe"]) ? $this->_ref_prescriptions["externe"] : new CPrescription();
+      $prescription = isset($this->_ref_prescriptions["externe"]) ?
+        $this->_ref_prescriptions["externe"] :
+        new CPrescription();
       $prescription->type = "externe";
       $prescription->fillLimitedTemplate($template);
     }
@@ -1388,18 +1553,27 @@ TESTS A EFFECTUER
 
     if (CModule::getActive("dPprescription")) {
       $sejour->loadRefsPrescriptions();
-      $prescription = isset($sejour->_ref_prescriptions["pre_admission"]) ? $sejour->_ref_prescriptions["pre_admission"] : new CPrescription();
+      $prescription = isset($sejour->_ref_prescriptions["pre_admission"]) ?
+        $sejour->_ref_prescriptions["pre_admission"] :
+        new CPrescription();
       $prescription->type = "pre_admission";
       $prescription->fillLimitedTemplate($template);
-      $prescription = isset($sejour->_ref_prescriptions["sejour"]) ? $sejour->_ref_prescriptions["sejour"] : new CPrescription();
+      $prescription = isset($sejour->_ref_prescriptions["sejour"]) ?
+        $sejour->_ref_prescriptions["sejour"] :
+        new CPrescription();
       $prescription->type = "sejour";
       $prescription->fillLimitedTemplate($template);
-      $prescription = isset($sejour->_ref_prescriptions["sortie"]) ? $sejour->_ref_prescriptions["sortie"] : new CPrescription();
+      $prescription = isset($sejour->_ref_prescriptions["sortie"]) ?
+        $sejour->_ref_prescriptions["sortie"] :
+        new CPrescription();
       $prescription->type = "sortie";
       $prescription->fillLimitedTemplate($template);
     }
   }
 
+  /**
+   * @see parent::fillLimitedTemplate()
+   */
   function fillLimitedTemplate(&$template) {
     $chir = $this->_ref_plageconsult->_ref_chir;
     
@@ -1426,10 +1600,12 @@ TESTS A EFFECTUER
       "histoire_maladie" => "histoire maladie",
       "conclusion"       => "conclusion"
     );
+
     foreach ($this->_exam_fields as $field) {
       $loc_field = $locExamFields[$field];
       $template->addProperty("Consultation - $loc_field", $this->$field);
     }
+
     if (!in_array("traitement", $this->_exam_fields)) {
       $template->addProperty("Consultation - traitement", $this->traitement);
     }
@@ -1454,7 +1630,7 @@ TESTS A EFFECTUER
     $template->addProperty("Consultation - Accident de travail sans arrêt de travail", $this->getFormattedValue("at_sans_arret"));
     $template->addProperty("Consultation - Arrêt maladie", $this->getFormattedValue("arret_maladie"));
     
-    $this->loadExamsComp();
+    $this->loadRefsExamsComp();
     $exam = new CExamComp();
     
     foreach ($exam->_specs["realisation"]->_locales as $key => $locale) {
@@ -1465,6 +1641,9 @@ TESTS A EFFECTUER
     $this->notify("AfterFillLimitedTemplate", $template);
   }
 
+  /**
+   * @see parent::canDeleteEx()
+   */
   function canDeleteEx() {
     if (!$this->_mergeDeletion) {
       // Date dépassée
@@ -1477,16 +1656,24 @@ TESTS A EFFECTUER
     return parent::canDeleteEx();
   }
 
+  /**
+   * Ajustement du séjour à l'enregistrement
+   *
+   * @param CSejour  $sejour        Séjour englobant
+   * @param datetime $dateTimePlage Date et heure de la plage à créer
+   *
+   * @return string|null Store-like message
+   */
   private function adjustSejour(CSejour $sejour, $dateTimePlage) {
     if ($sejour->_id == $this->_ref_sejour->_id) {
-      return;
+      return null;
     }
 
     // Journée dans lequel on déplace à déjà un séjour
     if ($sejour->_id) {
       // Affecte à la consultation le nouveau séjour
       $this->sejour_id = $sejour->_id;
-      return;
+      return null;
     }
 
     // Journée qui n'a pas de séjour en cible
@@ -1502,7 +1689,7 @@ TESTS A EFFECTUER
         return $msg;
       }
 
-      return;
+      return null;
     }
 
     // On créé le séjour de consultation
@@ -1512,12 +1699,18 @@ TESTS A EFFECTUER
     $sejour->type = "consult";
     $sejour->entree_prevue = $dateTimePlage;
     $sejour->sortie_prevue = CMbDT::date($dateTimePlage)." 23:59:59";
+
     if ($msg = $sejour->store()) {
       return $msg;
     }
+
     $this->sejour_id = $sejour->_id;
+    return null;
   }
 
+  /**
+   * @see parent::docsEditable()
+   */
   function docsEditable() {
     if (parent::docsEditable()) {
       return true;
@@ -1535,10 +1728,16 @@ TESTS A EFFECTUER
     return (CMbDT::dateTime("+ 24 HOUR", "{$this->_date} {$this->heure}") > CMbDT::dateTime());
   }
 
+  /**
+   * @see parent::completeLabelFields()
+   */
   function completeLabelFields(&$fields) {
     $this->loadRefPatient()->completeLabelFields($fields);
   }
 
+  /**
+   * @see parent::canEdit()
+   */
   function canEdit() {
     if (!$this->sejour_id || CCanDo::admin() || !CAppUI::conf("cabinet CConsultation consult_readonly")) {
       return parent::canEdit();
@@ -1555,6 +1754,9 @@ TESTS A EFFECTUER
     return $this->_canEdit = CAppUI::$user->function_id == $praticien->function_id;
   }
 
+  /**
+   * @see parent::canRead()
+   */
   function canRead() {
     if (!$this->sejour_id || CCanDo::admin()) {
       return parent::canRead();
@@ -1563,6 +1765,15 @@ TESTS A EFFECTUER
     return $this->_canRead = 1;
   }
 
+  /**
+   * Crée une consultation à une horaire arbitraire et créé les plages correspondantes au besoin
+   *
+   * @param datetime $datetime     Date et heure
+   * @param ref      $praticien_id Praticien
+   * @param ref      $patient_id   Patient
+   *
+   * @return null|string Store-like message
+   */
   function createByDatetime($datetime, $praticien_id, $patient_id) {
     $day_now   = CMbDT::transform(null, $datetime, "%Y-%m-%d");
     $time_now  = CMbDT::transform(null, $datetime, "%H:%M:00");
@@ -1592,16 +1803,13 @@ TESTS A EFFECTUER
       $where["debut"]   = "<= '$hour_next'";
       $where["fin"]     = ">= '$hour_next'";
       $plageAfter->loadObject($where);
-      if ($plageBefore->plageconsult_id) {
-        if ($plageAfter->plageconsult_id) {
-          $plageBefore->fin = $plageAfter->debut;
-        }
-        else {
-          $plageBefore->fin = max($plageBefore->fin, $hour_next);
-        }
+      if ($plageBefore->_id) {
+        $plageBefore->fin = $plageAfter->_id ?
+          $plageAfter->debut :
+          max($plageBefore->fin, $hour_next);
         $plage = $plageBefore;
       }
-      elseif ($plageAfter->plageconsult_id) {
+      elseif ($plageAfter->_id) {
         $plageAfter->debut = min($plageAfter->debut, $hour_now);
         $plage = $plageAfter;
       }
@@ -1620,7 +1828,7 @@ TESTS A EFFECTUER
       }
     }
 
-    $this->plageconsult_id = $plage->plageconsult_id;
+    $this->plageconsult_id = $plage->_id;
     $this->patient_id      = $patient_id;
 
     // Chargement de la consult avec la plageconsult && le patient
@@ -1633,16 +1841,19 @@ TESTS A EFFECTUER
       $this->chrono  = CConsultation::TERMINE;
     }
 
-    if ($msg = $this->store()) {
-      return $msg;
-    }
+    return $this->store();
   }
 
-  function createConsultAnesth(){
+  /**
+   * Crée la dossier d'anesthésie associée à la consultation
+   *
+   * @return null|string Store-like message
+   */
+  function createConsultAnesth() {
     $this->loadRefPlageConsult();
 
     if (!$this->_is_anesth || !$this->patient_id || !$this->_id || $this->type == "entree") {
-      return;
+      return null;
     }
 
     // Création de la consultation d'anesthésie
@@ -1701,6 +1912,8 @@ TESTS A EFFECTUER
         }
       }
     }
+
+    return null;
   }
 
   /**
@@ -1708,12 +1921,12 @@ TESTS A EFFECTUER
    * 
    * @param string $group_id Permet de charger l'id externe d'uns consultation pour un établissement donné si non null
    * 
-   * @return string
+   * @return string|null Nul si indisponible
    */
   static function getTagConsultation($group_id = null) {
     // Pas de tag consultation
     if (null == $tag_consultation = CAppUI::conf("dPcabinet CConsultation tag")) {
-      return;
+      return null;
     }
 
     // Permettre des id externes en fonction de l'établissement
@@ -1724,7 +1937,14 @@ TESTS A EFFECTUER
     
     return str_replace('$g', $group_id, $tag_consultation);
   }
-  
+
+  /**
+   * Crée une facture cabinet pour la consultation
+   *
+   * @param string $type_facture Type de facture voulu
+   *
+   * @return CFactureCabinet
+   */
   function createFactureConsult($type_facture = "maladie") {
     $facture               = new CFactureCabinet();
     $facture->patient_id   = $this->patient_id;

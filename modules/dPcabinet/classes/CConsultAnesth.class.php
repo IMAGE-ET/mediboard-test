@@ -420,6 +420,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   }
 
   /**
+   * @deprecated
    * @see parent::loadRefsFwd()
    */
   function loadRefsFwd() {
@@ -445,8 +446,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     if ($const_med->poids && $this->creatinine && 
         $age && $age >= 18 && $age <= 110 && 
         $const_med->poids >= 35 && $const_med->poids <= 120 && 
-        $this->creatinine >= 6 && $this->creatinine <= 70
-    ) {
+        $this->creatinine >= 6 && $this->creatinine <= 70) {
           $this->_clairance = $const_med->poids * (140-$age) / (7.2 * $this->creatinine);
       if ($patient->sexe == 'm') {
         $this->_clairance *= 1.04;
@@ -463,11 +463,6 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     }
   }
 
-  /**
-   * Charge les techniques complémentaires
-   *
-   * @return array
-   */
   function loadRefsTechniques() {
     $techniques = new CTechniqueComp;
     $where = array(
@@ -477,6 +472,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   }
 
   /**
+   * @deprecated
    * @see parent::loadRefsBack()
    */
   function loadRefsBack() {
@@ -485,9 +481,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   }
 
   /**
-   * Retourne les classes de template pour les modèles
-   *
-   * @return array
+   * @see parent::getTemplateClasses
    */
   function getTemplateClasses(){
     $this->loadRefsFwd();
@@ -541,11 +535,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   }
 
   /**
-   * Charge les objets pour les champs variables pour le template de document
-   *
-   * @param CTemplateManager &$template Template de document
-   *
-   * @return void
+   * @see parent::fillTemplate()
    */
   function fillTemplate(&$template) {
     $this->loadRefsFwd();
@@ -554,16 +544,11 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $this->_ref_sejour->fillLimitedTemplate($template);
     $this->_ref_operation->fillLimitedTemplate($template);
     $this->_ref_sejour->loadRefDossierMedical();
-
-    $this->_ref_sejour->_ref_dossier_medical->fillTemplate($template, "Sejour");
+    $this->_ref_sejour->loadRefDossierMedical()->fillTemplate($template, "Sejour");
   }
 
   /**
-   * Value les champs pour le template de document
-   *
-   * @param CTemplateManager &$template Template de document
-   *
-   * @return void
+   * @see parent::fillLimitedTemplate
    */
   function fillLimitedTemplate(&$template) {
     global $rootName;
@@ -610,8 +595,8 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $template->addProperty("Anesthésie - Etat bucco-dentaire"       , $this->etatBucco);
     $img = "";
     if ($this->mallampati) {
-      $img = $this->mallampati.'<br /><img src="/'.$rootName.'/images/pictures/'.
-             $this->mallampati.'.png" alt="'.$this->mallampati.'" />';
+      $img = $this->mallampati.'<br /> .
+        <img src="/'.$rootName.'/images/pictures/'.$this->mallampati.'.png" alt="'.$this->mallampati.'" />';
     }
     $template->addProperty("Anesthésie - Mallampati", $img, null, false);
     $template->addProperty("Anesthésie - Mallampati (texte seul)", $this->getFormattedValue("mallampati"));
@@ -654,7 +639,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   }
 
   /**
-   * @see parent::docsEditable
+   * @see parent::docsEditable()
    */
   function docsEditable() {
     if (parent::docsEditable()) {
