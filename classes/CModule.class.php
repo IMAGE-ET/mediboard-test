@@ -249,7 +249,7 @@ class CModule extends CMbObject {
     $this->_update_messages = $setup->messages;
     if ($onlyNextUpdate) {
       foreach ($this->_update_messages as $version => $message) {
-        if ($version <= $this->mod_version) {
+        if ($version < $this->mod_version) {
           unset($this->_update_messages[$version]);
         }
       }
