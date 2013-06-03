@@ -40,6 +40,7 @@ class CMbLock {
    */
   function acquire($lock_lifetime = 300.0) {
     // No lock, we acquire
+    clearstatcache(true, $this->filename);
     if (!file_exists($this->filename)) {
       return touch($this->filename);
     }
@@ -64,6 +65,7 @@ class CMbLock {
    * @return bool
    */
   function release() {
+    clearstatcache(true, $this->filename);
     if (file_exists($this->filename)) {
       return unlink($this->filename);
     }

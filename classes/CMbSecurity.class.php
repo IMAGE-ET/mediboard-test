@@ -3,7 +3,6 @@
 /**
  * $Id$
  *  
- * @category ${Module}
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -14,7 +13,7 @@ CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/AES");
 CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/TripleDES");
 
 /**
- * Description
+ * Generic security class, uses pure-PHP library phpseclib
  */
 class CMbSecurity {
   // Ciphers
@@ -23,11 +22,11 @@ class CMbSecurity {
   const TDES = 3;
 
   // Encryption modes
-  const CTR = -1;
-  const ECB = 1;
-  const CBC = 2;
-  const CFB = 3;
-  const OFB = 4;
+  const CTR = CRYPT_AES_MODE_CTR;
+  const ECB = CRYPT_AES_MODE_ECB;
+  const CBC = CRYPT_AES_MODE_CBC;
+  const CFB = CRYPT_AES_MODE_CFB;
+  const OFB = CRYPT_AES_MODE_OFB;
 
   /**
    * Generate a pseudo random string
@@ -99,17 +98,17 @@ class CMbSecurity {
    * @return Crypt_AES|Crypt_DES|Crypt_TripleDES
    */
   static function getCipher($encryption = self::AES, $mode = self::CTR) {
-    switch (strtoupper($encryption)) {
+    switch ($encryption) {
       case self::AES:
         return new Crypt_AES($mode);
-      break;
 
       case self::DES:
         return new Crypt_DES($mode);
-      break;
 
       case self::TDES:
         return new Crypt_TripleDES($mode);
     }
+
+    return null;
   }
 }
