@@ -29,32 +29,30 @@ class CReglement extends CMbMetaObject {
   public $object_id;
   public $reference;
   public $num_bvr;
-  
+
+  // Behaviour fields
+  public $_update_facture = true;
+
+  // References
   /** @var CBanque */
   public $_ref_banque;
-
   /** @var CFacture */
   public $_ref_facture;
   
-  var $_update_facture = true;
-  
+
   /**
-   * getSpec
-   * 
-   * @return $spec
-  **/
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'reglement';
     $spec->key   = 'reglement_id';
     return $spec;
   }
-  
+
   /**
-   * getProps
-   * 
-   * @return $props
-  **/
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props['object_class']    = 'enum notNull list|CFactureCabinet|CFactureEtablissement show|0 default|CFactureCabinet';
@@ -69,7 +67,7 @@ class CReglement extends CMbMetaObject {
   }
   
   /**
-   * Accesseur sur la banque
+   * Charge la banque
    * 
    * @return CBanque La banque
    */
@@ -78,9 +76,8 @@ class CReglement extends CMbMetaObject {
   }
   
   /**
-   * loadRefsFwd
-   * 
-   * @return void
+   * @see parent::loadRefsFwd()
+   * @deprecated
    */
   function loadRefsFwd() {
     $this->loadTargetObject();
@@ -88,9 +85,7 @@ class CReglement extends CMbMetaObject {
   }
   
   /**
-   * Vérification des champs
-   * 
-   * @return string|null
+   * @see parent::check()
    */
   function check() {
     if ($msg = parent::check()) {
@@ -108,19 +103,21 @@ class CReglement extends CMbMetaObject {
     }
 
     $this->loadRefsFwd();
+    return null;
   }
   
   /**
    * Accesseur sur la facture
    * 
-   * @return array La facture
+   * @return CFacture
    */
   function loadRefFacture() {
-    $target = $this->loadTargetObject();
-    $target->loadRefsObjects();
-    $target->loadRefPatient();
-    $target->loadRefPraticien();
-    return $this->_ref_facture = $target;
+    /** @var CFacture $facture */
+    $facture = $this->loadTargetObject();
+    $facture->loadRefsObjects();
+    $facture->loadRefPatient();
+    $facture->loadRefPraticien();
+    return $this->_ref_facture = $facture;
   }
   
   /**
@@ -130,6 +127,7 @@ class CReglement extends CMbMetaObject {
    */
   function acquiteFacture() {
     $this->loadRefsFwd();
+    /** @var CFacture $facture */
     $facture = $this->_ref_object;
     $facture->loadRefsObjects();
     $facture->loadRefsReglements();
@@ -178,7 +176,10 @@ class CReglement extends CMbMetaObject {
 
     return $this->acquiteFacture();
   }
-  
+
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     return $this->loadTargetObject()->getPerm($permType);
   }
