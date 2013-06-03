@@ -709,7 +709,19 @@ class CSetupdPhospi extends CSetup {
       ADD `locked` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.76";
+
+    $this->makeRevision("0.76");
+    $this->addUpdateMessage("Mise à jour des blocages de lit en base, 0 => null");
+    $query = "ALTER TABLE `affectation`
+                CHANGE `sejour_id` `sejour_id` INT (11) UNSIGNED";
+    $this->addQuery($query);
+
+    $query = "UPDATE `affectation`
+                SET `sejour_id` = NULL
+                WHERE `sejour_id` = '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.77";
   }
 }
 ?>
