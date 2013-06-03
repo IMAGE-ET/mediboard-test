@@ -8,6 +8,7 @@ var File = {
     var url = new Url("dPfiles", "upload_file");
     url.addParam("object_class", object_class);
     url.addParam("object_id", object_id);
+    url.addParam("object_guid", object_class+"-"+object_id);
     url.addParam("file_category_id", file_category_id);
     url.requestModal(700, 300);
   },
