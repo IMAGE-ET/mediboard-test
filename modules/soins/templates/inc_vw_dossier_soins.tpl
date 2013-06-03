@@ -360,7 +360,7 @@ Main.add(function () {
       
       {{if "dPprescription"|module_active}}
       <!-- Plan de soins journée -->
-      <li onmousedown="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med', '{{$hide_close}}'); refreshTabState();">
+      <li onmousedown="refreshTabState();">
         <a href="#jour">{{tr}}Soin-tabSuivi-tabViewDay{{/tr}}</a>
       </li>
       
