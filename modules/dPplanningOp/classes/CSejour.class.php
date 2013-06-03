@@ -3160,7 +3160,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->_first_liaison_for_prestation->loadObject($where, null, null, $ljoin);
   }
 
-  function loadLiaisonsForPrestation($prestation_id) {
+  function loadLiaisonsForPrestation($prestation_id, $date_min = null, $date_max = null) {
     if ($prestation_id == "all") {
       $prestation_id = null;
     }
@@ -3177,6 +3177,14 @@ class CSejour extends CFacturable implements IPatientRelated {
     if ($prestation_id) {
       $where["object_id"] = " = '$prestation_id'";
     }
+
+    if ($date_min && $date_max) {
+      $date_min_w = ($date_min) ? $date_min : CMbDT::date($this->entree_prevue);
+      $date_max_w = ($date_max) ? $date_max : CMbDT::date($this->sortie_prevue);
+      $where[] = "'date' BETWEEN '$date_min_w' AND '$date_max_w'";
+    }
+
+    /** @var  CItemLiaison[] _liaisons_for_prestation */
     $this->_liaisons_for_prestation = $item_liaison->loadList($where, "date ASC", null, null, $ljoin);
 
     CMbObject::massLoadFwdRef($this->_liaisons_for_prestation, "item_souhait_id");
@@ -3186,6 +3194,8 @@ class CSejour extends CFacturable implements IPatientRelated {
       $_liaison->loadRefItem();
       $_liaison->loadRefItemRealise();
     }
+
+    return $this->_liaisons_for_prestation;
   }
 
   function countPrestationsSouhaitees() {
