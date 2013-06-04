@@ -791,9 +791,11 @@ abstract class CSQLDataSource {
       $quoted = "'$escaped'";
       if ($i == 0) {
         $trans["%"] = $quoted;
+        $trans["?"] = $quoted;
       }
       $key = $i+1;
       $trans["%$key"] = $quoted;
+      $trans["?$key"] = $quoted;
     }
     
     return strtr($query, $trans);
