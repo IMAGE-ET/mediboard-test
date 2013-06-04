@@ -82,9 +82,12 @@ Main.add(function(){
     <tr>
       <th>{{mb_label object=$ex_message field=predicate_id}}</th>
       <td colspan="3">
-        <input type="text" name="predicate_id_autocomplete_view" size="70" value="{{$ex_message->_ref_predicate->_view}}" placeholder=" -- Toujours afficher -- " />
+        <input type="text" name="predicate_id_autocomplete_view" size="70"
+               value="{{$ex_message->_ref_predicate->_view}}" placeholder=" -- Toujours afficher -- " />
         {{mb_field object=$ex_message field=predicate_id hidden=true}}
-        <button class="new notext" onclick="ExFieldPredicate.create('{{$ex_message->_id}}', '{{$ex_message->_id}}', this.form)" type="button">{{tr}}New{{/tr}}</button>
+        <button class="new notext" onclick="ExFieldPredicate.create(null, null, this.form)" type="button">
+          {{tr}}New{{/tr}}
+        </button>
       </td>
     </tr>
     
