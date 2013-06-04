@@ -228,7 +228,7 @@ class CFunctions extends CMbObject {
       $where[] = "users_mediboard.user_id IS NOT NULL OR functions_mediboard.function_id $in_functions";
     }
 
-    return $this->loadListWithPerms($perm_type, $where, "text", null, "function_id", $ljoin);
+    return $this->loadListWithPerms($perm_type, $where, "text", null, "functions_mediboard.function_id", $ljoin);
   }
 
   function fillTemplate(&$template) {
