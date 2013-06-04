@@ -302,7 +302,7 @@ if ($show_operations) {
       $libelle = "<span style='display: none;' data-entree_prevue='$sejour->entree_prevue'".
         "data-sortie_prevue='$sejour->sortie_prevue' data-sejour_id='$sejour->_id' data-preop='".
         ($_operation->presence_preop ? CMbDT::transform($_operation->presence_preop, null, "%H:%M") : "00:00")."' data-postop='".
-        ($_operation->presence_postop ? CMbDT::transform($_operation->presence_postop, null, "%H:%M") : "00:00")."'></span>";
+        ($_operation->presence_postop ? CMbDT::transform($_operation->presence_postop, null, "%H:%M") : "00:00")."' data-traitement='".$charge->_id."'></span>";
 
       /** CADRE DROIT */
       $libelle .="<span style=\"float:right; text-align: right\">";
