@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-//CCanDo::checkEdit();
+CCanDo::checkRead();
 
 $consultation_id   = CValue::getOrSession("consultation_id");
 $dossier_anesth_id = CValue::getOrSession("dossier_anesth_id");
@@ -15,15 +15,15 @@ $dossier_anesth_id = CValue::getOrSession("dossier_anesth_id");
 $where = array("consultation_id" => "= '$consultation_id'");
 $exam_possum = new CExamPossum;
 $exam_possum->loadObject($where);
+$exam_possum->loadRefsNotes();
 
 if (!$exam_possum->_id) {
   $exam_possum->consultation_id = $consultation_id;
   $exam_possum->updateFormFields();
 }
-$exam_possum->loadRefsFwd();
 
 // Pré-remplissage de certaines valeurs
-$consultation =& $exam_possum->_ref_consult;
+$consultation = $exam_possum->loadRefConsult();
 $consultation->loadRefsFwd();
 $consultation->loadRefConsultAnesth();
 $dossier_anesth = $consultation->_refs_dossiers_anesth[$dossier_anesth_id];

@@ -21,7 +21,7 @@ class AudiogrammeTympano extends Graph {
   }
   
   function AudiogrammeTympano() {
-    global $pressions;
+    $pressions = CExamAudio::$pressions;
     
     // Setup the graph.
     $this->Graph(280, 160, "auto"); 
@@ -79,7 +79,7 @@ class AudiogrammeTympano extends Graph {
   }
   
   function addAudiogramme($values, $mark_color) {
-    global $pressions;
+    $pressions = CExamAudio::$pressions;
 
     // Empty plot case
     $datay = $values;

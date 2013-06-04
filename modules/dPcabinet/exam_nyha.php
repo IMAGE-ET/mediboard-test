@@ -14,13 +14,13 @@ $consultation_id = CValue::getOrSession("consultation_id");
 $where = array("consultation_id" => "= '$consultation_id'");
 $exam_nyha = new CExamNyha;
 $exam_nyha->loadObject($where);
+$exam_nyha->loadRefsNotes();
 
 if (!$exam_nyha->_id) {
   $exam_nyha->consultation_id = $consultation_id;
 }
-$exam_nyha->loadRefsFwd();
 
-$consultation =& $exam_nyha->_ref_consult;
+$consultation = $exam_nyha->loadRefConsult();
 $consultation->loadRefsFwd();
 $consultation->loadRefConsultAnesth();
 

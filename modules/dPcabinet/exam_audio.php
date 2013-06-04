@@ -28,7 +28,7 @@ if (!$exam_audio->_id) {
   $exam_audio->store();
 }
 
-$exam_audio->loadRefs();
+$exam_audio->loadRefConsult();
 $exam_audio->_ref_consult->loadRefsFwd();
 
 CAppUI::requireModuleFile($m, "inc_graph_audio_tonal");
