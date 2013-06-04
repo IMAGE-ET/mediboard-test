@@ -3,27 +3,28 @@
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPcabinet
+ * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
 CCanDo::checkEdit();
-$patient_id     = CValue::getOrSession("patient_id");
-$consult_id     = CValue::get("consult_id");
-$type_facture   = CValue::get("type_facture", "maladie");
-$chirsel_id     = CValue::get("executant_id");
-$date           = CValue::get("date", CMbDT::date());
+
+$patient_id   = CValue::getOrSession("patient_id");
+$consult_id   = CValue::get("consult_id");
+$type_facture = CValue::get("type_facture", "maladie");
+$chirsel_id   = CValue::get("executant_id");
+$date         = CValue::get("date", CMbDT::date());
 
 $facture = new CFactureCabinet();
 $facture->ajoutConsult($patient_id, $chirsel_id, $consult_id, $type_facture);
 $facture->loadRefs();
 
 // Chargement des banques
-$orderBanque = "nom ASC";
-$banque      = new CBanque();
-$banques     = $banque->loadList(null,$orderBanque);
+$order = "nom ASC";
+$banque = new CBanque();
+$banques = $banque->loadList(null, $order);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -40,4 +41,3 @@ $smarty->assign("date"          , $date);
 $smarty->assign("chirSel"       , $chirsel_id);
 
 $smarty->display("inc_vw_facturation.tpl");
-?>

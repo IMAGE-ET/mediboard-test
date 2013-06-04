@@ -1,13 +1,15 @@
 <?php
 /**
- * $Id:$
+ * $Id: $
  *
  * @package    Mediboard
- * @subpackage dPcabinet
+ * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    $Revision: 17164 $
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: $
  */
+
+CCanDo::checkRead();
 
 $facture_id  = CValue::get("facture_id");
 $patient_id  = CValue::get("patient_id");
@@ -35,4 +37,3 @@ $smarty->assign("patient"       , $patient);
 $smarty->assign("facture"       , $facture);
 
 $smarty->display("inc_vw_assurances.tpl");
-?>

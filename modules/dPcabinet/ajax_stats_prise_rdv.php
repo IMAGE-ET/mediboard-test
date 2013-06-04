@@ -1,15 +1,15 @@
 <?php
-
 /**
- * dPcabinet
- *  
- * @category dPdcabinet
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id: $
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: $
  */
+
+CCanDo::checkRead();
 
 // Current user
 $mediuser = new CMediusers;
@@ -51,6 +51,7 @@ if ($filter->_user_id) {
   
   $where = array();
   $where["user_id"] = CSQLDataSource::prepareIn(CMbArray::pluck($stats_creation, "user_id"));
+  /** @var CMediusers[] $prats_creation */
   $prats_creation = $mediuser->loadList($where);
   CMbObject::massLoadFwdRef($prats_creation, "function_id");
   
@@ -65,5 +66,3 @@ $smarty->assign("filter"        , $filter);
 $smarty->assign("prats_creation", $prats_creation);
 $smarty->assign("stats_creation", $stats_creation);
 $smarty->display("inc_stats_prise_rdv.tpl");
-
-?>

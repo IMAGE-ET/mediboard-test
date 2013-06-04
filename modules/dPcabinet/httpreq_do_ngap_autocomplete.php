@@ -1,11 +1,15 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPcabinet
- * @version $Revision$
- * @author Alexis Granger
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
+
+CCanDo::check();
 
 $ds = CSQLDataSource::get("ccamV2");
 
@@ -14,6 +18,7 @@ $object_class = CValue::get("object_class");
 $code = CValue::post("code");
 
 // Chargement de l'object
+/** @var CCodable $object */
 $object = new $object_class;
 $object->load($object_id);
 
@@ -28,8 +33,9 @@ if ($code) {
     FROM `codes_ngap` 
     WHERE `code` LIKE '".addslashes($code)."%' ";
 
-  if (!$object->_count_actes)
+  if (!$object->_count_actes) {
     $sql .= " AND `lettre_cle` = '1' ";
+  }
 }
 
 $result = $ds->loadList($sql, null);
@@ -43,5 +49,3 @@ $smarty->assign("result"    , $result);
 $smarty->assign("nodebug", true);
 
 $smarty->display("httpreq_do_ngap_autocomplete.tpl");
-
-?>

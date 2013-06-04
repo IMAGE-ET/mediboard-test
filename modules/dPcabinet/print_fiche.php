@@ -1,17 +1,19 @@
-<?php /* $Id$ */
-
+<?php
 /**
+ * $Id$
+ *
  * @package    Mediboard
- * @subpackage dPcabinet
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
- * @author     Romain Ollivier
  */
+
+CCanDo::check();
 
 if (!CModule::getCanDo('dPcabinet')->edit && !CModule::getCanDo('soins')->read) {
   CModule::getCanDo('dPcabinet')->redirect();
 }
-
-//CCanDo::checkEdit();
 
 $date  = CValue::getOrSession("date", CMbDT::date());
 $print = CValue::getOrSession("print", false);

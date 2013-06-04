@@ -1123,6 +1123,13 @@ class CPatient extends CPerson {
     }
   }
 
+  /**
+   * Charge les consultations du patient
+   *
+   * @param array|null $where [optional] Clauses SQL
+   *
+   * @return CConsultation[]
+   */
   function loadRefsConsultations($where = null) {
     $consultation = new CConsultation();
     $group_id = CGroups::loadCurrent()->_id;
@@ -1163,6 +1170,9 @@ class CPatient extends CPerson {
     return $this->_ref_dossier_medical;
   }
 
+  /**
+   * @return CDevenirDentaire[]
+   */
   function loadRefsDevenirDentaire() {
     return $this->_refs_devenirs_dentaires = $this->loadBackRefs("devenirs_dentaires");
   }

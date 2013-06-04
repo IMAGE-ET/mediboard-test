@@ -1,12 +1,12 @@
-<?php 
+<?php
 /**
- * $Id:$
+ * $Id: $
  *
  * @package    Mediboard
- * @subpackage dPcabinet
- * @author     Romain Ollivier <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    $Revision:$
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: $
  */
 
 CCanDO::checkEdit();
@@ -31,6 +31,7 @@ else {
 $banque = new CBanque();
 $banques = $banque->loadList(null, "nom");
 
+/** @var CFactureCabinet $facture */
 $facture = $object;
 if (CAppUI::conf("ref_pays") == 2) {
   $facture->loadRefsObjects();
@@ -46,4 +47,3 @@ $smarty->assign("facture"  , $facture);
 $smarty->assign("banques"  , $banques);
 
 $smarty->display("edit_reglement.tpl");
-?>

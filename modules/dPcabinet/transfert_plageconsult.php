@@ -1,14 +1,15 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Thomas Depoix
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
-global $can;
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 // Vérification des droits sur les praticiens
 $mediuser = new CMediusers();

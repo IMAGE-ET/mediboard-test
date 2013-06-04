@@ -1,16 +1,22 @@
-<?php 
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPcabinet
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id: $
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: $
  */
 
-if(!CModule::getActive('bcb')){
-  CAppUI::stepMessage(UI_MSG_ERROR, "Le module de médicament autonome est en cours de developpement. 
-  Pour être utilisé, ce module a pour le moment besoin d'être connecté à une base de données de médicaments externe");
+CCanDo::checkRead();
+
+if (!CModule::getActive('bcb')) {
+  CAppUI::stepMessage(
+    UI_MSG_ERROR,
+    "Le module de médicament autonome est en cours de developpement.
+    Pour être utilisé, ce module a pour le moment besoin d'être connecté à une base de données de médicaments externe"
+  );
   return;
 }
 

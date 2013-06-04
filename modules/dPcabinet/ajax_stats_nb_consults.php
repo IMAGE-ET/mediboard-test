@@ -1,15 +1,15 @@
 <?php
-
 /**
- * dPcabinet
- *  
- * @category dPcabinet
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id: $
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: $
  */
+
+CCanDo::checkRead();
 
 // Current user
 $mediuser = new CMediusers;
@@ -44,12 +44,12 @@ if ($filter->_function_id || $filter->_user_id) {
     AND annule = '0'
     AND patient_id IS NOT NULL ";
     
-    if ($filter->_function_id) {
-      $query .= "AND users_mediboard.function_id = '$filter->_function_id';";
-    }
-    else {
-      $query .= "AND users_mediboard.user_id = '$filter->_user_id';";
-    }
+  if ($filter->_function_id) {
+    $query .= "AND users_mediboard.function_id = '$filter->_function_id';";
+  }
+  else {
+    $query .= "AND users_mediboard.user_id = '$filter->_user_id';";
+  }
   
   $ds->exec($query);
   
@@ -132,16 +132,17 @@ $praticiens = $mediuser->loadPraticiens(PERM_READ, $filter->_function_id);
 $stats = array();
 foreach ($praticiens as $prat_id => $_praticien) {
   if (!isset($consultations_counts[$_praticien->_id]) && !isset($sejours_counts[$_praticien->_id]) &&
-      !isset($patients_counts     [$_praticien->_id]) && !isset($others_counts [$_praticien->_id])) {
+      !isset($patients_counts     [$_praticien->_id]) && !isset($others_counts [$_praticien->_id])
+  ) {
     unset($praticiens[$prat_id]);
     continue;
   }
   // Counts
   $counts = array (
-    "consultations" => @$consultations_counts[$_praticien->_id],
-    "sejours"       => @$sejours_counts      [$_praticien->_id],
-    "patients"      => @$patients_counts     [$_praticien->_id],
-    "others"        => @$others_counts       [$_praticien->_id],
+    "consultations" => CMbArray::get($consultations_counts, $_praticien->_id),
+    "sejours"       => CMbArray::get($sejours_counts      , $_praticien->_id),
+    "patients"      => CMbArray::get($patients_counts     , $_praticien->_id),
+    "others"        => CMbArray::get($others_counts       , $_praticien->_id),
   );
   
   // Percents
@@ -165,4 +166,3 @@ $smarty->assign("praticiens", $praticiens);
 $smarty->assign("stats"     , $stats);
 
 $smarty->display("inc_stats_nb_consults.tpl");
-?>

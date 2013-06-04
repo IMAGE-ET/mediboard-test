@@ -1,12 +1,15 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id: $
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: $
  */
+
+CCanDo::checkRead();
 
 $consult_id = CValue::get("consult_id");
 $sejour_id  = CValue::get("sejour_id");
@@ -45,7 +48,7 @@ $smarty->assign("patient"        , $patient);
 $smarty->assign("_is_anesth"     , $user->isAnesth());
 $smarty->assign("antecedent"     , new CAntecedent);
 $smarty->assign("traitement"     , new CTraitement);
-if(CModule::getActive("dPprescription")){
+if (CModule::getActive("dPprescription")) {
   $smarty->assign("line"           , new CPrescriptionLineMedicament);
 }
 $smarty->assign("userSel"        , $user);
@@ -57,8 +60,8 @@ if ($consult_anesth->_id) {
   $consult_anesth->loadRefOperation();
   $consult_anesth->loadRefsTechniques();
   $anesth = new CTypeAnesth;
-  $orderanesth = "name";
-  $anesth = $anesth->loadList(null,$orderanesth);
+  $order = "name";
+  $anesth = $anesth->loadList(null, $order);
   
   $smarty->assign("list_etat_dents", $list_etat_dents);
   $smarty->assign("mins"           , range(0, 15-1, 1));
@@ -83,5 +86,3 @@ if ($consult_anesth->_id) {
 }
 
 $smarty->display("inc_short_consult.tpl");
-
-?>

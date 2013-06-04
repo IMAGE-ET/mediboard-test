@@ -1,12 +1,15 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dPcabinet
- *  @version $Revision:  $
- *  @author SARL OpenXtrem
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id: $
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: $
  */
+
+CCanDo::checkRead();
 
 $consultation_id    = CValue::get("consultation_id");
 $dossier_anesth_id = CValue::get("dossier_anesth_id");

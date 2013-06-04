@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPstats
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 global $can, $m;
 
@@ -25,6 +27,7 @@ function xPseudoAxisFormatCb ($value) {
 }
 
 class AudiogrammeVocal extends Graph {
+  /** @var self */
   static public $graph = null;
   
   function AudiogrammeVocal() {

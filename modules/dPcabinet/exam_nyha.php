@@ -1,13 +1,15 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
-//CCanDo::checkEdit();
+CCanDo::checkRead();
 
 $consultation_id = CValue::getOrSession("consultation_id");
 
@@ -30,4 +32,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("exam_nyha" , $exam_nyha);
 
 $smarty->display("exam_nyha.tpl");
-?>

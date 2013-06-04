@@ -77,7 +77,7 @@ class CConsultation extends CFacturable {
   public $arret_maladie;
   public $concerne_ALD;
 
-  // Form fields
+  // Derived fields
   public $_etat;
   public $_hour;
   public $_min;
@@ -178,6 +178,7 @@ class CConsultation extends CFacturable {
   public $_operation_id;
   public $_dossier_anesth_completed_id;
   public $_docitems_from_dossier_anesth;
+  public $_locks;
 
   /**
    * @see parent::getSpec()

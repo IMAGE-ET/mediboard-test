@@ -1,11 +1,13 @@
-<?php /* $Id: print_fiche.php 6271 2009-05-12 14:39:22Z alexis_granger $ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision: 6271 $
-* @author Romain Ollivier
-*/
+ * $Id: $
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: $
+ */
 
 CCanDo::checkEdit();
 
@@ -20,12 +22,9 @@ $praticiens = $user->isPraticien() ?
   array($user) :
   $user->loadPraticiens(PERM_EDIT, $user->function_id);
 
-if (CModule::getActive("ecap")) {
-  $group = CGroups::loadCurrent();
-  $cidc = $group->loadLastId400("ecap")->id400;
-  CAppUI::stepAjax("Problème d'accès au service web ecap", UI_MSG_WARNING);
-}
-  
+$group = CGroups::loadCurrent();
+$cidc = $group->loadLastId400("eCap")->id400;
+
 foreach ($praticiens as $_praticien) {
   $_praticien->loadRefFunction()->loadRefGroup();
   
@@ -129,6 +128,7 @@ foreach ($praticiens as $_praticien) {
   $plage = new CPlageconsult();
   $plage->date = CMbDT::date();
   $plage->chir_id = $_praticien->_id;
+  /** @var CPlageconsult $_plage */
   foreach ($plage->loadMatchingList() as $_plage) {
     $patient_count += $_plage->countPatients();
   }

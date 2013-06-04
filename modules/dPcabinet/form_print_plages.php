@@ -1,11 +1,13 @@
-<?php /* $Id$*/
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPbloc
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -28,11 +30,9 @@ $month_fin  = CMbDT::date("-1 day", $month_fin);
 
 // Liste des praticiens
 $mediusers = new CMediusers();
-if(CAppUI::pref("pratOnlyForConsult", 1)) {
-  $listChir = $mediusers->loadPraticiens(PERM_READ);
-} else {
-  $listChir = $mediusers->loadProfessionnelDeSante(PERM_READ);
-}
+$listChir = CAppUI::pref("pratOnlyForConsult", 1) ?
+  $mediusers->loadPraticiens(PERM_READ) :
+  $mediusers->loadProfessionnelDeSante(PERM_READ);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -47,5 +47,3 @@ $smarty->assign("month_fin" , $month_fin);
 $smarty->assign("listChir"  , $listChir);
 
 $smarty->display("form_print_plages.tpl");
-
-?>

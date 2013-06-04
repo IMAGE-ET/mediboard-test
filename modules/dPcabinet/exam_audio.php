@@ -1,16 +1,18 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
+
+CCanDo::checkEdit();
 
 global $m;
 global $exam_audio;
-
-CCanDo::checkEdit();
 
 $frequences = CExamAudio::$frequences;
 $pressions  = CExamAudio::$pressions;
@@ -89,7 +91,4 @@ $smarty->assign("map_tympan_droite", $map_tympan_droite);
 $smarty->assign("map_vocal", $map_vocal);
 $smarty->assign("time"     , time());
 
-
 $smarty->display('exam_audio.tpl');
-
-?>

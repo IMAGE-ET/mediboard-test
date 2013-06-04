@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpatients
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id: $
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: $
  */
 
 $consult_id = CValue::get("consult_id");
@@ -50,5 +51,3 @@ $smarty = new CSmartyDP;
 $smarty->assign("consult_anesth", $consult_anesth);
 
 $smarty->display("inc_guess_score_apfel.tpl");
-
-?>

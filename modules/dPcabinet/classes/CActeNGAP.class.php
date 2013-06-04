@@ -197,9 +197,8 @@ class CActeNGAP extends CActe {
     $ds = CSQLDataSource::get("ccamV2");
     $query = "SELECT `tarif` 
       FROM `codes_ngap` 
-      WHERE `code` = %";
+      WHERE `code` = ? ";
     $query = $ds->prepare($query, $this->code);
-
     $this->montant_base = $ds->loadResult($query);
     $this->montant_base *= $this->coefficient;
     $this->montant_base *= $this->quantite;
@@ -228,7 +227,7 @@ class CActeNGAP extends CActe {
     $ds = CSQLDataSource::get("ccamV2");
     $query = "SELECT `libelle`, `lettre_cle`
       FROM codes_ngap 
-      WHERE CODE = % ";
+      WHERE CODE = ? ";
     $query = $ds->prepare($query, $this->code);
 
     $this->_libelle = "Acte inconnu ou supprimé";

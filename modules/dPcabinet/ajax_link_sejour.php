@@ -1,14 +1,12 @@
-<?php 
-
+<?php
 /**
- * Relier une consutation à un séjour
- *  
- * @category dPcabinet
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:\$ 
- * @link     http://www.mediboard.org
+ * $Id: $
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: $
  */
 
 CCanDo::checkEdit();
@@ -28,8 +26,8 @@ $where["sejour.type"] = "!= 'consult'";
 $where["sejour.group_id"] = "= '$group_id'";
 $where["sejour.patient_id"] = "= '$consult->patient_id'";
 
+/** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where);
-
 CMbObject::massLoadFwdRef($sejours, "praticien_id");
 
 foreach ($sejours as $_sejour) {

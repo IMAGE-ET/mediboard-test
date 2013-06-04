@@ -1,11 +1,20 @@
-<?php /* $Id$ */
+<?php
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 /**
-* @abstract Bezier interoplated point generation, 
-* @copyright Thomas Despoix, openXtrem company, released under QPL
-* computed from control points data sets, based on Paul Bourke algorithm :
-* http://astronomy.swin.edu.au/~pbourke/curves/bezier/
-*/
+ * Bezier interoplated point generation,
+ * Computed from control points data sets, based on Paul Bourke algorithm
+ * 
+ * @see http://astronomy.swin.edu.au/~pbourke/curves/bezier/
+ */
 class BezierTD {
   var $datax = array();
   var $datay = array();

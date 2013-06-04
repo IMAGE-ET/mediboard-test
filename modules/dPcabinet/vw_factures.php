@@ -3,11 +3,12 @@
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPcabinet
+ * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
+
 CCanDo::checkEdit();
 $date_min           = CValue::getOrSession("_date_min", CMbDT::date());
 $date_max           = CValue::getOrSession("_date_max", CMbDT::date());

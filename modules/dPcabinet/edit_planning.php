@@ -27,12 +27,9 @@ if ($mediuser->isMedical()) {
 }
 
 // Vérification des droits sur les praticiens et les fonctions
-if (CAppUI::pref("pratOnlyForConsult", 1)) {
-  $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
-}
-else {
-  $listPraticiens = $mediuser->loadProfessionnelDeSante(PERM_EDIT);
-}
+$listPraticiens = CAppUI::pref("pratOnlyForConsult", 1) ?
+  $mediuser->loadPraticiens(PERM_EDIT) :
+  $mediuser->loadProfessionnelDeSante(PERM_EDIT);
 
 $function       = new CFunctions();
 $listFunctions  = $function->loadSpecialites(PERM_EDIT);
@@ -155,19 +152,20 @@ else {
 $categorie = new CConsultationCategorie();
 $whereCategorie["function_id"] = " = '$chir->function_id'";
 $orderCategorie = "nom_categorie ASC";
+/** @var CConsultationCategorie[] $categories */
 $categories = $categorie->loadList($whereCategorie, $orderCategorie);
 
 // Creation du tableau de categories simplifié pour le traitement en JSON
 $listCat = array();
-foreach ($categories as $cat) {
-  $listCat[$cat->_id] = array(
-    "nom_icone"   => $cat->nom_icone,
-    "duree"       => $cat->duree,
-    "commentaire" => utf8_encode($cat->commentaire));
+foreach ($categories as $_categorie) {
+  $listCat[$_categorie->_id] = array(
+    "nom_icone"   => $_categorie->nom_icone,
+    "duree"       => $_categorie->duree,
+    "commentaire" => utf8_encode($_categorie->commentaire));
 }
 
 // Ajout du motif de la consultation passé en parametre
-if (!$consult->_id && $consult_urgence_id) {
+if (!$consult->_id && $consult_urgence_id){
   // Chargement de la consultation de passage aux urgences
   $consultUrgence = new CConsultation();
   $consultUrgence->load($consult_urgence_id);

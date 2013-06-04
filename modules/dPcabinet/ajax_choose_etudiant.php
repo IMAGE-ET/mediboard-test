@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPcabinet
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id: $
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: $
  */
 
 $devenir_dentaire_id = CValue::get("devenir_dentaire_id");
@@ -32,6 +33,7 @@ foreach ($actes_dentaires as $_acte_dentaire) {
 $icr_base = CAppUI::conf("aphmOdonto icr_base");
 $ds = CSQLDataSource::get("std");
 
+$etudiants_calcul_icr = array();
 foreach ($etudiants as $_etudiant) {
   $_etudiant->loadRefFunction();
   $sql = "SELECT sum(ICR) as ICR_realise, count(*) AS nombre_actes, ROUND(AVG(ICR),0) as ICR_moyen, max(ICR) as ICR_max
@@ -51,5 +53,3 @@ $smarty->assign("etudiants", $etudiants);
 $smarty->assign("etudiants_calcul_icr", $etudiants_calcul_icr);
 $smarty->assign("devenir_dentaire", $devenir_dentaire);
 $smarty->display("inc_choose_etudiant.tpl");
-
-?>

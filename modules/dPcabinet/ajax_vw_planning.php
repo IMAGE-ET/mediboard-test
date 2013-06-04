@@ -9,6 +9,8 @@
  * @version    $Revision$
  */
 
+CCanDo::checkRead();
+
 $chirSel = CValue::getOrSession("chirSel");
 $today = CMbDT::date();
 
@@ -91,7 +93,13 @@ for ($i = 0; $i < $nbDays; $i++) {
     $intervs = $interv->loadList($whereInterv);
     CMbObject::massLoadFwdRef($intervs, "chir_id");
     foreach ($intervs as $_interv) {
-      $range = new CPlanningRange($_interv->_guid, $jour." ".$_interv->debut, CMbDT::minutesRelative($_interv->debut, $_interv->fin), CAppUI::tr($_interv->_class),"bbccee", "plageop");
+      $range = new CPlanningRange(
+        $_interv->_guid, $jour." ".$_interv->debut,
+        CMbDT::minutesRelative($_interv->debut, $_interv->fin),
+        CAppUI::tr($_interv->_class),
+        "bbccee",
+        "plageop"
+      );
       $planning->addRange($range);
     }
 
@@ -102,10 +110,34 @@ for ($i = 0; $i < $nbDays; $i++) {
     CMbObject::massLoadFwdRef($horsPlages, "chir_id");
     foreach ($horsPlages as $_horsplage) {
       $lenght = (CMBDT::minutesRelative("00:00:00", $_horsplage->temp_operation));
-      $op = new CPlanningRange($_horsplage->_guid, $jour." ".$_horsplage->time_operation, $lenght, $_horsplage,"3c75ea", "horsplage");
+      $op = new CPlanningRange(
+        $_horsplage->_guid,
+        $jour." ".$_horsplage->time_operation,
+        $lenght,
+        $_horsplage,
+        "3c75ea",
+        "horsplage"
+      );
       $planning->addRange($op);
     }
 
+
+    //INTERVENTIONS
+    /** @var CPlageOp[] $intervs */
+    $interv = new CPlageOp();
+    $intervs = $interv->loadList($whereInterv);
+    CMbObject::massLoadFwdRef($intervs, "chir_id");
+    foreach ($intervs as $_interv) {
+      $range = new CPlanningRange(
+        $_interv->_guid,
+        $jour." ".$_interv->debut,
+        CMbDT::minutesRelative($_interv->debut, $_interv->fin),
+        CAppUI::tr($_interv->_class),
+        "bbccee",
+        "plageop"
+      );
+      $planning->addRange($range);
+    }
   }
 
   //PLAGES CONSULT
@@ -117,7 +149,13 @@ for ($i = 0; $i < $nbDays; $i++) {
     $_plage->loadRefsConsultations(false);
 
     // Affichage de la plage sur le planning
-    $range = new CPlanningRange($_plage->_guid, $jour." ".$_plage->debut, CMbDT::minutesRelative($_plage->debut, $_plage->fin), $_plage->libelle, $_plage->color);
+    $range = new CPlanningRange(
+      $_plage->_guid,
+      $jour." ".$_plage->debut,
+      CMbDT::minutesRelative($_plage->debut, $_plage->fin),
+      $_plage->libelle,
+      $_plage->color
+    );
     $range->type = "plageconsult";
     $planning->addRange($range);
 
@@ -163,13 +201,30 @@ for ($i = 0; $i < $nbDays; $i++) {
             $color = "#faf";
           }
         }
-        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->_ref_patient->_view . "\n" . $_consult->motif, $color, true, "droppable $debute", $_consult->_guid);
+        $event = new CPlanningEvent(
+          $_consult->_guid,
+          $debute,
+          $_consult->duree * $_plage->_freq,
+          $_consult->_ref_patient->_view . "\n" . $_consult->motif,
+          $color,
+          true,
+          "droppable $debute",
+          $_consult->_guid
+        );
       }
       else {
         if ($color = "#cfc") {
            $color = "#faa";
         }
-        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->motif ? $_consult->motif : "[PAUSE]", $color, true, null, null);
+        $event = new CPlanningEvent(
+          $_consult->_guid,
+          $debute, $_consult->duree * $_plage->_freq,
+          $_consult->motif ? $_consult->motif : "[PAUSE]",
+          $color,
+          true,
+          null,
+          null
+        );
       }
       $event->type        = "rdvfull";
       $event->plage["id"] = $_plage->_id;

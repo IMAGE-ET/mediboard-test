@@ -1,15 +1,15 @@
-<?php 
+<?php
 /**
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPcabinet
- * @author     Romain Ollivier <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
-global $m;
+CCanDo::check();
 
 $user = CMediusers::get();
 
@@ -17,6 +17,7 @@ $consult_id   = CValue::getOrSession("consult_id");
 $dossier_anesth_id = CValue::getOrSession("dossier_anesth_id");
 
 if (!isset($current_m)) {
+  global $m;
   $current_m = CValue::get("current_m", $m);
 }
 
@@ -172,9 +173,7 @@ if ($consult->adresse_par_prat_id) {
 // Chargement des boxes 
 $services = array();
 
-if ($consult->sejour_id) {
-  $sejour = $consult->loadRefSejour();
-}
+$sejour = $consult->loadRefSejour();
 
 // Chargement du sejour
 if ($consult->_ref_sejour && $sejour->_id) {
@@ -295,11 +294,10 @@ $smarty->assign("soustotal_dh"   , $soustotal_dh);
 $smarty->assign("total"          , $total);
 if ($consult->_is_dentiste) {
   $devenirs_dentaires = $consult->_ref_patient->loadRefsDevenirDentaire();
-  
-  foreach ($devenirs_dentaires as &$devenir_dentaire) {
-    $etudiant = $devenir_dentaire->loadRefEtudiant();
+  foreach ($devenirs_dentaires as $_devenir) {
+    $etudiant = $_devenir->loadRefEtudiant();
     $etudiant->loadRefFunction();
-    $actes_dentaires  = $devenir_dentaire->countRefsActesDentaires();
+    $actes_dentaires  = $_devenir->countRefsActesDentaires();
   }
   
   $smarty->assign("devenirs_dentaires", $devenirs_dentaires);
@@ -324,6 +322,7 @@ else {
   $where["function_id"] = "IS NOT NULL";
   
   $affectation = new CAffectation();
+  /** @var CAffectation[] $blocages_lit */
   $blocages_lit = $affectation->loadList($where);
   
   $where["function_id"] = "IS NULL";
@@ -333,9 +332,11 @@ else {
     $where["lit_id"] = "= '$blocage->lit_id'";
     
     if ($affectation->loadObject($where)) {
-      $affectation->loadRefSejour();
-      $affectation->_ref_sejour->loadRefPatient();
-      $blocage->_ref_lit->_view .= " indisponible jusqu'à ".CMbDT::transform($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
+      $sejour = $affectation->loadRefSejour();
+      $patient = $sejour->loadRefPatient();
+      $blocage->_ref_lit->_view .= " indisponible jusqu'à ".
+        CMbDT::transform($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y") .
+        " ($patient->_view)";
     }
   }
   $smarty->assign("blocages_lit"  , $blocages_lit);

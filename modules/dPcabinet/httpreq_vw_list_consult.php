@@ -1,17 +1,17 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
-global $m;
-
-$user = CUser::get();
 CCanDO::checkEdit();
 
+global $m;
 $current_m = CValue::get("current_m", $m);
 
 $ds = CSQLDataSource::get("std");
@@ -21,6 +21,7 @@ $board     = CValue::get("board", 0);
 $boardItem = CValue::get("boardItem", 0);
 $plageconsult_id = CValue::get("plageconsult_id");
 
+$user = CUser::get();
 $prat_id    = CValue::getOrSession("chirSel", $user->_id);
 $selConsult = CValue::getOrSession("selConsult");
 

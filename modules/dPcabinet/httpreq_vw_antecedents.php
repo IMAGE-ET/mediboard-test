@@ -1,11 +1,15 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Alexis Granger
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
+
+CCanDo::check();
 
 $sejour_id   = CValue::getOrSession("sejour_id");
 $show_header = CValue::getOrSession("show_header", 0);
@@ -15,13 +19,12 @@ $sejour->load($sejour_id);
 
 $userSel = CMediusers::get();
 
-
 $patient = $sejour->loadRefPatient();
 $patient->loadRefPhotoIdentite();
 
 // Création du template
 $smarty = new CSmartyDP("modules/dPcabinet");
-if (CModule::getActive("dPprescription")){
+if (CModule::getActive("dPprescription")) {
   $smarty->assign("line", new CPrescriptionLineMedicament());
 }
 $smarty->assign("current_m", "dPcabinet");
@@ -36,5 +39,3 @@ $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"))
 $smarty->assign("sejour", $sejour);
 $smarty->assign("show_header", $show_header);
 $smarty->display("inc_ant_consult.tpl");
-
-?>

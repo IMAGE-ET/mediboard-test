@@ -1,11 +1,13 @@
-<?php /* $Id: print_fiche.php 6271 2009-05-12 14:39:22Z alexis_granger $ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision: 6271 $
-* @author Romain Ollivier
-*/
+ * $Id: $
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: $
+ */
 
 CCanDo::checkEdit();
 

@@ -3,13 +3,11 @@
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPcabinet
- * @author     Romain Ollivier <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
-
-global $m;
 
 CCanDo::checkEdit();
 
@@ -22,6 +20,7 @@ $hour  = CMbDT::time(null);
 $now   = CMbDT::dateTime();
 
 if (!isset($current_m)) {
+  global $m;
   $current_m = CValue::get("current_m", $m);
 }
 
@@ -213,12 +212,10 @@ if ($consult->adresse_par_prat_id) {
 // Chargement des boxes 
 $services = array();
 
-if ($consult->sejour_id) {
-  $sejour = $consult->loadRefSejour();
-}
+$sejour = $consult->loadRefSejour();
 
 // Chargement du sejour
-if ($consult->_ref_sejour && $sejour->_id) {
+if ($sejour && $sejour->_id) {
   $sejour->loadExtDiagnostics();
   $sejour->loadRefDossierMedical();
   $sejour->loadNDA();
@@ -291,8 +288,8 @@ $total_tarmed = $consult->loadRefsActesTarmed();
 $total_caisse = $consult->loadRefsActesCaisse();
 $soustotal_base = array("tarmed" => $total_tarmed["base"], "caisse" => $total_caisse["base"]);
 $soustotal_dh   = array("tarmed" => $total_tarmed["dh"], "caisse" => $total_caisse["dh"]);
-$total["tarmed"] = round($total_tarmed["base"]+$total_tarmed["dh"],2);
-$total["caisse"] = round($total_caisse["base"]+$total_caisse["dh"],2);
+$total["tarmed"] = round($total_tarmed["base"]+$total_tarmed["dh"], 2);
+$total["caisse"] = round($total_caisse["base"]+$total_caisse["dh"], 2);
 
 if (CModule::getActive("maternite")) {
   $consult->loadRefGrossesse();
@@ -381,6 +378,7 @@ else {
     $where["function_id"] = "IS NOT NULL";
     
     $affectation = new CAffectation();
+    /** @var CAffectation[] $blocages_lit */
     $blocages_lit = $affectation->loadList($where);
     
     $where["function_id"] = "IS NULL";
@@ -390,9 +388,11 @@ else {
       $where["lit_id"] = "= '$blocage->lit_id'";
       
       if ($affectation->loadObject($where)) {
-        $affectation->loadRefSejour();
-        $affectation->_ref_sejour->loadRefPatient();
-        $blocage->_ref_lit->_view .= " indisponible jusqu'à ".CMbDT::transform($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
+        $sejour = $affectation->loadRefSejour();
+        $patient = $sejour->loadRefPatient();
+        $blocage->_ref_lit->_view .= " indisponible jusqu'à " .
+          CMbDT::transform($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y") .
+          " ($patient->_view)";
       }
     }
     $smarty->assign("blocages_lit" , $blocages_lit);

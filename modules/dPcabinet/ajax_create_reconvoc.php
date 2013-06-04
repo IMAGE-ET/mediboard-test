@@ -1,11 +1,15 @@
-<?php /* $Id: */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision:$
-* @author SARL Openxtrem
-*/
+ * $Id: $
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: $
+ */
+
+CCanDo::checkRead();
 
 $group = CGroups::loadCurrent();
 $cabinet_id = $group->service_urgences_id;
@@ -23,5 +27,3 @@ $smarty = new CSmartyDP;
 $smarty->assign("praticiens", $praticiens);
 $smarty->assign("consult"   , $consult);
 $smarty->display("inc_create_reconvoc.tpl");
-
-?>

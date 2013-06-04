@@ -68,27 +68,49 @@ class CFacture extends CMbObject {
   public $_montant_retrocession;
       
   // Object References
+  /** @var CCorrespondantPatient */
   public $_ref_assurance_accident;
+  /** @var CCorrespondantPatient */
   public $_ref_assurance_maladie;
+  /** @var CMediusers */
   public $_ref_chir;
-  public $_ref_consults;
+  /** @var CConsultation */
   public $_ref_last_consult;
+  /** @var CConsultation */
   public $_ref_first_consult;
-  public $_ref_items;
+  /** @var CPatient */
   public $_ref_patient;
+  /** @var CMediusers */
   public $_ref_praticien;
-  public $_ref_reglements;
-  public $_ref_reglements_patient;
-  public $_ref_reglements_tiers;
-  public $_ref_sejours;
+  /** @var CSejour */
   public $_ref_first_sejour;
+  /** @var CSejour */
   public $_ref_last_sejour;
-  public $_ref_relances;
+  /** @var CRelance */
   public $_ref_last_relance;
-  
+
+  // Object Collections
+  /** @var CConsultation[] */
+  public $_ref_consults;
+  /** @var CFactureItem */
+  public $_ref_items;
+  /** @var CReglement[] */
+  public $_ref_reglements;
+  /** @var CReglement[] */
+  public $_ref_reglements_patient;
+  /** @var CReglement[] */
+  public $_ref_reglements_tiers;
+  /** @var CSejour[] */
+  public $_ref_sejours;
+  /** @var CRelance[] */
+  public $_ref_relances;
+  /** @var CActeTarmed[] */
   public $_ref_actes_tarmed = array();
+  /** @var CActeCaisse[] */
   public $_ref_actes_caisse = array();
+  /** @var CActeNGAP[] */
   public $_ref_actes_ngap   = array();
+  /** @var CActeCCAM[] */
   public $_ref_actes_ccam   = array();
   
   /**

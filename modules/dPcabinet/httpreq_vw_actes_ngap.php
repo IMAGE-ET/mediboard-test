@@ -1,17 +1,20 @@
-<?php 
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPcabinet
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+CCanDo::checkRead();
 $object_id    = CValue::getOrSession("object_id");
 $object_class = CValue::getOrSession("object_class");
 
 // Chargement de la consultation
+/** @var CCodable $object */
 $object = new $object_class;
 $object->load($object_id);
 $object->loadRefsActesNGAP();

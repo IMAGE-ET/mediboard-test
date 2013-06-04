@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkEdit();
 
@@ -23,7 +25,6 @@ if (CAppUI::pref("pratOnlyForConsult", 1)) {
 else {
   $listChir = $userSel->loadProfessionnelDeSante(PERM_EDIT);
 }
-
 
 if (!$userSel->isMedical()) {
   CAppUI::setMsg("Vous devez selectionner un professionnel de santé", UI_MSG_ALERT);

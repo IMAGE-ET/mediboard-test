@@ -1,11 +1,12 @@
-<?php /* $Id: rpu.class.php 6716 2009-07-28 06:53:12Z mytto $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPurgences
- * @version $Revision: 6716 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id: $
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: $
  */
 
 CCanDo::checkRead();

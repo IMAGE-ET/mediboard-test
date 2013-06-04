@@ -3,9 +3,9 @@
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPcabinet
+ * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -30,6 +30,7 @@ else {
   $where = array();
   $where["praticien_id"] = " = '$prat_id'";
   $where[]  = "cloture  <= '$date_max' AND cloture >= '$date_min'";
+  /** @var CFactureCabinet[] $factures */
   $factures = $facture->loadList($where, "facture_id DESC", null, "patient_id");
 }
 
@@ -48,10 +49,12 @@ if ($edition_bvr) {
       foreach ($consult->_ref_actes_tarmed as $acte) {
         if ($acte->_ref_tarmed->tp_al == 0.00 && $acte->_ref_tarmed->tp_tl == 0.00) {
           if ($acte->code_ref && (preg_match("Réduction", $acte->libelle) || preg_match("Majoration", $acte->libelle))) {
+            /** @var CActeTarmed $acte_ref */
             $acte_ref = null;
             foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
               if ($acte_tarmed->code == $acte->code_ref) {
-                $acte_ref = $acte_tarmed;break;
+                $acte_ref = $acte_tarmed;
+                break;
               }
             }
             $acte_ref->loadRefTarmed();
@@ -62,7 +65,8 @@ if ($edition_bvr) {
             $acte->_ref_tarmed->tp_al = $acte->montant_base;
           }
         }
-        $somme = ($acte->_ref_tarmed->tp_tl * $acte->_ref_tarmed->f_tl + $acte->_ref_tarmed->tp_al * $acte->_ref_tarmed->f_al)  * $acte->quantite;
+        $somme = $acte->_ref_tarmed->tp_tl * $acte->_ref_tarmed->f_tl + $acte->_ref_tarmed->tp_al * $acte->_ref_tarmed->f_al;
+        $somme *= $acte->quantite;
         if ($acte->montant_base != $somme) {
           $pm += $acte->montant_base;
         }
@@ -123,7 +127,7 @@ if ($edition_bvr) {
         if (stristr($function_prat->adresse, "\r\n")) {
           $adresse_part1 = stristr($function_prat->adresse, "\r\n", true);
           $adresse_part2 = stristr($function_prat->adresse, "\r\n");
-          $adresse_part2 = str_replace("\r\n",'',$adresse_part2);
+          $adresse_part2 = str_replace("\r\n", '', $adresse_part2);
         }
         else {
           $adresse_part1 = substr($function_prat->adresse, 0, 30);
@@ -169,33 +173,33 @@ if ($edition_bvr) {
           "cp"=> $facture->_ref_patient->cp." ".$facture->_ref_patient->ville,
         );
          
-//        if ($facture->cession_creance || $facture->type_facture == "accident") {
-          $correspondant = new CCorrespondantPatient();
-          
-          if ($facture->assurance_maladie && $cle_facture == 0 && !$facture->send_assur_base) {
-            $correspondant->load($facture->assurance_maladie);
+        // if ($facture->cession_creance || $facture->type_facture == "accident") {
+        $correspondant = new CCorrespondantPatient();
+
+        if ($facture->assurance_maladie && $cle_facture == 0 && !$facture->send_assur_base) {
+          $correspondant->load($facture->assurance_maladie);
+        }
+        elseif ($facture->assurance_accident && $cle_facture == 1 && !$facture->send_assur_compl) {
+          $correspondant->load($facture->assurance_accident);
+        }
+
+        if ($correspondant->_id) {
+          if (strlen($correspondant->cp)>4) {
+            $correspondant->cp = substr($correspondant->cp, 1);
           }
-          elseif ($facture->assurance_accident && $cle_facture == 1 && !$facture->send_assur_compl) {
-            $correspondant->load($facture->assurance_accident);
+          $destinataire["nom"] = $correspondant->nom." ".$correspondant->prenom;
+          if (stristr($correspondant->adresse, "\r\n")) {
+            $destinataire["adresse1"] = stristr($correspondant->adresse, "\r\n", true);
+            $destinataire["adresse2"] = stristr($correspondant->adresse, "\r\n");
+            $destinataire["adresse2"] = str_replace("\r\n", '', $destinataire["adresse2"]);
           }
-          
-          if ($correspondant->_id) {
-            if (strlen($correspondant->cp)>4) {
-              $correspondant->cp = substr($correspondant->cp, 1);
-            }
-            $destinataire["nom"] = $correspondant->nom." ".$correspondant->prenom;
-            if (stristr($correspondant->adresse, "\r\n")) {
-              $destinataire["adresse1"] = stristr($correspondant->adresse, "\r\n", true);
-              $destinataire["adresse2"] = stristr($correspondant->adresse, "\r\n");
-              $destinataire["adresse2"] = str_replace("\r\n",'',$destinataire["adresse2"]);
-            }
-            else {
-              $destinataire["adresse1"] = $correspondant->adresse;
-              $destinataire["adresse2"] = "";
-            }
-            $destinataire["cp"] =  $correspondant->cp." ".$correspondant->ville;
+          else {
+            $destinataire["adresse1"] = $correspondant->adresse;
+            $destinataire["adresse2"] = "";
           }
-//        }
+          $destinataire["cp"] =  $correspondant->cp." ".$correspondant->ville;
+        }
+        // }
         
         // E + F : Destinataire de la facture
         $patient = array(
@@ -213,23 +217,23 @@ if ($edition_bvr) {
         );
         
         $tab[$colonne2] = $patient;
-        $pdf->SetTextColor(80,80,80);
+        $pdf->SetTextColor(80, 80, 80);
         if ($facture->_reglements_total_patient) {
           $pdf->setFont($font, '', 25);
-          $pdf->setXY(100,20);
+          $pdf->setXY(100, 20);
           $pdf->Write("", "DUPLICATA");
         }
         if ($facture->type_facture == "accident") {
           $pdf->setFont($font, '', 15);
-          $pdf->setXY(80,40);
+          $pdf->setXY(80, 40);
           $pdf->Write("", "Accident");
         }
         if ($facture->cession_creance) {
           $pdf->setFont($font, '', 15);
-          $pdf->setXY(80,30);
+          $pdf->setXY(80, 30);
           $pdf->Write("", "Cession de créance");
         }
-        $pdf->SetTextColor(0,0,0);
+        $pdf->SetTextColor(0, 0, 0);
         $pdf->setFont($font, '', 8);
 
         // Ecriture de C, D, E, F
@@ -323,9 +327,9 @@ if ($edition_bvr) {
         $genre = "01";
         $montant = sprintf('%010d', $montant_facture*100);
         $cle = $facture->getNoControle($genre.$montant);
-        $adherent2 = str_replace(' ','',$praticien->adherent);
-        $adherent2 = str_replace('-','',$adherent2);
-        $_num_reference = str_replace(' ','',$facture->num_reference);
+        $adherent2 = str_replace(' ', '', $praticien->adherent);
+        $adherent2 = str_replace('-', '', $adherent2);
+        $_num_reference = str_replace(' ', '', $facture->num_reference);
         $bvr = $genre.$montant.$cle.">".$_num_reference."+ ".$adherent2.">";
           
         // Dimensions du bvr
@@ -368,10 +372,14 @@ if ($edition_bvr) {
           //$pdf->Text($l_colonne + $decalage, $h_ligne*11.5+$haut_doc , "CHF");
             
           $pdf->setFont($font, '', 10);
-          $pdf->Text($l_colonne*(17-strlen($montant_facture*100)) + $decalage, $h_ligne*13+$haut_doc , sprintf("%d", $montant_facture));
+          $pdf->Text(
+            $l_colonne*(17-strlen($montant_facture*100)) + $decalage,
+            $h_ligne*13+$haut_doc,
+            sprintf("%d", $montant_facture)
+          );
           
           $cents = floor(sprintf("%.2f", $montant_facture - sprintf("%d", $montant_facture))*100);
-          if ($cents<10) {      
+          if ($cents < 10) {
             $cents = "0".$cents;
           }
           $pdf->Text($l_colonne*19 + $decalage, $h_ligne*13+$haut_doc , $cents);
@@ -422,4 +430,3 @@ if ($edition_bvr) {
 if ($edition_justificatif) {
   include "ajax_edit_justificatif.php" ;
 }
-?>

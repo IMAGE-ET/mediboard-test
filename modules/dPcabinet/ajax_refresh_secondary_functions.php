@@ -1,13 +1,15 @@
 <?php
 /**
- * $Id$
+ * $Id: $
  *
  * @package    Mediboard
- * @subpackage dPcabinet
+ * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision: $
  */
+
+CCanDo::checkRead();
 
 $chir_id       = CValue::get("chir_id");
 $field_name    = CValue::get("field_name", "_secondary_function_id");
@@ -19,6 +21,7 @@ $chir = new CMediusers();
 $chir->load($chir_id);
 $chir->loadRefFunction()->loadRefGroup();
 
+/** @var CSecondaryFunction[] $_functions */
 $_functions = $chir->loadBackRefs("secondary_functions");
 
 CMbObject::massLoadFwdRef(CMbArray::pluck($_functions, "_ref_function"), "group_id");

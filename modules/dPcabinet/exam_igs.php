@@ -1,11 +1,15 @@
 <?php
-
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Alexis Granger
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
+
+CCanDo::checkRead();
 
 $sejour_id = CValue::get("sejour_id"); 
 $exam_igs_id = CValue::get("exam_igs_id");
