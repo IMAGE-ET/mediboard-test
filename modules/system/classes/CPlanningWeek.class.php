@@ -103,6 +103,7 @@ class CPlanningWeek{
       for ($i = 0 ; $i < $this->nb_days ; $i++) {
         $this->days[$i] = array();
         $this->load_data[$i] = array();
+        $this->_nb_collisions_ranges_sorted[$i] = 0;
       }
     }
     else {
@@ -129,6 +130,7 @@ class CPlanningWeek{
         $_day = CMbDT::date("+$i day", $monday);
         $this->days[$_day] = array();
         $this->load_data[$_day] = array();
+        $this->_nb_collisions_ranges_sorted[$_day] = 0;
       }
       
       $this->_date_min_planning = reset(array_keys($this->days));

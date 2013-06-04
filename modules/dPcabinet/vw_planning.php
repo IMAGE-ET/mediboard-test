@@ -38,6 +38,7 @@ $is_in_period = ($today >= $debut) && ($today <= $fin);
 $prec = CMbDT::date("-1 week", $debut);
 $suiv = CMbDT::date("+1 week", $debut);
 
+
 // Plage de consultation selectionnée
 $plageconsult_id = CValue::getOrSession("plageconsult_id", null);
 $plageSel = new CPlageconsult();
@@ -92,9 +93,17 @@ $dateArr = CMbDT::date("+6 day", $debut);
 
 $plage = new CPlageconsult();
 
+//where interv/hp
+$whereInterv = array();
+$whereHP = array();
 $where = array();
+
 $where["date"] = "= '$dateArr'";
 $where["chir_id"] = " = '$chirSel'";
+$whereInterv["chir_id"] = $whereHP["chir_id"] =  " = '$chirSel'";
+$whereInterv["date"] = $whereHP["date"] = "= '$dateArr'";
+
+
 
 if (!$plage->countList($where)) {
   $nbjours--;
@@ -131,7 +140,46 @@ $where[] = "chir_id = '$chirSel' OR remplacant_id = '$chirSel' OR pour_compte_id
 
 for ($i = 0; $i < 7; $i++) {
   $jour = CMbDT::date("+$i day", $debut);
+  $whereInterv["date"] = $whereHP["date"] = "= '$jour'";
   $where["date"] = "= '$jour'";
+
+  if (CAppUI::pref("showIntervPlanning")) {
+    //INTERVENTIONS
+    /** @var CPlageOp[] $intervs */
+    $interv = new CPlageOp();
+    $intervs = $interv->loadList($whereInterv);
+    CMbObject::massLoadFwdRef($intervs, "chir_id");
+    foreach ($intervs as $_interv) {
+      $range = new CPlanningRange(
+        $_interv->_guid,
+        $jour." ".$_interv->debut, CMbDT::minutesRelative($_interv->debut, $_interv->fin),
+        CAppUI::tr($_interv->_class),
+        "bbccee",
+        "plageop"
+      );
+      $planning->addRange($range);
+    }
+
+    //HORS PLAGE
+    $horsPlage = new COperation();
+    /** @var COperation[] $horsPlages */
+    $horsPlages = $horsPlage->loadList($whereHP);
+    CMbObject::massLoadFwdRef($horsPlages, "chir_id");
+    foreach ($horsPlages as $_horsplage) {
+      $lenght = (CMBDT::minutesRelative("00:00:00", $_horsplage->temp_operation));
+      $op = new CPlanningRange(
+        $_horsplage->_guid,
+        $jour." ".$_horsplage->time_operation,
+        $lenght,
+        $_horsplage,
+        "3c75ea",
+        "horsplage"
+      );
+      $planning->addRange($op);
+    }
+  }
+
+
   foreach ($plage->loadList($where, "date, debut") as $_plage) {
     $_plage->loadRefsBack();
     $_plage->countPatients();
