@@ -5,6 +5,7 @@
       ({{mb_label object=$reglement field=banque_id}})
     </th>
     <th class="category">{{mb_label object=$reglement field=reference}}</th>
+    <th class="category">{{mb_label object=$reglement field=tireur}}</th>
     <th class="category narrow">{{mb_label object=$reglement field=montant}}</th>
     <th class="category narrow">{{mb_label object=$reglement field=date}}</th>
   </tr>
@@ -18,8 +19,9 @@
         ({{$_reglement->_ref_banque}})
       {{/if}}
     </td>
-    <td> {{mb_value object=$_reglement field=reference}} </td>
-    <td> 
+    <td>{{mb_value object=$_reglement field=reference}}</td>
+    <td>{{mb_value object=$_reglement field=tireur}}</td>
+    <td>
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_reglement->_guid}}');">
         {{mb_value object=$_reglement field=montant}}
       </span> 

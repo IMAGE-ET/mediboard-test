@@ -1923,12 +1923,16 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `facture_cabinet`
                 ADD `annule` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
-
     $this->makeRevision("2.06");
+
     $query = "ALTER TABLE `plageconsult`
       ADD `pour_tiers` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
+    $this->makeRevision("2.07");
 
-    $this->mod_version = "2.07";
+    $query = "ALTER TABLE `reglement`
+                ADD `tireur` VARCHAR (255);";
+    $this->addQuery($query);
+    $this->mod_version = "2.08";
   }
 }

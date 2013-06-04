@@ -40,7 +40,13 @@
   
   {{foreach from=$reglements item=_reglement}}
   <tr>
-    <td colspan="2">{{$_reglement->_ref_object->_ref_patient}}</td>
+    <td colspan="2">
+      {{if $_reglement->tireur}}
+        {{$_reglement->tireur}}
+      {{else}}
+        {{$_reglement->_ref_object->_ref_patient}}
+      {{/if}}
+    </td>
     <td colspan="2">{{$_reglement->reference}}</td>
     <td colspan="3">{{$_reglement->_ref_banque}}</td>
     <td style="text-align: right;">{{mb_value object=$_reglement field=montant}}</td>

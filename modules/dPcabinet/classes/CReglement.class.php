@@ -29,6 +29,7 @@ class CReglement extends CMbMetaObject {
   public $object_id;
   public $reference;
   public $num_bvr;
+  public $tireur;
 
   // Behaviour fields
   public $_update_facture = true;
@@ -63,6 +64,7 @@ class CReglement extends CMbMetaObject {
     $props['mode']            = 'enum notNull list|cheque|CB|especes|virement|BVR|autre default|cheque';
     $props['reference']       = 'str';
     $props['num_bvr']         = 'str';
+    $props['tireur']          = 'str';
     return $props;
   }
   
@@ -92,14 +94,9 @@ class CReglement extends CMbMetaObject {
       return $msg;
     }
     
-    $this->completeField("montant", "mode");
-    
+    $this->completeField("montant");
     if (!$this->montant) {
       return 'Le montant du règlement ne doit pas être nul';
-    }
-    
-    if (!$this->mode) {
-      return 'Le mode de paiment ne doit pas être nul';
     }
 
     $this->loadRefsFwd();
@@ -126,10 +123,8 @@ class CReglement extends CMbMetaObject {
    * @return string|null
    */
   function acquiteFacture() {
-    $this->loadRefsFwd();
-    /** @var CFacture $facture */
-    $facture = $this->_ref_object;
-    $facture->loadRefsObjects();
+    $this->loadRefBanque();
+    $facture = $this->loadRefFacture();
     $facture->loadRefsReglements();
     
     // Acquitement patient

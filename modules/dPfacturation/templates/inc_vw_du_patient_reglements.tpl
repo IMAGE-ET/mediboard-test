@@ -137,6 +137,7 @@
         ({{mb_label object=$reglement field=banque_id}})
       </th>
       <th class="category">{{mb_label object=$reglement field=reference}}</th>
+      <th class="category">{{mb_label object=$reglement field=tireur}}</th>
       <th class="category narrow">{{mb_label object=$reglement field=montant}}</th>
       <th class="category narrow">{{mb_label object=$reglement field=date}}</th>
       <th class="category narrow"></th>
@@ -152,9 +153,8 @@
         {{/if}}
         {{if $_reglement->num_bvr}}( {{$_reglement->num_bvr}} ){{/if}}
       </td>
-      <td>
-        {{mb_value object=$_reglement field=reference}}
-      </td>
+      <td>{{mb_value object=$_reglement field=reference}}</td>
+      <td>{{mb_value object=$_reglement field=tireur}}</td>
       <td style="text-align: right;">
         {{mb_value object=$_reglement field=montant}}
       </td>
@@ -186,9 +186,8 @@
             </select>
           {{/if}}
         </td>
-        <td>
-          {{mb_field object=$reglement field=reference style="display: none"}}
-        </td>
+        <td>{{mb_field object=$reglement field=reference style="display: none"}}</td>
+        <td>{{mb_field object=$reglement field=tireur}}</td>
         <td><input type="text" class="currency notNull" size="4" maxlength="8" name="montant" value="{{$object->_du_restant_patient}}" /></td>
         <td>{{mb_field object=$reglement field=date register=true form="reglement-add" value="now"}}</td>
         <td>
@@ -197,13 +196,13 @@
       </tr>
     {{/if}}
     <tr>
-      <td colspan="5" style="text-align: center;">
+      <td colspan="6" style="text-align: center;">
         {{mb_value object=$object field=_reglements_total_patient}} réglés, 
         <strong>{{mb_value object=$object field=_du_restant_patient}} restant</strong>
       </td>
     </tr>
     <tr>
-      <td colspan="5" style="text-align: center;">
+      <td colspan="6" style="text-align: center;">
         <strong>
           {{mb_label object=$object field=patient_date_reglement}}
           <input type="hidden" name="patient_date_reglement" class="date" value="{{$object->patient_date_reglement}}" />
