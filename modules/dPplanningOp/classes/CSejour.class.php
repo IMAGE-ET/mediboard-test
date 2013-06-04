@@ -2974,8 +2974,10 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->loadRefPraticien();
     $this->loadNDA();
     $this->loadNRA();
-    $affectation = $this->getCurrAffectation();
+    $now = CMbDT::dateTime();
+    $affectation = $this->getCurrAffectation($this->entree < $now ? $this->entree : null);
     $affectation->loadView();
+
     $fields = array_merge($fields,
                 array("DATE ENT"         => CMbDT::dateToLocale(CMbDT::date($this->entree)),
                       "HEURE ENT"        => CMbDT::transform($this->entree, null, "%H:%M"),

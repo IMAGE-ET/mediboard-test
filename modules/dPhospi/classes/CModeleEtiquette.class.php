@@ -267,7 +267,7 @@ class CModeleEtiquette extends CMbMetaObject {
               $pdf->setX($save_x);
               $barcode = $matches[1];
               $pdf->setFont("C39HrP24DhTt", '', 30);
-              $pdf->WriteHTML("*47013*", false);
+              $pdf->WriteHTML("*$barcode*", false);
               $pdf->setFont($this->font, '', $this->hauteur_ligne);
               break;
             default:
