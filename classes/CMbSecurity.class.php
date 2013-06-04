@@ -3,10 +3,10 @@
 /**
  * $Id$
  *  
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @link     http://www.mediboard.org */
+ * @package Mediboard
+ * @author  SARL OpenXtrem <dev@openxtrem.com>
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @link    http://www.mediboard.org */
 
 CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/Random");
 CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/AES");
@@ -110,5 +110,30 @@ class CMbSecurity {
     }
 
     return null;
+  }
+
+  /**
+   * Filtering input data
+   *
+   * @param string $params Array to filter
+   *
+   * @return array
+   */
+  static function filterInput($params) {
+    if (!is_array($params)) {
+      return $params;
+    }
+
+    // We replace passwords and passphrases with a mask
+    $mask    = "***";
+    $pattern = "/password|passphrase/i";
+
+    foreach ($params as $_key => $_value) {
+      if (!empty($_value) && preg_match($pattern, $_key)) {
+        $params[$_key] = $mask;
+      }
+    }
+
+    return $params;
   }
 }
