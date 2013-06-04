@@ -84,7 +84,7 @@ else {
 
 if (count($wheres)) {
   $keys = array();
-  foreach($wheres as $_i => $_where) {
+  foreach ($wheres as $_i => $_where) {
     $where[0] = $_where;
     
     // Pour ne pas afficher les prescriptions en double (== group by prescription_id)
@@ -93,7 +93,7 @@ if (count($wheres)) {
     }
       
     $ljoin[$leftjoins[$_i][0]] = $leftjoins[$_i][1];
-    $_prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
+    $_prescriptions = $prescription->loadList($where, null, null, "prescription_id", $ljoin);
     
     $keys = array_merge($keys, array_keys($_prescriptions));
     $prescriptions = array_merge($prescriptions, $_prescriptions);
@@ -110,15 +110,15 @@ else {
   $prescriptions = $prescription->loadList($where, "patients.nom", null, "prescription_id", $ljoin);
 }
 
-if($type_prescription == "sortie_manquante"){
-  foreach($prescriptions as $_prescription){
+if ($type_prescription == "sortie_manquante") {
+  foreach ($prescriptions as $_prescription) {
     // Recherche d'une prescription de sortie correspondant à la prescription de sejour
     $_prescription_sortie = new CPrescription();
     $_prescription_sortie->type = "sortie";
     $_prescription_sortie->object_id = $_prescription->object_id;
     $_prescription_sortie->object_class = $_prescription->object_class;
     $_prescription_sortie->loadMatchingObject();
-    if($_prescription_sortie->_id){
+    if ($_prescription_sortie->_id) {
       unset($prescriptions[$_prescription->_id]);
     }
   }
@@ -128,11 +128,11 @@ $sejour = new CSejour();
 $sejour->_date_min = $date_min;
 $sejour->_date_max = $date_max;
 
-if(!$praticien_id && $user->isPraticien()){
+if (!$praticien_id && $user->isPraticien()) {
   $praticien_id = $user->_id;
 }
 
-foreach($prescriptions as $_prescription){
+foreach ($prescriptions as $_prescription) {
   $_prescription->loadRefPatient();
   
   $patient = $_prescription->_ref_patient;  
@@ -153,7 +153,7 @@ foreach($prescriptions as $_prescription){
   $patient->loadRefDossierMedical();
   $dossier_medical = $patient->_ref_dossier_medical;
   
-  if($dossier_medical->_id){
+  if ($dossier_medical->_id) {
     $dossier_medical->loadRefsAllergies();
     $dossier_medical->loadRefsAntecedents();
     $dossier_medical->countAntecedents();
@@ -168,5 +168,3 @@ $smarty->assign("board"        , $board);
 $smarty->assign("date", $date_min);
 $smarty->assign("default_tab", "prescription_sejour");
 $smarty->display('inc_vw_bilan_list_prescriptions.tpl');
-
-?>
