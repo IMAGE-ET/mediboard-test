@@ -1107,22 +1107,15 @@ class CConsultation extends CFacturable {
     }
 
     if (CModule::getActive("dPfacturation")) {
-      $where = array();
-      $where["object_id"]     = "= '$this->_id'";
-      $where["object_class"]  = "= '$this->_class'";
-      $where["facture_class"] = "= 'CFactureCabinet'";
       $liaison = new CFactureLiaison();
-      if ($liaison->loadObject($where)) {
+      $liaison->setObject($this);
+      $liaison->facture_class = "CFactureCabinet";
+      if ($liaison->loadMatchingObject()) {
         return $this->_ref_facture = $liaison->loadRefFacture();
       }
     }
     if (!$this->_ref_facture) {
-      if ($this->facture_id) {
-        return $this->_ref_facture = $this->loadFwdRef("facture_id", true);
-      }
-      else {
-        return $this->_ref_facture = new CFactureCabinet();
-      }
+      return $this->_ref_facture = $this->loadFwdRef("facture_id", true);
     }
 
     return $this->_ref_facture;
@@ -1166,6 +1159,7 @@ class CConsultation extends CFacturable {
       return $this->_ref_plageconsult;
     }
 
+    $this->completeField("plageconsult_id");
     /** @var CPlageConsult $plage */
     $plage = $this->loadFwdRef("plageconsult_id", $cache);
     $plage->loadRefsFwd($cache);
