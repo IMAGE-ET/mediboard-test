@@ -12,8 +12,8 @@ then
   echo " <binlog-index_filename> is the name of the binlog-index file, ie log-bin.index"
   echo " <backup_directory> is the name of the directory where binlogs will be stored, ie /mbbackup/binlogs"
   echo " Options :"
-  echo "   [-c <passphrase>] is the passphrase to encrpyt the archive
-  echo "   [-e <cryptage>]   is the cryptage method to use
+  echo "   [-c <passphrase>] is the passphrase to encrpyt the archive"
+  echo "   [-e <cryptage>]   is the cryptage method to use"
   exit 1
 fi
 
