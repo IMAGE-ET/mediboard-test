@@ -209,7 +209,7 @@ class CFunctions extends CMbObject {
       "functions_mediboard.type" => "= 'cabinet'",
       "functions_mediboard.group_id" => "= '$group_id'"
     );
-    $ljoin = array();
+    $ljoin   = array();
     if (!$include_empty) {
       // Fonctions secondaires actives
       $sec_function = new CSecondaryFunction();
@@ -228,7 +228,7 @@ class CFunctions extends CMbObject {
       $where[] = "users_mediboard.user_id IS NOT NULL OR functions_mediboard.function_id $in_functions";
     }
 
-    return $this->loadListWithPerms($perm_type, $where, "text", null, null, $ljoin);
+    return $this->loadListWithPerms($perm_type, $where, "text", null, "function_id", $ljoin);
   }
 
   function fillTemplate(&$template) {
