@@ -13,7 +13,8 @@
 
 CAppUI::requireLibraryFile("yampee-redis/autoloader", false);
 
-if (!class_exists("Yampee_Redis_Client", false)) {
+// The autoloader must be triggered, so the second argument must be true
+if (!class_exists("Yampee_Redis_Client", true)) {
   return;
 }
 

@@ -26,7 +26,7 @@ $colors = array(
 // Remove session lock
 session_write_close();
 
-$mutex = new CMbMutex("test", $colors[$i]);
+$mutex = new CMbMutex("test", isset($colors[$i]) ? $colors[$i] : null);
 $time = $mutex->acquire($duration);
 
 sleep($sleep);
@@ -39,6 +39,6 @@ $data = array(
   "time"   => $time,
 );
 
+ob_clean();
 echo json_encode($data);
-
 CApp::rip();
