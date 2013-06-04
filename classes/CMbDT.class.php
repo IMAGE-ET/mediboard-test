@@ -53,6 +53,18 @@ class CMbDT {
   }
 
   /**
+   * Shortcut to transform when no relative operand is given
+   *
+   * @param string $ref    An absolute time to transform
+   * @param string $format The format in which the date will be returned
+   *
+   * @return string The transformed date
+   */
+  static function format($ref, $format) {
+    return self::transform(null, $ref, $format);
+  }
+
+  /**
    * Transforms absolute or relative date into DB friendly DATETIME format
    *
    * @param string $relative [optional] Modifies the date (eg '+1 DAY')
