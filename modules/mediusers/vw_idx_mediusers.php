@@ -105,7 +105,7 @@ if ($order_col == "user_last_login") {
 
 $total_mediuser = $mediuser->countList($where, null, $ljoin);
 /** @var CMediusers[] $mediusers */
-$mediusers = $mediuser->loadList($where, $order, "$page, $step", null, $ljoin);
+$mediusers = $mediuser->loadList($where, $order, "$page, $step", "users_mediboard.user_id", $ljoin);
 foreach ($mediusers as $_mediuser) {
   $_mediuser->loadRefFunction();
   $_mediuser->loadRefProfile();
