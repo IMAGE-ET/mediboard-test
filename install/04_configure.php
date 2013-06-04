@@ -24,9 +24,18 @@ if (isset($_POST["password"])) {
 }
 
 $mutex_drivers = array(
-  "CMbRedisMutex" => "Redis (Serveur local)" ,
-  "CMbAPCMutex"   => "APC",
-  "CMbFileMutex"  => "Fichier",
+  "CMbRedisMutex" => array(
+    "title"  => "Redis",
+    "params" => "Serveurs Redis, séparés par des virgules",
+  ),
+  "CMbAPCMutex"   => array(
+    "title"  => "APC",
+    "params" => null,
+  ),
+  "CMbFileMutex"  => array(
+    "title" => "Fichier",
+    "params" => null,//"Dossier contenant les verrous (par défaut ./tmp)"
+  ),
 );
 
 $mbConfig = new CMbConfig;
@@ -218,14 +227,14 @@ showHeader();
     <legend>Drivers de mutex</legend>
 
     <table class="form">
-      <col style="width: 25%" />
+      <col style="width: 15%" />
 
-      <?php foreach ($mutex_drivers as $_driver_class => $_title) { ?>
+      <?php foreach ($mutex_drivers as $_driver_class => $_values) { ?>
         <tr>
           <th class="narrow">
-            <?php echo $_title; ?>
+            <?php echo $_values["title"]; ?>
           </th>
-          <td>
+          <td class="narrow">
             <label>
               <input type="radio" name="mutex_drivers[<?php echo $_driver_class; ?>]" value="1"
                 <?php if (!empty($dPconfig['mutex_drivers'][$_driver_class])) echo 'checked'; ?> />
@@ -237,6 +246,18 @@ showHeader();
                 <?php if (empty($dPconfig['mutex_drivers'][$_driver_class])) echo 'checked'; ?> />
               Non
             </label>
+          </td>
+          <th>
+            <label for="mutex_drivers_params[<?php echo $_driver_class; ?>]">
+              <?php echo $_values["params"]; ?>
+            </label>
+          </th>
+          <td>
+            <?php if ($_values["params"]) { ?>
+              <input type="text" name="mutex_drivers_params[<?php echo $_driver_class; ?>]" size="70"
+                     id="mutex_drivers_params[<?php echo $_driver_class; ?>]"
+                     value="<?php echo $dPconfig["mutex_drivers_params"][$_driver_class]; ?>" />
+            <?php } ?>
           </td>
         </tr>
       <?php } ?>

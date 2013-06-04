@@ -41,7 +41,13 @@ $dPconfig["shared_memory"]        = "none";
 $dPconfig["shared_memory_params"] = "";
 $dPconfig["session_handler"]      = "files";
 $dPconfig["mutex_drivers"]       = array(
-  "CMbFileMutex" => "1",
+  "CMbRedisMutex" => "0",
+  "CMbAPCMutex"   => "0",
+  "CMbFileMutex"  => "1",
+);
+$dPconfig["mutex_drivers_params"] = array(
+  "CMbRedisMutex" => "127.0.0.1:6379", // List of Redis servers
+  "CMbFileMutex"  => "", // The folder that will contain the lock files
 );
 $dPconfig["log_js_errors"]        = "1";
 $dPconfig["weinre_debug_host"]    = "";

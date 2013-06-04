@@ -22,8 +22,22 @@ class CMbRedisMutex extends CMbMutexDriver {
   function __construct($key, $label = null) {
     parent::__construct($key, $label);
 
-    $client = new CRedisClient("127.0.0.1");
-    $client->connect();
+    $client = null;
+
+    $list = $this->getServerAddresses();
+    foreach ($list as $_server) {
+      try {
+        $client = new CRedisClient($_server[0], $_server[1]);
+        $client->connect();
+      }
+      catch (Exception $e) {
+        $client = null;
+      }
+    }
+
+    if (!$client) {
+      throw new Exception("No Redis server reachable");
+    }
 
     $this->client = $client;
   }
@@ -35,6 +49,24 @@ class CMbRedisMutex extends CMbMutexDriver {
     if ($this->canRelease()) {
       $this->client->remove($this->getLockKey());
     }
+  }
+
+  /**
+   * Get the list of server addresses
+   *
+   * @return array
+   */
+  private function getServerAddresses(){
+    global $dPconfig;
+
+    $conf = trim($dPconfig["mutex_drivers_params"]["CMbRedisMutex"]);
+
+    $servers = preg_split("/\s*,\s*/", $conf);
+    $list = array();
+    foreach ($servers as $_server) {
+      $list[] = explode(":", $_server);
+    }
+    return $list;
   }
 
   /**
