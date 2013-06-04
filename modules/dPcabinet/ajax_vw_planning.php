@@ -85,6 +85,16 @@ for ($i = 0; $i < $nbDays; $i++) {
   $where["date"] = $whereInterv["date"] = $whereHP["date"] = "= '$jour'";
 
   if (CAppUI::pref("showIntervPlanning")) {
+    //INTERVENTIONS
+    /** @var CPlageOp[] $intervs */
+    $interv = new CPlageOp();
+    $intervs = $interv->loadList($whereInterv);
+    CMbObject::massLoadFwdRef($intervs, "chir_id");
+    foreach ($intervs as $_interv) {
+      $range = new CPlanningRange($_interv->_guid, $jour." ".$_interv->debut, CMbDT::minutesRelative($_interv->debut, $_interv->fin), CAppUI::tr($_interv->_class),"bbccee", "plageop");
+      $planning->addRange($range);
+    }
+
     //HORS PLAGE
     $horsPlage = new COperation();
     /** @var COperation[] $horsPlages */
@@ -96,16 +106,6 @@ for ($i = 0; $i < $nbDays; $i++) {
       $planning->addRange($op);
     }
 
-
-    //INTERVENTIONS
-    /** @var CPlageOp[] $intervs */
-    $interv = new CPlageOp();
-    $intervs = $interv->loadList($whereInterv);
-    CMbObject::massLoadFwdRef($intervs, "chir_id");
-    foreach ($intervs as $_interv) {
-      $range = new CPlanningRange($_interv->_guid, $jour." ".$_interv->debut, CMbDT::minutesRelative($_interv->debut, $_interv->fin), CAppUI::tr($_interv->_class),"bbccee", "plageop");
-      $planning->addRange($range);
-    }
   }
 
   //PLAGES CONSULT
