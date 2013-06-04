@@ -44,6 +44,7 @@ Main.add(function () {
 <input type="hidden" name="chir_id" value="{{$chir_id}}" />
 <input type="hidden" name="function_id" value="{{$function_id}}" />
 <input type="hidden" name="plageconsult_id" value="{{$plage->_id}}" />
+<input type="hidden" name="_line_element_id" value="{{$_line_element_id}}" />
 
 <table class="form">
   <tr>

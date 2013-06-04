@@ -15,6 +15,8 @@ global $period, $periods, $listPraticiens, $chir_id, $function_id, $date, $ndate
 
 $plageconsult_id = 0;
 
+$_line_element_id = CValue::get("_line_element_id");
+
 if (!$chir_id) {
   $chir_id = reset($listPraticiens);
 }
@@ -39,6 +41,10 @@ $where = array();
 $whereInterv["chir_id"] = $whereHP["chir_id"] =  " = '$chir_id'";
 $where[] = "chir_id = '$chir_id' OR remplacant_id = '$chir_id'";
 $where["date"] = $whereInterv["date"] = $whereHP["date"] = "= '$fin'";
+
+if ($_line_element_id) {
+  $where["pour_tiers"] = "= '1'";
+}
 
 if ($plage->countList($where)) {
   $nbDays = 7;
@@ -65,7 +71,7 @@ for ($i = 0; $i < $nbDays; $i++) {
   $where["date"] = $whereInterv["date"] = $whereHP["date"] = "= '$jour'";
 
   if (CAppUI::pref("showIntervPlanning")) {
-    //HORS PLAGE
+    // HORS PLAGE
     $horsPlage = new COperation();
     /** @var COperation[] $horsPlages */
     $horsPlages = $horsPlage->loadList($whereHP);
@@ -77,7 +83,7 @@ for ($i = 0; $i < $nbDays; $i++) {
     }
 
 
-    //INTERVENTIONS
+    // INTERVENTIONS
     /** @var CPlageOp[] $intervs */
     $interv = new CPlageOp();
     $intervs = $interv->loadList($whereInterv);
@@ -93,6 +99,8 @@ for ($i = 0; $i < $nbDays; $i++) {
 
   $plages = $plage->loadList($where);
   CMbObject::massLoadFwdRef($plages, "chir_id");
+  
+  /** @var $_plage CPlageconsult */
   foreach ($plages as $_plage) {
     $_plage->loadRefsFwd(1);
     $_plage->loadRefsConsultations(false);
@@ -117,7 +125,16 @@ for ($i = 0; $i < $nbDays; $i++) {
         if ($color == "cfc") {
           $color = "#fee";
         }
-        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->_ref_patient->_view, $color, true, null, null);
+        $event = new CPlanningEvent(
+          $_consult->_guid,
+          $debute,
+          $_consult->duree * $_plage->_freq,
+          $_consult->_ref_patient->_view,
+          $color,
+          true,
+          null,
+          null
+        );
       }
       else {
         if ($color == "cfc") {
@@ -179,5 +196,6 @@ $smarty->assign("planning"       , $planning);
 $smarty->assign("bank_holidays"  , $bank_holidays);
 $smarty->assign("print"          , $print);
 $smarty->assign("week"           , $week);
+$smarty->assign("_line_element_id", $_line_element_id);
 
 $smarty->display("inc_plage_selector_weekly.tpl");

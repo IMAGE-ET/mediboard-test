@@ -219,6 +219,8 @@ Main.add(function() {
 <input type="hidden" name="_operation_id" value="" />
 {{mb_field object=$consult field=sejour_id hidden=1}}
 <input type="hidden" name="_force_create_sejour" value="0" />
+<input type="hidden" name="_line_element_id" value="{{$line_element_id}}" />
+
 {{if !$dialog}}
   <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;consultation_id=0">
     {{tr}}CConsultation-title-create{{/tr}}
@@ -226,9 +228,15 @@ Main.add(function() {
 {{/if}}
 
 {{if $consult->_id}}
-<a class="button search" href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}" style="float: right;">
-  {{tr}}CConsultation-title-access{{/tr}}
-</a>
+  <a class="button search" href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}" style="float: right;">
+    {{tr}}CConsultation-title-access{{/tr}}
+  </a>
+{{/if}}
+
+{{if !$consult->_id && $line_element_id && !$nb_plages}}
+  <div class="small-warning">
+    Aucune plage de consultation présente pour l'exécutant sélectionné
+  </div>
 {{/if}}
 
 <table class="form">  
@@ -420,6 +428,7 @@ Main.add(function() {
                   this.sChir_id         = "chir_id";
                   this.sFunction_id     = "_function_id";
                   this.sDatePlanning    = "_date_planning";
+                  this.sLineElementId   = "_line_element_id";
                   this.options          = {width: 1200, height: 900};
                   this.modal();
                 }
@@ -543,7 +552,7 @@ Main.add(function() {
               <select name="_function_id" style="width: 15em;" onchange = "if (this.value != '') { $V(this.form.chir_id, ''); $V(this.form._date, '');}">
                 <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                 {{foreach from=$listFunctions item=_function}}
-                <option value="{{$_function->_id}}" class="mediuser" style="border-color: #{{$_function->color}};">
+                <option value="{{$_function->_id}}" class="mediuser" style="border-color: #{{$_function->color}};" {{if !$consult->_id && $_function_id == $_function->_id}}selected{{/if}}>
                   {{$_function->_view}}
                 </option>
                 {{/foreach}}

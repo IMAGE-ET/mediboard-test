@@ -94,6 +94,7 @@ class CConsultation extends CFacturable {
   public $_force_create_sejour;
   public $_rques_consult;
   public $_examen_consult;
+  public $_line_element_id;
 
   // References
   /** @var CMediusers */
@@ -935,6 +936,33 @@ class CConsultation extends CFacturable {
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
+    }
+
+    $this->completeField("_line_element_id");
+
+    // Création d'une tâche si la prise de rdv est issue du plan de soin
+    if ($this->_line_element_id) {
+      $task = new CSejourTask();
+      $task->consult_id = $this->_id;
+      $task->sejour_id = $this->sejour_id;
+      $task->prescription_line_element_id = $this->_line_element_id;
+      $task->description = "Consultation prévue le ".$this->_ref_plageconsult->getFormattedValue("date");
+      if ($msg = $task->store()) {
+        return $msg;
+      }
+    }
+
+    // On note le résultat de la tâche si la consultation est terminée
+    if ($this->chrono == CConsultation::TERMINE) {
+      /** @var $task CSejourTask */
+      $task = $this->loadRefTask();
+      if ($task->_id) {
+        $task->resultat = "Consultation terminée";
+        $task->realise = 1;
+        if ($msg = $task->store()) {
+          return $msg;
+        }
+      }
     }
 
     if (CAppUI::pref("create_dossier_anesth")) {

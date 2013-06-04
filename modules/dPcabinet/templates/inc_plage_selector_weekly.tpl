@@ -35,7 +35,7 @@
         <input type="hidden" name="dialog" value="1" />
         <input type="hidden" name="function_id" value="{{$function_id}}" />
         <input type="hidden" name="plageconsult_id" value="{{$plage->_id}}" />
-    
+        <input type="hidden" name="_line_element_id" value="{{$_line_element_id}}" />
         <table class="form">
           <tr>
             <th><label for="period" title="Changer la période de recherche">Planning</label></th>

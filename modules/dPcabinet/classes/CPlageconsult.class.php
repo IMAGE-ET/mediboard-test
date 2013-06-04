@@ -33,6 +33,7 @@ class CPlageconsult extends CPlageHoraire {
   public $desistee;
   public $color;
   public $pct_retrocession;
+  public $pour_tiers;
 
   // Form fields
   public $_freq;
@@ -95,6 +96,7 @@ class CPlageconsult extends CPlageHoraire {
     $props["desistee"]         = "bool default|0 show|0";
     $props["color"]            = "str length|6 default|DDDDDD";
     $props["pct_retrocession"] = "pct default|70 show|0";
+    $props["pour_tiers"]       = "bool default|0 show|0";
 
     // Form fields
     $props["_freq"]        = "";

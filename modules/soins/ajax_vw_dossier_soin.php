@@ -23,6 +23,7 @@ $unite_prise  = CValue::get("unite_prise");
 $without_check_date = CValue::get("without_check_date", "0");
 $hide_close  = CValue::get("hide_close", 0);
 $with_navigation = CValue::get("with_navigation");
+$regroup_lines = CValue::get("regroup_lines");
 
 if (!$date) {
   $date = CMbDT::date();
@@ -222,7 +223,7 @@ if (CModule::getActive("dPprescription")) {
     // Calcul du dossier de soin complet
     if ($prescription->_id) {
       // Chargement des lignes de medicament
-      if ($chapitre == "all_med") {
+      if (in_array($chapitre, array("all_med", "all_chaps"))) {
         $prescription->loadRefsLinesMedByCat("1", "1");
         foreach ($prescription->_ref_prescription_lines as &$_line_med) {
           $_line_med->loadRefLogSignee();
@@ -248,6 +249,10 @@ if (CModule::getActive("dPprescription")) {
           if (in_array($_prescription_line_mix->jour_decalage, array("ER", "R"))) {
             $_prescription_line_mix->loadRefOperation();
           }
+        }
+        // Chargement des lignes d'éléments
+        if ($chapitre == "all_chaps") {
+          $prescription->loadRefsLinesElementByCat("1", "1", null);
         }
       }
       elseif ($chapitre == "med" || $chapitre == "inj") {
@@ -343,6 +348,10 @@ if (CModule::getActive("dPprescription")) {
     // Chargement des transmissions qui ciblent les lignes de la prescription
     $prescription->loadAllTransmissions();
   }
+
+  if ($regroup_lines == "") {
+    $regroup_lines = CAppUI::pref("regroup_lines_".$prescription->_ref_object->type);
+  }
 }
 $signe_decalage = ($nb_decalage < 0) ? "-" : "+";
 
@@ -416,6 +425,7 @@ $smarty->assign("move_dossier_soin"   , false);
 $smarty->assign("params"              , CConstantesMedicales::$list_constantes);
 $smarty->assign("hide_close"          , $hide_close);
 $smarty->assign("manual_planif"       , $planif_manuelle);
+$smarty->assign("regroup_lines"       , $regroup_lines);
 
 // Affichage d'une ligne
 if ($object_id && $object_class) {

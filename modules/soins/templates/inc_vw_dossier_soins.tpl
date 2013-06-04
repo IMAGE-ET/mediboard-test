@@ -104,7 +104,7 @@ refreshTabState = function(){
   window['alimentationSoinLoaded'] = false;
   window['inscriptionSoinLoaded'] = false;
   window['all_medSoinLoaded'] = false;
-  
+  window['all_chapsSoinLoaded'] = false;
   
   window['injSoinLoaded'] = false;
   {{if "dPprescription"|module_active}}
@@ -177,64 +177,64 @@ function updateNbTrans(sejour_id) {
 
 Main.add(function () {
   PlanSoins.anciennete = {{$conf.dPprescription.CPrescription.alerte_refresh_plan}}
-  {{if !"dPprescription"|module_active || $multiple_prescription|@count <= 1}}
-  
-  {{if "dPprescription"|module_active}}
-  PlanSoins.init({
-    composition_dossier: {{$composition_dossier|@json}}, 
-    date: "{{$date}}", 
-    manual_planif: "{{$manual_planif}}",
-    bornes_composition_dossier:  {{$bornes_composition_dossier|@json}},
-    nb_postes: {{$bornes_composition_dossier|@count}},
-    nb_decalage: {{$nb_decalage}},
-    plan_soin_id: 'plan_soin'
-  });
-  {{/if}}
-  
-  // Deplacement du dossier de soin
-  if($('plan_soin')){
-    PlanSoins.moveDossierSoin($('tbody_date'));
-  }
-  
-  var tab_dossier_soin = new Control.Tabs.create('tab_dossier_soin', true);
-  tab_dossier_soin.activeLink.up('li').onmousedown();  
-  
-  if($('tab_categories')){
-    tabs = Control.Tabs.create('tab_categories', true);
-  }
-  refreshTabState();
-  
-  document.observe("mousedown", function(e){
-   // fait crasher IE quand ouvert dans une iframe dans un showModalDialog:
-   // l'evenement est lancé sur la balise html et ca plante
-    try {
-      if (!Event.element(e).up("div.tooltip")){
-        $$("div.tooltip").invoke("hide");
-      }
-    } catch(e) {}
-  });
 
-  {{if !$hide_close}}
-    if(window.modalWindow){
-      $('modal_button').show();
+  {{if !"dPprescription"|module_active || $multiple_prescription|@count <= 1}}
+    {{if "dPprescription"|module_active}}
+      PlanSoins.init({
+        composition_dossier: {{$composition_dossier|@json}},
+        date: "{{$date}}",
+        manual_planif: "{{$manual_planif}}",
+        bornes_composition_dossier:  {{$bornes_composition_dossier|@json}},
+        nb_postes: {{$bornes_composition_dossier|@count}},
+        nb_decalage: {{$nb_decalage}},
+        plan_soin_id: 'plan_soin'
+      });
+    {{/if}}
+
+    // Deplacement du dossier de soin
+    if($('plan_soin')){
+      PlanSoins.moveDossierSoin($('tbody_date'));
     }
-  {{/if}}
- 
-  var options = {
-      minHours: '0',
-      maxHours: '9'
+
+    var tab_dossier_soin = new Control.Tabs.create('tab_dossier_soin', true);
+    tab_dossier_soin.activeLink.up('li').onmousedown();
+
+    if($('tab_categories')){
+      tabs = Control.Tabs.create('tab_categories', true);
+    }
+    refreshTabState();
+
+    document.observe("mousedown", function(e){
+     // fait crasher IE quand ouvert dans une iframe dans un showModalDialog:
+     // l'evenement est lancé sur la balise html et ca plante
+      try {
+        if (!Event.element(e).up("div.tooltip")){
+          $$("div.tooltip").invoke("hide");
+        }
+      } catch(e) {}
+    });
+
+    {{if !$hide_close}}
+      if(window.modalWindow){
+        $('modal_button').show();
+      }
+    {{/if}}
+
+    var options = {
+        minHours: '0',
+        maxHours: '9'
+      };
+
+    var dates = {};
+    dates.limit = {
+      start: '{{$sejour->entree|date_format:"%Y-%m-%d"}}',
+      stop: '{{$sortie_sejour|date_format:"%Y-%m-%d"}}'
     };
-  
-  var dates = {};
-  dates.limit = {
-    start: '{{$sejour->entree|date_format:"%Y-%m-%d"}}',
-    stop: '{{$sortie_sejour|date_format:"%Y-%m-%d"}}'
-  };
-  
-  var oFormDate = getForm("changeDateDossier");
-  if (oFormDate) {
-    Calendar.regField(oFormDate.date, dates, {noView: true});
-  }
+
+    var oFormDate = getForm("changeDateDossier");
+    if (oFormDate) {
+      Calendar.regField(oFormDate.date, dates, {noView: true});
+    }
   {{/if}}
 });
 
@@ -429,6 +429,11 @@ Main.add(function () {
       <table style="width: 100%">
          <tr>
           <td>
+            <button type="button" class="search"
+                    onclick="PlanSoins.regroup_lines = !{{$regroup_lines}};
+                      PlanSoins.loadTraitement('{{$prescription->object_id}}', PlanSoins.date, null, null, null, null, null, null, '1')">
+              Somme
+            </button>
             <button type="button" class="print" onclick="PlanSoins.printBons('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
               Bons
             </button>

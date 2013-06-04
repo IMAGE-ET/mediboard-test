@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPcabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 class CSetupdPcabinet extends CSetup {
@@ -1920,10 +1920,15 @@ class CSetupdPcabinet extends CSetup {
     $this->addPrefQuery("showIntervPlanning", "0");
 
     $this->makeRevision("2.05");
-
     $query = "ALTER TABLE `facture_cabinet`
                 ADD `annule` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
-    $this->mod_version = "2.06";
+
+    $this->makeRevision("2.06");
+    $query = "ALTER TABLE `plageconsult`
+      ADD `pour_tiers` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.07";
   }
 }

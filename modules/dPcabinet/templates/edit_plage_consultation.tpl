@@ -149,6 +149,12 @@
             <th>{{mb_label object=$plageSel field="_skip_collisions"}}</th>
             <td>{{mb_field object=$plageSel field="_skip_collisions" typeEnum=checkbox}}</td>
           </tr>
+          <tr>
+            <th></th>
+            <td></td>
+            <th>{{mb_label object=$plageSel field="pour_tiers"}}</th>
+            <td>{{mb_field object=$plageSel field="pour_tiers" typeEnum=checkbox}}</td>
+          </tr>
         </table>
       </fieldset>
     </td>

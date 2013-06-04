@@ -1,7 +1,7 @@
 <!-- Modale de creation / modification d'une activite --> 
 <form name="addTask-{{$sejour_id}}" action="?" method="post" 
       onsubmit="{{if $task_element}}
-      return onSubmitFormAjax(this, { onComplete: function(){ PlanSoins.refreshTask('{{$task->prescription_line_element_id}}'); Control.Modal.close(); } })
+      return onSubmitFormAjax(this, function(){ PlanSoins.refreshTask('{{$task->prescription_line_element_id}}'); Control.Modal.close();})
       {{else}}
       return submitActivite(this);
       {{/if}}">
@@ -49,10 +49,32 @@
             <button class="tick" onclick="$V(this.form.realise, '1');">Réalisée</button>
           {{/if}}
           {{if $task->_id}}
-          <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,objName:'{{$task->_view|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
+          <button type="button" class="trash"
+                  onclick="confirmDeletion(this.form, {
+                    ajax: true,
+                    objName:'{{$task->_view|smarty:nodefaults|JSAttribute}}'
+                    },
+                    {
+                      onComplete: function(){ PlanSoins.refreshTask('{{$task->prescription_line_element_id}}'); Control.Modal.close();}
+                    })">{{tr}}Delete{{/tr}}</button>
           {{/if}}
         </div>
       </td>
     </tr>
+    {{if $task->_id && $task->_ref_consult->_id}}
+      {{assign var=consult value=$task->_ref_consult}}
+      <tr>
+        <th colspan="4" class="title">
+          Consultation associée
+        </th>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$consult->_guid}}')">
+            {{$consult}}
+          </span>
+        </td>
+      </tr>
+    {{/if}}
   </table>
 </form>

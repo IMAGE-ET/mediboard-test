@@ -23,6 +23,7 @@ PlanSoins = {
   nb_decalage:         null,
   save_nb_decalage:    null,
   plan_soin_id:        null,// L'id de l'element plan de soin
+  regroup_lines:       null,
 
   init: function(options){
     Object.extend(PlanSoins, options);
@@ -296,6 +297,11 @@ PlanSoins = {
     if (hide_close) {
       url.addParam("hide_close", hide_close);
     }
+
+    if (PlanSoins.regroup_lines !== null) {
+      url.addParam("regroup_lines", PlanSoins.regroup_lines ? "1" : "0");
+    }
+
     if (PlanSoins.with_navigation) {
       url.addParam("with_navigation", PlanSoins.with_navigation);
     }
@@ -335,24 +341,28 @@ PlanSoins = {
         } );
       }
     } else {
-      if(chapitre){
-        if(chapitre == "med" ||
+      if (chapitre) {
+        if (chapitre == "med" ||
+           chapitre == "all_chaps" ||
            chapitre == "all_med" ||
            chapitre == "perfusion" || 
            chapitre == "oxygene" || 
            chapitre == "alimentation" ||
            chapitre == "aerosol" ||
            chapitre == "inj" ||
-           chapitre == "inscription"){
+           chapitre == "inscription") {
           chapitre = "_"+chapitre;
-        } else {
+        }
+        else {
           chapitre = "_cat-"+chapitre;
         }
-        if($(chapitre)){
-          url.requestUpdate(chapitre, { onComplete: function() { PlanSoins.moveDossierSoin($(chapitre), false); } } );
+        var chap = $(chapitre);
+        if (chap) {
+          url.requestUpdate(chapitre, { onComplete: function() { PlanSoins.moveDossierSoin(chap, false); } } );
         }
         
-      } else {
+      }
+      else {
         url.requestUpdate("dossier_traitement");
       }
     }
@@ -638,7 +648,21 @@ PlanSoins = {
     url.addParam("prescription_line_element_id", prescription_line_element_id);
     url.requestModal(600, 200);
   },
-  
+
+  editRDV: function(patient_id, sejour_id, prescription_line_element_id) {
+    var url = new Url("cabinet", "edit_planning");
+    url.addParam("consultation_id", 0);
+    url.addParam("sejour_id"   , sejour_id);
+    url.addParam("pat_id"      , patient_id);
+    url.addParam("line_element_id", prescription_line_element_id);
+    url.addParam("dialog"      , 1);
+    url.modal({width: 1000, height: 700});
+    url.modalObject.observe("afterClose", function() {
+      PlanSoins.refreshTask(prescription_line_element_id);
+      updateTasks(sejour_id);
+    } );
+  },
+
   refreshTask: function(prescription_line_element_id){
     var url = new Url("soins", "ajax_update_task_icon");
     url.addParam("prescription_line_element_id", prescription_line_element_id);
@@ -654,6 +678,7 @@ PlanSoins = {
     $V(oForm.nb_hours, nb_hours);
     $V(oForm.quantite, quantite);
     $V(oForm.unite_prise, unite_prise);
+    $("modalMovePlanifs").select("button").invoke("writeAttribute", "cancelled", null).invoke("writeAttribute", "disabled", null);
     Modal.open("modalMovePlanifs");
   },
 

@@ -27,9 +27,10 @@ if ($mediuser->isMedical()) {
 }
 
 // Vérification des droits sur les praticiens et les fonctions
-if(CAppUI::pref("pratOnlyForConsult", 1)) {
+if (CAppUI::pref("pratOnlyForConsult", 1)) {
   $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
-} else {
+}
+else {
   $listPraticiens = $mediuser->loadProfessionnelDeSante(PERM_EDIT);
 }
 
@@ -38,18 +39,21 @@ $listFunctions  = $function->loadSpecialites(PERM_EDIT);
 
 $consultation_id = CValue::getOrSession("consultation_id");
 $plageconsult_id = CValue::get("plageconsult_id", null);
-
+$line_element_id = CValue::get("line_element_id");
+$sejour_id       = CValue::get("sejour_id");
 $date_planning   = CValue::get("date_planning", null);
 $heure           = CValue::get("heure", null);
 
 $correspondantsMedicaux = array();
 $medecin_adresse_par = "";
+$_function_id = null;
+$nb_plages = 0;
 
 // Nouvelle consultation
 if (!$consultation_id) {
 
   // A t'on fourni une plage de consultation
-  if ($plageconsult_id){
+  if ($plageconsult_id) {
     $plageConsult->load($plageconsult_id);
   } 
   // A t'on fourni l'id du praticien
@@ -80,7 +84,29 @@ if (!$consultation_id) {
     $consult->plageconsult_id = $plageconsult_id;
     $chir->load($plageConsult->chir_id);
   }
-} 
+
+  // RDV issu d'une ligne d'élément
+  if ($line_element_id) {
+    $consult->sejour_id = $sejour_id;
+
+    $line = new CPrescriptionLineElement();
+    $line->load($line_element_id);
+    $func_categ = reset($line->_ref_element_prescription->_ref_category_prescription->loadBackRefs("functions_category", null, "1"));
+    $plageconsult = new CPlageconsult();
+
+    $where = $ljoin = array();
+
+    $where["pour_tiers"] = "= '1'";
+    $where["date"] = "BETWEEN '".CMbDT::date() . "' AND '".CMbDT::date("+3 month") . "'";
+
+    if ($func_categ) {
+      $_function_id = $func_categ->function_id;
+      $where["users_mediboard.function_id"] = "= '$_function_id'";
+      $ljoin["users_mediboard"] = "users_mediboard.user_id = plageconsult.chir_id";
+    }
+    $nb_plages = $plageconsult->countList($where, null, $ljoin);
+  }
+}
 
 // Consultation existante
 else {
@@ -129,11 +155,11 @@ else {
 $categorie = new CConsultationCategorie();
 $whereCategorie["function_id"] = " = '$chir->function_id'";
 $orderCategorie = "nom_categorie ASC";
-$categories = $categorie->loadList($whereCategorie,$orderCategorie);
+$categories = $categorie->loadList($whereCategorie, $orderCategorie);
 
 // Creation du tableau de categories simplifié pour le traitement en JSON
 $listCat = array();
-foreach($categories as $cat){
+foreach ($categories as $cat) {
   $listCat[$cat->_id] = array(
     "nom_icone"   => $cat->nom_icone,
     "duree"       => $cat->duree,
@@ -141,7 +167,7 @@ foreach($categories as $cat){
 }
 
 // Ajout du motif de la consultation passé en parametre
-if (!$consult->_id && $consult_urgence_id){
+if (!$consult->_id && $consult_urgence_id) {
   // Chargement de la consultation de passage aux urgences
   $consultUrgence = new CConsultation();
   $consultUrgence->load($consult_urgence_id);
@@ -208,6 +234,9 @@ $smarty->assign("correspondantsMedicaux" , $correspondantsMedicaux);
 $smarty->assign("medecin_adresse_par"    , $medecin_adresse_par);
 $smarty->assign("today"                  , $today);
 $smarty->assign("date_planning"          , $date_planning);
+$smarty->assign("_function_id"           , $_function_id);
+$smarty->assign("line_element_id"        , $line_element_id);
+$smarty->assign("nb_plages"              , $nb_plages);
 $smarty->assign("dialog"                 , $dialog);
 
 $smarty->display("addedit_planning.tpl");
