@@ -19,7 +19,7 @@
   <td>{{mb_value object=$_patient field="naissance"}}</td>
   <td>{{$_patient->telephone1}}</td>
   <td>{{$_patient->telephone2}}</td>
-  <td />
+  <td></td>
 </tr>
 {{foreach from=$_patient->_ref_hprim21_sejours item=_sejour}}
 <tr>

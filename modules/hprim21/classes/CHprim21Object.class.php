@@ -1,24 +1,28 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprim21
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * The HPRIM 2.1 parent class declaration
+ *
+ * @category Hprim21
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 /**
  * The HPRIM 2.1 parent class
  */
 class CHprim21Object extends CMbObject {
-	
+  
   // DB Fields
   public $emetteur_id;
   public $external_id;
   public $echange_hprim21_id;
 
   // Back reference
+  /** @var  CEchangeHprim21 */
   public $_ref_echange_hprim21;
 
   /**
@@ -38,11 +42,11 @@ class CHprim21Object extends CMbObject {
    * @see parent::updateFormFields()
    */
   function updateFormFields() {
-  	parent::updateFormFields();
-  	
+    parent::updateFormFields();
+    
     $this->_view = $this->emetteur_id." : ".$this->external_id;
   }
-  
+
   function loadRefEchangeHprim21() {
     $this->_ref_echange_hprim21 = new CEchangeHprim21();
     $this->_ref_echange_hprim21->load($this->echange_hprim21_id);
@@ -58,37 +62,39 @@ class CHprim21Object extends CMbObject {
   }
   
   function getDateFromHprim($date) {
-    if(strlen($date) >= 8) {
+    if (strlen($date) >= 8) {
       $annee = substr($date, 0, 4);
       $mois = substr($date, 4, 2);
-      if($mois == "00") {
+      if ($mois == "00") {
         $mois = "01";
       }
       $jour = substr($date, 6, 2);
-      if($jour == "00") {
+      if ($jour == "00") {
         $jour = "01";
       }
       return "$annee-$mois-$jour";
-    } else {
+    }
+    else {
       return "";
     }
   }
   
   function getDateTimeFromHprim($date) {
-    if(strlen($date) >= 12) {
+    if (strlen($date) >= 12) {
       $annee = substr($date, 0, 4);
       $mois = substr($date, 4, 2);
-      if($mois == "00") {
+      if ($mois == "00") {
         $mois = "01";
       }
       $jour = substr($date, 6, 2);
-      if($jour == "00") {
+      if ($jour == "00") {
         $jour = "01";
       }
       $heure   = substr($date, 8, 2);
       $minutes = substr($date, 10, 2);
       return "$annee-$mois-$jour $heure:$minutes:00";
-    } else {
+    }
+    else {
       return "";
     }
   }

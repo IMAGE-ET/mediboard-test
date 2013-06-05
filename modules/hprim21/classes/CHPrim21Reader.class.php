@@ -1,16 +1,22 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprim21
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * The HPRIM 2.1 reader class declaration
+ *
+ * @category Hprim21
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
+/**
+ * The HPRIM 2.1 reader class
+ */
 class CHPrim21Reader {
   
-  var $has_header                 = false;
+  public $has_header = false;
   
   // Champs header
   public $separateur_champ;
@@ -32,11 +38,12 @@ class CHPrim21Reader {
   public $date;
   
   // Nombre d'éléments
-   public $nb_patients;
+  public $nb_patients;
   
   // Log d'erreur
-  var $error_log     = array();
-  
+  public $error_log = array();
+
+  /** @var  CEchangeHprim21 */
   public $_echange_hprim21;
   
   function bindEchange($fileName = null) {
@@ -48,35 +55,37 @@ class CHPrim21Reader {
     $this->_echange_hprim21->sous_type         = $this->sous_type;
     $this->_echange_hprim21->type              = $this->type;
     $this->_echange_hprim21->date_echange      = CMbDT::dateTime();
-    if ($fileName)
+    if ($fileName) {
       $this->_echange_hprim21->_message        = file_get_contents($fileName);
-
+    }
     return $this->_echange_hprim21;
   }
   
   function readFile($fileName = null, $file = null) {
     if ($fileName) {
-      $file = fopen( $fileName, 'rw' );
+      $file = fopen($fileName, 'rw' );
     }
     
     if (!$file) {
       $this->error_log[] = "Fichier non trouvé";
-      return;
+      return null;
     }
     
     $i = 0;
     $lines = array();
-    while (!feof($file)){
+    while (!feof($file)) {
       if (!$i) {
         $header = trim(fgets($file, 1024));
         $i++;
-      } else {
+      }
+      else {
         $_line = trim(fgets($file, 1024));
         if ($_line) {
           // On vérifie si la ligne est un Addendum
           if (substr($_line, 0, 2) == "A|") {
             $lines[$i-1] .= substr($_line, 2);
-          } else {
+          }
+          else {
             $lines[$i] = $_line;
             $i++;
           }
@@ -88,7 +97,7 @@ class CHPrim21Reader {
     
     // Lecture de l'en-tête
     if (!$this->segmentH($header)) {
-      return;
+      return null;
     }    
     
     // Lecture du message
@@ -132,18 +141,18 @@ class CHPrim21Reader {
     $i = 1;
     while ($i <= $nbLine && $this->getTypeLine($lines[$i]) == "P") {
       $patient = new CHprim21Patient();
-      if(!$this->segmentP($lines[$i], $patient)) {
+      if (!$this->segmentP($lines[$i], $patient)) {
         return false;
       }
       $i++;
       if ($i < $nbLine && $this->getTypeLine($lines[$i]) == "AP") {
-        if(!$this->segmentAP($lines[$i], $patient)) {
+        if (!$this->segmentAP($lines[$i], $patient)) {
           return false;
         }
         $i++;
         while ($i < $nbLine && $this->getTypeLine($lines[$i]) == "AC") {
           $complementaire = new CHprim21Complementaire();
-          if(!$this->segmentAC($lines[$i], $complementaire, $patient)) {
+          if (!$this->segmentAC($lines[$i], $complementaire, $patient)) {
             return false;
           }
           $i++;
@@ -181,8 +190,14 @@ class CHPrim21Reader {
     $this->error_log[] = "Message ERR non pris en charge";
     return false;
   }
-  
-  // Fonctions de prise en charge des segments
+
+  /**
+   * Fonctions de prise en charge des segments
+   *
+   * @param string $line Ligne du fichier analysé
+   *
+   * @return string
+   */
   function getTypeLine($line) {
     $lines = explode($this->separateur_champ, $line);
     $type = reset($lines);
@@ -222,7 +237,13 @@ class CHPrim21Reader {
     
     return true;
   }
-  
+
+  /**
+   * @param string          $line     Ligne analysée
+   * @param CHprim21Patient &$patient Patient lié
+   *
+   * @return bool
+   */
   function segmentP($line, &$patient) {
     if (!$this->has_header) {
       return false;
@@ -249,27 +270,30 @@ class CHPrim21Reader {
   
   function segmentOBR($line) {
     mbTrace($line, "Demande d'analyses ou d'actes");
-    if(!$this->has_header) {
+    if (!$this->has_header) {
       return false;
     }
+    return true;
   }
   
   function segmentOBX($line) {
     mbTrace($line, "Résultat d'un test");
-    if(!$this->has_header) {
+    if (!$this->has_header) {
       return false;
     }
+    return true;
   }
   
   function segmentC($line) {
     mbTrace($line, "Commentaire");
-    if(!$this->has_header) {
+    if (!$this->has_header) {
       return false;
     }
+    return true;
   }
   
   function segmentL($line) {
-    if(!$this->has_header) {
+    if (!$this->has_header) {
       return false;
     }
     return true;
@@ -277,43 +301,60 @@ class CHPrim21Reader {
   
   function segmentA($line) {
     mbTrace($line, "Addendum");
-    if(!$this->has_header) {
+    if (!$this->has_header) {
       return false;
     }
+    return true;
   }
   
   function segmentFAC($line) {
     mbTrace($line, "En-tête de facture");
-    if(!$this->has_header) {
+    if (!$this->has_header) {
       return false;
     }
+    return true;
   }
   
   function segmentACT($line) {
     mbTrace($line, "Ligne de facture");
-    if(!$this->has_header) {
+    if (!$this->has_header) {
       return false;
     }
+    return true;
   }
   
   function segmentREG($line) {
     mbTrace($line, "Elément de règlement");
-    if(!$this->has_header) {
+    if (!$this->has_header) {
       return false;
     }
+    return true;
   }
-  
+
+  /**
+   * @param string          $line     Ligne analysée
+   * @param CHprim21Patient &$patient Patient lié
+   *
+   * @return bool
+   */
   function segmentAP($line, &$patient) {
-    if(!$this->has_header) {
+    if (!$this->has_header) {
       return false;
     }
     $patient->bindAssurePrimaireToLine($line, $this);
     $patient->store();
     return true;
   }
-  
+
+  /**
+   * @param string                 $line             Ligne analysée
+   * @param CHprim21Complementaire &$complementaire  Complémentaire liée
+   * @param CHprim21Patient        $patient          Patient lié
+   *
+   * @return bool
+   */
   function segmentAC($line, &$complementaire, $patient) {
-    if(!$this->has_header) {
+    if (!$this->has_header) {
       return false;
     }
     $complementaire->bindToLine($line, $this, $patient);
@@ -323,9 +364,10 @@ class CHPrim21Reader {
   
   function segmentERR($line) {
     mbTrace($line, "Message d'erreur");
-    if(!$this->has_header) {
+    if (!$this->has_header) {
       return false;
     }
+    return true;
   }
 
 }

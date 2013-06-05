@@ -3,7 +3,7 @@
 /**
  * Event H'2.1
  *  
- * @category hprim21
+ * @category Hprim21
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -30,7 +30,7 @@ class CHPREvent {
   
   public $msg_hpr;
 
-  var $msg_codes     = array();
+  public $msg_codes = array();
   
   /**
    * @var CDestinataireHprim21
@@ -43,12 +43,16 @@ class CHPREvent {
   public $_sender;
   
   public $_exchange_hpr;
-  
+
   /**
    * Build HPR message
+   *
    * @param $object Object to use
+   *
+   * @return void
    */
-  function build($object) {}
+  function build($object) {
+  }
   
   function handle($msg_hpr) {
     $this->message = new CHPrim21Message();

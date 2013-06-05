@@ -1,11 +1,14 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprim21
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * The HPRIM 2.1 sejour class declaration
+ *
+ * @category Hprim21
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 /**
@@ -13,13 +16,13 @@
  */
 class CHprim21Sejour extends CHprim21Object {
   // DB Table key
-	public $hprim21_sejour_id;
+  public $hprim21_sejour_id;
   
   // DB references
   public $hprim21_patient_id;
   public $hprim21_medecin_id;
   public $sejour_id;
-	
+  
   // DB Fields
   public $date_mouvement;
   public $statut_admission;
@@ -49,7 +52,7 @@ class CHprim21Sejour extends CHprim21Object {
    * @see parent::getProps()
    */
   function getProps() {
-  	$specsParent = parent::getProps();
+    $specsParent = parent::getProps();
     $specs = array (
       "hprim21_patient_id"   => "ref notNull class|CHprim21Patient",
       "hprim21_medecin_id"   => "ref class|CHprim21Medecin",
@@ -67,21 +70,29 @@ class CHprim21Sejour extends CHprim21Object {
     );
     return array_merge($specsParent, $specs);
   }
-  
+
+  /**
+   * @param string          $line
+   * @param CHPrim21Reader  $reader
+   * @param CHprim21Patient $patient
+   * @param CHprim21Medecin $medecin
+   *
+   * @return bool|string
+   */
   function bindToLine($line, &$reader, $patient, $medecin = null) {
     $this->setHprim21ReaderVars($reader);
-    $this->hprim21_patient_id   = $patient->_id;
-    if($medecin) {
-      $this->hprim21_medecin_id   = $medecin->_id;
+    $this->hprim21_patient_id = $patient->_id;
+    if ($medecin) {
+      $this->hprim21_medecin_id = $medecin->_id;
     }
     
-    $elements                   = explode($reader->separateur_champ, $line);
+    $elements = explode($reader->separateur_champ, $line);
   
-    if(count($elements) < 34) {
+    if (count($elements) < 34) {
       $reader->error_log[] = "Champs manquant dans le segment patient (sejour) : ".count($elements)." champs trouvés";
       return false;
     }
-    if(!$elements[4]) {
+    if (!$elements[4]) {
       //$reader->error_log[] = "Identifiant externe manquant dans le segment patient (sejour)";
       return true;
     }
@@ -94,19 +105,19 @@ class CHprim21Sejour extends CHprim21Object {
     $this->localisation_lit     = $localisation[0];
     $this->localisation_chambre = $localisation[1];
     $this->localisation_service = $localisation[2];
-    if(isset($localisation[3])) {
+    if (isset($localisation[3])) {
       $this->localisation4      = $localisation[3];
     }
-    if(isset($localisation[4])) {
+    if (isset($localisation[4])) {
       $this->localisation5      = $localisation[4];
     }
-    if(isset($localisation[5])) {
+    if (isset($localisation[5])) {
       $this->localisation6      = $localisation[5];
     }
-    if(isset($localisation[6])) {
+    if (isset($localisation[6])) {
       $this->localisation7      = $localisation[6];
     }
-    if(isset($localisation[7])) {
+    if (isset($localisation[7])) {
       $this->localisation8      = $localisation[7];
     }
     return true;

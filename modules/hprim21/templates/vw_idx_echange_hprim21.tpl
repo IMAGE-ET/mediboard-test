@@ -15,13 +15,14 @@ reprocessing = function(echange_hprim21_id){
   url.addParam("echange_hprim21_id", echange_hprim21_id);
   url.requestUpdate("systemMsg", { onComplete:function() { 
      refreshEchange(echange_hprim21_id) }});
-}
+};
 
 refreshEchange = function(echange_hprim21_id){
   var url = new Url("hprim21", "ajax_refresh_echange");
   url.addParam("echange_hprim21_id", echange_hprim21_id);
   url.requestUpdate("echange_"+echange_hprim21_id);
-}
+};
+
 </script>
 
 <table class="main">  

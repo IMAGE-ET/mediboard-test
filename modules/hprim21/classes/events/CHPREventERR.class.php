@@ -71,16 +71,20 @@ class CHPREventERR extends CHPREvent {
     return $segment;
   }
   
-  /*
-   * H - Represents an HPR H message segment (Message Header) 
+  /**
+   * H - Represents an HPR H message segment (Message Header)
+   *
+   * @return void
    */
   function addH() {
     $H = $this->createSegment("H", $this->message);
     $H->build($this);
   }
-  
-  /*
+
+  /**
    * ERR - Represents an HPR ERR message segment (Error)
+   *
+   * @return void
    */
   function addERR(CHPrim21Acknowledgment $acknowledgment, $error = null) {
     $ERR = $this->createSegment("ERR", $this->message);
@@ -89,8 +93,10 @@ class CHPREventERR extends CHPREvent {
     $ERR->build($this);
   }
   
-  /*
-   * L - Represents an HPR L message segment (Message Footer) 
+  /**
+   * L - Represents an HPR L message segment (Message Footer)
+   *
+   * @return void
    */
   function addL() {
     $L = $this->createSegment("L", $this->message);

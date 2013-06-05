@@ -36,7 +36,7 @@
   <tr>
     <th><label for="jeuneFille" title="Nom de naissance">Nom de naissance</label></th>
     <td><input tabindex="3" type="text" name="jeuneFille" value="{{$jeuneFille|stripslashes}}" /></td>
-    <td colspan="2" />
+    <td colspan="2"></td>
   </tr>
   
   <tr>

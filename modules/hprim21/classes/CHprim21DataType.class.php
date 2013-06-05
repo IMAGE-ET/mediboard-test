@@ -12,11 +12,12 @@
 class CHprim21DataType extends CHDataType {
   /**
    * Get the spec object of a data type
-   * 
+   *
+   * @param        $message
    * @param string $type      The 2 or 3 letters type
    * @param string $version   The version number of the spec
    * @param string $extension The extension
-   * 
+   *
    * @return CHL7v2DataType The data type spec
    */
   static function load($message, $type, $version, $extension) {

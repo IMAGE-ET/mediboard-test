@@ -3,7 +3,7 @@
 /**
  * Operator HPR
  *  
- * @category hprim21
+ * @category Hprim21
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -42,7 +42,7 @@ class COperatorHPR extends CEAIOperator {
         // * où l'on ne souhaite pas traiter le message
         // * où le sender n'enregistre pas les messages non pris en charge
         if (!$data_format->_to_treatment || !$data_format->_ref_sender->save_unsupported_message) {
-          return;
+          return null;
         }
 
         $exchange_hpr->populateExchange($data_format, $evt);
@@ -71,7 +71,7 @@ class COperatorHPR extends CEAIOperator {
       
       // Pas de traitement du message
       if (!$data_format->_to_treatment) {
-        return;
+        return null;
       }
 
       $exchange_hpr->loadRefsInteropActor();
@@ -92,7 +92,10 @@ class COperatorHPR extends CEAIOperator {
     return $msgAck;
   }
   
-  static function handleEvent($data = array(), CEchangeHprim21 $exchange_hpr, CHPrim21MessageXML $dom_evt, CHPrim21Acknowledgment $ack) {
+  static function handleEvent(
+      $data = array(), CEchangeHprim21 $exchange_hpr,
+      CHPrim21MessageXML $dom_evt, CHPrim21Acknowledgment $ack
+  ) {
     $data = array_merge($data, $dom_evt->getContentNodes());
     
     $object = new CSejour();

@@ -19,7 +19,7 @@ class CHPrim21Message extends CHMessage {
   
   protected $keep_original = array("H.1");
 
-  var $version      = "2.1";
+  public $version = "2.1";
   public $type;
   public $extension;
   public $type_liaison;

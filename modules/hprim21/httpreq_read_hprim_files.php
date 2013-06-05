@@ -1,11 +1,14 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprim21
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Lecture des fichiers d'échanges Hprim21
+ *
+ * @category Hprim21
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License; see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -41,7 +44,7 @@ $sender_ftp->loadMatchingObject();
 $count = CAppUI::conf("eai max_files_to_process");
 $list = array_slice($list, 0, $count);
 
-foreach($list as $filepath) {
+foreach ($list as $filepath) {
   if (substr($filepath, -(strlen($extension))) == $extension) {
     $filename = basename($filepath);
     $hprimFile = $ftp->getFile($filepath, "tmp/hprim21/$filename");
@@ -64,7 +67,8 @@ foreach($list as $filepath) {
     if (!count($hprimReader->error_log)) {
       $echg_hprim21->message_valide = true;
       $ftp->delFile($filepath);
-    } else {
+    }
+    else {
       $echg_hprim21->message_valide = false;
       CAppUI::stepAjax("Erreur(s) pour le fichier '$filepath' : $hprimReader->error_log", UI_MSG_WARNING);
     }
@@ -72,7 +76,8 @@ foreach($list as $filepath) {
     $msg ? CAppUI::stepAjax("Erreur lors de la création de l'échange : $msg", UI_MSG_WARNING) : 
            CAppUI::stepAjax("L'échange '$echg_hprim21->_id' a été créé.");
     unlink($hprimFile);
-  } else {
+  }
+  else {
     $ftp->delFile($filepath);
   }
 }

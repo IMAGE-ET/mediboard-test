@@ -3,7 +3,7 @@
 /**
  * Represents an HPR ERR message segment (Error) - HPR
  *  
- * @category hprim21
+ * @category Hprim21
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License; see http://www.gnu.org/licenses/gpl.html 
@@ -17,7 +17,7 @@
  */
 
 class CHPRSegmentERR extends CHL7v2Segment {
-  var $name = "ERR";
+  public $name = "ERR";
   
   /**
    * @var CHPrim21Acknowledgment
@@ -28,7 +28,10 @@ class CHPRSegmentERR extends CHL7v2Segment {
    * @var CHL7v2Error
    */
   public $error;
-  
+
+  /**
+   * @see parent::build
+   */
   function build(CHPREvent $event) {
     parent::build($event);
     

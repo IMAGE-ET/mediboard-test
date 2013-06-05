@@ -11,7 +11,7 @@
 <script>
   highlightMessage = function(form) {
     return Url.update(form, "highlighted");
-  }
+  };
   
   {{if $message}}
     Main.add(function(){

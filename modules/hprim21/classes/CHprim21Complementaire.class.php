@@ -1,11 +1,14 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprim21
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * The HPRIM 2.1 assurance complémentaire class declaration
+ *
+ * @category Hprim21
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 /**
@@ -13,11 +16,11 @@
  */
 class CHprim21Complementaire extends CHprim21Object {
   // DB Table key
-	public $hprim21_complementaire_id;
+  public $hprim21_complementaire_id;
   
   // DB references
   public $hprim21_patient_id;
-	
+  
   // DB Fields
   public $code_organisme;
   public $numero_adherent;
@@ -39,7 +42,7 @@ class CHprim21Complementaire extends CHprim21Object {
    * @see parent::getProps()
    */
   function getProps() {
-  	$specsParent = parent::getProps();
+    $specsParent = parent::getProps();
     $specs = array (
       "hprim21_patient_id" => "ref class|CHprim21Patient",
       "code_organisme"     => "str",
@@ -57,12 +60,12 @@ class CHprim21Complementaire extends CHprim21Object {
     
     $elements                 = explode($reader->separateur_champ, $line);
   
-    if(count($elements) < 7) {
+    if (count($elements) < 7) {
       $reader->error_log[] = "Champs manquant dans le segment assurance complémentaire";
       return false;
     }
-    if(!$elements[2]) {
-      $reader->erreo_log[] = "Identifiant externe dans le segment assurance complémentaire";
+    if (!$elements[2]) {
+      $reader->error_log[] = "Identifiant externe dans le segment assurance complémentaire";
     }
     
     $this->external_id        = $patient->external_id.$elements[2];

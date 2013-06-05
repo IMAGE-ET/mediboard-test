@@ -1,11 +1,14 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage sip
- * @version $Revision: 9883 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Vue des échanges Hprim21
+ *
+ * @category Hprim21
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License; see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -34,7 +37,7 @@ $echg_hprim21->load($echange_hprim21_id);
 $echg_hprim21->loadRefsInteropActor();
 
 // Récupération de la liste des echanges HPRIM 2.1
-$itemEchangeHprim21 = new CEchangeHprim21;
+$itemEchangeHprim21 = new CEchangeHprim21();
 
 $where = array();
 
@@ -57,20 +60,22 @@ $total_echange_hprim21 = $itemEchangeHprim21->countList($where);
 $order = "date_production DESC";
 $forceindex[] = "date_production";
 
+/** @var CEchangeHprim21[] $echangesHprim21 */
 $echangesHprim21 = $itemEchangeHprim21->loadList($where, $order, "$page, 20", null, null, $forceindex);
-foreach($echangesHprim21 as $_echange) {
+foreach ($echangesHprim21 as $_echange) {
   $_echange->loadRefsInteropActor();
 }
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("echg_hprim21"        , $echg_hprim21);
+$smarty->assign("echg_hprim21"         , $echg_hprim21);
 $smarty->assign("echangesHprim21"      , $echangesHprim21);
 $smarty->assign("total_echange_hprim21", $total_echange_hprim21);
 $smarty->assign("page"                 , $page);
 $smarty->assign("selected_types"       , $t);
 $smarty->assign("types"                , $types);
 $smarty->assign("type_message"         , $type_message);
+
 $smarty->display("vw_idx_echange_hprim21.tpl");
 
 

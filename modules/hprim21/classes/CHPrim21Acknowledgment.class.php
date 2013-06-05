@@ -27,6 +27,7 @@ class CHPrim21Acknowledgment {
   
   public $_ref_exchange_hpr;
   public $_errors;
+  public $_row;
     
   function __construct(CHPREvent $event = null) {
     $this->event = $event;

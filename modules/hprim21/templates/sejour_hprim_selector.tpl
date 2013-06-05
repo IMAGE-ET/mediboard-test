@@ -69,11 +69,11 @@ var Sejour = {
     <th class="category" colspan="5">Choisissez un patient dans la liste</th>
   </tr>
   <tr>
-    <th align="center">Patient</th>
-    <th align="center">Date de naissance</th>
-    <th align="center">Téléphone</th>
-    <th align="center">Mobile</th>
-    <th align="center">Actions</th>
+    <th>Patient</th>
+    <th>Date de naissance</th>
+    <th>Téléphone</th>
+    <th>Mobile</th>
+    <th>Actions</th>
   </tr>
 
   <!-- Recherche exacte -->

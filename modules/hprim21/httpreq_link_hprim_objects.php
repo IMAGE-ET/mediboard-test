@@ -1,11 +1,14 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprim21
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Liaison des object Hprim21 aux objets métiers
+ *
+ * @category Hprim21
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License; see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -22,6 +25,7 @@ $tag_sejour = CSejour::getTagNDA();
 $hprimMedecin = new CHprim21Medecin();
 $where = array();
 $where["user_id"] = "IS NULL";
+/** @var CHprim21Medecin[] $listHprimMedecins */
 $listHprimMedecins = $hprimMedecin->loadList($where);
 $total = count($listHprimMedecins);
 
@@ -60,6 +64,7 @@ $where                        = array();
 $where["date_derniere_modif"] = ">= '$date_limite'";
 $where["patient_id"]          = "IS NULL";
 $order                        = "date_derniere_modif DESC";
+/** @var CHprim21Patient[] $listHprimPatients */
 $listHprimPatients = $hprimPatient->loadList($where, $order, $qte_limite);
 $total = count($listHprimPatients);
 
@@ -124,6 +129,7 @@ $where = array();
 $where["date_mouvement"] = ">= '$date_limite'";
 $where["sejour_id"] = "IS NULL";
 $order = "date_mouvement DESC";
+/** @var CHprim21Sejour[] $listHprimSejours */
 $listHprimSejours = $hprimSejour->loadList($where, $order, $qte_limite);
 $total = count($listHprimSejours);
 

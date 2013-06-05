@@ -141,21 +141,21 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
         $facture = $consultation->createFactureConsult();
         if (!$facture->_id) {
           $errors[] = $this->addError(
-                        "P", 
-                        null, 
-                        array(
-                          "REG", 
-                          $segment_row, 
-                          array(
-                            $NDA,
-                            $user_reg
-                          )
-                        ), 
-                        null, 
-                        $NDA, 
-                        "I", 
-                        CAppUI::tr("CHL7EventADT-P-03")
-                      );
+            "P",
+            null,
+            array(
+              "REG",
+              $segment_row,
+              array(
+                $NDA,
+                $user_reg
+              )
+            ),
+            null,
+            $NDA,
+            "I",
+            CAppUI::tr("CHL7EventADT-P-03")
+          );
           continue;
         }
       }
@@ -170,21 +170,21 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
       $return_payment = $this->mapAndStorePayment($_REG, $facture, $idex);
       if (is_string($return_payment)) {
         $errors[] = $this->addError(
-                      "P", 
-                      null, 
-                      array(
-                        "REG", 
-                        $segment_row, 
-                        array(
-                          $NDA,
-                          $user_reg
-                        )
-                      ), 
-                      null, 
-                      $NDA, 
-                      "I", 
-                      CAppUI::tr("CHL7EventADT-P-04", $return_payment)
-                    );
+          "P",
+          null,
+          array(
+            "REG",
+            $segment_row,
+            array(
+              $NDA,
+              $user_reg
+            )
+          ),
+          null,
+          $NDA,
+          "I",
+          CAppUI::tr("CHL7EventADT-P-04", $return_payment)
+        );
         continue;
       }      
     }

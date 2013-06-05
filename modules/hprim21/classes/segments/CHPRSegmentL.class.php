@@ -3,7 +3,7 @@
 /**
  * Represents an HPR L message segment (Message Footer) - HPR
  *  
- * @category hprim21
+ * @category Hprim21
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License; see http://www.gnu.org/licenses/gpl.html 
@@ -17,8 +17,11 @@
  */
 
 class CHPRSegmentL extends CHL7v2Segment {
-  var $name = "L";
-  
+  public $name = "L";
+
+  /**
+   * @see parent::build
+   */
   function build(CHPREvent $event) {
     parent::build($event);
         

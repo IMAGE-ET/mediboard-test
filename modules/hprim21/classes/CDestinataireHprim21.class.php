@@ -3,7 +3,7 @@
 /**
  * Receiver HPRIM 2.1
  *  
- * @category HPRIM 2.1
+ * @category Hprim21
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -11,6 +11,10 @@
  * @link     http://www.mediboard.org
  */
 
+/**
+ * Destinataire de messages Hprim21
+ * Class CDestinataireHprim21
+ */
 class CDestinataireHprim21 extends CInteropReceiver {
   // DB Table key
   public $dest_hprim21_id;

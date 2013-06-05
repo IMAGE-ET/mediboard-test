@@ -1,11 +1,14 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprim21
- * @version $Revision: 10062 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Hprim 2.1 utility class declaration
+ *
+ * @category Hprim21
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License; see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 
@@ -16,7 +19,7 @@ class CHprim21 {
   static function getTag($group_id = null) {
     // Pas de tag Identifiant
     if (null == $tag = CAppUI::conf("hprim21 tag")) {
-      return;
+      return null;
     }
 
     // Permettre des ID en fonction de l'établissement
@@ -29,13 +32,12 @@ class CHprim21 {
   }
 
   static function formatHPRIMBiologie($string) {
-    // UTF-16 with BOM
     if (substr($string, 0, 2) === "\xFF\xFE") {
+      // UTF-16 with BOM
       $string = iconv("UTF-16", "iso-8859-1//TRANSLIT//IGNORE", $string);
     }
-
-    // MacRoman
     elseif (strpos($string, "\x8E") !== false) {
+      // MacRoman
       $string = iconv("macintosh", "iso-8859-1//TRANSLIT//IGNORE", $string);
     }
 

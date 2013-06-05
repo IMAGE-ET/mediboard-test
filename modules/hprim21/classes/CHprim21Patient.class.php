@@ -1,11 +1,14 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprim21
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * The HPRIM 2.1 patient class declaration
+ *
+ * @category Hprim21
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 /**
@@ -213,13 +216,13 @@ class CHprim21Patient extends CHprim21Object {
     
     $elements                        = explode($reader->separateur_champ, $line);
   
-    if(count($elements) < 34) {
+    if (count($elements) < 34) {
       $reader->error_log[] = "Champs manquant dans le segment patient : ".count($elements)." champs trouvés";
       return false;
     }
     
     $identifiant                     = explode($reader->separateur_sous_champ, $elements[2]);
-    if(!$identifiant[0]) {
+    if (!$identifiant[0]) {
       $reader->error_log[] = "Identifiant externe manquant dans le segment patient";
       return false;
     }
@@ -244,7 +247,7 @@ class CHprim21Patient extends CHprim21Object {
     $this->pays                      = $adresse[5];
     $telephone                       = explode($reader->repetiteur, $elements[12]);
     $this->telephone1                = $telephone[0];
-    if(isset($telephone[2])) {
+    if (isset($telephone[2])) {
       $this->telephone2              = $telephone[1];
     }
     $this->traitement_local1         = $elements[14];
@@ -270,7 +273,7 @@ class CHprim21Patient extends CHprim21Object {
   function bindAssurePrimaireToLine($line, &$reader) {
     $elements = explode($reader->separateur_champ, $line);
   
-    if(count($elements) < 22) {
+    if (count($elements) < 22) {
       $this->error_log[] = "Champs manquant dans le segment assuré primaire";
       return false;
     }

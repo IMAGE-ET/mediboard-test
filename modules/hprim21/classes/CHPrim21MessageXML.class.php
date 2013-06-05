@@ -14,6 +14,7 @@
  * Message XML HPR
  */
 class CHPrim21MessageXML extends CMbXMLDocument {
+  /** @var  CEchangeHprim21 */
   public $_ref_exchange_hpr;
   public $_ref_sender;
   public $_ref_receiver;
@@ -69,7 +70,7 @@ class CHPrim21MessageXML extends CMbXMLDocument {
     return $data[$nodeName] = $xpath->queryUniqueNode($root ? "//$nodeName" : "$nodeName", $contextNode);
   }
   
-  function queryNodes($nodeName, DOMNode $contextNode = null, &$data = null, $root = false) {    
+  function queryNodes($nodeName, DOMNode $contextNode = null, &$data = null, $root = false) {
     $nodeList = $this->query("$nodeName", $contextNode);
     foreach ($nodeList as $_node) {
       $data[$nodeName][] = $_node;
@@ -104,11 +105,15 @@ class CHPrim21MessageXML extends CMbXMLDocument {
     
     return $data;
   }
-  
+
+  /**
+   * @return array
+   */
   function getContentNodes() {
     $data  = array();
-    
+    return $data;
   }
   
-  function handle($ack, CMbObject $newPatient, $data) {}
+  function handle($ack, CMbObject $newPatient, $data) {
+  }
 }

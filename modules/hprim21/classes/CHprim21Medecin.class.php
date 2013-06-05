@@ -1,11 +1,14 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprim21
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * The HPRIM 2.1 medecin class declaration
+ *
+ * @category Hprim21
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 /**
@@ -13,11 +16,11 @@
  */
 class CHprim21Medecin extends CHprim21Object {
   // DB Table key
-	public $hprim21_medecin_id;
+  public $hprim21_medecin_id;
   
   // DB references
   public $user_id;
-	
+
   // DB Fields
   public $nom;
   public $prenom;
@@ -43,7 +46,7 @@ class CHprim21Medecin extends CHprim21Object {
    * @see parent::getProps()
    */
   function getProps() {
-  	$specsParent = parent::getProps();
+    $specsParent = parent::getProps();
     $specs = array (
       "user_id"     => "ref class|CMediusers",
       "nom"         => "str",
@@ -61,17 +64,17 @@ class CHprim21Medecin extends CHprim21Object {
    * @see parent::getBackProps()
    */
   function getBackProps() {
-	  $backProps = parent::getBackProps();
-	  $backProps["hprim21_sejours"] = "CHprim21Sejour hprim21_medecin_id";
-	  return $backProps;
-	}  
+    $backProps = parent::getBackProps();
+    $backProps["hprim21_sejours"] = "CHprim21Sejour hprim21_medecin_id";
+    return $backProps;
+  }  
   
-	function bindToLine($line, &$reader) {
+  function bindToLine($line, &$reader) {
     $this->setHprim21ReaderVars($reader);
     
     $elements = explode($reader->separateur_champ, $line);
   
-    if(count($elements) < 1) {
+    if (count($elements) < 1) {
       $reader->error_log[] = "Champs manquant dans le segment patient (médecin)";
       return false;
     }

@@ -1,11 +1,14 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprim21
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Vue de la liste des patients HPRIM
+ * 
+ * @category Hprim21
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -48,27 +51,31 @@ if ($patient_jeuneFille) {
   $whereSoundex["nomjf_soundex2"]  = "LIKE '".$soundexObj->build($patient_jeuneFille)."%'";
 }
 
-if(($patient_year) || ($patient_month) || ($patient_day)){
-	$patient_naissance = "on";
+if (($patient_year) || ($patient_month) || ($patient_day)) {
+  $patient_naissance = "on";
 }
 
-if ($patient_naissance == "on"){
+if ($patient_naissance == "on") {
   $year =($patient_year)?"$patient_year-":"%-";
   $month =($patient_month)?"$patient_month-":"%-";
   $day =($patient_day)?"$patient_day":"%";
   if ($day!="%") {
-    $day = str_pad($day,2,"0",STR_PAD_LEFT);
+    $day = str_pad($day, 2, "0", STR_PAD_LEFT);
   }
   
   $naissance = $year.$month.$day;
   
-  if($patient_year || $patient_month || $patient_day){
+  if ($patient_year || $patient_month || $patient_day) {
     $where["naissance"] = $whereSoundex["naissance"] = "LIKE '$naissance'";
   }
 }
 
-if ($patient_ville) $where["ville"] = $whereSoundex["ville"] = "LIKE '$patient_ville%'";
-if ($patient_cp)    $where["cp"]    = $whereSoundex["cp"]    = "= '$patient_cp'";
+if ($patient_ville) {
+  $where["ville"] = $whereSoundex["ville"] = "LIKE '$patient_ville%'";
+}
+if ($patient_cp) {
+  $where["cp"] = $whereSoundex["cp"] = "= '$patient_cp'";
+}
 
 $patients        = array();
 $patientsSoundex = array();
@@ -96,9 +103,9 @@ if (!$patient->_id and count($patients) == 1) {
   $patient = reset($patients);
 }
 
-if($patient->_id) {
+if ($patient->_id) {
   $patient->loadRefs();
-  foreach($patient->_ref_hprim21_sejours as &$sejour) {
+  foreach ($patient->_ref_hprim21_sejours as &$sejour) {
     $sejour->loadRefs();
     $sejour->_ref_sejour->loadRefsFwd();
   }
