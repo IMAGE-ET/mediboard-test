@@ -9,6 +9,10 @@
  * @version    $Revision$
  */
 
+/**
+ * Class CMbMetaObject
+ * Classe abstraite de gestion des meta-objets
+ */
 class CMbMetaObject extends CMbObject {
   public $object_id;
   public $object_class;
@@ -17,28 +21,48 @@ class CMbMetaObject extends CMbObject {
    * @var CMbObject
    */
   public $_ref_object;
-  
+
+  /**
+   * @see parent::getProps
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["object_id"]    = "ref notNull class|CMbObject meta|object_class";
     $specs["object_class"] = "str notNull class show|0";
     return $specs;
   }
-    
+
+  /**
+   * Initialisation de l'objet relié
+   *
+   * @param CMbObject $object Objet relié
+   *
+   * @return void
+   */
   function setObject(CMbObject $object) {
     $this->_ref_object  = $object;
     $this->object_id    = $object->_id;
     $this->object_class = $object->_class;
   }
-  
+
+  /**
+   * Récupération de la liste des meta-objets
+   * reliés à un objet donné
+   *
+   * @param CMbObject $object Objet relié
+   *
+   * @return CMbMetaObject[]
+   */
   function loadListFor(CMbObject $object) {
     $this->setObject($object);
     return $this->loadMatchingList();
   }
-  
+
   /**
    * Load target of meta object
-   * 
+   *
+   * @param bool $cache Utilisation du cache
+   *
    * @return CMbObject
    */
   function loadTargetObject($cache = true) {
@@ -51,7 +75,7 @@ class CMbMetaObject extends CMbObject {
       
       if (!$ex_object) {
         trigger_error("Unable to create instance of '$this->object_class' class", E_USER_ERROR);
-        return;
+        return null;
       }
       else {
         $ex_object->load($this->object_id);
@@ -69,7 +93,10 @@ class CMbMetaObject extends CMbObject {
     
     return $this->_ref_object;
   }
-    
+
+  /**
+   * @see parent::loadRefsFwd
+   */
   function loadRefsFwd() {  
     parent::loadRefsFwd();
     $this->loadTargetObject();
