@@ -354,12 +354,19 @@ button.big,
 a.button.big {
   font-size: 150%;
   height: 50px;
-  margin: 4px 10px;
+  margin: 4px 8px;
   padding: 0 2px;
   border-width: 2px;
   text-align: center;
   border-radius: 6px;
   white-space: normal;
+}
+
+button.big.notext,
+a.button.big.notext {
+  width: 26px;
+  height: 40px;
+  padding-top: 6px;
 }
 
 button.copy:before, a.button.copy:before {
