@@ -59,6 +59,27 @@ class CRecordSante400 {
     self::$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     self::$chrono->stop("connection");
+    self::traceChrono("connection");
+  }
+
+  /**
+   * Trace a query chrono
+   *
+   * @param string $trace Trace label
+   *
+   * @return void
+   */
+  static function traceChrono($trace) {
+    if (self::$verbose) {
+      $step = self::$chrono->latestStep * 1000 * 1000;
+      $total = self::$chrono->total * 1000;
+
+      $pace = floor(2*log10($step));
+      $pace = max(0, min(6, $pace));
+      $message = "query-pace-$pace";
+      $type = floor(($pace+3)/2);
+      CAppUI::stepMessage($type, $message, $trace, $step, $total);
+    }
   }
 
   /**
@@ -109,17 +130,20 @@ class CRecordSante400 {
       self::$chrono->start();
       $sth->execute($values);
       self::$chrono->stop("multiple load execute");
+      self::traceChrono("multiple load execute");
 
       // Fetching results
       self::$chrono->start();
       while ($data = $sth->fetch(PDO::FETCH_ASSOC) and $max--) {
         self::$chrono->stop("multiple load fetch");
+        self::traceChrono("multiple load fetch");
         $record = new $class;
         $record->data = $data;
         $records[] = $record;
         self::$chrono->start();
       }
-      self::$chrono->stop();
+      self::$chrono->stop("multiple load fetch");
+      self::traceChrono("multiple load fetch");
 
     } 
     catch (PDOException $e) {
@@ -148,11 +172,13 @@ class CRecordSante400 {
       $sth->execute($values);
       $this->data = $sth->fetch(PDO::FETCH_ASSOC);
       self::$chrono->stop("query");
-    } 
+      self::traceChrono("query");
+    }
     catch (PDOException $e) {
       // Fetch throws this exception in case of UPDATE or DELETE query
       if ($e->getCode() == 24000) {
         self::$chrono->stop("query");
+        self::traceChrono("query");
         return $sth->rowCount($values);
       }
   
