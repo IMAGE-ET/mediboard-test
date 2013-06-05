@@ -71,7 +71,7 @@ class CRecordSante400 {
    */
   static function traceChrono($trace) {
     if (self::$verbose) {
-      $step = self::$chrono->latestStep * 1000 * 1000;
+      $step = self::$chrono->latestStep * 1000;
       $total = self::$chrono->total * 1000;
 
       $pace = floor(2*log10($step));
