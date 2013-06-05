@@ -28,7 +28,7 @@
   {{assign var=maternite_active value="0"}}
 {{/if}}
 
-<script type="text/javascript">
+<script>
 function modifLits(lit_id){
   var form = getForm('editSejour');
 
@@ -607,7 +607,7 @@ Main.add( function(){
 
 <tr>
   <th>
-    <script type="text/javascript">
+    <script>
       if (window.reloadSejours == null) {
         reloadSejours = Prototype.emptyFunction;
       }
@@ -660,7 +660,7 @@ Main.add( function(){
 <tr {{if !$conf.dPplanningOp.CSejour.easy_cim10}}class="modeExpert"{{/if}}>
   <th>{{mb_label object=$sejour field="DP"}}</th>
   <td colspan="3">
-    <script type="text/javascript">
+    <script>
     Main.add(function(){
       var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
       url.autoComplete(getForm("editSejour").keywords_code, '', {
@@ -725,7 +725,7 @@ Main.add( function(){
   <td colspan="3">
     {{mb_field object=$sejour field=_unique_lit_id hidden=true}}
     <input type="text" name="_unique_lit_id_view" style="width: 12em" value="" />
-    <script type="text/javascript">
+    <script>
       Main.add(function(){
         var form = getForm("editSejour");
 
@@ -865,7 +865,7 @@ Main.add( function(){
         <th>{{mb_label object=$sejour field="UHCD"}}</th>
         <td colspan="3">
           {{mb_field object=$sejour field="UHCD"}}
-          <script type="text/javascript">
+          <script>
             function changeTypeHospi() {
               var oForm = getForm("editSejour");
               var sValue = $V(oForm.type);
@@ -1177,7 +1177,7 @@ Main.add( function(){
 
 {{if $conf.dPplanningOp.CSejour.assurances}}
   <tbody {{if !$conf.dPplanningOp.COperation.easy_assurances}}class="modeExpert"{{/if}} id="assurances_patient">
-    {{mb_include module=planningOp template="inc_vw_assurances"}}  
+    {{mb_include module=planningOp template="inc_vw_assurances" form=editSejour}}
   </tbody>
 {{/if}}
 
@@ -1186,7 +1186,7 @@ Main.add( function(){
 <tr>
   <th>{{tr}}CProtocole-protocole_prescription_chir_id{{/tr}}</th>
   <td colspan="3">
-    <script type="text/javascript">
+    <script>
     Main.add(function(){
       var form = getForm("editSejour");
       var url = new Url("dPprescription", "httpreq_vw_select_protocole");
@@ -1256,7 +1256,7 @@ Main.add( function(){
 <table style="width:100%" class="form"> 
   <tr>
     <td id="prescription_register">
-      <script type="text/javascript">
+      <script>
         PrescriptionEditor.register('{{$sejour->_id}}','{{$sejour->_class}}','dhe','{{$sejour->praticien_id}}');
       </script>
     </td>

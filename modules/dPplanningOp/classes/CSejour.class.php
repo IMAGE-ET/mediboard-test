@@ -320,6 +320,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->_locked = CAppUI::conf("dPplanningOp CSejour locked");
   }
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'sejour';
@@ -334,6 +337,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["affectations"]          = "CAffectation sejour_id";
@@ -375,6 +381,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["patient_id"]               = "ref notNull class|CPatient seekable";
@@ -510,6 +519,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->loadRefPatient();
   }
 
+  /**
+   * @see parent::check()
+   */
   function check() {
     // Has to be done first to check and repair fields before further checking
     if ($msg = parent::check()) {
@@ -900,9 +912,9 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Si annulation possible que par le chef de bloc
     if (CAppUI::conf("dPplanningOp COperation cancel_only_for_resp_bloc") &&
-      $this->fieldModified("annule", 1) &&
-      $this->entree_reelle &&
-      !CModule::getCanDo("dPbloc")->edit) {
+        $this->fieldModified("annule", 1) &&
+        $this->entree_reelle &&
+        !CModule::getCanDo("dPbloc")->edit) {
       foreach ($this->loadRefsOperations() as $_operation) {
         if ($_operation->rank) {
           CAppUI::setMsg("Impossible de sauvegarder : une des interventions du séjour est validée.\nContactez le responsable de bloc", UI_MSG_ERROR);
@@ -1071,7 +1083,12 @@ class CSejour extends CFacturable implements IPatientRelated {
       }
     }
   }
-  
+
+  /**
+   *  Récupération des factures du séjour
+   *
+   * @return void|CFactureEtablissement[]
+   */
   function loadRefsFactureEtablissement(){
     if (CModule::getActive("dPfacturation") && CAppUI::conf("dPplanningOp CFactureEtablissement use_facture_etab")) {
       $ljoin = array();
@@ -1083,9 +1100,10 @@ class CSejour extends CFacturable implements IPatientRelated {
       
       $facture = new CFactureEtablissement();
       $this->_ref_factures = $facture->loadList($where, "ouverture ASC", null, null, $ljoin);
-     if (count($this->_ref_factures) > 0) {
+      if (count($this->_ref_factures) > 0) {
         $this->_ref_last_facture = end($this->_ref_factures);
         $this->_ref_last_facture->loadRefsReglements();
+        $this->_ref_last_facture->loadRefAssurance();
       }
       else {
         $this->_ref_last_facture = new CFactureEtablissement();
@@ -1149,6 +1167,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->_isolement_date = CValue::first($this->isolement_date, $this->_entree);
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->updateEntreeSortie();
@@ -1557,8 +1578,8 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
- * @return CModeEntreeSejour
- */
+   * @return CModeEntreeSejour
+   */
   function loadRefModeEntree($cache = true) {
     return $this->_ref_mode_entree = $this->loadFwdRef("mode_entree_id", $cache);
   }
@@ -2083,7 +2104,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->_count_modeles_etiq = $modele_etiquette->countMatchingList();
   }
 
-/**
+  /**
    * Charge le sejour ayant les traits suivants :
    * - Meme patient
    * - Meme praticien si praticien connu
@@ -2130,7 +2151,9 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   /**
    * Construit le tag NDOS en fonction des variables de configuration
+   *
    * @param $group_id Permet de charger le NDOS pour un établissement donné si non null
+   *
    * @return string
    */
   static function getTagNDA($group_id = null, $type_tag = "tag_dossier") {
@@ -2577,8 +2600,8 @@ class CSejour extends CFacturable implements IPatientRelated {
     $template->addProperty("Hospitalisation - Date sortie longue", $this->getFormattedValue("sortie_prevue"));
     $this->loadNDA();
     $template->addProperty("Sejour - Numéro de dossier"       , $this->_NDA );
-    $template->addBarcode ("Sejour - Code barre ID"           , "SID$this->_id"     );
-    $template->addBarcode ("Sejour - Code barre NDOS"         , "NDOS$this->_NDA");
+    $template->addBarcode("Sejour - Code barre ID"           , "SID$this->_id");
+    $template->addBarcode("Sejour - Code barre NDOS"         , "NDOS$this->_NDA");
 
     $template->addDateProperty("Sejour - Date entrée"         , $this->entree);
     $template->addLongDateProperty("Sejour - Date entrée (longue)", $this->entree);
@@ -2855,7 +2878,9 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   /**
    * Builds an array containing cancel alerts for the sejour
+   *
    * @param ref|COperation excluded_id Exclude given operation
+   *
    * @return void Valuate $this->_cancel_alert
    */
   function makeCancelAlerts($excluded_id = null) {
@@ -2911,7 +2936,9 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   /**
    * Count evenement SSR for a given date;
+   *
    * @param date $date
+   *
    * @return
    */
   function countEvenementsSSR($date) {
