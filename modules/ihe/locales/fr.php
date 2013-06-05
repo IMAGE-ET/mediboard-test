@@ -11,7 +11,15 @@ $locales['CPAMFR'] = 'PAM - National extension France';
 $locales['CPAMFR-desc'] = 'Patient Administration Management';
 $locales['CSWF'] = 'SWF - International';
 $locales['CSWF-desc'] = 'Scheduled Workflow';
+$locales['ITI-21'] = 'Patient Demographics Query';
+$locales['ITI-22'] = 'Patient Demographics and Visit Query';
+$locales['ITI-30'] = 'Patient Identity Management';
+$locales['ITI-31'] = 'Patient Encounter Management';
+$locales['PDC-01'] = 'Communicate PCD Data';
+$locales['RAD-3'] = 'Filler Order Management';
+$locales['RAD-48'] = 'Appointment Notification';
 $locales['evenementsPatient'] = 'PAM';
 $locales['evenementsPatient-desc'] = 'Patient Administration Management';
 $locales['module-ihe-court'] = 'IHE';
 $locales['module-ihe-long'] = 'Integrating the Healthcare Enterprise';
+?>

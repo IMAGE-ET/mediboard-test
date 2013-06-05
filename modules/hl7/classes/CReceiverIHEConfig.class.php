@@ -61,6 +61,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
   public $send_own_identifier;
   public $send_self_identifier;
   public $send_update_patient_information;
+  public $send_change_after_admit;
 
   // Build
   public $build_mode;
@@ -141,6 +142,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
       "send_own_identifier",
       "send_self_identifier",
       "send_update_patient_information",
+      "send_change_after_admit"
     ),
     "PID" => array(
       "build_PID_31",
@@ -227,6 +229,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
     $props["send_own_identifier"]                = "bool default|1";
     $props["send_self_identifier"]               = "bool default|0";
     $props["send_update_patient_information"]    = "enum list|A08|A31 default|A31";
+    $props["send_change_after_admit"]            = "bool default|1";
     
     // Build
     $props["build_mode"]                   = "enum list|normal|simple default|normal";

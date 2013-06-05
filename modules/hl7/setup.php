@@ -1111,7 +1111,13 @@ class CSetuphl7 extends CSetup {
                 ADD INDEX (`object_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.69";
+    $this->makeRevision("0.69");
+
+    $query = "ALTER TABLE `receiver_ihe_config`
+                ADD `send_change_after_admit` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.70";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

@@ -101,6 +101,10 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
       $code = $this->getCodeSejour($sejour);
 
+      if (!$code) {
+        return;
+      }
+
       // Cas où :
       // * on est l'initiateur du message
       // * le destinataire ne supporte pas le message
@@ -551,6 +555,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       ) {
         return "A26";
       }
+
+      // On ne transmet pas les modifications d'un séjour dès lors que celui-ci a une entrée réelle
+      if (!$receiver->_configs["send_change_after_admit"]) {
+        return null;
+      }
       
       // Simple modification ? 
       return $this->getModificationAdmitCode($sejour->_receiver);
@@ -568,10 +577,17 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($sejour->fieldModified("annule", "1")) {
         return "A13";
       }
-      
+
+      // On ne transmet pas les modifications d'un séjour dès lors que celui-ci a une entrée réelle
+      if (!$receiver->_configs["send_change_after_admit"]) {
+        return null;
+      }
+
       // Simple modification ? 
       return $this->getModificationAdmitCode($sejour->_receiver);
     }
+
+    return null;
   }
 
   /**

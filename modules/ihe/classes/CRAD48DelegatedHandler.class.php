@@ -24,7 +24,10 @@ class CRAD48DelegatedHandler extends CITIDelegatedHandler {
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
   }
- 
+
+  /**
+   * @see parent::onAfterStore()
+   */
   function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
@@ -36,14 +39,16 @@ class CRAD48DelegatedHandler extends CITIDelegatedHandler {
     // Récupération du code du trigger    
     $code = $this->getCode($consultation);
     
-    if ($consultation->_eai_initiateur_group_id || 
-        !$this->isMessageSupported($this->transaction, $this->message, $code, $consultation->_receiver)) {
+    if ($consultation->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $this->message, $code, $consultation->_receiver)) {
       return;
     }
     
     $this->sendITI($this->profil, $this->transaction, $this->message, $code, $consultation);    
   }
 
+  /**
+   * @see parent::onBeforeDelete()
+   */
   function onBeforeDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
@@ -51,7 +56,10 @@ class CRAD48DelegatedHandler extends CITIDelegatedHandler {
     
     return true;
   }
-  
+
+  /**
+   * @see parent::onAfterDelete()
+   */
   function onAfterDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
