@@ -18,7 +18,7 @@ class CSetuphl7 extends CSetup {
     $code_mb_to    = ($code_mb_to === null)    ? "NULL" : "'$code_mb_to'";
     
     
-    $query = "INSERT INTO `hl7v2`.`table_entry` (
+    $query = "INSERT INTO `table_entry` (
               `table_entry_id`, `number`, `code_hl7_from`, `code_hl7_to`, `code_mb_from`, `code_mb_to`, `description`, `user`
               ) VALUES (
                 NULL , '$number', $code_hl7_from, $code_hl7_to, $code_mb_from, $code_mb_to, '$description', '$user'
@@ -36,7 +36,7 @@ class CSetuphl7 extends CSetup {
     foreach ($where as $field => $value) {
       $and .= "AND `$field` = '$value' ";
     }
-    $query = "UPDATE `hl7v2`.`table_entry`
+    $query = "UPDATE `table_entry`
               SET ".implode(", ", $set)."
               WHERE `number` = '$number'
               $and;";
@@ -51,7 +51,7 @@ class CSetuphl7 extends CSetup {
       $and .= "AND `$field` = '$value' ";
     }
     
-    $query = "DELETE FROM `hl7v2`.`table_entry`
+    $query = "DELETE FROM `table_entry`
               WHERE `number` = '$number'
               $and;";
 
@@ -85,7 +85,7 @@ class CSetuphl7 extends CSetup {
     $this->addQuery($query, true, "hl7v2");
     
     // Gestion du mode de placement en psychiatrie
-    $query = "INSERT INTO `hl7v2`.`table_description` (
+    $query = "INSERT INTO `table_description` (
               `table_description_id`, `number`, `description`, `user`
               ) VALUES (
                 NULL , '9000', 'Admit Reason (Psychiatrie)', '1'
@@ -94,7 +94,7 @@ class CSetuphl7 extends CSetup {
     
     $this->makeRevision("0.03");
     
-    $query = "ALTER TABLE `hl7v2`.`table_entry` 
+    $query = "ALTER TABLE `table_entry`
                 DROP INDEX `number_code_hl7` ,
                 ADD INDEX `number_code_hl7` ( `number` , `code_hl7_from` );";
     $this->addQuery($query, false, "hl7v2");
@@ -694,7 +694,7 @@ class CSetuphl7 extends CSetup {
     $this->makeRevision("0.18");
     
     // Gestion du mode de placement en psychiatrie
-    $query = "INSERT INTO `hl7v2`.`table_description` (
+    $query = "INSERT INTO `table_description` (
               `table_description_id`, `number`, `description`, `user`
               ) VALUES (
                 NULL , '9001', 'Mode de sortie PMSI', '1'
