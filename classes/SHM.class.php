@@ -378,11 +378,12 @@ class MemcachedSharedMemory implements ISharedMemory {
       return (bool) $this->conn = $conn;
     }
 
-    include dirname(__FILE__)."/../lib/xenzilla-memcached/Memcached.php";
+    //include dirname(__FILE__)."/../lib/xenzilla-memcached/Memcached.php";
 
-    $conn = new \Xenzilla\Memcached();
-    $conn->addServer("127.0.0.1", 11211);
-    return (bool) $this->conn = $conn;
+    //$conn = new \Xenzilla\Memcached();
+    //$conn->addServer("127.0.0.1", 11211);
+    //return (bool) $this->conn = $conn;
+    return false;
   }
 
   /**
