@@ -135,12 +135,12 @@ class CSourceFTP extends CExchangeSource {
     return $file_get_content;
   }
 
-  function delFile($path, $directory) {
+  function delFile($path, $current_directory) {
     $ftp = $this->init($this);
 
     try {
       $ftp->connect();
-      $ftp->changeDirectory($directory);
+      $ftp->changeDirectory($current_directory);
 
       $ftp->delFile($path);
     } catch (CMbException $e) {
@@ -150,12 +150,12 @@ class CSourceFTP extends CExchangeSource {
     $ftp->close();
   }
 
-  function renameFile($oldname, $newname, $directory) {
+  function renameFile($oldname, $newname, $current_directory) {
     $ftp = $this->init($this);
 
     try {
       $ftp->connect();
-      $ftp->changeDirectory($directory);
+      $ftp->changeDirectory($current_directory);
 
       $ftp->renameFile($oldname, $newname);
     } catch (CMbException $e) {
@@ -199,13 +199,13 @@ class CSourceFTP extends CExchangeSource {
     return $curent_directory;
   }
 
-  function getListFilesDetails($directory) {
+  function getListFilesDetails($current_directory) {
     $ftp = $this->init($this);
 
     try {
       $ftp->connect();
 
-      $files = $ftp->getListFilesDetails($directory);
+      $files = $ftp->getListFilesDetails($current_directory);
     } catch (CMbException $e) {
       $e->stepAjax();
     }
@@ -215,12 +215,12 @@ class CSourceFTP extends CExchangeSource {
     return $files;
   }
 
-  function addFile($file, $file_name, $directory) {
+  function addFile($file, $file_name, $current_directory) {
     $ftp = $this->init($this);
 
     try {
       $ftp->connect();
-      $ftp->changeDirectory($directory);
+      $ftp->changeDirectory($current_directory);
 
       $ftp->addFile($file, $file_name);
     } catch (CMbException $e) {
@@ -248,6 +248,27 @@ class CSourceFTP extends CExchangeSource {
     $ftp->close();
 
     return $directories;
+  }
+
+  function getRootDirectory($current_directory) {
+    $tabRoot = explode("/", $current_directory);
+    array_pop($tabRoot);
+    $tabRoot[0] = "/";
+    $root = array();
+    $i =0;
+    foreach ($tabRoot as $_tabRoot) {
+
+      if ($i === 0) {
+        $path = "/";
+      }
+      else {
+        $path = $root[count($root)-1]["path"]."$_tabRoot/";
+      }
+      $root[] = array("name" => $_tabRoot,
+                      "path" => $path);
+      $i++;
+    }
+    return $root;
   }
 
   function isReachableSource() {
