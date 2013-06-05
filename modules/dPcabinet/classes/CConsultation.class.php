@@ -121,6 +121,8 @@ class CConsultation extends CFacturable {
   public $_ref_prescription;
   /** @var CConsultationCategorie */
   public $_ref_categorie;
+  /** @var CSejourTask */
+  public $_ref_task;
 
   // Collections
   /** @var CConsultAnesth[] */
@@ -215,7 +217,8 @@ class CConsultation extends CFacturable {
     $backProps["echanges_hprimxml"] = "CEchangeHprim object_id";
     $backProps["exchanges_ihe"]     = "CExchangeIHE object_id";
     $backProps["fse_pyxvital"]      = "CPvFSE consult_id";
-    
+    $backProps["task"]              = "CSejourTask consult_id";
+
     return $backProps;
   }
 
@@ -1039,6 +1042,15 @@ class CConsultation extends CFacturable {
    */
   function loadRefCategorie($cache = true) {
     return $this->_ref_categorie = $this->loadFwdRef("categorie_id", $cache);
+  }
+
+  /**
+   * Charge la tâche de séjour possiblement associée
+   *
+   * @return CSejourTask
+   */
+  function loadRefTask() {
+    return $this->_ref_task = $this->loadUniqueBackRef("task");
   }
 
   /**
@@ -1937,6 +1949,24 @@ class CConsultation extends CFacturable {
     }
 
     return null;
+  }
+
+  /**
+   * Charge les praticiens susceptibles d'être concernés par les consultation
+   * en fonction de les préférences utilisateurs
+   *
+   * @param int    $permType    Type de permission
+   * @param ref    $function_id Fonction spécifique
+   * @param string $name        Nom spécifique
+   * @param bool   $secondary   Chercher parmi les fonctions secondaires
+   * @param bool   $actif       Seulement les actifs
+   *
+   * @return CMediusers[]
+   */
+  static function loadPraticiens($permType = PERM_READ, $function_id = null, $name = null, $secondary = false, $actif = true) {
+    $user = new CMediusers();
+    $method = CAppUI::pref("pratOnlyForConsult", 1) ? "loadPraticiens" : "loadProfessionnelDeSante";
+    return $user->$method($permType, $function_id, $name, $secondary, $actif);
   }
 
   /**

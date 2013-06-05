@@ -419,7 +419,7 @@ class CActeCCAM extends CActe {
    * @return CCodable
    */
   function loadRefObject() {
-    $this->loadTargetObject();
+    return $this->loadTargetObject();
   }
 
   /**
@@ -976,7 +976,7 @@ class CActeCCAM extends CActe {
    */
   static function getNGAP($code) {
     $ds = CSQLDataSource::get("ccamV2");
-    $query = $ds->prepare("SELECT * FROM ccam_ngap WHERE code_ccam = %", $code);
+    $query = $ds->prepare("SELECT * FROM ccam_ngap WHERE code_ccam = ?", $code);
     $result = $ds->exec($query);
     
     if ($ds->numRows($result)) {
