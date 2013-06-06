@@ -170,7 +170,7 @@ class CFacture extends CMbObject {
   /**
    * Duplication de la facture
    *
-   * @return void
+   * @return void|string
    **/
   function duplicate() {
     $this->loadRefsReglements();
@@ -178,7 +178,7 @@ class CFacture extends CMbObject {
     if (!$this->_id || count($this->_ref_reglements) || count($this->_ref_relances)) {
       return null;
     }
-
+    /** @var CFacture $new*/
     $new = new $this->_class;
     $new->cloneFrom($this);
 
@@ -244,6 +244,7 @@ class CFacture extends CMbObject {
       //Suppression des tous les items de la facture
       $this->loadRefsItems();
       foreach ($this->_ref_items as $item) {
+        /** @var CFactureItem $item*/
         $item->delete();
       }
     }
@@ -618,7 +619,7 @@ class CFacture extends CMbObject {
         $where["facture_liaison.facture_id"]    = " = '$this->_id'";
         $where["facture_liaison.facture_class"] = " = '$this->_class'";
         $where["facture_liaison.object_class"]  = " = 'CConsultation'";
-        $this->_ref_consults = $consult->loadList($where, null, null, null, $ljoin);
+        $this->_ref_consults = $consult->loadList($where, null, null, "consultation.consultation_id", $ljoin);
       }
       if (!count($this->_ref_consults) && $this->_class == "CFactureCabinet") {
         $this->_ref_consults = $this->loadBackRefs("consultations", "consultation_id");
@@ -675,6 +676,7 @@ class CFacture extends CMbObject {
       $this->_ref_sejours = $sejour->loadList($where, "sejour_id", null, null, $ljoin);
       // Chargement des actes de séjour
       foreach ($this->_ref_sejours as $sejour) {
+        /** @var CSejour $sejour*/
         $sejour->loadRefsOperations();
         foreach ($sejour->_ref_operations as $op) {
           $op->loadRefsActes();
@@ -832,6 +834,7 @@ class CFacture extends CMbObject {
           $use   = $acte_caisse->_ref_caisse_maladie->use_tarmed_bill;
         }
         else {
+          /** @var CFactureItem $acte_caisse*/
           $coeff = $acte_caisse->coeff ;
           $use   = $acte_caisse->use_tarmed_bill;
         }
@@ -865,7 +868,7 @@ class CFacture extends CMbObject {
   /**
    * Calcul des totaux à partir d'un objet
    * 
-   * @param string $object objet référence
+   * @param object $object objet référence
    * 
    * @return void
   **/
@@ -887,7 +890,7 @@ class CFacture extends CMbObject {
   /**
    * Fonction de création des lignes(items) de la facture lorsqu'elle est cloturée
    * 
-   * @param string  $object objet référence
+   * @param object  $object objet référence
    * @param boolean $val    item
    * 
    * @return void
@@ -908,6 +911,7 @@ class CFacture extends CMbObject {
             $this->_ref_actes_ngap[$key] = $acte;
             break;
           case "CActeCCAM" :
+            /** @var CActeCCAM $acte*/
             if ($type == "_class") {
               $acte->loadRefCodeCCAM();
             }
@@ -989,6 +993,7 @@ class CFacture extends CMbObject {
     $retrocessions = $this->_ref_praticien->loadRefsRetrocessions();
     foreach ($this->_ref_items as $item) {
       foreach ($retrocessions as $retro) {
+        /** @var CRetrocession $retro*/
         if ($retro->code_class == $item->type && $retro->code == $item->code) {
           $this->_montant_retrocession += $retro->updateMontant();
         }
@@ -1005,6 +1010,7 @@ class CFacture extends CMbObject {
    * @return void
    */
   function cloneFrom($the_facture){
+    /** @var CFacture $facture*/
     $facture = new $the_facture->_class;
     $facture->load($the_facture->_id);
     $this->patient_id = $facture->patient_id;
