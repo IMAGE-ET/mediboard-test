@@ -1,23 +1,25 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPplanningOp
- * @version $Revision$
- * @author Alexis Granger
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    OXOL, see http://www.mediboard.org/public/OXOL
+ * @version    $Revision$
  */
 
-CApp::setTimeLimit(180);
-
-$_date_min = CValue::getOrSession("_date_min");
-$_date_max = CValue::getOrSession("_date_max");
-$_prat_id = CValue::getOrSession("chir");
-$typeVue = CValue::getOrSession("typeVue");
-$etab = CValue::getOrSession("etab");
+CCanDo::checkEdit();
+$_date_min  = CValue::getOrSession("_date_min");
+$_date_max  = CValue::getOrSession("_date_max");
+$_prat_id   = CValue::getOrSession("chir");
+$typeVue    = CValue::getOrSession("typeVue");
 
 $nbActes = array();
 $montantSejour = array();
 $tabSejours = array();
+$totalActes = 0;
+$montantTotalActes = 0;
 
 $praticien = new CMediusers();
 $praticien->load($_prat_id);
@@ -25,149 +27,67 @@ $praticien->load($_prat_id);
 $date_min = $_date_min . " 00:00:00";
 $date_max = $_date_max . " 23:59:59";
 
-// Parcours des actes CCAM
-$acte_ccam = new CActeCCAM();
-$order = "execution ASC";
-$where = array();
-$ljoin = array();
-
-$where["executant_id"] = " = '$_prat_id'";
-$where["execution"] = "BETWEEN '$date_min' AND '$date_max'";
-
-$ljoin["consultation"] = "acte_ccam.object_id = consultation.sejour_id AND acte_ccam.object_class = 'CConsultation'";
-
-if ($etab) {
-  $where[] = "(object_class <> 'CConsultation') OR (consultation.sejour_id IS NOT NULL AND consultation.consultation_id = object_id)";
-}
-else {
-  $where[] = "consultation.sejour_id IS NULL";
-}
-
-$actes_ccam = $acte_ccam->loadList($where, $order, null, null, $ljoin);
-
-// Parcours des actes NGAP
 $sejour = new CSejour();
-$ljoin = array();
 $where = array();
 
 $where["entree"] = "< '$date_max'";
 $where["sortie"] = "> '$date_min'";
+$where["praticien_id"] = "= '$_prat_id'";
+/** @var  CSejour[] $sejours*/
+$sejours = $sejour->loadList($where);
 
-$ljoin["acte_ngap"] = "acte_ngap.object_id = sejour.sejour_id AND acte_ngap.object_class = 'CSejour'";
-
-$sejours = $sejour->loadList($where, null, null, null, $ljoin);
-
-// Initialisation du tableau de codables
-$codables = array(
-  "COperation"    => array(), 
-  "CSejour"       => array(), 
-  "CConsultation" => array(),
-);
-
-// Parcours des actes ccam
-foreach ($actes_ccam as $key => $acte_ccam) {
-  if (!array_key_exists($acte_ccam->object_id, $codables[$acte_ccam->object_class])) {
-    $codable = new $acte_ccam->object_class;
-    $codable->load($acte_ccam->object_id);
-  }
-  $codables[$acte_ccam->object_class][$acte_ccam->object_id] = $codable;
-  $codables[$acte_ccam->object_class][$acte_ccam->object_id]->_ref_actes_ccam[$acte_ccam->_id] = $acte_ccam;
-}
-
-CMbObject::massLoadFwdRef($codables["COperation"], "plageop_id");
-
-// Parcours des operations
-foreach ($codables["COperation"] as $key => $operation) {
-  $operation->loadRefPlageOp();
-
-  // Si le sejour_id n'est pas présent dans le tableau de séjours, on le crée
-  if (!array_key_exists($operation->sejour_id, $codables["CSejour"])) {
-    $sejour = new CSejour();
-    $sejour->load($operation->sejour_id);
-    $sejour->_ref_operations = array();
-    $sejour->_ref_operations[$operation->_id] = $operation; 
-    $codables["CSejour"][$operation->sejour_id] = $sejour;
-  }
-  else {
-    // sinon, on rajoute directement l'opération dans le séjour
-    $codables["CSejour"][$operation->sejour_id]->_ref_operations[$operation->_id] = $operation;
-  }
-}
-
-// Suppression des consultations qui n'ont pas de sejour_id
-foreach ($codables["CConsultation"] as $key => $consultation) {
-  if (!$consultation->sejour_id) {
-    unset($codables["CConsultation"][$key]);
-  }
-}
-
-CMbObject::massLoadFwdRef($codables["CConsultation"], "sejour_id");
-
-// Parcours des consultations
-foreach ($codables["CConsultation"] as $key => $consultation) {
-  if (!array_key_exists($consultation->sejour_id, $codables["CSejour"])) {
-    $consultation->loadRefSejour();
-    $sejour = new CSejour();
-    $sejour = $consultation->_ref_sejour;
-    $sejour->_ref_consultations[$consultation->_id] = $consultation;
-    $codables["CSejour"][$consultation->sejour_id] = $sejour;  
-  }
-  else {
-    $codables["CSejour"][$consultation->sejour_id]->_ref_consultations[$consultation->_id] = $consultation;
-  }
-}
-
-$sejours =& $codables["CSejour"];
-
-CMbObject::massLoadFwdRef($sejours, "patient_id");
-
-// Tri par sortie et chargement des patients
 foreach ($sejours as $key => $sejour) {
   $sejour->loadRefPatient();
-  $tabSejours[CMbDT::date($sejour->sortie)][$sejour->_id] = $sejour;
-  
-  // Calcul du nombre d'actes par sejour
-  if ($sejour->_ref_actes_ccam) {
-    if (count($sejour->_ref_actes_ccam)) {
-      foreach ($sejour->_ref_actes_ccam as $acte) {
-        @$nbActes[$sejour->_id]++;
-        @$montantSejour[$sejour->_id] += $acte->_montant_facture; 
-      }
+  $sejour->loadRefsOperations();
+  $sejour->loadRefsActes();
+  $sejour->loadRefsFactureEtablissement();
+  foreach ($sejour->_ref_operations as $keyop => $op) {
+    $op->loadRefsActes();
+    if (!count($op->_ref_actes)) {
+      unset($sejour->_ref_operations[$keyop]);
     }
   }
-  if ($sejour->_ref_operations) {
-    foreach ($sejour->_ref_operations as $operation) {
-      if (count($operation->_ref_actes_ccam)) {
-        foreach ($operation->_ref_actes_ccam as $acte) {
-          @$nbActes[$sejour->_id]++;
-          @$montantSejour[$sejour->_id] += $acte->_montant_facture;
+  if (!count($sejour->_ref_actes) && !count($sejour->_ref_operations)) {
+    unset($sejours[$key]);
+  }
+  else {
+    $sejour->loadRefPatient();
+    $tabSejours[CMbDT::date($sejour->sortie)][$sejour->_id] = $sejour;
+    $nbActes[$sejour->_id] = 0;
+    $montantSejour[$sejour->_id] = 0;
+    // Calcul du nombre d'actes par sejour
+    if ($sejour->_ref_actes) {
+      if (count($sejour->_ref_actes)) {
+        foreach ($sejour->_ref_actes as $acte) {
+          $nbActes[$sejour->_id]++;
+          $montantSejour[$sejour->_id] += $acte->_montant_facture; 
         }
       }
     }
-  }
-  if ($sejour->_ref_consultations) {
-    foreach ($sejour->_ref_consultations as $consult) {
-      if (count($consult->_ref_actes_ccam)) {
-        foreach ($consult->_ref_actes_ccam as $acte) {
-          @$nbActes[$sejour->_id]++;
-          @$montantSejour[$sejour->_id] += $acte->_montant_facture;
+    if ($sejour->_ref_operations) {
+      foreach ($sejour->_ref_operations as $operation) {
+        if (count($operation->_ref_actes)) {
+          $operation->loadRefPlageOp();
+          foreach ($operation->_ref_actes as $acte) {
+            $nbActes[$sejour->_id]++;
+            $montantSejour[$sejour->_id] += $acte->_montant_facture;
+          }
         }
       }
     }
+    if ($sejour->_ref_consultations) {
+      foreach ($sejour->_ref_consultations as $consult) {
+        if (count($consult->_ref_actes)) {
+          foreach ($consult->_ref_actes as $acte) {
+            $nbActes[$sejour->_id]++;
+            $montantSejour[$sejour->_id] += $acte->_montant_facture;
+          }
+        }
+      }
+    }
+    $totalActes        += $nbActes[$sejour->_id];
+    $montantTotalActes += $montantSejour[$sejour->_id];
   }
-}
-
-$totalActes = 0;
-$montantTotalActes = 0;
-
-// Calcul du nombre total d'actes
-foreach ($nbActes as $key => $nb_acte_sejour) {
-  $totalActes += $nb_acte_sejour;
-}
-
-// Calcul du montant total des actes realises
-foreach ($montantSejour as $key => $montant_sejour) {
-  $montantTotalActes += $montant_sejour;
 }
 
 // Tri par date du tableau de sejours
@@ -186,4 +106,9 @@ $smarty->assign("_date_min"        , $_date_min);
 $smarty->assign("_date_max"        , $_date_max);
 $smarty->assign("typeVue"          , $typeVue);
 
-$smarty->display("vw_actes_realises.tpl");
+if (CAppUI::conf("ref_pays") == 1) {
+  $smarty->display("vw_actes_realises.tpl");
+}
+else {
+  $smarty->display("vw_actes_realises2.tpl");
+}
