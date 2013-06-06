@@ -51,8 +51,8 @@ function initCKEditor() {
         $("thumbs").style.height = (dims["height"] - greedyPane.cumulativeOffset().top - 10) +"px";
       }
     }
-    
-    var ck_instance = CKEDITOR.instances.htmlarea;
+
+    var ck_instance = e.editor;
 
     {{if !$templateManager->valueMode}}
   
@@ -147,14 +147,9 @@ function initCKEditor() {
     Event.observe(window, "resize", function(e){
       window.resizeEditor();
     });
-    
+
     {{if $templateManager->printMode}}
-      CKEDITOR.instances.htmlarea.element.$.disabled=true;
-      CKEDITOR.instances.htmlarea.element.$.contentEditable=false;
-      CKEDITOR.instances.htmlarea.element.$.designMode="Off";
-      ck_instance.on('key', function(keyEvent) {
-        keyEvent.cancel();
-      });
+      ck_instance.setReadOnly();
     {{else}}
       {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
         if (window.Thumb) {
