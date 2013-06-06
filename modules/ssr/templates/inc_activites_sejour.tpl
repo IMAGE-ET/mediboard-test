@@ -16,7 +16,7 @@ selectActivite = function(activite) {
 
   $$("button.activite").invoke("removeClassName", "selected");
   $("trigger-"+activite).addClassName("selected");
-  
+
   $$("div.activite").invoke("hide");
   $("activite-"+activite).show();
 
@@ -24,19 +24,19 @@ selectActivite = function(activite) {
   $$("div.techniciens").invoke("hide").invoke("removeClassName", "selected");
   $$("button.ressource").invoke("removeClassName", "selected");
   $V(oFormEvenementSSR.therapeute_id, '');  
-  
+
   // Suppression des valeurs su select de technicien
   $$("select._technicien_id").each(function(select_tech){
     $V(select_tech, '');
   });
-  
+
   // Affichage des techniciens correspondants à l'activité selectionnée
   $("techniciens-"+activite).show();
 
   // On masque les codes Cdarrs
   $$("div.cdarrs").invoke("hide");
   $$("div.type-cdarrs").invoke("hide");
-  
+
   $('div_other_cdarr').hide(); 
   $('div_other_csarr').hide(); 
   $('other_cdarr').hide();
@@ -44,11 +44,11 @@ selectActivite = function(activite) {
   $V(oFormEvenementSSR.code_cdarr, '');
   $V(oFormEvenementSSR.code_csarr, '');
   oFormEvenementSSR._cdarr.checked = false;
-  
+
   // Mise en evidence des elements dans les plannings
   addBorderEvent();
   refreshSelectSeances();
-}
+};
 
 selectElement = function(line_id){
   $V(oFormEvenementSSR.line_id, line_id);
@@ -56,15 +56,15 @@ selectElement = function(line_id){
   $$("button.line").invoke("removeClassName", "selected");
   $$(".button-type-cdarrs").invoke("removeClassName","selected");
   $("line-"+line_id).addClassName("selected");
-  
+
   $$("div.cdarrs").invoke("hide");
   $$("div.type-cdarrs").invoke("hide");
-  
+
   $V(getForm("editEvenementSSR").cdarr, '');
   $("cdarrs-"+line_id).show();
   $("csarrs-"+line_id).show();
   $("type-cdarrs-"+line_id).show();
-  
+
   $('div_other_cdarr').show();
   $('div_other_csarr').show();
 
@@ -74,30 +74,30 @@ selectElement = function(line_id){
   // Mise en evidence des elements dans les plannings
   addBorderEvent();
   refreshSelectSeances();
-}
+};
 
 selectTypeCdarr = function(type_cdarr, line_id, buttonSelected){
   $$('.cdarrs').invoke('hide'); 
   $('cdarrs-'+line_id+'-'+type_cdarr).show();
-  
+
   $$(".button-type-cdarrs").invoke("removeClassName","selected");
   buttonSelected.addClassName("selected");
-}
+};
 
 selectTechnicien = function(kine_id, buttonSelected) {
   $V(oFormEvenementSSR.therapeute_id, kine_id); 
-  
+
   $$("button.ressource").invoke("removeClassName", "selected");
   if(buttonSelected){
     buttonSelected.addClassName("selected");
   }
-      
+
   PlanningTechnicien.show(kine_id, null, '{{$bilan->sejour_id}}');
   if($V(oFormEvenementSSR.equipement_id)){
     PlanningEquipement.show($V(oFormEvenementSSR.equipement_id), '{{$bilan->sejour_id}}');
   }
   refreshSelectSeances();
-}
+};
 
 selectEquipement = function(equipement_id) {
   $V(oFormEvenementSSR.equipement_id, equipement_id);
@@ -105,7 +105,7 @@ selectEquipement = function(equipement_id) {
   if ($("equipement-"+equipement_id)){
     $("equipement-"+equipement_id).addClassName("selected");
   }
-  
+
   if (equipement_id) {
     PlanningEquipement.show(equipement_id,'{{$bilan->sejour_id}}');
   } 
@@ -113,13 +113,13 @@ selectEquipement = function(equipement_id) {
     PlanningEquipement.hide();
   }
   refreshSelectSeances();
-}
+};
 
 refreshSelectSeances = function(){  
   if($V(oFormEvenementSSR.equipement_id) && 
      $V(oFormEvenementSSR.therapeute_id) &&
      $V(oFormEvenementSSR.line_id)){
-  
+
     var url = new Url("ssr", "ajax_vw_select_seances");
     url.addParam("therapeute_id", $V(oFormEvenementSSR.therapeute_id));
     url.addParam("equipement_id", $V(oFormEvenementSSR.equipement_id));
@@ -137,7 +137,7 @@ refreshSelectSeances = function(){
     $V(oFormEvenementSSR.seance_collective, false);
     $V(oFormEvenementSSR.seance_collective_id, '');
   }
-}
+};
 
 hideCodes = function() {
   // Deselection des codes cdarrs et csarrs
@@ -147,8 +147,7 @@ hideCodes = function() {
   $$('#other_csarr span').invoke('remove'); 
   $('other_cdarr').hide();
   $('other_csarr').hide();
-  
-}
+};
 
 removeCodes = function() {
   oFormEvenementSSR.select('input[name^="cdarrs"]').each(function(e){
@@ -158,9 +157,9 @@ removeCodes = function() {
   oFormEvenementSSR.select('input[name^="csarrs"]').each(function(e){
     e.checked = false;
   });
-  
+
   $$('.counts_cdarr').invoke('update','')
-}
+};
 
 submitSSR = function(){
   // Test de la presence d'au moins un code SSR
@@ -190,14 +189,14 @@ submitSSR = function(){
       return false;
     }
   }
-  
+
   if (oFormEvenementSSR.equipement_id) {
     if(!oFormEvenementSSR.select("button.equipement.selected").length && !$V(oFormEvenementSSR.equipement_id)){
       alert("Veuillez selectionner un equipement");
       return false;
     }
   }
-  
+
   return onSubmitFormAjax(oFormEvenementSSR, { onComplete: function(){
     refreshPlanningsSSR();
     $$(".days").each(function(e){
@@ -217,10 +216,10 @@ submitSSR = function(){
     }
 
     hideCodes();
-    
+
     selectElement($V(oFormEvenementSSR.line_id));
   }} );
-}
+};
 
 refreshPlanningsSSR = function(){
   Planification.refreshSejour('{{$bilan->sejour_id}}', true);
@@ -228,7 +227,7 @@ refreshPlanningsSSR = function(){
   if($V(oFormEvenementSSR.equipement_id)){
     PlanningEquipement.show($V(oFormEvenementSSR.equipement_id),'{{$bilan->sejour_id}}');
   }
-}
+};
 
 addBorderEvent = function(){
   // Classe des evenements à selectionner
@@ -236,46 +235,49 @@ addBorderEvent = function(){
   var element_id  = $V(oFormEvenementSSR._element_id);
   var eventClass = (element_id) ? ".CElementPrescription-"+element_id : ".CCategoryPrescription-"+category_id;
   var planning = $('planning-sejour');
-  
+
   // On ne passe pas en selected les evenements qui possedent la classe tag_cat
   if(element_id){ 
     var elements_tag = planning.select(".event.elt_selected"+eventClass+":not(.tag_cat)");
-    if(planning.select(".event.elt_selected"+eventClass+".selected:not(.tag_cat)").length){
+    if (planning.select(".event.elt_selected"+eventClass+".selected:not(.tag_cat)").length) {
       elements_tag.invoke("removeClassName", 'selected');
-    } else {
+    }
+    else {
       elements_tag.invoke("addClassName", 'selected');
     }
-  } else {
-    var elements = $('planning-sejour').select(".event.elt_selected"+eventClass);
-    if($('planning-sejour').select(".event.elt_selected"+eventClass+".selected").length){
+  }
+  else {
+    var elements = planning.select(".event.elt_selected"+eventClass);
+    if (planning.select(".event.elt_selected"+eventClass+".selected").length) {
       elements.invoke("removeClassName", 'selected');
-    } else {
+    }
+    else {
       elements.invoke("addClassName", 'selected');
     }
   }
-  
+
   planning.select(".event.elt_selected:not("+eventClass+")").invoke("removeClassName", 'selected');
 
   // Selection de tous les elements qui ont la classe spécifiée
   planning.select(".event"+eventClass).invoke("addClassName", 'elt_selected');
-  
+
   // Deselection de tous les elements deja selectionnés qui n'ont pas la bonne classe
   planning.select(".event:not("+eventClass+")").invoke("removeClassName", 'elt_selected');
-  
+
   // Suppression de la classe tag_cat de tous les evenements selectionnés
   planning.select(".event"+eventClass).invoke("removeClassName", 'tag_cat');
-  
+
   // Si la selection a eu lieu suite au choix d'une categorie, ajout d'une classe aux evenements
   if(!element_id){
     planning.select(".event.elt_selected"+eventClass).invoke("addClassName", 'tag_cat');
   }
-  
+
   // Parfois le planning n'est pas prêt
-  
+
   if (planning.down('div.planning')) {
     window["planning-"+planning.down('div.planning').id].updateNbSelectEvents();
   }
-}
+};
 
 updateCdarrCount = function(line_id, type_cdarr){
   var countCdarr = ($('cdarrs-'+line_id+'-'+type_cdarr).select('input:checked')).length;  
@@ -284,28 +286,19 @@ updateCdarrCount = function(line_id, type_cdarr){
   } else {
     $('count-'+line_id+'-'+type_cdarr).update('');
   }
-}
+};
 
 updateModalCdarr = function(){
   var oFormEvents = getForm("form_list_cdarr");
   var url = new Url("ssr", "ajax_update_modal_evts_modif");
   url.addParam("token_evts", $V(oFormEvents.token_evts));
-  url.requestUpdate("modal-cdarr", { onComplete: function(){
-    if(!$("modal-cdarr").visible()){
-      modalWindow = Modal.open($('modal-cdarr'), {
-        className: 'modal'
-      });
-    }
-  } })
-}
+  url.requestModal(420, 400);
+  modalWindow = url.modalObject;
+};
 
 onchangeSeance = function(seance_id){
-  if(seance_id){
-    $('date-evenements').hide();
-  } else {
-    $('date-evenements').show();  
-  }
-}
+  $('date-evenements').setVisible(!seance_id);
+};
 
 toggleAllDays = function(){
   var days = oFormEvenementSSR.select('input.days');
@@ -315,7 +308,7 @@ toggleAllDays = function(){
   days.slice(5,7).each(function(e){
     e.checked = false;
 });
-}
+};
 
 var oFormEvenementSSR;
 Main.add(function(){
@@ -332,7 +325,7 @@ Main.add(function(){
       updateElement: updateFieldCodeCdarr
     } );
   }
-  
+
   // CsARR other code autocomplete
   if ($('code_csarr_autocomplete')) {
     var url = new Url("ssr", "httpreq_do_csarr_autocomplete");
@@ -343,21 +336,21 @@ Main.add(function(){
       updateElement: updateFieldCodeCsarr
     } );
   }
-  
+
   // Initialisation du timePicker
   Control.Tabs.create('tabs-activites', true);
-  
+
   {{if $selected_cat}}
   selectActivite('{{$selected_cat->_guid}}');
   $("technicien-{{$selected_cat->_id}}-{{$user->_id}}").onclick();
   {{/if}}
-  
+
   {{if !$prescription}}
   $('div_other_cdarr').show();
   $('div_other_csarr').show();
   {{/if}}
 });
-                  
+
 </script>
 
 
@@ -425,18 +418,18 @@ Main.add(function(){
       </tr>
     </table>
   </form>
-  
+
   <form name="editEvenementSSR" method="post" action="?" onsubmit="return submitSSR();">
     <input type="hidden" name="m" value="ssr" />
     <input type="hidden" name="dosql" value="do_evenement_ssr_multi_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="sejour_id" value="{{$bilan->sejour_id}}">
-    
+
     {{mb_field hidden=true object=$evenement field=therapeute_id prop="ref notNull"}}
     <input type="hidden" name="line_id" value="" />
     <input type="hidden" name="_element_id" value="" />
     <input type="hidden" name="_category_id" value="" />
-    
+
     <table class="form">
       {{if $prescription}}
       <tr>
@@ -457,7 +450,7 @@ Main.add(function(){
           {{/foreach}}
         </td>
       </tr>
-      
+
       <tr>
         <th>Eléments</th>
         <td class="text">
@@ -471,7 +464,7 @@ Main.add(function(){
                     {{assign var=category value=$element->_ref_category_prescription}}
                     <div class="activite" id="activite-{{$category->_guid}}" style="display: none;">
                   {{/if}}
-                  
+
                   {{if $smarty.foreach.elts.first && $_lines_by_elt|@count > 1}}
                    <span class="mediuser" style="font-weight: bold; border-left-color: #{{$element->_color}};" 
                           onmouseover="ObjectTooltip.createEx(this, '{{$element->_guid}}')">
@@ -483,15 +476,15 @@ Main.add(function(){
                   <span style="float: right">
                     {{mb_include module=system template=inc_opened_interval_date from=$_line->debut to=$_line->date_arret}}
                   </span>
-                  
+
                   <label>
                     {{if $_line->_recent_modification}} 
                     <img style="float: left" src="images/icons/ampoule.png" title="Prescription recemment modifiée"/>
                     {{/if}}
-                    
+
                     <input type="radio" name="prescription_line_element_id" id="line-{{$_line->_id}}" class="search line" 
                            onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}'); hideCodes();" />
-                   
+
                     {{if $_lines_by_elt|@count == 1}}
                      <span class="mediuser" style="font-weight: bold; border-left-color: #{{$element->_color}};" 
                             onmouseover="ObjectTooltip.createEx(this, '{{$element->_guid}}')">
@@ -514,14 +507,14 @@ Main.add(function(){
         </td>
       </tr>
       {{/if}}
-        
+
       <tr id='tr-cdarrs'>
         <th>Codes CdARR</th>
         <td class="text">
           <button type="button" class="add" onclick="$('remarque_ssr').toggle(); this.form.remarque.focus();" style="float: right">Remarque</button>
-          
+
           {{if $prescription}}
-          
+
           <!-- Boutons de type de code cdarr-->
           {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
             {{foreach from=$_lines_by_chap item=_lines_by_cat}}
@@ -536,7 +529,7 @@ Main.add(function(){
               {{/foreach}}
             {{/foreach}}
           {{/foreach}}  
-          
+
           <!-- Affichage des codes cdarrs -->
           {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
             {{foreach from=$_lines_by_chap item=_lines_by_cat}}
@@ -544,7 +537,7 @@ Main.add(function(){
 
                 <div id="cdarrs-{{$_line->_id}}" style="display : none;">
                   {{foreach from=$_line->_ref_element_prescription->_ref_cdarrs_by_type key=type_cdarr item=_cdarrs}}
-                  
+
                   <div class="cdarrs" id="cdarrs-{{$_line->_id}}-{{$type_cdarr}}" style="display: none;">
                   {{foreach from=$_cdarrs item=_cdarr}}
                     <label>
@@ -555,36 +548,36 @@ Main.add(function(){
                     </label>
                     {{/foreach}}
                     </div>
-                    
+
                   {{/foreach}}
                 </div>
-                
+
               {{/foreach}}
             {{/foreach}}
           {{/foreach}}
-            
+
           {{/if}} 
-          
+
           <!-- Autre code CdARR -->
           <div id="div_other_cdarr" style="display: none;">
             <label>
               <input type="checkbox" name="_cdarr" value="other" onclick="toggleOtherCdarr(this);" /> Autre:
             </label>
-            
+
             <span id="other_cdarr" style="display: block;">
                <input type="text" name="code_cdarr" class="autocomplete" canNull=true size="2" />
                <div style="display:none;" class="autocomplete" id="code_cdarr_autocomplete"></div>
             </span>
           </div>
-          
+
         </td>
       </tr> 
-      
+
       <tr id='tr-csarrs'>
         <th>Codes CsARR</th>
         <td class="text">
           {{if $prescription}}
-          
+
           <!-- Affichage des codes cdarrs -->
           {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
             {{foreach from=$_lines_by_chap item=_lines_by_cat}}
@@ -601,25 +594,25 @@ Main.add(function(){
                     {{/foreach}}
                     </div>
                 </div>
-                
+
               {{/foreach}}
             {{/foreach}}
           {{/foreach}}
-            
+
           {{/if}} 
-          
+
           <!-- Autre code CsARR -->
           <div id="div_other_csarr" style="display: none;">
             <label>
               <input type="checkbox" name="_csarr" value="other" onclick="toggleOtherCsarr(this);" /> Autre:
             </label>
-            
+
             <span id="other_csarr" style="display: block;">
                <input type="text" name="code_csarr" class="autocomplete" canNull=true size="2" />
                <div style="display: none;" class="autocomplete" id="code_csarr_autocomplete"></div>
             </span>
           </div>
-          
+
         </td>
       </tr> 
 
@@ -632,36 +625,36 @@ Main.add(function(){
         <th>{{mb_label object=$evenement field=therapeute_id}}</th>
         <td class="text">
           {{if $prescription}}
-          
+
           {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
             {{foreach from=$_lines_by_chap item=_lines_by_cat}}
               {{foreach from=$_lines_by_cat.element item=_line name=foreach_category}}
                 {{assign var=element value=$_line->_ref_element_prescription}}
-                
+
                 {{if $smarty.foreach.foreach_category.first}}
                   {{assign var=category value=$element->_ref_category_prescription}}
                   {{assign var=category_id value=$category->_id}}
-                  
+
                    <div class="techniciens" id="techniciens-{{$category->_guid}}" style="display: none;">
                      {{if array_key_exists($category_id, $executants)}}
                        {{assign var=list_executants value=$executants.$category_id}}
                        {{if array_key_exists($user->_id, $list_executants)}}
-                       
+
                        {{assign var=current_user_id value=$user->_id}}
                        {{assign var=current_user value=$list_executants.$current_user_id}}
-                       
+
                        <button title="{{$current_user->_view}}" id="technicien-{{$category_id}}-{{$user->_id}}" class="none ressource" type="button" onclick="selectTechnicien('{{$current_user->_id}}', this)">
                          {{$current_user->_user_last_name}}
                        </button>     
                      {{/if}}
-                       
+
                      {{if $can->admin}}
                        <select class="_technicien_id" onchange="selectTechnicien(this.value)">
                          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                          {{mb_include module=mediusers template=inc_options_mediuser list=$executants.$category_id}}
                        </select>
                      {{/if}}
-  
+
                     {{else}}
                       <div class="small-warning">
                         Aucun exécutant n'est disponible pour cette catégorie
@@ -669,11 +662,11 @@ Main.add(function(){
                     {{/if}}
                   </div>
                 {{/if}}
-                
+
               {{/foreach}}
             {{/foreach}}
           {{/foreach}}
-          
+
           {{else}}
             {{if $can->edit}}
             <select class="_technicien_id" onchange="selectTechnicien(this.value)">
@@ -684,7 +677,7 @@ Main.add(function(){
           {{/if}}  
         </td>
       </tr>
-      
+
       {{if $app->user_prefs.ssr_planification_show_equipement}} 
       <tr>
         <th>
@@ -698,7 +691,7 @@ Main.add(function(){
           </button>
           {{/foreach}}
           <button id="equipement-" type="button" class="cancel equipement" onclick="$V(getForm('editEvenementSSR')._equipement_id, ''); selectEquipement(''); ">Aucun</button>
-          
+
           <select name="_equipement_id" onchange="selectEquipement(this.value);" style="width: 6em;">
             <option value="">&mdash; {{tr}}Other{{/tr}}</option>
             {{foreach from=$plateaux item=_plateau}}
@@ -765,7 +758,7 @@ Main.add(function(){
                   var timeFin = Date.fromDATETIME("2001-01-01 " + $V(form._heure_fin));
                   $V(form.duree, (timeFin-timeDeb) / Date.minute, false);
                 }
-                
+
                 if (!$V(form._heure_fin)) {
                   updateHeureFin(form);
                 }
@@ -797,9 +790,9 @@ Main.add(function(){
 </div>
 
 <div id="outils" style="display: none;">
-  
+
   <script type="text/javascript">
-    
+
     updateSelectedEvents = function(input_elements){
       $V(input_elements, '');
       var tab_selected = new TokenField(input_elements); 
@@ -810,7 +803,7 @@ Main.add(function(){
         }
       });
     }
-    
+
     resetFormSSR = function(){
       var oForm = getForm('editSelectedEvent');
       $V(oForm.del, '0');
@@ -821,10 +814,10 @@ Main.add(function(){
       $V(oForm.kine_id, ''); 
       $V(oForm.equipement_id, ''); 
     }
-    
+
     toggleOtherCdarr = function(elem) {
       var toggle = $V(elem);
-      
+
       $('other_cdarr').setVisible(toggle); 
       $V(elem.form.code_cdarr, '');
       $(elem.form.code_cdarr).tryFocus();
@@ -833,7 +826,7 @@ Main.add(function(){
 
     toggleOtherCsarr = function(elem) {
       var toggle = $V(elem);
-      
+
       $('other_csarr').setVisible(toggle); 
       $V(elem.form.code_csarr, '');
       $(elem.form.code_csarr).tryFocus();
@@ -859,7 +852,7 @@ Main.add(function(){
           DOM.label({}, code_selected.innerHTML)
         )
       });
-         
+
       var input = $('editEvenementSSR_code_cdarr');
       input.value = '';
       input.tryFocus();
@@ -884,7 +877,7 @@ Main.add(function(){
           DOM.label({}, code_selected.innerHTML)
         )
       });
-         
+
       var input = $('editEvenementSSR_code_csarr');
       input.value = '';
       input.tryFocus();
@@ -894,24 +887,24 @@ Main.add(function(){
     deleteCode = function(elem) {
       $(elem).up().remove();
     }
-    
+
     onSubmitSelectedEvents = function(form) {
       updateSelectedEvents(form.event_ids);
       var values = new TokenField(form.event_ids).getValues();
-      
+
       // Sélection vide
       if (!values.length) {
         alert($T('CEvenementSSR-alert-selection_empty'));
         return;
       }
-      
+
       // Suppression multiple
       if ($V(form.del) == '1' && values.length > 1) {
         if (!confirm($T('CEvenementSSR-msg-confirm-multidelete', values.length) + $T('confirm-ask-continue'))) {
           return;
         }
       }
-      
+
       // Envoi du formulaire
       return onSubmitFormAjax(form, { onComplete: function() {
         refreshPlanningsSSR(); 
@@ -983,14 +976,14 @@ Main.add(function(){
       </tr> 
     </table>
   </form>
-  
+
   <form name="duplicateSelectedEvent" method="post" action="?" onsubmit="return onSubmitSelectedEvents(this)">
-    
+
     <input type="hidden" name="m" value="ssr" />
     <input type="hidden" name="dosql" value="do_duplicate_evenements_aed" />
     <input type="hidden" name="event_ids" value="" /> 
     <input type="hidden" name="propagate" value="" /> 
-          
+
     <table class="form">
       <tr>
         <th colspan="2" class="category">
@@ -998,7 +991,7 @@ Main.add(function(){
         </th>
       </tr>
       <tr>
-        
+
         <th>
           <select name="period">
             <option value="+1 WEEK">{{tr}}Week-after{{/tr}}</option>
@@ -1006,7 +999,7 @@ Main.add(function(){
             <option value="-1 DAY" >{{tr}}Day-before{{/tr}}</option>
           </select>
         </th>
-        
+
         <td class="button">
           <button type="button" class="duplicate singleclick" onclick="$V(this.form.propagate, '0'); this.form.onsubmit();">
             {{tr}}Duplicate{{/tr}}
@@ -1029,7 +1022,7 @@ Main.add(function(){
             </tr>
           </table>
         </th>
-        
+
         <td class="button">
           <button type="button" class="new singleclick" onclick="$V(this.form.propagate, '1'); this.form.onsubmit();">
             {{tr}}Propagate{{/tr}}
@@ -1039,15 +1032,12 @@ Main.add(function(){
 
     </table>
   </form>
-  
+
   <!-- TODO: utiliser le meme formulaire pour stocker le token d'evenements pour les differentes actions  -->
   <form name="form_list_cdarr" method="post">
     <input type="hidden" name="token_evts" />
-  </form> 
-  
-  <!-- Modal de modification des actes cdarrs -->
-  <div id="modal-cdarr" style="display: none;"></div>
-  
+  </form>
+
   <table class="form">
     <tr>
       <th class="category">Codes CdARR</th>

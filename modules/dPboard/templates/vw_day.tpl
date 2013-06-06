@@ -81,15 +81,16 @@ updateWorkList = function() {
 };
 
 showDossierSoins = function(sejour_id, date, default_tab){
-  $('dossier_sejour').update("");
   var url = new Url("soins", "ajax_vw_dossier_sejour");
   url.addParam("sejour_id", sejour_id);
   if(default_tab){
     url.addParam("default_tab", default_tab);
   }
-  url.requestUpdate($('dossier_sejour'));
-  modalWindow = Modal.open($('dossier_sejour'));
-  modalWindow.observe("afterClose", updatePrescriptions);
+  url.requestModal("95%", "90%", {
+    onClose: updatePrescriptions,
+    showClose: false
+  });
+  modalWindow = url.modalObject;
 };
 
 Main.add(function () {
@@ -148,5 +149,3 @@ Main.add(function () {
     </tr>
   </tbody>
 </table>
-
-<div id="dossier_sejour" style="width: 95%; height: 90%; overflow: auto; position: absolute;"></div>

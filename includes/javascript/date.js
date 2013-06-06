@@ -580,7 +580,6 @@ var Calendar = {
     if (options.noView) {
       // @todo: Passer ça en classe CSS
       datepicker.element.setStyle({width: 0, border: 'none', background: 'none', position: 'absolute'}).addClassName("opacity-0");
-      datepicker.element.up().setStyle({width: '16px'});
       if (datepicker.icon) {
         datepicker.icon.setStyle({
           position: 'relative',

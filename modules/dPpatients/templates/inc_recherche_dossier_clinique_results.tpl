@@ -9,9 +9,6 @@
 *}}
 
 <div style="width: 100%; padding-bottom: 5px; height: 20px;" class="not-printable">
-  <button type="button" style="float: right;" class="close" onclick="Control.Modal.close();">
-    {{tr}}Close{{/tr}}
-  </button>
   {{if $one_field}}
     <button type="button" style="float: left;" class="hslip" onclick="exportResults();">Export Texte</button>
     <button type="button" style="float: left;" class="print" onclick="modal_results.print();">{{tr}}Print{{/tr}}

@@ -1,11 +1,11 @@
-/* $Id$ */
-
 /**
+ * $Id$
+ *
  * @package Mediboard
  * @subpackage includes
  * @version $Revision$
  * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 window.children = {};
@@ -41,7 +41,7 @@ var Url = Class.create({
     this.oWindow = null;
     this.sFragment = null;
     this.oPrefixed = {};
-    
+
     if (sModule && sAction) {
       switch (sMode) {
         case 'action' : this.setModuleAction(sModule, sAction); break;
@@ -166,12 +166,12 @@ var Url = Class.create({
     if (typeof oObject != "object") {
       return this.addParam(sName, oObject);
     }
-    
+
     // Recursive call
     $H(oObject).each( function(pair) {
       this.addObjectParam(printf("%s[%s]", sName, pair.key), pair.value);
     }, this);
-    
+
     return this;
   },
 
@@ -202,31 +202,31 @@ var Url = Class.create({
   /**
    * Add element value to the parameters
    * Won't work with radio button, use addRadio() instead
-   * 
-   * @param {HTMLInputElement,HTMLSelectElement,HTMLTextAreaElement} oElement The element to add to the data
-   * @param {String=}      sParamName The parameter name
+   *
+   * @param {HTMLInputElement,HTMLSelectElement,HTMLTextAreaElement} oElement   The element to add to the data
+   * @param {String=}                                                sParamName The parameter name
    *
    * @return {Url}
    */
   addElement: function(oElement, sParamName) {
     if (!oElement) return this;
-  
+
     if (!sParamName) {
       sParamName = oElement.name;
     }
-    
+
     var value = oElement.value;
     if (oElement.type == 'checkbox') {
-      value = $V(oElement) ? 1 : 0; 
+      value = $V(oElement) ? 1 : 0;
     }
-  
+
     return this.addParam(sParamName, value);
   },
 
   /**
    * Add element not null value to the parameters
    * Won't work with radio button, use addRadio() instead
-   * 
+   *
    * @param {HTMLInputElement,HTMLSelectElement,HTMLTextAreaElement} oElement The element to add to the data
    * @param {String}      sParamName The parameter name
    *
@@ -234,16 +234,16 @@ var Url = Class.create({
    */
   addNotNullElement: function(oElement, sParamName) {
     if (!oElement) return this;
-  
+
     if (!sParamName) {
       sParamName = oElement.name;
     }
-    
+
     var value = oElement.value;
     if (oElement.type == 'checkbox') {
-      value = $V(oElement) ? 1 : 0; 
+      value = $V(oElement) ? 1 : 0;
     }
-  
+
     return this.addNotNullParam(sParamName, value);
   },
 
@@ -257,13 +257,13 @@ var Url = Class.create({
    */
   addRadio: function(oButtons, sParamName) {
     if (!oButtons) return this;
-  
+
     if (!sParamName) {
       sParamName = oButtons[0].name;
     }
-    
+
     var value = $V(oButtons);
-  
+
     return this.addParam(sParamName, value);
   },
 
@@ -307,7 +307,7 @@ var Url = Class.create({
   redirectOpener: function() {
     if (window.opener && !window.opener.closed) {
       window.opener.location.assign(this.make());
-    } 
+    }
     else {
       this.redirect();
     }
@@ -323,8 +323,8 @@ var Url = Class.create({
   /**
    * Open a popup window
    *
-   * @param {Integer}           iWidth
-   * @param {Integer}           iHeight
+   * @param {Number}            iWidth
+   * @param {Number}            iHeight
    * @param {String=}           sWindowName
    * @param {String=}           sBaseUrl
    * @param {String=}           sPrefix
@@ -333,9 +333,9 @@ var Url = Class.create({
    *
    * @return {Url}
    */
-  pop: function(iWidth, iHeight, sWindowName, sBaseUrl, sPrefix, oPostParameters, iFrame) {  
+  pop: function(iWidth, iHeight, sWindowName, sBaseUrl, sPrefix, oPostParameters, iFrame) {
     var features = this.getPopupFeatures();
-    
+
     features = Object.extend(features, {
       width: iWidth,
       height: iHeight
@@ -348,16 +348,16 @@ var Url = Class.create({
         features.width = screen.availWidth || screen.width;
         features.left = 0;
       }
-      
+
       if (features.height == "100%") {
         features.height = screen.availHeight || screen.height;
         features.top = 0;
       }
     }
-    
+
     sWindowName = sWindowName || "";
     sBaseUrl = sBaseUrl || "";
-    
+
     var questionMark = true;
     if (!sBaseUrl) {
       if (!this.oParams.raw) {
@@ -376,26 +376,26 @@ var Url = Class.create({
           return oWindow.closed;
         });
       }
-    
+
       // Forbidden characters for IE
       if (Prototype.Browser.IE) {
         sWindowName = sWindowName.replace(/[^a-z0-9_]/gi, "_");
       }
 
       var wasClosedBefore = !window.children[sWindowName] || window.children[sWindowName].closed;
-      
+
       try {
         this.oWindow = window.open(oPostParameters ? "" : (sBaseUrl + this.make(questionMark)), sWindowName, sFeatures);
       } catch(e) {
         // window.open failed :(
       }
-      
+
       if (!this.oWindow) {
         return this.showPopupBlockerAlert(sWindowName);
       }
-      
+
       window.children[sWindowName] = this.oWindow;
-      
+
       if (wasClosedBefore && this.oWindow.history.length == 0) {
         // bug in Chrome 18: invisible popup
         if (BrowserDetect.browser != "Chrome") {
@@ -404,21 +404,21 @@ var Url = Class.create({
         }
       }
     }
-    
+
     if (oPostParameters) {
       var form = DOM.form({
-        method: "post", 
-        action: sBaseUrl + this.make(questionMark), 
+        method: "post",
+        action: sBaseUrl + this.make(questionMark),
         target: (iFrame ? iFrame.getAttribute("name") : sWindowName)
       });
-      
+
       $(document.documentElement).insert(form);
-      
+
       Form.fromObject(form, oPostParameters, true);
       form.submit();
       form.remove();
     }
-    
+
     // Prefixed window collection
     if (sPrefix) {
       if (!this.oPrefixed[sPrefix]) {
@@ -426,7 +426,7 @@ var Url = Class.create({
       }
       this.oPrefixed[sPrefix].push(this.oWindow);
     }
-    
+
     return this;
   },
 
@@ -448,30 +448,65 @@ var Url = Class.create({
       title: "",
       baseUrl: "",
       closeOnClick: closeButton,
-      closeOnEscape: true
+      closeOnEscape: true,
+      onClose: null
     }, options);
-    
+
     var questionMark = true;
     if (!options.baseUrl) {
       this.addParam("dialog", 1);
       questionMark = false;
     }
-    
-    var viewport = document.viewport.getDimensions();
-    options.height = Math.min(viewport.height-50, options.height);
-    options.width  = Math.min(viewport.width -50, options.width );
-        
-    // Hack
-    this.modalObject = Control.Modal.open(new Element("a", {href: options.baseUrl + this.make(questionMark)}), options);
-    
-    var titleElement = DOM.div({className: "title"}, options.title || "&nbsp;");
-    
-    this.modalObject.container.insert({top: titleElement});   
-    
-    if (options.closeOnClick) {
-      this.modalObject.container.insert({top: closeButton});
+
+    /*var viewport = document.viewport.getDimensions();
+    if (!isNaN(options.height)) {
+      options.height = Math.min(viewport.height-50, options.height);
     }
-    
+    if (!isNaN(options.width)) {
+      options.width  = Math.min(viewport.width -50, options.width);
+    }*/
+
+    var titleElement = DOM.div({className: "title"},
+      DOM.span({className: "left"},
+        options.title || "&nbsp;"
+      ),
+      DOM.span({className: "right"})
+    );
+
+    var style = Modal.prepareDimensions({
+      width:  options.width,
+      height: options.height
+    });
+
+    // Do not pass dimensions to Control.Modal.open
+    delete options.height;
+    delete options.width;
+
+    if (options.maxHeight) {
+      style.maxHeight = String.getCSSLength(options.maxHeight);
+    }
+
+    var href = options.baseUrl + this.make(questionMark);
+    this.modalObject = Control.Modal.open(new Element("a", {href: href}), options);
+
+    var modalContainer = this.modalObject.container;
+    modalContainer.insert({top: titleElement});
+
+    // Wrap the iFrame if we are on an iPad
+    if (Prototype.Browser.IPad) {
+      var content = DOM.div({className: "content"}, modalContainer.down("iframe"));
+      modalContainer.insert(content);
+    }
+
+    style.paddingTop = titleElement.getHeight()+"px";
+    modalContainer.setStyle(style);
+
+    this.modalObject.position();
+
+    if (options.closeOnClick) {
+      titleElement.down(".right").insert(closeButton);
+    }
+
     // iframe.onload not thrown under IE
     if (Prototype.Browser.IE) {
       var that = this.modalObject;
@@ -479,39 +514,49 @@ var Url = Class.create({
 
       iframe.onload = null;
       iframe.onreadystatechange = function(){
-        if (iframe.readyState !== "complete") return;
+        if (iframe.readyState !== "complete") {
+          return;
+        }
 
         that.notify('onRemoteContentLoaded');
-        if (that.options.indicator) 
+        if (that.options.indicator)
           that.hideIndicator();
 
         iframe.onreadystatechange = null;
       }
     }
-    
-    this.modalObject.observe("onRemoteContentLoaded", function(){
+
+    // Observe remote content loading
+    this.modalObject.observe("onRemoteContentLoaded", (function(){
       var iframeWindow = this.container.down("iframe").contentWindow;
-      
+
       if (!options.title) {
-        titleElement.update(iframeWindow.document.title);
+        titleElement.down("span").update(iframeWindow.document.title);
       }
-      
+
       if (!options.closeOnEscape) {
         iframeWindow.document.stopObserving('keydown', iframeWindow.closeWindowByEscape);
       }
-      
-    }.bind(this.modalObject));
-  
+
+      this.position();
+
+    }).bind(this.modalObject));
+
+    // Observe modal closing
+    if (options.onClose) {
+      this.modalObject.observe("afterClose", options.onClose.bindAsEventListener(this));
+    }
+
     return this;
   },
 
   /**
    * Opens a popup window
    *
-   * @param {Integer=} iWidth
-   * @param {Integer=} iHeight
-   * @param {String=}  sWindowName
-   * @param {String=}  sBaseUrl
+   * @param {Number=} iWidth
+   * @param {Number=} iHeight
+   * @param {String=} sWindowName
+   * @param {String=} sBaseUrl
    *
    * @return {Url}
    */
@@ -520,9 +565,9 @@ var Url = Class.create({
     iHeight = iHeight || 600;
     sWindowName = sWindowName || "";
     sBaseUrl = sBaseUrl || "";
-    
+
     var sFeatures = Url.buildPopupFeatures({height: iHeight, width: iWidth});
-    
+
     // Forbidden characters for IE
     if (Prototype.Browser.IE) {
       sWindowName = sWindowName.replace(/[^a-z0-9_]/gi, "_");
@@ -530,19 +575,19 @@ var Url = Class.create({
     var questionMark = sBaseUrl.indexOf("?") != -1;
     this.oWindow = window.open(sBaseUrl + this.make(questionMark), sWindowName, sFeatures);
     window.children[sWindowName] = this.oWindow;
-    
+
     if (!this.oWindow) {
       this.showPopupBlockerAlert(sWindowName);
     }
-    
+
     return this;
   },
 
   /**
    * Opens a popup window
    *
-   * @param {Integer} iWidth          Popup width
-   * @param {Integer} iHeight         Popup height
+   * @param {Number}  iWidth          Popup width
+   * @param {Number}  iHeight         Popup height
    * @param {String=} sWindowName     Popup internal name
    * @param {String=} sPrefix         Popup name prefix
    * @param {Object=} oPostParameters Popup POST parameters
@@ -552,10 +597,10 @@ var Url = Class.create({
    */
   popup: function(iWidth, iHeight, sWindowName, sPrefix, oPostParameters, sBaseUrl) {
     this.pop(iWidth, iHeight, sWindowName, sBaseUrl, sPrefix, oPostParameters);
-  
+
     // Prefixed window collection
     if (sPrefix) {
-      (this.oPrefixed[sPrefix] || []).each(function (oWindow) { 
+      (this.oPrefixed[sPrefix] || []).each(function (oWindow) {
         oWindow.blur(); // Chrome issue
         oWindow.focus();
       });
@@ -567,7 +612,7 @@ var Url = Class.create({
     } else {
       this.showPopupBlockerAlert(sWindowName);
     }
-      
+
     return this;
   },
 
@@ -595,42 +640,42 @@ var Url = Class.create({
   autoComplete: function(input, populate, oOptions) {
     var saveInput = input;
     input = $(input);
-    
+
     if (!input) {
       try {
         console.warn((saveInput || "$(input)") + " doesn't exist [Url.autoComplete]");
       } catch (e) {}
-    
+
       return false;
     }
-    
+
     if ($(input.form).isReadonly()) {
       input.removeClassName("autocomplete");
       return false;
     }
-    
+
     var autocompleteDelays = {
-        "short": 0.5,
-        "medium": 1.0,
-        "long": 1.5
-      };
-    
+      "short": 0.5,
+      "medium": 1.0,
+      "long": 1.5
+    };
+
     oOptions = Object.extend({
       minChars: 2,
       frequency: autocompleteDelays[Preferences.autocompleteDelay],
       width: null,
       dropdown: false,
       valueElement: null,
-      
+
       // Allows bigger width than input
       onShow: function(element, update) {
         update.style.position = "absolute";
-        
+
         var elementDimensions = element.getDimensions();
-        
+
         update.show().clonePosition(element, {
           setWidth: true,
-          setHeight: false, 
+          setHeight: false,
           setTop: true,
           setLeft: true,
           offsetTop: elementDimensions.height+1
@@ -650,33 +695,33 @@ var Url = Class.create({
             width: oOptions.width
           };
         }
-        
+
         var scroll = document.viewport.getScrollOffsets(); // Viewport offset
         var viewport = document.viewport.getDimensions(); // Viewport size
         var scrollOffset = update.cumulativeOffset();
         var updateHeight = update.getHeight();
-        
+
         if (scrollOffset.top + updateHeight > viewport.height+scroll.top) {
           style.top = (parseInt(update.style.top)-elementDimensions.height-updateHeight+2) + "px";
         }
-        
+
         update.setStyle(style)
               .setOpacity(1)
               .unoverflow();
-        
+
         if (oOptions.onAfterShow) {
           oOptions.onAfterShow(element, update);
         }
       },
-      
-      onHide: function(element, update){ 
+
+      onHide: function(element, update){
         update.scrollTop = 0;
-        Element.hide(update); 
+        Element.hide(update);
       }
     }, oOptions);
-    
+
     input.addClassName("autocomplete");
-    
+
     populate = $(populate);
     if (!populate) {
       populate = new Element("div").addClassName("autocomplete").hide();
@@ -685,36 +730,32 @@ var Url = Class.create({
 
     // Autocomplete
     this.addParam("ajax", 1);
-    
+
     if (oOptions.valueElement) {
       oOptions.afterUpdateElement = function(input, selected) {
         var valueElement = $(selected).down(".value");
         var value = valueElement ? valueElement.innerHTML.strip() : selected.innerHTML.stripTags().strip();
         $V(oOptions.valueElement, value);
       };
-      
+
       var clearElement = function(){
         if ($V(input) == "") {
           $V(oOptions.valueElement, "");
         }
       };
-      
+
       input.observe("change", clearElement).observe("ui:change", clearElement);
     }
-    
+
     var autocompleter = new Ajax.Autocompleter(input, populate, this.make(), oOptions);
-    
-    if (Prototype.Browser.IE) {
-      //autocompleter.iefix = new Element("div"); // to prevent the iefix iframe
-    }
-    
+
     // Pour "eval" les scripts inserés (utile pour lancer le onDisconnected
     autocompleter.options.onComplete = function(request) {
       var content = request.responseText;
       content.evalScripts.bind(content).defer();
       this.updateChoices(content);
     }.bind(autocompleter);
-    
+
     autocompleter.startIndicator = function(){
       if(this.options.indicator) Element.show(this.options.indicator);
       input.addClassName("throbbing");
@@ -726,66 +767,66 @@ var Url = Class.create({
       if(this.options.indicator) Element.hide(this.options.indicator);
       input.removeClassName("throbbing");
     };
-    
+
     ///////// to prevent IE (and others in some cases) from closing the autocompleter when using the scrollbar of the update element
     function onUpdateFocus(event){
       this.updateHasFocus = true;
       Event.stop(event);
     }
-  
+
     function resetUpdateFocus(event){
       if (!this.updateHasFocus) return;
       this.updateHasFocus = false;
       this.onBlur(event);
     }
-    
+
     Event.observe(populate, 'mousedown', onUpdateFocus.bindAsEventListener(autocompleter));
     document.observe('click', resetUpdateFocus.bindAsEventListener(autocompleter));
     /////////
-    
+
     // Drop down button, like <select> tags
     if (oOptions.dropdown) {
       var container = new Element("div").addClassName("dropdown");
-      
+
       input.wrap(container);
       container.insert(populate);
-      
+
       // The trigger button
       var trigger = new Element("div").addClassName("dropdown-trigger");
       trigger.insert(new Element("div"));
-      
+
       // Hide the list
       var hideAutocomplete = function(e){
         autocompleter.onBlur(e);
         //$$("div.autocomplete").invoke("hide");
       }.bindAsEventListener(this);
-      
+
       // Show the list
       var showAutocomplete = function(e, dontClear){
         var oldValue;
-        
+
         if (!dontClear) {
           oldValue = $V(input);
           $V(input, '', false);
         }
-        
+
         autocompleter.activate.bind(autocompleter)();
         Event.stop(e);
         document.observeOnce("mousedown", hideAutocomplete);
-        
+
         if (!dontClear) {
           $V(input, oldValue, false);
         }
 
         input.select();
       };
-      
+
       // Bind the events
       trigger.observe("mousedown", showAutocomplete.bindAsEventListener(this));
       //input.observe("click", showAutocomplete.bindAsEventListener(this, true));
       input.observe("click", function(){
         var valueElement = oOptions.valueElement;
-        
+
         if (valueElement && valueElement.value == "") {
           input.value = "";
         }
@@ -794,15 +835,15 @@ var Url = Class.create({
             input.select();
           } catch(e) {}
         }
-          
+
         input.fire("ui:change");
         autocompleter.activate.bind(autocompleter)();
       });
       populate.observe("mousedown", Event.stop);
-      
+
       container.insert(trigger);
     }
-    
+
     return autocompleter;
   },
 
@@ -819,79 +860,92 @@ var Url = Class.create({
   /**
    * Open a modal window via an Ajax request
    *
-   * @param {Integer=} iWidth
-   * @param {Integer=} iHeight
-   * @param {Object=}  oOptions
+   * @param {Number,String=} width
+   * @param {Number,String=} height
+   * @param {Object=}        options
    *
    * @return {Url}
    */
-  requestModal: function(iWidth, iHeight, oOptions) {
+  requestModal: function(width, height, options) {
     var m = this.oParams.m,
         a = this.oParams.a;
-        
-    oOptions = Object.extend({
-      title: Localize.first('mod-'+m+'-tab-'+a, 'mod-dP'+m+'-tab-'+a),
-      showReload: true,
-      showClose: true
-    }, oOptions);
-    
-    var div = DOM.div(null,
-      DOM.div({
-        className: 'content'
-      }).setStyle({
-        overflowY: 'auto',
-        overflowX: 'hidden',
-        height: iHeight ? iHeight+'px' : '',
-        maxHeight: oOptions.maxHeight ? oOptions.maxHeight+'px' : '',
-        maxWidth : oOptions.maxWidth  ? oOptions.maxWidth +'px' : '',
-        width: iWidth ? iWidth+'px' : ''
-      })
-    );
-  
-    $(document.body).insert(div);
 
-    // Decoration preparing
-    var closeButton  = DOM.button({type: "button", className: "close notext" }, $T('Close' ));
-    var reloadButton = DOM.button({type: "button", className: "change notext"}, $T('Reload'));
-    var titleElement = DOM.div({className: "title"}, oOptions.title);
-    
-    if (!oOptions.showClose) {
-      closeButton.setStyle({display: "none"});
-    }
-    
-    if (!oOptions.showReload) {
-      reloadButton.setStyle({display: "none"});
-    }
-    
-    this.modalObject = modal(div, {
-      className: 'modal popup',
-      closeOnClick: closeButton
+    options = Object.extend({
+      title: Localize.first('mod-'+m+'-tab-'+a, 'mod-dP'+m+'-tab-'+a),
+      showReload: Preferences.INFOSYSTEM == 1,
+      showClose: true,
+      //onClose: null,
+      container: null
+    }, options);
+
+    var style = Modal.prepareDimensions({
+      width:  width,
+      height: height
     });
-    
-    this.modalObject.observe("afterClose", function(){div.remove()});
-    
-    this.modalObject.container.insert({top: reloadButton})
-                              .insert({top: closeButton })
-                              .insert({top: titleElement});   
+
+    if (options.maxHeight) {
+      style.maxHeight = String.getCSSLength(options.maxHeight);
+    }
+
+    var modalContainer = options.container;
+
+    if (!modalContainer) {
+      modalContainer = DOM.div(null, null);
+      $(document.body).insert(modalContainer);
+    }
+
+    this.modalObject = Modal.open(modalContainer, {
+      className:  'modal popup',
+      showClose:  options.showClose,
+      onClose:    options.onClose,
+      title:      options.title || "&nbsp;",
+      fireLoaded: false
+    });
+
+    modalContainer = this.modalObject.container.setStyle(style);
+    this.modalObject.position();
+
+    if (options.showReload) {
+      var title = modalContainer.down(".title");
+
+      if (title) {
+        var reloadButton = DOM.button({
+          type: "button",
+          className: "change notext"
+        }, $T('Reload'));
+
+        reloadButton.observe("click", this.refreshModal.bindAsEventListener(this));
+
+        title.down(".right").insert({top: reloadButton});
+      }
+    }
 
     // Default on complete behaviour
-    oOptions = Object.extend({
+    options = Object.extend({
       onComplete: function () {
-        // Modal repositioning
-        this.modalObject.position();
-        
+        this.container.fire("modal:loaded");
+
         // Form focus
-        var form = div.down('form');
+        var form = this.container.down('form');
         if (form) {
           form.focusFirstElement();
         }
-      }.bind(this)
-    }, oOptions);
-    
-    this.requestUpdate(div.down('.content'), oOptions);
-  
-    reloadButton.onclick = this.refreshModal.bind(this);
-    
+      }.bind(this.modalObject)
+    }, options);
+
+    this.requestUpdate(modalContainer.down(".content"), options);
+
+    this.modalObject.observe("afterClose", (function(){
+      // Don't remove if it was a custom container
+      if (!options.container) {
+        modalContainer.remove();
+      }
+
+      //if (options.onClose) {
+      //  options.onClose.bind(this.modalObject)();
+      //}
+    }).bindAsEventListener(this));
+
     return this;
   },
 
@@ -914,31 +968,31 @@ var Url = Class.create({
    */
   requestUpdate: function(ioTarget, oOptions) {
     this.addParam("ajax", 1);
-    
+
     // onComplete callback definition shortcut
     if (oOptions instanceof Function) {
       oOptions = {
         onComplete: oOptions
       };
     }
-    
+
     var element = $(ioTarget);
     //this.addParam("__dom", element.id);
-    
+
     if (!element) {
       console.warn(ioTarget+" doesn't exist");
       return this;
     }
-    
+
     var paramsString = $H(this.oParams).toQueryString();
     var targetId = element.identify();
     var customInsertion = oOptions && oOptions.insertion;
-    
+
     oOptions = Object.extend( {
       waitingText: null,
       urlBase: "",
       method: "get",
-      parameters: paramsString, 
+      parameters: paramsString,
       asynchronous: true,
       evalScripts: true,
       getParameters: null,
@@ -946,26 +1000,26 @@ var Url = Class.create({
       onComplete: Prototype.emptyFunction,
       onFailure: function(){ element.update('<div class="error">Le serveur rencontre quelques problèmes.</div>');}
     }, oOptions);
-    
+
     if (Preferences.INFOSYSTEM == 1 && oOptions.method === "get") {
       var lastQuery = Url.requestTimers[targetId];
-      
+
       // Same query on the same node 
       if (lastQuery && (lastQuery === paramsString)) {
         Console.info("Chargement en double de l'élément '"+targetId+"'");
         return this;
       }
       /*else {
-        // Different query on the same node, while the previous one is not finished
-        if (element.currentXHR && element.currentXHR.transport.readyState < 4) {
-          element.currentXHR.transport.abort();
-          console.info("XHR cancelled", element, lastQuery.toQueryParams());
-        }
-      }*/
-      
+       // Different query on the same node, while the previous one is not finished
+       if (element.currentXHR && element.currentXHR.transport.readyState < 4) {
+       element.currentXHR.transport.abort();
+       console.info("XHR cancelled", element, lastQuery.toQueryParams());
+       }
+       }*/
+
       Url.requestTimers[targetId] = paramsString;
     }
-    
+
     oOptions.onComplete = oOptions.onComplete.wrap(function(onComplete) {
       delete Url.requestTimers[targetId];
       prepareForms(element);
@@ -979,14 +1033,14 @@ var Url = Class.create({
         Didacticiel.main_didacticiel.didacOnComplete();
       }
     });
-    
+
     // If we have a custom insertion, we should not touch the origin target
     if (!customInsertion) {
       // Empty holder gets a div for load notifying
       if (!/\S/.test(element.innerHTML)) {
-        element.update('<div style="height: 2em;" />');
+        element.update('<div style="height: 2em;"></div>');
       }
-      
+
       // Animate system message
       if (element.id == SystemMessage.id) {
         oOptions.waitingText = $T("Loading in progress");
@@ -994,10 +1048,10 @@ var Url = Class.create({
       }
       // Cover div
       else {
-        if (!Prototype.Browser.IE || oOptions.coverIE || document.documentMode > 8) 
+        if (!Prototype.Browser.IE || oOptions.coverIE || document.documentMode > 8)
           WaitingMessage.cover(element);
       }
-      
+
       if (oOptions.waitingText) {
         element.update('<div class="loading">' + oOptions.waitingText + '...</div>');
       }
@@ -1005,7 +1059,7 @@ var Url = Class.create({
 
     var getParams = oOptions.getParameters ? "?" + $H(oOptions.getParameters).toQueryString() : '';
     /*element.currentXHR = */new Ajax.Updater(element, oOptions.urlBase + "index.php" + getParams, oOptions);
-    
+
     return this;
   },
 
@@ -1020,22 +1074,22 @@ var Url = Class.create({
   requestJSON: function(fCallback, oOptions) {
     this.addParam("suppressHeaders", 1);
     this.addParam("ajax", "");
-  
+
     oOptions = Object.extend({
       urlBase: "",
       method: "get",
-      parameters:  $H(this.oParams).toQueryString(), 
+      parameters:  $H(this.oParams).toQueryString(),
       asynchronous: true,
       evalScripts: true,
       evalJSON: 'force',
       getParameters: null
     }, oOptions);
-    
+
     oOptions.onSuccess = function(transport){fCallback(transport.responseJSON)};
-    
+
     var getParams = oOptions.getParameters ? "?" + $H(oOptions.getParameters).toQueryString() : '';
     new Ajax.Request(oOptions.urlBase + "index.php" + getParams, oOptions);
-    
+
     return this;
   },
 
@@ -1051,18 +1105,18 @@ var Url = Class.create({
     if (typeof netscape != 'undefined' && typeof netscape.security != 'undefined') {
       netscape.security.PrivilegeManager.enablePrivilege('UniversalBrowserRead');
     }
-    
+
     this.addParam("_syncroOffline", 1);
     if(config.date_synchro){
       this.addParam("_synchroDatetime" , config.date_synchro);
     }
-    
+
     oOptions = Object.extend({
       urlBase: config.urlMediboard
     }, oOptions);
 
     this.requestUpdate(ioTarget, oOptions);
-    
+
     return this;
   },
 
@@ -1076,7 +1130,7 @@ var Url = Class.create({
    */
   periodicalUpdate: function(ioTarget, oOptions) {
     this.addParam("ajax", 1);
-    
+
     var element = $(ioTarget);
     if (!element) {
       console.warn(ioTarget+" doesn't exist");
@@ -1085,20 +1139,20 @@ var Url = Class.create({
 
     // Empty holder gets a div for load notifying
     if (!/\S/.test(element.innerHTML)) {
-      element.update('<div style="height: 2em" />');
+      element.update('<div style="height: 2em"></div>');
     }
 
     oOptions = Object.extend({
       onCreate: WaitingMessage.cover.curry(element),
       method: "get",
-      parameters:  $H(this.oParams).toQueryString(), 
+      parameters:  $H(this.oParams).toQueryString(),
       asynchronous: true,
       evalScripts: true,
       onComplete: Prototype.emptyFunction
     }, oOptions);
-    
+
     var updater = new Ajax.PeriodicalUpdater(element, "index.php", oOptions);
-    
+
     updater.options.onComplete = updater.options.onComplete.wrap(function(onComplete) {
       prepareForms(element);
       Note.refresh();
@@ -1106,22 +1160,22 @@ var Url = Class.create({
       //element.prepareTouchEvents();
       Element.warnDuplicates();
     });
-    
+
     return updater;
   },
-  
+
   ViewFilePopup: function(objectClass, objectId, elementClass, elementId, sfn){
     var popupName = "Fichier";
     popupName += "-"+elementClass+"-"+elementId;
-    
+
     /*
-    var event = Function.getEvent();
-    if (event) {
-      Event.stop(event);
-      if (event.shiftKey)
-        popupName += "-"+objectClass+"-"+objectId;
-    }*/
-    
+     var event = Function.getEvent();
+     if (event) {
+     Event.stop(event);
+     if (event.shiftKey)
+     popupName += "-"+objectClass+"-"+objectId;
+     }*/
+
     this.setModuleAction("dPfiles", "preview_files");
     this.addParam("popup", 1);
     this.addParam("objectClass", objectClass);
@@ -1167,7 +1221,7 @@ Url.buildPopupFeatures = function(features) {
     value = (f.value === true ? 'yes' : (f.value === false ? 'no' : f.value));
     a.push(f.key+'='+value);
   });
-  
+
   return a.join(',');
 };
 
@@ -1176,7 +1230,7 @@ Url.buildPopupFeatures = function(features) {
  *
  * @param {Object} options
  *
- * @return {Boolean} true if user is connected, false otherwise
+ * @return void
  */
 Url.ping = function(options) {
   var url = new Url("system", "ajax_ping");
@@ -1195,10 +1249,10 @@ Url.parse = function(url) {
   url = url || location.href;
 
   var keys = ["source","scheme","authority","userInfo","user","pass","host","port","relative","path","directory","file","query","fragment"],
-      regex = /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
-      m = regex.exec(url),
-      c = {},
-      i = keys.length;
+    regex = /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
+    m = regex.exec(url),
+    c = {},
+    i = keys.length;
 
   while (i--) c[keys[i]] = m[i] || "";
 
@@ -1210,22 +1264,38 @@ Url.parse = function(url) {
  *
  * @param {HTMLFormElement}    form    The form to take the data from
  * @param {HTMLElement,String} element The element to update
+ * @param {Object=}            options Options
  *
- * @return {Boolean}
+ * @return {Boolean,Url}
  */
-Url.update = function(form, element) {
+Url.update = function(form, element, options) {
   var method = form.getAttribute("method");
   var getParameters;
-  
+
   if (method == "post") {
     getParameters = form.getAttribute("action").toQueryParams();
   }
-  
-  new Url().addFormData(form).requestUpdate(element, {
+
+  options = Object.extend({
+    openModal: false,
+    modalWidth: "90%",
+    modalHeight: "90%",
+
     method: method,
     getParameters: getParameters
-  });
-  
+  }, options);
+
+  var url = new Url();
+  url.addFormData(form);
+
+  if (options.openModal) {
+    url.requestModal(options.modalWidth, options.modalHeight, options);
+
+    return url;
+  }
+
+  url.requestUpdate(element, options);
+
   return false;
 };
 

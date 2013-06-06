@@ -1,5 +1,4 @@
 <?php
-$locales['CExhangeFile-error'] = 'Le fichier \'%s\' n\'a pu être téléversé';
 $locales['CAccessLog'] = 'Logs d\'accès';
 $locales['CAccessLog-_average_duration'] = 'Durée moyenne';
 $locales['CAccessLog-_average_duration-desc'] = 'Durée moyenne de production de la page';
@@ -976,6 +975,7 @@ $locales['CExchangeTabular'] = 'Echanges Tabulés';
 $locales['CExchangeTabular.sender_class.CSenderFTP'] = 'Expéditeur FTP';
 $locales['CExchangeTabular.sender_class.CSenderMLLP'] = 'Expéditeur MLLP';
 $locales['CExchangeTabular.sender_class.CSenderSOAP'] = 'Expéditeur SOAP';
+$locales['CExhangeFile-error'] = 'Le fichier \'%s\' n\'a pu être téléversé';
 $locales['CGroups-back-.empty'] = 'Etablissements';
 $locales['CGroups-back-ex_classes'] = 'Formulaires';
 $locales['CGroups-back-ex_classes.empty'] = 'Aucun formulaire';
@@ -1649,6 +1649,10 @@ $locales['CTranslationOverwrite.translation_mb-desc'] = 'Traduction actuellement
 $locales['CUser-back-logs'] = 'Journaux utilisateurs';
 $locales['CUser-back-owned_logs'] = 'Actions utilisateur';
 $locales['CUser-back-owned_logs.empty'] = 'Aucune action utilisateur';
+$locales['CUser-user_password_last_change'] = 'Dernier changement de mot de passe';
+$locales['CUser-user_password_last_change-desc'] = 'Dernier changement de mot de passe';
+$locales['CUser-user_salt'] = 'Grain de sel';
+$locales['CUser-user_salt-desc'] = 'Grain de sel';
 $locales['CUserLog'] = 'Entrée de journal utilisateur';
 $locales['CUserLog-_date_max'] = 'Date de fin';
 $locales['CUserLog-_date_max-court'] = 'Fin';
@@ -2095,4 +2099,3 @@ $locales['utilities-source-file_system-connexion'] = 'Test d\'accessibilité';
 $locales['utilities-source-file_system-getFiles'] = 'Liste des fichiers';
 $locales['utilities-source-file_system-sendFile'] = 'Dépôt d\'un fichier';
 $locales['utilities-source-http'] = 'Utilitaires de la source HTTP';
-?>

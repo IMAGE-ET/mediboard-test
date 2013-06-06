@@ -241,6 +241,21 @@ Class.extend(Autocompleter.Base, {
     if(this.index > -1){ 
       this.updateElement(this.getCurrentEntry());
     }
+  },
+
+  // Reimplemented for IE10
+  show: function() {
+    if(Element.getStyle(this.update, 'display')=='none') this.options.onShow(this.element, this.update);
+    if(!this.iefix &&
+      (Prototype.Browser.IE && document.documentMode <= 9) && // added " && document.documentMode <= 9"
+      (Element.getStyle(this.update, 'position')=='absolute')) {
+      new Insertion.After(this.update,
+        '<iframe id="' + this.update.id + '_iefix" '+
+          'style="display:none;position:absolute;filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);" ' +
+          'src="javascript:false;" frameborder="0" scrolling="no"></iframe>');
+      this.iefix = $(this.update.id+'_iefix');
+    }
+    if(this.iefix) setTimeout(this.fixIEOverlapping.bind(this), 50);
   }
 });
 
@@ -916,6 +931,21 @@ Object.extend(String, {
     }
 
     return top + sep + bot;
+  },
+
+  /**
+   * Convert a number or a percentage to a CSS length
+   *
+   * @param {String,Number} string The string to convert to a CSS length, may be a Number, will become NNpx
+   *
+   * @returns {String} A CSS length
+   */
+  getCSSLength: function(string) {
+    if (/%/.test(string)) {
+      return string;
+    }
+
+    return parseInt(string)+"px";
   }
 });
 
@@ -1151,6 +1181,14 @@ Event.initKeyboardEvents = function() {
     if(key == Event.KEY_RETURN && element.form && e.ctrlKey && tagName == "TEXTAREA") {
       element.form.onsubmit();
       Event.stop(e);
+    }
+
+    // Escape in a modal window containing a visible "close" button
+    if(key == Event.KEY_ESC && Control.Modal.stack.length) {
+      if (Control.Modal.stack.last().container.down("button.close:visible")) {
+        Control.Modal.close();
+        Event.stop(e);
+      }
     }
   });
 };

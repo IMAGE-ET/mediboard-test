@@ -5,13 +5,146 @@ Main.add(function(){
   Calendar.regField(form.time);
   Calendar.regField(form.date);
   Calendar.regField(form.dateInline, null, {inline: true, container: $(form.dateInline).up(), noView: true});
-  
+
   //Form.multiSubmit($$("form"), {check: false});
 });
+
+/*
+Modal.open
+Modal.confirm
+Modal.alert
+ */
+TestModal = {
+  /**
+   * @return {Url}
+   */
+  getUrl: function(){
+    var url = new Url("developpement", "css_test");
+    url.addParam("nodebug", 1);
+    return url;
+  },
+  modal: function(){
+    this.getUrl().modal();
+  },
+  modalClose: function(){
+    this.getUrl().modal({
+      onClose: function(){
+        alert("Closed !");
+      }
+    });
+  },
+  modalSize: function(){
+    this.getUrl().modal({
+      width: 500,
+      height: 400
+    });
+  },
+  modalSizePercent: function(){
+    this.getUrl().modal({
+      width: "60%",
+      height: "60%"
+    });
+  },
+  modalSizeNegative: function(){
+    this.getUrl().modal({
+      width: -50,
+      height: -50
+    });
+  },
+  requestModal: function(){
+    this.getUrl().requestModal();
+  },
+  requestModalClose: function(){
+    this.getUrl().requestModal(null, null, {
+      onClose: function(){
+        alert("Closed !");
+      }
+    });
+  },
+  requestModalSize: function(){
+    this.getUrl().requestModal(500, 400);
+  },
+  requestModalSizePercent: function(){
+    this.getUrl().requestModal("60%", "60%");
+  },
+  requestModalSizeNegative: function(){
+    this.getUrl().requestModal(-50, -50);
+  },
+  modalOpen: function(){
+    Modal.open("buttons");
+  },
+  modalConfirm: function(){
+    Modal.confirm("Sure ?");
+  },
+  modalAlert: function(){
+    Modal.alert("Yo! Sure ?");
+  }
+};
 </script>
 
-<button class="new" onclick="showModalDialog('?m=dPdeveloppement&a=iframe_test&dialog=1', null, 'dialogHeight:700px;dialogWidth:900px;center:yes;resizable:no;scroll:no;')">showModalDialog</button>
-<button class="new" onclick="open('?m=dPdeveloppement&a=iframe_test&dialog=1', 'test', '')">popup</button>
+<table class="main layout">
+  <tr>
+    <td>
+      <fieldset>
+        <legend>Modal windows tests</legend>
+
+        <button class="new" onclick="TestModal.modal()">
+          url.modal (IFrame)
+        </button>
+        <button class="new" onclick="TestModal.modalSize()">
+          url.modal + size (IFrame)
+        </button>
+        <button class="new" onclick="TestModal.modalClose()">
+          url.modal + onClose (IFrame)
+        </button>
+        <button class="new" onclick="TestModal.modalSizePercent()">
+          url.modal + size percent (IFrame)
+        </button>
+        <button class="new" onclick="TestModal.modalSizeNegative()">
+          url.modal + size negative (IFrame)
+        </button>
+
+        <br />
+
+        <button class="new" onclick="TestModal.requestModal()">
+          url.requestModal
+        </button>
+        <button class="new" onclick="TestModal.requestModalSize()">
+          url.requestModal + size
+        </button>
+        <button class="new" onclick="TestModal.requestModalClose()">
+          url.requestModal + onClose
+        </button>
+        <button class="new" onclick="TestModal.requestModalSizePercent()">
+          url.requestModal + size percent
+        </button>
+        <button class="new" onclick="TestModal.requestModalSizeNegative()">
+          url.requestModal + size negative
+        </button>
+
+        <br />
+
+        <button class="new" onclick="TestModal.modalOpen()">
+          Modal.open
+        </button>
+        <button class="new" onclick="TestModal.modalConfirm()">
+          Modal.confirm
+        </button>
+        <button class="new" onclick="TestModal.modalAlert()">
+          Modal.alert
+        </button>
+      </fieldset>
+    </td>
+    <td>
+      <fieldset>
+        <legend>Popup windows</legend>
+
+        <button class="new" onclick="showModalDialog('?m=dPdeveloppement&a=iframe_test&dialog=1', null, 'dialogHeight:700px;dialogWidth:900px;center:yes;resizable:no;scroll:no;')">showModalDialog</button>
+        <button class="new" onclick="open('?m=dPdeveloppement&a=iframe_test&dialog=1', 'test', '')">popup</button>
+      </fieldset>
+    </td>
+  </tr>
+</table>
 
 <hr />
 <button class="change" onclick="$$('body')[0].toggleClassName('touchscreen')">Touchscreen</button>

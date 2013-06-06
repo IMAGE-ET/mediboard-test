@@ -745,6 +745,10 @@ button.header_footer:before, a.button.header_footer:before {
   content: url(images/buttons/header_footer.png);
 }
 
+button.switch:before, a.button.switch:before {
+  content: url(images/buttons/switch.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }

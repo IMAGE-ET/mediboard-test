@@ -955,11 +955,26 @@ table.active {
 
 .modal {
   min-width: 200px;
-  padding: 0.3em;
-  border: 3px solid #fff;
+  max-width: 95%;
+
+  min-height: 50px;
+  max-height: 95%;
+
+  border: 2px solid #fff;
   background-color: #eee;
   border-radius: 6px;
   box-shadow: 0 0 15px rgba(0,0,0,0.7);
+  overflow: hidden;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+.modal.full-width {
+  width: 100%;
+}
+
+.modal.full-height {
+  height: 100%;
 }
 
 .modal h1 {
@@ -973,39 +988,71 @@ table.active {
   white-space: nowrap;
 }
 
-.modal > div {
-  text-align: center;
-/* breaks all div.[small|big]-[warning|sucess|error|etc] */
-/* padding: 0.5em;*/
-}
-
-.modal.popup > .title,
-.modal.popup > button.cancel,
-.modal.popup > button.close,
-.modal.popup > button.change {
-  position: absolute; 
-  top: -20px;
-}
-
 .modal.popup > .title {
-  left: 20px;
-  background: #eee;
-  padding: 4px 2em;
   font-weight: bold;
-  border-radius: 5px; 
+  background-color: #999999;
+  border-radius: 5px 5px 0 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  line-height: 18px;
+  vertical-align: middle;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  z-index: 2;
 }
 
-.modal.popup > button.cancel,
-.modal.popup > button.close {
-  right: -15px;
+.modal.popup > .title > span {
+  margin: 1px;
 }
 
-.modal.popup > button.change {
-  right: 10px;
+.modal.popup > .title .left {
+  float: left;
+  padding-left: 0.4em;
 }
 
-.modal table.tbl {
-  text-align: left;
+.modal.popup > .title .right {
+  float: right;
+}
+
+.modal > .content {
+  overflow-x: auto; /* hidden */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.modal > .content,
+.modal > iframe {
+  height: 100%;
+  position: relative;
+  bottom: 0;
+}
+
+/* Inner-shadow scroll top */
+.modal.scroll-top > .title,
+.modal.scroll-bottom:after {
+  box-shadow: 0 0 10px 5px rgba(0,0,0,0.3);
+}
+
+/* Inner-shadow scroll bottom */
+.modal.scroll-bottom:after {
+  content: "";
+  display: block;
+  position: relative;
+}
+
+.modal.popup > .title button.cancel,
+.modal.popup > .title button.close,
+.modal.popup > .title button.change {
+  margin: 0;
+}
+
+.modal.popup > .title:empty {
+  background: none;
+  padding: 0;
+  border: none;
 }
 
 /** Pagination **/

@@ -133,7 +133,7 @@
       Event.observe(document, 'keydown', closeWindowByEscape);
     {{/if}}
     
-    {{if @$conf.weinre_debug_host}}
+    {{if @$conf.weinre_debug_host && !@$smarty.get.nodebug}}
       setTimeout(function() {
         $$('head')[0].insert(DOM.script({src: 'http://{{$conf.weinre_debug_host}}/target/target-script-min.js'}));
       }, 0);
@@ -173,26 +173,38 @@
 
 <div id="sessionLock" style="display: none;">
   {{if $app->_ref_user}}
-  <h1>{{tr}}Session locked{{/tr}} - {{$app->_ref_user}}</h1>
   <form name="sessionLockForm" method="get" action="?" onsubmit="return Session.request(this)">
     <input type="hidden" name="unlock" value="unlock" />
     <input type="hidden" name="username" value="{{$app->_ref_user->_user_username}}" />
-    <div>
-      <label for="password">{{tr}}Password{{/tr}}</label>
-      <input type="password" name="password" />
-    </div>
-    <div>
-      <button type="submit" class="tick">{{tr}}Unlock{{/tr}}</button>
-      <button type="button" class="cancel" onclick="Session.close()">{{tr}}Logout{{/tr}}</button>
-      <button type="button" class="tick" onclick="Session.window.close(); $('main').show(); UserSwitch.popup();">{{tr}}User switch{{/tr}}</button>
-    </div>
-    <div class="login-message"></div>
+    <table class="main form">
+      <tr>
+        <th><label for="password">{{tr}}Password{{/tr}}</label></th>
+        <td><input type="password" name="password" /></td>
+      </tr>
+      <tr>
+        <th></th>
+        <td>
+          <button type="submit" class="tick">{{tr}}Unlock{{/tr}}</button>
+          <button type="button" class="cancel" onclick="Session.close()">{{tr}}Logout{{/tr}}</button>
+        </td>
+      </tr>
+      <tr>
+        <th></th>
+        <td>
+          <button type="button" class="switch" onclick="Session.window.close(); $('main').show(); UserSwitch.popup();">
+            {{tr}}User switch{{/tr}}
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="login-message"></td>
+      </tr>
+    </table>
   </form>
   {{/if}}
 </div>
 
 <div id="userSwitch" style="display: none;">
-  <h1>{{tr}}User switch{{/tr}}</h1>
   <form name="userSwitchForm" method="post" action="?" onsubmit="return UserSwitch.login(this)">
     <input type="hidden" name="m" value="admin" />
     <input type="hidden" name="dosql" value="do_login_as" />
@@ -213,7 +225,6 @@
         <th></th>
         <td>
           <button type="submit" class="tick">{{tr}}Switch{{/tr}}</button>
-          <button type="button" class="cancel" onclick="UserSwitch.cancel()">{{tr}}Cancel{{/tr}}</button>
         </td>
       </tr>
     </table>

@@ -1152,33 +1152,195 @@ var Modal = {
     };
     
     okButton.tryFocus();
-    document.observe('keyup', escapeClose);
-  }, 
+    document.observe('keydown', escapeClose);
+  },
   
   open: function(container, options) {
+    options = Object.extend({
+      className: 'modal popup',
+      title: null,
+      showClose: false,
+      fireLoaded: true,
+      onClose: null
+    }, options);
+
+    var containerId = container;
+    container = $(container);
+
+    if (!container) {
+      throw new Error("Unknown modal element: '"+containerId+"'");
+    }
+
+    var offset = 10;
+    var wrapper;
+    var containerStyle = container.style;
+
+    // When the modal size is put on the element itself (should be avoided)
+    if (!options.width && containerStyle.width && !/%/.test(containerStyle.width)) {
+      options.width = containerStyle.width;
+    }
+    if (!options.height && containerStyle.height && !/%/.test(containerStyle.height)) {
+      options.height = containerStyle.height;
+    }
+    containerStyle.width = null;
+    containerStyle.height = null;
+
+    // Handle negative dimensions
+    var viewportDimensions = document.viewport.getDimensions();
+    if (options.width && /^-/.test(options.width)) {
+      var width = viewportDimensions.width + parseInt(options.width, 10);
+      options.width = width+"px";
+    }
+
+    if (options.height && /^-/.test(options.height)) {
+      var height = viewportDimensions.height + parseInt(options.height, 10);
+      options.height = height+"px";
+    }
+
+    container.show();
+
+    // reset defaults
+    container.setStyle({
+      position: "static",
+      overflow: "visible",
+      top: "auto",
+      left: "auto"
+    });
+
+    // Wrap the content if not already done (modal windows launched more than once)
+    if (!container._alreadyWrapped) {
+      var content = DOM.div({className: "content"});
+      wrapper = DOM.div({className: "modal-wrapper"}, content);
+      container.insert({after: wrapper});
+      content.update(container);
+
+      // Decoration preparing
+      var titleElement = DOM.div({className: "title"},
+        DOM.span({className: "left"}, options.title),
+        DOM.span({className: "right"})
+      );
+
+      if (options.showClose) {
+        var closeButton = DOM.button({type: "button", className: "close notext" }, $T('Close'));
+        titleElement.down(".right").insert({bottom: closeButton});
+        closeButton.observe("click", Control.Modal.close);
+      }
+
+      content.insert({before: titleElement});
+
+      if (!Prototype.Browser.IE || document.documentMode >= 9) {
+        // Display small shadows if the user has to scroll
+        content.observe("scroll", Modal.updateScrollStatus.curry(content, wrapper, offset));
+      }
+
+      container._alreadyWrapped = true;
+    }
+    else {
+      wrapper = container.up(".modal-wrapper");
+    }
+
+    wrapper.show();
+
+    var modal = Modal.openRaw(wrapper, options);
+    container = modal.container;
+
+    if (!container._loadedEventAttached) {
+      container.observe("modal:loaded", (function(){
+        var container    = this.container;
+        var titleElement = container.down(".title");
+        var content      = container.down(".content");
+        var style        = container.style;
+
+        style.paddingTop = titleElement.getHeight()+"px";
+
+        if (!style.width || !style.height) {
+          var contentDim   = content.getDimensions();
+          var containerDim = container.getDimensions();
+
+          if (!style.width && contentDim.width  > containerDim.width - 5) {
+            container.addClassName("full-width");
+          }
+
+          if (!style.height && contentDim.height > containerDim.height - 5) {
+            container.addClassName("full-height");
+          }
+        }
+
+        this.position();
+
+        if (!Prototype.Browser.IE || document.documentMode >= 9) {
+          Modal.updateScrollStatus(content, container, offset);
+        }
+      }).bindAsEventListener(modal));
+    }
+
+    container._loadedEventAttached = true;
+
+    if (options.fireLoaded) {
+      container.fire("modal:loaded");
+    }
+
+    if (options.onClose) {
+      modal.observe("afterClose", options.onClose.bindAsEventListener(modal));
+    }
+
+    return modal;
+  },
+
+  openRaw: function(container, options) {
     options = Object.extend({
       className: 'modal',
       closeOnClick: null,
       overlayOpacity: 0.5,
       iframeshim: false
     }, options);
-    
+
     return Control.Modal.open(container, options);
+  },
+
+  updateScrollStatus: function(element, modalContainer, offset){
+    // Do NOT use toggleClassName to prevent reflows !!
+    if (!Prototype.Browser.IPad) {
+      if (element.scrollTop > offset) {
+        modalContainer.addClassName("scroll-top");
+      }
+      else {
+        modalContainer.removeClassName("scroll-top");
+      }
+    }
+
+    if (element.scrollHeight - element.scrollTop - element.clientHeight > offset) {
+      modalContainer.addClassName("scroll-bottom");
+    }
+    else {
+      modalContainer.removeClassName("scroll-bottom");
+    }
+  },
+
+  prepareDimensions: function(dimensions) {
+    var viewportDimensions = document.viewport.getDimensions();
+
+    var newDimensions = {};
+
+    if (dimensions.width) {
+      if (/^-/.test(dimensions.width)) {
+        dimensions.width = viewportDimensions.width + parseInt(dimensions.width, 10) * 2;
+      }
+
+      newDimensions.width = String.getCSSLength(dimensions.width);
+    }
+
+    if (dimensions.height) {
+      if (/^-/.test(dimensions.height)) {
+        dimensions.height = viewportDimensions.height + parseInt(dimensions.height, 10) * 2;
+      }
+
+      newDimensions.height = String.getCSSLength(dimensions.height);
+    }
+
+    return newDimensions;
   }
 };
-/*
-window.open = function(element, title, options) {
-  options = Object.extend({
-    className: 'modal popup',
-    width: 800,
-    height: 500,
-    iframe: true,
-    iframeshim: false
-  }, options);
-  
-  Control.Modal.open(element, options);
-  return false;
-}*/
 
 window._close = function() {
   window.close();
@@ -1202,7 +1364,7 @@ if (window.parent && window.parent != window && window.parent.Mediboard) {
 else {
   window.launcher = window.opener;
 }
-
+// TODO To be removed
 window.modal = Modal.open;
 
 window.scrollToTop = function(){
@@ -1339,13 +1501,21 @@ Class.extend(Control.Modal, {
     e.print();
   },
   position: function(){
-    var contDims = this.container.getDimensions();
+    var container = this.container;
+
+    // Reset container position so that it take all the room it needs
+    container.setStyle({
+      top: null,
+      left: null
+    });
+
+    var contDims = container.getDimensions();
     var vpDims = document.viewport.getDimensions();
     
-    var top  = Math.max(16, (vpDims.height - contDims.height) / 2);
-    var left = Math.max(0,  (vpDims.width  - contDims.width)  / 2);
-    
-    this.container.setStyle({
+    var top  = Math.max(0, (vpDims.height - contDims.height) / 2);
+    var left = Math.max(0, (vpDims.width  - contDims.width)  / 2);
+
+    container.setStyle({
       top: top + "px",
       left: left + "px"
     });
@@ -1367,8 +1537,13 @@ var Session = {
       method: "post",
       getParameters: {m: 'admin', a: 'ajax_unlock_session'}
     });
+
     var container = $('sessionLock');
-    this.window = Modal.open(container);
+    this.window = Modal.open(container, {
+      width: 350,
+      height: 150,
+      title: $T("Session locked") + " - " + User.view
+    });
     
     container.down('form').reset();
     container.down('input[type=text], input[type=password]').focus();
@@ -1409,13 +1584,16 @@ var UserSwitch = {
   window: null,
   popup: function(){
     var container = $('userSwitch');
-    this.window = Modal.open(container);
+    this.window = Modal.open(container, {
+      width: 350,
+      height: 200,
+      showClose: true,
+      title: $T("User switch"),
+      onClose: UserSwitch.cancel
+    });
     
     container.down('form').reset();
     container.down('input[type=text], input[type=password]').focus();
-    document.observe('keydown', function(e){
-      if (Event.key(e) == Event.KEY_ESC) UserSwitch.cancel();
-    });
   },
   reload: function(){
     this.window.close();
@@ -1438,7 +1616,6 @@ var UserSwitch = {
     return false;
   },
   cancel: function(){
-    this.window.close();
     if (Session.isLocked) {
       Session.lock();
     }

@@ -102,6 +102,7 @@ $locales['mod-brancardage-tab-ajax_prefiltre_brancardage'] = 'Formulaire de bran
 $locales['mod-brancardage-tab-vw_jumelles_brancardage'] = 'Vue brancardage du patient';
 $locales['mod-soins-tab-ajax_calcul_debit'] = 'Calcul de perfusion';
 $locales['mod-soins-tab-ajax_modal_task'] = 'Tâche';
+$locales['mod-soins-tab-ajax_vw_dossier_sejour'] = 'Dossier séjour';
 $locales['mod-soins-tab-ajax_vw_suivi_clinique'] = 'Synthèse';
 $locales['mod-soins-tab-configure'] = 'Configurer';
 $locales['mod-soins-tab-offline_sejours'] = 'Séjours offline';

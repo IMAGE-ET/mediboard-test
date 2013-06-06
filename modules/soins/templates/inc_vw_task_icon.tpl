@@ -20,6 +20,6 @@
       <img src="images/icons/phone_orange.png" title="RDV pris" onclick="PlanSoins.editTask('{{$prescription->object_id}}', '{{$line->_id}}');" />
     {{/if}}
   {{else}}
-    <img src="images/icons/phone_red.png" title="RDV à prendre" onclick="modal('consult_tache_{{$line->_id}}')" />
+    <img src="images/icons/phone_red.png" title="RDV à prendre" onclick="Modal.open('consult_tache_{{$line->_id}}')" />
   {{/if}}
 </a>

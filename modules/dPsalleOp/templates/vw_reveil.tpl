@@ -28,7 +28,7 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  new Control.Tabs.create('reveil_tabs', true);
+  Control.Tabs.create('reveil_tabs', true);
   
   var url = new Url("dPsalleOp", "httpreq_reveil");
   
@@ -82,15 +82,16 @@ codageCCAM = function(operation_id){
 
 showDossierSoins = function(sejour_id, operation_id, default_tab){
   {{if "dPprescription"|module_active}}
-  $('dossier_sejour').update("");
-  var url = new Url("soins", "ajax_vw_dossier_sejour");
-  url.addParam("sejour_id", sejour_id);
-  url.addParam("operation_id", operation_id);
-  if(default_tab){
-    url.addParam("default_tab", default_tab);
-  }
-  url.requestUpdate($('dossier_sejour'));
-  modalWindow = Modal.open($('dossier_sejour'));
+    var url = new Url("soins", "ajax_vw_dossier_sejour");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("operation_id", operation_id);
+    if(default_tab){
+      url.addParam("default_tab", default_tab);
+    }
+    url.requestModal("90%", "90%", {
+      showClose: false
+    });
+    modalWindow = url.modalObject;
   {{/if}}
 }
 
@@ -156,5 +157,3 @@ printDossier = function(sejour_id, operation_id) {
   </tr>
 </table>
 {{/if}}
-
-<div id="dossier_sejour" style="width: 95%; height: 90%; overflow: auto; display: none;"></div> 
