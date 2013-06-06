@@ -38,14 +38,14 @@
     </div>
     <div style="float:right;">
       <span class="toolbar_affectation_topo">
-        {{if !$_affectation->uf_hebergement_id || !$_affectation->uf_medicale_id || !$_affectation->uf_soins_id}}
+        {{if (!$_affectation->uf_hebergement_id || !$_affectation->uf_medicale_id || !$_affectation->uf_soins_id) && $conf.dPhospi.show_uf}}
           <a style="margin-top: 3px; display: inline" href="#1"
             onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{$_affectation->_ref_lit->_guid}}')">
             <img src="images/icons/uf-warning.png" width="16" height="16" title="Affecter les UF" />
           </a>
         {{/if}}
         {{if $_affectation->sejour_id}}
-          {{if $_affectation->uf_hebergement_id && $_affectation->uf_medicale_id && $_affectation->uf_soins_id}} 
+          {{if $_affectation->uf_hebergement_id && $_affectation->uf_medicale_id && $_affectation->uf_soins_id && $conf.dPhospi.show_uf}}
             <a style="margin-top: 3px; display: inline" href="#1"
                onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{$_affectation->_ref_lit->_guid}}')">
               <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF" class="opacity-40"

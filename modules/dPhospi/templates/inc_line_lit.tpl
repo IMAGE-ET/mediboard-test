@@ -199,7 +199,7 @@
                 </td>
                 {{if $mode_vue_reelle != "compacte"}}
                   <td style="vertical-align: middle; width: 1%;">
-                    {{if !$_affectation->uf_hebergement_id || !$_affectation->uf_medicale_id || !$_affectation->uf_soins_id}}
+                    {{if (!$_affectation->uf_hebergement_id || !$_affectation->uf_medicale_id || !$_affectation->uf_soins_id) && $conf.dPhospi.show_uf}}
                       <a style="margin-top: 3px; display: inline" href="#1"
                         onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{$_lit->_guid}}', 'refreshMouvements.curry(null, {{$_affectation->lit_id}})')">
                         <img src="images/icons/uf-warning.png" width="16" height="16" title="Affecter les UF" />
@@ -216,7 +216,7 @@
                             {{mb_include module=patients template=inc_vw_antecedents patient=$_patient type=deficience readonly=1}}
                           </span>
                         {{/if}}
-                        {{if $_affectation->uf_hebergement_id && $_affectation->uf_medicale_id && $_affectation->uf_soins_id}}
+                        {{if $_affectation->uf_hebergement_id && $_affectation->uf_medicale_id && $_affectation->uf_soins_id && $conf.dPhospi.show_uf}}
                           <a style="margin-top: 3px; display: inline" href="#1"
                              onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{$_lit->_guid}}', 'refreshMouvements.curry(null, \'{{$_affectation->lit_id}}\')')">
                             <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF" class="opacity-40"
@@ -241,7 +241,7 @@
           {{/if}}
         </div>
         {{if !$readonly}}
-          <script type="text/javascript">
+          <script>
             var container = $('affectation_temporel_{{$_affectation->_id}}');
             new Draggable(container, {
               constraint: "vertical",

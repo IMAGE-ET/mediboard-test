@@ -33,7 +33,7 @@
           {{if $curr_affectation->sejour_id}}
           <td class="text button" style="width: 1%;">
             {{if $can->edit}}
-            <script type="text/javascript">new Draggable('affectation_{{$curr_affectation->_id}}', {revert:true})</script>
+            <script>new Draggable('affectation_{{$curr_affectation->_id}}', {revert:true})</script>
             {{/if}}
             <!--
             <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
@@ -248,11 +248,13 @@
 
     <tr class="dates">
       <td colspan="3"><strong>Age</strong>: {{$patient->_age}} ({{mb_value object=$patient field=naissance}})
-      <a style="float: right;" href="#1" title=""
-        onclick="AffectationUf.affecter('{{$curr_affectation->_guid}}','{{$curr_lit->_guid}}')"  >
-        <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF"/>
-      </a></td>
-      
+        {{if $conf.dPhospi.show_uf}}
+          <a style="float: right;" href="#1" title=""
+            onclick="AffectationUf.affecter('{{$curr_affectation->_guid}}','{{$curr_lit->_guid}}')"  >
+            <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF"/>
+          </a>
+        {{/if}}
+      </td>
     </tr>
 
     {{if $sejour->prestation_id}}

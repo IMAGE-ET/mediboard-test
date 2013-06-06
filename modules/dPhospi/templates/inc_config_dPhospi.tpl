@@ -43,6 +43,7 @@
   {{mb_include module=system template=inc_config_bool var=show_collation_mvt}}
 
   {{mb_include module=system template=inc_config_bool var=show_sortie_mvt}}
+  {{mb_include module=system template=inc_config_bool var=show_uf}}
 
   <tr>
     <th class="title" colspan="2">Vue temporelle</th>
