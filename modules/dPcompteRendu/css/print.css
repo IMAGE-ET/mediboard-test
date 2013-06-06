@@ -3,22 +3,22 @@ div.body, table.body {
   page-break-after: always;
 }
 
-div.body, table.body, 
+div.body, table.body,
 div.bodyWithoutPageBreak, table.bodyWithoutPageBreak {
   padding: 0;
-  font-size: 12px; 
+  font-size: 12px;
 }
 
 li {
   margin-left: 32px;
   padding-top: 3px;
 }
- 
+
 div.header,
 div.footer {
-  position: fixed; 
+  position: fixed;
   background: #ddd;
-  border: 0 solid #aaa;
+  border: 0px solid #aaa;
   width: 100%;
   opacity: 0.9;
   overflow: hidden;
@@ -26,31 +26,31 @@ div.footer {
 
 h1 {
   text-align: center;
-} 
+}
 
 h2 {
   color: black;
-} 
+}
 
 h3 {
   text-align: center;
   border: 1px dotted #888;
-  
+
 }
 
 td.left {
-	text-align: left;
-	width: 33%
+  text-align: left;
+  width: 33%
 }
 
 td.right {
-	text-align: right;
-	width: 33%
+  text-align: right;
+  width: 33%
 }
 
 td.center {
-	text-align: center;
-	width: 33%;
+  text-align: center;
+  width: 33%;
 }
 
 
@@ -77,7 +77,7 @@ div.header table {
   div.middle {
     margin-top: 270px;
     height: 0;
-  } 
+  }
 }
 
 @media screen {
@@ -92,22 +92,22 @@ table#mainPane {
 }
 
 div.body, table.body, div.bodyWithoutPageBreak, table.bodyWithoutPageBreak {
-  padding-top: {{$header}}em;
-  padding-bottom: {{$footer}}em;
-}
+padding-top: {{$header}}em;
+padding-bottom: {{$footer}}em;
+  }
 
 /* Partie variable */
 @media print {
-	div.body, table.body,	div.bodyWithoutPageBreak, table.bodyWithoutPageBreak {
-	  padding-top: {{$header+3}}em;
-	  padding-bottom: {{$footer+3}}em;
-	}
-}
+  div.body, table.body,	div.bodyWithoutPageBreak, table.bodyWithoutPageBreak {
+  padding-top: {{$header+3}}em;
+padding-bottom: {{$footer+3}}em;
+  }
+  }
 
 div.header {
-  height: {{$header}}em;
-}
+height: {{$header}}em;
+  }
 
 div.footer {
-  height: {{$footer}}em;
-}
+height: {{$footer}}em;
+  }
