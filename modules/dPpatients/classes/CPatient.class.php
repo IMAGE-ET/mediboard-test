@@ -577,9 +577,9 @@ class CPatient extends CPerson {
     if (CModule::getActive("fse")) {
       $cv = CFseFactory::createCV();
       if ($cv) {
-        if ($msg = $cv->bindVitale($this)) {
+        /*if ($msg = $cv->bindVitale($this)) {
           return $msg;
-        }
+        }*/
       }
     }
 
@@ -1229,8 +1229,18 @@ class CPatient extends CPerson {
     }
   }
 
-  function loadRefConstantesMedicales($datetime = null, $selection = array()) {
-    $latest = CConstantesMedicales::getLatestFor($this, $datetime, $selection);
+  /**
+   * Load the CConstantesMedicales of the patient
+   *
+   * @param string    $datetime  The reference datetime
+   * @param array     $selection A selection of constantes to load
+   * @param CMbObject $context   A particular context
+   * @param boolean      $use_cache Force the function to return the latest_values is already set
+   *
+   * @return array
+   */
+  function loadRefConstantesMedicales($datetime = null, $selection = array(), $context = null, $use_cache = true) {
+    $latest = CConstantesMedicales::getLatestFor($this, $datetime, $selection, $context, $use_cache);
 
     list($this->_ref_constantes_medicales, /*$dates*/) = $latest;
     $this->_ref_constantes_medicales->updateFormFields();

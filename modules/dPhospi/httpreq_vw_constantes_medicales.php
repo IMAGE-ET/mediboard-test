@@ -183,7 +183,13 @@ if ($patient_id) {
   $patient->load($patient_id);
 }
 
-$latest_constantes = $patient->loadRefConstantesMedicales();
+if ($selected_context_guid == "all") {
+  $context = null;
+}
+
+//CConstantesMedicales::$_latest_values = array();
+$latest_constantes = $patient->loadRefConstantesMedicales(null, array(), $context);
+
 $patient->loadRefPhotoIdentite();
 
 $where = array(
@@ -562,6 +568,8 @@ foreach ($data as $name => &$_data) {
   }
 }
 
+// On récupère dans tous les cas le poids et la taille du patient
+$patient->loadRefConstantesMedicales(null, array("poids", "taille"), null, false);
 //mbTrace($data);
 
 // Création du template

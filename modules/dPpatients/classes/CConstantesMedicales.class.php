@@ -1183,13 +1183,15 @@ class CConstantesMedicales extends CMbObject {
    * @param int|CPatient $patient   The patient to load the constantes for
    * @param string       $datetime  The reference datetime
    * @param array        $selection A selection of constantes to load
+   * @param CMbObject    $context   The context
+   * @param boolean      $use_cache Force the function to return the latest_values is already set
    *
    * @return array The constantes values and dates
    */
-  static function getLatestFor($patient, $datetime = null, $selection = array()) {
+  static function getLatestFor($patient, $datetime = null, $selection = array(), $context = null, $use_cache = true) {
     $patient_id = ($patient instanceof CPatient) ? $patient->_id : $patient;
 
-    if (isset(self::$_latest_values[$patient_id][$datetime])) {
+    if (isset(self::$_latest_values[$patient_id][$datetime]) && $use_cache === true) {
       return self::$_latest_values[$patient_id][$datetime];
     }
 
@@ -1213,6 +1215,11 @@ class CConstantesMedicales extends CMbObject {
     $where = array(
       "patient_id" => "= '$patient_id'",
     );
+
+    if ($context) {
+      $where["context_class"] = " = '$context->_class'";
+      $where["context_id"] = " = '$context->_id'";
+    }
 
     if ($datetime) {
       $where["datetime"] = "<= '$datetime'";
@@ -1722,7 +1729,7 @@ class CConstantesMedicales extends CMbObject {
   /**
    * Return the selected constant, ordered by rank
    *
-   * @param boolean          $order_by_types If false, the constants won't be oprdered by types,
+   * @param boolean          $order_by_types If false, the constants won't be ordered by types,
    *                                         even if the config show_cat_tabs is set to true
    * @param CMbObject|string $host           Host from which we'll get the configuration
    *
@@ -1771,6 +1778,10 @@ class CConstantesMedicales extends CMbObject {
         unset($result[$_type][0]);
         $result[$_type]["hidden"] = $unselected_constants;
       }
+
+      if (array_key_exists(-1, $result[$_type])) {
+        unset($result[$_type][-1]);
+      }
     }
 
     return $result;
@@ -1788,23 +1799,42 @@ class CConstantesMedicales extends CMbObject {
 
     $constants_list = CConstantesMedicales::$list_constantes;
     if (CConstantesMedicales::getConfig("show_cat_tabs")) {
-      foreach ($selection as $_constant) {
-        if (array_key_exists($_constant, $constants_list)) {
-          $_type = $constants_list[$_constant]["type"];
+      foreach ($constants_list as $_constant_name => $_constant_attrs) {
+        if (strpos($_constant_name, "_") === 0) {
+          continue;
+        }
 
-          if (!array_key_exists($_type, $result)) {
-            $result[$_type] = array();
+        $_type = $_constant_attrs["type"];
+
+        if (!array_key_exists($_type, $result)) {
+          $result[$_type] = array();
+        }
+        if (in_array($_constant_name, $selection)) {
+          $result[$_type][] = array($_constant_name);
+        }
+        else {
+          if (!array_key_exists("hidden", $result[$_type])) {
+            $result[$_type]["hidden"] = array();
           }
-          $result[$_type][] = array($_constant);
+          $result[$_type]["hidden"][] = $_constant_name;
         }
       }
     }
     else {
       $result["all"] = array();
 
-      foreach ($selection as $_constant) {
-        if (array_key_exists($_constant, $constants_list)) {
-          $result["all"][] = array($_constant);
+      foreach ($constants_list as $_constant_name => $_constant_attrs) {
+        if (strpos($_constant_name, "_") === 0) {
+          continue;
+        }
+        if (in_array($_constant_name, $selection)) {
+          $result["all"][] = array($_constant_name);
+        }
+        else {
+          if (!array_key_exists("hidden", $result["all"])) {
+            $result["all"]["hidden"] = array();
+          }
+          $result["all"]["hidden"][] = $_constant_name;
         }
       }
     }
