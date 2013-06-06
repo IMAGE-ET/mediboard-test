@@ -251,6 +251,7 @@ class CSetupihe extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("0.27");
+    $this->addDependency("hl7", "0.70");
 
     $query = "RENAME TABLE `receiver_ihe_config` TO `receiver_hl7v2_config`;";
     $this->addQuery($query);
