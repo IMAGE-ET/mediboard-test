@@ -23,7 +23,7 @@
   dossierBloc = function(operation_id) {
     var url = new Url("salleOp", "ajax_vw_operation");
     url.addParam("op", operation_id);
-    url.requestModal(1000, 700);
+    url.requestModal('90%', '90%');
     url.modalObject.observe("afterClose", function(){
       Facture.reload('{{$facture->patient_id}}', '{{$facture->_class}}', 0, '{{$facture->_id}}');
     });

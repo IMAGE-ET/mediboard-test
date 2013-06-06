@@ -24,7 +24,7 @@ viewFacture = function(element, facture_id, facture_class){
 showLegend = function() {
   new Url('facturation', 'vw_legende').
   addParam('classe', '{{$facture->_class}}').
-  requestModal();
+  requestModal(200);
 }
 </script>
 
