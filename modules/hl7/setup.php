@@ -1144,15 +1144,7 @@ class CSetuphl7 extends CSetup {
     $this->addQuery($query);
 
     self::updateTableSource("source_file_system");
-    self::updateTableSource("source_ftp");
-    self::updateTableSource("source_http");
-    self::updateTableSource("source_ldap");
-    self::updateTableSource("source_lpr");
     self::updateTableSource("source_mllp");
-    self::updateTableSource("source_pop");
-    self::updateTableSource("source_smb");
-    self::updateTableSource("source_smtp");
-    self::updateTableSource("source_soap");
 
     $this->mod_version = "0.72";
 

@@ -138,6 +138,12 @@ class CSetupftp extends CSetup {
                 ADD `iv` VARCHAR (16) AFTER `password`;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.13";
+    $this->makeRevision("0.13");
+    $query = "UPDATE source_ftp
+                SET source_ftp.name = Replace(name, 'CReceiverIHE', 'CReceiverHL7v2')
+                WHERE source_ftp.name LIKE 'CReceiverIHE-%';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.14";
   }
 }

@@ -110,17 +110,16 @@ ExchangeSource = {
   },
 
   closeAfterSubmit : function(message) {
-    var div = "";
+    window.parent.$("systemMsg").update("");
     if (message["resultNumber"] != '0'  ) {
-      div = message["result"]+" x"+message["resultNumber"]+"<br/>";
+      window.parent.SystemMessage.notify(DOM.div({class:"info"}, message["result"]+" x"+message["resultNumber"]+"<br/>"), true);
     }
     var length = message["error"].length;
     if (length !==0) {
       for (var i =0; i<length; i++) {
-        div += message["error"][i]+"<br/>";
+        window.parent.SystemMessage.notify(DOM.div({class:"error"}, message["error"][i]+"<br/>"), true);
       }
     }
-    window.parent.$("systemMsg").update(DOM.div({class:"error"}, div)).show();
     window.parent.Control.Modal.close();
   },
 

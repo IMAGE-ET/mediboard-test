@@ -183,7 +183,13 @@ function __construct() {
                 ADD `iv_passphrase` VARCHAR (16) AFTER `passphrase`;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.30";
+  $this->makeRevision("0.30");
+  $query = "UPDATE source_soap
+                SET source_soap.name = Replace(name, 'CReceiverIHE', 'CReceiverHL7v2')
+                WHERE source_soap.name LIKE 'CReceiverIHE-%';";
+  $this->addQuery($query);
+
+    $this->mod_version = "0.31";
   }
 }
 ?>

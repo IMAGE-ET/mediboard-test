@@ -222,14 +222,14 @@ class CSourceFileSystem extends CExchangeSource {
     return str_replace("\\", "/", $path);
   }
   
-  function delFile($path) {
-    if (file_exists($path) && unlink($path) === false) {
-      throw new CMbException("CSourceFileSystem-file-not-deleted", $path);
+  function delFile($path, $current_directory) {
+    if (file_exists($current_directory.$path) && unlink($current_directory.$path) === false) {
+      throw new CMbException("CSourceFileSystem-file-not-deleted", $current_directory.$path);
     }    
   }
 
-  function renameFile($oldname, $newname) {
-    if (rename($oldname, $newname) === false) {
+  function renameFile($oldname, $newname, $current_directory) {
+    if (rename($current_directory.$oldname, $current_directory.$newname) === false) {
       throw new CMbException("CSourceFileSystem-error-renaming", $oldname);
     }
   }
@@ -237,16 +237,75 @@ class CSourceFileSystem extends CExchangeSource {
   function changeDirectory($directory_name) {
   }
 
-  function getCurrentDirectory() {
+  function getCurrentDirectory($directory = null) {
+    if (!$directory) {
+      $directory = $this->host;
+      if (substr($directory, -1, 1) !== "/" && substr($directory, -1, 1) !== "\\") {
+        $directory = "$directory/";
+      }
+    }
+
+    return str_replace("\\", "/", $directory);
   }
 
   function getListDirectory($current_directory) {
+    $contain = scandir($current_directory);
+
+    $dir = array();
+    foreach ($contain as $_contain) {
+      $full_path = $current_directory.$_contain;
+      if (is_dir($full_path) && "$_contain/" !== "./" && "$_contain/" !== "../") {
+        $dir[] = "$_contain/";
+      }
+    }
+    return $dir;
   }
 
-  function getListFilesDetails($directory) {
+  function getRootDirectory($current_directory) {
+    $tabRoot = explode("/", $current_directory);
+    array_pop($tabRoot);
+    $tabRoot[0] = "/";
+    $root = array();
+    $i =0;
+    foreach ($tabRoot as $_tabRoot) {
+
+      if ($i === 0) {
+        $path = $_tabRoot[0];
+        if (!$path) {
+          $path = "/";
+        }
+      }
+      else {
+        $path = $root[count($root)-1]["path"]."$_tabRoot/";
+      }
+      $root[] = array("name" => $_tabRoot,
+                      "path" => $path);
+      $i++;
+    }
+    return $root;
   }
 
-  function addFile($file, $file_name) {
+  function getListFilesDetails($current_directory) {
+    $contain = scandir($current_directory);
+    $fileInfo = array();
+    foreach ($contain as $_contain) {
+      $full_path = $current_directory.$_contain;
+      if (!is_dir($full_path) && @filetype($full_path) && !is_link($full_path)) {
+        $fileInfo[] = array("type"  => "f",
+                            "user"  => fileowner($full_path),
+                            "size"  => CMbString::toDecaBinary(filesize($full_path)),
+                            "date"  => strftime(CMbDT::ISO_DATETIME, filemtime($full_path)),
+                            "name"  => $_contain,
+                            "relativeDate" => CMbDT::daysRelative(fileatime($full_path), CMbDT::date()));
+      }
+    }
+        return $fileInfo;
+  }
+
+  function addFile($file, $file_name, $current_directory) {
+    if (copy($file, $current_directory.$file_name) === false) {
+      throw new CMbException("CSourceFileSystem-error-add", $file);
+    }
   }
   
   function isReachableSource() {

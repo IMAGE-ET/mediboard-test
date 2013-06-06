@@ -126,11 +126,6 @@
           <td id="utilities-source-file_system-getFiles-{{$source->name}}" class="text"></td>
         </tr>
         <tr>
-          <td>
-            <button type="button" class="search" onclick="ExchangeSource.manageFiles('{{$source->_guid}}');">
-              {{tr}}utilities-source-file_system-manageFiles{{/tr}}
-            </button>
-          </td>
           <td id="utilities-source-file_system-manageFiles-{{$source->name}}" class="text"></td>
         </tr>
       </table>
