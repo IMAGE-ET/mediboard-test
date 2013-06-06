@@ -84,7 +84,6 @@ class CExchangeHL7v2 extends CExchangeTabular {
    * @return null|string|void
    */
   function handle() {
-    mbLog("test");
     return COperatorHL7v2::event($this);
   }
 
