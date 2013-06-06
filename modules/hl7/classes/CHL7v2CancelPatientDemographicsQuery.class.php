@@ -40,12 +40,12 @@ class CHL7v2CancelPatientDemographicsQuery extends CHL7v2MessageXML {
    * @return null|string
    */
   function handle(CHL7Acknowledgment $ack, CPatient $patient, $data) {
-    $exchange_ihe = $this->_ref_exchange_ihe;
-    $sender       = $exchange_ihe->_ref_sender;
+    $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
+    $sender         = $exchange_hl7v2->_ref_sender;
     $sender->loadConfigValues();
 
     $this->_ref_sender = $sender;
 
-    return $exchange_ihe->setAckAA($ack, null);
+    return $exchange_hl7v2->setAckAA($ack, null);
   }
 }

@@ -33,9 +33,9 @@ class CHL7v2EventACK extends CHL7v2Event implements CHL7EventACK {
       )
     );
 
-    $this->_exchange_ihe = $trigger_event->_exchange_ihe;
-    $this->_receiver     = $trigger_event->_exchange_ihe->_ref_receiver;
-    $this->_sender       = $trigger_event->_exchange_ihe->_ref_sender;
+    $this->_exchange_hl7v2 = $trigger_event->_exchange_hl7v2;
+    $this->_receiver       = $trigger_event->_exchange_hl7v2->_ref_receiver;
+    $this->_sender         = $trigger_event->_exchange_hl7v2->_ref_sender;
   }
 
   /**

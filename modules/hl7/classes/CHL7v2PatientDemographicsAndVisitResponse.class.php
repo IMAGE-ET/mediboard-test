@@ -41,9 +41,9 @@ class CHL7v2PatientDemographicsAndVisitResponse implements CHL7Acknowledgment {
   public $domains;
 
   /**
-   * @var CExchangeIHE
+   * @var CExchangeHL7v2
    */
-  public $_ref_exchange_ihe;
+  public $_ref_exchange_hl7v2;
 
   /**
    * Construct
@@ -93,7 +93,7 @@ class CHL7v2PatientDemographicsAndVisitResponse implements CHL7Acknowledgment {
     $this->QPD8_error     = $QPD8_error;
     $this->domains        = $domains;
 
-    $this->event->_exchange_ihe = $this->_ref_exchange_ihe;
+    $this->event->_exchange_hl7v2 = $this->_ref_exchange_hl7v2;
 
     $this->event_ack = new CHL7v2EventRSP($this->event);
     $this->event_ack->build($this);

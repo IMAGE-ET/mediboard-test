@@ -38,10 +38,10 @@ orderColonne = function(order_col, order_way) {
     <th>{{mb_title object=$exchange field="receiver_id"}}</th>
     <th>{{mb_title object=$exchange field="type"}}</th>
     <th>{{mb_title object=$exchange field="sous_type"}}</th>
-    {{if $exchange instanceof CExchangeIHE}}
+    {{if $exchange instanceof CExchangeHL7v2}}
       <th>{{mb_title object=$exchange field="code"}}</th>
     {{/if}}
-    {{if $exchange instanceof CExchangeIHE || $exchange instanceof CEchangeHprim21}}
+    {{if $exchange instanceof CExchangeHL7v2 || $exchange instanceof CEchangeHprim21}}
       <th>{{mb_title object=$exchange field="version"}}</th>
     {{/if}}
     <th>{{mb_colonne class=$exchange->_class field="date_echange" order_col=$order_col order_way=$order_way function=orderColonne}}</th>

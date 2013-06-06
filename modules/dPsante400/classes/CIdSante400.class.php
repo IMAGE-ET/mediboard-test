@@ -309,4 +309,14 @@ class CIdSante400 extends CMbMetaObject {
   function getSpecialType() {
     return $this->_type = $this->loadTargetObject()->getSpecialIdex($this);
   }
+
+  /**
+   * @see parent::store()
+   */
+  function store() {
+    if (!$this->_id && !$this->last_update) {
+      $this->last_update = "now";
+    }
+    parent::store();
+  }
 }

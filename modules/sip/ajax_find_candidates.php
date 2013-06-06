@@ -96,10 +96,10 @@ $sejour->_praticien_referring  = $admit_referring_doctor; // Nom du médecin adre
 $sejour->_praticien_admitting  = $admit_admitting_doctor; // Médecin traitant
 $sejour->_praticien_consulting = $admit_consulting_doctor;
 
-$receiver_ihe           = new CReceiverIHE();
-$receiver_ihe->actif    = 1;
-$receiver_ihe->group_id = CGroups::loadCurrent()->_id;
-$receivers = $receiver_ihe->loadMatchingList();
+$receiver_hl7v2           = new CReceiverHL7v2();
+$receiver_hl7v2->actif    = 1;
+$receiver_hl7v2->group_id = CGroups::loadCurrent()->_id;
+$receivers = $receiver_hl7v2->loadMatchingList();
 
 $profil      = "PDQ";
 $transaction = "ITI21";

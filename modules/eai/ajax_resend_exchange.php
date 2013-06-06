@@ -97,7 +97,7 @@ foreach ($sejours as $_sejour) {
     CAppUI::stepAjax("Le traitement pour ce destinataire n'est pas pris en charge", UI_MSG_ERROR); 
   }
   
-  if ($receiver instanceof CReceiverIHE) {
+  if ($receiver instanceof CReceiverHL7v2) {
     $receiver->getInternationalizationCode("ITI31");  
     $_sejour->_receiver = $receiver;
     

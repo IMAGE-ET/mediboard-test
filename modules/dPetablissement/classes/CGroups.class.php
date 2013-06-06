@@ -121,11 +121,13 @@ class CGroups extends CMbObject {
     $backProps["destinataires_hprim"]       = "CDestinataireHprim group_id";
     $backProps["destinataires_sigems"]      = "CDestinataireSigems group_id";
     $backProps["destinataires_hprim21"]     = "CDestinataireHprim21 group_id";
-    $backProps["destinataires_ihe"]         = "CReceiverIHE group_id";
+    $backProps["destinataires_HL7v2"]       = "CReceiverHL7v2 group_id";
+    $backProps["destinataires_dmp"]         = "CReceiverDMP group_id";
     $backProps["echanges_generique"]        = "CExchangeAny group_id";
     $backProps["echanges_hprim"]            = "CEchangeHprim group_id";
     $backProps["echanges_hprim21"]          = "CEchangeHprim21 group_id";
-    $backProps["echanges_ihe"]              = "CExchangeIHE group_id";
+    $backProps["echanges_hl7v2"]            = "CExchangeHL7v2 group_id";
+    $backProps["echanges_dmp"]              = "CExchangeDMP group_id";
     $backProps["echanges_phast"]            = "CExchangePhast group_id";
     $backProps["echanges_dicom"]            = "CExchangeDicom group_id";
     $backProps["extract_passages"]          = "CExtractPassages group_id";

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Receiver IHE
+ * Receiver HL7v2
  *  
- * @category IHE
+ * @category HL7
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -12,16 +12,16 @@
  */
 
 /**
- * Class CReceiverIHE 
- * Receiver IHE
+ * Class CReceiverHL7v2
+ * Receiver HL7v2
  */
 
-class CReceiverIHE extends CInteropReceiver {
+class CReceiverHL7v2 extends CInteropReceiver {
   // DB Table key
   /**
    * @var null
    */
-  public $receiver_ihe_id;
+  public $receiver_hl7v2_id;
 
   /**
    * @var null
@@ -40,8 +40,8 @@ class CReceiverIHE extends CInteropReceiver {
    */
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = 'receiver_ihe';
-    $spec->key   = 'receiver_ihe_id';
+    $spec->table = 'receiver_hl7v2';
+    $spec->key   = 'receiver_hl7v2_id';
     $spec->messages = array(
       "PAM"    => array ("evenementsPatient"),
       "PAM_FR" => array ("evenementsPatient"),
@@ -60,8 +60,8 @@ class CReceiverIHE extends CInteropReceiver {
    */
   function getBackProps() {
     $backProps                   = parent::getBackProps();
-    $backProps['object_configs'] = "CReceiverIHEConfig object_id";
-    $backProps['echanges']       = "CExchangeIHE receiver_id";
+    $backProps['object_configs'] = "CReceiverHL7v2Config object_id";
+    $backProps['echanges']       = "CExchangeHL7v2 receiver_id";
     
     return $backProps;
   }
@@ -175,7 +175,7 @@ class CReceiverIHE extends CInteropReceiver {
       return null;
     }
     
-    $exchange = $evenement->_exchange_ihe;
+    $exchange = $evenement->_exchange_hl7v2;
 
     if ($this->_configs["encoding"] == "UTF-8") {
       $msg = utf8_encode($msg); 

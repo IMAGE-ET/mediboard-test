@@ -51,8 +51,8 @@ class CHL7v2ReceiveOrderMessage extends CHL7v2MessageXML {
    * @return string|void
    */
   function handle(CHL7v2ReceiveOrderMessageResponse $ack, CPatient $patient, $data) {
-    $exchange_ihe = $this->_ref_exchange_ihe;
-    $sender       = $exchange_ihe->_ref_sender;
+    $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
+    $sender         = $exchange_hl7v2->_ref_sender;
     $sender->loadConfigValues();
 
     $this->_ref_sender = $sender;
@@ -60,13 +60,13 @@ class CHL7v2ReceiveOrderMessage extends CHL7v2MessageXML {
     $patientPI = CValue::read($data['personIdentifiers'], "PI");
 
     if (!$patientPI) {
-      return $exchange_ihe->setORRError($ack, "E007");
+      return $exchange_hl7v2->setORRError($ack, "E007");
     }
 
     $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
     // Patient non retrouvé par son IPP
     if (!$IPP->_id) {
-      return $exchange_ihe->setORRError($ack, "E105");
+      return $exchange_hl7v2->setORRError($ack, "E105");
     }
     $patient->load($IPP->object_id);
 
@@ -75,7 +75,7 @@ class CHL7v2ReceiveOrderMessage extends CHL7v2MessageXML {
     $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
     // Séjour non retrouvé par son NDA
     if (!$NDA->_id) {
-      return $exchange_ihe->setORRError($ack, "E205");
+      return $exchange_hl7v2->setORRError($ack, "E205");
     }
     $sejour = new CSejour();
     $sejour->load($NDA->object_id);
@@ -92,10 +92,10 @@ class CHL7v2ReceiveOrderMessage extends CHL7v2MessageXML {
 
         break;
       default :
-        return $exchange_ihe->setORRError($ack, "E205");
+        return $exchange_hl7v2->setORRError($ack, "E205");
     }
 
-    return $exchange_ihe->setORRSuccess($ack);
+    return $exchange_hl7v2->setORRSuccess($ack);
   }
 
   /**

@@ -215,7 +215,7 @@ class CConsultation extends CFacturable {
     $backProps["prescriptions"]     = "CPrescription object_id";
     $backProps["actes_dentaires"]   = "CActeDentaire consult_id";
     $backProps["echanges_hprimxml"] = "CEchangeHprim object_id";
-    $backProps["exchanges_ihe"]     = "CExchangeIHE object_id";
+    $backProps["exchanges_hl7v2"]   = "CExchangeHL7v2 object_id";
     $backProps["fse_pyxvital"]      = "CPvFSE consult_id";
     $backProps["task"]              = "CSejourTask consult_id";
 

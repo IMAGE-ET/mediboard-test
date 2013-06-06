@@ -9,7 +9,7 @@
  * @link     http://www.mediboard.org
 *}}
 
-{{if $exchange instanceof CExchangeIHE}}
+{{if $exchange instanceof CExchangeHL7v2}}
   {{mb_include template=inc_exchange_er7_details}}
 {{elseif $exchange instanceof CEchangeHprim21}}
   {{mb_include template=inc_exchange_hpr_details}}

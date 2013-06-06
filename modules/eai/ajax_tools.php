@@ -80,7 +80,7 @@ switch ($tool) {
     $collisions = array();
     
     foreach ($exchanges as $_exchange) {
-      if ($_exchange instanceof CExchangeIHE) {
+      if ($_exchange instanceof CExchangeHL7v2) {
         $hl7_message = new CHL7v2Message;
         $hl7_message->parse($_exchange->_message);
         

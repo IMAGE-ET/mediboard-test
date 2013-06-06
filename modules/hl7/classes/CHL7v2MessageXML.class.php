@@ -15,9 +15,9 @@
  */
 class CHL7v2MessageXML extends CMbXMLDocument {
   /**
-   * @var CExchangeIHE
+   * @var CExchangeHL7v2
    */
-  public $_ref_exchange_ihe;
+  public $_ref_exchange_hl7v2;
   /**
    * @var CInteropSender
    */
@@ -486,9 +486,9 @@ class CHL7v2MessageXML extends CMbXMLDocument {
    */
   function getContentNodes() {
     $data  = array();
-    
-    $exchange_ihe = $this->_ref_exchange_ihe;
-    $sender       = $exchange_ihe->_ref_sender;
+
+    $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
+    $sender       = $exchange_hl7v2->_ref_sender;
     $sender->loadConfigValues();
    
     $this->_ref_sender = $sender;

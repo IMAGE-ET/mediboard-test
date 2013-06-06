@@ -37,9 +37,9 @@ class CHL7v2EventORR extends CHL7v2Event implements CHL7EventORR {
       )
     );
 
-    $this->_exchange_ihe = $trigger_event->_exchange_ihe;
-    $this->_receiver     = $trigger_event->_exchange_ihe->_ref_receiver;
-    $this->_sender       = $trigger_event->_exchange_ihe->_ref_sender;
+    $this->_exchange_hl7v2 = $trigger_event->_exchange_hl7v2;
+    $this->_receiver       = $trigger_event->_exchange_hl7v2->_ref_receiver;
+    $this->_sender         = $trigger_event->_exchange_hl7v2->_ref_sender;
   }
 
   /**
@@ -55,7 +55,7 @@ class CHL7v2EventORR extends CHL7v2Event implements CHL7EventORR {
     $this->message->version = $this->version;
     $this->message->name    = $this->msg_codes;
 
-    $message      = $this->_exchange_ihe->_message;
+    $message      = $this->_exchange_hl7v2->_message;
 
     $hl7_message_initiator = new CHL7v2Message();
     $hl7_message_initiator->parse($message);

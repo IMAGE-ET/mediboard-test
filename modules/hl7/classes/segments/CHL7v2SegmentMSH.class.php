@@ -68,7 +68,7 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     $data[] = $event->msg_codes; 
     
     // MSH-10: Message Control ID (ST) 
-    $data[] = $event->_exchange_ihe->_id; 
+    $data[] = $event->_exchange_hl7v2->_id;
     
     // MSH-11: Processing ID (PT) 
     // Table 103 

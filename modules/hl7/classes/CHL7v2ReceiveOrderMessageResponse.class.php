@@ -39,9 +39,9 @@ class CHL7v2ReceiveOrderMessageResponse implements CHL7Acknowledgment {
   public $comments;
 
   /**
-   * @var CExchangeIHE
+   * @var CExchangeHL7v2
    */
-  public $_ref_exchange_ihe;
+  public $_ref_exchange_hl7v2;
 
   /**
    * Construct
@@ -91,7 +91,7 @@ class CHL7v2ReceiveOrderMessageResponse implements CHL7Acknowledgment {
     $this->comments       = CMbString::convertHTMLToXMLEntities($comments);
     $this->object         = $object;
 
-    $this->event->_exchange_ihe = $this->_ref_exchange_ihe;
+    $this->event->_exchange_hl7v2 = $this->_ref_exchange_hl7v2;
 
     $this->event_ack = new CHL7v2EventORR($this->event);
     $this->event_ack->build($this);

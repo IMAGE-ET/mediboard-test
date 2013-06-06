@@ -24,8 +24,8 @@ class CHL7v2MoveAccountInformation extends CHL7v2MessageXML {
   function getContentNodes() {
     $data = array();
 
-    $exchange_ihe = $this->_ref_exchange_ihe;
-    $sender       = $exchange_ihe->_ref_sender;
+    $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
+    $sender         = $exchange_hl7v2->_ref_sender;
     $sender->loadConfigValues();
 
     foreach ($this->queryNodes("ADT_A44.PATIENT") as $_patient_group) {
@@ -60,13 +60,13 @@ class CHL7v2MoveAccountInformation extends CHL7v2MessageXML {
     // Traitement du message des erreurs
     $comment = "";
 
-    $exchange_ihe = $this->_ref_exchange_ihe;
-    $exchange_ihe->_ref_sender->loadConfigValues();
-    $sender       = $exchange_ihe->_ref_sender;
+    $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
+    $exchange_hl7v2->_ref_sender->loadConfigValues();
+    $sender       = $exchange_hl7v2->_ref_sender;
 
     // Impossibilité dans Mediboard de modifier le patient d'un séjour
     if (CAppUI::conf("dPplanningOp CSejour patient_id") == 0) {
-      return $exchange_ihe->setAckAR($ack, "E600", null, $newPatient);
+      return $exchange_hl7v2->setAckAR($ack, "E600", null, $newPatient);
     }
 
     $venue = new CSejour();
@@ -85,7 +85,7 @@ class CHL7v2MoveAccountInformation extends CHL7v2MessageXML {
 
     // Acquittement d'erreur : identifiants RI et PI non fournis
     if (!$patientRI && !$patientPI || !$patientChangeRI && !$patientChangePI) {
-      return $exchange_ihe->setAckAR($ack, "E100", null, $newPatient);
+      return $exchange_hl7v2->setAckAR($ack, "E100", null, $newPatient);
     }
 
     $idexPatient = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
@@ -93,7 +93,7 @@ class CHL7v2MoveAccountInformation extends CHL7v2MessageXML {
       if ($mbPatient->_id != $idexPatient->object_id) {
         $comment  = "L'identifiant source fait référence au patient : $idexPatient->object_id";
         $comment .= " et l'identifiant cible au patient : $mbPatient->_id.";
-        return $exchange_ihe->setAckAR($ack, "E601", $comment, $newPatient);
+        return $exchange_hl7v2->setAckAR($ack, "E601", $comment, $newPatient);
       }
     }
     if (!$mbPatient->_id) {
@@ -105,7 +105,7 @@ class CHL7v2MoveAccountInformation extends CHL7v2MessageXML {
       if ($mbPatientChange->_id != $idexPatientChange->object_id) {
         $comment  = "L'identifiant source fait référence au patient : $idexPatientChange->object_id";
         $comment .= "et l'identifiant cible au patient : $mbPatientChange->_id.";
-        return $exchange_ihe->setAckAR($ack, "E602", $comment, $newPatient);
+        return $exchange_hl7v2->setAckAR($ack, "E602", $comment, $newPatient);
       }
     }
     if (!$mbPatientChange->_id) {
@@ -115,34 +115,34 @@ class CHL7v2MoveAccountInformation extends CHL7v2MessageXML {
     if (!$mbPatient->_id || !$mbPatientChange->_id) {
       $comment = !$mbPatient->_id ?
         "Le patient $mbPatient->_id est inconnu dans Mediboard." : "Le patient $mbPatientChange->_id est inconnu dans Mediboard.";
-      return $exchange_ihe->setAckAR($ack, "E603", $comment, $newPatient);
+      return $exchange_hl7v2->setAckAR($ack, "E603", $comment, $newPatient);
     }
 
     $venueAN = $this->getVenueAN($sender, $data);
     $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
 
     if (!$venueAN && !$NDA->_id) {
-      return $exchange_ihe->setAckAR($ack, "E604", $comment, $mbPatient);
+      return $exchange_hl7v2->setAckAR($ack, "E604", $comment, $mbPatient);
     }
 
     $venue->load($NDA->object_id);
 
     // Impossibilité dans Mediboard de modifier le patient d'un séjour ayant une entrée réelle
     if (CAppUI::conf("dPplanningOp CSejour patient_id") == 2 && $venue->entree_reelle) {
-      return $exchange_ihe->setAckAR($ack, "E605", null, $venue);
+      return $exchange_hl7v2->setAckAR($ack, "E605", null, $venue);
     }
 
     if ($venue->patient_id != $mbPatientChange->_id) {
-      return $exchange_ihe->setAckAR($ack, "E606", null, $venue);
+      return $exchange_hl7v2->setAckAR($ack, "E606", null, $venue);
     }
 
     $venue->patient_id = $mbPatient->_id;
     if ($msg = $venue->store()) {
-      return $exchange_ihe->setAckAR($ack, "E607", $msg, $venue);
+      return $exchange_hl7v2->setAckAR($ack, "E607", $msg, $venue);
     }
 
     $comment = CEAISejour::getComment($venue);
 
-    return $exchange_ihe->setAckAA($ack, "I600", $comment, $venue);
+    return $exchange_hl7v2->setAckAA($ack, "I600", $comment, $venue);
   }
 }

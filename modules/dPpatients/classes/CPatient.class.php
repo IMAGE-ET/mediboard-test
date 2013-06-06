@@ -320,7 +320,7 @@ class CPatient extends CPerson {
     $backProps["dossier_medical"]       = "CDossierMedical object_id";
     $backProps["echanges_hprim"]        = "CEchangeHprim object_id";
     $backProps["echanges_hprim21"]      = "CEchangeHprim21 object_id";
-    $backProps["echanges_ihe"]          = "CExchangeIHE object_id";
+    $backProps["echanges_hl7v2"]        = "CExchangeHL7v2 object_id";
     $backProps["devenirs_dentaires"]    = "CDevenirDentaire patient_id";
     $backProps["correspondants_courrier"] = "CCorrespondantCourrier object_id";
     $backProps["grossesses"]            = "CGrossesse parturiente_id";

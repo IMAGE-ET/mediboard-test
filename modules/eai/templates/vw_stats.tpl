@@ -153,7 +153,7 @@
   </ul>
   <strong>Pour les échanges tabulés</strong>
   <ul>
-    <li> Échanges IHE 
+    <li> Échanges HL7v2
       <ul>
         <li> Statut acquittement : <code>AA</code> <em>(OK)</em> - <code>AR</code> <em>(Erreur)</em></li>
       </ul>

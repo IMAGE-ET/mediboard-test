@@ -26,8 +26,8 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
   function getContentNodes() {
     $data = $patient_results = array();
     
-    $exchange_ihe = $this->_ref_exchange_ihe;
-    $sender       = $exchange_ihe->_ref_sender;
+    $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
+    $sender         = $exchange_hl7v2->_ref_sender;
     $sender->loadConfigValues();
     
     $patient_results = $this->queryNodes("ORU_R01.PATIENT_RESULT", null, $varnull, true);
@@ -81,21 +81,21 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $codes   = array();
     $object  = null;
     
-    $exchange_ihe = $this->_ref_exchange_ihe;
-    $exchange_ihe->_ref_sender->loadConfigValues();
-    $sender       = $exchange_ihe->_ref_sender;
+    $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
+    $exchange_hl7v2->_ref_sender->loadConfigValues();
+    $sender         = $exchange_hl7v2->_ref_sender;
 
     $patientPI = CValue::read($data['personIdentifiers'], "PI");
     $venueAN   = CValue::read($data['personIdentifiers'], "AN");
 
     if (!$patientPI) {
-      return $exchange_ihe->setAckAR($ack, "E007", null, $patient);
+      return $exchange_hl7v2->setAckAR($ack, "E007", null, $patient);
     }
    
     $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
     // Patient non retrouvé par son IPP
     if (!$IPP->_id) {
-      return $exchange_ihe->setAckAR($ack, "E105", null, $patient);
+      return $exchange_hl7v2->setAckAR($ack, "E105", null, $patient);
     }
     $patient->load($IPP->object_id);
 
@@ -123,7 +123,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
         $sejour = reset($sejours);
 
         if (!$sejour) {
-          return $exchange_ihe->setAckAR($ack, "E205", null);
+          return $exchange_hl7v2->setAckAR($ack, "E205", null);
         }
       }
 
@@ -131,7 +131,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
       $operation = $sejour->getCurrOperation($observation_dt);
 
       if (!$operation->_id) {
-        return $exchange_ihe->setAckAR($ack, "E301", null, $operation);
+        return $exchange_hl7v2->setAckAR($ack, "E301", null, $operation);
       }
 
       foreach ($_observation["OBX"] as $_OBX) {
@@ -142,7 +142,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
           // Reference Pointer to External Report
           case "RP" :
             if (!$this->getReferencePointerToExternalReport($_OBX, $operation)) {
-              return $exchange_ihe->setAckAR($ack, $this->codes, null, $operation);
+              return $exchange_hl7v2->setAckAR($ack, $this->codes, null, $operation);
             }
 
             break;
@@ -150,7 +150,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
           // Encapsulated PDF
           case "ED" :
             if (!$this->getEncapsulatedPDF($_OBX, $patient, $operation)) {
-              return $exchange_ihe->setAckAR($ack, $this->codes, null, $operation);
+              return $exchange_hl7v2->setAckAR($ack, $this->codes, null, $operation);
             }
 
             break;
@@ -158,19 +158,19 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
           // Pulse Generator and Lead Observation Results
           case "ST" :  case "CWE" :  case "DTM" :  case "NM" :  case "SN" :
             if (!$this->getPulseGeneratorAndLeadObservationResults($_OBX, $patient, $operation)) {
-              return $exchange_ihe->setAckAR($ack, $this->codes, null, $operation);
+              return $exchange_hl7v2->setAckAR($ack, $this->codes, null, $operation);
             }
 
             break;
 
           // Not supported
           default :
-            return $exchange_ihe->setAckAR($ack, "E302", null, $operation);
+            return $exchange_hl7v2->setAckAR($ack, "E302", null, $operation);
         }
       }
     }
     
-    return $exchange_ihe->setAckAA($ack, $this->codes, $comment, $object);
+    return $exchange_hl7v2->setAckAA($ack, $this->codes, $comment, $object);
   }
 
   /**
@@ -353,8 +353,8 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
    * @return bool
    */
   function getReferencePointerToExternalReport(DOMNode $OBX, COperation $operation) {
-    $exchange_ihe = $this->_ref_exchange_ihe;
-    $sender       = $exchange_ihe->_ref_sender;
+    $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
+    $sender         = $exchange_hl7v2->_ref_sender;
 
     // Chargement de la source associée à l'expéditeur
     /** @var CInteropSender $sender_link */

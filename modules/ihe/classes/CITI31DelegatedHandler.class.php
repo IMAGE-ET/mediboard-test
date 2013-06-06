@@ -677,11 +677,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
   /**
    * Get affectation HL7 event code
    *
-   * @param CReceiverIHE $receiver Receiver IHE
+   * @param CReceiverHL7v2 $receiver Receiver HL7v2
    *
    * @return string
    */
-  function getModificationAdmitCode(CReceiverIHE $receiver) {
+  function getModificationAdmitCode(CReceiverHL7v2 $receiver) {
     switch ($receiver->_i18n_code) {
       // Cas de l'extension française : Z99
       case "FR" :

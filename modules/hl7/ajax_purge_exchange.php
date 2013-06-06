@@ -28,17 +28,17 @@ if (!$date_max) {
   CAppUI::stepAjax("Merci d'indiquer une date fin de recherche.", UI_MSG_ERROR);
 }
 
-$exchange_ihe = new CExchangeIHE();
+$exchange_hl7v2 = new CExchangeHL7v2();
 
 // Dry run
 if (!$do_purge) {
   $where = array();
-  $where["exchange_ihe.date_production"]         = "< '$date_max'";
-  $where["exchange_ihe.message_content_id"]      = "IS NOT NULL";
-  $where["exchange_ihe.acquittement_content_id"] = "IS NOT NULL";
-  $count = $exchange_ihe->countList($where);
+  $where["exchange_hl7v2.date_production"]         = "< '$date_max'";
+  $where["exchange_hl7v2.message_content_id"]      = "IS NOT NULL";
+  $where["exchange_hl7v2.acquittement_content_id"] = "IS NOT NULL";
+  $count = $exchange_hl7v2->countList($where);
   
-  CAppUI::stepAjax("CExchangeIHE-msg-purge_count", UI_MSG_OK, $count);
+  CAppUI::stepAjax("CExchangeHL7v2-msg-purge_count", UI_MSG_OK, $count);
   return;
 }
 
@@ -53,7 +53,7 @@ if ($count) {
   echo "<script type='text/javascript'>Echange.purge();</script>";
 }
 
-CAppUI::stepAjax("CExchangeIHE-msg-purged_count", UI_MSG_OK, $count, CMbDT::dateTime());
+CAppUI::stepAjax("CExchangeHL7v2-msg-purged_count", UI_MSG_OK, $count, CMbDT::dateTime());
 
 /**
  * Delete content and update exchange
@@ -70,7 +70,7 @@ function deleteContentAndUpdateExchange(CContentTabular $content_tabular, $type_
 
   // Récupère les content Tabulé
   $query = "SELECT cx.content_id
-            FROM content_tabular AS cx, exchange_ihe AS ec
+            FROM content_tabular AS cx, exchange_hl7v2 AS ec
             WHERE ec.`date_production` < '$date_max'
             AND ec.$type_content_id = cx.content_id
             LIMIT $max;";
@@ -82,7 +82,7 @@ function deleteContentAndUpdateExchange(CContentTabular $content_tabular, $type_
   $ds->exec($query);
   
   // Mise à jour des échanges
-  $query = "UPDATE exchange_ihe
+  $query = "UPDATE exchange_hl7v2
               SET `$type_content_id` = NULL 
               WHERE `$type_content_id` ".CSQLDataSource::prepareIn($ids);
   $ds->exec($query);  

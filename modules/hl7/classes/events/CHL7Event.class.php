@@ -64,7 +64,7 @@ class CHL7Event {
   public $msg_codes     = array();
   
   /**
-   * @var CReceiverIHE
+   * @var CReceiverHL7v2
    */
   public $_receiver;
   
@@ -79,9 +79,9 @@ class CHL7Event {
   public $_data_format;
 
   /**
-   * @var CExchangeIHE
+   * @var CExchangeHL7v2
    */
-  public $_exchange_ihe;
+  public $_exchange_hl7v2;
   /**
    * @var string
    */

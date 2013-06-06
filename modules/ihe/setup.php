@@ -248,9 +248,30 @@ class CSetupihe extends CSetup {
                 ADD `send_provisional_affectation` ENUM ('0','1') DEFAULT '0',
                 ADD `send_transfer_patient` ENUM ('A02','Z99') DEFAULT 'A02',
                 ADD `send_own_identifier` ENUM ('0','1') DEFAULT '1';";
-    $this->addQuery($query); 
-    
-    $this->mod_version = "0.27";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.27");
+
+    $query = "RENAME TABLE `receiver_ihe_config` TO `receiver_hl7v2_config`;";
+    $this->addQuery($query);
+    $query = "RENAME TABLE `receiver_ihe` TO `receiver_hl7v2`;";
+    $this->addQuery($query);
+    $query = "RENAME TABLE `exchange_ihe` TO `exchange_hl7v2`;";
+    $this->addQuery($query);
+
+    $query ="ALTER TABLE `exchange_hl7v2`
+              CHANGE `exchange_ihe_id` `exchange_hl7v2_id` INT (11) UNSIGNED NOT NULL auto_increment;";
+    $this->addQuery($query);
+
+    $query ="ALTER TABLE `receiver_hl7v2`
+              CHANGE `receiver_ihe_id` `receiver_hl7v2_id` INT (11) UNSIGNED NOT NULL auto_increment;";
+    $this->addQuery($query);
+
+    $query ="ALTER TABLE `receiver_hl7v2_config`
+              CHANGE `receiver_ihe_config_id` `receiver_hl7v2_config_id` INT (11) UNSIGNED NOT NULL auto_increment;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.28";
   }
 }
 

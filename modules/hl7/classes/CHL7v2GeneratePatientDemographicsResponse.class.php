@@ -46,8 +46,8 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    * @return null|string
    */
   function handle(CHL7v2PatientDemographicsAndVisitResponse $ack, CPatient $patient, $data) {
-    $exchange_ihe = $this->_ref_exchange_ihe;
-    $sender       = $exchange_ihe->_ref_sender;
+    $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
+    $sender       = $exchange_hl7v2->_ref_sender;
     $sender->loadConfigValues();
 
     $this->_ref_sender = $sender;
@@ -237,7 +237,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
       // Cas où le domaine n'est pas retrouvé
       if (!$domain->_id) {
-        return $exchange_ihe->setPDRAE($ack, null, $value);
+        return $exchange_hl7v2->setPDRAE($ack, null, $value);
       }
 
       $domains[] = $domain;
@@ -299,7 +299,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
       $last->_incremental_query = true;
     }
 
-    return $exchange_ihe->setPDRAA($ack, $objects, null, $domains);
+    return $exchange_hl7v2->setPDRAA($ack, $objects, null, $domains);
   }
 
   /**

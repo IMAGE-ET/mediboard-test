@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Exchange IHE
+ * Exchange HL7v2
  *  
  * @category IHE
  * @package  Mediboard
@@ -12,11 +12,11 @@
  */
 
 /**
- * Class CExchangeIHE 
- * Exchange IHE
+ * Class CExchangeHL7v2
+ * Exchange HL7v2
  */
 
-class CExchangeIHE extends CExchangeTabular {
+class CExchangeHL7v2 extends CExchangeTabular {
   /**
    * @var array
    */
@@ -32,7 +32,7 @@ class CExchangeIHE extends CExchangeTabular {
   /**
    * @var int
    */
-  public $exchange_ihe_id;
+  public $exchange_hl7v2_id;
 
   /**
    * @var string
@@ -52,8 +52,8 @@ class CExchangeIHE extends CExchangeTabular {
   function getSpec() {
     $spec = parent::getSpec();
     $spec->loggable = false;
-    $spec->table = 'exchange_ihe';
-    $spec->key   = 'exchange_ihe_id';
+    $spec->table = 'exchange_hl7v2';
+    $spec->key   = 'exchange_hl7v2_id';
     
     return $spec;
   }
@@ -68,7 +68,7 @@ class CExchangeIHE extends CExchangeTabular {
     
     $props["sender_class"]  = "enum list|CSenderFTP|CSenderSOAP|CSenderMLLP|CSenderFileSystem show|0";
     
-    $props["receiver_id"]   = "ref class|CReceiverIHE"; 
+    $props["receiver_id"]   = "ref class|CReceiverHL7v2";
     $props["object_class"]  = "enum list|CPatient|CSejour|COperation|CAffectation|COperation|CConsultation show|0";
     $props["code"]          = "str";
     
@@ -84,11 +84,12 @@ class CExchangeIHE extends CExchangeTabular {
    * @return null|string|void
    */
   function handle() {
-    return COperatorIHE::event($this);
+    mbLog("test");
+    return COperatorHL7v2::event($this);
   }
 
   /**
-   * Get exchange IHE families
+   * Get exchange HL7v2 families
    *
    * @return array Families
    */

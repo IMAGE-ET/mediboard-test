@@ -28,7 +28,7 @@ $receiver->loadConfigValues();
 $evenement = null;
 
 $msg = $exchange->_message;
-if ($receiver instanceof CReceiverIHE) {
+if ($receiver instanceof CReceiverHL7v2) {
   if ($receiver->_configs["encoding"] == "UTF-8") {
     $msg = utf8_encode($msg);
   }
@@ -93,7 +93,7 @@ if ($exchange instanceof CEchangeHprim) {
   }
 }
 
-if ($exchange instanceof CExchangeIHE) {
+if ($exchange instanceof CExchangeHL7v2) {
   $ack = new CHL7v2Acknowledgment($data_format);
   $ack->handle($ack_data);
   $exchange->statut_acquittement = $ack->getStatutAcknowledgment();

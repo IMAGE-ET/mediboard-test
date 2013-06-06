@@ -39,21 +39,21 @@ class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
    * @return string|void
    */
   function handle(CHL7Acknowledgment $ack, CPatient $patient, $data) {
-    $exchange_ihe = $this->_ref_exchange_ihe;
-    $sender       = $exchange_ihe->_ref_sender;
+    $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
+    $sender       = $exchange_hl7v2->_ref_sender;
     $sender->loadConfigValues();
 
     $this->_ref_sender = $sender;
 
     // Acquittement d'erreur : identifiants RI et PI non fournis
     if (!$data['personIdentifiers']) {
-      return $exchange_ihe->setAckAR($ack, "E100", null, $patient);
+      return $exchange_hl7v2->setAckAR($ack, "E100", null, $patient);
     }
  
-    $function_handle = "handle$exchange_ihe->code";
+    $function_handle = "handle$exchange_hl7v2->code";
     
     if (!method_exists($this, $function_handle)) {
-      return $exchange_ihe->setAckAR($ack, "E006", null, $patient);
+      return $exchange_hl7v2->setAckAR($ack, "E006", null, $patient);
     }
     
     return $this->$function_handle($ack, $patient, $data);
@@ -90,8 +90,8 @@ class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
    * @return string
    */
   function handleA47(CHL7Acknowledgment $ack, CPatient $patient, $data) {
-    $exchange_ihe = $this->_ref_exchange_ihe;
-    $sender       = $exchange_ihe->_ref_sender;
+    $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
+    $sender       = $exchange_hl7v2->_ref_sender;
     $sender->loadConfigValues();
    
     $this->_ref_sender = $sender;
@@ -108,7 +108,7 @@ class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
 
       // ID non connu (non fourni ou non retrouvé)
       if (!$incorrect_identifier || !$patient->_id) {
-        return $exchange_ihe->setAckAR($ack, "E141", null, $patient);
+        return $exchange_hl7v2->setAckAR($ack, "E141", null, $patient);
       }
     }
     else {
@@ -126,14 +126,14 @@ class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
 
       // PI non connu (non fourni ou non retrouvé)
       if (!$incorrect_identifier || !$IPP_incorrect->_id) {
-        return $exchange_ihe->setAckAR($ack, "E141", null, $patient);
+        return $exchange_hl7v2->setAckAR($ack, "E141", null, $patient);
       }
 
       $patient->load($IPP_incorrect->object_id);
 
       // Passage en trash de l'IPP du patient a éliminer
       if ($msg = $patient->trashIPP($IPP_incorrect)) {
-        return $exchange_ihe->setAckAR($ack, "E140", $msg, $patient);
+        return $exchange_hl7v2->setAckAR($ack, "E140", $msg, $patient);
       }
     }
 
@@ -146,9 +146,9 @@ class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
     $IPP->last_update  = CMbDT::dateTime();
     
     if ($msg = $IPP->store()) {
-      return $exchange_ihe->setAckAR($ack, "E140", $msg, $patient);
+      return $exchange_hl7v2->setAckAR($ack, "E140", $msg, $patient);
     }  
     
-    return $exchange_ihe->setAckAA($ack, "I140", null, $patient);
+    return $exchange_hl7v2->setAckAA($ack, "I140", null, $patient);
   }
 }

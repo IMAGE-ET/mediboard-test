@@ -24,8 +24,8 @@ class CHL7v2LinkUnlink extends CHL7v2MessageXML {
   function getContentNodes() {
     $data  = array();
 
-    $exchange_ihe = $this->_ref_exchange_ihe;
-    $sender       = $exchange_ihe->_ref_sender;
+    $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
+    $sender         = $exchange_hl7v2->_ref_sender;
     $sender->loadConfigValues();
 
     $this->_ref_sender = $sender;
@@ -53,14 +53,14 @@ class CHL7v2LinkUnlink extends CHL7v2MessageXML {
    * @return string|void
    */
   function handle(CHL7Acknowledgment $ack, CPatient $patient, $data) {
-    $exchange_ihe = $this->_ref_exchange_ihe;
-    $sender       = $exchange_ihe->_ref_sender;
+    $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
+    $sender         = $exchange_hl7v2->_ref_sender;
     $sender->loadConfigValues();
 
     $this->_ref_sender = $sender;
 
     if (count($data["PID"]) != 2) {
-      return $exchange_ihe->setAckAR($ack, "E500", null, $patient);
+      return $exchange_hl7v2->setAckAR($ack, "E500", null, $patient);
     }
 
     foreach ($data["PID"] as $_PID) {
@@ -68,7 +68,7 @@ class CHL7v2LinkUnlink extends CHL7v2MessageXML {
 
       // Acquittement d'erreur : identifiants PI non fournis
       if (!$patientPI) {
-        return $exchange_ihe->setAckAR($ack, "E100", null, $patient);
+        return $exchange_hl7v2->setAckAR($ack, "E100", null, $patient);
       }
     }
 
@@ -80,7 +80,7 @@ class CHL7v2LinkUnlink extends CHL7v2MessageXML {
     $patient_1->loadFromIPP($sender->group_id);
     // PI non connu (non fourni ou non retrouvé)
     if (!$patient_1->_id) {
-      return $exchange_ihe->setAckAR($ack, "E501", null, $patient_1);
+      return $exchange_hl7v2->setAckAR($ack, "E501", null, $patient_1);
     }
 
     $patient_2 = new CPatient();
@@ -88,13 +88,13 @@ class CHL7v2LinkUnlink extends CHL7v2MessageXML {
     $patient_2->loadFromIPP($sender->group_id);
     // PI non connu (non fourni ou non retrouvé)
     if (!$patient_2->_id) {
-      return $exchange_ihe->setAckAR($ack, "E501", null, $patient_2);
+      return $exchange_hl7v2->setAckAR($ack, "E501", null, $patient_2);
     }
 
-    $function_handle = "handle$exchange_ihe->code";
+    $function_handle = "handle$exchange_hl7v2->code";
     
     if (!method_exists($this, $function_handle)) {
-      return $exchange_ihe->setAckAR($ack, "E006", null, $patient);
+      return $exchange_hl7v2->setAckAR($ack, "E006", null, $patient);
     }
     
     return $this->$function_handle($ack, $patient_1, $patient_2, $data);
@@ -111,15 +111,15 @@ class CHL7v2LinkUnlink extends CHL7v2MessageXML {
    * @return string
    */
   function handleA24(CHL7Acknowledgment $ack, CPatient $patient_1, CPatient $patient_2, $data) {
-    $exchange_ihe = $this->_ref_exchange_ihe;
+    $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
 
     // Association des deux patients
     $patient_1->patient_link_id = $patient_2->_id;
     if ($msg = $patient_1->store()) {
-      return $exchange_ihe->setAckAR($ack, "E502", $msg, $patient_1);
+      return $exchange_hl7v2->setAckAR($ack, "E502", $msg, $patient_1);
     }
 
-    return $exchange_ihe->setAckAA($ack, "I501", null, $patient_1);
+    return $exchange_hl7v2->setAckAA($ack, "I501", null, $patient_1);
   }
 
   /**
@@ -133,16 +133,14 @@ class CHL7v2LinkUnlink extends CHL7v2MessageXML {
    * @return string
    */
   function handleA37(CHL7Acknowledgment $ack, CPatient $patient_1, CPatient $patient_2, $data) {
-    $exchange_ihe = $this->_ref_exchange_ihe;
-
-    $exchange_ihe = $this->_ref_exchange_ihe;
+    $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
 
     // Association des deux patients
     $patient_1->patient_link_id = "";
     if ($msg = $patient_1->store()) {
-      return $exchange_ihe->setAckAR($ack, "E503", $msg, $patient_1);
+      return $exchange_hl7v2->setAckAR($ack, "E503", $msg, $patient_1);
     }
 
-    return $exchange_ihe->setAckAA($ack, "I502", null, $patient_1);
+    return $exchange_hl7v2->setAckAA($ack, "I502", null, $patient_1);
   }
 }

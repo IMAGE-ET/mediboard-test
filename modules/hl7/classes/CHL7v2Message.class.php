@@ -252,8 +252,8 @@ class CHL7v2Message extends CHMessage {
 
     $configs = new CHL7Config();
     if ($actor instanceof CInteropSender) {
-      $exchange_ihe = new CExchangeIHE();
-      $configs = $exchange_ihe->getConfigs($actor->_guid);
+      $exchange_hl7v2 = new CExchangeHL7v2();
+      $configs = $exchange_hl7v2->getConfigs($actor->_guid);
     }
 
     // On privilégie le code du pays sur l'acteur d'intégration

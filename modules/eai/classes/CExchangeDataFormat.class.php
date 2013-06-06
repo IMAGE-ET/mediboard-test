@@ -58,7 +58,7 @@ class CExchangeDataFormat extends CMbMetaObject {
   public $_family_message;
   public $_configs_format;
   public $_delayed;
-  public $_exchange_ihe;
+  public $_exchange_hl7v2;
   
   /**
    * @var CGroups
@@ -429,7 +429,7 @@ class CExchangeDataFormat extends CMbMetaObject {
       $ack_valid = $ack->message->isOK(CHL7v2Error::E_ERROR);
     }
     
-    if ($this instanceof CExchangeIHE) {
+    if ($this instanceof CExchangeHL7v2) {
       $evt               = $sender->_data_format->_family_message;
       $evt->_data_format = $sender->_data_format;
 

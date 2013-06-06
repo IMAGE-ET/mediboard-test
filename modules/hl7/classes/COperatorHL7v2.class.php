@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Operator IHE
+ * Operator HL7v2
  *  
- * @category IHE
+ * @category HL7
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -12,10 +12,10 @@
  */
 
 /**
- * Class COperatorIHE 
- * Operator IHE
+ * Class COperatorHL7v2
+ * Operator HL7v2
  */
-class COperatorIHE extends CEAIOperator {
+class COperatorHL7v2 extends CEAIOperator {
   /**
    * Event
    *
@@ -34,8 +34,8 @@ class COperatorIHE extends CEAIOperator {
     
     try {
       // Création de l'échange
-      $exchange_ihe = new CExchangeIHE();
-      $exchange_ihe->load($data_format->_exchange_id);
+      $exchange_hl7v2 = new CExchangeHL7v2();
+      $exchange_hl7v2->load($data_format->_exchange_id);
       
       // Récupération des données du segment MSH
       $data = $dom_evt->getMSHEvenementXML();
@@ -55,52 +55,52 @@ class COperatorIHE extends CEAIOperator {
           return;
         }
 
-        $exchange_ihe->populateExchange($data_format, $evt);
-        $exchange_ihe->loadRefsInteropActor();
-        $exchange_ihe->populateErrorExchange(null, $evt);
+        $exchange_hl7v2->populateExchange($data_format, $evt);
+        $exchange_hl7v2->loadRefsInteropActor();
+        $exchange_hl7v2->populateErrorExchange(null, $evt);
         
-        $ack->_ref_exchange_ihe = $exchange_ihe;
+        $ack->_ref_exchange_hl7v2 = $exchange_hl7v2;
         $msgAck = $ack->generateAcknowledgment("AR", "E001", "201");
-        
-        $exchange_ihe->populateErrorExchange($ack);
+
+        $exchange_hl7v2->populateErrorExchange($ack);
         
         return $msgAck;
       }
    
       // Acquittement d'erreur d'un document XML recu non valide
       if (!$evt->message->isOK(CHL7v2Error::E_ERROR)) {
-        $exchange_ihe->populateExchange($data_format, $evt);
-        $exchange_ihe->loadRefsInteropActor();
-        $exchange_ihe->populateErrorExchange(null, $evt);
+        $exchange_hl7v2->populateExchange($data_format, $evt);
+        $exchange_hl7v2->loadRefsInteropActor();
+        $exchange_hl7v2->populateErrorExchange(null, $evt);
 
-        $ack->_ref_exchange_ihe = $exchange_ihe;
+        $ack->_ref_exchange_hl7v2 = $exchange_hl7v2;
         $msgAck = $ack->generateAcknowledgment("AR", "E002", "207");
 
-        $exchange_ihe->populateErrorExchange($ack);
+        $exchange_hl7v2->populateErrorExchange($ack);
 
         return $msgAck;
       }
-      
-      $exchange_ihe->populateExchange($data_format, $evt);
-      $exchange_ihe->message_valide = 1;
+
+      $exchange_hl7v2->populateExchange($data_format, $evt);
+      $exchange_hl7v2->message_valide = 1;
       
       // Gestion des notifications ? 
-      if (!$exchange_ihe->_id) {
-        $exchange_ihe->date_production      = CMbDT::dateTime();
-        $exchange_ihe->identifiant_emetteur = $data['identifiantMessage'];
+      if (!$exchange_hl7v2->_id) {
+        $exchange_hl7v2->date_production      = CMbDT::dateTime();
+        $exchange_hl7v2->identifiant_emetteur = $data['identifiantMessage'];
       }
-      
-      $exchange_ihe->store();
+
+      $exchange_hl7v2->store();
       
       // Pas de traitement du message
       if (!$data_format->_to_treatment) {
         return;
       }
 
-      $exchange_ihe->loadRefsInteropActor();
+      $exchange_hl7v2->loadRefsInteropActor();
 
       // Chargement des configs de l'expéditeur
-      $sender = $exchange_ihe->_ref_sender;
+      $sender = $exchange_hl7v2->_ref_sender;
       $sender->getConfigs($data_format);
 
       if (!$dom_evt->checkApplicationAndFacility($data, $sender)) {
@@ -111,26 +111,26 @@ class COperatorIHE extends CEAIOperator {
         CHL7v2Message::setHandleMode($sender->_configs["handle_mode"]);
       }
 
-      $dom_evt->_ref_exchange_ihe = $exchange_ihe;
-      $ack->_ref_exchange_ihe     = $exchange_ihe;
+      $dom_evt->_ref_exchange_hl7v2 = $exchange_hl7v2;
+      $ack->_ref_exchange_hl7v2     = $exchange_hl7v2;
 
       // Message PAM / DEC / PDQ / SWF
-      $msgAck = self::handleEvent($exchange_ihe, $dom_evt, $ack, $data);
+      $msgAck = self::handleEvent($exchange_hl7v2, $dom_evt, $ack, $data);
 
       CHL7v2Message::resetBuildMode();
     }
     catch(Exception $e) {
-      $exchange_ihe->populateExchange($data_format, $evt);
-      $exchange_ihe->loadRefsInteropActor();
-      $exchange_ihe->populateErrorExchange(null, $evt);
+      $exchange_hl7v2->populateExchange($data_format, $evt);
+      $exchange_hl7v2->loadRefsInteropActor();
+      $exchange_hl7v2->populateErrorExchange(null, $evt);
       
       $ack = new CHL7v2Acknowledgment($evt);
       $ack->message_control_id = isset($data['identifiantMessage']) ? $data['identifiantMessage'] : "000000000";
       
-      $ack->_ref_exchange_ihe = $exchange_ihe;
+      $ack->_ref_exchange_hl7v2 = $exchange_hl7v2;
       $msgAck = $ack->generateAcknowledgment("AR", "E003", "207", "E", $e->getMessage());
 
-      $exchange_ihe->populateErrorExchange($ack);
+      $exchange_hl7v2->populateErrorExchange($ack);
       
       CHL7v2Message::resetBuildMode(); 
     }
@@ -141,16 +141,16 @@ class COperatorIHE extends CEAIOperator {
   /**
    * Handle event PAM / DEC / PDQ / SWF message
    *
-   * @param CExchangeIHE       $exchange_ihe Exchange IHE
-   * @param CHL7v2MessageXML   $dom_evt      DOM Event
-   * @param CHL7Acknowledgment $ack          Acknowledgment
-   * @param array              $data         Nodes data
+   * @param CExchangeHL7v2     $exchange_hl7v2 Exchange HL7v2
+   * @param CHL7v2MessageXML   $dom_evt        DOM Event
+   * @param CHL7Acknowledgment $ack            Acknowledgment
+   * @param array              $data           Nodes data
    *
    * @return null|string
    */
-  static function handleEvent(CExchangeIHE $exchange_ihe, CHL7v2MessageXML $dom_evt, CHL7Acknowledgment $ack, $data = array()) {
+  static function handleEvent(CExchangeHL7v2 $exchange_hl7v2, CHL7v2MessageXML $dom_evt, CHL7Acknowledgment $ack, $data = array()) {
     $newPatient = new CPatient();
-    $newPatient->_eai_exchange_initiator_id = $exchange_ihe->_id;
+    $newPatient->_eai_exchange_initiator_id = $exchange_hl7v2->_id;
 
     $data = array_merge($data, $dom_evt->getContentNodes());
 

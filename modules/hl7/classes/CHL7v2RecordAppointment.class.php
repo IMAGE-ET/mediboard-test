@@ -24,8 +24,8 @@ class CHL7v2RecordAppointment extends CHL7v2MessageXML {
   function getContentNodes() {
     $data = $resources = array();
     
-    $exchange_ihe = $this->_ref_exchange_ihe;
-    $sender       = $exchange_ihe->_ref_sender;
+    $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
+    $sender         = $exchange_hl7v2->_ref_sender;
     $sender->loadConfigValues();
     
     $this->queryNode("SCH", null, $data, true);

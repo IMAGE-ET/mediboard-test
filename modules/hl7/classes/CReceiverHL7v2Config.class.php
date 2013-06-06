@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Receiver IHE Config
+ * Receiver HL7v2 Config
  *  
- * @category IHE
+ * @category HL7
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -12,12 +12,12 @@
  */
 
 /**
- * IHE receiver config
+ * Hl7v2 receiver config
  */
-class CReceiverIHEConfig extends CMbObjectConfig {
-  public $receiver_ihe_config_id;
+class CReceiverHL7v2Config extends CMbObjectConfig {
+  public $receiver_hl7v2_config_id;
   
-  public $object_id; // CReceiverIHE
+  public $object_id; // CReceiverHL7v2
   
   // Format
   public $encoding;
@@ -171,8 +171,8 @@ class CReceiverIHEConfig extends CMbObjectConfig {
   function getSpec() {
     $spec = parent::getSpec();
 
-    $spec->table = "receiver_ihe_config";
-    $spec->key   = "receiver_ihe_config_id";
+    $spec->table = "receiver_hl7v2_config";
+    $spec->key   = "receiver_hl7v2_config_id";
     $spec->uniques["uniques"] = array("object_id");
 
     return $spec;
@@ -185,7 +185,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["object_id"]              = "ref class|CReceiverIHE";
+    $props["object_id"]              = "ref class|CReceiverHL7v2";
     
     // Format
     $props["encoding"]               = "enum list|UTF-8|ISO-8859-1 default|UTF-8";

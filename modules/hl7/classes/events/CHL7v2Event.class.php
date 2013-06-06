@@ -103,39 +103,39 @@ class CHL7v2Event extends CHL7Event {
   }
 
   /**
-   * Generate exchange IHE
+   * Generate exchange HL7v2
    *
-   * @return CExchangeIHE
+   * @return CExchangeHL7v2
    */
   function generateExchange() {
-    $exchange_ihe                  = new CExchangeIHE();
-    $exchange_ihe->date_production = CMbDT::dateTime();
-    $exchange_ihe->receiver_id     = $this->_receiver->_id;
-    $exchange_ihe->group_id        = $this->_receiver->group_id;
-    $exchange_ihe->sender_id       = $this->_sender ? $this->_sender->_id : null;
-    $exchange_ihe->sender_class    = $this->_sender ? $this->_sender->_id : null;
-    $exchange_ihe->version         = $this->version;
-    $exchange_ihe->type            = $this->profil;
-    $exchange_ihe->sous_type       = $this->transaction;
-    $exchange_ihe->code            = $this->code;
-    $exchange_ihe->object_id       = $this->object->_id;
-    $exchange_ihe->object_class    = $this->object->_class;
-    $exchange_ihe->store();
+    $exchange_hl7v2                  = new CExchangeHL7v2();
+    $exchange_hl7v2->date_production = CMbDT::dateTime();
+    $exchange_hl7v2->receiver_id     = $this->_receiver->_id;
+    $exchange_hl7v2->group_id        = $this->_receiver->group_id;
+    $exchange_hl7v2->sender_id       = $this->_sender ? $this->_sender->_id : null;
+    $exchange_hl7v2->sender_class    = $this->_sender ? $this->_sender->_id : null;
+    $exchange_hl7v2->version         = $this->version;
+    $exchange_hl7v2->type            = $this->profil;
+    $exchange_hl7v2->sous_type       = $this->transaction;
+    $exchange_hl7v2->code            = $this->code;
+    $exchange_hl7v2->object_id       = $this->object->_id;
+    $exchange_hl7v2->object_class    = $this->object->_class;
+    $exchange_hl7v2->store();
 
-    return $this->_exchange_ihe = $exchange_ihe;
+    return $this->_exchange_hl7v2 = $exchange_hl7v2;
   }
 
   /**
-   * Update exchange IHE with
+   * Update exchange HL7v2 with
    *
-   * @return CExchangeIHE
+   * @return CExchangeHL7v2
    */
   function updateExchange() {
-    $exchange_ihe                 = $this->_exchange_ihe;
-    $exchange_ihe->_message       = $this->msg_hl7;
-    $exchange_ihe->message_valide = $this->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
-    $exchange_ihe->store();
+    $exchange_hl7v2                 = $this->_exchange_hl7v2;
+    $exchange_hl7v2->_message       = $this->msg_hl7;
+    $exchange_hl7v2->message_valide = $this->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
+    $exchange_hl7v2->store();
     
-    return $exchange_ihe;
+    return $exchange_hl7v2;
   }
 }

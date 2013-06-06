@@ -18,7 +18,7 @@ $extension = ".txt";
 if ($exchange_object instanceof CEchangeXML) {
   $extension = ".xml";    
 }
-if ($exchange_object instanceof CExchangeIHE) {
+if ($exchange_object instanceof CExchangeHL7v2) {
   $extension = ".HL7";    
 }
 

@@ -57,6 +57,13 @@ class CSetuphl7 extends CSetup {
 
     $this->addQuery($query, false, "hl7v2");
   }
+
+  function updateTableSource($nameTable) {
+    $query = "UPDATE $nameTable
+                SET $nameTable.name = Replace(name, 'CReceiverIHE', 'CReceiverHL7v2')
+                WHERE $nameTable.name LIKE 'CReceiverIHE-%';";
+    $this->addQuery($query);
+  }
   
   function __construct() {
     parent::__construct();
@@ -886,7 +893,7 @@ class CSetuphl7 extends CSetup {
     $this->addDependency("ihe", "0.26");
     
     $this->makeRevision("0.37");
-    $query = "ALTER TABLE `receiver_ihe_config` 
+    $query = "ALTER TABLE `receiver_ihe_config`
                 ADD `RAD48_HL7_version` ENUM ('2.1','2.2','2.3','2.3.1','2.4','2.5') DEFAULT '2.5';";
     $this->addQuery($query);
     
@@ -1117,7 +1124,37 @@ class CSetuphl7 extends CSetup {
                 ADD `send_change_after_admit` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.70";
+    $this->makeRevision("0.70");
+
+    $query = "UPDATE user_log
+                SET user_log.object_class = 'CReceiverHL7v2'
+                WHERE user_log.object_class = 'CReceiverIHE';";
+    $this->addQuery($query);
+
+    $query = "UPDATE user_log
+                SET user_log.object_class = 'CReceiverHL7v2Config'
+                WHERE user_log.object_class = 'CReceiverIHEConfig';";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.71");
+
+    $query = "UPDATE message_supported
+                SET message_supported.object_class = 'CReceiverHL7v2'
+                WHERE message_supported.object_class = 'CReceiverIHE';";
+    $this->addQuery($query);
+
+    self::updateTableSource("source_file_system");
+    self::updateTableSource("source_ftp");
+    self::updateTableSource("source_http");
+    self::updateTableSource("source_ldap");
+    self::updateTableSource("source_lpr");
+    self::updateTableSource("source_mllp");
+    self::updateTableSource("source_pop");
+    self::updateTableSource("source_smb");
+    self::updateTableSource("source_smtp");
+    self::updateTableSource("source_soap");
+
+    $this->mod_version = "0.72";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

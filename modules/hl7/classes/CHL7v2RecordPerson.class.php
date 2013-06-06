@@ -46,18 +46,18 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
    * @return null|string
    */
   function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
-    $exchange_ihe = $this->_ref_exchange_ihe;
-    $sender       = $exchange_ihe->_ref_sender;
+    $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
+    $sender         = $exchange_hl7v2->_ref_sender;
     $sender->loadConfigValues();
 
     $this->_ref_sender = $sender;
 
     // Acquittement d'erreur : identifiants RI et PI non fournis
     if (!$data['personIdentifiers']) {
-      return $exchange_ihe->setAckAR($ack, "E100", null, $newPatient);
+      return $exchange_hl7v2->setAckAR($ack, "E100", null, $newPatient);
     }
 
-    switch ($exchange_ihe->code) {
+    switch ($exchange_hl7v2->code) {
       // A29 - Delete person information
       case "A29" :
         $eventCode = "A29";
@@ -70,7 +70,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
 
     $function_handle = "handle$eventCode";
     if (!method_exists($this, $function_handle)) {
-      return $exchange_ihe->setAckAR($ack, "E006", null, $newPatient);
+      return $exchange_hl7v2->setAckAR($ack, "E006", null, $newPatient);
     }
 
     return $this->$function_handle($ack, $newPatient, $data);
@@ -89,7 +89,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     // Traitement du message des erreurs
     $_modif_patient = false;
 
-    $exchange_ihe = $this->_ref_exchange_ihe;
+    $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
     $sender       = $this->_ref_sender;
 
     $patientRI       = CValue::read($data['personIdentifiers'], "RI");
@@ -117,12 +117,12 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
           if (!$this->checkSimilarPatient($recoveredPatient, $newPatient)) {
             $commentaire = "Le nom ($newPatient->nom / $recoveredPatient->nom) ".
                            "et/ou le prénom ($newPatient->prenom / $recoveredPatient->prenom) sont très différents.";
-            return $exchange_ihe->setAckAR($ack, "E123", $commentaire, $newPatient);
+            return $exchange_hl7v2->setAckAR($ack, "E123", $commentaire, $newPatient);
           }
           
           // On store le patient
           if ($msgPatient = CEAIPatient::storePatient($newPatient, $sender)) {
-            return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);
+            return $exchange_hl7v2->setAckAR($ack, "E101", $msgPatient, $newPatient);
           }
                     
           $code_IPP      = "I121";
@@ -159,18 +159,18 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
 
         // On store le patient
         if ($msgPatient = CEAIPatient::storePatient($newPatient, $sender)) {
-          return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);
+          return $exchange_hl7v2->setAckAR($ack, "E101", $msgPatient, $newPatient);
         }
       }
       
       $newPatient->_generate_IPP = false;
       // Mapping secondaire (correspondants, médecins) du patient
       if ($msgPatient = $this->secondaryMappingPatient($data, $newPatient)) {
-        return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);
+        return $exchange_hl7v2->setAckAR($ack, "E101", $msgPatient, $newPatient);
       }
 
       if ($msgIPP = CEAIPatient::storeIPP($IPP, $newPatient, $sender)) {
-        return $exchange_ihe->setAckAR($ack, "E102", $msgIPP, $newPatient);
+        return $exchange_hl7v2->setAckAR($ack, "E102", $msgIPP, $newPatient);
       }
       
       $codes = array (($_modif_patient ? "I102" : "I101"), $code_IPP);
@@ -191,7 +191,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       if (!$this->checkSimilarPatient($recoveredPatient, $newPatient)) {
         $commentaire = "Le nom ($newPatient->nom / $recoveredPatient->nom) ".
                        "et/ou le prénom ($newPatient->prenom / $recoveredPatient->prenom) sont très différents.";
-        return $exchange_ihe->setAckAR($ack, "E124", $commentaire, $newPatient);
+        return $exchange_hl7v2->setAckAR($ack, "E124", $commentaire, $newPatient);
       }
                       
       // RI non fourni
@@ -205,7 +205,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
           if ($tmpPatient->_id != $IPP->object_id) {
             $comment = "L'identifiant source fait référence au patient : $IPP->object_id".
                        "et l'identifiant cible au patient : $tmpPatient->_id.";
-            return $exchange_ihe->setAckAR($ack, "E101", $comment, $newPatient);
+            return $exchange_hl7v2->setAckAR($ack, "E101", $comment, $newPatient);
           }
           $code_IPP = "I124"; 
         }
@@ -217,12 +217,12 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       
       // On store le patient
       if ($msgPatient = CEAIPatient::storePatient($newPatient, $sender)) {
-        return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);
+        return $exchange_hl7v2->setAckAR($ack, "E101", $msgPatient, $newPatient);
       }
       
       // Mapping secondaire (correspondants, médecins) du patient
       if ($msgPatient = $this->secondaryMappingPatient($data, $newPatient)) {
-        return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);
+        return $exchange_hl7v2->setAckAR($ack, "E101", $msgPatient, $newPatient);
       }
             
       $codes = array ("I102", $code_IPP);
@@ -230,7 +230,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       $comment = CEAIPatient::getComment($newPatient);
     }
     
-    return $exchange_ihe->setAckAA($ack, $codes, $comment, $newPatient);
+    return $exchange_hl7v2->setAckAA($ack, $codes, $comment, $newPatient);
   }
 
   /**
@@ -246,7 +246,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     // Traitement du message des erreurs
     $comment = $warning = "";
 
-    $exchange_ihe = $this->_ref_exchange_ihe;
+    $exchange_hl7v2 = $this->_ref_exchange_hl7v2;
     $sender       = $this->_ref_sender;
 
     $patientPI = CValue::read($data['personIdentifiers'], "PI");
@@ -256,14 +256,14 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     }
 
     if (!$patientPI || !$IPP->_id) {
-      return $exchange_ihe->setAckAR($ack, "E150", null, $newPatient);
+      return $exchange_hl7v2->setAckAR($ack, "E150", null, $newPatient);
     }
 
     $newPatient->load($IPP->object_id);
 
     // Passage en trash de l'IPP du patient
     if ($msg = $newPatient->trashIPP($IPP)) {
-      return $exchange_ihe->setAckAR($ack, "E151", $msg, $newPatient);
+      return $exchange_hl7v2->setAckAR($ack, "E151", $msg, $newPatient);
     }
 
     // Annulation de tous les séjours du patient qui n'ont pas d'entrée réelle
@@ -288,7 +288,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
 
     $codes = array ("I150");
 
-    return $exchange_ihe->setAckAA($ack, $codes, $comment, $newPatient);
+    return $exchange_hl7v2->setAckAA($ack, $codes, $comment, $newPatient);
   }
 
   /**
