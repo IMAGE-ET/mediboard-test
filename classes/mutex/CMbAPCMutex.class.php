@@ -56,12 +56,4 @@ class CMbAPCMutex extends CMbMutexDriver {
   protected function recover($duration){
     return false;
   }
-
-  /**
-   * @see parent::getLockKey()
-   */
-  protected function getLockKey(){
-    global $rootName;
-    return "$rootName-lock-{$this->key}";
-  }
 }

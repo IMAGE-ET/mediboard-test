@@ -29,7 +29,7 @@ interface IMbMutex {
    * @param float $duration   The max time in seconds to acquire the semaphore (max 10s)
    * @param int   $poll_delay Poll delay in microseconds
    *
-   * @return float Time spent waiting, in seconds
+   * @return float|bool Time spent waiting, in seconds, or true/false of $duration is 0
    */
   function acquire($duration = self::DEFAULT_TIMEOUT, $poll_delay = self::DEFAULT_POLL_DELAY);
 

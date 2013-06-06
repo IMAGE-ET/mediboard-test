@@ -26,7 +26,9 @@ class CMbSemaphore {
     $this->path = CAppUI::conf("root_dir")."/tmp/locks";
     CMbPath::forceDir($this->path);
     $this->process = getmypid();
-    $this->key = $key;
+
+    $prefix = CApp::getAppIdentifier();
+    $this->key = "$prefix-sem-$key";
   }
 
   /**

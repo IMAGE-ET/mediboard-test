@@ -76,13 +76,6 @@ class CMbFileMutex extends CMbMutexDriver {
     return true;
   }
 
-  /**
-   * @see parent::getLockKey()
-   */
-  protected function getLockKey(){
-    global $rootName;
-    return "$rootName-lock-{$this->key}";
-  }
 
   /**
    * Get file modification time

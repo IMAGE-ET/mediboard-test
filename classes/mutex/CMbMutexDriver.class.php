@@ -39,7 +39,6 @@ abstract class CMbMutexDriver implements IMbMutex {
       $this->expire = $this->timeout($duration);
 
       // Set lock if not already here and acquire it
-      // Should be atomic
       if ($this->setLock($duration)) {
         break;
       }
@@ -49,10 +48,20 @@ abstract class CMbMutexDriver implements IMbMutex {
         break;
       }
 
+      // Don't wait if no duration, but return false to indicate that the lock could not be aquired
+      if ($duration == 0) {
+        return false;
+      }
+
       // Sleep a little
       usleep($poll_delay);
 
     } while (true);
+
+    // If it's a "lock" not a mutex
+    if ($duration == 0) {
+      return true;
+    }
 
     return $this->getTime() - $start;
   }
@@ -65,13 +74,6 @@ abstract class CMbMutexDriver implements IMbMutex {
    * @return bool Was the lock acquired?
    */
   abstract protected function recover($duration);
-
-  /**
-   * Get the lock key name
-   *
-   * @return string
-   */
-  abstract protected function getLockKey();
 
   /**
    * Sets the lock, this must be atomic
@@ -109,5 +111,15 @@ abstract class CMbMutexDriver implements IMbMutex {
    */
   protected function canRelease(){
     return $this->getTime() < $this->expire;
+  }
+
+  /**
+   * Get the lock key name
+   *
+   * @return string
+   */
+  protected function getLockKey() {
+    $prefix = CApp::getAppIdentifier();
+    return "$prefix-mutex-{$this->key}";
   }
 }

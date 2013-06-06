@@ -238,7 +238,7 @@ class CApp {
    * @return void
    */
   static function getAllClasses() {
-    $rootDir = CAppUI::conf("root_dir");
+    $root_dir = CAppUI::conf("root_dir");
     
     // Ordered paths
     $dirs = array(
@@ -261,7 +261,7 @@ class CApp {
 
     // Actual requires
     foreach ($dirs as $dir) {
-      $files = glob("$rootDir/$dir");
+      $files = glob("$root_dir/$dir");
       foreach ($files as $fileName) {
         include_once $fileName;
       }
@@ -498,5 +498,17 @@ class CApp {
         "timeFetch"  => $chronoFetch->total,
       );
     }
+  }
+
+  /**
+   * Must be the same here and SHM::init
+   * We don't use CApp because it can be called in /install
+   *
+   * @return string Application identifier, in a pool of servers
+   */
+  static function getAppIdentifier(){
+    $root_dir = CAppUI::conf("root_dir");
+
+    return preg_replace("/[^\w]+/", "_", $root_dir);
   }
 }

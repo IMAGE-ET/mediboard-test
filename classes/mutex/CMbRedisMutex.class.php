@@ -70,14 +70,6 @@ class CMbRedisMutex extends CMbMutexDriver {
   }
 
   /**
-   * @see parent::getLockKey()
-   */
-  protected function getLockKey(){
-    global $rootName;
-    return "$rootName-lock:{$this->key}";
-  }
-
-  /**
    * @see parent::setLock()
    */
   protected function setLock($duration){

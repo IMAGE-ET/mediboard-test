@@ -26,7 +26,10 @@ class CMbLock {
   function __construct($key) {
     $this->path = CAppUI::conf("root_dir")."/tmp/locks";
     $this->process = getmypid();
-    $this->key = $key;
+
+    $prefix = CApp::getAppIdentifier();
+    $this->key = "$prefix-lock-$key";
+
     $this->filename = "$this->path/$this->key";
     CMbPath::forceDir(dirname($this->filename));
   }

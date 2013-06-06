@@ -9,8 +9,6 @@
  * @version    $Revision$
  */
 
-// Use $dPconfig for both application and install wizard to use it
-global $dPconfig, $rootName;
 require_once dirname(__FILE__)."/CMbPath.class.php";
 
 /**
@@ -232,12 +230,18 @@ abstract class SHM {
   /**
    * Initialize the shared memory
    *
-   * @param string $engine_name Engine type
-   * @param string $prefix      Prefix to use
-   *
    * @return void
    */
-  static function init($engine_name = "disk", $prefix = "") {
+  static function init() {
+    global $dPconfig;
+
+    $engine_name = $dPconfig['shared_memory'];
+
+    // Must be the same here and in CApp
+    // We don't use CApp because it can be called in /install
+    $root_dir = $dPconfig['root_dir'];
+    $prefix = preg_replace("/[^\w]+/", "_", $root_dir);
+
     if (!isset(self::$availableEngines[$engine_name])) {
       $engine_name = "disk";
     }
@@ -506,4 +510,4 @@ class RedisSharedMemory implements ISharedMemory {
   }
 }
 
-SHM::init($dPconfig['shared_memory'], $rootName);
+SHM::init();
