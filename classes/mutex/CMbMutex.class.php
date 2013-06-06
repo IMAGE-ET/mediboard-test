@@ -19,13 +19,21 @@ class CMbMutex implements IMbMutex {
     "CMbFileMutex",
   );
 
+  /** @var self[] */
+  static $open_mutexes = array();
+
   /** @var CMbMutexDriver */
   private $driver;
+
+  /** @var string Key */
+  private $key;
 
   /**
    * @see parent::__construct()
    */
   function __construct($key, $label = null) {
+    $this->key = $key;
+
     $driver = null;
 
     $config = CAppUI::conf("mutex_drivers");
@@ -64,9 +72,20 @@ class CMbMutex implements IMbMutex {
   }
 
   /**
+   * Get the mutext key
+   *
+   * @return string
+   */
+  function getKey(){
+    return $this->key;
+  }
+
+  /**
    * @see parent::acquire()
    */
   function acquire($duration = self::DEFAULT_TIMEOUT, $poll_delay = self::DEFAULT_POLL_DELAY) {
+    self::$open_mutexes[$this->key] = $this;
+
     return $this->driver->acquire($duration, $poll_delay);
   }
 
@@ -74,6 +93,8 @@ class CMbMutex implements IMbMutex {
    * @see parent::release()
    */
   function release() {
+    unset(self::$open_mutexes[$this->key]);
+
     $this->driver->release();
   }
 
@@ -83,6 +104,20 @@ class CMbMutex implements IMbMutex {
    * @return void
    */
   function failedMessage() {
-    CAppUI::stepMessage(UI_MSG_OK, "CMbLock-failed-message", $this->key);
+    CAppUI::stepMessage(UI_MSG_OK, "CMbLock-failed-message", $this->getKey());
+  }
+
+  /**
+   * Release all mutexes on script end
+   *
+   * @return void
+   */
+  static function releaseMutexes(){
+    foreach (self::$open_mutexes as $_mutex) {
+      trigger_error(sprintf("Mutex '%s' was not released properly", $_mutex->getKey()), E_USER_NOTICE);
+      $_mutex->release();
+    }
   }
 }
+
+register_shutdown_function(array("CMbMutex", "releaseMutexes"));
