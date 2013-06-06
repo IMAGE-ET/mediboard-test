@@ -45,11 +45,12 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $results[$i]["rpps"]            = CMbArray::get($line,  8);
     }
     else {
-      $results[$i]["ean"]           = CMbArray::get($line,  7);
+      $results[$i]["ean"]            = CMbArray::get($line,  7);
       $results[$i]["rcc"]            = CMbArray::get($line,  8);
     }
     $results[$i]["spec_cpam_code"]  = CMbArray::get($line,  9);
     $results[$i]["discipline_name"] = CMbArray::get($line, 10);
+    $results[$i]["idex"]            = CMbArray::get($line, 11);
     
     $results[$i]["error"] = 0;
         
@@ -92,10 +93,10 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
         $unfound["profil_name"][$profil_name] = true;
       }
     }
-
+    $group_id = CGroups::loadCurrent()->_id;
     // Fonction
     $function = new CFunctions();
-    $function->group_id = CGroups::loadCurrent()->_id;
+    $function->group_id = $group_id;
     $function->text     = $results[$i]["function_name"];
     $function->loadMatchingObject();
     if (!$function->_id) {
@@ -167,6 +168,25 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $results[$i]["result"] = 0;
     $results[$i]["username"] = $user->_user_username;
     $results[$i]["password"] = $user->_user_password;
+
+    $number_idex = $results[$i]["idex"];
+    if (!$number_idex) {
+      continue;
+    }
+    $idex = new CIdSante400();
+    $idex->tag = CMediusers::getTagMediusers($group_id);
+    $idex->id400 = $number_idex;
+
+    if ($idex->loadMatchingObject()) {
+      $unfound["idex"][$number_idex] = true;
+      CAppUI::setMsg("Identifiant déjà existant", UI_MSG_WARNING);
+      continue;
+    }
+    $idex->setObject($user);
+    $msg = $idex->store();
+    if ($msg) {
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
+    }
   }
   fclose($fp);
 }

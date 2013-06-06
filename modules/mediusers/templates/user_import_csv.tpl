@@ -27,6 +27,7 @@
   {{/if}}
   <li>{{mb_label class=CMediusers field=spec_cpam_id    }} (code à deux chiffres): spcécialité non créée si introuvable</li>
   <li>{{mb_label class=CMediusers field=discipline_id   }} : discipline non créée si introuvable</li>
+  <li>{{mb_label class=CIdSante400 field=id400          }} : idex non créé si introuvable</li>
 {{mb_include module=system template=inc_import_csv_info_outro}}
 
 <form method="post" action="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog=1&amp;" name="import" enctype="multipart/form-data">
@@ -42,7 +43,7 @@
 {{if $results|@count}}
 <table class="tbl">
   <tr>
-    <th class="title" colspan="12">{{$results|@count}} utilisateurs trouvés</th>
+    <th class="title" colspan="13">{{$results|@count}} utilisateurs trouvés</th>
   </tr>
   <tr>
     <th>Etat</th>
@@ -80,6 +81,9 @@
         {{$unfound.discipline_name|@count}} non trouvée(s)
       {{/if}}
     </th>
+    <th>
+      {{mb_label class=CIdSante400 field=id400}}
+    </th>
   </tr>
   {{foreach from=$results item=_user}}
   <tr>
@@ -112,6 +116,7 @@
     <td class="text {{if array_key_exists($_user.profil_name    , $unfound.profil_name    )}}warning{{/if}}">{{$_user.profil_name    }}</td>
     <td class="text {{if array_key_exists($_user.spec_cpam_code , $unfound.spec_cpam_code )}}warning{{/if}}">{{$_user.spec_cpam_code }}</td>
     <td class="text {{if array_key_exists($_user.discipline_name, $unfound.discipline_name)}}warning{{/if}}">{{$_user.discipline_name}}</td>
+    <td class="text {{if array_key_exists($_user.idex           , $unfound.idex           )}}warning{{/if}}">{{$_user.idex           }}</td>
   </tr>
   {{/foreach}}
 </table>
