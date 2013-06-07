@@ -1,4 +1,4 @@
-<form name="editFrm" action="?" method="post" onsubmit="return onSubmitFormAjax(this, Control.Modal.close);">
+<form name="edit{{$idex->_guid}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, Control.Modal.close);">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="dosql" value="do_idsante400_aed" />
   <input type="hidden" name="del" value="0" />
@@ -46,7 +46,7 @@
         <button class="search" type="button" onclick="ObjectSelector.initEdit()">Chercher</button>
         <script type="text/javascript">
           ObjectSelector.initEdit = function(){
-            this.sForm     = "editFrm";
+            this.sForm     = "edit{{$idex->_guid}}";
             this.sId       = "object_id";
             this.sClass    = "object_class";
             this.onlyclass = "false";
@@ -73,7 +73,7 @@
   
     <tr>
       <th>{{mb_label object=$idex field="last_update"}}</th>
-      <td>{{mb_field object=$idex field="last_update" form="editFrm" canNull="false" register=true}} </td>
+      <td>{{mb_field object=$idex field="last_update" form="edit`$idex->_guid`" canNull="false" register=true}} </td>
     </tr>
   
     <tr>
@@ -92,5 +92,4 @@
       </td>
     </tr>
   </table>
-
 </form>

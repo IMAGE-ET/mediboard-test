@@ -20,6 +20,6 @@ $locales['RAD-3'] = 'Filler Order Management';
 $locales['RAD-48'] = 'Appointment Notification';
 $locales['evenementsPatient'] = 'PAM';
 $locales['evenementsPatient-desc'] = 'Patient Administration Management';
-$locales['module-ihe-court'] = 'HL7v2';
-$locales['module-ihe-long'] = 'Health Level Seven International version 2';
+$locales['module-ihe-court'] = 'IHE';
+$locales['module-ihe-long'] = 'Integrating the Healthcare Enterprise';
 ?>

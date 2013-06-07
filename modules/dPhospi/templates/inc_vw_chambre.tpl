@@ -1,4 +1,4 @@
-<form name="Edit-CChambre" action="" method="post" onsubmit="return submit_Ajax(this, 'chambres')">
+<form name="edit{{$chambre->_guid}}" action="" method="post" onsubmit="return submit_Ajax(this, 'chambres')">
   <input type="hidden" name="m" value="hospi" />
   <input type="hidden" name="dosql" value="do_chambre_aed" />
   <input type="hidden" name="del" value="0" />
@@ -78,7 +78,7 @@
     {{/foreach}}
   </table>
   
-  <form name="Edit-CLit" action="?m={{$m}}" method="post" onsubmit="submit_Ajax(this, 'chambres')">
+  <form name="editedit{{$_lit->_guid}}" action="?m={{$m}}" method="post" onsubmit="submit_Ajax(this, 'chambres')">
     
   <input type="hidden" name="dosql" value="do_lit_aed" />
   <input type="hidden" name="del" value="0" />
