@@ -1318,7 +1318,54 @@ class CSetupsystem extends CSetup {
       CHANGE `data` `data` LONGBLOB";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.35";
+    $this->makeRevision("1.1.35");
+    $query = "CREATE TABLE `long_request_log` (
+                `long_request_log_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `datetime`            DATETIME NOT NULL,
+                `duration`            FLOAT UNSIGNED NOT NULL,
+                `server_addr`         VARCHAR (255) NOT NULL,
+                `user_id`             INT (11) UNSIGNED NOT NULL,
+                `query_params_get`    TEXT,
+                `query_params_post`   TEXT,
+                `session_data`        TEXT
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `long_request_log`
+                ADD INDEX (`datetime`),
+                ADD INDEX (`user_id`);";
+    $this->addQuery($query);
+
+    /*
+    // Création des deux nouveaux champs
+    $this->makeRevision("1.1.36");
+    $query = "ALTER TABLE `access_log`
+      ADD `aggregate` INT(11) UNSIGNED NOT NULL DEFAULT '10',
+      ADD `bot` BOOL NOT NULL DEFAULT 0;";
+    $this->addQuery($query);
+
+    // Mise à jour du champ
+    $this->makeRevision("1.1.37");
+    $query = "UPDATE `access_log`
+      SET `aggregate` = '60';";
+    $this->addQuery($query);
+
+    /**
+     * Suppression de l'index UNIQUE triplet
+     * Création d'un index unique portant sur le précédent triplet + l'agrégat et le booléen bot
+     * Création d'un simple index triplet
+     */
+    /*
+    $this->makeRevision("1.1.38");
+    $query = "ALTER TABLE `access_log`
+      DROP INDEX `triplet`,
+      ADD UNIQUE `aggregate` (`module`, `action`, `period`, `aggregate`, `bot`),
+      ADD INDEX `triplet` (`module`, `action`, `period`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.39";
+    */
+    $this->mod_version = "1.1.36";
     
     /*$query = "ALTER TABLE user_log
                 DROP INDEX object_id,

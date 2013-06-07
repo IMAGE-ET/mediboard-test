@@ -85,6 +85,8 @@ class CApp {
 
     //access log
     include "./includes/access_log.php";
+    // Long request log
+    include "./includes/long_request_log.php";
 
     self::$inPeace = true;
     die;

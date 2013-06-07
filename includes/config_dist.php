@@ -65,6 +65,8 @@ $dPconfig["purify_text_input"]    = "0";
 
 $dPconfig["config_db"] = "0";
 
+$dPconfig["long_request_log_level"] = "";
+
 // Object merge
 $dPconfig["alternative_mode"]  = "1";
 $dPconfig["merge_prevent_base_without_idex"]  = "1";
