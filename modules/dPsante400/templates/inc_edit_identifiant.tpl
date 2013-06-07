@@ -9,7 +9,6 @@
     <tr>
       <th class="title text {{if $idex->_id}}modify{{/if}}" colspan="2">
       {{if $idex->_id}}
-        {{mb_include module=system template=inc_object_history object=$idex}}
         {{tr}}CIdSante400-title-modify{{/tr}} &lsquo;{{$idex->_view}}&rsquo;
       {{else}}
         {{tr}}CIdSante400-title-create{{/tr}}
