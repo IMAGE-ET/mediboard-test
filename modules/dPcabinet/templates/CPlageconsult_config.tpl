@@ -156,9 +156,6 @@
       </td>
     </tr>
 
-    <div>
-    </div>
-
     <tr>
       <td class="button" colspan="2">
         <button type="button" class="trash" onclick="cleanPlages()">{{tr}}Clean{{/tr}}</button>
