@@ -23,6 +23,9 @@ if ($praticien_id) {
 }
 $where["plageconsult.date"] = "> '$date'";
 
+$count = $plage->countList($where);
+CAppUI::setMsg("'$count' plages à supprimer", UI_MSG_OK);
+
 /** @var CPlageconsult[] $listPlages */
 $listPlages = $plage->loadList($where, null, $limit);
 
