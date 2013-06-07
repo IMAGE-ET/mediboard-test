@@ -247,7 +247,7 @@ class CTemplateManager {
    * @return void
    */
   function addDateProperty($field, $value = null) {
-    $value = $value ? CMbDT::transform(null, $value, CAppUI::conf("date")) : "";
+    $value = $value ? CMbDT::format($value, CAppUI::conf("date")) : "";
     $this->addProperty($field, $value);
   }
 
@@ -261,7 +261,7 @@ class CTemplateManager {
    * @return void
    */
   function addLongDateProperty($field, $value, $lowercase = false) {
-    $value = $value ? ucfirst(CMbDT::transform(null, $value, CAppUI::conf("longdate"))) : "";
+    $value = $value ? ucfirst(CMbDT::format($value, CAppUI::conf("longdate"))) : "";
     $this->addProperty($field, $lowercase ? CMbString::lower($value) : $value);
   }
 
@@ -274,7 +274,7 @@ class CTemplateManager {
    * @return void
    */
   function addTimeProperty($field, $value = null) {
-    $value = $value ? CMbDT::transform(null, $value, CAppUI::conf("time")) : "";
+    $value = $value ? CMbDT::format($value, CAppUI::conf("time")) : "";
     $this->addProperty($field, $value);
   }
 
@@ -287,7 +287,7 @@ class CTemplateManager {
    * @return void
    */
   function addDateTimeProperty($field, $value = null) {
-    $value = $value ? CMbDT::transform(null, $value, CAppUI::conf("datetime")) : "";
+    $value = $value ? CMbDT::format($value, CAppUI::conf("datetime")) : "";
     $this->addProperty($field, $value);
   }
 

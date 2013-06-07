@@ -41,7 +41,7 @@ else {
 }
 
 foreach (CConstantesMedicales::$list_constantes as $key => $cst) {
-  $dates["$key"] = CMbDT::transform(null, null, '%d/%m/%y');
+  $dates["$key"] = CMbDT::format(null, '%d/%m/%y');
 }
 
 if ($tri) {

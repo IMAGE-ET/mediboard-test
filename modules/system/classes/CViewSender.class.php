@@ -254,7 +254,7 @@ class CViewSender extends CMbObject {
     try {
       // Répertoire d'archivage
       $directory = $ftp->fileprefix.$basename;
-      $datetime = CMbDT::transform(null, null, "%Y-%m-%d_%H-%M-%S");
+      $datetime = CMbDT::format(null, "%Y-%m-%d_%H-%M-%S");
       $ftp->createDirectory($directory);
       
       // Transmission de la copie

@@ -56,14 +56,14 @@ class CPlanningRange {
       $parts = split(" ", $this->start);
       $this->end = "{$parts[0]} ".CMbDT::time("+{$this->length} MINUTES", $parts[1]);
       $this->day = $parts[0];
-      $this->hour = CMbDT::transform(null, $parts[1], "%H");
-      $this->minutes = CMbDT::transform(null, $parts[1], "%M");
+      $this->hour = CMbDT::format($parts[1], "%H");
+      $this->minutes = CMbDT::format($parts[1], "%M");
     }
     else {
       $this->day = CMbDT::date($date);
       $this->end = CMbDT::dateTime("+{$this->length} MINUTES", $date);
-      $this->hour = CMbDT::transform(null, $date, "%H");
-      $this->minutes = CMbDT::transform(null, $date, "%M");
+      $this->hour = CMbDT::format($date, "%H");
+      $this->minutes = CMbDT::format($date, "%M");
     }
   }
 

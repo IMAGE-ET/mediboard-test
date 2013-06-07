@@ -186,7 +186,7 @@ foreach ($comparison as $comp) {
           $series_data['total'][$i][1] += $count;
           
           $data[] = array($i, $count);
-          $ticks[$i] = array($i, CMbDT::transform(null, $month, "%m/%y"));
+          $ticks[$i] = array($i, CMbDT::format($month, "%m/%y"));
           ++$i;
         }
       }

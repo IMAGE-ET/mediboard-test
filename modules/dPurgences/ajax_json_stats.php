@@ -706,7 +706,7 @@ switch ($axe) {
 // Ticks
 $ticks = array();
 foreach ($dates as $i => $_date) {
-  $ticks[$i] = array($i, CMbDT::transform(null, $_date, $format));
+  $ticks[$i] = array($i, CMbDT::format($_date, $format));
 }
 
 $group_view = utf8_encode($group->_view);

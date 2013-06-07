@@ -39,7 +39,7 @@ class CMbDay {
     $dateTmp = explode("-", $date);
     $this->name = CMbDate::$days_name[(int) $dateTmp[1]][(int) ($dateTmp[2]-1)];
 
-    $this->_nbDaysYear = (CMbDT::transform(null, $date, "L")) ? 366 : 365;
+    $this->_nbDaysYear = (CMbDT::format($date, "L")) ? 366 : 365;
     $this->days_left = $this->_nbDaysYear - $this->number;
 
 

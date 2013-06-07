@@ -604,7 +604,7 @@ if ($export) {
       switch (get_class($object)) {
         case "CConsultation":
           $object_view = "Consultation du " . CMbDT::dateToLocale($object->_ref_plageconsult->date) .
-            " à ".CMbDT::transform(null, $object->heure, "%Hh:%M");
+            " à ".CMbDT::format($object->heure, "%Hh:%M");
           break;
         case "CSejour":
           $object_view = "Séjour du " .

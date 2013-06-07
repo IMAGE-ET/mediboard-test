@@ -73,7 +73,7 @@ function graphRessourceLog($module, $date, $element = 'duration', $interval = 'd
   $series = $seriesNew;
 
   // Set up the title for the graph
-  $title = CMbDT::transform(null, $date, "%A %d %b %Y");
+  $title = CMbDT::format($date, "%A %d %b %Y");
   if($module) $title .= " : ".CAppUI::tr($module);
 
   $options = array(

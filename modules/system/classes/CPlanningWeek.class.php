@@ -397,8 +397,8 @@ class CPlanningWeek{
       
       // FIXME: ameliorer ce calcul
       if ($div_min >= $start && $div_min < $end) {
-        $hour = CMbDT::transform(null, $div_min, "%H");
-        $min = CMbDT::transform(null, $div_min, "%M");
+        $hour = CMbDT::format($div_min, "%H");
+        $min = CMbDT::format($div_min, "%M");
         
         if (!isset($this->load_data[$day][$hour][$min])) {
           $this->load_data[$day][$hour][$min] = 0;

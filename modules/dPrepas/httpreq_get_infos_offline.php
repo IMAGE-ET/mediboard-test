@@ -73,24 +73,25 @@ if(!$service_id || !array_key_exists($service_id,$services)){
           $patient  =& $affectation->_ref_sejour->_ref_patient;
           $repas    =& $affectation->_list_repas[$date];
           
-          if($patient->_id){
+          if ($patient->_id) {
             $aPatients["$patient->_id"] = $patient;
           }
           
-          foreach($listTypeRepas as $keyType => $valType){
-            $heure_entree = CMbDT::transform(null,$affectation->entree,"%H:%M");
-            $heure_sortie = CMbDT::transform(null,$affectation->sortie,"%H:%M");
-            $date_entree  = CMbDT::transform(null,$affectation->entree,"%Y-%m-%d");
-            $date_sortie  = CMbDT::transform(null,$affectation->sortie,"%Y-%m-%d");
+          foreach ($listTypeRepas as $keyType => $valType) {
+            $heure_entree = CMbDT::format($affectation->entree, "%H:%M");
+            $heure_sortie = CMbDT::format($affectation->sortie, "%H:%M");
+            $date_entree  = CMbDT::format($affectation->entree, "%Y-%m-%d");
+            $date_sortie  = CMbDT::format($affectation->sortie, "%Y-%m-%d");
             
-            if(($date == $date_entree && $heure_entree > $valType->fin) ||
-                ($date == $date_sortie && $valType->debut > $heure_sortie)){
+            if (($date == $date_entree && $heure_entree > $valType->fin) ||
+                ($date == $date_sortie && $valType->debut > $heure_sortie)
+            ) {
               $planning[$keyType] = "null";
               continue;    
             }
             $planning[$keyType] = array("repas_id" => 0, "_tmp_repas_id" => 0);
 
-            if($repas[$keyType]->repas_id){
+            if ($repas[$keyType]->repas_id) {
               $repas[$keyType]->del  = 0;
               $repas[$keyType]->_del = 0;
               $repas[$keyType]->_tmp_repas_id = 0;

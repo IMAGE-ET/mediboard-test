@@ -35,9 +35,9 @@ while ($date < $now) {
   //$to = CMbDT::date("+1 MONTH", $date);
   //$ticks[] = "Du ".CMbDT::dateToLocale($date)." au ".CMbDT::dateToLocale($to);
 
-  $date = CMbDT::transform(null, $date, "%Y-%m-01");
-  $to = CMbDT::date("+1 MONTH", $date);
-  $ticks[] = array(count($ticks)*2-0.4, utf8_encode(CMbDT::transform(null, $date, "%b")));
+  $date    = CMbDT::format($date, "%Y-%m-01");
+  $to      = CMbDT::date("+1 MONTH", $date);
+  $ticks[] = array(count($ticks)*2-0.4, utf8_encode(CMbDT::format($date, "%b")));
 
   // Input //////////////////
   $where = array(

@@ -39,8 +39,8 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
     'bars' => array('show' => false)
   );
   for ($i = $debut; $i <= $fin; $i = CMbDT::date($step, $i)) {
-    $ticks[] = array(count($ticks), CMbDT::transform(null, $i, "%a %d"));
-    $ticks2[] = array(count($ticks), CMbDT::transform(null, $i, "%d"));
+    $ticks[] = array(count($ticks), CMbDT::format($i, "%a %d"));
+    $ticks2[] = array(count($ticks), CMbDT::format($i, "%d"));
     $serie_total['data'][] = array(count($serie_total['data']), 0);
   }
 
@@ -147,11 +147,11 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
   
   // Set up the title for the graph
   if ($prat_id && $prat->isFromType(array("Anesthésiste"))) {
-    $title = "Nombre d'anesthésie par salle - ".CMbDT::transform(null, $debut, "%m/%Y");
+    $title = "Nombre d'anesthésie par salle - ".CMbDT::format($debut, "%m/%Y");
     $subtitle = "$total anesthésies";
   }
   else {
-    $title = "Nombre d'interventions par salle - ".CMbDT::transform(null, $debut, "%m/%Y");
+    $title = "Nombre d'interventions par salle - ".CMbDT::format($debut, "%m/%Y");
     $subtitle = "$total interventions";
   }
 

@@ -335,7 +335,7 @@ if (CModule::getActive("dPprescription")) {
               $date_operation = $_operation->date;
             }
             $hour_op = $_operation->debut_op ? $_operation->debut_op : $_operation->time_operation; 
-            $hour_operation = CMbDT::transform(null, $hour_op, '%H');
+            $hour_operation = CMbDT::format($hour_op, '%H');
             $hour_operation .= ":00:00";
             $operations["$date_operation $hour_operation"] = $hour_op;
             $operations["$date_operation $hour_operation object"] = $_operation;

@@ -74,7 +74,7 @@ function computeMeanValue(&$where, &$ljoin, &$serie, $dates, $prop) {
 
 // Dates
 $dates = array();
-$first_day = CMbDT::transform(null, null, "%Y-%m-01");
+$first_day = CMbDT::format(null, "%Y-%m-01");
 for ($i = $months_count - 1; $i >= 0; --$i) {
   $mr = $months_relative+$i;
   $sample_end = CMbDT::transform("-$mr MONTHS", $first_day, "%Y-%m-31 23:59:59");
@@ -270,7 +270,7 @@ if ($mode === "comparison") {
 $i = 0;
 $ticks = array();
 foreach ($dates as $month => $date) {
-  $ticks[$i] = array($i, CMbDT::transform(null, $month, '%m/%y'));
+  $ticks[$i] = array($i, CMbDT::format($month, '%m/%y'));
   $i++;
 }
 

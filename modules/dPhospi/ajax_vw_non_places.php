@@ -202,8 +202,8 @@ foreach ($sejours as $_key => $_sejour) {
   foreach ($_operations as $key=>$_operation) {
     $_operation->loadRefPlageOp(1);
     
-    $hour_operation = CMbDT::transform(null, $_operation->temp_operation, "%H");
-    $min_operation = CMbDT::transform(null, $_operation->temp_operation, "%M");
+    $hour_operation = CMbDT::format($_operation->temp_operation, "%H");
+    $min_operation = CMbDT::format($_operation->temp_operation, "%M");
     
     $_operation->_debut_offset = CMbDate::position($_operation->_datetime, max($date_min, $_sejour->entree), $period);
     $_operation->_fin_offset = CMbDate::position(CMbDT::dateTime("+$hour_operation hours +$min_operation minutes",$_operation->_datetime), max($date_min, $_sejour->entree), $period);
@@ -314,8 +314,8 @@ foreach ($affectations as $_affectation) {
   foreach ($_operations as $key=>$_operation) {
     $_operation->loadRefPlageOp(1);
     
-    $hour_operation = CMbDT::transform(null, $_operation->temp_operation, "%H");
-    $min_operation = CMbDT::transform(null, $_operation->temp_operation, "%M");
+    $hour_operation = CMbDT::format($_operation->temp_operation, "%H");
+    $min_operation = CMbDT::format($_operation->temp_operation, "%M");
     
     $_operation->_debut_offset[$_affectation->_id] = CMbDate::position($_operation->_datetime, max($date_min, $_affectation->entree), $period);
     

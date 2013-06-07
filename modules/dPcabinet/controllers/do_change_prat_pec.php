@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPcabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 $prat_id = CValue::post("prat_id");
@@ -19,9 +19,9 @@ if (!isset($current_m)) {
   $current_m = CValue::post("current_m", "dPcabinet");
 }
 
-$day_now  = CMbDT::transform(null, $_datetime, "%Y-%m-%d");
-$time_now = CMbDT::transform(null, $_datetime, "%H:%M:00");
-$hour_now = CMbDT::transform(null, $_datetime, "%H:00:00");
+$day_now  = CMbDT::format($_datetime, "%Y-%m-%d");
+$time_now = CMbDT::format($_datetime, "%H:%M:00");
+$hour_now = CMbDT::format($_datetime, "%H:00:00");
 $hour_next = CMbDT::time("+1 HOUR", $hour_now);
 $plage = new CPlageconsult();
 $plageBefore = new CPlageconsult();

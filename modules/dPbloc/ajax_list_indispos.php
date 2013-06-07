@@ -14,7 +14,7 @@ CCanDo::checkEdit();
 $indispo_ressource_id = CValue::getOrSession("indispo_ressource_id");
 $date_indispo         = CValue::getOrSession("date_indispo", CMbDT::date());
 
-$date_min = CMbDT::transform(null, $date_indispo, "%Y-%m-01");
+$date_min = CMbDT::format($date_indispo, "%Y-%m-01");
 $date_max = CMbDT::date("-1 day", CMbDT::date("+1 month", $date_min));
 
 $group_id = CGroups::loadCurrent()->_id;

@@ -21,7 +21,7 @@ $resp_bloc = CModule::getInstalled("dPbloc")->canEdit();
 
 // Liste des mois selectionnables
 
-$date = CMbDT::transform(null, $date, "%Y-%m-01");
+$date = CMbDT::format($date, "%Y-%m-01");
 $listMonthes = array();
 for($i = -6; $i <= 12; $i++) {
   $curr_key   = CMbDT::transform("$i month", $date, "%Y-%m-%d");

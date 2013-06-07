@@ -325,7 +325,7 @@ class CConsultation extends CFacturable {
   function getEtat() {
     $etat = array();
     $etat[self::PLANIFIE]       = "Plan.";
-    $etat[self::PATIENT_ARRIVE] = CMbDT::transform(null, $this->arrivee, "%Hh%M");
+    $etat[self::PATIENT_ARRIVE] = CMbDT::format($this->arrivee, "%Hh%M");
     $etat[self::EN_COURS]       = "En cours";
     $etat[self::TERMINE]        = "Term.";
 
@@ -1246,7 +1246,7 @@ class CConsultation extends CFacturable {
     $this->_ref_patient->loadRefConstantesMedicales();
     $this->loadRefPlageConsult($cache);
     $this->_view = "Consult. de ".$this->_ref_patient->_view." - ".$this->_ref_plageconsult->_ref_chir->_view;
-    $this->_view .= " (".CMbDT::transform(null, $this->_ref_plageconsult->date, "%d/%m/%Y").")";
+    $this->_view .= " (".CMbDT::format($this->_ref_plageconsult->date, "%d/%m/%Y").")";
     $this->loadExtCodesCCAM();
   }
 
@@ -1810,9 +1810,9 @@ class CConsultation extends CFacturable {
    * @return null|string Store-like message
    */
   function createByDatetime($datetime, $praticien_id, $patient_id) {
-    $day_now   = CMbDT::transform(null, $datetime, "%Y-%m-%d");
-    $time_now  = CMbDT::transform(null, $datetime, "%H:%M:00");
-    $hour_now  = CMbDT::transform(null, $datetime, "%H:00:00");
+    $day_now   = CMbDT::format($datetime, "%Y-%m-%d");
+    $time_now  = CMbDT::format($datetime, "%H:%M:00");
+    $hour_now  = CMbDT::format($datetime, "%H:00:00");
     $hour_next = CMbDT::time("+1 HOUR", $hour_now);
 
     $plage       = new CPlageconsult();
@@ -1926,10 +1926,10 @@ class CConsultation extends CFacturable {
             '%P' => $chir->_user_first_name,
             '%S' => $chir->_shortview,
             '%L' => $operation->libelle,
-            '%i' => CMbDT::transform(null, $operation->_datetime_best , CAppUI::conf('time')),
-            '%I' => CMbDT::transform(null, $operation->_datetime_best , CAppUI::conf('date')),
-            '%E' => CMbDT::transform(null, $sejour->entree_prevue, CAppUI::conf('date')),
-            '%e' => CMbDT::transform(null, $sejour->entree_prevue, CAppUI::conf('time')),
+            '%i' => CMbDT::format($operation->_datetime_best , CAppUI::conf('time')),
+            '%I' => CMbDT::format($operation->_datetime_best , CAppUI::conf('date')),
+            '%E' => CMbDT::format($sejour->entree_prevue, CAppUI::conf('date')),
+            '%e' => CMbDT::format($sejour->entree_prevue, CAppUI::conf('time')),
             '%T' => strtoupper(substr($sejour->type, 0, 1)),
           );
 

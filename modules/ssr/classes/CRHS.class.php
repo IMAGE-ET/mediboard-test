@@ -129,7 +129,7 @@ class CRHS extends CMbObject {
    * @see parent::check()
    */
   function check() {
-    if ($this->date_monday && CMbDT::transform(null, $this->date_monday, "%w") != "1") {
+    if ($this->date_monday && CMbDT::format($this->date_monday, "%w") != "1") {
       return CAppUI::tr("CRHS-failed-monday", $this->date_monday);
     }
     return parent::check();
@@ -140,7 +140,7 @@ class CRHS extends CMbObject {
    */
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_week_number = CMbDT::transform(null, $this->date_monday, "%U");
+    $this->_week_number = CMbDT::format($this->date_monday, "%U");
 
     $this->_date_tuesday   = CMbDT::date("+1 DAY", $this->date_monday);
     $this->_date_wednesday = CMbDT::date("+2 DAY", $this->date_monday);

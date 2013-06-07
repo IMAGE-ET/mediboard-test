@@ -48,7 +48,7 @@ class CMediusersStats {
         $sql_date = "DATE_ADD($date_column, INTERVAL (1 - DAYOFMONTH($date_column)) DAY)";
         break;
       case "year":
-        $date = CMbDT::transform(null, $date, "%Y-01-01");
+        $date = CMbDT::format($date, "%Y-01-01");
         $php_period = "years";
         $sql_date = "DATE_ADD($date_column, INTERVAL (1 - DAYOFYEAR($date_column)) DAY)";
         break;

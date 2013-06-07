@@ -1189,16 +1189,16 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Horaires
     // @todo: A supprimer
-    $this->_time_entree_prevue = CMbDT::transform(null, $this->entree_prevue, "%H:%M:00");
-    $this->_time_sortie_prevue = CMbDT::transform(null, $this->sortie_prevue, "%H:%M:00");
-    $this->_hour_entree_prevue = CMbDT::transform(null, $this->entree_prevue, "%H");
-    $this->_hour_sortie_prevue = CMbDT::transform(null, $this->sortie_prevue, "%H");
-    $this->_min_entree_prevue  = CMbDT::transform(null, $this->entree_prevue, "%M");
-    $this->_min_sortie_prevue  = CMbDT::transform(null, $this->sortie_prevue, "%M");
+    $this->_time_entree_prevue = CMbDT::format($this->entree_prevue, "%H:%M:00");
+    $this->_time_sortie_prevue = CMbDT::format($this->sortie_prevue, "%H:%M:00");
+    $this->_hour_entree_prevue = CMbDT::format($this->entree_prevue, "%H");
+    $this->_hour_sortie_prevue = CMbDT::format($this->sortie_prevue, "%H");
+    $this->_min_entree_prevue  = CMbDT::format($this->entree_prevue, "%M");
+    $this->_min_sortie_prevue  = CMbDT::format($this->sortie_prevue, "%M");
 
     switch (CAppUI::conf("dPpmsi systeme_facturation")) {
       case "siemens" :
-        $this->_guess_NDA = CMbDT::transform(null, $this->entree_prevue, "%y");
+        $this->_guess_NDA = CMbDT::format($this->entree_prevue, "%y");
         $this->_guess_NDA .=
           $this->type == "exte" ? "5" :
           $this->type == "ambu" ? "4" : "0";
@@ -1210,11 +1210,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->_at_midnight = ($this->_date_entree_prevue != $this->_date_sortie_prevue);
 
     if ($this->entree_prevue && $this->sortie_prevue) {
-      $this->_view      = "Séjour du " . CMbDT::transform(null, $this->_entree, CAppUI::conf("date"));
-      $this->_shortview = "Du "        . CMbDT::transform(null, $this->_entree, CAppUI::conf("date"));
-      if (CMbDT::transform(null, $this->_entree, CAppUI::conf("date")) != CMbDT::transform(null, $this->_sortie, CAppUI::conf("date"))) {
-        $this->_view      .= " au " . CMbDT::transform(null, $this->_sortie, CAppUI::conf("date"));
-        $this->_shortview .= " au " . CMbDT::transform(null, $this->_sortie, CAppUI::conf("date"));
+      $this->_view      = "Séjour du " . CMbDT::format($this->_entree, CAppUI::conf("date"));
+      $this->_shortview = "Du "        . CMbDT::format($this->_entree, CAppUI::conf("date"));
+      if (CMbDT::format($this->_entree, CAppUI::conf("date")) != CMbDT::format($this->_sortie, CAppUI::conf("date"))) {
+        $this->_view      .= " au " . CMbDT::format($this->_sortie, CAppUI::conf("date"));
+        $this->_shortview .= " au " . CMbDT::format($this->_sortie, CAppUI::conf("date"));
       }
     }
     $this->_acte_execution = CMbDT::dateTime($this->entree_prevue);
@@ -2670,7 +2670,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $transmissions = array();
     if (isset($this->_back["transmissions"])) {
       foreach ($this->_back["transmissions"] as $_trans) {
-        $datetime = CMbDT::transform(null, $_trans->date, CAppUI::conf('datetime'));
+        $datetime = CMbDT::format($_trans->date, CAppUI::conf('datetime'));
         $transmissions["$_trans->date $_trans->_guid"] = "$_trans->text, le $datetime, {$_trans->_ref_user->_view}";
       }
     }
@@ -2682,7 +2682,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $transmissions_hautes = array();
     foreach ($this->_ref_transmissions as $_trans) {
       $_trans->loadRefUser();
-      $datetime = CMbDT::transform(null, $_trans->date, CAppUI::conf('datetime'));
+      $datetime = CMbDT::format($_trans->date, CAppUI::conf('datetime'));
       $transmissions_hautes["$_trans->date $_trans->_guid"] = "$_trans->text, le $datetime, {$_trans->_ref_user->_view}";
 
     }
@@ -2693,7 +2693,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     foreach ($this->_ref_transmissions as $_trans) {
       $_trans->loadRefUser();
-      $datetime = CMbDT::transform(null, $_trans->date, CAppUI::conf('datetime'));
+      $datetime = CMbDT::format($_trans->date, CAppUI::conf('datetime'));
       $transmissions_macro["$_trans->date $_trans->_guid"] = "$_trans->text, le $datetime, {$_trans->_ref_user->_view}";
 
     }
@@ -2705,7 +2705,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $observations = array();
     if (isset($this->_back["observations"])) {
       foreach ($this->_back["observations"] as $_obs) {
-        $datetime = CMbDT::transform(null, $_obs->date, CAppUI::conf('datetime'));
+        $datetime = CMbDT::format($_obs->date, CAppUI::conf('datetime'));
         $observations["$_obs->date $_obs->_guid"] = "$_obs->text, le $datetime, {$_obs->_ref_user->_view}";
       }
     }
@@ -2721,14 +2721,14 @@ class CSejour extends CFacturable implements IPatientRelated {
 
       if (isset($prescription->_ref_prescription_lines_all_comments)) {
         foreach ($prescription->_ref_prescription_lines_all_comments as $_comment) {
-          $datetime = CMbDT::transform(null, "$_comment->debut $_comment->time_debut", CAppUI::conf('datetime'));
+          $datetime = CMbDT::format("$_comment->debut $_comment->time_debut", CAppUI::conf('datetime'));
           $lines["$_comment->debut $_comment->time_debut $_comment->_guid"] = "$_comment->_view, $datetime, {$_comment->_ref_praticien->_view}";
         }
       }
 
       if (isset($prescription->_ref_prescription_lines_element)) {
         foreach ($prescription->_ref_prescription_lines_element as $_line_element) {
-          $datetime = CMbDT::transform(null, "$_line_element->debut $_line_element->time_debut", CAppUI::conf('datetime'));
+          $datetime = CMbDT::format("$_line_element->debut $_line_element->time_debut", CAppUI::conf('datetime'));
           $view = "$_line_element->_view";
           if ($_line_element->commentaire) {
             $view .= " ($_line_element->commentaire)";

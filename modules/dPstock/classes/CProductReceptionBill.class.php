@@ -79,7 +79,7 @@ class CProductReceptionBill extends CMbObject {
     }
 
     $format = str_replace('%id', str_pad($this->_id?$this->_id:0, 4, '0', STR_PAD_LEFT), $format);
-    return CMbDT::transform(null, null, $format);
+    return CMbDT::format(null, $format);
   }
 
   /**

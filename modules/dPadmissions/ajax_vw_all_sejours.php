@@ -34,7 +34,7 @@ else {
   $month_min     = CMbDT::transform("+ 0 month", $date, "%Y-%m-01");
   $lastmonth     = CMbDT::date("-1 month", $date);
   $nextmonth     = CMbDT::date("+1 month", $date);
-  if (CMbDT::transform(null, $date, "%m-%d") == "08-31") {
+  if (CMbDT::format($date, "%m-%d") == "08-31") {
     $nextmonth = CMbDT::transform("+0 month", $nextmonth, "%Y-09-%d");
   }
   else {

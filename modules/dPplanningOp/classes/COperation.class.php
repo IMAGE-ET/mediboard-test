@@ -629,12 +629,12 @@ class COperation extends CCodable implements IPatientRelated {
 
       // Alerte sur l'annulation d'une intervention
       if ($this->fieldModified("annulee", "1")) {
-        $comments .= "L'intervention a été annulée pour le ".CMbDT::transform(null, $this->_datetime, CAppUI::conf("datetime")).".";
+        $comments .= "L'intervention a été annulée pour le ".CMbDT::format($this->_datetime, CAppUI::conf("datetime")).".";
       }
 
       // Alerte sur le déplacement d'une intervention
       elseif (CMbDT::date(null, $this->_datetime) != CMbDT::date(null, $this->_old->_datetime)) {
-        $comments .= "L'intervention a été déplacée du ".CMbDT::transform(null, $this->_old->_datetime, CAppUI::conf("date"))." au ".CMbDT::transform(null, $this->_datetime, CAppUI::conf("date")).".";
+        $comments .= "L'intervention a été déplacée du ".CMbDT::format($this->_old->_datetime, CAppUI::conf("date"))." au ".CMbDT::format($this->_datetime, CAppUI::conf("date")).".";
       }
 
       // Alerte sur la commande de matériel
@@ -1111,7 +1111,7 @@ class COperation extends CCodable implements IPatientRelated {
       $this->_view .= "(hors plage) ";
     }
 
-    $this->_view .= "du " . CMbDT::transform(null, $this->_datetime, CAppUI::conf("date"));
+    $this->_view .= "du " . CMbDT::format($this->_datetime, CAppUI::conf("date"));
     return $this->_ref_plageop;
   }
 

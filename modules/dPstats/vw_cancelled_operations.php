@@ -114,7 +114,7 @@ $resultInPlage   = $prat->_spec->ds->loadlist($queryInPlage);
 $resultHorsPlage = $prat->_spec->ds->loadlist($queryHorsPlage);
 
 for ($rangeDate = $date_min; $rangeDate <= $date_max; $rangeDate = CMbDT::date("+1 month", $rangeDate)) {
-  $month = CMbDT::transform(null, $rangeDate, "%Y - %m");
+  $month = CMbDT::format($rangeDate, "%Y - %m");
   $list[$month]['total'] = 0;
   $list[$month]['inPlage'] = array();
   $list[$month]['horsPlage'] = array();

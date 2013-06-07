@@ -94,7 +94,7 @@ if($prescription_id){
 }
 
 // Recuperation de l'heure courante
-$time = CMbDT::transform(null,null,"%H");
+$time = CMbDT::format(null, "%H");
 
 $tabHours = CAdministration::getTimingPlanSoins($date, $configs);
 $nb_decalage = $configs["Nombre postes avant"];
@@ -105,8 +105,8 @@ $count_composition_dossier = array();
 
 $date_min = "";
 $date_max = "";
-foreach($tabHours as $_key_date => $_period_date){
-  foreach($_period_date as $_key_periode => $_period_dates){
+foreach ($tabHours as $_key_date => $_period_date) {
+  foreach ($_period_date as $_key_periode => $_period_dates) {
     $count_composition_dossier[$_key_date][$_key_periode] = $planif_manuelle ? 3 : 2;
     $first_date = reset(array_keys($_period_dates));
     $first_time = reset(reset($_period_dates));
@@ -225,7 +225,7 @@ foreach($prescriptions as $_prescription){
         $where["object_class"] = " = 'CPrescriptionLineMixItem'";
         $where["object_id"] = " = '$_planif->object_id'";
         
-        $_line_mix_datetime = CMbDT::transform(null, $_planif->dateTime, "%Y-%m-%d %H:00:00");
+        $_line_mix_datetime = CMbDT::format($_planif->dateTime, "%Y-%m-%d %H:00:00");
         
         $where[] = "original_dateTime = '$_line_mix_datetime'";
         $where["planification"] = " = '1'";

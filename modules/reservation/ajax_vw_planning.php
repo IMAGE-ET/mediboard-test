@@ -129,7 +129,7 @@ $plages = $plageop->loadList($where);
 
 // Création du planning
 $planning = new CPlanningWeek(0, 0, count($salles), count($salles), false, "auto");
-$planning->title =  "Planning du ".CMbDT::transform(null, $date_planning, "%A %d %B %Y");
+$planning->title =  "Planning du ".CMbDT::format($date_planning, "%A %d %B %Y");
 
 
 //load the current bloc

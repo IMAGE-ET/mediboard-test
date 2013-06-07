@@ -118,7 +118,7 @@ if (!$source_mllp->_id) {
   
   $message->appendChild($ERR);*/
   
-  $now  = CMbDT::transform(null, null, "%Y%m%d%H%M%S");
+  $now  = CMbDT::format(null, "%Y%m%d%H%M%S");
   $ACK  = "MSH|^~\&|".CAppUI::conf("hl7 sending_application")."|".CAppUI::conf("hl7 sending_facility").
           "|||$now||ACK|$now|P|2.5||||||".CHL7v2TableEntry::mapTo("211", CApp::$encoding);
   $ACK .= "\r"."MSA|AR|$now";

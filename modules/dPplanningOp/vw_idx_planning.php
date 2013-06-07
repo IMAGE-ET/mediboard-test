@@ -19,8 +19,8 @@ if (phpversion() >= "5.3") {
     $lastmonth = CMbDT::date("first day of previous month", $date);
 }
 else {
-    $nextmonth = CMbDT::date("+1 month"   , CMbDT::transform(null, $date, "%Y-%m-01" ));
-    $lastmonth = CMbDT::date("-1 month"   , CMbDT::transform(null, $date, "%Y-%m-01" ));
+    $nextmonth = CMbDT::date("+1 month"   , CMbDT::format($date, "%Y-%m-01" ));
+    $lastmonth = CMbDT::date("-1 month"   , CMbDT::format($date, "%Y-%m-01" ));
 }
 $sans_anesth    = CValue::getOrSession("sans_anesth", 0);
 
@@ -169,8 +169,8 @@ else {
   }
   
   // Planning du mois
-  $month_min = CMbDT::transform(null, $date, "%Y-%m-01");
-  $month_max = CMbDT::transform(null, $date, "%Y-%m-31");
+  $month_min = CMbDT::format($date, "%Y-%m-01");
+  $month_max = CMbDT::format($date, "%Y-%m-31");
 
 
   $sql = "SELECT plagesop.*, plagesop.date AS opdate,

@@ -947,7 +947,7 @@ class CMbFieldSpec {
     if ($value && $value != '0000-00-00' && $value != '00:00:00' && $value != '0000-00-00 00:00:00') {
       $date =  ($this instanceof CDateSpec && $this->progressive) ? 
         $this->getValue($object, null, $params) :
-        CMbDT::transform(null, $value, $format);
+        CMbDT::format($value, $format);
     }
     
     $form     = CMbArray::extract($params, "form");

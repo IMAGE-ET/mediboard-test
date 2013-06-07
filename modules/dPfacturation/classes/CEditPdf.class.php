@@ -295,7 +295,7 @@ class CEditPdf{
             switch ($key) {
               case "Date" :
                 $valeur = $acte->date;
-                $valeur= CMbDT::transform(null, $valeur, "%d.%m.%Y");
+                $valeur= CMbDT::format($valeur, "%d.%m.%Y");
                 break;
               case "Tarif":
                 $valeur = $code;
@@ -555,17 +555,17 @@ class CEditPdf{
     $this->pdf->Line($colonne1, 122, $colonne1+40, 122);
     $this->editCell($colonne1, 120, 25, "Données de la facture", "L");
     $this->editCell($colonne1, $this->pdf->GetY()+5, 22, "Date facture:", "R");
-    $this->pdf->Cell(25, "", CMbDT::transform(null, $this->facture->cloture, "%d %B %Y"), null, null, "L");
+    $this->pdf->Cell(25, "", CMbDT::format($this->facture->cloture, "%d %B %Y"), null, null, "L");
     if ($relance) {
       $this->editCell($colonne1, $this->pdf->GetY()+3, 22, "Date relance:", "R");
-      $this->pdf->Cell(25, "", CMbDT::transform(null, $this->relance->date, "%d %B %Y"), null, null, "L");
+      $this->pdf->Cell(25, "", CMbDT::format($this->relance->date, "%d %B %Y"), null, null, "L");
     }
     $this->editCell($colonne1, $this->pdf->GetY()+3, 22, "N° facture:", "R");
     $this->pdf->Cell(25, "", $this->facture->_id, null, null, "L");
     $this->editCell($colonne1, $this->pdf->GetY()+3, 22, "Traitement du:", "R");
-    $this->pdf->Cell(25, "", CMbDT::transform(null, $this->facture->_ref_first_consult->_date, "%d %B %Y"), null, null, "L");
+    $this->pdf->Cell(25, "", CMbDT::format($this->facture->_ref_first_consult->_date, "%d %B %Y"), null, null, "L");
     $this->editCell($colonne1, $this->pdf->GetY()+3, 22, "au:", "R");
-    $this->pdf->Cell(25, "", CMbDT::transform(null, $this->facture->cloture, "%d %B %Y"), null, null, "L");
+    $this->pdf->Cell(25, "", CMbDT::format($this->facture->cloture, "%d %B %Y"), null, null, "L");
     
     $montant_facture = sprintf('%0.2f', $montant_facture);
     if ($montant_facture < 0) {
@@ -781,23 +781,23 @@ class CEditPdf{
     if ($this->facture->type_facture == "accident" && $this->facture->_coeff == CAppUI::conf("tarmed CCodeTarmed pt_maladie")) {
       $motif = "Accident (Caisse-Maladie)";
     }
-    $naissance =  CMbDT::transform(null, $this->patient->naissance, "%d.%m.%Y");
+    $naissance =  CMbDT::format($this->patient->naissance, "%d.%m.%Y");
     $colonnes = array(20, 28, 25, 25, 35, 50);
     if ($this->facture->_class == "CFactureCabinet") {
-      $traitement = CMbDT::transform(null, $this->facture->_ref_first_consult->_date, "%d.%m.%Y")." - ";
-      $traitement .= CMbDT::transform(null, $this->facture->cloture, "%d.%m.%Y");
+      $traitement = CMbDT::format($this->facture->_ref_first_consult->_date, "%d.%m.%Y")." - ";
+      $traitement .= CMbDT::format($this->facture->cloture, "%d.%m.%Y");
     }
     else {
-      $traitement = CMbDT::transform(null, $this->facture->_ref_first_sejour->entree, "%d.%m.%Y")." - ";
-      $traitement .= CMbDT::transform(null, $this->facture->_ref_first_sejour->sortie, "%d.%m.%Y");
+      $traitement = CMbDT::format($this->facture->_ref_first_sejour->entree, "%d.%m.%Y")." - ";
+      $traitement .= CMbDT::format($this->facture->_ref_first_sejour->sortie, "%d.%m.%Y");
     }
 
     $name_rappel = $date_rappel = null;
     if (CAppUI::conf("dPfacturation CRelance use_relances")) {
       $name_rappel = "Date rappel / facture";
       //$date_rappel = CMbDT::date("+".CAppUI::conf("dPfacturation CRelance nb_days_first_relance")." DAY" , $this->facture->cloture);
-      //$date_rappel = CMbDT::transform(null, $date_rappel, "%d.%m.%Y");
-      $date_rappel = CMbDT::transform(null, $this->facture->cloture, "%d.%m.%Y");
+      //$date_rappel = CMbDT::format($date_rappel, "%d.%m.%Y");
+      $date_rappel = CMbDT::format($this->facture->cloture, "%d.%m.%Y");
     }
     $ean2 = $this->group->ean;
     if ($this->facture->_class == "CFactureEtablissement") {
@@ -811,7 +811,7 @@ class CEditPdf{
       array(""          , "Localité"        , $this->patient->ville   , null, $assur["nom"]),
       array(""          , "Date de naissance",$naissance        , null, $assur["adresse"]),
       array(""          , "Sexe"            , strtoupper($this->patient->sexe) , null, $assur["cp"]),
-      array(""          , "Date cas"        , CMbDT::transform(null, $this->facture->cloture, "%d.%m.%Y")),
+      array(""          , "Date cas"        , CMbDT::format($this->facture->cloture, "%d.%m.%Y")),
       array(""          , "N° cas"          , $this->facture->ref_accident),
       array(""          , "N° AVS"          , $this->patient->avs),
       array(""          , "N° assuré"       , $_ref_assurance),
@@ -859,7 +859,7 @@ class CEditPdf{
     $this->pdf->Rect(10, 18, 180, 20);
     
     $lignes = array(
-      array("Document"    , "Identification"  , $this->facture->_id." ".CMbDT::transform(null, null, "%d.%m.%Y %H:%M:%S"), "", "Page $nb"),
+      array("Document"    , "Identification"  , $this->facture->_id." ".CMbDT::format(null, "%d.%m.%Y %H:%M:%S"), "", "Page $nb"),
       array("Auteur"      , "N° EAN(B)"       , $this->auteur["EAN"], $this->auteur["nom"], " Tél: ".$this->auteur["tel"]),
       array("Facture"     , "N° RCC(B)"       , $this->auteur["RCC"], substr($this->auteur["adresse1"], 0, 29)." ". $this->auteur["cp"]." ".$this->auteur["ville"], "Fax: ".$this->auteur["fax"]),
       array("Four.de"     , "N° EAN(P)"       , $this->fourn_presta["EAN"], $this->fourn_presta["nom_dr"], " Tél: ".$this->fourn_presta["0"]->tel),

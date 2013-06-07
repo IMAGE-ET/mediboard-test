@@ -37,7 +37,7 @@ function graphUserLog($startx, $endx, $interval, $user_id) {
   $datax  = array();
   $i = 0;
   for ($d = $startx; $d <= $endx; $d = CMbDT::dateTime($step, $d)) {
-    $period = CMbDT::transform(null, $d, $period_format);
+    $period = CMbDT::format($d, $period_format);
     $datax[$period] = array($i, $period);
     $i++;
   }
@@ -154,7 +154,7 @@ function graphUserLogV2($module_name, $action_name, $startx, $endx, $interval = 
   $datax = array();
   $i = 0;
   for ($d = $startx; $d <= $endx; $d = CMbDT::dateTime($step, $d)) {
-    $datax[] = array($i, CMbDT::transform(null, $d, $period_format));
+    $datax[] = array($i, CMbDT::format($d, $period_format));
     $i++;
   }
   
@@ -233,7 +233,7 @@ function graphUserLogV2($module_name, $action_name, $startx, $endx, $interval = 
     
   }
   
-  $subtitle = CMbDT::transform(null, $endx, CAppUI::conf("longdate"));
+  $subtitle = CMbDT::format($endx, CAppUI::conf("longdate"));
   
   $options = array(
     'title' => utf8_encode($title),

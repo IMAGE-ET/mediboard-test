@@ -89,7 +89,7 @@ while ($n--) {
 }
 
 foreach ($dates as $i => $_date) {
-  $options["xaxis"]["ticks"][$i] = array($i, CMbDT::transform(null, $_date, $format));
+  $options["xaxis"]["ticks"][$i] = array($i, CMbDT::format($_date, $format));
 }
 
 $where = array();

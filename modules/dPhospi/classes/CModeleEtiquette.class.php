@@ -112,7 +112,7 @@ class CModeleEtiquette extends CMbMetaObject {
   function completeLabelFields(&$fields) {
     $fields = array_merge($fields,array(
       "DATE COURANTE"  => CMbDT::dateToLocale(CMbDT::date()),
-      "HEURE COURANTE" => CMbDT::transform(null, null, "%H:%M")
+      "HEURE COURANTE" => CMbDT::format(null, "%H:%M")
     ));
   }
   

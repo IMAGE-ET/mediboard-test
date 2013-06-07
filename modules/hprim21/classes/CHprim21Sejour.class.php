@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -127,7 +127,7 @@ class CHprim21Sejour extends CHprim21Object {
    * @see parent::updateFormFields()
    */
   function updateFormFields() {
-    $this->_view = "Séjour du ".CMbDT::transform(null, $this->date_mouvement, "%d/%m/%Y")." [".$this->external_id."]";
+    $this->_view = "Séjour du ".CMbDT::format($this->date_mouvement, "%d/%m/%Y")." [".$this->external_id."]";
   }
   
   function loadRefHprim21Medecin(){

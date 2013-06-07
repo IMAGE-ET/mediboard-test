@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License; see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -22,9 +22,9 @@ $findmonth = null;
 $findday   = null;
 
 if ($patient->naissance) {
-  //$findyear  = CMbDT::transform(null, $patient->naissance, "%Y");
-  //$findmonth = CMbDT::transform(null, $patient->naissance, "%m");
-  //$findday   = CMbDT::transform(null, $patient->naissance, "%d");
+  //$findyear  = CMbDT::format($patient->naissance, "%Y");
+  //$findmonth = CMbDT::format($patient->naissance, "%m");
+  //$findday   = CMbDT::format($patient->naissance, "%d");
 }
 
 $name          = utf8_decode(CValue::get("name"      , $patient->nom));

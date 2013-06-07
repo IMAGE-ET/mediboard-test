@@ -53,8 +53,8 @@ if ($period == "month" && phpversion() >= "5.3") {
 }
 //5.1, 5.2 Case @TODO : toDelete if all MB instance are 5.3 compatible
 elseif ($period == 'month') {
-    $ndate = CMbDT::date("+1 month"   , CMbDT::transform(null, $date, "%Y-%m-01" ));
-    $pdate = CMbDT::date("-1 month"   , CMbDT::transform(null, $date, "%Y-%m-01" ));
+    $ndate = CMbDT::date("+1 month"   , CMbDT::format($date, "%Y-%m-01" ));
+    $pdate = CMbDT::date("-1 month"   , CMbDT::format($date, "%Y-%m-01" ));
 }
 else {
   $ndate = CMbDT::date("+1 $unit", $date);

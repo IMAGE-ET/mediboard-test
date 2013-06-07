@@ -170,8 +170,8 @@ class CBilanSSR extends CMbObject {
     $premier_jour = CMbDT::date($sejour->entree);
     $dernier_jour = CMbDT::date($sejour->sortie);
     if (!$this->hospit_de_jour) {
-      $numero_premier_decalage = CMbDT::transform(null, $premier_jour, "%w");
-      $numero_dernier_decalage = CMbDT::transform(null, $dernier_jour, "%w");
+      $numero_premier_decalage = CMbDT::format($premier_jour, "%w");
+      $numero_dernier_decalage = CMbDT::format($dernier_jour, "%w");
       $premier_jour = CMbDT::date(in_array($numero_premier_decalage, array(5, 6)) ? "next monday" : "+1 day", $premier_jour);
       $dernier_jour = CMbDT::date(in_array($numero_dernier_decalage, array(1, 7)) ? "last friday" : "-1 day", $dernier_jour);
     }

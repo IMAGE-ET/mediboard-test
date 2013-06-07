@@ -205,11 +205,11 @@ class CMbXMLDocument extends DOMDocument {
   }
   
   function addDateTimeElement($elParent, $elName, $dateValue = null) {
-    $this->addElement($elParent, $elName, CMbDT::transform(null, $dateValue, "%Y-%m-%dT%H:%M:%S"));
+    $this->addElement($elParent, $elName, CMbDT::format($dateValue, "%Y-%m-%dT%H:%M:%S"));
   }
   
   function addDateTimeAttribute($elParent, $atName, $dateValue = null) {
-    $this->addAttribute($elParent, $atName, CMbDT::transform(null, $dateValue, "%Y-%m-%dT%H:%M:%S"));
+    $this->addAttribute($elParent, $atName, CMbDT::format($dateValue, "%Y-%m-%dT%H:%M:%S"));
   }
   
   function addAttribute($elParent, $atName, $atValue) {

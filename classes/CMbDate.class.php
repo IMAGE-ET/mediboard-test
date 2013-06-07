@@ -137,7 +137,7 @@ class CMbDate {
    * @return int The month number
    */
   static function monthNumber($date) {
-    return intval(CMbDT::transform(null, $date, "%m"));
+    return intval(CMbDT::format($date, "%m"));
   }
 
   /**
@@ -182,17 +182,17 @@ class CMbDate {
   static function dirac($period, $datetime) {
     switch ($period) {
       case "min":
-        return CMbDT::transform(null, $datetime, "%Y-%m-%d %H:%M:00");
+        return CMbDT::format($datetime, "%Y-%m-%d %H:%M:00");
       case "hour":
-        return CMbDT::transform(null, $datetime, "%Y-%m-%d %H:00:00");
+        return CMbDT::format($datetime, "%Y-%m-%d %H:00:00");
       case "day":
-        return CMbDT::transform(null, $datetime, "%Y-%m-%d 00:00:00");
+        return CMbDT::format($datetime, "%Y-%m-%d 00:00:00");
       case "week":
         return CMbDT::transform("last sunday +1 day", $datetime, "%Y-%m-%d 00:00:00");
       case "month":
-        return CMbDT::transform(null, $datetime, "%Y-%m-01 00:00:00");
+        return CMbDT::format($datetime, "%Y-%m-01 00:00:00");
       case "year":
-        return CMbDT::transform(null, $datetime, "%Y-01-01 00:00:00");
+        return CMbDT::format($datetime, "%Y-01-01 00:00:00");
       default:
         trigger_error("Can't make a Dirac hash for unknown '$period' period", E_USER_WARNING);
     }

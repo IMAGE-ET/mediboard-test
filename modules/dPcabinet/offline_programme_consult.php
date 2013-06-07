@@ -59,7 +59,7 @@ $totals = array();
 // Chargement des places disponibles pour chaque plage
 foreach ($plages as $_plage) {
   // Classement par mois
-  $month = CMbDT::transform(null, $_plage->date, "%B %Y");
+  $month = CMbDT::format($_plage->date, "%B %Y");
   $listPlages[$month][] = $_plage;
 
   // Praticien

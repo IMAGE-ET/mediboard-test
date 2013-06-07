@@ -169,6 +169,7 @@ $locales['History'] = 'Historique';
 $locales['History.desc'] = 'Voir l\'historique';
 $locales['Home'] = 'Accueil';
 $locales['Hour'] = 'Heure';
+$locales['Hyperlink'] = 'Lien';
 $locales['Import'] = 'Importer';
 $locales['Import-CSV'] = 'Importer un fichier CSV';
 $locales['Imports/Exports'] = 'Imports/Exports';

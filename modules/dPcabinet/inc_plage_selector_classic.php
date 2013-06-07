@@ -69,7 +69,7 @@ switch ($period) {
     break;
 
   case "month":
-    $minDate = CMbDT::transform(null, $date, "%Y-%m-01");
+    $minDate = CMbDT::format($date, "%Y-%m-01");
     $maxDate = CMbDT::transform("+1 month", $minDate, "%Y-%m-01");
     $maxDate = CMbDT::date("-1 day", $maxDate);
     $refDate = $minDate;

@@ -30,7 +30,7 @@ if ($update_moment) {
   $message->titre = CAppUI::tr("CMessage-create_update-titre");
   $message->corps = CAppUI::tr(
     "CMessage-create_update-corps",
-    CMbDT::transform(null, $update_moment, CAppUI::conf("datetime"))
+    CMbDT::format($update_moment, CAppUI::conf("datetime"))
   );
   
   $details = CAppUI::tr(

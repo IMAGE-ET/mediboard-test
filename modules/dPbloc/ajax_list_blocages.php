@@ -16,7 +16,7 @@ CCanDo::checkEdit();
 $blocage_id = CValue::getOrSession("blocage_id");
 $date_replanif = CValue::getOrSession("date_replanif", CMbDT::date());
 
-$date_min = CMbDT::transform(null, $date_replanif, "%Y-%m-01");
+$date_min = CMbDT::format($date_replanif, "%Y-%m-01");
 $date_max = CMbDT::date("-1 day", CMbDT::date("+1 month", $date_min));
 
 $bloc = new CBlocOperatoire();

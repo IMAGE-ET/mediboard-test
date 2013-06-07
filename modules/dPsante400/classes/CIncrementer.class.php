@@ -177,8 +177,8 @@ class CIncrementer extends CMbObject {
   static function getVars(CMbObject $object) {
     $vars = $object->getIncrementVars();
     $default_vars = array(
-      "YYYY" => CMbDT::transform(null, null, "%Y"),
-      "YY"   => CMbDT::transform(null, null, "%y"),
+      "YYYY" => CMbDT::format(null, "%Y"),
+      "YY"   => CMbDT::format(null, "%y"),
     );
     $vars = array_merge($vars, $default_vars);
     
