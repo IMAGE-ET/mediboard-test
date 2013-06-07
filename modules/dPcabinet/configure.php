@@ -21,7 +21,11 @@ $smarty->assign("hours"     , $hours);
 $smarty->assign("date"      , CMbDT::date());
 $smarty->assign("intervals" , $intervals);
 
-$smarty->assign("anesths" , CMediusers::get()->loadAnesthesistes());
-$smarty->assign("user"    , CUser::get());
+
+$smarty->assign("debut"     , CMbDT::date("+ 5 YEAR"));
+$smarty->assign("limit"     , "100");
+$smarty->assign("praticiens", CMediusers::get()->loadPraticiens());
+$smarty->assign("anesths"   , CMediusers::get()->loadAnesthesistes());
+$smarty->assign("user"      , CUser::get());
 
 $smarty->display("configure.tpl");

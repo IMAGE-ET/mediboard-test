@@ -22,7 +22,7 @@
     
     {{assign var="var" value="hours_start"}}
     <tr>
-      <th>
+      <th class="halfPane">
         <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
           {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
         </label>  
@@ -95,6 +95,59 @@
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+      </td>
+    </tr>
+  </table>
+</form>
+
+<script type="text/javascript">
+  cleanPlages = function() {
+    var url = new Url("cabinet", "controllers/do_clean_plages");
+    url.addParam("praticien_id", $V($("clean_plage_praticien_id")));
+    url.addParam("date"        , $V($("clean_plage_date")));
+    url.addParam("limit"       , $V($("clean_plage_limit")));
+    url.requestUpdate("resultCleanPlages");
+  };
+</script>
+
+<form name="clean-CPlageConsult" method="get">
+  <table class="form">
+    <tr>
+      <th colspan="3" class="category">Outil de nettoyage</th>
+    </tr>
+    <tr>
+      <th>Date de départ</th>
+      <td>
+        <script type="text/javascript">
+          Main.add(function() {
+            Calendar.regField(getForm("clean-CPlageConsult").debut);
+          });
+        </script>
+        <input id="clean_plage_date" type="hidden" name="debut" value="{{$debut}}" />
+      </td>
+      <td rowspan="4" class="greedyPane" id="resultCleanPlages">
+      </td>
+    </tr>
+    <tr>
+      <th>Praticien</th>
+      <td>
+        <select id="clean_plage_praticien_id" name="praticien_id" style="width: 14em;">
+          <option value="">&mdash; Tous les praticiens</option>
+          {{foreach from=$praticiens item=_prat}}
+            <option value="{{$_prat->_id}}">{{$_prat}}</option>
+          {{/foreach}}
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <th>Nombre maximum de plages à traiter</th>
+      <td>
+        <input id="clean_plage_limit" type="text" name="limit" value="{{$limit}}" style="width: 14em;" />
+      </td>
+    </tr>
+    <tr>
+      <td class="button" colspan="2">
+        <button type="button" class="trash" onclick="cleanPlages()">{{tr}}Clean{{/tr}}</button>
       </td>
     </tr>
   </table>
