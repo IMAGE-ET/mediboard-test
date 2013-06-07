@@ -27,9 +27,7 @@ if ($mediuser->isMedical()) {
 }
 
 // Vérification des droits sur les praticiens et les fonctions
-$listPraticiens = CAppUI::pref("pratOnlyForConsult", 1) ?
-  $mediuser->loadPraticiens(PERM_EDIT) :
-  $mediuser->loadProfessionnelDeSante(PERM_EDIT);
+$listPraticiens = CConsultation::loadPraticiens(PERM_EDIT);
 
 $function       = new CFunctions();
 $listFunctions  = $function->loadSpecialites(PERM_EDIT);
