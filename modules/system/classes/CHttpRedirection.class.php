@@ -85,9 +85,6 @@ class CHttpRedirection extends CMbObject {
       $scheme = $this->_complete_to["scheme"];
       $host   = $this->_complete_to["host"];
       $redirection = $scheme."://".$host;
-      if ($port) {
-        $redirection .= ":$port";
-      }
       $redirection .= $params;
       header("Location: $redirection");
       CApp::rip();
