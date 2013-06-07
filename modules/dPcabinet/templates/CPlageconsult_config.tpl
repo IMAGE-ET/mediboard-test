@@ -103,10 +103,11 @@
 <script type="text/javascript">
   cleanPlages = function() {
     var url = new Url("cabinet", "controllers/do_clean_plages");
-    url.addParam("praticien_id", $V($("clean_plage_praticien_id")));
-    url.addParam("date"        , $V($("clean_plage_date")));
-    url.addParam("limit"       , $V($("clean_plage_limit")));
-    url.requestUpdate("resultCleanPlages");
+    url.addParam("praticien_id", $V("clean_plage_praticien_id"));
+    url.addParam("date"        , $V("clean_plage_date"));
+    url.addParam("limit"       , $V("clean_plage_limit"));
+    var onComplete = $('clean_plage_auto').checked ? cleanPlages : Prototype.emptyFunction;
+    url.requestUpdate("resultCleanPlages", onComplete);
   };
 </script>
 
@@ -125,7 +126,7 @@
         </script>
         <input id="clean_plage_date" type="hidden" name="debut" value="{{$debut}}" />
       </td>
-      <td rowspan="4" class="greedyPane" id="resultCleanPlages">
+      <td rowspan="5" class="greedyPane" id="resultCleanPlages">
       </td>
     </tr>
     <tr>
@@ -145,6 +146,19 @@
         <input id="clean_plage_limit" type="text" name="limit" value="{{$limit}}" style="width: 14em;" />
       </td>
     </tr>
+
+    <tr>
+      <th>
+        <label for="clean_plage_auto">Auto</label>
+      </th>
+      <td>
+        <input id="clean_plage_auto" type="checkbox" name="auto" value="1"  />
+      </td>
+    </tr>
+
+    <div>
+    </div>
+
     <tr>
       <td class="button" colspan="2">
         <button type="button" class="trash" onclick="cleanPlages()">{{tr}}Clean{{/tr}}</button>
