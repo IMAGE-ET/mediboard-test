@@ -15,6 +15,7 @@ $debug = CAppUI::pref("INFOSYSTEM");
 if (CAppUI::conf("http_redirections")) {
   if (!CAppUI::$instance->user_id || CValue::get("login")) {
     $redirection = new CHttpRedirection();
+    /** @var CHttpRedirection[] $redirections */
     $redirections = $redirection->loadList(null, "priority DESC");
     $passThrough = false;
     foreach ($redirections as $_redirect) {
@@ -210,8 +211,8 @@ $user = CAppUI::$user;
 // If account is not a robot
 if ($user->_id && !$user->isRobot() && (!($m == "admin" && $tab == "chpwd") && !($m_post == "admin" && $dosql == "do_chpwd_aed"))) {
   if (
-    CAppUI::$instance->weak_password
-    && (!CAppUI::$instance->user_remote || CAppUI::conf("admin CUser apply_all_users"))
+      CAppUI::$instance->weak_password
+      && (!CAppUI::$instance->user_remote || CAppUI::conf("admin CUser apply_all_users"))
   ) {
     CAppUI::redirect("m=admin&tab=chpwd&forceChange=1");
   }

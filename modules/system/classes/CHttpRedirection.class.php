@@ -25,6 +25,9 @@ class CHttpRedirection extends CMbObject {
   public $_complete_from;
   public $_complete_to;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'http_redirection';
@@ -32,6 +35,9 @@ class CHttpRedirection extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["priority"] = "num notNull default|0";
@@ -40,6 +46,11 @@ class CHttpRedirection extends CMbObject {
     return $props;
   }
 
+  /**
+   * Traduction de l'Url
+   *
+   * @return void
+   */
   function parseUrl() {
     if (!$this->_complete_from) {
       $this->_complete_from = parse_url($this->from);
@@ -49,6 +60,11 @@ class CHttpRedirection extends CMbObject {
     }
   }
 
+  /**
+   * Effectue la redirection d'après la règle
+   *
+   * @return bool
+   */
   function applyRedirection() {
     $scheme = "http".(isset($_SERVER["HTTPS"]) ? "s" : "");
     $host   = $_SERVER["SERVER_NAME"];
@@ -68,7 +84,11 @@ class CHttpRedirection extends CMbObject {
     if ($this->_complete_from["scheme"] == $scheme && $this->_complete_from["host"] == $host) {
       $scheme = $this->_complete_to["scheme"];
       $host   = $this->_complete_to["host"];
-      $redirection = $scheme."://".$host.$params;
+      $redirection = $scheme."://".$host;
+      if ($port) {
+        $redirection .= ":$port";
+      }
+      $redirection .= $params;
       header("Location: $redirection");
       CApp::rip();
     }
