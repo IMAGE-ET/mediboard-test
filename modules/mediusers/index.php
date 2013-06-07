@@ -1,11 +1,16 @@
-<?php /* $Id$ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage mediusers
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * Index
+ *
+ * @category Mediusers
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
+ */
+
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 

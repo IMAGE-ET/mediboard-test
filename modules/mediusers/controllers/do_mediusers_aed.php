@@ -1,11 +1,15 @@
-<?php /* $Id$ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage mediusers
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * Mediuser
+ *
+ * @category Mediusers
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
+ */
 
 // we don't allow anybody to change his user type or profile
 if ($_POST["user_id"] && !CAppUI::$user->isAdmin() && !CModule::getCanDo("admin")->admin) {
@@ -13,12 +17,25 @@ if ($_POST["user_id"] && !CAppUI::$user->isAdmin() && !CModule::getCanDo("admin"
   unset($_POST['_profile_id']);
 }
 
+/**
+ * Class CDoMediuserAddEdit
+ */
 class CDoMediuserAddEdit extends CDoObjectAddEdit {
+  /**
+   * Construct
+   *
+   * @return void
+   */
   function CDoMediuserAddEdit() {
     $this->CDoObjectAddEdit("CMediusers", "user_id");
   }
-  
-  function doStore () {
+
+  /**
+   * Store
+   *
+   * @return void
+   */
+  function doStore() {
     // keep track of former values for fieldModified below
     $obj = $this->_obj;
     $old = $obj->loadOldObject();

@@ -72,6 +72,15 @@ class CIdSante400 extends CMbMetaObject {
 
     parent::updatePlainFields();
   }
+
+  /**
+   * @see parent::updateFormFields()
+   */
+  function updateFormFields() {
+    parent::updateFormFields();
+
+    $this->_view = "$this->id400";
+  }
   
   /**
    * Loads a specific id400 for a given object (and optionnaly tag)

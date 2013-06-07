@@ -171,6 +171,9 @@ class CMediusers extends CPerson {
     return $user->_ref_current_functions = $secondary_function->loadList($where, null, null, null, $ljoin);
   }
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'users_mediboard';
@@ -178,6 +181,9 @@ class CMediusers extends CPerson {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -262,6 +268,9 @@ class CMediusers extends CPerson {
       $this->_props['_user_password_weak'];
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["secondary_functions"]             = "CSecondaryFunction user_id";
@@ -386,6 +395,9 @@ class CMediusers extends CPerson {
     return $user;
   }
 
+  /**
+   * @see parent::delete()
+   */
   function delete() {
     $msg = null;
 
@@ -404,6 +416,9 @@ class CMediusers extends CPerson {
     return parent::delete();
   }
 
+  /**
+   * @see parent::merge()
+   */
   function merge($objects = array/*<CMbObject>*/(), $fast = false) {
     if ($this->_force_merge) {
       return parent::merge($objects, $fast);
@@ -411,11 +426,17 @@ class CMediusers extends CPerson {
     return CAppUI::tr("CMediusers-merge-impossible");
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefUser();
   }
 
+  /**
+   * @see parent::loadView()
+   */
   function loadView() {
     parent::loadView();
     $this->isPraticien();
@@ -539,6 +560,9 @@ class CMediusers extends CPerson {
     $this->loadRefDiscipline();
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     if ($this->user_id == CAppUI::$user->_id) {
       return true;
@@ -604,6 +628,9 @@ class CMediusers extends CPerson {
     );
   }
 
+  /**
+   * @see parent::check()
+   */
   function check() {
     // TODO: voir a fusionner cette fonction avec celle de admin.class.php qui est exactement la meme
     // Chargement des specs des attributs du mediuser

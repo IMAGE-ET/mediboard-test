@@ -52,6 +52,14 @@ if (!$idex->_id) {
   $idex = $filter;
 }
 
+// Si on veut un chargement unique on charge le premier identifiant pour le tag, object_id et object_class
+if (CValue::get("load_unique") && $idex->tag && $idex->object_id && $idex->object_class) {
+  $idex->last_update = null;
+  $idex->loadMatchingObject();
+
+  $idex->last_update = CMbDT::dateTime();
+}
+
 $smarty = new CSmartyDP;
 
 $smarty->assign("idex"       , $idex);

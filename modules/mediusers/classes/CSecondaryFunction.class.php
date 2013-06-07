@@ -26,6 +26,9 @@ class CSecondaryFunction extends CMbObject {
   /** @var CMediusers */
   public $_ref_user;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'secondary_function';
@@ -33,6 +36,9 @@ class CSecondaryFunction extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["function_id"] = "ref notNull class|CFunctions";
@@ -40,6 +46,9 @@ class CSecondaryFunction extends CMbObject {
     return $specs;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
@@ -47,18 +56,35 @@ class CSecondaryFunction extends CMbObject {
     $this->_shortview = $this->_ref_user->_shortview." - ".$this->_ref_function->_shortview;
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadRefFunction();
     $this->loadRefUser();
   }
 
+  /**
+   * Load function
+   *
+   * @return CFunctions
+   */
   function loadRefFunction() {
     $this->_ref_function = new CFunctions();
     $this->_ref_function->load($this->function_id);
+
+    return $this->_ref_function;
   }
 
+  /**
+   * Load mediuser
+   *
+   * @return CMediusers
+   */
   function loadRefUser() {
     $this->_ref_user = new CMediusers();
     $this->_ref_user->load($this->user_id);
+
+    return $this->_ref_user;
   }
 }

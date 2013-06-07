@@ -3,7 +3,7 @@
 /**
  * Liste des users principaux et secondaires d'une fonction 
  *  
- * @category mediusers
+ * @category Mediusers
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -25,16 +25,18 @@ $function->load($function_id);
 
 $function->loadBackRefs("users");
 $total_sec_functions = $function->countBackRefs("users");
+/** @var CMediusers[] $primary_users */
 $primary_users = $function->loadBackRefs("users", null, "$page_function, $step_sec_function");
 
-foreach ($primary_users as $_user) {
-  $_user->loadRefProfile();
+foreach ($primary_users as $_mediuser) {
+  $_mediuser->loadRefProfile();
 }
 
+/** @var CSecondaryFunction[] $secondaries_functions */
 $secondaries_functions = $function->loadBackRefs("secondary_functions");
 $users = CMbObject::massLoadFwdRef($secondaries_functions, "user_id");
 
-foreach ($function->_back["secondary_functions"] as &$_sec_function) {
+foreach ($secondaries_functions as $_sec_function) {
   $_sec_function->loadRefUser();
   $_sec_function->_ref_user->loadRefProfile();
 }

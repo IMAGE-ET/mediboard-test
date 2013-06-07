@@ -1,11 +1,16 @@
-<?php /* $Id$ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage mediusers
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * View disciplines
+ *
+ * @category Mediusers
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
+ */
+
 
 CCanDo::checkRead();
 
@@ -14,14 +19,16 @@ $discipline_id = CValue::getOrSession("discipline_id");
 $g = CGroups::loadCurrent();
 
 // CHargement d'une discipline
-$specialite = new CDiscipline;
+$specialite = new CDiscipline();
 $specialite->load($discipline_id);
 $specialite->loadGroupRefsBack();
 
 //Liste de toutes les disciplines
-$listDiscipline = new CDiscipline;
-$listDiscipline = $listDiscipline->loadList();
-foreach ($listDiscipline as &$discipline) {
+$discipline = new CDiscipline();
+/** @var CDiscipline[] $listDiscipline */
+$listDiscipline = $discipline->loadList();
+
+foreach ($listDiscipline as $discipline) {
   $discipline->loadGroupRefsBack();
 }
 

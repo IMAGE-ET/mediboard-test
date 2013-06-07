@@ -1,11 +1,15 @@
-<?php /* $Id: vw_idx_mediusers.php 7695 2009-12-23 09:10:10Z rhum1 $ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage mediusers
-* @version $Revision: 7695 $
-* @author Romain Ollivier
-*/
+ * Color selector
+ *
+ * @category Mediusers
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
+ */
 
 CCanDo::checkAdmin();
 

@@ -1,11 +1,15 @@
-<?php /* $Id$ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage mediusers
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * View mediusers
+ *
+ * @category Mediusers
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
+ */
 
 CCanDo::checkRead();
 
@@ -116,21 +120,22 @@ foreach ($mediusers as $_mediuser) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("utypes"        , CUser::$types  );
+$smarty->assign("utypes"        , CUser::$types);
 $smarty->assign("total_mediuser", $total_mediuser);
-$smarty->assign("page"          , $page          );
-$smarty->assign("pro_sante"     , $pro_sante     );
-$smarty->assign("inactif"       , $inactif       );
-$smarty->assign("ldap_bound"    , $ldap_bound    );
-$smarty->assign("filter"        , $filter        );
-$smarty->assign("mediusers"     , $mediusers     );
-$smarty->assign("user_id"       , $user_id       );
-$smarty->assign("group"         , $group         );
-$smarty->assign("order_way"     , $order_way     );
-$smarty->assign("order_col"     , $order_col     );
-$smarty->assign("step"          , $step          );
-$smarty->assign("no_association", CValue::get("no_association"));
-$smarty->assign("ldap_user_actif", CValue::get("ldap_user_actif"));
+$smarty->assign("page"          , $page);
+$smarty->assign("pro_sante"     , $pro_sante);
+$smarty->assign("inactif"       , $inactif);
+$smarty->assign("ldap_bound"    , $ldap_bound);
+$smarty->assign("filter"        , $filter);
+$smarty->assign("mediusers"     , $mediusers);
+$smarty->assign("user_id"       , $user_id);
+$smarty->assign("group"         , $group);
+$smarty->assign("order_way"     , $order_way);
+$smarty->assign("order_col"     , $order_col);
+$smarty->assign("step"          , $step);
+$smarty->assign("tag_mediuser"          , CMediusers::getTagMediusers($group->_id));
+$smarty->assign("no_association"        , CValue::get("no_association"));
+$smarty->assign("ldap_user_actif"       , CValue::get("ldap_user_actif"));
 $smarty->assign("ldap_user_deb_activite", CValue::get("ldap_user_deb_activite"));
 $smarty->assign("ldap_user_fin_activite", CValue::get("ldap_user_fin_activite"));
 

@@ -83,6 +83,9 @@ class CDiscipline extends CMbObject {
     $this->_compat =& $compat;
   }
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'discipline';
@@ -90,12 +93,18 @@ class CDiscipline extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["users"] = "CMediusers discipline_id";
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["text"]      = "str notNull seekable";
@@ -103,23 +112,18 @@ class CDiscipline extends CMbObject {
     return $specs;
   }
 
-  function loadUsedDisciplines($where = array(), $order = null) {
-    $ljoin["users_mediboard"] = "users_mediboard.discipline_id = discipline.discipline_id";
-    $where["users_mediboard.discipline_id"] = "IS NOT NULL";
-
-    if (!$order) {
-      $order = "discipline.text";
-    }
-
-    return $this->loadList($where, $order, null, null, $ljoin);
-  }
-
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields () {
     parent::updateFormFields();
     $this->_view = strtolower($this->text);
     $this->_shortview = CMbString::truncate($this->_view);
   }
 
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack() {
     $where = array(
       "discipline_id" => "= '$this->discipline_id'",
@@ -134,6 +138,17 @@ class CDiscipline extends CMbObject {
     );
     $this->_ref_users = new CMediusers;
     $this->_ref_users = $this->_ref_users->loadGroupList($where);
+  }
+
+  function loadUsedDisciplines($where = array(), $order = null) {
+    $ljoin["users_mediboard"] = "users_mediboard.discipline_id = discipline.discipline_id";
+    $where["users_mediboard.discipline_id"] = "IS NOT NULL";
+
+    if (!$order) {
+      $order = "discipline.text";
+    }
+
+    return $this->loadList($where, $order, null, null, $ljoin);
   }
 
   function addCompat(&$compat, $patho1, $patho2, $septique1 = null, $septique2 = null) {

@@ -108,8 +108,9 @@ Main.add(function () {
         {{mb_include module=system template=inc_object_idsante400 object=$object}}
         {{mb_include module=system template=inc_object_history    object=$object}}
         {{mb_include module=system template=inc_object_uf         object=$object}}
-        {{tr}}CMediusers-title-modify{{/tr}} 
-        '{{$object->_user_username}}'
+        {{mb_include module=system template=inc_object_idex       object=$object}}
+
+        {{tr}}CMediusers-title-modify{{/tr}} '{{$object->_user_username}}'
       </th>
       {{else}}
       <th class="title" colspan="2">

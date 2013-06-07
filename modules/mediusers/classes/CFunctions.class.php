@@ -49,6 +49,9 @@ class CFunctions extends CMbObject {
   // Filter fields
   public $_skipped;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'functions_mediboard';
@@ -56,6 +59,9 @@ class CFunctions extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["users"]                          = "CMediusers function_id";
@@ -91,6 +97,9 @@ class CFunctions extends CMbObject {
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -114,36 +123,50 @@ class CFunctions extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->text;
     $this->_shortview = CMbString::truncate($this->text);
   }
 
+  /**
+   * @see parent::loadView()
+   */
   function loadView() {
     parent::loadView();
     $this->loadRefsFwd();
   }
 
-  // Forward references
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadRefGroup();
   }
 
   /**
+   * Load ref Group
+   *
    * @return CGroups
    */
   function loadRefGroup() {
     return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
 
-  // Backward references
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack() {
     $this->loadRefsUsers();
   }
 
   /**
-   * @param string $type
+   * Load users
+   *
+   * @param string $type Type
    *
    * @return CMediusers[]
    */
@@ -166,7 +189,9 @@ class CFunctions extends CMbObject {
   }
 
   /**
-   * @param string $type
+   * Load protocole
+   *
+   * @param string $type Type
    *
    * @return CProtocole[]
    */
@@ -184,7 +209,9 @@ class CFunctions extends CMbObject {
   }
 
   /**
-   * @param string $type
+   * Count protocole
+   *
+   * @param string $type Type
    *
    * @return int
    */
@@ -201,8 +228,14 @@ class CFunctions extends CMbObject {
     return $this->_count_protocoles = $protocole->countList($where);
   }
 
-  // @todo : ameliorer le choix des spécialités
-  // (loadfunction($groupe, $permtype) par exemple)
+  /**
+   * Load specialties
+   *
+   * @param string $perm_type     Type
+   * @param int    $include_empty Include empty
+   *
+   * @return CStoredObject[]
+   */
   function loadSpecialites($perm_type = null, $include_empty = 0) {
     $group_id = CGroups::loadCurrent()->_id;
     $where = array(
@@ -231,6 +264,9 @@ class CFunctions extends CMbObject {
     return $this->loadListWithPerms($perm_type, $where, "text", null, "functions_mediboard.function_id", $ljoin);
   }
 
+  /**
+   * @see parent::fillTemplate()
+   */
   function fillTemplate(&$template) {
     $this->loadRefsFwd();
     $this->_ref_group->fillTemplate($template);

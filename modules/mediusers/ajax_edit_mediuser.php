@@ -1,11 +1,15 @@
-<?php /* $Id: vw_idx_mediusers.php 7695 2009-12-23 09:10:10Z rhum1 $ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage mediusers
-* @version $Revision: 7695 $
-* @author Romain Ollivier
-*/
+ * Edit mediuser
+ *
+ * @category Mediusers
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
+ */
 
 CCanDo::checkRead();
 
@@ -59,6 +63,7 @@ $spec_cpam = $spec_cpam->loadList();
 // Récupération des profils
 $profile = new CUser();
 $profile->template = 1;
+/** @var CUser[] $profiles */
 $profiles = $profile->loadMatchingList();
 
 // Creation du tableau de profil en fonction du type
@@ -70,14 +75,15 @@ foreach ($profiles as $profil) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("tabProfil"    , $tabProfil      );
-$smarty->assign("utypes"       , CUser::$types   );
-$smarty->assign("ps_types"     , CUser::$ps_types);
-$smarty->assign("banques"      , $banques        );
-$smarty->assign("object"       , $object         );
-$smarty->assign("profiles"     , $profiles       );
-$smarty->assign("group"        , $group          );
-$smarty->assign("disciplines"  , $disciplines    );
-$smarty->assign("spec_cpam"    , $spec_cpam    );
+$smarty->assign("tabProfil"   , $tabProfil);
+$smarty->assign("utypes"      , CUser::$types);
+$smarty->assign("ps_types"    , CUser::$ps_types);
+$smarty->assign("banques"     , $banques);
+$smarty->assign("object"      , $object);
+$smarty->assign("profiles"    , $profiles);
+$smarty->assign("group"       , $group);
+$smarty->assign("disciplines" , $disciplines);
+$smarty->assign("spec_cpam"   , $spec_cpam);
+$smarty->assign("tag_mediuser", CMediusers::getTagMediusers($group->_id));
 
 $smarty->display("inc_edit_mediuser.tpl");

@@ -1,11 +1,14 @@
-<?php /* $Id: prat_import_csv.php 6103 2009-04-16 13:36:52Z yohann $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage mediusers
- * @version $Revision: 6153 $
- * @author SARL OpenXtrem
- * @license GNU GPL
+ * Import users CSV
+ *
+ * @category Mediusers
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkAdmin();

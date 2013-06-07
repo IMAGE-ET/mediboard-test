@@ -22,6 +22,9 @@ class CSpecCPAM extends CMbObject {
   /** @var CMediusers[] */
   public $_ref_users;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'spec_cpam';
@@ -29,12 +32,18 @@ class CSpecCPAM extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["users"] = "CMediusers spec_cpam_id";
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["text"]  = "str notNull seekable";
@@ -42,12 +51,18 @@ class CSpecCPAM extends CMbObject {
     return $specs;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields () {
     parent::updateFormFields();
     $this->_view = $this->_id.' - '.strtolower($this->text);
     $this->_shortview = CMbString::truncate($this->_view);
   }
 
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack() {
     $where = array(
       "spec_cpam_id" => "= '$this->spec_cpam_id'",
