@@ -159,10 +159,10 @@ if (is_array($dossier_medical->_ref_etats_dents)) {
     if ($etat->etat != null) {
       switch ($etat->dent) {
         case 10:
-        case 30:
+        case 50:
           $position = "Central haut";
           break;
-        case 50:
+        case 30:
         case 70:
           $position = "Central bas";
           break;
