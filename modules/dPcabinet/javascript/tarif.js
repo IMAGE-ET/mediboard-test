@@ -44,13 +44,13 @@ Tarif = {
   updateOwner: function() {
     var form = getForm("editFrm");
     var type = $V(form._type);
-        
+
     if (type == "chir") {
       $V(form.chir_id, this.chir_id);
       $V(form.function_id, "");
       $V(form.group_id, "");
     }
-     
+
     if (type == "function") {
       $V(form.chir_id, "");
       $V(form.function_id, this.function_id);
@@ -76,7 +76,7 @@ Code = {
   edit: function (tarif_id) {
     var url = new Url('dPcabinet', 'vw_codes_tarif');
     url.addParam('tarif_id'    , tarif_id);
-    url.requestModal(600, 500);
+    url.requestModal(700);
     this.modal = url.modalObject;
     Code.url = url;
   },
