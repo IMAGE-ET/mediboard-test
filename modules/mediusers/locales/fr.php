@@ -1,4 +1,5 @@
 <?php
+$locales['Agenda'] = 'Agenda';
 $locales['CBanque-back-users'] = 'Utilisateurs';
 $locales['CBanque-back-users.empty'] = 'Aucun utilisateur';
 $locales['CDiscipline'] = 'Disciplines';
@@ -363,6 +364,9 @@ $locales['pref-sessionLifetime-180'] = '3 heures';
 $locales['pref-sessionLifetime-240'] = '4 heures';
 $locales['pref-sessionLifetime-300'] = '5 heures';
 $locales['pref-sessionLifetime-desc'] = 'Durée de vie de la session de l\'utilisateur';
+$locales['pref-showIntervPlanning'] = 'Afficher les interventions dans le semainier';
+$locales['pref-showIntervPlanning-desc'] = 'Afficher les plages opératoires et les Hors plage dans le semainier de consultations';
 $locales['utilities-source-pop'] = 'Outils de test de la connexion';
 $locales['utilities-source-pop-connexion'] = 'Test de connexion';
 $locales['utilities-source-pop-envoi'] = 'Test de reception';
+?>
