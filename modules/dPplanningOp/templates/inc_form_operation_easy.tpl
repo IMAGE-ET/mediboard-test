@@ -153,7 +153,7 @@
     <tr>
       <th>{{mb_label object=$op field="type_anesth"}}</th>
       <td colspan="2">
-        <select name="type_anesth" style="width: 15em;" onchange="submitAnesth(this.form);">
+        <select name="type_anesth" style="width: 15em;" onchange="Value.synchronize(this)">
           <option value="">&mdash; Anesthésie</option>
           {{foreach from=$listAnesthType item=curr_anesth}}
             {{if $curr_anesth->actif || $op->type_anesth == $curr_anesth->type_anesth_id}}

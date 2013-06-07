@@ -21,6 +21,7 @@ ProtocoleSelector = {
   sLibelle_sejour  : null,
   sType            : null,
   sTypePec         : null,
+  sTypeAnesth      : null,
   sDuree_uscpo     : null,
   sDuree_preop     : null,
   sConvalescence   : null,
@@ -84,6 +85,7 @@ ProtocoleSelector = {
       $V(oOpForm[this.sPresencePostop],    protocole.presence_postop);
       $V(oOpForm[this.sPresencePostop+"_da"], protocole.presence_postop);
       $V(oOpForm[this.sCote],              protocole.cote);
+      $V(oOpForm[this.sTypeAnesth],        protocole.type_anesth);
       $V(oOpForm[this.sHour_op],           protocole._hour_op);
       $V(oOpForm[this.sMin_op],            protocole._min_op);
       $V(oOpForm[this.sMateriel],          protocole.materiel);

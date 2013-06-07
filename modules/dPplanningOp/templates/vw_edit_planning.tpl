@@ -11,7 +11,7 @@
 {{mb_script module="dPcompteRendu" script="modele_selector"}}
 
 <script type="text/javascript">
-  
+
 Main.add(function(){
   // Il faut sauvegarder le sejour_id pour la création de l'affectation
   // après la fermeture de la modale.
@@ -124,6 +124,7 @@ ProtocoleSelector.init = function(){
   this.sPresencePreop = "presence_preop";
   this.sPresencePostop = "presence_postop";
   this.sType          = "type";
+  this.sTypeAnesth    = "type_anesth";
   this.sUf_hebergement_id = "uf_hebergement_id";
   this.sUf_medicale_id = "uf_medicale_id";
   this.sUf_soins_id = "uf_soins_id";
