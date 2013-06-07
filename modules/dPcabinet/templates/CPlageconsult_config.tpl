@@ -106,8 +106,10 @@
     url.addParam("praticien_id", $V("clean_plage_praticien_id"));
     url.addParam("date"        , $V("clean_plage_date"));
     url.addParam("limit"       , $V("clean_plage_limit"));
+
+    // Give some rest to server
     var onComplete = $('clean_plage_auto').checked ? cleanPlages : Prototype.emptyFunction;
-    url.requestUpdate("resultCleanPlages", onComplete);
+    url.requestUpdate("resultCleanPlages", function () { onComplete.delay(2) } );
   };
 </script>
 
