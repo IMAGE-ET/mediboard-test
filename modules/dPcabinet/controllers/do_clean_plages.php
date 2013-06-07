@@ -16,6 +16,7 @@ $date         = CValue::get("date", CMbDT::date("+5 year"));
 $limit        = CValue::get("limit", 100);
 
 $plage = new CPlageconsult();
+$plage->_spec->loggable = false;
 
 $where = array();
 if ($praticien_id) {
@@ -24,7 +25,7 @@ if ($praticien_id) {
 $where["plageconsult.date"] = "> '$date'";
 
 $count = $plage->countList($where);
-CAppUI::setMsg("'$count' plages à supprimer après '$date", UI_MSG_OK);
+CAppUI::setMsg("'$count' plages à supprimer après '$date'", UI_MSG_OK);
 
 /** @var CPlageconsult[] $listPlages */
 $listPlages = $plage->loadList($where, null, $limit);
