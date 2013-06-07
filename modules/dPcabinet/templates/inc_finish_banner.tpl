@@ -87,7 +87,7 @@ function changePratPec(prat_id) {
           <button class="print" type="button" onclick="printConsult();">
             Imprimer la consultation
           </button><br/> 
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}');">{{$sejour}} </span>          
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}');">{{$sejour->_shortview}} </span>
         {{/if}}
         {{if "maternite"|module_active && !$_is_anesth && $modules.maternite->_can->read}}
           <br />
@@ -95,8 +95,8 @@ function changePratPec(prat_id) {
         {{/if}}   
       </div>
       {{/if}}
-      {{$patient}} -
-      <select name="prat_id" class="ref notNull" onchange="changePratPec($V(this));" title="Changer le praticien">
+      {{$patient}} - {{$patient->_age}} -
+      <select name="prat_id" class="ref notNull" onchange="changePratPec($V(this));" style="width: 16em;" title="Changer le praticien">
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
         {{mb_include module=mediusers template=inc_options_mediuser list=$listPrats selected=$consult->_ref_chir->_id}}
       </select>
