@@ -6,7 +6,7 @@
   {{mb_key object=$service}}
   
   <table class="form">
-    {{mb_include module=system template=inc_form_table_header_uf         object=$service }}
+    {{mb_include module=system template=inc_form_table_header_uf object=$service tag=$tag_service}}
     
     <tr>
       <th>{{mb_label object=$service field=group_id}}</th>

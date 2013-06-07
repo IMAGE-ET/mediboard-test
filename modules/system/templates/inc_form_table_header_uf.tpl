@@ -17,7 +17,9 @@
     {{mb_include module=system template=inc_object_notes     }}
     {{mb_include module=system template=inc_object_idsante400}}
     {{mb_include module=system template=inc_object_history   }}
-    {{mb_include module=system template=inc_object_uf        object=$object}}
+    {{mb_include module=system template=inc_object_uf}}
+    {{mb_include module=system template=inc_object_idex}}
+
     {{tr}}{{$object->_class}}-title-modify{{/tr}} 
     <br />
     '{{$object}}'

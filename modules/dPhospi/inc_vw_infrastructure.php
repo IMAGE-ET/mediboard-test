@@ -40,8 +40,10 @@ if ($use_chambre != null) {
   $chambre->load($chambre_id);
   $chambre->loadRefsNotes();
   $chambre->loadRefService();
-  foreach ($chambre->loadRefsLits(true) as $_lit) {
-    $_lit->loadRefsNotes();
+  /** @var CChambre[] $chambres */
+  $chambres = $chambre->loadRefsLits(true);
+  foreach ($chambres as $_chambre) {
+    $_chambre->loadRefsNotes();
   }
   
   if (!$chambre->_id) {
@@ -59,7 +61,8 @@ if ($use_chambre != null) {
   $order = "nom";
   
   $service = new CService();
-  $services = $service->loadListWithPerms(PERM_READ,$where, $order);
+  /** @var CService[] $services */
+  $services = $service->loadListWithPerms(PERM_READ, $where, $order);
   foreach ($services as $_service) {
     foreach ($_service->loadRefsChambres() as $_chambre) {
       $_chambre->loadRefs();
@@ -88,8 +91,9 @@ if ($use_prestation != null) {
   
   // Récupération des prestations
   $order = "group_id, nom";
+  /** @var CPrestation[] $prestations */
   $prestations = $prestation->loadList(null, $order);
-  foreach ($prestations as $_prestation){
+  foreach ($prestations as $_prestation) {
     $_prestation->loadRefGroup();
   }
 }
@@ -111,25 +115,28 @@ $smarty->assign("praticiens"    , $praticiens);
 $smarty->assign("etablissements", $etablissements);
 
 if ($use_service != null) {
-  $smarty->assign("service"       , $service);
+  $smarty->assign("service"    , $service);
+  $smarty->assign("tag_service", CService::getTagService($group->_id));
   $smarty->display("inc_vw_service.tpl");
 }
 elseif ($use_chambre != null) {
-  $smarty->assign("services"       , $services);
-  $smarty->assign("chambre"       , $chambre);
-  $smarty->assign("lit"           , $lit);
+  $smarty->assign("services"   , $services);
+  $smarty->assign("tag_service", CService::getTagService($group->_id));
+  $smarty->assign("chambre"    , $chambre);
+  $smarty->assign("tag_chambre", CChambre::getTagChambre($group->_id));
+  $smarty->assign("lit"        , $lit);
+  $smarty->assign("tag_lit"    , CLit::getTagLit($group->_id));
   $smarty->display("inc_vw_chambre.tpl");
 }
 elseif ($use_uf != null) {
-  $smarty->assign("uf"            , $uf);
+  $smarty->assign("uf", $uf);
   $smarty->display("inc_vw_uf.tpl");
 }
 elseif ($use_prestation != null) {
-  $smarty->assign("prestation"    , $prestation);
+  $smarty->assign("prestation", $prestation);
   $smarty->display("inc_vw_prestation.tpl");
 }
 elseif ($use_secteur != null) {
   $smarty->assign("secteur", $secteur);
   $smarty->display("inc_vw_secteur.tpl");
 }
-?>

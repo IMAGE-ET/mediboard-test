@@ -5,60 +5,46 @@
   {{mb_key object=$chambre}}
 
   <table class="form">
-  <tr>
-    {{if $chambre->_id}}
-    <th class="title modify text" colspan="2">
-      {{mb_include module=system object=$chambre template=inc_object_notes     }}
-      {{mb_include module=system object=$chambre template=inc_object_idsante400}}
-      {{mb_include module=system object=$chambre template=inc_object_history   }}
-      {{mb_include module=system object=$chambre template=inc_object_uf        }}
-      {{tr}}CChambre-title-modify{{/tr}} '{{$chambre}}'
-    {{else}}
-    <th class="title text" colspan="2">
-      {{tr}}CChambre-title-create{{/tr}}
-    </th>
-    {{/if}}
-  </tr>
-  
-  <tr>
-    <th>{{mb_label object=$chambre field=nom}}</th>
-    <td>{{mb_field object=$chambre field=nom}}</td>
-  </tr>
-  
-  <tr>
-    <th>{{mb_label object=$chambre field=service_id}}</th>
-    <td>{{mb_field object=$chambre field=service_id options=$services}}</td>
-  </tr>    
-  
-  <tr>
-    <th>{{mb_label object=$chambre field=caracteristiques}}</th>
-    <td>{{mb_field object=$chambre field=caracteristiques}}</td>
-  </tr>
-  
-  <tr>
-    <th>{{mb_label object=$chambre field=lits_alpha}}</th>
-    <td>{{mb_field object=$chambre field=lits_alpha}}</td>
-  </tr>
-  
-  <tr>
-    <th>{{mb_label object=$chambre field=annule}}</th>
-    <td>{{mb_field object=$chambre field=annule}}</td>
-  </tr>
-  
-  <tr>
-    <td class="button" colspan="2">
-      {{if $chambre->_id}}
-      <button class="submit" type="submit">{{tr}}Validate{{/tr}}</button>
-      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la chambre',objName: $V(this.form.nom) })">
-        {{tr}}Delete{{/tr}}
-      </button>
-      {{else}}
-      <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
-      {{/if}}
-    </td>
-  </tr>
+    {{mb_include module=system template=inc_form_table_header_uf object=$chambre tag=$tag_chambre}}
+
+    <tr>
+      <th>{{mb_label object=$chambre field=nom}}</th>
+      <td>{{mb_field object=$chambre field=nom}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$chambre field=service_id}}</th>
+      <td>{{mb_field object=$chambre field=service_id options=$services}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$chambre field=caracteristiques}}</th>
+      <td>{{mb_field object=$chambre field=caracteristiques}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$chambre field=lits_alpha}}</th>
+      <td>{{mb_field object=$chambre field=lits_alpha}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$chambre field=annule}}</th>
+      <td>{{mb_field object=$chambre field=annule}}</td>
+    </tr>
+
+    <tr>
+      <td class="button" colspan="2">
+        {{if $chambre->_id}}
+        <button class="submit" type="submit">{{tr}}Validate{{/tr}}</button>
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la chambre',objName: $V(this.form.nom) })">
+          {{tr}}Delete{{/tr}}
+        </button>
+        {{else}}
+        <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+        {{/if}}
+      </td>
+    </tr>
   </table>
-  
 </form>
   
 {{if $chambre->_id}}
@@ -79,6 +65,8 @@
         {{mb_include module=system template=inc_object_idsante400 object=$_lit}}
         {{mb_include module=system template=inc_object_history    object=$_lit}}
         {{mb_include module=system template=inc_object_uf         object=$_lit }}
+        {{mb_include module=system template=inc_object_idex       object=$_lit tag=$tag_lit}}
+
         <a href="#" onclick="showLit('chambre_id', '{{$_lit->chambre_id}}','lit_id', '{{$_lit->_id}}', 'infrastructure_chambre')">
           {{$_lit->nom}}
           {{if $_lit->nom_complet}}

@@ -108,7 +108,7 @@ Main.add(function () {
         {{mb_include module=system template=inc_object_idsante400 object=$object}}
         {{mb_include module=system template=inc_object_history    object=$object}}
         {{mb_include module=system template=inc_object_uf         object=$object}}
-        {{mb_include module=system template=inc_object_idex       object=$object}}
+        {{mb_include module=system template=inc_object_idex       object=$object tag=$tag_mediuser}}
 
         {{tr}}CMediusers-title-modify{{/tr}} '{{$object->_user_username}}'
       </th>

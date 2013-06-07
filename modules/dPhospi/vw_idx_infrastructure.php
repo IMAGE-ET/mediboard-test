@@ -97,10 +97,13 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("services"      , $services);
 $smarty->assign("service"       , $service);
+$smarty->assign("tag_service"   , CService::getTagService($group->_id));
 $smarty->assign("secteurs"      , $secteurs);
 $smarty->assign("secteur"       , $secteur);
 $smarty->assign("chambre"       , $chambre);
+$smarty->assign("tag_chambre"   , CChambre::getTagChambre($group->_id));
 $smarty->assign("lit"           , $lit);
+$smarty->assign("tag_lit"       , CLit::getTagLit($group->_id));
 $smarty->assign("ufs"           , $ufs);
 $smarty->assign("uf"            , $uf);
 $smarty->assign("prestations"   , $prestations);
@@ -109,4 +112,3 @@ $smarty->assign("praticiens"    , $praticiens);
 $smarty->assign("etablissements", $etablissements);
 
 $smarty->display("vw_idx_infrastructure.tpl");
-?>
