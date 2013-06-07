@@ -15,9 +15,13 @@
 class CEditPdf{
   //Elements du PDF
   public $type_pdf;
+  /** @var CMbPdf*/
   public $pdf;
+  /** @var CFactureEtablissement*/
   public $facture;
+  /** @var CFactureEtablissement[]*/
   public $factures;
+  /** @var CRelance*/
   public $relance;
   public $font;
   public $fontb;
@@ -31,12 +35,16 @@ class CEditPdf{
   public $destinataire;
   public $auteur;
   public $fourn_presta;
+  /** @var CFunctions*/
   public $function_prat;
+  /** @var CGroups*/
   public $group;
   public $group_adrr;
   public $nb_factures;
   public $num_fact;
+  /** @var CPatient*/
   public $patient;
+  /** @var CMediusers*/
   public $praticien;
   public $pre_tab      = array();
   public $type_rbt;
@@ -204,8 +212,8 @@ class CEditPdf{
   /**
    * Edition du centre du justificatif
    *
-   * @param num $cle_facture     clé de la facture
-   * @param num $montant_facture montant de la facture
+   * @param int $cle_facture     clé de la facture
+   * @param int $montant_facture montant de la facture
    *
    * @return void
    */
@@ -457,8 +465,8 @@ class CEditPdf{
   /**
    * Edition du haut de la facture
    *
-   * @param num  $cle_facture     clé de la facture
-   * @param num  $montant_facture montant de la facture
+   * @param int  $cle_facture     clé de la facture
+   * @param int  $montant_facture montant de la facture
    * @param bool $relance         si c'est une relance
    *
    * @return void
@@ -632,7 +640,7 @@ class CEditPdf{
   /**
    * Edition du bas de la facture (partie BVR)
    *
-   * @param num $montant_facture montant du BVR
+   * @param int $montant_facture montant du BVR
    *
    * @return void
    */
@@ -749,7 +757,7 @@ class CEditPdf{
     }
     
     $loi = $this->facture->type_facture == "accident" ? "LAA" : "LAMal";
-    if ($this->facture->type_facture == "accident" && $this->facture->_coeff == CAppUI::conf("tarmed CCodeTarmed pt_maladie")) {
+    if ($this->facture->type_facture == "accident" && $this->facture->_coeff == CAppUI::conf("tarmed coefficient pt_maladie", CGroups::loadCurrent())) {
       $loi = "LAMal";
     }
     if ($this->facture->statut_pro == "invalide") {
@@ -778,7 +786,7 @@ class CEditPdf{
     $assur["cp"]      = "$assurance_patient->cp $assurance_patient->ville";
     
     $motif = $this->facture->type_facture;
-    if ($this->facture->type_facture == "accident" && $this->facture->_coeff == CAppUI::conf("tarmed CCodeTarmed pt_maladie")) {
+    if ($this->facture->type_facture == "accident" && $this->facture->_coeff == CAppUI::conf("tarmed coefficient pt_maladie", CGroups::loadCurrent())) {
       $motif = "Accident (Caisse-Maladie)";
     }
     $naissance =  CMbDT::format($this->patient->naissance, "%d.%m.%Y");
@@ -905,7 +913,7 @@ class CEditPdf{
       $this->type_rbt = $this->facture->_ref_assurance_maladie->type_pec;
     }
     elseif ($this->facture->assurance_accident && !$this->facture->send_assur_compl && $this->facture->type_facture == "accident") {
-      if ($this->facture->_coeff == CAppUI::conf("tarmed CCodeTarmed pt_maladie")) {
+      if ($this->facture->_coeff == CAppUI::conf("tarmed coefficient pt_maladie", CGroups::loadCurrent())) {
         $this->type_rbt = $this->facture->_ref_assurance_accident->type_pec;
       }
       else {

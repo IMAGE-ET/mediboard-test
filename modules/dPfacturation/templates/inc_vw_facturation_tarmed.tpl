@@ -43,7 +43,7 @@
       <button class="print" onclick="printFacture('{{$facture->_id}}', 'justificatif');">Justificatif de remboursement</button>
       {{if $facture->_ref_reglements|@count}}
         {{if ($facture->_ref_assurance_maladie->_id && $facture->type_facture == "maladie" && $facture->_ref_assurance_maladie->type_pec == "TS")
-          || ($facture->_ref_assurance_accident->_id && $facture->type_facture == "accident" && $facture->_ref_assurance_accident->type_pec == "TS" && $facture->_coeff == $conf.tarmed.CCodeTarmed.pt_maladie) }}
+          || ($facture->_ref_assurance_accident->_id && $facture->type_facture == "accident" && $facture->_ref_assurance_accident->type_pec == "TS" && "tarmed coefficient pt_maladie"|conf:"CGroups-$g") }}
           <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 'bvr_TS');">Facture Patient</button>
         {{/if}}
       {{/if}}

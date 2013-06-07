@@ -559,15 +559,15 @@ class CFacture extends CMbObject {
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
       $statuts_maladie = array("sans_emploi", "etudiant", "non_travailleur", "independant");
       if ($this->statut_pro && in_array($this->statut_pro, $statuts_maladie, 1) && $this->type_facture == "accident") {
-        $this->_coeff = CAppUI::conf("tarmed CCodeTarmed pt_maladie");
+        $this->_coeff = CAppUI::conf("tarmed coefficient pt_maladie", CGroups::loadCurrent());
       }
       elseif ($this->statut_pro && $this->statut_pro == "invalide") {
-        $this->_coeff = CAppUI::conf("tarmed CCodeTarmed pt_invalidite");
+        $this->_coeff = CAppUI::conf("tarmed coefficient pt_invalidite", CGroups::loadCurrent());
       }
       else {
         $this->_coeff = $this->type_facture == "accident" ?
-          CAppUI::conf("tarmed CCodeTarmed pt_accident") :
-          CAppUI::conf("tarmed CCodeTarmed pt_maladie");
+          CAppUI::conf("tarmed coefficient pt_accident", CGroups::loadCurrent()) :
+          CAppUI::conf("tarmed coefficient pt_maladie", CGroups::loadCurrent());
       }
     }
   }
