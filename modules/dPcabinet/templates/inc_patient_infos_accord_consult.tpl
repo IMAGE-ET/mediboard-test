@@ -17,7 +17,7 @@
         }
 
       </script>
-      <a class="action" style="float: right" title="Modifier la fiche" href="" onclick="editPatient('{{$patient->_id}}');">
+      <a class="action" style="float: right" title="Modifier la fiche" href="#" onclick="editPatient('{{$patient->_id}}');">
         <img src="images/icons/edit.png" alt="modifier" />
       </a>
 
