@@ -24,9 +24,7 @@ $period      = CValue::get("period", "12-weeks");
 $user = new CMediusers;
 $praticiens = array();
 if ($function_id) {
-  $praticiens = CAppUI::pref("pratOnlyForConsult", 1) ?
-    $user->loadPraticiens(PERM_EDIT, $function_id) :
-    $user->loadProfessionnelDeSante(PERM_EDIT, $function_id);
+  $praticiens = CConsultation::loadPraticiens(PERM_EDIT, $function_id);
 }
 
 if ($chir_ids) {

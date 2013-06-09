@@ -14,13 +14,7 @@ CCanDo::checkEdit();
 $pat_id = CValue::getOrSession("patSel");
 
 // Liste des Praticiens
-$listPrat = new CMediusers();
-if(CAppUI::pref("pratOnlyForConsult", 1)) {
-  $listPrat = $listPrat->loadPraticiens(PERM_READ);
-} else {
-  $listPrat = $listPrat->loadProfessionnelDeSante(PERM_READ);
-}
-
+$listPrat = CConsultation::loadPraticiens(PERM_READ);
 
 $patient = new CPatient;
 $patient->load($pat_id);

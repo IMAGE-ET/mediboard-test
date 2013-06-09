@@ -21,9 +21,7 @@ $canUser = $user->canDo();
 $canUser->needsEdit();
 
 // Liste des praticiens
-$listPrats = CAppUI::pref("pratOnlyForConsult", 1) ?
-  $user->loadPraticiens(PERM_EDIT) :
-  $user->loadProfessionnelDeSante(PERM_EDIT);
+$listPrats = CConsultation::loadPraticiens(PERM_EDIT);
 
 // Consultation courante
 $consult = new CConsultation();

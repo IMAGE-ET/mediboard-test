@@ -29,10 +29,7 @@ $month_fin  = CMbDT::date("+1 month", $month_deb);
 $month_fin  = CMbDT::date("-1 day", $month_fin);
 
 // Liste des praticiens
-$mediusers = new CMediusers();
-$listChir = CAppUI::pref("pratOnlyForConsult", 1) ?
-  $mediusers->loadPraticiens(PERM_READ) :
-  $mediusers->loadProfessionnelDeSante(PERM_READ);
+$listChir = CConsultation::loadPraticiens(PERM_READ);
 
 // Création du template
 $smarty = new CSmartyDP();

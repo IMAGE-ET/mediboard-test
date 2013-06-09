@@ -97,14 +97,9 @@ if (CAppUI::conf("dPcabinet Tarifs show_tarifs_etab")) {
 }
 
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
-if ($user->_is_secretaire) {
-  $listPrat = CAppUI::pref("pratOnlyForConsult", 1) ?
-    $user->loadPraticiens(PERM_READ) :
-    $user->loadProfessionnelDeSante(PERM_READ);
-}
-else {
-  $listPrat = array($user->_id => $user);
-}
+$listPrat = $user->isSecretaire() ?
+  CConsultation::loadPraticiens(PERM_READ) :
+  array($user->_id => $user);
 
 if (!$tarif->_id) {
   $tarif->secteur1 = 0;

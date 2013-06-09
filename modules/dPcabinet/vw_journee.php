@@ -47,14 +47,11 @@ $praticiens = array();
 $cabinet = new CFunctions;
 
 if ($cabinet_id) {
-  $praticiens = CAppUI::pref("pratOnlyForConsult", 1) ? 
-  $mediuser->loadPraticiens(PERM_READ, $cabinet_id) :
-  $mediuser->loadProfessionnelDeSante(PERM_READ, $cabinet_id);
-    
+  $praticiens = CConsultation::loadPraticiens(PERM_READ, $cabinet_id);
   $cabinet->load($cabinet_id);
 }
 
-// Praticiens disponibles ??????????????????
+// Praticiens disponibles ?
 $all_prats = $praticiens;
 
 if ($consult->_id) {
@@ -66,7 +63,7 @@ if ($consult->_id) {
 $listPlages = array();
 $heure_limit_matin = CAppUI::conf("dPcabinet CPlageconsult hour_limit_matin");
 
-foreach($praticiens as $prat) {
+foreach ($praticiens as $prat) {
   $listPlage = new CPlageconsult();
   $where = array();
   $where["chir_id"] = "= '$prat->_id'";
@@ -81,13 +78,13 @@ foreach($praticiens as $prat) {
     $where["debut"] = "> '$heure_limit_matin:00:00'";
   }
   // Ou rien
-  elseif (!$matin && !$apres_midi){
+  elseif (!$matin && !$apres_midi) {
     $where["debut"] = "IS NULL";
   }
   
   $order = "debut";
   $listPlage = $listPlage->loadList($where, $order);
-  if(!count($listPlage)) {
+  if (!count($listPlage)) {
     unset($praticiens[$prat->_id]);
   } 
   else {

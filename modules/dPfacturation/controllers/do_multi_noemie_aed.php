@@ -19,12 +19,8 @@ $filter->_date_max = CValue::getOrSession("_date_max", CMbDT::date());
 $chir_id = CValue::getOrSession("chir", null);
 $chirSel = new CMediusers;
 $chirSel->load($chir_id);
-if (CAppUI::pref("pratOnlyForConsult", 1)) {
-  $listPrat = $chirSel->loadPraticiens(PERM_EDIT);
-}
-else {
-  $listPrat = $chirSel->loadProfessionnelDeSante(PERM_EDIT);
-}
+
+$listPrat = CConsultation::loadPraticiens(PERM_EDIT);
 
 $where = array();
 $ljoin["plageconsult"]                      = "consultation.plageconsult_id = plageconsult.plageconsult_id";

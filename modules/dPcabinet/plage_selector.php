@@ -21,13 +21,7 @@ $date            = CValue::get("date", CMbDT::date());
 $plageconsult_id = CValue::get("plageconsult_id");
 
 // Vérification des droits sur les praticiens
-$mediuser = new CMediusers();
-if (CAppUI::pref("pratOnlyForConsult", 1)) {
-  $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
-}
-else {
-  $listPraticiens = $mediuser->loadProfessionnelDeSante(PERM_EDIT);
-}
+$listPraticiens = CConsultation::loadPraticiens(PERM_EDIT);
 
 // Récupération des consultations de la plage séléctionnée
 $plage = new CPlageconsult;

@@ -39,14 +39,7 @@ else {
   $where["date"] = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
 
   // Liste des praticiens
-  $mediusers = new CMediusers();
-  if (CAppUI::pref("pratOnlyForConsult", 1)) {
-    $listPrat = $mediusers->loadPraticiens(PERM_EDIT);
-  }
-  else {
-    $listPrat = $mediusers->loadProfessionnelDeSante(PERM_EDIT);
-  }
-
+  $listPrat = CConsultation::loadPraticiens(PERM_EDIT);
   $where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat), $chir);
 }
 

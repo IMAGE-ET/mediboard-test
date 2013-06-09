@@ -68,12 +68,8 @@ if ($plageSel->chir_id != $chirSel && $plageSel->remplacant_id != $chirSel) {
 CValue::setSession("plageconsult_id", $plageconsult_id);
 
 // Liste des chirurgiens
-$user = new CMediusers();
-$listChir = CAppUI::pref("pratOnlyForConsult", 1) ?
-  $user->loadPraticiens(PERM_EDIT) :
-  $user->loadProfessionnelDeSante(PERM_EDIT);
+$listChir = CConsultation::loadPraticiens(PERM_EDIT);
 
-  
 // Liste des consultations a avancer si desistement
 $now = CMbDT::date();
 $where = array(
@@ -123,6 +119,7 @@ $debut = CMbDT::date("-1 week", $debut);
 $debut = CMbDT::date("next monday", $debut);
 
 //Instanciation du planning
+$user = new CMediusers();
 $planning = new CPlanningWeek($debut, $debut, $fin, $nbjours, false, 450, null, true);
 if ($user->load($chirSel)) {
   $planning->title = $user->load($chirSel)->_view;

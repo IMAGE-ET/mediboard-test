@@ -40,10 +40,7 @@ $consultation_desist = new CConsultation();
 $count_si_desistement = $consultation_desist->countList($where, null, $ljoin);
 
 // Liste des chirurgiens
-$user = new CMediusers();
-$listChir = CAppUI::pref("pratOnlyForConsult", 1) ?
-  $user->loadPraticiens(PERM_EDIT) :
-  $user->loadProfessionnelDeSante(PERM_EDIT);
+$listChir = CConsultation::loadPraticiens(PERM_EDIT);
 
 // Période
 $today = CMbDT::date();

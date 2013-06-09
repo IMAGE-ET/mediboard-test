@@ -12,12 +12,7 @@
 CCanDo::checkAdmin();
 
 // Vérification des droits sur les praticiens
-$mediuser = new CMediusers();
-if(CAppUI::pref("pratOnlyForConsult", 1)) {
-  $praticiens = $mediuser->loadPraticiens(PERM_EDIT);
-} else {
-  $praticiens = $mediuser->loadProfessionnelDeSante(PERM_EDIT);
-}
+$praticiens = CConsultation::loadPraticiens(PERM_EDIT);
 
 // Filtre
 $filter = new CPlageconsult();

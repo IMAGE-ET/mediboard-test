@@ -137,22 +137,15 @@ if ($plageconsult_id) {
   if ($function->quotas) {
     $quotas = $function->quotas;
   }
-  
-  if (CAppUI::pref("pratOnlyForConsult", 1)) {
-    $listPrat    = $user->loadPraticiens(PERM_EDIT, $user->function_id, null, true);
-    $listAllPrat = $user->loadPraticiens(null, null, null, true);
-  }
-  else {
-    $listPrat    = $user->loadProfessionnelDeSante(PERM_EDIT, $user->function_id, null, true);
-    $listAllPrat = $user->loadProfessionnelDeSante(null, null, null, true);
-  }
-  
+
+  $listPrat    = CConsultation::loadPraticiens(PERM_EDIT, $user->function_id, null, true);
+  $listAllPrat = CConsultation::loadPraticiens(null, null, null, true);
+
   $where = array();
   $where["date"]    = $ds->prepare("BETWEEN %1 AND %2", "$plage->date", "$plage->date");
   $where[]          = "libelle != 'automatique' OR libelle IS NULL";
   $where["chir_id"] = " = '$user->_id'";
-  
-  
+
   if ($display_nb_consult == "cab" || $display_nb_consult == "etab") {
     $where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat));
     /** @var CPlageconsult[] $plages_func */

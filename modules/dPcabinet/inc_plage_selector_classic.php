@@ -24,13 +24,7 @@ $plage = new CPlageconsult;
 $where = array();
 
 // Praticiens sélectionnés
-$listPrat = new CMediusers;
-if (CAppUI::pref("pratOnlyForConsult", 1)) {
-  $listPrat = $listPrat->loadPraticiens(PERM_EDIT, $function_id, null, true);
-}
-else {
-  $listPrat = $listPrat->loadProfessionnelDeSante(PERM_EDIT, $function_id, null, true);
-}
+$listPrat = CConsultation::loadPraticiens(PERM_EDIT, $function_id, null, true);
 
 if ($_line_element_id) {
   $where["pour_tiers"] = "= '1'";

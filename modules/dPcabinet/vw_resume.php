@@ -16,13 +16,7 @@ $patient_id = CValue::get("patient_id");
 $patient = new CPatient;
 $patient->load($patient_id);
 
-$user = CMediusers::get();
-if (CAppUI::pref("pratOnlyForConsult", 1)) {
-  $listPrat = $user->loadPraticiens(PERM_EDIT, null, null, null, false);
-}
-else {
-  $listPrat = $user->loadProfessionnelDeSante(PERM_EDIT, null, null, null, false);
-}
+$listPrat = CConsultation::loadPraticiens(PERM_EDIT, null, null, null, false);
 
 $patient->loadRefsDocItems();
 

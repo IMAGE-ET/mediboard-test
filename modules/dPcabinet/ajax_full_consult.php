@@ -21,9 +21,7 @@ if (!isset($current_m)) {
   $current_m = CValue::get("current_m", $m);
 }
 
-$listPrats = $listChirs = CAppUI::pref("pratOnlyForConsult", 1) ?
-  $user->loadPraticiens(PERM_EDIT) :
-  $user->loadProfessionnelDeSante(PERM_EDIT);
+$listPrats = $listChirs = CConsultation::loadPraticiens(PERM_EDIT);
 
 $listAnesths = $user->loadAnesthesistes();
 
