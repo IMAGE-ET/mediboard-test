@@ -129,12 +129,15 @@ foreach ($fields as $_class => $_fields) {
 switch ($section) {
   case "consult":
     $consult_data = $data["CConsultation"];
-    
+    $sejour_data = $data["CSejour"];
+
     if (
         empty($consult_data["motif"]) &&
         empty($consult_data["_rques_consult"]) &&
         empty($consult_data["_examen_consult"]) &&
         empty($consult_data["conclusion"]) &&
+        empty($sejour_data["entree"]) &&
+        empty($sejour_data["sortie"]) &&
         !$one_field_presc
     ) {
       break;
@@ -157,7 +160,6 @@ switch ($section) {
       $where["consultation.examen"] = $ds->prepareLike("%{$consult_data['_examen_consult']}%");
     }
     
-    $sejour_data = $data["CSejour"];
     if (!empty($sejour_data["_rques_sejour"])) {
       $where["sejour.rques"] = $ds->prepareLike("%{$sejour_data['_rques_sejour']}%");
     }
@@ -176,6 +178,7 @@ switch ($section) {
     if (!empty($data_patient["_age_max"])) {
       $where[] = "DATEDIFF(plageconsult.date, patients.naissance)/365 <= {$data_patient['_age_max']}";
     }
+
     break;
   case "sejour":
     $sejour_data = $data["CSejour"];
@@ -185,6 +188,8 @@ switch ($section) {
         empty($sejour_data["type"]) &&
         empty($sejour_data["_rques_sejour"]) &&
         empty($sejour_data["convalescence"]) &&
+        empty($sejour_data["entree"]) &&
+        empty($sejour_data["sortie"]) &&
         !$one_field_presc
     ) {
       break;
@@ -192,15 +197,7 @@ switch ($section) {
     
     $sejour_filled = true;
     $ljoin["patients"] = "patients.patient_id = sejour.patient_id";
-    
-    if (!empty($sejour_data["entree"])) {
-      $from = $sejour_data["entree"];
-      $where[] = "sejour.entree >=  '{$sejour_data['entree']}'";
-      $where[] = "operations.date  >= '{$sejour_data['entree']}' OR 
-                  plagesop.date >= '{$sejour_data['entree']}'";
-      $where[] = "plageconsult.date >= '".CMbDT::date($sejour_data['entree'])."'";
-    }
-    
+
     $where["sejour.praticien_id"] = "= '$user_id'";
     
     // CSejour ----------------------------
@@ -208,11 +205,9 @@ switch ($section) {
       $where["sejour.rques"] = $ds->prepareLike("%{$sejour_data['_rques_sejour']}%");
     }
     if (!empty($sejour_data["entree"])) {
-      $from = CMbDT::date($sejour_data['entree']);
-      $where["plageconsult.date"] = ">= '".CMbDT::date($sejour_data['entree'])."'";
+      $where["sejour.sortie"] = ">  '{$sejour_data['entree']}'";
     }
     if (!empty($sejour_data["sortie"])) {
-      $to = CMbDT::date($sejour_data['sortie']);
       $where["sejour.entree"] = "<  '{$sejour_data['sortie']}'";
     }
     $ljoin["dossier_medical"] = "dossier_medical.object_id = sejour.sejour_id";
@@ -229,13 +224,16 @@ switch ($section) {
   case "operation":
     // COperations ---------------------------
     $interv_data = $data["COperation"];
-    
+    $sejour_data = $data["CSejour"];
+
     if (
         empty($interv_data["_libelle_interv"]) &&
         empty($interv_data["_rques_interv"]) &&
         empty($interv_data["examen"]) &&
         empty($interv_data["materiel"]) &&
         empty($interv_data["codes_ccam"]) &&
+        empty($sejour_data["entree"]) &&
+        empty($sejour_data["sortie"]) &&
         !$one_field_presc
     ) {
       break;
@@ -266,7 +264,7 @@ switch ($section) {
     $where[] = "operations.chir_id = '$user_id' OR operations.chir_id IS NULL";
     $where[] = "operations.annulee = '0' OR operations.annulee IS NULL";
     
-    $sejour_data = $data["CSejour"];
+
     if (!empty($sejour_data["entree"])) {
       $from = CMbDT::date($sejour_data['entree']);
       $where[] = "operations.date  >= '{$sejour_data['entree']}' OR 

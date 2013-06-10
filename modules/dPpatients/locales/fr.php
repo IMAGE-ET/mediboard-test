@@ -1862,6 +1862,7 @@ $locales['install-mmp-success-install'] = 'Installation réussie';
 $locales['install-mmp-success-query'] = 'Requête réussie : %s';
 $locales['mod-covercard-tab-ajax_form_covercard'] = 'Lecture de Carte CoverCard';
 $locales['mod-dPcovercard-tab-ajax_form_covercard'] = 'Lecture de Carte CoverCard';
+$locales['mod-dPpatients-tab-ajax_recherche_dossier_clinique'] = 'Résultat de recherche de dossiers cliniques';
 $locales['mod-dPpatients-tab-ajax_edit_antecedents'] = 'Modification des antécédents';
 $locales['mod-dPpatients-tab-ajax_edit_correspondant_modele'] = 'Création / Modification de correspondant';
 $locales['mod-dPpatients-tab-ajax_edit_supervision_graph'] = 'Modification de graphique';
