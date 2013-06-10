@@ -1,9 +1,9 @@
 {{mb_script module=developpement script=code_sniffer}}
 
 <script type="text/javascript">
-Main.add(function () {
-  PairEffect.initGroup('tree-content');
-});
+  Main.add(function () {
+    PairEffect.initGroup('tree-content');
+  });
 </script>
 
 <div id="sniff-run" style="display: none; width: 800px;">
@@ -36,7 +36,7 @@ Main.add(function () {
       </td>
     </tr>
   </table>
-  
+
   <div id="sniff-file" style="height: 300px; overflow: auto">
   </div>
 </div>
@@ -47,7 +47,10 @@ Main.add(function () {
 </script>
 
 <div style="width: 45%; float: left;">
-  <h1>Rapport des erreurs par fichier</h1>
+  <h1>
+    Rapport des erreurs par fichier
+    ({{$count}} fichiers)
+  </h1>
   <div id="tree-files">
     {{mb_include template=tree_sniffed_files dir=mediboard basename=mediboard files=$files}}
   </div>
@@ -59,4 +62,3 @@ Main.add(function () {
     {{mb_include template=tree_error_types dir=mediboard type=mediboard item=$types}}
   </div>
 </div>
-

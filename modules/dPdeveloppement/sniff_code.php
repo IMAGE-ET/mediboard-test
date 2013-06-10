@@ -14,11 +14,10 @@ if (!class_exists("CMbCodeSniffer")) {
   return;
 }
 
-CApp::setTimeLimit(600);
-
 $sniffer = new CMbCodeSniffer;
 $files = $sniffer->getFilesTree();
 //unset($files["modules"]);
+$count = CMbArray::countLeafs($files);
 
 $reports = $sniffer->checkReports($files);
 $stats = $sniffer->buildStats($files);
@@ -33,6 +32,7 @@ $sniffer->__destruct();
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("files", $files);
+$smarty->assign("count", $count);
 $smarty->assign("types", $types);
 $smarty->assign("reports", $reports);
 $smarty->assign("stats", $stats);
