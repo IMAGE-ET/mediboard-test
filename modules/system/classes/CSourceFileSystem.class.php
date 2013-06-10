@@ -221,11 +221,14 @@ class CSourceFileSystem extends CExchangeSource {
     
     return str_replace("\\", "/", $path);
   }
-  
-  function delFile($path, $current_directory) {
-    if (file_exists($current_directory.$path) && unlink($current_directory.$path) === false) {
-      throw new CMbException("CSourceFileSystem-file-not-deleted", $current_directory.$path);
-    }    
+
+  function delFile($path, $current_directory = null) {
+    if ($current_directory) {
+      $path = $current_directory.$path;
+    }
+    if (file_exists($path) && unlink($path) === false) {
+      throw new CMbException("CSourceFileSystem-file-not-deleted", $path);
+    }
   }
 
   function renameFile($oldname, $newname, $current_directory) {
