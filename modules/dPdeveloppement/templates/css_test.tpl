@@ -61,6 +61,11 @@ TestModal = {
       }
     });
   },
+  requestModalSmall: function(){
+    var url = this.getUrl();
+    url.addParam("a", "view_logs");
+    url.requestModal();
+  },
   requestModalSize: function(){
     this.getUrl().requestModal(500, 400);
   },
@@ -108,6 +113,9 @@ TestModal = {
 
         <button class="new" onclick="TestModal.requestModal()">
           url.requestModal
+        </button>
+        <button class="new" onclick="TestModal.requestModalSmall()">
+          url.requestModal + small
         </button>
         <button class="new" onclick="TestModal.requestModalSize()">
           url.requestModal + size

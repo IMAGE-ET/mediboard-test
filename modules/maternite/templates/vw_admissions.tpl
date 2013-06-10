@@ -8,10 +8,10 @@
     url.addParam("operation_id", operation_id);
     url.addParam("sejour_id", sejour_id);
     url.addParam("dialog", 1);
-    
-    url.modal({width: 1000, height: 700});
-    url.modalObject.observe("afterClose", function() {
-      document.location.reload();
+    url.modal({
+      width: "95%",
+      height: "95%",
+      onClose: function(){ document.location.reload(); } // Laisser dans une fonction anonyme a cause de l'argument "period"
     });
   }
 </script>

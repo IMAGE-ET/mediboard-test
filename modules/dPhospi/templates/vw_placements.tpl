@@ -288,7 +288,10 @@
     url.addParam("min_urgence" , "00");
     url.addParam("dialog", 1);
     url.addParam("operation_id", 0);
-    url.modal({width: 1000, height: 700});
+    url.modal({
+      width: "95%",
+      height: "95%"
+    });
     
     url.modalObject.observe("afterClose", function() {
       Placement.resume();
@@ -304,7 +307,10 @@
     url.addParam("date_reservation", window.save_date);
     url.addParam("sejour_id", 0);
     url.addParam("dialog", 1);
-    url.modal({width: 1000, height: 700});
+    url.modal({
+      width: "95%",
+      height: "95%"
+    });
     
     url.modalObject.observe("afterClose", function() {
       Placement.resume();

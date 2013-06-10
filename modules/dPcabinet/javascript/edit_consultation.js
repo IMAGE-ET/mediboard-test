@@ -32,10 +32,9 @@ ListConsults = {
   toggle: function() {
     this[$(this.target).visible() ? "hide" : "show"](); 
   }
-}
+};
 
 Consultation = {
-  
   editRDV: function(consult_id) {
     var url = new Url("dPcabinet", "edit_planning");
     url.addParam("consultation_id", consult_id);
@@ -51,11 +50,13 @@ Consultation = {
   editModal: function (consult_id) {
     var url = new Url("dPcabinet", "ajax_full_consult");
     url.addParam("consult_id", consult_id);
-    url.modal({width: 1000, height: 700});
+    url.modal({
+      width: "95%",
+      height: "95%"
+    });
   },
   
   useModal: function() {
     this.edit = this.editModal;
-  },
-  
-}
+  }
+};
