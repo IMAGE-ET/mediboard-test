@@ -27,6 +27,7 @@ $atc_classes = array();
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 $sejour->loadNDA();
+$sejour->loadExtDiagnostics();
 $sejour->loadRefsConsultAnesth();
 $sejour->_ref_consult_anesth->loadRefConsultation();
 $sejour->loadSuiviMedical();
