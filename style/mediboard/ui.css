@@ -1018,6 +1018,7 @@ table.active {
 }
 
 .modal > .content {
+  text-align: center;
   overflow-x: auto; /* hidden */
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
