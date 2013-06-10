@@ -22,13 +22,13 @@
   modalWindow = null;
   Main.add(function () {
     modalWindow = Modal.open($('evenement-chooser-modal'), {
-      className: 'modal'
+      className: 'modal',
+      width: 600,
+      height: 200
     });
   });
   {{/if}}
 </script>
-
-
 
 <div class="big-info"  style="display: none; text-align: center;" id="evenement-chooser-modal">
   {{assign var=next_operation value=$nextSejourAndOperation.COperation}}
