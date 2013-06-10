@@ -27,6 +27,7 @@ class CRelance extends CMbMetaObject {
   
   public $_montant;
   // Object References
+  /** @var  CFactureCabinet|CFactureEtablissement $_ref_object*/
   public $_ref_object;
 
   /**
@@ -75,7 +76,7 @@ class CRelance extends CMbMetaObject {
   /**
    * Redefinition du store
    * 
-   * @return void
+   * @return void|string
   **/
   function store() {
     if (!$this->_id && $this->object_class && $this->object_id) {
@@ -112,10 +113,11 @@ class CRelance extends CMbMetaObject {
   /**
    * Redefinition du delete
    * 
-   * @return void
+   * @return void|string
   **/
   function delete() {
     //Supression possible que de la derniere relance d'une facture
+    /** @var  CFactureCabinet|CFactureEtablissement $facture*/
     $facture = $this->loadRefFacture();
     $facture->loadRefsRelances();
     if (count($facture->_ref_relances) > 1 && $this->_id != $facture->_ref_last_relance->_id) {

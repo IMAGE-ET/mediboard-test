@@ -313,7 +313,7 @@ function popupImport(facture_class) {
               </td>
               <td colspan="2" class="text">
                 <div class="small-info" id="response_send_bill">
-                  Rapprochement bancaire des règlements grace au fichier V11 pour les factures de cabinet
+                  Rapprochement bancaire des règlements grace au fichier V11 pour les factures d'établissement
                 </div>
               </td>
             </tr>

@@ -63,7 +63,7 @@ class CFactureEtablissement extends CFacture {
   /**
    * Redefinition du store
    * 
-   * @return void
+   * @return void|string
   **/
   function store() {
     $this->loadRefsReglements();
@@ -77,7 +77,7 @@ class CFactureEtablissement extends CFacture {
   /**
    * Redefinition du delete
    * 
-   * @return void
+   * @return void|string
   **/
   function delete() {
     $this->loadRefsReglements();

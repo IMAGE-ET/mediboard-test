@@ -127,7 +127,7 @@
         </tr>
         {{/foreach}}
         <tr>
-          <td colspan="{{if $type_aff}}7{{else}}8{{/if}}" />
+          <td colspan="{{if $type_aff}}7{{else}}8{{/if}}"></td>
           <td><strong>{{tr}}Total{{/tr}}</strong></td>
           <td><strong>{{$_date.total.patient|currency}} </strong></td>
           {{if $type_aff}}

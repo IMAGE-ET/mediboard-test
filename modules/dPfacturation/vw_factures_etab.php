@@ -62,10 +62,11 @@ if ($num_facture) {
 }
 
 $facture = new CFactureEtablissement();
-$factures = $facture->loadList($where , "ouverture ASC", 50, null, $ljoin);
+$factures = $facture->loadList($where , "ouverture ASC", 50, "facture_id", $ljoin);
 
 //Affichage uniquement des factures qui contiennent des séjours
 foreach ($factures as $key => $_facture) {
+  /** @var CFacture $_facture*/
   $_facture->loadRefPatient();
   $_facture->loadRefsItems();
   $_facture->loadRefsSejour();

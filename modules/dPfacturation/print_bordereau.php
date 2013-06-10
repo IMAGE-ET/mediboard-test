@@ -51,6 +51,7 @@ $reglements = $reglement->loadList($where, $order, null, null, $ljoin);
 // Chargements des consultations
 $montantTotal = 0.0;
 foreach ($reglements as $_reglement) {
+  /** @var CReglement $_reglement*/
   $_reglement->loadTargetObject()->loadRefPatient();
   $_reglement->loadRefBanque();
   $montantTotal += $_reglement->montant;
@@ -60,16 +61,14 @@ $nbRemise = count($reglements);
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("praticien"      , $praticien     );
-$smarty->assign("reglements"     , $reglements    );
-$smarty->assign("date"           , CMbDT::date()       );
-$smarty->assign("compte_banque"  , $compte_banque );
+$smarty->assign("praticien"      , $praticien);
+$smarty->assign("reglements"     , $reglements);
+$smarty->assign("date"           , CMbDT::date());
+$smarty->assign("compte_banque"  , $compte_banque);
 $smarty->assign("compte_guichet" , $compte_guichet);
-$smarty->assign("compte_numero"  , $compte_numero );
-$smarty->assign("compte_cle"     , $compte_cle    );
-$smarty->assign("montantTotal"   , $montantTotal  );
-$smarty->assign("nbRemise"       , $nbRemise      );
+$smarty->assign("compte_numero"  , $compte_numero);
+$smarty->assign("compte_cle"     , $compte_cle);
+$smarty->assign("montantTotal"   , $montantTotal);
+$smarty->assign("nbRemise"       , $nbRemise);
 
 $smarty->display("print_bordereau.tpl");
-
-?>

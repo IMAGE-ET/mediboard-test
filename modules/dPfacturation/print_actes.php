@@ -15,7 +15,7 @@ $date   = CValue::get("date");
 $filter = new CPlageconsult();
 $filter->_date_min = CValue::getOrSession("_date_min", CMbDT::date());
 $filter->_date_max = CValue::getOrSession("_date_max", CMbDT::date());
-$filter->_type_affichage = CValue::getOrSession("_type_affichage" , 1);
+$filter->_type_affichage = CValue::getOrSession("_type_affichage", 1);
 
 // Traduction pour le passage d'un enum en bool pour les requetes sur la base de donnee
 if ($filter->_type_affichage == "complete") {
@@ -34,7 +34,7 @@ if (!CValue::getOrSession("cs")) {
 }
 
 if ($date) {
-//CSQLDataSource::$trace = true;
+  //CSQLDataSource::$trace = true;
   $ljoin["facture_liaison"] = "facture_liaison.facture_id = facture_etablissement.facture_id";
   $ljoin["sejour"] = "facture_liaison.object_id = sejour.sejour_id";
   
@@ -84,10 +84,11 @@ $order = "ouverture, praticien_id";
 
 //mbTrace(count($where));
 $facture = new CFactureEtablissement();
-$listFactures = $facture->loadList($where, $order, null, null, $ljoin);
-//mbTrace(count($listFactures));
+$listFactures = $facture->loadList($where, $order, null, "facture_id", $ljoin);
+
 $listPlages = array();
 foreach ($listFactures as $_facture) {
+  /** @var CFacture $_facture*/
   $_facture->loadRefPatient();
   $_facture->loadRefPraticien();
   $_facture->loadRefsObjects();

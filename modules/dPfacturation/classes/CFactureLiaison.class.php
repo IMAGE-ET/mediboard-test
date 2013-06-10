@@ -24,7 +24,9 @@ class CFactureLiaison extends CMbMetaObject {
   public $object_class;
   
   // Object References
+  /** @var  CFacture $_ref_facture*/
   public $_ref_facture;
+  /** @var  CFacturable $_ref_facturable*/
   public $_ref_facturable;
   
   /**
@@ -85,5 +87,20 @@ class CFactureLiaison extends CMbMetaObject {
     
     $this->loadRefFacture();
     return null;
+  }
+
+  /**
+   * Clonage de la liaison de la facture
+   *
+   * @param object $item   l'item
+   * @param int    $new_id l'identifant de la facture
+   *
+   * @return void
+   */
+  function cloneFrom($item, $new_id){
+    $this->object_id     = $item->object_id;
+    $this->object_class  = $item->object_class;
+    $this->facture_id    = $new_id;
+    $this->facture_class = $item->facture_class;
   }
 }

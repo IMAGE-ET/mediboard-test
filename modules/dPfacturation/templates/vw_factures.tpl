@@ -95,7 +95,7 @@ Main.add(function () {
           <select name="chirSel" style="width: 15em;">
             <option value="0" {{if !$chirSel}} selected="selected" {{/if}}>&mdash; Choisir un professionnel</option>
             {{if $facture->_class == "CFactureEtablissement"}} 
-              <b><option value="-1" {{if $chirSel == "-1"}} selected="selected" {{/if}}>&mdash; Tous</option></b>
+              <option value="-1" {{if $chirSel == "-1"}} selected="selected" {{/if}}><b>&mdash; Tous</b></option>
             {{/if}}
             {{mb_include module=mediusers template=inc_options_mediuser selected=$chirSel list=$listChirs}}
           </select>

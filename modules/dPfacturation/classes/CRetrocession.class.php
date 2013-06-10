@@ -30,7 +30,9 @@ class CRetrocession extends CMbObject {
   public $_montant_total;
   
   // Object References
+  /** @var  CMediusers $_ref_praticien*/
   public $_ref_praticien;
+  /** @var  CActe $_ref_acte*/
   public $_ref_acte;
 
   /**
