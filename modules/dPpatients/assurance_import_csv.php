@@ -22,18 +22,18 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
 
   // Each line
   while ($line = fgetcsv($fp, null, ";")) {
-    if (!isset($line[0]) || $line[0] == "") {
+    if (!isset($line[1]) || $line[1] == "") {
       continue;
     }
-
     // Parsing
-    $results[$i]["codeCDM"]   = addslashes(trim($line[0]));
+    $results[$i]["codeCDM"]   = addslashes(trim($line[0]));   //not used
     $results[$i]["nom"]       = addslashes(trim($line[1]));
     $results[$i]["adress"]    = addslashes(trim($line[2]));
     $results[$i]["rue"]       = addslashes(trim($line[3]));
     $explode                  = explode(" ", addslashes(trim($line[4])), 2);
     $results[$i]["cp"]        = $explode[0];
     $results[$i]["localite"]  = $explode[1];
+    $results[$i]["pec"]       = addslashes(trim($line[5]));
     $results[$i]["ean"]       = addslashes(trim($line[9]));
     $results[$i]["error"]     = 0;
 
@@ -51,6 +51,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $corres->adresse = $results[$i]["rue"];
       $corres->cp = $results[$i]["cp"];
       $corres->ville = $results[$i]["localite"];
+      $corres->type_pec = $results[$i]["pec"];
 
       if ($corres->ean == "" || $corres->nom == "") {
         $msg = "CCorrespondant-import-missing1";
@@ -75,6 +76,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $corres->adresse = $results[$i]["rue"];
       $corres->cp = $results[$i]["cp"];
       $corres->ville = $results[$i]["localite"];
+      $corres->type_pec = $results[$i]["pec"];
       $corres->ean = $results[$i]["ean"];
 
       if (!$corres->nom  && !$corres->ean ) {
