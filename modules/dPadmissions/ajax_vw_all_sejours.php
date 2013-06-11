@@ -113,7 +113,9 @@ $query = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`se
   GROUP BY `date`
   ORDER BY `date`";
 foreach ($ds->loadHashList($query) as $day => $num1) {
-  $days[$day]["num1"] = $num1;
+  if (isset($days[$day])) {
+    $days[$day]["num1"] = $num1;
+  }
 }
 
 // Liste des séjours validés par jour
@@ -130,7 +132,9 @@ $query = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`se
   GROUP BY `date`
   ORDER BY `date`";
 foreach ($ds->loadHashList($query) as $day => $num2) {
-  $days[$day]["num2"] = $num2;
+  if (isset($days[$day])) {
+    $days[$day]["num2"] = $num2;
+  }
 }
 
 // Liste des séjours récusés par jour
@@ -146,7 +150,9 @@ $query = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`se
   GROUP BY `date`
   ORDER BY `date`";
 foreach ($ds->loadHashList($query) as $day => $num3) {
-  $days[$day]["num3"] = $num3;
+  if (isset($days[$day])) {
+    $days[$day]["num3"] = $num3;
+  }
 }
 
 
@@ -169,7 +175,9 @@ if ($current_m == "reservation") {
     GROUP BY `date`
     ORDER BY `date`";
   foreach ($ds->loadHashList($query) as $day => $num4) {
-    $days[$day]["num4"] = "0/$num4";
+    if (isset($days[$day])) {
+      $days[$day]["num4"] = "0/$num4";
+    }
   }
   
   // Mails répondus
@@ -195,7 +203,9 @@ if ($current_m == "reservation") {
     ORDER BY `date`";
   
   foreach ($ds->loadHashList($query) as $day => $num4) {
-    $days[$day]["num4"] = preg_replace("/0\//", "$num4/", $days[$day]["num4"]);
+    if (isset($days[$day])) {
+      $days[$day]["num4"] = preg_replace("/0\//", "$num4/", $days[$day]["num4"]);
+    }
   }
 }
 

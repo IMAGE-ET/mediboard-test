@@ -22,7 +22,6 @@ function printPlanning() {
   var oForm = getForm("selType");
   var url = new Url("dPadmissions", "print_entrees");
   url.addParam("date"      , "{{$date}}");
-  url.addParam("type"      , "ssr");
   url.addParam("service_id", $V(oForm.service_id));
   url.popup(700, 550, "Entrees");
 }
