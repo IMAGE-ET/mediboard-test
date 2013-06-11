@@ -403,7 +403,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   function loadComplete(){
     parent::loadComplete();
     
-    $this->_ref_consultation->loadExamsComp();
+    $this->_ref_consultation->loadRefsExamsComp();
     $this->_ref_consultation->loadRefsExamNyha();
     $this->_ref_consultation->loadRefsExamPossum();
     
