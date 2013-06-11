@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License; see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -425,7 +425,13 @@ class CSetuphprim21 extends CSetup {
     $query = "ALTER TABLE `echange_hprim21` 
                 ADD `reprocess` TINYINT (4) UNSIGNED DEFAULT '0';";
     $this->addQuery($query);
+
+    $this->makeRevision("0.25");
+
+    $query = "ALTER TABLE `destinataire_hprim21`
+                ADD `OID` VARCHAR (255);";
+    $this->addQuery($query);
     
-    $this->mod_version = "0.25";
+    $this->mod_version = "0.26";
   }
 }

@@ -1,6 +1,8 @@
 <?php
 $locales['CContentXML-back-messages'] = 'Contenu du message';
 $locales['CDestinataireHprim'] = 'Destinataire H\'XML';
+$locales['CDestinataireHprim-OID'] = 'OID';
+$locales['CDestinataireHprim-OID-desc'] = 'Object Identifier (identifiant universel)';
 $locales['CDestinataireHprim-_exchanges_sources_save'] = 'Sources enregistrées';
 $locales['CDestinataireHprim-_exchanges_sources_save-court'] = 'Sources enregistrées';
 $locales['CDestinataireHprim-_exchanges_sources_save-desc'] = 'Sources enregistrées';
@@ -584,3 +586,4 @@ $locales['mod-hprimxml-tab-vw_idx_dest_hprim'] = 'Destinataires H\'XML';
 $locales['mod-hprimxml-tab-vw_idx_echange_hprim'] = 'Echanges H\'XML';
 $locales['module-hprimxml-court'] = 'HPRIM XML';
 $locales['module-hprimxml-long'] = 'HPRIM XML';
+?>

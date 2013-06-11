@@ -4,6 +4,8 @@ $locales['ADM-desc'] = 'Transfert de données d\'admission';
 $locales['CADM'] = 'ADM - Admission';
 $locales['CADM-desc'] = 'Transfert de données d\'admission';
 $locales['CDestinataireHprim21'] = 'Destinataire H\'2.1';
+$locales['CDestinataireHprim21-OID'] = 'OID';
+$locales['CDestinataireHprim21-OID-desc'] = 'Object Identifier (identifiant universel)';
 $locales['CDestinataireHprim21-_exchanges_sources_save'] = 'Sources enregistrées';
 $locales['CDestinataireHprim21-_exchanges_sources_save-court'] = 'Sources enregistrées';
 $locales['CDestinataireHprim21-_exchanges_sources_save-desc'] = 'Sources enregistrées';
@@ -421,3 +423,4 @@ $locales['mod-hprim21-tab-vw_patients'] = 'Patients';
 $locales['module-hprim21-court'] = 'HPRIM 2.1';
 $locales['module-hprim21-long'] = 'Gestion des objets HPRIM 2.1';
 $locales['read_hprim_files'] = 'Lecture fichiers HPRIM 2.1';
+?>

@@ -1146,7 +1146,25 @@ class CSetuphl7 extends CSetup {
     self::updateTableSource("source_file_system");
     self::updateTableSource("source_mllp");
 
-    $this->mod_version = "0.72";
+    $this->makeRevision("0.72");
+
+    $query = "ALTER TABLE `receiver_hl7v2`
+                ADD `OID` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $query = "RENAME TABLE `receiver_hl7_v3`
+                TO `receiver_hl7v3`;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `receiver_hl7v3`
+                CHANGE `receiver_hl7_v3_id` `receiver_hl7v3_id` INT (11) UNSIGNED NOT NULL AUTO_INCREMENT;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `receiver_hl7v3`
+                ADD `OID` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.73";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

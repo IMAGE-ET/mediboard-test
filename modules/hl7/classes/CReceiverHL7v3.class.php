@@ -18,10 +18,9 @@
 
 class CReceiverHL7v3 extends CInteropReceiver {
   // DB Table key
-  /**
-   * @var null
-   */
-  public $receiver_hl7_v3_id;
+
+  /** @var null */
+  public $receiver_hl7v3_id;
 
   /**
    * Initialize object specification
@@ -30,8 +29,8 @@ class CReceiverHL7v3 extends CInteropReceiver {
    */
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = 'receiver_hl7_v3';
-    $spec->key   = 'receiver_hl7_v3_id';
+    $spec->table = 'receiver_hl7v3';
+    $spec->key   = 'receiver_hl7v3_id';
     $spec->messages = array(
       "PRPA" => array ("CPRPAMessaging"),
     );
@@ -59,6 +58,17 @@ class CReceiverHL7v3 extends CInteropReceiver {
   function updateFormFields() {
     parent::updateFormFields();
 
+  }
+
+  /**
+   * Get object handler
+   *
+   * @param CEAIObjectHandler $objectHandler Object handler
+   *
+   * @return mixed
+   */
+  function getFormatObjectHandler(CEAIObjectHandler $objectHandler) {
+    return array();
   }
 
   /**

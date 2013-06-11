@@ -222,5 +222,7 @@ class CDestinataireHprim extends CInteropReceiver {
     if (array_key_exists($object_handler_class, $hprim_object_handlers)) {
       return new $hprim_object_handlers[$object_handler_class];
     }
+
+    return null;
   }
 }

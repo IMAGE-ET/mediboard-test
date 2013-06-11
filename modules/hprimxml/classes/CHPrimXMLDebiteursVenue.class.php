@@ -75,11 +75,13 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
   
   /**
    * Gestion des débiteurs d'une venue de patient
+   *
    * @param CHPrimXMLAcquittementsPatients $dom_acq
    * @param CEchangeHprim $echg_hprim
    * @param CPatient $newPatient
    * @param CSejour $newSejour
    * @param array $data
+   *
    * @return CHPrimXMLAcquittementsPatients $msgAcq 
    **/
   function debiteursVenue($dom_acq, $newPatient, $data, &$newVenue = null) {
@@ -118,7 +120,8 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
       
       if ($msgPatient) {
         $avertissement = $msgPatient." ";
-      } else {
+      }
+      else {
         $commentaire = "Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields.";
       }
 

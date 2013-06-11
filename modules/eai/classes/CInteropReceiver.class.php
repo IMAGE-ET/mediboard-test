@@ -19,6 +19,7 @@ class CInteropReceiver extends CInteropActor {
   // Form fields
   public $_type_echange;
   public $_exchanges_sources_save = 0;
+  public $OID = null;
 
   /**
    * Initialize object specification
@@ -39,6 +40,8 @@ class CInteropReceiver extends CInteropActor {
    */
   function getProps() {
     $props = parent::getProps();
+
+    $props["OID"] = "str";
     
     $props["_exchanges_sources_save"] = "num";
     return $props;

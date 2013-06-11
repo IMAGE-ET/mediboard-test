@@ -9,5 +9,9 @@
  * @link     http://www.mediboard.org
 *}}
 
+<tr>
+  <th>{{mb_label object=$actor field="OID"}}</th>
+  <td>{{mb_field object=$actor field="OID"}}</td>
+</tr>
 
 {{mb_include module=$actor->_ref_module->mod_name template="`$actor->_class`_inc"}}
