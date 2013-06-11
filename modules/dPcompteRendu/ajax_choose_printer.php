@@ -23,7 +23,7 @@ $printer = new CPrinter();
 $where = array("function_id" => "= '$function_id'");
 $printers = $printer->loadlist($where);
 
-CMbObject::massLoadFwdRef($printers, "object_id", "CFunctions");
+CMbObject::massLoadFwdRef($printers, "object_id");
 
 /** @var $printers CPrinter[] */
 foreach ($printers as $_printer) {

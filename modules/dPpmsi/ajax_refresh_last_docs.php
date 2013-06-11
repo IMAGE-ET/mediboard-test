@@ -124,8 +124,9 @@ if (($cat_docs || $specialite_docs || $prat_docs || ($date_docs_min && $date_doc
       break;
     case "intervention";
       $operations = CMbObject::massLoadFwdRef($docs, "object_id", "COperation");
-      CMbObject::massLoadFwdRef($operations, "patient_id");
-      $prats = CMbObject::massLoadFwdRef($operations, "chir_id");
+      $sejours    = CMbObject::massLoadFwdRef($operations, "sejour_id");
+      $prats      = CMbObject::massLoadFwdRef($operations, "chir_id");
+      CMbObject::massLoadFwdRef($sejours, "patient_id");
       CMbObject::massLoadFwdRef($prats, "function_id");
       
       foreach ($docs as $_doc) {
