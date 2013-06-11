@@ -1855,7 +1855,6 @@ div.sniff-bar div {
   font-size: 9px;
 }
 
-
 div.sniffed.none {
   background: #eee; 
 }
@@ -1867,6 +1866,13 @@ div.sniffed.obsolete {
 div.sniffed.uptodate {
   background: #bfb; 
 }
+
+div.regression {
+  float: right;
+  margin-top: -4px;
+  margin-right: -4px;
+}
+
 
 div.jeton_dizaine {
   background: #333;

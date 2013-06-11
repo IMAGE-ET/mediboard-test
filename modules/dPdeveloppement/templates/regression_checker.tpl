@@ -13,10 +13,10 @@
 <div>
   <h1>
     Rapport de non régression par vue
-    ({{$count}} fichiers)
+    ({{$count}} vues)
   </h1>
   <div id="tree-files">
-    {{mb_include template=tree_regression_files dir=modules basename=modules files=$files}}
+    {{mb_include template=tree_regression_views dir=modules basename=modules views=$views}}
   </div>
 </div>
 

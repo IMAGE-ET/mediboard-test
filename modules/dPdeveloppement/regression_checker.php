@@ -22,11 +22,11 @@ $ignored = array(
   "/preferences.php",
 );
 
-$files = CMbPath::getPathTreeUnder("$root_dir/modules", $ignored, $extensions);
-$count = CMbArray::countLeafs($files);
+$views = CMbPath::getPathTreeUnder("$root_dir/modules", $ignored, $extensions);
+$count = CMbArray::countLeafs($views);
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("files", $files);
+$smarty->assign("views", $views);
 $smarty->assign("count", $count);
 $smarty->display("regression_checker.tpl");

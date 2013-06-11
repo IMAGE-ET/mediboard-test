@@ -473,7 +473,7 @@ abstract class CMbArray {
   /**
    * Exchanges all keys with their associated values in an array, and keep all the values if there are several occurrences
    *
-   * @param $trans array
+   * @param array $trans The array to flip
    *
    * @return array[]
    */
@@ -489,6 +489,18 @@ abstract class CMbArray {
     }
 
     return $result;
+  }
+
+  static function countLeafs($array) {
+    if (!is_array($array)) {
+      return 1;
+    }
+
+    $count = 0;
+    foreach ($array as $_value) {
+      $count += self::countLeafs($_value);
+    }
+    return $count;
   }
 
   /**

@@ -1,7 +1,7 @@
 // Used in big DOM with lots of IDs, check
 Element.warnDuplicates = Prototype.emptyFunction;
 
-CheckRegression = {
+RegressionChecker = {
   run: function() {
     alert('run it');
   },
