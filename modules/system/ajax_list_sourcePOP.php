@@ -11,8 +11,6 @@
  * @version    $Revision$
  */
  
-CCanDo::checkRead();
-
 $mediuser = CMediusers::get();
 $pop_sources = $mediuser->loadRefsSourcePop();
 
