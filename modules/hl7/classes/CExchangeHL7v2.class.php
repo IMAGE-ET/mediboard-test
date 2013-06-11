@@ -17,9 +17,8 @@
  */
 
 class CExchangeHL7v2 extends CExchangeTabular {
-  /**
-   * @var array
-   */
+
+  /** @var string */
   static $messages = array(
     "PAM"    => "CPAM",
     "PAM_FR" => "CPAMFR",
@@ -29,19 +28,16 @@ class CExchangeHL7v2 extends CExchangeTabular {
   );
   
   // DB Table key
-  /**
-   * @var int
-   */
+
+  /** @var string */
   public $exchange_hl7v2_id;
 
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code;
   
-  /**
-   * @var CHL7v2Message
-   */
+
+  /** @var CHL7v2Message */
   public $_message_object;
 
   /**

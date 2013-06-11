@@ -13,9 +13,8 @@ class CHL7v2SegmentGroup extends CHL7v2Entity {
   public $children = array();
   public $name;
   
-  /**
-   * @var CHL7v2SegmentGroup
-   */
+
+  /** @var CHL7v2SegmentGroup */
   public $parent;
     
   function __construct(CHL7v2SegmentGroup $parent, $self_specs) {

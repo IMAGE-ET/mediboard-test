@@ -10,9 +10,8 @@
  */
 
 class CHL7v2Field extends CHL7v2Entity {
-  /**
-   * @var CHL7v2Segment
-   */
+
+  /** @var CHL7v2Segment */
   public $owner_segment;
   
   public $name;
@@ -25,9 +24,8 @@ class CHL7v2Field extends CHL7v2Entity {
   public $unbounded;
   public $items         = array();
 
-  /**
-   * @var CHL7v2SimpleXMLElement
-   */
+
+  /** @var CHL7v2SimpleXMLElement */
   public $meta_spec;
   
   // private $_ts_fixed = false;

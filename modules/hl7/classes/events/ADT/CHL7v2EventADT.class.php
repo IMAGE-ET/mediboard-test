@@ -16,9 +16,8 @@
  * Admit Discharge Transfer
  */
 class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $event_type = "ADT";
 
   /**

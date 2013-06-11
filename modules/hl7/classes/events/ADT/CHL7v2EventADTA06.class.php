@@ -16,13 +16,11 @@
  * A06 - Change an outpatient to an inpatient
  */
 class CHL7v2EventADTA06 extends CHL7v2EventADT implements CHL7EventADTA06 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A06";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A06";
 
   /**

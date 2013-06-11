@@ -17,18 +17,15 @@
  */
 
 class CHL7v2SegmentNK1 extends CHL7v2Segment {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $name          = "NK1";
-  /**
-   * @var null
-   */
+
+  /** @var null */
   public $set_id;
   
-  /**
-   * @var CCorrespondantPatient
-   */
+
+  /** @var CCorrespondantPatient */
   public $correspondant;
 
   /**

@@ -17,15 +17,11 @@
  */
 
 class CEAIObjectHandler extends CMbObjectHandler {
-  /**
-   * @var array
-   */
+  /** @var array */
   static $handled = array ();
-  /**
-   * @var null
-   */
-  public $_eai_initiateur_group_id;
 
+  /** @var null */
+  public $_eai_initiateur_group_id;
 
   /**
    * If object is handled ?

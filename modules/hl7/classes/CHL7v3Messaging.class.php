@@ -16,25 +16,21 @@
  * Patient Administration
  */
 class CHL7v3Messaging {
-  /**
-   * @var array
-   */
+
+  /** @var array */
   static $object_handlers = array(
   );
 
-  /**
-   * @var array
-   */
+
+  /** @var array */
   static $versions   = array();
 
-  /**
-   * @var array
-   */
+
+  /** @var array */
   static $evenements = array();
 
-  /**
-   * @var array
-   */
+
+  /** @var array */
   var $_categories   = array();
 
   /**

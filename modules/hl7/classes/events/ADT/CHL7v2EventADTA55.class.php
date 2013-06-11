@@ -16,13 +16,11 @@
  * A55 - Cancel change attending doctor
  */
 class CHL7v2EventADTA55 extends CHL7v2EventADT implements CHL7EventADTA52 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A55";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A52";
 
   /**

@@ -17,14 +17,12 @@
  */
 
 class CHL7v2SegmentDSC extends CHL7v2Segment {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $name    = "DSC";
 
-  /**
-   * @var CPatient
-   */
+
+  /** @var CPatient */
   public $patient;
 
   /**

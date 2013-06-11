@@ -17,14 +17,12 @@
  */
 
 class CHL7v2SegmentMSA extends CHL7v2Segment {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $name           = "MSA";
   
-  /**
-   * @var CHL7v2Acknowledgment
-   */
+
+  /** @var CHL7v2Acknowledgment */
   public $acknowledgment;
 
   /**

@@ -14,9 +14,8 @@
  * Cancel Query, message XML HL7
  */
 class CHL7v2CancelPatientDemographicsQuery extends CHL7v2MessageXML {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   static $event_codes = array ("J01");
 
   /**

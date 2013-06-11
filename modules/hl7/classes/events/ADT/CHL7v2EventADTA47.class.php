@@ -16,13 +16,11 @@
  * A47 - Change patient identifier list
  */
 class CHL7v2EventADTA47 extends CHL7v2EventADT implements CHL7EventADTA30 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A47";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A30";
 
   /**

@@ -17,10 +17,18 @@
  * Patient Registry Get Demographics Query
  */
 class CHL7v3EventPRPAIN201307UV02 extends CHL7v3EventPRPA implements CHL7EventPRPAST201317UV02 {
+
+  /** @var string */
+  public $interaction_id = "IN201307UV02";
+
   /**
-   * @var string
+   * Get interaction
+   *
+   * @return string|void
    */
-  public $code = "IN201307UV02";
+  function getInteractionID() {
+    return "{$this->event_type}_{$this->interaction_id}";
+  }
 
   /**
    * Build IN201307UV02 event
@@ -34,6 +42,44 @@ class CHL7v3EventPRPAIN201307UV02 extends CHL7v3EventPRPA implements CHL7EventPR
   function build($patient) {
     parent::build($patient);
 
+    $this->addControlActProcess($patient);
+  }
 
+  /**
+   * @see parent::addControlActProcess()
+   */
+  function addControlActProcess(CPatient $patient) {
+    $dom = $this->dom;
+
+    $controlActProcess = parent::addControlActProcess($patient);
+
+    // reasonCode
+    $reasonCode = $dom->addElement($controlActProcess, "reasonCode");
+    $dom->addAttribute($reasonCode, "code", "TEST_EXST");
+    $dom->addAttribute($reasonCode, "codeSystem", "1.2.250.1.213.1.1.4.11");
+    $dom->addAttribute($reasonCode, "displayName", "Test d'existence de dossier");
+
+    // queryByParameter
+    $queryByParameter = $dom->addElement($controlActProcess, "queryByParameter");
+
+    // queryId
+    $queryId = $dom->addElement($queryByParameter, "queryId");
+    $dom->addAttribute($queryId, "extension", "");
+    $dom->addAttribute($queryId, "root", "");
+
+    // statusCode
+    $statusCode = $dom->addElement($queryByParameter, "statusCode");
+    $dom->addAttribute($statusCode, "code", "new");
+
+    // parameterList
+    $parameterList = $dom->addElement($queryByParameter, "parameterList");
+
+    // patientIdentifer
+    $patientIdentifer = $dom->addElement($parameterList, "patientIdentifer");
+    $value = $dom->addElement($patientIdentifer, "value");
+    $dom->addAttribute($value, "extension", $patient->INSC);
+    $dom->addAttribute($value, "root", "1.2.250.1.213.1.4.2");
+
+    $dom->addElement($patientIdentifer, "semanticsText", "Patient.id");
   }
 }

@@ -16,13 +16,11 @@
  * A28 - Add person information
  */
 class CHL7v2EventADTA28 extends CHL7v2EventADT implements CHL7EventADTA05 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A28";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A05";
 
   /**

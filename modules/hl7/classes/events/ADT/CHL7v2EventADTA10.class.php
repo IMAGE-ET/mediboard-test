@@ -16,13 +16,11 @@
  * A10 - Patient Arriving - Tracking
  */
 class CHL7v2EventADTA10 extends CHL7v2EventADT implements CHL7EventADTA09 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A10";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A09";
 
   /**

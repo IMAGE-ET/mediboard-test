@@ -18,17 +18,14 @@ class CHL7v2PatientDemographicsAndVisitResponse implements CHL7Acknowledgment {
    * @var CHL7Event|null
    */
   public $event;
-  /**
-   * @var CHL7v2EventACK
-   */
 
-  /**
-   * @var CHL7v2Message
-   */
+  /** @var CHL7v2EventACK */
+
+
+  /** @var CHL7v2Message */
   public $message;
-  /**
-   * @var CHL7v2MessageXML
-   */
+
+  /** @var CHL7v2MessageXML */
   public $dom_message;
   
   public $message_control_id;
@@ -40,9 +37,8 @@ class CHL7v2PatientDemographicsAndVisitResponse implements CHL7Acknowledgment {
   public $QPD8_error;
   public $domains;
 
-  /**
-   * @var CExchangeHL7v2
-   */
+
+  /** @var CExchangeHL7v2 */
   public $_ref_exchange_hl7v2;
 
   /**

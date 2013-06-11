@@ -16,13 +16,11 @@
  * A26 - Cancel Pending Transfer
  */
 class CHL7v2EventADTA26 extends CHL7v2EventADT implements CHL7EventADTA21 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A26";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A21";
 
   /**

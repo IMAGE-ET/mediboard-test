@@ -17,14 +17,12 @@
  */
 
 class CHL7v2SegmentSCH extends CHL7v2Segment {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $name = "SCH";
   
-  /**
-   * @var CConsultation
-   */
+
+  /** @var CConsultation */
   public $appointment;
 
   /**

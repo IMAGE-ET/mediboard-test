@@ -16,13 +16,11 @@
  * A52 - Cancel Leave of Absence for a Patient
  */
 class CHL7v2EventADTA52 extends CHL7v2EventADT implements CHL7EventADTA52 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A52";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A52";
 
   /**

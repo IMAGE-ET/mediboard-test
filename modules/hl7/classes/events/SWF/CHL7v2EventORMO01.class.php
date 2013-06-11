@@ -16,9 +16,8 @@
  * O01 - Order Message
  */
 class CHL7v2EventORMO01 extends CHL7v2EventORM implements CHL7EventORMO01 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code = "O01";
 
   /**

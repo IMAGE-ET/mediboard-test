@@ -16,13 +16,11 @@
  * A29 - Delete person information
  */
 class CHL7v2EventADTA29 extends CHL7v2EventADT implements CHL7EventADTA21 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A29";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A21";
 
   /**

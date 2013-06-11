@@ -16,9 +16,8 @@
  * Patient Demographics Query Cancel Query
  */
 class CHL7v2EventQCN extends CHL7v2Event implements CHL7EventQCN {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $event_type = "QCN";
 
   /**

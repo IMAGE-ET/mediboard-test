@@ -18,19 +18,16 @@
 
 class CReceiverHL7v2 extends CInteropReceiver {
   // DB Table key
-  /**
-   * @var null
-   */
+
+  /** @var null */
   public $receiver_hl7v2_id;
 
-  /**
-   * @var null
-   */
+
+  /** @var null */
   public $_extension;
 
-  /**
-   * @var null
-   */
+
+  /** @var null */
   public $_i18n_code;
 
   /**

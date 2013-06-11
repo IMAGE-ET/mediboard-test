@@ -17,14 +17,12 @@
  */
 
 class CHL7v2SegmentZFD extends CHL7v2Segment {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $name   = "ZFD";
   
-  /**
-   * @var CPatient
-   */
+
+  /** @var CPatient */
   public $patient;
 
   /**

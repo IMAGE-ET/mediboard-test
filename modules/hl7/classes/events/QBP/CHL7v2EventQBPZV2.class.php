@@ -16,9 +16,8 @@
  * K22 - Find Candidates response
  */
 class CHL7v2EventQBPZV2 extends CHL7v2EventQBP implements CHL7EventQBPK22 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code = "ZV2";
 
   /**

@@ -16,13 +16,11 @@
  * A16 - Pending Discharge
  */
 class CHL7v2EventADTA16 extends CHL7v2EventADT implements CHL7EventADTA16 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A16";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A16";
 
   /**

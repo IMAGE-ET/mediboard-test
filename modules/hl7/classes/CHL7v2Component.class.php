@@ -13,16 +13,14 @@
  * A CHL7v2Component is an item of a composite value
  */
 class CHL7v2Component extends CHL7v2Entity {
-  /**
-   * @var CHL7v2Component
-   */
+
+  /** @var CHL7v2Component */
   public $parent;
 
   public $children = array();
 
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $data;
 
   /**
@@ -67,9 +65,8 @@ class CHL7v2Component extends CHL7v2Entity {
    */
   public $self_pos;
 
-  /**
-   * @var CHL7v2DataType
-   */
+
+  /** @var CHL7v2DataType */
   public $props;
 
   public $invalid = false;

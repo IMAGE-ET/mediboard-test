@@ -17,9 +17,8 @@
  */
 
 class CHL7v2SegmentZBE extends CHL7v2Segment {
-  /**
-   * @var array
-   */
+
+  /** @var array */
   static $actions = array(
     "INSERT" => array(
       "A05", "A01", "A14", "A04", "A06", "A07", "A54", "A02", "A14",
@@ -35,29 +34,24 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     ),
   );
 
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $name   = "ZBE";
   
-  /**
-   * @var CSejour
-   */
+
+  /** @var CSejour */
   public $sejour;
   
-  /**
-   * @var CMovement
-   */
+
+  /** @var CMovement */
   public $movement;
   
-  /**
-   * @var CAffectation
-   */
+
+  /** @var CAffectation */
   public $curr_affectation;
   
-  /**
-   * @var CAffectation
-   */
+
+  /** @var CAffectation */
   public $other_affectation;
 
   /**

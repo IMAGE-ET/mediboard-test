@@ -16,9 +16,8 @@
  * S14 - Notification of appointment modification
  */
 class CHL7v2EventSIUS14 extends CHL7v2EventSIU implements CHL7EventSIUS12 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code = "S14";
 
   /**

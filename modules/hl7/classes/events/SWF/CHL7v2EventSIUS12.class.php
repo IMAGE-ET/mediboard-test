@@ -16,9 +16,8 @@
  * S12 - Notification of new appointment booking 
  */
 class CHL7v2EventSIUS12 extends CHL7v2EventSIU implements CHL7EventSIUS12 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code = "S12";
 
   /**

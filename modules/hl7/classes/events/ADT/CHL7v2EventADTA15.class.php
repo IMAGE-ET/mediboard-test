@@ -16,13 +16,11 @@
  * A15 - Pending Transfer
  */
 class CHL7v2EventADTA15 extends CHL7v2EventADT implements CHL7EventADTA15 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A15";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A15";
 
   /**

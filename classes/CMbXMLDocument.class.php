@@ -196,7 +196,7 @@ class CMbXMLDocument extends DOMDocument {
    * @param null    $elValue
    * @param null    $elNS
    *
-   * @return DOMNode
+   * @return DOMElement
    */
   function addElement(DOMNode $elParent, $elName, $elValue = null, $elNS = null) {
     $elName  = utf8_encode($elName );

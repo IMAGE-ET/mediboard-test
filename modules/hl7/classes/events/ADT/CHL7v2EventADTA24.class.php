@@ -16,13 +16,11 @@
  * A24 - Link patient information
  */
 class CHL7v2EventADTA24 extends CHL7v2EventADT implements CHL7EventADTA24 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A24";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A24";
 
   /**

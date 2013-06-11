@@ -35,34 +35,28 @@ class CHL7v2Error {
     CHL7v2Exception::UNKNOWN_DOMAINS_RETURNED   => 204,
   );
   
-  /**
-   * @var integer
-   */
+
+  /** @var integer */
   public $line;
   
-  /**
-   * @var CHL7v2Entity
-   */
+
+  /** @var CHL7v2Entity */
   public $entity;
   
-  /**
-   * @var integer
-   */
+
+  /** @var integer */
   public $code;
   
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $data;
   
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $level = self::E_WARNING;
 
-  /**
-   * @var array
-   */
+
+  /** @var array */
   public $location;
 
   /**

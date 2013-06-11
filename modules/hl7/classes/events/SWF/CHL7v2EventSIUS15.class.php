@@ -16,9 +16,8 @@
  * S15 - Notification of appointment cancellation
  */
 class CHL7v2EventSIUS15 extends CHL7v2EventSIU implements CHL7EventSIUS12 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code = "S15";
 
   /**

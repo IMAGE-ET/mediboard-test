@@ -16,13 +16,11 @@
  * A44 - Move account information - patient account number
  */
 class CHL7v2EventADTA44 extends CHL7v2EventADT implements CHL7EventADTA43 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A44";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A43";
 
   /**

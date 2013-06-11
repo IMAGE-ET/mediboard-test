@@ -16,13 +16,11 @@
  * A11 - Cancel admit/visit notification
  */
 class CHL7v2EventADTA11 extends CHL7v2EventADT implements CHL7EventADTA09 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A11";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A09";
 
   /**

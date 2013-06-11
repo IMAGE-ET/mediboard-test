@@ -16,13 +16,11 @@
  * A01 - Admit/visit notification
  */
 class CHL7v2EventADTA01 extends CHL7v2EventADT implements CHL7EventADTA01 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A01";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A01";
 
   /**

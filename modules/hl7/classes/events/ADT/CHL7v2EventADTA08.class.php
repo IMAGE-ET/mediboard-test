@@ -16,13 +16,11 @@
  * A08 - Update Patient Information
  */
 class CHL7v2EventADTA08 extends CHL7v2EventADT implements CHL7EventADTA01 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A08";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A01";
 
   /**

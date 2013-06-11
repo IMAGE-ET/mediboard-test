@@ -25,15 +25,11 @@ class CGroupDomain extends CMbObject {
   public $group_id;
   public $domain_id;
   public $master;
-  
-  /**
-   * @var CGroup
-   */
+
+  /** @var CGroup */
   public $_ref_group; 
-  
-  /**
-   * @var CDomain
-   */
+
+  /** @var CDomain */
   public $_ref_domain;     
   
   function getSpec() {

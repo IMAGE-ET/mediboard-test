@@ -18,4 +18,30 @@
  */
 class CHL7v3EventPRPAIN201308UV02 extends CHL7v3EventPRPA implements CHL7EventPRPAST201317UV02 {
 
+  /** @var string */
+  public $interaction_id = "IN201308UV02";
+
+  /**
+   * Get interaction
+   *
+   * @return string|void
+   */
+  function getInteractionID() {
+    return "{$this->event_type}_{$this->interaction_id}";
+  }
+
+  /**
+   * Build IN201307UV02 event
+   *
+   * @param CPatient $patient Person
+   *
+   * @see parent::build()
+   *
+   * @return void
+   */
+  function build($patient) {
+    parent::build($patient);
+
+
+  }
 }

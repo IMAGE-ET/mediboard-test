@@ -16,13 +16,11 @@
  * A05 - Pre-admit a patient
  */
 class CHL7v2EventADTA05 extends CHL7v2EventADT implements CHL7EventADTA05 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A05";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A05";
 
   /**

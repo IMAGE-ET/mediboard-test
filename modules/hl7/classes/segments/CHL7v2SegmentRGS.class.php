@@ -17,18 +17,15 @@
  */
 
 class CHL7v2SegmentRGS extends CHL7v2Segment {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $name   = "RGS";
-  /**
-   * @var null
-   */
+
+  /** @var null */
   public $set_id;
   
-  /**
-   * @var CConsultation
-   */
+
+  /** @var CConsultation */
   public $appointment;
 
   /**

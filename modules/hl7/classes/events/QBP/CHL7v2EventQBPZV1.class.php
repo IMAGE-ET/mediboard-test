@@ -16,14 +16,12 @@
  * ZV1 - Find Admit Candidates
  */
 class CHL7v2EventQBPZV1 extends CHL7v2EventQBP implements CHL7EventQBPZV1 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "ZV1";
 
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "Q21";
 
   /**

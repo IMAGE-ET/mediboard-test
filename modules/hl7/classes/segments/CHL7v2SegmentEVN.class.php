@@ -17,17 +17,14 @@
  */
 
 class CHL7v2SegmentEVN extends CHL7v2Segment {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $name             = "EVN";
-  /**
-   * @var null
-   */
+
+  /** @var null */
   public $planned_datetime;
-  /**
-   * @var null
-   */
+
+  /** @var null */
   public $occured_datetime;
 
   /**

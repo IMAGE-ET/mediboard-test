@@ -16,13 +16,11 @@
  * A46 - Change Patient ID
  */
 class CHL7v2EventADTA46 extends CHL7v2EventADT implements CHL7EventADTA30 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A46";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A30";
 
   /**

@@ -16,9 +16,8 @@
  * Patient Demographics Query
  */
 class CHL7v2EventQBP extends CHL7v2Event implements CHL7EventQBP {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $event_type = "QBP";
 
   /**

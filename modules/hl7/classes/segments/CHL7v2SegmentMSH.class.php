@@ -17,9 +17,8 @@
  */
 
 class CHL7v2SegmentMSH extends CHL7v2Segment {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $name = "MSH";
 
   /**

@@ -16,13 +16,11 @@
  * A13 - Cancel discharge/end visit
  */
 class CHL7v2EventADTA13 extends CHL7v2EventADT implements CHL7EventADTA01 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A13";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A01";
 
   /**

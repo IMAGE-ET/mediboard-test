@@ -16,9 +16,8 @@
  * Scheduled Workflow
  */
 class CHL7v2EventSIU extends CHL7v2Event implements CHL7EventSIU {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $event_type = "SIU";
 
   /**

@@ -36,13 +36,11 @@ class CDomain extends CMbObject {
   public $_detail_objects = array();
   public $_force_merge    = false;
   
-  /**
-   * @var CInteropActor
-   */
+
+  /** @var CIncrementer */
   public $_ref_actor; 
-  /**
-   * @var CIncrementer
-   */
+
+  /** @var CIncrementer */
   public $_ref_incrementer;
   public $_ref_group_domains;
 

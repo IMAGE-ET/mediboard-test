@@ -16,13 +16,11 @@
  * A25 - Cancel Pending Discharge
  */
 class CHL7v2EventADTA25 extends CHL7v2EventADT implements CHL7EventADTA25 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A25";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A25";
 
   /**

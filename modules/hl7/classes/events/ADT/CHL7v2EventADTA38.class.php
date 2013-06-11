@@ -16,13 +16,11 @@
  * A38 - Cancel pre-admit 
  */
 class CHL7v2EventADTA38 extends CHL7v2EventADT implements CHL7EventADTA38 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A38";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A38";
 
   /**

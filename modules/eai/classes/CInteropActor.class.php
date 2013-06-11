@@ -17,133 +17,87 @@
  */
 class CInteropActor extends CMbObject {
   // DB Fields
-  /**
-   * @var null
-   */
+
+  /** @var string */
   public $nom;
 
-  /**
-   * @var null
-   */
+  /** @var string */
   public $libelle;
 
-  /**
-   * @var null
-   */
+  /** @var string */
   public $group_id;
 
-  /**
-   * @var null
-   */
+  /** @var int */
   public $actif;
   
   // Form fields
-  /**
-   * @var null
-   */
+  /** @var int */
   public $_reachable;
 
-  /**
-   * @var null
-   */
+  /** @var string */
   public $_parent_class;
 
-  /**
-   * @var bool
-   */
+  /** @var bool */
   public $_delete_file = true;
 
-  /**
-   * @var null
-   */
+  /** @var string */
   public $_tag_patient;
 
-  /**
-   * @var null
-   */
+  /** @var string */
   public $_tag_sejour;
 
-  /**
-   * @var null
-   */
+  /** @var string */
   public $_tag_mediuser;
 
-  /**
-   * @var null
-   */
+  /** @var string */
   public $_tag_service;
 
-  /**
-   * @var null
-   */
+  /** @var string */
   public $_tag_chambre;
 
-  /**
-   * @var null
-   */
+  /** @var string */
   public $_tag_lit;
 
-  /**
-   * @var null
-   */
+  /** @var string */
   public $_tag_movement;
 
-  /**
-   * @var null
-   */
+  /** @var string */
   public $_tag_visit_number;
 
-  /**
-   * @var null
-   */
+  /** @var string */
   public $_tag_hprimxml;
 
-  /**
-   * @var null
-   */
+  /** @var string */
   public $_tag_hl7;
 
-  /**
-   * @var null
-   */
+  /** @var string */
   public $_tag_consultation;
 
-  /**
-   * @var null
-   */
+  /** @var string */
   public $_self_tag_patient;
 
-  /**
-   * @var null
-   */
+  /** @var string */
   public $_self_tag_sejour;
 
-  /**
-   * @var array
-   */
+  /** @var array */
   public $_tags = array(); // All tags
   
   // Forward references
-  /**
-   * @var CGroups
-   */
+  /** @var CGroups */
   public $_ref_group;
-  /**
-   * @var null
-   */
+
+  /** @var null */
   public $_ref_exchanges_sources;
-  /**
-   * @var null
-   */
+
+  /** @var CExchangeDataFormat */
   public $_ref_last_message;
-  /**
-   * @var null
-   */
+
+  /** @var CMessageSupported[] */
   public $_ref_messages_supported;
-  /**
-   * @var array
-   */
+
+  /** @var array */
   public $_ref_msg_supported_family = array();
+
 
   public $_type_echange;
 

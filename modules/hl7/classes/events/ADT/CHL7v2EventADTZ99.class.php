@@ -16,13 +16,11 @@
  * Z99 - Change admit - HL7
  */
 class CHL7v2EventADTZ99 extends CHL7v2EventADT implements CHL7EventADTA01 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "Z99";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A01";
 
   /**

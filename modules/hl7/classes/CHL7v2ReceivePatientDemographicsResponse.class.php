@@ -14,9 +14,8 @@
  * Receive patient demographics response, message XML HL7
  */
 class CHL7v2ReceivePatientDemographicsResponse extends CHL7v2MessageXML {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   static $event_codes = array ("K22", "ZV2");
 
   /**

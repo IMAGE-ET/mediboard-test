@@ -17,14 +17,12 @@
  */
 
 class CHL7v2SegmentQID extends CHL7v2Segment {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $name    = "QID";
 
-  /**
-   * @var CPatient
-   */
+
+  /** @var CPatient */
   public $patient;
 
   /**

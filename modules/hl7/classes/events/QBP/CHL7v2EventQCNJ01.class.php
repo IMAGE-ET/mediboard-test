@@ -16,14 +16,12 @@
    * J01 - PDQ Cancel Query
    */
 class CHL7v2EventQCNJ01 extends CHL7v2EventQCN implements CHL7EventQCNJ01 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "J01";
 
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "J01";
 
   /**

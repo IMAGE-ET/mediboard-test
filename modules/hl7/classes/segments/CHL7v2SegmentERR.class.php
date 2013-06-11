@@ -17,19 +17,16 @@
  */
 
 class CHL7v2SegmentERR extends CHL7v2Segment {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $name           = "ERR";
   
-  /**
-   * @var CHL7v2Acknowledgment
-   */
+
+  /** @var CHL7v2Acknowledgment */
   public $acknowledgment;
   
-  /**
-   * @var CHL7v2Error
-   */
+
+  /** @var CHL7v2Error */
   public $error;
 
   /**

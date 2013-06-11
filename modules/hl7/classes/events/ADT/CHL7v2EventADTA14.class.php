@@ -16,13 +16,11 @@
  * A14 - Pending Admit
  */
 class CHL7v2EventADTA14 extends CHL7v2EventADT implements CHL7EventADTA14 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A14";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A05";
 
   /**

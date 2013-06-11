@@ -17,23 +17,19 @@
  */
 
 class CHL7v2SegmentGT1 extends CHL7v2Segment {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $name   = "GT1";
-  /**
-   * @var null
-   */
+
+  /** @var null */
   public $set_id;
   
-  /**
-   * @var CPatient
-   */
+
+  /** @var CPatient */
   public $patient;
   
-  /**
-   * @var CSejour
-   */
+
+  /** @var CSejour */
   public $sejour;
 
   /**

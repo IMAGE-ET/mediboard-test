@@ -16,13 +16,11 @@
  * Z81 - Cancel the former change
  */
 class CHL7v2EventADTZ81_FR extends CHL7v2EventADT implements CHL7EventADTA01 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "Z81";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A01";
 
   /**

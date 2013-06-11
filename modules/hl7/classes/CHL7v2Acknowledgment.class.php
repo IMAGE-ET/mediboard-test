@@ -18,18 +18,15 @@ class CHL7v2Acknowledgment implements CHL7Acknowledgment {
    * @var CHL7Event|null
    */
   public $event;
-  /**
-   * @var CHL7v2EventACK
-   */
+
+  /** @var CHL7v2EventACK */
   public $event_ack;
 
-  /**
-   * @var CHL7v2Message
-   */
+
+  /** @var CHL7v2Message */
   public $message;
-  /**
-   * @var CHL7v2MessageXML
-   */
+
+  /** @var CHL7v2MessageXML */
   public $dom_message;
   
   public $message_control_id;
@@ -38,14 +35,12 @@ class CHL7v2Acknowledgment implements CHL7Acknowledgment {
   public $hl7_error_code;
   public $severity;
   public $comments;
-  /**
-   * @var CMbObject
-   */
+
+  /** @var CMbObject */
   public $object;
 
-  /**
-   * @var CExchangeHL7v2
-   */
+
+  /** @var CExchangeHL7v2 */
   public $_ref_exchange_hl7v2;
   public $_mb_error_code;
 

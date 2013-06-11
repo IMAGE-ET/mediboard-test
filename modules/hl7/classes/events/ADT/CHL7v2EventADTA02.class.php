@@ -16,13 +16,11 @@
  * A02 - Transfer a patient
  */
 class CHL7v2EventADTA02 extends CHL7v2EventADT implements CHL7EventADTA02 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A02";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A02";
 
   /**

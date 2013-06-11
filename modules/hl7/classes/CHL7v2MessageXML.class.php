@@ -14,21 +14,17 @@
  * Message XML HL7
  */
 class CHL7v2MessageXML extends CMbXMLDocument {
-  /**
-   * @var CExchangeHL7v2
-   */
+
+  /** @var CExchangeHL7v2 */
   public $_ref_exchange_hl7v2;
-  /**
-   * @var CInteropSender
-   */
+
+  /** @var CInteropSender */
   public $_ref_sender;
-  /**
-   * @var CInteropReceiver
-   */
+
+  /** @var CInteropReceiver */
   public $_ref_receiver;
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $_is_i18n;
 
   /**

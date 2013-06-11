@@ -17,22 +17,18 @@
  */
 
 class CHL7v2SegmentROL extends CHL7v2Segment {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $name = "ROL";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $action  = "UC";
-  /**
-   * @var null
-   */
+
+  /** @var null */
   public $role_id;
   
-  /**
-   * @var CMedecin
-   */
+
+  /** @var CMedecin */
   public $medecin;
 
   /**

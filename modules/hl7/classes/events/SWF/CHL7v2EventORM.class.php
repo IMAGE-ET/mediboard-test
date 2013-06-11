@@ -16,9 +16,8 @@
  * Order Message
  */
 class CHL7v2EventORM extends CHL7v2Event implements CHL7EventORM {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $event_type = "ORM";
 
   /**

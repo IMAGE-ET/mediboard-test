@@ -16,6 +16,12 @@
  * Event HL7v3
  */
 class CHL7v3Event extends CHL7Event {
+  /** @var  CHL7v3MessageXML $dom */
+  public $dom;
+
+  /** @var CExchangeHL7v3 */
+  public $_exchange_hl7v3;
+
   /**
    * Build event
    *
@@ -26,16 +32,7 @@ class CHL7v3Event extends CHL7Event {
    * @return void
    */
   function build($object) {
-  }
-
-  /**
-   * Handle event
-   *
-   * @param string $msg_hl7 HL7 message
-   *
-   * @return DOMDocument|void
-   */
-  function handle($msg_hl7) {
+    $this->dom = new CHL7v3MessageXML();
   }
 
   /**

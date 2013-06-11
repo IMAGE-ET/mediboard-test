@@ -14,9 +14,8 @@
  * Record person, message XML HL7
  */
 class CHL7v2RecordPerson extends CHL7v2MessageXML {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   static $event_codes = array("A28", "A29", "A31");
 
   /**

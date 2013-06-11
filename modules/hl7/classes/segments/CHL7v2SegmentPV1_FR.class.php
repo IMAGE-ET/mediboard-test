@@ -20,14 +20,12 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
   public $name   = "PV1";
   public $set_id;
   
-  /**
-   * @var CSejour
-   */
+
+  /** @var CSejour */
   public $sejour;
   
-  /**
-   * @var CAffectation
-   */
+
+  /** @var CAffectation */
   public $curr_affectation;
 
   /**

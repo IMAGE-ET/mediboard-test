@@ -16,9 +16,8 @@
  * S13 - Notification of appointment rescheduling
  */
 class CHL7v2EventSIUS13 extends CHL7v2EventSIU implements CHL7EventSIUS12 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code = "S13";
 
   /**

@@ -16,13 +16,11 @@
  * A40 - Merge patient
  */
 class CHL7v2EventADTA40 extends CHL7v2EventADT implements CHL7EventADTA39 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A40";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A39";
 
   /**

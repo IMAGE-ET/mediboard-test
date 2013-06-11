@@ -16,13 +16,11 @@
  * A37 - Unlink patient information
  */
 class CHL7v2EventADTA37 extends CHL7v2EventADT implements CHL7EventADTA37 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A37";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A37";
 
   /**

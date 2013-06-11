@@ -27,6 +27,7 @@ $dPconfig["offline_non_admin"]    = "0";
 $dPconfig["instance_role"]        = "qualif";
 $dPconfig["http_redirections"]    = "0";
 $dPconfig["mb_id"]                = "";
+$dPconfig["mb_oid"]               = "";
 $dPconfig["system_date"]          = "";
 $dPconfig["minify_javascript"]    = "1";
 $dPconfig["minify_css"]           = "1";

@@ -17,23 +17,19 @@
  */
 
 class CHL7v2SegmentPV1_RESP extends CHL7v2Segment {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $name   = "PV1";
-  /**
-   * @var null
-   */
+
+  /** @var null */
   public $set_id;
   
-  /**
-   * @var CSejour
-   */
+
+  /** @var CSejour */
   public $sejour;
   
-  /**
-   * @var CAffectation
-   */
+
+  /** @var CAffectation */
   public $curr_affectation;
 
   /**

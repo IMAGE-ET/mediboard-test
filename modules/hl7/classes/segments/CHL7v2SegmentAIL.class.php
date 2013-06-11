@@ -17,18 +17,15 @@
  */
 
 class CHL7v2SegmentAIL extends CHL7v2Segment {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $name = "AIL";
-  /**
-   * @var null
-   */
+
+  /** @var null */
   public $set_id;
   
-  /**
-   * @var CConsultation
-   */
+
+  /** @var CConsultation */
   public $appointment;
 
   /**

@@ -17,14 +17,12 @@
  */
 
 class CHL7v2SegmentRCP extends CHL7v2Segment {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $name    = "RCP";
 
-  /**
-   * @var CPatient
-   */
+
+  /** @var CPatient */
   public $patient;
 
   /**

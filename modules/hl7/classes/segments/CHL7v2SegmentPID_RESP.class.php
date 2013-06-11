@@ -17,23 +17,19 @@
  */
 
 class CHL7v2SegmentPID_RESP extends CHL7v2Segment {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $name    = "PID";
-  /**
-   * @var null
-   */
+
+  /** @var null */
   public $set_id;
   
-  /**
-   * @var CPatient
-   */
+
+  /** @var CPatient */
   public $patient;
   
-  /**
-   * @var CSejour
-   */
+
+  /** @var CSejour */
   public $sejour;
 
   /** @var array() */

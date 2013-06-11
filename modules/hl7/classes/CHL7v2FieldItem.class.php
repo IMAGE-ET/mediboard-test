@@ -12,9 +12,8 @@
 class CHL7v2FieldItem extends CHL7v2Component {
   static $_get_path_full = false;
   
-  /**
-   * @var CHL7v2Field
-   */
+
+  /** @var CHL7v2Field */
   public $parent;
   
   function __construct(CHL7v2Field $field, CHL7v2SimpleXMLElement $specs, $self_pos) {

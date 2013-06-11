@@ -24,9 +24,8 @@ abstract class CHL7v2Entity extends CHL7v2 {
   protected $id      = null;
   public $spec_filename;
   
-  /**
-   * @var CHL7v2SimpleXMLElement
-   */
+
+  /** @var CHL7v2SimpleXMLElement */
   public $specs;
   public $data;
   

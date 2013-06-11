@@ -60,19 +60,16 @@ class CExchangeDataFormat extends CMbMetaObject {
   public $_delayed;
   public $_exchange_hl7v2;
   
-  /**
-   * @var CGroups
-   */
+
+  /** @var CGroups */
   public $_ref_group;
   
-  /**
-   * @var CInteropSender
-   */
+
+  /** @var CInteropSender */
   public $_ref_sender;
   
-  /**
-   * @var CInteropReceiver
-   */
+
+  /** @var CInteropReceiver */
   public $_ref_receiver;
 
   /**

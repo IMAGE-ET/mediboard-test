@@ -16,13 +16,11 @@
  * A27 - Cancel Pending Admit
  */
 class CHL7v2EventADTA27 extends CHL7v2EventADT implements CHL7EventADTA21 {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code        = "A27";
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code = "A21";
 
   /**

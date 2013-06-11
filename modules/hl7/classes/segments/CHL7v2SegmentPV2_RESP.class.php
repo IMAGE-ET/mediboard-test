@@ -17,19 +17,16 @@
  */
 
 class CHL7v2SegmentPV2_RESP extends CHL7v2Segment {
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $name   = "PV2";
   
-  /**
-   * @var CSejour
-   */
+
+  /** @var CSejour */
   public $sejour;
   
-  /**
-   * @var COperation
-   */
+
+  /** @var COperation */
   public $operation;
 
   /**
