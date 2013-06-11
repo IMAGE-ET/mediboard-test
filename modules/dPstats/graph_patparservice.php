@@ -9,9 +9,34 @@
  * @version    $Revision$
  */
 
-function graphPatParService($debut = null, $fin = null, $prat_id = 0, $service_id = 0, $type_adm = 0, $discipline_id = 0, $septique = 0, $type_data = "prevue") {
-  if (!$debut) $debut = CMbDT::date("-1 YEAR");
-  if (!$fin) $fin = CMbDT::date();
+/**
+ * Affichage du graphique de la réparition des patients par service
+ *
+ * @param date   $debut         Début de la période
+ * @param date   $fin           Fin de la période
+ * @param int    $prat_id       Filtre sur un praticien
+ * @param int    $service_id    Filtre sur un service
+ * @param string $type_adm      Filtre sur le type d'admission
+ * @param int    $discipline_id Filtre sur une discipline
+ * @param int    $septique      Filtre sur les patients septiques
+ * @param string $type_data     Choix du type de données
+ *
+ * @return array
+ */
+function graphPatParService(
+    $debut = null, $fin = null,
+    $prat_id = 0, $service_id = 0,
+    $type_adm = "", $discipline_id = 0,
+    $septique = 0, $type_data = "prevue"
+) {
+  if (!$debut) {
+    $debut = CMbDT::date("-1 YEAR");
+  }
+  if (!$fin) {
+    $fin = CMbDT::date();
+  }
+
+  $group_id = CGroups::loadCurrent()->_id;
 
   $prat = new CMediusers;
   $prat->load($prat_id);
@@ -65,19 +90,30 @@ function graphPatParService($debut = null, $fin = null, $prat_id = 0, $service_i
       INNER JOIN service ON chambre.service_id = service.service_id
       WHERE
         sejour.annule = '0' AND
+        sejour.group_id = '$group_id' AND
         affectation.entree BETWEEN '$debut 00:00:00' AND '$fin 23:59:59' AND
         service.service_id = '$service->_id'";
 
-    if($type_data == "reelle") $query .= "\nAND sejour.entree_reelle BETWEEN  '$debut 00:00:00' AND '$fin 23:59:59'";
-    if($prat_id)              $query  .= "\nAND sejour.praticien_id = '$prat_id'";
-    if($discipline_id)        $query  .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-    if($septique)             $query  .= "\nAND sejour.septique = '$septique'";
+    if ($type_data == "reelle") {
+      $query .= "\nAND sejour.entree_reelle BETWEEN  '$debut 00:00:00' AND '$fin 23:59:59'";
+    }
+    if ($prat_id) {
+      $query  .= "\nAND sejour.praticien_id = '$prat_id'";
+    }
+    if ($discipline_id) {
+      $query  .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    }
+    if ($septique) {
+      $query  .= "\nAND sejour.septique = '$septique'";
+    }
 
     if ($type_adm) {
-      if($type_adm == 1)
+      if ($type_adm == 1) {
         $query .= "\nAND (sejour.type = 'comp' OR sejour.type = 'ambu')";
-      else
+      }
+      else {
         $query .= "\nAND sejour.type = '$type_adm'";
+      }
     }
     $query .= "\nGROUP BY mois ORDER BY orderitem";
 
@@ -94,7 +130,9 @@ function graphPatParService($debut = null, $fin = null, $prat_id = 0, $service_i
           break;
         }
       }
-      if($f) $serie["data"][] = array(count($serie["data"]), 0);
+      if ($f) {
+        $serie["data"][] = array(count($serie["data"]), 0);
+      }
     }
     $series[] = $serie;
   }
@@ -115,18 +153,27 @@ function graphPatParService($debut = null, $fin = null, $prat_id = 0, $service_i
       LEFT JOIN  affectation ON sejour.sejour_id = affectation.sejour_id
       WHERE 
         sejour.annule = '0' AND
+        sejour.group_id = '$group_id' AND
         sejour.entree_$type_data BETWEEN  '$debut 00:00:00' AND '$fin 23:59:59' AND 
         affectation.affectation_id IS NULL";
 
-    if($prat_id)              $query  .= "\nAND sejour.praticien_id = '$prat_id'";
-    if($discipline_id)        $query  .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-    if($septique)             $query  .= "\nAND sejour.septique = '$septique'";
+    if ($prat_id) {
+      $query  .= "\nAND sejour.praticien_id = '$prat_id'";
+    }
+    if ($discipline_id) {
+      $query  .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    }
+    if ($septique) {
+      $query  .= "\nAND sejour.septique = '$septique'";
+    }
 
     if ($type_adm) {
-      if($type_adm == 1)
+      if ($type_adm == 1) {
         $query .= "\nAND (sejour.type = 'comp' OR sejour.type = 'ambu')";
-      else
+      }
+      else {
         $query .= "\nAND sejour.type = '$type_adm'";
+      }
     }
     $query .= "\nGROUP BY mois ORDER BY orderitem";
 
@@ -143,7 +190,9 @@ function graphPatParService($debut = null, $fin = null, $prat_id = 0, $service_i
           break;
         }
       }
-      if ($f) $serie["data"][] = array(count($serie["data"]), 0);
+      if ($f) {
+        $serie["data"][] = array(count($serie["data"]), 0);
+      }
     }
     $series[] = $serie;
   }
@@ -151,10 +200,18 @@ function graphPatParService($debut = null, $fin = null, $prat_id = 0, $service_i
   $series[] = $serie_total;
 
   $subtitle = "$total passages";
-  if($prat_id)       $subtitle .= " - Dr $prat->_view";
-  if($discipline_id) $subtitle .= " - $discipline->_view";
-  if($type_adm)      $subtitle .= " - ".$listHospis[$type_adm];
-  if($septique)      $subtitle .= " - Septiques";
+  if ($prat_id) {
+    $subtitle .= " - Dr $prat->_view";
+  }
+  if ($discipline_id) {
+    $subtitle .= " - $discipline->_view";
+  }
+  if ($type_adm) {
+    $subtitle .= " - ".$listHospis[$type_adm];
+  }
+  if ($septique) {
+    $subtitle .= " - Septiques";
+  }
 
   $options = array(
     'title' => utf8_encode("Nombre de patients par service - $type_data"),
