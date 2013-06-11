@@ -17,7 +17,8 @@ $entree_prevue = CValue::get("entree_prevue");
 $sortie_prevue = CValue::get("sortie_prevue");
 $new_sejour    = CValue::get("new_sejour");
 $hour_intervention = CValue::get("hour_intervention");
-$duree         = CValue::get("duree");
+$duree         = CValue::get("duree");  //days
+$duree_hours = $duree*24;               // hours
 
 if ($operation_id) {
   $operation = new COperation();
@@ -31,7 +32,7 @@ else {
   if ($new_sejour) {
     $sejour->_id = null;
     $entree_prevue = CMbDT::date($date_move) . " " . $hour_intervention;
-    $sortie_prevue = CMbDT::addDateTime($duree, $entree_prevue);
+    $sortie_prevue = CMbDT::addDateTime($duree_hours, $entree_prevue);
   }
 }
 
@@ -54,11 +55,12 @@ else {
 if ($nb_days > 0 ) {
   $sejour->entree_prevue = CMbDT::dateTime("+$nb_days day", $sejour->entree_prevue);
   $sejour->sortie_prevue = CMbDT::dateTime("+$nb_days day", $sejour->sortie_prevue);
-} 
+}
 else {
   $sejour->entree_prevue = CMbDT::dateTime("$nb_days day", $sejour->entree_prevue);
   $sejour->sortie_prevue = CMbDT::dateTime("$nb_days day", $sejour->sortie_prevue);
 }
+
 
 $smarty = new CSmartyDP;
 
