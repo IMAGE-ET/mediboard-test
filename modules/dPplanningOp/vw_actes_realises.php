@@ -28,13 +28,16 @@ $date_min = $_date_min . " 00:00:00";
 $date_max = $_date_max . " 23:59:59";
 
 $sejour = new CSejour();
-$where = array();
+$ljoin = array();
+$ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
 
-$where["entree"] = "< '$date_max'";
-$where["sortie"] = "> '$date_min'";
-$where["praticien_id"] = "= '$_prat_id'";
+$where = array();
+$where["sejour.entree"] = "< '$date_max'";
+$where["sejour.sortie"] = "> '$date_min'";
+$where[] = "sejour.praticien_id = '$_prat_id' OR operations.chir_id = '$_prat_id'";
+
 /** @var  CSejour[] $sejours*/
-$sejours = $sejour->loadList($where);
+$sejours = $sejour->loadList($where, null, null, "sejour_id", $ljoin);
 
 foreach ($sejours as $key => $sejour) {
   $sejour->loadRefPatient();
@@ -59,8 +62,10 @@ foreach ($sejours as $key => $sejour) {
     if ($sejour->_ref_actes) {
       if (count($sejour->_ref_actes)) {
         foreach ($sejour->_ref_actes as $acte) {
-          $nbActes[$sejour->_id]++;
-          $montantSejour[$sejour->_id] += $acte->_montant_facture; 
+          if($acte->executant_id == $_prat_id) {
+            $nbActes[$sejour->_id]++;
+            $montantSejour[$sejour->_id] += $acte->_montant_facture;
+          }
         }
       }
     }
@@ -69,8 +74,10 @@ foreach ($sejours as $key => $sejour) {
         if (count($operation->_ref_actes)) {
           $operation->loadRefPlageOp();
           foreach ($operation->_ref_actes as $acte) {
-            $nbActes[$sejour->_id]++;
-            $montantSejour[$sejour->_id] += $acte->_montant_facture;
+            if($acte->executant_id == $_prat_id) {
+              $nbActes[$sejour->_id]++;
+              $montantSejour[$sejour->_id] += $acte->_montant_facture;
+            }
           }
         }
       }
@@ -79,8 +86,10 @@ foreach ($sejours as $key => $sejour) {
       foreach ($sejour->_ref_consultations as $consult) {
         if (count($consult->_ref_actes)) {
           foreach ($consult->_ref_actes as $acte) {
-            $nbActes[$sejour->_id]++;
-            $montantSejour[$sejour->_id] += $acte->_montant_facture;
+            if($acte->executant_id == $_prat_id) {
+              $nbActes[$sejour->_id]++;
+              $montantSejour[$sejour->_id] += $acte->_montant_facture;
+            }
           }
         }
       }
