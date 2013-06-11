@@ -2014,9 +2014,9 @@ class CStoredObject extends CModelObject {
    *
    * @param self[] $objects      Array of objects
    * @param string $field        Field to load
-   * @param string $object_class Object class
+   * @param string $object_class Rstrict to explicit object class in case of meta reference
    *
-   * @return self[] Loaded collection, null if unavailable
+   * @return self[] Loaded collection, null if unavailable, with ids as keys of guids for meta references
    */
   static function massLoadFwdRef($objects, $field, $object_class = null) {
     if (!count($objects)) {
@@ -2031,38 +2031,68 @@ class CStoredObject extends CModelObject {
       return null;
     }
 
-    if ($spec->meta && !$object_class) {
-      trigger_error("No mass load yet fir ref '$field' with meta field '$spec->meta' for class '$object->_class'", E_USER_WARNING);
+    $meta = $spec->meta;
+    if ($object_class && !$spec->meta) {
+      trigger_error("Mass load with object class is unavailable for non meta ref '$field' in class '$object->_class'", E_USER_WARNING);
       return null;
     }
-    
+
+    // Delegated mass load forward references by meta class then append in global array with guid as keys
+    if ($meta && !$object_class) {
+      $object_classes = array();
+      foreach ($objects as $_object) {
+        $object_classes[$_object->$meta] = true;
+      }
+
+      $fwd_objects = array();
+      foreach (array_keys($object_classes) as $_object_class) {
+        // Merge array_values to get rid of non integer keys
+        $fwd_objects = array_merge($fwd_objects, array_values(self::massLoadFwdRef($objects, $field, $_object_class)));
+      }
+
+      // Final array has guids for keys;
+      return array_combine(CMbArray::pluck($fwd_objects, "_guid"), $fwd_objects);
+    }
+
     // No existing class
     if (!self::classExists($spec->class)) {
       return null;
     }
 
     /** @var self $fwd */
-    $fwd = new $spec->class;
+    $class = CValue::first($object_class, $spec->class);
+    $fwd = new $class;
     
     // Inactive module
     if (!$fwd->_ref_module) {
       return null;
     }
 
+    // Get the ids
+    $fwd_ids = array();
+    if ($object_class) {
+      foreach ($objects as $_object) {
+        if ($_object->$meta == $object_class) {
+          $fwd_ids[] = $_object->$field;
+        }
+      }
+    }
+    else {
+      $fwd_ids = CMbArray::pluck($objects, $field);
+    }
+
     // Trim real ids
-    $fwd_ids = CMbArray::pluck($objects, $field);
     $fwd_ids = array_unique($fwd_ids);
     CMbArray::removeValue("", $fwd_ids);
+
+    // Only run when there's something to look for
     if (!count($fwd_ids)) {
       return array();
     }
 
-    if ($object_class) {
-      $where[$object_class] = CSQLDataSource::prepareIn($fwd_ids);
-    }
-    else {
-      $where[$fwd->_spec->key] = CSQLDataSource::prepareIn($fwd_ids);
-    }
+
+    $where[$fwd->_spec->key] = CSQLDataSource::prepareIn($fwd_ids);
+
     return $fwd->loadList($where);
   }
 
