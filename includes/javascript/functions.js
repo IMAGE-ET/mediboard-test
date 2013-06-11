@@ -1161,7 +1161,8 @@ var Modal = {
       title: null,
       showClose: false,
       fireLoaded: true,
-      onClose: null
+      onClose: null,
+      align: "left"
     }, options);
 
     var containerId = container;
@@ -1210,6 +1211,8 @@ var Modal = {
     // Wrap the content if not already done (modal windows launched more than once)
     if (!container._alreadyWrapped) {
       var content = DOM.div({className: "content"});
+      content.style.textAlign = options.align;
+
       wrapper = DOM.div({className: "modal-wrapper"}, content);
       container.insert({after: wrapper});
       content.update(container);
