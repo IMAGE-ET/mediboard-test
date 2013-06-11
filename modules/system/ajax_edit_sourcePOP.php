@@ -11,8 +11,6 @@
  * @version    $Revision$
  */
 
-CCanDo::checkEdit();
-
 $source_id = CValue::get("source_id");
 $user = CMediusers::get();
 
