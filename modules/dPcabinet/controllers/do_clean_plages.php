@@ -9,7 +9,7 @@
  * @version    $Revision$
  */
 
-CCanDo::admin();
+CCanDo::checkAdmin();
 
 $praticien_id = CValue::get("praticien_id");
 $date         = CValue::get("date", CMbDT::date("+5 year"));

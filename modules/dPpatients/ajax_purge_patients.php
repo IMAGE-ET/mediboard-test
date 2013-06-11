@@ -9,7 +9,7 @@
  * @version    $Revision$
  */
 
-CCanDo::Admin();
+CCanDo::checkAdmin();
 
 $patient = new CPatient();
 

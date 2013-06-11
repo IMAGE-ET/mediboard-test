@@ -9,7 +9,7 @@
  */
 
 
-CCanDo::Admin();
+CCanDo::checkAdmin();
 
 // Création du template
 $smarty = new CSmartyDP();
