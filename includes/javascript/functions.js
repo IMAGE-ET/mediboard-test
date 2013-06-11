@@ -1257,9 +1257,10 @@ var Modal = {
           var contentDim   = content.getDimensions();
           var containerDim = container.getDimensions();
 
-          if (!style.width && contentDim.width  > containerDim.width - 5) {
+          // Useless, makes BIG modal windows which should remain small
+          /*if (!style.width && contentDim.width  > containerDim.width - 5) {
             container.addClassName("full-width");
-          }
+          }*/
 
           if (!style.height && contentDim.height > containerDim.height - 5) {
             container.addClassName("full-height");
