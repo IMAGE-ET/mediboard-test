@@ -1970,6 +1970,75 @@ class CConsultation extends CFacturable {
   }
 
   /**
+   * Charge les praticiens à la compta desquels l'utilisateur courant a accès
+   *
+   * @param ref $prat_id Si définit, retourne un tableau avec seulement ce praticien
+   *
+   * @todo Définir verbalement la stratégie
+   * @return CMediusers[]
+   */
+  static function loadPraticiensCompta($prat_id = null) {
+    // Cas du praticien unique
+    if ($prat_id) {
+      $prat = new CMediusers();
+      $prat->load($prat_id);
+      return array($prat->_id => $prat);
+    }
+
+    // Cas standard
+    $user = CMediusers::get();
+    $is_admin      = in_array(CUser::$types[$user->_user_type], array("Administrator"));
+    $is_secretaire = in_array(CUser::$types[$user->_user_type], array("Secrétaire"));
+    $is_directeur  = in_array(CUser::$types[$user->_user_type], array("Directeur"));
+
+    $function = $user->loadRefFunction();
+    $praticiens = array();
+
+    // Liste des praticiens du cabinet
+    if ($is_admin || $is_secretaire || $is_directeur || $function->compta_partagee) {
+      $function_id = null;
+      if (!CAppUI::conf("cabinet Comptabilite show_compta_tiers") && $user->_user_username != "admin") {
+        $function_id = $user->function_id;
+      }
+
+      if ($is_admin) {
+        $praticiens = CConsultation::loadPraticiens(PERM_EDIT, $function_id);
+      }
+      else {
+        $praticiens = CConsultation::loadPraticiens(PERM_EDIT, $user->function_id);
+
+        // On ajoute les praticiens qui ont délégués leurs compta
+        $where = array();
+        $where[] = "users_mediboard.compta_deleguee = '1' ||  users_mediboard.user_id ".
+          CSQLDataSource::prepareIn(array_keys($praticiens));
+        // Filters on users values
+        $where["users_mediboard.actif"] = "= '1'";
+
+        $ljoin["users"] = "users.user_id = users_mediboard.user_id";
+        $order = "users.user_last_name, users.user_first_name";
+
+        $mediuser = new CMediusers();
+        // les praticiens WithPerms sont déjà chargés
+        // $mediusers = $mediuser->loadListWithPerms(PERM_EDIT, $where, $order, null, null, $ljoin);
+        /** @var CMediusers[] $mediusers */
+        $mediusers = $mediuser->loadList($where, $order, null, null, $ljoin);
+
+        // Associate already loaded function
+        foreach ($mediusers as $_mediuser) {
+          $_mediuser->loadRefFunction();
+        }
+        $praticiens = $mediusers;
+      }
+    }
+    elseif ($user->isPraticien() && !$user->compta_deleguee) {
+      return array($user->_id => $user);
+    }
+
+    return $praticiens;
+  }
+
+
+  /**
    * Construit le tag d'une consultation en fonction des variables de configuration
    * 
    * @param string $group_id Permet de charger l'id externe d'uns consultation pour un établissement donné si non null

@@ -43,19 +43,12 @@ if ($filter->_mode_reglement) {
 }
 
 // Filtre sur les praticiens
-$mediuser = CMediusers::get();
-$mediuser->loadRefFunction();
-$prat = new CMediusers;
-$prat->load(CValue::getOrSession("chir"));
-$prat->loadRefFunction();
-$listPrat = ($prat->_id) ? 
-  array($prat->_id => $prat) :
-  $listPrat = $mediuser->loadPraticiensCompta();
-$where[] = "plageconsult.chir_id ".CSQLDataSource::prepareIn(array_keys($listPrat)).
-    " OR plageconsult.pour_compte_id ".CSQLDataSource::prepareIn(array_keys($listPrat));
-  
-CSQLDataSource::$trace = false;
+$chir_id = CValue::getOrSession("chir");
+$listPrat = CConsultation::loadPraticiensCompta($chir_id);
 
+$inPrats = CSQLDataSource::prepareIn(array_keys($listPrat));
+$where[] = "plageconsult.chir_id $inPrats OR plageconsult.pour_compte_id $inPrats";
+  
 // Chargement des règlements via les consultations
 $ljoin["consultation"] = "reglement.object_id = consultation.consultation_id";
 $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id";
@@ -71,6 +64,7 @@ $where["object_class"] = " = 'CFactureCabinet'";
 $reglement = new CReglement();
 $reglements_facture = $reglement->loadList($where, "reglement.date, plageconsult.chir_id", null, null, $ljoin);
 
+/** @var CReglement[] $reglements */
 $reglements = array_merge($reglements_consult, $reglements_facture);
 
 // Calcul du récapitulatif
@@ -159,4 +153,3 @@ $smarty->assign("listConsults"       , $listConsults);
 $smarty->assign("recapReglement"     , $recapReglement);
 
 $smarty->display("print_compta.tpl");
-?>

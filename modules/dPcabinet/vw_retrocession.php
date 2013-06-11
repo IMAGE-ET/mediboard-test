@@ -16,19 +16,9 @@ $filter = new CPlageconsult();
 $filter->_date_min  = CValue::getOrSession("_date_min");
 $filter->_date_max  = CValue::getOrSession("_date_max");
 
-// Tri sur les praticiens
-$mediuser = CMediusers::get();
-$mediuser->loadRefFunction();
-
-$prat = new CMediusers;
-$prat->load(CValue::getOrSession("chir"));
-$prat->loadRefFunction();
-if ($prat->_id) {
-  $listPrat = array($prat->_id => $prat);
-}
-else {
-  $listPrat = $mediuser->loadPraticiensCompta();
-}
+// Filtre sur les praticiens
+$chir_id = CValue::getOrSession("chir");
+$listPrat = CConsultation::loadPraticiensCompta($chir_id);
 
 $plageconsult = new CPlageconsult();
 $ljoin = array();

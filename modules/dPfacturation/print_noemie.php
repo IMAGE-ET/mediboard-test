@@ -21,19 +21,9 @@ $where["consultation.du_tiers"]             = "> 0";
 $where["consultation.tiers_date_reglement"] = "IS NULL";
 $where["plageconsult.date"]                 = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
 
-// Tri sur les praticiens
-$mediuser = CMediusers::get();
-$mediuser->loadRefFunction();
-
-$prat = new CMediusers;
-$prat->load(CValue::getOrSession("chir"));
-$prat->loadRefFunction();
-if ($prat->_id) {
-  $listPrat = array($prat->_id => $prat);
-}
-else {
-  $listPrat = $mediuser->loadPraticiensCompta();
-}
+// Filtre sur les praticiens
+$chir_id = CValue::getOrSession("chir");
+$listPrat = CConsultation::loadPraticiensCompta($chir_id);
 
 $where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat));
 $order = "plageconsult.date";

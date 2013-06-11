@@ -51,13 +51,10 @@ if (!CValue::getOrSession("cs")) {
   $where[] = "du_patient + du_tiers > 0";
 }
 
-// Tri sur les praticiens
-$mediuser = CMediusers::get();
-$mediuser->loadRefFunction();
-$prat = new CMediusers;
-$prat->load(CValue::getOrSession("chir"));
-$prat->loadRefFunction();
-$listPrat = ($prat->_id) ? array($prat->_id => $prat) : $listPrat = $mediuser->loadPraticiensCompta();
+// Filtre sur les praticiens
+$chir_id = CValue::getOrSession("chir");
+$listPrat = CConsultation::loadPraticiensCompta($chir_id);
+
 $where["praticien_id"] = CSQLDataSource::prepareIn(array_keys($listPrat));
 
 // Initialisation du tableau de reglements

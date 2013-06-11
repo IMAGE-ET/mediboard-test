@@ -68,10 +68,8 @@ foreach ($patient->_ref_sejours as $sejour) {
   }
 }
 
-// L'utilisateur est-il praticien ?
-$user = CMediusers::get();
-$user->loadRefFunction();
-$listPrat = $user->loadPraticiensCompta();
+// Filtre sur les praticiens
+$listPrat = CConsultation::loadPraticiensCompta();
 
 // Création du template
 $smarty = new CSmartyDP();

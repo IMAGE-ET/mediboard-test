@@ -16,14 +16,9 @@ $filter->_date_min = CValue::getOrSession("_date_min", CMbDT::date());
 $filter->_date_max = CValue::getOrSession("_date_max", CMbDT::date());
 $filter->_type_affichage  = CValue::getOrSession("_type_affichage" , 1);
 
-// Tri sur les praticiens
-$mediuser = CMediusers::get();
-$mediuser->loadRefFunction();
-
-$prat = new CMediusers;
-$prat->load(CValue::getOrSession("chir"));
-$prat->loadRefFunction();
-$listPrat = $prat->_id ? array($prat->_id => $prat) :  $mediuser->loadPraticiensCompta();
+// Filtre sur les praticiens
+$chir_id = CValue::getOrSession("chir");
+$listPrat = CConsultation::loadPraticiensCompta($chir_id);
 
 // On recherche toutes les consultations non cotés
 $ljoin = array();

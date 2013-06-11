@@ -16,8 +16,7 @@ $chir_id = CValue::getOrSession("chir_id");
 
 $prats = array();
 if (!$chir_id) {
-  $user = CMediusers::get();
-  $prats = $user->loadPraticiensCompta();
+  $prats = CConsultation::loadPraticiensCompta();
 }
 else {
   $chir = CMediusers::get($chir_id);
@@ -27,85 +26,63 @@ else {
 CMbObject::massLoadFwdRef($prats, "function_id");
 
 $ds = CSQLDataSource::get("std");
-$object_classes = array("CConsultation", "CSejour", "COperation");
+
+$object_classes = array(
+  "CConsultation",
+  "CSejour",
+  "COperation",
+);
+
+$secteurs =  array(
+  "sect1" => 0,
+  "sect2" => 0
+);
 
 $cotation = array();
 $total_by_prat = array();
-$total_by_class = array(
-  "CConsultation" => array(),
-  "CSejour"       => array(),
-  "COperation"    => array()
-);
-$total = 0;
-$tab =  array( "sect1" => 0, "sect2" => 0);
+$total_by_class = array();
 $tab_actes = array();
+$total = 0;
 
 if (CAppUI::conf("ref_pays") == 1) {
-  $tab_actes["ccam"] = $tab;
-  $tab_actes["ngap"] = $tab;
+  $tab_actes["ccam"] = $secteurs;
+  $tab_actes["ngap"] = $secteurs;
 }
 else {
-  $tab_actes["tarmed"] = $tab;
-  $tab_actes["caisse"] = $tab;
+  $tab_actes["tarmed"] = $secteurs;
+  $tab_actes["caisse"] = $secteurs;
 }
-foreach ($total_by_class as $classe => $value) {
+
+foreach ($object_classes as $_class) {
   foreach ($tab_actes as $nom => $other) {
-    $total_by_class[$classe][$nom] = 0;
+    $total_by_class[$_class][$nom] = 0;
   }
 }
+
 foreach ($prats as $_chir_id => $_prat) {
   $_prat->loadRefFunction();
   $cotation[$_chir_id] = array();
   $total_by_prat[$_chir_id] = 0;
 
-  foreach ($object_classes as $_object_class) {
-    $cotation[$_chir_id][$_object_class] = $tab_actes;
-    foreach ($cotation[$_chir_id][$_object_class] as $key => $type) {
-      $result = null;
-      if ($key == "ccam") {
-        $request = "SELECT SUM(montant_base) AS sect1, SUM(montant_depassement) AS sect2
-          FROM acte_ccam
-          WHERE object_class = '$_object_class'
-          AND executant_id = '$_chir_id'
-          AND DATE(execution) BETWEEN '$debut' AND '$fin';";
-    
-        $result = $ds->loadHash($request);
-      }
-      else {
-        $request = "SELECT SUM(montant_base) AS sect1, SUM(montant_depassement) AS sect2
-          FROM acte_$key ";
-    
-        switch ($_object_class) {
-          case "CConsultation":
-            $request .= "LEFT JOIN consultation ON consultation.consultation_id = acte_$key.object_id
-              LEFT JOIN plageconsult ON plageconsult.plageconsult_id = consultation.plageconsult_id
-              WHERE plageconsult.date BETWEEN '$debut' AND '$fin' ";
-            break;
-          case "CSejour":
-            $request .= "LEFT JOIN sejour ON sejour.sejour_id = acte_$key.object_id
-              WHERE DATE(sejour.entree) <= '$fin' AND DATE(sejour.sortie) >= '$debut' ";
-            break;
-          case "COperation":
-            $request .= "LEFT JOIN operations ON operations.operation_id = acte_$key.object_id
-              LEFT JOIN plagesop ON plagesop.plageop_id = operations.plageop_id
-              WHERE ((DATE(plagesop.date) BETWEEN '$debut' AND '$fin')
-                     OR (plagesop.plageop_id IS NULL AND operations.date BETWEEN '$debut' AND '$fin'))";
-        }
-    
-        $request .= "AND object_class = '$_object_class'
-          AND executant_id = '$_chir_id'";
-    
-        $result = $ds->loadHash($request);
-      }
+  foreach ($object_classes as $_class) {
+    $cotation[$_chir_id][$_class] = $tab_actes;
+    foreach ($cotation[$_chir_id][$_class] as $_type => $value) {
+      $query = "SELECT SUM(montant_base) AS sect1, SUM(montant_depassement) AS sect2
+        FROM acte_$_type
+        WHERE object_class = '$_class'
+        AND executant_id = '$_chir_id'
+        AND DATE(execution) BETWEEN '$debut' AND '$fin';";
+      $result = $ds->loadHash($query);
+
       $sect1 = round($result["sect1"], 2);
       $sect2 = round($result["sect2"], 2);
       $total_sect = $sect1 + $sect2;
-      $cotation[$_chir_id][$_object_class][$key]["sect1"] = $sect1;
-      $cotation[$_chir_id][$_object_class][$key]["sect2"] = $sect2;
+      $cotation[$_chir_id][$_class][$_type]["sect1"] = $sect1;
+      $cotation[$_chir_id][$_class][$_type]["sect2"] = $sect2;
       
       $total_by_prat[$_chir_id] += $total_sect;
       
-      $total_by_class[$_object_class][$key] += $total_sect;
+      $total_by_class[$_class][$_type] += $total_sect;
       $total += $total_sect;
     }
   }

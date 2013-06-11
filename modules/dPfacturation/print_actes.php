@@ -1,12 +1,12 @@
  <?php 
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPfacturation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
@@ -43,13 +43,10 @@ if ($date) {
   $where["sejour.sortie"] = " LIKE '%$date%'";
 }
 
-// Tri sur les praticiens
-$mediuser = CMediusers::get();
-$mediuser->loadRefFunction();
-$prat = new CMediusers;
-$prat->load(CValue::getOrSession("chir"));
-$prat->loadRefFunction();
-$listPrat = ($prat->_id) ? array($prat->_id => $prat) : $listPrat = $mediuser->loadPraticiensCompta();
+// Filtre sur les praticiens
+$chir_id = CValue::getOrSession("chir");
+$listPrat = CConsultation::loadPraticiensCompta($chir_id);
+
 $where["facture_etablissement.praticien_id"] = CSQLDataSource::prepareIn(array_keys($listPrat));
 
 // Initialisation du tableau de reglements

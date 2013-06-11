@@ -34,7 +34,7 @@ $filter_reglement->mode = CValue::getOrSession("mode", 0);
 // L'utilisateur est-il praticien ?
 $mediuser = CMediusers::get();
 $mediuser->loadRefFunction();
-$listPrat = $mediuser->loadPraticiensCompta();
+$listPrat = CConsultation::loadPraticiensCompta();
 
 // Création du template
 $smarty = new CSmartyDP();

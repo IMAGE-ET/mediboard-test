@@ -4,13 +4,15 @@
 
 <table class="tbl">
   <tr>
-    <th rowspan="2" colspan="2" style="width: 18%;">Praticien</th>
+    <th rowspan="2" colspan="2" style="width: 20%;">
+      Praticien
+    </th>
     {{foreach from=$object_classes item=classe}}
-      <th colspan="2">
+      <th colspan="2" style="width: 20%;">
         {{tr}}{{$classe}}{{/tr}}
       </th>
     {{/foreach}}
-    <th colspan="2" rowspan="2">
+    <th colspan="2" rowspan="2" style="width: 20%;">
       Totaux
     </th>
   </tr>
@@ -18,7 +20,7 @@
     {{foreach from=$object_classes item=classe}}
       {{foreach from=$tab_actes item=acte key=nom}}
       <th>
-        {{$nom|capitalize}}
+        {{$nom|upper}}
       </th>
       {{/foreach}}
     {{/foreach}}
@@ -55,44 +57,44 @@
       </td>
     </tr>
   {{/foreach}}
-  <tr>
-    <td style="text-align: right;" colspan="2">
-      <strong>Total</strong>
-    </td>
-    {{foreach from=$total_by_class item=_total_by_code}}
-      {{foreach from=$_total_by_code item=_total}}
-        <td style="text-align: right;">
-          <strong>{{$_total|currency}}</strong>
+  <tbody class="hoverable">
+    <tr>
+      <td  rowspan="2"  colspan="2" style="text-align: right;">
+        <strong>Total</strong>
+      </td>
+      {{foreach from=$total_by_class item=_total_by_code}}
+        {{foreach from=$_total_by_code item=_total}}
+          <td style="text-align: right;">
+            <strong>{{$_total|currency}}</strong>
+          </td>
+        {{/foreach}}
+      {{/foreach}}
+      <td rowspan="2" style="text-align: right;">
+        <strong>{{$total|currency}}</strong>
+      </td>
+      <td rowspan="2" style="text-align: right;">
+        <strong>100%</strong>
+      </td>
+    </tr>
+    <tr>
+      {{foreach from=$total_by_class item=_total_by_code}}
+        <td colspan="2" style="text-align: center;">
+          {{if $total}}
+            {{if $conf.ref_pays == 1}}
+              {{math equation=x+y x=$_total_by_code.ccam y=$_total_by_code.ngap assign=sub_total}}
+            {{else}}
+              {{math equation=x+y x=$_total_by_code.tarmed y=$_total_by_code.caisse assign=sub_total}}
+            {{/if}}
+            {{math equation=(x/y)*100 x=$sub_total y=$total assign=percent_total}}
+            <strong>
+              {{$sub_total|currency}}
+              {{if $percent_total}}
+                ({{$percent_total|round:2}}%)
+              {{/if}}
+            </strong>
+          {{/if}}
         </td>
       {{/foreach}}
-    {{/foreach}}
-    <td style="text-align: right;">
-      <strong>{{$total|currency}}</strong>
-    </td>
-    <td style="text-align: right;">
-      <strong>100%</strong>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2"></td>
-    {{foreach from=$total_by_class item=_total_by_code}}
-      <td colspan="2" style="text-align: right;">
-        {{if $total}}
-          {{if $conf.ref_pays == 1}}
-            {{math equation=x+y x=$_total_by_code.ccam y=$_total_by_code.ngap assign=sub_total}}
-          {{else}}
-            {{math equation=x+y x=$_total_by_code.tarmed y=$_total_by_code.caisse assign=sub_total}}
-          {{/if}}
-          {{math equation=(x/y)*100 x=$sub_total y=$total assign=percent_total}}
-          <strong>
-            {{$sub_total|currency}}
-            {{if $percent_total}}
-              ({{$percent_total|round:2}}%)
-            {{/if}}
-          </strong>
-        {{/if}}
-      </td>
-    {{/foreach}}
-    <td colspan="2"></td>
-  </tr>
+    </tr>
+  </tbody>
 </table>

@@ -11,7 +11,6 @@
 
 CCanDo::checkEdit();
 // Récupération des paramètres
-$chir   = CValue::getOrSession("chir");
 $filter = new CPlageconsult();
 $filter->_date_min = CValue::getOrSession("_date_min", CMbDT::date());
 $filter->_date_max = CValue::getOrSession("_date_max", CMbDT::date());
@@ -37,12 +36,8 @@ if ($filter->_mode_reglement) {
 }
 
 // Filtre sur les praticiens
-$mediuser = CMediusers::get();
-$mediuser->loadRefFunction();
-$prat = new CMediusers;
-$prat->load($chir);
-$prat->loadRefFunction();
-$listPrat = ($prat->_id) ? array($prat->_id => $prat) : $listPrat = $mediuser->loadPraticiensCompta();
+$chir_id = CValue::getOrSession("chir");
+$listPrat = CConsultation::loadPraticiensCompta($chir_id);
 
 // Chargement des règlements via les factures
 $ljoin["facture_cabinet"] = "reglement.object_id = facture_cabinet.facture_id";
@@ -50,6 +45,7 @@ $where["facture_cabinet.praticien_id"] = CSQLDataSource::prepareIn(array_keys($l
 $where["reglement.object_class"] = " = 'CFactureCabinet'";
 
 $reglement = new CReglement();
+/** @var CReglement[] $reglements */
 $reglements = $reglement->loadList($where, " facture_cabinet.facture_id, reglement.date", null, null, $ljoin);
 
 $reglement = new CReglement();
@@ -76,8 +72,13 @@ foreach (array_merge($reglement->_specs["mode"]->_list, array("")) as $_mode) {
 
 $listReglements = array();
 $listConsults   = array();
+$factures = CStoredObject::massLoadFwdRef($reglements, "object_id");
+$patients = CStoredObject::massLoadFwdRef($factures, "patient_id");
+CStoredObject::massCountBackRefs($factures, "notes");
+
 foreach ($reglements as $_reglement) {
   $facture = $_reglement->loadRefFacture();
+
   $facture->loadRefsNotes();
   $facture->loadRefsConsultation();
   $facture->loadRefsReglements();

@@ -59,15 +59,10 @@ if (!CValue::getOrSession("cs")) {
 
 $where["consultation.patient_id"] = "IS NOT NULL";
 
-// Tri sur les praticiens
-$mediuser = CMediusers::get();
-$mediuser->loadRefFunction();
-$prat = new CMediusers;
-$prat->load(CValue::getOrSession("chir"));
-$prat->loadRefFunction();
-$listPrat = ($prat->_id) ? 
-  array($prat->_id => $prat) :
-  $listPrat = $mediuser->loadPraticiensCompta();
+// Filtre sur les praticiens
+$chir_id = CValue::getOrSession("chir");
+$listPrat = CConsultation::loadPraticiensCompta($chir_id);
+
 $where[] = "plageconsult.chir_id ".CSQLDataSource::prepareIn(array_keys($listPrat))
     ." OR plageconsult.pour_compte_id ".CSQLDataSource::prepareIn(array_keys($listPrat));
 

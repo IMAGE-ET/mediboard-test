@@ -41,7 +41,7 @@ $mediuser->loadRefFunction();
 $is_praticien = $mediuser->isPraticien();
 $is_admin     = in_array(CUser::$types[$mediuser->_user_type], array("Administrator"));
 $is_admin_or_secretaire = in_array(CUser::$types[$mediuser->_user_type], array("Administrator", "Secrétaire"));
-$listPrat     = $mediuser->loadPraticiensCompta();
+$listPrat     = CConsultation::loadPraticiensCompta();
 
 // Création du template
 $smarty = new CSmartyDP();

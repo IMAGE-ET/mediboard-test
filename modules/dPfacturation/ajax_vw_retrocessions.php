@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPfacturation
@@ -14,14 +14,13 @@ CCanDo::checkEdit();
 $filter = new CConsultation;
 $filter->_date_min = CValue::getOrSession("_date_min", CMbDT::date());
 $filter->_date_max = CValue::getOrSession("_date_max", CMbDT::date("+ 0 day"));
-$chir     = CValue::getOrSession("chir", 0);
 
-$mediuser = CMediusers::get();
-$mediuser->loadRefFunction();
+
+// Filtre sur les praticiens
+$chir_id = CValue::getOrSession("chir");
 $prat = new CMediusers;
-$prat->load($chir);
-$prat->loadRefFunction();
-$listPrat = ($prat->_id) ? array($prat->_id => $prat) : $mediuser->loadPraticiensCompta();
+$prat->load($chir_id);
+$listPrat = CConsultation::loadPraticiensCompta($chir_id);
 
 $where = array();
 $where["cloture"] = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";

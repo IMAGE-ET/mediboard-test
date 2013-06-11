@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPfacturation
@@ -30,7 +30,7 @@ $filter->_date_max = CValue::getOrSession("_date_max", CMbDT::date("+ 0 day"));
 // L'utilisateur est-il praticien ?
 $mediuser = CMediusers::get();
 $mediuser->loadRefFunction();
-$listPrat = $mediuser->loadPraticiensCompta();
+$listPrat = CConsultation::loadPraticiensCompta();
 
 $prat = new CMediusers();
 $prat->load($chir);

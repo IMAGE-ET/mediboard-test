@@ -28,7 +28,7 @@ $month_fin       = CMbDT::date("-1 day"         , $month_fin);
 // L'utilisateur est-il praticien ?
 $mediuser = CMediusers::get();
 $mediuser->loadRefFunction();
-$listPrat = $mediuser->loadPraticiensCompta();
+$listPrat = CConsultation::loadPraticiensCompta();
 
 // Creation du template
 $smarty = new CSmartyDP();
