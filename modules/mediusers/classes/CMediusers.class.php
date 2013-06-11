@@ -1054,58 +1054,6 @@ class CMediusers extends CPerson {
   }
 
   /**
-   * @return CMediusers[]
-   */
-  function loadPraticiensCompta(){
-    $is_admin      = in_array(CUser::$types[$this->_user_type], array("Administrator"));
-    $is_secretaire = in_array(CUser::$types[$this->_user_type], array("Secrétaire"));
-    $is_directeur  = in_array(CUser::$types[$this->_user_type], array("Directeur"));
-
-    $function = $this->loadRefFunction();
-    $praticiens = array();
-
-    // Liste des praticiens du cabinet
-    if ($is_admin || $is_secretaire || $is_directeur || $function->compta_partagee) {
-      $function_id = null;
-      if (!CAppUI::conf("dPcabinet Comptabilite show_compta_tiers") && $this->_user_username != "admin") {
-        $function_id = $this->function_id;
-      }
-
-      if ($is_admin) {
-        $praticiens = CConsultation::loadPraticiens(PERM_EDIT, $function_id);
-      }
-      else {
-        $praticiens = CConsultation::loadPraticiens(PERM_EDIT, $this->function_id);
-
-        // On ajoute les praticiens qui ont délégués leurs compta
-        $where = array();
-        $where[] = "users_mediboard.compta_deleguee = '1' ||  users_mediboard.user_id ". CSQLDataSource::prepareIn(array_keys($praticiens));
-        // Filters on users values
-        $where["users_mediboard.actif"] = "= '1'";
-
-        $ljoin["users"] = "users.user_id = users_mediboard.user_id";
-        $order = "users.user_last_name, users.user_first_name";
-
-        $mediuser = new CMediusers();
-        // les praticiens WithPerms sont déjà chargés
-        // $mediusers = $mediuser->loadListWithPerms(PERM_EDIT, $where, $order, null, null, $ljoin);
-        $mediusers = $mediuser->loadList($where, $order, null, null, $ljoin);
-
-        // Associate already loaded function
-        foreach ($mediusers as $_mediuser) {
-          $_mediuser->loadRefFunction();
-        }
-        $praticiens = $mediusers;
-      }
-    }
-    elseif ($this->isPraticien() && !$this->compta_deleguee) {
-      return array($this->_id => $this);
-    }
-
-    return $praticiens;
-  }
-
-  /**
    * @param int  $permType
    * @param null $function_id
    * @param null $name
