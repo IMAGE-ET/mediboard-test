@@ -88,6 +88,9 @@ class CApp {
     // Long request log
     include "./includes/long_request_log.php";
 
+    // Explicit close of the session before object destruction
+    CSessionHandler::writeClose();
+
     self::$inPeace = true;
     die;
   }
