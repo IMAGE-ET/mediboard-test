@@ -12,15 +12,15 @@
  */
 class CPop{
 
-  var $source         = null;
+  public $source;
 
-  var $_mailbox       = null; //ressource id
-  var $_server        = null;
-  var $_mailbox_info  = null;
+  public $_mailbox; //ressource id
+  public $_server;
+  public $_mailbox_info;
 
-  var $_parts         = array();
+  public $_parts = array();
 
-  var $content = array (
+  public $content = array (
     "text" => array(
       "plain"       => null,
       "html"        => null,
@@ -49,8 +49,9 @@ class CPop{
 
     //lets create the string for stream
     $type = ($this->source->type == "pop3")?"/".$this->source->type:"";
-    $ssl  = ($this->source->auth_ssl == "SSL/TLS")?"/ssl/novalidate-cert":"";
-    return $this->_server = "{".$this->source->host.":".$this->source->port.$type.$ssl."}";
+    $ssl  = ($this->source->auth_ssl == "SSL/TLS")?"/ssl/novalidate-cert":"/notls";
+    $port = ($this->source->port) ? ":".$this->source->port: "";
+    return $this->_server = "{".$this->source->host.$port.$type.$ssl."}";
   }
 
   /**
@@ -59,19 +60,30 @@ class CPop{
    * @return ressource|bool
    */
   function open() {
+    $port = ($this->source->port) ? ":".$this->source->port : "";
+    $protocole = ($this->source->auth_ssl) ? "https://" : "http://" ;
+    $url = $protocole.$this->source->host.$port;
 
     if (!isset($this->_server)) {
       CAppUI::stepAjax("CPop-error-notInitiated", UI_MSG_ERROR);
+      return false;
     }
+
+    //@TODO: fix this
+    /*if (!url_exists($url)) {
+      //CAppUI::stepAjax("CPop-server-unreachable", UI_MSG_ALERT);
+      mbLog("server-not-reachable");
+      return false;
+    }*/
+
     $password = $this->source->getPassword();
-    $this->_mailbox = @imap_open($this->_server, $this->source->user, $password, 0, 0) or die();
+    $this->_mailbox = @imap_open($this->_server, $this->source->user, $password, 0, 0);
     if ($this->_mailbox === false ) {
       return false;
     }
     //get the basics
     $this->_mailbox_info = @imap_check($this->_mailbox);
     return $this->_mailbox;
-
   }
 
   /**
@@ -106,7 +118,7 @@ class CPop{
   /**
    * get the header of the mail
    *
-   * @param $id
+   * @param int $id mail id
    *
    * @return array
    */
