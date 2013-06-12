@@ -140,7 +140,12 @@ class CCorrespondantPatient extends CPerson {
     if ($this->prenom) {
       $this->prenom = CMbString::capitalize(CMbString::lower($this->prenom));
     }
+  }
 
+  /**
+   * @see parent::store()
+   */
+  function store() {
     if (!$this->_id) {
       $this->date_debut = CMbDT::date();
     }
@@ -154,6 +159,8 @@ class CCorrespondantPatient extends CPerson {
 
       $this->_duplicate = null;
     }
+
+    return parent::store();
   }
 
   /**
