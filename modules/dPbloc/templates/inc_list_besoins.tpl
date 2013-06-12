@@ -16,7 +16,7 @@
   <tr>
     <td style="width: 12px; background: #{{$_besoin->_color}}">
     </td>
-    <td {{if $type == "operation_id"}}style="width: 50%"{{/if}}>
+    <td class="text" {{if $type == "operation_id"}}style="width: 50%"{{/if}}>
       <div style="float: right">
         <button type="button" class="trash notext" {{if $usage || $_usage->_id}}disabled{{/if}} title="{{tr}}Delete{{/tr}}"
           {{if $object_id}}
