@@ -29,6 +29,7 @@ $object = null;
 $canFile  = new CCanDo;
 $praticienId = null;
 $affichageFile = array();
+$nbItems = 0;
 
 if ($object_id && $object_class) {
   // Chargement de l'objet
@@ -55,7 +56,6 @@ if ($object_id && $object_class) {
   
   $affichageFile = CFile::loadDocItemsByObject($object);
 
-  $nbItems = 0;
   foreach ($affichageFile as $_cat) {
     if (!isset($_cat["items"])) break;
 
