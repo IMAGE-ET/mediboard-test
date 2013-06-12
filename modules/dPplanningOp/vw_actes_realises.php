@@ -30,10 +30,12 @@ $date_max = $_date_max . " 23:59:59";
 $sejour = new CSejour();
 $ljoin = array();
 $ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
+$ljoin["acte_ccam"] = "operations.operation_id = acte_ccam.object_id AND acte_ccam.object_class = 'COperation'";
+$ljoin["acte_ngap"] = "operations.operation_id = acte_ngap.object_id AND acte_ngap.object_class = 'COperation'";
 
 $where = array();
-$where["sejour.sortie"] = " BETWEEN '$date_min' AND '$date_max'";
-$where[] = "sejour.praticien_id = '$_prat_id' OR operations.chir_id = '$_prat_id'";
+$where[] = "acte_ccam.execution BETWEEN '$date_min' AND '$date_max' OR acte_ngap.execution BETWEEN '$date_min' AND '$date_max'";
+$where[] = "acte_ccam.executant_id = '$_prat_id' OR acte_ngap.executant_id = '$_prat_id'";
 
 /** @var  CSejour[] $sejours*/
 $sejours = $sejour->loadList($where, null, null, "sejour_id", $ljoin);
