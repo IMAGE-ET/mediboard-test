@@ -11,7 +11,7 @@
  * @link     http://www.mediboard.org
  */
 
-CCanDo::checkEdit();
+CCanDo::checkRead();
 $mail_id = CValue::get("mail_id");
 
 $mail = new CUserMail();
