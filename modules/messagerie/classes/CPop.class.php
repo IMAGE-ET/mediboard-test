@@ -69,7 +69,6 @@ class CPop{
       return false;
     }
 
-    mbLog($this->_server);
     //@TODO: fix this
     /*if (!url_exists($url)) {
       //CAppUI::stepAjax("CPop-server-unreachable", UI_MSG_ALERT);
@@ -79,6 +78,9 @@ class CPop{
 
     $password = $this->source->getPassword();
     $this->_mailbox = @imap_open($this->_server, $this->source->user, $password, 0, 0);
+    //avoid erros reporting
+    imap_errors();
+    imap_alerts();
     if ($this->_mailbox === false ) {
       return false;
     }
