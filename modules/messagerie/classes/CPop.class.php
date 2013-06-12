@@ -69,6 +69,7 @@ class CPop{
       return false;
     }
 
+
     //@TODO: fix this
     /*if (!url_exists($url)) {
       //CAppUI::stepAjax("CPop-server-unreachable", UI_MSG_ALERT);
@@ -78,14 +79,13 @@ class CPop{
 
     $password = $this->source->getPassword();
     $this->_mailbox = @imap_open($this->_server, $this->source->user, $password, 0, 0);
-    //avoid erros reporting
-    imap_errors();
-    imap_alerts();
     if ($this->_mailbox === false ) {
       return false;
     }
-    //get the basics
-    $this->_mailbox_info = @imap_check($this->_mailbox);
+
+    //avoid erros reporting
+    imap_errors();
+    imap_alerts();
     return $this->_mailbox;
   }
 
@@ -113,9 +113,9 @@ class CPop{
       CAppUI::stepAjax("CPop-error-search-notString", UI_MSG_ERROR);
     }
     if ($uid) {
-      return imap_sort($this->_mailbox, SORTDATE, 1, SE_UID, $string);
+      return imap_sort($this->_mailbox, SORTARRIVAL, 1, SE_UID, $string);
     }
-    return imap_sort($this->_mailbox, SORTDATE, 1, 0, $string);
+    return imap_sort($this->_mailbox, SORTARRIVAL, 1, 0, $string);
   }
 
   /**

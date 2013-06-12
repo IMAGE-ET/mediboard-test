@@ -13,26 +13,27 @@
  **/
 class CMailAttachments extends CMbObject{
 
-  var $user_mail_attachment_id = null;
+  public $user_mail_attachment_id;
 
-  var $mail_id      = null;
+  public $mail_id;
 
-  var $type         = null;
-  var $encoding     = null;
-  var $subtype      = null;
-  var $id           = null;
-  var $bytes        = null;
-  var $disposition  = null;
-  var $part         = null;
-  var $file_id      = null; //Cfile id if linked
+  public $type;
+  public $encoding;
+  public $subtype;
+  public $id;
+  public $bytes;
+  public $disposition;
+  public $part;
+  public $file_id;        //Cfile id if linked
 
-  var $name         = null;
-  var $extension    = null;
+  public $name;
+  public $extension;
 
 
-  var $_file        = null;
-  var $_content     = null; //temp for content of file
-  var $_ref_mail        = null; //for mail ref
+  /** @var CFile|null $_file */
+  public $_file;
+  public $_content;     // temp for content of file
+  public $_ref_mail;    // for mail ref
 
 
   /**
@@ -44,6 +45,7 @@ class CMailAttachments extends CMbObject{
     $spec = parent::getSpec();
     $spec->table = 'user_mail_attachment';
     $spec->key   = 'user_mail_attachment_id';
+    $spec->loggable = false;
     return $spec;
   }
 

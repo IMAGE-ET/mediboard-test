@@ -46,6 +46,7 @@ class CUserMail extends CMbObject{
   var $text_html_id           = null; //html text
   var $_text_html             = null;
 
+  /** @var CMailAttachments[] $_attachments */
   var $_attachments           = array(); //attachments
 
   var $_parts                 = null;
@@ -61,6 +62,7 @@ class CUserMail extends CMbObject{
     $spec = parent::getSpec();
     $spec->table = 'user_mail';
     $spec->key   = 'user_mail_id';
+    $spec->loggable = false;
     return $spec;
   }
 

@@ -39,7 +39,7 @@ $limit = "0, $nbAccount";
 $sources = $source->loadList($where, $order, $limit);
 
 
-//for each POP/IMAP source
+/** @var $sources CSourcePOP[] */
 foreach ($sources as $_source) {
 
   //no user => next
@@ -60,7 +60,6 @@ foreach ($sources as $_source) {
   $unseen = $pop->search('UNSEEN');
 
   if (count($unseen)>0) {
-
     //how many
     if ($user_id) {
       if (count($unseen)>1) {
@@ -70,21 +69,24 @@ foreach ($sources as $_source) {
         CAppUI::stepAjax("CPop-msg-newMsg", UI_MSG_OK, count($unseen));
       }
     }
-
-
     //set email as read in imap/pop server
     if ($markReadServer) {
       $pop->setFlag(implode(",", $unseen), "\\Seen");
     }
 
+    $iteration = 0;
     foreach ($unseen as $_mail) {
+
+      if ($iteration >= 100) {
+        break;
+      }
 
       $mail_unseen = new CUserMail();
       $mail_unseen->account_id = $_source->_id;
 
+      //mail non existant
       if (!$mail_unseen->loadMatchingFromSource($pop->header($_mail))) {
         $mail_unseen->loadContentFromSource($pop->getFullBody($_mail, false, false, true));
-
 
         //text plain
         if ($mail_unseen->_text_plain) {
@@ -103,8 +105,7 @@ foreach ($sources as $_source) {
         //text html
         if ($mail_unseen->_text_html) {
           $textH = new CContentHTML();
-          $text = new CMbXMLDocument();
-          $text = $text->sanitizeHTML($mail_unseen->_text_html); //cleanup
+          $text = CMbString::purifyHTML($mail_unseen->_text_html); //cleanup
           //apicrypt
           if (CModule::getActive("apicrypt") && $mail_unseen->_is_apicrypt == "html") {
             $textH->content = CApicrypt::uncryptBody($user->_id, $text);
@@ -123,6 +124,7 @@ foreach ($sources as $_source) {
         $mail_unseen->store();
 
         //attachments list
+        /** @var CMailAttachments[] $attachs */
         $attachs = $pop->getListAttachments($_mail);
 
         foreach ($attachs as $_attch) {
@@ -156,7 +158,7 @@ foreach ($sources as $_source) {
           $pop->setflag($_mail, "\\Seen");
         }
       }
-
+      $iteration++;
     } //foreach
   }
   else {
