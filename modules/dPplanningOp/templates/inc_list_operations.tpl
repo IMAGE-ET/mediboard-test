@@ -9,14 +9,6 @@
     $V(form.canceled, canceled);
     form.submit();
   }
-  
-  printPlanning = function(date, prat_id) {
-    var url = new Url("dPbloc", "view_planning");
-    url.addParam("_date_min", date);
-    url.addParam("_date_max", date);
-    url.addParam("_prat_id", prat_id);
-    url.pop('800', '600');
-  }
 </script>
 
 <form action="?" name="changeDate" method="get" style="font-weight:bold; padding: 2px; text-align:center; display: block;">
@@ -38,12 +30,20 @@
     action: "ajax_vw_allergies",
     sClass: "tooltip"
   };
+
+  printPlanningChir = function(date, prat_id) {
+    var url = new Url("dPbloc", "view_planning");
+    url.addParam("_date_min", date);
+    url.addParam("_date_max", date);
+    url.addParam("_prat_id", prat_id);
+    url.pop('800', '600');
+  }
 </script>
 
 <table class="tbl" {{if $board}}style="font-size: 9px;"{{/if}}>
   <tr>
     <th class="title" colspan="3">
-      <button type="button" style="float: right;" class="notext print" onclick="printPlanning('{{$date}}', '{{$praticien->_id}}');">{{tr}}Print{{/tr}}</button>
+      <button type="button" style="float: right;" class="notext print" onclick="printPlanningChir('{{$date}}', '{{$praticien->_id}}');">{{tr}}Print{{/tr}}</button>
       Interventions
     </th>
   </tr>
