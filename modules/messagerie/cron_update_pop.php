@@ -55,7 +55,6 @@ foreach ($sources as $_source) {
 
   $pop = new CPop($_source);
   if (!$pop->open()) {
-    CMbObject::error("CPop-error-imap_open");
     continue;
   }
   $unseen = $pop->search('UNSEEN');
@@ -144,6 +143,7 @@ foreach ($sources as $_source) {
               $file->file_name  = $_attch->name;
               $file->file_type  = $_attch->getType($_attch->type, $_attch->subtype);
               $file->fillFields();
+              $file->updateFormFields();
               $file->putContent($file_pop);
               $file->store();
             }
