@@ -458,14 +458,6 @@ var Url = Class.create({
       questionMark = false;
     }
 
-    /*var viewport = document.viewport.getDimensions();
-    if (!isNaN(options.height)) {
-      options.height = Math.min(viewport.height-50, options.height);
-    }
-    if (!isNaN(options.width)) {
-      options.width  = Math.min(viewport.width -50, options.width);
-    }*/
-
     var titleElement = DOM.div({className: "title"},
       DOM.span({className: "left"},
         options.title || "&nbsp;"
@@ -899,7 +891,8 @@ var Url = Class.create({
       showClose:  options.showClose,
       onClose:    options.onClose,
       title:      options.title || "&nbsp;",
-      fireLoaded: false
+      fireLoaded: false,
+      align:      options.align
     });
 
     modalContainer = this.modalObject.container.setStyle(style);

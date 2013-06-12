@@ -1162,7 +1162,7 @@ var Modal = {
       showClose: false,
       fireLoaded: true,
       onClose: null,
-      align: "left"
+      align: null
     }, options);
 
     var containerId = container;
@@ -1186,17 +1186,14 @@ var Modal = {
     containerStyle.width = null;
     containerStyle.height = null;
 
-    // Handle negative dimensions
-    var viewportDimensions = document.viewport.getDimensions();
-    if (options.width && /^-/.test(options.width)) {
-      var width = viewportDimensions.width + parseInt(options.width, 10);
-      options.width = width+"px";
-    }
+    var style = Modal.prepareDimensions({
+      width:  options.width,
+      height: options.height
+    });
 
-    if (options.height && /^-/.test(options.height)) {
-      var height = viewportDimensions.height + parseInt(options.height, 10);
-      options.height = height+"px";
-    }
+    // Do not pass dimensions to Control.Modal.open
+    delete options.height;
+    delete options.width;
 
     container.show();
 
@@ -1211,7 +1208,12 @@ var Modal = {
     // Wrap the content if not already done (modal windows launched more than once)
     if (!container._alreadyWrapped) {
       var content = DOM.div({className: "content"});
-      content.style.textAlign = options.align;
+
+      if (options.align) {
+        style.textAlign = options.align;
+      }
+
+      content.setStyle(style);
 
       wrapper = DOM.div({className: "modal-wrapper"}, content);
       container.insert({after: wrapper});
