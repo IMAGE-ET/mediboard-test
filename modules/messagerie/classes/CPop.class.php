@@ -69,6 +69,7 @@ class CPop{
       return false;
     }
 
+    mbLog($this->_server);
     //@TODO: fix this
     /*if (!url_exists($url)) {
       //CAppUI::stepAjax("CPop-server-unreachable", UI_MSG_ALERT);
