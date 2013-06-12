@@ -32,8 +32,7 @@ $ljoin = array();
 $ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
 
 $where = array();
-$where["sejour.entree"] = "< '$date_max'";
-$where["sejour.sortie"] = "> '$date_min'";
+$where["sejour.sortie"] = " BETWEEN '$date_min' AND '$date_max'";
 $where[] = "sejour.praticien_id = '$_prat_id' OR operations.chir_id = '$_prat_id'";
 
 /** @var  CSejour[] $sejours*/
