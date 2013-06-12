@@ -12,6 +12,10 @@
 {{mb_script module="dPfiles" script="files" ajax=true}}
 {{mb_script module=patients    script=pat_selector    ajax=true}}
 
+<script>
+  console.log('{{$mail->text_html_id}}');
+</script>
+
 <table class="form">
   <tr>
     <th class="title" colspan="4">{{mb_value object=$mail field=subject}}</th>
@@ -44,9 +48,9 @@
           {{/if}}
         </div>
       {{elseif $mail->text_plain_id}}
-      <div style="text-align: left;" id="content-plain">
-        {{$mail->_text_plain->content|nl2br}}
-      </div>
+        <div style="text-align: left;" id="content-plain">
+          {{$mail->_text_plain->content|nl2br}}
+        </div>
       {{else}}
         <h1>{{tr}}CUserMail-msg-noContentText{{/tr}}</h1>
       {{/if}}
@@ -64,9 +68,9 @@
 
 
 {{if $mail->_attachments|count}}
-<table class="form">
-  <tr><th class="title">{{tr}}Attachments{{/tr}} ({{$nbAttachPicked}}/{{$nbAttachAll}}) {{if $nbAttachPicked != $nbAttachAll}}<a href="#" tilte="{{tr}}CMailAttachment-button-getAllAttachments-desc{{/tr}}" onclick="messagerie.getAttachment('{{$mail->_id}}','0')" class="button download">{{tr}}CMailAttachment-button-getAllAttachments{{/tr}}</a>{{/if}}</th></tr>
-</table>
+  <table class="form">
+    <tr><th class="title">{{tr}}Attachments{{/tr}} ({{$nbAttachPicked}}/{{$nbAttachAll}}) {{if $nbAttachPicked != $nbAttachAll}}<a href="#" tilte="{{tr}}CMailAttachment-button-getAllAttachments-desc{{/tr}}" onclick="messagerie.getAttachment('{{$mail->_id}}','0')" class="button download">{{tr}}CMailAttachment-button-getAllAttachments{{/tr}}</a>{{/if}}</th></tr>
+  </table>
   <ul id="list_attachment">
     <style>
       #list_attachment {
