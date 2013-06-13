@@ -2,6 +2,7 @@
   Main.add(function () {
     getForm("editCRelance-config")["dPfacturation[CRelance][nb_days_first_relance]"].addSpinner({min:1, step:1});
     getForm("editCRelance-config")["dPfacturation[CRelance][nb_days_second_relance]"].addSpinner({min:10,step:1});
+    getForm("editCRelance-config")["dPfacturation[CRelance][nb_days_third_relance]"].addSpinner({min:10,step:1});
   });
 </script>
 
@@ -14,8 +15,9 @@
     </tr>
     {{assign var=class value=CRelance}}
     {{mb_include module=system template=inc_config_bool var=use_relances}}
-    {{mb_include module=system template=inc_config_str var=nb_days_first_relance size="3" suffix="jours"}}
+    {{mb_include module=system template=inc_config_str var=nb_days_first_relance  size="3" suffix="jours"}}
     {{mb_include module=system template=inc_config_str var=nb_days_second_relance size="3" suffix="jours"}}
+    {{mb_include module=system template=inc_config_str var=nb_days_third_relance  size="3" suffix="jours"}}
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

@@ -122,8 +122,8 @@ class CRetrocession extends CMbObject {
         $tarmed = $_code->_ref_tarmed;
         $pm = $this->code_class == "CActeTarmed" ? $tarmed->tp_al * $tarmed->f_al : $_code->_ref_prestation_caisse->pt_medical;
         $pt = $this->code_class == "CActeTarmed" ? $tarmed->tp_tl * $tarmed->f_tl : $_code->_ref_prestation_caisse->pt_technique;
-        
-        $this->_montant_total = $pm * $this->pct_pm + $pt * $this->pct_pt;
+
+        $this->_montant_total = $pm * ($this->pct_pm/100) + $pt * ($this->pct_pt/100);
       }
     }
     $this->_montant_total = round($this->_montant_total, 2);

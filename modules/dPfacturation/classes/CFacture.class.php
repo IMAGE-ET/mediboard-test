@@ -205,8 +205,6 @@ class CFacture extends CMbObject {
     if ($msg = $new_liaison->store()) {
       return $msg;
     }
-
-    return null;
   }
 
   /**
@@ -260,7 +258,7 @@ class CFacture extends CMbObject {
         }
       }
 
-      if ($this->isRelancable() && $this->_ref_last_relance->_id) {
+      if ($this->isRelancable() || $this->_ref_last_relance->_id) {
         $this->_ref_last_relance->etat = $this->patient_date_reglement ? "regle" : "emise";
         $this->_ref_last_relance->store();
       }
@@ -532,23 +530,7 @@ class CFacture extends CMbObject {
     
     return $this->_ref_reglements;
   }
-  
-  /**
-   * loadRefs
-   * 
-   * @return void
-  **/
-  function loadRefs(){
-    //@todo fonction à supprimer
-    $this->loadRefCoeffFacture();
-    $this->loadRefPatient();
-    $this->loadRefPraticien();
-    $this->loadRefAssurance();
-    $this->loadRefsObjects();
-    $this->loadRefsItems();
-    $this->loadRefsReglements();
-  }
-  
+
   /**
    * Dans la cas de la cotation d'acte Tarmed un facture comporte un coefficient (entre 0 et 1)
    * 
@@ -673,7 +655,7 @@ class CFacture extends CMbObject {
       $where["facture_liaison.object_class"]  = " = 'CSejour'";
       
       $sejour = new CSejour();
-      $this->_ref_sejours = $sejour->loadList($where, "sejour_id", null, null, $ljoin);
+      $this->_ref_sejours = $sejour->loadList($where, "sejour_id", null, "sejour_id", $ljoin);
       // Chargement des actes de séjour
       foreach ($this->_ref_sejours as $sejour) {
         /** @var CSejour $sejour*/
@@ -961,20 +943,18 @@ class CFacture extends CMbObject {
     }
 
     $date = CMbDT::date();
-
     $nb_first_relance  = CAppUI::conf("dPfacturation CRelance nb_days_first_relance");
     $nb_second_relance = CAppUI::conf("dPfacturation CRelance nb_days_second_relance");
+    $nb_third_relance  = CAppUI::conf("dPfacturation CRelance nb_days_third_relance");
 
     $this->_ref_last_relance = !count($this->_ref_relances) ? new CRelance() : end($this->_ref_relances);
 
-    if (($this->_du_restant_patient > 0 || $this->_du_restant_tiers > 0) && $this->cloture) {
-      if (!count($this->_ref_relances) && CMbDT::daysRelative($this->cloture, $date) > $nb_first_relance) {
+    if (($this->_du_restant_patient > 0 || $this->_du_restant_tiers > 0) && $this->cloture && !$this->annule) {
+      $first   = !count($this->_ref_relances) && CMbDT::daysRelative($this->cloture, $date) >= $nb_first_relance;
+      $seconde = count($this->_ref_relances) == 1 && CMbDT::daysRelative($this->_ref_last_relance->date, $date) >= $nb_second_relance;
+      $third   = count($this->_ref_relances) == 2 && CMbDT::daysRelative($this->_ref_last_relance->date, $date) >= $nb_third_relance;
+      if ($first || $seconde || $third) {
         $this->_is_relancable = true;
-      }
-      elseif (count($this->_ref_relances)) {
-        if (CMbDT::daysRelative($this->_ref_last_relance->date, $date) > $nb_second_relance) {
-          $this->_is_relancable = true;
-        }
       }
     }
 
