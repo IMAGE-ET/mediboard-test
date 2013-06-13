@@ -69,6 +69,18 @@ if ($op) {
   $patient->loadRefPhotoIdentite();
   $patient->loadRefDossierMedical();
 
+  if (!$selOp->_ref_consult_anesth->_id) {
+    $patient->loadRefsConsultations();
+
+    foreach ($patient->_ref_consultations as $_consultation) {
+      $_consultation->loadRefsDossiersAnesth();
+      $_consultation->loadRefPlageConsult();
+      foreach ($_consultation->_refs_dossiers_anesth as $_dossier_anesth) {
+        $_dossier_anesth->loadRefOperation();
+      }
+    }
+  }
+
   $selOp->getAssociationCodesActes();
   $selOp->loadExtCodesCCAM();
   $selOp->loadPossibleActes();
