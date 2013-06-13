@@ -887,9 +887,9 @@ class CExObject extends CMbMetaObject {
    *
    * @param CMbObject $object The object to count the ExObjects for
    *
-   * @return array The list, with ExClass IDs as key and counts as value
+   * @return CExObject[][] The list, with ExClass IDs as key and counts as value
    */
-  static function countExObjectsFor(CMbObject $object) {
+  static function loadExObjectsFor(CMbObject $object) {
     $group_id = CGroups::loadCurrent()->_id;
 
     $where = array(
@@ -905,17 +905,22 @@ class CExObject extends CMbMetaObject {
       "object_id"    => $ds->prepare("= %", $object->_id),
     );
 
-    $ex_object_counts = array();
+    $ex_objects = array();
 
     foreach ($ex_class_ids as $_ex_class_id) {
       $_ex_object = new CExObject($_ex_class_id);
-      $_count = $_ex_object->countList($where);
+      $_list = $_ex_object->loadList($where);
 
-      if ($_count > 0) {
-        $ex_object_counts[$_ex_class_id] = $_count;
+      if (count($_list) > 0) {
+        foreach ($_list as $_ex_object) {
+          $_ex_object->_ex_class_id = $_ex_class_id;
+          $_ex_object->load();
+        }
+
+        $ex_objects[$_ex_class_id] = $_list;
       }
     }
 
-    return $ex_object_counts;
+    return $ex_objects;
   }
 }
