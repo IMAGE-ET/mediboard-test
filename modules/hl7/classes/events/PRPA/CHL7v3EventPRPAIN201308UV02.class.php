@@ -42,6 +42,5 @@ class CHL7v3EventPRPAIN201308UV02 extends CHL7v3EventPRPA implements CHL7EventPR
   function build($patient) {
     parent::build($patient);
 
-
   }
 }
