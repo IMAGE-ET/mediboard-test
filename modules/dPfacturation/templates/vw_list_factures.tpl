@@ -33,7 +33,7 @@ showLegend = function() {
     <td style="width:200px;">
       <table class="tbl">
         <tr>
-          <th colspan="{{if $conf.dPfacturation.CEditPdf.use_bill_etab}}5{{else}}2{{/if}}" class="title">Factures</th>
+          <th colspan="{{if $conf.dPfacturation.CEditPdf.use_bill_etab}}6{{else}}2{{/if}}" class="title">Factures</th>
         </tr>
         <tr>
           {{if $conf.dPfacturation.CEditPdf.use_bill_etab}}
@@ -42,6 +42,7 @@ showLegend = function() {
           {{/if}}
           <th>Date</th>
           <th>Patient</th>
+          <th>N° patient</th>
           {{if $conf.dPfacturation.CEditPdf.use_bill_etab}}
             <th>Numéro séjour</th>
           {{/if}}
@@ -78,12 +79,13 @@ showLegend = function() {
               </a>
             </td>
             {{if $conf.dPfacturation.CEditPdf.use_bill_etab}}
+              <td style="text-align: right;" class="{{$reglee}} {{$cloture}}">{{$_facture->patient_id}}</td>
               <td style="text-align: right;" class="{{$reglee}} {{$cloture}}">{{$_facture->_ref_last_sejour->_id}}</td>
             {{/if}}
           </tr>
         {{foreachelse}}
           <tr>
-            <td colspan="{{if $conf.dPfacturation.CEditPdf.use_bill_etab}}5{{else}}2{{/if}}" class="empty">
+            <td colspan="{{if $conf.dPfacturation.CEditPdf.use_bill_etab}}6{{else}}2{{/if}}" class="empty">
               {{tr}}{{$facture->_class}}.none{{/tr}}
             </td>
           </tr>
