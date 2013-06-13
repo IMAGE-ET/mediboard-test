@@ -30,8 +30,6 @@ $sejour->load($sejour_id);
 $sejour->loadSuiviMedical();
 $sejour->loadRefPraticien();
 
-$sejour->loadRefsConsultations();
-
 $sejour->loadRefPrescriptionSejour();
 $prescription =& $sejour->_ref_prescription_sejour;
 
@@ -58,6 +56,7 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_suivi) {
     if ($user_id && $_suivi->praticien_id != $user_id) {
       unset($sejour->_ref_suivi_medical["$_suivi->debut $_suivi->time_debut $_suivi->_guid"]);
     }
+    continue;
   }
   // Transmissions et Observations
   elseif (!$_suivi instanceof CConsultation) {
@@ -85,8 +84,8 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_suivi) {
         $last_trans_cible["$_suivi->object_class $_suivi->object_id"] = $_suivi;
       }
     }
-    $_suivi->canEdit();
   }
+  $_suivi->canEdit();
 }
 
 foreach ($last_trans_cible as $_last) {
@@ -120,6 +119,11 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_trans_const) {
     $list_trans_const[$sort_key] = $_trans_const;
   }
   elseif ($_trans_const instanceof CConsultation) {
+    // On n'affiche pas les consultations annulées
+    if ($_trans_const->annule) {
+      unset($sejour->_ref_suivi_medical[$_key]);
+      continue;
+    }
     foreach ($_trans_const->_refs_dossiers_anesth as $key => $_dossier_anesth) {
       $_dossier_anesth->loadRefOperation();
     }

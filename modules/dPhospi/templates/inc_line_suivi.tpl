@@ -190,6 +190,18 @@
   </td>
   <td>
     {{if !$readonly}}
+      {{if $_suivi->_canEdit}}
+        <form name="Del-{{$_suivi->_guid}}" action="?m={{$m}}" method="post"
+              onsubmit="return onSubmitFormAjax(this, function() { loadSuivi('{{$sejour->_id}}') })">
+          <input type="hidden" name="dosql" value="do_consultation_aed" />
+          <input type="hidden" name="m" value="cabinet" />
+          <input type="hidden" name="consultation_id" value="{{$_suivi->_id}}" />
+          <input type="hidden" name="annule" value="1" />
+          <button type="button" class="trash notext"
+                  onclick="if (confirm('Voulez-vous vraiment annuler cette consultation ?')) { this.form.onsubmit() } ">
+            {{tr}}Delete{{/tr}}</button>
+        </form>
+      {{/if}}
       <button type="button" class="{{if $_suivi->_canEdit}}edit{{else}}search{{/if}} notext" onclick="modalConsult('{{$_suivi->_id}}')"></button>
     {{/if}}
   </td>
