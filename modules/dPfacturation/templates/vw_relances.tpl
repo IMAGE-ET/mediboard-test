@@ -75,71 +75,75 @@ function addRelances(facture_class, type_relance){
         <tr>
           <th>{{mb_label object=$filter field="_date_max"}}</th>
           <td>{{mb_field object=$filter field="_date_max" form="printFrm" canNull="false" register=true}} </td>
-        </tr> 
-        <tr>
-          <th class="category" colspan="4">Relance de Cabinet</th>
         </tr>
-        <tr>
-          <td class="button" rowspan="2">
-            <label for="typerelance_CFactureCabinet">Type de relance</label>
-            <select name="typerelance_CFactureCabinet">
-              <option value="1">Première Relance</option>
-              <option value="2">Seconde Relance</option>
-            </select>
-          </td>
-          <td class="button">
-            <button type="button" class="search" onclick="ListeFacture.load('CFactureCabinet', this.form.typerelance_CFactureCabinet.value);">Voir les factures à relancer</button>
-          </td>
-          <td class="button">
-            <label for="typereglement_CFactureCabinet">Règlement</label>
-            <select name="typereglement_CFactureCabinet">
-            <option value="0">&mdash; Tous</option>
-            <option value="1">Emises</option>
-            <option value="2">Réglées</option>
-            <option value="3">Renouvelées</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td class="button">
-            <button type="button" class="add" onclick="addRelances('CFactureCabinet', this.form.typerelance_CFactureCabinet.value);">Générer les relances</button>
-          </td>
-          <td class="button">
-            <button type="button" class="search" onclick="ListeFacture.view('CFactureCabinet', this.form.typerelance_CFactureCabinet.value, this.form.typereglement_CFactureCabinet.value);">Voir les relances émises</button>
-          </td>
-        </tr>
-        <tr>
-          <th class="category" colspan="4">Relance d'établissement</th>
-        </tr>
-        <tr>
-          <td class="button" rowspan="2">
-            <label for="typerelance_CFactureEtablissement">Type de relance</label>
-            <select name="typerelance_CFactureEtablissement">
-              <option value="1">Première Relance</option>
-              <option value="2">Seconde Relance</option>
-            </select>
-          </td>
-          <td class="button">
-            <button type="button" class="search" onclick="ListeFacture.load('CFactureEtablissement', this.form.typerelance_CFactureEtablissement.value);">Voir les factures à relancer</button>
-          </td>
-          <td class="button">
-            <label for="typereglement_CFactureEtablissement">Règlement</label>
-            <select name="typereglement_CFactureEtablissement">
-            <option value="0">&mdash; Tous</option>
-            <option value="emise">Emises</option>
-            <option value="regle">Réglées</option>
-            <option value="renouvelle">Renouvelées</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td class="button">
-            <button type="button" class="add" onclick="addRelances('CFactureEtablissement', this.form.typerelance_CFactureEtablissement.value);">Générer les relances</button>
-          </td>
-          <td class="button">
-            <button type="button" class="search" onclick="ListeFacture.view('CFactureEtablissement', this.form.typerelance_CFactureEtablissement.value, this.form.typereglement_CFactureEtablissement.value);">Voir les relances émises</button>
-          </td>
-        </tr>
+        {{if $conf.dPfacturation.CFactureCabinet.view_bill}}
+          <tr>
+            <th class="category" colspan="4">Relance de Cabinet</th>
+          </tr>
+          <tr>
+            <td class="button" rowspan="2">
+              <label for="typerelance_CFactureCabinet">Type de relance</label>
+              <select name="typerelance_CFactureCabinet">
+                <option value="1">Première Relance</option>
+                <option value="2">Seconde Relance</option>
+              </select>
+            </td>
+            <td class="button">
+              <button type="button" class="search" onclick="ListeFacture.load('CFactureCabinet', this.form.typerelance_CFactureCabinet.value);">Voir les factures à relancer</button>
+            </td>
+            <td class="button">
+              <label for="typereglement_CFactureCabinet">Règlement</label>
+              <select name="typereglement_CFactureCabinet">
+              <option value="0">&mdash; Tous</option>
+              <option value="1">Emises</option>
+              <option value="2">Réglées</option>
+              <option value="3">Renouvelées</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td class="button">
+              <button type="button" class="add" onclick="addRelances('CFactureCabinet', this.form.typerelance_CFactureCabinet.value);">Générer les relances</button>
+            </td>
+            <td class="button">
+              <button type="button" class="search" onclick="ListeFacture.view('CFactureCabinet', this.form.typerelance_CFactureCabinet.value, this.form.typereglement_CFactureCabinet.value);">Voir les relances émises</button>
+            </td>
+          </tr>
+        {{/if}}
+        {{if $conf.dPfacturation.CFactureEtablissement.view_bill}}
+          <tr>
+            <th class="category" colspan="4">Relance d'établissement</th>
+          </tr>
+          <tr>
+            <td class="button" rowspan="2">
+              <label for="typerelance_CFactureEtablissement">Type de relance</label>
+              <select name="typerelance_CFactureEtablissement">
+                <option value="1">Première Relance</option>
+                <option value="2">Seconde Relance</option>
+              </select>
+            </td>
+            <td class="button">
+              <button type="button" class="search" onclick="ListeFacture.load('CFactureEtablissement', this.form.typerelance_CFactureEtablissement.value);">Voir les factures à relancer</button>
+            </td>
+            <td class="button">
+              <label for="typereglement_CFactureEtablissement">Règlement</label>
+              <select name="typereglement_CFactureEtablissement">
+              <option value="0">&mdash; Tous</option>
+              <option value="emise">Emises</option>
+              <option value="regle">Réglées</option>
+              <option value="renouvelle">Renouvelées</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td class="button">
+              <button type="button" class="add" onclick="addRelances('CFactureEtablissement', this.form.typerelance_CFactureEtablissement.value);">Générer les relances</button>
+            </td>
+            <td class="button">
+              <button type="button" class="search" onclick="ListeFacture.view('CFactureEtablissement', this.form.typerelance_CFactureEtablissement.value, this.form.typereglement_CFactureEtablissement.value);">Voir les relances émises</button>
+            </td>
+          </tr>
+        {{/if}}
       </table>
       </form>
     </td>
