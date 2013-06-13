@@ -67,14 +67,11 @@ class CExchangeHL7v3 extends CEchangeXML {
     $this->loadRefNotifications();
   }
 
+  /**
+   * @see parent::loadRefNotifications()
+   */
   function loadRefNotifications(){
     $this->_ref_notifications = $this->loadBackRefs("notifications");
-  }
-
-  function getErrors() {
-  }
-
-  function getObservations($display_errors = false) {
   }
 
   /**
@@ -83,14 +80,35 @@ class CExchangeHL7v3 extends CEchangeXML {
   function loadView() {
   }
 
-  function setObjectClassIdPermanent(CMbObject $mbObject) {
-  }
-
+  /**
+   * @see parent::handle()
+   */
   function handle() {
-    return COperatorHL7v3::event($this);
+    //return COperatorHL7v3::event($this);
   }
 
+  /**
+   * @see parent::getFamily()
+   */
   function getFamily() {
     return self::$messages;
+  }
+
+  /**
+   * @see parent::getErrors()
+   */
+  function getErrors() {
+  }
+
+  /**
+   * @see parent::getObservations()
+   */
+  function getObservations($display_errors = false) {
+  }
+
+  /**
+   * @see parent::setObjectClassIdPermanent()
+   */
+  function setObjectClassIdPermanent(CMbObject $mbObject) {
   }
 }

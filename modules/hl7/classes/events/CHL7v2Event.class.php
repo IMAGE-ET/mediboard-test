@@ -34,9 +34,6 @@ class CHL7v2Event extends CHL7Event {
   /** @var string */
   public $struct_code;
 
-  /** @var CHL7v2Message */
-  public $message;
-
   /** @var string */
   public $msg_hl7;
 

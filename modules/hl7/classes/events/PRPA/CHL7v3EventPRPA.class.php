@@ -16,10 +16,6 @@
  * Patient Administration HL7v3
  */
 class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
-
-  /** @var string */
-  public $interaction_id = null;
-
   /**
    * Construct
    *

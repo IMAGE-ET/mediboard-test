@@ -89,14 +89,49 @@ class CReceiverHL7v3 extends CInteropReceiver {
   /**
    * Send event
    *
-   * @param CHL7Event $evenement Event type
-   * @param CMbObject $mbObject  Object
+   * @param CHL7v3Event $evenement Event type
+   * @param CMbObject   $mbObject  Object
    *
    * @return null|string
    *
    * @throws CMbException
    */
   function sendEvent($evenement, CMbObject $mbObject) {
+    $evenement->_receiver = $this;
 
+    if (!$this->isMessageSupported(get_class($evenement))) {
+      return false;
+    }
+
+    $this->loadConfigValues();
+    $evenement->build($mbObject);
+
+    $source = CExchangeSource::get("$this->_guid-C{$evenement->event_type}Messaging");
+
+    if (!$source->_id || !$source->active) {
+      return null;
+    }
+
+    $exchange = $evenement->_exchange_hl7v3;
+
+    $msg = $evenement->message;
+    $source->setData($msg, null, $exchange);
+    try {
+      $source->send();
+    }
+    catch (Exception $e) {
+      throw new CMbException("CExchangeSource-no-response");
+    }
+
+    $exchange->date_echange = CMbDT::dateTime();
+
+    $ack_data = $source->getACQ();
+
+    if (!$ack_data) {
+      $exchange->store();
+      return null;
+    }
+
+    return null;
   }
 }

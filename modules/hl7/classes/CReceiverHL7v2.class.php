@@ -145,8 +145,8 @@ class CReceiverHL7v2 extends CInteropReceiver {
   /**
    * Send event
    *
-   * @param CHL7Event $evenement Event type
-   * @param CMbObject $mbObject  Object
+   * @param CHL7v2Event $evenement Event type
+   * @param CMbObject   $mbObject  Object
    *
    * @return null|string
    *

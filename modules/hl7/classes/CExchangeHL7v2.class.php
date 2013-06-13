@@ -17,7 +17,6 @@
  */
 
 class CExchangeHL7v2 extends CExchangeTabular {
-
   /** @var string */
   static $messages = array(
     "PAM"    => "CPAM",

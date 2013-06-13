@@ -14,6 +14,11 @@
  * Message XML HL7
  */
 class CHL7v3MessageXML extends CMbXMLDocument {
+  public $patharchiveschema;
+  public $hl7v3_version;
+  public $dirschemaname;
+  public $schemafilename;
+
   /** @var CExchangeHL7v3 */
   public $_ref_exchange_hl7v3;
 
@@ -26,14 +31,16 @@ class CHL7v3MessageXML extends CMbXMLDocument {
   /**
    * Construct
    *
-   * @param string $encoding Encoding
+   * @param string $encoding      Encoding
+   * @param string $hl7v3_version Version
    *
    * @return \CHL7v3MessageXML
    */
-  function __construct($encoding = "utf-8") {
+  function __construct($encoding = "utf-8", $hl7v3_version = null) {
     parent::__construct($encoding);
 
-    $this->formatOutput = true;
+    $this->formatOutput  = true;
+    $this->hl7v3_version = $hl7v3_version;
   }
 
   /**
@@ -51,9 +58,7 @@ class CHL7v3MessageXML extends CMbXMLDocument {
    * @return void
    */
   function addNameSpaces() {
-    // Ajout des namespace pour XML Spy
     $this->addAttribute($this->documentElement, "xmlns", "urn:hl7-org:v3");
-
     $this->addAttribute($this->documentElement, "ITSVersion", "XML_1.0");
   }
 
@@ -69,6 +74,21 @@ class CHL7v3MessageXML extends CMbXMLDocument {
    */
   function addElement($elParent, $elName, $elValue = null, $elNS = "urn:hl7-org:v3") {
     return parent::addElement($elParent, $elName, $elValue, $elNS);
+  }
+
+  /**
+   * Try to validate the document against a schema will trigger errors when not validating
+   *
+   * @param bool $returnErrors   Return errors
+   * @param bool $display_errors Display errors
+   *
+   * @return boolean
+   */
+  function schemaValidate($returnErrors = false, $display_errors = true) {
+    $this->patharchiveschema = "modules/hl7/resources/hl7v3_$this->hl7v3_version";
+    $this->schemafilename    = "$this->patharchiveschema/$this->dirschemaname.xsd";
+
+    return parent::schemaValidate($this->schemafilename, $returnErrors, $display_errors);
   }
 
   /**

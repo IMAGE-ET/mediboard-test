@@ -67,12 +67,14 @@ class CEchangeXML extends CExchangeDataFormat {
    * @see parent::updatePlainFields()
    */   
   function updatePlainFields() {
+    parent::updatePlainFields();
+
     if ($this->_message !== null) {
       $content = new CContentXML();
       $content->load($this->message_content_id);
       $content->content = $this->_message;
       if ($msg = $content->store()) {
-        return $msg;
+        return;
       }
       if (!$this->message_content_id) {
         $this->message_content_id = $content->_id;
@@ -84,23 +86,42 @@ class CEchangeXML extends CExchangeDataFormat {
       $content->load($this->acquittement_content_id);
       $content->content = $this->_acquittement;
       if ($msg = $content->store()) {
-        return $msg;
+        return;
       }
       if (!$this->acquittement_content_id) {
         $this->acquittement_content_id = $content->_id;
       }
     }
   }
-  
-  function setAckError($dom_acq, $code_erreur, $commentaires = null, $values) {}
-  
+
+  /**
+   * Set ACK error
+   *
+   * @param DOMDocument     $dom_acq      Acquittement
+   * @param array           $code_erreur  Error codes
+   * @param string|null     $commentaires Comments
+   * @param CMbObject|array $values       Values
+   *
+   * @return void
+   */
+  function setAckError($dom_acq, $code_erreur, $commentaires = null, $values = null) {
+  }
+
+  /**
+   * @see parent::isWellFormed()
+   */
   function isWellFormed($data) {
     $dom = new CMbXMLDocument();
     if ($dom->loadXML($data, LIBXML_NOWARNING | LIBXML_NOERROR) !== false) {
       return $dom;
     }
+
+    return null;
   }
-  
+
+  /**
+   * @see parent::understand()
+   */
   function understand($data, CInteropSender $actor = null) {
     if (!$dom = $this->isWellFormed($data)) {
       return false;
@@ -116,6 +137,8 @@ class CEchangeXML extends CExchangeDataFormat {
         return true;
       }
     }
+
+    return false;
   }
 }
 

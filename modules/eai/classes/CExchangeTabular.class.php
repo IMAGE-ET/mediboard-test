@@ -21,7 +21,10 @@ class CExchangeTabular extends CExchangeDataFormat {
   public $version;
   public $nom_fichier;
   public $identifiant_emetteur;
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
         
@@ -36,7 +39,10 @@ class CExchangeTabular extends CExchangeDataFormat {
     
     return $props;
   }
-  
+
+  /**
+   * @see parent::loadContent()
+   */
   function loadContent() {
     $content = new CContentTabular();
     $content->load($this->message_content_id);
@@ -46,14 +52,19 @@ class CExchangeTabular extends CExchangeDataFormat {
     $content->load($this->acquittement_content_id);
     $this->_acquittement = $content->content;
   }
-  
+
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
+    parent::updatePlainFields();
+
     if ($this->_message !== null) {
       $content = new CContentTabular();
       $content->load($this->message_content_id);
       $content->content = $this->_message;
       if ($msg = $content->store()) {
-        return $msg;
+        return;
       }
       if (!$this->message_content_id) {
         $this->message_content_id = $content->_id;
@@ -65,20 +76,36 @@ class CExchangeTabular extends CExchangeDataFormat {
       $content->load($this->acquittement_content_id);
       $content->content = $this->_acquittement;
       if ($msg = $content->store()) {
-        return $msg;
+        return;
       }
       if (!$this->acquittement_content_id) {
         $this->acquittement_content_id = $content->_id;
       }
     }
   }
-  
-  function isWellFormed($data) {}
-  
-  function understand($data, CInteropActor $actor = null) {}
-  
-  function getMessage() {}
-  
-  function getACK() {}
+
+  /**
+   * @see parent::isWellFormed()
+   */
+  function isWellFormed($data) {
+  }
+
+  /**
+   * @see parent::understand()
+   */
+  function understand($data, CInteropActor $actor = null) {
+  }
+
+  /**
+   * @see parent::getMessage()
+   */
+  function getMessage() {
+  }
+
+  /**
+   * @see parent::getACK()
+   */
+  function getACK() {
+  }
 }
 

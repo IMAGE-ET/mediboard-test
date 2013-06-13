@@ -42,7 +42,14 @@ class CHL7v3EventPRPAIN201307UV02 extends CHL7v3EventPRPA implements CHL7EventPR
   function build($patient) {
     parent::build($patient);
 
+    $this->dom->dirschemaname = $this->getInteractionID();
+
     $this->addControlActProcess($patient);
+
+    $this->message = $this->dom->saveXML();
+
+    // Modification de l'échange
+    $this->updateExchange();
   }
 
   /**
@@ -64,8 +71,8 @@ class CHL7v3EventPRPAIN201307UV02 extends CHL7v3EventPRPA implements CHL7EventPR
 
     // queryId
     $queryId = $dom->addElement($queryByParameter, "queryId");
-    $dom->addAttribute($queryId, "extension", "");
-    $dom->addAttribute($queryId, "root", "");
+    $dom->addAttribute($queryId, "extension", $this->_exchange_hl7v3->_id);
+    $dom->addAttribute($queryId, "root", "OID");
 
     // statusCode
     $statusCode = $dom->addElement($queryByParameter, "statusCode");
@@ -75,7 +82,7 @@ class CHL7v3EventPRPAIN201307UV02 extends CHL7v3EventPRPA implements CHL7EventPR
     $parameterList = $dom->addElement($queryByParameter, "parameterList");
 
     // patientIdentifer
-    $patientIdentifer = $dom->addElement($parameterList, "patientIdentifer");
+    $patientIdentifer = $dom->addElement($parameterList, "patientIdentifier");
     $value = $dom->addElement($patientIdentifer, "value");
     $dom->addAttribute($value, "extension", $patient->INSC);
     $dom->addAttribute($value, "root", "1.2.250.1.213.1.4.2");

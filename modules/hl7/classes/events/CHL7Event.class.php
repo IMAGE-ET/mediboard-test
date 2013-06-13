@@ -20,7 +20,7 @@ class CHL7Event {
   /** @var null */
   public $event_type;
 
-  /** @var null */
+  /** @var CMbObject $object */
   public $object;
 
   /** @var CUserLog */
@@ -29,6 +29,9 @@ class CHL7Event {
 
   /** @var string */
   public $version;
+
+  /** @var CHL7v2Message|CHL7v3MessageXML */
+  public $message;
   
   /**
    * @var CReceiverHL7v2|CReceiverHL7v3
