@@ -181,6 +181,7 @@ class CConsultation extends CFacturable {
   public $_dossier_anesth_completed_id;
   public $_docitems_from_dossier_anesth;
   public $_locks;
+  public $_list_forms = array();
 
   /**
    * @see parent::getSpec()

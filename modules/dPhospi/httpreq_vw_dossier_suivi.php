@@ -103,6 +103,7 @@ if (!$cible && CAppUI::conf("soins constantes_show") && $_show_const) {
 $list_trans_const = array();
 
 $trans_compact = CAppUI::conf("soins trans_compact");
+$forms_active = CModule::getActive("forms");
 
 foreach ($sejour->_ref_suivi_medical as $_key => $_trans_const) {
   if (is_array($_trans_const)) {
@@ -124,12 +125,24 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_trans_const) {
       unset($sejour->_ref_suivi_medical[$_key]);
       continue;
     }
-    foreach ($_trans_const->_refs_dossiers_anesth as $key => $_dossier_anesth) {
-      $_dossier_anesth->loadRefOperation();
+
+    if ($forms_active) {
+      foreach ($_trans_const->_refs_dossiers_anesth as $key => $_dossier_anesth) {
+        $_dossier_anesth->loadRefOperation();
+      }
+      if ($_trans_const->type == "entree") {
+        $has_obs_entree = 1;
+      }
+
+      $forms = CExObject::loadExObjectsFor($_trans_const);
+
+      foreach ($_trans_const->_refs_dossiers_anesth as $_dossier_anesth) {
+        $_forms = CExObject::loadExObjectsFor($_dossier_anesth);
+        $forms += $_forms;
+      }
+      $_trans_const->_list_forms = $forms;
     }
-    if ($_trans_const->type == "entree") {
-      $has_obs_entree = 1;
-    }
+
     $list_trans_const[$_trans_const->_datetime] = $_trans_const;
   }
   elseif ($_trans_const instanceof CTransmissionMedicale) {

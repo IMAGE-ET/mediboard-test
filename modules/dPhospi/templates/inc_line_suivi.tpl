@@ -187,6 +187,20 @@
         <u>Au total :</u> {{mb_value object=$_suivi field=conclusion}}
       {{/if}}
     {{/if}}
+    {{if "forms"|module_active && $_suivi->_list_forms|@count}}
+      <u>Formulaires :</u>
+      <ul>
+        {{foreach from=$_suivi->_list_forms item=_forms key=ex_class_id}}
+          {{foreach from=$_forms item=ex_object key=ex_object_id}}
+            <li>
+              <a href="#1" onclick="ExObject.display('{{$ex_object_id}}', '{{$ex_class_id}}', '{{$ex_object->object_class}}-{{$ex_object->object_id}}')">
+                {{$ex_object->_ref_ex_class->name}}
+              </a>
+            </li>
+          {{/foreach}}
+        {{/foreach}}
+      </ul>
+    {{/if}}
   </td>
   <td>
     {{if !$readonly}}
