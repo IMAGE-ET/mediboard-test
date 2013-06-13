@@ -27,15 +27,14 @@ $log_pop = new CSourcePOP();
 $log_pop->load($mail->account_id);
 
 //if not read email, send the seen flag to server
-if (!$mail->date_read) {
+if (!$mail->date_read && !CAppUI::pref("markMailOnServerAsRead")) {
   $pop = new CPop($log_pop);
   $pop->open();
-  if ($pop->setflag($mail->uid, "\\Seen")) {
-    $mail->date_read = CMbDT::dateTime();
-    $mail->store();
-  }
+  $pop->setflag($mail->uid, "\\Seen");
   $pop->close();
 }
+$mail->date_read = CMbDT::dateTime();
+$mail->store();
 
 //get the CFile attachments
 $nbAttachPicked = 0;

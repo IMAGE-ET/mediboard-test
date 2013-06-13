@@ -26,6 +26,7 @@ $mails = $mail->loadList($where);
 $pop = new CPop($account_pop);
 $pop->open();
 $count = 0;
+/** @var $mails CUserMail[] */
 foreach ($mails as $_mail) {
   if ($pop->setflag($_mail->uid, "\\Seen")) {
     $_mail->date_read = CMbDT::dateTime();

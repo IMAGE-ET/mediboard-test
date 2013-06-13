@@ -21,6 +21,7 @@ $accounts = $account->loadMatchingList();
 
 //mailbox
 $mailbox = array();
+/** @var $accounts CSourcePOP[] */
 foreach ($accounts as $_account) {
   $libelle = $_account->libelle ? $_account->libelle : $_account->_id;
   $mailbox[$_account->_id]     = $libelle;

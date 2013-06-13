@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
  * @package Mediboard
@@ -13,24 +13,30 @@
   
 class CUserMessage extends CMbObject {
   // DB Fields
-  var $usermessage_id     = null;
-  var $from          = null;
-  var $to            = null;
-  var $subject       = null;
-  var $source        = null;
-  var $date_sent     = null;
-  var $date_read     = null;
-  var $archived      = null;
-  var $starred       = null;
+  public $usermessage_id;
+  public $from;
+  public $to;
+  public $subject;
+  public $source;
+  public $date_sent;
+  public $date_read;
+  public $archived;
+  public $starred;
   
   // Form Fields
-  var $_from_state   = null;
-  var $_to_state     = null;
+  public $_from_state;
+  public $_to_state;
   
   // References
-  var $_ref_user_from = null;
-  var $_ref_user_to   = null;
+  public $_ref_user_from;
+  public $_ref_user_to;
+  public $_clean_subject;
 
+  /**
+   * Get specs
+   *
+   * @return CMbObjectSpec $spec
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "usermessage";
@@ -38,6 +44,11 @@ class CUserMessage extends CMbObject {
     return $spec;
   }
 
+  /**
+   * get props
+   *
+   * @return array
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["from"]        = "ref notNull class|CMediusers";
@@ -58,6 +69,7 @@ class CUserMessage extends CMbObject {
   /**
    * Load all visible mails for current user
    * grouped by status (sent and starred only)
+   *
    * @return array
    */
   function loadVisibleList() {
@@ -76,9 +88,9 @@ class CUserMessage extends CMbObject {
     $where["date_sent"] = "IS NOT NULL";
     $where[]            = "date_read IS NULL OR starred = '1'";
     $order = "date_sent";
-		
     $mails = array();
     $list = $this->loadList($where, $order);
+    /** @var $list CUserMessage[] */
     foreach ($list as $mail) {
       $mail->loadRefUserFrom();
       $mails[$mail->_to_state][$mail->_id] = $mail;
@@ -87,38 +99,73 @@ class CUserMessage extends CMbObject {
     return $mails;
   }
 
+  /**
+   * function updateFormFields
+   *
+   * @return void
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = substr($this->subject, 0, 30);
     
     $this->_from_state = "saved";
-    if ($this->date_sent) $this->_from_state = "sent";
-    if ($this->date_read) $this->_from_state = "read";
+    if ($this->date_sent) {
+      $this->_from_state = "sent";
+    }
+    if ($this->date_read) {
+      $this->_from_state = "read";
+    }
 
     $this->_to_state = "pending";
-    if ($this->date_sent) $this->_to_state = "received";
-    if ($this->date_read) $this->_to_state = "read";
-    if ($this->archived ) $this->_to_state = "archived";
-    if ($this->starred  ) $this->_to_state = "starred"; 
+    if ($this->date_sent) {
+      $this->_to_state = "received";
+    }
+    if ($this->date_read) {
+      $this->_to_state = "read";
+    }
+    if ($this->archived ) {
+      $this->_to_state = "archived";
+    }
+    if ($this->starred  ) {
+      $this->_to_state = "starred";
+    }
     
     $this->_clean_subject = preg_replace("/^Re: /", "", $this->subject);
   }
-  
+
+  /**
+   * load Ref User From
+   *
+   * @param int $cache using cache
+   *
+   * @return CMediusers|null
+   */
   function loadRefUserFrom($cache = 0) {
     $this->_ref_user_from = $this->loadFwdRef("from", $cache);
     $this->_ref_user_from->loadRefFunction();
     return $this->_ref_user_from;
   }
 
+  /**
+   * load ref user to
+   *
+   * @param int $cache use cache
+   *
+   * @return CMbObject|null
+   */
   function loadRefUserTo($cache = 0) {
     $this->_ref_user_to = $this->loadFwdRef("to", $cache);
     $this->_ref_user_to->loadRefFunction();
     return $this->_ref_user_to;
   }
-  
+
+  /**
+   * loadRef Fwd, load from user & to user
+   *
+   * @return int|void
+   */
   function loadRefsFwd(){
     $this->loadRefUserFrom(); 
     $this->loadRefUserTo(); 
   }
 }
-?>

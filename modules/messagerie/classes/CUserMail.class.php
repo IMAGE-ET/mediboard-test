@@ -14,44 +14,43 @@
  */
 class CUserMail extends CMbObject{
 
-  var $user_mail_id           = null;  //key
+  public $user_mail_id;  //key
 
-  var $account_id             = null; //POP account
+  public $account_id; //POP account
   //headers
-  var $subject                = null;  //subject of the mail
-  var $from                   = null;  //who sent it
-  var $_from                  = null;  //who sent it, readable
-  var $to                     = null;  //complete recipient
-  var $_to                    = null;  //recipient readable
-  var $date_inbox             = null;  //sent date
-  var $date_read              = null;  //date of the first read of the mail
-  var $_msgno                 = null;  //message sequence number in the mailbox
-  var $uid                    = null;
-  var $answered               = null;  //this message is flagged as answered
-  var $favorite               = null;  // favorite, important email
-  var $archived               = null;  // is the mail archived, (hidden)
+  public $subject;  //subject of the mail
+  public $from;  //who sent it
+  public $_from;  //who sent it, readable
+  public $to;  //complete recipient
+  public $_to;  //recipient readable
+  public $date_inbox;  //sent date
+  public $date_read;  //date of the first read of the mail
+  public $_msgno;  //message sequence number in the mailbox
+  public $uid;
+  public $answered;  //this message is flagged as answered
+  public $favorite;  // favorite, important email
+  public $archived;  // is the mail archived, (hidden)
 
-  //var $msg_references = null; //is a reference to this message id
-  var $in_reply_to_id         = null; //is a reply to this message id
-  var $text_file_id           = null;
-  var $_ref_file_linked       = null;
+  public $in_reply_to_id; //is a reply to this message id
+  public $text_file_id;
+  public $_ref_file_linked;
 
   //body
-  var $text_plain_id          = null; //plain text (no html)
-  var $_text_plain            = null;
-  var $_ref_account_pop       = null;
-  var $_is_apicrypt           = null;
-  var $_is_hprim              = null;
+  public $text_plain_id; //plain text (no html)
+  public $_text_plain;
+  public $_ref_account_pop;
+  public $_is_apicrypt;
+  public $_is_hprim;
 
-  var $text_html_id           = null; //html text
-  var $_text_html             = null;
+  public $text_html_id; //html text
+  public $_text_html;
 
   /** @var CMailAttachments[] $_attachments */
-  var $_attachments           = array(); //attachments
+  public $_attachments           = array(); //attachments
 
-  var $_parts                 = null;
+  public $_parts;
 
-  var $_size                  = null; //size in bytes
+  public $_size; //size in bytes
 
   /**
    * get specs

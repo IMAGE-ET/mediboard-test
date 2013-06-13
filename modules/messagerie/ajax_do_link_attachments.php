@@ -18,6 +18,7 @@ $text_html = CValue::get("text_html_id");
 $mail_id = CValue::get("mail_id");
 
 //load object
+/** @var CMbObject $object */
 $object = new $object_class;
 $object->load($object_id);
 

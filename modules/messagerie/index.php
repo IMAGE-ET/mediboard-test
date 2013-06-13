@@ -14,5 +14,3 @@ $module->registerTab("vw_list_internalMessages", TAB_READ);
 
 //external
 $module->registerTab("vw_list_externalMessages", TAB_READ);
-
-//direct access to POP/IMAP (admin only)

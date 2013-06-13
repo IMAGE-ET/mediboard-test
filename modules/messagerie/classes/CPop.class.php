@@ -57,7 +57,7 @@ class CPop{
   /**
    * Open the remote mailbox
    *
-   * @return ressource|bool
+   * @return int|bool
    */
   function open() {
     $port = ($this->source->port) ? ":".$this->source->port : "";

@@ -33,6 +33,7 @@ $limit= "$page, $limit_list";
 $nb_mails = $mail->countMatchingList();
 $mails = $mail->loadMatchingList($order, $limit);
 
+/** @var $mails CUserMail[] */
 foreach ($mails as $_mail) {
   $_mail->loadReadableHeader();
   $_mail->loadRefsFwd();

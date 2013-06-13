@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
 * @package Mediboard
@@ -35,6 +35,7 @@ $historique = $usermessage->loadList($where, "date_sent DESC", "20");
 CMbObject::massLoadFwdRef($historique, "from");
 CMbObject::massLoadFwdRef($historique, "to");
 
+/** @var $historique CUserMessage[] */
 foreach ($historique as $_mail) {
   $_mail->loadRefUserFrom(1);
   $_mail->loadRefUserTo(1);
@@ -58,5 +59,3 @@ $smarty->assign("usermessage"   , $usermessage);
 $smarty->assign("historique", $historique);
 
 $smarty->display("write_usermessage.tpl");
-
-?>
