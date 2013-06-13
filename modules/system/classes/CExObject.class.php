@@ -881,4 +881,41 @@ class CExObject extends CMbMetaObject {
     
     return new CExObject($ex_class->_id);
   }
+
+  /**
+   * Counts ExObject stored for the object
+   *
+   * @param CMbObject $object The object to count the ExObjects for
+   *
+   * @return array The list, with ExClass IDs as key and counts as value
+   */
+  static function countExObjectsFor(CMbObject $object) {
+    $group_id = CGroups::loadCurrent()->_id;
+
+    $where = array(
+      "group_id = '$group_id' OR group_id IS NULL",
+    );
+
+    $ex_class = new CExClass();
+    $ex_class_ids = $ex_class->loadIds($where, "name");
+
+    $ds = $ex_class->_spec->ds;
+    $where = array(
+      "object_class" => $ds->prepare("= %", $object->_class),
+      "object_id"    => $ds->prepare("= %", $object->_id),
+    );
+
+    $ex_object_counts = array();
+
+    foreach ($ex_class_ids as $_ex_class_id) {
+      $_ex_object = new CExObject($_ex_class_id);
+      $_count = $_ex_object->countList($where);
+
+      if ($_count > 0) {
+        $ex_object_counts[$_ex_class_id] = $_count;
+      }
+    }
+
+    return $ex_object_counts;
+  }
 }
