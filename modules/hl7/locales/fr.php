@@ -483,6 +483,7 @@ $locales['CHL7Event-AR-E210'] = 'Erreur lors de l\'enregistrement de l\'objet li
 $locales['CHL7Event-AR-E211'] = 'Erreur lors de l\'enregistrement de la grossesse liée au séjour';
 $locales['CHL7Event-AR-E212'] = 'Erreur lors de l\'enregistrement de la naissance liée au séjour';
 $locales['CHL7Event-AR-E213'] = 'L\'enregistrement du séjour a échoué pour cause de collision';
+$locales['CHL7Event-AR-E214'] = 'L\'enregistrement du NRA a échoué';
 $locales['CHL7Event-AR-E220'] = 'Séjour(s) inconnu(s) par le système';
 $locales['CHL7Event-AR-E221'] = 'Erreur lors du test préalable de la fusion des séjours';
 $locales['CHL7Event-AR-E222'] = 'Erreur lors de la fusion des données séjours';

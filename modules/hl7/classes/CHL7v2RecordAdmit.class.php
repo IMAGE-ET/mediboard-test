@@ -288,6 +288,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       if ($msgNDA = CEAISejour::storeNDA($NDA, $newVenue, $sender)) {
         return $exchange_hl7v2->setAckAR($ack, "E202", $msgNDA, $newVenue);
       }
+
+      if ($msgNRA = $this->getAlternateVisitID($data["PV1"], $newVenue)) {
+        return $exchange_hl7v2->setAckAR($ack, "E214", $msgNRA, $newVenue);
+      }
       
       // Création du VN, voir de l'objet
       if ($msgVN = $this->createObjectByVisitNumber($newVenue, $data)) {
@@ -1369,7 +1373,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     // Entrée / Sortie réelle du séjour
     $this->getAdmitDischarge($node, $newVenue);
-    
+
     // Numéro de rang
     $this->getAlternateVisitID($node, $newVenue);
   }
@@ -1844,7 +1848,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $idexNRA = CIdSante400::getMatch($newVenue->_class, $tag_NRA, $PV1_50, $newVenue->_id);
     $idexNRA->last_update  = CMbDT::dateTime();
 
-    $idexNRA->store();
+    return $idexNRA->store();
   }
   
   function getPV2(DOMNode $node, CSejour $newVenue) {    
