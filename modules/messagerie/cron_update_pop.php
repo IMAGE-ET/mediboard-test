@@ -93,7 +93,7 @@ foreach ($sources as $_source) {
           $textP = new CContentAny();
           //apicrypt
           if (CModule::getActive("apicrypt") && $mail_unseen->_is_apicrypt == "plain") {
-            $textP->content = CApicrypt::uncryptBody($_source->object_id, $mail_unseen->_text_plain);
+            $textP->content = CApicrypt::uncryptBody($_source->object_id, $mail_unseen->_text_plain)."\n[apicrypt]";
           }
           else {
             $textP->content = $mail_unseen->_text_plain;
