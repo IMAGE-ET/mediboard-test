@@ -23,6 +23,8 @@ if (!CMediusers::getTagMediusers()) {
   CAppUI::stepAjax("Aucun tag de défini pour les mediusers", UI_MSG_ERROR);
 }
 
+$group_id = CGroups::loadCurrent()->_id;
+
 if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
   // Object columns on the first line
   $cols = fgetcsv($fp, null, ";");
@@ -40,13 +42,19 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $results[$i]["idex"]      = addslashes(trim($line[1]));
     $results[$i]["lastname"]  = isset($line[2]) ? addslashes(trim($line[2])) : null;
     $results[$i]["firstname"] = isset($line[3]) ? addslashes(trim($line[3])) : null;
+
+    $user = new CUser();
+    $ljoin["users_mediboard"] = "users_mediboard.user_id = users.user_id";
+
+    $where = array(
+      "users_mediboard.adeli"    => " = '".$results[$i]["adeli"]."'",
+      "users_mediboard.group_id" => " = '$group_id'"
+    );
+
+    $user = new CUser();
+    $count = $user->countList($where, null, $ljoin);
     
-    $mediuser = new CMediusers();
-    $mediuser->adeli = $results[$i]["adeli"];
-    
-    $count = $mediuser->countMatchingList();
-    
-    if ($count == "0") {
+    if ($count == 0) {
       $results[$i]["error"] = "L'utilisateur n'a pas été retrouvé dans Mediboard";
       $i++;
       continue;
@@ -56,8 +64,10 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $i++;
       continue;
     }
-    
-    $mediuser->loadMatchingObject();
+
+    $user->loadObject($where, null, null, $ljoin);
+
+    $mediuser = $user->loadRefMediuser();
     
     // Recherche pas nom/prenom si pas de code ADELI
     if (!$mediuser->_id) {
