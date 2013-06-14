@@ -39,7 +39,8 @@ class CFacture extends CMbObject {
   public $num_reference;
   public $envoi_xml;
   public $annule;
-  
+  public $definitive;
+
   // Form fields
   public $_consult_id;
   public $_total;
@@ -152,6 +153,7 @@ class CFacture extends CMbObject {
     $props["num_reference"]             = "str minLength|16 maxLength|27";
     $props["envoi_xml"]                 = "bool default|1";
     $props["annule"]                    = "bool default|0";
+    $props["definitive"]                = "bool default|0";
 
     $props["_du_restant_patient"]       = "currency";
     $props["_du_restant_tiers"]         = "currency";

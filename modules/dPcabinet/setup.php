@@ -1933,6 +1933,11 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `reglement`
                 ADD `tireur` VARCHAR (255);";
     $this->addQuery($query);
-    $this->mod_version = "2.08";
+    $this->makeRevision("2.08");
+
+    $query = "ALTER TABLE `facture_cabinet`
+                ADD `definitive` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    $this->mod_version = "2.09";
   }
 }

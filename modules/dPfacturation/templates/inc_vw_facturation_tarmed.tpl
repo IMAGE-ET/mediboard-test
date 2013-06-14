@@ -242,7 +242,7 @@
 </tbody>
 
 {{assign var="classe" value=$facture->_class}}
-{{if !$facture->_reglements_total_patient && !$conf.dPfacturation.$classe.use_auto_cloture && !$facture->annule}}
+{{if !$facture->_reglements_total_patient && !$conf.dPfacturation.$classe.use_auto_cloture && !$facture->annule && !$facture->definitive}}
   <tr>
     <td colspan="7">
       <form name="change_type_facture" method="post">
@@ -263,4 +263,19 @@
       </form>
     </td>
   </tr>
+{{/if}}
+{{if $facture->cloture && $conf.dPfacturation.Other.use_field_definitive}}
+  <tr>
+    <td colspan="7">
+      <form name="facture_definitive" method="post" action="">
+        {{mb_class object=$facture}}
+        {{mb_key   object=$facture}}
+        <input type="hidden" name="facture_class" value="{{$facture->_class}}" />
+        {{mb_label object=$facture field=definitive}}
+        {{mb_field object=$facture field=definitive onchange="Facture.modifCloture(this.form);"}}
+
+      </form>
+    </td>
+  </tr>
+  <tr></tr>
 {{/if}}

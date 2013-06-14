@@ -42,8 +42,8 @@ showLegend = function() {
           {{/if}}
           <th>Date</th>
           <th>Patient</th>
-          <th>N° patient</th>
           {{if $conf.dPfacturation.CEditPdf.use_bill_etab}}
+            <th>N° patient</th>
             <th>Numéro séjour</th>
           {{/if}}
         </tr>
