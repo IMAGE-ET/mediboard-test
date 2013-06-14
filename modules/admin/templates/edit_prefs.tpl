@@ -105,6 +105,7 @@ Main.add(Control.Tabs.create.curry('tab-modules', true));
   {{/if}}
   {{mb_include template=inc_pref spec=module var=DEFMODULE}}
   {{mb_include template=inc_pref spec=bool var=touchscreen}}
+  {{mb_include template=inc_pref spec=bool var=accessibility_dyslexic}}
   {{mb_include template=inc_pref spec=enum var=tooltipAppearenceTimeout values="short|medium|long" value_locale_prefix=""}}
   {{mb_include template=inc_pref spec=enum var=autocompleteDelay values="short|medium|long" value_locale_prefix=""}}
   {{mb_include template=inc_pref spec=bool var=showCounterTip}}

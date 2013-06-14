@@ -150,7 +150,7 @@
   </script>
 </head>
 
-<body class="{{if @$app->user_prefs.touchscreen == 1 || $browser.name == 'ipad' || $browser.useragent|stripos:'nexus 7' !== false}} touchscreen {{else}} desktop {{/if}} {{if $browser.name == 'ipad'}} ipad {{/if}}" {{if $app->touch_device}}style="margin-bottom:250px"{{/if}}>
+<body class="{{if @$app->user_prefs.accessibility_dyslexic == 1}} dyslexic {{/if}} {{if @$app->user_prefs.touchscreen == 1 || $browser.name == 'ipad' || $browser.useragent|stripos:'nexus 7' !== false}} touchscreen {{else}} desktop {{/if}} {{if $browser.name == 'ipad'}} ipad {{/if}}" {{if $app->touch_device}}style="margin-bottom:250px"{{/if}}>
 
 {{if $browser.name == "msie"}}
   {{include file="../../mediboard/templates/ie.tpl" nodebug=true}}

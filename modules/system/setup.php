@@ -1365,7 +1365,10 @@ class CSetupsystem extends CSetup {
 
     $this->mod_version = "1.1.39";
     */
-    $this->mod_version = "1.1.36";
+
+    $this->makeRevision("1.1.36");
+    $this->addPrefQuery("accessibility_dyslexic", "0");
+    $this->mod_version = "1.1.37";
     
     /*$query = "ALTER TABLE user_log
                 DROP INDEX object_id,
