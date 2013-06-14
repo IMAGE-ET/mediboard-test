@@ -55,9 +55,9 @@ if ((stripos($mail->_text_plain->content, "[apicrypt]") !== false) || (stripos($
   //search
   if (!$patient->_id && $nom != '' && $prenom != "") {
     $where = array();
-    $where[]            = "`nom` LIKE '$lines[$nom]%' OR `nom_jeune_fille` LIKE '$lines[$nom]%'";
-    $where["prenom"]    = "LIKE '$lines[$prenom]%' ";
-    $where["naissance"] = "LIKE '$lines[$naissance]' ";
+    $where[]            = "`nom` LIKE '$nom%' OR `nom_jeune_fille` LIKE '$nom%'";
+    $where["prenom"]    = "LIKE '$prenom%' ";
+    $where["naissance"] = "LIKE '$naissance' ";
     $patient->loadObject($where);
   }
   mbLog($patient);
