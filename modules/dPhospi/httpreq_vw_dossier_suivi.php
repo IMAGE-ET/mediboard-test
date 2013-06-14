@@ -223,6 +223,8 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_trans_const) {
   }
 }
 
+ksort($cibles["opened"]);
+ksort($cibles["closed"]);
 krsort($list_trans_const);
 
 $count_trans = count($list_trans_const);
