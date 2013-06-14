@@ -1091,12 +1091,12 @@ class CCompteRendu extends CDocumentItem {
     $file = $this->loadFile();
 
     // Fichier existe déjà et rempli
-    if ($file->_id && filesize($file->_file_path)) {
+    if ($file->_id && file_exists($file->_file_path) && filesize($file->_file_path)) {
       return null;
     }
 
     // Création du CFile si inexistant
-    if (!$file->_id) {
+    if (!$file->_id || !file_exists($file->_file_path)) {
       $file->setObject($this);
       $file->file_name  = $this->nom . ".pdf";
       $file->file_type  = "application/pdf";
@@ -1104,7 +1104,7 @@ class CCompteRendu extends CDocumentItem {
       $file->fillFields();
       $file->updateFormFields();
       $file->forceDir();
-    } 
+    }
 
     // Génération du contenu PDF 
     $margins = array(
