@@ -24,6 +24,7 @@ $mail->loadContentPlain();
 //apicrypt case
 if (stripos($mail->_text_plain->content, "[apicrypt]") !== false) {
   $lines = explode("\n", $mail->_text_plain->content);
+  mbLog($lines);
 
   //cleanup line 1 to 13
   for ($a = 1; $a<13; $a++) {

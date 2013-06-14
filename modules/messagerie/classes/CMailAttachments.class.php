@@ -37,9 +37,7 @@ class CMailAttachments extends CMbObject{
 
 
   /**
-   * get Spec
-   *
-   * @return CMbObjectSpec CMbObjectSpec
+   * @see parent::getSpec()
    */
   function getSpec() {
     $spec = parent::getSpec();
@@ -50,9 +48,7 @@ class CMailAttachments extends CMbObject{
   }
 
   /**
-   *  get Props
-   *
-   * @return array props
+   *  @see parent::getProps()
    */
   function getProps() {
     $props = parent::getProps();
@@ -73,9 +69,7 @@ class CMailAttachments extends CMbObject{
   }
 
   /**
-   * recuperation des back props
-   *
-   * @return array
+   * @see parent::getBackProps()
    */
   function getBackProps() {
     $backprops = parent::getBackProps();
@@ -170,6 +164,11 @@ class CMailAttachments extends CMbObject{
     $this->loadFiles();
   }
 
+  /**
+   * load the mail where this attachment is attached
+   *
+   * @return int|void
+   */
   function loadMail() {
     return $this->_ref_mail = $this->loadRefsFwd("mail_id");
   }

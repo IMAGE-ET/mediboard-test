@@ -53,9 +53,7 @@ class CUserMail extends CMbObject{
   public $_size; //size in bytes
 
   /**
-   * get specs
-   *
-   * @return CMbObjectSpec
+   * @see parent::getSpec()
    */
   function getSpec() {
     $spec = parent::getSpec();
@@ -66,9 +64,7 @@ class CUserMail extends CMbObject{
   }
 
   /**
-   * get Props
-   *
-   * @return array
+   * @see parent::getProps()
    */
   function getProps() {
     $props = parent::getProps();
@@ -97,9 +93,7 @@ class CUserMail extends CMbObject{
 
 
   /**
-   * BackProps
-   *
-   * @return array
+   * @see parent::getBackProps()
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
@@ -109,9 +103,7 @@ class CUserMail extends CMbObject{
   }
 
   /**
-   * delete (delete html & text
-   *
-   * @return null|string
+   * @see parent::delete()
    */
   function delete() {
     if ($msg = parent::delete()) {
