@@ -323,7 +323,11 @@ if ($show_operations) {
         $sejour->loadRefsFactureEtablissement();
         $facture = $sejour->_ref_last_facture;
         if ($facture->_id) {
-          $couleur = $facture->cloture ? "blue" : "#FF0";
+          $close = $facture->cloture;
+          if (CAppUI::conf("dPfacturation Other use_field_definitive")) {
+            $close = $facture->definitive;
+          }
+          $couleur = $close ? "blue" : "#FF0";
           $couleur = $facture->patient_date_reglement ? "green" : $couleur;
           $action_fact = "Facture.edit($facture->_id, '$facture->_class')";
           $libelle.= "<button class=\"calcul notext\" onclick=\"$action_fact\" style=\"border: $couleur 1px solid;\">Facture</button>";
