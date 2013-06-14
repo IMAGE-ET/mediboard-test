@@ -15,7 +15,7 @@
  * Class CHL7v3Event
  * Event HL7v3
  */
-class CHL7v3Event extends CHL7Event {
+class CHL7v3Event {
   /** @var  CHL7v3MessageXML $dom */
   public $dom;
 
@@ -43,7 +43,7 @@ class CHL7v3Event extends CHL7Event {
     // Génération de l'échange
     $this->generateExchange();
 
-    $this->dom = new CHL7v3MessageXML(null, $this->version);
+    $this->dom = new CHL7v3MessageXML("utf-8", $this->version);
   }
 
   /**
