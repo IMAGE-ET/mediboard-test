@@ -24,6 +24,8 @@ $mail->loadContentPlain();
 //apicrypt case
 if ((stripos($mail->_text_plain->content, "[apicrypt]") !== false) || (stripos($mail->_text_plain->content, "*FIN*") !== false)) {
   $lines = explode("\n", $mail->_text_plain->content);
+  $fl = ($lines[0] != "[apicrypt]") ? 0 : 1;  //first line
+
 
   //cleanup line 1 to 13
   for ($a = $fl; $a<$fl+12; $a++) {
@@ -31,7 +33,6 @@ if ((stripos($mail->_text_plain->content, "[apicrypt]") !== false) || (stripos($
   }
 
   //init
-  $fl = ($lines[0] != "[apicrypt]") ? 0 : 1;  //first line
   $ipp        = $lines[$fl];
   $nom        = $lines[$fl+1];
   $prenom     = $lines[$fl+2];
