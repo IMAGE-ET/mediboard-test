@@ -30,7 +30,7 @@ $hour_sum = array();
 foreach (range(0, 59) as $min) {
   $hour_sum[$min] = 0;
   foreach ($senders as $_sender) {
-    $hour_sum[$min] += $_sender->_hour_plan[$min] ? 1 : 0;
+    $hour_sum[$min] += $_sender->_hour_plan[$min];
   }
 }
 

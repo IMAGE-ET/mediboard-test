@@ -11,7 +11,6 @@
 
 /**
  * View sender class. 
- * @abstract Sends the content of a view on FTP source handling :
  * - FTP source
  * - cron table-like period + offset planning
  * - rotation on destination
@@ -26,6 +25,7 @@ class CViewSender extends CMbObject {
   public $params;
   public $period;
   public $offset;
+  public $every;
   public $active;
   public $max_archives;
   public $last_duration;
@@ -58,7 +58,8 @@ class CViewSender extends CMbObject {
     $props["name"         ] = "str notNull";
     $props["description"  ] = "text";
     $props["params"       ] = "text notNull";
-    $props["period"       ] = "enum list|1|2|3|4|5|6|10|15|20|30|60";
+    $props["period"       ] = "enum list|1|2|3|4|5|6|10|15|20|30|60 notNull default|30";
+    $props["every"        ] = "enum list|1|2|3|4|6|8|12|24 notNull default|1";
     $props["offset"       ] = "num min|0 notNull default|0";
     $props["active"       ] = "bool notNull default|0";
     $props["max_archives" ] = "num min|1 notNull default|10";
@@ -88,21 +89,26 @@ class CViewSender extends CMbObject {
     parse_str($params, $this->_params);
   }
   
-  function getActive($minute) {
+  function getActive($minute, $hour = null) {
     $period = intval($this->period);
     $offset = intval($this->offset);
+    $every  = intval($this->every);
     $minute = intval($minute);
+    $hour   = intval($hour);
+    $minute_actuve = $minute % $period == $offset;
+    $hour_active = $hour === null || ($hour % $every == 0);
     
-    return $this->_active = $minute % $period == $offset;
+    return $this->_active = $minute_actuve && $hour_active;
   }
   
   function makeHourPlan($minute = null) {
     $period = intval($this->period);
     $offset = intval($this->offset);
+    $every  = intval($this->every );
 
     // Hour plan
     foreach (range(0, 59) as $min) {
-      $this->_hour_plan[$min] = $min % $period == $offset;
+      $this->_hour_plan[$min] = ($min % $period == $offset) / $every;
     }
 
     // Active

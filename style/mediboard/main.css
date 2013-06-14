@@ -1759,6 +1759,10 @@ table.tbl td.hour-plan {
   height: 3em;
 }
 
+table.tbl td.hour-plan.partial {
+  background-color: #dfd !important;
+}
+
 table.tbl td.hour-plan.active {
   outline: 2px solid #000;
 }

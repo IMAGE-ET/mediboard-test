@@ -45,7 +45,12 @@
       <th>{{mb_label object=$sender field=offset}}</th>
       <td>{{mb_field object=$sender field=offset}}</td>
     </tr>
-    
+
+    <tr>
+      <th>{{mb_label object=$sender field=every}}</th>
+      <td>{{mb_field object=$sender field=every}}</td>
+    </tr>
+
     <tr>
       <th>{{mb_label object=$sender field=active}}</th>
       <td>{{mb_field object=$sender field=active}}</td>

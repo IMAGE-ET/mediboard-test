@@ -14,6 +14,7 @@ CCanDo::checkRead();
 // Minute courante
 $time = CMbDT::time();
 $minute = intval(CMbDT::transform($time, null, "%M"));
+$hour   = intval(CMbDT::transform($time, null, "%H"));
 
 // Opératue de l'envoi
 $user = new CUser;
@@ -29,12 +30,13 @@ $where = array(
   "active" => "= '1'",
 );
 
+/** @var CViewSender[] $senders */
 $senders = $sender->loadList($where, "name");
 
 // Envoi de vues
 foreach ($senders as $_sender) {
   $_sender->makeUrl($user);
-  if (!$_sender->getActive($minute)) {
+  if (!$_sender->getActive($minute, $hour)) {
     unset($senders[$_sender->_id]);
     continue;
   }
@@ -49,7 +51,7 @@ foreach ($senders as $_sender) {
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("senders", $senders);
-$smarty->assign("time", $time);
-$smarty->assign("user", $user);
-$smarty->assign("minute", $minute);
+$smarty->assign("time"   , $time);
+$smarty->assign("user"   , $user);
+$smarty->assign("minute" , $minute);
 $smarty->display("inc_send_views.tpl");
