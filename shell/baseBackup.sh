@@ -177,7 +177,7 @@ if [ -n "$passphrase" ]; then
 else
   # create a symlink
   cp -s -f $tarball $database-latest.tar.gz
-  check_errs $? "Failed to create symlink" "Symlink created!"
+  warn_errs $? "Failed to create symlink" "Symlink created!"
 fi
 
 # Remove temporary files

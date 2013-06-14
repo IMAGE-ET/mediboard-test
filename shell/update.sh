@@ -111,7 +111,7 @@ case "$1" in
     ;;
 
   *)
-    echo "Action '$1' unknown"
+      check_errs 2 "Action '$1' unknown"
     exit 1
     ;;
 esac

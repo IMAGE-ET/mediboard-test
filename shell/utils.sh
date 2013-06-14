@@ -1,4 +1,4 @@
-#!/$HOME/sh
+#!/bin/sh
 
 ########
 # Utilities
@@ -29,6 +29,23 @@ check_errs() {
   fi
 
   cecho "${SUCCESSTEXT}"
+}
+
+warn_errs() {
+  RETURNCODE=$1
+  FAILURETEXT=$2
+  SUCCESSTEXT=$3
+  DATETIME=$(date +%Y-%m-%dT%H-%M-%S)
+
+  cecho "[${DATETIME}] \c"
+  cecho ">> warning:: \c" bold
+
+  if [ "${RETURNCODE}" -ne "0" ]
+  then
+    cecho "ERROR # ${RETURNCODE} : ${FAILURETEXT}"
+  else
+    cecho "${SUCCESSTEXT}"
+  fi
 }
 
 announce_script() {
