@@ -156,11 +156,11 @@ class CExchangeHL7v2 extends CExchangeTabular {
       if (in_array($hl7_message_evt, $evenements)) {
         if (!$hl7_message->i18n_code) {
           $this->_family_message_class = $_message;
-          $this->_family_message       = CHL7Event::getEventVersion($hl7_message->version, $hl7_message->event_name);
+          $this->_family_message       = CHL7V2Event::getEventVersion($hl7_message->version, $hl7_message->event_name);
         }
         else {
           $this->_family_message_class = $_message;
-          $this->_family_message       = CHL7Event::getEventVersion($hl7_message->version, $hl7_message->getI18NEventName());
+          $this->_family_message       = CHL7V2Event::getEventVersion($hl7_message->version, $hl7_message->getI18NEventName());
         }
 
         return true;
