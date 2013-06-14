@@ -22,9 +22,9 @@ $mail->load($mail_id);
 $mail->loadContentPlain();
 
 //apicrypt case
+mbLog($mail->_text_plain->content);
 if (stripos($mail->_text_plain->content, "[apicrypt]") !== false) {
   $lines = explode("\n", $mail->_text_plain->content);
-  mbLog($lines);
 
   //cleanup line 1 to 13
   for ($a = 1; $a<13; $a++) {
