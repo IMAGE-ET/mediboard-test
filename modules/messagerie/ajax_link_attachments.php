@@ -60,7 +60,6 @@ if ((stripos($mail->_text_plain->content, "[apicrypt]") !== false) || (stripos($
     $where["naissance"] = "LIKE '$naissance' ";
     $patient->loadObject($where);
   }
-  mbLog($patient);
 
 
   //NDA
