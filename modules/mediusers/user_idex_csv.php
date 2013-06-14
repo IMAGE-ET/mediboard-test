@@ -44,11 +44,12 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $results[$i]["firstname"] = isset($line[3]) ? addslashes(trim($line[3])) : null;
 
     $user = new CUser();
-    $ljoin["users_mediboard"] = "users_mediboard.user_id = users.user_id";
+    $ljoin["users_mediboard"]     = "users_mediboard.user_id = users.user_id";
+    $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
 
     $where = array(
       "users_mediboard.adeli"    => " = '".$results[$i]["adeli"]."'",
-      "users_mediboard.group_id" => " = '$group_id'"
+      "functions_mediboard.group_id" => " = '$group_id'"
     );
 
     $user = new CUser();
