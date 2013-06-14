@@ -24,42 +24,51 @@ $mail->loadContentPlain();
 //apicrypt case
 if ((stripos($mail->_text_plain->content, "[apicrypt]") !== false) || (stripos($mail->_text_plain->content, "*FIN*") !== false)) {
   $lines = explode("\n", $mail->_text_plain->content);
-  mbLog($lines);
 
   //cleanup line 1 to 13
-  for ($a = 1; $a<13; $a++) {
+  for ($a = $fl; $a<$fl+12; $a++) {
     $lines[$a] = trim($lines[$a]);
   }
 
+  //init
+  $fl = ($lines[0] != "[apicrypt]") ? 0 : 1;  //first line
+  $ipp        = $lines[$fl];
+  $nom        = $lines[$fl+1];
+  $prenom     = $lines[$fl+2];
+  $addr       = $lines[$fl+3];
+  $addr_2     = $lines[$fl+4];
+  $cp_ville   = $lines[$fl+5];
+  $naissance  = CMbDT::dateFromLocale($lines[$fl+6]);
+  $codeSecu   = $lines[$fl+6];
+  $nda        = $lines[$fl+8];
+  $date       = CMbDT::dateTime(CMbDT::dateFromLocale($lines[$fl+9]));
+  $codeCores  = $lines[$fl+10];
+  $codePresc  = $lines[$fl+11];
+
   //IPP
-  if ($lines[1] != '') {
-    $patient->_IPP = $lines[1];
+  if ($lines[$fl] != '') {
+    $patient->_IPP = $ipp;
     $patient->loadFromIPP();
   }
 
   //search
-  if (!$patient->_id && $lines[2] != '' && $lines[3] != "") {
-    $lines[7] = CMbDT::dateFromLocale($lines[7]);
-
+  if (!$patient->_id && $nom != '' && $prenom != "") {
     $where = array();
-    $where[]            = "`nom` LIKE '$lines[2]%' OR `nom_jeune_fille` LIKE '$lines[2]%'";
-    $where["prenom"]    = "LIKE '$lines[3]%' ";
-    $where["naissance"] = "LIKE '$lines[7]' ";
-
+    $where[]            = "`nom` LIKE '$lines[$nom]%' OR `nom_jeune_fille` LIKE '$lines[$nom]%'";
+    $where["prenom"]    = "LIKE '$lines[$prenom]%' ";
+    $where["naissance"] = "LIKE '$lines[$naissance]' ";
     $patient->loadObject($where);
   }
 
   //NDA
-  if ($patient->_id && $lines[9]) {
-    $dossier->loadFromNDA($lines[9]);
+  if ($patient->_id && $nda) {
+    $dossier->loadFromNDA($nda);
   }
 
-  // patient + date
-  if ($patient->_id && !$dossier->_id && $lines[10]) {
-    $lines[10] = CMbDT::dateTime(CMbDT::dateFromLocale($lines[10]));
-
+  // patient + date (et pas de nda)
+  if ($patient->_id && !$dossier->_id && $date) {
     $where = array();
-    $where[]             = " '$lines[10]' BETWEEN entree AND sortie ";
+    $where[]             = " '$date' BETWEEN entree AND sortie ";
     $where["patient_id"] = " = '$patient->_id'";
 
     $dossier->loadObject($where);
