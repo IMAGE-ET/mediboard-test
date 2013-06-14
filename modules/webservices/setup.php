@@ -17,9 +17,9 @@ function __construct() {
 
   $this->mod_name = "webservices";
   $this->makeRevision("all");
-  
+
   $this->makeRevision("0.10");
- 
+
   $query = "CREATE TABLE `echange_soap` (
             `echange_soap_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
             `emetteur` VARCHAR (255),
@@ -32,44 +32,44 @@ function __construct() {
             `output` TEXT
           ) /*! ENGINE=MyISAM */;";
    $this->addQuery($query);
-   
+
    $this->makeRevision("0.11");
-   $query = "ALTER TABLE `echange_soap` 
+   $query = "ALTER TABLE `echange_soap`
              ADD `soapfault` ENUM ('0','1') DEFAULT '0',
              ADD INDEX (`date_echange`);";
    $this->addQuery($query);
-   
+
    $this->makeRevision("0.12");
-   $query = "ALTER TABLE `echange_soap` 
+   $query = "ALTER TABLE `echange_soap`
             ADD `purge` ENUM ('0','1') DEFAULT '0';";
-   $this->addQuery($query); 
-   
+   $this->addQuery($query);
+
    $this->makeRevision("0.13");
-   $query = "ALTER TABLE `echange_soap` 
+   $query = "ALTER TABLE `echange_soap`
             CHANGE `input` `input` TEXT;";
    $this->addQuery($query);
-   
+
    $this->makeRevision("0.14");
-   $query = "ALTER TABLE `echange_soap` 
+   $query = "ALTER TABLE `echange_soap`
              ADD `response_time` FLOAT,
              ADD INDEX (`type`);";
    $this->addQuery($query);
-   
+
    $this->makeRevision("0.15");
-   $query = "ALTER TABLE `echange_soap` 
+   $query = "ALTER TABLE `echange_soap`
              ADD INDEX (`web_service_name`),
              ADD INDEX (`function_name`);";
    $this->addQuery($query);
-   
+
    $this->makeRevision("0.16");
-   $query = "ALTER TABLE `echange_soap` 
+   $query = "ALTER TABLE `echange_soap`
             ADD `trace` ENUM ('0','1') DEFAULT '0',
             ADD `last_request_headers` TEXT,
             ADD `last_response_headers` TEXT,
             ADD `last_request` MEDIUMTEXT,
             ADD `last_response` MEDIUMTEXT;";
    $this->addQuery($query);
-   
+
    $query = "CREATE TABLE IF NOT EXISTS `source_soap` (
               `source_soap_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `wsdl_mode` ENUM ('0','1') DEFAULT '1',
@@ -189,7 +189,12 @@ function __construct() {
                 WHERE source_soap.name LIKE 'CReceiverIHE-%';";
   $this->addQuery($query);
 
-    $this->mod_version = "0.31";
+    $this->makeRevision("0.31");
+
+    $query = "ALTER TABLE source_soap
+                  ADD `safe_mode` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.32";
   }
 }
-?>

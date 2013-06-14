@@ -29,6 +29,7 @@ class CSourceSOAP extends CExchangeSource {
   public $local_cert;
   public $passphrase;
   public $iv_passphrase;
+  public $safe_mode;
 
   public $_headerbody = array();
 
@@ -62,6 +63,7 @@ class CSourceSOAP extends CExchangeSource {
     $specs["local_cert"]       = "str";
     $specs["passphrase"]       = "password show|0 loggable|0";
     $specs["iv_passphrase"]    = "str show|0 loggable|0";
+    $specs["safe_mode"]        = "bool default|0";
     
     return $specs;
   }
@@ -156,7 +158,7 @@ class CSourceSOAP extends CExchangeSource {
 
     $soap_client->make(
       $this->host, $this->user, $password, $this->type_echange, $options, null,
-      $this->stream_context, $this->local_cert, $passphrase
+      $this->stream_context, $this->local_cert, $passphrase, $this->safe_mode
     );
     
     if ($soap_client->client->soap_client_error) {
@@ -192,11 +194,13 @@ class CSourceSOAP extends CExchangeSource {
    * @return bool|void
    */
   function isReachableSource() {
-    if (!url_exists($this->host)) {
-      $this->_reachable = 0;
-      $this->_message   = CAppUI::tr("CSourceSOAP-unreachable-source", $this->host);
+    if (!$this->safe_mode) {
+      if (!url_exists($this->host)) {
+        $this->_reachable = 0;
+        $this->_message   = CAppUI::tr("CSourceSOAP-unreachable-source", $this->host);
 
-      return false;
+        return false;
+      }
     }
 
     return true;

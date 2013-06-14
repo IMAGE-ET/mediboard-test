@@ -294,10 +294,12 @@ class SocketClient {
   /**
    * Read data from socket
    *
-   * @param int $iTimeOut
+   * @param int    $iTimeOut    The timeout value
+   * @param string $end_pattern The end pattern
+   *
    * @return string
    */
-  public function recv($iTimeOut = null) {
+  public function recv($iTimeOut = null, $end_pattern = null) {
     
     if (!$this->bConnected) {
       $this->error("Socket error. Cannot read any data on a closed socket.");
@@ -319,6 +321,9 @@ class SocketClient {
       $res = @socket_recv($this->hnd, $buf, $iBufLen, 0);
       while ($res) {
         $this->sBuffer .= $buf;
+        if ($end_pattern && strpos($this->sBuffer, $end_pattern)) {
+          break;
+        }
         $buf = null;
         
         while (($rr = @socket_select($vSocket, $vWrite = null, $vExcept = null, $ReadTimeOut)) === FALSE)

@@ -63,10 +63,13 @@ class CSOAPClient {
       $loggable = null,
       $stream_context = null,
       $local_cert = null,
-      $passphrase = null
+      $passphrase = null,
+      $safe_mode = 0
   ) {
-    if (!url_exists($rooturl, $stream_context)) {
-      throw new CMbException("CSourceSOAP-unreachable-source", $rooturl);
+    if (!$safe_mode) {
+      if (!url_exists($rooturl, $stream_context)) {
+        throw new CMbException("CSourceSOAP-unreachable-source", $rooturl);
+      }
     }
 
     if (($login && $password) || (array_key_exists('login', $options) && array_key_exists('password', $options))) {
@@ -81,11 +84,11 @@ class CSOAPClient {
 
     switch ($this->type_client) {
       case 'CNuSOAPClient' :
-        $this->client = new CNuSOAPClient($rooturl, $type, $options, $loggable, $local_cert, $passphrase);
+        $this->client = new CNuSOAPClient($rooturl, $type, $options, $loggable, $local_cert, $passphrase, $safe_mode);
         break;
         
       default :
-        $this->client = new CMbSOAPClient($rooturl, $type, $options, $loggable, $local_cert, $passphrase);
+        $this->client = new CMbSOAPClient($rooturl, $type, $options, $loggable, $local_cert, $passphrase, $safe_mode);
         break;
     }
     

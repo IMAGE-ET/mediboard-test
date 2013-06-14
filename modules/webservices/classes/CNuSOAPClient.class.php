@@ -33,12 +33,13 @@ class CNuSOAPClient extends nusoap_client {
    * @param boolean $loggable   True if you want to log all the exchanges with the web service
    * @param string  $local_cert Path of the certifacte
    * @param string  $passphrase Pass phrase for the certificate
+   * @param bool    $safe_mode  Safe mode
    *
    * @throws CMbException
    *
    * @return CNuSOAPClient
    */
-  function __construct($rooturl, $type = null, $options = array(), $loggable = null, $local_cert = null, $passphrase = null) {
+  function __construct($rooturl, $type = null, $options = array(), $loggable = null, $local_cert = null, $passphrase = null, $safe_mode = 0) {
     $this->wsdl_url = $rooturl;
 
     if ($loggable) {
@@ -48,15 +49,17 @@ class CNuSOAPClient extends nusoap_client {
     if ($type) {
       $this->type_echange_soap = $type;
     }
-    
-    if (!$html = file_get_contents($this->wsdl_url)) {
-      $this->soap_client_error = true;
-      throw new CMbException("CSourceSOAP-unable-to-parse-url", $this->wsdl_url);
-    }
 
-    if (strpos($html, "<?xml") === false) {
-      $this->soap_client_error = true;
-      throw new CMbException("CSourceSOAP-wsdl-invalid");
+    if (!$safe_mode) {
+      if (!$html = file_get_contents($this->wsdl_url)) {
+        $this->soap_client_error = true;
+        throw new CMbException("CSourceSOAP-unable-to-parse-url", $this->wsdl_url);
+      }
+
+      if (strpos($html, "<?xml") === false) {
+        $this->soap_client_error = true;
+        throw new CMbException("CSourceSOAP-wsdl-invalid");
+      }
     }
     
     if (array_key_exists("encoding", $options)) {
