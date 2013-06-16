@@ -539,8 +539,8 @@ Object.extend(TogglePairEffect, {
 var ViewPort = {
   /**
    *
-   * @param {HTMLElement} element DOM element
-   * @param {float}       pct     Percentage of available height
+   * @param {HTMLElement|string} element DOM element
+   * @param {float}              pct     Percentage of available height
    * @constructor
    */
   SetAvlHeight: function (element, pct) {
