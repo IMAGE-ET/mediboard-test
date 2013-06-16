@@ -87,6 +87,9 @@ $locales['CActiviteCsARR-libelle-desc'] = 'Libellé de l\'activité';
 $locales['CActiviteCsARR-libelle_court'] = 'Libellé court';
 $locales['CActiviteCsARR-libelle_court-court'] = 'Lib.';
 $locales['CActiviteCsARR-libelle_court-desc'] = 'Libellé court (en majuscules';
+$locales['CActiviteCsARR-libelle_phase_A'] = 'Prise de mesure et/ou thermoformage';
+$locales['CActiviteCsARR-libelle_phase_B'] = 'Prise de fabrication de l\'orthèse';
+$locales['CActiviteCsARR-libelle_phase_C'] = 'Pour mise à disposition de l\'orthèse';
 $locales['CActiviteCsARR-msg-create'] = '-';
 $locales['CActiviteCsARR-msg-delete'] = '-';
 $locales['CActiviteCsARR-msg-modify'] = '-';
@@ -1103,3 +1106,4 @@ $locales['ssr-import-cdarr-report'] = 'Import du fichier \'%s\' dans la table \'
 $locales['ssr-import-csarr-report'] = 'Import du fichier \'%s\' dans la table \'%s\': \'%s\' lignes ignorée(s), \'%s\' lignes ajoutée(s), \'%s\' échouées(s)';
 $locales['ssr-import-tables-error'] = 'Erreur de création des tables: %s';
 $locales['ssr-import-tables-success'] = 'Création de \'%s\' tables avec succès';
+?>

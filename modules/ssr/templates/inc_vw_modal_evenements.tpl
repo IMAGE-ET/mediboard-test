@@ -4,10 +4,12 @@
   <input type="hidden" name="m" value="ssr" />
   <input type="hidden" name="dosql" value="do_treat_evenements" />
   <input type="hidden" name="realise_ids" value="" />
-  <input type="hidden" name="annule_ids" value="" />
+  <input type="hidden" name="annule_ids"  value="" />
+  <input type="hidden" name="modulateurs" value="" />
+  <input type="hidden" name="phases"      value="" />
 </form>
 
-<table class="tbl" style="margin-right: 10px; text-align: left;" id="list-evenements-modal">
+<table class="tbl" style="margin-right: 10px;" id="list-evenements-modal">
   <tr>
     <th colspan="8" class="title">Evenements</th>
   </tr>
@@ -41,10 +43,10 @@
     {{if $count_traite}} 
     <tr>
       <td colspan="8">
-	      <div class="small-info">
-	        {{$count_traite}} événéments ont déjà été traités pour ce patient.
-	        <strong>Aucun ne sera donc pas pré-sélectionné</strong>.
-	      </div>
+        <div class="small-info">
+          {{$count_traite}} événéments ont déjà été traités pour ce patient.
+          <strong>Aucun ne sera donc pas pré-sélectionné</strong>.
+        </div>
       </td>
     </tr>      
     {{/if}}
@@ -75,7 +77,7 @@
           <div>
             {{foreach from=$_evenement->_ref_actes_cdarr item=_acte}}
               <span onmouseover="ObjectTooltip.createEx(this, '{{$_acte->_guid}}')">
-                {{$_acte}}
+                {{$_acte->code}}
               </span> 
             {{/foreach}}
           </div>
@@ -83,14 +85,28 @@
           {{foreach from=$_evenement->_ref_actes_csarr item=_acte}}
           <div>
             <strong onmouseover="ObjectTooltip.createEx(this, '{{$_acte->_guid}}')">
-              {{$_acte}}
-            </strong> 
+              {{$_acte->code}}
+            </strong>
             {{foreach from=$_acte->_ref_activite_csarr->_ref_modulateurs item=_modulateur}}
             <label title="{{$_modulateur->_libelle}}">
-              <!--input type="checkbox" /-->
+              <input type="checkbox" class="modulateur"
+                {{if in_array($_modulateur->modulateur, $_acte->_modulateurs)}} checked="checked" {{/if}}
+                value="{{$_acte->_id}}-{{$_modulateur->modulateur}}" />
               {{$_modulateur->modulateur}}
             </label>
             {{/foreach}}
+            {{if $_acte->_fabrication}}
+              &dash; Phases:
+              {{foreach from="-"|explode:"A-B-C" item=_phase}}
+                <label title="{{tr}}CActiviteCsARR-libelle_phase_{{$_phase}}{{/tr}}">
+                  <input type="checkbox" class="phase"
+                    {{if in_array($_phase, $_acte->_phases)}} checked="checked" {{/if}}
+                     value="{{$_acte->_id}}-{{$_phase}}" />
+                  {{$_phase}}
+                </label>
+              {{/foreach}}
+            {{/if}}
+
           </div>
           {{/foreach}}
           
@@ -103,18 +119,18 @@
         </td> 
 
         <td>
-        	{{assign var=equipement value=$_evenement->_ref_equipement}}
-					{{if $equipement->_id}} 
-					  {{$equipement}}
-					{{/if}}
+          {{assign var=equipement value=$_evenement->_ref_equipement}}
+          {{if $equipement->_id}} 
+            {{$equipement}}
+          {{/if}}
         </td>
         <td>
           <input class="{{$sejour->_guid}} {{$_evenement->_guid}} realise" type="checkbox" value="{{$_evenement->_id}}" 
-					  onchange="if (this.checked) $$('input.{{$_evenement->_guid}}.annule')[0].checked = false;"
-					  {{if !$_evenement->_count_actes}} disabled="disabled" 
-						{{elseif $_evenement->realise || !$count_traite}}  checked="checked" 
-						{{/if}} 
-					/>
+            onchange="if (this.checked) $$('input.{{$_evenement->_guid}}.annule')[0].checked = false;"
+            {{if !$_evenement->_count_actes}} disabled="disabled" 
+            {{elseif $_evenement->realise || !$count_traite}}  checked="checked" 
+            {{/if}} 
+          />
         </td>
         <td>
           <input class="{{$sejour->_guid}} {{$_evenement->_guid}} annule" type="checkbox" value="{{$_evenement->_id}}" 
@@ -128,7 +144,7 @@
     {{/foreach}}
     {{/foreach}}
   {{foreachelse}}
-	<tr>
+  <tr>
     <td class="empty">{{tr}}CEvenementSSR.none{{/tr}}</td>
   </tr>
   {{/foreach}}
@@ -139,8 +155,8 @@
 
 {{if $count_zero_actes}} 
 <div class="small-warning">
-	{{tr}}CEvenementCdARR-msg-count_zero_actes{{/tr}} :
-	(<strong>{{$count_zero_actes}} {{tr}}CEvenementSSR{{/tr}} </strong>)
+  {{tr}}CEvenementCdARR-msg-count_zero_actes{{/tr}} :
+  (<strong>{{$count_zero_actes}} {{tr}}CEvenementSSR{{/tr}} </strong>)
 </div>
 {{/if}}
 

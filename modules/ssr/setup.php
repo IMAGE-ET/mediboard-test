@@ -431,8 +431,8 @@ class CSetupssr extends CSetup {
     
     $this->makeRevision("0.38");
     $query = "ALTER TABLE `acte_cdarr` 
-              ADD `administration_id` INT (11) UNSIGNED,
-              CHANGE `evenement_ssr_id` `evenement_ssr_id` INT (11) UNSIGNED;";
+      ADD `administration_id` INT (11) UNSIGNED,
+      CHANGE `evenement_ssr_id` `evenement_ssr_id` INT (11) UNSIGNED;";
     $this->addQuery($query);
     $this->makeRevision("0.39");
 
@@ -458,11 +458,11 @@ class CSetupssr extends CSetup {
     $this->makeRevision("0.42");
 
     $query = "CREATE TABLE `element_prescription_to_csarr` (
-        `element_prescription_to_csarr_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-        `element_prescription_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
-        `code` CHAR (7) NOT NULL,
-        `commentaire` VARCHAR (255)
-      )/*! ENGINE=MyISAM */;";
+      `element_prescription_to_csarr_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `element_prescription_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+      `code` CHAR (7) NOT NULL,
+      `commentaire` VARCHAR (255)
+    )/*! ENGINE=MyISAM */;";
     $this->addQuery($query);
             
     $query = "ALTER TABLE `element_prescription_to_csarr` ADD INDEX (`element_prescription_id`);";
@@ -472,12 +472,12 @@ class CSetupssr extends CSetup {
     $this->makeRevision("0.43");
 
     $query = "CREATE TABLE `acte_csarr` (
-        `acte_csarr_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-        `evenement_ssr_id` INT (11) UNSIGNED,
-        `administration_id` INT (11) UNSIGNED,
-        `sejour_id` INT (11) UNSIGNED,
-        `code` CHAR (7) NOT NULL
-      )/*! ENGINE=MyISAM */;";
+      `acte_csarr_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `evenement_ssr_id` INT (11) UNSIGNED,
+      `administration_id` INT (11) UNSIGNED,
+      `sejour_id` INT (11) UNSIGNED,
+      `code` CHAR (7) NOT NULL
+    )/*! ENGINE=MyISAM */;";
     $this->addQuery($query);
             
     $query = "ALTER TABLE `acte_csarr` 
@@ -503,8 +503,13 @@ class CSetupssr extends CSetup {
       ADD `code_activite_csarr` CHAR (7);";
     $this->addQuery($query);
 
+    $this->makeRevision("0.46");
+    $query = "ALTER TABLE `acte_csarr`
+      ADD `modulateurs` VARCHAR (20),
+      ADD `phases` VARCHAR (3);";
+    $this->addQuery($query);
 
-    $this->mod_version = "0.46";
+    $this->mod_version = "0.47";
 
     // Data source query
     $query = "SHOW TABLES LIKE 'type_activite'";
