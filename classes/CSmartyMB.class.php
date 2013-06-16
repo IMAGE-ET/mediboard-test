@@ -829,7 +829,7 @@ class CSmartyMB extends Smarty {
    * @return void
    */
   function trace($value) {
-    mbExport($value);
+    mbExport($value instanceof CModelObject ? $value->getProperties() : $value);
   }
 
   /**
