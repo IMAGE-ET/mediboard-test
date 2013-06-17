@@ -913,18 +913,24 @@ var Url = Class.create({
       }
     }
 
-    // Default on complete behaviour
-    options = Object.extend({
-      onComplete: function () {
-        this.container.fire("modal:loaded");
+    var onComplete = options.onComplete;
 
-        // Form focus
-        var form = this.container.down('form');
-        if (form) {
-          form.focusFirstElement();
+    // Default on complete behaviour
+    options.onComplete = (function() {
+      try {
+        if (onComplete) {
+          onComplete();
         }
-      }.bind(this.modalObject)
-    }, options);
+      } catch(e) {}
+
+      this.container.fire("modal:loaded");
+
+      // Form focus
+      var form = this.container.down('form');
+      if (form) {
+        form.focusFirstElement();
+      }
+    }).bind(this.modalObject);
 
     this.requestUpdate(modalContainer.down(".content"), options);
 
