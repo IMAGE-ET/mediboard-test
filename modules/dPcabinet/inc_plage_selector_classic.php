@@ -17,6 +17,8 @@ global $period, $periods, $chir_id, $function_id, $date, $ndate, $pdate, $plagec
 $hour             = CValue::get("hour");
 $hide_finished    = CValue::get("hide_finished", true);
 $_line_element_id = CValue::get("_line_element_id");
+$multipleMode     = CValue::get("multipleMode", false);
+
 
 // Récupération des plages de consultation disponibles
 $listPlage = new CPlageconsult;
@@ -122,5 +124,6 @@ $smarty->assign("plage"          , $plage);
 $smarty->assign("listPlage"      , $listPlage);
 $smarty->assign("online"         , true);
 $smarty->assign("_line_element_id", $_line_element_id);
+$smarty->assign("multipleMode"   , $multipleMode);
 
 $smarty->display("plage_selector.tpl");

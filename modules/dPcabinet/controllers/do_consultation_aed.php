@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPcabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 // Praticien courant pour les prises de rendez-vous suivantes
@@ -19,6 +19,9 @@ if (CValue::post("del")) {
   CValue::setSession("selConsult");
 }
 
+// before basic job, do the multiple consultations
+CAppUI::requireModuleFile("dPcabinet", "controllers/do_consultation_multiple");
+
+//consult n°1, classic use
 $do = new CDoObjectAddEdit("CConsultation");
 $do->doIt();
-?>
