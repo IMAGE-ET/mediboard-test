@@ -876,11 +876,12 @@ class CMediusers extends CPerson {
     }
 
     $order = "`users`.`user_last_name`, `users`.`user_first_name`";
+    $group_by = array("user_id");
 
     // Get all users
     $mediuser = new CMediusers;
     CMediusers::$user_autoload = false;
-    $mediusers = $mediuser->loadList($where, $order, null, null, $ljoin);
+    $mediusers = $mediuser->loadList($where, $order, null, $group_by, $ljoin);
     CMediusers::$user_autoload = true;
 
     // Mass user speficic preloading
