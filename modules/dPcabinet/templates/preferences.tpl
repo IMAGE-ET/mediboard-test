@@ -34,3 +34,5 @@
 {{mb_include template=inc_pref spec=bool var=showIntervPlanning}}
 {{mb_include template=inc_pref spec=enum var=AFFCONSULT values="0|1"}}
 {{mb_include template=inc_pref spec=enum var=DefaultPeriod values="day|week|month|weekly" value_locale_prefix="Period."}}
+<tr><th class="category" colspan="6">Consultations multiples</th></tr>
+{{mb_include template=inc_pref spec=enum var=NbConsultMultiple values="2|3|4|5|6"}}

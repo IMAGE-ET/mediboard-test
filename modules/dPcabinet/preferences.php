@@ -35,4 +35,5 @@ CPreferences::$modules["dPcabinet"] = array (
   "order_mode_grille",
   "create_dossier_anesth",
   "showIntervPlanning",
+  "NbConsultMultiple"
 );
