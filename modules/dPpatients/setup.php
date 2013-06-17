@@ -2266,7 +2266,16 @@ class CSetupdPpatients extends CSetup {
                 )";
     $this->addQuery($query);
 
-    $this->mod_version = "1.83";
+
+    $this->makeRevision("1.83");
+    $query = "ALTER TABLE `correspondant_patient`
+                CHANGE `relation` `relation` ENUM ('assurance','autre','confiance','employeur','inconnu','prevenir') DEFAULT 'prevenir',
+                ADD `surnom` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.84";
+
+
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

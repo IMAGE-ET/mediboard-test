@@ -53,22 +53,5 @@
 
 <button type="button" class="upload" onclick="popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button>
 
-<table class="tbl">
-  <tr>
-    <th>{{mb_title class=CCorrespondantPatient field=nom}}</th>
-    <th>{{mb_title class=CCorrespondantPatient field=prenom}}</th>
-    <th>{{mb_title class=CCorrespondantPatient field=naissance}}</th>
-    <th>{{mb_title class=CCorrespondantPatient field=adresse}}</th>
-    <th>{{mb_title class=CCorrespondantPatient field=cp}}/{{mb_title class=CCorrespondantPatient field=ville}}</th>
-    <th>{{mb_title class=CCorrespondantPatient field=tel}}</th>
-    <th>{{mb_title class=CCorrespondantPatient field=mob}}</th>
-    <th>{{mb_title class=CCorrespondantPatient field=fax}}</th>
-    <th>{{mb_title class=CCorrespondantPatient field=relation}}</th>
-    {{if $conf.ref_pays == 1}}
-      <th>{{mb_title class=CCorrespondantPatient field=urssaf}}</th>
-    {{/if}}
-    <th>{{mb_title class=CCorrespondantPatient field=email}}</th>
-    <th>{{mb_title class=CCorrespondantPatient field=remarques}}</th>
-  </tr>
-  <tbody id="list_correspondants"></tbody>
+<table class="tbl" id="list_correspondants">
 </table>

@@ -8,12 +8,45 @@
  * @version    $Revision$
  *}}
 
+
+
+
+<tr>
+  <th class="narrow"></th>
+  {{if $conf.ref_pays == 2}}
+    <th>{{mb_title class=CCorrespondantPatient field=surnom}}</th>
+  {{/if}}
+  <th>{{mb_title class=CCorrespondantPatient field=nom}}</th>
+  <th>{{mb_title class=CCorrespondantPatient field=prenom}}</th>
+  <th>{{mb_title class=CCorrespondantPatient field=naissance}}</th>
+  <th>{{mb_title class=CCorrespondantPatient field=adresse}}</th>
+  <th>{{mb_title class=CCorrespondantPatient field=cp}}/{{mb_title class=CCorrespondantPatient field=ville}}</th>
+  <th>{{mb_title class=CCorrespondantPatient field=tel}}</th>
+  <th>{{mb_title class=CCorrespondantPatient field=mob}}</th>
+  <th>{{mb_title class=CCorrespondantPatient field=fax}}</th>
+  <th>{{mb_title class=CCorrespondantPatient field=relation}}</th>
+  {{if $conf.ref_pays == 1}}
+    <th>{{mb_title class=CCorrespondantPatient field=urssaf}}</th>
+  {{/if}}
+  {{if $conf.ref_pays == 2}}
+    <th>{{mb_title class=CCorrespondantPatient field=ean}}</th>
+    <th>{{mb_title class=CCorrespondantPatient field=type_pec}}</th>
+  {{/if}}
+  <th>{{mb_title class=CCorrespondantPatient field=email}}</th>
+  <th>{{mb_title class=CCorrespondantPatient field=remarques}}</th>
+</tr>
+
 {{foreach from=$correspondants item=_correspondant}}
+
   <tr {{if $_correspondant->_id == $correspondant_id}}class="selected"{{/if}}>
+    <td class="narrow"><button class="button notext edit" onclick="CorrespondantModele.editCorrespondant('{{$_correspondant->_id}}')">{{tr}}Edit{{/tr}}</button></td>
+    {{if $conf.ref_pays == 2}}
+      <td>
+        {{mb_value object=$_correspondant field=surnom }}
+      </td>
+    {{/if}}
     <td>
-      <a href="#1" onclick="CorrespondantModele.updateSelected(this.up('tr')); CorrespondantModele.editCorrespondant('{{$_correspondant->_id}}')">
-        {{mb_value object=$_correspondant field=nom}}
-      </a>
+      {{mb_value object=$_correspondant field=nom}}
     </td>
     <td>
       {{mb_value object=$_correspondant field=prenom}}
@@ -53,10 +86,13 @@
         {{/if}}
       </td>
     {{/if}}
+    {{if $conf.ref_pays == 2}}
+      <td>{{mb_value object=$_correspondant field=ean}}</td>
+      <td>{{mb_value object=$_correspondant field=type_pec}}</td>
+    {{/if}}
     <td>{{mb_value object=$_correspondant field=email}}</td>
     <td>
       {{mb_value object=$_correspondant field=remarques}}
-      {{mb_value object=$_correspondant field=ean}}
     </td>
   </tr>
 {{foreachelse}}

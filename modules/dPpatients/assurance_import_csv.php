@@ -35,6 +35,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $results[$i]["localite"]  = $explode[1];
     $results[$i]["pec"]       = addslashes(trim($line[5]));
     $results[$i]["ean"]       = addslashes(trim($line[9]));
+    $results[$i]["surnom"]    = addslashes(trim($line[10]));
     $results[$i]["error"]     = 0;
 
     // Fonction
@@ -52,6 +53,9 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $corres->cp = $results[$i]["cp"];
       $corres->ville = $results[$i]["localite"];
       $corres->type_pec = $results[$i]["pec"];
+      $corres->surnom = $results[$i]["surnom"];
+      $corres->parente = "autre";
+      $corres->parente_autre = "assurance";
 
       if ($corres->ean == "" || $corres->nom == "") {
         $msg = "CCorrespondant-import-missing1";
@@ -78,6 +82,9 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $corres->ville = $results[$i]["localite"];
       $corres->type_pec = $results[$i]["pec"];
       $corres->ean = $results[$i]["ean"];
+      $corres->surnom = $results[$i]["surnom"];
+      $corres->parente = "autre";
+      $corres->parente_autre = "assurance";
 
       if (!$corres->nom  && !$corres->ean ) {
         $msg="CCorrespondant-import-missing2";

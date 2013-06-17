@@ -21,6 +21,7 @@ class CCorrespondantPatient extends CPerson {
   public $relation;
   public $relation_autre;
   public $nom;
+  public $surnom;
   public $nom_jeune_fille;
   public $prenom;
   public $naissance;
@@ -72,34 +73,35 @@ class CCorrespondantPatient extends CPerson {
   function getProps() {
     $props = parent::getProps();
 
-    $props["patient_id"] = "ref class|CPatient cascade";
-    $props["relation"]   = "enum list|assurance|autre|confiance|employeur|inconnu|prevenir default|prevenir";
-    $props["relation_autre"] = "str";
-    $props["nom"]        = "str seekable confidential";
-    $props["nom_jeune_fille"] = "str";
-    $props["prenom"]     = "str";
-    $props["naissance"]  = "birthDate mask|99/99/9999 format|$3-$2-$1";
-    $props["adresse"]    = "text";
-    $props["cp"]         = "numchar minLength|4 maxLength|5";
-    $props["ville"]      = "str confidential";
-    $props["tel"]        = "phone confidential";
-    $props["mob"]        = "phone confidential";
-    $props["fax"]        = "phone confidential";
-    $props["urssaf"]     = "numchar length|11 confidential";
-    $props["parente"]    = "enum list|ami|ascendant|autre|beau_fils|colateral|collegue|compagnon|conjoint|directeur|divers|employeur|".
+    $props["patient_id"]          = "ref class|CPatient cascade";
+    $props["relation"]            = "enum list|assurance|autre|confiance|employeur|inconnu|prevenir default|prevenir";
+    $props["relation_autre"]      = "str";
+    $props["nom"]                 = "str seekable confidential";
+    $props["surnom"]              = "str";
+    $props["nom_jeune_fille"]     = "str";
+    $props["prenom"]              = "str";
+    $props["naissance"]           = "birthDate mask|99/99/9999 format|$3-$2-$1";
+    $props["adresse"]             = "text";
+    $props["cp"]                  = "numchar minLength|4 maxLength|5";
+    $props["ville"]               = "str confidential";
+    $props["tel"]                 = "phone confidential";
+    $props["mob"]                 = "phone confidential";
+    $props["fax"]                 = "phone confidential";
+    $props["urssaf"]              = "numchar length|11 confidential";
+    $props["parente"]             = "enum list|ami|ascendant|autre|beau_fils|colateral|collegue|compagnon|conjoint|directeur|divers|employeur|".
       "employe|enfant|enfant_adoptif|entraineur|epoux|frere|grand_parent|mere|pere|petits_enfants|proche|proprietaire|soeur|tuteur";
-    $props["parente_autre"] = "str";
-    $props["email"]      = "email";
-    $props["remarques"]  = "text";
-    $props["ean"]        = "str maxLength|30";
-    $props["ean_base"]   = "str maxLength|30";
-    $props["type_pec"]   = "enum list|TG|TP|TS";
-    $props["assure_id"]  = "str maxLength|30";
-    $props["ean_id"]     = "str maxLength|5";
-    $props["date_debut"] = "date";
-    $props["date_fin"]   = "date";
-    $props["num_assure"] = "str maxLength|30";
-    $props["employeur"]  = "ref class|CCorrespondantPatient";
+    $props["parente_autre"]       = "str";
+    $props["email"]               = "email";
+    $props["remarques"]           = "text";
+    $props["ean"]                 = "str maxLength|30";
+    $props["ean_base"]            = "str maxLength|30";
+    $props["type_pec"]            = "enum list|TG|TP|TS";
+    $props["assure_id"]           = "str maxLength|30";
+    $props["ean_id"]              = "str maxLength|5";
+    $props["date_debut"]          = "date";
+    $props["date_fin"]            = "date";
+    $props["num_assure"]          = "str maxLength|30";
+    $props["employeur"]           = "ref class|CCorrespondantPatient";
 
     return $props;
   }

@@ -15,8 +15,9 @@ $correspondant = new CCorrespondantPatient();
 
 $where = array();
 $where["patient_id"] = "IS NULL";
+$order = "surnom, nom";
 
-$correspondants = $correspondant->loadList($where);
+$correspondants = $correspondant->loadList($where, $order);
 //$correspondants = $correspondant->loadMatchingList("nom");
 
 $smarty = new CSmartyDP();
