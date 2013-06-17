@@ -20,9 +20,13 @@ changeClass = function() {
   var form = getForm("Edit-CRetrocession");
   if (form.code_class.value == 'CActeTarmed') {
     codeTarmed();
+    $('code_caisse').hide();
+    $('code_tarmed').show();
   }
   if (form.code_class.value == 'CActeCaisse') {
     codeCaisse();
+    $('code_tarmed').hide();
+    $('code_caisse').show();
   }
 }
 
@@ -30,7 +34,7 @@ codeTarmed = function() {
   var form = getForm("Edit-CRetrocession");
   // Autocomplete Tarmed
   var url = new Url("tarmed", "ajax_do_tarmed_autocomplete");
-  url.autoComplete(form.code, null, {
+  url.autoComplete(form.code, 'code_auto_complete', {
     minChars: 0,
     dropdown: true,
     select: "newcode",
@@ -44,11 +48,12 @@ codeCaisse = function() {
   var form = getForm("Edit-CRetrocession");
   // Autocomplete Caisse
   var url2 = new Url("tarmed", "ajax_do_prestation_autocomplete");
-    url2.autoComplete(form.code, null, {
+    url2.autoComplete(form.code_caisse, 'code_auto_complete_caisse', {
     minChars: 0,
     dropdown: true,
     select: "newcode",
     updateElement: function(selected) {
+      $V(form.code_caisse, selected.down(".newcode").getText(), false);
       $V(form.code, selected.down(".newcode").getText(), false);
     }
   });
@@ -57,12 +62,7 @@ codeCaisse = function() {
 Main.add(function () {
   var form = getForm("Edit-CRetrocession");
   {{if $retrocession->_id}}
-    if (form.code_class.value == 'CActeTarmed') {
-      codeTarmed();
-    }
-    if (form.code_class.value == 'CActeCaisse') {
-      codeCaisse();
-    }
+    changeClass();
   {{/if}}
   {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
     form.code_class.options[3].hide();
@@ -117,8 +117,13 @@ Main.add(function () {
     <td>{{mb_field object=$retrocession field=code_class onchange="changeClass();" emptyLabel="Choose"}}</td>
   </tr>
   <th class="narrow">Code</th>
-  <td>
-    <input type="text" name="code" value="{{$retrocession->code}}" style="width:250px;"/>
+  <td id="code_tarmed">
+    <input type="text" name="code" value="{{$retrocession->code}}" style="width:250px;" />
+    <div  class="autocomplete" id="code_auto_complete" style="display: none;"></div>
+  </td>
+  <td id="code_caisse" style="display:none;">
+    <input type="text" name="code_caisse" value="{{$retrocession->code}}" style="width:250px;" onchange="this.form.code.value = this.value;"/>
+    <div  class="autocomplete" id="code_auto_complete_caisse" style="display: none;"></div>
   </td>
 
   <tr>
