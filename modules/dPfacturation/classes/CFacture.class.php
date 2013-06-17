@@ -67,7 +67,8 @@ class CFacture extends CMbObject {
   public $_montant_factures_caisse = array();
   public $_is_relancable;
   public $_montant_retrocession;
-      
+  public $_retrocessions = array();
+
   // Object References
   /** @var CCorrespondantPatient */
   public $_ref_assurance_accident;
@@ -260,7 +261,7 @@ class CFacture extends CMbObject {
         }
       }
 
-      if ($this->isRelancable() || $this->_ref_last_relance->_id) {
+      if ($this->isRelancable() && $this->_ref_last_relance->_id) {
         $this->_ref_last_relance->etat = $this->patient_date_reglement ? "regle" : "emise";
         $this->_ref_last_relance->store();
       }
@@ -974,11 +975,23 @@ class CFacture extends CMbObject {
     $this->loadRefsItems();
     $retrocessions = $this->_ref_praticien->loadRefsRetrocessions();
     foreach ($this->_ref_items as $item) {
+      $modif = false;
       foreach ($retrocessions as $retro) {
         /** @var CRetrocession $retro*/
         if ($retro->code_class == $item->type && $retro->code == $item->code) {
-          $this->_montant_retrocession += $retro->updateMontant();
+          $modif = true;
+          $montant = $retro->updateMontant();
+          $this->_montant_retrocession += $montant;
+          $this->_retrocessions[$item->code] = array($item->_montant_facture, $montant);
         }
+      }
+      if (!$modif && $item->type == "CActeTarmed") {
+        $tarmed = new CActeTarmed();
+        $tarmed->code = $item->code;
+        $tarmed->updateMontantBase();
+        $montant = $tarmed->_ref_tarmed->tp_al * $tarmed->_ref_tarmed->f_al;
+        $this->_montant_retrocession += $montant;
+        $this->_retrocessions[$item->code] = array($item->_montant_facture, $montant);
       }
     }
     return $this->_montant_retrocession;
