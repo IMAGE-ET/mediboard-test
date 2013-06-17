@@ -71,7 +71,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   static $_HAS_lists = array(
     "normal"                => "Au bloc opératoire (v. 2011-01)",
     "endoscopie"            => "En endoscopie digestive (v. 2013-01)",
-    "endoscopie-bronchique" => "En endoscopie bronchique (v. 2011-01)",
+    "endoscopie-bronchique" => "En endoscopie bronchique (v. 2013)",
     "radio"                 => "En radiologie interv. (v. 2011-01)",
   );
 

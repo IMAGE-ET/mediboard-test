@@ -39,6 +39,32 @@ class CSetupdPsalleOp extends CSetup {
   }
 
   /**
+   * Move a check list category
+   *
+   * @param string $title        Original title
+   * @param string $type         Original type
+   * @param string $new_title    New title
+   * @param string $new_type     New type
+   * @param string $object_class Target class
+   *
+   * @return void
+   */
+  private function moveCheckListCategory($title, $type, $new_title, $new_type = null, $object_class = "COperation") {
+    $update_new_type = "";
+    if ($new_type) {
+      $update_new_type = ", `type` = '$new_type";
+    }
+
+    $query = "UPDATE `daily_check_item_category` SET
+                `title` = '$new_title'
+                $update_new_type
+                WHERE `title` = '$title'
+                  AND `target_class` = '$object_class'
+                  AND `type` = '$type'";
+    $this->addQuery($query);
+  }
+
+  /**
    * Changes check list categories
    *
    * @param array $category_changes Categories changes
@@ -72,6 +98,13 @@ class CSetupdPsalleOp extends CSetup {
     }
   }
 
+  /**
+   * Creates check list categories
+   *
+   * @param array $category_additions A structure containing categories
+   *
+   * @return void
+   */
   private function addCheckListCategories($category_additions) {
     foreach ($category_additions as $_change) {
       $query = "INSERT INTO `daily_check_item_category` (`target_class`, `type`, `title`, `desc`) VALUES (%1, %2, %3, %4)";
@@ -80,6 +113,13 @@ class CSetupdPsalleOp extends CSetup {
     }
   }
 
+  /**
+   * Change check list types
+   *
+   * @param array $changes A structure containing changes
+   *
+   * @return void
+   */
   private function changeCheckListTypes($changes) {
     foreach ($changes as $_change) {
       $cat_class = $_change[0];
@@ -1079,18 +1119,8 @@ class CSetupdPsalleOp extends CSetup {
 
     $this->makeRevision("0.44");
     // Check list sécurité du patient en endoscopie digestive, version 2013
-    $query = "UPDATE `daily_check_item_category` SET
-                `title` = '11'
-                WHERE `title` = '10'
-                  AND `target_class` = 'COperation'
-                  AND `type` = 'postendoscopie'";
-    $this->addQuery($query);
-    $query = "UPDATE `daily_check_item_category` SET
-                `title` = '10'
-                WHERE `title` = '09'
-                  AND `target_class` = 'COperation'
-                  AND `type` = 'postendoscopie'";
-    $this->addQuery($query);
+    $this->moveCheckListCategory("10", "postendoscopie", "11");
+    $this->moveCheckListCategory("09", "postendoscopie", "10");
 
     // Nouveau point 09
     $check_list = array(
@@ -1204,6 +1234,30 @@ class CSetupdPsalleOp extends CSetup {
                 ADD `extension_documentaire` ENUM ('1','2','3','4','5','6') AFTER `code_association`;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.50";
+    $this->makeRevision("0.50");
+
+    // Check list sécurité du patient en endoscopie bronchique, version 2013
+    $this->moveCheckListCategory("07", "postendoscopie_bronchique", "08");
+    $this->moveCheckListCategory("06", "postendoscopie_bronchique", "07");
+
+    // Nouveau point 06
+    $check_list = array(
+      '06' => array('preendoscopie_bronchique', 'Patient suspect ou atteint d\'EST',
+        array(
+          array('(en cas de réponse positive, l\'endoscopie doit être considérée comme un acte à risque de transmission d\'ATNC et '.
+          'il convient de se référer aux procédures en cours dans l\'établissement en lien avec l\'Instruction n°DGS/R13/2011'.
+          '/449)', 'normal', 'yes'),
+        ),
+      ),
+    );
+    $this->addNewCheckList($check_list);
+
+    $this->moveCheckListCategory("04",  "preendoscopie_bronchique", "05b");
+    $this->moveCheckListCategory("02",  "preendoscopie_bronchique", "04");
+    $this->moveCheckListCategory("03",  "preendoscopie_bronchique", "02");
+    $this->moveCheckListCategory("05",  "preendoscopie_bronchique", "03");
+    $this->moveCheckListCategory("05b", "preendoscopie_bronchique", "05");
+
+    $this->mod_version = "0.51";
   }
 }

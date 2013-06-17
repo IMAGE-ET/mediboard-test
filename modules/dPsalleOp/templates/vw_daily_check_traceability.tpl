@@ -1,21 +1,28 @@
 {{mb_script module="system" script="object_selector"}}
 
-<table class="main">
+<script>
+changePage = function(start) {
+  $V(getForm("filter-check-lists").start, start);
+}
+</script>
+<table class="main layout">
   <tr>
     <td>
       <form name="filter-check-lists" action="?" method="get">
         <input type="hidden" name="m" value="salleOp" />
         <input type="hidden" name="tab" value="{{$tab}}" />
-        <table class="form">
+        <input type="hidden" name="start" value="{{$start}}" onchange="this.form.submit()" />
+
+        <table class="main form">
           <tr>
             <th>{{mb_label object=$check_list_filter field=_date_min}}</th>
-            <td>{{mb_field object=$check_list_filter field=_date_min register=true form="filter-check-lists"}}</td>
+            <td>{{mb_field object=$check_list_filter field=_date_min register=true form="filter-check-lists" onchange="this.form.start.value=0"}}</td>
             <th>{{mb_label object=$check_list_filter field=_date_max}}</th>
-            <td>{{mb_field object=$check_list_filter field=_date_max register=true form="filter-check-lists"}}</td>
+            <td>{{mb_field object=$check_list_filter field=_date_max register=true form="filter-check-lists" onchange="this.form.start.value=0"}}</td>
 
             <th>{{mb_label object=$check_list_filter field=object_id}}</th>
             <td>
-              <select name="object_guid">
+              <select name="object_guid" onchange="this.form.start.value=0">
                 {{foreach from=$list_rooms item=list key=class}}
                   <optgroup label="{{if $class == "CBlocOperatoire"}}Salle de réveil{{else}}{{tr}}{{$class}}{{/tr}}{{/if}}">
                     {{foreach from=$list item=room}}
@@ -27,13 +34,14 @@
             </td>
           </tr>
           <tr>
-            <td colspan="8" class="button">
-              <button type="submit" class="submit">{{tr}}Filter{{/tr}}</button>
-              Seules les 50 dernières checklists sont affichées
+            <td colspan="6" class="button">
+              <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
             </td>
           </tr>
         </table>
       </form>
+
+      {{mb_include module=system template=inc_pagination total=$count_check_lists current=$start change_page='changePage' step=40}}
 
       <table class="main tbl">
         <tr>
@@ -73,7 +81,6 @@
     {{if $check_list->_id}}
     <td>
       <table class="main form">
-
         <tr>
           <th class="title" colspan="2">{{$check_list}}</th>
         </tr>
