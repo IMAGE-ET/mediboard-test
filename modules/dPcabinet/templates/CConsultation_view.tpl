@@ -45,12 +45,12 @@
   {{/if}}
   <tr>
     <td colspan="2" class="text">
-      Motif : {{mb_value object=$object field=motif}}
+      {{mb_value object=$object field=motif}}
     </td>
   </tr>
   <tr>
     <td colspan="2" class="text">
-      Remarques : {{mb_value object=$object field=rques}}
+      {{mb_value object=$object field=rques}}
     </td>
   </tr>
   
