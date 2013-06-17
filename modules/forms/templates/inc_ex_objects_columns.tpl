@@ -74,7 +74,7 @@
         {{foreach from=$_ex_group->_ref_fields item=_ex_field name=_ex_field}}
           {{assign var=field_name value=$_ex_field->name}}
           
-          <tr class="field {{if $_ex_field->_empty}} empty {{/if}}">
+          <tr class="field {{if $_ex_field->_empty}} empty {{/if}} {{if $_ex_field->disabled}} opacity-50 {{/if}}">
             <th class="text section" style="font-size: 0.9em; min-width: 12em;">
               {{mb_label object=$_ex_obj field=$field_name}}
             </th>

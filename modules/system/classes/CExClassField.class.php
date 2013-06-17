@@ -16,6 +16,8 @@ class CExClassField extends CExListItemsOwner {
   public $subgroup_id;
   public $name; // != object_class, object_id, ex_ClassName_event_id,
   public $prop;
+  public $disabled;
+
   //public $report_level;
   public $report_class;
   public $concept_id;
@@ -236,6 +238,7 @@ class CExClassField extends CExListItemsOwner {
     $props["subgroup_id"] = "ref class|CExClassFieldSubgroup nullify";
     $props["concept_id"]  = "ref class|CExConcept autocomplete|name";
     $props["name"]        = "str notNull protected canonical";
+    $props["disabled"]    = "bool notNull default|0";
     //$props["report_level"]= "enum list|1|2|host";
     $props["report_class"]= "enum list|".implode("|", CExClassEvent::getReportableClasses());
     $props["prop"]        = "text notNull";
@@ -312,6 +315,8 @@ class CExClassField extends CExListItemsOwner {
   }
 
   /**
+   * Get default styling
+   *
    * @param bool $cache Cache results
    *
    * @return array
@@ -324,6 +329,9 @@ class CExClassField extends CExListItemsOwner {
     return $this->_default_properties = CExClassFieldProperty::getDefaultPropertiesFor($this);
   }
 
+  /**
+   * @see parent::getAutocompleteList()
+   */
   function getAutocompleteList($keywords, $where = null, $limit = null, $ljoin = null, $order = null) {
     $list = $this->loadList($where, null, null, null, $ljoin);
 
@@ -392,6 +400,8 @@ class CExClassField extends CExListItemsOwner {
   }
 
   /**
+   * Get formula values
+   *
    * @return string[]
    */
   function getFormulaValues(){
@@ -422,16 +432,16 @@ class CExClassField extends CExListItemsOwner {
   /**
    * @param bool $update
    *
-   * @return string
+   * @return string|null
    */
   function formulaToDB($update = true) {
     if ($this->_formula === null) {
-      return;
+      return null;
     }
 
     if ($this->_formula === "") {
       $this->formula = "";
-      return;
+      return null;
     }
 
     $field_names = $this->getFieldNames(false);
@@ -459,7 +469,7 @@ class CExClassField extends CExListItemsOwner {
       if ($update) {
         $this->formula = $formula;
       }
-      return;
+      return null;
     }
 
     return "Des éléments n'ont pas été reconnus dans la formule: ".implode(", ", $msg);
@@ -704,11 +714,10 @@ class CExClassField extends CExListItemsOwner {
    * @see parent::updatePlainFields()
    */
   function updatePlainFields(){
-    //$coord_modified = $this->fieldModified("coord_field_x") || $this->fieldModified("coord_field_y");
-    $group_modified = $this->fieldModified("ex_group_id");
+    $reset_position = $this->fieldModified("ex_group_id") || $this->fieldModified("disabled");
 
     // If we change its group, we need to reset its coordinates
-    if ($group_modified) {
+    if ($reset_position) {
       $this->coord_field_x = "";
       $this->coord_field_y = "";
       $this->coord_label_x = "";
@@ -717,7 +726,7 @@ class CExClassField extends CExListItemsOwner {
     }
 
     $subgroup_modified = $this->fieldModified("subgroup_id");
-    if ($group_modified || $subgroup_modified) {
+    if ($reset_position || $subgroup_modified) {
       if (!$this->fieldModified("coord_left")) {
         $this->coord_left = "";
       }
@@ -844,12 +853,16 @@ class CExClassField extends CExListItemsOwner {
         mbTrace($msg, get_class($this), true);
       }
     }
+
+    return null;
   }
 
   /**
    * @see parent::delete()
    */
   function delete(){
+    return "Les champs ne peuvent pas être supprimés, veuillez plutôt le désactiver.";
+    /*
     if ($msg = $this->canDeleteEx()) {
       return $msg;
     }
@@ -866,7 +879,7 @@ class CExClassField extends CExListItemsOwner {
       }
     }
 
-    return parent::delete();
+    return parent::delete();*/
   }
 
   /**

@@ -1355,6 +1355,11 @@ class CSetupsystem extends CSetup {
       ADD INDEX (`name`);";
     $this->addQuery($query);
 
+    $this->makeRevision("1.1.38");
+    $query = "ALTER TABLE `ex_class_field`
+                ADD `disabled` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
     /*
     // Création des deux nouveaux champs
     $this->makeRevision("1.1.36");
@@ -1385,7 +1390,7 @@ class CSetupsystem extends CSetup {
     $this->mod_version = "1.1.39";
     */
 
-    $this->mod_version = "1.1.38";    
+    $this->mod_version = "1.1.39";
 
     /*$query = "ALTER TABLE user_log
         DROP INDEX object_id,

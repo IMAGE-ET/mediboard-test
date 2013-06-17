@@ -34,13 +34,17 @@
       <tr>
         <td class="label-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
           {{foreach from=$out_of_grid.$_group_id.label item=_field}}
-            {{mb_include module=forms template=inc_ex_field_draggable _type="label" }}
+            {{if !$_field->disabled}}
+              {{mb_include module=forms template=inc_ex_field_draggable _type="label"}}
+            {{/if}}
           {{/foreach}}
         </td>
     
         <td class="field-list" data-x="" data-y="" style="padding: 4px; vertical-align: top;">
           {{foreach from=$out_of_grid.$_group_id.field item=_field}}
-            {{mb_include module=forms template=inc_ex_field_draggable _type="field"}}
+            {{if !$_field->disabled}}
+              {{mb_include module=forms template=inc_ex_field_draggable _type="field"}}
+            {{/if}}
           {{/foreach}}
         </td>
       </tr>

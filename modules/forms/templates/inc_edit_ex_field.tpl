@@ -124,13 +124,13 @@ Main.add(function(){
 <form name="editField" method="post" action="?" data-object_guid="{{$ex_field->_guid}}" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_ex_class_field_aed" />
-  <input type="hidden" name="del" value="0" />
   <input type="hidden" name="callback" value="ExField.saveCallback" />
   
   <input type="hidden" name="_triggered_data" value="{{$ex_field->_triggered_data|@json|smarty:nodefaults|JSAttribute}}" />
   
   {{mb_key object=$ex_field}}
   {{mb_field object=$ex_field field=ex_group_id hidden=true}}
+  {{mb_field object=$ex_field field=disabled hidden=true}}
   
   {{foreach from=$ex_field->getPropertyFields() item=_property_field}}
     {{mb_field object=$ex_field field=$_property_field hidden=true}}
@@ -275,9 +275,17 @@ Main.add(function(){
         <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
 
         {{if $ex_field->_id}}
-          <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'le champ ',objName:'{{$ex_field->_view|smarty:nodefaults|JSAttribute}}'}, {onComplete: ExClass.edit.curry('{{$ex_class->_id}}')})">
-            {{tr}}Delete{{/tr}}
-          </button>
+          {{if $ex_field->disabled}}
+            <button type="button" class="change"
+                    onclick="$V(this.form.elements.disabled, 0); onSubmitFormAjax(this.form, ExClass.edit.curry('{{$ex_class->_id}}'))">
+              {{tr}}Enable{{/tr}}
+            </button>
+          {{else}}
+            <button type="button" class="trash"
+                    onclick="if(confirm('Voulez-vous désactiver ce champ ?')){ $V(this.form.elements.disabled, 1); onSubmitFormAjax(this.form, ExClass.edit.curry('{{$ex_class->_id}}')); }">
+              {{tr}}Disable{{/tr}}
+            </button>
+          {{/if}}
         {{/if}}
       </td>
     </tr>

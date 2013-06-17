@@ -40,11 +40,13 @@ toggleList = function(select) {
 
       {{* FIELDS *}}
       {{foreach from=$_group->_ref_root_fields item=_field}}
-        {{mb_include
-          module=forms
-          template=inc_ex_field_draggable_children
-          _field=$_field
-        }}
+        {{if !$_field->disabled}}
+          {{mb_include
+            module=forms
+            template=inc_ex_field_draggable_children
+            _field=$_field
+          }}
+        {{/if}}
       {{/foreach}}
 
       {{* MESSAGES *}}

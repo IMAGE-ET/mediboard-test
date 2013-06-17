@@ -24,11 +24,13 @@
 
       {{* FIELDS *}}
       {{foreach from=$_subgroup->_ref_children_fields item=_field}}
-        {{mb_include
-          module=forms
-          template=inc_ex_field_draggable_children
-          _field=$_field
-        }}
+        {{if !$_field->disabled}}
+          {{mb_include
+            module=forms
+            template=inc_ex_field_draggable_children
+            _field=$_field
+          }}
+        {{/if}}
       {{/foreach}}
 
       {{* MESSAGES *}}

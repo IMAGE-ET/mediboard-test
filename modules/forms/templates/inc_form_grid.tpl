@@ -21,33 +21,35 @@
         {{if $_group.object instanceof CExClassField}}
           {{assign var=_field value=$_group.object}}
           {{assign var=_field_name value=$_field->name}}
-          
-          {{if $_group.type == "label"}}
-            {{if $_field->coord_field_x == $_field->coord_label_x+1}}
-              <th style="font-weight: bold; vertical-align: middle;">
-                <div class="field-{{$_field->name}} field-label">
-                  {{mb_label object=$ex_object field=$_field_name}}
-                  {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$_field}}
-                </div>
-              </th>
-            {{else}}
-              <td style="font-weight: bold; text-align: left;" class="field-{{$_field->name}} field-label">
-                <div class="field-{{$_field->name}} field-label">
-                  {{mb_label object=$ex_object field=$_field_name}}
-                  {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$_field}}
+
+          {{if !$_field->disabled}}
+            {{if $_group.type == "label"}}
+              {{if $_field->coord_field_x == $_field->coord_label_x+1}}
+                <th style="font-weight: bold; vertical-align: middle;">
+                  <div class="field-{{$_field->name}} field-label">
+                    {{mb_label object=$ex_object field=$_field_name}}
+                    {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$_field}}
+                  </div>
+                </th>
+              {{else}}
+                <td style="font-weight: bold; text-align: left;" class="field-{{$_field->name}} field-label">
+                  <div class="field-{{$_field->name}} field-label">
+                    {{mb_label object=$ex_object field=$_field_name}}
+                    {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$_field}}
+                  </div>
+                </td>
+              {{/if}}
+            {{elseif $_group.type == "field"}}
+              <td {{if $_field->coord_field_x == $_field->coord_label_x+1}} style="vertical-align: middle;" {{/if}}>
+                <div class="field-{{$_field->name}} field-input">
+                  {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field form="editExObject_$ex_form_hash"}}
                 </div>
               </td>
             {{/if}}
-          {{elseif $_group.type == "field"}}
-            <td {{if $_field->coord_field_x == $_field->coord_label_x+1}} style="vertical-align: middle;" {{/if}}>
-              <div class="field-{{$_field->name}} field-input">
-                {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field form="editExObject_$ex_form_hash"}}
-              </div>
-            </td>
           {{/if}}
         {{elseif $_group.object instanceof CExClassHostField}}
           {{assign var=_host_field value=$_group.object}}
-          
+
           {{if $_group.type == "label"}}
               {{assign var=_next_col value=$smarty.foreach._x.iteration}}
               {{assign var=_next value=null}}
@@ -82,7 +84,7 @@
           {{/if}}
         {{else}}
           {{assign var=_message value=$_group.object}}
-          
+
           {{if $_group.type == "message_title"}}
             {{if $_message->coord_text_x == $_message->coord_title_x+1}}
               <th style="font-weight: bold; vertical-align: middle;">
@@ -112,7 +114,7 @@
   {{foreach from=$groups.$_group_id->_ref_fields item=_field}}
     {{assign var=_field_name value=$_field->name}}
     
-    {{if isset($out_of_grid.$_group_id.field.$_field_name|smarty:nodefaults)}}
+    {{if isset($out_of_grid.$_group_id.field.$_field_name|smarty:nodefaults) && (!$_field->disabled || $ex_object->_id && $ex_object->$_field_name !== null)}}
       <tr>
         <th colspan="2" style="vertical-align: middle; font-weight: bold; width: 50%;">
           <div class="field-{{$_field->name}} field-label">

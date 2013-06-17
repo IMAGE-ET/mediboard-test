@@ -119,9 +119,11 @@ toggleList = function(select) {
         <div class="droppable grid" data-x="{{$_x}}" data-y="{{$_y}}">
           {{if $_group.object}}
             {{if $_group.object instanceof CExClassField}}
-              {{mb_include module=forms template=inc_ex_field_draggable 
-                           _field=$_group.object 
-                           _type=$_group.type}}
+              {{if !$_group.object->disabled}}
+                {{mb_include module=forms template=inc_ex_field_draggable
+                             _field=$_group.object
+                             _type=$_group.type}}
+              {{/if}}
             {{elseif $_group.object instanceof CExClassHostField}}
               {{assign var=_host_field value=$_group.object}}
               {{assign var=_host_class value=$_host_field->host_class}}

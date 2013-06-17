@@ -258,7 +258,7 @@ toggleGroupLabelEdit = function(link) {
                 </td>
               </tr>
               {{foreach from=$_group->_ref_fields item=_field}}
-                <tr class="ex-class-field" data-ex_class_field_id="{{$_field->_id}}">
+                <tr class="ex-class-field {{if $_field->disabled}}opacity-30{{/if}}" data-ex_class_field_id="{{$_field->_id}}">
                   <td class="text">
                     {{if $_field->tab_index != null}}
                     <span style="float: left; padding-right: 3px; color: #669966;" title="{{tr}}CExClassField-tab_index{{/tr}}">

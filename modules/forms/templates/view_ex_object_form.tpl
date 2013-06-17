@@ -361,24 +361,26 @@ function switchMode(){
             {{assign var=_field value=$_group.object}}
             {{assign var=_field_name value=$_field->name}}
 
-            {{if $_group.type == "label"}}
-              {{if $_field->coord_field_x == $_field->coord_label_x+1}}
-                <th style="font-weight: bold; vertical-align: middle; white-space: normal;">
-                  {{mb_label object=$ex_object field=$_field_name}}
-                </th>
-              {{else}}
-                <td style="font-weight: bold; text-align: left;">
-                  {{mb_label object=$ex_object field=$_field_name}}
+            {{if !$_field->disabled}}
+              {{if $_group.type == "label"}}
+                {{if $_field->coord_field_x == $_field->coord_label_x+1}}
+                  <th style="font-weight: bold; vertical-align: middle; white-space: normal;">
+                    {{mb_label object=$ex_object field=$_field_name}}
+                  </th>
+                {{else}}
+                  <td style="font-weight: bold; text-align: left;">
+                    {{mb_label object=$ex_object field=$_field_name}}
+                  </td>
+                {{/if}}
+              {{elseif $_group.type == "field"}}
+                <td>
+                  <div {{if $ex_object->_specs.$_field_name instanceof CTextSpec}} style="text-block" {{/if}}>
+                    {{$_field->prefix}}
+                    {{mb_value object=$ex_object field=$_field_name}}
+                    {{$_field->suffix}}
+                  </div>
                 </td>
               {{/if}}
-            {{elseif $_group.type == "field"}}
-              <td>
-                <div {{if $ex_object->_specs.$_field_name instanceof CTextSpec}} style="text-block" {{/if}}>
-                  {{$_field->prefix}}
-                  {{mb_value object=$ex_object field=$_field_name}}
-                  {{$_field->suffix}}
-                </div>
-              </td>
             {{/if}}
           {{elseif $_group.object instanceof CExClassHostField}}
             {{assign var=_host_field value=$_group.object}}
@@ -438,7 +440,7 @@ function switchMode(){
     {{foreach from=$groups.$_group_id->_ref_fields item=_field}}
       {{assign var=_field_name value=$_field->name}}
 
-      {{if isset($out_of_grid.$_group_id.field.$_field_name|smarty:nodefaults)}}
+      {{if isset($out_of_grid.$_group_id.field.$_field_name|smarty:nodefaults) && (!$_field->disabled || $ex_object->_id && $ex_object->$_field_name !== null)}}
         <tr>
           <th style="font-weight: bold; width: 50%; vertical-align: middle; white-space: normal;" colspan="2">
             {{mb_label object=$ex_object field=$_field_name}}
