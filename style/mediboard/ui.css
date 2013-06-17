@@ -954,10 +954,7 @@ table.active {
 }
 
 .modal {
-  min-width: 200px;
   max-width: 95%;
-
-  min-height: 50px;
   max-height: 95%;
 
   border: 2px solid #fff;
@@ -1022,6 +1019,9 @@ table.active {
   overflow-x: auto; /* hidden */
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+
+  min-width: 200px;
+  min-height: 80px;
 }
 
 .modal > .content,
