@@ -8,7 +8,6 @@
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
-mbTrace($_POST);
 
 // Ajustement des actes CsARR
 /** @var CActeCsARR[] $actes */
@@ -52,9 +51,6 @@ foreach ($phases as $_phase) {
 
 // Enregistrements des actes ajustés
 foreach ($actes as $_acte) {
-  mbTrace($_acte->getProperties(true));
-  mbTrace($_acte->_modulateurs);
-  mbTrace($_acte->_phases);
   $msg = $_acte->store();
   CAppUI::displayMsg($msg, "CActeCsARR-msg-modify");
 }

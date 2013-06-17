@@ -79,7 +79,6 @@ ModalValidation = {
   submitModal: function() {
     this.selectCheckboxes();
     return onSubmitFormAjax(this.formModal(), function() {
-      return;
       PlanningTechnicien.show(this.kine_id, null, null, 650, true);
       ModalValidation.close();
     });
