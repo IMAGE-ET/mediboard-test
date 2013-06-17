@@ -125,6 +125,7 @@ tr.opacity-100 > th,
   .opacity-100 .inputExtension  {
   -ms-filter: "alpha(opacity=100)";
 }
+
 @font-face {
   font-family: opendyslexic;
   src: url(fonts/open_dyslexic/eot/OpenDyslexic-Regular.eot);
@@ -142,6 +143,7 @@ tr.opacity-100 > th,
   font-style: italic;
   src: url(fonts/open_dyslexic/eot/OpenDyslexic-Italic.eot);
 }
+
 @font-face {
   font-family: opendyslexic;
   font-weight: bold;
