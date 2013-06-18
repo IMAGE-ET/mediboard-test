@@ -190,7 +190,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
           
           $sejour1_nda = $sejour->_NDA = $infos_fus["sejour1_nda"];
           
-          $sejour_eliminee = $infos_fus["sejourEliminee"];
+          $sejour_eliminee = $infos_fus["sejourElimine"];
           $sejour2_nda = $sejour_eliminee->_NDA = $infos_fus["sejour2_nda"];
 
           // Cas 0 NDA : Aucune notification envoyée
