@@ -224,7 +224,7 @@ Main.add(function () {
     this.sFunction_id     = "_function_id";
     this.sDatePlanning    = "_date_planning";
     this.sLineElementId   = "_line_element_id";
-    this.options          = {width: 1280, height: 900};
+    this.options          = {width: -30, height: -30};
     if (mode) {
       this.resetConsult();
       this.resetPage();
