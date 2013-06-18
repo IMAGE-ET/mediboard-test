@@ -177,6 +177,7 @@ class CPatient extends CPerson {
   // Other fields
   public $INSC_date;
   public $date_lecture_vitale;
+  public $_pays_naissance;
   public $_pays_naissance_insee;
   public $_assure_pays_naissance_insee;
 
@@ -230,6 +231,11 @@ class CPatient extends CPerson {
   public $_pays;
   public $_IPP;
   public $_fusion; // fusion
+
+  // DMP
+  public $_dmp_bris_de_glace;
+  public $_dmp_acces_urgence;
+
   /**
    * @var CPatient
    */
