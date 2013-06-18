@@ -48,7 +48,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     if ($corres->_id) {
       //update
 
-      $corres->nom = $results[$i]["nom"];
+      $corres->nom = stripslashes($results[$i]["nom"]);
       $corres->adresse = $results[$i]["rue"];
       $corres->cp = $results[$i]["cp"];
       $corres->ville = $results[$i]["localite"];
@@ -76,7 +76,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     }
     else {
       // create
-      $corres->nom = $results[$i]["nom"];
+      $corres->nom = stripslashes($results[$i]["nom"]);
       $corres->adresse = $results[$i]["rue"];
       $corres->cp = $results[$i]["cp"];
       $corres->ville = $results[$i]["localite"];

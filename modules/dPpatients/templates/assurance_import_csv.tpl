@@ -14,11 +14,14 @@
   Veuillez indiquez les champs suivants dans un fichier CSV (<strong>au format ISO</strong>) dont les champs sont séparés par
   <strong>;</strong> et les textes par <strong>"</strong>, la première ligne étant sautée :
   <ul>
-    <li>{{tr}}CCorrespondantPatient-nom{{/tr}} *</li>
-    <li>{{tr}}CCorrespondantPatient-adresse{{/tr}}</li>
-    <li>{{tr}}CCorrespondantPatient-adresse{{/tr}} 2</li>
-    <li>{{tr}}CCorrespondantPatient-ville{{/tr}}</li>
-    <li>{{tr}}CCorrespondantPatient-ean-desc{{/tr}} *</li>
+    <li>0 Code CDM </li>
+    <li>1 {{tr}}CCorrespondantPatient-nom{{/tr}} *</li>
+    <li>2 {{tr}}CCorrespondantPatient-adresse{{/tr}}</li>
+    <li>3 {{tr}}CCorrespondantPatient-adresse{{/tr}} 2</li>
+    <li>4 CP {{tr}}CCorrespondantPatient-ville{{/tr}}</li>
+    <li>5 Type de Prise en Charge</li>
+    <li>9 {{tr}}CCorrespondantPatient-ean-desc{{/tr}} *</li>
+    <li>10 Surnom</li>
   </ul>
   <em>* : {{tr}}CCorrespondantPatient-import-required{{/tr}}</em>
 </div>

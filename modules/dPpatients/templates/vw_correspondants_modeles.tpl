@@ -51,7 +51,7 @@
   {{tr}}CCorrespondant-title-create{{/tr}}
 </button>
 
-<button type="button" class="upload" onclick="popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button>
+<button type="button" class="upload" onclick="popupImport();" class="hslip">{{tr}}Import-assurance{{/tr}}</button>
 
 <table class="tbl" id="list_correspondants">
 </table>

@@ -1701,6 +1701,7 @@ $locales['IDossierMedical-back-addictions'] = 'Addicitions';
 $locales['IDossierMedical-back-antecedents'] = 'Antécédents';
 $locales['IDossierMedical-back-traitements'] = 'Traitements';
 $locales['INSEE'] = 'INSEE';
+$locales['Import-assurance'] = 'Importer Assurance';
 $locales['Intermax.error.-20'] = 'Le numéro de FSE est invalide';
 $locales['Intermax.error.-21'] = 'La FSE ne peut être annulée parce qu\'elle a déjà été annulée ou parce qu\'elle a été transmise.';
 $locales['Intermax.error.-22'] = 'La FSE ne peut être traitée manuellement parce qu\'elle est annulée, transmise ou en attente.';
