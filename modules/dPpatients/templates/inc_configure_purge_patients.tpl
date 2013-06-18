@@ -14,7 +14,7 @@ function repeatPurge() {
 
 </script>
 
-<div class="big-warning">
+<div class="small-error">
   La purge des patients est une action irreversible qui supprime aléatoirement
   une partie des dossiers patients de la base de données et toutes les données
   qui y sont associées.

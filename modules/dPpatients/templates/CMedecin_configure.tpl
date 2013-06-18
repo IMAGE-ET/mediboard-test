@@ -287,7 +287,6 @@ function installMouvMedecinPatient() {
   <tr>
     <td>
       <button type="button" class="tick" onclick="installMouvMedecinPatient()">Installer le trigger</button>
-      </form>
     </td>
     <td class="text" id="installMouvMedecinPatient"></td>
   </tr>

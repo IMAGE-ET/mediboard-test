@@ -115,6 +115,7 @@ $locales['Charge'] = 'Facturer';
 $locales['Choose'] = 'Choisir';
 $locales['Chose'] = 'Choisir';
 $locales['Clean'] = 'Nettoyer';
+$locales['Clean up'] = 'Nettoyer';
 $locales['Clear'] = 'Vider';
 $locales['Close'] = 'Fermer';
 $locales['Color'] = 'Couleur';
