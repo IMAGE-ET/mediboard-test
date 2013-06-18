@@ -1,7 +1,7 @@
 <ul>
   {{foreach from=$correspondants item=corresp}}
     <li>
-      <strong class="newcode" data-id="{{$corresp->_id}}">{{$corresp->nom}}</strong>
+      <strong class="newcode" data-id="{{$corresp->_id}}">{{$corresp->nom}} {{if $corresp->surnom}}({{$corresp->surnom}}){{/if}}</strong>
       <br />
       <small>{{$corresp->adresse}} {{$corresp->cp}} {{$corresp->ville}}</small>
       {{if $corresp->date_debut && $corresp->date_fin}}

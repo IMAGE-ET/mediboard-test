@@ -617,6 +617,7 @@ $locales['CCorrespondantPatient-relation_autre-desc'] = 'Rôle autre';
 $locales['CCorrespondantPatient-remarques'] = 'Remarques';
 $locales['CCorrespondantPatient-remarques-court'] = 'Remarques';
 $locales['CCorrespondantPatient-remarques-desc'] = 'Remarques';
+$locales['CCorrespondantPatient-surnom'] = 'Surnom';
 $locales['CCorrespondantPatient-surnom-court'] = 'Surnom';
 $locales['CCorrespondantPatient-surnom-desc'] = 'Surnom ou Code de l\'assurance';
 $locales['CCorrespondantPatient-tel'] = 'Téléphone';

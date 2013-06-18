@@ -45,6 +45,7 @@
           var form = field.form;
           var selected = selected.select(".view")[0];
           if (selected.innerHTML) {
+            $V(form.surnom, selected.get("surnom"));
             $V(form.nom, selected.get("nom"));
             $V(form.nom_jeune_fille, selected.get("nom_jeune_fille"));
             $V(form.prenom, selected.get("prenom"));
@@ -229,6 +230,10 @@
           <input type="text" name="nom" class="autocomplete" value="{{$correspondant->nom}}"/>
         {{/if}}
       </td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$correspondant field="surnom"}}</th>
+      <td>{{mb_field object=$correspondant field="surnom"}}</td>
     </tr>
     <tr {{if $correspondant->relation != "confiance"}}style="display: none;"{{/if}} id="nom_jeune_fille">
       <th>{{mb_label object=$correspondant field="nom_jeune_fille"}}</th>
