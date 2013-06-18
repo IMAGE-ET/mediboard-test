@@ -94,9 +94,9 @@ class CLongRequestLog extends CMbObject {
     $props["datetime"]          = "dateTime notNull";
     $props["duration"]          = "float notNull";
     $props["server_addr"]       = "str notNull";
-    $props["query_params_get"]  = "text";
-    $props["query_params_post"] = "text";
-    $props["session_data"]      = "text";
+    $props["query_params_get"]  = "text show|0";
+    $props["query_params_post"] = "text show|0";
+    $props["session_data"]      = "text show|0";
     $props["_date_min"]         = "dateTime";
     $props["_date_max"]         = "dateTime";
     $props["_ref_user"]         = "ref class|CUser";
