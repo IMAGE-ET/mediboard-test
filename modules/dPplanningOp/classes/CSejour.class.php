@@ -928,6 +928,11 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->recuse = CAppUI::conf("dPplanningOp CSejour use_recuse") ? -1 : 0;
     }
 
+    // no matter of config, if sejour is "urgence" type: recusation 0
+    if ($this->type == "urg") {
+      $this->recuse = 0;
+    }
+
     // Si gestion en mode expert de l'isolement
     if (CAppUI::conf("dPplanningOp CSejour systeme_isolement") == "expert") {
       $this->isolement_date =
