@@ -62,9 +62,7 @@ class CHL7v3EventPRPAIN201307UV02 extends CHL7v3EventPRPA implements CHL7EventPR
 
     // reasonCode
     $reasonCode = $dom->addElement($controlActProcess, "reasonCode");
-    $dom->addAttribute($reasonCode, "code", "TEST_EXST");
-    $dom->addAttribute($reasonCode, "codeSystem", "1.2.250.1.213.1.1.4.11");
-    $dom->addAttribute($reasonCode, "displayName", "Test d'existence de dossier");
+    $this->setCode($reasonCode, "TEST_EXST", "1.2.250.1.213.1.1.4.11", "Test d'existence de dossier");
 
     // queryByParameter
     $queryByParameter = $dom->addElement($controlActProcess, "queryByParameter");

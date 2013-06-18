@@ -340,7 +340,7 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
     }
 
     if ($use) {
-      $dom->addAttribute($elParent, "use", $value);
+      $dom->addAttribute($elParent, "use", $use);
     }
 
     $dom->addAttribute($elParent, "value", $value);
