@@ -235,6 +235,8 @@ class CPatient extends CPerson {
   // DMP
   public $_dmp_bris_de_glace;
   public $_dmp_acces_urgence;
+  /** @var  CMediusers */
+  public $_dmp_mediuser;
 
   /**
    * @var CPatient

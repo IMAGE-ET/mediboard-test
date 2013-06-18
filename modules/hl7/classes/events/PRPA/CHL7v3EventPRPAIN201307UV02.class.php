@@ -71,8 +71,7 @@ class CHL7v3EventPRPAIN201307UV02 extends CHL7v3EventPRPA implements CHL7EventPR
 
     // queryId
     $queryId = $dom->addElement($queryByParameter, "queryId");
-    $dom->addAttribute($queryId, "extension", $this->_exchange_hl7v3->_id);
-    $dom->addAttribute($queryId, "root", "OID");
+    $this->setII($queryId, $this->_exchange_hl7v3->_id, "OID");
 
     // statusCode
     $statusCode = $dom->addElement($queryByParameter, "statusCode");
@@ -84,8 +83,7 @@ class CHL7v3EventPRPAIN201307UV02 extends CHL7v3EventPRPA implements CHL7EventPR
     // patientIdentifer
     $patientIdentifer = $dom->addElement($parameterList, "patientIdentifier");
     $value = $dom->addElement($patientIdentifer, "value");
-    $dom->addAttribute($value, "extension", $patient->INSC);
-    $dom->addAttribute($value, "root", "1.2.250.1.213.1.4.2");
+    $this->setII($value, $patient->INSC, "1.2.250.1.213.1.4.2");
 
     $dom->addElement($patientIdentifer, "semanticsText", "Patient.id");
   }

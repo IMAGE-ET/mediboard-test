@@ -115,6 +115,7 @@ class CReceiverHL7v3 extends CInteropReceiver {
     $exchange = $evenement->_exchange_hl7v3;
 
     $msg = $evenement->message;
+
     $source->setData($msg, null, $exchange);
     try {
       $source->send();

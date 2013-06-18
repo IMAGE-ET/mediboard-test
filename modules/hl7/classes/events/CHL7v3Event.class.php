@@ -15,16 +15,13 @@
  * Class CHL7v3Event
  * Event HL7v3
  */
-class CHL7v3Event {
+class CHL7v3Event extends CHL7Event {
   /** @var  CHL7v3MessageXML $dom */
   public $dom;
 
   /** @var string */
   public $interaction_id = null;
   public $version = "2009";
-
-  /** @var CExchangeHL7v3 */
-  public $_exchange_hl7v3;
 
   /**
    * Build event

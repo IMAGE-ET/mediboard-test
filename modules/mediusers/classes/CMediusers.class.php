@@ -83,6 +83,7 @@ class CMediusers extends CPerson {
   public $_user_id;
   public $_keep_user;
   public $_user_type_view;
+  public $_common_name;
 
   // Distant fields
   public $_group_id;

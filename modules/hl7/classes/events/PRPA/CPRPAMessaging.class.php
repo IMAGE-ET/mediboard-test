@@ -24,7 +24,7 @@ class CPRPAMessaging extends CHL7v3Messaging {
 
 
   /** @var array */
-  static $interaction_ST201317UV = array(
+  static $interaction_ST201317UV = array (
     // Patient Registry Get Demographics Query
     "IN201307UV02", "IN201308UV02",
     // Patient Registry AddPatient
@@ -33,7 +33,7 @@ class CPRPAMessaging extends CHL7v3Messaging {
 
 
   /** @var array */
-  static $evenements = array(
+  static $evenements = array (
     // Patient Registry Get Demographics Query
     "IN201307UV02" => "CHL7v3EventPRPAIN201307UV02",
     // Patient Registry Get Demographics Query Response

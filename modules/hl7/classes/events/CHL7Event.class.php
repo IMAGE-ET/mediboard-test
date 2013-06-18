@@ -16,75 +16,55 @@
  * Event HL7
  */
 class CHL7Event {
-  /**
-   * @var null
-   */
+  /** @var CUserLog */
   public $event_type;
-  /**
-   * @var null
-   */
+
+  /** @var CUserLog */
   public $object;
-  /**
-   * @var CUserLog
-   */
+
+  /** @var CUserLog */
   public $last_log;
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $profil;
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $transaction;
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $code;
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $struct_code;
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $version;
 
-  /**
-   * @var CHL7v2Message
-   */
+  /** @var CHL7v2Message */
   public $message;
-  /**
-   * @var string
-   */
+
+  /** @var string */
   public $msg_hl7;
 
-  /**
-   * @var array
-   */
-  public $msg_codes     = array();
+  /** @var array */
+  public $msg_codes = array();
 
-  /**
-   * @var CReceiverHL7v2
-   */
+  /** @var CReceiverHL7v2 */
   public $_receiver;
-  
-  /**
-   * @var CInteropSender
-   */
+
+  /** @var CInteropSender */
   public $_sender;
 
-  /**
-   * @var CExchangeDataFormat
-   */
+  /** @var CExchangeDataFormat */
   public $_data_format;
 
-  /**
-   * @var CExchangeHL7v2
-   */
+  /** @var CExchangeHL7v2 */
   public $_exchange_hl7v2;
-  /**
-   * @var string
-   */
+
+  /** @var CExchangeHL7v3 */
+  public $_exchange_hl7v3;
+
+  /** @var string */
   public $_is_i18n;
 
   /**

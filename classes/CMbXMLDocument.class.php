@@ -21,7 +21,7 @@ class CMbXMLDocument extends DOMDocument {
   
   function __construct($encoding = "iso-8859-1") {
     parent::__construct("1.0", $encoding);
-    
+
     $this->preserveWhiteSpace = false;
     $this->formatOutput = true;
   }
@@ -213,7 +213,7 @@ class CMbXMLDocument extends DOMDocument {
   }
   
   function addAttribute($elParent, $atName, $atValue) {
-    $atName  = utf8_encode($atName );
+    $atName  = utf8_encode($atName);
     $atValue = utf8_encode($atValue);
     return $elParent->setAttribute($atName, $atValue);
   }

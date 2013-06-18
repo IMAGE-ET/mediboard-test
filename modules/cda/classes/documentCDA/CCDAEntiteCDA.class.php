@@ -56,7 +56,7 @@ class CCDAEntiteCDA extends CCDADocumentCDA {
     $enxp->setData($patient->_p_last_name);
     $enxp->setQualifier(array("BR"));
     if ($patient->_p_maiden_name) {
-      $enxp2 = new CCDA_en_given();
+      $enxp2 = new CCDA_en_family();
       $enxp2->setQualifier(array("BR"));
       $enxp2->setData($patient->_p_maiden_name);
       $pn->append("family", $enxp2);

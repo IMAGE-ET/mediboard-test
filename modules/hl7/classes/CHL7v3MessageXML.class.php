@@ -77,6 +77,18 @@ class CHL7v3MessageXML extends CMbXMLDocument {
   }
 
   /**
+   * Importe un DOMDocument à l'intérieur de l'élément spécifié
+   *
+   * @param DOMElement  $nodeParent  DOMElement
+   * @param DOMDocument $domDocument DOMDocument
+   *
+   * @return void
+   */
+  function importDOMDocument($nodeParent, $domDocument) {
+    $nodeParent->appendChild($this->importNode($domDocument->documentElement, true));
+  }
+
+  /**
    * Try to validate the document against a schema will trigger errors when not validating
    *
    * @param bool $returnErrors   Return errors
