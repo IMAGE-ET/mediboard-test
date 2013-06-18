@@ -113,6 +113,7 @@ Main.add( function(){
 {{mb_ternary var=gestionFSE test=$consult->sejour_id value=0 other=$modFSE}}
 
 <table class="form">
+  {{* Non utile pour le moment
   <tr>
     <td colspan="2">
       {{mb_include module="cabinet" template="inc_type_assurance_reglement/inc_type_assurance"}}
@@ -124,6 +125,7 @@ Main.add( function(){
     <td colspan="2" id="area_type_assurance">
     </td>
   </tr>
+  *}}
 
   <tr>
     {{if $gestionFSE}}

@@ -42,6 +42,12 @@ var Patient = {
   select: function(patient_id, patient_view, sexe) {
     window.launcher.PatSelector.set(patient_id, patient_view, sexe);
     window._close();
+  },
+
+  updateFromVitale: function(patient_id, view, sexe) {
+    var url = new Url("patients", "ajax_update_patient_from_vitale");
+    url.addParam("patient_id", patient_id);
+    url.requestUpdate("systemMsg", this.select.curry(patient_id, view, sexe));
   }
 };
 
