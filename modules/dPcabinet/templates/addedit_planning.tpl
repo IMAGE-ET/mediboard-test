@@ -150,8 +150,8 @@ unlinkSejour = function() {
   form.submit();
 };
 
-checkCorrespondantMedical = function(id){
-  var form = getForm("editFrm"+id);
+checkCorrespondantMedical = function() {
+  var form = getForm("editFrm");
   var url = new Url("dPplanningOp", "ajax_check_correspondant_medical");
   url.addParam("patient_id", $V(form.patient_id));
   url.addParam("object_id" , $V(form.consultation_id));
