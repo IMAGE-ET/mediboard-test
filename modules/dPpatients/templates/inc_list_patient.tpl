@@ -190,6 +190,7 @@ emptyForm = function() {
     </td>
 
     <td class="field_advanced" colspan="2"></td>
+    {{*
     <th style="display: none;" class="field_advanced">
       <label for="prat" title="Praticien concerné">
         Praticien
@@ -201,6 +202,7 @@ emptyForm = function() {
         {{mb_include module=mediusers template=inc_options_mediuser list=$prats selected=$prat_id}}
       </select>
     </td>
+    *}}
   </tr>
 
   <tr>
