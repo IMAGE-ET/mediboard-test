@@ -1108,9 +1108,8 @@ class CPatient extends CPerson {
       $join["sejour"] = "sejour.patient_id = patients.patient_id";
       $min = CMbDT::dateTime("-1 DAY", $date);
       $max = CMbDT::dateTime("+1 DAY", $date);
-      $whereDate[] = "sejour.entree_reelle BETWEEN '$min' AND '$max'";
-      $whereDate[] = "sejour.entree_prevue BETWEEN '$min' AND '$max'";
-      $where[] = implode(" OR ", $whereDate);
+      // Ne pas utiliser de OR entree_prevue / entree_reelle ici: problèmes de performance
+      $where["sejour.entree"] = "BETWEEN '$min' AND '$max'";
     }
 
     return $this->loadList($where, null, null, null, $join);
