@@ -20,7 +20,9 @@ if ($_date_min) {
   if ($facture_class == "CFactureEtablissement") {
     $where["temporaire"] = " = '0'";
   }
-  $where["praticien_id"] =" = '$chirSel' ";
+  if (($chirSel && $facture_class == "CFactureEtablissement") || $facture_class == "CFactureCabinet") {
+    $where["praticien_id"] =" = '$chirSel' ";
+  }
   $where["cloture"] = "<= '$_date_max'";
   
   $facture  = new $facture_class;
