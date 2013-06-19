@@ -60,6 +60,8 @@ class CEvenementSSR extends CMbObject {
   public $_ref_actes_cdarr;
   /** @var  CActeCsARR[] */
   public $_ref_actes_csarr;
+  /** @var  CActeSSR[] */
+  public $_ref_actes;
   /** @var  CEvenementSSR[] */
   public $_ref_evenements_seance;
   /** @var  CPrescriptionLineElement */
@@ -327,7 +329,7 @@ class CEvenementSSR extends CMbObject {
   }
 
   /**
-   * Chage les actes CdARR planifiés
+   * Chage les actes CdARR
    *
    * @return CActeCdARR[]
    */
@@ -336,12 +338,26 @@ class CEvenementSSR extends CMbObject {
   }
 
   /**
-   * Charge les actes CsARR planifiés
+   * Charge les actes CsARR
    *
    * @return CActeCsARR[]
    */
-  function loadRefsActesCsARR(){
+  function loadRefsActesCsARR() {
     return $this->_ref_actes_csarr = $this->loadBackRefs("actes_csarr");
+  }
+
+  /**
+   * Charge tous les actes
+   *
+   * @return CActeSSR[][] Actes classés par type
+   */
+  function loadRefsActes() {
+    $actes_cdarr = $this->loadRefsActesCdARR();
+    $actes_csarr = $this->loadRefsActesCsARR();
+    return $this->_ref_actes = array(
+      "cdarr" => $actes_cdarr,
+      "csarr" => $actes_csarr,
+    );
   }
 
   /**

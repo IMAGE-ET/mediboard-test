@@ -864,7 +864,7 @@ Main.add(function(){
         DOM.span({}, 
           DOM.input({
             type: 'hidden', 
-            id: 'editEvenementSSR__cdarrs['+code_selected.innerHTML+']', 
+            id: 'editEvenementSSR__csarrs['+code_selected.innerHTML+']',
             name:'_csarrs['+code_selected.innerHTML+']',
             value: code_selected.innerHTML,
             className: 'checkbox-other-csarrs'

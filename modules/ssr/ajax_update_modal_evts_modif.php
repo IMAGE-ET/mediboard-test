@@ -18,8 +18,11 @@ if ($token_evts) {
   $_evenements = explode("|", $token_evts);
 }
 
-$actes = array();
-$count_actes = array();
+$count_actes = $actes = array(
+  "cdarr" => array(),
+  "csarr" => array(),
+);
+
 $evenements = array();
 
 foreach ($_evenements as $_evenement_id) {
@@ -34,29 +37,34 @@ foreach ($_evenements as $_evenement_id) {
   }
   
   $evenement->loadRefSejour()->loadRefPatient();
-  $evenement->loadRefPrescriptionLineElement();
 
-  // Chargement des actes cdarrs de l'evenement
-  $evenement->loadRefsActesCdARR();
-  foreach ($evenement->_ref_actes_cdarr as $_acte_cdarr) {
-    $actes[$_acte_cdarr->code] = $_acte_cdarr->code;
-    if (!isset($count_actes[$_acte_cdarr->code])) {
-      $count_actes[$_acte_cdarr->code] = 0;
+  // Chargement et comptage des codes de tous les actes
+  foreach ($evenement->loadRefsActes() as $_type => $_actes) {
+    foreach ($_actes as $_acte) {
+      $actes[$_type][$_acte->code] = $_acte->code;
+      if (!isset($count_actes[$_type][$_acte->code])) {
+        $count_actes[$_type][$_acte->code] = 0;
+      }
+      $count_actes[$_type][$_acte->code]++;
     }
-    $count_actes[$_acte_cdarr->code]++;
   }
-  
-  // Chargement des actes cdarrs possibles pour l'evenement
-  $element_prescription =& $evenement->_ref_prescription_line_element->_ref_element_prescription;
-  $element_prescription->loadRefsCdarrs();
-  
-  foreach ($element_prescription->_ref_cdarrs as $element_to_acte_cdarr) {
-    $actes[$element_to_acte_cdarr->code] = $element_to_acte_cdarr->code;
+
+  // Chargement des codes possibles pour l'evenement
+  $line = $evenement->loadRefPrescriptionLineElement();
+  $element  = $line->_ref_element_prescription;
+  foreach ($element->loadRefsCodesSSR() as $_type => $_links) {
+    foreach ($_links as $_link_cdarr) {
+      $actes[$_type][$_link_cdarr->code] = $_link_cdarr->code;
+    }
   }
+
   $evenements[$evenement->_id] = $evenement;
 }
 
-ksort($actes);
+// Sorting
+foreach ($actes as $_type => &$_actes) {
+  ksort($_actes);
+}
 
 // Création du template
 $smarty = new CSmartyDP();
