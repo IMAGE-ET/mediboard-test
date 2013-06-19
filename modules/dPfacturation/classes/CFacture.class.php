@@ -974,6 +974,14 @@ class CFacture extends CMbObject {
     $this->loadRefPraticien();
     $this->loadRefsItems();
     $retrocessions = $this->_ref_praticien->loadRefsRetrocessions();
+    $use_pm = false;
+    foreach ($this->_ref_items as $item) {
+      foreach ($retrocessions as $retro) {
+        if ($retro->use_pm && $retro->code_class == $item->type && $retro->code == $item->code) {
+          $use_pm = true;
+        }
+      }
+    }
     foreach ($this->_ref_items as $item) {
       $modif = false;
       foreach ($retrocessions as $retro) {
@@ -981,15 +989,24 @@ class CFacture extends CMbObject {
         if ($retro->code_class == $item->type && $retro->code == $item->code) {
           $modif = true;
           $montant = $retro->updateMontant();
+          if ($use_pm) {
+            if ($retro->use_pm) {
+              $this->_montant_retrocession = 0;
+            }
+            else {
+              $montant = 0;
+            }
+          }
           $this->_montant_retrocession += $montant;
           $this->_retrocessions[$item->code] = array($item->_montant_facture, $montant);
         }
       }
-      if (!$modif && $item->type == "CActeTarmed") {
-        $tarmed = new CActeTarmed();
-        $tarmed->code = $item->code;
-        $tarmed->updateMontantBase();
-        $montant = $tarmed->_ref_tarmed->tp_al * $tarmed->_ref_tarmed->f_al;
+      if (!$modif && ($item->type == "CActeTarmed" || $item->type == "CActeCaisse") && !$use_pm) {
+        $code = new $item->type;
+        $code->code = $item->code;
+        $code->updateMontantBase();
+        $ref = $item->type == "CActeTarmed" ? $code->_ref_tarmed : $code->_ref_prestation_caisse;
+        $montant = $item->type == "CActeTarmed" ? $ref->tp_al * $ref->f_al : $ref->pt_medical;
         $this->_montant_retrocession += $montant;
         $this->_retrocessions[$item->code] = array($item->_montant_facture, $montant);
       }

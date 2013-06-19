@@ -116,16 +116,21 @@ Main.add(function () {
     <th>{{mb_label object=$retrocession field=code_class}}</th>
     <td>{{mb_field object=$retrocession field=code_class onchange="changeClass();" emptyLabel="Choose"}}</td>
   </tr>
-  <th class="narrow">Code</th>
-  <td id="code_tarmed">
-    <input type="text" name="code" value="{{$retrocession->code}}" style="width:250px;" />
-    <div  class="autocomplete" id="code_auto_complete" style="display: none;"></div>
-  </td>
-  <td id="code_caisse" style="display:none;">
-    <input type="text" name="code_caisse" value="{{$retrocession->code}}" style="width:250px;" onchange="this.form.code.value = this.value;"/>
-    <div  class="autocomplete" id="code_auto_complete_caisse" style="display: none;"></div>
-  </td>
-
+  <tr>
+    <th class="narrow">Code</th>
+    <td id="code_tarmed">
+      <input type="text" name="code" value="{{$retrocession->code}}" style="width:250px;" />
+      <div  class="autocomplete" id="code_auto_complete" style="display: none;"></div>
+    </td>
+    <td id="code_caisse" style="display:none;">
+      <input type="text" name="code_caisse" value="{{$retrocession->code}}" style="width:250px;" onchange="this.form.code.value = this.value;"/>
+      <div  class="autocomplete" id="code_auto_complete_caisse" style="display: none;"></div>
+    </td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$retrocession field=use_pm}}</th>
+    <td>{{mb_field object=$retrocession field=use_pm}}</td>
+  </tr>
   <tr>
     <td class="button" colspan="2">
       {{if $retrocession->_id}}

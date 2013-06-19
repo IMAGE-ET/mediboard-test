@@ -25,7 +25,8 @@ class CRetrocession extends CMbObject {
   public $pct_pt;
   public $code_class;
   public $code;
-  
+  public $use_pm;
+
   // Distant Field
   public $_montant_total;
   
@@ -58,7 +59,8 @@ class CRetrocession extends CMbObject {
     $props["pct_pt"]      = "pct default|0";
     $props["code_class"]  = "enum list|CActeCCAM|CActeNAGP|CActeTarmed|CActeCaisse default|CActeCCAM";
     $props["code"]        = "str";
-    
+    $props["use_pm"]      = "bool default|0";
+
     $props["_montant_total"]  = "currency";
     return $props;
   }
@@ -129,5 +131,4 @@ class CRetrocession extends CMbObject {
     $this->_montant_total = round($this->_montant_total, 2);
     return $this->_montant_total;
   }
-  
 }
