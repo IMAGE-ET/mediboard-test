@@ -36,6 +36,7 @@ $ljoin["acte_ngap"] = "operations.operation_id = acte_ngap.object_id AND acte_ng
 $where = array();
 $where[] = "acte_ccam.execution BETWEEN '$date_min' AND '$date_max' OR acte_ngap.execution BETWEEN '$date_min' AND '$date_max'";
 $where[] = "acte_ccam.executant_id = '$_prat_id' OR acte_ngap.executant_id = '$_prat_id'";
+$where["operations.annulee"] = " = '0'";
 
 /** @var  CSejour[] $sejours*/
 $sejours = $sejour->loadList($where, null, null, "sejour_id", $ljoin);
@@ -63,7 +64,7 @@ foreach ($sejours as $key => $sejour) {
     if ($sejour->_ref_actes) {
       if (count($sejour->_ref_actes)) {
         foreach ($sejour->_ref_actes as $acte) {
-          if($acte->executant_id == $_prat_id) {
+          if ($acte->executant_id == $_prat_id) {
             $nbActes[$sejour->_id]++;
             $montantSejour[$sejour->_id] += $acte->_montant_facture;
           }
@@ -75,7 +76,7 @@ foreach ($sejours as $key => $sejour) {
         if (count($operation->_ref_actes)) {
           $operation->loadRefPlageOp();
           foreach ($operation->_ref_actes as $acte) {
-            if($acte->executant_id == $_prat_id) {
+            if ($acte->executant_id == $_prat_id) {
               $nbActes[$sejour->_id]++;
               $montantSejour[$sejour->_id] += $acte->_montant_facture;
             }
@@ -87,7 +88,7 @@ foreach ($sejours as $key => $sejour) {
       foreach ($sejour->_ref_consultations as $consult) {
         if (count($consult->_ref_actes)) {
           foreach ($consult->_ref_actes as $acte) {
-            if($acte->executant_id == $_prat_id) {
+            if ($acte->executant_id == $_prat_id) {
               $nbActes[$sejour->_id]++;
               $montantSejour[$sejour->_id] += $acte->_montant_facture;
             }

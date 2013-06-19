@@ -67,11 +67,20 @@ foreach ($prats as $_chir_id => $_prat) {
   foreach ($object_classes as $_class) {
     $cotation[$_chir_id][$_class] = $tab_actes;
     foreach ($cotation[$_chir_id][$_class] as $_type => $value) {
-      $query = "SELECT SUM(montant_base) AS sect1, SUM(montant_depassement) AS sect2
-        FROM acte_$_type
-        WHERE object_class = '$_class'
-        AND executant_id = '$_chir_id'
-        AND DATE(execution) BETWEEN '$debut' AND '$fin';";
+      $query = "SELECT SUM(a.montant_base) AS sect1, SUM(a.montant_depassement) AS sect2
+        FROM acte_$_type a";
+      if ($_class == "COperation") {
+        $query .= ", operations o
+        WHERE o.annulee = '0'
+        AND o.operation_id = a.object_id
+        AND ";
+      }
+      else {
+        $query .= " WHERE ";
+      }
+      $query .= "a.object_class = '$_class'
+        AND a.executant_id = '$_chir_id'
+        AND DATE(a.execution) BETWEEN '$debut' AND '$fin';";
       $result = $ds->loadHash($query);
 
       $sect1 = round($result["sect1"], 2);
