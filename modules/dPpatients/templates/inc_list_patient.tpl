@@ -82,8 +82,8 @@ reloadPatient = function(patient_id, link){
 };
 
 toggleSearch = function() {
-  $$(".field_advanced").each(function(elt){ elt.toggle();});
-  $$(".field_basic").each(function(elt){ elt.toggle();});
+  $$(".field_advanced").invoke("toggle");
+  $$(".field_basic").invoke("toggle");
 };
 
 emptyForm = function() {
@@ -97,6 +97,49 @@ emptyForm = function() {
   });
   form.nom.focus();
 };
+
+checkEnoughTraits = function() {
+  var form = getForm("find");
+
+  return $V(form.nom).length >=2 ||
+    $V(form.prenom).length >=2 ||
+    $V(form.cp).length >=2 ||
+    $V(form.ville).length >=2 ||
+    $V(form.Date_Year) ||
+    ($V(form.Date_Day) && $V(form.Date_Month) && $V(form.Date_Year));
+};
+
+togglePraticien = function(){
+  var praticien = getForm("find").prat_id;
+  var praticien_message = $("prat_id_message");
+  var enough = checkEnoughTraits();
+
+  praticien.setVisible(enough);
+  praticien_message.setVisible(!enough);
+
+  if (!enough) {
+    $V(praticien, '');
+  }
+};
+
+Main.add(function(){
+  togglePraticien();
+
+  var form = getForm("find");
+
+  [
+    form.nom,
+    form.prenom,
+    form.cp,
+    form.ville,
+    form.Date_Day,
+    form.Date_Month,
+    form.Date_Year
+  ].each(function(select){
+    select.observe("change", togglePraticien);
+  })
+});
+
 {{if $cp || $ville || ($conf.dPpatients.CPatient.tag_ipp && $patient_ipp) || $prat_id || $sexe || ($conf.dPplanningOp.CSejour.tag_dossier && $patient_nda) }}
   Main.add(toggleSearch);
 {{/if}}
@@ -190,19 +233,20 @@ emptyForm = function() {
     </td>
 
     <td class="field_advanced" colspan="2"></td>
-    {{*
     <th style="display: none;" class="field_advanced">
       <label for="prat" title="Praticien concerné">
         Praticien
       </label>
     </th>
-    <td colspan="3" class="field_advanced" style="display: none;">
-      <select name="prat_id" tabindex="5" style="width: 13em;">
+    <td colspan="3" class="field_advanced text" style="display: none;">
+      <div class="small-info" id="prat_id_message">
+        Afin de pouvoir faire une recherche par praticien, veuillez spécifier un trait du patient.
+      </div>
+      <select name="prat_id" tabindex="5" style="width: 13em; display: none;">
         <option value="">&mdash; Choisir un praticien</option>
         {{mb_include module=mediusers template=inc_options_mediuser list=$prats selected=$prat_id}}
       </select>
     </td>
-    *}}
   </tr>
 
   <tr>
