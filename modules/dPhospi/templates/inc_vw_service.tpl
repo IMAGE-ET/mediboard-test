@@ -1,5 +1,5 @@
 <!-- Formulaire d'un service -->
-<form name="edit{{service->_guid}}" action="" method="post" onsubmit="return submit_Ajax(this, 'services')">
+<form name="edit{{$service->_guid}}" action="" method="post" onsubmit="return submit_Ajax(this, 'services')">
   <input type="hidden" name="m" value="hospi" />
   <input type="hidden" name="dosql" value="do_service_aed" />
   <input type="hidden" name="del" value="0" />
