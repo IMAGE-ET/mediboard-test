@@ -1,14 +1,21 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPportail
- * @version $Revision$
- * @author Fabien
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Portail
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * Portail setup
+ */
 class CSetupdPportail extends CSetup {
-
+  /**
+   * @see parent::__construct()
+   */
   function __construct() {
     parent::__construct();
 
@@ -56,4 +63,3 @@ class CSetupdPportail extends CSetup {
     $this->mod_version = '0.11';
   }
 }
-?>

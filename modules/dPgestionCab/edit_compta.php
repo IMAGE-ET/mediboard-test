@@ -1,10 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpatients
- * @version $Revision$
- * @author Romain Ollivier
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage GestionCab
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -30,7 +32,7 @@ $filter->mode_paiement_id = CValue::getOrSession("mode_paiement_id");
 $gestioncab = new CGestionCab;
 $gestioncab->load($gestioncab_id);
 
-if(!$gestioncab->gestioncab_id) {
+if (!$gestioncab->gestioncab_id) {
   $gestioncab->function_id = $user->function_id;
 }
 

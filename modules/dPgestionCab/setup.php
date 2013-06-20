@@ -1,14 +1,22 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpmsi
- * @version $Revision$
- * @author Romain Ollivier
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage GestionCab
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * Gestion Cab setup
+ */
 class CSetupdPgestionCab extends CSetup {
-  
+
+  /**
+   * @see parent::__construct()
+   */
   function __construct() {
     parent::__construct();
     
@@ -115,28 +123,29 @@ class CSetupdPgestionCab extends CSetup {
     
     $this->makeRevision("0.12");
     $this->addDependency("mediusers", "0.1");
-    $query = "CREATE TABLE `employecab` (" .
-            "\n`employecab_id` INT NOT NULL AUTO_INCREMENT," .
-            "\n`function_id` INT NOT NULL DEFAULT '0'," .
-            "\n`nom` VARCHAR( 50 ) NOT NULL DEFAULT ''," .
-            "\n`prenom` VARCHAR( 50 ) NOT NULL DEFAULT ''," .
-            "\n`function` VARCHAR( 50 ) NOT NULL DEFAULT ''," .
-            "\n`adresse` VARCHAR( 50 )," .
-            "\n`cp` VARCHAR( 5 )," .
-            "\n`ville` VARCHAR( 50 )," .
-            "PRIMARY KEY ( `employecab_id` ) ," .
-            "INDEX ( `function_id` )" .
-            ") /*! ENGINE=MyISAM */ COMMENT = 'Table des employes';";
+    $query = "CREATE TABLE `employecab` (
+                `employecab_id` INT NOT NULL AUTO_INCREMENT,
+                `function_id` INT NOT NULL DEFAULT '0',
+                `nom` VARCHAR( 50 ) NOT NULL DEFAULT '',
+                `prenom` VARCHAR( 50 ) NOT NULL DEFAULT '',
+                `function` VARCHAR( 50 ) NOT NULL DEFAULT '',
+                `adresse` VARCHAR( 50 ),
+                `cp` VARCHAR( 5 ),
+                `ville` VARCHAR( 50 ),
+                PRIMARY KEY ( `employecab_id` ),
+                INDEX ( `function_id` )
+              ) /*! ENGINE=MyISAM */ COMMENT = 'Table des employes';";
     $this->addQuery($query);
     $query = "ALTER TABLE `params_paie` CHANGE `user_id` `employecab_id` INT NOT NULL DEFAULT '0';";
     $this->addQuery($query);
-    function setup_paie(){
+
+    function setup_paie() {
       $param = new CParamsPaie;
       $params = $param->loadList();
-      if(!is_array($params)) {
+      if (!is_array($params)) {
         return true;
       }
-      foreach($params as $key => $curr_param) {
+      foreach ($params as $key => $curr_param) {
         $user = new CMediusers;
         $user->load($params[$key]->employecab_id);
         $employe = new CEmployeCab;
@@ -156,47 +165,47 @@ class CSetupdPgestionCab extends CSetup {
     $this->addFunction("setup_paie");
     
     $this->makeRevision("0.13");
-    $query = "ALTER TABLE `employecab` " .
-               "\nCHANGE `employecab_id` `employecab_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `nom` `nom` varchar(255) NOT NULL," .
-               "\nCHANGE `prenom` `prenom` varchar(255) NOT NULL," .
-               "\nCHANGE `function` `function` varchar(255) NOT NULL," .
-               "\nCHANGE `adresse` `adresse` varchar(255) NULL," .
-               "\nCHANGE `cp` `cp` int(5) unsigned zerofill NULL," .
-               "\nCHANGE `ville` `ville` varchar(255) NULL;";
+    $query = "ALTER TABLE `employecab`
+                CHANGE `employecab_id` `employecab_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `nom` `nom` varchar(255) NOT NULL,
+                CHANGE `prenom` `prenom` varchar(255) NOT NULL,
+                CHANGE `function` `function` varchar(255) NOT NULL,
+                CHANGE `adresse` `adresse` varchar(255) NULL,
+                CHANGE `cp` `cp` int(5) unsigned zerofill NULL,
+                CHANGE `ville` `ville` varchar(255) NULL;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `fiche_paie` " .
-               "\nCHANGE `fiche_paie_id` `fiche_paie_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `params_paie_id` `params_paie_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `heures` `heures` tinyint(4) NOT NULL DEFAULT '0'," .
-               "\nCHANGE `heures_sup` `heures_sup` tinyint(4) NOT NULL DEFAULT '0';";
+    $query = "ALTER TABLE `fiche_paie`
+                CHANGE `fiche_paie_id` `fiche_paie_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `params_paie_id` `params_paie_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `heures` `heures` tinyint(4) NOT NULL DEFAULT '0',
+                CHANGE `heures_sup` `heures_sup` tinyint(4) NOT NULL DEFAULT '0';";
     $this->addQuery($query);
-    $query = "ALTER TABLE `gestioncab` " .
-               "\nCHANGE `gestioncab_id` `gestioncab_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `libelle` `libelle` varchar(255) NOT NULL DEFAULT 'inconnu'," .
-               "\nCHANGE `rubrique_id` `rubrique_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `mode_paiement_id` `mode_paiement_id` int(11) unsigned NOT NULL DEFAULT '0';";
+    $query = "ALTER TABLE `gestioncab`
+                CHANGE `gestioncab_id` `gestioncab_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `libelle` `libelle` varchar(255) NOT NULL DEFAULT 'inconnu',
+                CHANGE `rubrique_id` `rubrique_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `mode_paiement_id` `mode_paiement_id` int(11) unsigned NOT NULL DEFAULT '0';";
     $this->addQuery($query);
-    $query = "ALTER TABLE `mode_paiement` " .
-               "\nCHANGE `mode_paiement_id` `mode_paiement_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `nom` `nom` varchar(255) NOT NULL DEFAULT 'inconnu';";
+    $query = "ALTER TABLE `mode_paiement`
+                CHANGE `mode_paiement_id` `mode_paiement_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `nom` `nom` varchar(255) NOT NULL DEFAULT 'inconnu';";
     $this->addQuery($query);
-    $query = "ALTER TABLE `params_paie` " .
-               "\nCHANGE `params_paie_id` `params_paie_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `employecab_id` `employecab_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `nom` `nom` varchar(255) NOT NULL," .
-               "\nCHANGE `adresse` `adresse` varchar(255) NOT NULL," .
-               "\nCHANGE `cp` `cp` int(5) unsigned zerofill NOT NULL," .
-               "\nCHANGE `ville` `ville` varchar(255) NOT NULL," .
-               "\nCHANGE `siret` `siret` bigint(14) unsigned zerofill NOT NULL;";
+    $query = "ALTER TABLE `params_paie`
+                CHANGE `params_paie_id` `params_paie_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `employecab_id` `employecab_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `nom` `nom` varchar(255) NOT NULL,
+                CHANGE `adresse` `adresse` varchar(255) NOT NULL,
+                CHANGE `cp` `cp` int(5) unsigned zerofill NOT NULL,
+                CHANGE `ville` `ville` varchar(255) NOT NULL,
+                CHANGE `siret` `siret` bigint(14) unsigned zerofill NOT NULL;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `rubrique_gestioncab` " .
-               "\nCHANGE `rubrique_id` `rubrique_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `nom` `nom` varchar(255) NOT NULL DEFAULT 'divers';";
+    $query = "ALTER TABLE `rubrique_gestioncab`
+                CHANGE `rubrique_id` `rubrique_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `nom` `nom` varchar(255) NOT NULL DEFAULT 'divers';";
     $this->addQuery($query);
     
     $this->makeRevision("0.14");
@@ -225,7 +234,7 @@ class CSetupdPgestionCab extends CSetup {
     $this->addQuery($query);
     $query = "ALTER TABLE `params_paie`
             ADD `ms` FLOAT NOT NULL AFTER `csp`,
-            ADD `mp` FLOAT NOT NULL AFTER `ms;";
+            ADD `mp` FLOAT NOT NULL AFTER `ms`;";
     $this->addQuery($query);
     
     $this->makeRevision("0.18");
@@ -248,4 +257,3 @@ class CSetupdPgestionCab extends CSetup {
     $this->mod_version = "0.20";
   }
 }
-?>

@@ -1,81 +1,85 @@
-<?php /* $Id$ */
+<?php
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage GestionCab
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 /**
-* @package Mediboard
-* @subpackage dPgestionCab
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
-/**
- * The CFichePaie Class
+ * Fiche de paie
  */
 class CFichePaie extends CMbObject {
   // DB Table key
-  var $fiche_paie_id = null;
+  public $fiche_paie_id;
 
   // DB Fields
-  var $params_paie_id = null;
-  var $debut          = null;
-  var $fin            = null;
-  var $salaire        = null;
-  var $heures         = null;
-  var $heures_comp    = null;
-  var $heures_sup     = null;
-  var $precarite      = null;
-  var $anciennete     = null;
-  var $conges_payes   = null;
-  var $prime_speciale = null;
-  
-  var $final_file     = null;
-  
+  public $params_paie_id;
+  public $debut;
+  public $fin;
+  public $salaire;
+  public $heures;
+  public $heures_comp;
+  public $heures_sup;
+  public $precarite;
+  public $anciennete;
+  public $conges_payes;
+  public $prime_speciale;
+
+  public $final_file;
+
   // Forms Fields
-  var $_salaire_base = null;
-  var $_base_heures_sup = null;
-  var $_salaire_heures_comp = null;
-  var $_salaire_heures_sup  = null;
-  var $_total_heures = null;
-  var $_prime_precarite = null;
-  var $_prime_anciennete = null;
-  var $_conges_payes = null;
-  var $_salaire_brut = null;
-  var $_base_csg = null;
-  var $_base_csgnis = null;
-  var $_base_csgds = null;
-  var $_base_csgnds = null;
-  var $_csgnis  = null; // CSG non imposable salariale
-  var $_csgds   = null; // CSG déductible salariale
-  var $_csgnds  = null; // CSG non déductible salariale
-  var $_ssms    = null; // sécurité sociale maladie salariale
-  var $_ssmp    = null; // sécurité sociale maladie patronale
-  var $_ssvs    = null; // sécurité sociale vieillesse salariale
-  var $_ssvp    = null; // sécurité sociale vieillesse patronale
-  var $_rcs     = null; // retraite complémentaire salariale
-  var $_rcp     = null; // retraite complémentaire patronale
-  var $_agffs   = null; // AGFF salariale
-  var $_agffp   = null; // AGFF patronale
-  var $_aps     = null; // assurance prévoyance salariale
-  var $_app     = null; // assurance prévoyance patronale
-  var $_acs     = null; // assurance chomage salariale
-  var $_acp     = null; // assurance chomage patronale
-  var $_aatp    = null; // assurance accident de travail patronale
-  var $_csp     = null; // contribution solidarité patronale
-  var $_reduc_heures_sup_pat = null;
-  var $_reduc_heures_sup_sal = null;
-  var $_reduc_bas_salaires  = null;
-  var $_total_retenues      = null;
-  var $_total_cot_patr      = null;
-  var $_total_heures_sup    = null;
-  var $_salaire_a_payer     = null;
-  var $_salaire_net         = null;
-  
+  public $_salaire_base;
+  public $_base_heures_sup;
+  public $_salaire_heures_comp;
+  public $_salaire_heures_sup;
+  public $_total_heures;
+  public $_prime_precarite;
+  public $_prime_anciennete;
+  public $_conges_payes;
+  public $_salaire_brut;
+  public $_base_csg;
+  public $_base_csgnis;
+  public $_base_csgds;
+  public $_base_csgnds;
+  public $_csgnis; // CSG non imposable salariale
+  public $_csgds; // CSG déductible salariale
+  public $_csgnds; // CSG non déductible salariale
+  public $_ssms; // sécurité sociale maladie salariale
+  public $_ssmp; // sécurité sociale maladie patronale
+  public $_ssvs; // sécurité sociale vieillesse salariale
+  public $_ssvp; // sécurité sociale vieillesse patronale
+  public $_rcs; // retraite complémentaire salariale
+  public $_rcp; // retraite complémentaire patronale
+  public $_agffs; // AGFF salariale
+  public $_agffp; // AGFF patronale
+  public $_aps; // assurance prévoyance salariale
+  public $_app; // assurance prévoyance patronale
+  public $_acs; // assurance chomage salariale
+  public $_acp; // assurance chomage patronale
+  public $_aatp; // assurance accident de travail patronale
+  public $_csp; // contribution solidarité patronale
+  public $_reduc_heures_sup_pat;
+  public $_reduc_heures_sup_sal;
+  public $_reduc_bas_salaires;
+  public $_total_retenues;
+  public $_total_cot_patr;
+  public $_total_heures_sup;
+  public $_salaire_a_payer;
+  public $_salaire_net;
+
   // Behaviour fields
-  var $_final_store = false;
+  public $_final_store = false;
 
+  /** @var CParamsPaie */
+  public $_ref_params_paie;
 
-  // Object References
-  var $_ref_params_paie = null;
-  
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'fiche_paie';
@@ -83,68 +87,78 @@ class CFichePaie extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
-  	$specs = parent::getProps();
-    $specs["params_paie_id"] = "ref notNull class|CParamsPaie";
-    $specs["debut"]          = "date notNull";
-    $specs["fin"]            = "date notNull moreEquals|debut";
-    $specs["salaire"]        = "currency notNull min|0";
-    $specs["heures"]         = "num notNull max|255";
-    $specs["heures_comp"]    = "num notNull max|255";
-    $specs["heures_sup"]     = "num notNull max|255";
-    $specs["anciennete"]     = "pct notNull";
-    $specs["precarite"]      = "pct notNull";
-    $specs["conges_payes"]   = "pct notNull";
-    $specs["prime_speciale"] = "currency notNull min|0";
-    $specs["final_file"]     = "html";
-    
-    $specs["_salaire_base"]         = "currency";
-    $specs["_base_heures_sup"]      = "currency";
-    $specs["_salaire_heures_comp"]  = "currency";
-    $specs["_salaire_heures_sup"]   = "currency";
-    $specs["_total_heures"]         = "currency";
-    $specs["_prime_precarite"]      = "currency";
-    $specs["_prime_anciennete"]     = "currency";
-    $specs["_conges_payes"]         = "currency";
-    $specs["_salaire_brut"]         = "currency";
-    $specs["_base_csg"]             = "currency";
-    $specs["_base_csgnis"]          = "currency";
-    $specs["_base_csgds"]           = "currency";
-    $specs["_base_csgnds"]          = "currency";
-    $specs["_csgnis"]               = "currency";
-    $specs["_csgds"]                = "currency";
-    $specs["_csgnds"]               = "currency";
-    $specs["_ssms"]                 = "currency";
-    $specs["_ssmp"]                 = "currency";
-    $specs["_ssvs"]                 = "currency";
-    $specs["_ssvp"]                 = "currency";
-    $specs["_rcs"]                  = "currency";
-    $specs["_rcp"]                  = "currency";
-    $specs["_agffs"]                = "currency";
-    $specs["_agffp"]                = "currency";
-    $specs["_aps"]                  = "currency";
-    $specs["_app"]                  = "currency";
-    $specs["_acs"]                  = "currency";
-    $specs["_acp"]                  = "currency";
-    $specs["_aatp"]                 = "currency";
-    $specs["_csp"]                  = "currency";
-    $specs["_reduc_heures_sup_pat"] = "currency";
-    $specs["_reduc_heures_sup_sal"] = "currency";
-    $specs["_reduc_bas_salaires"]   = "currency";
-    $specs["_total_retenues"]       = "currency";
-    $specs["_total_cot_patr"]       = "currency";
-    $specs["_total_heures_sup"]     = "currency";
-    $specs["_salaire_a_payer"]      = "currency";
-    $specs["_salaire_net"]          = "currency";
-    
-    return $specs;
+    $props = parent::getProps();
+    $props["params_paie_id"] = "ref notNull class|CParamsPaie";
+    $props["debut"]          = "date notNull";
+    $props["fin"]            = "date notNull moreEquals|debut";
+    $props["salaire"]        = "currency notNull min|0";
+    $props["heures"]         = "num notNull max|255";
+    $props["heures_comp"]    = "num notNull max|255";
+    $props["heures_sup"]     = "num notNull max|255";
+    $props["anciennete"]     = "pct notNull";
+    $props["precarite"]      = "pct notNull";
+    $props["conges_payes"]   = "pct notNull";
+    $props["prime_speciale"] = "currency notNull min|0";
+    $props["final_file"]     = "html";
+
+    $props["_salaire_base"]         = "currency";
+    $props["_base_heures_sup"]      = "currency";
+    $props["_salaire_heures_comp"]  = "currency";
+    $props["_salaire_heures_sup"]   = "currency";
+    $props["_total_heures"]         = "currency";
+    $props["_prime_precarite"]      = "currency";
+    $props["_prime_anciennete"]     = "currency";
+    $props["_conges_payes"]         = "currency";
+    $props["_salaire_brut"]         = "currency";
+    $props["_base_csg"]             = "currency";
+    $props["_base_csgnis"]          = "currency";
+    $props["_base_csgds"]           = "currency";
+    $props["_base_csgnds"]          = "currency";
+    $props["_csgnis"]               = "currency";
+    $props["_csgds"]                = "currency";
+    $props["_csgnds"]               = "currency";
+    $props["_ssms"]                 = "currency";
+    $props["_ssmp"]                 = "currency";
+    $props["_ssvs"]                 = "currency";
+    $props["_ssvp"]                 = "currency";
+    $props["_rcs"]                  = "currency";
+    $props["_rcp"]                  = "currency";
+    $props["_agffs"]                = "currency";
+    $props["_agffp"]                = "currency";
+    $props["_aps"]                  = "currency";
+    $props["_app"]                  = "currency";
+    $props["_acs"]                  = "currency";
+    $props["_acp"]                  = "currency";
+    $props["_aatp"]                 = "currency";
+    $props["_csp"]                  = "currency";
+    $props["_reduc_heures_sup_pat"] = "currency";
+    $props["_reduc_heures_sup_sal"] = "currency";
+    $props["_reduc_bas_salaires"]   = "currency";
+    $props["_total_retenues"]       = "currency";
+    $props["_total_cot_patr"]       = "currency";
+    $props["_total_heures_sup"]     = "currency";
+    $props["_salaire_a_payer"]      = "currency";
+    $props["_salaire_net"]          = "currency";
+
+    return $props;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_locked = ($this->final_file !== null);
-    $this->_view = "Fiche de paie du ".CMbDT::format($this->debut, CAppUI::conf("date"))." au ".CMbDT::format($this->fin, CAppUI::conf("date"));
-    if($this->fiche_paie_id) {
+
+    $this->_view = "Fiche de paie du ".
+      CMbDT::format($this->debut, CAppUI::conf("date"))." au ".
+      CMbDT::format($this->fin, CAppUI::conf("date"));
+
+    if ($this->fiche_paie_id) {
       // On charge cette référence dès le load
       $this->_ref_params_paie = new CParamsPaie();
       $this->_ref_params_paie->load($this->params_paie_id);
@@ -230,37 +244,44 @@ class CFichePaie extends CMbObject {
       $this->_salaire_net          = $this->_salaire_a_payer + $this->_csgnds - $this->_total_heures_sup;
     }
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->_ref_params_paie = new CParamsPaie;
     $this->_ref_params_paie->load($this->params_paie_id);
   }
-  
+
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     if (!$this->_ref_params_paie) {
       $this->loadRefsFwd();
     }
-    
+
     return ($this->_ref_params_paie->getPerm($permType));
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store() {
     // Must store to get all fields
     if ($this->_final_store) {
       $this->loadRefsFwd();
-			$this->_ref_params_paie->loadRefsFwd();
-			$this->updateFormFields();
-			
-			// Création du template
-			$smarty = new CSmartyDP();
-			$smarty->assign("fichePaie" , $this);
-			
-			$this->final_file = $smarty->fetch("print_fiche.tpl");
-			file_put_contents("tmp/fichePaie.htm", $this->final_file);
+      $this->_ref_params_paie->loadRefsFwd();
+      $this->updateFormFields();
+
+      // Création du template
+      $smarty = new CSmartyDP();
+      $smarty->assign("fichePaie" , $this);
+
+      $this->final_file = $smarty->fetch("print_fiche.tpl");
+      file_put_contents("tmp/fichePaie.htm", $this->final_file);
     }
 
     return parent::store();
   }
 }
-
-?>

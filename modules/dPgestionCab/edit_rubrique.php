@@ -1,11 +1,13 @@
-<?php 
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPgestionCab
-* @version $Revision$
-* @author Poiron Yohann
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage GestionCab
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -30,13 +32,14 @@ $order        = "nom DESC";
  
 // Récupération de la liste des rubriques hors fonction
 $where["function_id"] = "IS NULL";
-$listRubriqueGroup    = $itemRubrique->loadList($where,$order);
+$listRubriqueGroup = $itemRubrique->loadList($where, $order);
  
 $listRubriqueFonction = array();
+
 // Récupération de la liste des rubriques liés aux fonctions
-foreach($listFunc as $function) {
-	$where["function_id"] = "= '$function->function_id'";
-	$listRubriqueFonction[$function->text] = $itemRubrique->loadList($where,$order);
+foreach ($listFunc as $function) {
+  $where["function_id"] = "= '$function->function_id'";
+  $listRubriqueFonction[$function->text] = $itemRubrique->loadList($where, $order);
 }
 
 $smarty = new CSmartyDP();

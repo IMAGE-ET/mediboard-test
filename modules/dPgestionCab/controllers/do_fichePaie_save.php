@@ -1,14 +1,16 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPgestionCab
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage GestionCab
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 mbTrace("Start");
-$do = new CDoObjectAddEdit("CFichePaie", "fiche_paie_id");
+$do = new CDoObjectAddEdit("CFichePaie");
 $do->redirect = null;
 $do->doIt();
 mbTrace("End");
@@ -25,5 +27,3 @@ $smarty->assign("fichePaie" , $fichePaie);
 $fichePaie->final_file = $smarty->fetch("print_fiche.tpl");
 mbTrace($fichePaie->store());
 CApp::rip();
-
-?>

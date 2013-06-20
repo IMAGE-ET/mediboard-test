@@ -1,64 +1,80 @@
-<?php /* $Id$ */
+<?php
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage GestionCab
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 /**
-* @package Mediboard
-* @subpackage dPgestionCab
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
-/**
- * The CModePaiement Class
+ * Mode de paiement
  */
 class CModePaiement extends CMbObject {
   // DB Table key
-  var $mode_paiement_id = null;
+  public $mode_paiement_id;
 
   // DB Fields
-  var $function_id = null;
-  var $nom         = null;
+  public $function_id;
+  public $nom;
 
-  // Object References
-  var $_ref_function = null;
-  
+  /** @var CFunctions */
+  public $_ref_function;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'mode_paiement';
     $spec->key   = 'mode_paiement_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["fiches_compta"] = "CGestionCab mode_paiement_id";
     return $backProps;
   }
- 
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
-  	$specs = parent::getProps();
-    $specs["function_id"] = "ref class|CFunctions";
-    $specs["nom"]         = "str notNull seekable";
-    return $specs;
+    $props = parent::getProps();
+    $props["function_id"] = "ref class|CFunctions";
+    $props["nom"]         = "str notNull seekable";
+    return $props;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = "Mode de paiement '".$this->nom."'";
   }
 
-  // Forward references
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
-    // fonction (cabinet)
     $this->_ref_function = new CFunctions();
     $this->_ref_function->load($this->function_id);
   }
-  
+
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
-    if(!$this->_ref_function) {
+    if (!$this->_ref_function) {
       $this->loadRefsFwd();
     }
-    return ($this->_ref_function->getPerm($permType));
+    return $this->_ref_function->getPerm($permType);
   }
 }
-
-?>

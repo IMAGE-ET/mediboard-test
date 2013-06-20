@@ -30,8 +30,8 @@ function printRapport() {
         <tr>
           {{if $gestioncab->_id}}
           <th class="title modify" colspan="2">
-			      {{mb_include module=system template=inc_object_idsante400 object=$gestioncab}}
-			      {{mb_include module=system template=inc_object_history object=$gestioncab}}
+            {{mb_include module=system template=inc_object_idsante400 object=$gestioncab}}
+            {{mb_include module=system template=inc_object_history object=$gestioncab}}
             Modification de la fiche '{{$gestioncab}}'
           </th>
           {{else}}
@@ -141,7 +141,7 @@ function printRapport() {
         <tr>
           <th class="category">Date</th>
           <th>{{mb_label object=$filter field="libelle"}}
-		  <br />
+      <br />
             {{mb_field object=$filter field="libelle" canNull="true"}}
           </th>
           <th class="category">

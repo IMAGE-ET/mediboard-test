@@ -1,27 +1,31 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPportail
- * @version $Revision$
- * @author Fabien	
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Portail
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
  * The CForumMessage class
  */
-  
 class CForumMessage extends CMbObject {
   // DB Fields
-  var $body               = null;
-  var $date               = null;
-  var $user_id            = null;
-  var $forum_thread_id    = null;
-  
-  // References
-  var $_ref_forum_thread  = null;
-  var $_ref_user          = null;
+  public $body;
+  public $date;
+  public $user_id;
+  public $forum_thread_id;
 
+  // References
+  public $_ref_forum_thread;
+  public $_ref_user;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'forum_message';
@@ -29,28 +33,36 @@ class CForumMessage extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
-    $specs = parent::getProps();
-    $specs['body']            = 'html notNull';
-    $specs['date']            = 'dateTime notNull';
-    $specs['user_id']         = 'ref notNull class|CMediusers';
-    $specs['forum_thread_id'] = 'ref notNull class|CForumThread';
-    return $specs;
+    $props = parent::getProps();
+    $props['body']            = 'html notNull';
+    $props['date']            = 'dateTime notNull';
+    $props['user_id']         = 'ref notNull class|CMediusers';
+    $props['forum_thread_id'] = 'ref notNull class|CForumThread';
+    return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = substr($this->body, 0, 20) . '...';
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd(){
     $this->_ref_user = new CMediusers();
     $this->_ref_user->load($this->user_id);
     $this->_ref_user->loadRefFunction();
     $this->_ref_user->loadRefDiscipline();
-    
+
     $this->_ref_forum_thread = new CForumThread();
     $this->_ref_forum_thread->load($this->forum_thread_id);
   }
 }
-?>

@@ -34,7 +34,7 @@ function saveFiche() {
       {{if $fichePaie->_id}}
       <br />
       <a class="button new" href="?m={{$m}}&amp;tab=edit_paie&amp;fiche_paie_id=0">
-				{{tr}}CFichePaie-title-create{{/tr}}
+        {{tr}}CFichePaie-title-create{{/tr}}
       </a>
       {{/if}}
     </td>
@@ -54,22 +54,22 @@ function saveFiche() {
       
       <table class="form">
         {{if $fichePaie->_id}}
-	        <tr>
-	          <th class="title modify"colspan="2">
-	            {{mb_include module=system template=inc_object_idsante400 object=$fichePaie}}
-	            {{mb_include module=system template=inc_object_history object=$fichePaie}}
-	            
-			        {{if $fichePaie->_locked}}
-			        	{{$fichePaie}} Cloturée
-			        {{else}}
-	  	          {{tr}}CFichePaie-title-modify{{/tr}} '{{$fichePaie}}'
-			        {{/if}}
-	          </th>
-	        </tr>
+          <tr>
+            <th class="title modify"colspan="2">
+              {{mb_include module=system template=inc_object_idsante400 object=$fichePaie}}
+              {{mb_include module=system template=inc_object_history object=$fichePaie}}
+
+              {{if $fichePaie->_locked}}
+                {{$fichePaie}} Cloturée
+              {{else}}
+                {{tr}}CFichePaie-title-modify{{/tr}} '{{$fichePaie}}'
+              {{/if}}
+            </th>
+          </tr>
         {{else}}
-	        <tr>
-	          <th class="title" colspan="2">{{tr}}CFichePaie-title-create{{/tr}}</th>
-	        </tr>
+          <tr>
+            <th class="title" colspan="2">{{tr}}CFichePaie-title-create{{/tr}}</th>
+          </tr>
         {{/if}}
         
         <tr>
@@ -125,20 +125,20 @@ function saveFiche() {
         <tr>
           <td class="button" colspan="2">
             {{if !$fichePaie->_locked}}
-	            {{if $fichePaie->_id}}
-	            <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
-	            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la ',objName:'{{$fichePaie->_view|smarty:nodefaults|JSAttribute}}'})">
-	              {{tr}}Delete{{/tr}}
-	            </button>
-	            <button class="print" type="button" onclick="printFiche(this.form.fiche_paie_id.value)">
-	              {{tr}}Print{{/tr}}
-	            </button>
-	            <button class="tick" type="button" onclick="saveFiche()">
-	              {{tr}}Enclose{{/tr}}
-	            </button>
-	            {{else}}
-	            <button class="new" type="submit">{{tr}}Create{{/tr}}</button>
-	            {{/if}}
+              {{if $fichePaie->_id}}
+              <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
+              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la ',objName:'{{$fichePaie->_view|smarty:nodefaults|JSAttribute}}'})">
+                {{tr}}Delete{{/tr}}
+              </button>
+              <button class="print" type="button" onclick="printFiche(this.form.fiche_paie_id.value)">
+                {{tr}}Print{{/tr}}
+              </button>
+              <button class="tick" type="button" onclick="saveFiche()">
+                {{tr}}Enclose{{/tr}}
+              </button>
+              {{else}}
+              <button class="new" type="submit">{{tr}}Create{{/tr}}</button>
+              {{/if}}
             {{else}}
             <button class="print" type="button" onclick="printFiche(this.form.fiche_paie_id.value)">
               {{tr}}Print{{/tr}}

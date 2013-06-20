@@ -1,13 +1,16 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpatients
- * @version $Revision$
- * @author Romain Ollivier
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage GestionCab
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
+
 $ds = CSQLDataSource::get("std");
 $user = CMediusers::get();
 
@@ -33,15 +36,20 @@ $listModesPaiement = $listModesPaiement->loadList($where);
 
 $listGestionCab    = new CGestionCab();
 $where["date"]     = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
-if($libelle)
+
+if ($libelle) {
   $where["libelle"] = "LIKE '%$libelle%'";
-if($rubrique_id)
+}
+if ($rubrique_id) {
   $where["rubrique_id"] = "= '$rubrique_id'";
-if($mode_paiement_id)
+}
+if ($mode_paiement_id) {
   $where["mode_paiement_id"] = "= '$mode_paiement_id'";
+}
+
 $order = "date ASC";
 $listGestionCab    = $listGestionCab->loadList($where, $order);
-foreach($listGestionCab as $key => $fiche) {
+foreach ($listGestionCab as $key => $fiche) {
   $listGestionCab[$key]->loadRefsFwd();
 }
 
@@ -49,12 +57,17 @@ $sql = "SELECT rubrique_id, SUM(montant) AS value" .
     "\nFROM `gestioncab`" .
     "\nWHERE date BETWEEN '$filter->_date_min' AND '$filter->_date_max'" .
     "\nAND function_id = '$user->function_id'";
-if($libelle)
+
+if ($libelle) {
   $sql .= "\nAND libelle LIKE '%$libelle%'";
-if($rubrique_id)
+}
+if ($rubrique_id) {
   $sql .= "\nAND rubrique_id = '$rubrique_id'";
-if($mode_paiement_id)
+}
+if ($mode_paiement_id) {
   $sql .= "\nAND mode_paiement_id = '$mode_paiement_id'";
+}
+
 $sql .= "\nGROUP BY rubrique_id";
 $totaux = $ds->loadList($sql);
 
@@ -62,12 +75,17 @@ $sql = "SELECT SUM(montant) AS value, 0 as invar" .
     "\nFROM `gestioncab`" .
     "\nWHERE date BETWEEN '$filter->_date_min' AND '$filter->_date_max'" .
     "\nAND function_id = '$user->function_id'";
-if($libelle)
+
+if ($libelle) {
   $sql .= "\nAND libelle LIKE '%$libelle%'";
-if($rubrique_id)
+}
+if ($rubrique_id) {
   $sql .= "\nAND rubrique_id = '$rubrique_id'";
-if($mode_paiement_id)
+}
+if ($mode_paiement_id) {
   $sql .= "\nAND mode_paiement_id = '$mode_paiement_id'";
+}
+
 $sql .= "\nGROUP BY invar";
 $total = $ds->loadResult($sql);
 
@@ -85,4 +103,3 @@ $smarty->assign("totaux"           , $totaux);
 $smarty->assign("total"            , $total);
 
 $smarty->display("print_rapport.tpl");
-?>

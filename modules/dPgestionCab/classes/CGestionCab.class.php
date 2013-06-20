@@ -1,38 +1,47 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPgestionCab
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage GestionCab
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 /**
  * The CGestionCab Class
  */
 class CGestionCab extends CMbObject {
   // DB Table key
-  var $gestioncab_id = null;
+  public $gestioncab_id;
 
   // DB Fields
-  var $function_id      = null;
-  var $libelle          = null;
-  var $date             = null;
-  var $rubrique_id      = null;
-  var $montant          = null;
-  var $mode_paiement_id = null;
-  var $num_facture      = null;
-  var $rques            = null;
-  
+  public $function_id;
+  public $libelle;
+  public $date;
+  public $rubrique_id;
+  public $montant;
+  public $mode_paiement_id;
+  public $num_facture;
+  public $rques;
+
   //Filter Fields
-  var $_date_min = null;
-  var $_date_max = null;
-  
-  // Object References
-  var $_ref_function      = null;
-  var $_ref_rubrique      = null;
-  var $_ref_mode_paiement = null;
-  
+  public $_date_min;
+  public $_date_max;
+
+  /** @var CFunctions */
+  public $_ref_function;
+
+  /** @var CRubrique */
+  public $_ref_rubrique;
+
+  /** @var CModePaiement */
+  public $_ref_mode_paiement;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'gestioncab';
@@ -40,27 +49,35 @@ class CGestionCab extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
-  	$specs = parent::getProps();
-    $specs["function_id"]      = "ref notNull class|CFunctions";
-    $specs["libelle"]          = "str notNull seekable";
-    $specs["date"]             = "date notNull";
-    $specs["rubrique_id"]      = "ref notNull class|CRubrique";
-    $specs["montant"]          = "currency notNull min|0";
-    $specs["mode_paiement_id"] = "ref notNull class|CModePaiement";
-    $specs["num_facture"]      = "num notNull";
-    $specs["rques"]            = "text";
-    $specs["_date_min"] 		   = "date";
-    $specs["_date_max"] 		   = "date moreThan|_date_min";
-    return $specs;
+    $props = parent::getProps();
+    $props["function_id"]      = "ref notNull class|CFunctions";
+    $props["libelle"]          = "str notNull seekable";
+    $props["date"]             = "date notNull";
+    $props["rubrique_id"]      = "ref notNull class|CRubrique";
+    $props["montant"]          = "currency notNull min|0";
+    $props["mode_paiement_id"] = "ref notNull class|CModePaiement";
+    $props["num_facture"]      = "num notNull";
+    $props["rques"]            = "text";
+    $props["_date_min"]        = "date";
+    $props["_date_max"]        = "date moreThan|_date_min";
+    return $props;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = "Fiche '".$this->libelle."'";
   }
 
-  // Forward references
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     // fonction (cabinet)
     $this->_ref_function = new CFunctions();
@@ -74,13 +91,14 @@ class CGestionCab extends CMbObject {
     $this->_ref_mode_paiement = new CModePaiement();
     $this->_ref_mode_paiement->load($this->mode_paiement_id);
   }
-  
+
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
-    if(!$this->_ref_function) {
+    if (!$this->_ref_function) {
       $this->loadRefsFwd();
     }
-    return ($this->_ref_function->getPerm($permType));
+    return $this->_ref_function->getPerm($permType);
   }
 }
-
-?>

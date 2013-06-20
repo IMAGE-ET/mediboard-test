@@ -1,13 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dPportail
- *  @version $Revision$
- *  @author Fabien
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Portail
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
-$do = new CDoObjectAddEdit("CForumThread", "forum_thread_id");
+$do = new CDoObjectAddEdit("CForumThread");
 $do->doIt();
-
-?>
