@@ -74,11 +74,38 @@ class CPRPAMessaging extends CHL7v3Messaging {
    *
    * @param CExchangeDataFormat $exchange Instance of exchange
    *
-   * @return object An instance of data format
+   * @return CHL7Event An instance of data format
    */
   static function getEvent(CExchangeDataFormat $exchange) {
-    $classname = "CHL7v3EventPRPA{$exchange->code}";
+    $classname = "CHL7v3EventPRPA{$exchange->sous_type}";
 
     return new $classname;
+  }
+
+  /**
+   * Get aAcknowledgment object
+   *
+   * @param string $ack_data Data
+   *
+   * @return CHL7v3AcknowledgmentPRPA|null
+   */
+  static function getAcknowledgment($ack_data) {
+    $dom = new CHL7v3MessageXML();
+    $dom->loadXML($ack_data);
+
+    $tagName       = $dom->documentElement->tagName;
+    $first_element = str_replace("PRPA_", "", $tagName);
+
+    if (array_key_exists($first_element, self::$evenements)) {
+      $dom->hl7v3_version = "2009";
+      $dom->dirschemaname = $tagName;
+
+      $hl7event = new self::$evenements[$first_element];
+      $hl7event->dom = $dom;
+
+      return $hl7event;
+    }
+
+    return null;
   }
 }

@@ -133,6 +133,17 @@ class CReceiverHL7v3 extends CInteropReceiver {
       return null;
     }
 
-    return null;
+    if (!$ack = CPRPAMessaging::getAcknowledgment($ack_data)) {
+      $exchange->store();
+      return null;
+    }
+
+    $exchange->date_echange        = CMbDT::dateTime();
+    $exchange->statut_acquittement = $ack->getStatutAcknowledgment();
+    $exchange->acquittement_valide = $ack->dom->schemaValidate() ? 1 : 0;
+    $exchange->_acquittement       = $ack_data;
+    $exchange->store();
+
+    return $ack_data;
   }
 }

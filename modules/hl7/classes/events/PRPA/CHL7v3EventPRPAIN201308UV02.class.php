@@ -16,8 +16,7 @@
  * Class CHL7v3EventPRPAIN201308UV02
  * Patient Registry Get Demographics Query Response
  */
-class CHL7v3EventPRPAIN201308UV02 extends CHL7v3EventPRPA implements CHL7EventPRPAST201317UV02 {
-
+class CHL7v3EventPRPAIN201308UV02 extends CHL7v3AcknowledgmentPRPA implements CHL7EventPRPAST201317UV02 {
   /** @var string */
   public $interaction_id = "IN201308UV02";
 
@@ -31,16 +30,17 @@ class CHL7v3EventPRPAIN201308UV02 extends CHL7v3EventPRPA implements CHL7EventPR
   }
 
   /**
-   * Build IN201307UV02 event
+   * Get acknowledgment status
    *
-   * @param CPatient $patient Person
-   *
-   * @see parent::build()
-   *
-   * @return void
+   * @return string
    */
-  function build($patient) {
-    parent::build($patient);
+  function getStatutAcknowledgment() {
+    //Valeur fixée à "AA"
+    return "AA";
+  }
+
+  function getQueryACK() {
+    // controlActProcess/queryAck/queryResponseCode/@code
 
   }
 }
