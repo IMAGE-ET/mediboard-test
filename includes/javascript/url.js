@@ -396,7 +396,7 @@ var Url = Class.create({
 
       window.children[sWindowName] = this.oWindow;
 
-      if (wasClosedBefore && this.oWindow.history.length == 0) {
+      if (wasClosedBefore && this.oWindow.history && this.oWindow.history.length == 0) {
         // bug in Chrome 18: invisible popup
         if (BrowserDetect.browser != "Chrome") {
           this.oWindow.moveTo(features.left, features.top);
