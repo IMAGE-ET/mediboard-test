@@ -40,13 +40,6 @@ CancelAction = {
 
 </script>
 
-<form name="cancelFrm" action="?m={{$m}}" method="post">
-
-<input type="hidden" name="dosql"  value="do_consultation_aed" />
-<input type="hidden" name="del"    value="0" />
-<input type="hidden" name="annule" value="0" />
-<input type="hidden" name="consultation_ids" value="{{$consult->_id}}" />
-
 {{if $consult->annule}}
   <button class="change" type="button" onclick="CancelAction.confirm(this, 'cancel-0')">
   	{{tr}}Restore{{/tr}}
@@ -62,8 +55,6 @@ CancelAction = {
   {{tr}}Delete{{/tr}}
 </button>
 {{/if}}
-
-</form>
 
 <div id="following_consultations" style="display: none; width: 500px; max-height: 600px; overflow-y: auto;">
   <table class="tbl">
