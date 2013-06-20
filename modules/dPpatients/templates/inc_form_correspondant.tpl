@@ -23,6 +23,32 @@
       toggleUrrsafParente(form.relation);
     {{/if}}
 
+
+    updateFieldsCorrespondant = function(form, selected) {
+      if (selected.innerHTML) {
+        $V(form.surnom, selected.get("surnom"));
+        $V(form.nom, selected.get("nom"));
+        $V(form.nom_jeune_fille, selected.get("nom_jeune_fille"));
+        $V(form.prenom, selected.get("prenom"));
+        $V(form.adresse, selected.get("adresse"));
+        $V(form.cp, selected.get("cp"));
+        $V(form.ville, selected.get("ville"));
+        $V(form.tel, selected.get("tel"));
+        $V(form.mob, selected.get("mob"));
+        $V(form.fax, selected.get("fax"));
+        $V(form.urssaf, selected.get("urssaf"));
+        $V(form.parente, selected.get("parente"));
+        $V(form.email, selected.get("email"));
+        $V(form.remarques, selected.get("remarques"));
+
+        {{if $conf.ref_pays == 2}}
+        $V(form.ean, selected.get("ean"));
+        $V(form.ean_base, selected.get("ean_base"));
+        $V(form.type_pec, selected.get("type_pec"));
+        {{/if}}
+      }
+    };
+
     {{if !$mode_modele}}
       // Autocomplete sur le nom du correspondant
       var url = new Url("system", "ajax_seek_autocomplete");
@@ -44,28 +70,31 @@
         afterUpdateElement: function(field, selected){
           var form = field.form;
           var selected = selected.select(".view")[0];
-          if (selected.innerHTML) {
-            $V(form.surnom, selected.get("surnom"));
-            $V(form.nom, selected.get("nom"));
-            $V(form.nom_jeune_fille, selected.get("nom_jeune_fille"));
-            $V(form.prenom, selected.get("prenom"));
-            $V(form.adresse, selected.get("adresse"));
-            $V(form.cp, selected.get("cp"));
-            $V(form.ville, selected.get("ville"));
-            $V(form.tel, selected.get("tel"));
-            $V(form.mob, selected.get("mob"));
-            $V(form.fax, selected.get("fax"));
-            $V(form.urssaf, selected.get("urssaf"));
-            $V(form.parente, selected.get("parente"));
-            $V(form.email, selected.get("email"));
-            $V(form.remarques, selected.get("remarques"));
+          updateFieldsCorrespondant(form, selected);
+        }
+      });
 
-            {{if $conf.ref_pays == 2}}
-              $V(form.ean, selected.get("ean"));
-              $V(form.ean_base, selected.get("ean_base"));
-              $V(form.type_pec, selected.get("type_pec"));
-            {{/if}}
-          }
+      // Autocomplete sur le surnom du correspondant
+      var url_surnom = new Url("system", "ajax_seek_autocomplete");
+      url_surnom.addParam("object_class", "CCorrespondantPatient");
+      url_surnom.addParam("whereComplex[patient_id]", "IS NULL");
+      url_surnom.addParam("input_field", "surnom");
+      url_surnom.addParam("view_field", "surnom");
+      url_surnom.autoComplete(form.surnom, null, {
+        minChars: 2,
+        method: "get",
+        select: "view",
+        callback: function(input, queryString){
+          var form = getForm("editCorrespondant");
+          return queryString+"&where[relation]="+$V(form.relation);
+        },
+        updateElement: function(selectedElement) {
+          this.afterUpdateElement(form.surnom, selectedElement)
+        },
+        afterUpdateElement: function(field, selected){
+          var form = field.form;
+          var selected = selected.select(".view")[0];
+          updateFieldsCorrespondant(form, selected);
         }
       });
     {{/if}}
@@ -233,7 +262,13 @@
     </tr>
     <tr>
       <th>{{mb_label object=$correspondant field="surnom"}}</th>
-      <td>{{mb_field object=$correspondant field="surnom"}}</td>
+      <td>
+        {{if $mode_modele}}
+          {{mb_field object=$correspondant field="surnom"}}
+        {{else}}
+          <input type="text" name="surnom" class="autocomplete" value="{{$correspondant->surnom}}"/>
+        {{/if}}
+      </td>
     </tr>
     <tr {{if $correspondant->relation != "confiance"}}style="display: none;"{{/if}} id="nom_jeune_fille">
       <th>{{mb_label object=$correspondant field="nom_jeune_fille"}}</th>

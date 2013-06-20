@@ -77,7 +77,7 @@ class CCorrespondantPatient extends CPerson {
     $props["relation"]            = "enum list|assurance|autre|confiance|employeur|inconnu|prevenir default|prevenir";
     $props["relation_autre"]      = "str";
     $props["nom"]                 = "str seekable confidential";
-    $props["surnom"]              = "str";
+    $props["surnom"]              = "str seekable";
     $props["nom_jeune_fille"]     = "str";
     $props["prenom"]              = "str";
     $props["naissance"]           = "birthDate mask|99/99/9999 format|$3-$2-$1";
