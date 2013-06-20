@@ -44,44 +44,44 @@ filterExClasses = function(input){
 <table class="main tbl treegrid">
   <tr>
     <td colspan="3">
-      <label style="float: right;">
+      {{if $ex_classes_creation|@count}}
+        <select onchange="ExObject.showExClassFormSelect(this, '{{$self_guid}}')" style="width: 20em; max-width: 35em; float: left;">
+          <option value=""> &ndash; Remplir nouveau formulaire </option>
+          {{foreach from=$ex_classes_creation item=_ex_class_events key=_ex_class_id}}
+            {{if $_ex_class_events|@count > 1}}
+              <optgroup label="{{$ex_classes.$_ex_class_id}}">
+
+                {{foreach from=$_ex_class_events item=_ex_class_event}}
+                  <option value="{{$_ex_class_event->ex_class_id}}"
+                          data-reference_class="{{$reference_class}}"
+                          data-reference_id="{{$reference_id}}"
+                          data-host_class="{{$_ex_class_event->host_class}}"
+                          data-event_name="{{$_ex_class_event->event_name}}">
+                    {{$_ex_class_event}}
+                  </option>
+                {{/foreach}}
+
+              </optgroup>
+            {{else}}
+              {{foreach from=$_ex_class_events item=_ex_class_event}}
+                <option value="{{$_ex_class_event->ex_class_id}}"
+                        data-reference_class="{{$reference_class}}"
+                        data-reference_id="{{$reference_id}}"
+                        data-host_class="{{$_ex_class_event->host_class}}"
+                        data-event_name="{{$_ex_class_event->event_name}}">
+                  {{$ex_classes.$_ex_class_id}}
+                </option>
+              {{/foreach}}
+            {{/if}}
+          {{/foreach}}
+        </select>
+      {{/if}}
+
+      <label style="float: right; display: block;">
         Recherche
-        <input type="text"{{* type="search" *}} onkeyup="filterExClasses(this)" />
+        <input type="text"{{* type="search" *}} onkeyup="filterExClasses(this)" size="15" />
         <button class="cancel notext" onclick="var input = $(this).previous(); $V(input,''); filterExClasses(input)"></button>
       </label>
-      
-      {{if $ex_classes_creation|@count}}
-      <select onchange="ExObject.showExClassFormSelect(this, '{{$self_guid}}')" style="width: 20em;">
-        <option value=""> &ndash; Remplir nouveau formulaire </option>
-        {{foreach from=$ex_classes_creation item=_ex_class_events key=_ex_class_id}}
-          {{if $_ex_class_events|@count > 1}}
-            <optgroup label="{{$ex_classes.$_ex_class_id}}">
-          
-            {{foreach from=$_ex_class_events item=_ex_class_event}}
-              <option value="{{$_ex_class_event->ex_class_id}}" 
-                      data-reference_class="{{$reference_class}}" 
-                      data-reference_id="{{$reference_id}}"
-                      data-host_class="{{$_ex_class_event->host_class}}"
-                      data-event_name="{{$_ex_class_event->event_name}}">
-                {{$_ex_class_event}}
-              </option>
-            {{/foreach}}
-            
-            </optgroup>
-          {{else}}
-            {{foreach from=$_ex_class_events item=_ex_class_event}}
-              <option value="{{$_ex_class_event->ex_class_id}}" 
-                      data-reference_class="{{$reference_class}}" 
-                      data-reference_id="{{$reference_id}}"
-                      data-host_class="{{$_ex_class_event->host_class}}"
-                      data-event_name="{{$_ex_class_event->event_name}}">
-                {{$ex_classes.$_ex_class_id}}
-              </option>
-            {{/foreach}}
-          {{/if}}
-        {{/foreach}}
-      </select>
-      {{/if}}
     </td>
   </tr>
  
