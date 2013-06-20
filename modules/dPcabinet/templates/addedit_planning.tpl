@@ -605,9 +605,7 @@
                   {{tr}}Save{{/tr}}
                 </button>
               {{/if}}
-
               {{mb_include template=inc_cancel_planning}}
-
               <button class="print" id="print_fiche_consult" type="button" onclick="printForm();"
                 {{if !$consult->patient_id}} disabled="disabled" {{/if}}>
                 {{tr}}Print{{/tr}}
@@ -619,12 +617,11 @@
             {{/if}}
           </td>
         </tr>
-        <tr>
-          <td>{{mb_include template="plage_selector/inc_info_patient"}}</td>
-        </tr>
       </table>
     </td>
   </tr>
 </table>
 </form>
 </div>
+
+{{mb_include template="plage_selector/inc_info_patient"}}
