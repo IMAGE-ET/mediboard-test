@@ -1,13 +1,17 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPsalleOp
- * @version $Revision$
- * @author Fabien Ménager
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * Check list type
+ */
 class CDailyCheckListType extends CMbObject {
   public $daily_check_list_type_id;
 
@@ -33,6 +37,9 @@ class CDailyCheckListType extends CMbObject {
 
   public $_links = array();
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'daily_check_list_type';
@@ -40,6 +47,9 @@ class CDailyCheckListType extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props['object_class'] = 'enum notNull list|CSalle|CBlocOperatoire default|CSalle';
@@ -52,6 +62,9 @@ class CDailyCheckListType extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps(){
     $backProps = parent::getBackProps();
     $backProps["daily_check_list_categories"] = "CDailyCheckItemCategory list_type_id";
@@ -60,6 +73,9 @@ class CDailyCheckListType extends CMbObject {
     return $backProps;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
@@ -67,6 +83,8 @@ class CDailyCheckListType extends CMbObject {
   }
 
   /**
+   * Load group
+   *
    * @return CGroups
    */
   function loadRefGroup(){
@@ -74,12 +92,17 @@ class CDailyCheckListType extends CMbObject {
   }
 
   /**
+   * Load categories
+   *
    * @return CDailyCheckItemCategory[]
    */
   function loadRefsCategories(){
     return $this->_ref_categories = $this->loadBackRefs("daily_check_list_categories", "title");
   }
 
+  /**
+   * @see parent::store()
+   */
   function store(){
     if ($msg = parent::store()) {
       return $msg;
@@ -116,62 +139,24 @@ class CDailyCheckListType extends CMbObject {
         $new_link->store();
       }
     }
+
+    return null;
   }
 
   /**
-   * @param string $class              Class name
-   * @param string $object_class_field
-   * @param string $object_id_field
+   * Load type links
    *
-   * @return array
-   */
-  static function getObjectsTree($class, $object_class_field = "object_class", $object_id_field = "object_id") {
-    /** @var CDailyCheckListType|CDailyCheckItemCategory $object */
-    $object = new $class();
-
-    $target_classes = CDailyCheckList::getNonHASClasses();
-
-    $targets = array();
-    $by_class = array();
-
-    foreach ($target_classes as $_class) {
-      /** @var CSalle|CBlocOperatoire $_object */
-      $_object = new $_class;
-      //$_targets = $_object->loadGroupList();
-      $_targets = $_object->loadList();
-      array_unshift($_targets, $_object);
-
-      $targets[$_class] = array_combine(CMbArray::pluck($_targets, "_id"), $_targets);
-
-      $where = array(
-        $object_class_field => "= '$_class'",
-      );
-
-      /** @var CDailyCheckListType[]|CDailyCheckItemCategory[] $_list */
-      $_list = $object->loadList($where, "$object_id_field+0, title"); // target_id+0 to have NULL at the beginning
-
-      $by_object = array();
-      foreach ($_list as $_category) {
-        $_key = $_category->$object_id_field ? $_category->$object_id_field : "all";
-        $by_object[$_key][$_category->_id] = $_category;
-      }
-
-      $by_class[$_class] = $by_object;
-    }
-
-    return array(
-      $targets,
-      $by_class,
-    );
-  }
-
-  /**
    * @return CDailyCheckListTypeLink[]
    */
   function loadRefTypeLinks(){
     return $this->_ref_type_links = $this->loadBackRefs("daily_check_list_type_links", "object_class, object_id+0");
   }
 
+  /**
+   * Make an array of links
+   *
+   * @return array
+   */
   function makeLinksArray(){
     $this->_links = array();
 
@@ -185,6 +170,8 @@ class CDailyCheckListType extends CMbObject {
   }
 
   /**
+   * Get list types tree
+   *
    * @return array
    */
   static function getListTypesTree(){

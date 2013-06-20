@@ -1,11 +1,13 @@
-<?php /* $Id: httpreq_do_add_insee.php 2342 2007-07-19 14:24:59Z mytto $ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPsalleOp
-* @version $Revision$
-* @author SARL OpenXtrem
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 $dPconfig["dPsalleOp"] = array(
   "mode_anesth"               => "0",

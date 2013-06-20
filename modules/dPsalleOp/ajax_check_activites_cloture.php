@@ -2,13 +2,14 @@
 
 /**
  * Vérification d'activités 4 sur les actes pour la suppression d'actes non cotés avant envoi
- *  
- * @category dPsalleOp
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:\$ 
- * @link     http://www.mediboard.org
+ *
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
@@ -16,6 +17,7 @@ CCanDo::checkEdit();
 $object_id    = CValue::get("object_id");
 $object_class = CValue::get("object_class");
 
+/** @var CCodable $object */
 $object = new $object_class;
 $object->load($object_id);
 

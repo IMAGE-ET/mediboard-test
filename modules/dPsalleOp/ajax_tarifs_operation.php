@@ -1,16 +1,13 @@
-<?php 
-
+<?php
 /**
  * $Id$
- *  
- * @category dPsalleOp
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  $Revision$
- * @link     http://www.mediboard.org
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
-
 
 CCanDo::checkEdit();
 
@@ -43,7 +40,7 @@ if ($operation->_id) {
     $_tarif->getPrecodeReady();
   }
 
-  if (CAppui::conf("dPcabinet Tarifs show_tarifs_etab")) {
+  if (CAppUI::conf("dPcabinet Tarifs show_tarifs_etab")) {
     $where = array();
     $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
     $tarifs["group"] = $tarif->loadList($where, $order);

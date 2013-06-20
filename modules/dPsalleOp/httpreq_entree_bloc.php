@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPsalleOp
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -28,11 +30,11 @@ $ljoin = array();
 $ljoin["sejour"] = "`sejour`.`sejour_id` = `operations`.`sejour_id`";
 $order = "entree_reveil";
 $listReveil = $listReveil->loadList($where, $order, null, null, $ljoin);
-foreach($listReveil as $key => $value) {
+foreach ($listReveil as $key => $value) {
   $listReveil[$key]->loadRefsFwd();
   $listReveil[$key]->_ref_sejour->loadRefsFwd();
   $listReveil[$key]->_ref_sejour->loadRefsAffectations();
-  if($listReveil[$key]->_ref_sejour->_ref_first_affectation->affectation_id) {
+  if ($listReveil[$key]->_ref_sejour->_ref_first_affectation->affectation_id) {
     $listReveil[$key]->_ref_sejour->_ref_first_affectation->loadRefsFwd();
     $listReveil[$key]->_ref_sejour->_ref_first_affectation->_ref_lit->loadCompleteView();
   }
@@ -47,4 +49,3 @@ $smarty->assign("date"           , $date        );
 $smarty->assign("modif_operation", $modif_operation);
 
 $smarty->display("inc_reveil_reveil.tpl");
-?>

@@ -1,11 +1,11 @@
-<?php 
+<?php
 /**
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPsalleOp
- * @author     Romain Ollivier <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -53,5 +53,3 @@ $smarty->assign("m"          , $module      );
 $smarty->assign("_is_dentiste" , $operation->_ref_chir->isDentiste());
 
 $smarty->display("inc_codage_actes.tpl");
-
-?>

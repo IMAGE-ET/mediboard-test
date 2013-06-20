@@ -1,13 +1,17 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPsalleOp
- * @version $Revision$
- * @author Fabien Ménager
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * Daily Check List, can also be non-daily !
+ */
 class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be multiple objects for different dates
   public $daily_check_list_id;
 
@@ -93,8 +97,10 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   }
 
   /**
-   * @param CMbObject $object
-   * @param           $date
+   * Get the lists related to an object
+   *
+   * @param CMbObject $object Object to get the check lists of
+   * @param string    $date   The reference date
    *
    * @return array
    */
@@ -136,6 +142,9 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     );
   }
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'daily_check_list';
@@ -143,6 +152,9 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props['date']         = 'date notNull';
@@ -158,12 +170,18 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['items'] = 'CDailyCheckItem list_id';
     return $backProps;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
@@ -171,6 +189,8 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   }
 
   /**
+   * Tells if the check list is readonly (signed or not)
+   *
    * @return bool
    */
   function isReadonly() {
@@ -179,12 +199,17 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   }
 
   /**
+   * Get validator
+   *
    * @return CMediusers
    */
   function loadRefValidator(){
     return $this->_ref_validator = $this->loadFwdRef("validator_id", true);
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     if ($this->object_class) {
       $this->_ref_object = $this->loadFwdRef("object_id", true);
@@ -193,6 +218,9 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $this->loadRefValidator();
   }
 
+  /**
+   * @see parent::store()
+   */
   function store() {
     if ($this->validator_id) {
       // Verification du mot de passe
@@ -230,12 +258,17 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
         $check_item->store(); // Don't return if the item was not present
       }
     }
+
+    return null;
   }
 
   /**
-   * @param CMbObject $object
-   * @param string    $date
-   * @param string    $type
+   * Finds a list corresponding to a few params
+   *
+   * @param CMbObject $object       The host object
+   * @param string    $date         The date
+   * @param string    $type         The type of list
+   * @param int       $list_type_id List type ID
    *
    * @return self
    */
@@ -254,12 +287,19 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   }
 
   /**
+   * Get list type
+   *
    * @return CDailyCheckListType
    */
   function loadRefListType(){
     return $this->_ref_list_type = $this->loadFwdRef("list_type_id");
   }
 
+  /**
+   * Get the list of rooms to check
+   *
+   * @return CSalle[][]|CBlocOperatoire[][]
+   */
   static function getRooms() {
     $list_rooms = array(
       "CSalle"          => array(),
@@ -281,7 +321,9 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   }
 
   /**
-   * @return CDailyCheckItem[]
+   * Get item types
+   *
+   * @return CDailyCheckItemType[]
    */
   function loadItemTypes() {
     $ds = $this->getDS();

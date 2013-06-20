@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPsalleOp
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $operation_id = CValue::get("operation_id");
@@ -28,5 +29,3 @@ $smarty->assign("listAnesths", $listAnesths);
 $smarty->assign("callback"   , $callback);
 $smarty->assign("currUser"   , $user);
 $smarty->display("inc_visite_pre_anesth.tpl");
-
-?>

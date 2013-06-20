@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPsalleOp
-* @version $Revision$
-* @author Alexis Granger
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -17,7 +19,7 @@ $operation = new COperation();
 $protocoles = array();
 $anesth_id = "";
 
-if($operation_id){
+if ($operation_id) {
   $operation->load($operation_id);
   $operation->loadRefs();
 }
@@ -31,7 +33,7 @@ $listChirs = $listChirs->loadPraticiens(PERM_READ);
 
 $listAnesthType = new CTypeAnesth;
 $orderanesth = "name";
-$listAnesthType = $listAnesthType->loadList(null,$orderanesth);
+$listAnesthType = $listAnesthType->loadList(null, $orderanesth);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -43,5 +45,3 @@ $smarty->assign("date"            , $date            );
 $smarty->assign("modif_operation" , $modif_operation );
 $smarty->assign("anesth_id"       , $anesth_id);
 $smarty->display("inc_vw_anesth.tpl");
-
-?>

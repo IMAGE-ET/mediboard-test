@@ -1,13 +1,17 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPsalleOp
- * @version $Revision$
- * @author Fabien Ménager
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * Check item category
+ */
 class CDailyCheckItemCategory extends CMbObject {
   public $daily_check_item_category_id;
 
@@ -34,6 +38,9 @@ class CDailyCheckItemCategory extends CMbObject {
 
   public $_target_guid;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'daily_check_item_category';
@@ -41,6 +48,9 @@ class CDailyCheckItemCategory extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props['title'] = 'str notNull';
@@ -55,6 +65,9 @@ class CDailyCheckItemCategory extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['item_types'] = 'CDailyCheckItemType category_id';
@@ -62,6 +75,8 @@ class CDailyCheckItemCategory extends CMbObject {
   }
 
   /**
+   * Load target object
+   *
    * @return CSalle|CBlocOperatoire|COperation|CPoseDispositifVasculaire
    */
   function loadRefTarget(){
@@ -69,6 +84,8 @@ class CDailyCheckItemCategory extends CMbObject {
   }
 
   /**
+   * Load list type
+   *
    * @return CDailyCheckListType
    */
   function loadRefListType(){
@@ -76,12 +93,17 @@ class CDailyCheckItemCategory extends CMbObject {
   }
 
   /**
+   * Load item types
+   *
    * @return CDailyCheckItemType[]
    */
   function loadRefItemTypes() {
     return $this->_ref_item_types = $this->loadBackRefs("item_types", "`index`, title");
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
@@ -89,9 +111,46 @@ class CDailyCheckItemCategory extends CMbObject {
   }
 
   /**
+   * Get categories tree
+   *
    * @return array
    */
   static function getCategoriesTree(){
-    return CDailyCheckListType::getObjectsTree("CDailyCheckItemCategory", "target_class", "target_id");
+    $object = new self();
+
+    $target_classes = CDailyCheckList::getNonHASClasses();
+
+    $targets = array();
+    $by_class = array();
+
+    foreach ($target_classes as $_class) {
+      /** @var CSalle|CBlocOperatoire $_object */
+      $_object = new $_class;
+      //$_targets = $_object->loadGroupList();
+      $_targets = $_object->loadList();
+      array_unshift($_targets, $_object);
+
+      $targets[$_class] = array_combine(CMbArray::pluck($_targets, "_id"), $_targets);
+
+      $where = array(
+        "target_class" => "= '$_class'",
+      );
+
+      /** @var CDailyCheckItemCategory[] $_list */
+      $_list = $object->loadList($where, "target_id+0, title"); // target_id+0 to have NULL at the beginning
+
+      $by_object = array();
+      foreach ($_list as $_category) {
+        $_key = $_category->target_id ? $_category->target_id : "all";
+        $by_object[$_key][$_category->_id] = $_category;
+      }
+
+      $by_class[$_class] = $by_object;
+    }
+
+    return array(
+      $targets,
+      $by_class,
+    );
   }
 }

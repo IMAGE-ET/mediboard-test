@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPsalleOp
- * @version $Revision$
- * @author Fabien Ménager
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CDailyCheckItem extends CMbObject {
@@ -21,7 +22,10 @@ class CDailyCheckItem extends CMbObject {
 
   /** @var CDailyCheckItemType */
   public $_ref_item_type;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'daily_check_item';
@@ -29,6 +33,9 @@ class CDailyCheckItem extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props['list_id']      = 'ref notNull class|CDailyCheckList';
@@ -41,18 +48,26 @@ class CDailyCheckItem extends CMbObject {
     return $this->getFormattedValue("checked");
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
     $this->_view = "$this->_ref_item_type (".$this->getAnswer().")";
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadRefList();
     $this->loadRefItemType();
   }
 
   /**
+   * Get check list
+   *
    * @return CDailyCheckList
    */
   function loadRefList(){
@@ -60,6 +75,8 @@ class CDailyCheckItem extends CMbObject {
   }
 
   /**
+   * Get item type
+   *
    * @return CDailyCheckItemType
    */
   function loadRefItemType(){

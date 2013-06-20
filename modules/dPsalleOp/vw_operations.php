@@ -1,11 +1,11 @@
-<?php 
+<?php
 /**
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPsalleOp
+ * @subpackage SalleOp
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -194,7 +194,7 @@ $cat->target_class = "COperation";
 
 // Pre-anesth, pre-op, post-op
 // Don't load them if we have a daily check list to fill...
-if (!$require_check_list) {
+if (!$require_check_list && $selOp->_id) {
   foreach ($operation_check_list->_specs["type"]->_list as $type) {
     $list = CDailyCheckList::getList($selOp, null, $type);
     $list->loadItemTypes();

@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPsalleOp
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -25,12 +27,11 @@ $where = array();
 $where[] = "`plageop_id` ".CSQLDataSource::prepareIn(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
 $where["entree_bloc"] = "IS NULL";
 $order = "time_operation";
-$listEntree = $listEntree->loadList($where,$order);
-foreach($listEntree as $key => $value) {
-	$oper =& $listEntree[$key];
+$listEntree = $listEntree->loadList($where, $order);
+foreach ($listEntree as $key => $value) {
+  $oper =& $listEntree[$key];
   $oper->loadRefsFwd();
 }
-
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -40,4 +41,3 @@ $smarty->assign("date"       , $date);
 $smarty->assign("modif_operation", $modif_operation);
 
 $smarty->display("vw_brancardage.tpl");
-?>

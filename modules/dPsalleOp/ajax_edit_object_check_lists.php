@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPsalleOp
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 $object_guid = CValue::get("object_guid");
 $type_group  = CValue::get("type_group");
@@ -20,7 +22,7 @@ if (count($validateur_ids)) {
   // Pas utiliser IN car on les souhaite dans l'ordre spécifié
   $validateurs = array();
   
-  foreach($validateur_ids as $_id) {
+  foreach ($validateur_ids as $_id) {
     $validateur = new CMediusers;
     $validateur->load($_id);
     $validateurs[$_id] = $validateur;
@@ -41,7 +43,7 @@ $cat = new CDailyCheckItemCategory;
 $cat->target_class = $object->_class;
 
 // Pre-anesth, pre-op, post-op
-foreach($check_list->_specs["type"]->_list as $_type) {
+foreach ($check_list->_specs["type"]->_list as $_type) {
   if (CDailyCheckList::$types[$_type] != $type_group) {
     continue;
   }

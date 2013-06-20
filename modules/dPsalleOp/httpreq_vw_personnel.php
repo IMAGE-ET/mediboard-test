@@ -1,11 +1,13 @@
 <?php
-
 /**
-* @package Mediboard
-* @subpackage dPsalleOp
-* @version $Revision: 
-* @author Alexis Granger
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 $date     = CValue::getOrSession("date", CMbDT::date());
 $in_salle = CValue::get("in_salle", 1);

@@ -3,9 +3,9 @@
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPsalleOp
+ * @subpackage SalleOp
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -19,7 +19,6 @@ if (!$selOp->_id) {
   CAppUI::stepAjax(CAppUI::tr("COperation.none"));
   CApp::rip();
 }
-  
 
 $selOp->canDo();
 $selOp->loadRefs();
@@ -85,20 +84,20 @@ $selOp->_ref_plageop->loadRefsFwd();
 
 // Affichage des données
 $listChamps = array(
-                1=>array("hb","ht","ht_final","plaquettes"),
-                2=>array("creatinine","_clairance","na","k"),
-                3=>array("tp","tca","tsivy","ecbu")
-                );
+  1 => array("hb", "ht", "ht_final", "plaquettes"),
+  2 => array("creatinine", "_clairance", "na", "k"),
+  3 => array("tp", "tca", "tsivy", "ecbu"),
+);
 $cAnesth = $selOp->_ref_consult_anesth;
 foreach ($listChamps as $keyCol=>$aColonne) {
   foreach ($aColonne as $keyChamp=>$champ) {
     $verifchamp = true;
-    if ($champ=="tca") {
+    if ($champ == "tca") {
       $champ2 = $cAnesth->tca_temoin;
     }
     else {
       $champ2 = false;
-      if (($champ=="ecbu" && $cAnesth->ecbu=="?") || ($champ=="tsivy" && $cAnesth->tsivy=="00:00:00")) {
+      if (($champ == "ecbu" && $cAnesth->ecbu == "?") || ($champ == "tsivy" && $cAnesth->tsivy == "00:00:00")) {
         $verifchamp = false;
       }
     }
@@ -123,7 +122,7 @@ if (CModule::getActive("dPprescription")) {
 
 $anesth_id = ($selOp->anesth_id) ? $selOp->anesth_id : $selOp->_ref_plageop->anesth_id;
 if ($anesth_id && CModule::getActive('dPprescription')) {
-  $protocoles = CPrescription::getAllProtocolesFor($anesth_id, null, null, 'CSejour','sejour');
+  $protocoles = CPrescription::getAllProtocolesFor($anesth_id, null, null, 'CSejour', 'sejour');
 }
 
 if (!$selOp->prat_visite_anesth_id && $selOp->_ref_anesth->_id) {
@@ -132,9 +131,7 @@ if (!$selOp->prat_visite_anesth_id && $selOp->_ref_anesth->_id) {
 
 $listAnesthType = new CTypeAnesth();
 $orderanesth = "name";
-$listAnesthType = $listAnesthType->loadList(null,$orderanesth);
-
-
+$listAnesthType = $listAnesthType->loadList(null, $orderanesth);
 
 // Tableau d'unités
 $unites = array();
@@ -165,8 +162,8 @@ $total_tarmed = $selOp->loadRefsActesTarmed();
 $total_caisse = $selOp->loadRefsActesCaisse();
 $soustotal_base = array("tarmed" => $total_tarmed["base"], "caisse" => $total_caisse["base"]);
 $soustotal_dh   = array("tarmed" => $total_tarmed["dh"], "caisse" => $total_caisse["dh"]);
-$total["tarmed"] = round($total_tarmed["base"]+$total_tarmed["dh"],2);
-$total["caisse"] = round($total_caisse["base"]+$total_caisse["dh"],2);
+$total["tarmed"] = round($total_tarmed["base"]+$total_tarmed["dh"], 2);
+$total["caisse"] = round($total_caisse["base"]+$total_caisse["dh"], 2);
 
 // Vérification de la check list journalière
 $daily_check_list = CDailyCheckList::getList($salle, $date);

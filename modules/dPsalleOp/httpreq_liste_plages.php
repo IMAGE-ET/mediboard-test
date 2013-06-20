@@ -1,12 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPsalleOp
- * @version $Revision$
- * @author Sébastien Fillonneau
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
-
 
 CCanDo::checkRead();
 
@@ -23,7 +24,6 @@ $listAnesths = $listAnesths->loadAnesthesistes(PERM_READ);
 // Selection des salles
 $listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
 
-
 // Selection des plages opératoires de la journée
 $salle = new CSalle;
 if ($salle->load($salle_id)) {
@@ -31,45 +31,53 @@ if ($salle->load($salle_id)) {
 }
 
 if ($hide_finished == 1 && $salle->_ref_plages) {
-  foreach($salle->_ref_plages as &$plage) {
-    foreach($plage->_ref_operations as $key => $op){
-      if ($op->sortie_salle) unset($plage->_ref_operations[$key]);
+  foreach ($salle->_ref_plages as &$plage) {
+    foreach ($plage->_ref_operations as $key => $op) {
+      if ($op->sortie_salle) {
+        unset($plage->_ref_operations[$key]);
+      }
     }
-    foreach($plage->_unordered_operations as $key => $op){
-      if ($op->sortie_salle) unset($plage->_unordered_operations[$key]);
+    foreach ($plage->_unordered_operations as $key => $op) {
+      if ($op->sortie_salle) {
+        unset($plage->_unordered_operations[$key]);
+      }
     }
   }
-  
-  foreach($salle->_ref_deplacees as $key => $op){
-    if ($op->sortie_salle) unset($salle->_ref_deplacees[$key]);
+
+  foreach ($salle->_ref_deplacees as $key => $op) {
+    if ($op->sortie_salle) {
+      unset($salle->_ref_deplacees[$key]);
+    }
   }
-  
-  foreach($salle->_ref_urgences as $key => $op){
-    if ($op->sortie_salle) unset($salle->_ref_urgences[$key]);
+
+  foreach ($salle->_ref_urgences as $key => $op) {
+    if ($op->sortie_salle) {
+      unset($salle->_ref_urgences[$key]);
+    }
   }
 }
 
 // Calcul du nombre d'actes codé dans les interventions
-if($salle->_ref_plages){
-	foreach($salle->_ref_plages as $_plageop){
-		$_plageop->loadRefsNotes();
-		foreach($_plageop->_ref_operations as $_operation){
-			$_operation->countActes();
-		}
-		foreach($_plageop->_unordered_operations as $_operation){
-	    $_operation->countActes();
-	  }
-	}
+if ($salle->_ref_plages) {
+  foreach ($salle->_ref_plages as $_plageop) {
+    $_plageop->loadRefsNotes();
+    foreach ($_plageop->_ref_operations as $_operation) {
+      $_operation->countActes();
+    }
+    foreach ($_plageop->_unordered_operations as $_operation) {
+      $_operation->countActes();
+    }
+  }
 }
-if($salle->_ref_deplacees){
-	foreach($salle->_ref_deplacees as $_operation){
-	  $_operation->countActes();
-	}  
+if ($salle->_ref_deplacees) {
+  foreach ($salle->_ref_deplacees as $_operation) {
+    $_operation->countActes();
+  }
 }
-if($salle->_ref_urgences){
-	foreach($salle->_ref_urgences as $_operation){
-	  $_operation->countActes();
-	}
+if ($salle->_ref_urgences) {
+  foreach ($salle->_ref_urgences as $_operation) {
+    $_operation->countActes();
+  }
 }
 
 // Création du template
@@ -85,4 +93,3 @@ $smarty->assign("date"          , $date        );
 $smarty->assign("operation_id"  , $operation_id);
 
 $smarty->display("inc_liste_plages.tpl");
-?>

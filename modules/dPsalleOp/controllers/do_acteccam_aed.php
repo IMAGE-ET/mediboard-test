@@ -1,27 +1,37 @@
-<?php /* $Id$ */
+<?php
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 /**
-* @package Mediboard
-* @subpackage dPsalleOp
-* @version $Revision$
-* @author Thomas Despoix
-*/
-
-
+ * Acte CCAM controller
+ */
 class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
-  
-  var $_ref_object = null;
-  
+  /** @var CMbObject */
+  public $_ref_object;
+
+  /**
+   * Constructor
+   */
   function CDoActeCCAMAddEdit() {
     $this->CDoObjectAddEdit("CActeCCAM", "acte_id");
   }
-  
+
+  /**
+   * @see parent::doBind()
+   */
   function doBind() {
     parent::doBind();
     $this->_obj->modificateurs = "";
     foreach ($_POST as $propName => $propValue) {
       $matches = null;
-      if (preg_match("/modificateur_(.)/", $propName, $matches)) {      
+      if (preg_match("/modificateur_(.)/", $propName, $matches)) {
         $modificateur = $matches[1];
         $this->_obj->modificateurs .= $modificateur;
       }
@@ -29,9 +39,12 @@ class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
     $this->_obj->loadRefObject();
     $this->_ref_object = $this->_obj->_ref_object;
   }
-  
+
+  /**
+   * @see parent::doRedirect()
+   */
   function doRedirect() {
-    if(CAppUI::conf("dPsalleOp CActeCCAM codage_strict") || !$this->_old->_id || !$this->_obj->_id) {
+    if (CAppUI::conf("dPsalleOp CActeCCAM codage_strict") || !$this->_old->_id || !$this->_obj->_id) {
       $this->_ref_object->correctActes();
     }
     parent::doRedirect();
@@ -40,4 +53,3 @@ class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
 
 $do = new CDoActeCCAMAddEdit();
 $do->doIt();
-?>

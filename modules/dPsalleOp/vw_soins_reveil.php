@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPsalleOp
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -29,5 +30,3 @@ $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"))
 $smarty->assign("isImedsInstalled"       , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("date", CMbDT::date());
 $smarty->display("vw_soins_reveil.tpl");
-
-?>

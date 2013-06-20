@@ -1,13 +1,17 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPsalleOp
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * Incident / évenement per-opératoire
+ */
 class CAnesthPerop extends CMbObject {
   public $anesth_perop_id;
 
@@ -22,6 +26,9 @@ class CAnesthPerop extends CMbObject {
   /** @var COperation */
   public $_ref_operation;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'anesth_perop';
@@ -29,15 +36,21 @@ class CAnesthPerop extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
-    $specs = parent::getProps();
-    $specs["operation_id"] = "ref notNull class|COperation";
-    $specs["libelle"]      = "text notNull helped";
-    $specs["datetime"]     = "dateTime notNull";
-    $specs["incident"]     = "bool default|0";
-    return $specs;
+    $props = parent::getProps();
+    $props["operation_id"] = "ref notNull class|COperation";
+    $props["libelle"]      = "text notNull helped";
+    $props["datetime"]     = "dateTime notNull";
+    $props["incident"]     = "bool default|0";
+    return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
 
@@ -45,6 +58,8 @@ class CAnesthPerop extends CMbObject {
   }
 
   /**
+   * Charge l'intervention
+   *
    * @return COperation
    */
   function loadRefOperation(){
@@ -52,6 +67,9 @@ class CAnesthPerop extends CMbObject {
     return $this->_ref_operation = $this->_ref_operation->getCached($this->operation_id);
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     if (!$this->_ref_operation) {
       $this->loadRefOperation();

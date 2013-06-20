@@ -1,4 +1,13 @@
 <?php
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 $object_class    = CValue::getOrSession("object_class");
 $object_id       = CValue::getOrSession("object_id");
@@ -8,7 +17,6 @@ $chir_id         = CValue::getOrSession("chir_id");
 
 $date  = CValue::getOrSession("date", CMbDT::date());
 
-
 // Chargement de la liste des praticiens
 $listChirs = new CMediusers;
 $listChirs = $listChirs->loadPraticiens(PERM_DENY);
@@ -17,6 +25,7 @@ $listChirs = $listChirs->loadPraticiens(PERM_DENY);
 $listAnesths = new CMediusers;
 $listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
 
+/** @var CCodable $codable */
 $codable = new $object_class;
 $codable->load($object_id);
 $codable->isCoded();
@@ -27,7 +36,7 @@ $codable->loadExtCodesCCAM();
 $codable->getAssociationCodesActes();
 $codable->loadPossibleActes();
 $codable->canDo();
-if($codable->_class == "COperation") {
+if ($codable->_class == "COperation") {
   $codable->countExchanges();
 }
 

@@ -1,11 +1,13 @@
 <?php
-
 /**
-* @package Mediboard
-* @subpackage dPsalleOp
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 $sejour_id = CValue::getOrSession("sejour_id");
 $modeDAS   = CValue::getOrSession("modeDAS", 1);
@@ -22,5 +24,3 @@ $smarty->assign("sejour" , $sejour);
 $smarty->assign("modeDAS", $modeDAS);
 
 $smarty->display("inc_diagnostic_principal.tpl");
-
-?>

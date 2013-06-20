@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPsalleOp
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -112,7 +113,7 @@ foreach ($interv->_ref_anesth_perops as $_perop) {
 $sejour = $interv->loadRefSejour();
 $prescription = $sejour->loadRefPrescriptionSejour();
 
-if ($prescription->_id){
+if ($prescription->_id) {
   $lines = $prescription->loadPeropLines(false);
   
   foreach ($lines as $_guid => $_line_array) {

@@ -1,13 +1,17 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPsalleOp
- * @version $Revision$
- * @author Fabien Ménager
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * Check item type
+ */
 class CDailyCheckItemType extends CMbObject {
   public $daily_check_item_type_id;
 
@@ -30,6 +34,9 @@ class CDailyCheckItemType extends CMbObject {
   /** @var CDailyCheckItemCategory */
   public $_ref_category;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'daily_check_item_type';
@@ -37,6 +44,9 @@ class CDailyCheckItemType extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props['title']       = 'str notNull';
@@ -50,12 +60,18 @@ class CDailyCheckItemType extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['items'] = 'CDailyCheckItem item_type_id';
     return $backProps;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
@@ -67,12 +83,17 @@ class CDailyCheckItemType extends CMbObject {
     }
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadRefGroup();
     $this->loadRefCategory();
   }
 
   /**
+   * Load group
+   *
    * @return CGroups
    */
   function loadRefGroup(){
@@ -80,6 +101,8 @@ class CDailyCheckItemType extends CMbObject {
   }
 
   /**
+   * Load item category
+   *
    * @return CDailyCheckItemCategory
    */
   function loadRefCategory(){
@@ -87,13 +110,7 @@ class CDailyCheckItemType extends CMbObject {
   }
 
   /**
-   * @param array $where
-   * @param null  $order
-   * @param null  $limit
-   * @param null  $groupby
-   * @param array $ljoin
-   *
-   * @return self[]
+   * @see parent::loadGroupList()
    */
   function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
     $where['group_id'] = "= '".CGroups::loadCurrent()->_id."' OR group_id IS NULL";

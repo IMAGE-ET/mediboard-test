@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPsalleOp
-* @version $Revision$
-* @author Alexis Granger
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -14,11 +16,10 @@ $date  = CValue::getOrSession("date", CMbDT::date());
 $modif_operation = CCanDo::edit() || $date >= CMbDT::date();
 
 $operation = new COperation();
-if($operation_id){
+if ($operation_id) {
   $operation->load($operation_id);
   $operation->loadRefs();
 }
-
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -28,5 +29,3 @@ $smarty->assign("date",            $date);
 $smarty->assign("modif_operation", $modif_operation);
 
 $smarty->display("inc_vw_timing.tpl");
-
-?>

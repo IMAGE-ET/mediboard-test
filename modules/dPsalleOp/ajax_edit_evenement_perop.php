@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPsalleOp
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 $evenement_guid = CValue::get("evenement_guid");
 $operation_id   = CValue::get("operation_id");
@@ -20,6 +22,7 @@ if (!$datetime) {
 
 list($evenement_class, $evenement_id) = explode("-", $evenement_guid);
 
+/** @var CAnesthPerop $evenement */
 $evenement = new $evenement_class;
 
 if ($evenement_id) {

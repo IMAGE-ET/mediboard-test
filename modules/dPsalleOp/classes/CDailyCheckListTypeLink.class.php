@@ -1,13 +1,17 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPsalleOp
- * @version $Revision$
- * @author Fabien Ménager
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage SalleOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * Link between an object and a list type
+ */
 class CDailyCheckListTypeLink extends CMbObject {
   public $daily_check_list_type_link_id;
 
@@ -23,6 +27,9 @@ class CDailyCheckListTypeLink extends CMbObject {
   /** @var CDailyCheckListType */
   public $_ref_list_type;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'daily_check_list_type_link';
@@ -31,6 +38,9 @@ class CDailyCheckListTypeLink extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props['object_class'] = 'enum notNull list|CSalle|CBlocOperatoire default|CSalle';
@@ -40,6 +50,9 @@ class CDailyCheckListTypeLink extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
@@ -47,6 +60,8 @@ class CDailyCheckListTypeLink extends CMbObject {
   }
 
   /**
+   * Load target object
+   *
    * @return CSalle|CBlocOperatoire|COperation|CPoseDispositifVasculaire
    */
   function loadRefObject(){
@@ -54,6 +69,8 @@ class CDailyCheckListTypeLink extends CMbObject {
   }
 
   /**
+   * Load list type
+   *
    * @return CDailyCheckListType
    */
   function loadRefListType(){
