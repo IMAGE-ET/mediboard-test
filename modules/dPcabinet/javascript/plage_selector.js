@@ -32,9 +32,6 @@ PlageConsultSelector = {
     var oForm = getForm(window.PlageConsultSelector.sForm);
     var consults = $H(window.PlageConsultSelector.consultations);
     if (consults.size() > 0) {
-      if (consults.size() > 1) {
-        $("multiplePlaces").show();
-      }
       var iterator = 1;
       consults.each(function(consult) {
         var consultObj = consult[1];
@@ -48,6 +45,9 @@ PlageConsultSelector = {
           $V(oForm["heure_"+iterator], consultObj.heure);
           $V(oForm["chir_id_"+iterator], consultObj.chir_id);
           $V(oForm["_consult"+iterator], consultObj.chir_name+" "+consultObj.date+" "+consultObj.heure);
+          if ($V(oForm["_consult"+iterator])) {
+            $("place_reca_"+iterator).show();
+          }
         }
         iterator++;
       });

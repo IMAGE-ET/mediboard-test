@@ -434,7 +434,7 @@
           <td>
             <table class="form">
               <tr>
-                <th>{{mb_label object=$consult field="plageconsult_id"}}</th>
+                <th>{{mb_label object=$consult   field="plageconsult_id"}}</th>
                 <td>
                   {{if $consult->_id}}
                     <span style="float: right">
@@ -577,9 +577,9 @@
               </tr>
             </table>
           </td>
-          <td id="multiplePlaces" style="display: none;">
+          <td id="multiplePlaces">
             {{foreach from=2|range:$app->user_prefs.NbConsultMultiple item=j}}
-              <fieldset id="place_reca_{{$j}}">
+              <fieldset id="place_reca_{{$j}}" style="display: none;">
                 <legend>Rendez-vous {{$j}} <button class="button cancel notext" type="button" onclick="resetPlage('{{$j}}')">{{tr}}Delete{{/tr}}</button></legend>
                 <input type="text" name="_consult{{$j}}" value="" readonly="readonly" style="width: 30em;"/>
                 <input type="hidden" name="plage_id_{{$j}}" value=""/>
