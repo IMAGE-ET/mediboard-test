@@ -154,7 +154,7 @@ Main.add(function(){
                   {{$_operation->_ref_type_anesth}}
                 </td>
 
-                <td class="{{if $_operation->annulee}}cancelled{{/if}}" style="text-align: center;";>
+                <td class="{{if $_operation->annulee}}cancelled{{/if}}" style="text-align: center;">
                   {{if $_operation->ASA}}
                     <strong>{{$_operation->ASA[0]}}</strong>
                   {{else}}
@@ -170,7 +170,7 @@ Main.add(function(){
                     non effectuée
                   {{/if}}
                 </td>
-                <td {{if $_operation->annulee}}class="cancelled"{{/if}}">
+                <td {{if $_operation->annulee}}class="cancelled"{{/if}}>
                   <button type="button" class="edit notext" onclick="editVisite({{$_operation->_id}});">{{tr}}Edit{{/tr}}</button>
                   {{if $_operation->_ref_consult_anesth->_id}}
                     <button type="button" class="print notext" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_id}}');">{{tr}}Print{{/tr}}</button>
