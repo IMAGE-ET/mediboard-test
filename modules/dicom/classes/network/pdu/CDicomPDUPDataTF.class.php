@@ -1,10 +1,12 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dicom
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -172,7 +174,7 @@ class CDicomPDUPDataTF extends CDicomPDU {
     $handle = fopen("php://temp", "w+");
     $pdv_stream = new CDicomStreamWriter($handle);
 
-    foreach($this->pdvs as $_pdv) {
+    foreach ($this->pdvs as $_pdv) {
       $_pdv->setPresentationContexts($this->presentation_contexts);
       $_pdv->encode($pdv_stream);
     }

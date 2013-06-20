@@ -1,10 +1,12 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dicom
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
  /**
@@ -17,19 +19,19 @@ class CDicomSubFieldRelatedSopClassIdentification {
    * 
    * @var integer
    */
-  var $class_uid_length = null;
+  public $class_uid_length;
    
   /**
    * The related general SOP class UID
    * 
    * @var string
    */
-  var $class_uid = null;
+  public $class_uid;
 
   /**
    * @var int
    */
-  var $length;
+  public $length;
   
   /**
    * The constructor of the sub field

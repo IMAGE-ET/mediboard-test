@@ -1,10 +1,12 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dicom
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -17,14 +19,14 @@ class CDicomPDUItemSopClassExtendedNegociation extends CDicomPDUItem {
    * 
    * @var integer
    */
-  var $uid_length = null;
+  public $uid_length;
   
   /**
    * The SOP class uid
    * 
    * @var string
    */
-   var $sop_class_uid = null;
+   public $sop_class_uid;
    
    /**
     * The Service Class Application level of support
@@ -33,7 +35,7 @@ class CDicomPDUItemSopClassExtendedNegociation extends CDicomPDUItem {
     * 
     * @var integer
     */
-   var $sca_support = null;
+   public $sca_support;
    
    /**
     * The Service Class Application level of digital signature support
@@ -42,7 +44,7 @@ class CDicomPDUItemSopClassExtendedNegociation extends CDicomPDUItem {
     * 
     * @var integer
     */
-   var $sca_digital_signature_support = null;
+   public $sca_digital_signature_support;
    
    /**
     * The Service Class Application element coercion
@@ -51,7 +53,7 @@ class CDicomPDUItemSopClassExtendedNegociation extends CDicomPDUItem {
     * 
     * @var integer
     */
-   var $sca_element_coercion = null;
+   public $sca_element_coercion;
   
   /**
    * The constructor.
@@ -134,11 +136,11 @@ class CDicomPDUItemSopClassExtendedNegociation extends CDicomPDUItem {
    */
   function getValues() {
     return array(
-      "uid_length" 										=> $this->uid_length,
-      "sop_class_uid" 								=> $this->sop_class_uid,
-      "sca_support" 									=> $this->sca_support,
-      "sca_digital_signature_support"	=> $this->sca_digital_signature_support,
-      "sca_element_coercion" 					=> $this->sca_element_coercion
+      "uid_length"                     => $this->uid_length,
+      "sop_class_uid"                 => $this->sop_class_uid,
+      "sca_support"                   => $this->sca_support,
+      "sca_digital_signature_support"  => $this->sca_digital_signature_support,
+      "sca_element_coercion"           => $this->sca_element_coercion
     );
   }
   

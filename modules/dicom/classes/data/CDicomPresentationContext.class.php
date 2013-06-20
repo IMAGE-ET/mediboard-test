@@ -1,10 +1,12 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dicom
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
  /**
@@ -17,21 +19,21 @@ class CDicomPresentationContext {
    * 
    * @var integer
    */
-  var $id = null;
+  public $id;
   
   /**
    * The abstract syntax
    * 
    * @var string
    */
-  var $abstract_syntax = null;
+  public $abstract_syntax;
   
   /**
    * The transfer syntax
    * 
    * @var string
    */
-  var $transfer_syntax = null;
+  public $transfer_syntax;
 
   /**
    * The constructor

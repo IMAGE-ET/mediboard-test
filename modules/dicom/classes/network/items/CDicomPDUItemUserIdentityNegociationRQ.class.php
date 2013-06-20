@@ -1,10 +1,12 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dicom
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
  /**
@@ -18,7 +20,7 @@ class CDicomPDUItemUserIdentityNegociationRQ extends CDicomPDUItem {
    * 
    * @var integer
    */
-  var $user_identity_type = null;
+  public $user_identity_type;
 
   /**
    * An array who match the possible values for the user identity types and their signification
@@ -35,7 +37,7 @@ class CDicomPDUItemUserIdentityNegociationRQ extends CDicomPDUItem {
    * 
    * @var integer
    */
-  var $positive_response_requested = null;
+  public $positive_response_requested;
   
   /**
    * An array who match the possible values for the field positive_response_requested and their signification
@@ -50,28 +52,28 @@ class CDicomPDUItemUserIdentityNegociationRQ extends CDicomPDUItem {
    * 
    * @var integer
    */
-  var $primary_field_length = null;
+  public $primary_field_length;
   
   /**
    * The user identity, in the type defined by the user identity type
    * 
    * @var string
    */
-  var $primary_field = null; 
+  public $primary_field;
   
   /**
    * The length of the secondary field. If the identity type is not "2", should be equal to 0
    * 
    * @var integer
    */
-  var $secondary_field_length = null;
+  public $secondary_field_length;
   
   /**
    * This field should be null if the identiy type is not equal to 2
    * 
    * @var string
    */
-  var $secondary_field = null;
+  public $secondary_field;
    
   /**
    * The constructor.

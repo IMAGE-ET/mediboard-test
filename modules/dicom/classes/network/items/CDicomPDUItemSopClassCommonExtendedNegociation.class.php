@@ -1,10 +1,12 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dicom
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -17,42 +19,42 @@ class CDicomPDUItemSopClassCommonExtendedNegociation extends CDicomPDUItem {
    * 
    * @var integer
    */
-  var $sop_uid_length = null;
+  public $sop_uid_length;
   
   /**
    * The SOP class uid
    * 
    * @var string
    */
-   var $sop_class_uid = null;
+   public $sop_class_uid;
    
    /**
    * The service class uid length
    * 
    * @var integer
    */
-  var $service_uid_length = null;
+  public $service_uid_length;
   
   /**
    * The Service class uid
    * 
    * @var string
    */
-   var $service_class_uid = null;
+   public $service_class_uid;
    
    /**
    * The uid length
    * 
    * @var integer
    */
-  var $related_sop_classes_id_length = null;
+  public $related_sop_classes_id_length;
   
   /**
    * The related SOP class identification length
    * 
    * @var array
    */
-   var $related_sop_classes_id = array();
+  public $related_sop_classes_id = array();
    
   /**
    * The constructor.
@@ -153,10 +155,10 @@ class CDicomPDUItemSopClassCommonExtendedNegociation extends CDicomPDUItem {
       $rel_sop_classes_id[] = $_related_sop_class_id->getClassUID();
     }
     return array(
-      "sop_uid_length" 		=> $this->sop_uid_length,
+      "sop_uid_length"     => $this->sop_uid_length,
       "sop_class_uid" => $this->sop_class_uid,
-      "service_uid_length" 			=> $this->service_uid_length,
-      "service_class_uid" 			=> $this->service_class_uid,
+      "service_uid_length"       => $this->service_uid_length,
+      "service_class_uid"       => $this->service_class_uid,
       "related_sop_classes_id_length" => $this->related_sop_classes_id_length,
       "related_sop_classes_id" => $rel_sop_classes_id,
     );
@@ -260,7 +262,7 @@ class CDicomPDUItemSopClassCommonExtendedNegociation extends CDicomPDUItem {
     if ($this->related_sop_classes_id_length == 0) {
       return "$str</ul>";
     }
-    $str .=	 "<li>Related generam SOP classes :<ul>";
+    $str .=   "<li>Related generam SOP classes :<ul>";
     foreach ($this->related_sop_classes_id as $_sop_class_id) {
       $str .= "<li>{$_sop_class_id->__toString()}</li>";
     }       

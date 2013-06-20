@@ -1,10 +1,12 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dicom
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -33,7 +35,7 @@ class CDicomDictionary {
    * @var array
    */
   protected static $transfer_syntaxes = array(
-    '1.2.840.10008.1.2' 	=> 'Implicit VR Little Endian',
+    '1.2.840.10008.1.2'   => 'Implicit VR Little Endian',
     '1.2.840.10008.1.2.1' => 'Explicit VR Little Endian',
     '1.2.840.10008.1.2.2' => 'Explicit VR Big Endian',
   );
@@ -47,34 +49,34 @@ class CDicomDictionary {
    * @var array
    */
   protected static $value_representations = array(
-   'AE'=> array('Name'=>'Application Entity'							, 'Length' => 16				, 'Fixed' => 0),
-   'AS'=> array('Name'=>'Age String'											, 'Length' => 4					, 'Fixed' => 1),
-   'AT'=> array('Name'=>'Attribute Tag'										, 'Length' => 4					, 'Fixed' => 1),
-   'CS'=> array('Name'=>'Code String'											, 'Length' => 16				, 'Fixed' => 0),
-   'DA'=> array('Name'=>'Date'														, 'Length' => 8					, 'Fixed' => 1),
-   'DS'=> array('Name'=>'Decimal String'									, 'Length' => 16				, 'Fixed' => 0),
-   'DT'=> array('Name'=>'Date Time'												, 'Length' => 26				, 'Fixed' => 0),
-   'FL'=> array('Name'=>'Floating Point Single'						, 'Length' => 4					, 'Fixed' => 1),
-   'FD'=> array('Name'=>'Floating Point Double'						, 'Length' => 8					, 'Fixed' => 1),
-   'IS'=> array('Name'=>'Integer String'									, 'Length' => 12				, 'Fixed' => 0),
-   'LO'=> array('Name'=>'Long String'											, 'Length' => 64				, 'Fixed' => 0),
-   'LT'=> array('Name'=>'Long Text'												, 'Length' => 10240			, 'Fixed' => 0),
-   'OB'=> array('Name'=>'Other Byte String'								, 'Length' => 0					, 'Fixed' => 0),
-   'OF'=> array('Name'=>'Other Float String'							, 'Length' => 4294967292, 'Fixed' => 0),
-   'OX'=> array('Name'=>'Mixed. Other {Byte|Word} String'	, 'Length' => 0					, 'Fixed' => 0),
-   'OW'=> array('Name'=>'Other Word String'								, 'Length' => 0					, 'Fixed' => 0),
-   'PN'=> array('Name'=>'Person Name'											, 'Length' => 64				, 'Fixed' => 0),
-   'SH'=> array('Name'=>'Short String'										, 'Length' => 16				, 'Fixed' => 0),
-   'SL'=> array('Name'=>'Signed Long'											, 'Length' => 4					, 'Fixed' => 1),
-   'SQ'=> array('Name'=>'Sequence of Items'								, 'Length' => 0					, 'Fixed' => 0),
-   'SS'=> array('Name'=>'Signed Short'										, 'Length' => 2					, 'Fixed' => 1),
-   'ST'=> array('Name'=>'Short Text'											, 'Length' => 1024			, 'Fixed' => 0),
-   'TM'=> array('Name'=>'Time'														, 'Length' => 16				, 'Fixed' => 0),
-   'UI'=> array('Name'=>'Unique Identifier UID'						, 'Length' => 64				, 'Fixed' => 0),
-   'UL'=> array('Name'=>'Unsigned Long'										, 'Length' => 4					, 'Fixed' => 1),
-   'UN'=> array('Name'=>'Unknown'													, 'Length' => 0					, 'Fixed' => 0),
-   'US'=> array('Name'=>'Unsigned Short'									, 'Length' => 2					, 'Fixed' => 1),
-   'UT'=> array('Name'=>'Unlimited Text'									, 'Length' => 4294967294, 'Fixed' => 0)
+   'AE'=> array('Name'=>'Application Entity'              , 'Length' => 16        , 'Fixed' => 0),
+   'AS'=> array('Name'=>'Age String'                      , 'Length' => 4          , 'Fixed' => 1),
+   'AT'=> array('Name'=>'Attribute Tag'                    , 'Length' => 4          , 'Fixed' => 1),
+   'CS'=> array('Name'=>'Code String'                      , 'Length' => 16        , 'Fixed' => 0),
+   'DA'=> array('Name'=>'Date'                            , 'Length' => 8          , 'Fixed' => 1),
+   'DS'=> array('Name'=>'Decimal String'                  , 'Length' => 16        , 'Fixed' => 0),
+   'DT'=> array('Name'=>'Date Time'                        , 'Length' => 26        , 'Fixed' => 0),
+   'FL'=> array('Name'=>'Floating Point Single'            , 'Length' => 4          , 'Fixed' => 1),
+   'FD'=> array('Name'=>'Floating Point Double'            , 'Length' => 8          , 'Fixed' => 1),
+   'IS'=> array('Name'=>'Integer String'                  , 'Length' => 12        , 'Fixed' => 0),
+   'LO'=> array('Name'=>'Long String'                      , 'Length' => 64        , 'Fixed' => 0),
+   'LT'=> array('Name'=>'Long Text'                        , 'Length' => 10240      , 'Fixed' => 0),
+   'OB'=> array('Name'=>'Other Byte String'                , 'Length' => 0          , 'Fixed' => 0),
+   'OF'=> array('Name'=>'Other Float String'              , 'Length' => 4294967292, 'Fixed' => 0),
+   'OX'=> array('Name'=>'Mixed. Other {Byte|Word} String'  , 'Length' => 0          , 'Fixed' => 0),
+   'OW'=> array('Name'=>'Other Word String'                , 'Length' => 0          , 'Fixed' => 0),
+   'PN'=> array('Name'=>'Person Name'                      , 'Length' => 64        , 'Fixed' => 0),
+   'SH'=> array('Name'=>'Short String'                    , 'Length' => 16        , 'Fixed' => 0),
+   'SL'=> array('Name'=>'Signed Long'                      , 'Length' => 4          , 'Fixed' => 1),
+   'SQ'=> array('Name'=>'Sequence of Items'                , 'Length' => 0          , 'Fixed' => 0),
+   'SS'=> array('Name'=>'Signed Short'                    , 'Length' => 2          , 'Fixed' => 1),
+   'ST'=> array('Name'=>'Short Text'                      , 'Length' => 1024      , 'Fixed' => 0),
+   'TM'=> array('Name'=>'Time'                            , 'Length' => 16        , 'Fixed' => 0),
+   'UI'=> array('Name'=>'Unique Identifier UID'            , 'Length' => 64        , 'Fixed' => 0),
+   'UL'=> array('Name'=>'Unsigned Long'                    , 'Length' => 4          , 'Fixed' => 1),
+   'UN'=> array('Name'=>'Unknown'                          , 'Length' => 0          , 'Fixed' => 0),
+   'US'=> array('Name'=>'Unsigned Short'                  , 'Length' => 2          , 'Fixed' => 1),
+   'UT'=> array('Name'=>'Unlimited Text'                  , 'Length' => 4294967294, 'Fixed' => 0)
   );
   
   /**
@@ -841,7 +843,7 @@ class CDicomDictionary {
   /**
    * Get the characteristics of the given data set, identified by is group and is element number
    * 
-   * @param integer $group	 The group number
+   * @param integer $group   The group number
    * 
    * @param integer $element The element number
    * 

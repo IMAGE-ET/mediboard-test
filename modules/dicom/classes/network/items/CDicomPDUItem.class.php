@@ -1,10 +1,12 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dicom
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -17,14 +19,14 @@ class CDicomPDUItem {
    * 
    * @var integer
    */
-  var $type = null;
+  public $type;
   
   /**
    * The length of the Item
    * 
    * @var integer
    */
-  var $length = null;
+  public $length;
   
   /**
    * Set the type

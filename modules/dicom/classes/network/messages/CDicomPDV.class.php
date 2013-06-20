@@ -1,10 +1,12 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dicom
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -300,7 +302,7 @@ class CDicomPDV {
   /**
    * Decode the PDV
    * 
-   * @param CDicomStreamReader $stream_reader	The stream reader
+   * @param CDicomStreamReader $stream_reader The stream reader
    * 
    * @return null
    */

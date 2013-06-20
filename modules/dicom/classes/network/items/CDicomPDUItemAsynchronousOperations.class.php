@@ -1,10 +1,12 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dicom
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -17,14 +19,14 @@ class CDicomPDUItemAsynchronousOperations extends CDicomPDUItem {
    * 
    * @var integer
    */
-  var $max_number_operations_invoked = null;
+  public $max_number_operations_invoked;
   
   /**
    * The maximum number of operations the AE may perform
    * 
    * @var integer
    */
-  var $max_number_operations_performed = null;
+  public $max_number_operations_performed;
   
   /**
    * The constructor.

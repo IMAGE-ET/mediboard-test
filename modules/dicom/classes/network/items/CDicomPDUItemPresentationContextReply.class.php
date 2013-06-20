@@ -1,10 +1,12 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dicom
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -17,7 +19,7 @@ class CDicomPDUItemPresentationContextReply extends CDicomPDUItem {
    * 
    * @var integer
    */
-  var $id = null;
+  public $id;
   
   /**
    * The acceptance or the rejection of the transfer sybtax, and the reason if the rejected.
@@ -25,7 +27,7 @@ class CDicomPDUItemPresentationContextReply extends CDicomPDUItem {
    * 
    * @var integer
    */
-  var $reason = null;
+  public $reason;
   
   /**
    * Possible values for the field $reason
@@ -45,7 +47,7 @@ class CDicomPDUItemPresentationContextReply extends CDicomPDUItem {
    * 
    * @var CDicomPDUItemTransferSyntax
    */
-  var $transfer_syntax = null;
+  public $transfer_syntax;
   
   /**
    * The constructor.

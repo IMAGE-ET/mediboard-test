@@ -1,16 +1,18 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dicom
- * @version $Revision$
- * @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
  * The Dicom session
  * 
- * @todo Modifier la facon dont le presentation context est stock� : faire un mix entre le reply et le request
+ * @todo Modifier la facon dont le presentation context est stocké : faire un mix entre le reply et le request
  */
 class CDicomSession extends CMbObject {
   
@@ -838,7 +840,7 @@ class CDicomSession extends CMbObject {
     $this->state = self::STA6;
     
     /**
-     * @todo envoyer les donn�es
+     * @todo envoyer les données
      */
   }
   

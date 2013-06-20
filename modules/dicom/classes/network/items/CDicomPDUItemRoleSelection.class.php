@@ -1,10 +1,12 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dicom
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -17,14 +19,14 @@ class CDicomPDUItemRoleSelection extends CDicomPDUItem {
    * 
    * @var integer
    */
-  var $uid_length = null;
+  public $uid_length;
   
   /**
    * The SOP class uid
    * 
    * @var string
    */
-   var $sop_class_uid = null;
+   public $sop_class_uid;
    
    /**
     * The SCU role
@@ -32,7 +34,7 @@ class CDicomPDUItemRoleSelection extends CDicomPDUItem {
     * 
     * @var integer
     */
-  var $scu_role = null;
+  public $scu_role;
   
   /**
     * The SCP role
@@ -40,7 +42,7 @@ class CDicomPDUItemRoleSelection extends CDicomPDUItem {
     * 
     * @var integer
     */
-  var $scp_role = null;
+  public $scp_role;
   
   /**
    * The constructor.
@@ -112,10 +114,10 @@ class CDicomPDUItemRoleSelection extends CDicomPDUItem {
    */
   function getValues() {
     return array(
-      "uid_length" 		=> $this->uid_length,
+      "uid_length"     => $this->uid_length,
       "sop_class_uid" => $this->sop_class_uid,
-      "scu_role" 			=> $this->scu_role,
-      "scp_role" 			=> $this->scp_role
+      "scu_role"       => $this->scu_role,
+      "scp_role"       => $this->scp_role
     );
   }
   

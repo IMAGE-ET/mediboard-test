@@ -1,13 +1,14 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dicom
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- */ 
- 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
+
 /**
  * A Dicom sender
  */
@@ -27,10 +28,10 @@ class CDicomSender extends CInteropSender {
    */
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table	= "dicom_sender";
-    $spec->key		= "dicom_sender_id";
+    $spec->table  = "dicom_sender";
+    $spec->key    = "dicom_sender_id";
     
-    return $spec;	
+    return $spec;
   }
   
   /**

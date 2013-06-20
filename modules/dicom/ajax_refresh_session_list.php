@@ -1,12 +1,14 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dicom
- * @version $Revision$
- * @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
- 
+
 CCanDo::checkRead();
 
 $_date_min = CValue::getOrSession("_date_min", CMbDT::dateTime("-7 day"));

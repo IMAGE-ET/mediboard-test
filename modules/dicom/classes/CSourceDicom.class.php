@@ -1,13 +1,14 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dicom
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- */ 
- 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
+
 /**
  * The Dicom exchange source
  */
@@ -41,9 +42,9 @@ class CSourceDicom extends CExchangeSource {
    */
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table	= "dicom_source";
-    $spec->key		= "dicom_source_id";
-    return $spec;	
+    $spec->table  = "dicom_source";
+    $spec->key    = "dicom_source_id";
+    return $spec;
   }
   
   /**

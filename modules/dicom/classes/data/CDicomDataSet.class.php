@@ -1,10 +1,12 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage 
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -291,9 +293,9 @@ class CDicomDataSet {
   /**
    * Encode the dataset, depending on the transfer syntax
    * 
-   * @param CDicomStreamWriter $stream_writer		The stream writer
+   * @param CDicomStreamWriter $stream_writer   The stream writer
    * 
-   * @param string						 $transfer_syntax	The UID of the transfer syntax
+   * @param string             $transfer_syntax The UID of the transfer syntax
    * 
    * @return null
    */
@@ -332,7 +334,7 @@ class CDicomDataSet {
    * 
    * @param CDicomStreamWriter $stream_writer The stream writer
    * 
-   * @param string						 $endianness		The endianness, must be equal to "BE" (Big Endian) or "LE" (Little Endian)
+   * @param string             $endianness    The endianness, must be equal to "BE" (Big Endian) or "LE" (Little Endian)
    * 
    * @return null
    */
@@ -351,9 +353,9 @@ class CDicomDataSet {
   /**
    * Encode the data set with the explicit VR
    * 
-   * @param CDicomStreamWriter $stream_writer	The stream writer
+   * @param CDicomStreamWriter $stream_writer The stream writer
    * 
-   * @param string						 $endianness		The endianness, must be equal to "BE" (Big Endian) or "LE" (Little Endian)
+   * @param string             $endianness    The endianness, must be equal to "BE" (Big Endian) or "LE" (Little Endian)
    * 
    * @return null
    */
@@ -381,7 +383,7 @@ class CDicomDataSet {
    * 
    * @param CDicomStreamWriter $stream_writer The stream writer
    * 
-   * @param string						 $endianness		The endianness, must be equal to "BE" (Big Endian) or "LE" (Little Endian)
+   * @param string             $endianness    The endianness, must be equal to "BE" (Big Endian) or "LE" (Little Endian)
    * 
    * @return null
    * 
@@ -484,9 +486,9 @@ class CDicomDataSet {
   /**
    * Decode the dataset, depending on the transfer syntax
    * 
-   * @param CDicomStreamReader $stream_reader		The stream reader
+   * @param CDicomStreamReader $stream_reader   The stream reader
    * 
-   * @param string						 $transfer_syntax	The UID of the transfer syntax
+   * @param string             $transfer_syntax The UID of the transfer syntax
    * 
    * @return null
    */
@@ -521,7 +523,7 @@ class CDicomDataSet {
    * 
    * @param CDicomStreamReader $stream_reader The stream reader
    * 
-   * @param string						 $endianness		The endianness, must be equal to "BE" (Big Endian) or "LE" (Little Endian)
+   * @param string             $endianness    The endianness, must be equal to "BE" (Big Endian) or "LE" (Little Endian)
    * 
    * @return null
    */
@@ -540,7 +542,7 @@ class CDicomDataSet {
    * 
    * @param CDicomStreamReader $stream_reader The stream reader
    * 
-   * @param string						 $endianness		The endianness, must be equal to "BE" (Big Endian) or "LE" (Little Endian)
+   * @param string             $endianness    The endianness, must be equal to "BE" (Big Endian) or "LE" (Little Endian)
    * 
    * @return null
    */
@@ -565,7 +567,7 @@ class CDicomDataSet {
    * Decode the value
    * 
    * @param CDicomStreamReader $stream_reader The stream reader
-   * @param string						 $endianness		The endianness, must be equal to "BE" (Big Endian) or "LE" (Little Endian)
+   * @param string             $endianness    The endianness, must be equal to "BE" (Big Endian) or "LE" (Little Endian)
    * 
    * @return null
    * 
@@ -644,7 +646,7 @@ class CDicomDataSet {
             else {
               $sequence_end = $value_stream->getPos() + $sequence_length;
             
-              while($value_stream->getPos() < $sequence_end) {
+              while ($value_stream->getPos() < $sequence_end) {
                 $dataset = new CDicomDataSet();
                 $dataset->decode($value_stream, $this->transfer_syntax);
                 $sequence[] = $dataset;
@@ -671,7 +673,7 @@ class CDicomDataSet {
             $sequence = array();
             $sequence_end = $value_stream->getPos() + $sequence_length;
             
-            while($value_stream->getPos() < $sequence_end) {
+            while ($value_stream->getPos() < $sequence_end) {
               $dataset = new CDicomDataSet();
               $dataset->decode($value_stream, $this->transfer_syntax);
               $sequence[] = $dataset;

@@ -1,74 +1,75 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dicom
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- */ 
- 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
+
 /**
  * A Dicom exchange
  */
 class CExchangeDicom extends CExchangeBinary {
-  
+
   static $messages = array(
     "Echo" => "CEcho",
     "Find" => "CFind",
   );
-  
+
   /**
    * Table Key
    *
    * @var integer
    */
-  var $exchange_dicom_id = null;
-  
+  public $exchange_dicom_id;
+
   /**
    * The request
    * If there is several messages, they are separated by "|"
    * 
    * @var string
    */
-  var $requests = null;
-  
+  public $requests;
+
   /**
    * The response
    * If there is several messages, they are separated by "|"
    * 
    * @var string
    */
-  var $responses = null;
-  
+  public $responses;
+
   /**
    * The presentation contexts, in string
    * 
    * @var string
    */
   public $presentation_contexts;
-  
+
   /**
    * The request
    * 
    * @var CDicomPDU[]
    */
-  var $_requests;
-  
+  public $_requests;
+
   /**
    * The response
    * 
    * @var CDicomPDU[]
    */
-  var $_responses;
-  
+  public $_responses;
+
   /**
    * The presentation contexts
    * 
    * @var CDicomPresentationContext[]
    */
-  var $_presentation_contexts;
-  
+  public $_presentation_contexts;
+
   /**
    * Initialize the class specifications
    *
@@ -77,11 +78,11 @@ class CExchangeDicom extends CExchangeBinary {
   function getSpec() {
     $spec = parent::getSpec();
     $spec->loggable = false;
-    $spec->table	= "dicom_exchange";
-    $spec->key		= "dicom_exchange_id";
-    return $spec;	
+    $spec->table  = "dicom_exchange";
+    $spec->key    = "dicom_exchange_id";
+    return $spec;
   }
-  
+
   /**
    * Get the properties of our class as string
    *
@@ -97,7 +98,7 @@ class CExchangeDicom extends CExchangeBinary {
     $props["object_class"]          = "str";
     return $props;
   }
-  
+
   /**
    * Get backward reference specifications
    * 
@@ -110,7 +111,7 @@ class CExchangeDicom extends CExchangeBinary {
 
     return $backProps;
   }
-  
+
   /**
    * Decode the messages
    * 
@@ -149,7 +150,7 @@ class CExchangeDicom extends CExchangeBinary {
       }
     }
   }
-  
+
   /**
    * Update the fields tored in database
    * 
@@ -170,7 +171,7 @@ class CExchangeDicom extends CExchangeBinary {
         }
       }
     }
-    
+
     if ($this->_requests) {
       $this->requests = null;
       foreach ($this->_requests as $_request) {
@@ -182,7 +183,7 @@ class CExchangeDicom extends CExchangeBinary {
         }  
       }
     }
-    
+
     if ($this->_responses) {
       $this->responses = null;
       foreach ($this->_responses as $_response) {
@@ -195,7 +196,7 @@ class CExchangeDicom extends CExchangeBinary {
       }
     }
   }
-  
+
   /**
    * Handle the message
    * 
@@ -204,7 +205,7 @@ class CExchangeDicom extends CExchangeBinary {
   function handle() {
     return COperatorDicom::event($this);
   }
-  
+
   /**
    * Return the family
    * 
@@ -213,7 +214,7 @@ class CExchangeDicom extends CExchangeBinary {
   function getFamily() {
     return self::$messages;
   }
-  
+
   /**
    * Check if the message is well formed
    * 
@@ -226,7 +227,7 @@ class CExchangeDicom extends CExchangeBinary {
   function isWellFormed($msg, CInteropActor $actor = null) {
     $stream = fopen("php://temp", 'w+');
     fwrite($stream, $msg);
-    
+
     $stream_reader = new CDicomStreamReader($stream);
     $stream_reader->rewind();
     $type = $stream_reader->readHexByte();
@@ -235,18 +236,18 @@ class CExchangeDicom extends CExchangeBinary {
       $stream_reader->close();
       return false;
     }
-    
+
     $stream_reader->skip(1);
     $length = $stream_reader->readUInt32();
     $stream_reader->close();
-    
+
     if (strlen($msg) != $length + 6) {
       return false;
     }
-    
+
     return true;
   }
-  
+
   /**
    * Check if we can understand the message
    * 
@@ -263,7 +264,7 @@ class CExchangeDicom extends CExchangeBinary {
     if (!$this->isWellFormed($msg)) {
       return false;
     }
-    
+
     $pdu = CDicomPDUFactory::decodePDU($msg, $this->_presentation_contexts);
     $pdvs = $pdu->getPDVs();
 
@@ -276,7 +277,7 @@ class CExchangeDicom extends CExchangeBinary {
       $msg_classes[] = get_class($msg);
     }
 
-    
+
     if ($msg_types[0] == "C-Find-RQ" || $msg_types[0] == "C-Echo-RQ") {
       if (!$this->_requests) {
         $this->_requests = array();
@@ -297,7 +298,7 @@ class CExchangeDicom extends CExchangeBinary {
         $this->_requests[] = $pdu;
       }
     }
-    
+
     foreach ($this->getFamily() as $_family) {
       $family_class = new $_family;
       $events = $family_class->getEvenements();

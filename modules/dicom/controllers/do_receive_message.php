@@ -1,10 +1,12 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dicom
- * @version $Revision$
- * @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $addr = CValue::post("client_addr");
@@ -96,8 +98,7 @@ function getSession($addr, $port) {
  * @return string
  */
 function getEventName($type) {
-  $event = "";
-  switch($type) {
+  switch ($type) {
     case "01" :
       $event = "AAssociateRQ_Received";
       break;

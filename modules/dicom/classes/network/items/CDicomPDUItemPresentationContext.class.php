@@ -1,10 +1,12 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dicom
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -17,26 +19,26 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
    * 
    * @var integer
    */
-  var $id = null;
+  public $id;
   
   /**
    * The abstract syntax
    * 
    * @var CDicomPDUItemAbstractSyntax
    */
-  var $abstract_syntax = null;
+  public $abstract_syntax;
   
   /**
    * The transfer syntaxes
    * 
    * @var CDicomPDUItemTransferSyntax[]
    */
-  var $transfer_syntaxes = array();
+  public $transfer_syntaxes = array();
 
   /**
    * @var int
    */
-  var $reason;
+  public $reason;
   
   /**
    * The constructor.

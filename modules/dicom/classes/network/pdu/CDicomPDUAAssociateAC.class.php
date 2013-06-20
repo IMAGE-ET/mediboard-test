@@ -1,10 +1,12 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dicom
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -17,42 +19,42 @@ class CDicomPDUAAssociateAC extends CDicomPDU {
    * 
    * @var integer
    */
-  var $protocol_version = null;
+  public $protocol_version;
   
   /**
    * The called application entity
    * 
    * @var string
    */
-  var $called_AE_title = null;
+  public $called_AE_title;
   
   /**
    * The calling application entity
    * 
    * @var string
    */
-  var $calling_AE_title = null;
+  public $calling_AE_title;
   
   /**
    * The application context
    * 
    * @var CDicomPDUItemApplicationContext
    */
-  var $application_context = null;
+  public $application_context;
   
   /**
    * The presentation contexts
    * 
    * @var CDicomPDUItemPresentationContext[]
    */
-  var $presentation_contexts = array();
+  public $presentation_contexts = array();
   
   /**
    * The User informations
    * 
    * @var CDicomPDUItemUserInfo
    */
-  var $user_info = null; 
+  public $user_info;
   
   /**
    * The constructor.
@@ -154,7 +156,7 @@ class CDicomPDUAAssociateAC extends CDicomPDU {
   function decodePDU(CDicomStreamReader $stream_reader) {
     $this->protocol_version = $stream_reader->readUInt16();
     
-    // On v�rifie que la version du protocole est bien 0001
+    // On vérifie que la version du protocole est bien 0001
     if ($this->protocol_version != 0x0001) {
       // Erreur
       echo "Protocol version differente de 1";
@@ -169,7 +171,7 @@ class CDicomPDUAAssociateAC extends CDicomPDU {
     $this->calling_AE_title = $stream_reader->readString(16);
     
     
-    // On passe 32 octets, r�serv�s par Dicom
+    // On passe 32 octets, réservés par Dicom
     $stream_reader->skip(32);
     
     $this->application_context = CDicomPDUItemFactory::decodeItem($stream_reader);

@@ -1,9 +1,11 @@
-<?php /** $Id$ **/
+<?php
 /**
+ * $Id$
+ *
  * @package    Mediboard
- * @subpackage dicom
+ * @subpackage DICOM
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -138,7 +140,7 @@ class CDicomServer extends CSocketBasedServer {
   /**
    * Encode the request and return it
    * 
-   * @param string $buffer  The buffer
+   * @param string $buffer The buffer
    * 
    * @return string
    */

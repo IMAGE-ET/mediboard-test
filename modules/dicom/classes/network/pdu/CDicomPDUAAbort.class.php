@@ -1,10 +1,12 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dicom
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -18,7 +20,7 @@ class CDicomPDUAAbort extends CDicomPDU {
    * 
    * @var integer
    */
-  var $source = null;
+  public $source;
   
   /**
    * Possible values for the field $source
@@ -36,7 +38,7 @@ class CDicomPDUAAbort extends CDicomPDU {
    * 
    * @var integer
    */
-  var $diagnostic = null;
+  public $diagnostic;
   
   /**
    * Possible values for the field $diagnostic

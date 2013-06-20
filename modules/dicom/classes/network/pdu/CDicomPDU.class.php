@@ -1,13 +1,14 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dicom
- * @version $Revision$
- * @author SARL OpenXtrem | llemoine
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- */ 
- 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
+
 /**
  * Represent a DICOM PDU (Protocol Data Unit)
  */
@@ -18,21 +19,21 @@ class CDicomPDU {
    * 
    * @var string
    */
-  var $type = null;
+  public $type;
   
   /**
    * The type of the PDU, in string
    * 
    * @var string
    */
-  var $type_str = null;
+  public $type_str;
   
   /**
    * The length of the PDU
    * 
    * @var integer
    */
-  var $length = null;
+  public $length;
   
   /**
    * The encoded pdu

@@ -1,10 +1,12 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dicom
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
  /**
@@ -17,14 +19,14 @@ class CDicomPDUItemUserIdentityNegociationRP extends CDicomPDUItem {
    * 
    * @var integer
    */
-  var $server_response_length = null;
+  public $server_response_length;
   
   /**
    * The server response
    * 
    * @var string
    */
-  var $server_response = null;
+  public $server_response;
    
   /**
    * The constructor.

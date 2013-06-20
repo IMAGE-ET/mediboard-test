@@ -1,10 +1,12 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dicom
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage DICOM
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -17,14 +19,14 @@ class CDicomStreamWriter {
    * 
    * @var resource
    */
-  var $stream = null;
+  public $stream;
   
   /**
    * The content of the stream, used to keep a trace of the DICOM exchanges
    * 
    * @var string
    */
-  var $buf = null;
+  public $buf;
   
   /**
    * The constructor of CDicomStreamwriteer
