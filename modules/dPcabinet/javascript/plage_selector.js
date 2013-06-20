@@ -31,8 +31,10 @@ PlageConsultSelector = {
     Control.Modal.close();
     var oForm = getForm(window.PlageConsultSelector.sForm);
     var consults = $H(window.PlageConsultSelector.consultations);
-    if (consults.size() > 1) {
-      $("multiplePlaces").show();
+    if (consults.size() > 0) {
+      if (consults.size() > 1) {
+        $("multiplePlaces").show();
+      }
       var iterator = 1;
       consults.each(function(consult) {
         var consultObj = consult[1];
