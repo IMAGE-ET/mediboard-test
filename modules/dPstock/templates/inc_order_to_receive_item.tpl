@@ -102,7 +102,7 @@
       
       <input type="text" name="code" value="" size="6" title="{{tr}}CProductOrderItemReception-code{{/tr}}" />
       <input type="text" name="lapsing_date" value="" class="date mask|99/99/9999 format|$3-$2-$1" title="{{tr}}CProductOrderItemReception-lapsing_date{{/tr}}" />
-      <button type="submit" class="tick notext">{{tr}}CProductOrderItem-_receive{{/tr}}</button>
+      <button type="submit" class="tick notext singleclick">{{tr}}CProductOrderItem-_receive{{/tr}}</button>
       
       <script type="text/javascript">
         Main.add(function(){

@@ -63,7 +63,7 @@ editUnitPrice = function(order_item_id) {
   <input type="hidden" name="callback" value="location.reload" />
   {{mb_key object=$order}}
   
-  <button type="submit" class="tick" style="float: right;">
+  <button type="submit" class="tick singleclick" style="float: right;">
     Recevoir toute cette commande
   </button>
 </form>
