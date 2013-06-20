@@ -71,7 +71,9 @@ var PlageConsult = {
     var plage = window.parent.PlageConsultSelector;
     if (plage.pages.length > 1) {
       for (var a = 1; a<(plage.pages.length); a++) {
-        $("listPlaces-"+a).update("");
+        if ($("listPlaces-"+a)) {
+          $("listPlaces-"+a).update("");
+        }
         $("plage-"+plage.pages[a]).removeClassName("selected");
       }
       plage.resetConsult();
