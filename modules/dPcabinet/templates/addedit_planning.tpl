@@ -110,16 +110,14 @@
 
   submitRDV = function() {
     var form = getForm('editFrm');
-    if (checkFormRDV(form)) {
-      form.submit();
-    }
+    return checkFormRDV(form);
   };
 
   printForm = function() {
     var url = new Url("dPcabinet", "view_consultation");
     url.addElement(getForm("editFrm").consultation_id);
     url.popup(700, 500, "printConsult");
-    return;
+    return false;
   };
 
   printDocument = function(iDocument_id) {
@@ -601,7 +599,7 @@
           <td class="button">
             {{if $consult->_id}}
               {{if !$consult->_locks || $can->admin}}
-                <button class="modify" type="submit" onclick="submitRDV();">
+                <button class="modify" type="submit" onclick="return submitRDV();">
                   {{tr}}Save{{/tr}}
                 </button>
               {{/if}}
@@ -611,7 +609,7 @@
                 {{tr}}Print{{/tr}}
               </button>
             {{else}}
-              <button class="submit" type="submit" onclick="submitRDV();">
+              <button class="submit" type="submit" onclick="return submitRDV();">
                 {{tr}}Create{{/tr}}
               </button>
             {{/if}}
