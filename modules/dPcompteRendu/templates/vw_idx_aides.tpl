@@ -18,7 +18,7 @@ function loadClasses(value) {
   while (select.length > 1) {
     select.options[1] = null;
   }
-  
+
   // insert new ones
   for (var elm in options) {
     var option = elm;
@@ -26,7 +26,7 @@ function loadClasses(value) {
       select.options[select.length] = new Option(aTraduction[option], option);
     }
   }
-	
+
   $V(select, value);
   loadFields();
 }
@@ -46,10 +46,10 @@ function loadFields(value) {
   for (var elm in options) {
     var option = elm;
     if (typeof(options[option]) != "function") { // to filter prototype functions
-      select.options[select.length] = new Option(option, option);
+      select.options[select.length] = new Option($T(className+"-"+option), option);
     }
   }
-	
+
   $V(select, value);
   loadDependances();
 }
@@ -73,15 +73,15 @@ function loadDependances(depend_value_1, depend_value_2){
       select_depend_2.options[1] = null;
     }
   {{/if}}
-    
+
   if(!options){
     return;
   }
-  
+
   if(!classes[className][fieldName]){
     return;
   }
-  
+
   {{if !$aide->_is_ref_dp_1}}
     // Depend value 1
     options_depend_1 = classes[className][fieldName]['depend_value_1'];
@@ -128,7 +128,7 @@ function resetStart(form){
 
 function getListDependValues(select, object_class, field) {
   if (select.hasClassName("loaded")) return;
-  
+
   var oldValue = $V(select);
   var url = new Url("dPcompteRendu", "httpreq_select_enum_values");
   url.addParam("object_class", object_class);
@@ -150,13 +150,13 @@ var changePage = {};
 
 Main.add(function () {
   var form = getForm("filterFrm");
-  
+
   loadClasses('{{$aide->class}}');
   loadFields('{{$aide->field}}');
   loadDependances('{{$aide->depend_value_1}}', '{{$aide->depend_value_2}}');
-  
+
   loadTabsAides(form);
-  
+
   ["user", "func", "etab"].each(function(type){
     changePage[type] = function(page) {
       $V(form["start["+type+"]"], page);
@@ -170,9 +170,9 @@ Main.add(function () {
 
 <tr>
   <td class="greedyPane">
-    
+
     <a href="?m={{$m}}&amp;tab={{$tab}}&amp;aide_id=" class="button new">{{tr}}CAideSaisie-title-create{{/tr}}</a>
-    
+
     <form name="filterFrm" action="?" method="get" onsubmit="return loadTabsAides(this)">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="start[user]" value="{{$start.user}}" onchange="this.form.onsubmit()" />
@@ -185,7 +185,7 @@ Main.add(function () {
         <tr>
           <th class="category" colspan="10">Filtrer les aides</th>
         </tr>
-  
+
         <tr>
           <th><label for="filter_user_id" title="Filtrer les aides pour cet utilisateur">Utilisateur</label></th>
           <td>
@@ -256,7 +256,7 @@ Main.add(function () {
         </select>
       </td>
     </tr>
-  
+
     <tr>
       <th>{{mb_label object=$aide field="function_id"}}</th>
       <td>
@@ -302,7 +302,7 @@ Main.add(function () {
         </select>
       </td>
     </tr>
-    
+
     <tr>
       <th>{{mb_label object=$aide field="depend_value_1"}}</th>
       <td>
@@ -313,7 +313,7 @@ Main.add(function () {
             <script type="text/javascript">
               Main.add(function(){
                 var form = getForm("editFrm");
-                
+
                 var url = new Url("system", "ajax_seek_autocomplete");
                 url.addParam("object_class", $V(form._ref_class_depend_value_1));
                 url.addParam("field", "depend_value_1");
@@ -337,7 +337,7 @@ Main.add(function () {
         {{/if}}
       </td>
     </tr>
-    
+
     <tr>
       <th>{{mb_label object=$aide field="depend_value_2"}}</th>
       <td>
@@ -348,7 +348,7 @@ Main.add(function () {
             <script type="text/javascript">
               Main.add(function(){
                 var form = getForm("editFrm");
-                
+
                 var url = new Url("system", "ajax_seek_autocomplete");
                 url.addParam("object_class", $V(form._ref_class_depend_value_2));
                 url.addParam("field", "depend_value_2");
@@ -372,12 +372,12 @@ Main.add(function () {
         {{/if}}
       </td>
     </tr>
-    
+
     <tr>
       <th>{{mb_label object=$aide field="name"}}</th>
       <td>{{mb_field object=$aide field="name"}}</td>
     </tr>
-    
+
     <tr>
       <th>{{mb_label object=$aide field="text"}}</th>
       <td>{{mb_field object=$aide field="text"}}</td>
