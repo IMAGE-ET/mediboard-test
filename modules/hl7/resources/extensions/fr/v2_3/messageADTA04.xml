@@ -13,8 +13,8 @@
         <segment>PV1</segment>
         <segment minOccurs="0">PV2</segment>
         <segment>ZBE</segment>
-        <segment>ZFP</segment>
-        <segment>ZFV</segment>
+        <segment minOccurs="0">ZFP</segment>
+        <segment minOccurs="0">ZFV</segment>
         <segment minOccurs="0">ZFM</segment>
         <segment minOccurs="0">ZFD</segment>
         <segment minOccurs="0" maxOccurs="unbounded">ROL</segment>
