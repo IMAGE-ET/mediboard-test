@@ -72,7 +72,7 @@ else {
     }
 
     if ($_user->_count_ldap == 0) {
-      CAppUI::stepAjax("$user->_view non associé", UI_MSG_WARNING);
+      CAppUI::stepAjax("'$_user->_view' / '$_user->user_username' non associé", UI_MSG_WARNING);
       $count_no_associate++;
     }
     
