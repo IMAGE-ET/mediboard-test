@@ -21,6 +21,9 @@ class CApp {
   static $inPeace = false;
   static $encoding = "utf-8";
   static $classPaths = array();
+
+  /** @var string Current request unique identifier */
+  private static $requestUID = null;
   
   /* 
    * The order of the keys is important (only the first keys 
@@ -515,5 +518,34 @@ class CApp {
     $root_dir = CAppUI::conf("root_dir");
 
     return preg_replace("/[^\w]+/", "_", $root_dir);
+  }
+
+  /**
+   * Initializes a unique request ID to identify current request
+   *
+   * @return string
+   */
+  private static function initRequestUID(){
+    $user_id = CUser::get()->_id;
+    $uid     = uniqid("", true);
+
+    $address = get_remote_address();
+    $ip      = $address["remote"];
+
+    // MD5 is enough as it doesn't have to be crypto proof
+    self::$requestUID = md5("$user_id/$uid/$ip");
+  }
+
+  /**
+   * Get the current request unique ID
+   *
+   * @return string
+   */
+  static function getRequestUID(){
+    if (self::$requestUID === null) {
+      self::initRequestUID();
+    }
+
+    return self::$requestUID;
   }
 }
