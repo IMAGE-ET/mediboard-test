@@ -26,4 +26,5 @@
     data-remarques="{{$match->remarques}}">
   {{if $show_view}}{{$match->_view}}{{else}}{{$match->$f|emphasize:$input}}{{/if}}
 </span>
+{{if $match->surnom}}<div class="compact">{{$match->surnom}}</div>{{/if}}
 <div class="compact">{{$match->cp}} {{$match->ville}}</div>

@@ -79,7 +79,7 @@
       url_surnom.addParam("object_class", "CCorrespondantPatient");
       url_surnom.addParam("whereComplex[patient_id]", "IS NULL");
       url_surnom.addParam("input_field", "surnom");
-      url_surnom.addParam("view_field", "surnom");
+      url_surnom.addParam("view_field", "nom");
       url_surnom.autoComplete(form.surnom, null, {
         minChars: 2,
         method: "get",
