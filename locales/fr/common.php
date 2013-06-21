@@ -408,6 +408,7 @@ $locales['night'] = 'nuit';
 $locales['no_alternative_mode'] = 'Mode alternative non activé et obligatoire pour la synchronisation dans l\'EAI';
 $locales['no_tag_defined'] = 'Aucun tag (patient/séjour) de défini pour la synchronisation';
 $locales['now'] = 'maintenant';
+$locales['or'] = 'ou';
 $locales['others'] = 'autres';
 $locales['portal-help'] = 'Aide';
 $locales['portal-tracker'] = 'Suggérer une amélioration';
