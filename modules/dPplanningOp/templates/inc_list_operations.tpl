@@ -258,7 +258,7 @@
         
       </td>
       <td class="text top">
-        <button type="button" class="edit" style="float: right;" onclick="Operation.dossierBloc('{{$_operation->_id}}', updateListOperations)">
+        <button type="button" class="edit" style="float: right;" onclick="Operation.dossierBloc('{{$_operation->_id}}', updateListOperations.curry('{{$date}}'))">
           Dossier bloc
         </button>
         <a href="#1" onclick="Operation.edit('{{$_operation->_id}}', '{{$_operation->plageop_id}}')">
