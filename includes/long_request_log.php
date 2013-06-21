@@ -38,6 +38,9 @@ if ($duration > $long_request_log_level) {
   // SESSION params
   $long_request_log->_session_data = $session;
 
+  // Unique Request ID
+  $long_request_log->requestUID = CApp::getRequestUID();
+
   if ($msg = $long_request_log->store()) {
     trigger_error($msg, E_USER_WARNING);
   }

@@ -41,6 +41,9 @@ class CLongRequestLog extends CMbObject {
   // Reference fields
   public $_ref_user;
 
+  // Unique Request ID
+  public $requestUID;
+
 
   /**
    * @see parent::getSpec()
@@ -101,6 +104,7 @@ class CLongRequestLog extends CMbObject {
     $props["_date_max"]         = "dateTime";
     $props["_ref_user"]         = "ref class|CUser";
     $props["_link"]             = "str";
+    $props["requestUID"]        = "str";
 
     return $props;
   }

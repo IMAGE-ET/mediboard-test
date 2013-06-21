@@ -31,7 +31,7 @@
   </tr>
 </table>
 
-<div id="modalPassphrase" class="modal" style="display: none">
+<div id="modalPassphrase" style="display: none">
   <form name="passphrase" action="?m={{$m}}" method="post" onsubmit="return Keeper.getPassphrase(this, $V(this.password_keeper_id), $V(this.deletion), $V(this.passphraseInputExport))">
     <input type="hidden" name="password_keeper_id" />
     <input type="hidden" name="deletion" />

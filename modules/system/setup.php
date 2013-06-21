@@ -1360,6 +1360,15 @@ class CSetupsystem extends CSetup {
                 ADD `disabled` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
+    $this->makeRevision("1.1.39");
+    $query = "ALTER TABLE `long_request_log`
+                ADD `requestUID` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `long_request_log`
+                ADD INDEX (`requestUID`);";
+    $this->addQuery($query);
+
     /*
     // Création des deux nouveaux champs
     $this->makeRevision("1.1.36");
@@ -1369,7 +1378,6 @@ class CSetupsystem extends CSetup {
     $this->addQuery($query);
 
     // Mise à jour du champ
-    $this->makeRevision("1.1.37");
     $query = "UPDATE `access_log`
       SET `aggregate` = '60';";
     $this->addQuery($query);
@@ -1380,17 +1388,14 @@ class CSetupsystem extends CSetup {
      * Création d'un simple index triplet
      */
     /*
-    $this->makeRevision("1.1.38");
     $query = "ALTER TABLE `access_log`
       DROP INDEX `triplet`,
       ADD UNIQUE `aggregate` (`module`, `action`, `period`, `aggregate`, `bot`),
       ADD INDEX `triplet` (`module`, `action`, `period`);";
     $this->addQuery($query);
-
-    $this->mod_version = "1.1.39";
     */
 
-    $this->mod_version = "1.1.39";
+    $this->mod_version = "1.1.40";
 
     /*$query = "ALTER TABLE user_log
         DROP INDEX object_id,
