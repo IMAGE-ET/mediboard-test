@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Plages de consultation médicales et para-médicales
+ */
 
 class CPlageconsult extends CPlageHoraire {
   static $minutes = array();
@@ -66,6 +69,9 @@ class CPlageconsult extends CPlageHoraire {
   /** @var CMediusers */
   public $_ref_pour_compte;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table          = "plageconsult";
@@ -74,12 +80,18 @@ class CPlageconsult extends CPlageHoraire {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["consultations"] = "CConsultation plageconsult_id";
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
 
@@ -165,11 +177,25 @@ class CPlageconsult extends CPlageHoraire {
     return $this->_nb_patients = $consultation->countList($where);
   }
 
+  /**
+   * Refs consultations and fill rate loader
+   *
+   * @param bool $withCanceled Prise en compte des consultations annulées
+   * @param bool $withClosed   Prise en compte des consultations terminées
+   * @param bool $withPayees   Prise en compte des consultations payées
+   *
+   * @return void
+   */
   function loadRefsBack($withCanceled = true, $withClosed = true, $withPayees = true) {
     $this->loadRefsConsultations($withCanceled, $withClosed, $withPayees);
     $this->loadFillRate();
   }
 
+  /**
+   * Plageconsult fill rate loader
+   *
+   * @return void
+   */
   function loadFillRate() {
     if (!$this->_id) {
       return;
@@ -188,6 +214,11 @@ class CPlageconsult extends CPlageHoraire {
     }
   }
 
+  /**
+   * Calcul du tableau d'occupation de la plage de consultation
+   *
+   * @return array
+   */
   function getUtilisation() {
     $this->loadRefsConsultations(false);
 
@@ -211,6 +242,11 @@ class CPlageconsult extends CPlageHoraire {
     return $utilisation;
   }
 
+  /**
+   * Calcul de la répartition des consultations par catégorie
+   *
+   * @return void
+   */
   function loadCategorieFill() {
     if (!$this->_id) {
       return;
@@ -228,11 +264,24 @@ class CPlageconsult extends CPlageHoraire {
     $this->_consult_by_categorie = $this->_spec->ds->loadList($query);
   }
 
+  /**
+   * Chargement global des références
+   *
+   * @param bool $withCanceled Prise en compte des consultations annulées
+   * @param int  $cache        Utilisation du cache
+   *
+   * @deprecated out of control resouce consumption
+   *
+   * @return void
+   */
   function loadRefs($withCanceled = true, $cache = 0) {
     $this->loadRefsFwd($cache);
     $this->loadRefsBack($withCanceled);
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd($cache = 0) {
     $this->_ref_chir        = $this->loadFwdRef("chir_id"       , $cache);
     $this->_ref_remplacant  = $this->loadFwdRef("remplacant_id" , $cache);
@@ -247,7 +296,10 @@ class CPlageconsult extends CPlageHoraire {
   function loadRefChir() {
     return $this->_ref_chir = $this->loadFwdRef("chir_id", true);
   }
-  
+
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     if (!$this->_id) {
       return parent::getPerm($permType);
@@ -259,6 +311,9 @@ class CPlageconsult extends CPlageHoraire {
       && parent::getPerm($permType);
   }
 
+  /**
+   * @see parent::check()
+   */
   function check() {
     // Data checking
     $msg = null;
@@ -281,6 +336,9 @@ class CPlageconsult extends CPlageHoraire {
     return $msg . parent::check();
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_total = CMbDT::timeCountIntervals($this->debut, $this->fin, $this->freq);
@@ -293,6 +351,9 @@ class CPlageconsult extends CPlageHoraire {
     }
   }
 
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     parent::updatePlainFields();
     $this->completeField("freq");
@@ -306,20 +367,29 @@ class CPlageconsult extends CPlageHoraire {
     }
   }
 
+  /**
+   * Find the next occurence of similar Plageconsult
+   * using the _type_repeat form field
+   *
+   * @return int Number of weeks jumped
+   */
   function becomeNext() {
     $week_jumped = 0;
 
     switch ($this->_type_repeat) {
-      case "quadruple": 
-        $this->date = CMbDT::date("+1 WEEK", $this->date); // 4
-        $week_jumped++;
+      case "quadruple":
+        $this->date = CMbDT::date("+4 WEEK", $this->date); // 4
+        $week_jumped += 4;
+        break;
       case "triple": 
-        $this->date = CMbDT::date("+1 WEEK", $this->date); // 3
-        $week_jumped++;
-      case "double": 
-        $this->date = CMbDT::date("+1 WEEK", $this->date); // 2
-        $week_jumped++;
-      case "simple": 
+        $this->date = CMbDT::date("+3 WEEK", $this->date); // 3
+        $week_jumped +=3;
+        break;
+      case "double":
+        $this->date = CMbDT::date("+2 WEEK", $this->date); // 2
+        $week_jumped +=2;
+        break;
+      case "simple":
         $this->date = CMbDT::date("+1 WEEK", $this->date); // 1
         $week_jumped++;
         break;
@@ -342,15 +412,15 @@ class CPlageconsult extends CPlageHoraire {
     }
 
     // Stockage des champs modifiés
-    $debut   = $this->debut;
-    $fin     = $this->fin;
-    $freq    = $this->freq;
-    $libelle = $this->libelle;
-    $locked  = $this->locked;
-    $color   = $this->color;
+    $debut          = $this->debut;
+    $fin            = $this->fin;
+    $freq           = $this->freq;
+    $libelle        = $this->libelle;
+    //$locked         = $this->locked;
+    $color          = $this->color;
     $desistee       = $this->desistee;
     $remplacant_id  = $this->remplacant_id;
-    $pour_compte_id  = $this->pour_compte_id;
+    $pour_compte_id = $this->pour_compte_id;
 
     // Recherche de la plage suivante
     $where["date"]    = "= '$this->date'";
@@ -361,19 +431,22 @@ class CPlageconsult extends CPlageHoraire {
     }
 
     // Remise en place des champs modifiés
-    $this->debut   = $debut;
-    $this->fin     = $fin;
-    $this->freq    = $freq;
-    $this->libelle = $libelle;
-    $this->locked  = $locked;
-    $this->color   = $color;
-    $this->desistee        = $desistee;
-    $this->remplacant_id   = $remplacant_id;
-    $this->pour_compte_id  = $pour_compte_id;
+    $this->debut          = $debut;
+    $this->fin            = $fin;
+    $this->freq           = $freq;
+    $this->libelle        = $libelle;
+    //$this->locked         = $locked;
+    $this->color          = $color;
+    $this->desistee       = $desistee;
+    $this->remplacant_id  = $remplacant_id;
+    $this->pour_compte_id = $pour_compte_id;
     $this->updateFormFields();
     return $week_jumped;
   }
 
+  /**
+   * @see parent::store()
+   */
   function store() {
     $this->completeField("pour_compte_id", "chir_id");
     $change_pour_compte = $this->fieldModified("pour_compte_id");

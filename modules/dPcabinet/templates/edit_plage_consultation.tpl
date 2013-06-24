@@ -175,7 +175,9 @@
             <td rowspan="3" class="text">
               <div class="small-info">
                 Pour modifier plusieurs plages (nombre de plages > 1),
-                veuillez ne pas changer les champs début et fin en même temps.
+                veuillez <strong>ne pas changer les champs début et fin en même temps</strong>.
+                <br />
+                L'état de verrouillage de la plage ne sera pas propagé sur les plages suivantes.
               </div>
             </td>
           </tr>

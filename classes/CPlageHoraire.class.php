@@ -1,12 +1,19 @@
-<?php /* $Id$ */
+<?php /** $Id */
 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * Class usef for calendar duration
+ *
+ * @category Classes
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  Release: $Id:\$
+ * @link     http://www.mediboard.org
+ */
 
+/**
+ * Classe utilitaire de gestion des plages horaires
+ */
 class CPlageHoraire extends CMbObject {
   // DB fields
   public $date;
@@ -20,7 +27,10 @@ class CPlageHoraire extends CMbObject {
    * @var self[]
    */
   public $_colliding_plages;
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["date"]             = "date notNull";
@@ -29,7 +39,10 @@ class CPlageHoraire extends CMbObject {
     $props["_skip_collisions"] = "bool default|0";
     return $props;
   }
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     
@@ -85,6 +98,9 @@ class CPlageHoraire extends CMbObject {
     return count($msgs) ? implode(", ", $msgs) : null;
   }
 
+  /**
+   * @see parent::store()
+   */
   function store() {
     if ($msg = $this->hasCollisions()) {
       return $msg;
@@ -92,7 +108,10 @@ class CPlageHoraire extends CMbObject {
     
     return parent::store();
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = sprintf(
@@ -102,7 +121,10 @@ class CPlageHoraire extends CMbObject {
       CMbDT::transform($this->fin  , null, CAppUI::conf("time"))
     );
   }
-  
+
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     // Usefull for automatic plages coming from instant consult in emergency
     if ($this->fin && $this->fin == "00:00:00") {

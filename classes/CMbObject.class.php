@@ -349,7 +349,7 @@ class CMbObject extends CStoredObject {
   
   /**
    * Back references global loader
-   * DEPRECATED: out of control resouce consumption
+   * DEPRECATED: out of control ressource consumption
    *
    * @return ref Object id
    */
