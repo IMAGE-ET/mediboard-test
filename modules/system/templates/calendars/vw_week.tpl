@@ -44,8 +44,9 @@ Main.add(function() {
 
   // hack for height div in td
   var height_planning = $('planningWeek').getHeight();
+  var minutes_height = (height_planning/{{$planning->hours|@count}})/{{$app->user_prefs.planning_hour_division}}+"px";
   $$('.minutes').each(function(elt) {
-    elt.style.height = (height_planning/{{$planning->hours|@count}})/{{$app->user_prefs.planning_hour_division}}+"px";
+    elt.style.height = minutes_height;
   });
 
 });
