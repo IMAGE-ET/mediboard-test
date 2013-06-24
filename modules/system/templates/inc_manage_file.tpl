@@ -70,14 +70,14 @@
       {{/if}}
       {{foreachelse}}
       <tr>
-        <td colspan="5">
+        <td colspan="5" class="empty">
           {{tr}}No-file{{/tr}}
         </td>
       </tr>
     {{/foreach}}
   {{else}}
     <tr>
-      <td colspan="5">{{tr}}Error-file{{/tr}}</td>
+      <td colspan="5" class="empty">{{tr}}Error-file{{/tr}}</td>
     </tr>
   {{/if}}
 </table>

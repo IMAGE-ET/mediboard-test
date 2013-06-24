@@ -237,3 +237,6 @@ $locales['mod-ftp-tab-configure'] = 'Configurer';
 $locales['mod-ftp-tab-vw_idx_exchange_ftp'] = 'Echanges FTP';
 $locales['utilities-source-ftp-manageFiles'] = 'Gestion des fichiers';
 $locales['config-source-http'] = 'Configuration source HTTP';
+$locales['List-of-file'] = 'Liste des fichiers';
+$locales['Error-file'] = 'Impossible de récupérer les fichiers';
+$locales['No-file'] = 'Aucun fichier';

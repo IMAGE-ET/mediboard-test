@@ -184,6 +184,7 @@ class CSourceFTP extends CExchangeSource {
     if (!$directory) {
       $directory = $this->fileprefix;
     }
+    $curent_directory = "";
     try {
       $ftp->connect();
       if ($directory) {
@@ -201,7 +202,7 @@ class CSourceFTP extends CExchangeSource {
 
   function getListFilesDetails($current_directory) {
     $ftp = $this->init($this);
-
+    $files = "";
     try {
       $ftp->connect();
 
@@ -237,6 +238,7 @@ class CSourceFTP extends CExchangeSource {
     if (!$current_directory) {
       $current_directory = $this->fileprefix;
     }
+    $directories = "";
     try {
       $ftp->connect();
 
