@@ -29,6 +29,7 @@ class CMbRedisMutex extends CMbMutexDriver {
       try {
         $client = new CRedisClient($_server[0], $_server[1]);
         $client->connect();
+        break;
       }
       catch (Exception $e) {
         $client = null;
