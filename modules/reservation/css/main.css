@@ -43,3 +43,11 @@
 #planning_interv .planning tr:hover {
   border:solid 3px black!important;
 }
+
+.planning .minutes {
+  position:relative;
+  float:left;
+  width:100%;
+  padding:0!important;
+  margin:0!important;
+}

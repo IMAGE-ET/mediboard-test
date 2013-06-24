@@ -225,11 +225,12 @@
     
     {{if $can->edit}}
       // Création d'une interv sur une case à une heure donnée
-      planning_div.select("td").each(function(elt) {
+      planning_div.select("div.minutes").each(function(elt) {
 
         elt.observe('dblclick', function() {
           var classes = elt.className.split("  ");
-          var hour = classes[0].split("-")[2];
+          var hour = $(elt).get("hour");
+          var minutes = $(elt).get("minutes");
           var salle_id = planning.salles_ids[classes[0].split("-")[1]];
 
           // Mode commentaire
@@ -255,7 +256,7 @@
           }
           
           // - Création
-          modifIntervention("{{$date_planning}}", hour, salle_id);
+          modifIntervention("{{$date_planning}}", hour, salle_id, null, null, null, minutes);
         });
       });
     {{/if}}

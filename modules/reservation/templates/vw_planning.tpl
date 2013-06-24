@@ -28,7 +28,7 @@
     else {
       autorefreshPlanning.resume();
     }
-  }
+  };
 
   function strpad(val){
     return (!isNaN(val) && val.toString().length==1) ? "0" + val : val;
@@ -58,7 +58,7 @@
     }
 
 
-  }
+  };
 
 
   refreshPlanning = function(period) {
@@ -76,7 +76,7 @@
         frequency: period});
     }
     url.requestUpdate("planning");
-  }
+  };
 
   modifPlage = function(plage_id, date) {
     var url = new Url("dPbloc", "inc_edit_planning");
@@ -86,9 +86,9 @@
     url.modalObject.observe("afterClose", function() {
       refreshPlanning();
     });
-  }
+  };
   
-  modifIntervention = function(date, hour, salle_id, operation_id, enplage, chir_id) {
+  modifIntervention = function(date, hour, salle_id, operation_id, enplage, chir_id, minutes) {
     if (enplage) {
       var url = new Url("dPplanningOp", "vw_edit_planning");
     }
@@ -97,7 +97,7 @@
       url.addParam("date_urgence", date);
       url.addParam("hour_urgence", hour);
       url.addParam("salle_id"    , salle_id);
-      url.addParam("min_urgence" , "00");
+      url.addParam("min_urgence" , minutes);
     }
 
     if (chir_id) {
@@ -111,7 +111,7 @@
       height: "95%",
       onClose: function(){ refreshPlanning(); } // Laisser dans une fonction anonyme a cause de l'argument "period"
     });
-  }
+  };
   
   pasteIntervention = function(operation_id, salle_id, heure, sejour_id, duree) {
     var heure = heure+":00:00";
@@ -126,7 +126,7 @@
         "date": date,
         "duree": duree,
         "time_operation": heure,
-        "salle_id": salle_id,
+        "salle_id": salle_id
       };
       
       // Création d'un nouveau séjour si la date d'intervention ne colle pas
@@ -165,7 +165,7 @@
       updateStatusCut();
       refreshPlanning();
     } });
-  }
+  };
   
   updateStatusCut = function() {
     var div = $("status_cut");
@@ -184,7 +184,7 @@
         window.save_elem.removeClassName("opacity-50");
       }
     }
-  }
+  };
   
   modifSejour = function(operation_id, date_move, sejour_id, entree_prevue, sortie_prevue, new_sejour, callback) {
     var url = new Url("dPplanningOp", "ajax_edit_dates_sejour");
@@ -210,7 +210,7 @@
     }
     url.requestModal(300);
     url.modalObject.observe("afterClose", refreshPlanning);
-  }
+  };
   
   afterModifSejour = function() {
     // Après un drag and drop
@@ -249,7 +249,7 @@
       });
       window.save_cut_operation = null;
     }
-  }
+  };
   
   modifCommentaire = function(date, hour, salle_id, commentaire_id, clone) {
     var url = new Url("reservation", "ajax_edit_commentaire");
@@ -268,8 +268,8 @@
     
     url.requestModal(500, 300);
     url.modalObject.observe("afterClose", refreshPlanning);
-  }
-  
+  };
+
   afterCopy = function(sejour_id, sejour) {
     // Après la copie de séjour et intervention,
     // on ne vide pas l'opération sauvegardée
@@ -281,19 +281,19 @@
     $V(form.date, window.save_copy_operation.date);
     $V(form.time_operation, window.save_copy_operation.time_operation);
     onSubmitFormAjax(form, {onComplete: Control.Modal.close});
-  }
+  };
 
   planningInter = function(plageop_id) {
     var url = new Url("dPbloc", "vw_edit_interventions");
-    url.addParam("plageop_id", plageop_id)
+    url.addParam("plageop_id", plageop_id);
     url.requestModal(1000,700);
     url.modalObject.observe("afterClose", refreshPlanning);
-  }
+  };
 
   openLegend = function() {
     var url = new Url("reservation", "ajax_legend_planning");
     url.requestModal();
-  }
+  };
 
 
   updateSession = function(variable, value) {
@@ -303,14 +303,14 @@
     url.requestUpdate("systemMsg", function() {
       refreshPlanning();
     });
-  }
+  };
 
   modalDossierBloc = function(operation_id) {
     var url = new Url("dPsalleOp", "ajax_vw_operation");
     url.addParam("op", operation_id);
     url.addParam("hide_finished", 1);
     url.requestModal(1000,500);
-  }
+  };
 
 </script>
 

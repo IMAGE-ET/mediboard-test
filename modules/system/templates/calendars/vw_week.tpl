@@ -125,10 +125,26 @@ Main.add(function() {
             {{/if}}
             
             <td class="segment-{{$_day}}-{{$_hour}} {{if $disabled}}disabled{{/if}} {{if $unavail}}unavailable{{/if}} day-{{$smarty.foreach.days.index}}">
-              {{if $planning->show_half}}
-                <div style="width: 100%; height: 1px; background: #ccc;" class="show_half opacity-50"></div>
+
+
+            <!--hour subdivision -->
+              {{if $app->user_prefs.planning_hour_division > 0}}
+                {{math assign=division equation="(a-1)" a=$app->user_prefs.planning_hour_division}}
+                {{math assign=_height equation="100/(a+1)" a=$division}}
+                {{math assign=_minuteDiv equation="60/(a+1)" a=$division}}
+                {{foreach from=0|range:$division name=it item=i}}
+                  {{math assign=_minute equation="60/(a+1)" a=$i}}
+                  <div style="
+                    height:{{$_height}}%;
+                    {{if $smarty.foreach.it.index != $division}}border-bottom:solid 1px #ddd!important;{{/if}}
+                    top:{{math equation="a*b" a=$_height b=$i}}%;"
+                       class="segment-{{$_day}}-{{$_hour}} minutes"
+                    data-minutes="{{math equation="a*b" a=$i b=$_minuteDiv}}" data-hour="{{$_hour}}">
+                    {{math equation="a*b" a=$i b=$_minuteDiv}}
+                  </div>
+                {{/foreach}}
               {{/if}}
-              
+
               {{if isset($planning->ranges_sorted.$_day.$_hour|smarty:nodefaults)}}
                 {{assign var=has_range value=true}} 
               {{else}}
