@@ -43,6 +43,15 @@
     z-index: 50!important;
   }
 
+  .planning td {
+    border:solid 1px #bbb!important;
+  }
+
+
+  .planning div.minute-30 {
+    border-top:solid 1px #ccc!important;
+  }
+
 
 </style>
   {{if $can->edit && ($nbIntervNonPlacees || $nbIntervHorsPlage || $nbAlertesInterv)}}
