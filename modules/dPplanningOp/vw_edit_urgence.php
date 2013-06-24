@@ -112,11 +112,11 @@ if ($op->_id) {
   $patient = $sejour->_ref_patient;
 }
 else {
-  if ($hour_urgence && $min_urgence) {
+  if ($hour_urgence && isset($min_urgence)) {
     $op->_hour_urgence = intval(substr($hour_urgence, 0, 2));
     $op->_min_urgence  = intval(substr($min_urgence, 0, 2));
   }
-  
+
   $op->date = $op->_datetime = $date_urgence ? $date_urgence : CMbDT::date();
   $op->salle_id = $salle_id;
 }
