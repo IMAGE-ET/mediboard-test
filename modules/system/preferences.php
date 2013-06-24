@@ -29,6 +29,7 @@ CPreferences::$modules["common"] = array (
   "sessionLifetime",
   "planning_resize",
   "planning_dragndrop",
+  "planning_hour_division"
 );
   
 CPreferences::$modules["system"] = array (

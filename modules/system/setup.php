@@ -1369,6 +1369,9 @@ class CSetupsystem extends CSetup {
                 ADD INDEX (`requestUID`);";
     $this->addQuery($query);
 
+    $this->makeRevision("1.1.40");
+    $this->addPrefQuery("planning_hour_division", "2");
+
     /*
     // Création des deux nouveaux champs
     $this->makeRevision("1.1.36");
@@ -1395,7 +1398,7 @@ class CSetupsystem extends CSetup {
     $this->addQuery($query);
     */
 
-    $this->mod_version = "1.1.40";
+    $this->mod_version = "1.1.41";
 
     /*$query = "ALTER TABLE user_log
         DROP INDEX object_id,
