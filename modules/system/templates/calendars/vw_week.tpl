@@ -140,7 +140,6 @@ Main.add(function() {
                     top:{{math equation="a*b" a=$_height b=$i}}%;"
                        class="segment-{{$_day}}-{{$_hour}} minutes"
                     data-minutes="{{math equation="a*b" a=$i b=$_minuteDiv}}" data-hour="{{$_hour}}">
-                    {{math equation="a*b" a=$i b=$_minuteDiv}}
                   </div>
                 {{/foreach}}
               {{/if}}
