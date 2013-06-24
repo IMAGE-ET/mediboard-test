@@ -569,7 +569,11 @@ class CEditPdf{
       $this->pdf->Cell(25, "", CMbDT::format($this->relance->date, "%d %B %Y"), null, null, "L");
     }
     $this->editCell($colonne1, $this->pdf->GetY()+3, 22, "N° facture:", "R");
-    $this->pdf->Cell(25, "", $this->facture->_id, null, null, "L");
+    $num_fact = $this->facture->_id;
+    if (CAppUI::conf("dPfacturation Other use_field_definitive") && !$this->facture->definitive) {
+      $num_fact = "PROVISOIRE";
+    }
+    $this->pdf->Cell(25, "", $num_fact, null, null, "L");
     $this->editCell($colonne1, $this->pdf->GetY()+3, 22, "Traitement du:", "R");
     $this->pdf->Cell(25, "", CMbDT::format($this->facture->_ref_first_consult->_date, "%d %B %Y"), null, null, "L");
     $this->editCell($colonne1, $this->pdf->GetY()+3, 22, "au:", "R");
@@ -811,6 +815,10 @@ class CEditPdf{
     if ($this->facture->_class == "CFactureEtablissement") {
       $ean2 = $this->facture->_ref_last_sejour->_ref_last_operation->_ref_anesth->ean;
     }
+    $num_fact = $this->facture->_id;
+    if (CAppUI::conf("dPfacturation Other use_field_definitive") && !$this->facture->definitive) {
+      $num_fact = "PROVISOIRE";
+    }
     $lignes = array(
       array("Patient"   , "Nom"             , $this->patient->nom     ,null, "Assurance", $assur_nom),
       array(""          , "Prénom"          , $this->patient->prenom),
@@ -829,7 +837,7 @@ class CEditPdf{
       array(""          , "Type de remb."   , $this->type_rbt),
       array(""          , "Loi"             , $loi),
       array(""          , "N° contrat"      , ""),
-      array(""          , "Motif traitement", $motif  , null, "N° facture", $this->facture->_id),
+      array(""          , "Motif traitement", $motif  , null, "N° facture", $num_fact),
       array(""          , "Traitement"      , $traitement, null, $name_rappel, $date_rappel),
       array(""          , "Rôle/ Localité"  , "-"),
       array("Mandataire", "N° EAN/N° RCC"   , $this->praticien->ean." - ".$this->praticien->rcc, null, $this->praticien->_view),
