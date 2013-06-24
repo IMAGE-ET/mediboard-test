@@ -310,10 +310,17 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   function getANMotherIdentifier(DOMNode $node) {
     $PID_21 = $this->queryNodes("PID.21", $node);
     foreach ($PID_21 as $_PID21) {
-      if ($this->queryTextNode("CX.5", $_PID21) == "AN") {
+      if (CHL7v2Message::$handle_mode == "simple") {
         return $this->queryTextNode("CX.1", $_PID21);
       }
+      else {
+        if ($this->queryTextNode("CX.5", $_PID21) == "AN") {
+          return $this->queryTextNode("CX.1", $_PID21);
+        }
+      }
     }
+
+    return null;
   }
 
   /**
