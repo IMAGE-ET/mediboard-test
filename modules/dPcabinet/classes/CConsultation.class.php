@@ -1983,6 +1983,7 @@ class CConsultation extends CFacturable {
     if ($prat_id) {
       $prat = new CMediusers();
       $prat->load($prat_id);
+      $prat->loadRefFunction();
       return array($prat->_id => $prat);
     }
 
