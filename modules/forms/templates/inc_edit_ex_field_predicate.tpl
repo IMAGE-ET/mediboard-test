@@ -148,7 +148,7 @@ Main.add(function(){
     </tr>
     <tr>
       <th id="field-label">{{mb_label object=$ex_field_predicate field=value}}</th>
-      <td>
+      <td class="text">
         <div id="field-view">{{mb_field object=$ex_field_predicate field=value hidden=true}}</div>
         <div id="field-view-novalue" class="empty">N/A</div>
       </td>
