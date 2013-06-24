@@ -20,11 +20,17 @@
     url.modalObject.observe("afterClose", function() {
       refreshPlanning();
     });
-  }
+  };
 
   Main.add(function() {
+    var height_planning = 1500;
     ViewPort.SetAvlHeight("planningInterventions", 1);
-      $('planningWeek').style.height = "1500px";
+      $('planningWeek').style.height = height_planning+"px";
+
+    //hack for div
+      $$('.minutes').each(function(elt) {
+        elt.style.height = (height_planning/24)/{{$app->user_prefs.planning_hour_division}}+"px";
+      });
     $$(".body").each(function(elt) {
       elt.setStyle({backgroundColor: elt.up().getStyle("backgroundColor")});
     });
