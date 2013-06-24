@@ -18,6 +18,11 @@ table.tabmenu td.selected.right {
   background: url(../e-cap/images/icons/tabSelectedRight.png) no-repeat center left;
 }
 
+.modal {
+  border: 2px solid #eee;
+  background-color: #fff;
+}
+
 /* Main table */
 table#main {
   padding-top:32px;

@@ -1,8 +1,13 @@
 body {
   font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
-  background: #EFEFEF;
+  background: #efefef;
   color: #000000;
   cursor: default;
+}
+
+.modal {
+  border: 2px solid #ff6600;
+  background-color: #fcfcfe;
 }
 
 :focus {

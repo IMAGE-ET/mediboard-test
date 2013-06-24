@@ -1,5 +1,11 @@
 @import url(../e-cap/main.css);
 
+
+.modal {
+  border: 2px solid #eee;
+  background-color: #fff;
+}
+
 /* Login */
 #login table {
   border: solid #000 3px;

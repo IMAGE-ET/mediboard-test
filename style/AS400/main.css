@@ -9,6 +9,11 @@ body {
   margin: 0;
 }
 
+.modal {
+  border: 2px solid #0f0;
+  background-color: #000;
+}
+
 table {
   font-size: 1em;
 }

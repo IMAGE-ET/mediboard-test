@@ -5,6 +5,10 @@
   background: url(./images/pictures/acier.png) repeat-x scroll bottom left;
 }
 
+.modal {
+  border: 2px solid #fff;
+  background: url(./images/pictures/acierOnglet.png) repeat;
+}
 
 #menubar table td.textSelected,
 #menubar table td.textNonSelected {
