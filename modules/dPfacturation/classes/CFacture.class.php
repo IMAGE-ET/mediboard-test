@@ -289,7 +289,7 @@ class CFacture extends CMbObject {
       }
       
       //Si la facture existe déjà
-      if ($this->loadObject($where, null, null, $ljoin)) {
+      if ($this->loadObject($where, null, "facture_id", $ljoin)) {
         //Dans le cas Suisse
         if (CAppUI::conf("ref_pays") == 2 && CModule::getActive("dPfacturation")) {
           $ligne = new CFactureLiaison();
