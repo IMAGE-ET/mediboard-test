@@ -165,7 +165,7 @@ Main.add(function () {
   {{foreach from=$app->user_prefs.NbConsultMultiple|range:2:-1 item=j}}
     <div id="listPlaces-{{$j}}" class="listPlace" style="float:right; width:{{$width}}%"></div>
     <script>
-      ViewPort.SetAvlHeight('listPlaces-{{$j}}', 1);
+      ViewPort.SetAvlHeight('listPlaces-{{$j}}',.95);
     </script>
   {{/foreach}}
 {{/if}}
@@ -175,6 +175,6 @@ Main.add(function () {
 
   
 <script>
-  ViewPort.SetAvlHeight('listPlaces-1', 1);
-  ViewPort.SetAvlHeight('listePlages', 1);
+  ViewPort.SetAvlHeight('listPlaces-1',.95);
+  ViewPort.SetAvlHeight('listePlages', .95);
 </script>
