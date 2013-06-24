@@ -843,6 +843,11 @@ class CSejour extends CFacturable implements IPatientRelated {
       }
     }
 
+    // Mode de sortie normal par défaut si l'autorisation de sortie est réalisée
+    if ($this->conf("specified_output_mode") && !$this->mode_sortie && $this->fieldModified("confirme")) {
+      $this->mode_sortie = "normal";
+    }
+
     // Annulation de l'établissement de transfert si le mode de sortie n'est pas transfert
     if (null !== $this->mode_sortie) {
       if ("transfert" != $this->mode_sortie) {

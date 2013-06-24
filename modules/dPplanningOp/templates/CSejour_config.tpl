@@ -50,7 +50,7 @@
     </tbody>
     {{mb_include module=system template=inc_config_bool var=use_recuse}}
     {{mb_include module=system template=inc_config_enum var=systeme_isolement values=standard|expert}}
-
+    {{mb_include module=system template=inc_config_bool var=specified_output_mode}}
     <tr>
       <th class="title" colspan="2">
         Modes de traitement / entrée / sortie
