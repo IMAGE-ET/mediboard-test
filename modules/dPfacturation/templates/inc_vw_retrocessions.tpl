@@ -13,7 +13,7 @@
 {{if isset($factures|smarty:nodefaults)}}
   {{if $print}}
     <h2 style="text-align: center;">
-      Rétrocession pour la période du {{$filter->_date_min|date_format:"%d/%m/%Y"}} au {{$filter->_date_max|date_format:"%d/%m/%Y"}}
+      {{tr}}CRetrocession{{/tr}} pour la période du {{$filter->_date_min|date_format:"%d/%m/%Y"}} au {{$filter->_date_max|date_format:"%d/%m/%Y"}}
       {{if $prat->_id}}
         <br/> pour le praticien {{$prat->_view}}
       {{/if}}
@@ -23,7 +23,7 @@
     {{if !$print}}
       <tr>
         <th colspan="7" class="title">
-          Rétrocession pour la période du {{$filter->_date_min|date_format:"%d/%m/%Y"}} au {{$filter->_date_max|date_format:"%d/%m/%Y"}}
+          {{tr}}CRetrocession{{/tr}} pour la période du {{$filter->_date_min|date_format:"%d/%m/%Y"}} au {{$filter->_date_max|date_format:"%d/%m/%Y"}}
         </th>
         <th class="title">
           <button type="button" class="print" onclick="printRetrocession();">Imprimer</button>
@@ -37,7 +37,7 @@
       <th class="narrow">Praticien</th>
       <th>Patient</th>
       <th>Montant total</th>
-      <th>Rétrocession</th>
+      <th>{{tr}}CRetrocession{{/tr}}</th>
       <th class="narrow">Résultat</th>
     </tr>
     {{foreach from=$factures item=facture}}
