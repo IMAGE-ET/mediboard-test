@@ -144,9 +144,8 @@ Main.add(function() {
                   {{math assign=_minute equation="60/(a+1)" a=$i}}
                   <div style="
                     height:{{$_height}}%;
-                    {{if $smarty.foreach.it.index != $division}}border-bottom:solid 1px #ddd!important;{{/if}}
                     top:{{math equation="a*b" a=$_height b=$i}}%;"
-                       class="segment-{{$_day}}-{{$_hour}} minutes"
+                       class="segment-{{$_day}}-{{$_hour}} minutes minute-{{math equation="a*b" a=$i b=$_minuteDiv}}"
                     data-minutes="{{math equation="a*b" a=$i b=$_minuteDiv}}" data-hour="{{$_hour}}">
                   </div>
                 {{/foreach}}
