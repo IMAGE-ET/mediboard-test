@@ -18,6 +18,7 @@ printRelance = function(facture_id, type_pdf, relance_id) {
       <th>{{mb_label object=$facture->_ref_last_relance field=date}}</th>
       <th>{{mb_label object=$facture->_ref_last_relance field=_montant}}</th>
       <th>{{mb_label object=$facture->_ref_last_relance field=etat}}</th>
+      <th>{{mb_label object=$facture->_ref_last_relance field=statut}}</th>
       <th class="narrow">Action</th>
     </tr>
     {{foreach from=$facture->_ref_relances item=relance}}
@@ -26,6 +27,7 @@ printRelance = function(facture_id, type_pdf, relance_id) {
         <td>{{mb_value object=$relance field=date}}</td>
         <td>{{mb_value object=$relance field=_montant}}</td>
         <td>{{mb_value object=$relance field=etat}}</td>
+        <td>{{mb_value object=$relance field=statut}}</td>
         <td>
           {{if $conf.ref_pays == 2}}
             <button type="button" class="pdf notext"   onclick="printRelance('{{$facture->_id}}', 'relance', '{{$relance->_id}}');">  </button>

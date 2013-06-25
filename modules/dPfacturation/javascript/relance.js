@@ -19,7 +19,7 @@ Relance = {
   modify: function(relance_id) {
     var url = new Url('facturation', 'ajax_edit_relance');
     url.addParam('relance_id', relance_id);
-    url.requestModal(500);
+    url.requestModal(500, 300);
   }
 };
 

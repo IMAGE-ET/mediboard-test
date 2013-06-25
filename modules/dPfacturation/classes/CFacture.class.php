@@ -951,6 +951,9 @@ class CFacture extends CMbObject {
     $nb_third_relance  = CAppUI::conf("dPfacturation CRelance nb_days_third_relance");
 
     $this->_ref_last_relance = !count($this->_ref_relances) ? new CRelance() : end($this->_ref_relances);
+    if ($this->_ref_last_relance->statut == "inactive") {
+      return $this->_is_relancable;
+    }
 
     if (($this->_du_restant_patient > 0 || $this->_du_restant_tiers > 0) && $this->cloture && !$this->annule) {
       $first   = !count($this->_ref_relances) && CMbDT::daysRelative($this->cloture, $date) >= $nb_first_relance;

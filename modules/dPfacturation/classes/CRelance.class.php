@@ -24,7 +24,9 @@ class CRelance extends CMbMetaObject {
   public $du_patient;
   public $du_tiers;
   public $numero;
-  
+  public $statut;
+  public $poursuite;
+
   public $_montant;
   // Object References
   /** @var  CFactureCabinet|CFactureEtablissement $_ref_object*/
@@ -51,6 +53,9 @@ class CRelance extends CMbMetaObject {
     $props["numero"]        = "num notNull min|1 max|10 default|1";
     $props["du_patient"]    = "currency decimals|2";
     $props["du_tiers"]      = "currency decimals|2";
+    $props["statut"]        = "enum list|inactive|first|second|third|contentieux|poursuite";
+    $props["poursuite"]     = "enum list|defaut|continuation|etranger|faillite|hors_pays|deces|inactive|saisie|introuvable";
+
     $props["_montant"]      = "currency decimals|2";
     return $props;
   }
@@ -93,6 +98,9 @@ class CRelance extends CMbMetaObject {
       $this->du_tiers   = $this->_ref_object->_du_restant_tiers;
       $der_relance      = $this->_ref_object->_ref_last_relance;
       if ($der_relance->_id) {
+        if ($der_relance->statut == "inactive") {
+          return "La derniere relance est inactive";
+        }
         if ($der_relance->etat != "regle") {
           $this->numero = $der_relance->numero + 1;
           $der_relance->etat = "renouvelle";
@@ -108,12 +116,15 @@ class CRelance extends CMbMetaObject {
       switch ($this->numero) {
         case "1":
           $this->du_patient += CAppUI::conf("dPfacturation CRelance add_first_relance");
+          $this->statut = "first";
           break;
         case "2":
           $this->du_patient += CAppUI::conf("dPfacturation CRelance add_second_relance");
+          $this->statut = "second";
           break;
         case "3":
           $this->du_patient += CAppUI::conf("dPfacturation CRelance add_third_relance");
+          $this->statut = "third";
           break;
       }
     }

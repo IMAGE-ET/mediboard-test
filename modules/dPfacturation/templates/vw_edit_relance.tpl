@@ -1,3 +1,15 @@
+<script>
+  updatePoursuite = function(statut) {
+    if (statut.value == "poursuite") {
+      $('change_poursuite').show();
+    }
+    else {
+      $('change_poursuite').hide();
+      var form = getForm('Edit-CRelance');
+      form.poursuite.value = "";
+    }
+  }
+</script>
 <form name="Edit-CRelance" action="?m={{$m}}" method="post" onsubmit="onSubmitFormAjax(this);">
   {{mb_key    object=$relance}}
   {{mb_class  object=$relance}}
@@ -21,6 +33,14 @@
   <tr>
     <th>{{mb_label object=$relance field=etat}}</th>
     <td>{{mb_field object=$relance field=etat}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$relance field=statut}}</th>
+    <td>{{mb_field object=$relance field=statut emptyLabel=Choose onchange="updatePoursuite(this);"}}</td>
+  </tr>
+  <tr {{if $relance->statut != "poursuite"}} style="display:none;" {{/if}} id="change_poursuite">
+    <th>{{mb_label object=$relance field=poursuite}}</th>
+    <td>{{mb_field object=$relance field=poursuite emptyLabel=Choose}}</td>
   </tr>
 
   <tr>
