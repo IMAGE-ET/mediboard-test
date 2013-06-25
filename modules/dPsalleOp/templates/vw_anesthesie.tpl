@@ -1,3 +1,5 @@
+{{mb_script module=bloc script=edit_planning}}
+
 <script type="text/javascript">
 
 Main.add(function () {

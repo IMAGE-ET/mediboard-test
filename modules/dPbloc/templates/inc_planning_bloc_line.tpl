@@ -46,7 +46,7 @@
       {{assign var=affectations value=$plage->_ref_affectations_personnel}}
 
       {{if ($affectations.op|@count) || ($affectations.op_panseuse|@count) || ($affectations.iade|@count)}}
-        <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$plage->plageop_id}}">
+        <a onclick="EditPlanning.order('{{$plage->_id}}');" href="#" title="Agencer les interventions">
         <img src="images/icons/personnel.png" border="0" height="16" width="16" 
              onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-plage-{{$plage->_id}}")' />
          {{mb_include module=system template=inc_vw_counter_tip count=$plage->_count_affectations_personnel}}

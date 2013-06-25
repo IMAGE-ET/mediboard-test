@@ -6,7 +6,7 @@
   <tr>
     <th class="category{{if $vueReduite}} text{{/if}}" colspan="2">
       {{mb_include module=system template=inc_object_notes object=$_plage}}
-      <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$_plage->_id}}" title="Administrer la plage">
+      <a onclick="EditPlanning.order('{{$_plage->_id}}');" href="#" title="Agencer les interventions">
         {{$_plage->_ref_salle->_view}}
         {{if $vueReduite}}
           <br />

@@ -17,7 +17,7 @@
   <tr>
     <th class="category text" colspan="2">
       {{mb_include module=system template=inc_object_notes object=$_plage}}
-      <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$_plage->_id}}" title="Administrer la plage">
+      <a onclick="EditPlanning.order('{{$_plage->_id}}');" href="#" title="Agencer les interventions">
         {{if $_plage->chir_id}}
         Chir : Dr {{$_plage->_ref_chir->_view}}
         {{else}}
@@ -78,7 +78,7 @@
   <tr>
     <td class="button" colspan="2">
       <input type="hidden" name="actes_locked" value="{{$_plage->actes_locked}}" />
-      <button class="submit" type="button" onclick="$V(this.form.actes_locked, 1); if(confirmeCloture()) {this.form.submit()};">Cloturer le codage</button>
+      <button class="submit" type="button" onclick="$V(this.form.actes_locked, 1); if(confirmeCloture()) {this.form.submit()}">Cloturer le codage</button>
     </td>
   </tr>
   {{elseif $_plage->actes_locked}}

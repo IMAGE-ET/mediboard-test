@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module=bloc script=edit_planning}}
+
 <script type="text/javascript">
 Main.add(function () {
   Calendar.regField(getForm("changeDate").date, null, {noView: true});
