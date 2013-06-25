@@ -108,7 +108,7 @@ Main.add(function() {
       else {
         $V(input.form.code_ucd, selected.select(".code-ucd")[0].innerHTML);
       }
-      var libelle_ucd = selected.select(".libelle_ucd")[0].innerHTML;
+      var libelle_ucd = selected.select(".libelle")[0].innerHTML;
       libelle_ucd = libelle_ucd.replace(/(^\s+|\s+$)/g, '').replace(/<em>|<\/em>/g, '');
       $V(input, libelle_ucd);
     }

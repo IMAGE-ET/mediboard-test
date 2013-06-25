@@ -26,14 +26,14 @@ Main.add(function () {
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_antecedent_aed" />
         <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
-      
+
         <!-- dossier_medical_id du sejour si c'est une consultation_anesth -->
-        
+
         {{if $sejour_id}}
         <!-- On passe _sejour_id seulement s'il y a un sejour_id -->
         <input type="hidden" name="_sejour_id" value="{{$sejour_id}}" />
         {{/if}}
-      
+
         <table class="layout main">
           <tr>
             {{if $app->user_prefs.showDatesAntecedents}}
@@ -92,14 +92,14 @@ Main.add(function () {
             <form name="editLineTP{{$addform}}" action="?m=dPcabinet" method="post">
               <input type="hidden" name="m" value="dPprescription" />
               <input type="hidden" name="dosql" value="do_add_line_tp_aed" />
-              <input type="hidden" name="code_cip" value="" onchange="refreshAddPoso(this.value);"/>
+              <input type="hidden" name="_code" value="" onchange="refreshAddPoso(this.value);"/>
               <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
               <input type="hidden" name="praticien_id" value="{{$userSel->_id}}" />
-              
+
               <table class="layout">
                 <col style="width: 70px;" />
                 <col class="narrow" />
-              
+
                 <tr>
                   <th>Recherche</th>
                   <td>
@@ -107,25 +107,20 @@ Main.add(function () {
                       <input type="text" name="produit" value="" size="12" class="autocomplete" />
                       <div style="display:none; width: 350px;" class="autocomplete" id="_produit_auto_complete"></div>
                     </div>
-                    
+
                     <button type="button" class="search notext" onclick="MedSelector.init('produit');"></button>
                     <script type="text/javascript">
                         MedSelector.init = function(onglet){
                           this.sForm = "editLineTP{{$addform}}";
                           this.sView = "produit";
-                          this.sCode = "code_cip";
+                          this.sCode = "_code";
                           this.sSearch = document.editLineTP{{$addform}}.produit.value;
                           this.sSearchByCIS = 1;
                           this.selfClose = true;
                           this._DCI = 0;
                           this.sOnglet = onglet;
+                          this.traitement_perso = true;
                           this.pop();
-                        }
-                        MedSelector.doSet = function(){
-                          var oForm = document[MedSelector.sForm];
-                          $('_libelle').update(MedSelector.prepared.nom);
-                          $V(oForm.code_cip, MedSelector.prepared.code);
-                          $('button_submit_traitement').focus();
                         }
                     </script>
                   </td>
@@ -133,7 +128,7 @@ Main.add(function () {
                     <strong><div id="_libelle"></div></strong>
                   </td>
                 </tr>
-                
+
                 <tr>
                   {{if $app->user_prefs.showDatesAntecedents}}
                   <th>{{mb_label object=$line field="debut"}}</th>
@@ -143,27 +138,27 @@ Main.add(function () {
                   {{/if}}
                   <td rowspan="2" id="addPosoLine"></td>
                 </tr>
-                
+
                 {{if $app->user_prefs.showDatesAntecedents}}
                 <tr>
                   <th>{{mb_label object=$line field="fin"}}</th>
                   <td>{{mb_field object=$line field="fin" register=true form=editLineTP$addform}}</td>
                 </tr>
                 {{/if}}
-                
+
                 <tr>
                   <th>{{mb_label object=$line field="commentaire"}}</th>
                   <td>{{mb_field object=$line field="commentaire" size=20 form=editLineTP$addform}}</td>
                 </tr>
-                
+
                 <tr>
                   <th>{{mb_label object=$line field="long_cours"}}</th>
                   <td>{{mb_field object=$line field="long_cours" typeEnum=checkbox value=1}}</td>
                 </tr>
-                
+
                 <tr>
                   <td colspan="3" class="button">
-                    <button id="button_submit_traitement" class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
+                    <button id="button_submit_traitement" class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {
                       onComplete: function(){
                         DossierMedical.reloadDossiersMedicaux();
                         resetEditLineTP();

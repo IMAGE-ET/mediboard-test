@@ -110,9 +110,9 @@ DossierMedical = {
   }
 }
  
-refreshAddPoso = function(code_cip){
+refreshAddPoso = function(code){
   var url = new Url("dPprescription", "httpreq_vw_select_poso");
-  url.addParam("code_cip", code_cip);
+  url.addParam("_code", code);
   url.requestUpdate("addPosoLine");
 }
 
@@ -186,7 +186,7 @@ var oFormTP = getForm("editLineTP");
 // UpdateFields de l'autocomplete de medicaments
 updateFieldsMedicamentTP = function(selected) {
   // Submit du formulaire avant de faire le selection d'un nouveau produit
-  if(oFormTP.code_cip.value){
+  if(oFormTP._code.value){
     submitFormAjax(oFormTP, "systemMsg", { onComplete: function() { 
       updateTP(selected);
       DossierMedical.reloadDossiersMedicaux();
@@ -200,7 +200,7 @@ updateTP = function(selected){
   resetEditLineTP();
   Element.cleanWhitespace(selected);
   var dn = selected.childElements();
-  $V(oFormTP.code_cip, dn[0].innerHTML);
+  $V(oFormTP._code, dn[0].innerHTML);
   $("_libelle").insert("<button type='button' class='cancel notext' onclick='resetEditLineTP(); resetFormTP();'></button><a href=\"#nothing\" onclick=\"Prescription.viewProduit('','"+dn[1].innerHTML+"','"+dn[2].innerHTML+"')\">"+dn[3].innerHTML.stripTags()+"</a>");
   $V(oFormTP.produit, '');
   $('button_submit_traitement').focus();
@@ -218,7 +218,7 @@ urlAuto.autoComplete(getForm('editLineTP').produit, "_produit_auto_complete", {
 
 resetEditLineTP = function(){
   $("_libelle").update("");
-  oFormTP.code_cip.value = '';
+  oFormTP._code.value = '';
 }
 
 resetFormTP = function(){
