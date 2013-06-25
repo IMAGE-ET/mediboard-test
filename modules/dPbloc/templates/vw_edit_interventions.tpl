@@ -8,7 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=bloc script=edit_planning}}
+{{mb_script module=bloc       script=edit_planning ajax=1}}
+{{mb_script module=planningOp script=operation     ajax=1}}
 
 <script>
   printFicheAnesth = function(dossier_anesth_id, operation_id) {

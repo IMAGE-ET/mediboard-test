@@ -6,7 +6,6 @@
   };
   
   Main.add(function(){
-    var oForm = getForm("editPlageTiming");
     var options = {
       exactMinutes: false, 
       minInterval : {{$conf.dPplanningOp.COperation.min_intervalle}},
@@ -113,7 +112,7 @@
     </td>
     
     <td class="text" style="vertical-align: top;">
-      <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$_op->_id}}">
+      <a onclick="Operation.editModal({{$_op->_id}}, {{$_op->plageop_id}})" href="#">
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}');">
           {{if $_op->libelle}}
             <strong>{{$_op->libelle}}</strong>
