@@ -39,17 +39,18 @@
 
       Main.add( function(){
         var form = getForm("new-line-{{$rhs->_guid}}");
-        CotationRHS.autocompleteActivite(form);
+        CotationRHS.autocompleteCdARR(form);
+        CotationRHS.autocompleteCsARR(form);
         CotationRHS.autocompleteExecutant(form);
       } );
 
       </script>
       
       <form name="new-line-{{$rhs->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitLine(this);">
-      <input type="hidden" name="m" value="ssr" />
-      <input type="hidden" name="dosql" value="do_line_rhs_aed" />
-      <input type="hidden" name="del" value="0" />
+
+      {{mb_class class=CLigneActivitesRHS}}
       <input type="hidden" name="rhs_id" value="{{$rhs->_id}}" />
+
       <table class="form">
         <tr>
           <th class="title" colspan="2">Ajouter une ligne d'activité</th>
@@ -58,7 +59,14 @@
           <th>{{mb_label object=$rhs_line field=code_activite_cdarr}}</th>
           <td>
             {{mb_field object=$rhs_line field=code_activite_cdarr class="autocomplete"}}
-            <div style="display:none;" class="autocomplete activite" id="{{$rhs->_guid}}_activite_auto_complete"></div>
+            <div style="display: none;" class="autocomplete activite" id="{{$rhs->_guid}}_cdarr_auto_complete"></div>
+          </td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$rhs_line field=code_activite_csarr}}</th>
+          <td>
+            {{mb_field object=$rhs_line field=code_activite_csarr class="autocomplete"}}
+            <div style="display: none;" class="autocomplete activite" id="{{$rhs->_guid}}_csarr_auto_complete"></div>
           </td>
         </tr>
         <tr>

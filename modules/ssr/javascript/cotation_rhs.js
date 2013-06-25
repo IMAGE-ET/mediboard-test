@@ -54,7 +54,19 @@ CotationRHS = {
   onSubmitLine: function(form) {
      return onSubmitFormAjax(form, CotationRHS.refreshRHS.curry($V(form.rhs_id)));
   },
-  
+
+  confirmDeletionLine: function(form) {
+    var options = {
+      typeName:'l\'activité'
+    };
+
+    var ajax = {
+      onComplete: CotationRHS.refreshRHS.curry($V(form.rhs_id))
+    };
+
+    confirmDeletion(form, options, ajax);
+  },
+
   onSubmitQuantity: function(form, sField) {
     if($V(form[sField]) == '0' || $V(form[sField]) == '') {
       form.parentNode.removeClassName("ok");
@@ -96,21 +108,35 @@ CotationRHS = {
       $V(form._executant,             values.down('._executant'            ).textContent);
     }
   },
-  
-  autocompleteActivite: function(form) {
+
+  autocompleteCdARR: function(form) {
     var url = new Url('ssr', 'httpreq_do_cdarr_autocomplete');
     url.autoComplete(form.code_activite_cdarr, form.down('.autocomplete.activite'), {
       dropdown: true,
       minChars: 2,
-      updateElement: function(element) { CotationRHS.updateActivite(element, form); }
+      updateElement: function(element) { CotationRHS.updateCdARR(element, form); }
     } );
   },
-  
-  updateActivite: function(selected, form) {
-    var value = selected.down('.value'); 
+
+  updateCdARR: function(selected, form) {
+    var value = selected.down('.value');
     $V(form.code_activite_cdarr, value ? value.textContent : '');
   },
-  
+
+  autocompleteCsARR: function(form) {
+    var url = new Url('ssr', 'httpreq_do_csarr_autocomplete');
+    url.autoComplete(form.code_activite_csarr, form.down('.autocomplete.activite'), {
+      dropdown: true,
+      minChars: 2,
+      updateElement: function(element) { CotationRHS.updateCsARR(element, form); }
+    } );
+  },
+
+  updateCsARR: function(selected, form) {
+    var value = selected.down('.value');
+    $V(form.code_activite_csarr, value ? value.textContent : '');
+  },
+
   editDependancesRHS: function(rhs_id) {
     var url = new Url('ssr', 'ajax_edit_dependances_rhs');
     url.addParam('rhs_id', rhs_id);

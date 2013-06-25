@@ -58,7 +58,10 @@ class CLigneActivitesRHS extends CMbObject {
       "executant_id",
       "code_activite_cdarr"
     );
-    $spec->xor["code"] = array("code_activite_cdarr", "code_activite_csarr");
+    $spec->xor["code"] = array(
+      "code_activite_cdarr",
+      "code_activite_csarr"
+    );
     return $spec;
   }
 

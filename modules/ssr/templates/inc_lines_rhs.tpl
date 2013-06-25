@@ -18,7 +18,10 @@
 <table class="tbl">
   <tr>
     <th class="narrow"></th>
-    <th colspan="2">{{mb_title class=CLigneActivitesRHS field=code_activite_cdarr}}</th>
+    <th colspan="2">
+      {{mb_title class=CLigneActivitesRHS field=code_activite_cdarr}} /
+      {{mb_title class=CLigneActivitesRHS field=code_activite_csarr}}
+    </th>
     <th>{{mb_title class=CActiviteCdARR field=libelle}}</th>
     
     {{foreach from=$days key=day item=litteral_day}}
@@ -43,15 +46,10 @@
       <td>
         {{if !$read_only && !$_line->auto}}
         <form name="del-line-{{$_line->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitLine(this);">
-          <input type="hidden" name="m" value="ssr" />
-          <input type="hidden" name="dosql" value="do_line_rhs_aed" />
-          <input type="hidden" name="del" value="1" />
-          {{mb_key object=$_line}}
+          {{mb_class object=$_line}}
+          {{mb_key   object=$_line}}
           <input type="hidden" name="rhs_id" value="{{$rhs->_id}}" />
-          <button class="notext trash" type="button" onclick="confirmDeletion(this.form, {
-            typeName:'l\'activité',
-            objName:'{{$_line->_view|smarty:nodefaults|JSAttribute}}',
-            ajax: 1})">
+          <button class="notext trash" type="button" onclick="return CotationRHS.confirmDeletionLine(this.form);">
             {{tr}}Delete{{/tr}}
           </button>
         </form>

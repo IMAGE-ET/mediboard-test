@@ -14,10 +14,8 @@
 <td class="button {{if !$rhs->$bounds}}disabled{{elseif $_line->$qty}}ok{{/if}}">
   {{if $rhs->$bounds && !$read_only && !$_line->auto}}
     <form name="chg-{{$litteral_day}}-{{$_line->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitQuantity(this, '{{$qty}}');">
-      <input type="hidden" name="m" value="ssr" />
-      <input type="hidden" name="dosql" value="do_line_rhs_aed" />
-      <input type="hidden" name="del" value="0" />
-      {{mb_key object=$_line}}
+      {{mb_class object=$_line}}
+      {{mb_key   object=$_line}}
       <input type="hidden" name="rhs_id" value="{{$rhs->_id}}" />
       {{assign var=line_guid value=$_line->_guid}}
       {{assign var=qty_form value="chg-$litteral_day-$line_guid"}}
