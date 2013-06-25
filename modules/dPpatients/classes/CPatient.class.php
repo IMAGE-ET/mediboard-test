@@ -2151,7 +2151,19 @@ class CPatient extends CPerson {
       $first_name = str_pad($first_name, 10);
     }
 
-    list($year, $month, $day) = str_split($birth_date, 2);
+    $birth_date_length = strlen($birth_date);
+
+    switch ($birth_date_length) {
+      case 6:
+        list($year, $month, $day) = str_split($birth_date, 2);
+        break;
+      case 8:
+        list($day, $month, $year2, $year) = str_split($birth_date, 2);
+        $birth_date = $year.$month.$day;
+        break;
+      default:
+        return;
+    }
 
     if (!checkdate($month, $day, $year) && $birth_date !== "000000" && strlen($birth_date) !== 6) {
       return;
