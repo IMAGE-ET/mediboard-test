@@ -69,7 +69,7 @@
                   {{if $_line->debut || $_line->fin}} 
                     {{mb_include module=system template=inc_interval_date from=$_line->debut to=$_line->fin}} :
                   {{/if}}
-                  <a href="#1" onclick="Prescription.viewProduit(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
+                  <a href="#1" onclick="Prescription.showMonographyMedicament(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
                     <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView');">
                       {{$_line->_ucd_view}}
                     </span>

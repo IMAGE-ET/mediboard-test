@@ -201,7 +201,7 @@ updateTP = function(selected){
   Element.cleanWhitespace(selected);
   var dn = selected.childElements();
   $V(oFormTP._code, dn[0].innerHTML);
-  $("_libelle").insert("<button type='button' class='cancel notext' onclick='resetEditLineTP(); resetFormTP();'></button><a href=\"#nothing\" onclick=\"Prescription.viewProduit('','"+dn[1].innerHTML+"','"+dn[2].innerHTML+"')\">"+dn[3].innerHTML.stripTags()+"</a>");
+  $("_libelle").insert("<button type='button' class='cancel notext' onclick='resetEditLineTP(); resetFormTP();'></button><a href=\"#nothing\" onclick=\"Prescription.showMonographyMedicament('','','"+selected.down(".code-cis").getText()+"')\">"+selected.down(".libelle").getText()+"</a>");
   $V(oFormTP.produit, '');
   $('button_submit_traitement').focus();
 }  
@@ -224,7 +224,7 @@ resetEditLineTP = function(){
 resetFormTP = function(){
   $V(oFormTP.commentaire, '');
   $V(oFormTP.token_poso, '');
-  $('addPosoLine').update('');     
+  $('addPosoLine').update('');
   
   $V(oFormTP.long_cours, 1);
   $V(oFormTP.__long_cours, true);
