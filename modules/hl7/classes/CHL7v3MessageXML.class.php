@@ -114,4 +114,81 @@ class CHL7v3MessageXML extends CMbXMLDocument {
    */
   function handle($ack, CMbObject $object, $data) {
   }
+
+  /**
+   * Query
+   *
+   * @param string  $nodeName    The XPath to the node
+   * @param DOMNode $contextNode The context node from which the XPath starts
+   *
+   * @return DOMNodeList
+   */
+  function query($nodeName, DOMNode $contextNode = null) {
+    $xpath = new CHL7v3MessageXPath($contextNode ? $contextNode->ownerDocument : $this);
+
+    return $xpath->query($nodeName, $contextNode ? $contextNode : null);
+  }
+
+  /**
+   * Get the node corresponding to an XPath
+   *
+   * @param string       $nodeName    The XPath to the node
+   * @param DOMNode|null $contextNode The context node from which the XPath starts
+   * @param array|null   &$data       Nodes data
+   * @param boolean      $root        Is root node ?
+   *
+   * @return DOMNode The node
+   */
+  function queryNode($nodeName, DOMNode $contextNode = null, &$data = null, $root = false) {
+    $xpath = new CHL7v3MessageXPath($contextNode ? $contextNode->ownerDocument : $this);
+
+    return $data[$nodeName] = $xpath->queryUniqueNode($root ? "//$nodeName" : "$nodeName", $contextNode);
+  }
+
+  /**
+   * Get the nodeList corresponding to an XPath
+   *
+   * @param string       $nodeName    The XPath to the node
+   * @param DOMNode|null $contextNode The context node from which the XPath starts
+   * @param array|null   &$data       Nodes data
+   *
+   * @return DOMNodeList
+   */
+  function queryNodes($nodeName, DOMNode $contextNode = null, &$data = null) {
+    $nodeList = $this->query("$nodeName", $contextNode);
+    foreach ($nodeList as $_node) {
+      $data[$nodeName][] = $_node;
+    }
+
+    return $nodeList;
+  }
+
+  /**
+   * Get the text of a node corresponding to an XPath
+   *
+   * @param string       $nodeName    The XPath to the node
+   * @param DOMNode|null $contextNode The context node from which the XPath starts
+   *
+   * @return string
+   */
+  function queryTextNode($nodeName, DOMNode $contextNode) {
+    $xpath = new CHL7v3MessageXPath($contextNode ? $contextNode->ownerDocument : $this);
+
+    return $xpath->queryTextNode($nodeName, $contextNode);
+  }
+
+  /**
+   * Get the value of attribute
+   *
+   * @param DOMNode $node       Node
+   * @param string  $attName    Attribute name
+   * @param string  $purgeChars The input string
+   *
+   * @return string
+   */
+  function getValueAttributNode(DOMNode $node, $attName, $purgeChars = "") {
+    $xpath = new CHL7v3MessageXPath($this);
+
+    return $xpath->getValueAttributNode($node, $attName, $purgeChars);
+  }
 }

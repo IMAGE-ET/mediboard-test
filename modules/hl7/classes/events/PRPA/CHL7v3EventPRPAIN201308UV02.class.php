@@ -19,6 +19,7 @@
 class CHL7v3EventPRPAIN201308UV02 extends CHL7v3AcknowledgmentPRPA implements CHL7EventPRPAST201317UV02 {
   /** @var string */
   public $interaction_id = "IN201308UV02";
+  public $queryAck;
 
   /**
    * Get interaction
@@ -39,8 +40,18 @@ class CHL7v3EventPRPAIN201308UV02 extends CHL7v3AcknowledgmentPRPA implements CH
     return "AA";
   }
 
-  function getQueryACK() {
-    // controlActProcess/queryAck/queryResponseCode/@code
+  /**
+   * Get query ack
+   *
+   * @return string
+   */
+  function getQueryAck() {
+    $dom = $this->dom;
 
+    $this->queryAck = $dom->queryNode("//hl7:".$this->getInteractionID()."/hl7:controlActProcess/hl7:queryAck");
+
+    $queryResponseCode = $dom->queryNode("hl7:queryResponseCode", $this->queryAck);
+
+    return $dom->getValueAttributNode($queryResponseCode, "code");
   }
 }

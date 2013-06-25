@@ -64,7 +64,6 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
    */
   function addHeader() {
     $dom            = $this->dom;
-    $exchange_hl7v3 = $this->_exchange_hl7v3;
 
     $root = $dom->addElement($dom, $this->getInteractionID());
     $dom->addNameSpaces();

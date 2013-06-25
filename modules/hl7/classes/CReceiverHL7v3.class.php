@@ -144,6 +144,10 @@ class CReceiverHL7v3 extends CInteropReceiver {
     $exchange->_acquittement       = $ack_data;
     $exchange->store();
 
-    return $ack_data;
+    $ack->object          = $mbObject;
+    $ack->_receiver       = $this;
+    $ack->_exchange_hl7v3 = $exchange;
+
+    return $ack;
   }
 }
