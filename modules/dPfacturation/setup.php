@@ -285,7 +285,12 @@ class CSetupdPfacturation extends CSetup {
                 ADD `statut` ENUM ('inactive','first','second','third','contentieux','poursuite'),
                 ADD `poursuite` ENUM ('defaut','continuation','etranger','faillite','hors_pays','deces','inactive','saisie','introuvable');";
     $this->addQuery($query);
-    $this->mod_version = "0.30";
+    $this->makeRevision("0.30");
+
+    $query = "ALTER TABLE `retrocession`
+                ADD `active` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+    $this->mod_version = "0.31";
     
   }
 }

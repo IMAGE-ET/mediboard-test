@@ -132,6 +132,10 @@ Main.add(function () {
     <td>{{mb_field object=$retrocession field=use_pm}}</td>
   </tr>
   <tr>
+    <th>{{mb_label object=$retrocession field=active}}</th>
+    <td>{{mb_field object=$retrocession field=active}}</td>
+  </tr>
+  <tr>
     <td class="button" colspan="2">
       {{if $retrocession->_id}}
       <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
