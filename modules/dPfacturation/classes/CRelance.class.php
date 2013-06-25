@@ -102,6 +102,20 @@ class CRelance extends CMbMetaObject {
           return "La derniere relance est reglee";
         }
       }
+      if (!$this->numero) {
+        $this->numero = 1;
+      }
+      switch ($this->numero) {
+        case "1":
+          $this->du_patient += CAppUI::conf("dPfacturation CRelance add_first_relance");
+          break;
+        case "2":
+          $this->du_patient += CAppUI::conf("dPfacturation CRelance add_second_relance");
+          break;
+        case "3":
+          $this->du_patient += CAppUI::conf("dPfacturation CRelance add_third_relance");
+          break;
+      }
     }
     
     // Standard store

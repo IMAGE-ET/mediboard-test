@@ -15,9 +15,12 @@
     </tr>
     {{assign var=class value=CRelance}}
     {{mb_include module=system template=inc_config_bool var=use_relances}}
-    {{mb_include module=system template=inc_config_str var=nb_days_first_relance  size="3" suffix="jours"}}
-    {{mb_include module=system template=inc_config_str var=nb_days_second_relance size="3" suffix="jours"}}
-    {{mb_include module=system template=inc_config_str var=nb_days_third_relance  size="3" suffix="jours"}}
+    {{mb_include module=system template=inc_config_num var=nb_days_first_relance  size="3" suffix="jours"}}
+    {{mb_include module=system template=inc_config_num var=nb_days_second_relance size="3" suffix="jours"}}
+    {{mb_include module=system template=inc_config_num var=nb_days_third_relance  size="3" suffix="jours"}}
+    {{mb_include module=system template=inc_config_num var=add_first_relance}}
+    {{mb_include module=system template=inc_config_num var=add_second_relance}}
+    {{mb_include module=system template=inc_config_num var=add_third_relance}}
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

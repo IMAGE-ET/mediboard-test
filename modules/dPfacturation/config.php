@@ -23,7 +23,10 @@ $dPconfig["dPfacturation"] = array (
     "use_relances"   => "0",
     "nb_days_first_relance"   => "30",
     "nb_days_second_relance"  => "60",
-    "nb_days_third_relance"   => "90"
+    "nb_days_third_relance"   => "90",
+    "add_first_relance"       => "0",
+    "add_second_relance"      => "0",
+    "add_third_relance"       => "0"
   ),
   "CRetrocession" => array(
     "use_retrocessions" => "0"
