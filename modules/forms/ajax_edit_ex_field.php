@@ -28,6 +28,7 @@ if ($ex_field->load($ex_field_id)) {
 }
 else {
   $ex_field->ex_group_id = $ex_group_id;
+  $ex_field->disabled = 0;
 }
 
 $ex_field->loadRefExClass();
