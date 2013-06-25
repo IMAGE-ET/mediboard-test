@@ -1620,4 +1620,11 @@ $locales['type_assurance.assurance_maladie-desc'] = 'Assurance Maladie';
 $locales['type_assurance.maternite'] = 'Maternité';
 $locales['type_assurance.soins_medicaux_gratuits'] = 'Soins médicaux gratuits';
 $locales['type_assurance.soins_medicaux_gratuits-desc'] = 'Titulaire d\'une pension d\'invalidité attribuée au titre du Code des pensions militaires d\'invalidité et des victimes de la guerre (CPMIVG) résidant en métropole ou à l\'étranger, hors Maghreb.';
+$locales['CConsultation.type_assurance.classique'] = "Assurance Maladie";
+$locales['CConsultation.type_assurance.at'] = "Accident de droit commun";
+$locales['CConsultation.type_assurance.maternite'] = "Maternité";
+$locales['CConsultation.type_assurance.smg'] = "Soins médicaux gratuits (Codes des pensions militaires d?invalidité et des victimes de la guerre)";
+$locales['CConsultation-type_assurance'] = "Type d'assurance maladie";
+$locales['CConsultation-type_assurance-desc'] = "Le type d'assurance maladie prenant en charge les soins";
+$locales['CConsultation-type_assurance-court'] = "Type d'assurance maladie";
 ?>
