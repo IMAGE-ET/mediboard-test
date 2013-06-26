@@ -448,7 +448,7 @@
                   <input type="hidden" name="_date_planning" value="{{$date_planning}}" />
                   {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageConsultSelector.init()"}}
                   <button class="search notext" type="button" onclick="PlageConsultSelector.init()">Choix de l'horaire</button>
-                  <button class="multiline notext" type="button" onclick="PlageConsultSelector.init(true)" id="buttonMultiple">Consultation multiple</button>
+                  {{if !$consult->_id}}<button class="multiline notext" type="button" onclick="PlageConsultSelector.init(true)" id="buttonMultiple">Consultation multiple</button>{{/if}}
                 </td>
               </tr>
 
