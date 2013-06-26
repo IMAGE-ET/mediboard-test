@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -129,9 +129,15 @@ class CSetupdPccam extends CSetup {
 
     // Data source query
     $query = "SELECT *
+              FROM modificateur
+              WHERE CODE = 'K'
+              AND LIBELLE = 'Majoration forfaits modulables accouchements gyneco. et chir sect. 1 ou 2 adherant,pour actes avec J'";
+    /*
+    $query = "SELECT *
               FROM `codes_ngap`
               WHERE `code` LIKE 'MA'";
-    //$query = "SHOW TABLES LIKE 'forfaits'";
+    $query = "SHOW TABLES LIKE 'forfaits'";
+    */
     $this->addDatasource("ccamV2", $query);
   }
 }
