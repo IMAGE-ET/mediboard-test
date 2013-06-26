@@ -43,7 +43,7 @@ $year = min(CMbDT::transform("+ 6 MONTH", $oldest, "%Y-%m-%d 00:00:00"), $year);
 if ($dry_run) {
   // Récupération des IDs de journaux à supprimer
   $query = "SELECT
-            count(`accesslog_id`)
+            count(`accesslog_id`) as count
           FROM `access_log`
           WHERE
           (
@@ -57,9 +57,15 @@ if ($dry_run) {
             AND `aggregate` < '60'
           )";
 
-  $IDs_to_aggregate = $ds->loadResult($query);
+  $count = $ds->loadResult($query);
 
-  CAppUI::stepAjax("%d access logs to aggregate", UI_MSG_OK, $IDs_to_aggregate);
+  $msg = "%d access logs to aggregate from %s";
+  if ($oldest) {
+    $msg = "%d access logs to aggregate from %s to %s";
+  }
+
+  CAppUI::stepAjax($msg, UI_MSG_OK, $count, CMbDT::date($year), CMbDT::date($oldest));
+
   return;
 }
 
@@ -220,7 +226,13 @@ $query = "SELECT `accesslog_id`, `accesslog_id`
 $month_IDs_to_insert = $ds->loadHashList($query);
 
 $IDs_to_insert = array_merge($year_IDs_to_insert, $month_IDs_to_insert);
-CAppUI::stepAjax("%d access logs inserted", UI_MSG_OK, count($IDs_to_insert));
+
+$msg = "%d access logs inserted from %s";
+if ($oldest) {
+  $msg = "%d access logs inserted from %s to %s";
+}
+
+CAppUI::stepAjax($msg, UI_MSG_OK, count($IDs_to_insert), CMbDT::date($year), CMbDT::date($oldest));
 
 foreach ($IDs_to_aggregate as $key => $ids) {
   $id = $IDs_to_insert[$key];

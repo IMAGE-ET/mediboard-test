@@ -1,6 +1,8 @@
 <?php
-$locales['%d access logs inserted'] = '%d journaux d\'accès insérés';
-$locales['%d access logs to aggregate'] = '%d journaux d\'accès à agréger';
+$locales['%d access logs inserted from %s'] = '%d journaux d\'accès insérés à partir de %s';
+$locales['%d access logs inserted from %s to %s'] = '%d journaux d\'accès insérés de %s à %s';
+$locales['%d access logs to aggregate from %s'] = '%d journaux d\'accès à agréger à partir de %s';
+$locales['%d access logs to aggregate from %s to %s'] = '%d journaux d\'accès à agréger de %s à %s';
 $locales['Aggregate'] = 'Agrégation';
 $locales['CAccessLog'] = 'Logs d\'accès';
 $locales['CAccessLog-_average_duration'] = 'Durée moyenne';

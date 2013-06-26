@@ -1374,6 +1374,8 @@ class CSetupsystem extends CSetup {
 
     // Création des deux nouveaux champs
     $this->makeRevision("1.1.41");
+    $this->setTimeLimit(1200);
+
     $query = "ALTER TABLE `access_log`
       ADD `aggregate` INT(11) UNSIGNED NOT NULL DEFAULT '10',
       ADD `bot` BOOL NOT NULL DEFAULT 0;";

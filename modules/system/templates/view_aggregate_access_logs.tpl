@@ -8,6 +8,10 @@
  * @link     http://www.mediboard.org
  *}}
 
+<div class="small-warning">
+  Ne seront agrégés que les journaux des 6 plus anciens mois.
+</div>
+
 <table class="main">
   <tr>
     <td>
