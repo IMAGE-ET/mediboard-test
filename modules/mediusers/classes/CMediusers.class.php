@@ -710,7 +710,7 @@ class CMediusers extends CPerson {
 
     $spec = $this->_spec;
 
-    if ($this->fieldModified("remote", 0)) {
+    if ($this->fieldModified("remote", 0) && !CAppUI::$user->isAdmin()) {
       if (!$this->_user_password) {
         return "Veuillez saisir à nouveau votre mot de passe";
       }
@@ -1444,8 +1444,20 @@ class CMediusers extends CPerson {
     return str_replace('$g', $group_id, $tag_mediusers);
   }
 
+  /**
+   * Is the user a robot?
+   *
+   * @return bool
+   */
   function isRobot() {
-    return (CIdSante400::getMatch($this->_class, CMediusers::getTagSoftware(), null, $this->_id)->_id != null);
+    if (CModule::getActive("dPsante400")) {
+      return (CIdSante400::getMatch($this->_class, CMediusers::getTagSoftware(), null, $this->_id)->_id != null);
+    }
+
+    if (!$this->_ref_user || !$this->_ref_user->_id) {
+      $this->loadRefUser();
+    }
+    return $this->_ref_user->dont_log_connection;
   }
 
   /**

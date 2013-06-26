@@ -39,10 +39,13 @@ changeRemote = function(input) {
     
   {{if !$object->user_id}}oPassword.addClassName('notNull');{{/if}}
 
-  // Force to re-enter password
-  if (canRemote) {
-    oPassword.addClassName('notNull');
-  }
+  // Admin user can force the remote field toggle
+  {{if !$is_admin}}
+    // Force to re-enter password
+    if (canRemote) {
+      oPassword.addClassName('notNull');
+    }
+  {{/if}}
 
   // we check the field
   checkFormElement(oPassword);

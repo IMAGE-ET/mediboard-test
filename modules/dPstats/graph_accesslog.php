@@ -9,38 +9,42 @@
  * @version    $Revision$
  */
 
-function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 'day', $left, $right, $DBorNotDB = false) {
+function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 'day', $left, $right, $DBorNotDB = false, $human_bot = null) {
   switch ($interval) {
     case "day":
-      $step = "+1 HOUR";
-      $period_format = "%Hh";
-      $max = 24;
-      $hours = 1;
+      $step          = "+10 MINUTES";
+      $period_format = "%H:%M";
+      $hours         = 1/6;
       break;
+
     case "month":
-      $step = "+1 DAY";
+      $step          = "+1 DAY";
       $period_format = "%d/%m";
-      $max = 32;
-      $hours = 24;
+      $hours         = 24;
       break;
+
     case "hyear":
-      $step = "+1 WEEK";
+      $step          = "+1 WEEK";
       $period_format = "%U";
-      $max = 27;
-      $hours = 24 * 7;
+      $hours         = 24 * 7;
       break;
+
     case "twoyears":
-      $step = "+1 MONTH";
+      $step          = "+1 MONTH";
       $period_format = "%m/%Y";
-      $max = 25;
-      $hours = 24 * 30;
+      $hours         = 24 * 30;
       break;
+
     case "twentyyears":
-      $step = "+1 YEAR";
+      $step          = "+1 YEAR";
       $period_format = "%Y";
-      $max = 21;
-      $hours = 24 * 30 * 12;
+      $hours         = 24 * 30 * 12;
       break;
+
+    case "fourhours":
+      $step          = "+10 MINUTES";
+      $period_format = "%H:%M";
+      $hours         = 1/6;
   }
   
   $datax = array();
@@ -49,9 +53,9 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
     $datax[] = array($i, CMbDT::format($d, $period_format));
     $i++;
   }
-  
-  $logs = CAccessLog::loadPeriodAggregation($startx, $endx, $period_format, $module_name, $action_name, $DBorNotDB);
-  
+
+  $logs = CAccessLog::loadPeriodAggregation($startx, $endx, $period_format, $module_name, $action_name, $DBorNotDB, $human_bot);
+
   if (!$DBorNotDB) {
     $duration  = array();
     $processus = array();
@@ -96,7 +100,15 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
         }
       }
     }
-    
+
+    if ($interval == 'day') {
+      foreach ($datax as $i => &$x) {
+        if ($i % 4) {
+          $x[1] = '';
+        }
+      }
+    }
+
     if ($interval == 'month') {
       foreach ($datax as $i => &$x) {
         if ($i % 2) {
@@ -116,14 +128,14 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
     $subtitle = CMbDT::format($endx, CAppUI::conf("longdate"));
     
     $options = array(
-      'title' => utf8_encode($title),
+      'title'    => utf8_encode($title),
       'subtitle' => utf8_encode($subtitle),
-      'xaxis' => array(
+      'xaxis'    => array(
         'labelsAngle' => 45,
-        'ticks' => $datax,
+        'ticks'       => $datax,
       ),
       'yaxis' => array(
-        'min' => 0,
+        'min'   => 0,
         'title' => utf8_encode(($left[0] == 'request_time' ? 'Temps de réponse' :
                                   ($left[0] == 'cpu_time' ? 'Temps CPU' :
                                     ($left[0] == 'errors' ? 'Erreurs' : 'Mémoire'))) .
@@ -131,7 +143,7 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
         'autoscaleMargin' => 1
       ),
       'y2axis' => array(
-        'min' => 0,
+        'min'   => 0,
         'title' => utf8_encode(($right[0] == 'hits' ? 'Hits' : 'Bande passante') .
                                ($right[1] == 'mean' ? (($right[0] == 'hits' ? ' (par minute)' : ' (octets/s)')) : '')),
         'autoscaleMargin' => 1
@@ -143,9 +155,9 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
         'track' => true,
         'relative' => true
       ),*/
-      'HtmlText' => false,
+      'HtmlText'    => false,
       'spreadsheet' => array(
-        'show' => true, 
+        'show'             => true,
         'csvFileSeparator' => ';',
         'decimalSeparator' => ','
       )
@@ -157,16 +169,20 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
     if ($right[0] == 'hits') {
       $series[] = array(
        'label' => 'Hits',
-       'data' => $hits,
-       'bars' => array('show' => true),
+       'data'  => $hits,
+       'bars'  => array(
+         'show' => true
+       ),
        'yaxis' => 2
       );
     }
     else {
       $series[] = array(
        'label' => 'Bande passante',
-       'data' => $size,
-       'bars' => array('show' => true),
+       'data'  => $size,
+       'bars'  => array(
+         'show' => true
+       ),
        'yaxis' => 2
       );
     }
@@ -175,39 +191,51 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
     if ($left[0] == 'request_time') {
       $series[] = array(
        'label' => 'Page (s)',
-       'data' => $duration,
-       'lines' => array('show' => true),
+       'data'  => $duration,
+       'lines' => array(
+         'show' => true
+       ),
       );
         
       $series[] = array(
        'label' => 'DB (s)',
-       'data' => $request,
-       'lines' => array('show' => true),
+       'data'  => $request,
+       'lines' => array(
+         'show' => true
+       ),
       );
     }
     elseif ($left[0] == 'cpu_time') {
       $series[] = array(
        'label' => 'Page (s)',
-       'data' => $duration,
-       'lines' => array('show' => true),
+       'data'  => $duration,
+       'lines' => array(
+         'show' => true
+       ),
       );
         
       $series[] = array(
        'label' => 'Process (s)',
-       'data' => $processus,
-       'lines' => array('show' => true),
+       'data'  => $processus,
+       'lines' => array(
+         'show' => true
+       ),
       );
         
       $series[] = array(
        'label' => 'CPU (s)',
-       'data' => $processor,
-       'lines' => array('show' => true),
+       'data'  => $processor,
+       'lines' => array(
+         'show' => true
+       ),
       );
         
       $series[] = array(
        'label' => 'DB (s)',
-       'data' => $request,
-       'lines' => array('show' => true),
+       'data'  => $request,
+       'lines' => array(
+         'show' => true
+       ),
       );
     }
     elseif ($left[0] == 'errors') {
@@ -217,30 +245,38 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
       
       $series[] = array(
        'label' => 'Errors',
-       'data' => $errors,
+       'data'  => $errors,
        'color' => 'red',
-       'lines' => array('show' => true),
+       'lines' => array(
+         'show' => true
+       ),
       );
       
       $series[] = array(
        'label' => 'Warnings',
-       'data' => $warnings,
+       'data'  => $warnings,
        'color' => 'orange',
-       'lines' => array('show' => true),
+       'lines' => array(
+         'show' => true
+       ),
       );
         
       $series[] = array(
        'label' => 'Notices',
-       'data' => $notices,
+       'data'  => $notices,
        'color' => 'yellow',
-       'lines' => array('show' => true),
+       'lines' => array(
+         'show' => true
+       ),
       );
     }
     else {
       $series[] = array(
        'label' => 'Pic (byte)',
-       'data' => $peak_memory,
-       'lines' => array('show' => true),
+       'data'  => $peak_memory,
+       'lines' => array(
+         'show' => true
+       ),
       );
     }
   }
@@ -282,28 +318,28 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
     $subtitle = CMbDT::format($endx, CAppUI::conf("longdate"));
     
     $options = array(
-      'title' => utf8_encode($title),
+      'title'    => utf8_encode($title),
       'subtitle' => utf8_encode($subtitle),
-      'xaxis' => array(
+      'xaxis'    => array(
         'labelsAngle' => 45,
-        'ticks' => $datax,
+        'ticks'       => $datax,
       ),
       'yaxis' => array(
-        'min' => 0,
-        'title' => utf8_encode('Temps de réponse'),
+        'min'             => 0,
+        'title'           => utf8_encode('Temps de réponse'),
         'autoscaleMargin' => 1
       ),
       'y2axis' => array(
-        'min' => 0,
-        'title' => utf8_encode('Requêtes'),
+        'min'             => 0,
+        'title'           => utf8_encode('Requêtes'),
         'autoscaleMargin' => 1
       ),
       'grid' => array(
         'verticalLines' => false
       ),
-      'HtmlText' => false,
+      'HtmlText'    => false,
       'spreadsheet' => array(
-        'show' => true, 
+        'show'             => true,
         'csvFileSeparator' => ';',
         'decimalSeparator' => ','
       )
@@ -315,8 +351,11 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
     foreach ($requests as $datasource => $_requests) {
       $series[] = array(
        'label' => "$datasource-requetes",
-       'data' => $_requests,
-       'bars' => array('show' => true, 'stacked' => true),
+       'data'  => $_requests,
+       'bars'  => array(
+         'show'    => true,
+         'stacked' => true
+       ),
        'yaxis' => 2
       );
     }
@@ -325,8 +364,10 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
     foreach ($duration as $datasource => $_duration) {
       $series[] = array(
        'label' => "$datasource-temps moyen",
-       'data' => $_duration,
-       'lines' => array('show' => true),
+       'data'  => $_duration,
+       'lines' => array(
+         'show' => true
+       ),
       );
     } 
   }

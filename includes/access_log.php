@@ -31,7 +31,13 @@ if (!$action) {
 $log = new CAccessLog();
 $log->module   = $m;
 $log->action   = $action;
-$log->period   = CMbDT::transform(null, null, "%Y-%m-%d %H:00:00");;
+
+$minutes     = CMbDT::format(null, "%M");
+$arr_minutes = (floor($minutes / 10) * 10) % 60;
+($arr_minutes === 0) ? $arr_minutes = "00" : null;
+
+// 10 min. long aggregation
+$log->period = CMbDT::format(null, "%Y-%m-%d %H:" . $arr_minutes . ":00");
 
 // Probe aquisition
 $rusage = getrusage();
@@ -45,6 +51,13 @@ $log->peak_memory += memory_get_peak_usage();
 $log->errors      += CApp::$performance["error"];
 $log->warnings    += CApp::$performance["warning"];
 $log->notices     += CApp::$performance["notice"];
+
+$log->aggregate = 10;
+
+$user = CMediusers::get();
+if ($user) {
+  $log->bot = $user->isRobot();
+}
 
 // Fast store
 if ($msg = $log->fastStore()) {
@@ -60,9 +73,11 @@ else {
       
       // In order to retrieve inserted AccessLog ID
       $log2 = new CAccessLog();
-      $log2->module   = $log->module;
-      $log2->action   = $log->action;
-      $log2->period   = $log->period;
+      $log2->module    = $log->module;
+      $log2->action    = $log->action;
+      $log2->period    = $log->period;
+      $log2->aggregate = $log->aggregate;
+      $log2->bot       = $log->bot;
       $log2->loadMatchingObject();
       
       $dsl->accesslog_id = $log2->_id;

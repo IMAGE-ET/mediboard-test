@@ -85,5 +85,6 @@ $smarty->assign("group"       , $group);
 $smarty->assign("disciplines" , $disciplines);
 $smarty->assign("spec_cpam"   , $spec_cpam);
 $smarty->assign("tag_mediuser", CMediusers::getTagMediusers($group->_id));
+$smarty->assign("is_admin",     CAppUI::$user->isAdmin());
 
 $smarty->display("inc_edit_mediuser.tpl");

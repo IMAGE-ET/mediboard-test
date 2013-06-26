@@ -1372,9 +1372,8 @@ class CSetupsystem extends CSetup {
     $this->makeRevision("1.1.40");
     $this->addPrefQuery("planning_hour_division", "2");
 
-    /*
     // Création des deux nouveaux champs
-    $this->makeRevision("1.1.36");
+    $this->makeRevision("1.1.41");
     $query = "ALTER TABLE `access_log`
       ADD `aggregate` INT(11) UNSIGNED NOT NULL DEFAULT '10',
       ADD `bot` BOOL NOT NULL DEFAULT 0;";
@@ -1390,15 +1389,18 @@ class CSetupsystem extends CSetup {
      * Création d'un index unique portant sur le précédent triplet + l'agrégat et le booléen bot
      * Création d'un simple index triplet
      */
-    /*
     $query = "ALTER TABLE `access_log`
       DROP INDEX `triplet`,
       ADD UNIQUE `aggregate` (`module`, `action`, `period`, `aggregate`, `bot`),
       ADD INDEX `triplet` (`module`, `action`, `period`);";
     $this->addQuery($query);
-    */
 
-    $this->mod_version = "1.1.41";
+    // Ajout de l'index sur l'ID du journal d'accès concerné
+    $query = "ALTER TABLE `datasource_log`
+      ADD INDEX `agregat` (`accesslog_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.42";
 
     /*$query = "ALTER TABLE user_log
         DROP INDEX object_id,

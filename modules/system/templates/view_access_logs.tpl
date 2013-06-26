@@ -44,6 +44,24 @@ var AccessLog = {
     var url = new Url('system', 'crazy_logs');
     url.addParam('mode', mode);
     url.requestModal(400);
+  },
+
+  viewAggregateLogs: function() {
+    Control.Modal.close();
+    var url = new Url('system', 'view_aggregate_access_logs');
+    url.requestModal(400);
+  },
+
+  aggregate: function(dry_run) {
+    var url = new Url('system', 'aggregate_access_logs');
+
+    if (dry_run) {
+      url.addParam('dry_run', 1);
+      url.requestUpdate("dry_run");
+    }
+    else {
+      Modal.confirm("Agréger ?", {onValidate: function(v) { if (v) {url.requestUpdate("aggregate")} } });
+    }
   }
 }
 
@@ -66,6 +84,7 @@ Main.add(function () {
       
       <label for="interval" title="Echelle d'affichage">Intervalle</label>
       <select name="interval" onchange="this.form.submit();">
+        <option value="fourhours"    {{if $interval == "fourhours"}}   selected="selected" {{/if}}>4 heures</option>
         <option value="day"          {{if $interval == "day"}}         selected="selected" {{/if}}>Journée </option>
         <option value="month"        {{if $interval == "month"}}       selected="selected" {{/if}}>Mois    </option>
         <option value="hyear"        {{if $interval == "hyear"}}       selected="selected" {{/if}}>Semestre</option>
@@ -116,6 +135,14 @@ Main.add(function () {
           {{/foreach}}
         </optgroup>
       </select>
+
+      <label for="human_bot" title="Filtrage en fonction du type d'utilisateur">Visualiser</label>
+      <select name="human_bot" onchange="this.form.submit()">
+        <option value="0" {{if $human_bot === '0'}}selected="selected"{{/if}}>Humains</option>
+        <option value="1" {{if $human_bot === '1'}}selected="selected"{{/if}}>Robots</option>
+        <option value="2" {{if $human_bot === '2'}}selected="selected"{{/if}}>Les deux</option>
+      </select>
+      <br />
       
       {{if !$DBorNotDB}}
       <div>
@@ -146,7 +173,9 @@ Main.add(function () {
   </th>
   <td>
     {{if $can->admin}}
-    <button class="search" type="button" onclick="AccessLog.crazyLogs('find')";>Logs douteux</button>
+      <button class="search" type="button" onclick="AccessLog.crazyLogs('find')">Logs douteux</button>
+      <br />
+      <button class="search" type="button" onclick="AccessLog.viewAggregateLogs()">{{tr}}Aggregate{{/tr}}</button>
     {{/if}}
   </td>
 </tr>

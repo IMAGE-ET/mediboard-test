@@ -29,6 +29,8 @@ class CAccessLog extends CMbObject {
   public $errors;
   public $warnings;
   public $notices;
+  public $aggregate;
+  public $bot;
   
   // Form fields
   public $_average_hits        = 0;
@@ -71,6 +73,8 @@ class CAccessLog extends CMbObject {
     $props["errors"]      = "num min|0";
     $props["warnings"]    = "num min|0";
     $props["notices"]     = "num min|0";
+    $props["aggregate"]   = "num min|0 default|10";
+    $props["bot"]         = "enum list|0|1 default|0";
 
     $props["_average_duration"] = "num min|0";
     
@@ -93,7 +97,7 @@ class CAccessLog extends CMbObject {
     foreach ($fields as $_name => $_value) {
       $columns[] = "$_name";
       $inserts[] = "'$_value'";
-      if (!in_array($_name, array("module", "action", "period"))) {
+      if (!in_array($_name, array("module", "action", "period", "aggregate", "bot"))) {
           $updates[] = "$_name = $_name + '$_value'";
       }
     }
@@ -142,13 +146,14 @@ class CAccessLog extends CMbObject {
    * @param int    $groupmod  Grouping mode
    * @param null   $module    Module name
    * @param bool   $DBorNotDB Load database stats or not
+   * @param string $human_bot Human/bot filter
    *
    * @return array|CStoredObject[]
    */
-  static function loadAgregation($start, $end, $groupmod = 0, $module = null, $DBorNotDB = false) {
-    $query = "SELECT 
-        accesslog_id, 
-        module, 
+  static function loadAgregation($start, $end, $groupmod = 0, $module = null, $DBorNotDB = false, $human_bot = null) {
+    $query = "SELECT
+        accesslog_id,
+        module,
         action,
         SUM(hits)        AS hits,
         SUM(size)        AS size,
@@ -164,7 +169,12 @@ class CAccessLog extends CMbObject {
       FROM access_log
       USE INDEX (period)
       WHERE period BETWEEN '$start' AND '$end' ";
-            
+
+    // 2 means for both of them
+    if ($human_bot === '0' || $human_bot === '1') {
+      $query .= "\nAND bot = '$human_bot' ";
+    }
+
     if ($module && !$groupmod) {
       $query .= "AND module = '$module' ";
     }
@@ -191,9 +201,14 @@ class CAccessLog extends CMbObject {
       FROM `access_log`
       USE INDEX (`period`)
       WHERE `access_log`.`period` BETWEEN '$start' AND '$end' ";
-        
+
+      // 2 means for both of them
+      if ($human_bot === '0' || $human_bot === '1') {
+        $query .= "\nAND bot = '$human_bot' ";
+      }
+
       if ($module && !$groupmod) {
-        $query .= "AND module = '$module' ";
+        $query .= "\nAND module = '$module' ";
       }
       
       switch ($groupmod) {
@@ -211,7 +226,7 @@ class CAccessLog extends CMbObject {
       $log = new self;
       return $log->_spec->ds->loadList($query);
     }
-    
+
     $log = new self;
     return $log->loadQueryList($query);
   }
@@ -225,11 +240,15 @@ class CAccessLog extends CMbObject {
    * @param string $module_name   Module name
    * @param string $action_name   Action name
    * @param bool   $DBorNotDB     Include database logs stats
+   * @param string $human_bot     Human/bot filter
    *
    * @return array|CStoredObject[]
    */
-  static function loadPeriodAggregation($start, $end, $period_format, $module_name, $action_name, $DBorNotDB = false) {
-    $query = "SELECT 
+  static function loadPeriodAggregation($start, $end, $period_format, $module_name, $action_name, $DBorNotDB = false, $human_bot = null) {
+    // Convert date format from PHP to MySQL
+    $period_format = str_replace("%M", "%i", $period_format);
+
+    $query = "SELECT
         `accesslog_id`,
         `module`,
         `action`,
@@ -253,7 +272,12 @@ class CAccessLog extends CMbObject {
       FROM `access_log`
       USE INDEX (period)
       WHERE `period` BETWEEN '$start' AND '$end'";
-      
+
+    // 2 means for both of them
+    if ($human_bot === '0' || $human_bot === '1') {
+      $query .= "\nAND bot = '$human_bot' ";
+    }
+
     if ($module_name) {
       $query .= "\nAND `module` = '$module_name'";
     }
@@ -285,13 +309,18 @@ class CAccessLog extends CMbObject {
       if ($action_name) {
         $query .= "\nAND `access_log`.`action` = '$action_name'";
       }
+
+      // 2 means for both of them
+      if ($human_bot === '0' || $human_bot === '1') {
+        $query .= "\nAND bot = '$human_bot' ";
+      }
       
       $query .= "\nGROUP BY `gperiod`, `datasource_log`.`datasource` ORDER BY `period`";
       
       $log = new self;
       return $log->_spec->ds->loadList($query);
     }
-    
+
     $log = new self;
     return $log->loadQueryList($query);
   }
