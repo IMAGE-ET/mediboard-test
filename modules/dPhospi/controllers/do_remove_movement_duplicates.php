@@ -1,15 +1,15 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpersonnel
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id:$
+ *
+ * @package    Mediboard
+ * @subpackage dPhospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 CCanDo::checkAdmin();
-
 $original_trigger_code = CValue::post("original_trigger_code");
 $do_it                 = CValue::post("do_it");
 $count                 = CValue::post("count", 10);
@@ -46,7 +46,7 @@ if (!$do_it) {
   CAppUI::setMsg(count($list)." doublons à traiter");
 }
 else {
-  foreach($list as $_mvt) {
+  foreach ($list as $_mvt) {
     $ids = explode(",", $_mvt["ids"]);
     sort($ids); // IMPORTANT, must use the first movement created as a reference
     

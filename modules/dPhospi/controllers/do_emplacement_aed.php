@@ -1,12 +1,13 @@
-<?php /* $Id: do_emplacement_aed.php $ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPhospi
-* @version $Revision: 8216 $
-* @author Aurélie Hebras
-*/
+ * $Id:$
+ *
+ * @package    Mediboard
+ * @subpackage dPhospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
+ */
 
 $do = new CDoObjectAddEdit("CEmplacement", "emplacement_id");
 $do->doIt();
-?>

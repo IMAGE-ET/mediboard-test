@@ -1,11 +1,12 @@
-<?php /* $Id: do_items_liaisons_aed.php $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage dPhospi
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 $liaisons_j = CValue::post("liaisons_j");
@@ -72,9 +73,7 @@ if (is_array($liaisons_j)) {
       
       // On ne store que si c'est nouvelle liaison
       // ou un changement de niveau
-      if (!$item_liaison->_id ||
-           $item_liaison->item_souhait_id != $souhait_id ||
-           $item_liaison->item_realise_id != $realise_id) {
+      if (!$item_liaison->_id || $item_liaison->item_souhait_id != $souhait_id || $item_liaison->item_realise_id != $realise_id) {
         $item_liaison->item_souhait_id = $souhait_id;
         $item_liaison->item_realise_id = $realise_id;
         $item_liaison->store();
@@ -87,4 +86,3 @@ CAppUI::setMsg("CItemLiaison-modified_selection");
 
 echo CAppUI::getMsg();
 CApp::rip();
-?>

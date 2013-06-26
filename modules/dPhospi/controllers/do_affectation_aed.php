@@ -1,11 +1,13 @@
-<?php /** $Id$ **/
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPhospi
-* @version $Revision$
-* @author Thomas Despoix
-*/
+ * $Id:$
+ *
+ * @package    Mediboard
+ * @subpackage dPhospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
+ */
 $_lock_all_lits = CValue::post("_lock_all_lits");
 $_lock_all_lits_urgences = CValue::post("_lock_all_lits_urgences");
 $lit_id     = CValue::post("lit_id");

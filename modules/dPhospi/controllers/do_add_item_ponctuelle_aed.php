@@ -1,11 +1,12 @@
-<?php /* $Id: do_affect_ponctuelle_aed.php $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage dPhospi
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 $sejour_id          = CValue::post("sejour_id");
@@ -28,5 +29,3 @@ else {
 echo CAppUI::getMsg();
 
 CApp::rip();
-
-?>

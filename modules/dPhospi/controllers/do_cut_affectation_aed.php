@@ -1,11 +1,12 @@
-<?php /* $Id: do_cut_affectation_aed.php $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpersonnel
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id:$
+ *
+ * @package    Mediboard
+ * @subpackage dPhospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 $affectation_id = CValue::post("affectation_id");
@@ -86,7 +87,8 @@ if ($affectation->countBackRefs("affectations_enfant")) {
   $affectations_enfant = $affectation->loadBackRefs("affectations_enfant");
   
   foreach ($affectations_enfant as $_affectation_enfant) {
-    $_affectation = new CAffectation;
+    /** @var CAffectation $_affectation_enfant */
+    $_affectation = new CAffectation();
     $_affectation->entree = $_date_cut;
     $_affectation->sejour_id = $_affectation_enfant->sejour_id;
     $_affectation->sortie = $_affectation_enfant->sortie;

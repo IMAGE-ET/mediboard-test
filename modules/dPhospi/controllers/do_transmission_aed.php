@@ -1,10 +1,12 @@
 <?php
-
 /**
- *	@package Mediboard
- *	@subpackage dPhospi
- *	@version $Revision: 
- *  @author Romain Ollivier
+ * $Id:$
+ *
+ * @package    Mediboard
+ * @subpackage dPhospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 /*
 if(isset($_POST["date"]) && $_POST["date"] == "now") {
@@ -13,5 +15,3 @@ if(isset($_POST["date"]) && $_POST["date"] == "now") {
 */
 $do = new CDoObjectAddEdit("CTransmissionMedicale", "transmission_medicale_id");
 $do->doIt();
-
-?>

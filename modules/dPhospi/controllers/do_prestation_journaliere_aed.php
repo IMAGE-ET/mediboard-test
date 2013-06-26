@@ -1,13 +1,13 @@
-<?php /* $Id: do_prestation_ponctuelle_aed.php $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpersonnel
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id:$
+ *
+ * @package    Mediboard
+ * @subpackage dPhospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 $do = new CDoObjectAddEdit("CPrestationJournaliere");
 $do->doIt();
-?>

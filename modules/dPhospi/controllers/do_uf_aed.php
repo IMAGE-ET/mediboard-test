@@ -1,12 +1,13 @@
-<?php /* $Id: do_service_aed.php 8216 2010-03-05 10:16:33Z rhum1 $ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPhospi
-* @version $Revision: 8216 $
-* @author Thomas Despoix
-*/
+ * $Id:$
+ *
+ * @package    Mediboard
+ * @subpackage dPhospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
+ */
 
 $do = new CDoObjectAddEdit("CUniteFonctionnelle", "uf_id");
 $do->doIt();
-?>
