@@ -29,8 +29,9 @@ class CMediusersStats {
    * @param date   $date        Reference ISO date
    * @param string $period      One of day, week, month, year
    * @param string $date_column SELECT-like column, might be a expression such as DATE(when)
+   * @param int    $nb_periods  Number of periods to display
    */
-  public function __construct($date, $period, $date_column) {
+  public function __construct($date, $period, $date_column, $nb_periods = 30) {
     // Prepare periods
     switch ($period) {
       case "day": 
@@ -61,7 +62,7 @@ class CMediusersStats {
     
     // Prepare dates
     $dates = array();
-    foreach (range(0, 29) as $n) {
+    foreach (range(0, $nb_periods - 1) as $n) {
       $dates[] = $min_date = CMbDT::date("- $n $php_period", $date);
     }
     $dates = array_reverse($dates);
@@ -82,24 +83,25 @@ class CMediusersStats {
   /**
    * Add a total for a user at a given date
    *
-   * @param int   $user_id CMediuser id
-   * @param date  $date    Date for total
-   * @param mixed $value   Value for total
+   * @param int    $user_id CMediuser id
+   * @param date   $date    Date for total
+   * @param mixed  $value   Value for total
+   * @param string $part    Part name if partial total wanted
    *
    * @return void
    */
-  function addTotal($user_id, $date, $value) {
+  function addTotal($user_id, $date, $value, $part = null) {
     if (!in_array($date, $this->dates)) {
       $warning = CAppUI::tr("CMediusersStats-warning-total_incorrect_date", $date);
       trigger_error($warning, E_USER_WARNING);
     }
     
-    if (isset($this->totals[$user_id][$date])) {
+    if (isset($this->totals[$user_id][$date][$part])) {
       $warning = CAppUI::tr("CMediusersStats-warning-already_defined", $user_id, $date);
       trigger_error($warning, E_USER_WARNING);
     }
 
-    $this->totals[$user_id][$date] = $value;
+    $this->totals[$user_id][$date][$part] = $value;
   }
 
   /**

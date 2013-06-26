@@ -16,9 +16,11 @@
     {{if $period == "week" }}{{assign var=format value="%V"   }}{{/if}}
     {{if $period == "month"}}{{assign var=format value="%m"   }}{{/if}}
     {{if $period == "year" }}{{assign var=format value="%y"   }}{{/if}}
-    
+
     {{foreach from=$dates item=_date}}
-    <th class="text narrow" title="{{$_date}}">{{$_date|date_format:$format}}</th>
+    <th class="text" style="width: {{math equation="60/x" x=$dates|@count}}%;" title="{{$_date}}">
+      {{$_date|date_format:$format}}
+    </th>
     {{/foreach}}
   </tr>
 
@@ -41,7 +43,9 @@
     {{foreach from=$dates item=_date}}     
     <td style="text-align: center;">
       {{if array_key_exists($_date, $_dates)}}
-        <strong>{{$_dates.$_date}}</strong> 
+        {{foreach from=$_dates.$_date key=_class item=_value}}
+          <strong class="{{$_class}}">{{$_value}}</strong>
+        {{/foreach}}
       {{/if}}
     </td>
     {{/foreach}}

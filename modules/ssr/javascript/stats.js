@@ -15,6 +15,6 @@ Stats = {
       addElement(form.date) .
       addElement(form.type) .
       addElement(form.period) .
-      requestModal(900, 800);
+      requestModal(-50, -50);
   }
 };

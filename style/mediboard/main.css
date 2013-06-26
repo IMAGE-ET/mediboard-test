@@ -1636,6 +1636,28 @@ table.tbl tr.ssr-prevu   td.cancelled {
   background-color: #f88; 
 }
 
+strong.realises {
+  color: #080;
+}
+
+strong.annules {
+  color: #800;
+}
+
+strong.planifies {
+  color: #888;
+}
+
+strong.csarr {
+  color: #080;
+}
+
+strong.cdarr {
+  color: #800;
+}
+
+
+
 table.tbl tr.ssr-kine-conges td,
 table.tbl tr.ssr-kine-conges th {
   text-align: center;
