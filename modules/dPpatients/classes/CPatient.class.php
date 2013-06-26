@@ -334,7 +334,8 @@ class CPatient extends CPerson {
     $backProps["grossesses"]            = "CGrossesse parturiente_id";
     $backProps["facture_patient_consult"] = "CFactureCabinet patient_id";
     $backProps["facture_patient_sejour"]  = "CFactureEtablissement patient_id";
-    $backProps["patient_observation_result_sets"] = "CObservationResultSet patient_id"; // interfere avec CMbObject-back-observation_result_sets
+    // interfere avec CMbObject-back-observation_result_sets
+    $backProps["patient_observation_result_sets"] = "CObservationResultSet patient_id";
     $backProps["patient_links"]         = "CPatient patient_link_id";
     $backProps["CV_pyxvital"]           = "CPvCV id_patient";
     return $backProps;
@@ -474,13 +475,22 @@ class CPatient extends CPerson {
     return $props;
   }
 
-  function checkMerge($patients = array()/*<CPatient>*/) {
+  /**
+   * Vérification de la possibilité de merger
+   * une liste de patients
+   *
+   * @param CPatient[] $patients Liste des patients à merger
+   *
+   * @return string
+   */
+  function checkMerge($patients = array()) {
     if ($msg = parent::checkMerge($patients)) {
       return $msg;
     }
 
     $sejour = new CSejour;
     $where["patient_id"] = CSQLDataSource::prepareIn(CMbArray::pluck($patients, "_id"));
+    /** @var CSejour[] $sejours */
     $sejours = $sejour->loadList($where);
 
     foreach ($sejours as $_sejour1) {
@@ -492,15 +502,18 @@ class CPatient extends CPerson {
         }
       }
     }
+    return null;
   }
 
   /**
-   * @param self[] $objects
-   * @param bool   $fast
+   * Fusion de patients
    *
-   * @return CMbObject|CModelObject
+   * @param CPatient[] $objects Liste des patientsx
+   * @param bool       $fast    Mode rapide
+   *
+   * @return string|null
    */
-  function merge($objects = array/*<CPatient>*/(), $fast = false) {
+  function merge($objects = array(), $fast = false) {
     // Load the matching CDossierMedical objects
     if ($this->_id) {
       $merged_objects = array_merge($objects, array($this));
@@ -526,14 +539,12 @@ class CPatient extends CPerson {
 
     // Merge them
     if (count($list) > 1) {
-      if ($msg = $dossier_medical->mergePlainFields($list)) {
-        return $msg;
-      }
-
+      $dossier_medical->mergePlainFields($list);
       $dossier_medical->object_class = $this->_class;
       $dossier_medical->object_id = $this->_id;
       return $dossier_medical->merge($list);
     }
+    return null;
   }
 
   /**
@@ -551,6 +562,7 @@ class CPatient extends CPerson {
         return "Doublons détectés";
       }
     }
+    return null;
   }
 
   /**
@@ -597,24 +609,36 @@ class CPatient extends CPerson {
         return $msg;
       }
     }
+    return null;
   }
 
+  /**
+   * Génération de l'IPP du patient
+   *
+   * @return null|string
+   */
   function generateIPP() {
     $group = CGroups::loadCurrent();
     if (!$group->isIPPSupplier()) {
-      return;
+      return null;
     }
 
     $this->loadIPP($group->_id);
     if ($this->_IPP) {
-      return;
+      return null;
     }
     
     if (!$IPP = CIncrementer::generateIdex($this, self::getTagIPP($group->_id), $group->_id)) {
       return CAppUI::tr("CIncrementer_undefined");
     }
+    return null;
   }
 
+  /**
+   * Evaluation des libellés d'exonération
+   *
+   * @return void
+   */
   function guessExoneration(){
     $this->completeField("libelle_exo");
 
@@ -784,6 +808,10 @@ class CPatient extends CPerson {
 
   /**
    * Calcul l'âge du patient en semaines
+   *
+   * @param string $date Date de référence pour le calcul, maintenant si null
+   *
+   * @return int l'age du patient en semaines
    */
   function evalAgeSemaines($date = null){
     $jours = $this->evalAgeJours($date);
@@ -792,6 +820,10 @@ class CPatient extends CPerson {
 
   /**
    * Calcul l'âge du patient en jours
+   *
+   * @param string $date Date de référence pour le calcul, maintenant si null
+   *
+   * @return int l'age du patient en jours
    */
   function evalAgeJours($date = null){
     $date = $date ? $date : CMbDT::date();
@@ -902,6 +934,13 @@ class CPatient extends CPerson {
     return $this->_ref_sejours = $sejour->loadList($where, $order);
   }
 
+  /**
+   * Chargement du séjour courant du patient
+   *
+   * @param string $dateTime Date de référence, maintenant si null
+   *
+   * @return void
+   */
   function getCurrSejour($dateTime = null) {
     if (!$dateTime) {
       $dateTime = CMbDT::dateTime();
@@ -913,18 +952,25 @@ class CPatient extends CPerson {
 
   /**
    * Get patient links
+   *
+   * @return CPatient[]
    */
   function loadPatientLinks() {
     if ($this->patient_link_id) {
       return $this->_ref_patient_links = array($this->loadFwdRef("patient_link_id"));
     }
-
+    return null;
     // return $this->_ref_patient_links = $this->loadBackRefs("patient_links");
   }
 
-  /*
+  /**
    * Get the next sejour from today or from a given date
-   * @return array(CSejour, COperation);
+   *
+   * @param string $date        Date de début de recherche
+   * @param bool $withOperation Avec rechreche des interventions
+   * @param int $consult_id     Identifiant de la consultation de référence
+   *
+   * @return array;
    */
   function getNextSejourAndOperation($date = null, $withOperation = true, $consult_id = null) {
     $sejour = new CSejour;
@@ -1528,7 +1574,7 @@ class CPatient extends CPerson {
    *
    * @param int $group_id Permet de charger l'IPP pour un établissement donné si non null
    *
-   * @return string
+   * @return string|null
    */
   static function getTagIPP($group_id = null) {
     $context = array(__METHOD__, func_get_args());
@@ -1543,7 +1589,7 @@ class CPatient extends CPerson {
     
     // Pas de tag IPP => pas d'affichage d'IPP
     if (null == $tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp")) {
-      return;
+      return null;
     }
 
     // Permettre des IPP en fonction de l'établissement
@@ -2018,7 +2064,7 @@ class CPatient extends CPerson {
   function isIPPConflict($ipp) {
     // Pas de tag IPP => pas d'affichage d'IPP
     if (null == $tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp")) {
-      return;
+      return null;
     }
 
     $idex = new CIdSante400();
@@ -2126,12 +2172,12 @@ class CPatient extends CPerson {
 
     //on vérifie que le nir est valide
     if (CCodeSpec::checkInsee($nir_complet)) {
-      return;
+      return null;
     }
 
     //on vérifie que le nir n'est pas un nir temporaire
     if (!preg_match("/^([12][0-9]{2}[0-9]{2}[0-9][0-9ab][0-9]{3}[0-9]{3})([0-9]{2})$/i", $nir_complet, $matches)) {
-      return;
+      return null;
     }
 
     if (empty($first_name)) {
@@ -2162,11 +2208,11 @@ class CPatient extends CPerson {
         $birth_date = $year.$month.$day;
         break;
       default:
-        return;
+        return null;
     }
 
     if (!checkdate($month, $day, $year) && $birth_date !== "000000" && strlen($birth_date) !== 6) {
-      return;
+      return null;
     }
 
     $seed = $first_name.$birth_date.$nir;
@@ -2210,6 +2256,7 @@ class CPatient extends CPerson {
     if ($idex->tag == self::getTagIPP()) {
       return "IPP";
     }
+    return null;
   }
 
   /**

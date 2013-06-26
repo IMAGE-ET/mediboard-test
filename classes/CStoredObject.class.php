@@ -1445,7 +1445,7 @@ class CStoredObject extends CModelObject {
    * @param self[] $objects An array of CMbObject to merge
    * @param bool   $fast    Tell wether to use SQL (fast) or PHP (slow but checked and logged) algorithm
    *
-   * @return CMbObject
+   * @return string|null
    */
   function merge($objects, $fast = false) {
     $alternative_mode = ($this->_id != null);

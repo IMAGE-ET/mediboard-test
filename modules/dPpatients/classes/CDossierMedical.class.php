@@ -39,6 +39,7 @@ class CDossierMedical extends CMbMetaObject {
   public $_ext_codes_cim;
 
   // Back references
+  /** @var  CAntecedent[] */
   public $_all_antecedents;
   public $_ref_antecedents_by_type;
   public $_ref_antecedents_by_appareil;
@@ -126,17 +127,24 @@ class CDossierMedical extends CMbMetaObject {
   }
 
   /**
+   * Chargement de la prescription du dossier médical
+   *
    * @return CPrescription
    */
-  function loadRefPrescription(){
+  function loadRefPrescription() {
     $this->_ref_prescription = $this->loadUniqueBackRef("prescription");  
     if ($this->_ref_prescription && $this->_ref_prescription->_id) {
       $this->_ref_prescription->loadRefsLinesMed();
     }
     return $this->_ref_prescription;
   }
-  
-  function loadRefObject(){  
+
+  /**
+   * Chargement de l'objet lié au dossier médical
+   *
+   * @return void
+   */
+  function loadRefObject() {
     $this->_ref_object = new $this->object_class;
     $this->_ref_object->load($this->object_id);
   }
@@ -157,21 +165,20 @@ class CDossierMedical extends CMbMetaObject {
       $this->_ext_codes_cim[$code_cim] = new CCodeCIM10($code_cim, 1);
     }
   }
-  
-  function mergePlainFields ($objects /*array(<CMbObject>)*/, $getFirstValue = false) {
+
+  /**
+   * @see parent::mergePlainFields()
+   */
+  function mergePlainFields($objects /*array(<CMbObject>)*/, $getFirstValue = false) {
     $codes_cim_array = CMbArray::pluck($objects, 'codes_cim');
     $codes_cim_array[] = $this->codes_cim;
     $codes_cim = implode('|', $codes_cim_array);
     $codes_cim_array = array_unique(explode('|', $codes_cim));
     CMbArray::removeValue('', $codes_cim_array);
     
-    if ($msg = parent::mergePlainFields($objects)) {
-      return $msg;
-    }
+    parent::mergePlainFields($objects);
     
     $this->codes_cim = implode('|', $codes_cim_array);
-
-    return null;
   }
 
   /**
@@ -181,7 +188,14 @@ class CDossierMedical extends CMbMetaObject {
     parent::loadView();
     $this->loadComplete();
   }
-    
+
+  /**
+   * Chargement des antécédents du dossier
+   *
+   * @param bool $cancelled Prise en compte des annulés
+   *
+   * @return CStoredObject[]|null
+   */
   function loadRefsAntecedents($cancelled = false) {
     // Initialisation du classement
     $order = "CAST(type AS CHAR), CAST(appareil AS CHAR), rques";
@@ -231,6 +245,8 @@ class CDossierMedical extends CMbMetaObject {
 
   /**
    * Compte les antécédents annulés et non-annulés
+   *
+   * @param string $type Type des l'antécédent (apparement non utilisé)
    * 
    * @return void
    */
@@ -262,9 +278,11 @@ class CDossierMedical extends CMbMetaObject {
     $this->_count_cancelled_traitements = $traitement->countList($where);
   }
   
-  /*
+  /**
    * Compte les antecedents de type allergies
    * tout en tenant compte de la config pour ignorer certaines allergies
+   *
+   * @return int
    */
   function countAllergies(){
     if (!$this->_id) {
@@ -279,7 +297,14 @@ class CDossierMedical extends CMbMetaObject {
     
     return $this->_count_allergies = $antecedent->countList($where);
   }
-  
+
+  /**
+   * Chargmeent des antécédents par type
+   *
+   * @param string $type Type des antécédents
+   *
+   * @return array|CStoredObject[]
+   */
   function loadRefsAntecedentsOfType($type) {
     if (!$this->_id) {
       return $this->_ref_antecedents_by_type[$type] = array();
@@ -291,7 +316,12 @@ class CDossierMedical extends CMbMetaObject {
     $antecedent->dossier_medical_id = $this->_id;
     return $this->_ref_antecedents_by_type[$type] = $antecedent->loadMatchingList();
   }
-  
+
+  /**
+   * Chargement des allergies
+   *
+   * @return CStoredObject[]
+   */
   function loadRefsAllergies(){
     return $this->_ref_allergies = $this->loadRefsAntecedentsOfType("alle");
   }
@@ -312,11 +342,24 @@ class CDossierMedical extends CMbMetaObject {
     }
     return $this->_ref_allergies = $allergies;
   }
-  
+
+  /**
+   * Chargement des déficiences
+   *
+   * @return CStoredObject[]
+   */
   function loadRefsDeficiences(){
     return $this->_ref_deficiences = $this->loadRefsAntecedentsOfType("deficience");
   }
 
+  /**
+   * Comptage des antécédents par type
+   *
+   * @param CStoredObject[] $dossiers liste des dossiers
+   * @param string          $type     Type des antécédents
+   *
+   * @return void
+   */
   static function massCountAntecedentsByType($dossiers, $type = "") {
     if ($type && !preg_match("/$type/", CAppUI::conf("patients CAntecedent types"))) {
       return;
@@ -338,6 +381,13 @@ class CDossierMedical extends CMbMetaObject {
     }
   }
 
+  /**
+   * Chargement des traitements personnels
+   *
+   * @param bool $cancelled Prise en compte des annulés
+   *
+   * @return CStoredObject[]
+   */
   function loadRefsTraitements($cancelled = false) {
     $order = "fin DESC, debut DESC";
     
@@ -403,7 +453,15 @@ class CDossierMedical extends CMbMetaObject {
     
     return parent::store();
   }
-  
+
+  /**
+   * Register all templates properties
+   *
+   * @param CTemplateManager &$template Template manager
+   * @param string           $champ     Type d'objet relié au dossier médical
+   *
+   * @return void
+   */
   function fillTemplate(&$template, $champ = "Patient") {
     // Antécédents
     $this->loadRefsAntecedents();

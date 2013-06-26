@@ -592,12 +592,12 @@ class CModelObject {
   /**
    * Merges the fields of an array of objects to $this
    *
-   * @param array $objects       An array of CModelObject
-   * @param bool  $getFirstValue Get first value ?
+   * @param CModelObject[] $objects       An array of CModelObject
+   * @param bool           $getFirstValue Get first value ?
    *
-   * @return $this or an error
+   * @return void
    */
-  function mergePlainFields ($objects /*array(<CModelObject>)*/, $getFirstValue = false) {
+  function mergePlainFields ($objects, $getFirstValue = false) {
     $fields = $this->getPlainFields();
     $diffs = $fields;
     foreach ($diffs as &$diff) {
