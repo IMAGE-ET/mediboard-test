@@ -36,7 +36,6 @@
       date.setMinutes({{$plage->debut|date_format:"%M"}} - {{$plage->freq|date_format:"%M"}});
       date.setSeconds({{$plage->debut|date_format:"%S"}});
       form.debut.value = printf('%02d:%02d:%02d',date.getHours(), date.getMinutes(), date.getSeconds());
-      console.log('Passé par là');
       return onSubmitFormAjax(form, function() { PlageConsult.refreshPlage(page_id, "{{$multiple}}"); });
     };
 
@@ -172,7 +171,7 @@
               <button type="button" class="tick" onclick="PlageConsult.setClose('{{$_place.time}}')">{{$_place.time|date_format:$conf.time}}</button>
             {{else}}
               <label>
-                <input name="checkbox-{{$_place.time}}" type="checkbox" data-chir_name="{{$plage->_ref_chir}}" data-plageid="{{$plage->_id}}" data-date="{{$plage->date}}" data-chir="{{$plage->chir_id}}" onclick="PlageConsult.setClose('{{$_place.time}}',true, this)"> {{$_place.time|date_format:$conf.time}}
+                <input name="checkbox" type="radio" data-chir_name="{{$plage->_ref_chir}}" data-plageid="{{$plage->_id}}" data-date="{{$plage->date}}" data-chir="{{$plage->chir_id}}" onclick="PlageConsult.setClose('{{$_place.time}}',true, this)"> {{$_place.time|date_format:$conf.time}}
               </label>
             {{/if}}
           {{else}}

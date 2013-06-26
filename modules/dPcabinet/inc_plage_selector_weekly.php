@@ -11,7 +11,7 @@
 
 CCanDo::checkRead();
 
-global $period, $periods, $listPraticiens, $chir_id, $function_id, $date, $ndate, $pdate, $plageconsult_id, $print;
+global $period, $periods, $listPraticiens, $chir_id, $function_id, $date, $ndate, $pdate, $plageconsult_id, $print, $consultation_id;
 
 $plageconsult_id = 0;
 

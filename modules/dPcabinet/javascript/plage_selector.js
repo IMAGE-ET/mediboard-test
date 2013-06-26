@@ -8,6 +8,7 @@ PlageConsultSelector = {
   sChir_id         : null,
   sFunction_id     : null,
   sDatePlanning    : null,
+  sConsultId       : null,
   multipleMode     : 0,
   options          : {},
   pages            : [],
@@ -22,6 +23,7 @@ PlageConsultSelector = {
     url.addParam("plageconsult_id", $V(oForm[this.sPlageconsult_id]));
     url.addParam("multipleMode"       , this.multipleMode);
     url.addParam("_line_element_id", $V(oForm[this.sLineElementId]));
+    url.addParam("consultation_id", $V(oForm[this.sConsultId]));
     if (this.sDatePlanning != null && $V(oForm[this.sDatePlanning])) {
       url.addParam("date", $V(oForm[this.sDatePlanning]));
     }

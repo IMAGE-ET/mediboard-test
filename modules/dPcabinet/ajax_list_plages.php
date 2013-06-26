@@ -1,43 +1,43 @@
-<?php
+<?php 
+
 /**
  * $Id$
- *
- * @package    Mediboard
- * @subpackage Cabinet
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ *  
+ * @category Cabinet
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
+
+CCanDo::check();
+
+global $listPraticiens;
+
 
 $ds = CSQLDataSource::get("std");
 
-// Initialisation des variables
-global $period, $periods, $chir_id, $function_id, $date, $ndate, $pdate, $plageconsult_id, $consultation_id;
-
+$period           = CValue::get("period", CAppUI::pref("DefaultPeriod"));
+$periods          = array("day", "week", "month","weekly");
+$chir_id          = CValue::get("chir_id");
+$function_id      = CValue::get("function_id");
+$multipleMode     = CValue::get("multipleMode", false);
+$date             = CValue::get("date", CMbDT::date());
+$plageconsult_id  = CValue::get("plageconsult_id");
 $hour             = CValue::get("hour");
 $hide_finished    = CValue::get("hide_finished", true);
 $_line_element_id = CValue::get("_line_element_id");
-$multipleMode     = CValue::get("multipleMode", false);
 
-//if multiple, no weekly planner
-if ($multipleMode) {
-  $periods         = array("day", "week", "month");
-  if ($period == "weekly") {
-    $period = "month";
-  }
-}
 
-//functions
-$function       = new CFunctions();
-$listFunctions  = $function->loadSpecialites(PERM_EDIT);
+// Vérification des droits sur les praticiens
+$listPraticiens = CConsultation::loadPraticiens(PERM_EDIT);
+$listPrat = CConsultation::loadPraticiens(PERM_EDIT, $function_id, null, true);
 
 // Récupération des plages de consultation disponibles
 $listPlage = new CPlageconsult;
 $plage = new CPlageconsult;
 $where = array();
-
-// Praticiens sélectionnés
-$listPrat = CConsultation::loadPraticiens(PERM_EDIT, $function_id, null, true);
 
 if ($_line_element_id) {
   $where["pour_tiers"] = "= '1'";
@@ -57,22 +57,36 @@ if ($hide_finished) {
 }
 
 $minDate = $maxDate = $refDate = CMbDT::date(null, $date);
-// Filtre de la période
+
+
+
+if ($period == "weekly") {
+  CAppUI::requireModuleFile("dPcabinet", "inc_plage_selector_weekly");
+  return;
+}
+
+
 switch ($period) {
   case "day":
     $minDate = $maxDate = $refDate = CMbDT::date(null, $date);
+    $ndate = CMbDT::date("+1 day", $date);
+    $pdate = CMbDT::date("-1 day", $date);
     break;
 
   case "week":
     $minDate = CMbDT::date("last sunday", $date);
     $maxDate = CMbDT::date("next saturday", $date);
     $refDate = CMbDT::date("+1 day", $minDate);
+    $ndate = CMbDT::date("+1 week", $date);
+    $pdate = CMbDT::date("-1 week", $date);
     break;
 
   case "4weeks":
     $minDate = CMbDT::date("last sunday", $date);
     $maxDate = CMbDT::date("+ 3 weeks", CMbDT::date("next saturday", $date));
     $refDate = CMbDT::date("+1 day", $minDate);
+    $ndate = CMbDT::date("+4 week", $date);
+    $pdate = CMbDT::date("-4 week", $date);
     break;
 
   case "month":
@@ -80,9 +94,13 @@ switch ($period) {
     $maxDate = CMbDT::transform("+1 month", $minDate, "%Y-%m-01");
     $maxDate = CMbDT::date("-1 day", $maxDate);
     $refDate = $minDate;
+    $ndate = CMbDT::date("first day of next month"   , $date);
+    $pdate = CMbDT::date("last day of previous month", $date);
     break;
 
   default:
+    $ndate = CMbDT::date("+1 day", $date);
+    $pdate = CMbDT::date("-1 day", $date);
     trigger_error("Période '$period' inconnue");
     break;
 }
@@ -114,7 +132,6 @@ foreach ($listPlage as $currPlage) {
   $currPlage->loadCategorieFill();
   $currPlage->loadRefsNotes();
 }
-
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -133,10 +150,8 @@ $smarty->assign("function_id"    , $function_id);
 $smarty->assign("plageconsult_id", $plageconsult_id);
 $smarty->assign("plage"          , $plage);
 $smarty->assign("listPlage"      , $listPlage);
-$smarty->assign("listFunctions"  , $listFunctions);
-$smarty->assign("consultation_id", $consultation_id);
 $smarty->assign("online"         , true);
 $smarty->assign("_line_element_id", $_line_element_id);
-$smarty->assign("multipleMode"   , $multipleMode);
+$smarty->assign("multiple"      , $multipleMode);
 
-$smarty->display("plage_selector.tpl");
+$smarty->display("inc_list_plages.tpl");

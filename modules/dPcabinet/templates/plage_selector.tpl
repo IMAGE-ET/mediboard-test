@@ -1,4 +1,5 @@
 <!-- $Id$ -->
+
 <script type="text/javascript">
 
 var PlageConsult = {
@@ -15,10 +16,14 @@ var PlageConsult = {
     if(!multipleMode) {
       if (this.currPlage) {
         this.page_displayed = 1;
-        $("plage-"+this.currPlage).removeClassName("selected");
+        if ($("plage-"+this.currPlage)) {
+          $("plage-"+this.currPlage).removeClassName("selected");
+        }
       }
       this.currPlage = plage_id;
-      $("plage-"+this.currPlage).addClassName("selected");
+      if ($("plage-"+this.currPlage)) {
+        $("plage-"+this.currPlage).addClassName("selected");
+      }
     }
 
 
@@ -67,25 +72,56 @@ var PlageConsult = {
   addPlaceBefore: function(plage_id) {
     alert("Veuillez choisir une plage");
   },
-  reset : function() {
-    var plage = window.parent.PlageConsultSelector;
-    if (plage.pages.length > 1) {
-      for (var a = 1; a<(plage.pages.length); a++) {
-        if ($("listPlaces-"+a)) {
-          $("listPlaces-"+a).update("");
+  reset : function(id) {
+    if (!id) {
+      var plage = window.parent.PlageConsultSelector;
+      if (plage.pages.length > 1) {
+        for (var a = 1; a<(plage.pages.length); a++) {
+          if ($("listPlaces-"+a)) {
+            $("listPlaces-"+a).update("");
+          }
+          $("plage-"+plage.pages[a]).removeClassName("selected");
         }
-        $("plage-"+plage.pages[a]).removeClassName("selected");
+        plage.resetConsult();
+        plage.resetPage();
+        this.page_displayed = 1;
       }
-      plage.resetConsult();
-      plage.resetPage();
-      this.page_displayed = 1;
+    }
+    else {
+
     }
   }
 };
 
+updatePlage = function(sdate) {
+  var form = getForm("Filter");
+  $V(form.date, sdate);
+
+  if ($V(form.period) == "weekly") {
+    form.submit();
+  }
+  var url = new Url("cabinet", "ajax_list_plages");
+  url.addParam("dialog"             , 1);
+  url.addParam("chir_id"            , $V(form.chir_id));
+  url.addParam("function_id"        , $V(form.function_id));
+  url.addParam("plageconsult_id"    , $V(form.plageconsult_id));
+  url.addParam("consultation_id"    , $V(form.consultation_id));
+  url.addParam("_line_element_id"   , $V(form._line_element_id));
+  url.addParam("period"             , $V(form.period));
+  url.addParam("multipleMode"       , "{{$multipleMode}}");
+  url.addParam("hour"               , $V(form.hour));
+  url.addParam("date"               , sdate ? sdate : $V(form.date));
+  url.addParam("hide_finished"      , $V(form.hide_finished));
+  url.addParam("function_id"       , $V(form._function_id));
+  url.requestUpdate('listePlages');
+};
+
 Main.add(function () {
-  Calendar.regField(getForm("Filter").date, null, {noView: true});
-  {{if !$multipleMode}}PlageConsult.changePlage({{$plageconsult_id}});{{/if}}
+  {{* Calendar.regField(getForm("Filter").date, null, {noView: true}); *}}
+  updatePlage();
+  {{if !$multipleMode}}
+      PlageConsult.changePlage('{{$plageconsult_id}}');
+  {{/if}}
 });
 
 </script>
@@ -98,12 +134,13 @@ Main.add(function () {
   <input type="hidden" name="function_id" value="{{$function_id}}" />
   <input type="hidden" name="plageconsult_id" value="{{$plage->_id}}" />
   <input type="hidden" name="_line_element_id" value="{{$_line_element_id}}" />
+  <input type="hidden" name="consultation_id" value="{{$consultation_id}}"/>
   <table class="form">
     <tr>
       <!-- planning type -->
       <th><label for="period" title="Changer la période de recherche">Planning</label></th>
       <td>
-        <select name="period" onchange="this.form.submit()">
+        <select name="period" onchange="updatePlage()">
           {{foreach from=$periods item="_period"}}
           <option value="{{$_period}}" {{if $_period == $period}}selected="selected"{{/if}}>
             {{tr}}Period.{{$_period}}{{/tr}}
@@ -114,20 +151,13 @@ Main.add(function () {
 
       <!-- date -->
       <td class="button" style="width: 250px;">
-        <a style="float:left" href="#1" onclick="$V(getForm('Filter').plageconsult_id, ''); $V(getForm('Filter').date, '{{$pdate}}')">&lt;&lt;&lt;</a>
-        <a style="float:right" href="#1" onclick="$V(getForm('Filter').plageconsult_id, ''); $V(getForm('Filter').date, '{{$ndate}}')">&gt;&gt;&gt;</a>
-        <strong>
-          {{if $period == "day"  }}{{$refDate|date_format:" %A %d %B %Y"}}{{/if}}
-          {{if $period == "week" || $period == "4weeks"}}{{$refDate|date_format:" semaine du %d %B %Y (%U)"}}{{/if}}
-          {{if $period == "month"}}{{$refDate|date_format:" %B %Y"}}{{/if}}
-        </strong>
-        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="$V(getForm('Filter').plageconsult_id, ''); this.form.submit()" />
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="$V(getForm('Filter').plageconsult_id, '');" />
       </td>
 
       <!-- filter -->
       <th><label for="hour" title="Filtrer les plages englobalt l'heure choisie">Filtrer les heures</label></th>
       <td>
-        <select name="hour" onchange="this.form.submit()">
+        <select name="hour" onchange="updatePlage()">
           <option value="">&mdash; Toutes</option>
           {{foreach from=$hours item="_hour"}}
           <option value="{{$_hour}}" {{if $_hour == $hour}} selected="selected" {{/if}}>
@@ -140,10 +170,22 @@ Main.add(function () {
       <!-- hide -->
       <td>
         <label for="hide_finished">Masquer terminées :</label>
-        <input type="radio" name="hide_finished" value="0" onclick="this.form.submit()" {{if $hide_finished == "0"}}checked="checked" {{/if}} />
+        <input type="radio" name="hide_finished" value="0" onclick="updatePlage()" {{if $hide_finished == "0"}}checked="checked" {{/if}} />
         <label for="hide_finished_0">Non</label>
-        <input type="radio" name="hide_finished" value="1" onclick="this.form.submit()" {{if $hide_finished == "1"}}checked="checked" {{/if}} />
+        <input type="radio" name="hide_finished" value="1" onclick="updatePlage()" {{if $hide_finished == "1"}}checked="checked" {{/if}} />
         <label for="hide_finished_1">Oui</label>
+      </td>
+
+      <th>Filtre par fonction</th>
+      <td>
+        <select name="_function_id" style="width: 15em;" onchange="updatePlage()">
+          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+          {{foreach from=$listFunctions item=_function}}
+            <option value="{{$_function->_id}}" class="mediuser" style="border-color: #{{$_function->color}};" {{if $function_id == $_function->_id}}selected="selected" {{/if}}>
+              {{$_function->_view}}
+            </option>
+          {{/foreach}}
+        </select>
       </td>
 
       {{if $multipleMode}}
@@ -158,7 +200,7 @@ Main.add(function () {
 </form>
 
 <div style="float: left; width: {{if $multipleMode}}28{{else}}50{{/if}}%" id="listePlages">
-  {{include file="inc_list_plages.tpl" multiple=$multipleMode}}
+ 
 </div>
 {{if $multipleMode}}
   {{math assign=width equation="(72/(b))" b=$app->user_prefs.NbConsultMultiple}}

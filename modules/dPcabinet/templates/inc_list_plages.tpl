@@ -1,4 +1,24 @@
-    <table class="tbl">
+<script>
+  Calendar.regField(getForm("FilterPlage").date, null, {noView: true});
+</script>
+
+<form name="FilterPlage" action="?" method="get">
+  <table class="form">
+    <tr>
+      <td class="button narrow">
+        <a href="#1" onclick="updatePlage('{{$pdate}}')">&lt;&lt;&lt;</a>
+        <strong>
+          {{if $period == "day"  }}{{$refDate|date_format:" %A %d %B %Y"}}{{/if}}
+          {{if $period == "week" || $period == "4weeks"}}{{$refDate|date_format:" semaine du %d %B %Y (%U)"}}{{/if}}
+          {{if $period == "month"}}{{$refDate|date_format:" %B %Y"}}{{/if}}
+        </strong>
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="updatePlage( $V(this) )" />
+        <a href="#1" onclick="updatePlage('{{$ndate}}')">&gt;&gt;&gt;</a>
+      </td>
+    </tr>
+</form>
+
+<table class="tbl">
       <tr>
         <th style="width: 7em;">{{mb_title class=CPlageconsult field=date}}</th>
         <th>{{mb_title class=CPlageconsult field=chir_id}}</th>

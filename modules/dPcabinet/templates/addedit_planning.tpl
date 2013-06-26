@@ -218,6 +218,7 @@
     this.sChir_id         = "chir_id";
     this.sFunction_id     = "_function_id";
     this.sDatePlanning    = "_date_planning";
+    this.sConsultId       = "consultation_id";
     this.sLineElementId   = "_line_element_id";
     this.options          = {width: -30, height: -30};
     if (mode) {
