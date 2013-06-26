@@ -120,15 +120,20 @@ Main.add(function(){
             </td>
           </tr>
           <tr>
-            <th>
-              {{mb_label class=CMediusers field=function_id}}
-            </th>
-            <td id="secondary_functions">
+            <th>{{mb_label class=CMediusers field=function_id}}</th>
+            <td id="secondary_functions" class="text">
               {{assign var=chir value=$plagesel->_ref_chir}}
               {{assign var=selected value=$plagesel->secondary_function_id}}
               {{mb_include module=cabinet template=inc_refresh_secondary_functions field_name=secondary_function_id empty_function_principale=1 type_onchange="" change_active=0}}
             </td>
-            <td colspan="2" style="min-width: 50%"></td>
+            <th>{{mb_label object=$plagesel field="date"}}</th>
+            <td>
+              {{if $plagesel->plageop_id}}
+                <input type="hidden" name="date" value="{{$plagesel->date}}" />
+              {{else}}
+                <input type="hidden" name="date" value="{{$date}}" />
+              {{/if}}
+            </td>
           </tr>
           <tr>
             <th>{{mb_label object=$plagesel field="spec_id"}}</th>
@@ -143,14 +148,8 @@ Main.add(function(){
                 {{/foreach}}
               </select>
             </td>
-            <th>{{mb_label object=$plagesel field="date"}}</th>
-            <td>
-              {{if $plagesel->plageop_id}}
-              <input type="hidden" name="date" value="{{$plagesel->date}}" />
-              {{else}}
-              <input type="hidden" name="date" value="{{$date}}" />
-              {{/if}}
-            </td>
+            <th>{{mb_label object=$plagesel field="debut"}}</th>
+            <td>{{mb_field object=$plagesel field="debut"}}</td>
           </tr>
           <tr>
             <th>{{mb_label object=$plagesel field="anesth_id"}}</th>
@@ -158,29 +157,23 @@ Main.add(function(){
               <select name="anesth_id" style="width: 15em;">
                 <option value="">&mdash; Choisir un anesthésiste</option>
                 {{mb_include module=mediusers template=inc_options_mediuser selected=$plagesel->anesth_id list=$anesths}}
-            </select>
+              </select>
             </td>
-            <th>{{mb_label object=$plagesel field="debut"}}</th>
-            <td>{{mb_field object=$plagesel field="debut"}}</td>
+            <th>{{mb_label object=$plagesel field="fin"}}</th>
+            <td>{{mb_field object=$plagesel field="fin" }}</td>
           </tr>
           
           <tr>
             <th>{{mb_label object=$plagesel field="unique_chir"}}</th>
             <td>{{mb_field object=$plagesel field="unique_chir"}}</td>
-            <th>{{mb_label object=$plagesel field="fin"}}</th>
-            <td>{{mb_field object=$plagesel field="fin" }}</td>
-          </tr>
-          <tr>
-            <th>{{mb_label object=$plagesel field="max_intervention"}}</th>
-            <td>{{mb_field object=$plagesel field="max_intervention" size=1 increment=true form="editFrm" min=0}}</td>
             <th>{{mb_label object=$plagesel field="temps_inter_op"}}</th>
             <td>{{mb_field object=$plagesel field="temps_inter_op"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$plagesel field="verrouillage"}}</th>
+            <th>{{mb_label object=$plagesel field="max_intervention"}}</th>
+            <td>{{mb_field object=$plagesel field="max_intervention" size=1 increment=true form="editFrm" min=0}}</td>
+            <th>* {{mb_label object=$plagesel field="verrouillage"}}</th>
             <td>{{mb_field object=$plagesel field="verrouillage"}}</td>
-            <th></th>
-            <td></td>
           </tr>
         </table>
       </fieldset>
@@ -200,8 +193,10 @@ Main.add(function(){
             </td>
             <td rowspan="2" class="text">
               <div class="small-info">
-                Pour modifier plusieurs plages (nombre de semaines > 1),
-                veuillez ne pas changer les champs début et fin en même temps
+                Pour modifier plusieurs plages (nombre de plages > 1),
+                veuillez <strong>ne pas changer les champs début et fin en même temps</strong>.
+                <br />
+                * Cette valeur ne sera pas propagée sur les plages suivantes.
               </div>
             </td>
           </tr>

@@ -116,22 +116,14 @@
           <tr>
             <th>{{mb_label object=$plageSel field="debut"}}</th>
             <td>{{mb_field object=$plageSel field="debut"}}</td>
-            <th>{{mb_label object=$plageSel field="locked"}}</th>
+            <th>* {{mb_label object=$plageSel field="locked"}}</th>
             <td>{{mb_field object=$plageSel field="locked" typeEnum="checkbox"}}</td>
           </tr>
           <tr>
             <th>{{mb_label object=$plageSel field="fin"}}</th>
             <td>{{mb_field object=$plageSel field="fin"}}</td>
-            <th></th>
-            <td>
-              {{if $plageSel->_affected}}
-                Déjà <strong>{{$plageSel->_affected}} consultations</strong> planifiées
-                de <strong>{{$_firstconsult_time}}</strong> à <strong>{{$_lastconsult_time}}</strong>
-              {{/if}}
-              <input type='hidden' name='nbaffected' value='{{$plageSel->_affected}}' />
-              <input type='hidden' name='_firstconsult_time' value='{{$_firstconsult_time}}' />
-              <input type='hidden' name='_lastconsult_time' value='{{$_lastconsult_time}}' />
-            </td>
+            <th>* {{mb_label object=$plageSel field="pour_tiers"}}</th>
+            <td>{{mb_field object=$plageSel field="pour_tiers" typeEnum=checkbox}}</td>
           </tr>
           <tr>
             <th>{{mb_label object=$plageSel field="_freq"}}</th>
@@ -150,10 +142,15 @@
             <td>{{mb_field object=$plageSel field="_skip_collisions" typeEnum=checkbox}}</td>
           </tr>
           <tr>
-            <th></th>
-            <td></td>
-            <th>{{mb_label object=$plageSel field="pour_tiers"}}</th>
-            <td>{{mb_field object=$plageSel field="pour_tiers" typeEnum=checkbox}}</td>
+            <td class="text button" colspan="4">
+              {{if $plageSel->_affected}}
+                Déjà <strong>{{$plageSel->_affected}} consultations</strong> planifiées
+                                                                             de <strong>{{$_firstconsult_time}}</strong> à <strong>{{$_lastconsult_time}}</strong>
+              {{/if}}
+              <input type='hidden' name='nbaffected' value='{{$plageSel->_affected}}' />
+              <input type='hidden' name='_firstconsult_time' value='{{$_firstconsult_time}}' />
+              <input type='hidden' name='_lastconsult_time' value='{{$_lastconsult_time}}' />
+            </td>
           </tr>
         </table>
       </fieldset>
@@ -177,7 +174,7 @@
                 Pour modifier plusieurs plages (nombre de plages > 1),
                 veuillez <strong>ne pas changer les champs début et fin en même temps</strong>.
                 <br />
-                L'état de verrouillage de la plage ne sera pas propagé sur les plages suivantes.
+                * Cette valeur ne sera pas propagée sur les plages suivantes.
               </div>
             </td>
           </tr>
@@ -248,7 +245,7 @@
           callback: function() {
             var form = getForm('editFrm');
             form._type_repeat.disabled = '';
-            form.submit(); 
+            form.submit();
           }})">
         {{tr}}Delete{{/tr}}
       </button>

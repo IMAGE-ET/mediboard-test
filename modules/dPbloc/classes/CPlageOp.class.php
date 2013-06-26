@@ -553,16 +553,19 @@ class CPlageOp extends CMbObject {
 
     switch ($this->_type_repeat) {
       case "quadruple": 
-        $this->date = CMbDT::date("+1 WEEK", $this->date); // 4
-        $week_jumped++;
+        $this->date = CMbDT::date("+4 WEEK", $this->date);
+        $week_jumped += 4;
+        break;
       case "triple": 
-        $this->date = CMbDT::date("+1 WEEK", $this->date); // 3
-        $week_jumped++;
+        $this->date = CMbDT::date("+3 WEEK", $this->date);
+        $week_jumped += 3;
+        break;
       case "double": 
-        $this->date = CMbDT::date("+1 WEEK", $this->date); // 2
-        $week_jumped++;
+        $this->date = CMbDT::date("+2 WEEK", $this->date);
+        $week_jumped += 2;
+        break;
       case "simple": 
-        $this->date = CMbDT::date("+1 WEEK", $this->date); // 1
+        $this->date = CMbDT::date("+1 WEEK", $this->date);
         $week_jumped++;
         break;
       case "sameweek":
@@ -582,19 +585,19 @@ class CPlageOp extends CMbObject {
     }
     
     // Stockage des champs modifiés
-    $salle_id         = $this->salle_id;
-    $chir_id          = $this->chir_id;
-    $spec_id          = $this->spec_id;
+    $salle_id              = $this->salle_id;
+    $chir_id               = $this->chir_id;
+    $spec_id               = $this->spec_id;
     $secondary_function_id = $this->secondary_function_id === null ? "" : $this->secondary_function_id;
-    $debut            = $this->debut;
-    $fin              = $this->fin;
-    $temps_inter_op   = $this->temps_inter_op;
-    $max_intervention = $this->max_intervention;
-    $anesth_id        = $this->anesth_id;
-    $delay_repl       = $this->delay_repl;
-    $spec_repl_id     = $this->spec_repl_id;
-    $type_repeat      = $this->_type_repeat;
-    $unique_chir      = $this->unique_chir;
+    $debut                 = $this->debut;
+    $fin                   = $this->fin;
+    $temps_inter_op        = $this->temps_inter_op;
+    $max_intervention      = $this->max_intervention;
+    $anesth_id             = $this->anesth_id;
+    $delay_repl            = $this->delay_repl;
+    $spec_repl_id          = $this->spec_repl_id;
+    $type_repeat           = $this->_type_repeat;
+    $unique_chir           = $this->unique_chir;
 
     // Recherche de la plage suivante
     $where             = array();
