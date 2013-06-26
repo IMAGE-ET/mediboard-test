@@ -220,6 +220,7 @@ class CFacture extends CMbObject {
       $this->_duplicate = null;
       $this->duplicate();
       $this->annule = 1;
+      $this->definitive = 1;
     }
 
     if (!$this->cloture && $this->fieldModified("cloture") && count($this->_ref_reglements)) {

@@ -21,6 +21,8 @@
     {{mb_include module=system template=inc_config_num var=add_first_relance}}
     {{mb_include module=system template=inc_config_num var=add_second_relance}}
     {{mb_include module=system template=inc_config_num var=add_third_relance}}
+    {{mb_include module=system template=inc_config_str var=message1_relance textarea=1}}
+    {{mb_include module=system template=inc_config_str var=message2_relance textarea=1}}
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
