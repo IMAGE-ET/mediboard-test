@@ -21,4 +21,5 @@ $module->registerTab("vw_personnel_salle"     , TAB_READ);
 if (CModule::getActive("dPprescription")) {
   $module->registerTab("vw_prescriptions"       , TAB_READ);
 }
+$module->registerTab("vw_patients_provenance" , TAB_READ);
 $module->registerTab("vw_user_logs"           , TAB_ADMIN);

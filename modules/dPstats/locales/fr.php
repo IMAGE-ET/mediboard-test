@@ -13,6 +13,7 @@ $locales['mod-dPstats-tab-vw_bloc'] = 'Bloc opératoire';
 $locales['mod-dPstats-tab-vw_bloc2'] = 'Journée opératoire';
 $locales['mod-dPstats-tab-vw_cancelled_operations'] = 'Interventions annulées/ajoutées';
 $locales['mod-dPstats-tab-vw_hospitalisation'] = 'Hospitalisation';
+$locales['mod-dPstats-tab-vw_patients_provenance'] = 'Provenance patients';
 $locales['mod-dPstats-tab-vw_personnel_salle'] = 'Personnel en salle';
 $locales['mod-dPstats-tab-vw_prescriptions'] = 'Prescriptions';
 $locales['mod-dPstats-tab-vw_reveil'] = 'Salle de réveil';
