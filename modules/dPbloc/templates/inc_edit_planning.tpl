@@ -193,7 +193,7 @@ Main.add(function(){
             </td>
             <td rowspan="2" class="text">
               <div class="small-info">
-                Pour modifier plusieurs plages (nombre de plages > 1),
+                Pour modifier plusieurs plages (nombre de semaines > 1),
                 veuillez <strong>ne pas changer les champs début et fin en même temps</strong>.
                 <br />
                 * Cette valeur ne sera pas propagée sur les plages suivantes.
