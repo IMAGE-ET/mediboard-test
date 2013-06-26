@@ -72,16 +72,16 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     }
     $user->actif  = 1;
     $user->remote = 0;
-    
-    // Username
-    if ($results[$i]["username"]) {
-      $user->_user_username = $results[$i]["username"];
-    }
-    
+
     // Password
     $user->makeUsernamePassword($results[$i]["firstname"], $results[$i]["lastname"]);
     if ($results[$i]["password"]) {
       $user->_user_password = $results[$i]["password"];
+    }
+
+    // Username
+    if ($results[$i]["username"]) {
+      $user->_user_username = $results[$i]["username"];
     }
 
     // Profil
