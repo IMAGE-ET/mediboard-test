@@ -12,5 +12,5 @@ CCanDo::checkAdmin();
 
 $path = CValue::get("path");
 
-echo "<h1>$path</h1>";
+echo CMbString::purifyHTML("<h1>$path</h1>");
 echo CMbString::highlightCode("xml", file_get_contents($path));
