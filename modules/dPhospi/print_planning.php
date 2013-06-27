@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPhospi
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id:$
+ *
+ * @package    Mediboard
+ * @subpackage dPhospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
+ */
 
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
@@ -102,10 +104,11 @@ $where = array();
 $where["group_id"]  = "= '$group->_id'";
 $where["cancelled"] = "= '0'";
 $order = "nom";
-$services = $service->loadListWithPerms(PERM_READ,$where, $order);
+$services = $service->loadListWithPerms(PERM_READ, $where, $order);
 
 // ATTENTION ne pas supprimer le "&" car pose des problemes
 foreach ($sejours as $key => &$sejour) {
+  /** @var CSejour $sejour*/
   $sejour->loadRefsAffectations();
   $sejour->loadRefsOperations();
   $sejour->loadRefPatient();
@@ -113,16 +116,17 @@ foreach ($sejours as $key => &$sejour) {
   $affectation = $sejour->_ref_first_affectation;
   $affectation->_ref_lit->loadCompleteView();
 
-  if (count($filter->_service) && !in_array($affectation->_ref_lit->_ref_chambre->service_id, $filter->_service)) {
+  if (count($filter->_service) && !in_array($affectation->service_id, $filter->_service)) {
     unset($sejours[$key]);
     continue;
-  }elseif(!$filter->_service && $affectation->_id && !in_array($affectation->_ref_lit->_ref_chambre->service_id, array_keys($services))){
+  }
+  elseif (!$filter->_service && $affectation->_id && !in_array($affectation->service_id, array_keys($services))) {
     unset($sejours[$key]);
     continue;
   }
   $sejour->loadRefPraticien();
 
-  foreach($sejour->_ref_operations as $operation) {
+  foreach ($sejour->_ref_operations as $operation) {
     $operation->loadRefsFwd();
   }
 
@@ -135,11 +139,9 @@ foreach ($sejours as $key => &$sejour) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("filter" 	 , $filter	      );
-$smarty->assign("listDays" , $listDays      );
-$smarty->assign("listPrats", $listPrats     );
+$smarty->assign("filter"   , $filter);
+$smarty->assign("listDays" , $listDays);
+$smarty->assign("listPrats", $listPrats);
 $smarty->assign("total"    , count($sejours));
 
 $smarty->display("print_planning.tpl");
-
-?>
