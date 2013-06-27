@@ -17,6 +17,7 @@
     <li>Nom du service *</li>
     <li>Nom de la chambre *</li>
     <li>Nom du lit *</li>
+    <li>Nom complet du lit</li>
   </ul>
   <em>* : champs obligatoires</em>
 </div>
@@ -41,6 +42,7 @@
     <th>Service</th>
     <th>Chambre</th>
     <th>Lit</th>
+    <th>Nom complet</th>
   </tr>
   {{foreach from=$results item=_lit}}
   <tr>
@@ -54,6 +56,7 @@
     <td>{{$_lit.service}}</td>
     <td>{{$_lit.chambre}}</td>
     <td>{{$_lit.nom}}</td>
+    <td>{{$_lit.nomcomplet}}</td>
   </tr>
   {{/foreach}}
 </table>
