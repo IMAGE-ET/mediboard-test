@@ -443,7 +443,7 @@
                         {{/if}}
                         {{assign var=is_first value=0}}
                         {{math equation="x+1" x=$total assign=total}}
-                        {{$_line->voie}}
+                        {{$_line->_libelle_voie}}
                         ({{$_line->_compact_view}})
                       {{/if}}
                     {{/foreach}}
@@ -463,7 +463,7 @@
                         {{/if}}
                         {{assign var=is_first value=0}}
                         {{math equation="x+1" x=$total assign=total}}
-                        {{$_line->voie}}
+                        {{$_line->_libelle_voie}}
                         ({{$_line->_compact_view}})
                       {{/if}}
                     {{/foreach}}
@@ -483,7 +483,7 @@
                         {{/if}}
                         {{assign var=is_first value=0}}
                         {{math equation="x+1" x=$total assign=total}}
-                        {{$_line->voie}}
+                        {{$_line->_libelle_voie}}
                         ({{$_line->_compact_view}})
                       {{/if}}
                     {{/foreach}}
