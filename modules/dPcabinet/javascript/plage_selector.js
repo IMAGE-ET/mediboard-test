@@ -30,9 +30,15 @@ PlageConsultSelector = {
     url.modal(this.options);
   },
   checkMultiple : function() {
-    Control.Modal.close();
     var oForm = getForm(window.PlageConsultSelector.sForm);
     var consults = $H(window.PlageConsultSelector.consultations);
+
+    if(consults.size() <= 0) {
+      alert("Selectionner au moins un créneau avant de valider.");
+      return false;
+    }
+
+    Control.Modal.close();
     if (consults.size() > 0) {
       var iterator = 1;
       consults.each(function(consult) {

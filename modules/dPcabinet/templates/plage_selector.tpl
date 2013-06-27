@@ -44,7 +44,6 @@ var PlageConsult = {
   },
 
   togglePage: function(plage_id){
-    $("plage-"+this.currPlage).toggleClassName("selected");
 
     var found = false;
     for(var a=1; a<=window.parent.PlageConsultSelector.pages.length+1; a++) {
@@ -59,9 +58,12 @@ var PlageConsult = {
         window.parent.PlageConsultSelector.pages[this.page_displayed] = plage_id;
         this.refreshPlage(this.page_displayed, true);
         this.page_displayed ++;
+        $("plage-"+this.currPlage).addClassName("selected");
+
       }
     }
     else {
+      $("plage-"+this.currPlage).removeClassName("selected");
       window.parent.PlageConsultSelector.pages[found] = plage_id;
       this.currPlage = plage_id;
       this.page_displayed = found;
