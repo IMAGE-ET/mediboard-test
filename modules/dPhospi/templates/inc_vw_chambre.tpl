@@ -35,12 +35,12 @@
     <tr>
       <td class="button" colspan="2">
         {{if $chambre->_id}}
-        <button class="submit" type="submit">{{tr}}Validate{{/tr}}</button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la chambre',objName: $V(this.form.nom) })">
-          {{tr}}Delete{{/tr}}
-        </button>
+          <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
+          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la chambre',objName: $V(this.form.nom) })">
+            {{tr}}Delete{{/tr}}
+          </button>
         {{else}}
-        <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+          <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
         {{/if}}
       </td>
     </tr>
@@ -78,7 +78,7 @@
     {{/foreach}}
   </table>
   
-  <form name="editedit{{$_lit->_guid}}" action="?m={{$m}}" method="post" onsubmit="submit_Ajax(this, 'chambres')">
+  <form name="editedit{{$_lit->_guid}}" action="?m={{$m}}" method="post" onsubmit="return submit_Ajax(this, 'chambres')">
     
   <input type="hidden" name="dosql" value="do_lit_aed" />
   <input type="hidden" name="del" value="0" />
@@ -92,7 +92,7 @@
       <td>{{mb_field object=$lit field=nom}}</td>
       <td rowspan="2">
         {{if $lit->_id}}
-        <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+        <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
         <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le lit', objName: $V(this.form.nom)})">
           {{tr}}Delete{{/tr}}
         </button>

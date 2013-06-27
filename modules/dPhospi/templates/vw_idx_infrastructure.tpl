@@ -24,12 +24,12 @@ function showLit(type_id, valeur_id, type_id2, valeur_id2, update_name){
 }
 function submit_Ajax(form, update_name){
   return onSubmitFormAjax(form, {
-      onComplete : function() {
-        var url = new Url("dPhospi", "ajax_list_infrastructure");
-        url.addParam("type_name", update_name);
-        url.requestUpdate(update_name);
-      }
-    });
+    onComplete : function() {
+      var url = new Url("dPhospi", "ajax_list_infrastructure");
+      url.addParam("type_name", update_name);
+      url.requestUpdate(update_name);
+    }
+  });
 }
 </script>
 
@@ -46,21 +46,21 @@ function submit_Ajax(form, update_name){
 <hr class="control_tabs" />
 
 <div id="secteurs" style="display: none;">
-  {{include file="inc_vw_idx_secteurs.tpl"}}
+  {{mb_include template="inc_vw_idx_secteurs"}}
 </div>
 
 <div id="services" style="display: none;">
-  {{include file="inc_vw_idx_services.tpl"}}
+  {{mb_include template="inc_vw_idx_services"}}
 </div>
 
 <div id="chambres" style="display: none;">
-  {{include file="inc_vw_idx_chambres.tpl"}}
+  {{mb_include template="inc_vw_idx_chambres"}}
 </div>
 
 <div id="UF" style="display: none;">
-  {{include file="inc_vw_idx_ufs.tpl"}}
+  {{mb_include template="inc_vw_idx_ufs"}}
 </div>
 
 <div id="prestations" style="display: none;">
-  {{include file="inc_vw_idx_prestations.tpl"}}
+  {{mb_include template="inc_vw_idx_prestations"}}
 </div>

@@ -71,7 +71,7 @@
     <tr>
       <td class="button" colspan="2">
         {{if $service->_id}}
-        <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+        <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
         <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le service ',objName: $V(this.form.nom)})">
           {{tr}}Delete{{/tr}}
         </button>

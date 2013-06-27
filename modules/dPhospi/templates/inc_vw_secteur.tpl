@@ -21,7 +21,7 @@
     <tr>
       <td class="button" colspan="2">
         {{if $secteur->_id}}
-          <button class="submit" type="submit">{{tr}}Validate{{/tr}}</button>
+          <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
           <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le secteur',objName: $V(this.form.nom) })">
             {{tr}}Delete{{/tr}}
           </button>

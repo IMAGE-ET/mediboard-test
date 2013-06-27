@@ -23,13 +23,38 @@ $group = CGroups::loadCurrent();
 // Liste des Etablissements
 $etablissements = CMediusers::loadEtablissements(PERM_READ);
 
+$praticiens = CAppUI::$user->loadPraticiens();
+
+// Création du template
+$smarty = new CSmartyDP();
+
+$smarty->assign("praticiens"    , $praticiens);
+$smarty->assign("etablissements", $etablissements);
+
+// Récupération des chambres/services
+$where = array();
+$where["group_id"] = "= '$group->_id'";
+
 if ($type_name == "services") {
   // Chargement du service à ajouter/editer
   $service = new CService();
   $service->group_id = $group->_id;
   $service->load($service_id);
   $service->loadRefsNotes();
+  $services = $service->loadListWithPerms(PERM_READ, $where, "nom");
+
+  foreach ($services as $_service) {
+    foreach ($_service->loadRefsChambres() as $_chambre) {
+      $_chambre->loadRefs();
+    }
+  }
+
+  $smarty->assign("services"    , $services);
+  $smarty->assign("service"     , $service);
+  $smarty->assign("tag_service" , CService::getTagService($group->_id));
+  $smarty->display("inc_vw_idx_services.tpl");
 }
+
 if ($type_name == "chambres") {
   // Récupération de la chambre à ajouter/editer
   $chambre = new CChambre();
@@ -44,23 +69,26 @@ if ($type_name == "chambres") {
     CValue::setSession("lit_id", 0);
   }
 
-    // Chargement du lit à ajouter/editer
-    $lit = new CLit();
-    $lit->load($lit_id);
-    $lit->loadRefChambre();
-}
+  // Chargement du lit à ajouter/editer
+  $lit = new CLit();
+  $lit->load($lit_id);
+  $lit->loadRefChambre();
 
-// Récupération des chambres/services
-$where = array();
-$where["group_id"] = "= '$group->_id'";
-$order = "nom";
-$service = new CService();
-$services = $service->loadListWithPerms(PERM_READ,$where, $order);
+  $service = new CService();
+  $services = $service->loadListWithPerms(PERM_READ, $where, "nom");
 
-foreach ($services as $_service) {
-  foreach ($_service->loadRefsChambres() as $_chambre) {
-    $_chambre->loadRefs();
+  foreach ($services as $_service) {
+    foreach ($_service->loadRefsChambres() as $_chambre) {
+      $_chambre->loadRefs();
+    }
   }
+
+  $smarty->assign("services"    , $services);
+  $smarty->assign("chambre"     , $chambre);
+  $smarty->assign("tag_chambre" , CChambre::getTagChambre($group->_id));
+  $smarty->assign("lit"         , $lit);
+  $smarty->assign("tag_lit"     , CLit::getTagLit($group->_id));
+  $smarty->display("inc_vw_idx_chambres.tpl");
 }
 
 if ($type_name == "UF") {
@@ -75,7 +103,13 @@ if ($type_name == "UF") {
   $ufs = array("hebergement" => $uf->loadGroupList(array("type" => "= 'hebergement'"), $order),
                "medicale"    => $uf->loadGroupList(array("type" => "= 'medicale'"), $order),
                "soins"       => $uf->loadGroupList(array("type" => "= 'soins'"), $order));
+
+
+  $smarty->assign("ufs", $ufs);
+  $smarty->assign("uf", $uf);
+  $smarty->display("inc_vw_idx_ufs.tpl");
 }
+
 if ($type_name == "prestations") {
   // Chargement de la prestation à ajouter/éditer
   $prestation = new CPrestation();
@@ -86,10 +120,16 @@ if ($type_name == "prestations") {
   // Récupération des prestations
   $order = "group_id, nom";
   $prestations = $prestation->loadList(null, $order);
+
   foreach ($prestations as $_prestation) {
     $_prestation->loadRefGroup();
   }
+
+  $smarty->assign("prestation"  , $prestation);
+  $smarty->assign("prestations" , $prestations);
+  $smarty->display("inc_vw_idx_prestations.tpl");
 }
+
 if ($type_name == "secteurs") {
    // Chargement du secteur à ajouter / éditer
   $secteur = new CSecteur;
@@ -97,42 +137,14 @@ if ($type_name == "secteurs") {
   $secteur->load($secteur_id);
   $secteur->loadRefsNotes();
   $secteur->loadRefsServices();
+
+  // Récupération des prestations
+  $order = "group_id, nom";
+
   // Récupération des secteurs
   $secteurs = $secteur->loadListWithPerms(PERM_READ, $where, $order);
-}
 
-$praticiens = CAppUI::$user->loadPraticiens();
-
-// Création du template
-$smarty = new CSmartyDP();
-
-$smarty->assign("praticiens"    , $praticiens);
-$smarty->assign("etablissements", $etablissements);
-
-if($type_name == "services"){
-  $smarty->assign("services"      , $services);
-  $smarty->assign("service"       , $service);
-  $smarty->display("inc_vw_idx_services.tpl");
-}
-if($type_name == "chambres"){
-  $smarty->assign("services"       , $services);
-  $smarty->assign("chambre"       , $chambre);
-  $smarty->assign("lit"           , $lit);
-  $smarty->display("inc_vw_idx_chambres.tpl");
-}
-if($type_name == "UF"){
-  $smarty->assign("ufs"           , $ufs);
-  $smarty->assign("uf"            , $uf);
-  $smarty->display("inc_vw_idx_ufs.tpl");
-}
-if($type_name == "prestations"){
-  $smarty->assign("prestation"    , $prestation);
-  $smarty->assign("prestations"   , $prestations);
-  $smarty->display("inc_vw_idx_prestations.tpl");
-}
-if($type_name == "secteurs"){
-  $smarty->assign("secteurs"      , $secteurs);
-  $smarty->assign("secteur"       , $secteur);
+  $smarty->assign("secteurs", $secteurs);
+  $smarty->assign("secteur", $secteur);
   $smarty->display("inc_vw_idx_secteurs.tpl");
 }
-?>
