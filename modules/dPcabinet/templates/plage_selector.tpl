@@ -37,8 +37,6 @@ var PlageConsult = {
     else {
       this.refreshPlage('1', multipleMode);
     }
-
-    console.log(this);
   },
 
   emptyPage: function(plage_id) {
