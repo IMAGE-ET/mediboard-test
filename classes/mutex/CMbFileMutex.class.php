@@ -83,7 +83,7 @@ class CMbFileMutex extends CMbMutexDriver {
    * @return int Unix timestamp
    */
   protected function getFileMtime(){
-    clearstatcache(true, $this->filename);
+    @clearstatcache(true, $this->filename);
     return (int) @filemtime($this->filename); // Can fail if file was deleted, will return 0
   }
 
@@ -93,7 +93,7 @@ class CMbFileMutex extends CMbMutexDriver {
    * @return bool
    */
   protected function fileExists(){
-    clearstatcache(true, $this->filename);
+    @clearstatcache(true, $this->filename);
     return file_exists($this->filename);
   }
 
