@@ -37,7 +37,14 @@ var PlageConsult = {
     else {
       this.refreshPlage('1', multipleMode);
     }
+
+    console.log(this);
   },
+
+  emptyPage: function(plage_id) {
+    $("Places_"+plage_id).update("");
+  },
+
   togglePage: function(plage_id){
     $("plage-"+this.currPlage).toggleClassName("selected");
     var found = false;
@@ -49,15 +56,17 @@ var PlageConsult = {
     }
 
     if (found === false) {
-      window.parent.PlageConsultSelector.pages[this.page_displayed] = plage_id;
-      this.refreshPlage(this.page_displayed, true);
-      this.page_displayed ++ ;
+      if (this.page_displayed <= this.max_number) {
+        window.parent.PlageConsultSelector.pages[this.page_displayed] = plage_id;
+        this.refreshPlage(this.page_displayed, true);
+        this.page_displayed ++;
+      }
     }
     else {
       window.parent.PlageConsultSelector.pages[found] = plage_id;
       this.currPlage = plage_id;
       this.page_displayed = found ;
-      this.refreshPlage(found, true);
+      this.cleanuPlage(found);
     }
   },
   refreshPlage: function(page_number, multiple) {
@@ -67,28 +76,24 @@ var PlageConsult = {
     url.requestUpdate("listPlaces-"+page_number);
   },
   cleanuPlage : function(page_number) {
+    var plage = window.parent.PlageConsultSelector;
     $("listPlaces-"+page_number).update();
+    plage.pages.splice(page_number, 1);
+    this.currPlage = page_number;
   },
   addPlaceBefore: function(plage_id) {
     alert("Veuillez choisir une plage");
   },
   reset : function(id) {
-    if (!id) {
-      var plage = window.parent.PlageConsultSelector;
-      if (plage.pages.length > 1) {
-        for (var a = 1; a<(plage.pages.length); a++) {
-          if ($("listPlaces-"+a)) {
-            $("listPlaces-"+a).update("");
-          }
-          $("plage-"+plage.pages[a]).removeClassName("selected");
-        }
-        plage.resetConsult();
-        plage.resetPage();
-        this.page_displayed = 1;
-      }
-    }
-    else {
-
+    var plage = window.parent.PlageConsultSelector;
+    if (plage.pages.length > 1) {
+      plage.resetConsult();
+      plage.resetPage();
+      $$('.listPlace').each(function(elt) {
+        elt.update('');
+        elt.removeClassName("selected");
+      });
+      this.page_displayed = 1;
     }
   }
 };

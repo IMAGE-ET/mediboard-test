@@ -74,6 +74,9 @@
       {{else}}
         {{if $display_nb_consult}}4{{else}}2{{/if}}
       {{/if}}">
+        {{if $multiple}}
+          <button class="cancel notext" style="float:right;" onclick="PlageConsult.changePlage('{{$plage->_id}}'{{if $multiple}}, true{{/if}});">{{tr}}Clean{{/tr}}</button>
+        {{/if}}
         {{if $online}}
           {{mb_include module=system template=inc_object_notes object=$plage}}
         {{/if}}
@@ -171,7 +174,7 @@
               <button type="button" class="tick" onclick="PlageConsult.setClose('{{$_place.time}}')">{{$_place.time|date_format:$conf.time}}</button>
             {{else}}
               <label>
-                <input name="checkbox" type="radio" data-chir_name="{{$plage->_ref_chir}}" data-plageid="{{$plage->_id}}" data-date="{{$plage->date}}" data-chir="{{$plage->chir_id}}" onclick="PlageConsult.setClose('{{$_place.time}}',true, this)"> {{$_place.time|date_format:$conf.time}}
+                <input name="checkbox-{{$plage->_id}}" type="radio" data-chir_name="{{$plage->_ref_chir}}" data-plageid="{{$plage->_id}}" data-date="{{$plage->date}}" data-chir="{{$plage->chir_id}}" onclick="PlageConsult.setClose('{{$_place.time}}',true, this)"> {{$_place.time|date_format:$conf.time}}
               </label>
             {{/if}}
           {{else}}

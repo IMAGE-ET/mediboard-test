@@ -75,6 +75,9 @@ PlageConsultSelector = {
   addOrRemovePage : function(key, plage_consult_id) {
     if (this.pages[key]){
       delete this.pages[key];
+      if($("listPlaces-"+key)) {
+        $("listPlaces-"+key).update("");
+      }
     }
     else {
       this.pages[key] = plage_consult_id;
