@@ -156,7 +156,6 @@ if ($dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->
 $etats = array();
 if (is_array($dossier_medical->_ref_etats_dents)) {
   foreach ($dossier_medical->_ref_etats_dents as $etat) {
-    mbTrace($etat);
     if ($etat->etat != null) {
       switch ($etat->dent) {
         case 10:
