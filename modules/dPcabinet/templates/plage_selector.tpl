@@ -45,8 +45,9 @@ var PlageConsult = {
 
   togglePage: function(plage_id){
     $("plage-"+this.currPlage).toggleClassName("selected");
+
     var found = false;
-    for(var a=0; a<=window.parent.PlageConsultSelector.pages.length; a++) {
+    for(var a=1; a<=window.parent.PlageConsultSelector.pages.length+1; a++) {
       if (window.parent.PlageConsultSelector.pages[a] == plage_id) {
         found = a;
         break;
@@ -63,7 +64,7 @@ var PlageConsult = {
     else {
       window.parent.PlageConsultSelector.pages[found] = plage_id;
       this.currPlage = plage_id;
-      this.page_displayed = found ;
+      this.page_displayed = found;
       this.cleanuPlage(found);
     }
   },
@@ -76,7 +77,7 @@ var PlageConsult = {
   cleanuPlage : function(page_number) {
     var plage = window.parent.PlageConsultSelector;
     $("listPlaces-"+page_number).update();
-    plage.pages.splice(page_number, 1);
+    plage.pages[page_number] = '';
     this.currPlage = page_number;
   },
   addPlaceBefore: function(plage_id) {
@@ -89,6 +90,8 @@ var PlageConsult = {
       plage.resetPage();
       $$('.listPlace').each(function(elt) {
         elt.update('');
+      });
+      $$(".plage").each(function(elt) {
         elt.removeClassName("selected");
       });
       this.page_displayed = 1;

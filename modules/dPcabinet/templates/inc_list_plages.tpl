@@ -26,7 +26,7 @@
         <th colspan="2">{{tr}}Status{{/tr}}</th>
       </tr>
       {{foreach from=$listPlage item=_plage}}
-        <tr {{if $_plage->_id == $plageconsult_id && !$multiple}}class="selected"{{/if}} id="plage-{{$_plage->_id}}">
+        <tr class="plage{{if $_plage->_id == $plageconsult_id && !$multiple}} selected{{/if}}" id="plage-{{$_plage->_id}}" >
           <td {{if in_array($_plage->date, $bank_holidays)}}style="background: #fc0"{{/if}}>
             {{mb_include template=inc_plage_etat multiple=$multiple}}
           </td>
