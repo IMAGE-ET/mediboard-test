@@ -165,7 +165,7 @@ Main.add(function(){
             Type
           {{/if}}
         </th>
-        <td colspan="3">
+        <td colspan="3" class="text">
           <strong>
             {{if $ex_field->concept_id}}
               {{mb_value object=$ex_field field=concept_id}}
@@ -329,7 +329,6 @@ Main.add(function(){
     </li>
   {{/if}}
 </ul>
-<hr class="control_tabs" />
 
 <div id="fieldSpecEditor" style="white-space: normal; display: none;"></div>
 

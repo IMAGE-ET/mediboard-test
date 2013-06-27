@@ -81,8 +81,8 @@
   <div id="outofgrid-hostfields-{{$_group_id}}" style="display: none;">
     <table class="main layout">
       <tr>
-        <td style="width: 40%;">
-          <select onchange="toggleList(this)" class="dont-lock">
+        <td style="width: 30%;">
+          <select onchange="toggleList(this, '{{$_group_id}}')" class="dont-lock">
             {{foreach from=$ex_class->_host_objects item=_object key=_class}}
               <option value="{{$_class}}">{{tr}}{{$_class}}{{/tr}}</option>
             {{/foreach}}
@@ -91,7 +91,7 @@
         <td>
           {{foreach from=$ex_class->_host_objects item=_object key=_class name=_host_objects}}
             <div style="overflow-y: scroll; min-height: 140px; max-height: 140px; {{if $smarty.foreach._host_objects.first}} display: inline-block; {{else}} display: none; {{/if}}"
-                 class="hostfield-{{$_class}} hostfield-list" data-x="" data-y="">
+                 class="hostfield-{{$_group_id}}-{{$_class}} hostfield-list-{{$_group_id}}" data-x="" data-y="">
               <ul>
               {{foreach from=$_object->_specs item=_spec key=_field}}
                 {{if $_spec->show == 1 || $_field == "_view" || ($_spec->show == "" && $_field.0 !== "_")}}

@@ -5,9 +5,9 @@ Main.add(function(){
   //ExClass.putCellSpans($$(".drop-grid")[0]);
 });
 
-toggleList = function(select) {
-  $$(".hostfield-list").invoke("hide");
-  $$(".hostfield-"+$V(select))[0].setStyle({display: "inline-block"});
+toggleList = function(select, ex_group_id) {
+  $$(".hostfield-list-"+ex_group_id).invoke("hide");
+  $$(".hostfield-"+ex_group_id+"-"+$V(select))[0].setStyle({display: "inline-block"});
 }
 </script>
 
