@@ -205,6 +205,7 @@ class CDossierMedical extends CMbMetaObject {
 
     // Filtrage sur les annulés
     foreach ($this->_all_antecedents as $_atcd) {
+      /** @var $_atcd CAntecedent */
       if ($_atcd->annule && !$cancelled) {
          unset($this->_all_antecedents[$_atcd->_id]);
       }
@@ -245,12 +246,10 @@ class CDossierMedical extends CMbMetaObject {
 
   /**
    * Compte les antécédents annulés et non-annulés
-   *
-   * @param string $type Type des l'antécédent (apparement non utilisé)
    * 
    * @return void
    */
-  function countAntecedents($type = ""){
+  function countAntecedents(){
     $antedecent = new CAntecedent();
     $where = array();
     $where["dossier_medical_id"] = " = '$this->_id'";
@@ -355,8 +354,8 @@ class CDossierMedical extends CMbMetaObject {
   /**
    * Comptage des antécédents par type
    *
-   * @param CStoredObject[] $dossiers liste des dossiers
-   * @param string          $type     Type des antécédents
+   * @param self[] $dossiers liste des dossiers
+   * @param string $type     Type des antécédents
    *
    * @return void
    */
@@ -386,7 +385,7 @@ class CDossierMedical extends CMbMetaObject {
    *
    * @param bool $cancelled Prise en compte des annulés
    *
-   * @return CStoredObject[]
+   * @return CTraitement[]
    */
   function loadRefsTraitements($cancelled = false) {
     $order = "fin DESC, debut DESC";
@@ -395,6 +394,7 @@ class CDossierMedical extends CMbMetaObject {
     
      // Filtrage sur les annulés
     foreach ($this->_ref_traitements as $_traitement) {
+      /** @var $_traitement CTraitement */
       if ($_traitement->annule && !$cancelled) {
         unset($this->_ref_traitements[$_traitement->_id]);
       }

@@ -24,13 +24,13 @@ $dossier_medical =& $sejour->_ref_dossier_medical;
 // Chargement des antecedents et traitements
 $dossier_medical->loadRefsAntecedents(true);
 if ($dossier_medical->_ref_antecedents_by_type) {
-	$dossier_medical->countAntecedents();
+  $dossier_medical->countAntecedents();
   $dossier_medical->countTraitements();
-	foreach ($dossier_medical->_ref_antecedents_by_type as &$type) {
-	  foreach ($type as &$ant) {
-	    $ant->loadLogs();
-	  }
-	}
+  foreach ($dossier_medical->_ref_antecedents_by_type as &$type) {
+    foreach ($type as &$ant) {
+      $ant->loadLogs();
+    }
+  }
 }
 
 $dossier_medical->loadRefsTraitements(true);
@@ -41,10 +41,10 @@ $prescription = $sejour->loadRefPrescriptionSejour();
 // Chargement des lignes de tp de la prescription
 $lines_tp = array();
 if($prescription && $prescription->_id){
-	$line_tp = new CPrescriptionLineMedicament();
-	$line_tp->prescription_id = $prescription->_id;
-	$line_tp->traitement_personnel = 1;
-	$lines_tp = $line_tp->loadMatchingList();
+  $line_tp = new CPrescriptionLineMedicament();
+  $line_tp->prescription_id = $prescription->_id;
+  $line_tp->traitement_personnel = 1;
+  $lines_tp = $line_tp->loadMatchingList();
 }
 
 // Création du template

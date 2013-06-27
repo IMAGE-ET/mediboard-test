@@ -326,6 +326,6 @@ class CIdSante400 extends CMbMetaObject {
     if (!$this->_id && !$this->last_update) {
       $this->last_update = "now";
     }
-    parent::store();
+    return parent::store();
   }
 }

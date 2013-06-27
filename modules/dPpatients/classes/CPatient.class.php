@@ -966,15 +966,15 @@ class CPatient extends CPerson {
   /**
    * Get the next sejour from today or from a given date
    *
-   * @param string $date        Date de début de recherche
-   * @param bool $withOperation Avec rechreche des interventions
-   * @param int $consult_id     Identifiant de la consultation de référence
+   * @param string $date          Date de début de recherche
+   * @param bool   $withOperation Avec rechreche des interventions
+   * @param int    $consult_id    Identifiant de la consultation de référence
    *
    * @return array;
    */
   function getNextSejourAndOperation($date = null, $withOperation = true, $consult_id = null) {
-    $sejour = new CSejour;
-    $op     = new COperation;
+    $sejour = new CSejour();
+    $op     = new COperation();
     if (!$date) {
       $date = CMbDT::date();
     }
@@ -982,35 +982,34 @@ class CPatient extends CPerson {
       $this->loadRefsSejours();
     }
     foreach ($this->_ref_sejours as $_sejour) {
-      if (in_array($_sejour->type, array("ambu", "comp", "exte")) && !$_sejour->annule && $_sejour->entree_prevue >= $date) {
-        if (!$sejour->_id) {
-          $sejour = $_sejour;
-        }
-        else {
-          if ($_sejour->entree_prevue < $sejour->entree_prevue) {
-            $sejour = $_sejour;
-          }
-        }
+      // Conditions d'exlusion du séjour
+      if (!in_array($_sejour->type, array("ambu", "comp", "exte")) || $_sejour->annule || $_sejour->entree_prevue < $date) {
+        continue;
+      }
+      if (!$sejour->_id) {
+        $sejour = $_sejour;
+      }
+      elseif ($_sejour->entree_prevue < $sejour->entree_prevue) {
+        $sejour = $_sejour;
+      }
 
-        if ($withOperation) {
-          if (!$_sejour->_ref_operations) {
-            $_sejour->loadRefsOperations(array("annulee" => "= '0'"));
-          }
-          foreach ($_sejour->_ref_operations as $_op) {
-            $consult_anesth = $_op->loadRefsConsultAnesth();
-            if ($consult_id && $consult_anesth->consultation_id == $consult_id) {
-              continue;
-            }
-            $_op->loadRefPlageOp();
-            if (!$op->_id) {
-              $op = $_op;
-            }
-            else {
-              if ($_op->_datetime < $op->_datetime) {
-                $op = $_op;
-              }
-            }
-          }
+      if (!$withOperation) {
+        continue;
+      }
+      if (!$_sejour->_ref_operations) {
+        $_sejour->loadRefsOperations(array("annulee" => "= '0'"));
+      }
+      foreach ($_sejour->_ref_operations as $_op) {
+        $consult_anesth = $_op->loadRefsConsultAnesth();
+        if ($consult_id && $consult_anesth->consultation_id == $consult_id) {
+          continue;
+        }
+        $_op->loadRefPlageOp();
+        if (!$op->_id) {
+          $op = $_op;
+        }
+        elseif ($_op->_datetime < $op->_datetime) {
+          $op = $_op;
         }
       }
     }
@@ -1162,6 +1161,15 @@ class CPatient extends CPerson {
   }
 
 
+  /**
+   * Vérification de la similarité du patient avec un autre nom / prénom
+   *
+   * @param string $nom    Nom à tester
+   * @param string $prenom Prénom à taster
+   * @param bool   $strict Test strict
+   *
+   * @return bool
+   */
   function checkSimilar($nom, $prenom, $strict = true) {
     $soundex2 = new soundex2;
 
@@ -1211,6 +1219,10 @@ class CPatient extends CPerson {
   }
 
   /**
+   * Chargement du dossier médical
+   *
+   * @param bool $load_refs_back Avec chargement des backrefs
+   *
    * @return CDossierMedical
    */
   function loadRefDossierMedical($load_refs_back = true) {
@@ -1556,13 +1568,14 @@ class CPatient extends CPerson {
   function loadRefsCorrespondantsPatient() {
     $this->_ref_correspondants_patient = $this->loadBackRefs("correspondants_patient");
 
-    $correspondant = new CCorrespondantPatient;
+    $correspondant = new CCorrespondantPatient();
     $this->_ref_cp_by_relation = array();
     foreach (explode("|", $correspondant->_specs["relation"]->list) as $_relation) {
       $this->_ref_cp_by_relation[$_relation] = array();
     }
 
     foreach ($this->_ref_correspondants_patient as $_correspondant) {
+
       $this->_ref_cp_by_relation[$_correspondant->relation][$_correspondant->_id] = $_correspondant;
     }
 
