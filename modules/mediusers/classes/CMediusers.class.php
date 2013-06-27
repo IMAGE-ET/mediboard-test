@@ -225,8 +225,8 @@ class CMediusers extends CPerson {
 
     $props["_user_username"]         = "str notNull minLength|3 reported";
     $props["_user_password2"]        = "password sameAs|_user_password reported";
-    $props["_user_first_name"]       = "str reported";
-    $props["_user_last_name"]        = "str notNull confidential reported";
+    $props["_user_first_name"]       = "str reported show|1";
+    $props["_user_last_name"]        = "str notNull confidential reported show|1";
     $props["_user_email"]            = "str confidential reported";
     $props["_user_phone"]            = "phone confidential reported";
     $props["_user_astreinte"]        = "phone confidential reported";
