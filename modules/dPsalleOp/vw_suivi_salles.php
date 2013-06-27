@@ -13,4 +13,4 @@ global $can;
 $can->read = 1;
 $can->edit = 0;
 
-CAppUI::requireModuleFile("dPbloc", "vw_suivi_salles")
+CAppUI::requireModuleFile("dPbloc", "vw_suivi_salles");
