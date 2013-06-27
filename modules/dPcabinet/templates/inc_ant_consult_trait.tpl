@@ -92,7 +92,7 @@ Main.add(function () {
             <form name="editLineTP{{$addform}}" action="?m=dPcabinet" method="post">
               <input type="hidden" name="m" value="dPprescription" />
               <input type="hidden" name="dosql" value="do_add_line_tp_aed" />
-              <input type="hidden" name="_code" value="" onchange="refreshAddPoso(this.value);"/>
+              <input type="hidden" name="_code" value="" onchange="{{if $addform}}refreshAddPosotri(this.value);{{else}}refreshAddPoso(this.value);{{/if}}"/>
               <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
               <input type="hidden" name="praticien_id" value="{{$userSel->_id}}" />
 
@@ -105,11 +105,10 @@ Main.add(function () {
                   <td>
                     <div class="dropdown">
                       <input type="text" name="produit" value="" size="12" class="autocomplete" />
-                      <div style="display:none; width: 350px;" class="autocomplete" id="_produit_auto_complete"></div>
+                      <div style="display:none; width: 350px;" class="autocomplete" id="_produit_auto_complete{{$addform}}"></div>
                     </div>
-
                     <button type="button" class="search notext" onclick="MedSelector.init('produit');"></button>
-                    <script type="text/javascript">
+                    <script>
                         MedSelector.init = function(onglet){
                           this.sForm = "editLineTP{{$addform}}";
                           this.sView = "produit";
@@ -123,9 +122,12 @@ Main.add(function () {
                           this.pop();
                         }
                     </script>
+                    {{if $isPrescriptionInstalled && $addform}}
+                      {{mb_script module="dPcabinet" script="traitement"}}
+                    {{/if}}
                   </td>
                   <td>
-                    <strong><div id="_libelle"></div></strong>
+                    <strong><div id="_libelle{{$addform}}"></div></strong>
                   </td>
                 </tr>
 
@@ -136,7 +138,7 @@ Main.add(function () {
                   {{else}}
                   <td colspan="2"></td>
                   {{/if}}
-                  <td rowspan="2" id="addPosoLine"></td>
+                  <td rowspan="2" id="addPosoLine{{$addform}}"></td>
                 </tr>
 
                 {{if $app->user_prefs.showDatesAntecedents}}
@@ -158,11 +160,16 @@ Main.add(function () {
 
                 <tr>
                   <td colspan="3" class="button">
-                    <button id="button_submit_traitement" class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {
+                    <button id="button_submit_traitement{{$addform}}" class="tick" type="button" onclick="onSubmitFormAjax(this.form, {
                       onComplete: function(){
                         DossierMedical.reloadDossiersMedicaux();
-                        resetEditLineTP();
-                        resetFormTP();
+                        {{if $addform}}
+                          resetEditLineTPtri();
+                          resetFormTPtri();
+                        {{else}}
+                          resetEditLineTP();
+                          resetFormTP();
+                        {{/if}}
                       }
                      } ); this.form.produit.focus();">
                       {{tr}}Add{{/tr}} le traitement
@@ -251,7 +258,7 @@ Main.add(function () {
           <input type="hidden" name="code_diag" onchange="$V(this.form.keywords_code, this.value)"/>
           <button class="search" type="button" onclick="CIM10Selector.init()">{{tr}}Search{{/tr}}</button>
           <button class="tick notext" type="button" onclick="reloadCim10(this.form.code_diag.value)">{{tr}}Validate{{/tr}}</button>
-          <script type="text/javascript">   
+          <script>
             CIM10Selector.init = function(){
               this.sForm = "addDiagFrm";
               this.sView = "code_diag";
