@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPhospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
@@ -112,15 +112,16 @@ foreach ($sejours as $key => &$sejour) {
   $sejour->loadRefsAffectations();
   $sejour->loadRefsOperations();
   $sejour->loadRefPatient();
-  $sejour->_ref_first_affectation->loadRefLit();
+  $sejour->_ref_first_affectation->loadRefLit()->loadRefChambre();
   $affectation = $sejour->_ref_first_affectation;
   $affectation->_ref_lit->loadCompleteView();
 
-  if (count($filter->_service) && !in_array($affectation->service_id, $filter->_service)) {
+  $service_id = $affectation->service_id ? $affectation->service_id : $affectation->_ref_lit->_ref_chambre->service_id;
+  if (count($filter->_service) && !in_array($service_id, $filter->_service)) {
     unset($sejours[$key]);
     continue;
   }
-  elseif (!$filter->_service && $affectation->_id && !in_array($affectation->service_id, array_keys($services))) {
+  elseif (!$filter->_service && $affectation->_id && !in_array($service_id, array_keys($services))) {
     unset($sejours[$key]);
     continue;
   }
