@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Integer value
+ */
 class CNumSpec extends CMbFieldSpec {
   public $min;
   public $max;
@@ -17,11 +20,17 @@ class CNumSpec extends CMbFieldSpec {
   public $minLength;
   public $maxLength;
   public $byteUnit;
-  
+
+  /**
+   * @see parent::getSpecType()
+   */
   function getSpecType() {
     return "num";
   }
-  
+
+  /**
+   * @see parent::getDBSpec()
+   */
   function getDBSpec(){
     $type_sql = "INT(11)";
     
@@ -29,15 +38,15 @@ class CNumSpec extends CMbFieldSpec {
       $max = $this->max;
       $type_sql = "TINYINT(4)";
       
-      if ($max > pow(2,8)) {
+      if ($max > pow(2, 8)) {
         $type_sql = "MEDIUMINT(9)";
       }
       
-      if ($max > pow(2,16)) {
+      if ($max > pow(2, 16)) {
         $type_sql = "INT(11)";
       }
       
-      if ($max > pow(2,32)) {
+      if ($max > pow(2, 32)) {
         $type_sql = "BIGINT(20)";
       }
     }
@@ -48,7 +57,10 @@ class CNumSpec extends CMbFieldSpec {
 
     return $type_sql;
   }
-  
+
+  /**
+   * @see parent::getOptions()
+   */
   function getOptions(){
     return array(
       'min' => 'num',
@@ -60,7 +72,10 @@ class CNumSpec extends CMbFieldSpec {
       'byteUnit' => 'str',
     ) + parent::getOptions();
   }
-  
+
+  /**
+   * @see parent::getValue()
+   */
   function getValue($object, $smarty = null, $params = array()) {
     if (!isset($this->byteUnit)) {
       return parent::getValue($object, $smarty, $params);
@@ -69,7 +84,7 @@ class CNumSpec extends CMbFieldSpec {
     $propValue = $object->{$this->fieldName};
     $ratio = 1;
     
-    switch($this->byteUnit) {
+    switch ($this->byteUnit) {
       case "GB": $ratio *= 1024;
       case "MB": $ratio *= 1024;
       case "KB": $ratio *= 1024;
@@ -80,6 +95,9 @@ class CNumSpec extends CMbFieldSpec {
     return CMbString::toDecaBinary($propValue * $ratio);
   }
 
+  /**
+   * @see parent::checkProperty()
+   */
   function checkProperty($object){
     $propValue = CMbFieldSpec::checkNumeric($object->{$this->fieldName});
     
@@ -149,6 +167,9 @@ class CNumSpec extends CMbFieldSpec {
     }
   }
 
+  /**
+   * @see parent::sample()
+   */
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
     $propValue =& $object->{$this->fieldName};
@@ -172,6 +193,9 @@ class CNumSpec extends CMbFieldSpec {
     }
   }
 
+  /**
+   * @see parent::getFormHtmlElement()
+   */
   function getFormHtmlElement($object, $params, $value, $className) {
     $form       = CMbArray::extract($params, "form");
     $increment  = CMbArray::extract($params, "increment");

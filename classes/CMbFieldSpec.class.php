@@ -179,7 +179,7 @@ class CMbFieldSpec {
    * @param Smarty $smarty Optional smarty instance
    * @param array  $params Optional extra params
    * 
-   * @return html Formatted value
+   * @return string Formatted value
    */
   function getValue($object, $smarty = null, $params = array()) {
     $propValue = $object->{$this->fieldName};
@@ -1012,7 +1012,7 @@ class CMbFieldSpec {
    * 
    * @param object $object Object bound to property
    * 
-   * @return string Store-like message
+   * @return string|null Store-like message
    * @todo could be abstract
    */
   function checkProperty($object) {

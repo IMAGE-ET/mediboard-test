@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Boolean value (0 or 1)
+ */
 class CBoolSpec extends CMbFieldSpec {
   public $_list;
   public $_locales;
@@ -16,6 +19,9 @@ class CBoolSpec extends CMbFieldSpec {
 
   static $_default_no = true; // @todo : faire en sorte de se passer de ça
 
+  /**
+   * @see parent::__construct()
+   */
   function __construct($className, $field, $prop = null, $aProperties = array()) {
     parent::__construct($className, $field, $prop, $aProperties);
     foreach ($this->_list = array(0,1) as $value) {
@@ -23,14 +29,23 @@ class CBoolSpec extends CMbFieldSpec {
     }
   }
 
+  /**
+   * @see parent::getSpecType()
+   */
   function getSpecType() {
     return "bool";
   }
 
+  /**
+   * @see parent::getDBSpec()
+   */
   function getDBSpec(){
     return "ENUM('0','1')";
   }
 
+  /**
+   * @see parent::getOptions()
+   */
   function getOptions(){
     return array(
       'default' => 'bool',
@@ -38,10 +53,16 @@ class CBoolSpec extends CMbFieldSpec {
     ) + parent::getOptions();
   }
 
+  /**
+   * @see parent::getValue()
+   */
   function getValue($object, $smarty = null, $params = array()) {
     return CAppUI::tr("bool.".$object->{$this->fieldName});
   }
 
+  /**
+   * @see parent::checkOptions()
+   */
   function checkOptions(){
     parent::checkOptions();
 
@@ -50,6 +71,9 @@ class CBoolSpec extends CMbFieldSpec {
     }
   }
 
+  /**
+   * @see parent::checkProperty()
+   */
   function checkProperty($object){
     $propValue = CMbFieldSpec::checkNumeric($object->{$this->fieldName}, true);
 
@@ -60,8 +84,13 @@ class CBoolSpec extends CMbFieldSpec {
     if ($propValue != 0 && $propValue != 1) {
       return "Ne peut être différent de 0 ou 1";
     }
+
+    return null;
   }
 
+  /**
+   * @see parent::getFormHtmlElement()
+   */
   function getFormHtmlElement($object, $params, $value, $className){
     $sHtml         = "";
     $field         = CMbString::htmlSpecialChars($this->fieldName);
@@ -157,19 +186,29 @@ class CBoolSpec extends CMbFieldSpec {
     }
   }
 
+  /**
+   * @see parent::getLabelForAttribute()
+   */
   function getLabelForAttribute($object, &$params){
     $typeEnum  = CMbArray::extract($params, "typeEnum", "radio");
 
     switch ($typeEnum) {
       //case "radio":    return "{$this->fieldName}_1";
-      case "checkbox": return "__$this->fieldName";
-      case "radio":    
-      case "select":   return $this->fieldName;
+      case "checkbox":
+        return "__$this->fieldName";
+
+      default:
+      case "radio":
+      case "select":
+        return $this->fieldName;
     }
   }
 
+  /**
+   * @see parent::sample()
+   */
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
-    $object->{$this->fieldName} = rand(0,1);
+    $object->{$this->fieldName} = rand(0, 1);
   }
 }

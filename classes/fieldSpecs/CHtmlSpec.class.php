@@ -9,19 +9,34 @@
  * @version    $Revision$
  */
 
+/**
+ * HTML string
+ */
 class CHtmlSpec extends CMbFieldSpec {
+  /**
+   * @see parent::getSpecType()
+   */
   function getSpecType() {
     return "html";
   }
-  
+
+  /**
+   * @see parent::getDBSpec()
+   */
   function getDBSpec(){
     return "MEDIUMTEXT";
   }
-  
+
+  /**
+   * @see parent::getValue()
+   */
   function getValue($object, $smarty = null, $params = array()) {
     return $object->{$this->fieldName};
   }
-  
+
+  /**
+   * @see parent::checkProperty()
+   */
   function checkProperty($object){
     $propValue = $object->{$this->fieldName};
     
@@ -41,8 +56,13 @@ class CHtmlSpec extends CMbFieldSpec {
       trigger_error("Error: Html document bad formatted", E_USER_WARNING);
       return "Le document HTML est mal formé, ou la requête n'a pas pu se terminer.";
     }
+
+    return null;
   }
-  
+
+  /**
+   * @see parent::sample()
+   */
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
     $object->{$this->fieldName} = <<<EOD
@@ -55,7 +75,10 @@ class CHtmlSpec extends CMbFieldSpec {
 </ul>
 EOD;
   }
-  
+
+  /**
+   * @see parent::getFormHtmlElement()
+   */
   function getFormHtmlElement($object, $params, $value, $className){
     return $this->getFormElementTextarea($object, $params, $value, $className);
   }

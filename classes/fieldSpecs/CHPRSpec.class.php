@@ -9,19 +9,34 @@
  * @version    $Revision$
  */
 
-class CHPRSpec extends CTextSpec { 
+/**
+ * HPrim string
+ */
+class CHPRSpec extends CTextSpec {
+  /**
+   * @see parent::getSpecType()
+   */
   function getSpecType() {
     return "hpr";
   }
-  
+
+  /**
+   * @see parent::getDBSpec()
+   */
   function getDBSpec() {
     return "MEDIUMTEXT";
   }
-  
+
+  /**
+   * @see parent::getFormHtmlElement()
+   */
   function getFormHtmlElement($object, $params, $value, $className){
     return $this->getFormElementTextarea($object, $params, $value, $className);
   }
 
+  /**
+   * @see parent::getValue()
+   */
   function getValue($object, $smarty = null, $params = array()) {
     $value = $object->{$this->fieldName};
 
@@ -33,7 +48,10 @@ class CHPRSpec extends CTextSpec {
 
     return CHPrim21Message::highlight($value);
   }
-  
+
+  /**
+   * @see parent::sample()
+   */
   function sample(&$object, $consistent = true){
     $object->{$this->fieldName} = <<<HPR
 H|^~&\|C152203.HPR||111111^MEDIBOARD ATL||ADM|||MDB^MEDIBOARD|LS1||H2.1^C|201210251522

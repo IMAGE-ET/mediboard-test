@@ -9,19 +9,34 @@
  * @version    $Revision$
  */
 
-class CER7Spec extends CTextSpec { 
+/**
+ * ER7 string (HL7v2 message)
+ */
+class CER7Spec extends CTextSpec {
+  /**
+   * @see parent::getSpecType()
+   */
   function getSpecType() {
     return "er7";
   }
-  
+
+  /**
+   * @see parent::getDBSpec()
+   */
   function getDBSpec() {
     return "MEDIUMTEXT";
   }
-  
+
+  /**
+   * @see parent::getFormHtmlElement()
+   */
   function getFormHtmlElement($object, $params, $value, $className){
     return $this->getFormElementTextarea($object, $params, $value, $className);
   }
-  
+
+  /**
+   * @see parent::getValue()
+   */
   function getValue($object, $smarty = null, $params = array()) {
     $value = $object->{$this->fieldName};
     
@@ -33,7 +48,10 @@ class CER7Spec extends CTextSpec {
     
     return CHL7v2Message::highlight($value);
   }
-  
+
+  /**
+   * @see parent::sample()
+   */
   function sample(&$object, $consistent = true){
     $object->{$this->fieldName} = <<<ER7
 MSH|^~\&|MYSENDER|MYRECEIVER|MYAPPLICATION||200612211200||QRY^A19|1234|P|2.5

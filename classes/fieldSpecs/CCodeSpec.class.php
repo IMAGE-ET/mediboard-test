@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Code of different types (CCAM, CIM, ADELI, etc)
+ */
 class CCodeSpec extends CMbFieldSpec {
   public $ccam;
   public $cim10;
@@ -18,10 +21,16 @@ class CCodeSpec extends CMbFieldSpec {
   public $siret;
   public $order_number;
 
+  /**
+   * @see parent::getSpecType()
+   */
   function getSpecType() {
     return "code";
   }
 
+  /**
+   * @see parent::getDBSpec()
+   */
   function getDBSpec(){
     $type_sql = null;
 
@@ -47,6 +56,9 @@ class CCodeSpec extends CMbFieldSpec {
     return $type_sql;
   }
 
+  /**
+   * @see parent::getOptions()
+   */
   function getOptions(){
     return array(
       'ccam'         => 'bool',
@@ -59,9 +71,15 @@ class CCodeSpec extends CMbFieldSpec {
     ) + parent::getOptions();
   }
 
+  /**
+   * Check validity of INSEE code
+   *
+   * @param string $insee INSEE code
+   *
+   * @return string|null String on error, null on OK
+   */
   static function checkInsee($insee) {
-
-    $matches = null;
+    $matches = array();
     if (!preg_match("/^([12478][0-9]{2}[0-9]{2}[0-9][0-9ab][0-9]{3}[0-9]{3})([0-9]{2})$/i", $insee, $matches)) {
       return "Matricule incorrect";
     }
@@ -72,8 +90,13 @@ class CCodeSpec extends CMbFieldSpec {
     if (97 - bcmod($code, 97) != $cle) {
       return "Matricule incorrect, la clé n'est pas valide";
     }
+
+    return null;
   }
 
+  /**
+   * @see parent::checkProperty()
+   */
   function checkProperty($object){
     $propValue = $object->{$this->fieldName};
 
@@ -157,10 +180,16 @@ class CCodeSpec extends CMbFieldSpec {
     }
   }
 
+  /**
+   * @see parent::getFormHtmlElement()
+   */
   function getFormHtmlElement($object, $params, $value, $className){
     return $this->getFormElementText($object, $params, $value, $className);
   }
 
+  /**
+   * @see parent::sample()
+   */
   function sample(&$object, $consistent = true) {
     parent::sample($object, $consistent);
     $propValue = &$object->{$this->fieldName};

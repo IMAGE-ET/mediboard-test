@@ -9,23 +9,38 @@
  * @version    $Revision$
  */
 
+/**
+ * Date type : DD-MM-YYYY
+ */
 class CDateSpec extends CMbFieldSpec {
   public $progressive;
 
+  /**
+   * @see parent::getSpecType()
+   */
   function getSpecType() {
     return "date";
   } 
 
+  /**
+   * @see parent::getDBSpec()
+   */
   function getDBSpec(){
     return "DATE";
   }
 
+  /**
+   * @see parent::getOptions()
+   */
   function getOptions(){
     return array(
       'progressive' => 'bool',
     ) + parent::getOptions();
   }
 
+  /**
+   * @see parent::getValue()
+   */
   function getValue($object, $smarty = null, $params = array()) {
     if ($smarty) {
       include_once $smarty->_get_plugin_filepath('modifier', 'date_format');
@@ -39,11 +54,21 @@ class CDateSpec extends CMbFieldSpec {
     // TODO: test and use strftime($format, strtotime($propValue)) instead of smarty
   }
 
+  /**
+   * Format a progressive date
+   *
+   * @param date $value The date
+   *
+   * @return string
+   */
   function progressiveFormat($value) {
     $parts = explode('-', $value);
     return (intval($parts[2]) ? $parts[2].'/' : '').(intval($parts[1]) ? $parts[1].'/' : '').$parts[0];
   }
 
+  /**
+   * @see parent::checkProperty()
+   */
   function checkProperty($object){
     $propValue = &$object->{$this->fieldName};
 
@@ -70,6 +95,9 @@ class CDateSpec extends CMbFieldSpec {
     }
   }
 
+  /**
+   * @see parent::sample()
+   */
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
     $object->{$this->fieldName} = sprintf(
@@ -80,6 +108,9 @@ class CDateSpec extends CMbFieldSpec {
     );
   }
 
+  /**
+   * @see parent::getFormHtmlElement()
+   */
   function getFormHtmlElement($object, $params, $value, $className) {
     return $this->getFormElementDateTime($object, $params, $value, $className, CAppUI::conf("date"));
   }

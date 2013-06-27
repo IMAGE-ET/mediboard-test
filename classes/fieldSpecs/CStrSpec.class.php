@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Short string value
+ */
 class CStrSpec extends CMbFieldSpec {
   public $length;
   public $minLength;
@@ -17,11 +20,17 @@ class CStrSpec extends CMbFieldSpec {
   public $class;
   public $delimiter;
   public $canonical;
-  
+
+  /**
+   * @see parent::getSpecType()
+   */
   function getSpecType() {
     return "str";
   }
-  
+
+  /**
+   * @see parent::getDBSpec()
+   */
   function getDBSpec(){
     if ($this->maxLength) {
       return "VARCHAR ($this->maxLength)";
@@ -37,7 +46,10 @@ class CStrSpec extends CMbFieldSpec {
     
     return "VARCHAR (255)";
   }
-  
+
+  /**
+   * @see parent::getOptions()
+   */
   function getOptions(){
     return array(
       'length'    => 'num',
@@ -49,7 +61,10 @@ class CStrSpec extends CMbFieldSpec {
       'canonical' => 'bool',
     ) + parent::getOptions();
   }
-  
+
+  /**
+   * @see parent::getValue()
+   */
   function getValue($object, $smarty = null, $params = array()) {
     if ($this->class) {
       return CMbString::htmlSpecialChars(CAppUI::tr($object->{$this->fieldName}));
@@ -58,6 +73,9 @@ class CStrSpec extends CMbFieldSpec {
     return parent::getValue($object, $smarty, $params);
   }
 
+  /**
+   * @see parent::checkProperty()
+   */
   function checkProperty($object){
     $propValue = $object->{$this->fieldName};
     
@@ -118,8 +136,13 @@ class CStrSpec extends CMbFieldSpec {
         return "La classe '$propValue' n'existe pas";
       }
     }
+
+    return null;
   }
-  
+
+  /**
+   * @see parent::sample()
+   */
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
     $propValue =& $object->{$this->fieldName};
@@ -147,7 +170,10 @@ class CStrSpec extends CMbFieldSpec {
       $propValue = self::randomString(CMbFieldSpec::$chars, $this->_defaultLength);
     }
   }
-  
+
+  /**
+   * @see parent::getFormHtmlElement()
+   */
   function getFormHtmlElement($object, $params, $value, $className){
     $maxLength = CValue::first($this->length, $this->maxLength, 255);
     CMbArray::defaultValue($params, "size", min($maxLength, 25));
@@ -155,6 +181,9 @@ class CStrSpec extends CMbFieldSpec {
     return $this->getFormElementText($object, $params, $value, $className);
   }
 
+  /**
+   * @see parent::filter()
+   */
   function filter($value) {
     if (CAppUI::conf("purify_text_input")) {
       $value = CMbString::purifyHTML($value);

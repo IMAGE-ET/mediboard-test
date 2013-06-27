@@ -9,30 +9,39 @@
  * @version    $Revision$
  */
 
+/**
+ * Integer value (zerofilled)
+ */
 class CNumcharSpec extends CNumSpec {
   public $control;
   public $protected;
-  
+
+  /**
+   * @see parent::getSpecType()
+   */
   function getSpecType() {
     return "numchar";
   }
 
+  /**
+   * @see parent::getDBSpec()
+   */
   function getDBSpec(){
     $type_sql = "BIGINT ZEROFILL";
     
     if ($this->maxLength || $this->length) {
       $length = $this->maxLength ? $this->maxLength : $this->length;
-      $valeur_max = pow(10,$length);
+      $valeur_max = pow(10, $length);
       
       $type_sql = "TINYINT";
       
-      if ($valeur_max > pow(2,8)) {
+      if ($valeur_max > pow(2, 8)) {
         $type_sql = "MEDIUMINT";
       }
-      if ($valeur_max > pow(2,16)) {
+      if ($valeur_max > pow(2, 16)) {
         $type_sql = "INT";
       }
-      if ($valeur_max > pow(2,32)) {
+      if ($valeur_max > pow(2, 32)) {
         $type_sql = "BIGINT";
       }
       
@@ -41,14 +50,20 @@ class CNumcharSpec extends CNumSpec {
     
     return $type_sql;
   }
-  
+
+  /**
+   * @see parent::getOptions()
+   */
   function getOptions(){
     return array(
       'control'   => 'str',
       'protected' => 'bool',
     ) + parent::getOptions();
   }
- 
+
+  /**
+   * @see parent::checkProperty()
+   */
   function checkProperty($object){
     $propValue = $object->{$this->fieldName};
         
@@ -59,10 +74,19 @@ class CNumcharSpec extends CNumSpec {
         return "La clé est incorrecte";
       }
     }
+
+    return null;
   }
   
-  //Returns true if it's a valid Luhn number.
-  // @FIXME Why not use luhn() function ?
+  /**
+   * Returns true if it's a valid Luhn number.
+   *
+   * @param int $number Number to check
+   *
+   * @fixme Why not use luhn() function ?
+   *
+   * @return bool
+   */
   function checkLuhn($number) {
     $split = array_reverse(str_split($number));
     

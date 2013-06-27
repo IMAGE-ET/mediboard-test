@@ -9,18 +9,30 @@
  * @version    $Revision$
  */
 
+/**
+ * Time value (HH:MM:SS)
+ */
 class CTimeSpec extends CMbFieldSpec {
   public $min;
   public $max;
-  
+
+  /**
+   * @see parent::getSpecType()
+   */
   function getSpecType() {
     return "time";
   }
-  
+
+  /**
+   * @see parent::getDBSpec()
+   */
   function getDBSpec(){
     return "TIME";
   }
-  
+
+  /**
+   * @see parent::checkProperty()
+   */
   function checkProperty($object){
     $propValue = &$object->{$this->fieldName};
 
@@ -60,13 +72,19 @@ class CTimeSpec extends CMbFieldSpec {
     return null;
   }
 
+  /**
+   * @see parent::getOptions()
+   */
   function getOptions(){
     return array(
       'min' => 'time',
       'max' => 'time'
     ) + parent::getOptions();
   }
-  
+
+  /**
+   * @see parent::getValue()
+   */
   function getValue($object, $smarty = null, $params = array()) {
     include_once $smarty->_get_plugin_filepath('modifier', 'date_format');
     
@@ -75,6 +93,9 @@ class CTimeSpec extends CMbFieldSpec {
     return $propValue ? smarty_modifier_date_format($propValue, $format) : "";
   }
 
+  /**
+   * @see parent::sample()
+   */
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
     $object->{$this->fieldName} = 
@@ -82,7 +103,10 @@ class CTimeSpec extends CMbFieldSpec {
       self::randomString(CMbFieldSpec::$mins, 1).":".
       self::randomString(CMbFieldSpec::$mins, 1);
   }
-  
+
+  /**
+   * @see parent::getFormHtmlElement()
+   */
   function getFormHtmlElement($object, $params, $value, $className) {
     return $this->getFormElementDateTime($object, $params, $value, $className, CAppUI::conf("time"));
   }

@@ -9,12 +9,24 @@
  * @version    $Revision$
  */
 
+/**
+ * Float value
+ */
 class CFloatSpec extends CMbFieldSpec {
   public $min;
   public $max;
   public $pos;
   public $decimals;
-  
+
+  /**
+   * Tells if the float values are equal
+   *
+   * @param float $value1 Value 1
+   * @param float $value2 Value 2
+   * @param float $spec   Spec
+   *
+   * @return bool
+   */
   static function equals($value1, $value2, $spec) {
     if ($spec instanceof CCurrencySpec) {
       $precision = isset($spec->precise) ? 5 : 3;
@@ -23,15 +35,24 @@ class CFloatSpec extends CMbFieldSpec {
     
     return round($value1, 2) == round($value2, 2);
   }
-  
+
+  /**
+   * @see parent::getSpecType()
+   */
   function getSpecType() {
     return "float";
   }
-  
+
+  /**
+   * @see parent::getDBSpec()
+   */
   function getDBSpec(){
     return 'FLOAT'.($this->pos || ($this->min !== null && $this->min >= 0) ? ' UNSIGNED' : '');
   }
-  
+
+  /**
+   * @see parent::getOptions()
+   */
   function getOptions(){
     return array(
       'min' => 'num',
@@ -40,7 +61,10 @@ class CFloatSpec extends CMbFieldSpec {
       'decimals' => 'num',
     ) + parent::getOptions();
   }
-  
+
+  /**
+   * @see parent::getValue()
+   */
   function getValue($object, $smarty = null, $params = array()) {
     $propValue = $object->{$this->fieldName};
     
@@ -58,7 +82,10 @@ class CFloatSpec extends CMbFieldSpec {
     
     return CMbString::htmlSpecialChars($propValue);
   }
-  
+
+  /**
+   * @see parent::checkProperty()
+   */
   function checkProperty($object){
     $propValue = CMbFieldSpec::checkNumeric($object->{$this->fieldName}, false);
     if ($propValue === null) {
@@ -94,13 +121,21 @@ class CFloatSpec extends CMbFieldSpec {
         return "Doit avoir une valeur maximale de $max";
       }
     }
+
+    return null;
   }
-  
+
+  /**
+   * @see parent::sample()
+   */
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
     $object->{$this->fieldName} = self::randomString(CMbFieldSpec::$nums, 2).".".self::randomString(CMbFieldSpec::$nums, 2);
   }
-  
+
+  /**
+   * @see parent::getFormHtmlElement()
+   */
   function getFormHtmlElement($object, $params, $value, $className){
     $form         = CMbArray::extract($params, "form");
     $increment    = CMbArray::extract($params, "increment");

@@ -9,18 +9,30 @@
  * @version    $Revision$
  */
 
+/**
+ * DateTime value (YYYY-MM-DD HH:MM:SS)
+ */
 class CDateTimeSpec extends CMbFieldSpec {
+  /**
+   * @see parent::getSpecType()
+   */
   function getSpecType() {
     return "dateTime";
   }
 
+  /**
+   * @see parent::getDBSpec()
+   */
   function getDBSpec(){
     return "DATETIME";
   }
 
+  /**
+   * @see parent::getValue()
+   */
   function getValue($object, $smarty = null, $params = array()) {
     if ($smarty) {
-      include_once $smarty->_get_plugin_filepath('modifier','date_format');
+      include_once $smarty->_get_plugin_filepath('modifier', 'date_format');
     }
 
     $propValue = $object->{$this->fieldName};
@@ -41,6 +53,9 @@ class CDateTimeSpec extends CMbFieldSpec {
       "";
   }
 
+  /**
+   * @see parent::checkProperty()
+   */
   function checkProperty($object){
     $propValue = &$object->{$this->fieldName};
 
@@ -53,8 +68,13 @@ class CDateTimeSpec extends CMbFieldSpec {
     }
 
     $propValue = strtr($propValue, "+", " ");
+
+    return null;
   }
 
+  /**
+   * @see parent::sample()
+   */
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
 
@@ -66,6 +86,9 @@ class CDateTimeSpec extends CMbFieldSpec {
       ":".self::randomString(CMbFieldSpec::$mins, 1);
   }
 
+  /**
+   * @see parent::getFormHtmlElement()
+   */
   function getFormHtmlElement($object, $params, $value, $className){
     return $this->getFormElementDateTime($object, $params, $value, $className, CAppUI::conf("datetime"));
   }

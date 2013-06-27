@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Enum value (list of values)
+ */
 class CEnumSpec extends CMbFieldSpec {
   public $list;
   public $typeEnum;
@@ -18,6 +21,9 @@ class CEnumSpec extends CMbFieldSpec {
   public $_list;
   public $_locales;
 
+  /**
+   * @see parent::__construct()
+   */
   function __construct($className, $field, $prop = null, $aProperties = array()) {
     parent::__construct($className, $field, $prop, $aProperties);
 
@@ -29,6 +35,13 @@ class CEnumSpec extends CMbFieldSpec {
     }
   }
 
+  /**
+   * Get the values of the list
+   *
+   * @param string $string The string to get the values of
+   *
+   * @return array
+   */
   protected function getListValues($string){
     $list = array();
 
@@ -39,14 +52,23 @@ class CEnumSpec extends CMbFieldSpec {
     return $list;
   }
 
+  /**
+   * @see parent::getSpecType()
+   */
   function getSpecType() {
     return "enum";
   }
 
+  /**
+   * @see parent::getDBSpec()
+   */
   function getDBSpec() {
     return "ENUM('".str_replace('|', "','", $this->list)."')";
   }
 
+  /**
+   * @see parent::getOptions()
+   */
   function getOptions(){
     return array(
       'list'     => 'list',
@@ -56,12 +78,18 @@ class CEnumSpec extends CMbFieldSpec {
     ) + parent::getOptions();
   }
 
+  /**
+   * @see parent::getValue()
+   */
   function getValue($object, $smarty = null, $params = array()) {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     return CMbString::htmlSpecialChars(CAppUI::tr("$object->_class.$fieldName.$propValue"));
   }
 
+  /**
+   * @see parent::checkOptions()
+   */
   function checkOptions(){
     parent::checkOptions();
     if (!$this->list) {
@@ -69,20 +97,31 @@ class CEnumSpec extends CMbFieldSpec {
     }
   }
 
+  /**
+   * @see parent::checkProperty()
+   */
   function checkProperty($object){
     $propValue = $object->{$this->fieldName};
     $specFragments = $this->getListValues($this->list);
     if (!in_array($propValue, $specFragments)) {
       return "N'a pas une valeur possible";
     }
+
+    return null;
   }
 
+  /**
+   * @see parent::sample()
+   */
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
     $specFragments = $this->getListValues($this->list);
     $object->{$this->fieldName} = self::randomString($specFragments, 1);
   }
 
+  /**
+   * @see parent::getFormHtmlElement()
+   */
   function getFormHtmlElement($object, $params, $value, $className){
     $field         = CMbString::htmlSpecialChars($this->fieldName);
     $typeEnum      = CMbArray::extract($params, "typeEnum", $this->typeEnum ? $this->typeEnum : "select");
@@ -182,6 +221,9 @@ class CEnumSpec extends CMbFieldSpec {
     }
   }
 
+  /**
+   * @see parent::getLabelForAttribute()
+   */
   function getLabelForAttribute($object, &$params){
     // to extract the XHTML invalid attribute "typeEnum"
     $typeEnum = CMbArray::extract($params, "typeEnum");

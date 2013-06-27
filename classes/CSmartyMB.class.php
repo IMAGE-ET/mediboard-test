@@ -578,7 +578,7 @@ class CSmartyMB extends Smarty {
    *
    * @return string
    */
-  function currency($value, $decimals = null, $precise = null, $empty = true) {
+  static function currency($value, $decimals = null, $precise = null, $empty = true) {
     if ($decimals == null) {
       $decimals = $precise ? 4 : 2;
     }

@@ -9,15 +9,29 @@
  * @version    $Revision$
  */
 
+/**
+ * Phone number
+ */
 class CPhoneSpec extends CMbFieldSpec {
+  /**
+   * @see parent::getSpecType()
+   */
   function getSpecType() {
     return "phone";
   }
-  
+
+  /**
+   * @see parent::getDBSpec()
+   */
   function getDBSpec(){
     return "VARCHAR (20)";
   }
-  
+
+  /**
+   * Get the mask corresponding to the phone number format
+   *
+   * @return string
+   */
   protected function getMask(){
     static $phone_number_mask = null;
     
@@ -33,7 +47,10 @@ class CPhoneSpec extends CMbFieldSpec {
 
     return $phone_number_mask;
   }
-  
+
+  /**
+   * @see parent::sample()
+   */
   function sample($object, $consistent = true){
     parent::sample($object, $consistent);
     
@@ -41,11 +58,17 @@ class CPhoneSpec extends CMbFieldSpec {
     
     $object->{$this->fieldName} = self::randomString(range(0, 9), strlen($nums));
   }
-  
+
+  /**
+   * @see parent::getPropSuffix()
+   */
   function getPropSuffix(){
     return "pattern|\d{10,}".$this->getMask();
   }
-  
+
+  /**
+   * @see parent::getFormHtmlElement()
+   */
   function getFormHtmlElement($object, $params, $value, $className){
     $field = CMbString::htmlSpecialChars($this->fieldName);
     $value = CMbString::htmlSpecialChars($value);

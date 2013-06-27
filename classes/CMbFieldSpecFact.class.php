@@ -48,9 +48,9 @@ class CMbFieldSpecFact {
   /**
    * Returns a spec object for an object field's prop
    * 
-   * @param CMbObject $object The object
-   * @param string    $field  The field name
-   * @param string    $prop   The prop string serializing the spec object options
+   * @param CModelObject $object The object
+   * @param string       $field  The field name
+   * @param string       $prop   The prop string serializing the spec object options
    * 
    * @return CMbFieldSpec Corresponding spec instance
    */

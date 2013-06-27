@@ -9,31 +9,49 @@
  * @version    $Revision$
  */
 
+/**
+ * Set of values
+ */
 class CSetSpec extends CEnumSpec {
   
   public $_list_default;
-  
+
+  /**
+   * @see parent::__construct()
+   */
   function __construct($className, $field, $prop = null, $aProperties = array()) {
     parent::__construct($className, $field, $prop, $aProperties);
 
     $this->_list_default = $this->getListValues($this->default);
   }
-  
+
+  /**
+   * @see parent::getSpecType()
+   */
   function getSpecType() {
     return "set";
   }
-  
+
+  /**
+   * @see parent::getDBSpec()
+   */
   function getDBSpec() {
     return "TEXT";
   }
-  
+
+  /**
+   * @see parent::getOptions()
+   */
   function getOptions(){
     return array(
       'list' => 'list',
       'typeEnum' => array('checkbox', 'select'),
     ) + parent::getOptions();
   }
-  
+
+  /**
+   * @see parent::getValue()
+   */
   function getValue($object, $smarty = null, $params = array()) {
     $fieldName = $this->fieldName;
     $propValue = $this->getListValues($object->$fieldName);
@@ -45,7 +63,10 @@ class CSetSpec extends CEnumSpec {
     
     return implode(", ", $ret);
   }
-  
+
+  /**
+   * @see parent::checkProperty()
+   */
   function checkProperty($object){
     $propValue = $this->getListValues($object->{$this->fieldName});
     $specFragments = $this->getListValues($this->list);
@@ -55,8 +76,13 @@ class CSetSpec extends CEnumSpec {
     if (!empty($diff)) {
       return "Contient une valeur non valide";
     }
+
+    return null;
   }
-  
+
+  /**
+   * @see parent::getFormHtmlElement()
+   */
   function getFormHtmlElement($object, $params, $value, $className){
     $field         = CMbString::htmlSpecialChars($this->fieldName);
     $locales       = $this->_locales;
@@ -153,7 +179,10 @@ class CSetSpec extends CEnumSpec {
 
     return $sHtml;
   }
-  
+
+  /**
+   * @see parent::getLabelForAttribute()
+   */
   function getLabelForAttribute($object, &$params){
     // to extract the XHTML invalid attribute "typeEnum"
     $typeEnum = CMbArray::extract($params, "typeEnum");

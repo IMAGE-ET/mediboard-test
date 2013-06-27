@@ -16,14 +16,23 @@
  *  DD > 31
  */
 class CBirthDateSpec extends CMbFieldSpec {
+  /**
+   * @see parent::getSpecType()
+   */
   function getSpecType() {
     return "birthDate";
   }
-  
+
+  /**
+   * @see parent::getDBSpec()
+   */
   function getDBSpec(){
     return "CHAR(10)";
   }
-  
+
+  /**
+   * @see parent::getValue()
+   */
   function getValue($object, $smarty = null, $params = array()) {
     $propValue = $object->{$this->fieldName};
     
@@ -32,7 +41,10 @@ class CBirthDateSpec extends CMbFieldSpec {
     }
     return parent::getValue($object, $smarty, $params);
   }
-  
+
+  /**
+   * @see parent::checkProperty()
+   */
   function checkProperty($object){
     if (!preg_match("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})$/", $object->{$this->fieldName}, $match)) {
       return "Format de date invalide";
@@ -42,11 +54,17 @@ class CBirthDateSpec extends CMbFieldSpec {
       return "Année inférieure a 1850";
     }
   }
-  
+
+  /**
+   * @see parent::getPropSuffix()
+   */
   function getPropSuffix() {
     return "mask|99/99/9999 format|$3-$2-$1";
   }
-  
+
+  /**
+   * @see parent::sample()
+   */
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
     
@@ -57,7 +75,10 @@ class CBirthDateSpec extends CMbFieldSpec {
       self::randomString(CMbFieldSpec::$days, 1)
     );
   }
-  
+
+  /**
+   * @see parent::getFormHtmlElement()
+   */
   function getFormHtmlElement($object, $params, $value, $className){
     $maxLength = 10;
     CMbArray::defaultValue($params, "size", $maxLength);

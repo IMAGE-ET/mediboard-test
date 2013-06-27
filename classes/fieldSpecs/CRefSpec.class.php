@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Numeric reference to a CStoredObject
+ */
 class CRefSpec extends CMbFieldSpec {
   public $class;
   public $cascade;
@@ -16,15 +19,24 @@ class CRefSpec extends CMbFieldSpec {
   public $nullify;
   public $meta;
   public $purgeable;
-  
+
+  /**
+   * @see parent::getSpecType()
+   */
   function getSpecType() {
     return "ref";
   }
-  
+
+  /**
+   * @see parent::getDBSpec()
+   */
   function getDBSpec(){
     return "INT(11) UNSIGNED";
   }
-  
+
+  /**
+   * @see parent::getOptions()
+   */
   function getOptions(){
     return array(
       'class'     => 'class',
@@ -35,7 +47,10 @@ class CRefSpec extends CMbFieldSpec {
       'purgeable' => 'bool',
     ) + parent::getOptions();
   }
-  
+
+  /**
+   * @see parent::getValue()
+   */
   function getValue($object, $smarty = null, $params = array()) {
     $tooltip = CMbArray::extract($params, "tooltip");
     $ref = $object->loadFwdRef($this->fieldName, true);
@@ -49,6 +64,9 @@ class CRefSpec extends CMbFieldSpec {
     return $object->{$this->fieldName};
   }
 
+  /**
+   * @see parent::checkProperty()
+   */
   function checkProperty($object){
     if ($this->notNull && $this->nullify) {
       return "Spécifications de propriété incohérentes entre 'notNull' et 'nullify'";
@@ -89,12 +107,15 @@ class CRefSpec extends CMbFieldSpec {
       if (!is_subclass_of($class, "CStoredObject")) {
         return "La classe '$class' n'est pas une classe d'objet enregistrée";
       }
-      
+
+      /** @var CStoredObject $ref */
       $ref = new $class;
       if (!$this->unlink && !$ref->load($propValue)) {
         return "Objet référencé de type '$class' introuvable";      
       }
     }
+
+    return null;
   }
   
   /**
@@ -103,6 +124,8 @@ class CRefSpec extends CMbFieldSpec {
    *   - choose  : string alternative for Choose default option
    *   - size    : interger for size of text input 
    * @see classes/CMbFieldSpec#getFormHtmlElement($object, $params, $value, $className)
+   *
+   * @return string
    */
   function getFormHtmlElement($object, $params, $value, $className) {
     if ($options = CMbArray::extract($params, "options")) {

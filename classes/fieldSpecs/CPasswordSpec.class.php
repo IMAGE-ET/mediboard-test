@@ -9,18 +9,30 @@
  * @version    $Revision$
  */
 
+/**
+ * Password
+ */
 class CPasswordSpec extends CMbFieldSpec {
   public $minLength;
   public $revealable;
-  
+
+  /**
+   * @see parent::getSpecType()
+   */
   function getSpecType() {
     return "password";
   }
-  
+
+  /**
+   * @see parent::getDBSpec()
+   */
   function getDBSpec(){
     return "VARCHAR(50)";
   }
-  
+
+  /**
+   * @see parent::getOptions()
+   */
   function getOptions(){
     return array(
       'minLength' => 'num',
@@ -73,8 +85,13 @@ class CPasswordSpec extends CMbFieldSpec {
         return 'Le mot de passe doit contenir au moins un chiffre ET une lettre';
       }
     }
+
+    return null;
   }
-  
+
+  /**
+   * @see parent::getFormHtmlElement()
+   */
   function getFormHtmlElement($object, $params, $value, $className){
     $form         = CMbArray::extract($params, "form"); // needs to be extracted
     $field        = CMbString::htmlSpecialChars($this->fieldName);
@@ -94,9 +111,12 @@ class CPasswordSpec extends CMbFieldSpec {
     $sHtml       .= '<span id="'.$field.'_message"></span>';
     return $sHtml;
   }
-  
+
+  /**
+   * @see parent::sample()
+   */
   function sample(&$object, $consistent = true) {
     parent::sample($object, $consistent);
-    $object->{$this->fieldName} = self::randomString(array_merge(range('0','9'), range('a','z'), range('A','Z')), 8);
+    $object->{$this->fieldName} = self::randomString(array_merge(range('0', '9'), range('a', 'z'), range('A', 'Z')), 8);
   }
 }

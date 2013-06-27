@@ -9,15 +9,27 @@
  * @version    $Revision$
  */
 
+/**
+ * URL
+ */
 class CURLSpec extends CMbFieldSpec {
+  /**
+   * @see parent::getSpecType()
+   */
   function getSpecType() {
     return "url";
   }
-  
+
+  /**
+   * @see parent::getDBSpec()
+   */
   function getDBSpec(){
     return "VARCHAR(255)";
   }
-  
+
+  /**
+   * @see parent::getHtmlValue()
+   */
   function getHtmlValue($object, $smarty = null, $params = array()) {
     $propValue = $object->{$this->fieldName};
     
@@ -25,14 +37,22 @@ class CURLSpec extends CMbFieldSpec {
       "<a class=\"inline-url\" target=\"_blank\" href=\"$propValue\">$propValue</a>" :
       "";
   }
-  
+
+  /**
+   * @see parent::checkProperty()
+   */
   function checkProperty($object){
     $regex = "@^(ftp|http|https)://(\w+:{0,1}\w*\@)?(\S+)(:[0-9]+)?(/|/([\w#!:.?+=&%\@!-/]))?$@i";
     if (!preg_match($regex, $object->{$this->fieldName})) {
       return "Le format de l'URL n'est pas valide";
     }
+
+    return null;
   }
 
+  /**
+   * @see parent::getFormHtmlElement()
+   */
   function getFormHtmlElement($object, $params, $value, $className){
     $field = CMbString::htmlSpecialChars($this->fieldName);
     $value = CMbString::htmlSpecialChars($value);
@@ -44,6 +64,9 @@ class CURLSpec extends CMbFieldSpec {
     return "<input type=\"url\" name=\"$field\" value=\"$value\" class=\"$class styled-element\" $extra />";
   }
 
+  /**
+   * @see parent::sample()
+   */
   function sample(&$object, $consistent = true) {
     parent::sample($object, $consistent);
     $object->{$this->fieldName} = "http://mediboard.org";
