@@ -144,15 +144,6 @@ class CSOAPClient {
       $arguments = $arguments[0];
     }
     
-    if (!$client->loggable) {
-      try {
-        return $client->call($function_name, $arguments, $options, $input_headers, $output_headers);
-      } 
-      catch(SoapFault $fault) {
-        throw $fault;
-      }
-    }
-    
     $output = null;
     
     $echange_soap = new CEchangeSOAP();
@@ -172,8 +163,10 @@ class CSOAPClient {
     $arguments_serialize = array_map_recursive(array('CSOAPClient', "truncate"), $arguments);
     
     $echange_soap->input = serialize($arguments_serialize);
-    
-    $echange_soap->store();
+
+    if ($client->loggable) {
+      $echange_soap->store();
+    }
     
     CApp::$chrono->stop();
     $chrono = new Chronometer();
@@ -181,6 +174,11 @@ class CSOAPClient {
 
     try {
       $output = $client->call($function_name, $arguments, $options, $input_headers, $output_headers);
+
+      if (!$client->loggable) {
+        CApp::$chrono->start();
+        return $output;
+      }
     } 
     catch(SoapFault $fault) {
       // trace
