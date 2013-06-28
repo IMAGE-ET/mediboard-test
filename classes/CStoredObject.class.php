@@ -894,6 +894,7 @@ class CStoredObject extends CModelObject {
    * @return self[] List of found objects, null if module is not installed
    */
   function loadQueryList($query) {
+    global $m, $action;
     $ds = $this->_spec->ds;
     
     // @todo should replace fetchAssoc, instanciation and bind
@@ -922,7 +923,7 @@ class CStoredObject extends CModelObject {
     }
 
     if (count($objects) != count($rows)) {
-      mbLog($query,  "Missing group by");
+      mbLog($query,  "Missing group by in $m / $action (rows : ".count($rows).", objects : ".count($objects));
     }
 
     return $objects;

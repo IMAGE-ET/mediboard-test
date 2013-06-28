@@ -8,7 +8,7 @@ Main.add(function () {
 
 <table class="tbl main">
   <tr>
-    <th class="title" colspan="{{if $systeme_materiel == "expert"}}9{{else}}8{{/if}}">
+    <th class="title" colspan="10">
       Hors plage du {{$date|date_format:$conf.longdate}}
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
