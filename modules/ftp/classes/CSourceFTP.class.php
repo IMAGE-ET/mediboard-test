@@ -25,6 +25,7 @@ class CSourceFTP extends CExchangeSource {
   public $filenbroll;
   public $fileextension_write_end;
   public $counter;
+  public $ssl;
 
   // Form fields
   public $_source_file;
@@ -46,6 +47,7 @@ class CSourceFTP extends CExchangeSource {
    */
   function getProps() {
     $specs = parent::getProps();
+    $specs["ssl"]        = "bool default|0";
     $specs["port"]       = "num default|21";
     $specs["timeout"]    = "num default|5";
     $specs["pasv"]       = "bool default|0";
@@ -55,6 +57,7 @@ class CSourceFTP extends CExchangeSource {
     $specs["fileextension"] = "str";
     $specs["filenbroll"]    = "enum list|1|2|3|4";
     $specs["fileextension_write_end"] = "str";
+
 
     return $specs;
   }

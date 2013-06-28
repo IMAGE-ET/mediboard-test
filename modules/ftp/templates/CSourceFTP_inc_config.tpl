@@ -48,6 +48,10 @@
             <td>{{mb_field object=$source field="timeout"}}</td>
           </tr>
           <tr>
+            <th>{{mb_label object=$source field="ssl"}}</th>
+            <td>{{mb_field object=$source field="ssl"}}</td>
+          </tr>
+          <tr>
             <th>{{mb_label object=$source field="pasv"}}</th>
             <td>{{mb_field object=$source field="pasv"}}</td>
           </tr>

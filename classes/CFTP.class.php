@@ -16,6 +16,7 @@ class CFTP {
   public $connexion;
   public $port;
   public $timeout;
+  public $ssl;
   public $passif_mode = false;
   public $mode;
   public $fileprefix;
@@ -156,6 +157,7 @@ class CFTP {
     $this->userpass      = $exchange_source->getPassword();
     $this->port          = $exchange_source->port;
     $this->timeout       = $exchange_source->timeout;
+    $this->ssl           = $exchange_source->ssl;
     $this->passif_mode   = $exchange_source->pasv;
     $this->mode          = $exchange_source->mode;
     $this->fileprefix    = $exchange_source->fileprefix;
@@ -174,14 +176,28 @@ class CFTP {
   }
   
   private function _connect() {
-    if (!function_exists("ftp_connect")) {
-      throw new CMbException("CSourceFTP-function-not-available", "ftp_connect");
+    // If server provides SSL mode
+    if ($this->ssl) {
+      if (!function_exists("ftp_ssl_connect")) {
+        throw new CMbException("CSourceFTP-function-not-available", "ftp_ssl_connect");
+      }
+
+      // Set up over-SSL connection
+      $this->connexion = ftp_ssl_connect($this->hostname, $this->port, $this->timeout);
+      if (!$this->connexion) {
+        throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
+      }
     }
-    
-    // Set up basic connection
-    $this->connexion = @ftp_connect($this->hostname, $this->port, $this->timeout);
-    if (!$this->connexion) {
-      throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
+    else {
+      if (!function_exists("ftp_connect")) {
+        throw new CMbException("CSourceFTP-function-not-available", "ftp_connect");
+      }
+
+      // Set up basic connection
+      $this->connexion = @ftp_connect($this->hostname, $this->port, $this->timeout);
+      if (!$this->connexion) {
+        throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
+      }
     }
 
     // Login with username and password

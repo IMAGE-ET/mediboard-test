@@ -144,6 +144,11 @@ class CSetupftp extends CSetup {
                 WHERE source_ftp.name LIKE 'CReceiverIHE-%';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.14";
+    $this->makeRevision("0.14");
+    $query = "ALTER TABLE `source_ftp`
+               ADD `ssl` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query, true);
+
+    $this->mod_version = "0.15";
   }
 }
