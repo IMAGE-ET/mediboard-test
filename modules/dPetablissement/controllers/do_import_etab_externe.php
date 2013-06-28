@@ -40,7 +40,7 @@ function getNum($value) {
 }
  
 CApp::setTimeLimit(3600);
-session_write_close();
+CSessionHandler::writeClose();
 
 if (empty($_FILES["import"]["tmp_name"])) {
   return;
