@@ -81,7 +81,7 @@
                   {{else}}
                     {{mb_field object=$consult field=at_sans_arret readonly=readonly}}
                   {{/if}}
-                </th>
+                </td>
               </tr>
             </table>
           </fieldset>
@@ -98,7 +98,7 @@
                 {{else}}
                   {{mb_field object=$consult field=arret_maladie readonly=readonly}}
                 {{/if}}
-              </th>
+              </td>
             </tr>
           </table>
         </fieldset>
