@@ -649,6 +649,34 @@ Main.add( function(){
         RDV Consultation
       </button>
     {{/if}}
+    <br />
+    <input type="text" name="_seek_patient" style="width: 13em;" placeholder="{{tr}}fast-search{{/tr}}" "autocomplete" onblur="$V(this, '')"/>
+    {{assign var=patient_id_config value=$conf.dPplanningOp.CSejour.patient_id}}
+    {{if !($patient_id_config == 0 && $sejour->_id) && !($patient_id_config == 2 && $sejour->entree_reelle)}}
+      <script>
+        Main.add(function () {
+          var form = getForm("editSejour");
+          var url = new Url("system", "ajax_seek_autocomplete");
+          url.addParam("object_class", "CPatient");
+          url.addParam("field", "patient_id");
+          url.addParam("view_field", "_patient_view");
+          url.addParam("input_field", "_seek_patient");
+          url.autoComplete(form.elements._seek_patient, null, {
+            minChars: 3,
+            method: "get",
+            select: "view",
+            dropdown: false,
+            width: "300px",
+            afterUpdateElement: function(field,selected){
+              $V(field.form.patient_id, selected.getAttribute("id").split("-")[2]);
+              $V(field.form.elements._patient_view, selected.down('.view').innerHTML);
+              $V(field.form.elements._seek_patient, "");
+            }
+          });
+          Event.observe(form.elements._seek_patient, 'keydown', PatSelector.cancelFastSearch);
+        });
+      </script>
+    {{/if}}
   </td>
 </tr>
 
