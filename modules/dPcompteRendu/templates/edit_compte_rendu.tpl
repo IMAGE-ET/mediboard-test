@@ -174,9 +174,11 @@ function openWindowMail() {
 
 function openWindowApicrypt() {
   {{if $exchange_source->_id}}
+    var form = getForm("editFrm");
     var url = new Url("apicrypt", "ajax_view_apicrypt_mail");
     url.addParam("object_id", '{{$compte_rendu->object_id}}');
     url.addParam("object_class", '{{$compte_rendu->object_class}}');
+    url.addParam("doc_id", $V(form.compte_rendu_id));
     url.requestModal(700, 320);
   {{else}}
     alert("Veuillez paramétrer votre compte mail (source smtp dans les préférences utilisateur).");
