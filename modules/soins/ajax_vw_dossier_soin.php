@@ -360,32 +360,7 @@ $sortie_sejour = ($sejour->sortie_reelle || !$prolongation_time) ? $sejour->sort
 
 $count_perop_adm = 0;
 if (CAppUI::conf("dPprescription CPrescription show_perop_suivi_soins") && $prescription->_id && !$chapitre) {
-  // Calcul du nombre d'administration perop
-  $administration = new CAdministration();
-  $ljoin = array();
-  $ljoin["prescription_line_medicament"] = "prescription_line_medicament.prescription_line_medicament_id = administration.object_id AND administration.object_class = 'CPrescriptionLineMedicament'";                                                         
-  $ljoin["prescription"] = "prescription_line_medicament.prescription_id = prescription.prescription_id";                   
-  $where = array();
-  $where["prescription.prescription_id"] = " = '$prescription->_id'";
-  $where[] = "prescription_line_medicament.perop = '1'";
-  $count_perop_adm += $administration->countList($where, null, $ljoin);
-  
-  $ljoin = array();
-  $ljoin["prescription_line_element"]    = "prescription_line_element.prescription_line_element_id = administration.object_id AND administration.object_class = 'CPrescriptionLineElement'";                                                                                 
-  $ljoin["prescription"] = "prescription_line_element.prescription_id = prescription.prescription_id";              
-  $where = array();
-  $where["prescription.prescription_id"] = " = '$prescription->_id'";
-  $where[] = "prescription_line_element.perop = '1'";
-   $count_perop_adm += $administration->countList($where, null, $ljoin);
-  
-  $ljoin = array();
-  $ljoin["prescription_line_mix_item"]   = "prescription_line_mix_item.prescription_line_mix_item_id = administration.object_id AND administration.object_class = 'CPrescriptionLineMixItem'";
-  $ljoin["prescription_line_mix"]        = "prescription_line_mix.prescription_line_mix_id = prescription_line_mix_item.prescription_line_mix_id";                                                                        
-  $ljoin["prescription"] = "prescription_line_mix.prescription_id = prescription.prescription_id";
-  $where = array();
-  $where["prescription.prescription_id"] = " = '$prescription->_id'";
-  $where[] = "prescription_line_mix.perop = '1'";
-  $count_perop_adm += $administration->countList($where, null, $ljoin);
+  $count_perop_adm = CAdministration::countPerop($prescription->_id);
 }
 
 // Création du template
