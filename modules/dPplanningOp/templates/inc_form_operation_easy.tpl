@@ -95,7 +95,7 @@
   <tr>
     <th>{{mb_label object=$op field="libelle"}}</th>
     <td colspan="2">
-      {{mb_field object=$op field="libelle" style="width: 15em; padding-right: 1px;" onfocus="ProtocoleSelector.init()" readonly="readonly"}}
+      {{mb_field object=$op field="libelle" style="width: 23em; padding-right: 1px;" onfocus="ProtocoleSelector.init()" readonly="readonly"}}
       <button class="search notext" type="button" onclick="ProtocoleSelector.init()">
         Choisir un protocole
       </button>
@@ -123,7 +123,7 @@
       </script>
       
       <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$sejour->DP}}" onchange="Value.synchronize(this, 'editSejour');" style="width: 12em" />
-      <button type="button" class="cancel notext" onclick="$V(this.form.DP, '');" />
+      <button type="button" class="cancel notext" onclick="$V(this.form.DP, '');">{{tr}}Cancel{{/tr}}</button>
       <button type="button" class="search notext" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
       <input type="hidden" name="DP" value="{{$sejour->DP}}" onchange="$V(this.form.keywords_code, this.value); Value.synchronize(this, 'editSejour');"/>
     </td>

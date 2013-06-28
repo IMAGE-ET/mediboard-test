@@ -238,7 +238,6 @@ function printFormSejour() {
   url.setModuleAction("dPplanningOp", "view_planning"); 
   url.addParam("sejour_id", $V(getForm("editSejour").sejour_id));
   url.popup(700, 500, "printSejour");
-  return;
 }
 
 function openAntecedents() {
@@ -260,14 +259,14 @@ PatSelector.init = function(){
   this.sView = "_patient_view";
   this.sSexe = "_patient_sexe";
   this.pop();
-}
+};
 
 CIM10Selector.init = function(){
   this.sForm = "editSejour";
   this.sView = "DP";
   this.sChir = "praticien_id";
   this.pop();
-}
+};
 
 function updateListCPI(form){
   var field = form.charge_id;
@@ -338,7 +337,7 @@ updateModeSortie = function(select) {
   var selected = select.options[select.selectedIndex];
   var form = select.form;
   $V(form.elements.mode_sortie, selected.get("mode"));
-}
+};
 
 {{if $mode_operation}}
 // Declaration d'un objet Sejour
@@ -377,7 +376,7 @@ var Sejour = {
       }
     }
   }
-}
+};
 
 Main.add( function(){
   // Conservation du non facturable lors de la sélection
@@ -682,7 +681,7 @@ Main.add( function(){
 
 <tr>
   <th>{{mb_label object=$sejour field="libelle"}}</th>
-  <td colspan="3">{{mb_field object=$sejour field="libelle" form="editSejour" style="width: 12em" autocomplete="true,1,50,true,true"}}</td>
+  <td colspan="3">{{mb_field object=$sejour field="libelle" form="editSejour" style="width: 20em" autocomplete="true,1,50,true,true"}}</td>
 </tr>
 
 <tr {{if !$conf.dPplanningOp.CSejour.easy_cim10}}class="modeExpert"{{/if}}>

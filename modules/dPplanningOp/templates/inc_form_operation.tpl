@@ -30,7 +30,7 @@ PlageOpSelector.init = function(){
   this.pop(oOpForm.chir_id.value, oOpForm._hour_op.value,
            oOpForm._min_op.value, oSejourForm.group_id.value,
            oOpForm.operation_id.value);
-}
+};
 
 CCAMSelector.init = function(){
   this.sForm  = "editOp";
@@ -38,7 +38,7 @@ CCAMSelector.init = function(){
   this.sChir  = "chir_id";
   this.sClass = "_class";
   this.pop();
-}
+};
 
 addBesoins = function(types_ressources_ids) {
   var form = getForm("addBesoinOp");
@@ -53,7 +53,7 @@ addBesoins = function(types_ressources_ids) {
       }
     });
   });
-}
+};
 
 refreshFunction = function(chir_id) {
   var url = new Url("dPcabinet", "ajax_refresh_secondary_functions");
@@ -108,7 +108,7 @@ refreshFunction = function(chir_id) {
 <input type="hidden" name="_place_after_interv_id" value="" />
 {{mb_field object=$op field=duree_preop form=editOp hidden=1}}
 <input type="hidden" name="_types_ressources_ids"
-  onchange="{{if $op->_id}}addBesoins(this.value){{else}}synchronizeTypes($V(this)){{/if}}"/>
+  onchange="{{if $op->_id}}addBesoins(this.value);{{else}}synchronizeTypes($V(this));{{/if}}"/>
 
 <table class="form">
   <tr>
@@ -192,7 +192,7 @@ refreshFunction = function(chir_id) {
       {{mb_field object=$op field="libelle" form="editOp"
         autocomplete="true,1,50,true,true"
         onblur="\$V(getForm('editOpEasy').libelle, \$V(getForm('editOp').libelle));"
-        style="width: 12em"}}
+        style="width: 20em"}}
       <button class="search notext" type="button" onclick="ProtocoleSelector.init()">
         Choisir un protocole
       </button>
@@ -346,7 +346,7 @@ refreshFunction = function(chir_id) {
                     $V(this.form._locale_date, Date.fromDATE(this.value).toLocaleDate());
                   } else { 
                     $V(this.form._locale_date, '');
-                  }; 
+                  }
                   Sejour.preselectSejour(this.value);" />
       </th>
       <td colspan="2">
@@ -388,11 +388,11 @@ refreshFunction = function(chir_id) {
   {{if $conf.dPplanningOp.COperation.show_asa_position}}
     <tr>
       <th>{{mb_label object=$op field="ASA"}}</th>
-      <td>{{mb_field object=$op field="ASA" emptyLabel="Choose" style="width: 15em;"}}</td>
+      <td colspan="2">{{mb_field object=$op field="ASA" emptyLabel="Choose" style="width: 15em;"}}</td>
     </tr>
     <tr>
       <th>{{mb_label object=$op field="position"}}</th>
-      <td>{{mb_field object=$op field="position" emptyLabel="Choose" style="width: 15em;"}}</td>
+      <td colspan="2">{{mb_field object=$op field="position" emptyLabel="Choose" style="width: 15em;"}}</td>
     </tr>
   {{/if}}
   {{if $conf.dPplanningOp.COperation.use_poste}}
@@ -420,12 +420,12 @@ refreshFunction = function(chir_id) {
                 if (guid) {
                   $V(field.form['poste_sspi_id'], guid.split('-')[2]);
                 }
-              },
+              }
             });
           });
         </script>
         <button type="button" class="cancel notext"
-          onclick="$V(this.form.poste_sspi_id, ''), $V(this.form._poste_sspi_id_autocomplete, '')"></button>
+          onclick="$V(this.form.poste_sspi_id, ''); $V(this.form._poste_sspi_id_autocomplete, '')"></button>
       </td>
     </tr>
   {{/if}}
