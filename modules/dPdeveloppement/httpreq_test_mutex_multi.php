@@ -24,7 +24,7 @@ $colors = array(
 );
 
 // Remove session lock
-session_write_close();
+CSessionHandler::writeClose();
 
 $mutex = new CMbMutex("test", isset($colors[$i]) ? $colors[$i] : null);
 $time = $mutex->acquire($duration);

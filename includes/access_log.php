@@ -54,9 +54,11 @@ $log->notices     += CApp::$performance["notice"];
 
 $log->aggregate = 10;
 
-$user = CMediusers::get();
-if ($user) {
-  $log->bot = $user->isRobot();
+if (CSessionHandler::isOpen()) {
+  $user = CMediusers::get();
+  if ($user) {
+    $log->bot = $user->isRobot();
+  }
 }
 
 // Fast store

@@ -266,4 +266,13 @@ SQL;
 
     self::$started = false;
   }
+
+  /**
+   * Tells if the session is currently open
+   *
+   * @return bool
+   */
+  static function isOpen(){
+    return self::$started;
+  }
 }

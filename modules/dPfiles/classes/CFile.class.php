@@ -609,7 +609,7 @@ class CFile extends CDocumentItem {
     );
     
     // Fermeture de la session afin d'écrire dans le fichier de session
-    session_write_close();
+    CSessionHandler::writeClose();
     
     // Le header Connection: close permet de forcer a couper la connexion lorsque la requête est effectuée
     $ctx = stream_context_create(

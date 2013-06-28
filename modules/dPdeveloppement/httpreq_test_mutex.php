@@ -14,7 +14,7 @@ $action = CValue::get("action");
 $duration = 10;
 
 // Remove session lock
-session_write_close();
+CSessionHandler::writeClose();
 
 CAppUI::stepAjax("test_mutex-try", UI_MSG_OK, $action);
 

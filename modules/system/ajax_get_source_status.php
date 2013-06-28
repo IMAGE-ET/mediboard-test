@@ -14,7 +14,7 @@
 CCanDo::checkRead();
 
 // Déverrouiller la session pour rendre possible les requêtes concurrentes.
-session_write_close();
+CSessionHandler::writeClose();
 
 $source_guid = CValue::get("source_guid");
 
