@@ -161,6 +161,6 @@ Main.add(function () {
       </td>
     </tr>
   {{foreachelse}}
-    <tr><td colspan="{{if $systeme_materiel == "expert"}}8{{else}}7{{/if}}" class="empty">{{tr}}COperation.none{{/tr}}</td></tr>
+    <tr><td colspan="10" class="empty">{{tr}}COperation.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>
