@@ -437,9 +437,11 @@ Main.add(function () {
             <button type="button" class="print" onclick="PlanSoins.printBons('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
               Bons
             </button>
+            {{if $conf.dPmedicament.base == "bcb"}}
             <button type="button" class="print" onclick="Prescription.viewFullAlertes('{{$prescription_id}}')" title="{{tr}}Print{{/tr}}">
               Alertes 
             </button>
+            {{/if}}
             <button type="button" class="tick" onclick="PlanSoins.applyAdministrations();" id="button_administration">
             </button>
           </td>
