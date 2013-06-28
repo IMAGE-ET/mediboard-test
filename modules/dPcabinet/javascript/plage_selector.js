@@ -96,13 +96,12 @@ PlageConsultSelector = {
   resetConsult : function() {
     this.consultations = {};
   },
-  addOrRemoveConsult : function(plage_id, date, heure, chir_id, chir_name) {
-    var key = plage_id+"_"+date+"_"+heure+"_"+chir_id;
-    if (this.consultations[key]){
-      delete this.consultations[key];
-    }
-    else {
-      this.consultations[key] = {date:date, heure:heure, plage_id:plage_id, chir_id:chir_id, chir_name:chir_name};
+  addConsult : function(plage_id, date, heure, chir_id, chir_name) {
+    this.consultations[plage_id] = {date:date, heure:heure, plage_id:plage_id, chir_id:chir_id, chir_name:chir_name};
+  },
+  removeConsult : function(plage_id) {
+    if(this.consultations[plage_id]) {
+      delete this.consultations[plage_id];
     }
   }
 };

@@ -67,6 +67,7 @@ var PlageConsult = {
       window.parent.PlageConsultSelector.pages[found] = plage_id;
       this.currPlage = plage_id;
       this.page_displayed = found;
+      window.parent.PlageConsultSelector.removeConsult(plage_id);
       this.cleanuPlage(found);
     }
   },

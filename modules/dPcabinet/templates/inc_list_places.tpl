@@ -7,7 +7,7 @@
         var date      = $(elt).get("date");
         var chir_id   = $(elt).get("chir");
         var chir_name   = $(elt).get("chir_name");
-        window.parent.PlageConsultSelector.addOrRemoveConsult(
+        window.parent.PlageConsultSelector.addConsult(
           plage_id,
           date,
           time,
