@@ -298,6 +298,14 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
         }
       }
     }
+
+    if ($interval == 'day') {
+      foreach ($datax as $i => &$x) {
+        if ($i % 4) {
+          $x[1] = '';
+        }
+      }
+    }
     
     if ($interval == 'month') {
       foreach ($datax as $i => &$x) {
