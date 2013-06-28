@@ -569,6 +569,7 @@ class CPatient extends CPerson {
    * @see parent::store()
    */
   function store() {
+    mbLog("CPatient::store()");
     //$this->INSC      = "1075102722581011056235";
     //$this->INSC_date = " 2012-03-12 16:59:21";
 
@@ -597,9 +598,9 @@ class CPatient extends CPerson {
     if (CModule::getActive("fse")) {
       $cv = CFseFactory::createCV();
       if ($cv) {
-        /*if ($msg = $cv->bindVitale($this)) {
+        if ($msg = $cv->bindVitale($this)) {
           return $msg;
-        }*/
+        }
       }
     }
 
