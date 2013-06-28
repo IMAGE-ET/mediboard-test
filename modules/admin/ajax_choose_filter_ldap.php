@@ -17,6 +17,11 @@ $user_username   = CValue::get("user_username");
 $user_first_name = CValue::get("user_first_name");
 $user_last_name  = CValue::get("user_last_name");
 
+// LDAP filtering
+$user_username   = CLDAP::escape($user_username);
+$user_first_name = CLDAP::escape($user_first_name);
+$user_last_name  = CLDAP::escape($user_last_name);
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -29,7 +34,7 @@ if ($user_username || $user_first_name || $user_last_name) {
   } catch(CMbException $e) {
     $e->stepAjax(UI_MSG_ERROR);
   }
-  
+
   $choose_filter = "";
   if ($user_username) {
     $choose_filter = "(samaccountname=$user_username*)";
@@ -40,17 +45,20 @@ if ($user_username || $user_first_name || $user_last_name) {
   if ($user_last_name) {
     $choose_filter .= "(sn=$user_last_name*)";
   }
-  $filter="(|$choose_filter)";
+
+  $filter = "(|$choose_filter)";
   $filter = utf8_encode($filter);
+
   try {
     $results = $source_ldap->ldap_search($source_ldap->_ldapconn, $filter);
-  } catch(CMbException $e) {
+  }
+  catch (CMbException $e) {
     $e->stepAjax(UI_MSG_ERROR);
   }
-  
+
   $nb_users = $results["count"];
-  unset($results["count"]); 
-  
+  unset($results["count"]);
+
   $users = array();
   foreach ($results as $key => $_result) {
     $objectguid = CLDAP::getObjectGUID($_result);;
@@ -65,17 +73,18 @@ if ($user_username || $user_first_name || $user_last_name) {
     $idex->id400        = $objectguid;
     $idex->object_class = "CUser";
     $idex->loadMatchingObject();
+
     $users[$key]["associate"] = $idex->_id ? $idex->object_id : null;
   }
   
   $mediuser = new CMediusers();
 
-  $smarty->assign("users"         , $users);
-  $smarty->assign("mediuser"      , $mediuser);
-  $smarty->assign("nb_users"      , $nb_users);
-  $smarty->assign("givenname"     , CMbString::capitalize($user_first_name));
-  $smarty->assign("sn"            , strtoupper($user_last_name));
-  $smarty->assign("samaccountname", strtolower($user_username)); 
+  $smarty->assign("users",          $users);
+  $smarty->assign("mediuser",       $mediuser);
+  $smarty->assign("nb_users",       $nb_users);
+  $smarty->assign("givenname",      CMbString::capitalize($user_first_name));
+  $smarty->assign("sn",             strtoupper($user_last_name));
+  $smarty->assign("samaccountname", strtolower($user_username));
   $smarty->display("inc_search_user_ldap.tpl");
 }
 else {

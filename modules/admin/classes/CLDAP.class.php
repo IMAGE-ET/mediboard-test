@@ -387,4 +387,24 @@ class CLDAP {
     
     return $id_ext->loadTargetObject();
   }
+
+  /**
+   * Escape the string used in LDAP search in order to avoid
+   * "LDAP-injections"
+   *
+   * @param string $str LDAP search query
+   *
+   * @return string
+   */
+  static function escape($str) {
+    $meta_chars = array (
+      "\0" => "\\00",
+      "\\" => "\\5C",
+      "("  => "\\28",
+      ")"  => "\\29",
+      "*"  => "\\2A"
+    );
+
+    return strtr($str, $meta_chars);
+  }
 }

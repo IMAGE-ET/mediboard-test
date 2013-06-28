@@ -31,7 +31,8 @@ try {
   $user = $ldaprdn ? $ldaprdn : "anonymous";
   $user = $source_ldap->bind_rdn_suffix ? $ldaprdn.$source_ldap->bind_rdn_suffix : $user;
   CAppUI::stepAjax("CSourceLDAP_authenticate", UI_MSG_OK, $source_ldap->host, $user);
-} catch(CMbException $e) {
+}
+catch(CMbException $e) {
   $e->stepAjax(UI_MSG_ERROR);
 }
 
@@ -41,7 +42,8 @@ if ($action == "search") {
   }
   try {
     $results = $source_ldap->ldap_search($ldapconn, $filter, $attributes ? $attributes : array());
-  } catch(CMbException $e) {
+  }
+  catch (CMbException $e) {
     $e->stepAjax(UI_MSG_ERROR);
   }
   
