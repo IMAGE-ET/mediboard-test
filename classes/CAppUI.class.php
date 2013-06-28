@@ -245,26 +245,25 @@ class CAppUI {
    * @return void
    */
   static function redirect($params = "") {
-
-    session_write_close();
-
-    if (!CValue::get("dontRedirect")) {
-      if (CValue::get("dialog")) {
-        $params .= "&dialog=1";
-      }
-
-      if (CValue::get("ajax")) {
-        $params .= "&ajax=1";
-      }
-
-      if (CValue::get("suppressHeaders")) {
-        $params .= "&suppressHeaders=1";
-      }
-
-      $query = ($params && $params[0] !== "#" ? "?$params" : "");
-      header("Location: index.php$query");
-      CApp::rip();
+    if (CValue::get("dontRedirect")) {
+      return;
     }
+
+    if (CValue::get("dialog")) {
+      $params .= "&dialog=1";
+    }
+
+    if (CValue::get("ajax")) {
+      $params .= "&ajax=1";
+    }
+
+    if (CValue::get("suppressHeaders")) {
+      $params .= "&suppressHeaders=1";
+    }
+
+    $query = ($params && $params[0] !== "#" ? "?$params" : "");
+    header("Location: index.php$query");
+    CApp::rip();
   }
 
   /**
