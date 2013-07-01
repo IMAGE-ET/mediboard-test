@@ -54,4 +54,30 @@ class CHL7v3EventPRPAIN201308UV02 extends CHL7v3AcknowledgmentPRPA implements CH
 
     return $dom->getValueAttributNode($queryResponseCode, "code");
   }
+
+  /**
+   * Get status code
+   *
+   * @return string
+   */
+  function getStatusCode() {
+    $dom = $this->dom;
+
+    $interaction_id = "//hl7:".$this->getInteractionID();
+
+    $patient = $dom->queryNode("$interaction_id/hl7:controlActProcess/hl7:subject/hl7:registrationEvent/hl7:subject1/hl7:patient");
+
+    $statusCode = $dom->queryNode("hl7:statusCode", $patient);
+
+    return $dom->getValueAttributNode($statusCode, "code");
+  }
+
+
+  function getDateFermeture() {
+
+  }
+
+  function getMotifFermeture() {
+
+  }
 }
