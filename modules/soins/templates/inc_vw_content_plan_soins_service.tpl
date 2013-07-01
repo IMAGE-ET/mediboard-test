@@ -89,7 +89,7 @@ Main.add(function(){
               <th class="{{$_date}}-{{$moment_journee}}" 
                   style='width: 50px; text-align: center; 
                 {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
-                <a href="#1" onclick="PlanSoins.selColonne('{{$_date_reelle}}-{{$_hour}}');">{{$_hour}}h</a>
+                <a href="#1" onclick="PlanSoins.selColonne('{{$_date_reelle}}-{{$_hour}}');" {{if $smarty.now|date_format:"%Y-%m-%d %H" == "$_date $_hour"}}style="background-color: #fff;"{{/if}}'>{{$_hour}}h</a>
                 {{if array_key_exists("$_date $_hour:00:00", $operations)}}
                   {{assign var=_hour_op value="$_date $_hour:00:00"}}
                   <a style="color: white; font-weight: bold; font-style: normal;" href="#" title="Intervention à {{$operations.$_hour_op|date_format:'%Hh%M'}}">Interv.</a>
