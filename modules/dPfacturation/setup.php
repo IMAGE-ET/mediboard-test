@@ -290,7 +290,12 @@ class CSetupdPfacturation extends CSetup {
     $query = "ALTER TABLE `retrocession`
                 ADD `active` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
-    $this->mod_version = "0.31";
+    $this->makeRevision("0.31");
+
+    $query = "ALTER TABLE `facture_etablissement`
+                CHANGE `type_facture` `type_facture` ENUM ('maladie','accident','esthetique') NOT NULL DEFAULT 'maladie';";
+    $this->addQuery($query);
+    $this->mod_version = "0.32";
     
   }
 }

@@ -1319,6 +1319,7 @@ $locales['CSejour._type_admission.ssr'] = 'SSR';
 $locales['CSejour._type_admission.urg'] = 'Urgences';
 $locales['CSejour._type_sejour.'] = '-';
 $locales['CSejour._type_sejour.accident'] = 'Accident';
+$locales['CSejour._type_sejour.esthetique'] = 'Esthétique';
 $locales['CSejour._type_sejour.maladie'] = 'Maladie';
 $locales['CSejour.adresse_par_class.CCorrespondant'] = 'Correspondants médicaux';
 $locales['CSejour.adresse_par_class.CEtabExterne'] = 'Etablissement externe';

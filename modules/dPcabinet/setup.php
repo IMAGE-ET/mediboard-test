@@ -1938,11 +1938,15 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `facture_cabinet`
                 ADD `definitive` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
-
     $this->makeRevision("2.09");
-    $this->addPrefQuery("NbConsultMultiple", 4);
 
-    $this->mod_version = "2.10";
+    $this->addPrefQuery("NbConsultMultiple", 4);
+    $this->makeRevision("2.10");
+
+    $query = "ALTER TABLE `facture_cabinet`
+                CHANGE `type_facture` `type_facture` ENUM ('maladie','accident','esthetique') NOT NULL DEFAULT 'maladie';";
+    $this->addQuery($query);
+    $this->mod_version = "2.11";
 
 
   }

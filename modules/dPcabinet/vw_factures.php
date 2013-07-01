@@ -10,7 +10,9 @@
  */
 
 CCanDo::checkEdit();
-$date_min           = CValue::getOrSession("_date_min", CMbDT::date());
+$rectif             = CMbDT::transform("+0 DAY", CMbDT::date(), "%d")-1;
+$month_deb          = CMbDT::date("-$rectif DAYS"  , CMbDT::date());
+$date_min           = CValue::getOrSession("_date_min", $month_deb);
 $date_max           = CValue::getOrSession("_date_max", CMbDT::date());
 $etat               = CValue::getOrSession("etat", "ouvert");
 $etat_cloture       = CValue::getOrSession("etat_cloture" , 1);
@@ -20,6 +22,7 @@ $patient_id         = CValue::getOrSession("patient_id");
 $no_finish_reglement= CValue::getOrSession("no_finish_reglement", 0);
 $type_date_search   = CValue::getOrSession("type_date_search", "cloture");
 $chirSel            = CValue::getOrSession("chirSel", "-1");
+$num_facture        = CValue::getOrSession("num_facture", "");
 
 //Patient sélectionné
 $patient = new CPatient();
@@ -33,10 +36,10 @@ if ($etat_relance) {
 }
 
 $where["$type_date_search"] = "BETWEEN '$date_min' AND '$date_max'";
-if ($etat_cloture == "ouverte" && $type_date_search != "cloture") {
+if ($etat_cloture == "1" && $type_date_search != "cloture") {
   $where["cloture"] = "IS NULL";
 }
-elseif ($etat_cloture == "cloture" && $type_date_search != "cloture") {
+elseif ($etat_cloture == "2" && $type_date_search != "cloture") {
   $where["cloture"] = "IS NOT NULL";
 }
 if ($no_finish_reglement) {
@@ -47,6 +50,12 @@ if ($chirSel) {
 }
 if ($patient_id) {
   $where["patient_id"] =" = '$patient_id' ";
+}
+
+if ($num_facture) {
+  $ljoin = array();
+  $where = array();
+  $where["facture_id"] =" = '$num_facture' ";
 }
 
 $facture = new CFactureCabinet();
@@ -111,7 +120,8 @@ $smarty->assign("etat_cloture"  , $etat_cloture);
 $smarty->assign("etat_relance"  , $etat_relance);
 $smarty->assign("date"          , CMbDT::date());
 $smarty->assign("filter"        , $filter);
-$smarty->assign("no_finish_reglement" ,$no_finish_reglement);
-$smarty->assign("type_date_search"    ,$type_date_search);
+$smarty->assign("no_finish_reglement" , $no_finish_reglement);
+$smarty->assign("type_date_search"    , $type_date_search);
+$smarty->assign("num_facture"    , $num_facture);
 
 $smarty->display("vw_factures.tpl");

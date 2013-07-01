@@ -472,7 +472,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $props["_rques_assurance_accident"] = "text helped";
     $props["_assurance_maladie"]        = "ref class|CCorrespondantPatient";
     $props["_assurance_accident"]       = "ref class|CCorrespondantPatient";
-    $props["_type_sejour"]              = "enum list|maladie|accident default|maladie";
+    $props["_type_sejour"]              = "enum list|maladie|accident|esthetique default|maladie";
     $props["_dialyse"]                  = "bool default|0";
     $props["_cession_creance"]          = "bool default|0";
     $props["_statut_pro"]               = "enum list|chomeur|etudiant|non_travailleur|independant|invalide|militaire|retraite|salarie_fr|salarie_sw|sans_emploi";
@@ -561,7 +561,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
         if (!$this->entree_reelle && $this->type == "consult") {
           $this->makeDatesConsultations();
-          foreach ($this->_dates_consultations as $consultation_id => $date_consultation) {
+          foreach ($this->_dates_consultations as $date_consultation) {
             if (!CMbRange::in($date_consultation, $entree, $sortie)) {
               return "Consultations en dehors des nouvelles dates du séjour.";
             }
@@ -650,6 +650,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $sejour->type   = $this->type;
     }
 
+    /** @var CSejour[] $siblings */
     $siblings = $sejour->loadMatchingList();
 
     $this->updateFormFields();
@@ -1017,6 +1018,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     if ($patient_modified) {
       $consultations = $this->loadBackRefs("consultations");
       foreach ($consultations as $_consult) {
+        /** @var CConsultation $_consult */
         if ($_consult->patient_id != $this->patient_id) {
           $_consult->patient_id = $this->patient_id;
           if ($msg = $_consult->store()) {
@@ -1109,7 +1111,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $where["facture_liaison.object_id"]    = " = '$this->_id'";
       
       $facture = new CFactureEtablissement();
-      $this->_ref_factures = $facture->loadList($where, "ouverture ASC", null, null, $ljoin);
+      $this->_ref_factures = $facture->loadList($where, "ouverture ASC", null, "facture_id", $ljoin);
       if (count($this->_ref_factures) > 0) {
         $this->_ref_last_facture = end($this->_ref_factures);
         $this->_ref_last_facture->loadRefsReglements();
@@ -1782,7 +1784,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Ajout des consultations d'anesthésie hors séjour
     foreach ($consultations_patient as $_consultation) {
-      $_consult_anesth = $_consultation->loadRefConsultAnesth();
+      $_consultation->loadRefConsultAnesth();
       if (!count($_consultation->_refs_dossiers_anesth)) {
         continue;
       }
@@ -1912,6 +1914,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     if ($this->countBackRefs("rpu") > 0) {
       foreach ($this->_ref_consultations as $_consult) {
+        /** @var CConsultation $_consult */
         $_consult->loadRefPraticien();
         $praticien = $_consult->_ref_praticien;
         $praticien->loadRefFunction();
@@ -1928,13 +1931,15 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   /*
    * Chargement de toutes les prescriptions liées au sejour (object_class CSejour)
+   *
+   * @return void|CPrescription[]
    */
   function loadRefsPrescriptions() {
     $prescriptions = $this->loadBackRefs("prescriptions");
     // Si $prescriptions n'est pas un tableau, module non installé
     if (!is_array($prescriptions)) {
       $this->_ref_last_prescription = null;
-      return;
+      return null;
     }
     $this->_count_prescriptions = count($prescriptions);
     $this->_ref_prescriptions["pre_admission"] = new CPrescription();
@@ -2041,7 +2046,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     parent::loadComplete();
     foreach ($this->_ref_operations as &$operation) {
       $operation->loadRefsFwd();
-      $operation->_ref_chir->loadRefsFwd();
+      $operation->_ref_chir->loadRefFunction();
+      $operation->_ref_chir->loadRefSpecCPAM();
+      $operation->_ref_chir->loadRefDiscipline();
     }
     foreach ($this->_ref_affectations as &$affectation) {
       $affectation->loadRefLit();
@@ -2084,6 +2091,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     if (is_array($affectations) && count($affectations)) {
       foreach ($affectations as $_affectation) {
+        /** @var CAffectation $_affectation */
         if (!$_affectation->lit_id) {
           $_affectation->_view = $_affectation->loadRefService()->_view;
         }
@@ -2119,7 +2127,7 @@ class CSejour extends CFacturable implements IPatientRelated {
    * - Meme patient
    * - Meme praticien si praticien connu
    * - Date de d'entree et de sortie équivalentes
-   * @return Nombre d'occurences trouvées
+   * @return int|void Nombre d'occurences trouvées
    */
   function loadMatchingSejour($strict = null, $notCancel = false, $useSortie = true) {
     if ($strict && $this->_id) {
@@ -2133,7 +2141,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     if (!$this->_entree) {
-      return;
+      return null;
     }
 
     if ($this->_entree) {
@@ -2162,9 +2170,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * Construit le tag NDOS en fonction des variables de configuration
    *
-   * @param $group_id Permet de charger le NDOS pour un établissement donné si non null
+   * @param int $group_id Permet de charger le NDOS pour un établissement donné si non null
    *
-   * @return string
+   * @return string|void
    */
   static function getTagNDA($group_id = null, $type_tag = "tag_dossier") {
     $context = array(__METHOD__, func_get_args());    
@@ -2203,7 +2211,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Pas de tag Num dossier
     if (null == $tag_NDA) {
-      return;
+      return null;
     }
 
     // Préférer un identifiant externe de l'établissement
@@ -2218,7 +2226,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   /**
    * Construit le tag NPA (préad) en fonction des variables de configuration
-   * @param $group_id Permet de charger le NPA pour un établissement donné si non null
+   * @param int $group_id Permet de charger le NPA pour un établissement donné si non null
    * @return string
    */
   static function getTagNPA($group_id = null) {
@@ -2227,7 +2235,9 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   /**
    * Construit le tag NTA (trash) en fonction des variables de configuration
-   * @param $group_id Permet de charger le NTA pour un établissement donné si non null
+   *
+   * @param int $group_id Permet de charger le NTA pour un établissement donné si non null
+   *
    * @return string
    */
   static function getTagNTA($group_id = null) {
@@ -2236,7 +2246,9 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   /**
    * Construit le tag NRA (rang) en fonction des variables de configuration
-   * @param $group_id Permet de charger le NRA pour un établissement donné si non null
+   *
+   * @param int $group_id Permet de charger le NRA pour un établissement donné si non null
+   *
    * @return string
    */
   static function getTagNRA($group_id = null) {
@@ -2246,9 +2258,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * Charge le NDA du séjour pour l'établissement courant
    *
-   * @param $group_id Permet de charger le NDA pour un établissement donné si non null
+   * @param int $group_id Permet de charger le NDA pour un établissement donné si non null
    *
-   * @return void
+   * @return void|string
    */
   function loadNDA($group_id = null) {
     // Objet inexistant
@@ -2277,9 +2289,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * Charge le Numéro de pré-admission du séjour pour l'établissement courant
    *
-   * @param $group_id Permet de charger le NPA pour un établissement donné si non null
+   * @param int $group_id Permet de charger le NPA pour un établissement donné si non null
    *
-   * @return void
+   * @return void|string
    */
   function loadNPA($group_id = null) {
     // Objet inexistant
@@ -2304,9 +2316,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * Charge le Numéro de rang du séjour pour l'établissement courant
    *
-   * @param $group_id Permet de charger le NRA pour un établissement donné si non null
+   * @param int $group_id Permet de charger le NRA pour un établissement donné si non null
    *
-   * @return void
+   * @return void|string
    */
   function loadNRA($group_id = null) {
     // Utilise t-on le rang pour le dossier
@@ -2504,6 +2516,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       }
       $motif = array();
       foreach ($this->_ref_operations as $_op) {
+        /** @var COperation $_op */
         if ($_op->libelle) {
           $motif[] = $_op->libelle;
         }
@@ -3016,15 +3029,15 @@ class CSejour extends CFacturable implements IPatientRelated {
     $affectation->loadView();
 
     $fields = array_merge($fields,
-                array("DATE ENT"         => CMbDT::dateToLocale(CMbDT::date($this->entree)),
-                      "HEURE ENT"        => CMbDT::transform($this->entree, null, "%H:%M"),
-                      "DATE SORTIE"      => CMbDT::dateToLocale(CMbDT::date($this->sortie)),
-                      "HEURE SORTIE"     => CMbDT::transform($this->sortie, null, "%H:%M"),
-                      "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
-                      "NDOS"             => $this->_NDA,
-                      "NRA"              => $this->_ref_NRA ? $this->_ref_NRA->id400 : "",
-                      "CODE BARRE NDOS"  => "@BARCODE_".$this->_NDA."@",
-                      "CHAMBRE COURANTE" => $affectation->_view));
+      array("DATE ENT"         => CMbDT::dateToLocale(CMbDT::date($this->entree)),
+            "HEURE ENT"        => CMbDT::transform($this->entree, null, "%H:%M"),
+            "DATE SORTIE"      => CMbDT::dateToLocale(CMbDT::date($this->sortie)),
+            "HEURE SORTIE"     => CMbDT::transform($this->sortie, null, "%H:%M"),
+            "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
+            "NDOS"             => $this->_NDA,
+            "NRA"              => $this->_ref_NRA ? $this->_ref_NRA->id400 : "",
+            "CODE BARRE NDOS"  => "@BARCODE_".$this->_NDA."@",
+            "CHAMBRE COURANTE" => $affectation->_view));
 
     if (CAppUI::conf("ref_pays") == 2) {
       $fields["NATURE SEJOUR"]  = $this->getFormattedValue("_type_sejour");

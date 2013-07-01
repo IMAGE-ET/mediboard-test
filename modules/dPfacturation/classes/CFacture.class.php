@@ -137,7 +137,7 @@ class CFacture extends CMbObject {
     $props["du_patient"]    = "currency notNull default|0 decimals|2";
     $props["du_tiers"]      = "currency notNull default|0 decimals|2";
     
-    $props["type_facture"]              = "enum notNull list|maladie|accident default|maladie";
+    $props["type_facture"]              = "enum notNull list|maladie|accident|esthetique default|maladie";
     $props["patient_date_reglement"]    = "date";
     $props["tiers_date_reglement"]      = "date";
     $props["npq"]                       = "bool default|0";

@@ -91,15 +91,8 @@
       <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
       <table class="main tbl">
         <tr>
-          <td class="narrow">{{tr}}CFactureEtablissement-type_facture{{/tr}}</td>
-          <td>
-            <input type="radio" name="type_facture" value="maladie" {{if $facture->type_facture == 'maladie'}}checked{{/if}} onchange="Facture.modifCloture(this.form);" 
-            {{if $facture->cloture}}disabled="disabled"{{/if}}/>
-            <label for="maladie">{{tr}}CFactureEtablissement.type_facture.maladie{{/tr}}</label>
-            <input type="radio" name="type_facture" value="accident" {{if $facture->type_facture == 'accident'}}checked{{/if}}
-            {{if $facture->cloture}}disabled="disabled"{{/if}} onchange="Facture.modifCloture(this.form);" />
-            <label for="accident">{{tr}}CFactureEtablissement.type_facture.accident{{/tr}}</label>
-          </td>
+          <td class="narrow">{{mb_label object=$facture field=type_facture}}</td>
+          <td>{{mb_field object=$facture field=type_facture onchange="Facture.modifCloture(this.form);" readonly=$facture->cloture}}</td>
           <td class="narrow"> {{mb_label object=$facture field=cession_creance}}</td>
           <td>{{mb_field object=$facture field=cession_creance onchange="Facture.modifCloture(this.form);" readonly=$facture->cloture}}</td>
           </td>
@@ -113,7 +106,7 @@
         <tr>
           <td>{{mb_label object=$facture field=envoi_xml}}</td>
           <td>{{mb_field object=$facture field=envoi_xml onchange="Facture.modifCloture(this.form);" readonly=$facture->cloture}}</td>
-          {{if $facture->type_facture == "CFactureCabinet"}}
+          {{if $facture->_class == "CFactureCabinet"}}
             <td>{{mb_label object=$facture field=npq}}</td>
             <td>{{mb_field object=$facture field=npq onchange="Facture.modifCloture(this.form);" readonly=$facture->cloture}}</td>
           {{else}}
@@ -253,7 +246,7 @@
         <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
         {{if !$facture->cloture}}
           <button class="submit" type="button" onclick="Facture.modifCloture(this.form);"
-          {{if $conf.dPfacturation.Other.use_strict_cloture && !$facture->statut_pro || (!$facture->assurance_maladie && !$facture->assurance_accident)}}
+          {{if $conf.dPfacturation.Other.use_strict_cloture && (!$facture->statut_pro || (!$facture->assurance_maladie && !$facture->assurance_accident))}}
           disabled
           {{/if}}
           >Cloturer la facture</button>
@@ -273,9 +266,7 @@
         <input type="hidden" name="facture_class" value="{{$facture->_class}}" />
         {{mb_label object=$facture field=definitive}}
         {{mb_field object=$facture field=definitive onchange="Facture.modifCloture(this.form);"}}
-
       </form>
     </td>
   </tr>
-  <tr></tr>
 {{/if}}
