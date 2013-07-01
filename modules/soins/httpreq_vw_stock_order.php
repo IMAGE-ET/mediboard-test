@@ -168,7 +168,7 @@ foreach ($stocks as &$_stock) {
     'product_delivery.stock_class' => "= '$_stock->_class'",
     'product_delivery.stock_id'    => "= '$_stock->_id'",
     'product_delivery.service_id'  => "= '$service_id'",
-    //'product.category_id'          => "= '".CAppUI::conf('bcb CBcbProduitLivretTherapeutique product_category_id')."'"
+    //'product.category_id'          => "= '".CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id')."'"
   );
 
   $ljoin = array(

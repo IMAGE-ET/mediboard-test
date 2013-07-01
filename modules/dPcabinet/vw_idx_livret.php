@@ -21,7 +21,7 @@ if (!CModule::getActive('bcb')) {
 }
 
 $lettre = CValue::get("lettre");
-$category_id  = CValue::getOrSession("category_id", CAppUI::conf('bcb CBcbProduitLivretTherapeutique product_category_id'));
+$category_id  = CValue::getOrSession("category_id", CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id'));
 
 $listProduits = array();
 

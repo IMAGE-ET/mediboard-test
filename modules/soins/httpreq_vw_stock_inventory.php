@@ -77,7 +77,7 @@ foreach($destockages as $code_cip => $_destockage){
   } else {
     $product = new CProduct();
     $product->code = $code_cip;
-    $product->category_id = CAppUI::conf('bcb CBcbProduitLivretTherapeutique product_category_id');
+    $product->category_id = CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id');
     if ($product->loadMatchingObject()) {
       $stock = new CProductStockService();
       $stock->object_id = $service_id;
