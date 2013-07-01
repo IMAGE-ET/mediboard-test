@@ -191,7 +191,7 @@ toggleDateMax = function() {
     <input type="hidden" name="type" value="{{$transmission->type}}" />
   {{/if}}
 
-  <table style="width: 100%;">
+  <table class="main" style="width: 100%;">
     <tr>
       {{if !$transmission->_id}}
         <td>
@@ -275,18 +275,22 @@ toggleDateMax = function() {
         </fieldset>
       {{/if}}
     </tr>
-  </table>
-  {{if !$hide_button_add}}
-    <button type="button" class="{{if $transmission->_id || $data_id || $action_id || $result_id}}save{{else}}add{{/if}}" onclick="submitTrans(this.form);">
-      {{if $transmission->_id || $data_id || $action_id || $result_id}}
-        {{tr}}Save{{/tr}}
-      {{else}}
-        {{tr}}Add{{/tr}}
-      {{/if}}
-    </button>
-    {{if !$transmission->_id && !$data_id && !$action_id && !$result_id}}
-      <button type="button" class="add" onclick="$V(this.form._locked, 1); submitTrans(this.form);">Ajouter et fermer la cible</button>
+    {{if !$hide_button_add}}
+      <tr>
+        <td class="button" {{if !$transmission->_id}}colspan="3"{{/if}}>
+          <button type="button" class="singleclick {{if $transmission->_id || $data_id || $action_id || $result_id}}save{{else}}add{{/if}}" onclick="submitTrans(this.form);">
+            {{if $transmission->_id || $data_id || $action_id || $result_id}}
+              {{tr}}Save{{/tr}}
+            {{else}}
+              {{tr}}Add{{/tr}}
+            {{/if}}
+          </button>
+          {{if !$transmission->_id && !$data_id && !$action_id && !$result_id}}
+            <button type="button" class="singleclick add" onclick="$V(this.form._locked, 1); submitTrans(this.form);">Ajouter et fermer la cible</button>
+          {{/if}}
+        </td>
+      </tr>
     {{/if}}
-  {{/if}}
+  </table>
   <div style="margin-top: 20px;" id="list_transmissions"></div>
 </form>
