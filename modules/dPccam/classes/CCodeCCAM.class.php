@@ -360,6 +360,7 @@ class CCodeCCAM {
   }
 
   function getModificateursFromActivite(&$activite) {
+    $listModifConvergence = array("X", "I", "9", "O");
     $ds =& $this->_spec->ds;
     // recherche de la dernière date d'effet
     $query = "SELECT MAX(DATEEFFET) AS LASTDATE
@@ -392,7 +393,11 @@ class CCodeCCAM {
                 WHERE CODE = %
                 ORDER BY CODE";
       $query = $ds->prepare($query, $row["MODIFICATEUR"]);
-      $modificateurs[] = $ds->fetchObject($ds->exec($query));
+      $_modif = $ds->fetchObject($ds->exec($query));
+      $modificateurs[] = $_modif;
+      if (in_array($row["MODIFICATEUR"], $listModifConvergence)) {
+        $modificateurs[] = $_modif;
+      }
     }
   }
 
