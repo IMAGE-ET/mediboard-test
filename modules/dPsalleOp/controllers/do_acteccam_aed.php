@@ -33,7 +33,6 @@ class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
     foreach ($_POST as $propName => $propValue) {
       $matches = null;
       if (preg_match("/modificateur_(.)/", $propName, $matches)) {
-        mbTrace($matches);
         $modificateur = $matches[1];
         $this->_obj->modificateurs .= $modificateur;
       }
