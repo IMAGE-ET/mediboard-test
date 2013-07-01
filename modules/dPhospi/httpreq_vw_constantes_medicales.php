@@ -132,6 +132,11 @@ else {
   $selection = CConstantesMedicales::selectConstants($selection);
 }
 
+// If print mode, no need to include hidden graphs
+if ($print) {
+  $selection["all"]["hidden"] = array();
+}
+
 $old_constants_to_draw = ($print == 1 ? $selection : CConstantesMedicales::$list_constantes);
 
 /*
