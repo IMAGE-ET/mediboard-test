@@ -394,9 +394,12 @@ class CCodeCCAM {
                 ORDER BY CODE";
       $query = $ds->prepare($query, $row["MODIFICATEUR"]);
       $_modif = $ds->fetchObject($ds->exec($query));
+      $_modif->_double = "";
       $modificateurs[] = $_modif;
       if (in_array($row["MODIFICATEUR"], $listModifConvergence)) {
-        $modificateurs[] = $_modif;
+        $_double_modif = clone $_modif;
+        $_double_modif->_double = "2";
+        $modificateurs[] = $_double_modif;
       }
     }
   }

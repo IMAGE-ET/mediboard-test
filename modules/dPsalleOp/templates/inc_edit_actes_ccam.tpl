@@ -209,8 +209,8 @@
                 <th>{{mb_label object=$acte field=modificateurs}}</th>
                 <td{{if !$modifs_compacts}} class="text" colspan="10"{{/if}}>
                   {{foreach from=$_phase->_modificateurs item=_mod name=modificateurs}}
-                    <input type="checkbox" name="modificateur_{{$_mod->code}}" {{if $_mod->_checked}}checked="checked"{{/if}} />
-                    <label for="modificateur_{{$_mod->code}}" title="{{$_mod->libelle}}">
+                    <input type="checkbox" name="modificateur_{{$_mod->code}}{{$_mod->_double}}" {{if $_mod->_checked}}checked="checked"{{/if}} />
+                    <label for="modificateur_{{$_mod->code}}{{$_mod->_double}}" title="{{$_mod->libelle}}">
                       {{$_mod->code}} 
                       {{if !$modifs_compacts}} : {{$_mod->libelle}}{{/if}}
                     </label>

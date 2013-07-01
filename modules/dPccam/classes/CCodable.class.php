@@ -823,15 +823,17 @@ class CCodable extends CMbObject {
 
           // Keep references !
           $phase->_connected_acte = $possible_acte;
+          $listModificateurs = $phase->_connected_acte->modificateurs;
           if (!$possible_acte->_id) {
-            foreach ($phase->_modificateurs as &$modificateur) {
+            foreach ($phase->_modificateurs as $modificateur) {
               $modificateur->_checked = $this->checkModificateur($modificateur->code, CMbDT::time($phase->_connected_acte->execution));
             }
           }
           else {
-            foreach ($phase->_modificateurs as &$modificateur) {
-              if (strpos($phase->_connected_acte->modificateurs, $modificateur->code) !== false) {
+            foreach ($phase->_modificateurs as $modificateur) {
+              if ($position = strpos($listModificateurs, $modificateur->code) !== false) {
                 $modificateur->_checked = $modificateur->code;
+                $listModificateurs = substr($listModificateurs, 0, $position-1).substr($listModificateurs, $position);
               }
               else {
                 $modificateur->_checked = "";
