@@ -95,7 +95,7 @@
 
     {{if count($factures)}}
       <tr style="text-align: right;">
-        <td colspan="4"><strong>Total</strong></td>
+        <td colspan="5"><strong>Total</strong></td>
         <td><strong>{{$total_montant|string_format:"%0.2f"|currency}}</strong></td>
         <td><strong>{{$total_retrocession|string_format:"%0.2f"|currency}}</strong></td>
         <td><strong>{{$total_montant-$total_retrocession|string_format:"%0.2f"|currency}}</strong></td>

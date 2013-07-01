@@ -27,20 +27,24 @@ else {
   $where["cloture"] = "BETWEEN '$date_min' AND '$date_max'";
 }
 
+/** @var CFactureCabinet|CFactureEtablissement $facture*/
 $facture = new $facture_class;
 $factures = $facture->loadList($where , "cloture DESC", 50);
 
 foreach ($factures as $_facture) {
+  /** @var CFacture $_facture*/
   $_facture->loadRefPatient();
 }
 
 //Affichage uniquement des factures relançables
 if ($type_relance) {
   foreach ($factures as $key => $_facture) {
+    /** @var CFactureCabinet|CFactureEtablissement $_facture*/
     $_facture->loadRefsObjects();
     $_facture->loadRefsReglements();
     $_facture->loadRefsRelances();
-    if (!$_facture->_is_relancable || count($_facture->_ref_relances)+1 < $type_relance) {
+    $not_exist_objets = !count($_facture->_ref_consults) && !count($_facture->_ref_sejours);
+    if (!$_facture->_is_relancable || count($_facture->_ref_relances)+1 < $type_relance || $not_exist_objets) {
       unset($factures[$key]);
     }
   }

@@ -86,6 +86,7 @@ function addRelances(facture_class, type_relance){
               <select name="typerelance_CFactureCabinet">
                 <option value="1">Première Relance</option>
                 <option value="2">Seconde Relance</option>
+                <option value="3">Troisième Relance</option>
               </select>
             </td>
             <td class="button">
@@ -120,6 +121,7 @@ function addRelances(facture_class, type_relance){
               <select name="typerelance_CFactureEtablissement">
                 <option value="1">Première Relance</option>
                 <option value="2">Seconde Relance</option>
+                <option value="3">Troisième Relance</option>
               </select>
             </td>
             <td class="button">
