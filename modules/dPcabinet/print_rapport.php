@@ -128,7 +128,7 @@ $listPlages = array();
 
 foreach ($listFactures as $_facture) {
   $_facture->loadRefPatient();
-  $_facture->loadRefsConsults();
+  $_facture->loadRefsConsultation();
   $_facture->loadRefsReglements();
   $_facture->loadRefsNotes();
   
