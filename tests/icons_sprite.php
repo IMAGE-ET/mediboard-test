@@ -1,5 +1,7 @@
 <?php
 
+die;
+
 $size_orig = 48;
 $ttl = 60*60; // seconds
 
