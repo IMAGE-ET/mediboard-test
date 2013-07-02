@@ -42,7 +42,7 @@ CKEDITOR.editorConfig = function(config) {
   config.fontSize_sizes  = '8/8pt;9/9pt;10/10pt;11/11pt;12/12pt;14/14pt;16/16pt;18/18pt;20/20pt;22/22pt;24/24pt;26/26pt;28/28pt;36/36pt;48/48pt;72/72pt;';
   config.fontSize_sizes += 'xx-small/xx-small;x-small/x-small;small/small;medium/medium;large/large;x-large/x-large;xx-large/xx-large';
   
-  CKEDITOR.config.font_names =
+  config.font_names =
   'Arial/Arial, Helvetica, sans-serif;' +
   'Calibri/Calibri, Helvetica, sans-serif;'+
   'Comic Sans MS/Comic Sans MS, cursive;' +
@@ -65,10 +65,11 @@ CKEDITOR.editorConfig = function(config) {
   config.docType = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
   config.filebrowserImageBrowseUrl = "lib/kcfinder/browse.php?type=image";
   config.tabSpaces = 13;
+  config.indentOffset = 10;
   config.disableNativeSpellChecker = false;
   config.resize_maxWidth = "100%";
   config.resize_minWidth = "100%";
-  
+
   {{if $templateManager->font != ""}}
     config.font_defaultLabel = '{{$templateManager->font}}';
   {{else}}
