@@ -14,6 +14,7 @@
 $object_guid = CValue::get("object_guid");
 $event_name  = CValue::get("event_name");
 $_element_id = CValue::get("_element_id");
+$form_name   = CValue::get("form_name");
 
 $object = CMbObject::loadFromGuid($object_guid);
 
@@ -54,6 +55,11 @@ foreach ($ex_class_events as $_id => $_ex_class_event) {
 
   $_ex_objects = $_ex_class_event->getExObjectForHostObject($object);
 
+  // Only keep first if in "pre fill" mode
+  if ($form_name) {
+    $_ex_objects = array(reset($_ex_objects));
+  }
+
   foreach ($_ex_objects as $_ex_object) {
     $_ex_object->load(); // Needed
     $_ex_object->loadLogs();
@@ -82,4 +88,5 @@ $smarty->assign("event_name",      $event_name);
 $smarty->assign("count",           $count);
 $smarty->assign("count_available", $count_available);
 $smarty->assign("_element_id",     $_element_id);
+$smarty->assign("form_name",       $form_name);
 $smarty->display("inc_widget_ex_classes_new.tpl");

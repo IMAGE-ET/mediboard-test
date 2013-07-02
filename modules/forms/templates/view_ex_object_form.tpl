@@ -60,6 +60,10 @@ ExObjectForms.{{$ex_form_hash}} = {
             });
           }
         }
+
+        {{if $form_name && !$ex_object->_id}}
+          window.opener.ExObject.addToForm("{{$form_name}}", "CExObject_{{$ex_class_id}}-"+id);
+        {{/if}}
       }
 
       window.close();
@@ -159,7 +163,18 @@ Main.add(function(){
     <hr style="border-color: #333; margin: 4px 0;" />
     {{*<span style="float: right;">{{$ex_object->_ref_group}}</span>*}}
 
-    {{$ex_object->_ref_ex_class->name}} - {{$object}}
+    {{$ex_object->_ref_ex_class->name}} -
+
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
+      {{$object}}
+    </span>
+
+    {{if $ex_object->additional_id}}
+      <hr />
+      <span style="color: #AA0000;" onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_ref_additional_object->_guid}}')">
+        {{$ex_object->_ref_additional_object}}
+      </span>
+    {{/if}}
 
     {{if $parent_view}}
       <span style="float: right; color: #666;">
@@ -317,7 +332,18 @@ function switchMode(){
           </span>
 
           <br />
-          {{$ex_object->_ref_ex_class->name}} - {{$object}}
+          {{$ex_object->_ref_ex_class->name}} -
+
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
+            {{$object}}
+          </span>
+
+          {{if $ex_object->additional_id}}
+            <hr />
+            <span style="color: #AA0000;" onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_ref_additional_object->_guid}}')">
+              {{$ex_object->_ref_additional_object}}
+            </span>
+          {{/if}}
         </p>
         <hr style="border-color: #333; margin: 4px 0;" />
       </td>

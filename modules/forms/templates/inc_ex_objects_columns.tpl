@@ -15,32 +15,38 @@
         <th {{if !$print}} style="min-width: 20em;" {{/if}}>Champ</th>
         
         {{foreach from=$_ex_objects item=_ex_object name=_ex_object}}
-          <th class="narrow text">
+          <th class="narrow text" style="vertical-align: top;">
             {{mb_value object=$_ex_object->_ref_first_log field=date}}
             
             {{if !$print}}
-             <hr />
-             
-             <div style="white-space: nowrap;">
-               {{if !$search_mode}}
-                 <button class="edit notext compact" title="{{tr}}Edit{{/tr}}"
-                         onclick="ExObject.edit('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}', '{{$target_element}}')">
+              <hr />
+              <div style="white-space: nowrap;">
+                {{if !$search_mode}}
+                  <button class="edit notext compact" title="{{tr}}Edit{{/tr}}"
+                          onclick="ExObject.edit('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}', '{{$target_element}}')">
                  </button>
-               {{/if}}
-               
-               <button class="search notext compact" title="{{tr}}Display{{/tr}}"
-                       onclick="ExObject.display('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">
-               </button>
-              
-               <button class="history notext compact" title="{{tr}}History{{/tr}}"
-                       onclick="ExObject.history('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}')">
-               </button>
-               
-               <button class="print notext compact" title="{{tr}}Print{{/tr}}"
-                       onclick="ExObject.print('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">
-               </button>
-             </div>
-             {{/if}}
+                {{/if}}
+
+                <button class="search notext compact" title="{{tr}}Display{{/tr}}"
+                        onclick="ExObject.display('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">
+                </button>
+
+                <button class="history notext compact" title="{{tr}}History{{/tr}}"
+                        onclick="ExObject.history('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}')">
+                </button>
+
+                <button class="print notext compact" title="{{tr}}Print{{/tr}}"
+                        onclick="ExObject.print('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">
+                </button>
+              </div>
+            {{/if}}
+
+            {{if $_ex_object->additional_id}}
+              <hr />
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$_ex_object->_ref_additional_object->_guid}}')">
+                {{$_ex_object->_ref_additional_object}}
+              </span>
+            {{/if}}
           </th>
           
           {{if $smarty.foreach._ex_object.iteration%$_title_col==0}}

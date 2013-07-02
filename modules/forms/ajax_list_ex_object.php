@@ -223,6 +223,10 @@ foreach (CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
       $_ex->_ref_object = $ref_objects_cache[$guid];
     }
 
+    if ($_ex->additional_id) {
+      $_ex->loadRefAdditionalObject();
+    }
+
     $_ex->loadLogs();
     $_log = $_ex->_ref_first_log;
 

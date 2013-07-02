@@ -15,13 +15,15 @@ var ExObject = {
     options = Object.extend({
       ex_class_id: null,
       object_guid: null,
-      event_name:  null
+      event_name:  null,
+      form_name:   null
     }, options);
 
     var url = new Url("forms", "ajax_widget_ex_classes_new");
     url.addParam("object_guid", options.object_guid);
     url.addParam("ex_class_id", options.ex_class_id);
     url.addParam("event_name",  options.event_name);
+    url.addParam("form_name",   options.form_name);
     url.addParam("_element_id", this.container.identify());
     url.requestUpdate(container, options);
   },
@@ -478,6 +480,20 @@ var ExObject = {
 
   toggleDateField: function(checkbox) {
     checkbox.up().select('input').without(checkbox).invoke(checkbox.checked ? 'enable' : 'disable');
+  },
+
+  addToForm: function(form, ex_object_guid) {
+    form = getForm(form);
+    if (!form._ex_object_guid) {
+      form.insert(DOM.input({
+        type: "hidden",
+        name: "_ex_object_guid",
+        value: ex_object_guid
+      }));
+    }
+    else {
+      $V(form._ex_object_guid, ex_object_guid);
+    }
   }
 };
 
@@ -700,13 +716,13 @@ var ExObjectFormula = Class.create({
 });
 
 // TODO put this in the object
-function selectExClass(element, object_guid, event_name, _element_id) {
+function selectExClass(element, object_guid, event_name, _element_id, form_name) {
   var view = element.options ? element.options[element.options.selectedIndex].innerHTML : element.innerHTML;
-  showExClassForm($V(element) || element.value, object_guid, view, null, event_name, _element_id);
+  showExClassForm($V(element) || element.value, object_guid, view, null, event_name, _element_id, null, null, form_name);
   element.selectedIndex = 0;
 }
 
-function showExClassForm(ex_class_id, object_guid, title, ex_object_id, event_name, _element_id, parent_view, ajax_container) {
+function showExClassForm(ex_class_id, object_guid, title, ex_object_id, event_name, _element_id, parent_view, ajax_container, form_name) {
   var url = new Url("forms", "view_ex_object_form");
   url.addParam("ex_class_id",  ex_class_id);
   url.addParam("object_guid",  object_guid);
@@ -714,6 +730,7 @@ function showExClassForm(ex_class_id, object_guid, title, ex_object_id, event_na
   url.addParam("event_name",   event_name);
   url.addParam("_element_id",  _element_id);
   url.addParam("parent_view",  parent_view);
+  url.addParam("form_name",    form_name);
 
   /*window["callback_"+ex_class_id] = function(){
     ExObject.register(_element_id, {

@@ -24,6 +24,7 @@ $autoprint    = CValue::get("autoprint");
 $only_filled  = CValue::get("only_filled");
 $noheader     = CValue::get("noheader");
 $preview      = CValue::get("preview");
+$form_name    = CValue::get("form_name");
 
 if (!$ex_class_id) {
   $msg = "Impossible d'afficher le formulaire sans connaître la classe de base";
@@ -127,6 +128,7 @@ foreach ($ex_object->_specs as $_field => $_spec) {
       continue;
     }
 
+    /** @var CMbObject $obj */
     $obj = new $class;
     $obj->load($ex_object->$_field);
     $ex_object->_fwd[$_field] = $obj;
@@ -135,6 +137,7 @@ foreach ($ex_object->_specs as $_field => $_spec) {
 
 $ex_object->getReportedValues($ex_class_event);
 $ex_object->setFieldsDisplay();
+$ex_object->loadRefAdditionalObject();
 
 if (!$ex_object->_id) {
   if (!$ex_object->reference_id && !$ex_object->reference_class) {
@@ -151,6 +154,7 @@ if (!$ex_object->_id) {
 // depends on setReferenceObject_1 and setReferenceObject_2
 $ex_object->loadNativeViews($ex_class_event);
 
+/** @var CExClassField[] $fields */
 $fields = array();
 foreach ($groups as $_group) {
   $fields = array_merge($_group->_ref_fields, $fields);
@@ -244,4 +248,5 @@ $smarty->assign("print",        $print);
 $smarty->assign("autoprint",    $autoprint);
 $smarty->assign("only_filled",  $only_filled);
 $smarty->assign("noheader",     $noheader);
+$smarty->assign("form_name",    $form_name);
 $smarty->display("view_ex_object_form.tpl");

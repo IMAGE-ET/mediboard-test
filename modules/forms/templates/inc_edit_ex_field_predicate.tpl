@@ -30,32 +30,20 @@ showField = function(field_id, field_name, value){
 };
 
 toggleNoValue = function(form){
-  var field = form.elements[window.predicateFieldName];
   var operator = $V(form.elements.operator);
+  var fieldView = $("field-view");
+  var fieldViewNoValue = $("field-view-novalue");
 
   if (operator == "hasValue" || operator == "hasNoValue") {
-    $("field-view").hide();
-    $("field-view-novalue").show();
-    
-    if (field) {
-      field._valueSave = $V(field);
-      field._specSave = field.className;
-      
-      $V(field, "__no_value__");
-      field.className = "";
-    }
-    return;
+    fieldView.disableInputs();
+    fieldView.select("input,textarea,select").invoke("removeClassName", "notNull");
+    fieldViewNoValue.enableInputs();
   }
-  
-  if (field && field._valueSave) {
-    $V(field, field._valueSave);
-    field.className = field._specSave;
-    field._valueSave = null;
-    field._specSave = null;
+  else {
+    fieldView.enableInputs();
+    fieldView.select("input,textarea,select").invoke("addClassName", "notNull");
+    fieldViewNoValue.disableInputs();
   }
-    
-  $("field-view").show();
-  $("field-view-novalue").hide();
 };
 
 predicateCallback = function(id, obj) {
@@ -150,7 +138,10 @@ Main.add(function(){
       <th id="field-label">{{mb_label object=$ex_field_predicate field=value}}</th>
       <td class="text">
         <div id="field-view">{{mb_field object=$ex_field_predicate field=value hidden=true}}</div>
-        <div id="field-view-novalue" class="empty">N/A</div>
+        <div id="field-view-novalue" class="empty">
+          <input type="hidden" name="value" value="__no_value__" disabled />
+          N/A
+        </div>
       </td>
     </tr>
     <tr>

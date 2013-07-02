@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Main CStoredObject controller
+ */
 class CDoObjectAddEdit {
   public $className;
   public $objectKey;
@@ -26,9 +29,18 @@ class CDoObjectAddEdit {
   public $suppressHeaders;
   public $_logIt;
 
+  /** @var CStoredObject */
   public $_obj;
+
+  /** @var CStoredObject */
   public $_old;
 
+  /**
+   * Constructor
+   *
+   * @param string $className Class name
+   * @param int    $objectKey Object key name
+   */
   function CDoObjectAddEdit($className, $objectKey = null) {
     if (CAppUI::conf("readonly")) {
       CAppUI::stepAjax("Mode-readonly-title", UI_MSG_ERROR);
@@ -61,6 +73,13 @@ class CDoObjectAddEdit {
     $this->objectKeys = $this->objectKey . "s";
   }
 
+  /**
+   * Bind request values to a CStoredObject
+   *
+   * @param bool $reinstanciate_objects Make new instances of the object (don't use the ones instanciated in the constructor)
+   *
+   * @return void
+   */
   function doBind($reinstanciate_objects = false) {
     $this->ajax            = CMbArray::extract($this->request, "ajax");
     $this->suppressHeaders = CMbArray::extract($this->request, "suppressHeaders");
@@ -84,10 +103,20 @@ class CDoObjectAddEdit {
     $this->_old->load($this->_obj->_id);
   }
 
+  /**
+   * Action to do after CStoredObject instanciation
+   *
+   * @return void
+   */
   function onAfterInstanciation(){
 
   }
 
+  /**
+   * Delete object (del=1 parameter)
+   *
+   * @return void
+   */
   function doDelete() {
     if ($this->_obj->_purge) {
       set_time_limit(120);
@@ -122,9 +151,14 @@ class CDoObjectAddEdit {
     }
   }
 
+  /**
+   * Store object
+   *
+   * @return void
+   */
   function doStore() {
     if ($msg = $this->_obj->store()) {
-      CAppUI::setMsg($msg, UI_MSG_ERROR );
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
       if ($this->redirectError) {
         $this->redirect =& $this->redirectError;
       }
@@ -133,12 +167,32 @@ class CDoObjectAddEdit {
       $id = $this->objectKey;
       CValue::setSession($id, $this->_obj->_id);
       CAppUI::setMsg($this->_old->_id ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
+
+      // Store additional object reference to the CExObject
+      $ex_object_guid = CMbArray::get($this->request, "_ex_object_guid");
+      if ($ex_object_guid) {
+        $obj = $this->_obj;
+
+        /** @var CExObject $ex_object */
+        $ex_object = CStoredObject::loadFromGuid($ex_object_guid);
+        if ($ex_object->_id) {
+          $ex_object->additional_class = $obj->_class;
+          $ex_object->additional_id    = $obj->_id;
+          $ex_object->store();
+        }
+      }
+
       if ($this->redirectStore) {
         $this->redirect =& $this->redirectStore;
       }
     }
   }
 
+  /**
+   * Redirect at the end of the request
+   *
+   * @return void
+   */
   function doRedirect() {
     if ($this->redirect === null) {
       return;
@@ -153,6 +207,11 @@ class CDoObjectAddEdit {
     CAppUI::redirect($this->redirect);
   }
 
+  /**
+   * Make JavaScript callback
+   *
+   * @return void
+   */
   function doCallback() {
     $messages = CAppUI::$instance->messages;
 
@@ -183,9 +242,13 @@ class CDoObjectAddEdit {
     if (!CAppUI::$mobile) {
       CApp::rip();
     }
-
   }
 
+  /**
+   * Do action (store object)
+   *
+   * @return void
+   */
   function doIt() {
     // Multiple case
     if ($object_ids = CMbArray::extract($this->request, $this->objectKeys)) {
@@ -203,6 +266,13 @@ class CDoObjectAddEdit {
     $this->doRedirect();
   }
 
+  /**
+   * Do action, single object mode
+   *
+   * @param bool $reinstanciate_objects Make new instances of the object (don't use the ones instanciated in the constructor)
+   *
+   * @return void
+   */
   function doSingle($reinstanciate_objects) {
     $this->doBind($reinstanciate_objects);
 
@@ -216,7 +286,10 @@ class CDoObjectAddEdit {
 
   /**
    * Sets a error messages and redirects
-   * @param string $msg
+   *
+   * @param string $msg Message to display
+   *
+   * @return void
    */
   function errorRedirect($msg) {
     CAppUI::setMsg($msg, UI_MSG_ERROR);

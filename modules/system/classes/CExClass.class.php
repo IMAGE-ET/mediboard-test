@@ -160,7 +160,7 @@ class CExClass extends CMbObject {
       }
     }
     else {
-      list($grid, $out_of_grid) = $this->getGrid(4, 30, false);
+      list($grid, $out_of_grid) = $this->getGrid(4, 40, false);
     }
 
     $events = $this->loadRefsEvents();
@@ -525,7 +525,7 @@ class CExClass extends CMbObject {
    *
    * @return array
    */
-  function getGrid($w = 4, $h = 30, $reduce = true) {
+  function getGrid($w = 4, $h = 40, $reduce = true) {
     $big_grid = array();
     $big_out_of_grid = array();
     $groups = $this->loadRefsGroups(true);
@@ -717,17 +717,15 @@ class CExClass extends CMbObject {
         
         `reference2_id`    INT(11) UNSIGNED NOT NULL,
         `reference2_class` VARCHAR(80) NOT NULL,
+
+        `additional_id`    INT (11) UNSIGNED,
+        `additional_class` VARCHAR(80),
         
         INDEX ( `group_id` ),
-        
-        INDEX ( `object_id` ),
-        INDEX ( `object_class` ),
-        
-        INDEX ( `reference_id` ),
-        INDEX ( `reference_class` ),
-        
-        INDEX ( `reference2_id` ),
-        INDEX ( `reference2_class` )
+        INDEX `object`     ( `object_class`,     `object_id` ),
+        INDEX `reference1` ( `reference_class`,  `reference_id` ),
+        INDEX `reference2` ( `reference2_class`, `reference2_id` ),
+        INDEX `additional` ( `additional_class`, `additional_id` )
       ) /*! ENGINE=MyISAM */;";
       
       $ds = $this->_spec->ds;

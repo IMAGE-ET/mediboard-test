@@ -33,7 +33,15 @@
          <td class="text compact">
            <strong style="color: #000;">{{mb_value object=$_ex_object->_ref_first_log field=date}}</strong>
            <br />
-           {{$_ex_object->_ref_object}}
+           <span onmouseover="ObjectTooltip.createEx(this, '{{$_ex_object->_ref_object->_guid}}')">
+             {{$_ex_object->_ref_object}}
+           </span>
+           {{if $_ex_object->additional_id}}
+             <br />
+             <span style="color: #AA0000" onmouseover="ObjectTooltip.createEx(this, '{{$_ex_object->_ref_additional_object->_guid}}')">
+               {{$_ex_object->_ref_additional_object}}
+             </span>
+           {{/if}}
          </td>
        </tr>
      </table>

@@ -19,9 +19,13 @@ class CExObject extends CMbMetaObject {
   
   public $reference_class;
   public $reference_id;
-  
+
   public $reference2_class;
   public $reference2_id;
+
+  // "weak" link to an object stored after $this
+  public $additional_class;
+  public $additional_id;
   
   public $_ex_class_id;
   public $_own_ex_class_id;
@@ -34,9 +38,12 @@ class CExObject extends CMbMetaObject {
   
   /** @var CMbObject */
   public $_ref_reference_object_1;
-  
+
   /** @var CMbObject */
   public $_ref_reference_object_2;
+
+  /** @var CMbObject */
+  public $_ref_additional_object;
   
   /** @var CGroups */
   public $_ref_group;
@@ -279,16 +286,30 @@ class CExObject extends CMbMetaObject {
     $this->reference_class = $reference->_class;
     $this->reference_id = $reference->_id;
   }
-  
+
   function setReferenceObject_2(CMbObject $reference) {
     $this->_ref_reference_object_2 = $reference;
     $this->reference2_class = $reference->_class;
     $this->reference2_id = $reference->_id;
   }
+
+  function setAdditionalObject(CMbObject $reference) {
+    $this->_ref_additional_object = $reference;
+    $this->additional_class = $reference->_class;
+    $this->additional_id = $reference->_id;
+  }
   
   function loadRefReferenceObjects(){
     $this->_ref_reference_object_1 = $this->loadFwdRef("reference_id");
     $this->_ref_reference_object_2 = $this->loadFwdRef("reference2_id");
+  }
+
+  function loadRefAdditionalObject(){
+    $this->_ref_additional_object = $this->loadFwdRef("additional_id");
+
+    if ($this->additional_id && $this->_ref_additional_object) {
+      $this->_ref_additional_object->loadComplete();
+    }
   }
 
   /**
@@ -785,9 +806,12 @@ class CExObject extends CMbMetaObject {
     
     $props["reference_class"]  = "str class";
     $props["reference_id"]     = "ref class|CMbObject meta|reference_class";
-    
+
     $props["reference2_class"] = "str class";
     $props["reference2_id"]    = "ref class|CMbObject meta|reference2_class";
+
+    $props["additional_class"] = "str class";
+    $props["additional_id"]    = "ref class|CMbObject meta|additional_class";
     
     if (self::$_load_lite) {
       return $props;

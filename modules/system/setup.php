@@ -816,7 +816,7 @@ class CSetupsystem extends CSetup {
 
       $ds = CSQLDataSource::get("std");
 
-      // Changement des chirurgiens
+      // Changement des ExClasses
       $query = "SELECT ex_class_id, host_class FROM ex_class";
       $list_ex_class = $ds->loadHashAssoc($query);
       foreach ($list_ex_class as $key => $hash) {
@@ -1402,11 +1402,44 @@ class CSetupsystem extends CSetup {
       ADD INDEX `agregat` (`accesslog_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.42";
+    $this->makeRevision("1.1.42");
+    function setup_system_addExObjectAdditionalObject($setup) {
+      /** @var CSQLDataSource $ds */
+      $ds = $setup->ds;
 
-    /*$query = "ALTER TABLE user_log
-        DROP INDEX object_id,
-        ADD INDEX object_id_object_class (`object_id`, `object_class`)";
+      // Changement des ExClasses
+      $query = "SELECT ex_class_id, ex_class_id FROM ex_class";
+      $list_ex_class = $ds->loadHashAssoc($query);
+
+      foreach ($list_ex_class as $key => $hash) {
+        $query = "ALTER TABLE `ex_object_$key`
+                    ADD `additional_id` INT (11) UNSIGNED AFTER `reference2_class`,
+                    ADD `additional_class` VARCHAR(80) AFTER `additional_id`,
+                    ADD  INDEX `additional` ( `additional_class`, `additional_id` ),
+
+                    DROP INDEX `object_id`,
+                    DROP INDEX `object_class`,
+                    ADD  INDEX `object` ( `object_class`, `object_id` ),
+
+                    DROP INDEX `reference_id`,
+                    DROP INDEX `reference_class`,
+                    ADD  INDEX `reference1` ( `reference_class`, `reference_id` ),
+
+                    DROP INDEX `reference2_id`,
+                    DROP INDEX `reference2_class`,
+                    ADD  INDEX `reference2` ( `reference2_class`, `reference2_id` );";
+        $ds->exec($query);
+      }
+
+      return true;
+    }
+    $this->addFunction("setup_system_addExObjectAdditionalObject");
+
+    $this->mod_version = "1.1.43";
+
+    /*$query = "ALTER TABLE `user_log`
+        DROP INDEX `object_id`,
+        ADD INDEX `object` (`object_id`, `object_class`)";
     $this->addQuery($query);*/
   }
 }
