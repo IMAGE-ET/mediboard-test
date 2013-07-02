@@ -30,12 +30,12 @@ class CAppUI {
   /**
    * @var CAppUI
    */
-  static $instance = null;
+  static $instance;
 
   /**
    * @var CMediusers
    */
-  static $user = null;
+  static $user;
 
   public $user_id = 0;
 
@@ -74,10 +74,10 @@ class CAppUI {
   public $touch_device = false;
 
 
-  static $token_expiration = null;
+  static $token_expiration;
 
   // Global collections
-  public $messages = array();
+  public $messages   = array();
   public $user_prefs = array();
   public $update_hash;
 
@@ -91,13 +91,16 @@ class CAppUI {
    */
   public $session_name = "";
 
+  static $dialog;
+  static $do_login;
+
   /**
    * Initializes the CAppUI singleton
    *
    * @return CAppUI The singleton
    */
   static function init() {
-    return self::$instance = new CAppUI;
+    return self::$instance = new CAppUI();
   }
 
   /**
@@ -301,6 +304,7 @@ class CAppUI {
   static function setMsg($msg, $type = UI_MSG_OK, $_ = null) {
     $args = func_get_args();
     $msg = CAppUI::tr($msg, array_slice($args, 2));
+    $msg = CMbString::purifyHTML($msg);
     @self::$instance->messages[$type][$msg]++;
   }
 
@@ -402,6 +406,7 @@ class CAppUI {
   static function stepMessage($type, $msg, $_ = null) {
     $args = func_get_args();
     $msg = CAppUI::tr($msg, array_slice($args, 2));
+    $msg = CMbString::purifyHTML($msg);
 
     $class = self::getErrorClass($type);
     echo "\n<div class='small-$class'>$msg</div>";
@@ -421,6 +426,7 @@ class CAppUI {
   static function stepAjax($msg, $type = UI_MSG_OK, $_ = null) {
     $args = func_get_args();
     $msg = CAppUI::tr($msg, array_slice($args, 2));
+    $msg = CMbString::purifyHTML($msg);
 
     $class = self::getErrorClass($type);
     echo "\n<div class='$class'>$msg</div>";
@@ -908,7 +914,6 @@ class CAppUI {
         $str = vsprintf($str, $args);
       }
     }
-
 
     return nl2br($str);
   }
