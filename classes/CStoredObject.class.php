@@ -173,14 +173,15 @@ class CStoredObject extends CModelObject {
     if (!$class) {
       return null;
     }
-    
-    // Non existing class
-    if (!self::classExists($class)) {
-      return null;
-    }
 
     $object = CExObject::getValidObject($class);
+
     if (!$object) {
+      // Non existing class
+      if (!self::classExists($class)) {
+        return null;
+      }
+
       $object = new $class;
     }
     
@@ -599,12 +600,15 @@ class CStoredObject extends CModelObject {
 
     $this->updatePlainFields();
     $fields = $this->getPlainFields();
+    //$ds = $this->getDS();
     foreach ($fields as $key => $value) {
       if ($value !== null) {
+        //$value = stripslashes($value); // To "undo" the addslashes from magic_quotes_gpc.php
+        //$request->addWhereClause($key, $ds->prepare("=%", $value));
         $request->addWhereClause($key, "= '$value'");
       }
     }
-    
+
     $this->loadObject($request->where, $request->order, $request->group, $request->ljoin, $request->forceindex);
     return $this->_id;
   }
@@ -1538,7 +1542,7 @@ class CStoredObject extends CModelObject {
    * @param array  $where    Additional where clauses
    * @param array  $ljoin    Additionnal ljoin clauses
    * @param bool   $cache    Cache
-   * 
+   *
    * @return int|null The count, null if collection count is unavailable
    */
   function countBackRefs($backName, $where = array(), $ljoin = array(), $cache = true) {

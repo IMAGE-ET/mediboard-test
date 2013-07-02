@@ -132,11 +132,14 @@ class CDossierMedical extends CMbMetaObject {
    * @return CPrescription
    */
   function loadRefPrescription() {
-    $this->_ref_prescription = $this->loadUniqueBackRef("prescription");  
-    if ($this->_ref_prescription && $this->_ref_prescription->_id) {
-      $this->_ref_prescription->loadRefsLinesMed();
+    /** @var CPrescription $prescription */
+    $prescription = $this->loadUniqueBackRef("prescription");
+
+    if ($prescription && $prescription->_id) {
+      $prescription->loadRefsLinesMed();
     }
-    return $this->_ref_prescription;
+
+    return $this->_ref_prescription = $prescription;
   }
 
   /**
@@ -187,6 +190,23 @@ class CDossierMedical extends CMbMetaObject {
   function loadView() {
     parent::loadView();
     $this->loadComplete();
+  }
+
+  /**
+   * @see parent::loadComplete()
+   */
+  function loadComplete() {
+    parent::loadComplete();
+
+    $this->loadRefsTraitements();
+    $this->loadRefsAntecedents();
+    $prescription = $this->loadRefPrescription();
+
+    if ($prescription && is_array($prescription->_ref_prescription_lines)) {
+      foreach ($prescription->_ref_prescription_lines as $_line) {
+        $_line->loadRefsPrises();
+      }
+    }
   }
 
   /**
@@ -455,12 +475,7 @@ class CDossierMedical extends CMbMetaObject {
   }
 
   /**
-   * Register all templates properties
-   *
-   * @param CTemplateManager &$template Template manager
-   * @param string           $champ     Type d'objet relié au dossier médical
-   *
-   * @return void
+   * @see parent::fillTemplate()
    */
   function fillTemplate(&$template, $champ = "Patient") {
     // Antécédents

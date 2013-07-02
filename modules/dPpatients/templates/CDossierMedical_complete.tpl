@@ -1,11 +1,15 @@
+{{mb_default var=hide_header value=false}}
 
 <table class="tbl">
-  <tr>
-    <th class="title" colspan="4">
-      Dossier médical du 
-      {{tr}}{{$object->object_class}}{{/tr}}
-    </th>
-  </tr>
+  {{if !$hide_header}}
+    <tr>
+      <th class="title" colspan="4">
+        Dossier médical du
+        {{tr}}{{$object->object_class}}{{/tr}}
+      </th>
+    </tr>
+  {{/if}}
+
   <tr>
     <th>Antécédent(s)</th>
     {{if is_array($object->_ref_traitements)}}

@@ -384,7 +384,7 @@ var ProgressiveCalendar = Class.create({
   },
   createPicker: function(e){
     if (!this.picker)
-      this.picker = new Element('div', {style: 'position:absolute;', className: 'datepickerControl'}).observe('click', Event.stop);
+      this.picker = new Element('div', {style: 'position:absolute;width:220px;', className: 'datepickerControl'}).observe('click', Event.stop);
     if (ProgressiveCalendar.activePicker) ProgressiveCalendar.activePicker.hidePicker();
     var container,
         now = new Date(),

@@ -38,15 +38,7 @@ $patient->loadIPP();
 
 // Chargement du dossier medical du patient
 $dossier_medical = $patient->loadRefDossierMedical();
-$dossier_medical->loadRefsTraitements();
-$dossier_medical->loadRefsAntecedents();
-$prescription = $dossier_medical->loadRefPrescription();
-
-if ($prescription && is_array($prescription->_ref_prescription_lines)) {
-  foreach ($prescription->_ref_prescription_lines as $_line) {
-    $_line->loadRefsPrises();
-  }
-}
+$dossier_medical->loadComplete();
 
 // Suppression des consultations d'urgences
 foreach ($patient->_ref_consultations as $consult) {
