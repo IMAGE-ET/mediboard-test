@@ -78,37 +78,37 @@
     {{/foreach}}
   </table>
   
-  <form name="editedit{{$_lit->_guid}}" action="?m={{$m}}" method="post" onsubmit="return submit_Ajax(this, 'chambres')">
-    
-  <input type="hidden" name="dosql" value="do_lit_aed" />
-  <input type="hidden" name="del" value="0" />
-  {{mb_key object=$lit}}
+  <form name="editedit{{$lit->_guid}}" action="?" method="post" onsubmit="return submit_Ajax(this, 'chambres')">
+    <input type="hidden" name="m" value="hospi" />
+    <input type="hidden" name="dosql" value="do_lit_aed" />
+    <input type="hidden" name="del" value="0" />
+    {{mb_key object=$lit}}
 
-  <input type="hidden" name="chambre_id" value="{{$chambre->_id}}" />
+    <input type="hidden" name="chambre_id" value="{{$chambre->_id}}" />
 
     <table class="form">
-    <tr>
-      <th>{{mb_label object=$lit field=nom}}</th>
-      <td>{{mb_field object=$lit field=nom}}</td>
-      <td rowspan="2">
-        {{if $lit->_id}}
-        <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le lit', objName: $V(this.form.nom)})">
-          {{tr}}Delete{{/tr}}
-        </button>
-        {{else}}
-        <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
-        {{/if}}
-      </td>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$lit field=nom_complet}}</th>
-      <td>{{mb_field object=$lit field=nom_complet}}</td>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$lit field=annule}}</th>
-      <td>{{mb_field object=$lit field=annule}}</td>
-    </tr>
+      <tr>
+        <th>{{mb_label object=$lit field=nom}}</th>
+        <td>{{mb_field object=$lit field=nom}}</td>
+        <td rowspan="2">
+          {{if $lit->_id}}
+          <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le lit', objName: $V(this.form.nom)})">
+            {{tr}}Delete{{/tr}}
+          </button>
+          {{else}}
+          <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+          {{/if}}
+        </td>
+      </tr>
+      <tr>
+        <th>{{mb_label object=$lit field=nom_complet}}</th>
+        <td>{{mb_field object=$lit field=nom_complet}}</td>
+      </tr>
+      <tr>
+        <th>{{mb_label object=$lit field=annule}}</th>
+        <td>{{mb_field object=$lit field=annule}}</td>
+      </tr>
     </table>
   </form>
   {{if $lit->_id}}
