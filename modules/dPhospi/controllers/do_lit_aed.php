@@ -9,7 +9,5 @@
  * @version    $Revision$
  */
 
-mbLog($_POST);
-
 $do = new CDoObjectAddEdit("CLit", "lit_id");
 $do->doIt();
