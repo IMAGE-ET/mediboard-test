@@ -124,6 +124,7 @@ $locales['Composition'] = 'Composition';
 $locales['Compute'] = 'Calculer';
 $locales['Config'] = 'Configuration';
 $locales['Configure'] = 'Configurer';
+$locales['Content'] = 'Contenu';
 $locales['Continue'] = 'Continuer';
 $locales['Count'] = 'Compter';
 $locales['Create'] = 'Créer';
@@ -478,3 +479,4 @@ $locales['weeks'] = 'semaines';
 $locales['year'] = 'année';
 $locales['years'] = 'années';
 $locales['years_old'] = 'ans';
+?>
