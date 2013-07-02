@@ -203,6 +203,23 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
   /**
    * Transforme une chaine date au format time CDA
    *
+   * @param String $dateTime String
+   *
+   * @return string
+   */
+  function setUtcToTime($dateTime) {
+    $timezone_local = new DateTimeZone(CAppUI::conf("timezone"));
+    $timezone_utc = new DateTimeZone("UTC");
+
+    $date = new DateTime($dateTime, $timezone_utc);
+    $date->setTimezone($timezone_local);
+
+    return $date->format("d-m-Y H:i");
+  }
+
+  /**
+   * Transforme une chaine date au format time CDA
+   *
    * @param String $date String
    *
    * @return string

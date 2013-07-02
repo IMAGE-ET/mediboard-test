@@ -20,6 +20,7 @@ class CHL7v3EventPRPAIN201308UV02 extends CHL7v3AcknowledgmentPRPA implements CH
   /** @var string */
   public $interaction_id = "IN201308UV02";
   public $queryAck;
+  public $subject;
 
   /**
    * Get interaction
@@ -65,19 +66,44 @@ class CHL7v3EventPRPAIN201308UV02 extends CHL7v3AcknowledgmentPRPA implements CH
 
     $interaction_id = "//hl7:".$this->getInteractionID();
 
-    $patient = $dom->queryNode("$interaction_id/hl7:controlActProcess/hl7:subject/hl7:registrationEvent/hl7:subject1/hl7:patient");
+    $this->subject = $dom->queryNode("$interaction_id/hl7:controlActProcess/hl7:subject");
+
+    $patient = $dom->queryNode("hl7:registrationEvent/hl7:subject1/hl7:patient", $this->subject);
 
     $statusCode = $dom->queryNode("hl7:statusCode", $patient);
 
     return $dom->getValueAttributNode($statusCode, "code");
   }
 
-
+  /**
+   * Get closing date
+   *
+   * @return string
+   */
   function getDateFermeture() {
+    $dom = $this->dom;
 
+    $effectiveTime = $dom->queryNode("hl7:registrationEvent/hl7:effectiveTime", $this->subject);
+
+    return $this->setUtcToTime($dom->getValueAttributNode($effectiveTime, "value"));
   }
 
+  /**
+   * Get closing pattern
+   *
+   * @return string
+   */
   function getMotifFermeture() {
+    $dom = $this->dom;
 
+    $interaction_id = "//hl7:".$this->getInteractionID();
+
+    $code = $dom->queryNode($interaction_id."/hl7:controlActProcess/hl7:reasonOf/hl7:detectedIssueEvent/hl7:code");
+
+    $reasonOf = $dom->getValueAttributNode($code, "code");
+
+    $reasonOf = $reasonOf ? $reasonOf : "none";
+
+    return CAppUI::tr("DMP-reasonOf_$reasonOf");
   }
 }
