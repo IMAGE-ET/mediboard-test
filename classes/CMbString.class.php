@@ -512,19 +512,23 @@ abstract class CMbString {
    */
   static function purifyHTML($html) {
     static $cache = array();
+    static $purifier;
 
     if (isset($cache[$html])) {
       return $cache[$html];
     }
 
-    if (!class_exists("HTMLPurifier", false)) {
-      CAppUI::requireLibraryFile("htmlpurifier/library/HTMLPurifier.auto");
-    }
+    if (!$purifier) {
+      if (!class_exists("HTMLPurifier", false)) {
+        CAppUI::requireLibraryFile("htmlpurifier/library/HTMLPurifier.auto");
+      }
 
-    $config = HTMLPurifier_Config::createDefault();
-    // App encoding (in order to prevent from removing diacritics)
-    $config->set('Core.Encoding', CApp::$encoding);
-    $purifier = new HTMLPurifier($config);
+      $config = HTMLPurifier_Config::createDefault();
+      // App encoding (in order to prevent from removing diacritics)
+      $config->set('Core.Encoding', CApp::$encoding);
+
+      $purifier = new HTMLPurifier($config);
+    }
 
     $purified = $purifier->purify($html);
 
