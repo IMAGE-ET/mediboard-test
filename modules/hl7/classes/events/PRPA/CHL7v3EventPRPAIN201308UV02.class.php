@@ -85,6 +85,10 @@ class CHL7v3EventPRPAIN201308UV02 extends CHL7v3AcknowledgmentPRPA implements CH
 
     $effectiveTime = $dom->queryNode("hl7:registrationEvent/hl7:effectiveTime", $this->subject);
 
+    if (!$effectiveTime) {
+      return null;
+    }
+
     return $this->setUtcToTime($dom->getValueAttributNode($effectiveTime, "value"));
   }
 
@@ -105,5 +109,35 @@ class CHL7v3EventPRPAIN201308UV02 extends CHL7v3AcknowledgmentPRPA implements CH
     $reasonOf = $reasonOf ? $reasonOf : "none";
 
     return CAppUI::tr("DMP-reasonOf_$reasonOf");
+  }
+
+  /**
+   * Get authorization status
+   *
+   * @return string
+   */
+  function getAuthorizationStatus() {
+    $dom = $this->dom;
+
+    $interaction_id = "//hl7:".$this->getInteractionID();
+
+    $value = $dom->queryNode($interaction_id."/hl7:attentionLine[hl7:keyWordText[@code='AUTORISATION']]/hl7:value");
+
+    return $dom->getValueAttributNode($value, "code");
+  }
+
+  /**
+   * Get status doctor
+   *
+   * @return string
+   */
+  function getStatusMT() {
+    $dom = $this->dom;
+
+    $interaction_id = "//hl7:".$this->getInteractionID();
+
+    $value = $dom->queryNode($interaction_id."/hl7:attentionLine[hl7:keyWordText[@code='STATUT_MT']]/hl7:value");
+
+    return $dom->getValueAttributNode($value, "value");
   }
 }
