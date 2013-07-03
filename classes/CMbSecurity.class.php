@@ -3,13 +3,17 @@
 /**
  * $Id$
  *  
- * @package Mediboard
- * @author  SARL OpenXtrem <dev@openxtrem.com>
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @link    http://www.mediboard.org */
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @link     http://www.mediboard.org */
 
+CAppUI::requireLibraryFile("phpseclib/phpseclib/Math/BigInteger");
+CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/Hash");
 CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/Random");
-CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/AES");
+CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/RSA");
+CAppUI::requireLibraryFile("phpseclib/phpseclib/File/ASN1");
+CAppUI::requireLibraryFile("phpseclib/phpseclib/File/X509");
 CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/TripleDES");
 
 /**
@@ -135,5 +139,107 @@ class CMbSecurity {
     }
 
     return $params;
+  }
+
+  /**
+   * Validate the client certificate with the authority certificate
+   *
+   * @param String $certificate_client Client certificate
+   * @param String $certificate_ca     Authority certificate
+   *
+   * @return boolean
+   */
+  static function validateCertificate($certificate_client, $certificate_ca) {
+    $x509 = new File_X509();
+
+    $x509->loadX509($certificate_client);
+    $x509->loadCA($certificate_ca);
+
+    return $x509->validateSignature(FILE_X509_VALIDATE_SIGNATURE_BY_CA);
+  }
+
+  /**
+   * Return the DN of the certificate
+   *
+   * @param String $certificate_client Client certificate
+   *
+   * @return String
+   */
+  static function getDNString($certificate_client) {
+    $x509 = new File_X509();
+
+    $x509->loadX509($certificate_client);
+
+    return $x509->getDN(true);
+  }
+
+  /**
+   * Return the Issuer DN of the certificate
+   *
+   * @param String $certificate_client Client certificate
+   *
+   * @return String
+   */
+  static function getIssuerDnString($certificate_client) {
+    $x509 = new File_X509();
+
+    $x509->loadX509($certificate_client);
+
+    return $x509->getIssuerDN(true);
+  }
+
+  /**
+   * Validate the client certificate with the current date
+   *
+   * @param String $certificate_client Client certificate
+   *
+   * @return bool
+   */
+  static function validateCertificateDate($certificate_client) {
+
+    $x509 = new File_X509();
+
+    $x509->loadX509($certificate_client);
+
+    return $x509->validateDate();
+  }
+
+  /**
+   * Return the information of certificate
+   *
+   * @param String $certificate_client Client certificate
+   *
+   * @return bool
+   */
+  static function getInformationCertificate($certificate_client) {
+    $x509 = new File_X509();
+
+    $cert = $x509->loadX509($certificate_client);
+
+    return $cert;
+  }
+
+  /**
+   * Verify that certificate is not revoked
+   *
+   * @param String $certificate_client String
+   * @param String $list_revoked       String
+   *
+   * @return bool
+   */
+  static function isRevoked($certificate_client, $list_revoked) {
+    $certificate = self::getInformationCertificate($certificate_client);
+    $serial = $certificate['tbsCertificate']['serialNumber']->value;
+
+    $x509 = new File_X509();
+    $crl = $x509->loadCRL($list_revoked);
+
+    foreach ($crl["tbsCertList"]["revokedCertificates"] as $_cert) {
+      if ($_cert["userCertificate"]->value === $serial) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }
