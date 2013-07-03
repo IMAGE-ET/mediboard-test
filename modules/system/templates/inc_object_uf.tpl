@@ -1,7 +1,7 @@
 {{if @$modules.dPhospi->_can->read && $conf.dPhospi.show_uf}}
   {{assign var="unitefonctionnelle" value=$object}}
 
-  {{mb_script module=hospi script=affectation_uf}}
+  {{mb_script module=hospi script=affectation_uf ajax=true}}
 
   <a style="float: right;" href="#1" title=""
     onclick="AffectationUf.edit('{{$object->_guid}}')"
