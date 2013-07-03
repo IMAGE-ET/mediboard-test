@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -38,7 +38,7 @@ $where[] = "(transmission_medicale.date BETWEEN '$date_min' and '$date_max') OR
 
 $where["sejour.praticien_id"] = " = '$praticien_id'";
 /** @var CSejour[] $sejours */
-$sejours = $sejour->loadList($where, null, null, null, $ljoin);
+$sejours = $sejour->loadList($where, null, null, "sejour_id", $ljoin);
 
 foreach ($sejours as $_sejour) {
   $_sejour->loadRefPatient();

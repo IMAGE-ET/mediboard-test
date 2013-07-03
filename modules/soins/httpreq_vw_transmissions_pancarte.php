@@ -17,9 +17,10 @@ $load_transmissions = CValue::get("transmissions");
 $load_observations = CValue::get("observations");
 $refresh = CValue::get("refresh");
 
-if($date == CMbDT::date()){
+if ($date == CMbDT::date()) {
   $date_max = CMbDT::dateTime();
-} else {
+}
+else {
   $date_max = CMbDT::date("+ 1 DAY", $date)." 00:00:00";
 }
 
@@ -40,43 +41,43 @@ $where = array();
 $where["service.service_id"] = " = '$service_id'";
 
 $where[] = "date >= '$date_min' AND date <= '$date_max'";
-if($user_id){
+if ($user_id) {
   $where["user_id"] = " = '$user_id'";
 }
-if($degre){
-  if($degre == "urg_normal"){
+if ($degre) {
+  if ($degre == "urg_normal") {
     $where["degre"] = "IN('low', 'high')";
   }
-  if($degre == "urg"){
+  if ($degre == "urg") {
     $where["degre"] = "= 'high'";
   }
 }
   
 // Chargement des transmissions
-if($load_transmissions == "1"){
+if ($load_transmissions == "1") {
   $ljoin["sejour"] = "transmission_medicale.sejour_id = sejour.sejour_id";
   $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
   $ljoin["lit"]      = "lit.lit_id = affectation.lit_id";
   $ljoin["chambre"]  = "chambre.chambre_id = lit.chambre_id";
   $ljoin["service"]  = "service.service_id = chambre.service_id";
   $transmission = new CTransmissionMedicale();
-  $transmissions = $transmission->loadList($where, null, null, null, $ljoin);
+  $transmissions = $transmission->loadList($where, null, null, "transmission_medicale_id", $ljoin);
 }
 
 // Chargement des observations
-if($load_observations == "1"){
+if ($load_observations == "1") {
   $ljoin["sejour"] = "observation_medicale.sejour_id = sejour.sejour_id";
   $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
   $ljoin["lit"]      = "lit.lit_id = affectation.lit_id";
   $ljoin["chambre"]  = "chambre.chambre_id = lit.chambre_id";
   $ljoin["service"]  = "service.service_id = chambre.service_id";
   $observation = new CObservationMedicale();
-  $observations = $observation->loadList($where, null, null, null, $ljoin);
+  $observations = $observation->loadList($where, null, null, "observation_medicale_id", $ljoin);
 }
 
 $cibles = array();
 $trans_and_obs = array();
-foreach($transmissions as $_transmission){
+foreach ($transmissions as $_transmission) {
   $_transmission->loadRefsFwd();
   $_transmission->_ref_sejour->loadRefPatient();
   $_transmission->_ref_sejour->loadRefsAffectations();
@@ -85,13 +86,13 @@ foreach($transmissions as $_transmission){
   $patient = $_transmission->_ref_sejour->_ref_patient;
   $lit = $_transmission->_ref_sejour->_ref_last_affectation->_ref_lit;
   
-  if($order_col == "patient_id"){
+  if ($order_col == "patient_id") {
     $key = $patient->nom.$patient->prenom.$patient->_id.$_transmission->date;
   }
-  if($order_col == "date") {
+  if ($order_col == "date") {
     $key= $_transmission->date;
   }
-  if($order_col == "lit_id"){
+  if ($order_col == "lit_id") {
     $key = $lit->_view.$lit->_id.$_transmission->date;
   }
   $_transmission->calculCibles($cibles);
@@ -100,7 +101,7 @@ foreach($transmissions as $_transmission){
   $users[$_transmission->user_id] = $_transmission->_ref_user; 
 }
 
-foreach($observations as $_observation){
+foreach ($observations as $_observation) {
   $_observation->loadRefsFwd();
   $_observation->_ref_sejour->loadRefPatient();
   $_observation->_ref_sejour->loadRefsAffectations();
@@ -109,13 +110,13 @@ foreach($observations as $_observation){
   $patient = $_observation->_ref_sejour->_ref_patient;
   $lit = $_observation->_ref_sejour->_ref_last_affectation->_ref_lit;
   
-  if($order_col == "patient_id"){
+  if ($order_col == "patient_id") {
     $key = $patient->nom.$patient->prenom.$patient->_id.$_observation->date;
   }
-  if($order_col == "date") {
+  if ($order_col == "date") {
     $key= $_observation->date;
   }
-  if($order_col == "lit_id"){
+  if ($order_col == "lit_id") {
     $key = $lit->_view.$lit->_id.$_observation->date;
   }
   $trans_and_obs[$key][$_observation->_id] = $_observation;
@@ -124,9 +125,10 @@ foreach($observations as $_observation){
 }
 
 // Tri du tableau
-if($order_way == "ASC"){
+if ($order_way == "ASC") {
   ksort($trans_and_obs);
-} else {
+}
+else {
   krsort($trans_and_obs);
 }
 
@@ -149,10 +151,9 @@ $smarty->assign("with_filter", "1");
 $smarty->assign("date_min", $date_min);
 $smarty->assign("date_max", $date_max);
 
-if($user_id || $degre || $refresh){
+if ($user_id || $degre || $refresh) {
   $smarty->display('../../dPprescription/templates/inc_vw_transmissions.tpl'); 
-} else {
+}
+else {
   $smarty->display('inc_vw_transmissions_pancarte.tpl'); 
 }
-
-?>

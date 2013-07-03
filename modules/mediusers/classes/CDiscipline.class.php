@@ -148,7 +148,7 @@ class CDiscipline extends CMbObject {
       $order = "discipline.text";
     }
 
-    return $this->loadList($where, $order, null, null, $ljoin);
+    return $this->loadList($where, $order, null, "discipline_id", $ljoin);
   }
 
   function addCompat(&$compat, $patho1, $patho2, $septique1 = null, $septique2 = null) {
