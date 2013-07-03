@@ -61,7 +61,7 @@
   };
   
   reloadModal = function() {
-    getForm('delBesoin').up('div.modal').down('button.change').onclick();
+    getForm('delBesoin').up('div.modal').down('button.change').click();
   };
   
   addBesoinNonStored = function(type_ressource_id) {

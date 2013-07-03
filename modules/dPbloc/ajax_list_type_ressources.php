@@ -19,7 +19,7 @@ $type_ressource = new CTypeRessource();
 $type_ressource->group_id = CGroups::loadCurrent()->_id;
 
 /** @var CTypeRessource[] $type_ressources */
-$type_ressources = $type_ressource->loadMatchingList();
+$type_ressources = $type_ressource->loadMatchingList("libelle");
 
 foreach ($type_ressources as $_type_ressource) {
   $_type_ressource->loadRefsRessources();
