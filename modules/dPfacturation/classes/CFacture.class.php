@@ -375,14 +375,12 @@ class CFacture extends CMbObject {
         $this->delete();
       }
       elseif (CModule::getActive("dPfacturation")) {
-        $where = array();
-        $where["facture_id"]    = " = '$this->_id'";
-        $where["facture_class"] = " = '$this->_class'";
-        $where["object_class"] = " = 'CConsultation'";
-        $where["object_id"] = " = '$this->_consult_id'";
-        
         $liaison = new CFactureLiaison();
-        $liaison->loadObject($where);
+        $liaison->facture_id    = $this->_id;
+        $liaison->facture_class = $this->_class;
+        $liaison->object_class  = "CConsultation";
+        $liaison->object_id     = $this->_consult_id;
+        $liaison->loadMatchingObject();
         $liaison->delete();
       }
     }
@@ -814,7 +812,8 @@ class CFacture extends CMbObject {
       }
       foreach ($this->_ref_actes_caisse as $acte_caisse) {
         $this->completeField("type_facture");
-        $coeff = "coeff_".$this->type_facture;
+        $type = $this->type_facture == "esthetique" ? "maladie" : $this->type_facture;
+        $coeff = "coeff_".$type;
         if ($acte_caisse->_class == "CActeCaisse") {
           $coeff = $acte_caisse->_ref_caisse_maladie->$coeff;
           $use   = $acte_caisse->_ref_caisse_maladie->use_tarmed_bill;
@@ -863,7 +862,8 @@ class CFacture extends CMbObject {
       $this->_total_tarmed += $acte_tarmed->_montant_facture * $acte_tarmed->quantite;
     }
     foreach ($object->_ref_actes_caisse as $acte_caisse) {
-      $coeff = "coeff_".$this->type_facture;
+      $type = $this->type_facture == "esthetique" ? "maladie" : $this->type_facture;
+      $coeff = "coeff_".$type;
       $tarif_acte_caisse = ($acte_caisse->_montant_facture)*$acte_caisse->_ref_caisse_maladie->$coeff * $acte_caisse->quantite;
       if ($acte_caisse->_ref_caisse_maladie->use_tarmed_bill) {
         $this->_autre_tarmed += $tarif_acte_caisse ;
