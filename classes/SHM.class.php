@@ -499,8 +499,7 @@ class RedisSharedMemory implements ISharedMemory {
     $len = strlen($prefix);
 
     $keys = array();
-    foreach ($cache_list as $_cache) {
-      $_key = $_cache["info"];
+    foreach ($cache_list as $_key) {
       if (strpos($_key, $prefix) === 0) {
         $keys[] = substr($_key, $len);
       }
