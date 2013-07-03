@@ -1,11 +1,12 @@
-<?php /* $Id $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage dPplanningOp
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    OXOL, see http://www.mediboard.org/public/OXOL
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
@@ -61,7 +62,10 @@ if ($sejour_id) {
 
   foreach ($sejour->_ref_operations as $operation) {
     $operation->loadRefsFwd();
-    $operation->_ref_chir->loadRefsFwd();
+    $operation->loadBrancardage();
+    $operation->_ref_chir->loadRefFunction();
+    $operation->_ref_chir->loadRefSpecCPAM();
+    $operation->_ref_chir->loadRefDiscipline();
   }
 
   foreach ($sejour->_ref_affectations as $affectation) {
@@ -102,12 +106,13 @@ if (CModule::getActive("maternite")) {
 $patient->loadRefsSejours();
 $patient->loadRefsCorrespondantsPatient();
 
-if (count($patient->_ref_sejours))
+if (count($patient->_ref_sejours)) {
   foreach ($patient->_ref_sejours as $_sejour) {
     $_sejour->loadNDA();
     $_sejour->loadRefPraticien();
     $_sejour->loadRefEtablissement();
   }
+}
 
 $patient->loadRefsFwd();
 $patient->loadRefsCorrespondants();
@@ -177,7 +182,8 @@ foreach ($blocages_lit as $blocage) {
   $where["lit_id"] = "= '$blocage->lit_id'";
   if (!$sejour->_id && $affectation->loadObject($where)) {
     $affectation->loadRefSejour()->loadRefPatient();
-    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".CMbDT::transform($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
+    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".CMbDT::transform($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y");
+    $blocage->_ref_lit->_view .= " (".$affectation->_ref_sejour->_ref_patient->_view.")";
   }
 }
 

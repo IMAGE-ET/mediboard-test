@@ -20,17 +20,10 @@
     <td>
       {{mb_script module=brancardage script=creation_brancardage ajax=true}}
       <input id="modif" type="hidden" name="modif"/>
-      <div id="patientpret-{{$_operation->sejour_id}}"> </div>
-      <script>
-        Main.add(function () {
-          var url = new Url("brancardage", "ajax_exist_brancard");
-          url.addParam("sejour_id"    , "{{$_operation->sejour_id}}");
-          url.addParam("salle_id"     , "{{$_operation->salle_id}}");
-          url.addParam("operation_id" , '{{$_operation->_id}}');
-          url.addParam("id"           , "patientpret");
-          url.requestUpdate('patientpret-{{$_operation->sejour_id}}');
-        });
-      </script>
+      <div id="patientpret-{{$_operation->sejour_id}}">
+        {{mb_include module=brancardage template=inc_exist_brancard brancardage=$_operation->_ref_brancardage id="patientpret"
+        sejour_id=$_operation->sejour_id salle_id=$_operation->salle_id operation_id=$_operation->_id reveil=false }}
+      </div>
     </td>  
   {{/if}}
   

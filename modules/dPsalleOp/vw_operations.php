@@ -53,6 +53,7 @@ if ($op) {
   $selOp->loadRefChir();
   $selOp->countExchanges();
   $selOp->isCoded();
+  $selOp->loadBrancardage();
   $selOp->_ref_consult_anesth->loadRefsTechniques();
 
   $sejour =& $selOp->_ref_sejour;

@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage SalleOp
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
@@ -120,6 +120,7 @@ foreach ($listOperations as $key => $op) {
   $op->loadRefPlageOp(1);
   $op->loadRefPatient(1);
   $op->loadAffectationsPersonnel();
+  $op->loadBrancardage();
   
   if ($use_poste) {
     $op->loadRefPoste();

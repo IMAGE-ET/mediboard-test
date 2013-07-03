@@ -1,4 +1,4 @@
-<script type="text/javascript">  
+<script>
   submitPrepaForm = function(oFormPrepa) {
     submitFormAjax(oFormPrepa,'systemMsg', {onComplete: function(){ refreshTabsReveil() }});
   }
@@ -72,19 +72,11 @@
     <td class="text">{{mb_value object=$_operation field="cote"}}</td>
     {{if @$modules.brancardage->_can->read}}
       <td>
-         <span id="demandebrancard-{{$_operation->sejour_id}}"></span>
-          <script>
-            Main.add(function () {
-              var url = new Url("brancardage", "ajax_exist_brancard");
-              url.addParam("sejour_id", "{{$_operation->sejour_id}}");
-              url.addParam("salle_id", "{{$_operation->salle_id}}");
-              url.addParam("operation_id", '{{$_operation->_id}}');
-              url.addParam("reveil", "preop");
-              url.addParam("id", "demandebrancard");
-              url.addParam("opid", "{{$_operation->_id}}");
-              url.requestUpdate('demandebrancard-{{$_operation->sejour_id}}');
-            });
-          </script>
+         <span id="demandebrancard-{{$_operation->sejour_id}}">
+           {{mb_include module=brancardage template=inc_exist_brancard brancardage=$_operation->_ref_brancardage id="demandebrancard"
+             sejour_id=$_operation->sejour_id salle_id=$_operation->salle_id operation_id=$_operation->_id
+             opid=$_operation->_id reveil="preop" }}
+         </span>
       </td>
     {{/if}}
     <td class="button">

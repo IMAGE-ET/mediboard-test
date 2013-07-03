@@ -193,6 +193,8 @@ class COperation extends CCodable implements IPatientRelated {
   public $_ref_poses_disp_vasc;
   /** @var  CBloodSalvage */
   public $blood_salvage;
+  /** @var CBrancardage */
+  public $_ref_brancardage;
 
   // Filter Fields
   public $_date_min;
@@ -1497,5 +1499,25 @@ class COperation extends CCodable implements IPatientRelated {
         "DATE"    => CMbDT::dateToLocale(CMbDT::date($this->_datetime_best)),
         "COTE"    => $this->getFormattedValue("cote")
       ));
+  }
+
+  function loadBrancardage() {
+    if (CModule::getActive("brancardage")) {
+      //Chargement de la destination
+      $salle = new CSalle();
+      $salle->load($this->salle_id);
+
+      $destination = new CDestinationBrancardage();
+      $destination->object_id = $salle->bloc_id;
+      $destination->object_class = "CBlocOperatoire";
+      $destination->loadMatchingObject();
+
+      //Chargement du brancardage s'il existe
+      $brancardage = new CBrancardage();
+      $brancardage->operation_id = $this->_id;
+      $brancardage->destinationBrancardage_id = $destination->_id;
+      $brancardage->loadMatchingObject();
+      $this->_ref_brancardage = $brancardage;
+    }
   }
 }

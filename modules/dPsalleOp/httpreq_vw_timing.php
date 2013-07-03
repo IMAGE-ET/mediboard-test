@@ -19,6 +19,7 @@ $operation = new COperation();
 if ($operation_id) {
   $operation->load($operation_id);
   $operation->loadRefs();
+  $operation->loadBrancardage();
 }
 
 // Création du template
