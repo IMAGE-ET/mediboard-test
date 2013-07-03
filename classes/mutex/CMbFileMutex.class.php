@@ -62,20 +62,17 @@ class CMbFileMutex extends CMbMutexDriver {
       return true;
     }
 
-    $timeout = $this->timeout($duration);
-
-    if ($this->getFileMtime() + $timeout > $this->getTime()) {
+    if ($this->getFileMtime() + $duration > $this->getTime()) {
       return false;
     }
 
     // Not really atomic :(
     $this->touchFile();
 
-    $this->expire = $timeout;
+    $this->expire = $this->timeout($duration);
 
     return true;
   }
-
 
   /**
    * Get file modification time
