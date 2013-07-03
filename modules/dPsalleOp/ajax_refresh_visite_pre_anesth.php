@@ -14,6 +14,7 @@ $callback     = CValue::get("callback");
 
 $operation = new COperation;
 $operation->load($operation_id);
+$operation->loadRefVisiteAnesth();
 
 $listAnesths = new CMediusers;
 $listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);

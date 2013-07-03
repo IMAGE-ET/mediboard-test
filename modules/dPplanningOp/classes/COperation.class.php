@@ -1032,6 +1032,17 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   /**
+   * Chargement de la consultation anesthésiste pour l'oopération courante
+   *
+   * @param bool $cache Utilisation du cache
+   *
+   * @return CConsultAnesth
+   */
+  function loadRefVisiteAnesth($cache = true) {
+    return $this->_ref_anesth_visite = $this->loadFwdRef("prat_visite_anesth_id", $cache);
+  }
+
+  /**
    * Chargement de la plage opératoire
    * 
    * @param bool $cache Utilisation du cache
@@ -1040,7 +1051,7 @@ class COperation extends CCodable implements IPatientRelated {
    */
   function loadRefPlageOp($cache = true) {
 
-    $this->_ref_anesth_visite = $this->loadFwdRef("prat_visite_anesth_id", $cache);
+    $this->loadRefVisiteAnesth();
 
     if (!$this->_ref_plageop) {
       $this->_ref_plageop = $this->loadFwdRef("plageop_id", $cache);
