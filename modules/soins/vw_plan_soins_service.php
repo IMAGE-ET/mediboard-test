@@ -79,7 +79,7 @@ $where = array();
 $where["sejour.sejour_id"] = CSQLDataSource::prepareIn($sejours_id);
 $where["prescription_line_element.active"] = " = '1'";
 
-$elements = $element->loadList($where, null, null, null, $ljoin);
+$elements = $element->loadList($where, null, null, "element_prescription_id", $ljoin);
 
 CMbObject::massLoadFwdRef($elements, "category_prescription_id");
 
