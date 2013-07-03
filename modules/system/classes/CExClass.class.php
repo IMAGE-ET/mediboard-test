@@ -343,26 +343,27 @@ class CExClass extends CMbObject {
    * @return array|null
    */
   function getFormulaField(){
-    if ($this->_formula_field) {
-      return $this->_formula_field;
+    static $list = null;
+
+    if ($list === null) {
+      $ds = $this->getDS();
+
+      $request = new CRequest();
+      $request->addSelect(array("ex_class_field_group.ex_class_id", "ex_class_field.name"));
+      $request->addTable("ex_class_field");
+      $where = array(
+        "ex_class_field.result_in_title"   => "= '1'",
+      );
+      $request->addWhere($where);
+      $ljoin = array(
+        "ex_class_field_group" => "ex_class_field_group.ex_class_field_group_id = ex_class_field.ex_group_id",
+      );
+      $request->addLJoin($ljoin);
+
+      $list = $ds->loadHashList($request->getRequest());
     }
 
-    $ds = $this->getDS();
-
-    $request = new CRequest();
-    $request->addSelect("ex_class_field.name");
-    $request->addTable("ex_class_field");
-    $where = array(
-      "ex_class_field_group.ex_class_id" => $ds->prepare("=%", $this->_id),
-      "ex_class_field.result_in_title"   => "= '1'",
-    );
-    $request->addWhere($where);
-    $ljoin = array(
-      "ex_class_field_group" => "ex_class_field_group.ex_class_field_group_id = ex_class_field.ex_group_id",
-    );
-    $request->addLJoin($ljoin);
-
-    return $this->_formula_field = $ds->loadResult($request->getRequest());
+    return $this->_formula_field = CValue::read($list, $this->_id, null);
   }
 
   /**
