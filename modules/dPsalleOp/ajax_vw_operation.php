@@ -47,6 +47,7 @@ $protocoles = array();
 $anesth_id = "";
 
 $selOp->countExchanges();
+$selOp->loadBrancardage();
 $selOp->isCoded();
 $selOp->_ref_consult_anesth->loadRefsTechniques();
 
