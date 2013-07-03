@@ -72,7 +72,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if ($mbObject instanceof CSejour) {
       $sejour = $mbObject;
       $sejour->loadRefPatient();
-      
+
       // Si on ne souhaite explicitement pas de synchro
       if ($sejour->_no_synchro) {
         return;
@@ -503,7 +503,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($sejour->_old->confirme && $sejour->fieldModified("confirme", "0")) {
         return "A25";
       }
-      
+
       // Bascule du type et type_pec
       if ($sejour->fieldModified("type")) {
         return $this->getBasculeCode($sejour->_old, $sejour);

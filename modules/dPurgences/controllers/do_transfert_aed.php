@@ -55,6 +55,8 @@ viewMsg($msg, "CRPU-title-close");
 // Passage en séjour d'hospitalisation
 $sejour->type = "comp";
 $sejour->_en_mutation = $sejour_rpu->_id;
+// La synchronisation était désactivée après la sauvegarde du RPU
+$sejour->_no_synchro = false;
 $msg = $sejour->store();
 viewMsg($msg, "CSejour-title-modify");
 
