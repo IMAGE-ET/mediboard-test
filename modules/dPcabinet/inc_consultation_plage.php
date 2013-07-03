@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: $
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision: $
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
@@ -47,7 +47,7 @@ $plageSel->loadRefsFwd(1);
 $plageSel->loadRefsNotes();
 $plageSel->loadRefsBack($show_annulees, true, $show_payees);
 
-if ($plageSel->_affected) {
+if ($plageSel->_affected && count($plageSel->_ref_consultations)) {
   $firstconsult = reset($plageSel->_ref_consultations);
   $_firstconsult_time = substr($firstconsult->heure, 0, 5);
   $lastconsult = end($plageSel->_ref_consultations);
