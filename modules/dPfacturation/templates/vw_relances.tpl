@@ -16,7 +16,7 @@ function addRelances(facture_class, type_relance){
   relances._date_min.value      = form._date_min.value;
   relances._date_max.value      = form._date_max.value;
   relances.chir.value           = form.chir.value;
-  submitFormAjax(relances, 'systemMsg');
+  relances.submit();
 }
 </script>
 
@@ -153,7 +153,7 @@ function addRelances(facture_class, type_relance){
 </table>
 {{/if}}
 
-<form name="add-relances" action="" method="post">
+<form name="add-relances" action="" method="post" target="_blank">
   <input type="hidden" name="m" value="facturation" />
   <input type="hidden" name="dosql" value="do_relance_aed" />
   <input type="hidden" name="_date_min" value="" />
