@@ -9,7 +9,7 @@
 *}}
 
 {{if $form_name && $ex_objects|@count == 0}}
-
+  {{mb_return}}
 {{/if}}
 
 {{if !$form_name}}

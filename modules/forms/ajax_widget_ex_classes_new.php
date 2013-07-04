@@ -56,7 +56,7 @@ foreach ($ex_class_events as $_id => $_ex_class_event) {
   $_ex_objects = $_ex_class_event->getExObjectForHostObject($object);
 
   // Only keep first if in "pre fill" mode
-  if ($form_name) {
+  if ($form_name && count($_ex_objects)) {
     $_ex_objects = array(reset($_ex_objects));
   }
 
