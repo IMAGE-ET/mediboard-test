@@ -1024,6 +1024,12 @@ table.active {
   min-height: 80px;
 }
 
+/* IE9 in IE8 mode */
+/* To fix a bug in IE where the scroll bar doesn't appear */
+.ua-msie-8 .modal > .content {
+  overflow-y: scroll;
+}
+
 .modal > .content,
 .modal > iframe {
   height: 100%;
