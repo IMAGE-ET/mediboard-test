@@ -36,7 +36,7 @@ ListConsults = {
 
 Consultation = {
   editRDV: function(consult_id) {
-    var url = new Url("dPcabinet", "edit_planning");
+    var url = new Url("dPcabinet", "edit_planning", "tab");
     url.addParam("consultation_id", consult_id);
     url.redirect();
   },
