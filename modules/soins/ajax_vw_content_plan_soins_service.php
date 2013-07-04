@@ -24,11 +24,8 @@ $configs = CConfigService::getAllFor($service_id);
 
 // Si la date actuelle est inférieure a l'heure affichée sur le plan de soins, on affiche le plan de soins de la veille
 $datetime_limit = CMbDT::dateTime($configs["Poste 1"].":00:00");
-if (CMbDT::dateTime() < $datetime_limit) {
-  $date = CMbDT::date("- 1 DAY");
-}
-else {
-  $date = CMbDT::date();
+if ($date == CMbDT::date() && CMbDT::dateTime() < $datetime_limit) {
+  $date = CMbDT::date("- 1 DAY", $date);
 }
 
 if (!$nb_decalage) {
@@ -141,7 +138,9 @@ foreach ($prescriptions as $key => $_prescription) {
     }
   }
 
-  $prescriptions_order[$_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_ref_chambre->nom] = $key;
+  $bed = $_prescription->_ref_object->_ref_curr_affectation->_ref_lit;
+  $bedroom_name = $bed->_ref_chambre->nom . $bed->nom;
+  $prescriptions_order[$bedroom_name] = $key;
 }
 
 // Tri par numéro de chambre
