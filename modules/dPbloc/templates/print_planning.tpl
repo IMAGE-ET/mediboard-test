@@ -10,7 +10,7 @@
 
 {{mb_script module="dPplanningOp" script="ccam_selector"}}
 
-<script type="text/javascript">
+<script>
 function checkFormPrint(form) {
   if (!checkForm(form)){
     return false;
@@ -36,6 +36,9 @@ function popPlanning(form) {
   url.addRadio(form._plage);
   url.addRadio(form._ranking);
   url.addRadio(form._ccam_libelle);
+  url.addRadio(form._materiel);
+  url.addRadio(form._extra);
+  url.addRadio(form._duree);
   url.addParam("_bloc_id[]", $V(form.elements["_bloc_id[]"]), true);
   
   if (form.planning_perso.checked){ // pour l'affichage du planning perso d'un anesthesiste
@@ -243,7 +246,7 @@ function showCheckboxAnesth(element){
           <th>{{mb_label object=$filter field="_codes_ccam"}}</th>
           <td><input type="text" name="_codes_ccam" style="width: 12em;" value="" />
           <button type="button" class="search notext" onclick="CCAMSelector.init()">Chercher un code</button>
-          <script type="text/javascript">
+          <script>
             CCAMSelector.init = function(){
               this.sForm  = "paramFrm";
               this.sClass = "_class";
@@ -370,6 +373,39 @@ function showCheckboxAnesth(element){
             </label>
             <label>
               Non <input type="radio" name="_print_full" value="0" checked onclick="togglePrintFull(false)"/>
+            </label>
+          </td>
+        </tr>
+        <tr class="not-full">
+          <th><label for="_materiel_1" title="Afficher ou cacher le materiel">Afficher le matériel</label></th>
+          <td>
+            <label>
+              Oui <input type="radio" name="_materiel" value="1" {{if $conf.dPbloc.CPlageOp.view_materiel == "1"}}checked="checked"{{/if}}/>
+            </label>
+            <label>
+              Non <input type="radio" name="_materiel" value="0" {{if $conf.dPbloc.CPlageOp.view_materiel == "0"}}checked="checked"{{/if}}/>
+            </label>
+          </td>
+        </tr>
+        <tr class="not-full">
+          <th><label for="_extra_1" title="Afficher ou cacher les extras">Afficher les extra</label></th>
+          <td>
+            <label>
+              Oui <input type="radio" name="_extra" value="1" {{if $conf.dPbloc.CPlageOp.view_extra == "1"}}checked="checked"{{/if}}/>
+            </label>
+            <label>
+              Non <input type="radio" name="_extra" value="0" {{if $conf.dPbloc.CPlageOp.view_extra == "0"}}checked="checked"{{/if}}/>
+            </label>
+          </td>
+        </tr>
+        <tr class="not-full">
+          <th><label for="_duree_1" title="Afficher ou cacher la durée de l'intervention">Afficher la durée de l'intervention</label></th>
+          <td>
+            <label>
+              Oui <input type="radio" name="_duree" value="1" {{if $conf.dPbloc.CPlageOp.view_duree == "1"}}checked="checked"{{/if}}/>
+            </label>
+            <label>
+              Non <input type="radio" name="_duree" value="0" {{if $conf.dPbloc.CPlageOp.view_duree == "0"}}checked="checked"{{/if}}/>
             </label>
           </td>
         </tr>

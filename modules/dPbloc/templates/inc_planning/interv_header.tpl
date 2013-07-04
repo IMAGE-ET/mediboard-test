@@ -13,5 +13,12 @@
 <th>Coté</th>
 <th>Anesthésie</th>
 <th>Remarques</th>
-<th>Matériel</th>
-<th>Extra</th>
+{{if $_materiel}}
+  <th>Matériel</th>
+{{/if}}
+{{if $_extra}}
+  <th>Extra</th>
+{{/if}}
+{{if $_duree}}
+  <th>Durée</th>
+{{/if}}

@@ -12,7 +12,7 @@
 
 <table class="tbl">
   <tr class="clear">
-    <th colspan="{{if $_coordonnees}}13{{else}}12{{/if}}">
+    <th colspan="{{$_materiel+$_extra+$_duree+$_coordonnees+12}}">
       <h1 class="no-break">
         <a href="#" onclick="window.print()">
           Planning du {{$filter->_date_min|date_format:$conf.date}}
@@ -29,7 +29,7 @@
   {{foreach from=$listDates key=curr_date item=listPlages}}
   {{foreach from=$listPlages key=curr_plage_id item=curr_plageop}}
   <tr class="clear">
-    <td colspan="{{if $_coordonnees}}13{{else}}12{{/if}}" class="text">
+    <td colspan="{{$_materiel+$_extra+$_duree+$_coordonnees+12}}" class="text">
       {{if $curr_plage_id == "hors_plage"}}
         <h2>
           <strong>Interventions hors plage</strong>

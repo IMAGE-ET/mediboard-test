@@ -54,27 +54,36 @@
   {{assign var=consult_anesth value=$curr_op->_ref_consult_anesth}}
   {{mb_include module=bloc template=inc_rques_intub operation=$curr_op}}
 </td>
-<td class="text">
-  {{if $curr_op->commande_mat == '0' && $curr_op->materiel != ''}}
-  <em>Materiel manquant:</em>
-  {{/if}}
-  {{$curr_op->materiel|nl2br}}
-</td>
-<td class="text" style="width: 10%">
-  {{if $curr_op->plageop_id && $curr_op->_ref_plageop->salle_id != $curr_op->salle_id}}
-    Déplacée en {{$curr_op->_ref_salle}} <br />
-  {{/if}}
 
-  {{foreach from=$curr_op->_ref_affectations_personnel key=type_personnel item=_affectations}}
-    {{if ($type_personnel == "op" || $type_personnel == "op_panseuse" || $type_personnel == "iade") && $_affectations|@count > 0}}
-      <strong>{{tr}}CPersonnel.emplacement.{{$type_personnel}}{{/tr}}</strong>
-      <ul>
-        {{foreach from=$_affectations item=_affectation}}
-          <li>
-            {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_affectation->_ref_personnel->_ref_user}}
-          </li>
-        {{/foreach}}
-      </ul>
+{{if $_materiel}}
+  <td class="text">
+    {{if $curr_op->commande_mat == '0' && $curr_op->materiel != ''}}
+    <em>Materiel manquant:</em>
     {{/if}}
-  {{/foreach}}
-</td>
+    {{$curr_op->materiel|nl2br}}
+  </td>
+{{/if}}
+
+{{if $_extra}}
+  <td class="text" style="width: 10%">
+    {{if $curr_op->plageop_id && $curr_op->_ref_plageop->salle_id != $curr_op->salle_id}}
+      Déplacée en {{$curr_op->_ref_salle}} <br />
+    {{/if}}
+
+    {{foreach from=$curr_op->_ref_affectations_personnel key=type_personnel item=_affectations}}
+      {{if ($type_personnel == "op" || $type_personnel == "op_panseuse" || $type_personnel == "iade") && $_affectations|@count > 0}}
+        <strong>{{tr}}CPersonnel.emplacement.{{$type_personnel}}{{/tr}}</strong>
+        <ul>
+          {{foreach from=$_affectations item=_affectation}}
+            <li>
+              {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_affectation->_ref_personnel->_ref_user}}
+            </li>
+          {{/foreach}}
+        </ul>
+      {{/if}}
+    {{/foreach}}
+  </td>
+{{/if}}
+{{if $_duree}}
+  <td>{{mb_value object=$curr_op field=_duree_interv}}</td>
+{{/if}}

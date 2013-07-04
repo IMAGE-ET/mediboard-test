@@ -32,9 +32,11 @@
     {{/foreach}}
     
     {{mb_include module=system template=inc_config_bool var=plage_vide}}
-    
     {{mb_include module=system template=inc_config_bool var=libelle_ccam}}
-    
+    {{mb_include module=system template=inc_config_bool var=view_materiel}}
+    {{mb_include module=system template=inc_config_bool var=view_extra}}
+    {{mb_include module=system template=inc_config_bool var=view_duree}}
+
     <tr>
       <td class="button" colspan="100">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

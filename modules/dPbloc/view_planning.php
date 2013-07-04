@@ -1,14 +1,12 @@
 <?php
-
 /**
- * dPbloc
+ * $Id:$
  *
- * @category Bloc
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage dPbloc
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
@@ -33,6 +31,9 @@ $_coordonnees            = CValue::get("_coordonnees");
 $_print_numdoss          = CValue::get("_print_numdoss");
 $_print_ipp              = CValue::get("_print_ipp");
 $_print_annulees         = CValue::get("_print_annulees");
+$_materiel               = CValue::get("_materiel");
+$_extra                  = CValue::get("_extra");
+$_duree                  = CValue::get("_duree");
 
 if (is_array($filter->_bloc_id)) {
   CMbArray::removeValue("0", $filter->_bloc_id);
@@ -293,5 +294,8 @@ $smarty->assign("_print_ipp"        , $_print_ipp);
 $smarty->assign("listDates"         , $listDates);
 $smarty->assign("operations"        , $operations);
 $smarty->assign("numOp"             , $numOp);
+$smarty->assign("_materiel"         , $_materiel);
+$smarty->assign("_extra"            , $_extra);
+$smarty->assign("_duree"            , $_duree);
 
 $smarty->display("view_planning.tpl");
