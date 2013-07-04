@@ -8,4 +8,4 @@
   {{/if}}
 </div>
 <div style="color: #999; font-size: 0.9em; float: right;">{{mb_value object=$match field=naissance}}</div>
-<div style="color: #999; font-size: 0.9em; float: left;">{{mb_value object=$match field=tel}}</div>
+<div class="patientTel" style="color: #999; font-size: 0.9em; float: left;" data-tel="{{$match->tel}}" data-tel2="{{$match->tel2}}">{{mb_value object=$match field=tel}}</div>
