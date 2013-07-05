@@ -53,6 +53,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
       $obj->fillFields();
       $obj->updateFormFields();
       $obj->file_type = CMbPath::guessMimeType($file_name);
+
       if ($msg = $obj->store()) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
       }
@@ -80,7 +81,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
         if ($upload["name"][$fileNumber]) {
           $aFiles[] = array(
             "name"             => $upload["name"][$fileNumber],
-            "type"             => $upload["type"][$fileNumber],
+            "type"             => CMbPath::guessMimeType($upload["name"][$fileNumber]),
             "tmp_name"         => $upload["tmp_name"][$fileNumber],
             "error"            => $upload["error"][$fileNumber],
             "size"             => $upload["size"][$fileNumber],
