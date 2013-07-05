@@ -62,6 +62,8 @@
     
     {{mb_include module=system template=inc_config_bool var=surbooking_readonly}}
 
+    {{mb_include module=system template=inc_config_bool var=show_IPP_print_consult}}
+
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

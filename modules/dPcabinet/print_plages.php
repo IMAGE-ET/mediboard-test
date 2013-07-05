@@ -21,6 +21,7 @@ $filter->_telephone      = CValue::get("_telephone");
 $filter->_coordonnees    = CValue::get("_coordonnees");
 $filter->_plages_vides   = CValue::get("_plages_vides", 1);
 $filter->_non_pourvues   = CValue::get("_non_pourvues", 1);
+$filter->_print_ipp      = CValue::get("_print_ipp", CAppUI::conf("dPcabinet CConsultation show_IPP_print_consult"));
 
 $chir = CValue::getOrSession("chir");
 $show_lit = false;
@@ -67,9 +68,11 @@ foreach ($listPlage as $plage_id => &$plage) {
   }
 
   foreach ($plage->_ref_consultations as $keyConsult => $valConsult) {
+    /** @var CConsultation $consultation */
     $consultation =& $plage->_ref_consultations[$keyConsult];
 
     $patient = $consultation->loadRefPatient(1);
+    $patient->loadIPP();
 
     if ($consultation->sejour_id) {
       $patient->_ref_curr_affectation = $consultation->loadRefSejour()->loadRefCurrAffectation(CMbDT::date($consultation->_datetime));
@@ -114,11 +117,11 @@ if (!$filter->_plages_vides) {
   }
 }
 
-
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("filter"   , $filter);
 $smarty->assign("listPlage", $listPlage);
 $smarty->assign("show_lit" , $show_lit);
+
 $smarty->display("print_plages.tpl");

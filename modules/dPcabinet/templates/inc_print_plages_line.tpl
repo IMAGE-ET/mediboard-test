@@ -18,6 +18,9 @@
     {{assign var=patient value=$curr_consult->_ref_patient}}
     <td rowspan="2" style="{{$consult_background}}">
       {{$patient}}
+      {{if $filter->_print_ipp && $patient->_IPP}}
+        [{{$patient->_IPP}}]
+      {{/if}}
     </td>
     
       {{if $filter->_coordonnees}}

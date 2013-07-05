@@ -20,6 +20,7 @@ function popPlages() {
   url.addParam("_plages_vides",$V(form._plages_vides));
   url.addParam("_non_pourvues",$V(form._non_pourvues));
   url.addParam("_telephone", $V(form._telephone));
+  url.addParam("_print_ipp", $V(form._print_ipp));
   url.popup(700, 550, "Planning");
 }
 
@@ -106,13 +107,34 @@ function changeDateCal(){
     <td colspan="2">
 
       <table class="form">
+
         <tr>
-          <td class="button">
+          <th class="category" colspan="2">Paramètres d'affichage</th>
+        </tr>
+        {{assign var="class" value="CConsultation"}}
+
+        <tr class="not-full">
+          <th>
+            <label for="_print_ipp_1" title="Afficher ou cacher l'IPP">Afficher l'IPP</label>
+          </th>
+          <td>
+            <label>
+              Oui <input type="radio" name="_print_ipp" value="1"
+                         {{if $filter->_print_ipp == "1"}}checked="checked"{{/if}}/>
+            </label>
+            <label>
+              Non <input type="radio" name="_print_ipp" value="0"
+                         {{if $filter->_print_ipp == "0"}}checked="checked"{{/if}}/>
+            </label>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="button" colspan="2">
             <button type="button" class="print" onclick="checkFormPrint()">Afficher</button>
           </td>
         </tr>
         </table>
-
     </td>
   </tr>
 </table>

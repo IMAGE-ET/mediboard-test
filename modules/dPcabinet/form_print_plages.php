@@ -14,8 +14,9 @@ CCanDo::checkRead();
 $now       = CMbDT::date();
 
 $filter = new CConsultation;
-$filter->_date_min = CValue::get("_date_min"    , "$now");
-$filter->_date_max = CValue::get("_date_max"    , "$now");
+$filter->_date_min  = CValue::get("_date_min"    , "$now");
+$filter->_date_max  = CValue::get("_date_max"    , "$now");
+$filter->_print_ipp = CValue::get("_print_ipp", CAppUI::conf("dPcabinet CConsultation show_IPP_print_consult"));
 
 $tomorrow  = CMbDT::date("+1 day", $now);
 
