@@ -20,6 +20,7 @@ class CPlageHoraire extends CMbObject {
   public $debut;
   public $fin;
 
+  public $_dureePlage; //duree en minutes
   // Behaviour fields
   public $_skip_collisions;
 
@@ -59,7 +60,7 @@ class CPlageHoraire extends CMbObject {
    * @return int durée en minutes
    */
   function getDuree() {
-    return CMbDT::minutesRelative($this->debut, $this->fin);
+    return $this->_dureePlage = CMbDT::minutesRelative($this->debut, $this->fin);
   }
   
   /**
