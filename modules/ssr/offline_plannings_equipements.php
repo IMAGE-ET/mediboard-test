@@ -11,6 +11,7 @@
 
 CCanDo::checkRead();
 
+CApp::setTimeLimit(120);
 CApp::setMemoryLimit("768M");
 
 $date = CMbDT::date();
