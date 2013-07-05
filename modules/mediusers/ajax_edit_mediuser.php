@@ -72,6 +72,11 @@ foreach ($profiles as $profil) {
   $tabProfil[$profil->user_type][] = $profil->_id;
 }
 
+$tag = false;
+if ($object->_id) {
+  $tag = CIdSante400::getMatch($object->_class, CMediusers::getTagSoftware(), null, $object->_id)->id400;
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -86,5 +91,7 @@ $smarty->assign("disciplines" , $disciplines);
 $smarty->assign("spec_cpam"   , $spec_cpam);
 $smarty->assign("tag_mediuser", CMediusers::getTagMediusers($group->_id));
 $smarty->assign("is_admin",     CAppUI::$user->isAdmin());
+$smarty->assign("is_robot",     $object->isRobot());
+$smarty->assign("tag",          $tag);
 
 $smarty->display("inc_edit_mediuser.tpl");

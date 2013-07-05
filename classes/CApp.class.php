@@ -18,9 +18,10 @@
  *  - memory and performance
  */
 class CApp {
-  static $inPeace = false;
-  static $encoding = "utf-8";
+  static $inPeace    = false;
+  static $encoding   = "utf-8";
   static $classPaths = array();
+  static $is_robot   = false;
 
   /** @var string Current request unique identifier */
   private static $requestUID = null;

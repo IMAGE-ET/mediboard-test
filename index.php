@@ -148,6 +148,15 @@ if ($dialog = CValue::request("dialog")) {
   $index = $dialog;
   $dialog = 1;
 }
+CAppUI::$dialog = &$dialog;
+
+try {
+  include "./classes/CAuth.class.php";
+  //CAuth::login();
+}
+catch (AuthenticationFailedException $e) {
+  CAppUI::setMsg($e->getMessage());
+}
 
 // If the user uses a token, his session should not be reset, but only redirected
 $do_login = false;
@@ -265,6 +274,8 @@ if ($user->isInstalled()) {
   $user->getBasicInfo();
   CAppUI::$user = $user;
   CAppUI::$instance->_ref_user =& CAppUI::$user;
+
+  CApp::$is_robot = CAppUI::$user->isRobot();
 
   // Offline mode for non-admins
   if ($dPconfig["offline_non_admin"] && CAppUI::$user->_id != 0 && !CAppUI::$user->isAdmin()) {

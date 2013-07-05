@@ -7,17 +7,21 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
 
 $page       = intval(CValue::getOrSession('page', 0));
-$pro_sante  = CValue::get("pro_sante", false);
-$inactif    = CValue::get("inactif", false);
+
+$pro_sante  = CValue::get("pro_sante",  false);
+$inactif    = CValue::get("inactif",    false);
 $ldap_bound = CValue::get("ldap_bound", false);
-$filter     = CValue::getOrSession("filter", "");
+$human      = CValue::get("human",      false);
+$robot      = CValue::get("robot",      false);
+
+$filter     = CValue::getOrSession("filter",    "");
 $order_way  = CValue::getOrSession("order_way", "ASC");
 $order_col  = CValue::getOrSession("order_col", "function_id");
 $user_id    = CValue::getOrSession("user_id");
@@ -32,7 +36,7 @@ $group->loadFunctions();
 $mediuser = new CMediusers();
 
 $ljoin = array();
-$ljoin["users"] = "users.user_id = users_mediboard.user_id";
+$ljoin["users"]               = "users.user_id = users_mediboard.user_id";
 $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
 
 $where = array();
@@ -40,7 +44,6 @@ $where["functions_mediboard.group_id"] = "= '$group->_id'";
 
 // FIXME: utiliser le seek
 if ($filter) {
-
   $filters = explode(" ", $filter);
 
   $re = "/(\d+)\s*(jour|mois|an)/i";
@@ -49,12 +52,12 @@ if ($filter) {
     if (preg_match($re, $_filter, $matches)) {
       $map = array("an" => "YEAR", "mois" => "MONTH", "jour" => "DAY");
 
-      $nouvelle_date=CMbDT::dateTime("-".$matches[1]." ".$map[$matches[2]]);
+      $nouvelle_date = CMbDT::dateTime("-".$matches[1]." ".$map[$matches[2]]);
 
-      $where[] ="users.user_last_login <= '$nouvelle_date'";
+      $where[] = "users.user_last_login <= '$nouvelle_date'";
     }
     else {
-      $where[] ="functions_mediboard.text LIKE '%$_filter%' OR
+      $where[] = "functions_mediboard.text LIKE '%$_filter%' OR
               users.user_last_name LIKE '$_filter%' OR
               users.user_first_name LIKE '$_filter%' OR
               users.user_username LIKE '$_filter%' ";
@@ -65,6 +68,7 @@ if ($filter) {
 if ($pro_sante) {
   $user_types = array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme");
   $utypes_flip = array_flip(CUser::$types);
+
   if (is_array($user_types)) {
     foreach ($user_types as $key => $value) {
       $user_types[$key] = $utypes_flip[$value];
@@ -79,12 +83,52 @@ if ($inactif) {
 }
 
 if ($ldap_bound) {
-  $ljoin["id_sante400"] = "id_sante400.object_id = users.user_id";
-  $where["id_sante400.object_class"] = " = 'CUser'"; 
-  $where["id_sante400.tag"] = " = '".CAppUI::conf("admin LDAP ldap_tag")."'";
+  $ldap_tag = CAppUI::conf("admin LDAP ldap_tag");
+
+  if ($ldap_tag) {
+    $ljoin["id_sante400"] = "id_sante400.object_id = users.user_id";
+    $where["id_sante400.object_class"] = " = 'CUser'";
+    $where["id_sante400.tag"] = " = '".$ldap_tag."'";
+  }
 }
 
-$order=null;
+$tag = CMediusers::getTagSoftware();
+$ds  = CSQLDataSource::get("std");
+
+if (($human || $robot) && !($human && $robot)) {
+  if ($tag) {
+    $query = "SELECT users.user_id
+            FROM users
+            LEFT JOIN id_sante400 ON users.user_id = id_sante400.object_id
+            WHERE (id_sante400.object_class = 'CMediusers'
+              AND id_sante400.tag = ?)
+              OR users.dont_log_connection = '1'
+            GROUP BY users.user_id";
+
+    $query = $ds->prepare($query, $tag);
+  }
+  else {
+    $query = "SELECT users.user_id
+            FROM users
+            WHERE users.dont_log_connection = '1'";
+  }
+
+  $robots = $ds->loadColumn($query);
+}
+
+if ($human && !$robot) {
+  if ($robots) {
+    $where["users.user_id"] = $ds->prepareNotIn($robots);
+  }
+}
+
+if ($robot && !$human) {
+  if ($robots) {
+    $where["users.user_id"] = $ds->prepareIn($robots);
+  }
+}
+
+$order = null;
 
 if ($order_col == "function_id") {
   $order = "functions_mediboard.text $order_way, users.user_last_name ASC, users.user_first_name ASC";
@@ -108,8 +152,10 @@ if ($order_col == "user_last_login") {
 }
 
 $total_mediuser = $mediuser->countList($where, null, $ljoin);
+
 /** @var CMediusers[] $mediusers */
 $mediusers = $mediuser->loadList($where, $order, "$page, $step", "users_mediboard.user_id", $ljoin);
+
 foreach ($mediusers as $_mediuser) {
   $_mediuser->loadRefFunction();
   $_mediuser->loadRefProfile();
@@ -124,6 +170,8 @@ $smarty->assign("utypes"        , CUser::$types);
 $smarty->assign("total_mediuser", $total_mediuser);
 $smarty->assign("page"          , $page);
 $smarty->assign("pro_sante"     , $pro_sante);
+$smarty->assign("human"         , $human);
+$smarty->assign("robot"         , $robot);
 $smarty->assign("inactif"       , $inactif);
 $smarty->assign("ldap_bound"    , $ldap_bound);
 $smarty->assign("filter"        , $filter);

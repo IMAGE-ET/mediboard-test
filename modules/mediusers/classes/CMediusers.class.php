@@ -717,6 +717,14 @@ class CMediusers extends CPerson {
       }
     }
 
+    /*
+    if (!CAppUI::$user->isAdmin()) {
+      if ($this->fieldModified("_user_type", 1) || (!$this->_id && $this->_user_type)) {
+        return "Opération interdite";
+      }
+    }
+    */
+
     /// <diff>
     // Store corresponding core user first
     $user = $this->createUser();
@@ -1458,8 +1466,14 @@ class CMediusers extends CPerson {
    * @return bool
    */
   function isRobot() {
+    if (!$this->_id) {
+      return false;
+    }
+
     if (CModule::getActive("dPsante400")) {
-      return (CIdSante400::getMatch($this->_class, CMediusers::getTagSoftware(), null, $this->_id)->_id != null);
+      if (CIdSante400::getMatch($this->_class, CMediusers::getTagSoftware(), null, $this->_id)->_id != null) {
+        return true;
+      }
     }
 
     if (!$this->_ref_user || !$this->_ref_user->_id) {

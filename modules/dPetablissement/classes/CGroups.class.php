@@ -376,7 +376,7 @@ class CGroups extends CMbObject {
    * @return CGroups
    */
   static function loadCurrent() {
-    if (!self::$_ref_current) {
+    if (!self::$_ref_current || !self::$_ref_current->_id) {
       global $g;
       self::$_ref_current = new CGroups();
       self::$_ref_current->load($g);

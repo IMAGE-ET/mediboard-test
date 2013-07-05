@@ -95,6 +95,12 @@ Main.add(function () {
 </div>
 {{/if}}
 
+{{if $is_robot}}
+  <div class="small-info">
+    {{tr}}CUser_user-robot{{/tr}}{{if $tag}} : <strong>{{$tag}}</strong>{{/if}}.
+  </div>
+{{/if}}
+
 <form name="mediuser" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
   {{if !$can->edit}}
   <input name="_locked" value="1" hidden="hidden" />
