@@ -52,6 +52,15 @@ class CPlageHoraire extends CMbObject {
 
     return $spec;
   }
+
+  /**
+   * calcul de la durée de la plage
+   *
+   * @return int durée en minutes
+   */
+  function getDuree() {
+    return CMbDT::minutesRelative($this->debut, $this->fin);
+  }
   
   /**
    * Check collision with another plage regarding defined in class spec
