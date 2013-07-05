@@ -67,6 +67,15 @@ interface ISharedMemory {
    * @return array Keys list
    */
   function listKeys($prefix);
+
+  /**
+   * Get modification date
+   *
+   * @param string $key Key
+   *
+   * @return string ISO date
+   */
+  function modDate($key);
 }
 
 /**
@@ -143,6 +152,15 @@ class DiskSharedMemory implements ISharedMemory {
 
     return $list;
   }
+
+  /**
+   * @see parent::modDate()
+   */
+  function modDate($key) {
+    $filename = $this->dir.$key;
+    @clearstatcache(true, $filename);
+    return strftime(CMbDT::ISO_DATETIME, filemtime($filename));
+  }
 }
 
 /**
@@ -200,6 +218,24 @@ class APCSharedMemory implements ISharedMemory {
     }
 
     return $keys;
+  }
+
+  /**
+   * @see parent::modDate()
+   */
+  function modDate($key) {
+    $info = apc_cache_info("user");
+    $cache_list = $info["cache_list"];
+
+    foreach ($cache_list as $_cache) {
+      $_key = $_cache["info"];
+
+      if ($_key === $key) {
+        return strftime(CMbDT::ISO_DATETIME, $_cache["mtime"]);
+      }
+    }
+
+    return null;
   }
 }
 
@@ -340,6 +376,13 @@ abstract class SHM {
 
     return $n;
   }
+
+  /**
+   * @see parent::modDate()
+   */
+  static function modDate($key) {
+    return self::$engine->modDate(self::$prefix.$key);
+  }
 }
 
 /**
@@ -394,14 +437,31 @@ class MemcachedSharedMemory implements ISharedMemory {
    * @see parent::get()
    */
   function get($key) {
-    return $this->conn->get($key);
+    $value = $this->conn->get($key);
+
+    if (!$value) {
+      return null;
+    }
+
+    $value = unserialize($value);
+
+    if (isset($value["content"])) {
+      return $value["content"];
+    }
+
+    return null;
   }
 
   /**
    * @see parent::put()
    */
   function put($key, $value) {
-    return $this->conn->set($key, $value);
+    $data = array(
+      "content" => $value,
+      "ctime"   => time(),
+    );
+
+    return $this->conn->set($key, serialize($data));
   }
 
   /**
@@ -425,6 +485,19 @@ class MemcachedSharedMemory implements ISharedMemory {
     }
 
     return array();
+  }
+
+  /**
+   * @see parent::modDate()
+   */
+  function modDate($key) {
+    $data = self::get($key);
+
+    if (!$data) {
+      return null;
+    }
+
+    return strftime(CMbDT::ISO_DATETIME, $data["ctime"]);
   }
 }
 
@@ -470,8 +543,14 @@ class RedisSharedMemory implements ISharedMemory {
    * @see parent::get()
    */
   function get($key) {
-    if ($this->conn->has($key)) {
-      return unserialize($this->conn->get($key));
+    if (!$this->conn->has($key)) {
+      return null;
+    }
+
+    $value = unserialize($this->conn->get($key));
+
+    if (isset($value["content"])) {
+      return $value["content"];
     }
 
     return null;
@@ -481,7 +560,12 @@ class RedisSharedMemory implements ISharedMemory {
    * @see parent::put()
    */
   function put($key, $value) {
-    return $this->conn->set($key, serialize($value));
+    $data = array(
+      "content" => $value,
+      "ctime"   => time(),
+    );
+
+    return $this->conn->set($key, serialize($data));
   }
 
   /**
@@ -506,6 +590,19 @@ class RedisSharedMemory implements ISharedMemory {
     }
 
     return $keys;
+  }
+
+  /**
+   * @see parent::modDate()
+   */
+  function modDate($key) {
+    $data = self::get($key);
+
+    if (!$data) {
+      return null;
+    }
+
+    return strftime(CMbDT::ISO_DATETIME, $data["ctime"]);
   }
 }
 
