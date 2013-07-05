@@ -150,6 +150,7 @@ if ($dialog = CValue::request("dialog")) {
 }
 CAppUI::$dialog = &$dialog;
 
+/*
 try {
   include "./classes/CAuth.class.php";
   //CAuth::login();
@@ -157,6 +158,7 @@ try {
 catch (AuthenticationFailedException $e) {
   CAppUI::setMsg($e->getMessage());
 }
+*/
 
 // If the user uses a token, his session should not be reset, but only redirected
 $do_login = false;
