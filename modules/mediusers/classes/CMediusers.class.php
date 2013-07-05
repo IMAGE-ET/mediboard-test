@@ -74,6 +74,7 @@ class CMediusers extends CPerson {
   public $_is_anesth;
   public $_is_infirmiere;
   public $_is_aide_soignant;
+  public $_is_sage_femme;
   public $_is_pharmacien;
   public $_user_password_weak;
   public $_user_password_strong;
@@ -1135,6 +1136,13 @@ class CMediusers extends CPerson {
   }
 
   /**
+   * @return bool
+   */
+  function isSageFemme() {
+    return $this->_is_sage_femme = $this->isFromType(array("Sage Femme"));
+  }
+
+  /**
    * Check whether user is a secretary
    *
    * @return bool
@@ -1157,7 +1165,7 @@ class CMediusers extends CPerson {
    * @return bool
    */
   function isExecutantPrescription() {
-    return $this->isFromType(array("Infirmière", "Aide soignant", "Rééducateur"));
+    return $this->isFromType(array("Infirmière", "Aide soignant", "Rééducateur", "Sage Femme"));
   }
 
   /**
