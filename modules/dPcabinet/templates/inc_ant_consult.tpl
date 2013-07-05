@@ -212,7 +212,7 @@ urlAuto.autoComplete(getForm('editLineTP').produit, "_produit_auto_complete", {
   minChars: 3,
   updateElement: updateFieldsMedicamentTP, 
   callback: function(input, queryString){
-    return (queryString + "&produit_max=40"); 
+    return (queryString + "&produit_max=40&all_produits=1");
   }
 } );
 

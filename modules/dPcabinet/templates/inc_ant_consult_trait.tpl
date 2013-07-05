@@ -119,6 +119,7 @@ Main.add(function () {
                           this._DCI = 0;
                           this.sOnglet = onglet;
                           this.traitement_perso = true;
+                          this.only_prescriptible_sf = 0;
                           this.pop();
                         }
                     </script>
