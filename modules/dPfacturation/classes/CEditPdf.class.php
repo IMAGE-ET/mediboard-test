@@ -144,7 +144,7 @@ class CEditPdf{
     $this->pdf->setPrintFooter(false);
     $this->font = "vera";
     $this->fontb = $this->font."b";
-    
+
     foreach ($this->factures as $the_facture) {
       $this->facture = $the_facture;
       $this->facture->loadRefsItems();
@@ -434,8 +434,10 @@ class CEditPdf{
     $pt = 0;
     $medicaments = 0;
     foreach ($this->facture->_ref_actes_tarmed as $acte) {
-      $pt += $acte->pt * $acte->coeff_pt * $acte->quantite;
-      $pm += $acte->pm * $acte->coeff_pm * $acte->quantite;
+      $tmp_pt = $acte->pt * $acte->coeff_pt * $acte->quantite;
+      $tmp_pm = $acte->pm * $acte->coeff_pm * $acte->quantite;
+      $pt += $tmp_pt;
+      $pm += $tmp_pm;
     }
     
     foreach ($this->facture->_ref_actes_caisse as $acte) {
