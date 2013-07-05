@@ -30,7 +30,7 @@
     url.addParam("type", "{{$type}}");
     url.addParam("object_id", object_id);
     url.addParam("usage", "{{$usage}}");
-    url.requestModal(500, 380);
+    url.requestModal(500, 380, {showReload: true});
 
     url.modalObject.observe("afterClose", function() {
       {{if !$object_id}}
