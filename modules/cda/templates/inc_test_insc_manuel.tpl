@@ -24,7 +24,7 @@
   <tr>
     <td>{{$_person->prenom}}</td>
     <td>{{$_person->date}}</td>
-    <td>{{$_person->nir}}</td>
+    <td>{{$_person->nirCertifie}}</td>
     <td>{{$_person->insc}}</td>
   </tr>
   {{foreachelse}}

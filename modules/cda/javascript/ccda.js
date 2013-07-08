@@ -78,10 +78,18 @@ Ccda = {
     for (var i = 0; i < listBeneficiaires.length; i++) {
       var person = {};
       var ident = listBeneficiaires[i].getElementsByTagName("ident")[0];
-      person["date"]   = getNodeValue("dateEnCarte", ident);
-      person["prenom"] = getNodeValue("prenomUsuel", ident);
-      person["nir"]    = getNodeValue("nir", ident);
-      person["nom"]    = getNodeValue("nomUsuel", ident);
+      var amo = listBeneficiaires[i].getElementsByTagName("amo")[0];
+      person["date"]        = getNodeValue("dateEnCarte", ident);
+      if (person["date"].length === 0) {
+        person["date"]        = getNodeValue("date", ident);
+      }
+      person["prenom"]      = getNodeValue("prenomUsuel", ident);
+      person["nirCertifie"] = getNodeValue("nirCertifie", ident);
+      var qualBenef         = getNodeValue("qualBenef"  , amo);
+      if (person["nirCertifie"].length === 0 && qualBenef === '0') {
+        person["nirCertifie"] = getNodeValue("nir", ident);
+      }
+      person["nom"]         = getNodeValue("nomUsuel"   , ident);
 
       listPerson.push(person);
     }

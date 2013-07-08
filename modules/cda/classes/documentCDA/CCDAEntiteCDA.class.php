@@ -36,6 +36,20 @@ class CCDAEntiteCDA extends CCDADocumentCDA {
     $enxp->setData($mediUser->_p_first_name);
     $pn->append("given", $enxp);
 
+    if ($mediUser instanceof CPatient) {
+      $enxp = new CCDA_en_given();
+      $enxp->setData($mediUser->prenom_2);
+      $pn->append("given", $enxp);
+
+      $enxp = new CCDA_en_given();
+      $enxp->setData($mediUser->prenom_3);
+      $pn->append("given", $enxp);
+
+      $enxp = new CCDA_en_given();
+      $enxp->setData($mediUser->prenom_4);
+      $pn->append("given", $enxp);
+    }
+
     $person->appendName($pn);
 
     return $person;

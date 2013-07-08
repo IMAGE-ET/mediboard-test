@@ -15,9 +15,14 @@ $list_person = CValue::get("listPerson");
 $list_person = json_decode(stripslashes($list_person));
 
 foreach ($list_person as $_person) {
+
   $birthDate = $_person->date;
   $firstName = CInscTools::formatString($_person->prenom);
-  list($nir, $nirKey) = explode(" ", $_person->nir);
+  if (!$_person->nirCertifie) {
+    $_person->insc = "Impossible de calculer";
+    continue;
+  }
+  list($nir, $nirKey) = explode(" ", $_person->nirCertifie);
   $_person->insc = CPatient::calculInsc($nir, $nirKey, $firstName, $birthDate);
 }
 
