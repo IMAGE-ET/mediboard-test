@@ -51,7 +51,7 @@
       </td>
       <td {{if !$nbConsult}}class="empty"{{/if}}>
         {{if $nbConsult}}
-          <button class="pagelayout button" onclick="openPlage('{{$_plage_consultation->_id}}')">Voir la liste</button>
+          <button class="pagelayout button" onclick="openPlage('{{$_plage_consultation->_id}}')">Voir la liste ({{$nbConsult}})</button>
           <table class="tbl" id="plage_{{$_plage_consultation->_id}}" style="display: none;">
             <tr>
               <th rowspan="{{$nbConsult+1}}">{{$nbConsult}} {{tr}}CConsultation{{/tr}}{{if $nbConsult>1}}s{{/if}}</th>
