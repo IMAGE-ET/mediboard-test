@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappage>
+  <line id="application/pdf">
+    <mediaType contenu="documents à corps non structuré en Pdf/A-1"/>
+    <xds formatCode="urn:ihe:iti:xds-sd:pdf:2008" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="text/plain">
+    <mediaType contenu="documents à corps non structuré en texte brut"/>
+    <xds formatCode="urn:ihe:iti:xds-sd:text:2008" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="text/rtf">
+    <mediaType contenu="documents à corps non structuré en format rtf"/>
+    <xds formatCode="urn:ihe:iti-fr:xds-sd:rtf:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="image/jpeg">
+    <mediaType contenu="documents à corps non structuré en format jpeg"/>
+    <xds formatCode="urn:ihe:iti-fr:xds-sd:jpeg:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="image/tiff">
+    <mediaType contenu="documents à corps non structuré en format tiff"/>
+    <xds formatCode="urn:ihe:iti-fr:xds-sd:tiff:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+</mappage>

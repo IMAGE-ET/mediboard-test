@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<jeuxValeurs>
+  <line id="10" oid="1.2.250.1.213.1.1.4.1" name="Comptes rendus"/>
+  <line id="11" oid="1.2.250.1.213.1.1.4.1" name="Synth&#xE8;ses"/>
+  <line id="31" oid="1.2.250.1.213.1.1.4.1" name="Imagerie m&#xE9;dicale"/>
+  <line id="42" oid="1.2.250.1.213.1.1.4.1" name="Traitements prescrits ou administr&#xE9;s"/>
+  <line id="43" oid="1.2.250.1.213.1.1.4.1" name="Dispensations"/>
+  <line id="44" oid="1.2.250.1.213.1.1.4.1" name="Plans de soins, protocoles de soins"/>
+  <line id="52" oid="1.2.250.1.213.1.1.4.1" name="Certificats et d&#xE9;clarations"/>
+  <line id="90" oid="1.2.250.1.213.1.1.4.1" name="Expression du titulaire"/>
+  <line id="95" oid="1.2.250.1.213.1.1.4.1" name="Documents de gestion"/>
+  <line id="urn:oid:1.3.6.1.4.1.19376.1.2.1.1.1" oid="URN" name="Digital Signature"/>
+</jeuxValeurs>

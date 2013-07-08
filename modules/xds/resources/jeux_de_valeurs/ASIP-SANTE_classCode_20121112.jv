@@ -1,0 +1,13 @@
+1.2.250.1.213.2.20;1.2.250.1.213.1.1.5.6;classCode
+1.2.250.1.213.2.21;1.2.250.1.213.1.1.5.6;20121112
+1.2.250.1.213.2.22;1.2.250.1.213.1.1.5.6;Jeu de valeurs pour métadonnée classCode
+1.2.250.1.213.1.1.4.1;10;Comptes rendus
+1.2.250.1.213.1.1.4.1;11;Synthèses
+1.2.250.1.213.1.1.4.1;31;Imagerie médicale
+1.2.250.1.213.1.1.4.1;42;Traitements prescrits ou administrés
+1.2.250.1.213.1.1.4.1;43;Dispensations
+1.2.250.1.213.1.1.4.1;44;Plans de soins, protocoles de soins
+1.2.250.1.213.1.1.4.1;52;Certificats et déclarations
+1.2.250.1.213.1.1.4.1;90;Expression du titulaire
+1.2.250.1.213.1.1.4.1;95;Documents de gestion
+URN;urn:oid:1.3.6.1.4.1.19376.1.2.1.1.1;Digital Signature

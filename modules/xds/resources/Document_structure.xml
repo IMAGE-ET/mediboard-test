@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappage>
+  <line id="1.3.6.1.4.1.19376.1.3.3">
+    <mediaType contenu="Compte rendu structuré d’examens de biologie médicale"/>
+    <xds formatCode="urn:ihe:lab:xd-lab:2008" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.2.250.1.213.1.1.1.2.1.1">
+    <mediaType contenu="Fiche patient à risque en cardiologie - Traitement AVK"/>
+    <xds formatCode="urn:asip:ci-sis:avk:2009" codingScheme="1.2.250.1.213.1.1.4.2.282"/>
+  </line>
+  <line id="1.2.250.1.213.1.1.1.2.1.2">
+    <mediaType contenu="Fiche patient à risque en cardiologie - Traitement Antiaggrégant Plaquettaire/Stent"/>
+    <xds formatCode="urn:asip:ci-sis:tap:2009" codingScheme="1.2.250.1.213.1.1.4.2.282"/>
+  </line>
+  <line id="1.2.250.1.213.1.1.1.2.1.3">
+    <mediaType contenu="Fiche patient à risque en cardiologie - Défibrillateur Cardiaque Interne"/>
+    <xds formatCode="urn:asip:ci-sis:dci:2009" codingScheme="1.2.250.1.213.1.1.4.2.282"/>
+  </line>
+  <line id="1.2.250.1.213.1.1.1.2.1.4">
+    <mediaType contenu="Fiche patient à risque en cardiologie - Porteur d'un simulateur cardiaque"/>
+    <xds formatCode="urn:asip:ci-sis:psc:2009" codingScheme="1.2.250.1.213.1.1.4.2.282"/>
+  </line>
+  <line id="1.2.250.1.213.1.1.1.2.1.5">
+    <mediaType contenu="Fiche patient à risque en cardiologie - Porteur d'une Prothèse Valvulaire"/>
+    <xds formatCode="urn:asip:ci-sis:ppv:2009" codingScheme="1.2.250.1.213.1.1.4.2.282"/>
+  </line>
+  <line id="1.2.250.1.213.1.1.1.10">
+    <mediaType contenu="Carnet de vaccination"/>
+    <xds formatCode="urn:ihe:pcc:ic:2009" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.2.250.1.213.1.1.1.13">
+    <mediaType contenu="Synthèse Médicale"/>
+    <xds formatCode="urn:asip:ci-sis:vsm:2012" codingScheme="1.2.250.1.213.1.1.4.2.282"/>
+  </line>
+  <line id="1.2.250.1.213.1.1.1.5.1">
+    <mediaType contenu="Certificat de santé du 8ème jour de l'enfant"/>
+    <xds formatCode="urn:ihe:qrph:hbs:2009" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.2.250.1.213.1.1.1.5.2">
+    <mediaType contenu="Certificat du 9ème mois de l'enfant"/>
+    <xds formatCode="urn:asip:ci-sis:cs9:2012" codingScheme="1.2.250.1.213.1.1.4.2.282"/>
+  </line>
+  <line id="1.2.250.1.213.1.1.1.5.3">
+    <mediaType contenu="Certificat du 24ème mois de l'enfant"/>
+    <xds formatCode="urn:asip:ci-sis:cs24:2012" codingScheme="1.2.250.1.213.1.1.4.2.282"/>
+  </line>
+  <line id="1.2.250.1.213.1.1.1.9">
+    <mediaType contenu="Information et Directives Anticipées du Patient"/>
+    <xds formatCode="urn:asip:ci-sis:idap:2011" codingScheme="1.2.250.1.213.1.1.4.2.282"/>
+  </line>
+  <line id="1.2.250.1.213.1.1.1.8">
+    <mediaType contenu="Fiche de réunion de concertation pluridisciplinaire"/>
+    <xds formatCode="urn:asip:ci-sis:frcp:2011" codingScheme="1.2.250.1.213.1.1.4.2.282"/>
+  </line>
+  <line id="1.2.250.1.213.1.1.1.3.1">
+    <mediaType contenu="Compte Rendu d'Hospitalisation"/>
+    <xds formatCode="urn:asip:ci-sis:crh:2009" codingScheme="1.2.250.1.213.1.1.4.2.282"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.1">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - modèle générique"/>
+    <xds formatCode="urn:ihe:pat:apsr:all:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.1">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - sein"/>
+    <xds formatCode="urn:ihe:pat:apsr:breast:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.2">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - côlon"/>
+    <xds formatCode="urn:ihe:pat:apsr:colon:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.3">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - prostate"/>
+    <xds formatCode="urn:ihe:pat:apsr:prostate:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.4">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - thyroïde"/>
+    <xds formatCode="urn:ihe:pat:apsr:thyroid:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.5">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - poumon"/>
+    <xds formatCode="urn:ihe:pat:apsr:lung:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.6">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - mélanome cutané"/>
+    <xds formatCode="urn:ihe:pat:apsr:skin:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.7">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - rein"/>
+    <xds formatCode="urn:ihe:pat:apsr:kidney:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.8">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - col de l'utérus"/>
+    <xds formatCode="urn:ihe:pat:apsr:cervix:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.9">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - corps utérin"/>
+    <xds formatCode="urn:ihe:pat:apsr:endometrium:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.10">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - ovaires"/>
+    <xds formatCode="urn:ihe:pat:apsr:ovary:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.11">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - oesophage"/>
+    <xds formatCode="urn:ihe:pat:apsr:esophagus:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.12">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - estomac"/>
+    <xds formatCode="urn:ihe:pat:apsr:stomach:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.13">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - foie"/>
+    <xds formatCode="urn:ihe:pat:apsr:liver:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.14">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - pancréas"/>
+    <xds formatCode="urn:ihe:pat:apsr:pancreas:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.15">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - testicule"/>
+    <xds formatCode="urn:ihe:pat:apsr:testis:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.16">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - vessie"/>
+    <xds formatCode="urn:ihe:pat:apsr:urinary_bladder:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.17">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - cavité buccale"/>
+    <xds formatCode="urn:ihe:pat:apsr:lip_oral_cavity:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.18">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - pharynx"/>
+    <xds formatCode="urn:ihe:pat:apsr:pharynx:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.19">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - glandes salivaires"/>
+    <xds formatCode="urn:ihe:pat:apsr:salivary_gland:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="1.3.6.1.4.1.19376.1.8.1.1.2.20">
+    <mediaType contenu="Compte rendu d'anatomie et de cytologie pathologiques - larynx"/>
+    <xds formatCode="urn:ihe:pat:apsr:larynx:2010" codingScheme="1.3.6.1.4.1.19376.1.2.3"/>
+  </line>
+  <line id="*">
+    <mediaType contenu="documents utilisant un modèle non référencé"/>
+    <xds formatCode="urn:asipSante:modelesHorsProfils:2011" codingScheme="1.2.250.1.213.1.1.4.2.282"/>
+  </line>
+</mappage>
