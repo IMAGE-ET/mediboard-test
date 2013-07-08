@@ -59,6 +59,7 @@ foreach ($Pconsultations as $_plage_consult) {
     $patient->loadDossierComplet();
     $patient->loadRefDossierMedical();
     $smarty = new CSmartyDP();
+    $smarty->assign("offline", 1);
     $smarty->assign("patient", $_consult->_ref_patient);
     $resumes_patient[$patient->_id] = $smarty->fetch("vw_resume.tpl");  //dynamic assignment
   }
