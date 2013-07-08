@@ -236,7 +236,7 @@ class CFacture extends CMbObject {
       $this->cloture    = CMbDT::date();
       $create_lignes = true;
     }
-    
+
     //Si on cloture la facture création des lignes de la facture 
     //Si on décloture on les supprime
     if ($this->cloture && $this->fieldModified("cloture") && !$this->completeField("cloture")) {
@@ -978,21 +978,19 @@ class CFacture extends CMbObject {
     $this->loadRefPraticien();
     $this->loadRefsItems();
     $retrocessions = $this->_ref_praticien->loadRefsRetrocessions();
-    $use_pm = false;
+
     foreach ($this->_ref_items as $item) {
+      $modif = false;
+      $use_pm = false;
       foreach ($retrocessions as $retro) {
+        /** @var CRetrocession $retro*/
         if ($retro->use_pm && $retro->code_class == $item->type && $retro->code == $item->code) {
           $use_pm = true;
         }
-      }
-    }
-    foreach ($this->_ref_items as $item) {
-      $modif = false;
-      foreach ($retrocessions as $retro) {
-        /** @var CRetrocession $retro*/
+
         if ($retro->code_class == $item->type && $retro->code == $item->code && $retro->active) {
           $modif = true;
-          $montant = $retro->updateMontant();
+          $montant = $item->quantite * $retro->updateMontant();
           if ($use_pm) {
             if ($retro->use_pm) {
               $this->_montant_retrocession = 0;
@@ -1012,11 +1010,11 @@ class CFacture extends CMbObject {
         $montant = 0.00;
         if ($item->type == "CActeTarmed" && !strstr($item->code, "28.") && !strstr($item->code, "35.")) {
           $ref = $code->_ref_tarmed;
-          $montant = $ref->tp_al * $ref->f_al;
+          $montant = $item->quantite * $ref->tp_al * $ref->f_al;
         }
         elseif ($item->type == "CActeCaisse") {
           $ref = $code->_ref_prestation_caisse;
-          $montant = $ref->pt_medical;
+          $montant = $item->quantite * $ref->pt_medical;
         }
         $this->_montant_retrocession += $montant;
         $this->_retrocessions[$item->code] = array($item->_montant_facture, $montant);
@@ -1044,7 +1042,6 @@ class CFacture extends CMbObject {
     $this->praticien_id = $facture->praticien_id;
     $this->remise = $facture->remise;
     $this->ouverture = $facture->ouverture;
-    $this->cloture = $facture->cloture;
     $this->du_patient = $facture->du_patient;
     $this->du_tiers = $facture->du_tiers;
     $this->type_facture = $facture->type_facture;
