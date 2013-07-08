@@ -8,23 +8,23 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
+<script>
 changePageEndowment = function(start) {
   $V(getForm("filter-endowments").start, start);
-}
+};
 
 changeLetterEndowment = function(letter) {
   var form = getForm("filter-endowments");
   $V(form.start, 0, false);
   $V(form.letter, letter);
-}
+};
 
 filterEndowments = function(form) {
   var url = new Url("dPstock", "httpreq_vw_endowments_list");
   url.addFormData(form);
   url.requestUpdate("list-endowments");
   return false;
-}
+};
 
 loadEndowment = function(endowment_id, endowment_item) {
   if (endowment_item) {
@@ -38,7 +38,7 @@ loadEndowment = function(endowment_id, endowment_item) {
     
   url.requestUpdate("endowment-form");
   return false;
-}
+};
 
 Main.add(function(){
   filterEndowments(getForm("filter-endowments"));
