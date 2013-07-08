@@ -13,14 +13,14 @@
   function openResume(patient_id) {
     var fiche = $('resume_'+patient_id);
     if (fiche) {
-      Modal.open(fiche, {showClose: true, width:600});
+      Modal.open(fiche, {showClose: true, width:700});
     }
   }
 
   function openPlage(plage_id) {
     var plage = $('plage_'+plage_id);
     if (plage) {
-      Modal.open(plage, {showClose: true, width:600});
+      Modal.open(plage, {showClose: true, width:800});
     }
   }
 </script>
@@ -53,6 +53,9 @@
         {{if $nbConsult}}
           <button class="pagelayout button" onclick="openPlage('{{$_plage_consultation->_id}}')">Voir la liste ({{$nbConsult}})</button>
           <table class="tbl" id="plage_{{$_plage_consultation->_id}}" style="display: none;">
+            <tr>
+              <th colspan="5" class="title">{{$_plage_consultation->_view}}</th>
+            </tr>
             <tr>
               <th rowspan="{{$nbConsult+1}}">{{$nbConsult}} {{tr}}CConsultation{{/tr}}{{if $nbConsult>1}}s{{/if}}</th>
               <th>Entrée</th>
