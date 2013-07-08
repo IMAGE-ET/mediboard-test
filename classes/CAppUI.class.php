@@ -304,7 +304,6 @@ class CAppUI {
   static function setMsg($msg, $type = UI_MSG_OK, $_ = null) {
     $args = func_get_args();
     $msg = CAppUI::tr($msg, array_slice($args, 2));
-    $msg = /*CMbString::purifyHTML(*/$msg/*)*/;
     @self::$instance->messages[$type][$msg]++;
   }
 
@@ -390,7 +389,7 @@ class CAppUI {
       self::$instance->messages = array();
     }
 
-    return $return;
+    return CMbString::purifyHTML($return);
   }
 
   /**
