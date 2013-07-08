@@ -122,12 +122,14 @@
     </form>
   </td>
 </tr>
-<tr>
-  <td colspan="{{if $facture->_class == 'CFactureCabinet' || !$facture->dialyse}}2{{elseif $facture->dialyse}}3{{/if}}" id="refresh-assurance">
-    {{mb_include module=facturation template="inc_vw_assurances"}}
-  </td>
-  <td colspan="{{if $facture->_class == 'CFactureCabinet' || !$facture->dialyse}}5{{elseif $facture->dialyse}}4{{/if}}"></td>
-</tr>
+{{if $facture->type_facture != "esthetique"}}
+  <tr>
+    <td colspan="{{if $facture->_class == 'CFactureCabinet' || !$facture->dialyse}}2{{elseif $facture->dialyse}}3{{/if}}" id="refresh-assurance">
+      {{mb_include module=facturation template="inc_vw_assurances"}}
+    </td>
+    <td colspan="{{if $facture->_class == 'CFactureCabinet' || !$facture->dialyse}}5{{elseif $facture->dialyse}}4{{/if}}"></td>
+  </tr>
+{{/if}}
 
 {{if $facture->type_facture == "accident"}}
   <tr>
@@ -246,7 +248,8 @@
         <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
         {{if !$facture->cloture}}
           <button class="submit" type="button" onclick="Facture.modifCloture(this.form);"
-          {{if $conf.dPfacturation.Other.use_strict_cloture && (!$facture->statut_pro || (!$facture->assurance_maladie && !$facture->assurance_accident))}}
+          {{if $conf.dPfacturation.Other.use_strict_cloture && $facture->type_facture != "esthetique" &&
+            (!$facture->statut_pro || (!$facture->assurance_maladie && !$facture->assurance_accident))}}
           disabled
           {{/if}}
           >Cloturer la facture</button>
