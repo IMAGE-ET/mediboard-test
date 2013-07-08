@@ -134,8 +134,7 @@ class CPasswordKeeper extends CMbObject {
    * @return void
    */
   function generateIV() {
-    CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/Random");
-    $this->iv = bin2hex(crypt_random_string(16));
+    $this->iv = CMbSecurity::generateIV();
   }
 
   /**
@@ -144,15 +143,7 @@ class CPasswordKeeper extends CMbObject {
    * @return string
    */
   function encrypt() {
-    CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/AES");
-
-    $cipher = new Crypt_AES(CRYPT_AES_MODE_CTR);
-    $cipher->setKey($this->_passphrase);
-    $cipher->setIV($this->iv);
-
-    $crypted = rtrim(base64_encode($cipher->encrypt(self::SAMPLE)), "\0\3");
-
-    return $crypted;
+    return CMbSecurity::encrypt(CMbSecurity::AES, CMbSecurity::CTR, $this->_passphrase, self::SAMPLE, $this->iv);
   }
 
   /**
@@ -163,14 +154,7 @@ class CPasswordKeeper extends CMbObject {
    * @return bool
    */
   function testSample($passphrase) {
-    CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/AES");
-
-    $cipher = new Crypt_AES(CRYPT_AES_MODE_CTR);
-    $cipher->setKey($passphrase);
-    $cipher->setIV($this->iv);
-
-    $decrypted = rtrim(base64_decode($this->sample), "\0\3");
-    $decrypted = $cipher->decrypt($decrypted);
+    $decrypted = CMbSecurity::decrypt(CMbSecurity::AES, CMbSecurity::CTR, $passphrase, $this->sample, $this->iv);
 
     return ($decrypted === self::SAMPLE);
   }
