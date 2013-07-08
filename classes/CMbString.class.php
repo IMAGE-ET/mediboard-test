@@ -519,8 +519,12 @@ abstract class CMbString {
     }
 
     if (!$purifier) {
-      if (!class_exists("HTMLPurifier", false)) {
-        CAppUI::requireLibraryFile("htmlpurifier/library/HTMLPurifier.auto");
+      if (!class_exists("HTMLPurifier", false) || !class_exists("HTMLPurifier_Config", false)) {
+        $root = CAppUI::conf("root_dir");
+        $file = "$root/lib/htmlpurifier/library/HTMLPurifier.auto.php";
+        if (is_readable($file)) {
+          include_once $file;
+        }
       }
 
       $config = HTMLPurifier_Config::createDefault();
