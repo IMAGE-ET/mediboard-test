@@ -37,6 +37,7 @@ $factures = $facture->loadList($where, "ouverture", null, null, $ljoin);
 
 foreach ($factures as $_facture) {
   $_facture->loadRefPatient();
+  $_facture->loadRefsObjects();
 }
 
 if (count($factures)) {
