@@ -10,6 +10,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Class CTranslationOverwrite
+ */
 class CTranslationOverwrite extends CMbObject {
   public $translation_id;
 
@@ -19,7 +22,7 @@ class CTranslationOverwrite extends CMbObject {
   public $_old_translation;
 
   /**
-   * Initialize the class specifications
+   * @see parent::getSpec()
    *
    * @return CMbFieldSpec
    */
@@ -32,7 +35,7 @@ class CTranslationOverwrite extends CMbObject {
   }
 
   /**
-   * Get backward reference specifications
+   * @see parent::getBackProps()
    *
    * @return array
    */
@@ -50,7 +53,7 @@ class CTranslationOverwrite extends CMbObject {
   }
 
   /**
-   * Update DB fields before storing
+   * @see parent::updatePlainFields()
    */
   function updatePlainFields() {
     parent::updatePlainFields();
@@ -59,7 +62,7 @@ class CTranslationOverwrite extends CMbObject {
   }
 
   /**
-   * the source must be found in locales
+   * @see parent::check()
    *
    * @return string
    */
@@ -69,6 +72,34 @@ class CTranslationOverwrite extends CMbObject {
       return "CTranslationOverwrite-failed-locale-doesnot-exist";
     }
     return parent::check();
+  }
+
+  /**
+   * Transform the mb locales with the overwrite system
+   *
+   * @param array       $locales  locales from mediboard
+   * @param string|null $language language chosen, if not defined, use the preference.
+   *
+   * @return array $locales locales transformed
+   */
+
+  function transformLocales($locales, $language=null) {
+    $ds = $this->_spec->ds;
+    $where = array(
+      "language" => $ds->prepare("=%", $language ? $language : CAppUI::pref("LOCALE")),
+    );
+
+    $query = new CRequest();
+    $query->addSelect("source, translation");
+    $query->addTable("translation");
+    $query->addWhere($where);
+    $overwrites = $ds->loadList($query->getRequest());
+
+    foreach ($overwrites as $_overwrite) {
+      $locales[$_overwrite["source"]] = $_overwrite["translation"];
+    }
+
+    return $locales;
   }
 
   /**

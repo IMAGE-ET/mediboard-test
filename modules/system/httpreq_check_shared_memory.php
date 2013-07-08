@@ -48,6 +48,13 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
     CAppUI::stepAjax("Locales-shm-none", UI_MSG_OK, $localeName);
     continue;
   }
+
+
+  // Load overwritten locales if the table exists
+  $overwrite = new CTranslationOverwrite();
+  if ($overwrite->isInstalled()) {
+    $locales = $overwrite->transformLocales($locales);
+  }
   
   if ($sharedLocale != $locales) {
     CAppUI::stepAjax("Locales-shm-ko", UI_MSG_WARNING, $localeName);

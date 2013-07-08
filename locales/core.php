@@ -26,20 +26,7 @@ if (null == $locales = SHM::get($shared_name)) {
   // Load overwritten locales if the table exists
   $overwrite = new CTranslationOverwrite();
   if ($overwrite->isInstalled()) {
-    $ds = $overwrite->_spec->ds;
-    $where = array(
-      "language" => $ds->prepare("=%", $locale),
-    );
-
-    $query = new CRequest();
-    $query->addSelect("source, translation");
-    $query->addTable("translation");
-    $query->addWhere($where);
-    $overwrites = $ds->loadList($query->getRequest());
-
-    foreach ($overwrites as $_overwrite) {
-      $locales[$_overwrite["source"]] = $_overwrite["translation"];
-    }
+    $locales = $overwrite->transformLocales($locales, $locale);
   }
 
   SHM::put($shared_name, $locales);
