@@ -16,6 +16,13 @@
       Modal.open(fiche, {showClose: true, width:600});
     }
   }
+
+  function openPlage(plage_id) {
+    var plage = $('plage_'+plage_id);
+    if (plage) {
+      Modal.open(plage, {showClose: true, width:600});
+    }
+  }
 </script>
 
 <table class="tbl">
@@ -44,7 +51,8 @@
       </td>
       <td {{if !$nbConsult}}class="empty"{{/if}}>
         {{if $nbConsult}}
-          <table class="tbl">
+          <button class="pagelayout button" onclick="openPlage('{{$_plage_consultation->_id}}')">Voir la liste</button>
+          <table class="tbl" id="plage_{{$_plage_consultation->_id}}" style="display: none;">
             <tr>
               <th rowspan="{{$nbConsult+1}}">{{$nbConsult}} {{tr}}CConsultation{{/tr}}{{if $nbConsult>1}}s{{/if}}</th>
               <th>Entrée</th>
