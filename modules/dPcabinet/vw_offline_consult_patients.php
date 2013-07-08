@@ -13,12 +13,32 @@
 
 CCanDo::checkRead();
 
-$date = CValue::get("date", CMbDT::date());
+CApp::setMemoryLimit("512M");
+
+$ds = CSQLDataSource::get("std");
+
+$function_id = CValue::get("function_id");
+$chir_ids    = CValue::get("chir_ids");
+$date        = CValue::get("date", CMbDT::date());
+
+
+// Praticiens sélectionnés
+$user = new CMediusers;
+$praticiens = array();
+if ($function_id) {
+  $praticiens = CConsultation::loadPraticiens(PERM_EDIT, $function_id);
+}
+
+if ($chir_ids) {
+  $praticiens = $user->loadAll(explode("-", $chir_ids));
+}
 
 //plages de consultation
+$where = array();
+$where["chir_id"] = CSQLDataSource::prepareIn(array_keys($praticiens));
+$where["date"] = " = '$date'";
 $Pconsultation = new CPlageconsult();
-$Pconsultation->date = $date;
-$Pconsultations = $Pconsultation->loadMatchingList(array("debut"));
+$Pconsultations = $Pconsultation->loadList($where, array("debut"));
 
 $consultations = array();
 $resumes_patient = array();
@@ -32,7 +52,9 @@ foreach ($Pconsultations as $_plage_consult) {
 
   /** @var $consultations CConsultation[] */
   foreach ($_plage_consult->_ref_consultations as $_consult) {
-
+    if (isset($resumes_patient[$_consult->patient_id])) {
+      continue;
+    }
     $patient = $_consult->loadRefPatient();
     $patient->loadDossierComplet();
     $patient->loadRefDossierMedical();
@@ -41,7 +63,6 @@ foreach ($Pconsultations as $_plage_consult) {
     $resumes_patient[$patient->_id] = $smarty->fetch("vw_resume.tpl");  //dynamic assignment
   }
 }
-
 
 
 //smarty global
