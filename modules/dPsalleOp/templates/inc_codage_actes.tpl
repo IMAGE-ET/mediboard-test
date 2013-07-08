@@ -3,7 +3,7 @@
 
 {{mb_include module=salleOp template=js_codage_ccam}}
 
-<script type="text/javascript">
+<script>
   loadActesNGAP = function(operation_id) {
     var url = new Url("dPcabinet", "httpreq_vw_actes_ngap");
     url.addParam("object_id", operation_id);
@@ -77,7 +77,7 @@
   {{/if}}
   {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
     <li><a href="#tarmed_tab">TARMED</a></li>
-    <li><a href="#caisse_tab">Caisses</a></li>
+    <li><a href="#caisse_tab">{{tr}}CPrestationCaisse{{/tr}}</a></li>
   {{/if}}
 </ul>
 
