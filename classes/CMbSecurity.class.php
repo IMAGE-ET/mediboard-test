@@ -14,6 +14,9 @@ CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/Random");
 CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/RSA");
 CAppUI::requireLibraryFile("phpseclib/phpseclib/File/ASN1");
 CAppUI::requireLibraryFile("phpseclib/phpseclib/File/X509");
+CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/AES");
+CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/DES");
+CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/Rijndael");
 CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/TripleDES");
 
 /**
@@ -21,9 +24,10 @@ CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/TripleDES");
  */
 class CMbSecurity {
   // Ciphers
-  const AES  = 1;
-  const DES  = 2;
-  const TDES = 3;
+  const AES      = 1;
+  const DES      = 2;
+  const TDES     = 3;
+  const RIJNDAEL = 4;
 
   // Encryption modes
   const CTR = CRYPT_AES_MODE_CTR;
@@ -31,6 +35,16 @@ class CMbSecurity {
   const CBC = CRYPT_AES_MODE_CBC;
   const CFB = CRYPT_AES_MODE_CFB;
   const OFB = CRYPT_AES_MODE_OFB;
+
+  // Hash algorithms
+  const MD2     = 1;
+  const MD5     = 2;
+  const MD5_96  = 3;
+  const SHA1    = 4;
+  const SHA1_96 = 5;
+  const SHA256  = 6;
+  const SHA384  = 7;
+  const SHA512  = 8;
 
   /**
    * Generate a pseudo random string
@@ -52,6 +66,17 @@ class CMbSecurity {
    */
   static function getRandomBinaryString($length) {
     return crypt_random_string($length);
+  }
+
+  /**
+   * Generate an initialisation vector
+   *
+   * @param int $length IV length
+   *
+   * @return string
+   */
+  static function generateIV($length = 16) {
+    return self::getRandomString($length);
   }
 
   /**
@@ -96,8 +121,8 @@ class CMbSecurity {
   /**
    * Create a Crypt object
    *
-   * @param int $encryption Cipher to use
-   * @param int $mode       Encryption mode to use
+   * @param int $encryption Cipher to use (AES, DES, TDES or RIJNDAEL)
+   * @param int $mode       Encryption mode to use (CTR, ECB, CBC, CFB or OFB)
    *
    * @return Crypt_AES|Crypt_DES|Crypt_TripleDES
    */
@@ -111,9 +136,109 @@ class CMbSecurity {
 
       case self::TDES:
         return new Crypt_TripleDES($mode);
+
+      case self::RIJNDAEL:
+        return new Crypt_Rijndael($mode);
     }
 
-    return null;
+    return false;
+  }
+
+  /**
+   * Encrypt a text
+   *
+   * @param int    $encryption Cipher to use (AES, DES, TDES or RIJNDAEL)
+   * @param int    $mode       Encryption mode to use (CTR, ECB, CBC, CFB or OFB)
+   * @param string $key        Key to use
+   * @param string $clear      Clear text to encrypt
+   * @param string $iv         Initialisation vector to use
+   *
+   * @return bool|string
+   */
+  static function encrypt($encryption, $mode, $key, $clear, $iv = null) {
+    $cipher = self::getCipher($encryption, $mode);
+
+    if (!$cipher) {
+      return false;
+    }
+
+    $cipher->setKey($key);
+
+    switch ($mode) {
+      case self::CBC:
+      case self::CFB:
+      case self::CTR:
+      case self::OFB:
+        $cipher->setIV($iv);
+    }
+
+    return rtrim(base64_encode($cipher->encrypt($clear)), "\0\3");
+  }
+
+  /**
+   * Decrypt a text
+   *
+   * @param int    $encryption Cipher to use (AES, DES, TDES or RIJNDAEL)
+   * @param int    $mode       Encryption mode to use (CTR, ECB, CBC, CFB or OFB)
+   * @param string $key        Key to use
+   * @param string $crypted    Cipher text to decrypt
+   * @param string $iv         Initialisation vector to use
+   *
+   * @return bool|string
+   */
+  static function decrypt($encryption, $mode, $key, $crypted, $iv = null) {
+    $cipher = self::getCipher($encryption, $mode);
+
+    if (!$cipher) {
+      return false;
+    }
+
+    $cipher->setKey($key);
+
+    switch ($mode) {
+      case self::CBC:
+      case self::CFB:
+      case self::CTR:
+      case self::OFB:
+        $cipher->setIV($iv);
+    }
+
+    return $cipher->decrypt(rtrim(base64_decode($crypted), "\0\3"));
+  }
+
+  /**
+   * Global hashing function
+   *
+   * @param int    $algo   Hash algorithm to use
+   * @param string $text   Text to hash
+   * @param bool   $binary Binary or hexa output
+   *
+   * @return bool|string
+   */
+  static function hash($algo, $text, $binary = false) {
+    $algos = array(
+      self::MD2     => 'md2',
+      self::MD5     => 'md5',
+      self::MD5_96  => 'md5-96',
+      self::SHA1    => 'sha1',
+      self::SHA1_96 => 'sha1-96',
+      self::SHA256  => 'sha256',
+      self::SHA384  => 'sha384',
+      self::SHA512  => 'sha512'
+    );
+
+    if (array_key_exists($algo, $algos)) {
+      $hash = new Crypt_Hash($algos[$algo]);
+      $fingerprint = $hash->hash($text);
+
+      if (!$binary) {
+        $fingerprint = bin2hex($fingerprint);
+      }
+
+      return $fingerprint;
+    }
+
+    return false;
   }
 
   /**
@@ -147,7 +272,7 @@ class CMbSecurity {
    * @param String $certificate_client Client certificate
    * @param String $certificate_ca     Authority certificate
    *
-   * @return boolean
+   * @return bool
    */
   static function validateCertificate($certificate_client, $certificate_ca) {
     $x509 = new File_X509();
@@ -196,7 +321,6 @@ class CMbSecurity {
    * @return bool
    */
   static function validateCertificateDate($certificate_client) {
-
     $x509 = new File_X509();
 
     $x509->loadX509($certificate_client);
@@ -214,9 +338,7 @@ class CMbSecurity {
   static function getInformationCertificate($certificate_client) {
     $x509 = new File_X509();
 
-    $cert = $x509->loadX509($certificate_client);
-
-    return $cert;
+    return $x509->loadX509($certificate_client);
   }
 
   /**
@@ -229,6 +351,11 @@ class CMbSecurity {
    */
   static function isRevoked($certificate_client, $list_revoked) {
     $certificate = self::getInformationCertificate($certificate_client);
+
+    if (!$certificate) {
+      return false;
+    }
+
     $serial = $certificate['tbsCertificate']['serialNumber']->value;
 
     $x509 = new File_X509();
