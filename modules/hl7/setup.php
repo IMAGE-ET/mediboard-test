@@ -1164,7 +1164,13 @@ class CSetuphl7 extends CSetup {
                 ADD `OID` VARCHAR (255);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.73";
+    $this->makeRevision("0.73");
+
+    $query = "ALTER TABLE `hl7_config`
+                ADD `ignore_fields` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.74";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

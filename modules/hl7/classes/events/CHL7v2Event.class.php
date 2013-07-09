@@ -73,19 +73,39 @@ class CHL7v2Event extends CHL7Event {
   function handle($msg_hl7) {
     $this->message = new CHL7v2Message();
 
+    $ignore_fields = array();
     if ($this->_data_format) {
-      $strict = $this->_data_format->_configs_format->strict_segment_terminator;
+      $configs_format = $this->_data_format->_configs_format;
+
+      if ($configs_format->ignore_fields) {
+        $ignore_fields = preg_split("/\s*,\s*/", $configs_format->ignore_fields);
+      }
+
+      $strict = $configs_format->strict_segment_terminator;
       $this->message->strict_segment_terminator = $strict;
       
       if ($strict) {
-        $terminator = $this->getSegmentTerminator($this->_data_format->_configs_format->segment_terminator);
+        $terminator = $this->getSegmentTerminator($configs_format->segment_terminator);
         $this->message->segmentTerminator = $terminator;
       }
     }
 
     $this->message->parse($msg_hl7);
 
-    return $this->message->toXML(get_class($this), false, CApp::$encoding);
+    $dom = $this->message->toXML(get_class($this), false, CApp::$encoding);
+
+    $xpath = new CHL7v2MessageXPath($dom);
+
+    foreach ($ignore_fields as $_ignore_field) {
+      $query = "//$_ignore_field";
+
+      $nodes = $xpath->query($query);
+      foreach ($nodes as $_node) {
+        $_node->parentNode->removeChild($_node);
+      }
+    }
+
+    return $dom;
   }
 
   /**

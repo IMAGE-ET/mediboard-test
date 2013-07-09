@@ -44,6 +44,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "segment_terminator",
     
     // Handle
+    "ignore_fields",
     "handle_mode",
     "handle_NDA",
     "handle_telephone_number",
@@ -96,6 +97,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
   public $segment_terminator;
 
   // Handle
+  public $ignore_fields;
   public $handle_mode;
   public $handle_NDA;
   public $handle_telephone_number;
@@ -164,6 +166,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
       "handle_PV1_36",
       "handle_PV2_12",
       "handle_NSS",
+      "ignore_fields",
     ),
 
     "send" => array(
@@ -232,6 +235,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     // Handle
     $props["handle_mode"]             = "enum list|normal|simple default|normal";
     $props["handle_telephone_number"] = "enum list|XTN_1|XTN_12 default|XTN_12";
+    $props["ignore_fields"]           = "str";
     
     // => PID
     $props["handle_NDA"]    = "enum list|PID_18|PV1_19 default|PID_18";
