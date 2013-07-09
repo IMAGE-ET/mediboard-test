@@ -24,6 +24,7 @@ class CMbSOAPClient extends SoapClient {
   public $flatten;
   public $loggable;
   public $encoding;
+  public $options;
 
   /**
    * The constructor
@@ -93,6 +94,8 @@ class CMbSOAPClient extends SoapClient {
 
       $options = array_merge($options, array("stream_context" => $context));
     }
+
+    $this->options = $options;
 
     parent::__construct($this->wsdl_url, $options);
   }
@@ -168,6 +171,12 @@ class CMbSOAPClient extends SoapClient {
       $port_nodes = $xpath->query("wsdl:port", $_service_node);
       foreach ($port_nodes as $_port_node) {
         $address = $xpath->queryAttributNode("soap:address", $_port_node, "location");
+
+        $login    = CMbArray::get($this->options, "login");
+        $password = CMbArray::get($this->options, "password");
+        if ($login && $password) {
+          $address = str_replace("://", "://$login:$password@", $address);
+        }
 
         // Url exist
         $url_exist = url_exists($address);
