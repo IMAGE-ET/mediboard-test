@@ -159,6 +159,11 @@ class DiskSharedMemory implements ISharedMemory {
   function modDate($key) {
     $filename = $this->dir.$key;
     @clearstatcache(true, $filename);
+
+    if (!file_exists($filename)) {
+      return null;
+    }
+
     return strftime(CMbDT::ISO_DATETIME, filemtime($filename));
   }
 }
