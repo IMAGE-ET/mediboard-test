@@ -50,7 +50,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
       $extension = strrchr($file_name, '.');
       $_rename = $this->request['_rename'] ? $this->request['_rename'] : 'upload';
       $file_path = "$path/". $this->request['_checksum'];
-      mbLog(file_get_contents($file_path));
+
       $obj->file_name = $_rename == 'upload' ? $file_name : $_rename . $extension;
       $obj->_old_file_path = $this->request['_file_path'];
       $obj->file_size = filesize($file_path);
