@@ -2,6 +2,21 @@
 {{mb_script module="dPcompteRendu" script="modele_selector"}}
 {{mb_script module="dPcompteRendu" script="document"}}
 
+{{assign var="object" value=$consult}}
+{{assign var="mutation_id" value=""}}
+{{assign var="module" value="dPcabinet"}}
+{{assign var="do_subject_aed" value="do_consultation_aed"}}
+
+{{mb_include module=salleOp template=js_codage_ccam}}
+
+{{if $consult->sejour_id && $consult->_ref_sejour && $consult->_ref_sejour->_ref_rpu && $consult->_ref_sejour->_ref_rpu->_id}}
+  {{assign var="rpu" value=$consult->_ref_sejour->_ref_rpu}}
+  {{assign var="mutation_id" value=$rpu->mutation_sejour_id}}
+  {{if $mutation_id == $consult->sejour_id}}
+    {{assign var="mutation_id" value=""}}
+  {{/if}}
+{{/if}}
+
 <script type="text/javascript">
   {{if !$consult->_canEdit}}
     App.readonly = true;
@@ -18,6 +33,12 @@
     {{else}}
       tabs.setActiveTab("exams");
     {{/if}}
+
+    {{if ($app->user_prefs.ccam_consultation == 1)}}
+      {{if !($consult->sejour_id && $mutation_id)}}
+        var tabsActes = Control.Tabs.create('tab-actes', false);
+      {{/if}}
+    {{/if}}
   });
   
   refreshVisite = function(operation_id) {
@@ -26,6 +47,13 @@
     url.addParam("callback", "refreshVisite");
     url.requestUpdate("visite_pre_anesth");
   }
+
+  reloadDiagnostic = function(sejour_id, modeDAS) {
+    var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("modeDAS", modeDAS);
+    url.requestUpdate("cim");
+  };
 </script>
 
 <!-- Formulaire pour réactualiseér -->
@@ -65,6 +93,9 @@
       </li>  
     {{/if}}
   {{/if}}
+  {{if $app->user_prefs.ccam_consultation == 1}}
+    <li><a href="#Actes">Cotation</a></li>
+  {{/if}}
 </ul>
 
 <hr class="control_tabs" />
@@ -100,6 +131,74 @@
     {{assign var=currUser value=$userSel}}
     <div id="visite_pre_anesth">
       {{mb_include module=salleOp template=inc_visite_pre_anesth}}
+    </div>
+  {{/if}}
+{{/if}}
+{{if $app->user_prefs.ccam_consultation == 1}}
+  {{if $app->user_prefs.ccam_consultation == 1 }}
+    <div id="Actes" style="display: none;">
+      {{if $mutation_id}}
+        <div class="small-info">
+          Ce patient a été hospitalisé, veuillez vous référer au dossier de soin de son séjour.
+        </div>
+      {{else}}
+        {{assign var="sejour" value=$consult->_ref_sejour}}
+        <ul id="tab-actes" class="control_tabs">
+          {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
+            <li><a href="#ccam">Actes CCAM</a></li>
+            <li><a href="#ngap">Actes NGAP</a></li>
+          {{/if}}
+          {{if $sejour && $sejour->_id}}
+            <li><a href="#cim">Diagnostics</a></li>
+          {{/if}}
+          {{if $conf.dPccam.CCodable.use_frais_divers.CConsultation && $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
+            <li><a href="#fraisdivers">Frais divers</a></li>
+          {{/if}}
+          {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
+            <li><a href="#tarmed_tab">Tarmed</a></li>
+            <li><a href="#caisse_tab">Caisses</a></li>
+          {{/if}}
+        </ul>
+        <hr class="control_tabs"/>
+
+        <div id="ccam" style="display: none;">
+          {{assign var="module" value="dPcabinet"}}
+          {{assign var="subject" value=$consult}}
+          {{mb_include module=salleOp template=inc_codage_ccam}}
+        </div>
+
+        <div id="ngap" style="display: none;">
+          <div id="listActesNGAP">
+            {{assign var="_object_class" value="CConsultation"}}
+            {{mb_include module=cabinet template=inc_codage_ngap}}
+          </div>
+        </div>
+
+        {{if $sejour && $sejour->_id}}
+          <div id="cim" style="display: none;">
+            {{mb_include module=salleOp template=inc_diagnostic_principal modeDAS="1"}}
+          </div>
+        {{/if}}
+
+        {{if $conf.dPccam.CCodable.use_frais_divers.CConsultation && $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
+          <div id="fraisdivers" style="display: none;">
+            {{mb_include module=ccam template=inc_frais_divers object=$consult}}
+          </div>
+        {{/if}}
+
+        {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+          <div id="tarmed_tab" style="display:none">
+            <div id="listActesTarmed">
+              {{mb_include module=tarmed template=inc_codage_tarmed }}
+            </div>
+          </div>
+          <div id="caisse_tab" style="display:none">
+            <div id="listActesCaisse">
+              {{mb_include module=tarmed template=inc_codage_caisse}}
+            </div>
+          </div>
+        {{/if}}
+      {{/if}}
     </div>
   {{/if}}
 {{/if}}
