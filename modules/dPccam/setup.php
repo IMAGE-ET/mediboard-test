@@ -128,11 +128,14 @@ class CSetupdPccam extends CSetup {
     $this->mod_version = "0.19";
 
     // Data source query
+    $query = "SHOW TABLES LIKE 'convergence'";
+
+    /*
     $query = "SELECT *
               FROM modificateur
               WHERE CODE = 'K'
               AND LIBELLE = 'Majoration forfaits modulables accouchements gyneco. et chir sect. 1 ou 2 adherant,pour actes avec J'";
-    /*
+
     $query = "SELECT *
               FROM `codes_ngap`
               WHERE `code` LIKE 'MA'";

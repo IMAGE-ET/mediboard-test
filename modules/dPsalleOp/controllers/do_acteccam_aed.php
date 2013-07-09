@@ -32,9 +32,14 @@ class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
     $listModifConvergence = array("X", "I", "9", "O");
     foreach ($_POST as $propName => $propValue) {
       $matches = null;
-      if (preg_match("/modificateur_(.)/", $propName, $matches)) {
+      if (preg_match("/modificateur_(.)(.)/", $propName, $matches)) {
         $modificateur = $matches[1];
-        $this->_obj->modificateurs .= $modificateur;
+        if (strpos($this->_obj->modificateurs, $matches[1]) === false) {
+          $this->_obj->modificateurs .= $modificateur;
+          if ($matches[2] == 2) {
+            $this->_obj->modificateurs .= $modificateur;
+          }
+        }
       }
     }
     $this->_obj->loadRefObject();

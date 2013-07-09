@@ -11,6 +11,10 @@
  * @link     http://www.mediboard.org
  */
 
+/**
+ * Classe pour gérer le mapping avec la base de données CCAM
+ * Class CCodeCCAM
+ */
 class CCodeCCAM {
   public $code;          // Code de l'acte
   public $chapitres;     // Chapitres de la CCAM concernes
@@ -359,7 +363,20 @@ class CCodeCCAM {
     return $this->activites;
   }
 
+  function getConvergenceFromActivite($activite) {
+    $ds =& $this->_spec->ds;
+    // Recherche de la ligne des modificateurs de convergence
+    $query = "SELECT *
+              FROM convergence
+              WHERE convergence.code = %1
+                AND convergence.activite = %2";
+    $query = $ds->prepare($query, $this->code, $activite->numero);
+    $result = $ds->exec($query);
+    return $convergence = $ds->fetchObject($result);
+  }
+
   function getModificateursFromActivite(&$activite) {
+    $convergence = $this->getConvergenceFromActivite($activite);
     $listModifConvergence = array("X", "I", "9", "O");
     $ds =& $this->_spec->ds;
     // recherche de la dernière date d'effet
@@ -394,12 +411,25 @@ class CCodeCCAM {
                 ORDER BY CODE";
       $query = $ds->prepare($query, $row["MODIFICATEUR"]);
       $_modif = $ds->fetchObject($ds->exec($query));
-      $_modif->_double = "";
-      $modificateurs[] = $_modif;
+
+      // Cas d'un modificateur de convergence
       if (in_array($row["MODIFICATEUR"], $listModifConvergence)) {
-        $_double_modif = clone $_modif;
-        $_double_modif->_double = "2";
-        $modificateurs[] = $_double_modif;
+        $simple = "mod".$row["MODIFICATEUR"];
+        $double = "mod".$row["MODIFICATEUR"].$row["MODIFICATEUR"];
+        if ($convergence->$simple) {
+          $_modif->_double = "1";
+          $modificateurs[] = $_modif;
+        }
+        if ($convergence->$double) {
+          $_double_modif = clone $_modif;
+          $_double_modif->_double = "2";
+          $modificateurs[] = $_double_modif;
+        }
+      }
+      // Cas d'un modificateur normal
+      else {
+        $_modif->_double = "1";
+        $modificateurs[] = $_modif;
       }
     }
   }

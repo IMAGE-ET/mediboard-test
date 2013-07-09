@@ -211,7 +211,7 @@
                   {{foreach from=$_phase->_modificateurs item=_mod name=modificateurs}}
                     <input type="checkbox" name="modificateur_{{$_mod->code}}{{$_mod->_double}}" {{if $_mod->_checked}}checked="checked"{{/if}} />
                     <label for="modificateur_{{$_mod->code}}{{$_mod->_double}}" title="{{$_mod->libelle}}">
-                      {{$_mod->code}} 
+                      {{$_mod->code}}{{if $_mod->_double == 2}}{{$_mod->code}}{{/if}}
                       {{if !$modifs_compacts}} : {{$_mod->libelle}}{{/if}}
                     </label>
                     {{if !$modifs_compacts}}<br />{{/if}}          

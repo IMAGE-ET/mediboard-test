@@ -49,7 +49,7 @@
     </tr>
     {{foreach from=$results item=_result}}
       <tr>
-        <td class"text">
+        <td class="text">
           {{if $_result.error}}
             {{$_result.error}}
           {{else}}

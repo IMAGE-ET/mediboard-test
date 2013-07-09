@@ -20,6 +20,11 @@ function startNGAP(){
   .requestUpdate("ngap");
 }
 
+function startCCAM_convergence() {
+  new Url("ccam", "ajax_do_add_ccam_convergence")
+    .requestUpdate("ccam_convergence");
+}
+
 function startCCAM_ICR() {
   new Url("ccam", "ajax_do_add_ccam_ICR")
   .requestUpdate("ccam_icr");
@@ -51,6 +56,7 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#CCAM">{{tr}}CCAM{{/tr}}</a></li>
   <li><a href="#NGAP">{{tr}}NGAP{{/tr}}</a></li>
+  <li><a href="#ccam_CONV">CCAM Convergence</a></li>
   <li><a href="#ccam_ICR">CCAM ICR</a></li>
   <li><a href="#ccam_RADIO">CCAM radio</a></li>
   <li><a href="#ccam_NGAP">CCAM ngap</a></li>
@@ -65,6 +71,10 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
 
 <div id="NGAP" style="display: none;">
 {{mb_include template=inc_config_ngap}}
+</div>
+
+<div id="ccam_CONV" style="display: none;">
+  {{mb_include template=inc_config_ccam_convergence}}
 </div>
 
 <div id="ccam_ICR" style="display: none;">

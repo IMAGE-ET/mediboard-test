@@ -213,20 +213,36 @@ class CCodable extends CMbObject {
 
   }
 
+  /**
+   * @see parent::loadView()
+   */
   function loadView() {
     parent::loadView();
     $this->loadRefsActesCCAM();
     $this->loadExtCodesCCAM(true);
   }
 
+  /**
+   * Calcul de la date d'execution de l'acte
+   *
+   * @return void
+   */
   function getActeExecution() {
     $this->_acte_execution = CMbDT::dateTime();
   }
 
+  /**
+   * Retourn si l'acte a été codé
+   *
+   * @return bool
+   */
   function isCoded() {
     return $this->_coded;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
@@ -237,6 +253,9 @@ class CCodable extends CMbObject {
       array();
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["codes_ccam"]      = "str show|0";
@@ -254,6 +273,9 @@ class CCodable extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["actes_ngap"]    = "CActeNGAP object_id";
@@ -269,6 +291,7 @@ class CCodable extends CMbObject {
     $this->_ref_prescription = $this->loadUniqueBackRef("prescriptions");
   }
   */
+
   function getAssociationCodesActes() {
     $this->updateFormFields();
     $this->loadRefsActesCCAM();
@@ -831,9 +854,20 @@ class CCodable extends CMbObject {
           }
           else {
             foreach ($phase->_modificateurs as $modificateur) {
-              if ($position = strpos($listModificateurs, $modificateur->code) !== false) {
-                $modificateur->_checked = $modificateur->code;
-                $listModificateurs = substr($listModificateurs, 0, $position-1).substr($listModificateurs, $position);
+              $position = strpos($listModificateurs, $modificateur->code);
+              if ($position !== false) {
+                $nextposition = strrpos($listModificateurs, $modificateur->code);
+                if ($position === $nextposition && $modificateur->_double == "1") {
+                  $modificateur->_checked = $modificateur->code;
+                  $listModificateurs = substr($listModificateurs, 0, $position).substr($listModificateurs, $nextposition+1);
+                }
+                elseif ($position != $nextposition && $modificateur->_double == "2") {
+                  $modificateur->_checked = $modificateur->code.$modificateur->_double;
+                  $listModificateurs = substr($listModificateurs, 0, $position).substr($listModificateurs, $nextposition+1);
+                }
+                else {
+                  $modificateur->_checked = "";
+                }
               }
               else {
                 $modificateur->_checked = "";
