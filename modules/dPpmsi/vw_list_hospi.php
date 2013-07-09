@@ -29,11 +29,11 @@ $order[] = "entree";
 $listSejours = $sejour->loadList($where, $order);
 
 foreach ($listSejours as $_sejour) {
-  $sejour->loadRefsFwd();
-  $sejour->loadNDA();
-  $sejour->_ref_patient->loadIPP();
-  $sejour->loadRefGHM();
-  $sejour->countExchanges();
+  $_sejour->loadRefsFwd();
+  $_sejour->loadNDA();
+  $_sejour->_ref_patient->loadIPP();
+  $_sejour->loadRefGHM();
+  $_sejour->countExchanges();
 }
 
 // Création du template
