@@ -29,8 +29,13 @@
     });
   }
 
-  viewInterv = function(operation_id) {
-    var url = new Url("planningOp", "vw_edit_planning", "tab");
+  viewInterv = function(operation_id, plageop_id) {
+    if (plageop_id) {
+      var url = new Url("planningOp", "vw_edit_planning", "tab");
+    }
+    else {
+      var url = new Url("planningOp", "vw_edit_urgence", "tab");
+    }
     url.addParam("operation_id", operation_id);
     url.redirect();
   }
@@ -68,17 +73,17 @@
         </form>
       {{/if}}
       {{if $facture->_class == "CFactureEtablissement"}}
-        {{assign var="last_op_id" value=$facture->_ref_last_sejour->_ref_last_operation->_id}}
-        <button type="button" class="edit" onclick="viewInterv('{{$last_op_id}}');" style="float:right;"> Infos interv. </button>
+        {{assign var="last_op" value=$facture->_ref_last_sejour->_ref_last_operation}}
+        <button type="button" class="edit" onclick="viewInterv('{{$last_op->_id}}', '{{$last_op->plageop_id}}');" style="float:right;"> Infos interv. </button>
       {{/if}}
     </td>
   </tr>
 {{elseif !$facture->cloture && isset($factures|smarty:nodefaults) && count($factures) && $facture->_class == "CFactureEtablissement"}}
   <tr>
     <td colspan="8">
-      {{assign var="last_op_id" value=$facture->_ref_last_sejour->_ref_last_operation->_id}}
-      <button type="button" class="edit" onclick="dossierBloc('{{$last_op_id}}');"> Dossier bloc </button>
-      <button type="button" class="new" onclick="viewInterv('{{$last_op_id}}');"> Infos interv. </button>
+      {{assign var="last_op" value=$facture->_ref_last_sejour->_ref_last_operation}}
+      <button type="button" class="edit" onclick="dossierBloc('{{$last_op->_id}}');"> Dossier bloc </button>
+      <button type="button" class="new" onclick="viewInterv('{{$last_op->_id}}', '{{$last_op->plageop_id}}');"> Infos interv. </button>
     </td>
   </tr>
 {{/if}}
