@@ -33,6 +33,11 @@ class CFileAddEdit extends CDoObjectAddEdit {
     if (CValue::POST("_from_yoplet") == 1) {
       $obj = $this->_obj;
       $array_file_name = array();
+      $path = CAppUI::conf("dPfiles yoplet_upload_path");
+
+      if (!$path) {
+        $path = "tmp";
+      }
 
       // On retire les backslashes d'escape
       $file_name = stripslashes($this->request['_file_path']);
@@ -44,8 +49,8 @@ class CFileAddEdit extends CDoObjectAddEdit {
 
       $extension = strrchr($file_name, '.');
       $_rename = $this->request['_rename'] ? $this->request['_rename'] : 'upload';
-      $file_path = "tmp/". $this->request['_checksum'];
-
+      $file_path = "$path/". $this->request['_checksum'];
+      mbLog(file_get_contents($file_path));
       $obj->file_name = $_rename == 'upload' ? $file_name : $_rename . $extension;
       $obj->_old_file_path = $this->request['_file_path'];
       $obj->file_size = filesize($file_path);
