@@ -984,20 +984,12 @@ class CFacture extends CMbObject {
       $use_pm = false;
       foreach ($retrocessions as $retro) {
         /** @var CRetrocession $retro*/
-        if ($retro->use_pm && $retro->code_class == $item->type && $retro->code == $item->code) {
-          $use_pm = true;
-        }
-
         if ($retro->code_class == $item->type && $retro->code == $item->code && $retro->active) {
           $modif = true;
           $montant = $item->quantite * $retro->updateMontant();
-          if ($use_pm) {
-            if ($retro->use_pm) {
-              $this->_montant_retrocession = 0;
-            }
-            else {
-              $montant = 0;
-            }
+          if (!$retro->use_pm && $item->type == "CActeTarmed") {
+            $use_pm = true;
+            $montant = 0;
           }
           $this->_montant_retrocession += $montant;
           $this->_retrocessions[$item->code] = array($item->_montant_facture, $montant);
@@ -1010,11 +1002,7 @@ class CFacture extends CMbObject {
         $montant = 0.00;
         if ($item->type == "CActeTarmed" && !strstr($item->code, "28.") && !strstr($item->code, "35.")) {
           $ref = $code->_ref_tarmed;
-          $montant = $item->quantite * $ref->tp_al * $ref->f_al;
-        }
-        elseif ($item->type == "CActeCaisse") {
-          $ref = $code->_ref_prestation_caisse;
-          $montant = $item->quantite * $ref->pt_medical;
+          $montant = $item->quantite * $ref->tp_al * $ref->f_al * $this->_coeff;
         }
         $this->_montant_retrocession += $montant;
         $this->_retrocessions[$item->code] = array($item->_montant_facture, $montant);
