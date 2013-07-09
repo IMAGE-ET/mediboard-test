@@ -64,7 +64,7 @@
   {{/if}}
   {{if $conf.ref_pays == 1 || $rpu->_id}}
 
-  <script type="text/javascript">
+  <script>
   
   ContraintesRPU.contraintesProvenance = {{$contrainteProvenance|@json}};
   
@@ -381,7 +381,7 @@
         {{if $conf.dPurgences.allow_change_patient || !$sejour->_id || $app->user_type == 1}} 
           <button type="button" class="search notext" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
         {{/if}}
-        <script type="text/javascript">
+        <script>
           PatSelector.init = function(){
             this.sForm = "editRPU";
             this.sId   = "_patient_id";
@@ -454,7 +454,7 @@
       </tr>
     {{/if}}
     
-    <script type="text/javascript">
+    <script>
       Main.add(function(){
         var form = getForm("editRPU");
         
@@ -475,17 +475,21 @@
         <button type="button" class="cancel opacity-60 notext" onclick="this.form.elements['box_id'].selectedIndex=0"></button>
         &mdash; {{tr}}CRPU-_service_id{{/tr}} :
         {{if $services|@count == 1}}
-          {{assign var=first_service value=$services|@reset}}
+          {{assign var=first_service value=$services_type|@reset|@reset}}
           {{$first_service->_view}}
         {{else}}
-        <select name="_service_id" class="{{$sejour->_props.service_id}}">
-          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-          {{foreach from=$services item=_service}}
-          <option value="{{$_service->_id}}" {{if "Urgences" == $_service->nom}} selected="selected" {{/if}}>
-            {{$_service->_view}}
-          </option>
-          {{/foreach}}
-        </select>
+          <select name="_service_id" class="{{$sejour->_props.service_id}}">
+            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+            {{foreach from=$services_type item=_services key=nom_serv}}
+              <optgroup label="{{$nom_serv}}">
+                {{foreach from=$_services item=_service}}
+                  <option value="{{$_service->_id}}" {{if $rpu->_id && $rpu->_ref_box->_ref_chambre->service_id == $_service->_id}} selected="selected" {{/if}}>
+                    {{$_service->_view}}
+                  </option>
+                {{/foreach}}
+              </optgroup>
+            {{/foreach}}
+          </select>
         {{/if}}
       </td>
       <th>{{mb_label object=$rpu field="date_at"}}</th>
@@ -501,7 +505,7 @@
             <input type="text" name="_keywords_circonstance" value="{{if $orumip_active}}{{$rpu->_libelle_circonstance}}{{else}}{{$rpu->circonstance}}{{/if}}" class="autocomplete"/>
             <br/>
             <span id="libelle_circonstance" onclick="emptyCirconstance()" style="width: 150px;">{{$rpu->_libelle_circonstance}}</span>
-            <script type="text/javascript">
+            <script>
               function emptyCirconstance() {
                 var oForm = getForm("editRPU");
                 $V(oForm.circonstance, "");
@@ -729,7 +733,7 @@
   
   
   {{if $sejour->mode_entree}}
-  <script type="text/javascript">
+  <script>
     // Lancement des fonctions de contraintes entre les champs
     ContraintesRPU.updateProvenance("{{$sejour->mode_entree}}");
   </script>

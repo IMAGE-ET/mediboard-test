@@ -500,6 +500,8 @@ $locales['config-dPurgences-use_blocage_lit'] = 'Utiliser le blocage de lit';
 $locales['config-dPurgences-use_blocage_lit-desc'] = 'Utiliser le blocage de lit pour les urgences à destination des mutations';
 $locales['config-dPurgences-valid_cotation_sortie_reelle'] = 'Valider cotation lors de la sortie réelle';
 $locales['config-dPurgences-valid_cotation_sortie_reelle-desc'] = 'Valider cotation lors de la sortie réelle';
+$locales['config-dPurgences-view_rpu_uhcd'] = 'Afficher les services d\'urgence et UHCD';
+$locales['config-dPurgences-view_rpu_uhcd-desc'] = 'Afficher les services d\'urgence et UHCD dans la main courante';
 $locales['confirm-RPU-Hospitalisation-simple'] = 'Vous êtes sur le point de tranformer un passage aux urgences en hospitalisation.
 
 Cette action modifiera le type d\'hospitalisation de séjour pour permettre son traitement dans les unités de soins.

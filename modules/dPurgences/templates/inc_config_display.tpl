@@ -30,8 +30,8 @@
 	  {{mb_include module=system template=inc_config_str var=attente_third_part}}
     {{mb_include module=system template=inc_config_bool var=show_statut}}
     {{mb_include module=system template=inc_config_bool var=display_regule_par}}
-    
-    
+    {{mb_include module=system template=inc_config_bool var=view_rpu_uhcd}}
+
 	  <tr>
 	    <td class="button" colspan="2">
 	      <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

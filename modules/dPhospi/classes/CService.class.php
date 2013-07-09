@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dPhospi
- *  @version $Revision$
- *  @author Thomas Despoix
-*/
+ * $Id:$
+ *
+ * @package    Mediboard
+ * @subpackage dPhospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
+ */
 
 /**
  * Classe CService.
@@ -14,35 +16,38 @@
  */
 class CService extends CMbObject {
   // DB Table key
-  var $service_id = null;
+  public $service_id;
 
   // DB references
-  var $group_id       = null;
-  var $responsable_id = null;
-  var $secteur_id     = null;
+  public $group_id;
+  public $responsable_id;
+  public $secteur_id;
 
   // DB Fields
-  var $nom         = null;
-  var $type_sejour = null;
-  var $description = null;
-  var $cancelled   = null;
-  var $hospit_jour = null;
-  var $urgence     = null;
-  var $uhcd        = null;
-  var $externe     = null;
-  var $neonatalogie = null;
+  public $nom;
+  public $type_sejour;
+  public $description;
+  public $cancelled;
+  public $hospit_jour;
+  public $urgence;
+  public $uhcd;
+  public $externe;
+  public $neonatalogie;
 
   /**
    * @var CChambre[]
    */
-  var $_ref_chambres = null;
+  public $_ref_chambres;
 
   /**
    * @var CGroups
    */
-  var $_ref_group    = null;
-  var $_ref_validrepas = null;
+  public $_ref_group;
+  public $_ref_validrepas;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'service';
@@ -50,6 +55,9 @@ class CService extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
 
@@ -73,6 +81,9 @@ class CService extends CMbObject {
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["group_id"]       = "ref notNull class|CGroups";
@@ -94,6 +105,9 @@ class CService extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;
@@ -132,6 +146,8 @@ class CService extends CMbObject {
   }
 
   /**
+   * Chargements des chambres du service
+   *
    * @param bool $annule Charge les chambres desactivées aussi
    *
    * @return CChambre[]
@@ -201,6 +217,7 @@ class CService extends CMbObject {
     $service->group_id = CGroups::loadCurrent()->_id;
     $service->urgence   = "1";
     $service->cancelled = "0";
+    /** @var CService[] $services */
     $services = $service->loadMatchingList();
     foreach ($services as $_service) {
       $_service->loadRefsChambres(false);
@@ -222,9 +239,32 @@ class CService extends CMbObject {
     $service->group_id = CGroups::loadCurrent()->_id;
     $service->uhcd      = "1";
     $service->cancelled = "0";
+    /** @var CService[] $services */
     $services = $service->loadMatchingList();
     foreach ($services as $_service) {
-      $_service->loadRefsBack();
+      $_service->loadRefsChambres();
+      foreach ($_service->_ref_chambres as $_chambre) {
+        $_chambre->loadRefsBack();
+      }
+    }
+
+    return $services;
+  }
+
+  /**
+   * Charge les services d'UHCD et d'urgence de l'établissement courant
+   *
+   * @return CService[]
+   */
+  static function loadServicesUHCDRPU() {
+    $where = array();
+    $where[]            = "uhcd = '1' OR urgence = '1'";
+    $where["cancelled"] = " = '0'";
+    $service = new CService();
+    /** @var CService[] $services */
+    $services = $service->loadGroupList($where);
+    foreach ($services as $_service) {
+      $_service->loadRefsChambres();
       foreach ($_service->_ref_chambres as $_chambre) {
         $_chambre->loadRefsBack();
       }

@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage Urgences
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 $dPconfig["dPurgences"] = array (
@@ -43,5 +43,6 @@ $dPconfig["dPurgences"] = array (
   "gerer_circonstance"        => "0",
   "valid_cotation_sortie_reelle" => "1",
   "display_regule_par"        => "0",
+  "view_rpu_uhcd"             => "0",
   "use_blocage_lit"           => "0"
 );

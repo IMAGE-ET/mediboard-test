@@ -26,6 +26,7 @@ if ($rpu_id && !$rpu->load($rpu_id)) {
   CAppUI::setMsg("Ce RPU n'est pas ou plus disponible", UI_MSG_WARNING);
   CAppUI::redirect("m=$m&tab=$tab&rpu_id=0");
 }
+$rpu->loadRefBox()->loadRefChambre();
 
 // Création d'un RPU pour un séjour existant
 if ($sejour_id = CValue::get("sejour_id")) {
@@ -77,12 +78,23 @@ $contrainteProvenance[8] = array("", 5, 8);
 
 // Chargement des boxes 
 $services = array();
-// Urgences pour un séjour "urg"
-$services = CService::loadServicesUrgence();
+$services_type = array(
+  "Urgences" => CService::loadServicesUrgence(),
+  "UHCD" => CService::loadServicesUHCD());
 
-// UHCD pour un séjour "comp" et en UHCD
-if ($sejour->type == "comp" && $sejour->UHCD) {
-  $services = CService::loadServicesUHCD();
+if (CAppUI::conf("dPurgences view_rpu_uhcd")) {
+  // Affichage des services UHCD et d'urgence
+  $services = CService::loadServicesUHCDRPU();
+}
+elseif ($sejour->type == "comp" && $sejour->UHCD) {
+  // UHCD pour un séjour "comp" et en UHCD
+  $services = $services_type["UHCD"];
+  unset($services_type["Urgences"]);
+}
+else {
+  // Urgences pour un séjour "urg"
+  $services = $services_type["Urgences"];
+  unset($services_type["UHCD"]);
 }
 
 $module_orumip = CModule::getActive("orumip");
@@ -133,6 +145,7 @@ if (CModule::getActive("dPprescription")) {
 }
 
 $smarty->assign("services"            , $services);
+$smarty->assign("services_type"       , $services_type);
 $smarty->assign("contrainteProvenance", $contrainteProvenance);
 $smarty->assign("userSel"             , $user);
 $smarty->assign("today"               , CMbDT::date());
