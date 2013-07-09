@@ -14,9 +14,8 @@ $correspondant_id = CValue::get("correspondant_id");
 $correspondant = new CCorrespondantPatient();
 $correspondant->load($correspondant_id);
 
+//smarty
 $smarty = new CSmartyDP();
-
 $smarty->assign("correspondant", $correspondant);
 $smarty->assign("mode_modele"  , 1);
-
 $smarty->display("inc_form_correspondant.tpl");

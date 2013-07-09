@@ -20,7 +20,7 @@
     Calendar.regField(form.date_fin  , null, { noView: false } );
 
     {{if !$correspondant->_id}}
-      toggleUrrsafParente(form.relation);
+      $(form.relation).onchange();
     {{/if}}
 
 
@@ -101,25 +101,35 @@
 
   } );
 
+
+  showElem = function(eltList) {
+    $(eltList).each(function(elt) {
+      $(elt).setStyle({display: "table-row"});
+    });
+  };
+
+  hideElem = function(eltList) {
+    $(eltList).each(function(elt) {
+      $(elt).setStyle({display: "none"});
+    });
+  };
+
   toggleUrrsafParente = function(elt) {
     $("parente").toggle();
     if ($V(elt) == "employeur") {
-      $("urssaf").setStyle({display: "table-row"});
-      $("parente").setStyle({display: "none"});
-      $("parente_autre").setStyle({display: "none"});
+      showElem(["urssaf"]);
+      hideElem(["parente", "parente_autre"]);
       var form = getForm("editCorrespondant");
       $V(form.parente_autre, "");
       $V(form.relation_autre, "");
       elt.form.parente.selectedIndex = 0;
     }
     else if ($V(elt) == "assurance") {
-      $("urssaf").setStyle({display: "none"});
-      $("parente").setStyle({display: "none"});
-      $("parente_autre").setStyle({display: "none"});
+      hideElem(["urssaf" ,"parente", "parente_autre"]);
     }
     else {
-      $("parente").setStyle({display: "table-row"});
-      $("urssaf").setStyle({display: "none"});
+      showElem(["parente"]);
+      hideElem(["urssaf"]);
       $V(elt.form.urrsaf, "");
     }
   };
@@ -129,81 +139,57 @@
       $("relation_autre").setStyle({display: "inline"});
     }
     else {
-      $("relation_autre").setStyle({display: "none"});
+      hideElem(["relation_autre"]);
     }
   };
 
   toggleParenteAutre = function(elt) {
     if ($V(elt) == "autre") {
-      $("parente_autre").setStyle({display: "table-row"});
+      showElem(["parente_autre"]);
     }
     else {
-      $("parente_autre").setStyle({display: "none"});
+      hideElem(["parente_autre"]);
       $V(getForm("editCorrespondant").parente_autre, '');
     }
   };
 
   toggleConfiancePrevenir = function(elt) {
     if ($V(elt) == "confiance") {
-      $("nom_jeune_fille").setStyle({display: "table-row"});
-      $("prenom").setStyle({display: "table-row"});
-      $("naissance").setStyle({display: "table-row"});
+      showElem(["nom_jeune_fille", "prenom", "naissance"]);
     }
     else if ($V(elt) == "prevenir") {
-      $("nom_jeune_fille").setStyle({display: "none"});
-      $("prenom").setStyle({display: "table-row"});
-      $("naissance").setStyle({display: "table-row"});
+      showElem(["prenom", "naissance"]);
+      hideElem(["nom_jeune_fille"]);
     }
     else {
-      $("nom_jeune_fille").setStyle({display: "none"});
-      $("prenom").setStyle({display: "none"});
-      $("naissance").setStyle({display: "none"});
+      showElem(["prenom", "naissance"]);
+      hideElem(["nom_jeune_fille"]);
     }
   };
 
   toggleAssurance = function(elt) {
       if ($V(elt) == "assurance") {
          {{if $conf.ref_pays == 2}}
-          $("ean").setStyle({display: "table-row"});
-          $("ean_base").setStyle({display: "table-row"});
-          $("type_pec").setStyle({display: "table-row"});
-          $("employeur").setStyle({display: "table-row"});
-          $("num_assure").setStyle({display: "none"});
-          $("ean_id").setStyle({display: "table-row"});
-          $("assure_id").setStyle({display: "table-row"});
+          showElem(["surnom", "ean", "ean_base", "type_pec", "employeur", "ean_id", "assure_id"]);
+          hideElem(["num_assure"]);
         {{/if}}
-        $("date_debut").setStyle({display: "table-row"});
-        $("date_fin").setStyle({display: "table-row"});
-        $("prenom").setStyle({display: "none"});
+          showElem(["date_debut", "date_fin"]);
+          hideElem(["prenom"]);
       }
       else if ($V(elt) == "employeur") {
         {{if $conf.ref_pays == 2}}
-          $("ean").setStyle({display: "none"});
-          $("ean_base").setStyle({display: "none"});
-          $("type_pec").setStyle({display: "none"});
-          $("num_assure").setStyle({display: "table-row"});
-          $("employeur").setStyle({display: "none"});
-          $("ean_id").setStyle({display: "none"});
-          $("assure_id").setStyle({display: "none"});
+          showElem(["num_assure"]);
+          hideElem(["ean", "ean_base", "type_pec", "employeur", "ean_id", "assure_id"]);
         {{/if}}
-        $("prenom").setStyle({display: "none"});
-        $("date_debut").setStyle({display: "table-row"});
-        $("date_fin").setStyle({display: "table-row"});
+        showElem(["date_debut", "date_fin"]);
+        hideElem(["prenom"]);
       }
       else {
         {{if $conf.ref_pays == 2}}
-          $("ean").setStyle({display: "none"});
-          $("ean_base").setStyle({display: "none"});
-          $("type_pec").setStyle({display: "none"});
-          $("num_assure").setStyle({display: "none"});
-          $("employeur").setStyle({display: "none"});
-          $("ean_id").setStyle({display: "none"});
-          $("assure_id").setStyle({display: "none"});
+          hideElem(["ean", "ean_base", "type_pec", "num_assure", "employeur", "ean_id", "assure_id"]);
         {{/if}}
-        $("prenom").setStyle({display: "table-row"});
-        $("date_debut").setStyle({display: "none"});
-        $("date_fin").setStyle({display: "none"});
-
+        showElem(["prenom"]);
+        hideElem(["surnom", "date_debut", "date_fin"]);
       }
   }
 </script>
@@ -260,7 +246,9 @@
         {{/if}}
       </td>
     </tr>
-    <tr>
+
+
+    <tr {{if $correspondant->relation != "assurance"}}style="display: none;"{{/if}} id="surnom">
       <th>{{mb_label object=$correspondant field="surnom"}}</th>
       <td>
         {{if $mode_modele}}
@@ -270,6 +258,7 @@
         {{/if}}
       </td>
     </tr>
+
     <tr {{if $correspondant->relation != "confiance"}}style="display: none;"{{/if}} id="nom_jeune_fille">
       <th>{{mb_label object=$correspondant field="nom_jeune_fille"}}</th>
       <td>{{mb_field object=$correspondant field="nom_jeune_fille"}}</td>
@@ -285,21 +274,19 @@
       <td>{{mb_field object=$correspondant field="num_assure"}}</td>
     </tr>
 
-    {{if !$mode_modele}}
-      <tr id="employeur" {{if ($correspondant->relation != "assurance" && $correspondant->_id) || $conf.ref_pays == 1}} style="display: none;"{{/if}}>
-        <th>{{mb_label object=$correspondant field="employeur"}}</th>
-        <td>
-          <select name="employeur">
-            <option value="">-- Choisir</option>
-            {{foreach from=$patient->_ref_correspondants_patient item=_correspondant}}
-              {{if $_correspondant->relation == "employeur"}}
-                <option value="{{$_correspondant->_id}}" {{if $correspondant->employeur == $_correspondant->_id}}selected="selected"{{/if}}>{{$_correspondant->nom}}</option>
-              {{/if}}
-            {{/foreach}}
-          </select>
-        </td>
-      </tr>
-    {{/if}}
+    <tr id="employeur" {{if ($correspondant->relation != "assurance" && $correspondant->_id) || $conf.ref_pays == 1 || !$mode_modele}} style="display: none;"{{/if}}>
+      <th>{{mb_label object=$correspondant field="employeur"}}</th>
+      <td>
+        <select name="employeur">
+          <option value="">-- Choisir</option>
+          {{foreach from=$patient->_ref_correspondants_patient item=_correspondant}}
+            {{if $_correspondant->relation == "employeur"}}
+              <option value="{{$_correspondant->_id}}" {{if $correspondant->employeur == $_correspondant->_id}}selected="selected"{{/if}}>{{$_correspondant->nom}}</option>
+            {{/if}}
+          {{/foreach}}
+        </select>
+      </td>
+    </tr>
 
     <tr {{if $correspondant->relation != "confiance"}}style="display: none;"{{/if}} id="naissance">
       <th>{{mb_label object=$correspondant field="naissance"}}</th>
@@ -380,18 +367,16 @@
       </tr>
     {{/if}}
 
-    {{if !$mode_modele}}
       <tr id="date_debut"
-        {{if $correspondant->relation != "assurance" && $correspondant->relation != "employeur" && $correspondant->_id}} style="display: none;"{{/if}}>
+        {{if ($correspondant->relation != "assurance" && $correspondant->relation != "employeur" && $correspondant->_id && !$mode_modele)}} style="display: none;"{{/if}}>
         <th>{{mb_label object=$correspondant field="date_debut"}}</th>
         <td>{{mb_field object=$correspondant field="date_debut"}}</td>
       </tr>
 
-      <tr id="date_fin" {{if $correspondant->relation != "assurance" && $correspondant->relation != "employeur" && $correspondant->_id}} style="display: none;"{{/if}}>
+      <tr id="date_fin" {{if ($correspondant->relation != "assurance" && $correspondant->relation != "employeur" && $correspondant->_id && !$mode_modele)}} style="display: none;"{{/if}}>
         <th>{{mb_label object=$correspondant field="date_fin"}}</th>
         <td>{{mb_field object=$correspondant field="date_fin"}}</td>
       </tr>
-    {{/if}}
 
     <tr>
       <td colspan="2" class="button">
