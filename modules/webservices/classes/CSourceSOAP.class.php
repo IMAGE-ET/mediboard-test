@@ -30,6 +30,11 @@ class CSourceSOAP extends CExchangeSource {
   public $passphrase;
   public $iv_passphrase;
   public $safe_mode;
+  public $soap_version;
+
+  // Options de contexte SSL
+  public $verify_peer;
+  public $cafile;
 
   public $_headerbody = array();
 
@@ -58,13 +63,19 @@ class CSourceSOAP extends CExchangeSource {
     $specs["evenement_name"]   = "str";
     $specs["single_parameter"] = "str";
     $specs["encoding"]         = "enum list|UTF-8|ISO-8859-1|ISO-8859-15 default|UTF-8";
-    $specs["stream_context"]   = "str";
     $specs["type_soap"]        = "enum list|CMbSOAPClient|CNuSOAPClient default|CMbSOAPClient notNull";
-    $specs["local_cert"]       = "str";
-    $specs["passphrase"]       = "password show|0 loggable|0";
     $specs["iv_passphrase"]    = "str show|0 loggable|0";
     $specs["safe_mode"]        = "bool default|0";
-    
+    $specs["soap_version"]     = "enum list|SOAP_1_1|SOAP_1_2 default|SOAP_1_1 notNull";
+
+    $specs["local_cert"]       = "str";
+    $specs["passphrase"]       = "password show|0 loggable|0";
+
+    $specs["verify_peer"]      = "bool default|0";
+    $specs["cafile"]           = "str";
+
+    $specs["stream_context"]   = "str";
+
     return $specs;
   }
 
@@ -158,7 +169,8 @@ class CSourceSOAP extends CExchangeSource {
 
     $soap_client->make(
       $this->host, $this->user, $password, $this->type_echange, $options, null,
-      $this->stream_context, $this->local_cert, $passphrase, $this->safe_mode
+      $this->stream_context, $this->local_cert, $passphrase, $this->safe_mode,
+      $this->verify_peer, $this->cafile
     );
     
     if ($soap_client->client->soap_client_error) {

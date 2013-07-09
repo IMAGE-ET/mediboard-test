@@ -16,7 +16,7 @@
   
   {{if !$_source->_id}}
   <tr>
-    <td class="halfPane">
+    <td>
       <a class="button new" onclick="$('config-source-{{$class}}-{{$sourcename}}').show(); Control.Modal.position();">
         {{tr}}{{$class}}-title-create{{/tr}}
       </a>

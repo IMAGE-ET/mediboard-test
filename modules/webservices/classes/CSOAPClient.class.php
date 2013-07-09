@@ -51,44 +51,63 @@ class CSOAPClient {
    * @param string  $stream_context HTTP method (GET, POST, HEAD, PUT, ...)
    * @param string  $local_cert     Path of the certifacte
    * @param string  $passphrase     Pass phrase for the certificate
+   * @param boolean $safe_mode      Safe mode
+   * @param boolean $verify_peer    Require verification of SSL certificate used
+   * @param string  $cafile         Location of Certificate Authority file on local filesystem
    *
    * @throws CMbException
    *
    * @return CMbSOAPClient | CNuSOAPClient
    */
   public function make(
-      $rooturl, $login = null,
-      $password = null, $type = null,
+      $rooturl,
+      $login = null,
+      $password = null,
+      $type = null,
       $options = array(),
       $loggable = null,
       $stream_context = null,
       $local_cert = null,
       $passphrase = null,
-      $safe_mode = 0
+      $safe_mode = false,
+      $verify_peer = false,
+      $cafile = null
   ) {
+    if (($login && $password) || (array_key_exists('login', $options) && array_key_exists('password', $options))) {
+      $login = $login ? $login : $options['login'];
+      if (preg_match('#\%u#', $rooturl)) {
+        $rooturl = str_replace('%u', $login, $rooturl);
+      }
+      else {
+        $options['login'] = $login;
+      }
+
+      $password = $password ? $password : $options['password'];
+      if (preg_match('#\%p#', $rooturl)) {
+        $rooturl = str_replace('%p', $password, $rooturl);
+      }
+      else {
+        $options['password'] = $password;
+      }
+    }
+
     if (!$safe_mode) {
       if (!url_exists($rooturl, $stream_context)) {
         throw new CMbException("CSourceSOAP-unreachable-source", $rooturl);
       }
     }
 
-    if (($login && $password) || (array_key_exists('login', $options) && array_key_exists('password', $options))) {
-      if (preg_match('#\%u#', $rooturl)) {
-        $rooturl = str_replace('%u', $login ? $login : $options['login'], $rooturl);
-      }
-    
-      if (preg_match('#\%p#', $rooturl)) {
-        $rooturl = str_replace('%p', $password ? $password : $options['password'], $rooturl);
-      }
-    }
-
     switch ($this->type_client) {
       case 'CNuSOAPClient' :
-        $this->client = new CNuSOAPClient($rooturl, $type, $options, $loggable, $local_cert, $passphrase, $safe_mode);
+        $this->client = new CNuSOAPClient(
+          $rooturl, $type, $options, $loggable, $local_cert, $passphrase, $safe_mode, $verify_peer, $cafile
+        );
         break;
         
       default :
-        $this->client = new CMbSOAPClient($rooturl, $type, $options, $loggable, $local_cert, $passphrase, $safe_mode);
+        $this->client = new CMbSOAPClient(
+          $rooturl, $type, $options, $loggable, $local_cert, $passphrase, $safe_mode, $verify_peer, $cafile
+        );
         break;
     }
     

@@ -11,73 +11,72 @@
  */
 
 class CSetupwebservices extends CSetup {
-  
-function __construct() {
-  parent::__construct();
+  function __construct() {
+    parent::__construct();
 
-  $this->mod_name = "webservices";
-  $this->makeRevision("all");
+    $this->mod_name = "webservices";
+    $this->makeRevision("all");
 
-  $this->makeRevision("0.10");
+    $this->makeRevision("0.10");
 
-  $query = "CREATE TABLE `echange_soap` (
-            `echange_soap_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-            `emetteur` VARCHAR (255),
-            `destinataire` VARCHAR (255),
-            `type` VARCHAR (255),
-            `date_echange` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-            `web_service_name` VARCHAR (255),
-            `function_name` VARCHAR (255) NOT NULL,
-            `input` TEXT NOT NULL,
-            `output` TEXT
-          ) /*! ENGINE=MyISAM */;";
-   $this->addQuery($query);
-
-   $this->makeRevision("0.11");
-   $query = "ALTER TABLE `echange_soap`
-             ADD `soapfault` ENUM ('0','1') DEFAULT '0',
-             ADD INDEX (`date_echange`);";
-   $this->addQuery($query);
-
-   $this->makeRevision("0.12");
-   $query = "ALTER TABLE `echange_soap`
-            ADD `purge` ENUM ('0','1') DEFAULT '0';";
-   $this->addQuery($query);
-
-   $this->makeRevision("0.13");
-   $query = "ALTER TABLE `echange_soap`
-            CHANGE `input` `input` TEXT;";
-   $this->addQuery($query);
-
-   $this->makeRevision("0.14");
-   $query = "ALTER TABLE `echange_soap`
-             ADD `response_time` FLOAT,
-             ADD INDEX (`type`);";
-   $this->addQuery($query);
-
-   $this->makeRevision("0.15");
-   $query = "ALTER TABLE `echange_soap`
-             ADD INDEX (`web_service_name`),
-             ADD INDEX (`function_name`);";
-   $this->addQuery($query);
-
-   $this->makeRevision("0.16");
-   $query = "ALTER TABLE `echange_soap`
-            ADD `trace` ENUM ('0','1') DEFAULT '0',
-            ADD `last_request_headers` TEXT,
-            ADD `last_response_headers` TEXT,
-            ADD `last_request` MEDIUMTEXT,
-            ADD `last_response` MEDIUMTEXT;";
-   $this->addQuery($query);
-
-   $query = "CREATE TABLE IF NOT EXISTS `source_soap` (
-              `source_soap_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-              `wsdl_mode` ENUM ('0','1') DEFAULT '1',
-              `name` VARCHAR (255) NOT NULL,
-              `host` TEXT NOT NULL,
-              `user` VARCHAR (255),
-              `password` VARCHAR (50)
+    $query = "CREATE TABLE `echange_soap` (
+              `echange_soap_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `emetteur` VARCHAR (255),
+              `destinataire` VARCHAR (255),
+              `type` VARCHAR (255),
+              `date_echange` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+              `web_service_name` VARCHAR (255),
+              `function_name` VARCHAR (255) NOT NULL,
+              `input` TEXT NOT NULL,
+              `output` TEXT
             ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.11");
+    $query = "ALTER TABLE `echange_soap`
+               ADD `soapfault` ENUM ('0','1') DEFAULT '0',
+               ADD INDEX (`date_echange`);";
+     $this->addQuery($query);
+
+     $this->makeRevision("0.12");
+     $query = "ALTER TABLE `echange_soap`
+              ADD `purge` ENUM ('0','1') DEFAULT '0';";
+     $this->addQuery($query);
+
+     $this->makeRevision("0.13");
+     $query = "ALTER TABLE `echange_soap`
+              CHANGE `input` `input` TEXT;";
+     $this->addQuery($query);
+
+     $this->makeRevision("0.14");
+     $query = "ALTER TABLE `echange_soap`
+               ADD `response_time` FLOAT,
+               ADD INDEX (`type`);";
+     $this->addQuery($query);
+
+     $this->makeRevision("0.15");
+     $query = "ALTER TABLE `echange_soap`
+               ADD INDEX (`web_service_name`),
+               ADD INDEX (`function_name`);";
+     $this->addQuery($query);
+
+     $this->makeRevision("0.16");
+     $query = "ALTER TABLE `echange_soap`
+              ADD `trace` ENUM ('0','1') DEFAULT '0',
+              ADD `last_request_headers` TEXT,
+              ADD `last_response_headers` TEXT,
+              ADD `last_request` MEDIUMTEXT,
+              ADD `last_response` MEDIUMTEXT;";
+     $this->addQuery($query);
+
+     $query = "CREATE TABLE IF NOT EXISTS `source_soap` (
+                `source_soap_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `wsdl_mode` ENUM ('0','1') DEFAULT '1',
+                `name` VARCHAR (255) NOT NULL,
+                `host` TEXT NOT NULL,
+                `user` VARCHAR (255),
+                `password` VARCHAR (50)
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
    
     $this->makeRevision("0.17");
@@ -113,7 +112,7 @@ function __construct() {
     $this->addQuery($query);
     
     $query = "ALTER TABLE `sender_soap` 
-              ADD INDEX (`group_id`);";
+                ADD INDEX (`group_id`);";
     $this->addQuery($query);
     
     $this->makeRevision("0.20");
@@ -129,7 +128,7 @@ function __construct() {
     $this->makeRevision("0.21");
     
     $query = "ALTER TABLE `source_soap` 
-              ADD `loggable` ENUM ('0','1') NOT NULL DEFAULT '1';";
+                ADD `loggable` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
     
     $this->makeRevision("0.22");
@@ -160,7 +159,7 @@ function __construct() {
     $this->makeRevision("0.26");
     
     $query = "ALTER TABLE `source_soap` 
-              ADD `type_soap` ENUM ('CMbSOAPClient','CNuSOAPClient') NOT NULL DEFAULT 'CMbSOAPClient';";
+                ADD `type_soap` ENUM ('CMbSOAPClient','CNuSOAPClient') NOT NULL DEFAULT 'CMbSOAPClient';";
     $this->addQuery($query);
     
     $this->makeRevision("0.27");
@@ -183,18 +182,26 @@ function __construct() {
                 ADD `iv_passphrase` VARCHAR (16) AFTER `passphrase`;";
     $this->addQuery($query);
 
-  $this->makeRevision("0.30");
-  $query = "UPDATE source_soap
+    $this->makeRevision("0.30");
+    $query = "UPDATE source_soap
                 SET source_soap.name = Replace(name, 'CReceiverIHE', 'CReceiverHL7v2')
                 WHERE source_soap.name LIKE 'CReceiverIHE-%';";
-  $this->addQuery($query);
+    $this->addQuery($query);
 
     $this->makeRevision("0.31");
 
     $query = "ALTER TABLE source_soap
-                  ADD `safe_mode` ENUM ('0','1') DEFAULT '0';";
+                ADD `safe_mode` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.32";
+    $this->makeRevision("0.32");
+
+    $query = "ALTER TABLE source_soap
+                ADD `soap_version` ENUM ('SOAP_1_1','SOAP_1_2') NOT NULL DEFAULT 'SOAP_1_1',
+                ADD `verify_peer` ENUM ('0','1') DEFAULT '0',
+                ADD `cafile` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.33";
   }
 }

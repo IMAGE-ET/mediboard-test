@@ -27,19 +27,24 @@ class CNuSOAPClient extends nusoap_client {
   /**
    * The constructor
    * 
-   * @param string  $rooturl    The URL of the wsdl file
-   * @param string  $type       The type of exchange
-   * @param array   $options    An array of options
-   * @param boolean $loggable   True if you want to log all the exchanges with the web service
-   * @param string  $local_cert Path of the certifacte
-   * @param string  $passphrase Pass phrase for the certificate
-   * @param bool    $safe_mode  Safe mode
+   * @param string  $rooturl     The URL of the wsdl file
+   * @param string  $type        The type of exchange
+   * @param array   $options     An array of options
+   * @param boolean $loggable    True if you want to log all the exchanges with the web service
+   * @param string  $local_cert  Path of the certifacte
+   * @param string  $passphrase  Pass phrase for the certificate
+   * @param boolean $safe_mode   Safe mode
+   * @param boolean $verify_peer Require verification of SSL certificate used
+   * @param string  $cafile      Location of Certificate Authority file on local filesystem
    *
    * @throws CMbException
    *
    * @return CNuSOAPClient
    */
-  function __construct($rooturl, $type = null, $options = array(), $loggable = null, $local_cert = null, $passphrase = null, $safe_mode = 0) {
+  function __construct(
+      $rooturl, $type = null, $options = array(), $loggable = null, $local_cert = null, $passphrase = null, $safe_mode = false,
+      $verify_peer = false, $cafile = null
+  ) {
     $this->wsdl_url = $rooturl;
 
     if ($loggable) {

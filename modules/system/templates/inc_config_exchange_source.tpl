@@ -32,9 +32,9 @@
         url.requestUpdate('exchange_source-'+exchange_source_name);
       }
     </script>
-    <table>
+    <table class="main">
       <tr>
-        <td style="vertical-align: top;">
+        <td style="vertical-align: top;{{if $source->_allowed_instances}} width: 20%" {{/if}}>
           {{if $source->_allowed_instances}}
           <script type="text/javascript">
             Main.add(function () {

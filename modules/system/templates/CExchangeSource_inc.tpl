@@ -10,7 +10,7 @@
 
 <tr {{if !$can->admin}}style="display:none;"{{/if}}>
   <th>{{mb_label object=$source field="name"}}</th>
-  <td><input type="text" readonly="readonly" name="name" value="{{$source->name}}" /></td>
+  <td><input type="text" readonly="readonly" name="name" value="{{$source->name}}" size="50"/></td>
 </tr>
 <tr {{if !$can->admin}}style="display:none;"{{/if}}>
   <th>{{mb_label object=$source field="role"}}</th>

@@ -28,19 +28,24 @@ class CMbSOAPClient extends SoapClient {
   /**
    * The constructor
    *
-   * @param string  $rooturl    The URL of the wsdl file
-   * @param string  $type       The type of exchange
-   * @param array   $options    An array of options
-   * @param boolean $loggable   True if you want to log all the exchanges with the web service
-   * @param string  $local_cert Path of the certifacte
-   * @param string  $passphrase Pass phrase for the certificate
-   * @param bool    $safe_mode  Safe mode
+   * @param string  $rooturl     The URL of the wsdl file
+   * @param string  $type        The type of exchange
+   * @param array   $options     An array of options
+   * @param boolean $loggable    True if you want to log all the exchanges with the web service
+   * @param string  $local_cert  Path of the certifacte
+   * @param string  $passphrase  Pass phrase for the certificate
+   * @param bool    $safe_mode   Safe mode
+   * @param boolean $verify_peer Require verification of SSL certificate used
+   * @param string  $cafile      Location of Certificate Authority file on local filesystem
    *
    * @throws CMbException
    *
    * @return CMbSOAPClient
    */
-  function __construct($rooturl, $type = null, $options = array(), $loggable = null, $local_cert = null, $passphrase = null, $safe_mode = 0) {
+  function __construct(
+      $rooturl, $type = null, $options = array(), $loggable = null, $local_cert = null, $passphrase = null, $safe_mode = false,
+      $verify_peer = false, $cafile = null
+  ) {
     $this->wsdl_url = $rooturl;
 
     if ($loggable) {
@@ -63,16 +68,30 @@ class CMbSOAPClient extends SoapClient {
       }
     }
     
-    // Ajout des options personnalisÈes
+    // Ajout des options personnalisées
     $options = array_merge($options, array("connexion_timeout" => CAppUI::conf("webservices connection_timeout")));
     if (CAppUI::conf("webservices trace")) {
       $options = array_merge($options, array("trace" => true));
     }
+
+    // Authentification HTTP
     if ($local_cert) {
       $options = array_merge($options, array("local_cert" => $local_cert));
     }
     if ($passphrase) {
       $options = array_merge($options, array("passphrase" => $passphrase));
+    }
+
+    // Authentification SSL
+    if ($verify_peer && $cafile) {
+      $context = stream_context_create(
+        array("ssl" =>
+          array("verify_peer" => $verify_peer,
+                "cafile"      => $cafile)
+        )
+      );
+
+      $options = array_merge($options, array("stream_context" => $context));
     }
 
     parent::__construct($this->wsdl_url, $options);
