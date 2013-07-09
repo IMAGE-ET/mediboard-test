@@ -1,11 +1,12 @@
-<?php /* $Id: ajax_vw_prestations.php $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPplanningOp
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $sejour_id = CValue::get("sejour_id");
@@ -51,6 +52,7 @@ if (count($affectations)) {
   }
 }
 
+/** @var CItemLiaison[] $items_liaisons */
 $items_liaisons = $sejour->loadBackRefs("items_liaisons");
 CMbObject::massLoadFwdRef($items_liaisons, "item_souhait_id");
 CMbObject::massLoadFwdRef($items_liaisons, "item_realise_id");
@@ -63,7 +65,7 @@ foreach ($items_liaisons as $_item_liaison) {
     $_item = $_item_liaison->_ref_item_realise;
   }
   
-  switch($_item->object_class) {
+  switch ($_item->object_class) {
     case "CPrestationJournaliere":
       $liaisons_j[$_item_liaison->date][$_item->object_id] = $_item_liaison;
       break;
@@ -179,4 +181,3 @@ $smarty->assign("liaisons_j"   , $liaisons_j);
 $smarty->assign("context"      , $context);
 $smarty->assign("bank_holidays", CMbDT::bankHolidays(CMbDT::date()));
 $smarty->display("inc_vw_prestations.tpl");
-?>

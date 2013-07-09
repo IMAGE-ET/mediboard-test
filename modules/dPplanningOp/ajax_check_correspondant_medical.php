@@ -1,17 +1,19 @@
-<?php /* $Id $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPplanningOp
- * @version $Revision: 6171 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $patient_id   = CValue::get("patient_id");
 $object_id    = CValue::get("object_id");
 $object_class = CValue::get("object_class");
 
+/** @var CMbObject $object */
 $object = new $object_class;
 $object->load($object_id);
 
@@ -25,7 +27,7 @@ if ($patient->_ref_medecin_traitant->_id) {
   $correspondantsMedicaux["traitant"] = $patient->_ref_medecin_traitant;
 }
 
-foreach($patient->_ref_medecins_correspondants as $correspondant) {
+foreach ($patient->_ref_medecins_correspondants as $correspondant) {
   $correspondantsMedicaux["correspondants"][] = $correspondant->_ref_medecin;
 }
 
@@ -39,5 +41,3 @@ $smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
 $smarty->assign("medecin_adresse_par", $medecin_adresse_par);
 
 $smarty->display("inc_check_correspondant_medical.tpl");
-
-?>

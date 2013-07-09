@@ -1,27 +1,16 @@
-<?php /** $Id: **/
-
+<?php
 /**
- * look for a context to find a service
+ * Look for a context to find a service
+ * $Id$
  *
- * @category DPplanningOp
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:\$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
-/**
- * Description
- */
-class CRegleSectorisation extends CMbObject
-{
-
-  /**
-   * Table Key
-   *
-   * @var integer
-   */
+class CRegleSectorisation extends CMbObject {
   public $regle_id;
 
   public $service_id;
@@ -42,13 +31,10 @@ class CRegleSectorisation extends CMbObject
   public $_ref_group;
   public $_inactive;
 
-
   /**
-   * Initialize the class specifications
-   *
-   * @return CMbFieldSpec
+   * @see parent::getSpec()
    */
-  function getSpec()  {
+  function getSpec() {
     $spec = parent::getSpec();
     $spec->table  = "regle_sectorisation";
     $spec->key    = "regle_id";
@@ -56,12 +42,9 @@ class CRegleSectorisation extends CMbObject
   }
 
   /**
-   * Get the properties of our class as string
-   *
-   * @return array
+   * @see parent::getProps()
    */
   function getProps() {
-
     $sejour = new CSejour();
     $types_admission  = $sejour->_specs["type"]->_list;
     $types_pec        = $sejour->_specs["type_pec"]->_list;

@@ -26,15 +26,15 @@ printDossier = function(rpu_id) {
 {{assign var="sejour" value=$object}}
 
 <table class="tbl">
-	{{if !@$no_header}}
+  {{if !@$no_header}}
   <tr>
     <th class="title text" colspan="2" style="vertical-align:middle;">
       {{mb_include module=system template=inc_object_notes}}
-			
+
       <a style="float:left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->_ref_patient->_id}}">
        {{mb_include module=patients template=inc_vw_photo_identite patient=$sejour->_ref_patient size=42}}
       </a>
-	    
+
       <div style="float: right;">
         <button type="button" class="print" onclick="printDossierComplet('{{$sejour->_id}}');">Dossier Soins</button> 
         {{if $object->_ref_rpu && $object->_ref_rpu->_id}}

@@ -152,7 +152,7 @@ var changeField = function(sField, sValue) {
           <tr>
           {{/foreach}}
           <tr>
-          	<td></td>
+            <td></td>
             <td colspan="3" class="button">
               <button type="button" class="submit" onclick="this.form.onsubmit()">{{tr}}Submit{{/tr}}</button>
             </td>

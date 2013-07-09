@@ -10,16 +10,16 @@ ColorSelector.init = function(index) {
   this.sColorView = 'View-Color-'+index;
   this.pop();
 }
-	
+
 ColorSelector.empty = function(index) {
   Form.onSubmitComplete.index = index;
   $('View-Color-'+index).setStyle({ background: '' }); 
-	$V(getForm('Edit-Color-'+index).color, '');
+  $V(getForm('Edit-Color-'+index).color, '');
 }
 
 Form.onSubmitComplete = function (guid, properties) {
   var id = guid.split('-')[1];
-	var form = getForm('Edit-Color-'+Form.onSubmitComplete.index);
+  var form = getForm('Edit-Color-'+Form.onSubmitComplete.index);
   $V(form.color_id, id);
 }
 </script>
@@ -36,14 +36,14 @@ Form.onSubmitComplete = function (guid, properties) {
   <td>{{$count}}</td>
   <td>
     {{assign var=libelle value=$libelle|upper}}
-  	{{assign var=color value=$colors.$libelle}}
-		{{assign var=index value=$smarty.foreach.color.index}}
+    {{assign var=color value=$colors.$libelle}}
+    {{assign var=index value=$smarty.foreach.color.index}}
     <form name="Edit-Color-{{$index}}" action="?" onsubmit="return onSubmitFormAjax(this);" method="post">
-			<input type="hidden" name="m" value="dPplanningOp" />
-			<input type="hidden" name="dosql" value="do_color_libelle_sejour_aed" />
-			<input type="hidden" name="del" value="0" />
-			{{mb_key object=$color}}
-			
+      <input type="hidden" name="m" value="dPplanningOp" />
+      <input type="hidden" name="dosql" value="do_color_libelle_sejour_aed" />
+      <input type="hidden" name="del" value="0" />
+      {{mb_key object=$color}}
+
       {{mb_field object=$color field=libelle hidden=1}}
       {{mb_field object=$color field=color hidden=1 onchange="this.form.onsubmit()"}}
       <span class="color-view" id="View-Color-{{$index}}" style="background: #{{$color->color}};">
@@ -56,7 +56,7 @@ Form.onSubmitComplete = function (guid, properties) {
         {{tr}}Empty{{/tr}}
       </button>
     </form>
-		
+
   </td>
 </tr>
 {{foreachelse}}

@@ -1,11 +1,12 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPplanningOp
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -13,15 +14,18 @@
  */
 class CModeEntreeSejour extends CMbObject {
   // DB Table key
-  var $mode_entree_sejour_id;
+  public $mode_entree_sejour_id;
 
   // DB Table key
-  var $code;
-  var $mode;
-  var $group_id;
-  var $libelle;
-  var $actif;
+  public $code;
+  public $mode;
+  public $group_id;
+  public $libelle;
+  public $actif;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'mode_entree_sejour';
@@ -29,6 +33,9 @@ class CModeEntreeSejour extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["code"]     = "str notNull";
@@ -43,12 +50,18 @@ class CModeEntreeSejour extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["sejours"] = "CSejour mode_entree_id";
     return $backProps;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
 

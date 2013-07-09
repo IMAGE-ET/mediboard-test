@@ -1,11 +1,13 @@
-<?php /* $Id: $*/
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPplanningOp
-* @version $Revision: 13455 $
-* @author Romain OLLIVIER
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -23,7 +25,7 @@ $rank_not_validated = array();
 
 $_op = new COperation();
 $_last_op = null;
-foreach($plageop->_ref_operations as $_op) {
+foreach ($plageop->_ref_operations as $_op) {
   $_op->loadRefChir()->loadRefFunction();
   $_op->loadRefSejour()->loadRefPatient()->loadRefDossierMedical()->countAllergies();
   $_op->loadExtCodesCCAM();

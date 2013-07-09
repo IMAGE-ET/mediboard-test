@@ -1,11 +1,12 @@
-<?php /** $Id:$ **/
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPplanningOp
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -26,8 +27,6 @@ class CChargePriceIndicator extends CMbObject {
   public $actif;
 
   /**
-   * specs
-   *
    * @see parent::getSpec()
    */
   function getSpec() {
@@ -38,8 +37,6 @@ class CChargePriceIndicator extends CMbObject {
   }
 
   /**
-   * props
-   *
    * @see parent::getProps()
    */
   function getProps() {
@@ -58,8 +55,6 @@ class CChargePriceIndicator extends CMbObject {
   }
 
   /**
-   * get back props
-   *
    * @see parent::getBackProps()
    */
   function getBackProps() {
@@ -69,8 +64,6 @@ class CChargePriceIndicator extends CMbObject {
   }
 
   /**
-   * updateformfields
-   *
    * @see parent::updateFormFields()
    */
   function updateFormFields() {

@@ -2,11 +2,11 @@
 
 function setClose(code, type, tarif) {
   if (type == "ccam" ) {
-  	var oSelector = window.opener.CCAMSelector;
+    var oSelector = window.opener.CCAMSelector;
   }
   
   if (type == "cim10") {
-  	var oSelector = window.opener.CIM10Selector;
+    var oSelector = window.opener.CIM10Selector;
   }
 
   oSelector.set(code, tarif);
@@ -60,22 +60,22 @@ Main.add(function () {
     <th>Mode</th>
     <td>
       <input name="mode" value="favoris" type="radio" {{if $mode == "favoris"}}checked="checked"{{/if}} onchange="viewCode();" />
-			<label for="mode_favoris">Favoris</label> 
+      <label for="mode_favoris">Favoris</label>
       <input name="mode" value="stats"   type="radio" {{if $mode == "stats"  }}checked="checked"{{/if}} onchange="viewCode();" />
-			<label for="mode_stats">Statistiques</label> 
+      <label for="mode_stats">Statistiques</label>
     </td>
       
-  	<th>Tri</th>
+    <th>Tri</th>
     <td>
       {{if $mode == "favoris"}}
       Par ordre alphabétique
       {{else}}
       <input name="order" value="alpha" type="radio" {{if $order == "alpha"}}checked="checked"{{/if}} onchange="viewCode();" />
-			<label for="order_alpha">Par ordre alphabetique</label> 
+      <label for="order_alpha">Par ordre alphabetique</label>
       <input name="order" value="taux"  type="radio" {{if $order == "taux"  }}checked="checked"{{/if}} onchange="viewCode();" />
-			<label for="order_taux">Par utilisation</label>
-			{{/if}}
-  	</td>
+      <label for="order_taux">Par utilisation</label>
+      {{/if}}
+    </td>
   </tr>
 
   <tr>
@@ -94,8 +94,8 @@ Main.add(function () {
   {{assign var=user value=$users.$profile}}
   <li>
     <a href="#{{$profile}}">
-    	{{tr}}Profile.{{$profile}}{{/tr}} 
-    	{{$user->_view}}
+      {{tr}}Profile.{{$profile}}{{/tr}}
+      {{$user->_view}}
     </a>
   </li>
 {{/foreach}}

@@ -1,11 +1,12 @@
-<?php /* $Id: typeanesth.class.php 9834 2010-08-17 20:50:07Z MyttO $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPplanningOp
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -13,8 +14,11 @@
  */
 class CIntervHorsPlage extends CMbObject {
   // DB Table key
-  var $interv_hors_plage_id = null;
+  public $interv_hors_plage_id;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'interv_hors_plages';
@@ -22,4 +26,3 @@ class CIntervHorsPlage extends CMbObject {
     return $spec;
   }
 }
-?>

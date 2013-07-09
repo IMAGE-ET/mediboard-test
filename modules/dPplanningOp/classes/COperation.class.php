@@ -1,9 +1,9 @@
-<?php 
+<?php
 /**
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPplanningOp
+ * @subpackage PlanningOp
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
@@ -748,9 +748,10 @@ class COperation extends CCodable implements IPatientRelated {
     // Ne le faire que pour une nouvelle intervention
     // Pour une intervention existante, l'application du protocole
     // store les protocoles
-    if (CAppUI::conf("dPbloc CPlageOp systeme_materiel") == "expert" &&
-        $this->_types_ressources_ids && !$old_object->_id) {
-
+    if (
+        CAppUI::conf("dPbloc CPlageOp systeme_materiel") == "expert" &&
+        $this->_types_ressources_ids && !$old_object->_id
+    ) {
       $types_ressources_ids = explode(",", $this->_types_ressources_ids);
 
       foreach ($types_ressources_ids as $_type_ressource_id) {
@@ -1478,6 +1479,9 @@ class COperation extends CCodable implements IPatientRelated {
     return $affectation;
   }
 
+  /**
+   * @see parent::docsEditable()
+   */
   function docsEditable() {
     if (parent::docsEditable()) {
       return true;
@@ -1488,17 +1492,22 @@ class COperation extends CCodable implements IPatientRelated {
     return !$fix_edit_doc ? true : $this->_ref_sejour->sortie_reelle === null;
   }
 
+  /**
+   * @see parent::completeLabelFields()
+   */
   function completeLabelFields(&$fields) {
     $this->loadRefSejour()->completeLabelFields($fields);
     $this->loadRefPlageOp();
     $this->loadRefAnesth();
 
-    $fields = array_merge($fields, array(
-        "ANESTH"  => $this->_ref_anesth->_view,
-        "LIBELLE" => $this->libelle,
-        "DATE"    => CMbDT::dateToLocale(CMbDT::date($this->_datetime_best)),
-        "COTE"    => $this->getFormattedValue("cote")
-      ));
+    $new_fields = array(
+      "ANESTH"  => $this->_ref_anesth->_view,
+      "LIBELLE" => $this->libelle,
+      "DATE"    => CMbDT::dateToLocale(CMbDT::date($this->_datetime_best)),
+      "COTE"    => $this->getFormattedValue("cote")
+    );
+
+    $fields = array_merge($fields, $new_fields);
   }
 
   function loadBrancardage() {

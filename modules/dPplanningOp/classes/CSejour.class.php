@@ -1,10 +1,11 @@
-<?php 
+<?php
 /**
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPplanningOp
- * @author     Thomas Despoix <dev@openxtrem.com>
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -385,6 +386,7 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @see parent::getProps()
    */
   function getProps() {
+    $service_id_notNull = CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1;
     $props = parent::getProps();
     $props["patient_id"]               = "ref notNull class|CPatient seekable";
     $props["praticien_id"]             = "ref notNull class|CMediusers seekable";
@@ -401,7 +403,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $props["chambre_seule"]            = "bool notNull show|0 default|".(CGroups::loadCurrent()->chambre_particuliere ? 1 : 0);
     $props["reanimation"]              = "bool default|0";
     $props["UHCD"]                     = "bool default|0";
-    $props["service_id"]               = "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService seekable";
+    $props["service_id"]               = "ref".($service_id_notNull ? ' notNull' : '')." class|CService seekable";
     $props["entree_prevue"]            = "dateTime notNull show|0";
     $props["sortie_prevue"]            = "dateTime notNull moreEquals|entree_prevue show|0";
     $props["entree_reelle"]            = "dateTime show|0";
@@ -475,7 +477,8 @@ class CSejour extends CFacturable implements IPatientRelated {
     $props["_type_sejour"]              = "enum list|maladie|accident|esthetique default|maladie";
     $props["_dialyse"]                  = "bool default|0";
     $props["_cession_creance"]          = "bool default|0";
-    $props["_statut_pro"]               = "enum list|chomeur|etudiant|non_travailleur|independant|invalide|militaire|retraite|salarie_fr|salarie_sw|sans_emploi";
+    $props["_statut_pro"]               = "enum list|chomeur|etudiant|non_travailleur|independant|".
+                                                    "invalide|militaire|retraite|salarie_fr|salarie_sw|sans_emploi";
     
     $props["_time_entree_prevue"] = "time";
     $props["_time_sortie_prevue"] = "time";
@@ -515,6 +518,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $props;
   }
 
+  /**
+   * @see parent::loadRelPatient()
+   */
   function loadRelPatient() {
     return $this->loadRefPatient();
   }
@@ -583,6 +589,8 @@ class CSejour extends CFacturable implements IPatientRelated {
         }
       }
     }
+
+    return null;
   }
 
   /**
@@ -676,7 +684,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
-   * Check is the object collide another
+   * Check if the object collides another
    *
    * @param CSejour $sejour                 Sejour
    * @param bool    $collides_update_sejour Launch updateFormFields
@@ -707,13 +715,16 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     switch ($this->conf("check_collisions")) {
       case "no":
-        return;
+        return false;
+
       case "date":
         $lower1 = CMbDT::date($this->entree);
         $upper1 = CMbDT::date($this->sortie);
         $lower2 = CMbDT::date($sejour->entree);
         $upper2 = CMbDT::date($sejour->sortie);
         break;
+
+      default;
       case "datetime":
         $lower1 = $this->entree;
         $upper1 = $this->sortie;
@@ -725,9 +736,16 @@ class CSejour extends CFacturable implements IPatientRelated {
     return CMbRange::collides($lower1, $upper1, $lower2, $upper2, false);
   }
 
+  /**
+   * Apply a prescription protocol
+   *
+   * @param int $operation_id Operation ID
+   *
+   * @return null|string
+   */
   function applyProtocolesPrescription($operation_id = null) {
     if (!$this->_protocole_prescription_chir_id) {
-      return;
+      return null;
     }
 
     // Application du protocole de prescription
@@ -741,13 +759,28 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     /*
     if ($this->_protocole_prescription_anesth_id) {
-      $prescription->applyPackOrProtocole($this->_protocole_prescription_anesth_id, $this->praticien_id, CMbDT::date(), null, $operation_id);
+      $prescription->applyPackOrProtocole(
+        $this->_protocole_prescription_anesth_id,
+        $this->praticien_id,
+        CMbDT::date(),
+        null,
+        $operation_id
+      );
     }
     */
     if ($this->_protocole_prescription_chir_id) {
       $prescription->_dhe_mode = true;
-      $prescription->applyPackOrProtocole($this->_protocole_prescription_chir_id, $this->praticien_id, CMbDT::date(), null, $operation_id, null);
+      $prescription->applyPackOrProtocole(
+        $this->_protocole_prescription_chir_id,
+        $this->praticien_id,
+        CMbDT::date(),
+        null,
+        $operation_id,
+        null
+      );
     }
+
+    return null;
   }
 
   /**
@@ -783,6 +816,8 @@ class CSejour extends CFacturable implements IPatientRelated {
     $where["duree_max"] = " >= '$duree' OR `duree_max` IS NULL";
 
     $regle = new CRegleSectorisation();
+
+    /** @var CRegleSectorisation[] $regles */
     $regles = $regle->loadList($where);
     $count  = count($regles);
 
@@ -917,14 +952,19 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     // Si annulation possible que par le chef de bloc
-    if (CAppUI::conf("dPplanningOp COperation cancel_only_for_resp_bloc") &&
+    if (
+        CAppUI::conf("dPplanningOp COperation cancel_only_for_resp_bloc") &&
         $this->fieldModified("annule", 1) &&
         $this->entree_reelle &&
-        !CModule::getCanDo("dPbloc")->edit) {
+        !CModule::getCanDo("dPbloc")->edit
+    ) {
       foreach ($this->loadRefsOperations() as $_operation) {
         if ($_operation->rank) {
-          CAppUI::setMsg("Impossible de sauvegarder : une des interventions du séjour est validée.\nContactez le responsable de bloc", UI_MSG_ERROR);
-          return;
+          CAppUI::setMsg(
+            "Impossible de sauvegarder : une des interventions du séjour est validée.\nContactez le responsable de bloc",
+            UI_MSG_ERROR
+          );
+          return null;
         }
       }
     }
@@ -979,12 +1019,14 @@ class CSejour extends CFacturable implements IPatientRelated {
     
     $this->completeField("mode_entree_id");
     if ($this->mode_entree_id) {
+      /** @var CModeEntreeSejour $mode */
       $mode = $this->loadFwdRef("mode_entree_id");
       $this->mode_entree = $mode->mode;
     }
 
     $this->completeField("mode_sortie_id");
     if ($this->mode_sortie_id) {
+      /** @var CModeSortieSejour $mode */
       $mode = $this->loadFwdRef("mode_sortie_id");
       $this->mode_sortie = $mode->mode;
     }
@@ -1094,12 +1136,14 @@ class CSejour extends CFacturable implements IPatientRelated {
         return $msg;
       }
     }
+
+    return null;
   }
 
   /**
    *  Récupération des factures du séjour
    *
-   * @return void|CFactureEtablissement[]
+   * @return null|CFactureEtablissement[]
    */
   function loadRefsFactureEtablissement(){
     if (CModule::getActive("dPfacturation") && CAppUI::conf("dPplanningOp CFactureEtablissement use_facture_etab")) {
@@ -1122,6 +1166,8 @@ class CSejour extends CFacturable implements IPatientRelated {
       }
       return $this->_ref_factures;
     }
+
+    return null;
   }
   
   function generateNDA() {
@@ -1289,14 +1335,22 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
   }
 
-
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     // Annulation / Récusation
     $this->completeField("annule", "recuse");
     $annule = $this->annule;
-    if ($this->fieldModified("recuse", "1"))  $annule = "1";
-    if ($this->fieldModified("recuse", "0"))  $annule = "0";
-    if ($this->fieldModified("recuse", "-1")) $annule = "0";
+    if ($this->fieldModified("recuse", "1")) {
+      $annule = "1";
+    }
+    if ($this->fieldModified("recuse", "0")) {
+      $annule = "0";
+    }
+    if ($this->fieldModified("recuse", "-1")) {
+      $annule = "0";
+    }
     $this->annule = $annule;
 
     // Détail d'horaire d'entrée, ne pas comparer la date_entree_prevue à null
@@ -1448,6 +1502,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $sejour->loadList($where, $order, $limit, $group, $ljoin);
   }
 
+  /**
+   * @see parent::getTemplateClasses()
+   */
   function getTemplateClasses() {
     $this->loadRefsFwd();
 
@@ -1464,7 +1521,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $tab;
   }
 
-  // Calcul des droits CMU pour la duree totale du sejour
+  /**
+   * Calcul des droits CMU pour la duree totale du sejour
+   *
+   * @return void
+   */
   function getDroitsCMU() {
     if ($this->_date_sortie_prevue <= $this->_ref_patient->fin_amo && $this->_ref_patient->cmu) {
       $this->_couvert_cmu = 1;
@@ -1480,6 +1541,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
   }
 
+  /**
+   * @see parent::loadRefSejour()
+   */
   function loadRefSejour() {
     $this->_ref_sejour =& $this;
   }
@@ -1516,9 +1580,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * Load surrounding affectations
    *
-   * @param date $date Current date, now if null
+   * @param string $date $date Current date, now if null
    *
-   * @return array[CAffectation] Affectations array with curr, prev and next keys
+   * @return CAffectation[] Affectations array with curr, prev and next keys
    */
   function loadSurrAffectations($date = "") {
     if (!$date) {
@@ -1797,7 +1861,11 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->_ref_suivi_medical[$_consultation->_datetime] = $_consultation;
     }
 
-    if (CModule::getActive("dPprescription") && $this->type == "urg" && CAppUI::conf("dPprescription CPrescription prescription_suivi_soins", CGroups::loadCurrent())) {
+    if (
+        CModule::getActive("dPprescription") &&
+        $this->type == "urg" &&
+        CAppUI::conf("dPprescription CPrescription prescription_suivi_soins", CGroups::loadCurrent())
+    ) {
       $this->loadRefPrescriptionSejour();
       $prescription = $this->_ref_prescription_sejour;
 
@@ -2033,6 +2101,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_list_constantes_medicales = $constantes->loadList($where, 'datetime ASC');
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd($cache = true) {
     $this->loadRefPatient($cache);
     $this->loadRefPraticien($cache);
@@ -2042,6 +2113,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->loadExtCodesCCAM();
   }
 
+  /**
+   * @see parent::loadComplete()
+   */
   function loadComplete() {
     parent::loadComplete();
     foreach ($this->_ref_operations as &$operation) {
@@ -2078,6 +2152,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->_ref_patient->loadRefPhotoIdentite();
   }
 
+  /**
+   * @see parent::loadView()
+   */
   function loadView() {
     parent::loadView();
     $this->loadRefPatient()->loadRefPhotoIdentite();
@@ -2372,6 +2449,9 @@ class CSejour extends CFacturable implements IPatientRelated {
       return $this->praticien_id;
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     if (!$this->_ref_praticien) {
       $this->loadRefPraticien();
@@ -2586,6 +2666,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_curr_operations = $this->getCurrOperation($date, false, false);
   }
 
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack() {
     $this->loadRefsFiles();
     $this->loadRefsAffectations();

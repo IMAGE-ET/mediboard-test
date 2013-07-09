@@ -1,16 +1,18 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPplanningOp
-* @version $Revision$
-* @author Alexis Granger
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 $user = CMediusers::get();
 
 // Si ni praticien ni admin, redirect
-if(!$user->isPraticien() && CCanDo::checkAdmin()){
+if (!$user->isPraticien() && CCanDo::checkAdmin()) {
   CAppUI::redirect();
 }
  
@@ -33,14 +35,13 @@ $filter->_date_max = $now;
 $praticien = new CMediusers();
 $praticiens = array();
 
-if ($user->isFromType(array("Administrator"))){
+if ($user->isFromType(array("Administrator"))) {
   $praticiens = $praticien->loadPraticiens(PERM_EDIT);
 }
 
-if ($user->isPraticien()){
+if ($user->isPraticien()) {
   $praticiens[] = $user;
 }
-
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -53,6 +54,3 @@ $smarty->assign("month_deb", $month_deb);
 $smarty->assign("month_fin", $month_fin);
 $smarty->assign("praticiens", $praticiens);
 $smarty->display("vw_edit_compta.tpl");
-
-
-?>

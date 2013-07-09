@@ -1,11 +1,12 @@
-<?php 
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPplanningOp
- * @version $Revision: 6153 $
- * @author SARL OpenXtrem
- * @license GNU GPL
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -30,7 +31,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
   $cols = fgetcsv($fp, null, ";");
 
   // Each line
-  while($line = fgetcsv($fp, null, ";")) {
+  while ($line = fgetcsv($fp, null, ";")) {
     if (!isset($line[0]) || $line[0] == "") {
       continue;
     }
@@ -138,5 +139,3 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
 $smarty = new CSmartyDP();
 $smarty->assign("results", $results);
 $smarty->display("add_operation_csv.tpl");
-
-?>

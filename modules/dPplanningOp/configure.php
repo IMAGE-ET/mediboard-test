@@ -1,17 +1,19 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPplanningOp
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkAdmin();
 
 $hours = range(0, 23);
 $minutes = range(0, 59);
-$intervals = array("5","10","15","20","30");
+$intervals = array("5", "10", "15", "20", "30");
 $patient_ids = array("0", "1", "2");
 $today = CMbDT::date();
 

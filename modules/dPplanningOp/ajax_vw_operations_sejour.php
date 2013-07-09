@@ -1,18 +1,18 @@
-<?php /* $Id: $ */
-
-/** 
- * @category dPplanningOp
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+<?php
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $sejour_id = CValue::get("sejour_id");
 
 $sejour = new CSejour();
-if($sejour_id) {
+if ($sejour_id) {
   $sejour->load($sejour_id);
   $sejour->canRead();
   $sejour->loadRefsFwd();
@@ -33,5 +33,3 @@ if($sejour_id) {
 $smarty = new CSmartyDP();
 $smarty->assign("sejour", $sejour);
 $smarty->display("inc_info_list_operations.tpl");
-
-?>

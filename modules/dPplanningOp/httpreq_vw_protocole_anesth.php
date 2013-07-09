@@ -1,15 +1,15 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPplanningOp
-* @version $Revision$
-* @author Alexis Granger
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
-global $can;
-
-$can->needsEdit();
+CCanDo::checkEdit();
 
 $prescription_id = CValue::getOrSession("prescription_id");
 
@@ -20,5 +20,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("prescription", $prescription);
 $smarty->assign("nodebug", true);
 $smarty->display("inc_vw_protocole_anesth.tpl");
-
-?>

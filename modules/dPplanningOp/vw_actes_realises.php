@@ -1,11 +1,11 @@
-<?php 
+<?php
 /**
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPplanningOp
+ * @subpackage PlanningOp
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    OXOL, see http://www.mediboard.org/public/OXOL
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 

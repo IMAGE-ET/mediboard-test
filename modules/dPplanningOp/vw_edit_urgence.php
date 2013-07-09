@@ -1,12 +1,14 @@
-<?php 
+<?php
 /**
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPplanningOp
- * @author     Romain Ollivier
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
+
 global $can, $m, $tab;
 
 CCanDo::checkRead();
@@ -103,7 +105,7 @@ if ($op->_id) {
   $op->loadRefs();
   foreach ($op->_ref_actes_ccam as $acte) {
     $acte->loadRefExecutant();
-  }	
+  }
   
   $sejour = $op->_ref_sejour;
   $sejour->loadRefsFwd();
@@ -123,7 +125,7 @@ else {
 // Liste des types d'anesthésie
 $listAnesthType = new CTypeAnesth;
 $orderanesth = "name";
-$listAnesthType = $listAnesthType->loadList(null,$orderanesth);
+$listAnesthType = $listAnesthType->loadList(null, $orderanesth);
 
 // Liste des anesthésistes
 $anesthesistes = $chir->loadAnesthesistes(PERM_READ);
@@ -269,5 +271,3 @@ $smarty->assign("listBlocs",  $listBlocs);
 $smarty->assign("exchange_source"       , $exchange_source);
 
 $smarty->display("vw_edit_planning.tpl");
-
-?>

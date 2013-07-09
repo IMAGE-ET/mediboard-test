@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpatients
- * @version $Revision: 7138 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -21,9 +22,9 @@ $date_min = $date_min ? $date_min : CMbDT::date();
 $where = array("entree" => ">= '$date_min 00:00:00'");
 $listSejours = $sejour->loadList($where, null, $qte);
 
-foreach($listSejours as $_sejour) {
+foreach ($listSejours as $_sejour) {
   CAppUI::setMsg($_sejour->_view, UI_MSG_OK);
-  if($msg = $_sejour->purge()) {
+  if ($msg = $_sejour->purge()) {
     CAppUI::setMsg($msg, UI_MSG_ALERT);
     $error++;
     continue;
@@ -44,6 +45,3 @@ $smarty->assign("error"      , $error);
 $smarty->assign("nb_sejours" , $nb_sejours);
 
 $smarty->display("inc_purge_sejours.tpl");
-
- 
-?>

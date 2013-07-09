@@ -1,17 +1,14 @@
 <?php
-
 /**
+ * $Id$
  *
- *
- * @category PlanningOp
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:\$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
- 
- 
+
 CCanDo::checkAdmin();
 
 $rule_id  = CValue::get("rule_id");

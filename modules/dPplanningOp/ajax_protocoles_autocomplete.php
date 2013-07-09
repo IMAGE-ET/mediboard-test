@@ -1,11 +1,12 @@
-<?php /* $Id: httpreq_field_autocomplete.php 8303 2010-03-10 17:05:12Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision: 8303 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $field        = CValue::get('field');
@@ -21,7 +22,7 @@ $object = new CProtocole();
 $ds = $object->_spec->ds;
 
 $where = array();
-if($chir_id) {
+if ($chir_id) {
   $chir = new CMediusers();
   $chir->load($chir_id);
   $chir->loadRefFunction();
@@ -29,12 +30,12 @@ if($chir_id) {
   $functions_ids = array($chir->function_id);
   $chir->loadBackRefs("secondary_functions");
   if (count($chir->_back["secondary_functions"])) {
-    $functions_ids = array_merge($functions_ids, CMbArray::pluck($chir->_back["secondary_functions"],"function_id"));
+    $functions_ids = array_merge($functions_ids, CMbArray::pluck($chir->_back["secondary_functions"], "function_id"));
   }
   $where[] = "(protocole.chir_id = '$chir->_id' OR protocole.function_id ". CSQLDataSource::prepareIn($functions_ids).")";
 }
 
-if($for_sejour !== null) {
+if ($for_sejour !== null) {
   $where["for_sejour"] = "= '$for_sejour'";
 }
 

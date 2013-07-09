@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPplanningOp
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 if ($praticien_id = CValue::post("praticien_id")) {
   CValue::setSession("praticien_id", $praticien_id);
@@ -27,5 +29,5 @@ if (CValue::post("mode_sortie") == "mutation" && CValue::post("type") == "urg" &
   $affectation->store();
 }
 
-$do = new CDoObjectAddEdit("CSejour", "sejour_id");
+$do = new CDoObjectAddEdit("CSejour");
 $do->doIt();

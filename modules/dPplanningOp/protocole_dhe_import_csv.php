@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPplanningOp
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU GPL
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -95,7 +96,8 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $protocole->libelle     = $results[$i]["motif"];
     if ($prat->_id) {
       $protocole->chir_id = $prat->_id;
-    } else {
+    }
+    else {
       $protocole->function_id = $function->_id;
     }
     

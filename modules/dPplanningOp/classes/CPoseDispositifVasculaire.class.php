@@ -1,36 +1,36 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPplanningOp
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CPoseDispositifVasculaire extends CMbObject {
-  var $pose_dispositif_vasculaire_id = null;
+  public $pose_dispositif_vasculaire_id;
 
-  var $operation_id     = null;
-  var $sejour_id        = null;
-  var $date             = null;
-  var $lieu             = null;
-  var $urgence          = null;
-  var $operateur_id     = null;
-  var $encadrant_id     = null;
-  var $type_materiel    = null;
-  var $voie_abord_vasc  = null;
+  public $operation_id;
+  public $sejour_id;
+  public $date;
+  public $lieu;
+  public $urgence;
+  public $operateur_id;
+  public $encadrant_id;
+  public $type_materiel;
+  public $voie_abord_vasc;
+
+  /** @var CSejour */
+  public $_ref_sejour;
+
+  /** @var int Count of signed check lists */
+  public $_count_signed;
 
   /**
-   * @var CSejour
+   * @see parent::getSpec()
    */
-  var $_ref_sejour      = null;
-
-  /**
-   * @var int Count of signed check lists
-   */
-  var $_count_signed    = null;
-
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "pose_dispositif_vasculaire";
@@ -38,6 +38,9 @@ class CPoseDispositifVasculaire extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["operation_id"]    = "ref class|COperation";
@@ -52,6 +55,9 @@ class CPoseDispositifVasculaire extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["check_lists"] = "CDailyCheckList object_id";
@@ -81,6 +87,9 @@ class CPoseDispositifVasculaire extends CMbObject {
     return $this->_count_signed = $_count_signed;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
 

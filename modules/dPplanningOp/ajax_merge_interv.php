@@ -1,11 +1,12 @@
-<?php 
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPplanningOp
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -25,6 +26,7 @@ $where["sejour.entree"]   = "BETWEEN '$date_min' AND '$date_max'";
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $order = "entree";
 
+/** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, $order);
 $count = 0;
 
@@ -47,6 +49,7 @@ foreach ($sejours as $_sejour) {
 CAppUI::stepAjax("$count interventions sont à fusionner");
 
 foreach ($operations_merge as $_operation_merge) {
+  /** @var COperation[] $op_merge */
   $op_merge = array_values($_operation_merge);
   $plageop = 0;
   foreach ($op_merge as $_operation) {

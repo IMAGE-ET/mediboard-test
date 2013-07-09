@@ -73,7 +73,7 @@
       <button class="search" onclick="checkSynchroSejour('check_entree');">
         Nombre d'heure d'entrée non conforme
       </button>
-			<button class="save" onclick="checkSynchroSejour('fix_entree');">
+      <button class="save" onclick="checkSynchroSejour('fix_entree');">
         Corriger les problèmes d'entrée
       </button>
       <br />

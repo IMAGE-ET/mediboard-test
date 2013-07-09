@@ -1,17 +1,20 @@
-<?php /* $Id: vw_protocoles.php 7210 2009-11-03 12:18:57Z rhum1 $ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPplanningOp
-* @version $Revision: 7210 $
-* @author Thomas Despoix
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 global $dialog;
 
-if($dialog) {
+if ($dialog) {
   CCanDo::checkRead();
-} else {
+}
+else {
   CCanDo::checkEdit();
 }
 
@@ -29,11 +32,11 @@ $step = 30;
 $protocole = new CProtocole;
 $where = array();
 
-if($chir->_id) {
+if ($chir->_id) {
   $chir->loadRefFunction();
   $functions = array($chir->function_id);
   $chir->loadBackRefs("secondary_functions");
-  foreach($chir->_back["secondary_functions"] as $curr_sec_func) {
+  foreach ($chir->_back["secondary_functions"] as $curr_sec_func) {
     $functions[] = $curr_sec_func->function_id;
   }
   $list_functions = implode(",", $functions);
@@ -55,7 +58,7 @@ $list_protocoles       = $protocole->loadList($where, $order, "{$page[$type]},$s
 
 $total_protocoles = $protocole->countList($where);
 
-foreach ($list_protocoles as $_prot){
+foreach ($list_protocoles as $_prot) {
   $_prot->loadRefsFwd();
   $_prot->_types_ressources_ids = implode(",", CMbArray::pluck($_prot->loadRefsBesoins(), "type_ressource_id"));
 }
@@ -71,5 +74,3 @@ $smarty->assign("chir_id"              , $chir_id);
 $smarty->assign("type"                 , $type);
 
 $smarty->display("inc_list_protocoles.tpl");
-
-?>

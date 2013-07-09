@@ -10,9 +10,9 @@ CCAMSelector = {
   oUrl      : null,
   
   prepared : {
-	  code : null,
-	  tarif : null
-	},
+    code : null,
+    tarif : null
+  },
   
   preparedMulti: null,
   
@@ -67,7 +67,7 @@ CCAMSelector = {
     $V(oForm[CCAMSelector.sView], CCAMSelector.prepared.code);
     
     if (this.sTarif) {
-	    $V(oForm[CCAMSelector.sTarif], CCAMSelector.prepared.tarif);
+      $V(oForm[CCAMSelector.sTarif], CCAMSelector.prepared.tarif);
     }
   },
   

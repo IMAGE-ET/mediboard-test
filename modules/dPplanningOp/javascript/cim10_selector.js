@@ -8,10 +8,10 @@ CIM10Selector = {
   sCode     : null,
   oUrl      : null,
   
-	prepared : {
-	  code : null
-	},
-	
+  prepared : {
+    code : null
+  },
+
   options : {
     mode: "stats",
     width: 800,

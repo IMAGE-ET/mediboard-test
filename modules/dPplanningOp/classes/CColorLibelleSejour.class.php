@@ -1,11 +1,12 @@
-<?php /* $Id: typeanesth.class.php 9834 2010-08-17 20:50:07Z MyttO $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPplanningOp
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -13,12 +14,15 @@
  */
 class CColorLibelleSejour extends CMbObject {
   // DB Table key
-  var $color_id = null;
+  public $color_id;
 
   // DB Fields
-  var $libelle = null;
-  var $color = null;
-  
+  public $libelle;
+  public $color;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'color_libelle_sejour';
@@ -26,34 +30,36 @@ class CColorLibelleSejour extends CMbObject {
     $spec->uniques["libelle"] = array("libelle");
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["libelle"] = "str notNull";
     $specs["color"]   = "str length|6";
     return $specs;
   }
-	
-	static function loadAllFor($libelles) {
+
+  static function loadAllFor($libelles) {
     $libelles = array_map("strtoupper", $libelles);
-		
+
     // Initialisation du tableau
-		$colors_by_libelle = array();
+    $colors_by_libelle = array();
     foreach ($libelles as $_libelle) {
       $color = new self;
       $color->libelle = $_libelle;
       $colors_by_libelle[$_libelle] = $color;
     }
 
-		$color = new self;
-		$where = array();
+    $color = new self;
+    $where = array();
     $libelles = array_map("addslashes", $libelles);
-		$where["libelle"] = CSQLDataSource::prepareIn($libelles);
-		foreach($color->loadList($where) as $_color) {
-			$colors_by_libelle[$_color->libelle] = $_color;
-		}
-		
-		return $colors_by_libelle;
-	}
+    $where["libelle"] = CSQLDataSource::prepareIn($libelles);
+    foreach ($color->loadList($where) as $_color) {
+      $colors_by_libelle[$_color->libelle] = $_color;
+    }
+
+    return $colors_by_libelle;
+  }
 }
-?>

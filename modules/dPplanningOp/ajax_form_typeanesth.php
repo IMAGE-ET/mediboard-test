@@ -1,24 +1,20 @@
-<?php 
-
+<?php
 /**
- * type anest form
- *  
- * @category PlanningOp
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:\$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
- 
- CCanDo::checkEdit();
+
+CCanDo::checkEdit();
 
 $type_anesth_id = CValue::get("type_anesth");
 
 $type_anesth = new CTypeAnesth();
 $type_anesth->load($type_anesth_id);
-
-
 
 //smarty
 $smarty = new CSmartyDP();

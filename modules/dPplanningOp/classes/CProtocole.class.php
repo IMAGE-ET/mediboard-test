@@ -1,10 +1,11 @@
-<?php 
+<?php
 /**
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPplanningOp
- * @author     Romain Ollivier <dev@openxtrem.com>
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -13,76 +14,93 @@
  */
 class CProtocole extends CMbObject {
   // DB Table key
-  var $protocole_id = null;
+  public $protocole_id;
 
   // DB References
-  var $chir_id     = null;
-  var $function_id = null;
-  var $group_id    = null;
-  var $uf_hebergement_id = null; // UF de responsabilité d'hébergement
-  var $uf_medicale_id    = null; // UF de responsabilité médicale
-  var $uf_soins_id       = null; // UF de responsabilité de soins
-  
+  public $chir_id;
+  public $function_id;
+  public $group_id;
+  public $uf_hebergement_id; // UF de responsabilité d'hébergement
+  public $uf_medicale_id;    // UF de responsabilité médicale
+  public $uf_soins_id;       // UF de responsabilité de soins
+
   // For sejour/intervention
-  var $for_sejour = null; // Sejour / Operation
-  
+  public $for_sejour; // Sejour / Operation
+
   // DB Fields Sejour
-  var $type          = null;
-  var $DP            = null;
-  var $convalescence = null;
-  var $rques_sejour  = null; // Sejour->rques
-  var $pathologie    = null;
-  var $septique      = null;
-  var $type_pec      = null;
-  
+  public $type;
+  public $DP;
+  public $convalescence;
+  public $rques_sejour; // Sejour->rques
+  public $pathologie;
+  public $septique;
+  public $type_pec;
+
   // DB Fields Operation
-  var $codes_ccam        = null;
-  var $libelle           = null;
-  var $cote              = null;
-  var $temp_operation    = null;
-  var $examen            = null;
-  var $materiel          = null;
-  var $duree_hospi       = null;
-  var $rques_operation   = null; // Operation->rques
-  var $depassement       = null;
-  var $forfait           = null;
-  var $fournitures       = null;
-  var $service_id        = null;
-  var $libelle_sejour    = null;
-  var $duree_uscpo       = null;
-  var $duree_preop       = null;
-  var $presence_preop    = null;
-  var $presence_postop   = null;
-  var $exam_extempo      = null;
-  var $type_anesth       = null;
-  
+  public $codes_ccam;
+  public $libelle;
+  public $cote;
+  public $temp_operation;
+  public $examen;
+  public $materiel;
+  public $duree_hospi;
+  public $rques_operation; // Operation->rques
+  public $depassement;
+  public $forfait;
+  public $fournitures;
+  public $service_id;
+  public $libelle_sejour;
+  public $duree_uscpo;
+  public $duree_preop;
+  public $presence_preop;
+  public $presence_postop;
+  public $exam_extempo;
+  public $type_anesth;
+
   // DB fields linked protocols
-  var $protocole_prescription_chir_id      = null;
-  var $protocole_prescription_chir_class   = null;
-  var $protocole_prescription_anesth_id    = null;
-  var $protocole_prescription_anesth_class = null;
+  public $protocole_prescription_chir_id;
+  public $protocole_prescription_chir_class;
+  public $protocole_prescription_anesth_id;
+  public $protocole_prescription_anesth_class;
 
   // Form fields
-  var $_owner          = null;
-  var $_hour_op        = null;
-  var $_min_op         = null;
-  var $_codes_ccam     = array();
-  var $_types_ressources_ids = null;
-  
-  // DB References
-  var $_ref_chir                          = null;
-  var $_ref_function                      = null;
-  var $_ref_group                         = null;
-  var $_ref_protocole_prescription_chir   = null;
-  var $_ref_protocole_prescription_anesth = null;
-  var $_ref_uf_hebergement                = null;
-  var $_ref_uf_medicale                   = null;
-  var $_ref_uf_soins                      = null;
-  
-  // External references
-  var $_ext_codes_ccam = null;
-  var $_ext_code_cim   = null;
+  public $_owner;
+  public $_hour_op;
+  public $_min_op;
+  public $_codes_ccam = array();
+  public $_types_ressources_ids;
 
+  /** @var CMediusers */
+  public $_ref_chir;
+
+  /** @var CFunctions */
+  public $_ref_function;
+
+  /** @var CGroups */
+  public $_ref_group;
+
+  /** @var CPrescription */
+  public $_ref_protocole_prescription_chir;
+
+  /** @var CPrescription */
+  public $_ref_protocole_prescription_anesth;
+
+  /** @var CUniteFonctionnelle */
+  public $_ref_uf_hebergement;
+
+  /** @var CUniteFonctionnelle */
+  public $_ref_uf_medicale;
+
+  /** @var CUniteFonctionnelle */
+  public $_ref_uf_soins;
+
+  // External references
+  public $_ext_codes_ccam;
+  public $_ext_code_cim;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'protocole';
@@ -91,6 +109,9 @@ class CProtocole extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["chir_id"]         = "ref class|CMediusers seekable";
@@ -126,26 +147,32 @@ class CProtocole extends CMbObject {
     $props["presence_postop"] = "time show|0";
     $props["exam_extempo"]    = "bool";
     $props["type_anesth"]     = "ref class|CTypeAnesth";
-    
+
     $props["protocole_prescription_chir_id"]      = "ref class|CMbObject meta|protocole_prescription_chir_class";
     $props["protocole_prescription_chir_class"]   = "enum list|CPrescription|CPrescriptionProtocolePack";
     $props["protocole_prescription_anesth_id"]    = "ref class|CMbObject meta|protocole_prescription_anesth_class";
     $props["protocole_prescription_anesth_class"] = "enum list|CPrescription|CPrescriptionProtocolePack";
-    
+
     $props["_hour_op"]        = "num";
     $props["_min_op"]         = "num";
     $props["_owner"]          = "enum list|user|function|group";
 
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["besoins_ressources"] = "CBesoinRessource protocole_id";
     $backProps["ufs"]  = "CAffectationUniteFonctionnelle object_id";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->codes_ccam = strtoupper($this->codes_ccam);
@@ -158,7 +185,7 @@ class CProtocole extends CMbObject {
 
     $this->_hour_op = intval(substr($this->temp_operation, 0, 2));
     $this->_min_op  = intval(substr($this->temp_operation, 3, 2));
-    
+
     if ($this->libelle_sejour) {
       $this->_view = $this->libelle_sejour;
     }
@@ -168,12 +195,21 @@ class CProtocole extends CMbObject {
     else {
       $this->_view = $this->codes_ccam;
     }
-    
-    if ($this->chir_id    ) $this->_owner = "user"    ;
-    if ($this->function_id) $this->_owner = "function";
-    if ($this->group_id   ) $this->_owner = "group"   ;
+
+    if ($this->chir_id) {
+      $this->_owner = "user";
+    }
+    if ($this->function_id) {
+      $this->_owner = "function";
+    }
+    if ($this->group_id) {
+      $this->_owner = "group";
+    }
   }
 
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     if ($this->codes_ccam) {
       $this->codes_ccam = strtoupper($this->codes_ccam);
@@ -194,25 +230,37 @@ class CProtocole extends CMbObject {
     }
   }
 
+  /**
+   * @return CMediusers
+   */
   function loadRefChir() {
-    $this->_ref_chir = $this->loadFwdRef("chir_id", true);
-    return $this->_ref_chir;
+    return $this->_ref_chir = $this->loadFwdRef("chir_id", true);
   }
 
+  /**
+   * @return CFunctions
+   */
   function loadRefFunction() {
-    $this->_ref_function = $this->loadFwdRef("function_id", true);
-    return $this->_ref_function;
+    return $this->_ref_function = $this->loadFwdRef("function_id", true);
   }
 
+  /**
+   * @return CGroups
+   */
   function loadRefGroup() {
-    $this->_ref_group = $this->loadFwdRef("group_id", true);
-    return $this->_ref_group;
+    return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
 
+  /**
+   * @return CPrescription
+   */
   function loadRefPrescriptionChir() {
     return $this->_ref_protocole_prescription_chir = $this->loadFwdRef("protocole_prescription_chir_id", true);
   }
 
+  /**
+   * @return CPrescription
+   */
   function loadRefPrescriptionAnesth() {
     return $this->_ref_protocole_prescription_anesth = $this->loadFwdRef("protocole_prescription_anesth_id", true);
   }
@@ -229,6 +277,9 @@ class CProtocole extends CMbObject {
     $this->_ext_code_cim->loadLite();
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadRefChir();
     $this->loadRefFunction();
@@ -245,7 +296,7 @@ class CProtocole extends CMbObject {
       $this->_view .= "$this->libelle";
     }
     else {
-      foreach ($this->_ext_codes_ccam as $key => $ccam) {
+      foreach ($this->_ext_codes_ccam as $ccam) {
         $this->_view .= " - $ccam->code";
       }
     }
@@ -259,11 +310,11 @@ class CProtocole extends CMbObject {
       $this->_view .= " &mdash; Etablissement {$this->_ref_group->_view}";
     }
   }
-  
+
   function loadRefsBesoins() {
     return $this->_ref_besoins = $this->loadBackRefs("besoins_ressources");
   }
-  
+
   function loadRefUFHebergement($cache = true) {
     return $this->_ref_uf_hebergement = $this->loadFwdRef("uf_hebergement_id", $cache);
   }
@@ -275,7 +326,10 @@ class CProtocole extends CMbObject {
   function loadRefUFSoins($cache = true) {
     return $this->_ref_uf_soins = $this->loadFwdRef("uf_soins_id", $cache);
   }
-  
+
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     if ($this->chir_id) {
       if (!$this->_ref_chir) {
@@ -296,15 +350,18 @@ class CProtocole extends CMbObject {
       return $this->_ref_group->getPerm($permType);
     }
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store() {
     if (!$this->_id && $this->_types_ressources_ids) {
       if ($msg = parent::store()) {
         return $msg;
       }
-      
+
       $types_ressources_ids = explode(",", $this->_types_ressources_ids);
-      
+
       foreach ($types_ressources_ids as $_type_ressource_id) {
         $besoin = new CBesoinRessource;
         $besoin->type_ressource_id = $_type_ressource_id;
@@ -314,9 +371,7 @@ class CProtocole extends CMbObject {
         }
       }
     }
-    
+
     return parent::store();
   }
 }
-
-?>

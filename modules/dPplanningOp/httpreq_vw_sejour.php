@@ -1,10 +1,11 @@
-<?php 
+<?php
 /**
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPplanningOp
- * @author     Romain Ollivier <dev@openxtrem.com>
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -112,7 +113,7 @@ $where = array();
 $where["group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
 $where["cancelled"] = "= '0'";
 $order = "nom";
-$listServices = $service->loadListWithPerms(PERM_READ,$where, $order);
+$listServices = $service->loadListWithPerms(PERM_READ, $where, $order);
 
 if (CModule::getActive("maternite")) {
   $sejour->loadRefGrossesse();
@@ -151,8 +152,6 @@ $smarty->assign("listServices"  , $listServices);
 
 $smarty->assign("mode_operation", $mode_operation);
 $smarty->assign("etablissements", $etablissements);
-$smarty->assign("prestations"   , $prestations   );
-$smarty->assign("blocages_lit"  , $blocages_lit   );
+$smarty->assign("prestations"   , $prestations);
+$smarty->assign("blocages_lit"  , $blocages_lit);
 $smarty->display("inc_form_sejour.tpl");
-
-?>

@@ -1,11 +1,12 @@
-<?php /* $Id$*/
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPplanningOp
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
@@ -21,14 +22,16 @@ if (!is_array($operateur_ids)) {
 
 if (count($operateur_ids)) {
   $operateur = new CMediusers;
-  $operateurs = $operateur->loadList(array(
-    "user_id" => "IN(".implode(",", $operateur_ids).")",
-  ));
+  $where = array(
+    "user_id" => "IN(" . implode(",", $operateur_ids) . ")",
+  );
+  $operateurs = $operateur->loadList($where);
 }
 else {
   $operateurs = array();
 }
 
+$poses = array();
 if ($operation_id) {
   $interv = new COperation;
   $interv->load($operation_id);

@@ -86,7 +86,7 @@
 </table>
 
 <table class="tbl">
-	{{mb_include module=cabinet template=inc_list_actes_ccam subject=$object vue=complete}}
+  {{mb_include module=cabinet template=inc_list_actes_ccam subject=$object vue=complete}}
 </table>
 
 <table class="form">

@@ -1,10 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage PlanningOp
- * @version $Revision$
- * @author OpenXtrem
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -16,6 +18,7 @@ if (!in_array($mode_class, array("CModeEntreeSejour", "CModeSortieSejour"))) {
   throw new CMbException("Invalid class: '$mode_class'");
 }
 
+/** @var CModeEntreeSejour|CModeSortieSejour $mode */
 $mode = new $mode_class;
 $mode->load($mode_id);
 

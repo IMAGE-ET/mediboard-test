@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dPplanningOp
- *  @version $Revision: $
- *  @author SARL OpenXtrem
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $user = CUser::get();
@@ -40,5 +41,3 @@ $smarty->assign("operation"              , $operation);
 $smarty->assign("anesth_perop"           , new CAnesthPerop());
 $smarty->assign("create_dossier_anesth"  , 0);
 $smarty->display("edit_visite_anesth.tpl");
-
-?>

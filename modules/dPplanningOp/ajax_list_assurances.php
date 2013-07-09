@@ -1,9 +1,9 @@
-<?php 
+<?php
 /**
- * $Id:$
- * 
+ * $Id$
+ *
  * @package    Mediboard
- * @subpackage dPplanningOp
+ * @subpackage PlanningOp
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$

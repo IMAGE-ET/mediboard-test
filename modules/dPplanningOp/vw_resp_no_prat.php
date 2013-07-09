@@ -1,16 +1,15 @@
-<?php /* $Id: vw_sortie_rpu.php 6854 2009-09-03 16:16:08Z lryo $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPplanningOp
- * @version $Revision: 6854 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
-global $can, $m;
-
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 $repair = CValue::post('repair', 0);
 
@@ -27,6 +26,7 @@ $where["users.user_type"] = " != '13' AND users.user_type != '3' AND users.user_
 $order = "sejour.sortie_reelle DESC";
 
 if ($repair) {
+  /** @var CSejour[] $sejours */
   $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
   foreach ($sejours as $_sejour) {
     $_sejour->loadRefPraticien();
@@ -56,4 +56,3 @@ $smarty->assign("sejour_no_prat", $sejour_no_prat);
 $smarty->assign("sejours"       , $sejours);
 
 $smarty->display("vw_resp_no_prat.tpl");
-?>

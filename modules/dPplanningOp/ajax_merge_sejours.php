@@ -1,11 +1,12 @@
-<?php 
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPplanningOp
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -25,8 +26,11 @@ $where["sejour.entree"]   = "BETWEEN '$date_min' AND '$date_max'";
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $order = "entree";
 
+/** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, $order);
 $count = 0;
+
+/** @var CSejour[] _$sejours_merge */
 
 $sejours_merge = array();
 foreach ($sejours as $_sejour) {
@@ -66,8 +70,10 @@ foreach ($sejours_merge as $NDA => $_sejours_merge) {
   }
   
   // Si un séjour en cours / clôturé et un PA 
-  if ($first_sejour->_etat != "preadmission" && $second_sejour->_etat == "preadmission" ||
-      $first_sejour->_etat == "preadmission" && $second_sejour->_etat != "preadmission") {
+  if (
+      $first_sejour->_etat != "preadmission" && $second_sejour->_etat == "preadmission" ||
+      $first_sejour->_etat == "preadmission" && $second_sejour->_etat != "preadmission"
+  ) {
     
     if ($first_sejour->_etat == "preadmission") {
       list($second_sejour, $first_sejour) = array($first_sejour, $second_sejour);

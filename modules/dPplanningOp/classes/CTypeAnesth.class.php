@@ -1,10 +1,10 @@
-<?php 
+<?php
 /**
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPPlanningOp
- * @author     Sébastien Fillonneau <dev@openxtrem.com>
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
@@ -25,9 +25,7 @@ class CTypeAnesth extends CMbObject {
   public $_count_operations;
 
   /**
-   * Initialize object specification
-   *
-   * @return CMbObjectSpec the spec
+   * @see parent::getSpec()
    */
   function getSpec() {
     $spec = parent::getSpec();
@@ -38,10 +36,7 @@ class CTypeAnesth extends CMbObject {
   }
 
   /**
-   * Get properties specifications as strings
-   *
    * @see parent::getProps()
-   * @return array
    */
   function getProps() {
     $props = parent::getProps();
@@ -53,9 +48,7 @@ class CTypeAnesth extends CMbObject {
   }
 
   /**
-   * Get backward reference specifications
-   *
-   * @return array Array of form "collection-name" => "class join-field"
+   * @see parent::getBackProps()
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
@@ -66,9 +59,7 @@ class CTypeAnesth extends CMbObject {
   }
 
   /**
-   * Update the form (derived) fields plain fields
-   *
-   * @return void
+   * @see parent::updateFormFields()
    */
   function updateFormFields() {
     parent::updateFormFields();

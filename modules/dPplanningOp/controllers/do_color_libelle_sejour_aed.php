@@ -1,13 +1,13 @@
-<?php /* $Id: do_typeanesth_aed.php 8216 2010-03-05 10:16:33Z rhum1 $ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPPlanningOp
-* @version $Revision: 8216 $
-* @author Sébastien Fillonneau
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 $do = new CDoObjectAddEdit("CColorLibelleSejour");
 $do->doIt();
-
-?>

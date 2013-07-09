@@ -1,17 +1,15 @@
 <?php
-
 /**
- * Add, edit, remove sectorisations rules
+ * $Id$
  *
- * @category DPplanningOp
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:\$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
- 
- CCanDo::checkAdmin();
+
+CCanDo::checkAdmin();
 
 $regleSector = new CRegleSectorisation();
 $regleSector->group_id = CGroups::loadCurrent()->_id;

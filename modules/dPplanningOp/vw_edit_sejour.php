@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
- * @subpackage dPplanningOp
+ * @subpackage PlanningOp
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    OXOL, see http://www.mediboard.org/public/OXOL
- * @version    $Revision:$
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -234,5 +234,3 @@ $smarty->assign("list_mode_sortie", $list_mode_sortie);
 $smarty->assign("dialog", $dialog);
 
 $smarty->display("../../dPplanningOp/templates/vw_edit_sejour.tpl");
-
-?>

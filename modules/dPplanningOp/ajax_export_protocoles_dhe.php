@@ -1,9 +1,9 @@
-<?php 
+<?php
 /**
  * $Id$
- * 
+ *
  * @package    Mediboard
- * @subpackage dPplanningOp
+ * @subpackage PlanningOp
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
@@ -23,6 +23,7 @@ $protocole->chir_id = $chir_id ? $chir_id : null;
 $protocole->function_id = $function_id ? $function_id : null;
 $protocole->for_sejour = 0;
 
+/** @var CProtocole[] $protocoles */
 $protocoles = $protocole->loadMatchingList("libelle");
 
 if (!$function->_id) {
@@ -31,7 +32,7 @@ if (!$function->_id) {
 
 $csv = new CCSVFile();
 
-$csv->writeLine(array(
+$line = array(
   "Nom de la fonction",
   "Nom du praticien",
   "Prénom du praticien",
@@ -47,7 +48,8 @@ $csv->writeLine(array(
   "UF d'hébergement",
   "UF de soins",
   "UF médicale",
-));
+);
+$csv->writeLine($line);
 
 CMbObject::massLoadFwdRef($protocoles, "chir_id");
 CMbObject::massLoadFwdRef($protocoles, "function_id");
@@ -59,7 +61,7 @@ foreach ($protocoles as $_protocole) {
   $_protocole->loadRefChir();
   $_protocole->loadRefFunction();
 
-  $csv->writeLine(array(
+  $_line = array(
     $_protocole->_ref_function->text,
     $_protocole->_ref_chir->_user_last_name,
     $_protocole->_ref_chir->_user_first_name,
@@ -75,7 +77,8 @@ foreach ($protocoles as $_protocole) {
     $_protocole->_ref_uf_hebergement->code,
     $_protocole->_ref_uf_medicale->code,
     $_protocole->_ref_uf_soins->code,
-  ));
+  );
+  $csv->writeLine($_line);
 }
 
 $csv->stream("export-protocoles-".($chir_id ? $chir->_view : $function->text));

@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPplanningOp
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage PlanningOp
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 $ds = CSQLDataSource::get("std");
@@ -23,7 +25,7 @@ $resp_bloc = CModule::getInstalled("dPbloc")->canEdit();
 
 $date = CMbDT::format($date, "%Y-%m-01");
 $listMonthes = array();
-for($i = -6; $i <= 12; $i++) {
+for ($i = -6; $i <= 12; $i++) {
   $curr_key   = CMbDT::transform("$i month", $date, "%Y-%m-%d");
   $curr_month = CMbDT::transform("$i month", $date, "%B %Y");
   $listMonthes[$i]["date"] = $curr_key;
@@ -35,14 +37,14 @@ $mediChir = new CMediusers();
 $mediChir->load($chir);
 $mediChir->loadBackRefs("secondary_functions");
 $secondary_functions = array();
-foreach($mediChir->_back["secondary_functions"] as $curr_sec_func) {
+foreach ($mediChir->_back["secondary_functions"] as $curr_sec_func) {
   $secondary_functions[] = $curr_sec_func->function_id;
 }
 
 // Chargement de la liste des blocs opératoires
 $bloc = new CBlocOperatoire();
 $blocs = $bloc->loadGroupList(null, "nom");
-foreach($blocs as $_bloc) {
+foreach ($blocs as $_bloc) {
   $_bloc->loadRefsSalles();
   $_bloc->_date_min = CMbDT::date("+ " . $_bloc->days_locked . " DAYS");
 }
@@ -50,20 +52,20 @@ foreach($blocs as $_bloc) {
 // Chargement des plages pour le chir ou sa spécialité par bloc
 $where = array();
 $selectPlages  = "(plagesop.chir_id = %1 OR plagesop.spec_id = %2 OR plagesop.spec_id ".CSQLDataSource::prepareIn($secondary_functions).")";
-$where[]       = $ds->prepare($selectPlages ,$mediChir->user_id,$mediChir->function_id);
+$where[]       = $ds->prepare($selectPlages, $mediChir->user_id, $mediChir->function_id);
 $month_min = CMbDT::transform("+ 0 month", $date, "%Y-%m-00");
 $month_max = CMbDT::transform("+ 1 month", $date, "%Y-%m-00");
 $where["date"] = "BETWEEN '$month_min' AND '$month_max'";
-if(!$resp_bloc) {
+if (!$resp_bloc) {
   $where[] = "date >= '".CMbDT::date()."'";
 }
 $order = "date, debut";
 $plage = new CPlageOp;
 $listPlages = array();
-foreach($blocs as $_bloc) {
+foreach ($blocs as $_bloc) {
   $where["salle_id"] = CSQLDataSource::prepareIn(array_keys($_bloc->_ref_salles));
   $listPlages[$_bloc->_id] = $plage->loadList($where, $order);
-  if(!count($listPlages[$_bloc->_id])) {
+  if (!count($listPlages[$_bloc->_id])) {
     unset($listPlages[$_bloc->_id]);
   }
 }
@@ -72,7 +74,7 @@ $nb_secondes = $curr_op_hour*3600 + $curr_op_min*60;
 
 $_plage = new CPlageOp();
 foreach ($listPlages as &$_bloc) {
-  foreach($_bloc as &$_plage){
+  foreach ($_bloc as &$_plage) {
     $_plage->loadRefSalle();
     $_plage->getNbOperations($nb_secondes, false);
     $_plage->loadRefsNotes();
@@ -91,13 +93,12 @@ $heure_entree_jour   = $config["heure_entree_jour"];
 $config = CAppUI::conf("dPplanningOp COperation");
 $list_hours_voulu   = range(7, 20);
 $list_minutes_voulu = range(0, 59, $config["min_intervalle"]);
-foreach ($list_hours_voulu as &$hour){
+foreach ($list_hours_voulu as &$hour) {
   $hour = str_pad($hour, 2, '0', STR_PAD_LEFT);
 }
-foreach ($list_minutes_voulu as &$minute){
+foreach ($list_minutes_voulu as &$minute) {
   $minute = str_pad($minute, 2, '0', STR_PAD_LEFT);
 }
-
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -122,4 +123,3 @@ $smarty->assign("list_minutes_voulu" , $list_minutes_voulu);
 $smarty->assign("resp_bloc", $resp_bloc);
 
 $smarty->display("plage_selector.tpl");
-?>
