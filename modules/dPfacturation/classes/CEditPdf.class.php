@@ -356,18 +356,20 @@ class CEditPdf{
             $this->editCell($this->pdf->getX()+$x, $debut_lignes + $ligne*3, $largeur, $valeur, $cote);
             $x = $largeur;
           }
-          $this_pt = ($acte->pt * $acte->coeff_pt * $acte->quantite * $acte->coeff);
-          $this_pm = ($acte->pm * $acte->coeff_pm * $acte->quantite * $acte->coeff);
-          if (round($acte->montant_base, 2) != round(($this_pt + $this_pm)/$acte->coeff, 2)) {
+          $this_pt = ($acte->pt * $acte->coeff_pt);
+          $this_pm = ($acte->pm * $acte->coeff_pm);
+          if (round($acte->montant_base, 2) != round(($this_pt + $this_pm), 2)) {
             $this_pt = 0;
-            $this_pm = $acte->montant_base * $acte->quantite * $acte->coeff;
+            $this_pm = $acte->montant_base * $acte->coeff;
           }
 
+          $this_pt *= $acte->quantite;
+          $this_pm *= $acte->quantite;
           if ($acte->type == "CActeTarmed") {
-            $pt += $this_pt;
-            $pm += $this_pm;
-            $pt_notcoeff += ($this_pt/$acte->coeff);
-            $pm_notcoeff += ($this_pm/$acte->coeff);
+            $pt += ($this_pt * $acte->coeff);
+            $pm += ($this_pm * $acte->coeff);
+            $pt_notcoeff += $this_pt;
+            $pm_notcoeff += $this_pm;
           }
           else {
             if ($acte->code_caisse) {
