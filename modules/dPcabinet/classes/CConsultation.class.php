@@ -306,7 +306,7 @@ class CConsultation extends CFacturable {
     $props["_coordonnees"]      = "bool default|0";
     $props["_plages_vides"]     = "bool default|1";
     $props["_non_pourvues"]     = "bool default|1";
-    $props["_print_IPP"]        = "bool default|".CAppUI::conf("dPcabinet CConsultation show_IPP_print_consult");
+    $props["_print_ipp"]        = "bool default|".CAppUI::conf("dPcabinet CConsultation show_IPP_print_consult");
 
     $props["_check_adresse"]    = "";
     $props["_somme"]            = "currency";
