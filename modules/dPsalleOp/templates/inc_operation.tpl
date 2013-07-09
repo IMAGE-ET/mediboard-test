@@ -25,7 +25,7 @@ printFicheAnesth = function(dossier_anesth_id) {
   var url = new Url("cabinet", "print_fiche");
   url.addParam("dossier_anesth_id", dossier_anesth_id);
   url.popup(700, 500, "printFiche");
-}
+};
 
 submitTiming = function(oForm) {
   submitFormAjax(oForm, 'systemMsg', { 
@@ -33,7 +33,7 @@ submitTiming = function(oForm) {
       reloadTiming(oForm.operation_id.value);
     } 
   });
-}
+};
 
 reloadTiming = function(operation_id){
   {{if $object->_id}}
@@ -45,7 +45,7 @@ reloadTiming = function(operation_id){
       }
     });
   {{/if}}
-}
+};
 
 submitAnesth = function(oForm) {
   submitFormAjax(oForm, 'systemMsg', { 
@@ -59,11 +59,11 @@ submitAnesth = function(oForm) {
       }
     }
   });
-}
+};
 
 signVisiteAnesth = function(anesth_id) {
   alert('anesth numéro ' + anesth_id);
-}
+};
 
 reloadAnesth = function(operation_id){
   console.log($("anesth"));
@@ -77,24 +77,24 @@ reloadAnesth = function(operation_id){
       ActesCCAM.refreshList(operation_id,"{{$selOp->chir_id}}");
     }
   } );  
-}
+};
 
 reloadDiagnostic = function(sejour_id, modeDAS) {
   var url = new Url("salleOp", "httpreq_diagnostic_principal");
   url.addParam("sejour_id", sejour_id);
   url.addParam("modeDAS", modeDAS);
   url.requestUpdate("cim");
-}
+};
 
 reloadPersonnel = function(operation_id){
   var url = new Url("salleOp", "httpreq_vw_personnel");
   url.addParam("operation_id", operation_id);
   url.requestUpdate("listPersonnel");
-}
+};
 
 confirmeCloture = function() {
   return confirm("Action irréversible. Seul le service PSMI pourra modifier le codage de vos actes. Confirmez-vous la cloture de votre cotation pour aujourd'hui ?");
-}
+};
 
 Main.add(function () {
   
@@ -154,7 +154,7 @@ printFicheBloc = function(interv_id) {
   var url = new Url("dPsalleOp", "print_feuille_bloc");
   url.addParam("operation_id", interv_id);
   url.popup(700, 700, 'FeuilleBloc');
-}
+};
 
 var constantesMedicalesDrawn = false;
 refreshConstantesHack = function(sejour_id) {
@@ -164,7 +164,7 @@ refreshConstantesHack = function(sejour_id) {
       constantesMedicalesDrawn = true;
     }
   }).delay(0.5);
-}
+};
 
 refreshConstantesMedicales = function(context_guid) {
   if(context_guid) {
@@ -172,7 +172,7 @@ refreshConstantesMedicales = function(context_guid) {
     url.addParam("context_guid", context_guid);
     url.requestUpdate("constantes-medicales");
   }
-}
+};
 
 loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
   if(sejour_id) {
@@ -191,7 +191,7 @@ loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const
     }
     urlSuivi.requestUpdate("dossier_suivi");
   }
-}
+};
 
 submitSuivi = function(oForm) {
   sejour_id = oForm.sejour_id.value;
@@ -202,12 +202,12 @@ submitSuivi = function(oForm) {
       PlanSoins.loadTraitement(sejour_id,'{{$date}}','','administration');
     }  
   } });
-}
+};
 
 {{if $isPrescriptionInstalled}}
 reloadPrescription = function(prescription_id){
   Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null);
-}
+};
 {{/if}}
 
 reloadSurveillancePerop = function() {
@@ -216,15 +216,15 @@ reloadSurveillancePerop = function() {
     url.addParam("operation_id","{{$selOp->_id}}");
     url.requestUpdate("surveillance_perop");
   }
-}
+};
 
 loadPosesDispVasc = function() {
   var url = new Url("planningOp", "ajax_list_pose_disp_vasc");
   url.addParam("operation_id", "{{$selOp->_id}}");
   url.addParam("sejour_id",    "{{$selOp->sejour_id}}");
-  url.addParam("operateur_ids", "{{$operateurs_disp_vasc}}")
+  url.addParam("operateur_ids", "{{$operateurs_disp_vasc}}");
   url.requestUpdate("list-pose-dispositif-vasculaire");
-}
+};
 
 {{if "maternite"|module_active}}
   function refreshGrossesse(operation_id) {
@@ -241,7 +241,7 @@ infoAnapath = function(field) {
     url.requestModal();
   }
   submitFormAjax(field.form, 'systemMsg');
-}
+};
 
 infoBacterio = function(field) {
   if($V(field) == 1) {
@@ -529,6 +529,9 @@ infoBacterio = function(field) {
           {{mb_script module="compteRendu" script="document"}}
           {{mb_script module="compteRendu" script="modele_selector"}}
           {{mb_include module=planningOp template=inc_documents_operation operation=$selOp}}
+        </div>
+        <div id="files">
+          {{mb_include module=planningOp template=inc_files_operation operation=$selOp}}
         </div>
       </td>
     </tr>
