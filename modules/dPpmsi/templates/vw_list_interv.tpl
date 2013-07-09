@@ -66,8 +66,8 @@ Main.add(function () {
   {{/foreach}}
   </tbody>
   
-  <tbody id="horsplages" style="display: none;">
-  {{foreach from=$horsplages item=_operation}}
+  <tbody id="urgences" style="display: none;">
+  {{foreach from=$urgences item=_operation}}
   {{mb_include template=inc_list_interv}}
   {{/foreach}}
   </tbody>
