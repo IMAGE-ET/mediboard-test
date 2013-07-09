@@ -164,6 +164,9 @@ class CMbSOAPClient extends SoapClient {
     $xpath->registerNamespace("wsdl", "http://schemas.xmlsoap.org/wsdl/");
     $xpath->registerNamespace("soap", "http://schemas.xmlsoap.org/wsdl/soap/");
 
+    $login    = CMbArray::get($this->options, "login");
+    $password = CMbArray::get($this->options, "password");
+
     $service_nodes = $xpath->query("//wsdl:service");
     foreach ($service_nodes as $_service_node) {
       $service_name = $_service_node->getAttribute("name");
@@ -172,8 +175,10 @@ class CMbSOAPClient extends SoapClient {
       foreach ($port_nodes as $_port_node) {
         $address = $xpath->queryAttributNode("soap:address", $_port_node, "location");
 
-        $login    = CMbArray::get($this->options, "login");
-        $password = CMbArray::get($this->options, "password");
+        if (!$address) {
+          continue;
+        }
+
         if ($login && $password) {
           $address = str_replace("://", "://$login:$password@", $address);
         }
