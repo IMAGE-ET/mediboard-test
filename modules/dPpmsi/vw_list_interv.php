@@ -84,9 +84,9 @@ foreach ($horsplages as $_operation) {
   $sejour->countDocItems();
   $sejour->loadRefPatient()->loadIPP();
 
-  $counts["horsplages"]["total"]++;
+  $counts["urgences"]["total"]++;
   if (count($_operation->_nb_exchanges)) {
-    $counts["horsplages"]["facturees"]++;
+    $counts["urgences"]["facturees"]++;
   }
 }
 
