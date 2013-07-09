@@ -17,13 +17,17 @@ if (CAppUI::conf("readonly")) {
   return;
 }
 
-global $m, $action;
+global $m, $action, $dosql;
+
+if (!$action) {
+  $action = $dosql;
+}
 
 // Check prerequisites
 $ds = CSQLDataSource::get("std");
 
 // $action may not defined when the module is inactive
-if (!$action) { 
+if (!$action) {
   return;
 }
 
