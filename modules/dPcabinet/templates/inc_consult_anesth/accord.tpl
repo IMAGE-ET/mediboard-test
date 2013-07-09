@@ -75,7 +75,7 @@ Main.add(function () {
     <li onmousedown="refreshFacteursRisque();"><a href="#facteursRisque">Facteurs de risque</a></li>
   {{/if}}
   {{if $app->user_prefs.ccam_consultation == 1}}
-  <li><a href="#Actes">Cotation</a></li>
+  <li><a href="#Actes">Actes</a></li>
   {{/if}}
   <li><a href="#fdrConsult">Documents</a></li>
   <li><a href="#reglement">Réglements</a></li>

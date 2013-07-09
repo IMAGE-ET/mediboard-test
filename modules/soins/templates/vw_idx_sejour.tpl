@@ -625,7 +625,7 @@ checkAnesth = function(oField){
         </li>
         {{/if}}
         {{if $app->user_prefs.ccam_sejour == 1 }}
-          <li><a href="#Actes">Cotation</a></li>
+          <li><a href="#Actes">Actes</a></li>
         {{/if}}
         {{if $isImedsInstalled}}
           <li><a href="#Imeds">Labo</a></li>

@@ -122,7 +122,7 @@ Main.add(function () {
   {{/if}}
   
   {{if $app->user_prefs.ccam_consultation == 1}}
-  <li><a href="#Actes">Cotation</a></li>
+  <li><a href="#Actes">Actes</a></li>
   {{/if}}
   
   {{if $consult->_is_dentiste}}
