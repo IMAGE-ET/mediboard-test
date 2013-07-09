@@ -79,13 +79,13 @@ Main.add(function() {
               <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="inactif" {{if $inactif}}checked="checked"{{/if}} />
               <label for="inactif">Inactif</label>
               {{if $configLDAP}}
-              <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="ldap_bound" {{if $ldap_bound}}checked="checked"{{/if}} />
-              <label>Associé au LDAP</label>
+                <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="ldap_bound" {{if $ldap_bound}}checked="checked"{{/if}} />
+                <label>Associé au LDAP</label>
+              {{/if}}
               <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="human" {{if $human}}checked="checked"{{/if}} />
               <label for="human">Humain</label>
               <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="robot" {{if $robot}}checked="checked"{{/if}} />
               <label for="robot">Robot</label>
-              {{/if}}
             </td>
           </tr>
           <tr>
