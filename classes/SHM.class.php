@@ -493,7 +493,7 @@ class MemcachedSharedMemory implements ISharedMemory {
   function modDate($key) {
     $data = self::get($key);
 
-    if (!$data) {
+    if (empty($data["ctime"])) {
       return null;
     }
 
