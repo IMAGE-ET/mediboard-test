@@ -1,4 +1,5 @@
 {{mb_script module=cabinet script=yoplet}}
+{{assign var=yoplet_upload_url value=$conf.dPfiles.yoplet_upload_url}}
 
 {{if $app->user_prefs.directory_to_watch}}
   <script type="text/javascript">
@@ -15,7 +16,11 @@
     <param name="debug" value="true" />
     <param name="codebase_lookup" value="false" />
     <param name="action" value="" />
-    <param name="url" value="{{$base_url}}/index.php?m=dPfiles&a=ajax_yoplet_upload" />
+    {{if $yoplet_upload_url}}
+      <param name="url" value="{{$yoplet_upload_url}}/index.php?m=dPfiles&a=ajax_yoplet_upload" />
+    {{else}}
+      <param name="url" value="{{$base_url}}/index.php?m=dPfiles&a=ajax_yoplet_upload" />
+    {{/if}}
     <param name="content" value="a" />
     <param name="cookies" value="{{$app->session_name}}" />
   </applet>

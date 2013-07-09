@@ -11,6 +11,7 @@
 $dPconfig["dPfiles"] = array (
   "extensions_yoplet" => "gif jpeg jpg pdf png",
   "upload_max_filesize" => "2M",
+  "yoplet_upload_url" => "",
   "CFile" => array(
     "upload_directory"  => "files",
     "ooo_active"        => "0",

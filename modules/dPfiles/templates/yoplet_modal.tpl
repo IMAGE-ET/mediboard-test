@@ -1,13 +1,15 @@
-{{main}}
-  url = new Url("dPfiles", "ajax_category_autocomplete");
-  url.addParam("object_class", "{{$object->_class}}");
-  File.applet.autocompleteCat =
-    url.autoComplete(getForm('addFastFile').keywords_category, '', {
-          minChars: 2,
-          dropdown: true,
-          width: "100px"
-        });
-{{/main}}
+<script type="text/javascript">
+  Main.add(function() {
+    var url = new Url("files", "ajax_category_autocomplete");
+    url.addParam("object_class", "{{$object->_class}}");
+    File.applet.autocompleteCat =
+      url.autoComplete(getForm('addFastFile').keywords_category, '', {
+        minChars: 2,
+        dropdown: true,
+        width: "100px"
+      });
+  });
+</script>
 <div id="modal-yoplet" style="display: none; width: 400px;">
   <form name="addFastFile" method="post" action="?"
     onsubmit="return onSubmitFormAjax(this);">
@@ -15,7 +17,6 @@
     <input type="hidden" name="dosql" value="do_file_aed" />
     <input type="hidden" name="_from_yoplet" value="1" />
     <input type="hidden" name="object_class" value="" />
-    <input type="hidden" name="private" value="0" />
     <input type="hidden" name="object_id" value="" />
     <input type="hidden" name="file_date" value="now" />
     <input type="hidden" name="callback" value="File.applet.addfile_callback" />

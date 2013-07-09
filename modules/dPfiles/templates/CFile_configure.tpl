@@ -13,6 +13,7 @@
   {{assign var=class value=""}}
   {{mb_include module=system template=inc_config_str var=upload_max_filesize maxlength=4 size=2}}
   {{mb_include module=system template=inc_config_str var=extensions_yoplet}}
+  {{mb_include module=system template=inc_config_str var=yoplet_upload_url}}
   {{assign var=class value="CFile"}}
   {{mb_include module=system template=inc_config_bool var=merge_to_pdf}}
   
