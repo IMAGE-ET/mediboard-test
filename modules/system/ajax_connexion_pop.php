@@ -25,15 +25,31 @@ if (!$exchange_source->_id) {
 }
 $pop = new CPop($exchange_source);
 
-if ($type_action == "connexion") {
-  try {
-    if ($pop->open()) {
-      CAppUI::stepAjax("CSourcePOP-info-connection-established", UI_MSG_OK, $exchange_source->host, $exchange_source->port);
+switch ($type_action) {
+  case 'connexion':
+    try {
+      if ($pop->open()) {
+        CAppUI::stepAjax("CSourcePOP-info-connection-established", UI_MSG_OK, $exchange_source->host, $exchange_source->port);
+      }
+    } catch(CMbException $e) {
+      $e->stepAjax(UI_MSG_WARNING);
     }
-  } catch(CMbException $e) {
-    $e->stepAjax(UI_MSG_WARNING);
-  }
-}
-else {
-  CAppUI::stepAjax("CExchange-unknown-test", UI_MSG_ERROR, $type_action);
+    break;
+
+  case 'listBox':
+    try {
+      if ($pop->open()) {
+        $boxes = imap_list($pop->_mailbox, $pop->_server, "*");
+        foreach ($boxes as $_box) {
+          echo str_replace($pop->_server, "", $_box).'<br/>';
+        }
+      }
+    } catch(CMbException $e) {
+      $e->stepAjax(UI_MSG_WARNING);
+    }
+    break;
+
+  default:
+    CAppUI::stepAjax("CExchange-unknown-test", UI_MSG_ERROR, $type_action);
+    break;
 }

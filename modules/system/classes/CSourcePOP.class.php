@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Class CSourcePOP
+ */
 class CSourcePOP extends CExchangeSource {
 
   /* KEY */
@@ -49,19 +52,34 @@ class CSourcePOP extends CExchangeSource {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["host"]          = "str autocomplete";
-    $props["port"]          = "num default|25";
-    $props["auth_ssl"]      = "enum list|None|SSL/TLS|STARTTLS";
-    $props["password"]      = "password show|0";
-    $props["timeout"]       = "num default|5 max|30";
-    $props["type"]          = "enum list|pop3|imap";
-    $props["libelle"]       = "str notNull";
+    $props["host"]              = "str autocomplete";
+    $props["port"]              = "num default|25";
+    $props["auth_ssl"]          = "enum list|None|SSL/TLS|STARTTLS";
+    $props["password"]          = "password show|0";
+    $props["timeout"]           = "num default|5 max|30";
+    $props["type"]              = "enum list|pop3|imap";
+    $props["libelle"]           = "str notNull";
 
-    $props["last_update"]   = "dateTime";
-    $props["object_id"]     = "ref notNull class|CMbObject meta|object_class";
-    $props["object_class"]  = "str notNull class show|0";
-    $props["_server"]       = "str maxLength|255";
+    $props["last_update"]       = "dateTime";
+    $props["object_id"]         = "ref notNull class|CMbObject meta|object_class";
+    $props["object_class"]      = "str notNull class show|0";
+    $props["_server"]           = "str maxLength|255";
     return $props;
+  }
+
+  /**
+   * @return CMbObject|CMediusers
+   */
+  function loadRefMetaObject() {
+    if ($this->object_class == "CMediusers") {
+      $this->_ref_mediuser = CMbMetaObject::loadFromGuid("$this->object_class-$this->object_id");
+      $this->_ref_mediuser->loadRefFunction();
+      return $this->_ref_mediuser;
+    }
+    else {
+      $this->_ref_metaobject = CMbMetaObject::loadFromGuid("$this->object_class-$this->object_id");
+      return $this->_ref_metaobject;
+    }
   }
 
   /**

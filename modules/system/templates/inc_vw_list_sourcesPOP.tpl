@@ -12,10 +12,10 @@
 </table>
 <script>
   POP = {
-    connexion: function (exchange_source_name) {
+    connexion: function (exchange_source_name, action) {
       var url = new Url("system", "ajax_connexion_pop");
       url.addParam("exchange_source_name", exchange_source_name);
-      url.addParam("type_action", "connexion");
+      url.addParam("type_action", action);
       url.requestUpdate("test_result_" + exchange_source_name);
     }
   }
@@ -38,7 +38,11 @@
     <td>{{mb_value object=$source_pop field=active}}</td>
   </tr>
   <tr>
-    <td class="button"><button class="lookup" onclick="POP.connexion('{{$source_pop->name}}')">test</button></td><td colspan="3" id="test_result_{{$source_pop->name}}"></td>
+    <td class="button">
+      <button class="lookup notext" onclick="POP.connexion('{{$source_pop->name}}','connexion')">Connexion</button>
+      <button class="search notext" onclick="POP.connexion('{{$source_pop->name}}', 'listBox')">Liste des boites</button>
+    </td>
+    <td colspan="3" id="test_result_{{$source_pop->name}}"></td>
   </tr>
   {{foreachelse}}
   <tr><td colspan="3" class="empty">{{tr}}CSourcePOP.none{{/tr}}</td></tr>
