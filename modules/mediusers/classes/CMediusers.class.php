@@ -1469,9 +1469,10 @@ class CMediusers extends CPerson {
     if (!$this->_id) {
       return false;
     }
+    $tag_software = CMediusers::getTagSoftware();
 
-    if (CModule::getActive("dPsante400")) {
-      if (CIdSante400::getMatch($this->_class, CMediusers::getTagSoftware(), null, $this->_id)->_id != null) {
+    if (CModule::getActive("dPsante400") && $tag_software) {
+      if (CIdSante400::getMatch($this->_class, $tag_software, null, $this->_id)->_id != null) {
         return true;
       }
     }
