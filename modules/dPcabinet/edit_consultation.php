@@ -214,6 +214,7 @@ $sejour = $consult->loadRefSejour();
 
 // Chargement du sejour
 if ($sejour && $sejour->_id) {
+  $consult->_ref_sejour->loadRefCurrAffectation();
   $sejour->loadExtDiagnostics();
   $sejour->loadRefDossierMedical();
   $sejour->loadNDA();
@@ -388,9 +389,9 @@ else {
       if ($affectation->loadObject($where)) {
         $sejour = $affectation->loadRefSejour();
         $patient = $sejour->loadRefPatient();
-        $blocage->_ref_lit->_view .= " indisponible jusqu'à " .
-          CMbDT::transform($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y") .
-          " ($patient->_view)";
+        $blocage->_ref_lit->_view .= " indisponible jusqu'à ".CMbDT::transform($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y");
+        $blocage->_ref_lit->_view .= " (".$patient->_view." (".strtoupper($patient->sexe).") ";
+        $blocage->_ref_lit->_view .= CAppUI::conf("dPurgences age_patient_rpu_view") ? $patient->_age.")" : ")" ;
       }
     }
     $smarty->assign("blocages_lit" , $blocages_lit);
