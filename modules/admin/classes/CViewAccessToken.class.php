@@ -82,7 +82,8 @@ class CViewAccessToken extends CMbObject {
     }
     
     if (!$this->_id) {
-      $this->hash = sha1("$this->user_id $this->datetime_start $this->ttl_hours $this->params");
+      $rand = CMbSecurity::getRandomString(16);
+      $this->hash = CMbSecurity::hash(CMbSecurity::SHA1, "$rand $this->user_id $this->datetime_start $this->ttl_hours $this->params");
     }
     
     return parent::store();
