@@ -72,14 +72,14 @@ Main.add(function() {
       <tr>
         <td class="halfPane">
           <div class="plages" id="{{$month_name}}_div" style="overflow-y: auto;">
-            {{mb_include template=inc_list_plages}}
+            {{mb_include template=inc_list_plages multiple=0 offline=1}}
           </div>
         </td>
         <td class="halfPane">
           {{foreach from=$listPlage item=plage}}
           {{assign var="listPlace" value=$plage->_listPlace}}
           <div class="places" id="places-{{$plage->_id}}" style="overflow-y: auto; display: none;">
-            {{mb_include template=inc_list_places listBefore=null listAfter=null}}
+            {{mb_include template=inc_list_places listBefore=null listAfter=null multiple=0 offline=1}}
           </div>
           {{/foreach}}
         </td>

@@ -1,8 +1,13 @@
-<script>
-  Calendar.regField(getForm("FilterPlage").date, null, {noView: true});
-</script>
 
-<form name="FilterPlage" action="?" method="get">
+{{mb_default var=multiple value=0}}
+{{mb_default var=offline value=0}}
+
+{{if !$offline}}
+  <script>
+    Calendar.regField(getForm("FilterPlage").date, null, {noView: true});
+  </script>
+
+  <form name="FilterPlage" action="?" method="get">
   <table class="form">
     <tr>
       <td class="button narrow">
@@ -17,6 +22,7 @@
       </td>
     </tr>
 </form>
+{{/if}}
 
 <table class="tbl">
       <tr>
