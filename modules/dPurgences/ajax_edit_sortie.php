@@ -23,6 +23,7 @@ $sejour = $rpu->loadRefSejour();
 $sejour->loadRefPatient()->loadIPP();
 $sejour->loadNDA();
 $sejour->loadRefsConsultations();
+$sejour->loadRefCurrAffectation();
 
 // Horaire par défaut
 if (!$sejour->sortie_reelle) {
@@ -45,8 +46,11 @@ foreach ($blocages_lit as $blocage) {
 
   if ($affectation->loadObject($where)) {
     $affectation->loadRefSejour();
-    $affectation->_ref_sejour->loadRefPatient();
-    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".CMbDT::transform($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
+    $patient = $affectation->_ref_sejour->loadRefPatient();
+
+    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".CMbDT::transform($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y");
+    $blocage->_ref_lit->_view .= " (".$patient->_view." (".strtoupper($patient->sexe).") ";
+    $blocage->_ref_lit->_view .= CAppUI::conf("dPurgences age_patient_rpu_view") ? $patient->_age.")" : ")" ;
   }
 }
 

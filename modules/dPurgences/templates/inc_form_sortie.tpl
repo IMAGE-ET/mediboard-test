@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
+<script>
   updateModeSortie = function(select) {
     var selected = select.options[select.selectedIndex];
     var form = select.form;
@@ -85,7 +85,8 @@
           {{foreach from=$blocages_lit item=blocage_lit}}
             <option id="{{$blocage_lit->_ref_lit->_guid}}" value="{{$blocage_lit->lit_id}}"
              class="{{$blocage_lit->_ref_lit->_ref_chambre->_ref_service->_guid}}-{{$blocage_lit->_ref_lit->_ref_chambre->_ref_service->nom}}"
-             {{if $blocage_lit->_ref_lit->_view|strpos:"indisponible"}}disabled{{/if}}>
+             {{if $blocage_lit->_ref_lit->_view|strpos:"indisponible"}}disabled{{/if}}
+             {{if $blocage_lit->lit_id == $sejour->_ref_curr_affectation->lit_id}}selected{{/if}}>
               {{$blocage_lit->_ref_lit->_view}}
             </option>
           {{/foreach}}
@@ -102,7 +103,7 @@
       <input type="text" name="service_sortie_id_autocomplete_view" value="{{$sejour->_ref_service_mutation}}" 
         class="autocomplete" onchange='if(!this.value){this.form["service_sortie_id"].value=""}'size="25"  />
       
-      <script type="text/javascript">
+      <script>
         Main.add(function(){
           var form = getForm("editSejour");
           var input = form.service_sortie_id_autocomplete_view;
@@ -143,11 +144,11 @@
     <td>
       <input type="hidden" name="_date_deces" value="{{$sejour->_ref_patient->deces}}" onchange="this.form.onsubmit()"
           class="date progressive {{if $sejour->mode_sortie == "deces"}}notNull{{/if}}" />
-      <script type="text/javascript">
-          Main.add(function() {
-            Calendar.regProgressiveField(getForm('editSejour')._date_deces);
-          });
-        </script>
+      <script>
+        Main.add(function() {
+          Calendar.regProgressiveField(getForm('editSejour')._date_deces);
+        });
+      </script>
     </td>
   </tr>
   

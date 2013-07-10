@@ -90,7 +90,12 @@ CValue::setSession("plageconsult_id", $plageconsult_id);
 
 // Liste des chirurgiens
 $mediusers = new CMediusers();
-$listChirs = CConsultation::loadPraticiens(PERM_EDIT);
+if (CAppUI::pref("pratOnlyForConsult", 1)) {
+  $listChirs = $mediusers->loadPraticiens(PERM_EDIT);
+}
+else {
+  $listChirs = $mediusers->loadProfessionnelDeSante(PERM_EDIT);
+}
 
 $listDaysSelect = array();
 for ($i = 0; $i < 7; $i++) {
