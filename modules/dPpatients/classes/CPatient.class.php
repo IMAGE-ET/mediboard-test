@@ -1760,7 +1760,7 @@ class CPatient extends CPerson {
     $template->addProperty("Patient - cp"                , $this->cp         );
     $template->addProperty("Patient - années"            , $this->_annees    );
     $template->addProperty("Patient - âge"               , $this->_age       );
-    $template->addDateProperty("Patient - date de naissance", $this->naissance);
+    $template->addProperty("Patient - date de naissance" , $this->getFormattedValue("naissance"));
     $template->addProperty("Patient - lieu de naissance" , $this->lieu_naissance);
     $template->addProperty("Patient - sexe"              , strtolower($this->getFormattedValue("sexe")));
     $template->addProperty("Patient - sexe court"        , substr(strtolower($this->getFormattedValue("sexe")), 0, 1));
@@ -1953,7 +1953,7 @@ class CPatient extends CPerson {
     $template->addProperty("Patient - Assuré social - nom", $this->assure_nom);
     $template->addProperty("Patient - Assuré social - nom jeune fille", $this->assure_nom_jeune_fille);
     $template->addProperty("Patient - Assuré social - prénom", $this->assure_prenom);
-    $template->addDateProperty("Patient - Assuré social - date de naissance", $this->assure_naissance);
+    $template->addProperty("Patient - Assuré social - date de naissance", $this->getFormattedValue("assure_naissance"));
     $template->addProperty("Patient - Assuré social - article", $this->_assure_civilite);
     $template->addProperty("Patient - Assuré social - article long", $this->_assure_civilite_long);
     $template->addProperty("Patient - Assuré social - adresse", $this->assure_adresse);
