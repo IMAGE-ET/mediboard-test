@@ -111,7 +111,7 @@ class CNuSOAPClient extends nusoap_client {
       throw new SoapFault($this->faultcode, $this->faultstring, $this->fault->faultactor, $this->faultdetail);
     }
     elseif ($this->getError()) {
-      throw new SoapFault(-1, $this->getError());
+      throw new SoapFault("1", $this->getError());
     }
     
     return $output;
