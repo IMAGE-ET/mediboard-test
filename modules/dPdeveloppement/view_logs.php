@@ -17,6 +17,7 @@ $error_type    = CValue::getOrSession("error_type", array());
 $server_ip     = CValue::getOrSession("server_ip");
 $group_similar = CValue::getOrSession("group_similar", 1);
 
+$error_log = new CErrorLog();
 $error_log->server_ip = $server_ip;
 
 $log_size = filesize(LOG_PATH);
@@ -27,8 +28,6 @@ if ($log_size > $log_size_limit) {
   $offset = $log_size - $log_size_limit;
 }
 $log_content = file_get_contents(LOG_PATH, false, null, $offset);
-
-$error_log = new CErrorLog();
 
 // Création du template
 $smarty = new CSmartyDP();
