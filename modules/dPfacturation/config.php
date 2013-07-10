@@ -45,10 +45,11 @@ $dPconfig["dPfacturation"] = array (
     "home_fax"      => ""
   ),
   "Other" => array(
-    "use_view_chainage" => "0",
+    "use_view_chainage"     => "0",
     "use_view_quantitynull" => "0",
-    "use_strict_cloture" => "0",
-    "use_field_definitive" => "0"
+    "use_strict_cloture"    => "0",
+    "use_field_definitive"  => "0",
+    "add_pay_not_close"     => "0"
   ),
 );
 ?>

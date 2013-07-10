@@ -29,6 +29,7 @@
       {{mb_include module=system template=inc_config_bool var=use_view_quantitynull}}
       {{mb_include module=system template=inc_config_bool var=use_strict_cloture}}
       {{mb_include module=system template=inc_config_bool var=use_field_definitive}}
+      {{mb_include module=system template=inc_config_bool var=add_pay_not_close}}
 
       {{assign var=class value=CEditPdf}}
       {{mb_include module=system template=inc_config_bool var=use_bill_etab}}

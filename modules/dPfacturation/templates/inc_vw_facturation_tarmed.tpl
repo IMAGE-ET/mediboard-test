@@ -64,7 +64,7 @@
       {{if !$facture->_ref_patient->avs}}
         <div class="small-warning" style="display:inline">N° AVS manquant pour le patient</div>
       {{/if}}
-      {{if !count($facture->_ref_reglements) && !count($facture->_ref_relances)}}
+      {{if !count($facture->_ref_relances)}}
         <form name="facture_extourne" method="post" action="" style="float:right;">
           {{mb_class object=$facture}}
           {{mb_key   object=$facture}}
@@ -132,7 +132,11 @@
     <td colspan="{{if $facture->_class == 'CFactureCabinet' || !$facture->dialyse}}2{{elseif $facture->dialyse}}3{{/if}}" id="refresh-assurance">
       {{mb_include module=facturation template="inc_vw_assurances"}}
     </td>
-    <td colspan="{{if $facture->_class == 'CFactureCabinet' || !$facture->dialyse}}5{{elseif $facture->dialyse}}4{{/if}}"></td>
+    <td colspan="{{if $facture->_class == 'CFactureCabinet' || !$facture->dialyse}}5{{elseif $facture->dialyse}}4{{/if}}">
+      {{if $facture->rques_assurance_maladie}}
+        <div class="info"><b>Remarque</b>{{mb_value object=$facture field=rques_assurance_maladie}}</div>
+      {{/if}}
+    </td>
   </tr>
 {{/if}}
 
@@ -242,7 +246,8 @@
 </tbody>
 
 {{assign var="classe" value=$facture->_class}}
-{{if !$facture->_reglements_total_patient && !$conf.dPfacturation.$classe.use_auto_cloture && !$facture->annule && !$facture->definitive}}
+{{if (!$facture->_reglements_total_patient || $conf.dPfacturation.Other.add_pay_not_close)
+  && !$conf.dPfacturation.$classe.use_auto_cloture && !$facture->annule && !$facture->definitive}}
   <tr>
     <td colspan="7">
       <form name="change_type_facture" method="post">
