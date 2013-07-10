@@ -12,18 +12,8 @@
 global $dPconfig;
 
 define("LOG_PATH", $dPconfig["root_dir"]."/tmp/mb-log.html");
-define("E_JS_ERROR", 0);
 
-// Since PHP 5.2.0
-if (!defined("E_RECOVERABLE_ERROR")) {
-  define("E_RECOVERABLE_ERROR", 4096);
-}
-
-// Since PHP 5.3.0
-if (!defined("E_DEPRECATED")) {
-  define("E_DEPRECATED", 8192);
-  define("E_USER_DEPRECATED", 16384);
-}
+require_once $dPconfig["root_dir"]."/classes/CError.class.php";
 
 // Do not set to E_STRICT as it hides fatal errors to our error handler
 
@@ -37,73 +27,6 @@ ini_set("error_log", LOG_PATH);
 ini_set("log_errors_max_len", "4M");
 ini_set("log_errors", true);
 ini_set("display_errors", $dPconfig["debug"]);
-
-$divClasses = array (
-  E_ERROR             => "big-error",   // 1
-  E_WARNING           => "big-warning", // 2
-  E_PARSE             => "big-info",    // 4
-  E_NOTICE            => "big-info",    // 8
-  E_CORE_ERROR        => "big-error",   // 16
-  E_CORE_WARNING      => "big-warning", // 32
-  E_COMPILE_ERROR     => "big-error",   // 64
-  E_COMPILE_WARNING   => "big-warning", // 128
-  E_USER_ERROR        => "big-error",   // 256
-  E_USER_WARNING      => "big-warning", // 512
-  E_USER_NOTICE       => "big-info",    // 1024
-  E_STRICT            => "big-info",    // 2048
-  E_RECOVERABLE_ERROR => "big-error",   // 4096
-  E_DEPRECATED        => "big-info",    // 8192
-  E_USER_DEPRECATED   => "big-info",    // 16384
-                                        // E_ALL = 32767 (PHP 5.4)
-  E_JS_ERROR => "big-warning javascript",// 0
-);
-
-// Pour BCB 
-unset($divClasses[E_STRICT]);
-unset($divClasses[E_DEPRECATED]);
-
-if (!$dPconfig["debug"]) {
-  unset($divClasses[E_STRICT]);
-  unset($divClasses[E_RECOVERABLE_ERROR]); // Thrown by bad type hinting
-}
-
-$errorTypes = array (
-  E_ERROR             => "Error",
-  E_WARNING           => "Warning",
-  E_PARSE             => "Parse",
-  E_NOTICE            => "Notice",
-  E_CORE_ERROR        => "Core error",
-  E_CORE_WARNING      => "Core warning",
-  E_COMPILE_ERROR     => "Compile error",
-  E_COMPILE_WARNING   => "Compile warning",
-  E_USER_ERROR        => "User error",
-  E_USER_WARNING      => "User warning",
-  E_USER_NOTICE       => "User notice",
-  E_STRICT            => "Strict",
-  E_RECOVERABLE_ERROR => "Recoverable error",
-  E_DEPRECATED        => "Deprecated",
-  E_USER_DEPRECATED   => "User deprecated",
-  E_JS_ERROR          => "Javascript error",
-);
-
-$errorCategories = array (
-  E_ERROR             => "error",
-  E_WARNING           => "warning",
-  E_PARSE             => "error",
-  E_NOTICE            => "notice",
-  E_CORE_ERROR        => "error",
-  E_CORE_WARNING      => "warning",
-  E_COMPILE_ERROR     => "error",
-  E_COMPILE_WARNING   => "warning",
-  E_USER_ERROR        => "error",
-  E_USER_WARNING      => "warning",
-  E_USER_NOTICE       => "notice",
-  E_STRICT            => "notice",
-  E_RECOVERABLE_ERROR => "error",
-  E_DEPRECATED        => "notice",
-  E_USER_DEPRECATED   => "notice",
-  E_JS_ERROR          => "warning",
-);
 
 /**
  * Get the path relative to Mediboard root
@@ -254,49 +177,46 @@ function print_infos($var, $name = '') {
  * @return void
  */
 function errorHandler($code, $text, $file, $line, $context, $backtrace = null) {
-  global $divClasses, $errorTypes, $errorCategories;
-  
-  // See ALL errors
-  //  echo "<br />[$errno] : $text, $file : $line";
-  
+  global $dPconfig;
+
   // Handles the @ case
-  if (!error_reporting() || !array_key_exists($code, $divClasses)) {
+  if (!error_reporting() || in_array($code, CError::$_excluded)) {
     return;
   }
-  
+
+  $old_error_reporting = error_reporting(0);
+
   $time = date("Y-m-d H:i:s");
-  $text = htmlspecialchars($text);
-  
-  // CMbArray non chargé
-  $divClass = isset($divClasses[$code]) ? $divClasses[$code] : null;
-  $type = isset($errorTypes[$code]) ? $errorTypes[$code] : null;
-  
-  // Contextes 
-  $contexts = $backtrace ? $backtrace : debug_backtrace();
-  foreach ($contexts as &$ctx) {
-    unset($ctx['args']);
-    unset($ctx['object']);
-  }
-  $hash = md5($code.$text.$file.$line.serialize($contexts));
-  
-  array_shift($contexts);
-  $log = "\n\n<div class='$divClass' title='$hash'>";
-  
-  if (class_exists("CUser")) {
-    $user = CUser::get();
+
+  // User information
+  $user_id = null;
+  $user_view = "";
+  if (class_exists("CAppUI", false) && CAppUI::$user) {
+    $user = CAppUI::$user;
     if ($user->_id) {
-      $log .= "\n<strong>User: </strong>$user->_view ($user->_id)";
+      $user_id   = $user->_id;
+      $user_view = $user->_view;
     }
   }
 
+  // Server IP
+  $server_ip = isset($_SERVER["SERVER_ADDR"]) ? $_SERVER["SERVER_ADDR"] : null;
+
   $file = mbRelativePath($file);
-  $log .= <<<HTML
-<strong>Time: </strong>$time
-<strong>Type: </strong>$type
-<strong>Text: </strong>$text
-<strong>File: </strong>$file
-<strong>Line: </strong>$line
-HTML;
+  $type = isset(CError::$_types[$code]) ? CError::$_types[$code] : null;
+
+  // Stacktrace
+  $contexts = $backtrace ? $backtrace : debug_backtrace();
+
+  array_shift($contexts); // Remove current method from the stack
+
+  foreach ($contexts as &$ctx) {
+    if (isset($ctx["file"])) {
+      $ctx["file"] = mbRelativePath($ctx["file"]);
+    }
+    unset($ctx['args']);
+    unset($ctx['object']);
+  }
 
   // Might noy be ready at the time error is thrown
   $session = isset($_SESSION) ? $_SESSION : array();
@@ -318,43 +238,93 @@ HTML;
         $_all_params[$_type][$_key] = $mask;
       }
     }
+  }
 
-    $log .= print_infos($_all_params[$_type], $_type);
-  }
-  
-  foreach ($contexts as $context) {
-    $function = isset($context["class"]) ? $context["class"] . ":" : "";
-    $function.= $context["function"] . "()";
-    
-    $log .= "\n<strong>Function: </strong> $function";
-    
-    if (isset($context["file"])) {
-      $context["file"] = mbRelativePath($context["file"]);
-      $log .= "\n<strong>File: </strong>" . $context["file"];      
-    }
-    
-    if (isset($context["line"])) {
-      $log .= "\n<strong>Line: </strong>" . $context["line"];
-    }
-    
-    $log .= "<br />";
-  }
-  
-  $log .= "</div>";
-  
   // CApp might not be ready yet as of early error handling
-  if (class_exists("CApp")) {
-    CApp::$performance[$errorCategories[$code]]++;
+  $request_uid = null;
+  if (class_exists("CApp", false)) {
+    $request_uid = CApp::getRequestUID();
+    CApp::$performance[CError::$_categories[$code]]++;
   }
-  
-  if (ini_get("log_errors")) {
-    file_put_contents(LOG_PATH, $log, FILE_APPEND);
+
+  $build_output = ini_get("display_errors");
+  $save_to_file = false;
+
+  $data = array(
+    "stacktrace"   => $contexts,
+    "param_GET"    => $_all_params["GET"],
+    "param_POST"   => $_all_params["POST"],
+    "session_data" => $_all_params["SESSION"],
+  );
+
+  if (@$dPconfig["error_logs_in_db"] && class_exists("CErrorLog")) {
+    try {
+      CErrorLog::insert(
+        $user_id, $server_ip,
+        $time, $request_uid, $type, $text,
+        $file, $line, $data
+      );
+    }
+    catch (Exception $e) {
+      $build_output = true;
+      $save_to_file = true;
+    }
   }
-  
-  if (ini_get("display_errors")) {
-    echo $log;
+  else {
+    $build_output = true;
+    $save_to_file = true;
   }
-} 
+
+  if ($build_output) {
+    $html_class = isset(CError::$_classes[$code]) ? CError::$_classes[$code] : null;
+    $log = "\n\n<div class='$html_class'>";
+
+    if ($user_id) {
+      $log .= "\n<strong>User: </strong>$user_view ($user_id)";
+    }
+
+    $log .= <<<HTML
+  <strong>Time: </strong>$time
+  <strong>Type: </strong>$type
+  <strong>Text: </strong>$text
+  <strong>File: </strong>$file
+  <strong>Line: </strong>$line
+HTML;
+
+    foreach ($_all_params as $_type => $_params) {
+      $log .= print_infos($_all_params[$_type], $_type);
+    }
+
+    foreach ($contexts as $context) {
+      $function = isset($context["class"]) ? $context["class"] . ":" : "";
+      $function.= $context["function"] . "()";
+
+      $log .= "\n<strong>Function: </strong> $function";
+
+      if (isset($context["file"])) {
+        $log .= "\n<strong>File: </strong>" . $context["file"];
+      }
+
+      if (isset($context["line"])) {
+        $log .= "\n<strong>Line: </strong>" . $context["line"];
+      }
+
+      $log .= "<br />";
+    }
+
+    $log .= "</div>";
+
+    if ($save_to_file) {
+      file_put_contents(LOG_PATH, $log, FILE_APPEND);
+    }
+
+    if (ini_get("display_errors")) {
+      echo $log;
+    }
+  }
+
+  error_reporting($old_error_reporting);
+}
 
 set_error_handler("errorHandler");
 
@@ -366,70 +336,138 @@ set_error_handler("errorHandler");
  * @return void
  */
 function exceptionHandler($exception) {
-  $divClass = "big-warning";
-  
-  // Contextes 
+  global $dPconfig;
+
+  $time = date("Y-m-d H:i:s");
+
+  // User information
+  $user_id = null;
+  $user_view = "";
+  if (class_exists("CAppUI", false) && CAppUI::$user) {
+    $user = CAppUI::$user;
+    if ($user->_id) {
+      $user_id   = $user->_id;
+      $user_view = $user->_view;
+    }
+  }
+
+  // Server IP
+  $server_ip = isset($_SERVER["SERVER_ADDR"]) ? $_SERVER["SERVER_ADDR"] : null;
+
+  $file = mbRelativePath($exception->getFile());
+  $line = $exception->getLine();
+  $type = "exception";
+  $text = htmlspecialchars($exception->getMessage());
+
+  // Stacktrace
   $contexts = $exception->getTrace();
   foreach ($contexts as &$ctx) {
     unset($ctx['args']);
   }
-  $hash = md5(serialize($contexts));
-  
-  $log = "\n\n<div class='$divClass' title='$hash'>";
-  
-  $user = CUser::get();
-  if ($user->_id) {
-    $log .= "\n<strong>User: </strong>$user->_view ($user->_id)";
-  }
-  
-  // Erreur générale
-  $time = date("Y-m-d H:i:s");
-  $type = "Exception";
-  $file = mbRelativePath($exception->getFile());
-  $line = $exception->getLine();
-  $text = htmlspecialchars($exception->getMessage());
-  $log .= <<<HTML
-<strong>Time: </strong>$time
-<strong>Type: </strong>$type
-<strong>Text: </strong>$text
-<strong>File: </strong>$file
-<strong>Line: </strong>$line
-HTML;
-             
-  $log .= print_infos($_GET, 'GET');
-  $log .= print_infos($_POST, 'POST');
-  
-  $session = $_SESSION;
+
+  // Might noy be ready at the time error is thrown
+  $session = isset($_SESSION) ? $_SESSION : array();
   unset($session['AppUI']);
   unset($session['dPcompteRendu']['templateManager']);
-  $log .= print_infos($session, 'SESSION');
-  
-  foreach ($contexts as $context) {
-    $function = isset($context["class"]) ? $context["class"] . ":" : "";
-    $function.= $context["function"] . "()";
-    
-    $log .= "\n<strong>Function: </strong> $function";
-    
-    if (isset($context["file"])) {
-      $context["file"] = mbRelativePath($context["file"]);
-      $log .= "\n<strong>File: </strong>" . $context["file"];      
+
+  $_all_params = array(
+    "GET"     => $_GET,
+    "POST"    => $_POST,
+    "SESSION" => $session,
+  );
+
+  // We replace passwords with a mask
+  $mask = "***";
+  $pattern = "/password|passphrase/i";
+  foreach ($_all_params as $_type => $_params) {
+    foreach ($_params as $_key => $_value) {
+      if (!empty($_value) && preg_match($pattern, $_key)) {
+        $_all_params[$_type][$_key] = $mask;
+      }
     }
-    
-    if (isset($context["line"])) {
-      $log .= "\n<strong>Line: </strong>" . $context["line"];
+  }
+
+  // CApp might not be ready yet as of early error handling
+  $request_uid = null;
+  if (class_exists("CApp", false)) {
+    $request_uid = CApp::getRequestUID();
+    CApp::$performance[CError::$_categories["exception"]]++;
+  }
+
+  $build_output = ini_get("display_errors");
+  $save_to_file = false;
+
+  $data = array(
+    "stacktrace"   => $contexts,
+    "param_GET"    => $_all_params["GET"],
+    "param_POST"   => $_all_params["POST"],
+    "session_data" => $_all_params["SESSION"],
+  );
+
+  if (@$dPconfig["error_logs_in_db"] && class_exists("CErrorLog")) {
+    try {
+      CErrorLog::insert(
+        $user_id, $server_ip,
+        $time, $request_uid, $type, $text,
+        $file, $line, $data
+      );
     }
-    
-    $log .= "<br />";
+    catch (Exception $e) {
+      $build_output = true;
+      $save_to_file = true;
+    }
   }
-  
-  $log .= "</div>";
-  
-  if (ini_get("log_errors")) {
-    file_put_contents(LOG_PATH, $log, FILE_APPEND);
+  else {
+    $build_output = true;
+    $save_to_file = true;
   }
-  
-  if (ini_get("display_errors")) {
-    echo $log;
+
+  if ($build_output) {
+    $html_class = "big-warning";
+    $log = "\n\n<div class='$html_class'>";
+
+    if ($user_id) {
+      $log .= "\n<strong>User: </strong>$user_view ($user_id)";
+    }
+
+    $log .= <<<HTML
+  <strong>Time: </strong>$time
+  <strong>Type: </strong>$type
+  <strong>Text: </strong>$text
+  <strong>File: </strong>$file
+  <strong>Line: </strong>$line
+HTML;
+
+    foreach ($_all_params as $_type => $_params) {
+      $log .= print_infos($_all_params[$_type], $_type);
+    }
+
+    foreach ($contexts as $context) {
+      $function = isset($context["class"]) ? $context["class"] . ":" : "";
+      $function.= $context["function"] . "()";
+
+      $log .= "\n<strong>Function: </strong> $function";
+
+      if (isset($context["file"])) {
+        $log .= "\n<strong>File: </strong>" . $context["file"];
+      }
+
+      if (isset($context["line"])) {
+        $log .= "\n<strong>Line: </strong>" . $context["line"];
+      }
+
+      $log .= "<br />";
+    }
+
+    $log .= "</div>";
+
+    if ($save_to_file) {
+      file_put_contents(LOG_PATH, $log, FILE_APPEND);
+    }
+
+    if (ini_get("display_errors")) {
+      echo $log;
+    }
   }
 } 
 

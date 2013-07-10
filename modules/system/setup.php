@@ -1435,7 +1435,43 @@ class CSetupsystem extends CSetup {
     }
     $this->addFunction("setup_system_addExObjectAdditionalObject");
 
-    $this->mod_version = "1.1.43";
+    $this->makeRevision("1.1.43");
+    $query = "CREATE TABLE `error_log` (
+                `error_log_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `user_id` INT (11) UNSIGNED,
+                `server_ip` VARCHAR (80),
+                `datetime` DATETIME NOT NULL,
+                `request_uid` VARCHAR (255),
+                `error_type` ENUM (
+                  'exception','error','warning','parse','notice','core_error','core_warning','compile_error',
+                  'compile_warning','user_error','user_warning','user_notice','strict','recoverable_error','deprecated',
+                  'user_deprecated','js_error'
+                 ),
+                `text` TEXT,
+                `file_name` VARCHAR (255),
+                `line_number` INT (11),
+
+                `stacktrace_id` INT (11) UNSIGNED,
+                `param_GET_id` INT (11) UNSIGNED,
+                `param_POST_id` INT (11) UNSIGNED,
+                `session_data_id` INT (11) UNSIGNED
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `error_log`
+                ADD INDEX (`user_id`),
+                ADD INDEX (`server_ip`),
+                ADD INDEX (`datetime`),
+                ADD INDEX (`error_type`);";
+    $this->addQuery($query);
+    $query = "CREATE TABLE `error_log_data` (
+                `error_log_data_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `value` LONGTEXT NOT NULL,
+                `value_hash` CHAR(32) NOT NULL,
+                UNIQUE (`value_hash`)
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.44";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,

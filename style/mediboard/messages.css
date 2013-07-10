@@ -97,12 +97,12 @@ div.small-mail {
 
 .small-mail {
   background-image: url(images/icons/small-mail.png);
-   background-color: #ffe;
+  background-color: #ffe;
   border-color: #dd0;
 }
 .small-success {
   background-image: url(images/icons/small-success.png);
-   background-color: #efe;
+  background-color: #efe;
   border-color: #5a5;
 }
 
@@ -120,7 +120,7 @@ div.small-mail {
 
 .small-error {
   background-image: url(images/icons/small-error.png);
-   background-color: #fee;
+  background-color: #fee;
   border-color: #a55;
 }
 
@@ -160,7 +160,7 @@ div.big-error {
 
 .big-error {
   background-image: url(images/icons/error.png);
-   background-color: #fee;
+  background-color: #fee;
   border-color: #a55;
 }
 
@@ -174,4 +174,19 @@ div.small-warning,
 div.small-error,
 div.small-mail {
   box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+}
+
+fieldset.error-notice legend,
+td.error-notice {
+  background-color: #ccccff !important;
+}
+
+fieldset.error-warning legend,
+td.error-warning {
+  background-color: #ffcd75 !important;
+}
+
+fieldset.error-error legend,
+td.error-error {
+  background-color: #ff9999 !important;
 }

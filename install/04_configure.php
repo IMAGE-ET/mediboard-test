@@ -89,8 +89,8 @@ showHeader();
         <th><label for="instance_role">Rôle de l'instance</label></th>
         <td colspan="2">
           <select name="instance_role">
-            <option value="prod"   <?php if ($dPconfig['instance_role'] == 'prod'  ) echo 'selected="1"'; ?> >Production</option>
-            <option value="qualif" <?php if ($dPconfig['instance_role'] == 'qualif') echo 'selected="1"'; ?> >Qualification</option>
+            <option value="prod"   <?php if ($dPconfig['instance_role'] == 'prod'  ) echo 'selected'; ?> >Production</option>
+            <option value="qualif" <?php if ($dPconfig['instance_role'] == 'qualif') echo 'selected'; ?> >Qualification</option>
           </select>
         </td>
       </tr>
@@ -103,10 +103,10 @@ showHeader();
         </th>
         <td>
           <select name="session_handler">
-            <option value="files"    <?php if ($dPconfig['session_handler'] == 'files'   ) { echo 'selected="selected"'; } ?> >Fichiers</option>
-            <option value="memcache" <?php if ($dPconfig['session_handler'] == 'memcache') { echo 'selected="selected"'; } ?> >Memcache (déconseillé)</option>
-            <option value="mysql"    <?php if ($dPconfig['session_handler'] == 'mysql'   ) { echo 'selected="selected"'; } ?> >MySQL (Utile pour les environnements répliqués)</option>
-            <option value="zebra"    <?php if ($dPconfig['session_handler'] == 'zebra'   ) { echo 'selected="selected"'; } ?> >Zebra (Utile pour les environnements répliqués)</option>
+            <option value="files"    <?php if ($dPconfig['session_handler'] == 'files'   ) { echo 'selected'; } ?> >Fichiers</option>
+            <option value="memcache" <?php if ($dPconfig['session_handler'] == 'memcache') { echo 'selected'; } ?> >Memcache (déconseillé)</option>
+            <option value="mysql"    <?php if ($dPconfig['session_handler'] == 'mysql'   ) { echo 'selected'; } ?> >MySQL (Utile pour les environnements répliqués)</option>
+            <option value="zebra"    <?php if ($dPconfig['session_handler'] == 'zebra'   ) { echo 'selected'; } ?> >Zebra (Utile pour les environnements répliqués)</option>
           </select>
         </td>
         <td class="text">
@@ -124,11 +124,29 @@ showHeader();
           </label>
         </th>
         <td colspan="2">
-          <input type="radio" name="http_redirections" value="0" id="http_redirections_0" <?php if ($dPconfig['http_redirections'] == "0") echo 'checked="1"'; ?> />
-          <label for="http_redirections_0">Non</label>
+          <label>
+            <input type="radio" name="http_redirections" value="0" id="http_redirections_0" <?php if ($dPconfig['http_redirections'] == "0") echo 'checked'; ?> />
+            Non
+          </label>
 
-          <input type="radio" name="http_redirections" value="1" id="http_redirections_1" <?php if ($dPconfig['http_redirections'] == "1") echo 'checked="1"'; ?> />
-          <label for="http_redirections_1">Oui</label>
+          <label>
+            <input type="radio" name="http_redirections" value="1" id="http_redirections_1" <?php if ($dPconfig['http_redirections'] == "1") echo 'checked'; ?> />
+            Oui
+          </label>
+        </td>
+      </tr>
+
+      <tr>
+        <th><label for="error_logs_in_db">Logs d'erreur en base de données</label></th>
+        <td colspan="2">
+          <label>
+            <input type="radio" name="error_logs_in_db" value="0" id="error_logs_in_db_0" <?php if ($dPconfig['error_logs_in_db'] == "0") echo 'checked'; ?> />
+            Non
+          </label>
+          <label>
+            <input type="radio" name="error_logs_in_db" value="1" id="error_logs_in_db_1" <?php if ($dPconfig['error_logs_in_db'] == "1") echo 'checked'; ?> />
+            Oui
+          </label>
         </td>
       </tr>
     </table>
@@ -181,10 +199,10 @@ showHeader();
         </th>
         <td>
           <select id="shared_memory" name="shared_memory" onchange="toggleMemoryParams(this.value)">
-            <option value="none"      <?php if ($dPconfig['shared_memory'] == 'none'      ) { echo 'selected="selected"'; } ?> >Disque</option>
-            <option value="apc"       <?php if ($dPconfig['shared_memory'] == 'apc'       ) { echo 'selected="selected"'; } ?> >APC</option>
-            <option value="redis"     <?php if ($dPconfig['shared_memory'] == 'redis'     ) { echo 'selected="selected"'; } ?> >Redis (Expérimental)</option>
-            <option value="memcached" <?php if ($dPconfig['shared_memory'] == 'memcached' ) { echo 'selected="selected"'; } ?> >Memcached (Expérimental)</option>
+            <option value="none"      <?php if ($dPconfig['shared_memory'] == 'none'      ) { echo 'selected'; } ?> >Disque</option>
+            <option value="apc"       <?php if ($dPconfig['shared_memory'] == 'apc'       ) { echo 'selected'; } ?> >APC</option>
+            <option value="redis"     <?php if ($dPconfig['shared_memory'] == 'redis'     ) { echo 'selected'; } ?> >Redis (Expérimental)</option>
+            <option value="memcached" <?php if ($dPconfig['shared_memory'] == 'memcached' ) { echo 'selected'; } ?> >Memcached (Expérimental)</option>
           </select>
         </td>
         <td>
@@ -322,9 +340,9 @@ showHeader();
       <tr>
         <th><label for="offline">Mode maintenance</label></th>
         <td colspan="2">
-          <input type="radio" name="offline" value="0" id="offline_0" <?php if ($dPconfig['offline'] == "0") echo 'checked="1"'; ?> />
+          <input type="radio" name="offline" value="0" id="offline_0" <?php if ($dPconfig['offline'] == "0") echo 'checked'; ?> />
           <label for="offline_0">Non</label>
-          <input type="radio" name="offline" value="1" id="offline_1" <?php if ($dPconfig['offline'] == "1") echo 'checked="1"'; ?> />
+          <input type="radio" name="offline" value="1" id="offline_1" <?php if ($dPconfig['offline'] == "1") echo 'checked'; ?> />
           <label for="offline_1">Oui</label>
         </td>
       </tr>
@@ -332,9 +350,9 @@ showHeader();
       <tr>
         <th><label for="offline_non_admin">Mode maintenance accessible aux admins</label></th>
         <td colspan="2">
-          <input type="radio" name="offline_non_admin" value="0" id="offline_non_admin_0" <?php if ($dPconfig['offline_non_admin'] == "0") echo 'checked="1"'; ?> />
+          <input type="radio" name="offline_non_admin" value="0" id="offline_non_admin_0" <?php if ($dPconfig['offline_non_admin'] == "0") echo 'checked'; ?> />
           <label for="offline_non_admin_0">Non</label>
-          <input type="radio" name="offline_non_admin" value="1" id="offline_non_admin_1" <?php if ($dPconfig['offline_non_admin'] == "1") echo 'checked="1"'; ?> />
+          <input type="radio" name="offline_non_admin" value="1" id="offline_non_admin_1" <?php if ($dPconfig['offline_non_admin'] == "1") echo 'checked'; ?> />
           <label for="offline_non_admin_1">Oui</label>
         </td>
       </tr>
@@ -342,9 +360,9 @@ showHeader();
       <tr>
         <th><label for="migration[active]" title="Affiche une page avec les nouvelles adresse de Mediboard aux utilisateurs">Mode migration</label></th>
         <td colspan="2">
-          <input type="radio" name="migration[active]" value="0" id="migration[active]_0" <?php if ($dPconfig['migration']['active'] == "0") echo 'checked="1"'; ?> />
+          <input type="radio" name="migration[active]" value="0" id="migration[active]_0" <?php if ($dPconfig['migration']['active'] == "0") echo 'checked'; ?> />
           <label for="migration[active]_0">Non</label>
-          <input type="radio" name="migration[active]" value="1" id="migration[active]_1" <?php if ($dPconfig['migration']['active'] == "1") echo 'checked="1"'; ?> />
+          <input type="radio" name="migration[active]" value="1" id="migration[active]_1" <?php if ($dPconfig['migration']['active'] == "1") echo 'checked'; ?> />
           <label for="migration[active]_1">Oui</label>
         </td>
       </tr>
