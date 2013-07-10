@@ -1,10 +1,12 @@
-<?php /* $Id:affectation.class.php 8146 2010-02-25 14:38:16Z rhum1 $ */
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage dPhospi
- *  @version $Revision:8146 $
- *  @author Thomas Despoix
+ * $Id:$
+ *
+ * @package    Mediboard
+ * @subpackage dPhospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 /**
@@ -93,6 +95,9 @@ class CAffectation extends CMbObject {
   // EAI Fields
   public $_eai_initiateur_group_id; // group initiateur du message EAI
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'affectation';
@@ -100,6 +105,9 @@ class CAffectation extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["echanges_hprim"]      = "CEchangeHprim object_id cascade";
@@ -111,6 +119,9 @@ class CAffectation extends CMbObject {
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["service_id"]            = "ref notNull class|CService";
@@ -138,6 +149,9 @@ class CAffectation extends CMbObject {
     return $specs;
   }
 
+  /**
+   * @see parent::loadView()
+   */
   function loadView() {
     parent::loadView();
     $sejour = $this->loadRefSejour();
@@ -177,11 +191,17 @@ class CAffectation extends CMbObject {
     $sejour->getDroitsCMU();
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_duree = CMbDT::daysRelative($this->entree, $this->sortie);
   }
 
+  /**
+   * @see parent::check()
+   */
   function check() {
     if ($msg = parent::check()) {
       return $msg;
@@ -400,7 +420,9 @@ class CAffectation extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Chargement du lit de l'affectation
+   *
+   * @param bool $cache cache
    *
    * @return CLit
    */
@@ -409,7 +431,9 @@ class CAffectation extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Chargement du séjour de l'affectation
+   *
+   * @param bool $cache cache
    *
    * @return CSejour
    */
@@ -418,7 +442,9 @@ class CAffectation extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Chargement du service de l'affectation
+   *
+   * @param bool $cache cache
    *
    * @return CService
    */
@@ -426,6 +452,10 @@ class CAffectation extends CMbObject {
     return $this->_ref_service = $this->loadFwdRef("service_id", $cache);
   }
 
+  /**
+   * @deprecated
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd($cache = true) {
     $this->loadRefLit($cache);
     $this->loadView();
@@ -506,7 +536,7 @@ class CAffectation extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * @param bool $cache cache
    *
    * @return CMediusers
    */
@@ -528,7 +558,7 @@ class CAffectation extends CMbObject {
       "uf" => "uf.uf_id = affectation_uf.uf_id",
     );
 
-    if (!$this->uf_hebergement_id) {
+    if (!$this->uf_hebergement_id || $this->fieldModified("service_id") || $this->fieldModified("lit_id")) {
       $affectation_uf = new CAffectationUniteFonctionnelle();
       $where = array(
         "uf.type" => "= 'hebergement'",
@@ -555,7 +585,7 @@ class CAffectation extends CMbObject {
       $this->uf_hebergement_id = $affectation_uf->uf_id;      
     }
 
-    if (!$this->uf_soins_id) {
+    if (!$this->uf_soins_id || $this->fieldModified("service_id")) {
       $affectation_uf = new CAffectationUniteFonctionnelle();
       $where = array(
         "uf.type" => "= 'soins'",
@@ -615,7 +645,7 @@ class CAffectation extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * @param bool $cache cache
    *
    * @return CUniteFonctionnelle
    */
@@ -624,7 +654,7 @@ class CAffectation extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * @param bool $cache cache
    *
    * @return CUniteFonctionnelle
    */
@@ -633,7 +663,7 @@ class CAffectation extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * @param bool $cache cache
    *
    * @return CUniteFonctionnelle
    */
