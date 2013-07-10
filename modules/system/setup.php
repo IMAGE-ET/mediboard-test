@@ -1471,7 +1471,19 @@ class CSetupsystem extends CSetup {
               )/*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.44";
+    $this->makeRevision("1.1.44");
+    $query = "ALTER TABLE `source_pop`
+                CHANGE `port` `port` INT (11) DEFAULT '25',
+                CHANGE `timeout` `timeout` TINYINT (4) DEFAULT '5',
+                CHANGE `type` `type` ENUM ('pop3','imap'),
+                ADD `extension` VARCHAR (255);";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `source_pop`
+                ADD INDEX (`object_class`),
+                ADD INDEX (`object_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.45";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,
