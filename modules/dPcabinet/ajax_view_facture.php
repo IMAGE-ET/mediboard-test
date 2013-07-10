@@ -10,13 +10,15 @@
  */
 
 CCanDo::checkEdit();
-
-$facture_id  = CValue::getOrSession("facture_id");
+$facture_id   = CValue::getOrSession("facture_id");
 $consult_id  = CValue::get("consult_id");
-    
+$patient_id   = CValue::getOrSession("patient_id");
+$object_class = CValue::getOrSession("object_class", "CFactureCabinet");
+
 $derconsult_id = null;
-$facture = new CFactureCabinet();
 $consult = null;
+$facture = new $object_class;
+$assurances_patient = array();
 
 if ($consult_id) {
   $consult = new CConsultation();
@@ -53,7 +55,7 @@ $smarty->assign("banques"       , $banques);
 $smarty->assign("consult"       , $consult);
 
 if (!CValue::get("not_load_banque")) {
-  $smarty->assign("factures"    , array(new CFactureCabinet()));
+  $smarty->assign("factures"    , array(new $object_class()));
 }
 
 $smarty->assign("etat_ouvert"   , CValue::getOrSession("etat_ouvert", 1));

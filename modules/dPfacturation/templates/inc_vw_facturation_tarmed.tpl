@@ -72,13 +72,13 @@
           <button class="duplicate" type="submit">Extourner</button>
         </form>
       {{/if}}
-      {{if $facture->_class == "CFactureEtablissement"}}
+      {{if $facture->_class == "CFactureEtablissement" && $facture->_ref_sejours|@count}}
         {{assign var="last_op" value=$facture->_ref_last_sejour->_ref_last_operation}}
         <button type="button" class="edit" onclick="viewInterv('{{$last_op->_id}}', '{{$last_op->plageop_id}}');" style="float:right;"> Infos interv. </button>
       {{/if}}
     </td>
   </tr>
-{{elseif !$facture->cloture && isset($factures|smarty:nodefaults) && count($factures) && $facture->_class == "CFactureEtablissement"}}
+{{elseif !$facture->cloture && isset($factures|smarty:nodefaults) && count($factures) && $facture->_class == "CFactureEtablissement" && $facture->_ref_sejours|@count}}
   <tr>
     <td colspan="8">
       {{assign var="last_op" value=$facture->_ref_last_sejour->_ref_last_operation}}

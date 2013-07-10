@@ -202,7 +202,7 @@
       </td>
     </tr>
     <tr>
-      <td colspan="6" style="text-align: center;">
+      <td colspan="7" style="text-align: center;">
         <strong>
           {{mb_label object=$object field=patient_date_reglement}}
           <input type="hidden" name="patient_date_reglement" class="date" value="{{$object->patient_date_reglement}}" />

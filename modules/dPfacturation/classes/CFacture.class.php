@@ -283,10 +283,11 @@ class CFacture extends CMbObject {
         $where["cloture"]       = "IS NULL";
       }
       else {
-        $ljoin["facture_liaison"] =  "facture_liaison.facture_id = facture_cabinet.facture_id";
+        $table = $consult->sejour_id ? "facture_etablissement" : "facture_cabinet";
+        $ljoin["facture_liaison"] =  "facture_liaison.facture_id = $table.facture_id";
         $where["facture_liaison.object_id"]     = " = '$this->_consult_id'";
         $where["facture_liaison.object_class"]  = " = 'CConsultation'";
-        $where["facture_liaison.facture_class"] = " = 'CFactureCabinet'";
+        $where["facture_liaison.facture_class"] = " = '$this->_class'";
       }
       
       //Si la facture existe déjà
@@ -309,7 +310,7 @@ class CFacture extends CMbObject {
         $this->patient_id   = $consult->patient_id;
         $this->praticien_id = $consult->_ref_plageconsult->chir_id;
         $this->type_facture = $consult->pec_at == 'arret' ? "accident" : "maladie";
-        if (CAppUI::conf("dPfacturation CFactureCabinet use_auto_cloture")) {
+        if (CAppUI::conf("dPfacturation $this->_class use_auto_cloture")) {
           $this->cloture    = CMbDT::date();
           $create_lignes = true;
         }

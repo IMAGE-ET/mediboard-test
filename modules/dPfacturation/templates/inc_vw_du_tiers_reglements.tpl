@@ -30,7 +30,7 @@
   </tr>
   {{/foreach}}
   <tr>
-    <td colspan="4" style="text-align: center;">
+    <td colspan="5" style="text-align: center;">
       <strong> Aucun règlement à percevoir du patient </strong>
     </td>
   </tr>

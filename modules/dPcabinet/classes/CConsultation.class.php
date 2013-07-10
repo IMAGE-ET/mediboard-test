@@ -915,7 +915,7 @@ class CConsultation extends CFacturable {
     //Lors de la validation de la consultation
     // Enregistrement de la facture
     if ($this->fieldModified("valide", "1")) {
-      $facture = new CFactureCabinet();
+      $facture = $this->sejour_id ? new CFactureEtablissement() : new CFactureCabinet();
       $facture->_consult_id = $this->_id;
       $facture->du_patient  = $this->du_patient;
       $facture->du_tiers    = $this->du_tiers;
@@ -1125,7 +1125,7 @@ class CConsultation extends CFacturable {
     if (CModule::getActive("dPfacturation")) {
       $liaison = new CFactureLiaison();
       $liaison->setObject($this);
-      $liaison->facture_class = "CFactureCabinet";
+      $liaison->facture_class = $this->sejour_id ? "CFactureEtablissement" : "CFactureCabinet";
       if ($liaison->loadMatchingObject()) {
         return $this->_ref_facture = $liaison->loadRefFacture();
       }
@@ -2069,10 +2069,10 @@ class CConsultation extends CFacturable {
    *
    * @param string $type_facture Type de facture voulu
    *
-   * @return CFactureCabinet
+   * @return CFactureCabinet|CFactureEtablissement
    */
   function createFactureConsult($type_facture = "maladie") {
-    $facture               = new CFactureCabinet();
+    $facture               = $this->sejour_id ? new CFactureEtablissement() : new CFactureCabinet();
     $facture->patient_id   = $this->patient_id;
     $facture->praticien_id = $this->_praticien_id;
     $facture->du_patient   = $this->du_patient;

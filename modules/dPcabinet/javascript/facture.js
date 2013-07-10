@@ -12,8 +12,9 @@ window.Facture = {
     onSubmitFormAjax(oForm, {
       onComplete : function() {
       var url = new Url('dPcabinet'   , 'ajax_view_facture');
-        url.addParam('facture_id'     , oForm.facture_id.value);
-        url.addParam('not_load_banque', oForm.not_load_banque.value);
+        url.addElement(oForm.facture_id);
+        url.addElement(oForm.not_load_banque);
+        url.addParam('object_class'     , oForm.facture_class.value);
         url.requestUpdate('load_facture');
     }
     });
@@ -27,7 +28,8 @@ window.Facture = {
     onSubmitFormAjax(oForm, {
       onComplete : function() {
         var url = new Url('dPcabinet', 'ajax_view_facture');
-        url.addParam('facture_id'    , oForm.facture_id.value);
+        url.addElement(oForm.facture_id);
+        url.addParam('object_class'     , oForm.facture_class.value);
         url.requestUpdate("load_facture");
         Facture.modal.close();
       }

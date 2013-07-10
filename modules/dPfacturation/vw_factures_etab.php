@@ -69,12 +69,12 @@ foreach ($factures as $key => $_facture) {
   /** @var CFacture $_facture*/
   $_facture->loadRefPatient();
   $_facture->loadRefsItems();
-  $_facture->loadRefsSejour();
+  $_facture->loadRefsObjects();
   $nb_tarmed  = count($_facture->_ref_actes_tarmed);
   $nb_caisse  = count($_facture->_ref_actes_caisse);
   $nb_ngap    = count($_facture->_ref_actes_ngap);
   $nb_ccam    = count($_facture->_ref_actes_ccam);
-  if (count($_facture->_ref_sejours) == 0) {
+  if (!count($_facture->_ref_sejours) && !count($_facture->_ref_consults)) {
     unset($factures[$key]);
   }
   elseif ($nb_tarmed == 0 && $nb_caisse == 0 && $nb_ngap == 0 && $nb_ccam == 0 && !$etat_cotation) {
