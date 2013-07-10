@@ -379,6 +379,8 @@ class CHL7v2Component extends CHL7v2Entity {
         $title .= " [$this->table => $value_description]";
       }
 
+      $title = CMbString::htmlEntities($title);
+
       $xpath = ($this->getSegment()->name)."/".$this->getPathString("/", ".", true);
 
       $invalid = $this->invalid    ? 'invalid' : '';
