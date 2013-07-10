@@ -29,7 +29,7 @@
       <th>{{mb_label object=$source field="libelle"}}</th>
       <td>{{mb_field object=$source field="libelle"}}</td>
     </tr>
-  {{mb_include template="CExchangeSource_inc"}}
+    {{mb_include template="CExchangeSource_inc"}}
     <tr>
       <th>{{mb_label object=$source field="port"}}</th>
       <td>{{mb_field object=$source field="port"}}</td>
@@ -53,6 +53,10 @@
         {{assign var=placeholder value="Mot de passe enregistré"}}
       {{/if}}
       <td>{{mb_field object=$source field="password" placeholder=$placeholder}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$source field="extension"}}</th>
+      <td>{{mb_field object=$source field="extension"}}</td>
     </tr>
     <tr {{if !$can->admin}}style="display:none;"{{/if}}>
       <th>{{mb_label object=$source field="timeout"}}</th>
