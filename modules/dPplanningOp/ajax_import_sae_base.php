@@ -13,9 +13,9 @@ CCanDo::checkAdmin();
 
 $ds = CSQLDataSource::get("sae");
 
-$sourcePath = "modules/dPplanningOp/base/discipline_tarifaire.tar.gz";
+$sourcePath = "modules/dPplanningOp/base/sae.tar.gz";
 $targetDir = "tmp/dPplanningOp";
-$targetPath = "tmp/dPplanningOp/discipline_tarifaire.sql";
+$targetPath = "tmp/dPplanningOp/sae.sql";
 
 // Extract the SQL dump
 if (null == $nbFiles = CMbPath::extract($sourcePath, $targetDir)) {
