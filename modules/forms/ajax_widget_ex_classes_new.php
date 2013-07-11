@@ -48,10 +48,9 @@ foreach ($ex_class_events as $_id => $_ex_class_event) {
 
   $ex_classes[$_ex_class->_id] = $_ex_class;
 
-  /*if (!$_ex_class_event->checkConstraints($object)) {
-    unset($ex_class_events[$_id]);
+  if ($_ex_class_event->disabled || !$_ex_class_event->checkConstraints($object)) {
     $count_available--;
-  }*/
+  }
 
   $_ex_objects = $_ex_class_event->getExObjectForHostObject($object);
 

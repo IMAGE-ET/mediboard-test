@@ -65,7 +65,6 @@ class CExClassConstraint extends CMbObject {
   static function getFieldAndObjectStatic(CMbObject $object, $field) {
     if (strpos($field, "CONNECTED_USER") === 0) {
       $object = CMediusers::get();
-      $object->_specs = CExClassEvent::getHostObjectSpecs($object);
 
       if ($field != "CONNECTED_USER") {
         $field = substr($field, 15);
@@ -274,7 +273,7 @@ class CExClassConstraint extends CMbObject {
     $field  = $object_field["field"];
 
     // cas ou l'objet retrouvé n'a pas le champ (meta objet avec classe differente)
-    if (!isset($object->_specs[$field])) {
+    if (!isset($object->_specs[$field]) && $field != "CONNECTED_USER") {
       return false;
     }
 
