@@ -12,7 +12,7 @@
       window.parent.reloadListFileEditPatient("load", object.file_category_id);
     }
     
-    var systemMsg=window.parent.$("systemMsg").update("{{$messages|smarty:nodefaults}}");
+    var systemMsg=window.parent.$("systemMsg").update('{{$messages|smarty:nodefaults}}');
   
     systemMsg.show();
     window.parent.Control.Modal.close();
