@@ -620,6 +620,16 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "mg/l",
       "min" => 0, "max" => 30,
     ),
+    "ph_sanguin" => array(
+      "type" => "biolo",
+      "unit" => "",
+      "min" => 5, "max" => 10,
+    ),
+    "lactates" => array(
+      "type" => "biolo",
+      "unit" => "mmol/L",
+      "min" => 0, "max" => 20,
+    ),
     "glasgow" => array(
       "type" => "physio",
       "unit" => "",
@@ -842,6 +852,8 @@ class CConstantesMedicales extends CMbObject {
     $props['bricker']                = 'float min|0';
     $props['entree_lavage']          = 'float min|0';
     $props['creatininemie']          = 'float min|0';
+    $props['ph_sanguin']             = 'float min|0';
+    $props['lactates']               = 'float min|0';
     $props['glasgow']                = 'float min|0';
     return $props;
   }

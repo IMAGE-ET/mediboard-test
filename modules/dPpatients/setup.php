@@ -2273,9 +2273,13 @@ class CSetupdPpatients extends CSetup {
                 ADD `surnom` VARCHAR (255);";
     $this->addQuery($query);
 
-    $this->mod_version = "1.84";
+    $this->makeRevision("1.84");
+    $query = "ALTER TABLE `constantes_medicales`
+                ADD `ph_sanguin` FLOAT UNSIGNED,
+                ADD `lactates` FLOAT UNSIGNED;";
+    $this->addQuery($query);
 
-
+    $this->mod_version = "1.85";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
