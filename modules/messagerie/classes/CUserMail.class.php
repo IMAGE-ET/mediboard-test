@@ -39,13 +39,13 @@ class CUserMail extends CMbObject{
   public $_ref_file_linked;
 
   //body
-  public $text_plain_id; //plain text (no html)
+  public $text_plain_id; //plain text (no html) = CContentAny_id
   public $_text_plain;
   public $_ref_account_pop;
   public $_is_apicrypt;
   public $_is_hprim;
 
-  public $text_html_id; //html text
+  public $text_html_id; //html text = CContentHTML_id
   public $_text_html;
 
   /** @var CMailAttachments[] $_attachments */
@@ -159,6 +159,13 @@ class CUserMail extends CMbObject{
     return $ds->loadColumn($query);
   }
 
+  /**
+   * get the last uid mail from mb
+   *
+   * @param int $account_id account_id = source pop
+   *
+   * @return array|null
+   */
   static function getLastMailUid($account_id) {
     $mail = new self;
     $ds = $mail->getDS();
@@ -211,11 +218,13 @@ class CUserMail extends CMbObject{
       else {
         $textP->content = $this->_text_plain;
       }
-      $textP->store();
-      $this->text_plain_id = $textP->_id;
+
+      if (!$msg = $textP->store()) {
+        $this->text_plain_id = $textP->_id;
+      }
     }
 
-    return $this->_text_plain;
+    return $this->text_plain_id;
   }
 
   /**
@@ -242,7 +251,7 @@ class CUserMail extends CMbObject{
       }
     }
 
-    return $this->_text_html;
+    return $this->text_html_id;
   }
 
 
@@ -311,6 +320,7 @@ class CUserMail extends CMbObject{
     $this->_is_apicrypt  = $contentsource["text"]["is_apicrypt"];
     $this->_text_html    = $contentsource["text"]["html"];
     $this->_attachments  = $contentsource["attachments"];
+    mbLog($this);
     return;
   }
 

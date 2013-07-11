@@ -16,6 +16,16 @@
     <td>
       <table class="tbl">
         <tr>
+          <th class="title" colspan="2">Mail MB</th>
+        </tr>
+        <tr>
+          <td>{{$mail|@mbTrace}}</td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <table class="tbl">
+        <tr>
           <th class="title" colspan="2">Overview</th>
         </tr>
         {{foreach from=$overview key=key item=value}}
@@ -51,6 +61,26 @@
             </td>
           </tr>
         {{/foreach}}
+      </table>
+
+      <!-- CONTENT -->
+      <table class="tbl">
+        <tr>
+          <th class="title" colspan="2">Body</th>
+        </tr>
+        <tr>
+          <td>{{$content|@mbTrace}}</td>
+        </tr>
+      </table>
+
+      <!-- attachments -->
+      <table class="tbl">
+        <tr>
+          <th class="title" colspan="2">Attachments</th>
+        </tr>
+        <tr>
+          <td>{{$attachments|@mbTrace}}</td>
+        </tr>
       </table>
     </td>
   </tr>

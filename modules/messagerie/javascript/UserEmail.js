@@ -102,11 +102,11 @@ messagerie = {
   },
 
 
-  markallAsRead: function () {
-    var url = new Url("messagerie", "ajax_mark_all_mail_as_read");
-    url.addParam("account", messagerie.tab);
+  markallAsRead: function (account_id) {
+    var url = new Url("messagerie", "controllers/do_mark_all_mail_as_read");
+    url.addParam("account_id", account_id);
     url.requestUpdate("systemMsg", function () {
-      messagerie.refreshList(0, messagerie.tab, 0);
+      messagerie.refreshList();
     });
   },
 

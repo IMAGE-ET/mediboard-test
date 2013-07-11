@@ -19,6 +19,7 @@ $mail_id = CValue::get("id");
 //usermail
 $mail = new CUserMail();
 $mail->load($mail_id);
+$mail->loadAttachments();
 
 //client POP
 $clientPOP = new CSourcePOP();
@@ -37,11 +38,20 @@ $infos = $pop->infos($msgno);
 //structure
 $structure = $pop->structure($mail->uid);
 
+//content
+$content = $pop->getFullBody($mail->uid);
+
+//attachments
+$attachments = $pop->getListAttachments($mail->uid);
+
 $pop->close();
 
 $smarty = new CSmartyDP();
+$smarty->assign("mail", $mail);
 $smarty->assign("overview", $overview);
 $smarty->assign("structure", $structure);
 $smarty->assign("mail_id", $mail_id);
+$smarty->assign("content", $content);
+$smarty->assign("attachments", $attachments);
 $smarty->assign("infos", $infos);
 $smarty->display("vw_pop_mail.tpl");

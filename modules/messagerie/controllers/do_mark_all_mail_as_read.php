@@ -10,17 +10,17 @@
 CCanDo::checkRead();
 CPop::checkImapLib();
 
-$account = CValue::get("account");
+$account_id = CValue::get("account_id");
 $user = CMediusers::get();
 
 //get account
 $account_pop = new CSourcePOP();
-$account_pop->load($account);
+$account_pop->load($account_id);
 
 //get the list
 $mail = new CUserMail();
 $where = array();
-$where[] = "date_read IS NULL AND account_id = '$account'";
+$where[] = "date_read IS NULL AND account_id = '$account_id'";
 $mails = $mail->loadList($where);
 
 $pop = new CPop($account_pop);

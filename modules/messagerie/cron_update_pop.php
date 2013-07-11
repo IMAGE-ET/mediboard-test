@@ -75,6 +75,7 @@ foreach ($sources as $_source) {
     $loop = 0;      //loop of foreach
     $created = 0;
     foreach ($unseen as $_mail) {
+      $pop->cleanTemp();
 
       $mail_unseen = new CUserMail();
       $mail_unseen->account_id = $_source->_id;

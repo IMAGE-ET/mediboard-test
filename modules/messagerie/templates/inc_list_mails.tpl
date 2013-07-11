@@ -72,7 +72,7 @@
       <td{{if $_mail->_text_plain->content == ""}} class="empty">({{tr}}CUserMail-content-empty{{/tr}}){{else}}>{{$_mail->_text_plain->content|truncate}}{{/if}}</td>
     </tr>
   {{foreachelse}}
-    <tr><td class="empty" colspan="5">{{tr}}CUserMail-none{{/tr}}</td></tr>
+    <tr><td class="empty" colspan="6"">{{tr}}CUserMail-none{{/tr}}</td></tr>
   {{/foreach}}
 
   {{if $nb_mails != 0}}

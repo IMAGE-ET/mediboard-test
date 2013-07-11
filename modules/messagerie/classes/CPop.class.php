@@ -56,6 +56,22 @@ class CPop{
   }
 
   /**
+   * cleanup temporary elements
+   *
+   * @return void
+   */
+  function cleanTemp() {
+    $this->content = array (
+      "text" => array(
+        "plain"       => null,
+        "html"        => null,
+        "is_apicrypt" => null
+      ),
+      "attachments" => array()
+    );
+  }
+
+  /**
    * Open the remote mailbox
    *
    * @param string|null $extension Extension of the serveur to open (/Inbox, ...)
@@ -210,19 +226,16 @@ class CPop{
         case 0: //text or html
           if ($structure->subtype == "PLAIN") {
             $this->content["text"]["plain"] = self::decodeMail($structure->encoding, self::openPart($mail_id, $part_number), $structure);
+            if (stripos($this->content["text"]["plain"], '$APICRYPT') !== false) {
+              $this->content["text"]["is_apicrypt"] = "plain";
+            }
           }
 
           if ($structure->subtype == "HTML") {
             $this->content["text"]["html"] = self::decodeMail($structure->encoding, self::openPart($mail_id, $part_number), $structure);
-          }
-
-          //apycript
-          if (stripos($this->content["text"]["plain"], '$APICRYPT') !== false) {
-            $this->content["text"]["is_apicrypt"] = "plain";
-          }
-
-          if (stripos($this->content["text"]["html"], '$APICRYPT') !== false) {
-            $this->content["text"]["is_apicrypt"] = "html";
+            if (stripos($this->content["text"]["html"], '$APICRYPT') !== false) {
+              $this->content["text"]["is_apicrypt"] = "html";
+            }
           }
 
           break;
@@ -252,7 +265,7 @@ class CPop{
             //inline attachments
             if ($attach->id && $attach->subtype!="SVG+XML") {
               $id= 'cid:'.str_replace(array("<",">"), array("",""), $attach->id);
-              $url = "data:image/$attach->subtype|strtolower;base64,".$attach->content;
+              $url = "data:image/$attach->subtype|strtolower;base64,".$attach->_content;
               $this->content["text"]["html"] = str_replace($id, $url, $this->content["text"]["html"]);
             }
             else {  //attachments below

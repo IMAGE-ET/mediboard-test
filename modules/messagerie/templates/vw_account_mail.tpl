@@ -23,8 +23,7 @@
   <button class="button change" onclick="messagerie.getLastMessages('{{$account->_id}}');">{{tr}}CUserMAil-button-getNewMails{{/tr}}</button>
   <select style="width: 50px;" name="action">
     <option value="">{{tr}}CUserMail-option-More{{/tr}}</option>
-    <option value="AllMarkAsRead" onclick="messagerie.markallAsRead()">{{tr}}CUserMail-option-allmarkasread{{/tr}}</option>
-    <option value="AllMarkAsRead" onclick="">{{tr}}CUserMail-option-delete{{/tr}}</option>
+    <option value="AllMarkAsRead" onclick="messagerie.markallAsRead('{{$account->_id}}')">{{tr}}CUserMail-option-allmarkasread{{/tr}}</option>
   </select>
 </div>
 
