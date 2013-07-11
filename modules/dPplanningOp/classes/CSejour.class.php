@@ -3236,8 +3236,12 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   function getIncrementVars() {
+    $group_guid = $this->group_id ? "CGroups-$this->group_id" : CGroups::loadCurrent()->_guid;
+
+    $typeHospi = $this->type ? CAppUI::conf("dPsante400 CIncrementer type_sejour $this->type", $group_guid) : null;
+
     return array(
-      "typeHospi" => $this->type
+      "typeHospi" => $typeHospi
     );
   }
 

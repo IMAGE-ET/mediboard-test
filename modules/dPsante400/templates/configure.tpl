@@ -1,173 +1,44 @@
+{{* $Id$ *}}
 
-
-<h2>Environnement d'execution</h2>
-
-<form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
-
-<input type="hidden" name="m" value="system" />
-<input type="hidden" name="dosql" value="do_configure" />
-
-<table class="form">
-
-  <tr>
-    <th class="category" colspan="100">Connexion à la source de données</th>
-  </tr>
-  
-  {{assign var=m value=interop}}
-  {{assign var=mod value=interop}}
-
-  {{mb_include module=system template=inc_config_enum var=mode_compat values='|'|implode:$modes}}
-	
-  {{assign var=m value=dPsante400}}
-  {{mb_include module=system template=inc_config_enum var=prefix values=odbc|mysql}}
-  {{mb_include module=system template=inc_config_str var=dsn}}
-  {{mb_include module=system template=inc_config_str var=user}}
-  {{mb_include module=system template=inc_config_str var=pass}}
-   
-  <tr>
-    <th class="category" colspan="100">Traitement des mouvements</th>
-  </tr>
-
-  {{mb_include module=system template=inc_config_str var=group_id}}
-  {{mb_include module=system template=inc_config_str var=nb_rows}}
-  {{mb_include module=system template=inc_config_bool var=mark_row}}
-        
-  <tr>
-    <th class="category" colspan="100">Synchronisation des objets</th>
-  </tr>
-
-  {{mb_include module=system template=inc_config_str var=cache_hours}}
-
-	{{assign var=class value=CSejour}}
-	<tr>
-    <th class="category" colspan="100">{{tr}}{{$class}}{{/tr}}</th>
-  </tr>
-	
-  {{mb_include module=system template=inc_config_str var=sibling_hours}}
-
-  {{assign var=class value=CIncrementer}}
-  <tr>
-    <th class="category" colspan="100">{{tr}}{{$class}}{{/tr}}</th>
-  </tr>
-
-  {{mb_include module=system template=inc_config_str var=cluster_count}}
-  <tr>
-    <th>
-      <label title="{{tr}}config-dPsante400-CIncrementer-cluster_position-desc{{/tr}}">
-        {{tr}}config-dPsante400-CIncrementer-cluster_position{{/tr}}
-      </label>
-    </th>
-    <th>
-      <div class="small-info">
-        La position dans le cluster doit être définie dans le fichier <code>config_overload.php</code>, 
-        <br />
-        A la position : <code>dPsante400 CIncrementer cluster_position</code>
-        <br />
-        Elle est définie à <strong>{{$conf.dPsante400.CIncrementer.cluster_position}}</strong> sur ce serveur.
-      </div>
-    </th>
-  </tr>
-
-  <tr>
-    <td class="button" colspan="6">
-      <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-    </td>
-  </tr>
-</table>
-
-</form>
-
-<h2>Mouvements</h2>
+{{*
+ * @package Mediboard
+ * @subpackage dPsante400
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license OXOL, see http://www.mediboard.org/public/OXOL
+*}}
 
 <script type="text/javascript">
-
-var Moves = {
-  board: function() {
-    this.url = new Url('sante400', 'mouvements_board');
-    this.url.requestModal();
-  },
-  boardAction: function(action, type) {
-    var url = new Url('sante400', 'ajax_do_moves');
-    url.addParam('action', action);
-    url.addParam('type', type);
-    url.requestUpdate(SystemMessage.id, this.url.refreshModal.bind(this.url));
-  },
-
-  doImport: function() {
-    var url = new Url('sante400', 'ajax_do_import');
-    url.addElement($('ImportType'));
-    url.addElement($('ImportOffset'));
-    url.addElement($('ImportStep'));
-    url.addElement($('ImportVerbose'));
-    var onComplete = $('ImportAuto').checked ? Moves.doImport : Prototype.emptyFunction;
-    url.requestUpdate('doImport', onComplete);
-    
-    var offset = parseInt($V('ImportOffset'), 10);
-    var step   = parseInt($V('ImportStep'  ), 10);
-    $V('ImportOffset', offset+step);
-  }
-}
-
+  Main.add(function () {
+    var tabs = Control.Tabs.create('tabs-configure', true);
+    if (tabs.activeLink.key == "CConfigEtab") {
+      Configuration.edit('dPsante400', 'CGroups', $('CConfigEtab'));
+    }
+  });
 </script>
 
-<div style="margin: auto;">
+<ul id="tabs-configure" class="control_tabs">
+  <li><a href="#CIdSante400">{{tr}}CIdSante400{{/tr}}</a></li>
+  <li><a href="#CIncrementer">{{tr}}CIncrementer{{/tr}}</a></li>
+  <li onmousedown="Configuration.edit('dPsante400', 'CGroups', $('CConfigEtab'))">
+    <a href="#CConfigEtab">Config par établissement</a>
+  </li>
+  <li><a href="#mouvements">Mouvements</a></li>
+</ul>
 
-<button class="search singleclick" onclick="Moves.board();">
-  Tableau de bord
-</button>
+<hr class="control_tabs" />
 
+<div id="CIdSante400" style="display: none;">
+  {{mb_include template=CIdSante400_configure}}
 </div>
 
-<table class="tbl">
-  <tr>
-    <th class="narrow">Mouvements</th>
-    <th class="narrow">Action</th>
-    <th>Status</th>
-  </tr>
+<div id="CIncrementer" style="display: none;">
+  {{mb_include template=CIncrementer_configure}}
+</div>
 
-  <tr>
-    <td>
-      <div>
-        <label for="ImportType" title="{{tr}}CMouvement400-type-desc{{/tr}}">{{tr}}CMouvement400-type{{/tr}}</label>
-        <select id="ImportType" name="type">
-          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-          {{foreach from=$types item=_type}}
-          <option value="{{$_type}}">{{tr}}CMouvement400-type-{{$_type}}{{/tr}}</option>
-          {{foreachelse}}
-          <option value="">Pas de type disponible</option>
-          {{/foreach}}
-        </select>
-      </div>
+<div id="CConfigEtab" style="display: none">
+</div>
 
-      <div>
-        <label for="ImportOffset">Offset</label>
-        <input id="ImportOffset" type="text" name="offset" value="0" />
-      </div>
-
-      <div>
-        <label for="ImportStep">Step</label>
-        <input id="ImportStep" type="text" name="step" value="1" />
-      </div>
-
-      <div>
-        <input id="ImportAuto" type="checkbox" name="auto" value="1"  />
-        <label for="ImportAuto">Auto</label>
-      </div>
-
-      <div>
-        <input id="ImportVerbose" type="checkbox" name="verbose" value="1" />
-        <label for="ImportVerbose">Verbose</label>
-      </div>
-
-    </td>
-    <td>
-
-      <button class="change singleclick" onclick="Moves.doImport()">
-        {{tr}}Import{{/tr}}
-      </button>
-    </td>
-    <td class="text" id="doImport"></td>
-  </tr>
-
-</table>
-
+<div id="mouvements" style="display: none;">
+  {{mb_include template=mouvements_configure}}
+</div>
