@@ -65,6 +65,12 @@ function toggleCheckboxes(checkbox) {
                 </label>
               </td>
             </tr>
+            <tr>
+              <td></td>
+              <td>
+                <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
+              </td>
+            </tr>
           </table>
         </td>
         <td>
@@ -87,9 +93,6 @@ function toggleCheckboxes(checkbox) {
               {{/foreach}}
             </fieldset>
           {{/foreach}}
-        </td>
-        <td>
-          <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
         </td>
       </tr>
     </table>

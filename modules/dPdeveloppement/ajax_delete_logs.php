@@ -31,4 +31,14 @@ if ($hash) {
   file_put_contents(LOG_PATH, $content);
 }
 
-echo file_get_contents(LOG_PATH);
+
+$log_size = filesize(LOG_PATH);
+$log_size_limit = 1024*1024*2;
+
+$offset = -1;
+if ($log_size > $log_size_limit) {
+  $offset = $log_size - $log_size_limit;
+}
+$log_content = file_get_contents(LOG_PATH, false, null, $offset);
+
+echo $log_content;
