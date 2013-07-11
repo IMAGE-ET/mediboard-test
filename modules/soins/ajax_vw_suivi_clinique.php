@@ -65,6 +65,7 @@ $sejour->_ref_transmissions = $transmissions;
 foreach ($sejour->_ref_operations as $_operation) {
   $_operation->loadRefsFwd();
   $_operation->_ref_chir->loadRefFunction();
+  $_operation->loadBrancardage();
 }
 
 $sejour->loadRefsConsultAnesth();
