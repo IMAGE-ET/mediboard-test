@@ -24,6 +24,7 @@ if ($sejour_id) {
   foreach ($sejour->_ref_operations as $_operation) {
     $_operation->loadRefsFwd();
     $_operation->_ref_chir->loadRefFunction();
+    $_operation->loadBrancardage();
   }
   $sejour->loadRefsConsultAnesth();
   $sejour->_ref_consult_anesth->loadRefConsultation();

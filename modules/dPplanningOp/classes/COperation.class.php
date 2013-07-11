@@ -1511,22 +1511,25 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   function loadBrancardage() {
-    if (CModule::getActive("brancardage")) {
-      //Chargement de la destination
-      $salle = new CSalle();
-      $salle->load($this->salle_id);
-
-      $destination = new CDestinationBrancardage();
-      $destination->object_id = $salle->bloc_id;
-      $destination->object_class = "CBlocOperatoire";
-      $destination->loadMatchingObject();
-
-      //Chargement du brancardage s'il existe
-      $brancardage = new CBrancardage();
-      $brancardage->operation_id = $this->_id;
-      $brancardage->destinationBrancardage_id = $destination->_id;
-      $brancardage->loadMatchingObject();
-      $this->_ref_brancardage = $brancardage;
+    if (!CModule::getActive("brancardage")) {
+      return;
     }
+
+    //Chargement de la destination
+    $salle = new CSalle();
+    $salle->load($this->salle_id);
+
+    $destination = new CDestinationBrancardage();
+    $destination->object_id    = $salle->bloc_id;
+    $destination->object_class = "CBlocOperatoire";
+    $destination->loadMatchingObject();
+
+    //Chargement du brancardage s'il existe
+    $brancardage = new CBrancardage();
+    $brancardage->operation_id              = $this->_id;
+    $brancardage->destinationBrancardage_id = $destination->_id;
+    $brancardage->loadMatchingObject();
+
+    return $this->_ref_brancardage = $brancardage;
   }
 }

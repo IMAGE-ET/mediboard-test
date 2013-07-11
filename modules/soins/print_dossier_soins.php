@@ -51,6 +51,7 @@ foreach ($sejour->_ref_operations as $_interv) {
   $_interv->loadRefChir();
   $_interv->_ref_chir->loadRefFunction();
   $_interv->loadRefsConsultAnesth();
+  $_interv->loadBrancardage();
 
   /** @var CDailyCheckList[] $check_lists  */
   $check_lists = $_interv->loadBackRefs("check_lists", "date");
