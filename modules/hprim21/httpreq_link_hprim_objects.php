@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License; see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -170,6 +170,7 @@ foreach ($listHprimSejours as $_sejour) {
   $date_min            = CMbDT::date("-2 day", $_sejour->date_mouvement);
   $date_max            = CMbDT::date("+2 day", $_sejour->date_mouvement);
   $where["entree"]     = "BETWEEN '$date_min' AND '$date_max'";
+  $where["type"]       = "!= 'consult'";
   $where["annule"]     = "= '0'";
 
   $listSej = $sejour->loadList($where);
