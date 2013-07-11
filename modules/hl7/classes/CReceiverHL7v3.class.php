@@ -96,7 +96,7 @@ class CReceiverHL7v3 extends CInteropReceiver {
    *
    * @throws CMbException
    */
-  function sendEvent($evenement, CMbObject $mbObject) {
+  function sendEvent($evenement, CMbObject $mbObject, $headers, $soapVar = false) {
     $evenement->_receiver = $this;
 
     if (!$this->isMessageSupported(get_class($evenement))) {
@@ -115,13 +115,21 @@ class CReceiverHL7v3 extends CInteropReceiver {
     $exchange = $evenement->_exchange_hl7v3;
 
     $msg = $evenement->message;
+    if ($soapVar) {
+      $msg = preg_replace("#^<\?xml[^>]*>#", "", $msg);
+      $msg = new SoapVar($msg, XSD_ANYXML);
+    }
+
+    if ($headers) {
+      $source->_headerbody = $headers;
+    }
 
     $source->setData($msg, null, $exchange);
     try {
-      $source->send();
+      $source->send($evenement->_dmp_event_name);
     }
     catch (Exception $e) {
-      throw new CMbException("CExchangeSource-no-response");
+      throw $e;
     }
 
     $exchange->date_echange = CMbDT::dateTime();

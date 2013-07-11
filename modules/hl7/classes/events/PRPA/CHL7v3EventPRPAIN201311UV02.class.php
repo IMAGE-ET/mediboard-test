@@ -111,6 +111,8 @@ class CHL7v3EventPRPAIN201311UV02 extends CHL7v3EventPRPA implements CHL7EventPR
 
     $this->addAdress($patientPerson, $patient);
 
+    $this->addContactParty($patientPerson, $patient);
+
     $this->addBirthPlace($patientPerson, $patient);
 
     // providerOrganization

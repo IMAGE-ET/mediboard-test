@@ -19,6 +19,7 @@
 class CHL7v3EventPRPAIN201308UV02 extends CHL7v3AcknowledgmentPRPA implements CHL7EventPRPAST201317UV02 {
   /** @var string */
   public $interaction_id = "IN201308UV02";
+  public $acknowledgment;
   public $queryAck;
   public $subject;
 
@@ -37,8 +38,24 @@ class CHL7v3EventPRPAIN201308UV02 extends CHL7v3AcknowledgmentPRPA implements CH
    * @return string
    */
   function getStatutAcknowledgment() {
-    //Valeur fixée à "AA"
-    return "AA";
+    $dom = $this->dom;
+
+    $this->acknowledgment = $dom->queryNode("//hl7:".$this->getInteractionID()."/hl7:acknowledgement");
+
+    return $dom->getValueAttributNode($this->acknowledgment, "typeCode");
+  }
+
+  /**
+   * Get acknowledgment text
+   *
+   * @return string
+   */
+  function getTextAcknowledgment() {
+    $dom = $this->dom;
+
+    $acknowledgementDetail = $dom->queryNode("hl7:acknowledgementDetail", $this->acknowledgment);
+
+    return $dom->queryTextNode("hl7:text", $acknowledgementDetail);
   }
 
   /**
@@ -137,6 +154,10 @@ class CHL7v3EventPRPAIN201308UV02 extends CHL7v3AcknowledgmentPRPA implements CH
     $interaction_id = "//hl7:".$this->getInteractionID();
 
     $value = $dom->queryNode($interaction_id."/hl7:attentionLine[hl7:keyWordText[@code='STATUT_MT']]/hl7:value");
+
+    if (!$value) {
+      return;
+    }
 
     return $dom->getValueAttributNode($value, "value");
   }

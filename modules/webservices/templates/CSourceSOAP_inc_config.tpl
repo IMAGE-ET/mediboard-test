@@ -59,6 +59,11 @@
               <th>{{mb_label object=$source field="safe_mode"}}</th>
               <td>{{mb_field object=$source field="safe_mode"}}</td>
             </tr>
+
+            <tr>
+              <th>{{mb_label object=$source field="return_raw"}}</th>
+              <td>{{mb_field object=$source field="return_raw"}}</td>
+            </tr>
           </table>
         </fieldset>
 

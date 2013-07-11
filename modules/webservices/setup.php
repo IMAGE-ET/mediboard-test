@@ -202,6 +202,12 @@ class CSetupwebservices extends CSetup {
                 ADD `cafile` VARCHAR (255);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.33";
+    $this->makeRevision("0.33");
+
+    $query = "ALTER TABLE `source_soap`
+                ADD `return_raw` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.34";
   }
 }

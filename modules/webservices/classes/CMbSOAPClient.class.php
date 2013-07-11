@@ -25,6 +25,8 @@ class CMbSOAPClient extends SoapClient {
   public $loggable;
   public $encoding;
   public $options;
+  public $return_raw;
+  public $response_body;
 
   /**
    * The constructor
@@ -47,6 +49,9 @@ class CMbSOAPClient extends SoapClient {
       $rooturl, $type = null, $options = array(), $loggable = null, $local_cert = null, $passphrase = null, $safe_mode = false,
       $verify_peer = false, $cafile = null
   ) {
+
+    $this->return_raw = CMbArray::extract($options, "return_raw", false);
+
     $this->wsdl_url = $rooturl;
 
     if ($loggable) {
@@ -114,11 +119,33 @@ class CMbSOAPClient extends SoapClient {
    */
   public function call($function_name, $arguments, $options = null, $input_headers = null, &$output_headers = null) {
     try {
-      return parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
-    } 
+      $result = parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
+
+      if ($this->return_raw) {
+        return $this->response_body;
+      }
+
+      return $result;
+    }
     catch(SoapFault $fault) {
       throw $fault;
     }
+  }
+
+  public function __doRequest($request, $location,  $action,  $version,  $one_way = 0 ) {
+    $xml = parent::__doRequest($request, $location,  $action,  $version,  $one_way);
+    if (!$this->return_raw) {
+      return $xml;
+    }
+    $document = new CMbXMLDocument();
+    $document->loadXMLSafe($xml, null, true);
+    $xpath = new CMbXPath($document);
+    $xpath->registerNamespace("soap", "http://schemas.xmlsoap.org/soap/envelope/");
+    $body = $xpath->queryUniqueNode("/soap:Envelope/soap:Body");
+    $new_document = new CMbXMLDocument("UTF-8");
+    $new_document->appendChild($new_document->importNode($body->firstChild, true));
+    $this->response_body = $new_document->saveXML();
+    return $xml;
   }
   
   /**

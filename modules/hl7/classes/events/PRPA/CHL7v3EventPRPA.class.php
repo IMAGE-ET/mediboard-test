@@ -301,12 +301,15 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
    *
    * @return void
    */
-  function setCode(DOMNode $elParent, $code, $codeSystem, $displayName) {
+  function setCode(DOMNode $elParent, $code, $codeSystem, $displayName = null) {
     $dom = $this->dom;
 
     $dom->addAttribute($elParent, "code", $code);
     $dom->addAttribute($elParent, "codeSystem", $codeSystem);
-    $dom->addAttribute($elParent, "displayName", $displayName);
+
+    if ($displayName) {
+      $dom->addAttribute($elParent, "displayName", $displayName);
+    }
   }
 
   /**
@@ -487,5 +490,30 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
 
     $contactParty = $dom->addElement($representedOrganization, "contactParty");
     $this->setClassCode($contactParty, "CON");
+  }
+
+  function addContactParty(DOMNode $elParent, CPatient $patient) {
+    $carte = $patient->_carte_vitale;
+    $dom = $this->dom;
+    $contactParty = $dom->addElement($elParent, "contactParty");
+    $this->setClassCode($contactParty, "CON");
+
+    $code = $dom->addElement($contactParty, "code");
+    $this->setCode($code, "CARTE_SESAM_VITALE", "1.2.250.1.213.4.1.2.5");
+
+    $contactPerson = $dom->addElement($contactParty, "contactPerson");
+    $name = $dom->addElement($contactPerson, "name");
+
+    $family = $dom->addElement($name, "family", $carte["nomUsuel"]);
+    $this->setQualifier($family, "SP");
+
+    $family = $dom->addElement($name, "family", $carte["nomPatronymique"]);
+    $this->setQualifier($family, "BR");
+
+    $dom->addElement($name, "given", $carte["prenomUsuel"]);
+
+    $birthTime = $dom->addElement($contactPerson, "birthTime");
+    $dom->addAttribute($birthTime, "value", $carte["date"]);
+
   }
 }
