@@ -75,7 +75,7 @@ class CModule extends CMbObject {
   public $_update_messages;
   
   // Other fields
-  public $_dsns;
+  public $_dsns = array();
   
   // Other collections
   public $_tabs      = array(); // List of tabs with permission
@@ -177,12 +177,17 @@ class CModule extends CMbObject {
   function compareToSetup(CSetup $setup) {
     $this->mod_name = $setup->mod_name;
     $this->loadMatchingObject();
+
     $this->mod_type = $setup->mod_type;
     $this->_latest  = $setup->mod_version;
     $this->_upgradable = $this->mod_version < $this->_latest;
     $this->_too_new    = $this->mod_version > $this->_latest;
     $this->_configable = is_file("modules/$this->mod_name/configure.php");
-    $this->_dsns = $setup->getDatasources();
+
+    if ($this->_id) {
+      $this->_dsns = $setup->getDatasources();
+    }
+
     $this->_dependencies = $setup->dependencies;
     
     if (!$this->_id) {
