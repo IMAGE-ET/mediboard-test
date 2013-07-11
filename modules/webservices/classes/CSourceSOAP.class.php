@@ -37,6 +37,9 @@ class CSourceSOAP extends CExchangeSource {
   public $verify_peer;
   public $cafile;
 
+  /** @var CSOAPClient */
+  protected $_soap_client;
+
   public $_headerbody = array();
 
   /**
@@ -130,6 +133,10 @@ class CSourceSOAP extends CExchangeSource {
     }
   }
 
+  function getSoapClient(){
+    return $this->_soap_client;
+  }
+
   /**
    * Send SOAP event
    *
@@ -168,6 +175,7 @@ class CSourceSOAP extends CExchangeSource {
     }
     
     $soap_client = new CSOAPClient($this->type_soap);
+    $this->_soap_client = $soap_client;
 
     $password   = $this->getPassword();
     $passphrase = $this->getPassword($this->passphrase, "iv_passphrase");

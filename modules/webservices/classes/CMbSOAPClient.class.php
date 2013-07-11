@@ -137,6 +137,11 @@ class CMbSOAPClient extends SoapClient {
     if (!$this->return_raw) {
       return $xml;
     }
+
+    if (!$xml) {
+      return null;
+    }
+
     $document = new CMbXMLDocument();
     $document->loadXMLSafe($xml, null, true);
     $xpath = new CMbXPath($document);
