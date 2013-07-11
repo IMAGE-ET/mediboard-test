@@ -119,6 +119,7 @@ $locales['Clean up'] = 'Nettoyer';
 $locales['Clear'] = 'Vider';
 $locales['Close'] = 'Fermer';
 $locales['Color'] = 'Couleur';
+$locales['Comment'] = 'Commentaire';
 $locales['Complete'] = 'Terminé';
 $locales['Composition'] = 'Composition';
 $locales['Compute'] = 'Calculer';
@@ -479,4 +480,3 @@ $locales['weeks'] = 'semaines';
 $locales['year'] = 'année';
 $locales['years'] = 'années';
 $locales['years_old'] = 'ans';
-?>
