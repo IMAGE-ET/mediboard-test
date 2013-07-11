@@ -144,6 +144,9 @@ class CSetupmessagerie extends CSetup {
                 ADD `sent` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.27";
+    $this->makeRevision("0.27");
+    $this->addPrefQuery("mailReadOnServerGoToArchived", 1);
+
+    $this->mod_version = "0.28";
   }
 }

@@ -47,6 +47,7 @@ foreach ($sources as $_source) {
   $markReadServer = 0;
   $pref = CPreferences::get($_source->object_id);   //for user_id
   $markReadServer = (isset($pref["markMailOnServerAsRead"])) ? $pref["markMailOnServerAsRead"] : CAppUI::pref("markMailOnServerAsRead");
+  $archivedOnReception = (isset($pref["mailReadOnServerGoToArchived"])) ? $pref["mailReadOnServerGoToArchived"] : CAppUI::pref("mailReadOnServerGoToArchived");
 
   //last email uid from mediboard
   $mbMailUid = (CUserMail::getLastMailUid($_source->_id)) ? CUserMail::getLastMailUid($_source->_id) : 0;
@@ -81,7 +82,8 @@ foreach ($sources as $_source) {
       $mail_unseen->account_id = $_source->_id;
 
       //mail non existant
-      if (!$mail_unseen->loadMatchingFromSource($pop->header($_mail))) {
+      $header = $pop->header($_mail);
+      if (!$mail_unseen->loadMatchingFromSource($header)) {
         $mail_unseen->loadContentFromSource($pop->getFullBody($_mail, false, false, true));
 
         //text plain
@@ -99,12 +101,18 @@ foreach ($sources as $_source) {
           $unread++;
         }
 
+        //read on server + pref + not sent => archived !
+        if ($mail_unseen->date_read && $archivedOnReception && !$mail_unseen->sent) {
+          $mail_unseen->archived = 1;
+        }
+
         //store the usermail
         if (!$msg = $mail_unseen->store()) {
           $created++;
         }
 
         //attachments list
+        $pop->cleanTemp();
         $attachs = $pop->getListAttachments($_mail);
         $mail_unseen->attachFiles($attachs, $pop);
       }

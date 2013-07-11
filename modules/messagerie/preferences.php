@@ -15,5 +15,6 @@ CPreferences::$modules["messagerie"] = array (
   "LinkAttachment",
   "showImgInMail",
   "nbMailList",
-  "markMailOnServerAsRead"
+  "markMailOnServerAsRead",
+  "mailReadOnServerGoToArchived"
 );

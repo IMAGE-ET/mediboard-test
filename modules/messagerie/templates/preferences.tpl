@@ -19,3 +19,4 @@
 {{mb_include template=inc_pref spec=bool var=showImgInMail}}
 {{mb_include template=inc_pref spec=enum var=nbMailList values="5|10|20|50|100|150"}}
 {{mb_include template=inc_pref spec=bool var=markMailOnServerAsRead}}
+{{mb_include template=inc_pref spec=bool var=mailReadOnServerGoToArchived}}

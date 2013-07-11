@@ -173,6 +173,13 @@ class CUserMail extends CMbObject{
     return $ds->loadResult($query);
   }
 
+  static function getLastMailDate($account_id) {
+    $mail = new self;
+    $ds = $mail->getDS();
+    $query = "SELECT MAX(`date_inbox`) FROM `user_mail` WHERE `account_id` = '$account_id' ";
+    return $ds->loadResult($query);
+  }
+
 
   /**
    * used to load the mail from SourcePOP
