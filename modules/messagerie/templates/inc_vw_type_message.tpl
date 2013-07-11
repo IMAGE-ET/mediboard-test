@@ -9,4 +9,4 @@
   {{assign var=subject value=$subject|replace:'RE:':''}}
 {{/if}}
 
-{{$subject|truncate:100:"(...)"}}
+{{$subject|truncate:100:"(...)"|smarty:nodefaults}}
