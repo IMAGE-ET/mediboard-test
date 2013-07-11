@@ -30,6 +30,8 @@ class CReglement extends CMbMetaObject {
   public $reference;
   public $num_bvr;
   public $tireur;
+  public $debiteur_id;
+  public $debiteur_desc;
 
   // Behaviour fields
   public $_update_facture = true;
@@ -39,6 +41,8 @@ class CReglement extends CMbMetaObject {
   public $_ref_banque;
   /** @var CFacture */
   public $_ref_facture;
+  /** @var CDebiteur */
+  public $_ref_debiteur;
   
 
   /**
@@ -63,8 +67,10 @@ class CReglement extends CMbMetaObject {
     $props['emetteur']        = 'enum notNull list|patient|tiers';
     $props['mode']            = 'enum notNull list|cheque|CB|especes|virement|BVR|autre default|cheque';
     $props['reference']       = 'str';
-    $props['num_bvr']         = 'str';
+    $props['num_bvr']         = 'str maxLength|50';
     $props['tireur']          = 'str';
+    $props["debiteur_id"]     = "ref class|CDebiteur";
+    $props["debiteur_desc"]   = "str";
     return $props;
   }
   
@@ -75,6 +81,15 @@ class CReglement extends CMbMetaObject {
    */
   function loadRefBanque() {
     return $this->_ref_banque = $this->loadFwdRef("banque_id", true);
+  }
+
+  /**
+   * Charge le debiteur s'il existe
+   *
+   * @return CDebiteur le débiteur
+   */
+  function loadRefDebiteur() {
+    return $this->_ref_debiteur = $this->loadFwdRef("debiteur_id", true);
   }
   
   /**

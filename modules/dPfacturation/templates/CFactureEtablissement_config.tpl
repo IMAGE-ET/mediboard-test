@@ -20,17 +20,23 @@
     {{mb_include module=system template=inc_config_bool var=use_auto_cloture}}
     {{mb_include module=system template=inc_config_bool var=view_bill}}
 
-    {{if $conf.ref_pays == 2}}
-      <tr>
-        <th class="category" colspan="2">{{tr}}Other{{/tr}}</th>
-      </tr>
-      {{assign var=class value=Other}}
-      {{mb_include module=system template=inc_config_bool var=use_view_chainage}}
-      {{mb_include module=system template=inc_config_bool var=use_view_quantitynull}}
-      {{mb_include module=system template=inc_config_bool var=use_strict_cloture}}
-      {{mb_include module=system template=inc_config_bool var=use_field_definitive}}
-      {{mb_include module=system template=inc_config_bool var=add_pay_not_close}}
+    <tr>
+      <th class="category" colspan="2">{{tr}}CReglement{{/tr}}</th>
+    </tr>
+    {{assign var=class value=CReglement}}
+    {{mb_include module=system template=inc_config_bool var=use_debiteur}}
+    {{mb_include module=system template=inc_config_bool var=add_pay_not_close}}
+    {{mb_include module=system template=inc_config_bool var=use_lock_acquittement}}
+    <tr>
+      <th class="category" colspan="2">{{tr}}Other{{/tr}}</th>
+    </tr>
+    {{assign var=class value=Other}}
+    {{mb_include module=system template=inc_config_bool var=use_view_chainage}}
+    {{mb_include module=system template=inc_config_bool var=use_view_quantitynull}}
+    {{mb_include module=system template=inc_config_bool var=use_strict_cloture}}
+    {{mb_include module=system template=inc_config_bool var=use_field_definitive}}
 
+    {{if $conf.ref_pays == 2}}
       {{assign var=class value=CEditPdf}}
       {{mb_include module=system template=inc_config_bool var=use_bill_etab}}
       

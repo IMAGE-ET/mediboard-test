@@ -246,7 +246,7 @@
 </tbody>
 
 {{assign var="classe" value=$facture->_class}}
-{{if (!$facture->_reglements_total_patient || $conf.dPfacturation.Other.add_pay_not_close)
+{{if (!$facture->_reglements_total_patient || $conf.dPfacturation.CReglement.add_pay_not_close)
   && !$conf.dPfacturation.$classe.use_auto_cloture && !$facture->annule && !$facture->definitive}}
   <tr>
     <td colspan="7">

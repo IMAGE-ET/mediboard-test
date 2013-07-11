@@ -295,7 +295,16 @@ class CSetupdPfacturation extends CSetup {
     $query = "ALTER TABLE `facture_etablissement`
                 CHANGE `type_facture` `type_facture` ENUM ('maladie','accident','esthetique') NOT NULL DEFAULT 'maladie';";
     $this->addQuery($query);
-    $this->mod_version = "0.32";
+    $this->makeRevision("0.32");
+
+    $query = "CREATE TABLE `debiteur` (
+                `debiteur_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `numero` INT (11) NOT NULL DEFAULT '0',
+                `nom` VARCHAR (50) NOT NULL,
+                `description` VARCHAR (255)
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $this->mod_version = "0.33";
     
   }
 }

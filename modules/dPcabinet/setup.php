@@ -1946,7 +1946,16 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `facture_cabinet`
                 CHANGE `type_facture` `type_facture` ENUM ('maladie','accident','esthetique') NOT NULL DEFAULT 'maladie';";
     $this->addQuery($query);
-    $this->mod_version = "2.11";
+    $this->makeRevision("2.11");
+
+    $query = "ALTER TABLE `reglement`
+                ADD `debiteur_id` INT (11) UNSIGNED,
+                ADD `debiteur_desc` VARCHAR (255);";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `reglement`
+                ADD INDEX (`debiteur_id`);";
+    $this->addQuery($query);
+    $this->mod_version = "2.12";
 
 
   }

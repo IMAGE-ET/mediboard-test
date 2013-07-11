@@ -114,6 +114,8 @@ class CFacture extends CMbObject {
   public $_ref_actes_ngap   = array();
   /** @var CActeCCAM[] */
   public $_ref_actes_ccam   = array();
+  /** @var CDebiteur[] */
+  public $_ref_debiteurs;
   
   /**
    * @see parent::getBackProps()
@@ -516,7 +518,8 @@ class CFacture extends CMbObject {
     $this->_ref_reglements_tiers   = array();
     foreach ($this->_ref_reglements as $_reglement) {
       $_reglement->loadRefBanque();
-      
+      $_reglement->loadRefDebiteur();
+
       if ($_reglement->emetteur == "patient") {
         $this->_ref_reglements_patient[] = $_reglement;
         $this->_du_restant_patient       -= $_reglement->montant;
@@ -530,7 +533,8 @@ class CFacture extends CMbObject {
       }
     }
     $this->_du_restant_patient = round($this->_du_restant_patient, 2);
-    
+
+    $this->loadDebiteurs();
     return $this->_ref_reglements;
   }
 
@@ -1047,5 +1051,19 @@ class CFacture extends CMbObject {
     $this->statut_pro = $facture->statut_pro;
     $this->num_reference = $facture->num_reference;
     $this->envoi_xml = $facture->envoi_xml;
+  }
+
+  /**
+   * Clonage des éléments de la facture
+   *
+   * @return CDebiteur[]|void
+   */
+  function loadDebiteurs(){
+    if (!CAppUI::conf("dPfacturation CReglement use_debiteur")) {
+      return null;
+    }
+    $debiteur = new CDebiteur();
+    $debiteurs = $debiteur->loadList(null, "numero");
+    return $this->_ref_debiteurs = $debiteurs;
   }
 }

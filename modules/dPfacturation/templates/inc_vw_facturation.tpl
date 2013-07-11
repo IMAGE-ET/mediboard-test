@@ -53,7 +53,7 @@
 {{/if}}
 
 <!-- Reglements -->
-{{if $facture->_id && !$facture->annule && ($facture->cloture || $conf.dPfacturation.Other.add_pay_not_close)}}
+{{if $facture->_id && !$facture->annule && ($facture->cloture || $conf.dPfacturation.CReglement.add_pay_not_close)}}
   <div id="reglements_facture">
     {{mb_include module=dPfacturation template="inc_vw_reglements"}}
   </div>

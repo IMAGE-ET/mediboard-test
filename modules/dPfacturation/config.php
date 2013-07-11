@@ -30,6 +30,11 @@ $dPconfig["dPfacturation"] = array (
     "message1_relance"        => "",
     "message2_relance"        => ""
   ),
+  "CReglement" => array(
+    "use_debiteur" => "0",
+    "add_pay_not_close"     => "0",
+    "use_lock_acquittement" => "0",
+  ),
   "CRetrocession" => array(
     "use_retrocessions" => "0"
   ),
@@ -48,8 +53,7 @@ $dPconfig["dPfacturation"] = array (
     "use_view_chainage"     => "0",
     "use_view_quantitynull" => "0",
     "use_strict_cloture"    => "0",
-    "use_field_definitive"  => "0",
-    "add_pay_not_close"     => "0"
+    "use_field_definitive"  => "0"
   ),
 );
 ?>

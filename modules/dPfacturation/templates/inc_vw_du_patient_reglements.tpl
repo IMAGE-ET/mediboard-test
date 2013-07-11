@@ -29,7 +29,12 @@
         $V(banque_id, "");
     }
   }
-  
+  updateDebiteur = function(debiteur_id) {
+    var url = new Url('dPfacturation', 'ajax_edit_debiteur');
+    url.addParam('debiteur_id'   , debiteur_id);
+    url.addParam('debiteur_desc' , 1);
+    url.requestUpdate("reload_debiteur_desc");
+  }
   delReglement = function(reglement_id){
     var oForm = getForm('reglement-delete');
     $V(oForm.reglement_id, reglement_id);
@@ -137,7 +142,12 @@
         ({{mb_label object=$reglement field=banque_id}})
       </th>
       <th class="category">{{mb_label object=$reglement field=reference}}</th>
-      <th class="category">{{mb_label object=$reglement field=tireur}}</th>
+      {{if $conf.dPfacturation.CReglement.use_debiteur}}
+        <th class="category narrow">{{mb_label object=$reglement field=debiteur_id}}</th>
+        <th class="category narrow">{{mb_label object=$reglement field=debiteur_desc}}</th>
+      {{else}}
+        <th class="category">{{mb_label object=$reglement field=tireur}}</th>
+      {{/if}}
       <th class="category narrow">{{mb_label object=$reglement field=montant}}</th>
       <th class="category narrow">{{mb_label object=$reglement field=date}}</th>
       <th class="category narrow"></th>
@@ -154,7 +164,12 @@
         {{if $_reglement->num_bvr}}( {{$_reglement->num_bvr}} ){{/if}}
       </td>
       <td>{{mb_value object=$_reglement field=reference}}</td>
-      <td>{{mb_value object=$_reglement field=tireur}}</td>
+      {{if $conf.dPfacturation.CReglement.use_debiteur}}
+        <td>{{$_reglement->_ref_debiteur}}</td>
+        <td>{{mb_value object=$_reglement field=debiteur_desc}}</td>
+      {{else}}
+        <td>{{mb_value object=$_reglement field=tireur}}</td>
+      {{/if}}
       <td style="text-align: right;">
         {{mb_value object=$_reglement field=montant}}
       </td>
@@ -172,7 +187,7 @@
       </td>
     </tr>
     {{/foreach}}
-    {{if ($object->_du_restant_patient) > 0}}
+    {{if ($object->_du_restant_patient) > 0 || $conf.dPfacturation.CReglement.use_lock_acquittement}}
       <tr>
         <td>
           {{mb_field object=$reglement field=mode emptyLabel="Choose" onchange="updateBanque(this)"}}
@@ -187,7 +202,19 @@
           {{/if}}
         </td>
         <td>{{mb_field object=$reglement field=reference style="display: none"}}</td>
-        <td>{{mb_field object=$reglement field=tireur}}</td>
+        {{if $conf.dPfacturation.CReglement.use_debiteur}}
+          <td>
+            <select name="debiteur_id" onchange="updateDebiteur(this.value);" style="max-width: 150px;">
+              <option value="">&mdash; Choisir un débiteur</option>
+              {{foreach from=$object->_ref_debiteurs item=debiteur}}
+                <option value="{{$debiteur->_id}}">{{$debiteur}}</option>
+              {{/foreach}}
+            </select>
+          </td>
+          <td id="reload_debiteur_desc">{{mb_field object=$reglement field=debiteur_desc}}</td>
+        {{else}}
+          <td>{{mb_field object=$reglement field=tireur}}</td>
+        {{/if}}
         <td><input type="text" class="currency notNull" size="4" maxlength="8" name="montant" value="{{$object->_du_restant_patient}}" /></td>
         <td>{{mb_field object=$reglement field=date register=true form="reglement-add" value="now"}}</td>
         <td>
@@ -196,7 +223,7 @@
       </tr>
     {{/if}}
     <tr>
-      <td colspan="6" style="text-align: center;">
+      <td colspan="7" style="text-align: center;">
         {{mb_value object=$object field=_reglements_total_patient}} réglés, 
         <strong>{{mb_value object=$object field=_du_restant_patient}} restant</strong>
       </td>
