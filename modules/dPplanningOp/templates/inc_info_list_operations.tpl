@@ -22,7 +22,7 @@
       <input id="modif" type="hidden" name="modif"/>
       <div id="patientpret-{{$_operation->sejour_id}}">
         {{mb_include module=brancardage template=inc_exist_brancard brancardage=$_operation->_ref_brancardage id="patientpret"
-        sejour_id=$_operation->sejour_id salle_id=$_operation->salle_id operation_id=$_operation->_id reveil=false }}
+        sejour_id=$_operation->sejour_id salle_id=$_operation->salle_id operation_id=$_operation->_id opid=$_operation->_id reveil=false }}
       </div>
     </td>  
   {{/if}}
