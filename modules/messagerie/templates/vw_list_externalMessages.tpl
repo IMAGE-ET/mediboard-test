@@ -10,57 +10,36 @@
 
 {{mb_script module=messagerie script=UserEmail}}
 
-
-{{if count($mails) > 0}}
-<script type="text/javascript">
+<script>
   Main.add(function () {
-    var tabsMail = Control.Tabs.create("tab-mail", true);
-    console.log(tabsMail.activeLink);
-    tabsMail.activeLink.onmousedown();
-    //messagerie.getLastMessages({{$user->_id}}, null);
+    var formAccount = getForm("accountFrm");
+    messagerie.refreshAccount($V(formAccount.account_id));
   });
 </script>
-{{/if}}
 
-<div>
-  <button class="button change" onclick="messagerie.getLastMessages({{$user->_id}});">{{tr}}CUserMAil-button-getNewMails{{/tr}}</button>
-  <button onclick="messagerie.refreshList(messagerie.page,messagerie.tab,'1')" class="notext"><img src="modules/{{$m}}/images/favorites-1.png"  alt="" style="height: 15px;"/>{{tr}}CUserMail-view-onlyFavorite{{/tr}}</button>
-  <button onclick="messagerie.refreshList(messagerie.page,messagerie.tab,'0','1')" class="notext"><img src="style/mediboard/images/buttons/history.gif"  alt="" style="height: 15px;"/>{{tr}}CUserMail-view-onlyArchived{{/tr}}</button>
-  <!--<button class="button mail" onclick="messagerie.modalWriteNewMessage();">{{tr}}CUserMAil-button-writeMail{{/tr}}</button>-->
-  <select style="width: 50px;" name="action">
-    <option va>{{tr}}CUserMail-option-More{{/tr}}</option>
-    <option value="AllMarkAsRead" onclick="messagerie.markallAsRead()">{{tr}}CUserMail-option-allmarkasread{{/tr}}</option>
-    <option value="AllMarkAsRead" onclick="">{{tr}}CUserMail-option-delete{{/tr}}</option>
+<form onsubmit="return checkForm(this.form)" method="get" name="externalFrm">
+  <input type="hidden" name="m" value="{{$m}}"/>
+  <input type="hidden" name="tab" value="{{$tab}}"/>
+  <label>Messageries disponibles :
+  <select name="user_id" onchange="this.form.submit()">
+    <option value="" disabled="disabled">{{tr}}Select{{/tr}} {{tr}}CMediusers{{/tr}}</option>
+    {{foreach from=$users item=_user}}
+      <option value="{{$_user->_id}}" {{if $user->_id == $_user->_id}}selected="selected" {{/if}}>{{$_user}}</option>
+    {{/foreach}}
   </select>
-</div>
-<table class="main" id="list_external_mail">
-  <tr>
-    <td style="width:200px;">
-      {{if count($mails) > 0}}
-        <ul id="tab-mail" class="control_tabs">
-        {{foreach from=$mails key=k item=_mailbox}}
-          <li>
-            <a href="#{{$k}}" style="white-space: nowrap;" onmousedown="messagerie.refreshList(messagerie.page,'{{$k}}','0')"
-              class=" {{if !$_mailbox->active}}empty{{/if}}">{{$_mailbox->libelle}}
-            </a>
-          </li>
-        {{/foreach}}
-        </ul>
-      {{else}}
-        <div class="small-info">{{tr}}CUserMail-noAccount{{/tr}}</div>
-        <div>
-          <a href="?m=mediusers&amp;a=edit_infos">{{tr}}CSourcePOP-add-acount{{/tr}}</a>
-        </div>
-      {{/if}}
-    </td>
-  </tr>
-  <tr>
-    <td>
-      {{foreach from=$mails key=k item=_list}}
-        <table id="{{$k}}" class="tbl" style="display: none;">
-        </table>
-      {{/foreach}}
-    </td>
-  </tr>
-</table>
+  </label>
+</form>
 
+<form name="accountFrm" method="get">
+  {{tr}}Account{{/tr}} :
+      {{foreach from=$mails key=k item=_mailbox}}
+      <label>
+        <input type="radio" name="account_id" onclick="messagerie.refreshAccount($V(this))" value="{{$_mailbox->_id}}" {{if $_mailbox->_id == $account_id}}checked="checked"{{/if}}/>
+        {{$_mailbox->libelle}}
+      </label>
+      {{/foreach}}
+</form>
+
+
+<div id="account_mail">
+</div>

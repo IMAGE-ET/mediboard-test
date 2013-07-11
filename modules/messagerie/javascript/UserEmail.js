@@ -10,6 +10,8 @@
  */
 messagerie = {
   module:"messagerie",
+  mode : "unread",
+  account_id : '0',
   url:   null,
   tab:  null,
   page: 0,
@@ -17,39 +19,47 @@ messagerie = {
   modalExternalOpen:function (id, account) {
     var url = new Url(messagerie.module, "ajax_open_external_email");
     url.addParam("mail_id", id);
-    url.requestModal(900, 800);
-    url.modalObject.observe("afterClose", this.refreshList.curry(messagerie.page, account));
-    messagerie.url = url;
+    url.requestModal(900, 800, {onClose: messagerie.refreshList.curry(null, null, null)});
   },
 
-  refreshList:function (page,account,favorite, archive) {
-    if( page != messagerie.page) {
-      messagerie.page = page;
-    }
-    if (account) {
-      messagerie.tab = account;
-    }
+  //refresh div
+  refreshAccount:function(account_id) {
+    var url = new Url(messagerie.module, "vw_user_external_mail");
+    url.addParam("account_id", account_id);
+    url.requestUpdate("account_mail");
+  },
+
+  refreshList:function (account_id, mode, page) {
     var url = new Url(messagerie.module, "ajax_list_mails");
-    url.addParam("favorite", favorite);
-    url.addParam("account", messagerie.tab);
+
+    messagerie.account_id = (account_id != null) ? account_id : messagerie.account_id ;
+    messagerie.mode       = (mode != null)? mode : messagerie.mode;
+    messagerie.page       = (page != null)? page : messagerie.page;
+
+    url.addParam("account_id", messagerie.account_id);
+    url.addParam("mode", messagerie.mode);
     url.addParam("page", messagerie.page);
-    url.addParam("archived", archive);
-    url.requestUpdate(messagerie.tab);
+    url.requestUpdate(messagerie.mode);
+
+  },
+
+  refreshListPage : function(page) {
+    this.refreshList(null, null, page);
   },
 
   toggleFavorite : function(mail_id) {
-    var url = new Url(messagerie.module, "ajax_toggle_favorite");
+    var url = new Url(messagerie.module, "controllers/do_toggle_favorite");
     url.addParam("mail_id", mail_id);
     url.requestUpdate("systemMsg", function() {
-      messagerie.refreshList(0, messagerie.tab, 0);
+      messagerie.refreshList();
     });
   },
 
   toggleArchived : function(mail_id) {
-    var url = new Url(messagerie.module, "ajax_toggle_archived");
+    var url = new Url(messagerie.module, "controllers/do_toggle_archived");
     url.addParam("mail_id", mail_id);
     url.requestUpdate("systemMsg", function() {
-      messagerie.refreshList(0, messagerie.tab, 0);
+      messagerie.refreshList();
     });
   },
 
@@ -64,11 +74,11 @@ messagerie = {
     url.requestUpdate("list_attachments");
   },
 
-  getLastMessages:function (user_id) {
+  getLastMessages:function (account_id) {
     var url = new Url(messagerie.module, "cron_update_pop");
-    url.addParam("user_id", user_id);
+    url.addParam("account_id", account_id);
     url.requestUpdate("systemMsg", function () {
-      messagerie.refreshList(0, messagerie.tab, 0);
+      messagerie.refreshList();
     });
   },
 

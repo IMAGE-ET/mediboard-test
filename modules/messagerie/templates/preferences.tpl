@@ -8,6 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<tr>
+  <th colspan="5" class="category">Messagerie externe</th>
+</tr>
 {{mb_include template=inc_pref spec=bool var=ViewMailAsHtml}}
 
 {{* en octet *}}

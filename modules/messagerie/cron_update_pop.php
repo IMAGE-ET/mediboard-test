@@ -11,36 +11,32 @@
  * @link     http://www.mediboard.org
  */
  
- 
 CCanDo::checkRead();
 CPop::checkImapLib();
 
 $nbAccount = CAppUI::conf("messagerie CronJob_nbMail");
 $older = CAppUI::conf("messagerie CronJob_olderThan");
 
-$user_id = CValue::get("user_id");
+$account_id = CValue::get("account_id");
 
-
-$size_required = CAppUI::pref("getAttachmentOnUpdate");
-if ($size_required == "") {
-  $size_required = 0;
-}
-
+//source
 $source = new CSourcePOP();
 $where = array();
 $where["active"] = "= '1'";
-if ($user_id) {
-  $where["object_class"] = " = 'CMediusers'";
-  $where["object_id"] = " = '$user_id'";
+
+if ($account_id) {
+  $where["source_pop_id"] = " = '$account_id'";
 }
-//$where["last_update"] = "< (NOW() - INTERVAL $older MINUTE)"; //doit avoir été updaté il y a plus de 5 minutes
 $order = "'last_update' ASC";
 $limit = "0, $nbAccount";
 $sources = $source->loadList($where, $order, $limit);
 
+//$where["last_update"] = "< (NOW() - INTERVAL $older MINUTE)"; //doit avoir été updaté il y a plus de 5 minutes
 
 /** @var $sources CSourcePOP[] */
 foreach ($sources as $_source) {
+
+  $user = $_source->loadRefMetaObject();
 
   //no user => next
   if (!$_source->user) {
@@ -52,34 +48,33 @@ foreach ($sources as $_source) {
   $pref = CPreferences::get($_source->object_id);   //for user_id
   $markReadServer = (isset($pref["markMailOnServerAsRead"])) ? $pref["markMailOnServerAsRead"] : CAppUI::pref("markMailOnServerAsRead");
 
+  //last email uid from mediboard
+  $mbMailUid = (CUserMail::getLastMailUid($_source->_id)) ? CUserMail::getLastMailUid($_source->_id) : 0;
+
+  //limit by conf
+  $limitMail = CAppUI::conf("messagerie limit_external_mail");
 
   $pop = new CPop($_source);
   if (!$pop->open()) {
     continue;
   }
-  $unseen = $pop->search('UNSEEN');
+  //reception
+  $unseen = $pop->search('ALL');
+  $total = count($unseen);
+
+  //get mail > last mb mail
+  foreach ($unseen as $key => $_unseen) {
+    if ($_unseen < $mbMailUid) {
+      unset($unseen[$key]);
+    }
+  }
+  array_splice($unseen, CAppUI::conf("messagerie limit_external_mail"));
 
   if (count($unseen)>0) {
-    //how many
-    if ($user_id) {
-      if (count($unseen)>1) {
-        CAppUI::stepAjax("CPop-msg-newMsgs", UI_MSG_OK, count($unseen));
-      }
-      else {
-        CAppUI::stepAjax("CPop-msg-newMsg", UI_MSG_OK, count($unseen));
-      }
-    }
-    //set email as read in imap/pop server
-    if ($markReadServer) {
-      $pop->setFlag(implode(",", $unseen), "\\Seen");
-    }
-
-    $iteration = 0;
+    $unread = 0;    //unseen mail
+    $loop = 0;      //loop of foreach
+    $created = 0;
     foreach ($unseen as $_mail) {
-
-      if ($iteration >= 100) {
-        break;
-      }
 
       $mail_unseen = new CUserMail();
       $mail_unseen->account_id = $_source->_id;
@@ -89,77 +84,47 @@ foreach ($sources as $_source) {
         $mail_unseen->loadContentFromSource($pop->getFullBody($_mail, false, false, true));
 
         //text plain
-        if ($mail_unseen->_text_plain) {
-          $textP = new CContentAny();
-          //apicrypt
-          if (CModule::getActive("apicrypt") && $mail_unseen->_is_apicrypt == "plain") {
-            $textP->content = CApicrypt::uncryptBody($_source->object_id, $mail_unseen->_text_plain)."\n[apicrypt]";
-          }
-          else {
-            $textP->content = $mail_unseen->_text_plain;
-          }
-          $textP->store();
-          $mail_unseen->text_plain_id = $textP->_id;
-        }
-
+        $mail_unseen->getPlainText($_source->object_id);
         //text html
-        if ($mail_unseen->_text_html) {
-          $textH = new CContentHTML();
-          $text = CMbString::purifyHTML($mail_unseen->_text_html); //cleanup
-          //apicrypt
-          if (CModule::getActive("apicrypt") && $mail_unseen->_is_apicrypt == "html") {
-            $textH->content = CApicrypt::uncryptBody($user->_id, $text);
-          }
-          else {
-            $textH->content = $text;
-          }
+        $mail_unseen->getHtmlText($_source->object_id);
 
-          if (!$msg = $textH->store()) {
-            $mail_unseen->text_html_id = $textH->_id;
-          }
+        //sent ?
+        if (strpos($mail_unseen->from, $_source->user) !== false) {
+          $mail_unseen->sent = 1;
         }
 
+        //unread increment
+        if (!$mail_unseen->date_read) {
+          $unread++;
+        }
 
         //store the usermail
-        $mail_unseen->store();
+        if (!$msg = $mail_unseen->store()) {
+          $created++;
+        }
 
         //attachments list
-        /** @var CMailAttachments[] $attachs */
         $attachs = $pop->getListAttachments($_mail);
-
-        foreach ($attachs as $_attch) {
-          $_attch->mail_id = $mail_unseen->_id;
-          $_attch->loadMatchingObject();
-          if (!$_attch->_id) {
-            $_attch->store();
-          }
-          //si preference taille ok OU que la piece jointe est incluse au texte => CFile
-          if (($_attch->bytes <= $size_required ) || $_attch->disposition == "INLINE") {
-
-            $file = new CFile();
-            $file->setObject($_attch);
-            $file->author_id  = CAppUI::$user->_id;
-
-            if (!$file->loadMatchingObject()) {
-              $file_pop = $pop->decodeMail($_attch->encoding, $pop->openPart($mail_unseen->uid, $_attch->getpartDL()));
-              $file->file_name  = $_attch->name;
-              $file->file_type  = $_attch->getType($_attch->type, $_attch->subtype);
-              $file->fillFields();
-              $file->updateFormFields();
-              $file->putContent($file_pop);
-              $file->store();
-            }
-          }
-        }
+        $mail_unseen->attachFiles($attachs, $pop);
       }
+      // mail existe
       else {
-        //le mail est non lu sur MB mais lu sur IMAP => on le flag
+        // si le mail est lu sur MB mais non lu sur IMAP => on le flag
         if ($mail_unseen->date_read) {
           $pop->setflag($_mail, "\\Seen");
         }
       }
-      $iteration++;
+      $loop++;
     } //foreach
+
+    //set email as read in imap/pop server
+    if ($markReadServer) {
+      $pop->setFlag(implode(",", $unseen), "\\Seen");
+    }
+
+
+    //number of mails gathered
+    CAppUI::stepAjax("CPop-msg-newMsgs", UI_MSG_OK, $unread, $created, $total);
   }
   else {
     CAppUI::stepAjax("CPop-msg-nonewMsg", UI_MSG_OK, $_source->libelle);

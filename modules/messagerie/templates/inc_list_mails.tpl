@@ -19,8 +19,8 @@
     <input type="checkbox" value="" onclick="messagerie.toggleSelect('list_external_mail', this.checked,'item_mail')"/>
   </th>
   <th style="width: 10px;">
-    {{if $favorite}}<img src="modules/{{$m}}/images/favorites-1.png" alt="" style="height:15px;" title="{{tr}}CUserMail-view-onlyFavorite{{/tr}}"/>{{/if}}
-    {{if $archived}}<img src="modules/{{$m}}/images/mail_archive.png" alt="" title="{{tr}}CUserMail-view-onlyArchived{{/tr}}"/>{{/if}}
+    {{if $mode == "favorited"}}<img src="modules/{{$m}}/images/favorites-1.png" alt="" style="height:15px;" title="{{tr}}CUserMail-view-onlyFavorite{{/tr}}"/>{{/if}}
+    {{if $mode == "archived"}}<img src="modules/{{$m}}/images/mail_archive.png" alt="" title="{{tr}}CUserMail-view-onlyArchived{{/tr}}"/>{{/if}}
     {{tr}}Actions{{/tr}}
   </th>
   <th style="width: 30px;">{{tr}}CUserMail-date_inbox{{/tr}}</th>
@@ -29,6 +29,13 @@
   <th>{{tr}}CUserMail-abstract{{/tr}}</th>
 </tr>
 <tbody>
+{{if $nb_mails != 0}}
+  <tr>
+    <td colspan="6">
+      {{mb_include module=system template=inc_pagination total=$nb_mails current=$page change_page="messagerie.refreshListPage" step=$app->user_prefs.nbMailList}}
+    </td>
+  </tr>
+{{/if}}
   {{foreach from=$mails item=_mail}}
     <tr {{if !$_mail->date_read}}style="font-weight: bold; background: red!important;"{{/if}}>
       <td class="button">
@@ -40,19 +47,20 @@
           <input type="hidden" name="dosql" value="do_usermail_aed" />
           <input type="hidden" name="del" value="1" />
           <input type="hidden" name="user_mail_id" value="{{$_mail->_id}}"/>
-          <button type="button" class="trash notext" onclick="return confirmDeletion(this.form,{typeName:'messagerie',objName:'{{$_mail->_view|smarty:nodefaults|JSAttribute}}'}, {onComplete: messagerie.refreshList.curry(messagerie.page,'{{$account}}')})">Supprimer le message</button>
+          <button type="button" class="trash notext" onclick="return confirmDeletion(this.form,{typeName:'messagerie',objName:'{{$_mail->_view|smarty:nodefaults|JSAttribute}}'}, {onComplete: messagerie.refreshList})">Supprimer le message</button>
         </form>
-        <!--(<button class="tag notext" title="button.tag notext">tag</button>)-->
-        <button onclick="messagerie.toggleArchived('{{$_mail->_id}}');" class="nowrap notext"><img src="modules/{{$m}}/images/mail_archive.png" alt="" style="height:15px;"/>Archiver</button>
-        <button onclick="messagerie.toggleFavorite('{{$_mail->_id}}');" class="nowrap"><img src="modules/{{$m}}/images/favorites-{{$_mail->favorite}}.png" alt="" style="height:15px;"/></button>
+        {{if !$_mail->sent}}<button onclick="messagerie.toggleArchived('{{$_mail->_id}}');" class="nowrap notext"><img src="modules/{{$m}}/images/mail_archive.png" alt="" style="height:15px;"/>Archiver</button>{{/if}}
+        <button onclick="messagerie.toggleFavorite('{{$_mail->_id}}');" class="nowrap notext"><img src="modules/{{$m}}/images/favorites-{{$_mail->favorite}}.png" alt="" style="height:15px;"/>Mettre en favoris</button>
+        {{if $user->isAdmin() && $_mail->uid}}<a href="?m={{$m}}&amp;a=vw_pop_mail&amp;id={{$_mail->_id}}" target="_blank" class="button help notext">Debug</a>{{/if}}
       </td>
       <td>{{mb_value object=$_mail field=date_inbox format=relative}}</td>
       <td>
         <label title="{{$_mail->from}}">{{$_mail->_from}}</label>
       </td>
       <td>
-        <a href="#{{$_mail->_id}}"  onclick="messagerie.modalExternalOpen('{{$_mail->_id}}','{{$account}}');" style="display: inline; vertical-align: middle;">
-          {{if $_mail->subject}}{{mb_include template=inc_vw_type_message subject=$_mail->subject}}{{$_mail->subject|truncate:100:"(...)"}}{{else}}{{tr}}CUserMail-no_subject{{/tr}}{{/if}}
+        {{assign var=subject value=$_mail->subject}}
+        <a href="#{{$_mail->_id}}"  onclick="messagerie.modalExternalOpen('{{$_mail->_id}}','{{$account_id}}');" style="display: inline; vertical-align: middle;">
+          {{if $subject}}{{mb_include template=inc_vw_type_message}}{{else}}{{tr}}CUserMail-no_subject{{/tr}}{{/if}}
         </a>
         {{if count($_mail->_attachments)}}
           <img title="{{$_mail->_attachments|@count}}" src="modules/messagerie/images/attachments.png" alt="attachments"/>
@@ -69,8 +77,8 @@
 
   {{if $nb_mails != 0}}
   <tr>
-    <td colspan="5">
-      {{mb_include module=system template=inc_pagination total=$nb_mails current=$page change_page='messagerie.refreshList' step=$app->user_prefs.nbMailList}}
+    <td colspan="6">
+      {{mb_include module=system template=inc_pagination total=$nb_mails current=$page change_page="messagerie.refreshListPage" step=$app->user_prefs.nbMailList}}
     </td>
   </tr>
   {{/if}}

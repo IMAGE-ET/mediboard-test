@@ -1,0 +1,18 @@
+  .tag_head {
+  font-weight: bold;
+  font-size: 0.95em;
+  border-radius: 3px;
+  text-shadow: 1px 1px 3px black;
+  padding: 1px 4px;
+  margin: 1px;
+}
+
+.tag_head_fwd{
+  background-color: #5299cb;
+  color:white;
+}
+
+.tag_head_re {
+  color:white;
+  background-color: limegreen;
+}

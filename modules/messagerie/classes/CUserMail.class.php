@@ -28,8 +28,11 @@ class CUserMail extends CMbObject{
   public $_msgno;  //message sequence number in the mailbox
   public $uid;
   public $answered;  //this message is flagged as answered
+
+  //status
   public $favorite;  // favorite, important email
   public $archived;  // is the mail archived, (hidden)
+  public $sent;      // mail has been sent
 
   public $in_reply_to_id; //is a reply to this message id
   public $text_file_id;
@@ -81,6 +84,7 @@ class CUserMail extends CMbObject{
     $props["answered"]      = "bool default|0";
     $props["favorite"]      = "bool default|0";
     $props["archived"]      = "bool default|0";
+    $props["sent"]          = "bool default|0";
     //$props["msg_references"]= "str";
     $props["in_reply_to_id"] = "ref class|CUserMail";
     $props["text_file_id"]  = "ref class|CFile";
@@ -100,6 +104,20 @@ class CUserMail extends CMbObject{
     $backProps["mail_attachments"]          = "CMailAttachments mail_id";
     $backProps["reply_of"]                  = "CUserMail in_reply_to_id";
     return $backProps;
+  }
+
+  /**
+   * @see parent::check()
+   */
+  function check() {
+    if ($msg = parent::check()) {
+      return $msg;
+    }
+
+    //a message flag as sent cannot be archived
+    if ($this->sent && $this->archived) {
+      return "CUserMail-msg-AMessageSentCannotBeArchived";
+    }
   }
 
   /**
@@ -128,33 +146,147 @@ class CUserMail extends CMbObject{
   }
 
   /**
+   * return the list of uid for an account_id
+   *
+   * @param int $account_id account id = source_pop_id
+   *
+   * @return array
+   */
+  static function getListMailInMb($account_id) {
+    $mail = new self;
+    $ds = $mail->getDS();
+    $query = "SELECT `uid` FROM `user_mail` WHERE `account_id` = '$account_id' ";
+    return $ds->loadColumn($query);
+  }
+
+  static function getLastMailUid($account_id) {
+    $mail = new self;
+    $ds = $mail->getDS();
+    $query = "SELECT MAX(`uid`) FROM `user_mail` WHERE `account_id` = '$account_id' ";
+    return $ds->loadResult($query);
+  }
+
+
+  /**
    * used to load the mail from SourcePOP
    *
-   * @param array|object $source object from imap structure
+   * @param object $source object from imap structure
    *
    * @return bool|int|null
    */
   function loadMatchingFromSource($source) {
-    // always an array, so take the first header
-    if (!count($source)>0 || !isset($source[0]->to)) {
-      return false;
-    }
-    $source = $source[0];
-
     //assignment
-    if (isset($source->subject)) {
-      $this->subject      = self::flatMimeDecode($source->subject);
-    }
+    $this->uid          = $source->uid;
+    $this->loadMatchingObject();
 
+    $this->subject      = (isset($source->subject)) ? self::flatMimeDecode($source->subject) : null;
     $this->from         = self::flatMimeDecode($source->from);
     $this->to           = self::flatMimeDecode($source->to);
     $this->date_inbox   = CMbDT::dateTime($source->date);
-    $this->uid          = $source->uid;
 
-    $this->loadMatchingObject();
+    //cleanup
+    if ($source->seen) {
+      $this->date_read = $this->date_inbox;
+    }
+
     $this->unescapeValues();
     return $this->_id;
   }
+
+
+  /**
+   * get the plain text from the mail structure
+   *
+   * @param int $source_object_id the user id
+   *
+   * @return mixed
+   */
+  function getPlainText($source_object_id) {
+    if ($this->_text_plain) {
+      $textP = new CContentAny();
+      //apicrypt
+      if (CModule::getActive("apicrypt") && $this->_is_apicrypt == "plain") {
+        $textP->content = CApicrypt::uncryptBody($source_object_id, $this->_text_plain)."\n[apicrypt]";
+      }
+      else {
+        $textP->content = $this->_text_plain;
+      }
+      $textP->store();
+      $this->text_plain_id = $textP->_id;
+    }
+
+    return $this->_text_plain;
+  }
+
+  /**
+   * get the html text from the mail structure
+   *
+   * @param int $source_object_id the user id
+   *
+   * @return mixed
+   */
+  function getHtmlText($source_object_id) {
+    if ($this->_text_html) {
+      $textH = new CContentHTML();
+      $text = CMbString::purifyHTML($this->_text_html); //cleanup
+      //apicrypt
+      if (CModule::getActive("apicrypt") && $this->_is_apicrypt == "html") {
+        $textH->content = CApicrypt::uncryptBody($source_object_id, $text);
+      }
+      else {
+        $textH->content = $text;
+      }
+
+      if (!$msg = $textH->store()) {
+        $this->text_html_id = $textH->_id;
+      }
+    }
+
+    return $this->_text_html;
+  }
+
+
+  /**
+   * create the CFiles attached to the mail
+   *
+   * @param CMailAttachments[] $attachList The list of CMailAttachment
+   * @param CPop               $popClient  the CPop client
+   *
+   * @return void
+   */
+  function attachFiles($attachList, $popClient) {
+    //size limit
+    $size_required = CAppUI::pref("getAttachmentOnUpdate");
+    if ($size_required == "") {
+      $size_required = 0;
+    }
+
+    foreach ($attachList as $_attch) {
+      $_attch->mail_id = $this->_id;
+      $_attch->loadMatchingObject();
+      if (!$_attch->_id) {
+        $_attch->store();
+      }
+      //si preference taille ok OU que la piece jointe est incluse au texte => CFile
+      if (($_attch->bytes <= $size_required ) || $_attch->disposition == "INLINE") {
+
+        $file = new CFile();
+        $file->setObject($_attch);
+        $file->author_id  = CAppUI::$user->_id;
+
+        if (!$file->loadMatchingObject()) {
+          $file_pop = $popClient->decodeMail($_attch->encoding, $popClient->openPart($this->uid, $_attch->getpartDL()));
+          $file->file_name  = $_attch->name;
+          $file->file_type  = $_attch->getType($_attch->type, $_attch->subtype);
+          $file->fillFields();
+          $file->updateFormFields();
+          $file->putContent($file_pop);
+          $file->store();
+        }
+      }
+    }
+  }
+
 
   /**
    * load the visual fields

@@ -25,6 +25,10 @@
   {{mb_include module=system template=inc_config_str numeric=true var=CronJob_schedule}}
   {{mb_include module=system template=inc_config_str numeric=true var=CronJob_olderThan}}
     <tr>
+      <th colspan="2" class="title">Messagerie externe</th>
+    </tr>
+  {{mb_include module=system template=inc_config_str numeric=true var=limit_external_mail}}
+    <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
       </td>

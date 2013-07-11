@@ -138,6 +138,12 @@ class CSetupmessagerie extends CSetup {
     $this->makeRevision("0.25");
     $this->addPrefQuery("markMailOnServerAsRead", 1);
 
-    $this->mod_version = "0.26";
+    $this->makeRevision("0.26");
+    $query = "ALTER TABLE `user_mail`
+                CHANGE `account_id` `account_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                ADD `sent` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.27";
   }
 }

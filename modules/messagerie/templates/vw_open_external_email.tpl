@@ -12,10 +12,6 @@
 {{mb_script module="dPfiles" script="files" ajax=true}}
 {{mb_script module=patients    script=pat_selector    ajax=true}}
 
-<script>
-  console.log('{{$mail->text_html_id}}');
-</script>
-
 <table class="form">
   <tr>
     <th class="title" colspan="4">{{mb_value object=$mail field=subject}}</th>

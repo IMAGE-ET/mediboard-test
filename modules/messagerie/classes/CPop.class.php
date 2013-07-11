@@ -33,7 +33,7 @@ class CPop{
   /**
    * constructor
    *
-   * @param object $source sourcePOP
+   * @param CSourcePOP $source Source POP
    */
   function __construct($source) {
     //stock the source
@@ -51,15 +51,18 @@ class CPop{
     $type = ($this->source->type == "pop3")?"/".$this->source->type:"";
     $ssl  = ($this->source->auth_ssl == "SSL/TLS")?"/ssl/novalidate-cert":"/notls";
     $port = ($this->source->port) ? ":".$this->source->port: "";
-    return $this->_server = "{".$this->source->host.$port.$type.$ssl."}";
+    $extension = ($this->source->extension) ? $this->source->extension : "" ;
+    return $this->_server = "{".$this->source->host.$port.$type.$ssl."}".$extension;
   }
 
   /**
    * Open the remote mailbox
    *
+   * @param string|null $extension Extension of the serveur to open (/Inbox, ...)
+   *
    * @return int|bool
    */
-  function open() {
+  function open($extension = null) {
     $port = ($this->source->port) ? ":".$this->source->port : "";
     $protocole = ($this->source->auth_ssl) ? "https://" : "http://" ;
     $url = $protocole.$this->source->host.$port;
@@ -69,21 +72,14 @@ class CPop{
       return false;
     }
 
-
-    //@TODO: fix this
-    /*if (!url_exists($url)) {
-      //CAppUI::stepAjax("CPop-server-unreachable", UI_MSG_ALERT);
-      mbLog("server-not-reachable");
-      return false;
-    }*/
-
     $password = $this->source->getPassword();
-    $this->_mailbox = @imap_open($this->_server, $this->source->user, $password, 0, 0);
+    $server = $this->_server.$extension;
+    $this->_mailbox = imap_open($server, $this->source->user, $password, 0, 0);
     if ($this->_mailbox === false ) {
       return false;
     }
 
-    //avoid erros reporting
+    //avoid errors reporting
     imap_errors();
     imap_alerts();
     return $this->_mailbox;
@@ -95,7 +91,7 @@ class CPop{
    * @return object
    */
   function check() {
-      $this->_mailbox_info = @imap_check($this->_mailbox);
+      $this->_mailbox_info = imap_check($this->_mailbox);
     return $this->_mailbox_info;
   }
 
@@ -123,10 +119,27 @@ class CPop{
    *
    * @param int $id mail id
    *
-   * @return array
+   * @return array|stdClass
    */
   function header($id) {
-    return imap_fetch_overview($this->_mailbox, $id, FT_UID);
+    $header = imap_fetch_overview($this->_mailbox, $id, FT_UID);
+
+    if (count($header) > 0) {
+      return reset($header);
+    }
+
+    return $header;
+  }
+
+  /**
+   * get informations of an email (UID)
+   *
+   * @param int $id message number (msgno ! not uid)
+   *
+   * @return object
+   */
+  function infos($id) {
+    return imap_headerinfo($this->_mailbox, $id, FT_UID);
   }
 
   /**
@@ -259,7 +272,7 @@ class CPop{
    * @param bool $part_number part number
    * @param bool $part_temp   part for get the part later
    *
-   * @return mixed
+   * @return CMailAttachments[]
    */
   function getListAttachments($mail_id, $structure = false, $part_number = false, $part_temp=false) {
 
