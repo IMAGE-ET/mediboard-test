@@ -32,6 +32,7 @@ $listPrat = CConsultation::loadPraticiensCompta($chir_id);
 $where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat));
 $order = "plageconsult.date";
 
+/** @var CConsultation[] $listConsults */
 $listConsults = $consult->loadList($where, $order, null, null, $ljoin);
 
 $total = array("nb" => 0, "value" => 0);
