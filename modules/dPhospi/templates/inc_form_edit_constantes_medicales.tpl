@@ -126,7 +126,11 @@ Main.add(function () {
       <th class="category"></th>
       {{if $real_context}}<th class="category">Saisie</th>{{/if}}
       <th class="category" colspan="{{if $display_graph}}2{{else}}1{{/if}}">Dernières</th>
-      <th class="category"></th>
+      <th class="category">
+        {{if $constantes->_id}}
+          {{mb_include module=system template=inc_object_history object=$constantes}}
+        {{/if}}
+      </th>
     </tr>
     
     {{assign var=at_least_one_hidden value=false}}
