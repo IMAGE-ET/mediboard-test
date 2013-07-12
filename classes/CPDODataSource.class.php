@@ -45,9 +45,11 @@ abstract class CPDODataSource extends CSQLDataSource {
     }
 
     $dsn = "$this->driver_name:dbname=$name;host=$host";
-    $this->link = new PDO($dsn, $user, $pass);
 
-    return $this->link;
+    $link = new PDO($dsn, $user, $pass);
+    $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+
+    return $this->link = $link;
   }
 
   function error() {
@@ -73,8 +75,13 @@ abstract class CPDODataSource extends CSQLDataSource {
     return $stmt;
   }
 
+  /**
+   * @param PDOStatement $result Statement
+   *
+   * @return void
+   */
   function freeResult($result) {
-    //$result->free();
+    $result->closeCursor();
   }
 
   function numRows($result) {
@@ -90,6 +97,11 @@ abstract class CPDODataSource extends CSQLDataSource {
     return;
   }
 
+  /**
+   * @param PDOStatement $result Statement
+   *
+   * @return array
+   */
   function fetchRow($result) {
     return $result->fetch(PDO::FETCH_NUM);
   }
