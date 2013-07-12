@@ -95,6 +95,7 @@ class CSmartyMB extends Smarty {
     $this->register_modifier("cleanField"        , array($this, "cleanField"));
     $this->register_modifier("stripslashes"      , array($this, "stripslashes"));
     $this->register_modifier("emphasize"         , array($this, "emphasize"));
+    $this->register_modifier("ireplace"          , array($this, "ireplace"));
     $this->register_modifier("ternary"           , array($this, "ternary"));
     $this->register_modifier("trace"             , array($this, "trace"));
     $this->register_modifier("currency"          , array($this, "currency"));
@@ -818,6 +819,19 @@ class CSmartyMB extends Smarty {
 
     $regexp = str_replace("/", "\\/", implode("|", $tokens));
     return preg_replace("/($regexp)/i", "<$tag>$1</$tag>", $text);  
+  }
+
+  /**
+   * Smarty ireplace, case insensitive str_ireplace wrapper
+   *
+   * @param string $str    text
+   * @param string $value1 search value
+   * @param string $value2 replace value
+   *
+   * @return string
+   */
+  function ireplace($str, $value1, $value2) {
+    return str_ireplace($value1, $value2, $str);
   }
 
   /**
