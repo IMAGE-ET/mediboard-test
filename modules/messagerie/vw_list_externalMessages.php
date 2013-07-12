@@ -48,8 +48,6 @@ if (!array_key_exists($account_id, $accounts_user)) {
   $account_id = $account_temp->_id;
 }
 
-mbTrace($account_id);
-
 //smarty
 $smarty = new CSmartyDP();
 $smarty->assign("user",  $user);
