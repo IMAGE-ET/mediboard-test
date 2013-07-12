@@ -26,6 +26,7 @@
     <option value="AllMarkAsRead" onclick="messagerie.markallAsRead('{{$account->_id}}')">{{tr}}CUserMail-option-allmarkasread{{/tr}}</option>
   </select>
 </div>
+{{tr}}CUserMail-last-check{{/tr}} : {{$account->last_update|date_format:"%A %d %B %Y %H:%M"}}
 
 <table class="main">
   <tr>
