@@ -291,6 +291,17 @@ var Patient = {
     </tr>
   {{/foreach}}
 
+  <!-- recherche limitée -->
+  <tr>
+    <th colspan="5" class="section">
+      {{tr}}dPpatients-CPatient-limited-results{{/tr}}
+      {{if ($patientsLimited|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}
+    </th>
+  </tr>
+  {{foreach from=$patientsLimited item=_patient}}
+    {{mb_include template="inc_line_pat_selector"}}
+  {{/foreach}}
+
   <!-- Recherche phonétique -->
   {{if $patientsSoundex|@count}}
   <tr>

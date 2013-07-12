@@ -57,26 +57,39 @@ else {
 
   // Recherche sur valeurs exactes et phonétique
   $where        = array();
+  $whereLimited = array();
   $whereSoundex = array();
   $soundexObj   = new soundex2();
+  $lenSearchConfig = false; //not enought char in string to perform the limited search
 
   // Limitation du nombre de caractères
   $patient_name_search    = trim($name);
   $patient_firstName_search = trim($firstName);
+
+  //limitation de la recherche par config :
+  $patient_nom_search_limited = $patient_name_search;
+  $patient_prenom_search_limited = $patient_firstName_search;
+
   if ($limit_char_search = CAppUI::conf("dPpatients CPatient limit_char_search")) {
-    $patient_name_search    = substr($patient_name_search   , 0, $limit_char_search);
-    $patient_firstName_search = substr($patient_firstName_search, 0, $limit_char_search);
+    //not enought characters
+    if (strlen($patient_firstName_search) < $limit_char_search && strlen($patient_name_search < $limit_char_search )) {
+      $lenSearchConfig = true;
+    }
+    $patient_nom_search_limited     = substr($patient_name_search   , 0, $limit_char_search);
+    $patient_prenom_search_limited  = substr($patient_firstName_search, 0, $limit_char_search);
   }
 
   if ($patient_name_search) {
     $patient_nom_soundex = $soundexObj->build($patient_name_search);
     $where[] = "`nom` LIKE '$patient_name_search%' OR `nom_jeune_fille` LIKE '$patient_name_search%'";
+    $whereLimited[] = "`nom` LIKE '$patient_nom_search_limited%' OR `nom_jeune_fille` LIKE '$patient_nom_search_limited%'";
     $whereSoundex[] = "`nom_soundex2` LIKE '$patient_nom_soundex%' OR `nomjf_soundex2` LIKE '$patient_nom_soundex%'";
   }
 
   if ($patient_firstName_search) {
     $patient_prenom_soundex = $soundexObj->build($patient_firstName_search);
     $where["prenom"]                 = "LIKE '$patient_firstName_search%'";
+    $whereLimited["prenom"]          = "LIKE '$patient_prenom_search_limited%'";
     $whereSoundex["prenom_soundex2"] = "LIKE '$patient_prenom_soundex%'";
   }
 
@@ -85,7 +98,7 @@ else {
       CValue::first($patient_year, "%") . "-" .
       CValue::first($patient_month, "%") . "-" .
       ($patient_day ? str_pad($patient_day, 2, "0", STR_PAD_LEFT) : "%");
-    $where["naissance"] = $whereSoundex["naissance"] = "LIKE '$patient_naissance'";
+    $where["naissance"] = $whereSoundex["naissance"] = $whereLimited["naissance"] = "LIKE '$patient_naissance'";
   }
 
   $limit = "0, $showCount";
@@ -97,6 +110,9 @@ else {
   /** @var CPatient[] $patientsSoundex */
   $patientsSoundex = array();
 
+  /** @var CPatient[] $patientsLimited */
+  $patientsLimited = array();
+
   if ($where) {
     $patients = $pat->loadList($where, $order, $limit);
     if ($nbExact = ($showCount - count($patients))) {
@@ -104,7 +120,15 @@ else {
       $patientsSoundex = $pat->loadList($whereSoundex, $order, $limit);
       $patientsSoundex = array_diff_key($patientsSoundex, $patients);
     }
+
+    //par recherche limitée
+    if ($whereLimited && $limit_char_search && !$lenSearchConfig) {
+      $patientsLimited = $pat->loadList($whereLimited, $order, $limit);
+      $patientsLimited = array_diff_key($patientsLimited, $patients);
+    }
   }
+
+
 
   /**
    * Chargement des consultations du jour pour une liste de patients donnés
@@ -158,6 +182,10 @@ foreach ($patientsSoundex as $_patient) {
   $_patient->loadView();
 }
 
+foreach ($patientsLimited as $_patient) {
+  $_patient->loadView();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -169,6 +197,7 @@ $smarty->assign("firstName_search"    , $patient_firstName_search);
 $smarty->assign("useVitale"           , $useVitale       );
 $smarty->assign("patVitale"           , $patVitale       );
 $smarty->assign("patients"            , $patients        );
+$smarty->assign("patientsLimited"     , $patientsLimited );
 $smarty->assign("patientsSoundex"     , $patientsSoundex );
 $smarty->assign("patient_ipp"         , $patient_ipp     );
 $smarty->assign("datePat"             , "$patient_year-$patient_month-$patient_day");
