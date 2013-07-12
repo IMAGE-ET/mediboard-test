@@ -348,6 +348,18 @@ Main.add(function(){
       </tr>
     {{/foreach}}
 
+    {{if $patientsLimited|@count}}
+      <tr>
+        <th colspan="5" class="section">
+          {{tr}}dPpatients-CPatient-limited-results{{/tr}}
+          {{if ($patientsLimited|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}
+        </th>
+      </tr>
+    {{/if}}
+    {{foreach from=$patientsLimited item=_patient}}
+      {{mb_include module=patients template=inc_list_patient_line}}
+    {{/foreach}}
+
     <!-- Recherche phonétique -->
     {{if $patientsSoundex|@count}}
       <tr>

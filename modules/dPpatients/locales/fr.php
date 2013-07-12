@@ -1867,6 +1867,7 @@ $locales['config-dPpatients-intermax-auto_watch'] = 'Récupération automatique de
 $locales['config-dPpatients-intermax-auto_watch-desc'] = 'Récupération automatique des résultats InterMax';
 $locales['dPpatients-CPatient-close-results'] = 'Résultats proches';
 $locales['dPpatients-CPatient-exact-results'] = 'Résultats exacts';
+$locales['dPpatients-CPatient-limited-results'] = 'Résultats de la recherche limitée';
 $locales['dPpatients-CPatient-no-exact-results'] = 'Aucun résultat exact';
 $locales['install-mmp-alert'] = 'Cette installation nécessite une configuration de la source d\'échanges sur la source \'std\' dans le module Identifiants &gt; Configurer &gt; Source de données';
 $locales['install-mmp-success-install'] = 'Installation réussie';
