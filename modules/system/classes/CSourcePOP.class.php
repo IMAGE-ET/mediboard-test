@@ -30,6 +30,7 @@ class CSourcePOP extends CExchangeSource {
   public $object_id;
 
   public $extension;
+  public $cron_update;
 
   public $_mailbox; //ressource id
   public $_server; //string of server for imap
@@ -62,6 +63,7 @@ class CSourcePOP extends CExchangeSource {
     $props["type"]              = "enum list|pop3|imap";
     $props["libelle"]           = "str notNull";
     $props["extension"]         = "str";
+    $props["cron_update"]       = "bool default|1";
 
     $props["last_update"]       = "dateTime";
     $props["object_id"]         = "ref notNull class|CMbObject meta|object_class";

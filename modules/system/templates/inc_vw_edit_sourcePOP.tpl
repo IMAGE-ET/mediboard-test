@@ -54,6 +54,10 @@
       {{/if}}
       <td>{{mb_field object=$source field="password" placeholder=$placeholder}}</td>
     </tr>
+    <tr {{if !$can->admin}}style="display:none;"{{/if}}>
+      <th>{{mb_label object=$source field="cron_update"}}</th>
+      <td>{{mb_field object=$source field="cron_update"}}</td>
+    </tr>
     <tr>
       <th>{{mb_label object=$source field="extension"}}</th>
       <td>{{mb_field object=$source field="extension"}}</td>

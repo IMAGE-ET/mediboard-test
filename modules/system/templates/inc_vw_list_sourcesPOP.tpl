@@ -17,6 +17,17 @@
       url.addParam("exchange_source_name", exchange_source_name);
       url.addParam("type_action", action);
       url.requestUpdate("test_result_" + exchange_source_name);
+    },
+
+    getOldEmail: function (account_id, account_name) {
+      var url = new Url("messagerie", "cron_update_pop");
+      url.addParam("account_id", account_id);
+      url.addParam("import", 1);
+      url.requestUpdate("test_result_" + account_name, function() {
+        if($('messagerie-auto').checked) {
+          POP.getOldEmail.curry(account_id, account_name).delay(2);
+        }
+      });
     }
   }
 </script>
@@ -38,11 +49,14 @@
     <td>{{mb_value object=$source_pop field=active}}</td>
   </tr>
   <tr>
-    <td class="button">
+    <td class="button" colspan="4">
       <button class="lookup notext" onclick="POP.connexion('{{$source_pop->name}}','connexion')">Connexion</button>
-      <button class="search notext" onclick="POP.connexion('{{$source_pop->name}}', 'listBox')">Liste des boites</button>
+      <button class="search notext" onclick="POP.connexion('{{$source_pop->name}}', 'listBox')">Liste des boites filles</button>
+      {{if $can->admin}}<input type="checkbox" id="messagerie-auto" name="messagerie-auto" value="1"/><button class="change notext" onclick="POP.getOldEmail('{{$source_pop->_id}}','{{$source_pop->name}}')">Récupérer les anciens mails</button>{{/if}}
     </td>
-    <td colspan="3" id="test_result_{{$source_pop->name}}"></td>
+  </tr>
+  <tr>
+    <td colspan="4" id="test_result_{{$source_pop->name}}"></td>
   </tr>
   {{foreachelse}}
   <tr><td colspan="3" class="empty">{{tr}}CSourcePOP.none{{/tr}}</td></tr>
