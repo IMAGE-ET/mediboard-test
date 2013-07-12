@@ -17,12 +17,7 @@ $ids = CValue::post("log_ids");
 
 if ($ids) {
   $ids = explode("-", $ids);
-  $ids = array_map("intval", $ids);
 
   $error_log = new CErrorLog();
-  $spec = $error_log->_spec;
-  $ds = $spec->ds;
-
-  $query = "DELETE FROM $spec->table WHERE $spec->key ";
-  $ds->exec($query.$ds->prepareIn($ids));
+  $error_log->deleteMulti($ids);
 }

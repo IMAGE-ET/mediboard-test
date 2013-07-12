@@ -214,15 +214,13 @@ class CErrorLog extends CMbObject {
   }
 
   /**
-   * @see parent::delete()
+   * Cleanup orphan log data entries
+   *
+   * @return void
    */
-  function delete(){
-    if ($msg = parent::delete()) {
-      return $msg;
-    }
-
+  function cleanupLogData(){
     // A little cleanup ....
-    $this->_spec->ds->exec(
+    $this->getDS()->exec(
       "DELETE `error_log_data`
        FROM `error_log_data`
        LEFT JOIN error_log ON (
@@ -233,5 +231,37 @@ class CErrorLog extends CMbObject {
        )
        WHERE error_log_id IS NULL"
     );
+  }
+
+  /**
+   * @see parent::delete()
+   */
+  function delete(){
+    if ($msg = parent::delete()) {
+      return $msg;
+    }
+
+    $this->cleanupLogData();
+
+    return null;
+  }
+
+  /**
+   * Delete multiple error logs
+   *
+   * @param int[] $ids List of error log IDs
+   *
+   * @return void
+   */
+  function deleteMulti($ids) {
+    $ids = array_map("intval", $ids);
+
+    $spec = $this->_spec;
+    $ds = $this->getDS();
+
+    $query = "DELETE FROM $spec->table WHERE $spec->key ";
+    $ds->exec($query.$ds->prepareIn($ids));
+
+    $this->cleanupLogData();
   }
 }
