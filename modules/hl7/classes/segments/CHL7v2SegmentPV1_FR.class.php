@@ -171,11 +171,11 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
     
     // PV1-20: Financial Class (FC) (optional repeating)
     $data[] = $sejour->loadRefPrestation()->code;
-    
+
     // PV1-21: Charge Price Indicator (IS) (optional)
     // Table - 0032
     $data[] = $this->getModeTraitement($sejour);
-    
+
     // PV1-22: Courtesy Code (IS) (optional)
     // Table - 0045
     // Y - Demande de chambre particulière

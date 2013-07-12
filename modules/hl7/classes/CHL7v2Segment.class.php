@@ -922,10 +922,14 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
   
   function getModeTraitement(CSejour $sejour) {
-    $code  = $sejour->type;
-    $code .= $sejour->type_pec ? "_$sejour->type_pec" : null;
+    $charge = new CChargePriceIndicator();
+    $charge->type     = $sejour->type;
+    $charge->type_pec = $sejour->type_pec;
+    $charge->group_id = $sejour->group_id;
+    $charge->actif    = 1;
+    $charge->loadMatchingObject();
 
-    return CHL7v2TableEntry::mapTo("32", CMbString::lower($code));
+    return $charge->code;
   }
   
   function getModeSortie(CSejour $sejour) {

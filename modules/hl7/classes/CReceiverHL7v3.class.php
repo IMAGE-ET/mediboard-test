@@ -91,10 +91,12 @@ class CReceiverHL7v3 extends CInteropReceiver {
    *
    * @param CHL7v3Event $evenement Event type
    * @param CMbObject   $mbObject  Object
+   * @param array       $headers   Headers
+   * @param boolean     $soapVar   XML message ?
+   *
+   * @throws Exception
    *
    * @return null|string
-   *
-   * @throws CMbException
    */
   function sendEvent($evenement, CMbObject $mbObject, $headers, $soapVar = false) {
     $evenement->_receiver = $this;
