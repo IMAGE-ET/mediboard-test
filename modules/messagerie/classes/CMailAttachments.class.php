@@ -110,6 +110,7 @@ class CMailAttachments extends CMbObject{
     if ($ext = substr(strrchr($this->name, '.'), 1)) {
       $this->extension = $ext;
     }
+    $this->name = addslashes($this->name);
 
     return $this;
   }

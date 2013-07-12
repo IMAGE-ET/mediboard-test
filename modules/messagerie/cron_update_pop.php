@@ -18,11 +18,13 @@ $nbAccount = CAppUI::conf("messagerie CronJob_nbMail");
 $older = CAppUI::conf("messagerie CronJob_olderThan");
 
 $account_id = CValue::get("account_id");
+$import = CValue::get("import", 0);
 
 //source
 $source = new CSourcePOP();
 $where = array();
 $where["active"] = "= '1'";
+$where["cron_update"] = "= '1'";
 
 if ($account_id) {
   $where["source_pop_id"] = " = '$account_id'";
@@ -30,8 +32,6 @@ if ($account_id) {
 $order = "'last_update' ASC";
 $limit = "0, $nbAccount";
 $sources = $source->loadList($where, $order, $limit);
-
-//$where["last_update"] = "< (NOW() - INTERVAL $older MINUTE)"; //doit avoir été updaté il y a plus de 5 minutes
 
 /** @var $sources CSourcePOP[] */
 foreach ($sources as $_source) {
@@ -45,31 +45,62 @@ foreach ($sources as $_source) {
 
   // when a mail is copied in mediboard, will it be marked as read on the server ?
   $markReadServer = 0;
-  $pref = CPreferences::get($_source->object_id);   //for user_id
-  $markReadServer = (isset($pref["markMailOnServerAsRead"])) ? $pref["markMailOnServerAsRead"] : CAppUI::pref("markMailOnServerAsRead");
-  $archivedOnReception = (isset($pref["mailReadOnServerGoToArchived"])) ? $pref["mailReadOnServerGoToArchived"] : CAppUI::pref("mailReadOnServerGoToArchived");
+  $prefs = CPreferences::get($_source->object_id);   //for user_id
+  $markReadServer = (isset($prefs["markMailOnServerAsRead"])) ? $prefs["markMailOnServerAsRead"] : CAppUI::pref("markMailOnServerAsRead");
+  $archivedOnReception = (isset($prefs["mailReadOnServerGoToArchived"])) ? $prefs["mailReadOnServerGoToArchived"] : CAppUI::pref("mailReadOnServerGoToArchived");
 
   //last email uid from mediboard
   $mbMailUid = (CUserMail::getLastMailUid($_source->_id)) ? CUserMail::getLastMailUid($_source->_id) : 0;
 
+  // last email datetime
+  if ($import) {
+    $firstEmailDate = CUserMail::getFirstMailDate($_source->_id);
+    $firstCheck = $firstEmailDate;
+    $firstCheck = CMbDT::dateTime("+1 DAY", $firstCheck);
+    $month_number = CMbDT::format($firstCheck, "%m");
+    $month = reset(array_keys(CFTP::$month_to_number, $month_number));
+    $dateIMAP = CMbDT::format($firstCheck, "%d-$month-%Y");
+  }
+  else {
+    $lastEmailDate = CUserMail::getLastMailDate($_source->_id);
+    $firstCheck = $lastEmailDate;
+    $firstCheck = CMbDT::dateTime("-1 DAY", $firstCheck);
+    $month_number = CMbDT::format($firstCheck, "%m");
+    $month = reset(array_keys(CFTP::$month_to_number, $month_number));
+    $dateIMAP = CMbDT::format($firstCheck, "%d-$month-%Y");
+  }
+
   //limit by conf
-  $limitMail = CAppUI::conf("messagerie limit_external_mail");
+  $limitMail = CAppUI::conf("messagerie limit_external_mail")+1;
+
+  //create the date for the "since" request
 
   $pop = new CPop($_source);
   if (!$pop->open()) {
     continue;
   }
-  //reception
-  $unseen = $pop->search('ALL');
-  $total = count($unseen);
 
-  //get mail > last mb mail
-  foreach ($unseen as $key => $_unseen) {
-    if ($_unseen < $mbMailUid) {
-      unset($unseen[$key]);
+  //If import mode (get before actual)
+  if ($import) {
+    $unseen = $pop->search('BEFORE "'.$dateIMAP.'"', true);
+  }
+  else {
+
+    $unseen = $pop->search('SINCE "'.$dateIMAP.'"', true);
+  }
+
+  $results = count($unseen);
+  $total = imap_num_msg($pop->_mailbox);
+
+  //if get last email => check if uid server is > maxuidMb
+  if (!$import) {
+    foreach ($unseen as $key => $_unseen) {
+      if ($_unseen < $mbMailUid) {
+        unset($unseen[$key]);
+      }
     }
   }
-  array_splice($unseen, CAppUI::conf("messagerie limit_external_mail"));
+  array_splice($unseen, $limitMail);
 
   if (count($unseen)>0) {
     $unread = 0;    //unseen mail
@@ -133,7 +164,7 @@ foreach ($sources as $_source) {
 
 
     //number of mails gathered
-    CAppUI::stepAjax("CPop-msg-newMsgs", UI_MSG_OK, $unread, $created, $total);
+    CAppUI::stepAjax("CPop-msg-newMsgs", UI_MSG_OK, $unread, $created, $results, $total);
   }
   else {
     CAppUI::stepAjax("CPop-msg-nonewMsg", UI_MSG_OK, $_source->libelle);

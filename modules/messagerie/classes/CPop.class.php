@@ -115,19 +115,20 @@ class CPop{
   /**
    * search for a mail using specific string
    *
-   * @param string $string TEST
-   * @param bool   $uid    TEST
+   * @param string $string  search string
+   * @param bool   $uid     use uid of mails
+   * @param bool   $reverse reverse order
    *
    * @return array
    */
-  function search($string,$uid=true) {
+  function search($string,$uid=true, $reverse=true) {
     if (!is_string($string)) {
       CAppUI::stepAjax("CPop-error-search-notString", UI_MSG_ERROR);
     }
     if ($uid) {
-      return imap_sort($this->_mailbox, SORTARRIVAL, 1, SE_UID, $string);
+      return imap_sort($this->_mailbox, SORTARRIVAL, $reverse, SE_UID, $string);
     }
-    return imap_sort($this->_mailbox, SORTARRIVAL, 1, 0, $string);
+    return imap_sort($this->_mailbox, SORTARRIVAL, $reverse, 0, $string);
   }
 
   /**
@@ -369,7 +370,7 @@ class CPop{
     }
 
     //Hack for bad defined encoding
-    if (!empty($structure->parameters)) {
+    if (!empty($structure->parameters) && is_array($structure->parameters)) {
       for ($k = 0, $l = count($structure->parameters); $k < $l; $k++) {
         $attribute = $structure->parameters[$k];
         if ($attribute->attribute == 'CHARSET' && strtoupper($attribute->value) == 'UTF-8') {

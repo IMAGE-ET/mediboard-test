@@ -78,7 +78,7 @@ messagerie = {
     var url = new Url(messagerie.module, "cron_update_pop");
     url.addParam("account_id", account_id);
     url.requestUpdate("systemMsg", function () {
-      messagerie.refreshList();
+      messagerie.refreshAccount(account_id);
     });
   },
 

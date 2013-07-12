@@ -177,7 +177,18 @@ class CUserMail extends CMbObject{
     $mail = new self;
     $ds = $mail->getDS();
     $query = "SELECT MAX(`date_inbox`) FROM `user_mail` WHERE `account_id` = '$account_id' ";
-    return $ds->loadResult($query);
+    $date = $ds->loadResult($query);
+    $date = ($date) ? $date : CMbDT::dateTime();
+    return $date;
+  }
+
+  static function getFirstMailDate($account_id) {
+    $mail = new self;
+    $ds = $mail->getDS();
+    $query = "SELECT MIN(`date_inbox`) FROM `user_mail` WHERE `account_id` = '$account_id' ";
+    $date = $ds->loadResult($query);
+    $date = ($date) ? $date : CMbDT::dateTime();
+    return $date;
   }
 
 
@@ -195,7 +206,7 @@ class CUserMail extends CMbObject{
 
     $this->subject      = (isset($source->subject)) ? self::flatMimeDecode($source->subject) : null;
     $this->from         = self::flatMimeDecode($source->from);
-    $this->to           = self::flatMimeDecode($source->to);
+    $this->to           = (isset($source->to)) ? self::flatMimeDecode($source->to) : null;
     $this->date_inbox   = CMbDT::dateTime($source->date);
 
     //cleanup
@@ -327,7 +338,6 @@ class CUserMail extends CMbObject{
     $this->_is_apicrypt  = $contentsource["text"]["is_apicrypt"];
     $this->_text_html    = $contentsource["text"]["html"];
     $this->_attachments  = $contentsource["attachments"];
-    mbLog($this);
     return;
   }
 

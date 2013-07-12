@@ -48,13 +48,15 @@ foreach ($mail->_attachments as $_att) {
 
 $mail->checkInlineAttachments();
 
-//hprim
-$headers = preg_split("/(\r\n|\n)/", $mail->_text_plain->content);
-$mail->_text_plain->content = implode("\n", array_splice($headers, 13));
-
 //apicrypt
 if (stripos($mail->_text_plain->content, "****FIN****") !== false) {
   $mail->_is_apicrypt = 1;
+}
+
+$headers = preg_split("/(\r\n|\n)/", $mail->_text_plain->content);
+//hprim
+if ($mail->_is_apicrypt) {
+  $mail->_text_plain->content = implode("\n", array_splice($headers, 13));
 }
 
 //Smarty

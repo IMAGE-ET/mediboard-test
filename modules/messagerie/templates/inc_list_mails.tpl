@@ -15,7 +15,7 @@
 {{/if}}
 
 <tr>
-  <th>
+  <th  class="narrow">
     <input type="checkbox" value="" onclick="messagerie.toggleSelect('list_external_mail', this.checked,'item_mail')"/>
   </th>
   <th style="width: 10px;">
@@ -23,7 +23,7 @@
     {{if $mode == "archived"}}<img src="modules/{{$m}}/images/mail_archive.png" alt="" title="{{tr}}CUserMail-view-onlyArchived{{/tr}}"/>{{/if}}
     {{tr}}Actions{{/tr}}
   </th>
-  <th style="width: 30px;">{{tr}}CUserMail-date_inbox{{/tr}}</th>
+  <th style="width: 30px;">Date</th>
   <th>{{tr}}CUserMail-from{{/tr}}</th>
   <th>{{tr}}CUserMail-subject{{/tr}}</th>
   <th>{{tr}}CUserMail-abstract{{/tr}}</th>
@@ -54,10 +54,10 @@
         {{if $user->isAdmin() && $_mail->uid}}<a href="?m={{$m}}&amp;a=vw_pop_mail&amp;id={{$_mail->_id}}" target="_blank" class="button help notext">Debug</a>{{/if}}
       </td>
       <td>{{mb_value object=$_mail field=date_inbox format=relative}}</td>
-      <td>
+      <td class="text">
         <label title="{{$_mail->from}}">{{$_mail->_from}}</label>
       </td>
-      <td>
+      <td class="text">
         {{assign var=subject value=$_mail->subject}}
         <a href="#{{$_mail->_id}}"  onclick="messagerie.modalExternalOpen('{{$_mail->_id}}','{{$account_id}}');" style="display: inline; vertical-align: middle;">
           {{if $subject}}{{mb_include template=inc_vw_type_message}}{{else}}{{tr}}CUserMail-no_subject{{/tr}}{{/if}}
@@ -69,7 +69,7 @@
           <img title="apicrypt" src="modules/messagerie/images/cle.png" alt="attachments" style="height:15px;"/>
         {{/if}}
       </td>
-      <td{{if $_mail->_text_plain->content == ""}} class="empty">({{tr}}CUserMail-content-empty{{/tr}}){{else}}>{{$_mail->_text_plain->content|truncate}}{{/if}}</td>
+      <td{{if $_mail->_text_plain->content == ""}} class="empty">({{tr}}CUserMail-content-empty{{/tr}}){{else}} class="text compact">{{$_mail->_text_plain->content|truncate:256}}{{/if}}</td>
     </tr>
   {{foreachelse}}
     <tr><td class="empty" colspan="6"">{{tr}}CUserMail-none{{/tr}}</td></tr>

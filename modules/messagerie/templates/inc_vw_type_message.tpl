@@ -1,12 +1,10 @@
 {{if $subject|stripos:"Fwd:" !== false}}
   <span class="tag_head tag_head_fwd" title="{{tr}}CUserMail-fwd{{/tr}}">Fwd</span>
-  {{assign var=subject value=$subject|replace:'Fwd:':''}}
-  {{assign var=subject value=$subject|replace:'FWD:':''}}
+  {{assign var=subject value=$subject|ireplace:"FwD:":""|smarty:nodefaults}}
 {{/if}}
 {{if $subject|stripos:"Re:" !== false}}
   <span class="tag_head tag_head_re" title="{{tr}}CUserMail-responded{{/tr}}">Re</span>
-  {{assign var=subject value=$subject|replace:'Re:':''}}
-  {{assign var=subject value=$subject|replace:'RE:':''}}
+  {{assign var=subject value=$subject|ireplace:'RE:':''|smarty:nodefaults}}
 {{/if}}
 
-{{$subject|truncate:100:"(...)"|smarty:nodefaults}}
+{{$subject|smarty:nodefaults|truncate:100:"(...)"}}
