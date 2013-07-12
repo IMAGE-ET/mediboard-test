@@ -501,6 +501,9 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
     $code = $dom->addElement($contactParty, "code");
     $this->setCode($code, "CARTE_SESAM_VITALE", "1.2.250.1.213.4.1.2.5");
 
+    $telecom = $dom->addElement($contactParty, "telecom");
+    $dom->addAttribute($telecom, "nullFlavor", "NA");
+
     $contactPerson = $dom->addElement($contactParty, "contactPerson");
     $name = $dom->addElement($contactPerson, "name");
 

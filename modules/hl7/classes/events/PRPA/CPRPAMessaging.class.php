@@ -91,7 +91,7 @@ class CPRPAMessaging extends CHL7v3Messaging {
    */
   static function getAcknowledgment($ack_data) {
     $dom = new CHL7v3MessageXML();
-    $dom->loadXML($ack_data);
+    $dom->loadXMLSafe($ack_data);
 
     $tagName       = $dom->documentElement->tagName;
     $first_element = str_replace("PRPA_", "", $tagName);
