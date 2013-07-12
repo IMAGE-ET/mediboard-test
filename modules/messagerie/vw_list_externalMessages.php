@@ -42,6 +42,14 @@ foreach ($accounts_available as $_account) {
   $libelle = $_account->libelle ? $_account->libelle : $_account->_id;
 }
 
+//switching account check, if session account_id not in user_account, reset account_id
+if (!array_key_exists($account_id, $accounts_user)) {
+  $account_temp = reset($accounts_user);
+  $account_id = $account_temp->_id;
+}
+
+mbTrace($account_id);
+
 //smarty
 $smarty = new CSmartyDP();
 $smarty->assign("user",  $user);
