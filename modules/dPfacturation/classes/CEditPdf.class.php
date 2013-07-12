@@ -381,8 +381,8 @@ class CEditPdf{
               }
             }
           }
-          $montant_intermediaire += $this_pt;
-          $montant_intermediaire += $this_pm;
+          $montant_intermediaire += ($this_pt* $acte->coeff);
+          $montant_intermediaire += ($this_pm* $acte->coeff);
         }
       }
     }
@@ -719,7 +719,7 @@ class CEditPdf{
       $tarif["Relance:"]      = sprintf('%0.2f', $this->relance->_montant);
     }
     $tarif["Remise:"]         = sprintf('%0.2f', -$this->facture->remise);
-    $tarif["Montant total:"]  = sprintf('%0.2f', $montant_total);
+    $tarif["Montant total:"]  = sprintf('%0.2f', round($montant_total, 1));
     $tarif["Acompte:"]        = sprintf('%0.2f', $acompte);
     $tarif["Montant dû $title_montant:"]  = $montant_facture;
     
