@@ -23,7 +23,8 @@ if (null == @$dPconfig["db"][$dsn]) {
 }
 
 $dsConfig =& $dPconfig["db"][$dsn];
-if ("mysql" != $dbtype = $dsConfig["dbtype"]) {
+$dbtype = $dsConfig["dbtype"];
+if (strpos($dbtype, "mysql") === false) {
   CAppUI::stepAjax("Seules les DSN MySQL peuvent être créées par un accès administrateur", UI_MSG_ERROR);
 }
 
