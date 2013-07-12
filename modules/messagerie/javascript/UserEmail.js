@@ -19,7 +19,7 @@ messagerie = {
   modalExternalOpen:function (id, account) {
     var url = new Url(messagerie.module, "ajax_open_external_email");
     url.addParam("mail_id", id);
-    url.requestModal(900, 800, {onClose: messagerie.refreshList.curry(null, null, null)});
+    url.requestModal(-20, -20, {onClose: messagerie.refreshList.curry(null, null, null)});
   },
 
   //refresh div

@@ -18,6 +18,8 @@ class CPop{
   public $_server;
   public $_mailbox_info;
 
+  public $_is_open = false;
+
   public $_parts = array();
 
   public $content = array (
@@ -94,6 +96,8 @@ class CPop{
     if ($this->_mailbox === false ) {
       return false;
     }
+
+    $this->_is_open = true;
 
     //avoid errors reporting
     imap_errors();
@@ -402,7 +406,10 @@ class CPop{
    * @return bool
    */
   function close() {
-    return imap_close($this->_mailbox);
+    if ($this->_is_open) {
+      return imap_close($this->_mailbox);
+    }
+    return false;
   }
 
 

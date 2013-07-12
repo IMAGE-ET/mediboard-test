@@ -129,6 +129,7 @@ $locales['CUserMail-hashprim'] = 'Cet email contient des informations patients (
 $locales['CUserMail-in_reply_to_id'] = 'En réponse à';
 $locales['CUserMail-isApicrypt'] = 'Cet email provient d\'un chiffrement';
 $locales['CUserMail-is_apicrypt'] = 'Cet e-mail contient des données patient HL7';
+$locales['CUserMail-last-check'] = 'Dernière mise à jour';
 $locales['CUserMail-markedAsRead'] = '%d messages marqués comme lus';
 $locales['CUserMail-markedAsRead-none'] = 'Aucun message à marquer comme lu';
 $locales['CUserMail-msg-AMessageSentCannotBeArchived'] = 'Un message envoyé ne peut être archivé';

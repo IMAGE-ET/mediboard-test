@@ -16,7 +16,7 @@
 
 <tr>
   <th  class="narrow">
-    <input type="checkbox" value="" onclick="messagerie.toggleSelect('list_external_mail', this.checked,'item_mail')"/>
+    <input type="checkbox" value="" onclick="messagerie.toggleSelect('{{$mode}}', this.checked,'item_mail')"/>
   </th>
   <th style="width: 10px;">
     {{if $mode == "favorited"}}<img src="modules/{{$m}}/images/favorites-1.png" alt="" style="height:15px;" title="{{tr}}CUserMail-view-onlyFavorite{{/tr}}"/>{{/if}}

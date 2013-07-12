@@ -17,6 +17,8 @@ CPop::checkImapLib();
 $nbAccount = CAppUI::conf("messagerie CronJob_nbMail");
 $older = CAppUI::conf("messagerie CronJob_olderThan");
 
+$limitMail = CValue::get("limit", CAppUI::conf("messagerie limit_external_mail")+1);
+
 $account_id = CValue::get("account_id");
 $import = CValue::get("import", 0);
 
@@ -70,11 +72,8 @@ foreach ($sources as $_source) {
     $dateIMAP = CMbDT::format($firstCheck, "%d-$month-%Y");
   }
 
-  //limit by conf
-  $limitMail = CAppUI::conf("messagerie limit_external_mail")+1;
 
-  //create the date for the "since" request
-
+  //pop open account
   $pop = new CPop($_source);
   if (!$pop->open()) {
     continue;
