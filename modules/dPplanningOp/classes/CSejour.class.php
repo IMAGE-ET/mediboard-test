@@ -2120,6 +2120,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     parent::loadComplete();
     foreach ($this->_ref_operations as &$operation) {
       $operation->loadRefsFwd();
+      $operation->loadBrancardage();
       $operation->_ref_chir->loadRefFunction();
       $operation->_ref_chir->loadRefSpecCPAM();
       $operation->_ref_chir->loadRefDiscipline();
