@@ -57,7 +57,7 @@
           {{/foreach}}
         </select>
       {{else}}
-        {{mb_field object=$sejour field="mode_sortie" emptyLabel="Choose" onchange="Fields.init(this.value); this.form.onsubmit();"}}
+        {{mb_field object=$sejour field="mode_sortie" onchange="Fields.init(this.value); this.form.onsubmit();"}}
       {{/if}}
       {{if !$rpu->mutation_sejour_id}}
         <input type="hidden" name="group_id" value="{{if $sejour->group_id}}{{$sejour->group_id}}{{else}}{{$g}}{{/if}}" />

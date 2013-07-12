@@ -19,14 +19,13 @@ if (CValue::post("mode_sortie") == "mutation" && CValue::post("type") == "urg" &
   $lit_id = CValue::post("lit_id");
   $sejour = new CSejour();
   $sejour->load($sejour_id);
-  $sejour->loadRefRPU();
 
   //Création de l'affectation du patient
   $affectation = new CAffectation();
   $affectation->entree = CMbDT::dateTime();
   $affectation->lit_id = $lit_id;
   $affectation->sejour_id = $sejour_id;
-  if ($sejour->_ref_rpu->mutation_sejour_id) {
+  if ($sejour->loadRefRPU()->mutation_sejour_id) {
     $affectation->sejour_id = $sejour->_ref_rpu->mutation_sejour_id;
   }
   $affectation->sortie = $sejour->sortie_prevue;
