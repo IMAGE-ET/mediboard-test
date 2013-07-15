@@ -109,7 +109,9 @@ $locales['mod-maternite-tab-ajax_bind_grossesse'] = 'Modification de grossesse';
 $locales['mod-maternite-tab-ajax_edit_naissance'] = 'Naissance';
 $locales['mod-maternite-tab-configure'] = 'Configurer';
 $locales['mod-maternite-tab-vw_admissions'] = 'Validation séjours';
+$locales['mod-maternite-tab-vw_consultations'] = 'Consultations';
 $locales['mod-maternite-tab-vw_grossesses'] = 'Grossesses';
+$locales['mod-maternite-tab-vw_placement'] = 'Accouchements';
 $locales['module-maternite-court'] = 'Maternité';
 $locales['module-maternite-long'] = 'Maternité';
 ?>

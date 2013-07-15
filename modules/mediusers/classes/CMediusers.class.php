@@ -516,6 +516,8 @@ class CMediusers extends CPerson {
   }
 
   /**
+   * Chargement du profil associé
+   *
    * @return CUser
    */
   function loadRefProfile(){
@@ -523,6 +525,8 @@ class CMediusers extends CPerson {
   }
 
   /**
+   * Chargement de la fonction principale
+   *
    * @return CFunctions
    */
   function loadRefFunction() {
@@ -532,6 +536,8 @@ class CMediusers extends CPerson {
   }
 
   /**
+   * Chargement de la discipline médicale
+   *
    * @return CDiscipline
    */
   function loadRefDiscipline() {
@@ -539,6 +545,8 @@ class CMediusers extends CPerson {
   }
 
   /**
+   * Chargement de la spécialité CPAM
+   *
    * @return CSpecCPAM
    */
   function loadRefSpecCPAM(){
@@ -575,6 +583,10 @@ class CMediusers extends CPerson {
   }
 
   /**
+   * Chargement de la liste des protocoles de DHE de l'utilisateur
+   *
+   * @param string $type type du séjour
+   *
    * @return CProtocole[]
    */
   function loadProtocoles($type = null) {
@@ -831,6 +843,8 @@ class CMediusers extends CPerson {
   }
 
   /**
+   * Chargement de la liste des utilisateurs à partir de leur type
+   *
    * @param array  $user_types
    * @param int    $permType
    * @param int    $function_id
@@ -841,7 +855,10 @@ class CMediusers extends CPerson {
    *
    * @return CMediusers[]
    */
-  function loadListFromType($user_types = null, $permType = PERM_READ, $function_id = null, $name = null, $actif = true, $secondary = false, $reverse = false) {
+  function loadListFromType(
+      $user_types = null, $permType = PERM_READ, $function_id = null,
+      $name = null, $actif = true, $secondary = false, $reverse = false
+  ) {
     $where = array();
     $ljoin = array();
 

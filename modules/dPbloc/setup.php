@@ -403,6 +403,11 @@ class CSetupdPbloc extends CSetup {
       CHANGE `fin` `fin` DATETIME NOT NULL;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.40";
+    $this->makeRevision("0.40");
+    $query = "ALTER TABLE `bloc_operatoire`
+                ADD `type` ENUM ('chir','obst') NOT NULL DEFAULT 'chir' AFTER `nom`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.41";
   }
 }

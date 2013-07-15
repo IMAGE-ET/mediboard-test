@@ -23,6 +23,7 @@ class CBlocOperatoire extends CMbObject {
 
   // DB Fields
   public $nom;
+  public $type;
   public $days_locked;
   public $tel;
   public $fax;
@@ -72,6 +73,7 @@ class CBlocOperatoire extends CMbObject {
     $props = parent::getProps();
     $props["group_id"]    = "ref notNull class|CGroups";
     $props["nom"]         = "str notNull seekable";
+    $props["type"]        = "enum notNull list|chir|obst default|chir";
     $props["days_locked"] = "num min|0 default|0";
     $props["tel"]         = "phone";
     $props["fax"]         = "phone";

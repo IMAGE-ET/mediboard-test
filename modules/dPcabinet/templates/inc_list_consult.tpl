@@ -78,9 +78,11 @@ Main.add( function () {
         </span>
       {{/if}}
       {{mb_include module=system template=inc_object_notes object=$_plage}}
-      {{$_plage->debut|date_format:$conf.time}} 
-      - {{$_plage->fin|date_format:$conf.time}}
-      {{if $_plage->libelle}}: {{$_plage->libelle}}{{/if}}
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$_plage->_guid}}');">
+        {{$_plage->debut|date_format:$conf.time}}
+        - {{$_plage->fin|date_format:$conf.time}}
+        {{if $_plage->libelle}}: {{$_plage->libelle}}{{/if}}
+      </span>
     </th>
   </tr>
   {{foreach from=$_plage->_ref_consultations item=_consult}}

@@ -62,7 +62,8 @@ foreach ($urgences as &$urgence) {
     $secondary_functions[$curr_sec_func->function_id] = $curr_sec_func;
   }
   $where = array();
-  $selectPlages  = "(plagesop.chir_id = %1 OR plagesop.spec_id = %2 OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($secondary_functions)).")";
+  $selectPlages  = "(plagesop.chir_id = %1 OR plagesop.spec_id = %2
+    OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($secondary_functions)).")";
   $where[]       = $ds->prepare($selectPlages, $urgence->chir_id, $urgence->_ref_chir->function_id);
   $where["date"] = "= '$date'";
   $where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));

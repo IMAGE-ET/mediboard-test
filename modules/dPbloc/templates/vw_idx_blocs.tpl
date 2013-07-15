@@ -30,7 +30,7 @@ Main.add(function () {
   {{if $use_poste}}
     <li><a href="#postes">{{tr}}CPosteSSPI{{/tr}}</a></li>
   {{/if}}
-  <li><button type="button" style="float:right;" onclick="return popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button></li></li>
+  <li><button type="button" style="float:right;" onclick="return popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button></li>
 </ul>
 
 <div id="blocs" style="display: none;">
@@ -41,6 +41,7 @@ Main.add(function () {
         <table class="tbl">
           <tr>
             <th>{{mb_title class=CBlocOperatoire field=nom}}</th>
+            <th>{{mb_title class=CBlocOperatoire field=type}}</th>
             <th>{{mb_title class=CBlocOperatoire field=tel}}</th>
             <th>{{mb_title class=CBlocOperatoire field=fax}}</th>
             <th>{{mb_title class=CBlocOperatoire field=days_locked}}</th>
@@ -53,15 +54,10 @@ Main.add(function () {
                 {{mb_value object=$_bloc field=nom}}
               </a>
             </td>
-            <td>
-              {{mb_value object=$_bloc field=tel}}
-            </td>
-            <td>
-              {{mb_value object=$_bloc field=fax}}
-            </td>
-            <td>
-              {{mb_value object=$_bloc field=days_locked}}
-            </td>
+            <td>{{mb_value object=$_bloc field=type}}</td>
+            <td>{{mb_value object=$_bloc field=tel}}</td>
+            <td>{{mb_value object=$_bloc field=fax}}</td>
+            <td>{{mb_value object=$_bloc field=days_locked}}</td>
             <td>
               {{foreach from=$_bloc->_ref_salles item=_salle}}
                  <div>{{$_salle}}</div>
@@ -85,6 +81,10 @@ Main.add(function () {
             <tr>
               <th>{{mb_label object=$bloc field="nom"}}</th>
               <td>{{mb_field object=$bloc field="nom"}}</td>
+            </tr>
+            <tr>
+              <th>{{mb_label object=$bloc field="type"}}</th>
+              <td>{{mb_field object=$bloc field="type"}}</td>
             </tr>
             <tr>
               <th>{{mb_label object=$bloc field="tel"}}</th>

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * maternite
+ * Liste des grossesses dont le terme est proche
  *  
- * @category maternite
+ * @category Maternite
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -24,15 +24,16 @@ $ljoin = array();
 $where["terme_prevu"] = "BETWEEN '$date_min' AND '$date_max'";
 $ljoin["patients"]    = "patients.patient_id = grossesse.parturiente_id";
 
+/** @var CGrossesse[] $grossesses */
 $grossesses = $grossesse->loadList($where, "terme_prevu DESC, nom ASC", null, null, $ljoin);
 CMbObject::massLoadFwdRef($grossesses, "parturiente_id");
 CMbObject::massCountBackRefs($grossesses, "sejours");
 CMbObject::massCountBackRefs($grossesses, "consultations");
 
-foreach ($grossesses as $key => $_grossesse) {
+foreach ($grossesses as $_grossesse) {
   $sejours = $_grossesse->loadRefsSejours();
   if (!$show_cancelled && count($sejours) == 1 && reset($sejours)->annule == 1) {
-    unset($grossesses[$key]);
+    unset($grossesses[$_grossesse->_id]);
     continue;
   }
   $_grossesse->loadRefParturiente();
