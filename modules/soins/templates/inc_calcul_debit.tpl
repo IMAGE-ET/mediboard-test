@@ -72,14 +72,14 @@
     var temps_debit = $V(form.temps_debit);
     
     // rapport_debit_choisi_ua
-    var rapport_debit_choisi_ua = rapport_unite_prise[unite_choisie][unite_administration];
- 
+    var rapport_debit_choisi_ua = rapport_unite_prise[unite_choisie.replace(/\/kg/g, "")][unite_administration.replace(/\/kg/g, "")];
+
     // rapport_conditionnement_ua
-    var rapport_conditionnement_ua = rapport_unite_prise["{{$line_item->unite}}"][unite_administration];
-    
+    var rapport_conditionnement_ua = rapport_unite_prise["{{$line_item->unite}}".replace(/\/kg/g, "")][unite_administration.replace(/\/kg/g, "")];
+
     // Rapport resultant des calculs précédents
     var rapport_quantite_necessaire = rapport_debit_choisi_ua / rapport_conditionnement_ua;
-    
+
     var debit_choisi = parseFloat($V(form.quantite_debit).replace(/,/, "."));
     
     debit_choisi *= unite_temps_debit;
