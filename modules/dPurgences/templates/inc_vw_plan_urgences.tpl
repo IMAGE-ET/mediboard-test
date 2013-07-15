@@ -67,7 +67,7 @@
                   
                   {{assign var=prescription value=$_sejour->_ref_prescription_sejour}}
                   {{if $prescription->_id}}
-                      {{if $prescription->_count_recent_modif_presc}}
+                      {{if $prescription->_count_fast_recent_modif}}
                         <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
                       {{else}}
                         <img src="images/icons/ampoule_grey.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>

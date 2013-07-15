@@ -110,6 +110,7 @@ for ($num = 0; $num <= 1; $num++) {
       foreach ($sejours as $sejour) {
         $sejour->loadRefRPU();
         $sejour->loadRefPrescriptionSejour();
+        $sejour->_ref_prescription_sejour->countFastRecentModif();
         $sejour->loadRefsDocItems();
       }
       $listSejours[$nom][$chambre->_id] = $sejours;
