@@ -84,7 +84,7 @@ Main.add(function() {
              
          <th class="day {{if $disabled}}disabled{{/if}} text day-{{$smarty.foreach.days.index}} {{if $planning->selectable}}selector{{/if}}"
            {{if $planning->selectable}} onclick="window['planning-{{$planning->guid}}'].selectDayEvents({{$smarty.foreach.days.index}})" {{/if}}
-           {{if in_array($_day, $bank_holidays)}}style="background: #fc0"{{/if}}>
+           {{if array_key_exists($_day, $bank_holidays)}}style="background: #fc0"{{/if}}>
              {{if !$planning->no_dates}}
                {{$_day|date_format:"%a %d"|nl2br}}
              {{/if}}
