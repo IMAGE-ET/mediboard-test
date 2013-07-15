@@ -753,13 +753,13 @@ class CExClass extends CMbObject {
       $_field->delete();
     }
     
-    $table_name = $this->getTableName();
+    /*$table_name = $this->getTableName();
     $query = "DROP TABLE `$table_name`";
     
     $ds = $this->_spec->ds;
     if (!$ds->query($query)) {
       return "La table '$table_name' n'a pas pu être supprimée (".$ds->error().")";
-    }
+    }*/
     
     return parent::delete();
   }
