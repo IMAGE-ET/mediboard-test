@@ -240,16 +240,18 @@ class CGroups extends CMbObject {
   /**
    * Load blocs operatoires with given permission
    *
-   * @param int  $permType    Permission level
-   * @param bool $load_salles Load salles
+   * @param int   $permType    Permission level
+   * @param bool  $load_salles Load salles
+   * @param array $where       SQL WHERE parameters
    *
    * @return CBlocOperatoire[]
    */
-  function loadBlocs($permType = PERM_READ, $load_salles = true) {
+  function loadBlocs($permType = PERM_READ, $load_salles = true, $where = array()) {
     $bloc = new CBlocOperatoire();
-    $where = array(
+    $whereGroup = array(
       'group_id' => "= '$this->_id'"
     );
+    $where = array_merge($where, $whereGroup);
 
     /** @var CBlocOperatoire[] $blocs */
     $blocs = $bloc->loadListWithPerms($permType, $where, "nom");
