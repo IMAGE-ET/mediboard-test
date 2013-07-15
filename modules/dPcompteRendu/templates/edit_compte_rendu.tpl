@@ -65,7 +65,8 @@ function playField(element, class_name, editor_element, name) {
 }
 
 function submitCompteRendu(callback){
-  CKEDITOR.instances.htmlarea.document.getBody().setStyle("background", "#ddd");
+  var editor = CKEDITOR.instances.htmlarea;
+  editor.document.getBody().setStyle("background", "#ddd");
 
   var mess = null;
   if (mess=$('mess')) {
@@ -75,7 +76,7 @@ function submitCompteRendu(callback){
     if (window.pdf_thumbnails && Prototype.Browser.IE) {
       restoreStyle();
     }
-    var html = CKEDITOR.instances.htmlarea.getData();
+    var html = editor.getData();
     if (window.pdf_thumbnails && Prototype.Browser.IE) {
       window.save_style = deleteStyle();
     }
@@ -84,7 +85,8 @@ function submitCompteRendu(callback){
     var form = getForm("editFrm");
     
     if(checkForm(form) && User.id) {
-      CKEDITOR.instances.htmlarea.on("key", loadOld);
+      editor.getCommand('save').setState(CKEDITOR.TRISTATE_DISABLED);
+      editor.on("key", loadOld);
       form.onsubmit=function(){ return true; };
       if (Thumb.modele_id && Thumb.contentChanged) {
         emptyPDF();
@@ -108,6 +110,7 @@ function submitCompteRendu(callback){
           }
         }
         window.callback = callback ? callback : null;
+        editor.getCommand('save').setState(CKEDITOR.TRISTATE_OFF);
       }},  $("systemMsg"));
     }
   }).defer();
@@ -295,11 +298,12 @@ function modalHeaderFooter(state) {
 }
 
 function duplicateDoc(form) {
+  var element = CKEDITOR.instances.htmlarea.element;
   $V(form.modele_id, $V(form.compte_rendu_id));
   $V(form.compte_rendu_id, '');
-  CKEDITOR.instances.htmlarea.element.$.disabled=false;
-  CKEDITOR.instances.htmlarea.element.$.contentEditable=true;
-  CKEDITOR.instances.htmlarea.element.$.designMode="On";
+  element.$.disabled=false;
+  element.$.contentEditable=true;
+  element.$.designMode="On";
   $V(form.callback, "afterDuplicate");
   form.onsubmit();
 }

@@ -17,16 +17,19 @@ CKEDITOR.plugins.add('mbprintPDF',{
 });
 
 function mbprintPDF_onclick(editor) {
+  editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_DISABLED);
   window.parent.Url.ping({onComplete: function() {
     if (window.parent.Thumb.mode == "doc") {
       // Mise à jour de la date d'impression
       window.parent.$V(window.parent.getForm("editFrm").date_print, "now");
       window.parent.submitCompteRendu(function() {
         streamPDF(editor);
+        editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_OFF);
       });
     }
     else {
       streamPDF(editor);
+      editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_OFF);
     }
   } });
 }
