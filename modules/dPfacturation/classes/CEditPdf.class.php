@@ -463,7 +463,7 @@ class CEditPdf{
     
     $this->pre_tab["Medical:"]  = $pm;
     $this->pre_tab["Tarmed:"]   = $pt;
-    $this->pre_tab["Médicaments:"] = sprintf("%.2f", $medicaments);ture - $pm - $pt - $medicaments
+    $this->pre_tab["Médicaments:"] = sprintf("%.2f", $medicaments);ture - $pm - $pt - $medicaments;
     $autres =  $pm + $pt + $this->autre_tarmed + $medicaments;
     $this->pre_tab["Autres:"]   = sprintf("%.2f", $this->facture->_montant_sans_remise - $autres);
   }
