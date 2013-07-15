@@ -66,8 +66,9 @@ $dPconfig["purify_text_input"]    = "0";
 
 $dPconfig["config_db"] = "0";
 
-$dPconfig["long_request_log_level"] = "";
-$dPconfig["error_logs_in_db"]       = "0";
+$dPconfig["human_long_request_level"] = "";
+$dPconfig["bot_long_request_level"]   = "";
+$dPconfig["error_logs_in_db"]         = "0";
 
 // Object merge
 $dPconfig["alternative_mode"]  = "1";

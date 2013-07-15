@@ -10,13 +10,29 @@
  * @link       http://www.mediboard.org
  */
 
-$long_request_log_level = CAppUI::conf("long_request_log_level");
+$human_long_request_level = CAppUI::conf("human_long_request_level");
+$bot_long_request_level   = CAppUI::conf("bot_long_request_level");
 
-if (!$long_request_log_level) {
+if (!$human_long_request_level && !$bot_long_request_level) {
   return;
 }
 
 $duration = CApp::$performance["genere"];
+
+$bot = CAppUI::$user->isRobot();
+
+// Determine the log_level to apply
+$long_request_log_level = false;
+if ($bot && $bot_long_request_level) {
+  $long_request_log_level = $bot_long_request_level;
+}
+elseif (!$bot && $human_long_request_level) {
+  $long_request_log_level = $human_long_request_level;
+}
+
+if (!$long_request_log_level) {
+  return;
+}
 
 // If request is too slow
 if ($duration > $long_request_log_level) {

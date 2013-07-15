@@ -50,7 +50,8 @@ Main.add(function(){
     {{mb_include module=system template=inc_config_str var=offline_time_start}}
     {{mb_include module=system template=inc_config_str var=offline_time_end}}
     {{mb_include module=system template=inc_config_bool var=config_db}}
-    {{mb_include module=system template=inc_config_str var=long_request_log_level numeric=true}}
+    {{mb_include module=system template=inc_config_str var=human_long_request_level numeric=true}}
+    {{mb_include module=system template=inc_config_str var=bot_long_request_level numeric=true}}
 
     <tr>
       <th colspan="2" class="title">
