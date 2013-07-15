@@ -954,7 +954,30 @@ class CConsultation extends CFacturable {
       $task->sejour_id = $this->sejour_id;
       $task->prescription_line_element_id = $this->_line_element_id;
       $task->description = "Consultation prévue le ".$this->_ref_plageconsult->getFormattedValue("date");
+
+      $line_element = new CPrescriptionLineElement();
+      $line_element->load($this->_line_element_id);
+      $this->motif = ($this->motif ? "$this->motif\n" : "") . $line_element->_view;
+      $this->rques = ($this->rques ? "$this->rques\n" : "") .
+                     "Prescription d'hospitalisation, prescrit par le Dr ". $line_element->_ref_praticien->_view;
+
+      // Planification manuelle à l'heure de la consultation
+      $administration = new CAdministration();
+      $administration->administrateur_id = CAppUI::$user->_id;
+      $administration->dateTime = $this->_datetime;
+      $administration->quantite = $administration->planification = 1;
+      $administration->unite_prise = $line_element->_ref_element_prescription->_ref_category_prescription->chapitre;
+      $administration->setObject($line_element);
+
+      if ($msg = $administration->store()) {
+        return $msg;
+      }
+
       if ($msg = $task->store()) {
+        return $msg;
+      }
+
+      if ($msg = parent::store()) {
         return $msg;
       }
     }

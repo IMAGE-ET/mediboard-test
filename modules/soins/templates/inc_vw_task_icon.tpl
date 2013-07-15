@@ -1,4 +1,4 @@
-<div class="modal" style="display: none;" id="consult_tache_{{$line->_id}}">
+<div style="display: none;" id="consult_tache_{{$line->_id}}">
   <button class="new"
        onclick="Control.Modal.close(); PlanSoins.editRDV('{{$prescription->_ref_object->patient_id}}', '{{$prescription->object_id}}', '{{$line->_id}}');">
     Prendre un rendez-vous

@@ -658,8 +658,7 @@ PlanSoins = {
     url.addParam("dialog"      , 1);
     url.modal({width: 1000, height: 700});
     url.modalObject.observe("afterClose", function() {
-      PlanSoins.refreshTask(prescription_line_element_id);
-      updateTasks(sejour_id);
+      PlanSoins.loadTraitement(sejour_id, PlanSoins.date, '', 'administration');
     } );
   },
 
