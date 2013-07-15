@@ -27,23 +27,26 @@ class CLongRequestLog extends CMbObject {
   public $query_params_post;
   public $session_data;
 
+  // Form fields
+  public $_module;
+  public $_action;
+  public $_link;
+
+  // Filter fields
+  public $_date_min;
+  public $_date_max;
+
   // Arrays
   public $_query_params_get;
   public $_query_params_post;
   public $_session_data;
 
-  // Form fields
-  public $_date_min;
-  public $_date_max;
-
-  public $_link;
 
   // Reference fields
   public $_ref_user;
 
   // Unique Request ID
   public $requestUID;
-
 
   /**
    * @see parent::getSpec()
@@ -52,15 +55,8 @@ class CLongRequestLog extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = "long_request_log";
     $spec->key   = "long_request_log_id";
+    $spec->loggable = false;
     return $spec;
-  }
-
-  /**
-   * @see parent::getBackProps()
-   */
-  function getBackProps() {
-    $backProps = parent::getBackProps();
-    return $backProps;
   }
 
   /**
@@ -69,23 +65,46 @@ class CLongRequestLog extends CMbObject {
   function updatePlainFields() {
     parent::updatePlainFields();
 
+    // GET
     if ($this->_query_params_get) {
       $this->_query_params_get = CMbSecurity::filterInput($this->_query_params_get);
-
       $this->query_params_get = json_encode($this->_query_params_get);
     }
 
+    // POST
     if ($this->_query_params_post) {
       $this->_query_params_post = CMbSecurity::filterInput($this->_query_params_post);
-
       $this->query_params_post = json_encode($this->_query_params_post);
     }
 
+    // SESSION
     if ($this->_session_data) {
       $this->_session_data = CMbSecurity::filterInput($this->_session_data);
-
       $this->session_data = json_encode($this->_session_data);
     }
+  }
+
+  /**
+   * @see parent::updateFormFields()
+   */
+  function updateFormFields() {
+    $this->_query_params_get  = $get     = json_decode($this->query_params_get,  true);
+    $this->_query_params_post = $post    = json_decode($this->query_params_post, true);
+    $this->_session_data      = $session = json_decode($this->session_data,      true);
+
+    $get  = is_array($get)  ? $get  : array();
+    $post = is_array($post) ? $post : array();
+
+    $this->_module = CValue::first(
+      CMbArray::extract($get , "m"),
+      CMbArray::extract($post, "m")
+    );
+
+    $this->_action = CValue::first(
+      CMbArray::extract($get , "tab"),
+      CMbArray::extract($get , "a"),
+      CMbArray::extract($post, "dosql")
+    );
   }
 
   /**
@@ -100,11 +119,19 @@ class CLongRequestLog extends CMbObject {
     $props["query_params_get"]  = "text show|0";
     $props["query_params_post"] = "text show|0";
     $props["session_data"]      = "text show|0";
+    $props["requestUID"]        = "str";
+
+    // Form fields
+    $props["_module"]           = "str";
+    $props["_action"]           = "str";
+    $props["_link"]             = "str";
+    $props["_query_params_get"]  = "php";
+    $props["_query_params_post"] = "php";
+    $props["_session_data"]      = "php";
+
+    // Filter fields
     $props["_date_min"]         = "dateTime";
     $props["_date_max"]         = "dateTime";
-    $props["_ref_user"]         = "ref class|CUser";
-    $props["_link"]             = "str";
-    $props["requestUID"]        = "str";
 
     return $props;
   }
