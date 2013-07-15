@@ -435,6 +435,7 @@ class CEditPdf{
     $pm = 0;
     $pt = 0;
     $medicaments = 0;
+    $this->autre_tarmed = 0;
     foreach ($this->facture->_ref_actes_tarmed as $acte) {
       $tmp_pt = $acte->pt * $acte->coeff_pt * $acte->quantite;
       $tmp_pm = $acte->pm * $acte->coeff_pm * $acte->quantite;
@@ -462,7 +463,7 @@ class CEditPdf{
     
     $this->pre_tab["Medical:"]  = $pm;
     $this->pre_tab["Tarmed:"]   = $pt;
-    $this->pre_tab["Médicaments:"] = sprintf("%.2f", $medicaments);
+    $this->pre_tab["Médicaments:"] = sprintf("%.2f", $medicaments);ture - $pm - $pt - $medicaments
     $autres =  $pm + $pt + $this->autre_tarmed + $medicaments;
     $this->pre_tab["Autres:"]   = sprintf("%.2f", $this->facture->_montant_sans_remise - $autres);
   }
