@@ -10,6 +10,8 @@
 
 require "includes/config_all.php";
 
+header('HTTP/1.1 500 Internal Server Error');
+
 $reason = isset($_GET["reason"]) ? $_GET["reason"] : null;
 
 switch ($reason) {
