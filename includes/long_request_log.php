@@ -19,6 +19,9 @@ if (!$human_long_request_level && !$bot_long_request_level) {
 
 $duration = CApp::$performance["genere"];
 
+if (!CAppUI::$user) {
+  return;
+}
 $bot = CAppUI::$user->isRobot();
 
 // Determine the log_level to apply
