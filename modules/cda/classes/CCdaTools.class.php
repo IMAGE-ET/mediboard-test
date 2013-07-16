@@ -230,7 +230,7 @@ class CCdaTools {
    * @return void;
    */
   function validateSchematron($xml) {
-    $baseDir = dirname(__DIR__)."/resources";
+    $baseDir = dirname(__FILE__)."/../resources";
     $cmd = escapeshellarg("java");
 
     $styleSheet = "$baseDir/schematron/CI-SIS_StructurationCommuneCDAr2.xsl";
