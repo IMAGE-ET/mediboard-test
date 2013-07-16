@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage Urgences
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
@@ -110,7 +110,12 @@ for ($num = 0; $num <= 1; $num++) {
       foreach ($sejours as $sejour) {
         $sejour->loadRefRPU();
         $sejour->loadRefPrescriptionSejour();
-        $sejour->_ref_prescription_sejour->countFastRecentModif();
+        if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")){
+          $sejour->_ref_prescription_sejour->_count_fast_recent_modif = $sejour->_ref_prescription_sejour->countAlertes("medium");
+        }
+        else {
+          $sejour->_ref_prescription_sejour->countFastRecentModif();
+        }
         $sejour->loadRefsDocItems();
       }
       $listSejours[$nom][$chambre->_id] = $sejours;
