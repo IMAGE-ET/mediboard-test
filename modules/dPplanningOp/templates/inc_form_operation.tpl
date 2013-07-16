@@ -84,7 +84,11 @@ refreshFunction = function(chir_id) {
 {{mb_key object=$op}}
 
 {{if $dialog}}
-  <input type="hidden" name="postRedirect" value="m=planningOp&a=vw_edit_urgence&dialog=1" />
+  {{if $op->plageop_id}}
+    <input type="hidden" name="postRedirect" value="m=planningOp&a=vw_edit_planning&dialog=1" />
+  {{else}}
+    <input type="hidden" name="postRedirect" value="m=planningOp&a=vw_edit_urgence&dialog=1" />
+  {{/if}}
 {{/if}}
 
 {{if $op->_id && $op->_ref_sejour->sortie_reelle && !$modules.dPbloc->_can->edit}}
