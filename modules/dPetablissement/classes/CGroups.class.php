@@ -246,7 +246,7 @@ class CGroups extends CMbObject {
    *
    * @return CBlocOperatoire[]
    */
-  function loadBlocs($permType = PERM_READ, $load_salles = true, $where = array()) {
+  function loadBlocs($permType = PERM_READ, $load_salles = true, $order = "nom", $where = array()) {
     $bloc = new CBlocOperatoire();
     $whereGroup = array(
       'group_id' => "= '$this->_id'"
@@ -254,7 +254,7 @@ class CGroups extends CMbObject {
     $where = array_merge($where, $whereGroup);
 
     /** @var CBlocOperatoire[] $blocs */
-    $blocs = $bloc->loadListWithPerms($permType, $where, "nom");
+    $blocs = $bloc->loadListWithPerms($permType, $where, $order);
 
     if ($load_salles) {
       foreach ($blocs as $_bloc) {

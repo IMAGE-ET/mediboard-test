@@ -18,7 +18,7 @@ $ds = CSQLDataSource::get("std");
 $date  = CValue::getOrSession("date", CMbDT::date());
 
 // Toutes les salles des blocs
-$listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ, true, array("type" => "= 'obst'"));
+$listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ, true, "nom", array("type" => "= 'obst'"));
 
 // Les salles autorisées
 $salle = new CSalle();
