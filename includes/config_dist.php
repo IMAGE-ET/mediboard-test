@@ -66,8 +66,8 @@ $dPconfig["purify_text_input"]    = "0";
 
 $dPconfig["config_db"] = "0";
 
-$dPconfig["human_long_request_level"] = "";
-$dPconfig["bot_long_request_level"]   = "";
+$dPconfig["human_long_request_level"] = "10";
+$dPconfig["bot_long_request_level"]   = "100";
 $dPconfig["error_logs_in_db"]         = "0";
 
 // Object merge
