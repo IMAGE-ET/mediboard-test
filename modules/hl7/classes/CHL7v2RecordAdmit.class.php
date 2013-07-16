@@ -1407,15 +1407,28 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         break;
       // Dans tous les cas le nom du lit est celui que l'on reçoit du flux
       default:
-        $chambre->nom = $nom_chambre;
-        $chambre->loadMatchingObjectEsc();
+        $where = $ljoin = array();
+        $ljoin["service"]  = "service.service_id = chambre.service_id";
+        $where["chambre.nom"]      = " = '$nom_chambre'";
+        $where["group_id"] = " = '$sender->group_id'";
 
-        $lit->nom = $nom_lit;
+        $chambre->escapeValues();
+        $chambre->loadObject($where, null, null, $ljoin);
+        $chambre->unescapeValues();
+
+        $where = $ljoin = array();
+        $ljoin["chambre"]  = "chambre.chambre_id = lit.chambre_id";
+        $ljoin["service"]  = "service.service_id = chambre.service_id";
+        $where["lit.nom"]      = " = '$nom_lit'";
+        $where["group_id"] = " = '$sender->group_id'";
         if ($chambre->_id) {
-          $lit->chambre_id = $chambre->_id;
+          $where["chambre.chambre_id"] = " = '$chambre->_id'";
         }
-        $lit->loadMatchingObjectEsc();
-        
+
+        $lit->escapeValues();
+        $lit->loadObject($where, null, null, $ljoin);
+        $lit->unescapeValues();
+
         break; 
     }
 
