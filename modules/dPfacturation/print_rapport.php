@@ -148,7 +148,6 @@ foreach ($listFactures as $_facture) {
     $recapReglement["total"]["du_tiers"]        += $_facture->_reglements_total_tiers;
     $recapReglement["total"]["reste_tiers"]     += $_facture->_du_restant_tiers;
     if ($_facture->_du_restant_tiers) {
-      mbTrace($_facture->_id);
       $recapReglement["total"]["nb_impayes_tiers"]++;
     }
 
