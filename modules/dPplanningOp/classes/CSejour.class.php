@@ -1132,6 +1132,12 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Génération du NDA ?
     if ($this->_generate_NDA) {
+      // On ne synchronise pas un séjour d'urgences qui est un reliquat
+      $rpu = $this->loadRefRPU();
+      if ($rpu && $rpu->_id && ($rpu->sejour_id != $rpu->mutation_sejour_id)) {
+        return null;
+      }
+
       if ($msg = $this->generateNDA()) {
         return $msg;
       }
