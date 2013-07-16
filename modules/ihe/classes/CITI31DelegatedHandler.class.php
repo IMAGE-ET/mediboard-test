@@ -99,6 +99,12 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return;
       }
 
+      // On ne synchronise pas un séjour d'urgences qui est un reliquat
+      $rpu = $sejour->loadRefRPU();
+      if ($rpu && $rpu->_id && ($rpu->sejour_id != $rpu->mutation_sejour_id)) {
+        return;
+      }
+
       $code = $this->getCodeSejour($sejour);
 
       if (!$code) {
