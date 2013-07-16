@@ -48,7 +48,7 @@ PlanEtage = {
   show: function(chambre_id) {
     var url = new Url('hospi', 'ajax_vw_emplacement');
     url.addParam('chambre_id', chambre_id);
-    url.requestModal(300,150); 
+    url.requestModal(300);
     this.modal = url.modalObject;
   },
   onSubmit: function(form) {
