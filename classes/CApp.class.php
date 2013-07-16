@@ -472,7 +472,7 @@ class CApp {
     arsort(CMbObject::$objectCounts);
     arsort(self::$performance["autoload"]);
 
-    self::$performance["genere"]         = number_format(self::$chrono->total, 3);
+    self::$performance["genere"]         = round(self::$chrono->total, 3);
     self::$performance["memoire"]        = CHTMLResourceLoader::getOutputMemory();
     self::$performance["objets"]         = CMbObject::$objectCount;
     self::$performance["cachableCount"]  = array_sum(CMbObject::$cachableCounts);
