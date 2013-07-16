@@ -11,10 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-
-
-
-
 $date               = CValue::getOrSession("date", CMbDT::date());
 $type_view_planning = CValue::getOrSession("type_view_planning", "day");
 
@@ -36,7 +32,7 @@ for ($i = $debut; $i <= $fin; $i = CMbDT::date("+1 day", $i)) {
   $listDays[$i] = $i;  
 }
 
-$listBlocs  = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
+$listBlocs  = CGroups::loadCurrent()->loadBlocs();
 $bloc_id    = CValue::getOrSession("bloc_id", reset($listBlocs)->_id);
 if (!array_key_exists($bloc_id, $listBlocs)) {
   $bloc_id = reset($listBlocs)->_id;
@@ -92,7 +88,6 @@ $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $nbIntervHorsPlage = $operation->countList($where, null, $ljoin);
 
 foreach ($listDays as $keyDate => $valDate) {
-  
   // Récupération des plages par jour
   $where = array();
   $where["date"]     = "= '$keyDate'";
