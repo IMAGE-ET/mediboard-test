@@ -40,8 +40,8 @@ if (!CAppUI::conf("dPurgences create_sejour_hospit")) {
   $sejour_rpu->_id = null;
 
   // Pas de génération du NDA, et pas de synchro (handler) du séjour
-  $sejour->_generate_NDA = false;
-  $sejour->_no_synchro   = true;
+  $sejour_rpu->_generate_NDA = false;
+  $sejour_rpu->_no_synchro   = true;
   $msg = $sejour_rpu->store();
   viewMsg($msg, "Séjour reliquat enregistré");
   
