@@ -81,7 +81,7 @@
       <th>Lit</th>
       <td>
         <select name="lit_id" style="width: 15em;" onchange="Fields.modif(this.value);this.form.sortie_reelle.value = '';"  >
-          <option value="0">&mdash; Choisir Lit </option>
+          <option value="">&mdash; Choisir Lit </option>
           {{foreach from=$blocages_lit item=blocage_lit}}
             <option id="{{$blocage_lit->_ref_lit->_guid}}" value="{{$blocage_lit->lit_id}}"
              class="{{$blocage_lit->_ref_lit->_ref_chambre->_ref_service->_guid}}-{{$blocage_lit->_ref_lit->_ref_chambre->_ref_service->nom}}"
