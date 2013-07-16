@@ -114,85 +114,90 @@ CMbObject::massCountBackRefs($listFactures, "consultations");
 CMbObject::massCountBackRefs($listFactures, "reglements");
 CMbObject::massCountBackRefs($listFactures, "notes");
 foreach ($listFactures as $_facture) {
+  /** @var CFacture $_facture */
   $_facture->loadRefPatient();
   $_facture->loadRefPraticien();
   $_facture->loadRefsConsultation();
-  $_facture->loadRefCoeffFacture();
-  $_facture->updateMontants();
-  $_facture->loadRefsReglements();
-  $_facture->loadRefsNotes();
-  
-  // Ajout de reglements
-  $_facture->_new_reglement_patient = new CReglement();
-  $_facture->_new_reglement_patient->setObject($_facture);
-  $_facture->_new_reglement_patient->emetteur = "patient";
-  $_facture->_new_reglement_patient->montant = $_facture->_du_restant_patient;
-  
-  $_facture->_new_reglement_tiers = new CReglement();
-  $_facture->_new_reglement_tiers->setObject($_facture);
-  $_facture->_new_reglement_tiers->emetteur = "tiers";
-  $_facture->_new_reglement_tiers->mode = "virement";
-  $_facture->_new_reglement_tiers->montant = $_facture->_du_restant_tiers;
-  
-  $recapReglement["total"]["nb_consultations"] += count($_facture->_ref_consults);
-  
-  $recapReglement["total"]["du_patient"]      += $_facture->_reglements_total_patient;
-  $recapReglement["total"]["reste_patient"]   += $_facture->_du_restant_patient;
-  if ($_facture->_du_restant_patient) {
-    $recapReglement["total"]["nb_impayes_patient"]++;
-  }
+  if (count($_facture->_ref_consults)) {
 
-  $recapReglement["total"]["du_tiers"]        += $_facture->_reglements_total_tiers;
-  $recapReglement["total"]["reste_tiers"]     += $_facture->_du_restant_tiers;
-  if ($_facture->_du_restant_tiers) {
-    $recapReglement["total"]["nb_impayes_tiers"]++;
-  }
-  
-  $recapReglement["total"]["nb_reglement_patient"] += count($_facture->_ref_reglements_patient);
-  $recapReglement["total"]["nb_reglement_tiers"]   += count($_facture->_ref_reglements_tiers  );
-  if (CAppUI::conf("dPccam CCodeCCAM use_cotation_ccam")) {
-    $recapReglement["total"]["secteur1"]             += $_facture->_secteur1;
-    $recapReglement["total"]["secteur2"]             += $_facture->_secteur2;
-  }
-  else {
-    $recapReglement["total"]["secteur1"]             += $_facture->_montant_avec_remise;
-  }
-  
-  foreach ($_facture->_ref_reglements_patient as $_reglement) {
-    $recapReglement[$_reglement->mode]["du_patient"]          += $_reglement->montant;
-    $recapReglement[$_reglement->mode]["nb_reglement_patient"]++;
-  }
-  
-  foreach ($_facture->_ref_reglements_tiers as $_reglement) {
-    $recapReglement[$_reglement->mode]["du_tiers"]          += $_reglement->montant;
-    $recapReglement[$_reglement->mode]["nb_reglement_tiers"]++;
-  }
-  
-  // Classement par plage
-  $plage = $_facture->_ref_last_consult->_ref_plageconsult;
-  if ($_facture->_ref_last_consult->_id) {
-    $debut_plage = "$plage->date $plage->debut";
-    if (!isset($listPlages["$debut_plage"])) {
-      $listPlages["$debut_plage"]["plage"] = $plage;
-      $listPlages["$debut_plage"]["total"]["secteur1"] = 0;
-      $listPlages["$debut_plage"]["total"]["secteur2"] = 0;
-      $listPlages["$debut_plage"]["total"]["total"]    = 0;
-      $listPlages["$debut_plage"]["total"]["patient"]  = 0;
-      $listPlages["$debut_plage"]["total"]["tiers"]    = 0;
+    $_facture->loadRefCoeffFacture();
+    $_facture->updateMontants();
+    $_facture->loadRefsReglements();
+    $_facture->loadRefsNotes();
+
+    // Ajout de reglements
+    $_facture->_new_reglement_patient = new CReglement();
+    $_facture->_new_reglement_patient->setObject($_facture);
+    $_facture->_new_reglement_patient->emetteur = "patient";
+    $_facture->_new_reglement_patient->montant = $_facture->_du_restant_patient;
+
+    $_facture->_new_reglement_tiers = new CReglement();
+    $_facture->_new_reglement_tiers->setObject($_facture);
+    $_facture->_new_reglement_tiers->emetteur = "tiers";
+    $_facture->_new_reglement_tiers->mode = "virement";
+    $_facture->_new_reglement_tiers->montant = $_facture->_du_restant_tiers;
+
+    $recapReglement["total"]["nb_consultations"] += count($_facture->_ref_consults);
+
+    $recapReglement["total"]["du_patient"]      += $_facture->_reglements_total_patient;
+    $recapReglement["total"]["reste_patient"]   += $_facture->_du_restant_patient;
+    if ($_facture->_du_restant_patient) {
+      $recapReglement["total"]["nb_impayes_patient"]++;
     }
-    
-    $listPlages["$debut_plage"]["factures"][$_facture->_guid] = $_facture;
-    $listPlages["$debut_plage"]["total"]["secteur1"] += $_facture->_secteur1;
 
+    $recapReglement["total"]["du_tiers"]        += $_facture->_reglements_total_tiers;
+    $recapReglement["total"]["reste_tiers"]     += $_facture->_du_restant_tiers;
+    if ($_facture->_du_restant_tiers) {
+      mbTrace($_facture->_id);
+      $recapReglement["total"]["nb_impayes_tiers"]++;
+    }
+
+    $recapReglement["total"]["nb_reglement_patient"] += count($_facture->_ref_reglements_patient);
+    $recapReglement["total"]["nb_reglement_tiers"]   += count($_facture->_ref_reglements_tiers  );
     if (CAppUI::conf("dPccam CCodeCCAM use_cotation_ccam")) {
-      $listPlages["$debut_plage"]["total"]["secteur2"] += $_facture->_secteur2;
+      $recapReglement["total"]["secteur1"]             += $_facture->_secteur1;
+      $recapReglement["total"]["secteur2"]             += $_facture->_secteur2;
     }
     else {
-      $listPlages["$debut_plage"]["total"]["secteur2"] += $_facture->remise;
+      $recapReglement["total"]["secteur1"]             += $_facture->_montant_avec_remise;
     }
-    $listPlages["$debut_plage"]["total"]["total"]    += $_facture->_montant_avec_remise;
-    $listPlages["$debut_plage"]["total"]["patient"]  += $_facture->_reglements_total_patient;
-    $listPlages["$debut_plage"]["total"]["tiers"]    += $_facture->_reglements_total_tiers;
+
+    foreach ($_facture->_ref_reglements_patient as $_reglement) {
+      $recapReglement[$_reglement->mode]["du_patient"]          += $_reglement->montant;
+      $recapReglement[$_reglement->mode]["nb_reglement_patient"]++;
+    }
+
+    foreach ($_facture->_ref_reglements_tiers as $_reglement) {
+      $recapReglement[$_reglement->mode]["du_tiers"]          += $_reglement->montant;
+      $recapReglement[$_reglement->mode]["nb_reglement_tiers"]++;
+    }
+
+    // Classement par plage
+    $plage = $_facture->_ref_last_consult->_ref_plageconsult;
+    if ($_facture->_ref_last_consult->_id) {
+      $debut_plage = "$plage->date $plage->debut";
+      if (!isset($listPlages["$debut_plage"])) {
+        $listPlages["$debut_plage"]["plage"] = $plage;
+        $listPlages["$debut_plage"]["total"]["secteur1"] = 0;
+        $listPlages["$debut_plage"]["total"]["secteur2"] = 0;
+        $listPlages["$debut_plage"]["total"]["total"]    = 0;
+        $listPlages["$debut_plage"]["total"]["patient"]  = 0;
+        $listPlages["$debut_plage"]["total"]["tiers"]    = 0;
+      }
+
+      $listPlages["$debut_plage"]["factures"][$_facture->_guid] = $_facture;
+      $listPlages["$debut_plage"]["total"]["secteur1"] += $_facture->_secteur1;
+
+      if (CAppUI::conf("dPccam CCodeCCAM use_cotation_ccam")) {
+        $listPlages["$debut_plage"]["total"]["secteur2"] += $_facture->_secteur2;
+      }
+      else {
+        $listPlages["$debut_plage"]["total"]["secteur2"] += $_facture->remise;
+      }
+      $listPlages["$debut_plage"]["total"]["total"]    += $_facture->_montant_avec_remise;
+      $listPlages["$debut_plage"]["total"]["patient"]  += $_facture->_reglements_total_patient;
+      $listPlages["$debut_plage"]["total"]["tiers"]    += $_facture->_reglements_total_tiers;
+    }
   }
 }
 
