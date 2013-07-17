@@ -17,9 +17,9 @@ $user = new CUser();
 
 // Find duplicates
 $query = "SELECT `user_username`, COUNT(*) AS `user_count`
-	FROM `users` 
-	GROUP BY `user_username` 
-	ORDER BY `user_count` DESC";
+  FROM `users`
+  GROUP BY `user_username`
+  ORDER BY `user_count` DESC";
 $ds= $user->_spec->ds;
 $user_counts = $ds->loadHashList($query);
 $siblings = array();
