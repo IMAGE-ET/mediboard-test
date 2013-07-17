@@ -25,7 +25,7 @@ $user = CMediusers::get($filter->user_id);
 
 // load ref function
 foreach($mediusers as $_medius) {
-	$_medius->loadRefFunction();
+  $_medius->loadRefFunction();
 }
 
 // Query
@@ -46,13 +46,13 @@ $plages = $filter->loadList($where);
 $found_users = array();
 $plages_per_user = array();
 foreach ($plages as $_plage) {
-	$found_users[$_plage->user_id] = $mediusers[$_plage->user_id];
+  $found_users[$_plage->user_id] = $mediusers[$_plage->user_id];
   $_plage->_ref_user = $_plage->loadRefUser();
 
-	if (!isset($plages_per_user[$_plage->user_id])){
-	  $plages_per_user[$_plage->user_id] = 0;
-	}
-	$plages_per_user[$_plage->user_id]++;
+  if (!isset($plages_per_user[$_plage->user_id])){
+    $plages_per_user[$_plage->user_id] = 0;
+  }
+  $plages_per_user[$_plage->user_id]++;
 }
 
 $nbusers = count($found_users);
