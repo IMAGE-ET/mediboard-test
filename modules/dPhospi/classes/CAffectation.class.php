@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPhospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -318,12 +318,15 @@ class CAffectation extends CMbObject {
     // Si c'est une création d'affectation, avec ni une précédente ni une suivante,
     // que le séjour est relié à une grossesse, et que le module maternité est actif,
     // alors il faut créer les affectations des bébés.
-    if (CModule::getActive("maternite")  &&
-        !is_numeric($this->_ref_sejour->_ref_patient->nom) &&
-        $this->_ref_sejour->grossesse_id &&
-        !$this->_id && !$this->_ref_prev->_id &&
-        !$this->_ref_next->_id) {
-      $create_affectations = true;
+    if (CModule::getActive("maternite") &&
+        !is_numeric($sejour->_ref_patient->nom) &&
+        $sejour->grossesse_id &&
+        !$this->_id
+    ) {
+      $this->loadRefsAffectations();
+      if (!$this->_ref_prev->_id && !$this->_ref_next->_id) {
+        $create_affectations = true;
+      }
     }
 
     // Enregistrement standard

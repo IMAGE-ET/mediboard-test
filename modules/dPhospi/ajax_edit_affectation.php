@@ -25,7 +25,7 @@ if ($urgence) {
 
 $sejour_maman = null;
 
-if (CModule::getActive("maternite")) {
+if (CModule::getActive("maternite") && !$affectation->function_id) {
   $naissance = new CNaissance;
   $naissance->sejour_enfant_id = $affectation->sejour_id;
   $naissance->loadMatchingObject();
