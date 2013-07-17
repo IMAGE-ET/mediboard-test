@@ -95,7 +95,7 @@ class CLDAP {
       $ldappass = $user->_user_password;
     }
 
-    $bound = $source_ldap->ldap_bind($ldapconn, $ldaprdn, $ldappass);
+    $bound = @$source_ldap->ldap_bind($ldapconn, $ldaprdn, $ldappass);
 
     if ($user) {
       $user->_bound = $bound;
