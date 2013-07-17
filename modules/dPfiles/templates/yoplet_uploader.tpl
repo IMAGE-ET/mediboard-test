@@ -2,7 +2,7 @@
 {{assign var=yoplet_upload_url value=$conf.dPfiles.yoplet_upload_url}}
 
 {{if $app->user_prefs.directory_to_watch}}
-  <script type="text/javascript">
+  <script>
     File.applet.extensions = '{{$conf.dPfiles.extensions_yoplet|lower}} {{$conf.dPfiles.extensions_yoplet|upper}}';
     File.appletDirectory = "{{$app->user_prefs.directory_to_watch|addslashes}}";
   </script>
@@ -23,8 +23,10 @@
     {{/if}}
     <param name="content" value="a" />
     <param name="cookies" value="{{$app->session_name}}" />
+    <param name="user_agent" value="{{$smarty.server.HTTP_USER_AGENT}}" />
+    <param name="java_arguments" value="-Djnlp.packEnabled=true"/>
   </applet>
-  
+
   {{if $app->user_prefs.debug_yoplet}}
     <div id="yoplet-debug-console" style="border: 1px solid grey;">
       Directory watched: "{{$app->user_prefs.directory_to_watch}}"<br />
