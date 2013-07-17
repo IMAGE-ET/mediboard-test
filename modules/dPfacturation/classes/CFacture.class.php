@@ -178,11 +178,6 @@ class CFacture extends CMbObject {
    * @return void|string
    **/
   function duplicate() {
-    $this->loadRefsReglements();
-    $this->loadRefsRelances();
-    if (!$this->_id || count($this->_ref_reglements) || count($this->_ref_relances)) {
-      return null;
-    }
     /** @var CFacture $new*/
     $new = new $this->_class;
     $new->cloneFrom($this);
@@ -201,6 +196,36 @@ class CFacture extends CMbObject {
     if ($msg = $new_liaison->store()) {
       return $msg;
     }
+
+    $this->loadRefsReglements();
+    foreach($this->_ref_reglements as $reglement) {
+      // Clonage
+      $new_reglement = new CReglement();
+      foreach ($reglement->getProperties() as $name => $value) {
+        $new_reglement->$name = $value;
+      }
+      // Enregistrement
+      $new_reglement->_id = null;
+      $new_reglement->object_id = $new->_id;
+      if ($msg = $new_reglement->store()) {
+        return $msg;
+      }
+    }
+
+    $this->loadRefsRelances();
+    foreach($this->_ref_relances as $relance) {
+      // Clonage
+      $new_relance = new CRelance();
+      foreach ($relance->getProperties() as $name => $value) {
+        $new_relance->$name = $value;
+      }
+      // Enregistrement
+      $new_relance->_id = null;
+      $new_relance->object_id = $new->_id;
+      if ($msg = $new_relance->store()) {
+        return $msg;
+      }
+    }
   }
 
   /**
@@ -211,7 +236,9 @@ class CFacture extends CMbObject {
   function store() {
     if ($this->_id && $this->_duplicate) {
       $this->_duplicate = null;
-      $this->duplicate();
+      if ($msg = $this->duplicate()){
+        return $msg;
+      }
       $this->annule = 1;
       $this->definitive = 1;
     }
@@ -974,10 +1001,16 @@ class CFacture extends CMbObject {
     $this->loadRefPraticien();
     $this->loadRefsItems();
     $retrocessions = $this->_ref_praticien->loadRefsRetrocessions();
-
+    $use_pm = false;
+    foreach ($this->_ref_items as $item) {
+      foreach ($retrocessions as $retro) {
+        if ($retro->use_pm && $retro->code_class == $item->type && $retro->code == $item->code && $retro->active) {
+          $use_pm = true;
+        }
+      }
+    }
     foreach ($this->_ref_items as $item) {
       $modif = false;
-      $use_pm = false;
       foreach ($retrocessions as $retro) {
         /** @var CRetrocession $retro*/
         if ($retro->code_class == $item->type && $retro->code == $item->code && $retro->active) {
