@@ -517,10 +517,28 @@ class CEditPdf{
     $this->pdf->setX(110);
     $this->pdf->Write(4, CAppUI::conf("dPfacturation CEditPdf home_ville").", le ".CMbDT::format(CMbDT::date(), "%d %B %Y"));
 
+    $frais = 0;
+    $messages = array(0 => "", 1 => "");
+    $assurance_patient = $this->destinataire[0];
+    $type = isset($assurance_patient->type_pec) ? "assur" : "patient";
+    switch ($this->relance->statut) {
+      case "first":
+        $frais = CAppUI::conf("dPfacturation CRelance add_first_relance");
+        $messages = explode('/*****/', CAppUI::conf("dPfacturation CRelance message_relance1_$type"));
+        break;
+      case "second":
+        $frais = CAppUI::conf("dPfacturation CRelance add_second_relance");
+        $messages = explode('/*****/', CAppUI::conf("dPfacturation CRelance message_relance2_$type"));
+        break;
+      case "third":
+        $frais = CAppUI::conf("dPfacturation CRelance add_third_relance");
+        $messages = explode('/*****/', CAppUI::conf("dPfacturation CRelance message_relance3_$type"));
+        break;
+    }
     $this->pdf->setXY(10, $this->pdf->getY()+18);
     $this->pdf->Write(3, "Madame, Monsieur,");
     $this->pdf->setXY(10, $this->pdf->getY()+8);
-    $this->pdf->Write(4, CAppUI::conf("dPfacturation CRelance message1_relance"));
+    $this->pdf->Write(4, $messages[0]);
 
     $y = 122;
     $col1= 40;
@@ -536,18 +554,7 @@ class CEditPdf{
     $this->editCell(60, $y+9, $col2, "Frais", null, "R", 4);
     $this->pdf->setFont($this->fontb, '', 8);
     $this->editCell(60, $y+13, $col2, "Solde à payer", null, "BR", 6);
-    $frais = 0;
-    switch ($this->relance->numero) {
-      case "1":
-        $frais = CAppUI::conf("dPfacturation CRelance add_first_relance");
-        break;
-      case "2":
-        $frais = CAppUI::conf("dPfacturation CRelance add_second_relance");
-        break;
-      case "3":
-        $frais = CAppUI::conf("dPfacturation CRelance add_third_relance");
-        break;
-    }
+
     $this->editCell($this->pdf->getX(), $y, 30, "Montant (CHF)", "C", 1, 4);
     $this->editCell(140, $y+4, $col3, sprintf('%0.2f', $this->relance->_montant - $frais), "R", "R", 5);
     $this->pdf->setFont($this->font, '', 8);
@@ -557,7 +564,7 @@ class CEditPdf{
 
     $this->pdf->setFont($this->font, '', 8);
     $this->pdf->setXY(10, $this->pdf->getY()+14);
-    $this->pdf->Write(4, CAppUI::conf("dPfacturation CRelance message2_relance"));
+    $this->pdf->Write(4, $messages[1]);
     $this->pdf->setXY(120, $this->pdf->getY()+14);
     $this->pdf->Write(4, CAppUI::conf("dPfacturation CEditPdf home_nom"));
     $this->pdf->setXY(120, $this->pdf->getY()+4);

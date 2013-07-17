@@ -27,8 +27,12 @@ $dPconfig["dPfacturation"] = array (
     "add_first_relance"       => "0",
     "add_second_relance"      => "0",
     "add_third_relance"       => "0",
-    "message1_relance"        => "",
-    "message2_relance"        => ""
+    "message_relance1_assur"  => "",
+    "message_relance2_assur"  => "",
+    "message_relance3_assur"  => "",
+    "message_relance1_patient" => "",
+    "message_relance2_patient" => "",
+    "message_relance3_patient" => ""
   ),
   "CReglement" => array(
     "use_debiteur" => "0",
