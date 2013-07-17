@@ -115,8 +115,7 @@ class CBloodSalvage extends CMbObject {
   }
   
   function loadRefPatient() {
-    $this->_ref_operation->loadRefPatient(1);
-    $this->_ref_patient = $this->_ref_operation->_ref_patient;
+    return $this->_ref_patient = $this->_ref_operation->loadRefPatient(1);
   }
   
   function loadRefOperation() {
@@ -136,7 +135,7 @@ class CBloodSalvage extends CMbObject {
   }
   
   function loadRefPlageOp() {
-    $this->_ref_operation = new COperation;
+    $this->_ref_operation = new COperation();
     $this->_ref_operation = $this->_ref_operation->getCached($this->operation_id);
     $this->_ref_operation->loadRefPlageOp(1);
     $this->_datetime = $this->_ref_operation->_datetime;

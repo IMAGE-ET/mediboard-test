@@ -28,6 +28,7 @@ class CPlageAstreinte extends CPlageCalendaire {
   );
   // Object References
   public $_num_astreinte;
+  /** @var  CMediusers */
   public $_ref_user;
   public $_type;
 
@@ -124,7 +125,7 @@ class CPlageAstreinte extends CPlageCalendaire {
       return true;
     }
 
-    if (CModule::getCanDo("astreintes")->read && $permType <= READ) {
+    if (CModule::getCanDo("astreintes")->read && $permType <= PERM_READ) {
       return true;
     }
 
@@ -166,7 +167,6 @@ class CPlageAstreinte extends CPlageCalendaire {
    * @return mixed
    */
   function loadRefColor() {
-
     return $this->_color = CAppUI::conf("astreintes astreinte_".$this->type."_color");
   }
 
@@ -189,7 +189,6 @@ class CPlageAstreinte extends CPlageCalendaire {
    * @return CMbObject
    */
   function loadRefPhoneAstreinte() {
-    $this->_num_astreinte = $this->loadFwdRef("_user_astreinte", true);
-    return $this->_num_astreinte;
+    return $this->_num_astreinte = $this->loadFwdRef("_user_astreinte", true);
   }
 }
