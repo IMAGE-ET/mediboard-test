@@ -9,6 +9,7 @@
   {{foreach from=$list_protocoles item=_protocole}}
     {{assign var="type_prot_chir" value="prot-"}}
     {{assign var="type_prot_anesth" value="prot-"}}
+    {{assign var=libelle value=""}}
     {{if $_protocole->protocole_prescription_anesth_class == "CPrescriptionProtocolePack"}}
       {{assign var="type_prot_anesth" value="pack-"}}
     {{/if}}
@@ -17,8 +18,6 @@
     {{/if}}
     {{if $_protocole->_ref_protocole_prescription_chir}}
       {{assign var=libelle value=$_protocole->_ref_protocole_prescription_chir->libelle}}
-    {{else}}
-      {{assign var=libelle value=""}}
     {{/if}}
 
 {{*

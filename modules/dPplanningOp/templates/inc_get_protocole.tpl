@@ -10,11 +10,15 @@
 
 {{assign var="type_prot_chir" value="prot-"}}
 {{assign var="type_prot_anesth" value="prot-"}}
+{{assign var=libelle value=""}}
 {{if $protocole->protocole_prescription_anesth_class == "CPrescriptionProtocolePack"}}
   {{assign var="type_prot_anesth" value="pack-"}}
 {{/if}}
   {{if $protocole->protocole_prescription_chir_class == "CPrescriptionProtocolePack"}}
   {{assign var="type_prot_chir" value="pack-"}}
+{{/if}}
+{{if $_protocole->_ref_protocole_prescription_chir}}
+  {{assign var=libelle value=$_protocole->_ref_protocole_prescription_chir->libelle}}
 {{/if}}
 
 <script type="text/javascript">
@@ -44,7 +48,7 @@
     rques_sejour     : "{{$protocole->rques_sejour|smarty:nodefaults|escape:"javascript"}}",
     rques_operation  : "{{$protocole->rques_operation|smarty:nodefaults|escape:"javascript"}}",
     protocole_prescription_anesth_id: "{{$type_prot_anesth}}{{$protocole->protocole_prescription_anesth_id}}",
-    libelle_protocole_prescription_chir: "{{$protocole->_ref_protocole_prescription_chir->libelle|smarty:nodefaults}}",
+    libelle_protocole_prescription_chir: "{{$libelle}}",
     protocole_prescription_chir_id:   "{{$type_prot_chir}}{{$protocole->protocole_prescription_chir_id}}",
     service_id       : "{{$protocole->service_id}}",
     uf_hebergement_id: "{{$protocole->uf_hebergement_id}}",
