@@ -85,23 +85,25 @@
               <th>{{mb_label object=$source field="fileextension_write_end"}}</th>
               <td>{{mb_field object=$source field="fileextension_write_end"}}</td>
             </tr>
-
-            <tr>
-              <td class="button" colspan="2">
-                {{if $source->_id}}
-                  <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-                  <button type="button" class="trash" onclick="confirmDeletion(this.form, {ajax:1, typeName:'',
-                    objName:'{{$source->_view|smarty:nodefaults|JSAttribute}}'},
-                    {onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}')})">
-                    {{tr}}Delete{{/tr}}
-                  </button>
-                {{else}}
-                  <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
-                {{/if}}
-              </td>
-            </tr>
           </table>
         </fieldset>
+
+        <table class="main form">
+          <tr>
+            <td class="button" colspan="2">
+              {{if $source->_id}}
+                <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+                <button type="button" class="trash" onclick="confirmDeletion(this.form, {ajax:1, typeName:'',
+                  objName:'{{$source->_view|smarty:nodefaults|JSAttribute}}'},
+                  {onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}')})">
+                  {{tr}}Delete{{/tr}}
+                </button>
+              {{else}}
+                <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+              {{/if}}
+            </td>
+          </tr>
+        </table>
 
         <fieldset>
           <legend>{{tr}}utilities-source-ftp{{/tr}}</legend>
