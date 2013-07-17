@@ -10,12 +10,12 @@ FTP = {
   connexion: function (exchange_source_name) {
     var url = new Url("ftp", "ajax_connexion_ftp");
     url.addParam("exchange_source_name", exchange_source_name);
-    url.requestUpdate("utilities-source-ftp-connexion-" + exchange_source_name);
+    url.requestModal(500, 400);
   },
 
   getFiles: function (exchange_source_name) {
     var url = new Url("ftp", "ajax_getFiles_ftp");
     url.addParam("exchange_source_name", exchange_source_name);
-    url.requestUpdate("utilities-source-ftp-getFiles-" + exchange_source_name);
+    url.requestModal(500, 400);
   }
 };
