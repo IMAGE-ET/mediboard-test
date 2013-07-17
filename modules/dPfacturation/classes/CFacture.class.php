@@ -191,15 +191,6 @@ class CFacture extends CMbObject {
       return $msg;
     }
 
-    $this->loadRefsItems();
-    foreach ($this->_ref_items as $item) {
-      $new_item = new CFactureItem();
-      $new_item->cloneFrom($item, $new->_id);
-      if ($msg = $new_item->store()) {
-        return $msg;
-      }
-    }
-
     $liaison = new CFactureLiaison();
     $liaison->facture_id = $this->_id;
     $liaison->facture_class = $this->_class;
@@ -1028,9 +1019,9 @@ class CFacture extends CMbObject {
    * @return void
    */
   function cloneFrom($the_facture){
-    /** @var CFacture $facture*/
     $facture = new $the_facture->_class;
     $facture->load($the_facture->_id);
+    /** @var CFacture $facture*/
     $this->patient_id = $facture->patient_id;
     $this->praticien_id = $facture->praticien_id;
     $this->remise = $facture->remise;
