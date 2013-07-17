@@ -18,7 +18,8 @@ CAppUI::stepAjax("Liste des fonctions SOAP publiées");
 $smarty = new CSmartyDP();
 
 $smarty->assign("exchange_source", $exchange_source);
-$smarty->assign("functions", $soap_client->getFunctions());
-$smarty->assign("types"    , $soap_client->getTypes());
+$smarty->assign("functions"      , $soap_client->getFunctions());
+$smarty->assign("types"          , $soap_client->getTypes());
+$smarty->assign("form_name"      , CValue::get("form_name"));
 
 $smarty->display("inc_soap_functions.tpl");

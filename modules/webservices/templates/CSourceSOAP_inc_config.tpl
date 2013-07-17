@@ -8,6 +8,23 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+  SOAP = {
+    connexion: function (exchange_source_name) {
+      var url = new Url("webservices", "ajax_connexion_soap");
+      url.addParam("exchange_source_name", exchange_source_name);
+      url.requestModal(500, 400);
+    },
+
+    getFunctions: function (exchange_source_name, form) {
+      var url = new Url("webservices", "ajax_getFunctions_soap");
+      url.addParam("form_name", form.getAttribute("name"));
+      url.addParam("exchange_source_name", exchange_source_name);
+      url.requestModal(500, 400);
+    }
+  }
+</script>
+
 <table class="main layout">
   <tr>
     <td>
@@ -122,7 +139,7 @@
 
         <table class="main form">
           <tr>
-            <td class="button" colspan="2">
+            <td class="button">
               {{if $source->_id}}
                 <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
                 <button type="button" class="trash" onclick="confirmDeletion(this.form, {ajax:1, typeName:'',
@@ -136,62 +153,29 @@
             </td>
           </tr>
         </table>
+
+        <fieldset>
+          <legend>{{tr}}utilities-source-soap{{/tr}}</legend>
+
+          <table class="main form">
+            <tr>
+              <td class="button">
+                <!-- Test connexion SOAP -->
+                <button type="button" class="search" onclick="SOAP.connexion('{{$source->name}}');"
+                        {{if !$source->_id}}disabled{{/if}}>
+                  {{tr}}utilities-source-soap-connexion{{/tr}}
+                </button>
+
+                <!-- Liste des functions SOAP -->
+                <button type="button" class="search" onclick="SOAP.getFunctions('{{$source->name}}', this.form);"
+                        {{if !$source->_id}}disabled{{/if}}>
+                  {{tr}}utilities-source-soap-getFunctions{{/tr}}
+                </button>
+              </td>
+            </tr>
+          </table>
+        </fieldset>
       </form>
-    </td>
-  </tr>
-</table>
-
-<hr/>
-
-<table class="main layout">
-  <tr>
-    <td>
-      <script type="text/javascript">
-        SOAP = {
-          connexion: function (exchange_source_name) {
-            var url = new Url("webservices", "ajax_connexion_soap");
-            url.addParam("exchange_source_name", exchange_source_name);
-            url.requestUpdate("utilities-source-soap-connexion-" + exchange_source_name);
-          },
-
-          getFunctions: function (exchange_source_name) {
-            var url = new Url("webservices", "ajax_getFunctions_soap");
-            url.addParam("exchange_source_name", exchange_source_name);
-            url.requestUpdate("utilities-source-soap-getFunctions-" + exchange_source_name);
-          }
-        }
-      </script>
-      <table class="main tbl">
-        <tr>
-          <th class="category" colspan="100">
-            {{tr}}utilities-source-soap{{/tr}}
-          </th>
-        </tr>
-
-        <!-- Test connexion SOAP -->
-        <tr>
-          <td>
-            <button type="button" class="search" onclick="SOAP.connexion('{{$source->name}}');">
-              {{tr}}utilities-source-soap-connexion{{/tr}}
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td id="utilities-source-soap-connexion-{{$source->name}}" class="text"></td>
-        </tr>
-
-        <!-- Liste des functions SOAP -->
-        <tr>
-          <td>
-            <button type="button" class="search" onclick="SOAP.getFunctions('{{$source->name}}');">
-              {{tr}}utilities-source-soap-getFunctions{{/tr}}
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td id="utilities-source-soap-getFunctions-{{$source->name}}" class="text"></td>
-        </tr>
-      </table>
     </td>
   </tr>
 </table>

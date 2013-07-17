@@ -8,10 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
+<script>
   getEventName = function(button, func) {
 	  var method = func.split(/[ \(]/i)[1];
-	  $V(button.up('.source').down('form').evenement_name, method);
+	  $V(getForm('{{$form_name}}').evenement_name, method);
 	}
 
   sendEvent = function(func, exchange_source_guid) {
@@ -22,7 +22,7 @@
 	}
 </script>
 
-<table class="main">
+<table class="main tbl">
   <tr>
     <th colspan="2">
       Liste des fonctions disponibles
@@ -34,8 +34,8 @@
   {{foreach from=$functions item=_function}}
   <tr>
   	<td class="narrow">
-  		<button class="add notext" onclick="getEventName($(this), '{{$_function}}')"></button>
-  		<button class="tick notext" onclick="sendEvent('{{$_function}}', '{{$exchange_source->_guid}}')"></button>
+  		<button class="compact add notext" onclick="getEventName($(this), '{{$_function}}')"></button>
+  		<button class="compact tick notext" onclick="sendEvent('{{$_function}}', '{{$exchange_source->_guid}}')"></button>
 	  </td>
     <td class="text">
       {{$_function}}
