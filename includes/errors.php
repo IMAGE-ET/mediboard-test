@@ -276,8 +276,9 @@ function errorHandler($code, $text, $file, $line, $context, $backtrace = null) {
   }
 
   if ($build_output) {
+    $hash = md5($code.$text.$file.$line.serialize($contexts));
     $html_class = isset(CError::$_classes[$code]) ? CError::$_classes[$code] : null;
-    $log = "\n\n<div class='$html_class'>";
+    $log = "\n\n<div class='$html_class' title='$hash'>";
 
     if ($user_id) {
       $log .= "\n<strong>User: </strong>$user_view ($user_id)";
@@ -423,8 +424,9 @@ function exceptionHandler($exception) {
   }
 
   if ($build_output) {
+    $hash = md5(serialize($contexts));
     $html_class = "big-warning";
-    $log = "\n\n<div class='$html_class'>";
+    $log = "\n\n<div class='$html_class' title='$hash'>";
 
     if ($user_id) {
       $log .= "\n<strong>User: </strong>$user_view ($user_id)";

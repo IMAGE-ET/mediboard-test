@@ -38,6 +38,9 @@ class CErrorLog extends CMbObject {
   public $_session_data;
 
   public $_category;
+  public $_url;
+  public $_datetime_min;
+  public $_datetime_max;
 
   /**
    * @see parent::getSpec()
@@ -68,6 +71,9 @@ class CErrorLog extends CMbObject {
     $props["param_GET_id"]    = "ref class|CErrorLogData";
     $props["param_POST_id"]   = "ref class|CErrorLogData";
     $props["session_data_id"] = "ref class|CErrorLogData";
+
+    $props["_datetime_min"] = "dateTime";
+    $props["_datetime_max"] = "dateTime";
     return $props;
   }
 
@@ -84,6 +90,11 @@ class CErrorLog extends CMbObject {
     if (isset($_types[$this->error_type])) {
       $_num_type = $_types[$this->error_type];
       $this->_category = CError::$_categories[$_num_type];
+    }
+
+    if ($this->param_GET_id) {
+      $this->_param_GET = $this->getDataValue("param_GET_id");
+      $this->_url = "?".http_build_query($this->_param_GET, true, "&");
     }
   }
 

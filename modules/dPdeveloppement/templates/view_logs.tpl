@@ -49,8 +49,18 @@ function toggleCheckboxes(checkbox) {
         <td>
           <table class="main form">
             <tr>
+              <th>{{mb_label object=$error_log field=text}}</th>
+              <td>{{mb_field object=$error_log field=text prop=str}}</td>
+
+              <th>{{mb_label object=$error_log field=_datetime_min}}</th>
+              <td>{{mb_field object=$error_log field=_datetime_min register=true form="filter-logs-db"}}</td>
+            </tr>
+            <tr>
               <th>{{mb_label object=$error_log field=server_ip}}</th>
               <td>{{mb_field object=$error_log field=server_ip}}</td>
+
+              <th>{{mb_label object=$error_log field=_datetime_max}}</th>
+              <td>{{mb_field object=$error_log field=_datetime_max register=true form="filter-logs-db"}}</td>
             </tr>
             <tr>
               <th>Grouper les similaires</th>
@@ -64,10 +74,18 @@ function toggleCheckboxes(checkbox) {
                   {{tr}}No{{/tr}}
                 </label>
               </td>
+
+              <th>Trier par</th>
+              <td>
+                <select name="order_by">
+                  <option value="date"     {{if $order_by == "date"}}     selected {{/if}}>{{tr}}CErrorLog-datetime{{/tr}}</option>
+                  <option value="quantity" {{if $order_by == "quantity"}} selected {{/if}}>{{tr}}CErrorLog-_quantity{{/tr}}</option>
+                </select>
+              </td>
             </tr>
             <tr>
               <td></td>
-              <td>
+              <td colspan="3">
                 <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
               </td>
             </tr>

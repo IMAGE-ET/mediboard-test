@@ -75,7 +75,11 @@ Main.add(function(){
           {{$_log->text}}
         </td>
 
-        <td style="width: 15%; max-width: 200px;" rowspan="2">
+        <td style="width: 15%; max-width: 200px; position: relative;" rowspan="2">
+          <a href="{{$_log->_url}}" class="button link" target="_blank" style="position: absolute; right: 0;">
+            Lien
+          </a>
+
           <pre>{{$_log->_param_GET|@print_r:true}}</pre>
         </td>
 

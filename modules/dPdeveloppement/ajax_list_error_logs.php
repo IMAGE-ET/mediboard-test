@@ -16,11 +16,19 @@ CCanDo::checkRead();
 $start          = (int) CValue::get("start", 0);
 
 $error_type     = CValue::get("error_type");
+$text           = CValue::get("text");
 $server_ip      = CValue::get("server_ip");
+$datetime_min   = CValue::get("_datetime_min");
+$datetime_max   = CValue::get("_datetime_max");
+$order_by       = CValue::get("order_by");
 $group_similar  = CValue::get("group_similar", 1);
 
 CValue::setSession("error_type",    $error_type);
+CValue::setSession("text",          $text);
 CValue::setSession("server_ip",     $server_ip);
+CValue::setSession("_datetime_min", $datetime_min);
+CValue::setSession("_datetime_max", $datetime_max);
+CValue::setSession("order_by",      $order_by);
 CValue::setSession("group_similar", $group_similar);
 
 $where = array();
@@ -38,7 +46,28 @@ if ($server_ip) {
   $where["server_ip"] = $ds->prepareLike($server_ip);
 }
 
-$order = "datetime DESC, $spec->key DESC";
+if ($text) {
+  $where["text"] = $ds->prepareLike("%$text%");
+}
+
+if ($datetime_min) {
+  $where[] = $ds->prepare("datetime >= %", $datetime_min);
+}
+
+if ($datetime_max) {
+  $where[] = $ds->prepare("datetime <= %", $datetime_max);
+}
+
+if ($server_ip) {
+  $where["server_ip"] = $ds->prepareLike($server_ip);
+}
+
+$order = array();
+if ($order_by == "quantity" && $group_similar) {
+  $order[] = "total DESC";
+}
+$order[] = "datetime DESC";
+$order[] = "$spec->key DESC";
 $limit = "$start, 30";
 
 $groupby = null;
@@ -60,13 +89,24 @@ if ($group_similar) {
 
   $request->setLimit(null);
   $total = count($ds->loadList($request->getCountRequest($error_log, $fields)));
+
+  /** @var CErrorLog[] $error_logs */
+  $error_logs = array();
+  foreach ($error_logs_similar as $_info) {
+    $ids = explode(",", $_info["similar_ids"], 2);
+
+    $log = new CErrorLog();
+    $log->load(end($ids));
+
+    $error_logs[] = $log;
+  }
 }
 else {
   $total = $error_log->countList($where);
-}
 
-/** @var CErrorLog[] $error_logs */
-$error_logs = $error_log->loadList($where, $order, $limit, $groupby);
+  /** @var CErrorLog[] $error_logs */
+  $error_logs = $error_log->loadList($where, $order, $limit, $groupby);
+}
 
 foreach ($error_logs as $_error_log) {
   $_error_log->loadComplete();
