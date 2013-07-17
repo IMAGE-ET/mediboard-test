@@ -15,10 +15,10 @@
 class CCDA_base_bn extends CCDA_base_bl {
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     parent::getProps();
     $props["data"] = "booleen xml|data notnull";

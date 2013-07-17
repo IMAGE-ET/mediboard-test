@@ -18,10 +18,10 @@
 class CCDA_base_st extends CCDA_Datatype_Base {
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     parent::getProps();
     $props["data"] = "str xml|data minlength|1";

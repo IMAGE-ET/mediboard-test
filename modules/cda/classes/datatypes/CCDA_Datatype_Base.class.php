@@ -15,10 +15,10 @@
 class CCDA_Datatype_Base extends CCDA_Datatype {
   
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     

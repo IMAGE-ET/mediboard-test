@@ -54,10 +54,10 @@ class CCDAEIVL_event extends CCDACE {
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["code"] = "CCDATimigEvent xml|attribute";

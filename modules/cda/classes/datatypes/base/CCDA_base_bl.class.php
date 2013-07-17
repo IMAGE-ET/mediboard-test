@@ -17,10 +17,10 @@
 class CCDA_base_bl extends CCDA_Datatype_Base {
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     parent::getProps();
     $props["data"] = "booleen xml|data pattern|true|false";

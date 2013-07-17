@@ -20,10 +20,10 @@
 class CCDA_base_oid extends CCDA_Datatype_Base {
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["data"] = "str xml|data pattern|[0-2](\\.(0|[1-9][0-9]*))*";

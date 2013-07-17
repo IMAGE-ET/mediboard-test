@@ -19,10 +19,10 @@
 class CCDA_base_cs extends CCDA_Datatype_Base {
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = array();
     $props["data"] = "str xml|data pattern|[^\\s]+";

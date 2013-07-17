@@ -52,10 +52,10 @@ class CCDAPQR extends CCDACV {
 
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["value"] = "CCDA_base_real xml|attribute";

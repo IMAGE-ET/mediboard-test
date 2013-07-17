@@ -22,10 +22,10 @@
 class CCDA_base_url extends CCDA_Datatype_Base {
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["data"] = "uri xml|data";

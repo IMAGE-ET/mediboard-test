@@ -126,10 +126,10 @@ class CCDACR extends CCDAANY {
   }
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["name"] = "CCDACV xml|element max|1";
