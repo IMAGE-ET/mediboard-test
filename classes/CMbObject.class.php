@@ -188,9 +188,11 @@ class CMbObject extends CStoredObject {
   /**
    * Load documents and files for object and sort by category
    *
+   * @param boolean $with_cancelled Inclure les fichiers annulés
+   *
    * @return int document + files count
    */
-  function loadRefsDocItems() {
+  function loadRefsDocItems($with_cancelled = true) {
     $this->_nb_files = $this->loadRefsFiles();
     $this->_nb_docs  = $this->loadRefsDocs();
     $this->_nb_files_docs = $this->_nb_files + $this->_nb_docs;
@@ -204,7 +206,11 @@ class CMbObject extends CStoredObject {
       @$this->_ref_documents_by_cat[$cat_name][] = $_document;
       @$this->_refs_docitems_by_cat[$cat_name][] = $_document;
     }
-    foreach ($this->_ref_files as $_file) {
+    foreach ($this->_ref_files as $_key => $_file) {
+      if (!$with_cancelled && $_file->annule) {
+        unset($this->_ref_files[$_key]);
+        continue;
+      }
       $cat_name = $_file->file_category_id ? $categories[$_file->file_category_id]->nom : "";
       @$this->_ref_files_by_cat[$cat_name][] = $_file;
       @$this->_refs_docitems_by_cat[$cat_name][] = $_file;

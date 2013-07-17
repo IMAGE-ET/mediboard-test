@@ -41,7 +41,13 @@ $sejours =& $patient->_ref_sejours;
 
 // Consultations
 foreach ($consultations as $consultation) {
-  $consultation->loadRefsBack();
+  $consultation->loadRefsDocItems(false);
+  $consultation->countDocItems();
+  $consultation->loadRefConsultAnesth();
+  $consultation->loadRefsExamsComp();
+  $consultation->loadRefsFichesExamen();
+  $consultation->loadRefsActesCCAM();
+  $consultation->loadRefsActesNGAP();
   $consultation->loadRefsReglements();
   $consultation->loadRefPlageConsult();
   $consultation->_ref_plageconsult->_ref_chir->loadRefFunction();
@@ -59,11 +65,11 @@ foreach ($patient->_ref_sejours as $sejour) {
   $sejour->loadRefPraticien();
   $sejour->loadRefsPrescriptions();
   $sejour->loadRefsOperations($where);
-  $sejour->loadRefsDocItems();
+  $sejour->loadRefsDocItems(false);
   foreach ($sejour->_ref_operations as $operation) {
     $operation->loadRefPlageOp();
     $operation->loadRefChir();
-    $operation->loadRefsDocItems();
+    $operation->loadRefsDocItems(false);
     $operation->loadExtCodesCCAM();
   }
 }
