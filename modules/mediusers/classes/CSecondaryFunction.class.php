@@ -70,10 +70,7 @@ class CSecondaryFunction extends CMbObject {
    * @return CFunctions
    */
   function loadRefFunction() {
-    $this->_ref_function = new CFunctions();
-    $this->_ref_function->load($this->function_id);
-
-    return $this->_ref_function;
+    return $this->_ref_function = $this->loadFwdRef("function_id", true);
   }
 
   /**
@@ -82,9 +79,6 @@ class CSecondaryFunction extends CMbObject {
    * @return CMediusers
    */
   function loadRefUser() {
-    $this->_ref_user = new CMediusers();
-    $this->_ref_user->load($this->user_id);
-
-    return $this->_ref_user;
+    return $this->_ref_user = $this->loadFwdRef("user_id", true);
   }
 }

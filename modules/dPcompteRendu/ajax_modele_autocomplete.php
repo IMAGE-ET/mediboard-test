@@ -44,14 +44,19 @@ unset($where["user_id"]);
 $where["type"] = "= 'body'";
 
 // Inclusion des fonctions secondaires de l'utilisateur connecté
-$sec_function = new CSecondaryFunction;
-$sec_function->user_id = CAppUI::$user->_id;
-$sec_functions = $sec_function->loadMatchingList();
+// et de l'utilisateur concerné
+
+$sec_function = new CSecondaryFunction();
+$whereSecFunc = array();
+$whereSecFunc["user_id"] = " = '".CAppUI::$user->_id."'";
+if ($user->canEdit()) {
+  $whereSecFunc["user_id"] = "IN ('$user->_id', '".CAppUI::$user->_id."')";
+}
+$sec_functions = $sec_function->loadList($whereSecFunc);
 
 $functions_ids = CMbArray::pluck($sec_functions, "function_id");
 
 $functions_ids = array_merge($functions_ids, array($user->function_id, CAppUI::$user->function_id));
-
 $where["function_id"] = CSQLDataSource::prepareIn($functions_ids);
 $modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, null, null, null, $order));
 

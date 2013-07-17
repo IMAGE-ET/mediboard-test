@@ -1721,7 +1721,7 @@ class CStoredObject extends CModelObject {
       return $this->_back[$backName] = array();
     }
 
-    // Precounting optimization: no need to query when we alreaydy know array is empty
+    // Precounting optimization: no need to query when we already know array is empty
     if (isset($this->_count[$backName]) && $this->_count[$backName] === 0) {
       return $this->_back[$backName] = array();
     }

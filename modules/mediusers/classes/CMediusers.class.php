@@ -577,9 +577,18 @@ class CMediusers extends CPerson {
     if ($this->user_id == CAppUI::$user->_id) {
       return true;
     }
-
     $this->loadRefFunction();
-    return CPermObject::getPermObject($this, $permType, $this->_ref_function);
+    $perm = CPermObject::getPermObject($this, $permType, $this->_ref_function);
+
+    $this->loadBackRefs("secondary_functions");
+    foreach ($this->_back["secondary_functions"] as $_link) {
+      /** @var  CSecondaryFunction $_link */
+      $fonction = $_link->loadRefFunction();
+      $fonction->load($_link->function_id);
+      $perm = $perm || CPermObject::getPermObject($fonction, $permType);
+    }
+
+    return $perm;
   }
 
   /**
@@ -845,13 +854,13 @@ class CMediusers extends CPerson {
   /**
    * Chargement de la liste des utilisateurs à partir de leur type
    *
-   * @param array  $user_types
-   * @param int    $permType
-   * @param int    $function_id
-   * @param string $name
-   * @param bool   $secondary
-   * @param bool   $actif
-   * @param bool   $reverse
+   * @param array  $user_types  Tableau des types d'utilisateur
+   * @param int    $permType    Niveau de permission
+   * @param int    $function_id Filtre sur une fonction spécifique
+   * @param string $name        Filtre sur un nom d'utilisateur
+   * @param bool   $actif       Filtre sur les utilisateurs actifs
+   * @param bool   $secondary   Inclut les fonctions secondaires dans le filtre sur les fonctions
+   * @param bool   $reverse     Utilise les types en inclusion ou en exclusion
    *
    * @return CMediusers[]
    */
@@ -906,13 +915,14 @@ class CMediusers extends CPerson {
     $group_by = array("user_id");
 
     // Get all users
-    $mediuser = new CMediusers;
+    $mediuser = new CMediusers();
     CMediusers::$user_autoload = false;
+    /** @var CMediusers[] $mediusers */
     $mediusers = $mediuser->loadList($where, $order, null, $group_by, $ljoin);
     CMediusers::$user_autoload = true;
 
     // Mass user speficic preloading
-    $user = new CUser;
+    $user = new CUser();
     $user->loadAll(array_keys($mediusers));
 
     // Attach cached user
@@ -922,6 +932,7 @@ class CMediusers extends CPerson {
 
     // Mass fonction standard preloading
     CMbObject::massLoadFwdRef($mediusers, "function_id");
+    CMbObject::massCountBackRefs($mediusers, "secondary_functions");
 
     // Filter a posteriori to unable mass preloading of function
     self::filterByPerm($mediusers, $permType);
@@ -1267,6 +1278,7 @@ class CMediusers extends CPerson {
     $this->loadBackRefs("secondary_functions");
     $secondary_specs = array();
     foreach ($this->_back["secondary_functions"] as $curr_sec_spec) {
+      /** @var CSecondaryFunction $curr_sec_spec */
       $curr_sec_spec->loadRefsFwd();
       $curr_function = $curr_sec_spec->_ref_function;
       $secondary_specs[$curr_function->_id] = $curr_function;
@@ -1410,6 +1422,7 @@ class CMediusers extends CPerson {
    */
   function getAutocompleteList($keywords, $where = null, $limit = null, $ljoin= null) {
     $ljoin = array_merge($ljoin, array("users" => "users.user_id = users_mediboard.user_id"));
+    /** @var CMediusers[] $list */
     $list = $this->seek($keywords, $where, $limit, null, $ljoin, "users.user_last_name");
 
     foreach ($list as $_mediuser) {
