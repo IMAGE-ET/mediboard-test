@@ -21,16 +21,16 @@ $inLivretTherapeutique = CAppUI::conf("bloodSalvage inLivretTherapeutique");
 
 if(CModule::getActive("dPmedicament")) {
   $anticoagulant = new CBcbClasseATC(); 
-	if ($inLivretTherapeutique) {
-		$anticoagulant_list = $anticoagulant->loadRefProduitsLivret("B01AB");
-	}
-	else {
-	  $anticoagulant->loadRefsProduits("B01AB");
-	  $anticoagulant_list = $anticoagulant->_ref_produits;
-	}
+  if ($inLivretTherapeutique) {
+    $anticoagulant_list = $anticoagulant->loadRefProduitsLivret("B01AB");
+  }
+  else {
+    $anticoagulant->loadRefsProduits("B01AB");
+    $anticoagulant_list = $anticoagulant->_ref_produits;
+  }
 } else {
-	$list = CAppUI::conf("bloodSalvage AntiCoagulantList");
-	$anticoagulant_list = explode("|", $list);
+  $list = CAppUI::conf("bloodSalvage AntiCoagulantList");
+  $anticoagulant_list = explode("|", $list);
 }
 
 $selOp = new COperation();

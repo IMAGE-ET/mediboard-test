@@ -23,8 +23,8 @@ $tabAffected = array();
 $timingAffect = array();
 
 if($blood_salvage_id) {
-	$blood_salvage->load($blood_salvage_id);
-	loadAffected($blood_salvage_id, $list_nurse_sspi, $tabAffected, $timingAffect);
+  $blood_salvage->load($blood_salvage_id);
+  loadAffected($blood_salvage_id, $list_nurse_sspi, $tabAffected, $timingAffect);
 }
 
 $smarty = new CSmartyDP();

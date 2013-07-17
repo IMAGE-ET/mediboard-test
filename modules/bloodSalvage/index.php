@@ -22,7 +22,7 @@ $module->registerTab("vw_stats",             TAB_READ);
 $module->registerTab("vw_cellSaver",         TAB_EDIT);
 
 if(CModule::getActive("dPqualite")) {
-	$module->registerTab("vw_typeEi_manager", TAB_EDIT);	
+  $module->registerTab("vw_typeEi_manager", TAB_EDIT);
 }
 
 ?>

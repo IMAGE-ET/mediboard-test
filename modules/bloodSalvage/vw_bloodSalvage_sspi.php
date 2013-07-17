@@ -17,7 +17,7 @@ $op                 = CValue::getOrSession("op");
 
 
 if($op) {
-	$selOp->load($op);
+  $selOp->load($op);
   $selOp->loadRefs();
   $where = array();
   $where["operation_id"] = "='$selOp->_id'";  
