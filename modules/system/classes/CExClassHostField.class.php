@@ -78,8 +78,16 @@ class CExClassHostField extends CMbObject {
   function loadRefExGroup($cache = true){
     return $this->_ref_ex_group = $this->loadFwdRef("ex_group_id", $cache);
   }
-  
+
+  /**
+   * Get the host object of $this
+   *
+   * @param CExObject $ex_object The ExObject to get the host object of
+   *
+   * @return CMbObject|null
+   */
   function getHostObject(CExObject $ex_object) {
+    // Direct references
     if ($this->host_class == $ex_object->object_class) {
       return $this->_ref_host_object = $ex_object->_ref_object;
     }
@@ -91,7 +99,22 @@ class CExClassHostField extends CMbObject {
     if ($this->host_class == $ex_object->reference2_class) {
       return $this->_ref_host_object = $ex_object->_ref_reference_object_2;
     }
+
+    // Indirect references
+    /** @var CMbObject[] $objects */
+    $objects = array(
+      $ex_object->_ref_object,
+      $ex_object->_ref_reference_object_1,
+      $ex_object->_ref_reference_object_2,
+    );
+
+    foreach ($objects as $_object) {
+      $_obj = $_object->getRelatedObjectOfClass($this->host_class);
+      if ($_obj && $_obj->_id) {
+        return $this->_ref_host_object = $_obj;
+      }
+    }
     
-    $this->_ref_host_object = new $this->host_class;
+    return $this->_ref_host_object = new $this->host_class;
   }
 }

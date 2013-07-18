@@ -519,6 +519,25 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
+   * @see parent::getRelatedObjectOfClass()
+   *
+   * @param string $class
+   *
+   * @return CRPU|null
+   */
+  function getRelatedObjectOfClass($class) {
+    switch ($class) {
+      case "CRPU":
+        $rpu = $this->loadRefRPU();
+        if ($rpu->_id) {
+          return $rpu;
+        }
+    }
+
+    return null;
+  }
+
+  /**
    * @see parent::loadRelPatient()
    */
   function loadRelPatient() {

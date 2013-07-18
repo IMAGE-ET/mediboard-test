@@ -218,6 +218,17 @@ class CMbObject extends CStoredObject {
 
     ksort(@$this->_refs_docitems_by_cat);
   }
+
+  /**
+   * Get the object of class $class related to $this
+   *
+   * @param string $class Class name
+   *
+   * @return CMbObject|null
+   */
+  function getRelatedObjectOfClass($class) {
+    return null;
+  }
   
   /**
    * Count documents
