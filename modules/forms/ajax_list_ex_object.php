@@ -18,6 +18,8 @@ $ex_class_id     = CValue::get("ex_class_id");
 $target_element  = CValue::get("target_element");
 $print           = CValue::get("print");
 $start           = CValue::get("start", 0);
+$limit           = CValue::get("limit");
+$only_host       = CValue::get("only_host");
 
 // Search mode
 $search_mode     = CValue::get("search_mode", 0);
@@ -77,24 +79,24 @@ $ex_objects_counts   = array();
 $ex_objects_results  = array();
 $ex_classes_creation = array();
 
-$limit = null;
+if (!$limit) {
+  if ($print) {
+    $limit = 5;
+  }
+  else {
+    switch ($detail) {
+      case 3:
+      case 2:
+        $limit = ($search_mode ? 50 : ($ex_class_id ? 20 : 10));
+        break;
 
-if ($print) {
-  $limit = 5;
-}
-else {
-  switch ($detail) {
-    case 3:
-    case 2:
-      $limit = ($search_mode ? 50 : ($ex_class_id ? 20 : 10));
-      break;
+      case 1:
+        $limit = ($ex_class_id ? 50 : 25);
+        break;
 
-    case 1:
-      $limit = ($ex_class_id ? 50 : 25);
-      break;
-
-    default:
-    case 0:
+      default:
+      case 0:
+    }
   }
 }
 
@@ -134,11 +136,19 @@ foreach (CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
     }
   }
   else {
-    $where = array(
-      "(reference_class  = '$reference_class' AND reference_id  = '$reference_id') OR
-       (reference2_class = '$reference_class' AND reference2_id = '$reference_id') OR
-       (object_class     = '$reference_class' AND object_id     = '$reference_id')"
-    );
+    if ($only_host) {
+      $where = array(
+        "object_class" => " = '$reference_class'",
+        "object_id"    => " = '$reference_id'",
+      );
+    }
+    else {
+      $where = array(
+        "(reference_class  = '$reference_class' AND reference_id  = '$reference_id') OR
+         (reference2_class = '$reference_class' AND reference2_id = '$reference_id') OR
+         (object_class     = '$reference_class' AND object_id     = '$reference_id')"
+      );
+    }
 
     $ljoin = array();
   }

@@ -22,8 +22,8 @@ CKEDITOR.plugins.add('mbfields',{
        onClick: function(e) { CKEDITOR.dialog.getCurrent().hide(); }
      }
   ],
-    minWidth : 565,
-    minHeight : 235,
+    minWidth : 770,
+    minHeight : 340,
     contents :
     [
       {
@@ -35,8 +35,8 @@ CKEDITOR.plugins.add('mbfields',{
             {
               type : 'iframe',
               src : 'modules/dPcompteRendu/fcke_plugins/mbfields/dialogs/fields.html',
-              width : 565,
-              height : 235
+              width : 770,
+              height : 340
             }
           ]
      }

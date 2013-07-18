@@ -203,6 +203,7 @@ class CTemplateManager {
       );
     }
 
+    // Barcode
     if (isset($options["barcode"])) {
       $_field = &$this->sections[$section][$field];
 
@@ -228,8 +229,16 @@ class CTemplateManager {
       $_field["field"] .= "/>";
     }
 
-    if (isset($options["image"])) {
+    // Custom data
+    if (isset($options["data"])) {
+      $_field = &$this->sections[$section][$item][$sub_item];
+      $data = $options["data"];
+      $view = $_field['field'];
+      $_field["field"] = "<span data-data=\"$data\">$view</span>";
+    }
 
+    // Image (from a CFile object)
+    if (isset($options["image"])) {
       $_field = &$this->sections[$section][$field];
       $file = new CFile();
       $file->load($_field['value']);
@@ -401,13 +410,13 @@ class CTemplateManager {
   function addBarcode($field, $data, $options = array()) {
     $options = array_replace_recursive(
       array(
-      "barcode" => array(
-        "width"  => 220,
-        "height" => 60,
-        "class"  => "barcode",
-        "title"  => "",
-      )
-    ),
+        "barcode" => array(
+          "width"  => 220,
+          "height" => 60,
+          "class"  => "barcode",
+          "title"  => "",
+        )
+      ),
       $options
     );
 
@@ -440,6 +449,14 @@ class CTemplateManager {
    */
   function addHelper($name, $text) {
     $this->helpers[$name] = $text;
+  }
+
+  function addAdvancedData($name, $data, $value) {
+    $options = array(
+      "data" => $data
+    );
+
+    $this->addProperty($name, $value, $options, false);
   }
 
   /**
@@ -647,6 +664,19 @@ class CTemplateManager {
   }
 
   /**
+   * Get the regex to replace data
+   *
+   * @param string $data Data key
+   *
+   * @return string
+   */
+  protected function getDataRegex($data) {
+    $data_re = preg_quote($data, "/");
+
+    return '/(\[<span data-data=["\']'.$data_re.'["\']>[^<]+<\/span>\])/ms';
+  }
+
+  /**
    * Applique les champs variables sur une source html
    *
    * @param string $_source source html
@@ -656,12 +686,23 @@ class CTemplateManager {
   function renderDocument($_source) {
     $fields = array();
     $values = array();
+
+    $fields_regex = array();
+    $values_regex = array();
+
     foreach ($this->sections as $properties) {
-      foreach ($properties as $key=>$property) {
+      foreach ($properties as $key => $property) {
         if (strpos($key, ' - ') === false) {
           foreach ($property as $_property) {
-            $fields[] = $_property["fieldHTML"];
-            $values[] = nl2br($_property["valueHTML"]);
+            if (isset($_property["options"]["data"])) {
+              $data = $_property["options"]["data"];
+              $fields_regex[] = $this->getDataRegex($data);
+              $values_regex[] = $_property["valueHTML"];
+            }
+            else {
+              $fields[] = $_property["fieldHTML"];
+              $values[] = nl2br($_property["valueHTML"]);
+            }
           }
         }
         else if ($property["valueHTML"] && isset($property["options"]["barcode"])) {
@@ -671,6 +712,11 @@ class CTemplateManager {
 
           $fields[] = "src=\"{$property['fieldHTML']}\"";
           $values[] = "src=\"$image\"";
+        }
+        else if (isset($property["options"]["data"])) {
+          $data = $property["options"]["data"];
+          $fields_regex[] = $this->getDataRegex($data);
+          $values_regex[] = $property["valueHTML"];
         }
         else if ($property["valueHTML"] && isset($property["options"]["image"])) {
           $file = new CFile();
@@ -687,8 +733,16 @@ class CTemplateManager {
       }
     }
 
+    if (count($fields_regex)) {
+      $_source = preg_replace($fields_regex, $values_regex, $_source);
+    }
+
     if (count($fields)) {
-      $this->document = str_ireplace($fields, $values, $_source);
+      $_source = str_ireplace($fields, $values, $_source);
+    }
+
+    if (count($fields_regex) || count($fields)) {
+      $this->document = $_source;
     }
   }
 

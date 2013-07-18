@@ -151,11 +151,15 @@ CKEDITOR.editorConfig = function(config) {
         section: "{{$title|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}",
         itemname: "{{$_index|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}",
         view: "{{$_property.view|smarty:nodefaults|escape:"javascript"}}" ,
-        item: 
+        item:
           {{if $templateManager->valueMode}}
             "{{$_property.value|smarty:nodefaults|nl2br|escape:"javascript"}}",
-          {{else}} 
-            "[{{$_property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]", 
+          {{else}}
+            {{if @$_property.options.data}}
+              "[{{$_property.field|smarty:nodefaults|escape:"javascript"}}]",
+            {{else}}
+              "[{{$_property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]",
+            {{/if}}
           {{/if}}
          shortview: "{{$_property.shortview|smarty:nodefaults|escape:"javascript"}}"
         }
@@ -170,13 +174,13 @@ CKEDITOR.editorConfig = function(config) {
         view: '{{$property.view|smarty:nodefaults|escape:"javascript"}}' ,
         item: 
           {{if $templateManager->valueMode}}
-            {{if @$property.options.barcode || @$property.options.image}}
+            {{if @$property.options.barcode || @$property.options.image || @$property.options.data}}
               "{{$property.field|smarty:nodefaults|escape:"javascript"}}" ,
             {{else}}
               "{{$property.value|smarty:nodefaults|nl2br|escape:"javascript"}}",
             {{/if}}
           {{else}} 
-            {{if @$property.options.barcode || @$property.options.image}}
+            {{if @$property.options.barcode || @$property.options.image || @$property.options.data}}
               "{{$property.field|smarty:nodefaults|escape:"javascript"}}",
             {{else}}
               "[{{$property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]", 

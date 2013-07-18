@@ -53,9 +53,13 @@
       {{if $ex_object->$field_name !== null}}
         {{assign var=any value=true}}
         <li>
-          <span style="color: #666;">{{mb_label object=$ex_object field=$field_name}}</span>
-          :
-          {{mb_value object=$ex_object field=$field_name}}
+          <span style="color: #666;">
+            {{if $print}}
+              {{tr}}{{$ex_object->_class}}-{{$field_name}}{{/tr}}
+            {{else}}
+              {{mb_label object=$ex_object field=$field_name}}
+            {{/if}}
+          </span> : {{mb_value object=$ex_object field=$field_name}}
         </li>
       {{/if}}
     {{/foreach}}

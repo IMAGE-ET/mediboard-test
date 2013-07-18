@@ -947,4 +947,176 @@ class CExObject extends CMbMetaObject {
 
     return $ex_objects;
   }
+
+  /**
+   * Adds the list of forms to a template manager
+   *
+   * @param CTemplateManager $template The template manager
+   * @param CMbObject        $object   The host object
+   * @param string           $name     The field name
+   *
+   * @return void
+   */
+  static function addFormsToTemplate(CTemplateManager $template, CMbObject $object, $name) {
+    $params = array(
+      "detail"          => 3,
+      "reference_id"    => $object->_id,
+      "reference_class" => $object->_class,
+      "target_element"  => "ex-objects-$object->_id",
+      "print"           => 1,
+      "limit"           => null,
+    );
+
+    $formulaires = "";
+
+    $params["limit"] = 1;
+    if ($object->_id) {
+      $formulaires = CApp::fetch("forms", "ajax_list_ex_object", $params);
+      $formulaires = preg_replace("/\s+/", " ", $formulaires); // Remove CRLF which CKEditor transform to <br />
+    }
+    $template->addProperty("$name - Formulaires - Dernier", $formulaires, null, false);
+
+    $params["limit"] = 5;
+    if ($object->_id) {
+      $formulaires = CApp::fetch("forms", "ajax_list_ex_object", $params);
+      $formulaires = preg_replace("/\s+/", " ", $formulaires); // Remove CRLF which CKEditor transform to <br />
+    }
+    $template->addProperty("$name - Formulaires - 5 derniers", $formulaires, null, false);
+
+    $params["limit"] = 1;
+    $params["only_direct"] = 1;
+    if ($object->_id) {
+      $formulaires = CApp::fetch("forms", "ajax_list_ex_object", $params);
+      $formulaires = preg_replace("/\s+/", " ", $formulaires); // Remove CRLF which CKEditor transform to <br />
+    }
+    $template->addProperty("$name - Formulaires - Liés", $formulaires, null, false);
+
+//    self::$_multiple_load = true;
+//
+//    $group_id = CGroups::loadCurrent()->_id;
+//    $where = array(
+//      "group_id = '$group_id' OR group_id IS NULL",
+//      // TODO ajouter un champ "inclure dans les modèles"
+//    );
+//
+//    $ex_class = new CExClass();
+//    CExObject::initLocales();
+//
+//    /** @var CExClass[] $ex_classes */
+//    $ex_classes = $ex_class->loadList($where, "name");
+//    foreach ($ex_classes as $_ex_class) {
+//      $_name = "Form. ".str_replace(" - ", " ", $_ex_class->name);
+//      $fields = $_ex_class->loadRefsAllFields();
+//      $_class_name = $_ex_class->getExClassName();
+//
+//      $_ex_object = null;
+//      if ($object->_id) {
+//        $_ex_object = $_ex_class->getLatestExObject($object);
+//      }
+//
+//      foreach ($fields as $_field) {
+//        $_field_name = str_replace(" - ", " ", CAppUI::tr("$_class_name-{$_field->name}"));
+//
+//        $_template_field_name = "Sejour - $_name - $_field_name";
+//        $_template_key_name = "CExObject|$_ex_class->_id|$_field->name";
+//        $_template_value = (($_ex_object && $_ex_object->_id) ? $_ex_object->getFormattedValue($_field->name) : "");
+//
+//        $template->addAdvancedData($_template_field_name, $_template_key_name, $_template_value);
+//      }
+//    }
+//
+//    self::$_multiple_load = false;
+  }
+
+  /**
+   * @param CMbObject $object
+   *
+   * @return CExObject[][]
+   */
+  static function getExObjectsOf(CMbObject $object) {
+
+    CExClassField::$_load_lite = true;
+    CExObject::$_multiple_load = true;
+
+    $group_id = CGroups::loadCurrent()->_id;
+    $where = array(
+      "group_id = '$group_id' OR group_id IS NULL",
+    );
+
+    if (empty(CExClass::$_list_cache)) {
+      $ex_class = new CExClass;
+      CExClass::$_list_cache = $ex_class->loadList($where, "name");
+
+      if (!CExObject::$_locales_cache_enabled) {
+        foreach (CExClass::$_list_cache as $_ex_class) {
+          foreach ($_ex_class->loadRefsGroups() as $_group) {
+            $_group->loadRefsFields();
+
+            foreach ($_group->_ref_fields as $_field) {
+              $_field->updateTranslation();
+            }
+          }
+        }
+      }
+    }
+
+    $ex_objects = array();
+
+    $limit = 1;
+
+    $ref_objects_cache = array();
+
+    foreach (CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
+      $_ex_object = new CExObject($_ex_class_id);
+
+      $where = array(
+        "(reference_class  = '$object->_class' AND reference_id  = '$object->_id') OR
+         (reference2_class = '$object->_class' AND reference2_id = '$object->_id') OR
+         (object_class     = '$object->_class' AND object_id     = '$object->_id')"
+      );
+
+      $ljoin = array();
+
+      /** @var CExObject[] $_ex_objects */
+      $_ex_objects = $_ex_object->loadList($where, "{$_ex_object->_spec->key} DESC", $limit, null, $ljoin);
+
+      foreach ($_ex_objects as $_ex) {
+        $_ex->_ex_class_id = $_ex_class_id;
+        $_ex->load();
+
+        $guid = "$_ex->object_class-$_ex->object_id";
+
+        if (!isset($ref_objects_cache[$guid])) {
+          $_ex->loadTargetObject()->loadComplete(); // to get the view
+          $ref_objects_cache[$guid] = $_ex->_ref_object;
+        }
+        else {
+          $_ex->_ref_object = $ref_objects_cache[$guid];
+        }
+
+        if ($_ex->additional_id) {
+          $_ex->loadRefAdditionalObject();
+        }
+
+        $_ex->loadLogs();
+        $_log = $_ex->_ref_first_log;
+
+        // Cas tres etrange de formulaire sans aucun log
+        // Plutot que de tout planter, on ne l'affiche pas
+        if (!$_log) {
+          continue;
+        }
+
+        $ex_objects[$_ex_class_id]["$_log->date $_ex->_id"] = $_ex;
+      }
+
+      if (isset($ex_objects[$_ex_class_id])) {
+        krsort($ex_objects[$_ex_class_id]);
+      }
+    }
+
+    ksort($ex_objects);
+
+    return $ex_objects;
+  }
 }

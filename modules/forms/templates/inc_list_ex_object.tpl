@@ -2,6 +2,7 @@
 {{assign var=self_guid value=$self_guid|md5}}
 {{assign var=self_guid value="guid_$self_guid"}}
 
+{{if !$print}}
 <script type="text/javascript">
 
 ExObject.refreshSelf['{{$self_guid}}'] = function(start){
@@ -20,6 +21,8 @@ ExObject.refreshSelf['{{$self_guid}}'] = function(start){
 }
 
 </script>
+
+{{/if}}
 
 {{if $step && $detail < 3}}
   {{assign var=align value=null}}

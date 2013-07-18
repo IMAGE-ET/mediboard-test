@@ -1,4 +1,4 @@
-<!DOCTYPE html 
+<!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -27,8 +27,11 @@
           section.insert("<option value='" + i + "'>"+ sItem.section + "</option>");
         });
         section.selectedIndex = -1;
-        $("searchinput").focus();
-      }
+
+        var searchinput = $("searchinput");
+        searchinput.focus();
+        searchinput.observe("keyup", searchWord.bindAsEventListener(searchinput));
+      };
 
       function reloadItem(section) {
         var oItem = $("item").update();
@@ -52,6 +55,7 @@
           oItem.insert("<option value='" + item + "'>" + tag + several_items + "</option>");
         }
         oItem.selectedIndex = -1;
+        oItem.scrollTop = 0;
       }
     
       function reloadSubItem(section, item) {
@@ -70,6 +74,7 @@
           oSubItem.insert("<option value='" + subItem + "'>" + subItems[subItem].view + "</option>");
         }
         oSubItem.selectedIndex = -1;
+        oSubItem.scrollTop = 0;
       }
 
       function insertItem(section, item) {
@@ -121,24 +126,56 @@
         range.moveToPosition( textNode, CKEDITOR.POSITION_AFTER_END ); 
         range.select(); 
       }
+
+      function eventKey(e) {
+        return (window.event && (window.event.keyCode || window.event.which)) || e.which || e.keyCode || false;
+      }
       
       var empty = true;
-      function searchWord(elt) {
-        if (elt.value == "" && !empty) {
-            empty = true;
-            $("classic").toggle();
-            $("search").toggle();
+      function searchWord(event) {
+        if (this.value == "" && !empty) {
+          empty = true;
+          $("classic").toggle();
+          $("search").toggle();
         }
-        else if (elt.value != "") {
+        else if (this.value != "") {
           if (empty) {
             empty = false;
             $("classic").toggle();
             $("search").toggle();
           }
-          // Recherche
+
           var resultsearch = $("resultsearch");
+
+          var keyCode = eventKey(event);
+          var length = resultsearch.options.length;
+
+          switch (keyCode) {
+            case 38: // Up
+              if (resultsearch.selectedIndex == -1 || resultsearch.selectedIndex == 0) {
+                resultsearch.selectedIndex = length-1;
+              }
+              else {
+                resultsearch.selectedIndex = (resultsearch.selectedIndex-1) % length;
+              }
+              Event.stop(event);
+              return;
+
+            case 40: // Down
+              resultsearch.selectedIndex = (resultsearch.selectedIndex+1) % length;
+              Event.stop(event);
+              return;
+
+            case 13:
+              if (resultsearch.selectedIndex > -1) {
+                insertHTML(resultsearch.value);
+              }
+              Event.stop(event);
+              return;
+          }
+
+          // Recherche
           resultsearch.update();
-          var sections = fields[section];
           
           for (var section in fields) {
             if (typeof fields[section] == "function") continue;
@@ -153,13 +190,13 @@
                 for (var subItem in subItems) {
                   var _subItem = subItems[subItem];
                   if (typeof _subItem == "function") continue;
-                  if (_subItem.shortview.toLowerCase().indexOf(elt.value.toLowerCase()) != -1) {
+                  if (_subItem.shortview.toLowerCase().indexOf(this.value.toLowerCase()) != -1) {
                     resultsearch.insert(new Element('option', {value: _subItem.item}).update(_subItem.shortview));
                   }
                 }
               } else {
                 var _item = items[item];
-                if (_item.shortview.toLowerCase().indexOf(elt.value.toLowerCase()) != -1) {
+                if (_item.shortview.toLowerCase().indexOf(this.value.toLowerCase()) != -1) {
                   resultsearch.insert(new Element('option', {value: _item.item}).update(_item.shortview));
                 }
               }
@@ -172,27 +209,27 @@
 
   </head>
   <body>
-    Chercher un champ : <input type="text" id="searchinput" autofocus="true" value="" onkeyup="searchWord(this)"/>
+    Chercher un champ : <input type="text" id="searchinput" autofocus value="" />
     <table>
       <tr id="classic">
         <td>
-          <select id="section" onchange="reloadItem(this.value)" size="10" style="width: 150px; height: 180px;">
+          <select id="section" onchange="reloadItem(this.value)" size="10" style="width: 180px; height: 270px;">
           </select>
         </td>
         <td>
-          <select id="item" onchange="reloadSubItem($('section').value, this.value);" ondblclick="insertItem($('section').value,this.value);" size="10" style="width: 205px; height: 180px;">
+          <select id="item" onchange="reloadSubItem($('section').value, this.value);" ondblclick="insertItem($('section').value,this.value);" size="10" style="width: 270px; height: 270px;">
             <option value="">&mdash; Choisissez un item</option>
           </select>
         </td>
         <td>
-          <select id="subitem" size="10" style="width: 170px; height: 180px;" ondblclick="insertSubItem($('section').value, $('item').value, this.value);">
+          <select id="subitem" size="10" style="width: 270px; height: 270px;" ondblclick="insertSubItem($('section').value, $('item').value, this.value);">
             <option value="">&mdash; Choisissez un sous-item</option>
           </select>
         </td>  
       </tr>
       <tr id="search" style="display: none">
         <td>
-          <select id="resultsearch" size="10" style="height: 180px; width: 533px;" ondblclick="insertHTML(this.value)">
+          <select id="resultsearch" size="10" style="height: 270px; width: 750px;" ondblclick="insertHTML(this.value)">
           </select>
         </td>
       </tr>
