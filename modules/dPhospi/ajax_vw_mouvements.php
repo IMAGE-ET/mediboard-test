@@ -66,7 +66,6 @@ switch ($granularite) {
 
 $current = CMbDate::dirac("hour", CMbDT::dateTime());
 $offset = $nb_ticks * $nb_unite;
-
 $date_max = CMbDT::dateTime("+ $offset $unite", $date_min);
 $temp_datetime = CMbDT::dateTime(null, $date_min);
 
@@ -130,7 +129,7 @@ $ljoin = array();
 $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
 $ljoin["service"] = "chambre.service_id = service.service_id";
 $lit = new CLit();
-$lits     = $lit->loadList($where, null, null, null, $ljoin);
+$lits     = $lit->loadList($where, "chambre.nom", null, null, $ljoin);
 $chambres = CMbObject::massLoadFwdRef($lits, "chambre_id");
 $services = CMbObject::massLoadFwdRef($chambres, "service_id");
 
@@ -234,6 +233,10 @@ foreach ($affectations as $_affectation) {
   $_affectation->_entree_offset = CMbDate::position(max($date_min, $_affectation->_entree), $date_min, $period);
   $_affectation->_sortie_offset = CMbDate::position(min($date_max, $_affectation->_sortie), $date_min, $period);
   $_affectation->_width = $_affectation->_sortie_offset - $_affectation->_entree_offset;
+
+  if ($_affectation->_width === 0) {
+    $_affectation->_width = 0.01;
+  }
 
   if ($_affectation->_is_prolong) {
     $_affectation->_start_prolongation = CMbDate::position(max($date_min, $_affectation->_entree), $date_min, $period);
