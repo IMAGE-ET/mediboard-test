@@ -19,7 +19,7 @@ $filter->_status = $_status;
 $messages = $filter->loadPublications($filter->_status);
 foreach ($messages as $_message) {
   $_message->loadRefsNotes();
-  $_message->loadRefModule();
+  $_message->loadRefModuleObject();
   $_message->loadRefGroup();
 }
 

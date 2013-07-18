@@ -43,7 +43,7 @@ class CMessage extends CMbObject {
   
   
   // Object references
-  public $_ref_module;
+  public $_ref_module_object;
   public $_ref_group;
   
   static $status = array (
@@ -123,7 +123,7 @@ class CMessage extends CMbObject {
     if ($mod_name) {
       foreach ($messages as $message_id => $_message) {
         if ($_message->module_id) {
-          if ($_message->loadRefModule()->mod_name != $mod_name) {
+          if ($_message->loadRefModuleObject()->mod_name != $mod_name) {
             unset($messages[$message_id]);
           }
         }
@@ -220,10 +220,10 @@ class CMessage extends CMbObject {
    *
    * @return CModule
    */
-  function loadRefModule() {
+  function loadRefModuleObject() {
     $module = $this->loadFwdRef("module_id", true);
     $this->_view = ($module->_id ? "[$module] - " : "") . $this->titre;
-    return $this->_ref_module = $module;
+    return $this->_ref_module_object = $module;
   }
 
   /**

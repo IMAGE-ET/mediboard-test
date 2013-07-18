@@ -26,8 +26,8 @@
 <tr>
   <th colspan="10" class="title">
     {{$messages|@count}}
-  	{{tr}}CMessage{{/tr}}s
-  	{{tr}}found{{/tr}}
+    {{tr}}CMessage{{/tr}}s
+    {{tr}}found{{/tr}}
   </th>
 </tr>
 
@@ -73,9 +73,9 @@
     {{/if}}
     <br />
     {{if $_message->module_id}}
-      {{$_message->_ref_module}}
+      {{$_message->_ref_module_object}}
     {{else}}
-    	{{tr}}All{{/tr}}
+      {{tr}}All{{/tr}}
     {{/if}}
   </td>
   

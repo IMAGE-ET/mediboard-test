@@ -157,7 +157,7 @@ class CTag extends CMbObject {
   /**
    * @see parent::getAutocompleteList()
    */
-  function getAutocompleteList($keywords, $where = null, $limit = null) {
+  function getAutocompleteList($keywords, $where = null, $limit = null, $ljoin = null, $order = null) {
     $list = array();
     
     if ($keywords === "%" || $keywords == "") {
