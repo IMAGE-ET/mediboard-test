@@ -671,7 +671,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
 
     $telephones = $this->addElement($elParent, "telephones");
     $this->addElement($telephones, "telephone", $personne['tel']);
-    $this->addElement($telephones, "telephone", $personne['tel2']);
+    if (isset($personne['tel2'])) {
+      $this->addElement($telephones, "telephone", $personne['tel2']);
+    }
     
     if (!$light) {
       $emails = $this->addElement($elParent, "emails");
