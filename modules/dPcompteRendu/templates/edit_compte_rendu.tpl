@@ -11,7 +11,7 @@ window.nb_printers = {{$nb_printers|@json}};
 window.modal_mode_play = null;
 window.documentGraphs = {{$templateManager->graphs|@json}};
 window.choice_factory = {{$choice_factory|@json}};
-
+window.saving_doc = false;
 document.title = "{{$compte_rendu->_ref_object}} - {{$compte_rendu->nom}}";
 
 function openCorrespondants(compte_rendu_id, object_guid, show_modal) {
@@ -65,6 +65,11 @@ function playField(element, class_name, editor_element, name) {
 }
 
 function submitCompteRendu(callback){
+  if (window.saving_doc) {
+    return;
+  }
+  window.saving_doc = true;
+
   var editor = CKEDITOR.instances.htmlarea;
   editor.document.getBody().setStyle("background", "#ddd");
 
@@ -86,6 +91,7 @@ function submitCompteRendu(callback){
     
     if(checkForm(form) && User.id) {
       editor.getCommand('save').setState(CKEDITOR.TRISTATE_DISABLED);
+      editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_DISABLED);
       editor.on("key", loadOld);
       form.onsubmit=function(){ return true; };
       if (Thumb.modele_id && Thumb.contentChanged) {
@@ -110,7 +116,6 @@ function submitCompteRendu(callback){
           }
         }
         window.callback = callback ? callback : null;
-        editor.getCommand('save').setState(CKEDITOR.TRISTATE_OFF);
       }},  $("systemMsg"));
     }
   }).defer();
@@ -118,6 +123,7 @@ function submitCompteRendu(callback){
 }
 
 function refreshZones(id, obj) {
+  var editor = CKEDITOR.instances.htmlarea;
   var form = getForm("editFrm");
   $V(form.date_print, obj.date_print);
   
@@ -162,6 +168,9 @@ function refreshZones(id, obj) {
     
   // Remise du content sauvegardé, avec le refresh des vignettes si dispo, et/ou l'impression en callback
   CKEDITOR.instances.htmlarea.setData(obj._source, afterSetData);
+  editor.getCommand('save').setState(CKEDITOR.TRISTATE_OFF);
+  editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_OFF);
+  window.saving_doc = false;
 }
 
 function openWindowMail() {
