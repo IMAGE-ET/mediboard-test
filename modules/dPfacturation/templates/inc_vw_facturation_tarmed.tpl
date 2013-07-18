@@ -64,14 +64,12 @@
       {{if !$facture->_ref_patient->avs}}
         <div class="small-warning" style="display:inline">N° AVS manquant pour le patient</div>
       {{/if}}
-      {{if !count($facture->_ref_relances)}}
-        <form name="facture_extourne" method="post" action="" style="float:right;">
-          {{mb_class object=$facture}}
-          {{mb_key   object=$facture}}
-          <input type="hidden" name="_duplicate" value="1"/>
-          <button class="duplicate" type="submit">Extourner</button>
-        </form>
-      {{/if}}
+      <form name="facture_extourne" method="post" action="" style="float:right;">
+        {{mb_class object=$facture}}
+        {{mb_key   object=$facture}}
+        <input type="hidden" name="_duplicate" value="1"/>
+        <button class="duplicate" type="submit">Extourner</button>
+      </form>
       {{if $facture->_class == "CFactureEtablissement" && $facture->_ref_sejours|@count}}
         {{assign var="last_op" value=$facture->_ref_last_sejour->_ref_last_operation}}
         <button type="button" class="edit" onclick="viewInterv('{{$last_op->_id}}', '{{$last_op->plageop_id}}');" style="float:right;"> Infos interv. </button>
