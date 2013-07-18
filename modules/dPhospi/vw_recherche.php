@@ -114,8 +114,8 @@ if ($typeVue == 0) {
             WHERE '$date_recherche' BETWEEN affectation.entree AND affectation.sortie
             AND affectation.lit_id IS NOT NULL
             AND lit.chambre_id ".CSQLDataSource::prepareIn(CMbArray::pluck($libre, "chambre_id")).
-           "AND lit.lit_id ".CSQLDataSource::prepareNotIn(CMbArray::pluck($libre, "lit_id")).
-           "GROUP BY lit.lit_id";
+           " AND lit.lit_id ".CSQLDataSource::prepareNotIn(CMbArray::pluck($libre, "lit_id")).
+           " GROUP BY lit.lit_id";
     $autre_sexe_chambre = $ds->loadList($sql);
     foreach ($autre_sexe_chambre as $key=>$_autre) {
       $autre_sexe_chambre[$_autre["chambre_id"]] = $_autre;
