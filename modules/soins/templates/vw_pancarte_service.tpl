@@ -198,12 +198,14 @@ Main.add(function () {
             {{/if}}
 
             <th class="{{$_date}}-{{$moment_journee}} title" colspan="{{$_count}}" style="width: 60%">
-              <a href="#1" onclick="PlanSoins.showBefore()" class="prevPeriod" style="float: left">
-                <img src="images/icons/prev.png" alt="&lt;"/>
-              </a>
-              <a href="#1" onclick="PlanSoins.showAfter()" class="nextPeriod" style="float: right">
-                <img src="images/icons/next.png" alt="&gt;" />
-              </a>
+              {{if $composition_dossier|@count > 1}}
+                <a href="#1" onclick="PlanSoins.showBefore()" class="prevPeriod" style="float: left">
+                  <img src="images/icons/prev.png" alt="&lt;"/>
+                </a>
+                <a href="#1" onclick="PlanSoins.showAfter()" class="nextPeriod" style="float: right">
+                  <img src="images/icons/next.png" alt="&gt;" />
+                </a>
+              {{/if}}
               <strong>
                 {{assign var=key_borne value="$_date-$moment_journee"}}
                 {{assign var=bornes_poste value=$bornes_composition_dossier.$key_borne}}

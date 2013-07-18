@@ -43,13 +43,14 @@ Main.add(function(){
       {{foreach from=$count_composition_dossier key=_date item=_hours_by_moment}}
         {{foreach from=$_hours_by_moment key=moment_journee item=_count}}
           <th class="{{$_date}}-{{$moment_journee}} title" colspan="{{$_count}}">
-                       
-            <a href="#1" onclick="PlanSoins.showBefore()" style="float: left" onmousedown="periodicalBefore = new PeriodicalExecuter(PlanSoins.showBefore, 0.2);" onmouseup="periodicalBefore.stop();">
-              <img src="images/icons/prev.png" alt="&lt;"/>
-            </a>        
-            <a href="#1" onclick="PlanSoins.showAfter()" style="float: right" onmousedown="periodicalAfter = new PeriodicalExecuter(PlanSoins.showAfter, 0.2);" onmouseup="periodicalAfter.stop();">
-              <img src="images/icons/next.png" alt="&gt;" />
-            </a>     
+            {{if $composition_dossier|@count > 1}}
+              <a href="#1" onclick="PlanSoins.showBefore()" style="float: left" onmousedown="periodicalBefore = new PeriodicalExecuter(PlanSoins.showBefore, 0.2);" onmouseup="periodicalBefore.stop();">
+                <img src="images/icons/prev.png" alt="&lt;"/>
+              </a>
+              <a href="#1" onclick="PlanSoins.showAfter()" style="float: right" onmousedown="periodicalAfter = new PeriodicalExecuter(PlanSoins.showAfter, 0.2);" onmouseup="periodicalAfter.stop();">
+                <img src="images/icons/next.png" alt="&gt;" />
+              </a>
+            {{/if}}
             <strong>
               <a href="#1" onclick="PlanSoins.selColonne('{{$_date}}-{{$moment_journee}}')">
               	{{if $composition_dossier|@count == 1}}

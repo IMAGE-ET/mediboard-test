@@ -1,4 +1,5 @@
 {{mb_default var=addform value=""}}
+{{mb_default var=groups value="CGroups::loadCurrent"|static_call:null}}
 
 <script>
 updateTokenCim10 = function() {
@@ -73,7 +74,7 @@ Main.add(function () {
         <tr>
           <td class="text">
             <ul id="tab_traitements_perso{{$addform}}" class="control_tabs small">
-              {{if $isPrescriptionInstalled}}
+              {{if $isPrescriptionInstalled && "CAppUI::conf"|static_call:"dPprescription show_chapters med":$groups->_guid}}
                 <li><a href="#tp_base_med{{$addform}}">Base de données de médicaments</a></li>
               {{/if}}
               {{if $conf.dPpatients.CTraitement.enabled}}
@@ -85,7 +86,7 @@ Main.add(function () {
         </tr>
         {{/if}}
         
-        {{if $isPrescriptionInstalled}}
+        {{if $isPrescriptionInstalled && "CAppUI::conf"|static_call:"dPprescription show_chapters med":$groups->_guid}}
         <tr id="tp_base_med{{$addform}}">
           <td class="text">
             <!-- Formulaire d'ajout de traitements -->
