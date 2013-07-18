@@ -17,8 +17,8 @@
   {{if $protocole->protocole_prescription_chir_class == "CPrescriptionProtocolePack"}}
   {{assign var="type_prot_chir" value="pack-"}}
 {{/if}}
-{{if $_protocole->_ref_protocole_prescription_chir}}
-  {{assign var=libelle value=$_protocole->_ref_protocole_prescription_chir->libelle}}
+{{if $protocole->_ref_protocole_prescription_chir}}
+  {{assign var=libelle value=$protocole->_ref_protocole_prescription_chir->libelle}}
 {{/if}}
 
 <script type="text/javascript">
