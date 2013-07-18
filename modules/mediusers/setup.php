@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -426,6 +426,7 @@ class CSetupmediusers extends CSetup {
     $this->addQuery($query);
     $query = "INSERT INTO `spec_cpam` (`spec_cpam_id`, `text`, `actes`)
               VALUES(78,'GENETIQUE MEDICALE','CS|K|ADE|ADI|ADC|ACO|ADA|ATM');";
+    $this->addQuery($query);
 
     $this->makeRevision("0.21");
     $query = "ALTER TABLE `users_mediboard` CHANGE `spec_cpam_id` `spec_cpam_id` int(11) unsigned NULL;";

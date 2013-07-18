@@ -4,7 +4,7 @@ popupImport = function () {
   var url = new Url("mediusers", "user_import_csv");
   url.popup(800, 600, "Import des utilisateurs");
   return false;
-}
+};
 
 showMediuser = function(user_id, element) {
   if (element) {
@@ -18,12 +18,12 @@ showMediuser = function(user_id, element) {
   url.addParam("ldap_user_deb_activite", "{{$ldap_user_deb_activite}}");
   url.addParam("ldap_user_fin_activite", "{{$ldap_user_fin_activite}}");
   url.requestUpdate("vw_mediuser");
-}
+};
 
 createUserFromLDAP = function(){
   var url = new Url("admin", "ajax_choose_filter_ldap");
   url.requestModal(800, 350);
-}
+};
 
 function changePage(page) {
   $V(getForm('listFilter').page,page);

@@ -11,7 +11,7 @@ showFunction = function(function_id, element) {
   var url = new Url("mediusers", "ajax_edit_function");
   url.addParam("function_id", function_id);
   url.requestUpdate("vw_function");
-}
+};
 
 function changePage(page) {
   $V(getForm('listFilter').page,page);

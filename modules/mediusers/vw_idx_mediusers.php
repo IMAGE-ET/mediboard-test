@@ -94,6 +94,7 @@ if ($ldap_bound) {
 
 $tag = CMediusers::getTagSoftware();
 $ds  = CSQLDataSource::get("std");
+$robots = array();
 
 if (($human || $robot) && !($human && $robot)) {
   if ($tag) {
@@ -117,13 +118,13 @@ if (($human || $robot) && !($human && $robot)) {
 }
 
 if ($human && !$robot) {
-  if ($robots) {
+  if (count($robots)) {
     $where["users.user_id"] = $ds->prepareNotIn($robots);
   }
 }
 
 if ($robot && !$human) {
-  if ($robots) {
+  if (count($robots)) {
     $where["users.user_id"] = $ds->prepareIn($robots);
   }
 }

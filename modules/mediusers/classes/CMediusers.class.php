@@ -960,6 +960,12 @@ class CMediusers extends CPerson {
   /**
    * Load list overlay for current group
    *
+   * @param array  $where   list of SQL WHERE statements
+   * @param array  $order   list of SQL ORDER statement
+   * @param string $limit   SQL limit statement
+   * @param string $groupby SQL GROUP BY statement
+   * @param array  $ljoin   list of SQL LEFT JOIN statements
+   *
    * @return self[]
    */
   function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {

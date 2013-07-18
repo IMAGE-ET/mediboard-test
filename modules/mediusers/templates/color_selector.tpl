@@ -31,7 +31,7 @@
               onclick="selectColor('{{$rgb}}', this);"
               ondblclick="selectColor('{{$rgb}}', this); setClose();"
               title="{{$rgb}}"
-            />
+            ></td>
           </tr>
         {{/foreach}}
       </table>
@@ -58,7 +58,7 @@
                   onclick="selectColor('{{$rgb}}', this);" 
                   ondblclick="selectColor('{{$rgb}}', this); setClose();"
                   title="{{$rgb}}"
-                />
+                ></td>
               {{/foreach}}
              </tr>
             {{/foreach}}
