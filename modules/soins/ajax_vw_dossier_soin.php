@@ -96,7 +96,7 @@ if (CModule::getActive("dPprescription")) {
   $sejour->loadRefCurrAffectation($date);
   
   if ($sejour->_ref_curr_affectation->_id) {
-    $service_id = $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id;
+    $service_id = $sejour->_ref_curr_affectation->service_id;
   }
   else {
     $service_id = "none";
