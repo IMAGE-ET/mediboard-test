@@ -109,6 +109,10 @@ class CExClassHostField extends CMbObject {
     );
 
     foreach ($objects as $_object) {
+      if (!$_object) {
+        continue;
+      }
+
       $_obj = $_object->getRelatedObjectOfClass($this->host_class);
       if ($_obj && $_obj->_id) {
         return $this->_ref_host_object = $_obj;
