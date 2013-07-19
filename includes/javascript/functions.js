@@ -1341,6 +1341,13 @@ var Modal = {
         dimensions.height = viewportDimensions.height + parseInt(dimensions.height, 10) * 2;
       }
 
+      // IE8 doesn't handle max-height well
+      if (Prototype.Browser.IE && document.documentMode == 8) {
+        if (!/%/.test(dimensions.height)) {
+          dimensions.height = Math.min(dimensions.height, viewportDimensions.height - 5);
+        }
+      }
+
       newDimensions.height = String.getCSSLength(dimensions.height);
     }
 

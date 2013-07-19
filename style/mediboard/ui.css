@@ -1029,6 +1029,9 @@ table.active {
 .ua-msie-8 .modal > .content {
   overflow-y: scroll;
 }
+.ua-msie-8 .modal.modal-iframe > .content {
+  overflow-y: auto;
+}
 
 .modal > .content,
 .modal > iframe { /* .modal > iframe shoule never happen */

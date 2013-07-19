@@ -487,6 +487,7 @@ var Url = Class.create({
     // Wrap iframe with div.content
     var content = DOM.div({className: "content"}, modalContainer.down("iframe"));
     modalContainer.insert(content);
+    modalContainer.addClassName("modal-iframe");
 
     style.paddingTop = titleElement.getHeight()+"px";
     modalContainer.setStyle(style);
