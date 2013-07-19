@@ -1031,10 +1031,14 @@ table.active {
 }
 
 .modal > .content,
-.modal > iframe {
+.modal > iframe { /* .modal > iframe shoule never happen */
   height: 100%;
   position: relative;
   bottom: 0;
+}
+
+.modal > .content > iframe {
+  margin-bottom: -10px;
 }
 
 /* Inner-shadow scroll top */

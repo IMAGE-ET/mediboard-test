@@ -484,11 +484,9 @@ var Url = Class.create({
     var modalContainer = this.modalObject.container;
     modalContainer.insert({top: titleElement});
 
-    // Wrap the iFrame if we are on an iPad
-    if (Prototype.Browser.IPad) {
-      var content = DOM.div({className: "content"}, modalContainer.down("iframe"));
-      modalContainer.insert(content);
-    }
+    // Wrap iframe with div.content
+    var content = DOM.div({className: "content"}, modalContainer.down("iframe"));
+    modalContainer.insert(content);
 
     style.paddingTop = titleElement.getHeight()+"px";
     modalContainer.setStyle(style);
