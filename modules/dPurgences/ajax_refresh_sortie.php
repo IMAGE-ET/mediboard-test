@@ -23,6 +23,11 @@ $sejour = $rpu->_ref_sejour;
 $sejour->_ref_rpu = $rpu;
 $sejour->loadRefsFwd();
 $sejour->_ref_rpu->loadRefSejourMutation();
+$sejour_mutation = $rpu->_ref_sejour_mutation;
+$sejour_mutation->loadRefsAffectations();
+foreach ($sejour_mutation->_ref_affectations as $_affectation) {
+  $_affectation->loadView();
+}
 $sejour->loadNDA();
 $sejour->loadRefsConsultations();
 $sejour->_ref_rpu->_ref_consult->loadRefsActes();

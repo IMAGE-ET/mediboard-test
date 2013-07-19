@@ -146,6 +146,9 @@
       {{assign var=service_id value=$sejour->service_sortie_id}}
       {{assign var=service value=$services.$service_id}}
       <br />&gt; <strong>{{$service}}</strong>
+      {{foreach from=$rpu->_ref_sejour_mutation->_ref_affectations item=_affectation}}
+        <br />&gt;&gt; <strong>{{$_affectation}}</strong>
+      {{/foreach}}
     {{/if}}
 
     <div class="compact">{{mb_value object=$sejour field=commentaires_sortie}}</div>

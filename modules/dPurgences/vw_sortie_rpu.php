@@ -65,6 +65,11 @@ foreach ($listSejours as &$_sejour) {
   // Détail du RPU
   $rpu =& $_sejour->_ref_rpu;
   $rpu->loadRefSejourMutation();
+  $sejour_mutation = $rpu->_ref_sejour_mutation;
+  $sejour_mutation->loadRefsAffectations();
+  foreach ($sejour_mutation->_ref_affectations as $_affectation) {
+    $_affectation->loadView();
+  }
   $rpu->_ref_consult->loadRefsActes();
 
   // Détail du patient
