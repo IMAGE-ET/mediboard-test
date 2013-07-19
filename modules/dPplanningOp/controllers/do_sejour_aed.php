@@ -32,7 +32,9 @@ if (CValue::post("mode_sortie") == "mutation" && CValue::post("type") == "urg" &
     $affectation->sejour_id = $sejour->_ref_rpu->mutation_sejour_id;
   }
   $affectation->sortie = $sejour->sortie_prevue;
-  $affectation->store();
+  if ($msg = $affectation->store()) {
+    CAppUI::stepAjax($msg, UI_MSG_ERROR);
+  }
 }
 
 $do = new CDoObjectAddEdit("CSejour");
