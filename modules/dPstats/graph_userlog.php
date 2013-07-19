@@ -117,141 +117,100 @@ function graphUserLog($startx, $endx, $interval, $user_id) {
   );
 }
 
-function graphUserLogV2($module_name, $action_name, $startx, $endx, $interval = 'day', $left) {
-  switch ($interval) {
-    case "day":
+/**
+ * User logs graphic for system view
+ *
+ * @param datetime $startx    Datetime where the search starts
+ * @param datetime $endx      Datetime where the search ends
+ * @param string   $period    Aggregation period
+ * @param string   $type      User log type to filter
+ * @param int      $user_id   User ID to filter
+ * @param string   $class     Class to filter
+ * @param int      $object_id Object ID to filter
+ *
+ * @return array|bool
+ */
+function graphUserLogSystem($startx, $endx, $period, $type = null, $user_id = null, $class = null, $object_id = null) {
+  switch ($period) {
+    default:
+    case "hour":
       $step = "+1 HOUR";
-      $period_format = "%Hh";
-      $max = 24;
-      $hours = 1;
+      $period_format = "%d-%m-%Y %Hh";
       break;
-    case "month":
+
+    case "day":
       $step = "+1 DAY";
-      $period_format = "%d/%m";
-      $max = 32;
-      $hours = 24;
+      $period_format = "%d-%m-%Y";
       break;
-    case "hyear":
+
+    case "week":
       $step = "+1 WEEK";
-      $period_format = "%U";
-      $max = 27;
-      $hours = 24 * 7;
+      $period_format = "%Y Sem. %W";
       break;
-    case "twoyears":
+
+    case "month":
       $step = "+1 MONTH";
-      $period_format = "%m/%Y";
-      $max = 25;
-      $hours = 24 * 30;
+      $period_format = "%m-%Y";
       break;
-    case "twentyyears":
+
+    case "year":
       $step = "+1 YEAR";
       $period_format = "%Y";
-      $max = 21;
-      $hours = 24 * 30 * 12;
-      break;
   }
-  
+
   $datax = array();
   $i = 0;
   for ($d = $startx; $d <= $endx; $d = CMbDT::dateTime($step, $d)) {
     $datax[] = array($i, CMbDT::format($d, $period_format));
     $i++;
   }
-  
-  $logs = CUserLog::loadPeriodAggregation($startx, $endx, $period_format, $module_name, $action_name);
-  
+
+  // Compute a good spacement for label ticks
+  $count_datax = count($datax);
+  $space       = 1;
+  if ($count_datax > 35) {
+    $space = round($count_datax / 35);
+  }
+
+  $logs = CUserLog::loadPeriodAggregation($startx, $endx, $period, $type, $user_id, $class, $object_id);
+
   if (!$logs) {
     return false;
   }
-  
+
   $count = array();
-  
-  if ($action_name) {
-    $_class = null;
-    
-    if ($left == "type") {
-      foreach ($datax as $x) {
-        foreach ($logs as $log) {
-          $count[$log['object_class']][$x[0]] = array($x[0], 0);
-        }
-        
-        foreach ($logs as $log) {
-          if ($x[1] == $log['gperiod']) {
-            $count[$log['object_class']][$x[0]] = array($x[0], $log['count']);
-          }
-        }
-      }
-    }
-    else {
-      $_class = array_shift($action_name);
-      
-      foreach ($datax as $x) {
-        foreach ($logs as $log) {
-          $count[$log['type']][$x[0]] = array($x[0], 0);
-        }
-        
-        foreach ($logs as $log) {
-          if ($x[1] == $log['gperiod']) {
-            $count[$log['type']][$x[0]] = array($x[0], $log['count']);
-          }
-        }
-      }
-    }
-  }
-  else {
-    foreach ($datax as $x) {
-      // Needed
-      $count[$x[0]]    = array($x[0], 0);
-      
-      foreach ($logs as $log) {
-        if ($x[1] == $log['gperiod']) {
-          $count[$x[0]] = array($x[0], $log['count']);
-        }
+
+  foreach ($datax as $x) {
+    // Needed
+    $count[$x[0]] = array($x[0], 0);
+
+    foreach ($logs as $_log) {
+      if ($x[1] == $_log['gperiod']) {
+        $count[$x[0]] = array($x[0], $_log['count'], $_log['gperiod']);
       }
     }
   }
 
-  
-  if ($interval == 'month') {
-    foreach ($datax as $i => &$x) {
-      if ($i % 2) $x[1] = '';
-    }
+  // Label ticks spacement
+  foreach ($datax as $i => &$x) {
+    if ($i % $space) $x[1] = '';
   }
-  
-  $title = '';
-  if ($module_name) {
-    $title .= CAppUI::tr("module-$module_name-court");
-  }
-  
-  if ($action_name) {
-    if ($left == "type") {
-      $title .= " - $action_name";
-    }
-    else {
-      $title .= " - $_class";
-    }
-    
-  }
-  
+
   $subtitle = CMbDT::format($endx, CAppUI::conf("longdate"));
-  
+
   $options = array(
-    'title' => utf8_encode($title),
     'subtitle' => utf8_encode($subtitle),
     'xaxis' => array(
       'labelsAngle' => 45,
-      'ticks' => $datax,
+      'ticks'       => $datax,
     ),
     'yaxis' => array(
-      'min' => 0,
-      'title' => utf8_encode(($left == 'type' ? 'Type' : ($left == 'classe') ? 'Classe' : ''
-                              )
-                            ),
+      'min'             => 0,
       'autoscaleMargin' => 1
     ),
     'y2axis' => array(
-      'min' => 0,
-      'title' => utf8_encode('Counts'),
+      'min'             => 0,
+      'title'           => utf8_encode('Quantité'),
       'autoscaleMargin' => 1
     ),
     'grid' => array(
@@ -259,33 +218,23 @@ function graphUserLogV2($module_name, $action_name, $startx, $endx, $interval = 
     ),
     'HtmlText' => false,
     'spreadsheet' => array(
-      'show' => true, 
+      'show'             => true,
       'csvFileSeparator' => ';',
       'decimalSeparator' => ','
     ),
+    'mouse' => array(
+      'track' => true
+    )
   );
 
   $series = array();
-  
-  if ($action_name) {
-    foreach ($count as $key => $oneCount) {
-        $series[] = array(
-         'label' => $key,
-         'data' => $oneCount,
-         'bars' => array('show' => true, 'stacked' => true),
-         'yaxis' => 2
-       );
-    }
-  }
-  else {
-    // Right axis (before in order the lines to be on top)
-    $series[] = array(
-       'label' => 'Counts',
-       'data' => $count,
-       'bars' => array('show' => true),
-       'yaxis' => 2
-     );
-  }
-  
-  return array('series' => $series, 'options' => $options, 'module' => $module_name);
+
+  // Right axis (before in order the lines to be on top)
+  $series[] = array(
+    'data'    => $count,
+    'bars'    => array('show' => true),
+    'yaxis'   => 2
+  );
+
+  return array('series' => $series, 'options' => $options);
 }

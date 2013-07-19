@@ -15,6 +15,10 @@ function changePage(start) {
   $V(getForm("filterFrm").start, start);
 }
 
+function setStats(val) {
+  $V($("filterFrm").stats, val);
+}
+
 Main.add(function(){
   var form = getForm("filterFrm");
   form.getElements().each(function(e){
@@ -27,12 +31,13 @@ Main.add(function(){
 });
 </script>
 
-<form name="filterFrm" action="?m={{$m}}" method="get" onsubmit="return checkForm(this)">
+<form name="filterFrm" id="filterFrm" action="?m={{$m}}" method="get" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="tab" value="{{$tab}}" />
 <input type="hidden" name="dialog" value="{{$dialog}}" />
 <input type="hidden" name="start" value="{{$start|default:0}}" onchange="this.form.submit()" />
+<input type="hidden" name="stats" value="{{$stats}}" />
 
 <table class="form">
   <tr>
@@ -54,7 +59,7 @@ Main.add(function(){
         <option value="0">&mdash; Toutes les classes</option>
         {{foreach from=$listClasses item=curr_class}}
         <option value="{{$curr_class}}" {{if $curr_class == $filter->object_class}}selected="selected"{{/if}}>
-          {{tr}}{{$curr_class}}{{/tr}} - {{$curr_class}} 
+          {{tr}}{{$curr_class}}{{/tr}} - {{$curr_class}}
         </option>
         {{/foreach}}
       </select>
@@ -73,14 +78,14 @@ Main.add(function(){
     	{{mb_field object=$filter field=object_id canNull=true}}
       <button type="button" class="search" onclick="ObjectSelector.init()">Chercher un objet</button>
       <script type="text/javascript">
-        ObjectSelector.init = function(){  
+        ObjectSelector.init = function(){
           this.sForm     = "filterFrm";
           this.sId       = "object_id";
           this.sView     = "object_id";
           this.sClass    = "object_class";
           this.onlyclass = "false";
           this.pop();
-        } 
+        }
        </script>
     </td>
     <th>{{mb_label object=$filter field="_date_max"}}</th>
@@ -88,11 +93,22 @@ Main.add(function(){
   </tr>
   <tr>
     <td class="button" colspan="10">
-      <button class="search">{{tr}}Search{{/tr}}</button>
+      <button class="search" onclick="setStats('0')">{{tr}}Search{{/tr}}</button>
+      <button class="lookup" onclick="setStats('1')">{{tr}}Statistics{{/tr}}</button>
+      <label for="period" title="Période">{{tr}}Period{{/tr}}</label>
+      <select name="period" onchange="this.form.submit();">
+        <option value="hour"  {{if $period == "hour"}}  selected="selected" {{/if}}>Heure  </option>
+        <option value="day"   {{if $period == "day"}}   selected="selected" {{/if}}>Journée</option>
+        <option value="week"  {{if $period == "week"}}  selected="selected" {{/if}}>Semaine</option>
+        <option value="month" {{if $period == "month"}} selected="selected" {{/if}}>Mois   </option>
+        <option value="year"  {{if $period == "year"}}  selected="selected" {{/if}}>Année  </option>
+      </select>
     </td>
   </tr>
 </table>
 
 </form>
 
-{{mb_include module=system template=inc_pagination total=$list_count current=$start step=100 change_page='changePage' jumper=1}}
+{{if !$stats}}
+  {{mb_include module=system template=inc_pagination total=$list_count current=$start step=100 change_page='changePage' jumper=1}}
+{{/if}}

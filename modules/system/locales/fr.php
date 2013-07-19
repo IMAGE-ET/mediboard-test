@@ -1947,6 +1947,7 @@ $locales['Modules-shm-ko'] = 'Cache de modules obsolète';
 $locales['Modules-shm-none'] = 'Cache de modules absent';
 $locales['Modules-shm-ok'] = 'Cache de modules à jour';
 $locales['Modules-shm-rem-ok'] = 'Cache de modules supprimé';
+$locales['Period'] = 'Période';
 $locales['UnlocDiv-AYRRS'] = 'Are you really really sure you want NOT to localize your application ?';
 $locales['UnlocDiv-RRRS'] = 'Really really really sure ?';
 $locales['config-admin-dsn'] = 'Création de la source de données';
@@ -2222,3 +2223,4 @@ $locales['utilities-source-file_system-connexion'] = 'Test d\'accessibilité';
 $locales['utilities-source-file_system-getFiles'] = 'Liste des fichiers';
 $locales['utilities-source-file_system-sendFile'] = 'Dépôt d\'un fichier';
 $locales['utilities-source-http'] = 'Utilitaires de la source HTTP';
+?>

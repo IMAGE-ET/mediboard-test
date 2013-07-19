@@ -13,10 +13,14 @@ global $can;
 
 $dialog = CValue::get("dialog");
 $start  = CValue::get("start", 0);
+$stats  = CValue::get("stats", 0);
+$period = CValue::get("period", "day");
 
 if (!CCanDo::edit() && !$dialog) {
   $can->redirect();
 }
+
+$smarty = new CSmartyDP();
 
 $filter = new CUserLog();
 
@@ -84,7 +88,7 @@ if ($object instanceof CCompteRendu) {
   $object->loadContent(false);
   $content = $object->_ref_content;
   $where[] = "(object_id = '$filter->object_id' AND object_class = '$filter->object_class') OR
-  (object_id = '$content->_id' AND object_class = 'CContentHTML')";
+(object_id = '$content->_id' AND object_class = 'CContentHTML')";
 }
 else {
   if ($filter->object_id) {
@@ -106,34 +110,63 @@ if ($filter->_date_max) {
 }
 
 $log = new CUserLog;
-$list       = $log->loadList($where, "user_log_id DESC", "$start, 100");
-$list_count = $log->countList($where);
 
-$group_id = CGroups::loadCurrent()->_id;
+$list       = null;
+$list_count = null;
 
-foreach ($list as $key => $log) {
-  $log->loadRefsFwd();
-  $log->_ref_user->loadRefMediuser();
-  $mediuser = $log->_ref_user->_ref_mediuser;
-  $mediuser->loadRefFunction();
-  $log->getOldValues();
-  if (!$can->admin) {
-    if ($mediuser->_ref_function->group_id != $group_id) {
-      unset($list[$key]);
+if (!$stats) {
+  $list       = $log->loadList($where, "user_log_id DESC", "$start, 100");
+  $list_count = $log->countList($where);
+
+  $group_id = CGroups::loadCurrent()->_id;
+
+  foreach ($list as $key => $log) {
+    $log->loadRefsFwd();
+    $log->_ref_user->loadRefMediuser();
+
+    $mediuser = $log->_ref_user->_ref_mediuser;
+    $mediuser->loadRefFunction();
+
+    $log->getOldValues();
+
+    if (!$can->admin) {
+      if ($mediuser->_ref_function->group_id != $group_id) {
+        unset($list[$key]);
+      }
     }
   }
 }
 
-// Création du template
-$smarty = new CSmartyDP();
+$smarty->assign("dialog",      $dialog      );
+$smarty->assign("filter",      $filter      );
+$smarty->assign("object",      $object      );
+$smarty->assign("listClasses", $listClasses );
+$smarty->assign("listUsers",   $listUsers   );
+$smarty->assign("list",        $list        );
+$smarty->assign("start",       $start       );
+$smarty->assign("list_count",  $list_count  );
+$smarty->assign("stats",       $stats       );
+$smarty->assign("period",      $period      );
 
-$smarty->assign("dialog"      , $dialog      );
-$smarty->assign("filter"      , $filter      );
-$smarty->assign("object"      , $object      );
-$smarty->assign("listClasses" , $listClasses );
-$smarty->assign("listUsers"   , $listUsers   );
-$smarty->assign("list"        , $list        );
-$smarty->assign("start"       , $start       );
-$smarty->assign("list_count"  , $list_count  );
+if ($stats) {
+  CAppUI::requireModuleFile('dPstats', 'graph_userlog');
+
+  if (!$filter->_date_max) {
+    $filter->_date_max = CMbDT::dateTime();
+  }
+
+  $graphs[] =
+    graphUserLogSystem(
+      $filter->_date_min,
+      $filter->_date_max,
+      $period,
+      $filter->type,
+      $filter->user_id,
+      $filter->object_class,
+      $filter->object_id
+    );
+
+  $smarty->assign("graphs", $graphs);
+}
 
 $smarty->display("view_history.tpl");

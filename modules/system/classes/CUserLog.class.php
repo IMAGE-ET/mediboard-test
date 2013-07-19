@@ -297,52 +297,78 @@ class CUserLog extends CMbMetaObject {
   }
 
   /**
-   * @param $start
-   * @param $end
-   * @param $period_format
-   * @param $module_name
-   * @param $action_name
+   * Load period aggregation for the system view
    *
-   * @return array
+   * @param datetime $start        Datetime where the search starts
+   * @param datetime $end          Datetime where the search ends
+   * @param string   $period       Aggregation period
+   * @param string   $type         User log type to filter
+   * @param int      $user_id      User ID to filter
+   * @param string   $object_class Class to filter
+   * @param int      $object_id    Object ID to filter
+   *
+   * @return array|bool
    */
-  static function loadPeriodAggregation($start, $end, $period_format, $module_name, $action_name) {
+  static function loadPeriodAggregation(
+      $start,
+      $end,
+      $period,
+      $type         = null,
+      $user_id      = null,
+      $object_class = null,
+      $object_id    = null
+  ) {
+    switch ($period) {
+      default:
+      case "hour":
+        $period_format = "%d-%m-%Y %Hh";
+        break;
+
+      case "day":
+        $period_format = "%d-%m-%Y";
+        break;
+
+      case "week":
+        $period_format = "%Y Sem. %u";
+        break;
+
+      case "month":
+        $period_format = "%m-%Y";
+        break;
+
+      case "year":
+        $period_format = "%Y";
+    }
+
     $query = "SELECT
         COUNT(*) AS count,
-        `object_class`,
-        `type`,
-        `date`,
       DATE_FORMAT(`date`, '$period_format') AS `gperiod`
       FROM `user_log`
       USE INDEX (date)
-      WHERE `date` BETWEEN '$start' AND '$end'";
-    
-    if ($action_name) {
-      // If is_array, then we have to show one graph per class, with all types
-      if (is_array($action_name)) {
-        $_class = array_shift($action_name);
-        $query .= "\nAND `object_class` = '$_class'";
-        $query .= "\nAND `type` IN ('".implode("', '", $action_name)."') ";
-        $query .= "\nGROUP BY `gperiod`, `object_class`, `type` ORDER BY `date`";
-      }
-      else {
-        if ($module_name) {
-          $listClasses = implode("', '", CModule::getClassesFor($module_name));
-          $query .= "\nAND object_class IN ('".$listClasses."') ";
-        }
-        
-        $query .= "\nAND `type` = '$action_name'";
-        $query .= "\nGROUP BY `gperiod`, `object_class`, `type` ORDER BY `date`";
-      }
+      WHERE `date` >= '$start'";
+
+    if ($end) {
+      $query .= "\nAND `date` <= '$end'";
     }
-    else {
-      if ($module_name) {
-        $listClasses = implode("', '", CModule::getClassesFor($module_name));
-        $query .= "\nAND object_class IN ('".$listClasses."') ";
-      }
-      
-      $query .= "\nGROUP BY `gperiod` ORDER BY `date`";
+
+    if ($type) {
+      $query .= "\nAND `type` = '$type'";
     }
-    
+
+    if ($user_id) {
+      $query .= "\nAND `user_id` = '$user_id'";
+    }
+
+    if ($object_class) {
+      $query .= "\nAND `object_class` = '$object_class'";
+    }
+
+    if ($object_id) {
+      $query .= "\nAND `object_id` = '$object_id'";
+    }
+
+    $query .= "\nGROUP BY `gperiod` ORDER BY `date`";
+
     $log = new self;
     return $log->_spec->ds->loadList($query);
   }
