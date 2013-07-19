@@ -1894,6 +1894,37 @@ td.loading {
   opacity: 1.0;
 }
 
+/* Firefox doesn't print elements with opacity */
+@media print {
+  .ua-firefox .opacity-10 {
+    opacity: 1.0;
+  }
+  .ua-firefox .opacity-20 {
+    opacity: 1.0;
+  }
+  .ua-firefox .opacity-30 {
+    opacity: 1.0;
+  }
+  .ua-firefox .opacity-40 {
+    opacity: 1.0;
+  }
+  .ua-firefox .opacity-50 {
+    opacity: 1.0;
+  }
+  .ua-firefox .opacity-60 {
+    opacity: 1.0;
+  }
+  .ua-firefox .opacity-70 {
+    opacity: 1.0;
+  }
+  .ua-firefox .opacity-80 {
+    opacity: 1.0;
+  }
+  .ua-firefox .opacity-90 {
+    opacity: 1.0;
+  }
+}
+
 div.sniffer {
   float: right;
   margin-top: -4px;
