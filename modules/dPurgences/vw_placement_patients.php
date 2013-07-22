@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Urgences
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -59,12 +59,16 @@ for ($num = 0; $num <= 1; $num++) {
   /** @var CChambre[] $chambres */
   if ($num == 0) {
     $chambres = $chambres_uhcd;
-    $temp["sejour.uhcd"] = " = '1'";
+    if (!CAppUI::conf("dPurgences view_rpu_uhcd")) {
+      $temp["sejour.uhcd"] = " = '1'";
+    }
     $nom = "uhcd";
   }
   else {
     $chambres = $chambres_urgences;
-    $temp["sejour.uhcd"] = " = '0'";
+    if (!CAppUI::conf("dPurgences view_rpu_uhcd")) {
+      $temp["sejour.uhcd"] = " = '0'";
+    }
     $nom = "urgence";
   }
   
