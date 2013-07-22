@@ -24,6 +24,7 @@ $patient_firstName_search = null;
 
 $patients = array();
 $patientsSoundex = array();
+$patientsLimited = array();
 
 $showCount = 30;
 
