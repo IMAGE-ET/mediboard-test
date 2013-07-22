@@ -93,7 +93,22 @@ class CPRPAMessaging extends CHL7v3Messaging {
     $dom = new CHL7v3MessageXML();
     $dom->loadXMLSafe($ack_data);
 
-    $tagName       = $dom->documentElement->tagName;
+    $element = $dom->documentElement;
+    $tagName = $element->tagName;
+
+    if (strpos($tagName, "_Response") !== false) {
+      $cloneNode = $element->firstChild->cloneNode(true);
+
+      // Suppression du noeud RESPONSE
+      $dom->removeChild($element);
+
+      // On remet le noeud dédié à la réponse
+      $dom->appendChild($cloneNode);
+
+      $element = $dom->documentElement;
+      $tagName = $element->tagName;
+    }
+
     $first_element = str_replace("PRPA_", "", $tagName);
 
     if (array_key_exists($first_element, self::$evenements)) {

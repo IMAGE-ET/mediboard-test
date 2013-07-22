@@ -14,12 +14,27 @@
  * Acknowledgment HL7v3
  */
 class CHL7v3AcknowledgmentPRPA extends CHL7v3EventPRPA {
+  public $acknowledgment;
+
   /**
    * Get acknowledgment status
    *
    * @return string
    */
   function getStatutAcknowledgment() {
+  }
+
+  /**
+   * Get acknowledgment text
+   *
+   * @return string
+   */
+  function getTextAcknowledgment() {
+    $dom = $this->dom;
+
+    $acknowledgementDetail = $dom->queryNode("hl7:acknowledgementDetail", $this->acknowledgment);
+
+    return $dom->queryTextNode("hl7:text", $acknowledgementDetail);
   }
 
   /**

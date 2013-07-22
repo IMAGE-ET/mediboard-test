@@ -19,6 +19,7 @@ class CHL7v3EventPRPAIN201312UV02 extends CHL7v3AcknowledgmentPRPA implements CH
   /** @var string */
   public $interaction_id = "IN201312UV02";
   public $queryAck;
+  public $subject;
 
   /**
    * Get interaction
@@ -35,6 +36,11 @@ class CHL7v3EventPRPAIN201312UV02 extends CHL7v3AcknowledgmentPRPA implements CH
    * @return string
    */
   function getStatutAcknowledgment() {
+    $dom = $this->dom;
+
+    $this->acknowledgment = $dom->queryNode("//hl7:".$this->getInteractionID()."/hl7:acknowledgement");
+
+    return $dom->getValueAttributNode($this->acknowledgment, "typeCode");
   }
 
   /**
