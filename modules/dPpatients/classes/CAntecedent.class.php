@@ -117,7 +117,7 @@ class CAntecedent extends CMbObject {
       $this->loadRefDossierMedical();
       $dossier_medical = $this->_ref_dossier_medical;
       if ($dossier_medical->object_class == "CPatient") {
-        SHM::remKeys("bcb-alertes-*-CPatient-".$dossier_medical->object_id);
+        SHM::remKeys("alertes-*-CPatient-".$dossier_medical->object_id);
       }
     }
     
@@ -142,7 +142,7 @@ class CAntecedent extends CMbObject {
       $this->loadRefDossierMedical();
       $dossier_medical = $this->_ref_dossier_medical;
       if ($dossier_medical->object_class == "CPatient") {
-        SHM::remKeys("bcb-alertes-*-CPatient-".$dossier_medical->object_id);
+        SHM::remKeys("alertes-*-CPatient-".$dossier_medical->object_id);
       }
     }
     

@@ -580,7 +580,7 @@ class CPatient extends CPerson {
 
     if ($this->fieldModified("naissance") || $this->fieldModified("sexe")) {
       // _guid is not valued yet !!
-      SHM::remKeys("bcb-alertes-*-CPatient-".$this->_id);
+      SHM::remKeys("alertes-*-CPatient-".$this->_id);
     }
 
     // Standard store

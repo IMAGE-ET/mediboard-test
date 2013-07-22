@@ -1142,7 +1142,7 @@ class CConstantesMedicales extends CMbObject {
         !$this->_id && ($this->taille || $this->poids)
     ) {
       $this->completeField("patient_id");
-      SHM::remKeys("bcb-alertes-*-CPatient-".$this->patient_id);
+      SHM::remKeys("alertes-*-CPatient-".$this->patient_id);
     }
 
     if ($this->_id) {
@@ -1184,7 +1184,7 @@ class CConstantesMedicales extends CMbObject {
   function delete() {
     $this->completeField("taille", "poids", "patient_id");
     if ($this->taille || $this->poids) {
-      SHM::remKeys("bcb-alertes-*-CPatient-".$this->patient_id);
+      SHM::remKeys("alertes-*-CPatient-".$this->patient_id);
     }
     return parent::delete();
   }

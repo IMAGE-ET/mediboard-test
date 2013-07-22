@@ -468,7 +468,7 @@ class CDossierMedical extends CMbMetaObject {
     
     $this->completeField("object_id", "object_class");
     if ($this->object_class == "CPatient" && $this->fieldModified("codes_cim")) {
-      SHM::remKeys("bcb-alertes-*-CPatient-".$this->object_id);
+      SHM::remKeys("alertes-*-CPatient-".$this->object_id);
     }
     
     return parent::store();
