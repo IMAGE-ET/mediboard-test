@@ -377,8 +377,15 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
     $dom  = $this->dom;
 
     $name = $dom->addElement($elParent, "name");
-    /* @todo voir comment gérer la civilité */
-    //$dom->addElement($name, "prefix", CAppUI::tr("CPatient.civilite.$patient->civilite"));
+
+    $civilite = null;
+    if ($patient->civilite == "m" || $patient->civilite == "mme" || $patient->civilite == "mlle") {
+      $civilite = strtoupper($patient->civilite);
+    }
+    else {
+      $civilite = $patient->sexe == "m" ? "M" : "Mme";
+    }
+    $dom->addElement($name, "prefix", CAppUI::tr("CPatient.civilite.$civilite"));
 
     if ($patient->_p_maiden_name) {
       $family = $dom->addElement($name, "family", $patient->_p_maiden_name);
