@@ -92,16 +92,18 @@ class CPop{
 
     $password = $this->source->getPassword();
     $server = $this->_server.$extension;
-    $this->_mailbox = imap_open($server, $this->source->user, $password, 0, 0);
+    $this->_mailbox = @imap_open($server, $this->source->user, $password, 0, 0);
+    //avoid errors reporting
+    imap_errors();
+    imap_alerts();
     if ($this->_mailbox === false ) {
+      //CModelObject::warning("IMAP-warning-configuration-unreashable", $this->source->object_class, $this->source->object_id);
       return false;
     }
 
     $this->_is_open = true;
 
-    //avoid errors reporting
-    imap_errors();
-    imap_alerts();
+
     return $this->_mailbox;
   }
 
