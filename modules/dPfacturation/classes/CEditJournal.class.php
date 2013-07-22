@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPfacturation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -290,7 +290,7 @@ class CEditJournal {
       $assurance_patient = $facture->_ref_assurance_maladie;
     }
     elseif ($facture->assurance_accident && !$facture->send_assur_compl && $facture->type_facture == "accident") {
-      $assurance_patient = $this->type_rbt == "TG" ? $patient : $facture->_ref_assurance_accident;
+      $assurance_patient = $facture->_ref_assurance_accident->type_pec == "TG" ? $patient : $facture->_ref_assurance_accident;
     }
     else {
       $assurance_patient = $patient;
