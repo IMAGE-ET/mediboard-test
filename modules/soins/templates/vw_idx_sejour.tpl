@@ -630,7 +630,7 @@ checkAnesth = function(oField){
         {{if $isImedsInstalled}}
           <li><a href="#Imeds">Labo</a></li>
         {{/if}}
-        <li><a href="#documents">Documents</a></li>
+        <li onmousedown=loadDocuments(document.form_prescription.sejour_id.value)><a href="#documents">Documents</a></li>
         {{if $can_view_dossier_medical}}
         <li onmousedown="DossierMedical.reloadDossierSejour();"><a href="#antecedents">Antécédents</a></li>
         {{/if}} 
