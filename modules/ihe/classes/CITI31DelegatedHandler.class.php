@@ -149,13 +149,13 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if (!$current_log || $affectation->_no_synchro || !in_array($current_log->type, array("create", "store"))) {
         return;
       }
-      
+
       // Affectation non liée à un séjour
       $sejour = $affectation->loadRefSejour();
       if (!$sejour->_id) {
         return;
       }
-      
+
       // On envoie pas les affectations prévisionnelles 
       if (!$receiver->_configs["send_provisional_affectation"] && $sejour->_etat == "preadmission") {
         return;
@@ -170,7 +170,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($affectation->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
         return;
       }
-      
+
       $sejour->loadRefPatient();
       $sejour->_receiver = $receiver;
       
