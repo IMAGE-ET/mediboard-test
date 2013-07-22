@@ -1,6 +1,6 @@
 {{mb_script module="dPcabinet" script="edit_consultation" ajax=$ajax}}
 
-<script type="text/javascript">
+<script>
 
 Main.add(function () {
   if (document.selCabinet && "{{$offline}}" == 0){
@@ -86,7 +86,7 @@ Reconvocation = {
   {{if $mode_urgence}}
   <tr>
     <td>
-      <script type="text/javascript">
+      <script>
         PatSelector.init = function() {
           this.sForm = 'Create-Reconvocation';
           this.sId   = 'patient_id';
@@ -147,25 +147,25 @@ Reconvocation = {
             </td>
             {{/if}}
             <td {{if $mode_urgence}}colspan="5"{{/if}}>
-              <input name="_empty"      type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $empty}}checked="checked"{{/if}} />
+              <input name="_empty"      type="checkbox" value="1" onclick="synchronizeView(this.form);" {{if $empty}}checked="checked"{{/if}} />
               <input name="empty"       type="hidden"   value="{{$empty}}" />
               <label for="_empty"       title="Afficher les plages vides">Plages vides</label>
-              <input name="_canceled"   type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $canceled}}checked="checked"{{/if}} />
+              <input name="_canceled"   type="checkbox" value="1" onclick="synchronizeView(this.form);" {{if $canceled}}checked="checked"{{/if}} />
               <input name="canceled"    type="hidden"   value="{{$canceled}}" />
               <label for="_canceled"    title="Afficher les consultations annulées">Annulées</label>
-              <input name="_paid"       type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $paid}}checked="checked"{{/if}} />
+              <input name="_paid"       type="checkbox" value="1" onclick="synchronizeView(this.form);" {{if $paid}}checked="checked"{{/if}} />
               <input name="paid"        type="hidden"   value="{{$paid}}" />
               <label for="_paid"        title="Afficher les consultations réglées">Réglées</label>
-              <input name="_finished"   type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $finished}}checked="checked"{{/if}} />
+              <input name="_finished"   type="checkbox" value="1" onclick="synchronizeView(this.form);" {{if $finished}}checked="checked"{{/if}} />
               <input name="finished"    type="hidden"   value="{{$finished}}" />
               <label for="_finished"    title="Afficher les consultations terminées">Terminées</label>
-              <input name="_immediate"  type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $immediate}}checked="checked"{{/if}} />
+              <input name="_immediate"  type="checkbox" value="1" onclick="synchronizeView(this.form);" {{if $immediate}}checked="checked"{{/if}} />
               <input name="immediate"   type="hidden"   value="{{$immediate}}" />
               <label for="_immediate"   title="Afficher les consultations immédiates">Immédiates</label>
-              <input name="_matin"      type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $matin}}checked="checked"{{/if}} />
+              <input name="_matin"      type="checkbox" value="1" onclick="synchronizeView(this.form);" {{if $matin}}checked="checked"{{/if}} />
               <input name="matin"       type="hidden"   value="{{$matin}}" />
               <label for="_matin"       title="Afficher les consultations du matin">Matin</label>
-              <input name="_apres_midi" type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $apres_midi}}checked="checked"{{/if}} />
+              <input name="_apres_midi" type="checkbox" value="1" onclick="synchronizeView(this.form);" {{if $apres_midi}}checked="checked"{{/if}} />
               <input name="apres_midi"  type="hidden"   value="{{$apres_midi}}" />
               <label for="_apres_midi"  title="Afficher les consultations de l'après-midi">Après-midi</label>
               
