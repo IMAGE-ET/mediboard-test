@@ -12,26 +12,32 @@
  */
 
 CCanDo::checkEdit();
-
 global $locales;
-$cache_to_reload = false;
+$in_use_locales = $locales;
+
+//load old locales
+$locale = CAppUI::pref("LOCALE", "fr");
+foreach (CAppUI::getLocaleFilesPaths($locale) as $_path) {
+  include_once $_path;
+}
+$locales = array_filter($locales, "stringNotEmpty");
+foreach ($locales as &$_locale) {
+  $_locale = CMbString::unslash($_locale);
+}
 
 //get the list of translations made
 $translation = new CTranslationOverwrite();
 $translations_bdd = $translation->loadList();
 
-//check for cache and old translation
-foreach ($translations_bdd as $_trad_bdd ) {
-  $_trad_bdd->loadOldTranslation();
-  if (CAppUI::tr($_trad_bdd->source) != $_trad_bdd->translation) {
-    $cache_to_reload = true;
-    continue;
-  }
+
+
+/** @var CTranslationOverwrite[] $translations_bdd */
+foreach ($translations_bdd as $_translation) {
+  $_translation->loadOldTranslation($locales);
+  $_translation->checkInCache();
 }
 
 //smarty
 $smarty = new CSmartyDP();
 $smarty->assign("translations_bdd", $translations_bdd);
-$smarty->assign("cache",            $cache_to_reload);
-$smarty->assign("locales",          $locales);
 $smarty->display("view_translations.tpl");

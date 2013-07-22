@@ -18,28 +18,27 @@
 </script>
 
 <button onclick="editTrad(0)" class="new">{{tr}}CTranslationOverwrite.new{{/tr}}</button>
-{{if $cache}}
-  <div class="warning">{{tr}}CTranslationOverwrite-info-reload-cache{{/tr}}</div>
-{{/if}}
 <table class="main">
   <tr>
     <td id="listTrad">
       <table class="tbl">
         <tr>
+          <th class="narrow"></th>
           <th>{{tr}}CTranslationOverwrite-source{{/tr}}</th>
           <th>{{tr}}CTranslationOverwrite-_old_translation{{/tr}}</th>
           <th>{{tr}}CTranslationOverwrite-translation{{/tr}}</th>
           <th>{{tr}}CTranslationOverwrite-language{{/tr}}</th>
         </tr>
         {{foreach from=$translations_bdd item=_trad}}
-          <tr onclick="editTrad({{$_trad->_id}})">
+          <tr>
+            <td><button class="button edit notext"  onclick="editTrad({{$_trad->_id}})">{{tr}}Edit{{/tr}}</button></td>
             <td>{{mb_value object=$_trad field=source}}</td>
             <td>{{$_trad->_old_translation}}</td>
-            <td>{{mb_value object=$_trad field=translation}} {{if $_trad->_old_translation != $_trad->translation}}<div class="info" style="display: inline;">{{tr}}CTranslationOverwrite-info-notCachedTrad{{/tr}}</div>{{/if}}</td>
-            <td>{{tr}}CTranslationOverwrite.language.{{$_trad->language}}{{/tr}}</td>
+            <td {{if !$_trad->_in_cache}}class="warning"{{/if}}><strong>{{mb_value object=$_trad field=translation}}</strong></td>
+            <td><img src="images/icons/flag-{{$_trad->language}}.png" alt=""/> {{tr}}CTranslationOverwrite.language.{{$_trad->language}}{{/tr}}</td>
           </tr>
         {{foreachelse}}
-          <tr><td colspan="3" class="empty">{{tr}}CTranslationOverwrite.none{{/tr}}</td></tr>
+          <tr><td colspan="4" class="empty">{{tr}}CTranslationOverwrite.none{{/tr}}</td></tr>
         {{/foreach}}
       </table>
     </td>

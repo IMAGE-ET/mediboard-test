@@ -33,6 +33,7 @@
 </script>
 
   <form action="" method="post" name="editTranslationO">
+    <input type="hidden" name="dosql" value="do_translationoverwrite_aed"/>
     {{mb_key object=$translation}}
     {{mb_class object=$translation}}
 
@@ -56,9 +57,9 @@
         <td>{{mb_field object=$translation field=source}}</td>
       </tr>
       <tr>
-        <th>{{tr}}CTranslationOverwrite.translation_mb{{/tr}}</th>
+        <th>{{tr}}CTranslationOverwrite-_old_translation{{/tr}}</th>
         <td>
-          <textarea name="mbtrad" disabled="disabled">{{tr}}{{$translation->source}}{{/tr}}</textarea>
+          <textarea name="mbtrad" disabled="disabled">{{$translation->_old_translation}}</textarea>
         </td>
       </tr>
       <tr>

@@ -14,11 +14,15 @@
 CCanDo::checkEdit();
 
 $translation_id = CValue::getOrSession("trad_id");
-$language = CValue::getOrSession("language", "fr");
+$language = CValue::getOrSession("language", CAppUI::pref("LOCALE", "fr"));
 $languages = CAppUI::getAvailableLanguages();
 
 $translation = new CTranslationOverwrite();
 $translation->load($translation_id);
+
+if ($translation->_id) {
+  $translation->loadOldTranslation();
+}
 
 //smarty
 $smarty = new CSmartyDP();

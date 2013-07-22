@@ -11,9 +11,9 @@
 
 <ul>
   {{foreach from=$trad key=_key item=_trad}}
-    <li id="autocomplete-{{$_key}}" data-string="{{$_key}}" data-locale="{{$_trad}}">
-      {{$_key}}<br/>
-      <strong>{{$_trad}}</strong>
+    <li id="autocomplete-{{$_key}}" data-string="{{$_key}}" data-locale="{{$_trad.val}}">
+      {{$_trad.key|smarty:nodefaults}}<br/>
+      <strong>{{$_trad.val|smarty:nodefaults}}</strong>
     </li>
   {{foreachelse}}
     <li>

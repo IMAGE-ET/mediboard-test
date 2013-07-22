@@ -21,6 +21,8 @@ class CTranslationOverwrite extends CMbObject {
   public $language;
   public $_old_translation;
 
+  public $_in_cache;
+
   /**
    * @see parent::getSpec()
    *
@@ -46,10 +48,30 @@ class CTranslationOverwrite extends CMbObject {
   /**
    * load the activated translation from mediboard (used to compare with the sql one)
    *
+   * @param array $locales the locales array
+   *
    * @return string
    */
-  function loadOldTranslation() {
-    return $this->_old_translation = CAppUI::tr($this->source);
+  function loadOldTranslation($locales = array()) {
+    if (!count($locales)) {
+      $locale = CAppUI::pref("LOCALE", "fr");
+      foreach (CAppUI::getLocaleFilesPaths($locale) as $_path) {
+        include_once $_path;
+      }
+    }
+
+    return $this->_old_translation = $locales[$this->source];
+  }
+
+  /**
+   * check if the translation is cached
+   *
+   * @return bool
+   */
+  function checkInCache() {
+    global $locales;
+
+    return $this->_in_cache = ($locales[$this->source] != $this->translation);
   }
 
   /**
