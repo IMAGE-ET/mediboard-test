@@ -61,7 +61,7 @@ if (!$do_import) {
     $echg_hprim->type            = $domEvenement->type;
     $echg_hprim->sous_type       = $domEvenement->sous_type;
     $echg_hprim->_message         = utf8_encode($xmlfile);
-    $doc_valid                   = $domEvenement->schemaValidate();
+    $doc_valid                   = $domEvenement->schemaValidate(null, false, $dest_hprim->display_errors);
     $echg_hprim->message_valide  = $doc_valid ? 1 : 0;
     if ($type == "pmsi") {
       $echg_hprim->object_class = "CSejour";

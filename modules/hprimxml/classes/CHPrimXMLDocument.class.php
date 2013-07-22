@@ -218,7 +218,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->generateEnteteMessage();
     $this->generateFromOperation($mbObject, $referent);
 
-    $doc_valid = $this->schemaValidate();
+    $doc_valid = $this->schemaValidate(null, false, $this->_ref_receiver->display_errors);
     $echg_hprim->message_valide = $doc_valid ? 1 : 0;
 
     $this->saveTempFile();

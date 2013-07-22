@@ -24,6 +24,7 @@ class CDestinataireHprim extends CInteropReceiver {
   public $code_appli;
   public $code_acteur;
   public $code_syst;
+  public $display_errors;
   
   // Form fields
   public $_tag_hprimxml;
@@ -62,10 +63,12 @@ class CDestinataireHprim extends CInteropReceiver {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["register"]    = "bool notNull default|1";
-    $props["code_appli"]  = "str";
-    $props["code_acteur"] = "str";
-    $props["code_syst"]   = "str";
+
+    $props["register"]       = "bool notNull default|1";
+    $props["code_appli"]     = "str";
+    $props["code_acteur"]    = "str";
+    $props["code_syst"]      = "str";
+    $props["display_errors"] = "bool notNull default|1";
 
     return $props;
   }
@@ -136,7 +139,7 @@ class CDestinataireHprim extends CInteropReceiver {
     $dom_acq = new CHPrimXMLAcquittementsPatients();
     $dom_acq->loadXML($acq);
     $dom_acq->_ref_echange_hprim = $exchange;
-    $doc_valid = $dom_acq->schemaValidate();
+    $doc_valid = $dom_acq->schemaValidate(null, false, $this->display_errors);
     
     $exchange->statut_acquittement = $dom_acq->getStatutAcquittementPatient();
     $exchange->acquittement_valide = $doc_valid ? 1 : 0;
@@ -185,7 +188,7 @@ class CDestinataireHprim extends CInteropReceiver {
     $dom_acq = CHPrimXMLAcquittementsServeurActivitePmsi::getEvtAcquittement($dom_evt);
     $dom_acq->loadXML($acq);
     $dom_acq->_ref_echange_hprim = $exchange;
-    $doc_valid = $dom_acq->schemaValidate();
+    $doc_valid = $dom_acq->schemaValidate(null, false, $this->display_errors);
     
     $exchange->statut_acquittement = $dom_acq->getStatutAcquittementServeurActivitePmsi();
     $exchange->acquittement_valide = $doc_valid ? 1 : 0;

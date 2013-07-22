@@ -377,7 +377,7 @@ class CExchangeDataFormat extends CMbMetaObject {
     
     $sender = new $this->sender_class;
     $sender->load($this->sender_id);
-    
+
     // Suppression de l'identifiant dans le cas où l'échange repasse pour éviter un autre échange avec
     // un identifiant forcé
     if ($this instanceof CExchangeAny) {
@@ -413,7 +413,7 @@ class CExchangeDataFormat extends CMbMetaObject {
       $dom_evt = $sender->_data_format->_family_message->getHPrimXMLEvenements($this->_message);
       $ack = CHPrimXMLAcquittements::getAcquittementEvenementXML($dom_evt);
       $ack->loadXML($ack_data);
-      $ack_valid = $ack->schemaValidate();
+      $ack_valid = $ack->schemaValidate(null, false, false);
       if ($ack_valid) {
         $this->statut_acquittement = $ack->getStatutAcquittement();
       }

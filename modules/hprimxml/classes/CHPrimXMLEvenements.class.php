@@ -63,7 +63,7 @@ class CHPrimXMLEvenements extends CHPrimXMLDocument {
     }
     
     $acq       = $dom_acq->generateAcquittements("erreur", "E008");
-    $doc_valid = $dom_acq->schemaValidate();
+    $doc_valid = $dom_acq->schemaValidate(null, false, $this->_ref_receiver->display_errors);
     
     $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
     $echange_hprim->_acquittement       = $acq;

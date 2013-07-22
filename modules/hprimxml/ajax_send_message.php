@@ -57,7 +57,7 @@ if (!$echange_hprim_id) {
       if ($acquittement) {
         $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
         $domGetAcquittement->loadXML($acquittement);
-        $doc_valid = $domGetAcquittement->schemaValidate();
+        $doc_valid = $domGetAcquittement->schemaValidate(null, false, $dest_hprim->display_errors);
         if ($doc_valid) {
           $notification->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
         }
@@ -66,12 +66,13 @@ if (!$echange_hprim_id) {
         $notification->date_echange = CMbDT::dateTime();
         $notification->_acquittement = $acquittement;
         $notification->store();
-      } 
+      }
       else {
         $notification->date_echange = "";
         $notification->store();
       }   
-    } else {
+    }
+    else {
       $notification->date_echange = "";
       $notification->store();
     }
@@ -92,7 +93,7 @@ if (!$echange_hprim_id) {
   if ($acquittement) {
     $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
     $domGetAcquittement->loadXML($acquittement);
-    $doc_valid = $domGetAcquittement->schemaValidate();
+    $doc_valid = $domGetAcquittement->schemaValidate(null, false, $dest_hprim->display_errors);
     if ($doc_valid) {
       $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
     }

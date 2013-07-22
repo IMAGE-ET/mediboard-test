@@ -91,7 +91,7 @@ class CEchangeHprim extends CEchangeXML {
         $domGetAcquittement = new CHPrimXMLAcquittementsServeurActivitePmsi::$evenements[$this->sous_type] : null;
       
       $domGetAcquittement->loadXML($this->_acquittement);
-      $domGetAcquittement->formatOutput = true; 
+      $domGetAcquittement->formatOutput = true;
       
       $validate = $domGetAcquittement->schemaValidate(null, true, false);
       if (!is_bool($validate)) {
@@ -105,19 +105,21 @@ class CEchangeHprim extends CEchangeXML {
   }
   
   function getObservations($display_errors = false) {
-    if ($this->_acquittement) {
-      if ($this->type == "patients") {
-        $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-        $domGetAcquittement->loadXML($this->_acquittement);
-        $doc_valid = $domGetAcquittement->schemaValidate(null, false, false);
-        if ($doc_valid) {    
-          return $this->_observations = $domGetAcquittement->getAcquittementObservationPatients();
-        }
+    if (!$this->_acquittement) {
+      return;
+    }
+
+    if ($this->type == "patients") {
+      $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
+      $domGetAcquittement->loadXML($this->_acquittement);
+      $doc_valid = $domGetAcquittement->schemaValidate(null, false, false);
+      if ($doc_valid) {
+        return $this->_observations = $domGetAcquittement->getAcquittementObservationPatients();
       }
-      /* @todo a remplir ... */
-      if ($this->type == "pmsi") {
-        return $this->_observations = array();
-      }
+    }
+    /* @todo a remplir ... */
+    if ($this->type == "pmsi") {
+      return $this->_observations = array();
     }
   }
 
@@ -173,7 +175,7 @@ class CEchangeHprim extends CEchangeXML {
     $statut      = $avertissement ? $dom_acq->_codes_erreurs["avt"] : $dom_acq->_codes_erreurs["ok"];
 
     $msgAcq = $dom_acq->generateAcquittements($statut, $codes, $commentaire, $mbObject);
-    $doc_valid = $dom_acq->schemaValidate();
+    $doc_valid = $dom_acq->schemaValidate(null, false, $this->_ref_receiver->display_errors);
     
     $this->acquittement_valide = $doc_valid ? 1 : 0;
     $this->statut_acquittement = $statut;
@@ -192,7 +194,7 @@ class CEchangeHprim extends CEchangeXML {
     $statut = $dom_acq->_codes_erreurs["err"];
     
     $msgAcq    = $dom_acq->generateAcquittements($dom_acq->_codes_erreurs["err"], $code_erreur, $commentaires, $mbObject);
-    $doc_valid = $dom_acq->schemaValidate();
+    $doc_valid = $dom_acq->schemaValidate(null, false, $this->_ref_receiver->display_errors);
     
     $this->acquittement_valide = $doc_valid ? 1 : 0;
     $this->statut_acquittement = $statut;

@@ -18,6 +18,7 @@ CCanDo::checkRead();
 $exchange_guid = CValue::get("exchange_guid");
 
 // Chargement de l'échange demandé
+/** @var CExchangeDataFormat $exchange */
 $exchange = CMbObject::loadFromGuid($exchange_guid);
 
 try {

@@ -18,32 +18,52 @@ class COperatorHprimXML extends CEAIOperator {
    *
    * @param CExchangeDataFormat $data_format Exchange data format
    *
+   * @throws CMbException
+   *
    * @return string Acquittement
-   **/
+   */
   function event(CExchangeDataFormat $data_format) {
     $msg     = $data_format->_message;
+    /** @var CHPrimXMLEvenements $dom_evt */
     $dom_evt = $data_format->_family_message->getHPrimXMLEvenements($msg);
-    
+
     $dom_evt_class = get_class($dom_evt);
     if (!in_array($dom_evt_class, $data_format->_messages_supported_class)) {
       throw new CMbException(CAppUI::tr("CEAIDispatcher-no_message_supported_for_this_actor", $dom_evt_class));
     }
-    
+
     // Récupération des informations du message XML
     $dom_evt->loadXML($msg);
-    $doc_errors = $dom_evt->schemaValidate(null, true);
     
     // Récupération du noeud racine
     $root     = $dom_evt->documentElement;
     $nodeName = $root->nodeName;
-    
+
+    // Création de l'échange
+    $echg_hprim = new CEchangeHprim();
+
     try {
-      // Création de l'échange
-      $echg_hprim = new CEchangeHprim();
-      $echg_hprim->load($data_format->_exchange_id);
-      
       // Récupération des données de l'entête
       $data = $dom_evt->getEnteteEvenementXML($nodeName);
+
+      $echg_hprim->load($data_format->_exchange_id);
+
+      // Gestion des notifications ?
+      if (!$echg_hprim->_id) {
+        $echg_hprim->populateEchange($data_format, $dom_evt);
+        $echg_hprim->identifiant_emetteur = $data['identifiantMessage'];
+        $echg_hprim->message_valide       = 1;
+      }
+
+      $echg_hprim->loadRefsInteropActor();
+
+      // Chargement des configs de l'expéditeur
+      $echg_hprim->_ref_sender->getConfigs($data_format);
+
+      $configs = $echg_hprim->_ref_sender->_configs;
+
+      $display_errors = isset($configs["display_errors"]) ? $configs["display_errors"] : true;
+      $doc_errors = $dom_evt->schemaValidate(null, false, $display_errors);
   
       // Gestion de l'acquittement
       $dom_acq                        = CHPrimXMLAcquittements::getAcquittementEvenementXML($dom_evt);
@@ -58,31 +78,19 @@ class COperatorHprimXML extends CEAIOperator {
         $msgAcq    = $dom_acq->generateAcquittements(
           $dom_acq instanceof CHPrimXMLAcquittementsServeurActivitePmsi ? "err" : "erreur", "E002", $doc_errors
         );
-        $doc_valid = $dom_acq->schemaValidate();
+        $doc_valid = $dom_acq->schemaValidate(null, false, $display_errors);
 
         $echg_hprim->populateErrorEchange($msgAcq, $doc_valid, "erreur");
 
         return $msgAcq;
-      }
-
-      // Gestion des notifications ? 
-      if (!$echg_hprim->_id) {
-        $echg_hprim->populateEchange($data_format, $dom_evt);
-        $echg_hprim->identifiant_emetteur = $data['identifiantMessage'];
-        $echg_hprim->message_valide       = 1;
       }
       
       $echg_hprim->date_production = CMbDT::dateTime();
       $echg_hprim->store();
       
       if (!$data_format->_to_treatment) {
-        return;
+        return null;
       }
-      
-      $echg_hprim->loadRefsInteropActor();
-
-      // Chargement des configs de l'expéditeur
-      $echg_hprim->_ref_sender->getConfigs($data_format);
 
       $dom_evt->_ref_echange_hprim = $echg_hprim;
       $dom_acq->_ref_echange_hprim = $echg_hprim;
@@ -111,7 +119,7 @@ class COperatorHprimXML extends CEAIOperator {
         $dom_acq instanceof CHPrimXMLAcquittementsServeurActivitePmsi ? "err" : "erreur", "E009", $e->getMessage()
       );
     
-      $doc_valid = $dom_acq->schemaValidate();
+      $doc_valid = $dom_acq->schemaValidate(null, false, false);
       $echg_hprim->populateErrorEchange($msgAcq, $doc_valid, "erreur");
       
       return $msgAcq;

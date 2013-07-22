@@ -12,6 +12,7 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
   static $config_fields = array(
     // Encoding
     "encoding",
+    "display_errors",
     
     // Digit
     "type_sej_hospi",
@@ -55,17 +56,19 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
   
   // Format
   public $encoding;
+  public $display_errors;
   
   // Purge
   public $purge_idex_movements;
   
   // Repair
   public $repair_patient;
- 
-  var $_categories = array(
+
+  public $_categories = array(
     // Format
     "format" => array(
-      "encoding", 
+      "encoding",
+      "display_errors",
     ),
     
     // Handle
@@ -115,9 +118,10 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
     $props = parent::getProps();
     
     // Encoding
-    $props["encoding"] = "enum list|UTF-8|ISO-8859-1 default|UTF-8";
-    
-   // Digit
+    $props["encoding"]       = "enum list|UTF-8|ISO-8859-1 default|UTF-8";
+    $props["display_errors"] = "bool default|1";
+
+    // Digit
     $props["type_sej_hospi"]      = "str";
     $props["type_sej_ambu"]       = "str";
     $props["type_sej_urg"]        = "str";
@@ -139,7 +143,12 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
     
     return $props;
   }
-  
+
+  /**
+   * Get config fields
+   *
+   * @return array
+   */
   function getConfigFields() {
     return $this->_config_fields = self::$config_fields;
   }
