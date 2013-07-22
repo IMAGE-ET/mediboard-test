@@ -30,6 +30,8 @@ if (CAppUI::conf("dPfacturation CRetrocession use_retrocessions")) {
 }
 
 if (CAppUI::conf("dPfacturation CReglement use_debiteur")) {
-  $module->registerTab("vw_debiteurs"     , TAB_READ);
+  $module->registerTab("vw_debiteurs"       , TAB_READ);
 }
-//$module->registerTab("vw_journaux"          , TAB_READ);
+if (CAppUI::conf("ref_pays") == 2) {
+  $module->registerTab("vw_journaux"        , TAB_READ);
+}

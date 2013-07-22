@@ -45,7 +45,8 @@ class CFacture extends CMbObject {
   public $_consult_id;
   public $_total;
   public $_duplicate;
-  
+  public $_echeance;
+
   public $_coeff;
   public $_montant_sans_remise;
   public $_montant_avec_remise;
@@ -986,6 +987,14 @@ class CFacture extends CMbObject {
       if ($first || $seconde || $third) {
         $this->_is_relancable = true;
       }
+    }
+
+    if (!count($this->_ref_relances)) {
+      $this->_echeance = CMbDT::date("+$nb_first_relance DAYS" , $this->cloture);
+    }
+    else {
+      $nb_jours = count($this->_ref_relances) == 1 ? $nb_second_relance : $nb_third_relance;
+      $this->_echeance = CMbDT::date("+$nb_jours DAYS" , $this->_ref_last_relance->date);
     }
 
     return $this->_is_relancable;

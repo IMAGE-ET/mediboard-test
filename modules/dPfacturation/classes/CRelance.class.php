@@ -72,7 +72,7 @@ class CRelance extends CMbMetaObject {
   /**
    * Chargement de l'objet facturable
    * 
-   * @return $this->_ref_object
+   * @return CFacture
   **/
   function loadRefFacture() {
     return $this->_ref_object =  $this->loadTargetObject();
