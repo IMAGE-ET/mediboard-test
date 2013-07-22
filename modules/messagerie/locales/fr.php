@@ -63,6 +63,7 @@ $locales['CPop-msg-newMsg'] = 'Il y a 1 nouveau message';
 $locales['CPop-msg-newMsgs'] = '%d messages non lus, %d messages récupérés. Server :  %d trouvés/%d messages sur le serveur';
 $locales['CPop-msg-nonewMsg'] = 'Pas de messages non lus sur "%s"';
 $locales['CPop-msg-unreadfromPopReadfromMb'] = '%n message(s) mis à jour sur le serveur';
+$locales['CPop-warning-IMAP-warning-configuration-unreashable'] = 'Le compte lié à %s %d n\'est pas accessible, configuration à revoir';
 $locales['CSourcePOP-auth_ssl'] = 'Authentification';
 $locales['CSourcePOP-auth_ssl-desc'] = 'autentification SSL';
 $locales['CSourcePOP-cron_update'] = 'Utilisation dans le cron';
@@ -310,3 +311,4 @@ $locales['pref-nbMailList-150'] = '150';
 $locales['pref-nbMailList-desc'] = 'Nombre de couriels à afficher dans la messagerie';
 $locales['pref-showImgInMail'] = 'Afficher les images des courriels';
 $locales['pref-showImgInMail-desc'] = 'Afficher toutes les images embarquées dans un courriel dès l\'ouverture';
+?>
