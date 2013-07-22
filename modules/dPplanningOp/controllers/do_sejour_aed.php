@@ -33,7 +33,7 @@ if (CValue::post("mode_sortie") == "mutation" && CValue::post("type") == "urg" &
   }
   $affectation->sortie = $sejour->sortie_prevue;
   if ($msg = $affectation->store()) {
-    CAppUI::stepAjax($msg, UI_MSG_WARNING);
+    CAppUI::setMsg($msg, UI_MSG_WARNING);
   }
 }
 
