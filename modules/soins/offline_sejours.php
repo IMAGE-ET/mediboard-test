@@ -12,7 +12,7 @@
  */
 
 CApp::setMemoryLimit("1024M");
-CApp::setTimeLimit(120);
+CApp::setTimeLimit(240);
 
 $service_id = CValue::get("service_id");
 $date       = CValue::get("date", CMbDT::date());
