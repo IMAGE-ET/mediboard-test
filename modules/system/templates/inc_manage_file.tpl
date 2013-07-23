@@ -13,7 +13,7 @@
 <table class="tbl">
   <tr>
     <th class="title" colspan="5">
-      {{tr}}List-of-file{{/tr}}
+      {{tr}}List-of-file{{/tr}} ({{$files|@count}})
     </th>
   </tr>
   <tr>
