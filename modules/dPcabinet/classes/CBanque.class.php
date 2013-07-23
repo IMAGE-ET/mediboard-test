@@ -44,8 +44,9 @@ class CBanque extends CMbObject {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps['users']      = 'CMediusers banque_id';
-    $backProps['reglements'] = 'CReglement banque_id';
+    $backProps['users']        = 'CMediusers banque_id';
+    $backProps['reglements']   = 'CReglement banque_id';
+    $backProps['reglementsOX'] = 'CReglementOX banque_id';
     return $backProps;
   }
 
