@@ -15,7 +15,7 @@ if ($praticien_id = CValue::post("praticien_id")) {
 $lit_id            = CValue::post("lit_id");
 $service_sortie_id = CValue::post("service_sortie_id");
 
-//Pour un séjour ayant comme mode de sortie urgence:
+// Pour un séjour ayant comme mode de sortie urgence:
 if (CValue::post("mode_sortie") == "mutation" && CValue::post("type") == "urg" && ($lit_id || $service_sortie_id)) {
   $sejour_id = CValue::post("sejour_id");
 
@@ -39,9 +39,7 @@ if (CValue::post("mode_sortie") == "mutation" && CValue::post("type") == "urg" &
     if (!$rpu->box_id) {
       $services = CService::loadServicesUrgence();
       $affectation_urg->service_id = reset($services)->_id;
-      if ($msg = $affectation_urg->store()) {
-        CAppUI::setMsg($msg, UI_MSG_WARNING);
-      }
+      $affectation_urg->store();
     }
   }
 
@@ -53,9 +51,7 @@ if (CValue::post("mode_sortie") == "mutation" && CValue::post("type") == "urg" &
   $affectation_hospit->service_id = $service_sortie_id;
   $affectation_hospit->sejour_id  = $sejour_id;
   $affectation_hospit->sortie     = $sejour->sortie_prevue;
-  if ($msg = $affectation_hospit->store()) {
-    CAppUI::setMsg($msg, UI_MSG_WARNING);
-  }
+  $affectation_hospit->store();
 }
 
 $do = new CDoObjectAddEdit("CSejour");
