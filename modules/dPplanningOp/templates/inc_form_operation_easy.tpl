@@ -99,6 +99,50 @@
       <button class="search notext" type="button" onclick="ProtocoleSelector.init()">
         Choisir un protocole
       </button>
+      <br />
+      <input type="text" name="search_protocole" style="width: 13em;" placeholder="{{tr}}fast-search{{/tr}}"/>
+      <div style="display:none;" id="get_protocole"></div>
+        <script>
+          ajoutProtocole = function(protocole_id) {
+            if (aProtocoles[protocole_id]) {
+              ProtocoleSelector.set(aProtocoles[protocole_id]);
+              Control.Modal.close();
+            }
+            else {
+              var url = new Url('planningOp', 'ajax_get_protocole');
+              url.addParam('protocole_id', protocole_id);
+              url.addParam('chir_id'     , $V(getForm('editOpEasy').chir_id));
+              url.requestUpdate("get_protocole");
+            }
+          }
+
+          Main.add(function () {
+            aProtocoles = {
+              sejour: {},
+              interv: {}
+            };
+            var oForm = getForm('editOpEasy');
+            var url = new Url('planningOp', 'ajax_protocoles_autocomplete');
+            url.addParam('field'          , 'protocole_id');
+            url.addParam('input_field'    , 'search_protocole');
+            url.addParam('for_sejour', '0');
+            url.autoComplete(oForm.elements.search_protocole, null, {
+              minChars: 3,
+              method: 'get',
+              select: 'view',
+              dropdown: true,
+              afterUpdateElement: function(field, selected){
+                ajoutProtocole(selected.get('id'));
+                $V(field.form.libelle, selected.down('strong').getText());
+                $V(getForm('editOp').libelle, selected.down('strong').getText());
+                $V(field.form.elements.search_protocole, "");
+              },
+              callback: function(input, queryString){
+                return queryString + "&chir_id=" + $V(input.form.chir_id);
+              }
+            });
+          });
+        </script>
     </td>
   </tr>
 
@@ -263,6 +307,7 @@
         <script>
           Main.add(function () {
             var form = getForm("editOpEasy");
+            var formop = getForm("editSejour");
             var url = new Url("system", "ajax_seek_autocomplete");
             url.addParam("object_class", "CPatient");
             url.addParam("field", "patient_id");
@@ -276,7 +321,9 @@
               width: "300px",
               afterUpdateElement: function(field,selected){
                 $V(field.form.patient_id, selected.getAttribute("id").split("-")[2]);
+                $V(formop.patient_id, selected.getAttribute("id").split("-")[2]);
                 $V(field.form.elements._patient_view, selected.down('.view').innerHTML);
+                $V(formop.elements._patient_view, selected.down('.view').innerHTML);
                 $V(field.form.elements._seek_patient, "");
               }
             });

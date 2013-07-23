@@ -66,7 +66,7 @@ ProtocoleSelector = {
     var oOpForm     = getForm("editOp");
     var oSejourForm = getForm("editSejour");
     var oOpFormEasy = getForm("editOpEasy");
-    
+
     // Champs de l'intervention
     if (oOpForm) {
       $V(oOpForm[this.sChir_id], protocole.chir_id, true);
@@ -88,6 +88,7 @@ ProtocoleSelector = {
       $V(oOpForm[this.sTypeAnesth],        protocole.type_anesth);
       $V(oOpForm[this.sHour_op],           protocole._hour_op);
       $V(oOpForm[this.sMin_op],            protocole._min_op);
+      oOpForm._min_op.value = protocole._min_op;
       $V(oOpForm[this.sMateriel],          protocole.materiel);
       $V(oOpForm[this.sExamen],            protocole.examen);
       $V(oOpForm[this.sDuree_uscpo],       protocole.duree_uscpo);
