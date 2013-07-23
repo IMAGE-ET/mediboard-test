@@ -470,7 +470,7 @@ if ($do) {
                             if ($mode_urgences) {
                               $key1 = $sejour->patient_id;
                               $key2 = $sejour->_id;
-                              $key3 = "med";
+                              $key3 = $name_chap;
                             }
                             else {
                               $key1 = $by_patient ? $lit->_ref_chambre->nom : $name_chap;
@@ -507,7 +507,7 @@ if ($do) {
                             if ($mode_urgences) {
                               $key1 = $sejour->patient_id;
                               $key2 = $sejour->_id;
-                              $key3 = "med";
+                              $key3 = $name_chap;
                             }
                             else {
                               $key1 = $by_patient ? $lit->_ref_chambre->nom : $name_chap;
@@ -519,11 +519,16 @@ if ($do) {
                           }
                           $quantite_planifiee = @$administrations_by_hour["quantite_planifiee"];
                           if ($quantite_planifiee) {
-
-                            $key1 = $by_patient ? $lit->_ref_chambre->nom : $name_chap;
-                            $key2 = $by_patient ? $sejour->_id : $lit->_ref_chambre->nom;
-                            $key3 = $by_patient ? $name_chap : $sejour->_id;
-
+                            if ($mode_urgences) {
+                              $key1 = $sejour->patient_id;
+                              $key2 = $sejour->_id;
+                              $key3 = $name_chap;
+                            }
+                            else {
+                              $key1 = $by_patient ? $lit->_ref_chambre->nom : $name_chap;
+                              $key2 = $by_patient ? $sejour->_id : $lit->_ref_chambre->nom;
+                              $key3 = $by_patient ? $name_chap : $sejour->_id;
+                            }
                             @$lines_by_patient[$key1][$key2][$key3][$_date][$_hour][$_line_elt->_class][$_line_elt->_id]["prevu"] += $quantite_planifiee;
                             $administrations_by_hour["quantite_planifiee"] = 0;
                           }
