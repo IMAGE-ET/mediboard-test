@@ -17,22 +17,22 @@ PlanningEvent.onDblClic = function(event) {
   
   $('planning-technicien').select('.elt_selected').invoke('removeClassName', 'elt_selected');
   event.addClassName('elt_selected');
-}
+};
 	
 Planification.onCompleteShowWeek = function(){
   updatePlanningKineBoard();
-  BoardSejours.update()
+  BoardSejours.update();
 
   PlanningEquipement.hide();
   $('planning-sejour').update('');
-}
+};
 
 updatePlanningKineBoard = function(){
   var url = new Url("ssr", "ajax_vw_planning_kine_board");
   url.addParam("kine_id", '{{$kine_id}}');
   url.addParam("height", '500');
   url.requestUpdate("planning-kine"); 
-}
+};
 
 BoardSejours = {
 	update: function(hide_noevents) {
@@ -46,7 +46,7 @@ BoardSejours = {
     url.addParam("mode", mode);
     url.requestUpdate("board-sejours-"+ mode);
   }
-}
+};
 
 
 Main.add(function(){
