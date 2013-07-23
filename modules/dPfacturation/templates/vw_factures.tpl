@@ -62,6 +62,7 @@ Main.add(function () {
           <input type="text" name="_pat_name" style="width: 15em;" value="{{$patient->_view}}" readonly="readonly" ondblclick="PatSelector.init()" />
           <button class="cancel notext" type="button" onclick="$V(this.form._pat_name,''); $V(this.form.patient_id,'')"></button>
           <button class="search notext" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
+          <button class="edit notext" type="button" onclick="viewPatient();">{{tr}}View{{/tr}}</button>
           <script>
             PatSelector.init = function(){
               this.sForm = "choice-facture";
@@ -70,7 +71,35 @@ Main.add(function () {
               this.pop();
             }
           </script>
-          <button class="edit notext" type="button" onclick="viewPatient();">{{tr}}View{{/tr}}</button>
+        </td>
+        <td colspan="4"></td>
+      </tr>
+      <tr>
+        <th></th>
+        <td>
+          <input type="text" name="_seek_patient" style="width: 13em;"/>
+          <script>
+            Main.add(function () {
+              var form = getForm("choice-facture");
+              var url = new Url("system", "ajax_seek_autocomplete");
+              url.addParam("object_class", "CPatient");
+              url.addParam("field", "patient_id");
+              url.addParam("view_field", "_pat_name");
+              url.addParam("input_field", "_seek_patient");
+              url.autoComplete(form.elements._seek_patient, null, {
+                minChars: 3,
+                method: "get",
+                select: "view",
+                dropdown: false,
+                width: "300px",
+                afterUpdateElement: function(field,selected){
+                  $V(field.form.patient_id, selected.getAttribute("id").split("-")[2]);
+                  $V(field.form.elements._pat_name, selected.down('.view').innerHTML);
+                  $V(field.form.elements._seek_patient, "");
+                }
+              });
+            });
+          </script>
         </td>
         {{if !$conf.dPfacturation.$classe.use_auto_cloture}}
           <th>Etat</th>
