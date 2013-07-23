@@ -47,6 +47,7 @@ CMbObject::massLoadFwdRef($sejours, "patient_id");
 CMbObject::massLoadFwdRef($sejours, "praticien_id");
 $dossiers_complets = array();
 
+/** @var CSejour[] $sejours */
 foreach ($sejours as $sejour) {
   $patient = $sejour->loadRefPatient();
   $patient->loadIPP();
