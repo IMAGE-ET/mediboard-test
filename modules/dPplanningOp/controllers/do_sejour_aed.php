@@ -31,10 +31,10 @@ if (CValue::post("mode_sortie") == "mutation" && CValue::post("type") == "urg" &
   // Il s'agit de l'affectation qui a lieu entre le début du séjour et la mutation
   $affectation_urg = new CAffectation();
   $affectation_urg->entree    = $sejour->entree;
+  $affectation_urg->sejour_id  = $sejour_id;
   $affectation_urg->loadMatchingObject();
   if (!$affectation_urg->_id) {
     $affectation_urg->sortie    = CMbDT::dateTime();
-    $affectation_urg->sejour_id = $sejour_id;
     $affectation_urg->lit_id    = $rpu->box_id;
     if (!$rpu->box_id) {
       $services = CService::loadServicesUrgence();
@@ -46,10 +46,10 @@ if (CValue::post("mode_sortie") == "mutation" && CValue::post("type") == "urg" &
   // Création de l'affectation d'hospitalisation
   $affectation_hospit = new CAffectation();
   $affectation_hospit->entree     = $affectation_urg->sortie;
+  $affectation_hospit->sejour_id  = $sejour_id;
   $affectation_hospit->loadMatchingObject();
   $affectation_hospit->lit_id     = $lit_id;
   $affectation_hospit->service_id = $service_sortie_id;
-  $affectation_hospit->sejour_id  = $sejour_id;
   $affectation_hospit->sortie     = $sejour->sortie_prevue;
   $affectation_hospit->store();
 }
