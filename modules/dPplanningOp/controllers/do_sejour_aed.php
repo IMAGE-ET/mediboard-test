@@ -39,8 +39,8 @@ if (CValue::post("mode_sortie") == "mutation" && CValue::post("type") == "urg" &
     if (!$rpu->box_id) {
       $services = CService::loadServicesUrgence();
       $affectation_urg->service_id = reset($services)->_id;
-      $affectation_urg->store();
     }
+    $affectation_urg->store();
   }
 
   // Création de l'affectation d'hospitalisation
