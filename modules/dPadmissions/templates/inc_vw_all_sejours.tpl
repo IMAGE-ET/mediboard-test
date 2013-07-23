@@ -49,12 +49,12 @@
   {{foreach from=$days key=day item=counts}}
   <tr {{if $day == $date}}class="selected"{{/if}}>
     {{assign var=day_number value=$day|date_format:"%w"}}
-    <td align="right"
+    <td style="text-align: right;
       {{if array_key_exists($day, $bank_holidays)}}
-        style="background-color: #fc0"
+        background-color: #fc0;
       {{elseif $day_number == '0' || $day_number == '6'}}
-        style="background-color: #ccc;"
-      {{/if}}>
+        background-color: #ccc;
+      {{/if}}">
       <a href="?m={{$current_m}}&tab=vw_sejour_validation&date={{$day|iso_date}}" title="{{$day|date_format:$conf.longdate}}">
         <strong>
           {{$day|date_format:"%a"|upper|substr:0:1}}

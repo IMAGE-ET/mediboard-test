@@ -41,7 +41,8 @@ $sejours = $sejour->loadList($where, $order);
 $guesses = array();
 /** @var CPatient[] $patients */
 $patients = array();
-foreach ($sejours as &$_sejour) {
+$_sejour  = new CSejour();
+foreach ($sejours as $_sejour) {
   if ($module == "dPurgences") {
     // Look for multiple RPU
     $_sejour->loadBackRefs("rpu");

@@ -96,7 +96,7 @@ Admissions = {
   },
   
   showLegend: function() {
-    var url = new Url("dPadmissions", "vw_legende").requestModal();
+    new Url("dPadmissions", "vw_legende").requestModal();
   },
 
   showDocs: function(sejour_id) {
