@@ -1488,7 +1488,12 @@ class CSetupsystem extends CSetup {
                 ADD `cron_update` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.46";
+    $this->makeRevision("1.1.46");
+    $query = "ALTER TABLE `ex_class_field`
+                ADD `in_doc_template` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.47";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,

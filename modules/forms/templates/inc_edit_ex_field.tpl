@@ -253,7 +253,14 @@ Main.add(function(){
     
     <tr>
       <th>{{mb_label object=$ex_field field=report_class}}</th>
-      <td colspan="3">{{mb_field object=$ex_field field=report_class typeEnum=select emptyLabel="None"}}</td>
+      <td>{{mb_field object=$ex_field field=report_class typeEnum=select emptyLabel="None"}}</td>
+
+      {{if $conf.forms.CExClassField.doc_template_integration}}
+        <th>{{mb_label object=$ex_field field=in_doc_template}}</th>
+        <td>{{mb_field object=$ex_field field=in_doc_template}}</td>
+      {{else}}
+        <td colspan="2"></td>
+      {{/if}}
     </tr>
     
     <tr>

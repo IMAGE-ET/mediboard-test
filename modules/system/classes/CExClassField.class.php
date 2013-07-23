@@ -26,6 +26,7 @@ class CExClassField extends CExListItemsOwner {
   public $suffix;
   public $show_label;
   public $tab_index;
+  public $in_doc_template;
 
   public $formula;
   public $_formula;
@@ -248,6 +249,7 @@ class CExClassField extends CExListItemsOwner {
     $props["suffix"]      = "str";
     $props["show_label"]  = "bool notNull default|1";
     $props["tab_index"]   = "num";
+    $props["in_doc_template"] = "bool notNull default|0";
 
     $props["formula"]     = "text"; // canonical tokens
     $props["_formula"]    = "text"; // localized tokens

@@ -18,13 +18,14 @@ var Action = {
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
   <table class="form">
-    
+
     {{assign var=class value=CExClassField}}
     <tr>
       <th colspan="2" class="title">{{tr}}{{$class}}{{/tr}}</th>
     </tr>
     {{mb_include module=system template=inc_config_bool var=force_concept}}
-    
+    {{mb_include module=system template=inc_config_bool var=doc_template_integration}}
+
     {{assign var=class value=CExConcept}}
     <tr>
       <th colspan="2" class="title">{{tr}}{{$class}}{{/tr}}</th>
@@ -37,7 +38,7 @@ var Action = {
         <th colspan="2" class="title">{{tr}}{{$class}}{{/tr}}</th>
       </tr>
     {{mb_include module=system template=inc_config_bool var=pixel_positionning}}
-    
+
     <tr>
       <td class="button" colspan="10">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

@@ -1,6 +1,8 @@
 <?php
-$locales['config-forms-CExClass-pixel_positionning'] = 'Activer le positionnement au pixel';
-$locales['config-forms-CExClass-pixel_positionning-desc'] = 'Le positionnement au pixel permet de faire des formulaires plus denses (expérimental)';
+$locales['config-forms-CExClass-pixel_positionning'] = 'Activer le positionnement au pixel (EXPERIMENTAL)';
+$locales['config-forms-CExClass-pixel_positionning-desc'] = 'Le positionnement au pixel permet de faire des formulaires plus denses';
+$locales['config-forms-CExClassField-doc_template_integration'] = 'Intégration dans les modèles (EXPERIMENTAL)';
+$locales['config-forms-CExClassField-doc_template_integration-desc'] = 'Activer l\'intégration des champs de formulaires dans les modèles de documents';
 $locales['config-forms-CExClassField-force_concept'] = 'Forcer l\'utilisation des concepts (vivement conseillé)';
 $locales['config-forms-CExClassField-force_concept-desc'] = 'Forcer l\'utilisation des concepts (vivement conseillé)';
 $locales['config-forms-CExConcept-force_list'] = 'Forcer l\'utilisation des listes';
@@ -31,3 +33,4 @@ $locales['mod-forms-tab-view_import'] = 'Importation';
 $locales['mod-forms-tab-view_import_fields'] = 'Importation de formulaires';
 $locales['module-forms-court'] = 'Formulaires';
 $locales['module-forms-long'] = 'Formulaires';
+?>

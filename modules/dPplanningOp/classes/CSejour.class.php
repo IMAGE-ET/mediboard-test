@@ -2921,9 +2921,9 @@ class CSejour extends CFacturable implements IPatientRelated {
       $template->addListProperty("Sejour - Régime", $regimes);
     }
 
-    /*if (CModule::getActive("forms")) {
+    if (CModule::getActive("forms")) {
       CExObject::addFormsToTemplate($template, $this, "Sejour");
-    }*/
+    }
 
     $this->notify("AfterFillLimitedTemplate", $template);
   }

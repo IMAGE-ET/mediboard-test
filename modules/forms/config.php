@@ -12,6 +12,7 @@
 $dPconfig["forms"] = array(
   "CExClassField" => array(
     "force_concept" => 1,
+    "doc_template_integration" => 0,
   ),
   "CExConcept" => array(
     "force_list"   => 1,

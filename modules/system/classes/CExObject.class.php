@@ -958,6 +958,10 @@ class CExObject extends CMbMetaObject {
    * @return void
    */
   static function addFormsToTemplate(CTemplateManager $template, CMbObject $object, $name) {
+    if (!CAppUI::conf("forms CExClassField doc_template_integration")) {
+      return;
+    }
+
     $params = array(
       "detail"          => 3,
       "reference_id"    => $object->_id,
@@ -991,41 +995,50 @@ class CExObject extends CMbMetaObject {
     }
     $template->addProperty("$name - Formulaires - Liés", $formulaires, null, false);
 
-//    self::$_multiple_load = true;
-//
-//    $group_id = CGroups::loadCurrent()->_id;
-//    $where = array(
-//      "group_id = '$group_id' OR group_id IS NULL",
-//      // TODO ajouter un champ "inclure dans les modèles"
-//    );
-//
-//    $ex_class = new CExClass();
-//    CExObject::initLocales();
-//
-//    /** @var CExClass[] $ex_classes */
-//    $ex_classes = $ex_class->loadList($where, "name");
-//    foreach ($ex_classes as $_ex_class) {
-//      $_name = "Form. ".str_replace(" - ", " ", $_ex_class->name);
-//      $fields = $_ex_class->loadRefsAllFields();
-//      $_class_name = $_ex_class->getExClassName();
-//
-//      $_ex_object = null;
-//      if ($object->_id) {
-//        $_ex_object = $_ex_class->getLatestExObject($object);
-//      }
-//
-//      foreach ($fields as $_field) {
-//        $_field_name = str_replace(" - ", " ", CAppUI::tr("$_class_name-{$_field->name}"));
-//
-//        $_template_field_name = "Sejour - $_name - $_field_name";
-//        $_template_key_name = "CExObject|$_ex_class->_id|$_field->name";
-//        $_template_value = (($_ex_object && $_ex_object->_id) ? $_ex_object->getFormattedValue($_field->name) : "");
-//
-//        $template->addAdvancedData($_template_field_name, $_template_key_name, $_template_value);
-//      }
-//    }
-//
-//    self::$_multiple_load = false;
+    self::$_multiple_load = true;
+
+    CExObject::initLocales();
+
+    $group_id = CGroups::loadCurrent()->_id;
+    $where = array(
+      "ex_class.group_id = '$group_id' OR group_id IS NULL",
+      "ex_class_field.in_doc_template" => "= '1'"
+    );
+
+    $ljoin = array(
+      "ex_class_field_group" => "ex_class_field_group.ex_class_id = ex_class.ex_class_id",
+      "ex_class_field"       => "ex_class_field.ex_group_id = ex_class_field_group.ex_class_field_group_id",
+    );
+
+    $ex_class = new CExClass();
+    /** @var CExClass[] $ex_classes */
+    $ex_classes = $ex_class->loadList($where, "name", null, null, $ljoin);
+    foreach ($ex_classes as $_ex_class) {
+      $_name = "Form. ".str_replace(" - ", " ", $_ex_class->name);
+      $fields = $_ex_class->loadRefsAllFields();
+      $_class_name = $_ex_class->getExClassName();
+
+      $_ex_object = null;
+      if ($object->_id) {
+        $_ex_object = $_ex_class->getLatestExObject($object);
+      }
+
+      foreach ($fields as $_field) {
+        if (!$_field->in_doc_template) {
+          continue;
+        }
+
+        $_field_name = str_replace(" - ", " ", CAppUI::tr("$_class_name-{$_field->name}"));
+
+        $_template_field_name = "Sejour - $_name - $_field_name";
+        $_template_key_name = "CExObject|$_ex_class->_id|$_field->name";
+        $_template_value = (($_ex_object && $_ex_object->_id) ? $_ex_object->getFormattedValue($_field->name) : "");
+
+        $template->addAdvancedData($_template_field_name, $_template_key_name, $_template_value);
+      }
+    }
+
+    self::$_multiple_load = false;
   }
 
   /**
