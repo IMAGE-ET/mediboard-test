@@ -79,6 +79,9 @@ CJSLoader::$files = array(
   // JS Expression eval
   "lib/jsExpressionEval/parser.js",
 
+  //JS Store.js
+  "lib/store.js/store.js",
+
   "includes/javascript/common.js",
   "includes/javascript/functions.js",
   "includes/javascript/tooltip.js",
@@ -316,7 +319,7 @@ if (!$suppressHeaders) {
   }
   $mediboardStyle .= CCSSLoader::loadFiles("modules");
   $tplHeader->assign("mediboardStyle"       , $mediboardStyle);
-  
+
   //JS
   $tplHeader->assign("mediboardScript"      , CJSLoader::loadFiles(!$debug));
   
@@ -336,7 +339,7 @@ if (!$suppressHeaders) {
       "tracker" => mbPortalURL("tracker"),
     )
   );
-  
+
   $tplHeader->display("header.tpl");
 }
 

@@ -1173,7 +1173,7 @@ Event.initKeyboardEvents = function() {
     var tagName = element.tagName;
 
     // Prevent backspace to go back in history
-    if(key == Event.KEY_BACKSPACE && !/input|textarea/i.test(tagName)) {
+    if(key == Event.KEY_BACKSPACE && !(/input|textarea/i.test(tagName) || element.contentEditable)) {
       Event.stop(e);
     }
 

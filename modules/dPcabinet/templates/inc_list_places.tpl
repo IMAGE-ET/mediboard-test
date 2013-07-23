@@ -20,11 +20,11 @@
           "{{$plage->_id}}",
           "{{$plage->date|date_format:"%A %d/%m/%Y"}}",
           "{{$plage->chir_id}}");
-        window.close();
         var form = window.parent.getForm(window.parent.PlageConsultSelector.sForm);
         if (Preferences.choosePatientAfterDate == 1 && !$V(form.patient_id) && !form._pause.checked) {
           window.parent.PatSelector.init();
         }
+        window.parent.Control.Modal.close();
       }
     };
 

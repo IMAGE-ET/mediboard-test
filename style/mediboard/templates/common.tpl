@@ -125,7 +125,7 @@
   <![endif]-->
 
   {{$mediboardScript|smarty:nodefaults}}
-  
+
   <script type="text/javascript">
     AideSaisie.timestamp = "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}";
     
@@ -148,6 +148,9 @@
       });
     {{/if}}
   </script>
+  {{if "didacticiel"|module_active}}
+    {{mb_include module="didacticiel" template="inc_permanence_didacticiel"}}
+  {{/if}}
 </head>
 
 <body class="{{if @$app->user_prefs.accessibility_dyslexic == 1}} dyslexic {{/if}} {{if @$app->user_prefs.touchscreen == 1 || $browser.name == 'ipad' || $browser.useragent|stripos:'nexus 7' !== false}} touchscreen {{else}} desktop {{/if}} {{if $browser.name == 'ipad'}} ipad {{/if}}" {{if $app->touch_device}}style="margin-bottom:250px"{{/if}}>

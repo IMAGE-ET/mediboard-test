@@ -60,13 +60,9 @@ var Menu = {
   <div id="menubar" class="iconed">
     <div id="menuTools">
       <a id="toggleIcons" href="#1" onclick="Menu.toggle()" title="{{tr}}menu-toggleIcons{{/tr}}"></a>
-      
-      {{if $portal.help}}
-      <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">
-        <img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />
-      </a>
-      {{/if}}
-      
+
+      {{mb_include style=mediboard template=inc_help}}
+
       {{if $portal.tracker}}
       <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank">
         <img src="style/{{$uistyle}}/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" />
@@ -170,13 +166,9 @@ var Menu = {
         {{tr}}module-{{$_module->mod_name}}-court{{/tr}}</a>
       {{/if}}
       {{/foreach}}
-      
-      {{if $portal.help}}
-        <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">
-          <img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />
-        </a>
-      {{/if}}
-      
+
+      {{mb_include style=mediboard template=inc_help}}
+
       {{if $portal.tracker}}
         <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank">
           <img src="style/{{$uistyle}}/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" />

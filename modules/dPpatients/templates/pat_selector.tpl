@@ -216,7 +216,7 @@ var Patient = {
         {{/if}}
       </td>
       <td class="button">
-        <button class="search" type="submit">{{tr}}Search{{/tr}}</button>
+        <button class="search" id="pat_selector_search_pat_button" type="submit">{{tr}}Search{{/tr}}</button>
       </td>
       <td class="button">
         {{if $can->edit}}

@@ -332,6 +332,7 @@ $locales['config-mediusers-tag_mediuser_software-desc'] = 'Tag définissant que l
 $locales['config-source-pop'] = 'Configuration d\'un compte POP/IMAP';
 $locales['mod-admin-tab-ajax_edit_pref'] = 'Modification de préférence';
 $locales['mod-dPsystem-tab-ajax_edit_sourcePOP'] = 'Edition de compte de messagerie';
+$locales['mod-didacticiel-tab-view_choose_didacticiel'] = 'Aide';
 $locales['mod-mediusers-tab-ajax_edit_mediuser'] = 'Formulaire d\'utilisateur';
 $locales['mod-mediusers-tab-color_selector'] = 'Sélection d\'une couleur';
 $locales['mod-mediusers-tab-configure'] = 'Configuration';

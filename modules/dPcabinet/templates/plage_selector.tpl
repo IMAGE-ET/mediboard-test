@@ -164,7 +164,7 @@ Main.add(function () {
       </td>
 
       <!-- filter -->
-      <th><label for="hour" title="Filtrer les plages englobalt l'heure choisie">Filtrer les heures</label></th>
+      <th><label for="hour" title="Filtrer les plages englobant l'heure choisie">Filtrer les heures</label></th>
       <td>
         <select name="hour" onchange="updatePlage()">
           <option value="">&mdash; Toutes</option>
@@ -199,7 +199,7 @@ Main.add(function () {
 
       {{if $multipleMode}}
         <td>
-          <button type="button" class="button tick" onclick="window.parent.PlageConsultSelector.checkMultiple(); Control.Modal.close()">Valider</button>
+          <button type="button" id="consult_multiple_button_validate" class="button tick" onclick="window.parent.PlageConsultSelector.checkMultiple(); Control.Modal.close()">Valider</button>
           <button type="button" class="button cancel" onclick="PlageConsult.reset()">Réinitialiser</button>
         </td>
       {{/if}}

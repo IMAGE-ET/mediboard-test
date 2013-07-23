@@ -235,7 +235,7 @@
 
   <tr>
     {{if !$plageSel->_id}}
-    <td class="button" colspan="4"><button type="submit" class="submit">{{tr}}Create{{/tr}}</button></td>
+    <td class="button" colspan="4"><button id="edit_plage_consult_button_create_new_plage" type="submit" class="submit">{{tr}}Create{{/tr}}</button></td>
     {{else}}
     <td class="button" colspan="4">
       <button type="submit" class="modify">{{tr}}Modify{{/tr}}</button>

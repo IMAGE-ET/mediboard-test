@@ -1050,7 +1050,7 @@ var DOM = {
   
   tags: [
     'a', 'applet', 'big', 'br', 'button', 'canvas', 'div', 'fieldset', 'form',
-    'h1', 'h2', 'h3', 'h4', 'h5', 'hr', 'iframe', 'img', 'input', 'label', 
+    'h1', 'h2', 'h3', 'h4', 'h5', 'hr', 'iframe', 'img', 'input', 'ins', 'label',
     'legend', 'li', 'ol', 'optgroup', 'option', 'p', 'param', 'pre', 'script',
     'select', 'small', 'span', 'strong', 'table', 'tbody', 'td', 'textarea',
     'tfoot', 'th', 'thead', 'tr', 'tt', 'ul'
@@ -1490,7 +1490,7 @@ Object.extend(Control.Modal,{
       //Control.Modal.current = false;
       this.overlayFinishedOpening = false;
       
-      /* Gestion du didacticiel dans le cas où il est présent dans la page*/
+      /* Didacticiel management*/
       if (window.Didacticiel && Didacticiel.main_didacticiel.state) {
         Didacticiel.main_didacticiel.closeAfterModal();
       }

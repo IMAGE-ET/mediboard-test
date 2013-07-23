@@ -72,18 +72,15 @@ var Menu = {
       {{mb_include template=svnstatus}} 
       
       <div class="menu">
-        {{if $portal.help}}
-          <a title="{{tr}}portal-help{{/tr}}" href="{{$portal.help}}" target="_blank">
-            <img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />
-          </a>
-        {{/if}}
-        
+
+        {{mb_include template=inc_help}}
+
         {{if $portal.tracker}}
           <a title="{{tr}}portal-tracker{{/tr}}" href="{{$portal.tracker}}" target="_blank">
             <img src="style/{{$uistyle}}/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" />
           </a>
         {{/if}}
-        
+
         <a title="{{tr}}menu-changePassword{{/tr}}" href="#1" onclick="popChgPwd()">
           <img src="style/{{$uistyle}}/images/icons/passwd.png" alt="{{tr}}menu-changePassword{{/tr}}" />
         </a>

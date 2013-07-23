@@ -26,7 +26,7 @@
 
 <table class="tbl">
       <tr>
-        <th style="width: 7em;">{{mb_title class=CPlageconsult field=date}}</th>
+        <th id="inc_list_plages_date_th" style="width: 7em;">{{mb_title class=CPlageconsult field=date}}</th>
         <th>{{mb_title class=CPlageconsult field=chir_id}}</th>
         <th>{{mb_title class=CPlageconsult field=libelle}}</th>
         <th colspan="2">{{tr}}Status{{/tr}}</th>

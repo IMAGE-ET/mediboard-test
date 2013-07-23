@@ -65,8 +65,8 @@ class CSmartyMB extends Smarty {
     $this->default_modifiers = array("@cleanField");
 
     // Register mediboard functions
-    $this->register_block   ("tr"                , array($this,"tr")); 
-    $this->register_block   ("main"              , array($this,"main")); 
+    $this->register_block   ("tr"                , array($this,"tr"));
+    $this->register_block   ("main"              , array($this,"main"));
     
     $this->register_function("mb_default"        , array($this,"mb_default"));
     $this->register_function("mb_ditto"          , array($this,"mb_ditto"));
@@ -237,27 +237,6 @@ class CSmartyMB extends Smarty {
     return $spec->getHtmlValue($object, $smarty, $params);
   }
 
-  /**
-   *  convert into html of a given xml
-   * Module Didacticiel
-   */
-  function mb_didacticiel($params, &$smarty) {
-    if (!CModule::getActive("didacticiel")) {
-      return;
-    }
-
-    $module      = CMbArray::extract($params, "module",  null, true);
-    $didacticiel = CMbArray::extract($params, "didacticiel",  null, true);
-     
-    $html = CEtapeDidacticiel::convertxml($module, $didacticiel);
-    $html .= '<script>
-              Main.add(function () {
-                Didacticiel.init();
-              });
-             </script>';
-
-    return $html;
-  }
   /**
    * Put a random token into a form in order to prevent from CSRF attacks
    *
@@ -749,6 +728,17 @@ class CSmartyMB extends Smarty {
     return CModule::getActive($module);
   }
 
+  /**
+   * True if the module is visible
+   * Example: {"dPfiles"|module_visible}
+   *
+   * @param string $module The module name
+   *
+   * @return CModule The module object if visible, null otherwise
+   */
+  function module_visible($module) {
+    return CModule::getVisible($module);
+  }
   /**
    * Escape a JavaScript code to be used inside DOM attributes
    *

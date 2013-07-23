@@ -56,7 +56,7 @@
         {{tr}}Edit{{/tr}}
       </button>
       {{/if}}
-      <button class="tick" type="button" onclick="Patient.select({{$_patient->_id}}, '{{$_patient->_view|smarty:nodefaults|JSAttribute}}', '{{$_patient->sexe}}')">
+      <button class="tick" id="inc_pat_selector_select_pat" type="button" onclick="Patient.select({{$_patient->_id}}, '{{$_patient->_view|smarty:nodefaults|JSAttribute}}', '{{$_patient->sexe}}')">
         {{tr}}Select{{/tr}}
       </button>
     </td>

@@ -6,7 +6,7 @@
  * @subpackage Installer
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    SVN: $Id$ 
+ * @version    SVN: $Id$
  * @link       http://www.mediboard.org
  */
 
@@ -511,5 +511,17 @@ $library->sourceDir = "yampee-redis";
 $library->targetDir = "yampee-redis";
 $library->versionFile = "src/Yampee/Redis/Client.php";
 $library->versionString = 'class Yampee_Redis_Client';
+
+CLibrary::$all[$library->name] = $library;
+
+$library = new CLibrary;
+$library->name = "Store.js";
+$library->url = "https://github.com/marcuswestin/store.js";
+$library->fileName = "store.js-master.zip";
+$library->description = "localStorage wrapper for all browsers";
+$library->sourceDir = "store.js-master";
+$library->targetDir = "store.js";
+$library->versionFile = "Changelog";
+$library->versionString = 'v1.3.9';
 
 CLibrary::$all[$library->name] = $library;

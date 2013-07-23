@@ -3,10 +3,10 @@
 <table class="main">
   <tr>
     <td>
-      <form name="choixCabinet" action="?m={{$m}}" method="get">
+      <form  name="choixCabinet" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <select name="selCabinet" onchange="submit()">
-        <option value="">&mdash; Choix du cabinet</option>
+        <option  value="">&mdash; Choix du cabinet</option>
         {{foreach from=$listFunctions item="cabinet"}}
         <option class="mediuser" style="border-color: #{{$cabinet->color}}" value="{{$cabinet->_id}}" {{if $selCabinet == $cabinet->_id}}selected=selected{{/if}}>{{$cabinet->_view}}</option>
         {{/foreach}}
@@ -18,10 +18,10 @@
   {{if $selCabinet && $droit}}
   <tr>
     <td class="halfPane">
-    <a href="?m={{$m}}&amp;tab={{$tab}}&amp;categorie_id=0" class="button new">
+    <a id="vw_categorie_a_button_new" href="?m={{$m}}&amp;tab={{$tab}}&amp;categorie_id=0" class="button new">
     Créer une catégorie
     </a>
-    <table class="tbl">
+    <table id="vw_categorie_table_liste_categories" class="tbl">
       <tr>
         <th colspan="3">Liste des catégories du cabinet</th>
     </tr>
@@ -72,7 +72,7 @@
       </tr>
       <tr>
         <th>{{mb_label object=$categorie field="nom_categorie"}}</th>
-        <td>{{mb_field object=$categorie field="nom_categorie"}}</td>
+        <td >{{mb_field object=$categorie field="nom_categorie"}}</td>
       </tr>
       <tr>
         <th>{{mb_label object=$categorie field="nom_icone"}}</th>
@@ -84,8 +84,8 @@
             onclick="IconeSelector.init()"
           }}
         {{else}}
-          <img id="iconeBackground" src="images/icons/search.png" onclick="IconeSelector.init()" />
-         {{/if}}
+          <img style="cursor:pointer" id="iconeBackground" src="images/icons/search.png" onclick="IconeSelector.init()"/>
+        {{/if}}
          <input type="hidden" name="nom_icone" value="{{$categorie->nom_icone}}"  class="notNull" />
          <script type="text/javascript">
             IconeSelector.init = function(){
@@ -98,7 +98,7 @@
       </tr>
       <tr>
         <th>{{mb_label object=$categorie field="duree"}}</th>
-        <td>
+        <td id="vw_categorie_td_choix_duree">
           {{foreach from=1|range:15 item=i}}
             <label>
               <input type="radio" value="{{$i}}" name="duree" {{if $categorie->duree == $i}}checked{{/if}}>x{{$i}}
@@ -108,17 +108,17 @@
       </tr>
       <tr>
         <th>{{mb_label object=$categorie field="commentaire"}}</th>
-        <td>{{mb_field object=$categorie field="commentaire" form="editFrm"}}</td>
+        <td id="vw_categorie_td_commentaires">{{mb_field object=$categorie field="commentaire" form="editFrm"}}</td>
       </tr>
       <tr>
         <td class="button" colspan="2">
           {{if $categorie->_id}}
-          <button class="modify" type="submit">Valider</button>
+          <button id="vw_categorie_button_modif_categorie" class="modify" type="submit">Valider</button>
           <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la catégorie ',objName:'{{$categorie->nom_categorie|smarty:nodefaults|JSAttribute}}'})">
             Supprimer
           </button>
           {{else}}
-          <button class="submit" name="btnFuseAction" type="submit">Créer</button>
+          <button id="vw_categorie_button_create_categorie" class="submit" name="btnFuseAction" type="submit">Créer</button>
           {{/if}}
         </td>
       </tr>
