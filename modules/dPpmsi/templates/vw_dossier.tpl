@@ -21,21 +21,21 @@
     this.sView = "DP";
     this.sChir = "_praticien_id";
     this.pop();
-  }
+  };
   
   CIM10Selector.initDR = function(sejour_id){
     this.sForm = "editDR";
     this.sView = "DR";
     this.sChir = "_praticien_id";
     this.pop();
-  }
+  };
   
   CIM10Selector.initDAS = function(sejour_id){
     this.sForm = "editDA";
     this.sView = "_added_code_cim";
     this.sChir = "_praticien_id";
     this.pop();
-  }
+  };
   function choosePreselection(oSelect) {
   if (!oSelect.value) { 
     return;
@@ -83,7 +83,7 @@ var ExtRefManager = {
     url.addParam("sejour_id", ExtRefManager.sejour_id);
     url.requestUpdate("Numdos" + ExtRefManager.sejour_id);
   }
-}
+};
 
 function submitOpForm(operation_id) {
   var oForm = document.forms["editOpFrm" + operation_id];
@@ -99,25 +99,25 @@ printFicheBloc = function(oper_id) {
   var url = new Url("salleOp", "print_feuille_bloc");
   url.addParam("operation_id", oper_id);
   url.popup(700, 600, 'FeuilleBloc');
-}
+};
 
 printFicheAnesth = function(dossier_anesth_id, operation_id) {
   var url = new Url("cabinet", "print_fiche");
   url.addParam("dossier_anesth_id", dossier_anesth_id);
   url.addParam("operation_id", operation_id);
   url.popup(700, 500, "printFicheAnesth");
-}
+};
 
 function reloadDiagnostic(sejour_id, modeDAS) {
   var urlDiag = new Url("pmsi", "httpreq_diagnostic");
   urlDiag.addParam("sejour_id", sejour_id);
   urlDiag.addParam("modeDAS", modeDAS);
   urlDiag.requestUpdate("cim-"+sejour_id);
-	
+
   var urlListDiag = new Url("pmsi", "httpreq_list_diags");
   urlListDiag.addParam("sejour_id", sejour_id);
   urlListDiag.requestUpdate("cim-list-"+sejour_id);
-	
+
   var urlGHM = new Url("pmsi", "httpreq_vw_GHM");
   urlGHM.addParam("sejour_id", sejour_id);
   urlGHM.requestUpdate("GHM-"+sejour_id);
@@ -144,13 +144,13 @@ SejourHprimSelector.doSet = function(){
     $V(oFormIPP[SejourHprimSelector.sIPPId]  , SejourHprimSelector.prepared.IPPid);
     ExtRefManager.submitIPPForm();
   }
-}
+};
 
 printDossierComplet = function(sejour_id){
   var url = new Url("soins", "print_dossier_soins");
   url.addParam("sejour_id", sejour_id);
   url.popup(850, 600, "Dossier complet");
-}
+};
 
 {{if $isSejourPatient}}
 Main.add(function () {

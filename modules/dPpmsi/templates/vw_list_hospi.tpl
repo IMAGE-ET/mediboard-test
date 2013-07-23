@@ -65,7 +65,7 @@ Main.add(function () {
     </td>
     
     <td class="text">
-      <div class="{{if !$GHM->_CM}}small-error{{else}}small-success{{/if}}" style="margin: 0px;">
+      <div class="{{if !$GHM->_CM}}small-error{{else}}small-success{{/if}}" style="margin: 0;">
         {{$GHM->_GHM}}
         {{if $GHM->_DP}}: {{$GHM->_GHM_nom}}{{/if}}
       </div>

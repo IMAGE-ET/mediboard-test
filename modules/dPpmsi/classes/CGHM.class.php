@@ -306,7 +306,7 @@ class CGHM extends CMbObject {
    * @return int
    */
   function isFromGroup($type, $group) {
-    if($group == "non opératoires") {
+    if ($group == "non opératoires") {
       $n = 0;
       $sql = "SELECT * FROM liste WHERE nom LIKE '%(non opératoires)%'";
       $listeNO = $this->_dsghm->loadList($sql);

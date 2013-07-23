@@ -610,8 +610,8 @@ function addincomp() {
           }
         }
       }
-      // A t'on une liste dupliquée ?
       elseif (preg_match("`même liste que (".$regCim10.")`", $line, $duplicata)) {
+        // A t'on une liste dupliquée ?
         $baseCode = $listIncomp[0];
         $copy = $duplicata[1];
         $tabIncomp[$baseCode] = $tabIncomp[$copy];

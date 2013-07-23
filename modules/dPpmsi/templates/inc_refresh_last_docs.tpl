@@ -19,7 +19,7 @@
   <tr>
     <th class="title" colspan="{{if $section_search == "sejour"}}7{{else}}6{{/if}}">
       Liste des documents <small>({{$total_docs}})</small>
-    </td>
+    </th>
   </tr>
   <tr>
     {{if $section_search == "sejour"}}

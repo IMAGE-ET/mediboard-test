@@ -20,13 +20,13 @@
       var url = new Url("dPhospi", "httpreq_documents_sejour");
       url.addParam("sejour_id" , '{{$sejour->_id}}');
       url.requestUpdate("Docs");
-    }
+    };
 
     loadDMIs = function(sejour_id) {
       var url = new Url("dmi", "ajax_list_dmis");
       url.addParam("sejour_id" , sejour_id);
       url.requestUpdate("tab-dmi");
-    }
+    };
 
     Main.add(function() {
       Control.Tabs.create('tabs-pmsi', true);

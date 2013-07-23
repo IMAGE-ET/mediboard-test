@@ -136,7 +136,7 @@ function changeDateCal(form) {
               this.sChir  = '_chir';
               this.sView  = '_codes_ccam';
               this.pop();
-            }
+            };
             Main.add(function() {
               var oForm = getForm('paramFrm');
               var url = new Url('ccam', 'httpreq_do_ccam_autocomplete');

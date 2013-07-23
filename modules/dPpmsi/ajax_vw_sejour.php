@@ -17,7 +17,7 @@ $sejour_id = CValue::getOrSession("sejour_id");
 $listPrat = new CMediusers;
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
 
-$sejour = new CSejour;
+$sejour = new CSejour();
 $sejour->load($sejour_id);
 $sejour->loadRefPatient();
 
@@ -41,15 +41,13 @@ $sejour->loadRefs();
 $sejour->countExchanges();
 $sejour->loadRefGHM();
 $sejour->loadNDA();
-$sejour->canRead();
-$sejour->canEdit();
+$sejour->canDo();
 foreach ($sejour->_ref_operations as $_operation) {
   $_operation->loadRefsFwd();
   $_operation->countExchanges();
   $_operation->countDocItems();
   $_operation->loadRefsActesCCAM();
-  $_operation->canRead();
-  $_operation->canEdit();
+  $_operation->canDo();
   foreach ($_operation->_ref_actes_ccam as $_acte) {
     $_acte->loadRefsFwd();
     $_acte->guessAssociation();

@@ -23,7 +23,7 @@
   
   changePage = function(page) {
     $V(getForm('filterDocs').page,page);
-  }
+  };
   
   togglePanel = function(section) {
     var form = getForm("filterDocs");
@@ -120,7 +120,7 @@
               {{mb_label class=CSejour field=type}}
             </th>
             <td>
-              {{mb_field object=$sejour field=type onchange="this.form.onsubmit();}}
+              {{mb_field object=$sejour field=type onchange="this.form.onsubmit();"}}
             </td>
           </tr>
           <tr>

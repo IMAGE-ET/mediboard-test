@@ -4,9 +4,9 @@
 
 Action = {
   trigger: function(sAction) {
-    url = new Url("dPpmsi", sAction);
-		url.requestUpdate(sAction);
-	}
+    var url = new Url("dPpmsi", sAction);
+    url.requestUpdate(sAction);
+  }
 }
 
 </script>
