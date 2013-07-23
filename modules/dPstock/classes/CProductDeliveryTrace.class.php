@@ -210,7 +210,7 @@ class CProductDeliveryTrace extends CMbObject {
       $stock_sejour = CStockSejour::getFromCIS($this->_code_cis, $this->_ref_delivery->sejour_id);
 
       // Mise a jour de la quantité du stock en quantité d'administration
-      $ratio = CBcbProduit::get($this->_code_cip)->_ratio_cis_cip;
+      $ratio = CMedicamentArticle::get($this->_code_cip)->_ratio_cis_cip;
 
       $quantity = $this->quantity / $ratio;
 
@@ -273,7 +273,7 @@ class CProductDeliveryTrace extends CMbObject {
       $stock_sejour = CStockSejour::getFromCIS($this->_code_cis, $this->_ref_delivery->sejour_id);
 
       if ($stock_sejour->_id) {
-        $codes_cip = CMbArray::pluck(CBcbProduit::getProduitsFromCIS($this->_code_cis), "CODE_CIP");
+        $codes_cip = CMedicamentProduit::getArticleCodes($this->_code_cis);
 
         $ds = $this->getDS();
         $where = array();
@@ -292,9 +292,9 @@ class CProductDeliveryTrace extends CMbObject {
         if ($delivery->_id == $this->delivery_id) {
           // Mise a jour de la quantité du stock en quantité d'administration
           $code_cip = $this->_ref_delivery->loadRefStock()->loadRefProduct()->code;
-          $product = CBcbProduit::get($code_cip);
+          $product = CMedicamentArticle::get($code_cip);
 
-          if ($product->code_cip) {
+          if ($product->getId()) {
             $ratio = $product->_ratio_cis_cip;
 
             // Mise à jour du stock
