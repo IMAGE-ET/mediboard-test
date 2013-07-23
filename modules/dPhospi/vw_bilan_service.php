@@ -12,6 +12,7 @@
  */
 
 CApp::setMemoryLimit("512M");
+CApp::setTimeLimit(120);
 
 function getCurrentLit($sejour, $date, $hour, $service_id, &$lits) {
   $affectations = $sejour->_ref_affectations;
@@ -102,7 +103,7 @@ $lines_by_patient = array();
 if ($do) {
   $sejour = new CSejour();
   $where = array();
-  $order_by = "";
+  $order_by = null;
   $where["sejour.entree"] = "<= '$dateTime_max'";
   $where["sejour.sortie"] = " >= '$dateTime_min'";
 
