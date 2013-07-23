@@ -9,14 +9,13 @@
  * @version    $Revision$
  */
 
-global $can;
-
 $dialog = CValue::get("dialog");
 $start  = CValue::get("start", 0);
 $stats  = CValue::get("stats", 0);
 $period = CValue::get("period", "day");
 
 if (!CCanDo::edit() && !$dialog) {
+  global $can;
   $can->redirect();
 }
 
@@ -71,11 +70,7 @@ if (!$dialog) {
   $listClasses = CApp::getChildClasses();
 }
 
-// Récupération de la liste des utilisateurs disponibles
-$user = new CUser;
-$user->template = "0";
-$order = "user_last_name, user_first_name";
-$listUsers = $user->loadMatchingList($order);
+$filter->loadRefUser();
 
 // Récupération des logs correspondants
 $where = array();
@@ -109,31 +104,35 @@ if ($filter->_date_max) {
   $where[] = "date <= '$filter->_date_max'";
 }
 
-$log = new CUserLog;
+$log = new CUserLog();
 
 $list       = null;
 $list_count = null;
+
+$is_admin = CCanDo::checkAdmin();
 
 if (!$stats) {
   $list       = $log->loadList($where, "user_log_id DESC", "$start, 100");
   $list_count = $log->countList($where);
 
   $group_id = CGroups::loadCurrent()->_id;
+  CMbObject::massLoadFwdRef($list, "user_id");
+  CMbObject::massLoadFwdRef($list, "object_id");
 
   foreach ($list as $key => $log) {
-    $log->loadRefsFwd();
+    $log->loadRefUser();
     $log->_ref_user->loadRefMediuser();
 
     $mediuser = $log->_ref_user->_ref_mediuser;
     $mediuser->loadRefFunction();
 
-    $log->getOldValues();
-
-    if (!$can->admin) {
-      if ($mediuser->_ref_function->group_id != $group_id) {
-        unset($list[$key]);
-      }
+    if (!$is_admin && $mediuser->_ref_function->group_id != $group_id) {
+      unset($list[$key]);
+      continue;
     }
+
+    $log->loadTargetObject();
+    $log->getOldValues();
   }
 }
 
@@ -141,7 +140,6 @@ $smarty->assign("dialog",      $dialog      );
 $smarty->assign("filter",      $filter      );
 $smarty->assign("object",      $object      );
 $smarty->assign("listClasses", $listClasses );
-$smarty->assign("listUsers",   $listUsers   );
 $smarty->assign("list",        $list        );
 $smarty->assign("start",       $start       );
 $smarty->assign("list_count",  $list_count  );
