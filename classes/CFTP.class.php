@@ -263,7 +263,7 @@ class CFTP {
     $fileInfo = array();
     foreach ($files as $_file) {
       $pregInfo = preg_split("/[\s]+/", $_file, 9);
-      if (strpos($pregInfo[0], "d") !== false) {
+      if (strpos($pregInfo[0], "d") !== false || $pregInfo[0] == "total") {
         continue;
       }
       $month = self::$month_to_number[$pregInfo[5]];

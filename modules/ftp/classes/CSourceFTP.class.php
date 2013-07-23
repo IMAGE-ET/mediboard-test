@@ -62,6 +62,11 @@ class CSourceFTP extends CExchangeSource {
     return $specs;
   }
 
+  /**
+   * Init
+   *
+   * @return CFTP
+   */
   function init() {
     $ftp = new CFTP();
     $ftp->init($this);
@@ -210,6 +215,7 @@ class CSourceFTP extends CExchangeSource {
       $ftp->connect();
 
       $files = $ftp->getListFilesDetails($current_directory);
+
     } catch (CMbException $e) {
       $e->stepAjax();
     }
