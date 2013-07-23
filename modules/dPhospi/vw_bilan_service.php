@@ -103,6 +103,7 @@ $lines_by_patient = array();
 if ($do) {
   $sejour = new CSejour();
   $where = array();
+  $ljoin = array();
   $order_by = null;
   $where["sejour.entree"] = "<= '$dateTime_max'";
   $where["sejour.sortie"] = " >= '$dateTime_min'";
