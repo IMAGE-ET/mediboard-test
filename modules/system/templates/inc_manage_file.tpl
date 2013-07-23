@@ -13,7 +13,7 @@
 <table class="tbl">
   <tr>
     <th class="title" colspan="5">
-      {{tr}}List-of-file{{/tr}} ({{$files|@count}})
+      {{tr}}List-of-file{{/tr}} {{if is_array($files)}}({{$files|@count}}){{/if}}
     </th>
   </tr>
   <tr>
