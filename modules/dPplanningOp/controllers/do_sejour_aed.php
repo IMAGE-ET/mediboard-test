@@ -21,18 +21,39 @@ if (CValue::post("mode_sortie") == "mutation" && CValue::post("type") == "urg" &
 
   $sejour = new CSejour();
   $sejour->load($sejour_id);
+  $rpu = $sejour->loadRefRPU();
 
-  //Création de l'affectation du patient
-  $affectation = new CAffectation();
-  $affectation->entree     = CMbDT::dateTime();
-  $affectation->lit_id     = $lit_id;
-  $affectation->service_id = $service_sortie_id;
-  $affectation->sejour_id  = $sejour_id;
-  if ($sejour->loadRefRPU()->mutation_sejour_id) {
-    $affectation->sejour_id = $sejour->_ref_rpu->mutation_sejour_id;
+  if ($rpu->mutation_sejour_id) {
+    $sejour_id = $sejour->_ref_rpu->mutation_sejour_id;
   }
-  $affectation->sortie = $sejour->sortie_prevue;
-  if ($msg = $affectation->store()) {
+
+  // Rercherche de l'affectation d'urgences, et création si on en a pas
+  // Il s'agit de l'affectation qui a lieu entre le début du séjour et la mutation
+  $affectation_urg = new CAffectation();
+  $affectation_urg->entree    = $sejour->entree;
+  $affectation_urg->loadMatchingObject();
+  if (!$affectation_urg->_id) {
+    $affectation_urg->sortie    = CMbDT::dateTime();
+    $affectation_urg->sejour_id = $sejour_id;
+    $affectation_urg->lit_id    = $rpu->box_id;
+    if (!$rpu->box_id) {
+      $services = CService::loadServicesUrgence();
+      $affectation_urg->service_id = reset($services)->_id;
+      if ($msg = $affectation_urg->store()) {
+        CAppUI::setMsg($msg, UI_MSG_WARNING);
+      }
+    }
+  }
+
+  // Création de l'affectation d'hospitalisation
+  $affectation_hospit = new CAffectation();
+  $affectation_hospit->entree     = $affectation_urg->sortie;
+  $affectation_hospit->loadMatchingObject();
+  $affectation_hospit->lit_id     = $lit_id;
+  $affectation_hospit->service_id = $service_sortie_id;
+  $affectation_hospit->sejour_id  = $sejour_id;
+  $affectation_hospit->sortie     = $sejour->sortie_prevue;
+  if ($msg = $affectation_hospit->store()) {
     CAppUI::setMsg($msg, UI_MSG_WARNING);
   }
 }

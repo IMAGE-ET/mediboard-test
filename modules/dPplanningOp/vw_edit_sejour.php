@@ -69,7 +69,7 @@ if ($sejour_id) {
   }
 
   foreach ($sejour->_ref_affectations as $affectation) {
-    $affectation->loadRefLit()->loadCompleteView();
+    $affectation->loadView();
   }
   $praticien = $sejour->_ref_praticien;
   $patient = $sejour->_ref_patient;

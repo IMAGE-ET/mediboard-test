@@ -19,11 +19,7 @@
   <tr>
     <td>
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');">
-        {{if !$_affectation->_ref_lit || !$_affectation->_ref_lit->_id}}
-          <em>Couloir</em>
-        {{else}}
-          {{$_affectation->_ref_lit->_view}}
-        {{/if}}
+        {{$_affectation->_view}}
       </span>
     </td>
     <td>{{mb_value object=$_affectation field=entree}}</td>
