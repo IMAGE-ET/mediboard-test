@@ -363,10 +363,13 @@ class CMediusers extends CPerson {
     $backProps["affectation"]                     = "CAffectation praticien_id";
     $backProps["regles_sectorisation_mediuser"]   = "CRegleSectorisation praticien_id";
     $backProps["retrocession"]                    = "CRetrocession praticien_id";
+    $backProps["user_debiteur"]                   = "CDebiteurOX user_id";
     return $backProps;
   }
 
   /**
+   * Création d'un utilisateur
+   *
    * @return CUser
    */
   function createUser() {
@@ -1012,10 +1015,10 @@ class CMediusers extends CPerson {
   }
 
   /**
-   * @param int  $permType
-   * @param null $function_id
-   * @param null $name
-   * @param bool $actif
+   * @param int    $permType    permission
+   * @param int    $function_id fontion
+   * @param string $name        nom
+   * @param bool   $actif       actif
    *
    * @return CMediusers[]
    */
@@ -1024,10 +1027,10 @@ class CMediusers extends CPerson {
   }
 
   /**
-   * @param int  $permType
-   * @param null $function_id
-   * @param null $name
-   * @param bool $actif
+   * @param int    $permType    permission
+   * @param int    $function_id fontion
+   * @param string $name        nom
+   * @param bool   $actif       actif
    *
    * @return CMediusers[]
    */
@@ -1036,10 +1039,10 @@ class CMediusers extends CPerson {
   }
 
   /**
-   * @param int  $permType
-   * @param null $function_id
-   * @param null $name
-   * @param bool $actif
+   * @param int    $permType    permission
+   * @param int    $function_id fontion
+   * @param string $name        nom
+   * @param bool   $actif       actif
    *
    * @return CMediusers[]
    */
@@ -1048,10 +1051,10 @@ class CMediusers extends CPerson {
   }
 
   /**
-   * @param int  $permType
-   * @param null $function_id
-   * @param null $name
-   * @param bool $actif
+   * @param int    $permType    permission
+   * @param int    $function_id fontion
+   * @param string $name        nom
+   * @param bool   $actif       actif
    *
    * @return CMediusers[]
    */
@@ -1060,11 +1063,11 @@ class CMediusers extends CPerson {
   }
 
   /**
-   * @param int  $permType
-   * @param null $function_id
-   * @param null $name
-   * @param bool $secondary
-   * @param bool $actif
+   * @param int    $permType    permission
+   * @param int    $function_id fontion
+   * @param string $name        nom
+   * @param bool   $secondary   secondary
+   * @param bool   $actif       actif
    *
    * @return CMediusers[]
    */
@@ -1073,11 +1076,11 @@ class CMediusers extends CPerson {
   }
 
   /**
-   * @param int  $permType
-   * @param null $function_id
-   * @param null $name
-   * @param bool $secondary
-   * @param bool $actif
+   * @param int    $permType    permission
+   * @param int    $function_id fontion
+   * @param string $name        nom
+   * @param bool   $secondary   secondary
+   * @param bool   $actif       actif
    *
    * @return CMediusers[]
    */
@@ -1086,11 +1089,11 @@ class CMediusers extends CPerson {
   }
 
   /**
-   * @param int  $permType
-   * @param null $function_id
-   * @param null $name
-   * @param bool $secondary
-   * @param bool $actif
+   * @param int    $permType    permission
+   * @param int    $function_id fontion
+   * @param string $name        nom
+   * @param bool   $secondary   secondary
+   * @param bool   $actif       actif
    *
    * @return CMediusers[]
    */
@@ -1099,9 +1102,9 @@ class CMediusers extends CPerson {
   }
 
   /**
-   * @param int  $permType
-   * @param null $function_id
-   * @param null $name
+   * @param int    $permType    permission
+   * @param int    $function_id fontion
+   * @param string $name        nom
    *
    * @return CMediusers[]
    */
@@ -1110,9 +1113,9 @@ class CMediusers extends CPerson {
   }
 
   /**
-   * @param int  $permType
-   * @param null $function_id
-   * @param null $name
+   * @param int    $permType    permission
+   * @param int    $function_id fontion
+   * @param string $name        nom
    *
    * @return CMediusers[]
    */
@@ -1245,7 +1248,9 @@ class CMediusers extends CPerson {
   }
 
   function fillTemplate(&$template) {
-    $this->loadRefsFwd();
+    $this->loadRefFunction();
+    $this->loadRefSpecCPAM();
+    $this->loadRefDiscipline();
     $this->_ref_function->fillTemplate($template);
     $template->addProperty("Praticien - Nom"            , $this->_user_last_name );
     $template->addProperty("Praticien - Prénom"         , $this->_user_first_name);
@@ -1279,6 +1284,8 @@ class CMediusers extends CPerson {
    * Analogue à CSalle::loadRefsForDay
    *
    * @param string $date Date to look for
+   *
+   * @return void
    */
   function loadRefsForDay($date) {
     $this->loadBackRefs("secondary_functions");
@@ -1389,8 +1396,8 @@ class CMediusers extends CPerson {
 
   function makeUsernamePassword($first_name, $last_name, $id = null, $number = false, $prepass = "mdp") {
     $length = 20 - strlen($id);
-    $this->_user_username = substr(preg_replace($number ? "/[^a-z0-9]/i" : "/[^a-z]/i", "", strtolower(CMbString::removeDiacritics(($first_name ? $first_name[0] : '').$last_name))),0,$length) . $id;
-    $this->_user_password = $prepass . substr(preg_replace($number ? "/[^a-z0-9]/i" : "/[^a-z]/i", "", strtolower(CMbString::removeDiacritics($last_name))),0,$length) . $id;
+    $this->_user_username = substr(preg_replace($number ? "/[^a-z0-9]/i" : "/[^a-z]/i", "", strtolower(CMbString::removeDiacritics(($first_name ? $first_name[0] : '').$last_name))), 0, $length) . $id;
+    $this->_user_password = $prepass . substr(preg_replace($number ? "/[^a-z0-9]/i" : "/[^a-z]/i", "", strtolower(CMbString::removeDiacritics($last_name))), 0, $length) . $id;
   }
 
   function getNbJoursPlanningSSR($date){
@@ -1419,10 +1426,10 @@ class CMediusers extends CPerson {
   }
 
   /**
-   * @param string $keywords
-   * @param null   $where
-   * @param null   $limit
-   * @param null   $ljoin
+   * @param string $keywords keywords
+   * @param array  $where    where
+   * @param string $limit    limit
+   * @param array  $ljoin    ljoin
    *
    * @return self[]
    */
@@ -1456,7 +1463,8 @@ class CMediusers extends CPerson {
   /**
    * return the tag used for identifying "software user"
    *
-   * @param null $group_id
+   * @param int $group_id group_id
+   *
    * @return mixed
    */
   static function getTagSoftware($group_id = null) {
