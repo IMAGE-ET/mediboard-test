@@ -36,12 +36,12 @@
   {{mb_include template=inc_config_display}}
 </div>
 
+<div id="Offline" style="display: none;">
+  {{mb_include template=inc_config_offline}}
+</div>
+
 <div id="Sender" style="display: none;">
   {{mb_include template=inc_config_sender}}
 </div>
 
 <div id="CConfigEtab" style="display: none">
-
-<div id="Offline" style="display: none;">
-  {{mb_include template=inc_config_offline}}
-</div>
