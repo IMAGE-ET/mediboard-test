@@ -3138,7 +3138,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->loadNDA();
     $this->loadNRA();
     $now = CMbDT::dateTime();
-    $affectation = $this->getCurrAffectation($this->entree < $now ? $this->entree : null);
+    $affectation = $this->getCurrAffectation($this->entree > $now ? $this->entree : null);
     $affectation->loadView();
 
     $fields = array_merge($fields,
