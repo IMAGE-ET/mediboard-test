@@ -8,7 +8,6 @@
  */
 
 CCanDo::checkRead();
-
 $user = CMediusers::get();
 $object_id = CValue::get("object_id");
 $object_class = CValue::get("object_class");
@@ -29,17 +28,29 @@ if (!$object->_id) {
   CAppUI::stepAjax("CUserMail-link-objectNull", UI_MSG_ERROR);
 }
 
-if ($attach_list == "" && !$text_plain && !$text_html) {
+if (str_replace("-", "", $attach_list) == "" && !$text_plain && !$text_html) {
   CAppUI::stepAjax("CMailAttachment-msg-no_object_to_attach", UI_MSG_ERROR);
 }
 
-$attachments = explode("-", $attach_list);
+$attachments = trim($attach_list) ? explode("-", $attach_list) : array();
 foreach ($attachments as $_attachment) {
+  //no attachment value
+  if (!$_attachment) {
+    continue;
+  }
   $attachment = new CMailAttachments();
-  $attachment->load($_attachment);
-  $attachment->loadRefsFwd();
+  if ($_attachment != "") {
+    $attachment->load($_attachment);
+    $attachment->loadRefsFwd();
 
-  //je lie
+    //already linked = skip, no id, skip
+    if ($attachment->file_id || !$_attachment->_id) {
+      continue;
+    }
+  }
+
+
+  //linking
   if ($attachment->_file->_id) {
     $attachment->_file->setObject($object);
     if ($msg = $attachment->_file->store()) {
@@ -63,7 +74,6 @@ foreach ($attachments as $_attachment) {
 
     $pop = new CPop($account);
     $pop->open();
-
 
     $file = new CFile();
     $file->setObject($object);
@@ -89,6 +99,7 @@ foreach ($attachments as $_attachment) {
 }
 
 
+//text link
 if ($text_html || $text_plain) {
   if ($text_html) {
     $text = new CContentHTML();
@@ -115,7 +126,6 @@ if ($text_html || $text_plain) {
     CAppUI::stepAjax("CUserMail-content-attached", UI_MSG_OK);
   }
 }
-//if ($text_plain) {}
 
 if (!$text_html && !$text_plain && $attach_list == "" ) {
   CAppUI::stepAjax("CMailAttachment-msg-noAttachSelected", UI_MSG_ERROR);

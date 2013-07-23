@@ -181,20 +181,18 @@ class CMailAttachments extends CMbObject{
    */
   function loadFiles() {
     //a file is already linked and we have the id
+    $file = new CFile();
     if ($this->file_id) {
-      $file = new CFile();
       $file->load($this->file_id);
       $file->loadRefsFwd();         //TODO : fix this
-      $file->updateFormFields();
     }
     //so there is a file linked
     else {
-      $file = new CFile();
       $file->setObject($this);
       $file->loadMatchingObject();
-      //$file->loadUniqueBackRef("files");
-      $file->updateFormFields();
     }
+    $file->updateFormFields();
+
 
     return $this->_file = $file;
   }
