@@ -1498,7 +1498,12 @@ class CSetupsystem extends CSetup {
                 ADD `signature_hash` CHAR(32);";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.48";
+    $this->makeRevision("1.1.48");
+    $query = "ALTER TABLE `source_pop`
+                ADD `is_private` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.49";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,

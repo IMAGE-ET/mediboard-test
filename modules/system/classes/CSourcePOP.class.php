@@ -24,6 +24,7 @@ class CSourcePOP extends CExchangeSource {
   public $timeout; //seconds
   public $type;
   public $libelle;
+  public $is_private;
 
   public $last_update;
   public $object_class;
@@ -64,6 +65,7 @@ class CSourcePOP extends CExchangeSource {
     $props["libelle"]           = "str notNull";
     $props["extension"]         = "str";
     $props["cron_update"]       = "bool default|1";
+    $props["is_private"]        = "bool default|0";
 
     $props["last_update"]       = "dateTime";
     $props["object_id"]         = "ref notNull class|CMbObject meta|object_class";
