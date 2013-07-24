@@ -554,7 +554,7 @@ class CAffectation extends CMbObject {
 
     $lit       = $this->_ref_lit;
     $chambre   = $lit->_ref_chambre;
-    $service   = $chambre->_ref_service;
+    $service   = $this->loadRefService();
     $sejour    = $this->loadRefSejour();
     $prev_aff  = $this->_ref_prev;
     $ljoin = array(
