@@ -59,23 +59,25 @@
       </td>
       <td {{if !$nbConsult}}class="empty"{{/if}}>
         {{if $nbConsult}}
-          <button class="pagelayout button" onclick="openPlage('{{$_plage_consultation->_id}}')">Voir la liste ({{$nbConsult}})</button>
+          <button class="pagelayout button" onclick="openPlage('{{$_plage_consultation->_id}}')">Voir la liste ({{$_plage_consultation->_nb_patients}})</button>
           <table class="tbl" id="plage_{{$_plage_consultation->_id}}" style="display: none;">
             <tr>
-              <th colspan="5" class="title">{{$_plage_consultation->_view}}</th>
+              <th colspan="6" class="title">{{$_plage_consultation->_view}}</th>
             </tr>
             <tr>
               <th rowspan="{{$nbConsult+1}}">{{$nbConsult}} {{tr}}CConsultation{{/tr}}{{if $nbConsult>1}}s{{/if}}</th>
               <th>Entrée</th>
               <th>Patient</th>
               <th>Age</th>
+              <th>Motif</th>
               <th>Remarques</th>
             </tr>
             {{foreach from=$_plage_consultation->_ref_consultations item=_consultation}}
-              <tr>
+              <tr {{if !$_consultation->patient_id}}class="hatching"{{/if}}>
                 <td>{{$_consultation->heure|date_format:"%H:%M"}}</td>
-                <td><a href="#" onclick="openResume('{{$_consultation->_ref_patient->_id}}')">{{$_consultation->_ref_patient}}</a> </td>
+                <td>{{if $_consultation->patient_id}}<a href="#" onclick="openResume('{{$_consultation->_ref_patient->_id}}')">{{$_consultation->_ref_patient}}</a>{{else}}[PAUSE]{{/if}}</td>
                 <td>{{mb_value object=$_consultation->_ref_patient field=_age}}</td>
+                <td>{{$_consultation->motif}}</td>
                 <td>{{$_consultation->rques}}</td>
               </tr>
             {{/foreach}}

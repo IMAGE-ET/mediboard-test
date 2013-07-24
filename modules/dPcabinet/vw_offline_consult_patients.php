@@ -45,15 +45,15 @@ $resumes_patient = array();
 
 /** @var $Pconsultations CPlageConsult[] */
 foreach ($Pconsultations as $_plage_consult) {
-  $_plage_consult->loadRefsConsultations(false);
+  $_plage_consult->loadRefsConsultations(false, false);
   $_plage_consult->loadRefChir();
+  $_plage_consult->countPatients();
   $_plage_consult->_ref_chir->loadRefFunction();
   $_plage_consult->updateFormFields();
   $_plage_consult->loadFillRate();
 
   /** @var $consultations CConsultation[] */
   foreach ($_plage_consult->_ref_consultations as $_consult) {
-    $nbConsultations++;
     if (isset($resumes_patient[$_consult->patient_id])) {
       continue;
     }
@@ -64,6 +64,10 @@ foreach ($Pconsultations as $_plage_consult) {
     $smarty->assign("offline", 1);
     $smarty->assign("patient", $_consult->_ref_patient);
     $resumes_patient[$patient->_id] = $smarty->fetch("vw_resume.tpl");  //dynamic assignment
+
+    if ($_consult->patient_id) {
+      $nbConsultations++;
+    }
   }
 }
 
