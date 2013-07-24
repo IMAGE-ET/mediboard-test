@@ -165,6 +165,36 @@ function print_infos($var, $name = '') {
 }
 
 /**
+ * Hide some params according to regexp
+ *
+ * @param array &$params Params to check
+ *
+ * @return void
+ */
+function filterInput(&$params) {
+  $patterns = array(
+    "/password|passphrase/i",
+    "/login/i"
+  );
+
+  $replacements = array(
+    array("/.*/", "***"),
+    array("/([^:]*):(.*)/i", "$1:***")
+  );
+
+  // We replace passwords with a mask
+  foreach ($params as $_type => $_params) {
+    foreach ($_params as $_key => $_value) {
+      foreach ($patterns as $_k => $_pattern) {
+        if (!empty($_value) && preg_match($_pattern, $_key)) {
+          $params[$_type][$_key] = preg_replace($replacements[$_k][0], $replacements[$_k][1], $_value);
+        }
+      }
+    }
+  }
+}
+
+/**
  * Custom error handler with backtrace
  * 
  * @param string $code      Error code
@@ -229,26 +259,7 @@ function errorHandler($code, $text, $file, $line, $context, $backtrace = null) {
     "SESSION" => $session,
   );
 
-  $patterns = array(
-    "/password|passphrase/i",
-    "/login/i"
-  );
-
-  $replacements = array(
-    array("/.*/", "***"),
-    array("/([^:]*):(.*)/i", "$1:***")
-  );
-
-  // We replace passwords with a mask
-  foreach ($_all_params as $_type => $_params) {
-    foreach ($_params as $_key => $_value) {
-      foreach ($patterns as $_k => $_pattern) {
-        if (!empty($_value) && preg_match($_pattern, $_key)) {
-          $_all_params[$_type][$_key] = preg_replace($replacements[$_k][0], $replacements[$_k][1], $_value);
-        }
-      }
-    }
-  }
+  filterInput($_all_params);
 
   // CApp might not be ready yet as of early error handling
   $request_uid = null;
@@ -387,16 +398,7 @@ function exceptionHandler($exception) {
     "SESSION" => $session,
   );
 
-  // We replace passwords with a mask
-  $mask = "***";
-  $pattern = "/password|passphrase/i";
-  foreach ($_all_params as $_type => $_params) {
-    foreach ($_params as $_key => $_value) {
-      if (!empty($_value) && preg_match($pattern, $_key)) {
-        $_all_params[$_type][$_key] = $mask;
-      }
-    }
-  }
+  filterInput($_all_params);
 
   // CApp might not be ready yet as of early error handling
   $request_uid = null;
