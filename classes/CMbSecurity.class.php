@@ -253,13 +253,22 @@ class CMbSecurity {
       return $params;
     }
 
-    // We replace passwords and passphrases with a mask
-    $mask    = "***";
-    $pattern = "/password|passphrase/i";
+    $patterns = array(
+      "/password|passphrase/i",
+      "/login/i"
+    );
 
+    $replacements = array(
+      array("/.*/", "***"),
+      array("/([^:]*):(.*)/i", "$1:***")
+    );
+
+    // We replace passwords and passphrases with a mask
     foreach ($params as $_key => $_value) {
-      if (!empty($_value) && preg_match($pattern, $_key)) {
-        $params[$_key] = $mask;
+      foreach ($patterns as $_k => $_pattern) {
+        if (!empty($_value) && preg_match($_pattern, $_key)) {
+          $params[$_key] = preg_replace($replacements[$_k][0], $replacements[$_k][1], $_value);
+        }
       }
     }
 
