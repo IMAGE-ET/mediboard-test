@@ -13,7 +13,9 @@
 <script>
   Main.add(function () {
     var formAccount = getForm("accountFrm");
-    messagerie.refreshAccount($V(formAccount.account_id));
+    {{if $account_id}}
+      messagerie.refreshAccount($V(formAccount.account_id));
+    {{/if}}
   });
 </script>
 
@@ -22,7 +24,7 @@
   <input type="hidden" name="tab" value="{{$tab}}"/>
   <label>Messageries disponibles :
   <select name="user_id" onchange="this.form.submit()">
-    <option value="" disabled="disabled">{{tr}}Select{{/tr}} {{tr}}CMediusers{{/tr}}</option>
+    <option value="">{{tr}}Select{{/tr}} {{tr}}CMediusers{{/tr}}</option>
     {{foreach from=$users item=_user}}
       <option value="{{$_user->_id}}" {{if $user->_id == $_user->_id}}selected="selected" {{/if}}>{{$_user}}</option>
     {{/foreach}}
@@ -42,4 +44,7 @@
 
 
 <div id="account_mail">
+  {{if !$account_id}}
+    <div class="small-info">{{tr}}messagerie-msg-pls_select_an_account{{/tr}}</div>
+  {{/if}}
 </div>

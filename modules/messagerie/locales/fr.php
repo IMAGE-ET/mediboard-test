@@ -261,6 +261,7 @@ $locales['config-messagerie-enable_external-desc'] = 'recevoir et traiter email 
 $locales['config-messagerie-enable_internal'] = 'Utiliser messagerie interne';
 $locales['config-messagerie-enable_internal-desc'] = 'utiliser la messagerie interne à mediboard';
 $locales['config-messagerie-limit_external_mail'] = 'Limiter le nombre de mails à récupérer à ';
+$locales['messagerie-msg-pls_select_an_account'] = 'Sélectionnez un compte dans le menu déroulant ci-dessous';
 $locales['mod-dPmessagerie-tab-ajax_link_attachments'] = 'Liaison du mail';
 $locales['mod-dPmessagerie-tab-ajax_open_email'] = 'Aperçu de l\'email';
 $locales['mod-dPmessagerie-tab-ajax_open_external_email'] = 'Lecture du mail';

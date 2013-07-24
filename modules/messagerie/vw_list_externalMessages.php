@@ -61,8 +61,14 @@ if (!$account_id) {
 
 //switching account check, if session account_id not in user_account, reset account_id
 if (!array_key_exists($account_id, $accounts_user)) {
-  $account_temp = reset($accounts_user);
-  $account_id = $account_temp->_id;
+  if (count($accounts_user)) {
+    $account_temp = reset($accounts_user);
+    $account_id = $account_temp->_id;
+  }
+  else {
+    $account_id = null;
+  }
+
 }
 
 //smarty
