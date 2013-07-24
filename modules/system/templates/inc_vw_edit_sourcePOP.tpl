@@ -59,6 +59,10 @@
       <td>{{mb_field object=$source field="cron_update"}}</td>
     </tr>
     <tr>
+      <th>{{mb_label object=$source field="is_private"}}</th>
+      <td>{{mb_field object=$source field="is_private"}}</td>
+    </tr>
+    <tr>
       <th>{{mb_label object=$source field="extension"}}</th>
       <td>{{mb_field object=$source field="extension"}}</td>
     </tr>
