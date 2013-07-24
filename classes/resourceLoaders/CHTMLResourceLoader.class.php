@@ -28,6 +28,11 @@ abstract class CHTMLResourceLoader {
    * @var resource
    */
   private static $_fp_out;
+
+  /**
+   * @var string Path to save the exported files to
+   */
+  private static $_path;
   
   /** 
    * IE Conditional comments
@@ -129,7 +134,7 @@ abstract class CHTMLResourceLoader {
    * @return void
    */
   static function initOutput($aio){
-    self::$_aio = !!$aio;
+    self::$_aio = $aio;
     
     if (self::$_aio) {
       self::$_fp_in = CMbPath::getTempFile();
@@ -147,7 +152,15 @@ abstract class CHTMLResourceLoader {
    */
   static function output(){
     if (self::$_aio) {
-      self::allInOne();
+      $path = CAppUI::conf("aio_output_path");
+
+      if (self::$_aio === "savefile" && is_dir($path)) {
+        $str = self::allInOne($path);
+        file_put_contents($path."index.html", $str);
+      }
+      else {
+        self::allInOne();
+      }
     }
     else {
       ob_end_flush();
@@ -209,6 +222,23 @@ abstract class CHTMLResourceLoader {
 
     return null;
   }
+
+  /**
+   * Get embeddable URL
+   *
+   * @param string $src     Original URL
+   * @param string $content File content
+   * @param string $subpath Subpath to store the file to
+   *
+   * @return string
+   */
+  private static function getEmbedURL($src, $content, $subpath) {
+    $hash = md5($src);
+    $subpath .= "/";
+    CMbPath::forceDir(self::$_path.$subpath);
+    file_put_contents(self::$_path.$subpath.$hash, $content);
+    return "$subpath$hash";
+  }
   
   /**
    * Replace <script> src attribute with the contents of the script
@@ -219,9 +249,16 @@ abstract class CHTMLResourceLoader {
    */
   private static function replaceScriptSrc($matches) {
     $src = $matches[1];
+    $orig_src = $src;
     $src = preg_replace('/(\?.*)$/', '', $src);
     $script = self::getFileContents($src);
-    return '<script type="text/javascript">'.$script.'</script>';
+
+    if (self::$_path) {
+      return '<script type="text/javascript" src="'.self::getEmbedURL($orig_src, $script, "script").'"></script>';
+    }
+    else {
+      return '<script type="text/javascript">'.$script.'</script>';
+    }
   }
   
   /**
@@ -233,6 +270,7 @@ abstract class CHTMLResourceLoader {
    */
   private static function replaceImgSrc($matches) {
     $src = $matches[2];
+    $orig_src = $src;
     $src = preg_replace('/(\?.*)$/', '', $src);
     
     if ($src) {
@@ -273,8 +311,42 @@ abstract class CHTMLResourceLoader {
     }
     
     $matches[3] = rtrim($matches[3], " /");
-    $img = " src=\"data:$mime;base64,".base64_encode($img)."\" ";
-    return '<img '.$matches[1].$img.$matches[3].' />';
+
+    if (self::$_path) {
+      $img = " src=\"".self::getEmbedURL($orig_src, $img, "img")."\" ";
+    }
+    else {
+      $img = " src=\"data:$mime;base64,".base64_encode($img)."\" ";
+    }
+
+    return '<img '.$matches[1].$img.$matches[3].($matches[4] ? ' />' : "");
+  }
+
+  /**
+   * Replace <img> src attribute with the contents of the image (base 64 encoded)
+   *
+   * @param array $matches The matches of the regular expression
+   *
+   * @return string|null The <img> tag
+   */
+  private static function replaceAEmbed($matches) {
+    $src = $matches[2];
+    $orig_src = $src;
+    $src = preg_replace('/(\?.*)$/', '', $src);
+
+    if (!$src) {
+      return null;
+    }
+
+    if ($src[0] == "/") {
+      $src = $_SERVER['DOCUMENT_ROOT'] . $src;
+    }
+
+    $file = self::getFileContents($src);
+
+    $href = " href=\"".self::getEmbedURL($orig_src, $file, "embed")."\" ";
+
+    return '<a '.$matches[1].$href.$matches[3].'>';
   }
   
   /**
@@ -317,6 +389,7 @@ abstract class CHTMLResourceLoader {
    */
   private static function replaceStylesheet($matches) {
     $src = $matches[1];
+    $orig_src = $src;
     $src = preg_replace('/(\?.*)$/', '', $src);
     $stylesheet = self::getFileContents($src);
     
@@ -329,23 +402,35 @@ abstract class CHTMLResourceLoader {
     // url(foo)
     $re = "/url\([\"']?([^\"\'\)]+)[\"']?\)?/i";
     $stylesheet = preg_replace_callback($re, array('self', 'replaceStylesheetUrl'), $stylesheet);
-    
-    return '<style type="text/css">'.$stylesheet.'</style>';
+
+    if (self::$_path) {
+      return '<link rel="stylesheet" href="'.self::getEmbedURL($orig_src, $stylesheet, "css").'" >';
+    }
+    else {
+      return '<style type="text/css">'.$stylesheet.'</style>';
+    }
   }
   
   /**
    * Embed all the external resources of the current output buffer inside a single file and outputs it.
+   *
+   * @param string $path Path to save the files to
    * 
-   * @return void
+   * @return void|string
    */
-  private static function allInOne() {
-    set_min_memory_limit("256M");
+  private static function allInOne($path = null) {
+    if ($path) {
+      self::$_path = rtrim($path, "/\\")."/";
+    }
+
+    CApp::setMemoryLimit("256M");
     
     self::$_fp_out = CMbPath::getTempFile();
     
-    $re_img    = "/<img([^>]*)src\s*=\s*[\"']([^\"']+)[\"']([^>]*)>/i";
+    $re_img    = "/<img([^>]*)src\s*=\s*[\"']([^\"']+)[\"']([^>]*)(>|$)/i";
     $re_link   = "/<link[^>]*rel=\"stylesheet\"[^>]*href\s*=\s*[\"']([^\"']+)[\"'][^>]*>/i";
     $re_script = "/<script[^>]*src\s*=\s*[\"']([^\"']+)[\"'][^>]*>\s*<\/script>/i";
+    $re_a      = "/<a([^>]*)href\s*=\s*[\"']embed:([^\"']+)[\"']([^>]*)>/i";
     
     // End Output Buffering
     ob_end_clean();
@@ -353,28 +438,43 @@ abstract class CHTMLResourceLoader {
     rewind(self::$_fp_in);
     while (!feof(self::$_fp_in)) {
       $line = fgets(self::$_fp_in);
-      
+
       $line = preg_replace_callback($re_img,    array('self', 'replaceImgSrc'), $line);
       $line = preg_replace_callback($re_link,   array('self', 'replaceStylesheet'), $line);
       $line = preg_replace_callback($re_script, array('self', 'replaceScriptSrc'), $line);
-      
+
+      if (self::$_path) {
+        $line = preg_replace_callback($re_a, array('self', 'replaceAEmbed'), $line);
+      }
+
       fwrite(self::$_fp_out, $line);
     }
     
     $length = 0;
     rewind(self::$_fp_out);
+
+    $full_str = "";
+
     while (!feof(self::$_fp_out)) {
-      $str = fread(self::$_fp_out, 4096);
-      $length += strlen($str);
+      $line = fgets(self::$_fp_out);
+
+      $length += strlen($line);
+
+      $line = str_replace("[[AIO-length]]", CMbString::toDecaBinary($length), $line);
       
-      $str = str_replace("[[AIO-length]]", CMbString::toDecaBinary($length), $str);
-      
-      if (strpos($str, "[[AIO-memory]]") !== false) {
-        $str = str_replace("[[AIO-memory]]", self::getOutputMemory(true), $str);
+      if (strpos($line, "[[AIO-memory]]") !== false) {
+        $line = str_replace("[[AIO-memory]]", self::getOutputMemory(true), $line);
       }
-      
-      echo $str;
+
+      if ($path) {
+        $full_str .= $line;
+      }
+      else {
+        echo $line;
+      }
     }
+
+    return $full_str;
   }
 }
 

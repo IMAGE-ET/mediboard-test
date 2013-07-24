@@ -74,6 +74,8 @@ $dPconfig["error_logs_in_db"]         = "0";
 $dPconfig["alternative_mode"]  = "1";
 $dPconfig["merge_prevent_base_without_idex"]  = "1";
 
+$dPconfig["aio_output_path"]   = "";
+
 $dPconfig["browser_compat"]    = array(
   'firefox' => '8.0',
   'msie'    => '8.0',
