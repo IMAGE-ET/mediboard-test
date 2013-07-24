@@ -16,6 +16,8 @@ $dPconfig["dPfiles"] = array (
   "upload_max_filesize" => "2M",
   "yoplet_upload_url" => "",
   "yoplet_upload_path" => "",
+  "yoplet_cookies" => "",
+
   "CFile" => array(
     "upload_directory"  => "files",
     "ooo_active"        => "0",
@@ -27,9 +29,9 @@ $dPconfig["dPfiles"] = array (
   "CFilesCategory" => array(
     "show_empty" => "1",
   ),
-  
-	
+
   "system_sender" => "",
+
   "CDocumentSender" => array(
     "auto_max_load" => "50",
     "auto_max_send" => "10",

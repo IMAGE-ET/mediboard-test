@@ -1,5 +1,6 @@
 {{mb_script module=cabinet script=yoplet}}
 {{assign var=yoplet_upload_url value=$conf.dPfiles.yoplet_upload_url}}
+{{assign var=yoplet_cookies value=$conf.dPfiles.yoplet_cookies}}
 
 {{if $app->user_prefs.directory_to_watch}}
   <script>
@@ -17,12 +18,12 @@
     <param name="codebase_lookup" value="false" />
     <param name="action" value="" />
     {{if $yoplet_upload_url}}
-      <param name="url" value="{{$yoplet_upload_url}}/index.php?m=dPfiles&a=ajax_yoplet_upload" />
+      <param name="url" value="{{$yoplet_upload_url}}/index.php?m=dPfiles&a=ajax_yoplet_upload&suppressHeaders=1&dialog=1" />
     {{else}}
-      <param name="url" value="{{$base_url}}/index.php?m=dPfiles&a=ajax_yoplet_upload" />
+      <param name="url" value="{{$base_url}}/index.php?m=dPfiles&a=ajax_yoplet_upload&suppressHeaders=1&dialog=1" />
     {{/if}}
     <param name="content" value="a" />
-    <param name="cookies" value="{{$app->session_name}}" />
+    <param name="cookies" value="{{$app->session_name}} {{$yoplet_cookies}}" />
     <param name="user_agent" value="{{$smarty.server.HTTP_USER_AGENT}}" />
     <param name="java_arguments" value="-Djnlp.packEnabled=true"/>
   </applet>
