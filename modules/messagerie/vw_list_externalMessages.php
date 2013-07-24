@@ -20,27 +20,43 @@ $user->load($user_id);
 
 //CSourcePOP account
 $account = new CSourcePOP();
-$group = "object_id";   //all accounts from an unique mediuser are grouped
-$account->object_class = "CMediusers";
+
+//getting the list of user with the good rights
+$listUsers = $user->loadListWithPerms(PERM_EDIT);
+$where = array();
+$where["source_pop.is_private"]   = "= '0'";
+$where["source_pop.object_class"] = "= 'CMediusers'";
+$where["users_mediboard.user_id"] = CSQLDataSource::prepareIn(array_keys($listUsers));
+$ljoin = array();
+$ljoin["users_mediboard"] = "source_pop.object_id = users_mediboard.user_id AND source_pop.object_class = 'CMediusers'";
 
 //all accounts linked to a mediuser
-$accounts_available = $account->loadMatchingList(null, null, $group);
+//all accounts from an unique mediuser are grouped, in order to have the mediusers list
+/** @var CSourcePOP[] $accounts_available */
+$accounts_available = $account->loadList($where, null, null, null, $ljoin);
+
+//getting user list
+$users = array();
+foreach ($accounts_available as $_account) {
+  $userPop = $_account->loadRefMetaObject();
+  $users[] = $userPop;
+}
+
+//all accounts to the selected user
+$where["source_pop.object_id"] = " = '$user->_id'";
+
+//if user connected, show the private source pop
+if ($user_id == $user_connected->_id) {
+  $where["source_pop.is_private"] = " IS NOT NULL";
+}
+$accounts_user = $account->loadList($where, null, null, null, $ljoin);
+
+//if no account_id, selecting the first one
 if (!$account_id) {
   $account_temp = reset($accounts_available);
   $account_id = $account_temp->_id;
 }
 
-//all accounts to the selected user
-$account->object_id = $user->_id;
-$accounts_user = $account->loadMatchingList();
-
-$users = array();
-/** @var CSourcePOP[] $accounts_available */
-foreach ($accounts_available as $_account) {
-  $userPop = $_account->loadRefMetaObject();
-  $users[] = $userPop;
-  $libelle = $_account->libelle ? $_account->libelle : $_account->_id;
-}
 
 //switching account check, if session account_id not in user_account, reset account_id
 if (!array_key_exists($account_id, $accounts_user)) {

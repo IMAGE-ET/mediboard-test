@@ -21,10 +21,7 @@
 
 <div>
   <button class="button change" onclick="messagerie.getLastMessages('{{$account->_id}}');">{{tr}}CUserMAil-button-getNewMails{{/tr}}</button>
-  <select style="width: 50px;" name="action">
-    <option value="">{{tr}}CUserMail-option-More{{/tr}}</option>
-    <option value="AllMarkAsRead" onclick="messagerie.markallAsRead('{{$account->_id}}')">{{tr}}CUserMail-option-allmarkasread{{/tr}}</option>
-  </select>
+  <button class="button tick" onclick="messagerie.markallAsRead('{{$account->_id}}')">{{tr}}CUserMail-option-allmarkasread{{/tr}}</button>
 </div>
 {{tr}}CUserMail-last-check{{/tr}} : {{$account->last_update|date_format:"%A %d %B %Y %H:%M"}}
 

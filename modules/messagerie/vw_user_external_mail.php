@@ -13,12 +13,18 @@
 
 CCanDo::checkRead();
 
+$user_connected = CMediusers::get();
 $account_id = CValue::get("account_id");
 
 $account = new CSourcePOP();
 $account->load($account_id);
 if ($account_id) {
   CValue::setSession("account_id", $account_id);
+}
+
+//user is atempting to see an account private from another medisuers
+if (($account->object_id != $user_connected->_id) && ($account->is_private)) {
+  CAppUI::stepAjax("CSourcePOP-error-not_your_account_private", UI_MSG_ERROR);
 }
 
 $mail = new CUserMail();
