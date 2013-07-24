@@ -319,7 +319,9 @@ function duplicateDoc(form) {
 
 function afterDuplicate(cr_id) {
   window.opener.Document.edit(cr_id);
-  window.close();
+  if (Preferences.multiple_docs == "1") {
+    window.close();
+  }
 }
 
 Main.add(function(){
