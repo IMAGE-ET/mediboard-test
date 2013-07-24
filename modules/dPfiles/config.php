@@ -16,7 +16,6 @@ $dPconfig["dPfiles"] = array (
   "upload_max_filesize" => "2M",
   "yoplet_upload_url" => "",
   "yoplet_upload_path" => "",
-  "yoplet_cookies" => "",
 
   "CFile" => array(
     "upload_directory"  => "files",
