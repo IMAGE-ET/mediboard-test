@@ -166,8 +166,7 @@ foreach ($error_logs as $_error_log) {
 
 $error_logs = array_values($error_logs);
 
-$list_ids = CMbArray::pluck($error_logs, "_id");
-
+$list_ids = array();
 if ($group_similar && $group_similar !== 'no') {
   foreach ($error_logs as $_i => $_error_log) {
     $_error_log->_similar_count = $error_logs_similar[$_i]["total"];
@@ -175,6 +174,9 @@ if ($group_similar && $group_similar !== 'no') {
 
     $list_ids = array_merge($list_ids, $_error_log->_similar_ids);
   }
+}
+elseif ($group_similar === 'no') {
+  $list_ids = CMbArray::pluck($error_logs, "_id");
 }
 
 // Création du template
