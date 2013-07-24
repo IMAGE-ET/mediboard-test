@@ -24,7 +24,7 @@ $targetBaseDatas = "tmp/ccam/basedata.sql";
 // Extract the SQL dump
 if (null == $nbFiles = CMbPath::extract($sourcePath, $targetDir)) {
   CAppUI::stepAjax("Erreur, impossible d'extraire l'archive", UI_MSG_ERROR);
-} 
+}
 
 CAppUI::stepAjax("Extraction de $nbFiles fichier(s)", UI_MSG_OK);
 
@@ -67,26 +67,49 @@ $listTables = array(
   "typenote"            => "TB050.txt"
 );
 
+function insertValues($ds, $table, $values, &$echoue, &$reussi) {
+  $values_sql = array();
+  foreach ($values as $_line) {
+    $values_sql[] = "('".implode("','", $_line)."')";
+  }
+
+  $query = "INSERT INTO $table VALUES ".implode(",", $values_sql);
+
+  $ds->exec($query);
+
+  $count = count($values);
+  if ($msg = $ds->error()) {
+    $echoue += $count;
+  }
+  else {
+    $reussi += $count;
+  }
+}
+
 function addFileIntoDB($file, $table) {
   $reussi = 0;
   $echoue = 0;
   $ds = CSQLDataSource::get("ccamV2");
   $handle = fopen($file, "r");
-  
+
+  $values = array();
+  $batch = 50;
+
   // Ne pas utiliser fgetcsv, qui refuse de prendre en compte les caractères en majusucules accentués (et d'autres caractères spéciaux)
   while ($line = fgets($handle)) {
     $line = str_replace("'", "\'", $line);
-    $datas = explode("|", $line);
-    $query = "INSERT INTO $table VALUES('".implode("','", $datas)."')";
-    
-    $ds->exec($query);
-    if ($msg = $ds->error()) {
-      $echoue++;
-    }
-    else {
-      $reussi++;
+    $values[] = explode("|", $line);
+
+    if (count($values) == $batch) {
+      insertValues($ds, $table, $values, $echoue, $reussi);
+      $values = array();
     }
   }
+
+  if (count($values)) {
+    insertValues($ds, $table, $values, $echoue, $reussi);
+  }
+
   CAppUI::stepAjax("Import du fichier $file dans la table $table : $reussi lignes ajoutée(s), $echoue échouée(s)", UI_MSG_OK);
   fclose($handle);
 }
