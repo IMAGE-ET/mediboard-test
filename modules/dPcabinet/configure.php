@@ -16,7 +16,7 @@ $intervals = array("05","10","15","20","30");
 
 $function = new CFunctions();
 $function->group_id = CGroups::loadCurrent()->_id;
-$functions = $function->loadList();
+$functions = $function->loadMatchingList();
 
 // Création du template
 $smarty = new CSmartyDP();

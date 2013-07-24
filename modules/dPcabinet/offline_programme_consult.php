@@ -21,7 +21,7 @@ $date        = CValue::get("date", CMbDT::date());
 $period      = CValue::get("period", "12-weeks");
 
 // Praticiens sélectionnés
-$user = new CMediusers;
+$user = new CMediusers();
 $praticiens = array();
 if ($function_id) {
   $praticiens = CConsultation::loadPraticiens(PERM_EDIT, $function_id);
