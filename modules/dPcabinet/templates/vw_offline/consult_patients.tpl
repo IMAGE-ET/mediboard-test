@@ -27,7 +27,15 @@
 
 <table class="tbl">
   <tr>
-    <th class="title" colspan="6">{{tr}}CConsultation{{/tr}}s du {{$date|date_format:$conf.longdate}}</th>
+    <th class="title" colspan="6">{{tr}}CConsultation{{/tr}}s du {{$date|date_format:$conf.longdate}} : {{$nbConsultations}} {{tr}}CConsultation{{/tr}}s</th>
+  </tr>
+  <tr>
+    <th>{{tr}}CMediusers{{/tr}}</th>
+    <td colspan="5" class="text">{{foreach from=$praticiens item=_prat}}
+        <span class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};">
+        {{$_prat}}
+        </span>
+      {{/foreach}}</td>
   </tr>
   <tr>
     <th style="width:100px;">Début</th>
@@ -46,7 +54,7 @@
       <td>{{$_plage_consultation->libelle}}</td>
       <td>
         <div class="progressBar">
-          <div class="bar" style="width: {{$_plage_consultation->_fill_rate}}%; background: #abe;" ><div class="text" style="color: black; text-shadow: 1px 1px 2px white;">{{$_plage_consultation->_fill_rate}}%</div></div>
+          <div class="bar" style="width: {{if $_plage_consultation->_fill_rate > 100}}100{{else}}{{$_plage_consultation->_fill_rate > 100}}{{/if}}%; background: #abe;" ><div class="text" style="color: black; text-shadow: 1px 1px 2px white;">{{$_plage_consultation->_fill_rate}}%</div></div>
         </div>
       </td>
       <td {{if !$nbConsult}}class="empty"{{/if}}>
@@ -76,6 +84,10 @@
           {{tr}}CConsultation.none{{/tr}}
         {{/if}}
       </td>
+    </tr>
+  {{foreachelse}}
+    <tr>
+      <td colspan="6" class="empty">{{tr}}CPlageconsult.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

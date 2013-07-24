@@ -1553,6 +1553,7 @@ $locales['mod-dPcabinet-tab-vw_fse'] = 'LogicMax FSE';
 $locales['mod-dPcabinet-tab-vw_history'] = 'Historique';
 $locales['mod-dPcabinet-tab-vw_idx_livret'] = 'Livret de prescription';
 $locales['mod-dPcabinet-tab-vw_journee'] = 'Journée';
+$locales['mod-dPcabinet-tab-vw_offline_consult_patients'] = 'Vue journalière hors ligne avec résumé patient';
 $locales['mod-dPcabinet-tab-vw_planning'] = 'Semainier';
 $locales['mod-dPcabinet-tab-vw_planning_new'] = 'Semainier';
 $locales['mod-dPcabinet-tab-vw_resume'] = 'Résumé';

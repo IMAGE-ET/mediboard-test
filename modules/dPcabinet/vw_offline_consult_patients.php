@@ -28,7 +28,6 @@ $praticiens = array();
 if ($function_id) {
   $praticiens = CConsultation::loadPraticiens(PERM_EDIT, $function_id);
 }
-
 if ($chir_ids) {
   $praticiens = $user->loadAll(explode("-", $chir_ids));
 }
@@ -40,6 +39,7 @@ $where["date"] = " = '$date'";
 $Pconsultation = new CPlageconsult();
 $Pconsultations = $Pconsultation->loadList($where, array("debut"));
 
+$nbConsultations = 0;
 $consultations = array();
 $resumes_patient = array();
 
@@ -47,11 +47,13 @@ $resumes_patient = array();
 foreach ($Pconsultations as $_plage_consult) {
   $_plage_consult->loadRefsConsultations(false);
   $_plage_consult->loadRefChir();
+  $_plage_consult->_ref_chir->loadRefFunction();
   $_plage_consult->updateFormFields();
   $_plage_consult->loadFillRate();
 
   /** @var $consultations CConsultation[] */
   foreach ($_plage_consult->_ref_consultations as $_consult) {
+    $nbConsultations++;
     if (isset($resumes_patient[$_consult->patient_id])) {
       continue;
     }
@@ -69,6 +71,9 @@ foreach ($Pconsultations as $_plage_consult) {
 //smarty global
 $smarty = new CSmartyDP();
 $smarty->assign("consultations", $Pconsultations);
+$smarty->assign("nbConsultations", $nbConsultations);
+$smarty->assign("date_generated", CMbDT::dateTime());
+$smarty->assign("praticiens", $praticiens);
 $smarty->assign("resumes_patient", $resumes_patient);
 $smarty->assign("date", $date);
 $smarty->display("vw_offline/consult_patients.tpl");

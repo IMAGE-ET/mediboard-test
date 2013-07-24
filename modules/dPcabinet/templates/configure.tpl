@@ -77,24 +77,25 @@ Main.add(function () {
 </div>
 
 <div id="offline" style="display: none;">
-  <table class="main tbl">
-    <tr>
-      <td class="narrow">Selectionnez un cabinet :
-        <form method="get" name="genOffline" target="_blank">
-          <input type="hidden" name="m" value="{{$m}}">
-          <input type="hidden" name="a" value="{{$a}}">
-          <input type="hidden" name="_aio" value="1">
-          <input type="hidden" name="dialog" value="1">
-          <select name="function_id">
-            {{foreach from=$functions_id item=_function}}
-              <option value="{{$_function->_id}}">{{$_function}}</option>
-            {{/foreach}}
-          </select>
-
-          <button class="button search" type="button" onclick="$V(this.form.a,'offline_programme_consult'); this.form.submit()">{{tr}}mod-dPcabinet-tab-offline_programme_consult{{/tr}}</button>
-          <button class="button search" type="button" onclick="$V(this.form.a,'vw_offline_consult_patients'); this.form.submit()">{{tr}}mod-dPcabinet-tab-vw_offline_consult_patients{{/tr}}</button>
-        </form>
-      </td>
-    </tr>
-  </table>
+  <form method="get" name="genOffline" target="_blank">
+    <table class="main tbl">
+      <tr>
+        <td class="narrow">Selectionnez un cabinet :
+            <input type="hidden" name="m" value="{{$m}}">
+            <input type="hidden" name="a" value="{{$a}}">
+            <input type="hidden" name="_aio" value="1">
+            <input type="hidden" name="dialog" value="1">
+            <select name="function_id">
+              {{foreach from=$functions_id item=_function}}
+                <option value="{{$_function->_id}}">{{$_function}}</option>
+              {{/foreach}}
+            </select>
+          </td>
+        <td>
+            <button class="button search" type="button" onclick="$V(this.form.a,'offline_programme_consult'); this.form.submit()">{{tr}}mod-dPcabinet-tab-offline_programme_consult{{/tr}}</button><br/>
+            <button class="button search" type="button" onclick="$V(this.form.a,'vw_offline_consult_patients'); this.form.submit()">{{tr}}mod-dPcabinet-tab-vw_offline_consult_patients{{/tr}}</button>
+        </td>
+      </tr>
+    </table>
+  </form>
 </div>
