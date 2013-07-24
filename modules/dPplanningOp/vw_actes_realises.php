@@ -29,21 +29,36 @@ $date_max = $_date_max . " 23:59:59";
 
 $sejour = new CSejour();
 $ljoin = array();
-$ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
-$ljoin["acte_ccam"] = "operations.operation_id = acte_ccam.object_id AND acte_ccam.object_class = 'COperation'";
-$ljoin["acte_ngap"] = "operations.operation_id = acte_ngap.object_id AND acte_ngap.object_class = 'COperation'";
+$ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
+$ljoin["acte_ccam"] = "consultation.consultation_id = acte_ccam.object_id AND acte_ccam.object_class = 'CConsultation'";
+$ljoin["acte_ngap"] = "consultation.consultation_id = acte_ngap.object_id AND acte_ngap.object_class = 'CConsultation'";
 
 $where = array();
 $where[] = "acte_ccam.execution BETWEEN '$date_min' AND '$date_max' OR acte_ngap.execution BETWEEN '$date_min' AND '$date_max'";
 $where[] = "acte_ccam.executant_id = '$_prat_id' OR acte_ngap.executant_id = '$_prat_id'";
-$where["operations.annulee"] = " = '0'";
-
 /** @var  CSejour[] $sejours*/
 $sejours = $sejour->loadList($where, null, null, "sejour_id", $ljoin);
+
+$sejour = new CSejour();
+$ljoin = array();
+$ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
+$ljoin["acte_ccam"] = "operations.operation_id = acte_ccam.object_id AND acte_ccam.object_class = 'COperation'";
+$ljoin["acte_ngap"] = "operations.operation_id = acte_ngap.object_id AND acte_ngap.object_class = 'COperation'";
+
+$where["operations.annulee"] = " = '0'";
+
+/** @var  CSejour[] $sejours_consult*/
+$sejours_consult = $sejour->loadList($where, null, null, "sejour_id", $ljoin);
+foreach ($sejours_consult as $key => $sejour) {
+  if (!isset($sejours[$key])) {
+    $sejours[$key] = $sejour;
+  }
+}
 
 foreach ($sejours as $key => $sejour) {
   $sejour->loadRefPatient();
   $sejour->loadRefsOperations();
+  $sejour->loadRefsConsultations();
   $sejour->loadRefsActes();
   $sejour->loadRefsFactureEtablissement();
   foreach ($sejour->_ref_operations as $keyop => $op) {
@@ -52,7 +67,13 @@ foreach ($sejours as $key => $sejour) {
       unset($sejour->_ref_operations[$keyop]);
     }
   }
-  if (!count($sejour->_ref_actes) && !count($sejour->_ref_operations)) {
+  foreach ($sejour->_ref_consultations as $keyop => $consult) {
+    $consult->loadRefsActes();
+    if (!count($consult->_ref_actes)) {
+      unset($sejour->_ref_consultations[$keyop]);
+    }
+  }
+  if (!count($sejour->_ref_actes) && !count($sejour->_ref_operations) && !count($sejour->_ref_consultations)) {
     unset($sejours[$key]);
   }
   else {
