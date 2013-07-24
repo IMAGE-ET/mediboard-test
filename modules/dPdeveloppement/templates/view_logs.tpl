@@ -63,16 +63,13 @@ function toggleCheckboxes(checkbox) {
               <td>{{mb_field object=$error_log field=_datetime_max register=true form="filter-logs-db"}}</td>
             </tr>
             <tr>
-              <th>Grouper les similaires</th>
+              <th>Groupement</th>
               <td>
-                <label>
-                  <input type="radio" name="group_similar" value="1" {{if $group_similar}}checked{{/if}} onclick="$V(this.form.start, 0);" />
-                  {{tr}}Yes{{/tr}}
-                </label>
-                <label>
-                  <input type="radio" name="group_similar" value="0" {{if !$group_similar}}checked{{/if}} onclick="$V(this.form.start, 0);" />
-                  {{tr}}No{{/tr}}
-                </label>
+                <select name="group_similar" onchange="$V(form.start, 0);">
+                  <option value="similar"   {{if $group_similar == 'similar'}}  selected{{/if}}>Grouper les similaires</option>
+                  <option value="signature" {{if $group_similar == 'signature'}}selected{{/if}}>Grouper par signature </option>
+                  <option value="no"        {{if $group_similar == 'no'}}       selected{{/if}}>Ne pas grouper        </option>
+                </select>
               </td>
 
               <th>Trier par</th>
@@ -84,9 +81,35 @@ function toggleCheckboxes(checkbox) {
               </td>
             </tr>
             <tr>
+              <th>Utilisateur</th>
+              <td>
+                <select name="user_id" class="ref" style="max-width: 14em;">
+                  <option value="">&mdash; Tous les utilisateurs</option>
+                  {{foreach from=$list_users item=_user}}
+                    <option value="{{$_user->user_id}}" {{if $_user->user_id == $user_id}}selected="selected"{{/if}}>
+                      {{$_user}}
+                    </option>
+                  {{/foreach}}
+                </select>
+              </td>
+
+              <th>Type</th>
+              <td>
+                <label>
+                  <input type="checkbox" name="human" value="1" {{if $human}}checked{{/if}}/>
+                  {{tr}}Humans{{/tr}}
+                </label>
+                <label>
+                  <input type="checkbox" name="robot" value="1" {{if $robot}}checked{{/if}}/>
+                  {{tr}}Robots{{/tr}}
+                </label>
+              </td>
+            </tr>
+            <tr>
               <td></td>
               <td colspan="3">
                 <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
+                <button type="button" class="close" onclick="this.form.clear();">{{tr}}Reset{{/tr}}</button>
               </td>
             </tr>
           </table>

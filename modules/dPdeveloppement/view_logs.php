@@ -19,7 +19,10 @@ $server_ip     = CValue::getOrSession("server_ip");
 $datetime_min  = CValue::getOrSession("_datetime_min");
 $datetime_max  = CValue::getOrSession("_datetime_max");
 $order_by      = CValue::getOrSession("order_by");
-$group_similar = CValue::getOrSession("group_similar", 1);
+$group_similar = CValue::getOrSession("group_similar", "similar");
+$user_id       = CValue::getOrSession("user_id");
+$human         = CValue::getOrSession("human");
+$robot         = CValue::getOrSession("robot");
 
 $error_log = new CErrorLog();
 $error_log->text = $text;
@@ -36,6 +39,12 @@ if ($log_size > $log_size_limit) {
 }
 $log_content = file_get_contents(LOG_PATH, false, null, $offset);
 
+// Récupération de la liste des utilisateurs disponibles
+$user = new CUser();
+$user->template = "0";
+$order = "user_last_name, user_first_name";
+$list_users = $user->loadMatchingList($order);
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("log",           $log_content);
@@ -46,4 +55,8 @@ $smarty->assign("server_ip",     $server_ip);
 $smarty->assign("order_by",      $order_by);
 $smarty->assign("group_similar", $group_similar);
 $smarty->assign("error_types",   CError::getErrorTypesByCategory());
+$smarty->assign("user_id",       $user_id);
+$smarty->assign("list_users",    $list_users);
+$smarty->assign("human",         $human);
+$smarty->assign("robot",         $robot);
 $smarty->display('view_logs.tpl');

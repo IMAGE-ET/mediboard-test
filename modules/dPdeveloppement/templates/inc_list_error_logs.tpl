@@ -20,19 +20,32 @@ Main.add(function(){
 }
 </style>
 
+{{if $list_ids}}
+  <div style="float: left">
+    <form name="delete-logs-db" action="" method="post" onsubmit="return onSubmitFormAjax(this, filterLogDB.curry(getForm('filter-logs-db')))">
+      <input type="hidden" name="m" value="developpement" />
+      <input type="hidden" name="dosql" value="do_error_log_multi_delete" />
+      <input type="hidden" name="log_ids" value="{{'-'|implode:$list_ids}}" />
+      <button class="trash compact" onclick="return confirm('Voulez-vous supprimer ces {{$list_ids|@count}} journaux d\'erreur ?');">
+        {{tr}}Delete{{/tr}}
+      </button>
+    </form>
+
+    <form name="manage-logs-db" action="" method="post" onsubmit="return onSubmitFormAjax(this, filterLogDB.curry(this))">
+      <input type="hidden" name="m" value="developpement" />
+      <input type="hidden" name="dosql" value="do_error_log_purge" />
+      <button class="trash compact" onclick="return confirm('Voulez-vous vider complètement les journaux d\'erreur ?')">
+        {{tr}}Reset{{/tr}}
+      </button>
+    </form>
+  </div>
+{{/if}}
+
 {{mb_include module=system template=inc_pagination change_page="changePage" total=$total current=$start step=30}}
 
 <table class="main tbl error-logs">
   <tr>
-    <th>
-      <form name="manage-logs-db" action="" method="post" onsubmit="return onSubmitFormAjax(this, filterLogDB.curry(this))">
-        <input type="hidden" name="m" value="developpement" />
-        <input type="hidden" name="dosql" value="do_error_log_purge" />
-        <button class="trash compact" onclick="return confirm('Voulez-vous vider complètement les logs d\'erreur ?')">
-          {{tr}}Reset{{/tr}}
-        </button>
-      </form>
-    </th>
+    <th></th>
     <th>{{mb_title class=CErrorLog field=stacktrace_id}}</th>
     <th>{{mb_title class=CErrorLog field=param_GET_id}}</th>
     <th>{{mb_title class=CErrorLog field=param_POST_id}}</th>
@@ -42,7 +55,7 @@ Main.add(function(){
     <tbody>
       <tr style="border-top: 2px solid #666;">
         <td class="narrow error-{{$_log->_category}}" rowspan="2" style=" line-height: 1.5;" title="{{mb_value object=$_log field=error_type}}">
-          {{if $group_similar}}
+          {{if $group_similar && $group_similar !== 'no'}}
             <div class="rank">{{$_log->_similar_count}}</div>
 
             <form name="delete-error-log-{{$_log->_id}}" method="post"
@@ -124,3 +137,5 @@ Main.add(function(){
     </tr>
   {{/foreach}}
 </table>
+
+{{mb_include module=system template=inc_pagination change_page="changePage" total=$total current=$start step=30}}

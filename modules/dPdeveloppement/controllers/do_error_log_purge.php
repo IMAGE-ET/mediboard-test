@@ -23,4 +23,4 @@ $ds = $error_log->getDS();
 $query = "TRUNCATE {$error_log_data->_spec->table}";
 $ds->exec($query);
 
-CAppUI::stepAjax("Logs d'erreur vidés");
+CAppUI::stepAjax("Journaux d'erreur vidés");

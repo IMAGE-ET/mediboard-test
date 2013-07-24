@@ -31,6 +31,8 @@ class CErrorLog extends CMbObject {
   public $param_POST_id;
   public $session_data_id;
 
+  public $signature_hash;
+
   public $_stacktrace;
   public $_stacktrace_output;
   public $_param_GET;
@@ -41,6 +43,9 @@ class CErrorLog extends CMbObject {
   public $_url;
   public $_datetime_min;
   public $_datetime_max;
+
+  public $_similar_count;
+  public $_similar_ids = array();
 
   /**
    * @see parent::getSpec()
@@ -58,12 +63,12 @@ class CErrorLog extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["user_id"] = "ref class|CUser";
-    $props["server_ip"] = "str";
-    $props["datetime"]   = "dateTime notNull";
+    $props["user_id"]     = "ref class|CUser";
+    $props["server_ip"]   = "str";
+    $props["datetime"]    = "dateTime notNull";
     $props["request_uid"] = "str";
-    $props["error_type"] = "enum list|" . implode("|", CError::$_types);
-    $props["text"]       = "text";
+    $props["error_type"]  = "enum list|" . implode("|", CError::$_types);
+    $props["text"]        = "text";
     $props["file_name"]   = "str";
     $props["line_number"] = "num";
 
@@ -72,8 +77,12 @@ class CErrorLog extends CMbObject {
     $props["param_POST_id"]   = "ref class|CErrorLogData";
     $props["session_data_id"] = "ref class|CErrorLogData";
 
+    $props["signature_hash"] = "str";
+
     $props["_datetime_min"] = "dateTime";
     $props["_datetime_max"] = "dateTime";
+
+    $props["_similar_count"] = "num";
     return $props;
   }
 
@@ -169,15 +178,15 @@ class CErrorLog extends CMbObject {
   /**
    * Inserts an error log into database
    *
-   * @param int    $user_id     User ID
-   * @param string $server_ip   Server IP
-   * @param string $datetime    Datetime
-   * @param string $request_uid Request unique ID
-   * @param string $error_type  Error type
-   * @param string $text        Error message
-   * @param string $file_name   File name
-   * @param int    $line_number Line number
-   * @param array  $data        Data (stacktrace, GET, POST and session)
+   * @param int    $user_id        User ID
+   * @param string $server_ip      Server IP
+   * @param string $datetime       Datetime
+   * @param string $request_uid    Request unique ID
+   * @param string $error_type     Error type
+   * @param string $text           Error message
+   * @param string $file_name      File name
+   * @param int    $line_number    Line number
+   * @param array  $data           Data (stacktrace, GET, POST and session)
    *
    * @return void
    *
@@ -189,6 +198,12 @@ class CErrorLog extends CMbObject {
       $file_name, $line_number,
       $data
   ) {
+    global $m, $action, $dosql;
+
+    if (empty($action) && isset($dosql)) {
+      $action = $dosql;
+    }
+
     $ds = CSQLDataSource::get("std");
 
     if (!$ds || !$ds->loadTable("error_log")) {
@@ -204,19 +219,28 @@ class CErrorLog extends CMbObject {
       $data[$_field] = CErrorLogData::insert(json_encode($_value));
     }
 
+    $signature = array(
+      "text"   => $text,
+      "module" => isset($m) ? $m : null,
+      "action" => isset($action) ? $action : null
+    );
+    $signature_hash = md5(json_encode($signature));
+
     $query = "INSERT INTO"." `error_log` (
       `user_id`, `server_ip`,
       `datetime`, `request_uid`, `error_type`, `text`,
       `file_name`, `line_number`,
-      `stacktrace_id`, `param_GET_id`, `param_POST_id`, `session_data_id`
-    ) VALUES (%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12)";
+      `stacktrace_id`, `param_GET_id`, `param_POST_id`, `session_data_id`,
+      `signature_hash`
+    ) VALUES (%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13)";
 
     $query = $ds->prepare(
       $query,
       $user_id, $server_ip,
       $datetime, $request_uid, $error_type, $text,
       $file_name, $line_number,
-      $data["stacktrace"], $data["param_GET"], $data["param_POST"], $data["session_data"]
+      $data["stacktrace"], $data["param_GET"], $data["param_POST"], $data["session_data"],
+      $signature_hash
     );
 
     if (!@$ds->exec($query)) {
