@@ -24,7 +24,7 @@ $account = new CSourcePOP();
 //getting the list of user with the good rights
 $listUsers = $user->loadListWithPerms(PERM_EDIT);
 $where = array();
-//$where["source_pop.is_private"]   = "= '0'";
+$where["source_pop.is_private"]   = "= '0'";
 $where["source_pop.object_class"] = "= 'CMediusers'";
 $where["users_mediboard.user_id"] = CSQLDataSource::prepareIn(array_keys($listUsers));
 $ljoin = array();
@@ -46,9 +46,9 @@ foreach ($accounts_available as $_account) {
 $where["source_pop.object_id"] = " = '$user->_id'";
 
 //if user connected, show the private source pop
-/*if ($user_id == $user_connected->_id) {
+if ($user_id == $user_connected->_id) {
   $where["source_pop.is_private"] = " IS NOT NULL";
-}*/
+}
 
 $accounts_user = $account->loadList($where, null, null, null, $ljoin);
 

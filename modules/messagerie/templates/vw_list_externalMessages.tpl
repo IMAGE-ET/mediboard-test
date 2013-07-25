@@ -19,6 +19,7 @@
   });
 </script>
 
+
 <form onsubmit="return checkForm(this.form)" method="get" name="externalFrm">
   <input type="hidden" name="m" value="{{$m}}"/>
   <input type="hidden" name="tab" value="{{$tab}}"/>
@@ -32,6 +33,7 @@
   </label>
 </form>
 
+{{if $user->_id}}
 <form name="accountFrm" method="get">
   {{tr}}Account{{/tr}} :
       {{foreach from=$mails key=k item=_mailbox}}
@@ -41,6 +43,7 @@
       </label>
       {{/foreach}}
 </form>
+{{/if}}
 
 
 <div id="account_mail">

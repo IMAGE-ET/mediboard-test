@@ -21,14 +21,17 @@ $mode = CValue::get("mode", "unread");
 $page         = CValue::get("page", 0);
 $limit_list   = CAppUI::pref("nbMailList", 20);
 
-$user = CMediusers::get();
-
 //account POP
 $account_pop = new CSourcePOP();
 $account_pop->load($account_id);
 
+if (($account_pop->object_id != $user->_id) && $account_pop->is_private) {
+  CAppUI::stepAjax("CSourcePOP-error-not_your_account_private", UI_MSG_ERROR);
+}
+
 //no account_id, first of account of user
 $where = array();
+$where["object_class"] = " = 'CMediusers'";
 $where["object_id"] = " = '$user->_id'";
 $account_pop->loadObject($where);
 
