@@ -69,7 +69,10 @@
   {{/if}}
 
   {{if $conf.dPurgences.check_cotation}}
-    {{if !$rpu->_ref_consult->_ref_actes}}<div class="warning">Codage des actes manquant</div>{{/if}}
+    {{if (!$rpu->_ref_consult->_ref_actes && !$rpu->mutation_sejour_id) ||
+      ($rpu->mutation_sejour_id && !$rpu->_ref_sejour_mutation->_count_actes)}}
+      <div class="warning">Codage des actes manquant</div>
+    {{/if}}
     {{if $sejour->sortie_reelle && !$rpu->_ref_consult->valide}}<div class="warning">La cotation n'est pas validée</div>{{/if}}
   {{/if}}
 

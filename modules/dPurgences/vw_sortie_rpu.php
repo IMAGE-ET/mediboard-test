@@ -10,9 +10,8 @@
  */
 
 CCanDo::checkRead();
-
 // Type d'affichage
-$view_sortie = CValue::postOrSession("view_sortie","tous");
+$view_sortie = CValue::postOrSession("view_sortie", "tous");
 
 // Parametre de tri
 $order_way = CValue::getOrSession("order_way", "ASC");
@@ -67,6 +66,19 @@ foreach ($listSejours as &$_sejour) {
   $rpu->loadRefSejourMutation();
   $sejour_mutation = $rpu->_ref_sejour_mutation;
   $sejour_mutation->loadRefsAffectations();
+  $sejour_mutation->loadRefsConsultations();
+  $_nb_acte_sejour_rpu = 0;
+  $valide = true;
+  foreach ($sejour_mutation->_ref_consultations as $consult) {
+    $consult->countActes();
+    $_nb_acte_sejour_rpu += $consult->_count_actes;
+    if (!$consult->valide) {
+      $valide = false;
+    }
+  }
+  $rpu->_ref_consult->valide = $valide;
+  $sejour_mutation->_count_actes = $_nb_acte_sejour_rpu;
+
   foreach ($sejour_mutation->_ref_affectations as $_affectation) {
     $_affectation->loadView();
   }
