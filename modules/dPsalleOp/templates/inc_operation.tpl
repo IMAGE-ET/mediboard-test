@@ -417,7 +417,7 @@ infoBacterio = function(field) {
   
   {{if "maternite"|module_active && $sejour->grossesse_id}}
     <li onmouseup="refreshGrossesse('{{$selOp->_id}}')">
-      <a href="#grossesse">{{tr}}CGrossesse{{/tr}}</a>
+      <a href="#grossesse">Accouchement</a>
     </li>
   {{/if}}
 </ul>
