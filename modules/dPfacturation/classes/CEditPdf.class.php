@@ -464,8 +464,12 @@ class CEditPdf{
     $this->pre_tab["Medical:"]  = $pm;
     $this->pre_tab["Tarmed:"]   = $pt;
     $this->pre_tab["Médicaments:"] = sprintf("%.2f", $medicaments);
-    $autres =  $pm + $pt + $this->autre_tarmed + $medicaments;
-    $this->pre_tab["Autres:"]   = sprintf("%.2f", $this->facture->_montant_sans_remise - $autres);
+    $autres =  $pm + $pt + $medicaments;
+    $total = 0;
+    foreach ($this->facture->_montant_factures_caisse as $montant_facture) {
+      $total += $montant_facture;
+    }
+    $this->pre_tab["Autres:"]   = sprintf("%.2f", $total - $autres);
   }
 
   /**
@@ -705,22 +709,8 @@ class CEditPdf{
     $tarif = array( "Tarif"         => "CHF");
     $acompte = $this->type_pdf == "BVR_TS" ? $this->facture->_montant_avec_remise - $montant_facture : "0.00";
     foreach ($this->pre_tab as $cles => $valeur) {
-      if ($this->type_pdf == "BVR_TS") {
         $tarif[$cles] = $valeur;
         $montant_total += $valeur;
-      }
-      elseif (($cle_facture == 0 && $cles != "Autres:") || ($cle_facture == 1 && $cles == "Autres:")) {
-        $tarif[$cles] = $valeur;
-        $montant_total += $valeur;
-      }
-      elseif ($cle_facture == 0) {
-        $tarif[$cles] = sprintf('%0.2f', $this->autre_tarmed);
-        $montant_total += sprintf('%0.2f', $this->autre_tarmed);
-      }
-      else {
-        $tarif[$cles] = $valeur;
-        $montant_total += $valeur;
-      }
     }
 
     if ($relance) {
