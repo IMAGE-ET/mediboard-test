@@ -11,9 +11,9 @@
 
 CCanDo::checkEdit();
 $facture_id   = CValue::getOrSession("facture_id");
-$consult_id  = CValue::get("consult_id");
-$patient_id   = CValue::getOrSession("patient_id");
+$consult_id   = CValue::get("consult_id");
 $object_class = CValue::getOrSession("object_class", "CFactureCabinet");
+$object_class = $object_class == "CConsultation" ? "CFactureCabinet" : $object_class;
 
 $derconsult_id = null;
 $consult = null;
