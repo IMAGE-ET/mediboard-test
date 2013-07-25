@@ -721,7 +721,11 @@ class CSetupdPhospi extends CSetup {
                 WHERE `sejour_id` = '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.77";
+    $this->makeRevision("0.77");
+    $query = "ALTER TABLE `affectation`
+                ADD INDEX (`service_id`)";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.78";
   }
 }
-?>
