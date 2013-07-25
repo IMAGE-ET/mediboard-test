@@ -28,6 +28,7 @@ Main.add(function(){
   <input type="hidden" name="callback" value="loadEndowment" />
   <input type="hidden" name="del" value="0" />
   {{mb_key object=$endowment}}
+  <input type="hidden" name="group_id" value="{{$group_id}}" />
   
   <table class="form">
     {{mb_include module=system template=inc_form_table_header object=$endowment}}

@@ -18,6 +18,7 @@ $endowment = new CProductEndowment();
 if ($endowment->load($endowment_id)) {
   $items = $endowment->loadRefsEndowmentItems();
   $endowment->loadRefsNotes();
+  $endowment->loadRefService();
   
   foreach ($items as $_item) {
     $_item->updateFormFields();
@@ -28,4 +29,5 @@ if ($endowment->load($endowment_id)) {
 // Smarty template
 $smarty = new CSmartyDP();
 $smarty->assign('endowment', $endowment);
+$smarty->assign("group_id", $endowment->_id ? $endowment->_ref_service->group_id : CGroups::loadCurrent()->_id);
 $smarty->display('inc_form_endowment.tpl');

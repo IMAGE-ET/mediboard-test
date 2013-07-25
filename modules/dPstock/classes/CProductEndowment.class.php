@@ -42,7 +42,7 @@ class CProductEndowment extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     $props["name"]       = "str notNull";
-    $props["service_id"] = "ref notNull class|CService autocomplete|nom";
+    $props["service_id"] = "ref notNull class|CService autocomplete|nom dependsOn|group_id";
     $props["_duplicate_to_service_id"] = $props["service_id"];
     return $props;
   }
