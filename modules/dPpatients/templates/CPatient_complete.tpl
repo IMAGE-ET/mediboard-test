@@ -150,7 +150,12 @@
     <tr>
       <td class="text">
         <strong>{{mb_label object=$prevenir field="tel"}}</strong>
-        {{mb_value object=$prevenir field="tel"}}
+        {{if $prevenir->tel}}
+          Fixe : {{mb_value object=$prevenir field="tel"}}
+        {{/if}}
+        {{if $prevenir->mob}}
+          Portable : {{mb_value object=$prevenir field="mob"}}
+        {{/if}}
       </td>
       <td class="text">
         <strong>{{mb_label object=$prevenir field="ville"}}</strong>
@@ -162,7 +167,10 @@
         <strong>{{mb_label object=$prevenir field="parente"}}</strong>
         {{mb_value object=$prevenir field="parente"}}
       </td>
-      <td class="text"></td>
+      <td class="text">
+        <strong>Remarques</strong>
+        {{$prevenir->remarques}}
+      </td>
     </tr>
   {{/foreach}}
   {{foreach from=$object->_ref_cp_by_relation.confiance item=confiance}}
@@ -194,7 +202,12 @@
     <tr>
       <td class="text">
         <strong>{{mb_label object=$confiance field="tel"}}</strong>
-        {{mb_value object=$confiance field="tel"}}
+        {{if $confiance->tel}}
+          Fixe : {{mb_value object=$confiance field="tel"}}
+        {{/if}}
+        {{if $confiance->mob}}
+          Portable : {{mb_value object=$confiance field="mob"}}
+        {{/if}}
       </td>
       <td class="text">
         <strong>{{mb_label object=$confiance field="ville"}}</strong>
@@ -206,7 +219,10 @@
         <strong>{{mb_label object=$confiance field="parente"}}</strong>
         {{mb_value object=$confiance field="parente"}}
       </td>
-      <td class="text"></td>
+      <td class="text">
+        <strong>Remarques</strong>
+        {{$confiance->remarques}}
+      </td>
     </tr>
   {{/foreach}}
   <tr>
