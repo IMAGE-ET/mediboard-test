@@ -130,7 +130,9 @@
     AideSaisie.timestamp = "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}";
 
     //for holidays in datepicker
-    Calendar.ref_pays = {{$country}};
+    {{if $country}}
+      Calendar.ref_pays = {{$country}};
+    {{/if}}
     {{if $cp_group}}
       Calendar.ref_cp   = {{$cp_group}};
     {{/if}}
