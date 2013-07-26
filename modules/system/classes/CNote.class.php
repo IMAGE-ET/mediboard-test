@@ -45,7 +45,7 @@ class CNote extends CMbMetaObject {
   function getProps() {
     $props = parent::getProps();
     $props["user_id"]    = "ref class|CMediusers";
-    $props["public"]     = "bool notNull";
+    $props["public"]     = "bool notNull default|1";
     $props["degre"]      = "enum notNull list|low|medium|high default|low";
     $props["date"]       = "dateTime notNull";
     $props["libelle"]    = "str notNull";
@@ -74,6 +74,6 @@ class CNote extends CMbMetaObject {
 
     return $this->public ?
       $this->_ref_object->getPerm($perm) :
-      $this->_ref_object->getPerm($perm) && $this->_ref_user->getPerm($perm);
+      $this->_ref_object->getPerm($perm) && $this->_ref_user->getPerm(PERM_EDIT);
   }
 }
