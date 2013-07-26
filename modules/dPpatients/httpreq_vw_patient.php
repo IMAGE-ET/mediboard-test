@@ -10,7 +10,6 @@
  */
 
 CCanDo::checkRead();
-$user = CMediusers::get();
 
 $patient_id = CValue::getOrSession("patient_id", 0);
 
@@ -36,7 +35,7 @@ if ($patient->_id) {
   }
 }
 
-$listPrat = $user->loadPraticiens(PERM_EDIT);
+$listPrat = CConsultation::loadPraticiens(PERM_EDIT);
 
 // Création du template
 $smarty = new CSmartyDP();
