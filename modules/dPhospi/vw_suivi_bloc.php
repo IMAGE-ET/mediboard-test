@@ -1,11 +1,15 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPospi
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * $Id$
+ *
+ * Suivi des patients au bloc depuis les services d'hospitalisation
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -23,14 +27,14 @@ $where = array();
 $where["group_id"]  = "= '$group->_id'";
 $where["cancelled"] = "= '0'";
 $order = "nom";
-$services = $service->loadListWithPerms(PERM_READ,$where, $order);
+$services = $service->loadListWithPerms(PERM_READ, $where, $order);
 
 // Liste des blocs
 $bloc = new CBlocOperatoire();
 $where = array();
 $where["group_id"] = "= '$group->_id'";
 $order = "nom";
-$blocs = $bloc->loadListWithPerms(PERM_READ,$where, $order);
+$blocs = $bloc->loadListWithPerms(PERM_READ, $where, $order);
 
 // Listes des interventions
 $operation = new COperation();
@@ -40,17 +44,18 @@ $ljoin = array(
   "sejour"     => "`operations`.`sejour_id` = `sejour`.`sejour_id`");
 $where = array();
 $where[] = "`plagesop`.`date` = '$date_suivi' OR `operations`.`date` = '$date_suivi'";
-if($bloc_id) {
+if ($bloc_id) {
   $where["sallesbloc.bloc_id"] = "= '$bloc_id'";
 }
 $where["operations.annulee"] = "= '0'";
 $where["sejour.group_id"] = "= '$group->_id'";
 $order = "operations.time_operation";
-$listOps = $operation->loadList($where,$order, null, null, $ljoin);
+/** @var COperation[] $listOps */
+$listOps = $operation->loadList($where, $order, null, null, $ljoin);
 
 $listServices = array();
 // Chargement des infos des interventions
-foreach($listOps as $_key => $_op) {
+foreach ($listOps as $_key => $_op) {
   $_op->loadRefChir();
   $_op->_ref_chir->loadRefFunction();
   $_op->loadRefSejour();
@@ -61,11 +66,12 @@ foreach($listOps as $_key => $_op) {
     unset($listOps[$_key]);
     continue;
   }
-  if($_op->_ref_affectation->_id) {
-    if(!$service_id || $service_id == $_op->_ref_affectation->_ref_lit->_ref_chambre->service_id) {
+  if ($_op->_ref_affectation->_id) {
+    if (!$service_id || $service_id == $_op->_ref_affectation->_ref_lit->_ref_chambre->service_id) {
       $listServices[$_op->_ref_affectation->_ref_lit->_ref_chambre->service_id][$_op->_id] = $_op;
     }
-  } elseif(!$service_id) {
+  }
+  elseif (!$service_id) {
     $listServices["NP"][$_op->_id] = $_op;
   }
 } 
@@ -82,4 +88,3 @@ $smarty->assign("blocs"       , $blocs);
 $smarty->assign("bloc_id"     , $bloc_id);
 
 $smarty->display("vw_suivi_bloc.tpl");
-?>

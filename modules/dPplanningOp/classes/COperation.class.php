@@ -461,7 +461,11 @@ class COperation extends CCodable implements IPatientRelated {
     }
 
     // Vérification de la signature de l'anesthésiste pour la visite de pré-anesthésie
-    if ($this->fieldModified("prat_visite_anesth_id") && $this->prat_visite_anesth_id !== null && $this->prat_visite_anesth_id != CAppUI::$user->_id) {
+    if (
+        $this->fieldModified("prat_visite_anesth_id") &&
+        $this->prat_visite_anesth_id !== null &&
+        $this->prat_visite_anesth_id != CAppUI::$user->_id
+    ) {
       $anesth = new CUser();
       $anesth->load($this->prat_visite_anesth_id);
 
@@ -629,23 +633,22 @@ class COperation extends CCodable implements IPatientRelated {
       $this->loadRefPlageOp();
       $this->_old->loadRefPlageOp();
 
-      // Alerte sur l'annulation d'une intervention
       if ($this->fieldModified("annulee", "1")) {
+        // Alerte sur l'annulation d'une intervention
         $comments .= "L'intervention a été annulée pour le ".CMbDT::format($this->_datetime, CAppUI::conf("datetime")).".";
       }
-
-      // Alerte sur le déplacement d'une intervention
       elseif (CMbDT::date(null, $this->_datetime) != CMbDT::date(null, $this->_old->_datetime)) {
-        $comments .= "L'intervention a été déplacée du ".CMbDT::format($this->_old->_datetime, CAppUI::conf("date"))." au ".CMbDT::format($this->_datetime, CAppUI::conf("date")).".";
+        // Alerte sur le déplacement d'une intervention
+        $comments .= "L'intervention a été déplacée du ".CMbDT::format($this->_old->_datetime, CAppUI::conf("date")).
+          " au ".CMbDT::format($this->_datetime, CAppUI::conf("date")).".";
       }
-
-      // Alerte sur la commande de matériel
       elseif ($this->fieldModified("materiel") && $this->commande_mat) {
-        $comments .= "Le materiel a été modifié \n - Ancienne valeur : ".$this->_old->materiel." \n - Nouvelle valeur : ".$this->materiel;
+        // Alerte sur la commande de matériel
+        $comments .= "Le materiel a été modifié \n - Ancienne valeur : ".$this->_old->materiel.
+          " \n - Nouvelle valeur : ".$this->materiel;
       }
-
-      // Aucune alerte
       else {
+        // Aucune alerte
         return null;
       }
 
@@ -880,7 +883,7 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   /**
-   * Load list overlay for current group
+   * @see parent::loadGroupList()
    */
   function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
     $ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
@@ -914,6 +917,10 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   /**
+   * Chargmeent du chirurgien
+   *
+   * @param bool $cache Utilisation du cache
+   *
    * @return CMediusers
    */
   function loadRefChir($cache = true) {
@@ -923,7 +930,9 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   /**
-   * @param boolean $cache
+   * Chargement du deuxième chirurgien optionnel
+   *
+   * @param bool $cache Utilisation du cache
    *
    * @return CMediusers
    */
@@ -932,7 +941,9 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   /**
-   * @param boolean $cache
+   * Chargement du troisième chirurgien optionnel
+   *
+   * @param bool $cache Utilisation du cache
    *
    * @return CMediusers
    */
@@ -941,7 +952,9 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   /**
-   * @param boolean $cache
+   * Chargement du quatrième chirurgien optionnel
+   *
+   * @param bool $cache Utilisation du cache
    *
    * @return CMediusers
    */
@@ -950,6 +963,10 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   /**
+   * Chargement du praticien responsable
+   *
+   * @param bool $cache Utilisation du cache
+   *
    * @return CMediusers
    */
   function loadRefPraticien($cache = true) {
@@ -968,17 +985,12 @@ class COperation extends CCodable implements IPatientRelated {
   function loadRefAffectation() {
     $this->loadRefPlageOp();
 
-    $where = array();
-    $where["sejour_id"] = "= '$this->sejour_id'";
-    $where["entree"]    = " <= '$this->_datetime'";
-    $where["sortie"]    = " >= '$this->_datetime'";
-
-    $this->_ref_affectation = new CAffectation();
-
-    $this->_ref_affectation->loadObject($where);
-    $this->_ref_affectation->loadRefsFwd();
-    $this->_ref_affectation->_ref_lit->loadRefsFwd();
-    $this->_ref_affectation->_ref_lit->_ref_chambre->loadRefsFwd();
+    $sejour = $this->loadRefSejour();
+    $this->_ref_affectation = $sejour->getCurrAffectation($this->_datetime);
+    if (!$this->_ref_affectation->_id) {
+      $this->_ref_affectation = $sejour->loadRefFirstAffectation();
+    }
+    $this->_ref_affectation->loadView();
 
     return $this->_ref_affectation;
   }
@@ -1061,8 +1073,8 @@ class COperation extends CCodable implements IPatientRelated {
     }
     $plage = $this->_ref_plageop;
 
-    // Avec plage d'opération
     if ($plage->_id) {
+      // Avec plage d'opération
       $plage->loadRefsFwd($cache);
 
       if ($this->anesth_id) {
@@ -1074,8 +1086,8 @@ class COperation extends CCodable implements IPatientRelated {
 
       $date = $plage->date;
     }
-    // Hors plage
     else {
+      // Hors plage
       $this->loadRefAnesth();
       $date = $this->date;
     }
@@ -1173,6 +1185,10 @@ class COperation extends CCodable implements IPatientRelated {
 
   /**
    * Chargement des poses de dispositif vasculaire
+   *
+   * @param bool $count_check_lists Calcul du nombre de checklist remplies
+   *
+   * @return CPoseDispositifVasculaire[]
    */
   function loadRefsPosesDispVasc($count_check_lists = false){
     $this->_ref_poses_disp_vasc = $this->loadBackRefs("poses_disp_vasc", "date");
@@ -1271,10 +1287,15 @@ class COperation extends CCodable implements IPatientRelated {
         }
 
         if ($this->plageop_id) {
-          return (($this->_ref_chir->getPerm($permType) || $this->_ref_anesth->getPerm($permType)) && $this->_ref_module->getPerm($permType));
+          return (
+            ($this->_ref_chir->getPerm($permType) || $this->_ref_anesth->getPerm($permType)) &&
+            $this->_ref_module->getPerm($permType)
+          );
         }
         else {
-          return (($this->_ref_chir->getPerm($permType) || $this->_ref_anesth->getPerm($permType)) && $this->_ref_module->getPerm(PERM_READ));
+          return (($this->_ref_chir->getPerm($permType) || $this->_ref_anesth->getPerm($permType)) &&
+            $this->_ref_module->getPerm(PERM_READ)
+          );
         }
         break;
       default :
@@ -1320,27 +1341,31 @@ class COperation extends CCodable implements IPatientRelated {
 
     $this->notify("BeforeFillLimitedTemplate", $template);
 
-    $template->addProperty("Opération - Chirurgien"           , $this->_ref_praticien->_id ? ("Dr ".$this->_ref_praticien->_view) : '');
-    $template->addProperty("Opération - Anesthésiste - nom"   , @$this->_ref_anesth->_user_last_name);
-    $template->addProperty("Opération - Anesthésiste - prénom", @$this->_ref_anesth->_user_first_name);
-    $template->addProperty("Opération - Anesthésie"           , $this->_lu_type_anesth);
-    $template->addProperty("Opération - libellé"              , $this->libelle);
-    $template->addProperty("Opération - CCAM1 - code"         , @$this->_ext_codes_ccam[0]->code);
-    $template->addProperty("Opération - CCAM1 - description"  , @$this->_ext_codes_ccam[0]->libelleLong);
+    $template->addProperty(
+      "Opération - Chirurgien", $this->_ref_praticien->_id ? ("Dr ".$this->_ref_praticien->_view) : ''
+    );
+    $template->addProperty("Opération - Anesthésiste - nom"        , @$this->_ref_anesth->_user_last_name);
+    $template->addProperty("Opération - Anesthésiste - prénom"     , @$this->_ref_anesth->_user_first_name);
+    $template->addProperty("Opération - Anesthésie"                , $this->_lu_type_anesth);
+    $template->addProperty("Opération - libellé"                   , $this->libelle);
+    $template->addProperty("Opération - CCAM1 - code"              , @$this->_ext_codes_ccam[0]->code);
+    $template->addProperty("Opération - CCAM1 - description"       , @$this->_ext_codes_ccam[0]->libelleLong);
     $template->addProperty("Opération - CCAM1 - montant activité 1", @$this->_ext_codes_ccam[0]->activites[1]->phases[0]->tarif);
     $template->addProperty("Opération - CCAM1 - montant activité 4", @$this->_ext_codes_ccam[0]->activites[4]->phases[0]->tarif);
-    $template->addProperty("Opération - CCAM2 - code"         , @$this->_ext_codes_ccam[1]->code);
-    $template->addProperty("Opération - CCAM2 - description"  , @$this->_ext_codes_ccam[1]->libelleLong);
+    $template->addProperty("Opération - CCAM2 - code"              , @$this->_ext_codes_ccam[1]->code);
+    $template->addProperty("Opération - CCAM2 - description"       , @$this->_ext_codes_ccam[1]->libelleLong);
     $template->addProperty("Opération - CCAM2 - montant activité 1", @$this->_ext_codes_ccam[1]->activites[1]->phases[0]->tarif);
     $template->addProperty("Opération - CCAM2 - montant activité 4", @$this->_ext_codes_ccam[1]->activites[4]->phases[0]->tarif);
-    $template->addProperty("Opération - CCAM3 - code"         , @$this->_ext_codes_ccam[2]->code);
-    $template->addProperty("Opération - CCAM3 - description"  , @$this->_ext_codes_ccam[2]->libelleLong);
+    $template->addProperty("Opération - CCAM3 - code"              , @$this->_ext_codes_ccam[2]->code);
+    $template->addProperty("Opération - CCAM3 - description"       , @$this->_ext_codes_ccam[2]->libelleLong);
     $template->addProperty("Opération - CCAM3 - montant activité 1", @$this->_ext_codes_ccam[2]->activites[1]->phases[0]->tarif);
     $template->addProperty("Opération - CCAM3 - montant activité 4", @$this->_ext_codes_ccam[2]->activites[4]->phases[0]->tarif);
-    $template->addProperty("Opération - CCAM - codes"         , implode(" - ", $this->_codes_ccam));
-    $template->addProperty("Opération - CCAM - descriptions"  , implode(" - ", CMbArray::pluck($this->_ext_codes_ccam, "libelleLong")));
-    $template->addProperty("Opération - salle"                , @$this->_ref_salle->nom);
-    $template->addProperty("Opération - côté"                 , $this->cote);
+    $template->addProperty("Opération - CCAM - codes"              , implode(" - ", $this->_codes_ccam));
+    $template->addProperty(
+      "Opération - CCAM - descriptions", implode(" - ", CMbArray::pluck($this->_ext_codes_ccam, "libelleLong"))
+    );
+    $template->addProperty("Opération - salle"                     , @$this->_ref_salle->nom);
+    $template->addProperty("Opération - côté"                      , $this->cote);
 
     $template->addDateProperty("Opération - date"             , $this->_datetime_best != " 00:00:00" ? $this->_datetime_best : "");
     $template->addLongDateProperty("Opération - date longue"  , $this->_datetime_best != " 00:00:00" ? $this->_datetime_best : "");
@@ -1365,10 +1390,12 @@ class COperation extends CCodable implements IPatientRelated {
     $consult->loadRefPlageConsult();
     $template->addDateProperty("Opération - Consultation anesthésie - Date", $consult->_id ? $consult->_datetime : "");
     $template->addLongDateProperty("Opération - Consultation anesthésie - Date (longue)", $consult->_id ? $consult->_datetime : "");
-    $template->addLongDateProperty("Opération - Consultation anesthésie - Date (longue, minuscule)", $consult->_id ? $consult->_datetime : "", true);
+    $template->addLongDateProperty(
+      "Opération - Consultation anesthésie - Date (longue, minuscule)", $consult->_id ? $consult->_datetime : "", true
+    );
     $template->addTimeProperty("Opération - Consultation anesthésie - Heure", $consult->_id ? $consult->_datetime : "");
 
-
+    /** @var CMediusers $prat_visite */
     $prat_visite = $this->loadFwdRef("prat_visite_anesth_id", true);
 
     $template->addDateProperty("Opération - Visite pré anesthésie - Date", $this->date_visite_anesth);
@@ -1512,7 +1539,7 @@ class COperation extends CCodable implements IPatientRelated {
 
   function loadBrancardage() {
     if (!CModule::getActive("brancardage")) {
-      return;
+      return null;
     }
 
     //Chargement de la destination

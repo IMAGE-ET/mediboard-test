@@ -402,7 +402,7 @@ class CTemplateManager {
    * Ajoute un champ de type code-barre
    *
    * @param string $field   Nom du champ
-   * @param object $data    Code barre
+   * @param string $data    Code barre
    * @param array  $options Options
    *
    * @return void
