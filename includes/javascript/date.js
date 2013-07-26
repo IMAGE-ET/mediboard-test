@@ -451,7 +451,7 @@ var Calendar = {
     }
 
     if (Calendar.checkHolliday(date)) {
-      properties.className = "ferie";
+      properties.className = properties.className + " ferie";
     }
 
     if (dates.spots.include(sDate)) {
