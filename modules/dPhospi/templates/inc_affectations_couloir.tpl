@@ -15,7 +15,7 @@
             {{assign var="aff_prev" value=$_affectation->_ref_prev}}
             {{assign var="aff_next" value=$_affectation->_ref_next}}
             <form name="addAffectationaffectation_{{$_affectation->_id}}" action="?m={{$m}}" method="post" class="prepared">
-              <input type="hidden" name="m" value="dPhospi" />
+              <input type="hidden" name="m" value="hospi" />
               <input type="hidden" name="dosql" value="do_affectation_aed" />
               <input type="hidden" name="affectation_id" value="{{$_affectation->_id}}" />
               <input type="hidden" name="lit_id" value="" />
@@ -25,10 +25,13 @@
             </form>
             <table class="tbl sejourcollapse" id="affectation_{{$_affectation->_id}}">
               <tr class="patient">
-                <td class="text button" style="width: 1%;">
-                  {{if $can->edit}}
-                  <script type="text/javascript">new Draggable('affectation_{{$_affectation->_id}}', {revert:true})</script>
+                <td class="selectsejour" style="background:#{{$sejour->_ref_praticien->_ref_function->color}}">
+                  {{if !$conf.dPhospi.pathologies || $sejour->pathologie}}
+                    <input type="radio" id="affectation{{$_affectation->_id}}" onclick="selectAffectation({{$_affectation->_id}})" />
+                    <script type="text/javascript">new Draggable('affectation_{{$_affectation->_id}}', {revert:true})</script>
                   {{/if}}
+                </td>
+                <td class="selectsejour text button" style="width: 1%;">
                   {{if $sejour->_couvert_cmu}}
                   <div><strong>CMU</strong></div>
                   {{/if}}
@@ -57,7 +60,7 @@
                   {{/if}}
                 </td>  
                 {{if $sejour->confirme}}
-                <td class="text" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
+                <td class="text patient" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
                 {{else}}
                 <td class="text patient"
                   onclick="flipAffectationCouloir({{$_affectation->_id}});
@@ -91,14 +94,10 @@
                   {{/if}}
                   </span>
                 </td>
-                <td class="action" style="background:#{{$sejour->_ref_praticien->_ref_function->color}}" 
-                  onmouseover="ObjectTooltip.createTimeHospi(this, '{{$sejour->praticien_id}}', '{{$sejour->_codes_ccam_operations}}' );">
-                  {{$sejour->_ref_praticien->_shortview}}
-                </td>
               </tr>
               {{if !$_affectation->sejour_id}}
               <tr class="dates">   
-                <td class="text" colspan="2">
+                <td class="text" colspan="3">
                   {{if $can->edit}}
                   <form name="entreeAffectation{{$_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;" class="prepared">
                     <input type="hidden" name="m" value="dPhospi" />
@@ -126,7 +125,7 @@
                 </td>
               </tr>
               <tr class="dates">
-                <td class="text" colspan="2">
+                <td class="text" colspan="3">
                   {{if $can->edit && (!$sejour->sortie_reelle || $aff_next->_id)}}
                   <form name="sortieAffectation{{$_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;" class="prepared">
                     <input type="hidden" name="m" value="dPhospi" />
@@ -145,7 +144,7 @@
           
               {{if $_affectation->rques}}
               <tr class="dates">
-                <td class="text highlight" colspan="3">
+                <td class="text highlight" colspan="4">
                   <strong>Remarques:</strong> {{$_affectation->rques|nl2br}}
                 </td>
               </tr>
@@ -153,7 +152,20 @@
               {{else}}
           
               <tr class="dates">
-                <td class="text" colspan="2">
+                <td class="text" colspan="3">
+                  {{if $can->edit}}
+                    <span style="float: right">
+                      <form name="rmvAffectation{{$_affectation->_id}}" action="?m={{$m}}" method="post">
+                        <input type="hidden" name="m" value="dPhospi" />
+                        <input type="hidden" name="dosql" value="do_affectation_aed" />
+                        <input type="hidden" name="del" value="1" />
+                        <input type="hidden" name="affectation_id" value="{{$_affectation->_id}}" />
+                      </form>
+                      <a href="#" onclick="confirmDeletion(document.rmvAffectation{{$_affectation->_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|smarty:nodefaults|JSAttribute}}'})">
+                        <img src="images/icons/trash.png" alt="trash" title="Supprimer l'affectation" />
+                      </a>
+                    </span>
+                  {{/if}}
                   {{if $can->edit && (!$sejour->entree_reelle || $aff_prev->_id)}}
                   <form name="entreeAffectation{{$_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;" class="prepared">
                     <input type="hidden" name="m" value="dPhospi" />
@@ -177,34 +189,21 @@
                   {{$_affectation->entree|date_format:"%a %d %b %Hh%M"}}
                   ({{$_affectation->_entree_relative}}j)
                 </td>
-                <td class="action">
-                  {{if $can->edit}}
-                  <form name="rmvAffectation{{$_affectation->_id}}" action="?m={{$m}}" method="post">
-                    <input type="hidden" name="m" value="dPhospi" />
-                    <input type="hidden" name="dosql" value="do_affectation_aed" />
-                    <input type="hidden" name="del" value="1" />
-                    <input type="hidden" name="affectation_id" value="{{$_affectation->_id}}" />
-                  </form>
-                  <a href="#" onclick="confirmDeletion(document.rmvAffectation{{$_affectation->_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|smarty:nodefaults|JSAttribute}}'})">
-                    <img src="images/icons/trash.png" alt="trash" title="Supprimer l'affectation" />
-                  </a>
-                  {{/if}}
-                </td>
               </tr>
               <tr class="dates">
-                <td colspan="3"><strong>Age</strong>: {{$patient->_age}} ({{mb_value object=$patient field=naissance}})</td>
+                <td colspan="4"><strong>Age</strong>: {{$patient->_age}} ({{mb_value object=$patient field=naissance}})</td>
               </tr>
           
               {{if $sejour->prestation_id}}
               <tr class="dates">
-                <td colspan="3">
+                <td colspan="4">
                   <strong>Prestation:</strong> {{$sejour->_ref_prestation->_view}}
                 </td>
               </tr>
               {{/if}}
               
               <tr class="dates">
-                <td class="text" colspan="3">
+                <td class="text" colspan="4">
                   <strong>
                     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
                   </strong>
@@ -213,21 +212,21 @@
           
               {{if $sejour->libelle}}
               <tr class="dates">
-                <td class="text" colspan="3">
+                <td class="text" colspan="4">
                   {{$sejour->libelle}}
                 </td>
               </tr>
               {{/if}}
           
               <tr class="dates">
-                <td class="text" colspan="3">
+                <td class="text" colspan="4">
                   {{foreach from=$sejour->_ref_operations item=_operation}}
                     {{mb_include module=planningOp template=inc_vw_operation operation=$_operation}}
                   {{/foreach}}
                 </td>
               </tr>
               <tr class="dates">
-                <td class="text" colspan="3">
+                <td class="text" colspan="4">
                   <form name="SeptieSejour{{$sejour->_id}}" action="?m=dPhospi" method="post" class="prepared">
                     <input type="hidden" name="m" value="dPplanningOp" />
                     <input type="hidden" name="otherm" value="dPhospi" />
@@ -257,7 +256,7 @@
               </tr>
               {{if $sejour->rques != ""}}
               <tr class="dates">
-                <td class="text highlight" colspan="3">
+                <td class="text highlight" colspan="4">
                   <strong>Séjour</strong>: {{$sejour->rques|nl2br}}
                 </td>
               </tr>
@@ -265,7 +264,7 @@
               {{foreach from=$sejour->_ref_operations item=curr_operation}}
               {{if $curr_operation->rques != ""}}
               <tr class="dates">
-                <td class="text highlight" colspan="3">
+                <td class="text highlight" colspan="4">
                   <strong>Intervention</strong>: {{$curr_operation->rques|nl2br}}
                 </td>
               </tr>
@@ -273,13 +272,13 @@
               {{/foreach}}
               {{if $patient->rques != ""}}
               <tr class="dates">
-                <td class="text highlight" colspan="3">
+                <td class="text highlight" colspan="4">
                   <strong>Patient</strong>: {{$patient->rques|nl2br}}
                 </td>
               </tr>
               {{/if}}
               <tr class="dates">
-                <td colspan="3">
+                <td colspan="4">
                   {{mb_include module=admissions template=inc_form_prestations edit=$can->edit}}
                 </td>
               </tr>

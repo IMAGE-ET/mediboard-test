@@ -1,6 +1,6 @@
 {{mb_script module=hospi script=affectation_uf}}
 
-<script type='text/javascript'>
+<script>
   Position.includeScrollOffsets = true;
   Placement = {
     tabs: null,
@@ -9,22 +9,19 @@
     scrollAffectations: 0,
     scrollNonPlaces: 0,
     loadTableau: function(services_ids) {
-      var url = new Url('dPhospi', 'vw_affectations');
-      url.requestUpdate('tableau');
+      new Url('hospi', 'vw_affectations').requestUpdate('tableau');
     },
     loadTemporel: function() {
-      var url = new Url('dPhospi', 'vw_mouvements');
-      url.requestUpdate('temporel');
+      new Url('hospi', 'vw_mouvements').requestUpdate('temporel');
     },
     loadTopologique: function() {
-      var url = new Url('dPhospi', 'vw_placement_patients');
-      url.requestUpdate('topologique');
+      new Url('hospi', 'vw_placement_patients').requestUpdate('topologique');
     },
     showLegend: function() {
       Modal.open("legend_" + this.tabs.activeLink.key);
     },
     selectServices: function(view, services_ids_suggest) {
-      var url = new Url("dPhospi", "ajax_select_services");
+      var url = new Url("hospi", "ajax_select_services");
       
       if (Object.isUndefined(view)) {
         view = this.tabs.activeLink.key;
@@ -51,7 +48,7 @@
     init: function(frequency){
       this.frequency = frequency || this.frequency;
       
-      var url = new Url("dPhospi", "vw_mouvements");
+      var url = new Url("hospi", "vw_mouvements");
       Placement.updater = url.periodicalUpdate('temporel', {
         frequency: this.frequency,
         onCreate: function() {
@@ -63,7 +60,7 @@
           {{if "reservation"|module_active}}
             var tableau_vue_temporel = $("tableau_vue_temporel");
             if (tableau_vue_temporel) {
-              tableau_vue_temporel.select(".mouvement_lit").invoke("stopObserving", "click");
+              tableau_vue_temporel.select(".mouvement_lit").invoke("stopObserving", "dblclick");
             }
           {{/if}}
           
@@ -119,15 +116,13 @@
   }
   
   loadNonPlaces = function(after_refresh) {
-    if (!after_refresh) {
-      after_refresh = Prototype.emptyFunction;
-    }
-    var url = new Url("dPhospi", "ajax_vw_non_places");
+    after_refresh = after_refresh || Prototype.emptyFunction;
+    var url = new Url("hospi", "ajax_vw_non_places");
     url.requestUpdate("list_affectations", {onComplete: after_refresh});
   }
  
   changeLit = function(affectation_id, link_affectation, datetime) {
-    var url = new Url('dPhospi', 'ajax_suggest_lit');
+    var url = new Url('hospi', 'ajax_suggest_lit');
     url.addParam('affectation_id', affectation_id);
     url.addParam("datetime", datetime);
     if (link_affectation) {
@@ -138,7 +133,7 @@
   }
   
   editAffectation = function(affectation_id, lit_id, urgence) {
-     var url = new Url("dPhospi", "ajax_edit_affectation");
+     var url = new Url("hospi", "ajax_edit_affectation");
      url.addParam("affectation_id", affectation_id);
      
      if (!Object.isUndefined(lit_id)) {
@@ -149,13 +144,11 @@
      }
      
      Placement.stop();
-     var modal = url.requestModal(500, null, {showReload: false});
-     modal.modalObject.observe("afterClose", function() { Placement.resume(); });
+     url.requestModal(500, null, {showReload: false, onClose: Placement.resume});
    }
    
    moveAffectation = function(affectation_id, lit_id, sejour_id, lit_id_origine) {
-   
-    var url = new Url("dPhospi", "ajax_move_affectation");
+    var url = new Url("hospi", "ajax_move_affectation");
     if (!Object.isUndefined(affectation_id)) {
       url.addParam("affectation_id", affectation_id);
     }
@@ -164,7 +157,7 @@
     if (!Object.isUndefined(sejour_id)) {
       url.addParam("sejour_id", sejour_id);
     }
-    url.requestUpdate("systemMsg", {onComplete: function() {
+    url.requestUpdate("systemMsg", function() {
       var after_mouv = null;
       
       // Pas d'affectation_id ou pas de lit_id_origine (affectation dans un couloir),
@@ -179,7 +172,7 @@
       if (lit_id) {
         refreshMouvements(after_mouv, lit_id, after_mouv);
       }
-    }});
+    });
   }
 
   delLine = function(object_id) {
@@ -199,12 +192,11 @@
   // Drop d'une affectation avec la touche ctrl
   selectAction = function(affectation_id, lit_id, sejour_id) {
     Placement.stop();
-    var url = new Url("dPhospi", "ajax_select_action_affectation");
+    var url = new Url("hospi", "ajax_select_action_affectation");
     url.addParam("affectation_id", affectation_id);
     url.addParam("lit_id", lit_id);
     url.addParam("sejour_id", sejour_id);
-    var modal = url.requestModal(500, null, {showReload: false});
-    modal.modalObject.observe("afterClose", function() {  Placement.resume(); });
+    url.requestModal(500, null, {showReload: false, onClose: Placement.resume});
   }
   
   chooseSejour = function(sejour_id) {
@@ -272,7 +264,7 @@
   }
   
   createAffectation = function(sejour_id, lit_id) {
-    var url = new Url("dPplanningOp", "ajax_create_affectation");
+    var url = new Url("planningOp", "ajax_create_affectation");
     url.addParam("sejour_id", sejour_id);
     url.addParam("lit_id", lit_id);
     url.requestUpdate("systemMsg", function() {
@@ -282,7 +274,7 @@
   
   createIntervention = function() {
     Placement.stop();
-    var url = new Url("dPplanningOp", "vw_edit_urgence");
+    var url = new Url("planningOp", "vw_edit_urgence");
     url.addParam("date_urgence", window.save_date);
     url.addParam("hour_urgence", window.save_hour);
     url.addParam("min_urgence" , "00");
@@ -290,15 +282,13 @@
     url.addParam("operation_id", 0);
     url.modal({
       width: "95%",
-      height: "95%"
-    });
-    
-    url.modalObject.observe("afterClose", function() {
-      Placement.resume();
-      if (window.sejour_id_for_affectation) {
-        createAffectation(window.sejour_id_for_affectation, window.save_lit_guid.split("-")[1]);
-      }
-    });
+      height: "95%",
+      onClose: function() {
+        Placement.resume();
+        if (window.sejour_id_for_affectation) {
+          createAffectation(window.sejour_id_for_affectation, window.save_lit_guid.split("-")[1]);
+        }
+    } });
   }
   
   createSejour = function() {
@@ -309,13 +299,12 @@
     url.addParam("dialog", 1);
     url.modal({
       width: "95%",
-      height: "95%"
-    });
-    
-    url.modalObject.observe("afterClose", function() {
-      Placement.resume();
-      if (window.sejour_id_for_affectation) {
-        createAffectation(window.sejour_id_for_affectation, window.save_lit_guid.split("-")[1]);
+      height: "95%",
+      onClose:function() {
+        Placement.resume();
+        if (window.sejour_id_for_affectation) {
+          createAffectation(window.sejour_id_for_affectation, window.save_lit_guid.split("-")[1]);
+        }
       }
     });
   }
@@ -338,7 +327,7 @@
       url.addParam("prestation_id", $V(form.prestation_id));
       url.addParam("granularite", $V(form.granularite));
       
-      url.requestUpdate($("CLit-"+lit_id), {onComplete: function() {
+      url.requestUpdate($("CLit-"+lit_id), function() {
         after_refresh();
         {{if !$readonly && "reservation"|module_active}}
           $("CLit-"+lit_id).select("td").each(function(elt) {
@@ -351,9 +340,9 @@
             });
           });
         {{/if}}
-      } });
+      });
     }
-    else return onSubmitFormAjax(getForm('filterMouv'), {onComplete: after_refresh}, 'view_affectations');
+    else return onSubmitFormAjax(getForm('filterMouv'), after_refresh, 'view_affectations');
   }
 
   changeAffService = function(object_id, object_class) {
@@ -403,16 +392,16 @@
 </form>
 
 <!-- Légendes -->
-<div class="modal" id="legend_temporel" style="display: none;">
+<div id="legend_temporel" style="display: none;">
   {{mb_include module=hospi template=inc_legend_mouvement}}
 </div>
 
-<div class="modal" id="legend_tableau" style="display: none;">
+<div id="legend_tableau" style="display: none;">
   {{mb_include module=hospi template=legende}}
 </div>
 
 {{if $conf.dPhospi.use_vue_topologique}}
-  <div class="modal" id="legend_topologique" style="display: none;">
+  <div id="legend_topologique" style="display: none;">
     {{mb_include module=hospi template=legende_topologique}}
   </div>
 {{/if}}
@@ -443,5 +432,5 @@
 <div id="temporel" style="display: none;"></div>
 
 {{if $conf.dPhospi.use_vue_topologique}}
-<div id="topologique" style="display: none;"></div>
+  <div id="topologique" style="display: none;"></div>
 {{/if}}

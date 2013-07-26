@@ -32,16 +32,37 @@ selectLit = function(lit_id) {
   submitAffectation();
 }
 
+var selected_affectation = null;
+selectAffectation = function(affectation_id) {
+  var element= $("affectation" + selected_affectation);
+
+  if (element) {
+    element.checked = false;
+  }
+  selected_affectation = affectation_id;
+  submitAffectation();
+}
+
 submitAffectation = function() {
-  if (selected_lit && selected_hospi) {
-    if(selected_hospitalisation){
-      var oForm = getForm("addAffectationsejour_" + selected_hospitalisation);
-    }else{
-      var oForm = getForm("addAffectationsejour");
+  if (selected_lit) {
+    // Séjour
+    if (selected_hospi) {
+      if(selected_hospitalisation){
+        var oForm = getForm("addAffectationsejour_" + selected_hospitalisation);
+      }
+      else{
+        var oForm = getForm("addAffectationsejour");
+      }
+      oForm.lit_id.value = selected_lit;
+
+      return onSubmitFormAjax(oForm, reloadTableau);
     }
-    oForm.lit_id.value = selected_lit;
-    
-    return onSubmitFormAjax(oForm, {onComplete: reloadTableau});
+    // Affectation dans un couloir
+    else if (selected_affectation) {
+      var form = getForm("addAffectationaffectation_"+selected_affectation);
+      $V(form.lit_id, selected_lit);
+      return onSubmitFormAjax(form, reloadTableau);
+    }
   }
 }
 
@@ -193,6 +214,10 @@ reloadTableau = function() {
     $("sejour_"+selected_hospitalisation).remove();
     selected_hospitalisation = null;
     selected_hospi = false;
+  }
+  if (selected_affectation) {
+    $("affectation_"+selected_affectation).up('tr').remove();
+    selected_affectation = null;
   }
   selected_lit = null;
   
