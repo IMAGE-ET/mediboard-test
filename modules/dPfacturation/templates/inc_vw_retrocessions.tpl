@@ -89,7 +89,7 @@
       </tbody>
     {{foreachelse}}
       <tr>
-        <td colspan="7" class="empty">{{tr}}CFactureCabinet.none{{/tr}}</td>
+        <td colspan="8" class="empty">{{tr}}CFactureCabinet.none{{/tr}}</td>
       </tr>
     {{/foreach}}
 

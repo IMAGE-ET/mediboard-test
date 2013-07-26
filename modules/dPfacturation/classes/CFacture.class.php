@@ -1010,41 +1010,50 @@ class CFacture extends CMbObject {
     $this->loadRefPraticien();
     $this->loadRefsItems();
     $retrocessions = $this->_ref_praticien->loadRefsRetrocessions();
-    $use_pm = false;
-    foreach ($this->_ref_items as $item) {
-      foreach ($retrocessions as $retro) {
-        if ($retro->use_pm && $retro->code_class == $item->type && $retro->code == $item->code && $retro->active) {
-          $use_pm = true;
-        }
-      }
-    }
+    $item_forfait = array();
+    $total_forfait = 0.00;
+    $add_anesth = true;
     foreach ($this->_ref_items as $item) {
       $modif = false;
-      foreach ($retrocessions as $retro) {
-        /** @var CRetrocession $retro*/
-        if ($retro->code_class == $item->type && $retro->code == $item->code && $retro->active) {
-          $modif = true;
-          $montant = $item->quantite * $retro->updateMontant();
-          if (!$retro->use_pm && $item->type == "CActeTarmed") {
-            $use_pm = true;
-            $montant = 0;
+      $use_pm = false;
+      if (!(!$add_anesth && $item->type == "CActeTarmed" && strstr($item->code, "28."))) {
+        foreach ($retrocessions as $retro) {
+          /** @var CRetrocession $retro*/
+          if ($retro->code_class == $item->type && $retro->code == $item->code && $retro->active) {
+            $modif = true;
+            $montant = $item->quantite * $retro->updateMontant();
+            if (!$retro->use_pm && $item->type == "CActeTarmed") {
+              $use_pm = true;
+              $montant = 0;
+            }
+            if ($item->forfait) {
+              $item_forfait[$item->code] = array($item->_montant_facture, $montant);
+              $total_forfait += $montant;
+            }
+            if ($item->type == "CActeTarmed" && strstr($item->code, "28.")) {
+              $add_anesth = false;
+            }
+            $this->_montant_retrocession += $montant;
+            $this->_retrocessions[$item->code] = array($item->_montant_facture, $montant);
+          }
+        }
+        if (!$modif && ($item->type == "CActeTarmed" || $item->type == "CActeCaisse") && !$use_pm) {
+          $code = new $item->type;
+          $code->code = $item->code;
+          $code->updateMontantBase();
+          $montant = 0.00;
+          if ($item->type == "CActeTarmed" && !strstr($item->code, "28.") && !strstr($item->code, "35.")) {
+            $ref = $code->_ref_tarmed;
+            $montant = $item->quantite * $ref->tp_al * $ref->f_al * $this->_coeff;
           }
           $this->_montant_retrocession += $montant;
           $this->_retrocessions[$item->code] = array($item->_montant_facture, $montant);
         }
       }
-      if (!$modif && ($item->type == "CActeTarmed" || $item->type == "CActeCaisse") && !$use_pm) {
-        $code = new $item->type;
-        $code->code = $item->code;
-        $code->updateMontantBase();
-        $montant = 0.00;
-        if ($item->type == "CActeTarmed" && !strstr($item->code, "28.") && !strstr($item->code, "35.")) {
-          $ref = $code->_ref_tarmed;
-          $montant = $item->quantite * $ref->tp_al * $ref->f_al * $this->_coeff;
-        }
-        $this->_montant_retrocession += $montant;
-        $this->_retrocessions[$item->code] = array($item->_montant_facture, $montant);
-      }
+    }
+    if (count($item_forfait)) {
+      $this->_retrocessions = $item_forfait;
+      $this->_montant_retrocession = $total_forfait;
     }
     if ($this->_montant_retrocession && $this->annule) {
       $this->_retrocessions["extourne"] = array(0, -$this->_montant_retrocession);

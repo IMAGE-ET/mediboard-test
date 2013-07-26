@@ -37,6 +37,7 @@ class CFactureItem extends CMbMetaObject {
   public $code_ref;
   public $code_caisse;
   public $seance;
+  public $forfait;
 
   // References
   public $_ref_facture;
@@ -79,6 +80,7 @@ class CFactureItem extends CMbMetaObject {
     $specs["code_ref"]        = "text";
     $specs["code_caisse"]     = "text";
     $specs["seance"]          = "num";
+    $specs["forfait"]         = "bool default|0";
     return $specs;
   }
   
