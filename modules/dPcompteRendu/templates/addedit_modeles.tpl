@@ -184,7 +184,7 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
 
 </script>
 
-<div id="choose_template_name" class="modal" style="display: none; width: 600px;">
+<div id="choose_template_name" style="display: none; width: 600px;">
   <table class="tbl">
     <tr>
       <th class="title narrow">Nom</th>
