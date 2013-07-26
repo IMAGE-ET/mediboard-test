@@ -1630,6 +1630,9 @@ class CConsultation extends CFacturable {
       $prescription->type = "sortie";
       $prescription->fillLimitedTemplate($template);
     }
+
+    $facture = $this->loadRefFacture();
+    $facture->fillLimitedTemplate($template);
   }
 
   /**

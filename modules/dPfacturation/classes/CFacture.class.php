@@ -1099,4 +1099,27 @@ class CFacture extends CMbObject {
     $debiteurs = $debiteur->loadList(null, "numero");
     return $this->_ref_debiteurs = $debiteurs;
   }
+
+  /**
+   * @see parent::fillTemplate()
+   */
+  function fillTemplate(&$template) {
+    $this->fillLimitedTemplate($template);
+  }
+
+  /**
+   * @see parent::fillLimitedTemplate()
+   */
+  function fillLimitedTemplate(&$template) {
+    $this->updateFormFields();
+    $this->notify("BeforeFillLimitedTemplate", $template);
+
+    $template->addDateProperty("Facture - Date de création"   , $this->ouverture);
+    $template->addProperty("Facture - Du patient" , $this->du_patient);
+    $template->addProperty("Facture - Du tiers"   , $this->du_tiers);
+    $template->addDateProperty("Facture - Date règlement patient" , $this->patient_date_reglement);
+    $template->addDateProperty("Facture - Date règlement tiers"   , $this->tiers_date_reglement);
+
+    $this->notify("AfterFillLimitedTemplate", $template);
+  }
 }
