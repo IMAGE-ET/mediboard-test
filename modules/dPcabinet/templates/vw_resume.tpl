@@ -24,10 +24,12 @@ function newExam(sAction, consultation_id) {
     <tr>
       <td>
         <table class="tbl">
-          <th colspan="10" class="title">
-            {{$patient->_view}} <br />
-            Né{{if $patient->sexe == "f"}}e{{/if}} le {{$patient->naissance|date_format:$conf.date}}
-          </th>
+          <tr>
+            <th colspan="10" class="title">
+              {{$patient->_view}} <br />
+              Né{{if $patient->sexe == "f"}}e{{/if}} le {{$patient->naissance|date_format:$conf.date}}
+            </th>
+          </tr>
         </table>
       </td>
     </tr>
@@ -72,7 +74,7 @@ function newExam(sAction, consultation_id) {
                 toggle: function() {
                   $$(".compta").each(Element[($V("toggle_compta") ? "show" : "hide")]);
                 }
-              }
+              };
               
               Main.add(Compta.toggle);
               </script>

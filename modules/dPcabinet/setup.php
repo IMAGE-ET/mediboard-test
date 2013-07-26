@@ -507,7 +507,8 @@ class CSetupdPcabinet extends CSetup {
         return false;
       }
       if (count($aKeyxAnesth)) {
-        $query = "UPDATE consultation_anesth SET operation_id = NULL WHERE (consultation_anesth_id ".CSQLDataSource::prepareIn($aKeyxAnesth).")";
+        $query = "UPDATE consultation_anesth SET operation_id = NULL WHERE (consultation_anesth_id ".
+          CSQLDataSource::prepareIn($aKeyxAnesth).")";
         if (!$ds->exec($query)) {
           return false;
         }
@@ -538,14 +539,16 @@ class CSetupdPcabinet extends CSetup {
     $this->setTimeLimit(1800);
     $this->addDependency("dPpatients", "0.41");
     $query = "INSERT INTO antecedent
-            SELECT '', consultation_anesth.consultation_anesth_id, antecedent.type, antecedent.date, antecedent.rques, 'CConsultAnesth' 
+            SELECT '', consultation_anesth.consultation_anesth_id, antecedent.type,
+              antecedent.date, antecedent.rques, 'CConsultAnesth'
             FROM antecedent, consultation_anesth, consultation
             WHERE antecedent.object_class = 'CPatient'
               AND antecedent.object_id = consultation.patient_id
               AND consultation.consultation_id = consultation_anesth.consultation_id";
     $this->addQuery($query);
     $query = "INSERT INTO traitement
-            SELECT '', consultation_anesth.consultation_anesth_id, traitement.debut, traitement.fin, traitement.traitement, 'CConsultAnesth' 
+            SELECT '', consultation_anesth.consultation_anesth_id, traitement.debut,
+              traitement.fin, traitement.traitement, 'CConsultAnesth'
             FROM traitement, consultation_anesth, consultation
             WHERE traitement.object_class = 'CPatient'
               AND traitement.object_id = consultation.patient_id
@@ -1794,7 +1797,8 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($query);
     
     $query = "INSERT INTO `facture_cabinet` (`patient_id` ,`praticien_id`,`ouverture`,`cloture`,`du_patient`,`du_tiers`,`patient_date_reglement`,`tiers_date_reglement`, `consultation_id`)
-        SELECT c.patient_id, p.chir_id, p.date, p.date, c.du_patient, c.du_tiers, c.patient_date_reglement, c.tiers_date_reglement, c.consultation_id
+        SELECT c.patient_id, p.chir_id, p.date, p.date, c.du_patient, c.du_tiers,
+          c.patient_date_reglement, c.tiers_date_reglement, c.consultation_id
         FROM consultation c, plageconsult p
         WHERE c.facture_id IS NULL
         AND c.plageconsult_id = p.plageconsult_id

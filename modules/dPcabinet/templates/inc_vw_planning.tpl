@@ -16,7 +16,7 @@
     window.save_dates = {
       prev: '{{$prev}}',
       next: '{{$next}}'
-    }
+    };
     $("debut_periode").update("{{$debut|date_format:"%A %d %b %Y"}}");
     $("fin_periode").update("{{$fin|date_format:"%A %d %b %Y"}}");
     var button_desistement = $("desistement_count");
@@ -72,7 +72,7 @@
       }
       
       updateStatusCut();
-    }
+    };
     
     planning.onEventChange = function(e) {
       window.action_in_progress = true;
@@ -92,7 +92,7 @@
       $V(form.heure, hour);
       onSubmitFormAjax(form, {onComplete: refreshPlanning });
       window.save_to = null;
-    }
+    };
     
     $$(".droppable").each(function(elt) {
       Droppables.add(elt, {

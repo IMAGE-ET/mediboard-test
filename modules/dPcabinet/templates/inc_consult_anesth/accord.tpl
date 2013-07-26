@@ -37,10 +37,10 @@ function refreshConstantesMedicales (force) {
 
 refreshFacteursRisque = function(){
   var url = new Url("dPcabinet", "httpreq_vw_facteurs_risque");
-	url.addParam("consultation_id", "{{$consult->_id}}");
+  url.addParam("consultation_id", "{{$consult->_id}}");
   url.addParam("dossier_anesth_id", "{{$consult->_ref_consult_anesth->_id}}");
-	url.requestUpdate("facteursRisque");
-}
+  url.requestUpdate("facteursRisque");
+};
 
 Main.add(function () {
   tabsConsultAnesth = Control.Tabs.create('tab-consult-anesth', false, {

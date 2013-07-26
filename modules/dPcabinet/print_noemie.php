@@ -77,5 +77,3 @@ $smarty->assign("_date_max"   , $filter->_date_max);
 $smarty->assign("listPrat"    , $listPrat);
 
 $smarty->display("print_noemie.tpl");
-
-?>

@@ -30,7 +30,6 @@ function showConsultSiDesistement(){
 }
 
 function printPlage(plage_id) {
-  var form = document.paramFrm;
   var url = new Url;
   url.setModuleAction("cabinet", "print_plages");
   url.addParam("plage_id", plage_id);
@@ -143,7 +142,7 @@ Main.add(function () {
               url.addParam('plageconsult_id', plage);
               url.redirectOpener();
             }
-          }
+          };
 
           // Lancer le calcul du view planning avec la hauteur height
           var height = $('planning-plages').getDimensions().height;

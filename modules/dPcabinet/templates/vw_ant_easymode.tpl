@@ -57,7 +57,7 @@ toggleDisplay = function(className, status) {
       }
     });
   });
-}
+};
 Main.add(function () {
   Control.Tabs.create('tab-main', false);
 });

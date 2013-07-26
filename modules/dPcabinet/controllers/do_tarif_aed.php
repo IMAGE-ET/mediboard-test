@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPcabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 $do = new CDoObjectAddEdit("CTarif", "tarif_id");
@@ -16,5 +16,3 @@ if (isset($_POST["_tab"])) {
   $do->redirect = "m=dPcabinet&tab=".$_POST["_tab"];
 }
 $do->doIt();
-
-?>

@@ -28,7 +28,7 @@ $pack->load($pack_id);
 
 // Creation des template manager
 $listCr = array();
-foreach($pack->_modeles as $key => $value) {
+foreach ($pack->_modeles as $key => $value) {
   $listCr[$key] = new CTemplateManager;
   $listCr[$key]->valueMode = true;
   $op->fillTemplate($listCr[$key]);
@@ -42,5 +42,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("listCr", $listCr);
 
 $smarty->display("print_pack.tpl");
-
-?>

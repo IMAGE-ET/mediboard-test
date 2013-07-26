@@ -18,5 +18,3 @@ $icones = CAppUI::readFiles("modules/dPcabinet/images/categories", ".png");
 $smarty = new CSmartyDP();
 $smarty->assign("icones", $icones);
 $smarty->display("icone_selector.tpl");
-
-?>

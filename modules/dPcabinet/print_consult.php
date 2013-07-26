@@ -56,5 +56,3 @@ $smarty->assign("constantes_medicales_grid", $constantes_medicales_grid);
 $smarty->assign("today", $today  );
 
 $smarty->display("print_consult.tpl");
-
-?>

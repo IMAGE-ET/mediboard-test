@@ -30,4 +30,3 @@ $smarty->assign("users", $users);
 $smarty->assign("functions", $functions);
 
 $smarty->display("vw_stats.tpl");
-?>

@@ -11,5 +11,3 @@
 
 $do = new CDoObjectAddEdit("CFactureCabinet", "facture_id");
 $do->doIt();
-
-?>

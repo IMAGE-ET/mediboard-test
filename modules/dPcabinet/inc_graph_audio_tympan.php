@@ -71,7 +71,7 @@ class AudiogrammeTympano extends Graph {
     $this->yaxis->title->SetColor("darkred");
     
     // Empty plots for scale window
-    foreach($pressions as $pression) {
+    foreach ($pressions as $pression) {
       $datay[] = 20;
     }
     $p1 = new LinePlot($datay);
@@ -101,8 +101,8 @@ class AudiogrammeTympano extends Graph {
       $datax = array();
       $datay = array();
     foreach ($values as $key => $value) {
-      if($value !== "" && $value!== null){
-      	$pression = $pressions[$key];
+      if ($value !== "" && $value!== null) {
+        $pression = $pressions[$key];
         $jstitle = strtr($title, "\n", " ");
         $labels[] = "Modifier l'admittance {$value} ml pour $jstitle à la pression $pression mm H²0";
         $jscalls[] = "javascript:changeTympanValue('$cote',$key)";
@@ -131,15 +131,14 @@ class AudiogrammeTympano extends Graph {
 
 global $exam_audio,$reloadGraph;
 
-if(!$reloadGraph || $reloadGraph=="gauche"){
+if (!$reloadGraph || $reloadGraph=="gauche") {
   AudiogrammeTympano::$gauche = new AudiogrammeTympano();
   AudiogrammeTympano::$gauche->setTitle("Oreille gauche");
   AudiogrammeTympano::$gauche->addAudiogramme($exam_audio->_gauche_tympan, "blue");
 }
 
-if(!$reloadGraph || $reloadGraph=="droite"){
+if (!$reloadGraph || $reloadGraph=="droite") {
   AudiogrammeTympano::$droite = new AudiogrammeTympano();
   AudiogrammeTympano::$droite->setTitle("Oreille droite");
   AudiogrammeTympano::$droite->addAudiogramme($exam_audio->_droite_tympan, "red");
 }
-?>

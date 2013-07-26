@@ -15,6 +15,7 @@ global $can;
 
 $consultation_id = CValue::get("consultation_id");
 $nbDoc           = CValue::get("nbDoc");
+/** @var CCompteRendu[] $documents */
 $documents       = array();
 
 // Consultation courante
@@ -29,18 +30,17 @@ $headerFound = $footerFound = false;
 
 $consult->loadRefsDocs();
 
-foreach($nbDoc as $compte_rendu_id => $nb_print){
-  if(($nb_print > 0) && isset($consult->_ref_documents[$compte_rendu_id])){
-    for($i = 1; $i <= $nb_print; $i++){
+foreach ($nbDoc as $compte_rendu_id => $nb_print) {
+  if (($nb_print > 0) && isset($consult->_ref_documents[$compte_rendu_id])) {
+    for ($i = 1; $i <= $nb_print; $i++) {
       $documents[] = $consult->_ref_documents[$compte_rendu_id];
     }
   }
 }
 
 $_source = '';
-foreach($documents as $doc) {
-  
-	$doc->loadContent();
+foreach ($documents as $doc) {
+  $doc->loadContent();
 
   // Suppression des headers et footers en trop (tous sauf le premier)
   $xml = new DOMDocument;

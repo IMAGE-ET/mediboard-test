@@ -19,7 +19,7 @@ $order = "nom ASC";
 $banques = $banque->loadList(null, $order);
 
 // Chargement de la banque selectionnée
-if ($banque_id){
+if ($banque_id) {
   $banque->load($banque_id);
 }
 
@@ -30,4 +30,3 @@ $smarty->assign("banque"    , $banque);
 $smarty->assign("banques"   , $banques);
 
 $smarty->display("vw_banques.tpl");
-?>

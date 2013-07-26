@@ -39,9 +39,9 @@ if ($del) {
 
 }
 else {
-  // Modification des plages
-  if ($obj->_id != 0) { 
-    while ($repeat > 0) {    
+  if ($obj->_id != 0) {
+    // Modification des plages
+    while ($repeat > 0) {
       if ($obj->_id) {
         if ($msg = $obj->store()) {
           CAppUI::setMsg("Plage non mise à jour", UI_MSG_ERROR);
@@ -53,9 +53,9 @@ else {
       } 
       $repeat -= $obj->becomeNext();
     }
-  } 
-  // Creation des plages
+  }
   else {
+    // Creation des plages
     while ($repeat > 0) {     
       if ($msg = $obj->store()) {
         CAppUI::setMsg("Plage non créée", UI_MSG_ERROR);
@@ -70,5 +70,3 @@ else {
 }
 
 CAppUI::redirect("m=$m");
-
-?>

@@ -8,20 +8,20 @@
     $V(form._codes_ccam, '');
     $V(form.commentaire, '');
     refreshListDevenirs('{{$consult->patient_id}}', obj.devenir_dentaire_id);
-  }
+  };
   
   chooseEtudiant = function(devenir_dentaire_id) {
     var url = new Url('dPcabinet', 'ajax_choose_etudiant');
     url.addParam("devenir_dentaire_id", devenir_dentaire_id);
     url.modal();
-  }
+  };
   
   selectEtudiant = function(etudiant_id) {
     var form = getForm('editDevenir');
     $V(form.etudiant_id, etudiant_id);
     Control.Modal.close();
     form.onsubmit();
-  }
+  };
   
   editProjet = function(devenir_dentaire_id, obj) {
     var url = new Url('dPcabinet', 'ajax_edit_devenir_dentaire');
@@ -31,27 +31,27 @@
     if (!Object.isUndefined(obj)) {
       refreshListDevenirs('{{$consult->patient_id}}', obj.devenir_dentaire_id);
     }
-  }
+  };
   
   refreshListDevenirs = function(patient_id, devenir_dentaire_id) {
     var url = new Url('dPcabinet', 'ajax_list_devenirs_dentaires');
     url.addParam('patient_id', '{{$consult->patient_id}}');
     url.addParam('devenir_dentaire_id', devenir_dentaire_id);
     url.requestUpdate('list_devenirs');
-  }
+  };
   
   refreshListActesDentaires = function(devenir_dentaire_id) {
     var url = new Url('dPcabinet', 'ajax_list_actes_dentaires');
     url.addParam('devenir_dentaire_id', devenir_dentaire_id);
     url.requestUpdate('list_actes_dentaires');
-  }
+  };
   
   refreshSelected = function(tr) {
     $('list_devenirs').select('tr').each(function(elt) {
       elt.removeClassName('selected');
     });
     tr.addClassName('selected');
-  }
+  };
 
   dragOptions = {
     starteffect : function(element) { 
@@ -60,7 +60,7 @@
     constraint: "vertical",
     revert: true,
     ghosting: false
-  }
+  };
   
   orderActeDentaire = function(acte_dentaire_id, rank) {
     var form = getForm('reorderActe');
@@ -69,7 +69,7 @@
     return onSubmitFormAjax(form, { onComplete: function() {
       refreshListActesDentaires($V(getForm('editDevenir').devenir_dentaire_id));
     }});
-  }
+  };
   
   updateRank = function(increment) {
     var form = getForm('editActeDentaire');

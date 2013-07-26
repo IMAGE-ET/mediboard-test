@@ -84,7 +84,7 @@
                 this.sChir = "_chir";
                 this.sView = "_codes_ccam";
               this.pop();
-              }
+              };
         
               var form = getForm("editActeDentaire");
               Main.add(function() {

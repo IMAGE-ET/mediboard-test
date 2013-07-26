@@ -7,7 +7,7 @@ newExam = function(sAction, consultation_id) {
     url.addParam("consultation_id", consultation_id);
     url.popup(900, 600, "Examen");  
   }
-}
+};
 printFiche = function(dossier_anesth_id) {
   var url = new Url("dPcabinet", "print_fiche"); 
   url.addParam("dossier_anesth_id", dossier_anesth_id);
@@ -107,14 +107,14 @@ printFiche = function(dossier_anesth_id) {
         </tr>
       {{foreach from=$object->_ref_reglements item=reglement}}
         <tr>
-          <td>{{tr}}CReglement.mode.{{$reglement->mode}}{{/tr}}</d>
+          <td>{{tr}}CReglement.mode.{{$reglement->mode}}{{/tr}}</td>
           <td>{{mb_value object=$reglement field=montant}}</td>
           <td>{{mb_value object=$reglement field=date}}</td>
           <td>{{$reglement->_ref_banque->_view}}</td>
         </tr>
       {{foreachelse}}
         <tr>
-            <td colspan="4">Aucun règlement effectué</d>
+            <td colspan="4">Aucun règlement effectué</td>
         </tr>
       {{/foreach}}
       </table>

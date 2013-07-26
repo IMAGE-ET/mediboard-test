@@ -32,31 +32,31 @@ class AudiogrammeVocal extends Graph {
   
   function AudiogrammeVocal() {
     // Setup the graph.
-    $this->Graph(460,305); 
+    $this->Graph(460, 305);
        
     $this->SetScale("intint", 0, 100, 0, 120);
     $this->SetMarginColor("lightblue");
     
     // Image setup
     $this->img->SetAntiAliasing();
-    $this->img->SetMargin(40,20,45,20);
+    $this->img->SetMargin(40, 20, 45, 20);
     
     // Legend setup
-    $this->legend->Pos(0.02, 0.02, "right","top");
+    $this->legend->Pos(0.02, 0.02, "right", "top");
     $this->legend->SetShadow("darkgray@0.5", 3);
     $this->legend->SetFillColor('white@0.3');
-    $this->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
+    $this->legend->SetFont(FF_ARIAL, FS_NORMAL, 7);
 
   
     // Title setup
     $this->title->Set("Audiométrie vocale");
-    $this->title->SetFont(FF_ARIAL,FS_NORMAL,10);
+    $this->title->SetFont(FF_ARIAL, FS_NORMAL, 10);
     $this->title->SetColor("darkred");
     
     // Setup font for axis
     $this->xgrid->Show(true, true);
     $this->xgrid->SetColor("lightgray", "lightgray:1.8");
-    $this->xaxis->SetFont(FF_ARIAL, FS_NORMAL,8);
+    $this->xaxis->SetFont(FF_ARIAL, FS_NORMAL, 8);
     $this->xaxis->SetLabelFormatString("%ddB");
     $this->xaxis->scale->ticks->Set(10, 5);
     $this->xaxis->scale->ticks->SupressZeroLabel(true);
@@ -65,7 +65,7 @@ class AudiogrammeVocal extends Graph {
     // Setup Y-axis labels 
     $this->ygrid->Show(true, true);
     $this->ygrid->SetColor("lightgray", "lightgray:1.8");
-    $this->yaxis->SetFont(FF_ARIAL,FS_NORMAL,8);
+    $this->yaxis->SetFont(FF_ARIAL, FS_NORMAL, 8);
     $this->yaxis->SetLabelFormatString("%d%%");
     $this->yaxis->scale->ticks->Set(10, 5);
     $this->yaxis->scale->ticks->SupressZeroLabel(true);
@@ -76,10 +76,12 @@ class AudiogrammeVocal extends Graph {
     $datay = array(0, 10, 50, 98, 100);
 
     $pa = new LinePlot($datay, $datax);
-//    $pa->SetWeight(0);
-//    $pa->mark->SetType(MARK_SQUARE);
-//    $pa->mark->SetWidth(2);
-//    $this->Add($pa);
+    /*
+    $pa->SetWeight(0);
+    $pa->mark->SetType(MARK_SQUARE);
+    $pa->mark->SetWidth(2);
+    $this->Add($pa);
+    */
 
     $bezier = new BezierTD($datax, $datay, 5);
     
@@ -98,9 +100,9 @@ class AudiogrammeVocal extends Graph {
       $datay[] = 50 + ($i-10)/1000;
     }
 
-    $sp1 = new LinePlot($datay,$datax);
+    $sp1 = new LinePlot($datay, $datax);
     $sp1->mark->SetType(MARK_CROSS);
-    $sp1->value->SetFont(FF_ARIAL,FS_NORMAL,7);
+    $sp1->value->SetFont(FF_ARIAL, FS_NORMAL, 7);
     $sp1->value->SetFormatCallback("xPseudoAxisFormatCb");
     $sp1->value->Show();
     
@@ -150,13 +152,14 @@ class AudiogrammeVocal extends Graph {
 
     // Create the splined line
     if (count($points) > 1) {
-//      $spline = new Spline($dBs, $pcs);
-//      list($sdBs, $spcs) = $spline->Get(40);
-//      $p2 = new LinePlot($spcs, $sdBs);
-//      $p2->SetColor("$mark_color:1.8");
-//  
-//      $this->Add($p2);
-      
+      /*
+      $spline = new Spline($dBs, $pcs);
+      list($sdBs, $spcs) = $spline->Get(40);
+      $p2 = new LinePlot($spcs, $sdBs);
+      $p2->SetColor("$mark_color:1.8");
+
+      $this->Add($p2);
+      */
       $spline = new BezierTD($dBs, $pcs, 5);
       list($bdBs, $bpcs) = $spline->Get(40);
 
@@ -181,6 +184,3 @@ $_p = new LinePlot("0");
 AudiogrammeVocal::$graph->Add($_p);
 $_p->SetLegend("Courbe optimale");
 $_p->SetColor("#999999");
-
-			
-?>

@@ -18,7 +18,7 @@ $selConsult   = CValue::getOrSession("selConsult", null);
 // Chargement des banques
 $orderBanque = "nom ASC";
 $banque = new CBanque();
-$banques = $banque->loadList(null,$orderBanque);
+$banques = $banque->loadList(null, $orderBanque);
 
 $consult = new CConsultation();
 
@@ -90,7 +90,8 @@ if (CModule::getActive("fse")) {
 $consult->loadRefs();  
 
 // Récupération des tarifs
-$tarif = new CTarif;
+$tarif = new CTarif();
+/** @var CTarif[] $tarifs */
 $tarifs = array();
 if (!$consult->tarif || $consult->tarif == "pursue") {
   $order = "description";
@@ -107,7 +108,7 @@ if (!$consult->tarif || $consult->tarif == "pursue") {
   foreach ($tarifs["func"] as $_tarif) {
     $_tarif->getPrecodeReady();
   }
-  if (CAppui::conf("dPcabinet Tarifs show_tarifs_etab"))  {
+  if (CAppui::conf("dPcabinet Tarifs show_tarifs_etab")) {
     $where = array();
     $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
     $tarifs["group"] = $tarif->loadList($where, $order);
@@ -163,5 +164,3 @@ $smarty->assign("tarifs"   , $tarifs);
 $smarty->assign("date"     , CMbDT::date());
 
 $smarty->display("inc_vw_reglement.tpl");
-
-?>

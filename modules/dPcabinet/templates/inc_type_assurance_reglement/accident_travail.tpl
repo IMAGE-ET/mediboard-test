@@ -10,7 +10,7 @@
     var url = new Url("cabinet", "ajax_type_assurance");
     url.addParam("consult_id", '{{$consult->_id}}');
     url.requestUpdate("area_type_assurance");
-  }
+  };
 
   updateDates = function(elt) {
     var oForm = elt.form;

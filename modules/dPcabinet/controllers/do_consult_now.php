@@ -174,5 +174,3 @@ else {
   $current_m = ($sejour->type == "urg") ? "dPurgences" : "dPcabinet";
   CAppUI::redirect("m=$current_m&tab=edit_consultation&selConsult=$consult->consultation_id&chirSel=$chir->user_id");
 }
-
-?>

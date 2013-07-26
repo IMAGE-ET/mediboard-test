@@ -24,6 +24,3 @@ $acte->getLibelle();
 $smarty = new CSmartyDP();
 $smarty->assign("acte"  , $acte);
 $smarty->display("inc_vw_tarif_ngap.tpl");
-
-
-?>

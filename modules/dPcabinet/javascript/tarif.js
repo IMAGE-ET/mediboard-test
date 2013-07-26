@@ -68,7 +68,7 @@ Tarif = {
     var form = getForm("editFrm");
     form.save.disabled = true;
   }
-}
+};
 
 Code = {
   modal: null,
@@ -104,4 +104,4 @@ Code = {
       }
     });
   }
-}
+};

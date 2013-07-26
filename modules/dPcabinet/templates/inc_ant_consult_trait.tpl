@@ -5,12 +5,12 @@
 updateTokenCim10 = function() {
   var oForm = getForm("editDiagFrm");
   onSubmitFormAjax(oForm, { onComplete : DossierMedical.reloadDossierPatient });
-}
+};
 
 updateTokenCim10Anesth = function(){
   var oForm = getForm("editDiagAnesthFrm");
   onSubmitFormAjax(oForm, { onComplete : DossierMedical.reloadDossierSejour });
-}
+};
 Main.add(function () {
   if($('tab_traitements_perso{{$addform}}')){
     Control.Tabs.create('tab_traitements_perso{{$addform}}', false);

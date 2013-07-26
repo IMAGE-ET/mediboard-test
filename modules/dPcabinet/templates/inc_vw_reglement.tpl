@@ -15,7 +15,7 @@ pursueTarif = function() {
   $V(form.tarif, "pursue");
   $V(form.valide, 0);
   Reglement.submit(form, false);
-}	
+};
   
 cancelTarif = function(action, callback) {
   var form = document.tarifFrm;
@@ -37,7 +37,7 @@ cancelTarif = function(action, callback) {
   $V(form.patient_date_reglement, "");
   
   Reglement.submit(form, true, callback);
-}
+};
 
 validTarif = function(){
   var form = document.tarifFrm;
@@ -48,11 +48,11 @@ validTarif = function(){
     $V(form.tarif, "manuel");
   }
   Reglement.submit(form, true, reloadFacture);
-}
+};
 
 reloadFacture = function() {
   Facture.reload('{{$consult->patient_id}}', '{{$consult->_id}}', 1, '{{$consult->facture_id}}');
-}
+};
 
 modifTotal = function(){
   var form = document.tarifFrm;
@@ -66,7 +66,7 @@ modifTotal = function(){
   var secteur2 = form.secteur2.value;
   $V(form._somme, Math.round(100*(parseFloat(secteur1) + parseFloat(secteur2))) / 100);
   $V(form.du_patient, Math.round(100* parseFloat(form._somme.value)) / 100); 
-}
+};
 
 modifSecteur2 = function(){
   var form = document.tarifFrm;
@@ -75,20 +75,20 @@ modifSecteur2 = function(){
   
   $V(form.du_patient, somme);
   $V(form.secteur2, Math.round(100*(parseFloat(somme) - parseFloat(secteur1))) / 100);
-}
+};
 
 printActes = function(){
   var url = new Url('dPcabinet', 'print_actes');
   url.addParam('consultation_id', '{{$consult->_id}}');
   url.popup(600, 600, 'Impression des actes');
-}
+};
 
 checkActe = function(button) {
   button.form.du_tiers.value = 0; 
   button.form.du_patient.value = 0; 
   button.form.facture_id.value = ""; 
   cancelTarif(null, reloadFacture);
-}
+};
 
 Main.add( function(){
   prepareForm(document.accidentTravail);
@@ -276,7 +276,7 @@ Main.add( function(){
           {{mb_key object=$consult}}
           {{mb_field object=$consult field="sejour_id" hidden=1}}
 
-          <table width="100%">
+          <table style="width: 100%">
             <!-- A régler -->
             <tr>
               <th>{{mb_label object=$consult field="_somme"}}</th>

@@ -34,5 +34,3 @@ $smarty->assign("prat"        , $prat         );
 $smarty->assign("today"       , $today        );
 
 $smarty->display("view_consultation.tpl");
-
-?>

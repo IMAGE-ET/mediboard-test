@@ -15,17 +15,17 @@
   <li>{{mb_label class=CProtocole field=chir_id         }} ({{mb_label class=CMediusers field=_user_last_name }})</li>
   <li>{{mb_label class=CProtocole field=chir_id         }} ({{mb_label class=CMediusers field=_user_first_name}})</li>
   <li><strong>{{mb_label class=CProtocole field=libelle}}</strong> (mise à jour du protocole ayant exactement le même libellé)</li>
-  <li><strong>{{mb_label class=CProtocole field=temp_operation}}</strong> (<tt>HH:MM</tt>)</li>
-  <li>{{mb_label class=CProtocole field=codes_ccam}} (séparés par des barres verticales <tt>|</tt>)</li>
+  <li><strong>{{mb_label class=CProtocole field=temp_operation}}</strong> (<code>HH:MM</code>)</li>
+  <li>{{mb_label class=CProtocole field=codes_ccam}} (séparés par des barres verticales <code>|</code>)</li>
   <li>
     <strong>{{mb_label class=CProtocole field=type}}</strong> 
-    (parmi <tt>comp</tt>, <tt>ambu</tt>, <tt>exte</tt>, <tt>seances</tt>, <tt>ssr</tt>, <tt>psy</tt>, <tt>urg</tt> ou <tt>consult</tt>)
+    (parmi <code>comp</code>, <code>ambu</code>, <code>exte</code>, <code>seances</code>, <code>ssr</code>, <code>psy</code>, <code>urg</code> ou <code>consult</code>)
   </li>
   <li><strong>{{mb_label class=CProtocole field=duree_hospi}}</strong></li>
   <li>{{mb_label class=CProtocole field=duree_uscpo}}</li>
-  <li>{{mb_label class=CProtocole field=duree_preop}} (<tt>HH:MM</tt>)</li>
-  <li>{{mb_label class=CProtocole field=presence_preop }} (<tt>HH:MM</tt>)</li>
-  <li>{{mb_label class=CProtocole field=presence_postop}} (<tt>HH:MM</tt>)</li>
+  <li>{{mb_label class=CProtocole field=duree_preop}} (<code>HH:MM</code>)</li>
+  <li>{{mb_label class=CProtocole field=presence_preop }} (<code>HH:MM</code>)</li>
+  <li>{{mb_label class=CProtocole field=presence_postop}} (<code>HH:MM</code>)</li>
   <li>{{mb_label class=CProtocole field=uf_hebergement_id}}</li>
   <li>{{mb_label class=CProtocole field=uf_medicale_id}}</li>
   <li>{{mb_label class=CProtocole field=uf_soins_id}}</li>

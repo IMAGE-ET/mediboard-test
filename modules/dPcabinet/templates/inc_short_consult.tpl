@@ -46,7 +46,7 @@
     url.addParam("operation_id", operation_id);
     url.addParam("callback", "refreshVisite");
     url.requestUpdate("visite_pre_anesth");
-  }
+  };
 
   reloadDiagnostic = function(sejour_id, modeDAS) {
     var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
@@ -62,7 +62,7 @@
 </form>
 
 <ul id="tabs_consult" class="control_tabs">
-  <li href="#antecedents">
+  <li>
     <a href="#antecedents">Antécédents</a>
   </li>
   {{if !$consult_anesth->_id}}

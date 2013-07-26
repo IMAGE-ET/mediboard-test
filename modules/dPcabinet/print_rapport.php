@@ -121,6 +121,7 @@ $where["facture_cabinet.cloture"] = "IS NOT NULL";
 $where["consultation.facture_id"] = "IS NOT NULL";
 
 $facture = new CFactureCabinet();
+/** @var CFactureCabinet[] $listFactures */
 $listFactures = $facture->loadList($where, $order, null, null, $ljoin);
 
 $factures = array();
@@ -212,5 +213,3 @@ $smarty->assign("reglement"     , $reglement);
 $smarty->assign("banques"       , $banques);
 
 $smarty->display("print_rapport.tpl");
-
-?>

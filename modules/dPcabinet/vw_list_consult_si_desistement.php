@@ -26,10 +26,11 @@ $where = array(
 $ljoin = array(
   "plageconsult" => "plageconsult.plageconsult_id = consultation.plageconsult_id",
 );
-$consultation_desist = new CConsultation;
+$consultation_desist = new CConsultation();
+/** @var CConsultation[] $consultations */
 $consultations = $consultation_desist->loadList($where, "date", null, null, $ljoin);
 
-foreach($consultations as $_consult) {
+foreach ($consultations as $_consult) {
   $_consult->loadRefPatient();
   $_consult->loadRefPlageConsult();
   $_consult->loadRefCategorie();

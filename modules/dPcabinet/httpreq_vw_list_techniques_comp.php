@@ -24,4 +24,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("consult_anesth", $consult->_ref_consult_anesth);
 
 $smarty->display("inc_consult_anesth/techniques_comp.tpl");
-?>

@@ -40,7 +40,7 @@ $prescription = $sejour->loadRefPrescriptionSejour();
 
 // Chargement des lignes de tp de la prescription
 $lines_tp = array();
-if($prescription && $prescription->_id){
+if ($prescription && $prescription->_id) {
   $line_tp = new CPrescriptionLineMedicament();
   $line_tp->prescription_id = $prescription->_id;
   $line_tp->traitement_personnel = 1;
@@ -52,5 +52,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("sejour", $sejour);
 $smarty->assign("lines_tp", $lines_tp);
 $smarty->display("inc_list_ant_anesth.tpl");
-
-?>

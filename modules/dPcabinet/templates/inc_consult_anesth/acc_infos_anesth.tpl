@@ -22,11 +22,11 @@ guessScoreApfel = function() {
   url.requestUpdate("score_apfel_area", {onComplete: function() {
     return getForm('editScoreApfel').onsubmit();
   }});
-}
+};
 
 afterStoreScore = function(id, obj) {
   $("score_apfel").update(obj._score_apfel);
-}
+};
 
 toggleUSCPO = function(status) {
   var form = getForm("editTypeAnesthFrm");
@@ -39,7 +39,7 @@ toggleUSCPO = function(status) {
   // Permet de valuer à 1 automatiquement la durée uscpo,
   // ou bien 0 si le passage uscpo est repassé à non.
   $V(form.duree_uscpo, status);
-}
+};
 
 checkUSCPO = function() {
   var form = getForm("editTypeAnesthFrm");

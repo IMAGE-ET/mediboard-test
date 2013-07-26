@@ -23,4 +23,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("consult", $consult);
 
 $smarty->display("exam_comp.tpl");
-?>

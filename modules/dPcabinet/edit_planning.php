@@ -47,12 +47,12 @@ $nb_plages = 0;
 // Nouvelle consultation
 if (!$consultation_id) {
 
-  // A t'on fourni une plage de consultation
   if ($plageconsult_id) {
+    // On a fourni une plage de consultation
     $plageConsult->load($plageconsult_id);
-  } 
-  // A t'on fourni l'id du praticien
+  }
   else {
+    // On a fourni l'id du praticien
     $chir_id = CAppUI::conf("dPcabinet keepchir") ?
       CValue::getOrSession("chir_id") : 
       CValue::get("chir_id");
@@ -62,26 +62,23 @@ if (!$consultation_id) {
       $chir->load($chir_id);
     }
   }
-
-  // A t'on fourni l'id du patient
   if ($pat_id = CValue::get("pat_id")) {
+    // On a fourni l'id du patient
     $pat->load($pat_id);
   }
-  
-  // A t'on fourni une date
   if ($date_planning) {
+    // On a fourni une date
     $consult->_date = $date_planning;
   }
-  
-  // A t'on fourni une heure
   if ($heure) {
+    // On a fourni une heure
     $consult->heure = $heure;
     $consult->plageconsult_id = $plageconsult_id;
     $chir->load($plageConsult->chir_id);
   }
 
-  // RDV issu d'une ligne d'élément
   if ($line_element_id) {
+    // RDV issu d'une ligne d'élément
     $consult->sejour_id = $sejour_id;
 
     $line = new CPrescriptionLineElement();
@@ -102,9 +99,8 @@ if (!$consultation_id) {
     $nb_plages = $plageconsult->countList($where, null, $ljoin);
   }
 }
-
-// Consultation existante
 else {
+  // Consultation existante
   $consult->load($consultation_id);
   $canConsult = $consult->canDo();
   
@@ -163,7 +159,7 @@ foreach ($categories as $_categorie) {
 }
 
 // Ajout du motif de la consultation passé en parametre
-if (!$consult->_id && $consult_urgence_id){
+if (!$consult->_id && $consult_urgence_id) {
   // Chargement de la consultation de passage aux urgences
   $consultUrgence = new CConsultation();
   $consultUrgence->load($consult_urgence_id);

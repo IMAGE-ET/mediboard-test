@@ -6,24 +6,24 @@
         {{/foreach}}
       </tr>
       <tr>
-        <th />
+        <th></th>
         <th colspan="8">Conduction aérienne</th>
       </tr>
       <tr class="moyenne">
         <th class="text">
           Moyenne droite
         </th>
-        <td colspan="2" />
+        <td colspan="2"></td>
         <td class="aerien" colspan="4">{{$exam_audio->_moyenne_droite_aerien}}dB</td>
-        <td colspan="2" />
+        <td colspan="2"></td>
       </tr>
       <tr class="moyenne">
         <th class="text">
           Moyenne gauche
         </th>
-        <td colspan="2" />
+        <td colspan="2"></td>
         <td class="aerien" colspan="4">{{$exam_audio->_moyenne_gauche_aerien}}dB</td>
-        <td colspan="2" />
+        <td colspan="2"></td>
       </tr>
       <tr>
         <th class="text">
@@ -44,24 +44,24 @@
         {{/foreach}}
       </tr>
       <tr>
-        <th />
+        <th></th>
         <th colspan="8">Conduction osseuse</th>
       </tr>
       <tr class="moyenne">
         <th class="text">
           Moyenne droite
         </th>
-        <td colspan="2" />
+        <td colspan="2"></td>
         <td class="osseux" colspan="4">{{$exam_audio->_moyenne_droite_osseux}}dB</td>
-        <td colspan="2" />
+        <td colspan="2"></td>
       </tr>
       <tr class="moyenne">
         <th class="text">
           Moyenne gauche
         </th>
-        <td colspan="2" />
+        <td colspan="2"></td>
         <td class="osseux" colspan="4">{{$exam_audio->_moyenne_gauche_osseux}}dB</td>
-        <td colspan="2" />
+        <td colspan="2"></td>
       </tr>
       <tr>
         <th class="text">

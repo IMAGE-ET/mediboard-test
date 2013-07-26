@@ -206,11 +206,8 @@ Main.add(function () {
               {{if $consult_anesth->_intub_difficile}}style="display: none;"{{/if}}
                 onclick="$V(this.form.intub_difficile, '1'); verifIntubDifficileAndSave(this.form);">Difficile</button>
               <div id="divAlertIntubDiff"
-                style="color: {{if $consult_anesth->_intub_difficile}}
-                           #F00;
-                         {{else}}
-                           #000
-                {{/if}}" {{if !$consult_anesth->_intub_difficile}}class="hatching opacity-50"{{/if}}>
+                style="color: {{if $consult_anesth->_intub_difficile}}#F00;{{else}}#000;{{/if}}"
+                {{if !$consult_anesth->_intub_difficile}}class="hatching opacity-50"{{/if}}>
                 <strong>Intubation Difficile Prévisible</strong>
               </div>
             </td>

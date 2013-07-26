@@ -44,14 +44,15 @@ class AudiogrammeTonal extends Graph {
     if ($with_legend) {
       $this->legend->Pos(0.02, 0.5, "right", "center");
       $this->legend->SetShadow("darkgray@0.5", 3);
-      $this->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
+      $this->legend->SetFont(FF_ARIAL, FS_NORMAL, 7);
       $this->legend->SetFillColor('white@0.3');
-    } else {
+    }
+    else {
       $this->legend->Hide();
     }
   
     // Title setup
-    $this->title->SetFont(FF_ARIAL,FS_NORMAL,10);
+    $this->title->SetFont(FF_ARIAL, FS_NORMAL, 10);
     $this->title->SetColor("darkred");
     
     //Setup X-axis labels
@@ -67,7 +68,7 @@ class AudiogrammeTonal extends Graph {
     $this->ygrid->Show(true, true);
     $this->ygrid->SetColor("lightgray", "lightgray:1.8");
 
-    $this->yaxis->SetFont(FF_ARIAL,FS_NORMAL, 8);
+    $this->yaxis->SetFont(FF_ARIAL, FS_NORMAL, 8);
     $this->yaxis->SetLabelFormatString("%ddB");
     
     $this->yaxis->scale->ticks->Set(20, 10);
@@ -75,7 +76,7 @@ class AudiogrammeTonal extends Graph {
     $this->yaxis->scale->ticks->SupressMinorTickMarks(false);
     
     // Empty plots for scale window
-    foreach($frequences as $value) {
+    foreach ($frequences as $value) {
       $datay[] = 100;
     }
     $p1 = new LinePlot($datay);
@@ -105,8 +106,8 @@ class AudiogrammeTonal extends Graph {
       $datax = array();
       $datay = array();
     foreach ($values as $key => $value) {
-      if($value !== "" && $value!== null){
-      	$frequence = $frequences[$key];
+      if ($value !== "" && $value!== null) {
+        $frequence = $frequences[$key];
         $jstitle = strtr($title, "\n", " ");
         $labels[] = "Modifier la valeur {$value}dB pour $jstitle à $frequence";
         $jscalls[] = "javascript:changeTonalValue('$cote','$value_name',$key)";
@@ -139,23 +140,34 @@ class AudiogrammeTonal extends Graph {
 
 global $exam_audio,$reloadGraph;
 
-if(!$reloadGraph || $reloadGraph=="gauche"){
+if (!$reloadGraph || $reloadGraph=="gauche") {
   AudiogrammeTonal::$gauche = new AudiogrammeTonal(true);
   AudiogrammeTonal::$gauche->setTitle("Oreille gauche");
   AudiogrammeTonal::$gauche->addAudiogramme($exam_audio->_gauche_aerien, "aerien", "Conduction\naérienne", "blue", MARK_FILLEDCIRCLE);
   AudiogrammeTonal::$gauche->addAudiogramme($exam_audio->_gauche_osseux, "osseux", "Conduction\nosseuse", "red", MARK_STAR);
-  AudiogrammeTonal::$gauche->addAudiogramme($exam_audio->_gauche_pasrep, "pasrep", "Pas de\nréponse", "green", MARK_DTRIANGLE, null, false);
-  AudiogrammeTonal::$gauche->addAudiogramme($exam_audio->_gauche_ipslat, "ipslat", "Stapédien\nipsilatéral", "black", MARK_IMG, "si.png", false);
-  AudiogrammeTonal::$gauche->addAudiogramme($exam_audio->_gauche_conlat, "conlat", "Stapédien\ncontrolatéral", "black", MARK_IMG, "sc.png", false);
+  AudiogrammeTonal::$gauche->addAudiogramme(
+    $exam_audio->_gauche_pasrep, "pasrep", "Pas de\nréponse", "green", MARK_DTRIANGLE, null, false
+  );
+  AudiogrammeTonal::$gauche->addAudiogramme(
+    $exam_audio->_gauche_ipslat, "ipslat", "Stapédien\nipsilatéral", "black", MARK_IMG, "si.png", false
+  );
+  AudiogrammeTonal::$gauche->addAudiogramme(
+    $exam_audio->_gauche_conlat, "conlat", "Stapédien\ncontrolatéral", "black", MARK_IMG, "sc.png", false
+  );
 }
 
-if(!$reloadGraph || $reloadGraph=="droite"){
+if (!$reloadGraph || $reloadGraph=="droite") {
   AudiogrammeTonal::$droite = new AudiogrammeTonal(true);
   AudiogrammeTonal::$droite->setTitle("Oreille droite");
   AudiogrammeTonal::$droite->addAudiogramme($exam_audio->_droite_aerien, "aerien", "Conduction\naérienne", "blue", MARK_FILLEDCIRCLE);
   AudiogrammeTonal::$droite->addAudiogramme($exam_audio->_droite_osseux, "osseux", "Conduction\nosseuse", "red", MARK_STAR);
-  AudiogrammeTonal::$droite->addAudiogramme($exam_audio->_droite_pasrep, "pasrep", "Pas de\nréponse", "green", MARK_DTRIANGLE, null, false);
-  AudiogrammeTonal::$droite->addAudiogramme($exam_audio->_droite_ipslat, "ipslat", "Stapédien\nipsilatéral", "black", MARK_IMG, "si.png", false);
-  AudiogrammeTonal::$droite->addAudiogramme($exam_audio->_droite_conlat, "conlat", "Stapédien\ncontrolatéral", "black", MARK_IMG, "sc.png", false);
+  AudiogrammeTonal::$droite->addAudiogramme(
+    $exam_audio->_droite_pasrep, "pasrep", "Pas de\nréponse", "green", MARK_DTRIANGLE, null, false
+  );
+  AudiogrammeTonal::$droite->addAudiogramme(
+    $exam_audio->_droite_ipslat, "ipslat", "Stapédien\nipsilatéral", "black", MARK_IMG, "si.png", false
+  );
+  AudiogrammeTonal::$droite->addAudiogramme(
+    $exam_audio->_droite_conlat, "conlat", "Stapédien\ncontrolatéral", "black", MARK_IMG, "sc.png", false
+  );
 }
-?>

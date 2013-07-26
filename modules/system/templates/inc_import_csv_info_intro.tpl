@@ -9,9 +9,9 @@
 *}}
 
 <div class="big-info">
-  Téléversez un fichier CSV, encodé en <tt>ISO-8859-1</tt> (Western Europe), 
-  séparé par des point-virgules (<tt>;</tt>) et 
-  délimité par des guillemets doubles (<tt>"</tt>).
+  Téléversez un fichier CSV, encodé en <code>ISO-8859-1</code> (Western Europe),
+  séparé par des point-virgules (<code>;</code>) et
+  délimité par des guillemets doubles (<code>"</code>).
   <br />
   La première ligne sera ignorée et les suivantes devront comporter les champs suivants :
   <ol>

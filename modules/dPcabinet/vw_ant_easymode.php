@@ -48,7 +48,9 @@ $applied_antecedents = array();
 
 foreach ($dossier_medical->_ref_antecedents_by_type as $list) {
   foreach ($list as $a) {
-    if (!isset($applied_antecedents[$a->type]))   $applied_antecedents[$a->type] = array();
+    if (!isset($applied_antecedents[$a->type])) {
+      $applied_antecedents[$a->type] = array();
+    }
 
     $applied_antecedents[$a->type][] = $a->rques;
   }

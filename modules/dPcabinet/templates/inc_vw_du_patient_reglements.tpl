@@ -1,10 +1,10 @@
 <script type="text/javascript">
-  updateBanque = function(mode) {
+  updateBanque = function(mode_value) {
     var form = mode.form;
     var banque_id = form.banque_id;
     var reference = form.reference;
     var BVR       = form.num_bvr;
-    var mode = $V(mode);
+    var mode = $V(mode_value);
     
     banque_id.hide();
     reference.hide();
@@ -24,11 +24,12 @@
       case "BVR":
         BVR.show();
         $V(banque_id, "");
+        break;
         
       default:
         $V(banque_id, "");
     }
-  }
+  };
   
   delReglement = function(reglement_id){
     var oForm = getForm('reglement-delete');
@@ -46,7 +47,7 @@
         Reglement.reload(true);
       }
     });
-  }
+  };
   
   editReglementDate = function(reglement_id, date){
     var oForm = getForm('reglement-edit-date');
@@ -63,7 +64,7 @@
       url.requestUpdate('load_facture');
       Reglement.reload(true);
     });
-  }
+  };
   
   editAquittementDate = function(object_id, date){
     var oForm = getForm('edit-date-aquittement');
@@ -86,7 +87,7 @@
       url.requestUpdate('load_facture');
       Reglement.reload(true);
     });  
-  }
+  };
   
   addReglement = function (oForm){
     return onSubmitFormAjax(oForm, function() {
@@ -101,7 +102,7 @@
       url.requestUpdate('load_facture');
       Reglement.reload(true);
     });
-  }
+  };
   
   modifMontantBVR = function (num_bvr){
     var eclat = num_bvr.split('>')[0];

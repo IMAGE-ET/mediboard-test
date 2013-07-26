@@ -13,7 +13,7 @@ CCanDo::checkRead();
 
 global $mode_maternite;
 
-if(!isset($mode_maternite)) {
+if (!isset($mode_maternite)) {
   $mode_maternite = false;
 }
 

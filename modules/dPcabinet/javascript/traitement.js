@@ -12,7 +12,7 @@ updateFieldsMedicamentTPtri = function(selected) {
   else {
       updateTPtri(selected);
   }
-}
+};
 
 updateTPtri = function(selected){
   resetEditLineTPtri();
@@ -22,12 +22,12 @@ updateTPtri = function(selected){
   $("_libelletri").insert("<button type='button' class='cancel notext' onclick='resetEditLineTPtri(); resetFormTPtri();'></button><a href=\"#nothing\" onclick=\"Prescription.showMonographyMedicament('','','"+selected.down(".code-cis").getText()+"')\">"+selected.down(".libelle").getText()+"</a>");
   $V(oFormTPtri.produit, '');
   $('button_submit_traitementtri').focus();
-}
+};
 
 resetEditLineTPtri = function(){
   $("_libelletri").update("");
   oFormTPtri._code.value = '';
-}
+};
 
 resetFormTPtri = function(){
   $V(oFormTPtri.commentaire, '');
@@ -36,7 +36,7 @@ resetFormTPtri = function(){
 
   $V(oFormTPtri.long_cours, 1);
   $V(oFormTPtri.__long_cours, true);
-  }
+  };
 
 // Autocomplete des medicaments
 var urlAuto2 = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
@@ -53,4 +53,4 @@ refreshAddPosotri = function(code){
   url.addParam("_code", code);
   url.addParam("addform", "tri");
   url.requestUpdate("addPosoLinetri");
-}
+};

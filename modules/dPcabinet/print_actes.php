@@ -18,9 +18,9 @@ $consult = new CConsultation();
 if ($consultation_id) {
   $consult->load($consultation_id);
   $consult->loadView();
-	$consult->loadComplete();
-	$consult->loadRefsActesNGAP();
-	$consult->loadRefPraticien();
+  $consult->loadComplete();
+  $consult->loadRefsActesNGAP();
+  $consult->loadRefPraticien();
 }
 
 // Création du template

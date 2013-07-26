@@ -20,7 +20,7 @@ reloadCim10 = function(sCode){
   {{/if}}
   $V(oForm.code_diag, '');
   $V(oForm.keywords_code, '');
-}
+};
 
 onSubmitAnt = function (form) {
   var rques = $(form.rques);
@@ -41,7 +41,7 @@ onSubmitAnt = function (form) {
   rques.clear().focus();
 
   return false;
-}
+};
 
 onSubmitTraitement = function (form) {
   var trait = $(form.traitement);
@@ -56,7 +56,7 @@ onSubmitTraitement = function (form) {
   trait.clear().focus();
 
   return false;
-}
+};
 
 easyMode = function() {
   var url = new Url("dPcabinet", "vw_ant_easymode");
@@ -65,7 +65,7 @@ easyMode = function() {
     url.addParam("consult_id", "{{$consult->_id}}");
   {{/if}}
   url.pop(900, 600, "Mode grille");
-}
+};
 
 /**
  * Mise a jour du champ _sejour_id pour la creation d'antecedent et de traitement
@@ -108,13 +108,13 @@ DossierMedical = {
     DossierMedical.reloadDossierSejour();
     {{/if}}
   }
-}
+};
  
 refreshAddPoso = function(code){
   var url = new Url("dPprescription", "httpreq_vw_select_poso");
   url.addParam("_code", code);
   url.requestUpdate("addPosoLine");
-}
+};
 
 Main.add(function () {
   DossierMedical.reloadDossiersMedicaux();
@@ -194,7 +194,7 @@ updateFieldsMedicamentTP = function(selected) {
   } else {
     updateTP(selected);
   }
-}
+};
   
 updateTP = function(selected){
   resetEditLineTP();
@@ -204,7 +204,7 @@ updateTP = function(selected){
   $("_libelle").insert("<button type='button' class='cancel notext' onclick='resetEditLineTP(); resetFormTP();'></button><a href=\"#nothing\" onclick=\"Prescription.showMonographyMedicament('','','"+selected.down(".code-cis").getText()+"')\">"+selected.down(".libelle").getText()+"</a>");
   $V(oFormTP.produit, '');
   $('button_submit_traitement').focus();
-}  
+};
 
 // Autocomplete des medicaments
 var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
@@ -219,7 +219,7 @@ urlAuto.autoComplete(getForm('editLineTP').produit, "_produit_auto_complete", {
 resetEditLineTP = function(){
   $("_libelle").update("");
   oFormTP._code.value = '';
-}
+};
 
 resetFormTP = function(){
   $V(oFormTP.commentaire, '');

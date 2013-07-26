@@ -77,7 +77,7 @@
           <div>
             {{foreach from=$_evenement->_ref_actes_cdarr item=_acte}}
               <span onmouseover="ObjectTooltip.createEx(this, '{{$_acte->_guid}}')">
-                <tt>{{$_acte->code}}</tt>
+                <code>{{$_acte->code}}</code>
               </span> 
             {{/foreach}}
           </div>
@@ -85,7 +85,7 @@
           {{foreach from=$_evenement->_ref_actes_csarr item=_acte}}
           <div>
             <strong onmouseover="ObjectTooltip.createEx(this, '{{$_acte->_guid}}')">
-              <tt>{{$_acte->code}}</tt>
+              <code>{{$_acte->code}}</code>
             </strong>
             {{foreach from=$_acte->_ref_activite_csarr->_ref_modulateurs item=_modulateur}}
             <label title="{{$_modulateur->_libelle}}">

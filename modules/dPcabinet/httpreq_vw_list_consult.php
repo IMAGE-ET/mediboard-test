@@ -29,14 +29,16 @@ $consult = new CConsultation;
 
 // Test compliqué afin de savoir quelle consultation charger
 if (isset($_GET["selConsult"])) {
-  if($consult->load($selConsult)) {
+  if ($consult->load($selConsult)) {
     $consult->loadRefPlageConsult(1);
     $prat_id = $consult->_ref_plageconsult->chir_id;
     CValue::setSession("chirSel", $prat_id);
-  } else {
+  }
+  else {
     CValue::setSession("selConsult");
   }
-} else {
+}
+else {
   if ($consult->load($selConsult)) {
     $consult->loadRefPlageConsult(1);
     if ($prat_id !== $consult->_ref_plageconsult->chir_id) {
@@ -53,7 +55,7 @@ $canUserSel = $userSel->canDo();
 
 if (!$userSel->isMedical()) {
   CAppUI::setMsg("Vous devez selectionner un professionnel de santé", UI_MSG_ALERT);
-  if($current_m != "dPurgences"){
+  if ($current_m != "dPurgences") {
     CAppUI::redirect("m=dPcabinet&tab=0");
   }
 }
@@ -66,7 +68,7 @@ if ($consult->_id) {
 }
 
 // Récupération des plages de consultation du jour et chargement des références
-$listPlage = new CPlageconsult();
+$plage = new CPlageconsult();
 $where = array();
 $where["chir_id"] = "= '$userSel->user_id'";
 $where["date"] = "= '$date'";
@@ -74,7 +76,8 @@ if ($plageconsult_id && $boardItem) {
   $where["plageconsult_id"] =  $ds->prepare("= %", $plageconsult_id);
 }
 $order = "debut";
-$listPlage = $listPlage->loadList($where, $order);
+/** @var CPlageconsult[] $listPlage */
+$listPlage = $plage->loadList($where, $order);
 
 $vue = CValue::getOrSession("vue2", 0);
 
@@ -121,5 +124,3 @@ $smarty->assign("mode_urgence", false);
 $smarty->assign("current_date", $current_date);
 
 $smarty->display("inc_list_consult.tpl");
-
-?>

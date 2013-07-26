@@ -72,7 +72,7 @@
     url.requestUpdate("result-create_consult_anesth", { onComplete: function() {
       repeatActions("createConsultAnesth");
     }});
-  }
+  };
   
    repeatActions = function (func) {
     if ($V($("check_repeat_actions"))) {      

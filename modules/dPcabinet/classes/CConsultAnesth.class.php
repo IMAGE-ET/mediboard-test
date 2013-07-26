@@ -445,10 +445,12 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $const_med = $patient->_ref_constantes_medicales;
     $const_med->updateFormFields();
     $age = intval($patient->_annees);
-    if ($const_med->poids && $this->creatinine && 
-        $age && $age >= 18 && $age <= 110 && 
-        $const_med->poids >= 35 && $const_med->poids <= 120 && 
-        $this->creatinine >= 6 && $this->creatinine <= 70) {
+    if (
+        $const_med->poids && $this->creatinine &&
+        $age && $age >= 18 && $age <= 110 &&
+        $const_med->poids >= 35 && $const_med->poids <= 120 &&
+        $this->creatinine >= 6 && $this->creatinine <= 70
+    ) {
           $this->_clairance = $const_med->poids * (140-$age) / (7.2 * $this->creatinine);
       if ($patient->sexe == 'm') {
         $this->_clairance *= 1.04;

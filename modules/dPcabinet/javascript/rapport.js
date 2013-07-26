@@ -32,4 +32,4 @@ Rapport = {
     url.requestModal(400);
     url.modalObject.observe('afterClose', Rapport.refresh.curry(plage_id));
   }
-}
+};

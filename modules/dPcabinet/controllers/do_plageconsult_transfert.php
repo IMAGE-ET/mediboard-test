@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPcabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 // Filtre des plages
@@ -40,4 +40,3 @@ foreach ($plages as $_plage) {
 // Redirection finale
 $do->redirect = "m=$m&a=transfert_plageconsult&dialog=1";
 $do->doRedirect();
-?>

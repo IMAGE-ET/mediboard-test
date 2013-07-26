@@ -11,7 +11,7 @@ Main.add(function () {
     var oForm = getForm('editFrmExams');
     $V(oForm.traitement, $V(oForm.traitement)+dn[3].innerHTML.stripTags().strip()+'\n');
     $V(oForm.produit, "");
-  }
+  };
 
   // Autocomplete des medicaments
   var oForm = getForm('editFrmExams');

@@ -41,7 +41,7 @@ function loadSuivi(sejour_id, user_id, cible, show_obs, show_trans, show_const) 
 }
 
 function submitSuivi(oForm) {
-  sejour_id = oForm.sejour_id.value;
+  var sejour_id = oForm.sejour_id.value;
   submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadSuivi(sejour_id); } });
 }
 
@@ -56,7 +56,7 @@ function refreshConstantesMedicales (force) {
     url.requestUpdate("Constantes");
     constantesMedicalesDrawn = true;
   }
-};
+}
 
 function reloadPrescription(prescription_id){
   Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null,'', null, false);

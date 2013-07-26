@@ -518,14 +518,14 @@ class CConsultation extends CFacturable {
     $tarif = new CTarif();
     $tarif->load($this->_tarif_id);
 
-    // Cas de la cotation poursuivie
     if ($this->tarif == "pursue") {
+      // Cas de la cotation poursuivie
       $this->secteur1 += $tarif->secteur1;
       $this->secteur2 += $tarif->secteur2;
       $this->tarif     = "composite";
     }
-    // Cas de la cotation normale
     else {
+      // Cas de la cotation normale
       $this->secteur1 = $tarif->secteur1;
       $this->secteur2 = $tarif->secteur2;
       $this->tarif    = $tarif->description;

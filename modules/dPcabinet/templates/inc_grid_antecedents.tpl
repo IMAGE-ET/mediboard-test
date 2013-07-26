@@ -66,7 +66,7 @@ Main.add(function () {
           return;
         }
         
-        var previous = from.previous("li")
+        var previous = from.previous("li");
         if (previous) {
           from = from.remove();
           to.insert({after: from});
@@ -76,7 +76,7 @@ Main.add(function () {
         } 
       },
       accept: 'draggable',
-      hoverclass: "atcd_hover",
+      hoverclass: "atcd_hover"
     });
   });
   

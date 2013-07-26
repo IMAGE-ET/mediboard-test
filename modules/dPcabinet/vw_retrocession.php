@@ -33,6 +33,7 @@ $where[] = "plageconsult.date >= '$filter->_date_min' AND plageconsult.date <= '
 $where["consultation.annule"] = "= '0'";
 $order = "chir_id ASC";
 
+/** @var CPlageconsult[] $listPlages */
 $listPlages = $plageconsult->loadList($where, $order, null, null, $ljoin);
 
 $plages = array();
@@ -54,4 +55,3 @@ $smarty->assign("filter"      , $filter);
 $smarty->assign("plages"      , $plages);
 
 $smarty->display("vw_retrocession.tpl");
-?>

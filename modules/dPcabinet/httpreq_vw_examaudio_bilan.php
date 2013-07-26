@@ -47,4 +47,3 @@ $smarty->assign("exam_audio" , $exam_audio);
 $smarty->assign("bilan"      , $bilan);
 
 $smarty->display("inc_exam_audio/inc_examaudio_bilan.tpl");
-?>

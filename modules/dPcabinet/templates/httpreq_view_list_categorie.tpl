@@ -22,7 +22,7 @@
          }
        }
        $V(form.duree, listCat);
-     }
+     };
 
      Main.add(function() {
        reloadIcone('{{$categorie_id}}', false);

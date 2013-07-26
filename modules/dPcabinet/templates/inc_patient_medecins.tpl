@@ -8,19 +8,19 @@ togglePatientAddresse = function(input) {
   if (!checked) {
     input.form.onsubmit();
   }
-}
+};
 
 addOtherCorrespondant = function(medecin_id) {
   var form = getForm("addCorrespondant");
   $V(form.medecin_id, medecin_id);
   onSubmitFormAjax(form, {onComplete: reloadCorrespondants.curry('{{$consult->_id}}')});
-}
+};
 
 reloadCorrespondants = function(consultation_id) {
   var url = new Url("cabinet", "ajax_reload_correspondants");
   url.addParam("consultation_id", consultation_id);
   url.requestUpdate("adresseParPrat");
-}
+};
 
 Medecin = {
   form: null,

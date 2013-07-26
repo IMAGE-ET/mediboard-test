@@ -31,11 +31,12 @@ $where["plageconsult.date"]                 = "BETWEEN '$filter->_date_min' AND 
 $where["plageconsult.chir_id"]              = CSQLDataSource::prepareIn(array_keys($listPrat), $chir_id);
 $order = "plageconsult.date";
 
+/** @var CConsultation[] $listConsults */
 $listConsults = $consult->loadList($where, $order, null, null, $ljoin);
 
 $total = array("nb" => 0, "value" => 0);
 
-foreach($listConsults as $consult) {
+foreach ($listConsults as $consult) {
   $consult->loadRefsFwd();
   $consult->loadRefsReglements();
 
@@ -55,7 +56,7 @@ foreach($listConsults as $consult) {
     $_POST["consultation_id"] = $consult->_id;
     $_POST["montant"]         = $consult->_du_restant_tiers;
     $do = new CDoObjectAddEdit("CReglement", "reglement_id");
-	  $do->redirect = null;
+    $do->redirect = null;
     $do->doIt();
   }
 }
@@ -63,5 +64,3 @@ foreach($listConsults as $consult) {
 // Redirection finale
 $do->redirect = "m=$m&a=print_noemie&dialog=1";
 $do->doRedirect();
-
-?>

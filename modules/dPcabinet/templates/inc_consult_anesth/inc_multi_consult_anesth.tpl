@@ -22,7 +22,7 @@
       $V(form.dosql, "do_duplicate_dossier_anesth_aed");
     }
     form.submit();
-  }
+  };
 
   delDossier = function(dossier_anesth_id) {
     var form = getForm("manageDossierAnesth");
@@ -31,7 +31,7 @@
     confirmDeletion(form, {
       typeName: 'le dossier d\'anesthésie'
     });
-  }
+  };
   reloadDossierAnesth = function(dossier_anesth_id) {
     var url = new Url("cabinet", "edit_consultation", "tab");
     url.addParam("selConsult", "{{$consult->_id}}");

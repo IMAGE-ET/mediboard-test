@@ -1,7 +1,7 @@
 <script type="text/javascript">
   switchToConsult = function() {
     Control.Modal.close(); onSubmitFormAjax(getForm('addConsultation'));
-  }
+  };
   toggleOperation = function(elt) {
     $V(getForm('addConsultation')._operation_id, elt.value);
     switchToConsult();

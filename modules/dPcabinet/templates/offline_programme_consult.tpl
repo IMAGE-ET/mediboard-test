@@ -12,7 +12,7 @@ var PlageConsult = {
     ViewPort.SetAvlHeight($('places-' + this.currPlage), 1);
     $('plage-' + this.currPlage).addClassName("selected");
   }
-}
+};
 
 Main.add(function () {
   Control.Tabs.create('month_tabs').activeLink.onmouseup();

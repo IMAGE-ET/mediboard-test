@@ -47,16 +47,16 @@ verifIntubDifficileAndSave = function(oForm){
     var bg = $('mallampati_bg_classe'+(i+1));
     bg.setClassName('mallampati-selected', o.checked);
   }
-}
+};
 
 resetIntubation = function(form) {
-  var fields = ["mallampati", "bouche", "distThyro", "etatBucco", "conclusion"]
+  var fields = ["mallampati", "bouche", "distThyro", "etatBucco", "conclusion"];
   fields.each(function(f){
     $V(form[f], '');
   });
   $V(form.intub_difficile, '');
   verifIntubDifficileAndSave(form);
-}
+};
 
 SchemaDentaire = {
   sId: null,
@@ -260,7 +260,6 @@ SchemaDentaire = {
       this.aStates.each(function (state) {
         if (oDent.hasClassName(state)) {
           this.setState(key, null);
-          return;
         }
       }, this);
     }, this);

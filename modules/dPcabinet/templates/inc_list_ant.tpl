@@ -282,7 +282,7 @@ Main.add(function(){
   
   // form may be undefined if the page is changed while loading
   if (form) {
-    oCimField = new TokenField(form.codes_cim, { 
+    oCimField = new TokenField(form.codes_cim, {
       confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',
       onChange : updateTokenCim10
     });

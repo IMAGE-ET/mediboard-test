@@ -31,7 +31,7 @@ $debut         = CValue::getOrSession("debut", $today);
 $debut         = CMbDT::date("last sunday", $debut);
 $fin           = CMbDT::date("next sunday", $debut);
 $debut         = CMbDT::date("+1 day", $debut);
-$bank_holidays = array_merge(CMbDT::bankHolidays($debut), CMbDT::bankHolidays($fin));
+$bank_holidays = array_merge(CMbDate::getHolidays($debut), CMbDate::getHolidays($fin));
 
 $is_in_period = ($today >= $debut) && ($today <= $fin);
 
@@ -176,8 +176,9 @@ for ($i = 0; $i < 7; $i++) {
     }
   }
 
-
-  foreach ($plage->loadList($where, "date, debut") as $_plage) {
+  /** @var CPlageconsult[] $listPlages */
+  $listPlages = $plage->loadList($where, "date, debut");
+  foreach ($listPlages as $_plage) {
     $_plage->loadRefsBack();
     $_plage->countPatients();
     $debute = "$jour $_plage->debut";
@@ -204,13 +205,19 @@ for ($i = 0; $i < 7; $i++) {
     elseif ($_plage->pour_compte_id) {
       $color = "#EDC";
     }
-    $event = new CPlanningEvent($_plage->_guid, $debute, CMbDT::minutesRelative($_plage->debut, $_plage->fin), $libelle, $color, true, null, null);
+    $event = new CPlanningEvent(
+      $_plage->_guid, $debute, CMbDT::minutesRelative($_plage->debut, $_plage->fin), $libelle, $color, true, null, null
+    );
     $event->useHeight = true;
 
     //Menu des évènements
     $event->addMenuItem("list", "Voir le contenu de la plage");
-    $nonRemplace = !$_plage->remplacant_id || $_plage->remplacant_id != $chirSel || ($_plage->remplacant_id == $chirSel && $_plage->chir_id == $chirSel);
-    $nonDelegue = !$_plage->pour_compte_id || $_plage->pour_compte_id != $chirSel|| ($_plage->pour_compte_id == $chirSel && $_plage->chir_id == $chirSel);
+    $nonRemplace = !$_plage->remplacant_id ||
+      $_plage->remplacant_id != $chirSel ||
+      ($_plage->remplacant_id == $chirSel && $_plage->chir_id == $chirSel);
+    $nonDelegue = !$_plage->pour_compte_id ||
+      $_plage->pour_compte_id != $chirSel ||
+      ($_plage->pour_compte_id == $chirSel && $_plage->chir_id == $chirSel);
     if ($nonRemplace && $nonDelegue && $_plage->getPerm(PERM_EDIT)) {
       $event->addMenuItem("edit", "Modifier cette plage");
     }

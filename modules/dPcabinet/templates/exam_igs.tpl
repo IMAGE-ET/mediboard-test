@@ -19,7 +19,7 @@ checkSelect = function(){
   });
   
   $V(oForm.scoreIGS, score_igs);
-}
+};
 
 empty_on_click = function(elem) {
   $A(getForm("editScoreIGS").elements[elem]).each(function(radio){
@@ -30,13 +30,13 @@ empty_on_click = function(elem) {
   
   getForm("editScoreIGS").elements[elem][0].up('tr').down('.value').update('');
   checkSelect();     
-}
+};
 
 showLaboResult = function() {
   var url = new Url("dPImeds", "httpreq_vw_sejour_results");
   url.addParam("sejour_id", "{{$sejour->_id}}");
   url.popup(800, 700);
-}
+};
 
 Main.add(checkSelect);
 
@@ -93,7 +93,7 @@ Main.add(checkSelect);
       <!-- Calcul du nombre de td à rajouter pour compléter la ligne -->
       {{math equation=6-x x=$exam_igs->_specs.$_field->_list|@count assign=nb_colonne}}
       {{if $nb_colonne}}
-        <td colspan="{{$nb_colonne}}" />
+        <td colspan="{{$nb_colonne}}"></td>
       {{/if}}
       <td class="value" style="text-align: center;"></td>
       {{if !$exam_igs->_id}}

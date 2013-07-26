@@ -32,7 +32,7 @@
           var facturable = elt.options[elt.selectedIndex].get('facturable');
           form.facturable[facturable == '1' ? 0 : 1].checked = "checked";
       }
-    }
+    };
     {{if $change_active}}
       Main.add(function() {
         var select = $("select_secondary_func");

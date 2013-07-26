@@ -274,8 +274,8 @@ function changeVocalValueMouse(event) {
   }
   
   if (iKey > iMaxKey) {
-  	alert("Impossible d'ajouter un point supplémentaire");
-  	return;
+    alert("Impossible d'ajouter un point supplémentaire");
+    return;
   }
   
   changeVocalValue(sCote, iKey, iSelectedDB, iSelectedPc);

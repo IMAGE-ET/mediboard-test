@@ -18,9 +18,7 @@ class CFactureCabinet extends CFacture {
   public $facture_id;
   
   /**
-   * getSpec
-   * 
-   * @return $spec
+   * @see parent::getSpec()
   **/
   function getSpec() {
     $spec = parent::getSpec();
@@ -30,9 +28,7 @@ class CFactureCabinet extends CFacture {
   }
     
   /**
-   * getBackProps
-   * 
-   * @return $backProps
+   * @see parent::getBackProps()
   **/
   function getBackProps() {
     $backProps = parent::getBackProps();
@@ -44,9 +40,7 @@ class CFactureCabinet extends CFacture {
   }
    
   /**
-   * updateFormFields
-   * 
-   * @return void
+   * @see parent::updateFormFields()
   **/
   function updateFormFields() {
     parent::updateFormFields();
@@ -66,9 +60,7 @@ class CFactureCabinet extends CFacture {
   }
   
   /**
-   * Redéfinition du store
-   * 
-   * @return string|null
+   * @see parent::store()
    */
   function store() {
     $this->loadRefsConsultation();
@@ -93,9 +85,7 @@ class CFactureCabinet extends CFacture {
   }
   
   /**
-   * Redéfinition du delete
-   *
-   * @return string|null
+   * @see parent::delete()
    */
   function delete() {
     $this->loadRefsReglements();
@@ -119,7 +109,7 @@ class CFactureCabinet extends CFacture {
    * 
    * @param string $num_reference le numéro de référence 
    * 
-   * @return $facture
+   * @return CFactureCabinet
   **/
   function findFacture($num_reference){
     $facture = new CFactureCabinet();
@@ -131,7 +121,7 @@ class CFactureCabinet extends CFacture {
   /**
    * Chargement des relances de la facture
    * 
-   * @return _ref_relances
+   * @return CRelance[]
   **/
   function loadRefsRelances(){
     $this->_ref_relances = $this->loadBackRefs("relance_fact_cabinet", 'date');

@@ -227,7 +227,7 @@
         </tr>
         {{/foreach}}
         <tr>
-          <td colspan="7" />
+          <td colspan="7"></td>
           <td><strong>{{tr}}Total{{/tr}}</strong></td>
           <td><strong>{{$_date.total.patient|currency}} </strong></td>
           {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}

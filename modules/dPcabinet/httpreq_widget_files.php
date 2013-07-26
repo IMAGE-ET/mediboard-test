@@ -34,5 +34,3 @@ $smarty->assign("canDoFiles", $file->loadPermClass());
 $smarty->assign("name_readonly", $name_readonly);
 
 $smarty->display($only_files ? "inc_widget_list_files.tpl" : "inc_widget_vw_files.tpl");
-
-?>

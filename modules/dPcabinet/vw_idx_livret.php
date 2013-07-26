@@ -57,7 +57,7 @@ $arbreATC    = $classeATC->loadArbre($codeATC); // Chargements des sous chapitre
 
 $categories = array();
 
-if(CModule::getActive("dPstock")) {
+if (CModule::getActive("dPstock")) {
   $category = new CProductCategory;
   $categories = $category->loadList(null, "name");
 }
@@ -79,5 +79,3 @@ $smarty->assign('functions'   , $functions);
 $smarty->assign("function_guid" , $function_guid);
 
 $smarty->display("../../dPmedicament/templates/vw_idx_livret.tpl");
-
-?>

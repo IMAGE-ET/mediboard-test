@@ -8,7 +8,7 @@ Consultation = {
       setFragment(fragment).
       redirectOpener();
   },
-	
+
   plan: function(consult_id) {
     new Url().
       setModuleTab('cabinet', 'edit_planning').
@@ -29,4 +29,4 @@ Consultation = {
     new Url('cabinet', 'check_params').requestModal(950);
   }
   
-}
+};

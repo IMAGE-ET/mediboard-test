@@ -23,15 +23,15 @@
         <div class="big-info">
           <b>Format des champs auto :</b>
           <ul>
-            <li><tt>%N</tt> - Nom praticien interv</li>
-            <li><tt>%P</tt> - Prénom praticien interv</li>
-            <li><tt>%S</tt> - Initiales praticien interv</li>
-            <li><tt>%L</tt> - Libellé intervention</li>
-            <li><tt>%I</tt> - Jour intervention</li>
-            <li><tt>%i</tt> - Heure intervention</li>
-            <li><tt>%E</tt> - Jour d'entrée</li>
-            <li><tt>%e</tt> - Heure d'entrée</li>
-            <li><tt>%T</tt> - Type de séjour (A, O, E...)</li>
+            <li><code>%N</code> - Nom praticien interv</li>
+            <li><code>%P</code> - Prénom praticien interv</li>
+            <li><code>%S</code> - Initiales praticien interv</li>
+            <li><code>%L</code> - Libellé intervention</li>
+            <li><code>%I</code> - Jour intervention</li>
+            <li><code>%i</code> - Heure intervention</li>
+            <li><code>%E</code> - Jour d'entrée</li>
+            <li><code>%e</code> - Heure d'entrée</li>
+            <li><code>%T</code> - Type de séjour (A, O, E...)</li>
           </ul>
         </div>
       </td>

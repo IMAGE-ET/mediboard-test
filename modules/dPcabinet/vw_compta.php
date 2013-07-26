@@ -61,5 +61,3 @@ $smarty->assign("three_month_deb"       , $three_month_deb);
 $smarty->assign("month_fin"             , $month_fin);
 
 $smarty->display("vw_compta.tpl");
-
-?>

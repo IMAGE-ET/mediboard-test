@@ -84,5 +84,3 @@ if ($current_m == "dPurgences") {
 else {
   CAppUI::redirect("m=dPcabinet&tab=edit_consultation&selConsult=$consult->_id&ajax=$ajax");
 }
-
-?>

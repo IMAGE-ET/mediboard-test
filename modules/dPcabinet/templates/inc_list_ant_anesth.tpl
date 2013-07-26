@@ -24,19 +24,19 @@ onSubmitDossierMedical = function(oForm) {
   return onSubmitFormAjax(oForm, { 
     onComplete : DossierMedical.reloadDossierSejour 
   } );
-}
+};
 
 copyAntecedent = function(antecedent_id){
   var oForm = document.frmCopyAntecedent;
   oForm.antecedent_id.value = antecedent_id;
    onSubmitDossierMedical(oForm);
-}
+};
 
 copyTraitement = function(traitement_id){
   var oForm = document.frmCopyTraitement;
   oForm.traitement_id.value = traitement_id;
   onSubmitDossierMedical(oForm);
-}
+};
 
 toggleCancelledAnesth = function(list) {
   $(list).select('.cancelled').each(Element.show);

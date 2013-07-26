@@ -37,13 +37,14 @@ $where[]= "plageconsult.date >= '$filter->_date_min' AND plageconsult.date <= '$
 $order[] = "plageconsult.date, plageconsult.chir_id";
 
 $consultation = new CConsultation();
+/** @var CConsultation[] $listConsults */
 $listConsults = $consultation->loadList($where, $order, null, null, $ljoin);
 
 $listConsults_date = array();
 
-foreach($listConsults as $consult){
-	$consult->loadRefPatient();
-	$listConsults_date[$consult->_ref_plageconsult->date]["consult"][$consult->_id] = $consult;
+foreach ($listConsults as $consult) {
+  $consult->loadRefPatient();
+  $listConsults_date[$consult->_ref_plageconsult->date]["consult"][$consult->_id] = $consult;
 }
 
 // Création du template
@@ -56,4 +57,3 @@ $smarty->assign("listConsults"       , $listConsults);
 $smarty->assign("listConsults_date"  , $listConsults_date);
 
 $smarty->display("print_noncote.tpl");
-?>
