@@ -6,7 +6,7 @@
   </table>
   
   {{if $print && !@$multi}}
-    <script type="text/javascript">
+    <script>
     Main.add(window.print);
     </script> 
   {{/if}}
@@ -503,12 +503,12 @@
       </table>
     </td>
   </tr>
-  {{if $dossier_anesth->result_ecg || $dossier_anesth->result_rp}}
+  {{if $dossier_anesth->result_ecg || $dossier_anesth->result_rp || ($dossier_anesth->result_autre && $app->user_prefs.viewAutreResult)}}
   <tr>
     <td>
       <table width="100%">
         <tr>
-          <td width="50%">
+          <td width="{{if $app->user_prefs.viewAutreResult}}33%{{else}}50%{{/if}}">
             {{if $dossier_anesth->result_ecg}}
             <strong>{{mb_label object=$dossier_anesth field="result_ecg"}}</strong>
             <br />
@@ -522,6 +522,15 @@
             {{mb_value object=$dossier_anesth field="result_rp"}}
             {{/if}}
           </td>
+          {{if $app->user_prefs.viewAutreResult}}
+            <td>
+              {{if $dossier_anesth->result_autre}}
+              <strong>{{mb_label object=$dossier_anesth field="result_autre"}}</strong>
+              <br />
+              {{mb_value object=$dossier_anesth field="result_autre"}}
+              {{/if}}
+            </td>
+          {{/if}}
         </tr>
       </table>
     </td>

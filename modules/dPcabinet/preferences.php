@@ -30,6 +30,7 @@ CPreferences::$modules["dPcabinet"] = array (
   "displayResultsConsult",
   "choosePatientAfterDate",
   "viewFunctionPrats",
+  "viewAutreResult",
   "empty_form_atcd",
   "new_semainier",
   "order_mode_grille",

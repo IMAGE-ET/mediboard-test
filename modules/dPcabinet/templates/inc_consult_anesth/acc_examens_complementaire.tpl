@@ -1,7 +1,7 @@
 {{mb_script module=cabinet script=exam_comp}}
 {{mb_default var=view_prescription value=1}}
 
-<script type="text/javascript">
+<script>
 function calculClairance () {
   var oFormExam  = document.forms["editExamCompFrm"];
   var oFormConst = document.forms["edit-constantes-medicales"];
@@ -208,6 +208,17 @@ function calculPSA () {
             </fieldset>
           </td>
         </tr>
+        {{if $app->user_prefs.viewAutreResult}}
+          <tr>
+            <td class="halfPane" colspan="2">
+              <fieldset>
+                <legend>{{mb_label object=$consult_anesth field="result_autre"}}</legend>
+                {{mb_field object=$consult_anesth field="result_autre" rows="4" onblur="submitForm(this.form)" form="editExamCompFrm"
+                aidesaisie="validateOnBlur: 0"}}
+              </fieldset>
+            </td>
+          </tr>
+        {{/if}}
       </table> 
       </form>
     </td>
@@ -230,7 +241,7 @@ function calculPSA () {
             <td id="documents-exam">
               {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
               <!-- Documents -->
-              <script type="text/javascript">
+              <script">
                  Document.register('{{$object->_id}}','{{$object->_class}}','{{$consult->_praticien_id}}','documents-exam');
               </script>
             </td>

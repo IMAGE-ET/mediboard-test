@@ -80,7 +80,8 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   public $ht_final;
   public $result_ecg;
   public $result_rp;
-  
+  public $result_autre;
+
   // Check sur les codes cim10 de préfixe pour non-fumeur:
   //  F17 - T652 - Z720 - Z864 - Z587
   public $apfel_femme;
@@ -182,6 +183,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $props["ht_final"]         = "float min|0 max|100 show|0";
     $props["result_ecg"]       = "text helped";
     $props["result_rp"]        = "text helped";
+    $props["result_autre"]     = "text helped";
     $props["premedication"]    = "text helped";
     $props["prepa_preop"]      = "text helped";
     $props["date_analyse"]     = "date show|0";
@@ -558,7 +560,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     
     $template->addProperty("Anesthésie - Tabac"                  , $this->tabac);
     $template->addProperty("Anesthésie - Oenolisme"              , $this->oenolisme);
-    
+
     $template->addProperty("Anesthésie - Groupe sanguin"         , "$this->groupe $this->rhesus");
     $template->addProperty("Anesthésie - RAI"                    , $this->rai);
     $template->addProperty("Anesthésie - Hb"                     , "$this->hb g/dl");

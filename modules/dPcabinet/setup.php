@@ -154,7 +154,7 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($query);
     
     // CR passage des champs à enregistrements supprimé car regressifs
-//    $this->makeRevision("0.30");
+    // $this->makeRevision("0.30");
     
     $this->makeRevision("0.31");
     $query = "CREATE TABLE `examaudio` (" .
@@ -1955,8 +1955,12 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `reglement`
                 ADD INDEX (`debiteur_id`);";
     $this->addQuery($query);
-    $this->mod_version = "2.12";
+    $this->makeRevision("2.12");
 
-
+    $query = "ALTER TABLE `consultation_anesth`
+              ADD `result_autre` TEXT AFTER `result_rp`;";
+    $this->addQuery($query);
+    $this->addPrefQuery("viewAutreResult", "0");
+    $this->mod_version = "2.13";
   }
 }

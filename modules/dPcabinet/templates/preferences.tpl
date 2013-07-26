@@ -1,9 +1,9 @@
-{{* $Id: $ *}}
+{{* $Id:$ *}}
 
 {{*
  * @package Mediboard
  * @subpackage 
- * @version $Revision:  $
+ * @version $Revision:$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
@@ -29,6 +29,7 @@
 {{mb_include template=inc_pref spec=bool var=displayPremedConsult}}
 {{mb_include template=inc_pref spec=bool var=displayResultsConsult}}
 {{mb_include template=inc_pref spec=bool var=viewFunctionPrats}}
+{{mb_include template=inc_pref spec=bool var=viewAutreResult}}
 <tr><th class="category" colspan="6">Planning</th></tr>
 {{mb_include template=inc_pref spec=bool var=new_semainier}}
 {{mb_include template=inc_pref spec=bool var=showIntervPlanning}}
