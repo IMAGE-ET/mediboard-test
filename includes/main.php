@@ -330,7 +330,6 @@ if (!$suppressHeaders) {
   $tplHeader->assign("messages"             , $messages);
   $tplHeader->assign("mails"                , $mails);
   $tplHeader->assign("uistyle"              , $uistyle);
-  $tplHeader->assign("country"              , CAppUI::conf("ref_pays"));    // country number
   $tplHeader->assign("cp_group"             , $current_group->cp);          // cp of the current group
   $tplHeader->assign("browser"              , $browser);
   $tplHeader->assign("errorMessage"         , CAppUI::getMsg());

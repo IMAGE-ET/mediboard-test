@@ -129,12 +129,10 @@
   <script type="text/javascript">
     AideSaisie.timestamp = "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}";
 
-    //for holidays in datepicker
-    {{if $country}}
-      Calendar.ref_pays = {{$country}};
-    {{/if}}
-    {{if $cp_group}}
-      Calendar.ref_cp   = {{$cp_group}};
+    {{if $app->_ref_user}}
+      //for holidays in datepicker
+      Calendar.ref_pays = {{$conf.ref_pays|default:1}};   // france
+      Calendar.ref_cp   = {{$cp_group|default:"00000"}};  // fake cp
     {{/if}}
 
     {{if $dialog}}
