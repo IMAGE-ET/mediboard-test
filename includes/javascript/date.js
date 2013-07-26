@@ -432,6 +432,8 @@ var ProgressiveCalendar = Class.create({
 });
 
 var Calendar = {
+  ref_pays: null,
+  ref_cp: null,
   // This function is bound to date specification
   dateProperties: function(date, dates) {
     if (!date) return {};
@@ -448,9 +450,14 @@ var Calendar = {
       properties.className = "active";
     }
 
+    if (Calendar.checkHolliday(date)) {
+      properties.className = "ferie";
+    }
+
     if (dates.spots.include(sDate)) {
       properties.label = "Date";
     }
+
     return properties;
   },
 
@@ -645,7 +652,6 @@ var Calendar = {
     };
 
     element.addClassName('datepicker');
-
     return datepicker;
   },
   mobileHide: function (picker){
@@ -656,6 +662,167 @@ var Calendar = {
 
   regProgressiveField: function(element, options) {
     new ProgressiveCalendar(element, options);
+  },
+
+  //check if a date is in holliday calendar
+  checkHolliday: function(date) {
+    var sDate = date.toDATE();
+
+    //country
+    var datesHolidays = Calendar.getDateHolidays(date);
+    var length = datesHolidays.length;
+    for(var i = 0; i < length; i++) {
+      if(datesHolidays[i] == sDate) {
+        return true;
+      }
+    }
+
+    //states/canton/regions
+    var datesHolidaysCP = Calendar.getDateHolidaysCP(date);
+    length = datesHolidaysCP.length;
+    for (var j=0; j< length; j++) {
+      if(datesHolidaysCP[j] == sDate) {
+        return true;
+      }
+    }
+
+    return false;
+  },
+
+  getDateHolidays: function(date) {
+    var year = date.getFullYear();
+    var datesH = [];
+
+    //fixes
+    switch (this.ref_pays) {
+      case 1: //france
+
+        //static
+        datesH.push(year+"-01-01");  // nouvel an
+        datesH.push(year+"-05-01");  // fete du travail
+        datesH.push(year+"-05-08");  // victoire de 45
+        datesH.push(year+"-07-14");  // 14 juillet, fete nat.
+        datesH.push(year+"-08-15");  // Assomption
+        datesH.push(year+"-11-01");  // toussain
+        datesH.push(year+"-11-11");  // Armistice 1918
+        datesH.push(year+"-12-25");  // noel
+
+        //dynamic
+        var easter = Date.fromDATE(Calendar.getEasterDate(year));
+        datesH.push(easter.addDays(1).toDATE()); // lundi de paque
+        datesH.push(easter.addDays(39).toDATE()); // jeudi de l'ascension
+        datesH.push(easter.addDays(50).toDATE()); // lundi de pantecote
+        break;
+
+      case 2: //switzerland
+        datesH.push(year+"-01-01");  // jour de l'an
+        datesH.push(year+"-08-01");  // fete nationnale suisse
+        datesH.push(year+"-12-25");  // noel
+        break;
+
+      default:
+        break;
+    }
+
+    return datesH;
+  },
+
+  /**
+   * get the list of holidays following state CP
+   *
+   * @param date
+   * @returns {Array}
+   */
+  getDateHolidaysCP: function(date) {
+    var year = date.getFullYear();
+    var datesH = [];
+    if (!this.ref_cp) {
+      return datesH;
+    }
+
+    switch(this.ref_pays) {
+      case 1: //France
+        break;
+
+      case 2: // Switzerland
+        var canton = this.ref_cp+"";
+        canton = canton.substr(0,2);
+
+        var easter = Date.fromDATE(Calendar.getEasterDate(year));
+        var firstDaySeptember = Date.fromDATE(year+"-09-01");
+        var firstSundaySeptember = firstDaySeptember;
+        var fridayBeforeSeptember = firstDaySeptember;
+
+        //get first sunday of september
+        for (var k=0; k<=6; k++) {
+          var dayk = firstDaySeptember.addDays(k);
+          if (dayk.getDay() == 0) {
+            firstSundaySeptember = dayk;
+            break;
+          }
+        }
+
+        //get friday before easter
+        for (var l=1; l<=6; l++) {
+          var dayl = easter.addDays(-1);
+          if (dayl.getDay() == 5) {
+            fridayBeforeSeptember = dayl;
+            break;
+          }
+        }
+
+        //third sunday of september
+        var thirdSundaySeptember = firstSundaySeptember.addDays(14);
+
+        switch (canton) {
+          case '10': //vaud
+            //static
+            datesH.push(year+"-01-02");  // Saint-Berchtold
+
+            //dynamic
+            datesH.push(easter.addDays(1).toDATE()); // lundi de paque
+            datesH.push(easter.addDays(39).toDATE()); // jeudi de l'ascension
+            datesH.push(easter.addDays(50).toDATE()); // lundi de pantecote
+
+            datesH.push(thirdSundaySeptember.addDays(1).toDATE()); // Lundi du Jeûne fédéral
+            break;
+
+          case '12':  //geneva
+            //static
+            datesH.push(year+"-12-31");  // fete du travail
+
+            //dynamic
+            datesH.push(firstDaySeptember.addDays(4).toDATE()); // Jeûne Genevois
+            datesH.push(fridayBeforeSeptember.toDATE()); // Vendredi Saint
+            datesH.push(easter.addDays(1).toDATE()); // lundi de paque
+            datesH.push(easter.addDays(39).toDATE()); // jeudi de l'ascension
+            datesH.push(easter.addDays(50).toDATE()); // lundi de pantecote
+            break;
+        }
+        break;
+    }
+
+    return datesH;
+  },
+
+  getEasterDate: function(year) {
+    var C = Math.floor(year/100);
+    var N = year - 19*Math.floor(year/19);
+    var K = Math.floor((C - 17)/25);
+    var I = C - Math.floor(C/4) - Math.floor((C - K)/3) + 19*N + 15;
+    I = I - 30*Math.floor((I/30));
+    I = I - Math.floor(I/28)*(1 - Math.floor(I/28)*Math.floor(29/(I + 1))*Math.floor((21 - N)/11));
+    var J = year + Math.floor(year/4) + I + 2 - C + Math.floor(C/4);
+    J = J - 7*Math.floor(J/7);
+    var L = I - J;
+    var M = 3 + Math.floor((L + 40)/44);
+    var D = L + 28 - 31*Math.floor(M/4);
+
+    return year +"-" + Calendar.padout(M) + '-' + Calendar.padout(D);
+  },
+
+  padout: function(number) {
+    return (number < 10) ? '0' + number : number;
   }
 };
 

@@ -84,7 +84,7 @@
           }
 
           return date;
-        }
+        };
 
         Date.prototype = DateOrig.prototype;
       })();
@@ -128,7 +128,13 @@
 
   <script type="text/javascript">
     AideSaisie.timestamp = "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}";
-    
+
+    //for holidays in datepicker
+    Calendar.ref_pays = {{$country}};
+    {{if $cp_group}}
+      Calendar.ref_cp   = {{$cp_group}};
+    {{/if}}
+
     {{if $dialog}}
       Event.observe(document, 'keydown', closeWindowByEscape);
     {{/if}}
@@ -147,6 +153,7 @@
         periodicalUpdate: function(){}
       });
     {{/if}}
+
   </script>
   {{if "didacticiel"|module_active}}
     {{mb_include module="didacticiel" template="inc_permanence_didacticiel"}}

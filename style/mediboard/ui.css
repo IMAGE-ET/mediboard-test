@@ -767,6 +767,11 @@ div.rank.desired {
   font-weight:    bold;
 }
 
+.datepickerControl td.ferie {
+  background-color: yellow;
+  border:solid 1px orange;
+}
+
 .datepickerControl div.dropdown {
   border:        1px solid #999999;
   background-color:  #EEEEEE;

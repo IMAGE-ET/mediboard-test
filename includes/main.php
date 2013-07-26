@@ -278,6 +278,9 @@ if (!$suppressHeaders) {
   // Liste des Etablissements
   $etablissements = CMediusers::loadEtablissements(PERM_EDIT);
 
+  //current Group
+  $current_group = CGroups::loadCurrent();
+
   // Messages
   $messages = new CMessage();
   $messages = $messages->loadPublications("present", $m, $g);
@@ -327,6 +330,8 @@ if (!$suppressHeaders) {
   $tplHeader->assign("messages"             , $messages);
   $tplHeader->assign("mails"                , $mails);
   $tplHeader->assign("uistyle"              , $uistyle);
+  $tplHeader->assign("country"              , CAppUI::conf("ref_pays"));    // country number
+  $tplHeader->assign("cp_group"             , $current_group->cp);          // cp of the current group
   $tplHeader->assign("browser"              , $browser);
   $tplHeader->assign("errorMessage"         , CAppUI::getMsg());
   $tplHeader->assign("Etablissements"       , $etablissements);
