@@ -155,10 +155,8 @@
       {{/if}}
     </span>
     {{if $_operation->_ref_affectation && $_operation->_ref_affectation->_ref_lit->_id && $conf.dPbloc.CPlageOp.chambre_operation == 1}}
-      {{* le width 1% donnait un tres mauvais affichage sous IE *}}
-      <div style="text-align: center; font-size: 0.8em; white-space: nowrap; border: none;">
-        {{$_operation->_ref_affectation->_ref_lit->_ref_chambre->_ref_service->_view}}<br />
-        {{$_operation->_ref_affectation->_ref_lit->_view}}
+      <div style="font-size: 0.9em; white-space: nowrap; border: none;">
+        {{$_operation->_ref_affectation->_ref_lit->_ref_chambre->_ref_service->_view}} &rarr; {{$_operation->_ref_affectation->_ref_lit->_view}}
       </div>
     {{/if}}
     {{if $salle}}
