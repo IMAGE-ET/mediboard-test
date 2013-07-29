@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
+CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
+
 $services_ids   = CValue::getOrSession("services_ids", null);
 $readonly       = CValue::get("readonly", 0);
 $granularite    = CValue::getOrSession("granularite", "day");
@@ -143,18 +145,14 @@ foreach ($lits as $_lit) {
   $items_prestations = CMbObject::massLoadFwdRef($liaisons_items, "item_prestation_id");
   $prestations_ids = CMbArray::pluck($items_prestations, "object_id");
 
+  $_lit->_selected_item = new CItemPrestation();
+
   if (in_array($prestation_id, $prestations_ids)) {
     $inverse = array_flip($prestations_ids);
     $item_prestation = $items_prestations[$inverse[$prestation_id]];
     if ($item_prestation->_id) {
       $_lit->_selected_item = $item_prestation;
     }
-    else {
-      $_lit->_selected_item = new CItemPrestation();
-    }
-  }
-  else {
-    $_lit->_selected_item = new CItemPrestation();
   }
 }
 
@@ -179,27 +177,30 @@ $affectations = $affectation->loadList($where, "parent_affectation_id ASC");
 // Ajout des prolongations anormales
 // (séjours avec entrée réelle et sortie non confirmée et sortie < maintenant
 $nb_days_prolongation = CAppUI::conf("dPhospi nb_days_prolongation");
-$sejour = new CSejour();
-$max = CMbDT::dateTime();
-$min = CMbDT::date("-$nb_days_prolongation days", $max) . " 00:00:00";
-$where = array(
-  "entree_reelle"   => "IS NOT NULL",
-  "sortie_reelle"   => "IS NULL",
-  "sortie_prevue"   => "BETWEEN '$min' AND '$max'",
-  "sejour.confirme" => "= '0'",
-  "group_id"        => "= '$group_id'"
-);
 
-$sejours_prolonges = $sejour->loadList($where);
+if ($nb_days_prolongation) {
+  $sejour = new CSejour();
+  $max = CMbDT::dateTime();
+  $min = CMbDT::date("-$nb_days_prolongation days", $max) . " 00:00:00";
+  $where = array(
+    "entree_reelle"   => "IS NOT NULL",
+    "sortie_reelle"   => "IS NULL",
+    "sortie_prevue"   => "BETWEEN '$min' AND '$max'",
+    "sejour.confirme" => "= '0'",
+    "group_id"        => "= '$group_id'"
+  );
 
-$affectations_prolong = array();
-foreach ($sejours_prolonges as $_sejour) {
-  $aff = $_sejour->getCurrAffectation($_sejour->sortie);
-  if (!$aff->_id || !array_key_exists($aff->lit_id, $lits)) {
-    continue;
+  $sejours_prolonges = $sejour->loadList($where);
+
+  $affectations_prolong = array();
+  foreach ($sejours_prolonges as $_sejour) {
+    $aff = $_sejour->getCurrAffectation($_sejour->sortie);
+    if (!$aff->_id || !array_key_exists($aff->lit_id, $lits)) {
+      continue;
+    }
+    $aff->_is_prolong = true;
+    $affectations[$aff->_id] = $aff;
   }
-  $aff->_is_prolong = true;
-  $affectations[$aff->_id] = $aff;
 }
 
 $sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
@@ -210,70 +211,7 @@ $operations = array();
 
 $suivi_affectation = false;
 
-/** @var $affectations CAffectation[] */
-foreach ($affectations as $_affectation) {
-  if (!$suivi_affectation && $_affectation->parent_affectation_id) {
-    $suivi_affectation = true;
-  }
-  $_affectation->_entree = $_affectation->entree;
-  $_affectation->_sortie = $_affectation->sortie;
-  $_affectation->loadRefsAffectations();
-  $sejour = $_affectation->loadRefSejour();
-  $_affectation->_ref_sejour->loadRefChargePriceIndicator();    //switzerland
-  $sejour->loadRefPraticien()->loadRefFunction();
-  $patient = $sejour->loadRefPatient();
-  $patient->loadRefPhotoIdentite();
-  $constantes = $patient->getFirstConstantes();
-  $patient->_overweight = $constantes->poids > 120;
-  $patient->loadRefDossierMedical(false);
-  if ($_affectation->_is_prolong) {
-    $_affectation->_sortie = CMbDT::dateTime();
-  }
-  $lits[$_affectation->lit_id]->_ref_affectations[$_affectation->_id] = $_affectation;
-  $_affectation->_entree_offset = CMbDate::position(max($date_min, $_affectation->_entree), $date_min, $period);
-  $_affectation->_sortie_offset = CMbDate::position(min($date_max, $_affectation->_sortie), $date_min, $period);
-  $_affectation->_width = $_affectation->_sortie_offset - $_affectation->_entree_offset;
-
-  if ($_affectation->_width === 0) {
-    $_affectation->_width = 0.01;
-  }
-
-  if ($_affectation->_is_prolong) {
-    $_affectation->_start_prolongation = CMbDate::position(max($date_min, $_affectation->_entree), $date_min, $period);
-    $_affectation->_end_prolongation   = CMbDate::position(min($date_max, $_affectation->_sortie), $date_min, $period);
-    $_affectation->_width_prolongation = $_affectation->_end_prolongation - $_affectation->_start_prolongation;
-  }
-  if (isset($operations[$sejour->_id])) {
-    $_operations = $operations[$sejour->_id];
-  }
-  else {
-    $operations[$sejour->_id] = $_operations = $sejour->loadRefsOperations();
-  }
-
-  if ($prestation_id) {
-    $sejour->loadLiaisonsForPrestation($prestation_id);
-  }
-
-  foreach ($_operations as $key=>$_operation) {
-    $_operation->loadRefPlageOp(1);
-
-    $hour_operation = CMbDT::format($_operation->temp_operation, "%H");
-    $min_operation = CMbDT::format($_operation->temp_operation, "%M");
-
-    $_operation->_debut_offset[$_affectation->_id] = CMbDate::position($_operation->_datetime, max($date_min, $_affectation->_entree), $period);
-
-    $_operation->_fin_offset[$_affectation->_id] = CMbDate::position(CMbDT::dateTime("+$hour_operation hours +$min_operation minutes",$_operation->_datetime), max($date_min, $_affectation->_entree), $period);
-    $_operation->_width[$_affectation->_id] = $_operation->_fin_offset[$_affectation->_id] - $_operation->_debut_offset[$_affectation->_id];
-
-    if (($_operation->_datetime > $date_max)) {
-      $_operation->_width_uscpo[$_affectation->_id] = 0;
-    }
-    else {
-      $fin_uscpo = $hour_operation + 24 * $_operation->duree_uscpo;
-      $_operation->_width_uscpo[$_affectation->_id] = CMbDate::position(CMbDT::dateTime("+$fin_uscpo hours + $min_operation minutes", $_operation->_datetime), max($date_min, $_affectation->_entree), $period) - $_operation->_fin_offset[$_affectation->_id];
-    }
-  }
-}
+loadVueTempo($affectations, $suivi_affectation, $lits, $operations, $date_min, $date_max, $period, $prestation_id);
 
 $dossiers = CMbArray::pluck($affectations, "_ref_sejour", "_ref_patient", "_ref_dossier_medical");
 CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");

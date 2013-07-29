@@ -118,7 +118,7 @@
   loadNonPlaces = function(after_refresh) {
     after_refresh = after_refresh || Prototype.emptyFunction;
     var url = new Url("hospi", "ajax_vw_non_places");
-    url.requestUpdate("list_affectations", {onComplete: after_refresh});
+    url.requestUpdate("list_affectations", after_refresh);
   }
  
   changeLit = function(affectation_id, link_affectation, datetime) {
@@ -133,44 +133,45 @@
   }
   
   editAffectation = function(affectation_id, lit_id, urgence) {
-     var url = new Url("hospi", "ajax_edit_affectation");
-     url.addParam("affectation_id", affectation_id);
-     
-     if (!Object.isUndefined(lit_id)) {
-       url.addParam("lit_id", lit_id);
-     }
-     if (!Object.isUndefined(urgence)) {
+    var url = new Url("hospi", "ajax_edit_affectation");
+    url.addParam("affectation_id", affectation_id);
+
+    if (!Object.isUndefined(lit_id)) {
+      url.addParam("lit_id", lit_id);
+    }
+    if (!Object.isUndefined(urgence)) {
       url.addParam("urgence", urgence);
-     }
-     
-     Placement.stop();
-     url.requestModal(500, null, {showReload: false, onClose: Placement.resume});
-   }
+    }
+
+    Placement.stop();
+    url.requestModal(500, null, {showReload: false, onClose: Placement.resume});
+  }
    
-   moveAffectation = function(affectation_id, lit_id, sejour_id, lit_id_origine) {
+  moveAffectation = function(affectation_id, lit_id, sejour_id, lit_id_origine) {
     var url = new Url("hospi", "ajax_move_affectation");
     if (!Object.isUndefined(affectation_id)) {
       url.addParam("affectation_id", affectation_id);
     }
     url.addParam("lit_id", lit_id);
-    
+
     if (!Object.isUndefined(sejour_id)) {
       url.addParam("sejour_id", sejour_id);
     }
     url.requestUpdate("systemMsg", function() {
-      var after_mouv = null;
-      
+      var after_mouv = Prototype.emptyFunction;
+
       // Pas d'affectation_id ou pas de lit_id_origine (affectation dans un couloir),
       // on supprime l'affectation ciblée dans la liste des affectations (placement d'un patient)
       if (!affectation_id || !lit_id_origine) {
         after_mouv = delLine(affectation_id ? affectation_id : sejour_id);
       }
-      
+
       if (lit_id_origine) {
-        refreshMouvements(after_mouv, lit_id_origine, after_mouv);
+        refreshMouvements(after_mouv, lit_id_origine);
       }
+
       if (lit_id) {
-        refreshMouvements(after_mouv, lit_id, after_mouv);
+        refreshMouvements(after_mouv, lit_id);
       }
     });
   }
@@ -180,7 +181,7 @@
     if (line) {
       var div = line.down("div");
       var ids = div.get("affectations_enfant");
-      if (ids.length > 0) { 
+      if (ids && ids.length > 0) {
         ids.split("-").each(function(id) {
           $("wrapper_line_"+id).up("tr.line").remove();
         });
@@ -274,6 +275,7 @@
   
   createIntervention = function() {
     Placement.stop();
+    Control.Modal.close();
     var url = new Url("planningOp", "vw_edit_urgence");
     url.addParam("date_urgence", window.save_date);
     url.addParam("hour_urgence", window.save_hour);
@@ -293,6 +295,7 @@
   
   createSejour = function() {
     Placement.stop();
+    Control.Modal.close();
     var url = new Url("planningOp", "vw_edit_sejour");
     url.addParam("date_reservation", window.save_date);
     url.addParam("sejour_id", 0);

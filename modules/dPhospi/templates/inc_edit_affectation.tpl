@@ -18,7 +18,11 @@
     <tr>
       {{if $affectation->_id}}
         <th class="title" colspan="4">
-          {{$affectation->_ref_sejour->_ref_patient}}
+          {{if $affectation->sejour_id}}
+            {{$affectation->_ref_sejour->_ref_patient}}
+          {{else}}
+            Lit bloqué
+          {{/if}}
         </th>
       {{/if}}
     </tr>
@@ -65,6 +69,6 @@
     </tr>
   </table>
 </form>
-{{if $affectation->_id}}
+{{if $affectation->_id && $affectation->sejour_id}}
   {{mb_include module=hospi template=inc_other_actions}}
 {{/if}}

@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
+
 $services_ids    = CValue::getOrSession("services_ids");
 $triAdm          = CValue::getOrSession("triAdm", "praticien");
 $_type_admission = CValue::getOrSession("_type_admission", "ambucomp");
@@ -16,7 +18,7 @@ $date            = CValue::getOrSession("date");
 $granularite     = CValue::getOrSession("granularite");
 $readonly        = CValue::getOrSession("readonly", 0);
 $duree_uscpo     = CValue::getOrSession("duree_uscpo", "0");
-$isolement     = CValue::getOrSession("isolement", "0");
+$isolement       = CValue::getOrSession("isolement", "0");
 $prestation_id   = CValue::getOrSession("prestation_id", "");
 $item_prestation_id = CValue::getOrSession("item_prestation_id");
 
@@ -24,7 +26,6 @@ if (is_array($services_ids)) {
   CMbArray::removeValue("", $services_ids);
 }
 
-$heureLimit = "16:00:00";
 $group_id = CGroups::loadCurrent()->_id;
 $where = array();
 $where["annule"] = "= '0'";
@@ -169,76 +170,8 @@ $services = CMbObject::massLoadFwdRef($sejours, "service_id");
 $sejours_non_affectes = array();
 $functions_filter = array();
 $operations = array();
-
-$maternite_active = CModule::getActive("maternite");
-
-foreach ($sejours as $_key => $_sejour) {
-  $_sejour->loadRefPrestation();
-  $_sejour->loadRefPraticien()->loadRefFunction();
-  $functions_filter[$_sejour->_ref_praticien->function_id] = $_sejour->_ref_praticien->_ref_function;
-  if ($filter_function && $filter_function != $_sejour->_ref_praticien->function_id) {
-    unset($sejours[$_key]);
-    continue;
-  }
-  else {
-    $_sejour->_entree_offset = CMbDate::position(max($date_min, $_sejour->entree), $date_min, $period);
-    $_sejour->_sortie_offset = CMbDate::position(min($date_max, $_sejour->sortie), $date_min, $period);
-    $_sejour->_width = $_sejour->_sortie_offset - $_sejour->_entree_offset;
-    $_sejour->loadRefChargePriceIndicator();
-    $patient = $_sejour->loadRefPatient();
-    $patient->loadRefPhotoIdentite();
-    $patient->loadRefDossierMedical(false);
-    $constantes = $patient->getFirstConstantes();
-    $patient->_overweight = $constantes->poids > 120;
-  }
-  
-  if (isset($operations[$_sejour->_id])) {
-    $_operations = $operations[$_sejour->_id];
-  }
-  else {
-    $operations[$_sejour->_id] = $_operations = $_sejour->loadRefsOperations();
-  }
-  
-  foreach ($_operations as $key=>$_operation) {
-    $_operation->loadRefPlageOp(1);
-    
-    $hour_operation = CMbDT::format($_operation->temp_operation, "%H");
-    $min_operation = CMbDT::format($_operation->temp_operation, "%M");
-    
-    $_operation->_debut_offset = CMbDate::position($_operation->_datetime, max($date_min, $_sejour->entree), $period);
-    $_operation->_fin_offset = CMbDate::position(CMbDT::dateTime("+$hour_operation hours +$min_operation minutes",$_operation->_datetime), max($date_min, $_sejour->entree), $period);
-    $_operation->_width = $_operation->_fin_offset - $_operation->_debut_offset;
-    
-    if (($_operation->_datetime > $date_max)) {
-      $_operation->_width_uscpo = 0;
-    }
-    else {
-      $fin_uscpo = $hour_operation + 24 * $_operation->duree_uscpo;
-      $_operation->_width_uscpo = CMbDate::position(CMbDT::dateTime("+$fin_uscpo hours +$min_operation minutes", $_operation->_datetime), max($date_min, $_sejour->entree), $period) - $_operation->_fin_offset;
-    }
-  }
-  
-  if ($prestation_id) {
-    $_sejour->loadRefFirstLiaisonForPrestation($prestation_id);
-    $_sejour->loadLiaisonsForPrestation($prestation_id);
-  }
-  
-  if ($_sejour->service_id) {
-    @$sejours_non_affectes[$_sejour->service_id][] = $_sejour;
-  }
-  else {
-    @$sejours_non_affectes["np"][] = $_sejour;
-  }
-  
-  if ($maternite_active && $_sejour->grossesse_id) {
-    $_sejour->_sejours_enfants_ids = CMbArray::pluck($_sejour->loadRefsNaissances(), "sejour_enfant_id");
-  }
-}
-
-$dossiers = CMbArray::pluck($sejours, "_ref_patient", "_ref_dossier_medical");
-CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
-
 $items_prestation = array();
+$suivi_affectation = false;
 
 if ($prestation_id) {
   $prestation = new CPrestationJournaliere;
@@ -269,86 +202,31 @@ if ($isolement) {
 $affectation = new CAffectation();
 
 $affectations = $affectation->loadList($where, "entree ASC", null, null, $ljoin);
-$sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
+$_sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
 $services = $services + CMbObject::massLoadFwdRef($affectations, "service_id");
-$patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
-$praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
+$patients = CMbObject::massLoadFwdRef($_sejours, "patient_id");
+$praticiens = CMbObject::massLoadFwdRef($_sejours, "praticien_id");
 CMbObject::massLoadFwdRef($praticiens, "function_id");
 CMbObject::massCountBackRefs($affectations, "affectations_enfant");
-$operations = array();
-$suivi_affectation = false;
 
-/** @var $affectations CAffectation[] */
-foreach ($affectations as $_affectation) {
-  $lit = new CLit();
-  $lit->_selected_item = new CItemPrestation;
-  $lit->_affectation_id = $_affectation->_id;
-  
-  if (!$suivi_affectation && $_affectation->parent_affectation_id) {
-    $suivi_affectation = true;
-  }
-  $_affectation->loadRefsAffectations();
-  $_affectation->_affectations_enfant_ids = CMbArray::pluck($_affectation->loadBackRefs("affectations_enfant"), "affectation_id");
-  $sejour = $_affectation->loadRefSejour();
-  $_affectation->_ref_sejour->loadRefChargePriceIndicator();
-  $sejour->loadRefPraticien()->loadRefFunction();
-  $patient = $sejour->loadRefPatient();
-  $patient->loadRefPhotoIdentite();
-  $patient->loadRefDossierMedical(false);
-
-  $_affectation->_entree_offset = CMbDate::position(max($date_min, $_affectation->entree), $date_min, $period);
-  $_affectation->_sortie_offset = CMbDate::position(min($date_max, $_affectation->sortie), $date_min, $period);
-  $_affectation->_width = $_affectation->_sortie_offset - $_affectation->_entree_offset;
-  
-  if (isset($operations[$sejour->_id])) {
-    $_operations = $operations[$sejour->_id];
-  }
-  else {
-    $operations[$sejour->_id] = $_operations = $sejour->loadRefsOperations();
-  }
-
-  if ($prestation_id) {
-    $sejour->loadLiaisonsForPrestation($prestation_id);
-  }
-
-  foreach ($_operations as $key=>$_operation) {
-    $_operation->loadRefPlageOp(1);
-    
-    $hour_operation = CMbDT::format($_operation->temp_operation, "%H");
-    $min_operation = CMbDT::format($_operation->temp_operation, "%M");
-    
-    $_operation->_debut_offset[$_affectation->_id] = CMbDate::position($_operation->_datetime, max($date_min, $_affectation->entree), $period);
-    
-    $_operation->_fin_offset[$_affectation->_id] = CMbDate::position(CMbDT::dateTime("+$hour_operation hours +$min_operation minutes",$_operation->_datetime), max($date_min, $_affectation->entree), $period);
-    $_operation->_width[$_affectation->_id] = $_operation->_fin_offset[$_affectation->_id] - $_operation->_debut_offset[$_affectation->_id];
-    
-    if (($_operation->_datetime > $date_max)) {
-      $_operation->_width_uscpo[$_affectation->_id] = 0;
-    }
-    else {
-      $fin_uscpo = $hour_operation + 24 * $_operation->duree_uscpo;
-      $_operation->_width_uscpo[$_affectation->_id] = CMbDate::position(CMbDT::dateTime("+$fin_uscpo hours + $min_operation minutes", $_operation->_datetime), max($date_min, $_affectation->entree), $period) - $_operation->_fin_offset[$_affectation->_id];
-    }
-  }
-  
-  $lit->_lines = array();
-  $lit->_lines[] = $_affectation->_id;
-  
-  @$sejours_non_affectes[$_affectation->service_id][] = $lit;
-}
-
-$dossiers = CMbArray::pluck($affectations, "_ref_sejour", "_ref_patient", "_ref_dossier_medical");
+loadVueTempo($sejours, $suivi_affectation, null, $operations, $date_min, $date_max, $period, $prestation_id, $functions_filter, $filter_function, $sejours_non_affectes);
+$dossiers = CMbArray::pluck($sejours, "_ref_patient", "_ref_dossier_medical");
 CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
 
+loadVueTempo($affectations, $suivi_affectation, null, $operations, $date_min, $date_max, $period, $prestation_id, $functions_filter, $filter_function, $sejours_non_affectes);
+if (count($affectations)) {
+  $dossiers = CMbArray::pluck($affectations, "_ref_sejour", "_ref_patient", "_ref_dossier_medical");
+  CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
+}
 ksort($sejours_non_affectes, SORT_STRING);
 
-$sejour = new CSejour();
-$sejour->_type_admission = $_type_admission;
+$_sejour = new CSejour();
+$_sejour->_type_admission = $_type_admission;
 
 $smarty = new CSmartyDP();
 
 $smarty->assign("sejours_non_affectes", $sejours_non_affectes);
-$smarty->assign("sejour", $sejour);
+$smarty->assign("_sejour", $_sejour);
 $smarty->assign("triAdm", $triAdm);
 $smarty->assign("functions_filter", $functions_filter);
 $smarty->assign("filter_function", $filter_function);
@@ -369,6 +247,7 @@ $smarty->assign("prestation_id", $prestation_id);
 $smarty->assign("td_width", 84.2 / $nb_ticks);
 $smarty->assign("mode_vue_tempo", "classique");
 $smarty->assign("affectations", $affectations);
+$smarty->assign("sejours" , $sejours);
 $smarty->assign("services", $services);
 
 $smarty->display("inc_vw_non_places.tpl");

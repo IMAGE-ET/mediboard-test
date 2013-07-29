@@ -16,35 +16,37 @@ class CLit extends CMbObject {
   static $_prefixe = null;
   
   // DB Table key
-  var $lit_id = null;
+  public $lit_id;
   
   // DB References
-  var $chambre_id = null;
+  public $chambre_id;
 
   // DB Fields
-  var $nom         = null;
-  var $nom_complet = null;
-  var $annule      = null;
+  public $nom;
+  public $nom_complet;
+  public $annule;
   
   // Form Fields
-  var $_overbooking = null;
-  var $_selected_item   = null;
-  var $_lines       = array();
-  var $_sexe_other_patient = null;
+  public $_overbooking;
+  public $_selected_item;
+  public $_lines;
+  public $_sexe_other_patient;
+  public $_affectation_id;
+  public $_sejour_id;
 
   // Object references
   
   /**
    * @var CChambre
    */
-  var $_ref_chambre      = null;
+  public $_ref_chambre;
   /**
    * @var CService
    */
-  var $_ref_service      = null;
-  var $_ref_affectations = null;
-  var $_ref_last_dispo   = null;
-  var $_ref_next_dispo   = null;
+  public $_ref_service;
+  public $_ref_affectations;
+  public $_ref_last_dispo;
+  public $_ref_next_dispo;
   
   function getSpec() {
     $spec = parent::getSpec();

@@ -1,35 +1,11 @@
 {{if !$readonly}}
-  <script type="text/javascript">
+  <script>
     Main.add(function() {
       var time_line_temporelle = $("time_line_temporelle");
       var tableau_vue_temporelle = $("tableau_vue_temporel");
       var view_affectations = $("view_affectations");
       view_affectations.scrollTop = 0;
-     
-      if (Prototype.Browser.Gecko) {
-        time_line_temporelle.setStyle({top: window.top_tempo});
-      }
-      
-      if (!Prototype.Browser.IE)  {
-        view_affectations.on('scroll', function() {
-          time_line_temporelle.setClassName('scroll_shadow', view_affectations.scrollTop);
-        });
-      }
-      else {
-        view_affectations.on('scroll', function() {
-          var style = view_affectations.scrollTop > 0 ?
-            "progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=180, Strength=6)" : "";
-          time_line_temporelle.setStyle({
-            "filter": style,
-          });
-        });
-      }
-      time_line_temporelle.setStyle({width: tableau_vue_temporelle.getWidth()+"px" }); 
-      
-      Event.observe(window, "resize", function(e){
-        time_line_temporelle.setStyle({width: tableau_vue_temporelle.getWidth()+"px" });
-      });
-      
+
       view_affectations.select(".droppable").each(function(tr) {
          Droppables.add(tr, {
           onDrop: function(div, tr, event) {

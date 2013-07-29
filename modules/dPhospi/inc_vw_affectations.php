@@ -278,3 +278,118 @@ function loadAffectationsCouloirs($where, $order = null, $praticien_id = null, $
 
   return $tab_affectations;
 }
+
+function loadVueTempo(&$objects = array(), $suivi_affectation, $lits = array(), &$operations = array(), $date_min, $date_max, $period, $prestation_id, &$functions_filter = null, $filter_function = null, &$sejours_non_affectes = null) {
+  $maternite_active = CModule::getActive("maternite");
+
+  foreach ($objects as $key => $_object) {
+    $_object->_entree = $_object->entree;
+    $_object->_sortie = $_object->sortie;
+
+    switch (get_class($_object)) {
+      case "CAffectation":
+        if ($_object->_is_prolong) {
+          $_object->_sortie = CMbDT::dateTime();
+        }
+
+        $_object->loadRefsAffectations();
+        $sejour = $_object->loadRefSejour();
+
+        if (!$suivi_affectation && $_object->parent_affectation_id) {
+          $suivi_affectation = true;
+        }
+
+        $lits[$_object->lit_id]->_ref_affectations[$_object->_id] = $_object;
+
+        if ($_object->_is_prolong) {
+          $_object->_start_prolongation = CMbDate::position(max($date_min, $_object->_entree), $date_min, $period);
+          $_object->_end_prolongation   = CMbDate::position(min($date_max, $_object->_sortie), $date_min, $period);
+          $_object->_width_prolongation = $_object->_end_prolongation - $_object->_start_prolongation;
+        }
+
+        break;
+      case "CSejour":
+        $sejour = $_object;
+    }
+
+    $sejour->loadRefPraticien()->loadRefFunction();
+
+    if (is_array($functions_filter)) {
+      $functions_filter[$sejour->_ref_praticien->function_id] = $sejour->_ref_praticien->_ref_function;
+      if ($filter_function && $filter_function != $sejour->_ref_praticien->function_id) {
+        unset($objects[$_object->_id]);
+        continue;
+      }
+    }
+
+    $sejour->loadRefPrestation();
+    $sejour->loadRefChargePriceIndicator();
+    $patient = $sejour->loadRefPatient();
+    $patient->loadRefPhotoIdentite();
+    $constantes = $patient->getFirstConstantes();
+    $patient->_overweight = $constantes->poids > 120;
+    $patient->loadRefDossierMedical(false);
+
+    $_object->_entree_offset = CMbDate::position(max($date_min, $_object->_entree), $date_min, $period);
+    $_object->_sortie_offset = CMbDate::position(min($date_max, $_object->_sortie), $date_min, $period);
+    $_object->_width = $_object->_sortie_offset - $_object->_entree_offset;
+
+    if ($_object->_width === 0) {
+      $_object->_width = 0.01;
+    }
+
+    if (!isset($operations[$sejour->_id])) {
+      $operations[$sejour->_id] = $sejour->loadRefsOperations();
+    }
+
+    if ($prestation_id) {
+      $sejour->loadRefFirstLiaisonForPrestation($prestation_id);
+      $sejour->loadLiaisonsForPrestation($prestation_id);
+    }
+
+    if ($maternite_active && $sejour->grossesse_id) {
+      $sejour->_sejours_enfants_ids = CMbArray::pluck($sejour->loadRefsNaissances(), "sejour_enfant_id");
+    }
+
+    foreach ($operations[$sejour->_id] as $key=>$_operation) {
+      $_operation->loadRefPlageOp(1);
+      $hour_operation = CMbDT::format($_operation->temp_operation, "%H");
+      $min_operation = CMbDT::format($_operation->temp_operation, "%M");
+      $fin_operation = CMbDT::dateTime("+$hour_operation hours +$min_operation minutes", $_operation->_datetime_best);
+
+      if ($_operation->_datetime_best > $date_max || $fin_operation < $date_min) {
+        unset($sejour->_ref_operations[$_operation->_id]);
+        continue;
+      }
+
+      $_operation->_debut_offset[$_object->_id] = CMbDate::position($_operation->_datetime_best, max($date_min, $_object->_entree), $period);
+
+      $_operation->_fin_offset[$_object->_id] = CMbDate::position($fin_operation, max($date_min, $_object->_entree), $period);
+      $_operation->_width[$_object->_id] = $_operation->_fin_offset[$_object->_id] - $_operation->_debut_offset[$_object->_id];
+
+      if (($_operation->_datetime_best > $date_max)) {
+        $_operation->_width_uscpo[$_object->_id] = 0;
+      }
+      else {
+        $fin_uscpo = $hour_operation + 24 * $_operation->duree_uscpo;
+        $_operation->_width_uscpo[$_object->_id] = CMbDate::position(CMbDT::dateTime("+$fin_uscpo hours + $min_operation minutes", $_operation->_datetime_best), max($date_min, $_object->_entree), $period) - $_operation->_fin_offset[$_object->_id];
+      }
+    }
+
+    if (is_array($sejours_non_affectes)) {
+      $lit = new CLit();
+      $lit->_selected_item = new CItemPrestation();
+      $lit->_lines = array();
+      if ($_object instanceof CAffectation) {
+        $lit->_affectation_id = $_object->_id;
+        $lit->_lines[] = $_object->_id;
+      }
+      else {
+        $lit->_sejour_id = $_object->_id;
+        $lit->_lines[] = $_object->_guid;
+      }
+
+      @$sejours_non_affectes[$_object->service_id ? $_object->service_id : "np"][] = $lit;
+    }
+  }
+}

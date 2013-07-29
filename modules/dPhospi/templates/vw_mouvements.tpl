@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
   window.sejour_selected = null;
   window.lit_selected    = null;
   window.affectation_selected = null;
@@ -20,12 +20,35 @@
       time_line_temporelle.setStyle({top: window.top_tempo});
       window.top_tempo_na = time_line_temporelle_na.getStyle("top");
       time_line_temporelle_na.setStyle({top: window.top_tempo_na});
-    }
-    ));
+
+      var time_line_temporelle = $("time_line_temporelle");
+      var tableau_vue_temporelle = $("tableau_vue_temporel");
+      var view_affectations = $("view_affectations");
+      time_line_temporelle.setStyle({width: tableau_vue_temporelle.getWidth()+"px" });
+
+      Event.observe(window, "resize", function(e){
+        time_line_temporelle.setStyle({width: tableau_vue_temporelle.getWidth()+"px" });
+      });
+
+      if (!Prototype.Browser.IE)  {
+        view_affectations.on('scroll', function() {
+          time_line_temporelle.setClassName('scroll_shadow', view_affectations.scrollTop);
+        });
+      }
+      else {
+        view_affectations.on('scroll', function() {
+          var style = view_affectations.scrollTop > 0 ?
+            "progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=180, Strength=6)" : "";
+          time_line_temporelle.setStyle({
+            "filter": style
+          });
+        });
+      }
+    } ));
   });
 </script>
 
-<div class="modal" style="display: none;" id="choose_interv_sejour">
+<div style="display: none;" id="choose_interv_sejour">
   <table class="tbl">
     <tr>
       <th class="title" colspan="2">
@@ -33,10 +56,10 @@
       </th>
     <tr>
       <td>
-        <button type="button" class="new" onclick="Control.Modal.close(); createIntervention()">{{tr}}COperation{{/tr}}</button>
+        <button type="button" class="new" onclick="createIntervention()">{{tr}}COperation{{/tr}}</button>
       </td>
       <td>
-        <button type="button" class="new" onclick="Control.Modal.close(); createSejour()">{{tr}}CSejour{{/tr}}</button>
+        <button type="button" class="new" onclick="createSejour()">{{tr}}CSejour{{/tr}}</button>
       </td>
     </tr>
     <tr>

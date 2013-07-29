@@ -11,6 +11,8 @@
  * @link     http://www.mediboard.org
  */
 
+CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
+
 $lit_id         = CValue::get("lit_id");
 $mode_vue_tempo = CValue::get("mode_vue_tempo");
 $date           = CValue::get('date');
@@ -77,6 +79,8 @@ $lit->_ref_affectations = array();
 $chambre = $lit->loadRefChambre();
 $chambre->_ref_lits[$lit->_id] = $lit;
 
+$lits = array($lit_id => $lit);
+
 $liaisons_items = $lit->loadBackRefs("liaisons_items");
 $items_prestations = CMbObject::massLoadFwdRef($liaisons_items, "item_prestation_id");
 $prestations_ids = CMbArray::pluck($items_prestations, "object_id");
@@ -139,68 +143,7 @@ $operations = array();
 
 $suivi_affectation = false;
 
-/** @var $affectations CAffectation[] */
-foreach ($affectations as $_affectation) {
-  if (!$suivi_affectation && $_affectation->parent_affectation_id) {
-    $suivi_affectation = true;
-  }
-  $_affectation->_entree = $_affectation->entree;
-  $_affectation->_sortie = $_affectation->sortie;
-  if ($_affectation->_is_prolong) {
-    $_affectation->_sortie = CMbDT::dateTime();
-  }
-  $_affectation->loadRefsAffectations();
-  $sejour = $_affectation->loadRefSejour();
-  $sejour->loadRefPraticien()->loadRefFunction();
-  $_affectation->_ref_sejour->loadRefChargePriceIndicator();
-  $patient = $sejour->loadRefPatient();
-  $patient->loadRefPhotoIdentite();
-  $patient->loadRefDossierMedical(false)->loadRefsAntecedentsOfType("deficience");
-  $constantes = $patient->getFirstConstantes();
-  $patient->_overweight = $constantes->poids > 120;
-  
-  $lit->_ref_affectations[$_affectation->_id] = $_affectation;
-  $_affectation->_entree_offset = CMbDate::position(max($date_min, $_affectation->_entree), $date_min, $period);
-  $_affectation->_sortie_offset = CMbDate::position(min($date_max, $_affectation->_sortie), $date_min, $period);
-  $_affectation->_width = $_affectation->_sortie_offset - $_affectation->_entree_offset;
-  
-  if (isset($operations[$sejour->_id])) {
-    $_operations = $operations[$sejour->_id];
-  }
-  else {
-    $operations[$sejour->_id] = $_operations = $sejour->loadRefsOperations();
-  }
-  
-  foreach ($_operations as $key=>$_operation) {
-    $_operation->loadRefPlageOp(1);
-    
-    $hour_operation = CMbDT::format($_operation->temp_operation, "%H");
-    $min_operation = CMbDT::format($_operation->temp_operation, "%M");
-    
-    $_operation->_debut_offset[$_affectation->_id] = CMbDate::position($_operation->_datetime, max($date_min, $_affectation->_entree), $period);
-    
-    $_operation->_fin_offset[$_affectation->_id] = CMbDate::position(CMbDT::dateTime("+$hour_operation hours +$min_operation minutes",$_operation->_datetime), max($date_min, $_affectation->_entree), $period);
-    $_operation->_width[$_affectation->_id] = $_operation->_fin_offset[$_affectation->_id] - $_operation->_debut_offset[$_affectation->_id];
-    
-    if (($_operation->_datetime > $date_max)) {
-      $_operation->_width_uscpo[$_affectation->_id] = 0;
-    }
-    else {
-      $fin_uscpo = $hour_operation + 24 * $_operation->duree_uscpo;
-      $_operation->_width_uscpo[$_affectation->_id] = CMbDate::position(CMbDT::dateTime("+$fin_uscpo hours + $min_operation minutes", $_operation->_datetime), max($date_min, $_affectation->_entree), $period) - $_operation->_fin_offset[$_affectation->_id];
-    }
-
-    if ($_affectation->_is_prolong) {
-      $_affectation->_start_prolongation = CMbDate::position(max($date_min, $_affectation->_entree), $date_min, $period);
-      $_affectation->_end_prolongation   = CMbDate::position(min($date_max, $_affectation->_sortie), $date_min, $period);
-      $_affectation->_width_prolongation = $_affectation->_end_prolongation - $_affectation->_start_prolongation;
-    }
-  }
-  
-  if ($prestation_id) {
-    $sejour->loadLiaisonsForPrestation($prestation_id);
-  }
-}
+loadVueTempo($affectations, $suivi_affectation, $lits, $operations, $date_min, $date_max, $period, $prestation_id);
 
 $intervals = array();
 if (count($lit->_ref_affectations)) {
@@ -220,9 +163,9 @@ $where = array();
 $where["entree"] = "<= '$date_max'";
 $where["sortie"] = ">= '$date_min'";
 
-$lits = $chambre->loadBackIds("lits");
+$lits_ids = $chambre->loadBackIds("lits");
 
-foreach ($lits as $_lit_id) {
+foreach ($lits_ids as $_lit_id) {
   if ($lit_id == $_lit_id) {
     continue;
   }
