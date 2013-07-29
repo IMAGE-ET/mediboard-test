@@ -35,9 +35,10 @@ $dPconfig["dPfacturation"] = array (
     "message_relance3_patient" => ""
   ),
   "CReglement" => array(
-    "use_debiteur" => "0",
+    "use_debiteur"  => "0",
     "add_pay_not_close"     => "0",
     "use_lock_acquittement" => "0",
+    "use_mode_default"      => "cheque",
   ),
   "CRetrocession" => array(
     "use_retrocessions" => "0"

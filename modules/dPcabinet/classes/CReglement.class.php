@@ -60,17 +60,17 @@ class CReglement extends CMbMetaObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props['object_class']    = 'enum notNull list|CFactureCabinet|CFactureEtablissement show|0 default|CFactureCabinet';
-    $props['banque_id']       = 'ref class|CBanque';
-    $props['date']            = 'dateTime notNull';
-    $props['montant']         = 'currency notNull';
-    $props['emetteur']        = 'enum notNull list|patient|tiers';
-    $props['mode']            = 'enum notNull list|cheque|CB|especes|virement|BVR|autre default|cheque';
-    $props['reference']       = 'str';
-    $props['num_bvr']         = 'str maxLength|50';
-    $props['tireur']          = 'str';
-    $props["debiteur_id"]     = "ref class|CDebiteur";
-    $props["debiteur_desc"]   = "str";
+    $props['object_class']  = 'enum notNull list|CFactureCabinet|CFactureEtablissement show|0 default|CFactureCabinet';
+    $props['banque_id']     = 'ref class|CBanque';
+    $props['date']          = 'dateTime notNull';
+    $props['montant']       = 'currency notNull';
+    $props['emetteur']      = 'enum notNull list|patient|tiers';
+    $props['mode']          = "enum notNull list|cheque|CB|especes|virement|BVR|autre default|".CAppUI::conf("dPfacturation CReglement use_mode_default");
+    $props['reference']     = 'str';
+    $props['num_bvr']       = 'str maxLength|50';
+    $props['tireur']        = 'str';
+    $props["debiteur_id"]   = "ref class|CDebiteur";
+    $props["debiteur_desc"] = "str";
     return $props;
   }
   

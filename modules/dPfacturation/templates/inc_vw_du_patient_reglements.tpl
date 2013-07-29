@@ -190,7 +190,7 @@
     {{if ($object->_du_restant_patient) > 0 || $conf.dPfacturation.CReglement.use_lock_acquittement}}
       <tr>
         <td>
-          {{mb_field object=$reglement field=mode emptyLabel="Choose" onchange="updateBanque(this)"}}
+          {{mb_field object=$reglement field=mode onchange="updateBanque(this)"}}
           {{mb_field object=$reglement field=banque_id options=$banques style="display: none"}}
           {{if isset($object->_num_bvr|smarty:nodefaults)}}
             <select name="num_bvr" style="display:none;" onchange="modifMontantBVR(this.value);" >

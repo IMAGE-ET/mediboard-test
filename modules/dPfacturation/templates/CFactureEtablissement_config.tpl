@@ -27,6 +27,7 @@
     {{mb_include module=system template=inc_config_bool var=use_debiteur}}
     {{mb_include module=system template=inc_config_bool var=add_pay_not_close}}
     {{mb_include module=system template=inc_config_bool var=use_lock_acquittement}}
+    {{mb_include module=system template=inc_config_enum var=use_mode_default values="cheque|CB|especes|virement|BVR|autre"}}
     <tr>
       <th class="category" colspan="2">{{tr}}Other{{/tr}}</th>
     </tr>
