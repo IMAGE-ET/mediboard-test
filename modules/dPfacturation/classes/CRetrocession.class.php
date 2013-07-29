@@ -60,7 +60,7 @@ class CRetrocession extends CMbObject {
     $props["pct_pt"]      = "pct default|0";
     $props["code_class"]  = "enum list|CActeCCAM|CActeNAGP|CActeTarmed|CActeCaisse default|CActeCCAM";
     $props["code"]        = "str";
-    $props["use_pm"]      = "bool default|0";
+    $props["use_pm"]      = "bool default|1";
     $props["active"]      = "bool default|1";
 
     $props["_montant_total"]  = "currency";

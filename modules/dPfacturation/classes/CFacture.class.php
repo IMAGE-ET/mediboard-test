@@ -1010,25 +1010,25 @@ class CFacture extends CMbObject {
     $this->loadRefPraticien();
     $this->loadRefsItems();
     $retrocessions = $this->_ref_praticien->loadRefsRetrocessions();
-    $item_forfait = array();
-    $total_forfait = 0.00;
     $add_anesth = true;
+    $use_pm = false;
+    foreach ($this->_ref_items as $item) {
+      foreach ($retrocessions as $retro) {
+        if ($retro->use_pm && $retro->code_class == $item->type && $retro->code == $item->code && $retro->active) {
+          $use_pm = true;
+        }
+      }
+    }
     foreach ($this->_ref_items as $item) {
       $modif = false;
-      $use_pm = false;
       if (!(!$add_anesth && $item->type == "CActeTarmed" && strstr($item->code, "28."))) {
         foreach ($retrocessions as $retro) {
           /** @var CRetrocession $retro*/
           if ($retro->code_class == $item->type && $retro->code == $item->code && $retro->active) {
             $modif = true;
             $montant = $item->quantite * $retro->updateMontant();
-            if (!$retro->use_pm && $item->type == "CActeTarmed") {
-              $use_pm = true;
+            if (!$retro->use_pm && $item->type == "CActeTarmed" && $use_pm) {
               $montant = 0;
-            }
-            if ($item->forfait) {
-              $item_forfait[$item->code] = array($item->_montant_facture, $montant);
-              $total_forfait += $montant;
             }
             if ($item->type == "CActeTarmed" && strstr($item->code, "28.")) {
               $add_anesth = false;
@@ -1050,10 +1050,6 @@ class CFacture extends CMbObject {
           $this->_retrocessions[$item->code] = array($item->_montant_facture, $montant);
         }
       }
-    }
-    if (count($item_forfait)) {
-      $this->_retrocessions = $item_forfait;
-      $this->_montant_retrocession = $total_forfait;
     }
     if ($this->_montant_retrocession && $this->annule) {
       $this->_retrocessions["extourne"] = array(0, -$this->_montant_retrocession);

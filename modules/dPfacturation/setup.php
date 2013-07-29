@@ -309,6 +309,11 @@ class CSetupdPfacturation extends CSetup {
     $query = "ALTER TABLE `factureitem`
                 ADD `forfait` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
-    $this->mod_version = "0.34";
+    $this->makeRevision("0.34");
+
+    $query = "ALTER TABLE `factureitem`
+                DROP `forfait`;";
+    $this->addQuery($query);
+    $this->mod_version = "0.35";
   }
 }

@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPfacturation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 CCanDo::checkRead();
 $type     = CValue::get("type");
@@ -21,10 +21,10 @@ $journal_pdf->date_max = $date_max;
 $where = array();
 
 if ($type == "paiement") {
-  $where["date"] = "BETWEEN '$date_min 00:00:00' AND '$date_max 00:00:00'";
+  $where["date"] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:00'";
   $where["object_class"] = " = 'CFactureEtablissement'";
   $reglement = new CReglement();
-  $journal_pdf->reglements = $reglement->loadList($where);
+  $journal_pdf->reglements = $reglement->loadList($where, "debiteur_id, debiteur_desc, date");
   foreach ($journal_pdf->reglements as $_reglement) {
     /** @var CReglement $_reglement */
     $fact = $_reglement->loadRefFacture();

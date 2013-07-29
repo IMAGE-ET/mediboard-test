@@ -50,6 +50,19 @@ class CEditJournal {
   }
 
   /**
+   * Fontion qui permet de créer une nouvelle page
+   *
+   * @param array $colonnes les donnees des colonnes
+   *
+   * @return int
+   */
+  function ajoutPage($colonnes) {
+    $this->editEntete();
+    $this->editTableau($colonnes, 5, 25);
+    return 0;
+  }
+
+  /**
    * Fontion qui permet l'écriture des tableaux de données
    *
    * @param array $colonnes les noms et largeurs de colonnes
@@ -83,11 +96,6 @@ class CEditJournal {
 
     $this->page = 0;
     $this->editEntete();
-
-    $this->pdf->Line(5, 5, 5, 205);
-    $this->pdf->Line(5, 5, 293, 5);
-    $this->pdf->Line(293, 5, 293, 205);
-    $this->pdf->Line(5, 205, 293, 205);
 
     switch ($this->type_pdf) {
       case "paiement" :
@@ -133,6 +141,11 @@ class CEditJournal {
     $this->pdf->setFont($this->font, '', 8);
     $this->pdf->Line(5, 20, 293, 20);
     $this->pdf->Line(5, 30, 293, 30);
+
+    $this->pdf->Line(5, 5, 5, 205);
+    $this->pdf->Line(5, 5, 293, 5);
+    $this->pdf->Line(293, 5, 293, 205);
+    $this->pdf->Line(5, 205, 293, 205);
   }
 
   /**
@@ -150,8 +163,29 @@ class CEditJournal {
 
     $debut_lignes = 30;
     $ligne = 0;
+    $debiteur_nom = "";
+    $total_reglement = $totaux_reglement = 0.00;
+    $totaux = array();
     foreach ($this->reglements as $reglement) {
+      //mbTrace($reglement->_id);
       $reglement->_ref_facture->loadRefsReglements();
+      $reglement->loadRefDebiteur();
+      if (!strstr($debiteur_nom, $reglement->_ref_debiteur->nom)) {
+        $debiteur_nom = $reglement->_ref_debiteur->numero." - ".$reglement->_ref_debiteur->nom;
+        $totaux[$debiteur_nom] = array("Débit" => 0.00, "Crédit" => 0.00, "Solde" => 0.00);
+        if ($ligne != 0) {
+          $ligne +=2;
+          $this->editCell(125, $debut_lignes + $ligne*4, 45, "Total contre-partie", "L");
+          $this->editCell(215, $debut_lignes + $ligne*4, 15, "0.00", "R");
+          $this->editCell(245, $debut_lignes + $ligne*4, 15, sprintf("%.2f", $total_reglement), "R");
+          $total_reglement = 0.00;
+          $ligne = $this->ajoutPage($colonnes);
+        }
+        $this->pdf->setFont($this->font, '', 10);
+        $this->editCell(80, 15, 160, $debiteur_nom, "C");
+        $this->pdf->setFont($this->font, '', 8);
+      }
+
       $this->pdf->setX(5);
       $ligne++;
       $valeurs = array(
@@ -163,6 +197,9 @@ class CEditJournal {
         "Débit"   => "",
         "Crédit C/C" => sprintf("%.2f", $reglement->montant),
         "Solde fact." => sprintf("%.2f", $reglement->_ref_facture->_du_restant_patient));
+      $totaux[$debiteur_nom]["Débit"] += 0.00;
+      $totaux[$debiteur_nom]["Crédit"] += sprintf("%.2f", $reglement->montant);
+      $totaux[$debiteur_nom]["Solde"] += sprintf("%.2f", $reglement->montant);
 
       if ($reglement->debiteur_desc) {
         $valeurs["Libellé"] .= " ($reglement->debiteur_desc)";
@@ -173,12 +210,48 @@ class CEditJournal {
         $this->editCell($this->pdf->getX()+$x, $debut_lignes + $ligne*4, $value, $valeurs[$key], $cote);
         $x = $value;
       }
+      $total_reglement += sprintf("%.2f", $reglement->montant);
+      $totaux_reglement += sprintf("%.2f", $reglement->montant);
       if ($debut_lignes + $ligne*4 >= 200) {
-        $this->editEntete();
-        $this->editTableau($colonnes, 5, 25);
-        $ligne = 0;
+        $ligne = $this->ajoutPage($colonnes);
       }
     }
+    $ligne +=2;
+    $this->editCell(125, $debut_lignes + $ligne*4, 45, "Total contre-partie", "L");
+    $this->editCell(215, $debut_lignes + $ligne*4, 15, "0.00", "R");
+    $this->editCell(245, $debut_lignes + $ligne*4, 15, sprintf("%.2f", $total_reglement), "R");
+    $ligne +=2;
+    $this->editCell(125, $debut_lignes + $ligne*4, 45, "Total général", "L");
+    $this->editCell(215, $debut_lignes + $ligne*4, 15, "0.00", "R");
+    $this->editCell(245, $debut_lignes + $ligne*4, 15, $totaux_reglement, "R");
+
+    $colonnes = array(
+      "Contre-partie comptable" => 80,  "Débit"     => 25,
+      "Crédit"  => 25, "Solde" => 25);
+
+    $this->pdf->setFont($this->font, '', 9);
+    $this->ajoutPage($colonnes);
+    $this->pdf->setFont($this->font, '', 10);
+    $this->editCell(80, 15, 160, "Récapitulatif par contre-parties", "C");
+    $this->pdf->setFont($this->font, '', 9);
+    //mbTrace($totaux);
+    $ligne =0;
+    foreach ($totaux as $compte => $valeurs) {
+      $ligne++;
+      $this->editCell(5, $debut_lignes + $ligne*4, 80, $compte, "L");
+      $x = 80;
+      foreach ($valeurs as $key => $value) {
+        $cote = ($key == "Contre-partie comptable") ? "L" : "R";
+        $this->editCell($this->pdf->getX()+$x, $debut_lignes + $ligne*4, $colonnes[$key], sprintf("%.2f", $value), $cote);
+        $x = $colonnes[$key];
+      }
+    }
+    $ligne +=2;
+    $pos_ligne = $debut_lignes + $ligne*4;
+    $this->editCell(5  , $pos_ligne, 80, "Total général", "L");
+    $this->editCell(165, $pos_ligne, 25, "0.00", "R");
+    $this->editCell(215, $pos_ligne, 25, sprintf("%.2f", $totaux_reglement), "R");
+    $this->editCell(265, $pos_ligne, 25, sprintf("%.2f", $totaux_reglement), "R");
   }
 
   /**
@@ -221,9 +294,7 @@ class CEditJournal {
         $x = $value;
       }
       if ($debut_lignes + $ligne*4 >= 200) {
-        $this->editEntete();
-        $this->editTableau($colonnes, 5, 25);
-        $ligne = 0;
+        $ligne = $this->ajoutPage($colonnes);
       }
     }
   }
@@ -262,9 +333,7 @@ class CEditJournal {
         $x = $value;
       }
       if ($debut_lignes + $ligne*4 >= 200) {
-        $this->editEntete();
-        $this->editTableau($colonnes, 5, 25);
-        $ligne = 0;
+        $ligne = $this->ajoutPage($colonnes);
       }
     }
   }
