@@ -2,6 +2,12 @@
   <tr>
     <th colspan="2">Liste des factures</th>
   </tr>
+  {{if $classe == "CFactureEtablissement"}}
+    <tr>
+      <td style="background-color:#ffcd75;width:40px;"></td>
+      <td class="text">Facture non cotées</td>
+    </tr>
+  {{/if}}
   {{if !$conf.dPfacturation.$classe.use_auto_cloture}}
     <tr>
       <td style="background-color:#fcc;width:40px;"></td>

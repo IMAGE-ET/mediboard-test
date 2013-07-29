@@ -5,6 +5,9 @@
   table.main td.cloture, table.main tr.cloture{
     background-color:#fcc;
   }
+  table.main td.noncotee, table.main tr.noncotee{
+    background-color:#ffcd75;
+  }
 </style>
 {{if $conf.dPfacturation.CRelance.use_relances}}
   {{mb_script module=facturation script=relance ajax="true"}}
@@ -59,6 +62,9 @@ showLegend = function() {
             {{/if}}
             {{if $_facture->annule}}
               {{assign var="cloture" value="hatching"}}
+            {{/if}}
+            {{if !$_facture->_ref_actes_tarmed|@count && !$_facture->_ref_actes_caisse|@count && !$_facture->_ref_actes_ngap|@count && !$_facture->_ref_actes_ccam|@count}}
+              {{assign var="cloture" value="noncotee"}}
             {{/if}}
             {{assign var="classe" value=$facture->_class}}
             {{if $conf.dPfacturation.CEditPdf.use_bill_etab}}
