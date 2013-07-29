@@ -23,8 +23,8 @@
   };
 
   Main.add(function() {
-    var height_planning = 1500;
-    ViewPort.SetAvlHeight("planningInterventions", 1);
+    var height_planning = '{{$height_planning_resa}}';
+    ViewPort.SetAvlHeight("planningInterventions", 1.0);
     $('planningWeek').style.height = height_planning+"px";
     $$(".body").each(function(elt) {
       elt.setStyle({backgroundColor: elt.up().getStyle("backgroundColor")});
@@ -143,6 +143,7 @@
             window.save_sejour_id     = span_infos.get("sejour_id");
             window.save_chir_id       = span_infos.get("chir_id");
             window.save_duree         = span_infos.get("duree");
+            window.save_pec           = span_infos.get("pec");
             window.save_elem = elem;
           }
           updateStatusCut();
@@ -150,7 +151,7 @@
         case 'clock':
           modifSejour(object_id, null, null, null, null, null, "Control.Modal.close");
       }
-    }
+    };
     
     planning.onEventChange = function(e) {
       var time = e.getTime();
@@ -228,7 +229,7 @@
       $V(form.salle_id,       salle_id);
       
       onSubmitFormAjax(form, {onComplete: refreshPlanning});
-    }
+    };
     
     var planning_div = $("{{$planning->guid}}");
 

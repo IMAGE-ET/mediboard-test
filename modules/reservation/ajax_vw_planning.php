@@ -306,7 +306,7 @@ if ($show_operations) {
       $libelle = "<span style='display: none;' data-duree='$sejour->_duree' data-entree_prevue='$sejour->entree_prevue'".
         "data-sortie_prevue='$sejour->sortie_prevue' data-sejour_id='$sejour->_id' data-preop='".
         ($_operation->presence_preop ? CMbDT::transform($_operation->presence_preop, null, "%H:%M") : "00:00")."' data-postop='".
-        ($_operation->presence_postop ? CMbDT::transform($_operation->presence_postop, null, "%H:%M") : "00:00")."' data-traitement='".$charge->_id."'></span>";
+        ($_operation->presence_postop ? CMbDT::transform($_operation->presence_postop, null, "%H:%M") : "00:00")."' data-traitement='".$charge->_id."' data-pec='".$sejour->type_pec."'></span>";
 
       /** CADRE DROIT */
       $libelle .="<span style=\"float:right; text-align: right\">";
@@ -535,6 +535,7 @@ $smarty->assign("show_cancelled",       $show_cancelled);
 $smarty->assign("show_operations",      $show_operations);
 $smarty->assign("bloc_id",              $bloc_id );
 $smarty->assign("prestations",          $prestations_journalieres);
+$smarty->assign("height_planning_resa", CAppUI::pref("planning_resa_height", 1500));
 
 $smarty->assign("nbIntervNonPlacees",   $nbIntervNonPlacees);
 $smarty->assign("nbIntervHorsPlage" ,   $nbIntervHorsPlage );

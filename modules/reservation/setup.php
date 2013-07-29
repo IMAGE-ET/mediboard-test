@@ -55,7 +55,10 @@ class CSetupreservation extends CSetup {
       `physio_postop` TEXT
     ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-    
-    $this->mod_version = "0.04";
+
+    $this->makeRevision("0.04");
+    $this->addPrefQuery("planning_resa_height", 1500);
+
+    $this->mod_version = "0.05";
   }
 }

@@ -135,4 +135,6 @@ $locales['mod-reservation-tab-vw_sejours_validation'] = 'Validation séjours';
 $locales['mod-reservation-tab-vw_suivi_salles'] = 'Suivi salles';
 $locales['module-reservation-court'] = 'Réservation';
 $locales['module-reservation-long'] = 'Réservation';
+$locales['pref-planning_resa_height'] = 'Hauteur du planning de réservation';
+$locales['pref-planning_resa_height-desc'] = 'Hauteur du planning de réservation en pixels (permet de zoomer sur les plages)';
 ?>

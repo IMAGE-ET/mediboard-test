@@ -10,3 +10,6 @@
  */
 
 // Préférences par Module
+CPreferences::$modules["reservation"] = array (
+  "planning_resa_height"
+);
