@@ -226,6 +226,10 @@ class CSalle extends CMbObject {
       $urgence->loadRefPatient();
       $urgence->loadExtCodesCCAM();
       $urgence->loadRefPlageOp();
+
+      if (CAppUI::conf("dPbloc CPlageOp chambre_operation")) {
+        $urgence->loadRefAffectation();
+      }
     }
   }
 
