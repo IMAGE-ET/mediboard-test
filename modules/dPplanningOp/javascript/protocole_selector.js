@@ -94,16 +94,18 @@ ProtocoleSelector = {
       $V(oOpForm[this.sDuree_uscpo],       protocole.duree_uscpo);
       $V(oOpForm[this.sDuree_preop],       protocole.duree_preop);
       $V(oOpForm[this.sExamExtempo],       protocole.exam_extempo);
-      
-      var types_ressources_ids = $V(oOpForm[this.sTypesRessourcesIds]);
-      if (types_ressources_ids != "") {
-        types_ressources_ids += "," + protocole._types_ressources_ids;
+
+      if (oOpForm[this.sTypesRessourcesIds]) {
+        var types_ressources_ids = $V(oOpForm[this.sTypesRessourcesIds]);
+        if (types_ressources_ids != "") {
+          types_ressources_ids += "," + protocole._types_ressources_ids;
+        }
+        else {
+          types_ressources_ids = protocole._types_ressources_ids;
+        }
+
+        $V(oOpForm[this.sTypesRessourcesIds], types_ressources_ids);
       }
-      else {
-        types_ressources_ids = protocole._types_ressources_ids;
-      }
-      
-      $V(oOpForm[this.sTypesRessourcesIds], types_ressources_ids);
       
       if (oOpForm[this.sDepassement] && oOpForm[this.sForfait] && oOpForm[this.sFournitures]) {
         $V(oOpForm[this.sDepassement],       protocole.depassement, false);

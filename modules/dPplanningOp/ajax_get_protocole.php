@@ -15,7 +15,10 @@ $chir_id      = CValue::get("chir_id");
 $protocole = new CProtocole();
 $protocole->load($protocole_id);
 $protocole->loadRefsFwd();
-$protocole->_types_ressources_ids = implode(",", CMbArray::pluck($protocole->loadRefsBesoins(), "type_ressource_id"));
+
+if (CAppUI::conf("dPbloc CPlageOp systeme_materiel")) {
+  $protocole->_types_ressources_ids = implode(",", CMbArray::pluck($protocole->loadRefsBesoins(), "type_ressource_id"));
+}
 
 $smarty = new CSmartyDP();
 

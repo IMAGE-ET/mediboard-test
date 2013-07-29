@@ -58,9 +58,13 @@ $list_protocoles       = $protocole->loadList($where, $order, "{$page[$type]},$s
 
 $total_protocoles = $protocole->countList($where);
 
+$systeme_materiel_expert = CAppUI::conf("dPbloc CPlageOp systeme_materiel") == "expert";
+
 foreach ($list_protocoles as $_prot) {
   $_prot->loadRefsFwd();
-  $_prot->_types_ressources_ids = implode(",", CMbArray::pluck($_prot->loadRefsBesoins(), "type_ressource_id"));
+  if ($systeme_materiel_expert == "expert") {
+    $_prot->_types_ressources_ids = implode(",", CMbArray::pluck($_prot->loadRefsBesoins(), "type_ressource_id"));
+  }
 }
 
 // Création du template
