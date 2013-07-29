@@ -293,6 +293,7 @@ function loadVueTempo(&$objects = array(), $suivi_affectation, $lits = array(), 
         }
 
         $_object->loadRefsAffectations();
+        $_object->_affectations_enfant_ids = CMbArray::pluck($_object->loadBackRefs("affectations_enfant"), "affectation_id");
         $sejour = $_object->loadRefSejour();
 
         if (!$suivi_affectation && $_object->parent_affectation_id) {

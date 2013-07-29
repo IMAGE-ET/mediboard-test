@@ -137,6 +137,7 @@
             {{else}}
               data-patient_id="{{$patient->_id}}"
               data-sejour_id="{{$sejour->_id}}"
+              data-affectations_enfant="{{'-'|implode:$object->_sejours_enfants_ids}}";
             {{/if}}
 
             style="left: {{$offset}}%; width: {{$width}}%; border: 1px solid #{{$color}}; margin-left: 15.1%;
@@ -274,8 +275,11 @@
                         <button type="button" class="edit notext opacity-40"
                           onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"
                           onclick="editAffectation('{{$object->_id}}')"></button>
+                        <input type="radio" name="affectation_move" onclick="chooseAffectation('{{$object->_id}}');" />
+                      {{else}}
+                         <input type="radio" name="sejour_move" id="sejour_move_{{$sejour->_id}}" onclick="chooseSejour('{{$sejour->_id}}');"/>
                       {{/if}}
-                      <input type="radio" name="affectation_move" onclick="chooseAffectation('{{$object->_id}}');" />
+
                     </span>
                   </td>
                 {{/if}}
