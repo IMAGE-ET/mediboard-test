@@ -45,6 +45,7 @@ if (count($blocs) == 1) {
 }
 
 foreach ($blocs as $_bloc) {
+  /** @var CBlocOperatoire $_bloc */
   $_bloc->canDo();
   $_bloc->loadRefsSalles();
   $nbAlertesInterv+= count($_bloc->loadRefsAlertesIntervs());
@@ -162,6 +163,7 @@ foreach ($salles as $_salle) {
 // Tri des opérations par salle
 $operations_by_salle = array();
 foreach ($operations as $key => $_operation) {
+  /** @var COperation $_operation */
   if (!$_operation->salle_id) {
     unset($operations[$key]);
     continue;
@@ -176,6 +178,7 @@ foreach ($operations as $key => $_operation) {
 // Tri des commentaires par salle
 $commentaires_by_salle = array();
 foreach ($commentaires as $key => $_commentaire) {
+  /** @var CCommentairePlanning $_commentaire */
   $salle_id = $_commentaire->salle_id;
   if (!isset($commentaires_by_salle[$salle_id])) {
     $commentaires_by_salle[$salle_id] = array();
@@ -189,6 +192,7 @@ CMbObject::massLoadFwdRef($plages, "chir_id");
 CMbObject::massLoadFwdRef($plages, "spec_id");
 
 foreach ($plages as $_plage) {
+  /** @var CPlageOp $_plage */
   $_plage->loadRefChir();
   $_plage->loadRefSpec();
   $_plage->loadRefsOperations();
@@ -330,7 +334,7 @@ if ($show_operations) {
           $couleur = $close ? "blue" : "#FF0";
           $couleur = $facture->patient_date_reglement ? "green" : $couleur;
           $action_fact = "Facture.edit($facture->_id, '$facture->_class')";
-          $libelle.= "<button class=\"calcul notext\" onclick=\"$action_fact\" style=\"border: $couleur 1px solid;\">Facture</button>";
+          $libelle.= "<button class=\"calcul notext\" onclick=\"$action_fact\" style=\"border-left: $couleur 3px solid;\">Facture</button>";
         }
       }
       $libelle .="</span>";
