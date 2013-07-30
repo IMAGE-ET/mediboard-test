@@ -22,6 +22,13 @@
                item_superior
              {{/if}}"
     {{/if}}>
-    {{$item_presta->nom}}
+
+    <!-- display -->
+    {{if $item_presta->_id == $item_presta_realise->_id}}
+      {{$item_presta->nom}}
+    {{else}}
+      <span title="souhait [{{$item_presta->nom}}]: / realisé : [{{$item_presta_realise->nom}}]">{{if $item_presta->nom}}{{$item_presta->nom}}{{else}}{{$item_presta_realise->nom}}{{/if}}</span>
+    {{/if}}
+
   </strong>
 {{/foreach}}
