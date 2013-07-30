@@ -112,7 +112,7 @@
                     start: "{{$sejour->entree}}",
                     stop:  "{{$sejour->sortie}}"
                   }
-                }
+                };
                 new Calendar.regField(form.date, dates);
               });
             </script>

@@ -3380,15 +3380,17 @@ class CSejour extends CFacturable implements IPatientRelated {
       $where["object_id"] = " = '$prestation_id'";
     }
 
-    if ($date_min && $date_max) {
-      if ($date_min != $date_max) {
-        //dates differents, between
-        $where['date'] = "BETWEEN '$date_min' AND '$date_max'";
-      }
-      else {
-        $where['date'] = "= '$date_min'";
-        $groupby = "item_liaison.sejour_id";
-      }
+    //min != max
+    if ($date_min && $date_max && ($date_min != $date_max)) {
+      //dates differents, between
+      $where['date'] = "BETWEEN '$date_min' AND '$date_max'";
+    }
+
+    //min && !max or min == max
+    if (($date_min && !$date_max) || (($date_min == $date_max) && $date_min)) {
+      $where['date'] = "= '$date_min'";
+      $groupby = "item_liaison.sejour_id";
+
     }
 
     /** @var  CItemLiaison[] _liaisons_for_prestation */
