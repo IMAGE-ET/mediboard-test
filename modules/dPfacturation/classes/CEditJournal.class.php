@@ -121,7 +121,6 @@ class CEditJournal {
     $this->page ++;
     $this->pdf->AddPage();
     $this->pdf->setFont($this->font, '', 10);
-    $nom_journal = "JOURNAL DES PAIEMENTS";
     switch ($this->type_pdf) {
       case "paiement" :
         $nom_journal = "Journal des paiements";
@@ -138,14 +137,13 @@ class CEditJournal {
     $this->pdf->Cell(67, "", "Page: ".$this->page);
     $date = "Date: du ".CMbDT::transform("", $this->date_min, '%d/%m/%Y')." au ".CMbDT::transform("", $this->date_max, '%d/%m/%Y');
     $this->editCell(10, 15, 70, $date);
-    $this->pdf->setFont($this->font, '', 8);
     $this->pdf->Line(5, 20, 293, 20);
     $this->pdf->Line(5, 30, 293, 30);
-
     $this->pdf->Line(5, 5, 5, 205);
     $this->pdf->Line(5, 5, 293, 5);
     $this->pdf->Line(293, 5, 293, 205);
     $this->pdf->Line(5, 205, 293, 205);
+    $this->pdf->setFont($this->font, '', 9);
   }
 
   /**
@@ -160,14 +158,13 @@ class CEditJournal {
       "Facture"     => 10,  "Débit"     => 15,
       "Crédit C/C"  => 15, "Solde fact." => 15);
     $this->editTableau($colonnes, 5, 25);
-
+    $colonnes_x = array(125, 215, 245);
     $debut_lignes = 30;
     $ligne = 0;
     $debiteur_nom = "";
     $total_reglement = $totaux_reglement = 0.00;
     $totaux = array();
     foreach ($this->reglements as $reglement) {
-      //mbTrace($reglement->_id);
       $reglement->_ref_facture->loadRefsReglements();
       $reglement->loadRefDebiteur();
       if (!strstr($debiteur_nom, $reglement->_ref_debiteur->nom)) {
@@ -175,9 +172,10 @@ class CEditJournal {
         $totaux[$debiteur_nom] = array("Débit" => 0.00, "Crédit" => 0.00, "Solde" => 0.00);
         if ($ligne != 0) {
           $ligne +=2;
-          $this->editCell(125, $debut_lignes + $ligne*4, 45, "Total contre-partie", "L");
-          $this->editCell(215, $debut_lignes + $ligne*4, 15, "0.00", "R");
-          $this->editCell(245, $debut_lignes + $ligne*4, 15, sprintf("%.2f", $total_reglement), "R");
+          $pos_ligne = $debut_lignes + $ligne*4;
+          $this->editCell($colonnes_x[0], $pos_ligne, 45, "Total contre-partie", "L");
+          $this->editCell($colonnes_x[1], $pos_ligne, 15, "0.00", "R");
+          $this->editCell($colonnes_x[2], $pos_ligne, 15, sprintf("%.2f", $total_reglement), "R");
           $total_reglement = 0.00;
           $ligne = $this->ajoutPage($colonnes);
         }
@@ -217,32 +215,33 @@ class CEditJournal {
       }
     }
     $ligne +=2;
-    $this->editCell(125, $debut_lignes + $ligne*4, 45, "Total contre-partie", "L");
-    $this->editCell(215, $debut_lignes + $ligne*4, 15, "0.00", "R");
-    $this->editCell(245, $debut_lignes + $ligne*4, 15, sprintf("%.2f", $total_reglement), "R");
+    $pos_ligne = $debut_lignes + $ligne*4;
+    $this->editCell($colonnes_x[0], $pos_ligne, 45, "Total contre-partie", "L");
+    $this->editCell($colonnes_x[1], $pos_ligne, 15, "0.00", "R");
+    $this->editCell($colonnes_x[2], $pos_ligne, 15, sprintf("%.2f", $total_reglement), "R");
     $ligne +=2;
-    $this->editCell(125, $debut_lignes + $ligne*4, 45, "Total général", "L");
-    $this->editCell(215, $debut_lignes + $ligne*4, 15, "0.00", "R");
-    $this->editCell(245, $debut_lignes + $ligne*4, 15, $totaux_reglement, "R");
+    $pos_ligne = $debut_lignes + $ligne*4;
+    $this->editCell($colonnes_x[0], $pos_ligne, 45, "Total général", "L");
+    $this->editCell($colonnes_x[1], $pos_ligne, 15, "0.00", "R");
+    $this->editCell($colonnes_x[2], $pos_ligne, 15, $totaux_reglement, "R");
 
     $colonnes = array(
       "Contre-partie comptable" => 80,  "Débit"     => 25,
       "Crédit"  => 25, "Solde" => 25);
-
-    $this->pdf->setFont($this->font, '', 9);
+    $colonnes_x = array(5, 125, 215, 245);
     $this->ajoutPage($colonnes);
     $this->pdf->setFont($this->font, '', 10);
     $this->editCell(80, 15, 160, "Récapitulatif par contre-parties", "C");
     $this->pdf->setFont($this->font, '', 9);
-    //mbTrace($totaux);
     $ligne =0;
     foreach ($totaux as $compte => $valeurs) {
       $ligne++;
-      $this->editCell(5, $debut_lignes + $ligne*4, 80, $compte, "L");
+      $pos_ligne = $debut_lignes + $ligne*4;
+      $this->editCell($colonnes_x[0], $pos_ligne, 80, $compte, "L");
       $x = 80;
       foreach ($valeurs as $key => $value) {
         $cote = ($key == "Contre-partie comptable") ? "L" : "R";
-        $this->editCell($this->pdf->getX()+$x, $debut_lignes + $ligne*4, $colonnes[$key], sprintf("%.2f", $value), $cote);
+        $this->editCell($this->pdf->getX()+$x, $pos_ligne, $colonnes[$key], sprintf("%.2f", $value), $cote);
         $x = $colonnes[$key];
       }
     }
@@ -305,18 +304,45 @@ class CEditJournal {
    * @return void
    */
   function editRappel() {
-    $colonnes = array(
-      "Concerne" => 25, "Destinataire"  => 25,
-      "N° fact." => 10, "Débit"         => 15,
+    $colonnes = array("Concerne" => 25, "Destinataire"  => 25,
+      "N° fact." => 10, "Débit"     => 15,
       "Crédit"   => 15, "Solde"     => 15,
       "Echéance" => 10, "Pas de rappel jusqu'au" => 15);
     $this->editTableau($colonnes, 5, 25);
-
+    $pos_colonne = array(5, 55, 125, 155, 185);
+    $rappel_nom = " ";
+    $totaux_rappel = array();
     $debut_lignes = 30;
     $ligne = 0;
     foreach ($this->relances as $relance) {
+      // Une page par type de rappel
+      if (!strstr($rappel_nom, CAppUI::tr("CRelance.statut.".$relance->statut))) {
+        if ($ligne != 0) {
+          $ligne ++;
+          $pos_ligne = $debut_lignes + $ligne*4;
+          // Total à chaque fin de type de rappel
+          $this->editCell($pos_colonne[0], $pos_ligne, 45, "Total $rappel_nom", "L");
+          $this->editCell($pos_colonne[1], $pos_ligne, 15, "(".$totaux_rappel[$rappel_nom]["Nombre"]." rappels)", "L");
+          $this->editCell($pos_colonne[2], $pos_ligne, 15, sprintf("%.2f", $totaux_rappel[$rappel_nom]["Debit"]), "R");
+          $this->editCell($pos_colonne[3], $pos_ligne, 15, sprintf("%.2f", $totaux_rappel[$rappel_nom]["Credit"]), "R");
+          $this->editCell($pos_colonne[4], $pos_ligne, 15, sprintf("%.2f", $totaux_rappel[$rappel_nom]["Solde"]), "R");
+          $ligne = $this->ajoutPage($colonnes);
+        }
+        $rappel_nom = CAppUI::tr("CRelance.statut.".$relance->statut);
+        if ($relance->poursuite) {
+          $rappel_nom .= " - ".$relance->poursuite;
+        }
+        $totaux_rappel[$rappel_nom] = array("Nombre" => 0.00, "Debit" => 0.00, "Credit" => 0.00, "Solde" => 0.00);
+        $this->pdf->setFont($this->font, '', 10);
+        $this->editCell(80, 15, 160, $rappel_nom, "C");
+        $this->pdf->setFont($this->font, '', 8);
+      }
       $this->pdf->setX(5);
       $ligne++;
+      $totaux_rappel[$rappel_nom]["Nombre"] ++;
+      $totaux_rappel[$rappel_nom]["Debit"] += $relance->_ref_object->_montant_avec_remise;
+      $totaux_rappel[$rappel_nom]["Credit"] += $relance->_ref_object->_reglements_total_patient;
+      $totaux_rappel[$rappel_nom]["Solde"] += $relance->_ref_object->_du_restant_patient;
       $valeurs = array(
         "Concerne"      => $relance->_ref_object->_ref_patient->nom." ".$relance->_ref_object->_ref_patient->prenom,
         "Destinataire"  => $this->loadGarant($relance->_ref_object),
@@ -336,6 +362,47 @@ class CEditJournal {
         $ligne = $this->ajoutPage($colonnes);
       }
     }
+    $ligne ++;
+    $pos_ligne = $debut_lignes + $ligne*4;
+    // Total à chaque fin de type de rappel
+    $this->editCell($pos_colonne[0], $pos_ligne, 45, "Total $rappel_nom", "L");
+    $this->editCell($pos_colonne[1], $pos_ligne, 15, "(".$totaux_rappel[$rappel_nom]["Nombre"]." rappels)", "L");
+    $this->editCell($pos_colonne[2], $pos_ligne, 15, sprintf("%.2f", $totaux_rappel[$rappel_nom]["Debit"]), "R");
+    $this->editCell($pos_colonne[3], $pos_ligne, 15, sprintf("%.2f", $totaux_rappel[$rappel_nom]["Credit"]), "R");
+    $this->editCell($pos_colonne[4], $pos_ligne, 15, sprintf("%.2f", $totaux_rappel[$rappel_nom]["Solde"]), "R");
+
+    // Un récapitulatif par type
+    $colonnes = array("Code rappel" => 50,  "Nombre"  => 25, "Debit"  => 25,  "Credit"  => 25, "Solde" => 25);
+    $colonnes_debut = array("Code rappel" => 5, "Nombre"  => 105, "Debit" => 155, "Credit"  => 205, "Solde" => 255);
+
+    $this->ajoutPage($colonnes);
+    $this->pdf->setFont($this->font, '', 10);
+    $this->editCell(80, 15, 160, "Récapitulatif", "C");
+    $this->pdf->setFont($this->font, '', 9);
+    $ligne =0;
+    $total_final = array("Nombre" => 0.00, "Debit" => 0.00, "Credit" => 0.00, "Solde" => 0.00);
+    foreach ($totaux_rappel as $compte => $valeurs) {
+      $ligne++;
+      $pos_ligne = $debut_lignes + $ligne*4;
+      $this->editCell(5, $pos_ligne, 80, $compte, "L");
+      foreach ($valeurs as $key => $value) {
+        $cote = ($key == "Code rappel") ? "L" : "R";
+        $valeur = ($key == "Code rappel" || $key == "Nombre") ? $value : sprintf("%.2f", $value);
+        $x = $colonnes_debut[$key];
+        $this->editCell($x, $pos_ligne, $colonnes[$key], $valeur, $cote);
+        if ($key != "Code rappel") {
+          $total_final[$key] += $valeur;
+        }
+      }
+    }
+    $pos_colonne = array(5, 105, 155, 205, 255);
+    $ligne +=2;
+    $pos_ligne = $debut_lignes + $ligne*4;
+    $this->editCell($pos_colonne[0] , $pos_ligne, 80, "Total général", "L");
+    $this->editCell($pos_colonne[1], $pos_ligne, 25, $total_final["Nombre"], "R");
+    $this->editCell($pos_colonne[2], $pos_ligne, 25, sprintf("%.2f", $total_final["Debit"]), "R");
+    $this->editCell($pos_colonne[3], $pos_ligne, 25, sprintf("%.2f", $total_final["Credit"]), "R");
+    $this->editCell($pos_colonne[4], $pos_ligne, 25, sprintf("%.2f", $total_final["Solde"]), "R");
   }
 
   /**
