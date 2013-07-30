@@ -3366,9 +3366,11 @@ class CSejour extends CFacturable implements IPatientRelated {
       $prestation_id = null;
     }
     $item_liaison = new CItemLiaison();
-    $where = array();
-    $groupby = "item_liaison.date";
-    $ljoin = array();
+    $where    = array();
+    $order    = "date ASC";
+    $limit    = null;
+    $groupby  = "item_liaison.date";
+    $ljoin    = array();
 
     $where["sejour_id"] = "= '$this->_id'";
     $ljoin["item_prestation"] =
@@ -3382,19 +3384,18 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     //min != max
     if ($date_min && $date_max && ($date_min != $date_max)) {
-      //dates differents, between
       $where['date'] = "BETWEEN '$date_min' AND '$date_max'";
     }
 
-    //min && !max or min == max
+    //unique date, unique result
     if (($date_min && !$date_max) || (($date_min == $date_max) && $date_min)) {
-      $where['date'] = "= '$date_min'";
-      $groupby = "item_liaison.sejour_id";
-
+      $where['date'] = "<= '$date_min'";  //get the last prestation for sejour (current day might not be defined)
+      $limit = "1";
+      $order = "date DESC";
     }
 
     /** @var  CItemLiaison[] _liaisons_for_prestation */
-    $this->_liaisons_for_prestation = $item_liaison->loadList($where, "date ASC", null, $groupby, $ljoin);
+    $this->_liaisons_for_prestation = $item_liaison->loadList($where, $order, $limit, $groupby, $ljoin);
 
     CMbObject::massLoadFwdRef($this->_liaisons_for_prestation, "item_souhait_id");
     CMbObject::massLoadFwdRef($this->_liaisons_for_prestation, "item_realise_id");
