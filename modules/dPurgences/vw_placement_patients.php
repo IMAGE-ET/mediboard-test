@@ -49,7 +49,7 @@ $listSejours = array(
 $ljoin = array();
 $ljoin["rpu"] = "rpu.sejour_id = sejour.sejour_id";
 $temp = array();
-$temp["sejour.type"]      = " = 'urg'";
+//$temp["sejour.type"]      = " = 'urg'";
 $temp["sejour.entree"]    = " BETWEEN '$date_before' AND '$date_after'";
 $temp["sejour.sortie_reelle"]    = "IS NULL";
 $temp["sejour.annule"]    = " = '0'";
@@ -107,7 +107,6 @@ for ($num = 0; $num <= 1; $num++) {
     $where["rpu.box_id"] = CSQLDataSource::prepareIn(array_keys($chambre->_ref_lits));
     
     $sejour = new CSejour();
-
     /** @var CSejour[] $sejours */
     $sejours = $sejour->loadList($where, null, null, null, $ljoin);
     if ($sejours) {
