@@ -3367,6 +3367,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
     $item_liaison = new CItemLiaison();
     $where = array();
+    $groupby = "item_liaison_id";
     $ljoin = array();
 
     $where["sejour_id"] = "= '$this->_id'";
@@ -3386,7 +3387,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     /** @var  CItemLiaison[] _liaisons_for_prestation */
-    $this->_liaisons_for_prestation = $item_liaison->loadList($where, "date ASC", null, null, $ljoin);
+    $this->_liaisons_for_prestation = $item_liaison->loadList($where, "date ASC", null, $groupby, $ljoin);
 
     CMbObject::massLoadFwdRef($this->_liaisons_for_prestation, "item_souhait_id");
     CMbObject::massLoadFwdRef($this->_liaisons_for_prestation, "item_realise_id");
