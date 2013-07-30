@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
 * @package Mediboard
@@ -170,6 +170,7 @@ foreach ($groupSejourNonAffectes as $_keyGroup => $_group) {
   if ($_keyGroup == "couloir") {
     continue;
   }
+  /** @var CSejour[] $_group */
   foreach ($_group as $_key => $_sejour) {
     $_sejour->loadRefChargePriceIndicator();
     $functions_filter[$_sejour->_ref_praticien->function_id] = $_sejour->_ref_praticien->_ref_function;
@@ -183,15 +184,8 @@ $affectation = new CAffectation();
 $affectation->entree = CMbDT::addDateTime("08:00:00", $date);
 $affectation->sortie = CMbDT::addDateTime("23:00:00", $date);
 
-// Chargement des prestations
+// Chargement conf prestation
 $systeme_presta = CAppUI::conf("dPhospi systeme_prestations");
-
-if ($systeme_presta == "standard") {
-  $prestations = CPrestation::loadCurrentList();
-}
-else {
-  $prestations_journalieres = CPrestationJournaliere::loadCurrentList();
-}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -213,10 +207,14 @@ $smarty->assign("groupSejourNonAffectes", $groupSejourNonAffectes);
 $smarty->assign("functions_filter"      , $functions_filter);
 $smarty->assign("prestation_id"         , $prestation_id);
 $smarty->assign("systeme_presta"        , $systeme_presta);
+
+//chargement des prestations
 if ($systeme_presta == "standard") {
+  $prestations = CPrestation::loadCurrentList();
   $smarty->assign("prestations"           , $prestations);
 }
 else {
+  $prestations_journalieres = CPrestationJournaliere::loadCurrentList();
   $smarty->assign("prestations_journalieres", $prestations_journalieres);
 }
 
