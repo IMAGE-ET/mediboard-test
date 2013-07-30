@@ -48,6 +48,10 @@ if ($date_min) {
 if ($date_max) {
   $where[] = "date <= '$date_max'";
 }
+
+$group_id = CGroups::loadCurrent()->_id;
+$where["group_id"] = " = '$group_id'";
+
 $list_check_lists = $check_list->loadList($where, 'date DESC, object_class, object_id, type' , "$start,40");
 $count_check_lists = $check_list->countList($where);
 
