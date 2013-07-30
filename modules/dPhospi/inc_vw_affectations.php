@@ -138,7 +138,7 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
 
           if ($systeme_presta == "expert" && $prestation_id) {
 
-            $sejour->loadLiaisonsForPrestation($prestation_id);
+            $sejour->loadLiaisonsForPrestation($prestation_id, $date);
           }
         }
         else {
@@ -184,6 +184,7 @@ function loadSejourNonAffectes($where, $order = null, $praticien_id = null, $pre
   $sejourNonAffectes = new CSejour();
   $sejourNonAffectes = $sejourNonAffectes->loadList($where, $order, 100, null, $leftjoin);
 
+  /** @var $sejourNonAffectes CSejour[] */
   foreach ($sejourNonAffectes as $sejour) {
     $sejour->loadRefPrestation();
     $sejour->loadNDA();
@@ -193,7 +194,7 @@ function loadSejourNonAffectes($where, $order = null, $praticien_id = null, $pre
     $sejour->_ref_patient->loadRefDossierMedical(false);
 
     if ($systeme_presta == "expert" && $prestation_id) {
-     $sejour->loadLiaisonsForPrestation($prestation_id);
+      $sejour->loadLiaisonsForPrestation($prestation_id);
     }
 
     // Chargement des droits CMU
