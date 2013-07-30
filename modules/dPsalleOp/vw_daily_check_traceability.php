@@ -49,10 +49,13 @@ if ($date_max) {
   $where[] = "date <= '$date_max'";
 }
 
-$group_id = CGroups::loadCurrent()->_id;
-$where["group_id"] = " = '$group_id'";
+$ljoin = array();
+$ljoin["daily_check_item_type"] = "daily_check_list.list_type_id = daily_check_item_type.daily_check_item_type_id";
 
-$list_check_lists = $check_list->loadList($where, 'date DESC, object_class, object_id, type' , "$start,40");
+$group_id = CGroups::loadCurrent()->_id;
+$where["daily_check_item_type.group_id"] = " = '$group_id'";
+
+$list_check_lists = $check_list->loadList($where, 'date DESC, object_class, object_id, type' , "$start,40", null, $ljoin);
 $count_check_lists = $check_list->countList($where);
 
 foreach ($list_check_lists as $_check_list) {
