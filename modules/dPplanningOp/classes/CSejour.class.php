@@ -3367,7 +3367,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
     $item_liaison = new CItemLiaison();
     $where = array();
-    $groupby = "item_liaison_id";
+    $groupby = "item_liaison.date";
     $ljoin = array();
 
     $where["sejour_id"] = "= '$this->_id'";
@@ -3381,9 +3381,14 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     if ($date_min && $date_max) {
-      $date_min_w = ($date_min) ? $date_min : CMbDT::date($this->entree_prevue);
-      $date_max_w = ($date_max) ? $date_max : CMbDT::date($this->sortie_prevue);
-      $where[] = "'date' BETWEEN '$date_min_w' AND '$date_max_w'";
+      if ($date_min != $date_max) {
+        //dates differents, between
+        $where['date'] = "BETWEEN '$date_min' AND '$date_max'";
+      }
+      else {
+        $where['date'] = "= '$date_min'";
+        $groupby = "item_liaison.sejour_id";
+      }
     }
 
     /** @var  CItemLiaison[] _liaisons_for_prestation */
@@ -3392,6 +3397,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     CMbObject::massLoadFwdRef($this->_liaisons_for_prestation, "item_souhait_id");
     CMbObject::massLoadFwdRef($this->_liaisons_for_prestation, "item_realise_id");
 
+    /** @var CItemLiaison $_liaison */
     foreach ($this->_liaisons_for_prestation as $_liaison) {
       $_liaison->loadRefItem();
       $_liaison->loadRefItemRealise();
