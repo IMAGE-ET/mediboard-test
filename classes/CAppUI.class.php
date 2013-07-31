@@ -647,23 +647,9 @@ class CAppUI {
 
     // Test if remote connection is allowed
     // Get the client and the proxy IP
-    if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]) && $_SERVER["HTTP_X_FORWARDED_FOR"]) {
-      if (isset($_SERVER["HTTP_CLIENT_IP"]) && $_SERVER["HTTP_CLIENT_IP"]) {
-        self::$instance->proxy = $_SERVER["HTTP_CLIENT_IP"];
-      }
-      else {
-        self::$instance->proxy = $_SERVER["REMOTE_ADDR"];
-      }
-      self::$instance->ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
-    }
-    else {
-      if (isset($_SERVER["HTTP_CLIENT_IP"]) && $_SERVER["HTTP_CLIENT_IP"]) {
-        self::$instance->ip = $_SERVER["HTTP_CLIENT_IP"];
-      }
-      else {
-        self::$instance->ip = $_SERVER["REMOTE_ADDR"];
-      }
-    }
+    $adress = get_remote_address();
+    self::$instance->ip = $adress["client"];
+    self::$instance->proxy = $adress["proxy"];
     self::$instance->_is_intranet =
       is_intranet_ip(self::$instance->ip) &&
       (self::$instance->ip != self::conf("system reverse_proxy"));

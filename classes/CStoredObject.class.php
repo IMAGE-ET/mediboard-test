@@ -1172,7 +1172,7 @@ class CStoredObject extends CModelObject {
     
     $address = get_remote_address();
     
-    $log = new CUserLog;
+    $log = new CUserLog();
     $log->user_id = CAppUI::$instance->user_id;
     $log->object_id = $object_id;
     $log->object_class = $this->_class;
@@ -1182,7 +1182,7 @@ class CStoredObject extends CModelObject {
 
     // Champs potentiellement absents
     if (CModule::getInstalled("system")->mod_version > "1.0.19") {
-      $log->ip_address = $address["remote"] ? inet_pton($address["remote"]) : null;
+      $log->ip_address = $address["client"] ? inet_pton($address["client"]) : null;
       $log->extra = $extra;
     }
     
