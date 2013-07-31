@@ -373,6 +373,10 @@ button.copy:before, a.button.copy:before {
   content: url(images/buttons/copy.png);
 }
 
+button.agenda:before, a.button.agenda:before {
+  content: url(images/buttons/agenda.png);
+}
+
 button.duplicate:before, a.button.duplicate:before {
   content: url(images/buttons/duplicate.png);
 }
