@@ -40,6 +40,8 @@ class CAppUI {
   public $user_id = 0;
 
   public $_is_intranet;
+  public $ip;
+  public $proxy;
 
   // DEPRECATED Use CAppUI::$user instead
 
@@ -135,6 +137,7 @@ class CAppUI {
         CApp::rip();
       }
     }
+    return false;
   }
 
   /**
@@ -151,6 +154,7 @@ class CAppUI {
       $filename = $file ? $file : $name;
       return include_once "$root/modules/$name/$filename.php";
     }
+    return false;
   }
 
   /**
@@ -165,6 +169,7 @@ class CAppUI {
     if ($subpath && $root = self::conf("root_dir")) {
       return "$root/tmp/$subpath";
     }
+    return false;
   }
 
   /**
@@ -641,9 +646,27 @@ class CAppUI {
     }
 
     // Test if remote connection is allowed
+    // Get the client and the proxy IP
+    if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]) && $_SERVER["HTTP_X_FORWARDED_FOR"]) {
+      if (isset($_SERVER["HTTP_CLIENT_IP"]) && $_SERVER["HTTP_CLIENT_IP"]) {
+        self::$instance->proxy = $_SERVER["HTTP_CLIENT_IP"];
+      }
+      else {
+        self::$instance->proxy = $_SERVER["REMOTE_ADDR"];
+      }
+      self::$instance->ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+    }
+    else {
+      if (isset($_SERVER["HTTP_CLIENT_IP"]) && $_SERVER["HTTP_CLIENT_IP"]) {
+        self::$instance->ip = $_SERVER["HTTP_CLIENT_IP"];
+      }
+      else {
+        self::$instance->ip = $_SERVER["REMOTE_ADDR"];
+      }
+    }
     self::$instance->_is_intranet =
-      is_intranet_ip($_SERVER["REMOTE_ADDR"]) &&
-      $_SERVER["REMOTE_ADDR"] != self::conf("system reverse_proxy");
+      is_intranet_ip(self::$instance->ip) &&
+      (self::$instance->ip != self::conf("system reverse_proxy"));
 
     if (!self::$instance->_is_intranet && self::$instance->user_remote == 1 && $user->user_type != 1) {
       self::setMsg("Auth-failed-user-noremoteaccess", UI_MSG_ERROR);
@@ -715,6 +738,7 @@ class CAppUI {
         return true;
       }
     }
+    return false;
   }
 
   /**
@@ -780,16 +804,16 @@ class CAppUI {
    * @return void
    */
   static function loadPrefs($user_id = null) {
-    // Former pure SQL system
     $ds = CSQLDataSource::get("std");
     if ($ds->loadField("user_preferences", "pref_name")) {
+      // Former pure SQL system
       $query = "SELECT pref_name, pref_value
         FROM user_preferences
         WHERE pref_user = '$user_id'";
       $user_prefs = $ds->loadHashList($query);
     }
-    // Latter object oriented system
     else {
+      // Latter object oriented system
       $user_prefs = CPreferences::get($user_id);
     }
 
