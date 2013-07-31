@@ -116,6 +116,9 @@
   }
   
   loadNonPlaces = function(after_refresh) {
+    Draggables.drags.each(function(elt) {
+      Draggables.unregister(elt);
+    });
     after_refresh = after_refresh || Prototype.emptyFunction;
     var url = new Url("hospi", "ajax_vw_non_places");
     url.requestUpdate("list_affectations", after_refresh);
@@ -163,7 +166,7 @@
       // Pas d'affectation_id ou pas de lit_id_origine (affectation dans un couloir),
       // on supprime l'affectation ciblée dans la liste des affectations (placement d'un patient)
       if (!affectation_id || !lit_id_origine) {
-        after_mouv = delLine(affectation_id ? affectation_id : sejour_id);
+        after_mouv = function() { delLine(affectation_id ? affectation_id : sejour_id) };
       }
 
       if (lit_id_origine) {
@@ -224,7 +227,17 @@
     }
     else if (window.lit_selected && window.affectation_selected) {
       moveAffectation(window.affectation_selected, window.lit_selected);
-      $("affectation_temporel_"+window.affectation_selected).remove();
+      var affectation = $("affectation_temporel_"+window.affectation_selected);
+      var list_affectation = affectation.up('div');
+      if (list_affectation.id == "view_affectations") {
+        var ids = affectation.get("affectations_enfant");
+        if (ids && ids.length > 0) {
+          ids.split("-").each(function(id) {
+            $("affectation_temporel_"+id).remove();
+          });
+        }
+        affectation.remove();
+      }
       window.affectation_selected = null;
       window.lit_selected = null;
     }
@@ -345,7 +358,17 @@
         {{/if}}
       });
     }
-    else return onSubmitFormAjax(getForm('filterMouv'), after_refresh, 'view_affectations');
+    else {
+      Droppables.reset();
+
+      {{if "reservation"|module_active}}
+      var tableau_vue_temporel = $("tableau_vue_temporel");
+        if (tableau_vue_temporel) {
+          tableau_vue_temporel.select(".mouvement_lit").invoke("stopObserving", "dblclick");
+        }
+      {{/if}}
+      return onSubmitFormAjax(getForm('filterMouv'), after_refresh, 'view_affectations');
+    }
   }
 
   changeAffService = function(object_id, object_class) {
