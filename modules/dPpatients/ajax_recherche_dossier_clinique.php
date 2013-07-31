@@ -142,7 +142,7 @@ switch ($section) {
     ) {
       break;
     }
-    
+
     $consult_filled = true;
     $ljoin["patients"] = "patients.patient_id = consultation.patient_id";
     $ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
@@ -163,14 +163,25 @@ switch ($section) {
     if (!empty($sejour_data["_rques_sejour"])) {
       $where["sejour.rques"] = $ds->prepareLike("%{$sejour_data['_rques_sejour']}%");
     }
+
+    $from = CMbDT::date($sejour_data['entree']);
+    $to   = CMbDT::date($sejour_data['sortie']);
+
     if (!empty($sejour_data["entree"])) {
-      $from = CMbDT::date($sejour_data['entree']);
-      $where["plageconsult.date"] = ">= '" .CMbDT::date($sejour_data['entree'])."'";
+      // Début et fin
+      if (!empty($sejour_data["sortie"])) {
+        $where["plageconsult.date"] = "BETWEEN '$from' AND '$to'";
+      }
+      // Début
+      else {
+        $where["plageconsult.date"] = ">= '$from'";
+      }
     }
-    if (!empty($sejour_data["sortie"])) {
-      $to = CMbDT::date($sejour_data['sortie']);
-      $where["plageconsult.date"] = "< '" .CMbDT::date($sejour_data['sortie'])."'";
+    // Fin
+    else if (!empty($sejour_data["sortie"])) {
+      $where["plageconsult.date"] = "< '$to'";
     }
+
     $data_patient = $data["CPatient"];
     if (!empty($data_patient["_age_min"])) {
       $where[] = "DATEDIFF(plageconsult.date, patients.naissance)/365 > {$data_patient['_age_min']}";
@@ -444,9 +455,9 @@ if ($one_field) {
   if (!$export) {
     $request->setLimit("$start,30");
   }
-  
+
   $results = $ds->loadList($request->getRequest());
-  
+
   // Eventuelle deuxième requête (pour les lines mixes)
   if (!$commentaire && $one_field_presc) {
     $request_b = new CRequest();

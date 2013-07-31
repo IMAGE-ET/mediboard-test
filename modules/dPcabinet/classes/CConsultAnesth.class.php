@@ -545,9 +545,8 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $this->loadRefsFwd();
     $this->_ref_consultation->fillTemplate($template);
     $this->fillLimitedTemplate($template);
-    $this->_ref_sejour->fillLimitedTemplate($template);
+    $this->_ref_sejour->fillTemplate($template);
     $this->_ref_operation->fillLimitedTemplate($template);
-    $this->_ref_sejour->loadRefDossierMedical();
     $this->_ref_sejour->loadRefDossierMedical()->fillTemplate($template, "Sejour");
   }
 
