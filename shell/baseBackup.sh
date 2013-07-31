@@ -155,7 +155,11 @@ if [ $time -eq 0 ]; then
 else
   filter="-ctime +$time"
 fi
-find ${BASE_PATH} -name "$database*.tar.gz" $filter -exec /bin/rm '{}' ';'
+if [ -n "$passphrase" ]; then
+  find ${BASE_PATH} -name "$database*.tar.gz.aes" $filter -exec /bin/rm '{}' ';'
+else
+  find ${BASE_PATH} -name "$database*.tar.gz" $filter -exec /bin/rm '{}' ';'
+fi
 check_errs $? "Failed to rotate files" "Files rotated"
 
 # Compress archive and remove files
