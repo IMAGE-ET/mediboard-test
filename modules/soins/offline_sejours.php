@@ -41,7 +41,7 @@ $where["affectation.entree"] = "<= '$datetime_max'";
 $where["affectation.sortie"] = ">= '$datetime_min'";
 $where["service.service_id"] = " = '$service_id'";
 
-$sejours = $sejour->loadList($where, $order_by, null, null, $ljoin);
+$sejours = $sejour->loadList($where, $order_by, null, "sejour.sejour_id", $ljoin);
 
 CMbObject::massLoadFwdRef($sejours, "patient_id");
 CMbObject::massLoadFwdRef($sejours, "praticien_id");

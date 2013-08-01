@@ -1116,14 +1116,14 @@ class CPatient extends CPerson {
         "naissance" => $ds->prepare(" = %", $this->naissance),
         "patient_id" => "!= '$this->_id'",
       );
-      $siblings = CMbArray::mergeKeys($siblings, $this->loadList($where));
+      $siblings = CMbArray::mergeKeys($siblings, $this->loadList($where, null, null, "patients.patient_id"));
 
       $where = array (
         "prenom"    => $ds->prepareLikeName($this->prenom),
         "naissance" => $ds->prepare(" = %", $this->naissance),
         "patient_id" => "!= '$this->_id'",
       );
-      $siblings = CMbArray::mergeKeys($siblings, $this->loadList($where));
+      $siblings = CMbArray::mergeKeys($siblings, $this->loadList($where, null, null, "patients.patient_id"));
     }
 
     return $siblings;
@@ -1158,7 +1158,7 @@ class CPatient extends CPerson {
       $where["sejour.entree"] = "BETWEEN '$min' AND '$max'";
     }
 
-    return $this->loadList($where, null, null, null, $join);
+    return $this->loadList($where, null, null, "patients.patient_id", $join);
   }
 
 

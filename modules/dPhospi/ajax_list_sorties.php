@@ -131,7 +131,7 @@ if ($type == "presents") {
   $whereNP[]  = "'$date' BETWEEN DATE(sejour.entree) AND DATE(sejour.sortie)";
 
   /** @var CSejour[] $presentsNP */
-  $presentsNP = $sejour->loadList($whereNP, $orderNP, null, null, $ljoinNP);
+  $presentsNP = $sejour->loadList($whereNP, $orderNP, null, "sejour.sejour_id", $ljoinNP);
 
   $update_count = count($presents)."/".count($presentsNP);
 
