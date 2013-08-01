@@ -11,7 +11,7 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireLibraryFile("phpThumb/phpThumb.config");
+include_once('lib/phpThumb/phpThumb.config.php');
 CAppUI::requireLibraryFile("phpThumb/phpthumb.class");
 
 $file_id = CValue::get("file_id");

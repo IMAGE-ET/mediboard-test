@@ -84,6 +84,7 @@ $locales['CCompteRendu-_page_format-desc'] = 'Format de la page';
 $locales['CCompteRendu-_send_problem'] = 'Problème d\'envoi';
 $locales['CCompteRendu-_send_problem-court'] = 'Problème d\'envoi';
 $locales['CCompteRendu-_send_problem-desc'] = 'Détail du problème d\'envoi';
+$locales['CCompteRendu-alert_doc_deleted'] = 'Le compte-rendu a été supprimé. Veuillez fermer cette fenêtre.';
 $locales['CCompteRendu-alert_long_period'] = 'La période de recherche ne doit pas dépasser 10 jours.';
 $locales['CCompteRendu-already-access'] = 'Vous avez deja accès à ce modèle, souhaitez-vous confirmer la copie de ce modèle ?';
 $locales['CCompteRendu-apply_field'] = 'Appliquer';

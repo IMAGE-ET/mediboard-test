@@ -128,7 +128,7 @@ if ($do) {
     $where["sejour.sortie_reelle"] = 'IS NULL';
   }
 
-  $sejours = $sejour->loadList($where, $order_by, null, null, $ljoin);
+  $sejours = $sejour->loadList($where, $order_by, null, "sejour.sejour_id", $ljoin);
   CMbObject::massLoadFwdRef($sejours, "patient_id");
 
   foreach ($sejours as $_sejour) {

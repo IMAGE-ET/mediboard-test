@@ -19,6 +19,12 @@ if (!$compte_rendu_id) {
 
 $compte_rendu = new CCompteRendu();
 $compte_rendu->load($compte_rendu_id);
+
+if (!$compte_rendu->_id) {
+  CAppUI::stepAjax(CAppUI::tr("CCompteRendu-alert_doc_deleted"));
+  CApp::rip();
+}
+
 $compte_rendu->loadContent();
 $generate_thumbs = CValue::post("generate_thumbs");
 $mode        = CValue::post("mode", "doc");
