@@ -32,8 +32,7 @@ $function       = new CFunctions();
 $listFunctions  = $function->loadSpecialites(PERM_EDIT);
 
 // Récupération des plages de consultation disponibles
-$listPlage = new CPlageconsult;
-$plage = new CPlageconsult;
+$plage = new CPlageconsult();
 $where = array();
 
 // Praticiens sélectionnés
@@ -103,7 +102,7 @@ $listPlage = $plage->loadList($where, $order, null, null, $ljoin);
 if (!array_key_exists($plageconsult_id, $listPlage)) {
   $plage->_id = $plageconsult_id = null;
 }
-$currPlage = new CPlageconsult();
+
 foreach ($listPlage as $currPlage) {
   if (!$plageconsult_id && $date == $currPlage->date) {
     $plageconsult_id = $currPlage->_id;

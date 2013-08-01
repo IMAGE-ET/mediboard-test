@@ -223,8 +223,13 @@ class CPlageconsult extends CPlageHoraire {
     $this->loadRefsConsultations(false);
 
     $utilisation = array();
+    $old = $this->debut;
     for ($i = $this->debut; $i < $this->fin; $i = CMbDT::addTime("+".$this->freq, $i)) {
+      if ($old > $i) {
+        break;
+      }
       $utilisation[$i] = 0;
+      $old = $i;
     }
 
     foreach ($this->_ref_consultations as $_consult) {
