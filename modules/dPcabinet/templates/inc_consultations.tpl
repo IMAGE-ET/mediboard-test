@@ -37,8 +37,8 @@
     <th>{{mb_title class=CConsultation field=patient_id}}</th>
     <th>{{mb_title class=CConsultation field=motif}}</th>
     <th>{{mb_title class=CConsultation field=rques}}</th>
-    <th>RDV</th>
-    <th>{{mb_title class=CConsultation field=_etat}}</th>
+    <th id="inc_consult_notify_arrivate" >RDV</th>
+    <th id="th_inc_consult_etat">{{mb_title class=CConsultation field=_etat}}</th>
   </tr>
   {{foreach from=$plageSel->_ref_consultations item=_consult}}
   <tr {{if $_consult->chrono == $_consult|const:'TERMINE'}} class="hatching" {{/if}}>

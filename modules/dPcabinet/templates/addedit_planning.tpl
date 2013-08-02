@@ -281,7 +281,7 @@
 <table class="form">
   <tr>
     {{if $consult->_id}}
-      <th class="title modify" colspan="5">
+      <th id="th_addedit_planning_title_consult" class="title modify" colspan="5">
         {{mb_include module=system template=inc_object_notes      object=$consult}}
         {{mb_include module=system template=inc_object_idsante400 object=$consult}}
         {{mb_include module=system template=inc_object_history    object=$consult}}
