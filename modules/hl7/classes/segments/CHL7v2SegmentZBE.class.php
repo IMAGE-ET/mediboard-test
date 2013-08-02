@@ -105,7 +105,8 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     $data[] = $identifiers;
     
     // ZBE-2: Start of Movement Date/Time (TS)
-    $data[] = ($action_movement == "CANCEL") ? $movement->last_update : $movement->start_of_movement;
+    $start_of_movement = ($action_movement == "CANCEL") ? $movement->last_update : $movement->start_of_movement;
+    $data[] = $start_of_movement > $sejour->sortie ? $sejour->sortie : $start_of_movement;
     
     // ZBE-3: End of Movement Date/Time (TS) (optional)
     // Forbidden (IHE France)
