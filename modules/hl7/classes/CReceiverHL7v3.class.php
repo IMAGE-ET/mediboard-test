@@ -61,17 +61,6 @@ class CReceiverHL7v3 extends CInteropReceiver {
   }
 
   /**
-   * Get object handler
-   *
-   * @param CEAIObjectHandler $objectHandler Object handler
-   *
-   * @return mixed
-   */
-  function getFormatObjectHandler(CEAIObjectHandler $objectHandler) {
-    return array();
-  }
-
-  /**
    * Get event message
    *
    * @param string $profil Profil name

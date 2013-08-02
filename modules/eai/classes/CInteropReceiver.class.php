@@ -123,4 +123,16 @@ class CInteropReceiver extends CInteropActor {
 
     return $this->_ref_exchanges_sources;
   }
+
+
+  /**
+   * Get object handler
+   *
+   * @param CEAIObjectHandler $objectHandler Object handler
+   *
+   * @return mixed
+   */
+  function getFormatObjectHandler(CEAIObjectHandler $objectHandler) {
+    return array();
+  }
 }
