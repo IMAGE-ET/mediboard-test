@@ -31,7 +31,6 @@ CKEDITOR.plugins.addExternal("mbspace"     , "../../modules/dPcompteRendu/fcke_p
 
 // CK editor general configuration
 CKEDITOR.editorConfig = function(config) {
-  config.skin = "v2";
   config.language = 'fr';
   config.defaultLanguage = 'fr';
   config.contentsLanguage = 'fr';

@@ -276,8 +276,8 @@ $library->fileName = "ckeditor_3.6.4.tar.gz";
 $library->description = "Composant Javascript d'édition de texte au format HTML";
 $library->sourceDir = "ckeditor";
 $library->targetDir = "ckeditor";
-$library->versionFile = "ckeditor.js";
-$library->versionString = "3.6.4b";
+$library->versionFile = "skins/kama/skin.js";
+$library->versionString = "kama";
 
 CLibrary::$all[$library->name] = $library;
 
