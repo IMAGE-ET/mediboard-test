@@ -4,6 +4,9 @@
 {{mb_script path="lib/ckeditor/ckeditor.js"}}
 
 <style type="text/css">
+  #cke_htmlarea {
+    border: none;
+  }
 /* Ugly hack to display labels with plugin buttons */
   .cke_button_mbfields span.cke_label{display:inline !important}
   .cke_button_mbhelpers span.cke_label{display:inline !important}
