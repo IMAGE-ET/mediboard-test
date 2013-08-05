@@ -30,7 +30,7 @@
   </tr>
   <tr>
     <td class="halfPane" {{if $no_alle}}colspan="2"{{/if}}>
-      <table width="100%">
+      <table style="width:100%;">
         <tr>
           <th class="category" colspan="2">Informations sur le patient</th>
         </tr>
@@ -89,7 +89,7 @@
               <tr>
                 <th>PSA</th>
                 <td style="white-space: nowrap;">
-                  <b>{{$consult_anesth->_psa}} ml/GR</b>
+                  <b>{{$consult_anesth->_psa}} ml de GR</b>
                 </td>
                 <td colspan="2"></td>
               </tr>
@@ -102,7 +102,7 @@
   </tr>
   <tr>
     <td>
-      <table width="100%">
+      <table style="width:100%;">
         <tr>
           <th class="category" colspan="2">
             {{tr}}CBloodSalvage.operations{{/tr}}
@@ -126,7 +126,7 @@
   </tr>
   <tr>
     <td>
-      <table width="100%">
+      <table style="width:100%;">
         <tr>
           <th class="category" colspan="2">
             {{tr}}CCellSaver.name{{/tr}}
@@ -151,7 +151,7 @@
   </tr>
   <tr>
     <td>
-      <table width="100%">
+      <table style="width:100%;">
         <tr>
           <th class="category" colspan="2">
             {{tr}}CBloodSalvage.timers{{/tr}}
@@ -170,7 +170,7 @@
   </tr>
   <tr>
     <td>
-      <table width="100%">
+      <table style="width:100%;">
         <tr>
           <th class="category" colspan="2">
             {{tr}}CBloodSalvage.volumes{{/tr}}
@@ -190,7 +190,7 @@
   </tr>
   <tr>
     <td>
-      <table width="100%">
+      <table style="width:100%;">
         <tr>
           <th class="category" colspan="2">
             {{tr}}module-dPqualite-court{{/tr}}
