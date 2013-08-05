@@ -103,6 +103,9 @@ class CRPU extends CMbObject {
   public $_destination;
   public $_transport;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'rpu';
@@ -117,6 +120,9 @@ class CRPU extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $impose_degre_urgence = CAppUI::conf("dPurgences CRPU impose_degre_urgence", CGroups::loadCurrent()) == 1;
 
@@ -185,12 +191,18 @@ class CRPU extends CMbObject {
     return array_merge($specsParent, $specs);
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["passages"] = "CRPUPassage rpu_id";
     return $backProps;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
@@ -251,6 +263,9 @@ class CRPU extends CMbObject {
     }
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     parent::loadRefsFwd();
     $this->loadRefSejour();
@@ -277,6 +292,11 @@ class CRPU extends CMbObject {
     return $this->_ref_sejour = $sejour;
   }
 
+  /**
+   * Load ref consult
+   *
+   * @return void
+   */
   function loadRefConsult() {
     // Chargement de la consultation ATU
     if (!$this->_ref_sejour) {
@@ -291,7 +311,9 @@ class CRPU extends CMbObject {
     $this->_attente  = $this->_presence;
     if ($this->_ref_consult->_id) {
       $entree = CMbDT::time($this->_ref_sejour->_entree);
-      $this->_attente  = CMbDT::subTime(CMbDT::transform($entree, null, "%H:%M:00"), CMbDT::transform(CMbDT::time($this->_ref_consult->heure), null, "%H:%M:00"));
+      $this->_attente  = CMbDT::subTime(
+        CMbDT::transform($entree, null, "%H:%M:00"), CMbDT::transform(CMbDT::time($this->_ref_consult->heure), null, "%H:%M:00")
+      );
     }
 
     $this->_can_leave_level = $sejour->sortie_reelle ? "" : "ok";
@@ -326,6 +348,11 @@ class CRPU extends CMbObject {
     }
   }
 
+  /**
+   * Load ref mutation
+   *
+   * @return CSejour
+   */
   function loadRefSejourMutation() {
     /** @var CSejour $sejour */
     $sejour = $this->loadFwdRef("mutation_sejour_id", true);
@@ -333,6 +360,11 @@ class CRPU extends CMbObject {
     return $this->_ref_sejour_mutation = $sejour;
   }
 
+  /**
+   * Bind sejour
+   *
+   * @return null|string
+   */
   function bindSejour() {
     if (!$this->_bind_sejour) {
       return null;
@@ -351,7 +383,8 @@ class CRPU extends CMbObject {
     $sejour->recuse        = CAppUI::conf("dPplanningOp CSejour use_recuse") ? -1 : 0;
     $sejour->entree_prevue = $this->_entree;
     $sejour->entree_reelle = $this->_entree;
-    $sejour->sortie_prevue = (CAppUI::conf("dPurgences sortie_prevue") == "h24") ? CMbDT::dateTime("+1 DAY", $this->_entree) : CMbDT::date(null, $this->_entree)." 23:59:59";
+    $sejour->sortie_prevue = (CAppUI::conf("dPurgences sortie_prevue") == "h24") ?
+      CMbDT::dateTime("+1 DAY", $this->_entree) : CMbDT::date(null, $this->_entree)." 23:59:59";
     $sejour->annule        = $this->_annule;
     $sejour->service_id    = $this->_service_id;
     $sejour->etablissement_entree_id = $this->_etablissement_entree_id;
@@ -371,8 +404,13 @@ class CRPU extends CMbObject {
 
     // Affectation du sejour_id au RPU
     $this->sejour_id = $sejour->_id;
+
+    return null;
   }
 
+  /**
+   * @see parent::store()
+   */
   function store() {
     if (!$this->_id && !$this->sejour_id) {
       $sejour                = new CSejour();
@@ -446,6 +484,11 @@ class CRPU extends CMbObject {
       $this->diag_infirmier .= "\n".$this->code_diag.": ".$this->_ref_motif->nom;
       $this->diag_infirmier .= "\n Degrés d'urgence entre ".$this->_ref_motif->degre_min." et ".$this->_ref_motif->degre_max;
     }
+
+    // Bind affectation
+    if ($msg = $this->storeAffectation()) {
+      return $msg;
+    }
     
     // Standard Store
     if ($msg = parent::store()) {
@@ -456,14 +499,24 @@ class CRPU extends CMbObject {
     // Pas de sycnhro dans certains cas
     $this->_ref_sejour->_no_synchro = true;
     $this->_ref_sejour->notify("AfterStore");
+
+    return null;
   }
 
+  /**
+   * @see parent::loadComplete()
+   */
   function loadComplete() {
     parent::loadComplete();
 
     $this->loadRefSejour()->loadComplete();
   }
 
+  /**
+   * Get circonstance
+   *
+   * @return void
+   */
   function getCirconstance() {
     $ds = $this->_spec->ds;
 
@@ -485,6 +538,9 @@ class CRPU extends CMbObject {
     }
   }
 
+  /**
+   * @see parent::fillLimitedTemplate()
+   */
   function fillLimitedTemplate(&$template) {
     $this->loadRefConsult();
     $this->_ref_consult->loadRefPraticien();
@@ -536,13 +592,20 @@ class CRPU extends CMbObject {
     $this->notify("AfterFillLimitedTemplate", $template);
   }
 
+  /**
+   * @see parent::completeLabelFields()
+   */
   function completeLabelFields(&$fields) {
     $sejour = $this->loadRefSejour();
     $sejour->completeLabelFields($fields);
+
     $patient = $sejour->loadRefPatient();
     $patient->completeLabelFields($fields);
   }
 
+  /**
+   * @see parent::docsEditable()
+   */
   function docsEditable() {
     return true;
   }
@@ -563,11 +626,41 @@ class CRPU extends CMbObject {
   }
 
   /**
+   * Load box
+   *
    * @param bool $cache Use object cache
    *
    * @return CLit
    */
   function loadRefBox($cache = true){
     return $this->_ref_box = $this->loadFwdRef("box_id", $cache);
+  }
+
+  /**
+   * Store affectation
+   *
+   * @return null|string
+   */
+  function storeAffectation() {
+    if ($this->_id && !$this->fieldModified("box_id") && !$this->fieldModified("_service_id")) {
+      return null;
+    }
+
+    $this->completeField("box_id", "sejour_id", "_service_id");
+
+    $sejour = $this->loadRefSejour();
+
+    $affectation = new CAffectation();
+    $affectation->entree     = CMbDT::dateTime();
+    $affectation->lit_id     = $this->box_id;
+    $affectation->service_id = $this->_service_id;
+
+    $msg = $sejour->forceAffectation($affectation);
+
+    if ($msg instanceof CAffectation) {
+      return null;
+    }
+
+    return $msg;
   }
 }
