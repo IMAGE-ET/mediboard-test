@@ -120,7 +120,7 @@ CKEDITOR.editorConfig = function(config) {
       ['Font', 'FontSize'],
       ['RemoveFormat', 'Bold', 'Italic', 'Underline', 'Strike', 'mbbreakage', 'mbcap'],
       ['Subscript', 'Superscript', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList'],'/',
-      ['Outdent', 'Indent', 'mblineheight', 'TextColor', 'BGColor'],'/',
+      ['Outdent', 'Indent', 'mblineheight', 'TextColor', 'BGColor'],
       [{{if !$templateManager->isModele && $mode_play}}'mbplay', {{/if}} 'mbfields', {{if $templateManager->isModele}}'mblists', 'mbfreetext', {{/if}}{{if !$templateManager->isModele}}'mbhelpers', 'usermessage', {{if $use_apicrypt}}'apicrypt', {{/if}}{{/if}}{{if $can->admin}}'mbthumbs'{{/if}}]];
 
     window.parent.fields = [];
