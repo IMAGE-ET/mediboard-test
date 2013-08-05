@@ -8,7 +8,8 @@
 */
 
 /**
- * Classe CLit. 
+ * Classe CLit.
+ *
  * @abstract Gère les lits d'hospitalisation
  */
 class CLit extends CMbObject {
@@ -40,14 +41,18 @@ class CLit extends CMbObject {
    * @var CChambre
    */
   public $_ref_chambre;
-  /**
-   * @var CService
-   */
+  /** @var CService */
   public $_ref_service;
+  /** @var CAffectation[] */
   public $_ref_affectations;
+  /** @var CAffectation  */
   public $_ref_last_dispo;
+  /** @var CAffectation  */
   public $_ref_next_dispo;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'lit';
@@ -55,7 +60,10 @@ class CLit extends CMbObject {
     $spec->measureable = true;
     return $spec;
   }
- 
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["affectations"]     = "CAffectation lit_id";
@@ -65,6 +73,9 @@ class CLit extends CMbObject {
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["chambre_id"]  = "ref notNull class|CChambre seekable";
@@ -73,7 +84,14 @@ class CLit extends CMbObject {
     $specs["annule"]      = "bool default|0";
     return $specs;
   }
-  
+
+  /**
+   * Load affectations
+   *
+   * @param string $date Date
+   *
+   * @return void
+   */
   function loadAffectations($date) {
     $where = array (
       "lit_id" => "= '$this->lit_id'",
@@ -86,30 +104,44 @@ class CLit extends CMbObject {
     $this->_ref_affectations = $this->_ref_affectations->loadList($where, $order);
     $this->checkDispo($date);
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
+
     $this->_shortview = $this->_view = self::$_prefixe . ($this->nom_complet ? $this->nom_complet : $this->nom);
   }
-  
+
+  /**
+   * @see parent::loadCompleteView()
+   */
   function loadCompleteView() {
     $this->loadRefsFwd();
     
     $chambre =& $this->_ref_chambre;
     $chambre->loadRefsFwd();
-    $this->_view = $this->nom_complet ? self::$_prefixe . $this->nom_complet : "{$chambre->_ref_service->_view} $chambre->_view $this->_shortview";
+    $this->_view = $this->nom_complet ?
+      self::$_prefixe . $this->nom_complet :
+      "{$chambre->_ref_service->_view} $chambre->_view - $this->_shortview";
   }
 
   /**
+   * Load chambre
+   *
    * @return CChambre
    */
   function loadRefChambre() {
     $this->_ref_chambre =  $this->loadFwdRef("chambre_id", true);
     $this->_view = $this->nom_complet ? self::$_prefixe . $this->nom_complet : "{$this->_ref_chambre->_view} - $this->_shortview";
+
     return $this->_ref_chambre;
   }
 
   /**
+   * Load service
+   *
    * @return CService
    */
   function loadRefService() {
@@ -118,19 +150,30 @@ class CLit extends CMbObject {
     } 
     
     return $this->_ref_service = $this->_ref_chambre->loadRefService();
-  }  
+  }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadRefChambre();
   }
-  
+
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     if (!$this->_ref_chambre) {
       $this->loadRefsFwd();
     }
     return ($this->_ref_chambre->getPerm($permType));
   }
-  
+
+  /**
+   * Check overbooking
+   *
+   * @return void
+   */
   function checkOverBooking() {
     assert($this->_ref_affectations !== null);
     $this->_overbooking = 0;
@@ -147,7 +190,14 @@ class CLit extends CMbObject {
     }
     $this->_overbooking = $this->_overbooking / 2;
   }
-  
+
+  /**
+   * Check dispo
+   *
+   * @param string $date Date
+   *
+   * @return void
+   */
   function checkDispo($date) {
     assert($this->_ref_affectations !== null);
 
@@ -173,7 +223,12 @@ class CLit extends CMbObject {
     $this->_ref_next_dispo->loadObject($where, $order);
     $this->_ref_next_dispo->checkDaysRelative($date);
   }
-  
+
+  /**
+   * Load liaisons items
+   *
+   * @return CStoredObject[]|null
+   */
   function loadRefsLiaisonsItems() {
     return $this->_ref_liaisons_items = $this->loadBackRefs("liaisons_items");
   }
@@ -183,12 +238,12 @@ class CLit extends CMbObject {
    *
    * @param int $group_id Permet de charger l'id externe d'un lit pour un établissement donné si non null
    *
-   * @return string
+   * @return string|null
    */
   static function getTagLit($group_id = null) {
     // Pas de tag Lit
     if (null == $tag_lit = CAppUI::conf("dPhospi CLit tag")) {
-      return;
+      return null;
     }
 
     // Permettre des id externes en fonction de l'établissement
