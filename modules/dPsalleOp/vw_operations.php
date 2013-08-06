@@ -54,6 +54,7 @@ if ($op) {
   $selOp->countExchanges();
   $selOp->isCoded();
   $selOp->loadBrancardage();
+  $selOp->countAlertsNotHandled();
   $selOp->_ref_consult_anesth->loadRefsTechniques();
 
   $sejour =& $selOp->_ref_sejour;

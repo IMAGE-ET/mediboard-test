@@ -156,7 +156,7 @@ class COperation extends CCodable implements IPatientRelated {
   public $_ref_affectation;
   /** @var CBesoinRessource[]  */
   public $_ref_besoins;
-  
+
   // EAI Fields
   public $_eai_initiateur_group_id; // group initiateur du message EAI
 
@@ -667,21 +667,26 @@ class COperation extends CCodable implements IPatientRelated {
   /**
    * Create an alert if comments is not empty
    *
-   * @param string $comments Comments of the alert
+   * @param string  $comments Comments of the alert
+   * @param boolean $update   Search an existing alert for updating
+   * @param string  $tag      Tag of the alert
    *
    * @return string Store-like message
    */
-  function createAlert($comments) {
+  function createAlert($comments, $update = false, $tag = "mouvement_intervention") {
     if (!$comments) {
       return null;
     }
 
     $alerte = new CAlert();
     $alerte->setObject($this);
-    $alerte->comments = $comments;
-    $alerte->tag = "mouvement_intervention";
+    $alerte->tag = $tag;
     $alerte->handled = "0";
     $alerte->level = "medium";
+    if ($update) {
+      $alerte->loadMatchingObject();
+    }
+    $alerte->comments = $comments;
     return $alerte->store();
   }
 
@@ -742,6 +747,25 @@ class COperation extends CCodable implements IPatientRelated {
       $this->sortie_reveil_reel = $this->sortie_reveil_possible;
     }
 
+    // Création d'une alerte si modification du libellé et/ou du côté
+    if ($this->_id && ($this->fieldModified("libelle") || $this->fieldModified("cote"))) {
+      $alerte = "";
+      $date = CMbDT::dateToLocale(CMbDT::date());
+
+      if ($this->fieldModified("libelle")) {
+        $alerte = "Le libellé a été modifié le $date\n".
+          "Ancienne valeur : ".$old_object->getFormattedValue("libelle").
+          "\nNouvelle valeur : ".$this->getFormattedValue("libelle");
+      }
+      $this->createAlert($alerte, true, "libelle");
+      $alerte = "";
+      if ($this->fieldModified("cote")) {
+        $alerte = "Le côté a été modifié le $date : \n".
+           "Ancienne valeur : " . $old_object->getFormattedValue("cote") .
+           "\nNouvelle valeur : " . $this->getFormattedValue("cote");
+      }
+      $this->createAlert($alerte, true, "cote");
+    }
     // Standard storage
     if ($msg = parent::store()) {
       return $msg;

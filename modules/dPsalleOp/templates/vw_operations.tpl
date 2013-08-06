@@ -2,7 +2,8 @@
 {{assign var="chir_id" value=$selOp->_ref_chir->_id}}
 {{/if}}
 
-{{mb_script module=bloc script=edit_planning}}
+{{mb_script module=bloc   script=edit_planning}}
+{{mb_script module=system script=alert}}
 
 <script type="text/javascript">
 

@@ -114,7 +114,7 @@ for ($num = 0; $num <= 1; $num++) {
         $sejour->loadRefRPU();
         $sejour->loadRefPrescriptionSejour();
         if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")){
-          $sejour->_ref_prescription_sejour->_count_fast_recent_modif = $sejour->_ref_prescription_sejour->countAlertes("medium");
+          $sejour->_ref_prescription_sejour->_count_fast_recent_modif = $sejour->_ref_prescription_sejour->countAlertsNotHandled("medium");
         }
         else {
           $sejour->_ref_prescription_sejour->countFastRecentModif();

@@ -19,239 +19,236 @@
 {{mb_script module=planningOp script=cim10_selector ajax=$ajax}}
 {{mb_include module=salleOp template=js_codage_ccam}}
 
-<script type="text/javascript">
+<script>
+  printFicheAnesth = function(dossier_anesth_id) {
+    var url = new Url("cabinet", "print_fiche");
+    url.addParam("dossier_anesth_id", dossier_anesth_id);
+    url.popup(700, 500, "printFiche");
+  };
 
-printFicheAnesth = function(dossier_anesth_id) {
-  var url = new Url("cabinet", "print_fiche");
-  url.addParam("dossier_anesth_id", dossier_anesth_id);
-  url.popup(700, 500, "printFiche");
-};
-
-submitTiming = function(oForm) {
-  submitFormAjax(oForm, 'systemMsg', { 
-    onComplete : function() { 
-      reloadTiming(oForm.operation_id.value);
-    } 
-  });
-};
-
-reloadTiming = function(operation_id){
-  {{if $object->_id}}
-    var url = new Url("salleOp", "httpreq_vw_timing");
-    url.addParam("operation_id", operation_id);
-    url.requestUpdate("timing", { onComplete:
-      function() {
-        ActesCCAM.refreshList({{$object->_id}},{{$object->_praticien_id}});
+  submitTiming = function(oForm) {
+    submitFormAjax(oForm, 'systemMsg', {
+      onComplete : function() {
+        reloadTiming(oForm.operation_id.value);
       }
     });
-  {{/if}}
-};
+  };
 
-submitAnesth = function(oForm) {
-  submitFormAjax(oForm, 'systemMsg', { 
-    onComplete: function() {
-      if(Prescription.updatePerop){
-        Prescription.updatePerop('{{$selOp->sejour_id}}');
+  reloadTiming = function(operation_id){
+    {{if $object->_id}}
+      var url = new Url("salleOp", "httpreq_vw_timing");
+      url.addParam("operation_id", operation_id);
+      url.requestUpdate("timing", { onComplete:
+        function() {
+          ActesCCAM.refreshList({{$object->_id}},{{$object->_praticien_id}});
+        }
+      });
+    {{/if}}
+  };
+
+  submitAnesth = function(oForm) {
+    submitFormAjax(oForm, 'systemMsg', {
+      onComplete: function() {
+        if(Prescription.updatePerop){
+          Prescription.updatePerop('{{$selOp->sejour_id}}');
+        }
+        reloadAnesth(oForm.operation_id.value);
+        if(document.visiteAnesth && document.visiteAnesth.date_visite_anesth.value == 'current'){
+          $V(document.visiteAnesth.prat_visite_anesth_id, oForm.anesth_id.value);
+        }
       }
-      reloadAnesth(oForm.operation_id.value);
-      if(document.visiteAnesth && document.visiteAnesth.date_visite_anesth.value == 'current'){
-        $V(document.visiteAnesth.prat_visite_anesth_id, oForm.anesth_id.value);
+    });
+  };
+
+  signVisiteAnesth = function(anesth_id) {
+    alert('anesth numéro ' + anesth_id);
+  };
+
+  reloadAnesth = function(operation_id){
+    var url = new Url("salleOp", "httpreq_vw_anesth");
+    url.addParam("operation_id", operation_id);
+    url.requestUpdate("anesth", {
+      onComplete: function() {
+        if(reloadDocumentsAnesth) {
+          reloadDocumentsAnesth();
+        }
+        ActesCCAM.refreshList(operation_id,"{{$selOp->chir_id}}");
       }
+    } );
+  };
+
+  reloadDiagnostic = function(sejour_id, modeDAS) {
+    var url = new Url("salleOp", "httpreq_diagnostic_principal");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("modeDAS", modeDAS);
+    url.requestUpdate("cim");
+  };
+
+  reloadPersonnel = function(operation_id){
+    var url = new Url("salleOp", "httpreq_vw_personnel");
+    url.addParam("operation_id", operation_id);
+    url.requestUpdate("listPersonnel");
+  };
+
+  confirmeCloture = function() {
+    return confirm("Action irréversible. Seul le service PSMI pourra modifier le codage de vos actes. Confirmez-vous la cloture de votre cotation pour aujourd'hui ?");
+  };
+
+  Main.add(function () {
+
+    // Initialisation des onglets
+    if ($('main_tab_group')){
+      Control.Tabs.create('main_tab_group', true);
+      var tabName = Control.Tabs.loadTab('main_tab_group');
+      if (tabName && tabName == "grossesse") {
+        refreshGrossesse('{{$selOp->_id}}');
+      }
+    }
+
+    // Sauvegarde de l'operation_id selectionné (utile pour l'ajout de DMI dans la prescription)
+    window.DMI_operation_id = "{{$selOp->_id}}";
+
+    // Chargement de la gestion du personnel pour l'intervention
+    reloadPersonnel('{{$selOp->_id}}');
+
+    {{if $isPrescriptionInstalled}}
+    if($('prescription_sejour')){
+      Prescription.reloadPrescSejour('','{{$selOp->_ref_sejour->_id}}', null, null, '{{$selOp->_id}}', null, null);
+    }
+    {{/if}}
+
+    reloadSurveillancePerop();
+    loadPosesDispVasc();
+
+    if($('dossier_traitement')){
+      PlanSoins.loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');
+    }
+
+    if($('antecedents')){
+      var url = new Url("cabinet", "httpreq_vw_antecedents");
+      url.addParam("sejour_id","{{$selOp->sejour_id}}");
+      url.requestUpdate("antecedents");
+    }
+
+    if($('constantes-medicales')){
+      constantesMedicalesDrawn = false;
+      refreshConstantesHack('{{$selOp->sejour_id}}');
+    }
+
+    if($('bloodsalvage_form')){
+      var url = new Url("bloodSalvage", "httpreq_vw_bloodSalvage");
+      url.addParam("op","{{$selOp->_id}}");
+      url.requestUpdate("bloodsalvage_form");
+    }
+
+    if($('Imeds_tab')){
+      var url = new Url("Imeds", "httpreq_vw_sejour_results");
+      url.addParam("sejour_id", {{$sejour->_id}});
+      url.requestUpdate('Imeds_tab');
     }
   });
-};
 
-signVisiteAnesth = function(anesth_id) {
-  alert('anesth numéro ' + anesth_id);
-};
+  printFicheBloc = function(interv_id) {
+    var url = new Url("dPsalleOp", "print_feuille_bloc");
+    url.addParam("operation_id", interv_id);
+    url.popup(700, 700, 'FeuilleBloc');
+  };
 
-reloadAnesth = function(operation_id){
-  console.log($("anesth"));
-  var url = new Url("salleOp", "httpreq_vw_anesth");
-  url.addParam("operation_id", operation_id);
-  url.requestUpdate("anesth", {
-    onComplete: function() { 
-      if(reloadDocumentsAnesth) {
-        reloadDocumentsAnesth();
+  var constantesMedicalesDrawn = false;
+  refreshConstantesHack = function(sejour_id) {
+    (function(){
+      if (constantesMedicalesDrawn == false && $('constantes-medicales').visible() && sejour_id) {
+        refreshConstantesMedicales('CSejour-'+sejour_id);
+        constantesMedicalesDrawn = true;
       }
-      ActesCCAM.refreshList(operation_id,"{{$selOp->chir_id}}");
+    }).delay(0.5);
+  };
+
+  refreshConstantesMedicales = function(context_guid) {
+    if(context_guid) {
+      var url = new Url("hospi", "httpreq_vw_constantes_medicales");
+      url.addParam("context_guid", context_guid);
+      url.requestUpdate("constantes-medicales");
     }
-  } );  
-};
+  };
 
-reloadDiagnostic = function(sejour_id, modeDAS) {
-  var url = new Url("salleOp", "httpreq_diagnostic_principal");
-  url.addParam("sejour_id", sejour_id);
-  url.addParam("modeDAS", modeDAS);
-  url.requestUpdate("cim");
-};
-
-reloadPersonnel = function(operation_id){
-  var url = new Url("salleOp", "httpreq_vw_personnel");
-  url.addParam("operation_id", operation_id);
-  url.requestUpdate("listPersonnel");
-};
-
-confirmeCloture = function() {
-  return confirm("Action irréversible. Seul le service PSMI pourra modifier le codage de vos actes. Confirmez-vous la cloture de votre cotation pour aujourd'hui ?");
-};
-
-Main.add(function () {
-  
-  // Initialisation des onglets
-  if ($('main_tab_group')){
-    Control.Tabs.create('main_tab_group', true);
-    var tabName = Control.Tabs.loadTab('main_tab_group');
-    if (tabName && tabName == "grossesse") {
-      refreshGrossesse('{{$selOp->_id}}');
+  loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
+    if(sejour_id) {
+      var urlSuivi = new Url("hospi", "httpreq_vw_dossier_suivi");
+      urlSuivi.addParam("sejour_id", sejour_id);
+      urlSuivi.addParam("user_id", user_id);
+      urlSuivi.addParam("cible", cible);
+      if (!Object.isUndefined(show_obs)) {
+        urlSuivi.addParam("_show_obs", show_obs);
+      }
+      if (!Object.isUndefined(show_trans)) {
+        urlSuivi.addParam("_show_trans", show_trans);
+      }
+      if (!Object.isUndefined(show_const)) {
+        urlSuivi.addParam("_show_const", show_const);
+      }
+      urlSuivi.requestUpdate("dossier_suivi");
     }
-  }
-  
-  // Sauvegarde de l'operation_id selectionné (utile pour l'ajout de DMI dans la prescription)
-  window.DMI_operation_id = "{{$selOp->_id}}";
-  
-  // Chargement de la gestion du personnel pour l'intervention
-  reloadPersonnel('{{$selOp->_id}}');
+  };
+
+  submitSuivi = function(oForm) {
+    sejour_id = oForm.sejour_id.value;
+    submitFormAjax(oForm, 'systemMsg', { onComplete: function() {
+      loadSuivi(sejour_id);
+      if(oForm.object_class.value != "" || oForm.libelle_ATC.value != ''){
+        // Refresh de la partie administration
+        PlanSoins.loadTraitement(sejour_id,'{{$date}}','','administration');
+      }
+    } });
+  };
 
   {{if $isPrescriptionInstalled}}
-  if($('prescription_sejour')){
-    Prescription.reloadPrescSejour('','{{$selOp->_ref_sejour->_id}}', null, null, '{{$selOp->_id}}', null, null);
-  }
+  reloadPrescription = function(prescription_id){
+    Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null);
+  };
   {{/if}}
-  
-  reloadSurveillancePerop();
-  loadPosesDispVasc();
-  
-  if($('dossier_traitement')){
-    PlanSoins.loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');
-  }
-  
-  if($('antecedents')){
-    var url = new Url("cabinet", "httpreq_vw_antecedents");
-    url.addParam("sejour_id","{{$selOp->sejour_id}}");
-    url.requestUpdate("antecedents");
-  }
-  
-  if($('constantes-medicales')){
-    constantesMedicalesDrawn = false;
-    refreshConstantesHack('{{$selOp->sejour_id}}');
-  }
-  
-  if($('bloodsalvage_form')){
-    var url = new Url("bloodSalvage", "httpreq_vw_bloodSalvage");
-    url.addParam("op","{{$selOp->_id}}");
-    url.requestUpdate("bloodsalvage_form");
-  }
-  
-  if($('Imeds_tab')){
-    var url = new Url("Imeds", "httpreq_vw_sejour_results");
-    url.addParam("sejour_id", {{$sejour->_id}});
-    url.requestUpdate('Imeds_tab');
-  }
-});
 
-printFicheBloc = function(interv_id) {
-  var url = new Url("dPsalleOp", "print_feuille_bloc");
-  url.addParam("operation_id", interv_id);
-  url.popup(700, 700, 'FeuilleBloc');
-};
-
-var constantesMedicalesDrawn = false;
-refreshConstantesHack = function(sejour_id) {
-  (function(){
-    if (constantesMedicalesDrawn == false && $('constantes-medicales').visible() && sejour_id) {
-      refreshConstantesMedicales('CSejour-'+sejour_id);
-      constantesMedicalesDrawn = true;
+  reloadSurveillancePerop = function() {
+    if($('surveillance_perop')){
+      var url = new Url("salleOp", "ajax_vw_surveillance_perop");
+      url.addParam("operation_id","{{$selOp->_id}}");
+      url.requestUpdate("surveillance_perop");
     }
-  }).delay(0.5);
-};
+  };
 
-refreshConstantesMedicales = function(context_guid) {
-  if(context_guid) {
-    var url = new Url("hospi", "httpreq_vw_constantes_medicales");
-    url.addParam("context_guid", context_guid);
-    url.requestUpdate("constantes-medicales");
-  }
-};
+  loadPosesDispVasc = function() {
+    var url = new Url("planningOp", "ajax_list_pose_disp_vasc");
+    url.addParam("operation_id", "{{$selOp->_id}}");
+    url.addParam("sejour_id",    "{{$selOp->sejour_id}}");
+    url.addParam("operateur_ids", "{{$operateurs_disp_vasc}}");
+    url.requestUpdate("list-pose-dispositif-vasculaire");
+  };
 
-loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
-  if(sejour_id) {
-    var urlSuivi = new Url("hospi", "httpreq_vw_dossier_suivi");
-    urlSuivi.addParam("sejour_id", sejour_id);
-    urlSuivi.addParam("user_id", user_id);
-    urlSuivi.addParam("cible", cible);
-    if (!Object.isUndefined(show_obs)) {
-      urlSuivi.addParam("_show_obs", show_obs);
+  {{if "maternite"|module_active}}
+    function refreshGrossesse(operation_id) {
+      var url = new Url("maternite", "ajax_vw_grossesse");
+      url.addParam('operation_id', operation_id);
+      url.requestUpdate('grossesse');
     }
-    if (!Object.isUndefined(show_trans)) {
-      urlSuivi.addParam("_show_trans", show_trans);
+  {{/if}}
+
+  infoAnapath = function(field) {
+    if($V(field) == 1) {
+      var url = new Url("salleOp", "ajax_info_anapath");
+      url.addParam("operation_id", $V(field.form.operation_id));
+      url.requestModal();
     }
-    if (!Object.isUndefined(show_const)) {
-      urlSuivi.addParam("_show_const", show_const);
+    submitFormAjax(field.form, 'systemMsg');
+  };
+
+  infoBacterio = function(field) {
+    if($V(field) == 1) {
+      var url = new Url("salleOp", "ajax_info_bacterio");
+      url.addParam("operation_id", $V(field.form.operation_id));
+      url.requestModal();
     }
-    urlSuivi.requestUpdate("dossier_suivi");
+    submitFormAjax(field.form, 'systemMsg');
   }
-};
-
-submitSuivi = function(oForm) {
-  sejour_id = oForm.sejour_id.value;
-  submitFormAjax(oForm, 'systemMsg', { onComplete: function() { 
-    loadSuivi(sejour_id); 
-    if(oForm.object_class.value != "" || oForm.libelle_ATC.value != ''){
-      // Refresh de la partie administration
-      PlanSoins.loadTraitement(sejour_id,'{{$date}}','','administration');
-    }  
-  } });
-};
-
-{{if $isPrescriptionInstalled}}
-reloadPrescription = function(prescription_id){
-  Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null);
-};
-{{/if}}
-
-reloadSurveillancePerop = function() {
-  if($('surveillance_perop')){
-    var url = new Url("salleOp", "ajax_vw_surveillance_perop");
-    url.addParam("operation_id","{{$selOp->_id}}");
-    url.requestUpdate("surveillance_perop");
-  }
-};
-
-loadPosesDispVasc = function() {
-  var url = new Url("planningOp", "ajax_list_pose_disp_vasc");
-  url.addParam("operation_id", "{{$selOp->_id}}");
-  url.addParam("sejour_id",    "{{$selOp->sejour_id}}");
-  url.addParam("operateur_ids", "{{$operateurs_disp_vasc}}");
-  url.requestUpdate("list-pose-dispositif-vasculaire");
-};
-
-{{if "maternite"|module_active}}
-  function refreshGrossesse(operation_id) {
-    var url = new Url("maternite", "ajax_vw_grossesse");
-    url.addParam('operation_id', operation_id);
-    url.requestUpdate('grossesse');
-  }
-{{/if}}
-
-infoAnapath = function(field) {
-  if($V(field) == 1) {
-    var url = new Url("salleOp", "ajax_info_anapath");
-    url.addParam("operation_id", $V(field.form.operation_id));
-    url.requestModal();
-  }
-  submitFormAjax(field.form, 'systemMsg');
-};
-
-infoBacterio = function(field) {
-  if($V(field) == 1) {
-    var url = new Url("salleOp", "ajax_info_bacterio");
-    url.addParam("operation_id", $V(field.form.operation_id));
-    url.requestModal();
-  }
-  submitFormAjax(field.form, 'systemMsg');
-}
-
 </script>
 
 <!-- Informations générales sur l'intervention et le patient -->
@@ -274,17 +271,12 @@ infoBacterio = function(field) {
       &mdash; Dr {{$selOp->_ref_chir->_view}}
       {{if $sejour->_ref_curr_affectation->_id}}- {{$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view}}{{/if}}
       <br />
-      
-      {{if $selOp->libelle}}{{$selOp->libelle}} &mdash;{{/if}}
-      {{mb_label object=$selOp field=cote}} :
-      {{if !($conf.dPplanningOp.COperation.verif_cote && !$selOp->cote_bloc) || ($selOp->cote != "droit" && $selOp->cote != "gauche")}}
-        {{mb_value object=$selOp field=cote}}
-      {{else}}
-        Non validé en salle
-      {{/if}}
+
+      {{mb_include module=planningOp template=inc_reload_infos_interv operation=$selOp}}
+
       &mdash; {{mb_label object=$selOp field=temp_operation}} : {{mb_value object=$selOp field=temp_operation}}
       <br />
-      
+
       {{tr}}CSejour{{/tr}}
       du {{mb_value object=$sejour field=entree}}
       au 

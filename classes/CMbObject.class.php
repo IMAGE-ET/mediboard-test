@@ -29,6 +29,7 @@ class CMbObject extends CStoredObject {
   public $_nb_exchanges;
   public $_nb_exchanges_by_format = array();
   public $_degree_notes;
+  public $_count_alerts_not_handled;
 
   /** @var CIdSante400 */
   public $_ref_last_id400;
@@ -59,9 +60,42 @@ class CMbObject extends CStoredObject {
 
   /** @var CMbObjectConfig */
   public $_ref_object_configs;
-  
+
+  /** @var CAlert[] */
+  public $_refs_alerts_not_handled = array();
+
   public $_ref_affectations_personnel;
   public $_count_affectations_personnel;
+
+
+  function countAlertsNotHandled($level = null, $tag = null) {
+    $alert = new CAlert();
+    $alert->handled = "0";
+    $alert->setObject($this);
+    $alert->level = $level;
+    $alert->tag = $tag;
+    return $this->_count_alerts_not_handled = $alert->countMatchingList();
+  }
+
+  /**
+   * Chargement des alertes non traitées
+   *
+   * @param string $level Niveau des alertes
+   * @param string $tag   Tag des alertes
+   * @param int    $perm  Permission
+   *
+   * @return CStoredObject[]
+   */
+  function loadAlertsNotHandled($level = null, $tag = null, $perm = PERM_READ) {
+    $alert = new CAlert();
+    $alert->handled = "0";
+    $alert->setObject($this);
+    $alert->level = $level;
+    $alert->tag = $tag;
+    $this->_refs_alerts_not_handled = $alert->loadMatchingList();
+    self::filterByPerm($this->_refs_alerts_not_handled, $perm);
+    return $this->_refs_alerts_not_handled;
+  }
 
   /**
    * Chargement des notes sur l'objet

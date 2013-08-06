@@ -58,12 +58,10 @@
   {{assign var=prescription value=$sejour->_ref_prescription_sejour}}
 
   {{if @$conf.object_handlers.CPrescriptionAlerteHandler}}
-    {{if $sejour->_ref_prescription_sejour->_count_alertes}}
-      <img src="images/icons/ampoule.png" onclick="showAlertes(this, 'tooltip-content-alertes-medium-{{$sejour->_id}}', '{{$sejour->_ref_prescription_sejour->_id}}', 'medium');"/>
-      {{mb_include module=system template=inc_vw_counter_tip count=$sejour->_ref_prescription_sejour->_count_alertes}}
-      <div id="tooltip-content-alertes-medium-{{$sejour->_id}}" style="display: none; height: 400px; width: 400px; overflow-x:auto;">
-      </div>
-    {{/if}}
+    {{mb_include module=system template=inc_icon_alerts
+       object=$prescription
+       callback="function() { refreshLineSejour('`$sejour->_id`')}"
+       nb_alerts=$prescription->_count_alertes}}
   {{else}}
     {{if $sejour->_ref_prescription_sejour->_count_fast_recent_modif}}
       <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
@@ -73,12 +71,11 @@
 </td>
 <td style="text-align: center;">
   {{if @$conf.object_handlers.CPrescriptionAlerteHandler}}
-    {{if $sejour->_ref_prescription_sejour->_count_urgences}}
-      <img src="images/icons/ampoule_urgence.png" onclick="showAlertes(this, 'tooltip-content-alertes-high-{{$sejour->_id}}', '{{$sejour->_ref_prescription_sejour->_id}}', 'high');"/>
-      {{mb_include module=system template=inc_vw_counter_tip count=$sejour->_ref_prescription_sejour->_count_urgences}}
-      <div id="tooltip-content-alertes-high-{{$sejour->_id}}" style="display: none; height: 400px; width: 400px; overflow-x:auto;">
-      </div>
-    {{/if}}
+    {{mb_include module=system template=inc_icon_alerts
+       object=$prescription
+       callback="function() { refreshLineSejour('`$sejour->_id`')}"
+       nb_alerts=$prescription->_count_urgences
+       level="high"}}
   {{/if}} 
 </td>
 <td style="text-align: center;">
