@@ -1788,6 +1788,7 @@ $locales['mod-dPplanningOp-tab-vw_resp_no_prat'] = 'Responsable non praticien';
 $locales['mod-dPplanningOp-tab-vw_sectorisations'] = 'Règles de sectorisation';
 $locales['mod-dPreservation-tab-ajax_edit_examen'] = 'Examens';
 $locales['mod-hospi-tab-ajax_choose_modele_etiquette'] = 'Choix du modèle d\'étiquette';
+$locales['mod-planningOp-tab-ajax_edit_infos_interv'] = 'Modification du libellé et du côté';
 $locales['mod-planningOp-tab-ajax_edit_rule_sectorisation'] = 'Création/Modification d\'une règle';
 $locales['mod-planningOp-tab-ajax_form_typeanesth'] = 'Formulaire type d\'anesthésie';
 $locales['mod-reservation-tab-ajax_edit_examen'] = 'Examens';
