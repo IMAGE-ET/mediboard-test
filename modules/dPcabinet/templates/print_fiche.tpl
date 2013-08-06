@@ -251,7 +251,7 @@
           <th class="category">Antécédents</th>
         </tr>
         <tr>
-          <td>
+          <td class="text">
           {{if $dossier_medical->_ref_antecedents_by_type}}
             {{foreach from=$dossier_medical->_ref_antecedents_by_type key=keyAnt item=currTypeAnt}}
               {{if $currTypeAnt}}
@@ -288,7 +288,7 @@
         </tr>
         {{if is_array($dossier_medical->_ref_traitements)}}
         <tr>
-          <td>
+          <td class="text">
             <ul>
               {{foreach from=$dossier_medical->_ref_traitements item=curr_trmt}}
               <li>
