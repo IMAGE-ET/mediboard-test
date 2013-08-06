@@ -171,21 +171,12 @@
         <u>Remarques :</u> {{mb_value object=$_suivi field=rques}} <br />
       {{/if}}
     {{else}}
-      {{if $_suivi->rques}}
-        <u>Remarques :</u> {{mb_value object=$_suivi field=rques}} <br />
-      {{/if}}
-      {{if $_suivi->examen}}
-        <u>Examen clinique :</u> {{mb_value object=$_suivi field=examen}} <br />
-      {{/if}}
-      {{if $_suivi->traitement}}
-        <u>Traitement :</u> {{mb_value object=$_suivi field=traitement}} <br />
-      {{/if}}
-      {{if $conf.dPcabinet.CConsultation.show_histoire_maladie && $_suivi->histoire_maladie}}
-        <u>Histoire de la maladie :</u> {{mb_value object=$_suivi field=histoire_maladie}} <br />
-      {{/if}}
-      {{if $conf.dPcabinet.CConsultation.show_conclusion && $_suivi->conclusion}}
-        <u>Au total :</u> {{mb_value object=$_suivi field=conclusion}}
-      {{/if}}
+      {{foreach from=$_suivi->_specs item=_spec}}
+        {{assign var=field_name value=$_spec->fieldName}}
+        {{if $_spec instanceof CTextSpec && $_suivi->$field_name}}
+          <u>{{tr}}CConsultation-{{$field_name}}{{/tr}}</u> : {{mb_value object=$_suivi field=$field_name}} <br />
+        {{/if}}
+      {{/foreach}}
     {{/if}}
     {{if "forms"|module_active && $_suivi->_list_forms|@count}}
       <u>Formulaires :</u>
