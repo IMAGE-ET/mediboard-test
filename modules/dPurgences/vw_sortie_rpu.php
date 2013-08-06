@@ -80,6 +80,11 @@ foreach ($listSejours as &$_sejour) {
   $sejour_mutation->_count_actes = $_nb_acte_sejour_rpu;
 
   foreach ($sejour_mutation->_ref_affectations as $_affectation) {
+    if ($_affectation->loadRefService()->urgence) {
+      unset($sejour_mutation->_ref_affectations[$_affectation->_id]);
+      continue;
+    }
+
     $_affectation->loadView();
   }
   $rpu->_ref_consult->loadRefsActes();

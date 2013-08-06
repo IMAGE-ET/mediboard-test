@@ -483,7 +483,7 @@
             {{foreach from=$services_type item=_services key=nom_serv}}
               <optgroup label="{{$nom_serv}}">
                 {{foreach from=$_services item=_service}}
-                  <option value="{{$_service->_id}}" {{if $rpu->_id && $rpu->_ref_box->_ref_chambre->service_id == $_service->_id}} selected="selected" {{/if}}>
+                  <option value="{{$_service->_id}}" {{if $rpu->_id && $sejour->service_id == $_service->_id}} selected="selected" {{/if}}>
                     {{$_service->_view}}
                   </option>
                 {{/foreach}}

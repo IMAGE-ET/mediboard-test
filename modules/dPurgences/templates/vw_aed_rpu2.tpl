@@ -229,7 +229,7 @@
         <tr>
           <th class="category" colspan="2">
             Dossier Patient
-          </td>
+          </th>
         </tr>
         <tr>
           <td colspan="2" rowspan="3">

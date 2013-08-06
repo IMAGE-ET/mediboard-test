@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Urgences
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -38,6 +38,11 @@ foreach ($sejour_mutation->_ref_consultations as $consult) {
 $rpu->_ref_consult->valide = $valide;
 $sejour_mutation->_count_actes = $_nb_acte_sejour_rpu;
 foreach ($sejour_mutation->_ref_affectations as $_affectation) {
+  if ($_affectation->loadRefService()->urgence) {
+    unset($sejour_mutation->_ref_affectations[$_affectation->_id]);
+    continue;
+  }
+
   $_affectation->loadView();
 }
 $sejour->loadNDA();

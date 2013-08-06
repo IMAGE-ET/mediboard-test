@@ -642,6 +642,10 @@ class CRPU extends CMbObject {
    * @return null|string
    */
   function storeAffectation() {
+    if (!$this->_id && !$this->box_id || !$this->_service_id) {
+      return null;
+    }
+
     if ($this->_id && !$this->fieldModified("box_id") && !$this->fieldModified("_service_id")) {
       return null;
     }
@@ -649,9 +653,10 @@ class CRPU extends CMbObject {
     $this->completeField("box_id", "sejour_id", "_service_id");
 
     $sejour = $this->loadRefSejour();
+    $affectations = $sejour->loadRefsAffectations();
 
     $affectation = new CAffectation();
-    $affectation->entree     = CMbDT::dateTime();
+    $affectation->entree     = (count($affectations) == 0) ? $sejour->entree : CMbDT::dateTime();
     $affectation->lit_id     = $this->box_id;
     $affectation->service_id = $this->_service_id;
 
