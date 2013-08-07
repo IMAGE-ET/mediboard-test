@@ -231,4 +231,4 @@ $smarty->assign("line_element_id"        , $line_element_id);
 $smarty->assign("nb_plages"              , $nb_plages);
 $smarty->assign("dialog"                 , $dialog);
 
-$smarty->display("addedit_planning.tpl");
+$smarty->display("edit_planning.tpl");
