@@ -22,7 +22,7 @@ CancelAction = {
   
   submit: function() {
     var consultation_ids = $$('input.consult:checked').pluck('value');
-    consultation_ids.push($V(this.form.consultation_ids));
+    consultation_ids.push($V(this.form.consultation_id));
     consultation_ids = consultation_ids.join('-');
     $V(this.form.consultation_ids, consultation_ids);
     

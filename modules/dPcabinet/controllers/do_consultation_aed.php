@@ -9,6 +9,8 @@
  * @version    $Revision$
  */
 
+mbLog($_POST);
+
 // Praticien courant pour les prises de rendez-vous suivantes
 if ($chir_id = CValue::post("chir_id")) {
   CValue::setSession("chir_id", $chir_id);
@@ -21,6 +23,15 @@ if (CValue::post("del")) {
 
 // before basic job, do the multiple consultations
 CAppUI::requireModuleFile("dPcabinet", "controllers/do_consultation_multiple");
+
+// Cas de l'annulation / rétablissement / supression multiple
+if ($consultation_ids = CValue::post("consultation_ids")) {
+  $_POST = array(
+    "consultation_ids" => CValue::post("consultation_ids"),
+    "annule"           => CValue::post("annule"),
+    "del"              => CValue::post("del")
+  );
+}
 
 //consult n°1, classic use
 $do = new CDoObjectAddEdit("CConsultation");

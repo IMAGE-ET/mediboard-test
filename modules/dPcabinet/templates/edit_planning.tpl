@@ -257,6 +257,7 @@
   <input type="hidden" name="postRedirect" value="m=cabinet&a=edit_planning&dialog=1" />
 {{/if}}
 <input type="hidden" name="adresse_par_prat_id" value="{{$consult->adresse_par_prat_id}}" />
+<input type="hidden" name="consultation_ids" value="" />
 <input type="hidden" name="annule" value="{{$consult->annule|default:"0"}}" />
 <input type="hidden" name="arrivee" value="" />
 <input type="hidden" name="chrono" value="{{$consult|const:'PLANIFIE'}}" />
