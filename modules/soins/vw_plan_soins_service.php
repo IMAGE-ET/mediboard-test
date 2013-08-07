@@ -8,10 +8,11 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$service_id  = CValue::getOrSession("service_id");
-$date        = CValue::getOrSession("date", CMbDT::date());
-$nb_decalage = CValue::get("nb_decalage");
-$date_max    = CMbDT::date("+ 1 DAY", $date);
+$categories_id = CValue::getOrSession("categories_id");
+$service_id    = CValue::getOrSession("service_id");
+$date          = CValue::getOrSession("date", CMbDT::date());
+$nb_decalage   = CValue::get("nb_decalage");
+$date_max      = CMbDT::date("+ 1 DAY", $date);
 
 // Chargement du service
 $service = new CService();
@@ -65,7 +66,7 @@ $sejours = CMbArray::pluck($affectations, "_ref_sejour");
 $sejours_id = CMbArray::pluck($sejours, "_id");
 
 /*
- * Chargement des elements prescrit pour ces sejours
+ * Chargement des elements prescrits pour ces sejours
  */
 
 // Chargement des elements de prescription
@@ -112,10 +113,13 @@ $services = $_service->loadGroupList($where);
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("service", $service);
-$smarty->assign("categories", $categories);
-$smarty->assign("date", $date);
-$smarty->assign("nb_decalage", $nb_decalage);
-$smarty->assign("date", $date);
-$smarty->assign("services", $services);
+
+$smarty->assign("service"      , $service);
+$smarty->assign("categories"   , $categories);
+$smarty->assign("date"         , $date);
+$smarty->assign("nb_decalage"  , $nb_decalage);
+$smarty->assign("date"         , $date);
+$smarty->assign("services"     , $services);
+$smarty->assign("categories_id", $categories_id);
+
 $smarty->display('vw_plan_soins_service.tpl');

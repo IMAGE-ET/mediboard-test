@@ -11,7 +11,7 @@
 {{mb_script module="soins" script="plan_soins"}}
 
 {{if "dPprescription"|module_active}}
-  {{mb_script module="dPprescription" script="prescription"}}
+  {{mb_script module="prescription" script="prescription"}}
 {{/if}}
 
 <script type="text/javascript">
@@ -63,6 +63,9 @@ updateCountCategory = function(checkbox, category_guid){
 	count = checkbox.checked ? count+1 : count-1;
 	counter.update(count);
 	selectTr(counter);
+  var all_checked = $$("."+category_guid).all(function(elt) { return elt.checked });
+  var input_category = $("categories").select("input[value="+category_guid+"]")[0];
+  input_category.checked = all_checked;
 }
 
 // Affichage des elements au sein des catégories
@@ -113,6 +116,17 @@ printBons = function(service_id, date) {
 }
 
 Main.add(function(){
+  {{if $service->_id}}
+    var table_categories = $("categories");
+    if (table_categories) {
+      {{foreach from=$categories_id item=_category_id}}
+        var elts = table_categories.select("input[value={{$_category_id}}]");
+        if (elts.length > 0) {
+          elts[0].click();
+        }
+      {{/foreach}}
+    }
+  {{/if}}
   updatePlanSoinsPatients();
 	Calendar.regField(getForm("updateActivites").date);
 });	
