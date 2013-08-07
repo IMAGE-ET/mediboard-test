@@ -5,11 +5,13 @@
 
 <script type="text/javascript">
 
-function updateListOperations(date) {
+updateListOperations = function(date) {
   var url = new Url("dPplanningOp", "httpreq_vw_list_operations");
   url.addParam("pratSel" , "{{$selPrat}}");
   url.addParam("canceled", "{{$canceled}}");
-  url.addParam("date"    , date);
+  if(date) {
+    url.addParam("date"    , date);
+  }
   url.requestUpdate('operations');
   
   var row = $("date-"+date);

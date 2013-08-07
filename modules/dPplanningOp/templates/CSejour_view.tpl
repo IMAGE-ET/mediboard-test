@@ -18,7 +18,7 @@
     var url = new Url('hospi', 'vw_parcours');
     url.addParam('sejour_id', sejour_id);
     url.requestModal(700, 550);
-  }
+  },
   
   ModeleEtiquette.nb_printers = {{$sejour->_nb_printers|@json}};
 </script>
@@ -58,7 +58,7 @@
       {{mb_script module=planningOp script=sejour ajax=true}}
 
       {{if $object->_can->edit}}
-      <button type="button" class="edit" onclick="Sejour.edit('{{$sejour->_id}}');">
+      <button type="button" class="edit" onclick="Sejour.editModal('{{$sejour->_id}}');">
         {{tr}}Modify{{/tr}}
       </button>
       {{if $conf.dPhospi.systeme_prestations == "expert"}}

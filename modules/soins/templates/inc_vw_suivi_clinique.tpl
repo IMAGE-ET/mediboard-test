@@ -77,8 +77,13 @@
         <input type="hidden" name="tab" value="vw_idx_patients" />
         <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
         <h2 style="color: #fff; font-weight: bold;">
-          {{$patient->_view}}
-          <span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}} <br /> {{$sejour->_ref_curr_affectation->_ref_lit}}</span>
+          <span style="font-size: 0.7em;" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+            {{$patient->_view}}
+          </span>
+          -
+          <span style="font-size: 0.7em;" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
+            {{$sejour->_shortview|replace:"Du":"Séjour du"}} <br /> {{$sejour->_ref_curr_affectation->_ref_lit}}
+          </span>
           {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
           {{assign var=antecedents value=$dossier_medical->_ref_antecedents_by_type}}
           {{assign var=sejour_id value=$sejour->_id}}

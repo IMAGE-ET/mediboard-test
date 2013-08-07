@@ -1,41 +1,46 @@
 // $Id: plage_selector.js 6447 2009-06-22 08:11:48Z phenxdesign $
 
 Operation = {
-  edit: function(operation_id, plage_id) {
+  edit: function(operation_id, plage_id, callback) {
     new Url("planningOp", plage_id ? "vw_edit_planning" : "vw_edit_urgence", "tab").
       addParam("operation_id", operation_id).
       redirectOpener();
-  },
-
-  editModal: function(operation_id, plage_id) {
-    var url = new Url("planningOp", plage_id ? "vw_edit_planning" : "vw_edit_urgence", "action");
-    url.addParam("operation_id", operation_id);
-    url.addParam("dialog", 1);
-    url.modal({
-      width: "95%",
-      height: "95%"
-    });
-  },
-
-  dossierBloc: function(operation_id, callback) {
-    var url = new Url("salleOp", "ajax_vw_operation");
-    url.addParam("op", operation_id);
-    url.modal({
-      width: "95%",
-      height: "95%"
-    });
-    if (callback) {
-      url.modalObject.observe("afterClose", callback);
-    }
-  },
-
-  useModal: function() {
-    this.edit = this.editModal;
   },
 
   print: function(operation_id) {
     new Url("planningOp", "view_planning").
       addParam("operation_id", operation_id).
       popup(700, 550, "Admission");
+  },
+
+  modalCallback: function() {
+    document.location.reload();
+  },
+
+  editModal: function(operation_id, plage_id, callback) {
+    callback = callback || this.modalCallback;
+    var url = new Url("planningOp", plage_id ? "vw_edit_planning" : "vw_edit_urgence", "action");
+    url.addParam("operation_id", operation_id);
+    url.addParam("dialog", 1);
+    url.modal({
+      width     : "95%",
+      height    : "95%",
+      afterClose: callback
+    });
+  },
+
+  dossierBloc: function(operation_id, callback) {
+    callback = callback || this.modalCallback;
+    var url = new Url("salleOp", "ajax_vw_operation");
+    url.addParam("op", operation_id);
+    url.modal({
+      width     : "95%",
+      height    : "95%",
+      afterClose: callback
+    });
+  },
+
+  useModal: function() {
+    this.edit = this.editModal;
   }
 };

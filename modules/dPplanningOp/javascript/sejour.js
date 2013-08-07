@@ -6,24 +6,44 @@ Sejour = {
       addParam("sejour_id", sejour_id).
       redirectOpener();
   },
+
   admission: function(date) {
     new Url("dPadmissions", "vw_idx_admission", "tab").
       addParam("date", date).
       redirectOpener();
   },
+
   showSSR: function(sejour_id) {
     new Url("ssr", "vw_aed_sejour_ssr", "tab").
       addParam("sejour_id", sejour_id).
       redirectOpener();
   },
+
   showUrgences: function(sejour_id) {
     new Url("dPurgences", "vw_aed_rpu", "tab").
       addParam("sejour_id", sejour_id).
       redirectOpener();
   },
+
   showDossierSoins: function(sejour_id) {
     new Url("soins", "vw_dossier_sejour", "tab").
       addParam("sejour_id", sejour_id).
       redirectOpener();
+  },
+
+  modalCallback: function() {
+    document.location.reload();
+  },
+
+  editModal: function(sejour_id, callback) {
+    callback = callback || this.modalCallback;
+    var url = new Url("planningOp", "vw_edit_sejour", "action");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("dialog", 1);
+    url.modal({
+      width     : "95%",
+      height    : "95%",
+      afterClose: callback
+    });
   }
 };

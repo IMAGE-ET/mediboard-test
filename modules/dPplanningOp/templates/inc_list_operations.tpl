@@ -16,7 +16,7 @@
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="vw_idx_planning" />
   <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
-  <div style="float: right";>
+  <div style="float: right;">
     Afficher les interventions annulées ({{$nb_canceled}})
     <input type="checkbox" name="_canceled" value="1" {{if $canceled}}checked="checked"{{/if}} onchange="synchronizeView(this.form)" />
     <input type="hidden" name ="canceled" value="{{$canceled}}" />
@@ -183,7 +183,7 @@
         <button type="button" class="edit" style="float: right;" onclick="Operation.dossierBloc('{{$_operation->_id}}', updateListOperations)">
           Dossier bloc
         </button>
-        <a href="#1" onclick="Operation.edit('{{$_operation->_id}}', '{{$_operation->plageop_id}}')">
+        <a href="#1" onclick="Operation.editModal('{{$_operation->_id}}', '{{$_operation->plageop_id}}', updateListOperations)">
           {{mb_include template=inc_vw_operation}}
           ({{mb_label object=$_operation field=cote}} {{mb_value object=$_operation field=cote}})
         </a>
@@ -202,7 +202,7 @@
   
   {{assign var=real_prev_interv value=$_operation}}
   {{foreachelse}}
-  <tr><td colspan="3" class="empty">Aucune internvention dans cette plage</td></tr>
+  <tr><td colspan="3" class="empty">Aucune intervention dans cette plage</td></tr>
   {{/foreach}}
  
   {{foreachelse}}
@@ -261,7 +261,7 @@
         <button type="button" class="edit" style="float: right;" onclick="Operation.dossierBloc('{{$_operation->_id}}', updateListOperations.curry('{{$date}}'))">
           Dossier bloc
         </button>
-        <a href="#1" onclick="Operation.edit('{{$_operation->_id}}', '{{$_operation->plageop_id}}')">
+        <a href="#1" onclick="Operation.editModal('{{$_operation->_id}}', '{{$_operation->plageop_id}}', updateListOperations)">
           {{if $_operation->salle_id}}Effectué en salle {{$_operation->_ref_salle}}{{/if}}
           {{mb_include template=inc_vw_operation}}
           ({{mb_label object=$_operation field=cote}} {{mb_value object=$_operation field=cote}})  

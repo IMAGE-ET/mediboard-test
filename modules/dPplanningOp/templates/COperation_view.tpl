@@ -124,7 +124,7 @@
       {{mb_script module="dPplanningOp" script="operation" ajax="true"}}
       
       {{if $object->_can->edit}}
-        <button type="button" class="edit" onclick="Operation.edit('{{$operation->_id}}', '{{$operation->plageop_id}}');">
+        <button type="button" class="edit" onclick="Operation.editModal('{{$operation->_id}}', '{{$operation->plageop_id}}');">
           {{tr}}Modify{{/tr}}
         </button>
       {{/if}}
