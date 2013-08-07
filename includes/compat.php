@@ -391,16 +391,17 @@ if (!function_exists('mime_content_type')) {
   }
 }
 
-if (!function_exists(' parse_ini_string')) {
+if (!function_exists('parse_ini_string')) {
   /**
    * (PHP 5 > 5.2)
    * Analyse une chaîne de configuration
    *
-   * @param string $ini_string The config string
+   * @param string  $ini_string       The config string
+   * @param boolean $process_sections Just for the compatibility with the php function
    *
    * @return array le tableau
    */
-  function parse_ini_string($ini_string) {
+  function parse_ini_string($ini_string, $process_sections) {
 
     if (empty($ini_string)) {
       return false;
