@@ -125,17 +125,21 @@ class CMbXPath extends DOMXPath {
    * @param string  $attName     Attribute name
    * @param string  $purgeChars  The input string
    * @param bool    $optional    Don't throw an exception if node not found
+   * @param boolean $addslashes  Escape slashes is the return string
    *
    * @return string
    */
-  function queryAttributNode($query, DOMNode $contextNode = null, $attName, $purgeChars = "", $optional = true) {
+  function queryAttributNode($query, DOMNode $contextNode = null, $attName, $purgeChars = "", $optional = true, $addslashes = false) {
     $text = "";
 
     if ($node = $this->queryUniqueNode($query, $contextNode, $optional)) {
       $text = $this->convertEncoding($node->getAttribute($attName));
       $text = str_replace(str_split($purgeChars), "", $text);
       $text = trim($text);
-      $text = addslashes($text);
+
+      if ($addslashes) {
+        $text = addslashes($text);
+      }
     }
 
     return $text;
@@ -166,17 +170,22 @@ class CMbXPath extends DOMXPath {
    * @param DOMNode $node       Node
    * @param string  $attName    Attribute name
    * @param string  $purgeChars The input string
+   * @param boolean $addslashes Escape slashes is the return string
    *
    * @return string
    */
-  function getValueAttributNode(DOMNode $node, $attName, $purgeChars = "") {
+  function getValueAttributNode(DOMNode $node, $attName, $purgeChars = "", $addslashes = false) {
     $text = "";
 
     if ($att = $node->getAttributeNode($attName)) {
       $text = $this->convertEncoding($att->value);
       $text = str_replace(str_split($purgeChars), "", $text);
       $text = trim($text);
-      $text = addslashes($text);
+
+
+      if ($addslashes) {
+        $text = addslashes($text);
+      }
     }
 
     return $text;
