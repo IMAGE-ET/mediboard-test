@@ -122,7 +122,7 @@ $order = "date, user_last_name, user_first_name, debut";
 
 // Chargement des plages disponibles
 /** @var CPlageconsult[] $listPlage */
-$listPlage = $plage->loadList($where, $order, null, null, $ljoin);
+$listPlage = $plage->loadList($where, $order, null, "plageconsult_id", $ljoin);
 
 if (!array_key_exists($plageconsult_id, $listPlage)) {
   $plage->_id = $plageconsult_id = null;
