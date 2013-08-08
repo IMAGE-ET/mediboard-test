@@ -391,17 +391,22 @@ if (!function_exists('mime_content_type')) {
   }
 }
 
+if (!defined('INI_SCANNER_RAW')) {
+  define('INI_SCANNER_RAW', 1);
+}
+
 if (!function_exists('parse_ini_string')) {
   /**
    * (PHP 5 > 5.2)
    * Analyse une chaîne de configuration
    *
-   * @param string  $ini_string       The config string
-   * @param boolean $process_sections Just for the compatibility with the php function
+   * @param string $ini_string       The config string
+   * @param bool   $process_sections Just for the compatibility with the php function
+   * @param int    $scanner_mode     Just for the compatibility with the php function
    *
    * @return array le tableau
    */
-  function parse_ini_string($ini_string, $process_sections) {
+  function parse_ini_string($ini_string, $process_sections, $scanner_mode = INI_SCANNER_RAW) {
 
     if (empty($ini_string)) {
       return false;
