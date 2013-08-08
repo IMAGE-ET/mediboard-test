@@ -227,6 +227,10 @@ class CFTP {
     foreach ($files as &$_file) {
       $_file = str_replace("\\", "/", $_file);
     }
+
+    if (!$information) {
+      return $files;
+    }
     
     if ($folder && (substr($folder, -1) != "/")) {
       $folder = "$folder/";
@@ -242,11 +246,7 @@ class CFTP {
       }
     }
 
-    if ($information) {
-      return $tabFileDir;
-    }
-
-    return $files;
+    return $tabFileDir;
   }
 
   private function _getListFilesDetails($folder = ".") {

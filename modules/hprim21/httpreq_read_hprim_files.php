@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License; see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -28,7 +28,7 @@ try {
 
 $list = array();
 try {
-  $list = $ftp->getListFiles(".");
+  $list = $ftp->getListFiles($ftp->fileprefix);
 } catch (CMbException $e) {
   CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
 }
