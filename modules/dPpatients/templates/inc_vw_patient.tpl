@@ -91,7 +91,7 @@ Document.refreshList = function() {
           {{mb_include module=mediusers template=inc_options_mediuser selected=$app->user_id list=$listPrat}}
         </select>
   
-        <button class="new" type="submit">Consulter</button>
+        <button id="inc_vw_patient_button_consult_now" class="new" type="submit">Consulter</button>
   
         </form>
       </td>
@@ -135,7 +135,7 @@ Document.refreshList = function() {
     
     {{if $patient->_ref_consultations}}
     <tr>
-      <th colspan="2" class="category">Consultations</th>
+      <th id="inc_vw_patient_th_consult" colspan="2" class="category">Consultations</th>
     </tr>
     {{foreach from=$patient->_ref_consultations item=object}}
       {{mb_include module=patients template=inc_vw_elem_dossier}}

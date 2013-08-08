@@ -25,9 +25,9 @@
   {{/if}}
 </table>
 
-<table class="tbl">
+<table id="inc_list_tarifs_table" class="tbl">
   <tr>
-    <th colspan="10" class="title">{{tr}}CMediusers-back-tarifs{{/tr}}</th>
+    <th id="inc_list_tarifs_th_prat" colspan="10" class="title">{{tr}}CMediusers-back-tarifs{{/tr}}</th>
   </tr>
   
   {{if $user->_is_praticien || $user->_is_secretaire}}

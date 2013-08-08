@@ -182,7 +182,7 @@ ActesNGAP = {
             </select>
           </td>
           <td>
-            <button type="button" class="new" onclick="ActesNGAP.submit()">
+            <button id="inc_codage_ngap_button_create" type="button" class="new" onclick="ActesNGAP.submit()">
               {{tr}}Create{{/tr}}
             </button>
           </td>     

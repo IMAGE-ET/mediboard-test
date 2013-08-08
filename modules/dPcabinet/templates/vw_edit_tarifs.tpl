@@ -197,7 +197,7 @@ Main.add(function () {
 
               {{if count($tarif->_new_actes)}}
               <input type="hidden" name="_update_montants" value="0" />
-              <button class="change" type="submit" onclick="$V(this.form._update_montants, '1');">
+              <button id="vw_edit_tarif_button_recalculer" class="change" type="submit" onclick="$V(this.form._update_montants, '1');">
                 {{tr}}Recompute{{/tr}}
               </button>
               {{/if}}

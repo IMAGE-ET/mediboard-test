@@ -59,7 +59,7 @@ Main.add( function () {
 
 <table class="tbl" style="{{if !@$offline}}font-size: 9px;{{/if}} {{if @$fixed_width|default:0}}width: 250px{{/if}}">
   <tr>
-    <th class="title" colspan="3">Consultations</th>
+    <th id="inc_list_consult_th_consult" class="title" colspan="3">Consultations</th>
   </tr>
 
   <tr>

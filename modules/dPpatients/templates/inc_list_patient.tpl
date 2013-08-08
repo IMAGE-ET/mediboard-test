@@ -265,7 +265,7 @@ Main.add(function(){
     <td class="button" colspan="4">
       <button type="button" class="cancel" onclick="emptyForm()"
           title="Vider les champs du formulaire">{{tr}}Empty{{/tr}}</button>
-      <button class="search" tabindex="10" type="submit" {{if !$board}}onclick="Patient.search(this.form);"{{/if}}>{{tr}}Search{{/tr}}</button>
+      <button id="ins_list_patient_button_search" class="search" tabindex="10" type="submit" {{if !$board}}onclick="Patient.search(this.form);"{{/if}}>{{tr}}Search{{/tr}}</button>
 
       {{if !$board}}
         {{if $app->user_prefs.VitaleVision}}
@@ -278,7 +278,7 @@ Main.add(function(){
 
         {{if $can->edit}}
           {{if $nom || $prenom || $patient_ipp || $naissance}}
-          <button class="new" type="button" tabindex="15" onclick="Patient.create(this.form);">
+          <button id="vw_idx_patient_button_create" class="new" type="button" tabindex="15" onclick="Patient.create(this.form);">
             {{tr}}Create{{/tr}}
             {{if $useVitale}}avec Vitale{{/if}}
             {{if $useCoverCard}}avec Covercard{{/if}}
@@ -323,7 +323,7 @@ Main.add(function(){
         {{/if}}
         </th>
       {{/if}}
-      <th>{{tr}}CPatient{{/tr}}</th>
+      <th id="inc_list_patient_th_patient">{{tr}}CPatient{{/tr}}</th>
       <th class="narrow">{{tr}}CPatient-naissance-court{{/tr}}</th>
       <th>{{tr}}CPatient-adresse{{/tr}}</th>
       <th class="narrow"></th>

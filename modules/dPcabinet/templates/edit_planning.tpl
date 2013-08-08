@@ -599,7 +599,7 @@
           <td class="button">
             {{if $consult->_id}}
               {{if !$consult->_locks || $can->admin}}
-                <button class="modify" type="submit" onclick="return submitRDV();">
+                <button class="modify" id="addedit_planning_button_save" type="submit" onclick="return submitRDV();">
                   {{tr}}Save{{/tr}}
                 </button>
               {{/if}}

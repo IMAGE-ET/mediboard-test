@@ -237,7 +237,7 @@ Main.add( function(){
                   <td>
                     {{if $consult->valide}}
                       <!-- Creation d'un nouveau tarif avec les actes NGAP de la consultation courante -->
-                      <button class="submit" type="button" style="float: right;" onclick="getForm('creerTarif').submit()">Nouveau tarif</button>
+                      <button id="inc_vw_reglement_button_create_tarif" class="submit" type="button" style="float: right;" onclick="getForm('creerTarif').submit()">Nouveau tarif</button>
                     {{/if}}
                     {{mb_value object=$consult field=tarif}}
                   </td>
@@ -383,7 +383,7 @@ Main.add( function(){
                   {{mb_field object=$consult field="du_patient"}}
                   {{mb_field object=$consult field="du_tiers" hidden="1"}}
                   {{if !@$modules.tarmed->_can->read || $conf.tarmed.CCodeTarmed.use_cotation_tarmed != "1"}}
-                    <button type="button" class="tick" onclick="$V(this.form.du_patient, 0);">Tiers-payant total</button>
+                    <button id="reglement_button_tiers_payant" type="button" class="tick" onclick="$V(this.form.du_patient, 0);">Tiers-payant total</button>
                   {{/if}}   
                 </td>
               </tr>
@@ -396,7 +396,7 @@ Main.add( function(){
                   {{if $app->user_prefs.autoCloseConsult}}
                   <input type="hidden" name="chrono" value="64" />
                   {{/if}}
-                  <button class="submit" type="button" onclick="validTarif();">Cloturer la cotation</button>
+                  <button id="reglements_button_cloturer_cotation" class="submit" type="button" onclick="validTarif();">Cloturer la cotation</button>
                   <button class="cancel" type="button" onclick="cancelTarif('delActes')">Vider la cotation</button>
                 </td>
               </tr>

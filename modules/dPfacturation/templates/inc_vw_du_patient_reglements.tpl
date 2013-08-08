@@ -218,14 +218,14 @@
         <td><input type="text" class="currency notNull" size="4" maxlength="8" name="montant" value="{{$object->_du_restant_patient}}" /></td>
         <td>{{mb_field object=$reglement field=date register=true form="reglement-add" value="now"}}</td>
         <td>
-          <button class="add notext" type="submit">{{tr}}Add{{/tr}}</button>
+          <button id="reglement_button_add" class="add notext" type="submit">{{tr}}Add{{/tr}}</button>
         </td>
       </tr>
     {{/if}}
     <tr>
       <td colspan="7" style="text-align: center;">
         {{mb_value object=$object field=_reglements_total_patient}} réglés, 
-        <strong>{{mb_value object=$object field=_du_restant_patient}} restant</strong>
+        <strong id="reglements_strong_value">{{mb_value object=$object field=_du_restant_patient}} restant</strong>
       </td>
     </tr>
     <tr>
