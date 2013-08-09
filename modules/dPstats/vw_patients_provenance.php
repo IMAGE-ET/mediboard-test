@@ -45,12 +45,15 @@ $queryTraitant = "SELECT
                   ORDER BY total DESC";
 
 // En utilisant l'adresse du patient
+$baseINSEE = CSQLDataSource::get("INSEE")->config["dbname"];
 $queryPatient = "SELECT
                     COUNT(DISTINCT(`sejour`.`sejour_id`)) AS total,
-                    `patients`.`ville` AS asresse, `patients`.`cp`
+                    `$baseINSEE`.`communes_france`.`commune` AS adresse, `patients`.`cp`
                   FROM `sejour`
                   LEFT JOIN `patients`
                     ON `patients`.`patient_id` = `sejour`.`patient_id`
+                  LEFT JOIN `$baseINSEE`.`communes_france`
+                    ON `$baseINSEE`.`communes_france`.`code_postal` = `patients`.`cp`
                   WHERE `entree` BETWEEN '$year-01-01' AND '$year-12-31'
                   GROUP BY `patients`.`cp`
                   ORDER BY total DESC";
