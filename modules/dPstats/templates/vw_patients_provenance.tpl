@@ -30,8 +30,8 @@
   <tr>
     {{if $type != "domicile"}}
       <th>Correspondant</th>
-      <th>Adresse</th>
     {{/if}}
+    <th>Adresse</th>
     <th>Code Postal</th>
     <th>Nombre d'hospitalisations</th>
   </tr>
@@ -43,8 +43,13 @@
       {{else}}
         <td class="empty">Correspondant Inconnu</td>
       {{/if}}
-      <td>{{$_result.adresse}}</td>
       {{/if}}
+      <td>
+        {{if $_result.adresse}}
+          {{$_result.adresse}}
+        {{else}}
+          <em>Inconnu</em>
+        {{/if}}</td>
       <td>
         {{if $_result.cp}}
           {{$_result.cp}}

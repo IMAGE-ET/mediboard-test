@@ -47,7 +47,7 @@ $queryTraitant = "SELECT
 // En utilisant l'adresse du patient
 $queryPatient = "SELECT
                     COUNT(DISTINCT(`sejour`.`sejour_id`)) AS total,
-                    `patients`.`cp`
+                    `patients`.`ville` AS asresse, `patients`.`cp`
                   FROM `sejour`
                   LEFT JOIN `patients`
                     ON `patients`.`patient_id` = `sejour`.`patient_id`
