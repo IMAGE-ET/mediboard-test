@@ -450,13 +450,14 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addAttribute($acteNGAP, "action", "création");
     
     // executionNuit
+    // @todo Comment gérer ceci ?
+    /*
     if ($mbActeNGAP->complement == "N") {
       // non     non réalisé de nuit
       // 1t      réalisé 1re tranche de nuit
       // 2t      2me tranche
-      // @todo Comment gérer ceci ?
       // $this->addAttribute($acteNGAP, "executionNuit", "oui");
-    }
+    }*/
     
     // executionDimancheJourFerie
     if ($mbActeNGAP->complement == "F") {
@@ -464,7 +465,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }    
     
     $identifiant = $this->addElement($acteNGAP, "identifiant");
-    $emetteur    = $this->addElement($identifiant, "emetteur", "acte{$mbActeNGAP->_id}");
+    $this->addElement($identifiant, "emetteur", "acte{$mbActeNGAP->_id}");
     
     $this->addElement($acteNGAP, "lettreCle"    , $mbActeNGAP->code);
     $this->addElement($acteNGAP, "coefficient"  , $mbActeNGAP->demi ? $mbActeNGAP->coefficient * 0.5 : $mbActeNGAP->coefficient);
@@ -474,8 +475,6 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($acteNGAP, "quantite"     , $mbActeNGAP->quantite);
     
     $execute = $this->addElement($acteNGAP, "execute");
-    $mbActeNGAP->loadExecution();
-
     $this->addElement($execute, "date" , CMbDT::date($mbActeNGAP->execution));
     $this->addElement($execute, "heure", CMbDT::time($mbActeNGAP->execution));
     
@@ -487,7 +486,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     $montant = $this->addElement($acteNGAP, "montant");
     if ($mbActeNGAP->montant_depassement > 0) {
-      $montantDepassement = $this->addElement($montant, "montantDepassement", sprintf("%.2f", $mbActeNGAP->montant_depassement));
+      $this->addElement($montant, "montantDepassement", sprintf("%.2f", $mbActeNGAP->montant_depassement));
     }
     
     return $acteNGAP;
