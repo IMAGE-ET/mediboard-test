@@ -43,8 +43,31 @@ $queryTraitant = "SELECT
                   WHERE `entree` BETWEEN '$year-01-01' AND '$year-12-31'
                   GROUP BY `patients`.`medecin_traitant`
                   ORDER BY total DESC";
+
+// En utilisant l'adresse du patient
+$queryPatient = "SELECT
+                    COUNT(DISTINCT(`sejour`.`sejour_id`)) AS total,
+                    `patients`.`cp`
+                  FROM `sejour`
+                  LEFT JOIN `patients`
+                    ON `patients`.`patient_id` = `sejour`.`patient_id`
+                  WHERE `entree` BETWEEN '$year-01-01' AND '$year-12-31'
+                  GROUP BY `patients`.`cp`
+                  ORDER BY total DESC";
+
 $source = CSQLDataSource::get("std");
-$listResult = $source->loadList($type == "traitant" ? $queryTraitant : $queryAdresse);
+$listResult = array();
+switch($type) {
+  case "traitant":
+    $listResult = $source->loadList($queryTraitant);
+    break;
+  case "adresse":
+    $listResult = $source->loadList($queryAdresse);
+    break;
+  case "domicile":
+    $listResult = $source->loadList($queryPatient);
+    break;
+}
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -12,6 +12,9 @@
           <option value="adresse" {{if $type == "adresse"}}selected="selected"{{/if}}>
             médecins adressants
           </option>
+          <option value="domicile" {{if $type == "domicile"}}selected="selected"{{/if}}>
+            domiciles
+          </option>
         </select>
         des patients hospitalisés en
         <select name="year" onchange="this.form.submit()">
@@ -25,20 +28,30 @@
     </th>
   </tr>
   <tr>
-    <th>Correspondant</th>
-    <th>Adresse</th>
+    {{if $type != "domicile"}}
+      <th>Correspondant</th>
+      <th>Adresse</th>
+    {{/if}}
     <th>Code Postal</th>
     <th>Nombre d'hospitalisations</th>
   </tr>
   {{foreach from=$listResult item=_result}}
     <tr>
+      {{if $type != "domicile"}}
       {{if $_result.nom}}
         <td>{{$_result.nom}} {{$_result.prenom}}</td>
       {{else}}
         <td class="empty">Correspondant Inconnu</td>
       {{/if}}
       <td>{{$_result.adresse}}</td>
-      <td>{{$_result.cp}}</td>
+      {{/if}}
+      <td>
+        {{if $_result.cp}}
+          {{$_result.cp}}
+        {{else}}
+          <em>Inconnu</em>
+        {{/if}}
+      </td>
       <td>{{$_result.total}}</td>
     </tr>
   {{/foreach}}
