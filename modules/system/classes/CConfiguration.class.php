@@ -196,8 +196,8 @@ class CConfiguration extends CMbMetaObject {
     $status_result = $spec->ds->loadHash("SHOW TABLE STATUS LIKE '{$spec->table}'");
 
     // database or model were updated
-    return $date < $status_result["Update_time"] ||
-           $date < self::_getModelCacheDate();
+    return $date <= $status_result["Update_time"] ||
+           $date <= self::_getModelCacheDate();
   }
 
   /**

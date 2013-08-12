@@ -600,6 +600,10 @@ class CExObject extends CMbMetaObject {
     $this->_fields_display_struct = array();
     
     foreach ($fields as $_field) {
+      if ($_field->disabled) {
+        continue;
+      }
+
       $_affected = array();
       $_predicates = $_field->loadRefPredicates();
 

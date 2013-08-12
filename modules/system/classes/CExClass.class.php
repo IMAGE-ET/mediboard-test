@@ -467,24 +467,6 @@ class CExClass extends CMbObject {
   }
 
   /**
-   * Load the predicates
-   *
-   * @return CExClassFieldPredicate[]
-   */
-  function loadRefsDisplayConditions(){
-    $where = array(
-      "ex_class_field_group.ex_class_id" => "= '$this->_id'",
-    );
-    $ljoin = array(
-      "ex_class_field"       => "ex_class_field_predicate.ex_class_field_predicate_id = ex_class_field.predicate_id",
-      "ex_class_field_group" => "ex_class_field_group.ex_class_field_group_id = ex_class_field.ex_group_id",
-    );
-    
-    $ex_field_predicate = new CExClassFieldPredicate();
-    return $ex_field_predicate->loadList($where, null, null, null, $ljoin);
-  }
-
-  /**
    * Load all the elements to be pu on the pixel grid
    *
    * @return CExClassFieldGroup[]
