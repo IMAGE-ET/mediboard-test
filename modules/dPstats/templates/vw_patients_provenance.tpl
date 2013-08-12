@@ -1,6 +1,6 @@
 <table class="tbl">
   <tr>
-    <th class="title" colspan="4">
+    <th class="title" colspan="5">
       <form name="provenance" action="?" method="get">
         <input type="hidden" name="m" value="stats" />
         <input type="hidden" name="tab" value="vw_patients_provenance" />
@@ -30,9 +30,10 @@
   <tr>
     {{if $type != "domicile"}}
       <th>Correspondant</th>
+      <th>Adresse</th>
     {{/if}}
-    <th>Adresse</th>
     <th>Code Postal</th>
+    <th>Ville</th>
     <th>Nombre d'hospitalisations</th>
   </tr>
   {{foreach from=$listResult item=_result}}
@@ -43,16 +44,24 @@
       {{else}}
         <td class="empty">Correspondant Inconnu</td>
       {{/if}}
-      {{/if}}
       <td>
         {{if $_result.adresse}}
           {{$_result.adresse}}
         {{else}}
           <em>Inconnu</em>
-        {{/if}}</td>
+        {{/if}}
+      </td>
+      {{/if}}
       <td>
         {{if $_result.cp}}
           {{$_result.cp}}
+        {{else}}
+          <em>Inconnu</em>
+        {{/if}}
+      </td>
+      <td>
+        {{if $_result.ville}}
+          {{$_result.ville}}
         {{else}}
           <em>Inconnu</em>
         {{/if}}
