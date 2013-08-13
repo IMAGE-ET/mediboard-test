@@ -79,6 +79,7 @@ class CProductDelivery extends CMbObject {
   public $_make_delivery_trace;
   public $_initial_quantity;
   public $_quantity_recond;
+  public $_date_order;
 
   /** @var CProduct[] */
   public $_products;
@@ -140,6 +141,7 @@ class CProductDelivery extends CMbObject {
 
     $props['_date_min']         = 'date notNull';
     $props['_date_max']         = 'date notNull moreEquals|_date_min';
+    $props['_date_order']       = 'dateTime';
 
     $props['_datetime_min']     = 'dateTime notNull';
     $props['_datetime_max']     = 'dateTime notNull moreEquals|_datetime_min';
