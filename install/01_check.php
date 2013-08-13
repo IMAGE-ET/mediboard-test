@@ -114,7 +114,7 @@ showHeader();
 <?php 
   $extension = new CPHPExtension;
   
-  foreach($extension->getAll() as $prereq) { ?>
+  foreach ($extension->getAll() as $prereq) { ?>
   <tr>
     <td><strong><?php echo $prereq->name; ?></strong></td>
     <td class="text"><?php echo nl2br($prereq->description); ?></td>

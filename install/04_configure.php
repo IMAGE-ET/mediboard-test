@@ -89,8 +89,8 @@ showHeader();
         <th><label for="instance_role">Rôle de l'instance</label></th>
         <td colspan="2">
           <select name="instance_role">
-            <option value="prod"   <?php if ($dPconfig['instance_role'] == 'prod'  ) echo 'selected'; ?> >Production</option>
-            <option value="qualif" <?php if ($dPconfig['instance_role'] == 'qualif') echo 'selected'; ?> >Qualification</option>
+            <option value="prod"   <?php if ($dPconfig['instance_role'] == 'prod'  ) { echo 'selected'; } ?> >Production</option>
+            <option value="qualif" <?php if ($dPconfig['instance_role'] == 'qualif') { echo 'selected'; } ?> >Qualification</option>
           </select>
         </td>
       </tr>
@@ -104,14 +104,15 @@ showHeader();
         <td>
           <select name="session_handler">
             <option value="files"    <?php if ($dPconfig['session_handler'] == 'files'   ) { echo 'selected'; } ?> >Fichiers</option>
-            <option value="memcache" <?php if ($dPconfig['session_handler'] == 'memcache') { echo 'selected'; } ?> >Memcache (déconseillé)</option>
+            <option value="memcache" <?php if ($dPconfig['session_handler'] == 'memcache') { echo 'selected'; } ?> >Memcache (Obsolète)</option>
             <option value="mysql"    <?php if ($dPconfig['session_handler'] == 'mysql'   ) { echo 'selected'; } ?> >MySQL (Utile pour les environnements répliqués)</option>
-            <option value="zebra"    <?php if ($dPconfig['session_handler'] == 'zebra'   ) { echo 'selected'; } ?> >Zebra (Utile pour les environnements répliqués)</option>
+            <option value="zebra"    <?php if ($dPconfig['session_handler'] == 'zebra'   ) { echo 'selected'; } ?> >Zebra (Obsolète)</option>
           </select>
         </td>
         <td class="text">
           <div class="small-warning">
-            Le changement de ce paramètre <strong>mettra fin à toutes les session des utilisateurs actuellement connectés</strong>.<br />
+            Le changement de ce paramètre <strong>mettra fin à toutes les session des utilisateurs actuellement connectés</strong>.
+            <br />
             Si vous choisissez le mode Memcache, veuillez vous assurer que le serveur est correctement configuré.
           </div>
         </td>
@@ -125,12 +126,14 @@ showHeader();
         </th>
         <td colspan="2">
           <label>
-            <input type="radio" name="http_redirections" value="0" id="http_redirections_0" <?php if ($dPconfig['http_redirections'] == "0") echo 'checked'; ?> />
+            <input type="radio" name="http_redirections" value="0" id="http_redirections_0"
+              <?php if ($dPconfig['http_redirections'] == "0") { echo 'checked'; } ?> />
             Non
           </label>
 
           <label>
-            <input type="radio" name="http_redirections" value="1" id="http_redirections_1" <?php if ($dPconfig['http_redirections'] == "1") echo 'checked'; ?> />
+            <input type="radio" name="http_redirections" value="1" id="http_redirections_1"
+              <?php if ($dPconfig['http_redirections'] == "1") { echo 'checked'; } ?> />
             Oui
           </label>
         </td>
@@ -140,11 +143,13 @@ showHeader();
         <th><label for="error_logs_in_db">Logs d'erreur en base de données</label></th>
         <td colspan="2">
           <label>
-            <input type="radio" name="error_logs_in_db" value="0" id="error_logs_in_db_0" <?php if ($dPconfig['error_logs_in_db'] == "0") echo 'checked'; ?> />
+            <input type="radio" name="error_logs_in_db" value="0" id="error_logs_in_db_0"
+              <?php if ($dPconfig['error_logs_in_db'] == "0") { echo 'checked'; } ?> />
             Non
           </label>
           <label>
-            <input type="radio" name="error_logs_in_db" value="1" id="error_logs_in_db_1" <?php if ($dPconfig['error_logs_in_db'] == "1") echo 'checked'; ?> />
+            <input type="radio" name="error_logs_in_db" value="1" id="error_logs_in_db_1"
+              <?php if ($dPconfig['error_logs_in_db'] == "1") { echo 'checked'; } ?> />
             Oui
           </label>
         </td>
@@ -159,28 +164,43 @@ showHeader();
       <col style="width: 25%" />
 
       <tr>
-        <th><label for="db[std][dbtype]" title="Type de base de données. Seul mysql est possible pour le moment">Type de base de données :</label></th>
-        <td colspan="2"><input type="text" readonly="readonly" size="40" name="db[std][dbtype]" value="<?php echo @$dPconfig["db"]["std"]["dbtype"]; ?>" /></td>
+        <th>
+          <label for="db[std][dbtype]" title="Type de base de données. Seul mysql est possible pour le moment">
+            Type de base de données :
+          </label>
+        </th>
+        <td colspan="2">
+          <input type="text" readonly="readonly" size="40" name="db[std][dbtype]"
+                 value="<?php echo @$dPconfig["db"]["std"]["dbtype"]; ?>" />
+        </td>
       </tr>
 
       <tr>
         <th><label for="db[std][dbhost]">Nom de l'hôte</label></th>
-        <td colspan="2"><input type="text" size="40" name="db[std][dbhost]" value="<?php echo @$dPconfig["db"]["std"]["dbhost"]; ?>" /></td>
+        <td colspan="2">
+          <input type="text" size="40" name="db[std][dbhost]" value="<?php echo @$dPconfig["db"]["std"]["dbhost"]; ?>" />
+        </td>
       </tr>
 
       <tr>
         <th><label for="db[std][dbname]">Nom de la base</label></th>
-        <td colspan="2"><input type="text" size="40" name="db[std][dbname]" value="<?php echo @$dPconfig["db"]["std"]["dbname"]; ?>" /></td>
+        <td colspan="2">
+          <input type="text" size="40" name="db[std][dbname]" value="<?php echo @$dPconfig["db"]["std"]["dbname"]; ?>" />
+        </td>
       </tr>
 
       <tr>
         <th><label for="db[std][dbuser]">Nom de l'utilisateur</label></th>
-        <td colspan="2"><input type="text" size="40" name="db[std][dbuser]" value="<?php echo @$dPconfig["db"]["std"]["dbuser"]; ?>" /></td>
+        <td colspan="2">
+          <input type="text" size="40" name="db[std][dbuser]" value="<?php echo @$dPconfig["db"]["std"]["dbuser"]; ?>" />
+        </td>
       </tr>
 
       <tr>
         <th><label for="db[std][dbpass]">Mot de passe</label></th>
-        <td colspan="2"><input type="password" size="40" name="db[std][dbpass]" value="<?php echo @$dPconfig["db"]["std"]["dbpass"]; ?>" /></td>
+        <td colspan="2">
+          <input type="password" size="40" name="db[std][dbpass]" value="<?php echo @$dPconfig["db"]["std"]["dbpass"]; ?>" />
+        </td>
       </tr>
     </table>
   </fieldset>
@@ -215,7 +235,8 @@ showHeader();
       <tr class="shared-memory-params params-redis">
         <td colspan="3">
           <div class="small-info">
-            Spécifiez l'adresse IP+port du serveur Redis. Par exemple <em>127.0.0.1:6379</em>
+            Spécifiez les adresses IP+port des serveurs du cluster Memcached, séparés par des virgules.
+            Par exemple <em>192.168.1.39:6379, 192.168.1.40:6379</em>
           </div>
         </td>
       </tr>
@@ -223,7 +244,8 @@ showHeader();
       <tr class="shared-memory-params params-memcached">
         <td colspan="3">
           <div class="small-info">
-            Spécifiez les adresses IP+port des serveurs du cluster Memcached, séparés par des virgules. Par exemple <em>192.168.1.39:11211, 192.168.1.40:11211</em>
+            Spécifiez les adresses IP+port des serveurs du cluster Memcached, séparés par des virgules.
+            Par exemple <em>192.168.1.39:11211, 192.168.1.40:11211</em>
           </div>
         </td>
       </tr>
@@ -235,7 +257,8 @@ showHeader();
           </label>
         </th>
         <td colspan="2">
-          <input type="text" size="90" id="shared_memory_params" name="shared_memory_params" value="<?php echo $dPconfig["shared_memory_params"]; ?>" />
+          <input type="text" size="90" id="shared_memory_params" name="shared_memory_params"
+                 value="<?php echo $dPconfig["shared_memory_params"]; ?>" />
         </td>
       </tr>
     </table>
@@ -255,13 +278,13 @@ showHeader();
           <td class="narrow">
             <label>
               <input type="radio" name="mutex_drivers[<?php echo $_driver_class; ?>]" value="1"
-                <?php if (!empty($dPconfig['mutex_drivers'][$_driver_class])) echo 'checked'; ?> />
+                <?php if (!empty($dPconfig['mutex_drivers'][$_driver_class])) { echo 'checked'; } ?> />
               Oui
             </label>
 
             <label>
               <input type="radio" name="mutex_drivers[<?php echo $_driver_class; ?>]" value="0"
-                <?php if (empty($dPconfig['mutex_drivers'][$_driver_class])) echo 'checked'; ?> />
+                <?php if (empty($dPconfig['mutex_drivers'][$_driver_class])) { echo 'checked'; } ?> />
               Non
             </label>
           </td>
@@ -340,9 +363,9 @@ showHeader();
       <tr>
         <th><label for="offline">Mode maintenance</label></th>
         <td colspan="2">
-          <input type="radio" name="offline" value="0" id="offline_0" <?php if ($dPconfig['offline'] == "0") echo 'checked'; ?> />
+          <input type="radio" name="offline" value="0" id="offline_0" <?php if ($dPconfig['offline'] == "0") { echo 'checked'; } ?> />
           <label for="offline_0">Non</label>
-          <input type="radio" name="offline" value="1" id="offline_1" <?php if ($dPconfig['offline'] == "1") echo 'checked'; ?> />
+          <input type="radio" name="offline" value="1" id="offline_1" <?php if ($dPconfig['offline'] == "1") { echo 'checked'; } ?> />
           <label for="offline_1">Oui</label>
         </td>
       </tr>
@@ -350,41 +373,56 @@ showHeader();
       <tr>
         <th><label for="offline_non_admin">Mode maintenance accessible aux admins</label></th>
         <td colspan="2">
-          <input type="radio" name="offline_non_admin" value="0" id="offline_non_admin_0" <?php if ($dPconfig['offline_non_admin'] == "0") echo 'checked'; ?> />
+          <input type="radio" name="offline_non_admin" value="0" id="offline_non_admin_0" <?php if ($dPconfig['offline_non_admin'] == "0") { echo 'checked'; } ?> />
           <label for="offline_non_admin_0">Non</label>
-          <input type="radio" name="offline_non_admin" value="1" id="offline_non_admin_1" <?php if ($dPconfig['offline_non_admin'] == "1") echo 'checked'; ?> />
+          <input type="radio" name="offline_non_admin" value="1" id="offline_non_admin_1" <?php if ($dPconfig['offline_non_admin'] == "1") { echo 'checked'; } ?> />
           <label for="offline_non_admin_1">Oui</label>
         </td>
       </tr>
 
       <tr>
-        <th><label for="migration[active]" title="Affiche une page avec les nouvelles adresse de Mediboard aux utilisateurs">Mode migration</label></th>
+        <th>
+          <label for="migration[active]" title="Affiche une page avec les nouvelles adresses de Mediboard aux utilisateurs">
+            Mode migration
+          </label>
+        </th>
         <td colspan="2">
-          <input type="radio" name="migration[active]" value="0" id="migration[active]_0" <?php if ($dPconfig['migration']['active'] == "0") echo 'checked'; ?> />
+          <input type="radio" name="migration[active]" value="0" id="migration[active]_0"
+            <?php if ($dPconfig['migration']['active'] == "0") { echo 'checked'; } ?> />
           <label for="migration[active]_0">Non</label>
-          <input type="radio" name="migration[active]" value="1" id="migration[active]_1" <?php if ($dPconfig['migration']['active'] == "1") echo 'checked'; ?> />
+          <input type="radio" name="migration[active]" value="1" id="migration[active]_1"
+            <?php if ($dPconfig['migration']['active'] == "1") { echo 'checked'; } ?> />
           <label for="migration[active]_1">Oui</label>
         </td>
       </tr>
 
       <tr>
-        <th><label for="offline_time_start" title="Heure à partir de laquelle Mediboard sera hors ligne">Heure début mode maintenance</label></th>
+        <th>
+          <label for="offline_time_start" title="Heure à partir de laquelle Mediboard sera hors ligne">
+            Heure début mode maintenance
+          </label>
+        </th>
         <td colspan="2">
-          <input type="time" name="offline_time_start" id="offline_time_start" <?php if ($dPconfig['offline_time_start']) echo "value='".$dPconfig['offline_time_start']."'"; ?> />
+          <input type="time" name="offline_time_start" id="offline_time_start"
+                 value="<?php echo $dPconfig['offline_time_start']; ?>" />
         </td>
       </tr>
 
       <tr>
-        <th><label for="offline_time_end" title="Heure jusquà laquelle Mediboard sera hors ligne">Heure fin mode maintenance</label></th>
+        <th>
+          <label for="offline_time_end" title="Heure jusquà laquelle Mediboard sera hors ligne">
+            Heure fin mode maintenance
+          </label>
+        </th>
         <td colspan="2">
-          <input type="time" name="offline_time_end" id="offline_time_end" <?php if ($dPconfig['offline_time_end']) echo "value='".$dPconfig['offline_time_end']."'"; ?> />
+          <input type="time" name="offline_time_end" id="offline_time_end"
+                 value="<?php echo $dPconfig['offline_time_end']; ?>" />
         </td>
       </tr>
     </table>
   </fieldset>
 
   <table class="form">
-
     <tr>
       <td class="button"><button class="submit" type="submit">Valider la configuration</button></td>
     </tr>

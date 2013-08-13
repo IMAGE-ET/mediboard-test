@@ -82,7 +82,8 @@ abstract class CSQLDataSource {
         trigger_error("FATAL ERROR: DSN type '$dbtype' unhandled.", E_USER_ERROR);
         return;
       }
-      
+
+      /** @var self $dataSource */
       $dataSource = new $dsClass;
       $dataSource->init($dsn);
       self::$dataSources[$dsn] = $dataSource->link ? $dataSource : null;
@@ -317,8 +318,7 @@ abstract class CSQLDataSource {
     
     // Error handling
     if (!$result) {
-      trigger_error("Exécution SQL : $query", E_USER_NOTICE);
-      trigger_error("Erreur SQL : ".$this->error(), E_USER_WARNING);
+      trigger_error($this->error()." on SQL query <em>$query</em>", E_USER_WARNING);
       return false;
     }
   
@@ -606,7 +606,7 @@ abstract class CSQLDataSource {
    * 
    * @return bool job done
    */
-  function insertObject($table, &$object, $keyName = null) {
+  function insertObject($table, &$object, $keyName = null/*, $updateDuplicate = false*/) {
     if (CAppUI::conf("readonly")) {
       return false;
     }
@@ -640,12 +640,26 @@ abstract class CSQLDataSource {
       $fields[] = $k;
       $values[] = $v;
     }
-    
-    $fields = implode(",", $fields);
-    $values = implode(",", $values);
-    
-    $query = "INSERT INTO $table ($fields) VALUES ($values)";
-   
+
+    $fields_str = implode(",", $fields);
+    $values_str = implode(",", $values);
+
+    $query = "INSERT INTO $table ($fields_str) VALUES ($values_str)";
+
+    // Update object on duplicate key
+    /*if ($updateDuplicate) {
+      $update = array();
+      foreach ($fields as $_field) {
+        if (trim($_field, "`") !== $keyName) {
+          $update[] = "$_field = VALUES($_field)";
+        }
+      }
+
+      if (count($update)) {
+        $query .= " ON DUPLICATE KEY UPDATE ".implode(", ", $update);
+      }
+    }*/
+
     if (!$this->exec($query)) {
       return false;
     }
