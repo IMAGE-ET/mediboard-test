@@ -129,6 +129,28 @@ class CModelObject {
   }
 
   /**
+   * Make an instance of a ModelObject
+   *
+   * @param string $class Object class to get an instance of
+   *
+   * @return null|self
+   */
+  static function getInstance($class) {
+    $object = CExObject::getValidObject($class);
+
+    if (!$object) {
+      // Non existing class
+      if (!self::classExists($class)) {
+        return null;
+      }
+
+      return new $class;
+    }
+
+    return $object;
+  }
+
+  /**
    * Construct
    *
    * @return CModelObject

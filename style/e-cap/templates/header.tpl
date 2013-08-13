@@ -37,12 +37,6 @@ var Menu = {
 <td id="leftMenu">
   {{mb_include style="mediboard" template="logo" id="mediboard-logo" alt="MediBoard logo" width="140"}}
   
-  <script type="text/javascript">
-    Main.add(function(){
-      $("mediboard-logo").resample();
-    });
-  </script>
-  
   {{if !$offline}}
   {{assign var=style value="width: 130px;"}}
   {{mb_include style=mediboard template=change_group}}
@@ -124,7 +118,7 @@ var Menu = {
           <td class="logo">
             {{mb_include style="mediboard" template="logo" id="mediboard-logo" alt="MediBoard logo" width="140"}}
           </td>
-          <td width="1%">
+          <td>
             {{if !$offline}}
             <table class="titleblock">
               <tr>

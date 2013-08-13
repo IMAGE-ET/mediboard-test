@@ -79,7 +79,6 @@
         </th>
       </tr>
       <tr>
-      <tr>
         {{assign var=i value=0}}
         {{foreach from=$secteurs item=_secteur}}
           {{if $i == 6}}

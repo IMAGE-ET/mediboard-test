@@ -174,15 +174,10 @@ class CStoredObject extends CModelObject {
       return null;
     }
 
-    $object = CExObject::getValidObject($class);
+    $object = self::getInstance($class);
 
     if (!$object) {
-      // Non existing class
-      if (!self::classExists($class)) {
-        return null;
-      }
-
-      $object = new $class;
+      return null;
     }
     
     if ($id && $id !== "none") {
@@ -1418,7 +1413,7 @@ class CStoredObject extends CModelObject {
     }
     else {
       $keyToUpdate = $spec->incremented ? $spec->key : null;
-      $ret = $spec->ds->insertObject($spec->table, $this, $keyToUpdate);
+      $ret = $spec->ds->insertObject($spec->table, $this, $keyToUpdate/*, count($spec->uniques) > 0*/);
     }
 
     if (!$ret) {
@@ -2066,8 +2061,9 @@ class CStoredObject extends CModelObject {
 
     /** @var self $fwd */
     $class = CValue::first($object_class, $spec->class);
-    $fwd = new $class;
-    
+
+    $fwd = self::getInstance($class);
+
     // Inactive module
     if (!$fwd->_ref_module) {
       return null;
@@ -2510,6 +2506,32 @@ class CStoredObject extends CModelObject {
     }
     
     return $this->loadList($where);
+  }
+
+  /**
+   * Get IDs from similar object, based on unique tuples
+   *
+   * @return integer[]|null
+   */
+  function getSimilarIDs() {
+    $spec = $this->_spec;
+
+    if (empty($spec->uniques)) {
+      return null;
+    }
+
+    $first_unique = reset($spec->uniques);
+
+    if (empty($first_unique)) {
+      return null;
+    }
+
+    $where = array();
+    foreach ($first_unique as $field_name) {
+      $where[$field_name] = $spec->ds->prepare("=%", $this->$field_name);
+    }
+
+    return $this->loadIds($where);
   }
 
   /**

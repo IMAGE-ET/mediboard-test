@@ -124,8 +124,7 @@
             {{/if}}
           </th>
         {{/foreach}}
-      {{/if}} 
-      </th>
+      {{/if}}
     </tr>
     <tr>
       <th style="text-align: left;" {{if $prestation_id}}colspan="2"{{/if}}>
