@@ -17,12 +17,19 @@ if (!isset($current_m)) {
   $current_m = CValue::get("current_m", $m);
 }
 
-
 $date_planning = CValue::getOrSession("date_planning", CMbDT::date());
 $praticien_id  = CValue::getOrSession("planning_chir_id");
 $bloc_id       = CValue::getOrSession("bloc_id", "");
 $show_cancelled = CValue::getOrSession("show_cancelled", 0);
 $show_operations= CValue::getOrSession("show_operations", 1);
+
+$mediuser = CMediusers::get();
+$readOnly = false;
+if (in_array($mediuser->_id, explode(",", CAppUI::conf("reservation users_onlytoday")))) {
+  $readOnly = true;
+  $date_planning = CMbDT::date();
+  $praticien_id = null;
+}
 
 $praticiens = new CMediusers;
 $praticiens = $praticiens->loadChirurgiens(); 
@@ -36,7 +43,6 @@ $bloc = new CBlocOperatoire();
 $blocs = $bloc->loadGroupList();
 
 $smarty = new CSmartyDP("modules/reservation");
-
 $smarty->assign("current_m"    , $current_m);
 $smarty->assign("date_planning", $date_planning);
 $smarty->assign("praticien_id" , $praticien_id);
@@ -45,4 +51,5 @@ $smarty->assign("blocs"        , $blocs);
 $smarty->assign("bloc_id"      , $bloc_id);
 $smarty->assign("show_cancelled", $show_cancelled);
 $smarty->assign("show_operations", $show_operations);
+$smarty->assign("readOnly"      , $readOnly);
 $smarty->display("vw_planning.tpl");

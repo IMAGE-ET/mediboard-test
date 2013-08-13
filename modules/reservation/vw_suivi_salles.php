@@ -9,4 +9,6 @@
  * @version    $Revision$
  */
 
+CCanDo::checkEdit();
+
 CAppUI::requireModuleFile("dPbloc", "vw_suivi_salles");
