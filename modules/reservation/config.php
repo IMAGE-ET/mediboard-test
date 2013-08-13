@@ -1,12 +1,12 @@
 <?php 
 /**
- * $Id:$
+ * $Id$
  * 
  * @package    Mediboard
  * @subpackage reservation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 $dPconfig["reservation"] = array(
@@ -15,5 +15,6 @@ $dPconfig["reservation"] = array(
   "text_mail"      => "Formulaire de DHE accessible à l'adresse :\n[URL]",
   "diff_hour_urgence" => "24",
   "display_dossierBloc_button" => false,
-  "display_facture_button" => false
+  "display_facture_button" => false,
+  "users_onlytoday"  => "",
 );

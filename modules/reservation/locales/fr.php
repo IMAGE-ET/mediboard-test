@@ -124,6 +124,8 @@ $locales['config-reservation-subject_mail'] = 'Sujet pour l\'envoi par mail';
 $locales['config-reservation-subject_mail-desc'] = 'Sujet pour l\'envoi par mail de la DHE';
 $locales['config-reservation-text_mail'] = 'Texte pour l\'envoi par mal';
 $locales['config-reservation-text_mail-desc'] = 'Texte pour l\'envoi par mail de la DHE';
+$locales['config-reservation-users_onlytoday'] = 'Utilisateurs en lecture seule (ids)';
+$locales['config-reservation-users_onlytoday-desc'] = 'Liste des utilisateurs à l\'accès qu\'en lecture seule du jour courant (séparez leurs identifiants par des virgules)';
 $locales['mod-dPreservation-tab-ajax_edit_commentaire'] = 'Création / Modification de commentaire';
 $locales['mod-dPreservation-tab-ajax_legend_planning'] = 'Légende planning';
 $locales['mod-reservation-tab-ajax_edit_commentaire'] = 'Création / Modification de commentaire';
@@ -137,4 +139,3 @@ $locales['module-reservation-court'] = 'Réservation';
 $locales['module-reservation-long'] = 'Réservation';
 $locales['pref-planning_resa_height'] = 'Hauteur du planning de réservation';
 $locales['pref-planning_resa_height-desc'] = 'Hauteur du planning de réservation en pixels (permet de zoomer sur les plages)';
-?>
