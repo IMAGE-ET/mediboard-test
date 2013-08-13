@@ -149,7 +149,8 @@
     
     onSubmitFormAjax(form, function() {
       var formLineItem = getForm("editLinePerf-{{$line_item->_id}}");
-      
+      var volume_ref = $("volume_ref").innerHTML;
+
       // Si on a choisi une unité/kg et que le poids du patient n'est pas dispo,
       // on ne peut que vider la quantité de produit et tagger la perfusion en sans poids
       if (/\/kg/.test(unite_choisie) && !poids) {
@@ -165,11 +166,9 @@
       var quantite = parseFloat($("quantite_necessaire").innerHTML);
     
       $V(formLineItem.quantite, quantite, false);
-      
       onSubmitFormAjax(formLineItem, function() {
         Prescription.updateVolumeTotal('{{$line->_id}}', 1, null, null, null, function() {
-          $V(formPerf.volume_debit, $("volume_ref").innerHTML);
-
+          $V(formPerf.volume_debit, volume_ref);
           if (formPerf.volume_debit.readOnly) {
             formPerf.volume_debit.onchange();
           }

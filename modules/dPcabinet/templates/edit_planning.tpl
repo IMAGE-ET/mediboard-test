@@ -497,15 +497,6 @@
                 {{mb_include module=planningOp template=inc_check_correspondant_medical}}
               </tr>
 
-              {{if $maternite_active && @$modules.maternite->_can->read && (!$pat->_id || $pat->sexe != "m")}}
-                <tr>
-                  <th>{{tr}}CGrossesse{{/tr}}</th>
-                  <td>
-                    {{mb_include module=maternite template=inc_input_grossesse object=$consult patient=$pat}}
-                  </td>
-                </tr>
-              {{/if}}
-
               <tr>
                 <td></td>
                 <td colspan="3">
@@ -514,6 +505,15 @@
                   </div>
                 </td>
               </tr>
+
+              {{if $maternite_active && @$modules.maternite->_can->read && (!$pat->_id || $pat->sexe != "m")}}
+                <tr>
+                  <th>{{tr}}CGrossesse{{/tr}}</th>
+                  <td>
+                    {{mb_include module=maternite template=inc_input_grossesse object=$consult patient=$pat}}
+                  </td>
+                </tr>
+              {{/if}}
 
               <tr>
                 <th>{{mb_label object=$consult field="si_desistement"}}</th>
