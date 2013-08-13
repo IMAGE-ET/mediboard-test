@@ -15,7 +15,7 @@
 $path = dirname(__FILE__);
 
 $GLOBALS['CONFIG_TYPES']['mbconfig'] = array(
-  "$path../CMbConfig_Container_PHPArray.class.php",
+  "$path/CMbConfig_Container_PHPArray.class.php",
   'CMbConfig_Container_PHPArray',
 );
 
