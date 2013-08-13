@@ -450,14 +450,21 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addAttribute($acteNGAP, "action", "création");
     
     // executionNuit
-    // @todo Comment gérer ceci ?
-    /*
     if ($mbActeNGAP->complement == "N") {
       // non     non réalisé de nuit
       // 1t      réalisé 1re tranche de nuit
       // 2t      2me tranche
-      // $this->addAttribute($acteNGAP, "executionNuit", "oui");
-    }*/
+      $executionNuit = "non";
+
+      $time = CMbDT::time($mbActeNGAP->execution);
+      if (("22:00:00" <= $time && $time <= "23:59:59") || ("06:00:00" <= $time && $time < "08:00:00")) {
+        $executionNuit = "1t";
+      }
+      elseif ("00:00:00" <= $time && $time < "06:00:00") {
+        $executionNuit = "2t";
+      }
+      $this->addAttribute($acteNGAP, "executionNuit", $executionNuit);
+    }
     
     // executionDimancheJourFerie
     if ($mbActeNGAP->complement == "F") {
