@@ -8,20 +8,26 @@
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @version    $Revision$
  */
- 
- 
+
 // Throws some E_STRICT errors
 @require_once "Config.php";
 
+$path = dirname(__FILE__);
+
+$GLOBALS['CONFIG_TYPES']['mbconfig'] = array(
+  "$path../CMbConfig_Container_PHPArray.class.php",
+  'CMbConfig_Container_PHPArray',
+);
+
 class CMbConfig {
-  var $options = array("name" => "dPconfig");
-  var $configType = "phparray";
-  var $values = array();
-  var $sourcePath = "";
-  var $targetPath = "";
-  var $overloadPath = "";
+  public $options = array("name" => "dPconfig");
+  public $configType = "mbconfig";
+  public $values = array();
+  public $sourcePath = "";
+  public $targetPath = "";
+  public $overloadPath = "";
   
-  function CMbConfig() {
+  function __construct() {
     global $mbpath;
     $this->sourcePath   = $mbpath."includes/config_dist.php";
     $this->targetPath   = $mbpath."includes/config.php";

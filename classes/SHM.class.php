@@ -56,14 +56,19 @@ abstract class SHM {
       $engine_name = "disk";
     }
 
-    $class_name = self::$availableEngines[$engine_name];
+    $dir = dirname(__FILE__);
 
-    include_once dirname(__FILE__)."/shm/$class_name.class.php";
+    $class_name = self::$availableEngines[$engine_name];
+    include_once "$dir/shm/$class_name.class.php";
 
     /** @var ISharedMemory $engine */
     $engine = new $class_name;
+
     if (!$engine->init()) {
-      $engine = new self::$availableEngines["disk"];
+      $class_name = self::$availableEngines["disk"];
+      include_once "$dir/shm/$class_name.class.php";
+
+      $engine = new $class_name;
       $engine->init();
     }
 
