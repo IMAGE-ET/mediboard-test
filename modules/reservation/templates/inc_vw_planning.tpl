@@ -70,10 +70,10 @@
   </div>
 {{/if}}
 <div id="planningInterventions">
-  {{mb_include module=system template=calendars/vw_week}}
+   {{mb_include module=system template=calendars/vw_week}}
 </div>
 
-<script type="text/javascript">
+<script>
   Main.add(function() {
     var planning = window["planning-{{$planning->guid}}"];
     planning.salles_ids = {{$salles_ids|@json}};

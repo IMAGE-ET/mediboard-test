@@ -56,13 +56,16 @@
   {{$operation->libelle}}</span><hr/>
 
 
-coté : {{$operation->cote}}<br/>
+coté : <strong>{{$operation->cote}}</strong><br/>
 {{if $operation->_ref_type_anesth}}
-  Type anest. : {{$operation->_ref_type_anesth}}<br/>
+  Type anest. : <strong>{{$operation->_ref_type_anesth}}</strong><br/>
 {{/if}}
 
 
-<hr/>
+<!-- bloc allergie & atcd -->
+{{if $patient->_ref_dossier_medical->_count_allergies > 0 || $count_atcd > 0 }}
+  <hr/>
+{{/if}}
 
 {{if $patient->_ref_dossier_medical->_count_allergies > 0}}
   <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" ><img src="images/icons/warning.png" alt="WRN"/></span>
@@ -71,7 +74,6 @@ coté : {{$operation->cote}}<br/>
 {{if $count_atcd > 0}}
   <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_ref_dossier_medical->_guid}}', 'antecedents');" ><img src="images/icons/antecedents.gif" alt=\"WRN\"/></span>
 {{/if}}
-
 <hr/>
 
 Sejour: <span onmouseover='ObjectTooltip.createEx(this, "{{$sejour->_guid}}")'>{{mb_value object=$sejour field=entree}}</span>
