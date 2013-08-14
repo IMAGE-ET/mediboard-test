@@ -263,7 +263,8 @@ if ($show_operations) {
       $liaison_sejour = "";
       foreach ($sejour->_liaisons_for_prestation as $_liaison) {
         if ($date_planning >= $_liaison->date && ($_liaison->_ref_item->_id)) {
-          $liaison_sejour .= $_liaison->_ref_item->nom.', ';
+          $liaison_sejour .= $_liaison->_ref_item->nom;
+          $liaison_sejour .= " | ";
         }
       }
 
@@ -300,110 +301,48 @@ if ($show_operations) {
         $hour_fin_postop = CMbDT::addTime($_operation->presence_postop, $fin_op);
         $offset_bottom = CMbDT::minutesRelative($fin_op, $hour_fin_postop);
         $duree = $duree + $offset_bottom;
-
       }
 
-      $libelle = "<span style='display: none;' data-duree='$sejour->_duree' data-entree_prevue='$sejour->entree_prevue'".
-        "data-sortie_prevue='$sejour->sortie_prevue' data-sejour_id='$sejour->_id' data-preop='".
-        ($_operation->presence_preop ? CMbDT::transform($_operation->presence_preop, null, "%H:%M") : "00:00")."' data-postop='".
-        ($_operation->presence_postop ? CMbDT::transform($_operation->presence_postop, null, "%H:%M") : "00:00")."' data-traitement='".$charge->_id."' data-pec='".$sejour->type_pec."'></span>";
+      //factures
+      $sejour->loadRefsFactureEtablissement();
+      $facture = $sejour->_ref_last_facture;
 
-      /** CADRE DROIT */
-      $libelle .="<span style=\"float:right; text-align: right\">";
-
-      //only switzerland
-      if (CAppUI::conf("ref_pays") == 2) {
-        if ($liaison_sejour) {
-          $libelle .= "<strong>$liaison_sejour</strong> |";
-        }
-        if (CAppUI::conf("dPplanningOp CSejour use_charge_price_indicator") && $charge->_id) {
-          $libelle .= " <strong>$charge->code</strong><br/>";
-        }
-      }
-      if (CAppUI::conf("reservation display_dossierBloc_button")) {
-        $libelle.= "<button class=\"bistouri notext\" onclick=\"modalDossierBloc($_operation->_id)\">Dossier Bloc</button>";
-      }
-      if (CAppUI::conf("dPplanningOp CFactureEtablissement use_facture_etab") && CAppUI::conf("reservation display_facture_button")) {
-        $sejour->loadRefsFactureEtablissement();
-        $facture = $sejour->_ref_last_facture;
-        if ($facture->_id) {
-          $close = $facture->cloture;
-          if (CAppUI::conf("dPfacturation Other use_field_definitive")) {
-            $close = $facture->definitive;
-          }
-          $couleur = $close ? "blue" : "#FF0";
-          $couleur = $facture->patient_date_reglement ? "green" : $couleur;
-          $action_fact = "Facture.edit($facture->_id, '$facture->_class')";
-          $libelle.= "<button class=\"calcul notext\" onclick=\"$action_fact\" style=\"border-left: $couleur 3px solid;\">Facture</button>";
-        }
-      }
-      $libelle .="</span>";
-      /** FIN CADRE DROIT */
-
-      $libelle.= "<br/><span onmouseover='ObjectTooltip.createEx(this, \"".CMbString::htmlEntities($patient->_guid)."\")'>".CMbString::htmlEntities($patient->nom. " " .$patient->prenom." (".$patient->sexe.")")."<br/>[".$patient->getFormattedValue("naissance")."] ".$lit."</span>";
-
-      if (abs(CMbDT::hoursRelative("$_operation->date $debut_op", $first_log->date)) <= $diff_hour_urgence) {
-        $libelle .= "<span style='float: right' title='Intervention en urgence'><img src='images/icons/attente_fourth_part.png' /></span>";
-      }
-
-
-      $libelle.="\n<span  class=\"mediuser\" style=\"border-left-color: #".$chir->_ref_function->color.";\" onmouseover='ObjectTooltip.createEx(this, \"".$chir->_guid."\")'>".CMbString::htmlEntities($chir->_view)."</span>";
-      $libelle .= "\n<span style='font-size: 11px; font-weight: bold;' onmouseover='ObjectTooltip.createEx(this, \"".$_operation->_guid."\")'>".CMbDT::transform($debut_op, null, "%H:%M")." - ".CMbDT::transform($fin_op, null, "%H:%M")."<br/>".
-        CMbString::htmlEntities($_operation->libelle)."</span><hr/>";
-
-      if ($patient->_ref_dossier_medical->_count_allergies > 0) {
-        $libelle .= "
-              <span onmouseover=\"ObjectTooltip.createEx(this, '".$patient->_guid."', 'allergies');\" ><img src=\"images/icons/warning.png\" alt=\"WRN\"/></span>";
-      }
-
+      //antecedants
       $count_atcd = 0;
       foreach ($patient->_ref_dossier_medical->_ref_antecedents_by_type as $_type => $_atcd) {
         if ($_type != "alle") {
           $count_atcd += count($_atcd);
         }
       }
-      if ($count_atcd > 0) {
-        $libelle.="<span onmouseover=\"ObjectTooltip.createEx(this, '".$patient->_ref_dossier_medical->_guid."', 'antecedents');\" ><img src=\"images/icons/antecedents.gif\" alt=\"WRN\"/></span>";
-      }
 
-      $libelle.="Sejour: <span onmouseover='ObjectTooltip.createEx(this, \"".$sejour->_guid."\")'>".$sejour->getFormattedValue("entree")."</span>";
-      if ($_operation->materiel) {
-        $libelle .="<hr/><span>".CMbString::htmlEntities($_operation->materiel)."</span>";
-      }
-
-      if ($chir_2->_id) {
-        $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir_2->_guid."\")'>".CMbString::htmlEntities($chir_2->_view)."</span>";
-      }
-
-      if ($chir_3->_id) {
-        $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir_3->_guid."\")'>".CMbString::htmlEntities($chir_3->_view)."</span>";
-      }
-
-      if ($chir_4->_id) {
-        $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir_4->_guid."\")'>".CMbString::htmlEntities($chir_4->_view)."</span>";
-      }
-
-      if ($anesth->_id) {
-        $libelle .= "\n<img src=\"images/icons/anesth.png\" alt=\"WRN\"/><span onmouseover='ObjectTooltip.createEx(this, \"".$anesth->_guid."\")'>".CMbString::htmlEntities($anesth->_view)."</span>";
-      }
-
-      $libelle .= "\n".CMbString::htmlEntities($_operation->rques);
-
+      //besoins
       if (count($besoins)) {
         CMbObject::massLoadFwdRef($besoins, "type_ressource_id");
-
-        $last_besoin = end($besoins);
-
-        $libelle .= "<span class='compact' style='color: #000'>";
         foreach ($besoins as $_besoin) {
-          $_type_ressource = $_besoin->loadRefTypeRessource();
-          $libelle .= CMbString::htmlEntities($_type_ressource->libelle);
-          if ($_besoin != $last_besoin) {
-            $libelle .= " - ";
-          }
+          $_besoin->loadRefTypeRessource();
         }
-        $libelle .= "</span>";
       }
+
+      //template de contenu
+      $smarty = new CSmartyDP();
+      $smarty->assign("operation"           , $_operation);
+      $smarty->assign("patient"             , $patient);
+      $smarty->assign("sejour"              , $sejour);
+      $smarty->assign("liaison_sejour"      , $liaison_sejour);
+      $smarty->assign("charge"              , $charge);
+      $smarty->assign("facture"             , $facture);
+      $smarty->assign("debut_op"            , $debut_op);
+      $smarty->assign("fin_op"              , $fin_op);
+      $smarty->assign("lit"                 , $lit);
+      $smarty->assign("chir"                , $chir);
+      $smarty->assign("chir_2"              , $chir_2);
+      $smarty->assign("chir_3"              , $chir_3);
+      $smarty->assign("chir_4"              , $chir_4);
+      $smarty->assign("anesth"              , $anesth);
+      $smarty->assign("count_atcd"          , $count_atcd);
+      $smarty->assign("besoins"             , $besoins);
+      $smarty->assign("interv_en_urgence"   , abs(CMbDT::hoursRelative("$_operation->date $debut_op", $first_log->date)) <= $diff_hour_urgence);
+      $smartyL = $smarty->fetch("inc_planning/libelle_plage.tpl");
 
       // couleurs
       $color = CAppUI::conf("hospi colors default");
@@ -425,7 +364,7 @@ if ($show_operations) {
         }
       }
 
-      $event = new CPlanningEvent($_operation->_guid, $debut, $duree, utf8_encode($libelle), "#$color", $important, $css, $_operation->_guid, false);
+      $event = new CPlanningEvent($_operation->_guid, $debut, $duree, $smartyL, "#$color", $important, $css, $_operation->_guid, false);
 
       if ($can_edit) {
         $event->addMenuItem("edit" , utf8_encode("Modifier cette opération"));

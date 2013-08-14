@@ -1,0 +1,111 @@
+{{*
+ * $Id$
+ *  
+ * @category Reservation
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  OXOL, see http://www.mediboard.org/public/OXOL
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
+*}}
+
+<span style="display: none;" data-duree="{{$sejour->_duree}}" data-entree_prevue='{{$sejour->entree_prevue}}' data-sortie_prevue='{{$sejour->sortie_prevue}}' data-sejour_id='{{$sejour->_id}}' data-preop='{{if $operation->presence_preop}}{{$operation->presence_preop|date_format:"%H:%M"}}{{else}}00:00{{/if}}' data-postop='{{if $operation->presence_postop}}{{$operation->presence_postop|date_format:"%H:%M"}}{{else}}00:00{{/if}}' data-traitement='{{$charge->_id}}' data-pec='{{$sejour->type_pec}}'></span>
+<!-- CADRE DROIT -->
+<span style="float:right; text-align: right">
+  <!-- only switzerland -->
+  {{if $conf.ref_pays == 2 }}
+    {{if $liaison_sejour}}<strong>{{$liaison_sejour}}</strong>{{/if}}{{if $conf.dPplanningOp.CSejour.use_charge_price_indicator && $charge->_id}}<strong style='color:blue; background: white;padding:2px'>{{$charge->code}}</strong>
+  {{/if}}
+
+
+  {{/if}}
+
+  {{if $conf.reservation.display_dossierBloc_button && $charge->_id}}
+    <button class="bistouri notext" onclick="modalDossierBloc('{{$operation->_id}}')">Dossier Bloc</button>
+  {{/if}}
+
+  <!-- facture -->
+  {{if $conf.dPplanningOp.CFactureEtablissement.use_facture_etab && $conf.reservation.display_facture_button && $facture->_id}}
+    {{assign var=close value=$facture->cloture}}
+    {{if $conf.dPfacturation.Other.use_field_definitive}}
+      {{assign var=close value=$facture->definitive}}
+    {{/if}}
+
+    {{if $couleur}}
+      {{assign var=couleur value="blue"}}
+    {{else}}
+      {{assign var=couleur value="#FF0"}}
+    {{/if}}
+    <button class="calcul notext" onclick="Facture.edit({{$facture->_id}}, '{{$facture->_class}}')" style="border-left: {{$couleur}} 3px solid;">Facture</button>
+  {{/if}}
+
+</span>
+
+<br/><span onmouseover='ObjectTooltip.createEx(this, "{{$patient->_guid}}")'>{{$patient->_view}} ({{$patient->sexe}})<br/>
+  [{{mb_value object=$patient field=naissance}}] {{$lit}}</span>
+
+
+
+{{if $interv_en_urgence}}
+  <span style='float: right' title='Intervention en urgence'><img src='images/icons/attente_fourth_part.png' /></span>
+{{/if}}
+
+
+<br/><span  class="mediuser" style="border-left-color: #{{$chir->_ref_function->color}};" onmouseover="ObjectTooltip.createEx(this, '{{$chir->_guid}}')"> {{$chir->_view}}</span>
+<br/><span style='font-size: 11px; font-weight: bold;' onmouseover="ObjectTooltip.createEx(this, '{{$operation->_guid}}')">{{$debut_op|date_format:"%H:%M"}} - {{$fin_op|date_format:"%H:%M"}}<br/>
+  {{$operation->libelle}}</span><hr/>
+
+
+coté : {{$operation->cote}}<br/>
+{{if $operation->_ref_type_anesth}}
+  Type anest. : {{$operation->_ref_type_anesth}}<br/>
+{{/if}}
+
+
+<hr/>
+
+{{if $patient->_ref_dossier_medical->_count_allergies > 0}}
+  <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" ><img src="images/icons/warning.png" alt="WRN"/></span>
+{{/if}}
+
+{{if $count_atcd > 0}}
+  <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_ref_dossier_medical->_guid}}', 'antecedents');" ><img src="images/icons/antecedents.gif" alt=\"WRN\"/></span>
+{{/if}}
+
+<hr/>
+
+Sejour: <span onmouseover='ObjectTooltip.createEx(this, "{{$sejour->_guid}}")'>{{mb_value object=$sejour field=entree}}</span>
+{{if $operation->materiel}}
+  <span>{{mb_value object=$operation field=materiel}}</span>
+{{/if}}
+
+
+{{if $chir_2->_id}}
+  <br/><span onmouseover='ObjectTooltip.createEx(this, "{{$chir_2->_guid}}")'>{{$chir_2->_view}}</span>
+{{/if}}
+
+{{if $chir_3->_id}}
+  <br/><span onmouseover='ObjectTooltip.createEx(this, "{{$chir_3->_guid}}")'>{{$chir_3->_view}}</span>
+{{/if}}
+
+{{if $chir_4->_id}}
+  <br/><span onmouseover='ObjectTooltip.createEx(this, "{{$chir_4->_guid}}")'>{{$chir_4->_view}}</span>
+{{/if}}
+
+{{if $anesth->_id}}
+  <img src="images/icons/anesth.png" alt="WRN"/><span onmouseover="ObjectTooltip.createEx(this, '{{$anesth->_guid}}')">{{$anesth->_view|smarty:nodefaults}}</span>
+{{/if}}
+
+{{if $operation->rques}}
+  <hr/>
+  <strong>Rques:</strong> {{$operation->rques}}
+{{/if}}
+
+{{if count($besoins)}}
+  <span class='compact' style='color: #000'>
+    {{foreach from=$besoins item=_besoin}}
+      {{$_besoin->_ref_type_ressource->libelle}},
+    {{/foreach}}
+  </span>
+{{/if}}
+
