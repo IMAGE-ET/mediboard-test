@@ -80,6 +80,16 @@ class CAccessLog extends CMbObject {
     
     return $props;
   }
+
+  /**
+   * @see parent::getBackProps()
+   */
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["datasource_logs"] = "CDataSourceLog accesslog_id";
+
+    return $backProps;
+  }
   
   /**
    * Fast store using ON DUPLICATE KEY UPDATE MySQL feature
