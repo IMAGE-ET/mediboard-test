@@ -3362,15 +3362,17 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   function loadLiaisonsForPrestation($prestation_id, $date_min = null, $date_max = null) {
-    if ($prestation_id == "all") {
-      $prestation_id = null;
-    }
     $item_liaison = new CItemLiaison();
     $where    = array();
     $order    = "date ASC";
     $limit    = null;
     $groupby  = "item_liaison.date";
     $ljoin    = array();
+
+    if ($prestation_id == "all") {
+      $prestation_id = null;
+      $groupby = "item_prestation_id";
+    }
 
     $where["sejour_id"] = "= '$this->_id'";
     $ljoin["item_prestation"] =

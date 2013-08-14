@@ -251,7 +251,7 @@ if ($show_operations) {
       $anesth  = $_operation->_ref_anesth = $_operation->loadFwdRef("anesth_id");
       $sejour  = $_operation->loadRefSejour();
       $charge = $sejour->loadRefChargePriceIndicator();
-      $sejour->loadLiaisonsForPrestation($prestation_id);
+      $sejour->loadLiaisonsForPrestation("all");
       $patient = $sejour->loadRefPatient();
       $patient->loadRefDossierMedical();
       $patient->_ref_dossier_medical->countAllergies();
@@ -263,7 +263,7 @@ if ($show_operations) {
       $liaison_sejour = "";
       foreach ($sejour->_liaisons_for_prestation as $_liaison) {
         if ($date_planning >= $_liaison->date && ($_liaison->_ref_item->_id)) {
-          $liaison_sejour = $_liaison->_ref_item->nom.' ';
+          $liaison_sejour .= $_liaison->_ref_item->nom.', ';
         }
       }
 
