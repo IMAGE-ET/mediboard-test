@@ -302,7 +302,7 @@ Main.add(function() {
                               {{$_event->title|smarty:nodefaults|nl2br}}
                             {{else}}
                               <span>
-                              {{$_event->title|smarty:nodefaults|nl2br}}
+                              {{$_event->title|smarty:nodefaults}}
                             {{/if}}
                             </span>
                           </div>
