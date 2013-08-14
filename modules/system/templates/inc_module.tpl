@@ -33,7 +33,7 @@
   {{elseif $_mb_module->_upgradable && $can->admin}}
     <table class="layout">
       <tr>
-        <td>
+        <td style="padding: 0;">
           <form name="formUpdateModule-{{$module_id}}" method="post" class="upgrade" data-id="{{$module_id}}" data-dependencies="{{$_mb_module->_dependencies_not_verified}}"
                 {{if $_mb_module->mod_type != "core"}} onsubmit="return Module.updateOne(this)" {{/if}}>
             <input type="hidden" name="dosql" value="do_manage_module" />
@@ -44,7 +44,7 @@
             <input type="hidden" name="mod_id" value="{{$module_id}}" />
             <input type="hidden" name="cmd" value="upgrade" />
 
-            <button class="button change submit upgrade oneclick" type="submit" {{* onclick="return confirm('{{tr}}CModule-confirm-upgrade{{/tr}}')" *}}>
+            <button class="change compact upgrade oneclick" type="submit" {{* onclick="return confirm('{{tr}}CModule-confirm-upgrade{{/tr}}')" *}}>
               {{tr}}Upgrade{{/tr}} {{$_mb_module->_latest}}
             </button>
           </form>
@@ -72,7 +72,7 @@
       <input type="hidden" name="cmd" value="remove" />
       <input type="hidden" name="mod_id" value="{{$module_id}}" />
       
-      <button class="button cancel submit" type="submit" disabled="true" onclick="return confirm('{{tr}}CModule-confirm-deletion{{/tr}}');">
+      <button class="cancel compact" type="submit" disabled="true" onclick="return confirm('{{tr}}CModule-confirm-deletion{{/tr}}');">
         {{tr}}Remove{{/tr}}
       </button>
     </form>

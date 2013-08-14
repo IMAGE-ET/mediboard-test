@@ -122,7 +122,7 @@ var Module = {
               <input type="hidden" name="cmd" value="install" />
               <input type="hidden" name="mod_name" value="{{$module_name}}" />
               
-              <button class="button new submit" type="submit">
+              <button class="new compact" type="submit">
                 {{tr}}Install{{/tr}} &gt;
                 {{mb_value object=$_mb_module field=_latest}}
               </button>
