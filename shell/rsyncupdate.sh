@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BASH_PATH=$(dirname $0)
+BASH_PATH=$(dirname $(readlink -f $0))
 . $BASH_PATH/utils.sh
 export LANG=fr_FR.utf-8
 
@@ -25,7 +25,7 @@ conf_file=$BASH_PATH/rsyncupdate.conf
 dry_run=""
 revision=""
 
-args=`getopt r:c:d $*`
+args=$(getopt r:c:d $*)
 if [ $? != 0 ] ; then
   echo "Invalid argument. Check your command line"; exit 0;
 fi
@@ -59,7 +59,7 @@ then
 
   while read line
   do
-    first_character=`expr substr "$line" 1 1`
+    first_character=$(expr substr "$line" 1 1)
     # Skip comment lines and empty lines
     if [ "$first_character" != "#" ] && [ "$first_character" != "" ]
     then

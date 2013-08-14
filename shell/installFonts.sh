@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BASH_PATH=$(dirname $0)
+BASH_PATH=$(dirname $(readlink -f $0))
 . $BASH_PATH/utils.sh
 MB_PATH=$(dirname $BASH_PATH)
 

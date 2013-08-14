@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BASH_PATH=$(dirname $0)
+BASH_PATH=$(dirname $(readlink -f $0))
 . $BASH_PATH/utils.sh
 
 if [ "$#" -lt 5 ]
@@ -20,7 +20,7 @@ fi
 passphrase=''
 cryptage='aes-128-cbc'
 
-args=`getopt c:e: $*`
+args=$(getopt c:e: $*)
 set -- $args
 for i; do
   case "$i" in
@@ -56,7 +56,7 @@ done
 # Copy binlog indeces to binlog backup
 cp $index $backup
 
-date=`date '+%Y-%m-%dT%H:%M:%S'`
+date=$(date '+%Y-%m-%dT%H:%M:%S')
 
 # Archive binlogs
 if [ -n "$passphrase" ]; then

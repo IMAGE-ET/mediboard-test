@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BASH_PATH=$(dirname $0)
+BASH_PATH=$(dirname $(readlink -f $0))
 . $BASH_PATH/utils.sh
 
 ########
@@ -17,21 +17,21 @@ announce_script "Mediboard directories groups and mods"
 #  exit 1
 #fi
 
-darwin_kernel=`uname -a|cut -d' ' -f1`
+darwin_kernel=$(uname -a|cut -d' ' -f1)
 
 # Pour mac
 if [ $darwin_kernel = "Darwin" ]
 then
-  APACHE_USER=`ps -ef|grep httpd|grep -v grep|head -2|tail -1|cut -d' ' -f4`
-  APACHE_GROUP=`groups $APACHE_USER|cut -d' ' -f1`
+  APACHE_USER=$(ps -ef|grep httpd|grep -v grep|head -2|tail -1|cut -d' ' -f4)
+  APACHE_GROUP=$(groups $APACHE_USER|cut -d' ' -f1)
 
 # Distributions linux
 else
-  APACHE_USER=`ps -ef|grep apache|grep -v grep|head -2|tail -1|cut -d' ' -f1`
-  APACHE_GROUP=`groups $APACHE_USER|cut -d' ' -f3`
+  APACHE_USER=$(ps -ef|grep apache|grep -v grep|head -2|tail -1|cut -d' ' -f1)
+  APACHE_GROUP=$(groups $APACHE_USER|cut -d' ' -f3)
 fi
 
-args=`getopt g:d: $*`
+args=$(getopt g:d: $*)
 
 if [ $? != 0 ] ; then
   echo "Invalid argument. Check your command line"; exit 0;

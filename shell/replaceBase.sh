@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BASH_PATH=$(dirname $0)
+BASH_PATH=$(dirname $(readlink -f $0))
 . $BASH_PATH/utils.sh
 
 ########
@@ -28,7 +28,7 @@ fi
 port=22
 restart=0
 safe=0
-args=`getopt m:p:lrs $*`
+args=$(getopt m:p:lrs $*)
 mysql_directory=/var/lib/mysql
 distant=1
 

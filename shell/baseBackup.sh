@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BASH_PATH=$(dirname $0)
+BASH_PATH=$(dirname $(readlink -f $0))
 . $BASH_PATH/utils.sh
 
 ########
@@ -33,7 +33,7 @@ binary_log=0
 lock=''
 passphrase=''
 cryptage='aes-128-cbc'
-args=`getopt t:l:f:c:e:b $*`
+args=$(getopt t:l:f:c:e:b $*)
 
 if [ $? != 0 ] ; then
   echo "Invalid argument. Check your command line"; exit 0;
@@ -61,11 +61,6 @@ backup_path=$5
 
 info_script "Backuping '$database' database"
 
-## Make complete path
-
-# Make shell path
-SHELL_PATH=`pwd`/$BASH_PATH
-
 # Create lock file
 if [ -n "$lock" ]
 then
@@ -82,19 +77,25 @@ force_dir $BASE_PATH
 cd ${BASE_PATH}
 
 # Check free disk space
-mysql_conf=`find /etc/ -name my.cnf 2>/dev/null|head -n 1`
+mysql_conf=$(find /etc/ -name my.cnf 2>/dev/null|head -n 1)
 if [ -z "$mysql_conf" ]
 then
   check_errs 2 "MySQL configuration file not found"
 fi
 
-mysql_data_root=`cat $mysql_conf|grep datadir|tr -s ' '|cut -d"=" -f 2`
+mysql_data_root=$(grep datadir $mysql_conf|tr -s ' '|cut -d"=" -f 2)
+
+if [ -z $mysql_data_root ]
+then
+  mysql_data_root="/var/lib/mysql"
+fi
+
 mysql_data_base="$mysql_data_root/$database"
-database_size=`du -k $mysql_data_base|tail -n 1|sed -r 's/\s+/\ /g'|cut -d" " -f 1`
+database_size=$(du -k $mysql_data_base|tail -n 1|sed -r 's/\s+/\ /g'|cut -d" " -f 1)
 
 # Expanded size (database + tarball)
 needed_size=$((database_size*3/2))
-available_size=`df -k $BACKUP_PATH|tail -n 1|sed -r 's/\s+/\ /g'|cut -d" " -f 4`
+available_size=$(df -k $BACKUP_PATH|tail -n 1|sed -r 's/\s+/\ /g'|cut -d" " -f 4)
 available_size=$((available_size))
 
 if [ $available_size -lt $needed_size ]
@@ -171,7 +172,7 @@ check_errs $? "Failed to create backup tarball" "Tarball packaged!"
 
 # Crypt the tarball
 if [ -n "$passphrase" ]; then
-  cat $tarball|openssl $cryptage -salt -out $tarball.aes -k $passphrase
+  openssl $cryptage -salt -in $tarball -out $tarball.aes -k $passphrase
   check_errs $? "Failed to crypt the archive" "Archive crypted!"
   # create a symlink
   cp -s -f $tarball.aes $database-latest.tar.gz.aes
@@ -186,7 +187,7 @@ fi
 
 # Remove temporary files
 rm -Rf $result
-check_errs $? "Failed to clean MySQL files" "MySQL files cleansing done!"
+check_errs $? "Failed to clean MySQL files" "MySQL files cleaning done!"
 
 if [ -n "$lock" ]
 then

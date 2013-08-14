@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BASH_PATH=$(dirname $0)
+BASH_PATH=$(dirname $(readlink -f $0))
 . $BASH_PATH/utils.sh
 
 ########
@@ -26,7 +26,7 @@ port=22
 passphrase=''
 cryptage='aes-128-cbc'
 
-args=`getopt p:c:e: $*`
+args=$(getopt p:c:e: $*)
 set -- $args
 for i; do
   case "$i" in

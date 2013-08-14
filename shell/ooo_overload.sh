@@ -1,7 +1,7 @@
 # Openoffice memory leak...
 # If over 10%, restart it.
 
-percent=`ps -aux|grep soffice.bin|grep headless|sed -r 's/\s+/\ /g'|cut -d" " -f4|cut -d"." -f1`
+percent=$(ps -aux|grep soffice.bin|grep headless|sed -r 's/\s+/\ /g'|cut -d" " -f4|cut -d"." -f1)
 force_restart=$1
 
 if [ $percent -ge 10 ] || [ "$force_restart" = "1" ]

@@ -11,18 +11,18 @@ then
   exit 1;
 fi
 
-darwin_kernel=`uname -a|cut -d' ' -f1`
+darwin_kernel=$(uname -a|cut -d' ' -f1)
 
 # For Mac
 if [ $darwin_kernel = "Darwin" ]
 then
-  APACHE_USER=`ps -ef|grep httpd|grep -v grep|head -2|tail -1|cut -d' ' -f4`
-  APACHE_GROUP=`groups $APACHE_USER|cut -d' ' -f1`
+  APACHE_USER=$(ps -ef|grep httpd|grep -v grep|head -2|tail -1|cut -d' ' -f4)
+  APACHE_GROUP=$(groups $APACHE_USER|cut -d' ' -f1)
 
 # For linux
 else
-  APACHE_USER=`ps -ef|grep apache|grep -v grep|head -2|tail -1|cut -d' ' -f1`
-  APACHE_GROUP=`groups $APACHE_USER|cut -d' ' -f3`
+  APACHE_USER=$(ps -ef|grep apache|grep -v grep|head -2|tail -1|cut -d' ' -f1)
+  APACHE_GROUP=$(groups $APACHE_USER|cut -d' ' -f3)
 fi
 
 echo "Creating the folder /var/apicrypt/"

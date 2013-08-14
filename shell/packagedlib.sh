@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BASH_PATH=$(dirname $0)
+BASH_PATH=$(dirname $(readlink -f $0))
 . $BASH_PATH/utils.sh
 
 ########
@@ -16,7 +16,7 @@ then
   exit 1
 fi
 
-args=`getopt l: $*`
+args=$(getopt l: $*)
 
 if [ $? != 0 ] ; then
   echo "Invalid argument. Check your command line"; exit 0;
@@ -32,7 +32,7 @@ done
 
 case $lib_name in
  dompdf)
-   version=`date +%m-%d-%y`;
+   version=$(date +%m-%d-%y)
    package_lib dompdf https://dompdf.googlecode.com/svn/trunk/dompdf $version
    rm -rf ./tmp/dompdf
    break;;

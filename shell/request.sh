@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BASH_PATH=$(dirname $0)
+BASH_PATH=$(dirname $(readlink -f $0))
 . $BASH_PATH/utils.sh
 
 ########
@@ -27,7 +27,7 @@ times=1
 delay=1
 timeout=""
 
-args=`getopt t:d:f:T: $*`
+args=$(getopt t:d:f:T: $*)
 if [ $? != 0 ] ; then
   echo "Invalid argument. Check your command line"; exit 0;
 fi
