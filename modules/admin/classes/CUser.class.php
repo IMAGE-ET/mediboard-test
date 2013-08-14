@@ -129,6 +129,7 @@ class CUser extends CPerson {
     $backProps["profiled_users"]     = "CUser profile_id";
     $backProps["password_keepers"]   = "CPasswordKeeper user_id";
     $backProps["preferences"]        = "CPreferences user_id";
+    $backProps["error_logs"]         = "CErrorLog user_id";
     return $backProps;
   }
 

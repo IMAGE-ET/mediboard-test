@@ -128,6 +128,7 @@ Main.add(function(){
   <input type="hidden" name="type" value="{{$check_list->type}}" />
   <input type="hidden" name="list_type_id" value="{{$check_list->list_type_id}}" />
   <input type="hidden" name="date" value="{{$check_list->date|ternary:$check_list->date:"now"}}" />
+  <input type="hidden" name="group_id" value="{{$check_list->group_id|ternary:$check_list->group_id:$g}}" />
 
   {{if in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes)}}
     <input type="hidden" name="callback" value="refreshCheckList{{$check_list->type}}_{{$check_list->list_type_id}}" />

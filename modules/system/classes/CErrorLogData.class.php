@@ -41,6 +41,18 @@ class CErrorLogData extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
+  function getBackProps(){
+    $backProps = parent::getBackProps();
+    $backProps["stacktraces"]   = "CErrorLog stacktrace_id";
+    $backProps["params_GET"]    = "CErrorLog param_GET_id";
+    $backProps["params_POST"]   = "CErrorLog param_POST_id";
+    $backProps["session_datas"] = "CErrorLog session_data_id";
+    return $backProps;
+  }
+
   static function insert($value) {
     $ds = CSQLDataSource::get("std");
     if (!$ds) {

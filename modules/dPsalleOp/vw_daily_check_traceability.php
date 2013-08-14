@@ -33,8 +33,11 @@ if ($items) {
 
 @list($object_class, $object_id) = explode('-', $object_guid);
 
+$group_id = CGroups::loadCurrent()->_id;
+
 $where = array(
-  "validator_id" => "IS NOT NULL"
+  "validator_id" => "IS NOT NULL",
+  "group_id"     => "= '$group_id'",
 );
 if ($object_class) {
   $where['object_class'] = "= '$object_class'";
@@ -48,6 +51,8 @@ if ($date_min) {
 if ($date_max) {
   $where[] = "date <= '$date_max'";
 }
+
+/** @var CDailyCheckList[] $list_check_lists */
 $list_check_lists = $check_list->loadList($where, 'date DESC, object_class, object_id, type' , "$start,40");
 $count_check_lists = $check_list->countList($where);
 

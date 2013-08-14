@@ -23,6 +23,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   public $comments;
   public $validator_id;
   public $list_type_id;
+  public $group_id;
 
   /** @var CMediusers */
   public $_ref_validator;
@@ -163,10 +164,11 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $props['list_type_id'] = 'ref class|CDailyCheckListType';
     $props['type']         = 'enum list|'.implode('|', array_keys(CDailyCheckList::$types));
     $props['validator_id'] = 'ref class|CMediusers';
+    $props['group_id']     = 'ref class|CGroups';
     $props['comments']     = 'text';
     $props['_validator_password'] = 'password notNull';
-    $props['_date_min'] = 'date';
-    $props['_date_max'] = 'date';
+    $props['_date_min']    = 'date';
+    $props['_date_max']    = 'date';
     return $props;
   }
 

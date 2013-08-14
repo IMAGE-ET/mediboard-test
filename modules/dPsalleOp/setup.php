@@ -1260,6 +1260,55 @@ class CSetupdPsalleOp extends CSetup {
     $this->moveCheckListCategory("05",  "preendoscopie_bronchique", "03");
     $this->moveCheckListCategory("05b", "preendoscopie_bronchique", "05");
 
-    $this->mod_version = "0.51";
+    $this->makeRevision("0.51");
+    $query = "ALTER TABLE `daily_check_list`
+                ADD `group_id` INT (11) UNSIGNED NOT NULL,
+                ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+
+    // Update CSalle
+    $query = "UPDATE `daily_check_list` SET
+                `daily_check_list`.`group_id` = (
+                  SELECT `group_id`
+                  FROM `bloc_operatoire`
+                  LEFT JOIN `sallesbloc` ON `sallesbloc`.`bloc_id` = `bloc_operatoire`.`bloc_operatoire_id`
+                  WHERE `sallesbloc`.`salle_id` = `daily_check_list`.`object_id`
+                )
+                WHERE `daily_check_list`.`object_class` = 'CSalle'";
+    $this->addQuery($query);
+
+    // Update CBlocOperatoire
+    $query = "UPDATE `daily_check_list` SET
+                `daily_check_list`.`group_id` = (
+                  SELECT `group_id`
+                  FROM `bloc_operatoire`
+                  WHERE `bloc_operatoire_id` = `daily_check_list`.`object_id`
+                )
+                WHERE `daily_check_list`.`object_class` = 'CBlocOperatoire'";
+    $this->addQuery($query);
+
+    // Update COperation
+    $query = "UPDATE `daily_check_list` SET
+                `daily_check_list`.`group_id` = (
+                  SELECT `group_id`
+                  FROM `sejour`
+                  LEFT JOIN `operations` ON `operations`.`sejour_id` = `sejour`.`sejour_id`
+                  WHERE `operations`.`operation_id` = `daily_check_list`.`object_id`
+                )
+                WHERE `daily_check_list`.`object_class` = 'COperation'";
+    $this->addQuery($query);
+
+    // Update CPoseDispositifVasculaire
+    $query = "UPDATE `daily_check_list` SET
+                `daily_check_list`.`group_id` = (
+                  SELECT `group_id`
+                  FROM `sejour`
+                  LEFT JOIN `pose_dispositif_vasculaire` ON `pose_dispositif_vasculaire`.`sejour_id` = `sejour`.`sejour_id`
+                  WHERE `pose_dispositif_vasculaire`.`pose_dispositif_vasculaire_id` = `daily_check_list`.`object_id`
+                )
+                WHERE `daily_check_list`.`object_class` = 'CPoseDispositifVasculaire'";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.52";
   }
 }

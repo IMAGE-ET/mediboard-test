@@ -63,7 +63,7 @@ class CErrorLog extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["user_id"]     = "ref class|CUser";
+    $props["user_id"]     = "ref class|CUser unlink";
     $props["server_ip"]   = "str";
     $props["datetime"]    = "dateTime notNull";
     $props["request_uid"] = "str";

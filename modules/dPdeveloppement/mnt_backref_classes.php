@@ -9,9 +9,11 @@
 
 CCanDo::checkRead();
 
+CApp::setMemoryLimit("256M");
+
 // Checking out the result
 $class = CValue::get("class");
-$show       = CValue::get("show", "errors");
+$show  = CValue::get("show", "errors");
 
 $classes = CApp::getMbClasses();
 $classes[] = "CMbObject";
@@ -19,6 +21,7 @@ $classes[] = "CMbObject";
 // Looking for what is actually coded
 $present = array();
 foreach ($classes as $_class) {
+  /** @var CMbObject $object */
   $object = new $_class;
   $object->makeAllBackSpecs();
   foreach ($object->_backSpecs as $backName => $backSpec) {
@@ -97,9 +100,6 @@ foreach ($classes as $_class) {
 if ($show == "errors") {
   CMbArray::removeValue(array(), $reports);
 }
-
-//mbTrace($reports);
-//mbTrace($error_count);
 
 // Création du template
 $smarty = new CSmartyDP();
