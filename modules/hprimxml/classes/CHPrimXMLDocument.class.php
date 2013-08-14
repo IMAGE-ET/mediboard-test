@@ -457,10 +457,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $executionNuit = "non";
 
       $time = CMbDT::time($mbActeNGAP->execution);
-      if (("22:00:00" <= $time && $time <= "23:59:59") || ("06:00:00" <= $time && $time < "08:00:00")) {
+      if (("20:00:00" <= $time && $time <= "23:59:59") || ("06:00:00" <= $time && $time < "08:00:00")) {
         $executionNuit = "1t";
       }
-      elseif ("00:00:00" <= $time && $time < "06:00:00") {
+      elseif ("00:00:00" <= $time && $time < "05:59:59") {
         $executionNuit = "2t";
       }
       $this->addAttribute($acteNGAP, "executionNuit", $executionNuit);
