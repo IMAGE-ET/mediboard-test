@@ -137,7 +137,9 @@ class COperatorHprimXML extends CEAIOperator {
    * 
    * @return string Acquittement
    **/
-  static function eventPatient(CHPrimXMLEvenementsPatients $dom_evt, $data = array(), CHPrimXMLAcquittementsPatients $dom_acq, CEchangeHprim $echg_hprim) {
+  static function eventPatient(CHPrimXMLEvenementsPatients $dom_evt, $data = array(), CHPrimXMLAcquittementsPatients $dom_acq,
+      CEchangeHprim $echg_hprim
+  ) {
     $newPatient = new CPatient();
     $newPatient->_eai_exchange_initiator_id = $echg_hprim->_id;
     

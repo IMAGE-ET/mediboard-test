@@ -80,40 +80,61 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLAcquittements {
       foreach ($codes as $code) {
         $this->addErreurAvertissement($erreursAvertissements, $statut, $code, CAppUI::tr("hprimxml-error-$code"), $commentaires, $mbObject);
       }
-    } else {
+    }
+    else {
       $this->addErreurAvertissement($erreursAvertissements, $statut, $codes, CAppUI::tr("hprimxml-error-$codes"), $commentaires, $mbObject);
     }   
   }
 
+  /**
+   * @see parent::generateAcquittements
+   */
   function generateAcquittements($statut, $codes, $commentaires = null, $mbObject = null) {
     if ($statut != "OK") {
       $this->generateEnteteMessageAcquittement($statut);
       $this->addErreursAvertissements($statut, $codes, $commentaires, $mbObject);
-    } else {
+    }
+    else {
       $this->generateEnteteMessageAcquittement($statut, $codes, $commentaires);
     }
 
     return utf8_encode($this->saveXML());
   }
 
+  /**
+   * @see parent::generateAcquittementsError
+   */
   function generateAcquittementsError($code, $commentaire = null, CMbObject $mbObject = null) {
     return $this->_ref_echange_hprim->setAckError($this, $code, $commentaire, $mbObject);
   }
-  
+
+  /**
+   * @see parent::getStatutAcquittement
+   */
   function getStatutAcquittement() {
     return $this->getStatutAcquittementPatient();
   }
-  
+
+  /**
+   * Récupération du statut de l'acquittement patient
+   *
+   * @return string
+   */
   function getStatutAcquittementPatient() {
     $xpath = new CHPrimXPath($this);
         
     return $xpath->queryAttributNode("/hprim:acquittementsPatients/hprim:enteteMessageAcquittement", null, "statut"); 
   }
-  
+
+  /**
+   * Récupération de l'acquittement patient
+   *
+   * @return array
+   */
   function getAcquittementsPatients() {
     $xpath = new CHPrimXPath($this);
     
-    $statut = $xpath->queryAttributNode("/hprim:acquittementsPatients/hprim:enteteMessageAcquittement", null, "statut"); 
+    $xpath->queryAttributNode("/hprim:acquittementsPatients/hprim:enteteMessageAcquittement", null, "statut");
     
     $query = "/hprim:acquittementsPatients/hprim:enteteMessageAcquittement";
     $enteteMessageAcquittement = $xpath->queryUniqueNode($query);  
@@ -128,7 +149,12 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLAcquittements {
     
     return $data;
   }
-  
+
+  /**
+   * Récupération des observations de l'acquittement patient
+   *
+   * @return array
+   */
   function getAcquittementObservationPatients() {
     $xpath = new CHPrimXPath($this);
     
@@ -146,7 +172,8 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLAcquittements {
       $d['code'] = chunk_split($xpath->queryTextNode("hprim:code", $observation, "", false), 4, ' ');
       $d['libelle'] = $xpath->queryTextNode("hprim:libelle", $observation, "", false);
       $d['commentaire'] = $xpath->queryTextNode("hprim:commentaire", $observation, "", false);
-    } else {
+    }
+    else {
       $query = "/hprim:acquittementsPatients/hprim:erreursAvertissements/*";
       $erreursAvertissements = $xpath->query($query);   
 

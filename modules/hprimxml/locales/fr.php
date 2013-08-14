@@ -521,6 +521,7 @@ $locales['hprimxml-error-E203'] = 'Le chirurgien de l\'intervention est inconnu'
 $locales['hprimxml-error-E204'] = 'Le séjour  de l\'intervention récupérée par l\'identifiant externe est différent de celle de Mediboard';
 $locales['hprimxml-error-E205'] = 'L\'intervention récupérée par l\'identifiant externe est différente de l\'intervention récupérée par l\'identifiant Mediboard';
 $locales['hprimxml-error-E206'] = 'IPP et/ou Numéro de dossier non fourni';
+$locales['hprimxml-error-E301'] = 'Le séjour du mouvement retrouvé est différent du séjour du message';
 $locales['hprimxml-error-I001'] = 'L\'enregistrement du patient est terminé';
 $locales['hprimxml-error-I002'] = 'Modification du patient terminée';
 $locales['hprimxml-error-I003'] = 'IC non fourni';

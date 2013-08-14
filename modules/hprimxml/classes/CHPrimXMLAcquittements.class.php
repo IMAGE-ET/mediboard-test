@@ -1,16 +1,29 @@
-<?php /* $Id: evenements.class.php 8931 2010-05-12 12:58:21Z lryo $ */
+<?php
 
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage hprimxml
- * @version $Revision: 8931 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: 16236 $
  */
 
+/**
+ * Class CHPrimXMLAcquittements
+ */
 class CHPrimXMLAcquittements extends CHPrimXMLDocument {
-  var $_codes_erreurs = array();
-    
+  public $_codes_erreurs = array();
+
+  /**
+   * Get acknowledgment event
+   *
+   * @param CHPrimXMLEvenements $dom_evt Event
+   *
+   * @return CHPrimXMLAcquittementsFraisDivers|CHPrimXMLAcquittementsPatients|CHPrimXMLAcquittementsPmsi|
+   * CHPrimXMLAcquittementsServeurActes|CHPrimXMLAcquittementsServeurIntervention|null
+   */
   static function getAcquittementEvenementXML(CHPrimXMLEvenements $dom_evt) {
     // Message événement patient
     if ($dom_evt instanceof CHPrimXMLEvenementsPatients) {
@@ -21,8 +34,20 @@ class CHPrimXMLAcquittements extends CHPrimXMLDocument {
     if ($dom_evt instanceof CHPrimXMLEvenementsServeurActivitePmsi) {
       return CHPrimXMLAcquittementsServeurActivitePmsi::getEvtAcquittement($dom_evt);
     }
+
+    return null;
   }
-  
+
+  /**
+   * Generate acknowledgement
+   *
+   * @param string $statut       Status code
+   * @param array  $codes        Codes
+   * @param string $commentaires Comments
+   * @param string $mbObject     Object
+   *
+   * @return string
+   */
   function generateAcquittements($statut, $codes, $commentaires = null, $mbObject = null) {
   }
 }

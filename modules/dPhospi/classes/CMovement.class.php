@@ -1,38 +1,48 @@
-<?php /* $Id: CIdSante400.class.php 13724 2011-11-09 15:10:29Z lryo $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id: CIdSante400.class.php 13724 2011-11-09 15:10:29Z lryo $
+ *
+ * @package    Mediboard
  * @subpackage dPhospi
- * @version $Revision: 13724 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: 20044 $
  */
 
+/**
+ * Class CMovement
+ */
 class CMovement extends CMbObject {
   // DB Table key
-  var $movement_id      = null;
+  public $movement_id;
   
   // DB fields
-  var $sejour_id             = null;
-  var $affectation_id        = null;
-  var $movement_type         = null;
-  var $original_trigger_code = null;
-  var $start_of_movement     = null;
-  var $last_update           = null;
-  var $cancel                = null;
-  
-  var $_current              = true;
-  
-  var $_ref_sejour           = null;
-  var $_ref_affectation      = null;
-  
+  public $sejour_id;
+  public $affectation_id;
+  public $movement_type;
+  public $original_trigger_code;
+  public $start_of_movement;
+  public $last_update;
+  public $cancel;
+
+  public $_current = true;
+
+  public $_ref_sejour;
+  public $_ref_affectation;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'movement';
     $spec->key   = 'movement_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     
@@ -41,6 +51,9 @@ class CMovement extends CMbObject {
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["sejour_id"]             = "ref notNull class|CSejour seekable";
@@ -53,7 +66,10 @@ class CMovement extends CMbObject {
     
     return $props;
   }
-  
+
+  /**
+   * @see parent::check()
+   */
   function check() {
     if ($msg = parent::check()) {
       return $msg; 
@@ -71,42 +87,72 @@ class CMovement extends CMbObject {
           " : $this->affectation_id";
       }
     }
+
+    return null;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     
     $this->_view = "$this->movement_type-$this->_id";
   }
-  
+
+  /**
+   * Load sejour
+   *
+   * @return CMbObject|null
+   */
   function loadRefSejour() {
     return $this->_ref_sejour = $this->loadFwdRef("sejour_id", 1);
   }
-  
+
+  /**
+   * Load affectation
+   *
+   * @return CMbObject|null
+   */
   function loadRefAffectation() {
     return $this->_ref_affectation = $this->loadFwdRef("affectation_id", 1);
   }
-  
+
+  /**
+   * @see parent::loadMatchingObject()
+   */
   function loadMatchingObject($order = null, $group = null, $ljoin = null) {
     $order = "last_update DESC";
 
     return parent::loadMatchingObject($order, $group, $ljoin);
   }
-  
+
+  /**
+   * @see parent::loadMatchingList()
+   */
   function loadMatchingList($order = null, $limit = null, $group = null, $ljoin = null) {
     $order = "movement_id DESC, start_of_movement DESC";
 
     return parent::loadMatchingList($order, $limit, $group, $ljoin);
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store() {
     // Création idex sur le mouvement (movement_type + original_trigger_code + object_guid + tag (mvt_id))
-    
     $this->last_update = CMbDT::dateTime();
     
     return parent::store();
   }
-    
+
+  /**
+   * Get movement
+   *
+   * @param CMbObject $object Object
+   *
+   * @return void
+   */
   function getMovement(CMbObject $object) {
     if ($object instanceof CSejour) {
       $this->sejour_id = $object->_id;
@@ -123,13 +169,15 @@ class CMovement extends CMbObject {
   
   /**
    * Construit le tag d'un mouvement en fonction des variables de configuration
-   * @param $group_id Permet de charger l'id externe d'un mouvement pour un établissement donné si non null
+   *
+   * @param string $group_id Permet de charger l'id externe d'un mouvement pour un établissement donné si non null
+   *
    * @return string
    */
   static function getTagMovement($group_id = null) {
     // Pas de tag mouvement
     if (null == $tag_movement = CAppUI::conf("dPhospi CMovement tag")) {
-      return;
+      return null;
     }
 
     // Permettre des id externes en fonction de l'établissement

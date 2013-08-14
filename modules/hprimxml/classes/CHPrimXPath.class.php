@@ -1,42 +1,59 @@
-<?php /* $Id: hprimxmldocument.class.php 9055 2010-05-28 11:56:08Z lryo $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage hprimxml
- * @version $Revision: 9055 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: 16236 $
  */
 
-class CHPrimXPath extends CMbXPath {  
+/**
+ * Class CHPrimXPath
+ */
+class CHPrimXPath extends CMbXPath {
+  /**
+   * @see parent::__construct
+   */
   function __construct(DOMDocument $doc) {
     parent::__construct($doc);
     
-    $this->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+    $this->registerNamespace("hprim", "http://www.hprim.org/hprimXML");
   }
 
+  /**
+   * @see parent::nodePath
+   */
   function nodePath(DOMNode $node) {    
     $name = "hprim:$node->nodeName";
-    while(($node = $node->parentNode) && ($node->nodeName != "#document")) {
+    while (($node = $node->parentNode) && ($node->nodeName != "#document")) {
       $name = "hprim:$node->nodeName/$name";
     }
     
     return "'/$name'";
   }
-  
+
+  /**
+   * @see parent::queryTextNode
+   */
   function queryTextNode($query, DOMNode $contextNode = null, $purgeChars = "", $addslashes = false) {
     $text = "";
     if ($node = $this->queryUniqueNode($query, $contextNode)) {
       $text = utf8_decode($node->textContent);
       $text = str_replace(str_split($purgeChars), "", $text);
       $text = trim($text);
-      if ($addslashes)
+      if ($addslashes) {
         $text = addslashes($text);
+      }
     }
 
     return $text;
   }
-  
+
+  /**
+   * @see parent::getMultipleTextNodes
+   */
   function getMultipleTextNodes($query, DOMNode $contextNode = null, $implode = false) {
     $array = array();
     $query = utf8_encode($query);
@@ -47,7 +64,10 @@ class CHPrimXPath extends CMbXPath {
     }
     return $implode ? implode(" ", $array) : $array;
   }
-  
+
+  /**
+   * @see parent::getFirstNode
+   */
   function getFirstNode($query, DOMNode $contextNode = null) {
     $textNodes = $this->getMultipleTextNodes($query, $contextNode);
     

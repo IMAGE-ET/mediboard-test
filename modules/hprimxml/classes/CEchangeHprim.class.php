@@ -59,11 +59,21 @@ class CEchangeHprim extends CEchangeXML {
     
     $this->loadRefNotifications();
   }
-  
+
+  /**
+   * Load notifications
+   *
+   * @return void
+   */
   function loadRefNotifications(){
     $this->_ref_notifications = $this->loadBackRefs("notifications");
   }
-  
+
+  /**
+   * Get errors
+   *
+   * @return array|void
+   */
   function getErrors() {
     if ($this->_message !== null) {
       $domGetEvenement = null;
@@ -103,10 +113,17 @@ class CEchangeHprim extends CEchangeXML {
       $this->_acquittement = utf8_encode($domGetAcquittement->saveXML());
     }
   }
-  
+
+  /**
+   * Get observations
+   *
+   * @param bool $display_errors Display errors
+   *
+   * @return array
+   */
   function getObservations($display_errors = false) {
     if (!$this->_acquittement) {
-      return;
+      return null;
     }
 
     if ($this->type == "patients") {
@@ -121,6 +138,8 @@ class CEchangeHprim extends CEchangeXML {
     if ($this->type == "pmsi") {
       return $this->_observations = array();
     }
+
+    return null;
   }
 
   /**
@@ -131,7 +150,14 @@ class CEchangeHprim extends CEchangeXML {
     
     $this->getObservations();
   }
-  
+
+  /**
+   * Set object class & id
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function setObjectClassIdPermanent(CMbObject $mbObject) {
     $this->object_class = $mbObject->_class;
     
@@ -142,15 +168,29 @@ class CEchangeHprim extends CEchangeXML {
       $this->id_permanent = $mbObject->_NDA;
     }
   }
-  
+
+  /**
+   * @see parent::handle()
+   */
   function handle() {
     return COperatorHprimXML::event($this);
   }
 
+  /**
+   * @see parent::getFamily()
+   */
   function getFamily() {
     return self::$messages;
   }
-  
+
+  /**
+   * Populate exchange
+   *
+   * @param CExchangeDataFormat $data_format Data format
+   * @param CHPrimXMLEvenements $dom_evt     Event H'XML
+   *
+   * @return string
+   */
   function populateEchange(CExchangeDataFormat $data_format, CHPrimXMLEvenements $dom_evt) {
     $this->date_production = CMbDT::dateTime();
     $this->group_id        = $data_format->group_id;
@@ -160,7 +200,16 @@ class CEchangeHprim extends CEchangeXML {
     $this->sous_type       = $dom_evt->sous_type ? $dom_evt->sous_type : "inconnu";
     $this->_message        = $data_format->_message;;
   }
-  
+
+  /**
+   * Populate error exchange
+   *
+   * @param string $msgAcq     Acknowledgment
+   * @param bool   $doc_valid  Document is valid ?
+   * @param string $type_error Error type
+   *
+   * @return string|void
+   */
   function populateErrorEchange($msgAcq, $doc_valid, $type_error) {
     $this->_acquittement       = $msgAcq;
     $this->statut_acquittement = $type_error;
@@ -169,7 +218,18 @@ class CEchangeHprim extends CEchangeXML {
     $this->date_echange        = CMbDT::dateTime();
     $this->store();
   }
-  
+
+  /**
+   * Generate acknowledgment 'OK', 'AVT'
+   *
+   * @param CHPrimXMLAcquittements $dom_acq       Acknowledgment
+   * @param array                  $codes         Mediboard errors codes
+   * @param array                  $avertissement Warning
+   * @param null                   $commentaires  Comments
+   * @param CMbObject              $mbObject      Object
+   *
+   * @return string
+   */
   function setAck(CHPrimXMLAcquittements $dom_acq, $codes, $avertissement = null, $commentaires = null, CMbObject $mbObject = null) {
     $commentaire = $avertissement ? $avertissement : $commentaires;                    
     $statut      = $avertissement ? $dom_acq->_codes_erreurs["avt"] : $dom_acq->_codes_erreurs["ok"];
@@ -189,7 +249,17 @@ class CEchangeHprim extends CEchangeXML {
     
     return $msgAcq;
   }
-  
+
+  /**
+   * Generate acknowledgment 'ERR'
+   *
+   * @param CHPrimXMLAcquittements $dom_acq      Acknowledgment
+   * @param array                  $code_erreur  Mediboard errors codes
+   * @param null                   $commentaires Comments
+   * @param CMbObject              $mbObject     Object
+   *
+   * @return string
+   */
   function setAckError(CHPrimXMLAcquittements $dom_acq, $code_erreur, $commentaires = null, CMbObject $mbObject = null) {
     $statut = $dom_acq->_codes_erreurs["err"];
     
@@ -207,8 +277,15 @@ class CEchangeHprim extends CEchangeXML {
     $this->store();
     
     return $msgAcq;
-  }         
-  
+  }
+
+  /**
+   * Get H'XML config for one actor
+   *
+   * @param string $actor_guid Actor GUID
+   *
+   * @return CHprimXMLConfig
+   */
   function getConfigs($actor_guid) {
     list($sender_class, $sender_id) = explode("-", $actor_guid);
     

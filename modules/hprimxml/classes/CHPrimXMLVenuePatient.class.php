@@ -16,11 +16,11 @@
  * Évènements venue patient
  */
 class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients { 
-  var $actions = array(
+  public $actions = array(
     'création'     => "création",
     'remplacement' => "remplacement",
     'modification' => "modification",
-    'suppression'   => "suppression"
+    'suppression'  => "suppression"
   );
 
   /**
@@ -126,7 +126,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
    *
    * @return CHPrimXMLAcquittementsPatients $msgAcq 
    **/
-  function venuePatient($dom_acq, $newPatient, $data, &$newVenue = null) {
+  function venuePatient(CHPrimXMLAcquittementsPatients $dom_acq, CPatient $newPatient, $data, &$newVenue = null) {
     $echg_hprim = $this->_ref_echange_hprim;
     
     // Cas 1 : Traitement du patient

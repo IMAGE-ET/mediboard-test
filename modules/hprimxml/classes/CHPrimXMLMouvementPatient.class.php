@@ -17,8 +17,8 @@
  */
 
 class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients { 
-  var $actions = array(
-    'création' => "création",
+  public $actions = array(
+    'création'     => "création",
     'remplacement' => "remplacement",
     'modification' => "modification",
   );
@@ -119,6 +119,10 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
    **/
   function mouvementPatient(CHPrimXMLAcquittementsPatients $dom_acq, CPatient $newPatient, $data) {
     $echg_hprim = $this->_ref_echange_hprim;
+    $sender = $echg_hprim->_ref_sender;
+    $sender->loadConfigValues();
+
+    $this->_ref_sender = $sender;
     
     // Traitement de la venue
     $newVenue        = new CSejour();
@@ -133,18 +137,23 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
     $dom_acq->_identifiant_acquitte = $data['identifiantMessage'];
     $dom_acq->_sous_type_evt        = $this->sous_type;
     $dom_acq->_ref_echange_hprim    = $echg_hprim;
-    
+
+    // Mapping venue - création impossible
+    if (!$this->admitFound($newVenue, $data)) {
+      return $echg_hprim->setAckError($dom_acq, "E014", null, $newVenue);
+    }
+
+    $codes = array();
+    $avertissement = $commentaire = null;
+
     // Si CIP
-    if (!CAppUI::conf('smp server')) { 
-      $sender = $echg_hprim->_ref_sender;
-      
-      $avertissement = null;
-      
+    if (!CAppUI::conf('smp server')) {
       // Mapping des mouvements
+
       $newVenue = $this->mappingMouvements($data['mouvements'], $newVenue);
 
       // Notifier les autres destinataires
-      $newVenue->_eai_initiateur_group_id = $sender->group_id;
+      /*$newVenue->_eai_initiateur_group_id = $sender->group_id;
       $msgVenue = $newVenue->store();
       
       $codes = array ($msgVenue ? "A103" : "I102");
@@ -153,16 +162,10 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
         $avertissement = $msgVenue." ";
       }
       else {
-        $newVenue->loadLogs();
-        $modified_fields = "";
-        if (is_array($newVenue->_ref_last_log->_fields)) {
-          foreach ($newVenue->_ref_last_log->_fields as $field) {
-            $modified_fields .= "$field \n";
-          }
-        }
+        $modified_fields = CEAISejour::getModifiedFields($newVenue);
       
         $commentaire = "Séjour modifiée : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields.";
-      }
+      }*/
     }
 
     return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newVenue);

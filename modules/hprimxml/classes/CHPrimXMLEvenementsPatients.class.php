@@ -1,14 +1,13 @@
 <?php
 
 /**
- * Patients
+ * $Id:$
  *
- * @category Hprimxml
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage hprimxml
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -136,9 +135,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $mbPatient->naissance = $xpath->queryTextNode("hprim:date", $elementDateNaissance);
     
     $lieuNaissance = $xpath->queryUniqueNode("hprim:lieuNaissance", $personnePhysique);
-    $mbPatient->lieu_naissance = $xpath->queryTextNode("hprim:ville", $lieuNaissance);
+    $mbPatient->lieu_naissance       = $xpath->queryTextNode("hprim:ville", $lieuNaissance);
     $mbPatient->pays_naissance_insee = $xpath->queryTextNode("hprim:pays", $lieuNaissance);
-    $mbPatient->cp_naissance = $xpath->queryTextNode("hprim:codePostal", $lieuNaissance);
+    $mbPatient->cp_naissance         = $xpath->queryTextNode("hprim:codePostal", $lieuNaissance);
     
     return $mbPatient;
   }
@@ -183,26 +182,27 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       }
       $mbPersonne->nom = $nom;
       $mbPersonne->_nom_naissance = $xpath->queryTextNode("hprim:nomNaissance", $node);
-      $mbPersonne->prenom = $prenoms[0];
-      $mbPersonne->prenom_2 = isset($prenoms[1]) ? $prenoms[1] : null;
-      $mbPersonne->prenom_3 = isset($prenoms[2]) ? $prenoms[2] : null;
-      $mbPersonne->adresse  = $ligne;
-      $mbPersonne->ville = $ville;
+      $mbPersonne->prenom     = CMbArray::get($prenoms, 0);
+      $mbPersonne->prenom_2   = CMbArray::get($prenoms, 1);
+      $mbPersonne->prenom_3   = CMbArray::get($prenoms, 2);
+      $mbPersonne->adresse    = $ligne;
+      $mbPersonne->ville      = $ville;
       $mbPersonne->pays_insee = $xpath->queryTextNode("hprim:pays", $adresse);
       $pays = new CPaysInsee();
       $pays->numerique = $mbPersonne->pays_insee;
       $pays->loadMatchingObject();
-      $mbPersonne->pays = $pays->nom_fr;
-      $mbPersonne->cp = $cp;
-      $mbPersonne->tel  = isset($telephones[0]) && ($telephones[0] != $mbPersonne->tel2) ? $telephones[0] : null;
-      $mbPersonne->tel2 = isset($telephones[1]) && ($telephones[1] != $mbPersonne->tel) ? $telephones[1] : null;
+
+      $mbPersonne->pays  = $pays->nom_fr;
+      $mbPersonne->cp    = $cp;
+      $mbPersonne->tel   = isset($telephones[0]) && ($telephones[0] != $mbPersonne->tel2) ? $telephones[0] : null;
+      $mbPersonne->tel2  = isset($telephones[1]) && ($telephones[1] != $mbPersonne->tel) ? $telephones[1] : null;
       $mbPersonne->email = $email;
     }
     elseif ($mbPersonne instanceof CMediusers) {
       $mbPersonne->_user_last_name  = $nom;
-      $mbPersonne->_user_first_name = $prenoms[0];
+      $mbPersonne->_user_first_name = CMbArray::get($prenoms, 0);
       $mbPersonne->_user_email      = $email;
-      $mbPersonne->_user_phone      = isset($telephones[0]) ? $telephones[0] : null;
+      $mbPersonne->_user_phone      = CMbArray::get($telephones, 0);
       $mbPersonne->_user_adresse    = $ligne;
       $mbPersonne->_user_cp         = $cp;
       $mbPersonne->_user_ville      = $ville;
@@ -247,7 +247,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       $prevenir->relation = "prevenir";
       $prevenir->nom = $xpath->queryTextNode("hprim:nomUsuel", $personnePrevenir);
       $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $personnePrevenir);
-      $prevenir->prenom = $prenoms[0];
+      $prevenir->prenom = CMbArray::get($prenoms, 0);
       
       $adresses = $xpath->queryUniqueNode("hprim:adresses", $personnePrevenir);
       $adresse = $xpath->queryUniqueNode("hprim:adresse", $adresses);
@@ -256,7 +256,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       $prevenir->cp = $xpath->queryTextNode("hprim:codePostal", $adresse);
       
       $telephones = $xpath->getMultipleTextNodes("hprim:telephones/*", $personnePrevenir);
-      $prevenir->tel = isset($telephones[0]) ? $telephones[0] : null;
+      $prevenir->tel = CMbArray::get($telephones, 0);
       
       $mbPatient->_ref_correspondants_patient[] = $prevenir;
     }
@@ -280,7 +280,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
 
     $nom     = $xpath->queryTextNode("hprim:nomUsuel", $personnePhysique);
     $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $personnePhysique);
-    $prenom  = $prenoms[0];
+    $prenom  = CMbArray::get($prenoms, 0);
     
     return $mbPatient->checkSimilar($nom, $prenom);
   }
@@ -337,7 +337,46 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     
     return $mbVenue;
   }
-  
+
+  /**
+   * Admit ?
+   *
+   * @param CSejour $mbVenue Admit
+   * @param array   $data    Datas
+   *
+   * @return bool
+   */
+  function admitFound(CSejour $mbVenue, $data) {
+    $sender  = $this->_ref_sender;
+
+    $idSourceVenue = CValue::read($data, "idSourceVenue");
+    $idCibleVenue  = CValue::read($data, "idCibleVenue");
+
+    $NDA = new CIdSante400();
+    if ($idSourceVenue) {
+      $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $idSourceVenue);
+    }
+
+    if ($NDA->_id) {
+      $mbVenue->load($NDA->object_id);
+
+      return true;
+    }
+
+    if ($mbVenue->load($idCibleVenue)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Get admit attributes
+   *
+   * @param DOMNode $node Node
+   *
+   * @return array
+   */
   static function getAttributesVenue(DOMNode $node) {
     $xpath = new CHPrimXPath($node->ownerDocument);
         
@@ -349,13 +388,28 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     
     return $attributes;
   }
-  
+
+  /**
+   * Get admit state
+   *
+   * @param DOMNode $node Node
+   *
+   * @return string
+   */
   static function getEtatVenue(DOMNode $node) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
     return $xpath->getValueAttributNode($node, "etat"); 
   }
-  
+
+  /**
+   * Récupération de la nature de la venue
+   *
+   * @param DOMNode $node    Node
+   * @param CSejour $mbVenue Venue
+   *
+   * @return CSejour
+   */
   function getNatureVenue(DOMNode $node, CSejour $mbVenue) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
@@ -393,8 +447,16 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     
     return $mbVenue;
   }
-  
-  static function getVenueType($sender, $nda) {
+
+  /**
+   * Mapping des types de la venue
+   *
+   * @param CInteropSender $sender Sender
+   * @param string         $nda    NDA
+   *
+   * @return string|null
+   */
+  static function getVenueType(CInteropSender $sender, $nda) {
     $types = array(
       "type_sej_hospi"   => "comp",
       "type_sej_ambu"    => "ambu",
@@ -405,7 +467,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       "type_sej_dialyse" => "seances",
     );
     
-    foreach($types as $config => $type) {
+    foreach ($types as $config => $type) {
       if (!$sender->_configs[$config]) {
         continue;
       }
@@ -414,8 +476,18 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
         return $type;
       }
     }
+
+    return null;
   }
-  
+
+  /**
+   * Récupération de l'entrée
+   *
+   * @param DOMNode $node    Node
+   * @param CSejour $mbVenue Venue
+   *
+   * @return CSejour
+   */
   static function getEntree(DOMNode $node, CSejour $mbVenue) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
@@ -423,7 +495,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   
     $date = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:date", $entree);
     $heure = CMbDT::transform($xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $entree), null , "%H:%M:%S");
-    $modeEntree = $xpath->queryAttributNode("hprim:modeEntree", $entree, "valeur");
+
+    $xpath->queryAttributNode("hprim:modeEntree", $entree, "valeur");
     
     $dateHeure = "$date $heure";
 
@@ -436,7 +509,14 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
        
     return $mbVenue;
   }
-  
+
+  /**
+   * Est-ce que la venue à un praticien ?
+   *
+   * @param DOMNode $node Node
+   *
+   * @return bool
+   */
   static function isVenuePraticien(DOMNode $node) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
@@ -455,8 +535,16 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     }
     
     return true;
-  }  
-  
+  }
+
+  /**
+   * Récupération des médecins
+   *
+   * @param DOMNode $node    Node
+   * @param CSejour $mbVenue Venue
+   *
+   * @return CSejour
+   */
   function getMedecins(DOMNode $node, CSejour $mbVenue) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
@@ -493,17 +581,22 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
 
     return $mbVenue;
   }
-  
+
+  /**
+   * Récupération du médecin
+   *
+   * @param DOMNode $node Node
+   *
+   * @return int
+   */
   function getMedecin(DOMNode $node) {
     $xpath = new CHPrimXPath($node->ownerDocument);
         
     $code = $xpath->queryTextNode("hprim:identification/hprim:code", $node);
     $mediuser = new CMediusers();
-    $idex = new CIdSante400();
-    $idex->object_class = "CMediusers";
-    $idex->tag = $this->_ref_echange_hprim->_ref_sender->_tag_mediuser;
-    $idex->id400 = $code;
-    if ($idex->loadMatchingObject()) {
+    $tag  = $this->_ref_echange_hprim->_ref_sender->_tag_mediuser;
+    $idex = CIdSante400::getMatch("CMediusers", $tag, $code);
+    if ($idex->_id) {
       $mediuser->_id = $idex->object_id;
     }
     else {
@@ -521,7 +614,14 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     
     return $mediuser->_id;
   }
-  
+
+  /**
+   * Création du praticien
+   *
+   * @param CMediusers $mediuser Mediuser
+   *
+   * @return int
+   */
   function createPraticien(CMediusers $mediuser) {
     $sender = $this->_ref_echange_hprim->_ref_sender;
     
@@ -546,13 +646,22 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       $user = reset($listPrat);
       $user->loadRefMediuser();
       $mediuser = $user->_ref_mediuser;
-    } else {
+    }
+    else {
       $mediuser->store();
     }
     
     return $mediuser->_id;
   }
 
+  /**
+   * Récupération du placement
+   *
+   * @param DOMNode $node    Node
+   * @param CSejour $mbVenue Venue
+   *
+   * @return CSejour
+   */
   static function getPlacement(DOMNode $node, CSejour $mbVenue) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
@@ -564,7 +673,15 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     
     return $mbVenue;
   }
-  
+
+  /**
+   * Récupération de la sortie
+   *
+   * @param DOMNode $node    Node
+   * @param CSejour $mbVenue Venue
+   *
+   * @return CSejour
+   */
   static function getSortie(DOMNode $node, CSejour $mbVenue) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
@@ -576,9 +693,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       $dateHeure = "$date $heure";
     }
     elseif (!$date && !$mbVenue->sortie_prevue) {
-      $dateHeure = CMbDT::addDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$mbVenue->type).":00:00",
-                    $mbVenue->entree_reelle ? $mbVenue->entree_reelle : $mbVenue->entree_prevue);
-    } 
+      $config = CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$mbVenue->type);
+      $dateHeure = CMbDT::addDateTime($config.":00:00", $mbVenue->entree_reelle ? $mbVenue->entree_reelle : $mbVenue->entree_prevue);
+    }
     else {
       $dateHeure = $mbVenue->sortie_reelle ? $mbVenue->sortie_reelle : $mbVenue->sortie_prevue;
     }
@@ -586,57 +703,219 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     // Cas dans lequel on ne récupère pas de sortie tant que l'on a pas la sortie réelle
     if ($mbVenue->sortie_reelle && CAppUI::conf("hprimxml notifier_sortie_reelle")) {
       $mbVenue->sortie_reelle = $dateHeure;
-    } else {
+    }
+    else {
       $mbVenue->sortie_prevue = $dateHeure;
     }
     
     $modeSortieHprim = $xpath->queryAttributNode("hprim:modeSortieHprim", $sortie, "valeur");
-    if ($modeSortieHprim) {
-      // décès
-      if ($modeSortieHprim == "05") {
+    if (!$modeSortieHprim) {
+      return $mbVenue;
+
+    }
+    // décès
+    switch ($modeSortieHprim) {
+      case "05" :
         $mbVenue->mode_sortie = "deces";
-      } 
-      // autre transfert dans un autre CH
-      else if ($modeSortieHprim == "02") {
+        break;
+
+      case "02" :
+        // autre transfert dans un autre CH
         $mbVenue->mode_sortie = "transfert";
-        
+
         $destination = $xpath->queryUniqueNode("hprim:destination", $sortie);
         if ($destination) {
-          $mbVenue = self::getEtablissementTransfert($destination, $mbVenue);
+          $mbVenue = self::getEtablissementTransfert($mbVenue);
         }
-      } 
-      //retour au domicile
-      else {
+        break;
+
+      default :
+        //retour au domicile
         $mbVenue->mode_sortie = "normal";
-      }
+        break;
     }
-    
+
     return $mbVenue;
   }
-  
-  static function getEtablissementTransfert(DOMNode $node, CSejour $mbVenue) {
-    $xpath = new CHPrimXPath($node->ownerDocument);
-    
-    $code = $xpath->queryUniqueNode("hprim:code", $node);
-    
-    $etabExterne = new CEtabExterne();
 
+  /**
+   * Récupération de l'établissement de transfert
+   *
+   * @param CSejour $mbVenue Venue
+   *
+   * @return mixed
+   */
+  static function getEtablissementTransfert(CSejour $mbVenue) {
     return $mbVenue->etablissement_sortie_id;
   }
-  
-  function mappingMouvements($node, CSejour $mbVenue) {
+
+  /**
+   * Mapping mouvements
+   *
+   * @param DOMNode $node    Node
+   * @param CSejour $mbVenue Venue
+   *
+   * @return CSejour
+   */
+  function mappingMouvements(DOMNode $node, CSejour $mbVenue) {
     $xpath = new CHPrimXPath($node->ownerDocument);
-    
-    /* @FIXME Penser a parcourir tous les mouvements par la suite */
-    $mouvement = $xpath->queryUniqueNode("hprim:mouvement", $node);
 
     if (!CAppUI::conf("hprimxml mvtComplet")) {
-      //$mbVenue = $this->getMedecinResponsable($mouvement, $mbVenue);
+      return $mbVenue;
     }
-    
+
+    $movements = $xpath->query("hprim:mouvement", $node);
+
+    foreach ($movements as $_movement) {
+      $affectation = new CAffectation();
+
+      if ($msg = $this->mappingMovement($_movement, $mbVenue, $affectation)) {
+        return $msg;
+      }
+    }
+
     return $mbVenue;
-  } 
-  
+  }
+
+  /**
+   * Mapping mouvements
+   *
+   * @param DOMNode      $node        Node
+   * @param CSejour      $mbVenue     Venue
+   * @param CAffectation $affectation Affectation
+   *
+   * @return string
+   */
+  function mappingMovement(DOMNode $node, CSejour $mbVenue, CAffectation $affectation) {
+    $xpath  = new CHPrimXPath($node->ownerDocument);
+    $sender = $this->_ref_echange_hprim->_ref_sender;
+
+    // Recherche d'une affectation existante
+    $id = $mbVenue->_guid."-".$xpath->queryTextNode("hprim:identifiant/hprim:emetteur", $node);
+
+    $tag = $sender->_tag_hprimxml;
+
+    $idex = CIdSante400::getMatch("CAffectation", $tag, $id);
+    if ($idex->_id) {
+      $affectation->load($idex->object_id);
+
+      if ($affectation->sejour_id != $mbVenue->_id) {
+        return CAppUI::tr("hprimxml-error-E301");
+      }
+    }
+
+    $affectation->sejour_id = $mbVenue->_id;
+
+    // Praticien responsable
+    $medecinResponsable = $xpath->queryUniqueNode("hprim:medecinResponsable", $node);
+    $affectation->praticien_id = $this->getMedecin($medecinResponsable);
+
+    // Emplacement
+    $this->getEmplacement($node, $mbVenue, $affectation);
+
+    // Début de l'affectation
+    $debut = $xpath->queryUniqueNode("hprim:debut", $node);
+    $date  = $xpath->queryTextNode("hprim:date", $debut);
+    $heure = CMbDT::transform($xpath->queryTextNode("hprim:heure", $debut), null , "%H:%M:%S");
+
+    $affectation->entree = "$date $heure";
+
+    // Fin de l'affectation
+    $fin = $xpath->queryUniqueNode("hprim:fin", $node);
+    if ($fin) {
+      $date  = $xpath->queryTextNode("hprim:date", $fin);
+      $heure = CMbDT::transform($xpath->queryTextNode("hprim:heure", $fin), null , "%H:%M:%S");
+
+      $affectation->sortie = "$date $heure";
+    }
+
+    if (!$affectation->_id) {
+      $affectation = $mbVenue->forceAffectation($affectation);
+      if (is_string($affectation)) {
+        return $affectation;
+      }
+    }
+    else {
+      if ($msg = $affectation->store()) {
+        return $msg;
+      }
+    }
+
+    if (!$idex->_id) {
+      $idex->object_id = $affectation->_id;
+      if ($msg = $idex->store()) {
+        return $msg;
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Récupération de l'emplacement du patient
+   *
+   * @param DOMNode      $node        Node
+   * @param CSejour      $mbVenue     Sejour
+   * @param CAffectation $affectation Affectation
+   *
+   * @return void
+   */
+  function getEmplacement(DOMNode $node, CSejour $mbVenue, CAffectation $affectation) {
+    $xpath  = new CHPrimXPath($node->ownerDocument);
+    $sender = $this->_ref_echange_hprim->_ref_sender;
+
+    $chambreSeul = $xpath->queryAttributNode("hprim:emplacement", $node, "chambreSeul");
+    if ($chambreSeul) {
+      $mbVenue->chambre_seule = $chambreSeul;
+    }
+
+    $emplacement = $xpath->queryUniqueNode("hprim:emplacement", $node);
+
+    // Récupération de la chambre
+    $chambre_node = $xpath->queryUniqueNode("hprim:chambre", $emplacement);
+    $nom_chambre  = $xpath->queryTextNode("hprim:code", $chambre_node);
+    $chambre = new CChambre();
+
+    // Récupération du lit
+    $lit_node = $xpath->queryUniqueNode("hprim:lit", $emplacement);
+    $nom_lit  = $xpath->queryTextNode("hprim:code", $lit_node);
+    $lit = new CLit();
+
+    $where = $ljoin = array();
+    $ljoin["service"]     = "service.service_id = chambre.service_id";
+    $where["chambre.nom"] = " = '$nom_chambre'";
+    $where["group_id"]    = " = '$sender->group_id'";
+
+    $chambre->escapeValues();
+    $chambre->loadObject($where, null, null, $ljoin);
+    $chambre->unescapeValues();
+
+    $where = $ljoin = array();
+
+    $ljoin["chambre"]  = "chambre.chambre_id = lit.chambre_id";
+    $ljoin["service"]  = "service.service_id = chambre.service_id";
+    $where["lit.nom"]      = " = '$nom_lit'";
+    $where["group_id"] = " = '$sender->group_id'";
+    if ($chambre->_id) {
+      $where["chambre.chambre_id"] = " = '$chambre->_id'";
+    }
+
+    $lit->escapeValues();
+    $lit->loadObject($where, null, null, $ljoin);
+    $lit->unescapeValues();
+
+    // Affectation du lit
+    $affectation->lit_id = $lit->_id;
+  }
+
+  /**
+   * Récupération du médecin responsable
+   *
+   * @param DOMNode $node    Node
+   * @param CSejour $mbVenue Venue
+   *
+   * @return CSejour
+   */
   function getMedecinResponsable(DOMNode $node, CSejour $mbVenue) {
     $xpath = new CHPrimXPath($node->ownerDocument);    
     
@@ -648,7 +927,15 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     
     return $mbVenue;
   }
-  
+
+  /**
+   * Mapping débiteurs
+   *
+   * @param DOMNode  $node      Node
+   * @param CPatient $mbPatient Patient
+   *
+   * @return CPatient
+   */
   function mappingDebiteurs(DOMNode $node, CPatient $mbPatient) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     /* @FIXME Penser a parcourir tous les debiteurs par la suite */
@@ -658,7 +945,15 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
      
     return $mbPatient;
   }
-  
+
+  /**
+   * Récupérération de l'assurance
+   *
+   * @param DOMNode  $node      Node
+   * @param CPatient $mbPatient Patient
+   *
+   * @return CPatient
+   */
   static function getAssurance(DOMNode $node, CPatient $mbPatient) {
     $xpath = new CHPrimXPath($node->ownerDocument);  
     
@@ -679,7 +974,15 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     
     return $mbPatient;
   }
-  
+
+  /**
+   * Récupération de l'assuré
+   *
+   * @param DOMNode  $node      Node
+   * @param CPatient $mbPatient Patient
+   *
+   * @return CPatient
+   */
   static function getAssure(DOMNode $node, CPatient $mbPatient) {
     $xpath = new CHPrimXPath($node->ownerDocument);  
     
@@ -688,29 +991,41 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $mbPatient->assure_matricule = $immatriculation;
     
     $personne = $xpath->queryUniqueNode("hprim:personne", $node);
-    if ($personne) {
-      $sexe = $xpath->queryAttributNode("hprim:personne", $node, "sexe");
-      $sexeConversion = array (
-          "M" => "m",
-          "F" => "f",
-      );
-      
-      $mbPatient->assure_sexe = $sexeConversion[$sexe];
-      $mbPatient->assure_nom = $xpath->queryTextNode("hprim:nomUsuel", $personne);
-      $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $personne);
-      $mbPatient->assure_prenom = $prenoms[0];
-      $mbPatient->assure_prenom_2 = isset($prenoms[1]) ? $prenoms[1] : null;
-      $mbPatient->assure_prenom_3 = isset($prenoms[2]) ? $prenoms[2] : null;
-      $mbPatient->assure_naissance = $xpath->queryTextNode("hprim:naissance", $personne);
-      $elementDateNaissance = $xpath->queryUniqueNode("hprim:dateNaissance", $personne);
-      $mbPatient->assure_naissance = $xpath->queryTextNode("hprim:date", $elementDateNaissance);
-      $mbPatient->rang_beneficiaire = $xpath->queryTextNode("hprim:lienAssure", $node);
-      $mbPatient->qual_beneficiaire = CValue::read(CPatient::$rangToQualBenef, $mbPatient->rang_beneficiaire);
+    if (!$personne) {
+      return $mbPatient;
     }
-    
+
+    $sexe = $xpath->queryAttributNode("hprim:personne", $node, "sexe");
+    $sexeConversion = array (
+        "M" => "m",
+        "F" => "f",
+    );
+
+    $mbPatient->assure_sexe = $sexeConversion[$sexe];
+    $mbPatient->assure_nom = $xpath->queryTextNode("hprim:nomUsuel", $personne);
+    $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $personne);
+    $mbPatient->assure_prenom   = CMbArray::get($prenoms, 0);
+    $mbPatient->assure_prenom_2 = CMbArray::get($prenoms, 1);
+    $mbPatient->assure_prenom_3 = CMbArray::get($prenoms, 2);
+    $mbPatient->assure_naissance = $xpath->queryTextNode("hprim:naissance", $personne);
+
+    $elementDateNaissance = $xpath->queryUniqueNode("hprim:dateNaissance", $personne);
+    $mbPatient->assure_naissance = $xpath->queryTextNode("hprim:date", $elementDateNaissance);
+    $mbPatient->rang_beneficiaire = $xpath->queryTextNode("hprim:lienAssure", $node);
+    $mbPatient->qual_beneficiaire = CValue::read(CPatient::$rangToQualBenef, $mbPatient->rang_beneficiaire);
+
     return $mbPatient;
   }
-  
+
+  /**
+   * Annulation du séjour ?
+   *
+   * @param CSejour                        $venue      Venue
+   * @param CHPrimXMLAcquittementsPatients $dom_acq    Acquittement
+   * @param CEchangeHprim                  $echg_hprim Echange H'XML
+   *
+   * @return null|string
+   */
   function doNotCancelVenue(CSejour $venue, $dom_acq, $echg_hprim) {
     // Impossible d'annuler un séjour en cours 
     if ($venue->entree_reelle) {
@@ -725,18 +1040,26 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     if (count($venue->_ref_operations) > 0) {
       $commentaire = "La venue $venue->_id que vous souhaitez annuler est impossible.";
       return $echg_hprim->setAckError($dom_acq, "E109", $commentaire, $venue);
-    }  
+    }
+
+    return null;
   }
-  
+
+  /**
+   * Passage en trash du NDA
+   *
+   * @param CSejour        $venue  Venue
+   * @param CInteropSender $sender Expéditeur
+   *
+   * @return bool
+   */
   function trashNDA(CSejour $venue, CInteropSender $sender) {
     if (isset($sender->_configs["type_sej_pa"])) {
       if ($venue->_NDA && preg_match($sender->_configs["type_sej_pa"], $venue->_NDA)) {
         // Passage en pa_ de l'id externe
-        $num_pa = new CIdSante400();
-        $num_pa->object_class = "CSejour";
-        $num_pa->tag = $sender->_tag_sejour;
-        $num_pa->id400 = $venue->_NDA;
-        if ($num_pa->loadMatchingObject()) {
+
+        $num_pa = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venue->_NDA);
+        if ($num_pa->_id) {
           $num_pa->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$sender->_tag_sejour;
           $num_pa->last_update = CMbDT::dateTime();
           $num_pa->store();
@@ -747,6 +1070,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     if ($venue->_NDA) {
       return true;
     }
+
     return false;
   }
 }
