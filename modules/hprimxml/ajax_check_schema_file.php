@@ -1,11 +1,14 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprimxml
- * @version $Revision: 6153 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Check schema file
+ *
+ * @category Hprimxml
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkAdmin();
@@ -21,7 +24,7 @@ $ext    = (CAppUI::conf("hprimxml concatenate_xsd")) ? "xml" : "xsd";
 if ($evenement == "evt_serveuractes") {
   if ($version == "1.01") {
     $file = $racine."serveurActes/msgEvenementsServeurActes101.$ext";
-  } 
+  }
   else {
     $version = str_replace(".", "", $version);
     $file = $racine."serveurActivitePmsi_v$version/msgEvenementsServeurActes$version.$ext";
@@ -31,7 +34,7 @@ if ($evenement == "evt_serveuractes") {
 if ($evenement == "evt_pmsi") {
   if ($version == "1.01") {
     $file = $racine."evenementPmsi/msgEvenementsPmsi101.$ext";
-  } 
+  }
   else {
     $version = str_replace(".", "", $version);
     $file = $racine."serveurActivitePmsi_v$version/msgEvenementsPmsi$version.$ext";
@@ -67,9 +70,10 @@ if (file_exists($file)) {
   $status = 1; 
 }
 
-if ($status)
+if ($status) {
   echo '<div class="info">Fichiers présents</div>';
-else
+}
+else {
   echo '<div class="error">Fichiers manquants</div>';
-
+}
 

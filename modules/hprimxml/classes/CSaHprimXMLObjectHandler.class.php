@@ -3,7 +3,7 @@
 /**
  * SA H'XML object handler
  *
- * @category hprimxml
+ * @category Hprimxml
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -56,7 +56,8 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       // CSejour 
       // Envoi des actes / diags soit quand le séjour est facturé, soit quand le sejour a une sortie réelle,
       // soit quand on a la clôture sur le sejour
-      case 'CSejour': 
+      case 'CSejour':
+        /** @var CSejour $sejour */
         $sejour = $mbObject;
         $sejour->loadNDA($receiver->group_id);
         
@@ -82,6 +83,7 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       // COperation
       // Envoi des actes soit quand l'interv est facturée, soit quand on a la clôture sur l'interv
       case 'COperation':
+        /** @var COperation $operation */
         $operation = $mbObject;
         
         $sejour  = $operation->_ref_sejour;
@@ -94,6 +96,7 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       // CConsultation
       // Envoi des actes dans le cas de la clôture de la cotation
       case 'CConsultation':
+        /** @var CConsultation $consultation */
         $consultation = $mbObject;
         
         $patient = $consultation->loadRefPatient();
@@ -104,8 +107,11 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
         
         break; 
     }
-    
+
+    /** @var CPatient $patient */
+    /** @var CSejour  $sejour */
     if (CAppUI::conf("sa send_only_with_ipp_nda")) {
+
       if (!$patient->_IPP || !$sejour->_NDA) {
         throw new CMbException("CSaObjectHandler-send_only_with_ipp_nda", UI_MSG_ERROR);
       }
@@ -122,6 +128,7 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       }
     }
 
+    /** @var CCodable $codable */
     $codable = $mbObject;
 
     // Chargement des actes du codable

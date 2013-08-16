@@ -1,14 +1,23 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprimxml
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Schémas H'XML
+ *
+ * @category Hprimxml
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
+/**
+ * Class CHPrimXMLSchema
+ */
 class CHPrimXMLSchema extends CMbXMLSchema {
+  /**
+   * @see parent::__construct
+   */
   function __construct() {
     parent::__construct();
     
@@ -20,6 +29,9 @@ class CHPrimXMLSchema extends CMbXMLSchema {
     $this->addAttribute($root, "attributeFormDefault", "unqualified");
   }
 
+  /**
+   * @see parent::purgeImportedNamespaces
+   */
   function purgeImportedNamespaces() {
     $xpath = new domXPath($this);
     foreach ($xpath->query('//*[@type]') as $node) {

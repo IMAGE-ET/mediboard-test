@@ -1,11 +1,14 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprimxml
- * @version $Revision: 6153 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Exchange viewer
+ *
+ * @category HprimXML
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -21,7 +24,7 @@ $domGetEvenement->formatOutput = true;
 $doc_errors_msg = @$domGetEvenement->schemaValidate(null, true, false);
 
 $echange_hprim->_message = utf8_encode($domGetEvenement->saveXML());
-	
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("echange_hprim", $echange_hprim);

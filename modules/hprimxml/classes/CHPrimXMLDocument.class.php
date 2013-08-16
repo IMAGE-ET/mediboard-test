@@ -232,6 +232,14 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     // On envoie le contenu et NON l'entête en UTF-8 si le destinataire est en UTF-8
     return ($dest->_configs["encoding"] == "UTF-8") ? utf8_encode($msg) : $msg;
   }
+
+  /**
+   * Get content XML
+   *
+   * @return array
+   */
+  function getContentsXML() {
+  }
   
   function getIdSource($node, $valeur = true) {
     $xpath = new CHPrimXPath($this);

@@ -3,7 +3,7 @@
 /**
  * SIP H'XML Object handler
  *
- * @category SMP
+ * @category Hprimxml
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -37,7 +37,7 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
    *
    * @throws CMbException
    *
-   * @return void
+   * @return bool
    */
   function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
@@ -65,7 +65,7 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       $group->loadConfigValues();
       
       if (!$initiateur && !$group->_configs["sip_notify_all_actors"]) {
-        return;
+        return false;
       }
       
       $mbObject->_id400 = null;
@@ -78,7 +78,7 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     // Si Client
     else {
       if ($mbObject->_eai_initiateur_group_id || !$receiver->isMessageSupported("CHPrimXMLEnregistrementPatient")) {
-        return;
+        return false;
       }
       
       if (!$mbObject->_IPP) {
@@ -90,13 +90,15 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
   
       // Envoi pas les patients qui n'ont pas d'IPP
       if (!$receiver->_configs["send_all_patients"] && !$mbObject->_IPP) {
-        return;
+        return false;
       }
       
       $this->sendEvenementPatient("CHPrimXMLEnregistrementPatient", $mbObject);
       
       $mbObject->_IPP = null;
     }
+
+    return true;
   }
 
   /**
@@ -106,12 +108,14 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
    *
    * @throws CMbException
    *
-   * @return void
+   * @return bool
    */
   function onBeforeMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
+
+    return true;
   }
 
   /**
@@ -121,7 +125,7 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
    *
    * @throws CMbException
    *
-   * @return void
+   * @return bool
    */
   function onAfterMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
@@ -174,6 +178,8 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
         }
       }        
     }
+
+    return true;
   }
 
   /**
@@ -181,11 +187,13 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
    *
    * @param CMbObject $mbObject Object
    *
-   * @return void
+   * @return bool
    */
   function onAfterDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
+
+    return true;
   }
 }

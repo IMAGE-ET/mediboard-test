@@ -15,9 +15,8 @@
  * Class CHPrimXMLEvenementsServeurActes
  * Serveur actes
  */
-
 class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivitePmsi {
-  var $actions = array(
+  public $actions = array(
     'création'     => "création",
     'remplacement' => "remplacement",
     'modification' => "modification",
@@ -47,11 +46,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
   }
 
   /**
-   * Generate content message
-   *
-   * @param CCodable $codable Codable
-   *
-   * @return void
+   * @see parent::generateFromOperation
    */
   function generateFromOperation(CCodable $codable) {
     $evenementsServeurActes = $this->documentElement;
@@ -175,7 +170,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
    * @return string Acquittement 
    **/
   function handle(CHPrimXMLAcquittementsServeurActivitePmsi $dom_acq, CMbObject $mbObject, $data) {
-    return;
+    /*
     $messageAcquittement = null;
     
      // Si pas Serveur d'Actes
@@ -261,7 +256,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
         }
       }
       
-      /* @FIXME Penser à virer par la suite pour rattacher des actes à un séjour... */
+      // @FIXME Penser à virer par la suite pour rattacher des actes à un séjour...
       if (!$operation) {
         $messageAcquittement = $domAcquittement->generateAcquittements("err", "E201", null, null, $actesCCAM, $elPatient);
         $doc_valid = $domAcquittement->schemaValidate();
@@ -273,11 +268,10 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       $operation->loadRefsActesCCAM();
       $mbActesCCAM = $operation->_ref_actes_ccam;
       
-      /*mbTrace($actesCCAM, "actesCCAM", true);
+      mbTrace($actesCCAM, "actesCCAM", true);
       mbTrace($mbActesCCAM, "mbActesCCAM", true);
       foreach () {
       
-      }*/
       $messageAcquittement = $domAcquittement->generateAcquittements("ok", "I201", null, null, $actesCCAM, $elPatient);
     }
     
@@ -286,6 +280,6 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     $echange_hprim->setObjectIdClass("CSejour", $data['idCibleVenue']);
     $echange_hprim->store();
 
-    return $messageAcquittement;
+    return $messageAcquittement;*/
   }
 }

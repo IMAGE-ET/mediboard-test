@@ -1,13 +1,18 @@
-<?php /* $Id: object_config.class.php 8220 2010-03-05 13:06:52Z phenxdesign $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision: 8220 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id: object_config.class.php 8220 2010-03-05 13:06:52Z phenxdesign $
+ *
+ * @package    Mediboard
+ * @subpackage hprimxml
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: 20171 $
  */
 
+/**
+ * Class CDestinataireHprimConfig
+ */
 class CDestinataireHprimConfig extends CMbObjectConfig {
   public $dest_hprim_config_id;
   
@@ -27,7 +32,7 @@ class CDestinataireHprimConfig extends CMbObjectConfig {
   // Application
   public $receive_ack;
   
-  var $_categories = array(
+  public $_categories = array(
     // Format
     "format" => array(
       "encoding", 

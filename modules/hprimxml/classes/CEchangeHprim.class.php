@@ -1,13 +1,18 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage sip
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Exchange H'XML
+ *
+ * @package    Mediboard
+ * @subpackage hprimxml
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * Class CEchangeHprim
+ */
 class CEchangeHprim extends CEchangeXML {
   static $messages = array(
      "patients" => "CHPrimXMLEvenementsPatients",

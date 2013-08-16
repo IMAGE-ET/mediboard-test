@@ -1,13 +1,18 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
+ * Acquittements pour le serveur d'activité PMSI
+ *
+ * @package    Mediboard
  * @subpackage hprimxml
- * @version $Revision: 8208 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: 20171 $
  */
 
+/**
+ * Class CHPrimXMLAcquittementsServeurActivitePmsi
+ */
 class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
   static $evenements = array(
     'evenementPMSI'                => "CHPrimXMLAcquittementsPmsi",
@@ -21,12 +26,20 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
   
   public $_identifiant_acquitte;
   public $_sous_type_evt;
-  var $_codes_erreurs        = array(
+  public $_codes_erreurs        = array(
     "ok"  => "ok",
     "avt" => "avt",
     "err" => "err"
   );
-  
+
+  /**
+   * Récupération du type de l'acquittement en fonction de l'évènement
+   *
+   * @param CHPrimXMLEvenementsServeurActivitePmsi $dom_evt Évènement du serveur d'activité PMSI
+   *
+   * @return CHPrimXMLAcquittementsFraisDivers|CHPrimXMLAcquittementsPmsi|CHPrimXMLAcquittementsServeurActes|
+   *  CHPrimXMLAcquittementsServeurIntervention
+   */
   static function getEvtAcquittement(CHPrimXMLEvenementsServeurActivitePmsi $dom_evt) {
     if ($dom_evt instanceof CHPrimXMLEvenementsServeurActes) {
       return new CHPrimXMLAcquittementsServeurActes();
@@ -43,8 +56,13 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
     if ($dom_evt instanceof CHPrimXMLEvenementsServeurIntervention) {
       return new CHPrimXMLAcquittementsServeurIntervention();
     }
+
+    return null;
   }
-  
+
+  /**
+   * @see parent::generateEnteteMessageAcquittement()
+   */
   function generateEnteteMessageAcquittement($statut, $codes = null, $commentaires = null) {
     $echg_hprim      = $this->_ref_echange_hprim;
     $identifiant     = $echg_hprim->_id ? str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT) : "ES{$this->now}";
@@ -75,7 +93,18 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
 
     $this->addElement($enteteMessageAcquittement, "identifiantMessageAcquitte", $this->_identifiant_acquitte);
   }
-  
+
+  /**
+   * Ajout des éléments Reponses
+   *
+   * @param string    $statut       Statut de l'acquittement
+   * @param array     $codes        Codes d'erreurs
+   * @param string    $commentaires Commentaire
+   * @param CMbObject $mbObject     Object
+   * @param array     $data         Datas
+   *
+   * @return void
+   */
   function addReponses($statut, $codes, $commentaires = null, $mbObject = null, $data = array()) {
     $acquittementsServeurActivitePmsi = $this->documentElement;
     
@@ -119,6 +148,9 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
     }
   }
 
+  /**
+   * @see parent::generateAcquittements()
+   */
   function generateAcquittements($statut, $codes, $commentaires = null, $mbObject = null, $data = array()) {
     $this->date_production = CMbDT::dateTime();
 
@@ -130,21 +162,34 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
 
     return utf8_encode($this->saveXML());
   }
-  
+
+  /**
+   * @see parent::getStatutAcquittement()
+   */
   function getStatutAcquittement() {
     return $this->getStatutAcquittementServeurActivitePmsi();
   }
-  
+
+  /**
+   * Récupération du statut de l'acquittement du serveur d'activité PMSI
+   *
+   * @return string
+   */
   function getStatutAcquittementServeurActivitePmsi() {
     $xpath = new CHPrimXPath($this);
 
     return $xpath->queryAttributNode("/hprim:$this->acquittement/hprim:enteteMessage", null, "statut"); 
   }
-  
+
+  /**
+   * Récupération de l'acquittement du serveur d'activité PMSI
+   *
+   * @return array
+   */
   function getAcquittementsServeurActivitePmsi() {
     $xpath = new CHPrimXPath($this);
     
-    $statut = $xpath->queryAttributNode("/hprim:$this->acquittement/hprim:enteteMessage", null, "statut"); 
+    $xpath->queryAttributNode("/hprim:$this->acquittement/hprim:enteteMessage", null, "statut");
     
     $query = "/hprim:$this->evenement/hprim:enteteMessage";
     $enteteMessageAcquittement = $xpath->queryUniqueNode($query);  
@@ -159,7 +204,12 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
     
     return $data;
   }
-  
+
+  /**
+   * Récupération des éléments Reponses de l'acquittement
+   *
+   * @return array
+   */
   function getAcquittementReponsesServeurActivitePmsi() {
     $xpath = new CHPrimXPath($this);
     
@@ -177,7 +227,8 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
       $d['code'] = chunk_split($xpath->queryTextNode("hprim:code", $observation, "", false), 4, ' ');
       $d['libelle'] = $xpath->queryTextNode("hprim:libelle", $observation, "", false);
       $d['commentaire'] = $xpath->queryTextNode("hprim:commentaire", $observation, "", false);
-    } else {
+    }
+    else {
       $query = "/hprim:$this->evenements/hprim:reponses/*";
       $reponses = $xpath->query($query);   
 
@@ -195,4 +246,3 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
     return $observations;
   } 
 }
-

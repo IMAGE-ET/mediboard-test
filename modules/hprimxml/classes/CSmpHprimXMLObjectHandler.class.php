@@ -3,7 +3,7 @@
 /**
  * SMP H'XML Object handler
  *
- * @category SMP
+ * @category Hprimxml
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -147,7 +147,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
    */
   function onBeforeMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
-      return false;
+      return;
     }
   }
 
@@ -162,7 +162,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
    */
   function onAfterMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
-      return false;
+      return;
     }
     
     // Traitement Séjour
@@ -229,7 +229,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
    */
   function onBeforeDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
-      return false;
+      return;
     }
   }
 
@@ -242,7 +242,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
    */
   function onAfterDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
-      return false;
+      return;
     }
   }
 }

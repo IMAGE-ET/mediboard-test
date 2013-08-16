@@ -24,9 +24,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
   );
 
   /**
-   * Construct
-   *
-   * @return CHPrimXMLVenuePatient
+   * @see parent::__construct()
    */
   function __construct() {    
     $this->sous_type = "venuePatient";
@@ -35,14 +33,9 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
   }
 
   /**
-   * Generate content
-   *
-   * @param CSejour $mbVenue  Admit
-   * @param bool    $referent Is referent ?
-   *
-   * @return void
+   * @see parent::generateFromOperation()
    */
-  function generateFromOperation(CSejour $mbVenue, $referent) {  
+  function generateFromOperation(CSejour $mbVenue, $referent) {
     $evenementsPatients = $this->documentElement;
     $evenementPatient = $this->addElement($evenementsPatients, "evenementPatient");
     
@@ -90,9 +83,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
   }
 
   /**
-   * Get contents XML
-   *
-   * @return array
+   * @see parent::getContentsXML()
    */
   function getContentsXML() {
     $xpath = new CHPrimXPath($this);
@@ -245,11 +236,10 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
                 $newVenue->_eai_initiateur_group_id = $sender->group_id;
                 $msgVenue = $newVenue->store();
 
-                $modified_fields = CEAISejour::getModifiedFields($newVenue);
-                
+                $commentaire = CEAISejour::getComment($newVenue);
+
                 $_code_NumDos = "A121";
                 $_code_Venue = true;
-                $commentaire = "Séjour modifiée : $newVenue->_id.  Les champs mis à jour sont les suivants : $modified_fields.";
               }
             }
           }
@@ -276,11 +266,10 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
                 $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
                 $msgVenue = $newVenue->store();
 
-                $modified_fields = CEAISejour::getModifiedFields($newVenue);
+                $commentaire = CEAISejour::getComment($newVenue);
                 
                 $_code_NumDos = "A122";
                 $_code_Venue = true;
-                $commentaire = "Séjour modifiée : $newVenue->_id.  Les champs mis à jour sont les suivants : $modified_fields.";
               }
             }
           }
@@ -361,9 +350,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         // Notifier les autres destinataires autre que le sender
         $newVenue->_eai_initiateur_group_id = $sender->group_id;
         $msgVenue = $newVenue->store();
-        
-        $modified_fields = CEAISejour::getModifiedFields($newVenue);
-        
+
         $codes = array($msgVenue ? "A103" : "I102", $_code_NumDos);
         
         if ($cancel) {
@@ -376,11 +363,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         if ($msgVenue || $msgNDA) {
           $avertissement = $msgVenue." ".$msgNDA;
         }
-        else {
-          $commentaire  = "Séjour modifiée : $newVenue->_id.";
-          $commentaire .= "Les champs mis à jour sont les suivants : $modified_fields. ";
-          $commentaire .= "  Numéro dossier associé : $nda->id400.";
-        }
+
+        $commentaire = CEAISejour::getComment($newVenue);
       }
       
       return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newVenue);

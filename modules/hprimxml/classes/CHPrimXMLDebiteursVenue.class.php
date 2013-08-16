@@ -1,26 +1,37 @@
-<?php /* $Id: venuepatient.class.php 7500 2009-12-03 08:33:23Z lryo $ */
+<?php
 
 /**
- * @package Mediboard
+ * Évènement lié aux débiteurs de la venue
+ *
+ * @package    Mediboard
  * @subpackage hprimxml
- * @version $Revision: 7500 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: 20171 $
  */
 
+/**
+ * Class CHPrimXMLDebiteursVenue
+ */
 class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients { 
-  var $actions = array(
+  public $actions = array(
     'création' => "création",
     'remplacement' => "remplacement",
     'modification' => "modification",
   );
-  
+
+  /**
+   * @see parent::__construct
+   */
   function __construct() {    
     $this->sous_type = "debiteursVenue";
             
     parent::__construct();
   }
-  
+
+  /**
+   * @see parent::generateFromOperation
+   */
   function generateFromOperation($mbVenue, $referent) {  
     $evenementsPatients = $this->documentElement;
     $evenementPatient = $this->addElement($evenementsPatients, "evenementPatient");
@@ -49,6 +60,9 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
     $this->purgeEmptyElements();
   }
 
+  /**
+   * @see parent::getContentsXML
+   */
   function getContentsXML() {
     $xpath = new CHPrimXPath($this);
 
@@ -76,15 +90,13 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
   /**
    * Gestion des débiteurs d'une venue de patient
    *
-   * @param CHPrimXMLAcquittementsPatients $dom_acq
-   * @param CEchangeHprim $echg_hprim
-   * @param CPatient $newPatient
-   * @param CSejour $newSejour
-   * @param array $data
+   * @param CHPrimXMLAcquittementsPatients $dom_acq    Acquittement
+   * @param CPatient                       $newPatient Patient
+   * @param array                          $data       Datas
    *
    * @return CHPrimXMLAcquittementsPatients $msgAcq 
    **/
-  function debiteursVenue($dom_acq, $newPatient, $data, &$newVenue = null) {
+  function debiteursVenue($dom_acq, $newPatient, $data) {
     $echg_hprim = $this->_ref_echange_hprim;
     
     // Traitement du patient
@@ -99,34 +111,29 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
     $dom_acq->_identifiant_acquitte = $data['identifiantMessage'];
     $dom_acq->_sous_type_evt        = $this->sous_type;
     $dom_acq->_ref_echange_hprim    = $echg_hprim;
-    
+
+    $codes = array();
+    $avertissement = $commentaire = null;
+
     // Si CIP
     if (!CAppUI::conf('sip server')) { 
       $sender = $echg_hprim->_ref_sender;
-      
-      $avertissement = null;
       
       // Mapping des mouvements
       $newPatient = $this->mappingDebiteurs($data['debiteurs'], $newPatient);
       $newPatient->repair();
       
-      // Notifier les autres destinataires
-      $newPatient->_eai_initiateur_group_id = $sender->group_id;
-      $msgPatient = $newPatient->store();
-      
-      $modified_fields = CEAIPatient::getModifiedFields($newPatient);
+      $msgPatient  = CEAIPatient::storePatient($newPatient, $sender);
+      $commentaire = CEAIPatient::getComment($newPatient);
       
       $codes = array ($msgPatient ? "A003" : "I002");
       
       if ($msgPatient) {
         $avertissement = $msgPatient." ";
       }
-      else {
-        $commentaire = "Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields.";
-      }
-
-      return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newPatient);
     }
+
+    return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newPatient);
   }
 }
 

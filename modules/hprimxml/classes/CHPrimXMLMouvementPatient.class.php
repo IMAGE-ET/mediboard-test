@@ -144,30 +144,27 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
     }
 
     $codes = array();
-    $avertissement = $commentaire = null;
+    $avertissement = $comment = null;
 
     // Si CIP
     if (!CAppUI::conf('smp server')) {
-      // Mapping des mouvements
 
-      $newVenue = $this->mappingMouvements($data['mouvements'], $newVenue);
+      // Mapping des mouvements
+      $msgMovement = $this->mappingMouvements($data['mouvements'], $newVenue);
 
       // Notifier les autres destinataires
-      /*$newVenue->_eai_initiateur_group_id = $sender->group_id;
-      $msgVenue = $newVenue->store();
+      $newVenue->_eai_initiateur_group_id = $sender->group_id;
+      $newVenue->store();
       
-      $codes = array ($msgVenue ? "A103" : "I102");
+      $codes = array ($msgMovement ? "A301" : "I301");
       
-      if ($msgVenue) {
-        $avertissement = $msgVenue." ";
+      if ($msgMovement) {
+        $avertissement = $msgMovement." ";
       }
-      else {
-        $modified_fields = CEAISejour::getModifiedFields($newVenue);
-      
-        $commentaire = "Séjour modifiée : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields.";
-      }*/
+
+      $comment = CEAISejour::getComment($newVenue);
     }
 
-    return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newVenue);
+    return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $comment, $newVenue);
   } 
 }

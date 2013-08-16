@@ -1,13 +1,18 @@
-<?php /* $Id: object_config.class.php 8220 2010-03-05 13:06:52Z phenxdesign $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision: 8220 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Configuration de H'XML
+ *
+ * @package    Mediboard
+ * @subpackage hprimxml
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: 20171 $
  */
 
+/**
+ * Class CHprimXMLConfig
+ */
 class CHprimXMLConfig extends CExchangeDataFormatConfig {
   static $config_fields = array(
     // Encoding

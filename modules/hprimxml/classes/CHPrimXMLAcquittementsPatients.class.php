@@ -1,33 +1,49 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
+ * Acquittements pour les messages patient
+ *
+ * @package    Mediboard
  * @subpackage hprimxml
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * Class CHPrimXMLAcquittementsPatients
+ */
 class CHPrimXMLAcquittementsPatients extends CHPrimXMLAcquittements {
   public $_identifiant_acquitte;
   public $_sous_type_evt;
   
-  var $_codes_erreurs        = array(
+  public $_codes_erreurs        = array(
     "ok"  => "OK",
     "avt" => "avertissement",
     "err" => "erreur"
   );
-  
+
+  /**
+   * Get version acquittements patients
+   *
+   * @return string
+   */
   static function getVersionAcquittementsPatients() {    
     return "msgAcquittementsPatients".str_replace(".", "", CAppUI::conf('hprimxml evt_patients version'));
-  } 
-  
+  }
+
+  /**
+   * @see parent::__construct
+   */
   function __construct() {
     $this->evenement = "evt_patients";
      
     parent::__construct("patients", self::getVersionAcquittementsPatients());
   }
 
+  /**
+   * @see parent::generateEnteteMessageAcquittement
+   */
   function generateEnteteMessageAcquittement($statut, $codes = null, $commentaires = null) {
     $echg_hprim      = $this->_ref_echange_hprim;
     $identifiant     = isset($echg_hprim->_id) ? str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT) : "ES{$this->now}";
@@ -65,12 +81,23 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLAcquittements {
           $_libelle_codes .= CAppUI::tr("hprimxml-error-$code");
         }
         $this->addObservation($enteteMessageAcquittement, $_codes, $_libelle_codes, $commentaires);
-      } else {
+      }
+      else {
         $this->addObservation($enteteMessageAcquittement, $codes, CAppUI::tr("hprimxml-error-$codes"), $commentaires);
       }
     }
   }
 
+  /**
+   * Ajout des erreurs et des avertissements dans l'acquittement
+   *
+   * @param string    $statut       Statut de l'acquittement
+   * @param array     $codes        Codes d'erreurs
+   * @param string    $commentaires Commentaire
+   * @param CMbObject $mbObject     Object
+   *
+   * @return void
+   */
   function addErreursAvertissements($statut, $codes, $commentaires = null, $mbObject = null) {
     $acquittementsPatients = $this->documentElement;
      
@@ -78,11 +105,13 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLAcquittements {
      
     if (is_array($codes)) {
       foreach ($codes as $code) {
-        $this->addErreurAvertissement($erreursAvertissements, $statut, $code, CAppUI::tr("hprimxml-error-$code"), $commentaires, $mbObject);
+        $translate = CAppUI::tr("hprimxml-error-$code");
+        $this->addErreurAvertissement($erreursAvertissements, $statut, $code, $translate, $commentaires, $mbObject);
       }
     }
     else {
-      $this->addErreurAvertissement($erreursAvertissements, $statut, $codes, CAppUI::tr("hprimxml-error-$codes"), $commentaires, $mbObject);
+      $translate = CAppUI::tr("hprimxml-error-$codes");
+      $this->addErreurAvertissement($erreursAvertissements, $statut, $codes, $translate, $commentaires, $mbObject);
     }   
   }
 

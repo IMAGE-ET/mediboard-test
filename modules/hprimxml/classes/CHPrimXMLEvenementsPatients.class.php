@@ -1,7 +1,7 @@
 <?php
 
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage hprimxml
@@ -752,16 +752,16 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   /**
    * Mapping mouvements
    *
-   * @param DOMNode $node    Node
-   * @param CSejour $mbVenue Venue
+   * @param DOMNode $node     Node
+   * @param CSejour $newVenue Venue
    *
    * @return CSejour
    */
-  function mappingMouvements(DOMNode $node, CSejour $mbVenue) {
+  function mappingMouvements(DOMNode $node, CSejour $newVenue) {
     $xpath = new CHPrimXPath($node->ownerDocument);
 
     if (!CAppUI::conf("hprimxml mvtComplet")) {
-      return $mbVenue;
+      return $newVenue;
     }
 
     $movements = $xpath->query("hprim:mouvement", $node);
@@ -769,29 +769,29 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     foreach ($movements as $_movement) {
       $affectation = new CAffectation();
 
-      if ($msg = $this->mappingMovement($_movement, $mbVenue, $affectation)) {
+      if ($msg = $this->mappingMovement($_movement, $newVenue, $affectation)) {
         return $msg;
       }
     }
 
-    return $mbVenue;
+    return null;
   }
 
   /**
    * Mapping mouvements
    *
    * @param DOMNode      $node        Node
-   * @param CSejour      $mbVenue     Venue
+   * @param CSejour      $newVenue    Venue
    * @param CAffectation $affectation Affectation
    *
    * @return string
    */
-  function mappingMovement(DOMNode $node, CSejour $mbVenue, CAffectation $affectation) {
+  function mappingMovement(DOMNode $node, CSejour $newVenue, CAffectation $affectation) {
     $xpath  = new CHPrimXPath($node->ownerDocument);
     $sender = $this->_ref_echange_hprim->_ref_sender;
 
     // Recherche d'une affectation existante
-    $id = $mbVenue->_guid."-".$xpath->queryTextNode("hprim:identifiant/hprim:emetteur", $node);
+    $id = $newVenue->_guid."-".$xpath->queryTextNode("hprim:identifiant/hprim:emetteur", $node);
 
     $tag = $sender->_tag_hprimxml;
 
@@ -799,19 +799,19 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     if ($idex->_id) {
       $affectation->load($idex->object_id);
 
-      if ($affectation->sejour_id != $mbVenue->_id) {
+      if ($affectation->sejour_id != $newVenue->_id) {
         return CAppUI::tr("hprimxml-error-E301");
       }
     }
 
-    $affectation->sejour_id = $mbVenue->_id;
+    $affectation->sejour_id = $newVenue->_id;
 
     // Praticien responsable
     $medecinResponsable = $xpath->queryUniqueNode("hprim:medecinResponsable", $node);
     $affectation->praticien_id = $this->getMedecin($medecinResponsable);
 
     // Emplacement
-    $this->getEmplacement($node, $mbVenue, $affectation);
+    $this->getEmplacement($node, $newVenue, $affectation);
 
     // Début de l'affectation
     $debut = $xpath->queryUniqueNode("hprim:debut", $node);
@@ -830,7 +830,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     }
 
     if (!$affectation->_id) {
-      $affectation = $mbVenue->forceAffectation($affectation);
+      $affectation = $newVenue->forceAffectation($affectation);
       if (is_string($affectation)) {
         return $affectation;
       }
@@ -855,18 +855,18 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
    * Récupération de l'emplacement du patient
    *
    * @param DOMNode      $node        Node
-   * @param CSejour      $mbVenue     Sejour
+   * @param CSejour      $newVenue    Sejour
    * @param CAffectation $affectation Affectation
    *
    * @return void
    */
-  function getEmplacement(DOMNode $node, CSejour $mbVenue, CAffectation $affectation) {
+  function getEmplacement(DOMNode $node, CSejour $newVenue, CAffectation $affectation) {
     $xpath  = new CHPrimXPath($node->ownerDocument);
     $sender = $this->_ref_echange_hprim->_ref_sender;
 
     $chambreSeul = $xpath->queryAttributNode("hprim:emplacement", $node, "chambreSeul");
     if ($chambreSeul) {
-      $mbVenue->chambre_seule = $chambreSeul;
+      $newVenue->chambre_seule = $chambreSeul == "oui" ? 1 : 0;
     }
 
     $emplacement = $xpath->queryUniqueNode("hprim:emplacement", $node);

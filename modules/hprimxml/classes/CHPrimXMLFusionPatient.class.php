@@ -1,24 +1,37 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprimxml
- * @version $Revision:$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Fusion patient
+ *
+ * @category Hprimxml
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
+/**
+ * Class CHPrimXMLFusionPatient
+ * Mouvement patient
+ */
 class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients { 
-  var $actions = array(
+  public $actions = array(
     'fusion' => "fusion"
   );
-  
+
+  /**
+   * @see parent::__construct
+   */
   function __construct() {        
-  	$this->sous_type = "fusionPatient";
-  	    
+    $this->sous_type = "fusionPatient";
+
     parent::__construct();
   }
-  
+
+  /**
+   * @see parent::generateFromOperation
+   */
   function generateFromOperation($mbPatient, $referent) {  
     $evenementsPatients = $this->documentElement;
     $evenementPatient   = $this->addElement($evenementsPatients, "evenementPatient");
@@ -37,7 +50,10 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
     // Traitement final
     $this->purgeEmptyElements();
   }
-  
+
+  /**
+   * @see parent::getContentsXML
+   */
   function getContentsXML() {
     $xpath = new CHPrimXPath($this);
 
@@ -63,17 +79,17 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
   /**
    * Fusion and recording a patient with an IPP in the system
    *
-   * @param CHPrimXMLAcquittementsPatients $dom_acq
-   * @param CEchangeHprim $echg_hprim
-   * @param CPatient $newPatient
-   * @param array $data
+   * @param CHPrimXMLAcquittementsPatients $dom_acq    Acquittement
+   * @param CPatient                       $newPatient Patient
+   * @param array                          $data       Datas
    *
    * @return string acquittement 
    **/
-  function fusionPatient($dom_acq, $newPatient, $data) {
+  function fusionPatient(CHPrimXMLAcquittementsPatients$dom_acq, CPatient $newPatient, $data) {
     $echg_hprim = $this->_ref_echange_hprim;
-    $commentaire = "";
-    
+    $commentaire = $avertissement = "";
+    $codes = array();
+
     // Si CIP
     if (!CAppUI::conf('sip server')) {
       $mbPatientElimine = new CPatient();
@@ -126,7 +142,6 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       $idexPatientElimine->tag = CAppUI::conf('dPpatients CPatient tag_ipp_trash').$sender->_tag_patient;
       $idexPatientElimine->store();
       
-      $messages = array();
       $avertissement = null;
             
       $patientsElimine_array = array($mbPatientElimine);
@@ -139,7 +154,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
         return $echg_hprim->setAckError($dom_acq, "E010", $commentaire, $newPatient);
       }
       
-      $mbPatientElimine_id = $mbPatientElimine->_id;
+      $mbPatientElimine->_id;
       
       /** @todo mergePlainFields resets the _id */
       $mbPatient->_id = $first_patient_id;
@@ -147,18 +162,17 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       // Notifier les autres destinataires
       $mbPatient->_eai_initiateur_group_id = $sender->group_id;
       $mbPatient->_merging = CMbArray::pluck($patientsElimine_array, "_id");
+
       $msg = $mbPatient->merge($patientsElimine_array);
+      $commentaire = CEAIPatient::getComment($newPatient, $mbPatientElimine);
       
       $codes = array ($msg ? "A010" : "I010");
-        
+
       if ($msg) {
         $avertissement = $msg." ";
       }
-      else {
-        $commentaire = "Le patient $mbPatient->_id a été fusionné avec le patient $mbPatientElimine_id.";
-      }
-      
-      return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newPatient);
     }
+
+    return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newPatient);
   }
 }

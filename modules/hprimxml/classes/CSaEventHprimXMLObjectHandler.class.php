@@ -3,7 +3,7 @@
 /**
  * SA Event H'XML Handler
  *  
- * @category EAI
+ * @category Hprimxml
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -54,6 +54,7 @@ class CSaEventHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       return;
     }
 
+    /** @var COperation $operation */
     $operation = $mbObject;
         
     $sejour  = $operation->_ref_sejour;

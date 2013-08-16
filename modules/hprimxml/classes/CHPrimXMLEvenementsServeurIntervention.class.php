@@ -16,7 +16,7 @@
   * Évènements serveur intervention
   */
 class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurActivitePmsi {
-  var $actions = array(
+  public $actions = array(
     'création'     => "création",
     'remplacement' => "remplacement",
     'modification' => "modification",

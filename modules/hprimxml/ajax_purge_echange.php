@@ -33,7 +33,7 @@ if (!$do_purge) {
   $where["echange_hprim.date_production"]         = "< '$date_max'";
   $where["echange_hprim.message_content_id"]      = "IS NOT NULL";
   $where["echange_hprim.acquittement_content_id"] = "IS NOT NULL";
-  $count = $content_xml->countList($where, null, $ljoin);
+  $count = $content_xml->countList($where);
   
   CAppUI::stepAjax("CEchangeHprim-msg-purge_count", UI_MSG_OK, $count);
   return;

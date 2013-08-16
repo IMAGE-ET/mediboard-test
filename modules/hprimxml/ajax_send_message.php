@@ -1,11 +1,14 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage sip
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Send message
+ *
+ * @category HprimXML
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
@@ -33,6 +36,7 @@ if (!$echange_hprim_id) {
   // Effectue le traitement d'enregistrement des notifications sur lequel le cron vient de passer
   // ce qui permet la gestion des doublons
   foreach ($notifications as $notification) {
+    /** @var CEchangeHprim $notification */
     $notification->date_echange = CMbDT::dateTime();
     $notification->store();
   }
@@ -46,7 +50,8 @@ if (!$echange_hprim_id) {
       $source->setData($notification->_message);
       try {
         $source->send();
-      } catch(Exception $e) {
+      }
+      catch(Exception $e) {
         $notification->date_echange = "";
         $notification->store();
         continue;
@@ -77,8 +82,10 @@ if (!$echange_hprim_id) {
       $notification->store();
     }
   }
-} else {
+}
+else {
   // Chargement de l'objet
+  /** @var CEchangeHprim $echange_hprim */
   $echange_hprim = new $echange_hprim_classname;
   $echange_hprim->load($echange_hprim_id);
   

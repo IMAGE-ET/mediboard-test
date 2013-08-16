@@ -1,14 +1,22 @@
-<?php /* $Id: hprimxmlevenementmvtstock.class.php 7108 2009-10-21 16:10:46Z lryo $ */
+<?php
 
 /**
- * @package Mediboard
+ * Évènement lié aux mouvements de stock
+ *
+ * @package    Mediboard
  * @subpackage hprimxml
- * @version $Revision: 7108 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: 20171 $
  */
 
+/**
+ * Class CHPrimXMLEvenementMvtStock
+ */
 class CHPrimXMLEvenementMvtStock extends CHPrimXMLEvenements {
+  /**
+   * @see parent::__construct
+   */
   function __construct() {
     $this->evenement = "evt_mvtStock";
     

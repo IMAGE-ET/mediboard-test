@@ -1,13 +1,18 @@
-<?php /* $Id: evenements.class.php 8931 2010-05-12 12:58:21Z lryo $ */
+<?php
 
 /**
- * @package Mediboard
+ * Évènements H'XML
+ *
+ * @package    Mediboard
  * @subpackage hprimxml
- * @version $Revision: 8931 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: 20171 $
  */
 
+/**
+ * Class CHPrimXMLEvenements
+ */
 class CHPrimXMLEvenements extends CHPrimXMLDocument {  
   static $documentElements = array(
     'evenementsPatients'           => "CHPrimXMLEvenementsPatients",
@@ -16,13 +21,32 @@ class CHPrimXMLEvenements extends CHPrimXMLDocument {
     'evenementsFraisDivers'        => "CHPrimXMLEvenementsServeurActivitePmsi",
     'evenementServeurIntervention' => "CHPrimXMLEvenementsServeurActivitePmsi",
   );
-  
-  static function getHPrimXMLEvenements() {}
-  
+
+  /**
+   * Récupération de l'évènement H'XML
+   *
+   * @return CHPrimXMLEvenements
+   */
+  static function getHPrimXMLEvenements() {
+  }
+
+  /**
+   * Récupération des évènements disponibles
+   *
+   * @return array
+   */
   function getDocumentElements() {
     return self::$documentElements;
   }
-  
+
+  /**
+   * Construction de l'entête du message
+   *
+   * @param string $type    Type de l'évènement
+   * @param bool   $version Version
+   *
+   * @return void
+   */
   function generateEnteteMessage($type, $version = true) {
     $evenements = $this->addElement($this, $type, null, "http://www.hprim.org/hprimXML");
     if ($version) {
@@ -31,7 +55,14 @@ class CHPrimXMLEvenements extends CHPrimXMLDocument {
     
     $this->addEnteteMessage($evenements);
   }
-  
+
+  /**
+   * Récupération des élèments de l'entête du message
+   *
+   * @param string $type Type de l'évènement
+   *
+   * @return array
+   */
   function getEnteteEvenementXML($type) {
     $data = array();
     $xpath = new CHPrimXPath($this);   
@@ -47,14 +78,30 @@ class CHPrimXMLEvenements extends CHPrimXMLDocument {
     
     return $data;
   }
-  
-  function getActionEvenement($query, $node) {
+
+  /**
+   * Récupération de l'action de l'évènement
+   *
+   * @param string  $query Query
+   * @param DOMNode $node  Node
+   *
+   * @return string
+   */
+  function getActionEvenement($query, DOMNode $node) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
     return $xpath->queryAttributNode($query, $node, "action");    
   }
-  
-  function isActionValide($action, $dom_acq) {
+
+  /**
+   * Est-ce que l'action est possible par rapport à l'évènement ?
+   *
+   * @param string                 $action  Action
+   * @param CHPrimXMLAcquittements $dom_acq Acquittement
+   *
+   * @return null|string
+   */
+  function isActionValide($action, CHPrimXMLAcquittements $dom_acq) {
     $acq = null;
     $echange_hprim = $this->_ref_echange_hprim;
 
@@ -72,20 +119,41 @@ class CHPrimXMLEvenements extends CHPrimXMLDocument {
     
     return $acq;
   }
-  
-  function getDate($node) {
+
+  /**
+   * Récupération de la date
+   *
+   * @param DOMNode $node Node
+   *
+   * @return string
+   */
+  function getDate(DOMNode $node) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
     return $xpath->queryTextNode("hprim:date", $node);
   }
-  
-  function getHeure($node) {
+
+  /**
+   * Récupération de l'heure
+   *
+   * @param DOMNode $node Node
+   *
+   * @return string
+   */
+  function getHeure(DOMNode $node) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
     return $xpath->queryTextNode("hprim:heure", $node);
   }
-  
-  function getDateHeure($node) {
+
+  /**
+   * Récupération de la date et heure
+   *
+   * @param DOMNode $node Node
+   *
+   * @return string
+   */
+  function getDateHeure(DOMNode $node) {
     return $this->getDate($node)." ".$this->getHeure($node);
   }
 }

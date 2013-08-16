@@ -1,11 +1,14 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprimxml
- * @version $Revision: 6153 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Action
+ *
+ * @category Hprimxml
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkAdmin();
@@ -17,7 +20,7 @@ switch ($evenement) {
   case "evt_serveuractes":
     if ($version == "1.01") {
       extractFiles("serveurActes" , "schemaServeurActe_v101.zip");
-    } 
+    }
     else {
       $version = str_replace(".", "", $version);
       extractFiles("serveurActivitePmsi_v$version" , "schemaServeurActivitePmsi_v$version.zip", true);
@@ -27,7 +30,7 @@ switch ($evenement) {
   case "evt_pmsi":
     if ($version == "1.01") {
       extractFiles("evenementPmsi", "schemaPMSI_v101.zip" );
-    } 
+    }
     else {
       $version = str_replace(".", "", $version);
       extractFiles("serveurActivitePmsi_v$version" , "schemaServeurActivitePmsi_v$version.zip", true);
@@ -58,6 +61,15 @@ switch ($evenement) {
     echo "<div class='error'>Action '", CMbString::purifyHTML($evenement), "' inconnue</div>";
 }
 
+/**
+ * Extract files
+ *
+ * @param string $schemaDir  Schema directory
+ * @param string $schemaFile Schema files
+ * @param bool   $delOldDir  Delete old directory
+ *
+ * @return void
+ */
 function extractFiles($schemaDir, $schemaFile, $delOldDir = false) {
   $baseDir = "modules/hprimxml/xsd";
   $destinationDir = "$baseDir/$schemaDir";
@@ -65,14 +77,16 @@ function extractFiles($schemaDir, $schemaFile, $delOldDir = false) {
   if ($delOldDir && file_exists($destinationDir)) {
     if (CMbPath::remove($destinationDir)) {
       echo "<div class='info'>Suppression de $destinationDir</div>";
-    } else {
+    }
+    else {
       echo "<div class='error'>Impossible de supprimer le dossier $destinationDir</div>";
       return;
     }
   }
   if (false != $nbFiles = CMbPath::extract($archivePath, $destinationDir)) {
     echo "<div class='info'>Extraction de $nbFiles fichiers pour $schemaDir</div>";
-  } else {
+  }
+  else {
     echo "<div class='error'>Impossible d'extraire l'archive $schemaFile</div>";
     return;
   }
@@ -81,31 +95,31 @@ function extractFiles($schemaDir, $schemaFile, $delOldDir = false) {
     $rootFiles = glob("$destinationDir/msg*.xsd");
     $includeFiles = array_diff(glob("$destinationDir/*.xsd"), $rootFiles);
     
-    foreach($rootFiles as $rootFile) {
+    foreach ($rootFiles as $rootFile) {
       $xsd = new CHPrimXMLSchema();
       $xsd->loadXML(utf8_decode(file_get_contents($rootFile)));
       $xpath = new DOMXPath($xsd);
       
       $importFiles = array();
       
-      foreach($includeFiles as $includeFile) {
+      foreach ($includeFiles as $includeFile) {
         $include = new DOMDOcument();
         $include->loadXML(utf8_decode(file_get_contents($includeFile)));
         
         $isImport = false;
-        foreach($importFiles as $key => $value) {
+        foreach ($importFiles as $key => $value) {
           if (strpos($includeFile, $key) !== false) {
             $isImport = true;
             break;
           }
         }
         
-        foreach($include->documentElement->childNodes as $child) {
+        foreach ($include->documentElement->childNodes as $child) {
           $impNode = $xsd->importNode($child, true);
           
           $existing = false;
           
-          if (in_array($impNode->nodeName, array("xsd:simpleType", "xsd:complexType"))){
+          if (in_array($impNode->nodeName, array("xsd:simpleType", "xsd:complexType"))) {
             $name = $impNode->getAttribute('name');
             $existing = $xpath->query("//{$impNode->nodeName}[@name='$name']")->length > 0;
           }
@@ -114,8 +128,9 @@ function extractFiles($schemaDir, $schemaFile, $delOldDir = false) {
             $xsd->documentElement->setAttribute("xmlns:insee", "http://www.hprim.org/inseeXML");
           }
           
-          if (!$existing)
+          if (!$existing) {
             $xsd->documentElement->appendChild($impNode);
+          }
         }
       }
       

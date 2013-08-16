@@ -1,11 +1,14 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage sip
- * @version $Revision: 7816 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Exchange to file
+ *
+ * @category Hprimxml
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkAdmin();
@@ -21,7 +24,8 @@ $count = CMbPath::countFiles($path);
 
 if (!$do_import) {
   CAppUI::stepAjax("$count fichiers '$type' à passer en échanges HPRIM");
-} else {
+}
+else {
   if ($count <= 0) {
     CAppUI::stepAjax("Aucun fichier à passer en échange HPRIM", UI_MSG_ERROR);
   }
@@ -30,16 +34,18 @@ if (!$do_import) {
   if ($type == "pmsi") {
     $domEvenement = new CHPrimXMLEvenementsPmsi();
     $evt = "evenementsPMSI";
-  } elseif ($type ==  "actes") {
+  }
+  elseif ($type ==  "actes") {
     $domEvenement = new CHPrimXMLEvenementsServeurActes();
     $evt = "evenementsServeurActes";
-  } else {
+  }
+  else {
     CAppUI::stepAjax("Type de l'échange invalide", UI_MSG_ERROR);
   }
 
   $files = CAppUI::readFiles($path);
-	
-	ini_set("memory_limit", "512M");
+
+  ini_set("memory_limit", "512M");
   CApp::setTimeLimit(360);
   CMbObject::$useObjectCache = false;
   $counter = 0;
@@ -67,7 +73,8 @@ if (!$do_import) {
       $echg_hprim->object_class = "CSejour";
       $echg_hprim->object_id    = str_replace("sj", "", $data['idSourceVenue']);
       $echg_hprim->id_permanent = $data['idCibleVenue'];
-    } elseif ($type ==  "actes") {
+    }
+    elseif ($type ==  "actes") {
       $echg_hprim->object_class = "COperation";
       $echg_hprim->object_id    = str_replace("op", "", $data["idSourceIntervention"]);
     }
