@@ -3344,6 +3344,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         $_item_souhait->loadRefObject();
       }
     }
+
     return $this->_ref_prestations;
   }
 
@@ -3389,10 +3390,9 @@ class CSejour extends CFacturable implements IPatientRelated {
       $where['date'] = "BETWEEN '$date_min' AND '$date_max'";
     }
 
-    //unique date, unique result
+    //unique date, presta for the day
     if (($date_min && !$date_max) || (($date_min == $date_max) && $date_min)) {
       $where['date'] = "<= '$date_min'";  //get the last prestation for sejour (current day might not be defined)
-      $limit = "1";
       $order = "date DESC";
     }
 
@@ -3406,6 +3406,65 @@ class CSejour extends CFacturable implements IPatientRelated {
     foreach ($this->_liaisons_for_prestation as $_liaison) {
       $_liaison->loadRefItem();
       $_liaison->loadRefItemRealise();
+    }
+
+    return $this->_liaisons_for_prestation;
+  }
+
+  /**
+   * get prestations for a particular day
+   * check for previous prestation to keep only "active" liaisons
+   *
+   * @param $prestation_id
+   * @param $date
+   *
+   * @return CStoredObject[]
+   */
+  function loadLiaisonsForDay($prestation_id, $date) {
+    $maxs = array();
+    $item_liaison = new CItemLiaison();
+    $where = array();
+    $groupby = "item_liaison_id";
+    $order = "item_liaison_id DESC";
+    $where["sejour_id"] = "= '$this->_id'";
+    $where["object_class"] = " = 'CPrestationJournaliere'";
+
+    if ($prestation_id == "all") {
+      $prestation_id = null;
+    }
+
+    if ($prestation_id) {
+      $where["object_id"] = " = '$prestation_id'";
+    }
+
+    $ljoin["item_prestation"] =
+      "  item_prestation.item_prestation_id = item_liaison.item_souhait_id
+      OR item_prestation.item_prestation_id = item_liaison.item_realise_id";
+
+    $where["date"] = "<= '$date'";
+
+    $this->_liaisons_for_prestation = $item_liaison->loadList($where, $order, null, $groupby, $ljoin);
+
+    CMbObject::massLoadFwdRef($this->_liaisons_for_prestation, "item_souhait_id");
+    CMbObject::massLoadFwdRef($this->_liaisons_for_prestation, "item_realise_id");
+
+    /** @var CItemLiaison $_liaison */
+    foreach ($this->_liaisons_for_prestation as $_liaison) {
+      $_liaison->loadRefItem();
+      $_liaison->loadRefItemRealise();
+
+      //@todo : find a better way to cleanup old prestas
+      $cat_id = ($_liaison->_ref_item_realise->_id) ? $_liaison->_ref_item_realise->object_id : $_liaison->_ref_item->object_id;
+      $maxs[$_liaison->date][$cat_id] = $_liaison->_id;
+      foreach ($maxs as $date => $data) {
+        if ($date > $_liaison->date) {
+          foreach ($data as $cat => $id) {
+            if ($cat == $cat_id) {
+              unset($this->_liaisons_for_prestation[$_liaison->_id]);
+            }
+          }
+        }
+      }
     }
 
     return $this->_liaisons_for_prestation;
