@@ -87,6 +87,7 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
   foreach ($service->_ref_chambres as $chambre_id => &$chambre) {
     $chambre->loadRefsBack();
 
+    /** @var CLit $lit */
     foreach ($chambre->_ref_lits as $lit_id => &$lit) {
       $lit->loadAffectations($date);
 
@@ -136,9 +137,10 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
           $chambre->_nb_affectations++;
           $dossiers[] = $sejour->_ref_patient->_ref_dossier_medical;
 
-          if ($systeme_presta == "expert" && $prestation_id) {
-
-            $sejour->loadLiaisonsForPrestation($prestation_id, $date);
+          if ($systeme_presta == "expert") {
+            if ($prestation_id) {
+              $sejour->loadLiaisonsForDay($prestation_id, $date);
+            }
           }
         }
         else {
