@@ -15,7 +15,7 @@
   <input type="hidden" name="@class" value="CSupervisionGraphPack" />
   <input type="hidden" name="owner_class" value="CGroups" />
   <input type="hidden" name="owner_id" value="{{$g}}" />
-  <input type="hidden" name="callback" value="SupervisionGraph.editPack" />
+  <input type="hidden" name="callback" value="SupervisionGraph.callbackEditPack" />
   {{mb_key object=$pack}}
 
   <table class="main form">

@@ -757,7 +757,8 @@ button.selected {
   border: 2px solid #000;
 }
 
-button.compact {
+button.compact,
+a.button.compact {
   margin: -1px !important;
 }
 

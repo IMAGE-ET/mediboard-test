@@ -13,7 +13,7 @@
   <input type="hidden" name="@class" value="CSupervisionTimedData" />
   <input type="hidden" name="owner_class" value="CGroups" />
   <input type="hidden" name="owner_id" value="{{$g}}" />
-  <input type="hidden" name="callback" value="SupervisionGraph.editTimedData" />
+  <input type="hidden" name="callback" value="SupervisionGraph.callbackEditTimedData" />
   {{mb_key object=$timed_data}}
 
   <table class="main form">

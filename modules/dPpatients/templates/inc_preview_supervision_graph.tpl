@@ -2,8 +2,7 @@
 Main.add(function(){
   var ph = jQuery("#placeholder-preview");
   var series = {{$data.series|@json}};
-  
-  //ph.bind("plothover", plothover);
+
   jQuery.plot(ph, series, {
     series: SupervisionGraph.defaultSeries,
     xaxes: {{$data.xaxes|@json}},
@@ -24,5 +23,5 @@ Main.add(function(){
     {{/foreach}}
     <span class="title">{{$data.title}}</span>
   </div>
-  <div id="placeholder-preview" style="width:600px;height:180px;"></div>
+  <div id="placeholder-preview" style="width:600px;height:{{$graph->height}}px;"></div>
 </div>

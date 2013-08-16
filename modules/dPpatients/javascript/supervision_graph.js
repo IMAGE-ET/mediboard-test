@@ -1,11 +1,27 @@
 SupervisionGraph = {
   currentGraphId: null,
 
+  list: function(callback) {
+    var url = new Url("dPpatients", "ajax_list_supervision");
+    url.requestUpdate("supervision-list", {
+      onComplete: callback ? callback : function(){}
+    });
+  },
+
   editGraph: function(id) {
+    if (!id) {
+      return false;
+    }
     var url = new Url("dPpatients", "ajax_edit_supervision_graph");
     url.addParam("supervision_graph_id", id);
     url.requestUpdate("supervision-graph-editor");
     return false;
+  },
+
+  callbackEditGraph: function(id) {
+    SupervisionGraph.list(function(){
+      SupervisionGraph.editGraph(id);
+    });
   },
 
   // Axes
@@ -42,6 +58,12 @@ SupervisionGraph = {
     url.requestUpdate("supervision-graph-editor");
 
     return false;
+  },
+
+  callbackEditTimedData: function(id) {
+    SupervisionGraph.list(function(){
+      SupervisionGraph.editTimedData(id);
+    });
   },
   
   // Series
@@ -85,6 +107,11 @@ SupervisionGraph = {
     url.requestUpdate("supervision-graph-editor");
     return false;
   },
+  callbackEditPack: function(id) {
+    SupervisionGraph.list(function(){
+      SupervisionGraph.editPack(id);
+    });
+  },
 
   editGraphToPack: function(id, pack_id, graph_class) {
     var url = new Url("dPpatients", "ajax_edit_supervision_graph_to_pack");
@@ -102,6 +129,9 @@ SupervisionGraph = {
   },
 
   listGraphToPack: function(pack_id) {
+    if (!pack_id) {
+      return;
+    }
     var url = new Url("dPpatients", "ajax_list_supervision_graph_to_pack");
     url.addParam("supervision_graph_pack_id", pack_id);
     url.requestUpdate("graph-to-pack-list");

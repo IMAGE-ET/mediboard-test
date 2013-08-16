@@ -14,12 +14,12 @@ CCanDo::checkAdmin();
 $unit_id = CValue::getOrSession("value_unit_id");
 $type_id = CValue::getOrSession("value_type_id");
 
-$unit = new CObservationValueUnit;
+$unit = new CObservationValueUnit();
 $unit->load($unit_id);
 $unit->loadRefsNotes();
 $units = $unit->loadList(null, "coding_system, code");
 
-$type = new CObservationValueType;
+$type = new CObservationValueType();
 $type->load($type_id);
 $type->loadRefsNotes();
 $types = $type->loadList(null, "coding_system, code");

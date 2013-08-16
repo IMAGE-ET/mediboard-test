@@ -101,7 +101,7 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
         "position" => "bottom", 
         "min"      => $time_min, 
         "max"      => $time_max,
-        "ticks"    => 24, // FIXME
+        "ticks"    => 20, // FIXME
       )),
       "series" => array(),
       "title"  => $this->title,
@@ -219,9 +219,10 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
       "lib/flot/jquery.flot.resize.min.js",
       "lib/flot/jquery.flot.stack.min.js",
       "lib/flot/jquery.flot.bandwidth.js",
+      "lib/flot/jquery.flot.time.min.js",
       "modules/dPpatients/javascript/supervision_graph.js",
     );
     echo CJSLoader::loadFiles();
-    CAppUI::js('$.noConflict()');
+    CAppUI::js('jQuery.noConflict()');
   }
 }

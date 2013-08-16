@@ -17,7 +17,7 @@ Main.add(function(){
   <input type="hidden" name="@class" value="CSupervisionGraph" />
   <input type="hidden" name="owner_class" value="CGroups" />
   <input type="hidden" name="owner_id" value="{{$g}}" />
-  <input type="hidden" name="callback" value="SupervisionGraph.editGraph" />
+  <input type="hidden" name="callback" value="SupervisionGraph.callbackEditGraph" />
   {{mb_key object=$graph}}
 
   <table class="main form">

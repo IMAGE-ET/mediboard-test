@@ -18,7 +18,7 @@
       <td>{{mb_value object=$_series field=value_type_id}}</td>
       <td>{{mb_value object=$_series field=value_unit_id}}</td>
       <td>
-        <button class="edit notext" onclick="SupervisionGraph.editSeries({{$_series->_id}})" style="margin: 0">
+        <button class="edit notext compact" onclick="SupervisionGraph.editSeries({{$_series->_id}})">
           {{tr}}Edit{{/tr}}
         </button>
       </td>

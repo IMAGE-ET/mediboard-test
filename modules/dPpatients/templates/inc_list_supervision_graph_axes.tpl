@@ -13,7 +13,7 @@
     <tr data-axis_id="{{$_axis->_id}}">
       <td style="font-size: 1px;">
         {{foreach from=$_axis->_back.series item=_series}}
-          <div style="display: inline-block; width: 6px; height: 16px; background-color: #{{$_series->color}}; vertical-align: middle;" 
+          <div style="display: inline-block; width: 6px; height: 14px; background-color: #{{$_series->color}}; vertical-align: middle;"
                onmouseover="ObjectTooltip.createEx(this, '{{$_series->_guid}}');"></div>
         {{/foreach}}
       </td>
@@ -31,7 +31,7 @@
         {{mb_value object=$_axis field=symbol}}
       </td>
       <td>
-        <button class="edit notext" onclick="SupervisionGraph.editAxis({{$_axis->_id}})" style="margin: 0">
+        <button class="edit notext compact" onclick="SupervisionGraph.editAxis({{$_axis->_id}})">
           {{tr}}Edit{{/tr}}
         </button>
       </td>

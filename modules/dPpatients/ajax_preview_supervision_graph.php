@@ -38,4 +38,5 @@ $smarty = new CSmartyDP();
 $smarty->assign("data",  $data);
 $smarty->assign("times", $times);
 $smarty->assign("supervision_graph_id", $supervision_graph_id);
+$smarty->assign("graph", $graph);
 $smarty->display("inc_preview_supervision_graph.tpl");

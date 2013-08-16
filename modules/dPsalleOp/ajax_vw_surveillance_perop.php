@@ -26,7 +26,7 @@ list(
   $graphs, $yaxes_count,
   $time_min, $time_max,
   $time_debut_op_iso, $time_fin_op_iso
-) = CObservationResultSet::buildGraphs($interv, 2 /* FIXME pack_id */);
+) = CObservationResultSet::buildGraphs($interv, 1 /* FIXME pack_id */);
 
 $time_debut_op = CMbDate::toUTCTimestamp($time_debut_op_iso);
 $time_fin_op   = CMbDate::toUTCTimestamp($time_fin_op_iso);
