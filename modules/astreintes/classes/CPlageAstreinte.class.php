@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:\$
+ * @version  Release: <package_version>
  * @link     http://www.mediboard.org
  */
 class CPlageAstreinte extends CPlageCalendaire {
@@ -28,7 +28,7 @@ class CPlageAstreinte extends CPlageCalendaire {
   );
   // Object References
   public $_num_astreinte;
-  /** @var  CMediusers */
+  /** @var CMediusers $_ref_user */
   public $_ref_user;
   public $_type;
 
@@ -173,14 +173,15 @@ class CPlageAstreinte extends CPlageCalendaire {
   /**
    * load ref user
    *
-   * @return CMbObject
+   * @return CMediusers
    */
   function loadRefUser() {
-    $this->_ref_user = $this->loadFwdRef("user_id", true);
-    $this->_ref_user->loadRefFunction();
-    $this->_num_astreinte = $this->_ref_user->_user_astreinte;
-    $this->_type = $this->_ref_user->_user_type;
-    return $this->_ref_user;
+    /** @var CMediusers $user */
+    $user = $this->loadFwdRef("user_id", true);
+    $user->loadRefFunction();
+    $this->_num_astreinte = $user->_user_astreinte;
+    $this->_type = $user->_user_type;
+    return $this->_ref_user = $user;
   }
 
   /**

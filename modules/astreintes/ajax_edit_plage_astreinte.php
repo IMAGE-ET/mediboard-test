@@ -1,4 +1,4 @@
-<?php /* $Id: */
+<?php /** $Id: **/
 
 /**
  * @package Mediboard
@@ -8,25 +8,40 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CCanDo::checkRead();
+CCanDo::checkEdit();
 
+$user = CMediusers::get();
 $plage_id = CValue::get("plage_id");
-$user_id  = CValue::get("user_id");
+$plage_date = CValue::get("date");
+$plage_hour = CValue::get("hour");
+$plage_minutes = CValue::get("minutes");
+$user_id = CValue::getOrSession("user_id", $user->_id);
 
-$user = CMediusers::get($user_id);
-$users = CMediusers::loadListFromType(null,PERM_EDIT);
+$users = array($user);
 
-// Chargement de la plage
+if ($user->isAdmin()) {
+  $where = array("actif" => "= '1'");
+  $users = $user->loadUsers();
+}
+
 $plageastreinte = new CPlageAstreinte();
-$plageastreinte->user_id = $user_id;
-$plageastreinte->load($plage_id);
-$plageastreinte->loadRefsNotes();
-$plageastreinte->loadRefUser();
+
+// edition
+if ($plage_id) {
+  $plageastreinte->load($plage_id);
+  $plageastreinte->loadRefsNotes();
+}
+
+//creation
+if (!$plageastreinte->_id) {
+  if ($plage_date && $plage_hour) {
+    $plageastreinte->start = "$plage_date $plage_hour:$plage_minutes:00";
+  }
+  $plageastreinte->user_id = $user_id;
+}
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("user",      $user);
 $smarty->assign("users",      $users);
 $smarty->assign("plageastreinte",  $plageastreinte);
 $smarty->display("inc_edit_plage_astreinte.tpl");
-?>

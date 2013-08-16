@@ -4,7 +4,7 @@ PlageAstreinte = {
   showForUser: function(user_id) {
     new Url("astreintes", "ajax_plage_astreinte").
       addParam("user_id", user_id).
-      popup(400, 300);
+      popup(600, 300);  //popup is better
   },
 
   loadUser: function(user_id, plage_id) {
@@ -35,16 +35,13 @@ PlageAstreinte = {
     url.requestUpdate("planningconge");
   },
 
-  modal: function(plage_id, user_id) {
+  modal: function(plage_id, date, hourstart, minutestart) {
     var url = new Url("astreintes", "ajax_edit_plage_astreinte");
     url.addParam("plage_id", plage_id);
-    url.addParam("user_id", user_id);
-    url.requestModal();
-    url.modalObject.observe("afterClose", function(){
-      if(changedate){
-        changedate();
-      }
-    });
+    url.addParam("date", date);
+    url.addParam("hour", hourstart);
+    url.addParam("minutes", minutestart);
+    url.requestModal(500,300);
   },
 
   modaleastreinteForDay: function(date) {
@@ -52,4 +49,4 @@ PlageAstreinte = {
     url.addParam("date", date);
     url.requestModal(300,200);
   }
-}
+};

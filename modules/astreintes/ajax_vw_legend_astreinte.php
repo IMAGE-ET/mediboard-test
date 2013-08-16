@@ -1,4 +1,4 @@
-<?php /* $Id: */
+<?php /** $Id: */
 
 /**
  * @package Mediboard
@@ -11,4 +11,3 @@
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->display("inc_legend_planning_astreinte.tpl");
-?>

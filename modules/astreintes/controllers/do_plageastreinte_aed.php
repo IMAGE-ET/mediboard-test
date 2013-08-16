@@ -10,5 +10,3 @@
 
 $do = new CDoObjectAddEdit("CPlageAstreinte", "plage_id");
 $do->doIt();
-
-?>

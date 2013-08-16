@@ -1,40 +1,56 @@
-{{assign var=astreinte value=$object}}
 {{mb_script module="astreintes" script="plage"}}
+
+{{if !$object->_can->read}}
+  <div class="small-info">
+    {{tr}}{{$object->_class}}{{/tr}} : {{tr}}access-forbidden{{/tr}}
+  </div>
+  {{mb_return}}
+{{/if}}
+
 <table class="tbl tooltip">
   <tr>
-    <th>
-      {{tr}}CPlageAstreinte{{/tr}} {{if $astreinte->libelle}}"{{mb_value object=$astreinte field=libelle}}"{{/if}}
+    <th class="title text" colspan="2">
+      {{mb_include module=system template=inc_object_idsante400}}
+      {{mb_include module=system template=inc_object_history}}
+      {{mb_include module=system template=inc_object_notes}}
+      {{$object}}
     </th>
+
   </tr>
     <tr>
-      <td>{{mb_value object=$astreinte field=user_id}}</td>
+      <th>{{tr}}User{{/tr}}</th>
+      <td>{{mb_value object=$object field=user_id}}</td>
     </tr>
 
     <tr>
+      <th>Début</th>
       <td>
-        {{if $astreinte->date_debut == $astreinte->date_fin}}
-          Le : {{mb_value object=$astreinte field=date_debut}}
-        {{else}}
-          {{$astreinte->date_debut|date_format:$conf.longdate}} &rarr; {{$astreinte->date_fin|date_format:$conf.longdate}}<br/>
-          {{if $astreinte->_duree}}{{$astreinte->_duree}} {{tr}}Days{{/tr}}{{/if}}
-        {{/if}}
+        {{$object->start|date_format:"%A %d %B %Y %H:%M"}}
+      </td>
+    </tr>
+    <tr>
+      <th>Fin</th>
+      <td>
+        {{$object->end|date_format:"%A %d %B %Y %H:%M"}}
       </td>
     </tr>
 
-    {{if $astreinte->_ref_user}}
     <tr>
+      <th>Durée</th>
+      <td>{{mb_include module="system" template="inc_vw_duration" duration=$object->_duration}}</td>
+    </tr>
+
+    {{if $object->_ref_user}}
+    <tr>
+      <th><img src="images/icons/phone.png" alt="{{tr}}CPlageAstreinte.PhoneNumber{{/tr}}"/></th>
       <td>
-        {{if $astreinte->_num_astreinte}}
-          <img src="images/icons/phone.png" alt="{{tr}}CPlageAstreinte.PhoneNumber{{/tr}}"/>{{mb_value object=$astreinte field=_num_astreinte}}
-        {{else}}
-          <div class="small-warning">{{tr}}CPlageAstreinte.noPhoneNumber{{/tr}}</div>
-        {{/if}}
+        {{mb_value object=$object field=phone_astreinte}}
       </td>
     </tr>
     {{/if}}
      <tr style="text-align: center;">
-      <td>
-        <button class="edit" onclick="PlageAstreinte.modal({{$astreinte->_id}}, {{$astreinte->user_id}})">{{tr}}Edit{{/tr}}</button>
+      <td class="button" colspan="2">
+        <button class="edit" onclick="PlageAstreinte.modal({{$object->_id}}, {{$object->user_id}})">{{tr}}Edit{{/tr}}</button>
       </td>
       </td>
     </tr>

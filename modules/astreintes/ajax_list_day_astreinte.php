@@ -1,4 +1,4 @@
-<?php /* $Id: */
+<?php /** $Id: **/
 
 /**
  * @package Mediboard
@@ -10,34 +10,24 @@
 
 CCanDo::checkRead();
 
-
-// @TODO : faire un detection de plage et non un chargement d'une journée
 $date = CValue::get("date", CMbDT::date());
-
-
 
 // Plages d'astreinte pour l'utilisateur
 $plage_astreinte = new CPlageAstreinte();
 $where = array();
-$where[] = "((date_debut = '$date') OR (date_fin = '$date') OR (date_debut <='$date' AND date_fin >= '$date'))";
+$where["start"] = "< '$date 23:59:00'";
+$where["end"]   = "> '$date 00:00:00'";
 $plages_astreinte = $plage_astreinte->loadList($where);
 
+/** @var $plages_astreinte CPlageAstreinte[] */
 foreach ($plages_astreinte as $_plage) {
-  $_plage->_ref_user = $_plage->loadRefUser();
-  $_plage->_type = $_plage->loadType();
+  $_plage->loadRefUser();
+  $_plage->loadRefColor();
 }
-
-$new_plageastreinte = new CPlageAstreinte();
-
-$plage_id = CValue::get("plage_id");
-
-
-
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("plages_astreinte",   $plages_astreinte);
 $smarty->assign("date",   $date);
 $smarty->display("vw_list_day_astreinte.tpl");
-?>
 

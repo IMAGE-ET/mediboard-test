@@ -13,12 +13,11 @@
 $choix = CValue::get("choix", "mois");
 $filter = new CPlageAstreinte();
 $filter->user_id = CValue::get("user_id", CAppUI::$user->_id);
-$filter->date_debut = CValue::get("date_debut",CMbDT::date());
+$filter->start = CValue::get("date_debut", CMbDT::date());
 
 // Tableau des jours fériés sur 2 ans, car
 // en mode semaine : 31 décembre - 1 janvier
-$bank_holidays = array_merge(CMbDT::bankHolidays($filter->date_debut),
-  CMbDT::bankHolidays(CMbDT::transform("+1 YEAR", $filter->date_debut, "%Y-%m-%d")));
+$bank_holidays = array_merge(CMbDate::getHolidays($filter->start), CMbDate::getHolidays((CMbDT::transform("+1 YEAR", $filter->start, "%Y-%m-%d"))));
 
 $mediuser  = new CMediusers();
 switch ($filter->user_id) {
@@ -37,47 +36,48 @@ switch ($filter->user_id) {
     break;
 }
 
-if (!$filter->date_debut) {
-  $filter->date_debut = Date("Y-m-d");
+if (!$filter->start) {
+  $filter->start = Date("Y-m-d");
 }
 
 // Si la date rentrée par l'utilisateur est un lundi,
 // on calcule le dimanche d'avant et on rajoute un jour.
 $tab_start = array();
-if ($choix=="semaine"){
-  $last_sunday = CMbDT::transform('last sunday',$filter->date_debut,'%Y-%m-%d');
-  $last_monday = CMbDT::transform('+1 day',$last_sunday,'%Y-%m-%d');
+if ($choix=="semaine") {
+  $last_sunday = CMbDT::transform('last sunday', $filter->start, '%Y-%m-%d');
+  $last_monday = CMbDT::transform('+1 day', $last_sunday, '%Y-%m-%d');
   $debut_periode = $last_monday;
 
-  $fin_periode = CMbDT::transform('+6 day',$debut_periode,'%Y-%m-%d');
+  $fin_periode = CMbDT::transform('+6 day', $debut_periode, '%Y-%m-%d');
 }
-else if($choix=="annee") {
-  list($year,$m,$j)=explode("-",$filter->date_debut);
+else if ($choix=="annee") {
+  list($year,$m,$j) = explode("-", $filter->start);
   $debut_periode = "$year-01-01";
   $fin_periode = "$year-12-31";
   $j=1;
-  for ($i=1;$i<13;$i++){
-    if (!date("w", mktime(0,0,0,$i,1,$year))) {
+  for ($i=1;$i<13;$i++) {
+    if (!date("w", mktime(0, 0, 0, $i, 1, $year))) {
       $tab_start[$j] = 7;
-    } else {
-    $tab_start[$j]= date("w", mktime(0,0,0,$i,1,$year));
+    }
+    else {
+      $tab_start[$j]= date("w", mktime(0, 0, 0, $i, 1, $year));
     }
     $j++;
-    $tab_start[$j]= date("t", mktime(0,0,0,$i,1,$year));
+    $tab_start[$j]= date("t", mktime(0, 0, 0, $i, 1, $year));
     $j++;
   }
 }
 else {
-  list($a,$m,$j)=explode("-",$filter->date_debut);
+  list($a,$m,$j) = explode("-", $filter->start);
   $debut_periode  = "$a-$m-01";
-  $fin_periode = CMbDT::transform('+1 month',$debut_periode,'%Y-%m-%d');
-  $fin_periode  = CMbDT::transform('-1 day', $fin_periode,'%Y-%m-%d');
+  $fin_periode = CMbDT::transform('+1 month', $debut_periode, '%Y-%m-%d');
+  $fin_periode  = CMbDT::transform('-1 day', $fin_periode, '%Y-%m-%d');
 }
 
 $tableau_periode = array();
 
-for($i = 0 ; $i < CMbDT::daysRelative($debut_periode,$fin_periode) + 1; $i ++) {
-  $tableau_periode[$i] = CMbDT::transform('+'.$i.'day',$debut_periode,'%Y-%m-%d');
+for ($i = 0 ; $i < CMbDT::daysRelative($debut_periode, $fin_periode) + 1; $i ++) {
+  $tableau_periode[$i] = CMbDT::transform('+'.$i.'day', $debut_periode, '%Y-%m-%d');
 }
 
 
@@ -90,23 +90,24 @@ $where["user_id"] = CSQLDataSource::prepareIn(array_keys($mediusers), $filter->u
 $plageastreinte = new CPlageAstreinte();
 $plagesconge = array();
 $orderby="user_id";
-$plagesastreinte = $plageastreinte->loadList($where, $orderby);
+/** @var CPlageAstreinte[] $plagesastreintes */
+$plagesastreintes = $plageastreinte->loadList($where, $orderby);
 $tabUser_plage = array();
 $tabUser_plage_indices = array();
 
-foreach ($plagesastreinte as $_plage) {
+foreach ($plagesastreintes as $_plage) {
   $_plage->loadRefUser();
   $_plage->_ref_user->loadRefFunction();
-  $_plage->_deb = CMbDT::daysRelative($debut_periode,$_plage->date_debut);
-  $_plage->_fin = CMbDT::daysRelative($_plage->date_debut, $_plage->date_fin)+1;
-  $_plage->_duree = CMbDT::daysRelative($_plage->date_debut,$_plage->date_fin)+1;
+  $_plage->_deb = CMbDT::daysRelative($debut_periode, $_plage->start);
+  $_plage->_fin = CMbDT::daysRelative($_plage->start, $_plage->end)+1;
+  $_plage->_duree = CMbDT::daysRelative($_plage->start, $_plage->end)+1;
 }
 
 $smarty = new CSmartyDP();
 
 $smarty->assign("debut_periode"  , $debut_periode);
 $smarty->assign("filter"         , $filter);
-$smarty->assign("plagesastreinte", $plagesastreinte);
+$smarty->assign("plagesastreinte", $plagesastreintes);
 $smarty->assign("choix"          , $choix);
 $smarty->assign("mediusers"      , $mediusers);
 $smarty->assign("tableau_periode", $tableau_periode);

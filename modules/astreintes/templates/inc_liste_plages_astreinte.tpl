@@ -7,19 +7,26 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
+
+{{mb_script module=astreintes script=plage ajax=true}}
+{{if count($plages_astreinte) >= 100}}
+  <div class="small-info">{{tr var1=100}}first-results{{/tr}}</div>
+{{/if}}
+
 <table class="tbl">
   <tr>
     <th colspan="10"class="title">Plages pour {{mb_value object=$user field="_user_last_name"}} {{mb_value object=$user field="_user_first_name"}}</th>
   </tr>
   <tr>
     <th>{{mb_title class=CPlageAstreinte field=libelle}}</th>
-    <th>{{tr}}Dates{{/tr}}</th>
+    <th>{{tr}}Dates{{/tr}}</th>*
+    <th>{{mb_title class=CPlageAstreinte field=phone_astreinte}}</th>
   </tr>
   {{foreach from=$plages_astreinte item=_plageastreinte}}
-    <tr id="p{{$_plageastreinte->_id}}" {{if $plage_id == $_plageastreinte->_id}} class="selected" {{/if}}>
+    <tr id="p{{$_plageastreinte->_id}}" class="{{if $plage_id == $_plageastreinte->_id}} selected{{/if}}" >
       <td>
         <a href="#Edit-{{$_plageastreinte->_guid}}"
-           onclick="PlageAstreinte.edit('{{$_plageastreinte->_id}}','{{$user->_id}}')">
+           onclick="PlageAstreinte.modal('{{$_plageastreinte->_id}}')">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_plageastreinte->_guid}}')">
           {{if $_plageastreinte->libelle}}
             {{mb_value object=$_plageastreinte field="libelle"}}
@@ -29,9 +36,10 @@
           </span>
         </a>
       </td>
-      <td>
-        {{mb_include module=system template=inc_interval_date from=$_plageastreinte->date_debut to=$_plageastreinte->date_fin}}
+      <td {{if $today <= $_plageastreinte->end && $today >= $_plageastreinte->start}}class="highlight"{{/if}}>
+        {{mb_include module=system template=inc_interval_date from=$_plageastreinte->start to=$_plageastreinte->end}}
       </td>
+      <td>{{mb_value object=$_plageastreinte field=phone_astreinte}}</td>
     </tr>
   {{foreachelse}}
     <tr>
