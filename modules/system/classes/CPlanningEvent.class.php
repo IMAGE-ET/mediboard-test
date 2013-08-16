@@ -26,6 +26,7 @@ class CPlanningEvent  {
   public $type;
   public $plage     = array();
   public $menu      = array();
+  public $mb_object = array();
   
   public $start;
   public $end;
@@ -40,6 +41,8 @@ class CPlanningEvent  {
   public $minutes;
   public $hour_divider;
   public $width;
+  public $display_hours = false;  //show start time and end time in the event display (hover)
+
   public $offset;               //minutes
   public $offset_top;           //minutes
   public $offset_top_text;      //string
@@ -49,6 +52,9 @@ class CPlanningEvent  {
   public $height;
   public $useHeight;
   public $important;
+  public $css_class;
+
+  public $_ref_object;
 
   /**
    * constructor
@@ -79,6 +85,8 @@ class CPlanningEvent  {
     $this->color = $color;
     $this->important = $important;
     $this->css_class = is_array($css_class) ? implode(" ", $css_class) : $css_class;
+
+    $this->mb_object = array("id" => "", "guid" => "", "view" => "");
     
     if (preg_match("/[0-9]+ /", $this->start)) {
       $parts = explode(" ", $this->start);
@@ -96,6 +104,20 @@ class CPlanningEvent  {
   }
 
   /**
+   * assign an object to the event
+   *
+   * @param CMbObject $mbObject mediboard object
+   *
+   * @return void
+   */
+  function setObject($mbObject) {
+    $this->mb_object["id"] = $mbObject->_id;
+    $this->mb_object["class"] = $mbObject->_class;
+    $this->mb_object["guid"] = $mbObject->_guid;
+    $this->mb_object["view"] = utf8_encode($mbObject->_view);
+  }
+
+  /**
    * check if an event collid with another
    *
    * @param CPlanningEvent $event the event to check
@@ -106,7 +128,7 @@ class CPlanningEvent  {
     if ($event == $this || $this->length == 0 || $event->length == 0) {
       return false;
     }
-    
+
     return ($event->start < $this->end && $event->end > $this->start);
   }
 
