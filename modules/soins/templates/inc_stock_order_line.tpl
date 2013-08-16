@@ -66,8 +66,8 @@
         <input type="hidden" name="endowment_item_id" value="{{if isset($stock->_endowment_item_id|smarty:nodefaults)}}{{$stock->_endowment_item_id}}{{/if}}" class="ref" />
         {{mb_field object=$stock field=quantity form="form-dispensation-$stock_id" prop="num notNull min|1" increment=1 size=3 min=1 style=$style}}
       {{/if}}
-      <button type="button" class="comment notext" title="{{tr}}CProductDelivery-comments-desc{{/tr}}" onclick="$(this).up('form').elements.comments.up('.com').show().down('textarea').tryFocus()"></button>
-      <button type="submit" class="tick notext singleclick" title="Dispenser" style="{{$style}}">Dispenser</button>
+      <button type="button" class="comment notext compact" title="{{tr}}CProductDelivery-comments-desc{{/tr}}" onclick="$(this).up('form').elements.comments.up('.com').show().down('textarea').tryFocus()"></button>
+      <button type="submit" class="tick notext singleclick compact" title="Dispenser" style="{{$style}}">Dispenser</button>
       
       {{if $stock->_ref_product->packaging && $qty && !$endowment_id}}
         (soit <input type="text" name="_quantity_package" value="{{if $qty}}1{{else}}0{{/if}}" size="2" 
@@ -85,7 +85,7 @@
   <td style="text-align: left" class="text">
     {{if $stock->_total_quantity}}
       <div title="Dans {{$stock->_ref_deliveries|@count}} commandes">
-        <button class="down notext" type="button" onclick="$(this).up('div').next('table').toggle()"></button>
+        <button class="down notext compact" type="button" onclick="$(this).up('div').next('table').toggle()"></button>
         {{$stock->_total_quantity}}
       </div>
     
@@ -99,7 +99,7 @@
                 <input type="hidden" name="dosql" value="do_delivery_aed" />
                 <input type="hidden" name="del" value="1" />
                 <input type="hidden" name="delivery_id" value="{{$dispensation->_id}}" />
-                <button type="submit" class="cancel notext" title="{{tr}}Cancel{{/tr}}">{{tr}}Cancel{{/tr}}</button>
+                <button type="submit" class="cancel notext compact" title="{{tr}}Cancel{{/tr}}">{{tr}}Cancel{{/tr}}</button>
               </form>
             {{else}}
               <img src="images/icons/tick.png" title="Délivré" />

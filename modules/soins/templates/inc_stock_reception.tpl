@@ -50,23 +50,28 @@ changeReceptionPage = function(start) {
     <th>{{*tr}}CProductDelivery-service_id{{/tr*}}Pour</th>
     <th>{{tr}}CProduct{{/tr}}</th>
     <th colspan="2">Date commande</th>
+    <th>Demandeur</th>
     <th style="white-space: normal;">{{tr}}CProductDelivery-_initial_quantity-court{{/tr}}</th>
     <th>{{tr}}CProductDelivery-quantity-court{{/tr}}</th>
     <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
     <th>
-      <button type="button" onclick="receiveAll('list-reception')" class="tick">Tout recevoir</button>
+      <button type="button" onclick="receiveAll('list-reception')" class="tick compact">Tout recevoir</button>
     </th>
     <th class="narrow">
-      <button type="button" onclick="terminateAll('list-reception')" class="cancel notext">Tout marquer comme terminé (ne met pas à jour le stock du service)</button>
+      <button type="button" onclick="terminateAll('list-reception')" class="cancel notext compact">Tout marquer comme terminé (ne met pas à jour le stock du service)</button>
     </th>
   </tr>
   {{foreach from=$deliveries item=curr_delivery}}
     <tr>
       <td>
         {{if $curr_delivery->patient_id}}
-          {{$curr_delivery->_ref_patient->_view}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_delivery->_ref_sejour->_guid}}')">
+            {{$curr_delivery->_ref_patient->_view}}
+          </span>
         {{else}}
-          {{$curr_delivery->_ref_service->_view}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_delivery->_ref_service->_guid}}')">
+            {{$curr_delivery->_ref_service->_view}}
+          </span>
         {{/if}}
       </td>
       <td>
@@ -101,8 +106,19 @@ changeReceptionPage = function(start) {
           {{mb_value object=$curr_delivery field=comments}}
         {{/if}}
       </td>
-      <td style="text-align: center;">{{mb_ditto name=date value=$curr_delivery->date_dispensation|date_format:$conf.date}}</td>
-      <td style="text-align: center;">{{mb_ditto name=time value=$curr_delivery->date_dispensation|date_format:$conf.time}}</td>
+      <td style="text-align: center;">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_delivery->_guid}}')">
+          {{mb_ditto name=date value=$curr_delivery->date_dispensation|date_format:$conf.date}}
+        </span>
+      </td>
+      <td style="text-align: center;">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_delivery->_guid}}')">
+          {{mb_ditto name=time value=$curr_delivery->date_dispensation|date_format:$conf.time}}
+        </span>
+      </td>
+      <td>
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_delivery->_ref_preparateur}}
+      </td>
       <td style="text-align: right">
         {{if $curr_delivery->_initial_quantity != $curr_delivery->quantity}}
           {{mb_value object=$curr_delivery field=_initial_quantity}}
@@ -110,7 +126,7 @@ changeReceptionPage = function(start) {
       </td>
       <td style="text-align: right">{{mb_value object=$curr_delivery field=quantity}}</td>
       <td>{{mb_value object=$curr_delivery->_ref_stock->_ref_product field=_unit_title}}</td>
-      <td>
+      <td style="padding: 0;">
         <table class="layout">
         {{foreach from=$curr_delivery->_ref_delivery_traces item=trace}}
           <tr>
@@ -125,9 +141,9 @@ changeReceptionPage = function(start) {
                   {{mb_field object=$trace field=quantity increment=1 form=delivery-trace-$id-receive size=2}}
                   {{mb_field object=$trace field=code size=10 title="Code"}}
                   <input type="hidden" name="date_reception" value="now" />
-                  <button type="submit" class="tick notext">Recevoir</button>
+                  <button type="submit" class="tick notext compact">Recevoir</button>
                 {{else}}
-                  <button type="submit" class="cancel notext">Annuler</button>
+                  <button type="submit" class="cancel notext compact">Annuler</button>
                   <span onmouseover="ObjectTooltip.createEx(this, '{{$trace->_guid}}')">
                     {{mb_value object=$trace field=date_reception}} - 
                     <strong>{{mb_value object=$trace field=quantity}} éléments</strong>
@@ -156,7 +172,7 @@ changeReceptionPage = function(start) {
           <input type="hidden" name="dosql" value="do_delivery_aed" />
           {{mb_key object=$curr_delivery}}
           <input type="hidden" name="date_delivery" value="now" />
-          <button type="submit" class="cancel notext">Marquer comme terminé</button>
+          <button type="submit" class="cancel notext compact">Marquer comme terminé</button>
         </form>
       </td>
     </tr>

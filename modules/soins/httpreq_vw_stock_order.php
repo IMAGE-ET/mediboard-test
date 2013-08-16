@@ -50,13 +50,15 @@ $delivrance->_date_max = $date_max;
 
 $group_id = CProductStockGroup::getHostGroup();
 $single_line = false;
-$limit = "$start,20";
+$limit = "$start,25";
 
 $where = array(
   "product.name " . ($letter === "#" ? "RLIKE '^[^A-Z]'" : "LIKE '$letter%'")
 );
 
 if ($endowment_id) {
+  /** @var CProductEndowmentItem[] $endowment_items */
+
   // Toute la liste
   if (!$endowment_item_id) {
     $endowment_item = new CProductEndowmentItem;
@@ -113,6 +115,7 @@ else if ($only_service_stocks == 1 || $only_common == 1) {
     $where['product.name'] = $stock->_spec->ds->prepareLike("%$keywords%");
   }
 
+  /** @var CProductStockService[] $stocks_service */
   $stocks_service = $stock->seek($keywords, $where, $limit, true, $ljoin, 'product.name');
   $count_stocks = $stock->_totalSeek;
 
@@ -144,6 +147,8 @@ else {
   );
 
   $stock = new CProductStockGroup;
+
+  /** @var CProductStockGroup[] $stocks */
   $stocks = $stock->seek($keywords, $where, $limit, true, $ljoin, 'product.name');
   $count_stocks = $stock->_totalSeek;
 

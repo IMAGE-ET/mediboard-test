@@ -26,6 +26,7 @@ $where['quantity']      = " > 0";
 
 $delivery = new CProductDelivery();
 
+/** @var CProductDelivery[] $deliveries */
 $deliveries       = $delivery->loadList($where, $order_by, $mode ? null : intval($start).",30");
 $deliveries_count = $delivery->countList($where);
 
@@ -40,8 +41,10 @@ if (count($deliveries)) {
     $_delivery->loadRefsBack();
     $_delivery->_ref_stock->loadRefsFwd();
     $_delivery->loadRefPatient();
+    $_delivery->loadRefSejour();
     $_delivery->loadRefService();
     $_delivery->getInitialQuantity();
+    $_delivery->loadRefPreparateur();
     
     /*if($_delivery->patient_id){
       $_delivery->loadRefPatient();

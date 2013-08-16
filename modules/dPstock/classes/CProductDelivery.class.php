@@ -70,6 +70,9 @@ class CProductDelivery extends CMbObject {
   /** @var CMediusers */
   public $_ref_preparateur;
 
+  /** @var CMediusers */
+  public $_ref_validateur;
+
   public $_date_min;
   public $_date_max;
   public $_datetime_min;
@@ -90,6 +93,7 @@ class CProductDelivery extends CMbObject {
   public $_code_cip;
   public $_count_delivered;
   public $_preparateur_id;
+  public $_validateur_id;
 
   public $_auto_trace;
 
@@ -146,7 +150,8 @@ class CProductDelivery extends CMbObject {
     $props['_datetime_min']     = 'dateTime notNull';
     $props['_datetime_max']     = 'dateTime notNull moreEquals|_datetime_min';
 
-    $props['_preparateur_id']   = 'ref class|CMediusers';
+    $props['_preparateur_id']   = 'ref class|CMediusers show|1';
+    $props['_validateur_id']    = 'ref class|CMediusers show|1';
     return $props;
   }
 
@@ -255,7 +260,38 @@ class CProductDelivery extends CMbObject {
   function loadRefPreparateur() {
     $this->_preparateur_id = $this->loadFirstLog()->loadRefUser()->_id;
 
-    return $this->_ref_preparateur = $this->loadFwdRef("_preparateur_id");
+    /** @var CMediusers $preparateur */
+    $preparateur = $this->loadFwdRef("_preparateur_id");
+
+    if ($preparateur && $preparateur->_id) {
+      $preparateur->loadRefFunction();
+    }
+
+    return $this->_ref_preparateur = $preparateur;
+  }
+
+  /**
+   * Load validateur
+   *
+   * @return CMediusers|null
+   */
+  function loadRefValidateur() {
+    $order_logs = $this->loadLogsForField("order");
+
+    /** @var CUserLog $last_log */
+    $last_log = end($order_logs);
+
+    if (!$last_log || !$last_log->_id) {
+      return null;
+    }
+
+    $this->_validateur_id = $last_log->user_id;
+
+    /** @var CMediusers $validateur */
+    $validateur = $this->loadFwdRef("_validateur_id");
+    $validateur->loadRefFunction();
+
+    return $this->_ref_validateur = $validateur;
   }
 
   /**
@@ -362,6 +398,16 @@ class CProductDelivery extends CMbObject {
     if (!$this->stock_class) {
       $this->stock_class = "CProductStockGroup";
     }
+  }
+
+  /**
+   * @see parent::loadView()
+   */
+  function loadView(){
+    parent::loadView();
+
+    $this->loadRefPreparateur();
+    $this->loadRefValidateur();
   }
 
   /**

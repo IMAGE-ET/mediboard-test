@@ -209,7 +209,7 @@
 <hr />
 
 {{mb_include module=system template=inc_pagination change_page="changeOrderPage"
-    total=$count_stocks current=$start step=20}}
+    total=$count_stocks current=$start step=25}}
 
 <table class="tbl">
   <tr>
