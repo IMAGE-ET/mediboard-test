@@ -2020,33 +2020,33 @@ tr.show_important {
 }
 
 .item_egal {
-  background: #9f8 !important;
+  background-color: #9f8 !important;
 }
 
 .item_superior {
-  background: #f89 !important;
+  background-color: #f89 !important;
   line-height: 110%;
 }
 
 .item_inferior {
-  background: #fd9 !important;
+  background-color: #fd9 !important;
   line-height: 110%;
 }
 
 tr.consultation_entree td {
-  background: #fc8 !important;
+  background-color: #fc8 !important;
 }
 
 tr.observation_urgente td {
-  background: #faa !important;
+  background-color: #faa !important;
 }
 
 tr.observation_info td {
-  background: #ccf !important;
+  background-color: #ccf;
 }
 
 tr.transmission_haute td {
-  background: #faa !important;
+  background-color: #faa !important;
 }
 
 div.scroll_shadow {
