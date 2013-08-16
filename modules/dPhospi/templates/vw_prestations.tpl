@@ -4,18 +4,18 @@
     url.addParam("prestation_id", prestation_id);
     url.addParam("object_class" , object_class);
     url.requestUpdate('edit_prestation');
-  }
+  };
   
   refreshList = function(prestation_guid) {
     var url = new Url('dPhospi', 'ajax_list_prestations');
     url.addParam('prestation_guid', prestation_guid);
     url.requestUpdate('list_prestations');
-  }
+  };
   
   afterEditPrestation = function(id, obj) {
     editPrestation(id, obj._class);
     refreshList(obj._guid)
-  }
+  };
   
   editItem = function(item_id, object_class, object_id, rank) {
     var url = new Url("dPhospi", "ajax_edit_item_prestation");
@@ -30,7 +30,7 @@
     }
     
     url.requestUpdate("edit_item");
-  }
+  };
   
   refreshItems = function(object_class, object_id, item_id) {
     var url = new Url("dPhospi", "ajax_list_items_prestation");
@@ -38,32 +38,32 @@
     url.addParam("object_id", object_id);
     url.addParam("item_id", item_id);
     url.requestUpdate("list_items");
-  }
+  };
   
   afterEditItem = function(id, obj) {
     editItem(id);
     refreshItems(obj.object_class, obj.object_id, id);
-  }
+  };
   
   updateSelected = function(guid, classname) {
     removeSelected(classname);
     var tr = $(classname+"_" +guid);
     tr.addClassName("selected");
-  }
-  
+  };
+
   removeSelected = function(classname) {
     var tr = $$("tr."+classname+".selected")[0];
     if (tr) {
       tr.removeClassName("selected");
     }
-  }
+  };
   
   reorderItem = function(item_id_move, direction) {
     var url = new Url("dPhospi", "ajax_reorder_item");
     url.addParam("item_id_move", item_id_move);
     url.addParam("direction", direction);
     url.requestUpdate("list_items");
-  }
+  };
   
   Main.add(function() {
     editPrestation('{{$prestation_id}}', '{{$object_class}}');

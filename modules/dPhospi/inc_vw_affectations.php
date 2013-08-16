@@ -137,10 +137,8 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
           $chambre->_nb_affectations++;
           $dossiers[] = $sejour->_ref_patient->_ref_dossier_medical;
 
-          if ($systeme_presta == "expert") {
-            if ($prestation_id) {
-              $sejour->loadLiaisonsForDay($prestation_id, $date);
-            }
+          if ($systeme_presta == "expert" && $prestation_id) {
+            $sejour->loadLiaisonsForDay($prestation_id, $date);
           }
         }
         else {
