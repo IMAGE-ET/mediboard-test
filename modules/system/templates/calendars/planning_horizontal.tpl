@@ -71,7 +71,7 @@
                   <div class="toolbar" style="background:{{$_event->color}} ">
                     {{foreach from=$_event->menu item=element}}
                       <a class="button {{$element.class}} notext"
-                         onclick="window['planning-{{$planning->guid}}'].onMenuClick('{{$element.class}}','{{$_event->guid}}', this)"
+                         onclick="window['planning-{{$planning->guid}}'].onMenuClick('{{$element.class}}','{{$_event->mb_object.id}}', this)"
                          title="{{$element.title}}"></a>
                     {{/foreach}}
                   </div>
@@ -81,7 +81,7 @@
                   <span class="startTime incline" style="background:{{$_event->color}}; {{if $_event->start|date_format:"%H:%M" == "00:00"}}left:-10px;{{/if}}">{{$_event->start|date_format:"%H:%M"}}</span>
                 {{/if}}
 
-                <span class="event_libelle" {{if $_event->_ref_object->_id}}onmouseover="ObjectTooltip.createEx(this,'{{$_event->_ref_object->_guid}}')"{{/if}}>
+                <span class="event_libelle" {{if $_event->mb_object.guid != ""}}onmouseover="ObjectTooltip.createEx(this,'{{$_event->mb_object.guid}}')"{{/if}}>
                   {{if $_event->title}}
                     {{$_event->title|smarty:nodefaults}}
                   {{/if}}
