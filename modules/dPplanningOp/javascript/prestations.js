@@ -15,4 +15,4 @@ Prestations = {
       url.modalObject.observe('afterClose', this.callback);
     }
   }
-}
+};

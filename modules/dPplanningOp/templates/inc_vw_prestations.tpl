@@ -8,7 +8,12 @@
   openModal = function(id_div) {
     var div = $(id_div);
     window.save_checked = div.select("input").pluck("checked");
-    Modal.open(id_div);
+    Modal.open(id_div).observe("afterClose",
+      function() {
+        Control.Modal.close();
+        Prestations.edit('{{$sejour->_id}}');
+      }
+    );
   };
   
   closeModal = function(id_div) {
@@ -163,7 +168,7 @@
                             name="liaisons_j[{{$prestation_id}}][{{$_date}}][souhait][{{$liaison->_id}}]"
                               onclick="
                               {{if $liaison->_id == "temp"}}
-                                switchToNew(this)
+                                switchToNew(this);
                               {{/if}}
                               {{if $_prestation->desire}}
                                 autoRealiser(this);
@@ -194,7 +199,7 @@
                 {{/foreach}}
                 <tr>
                   <td class="button" colspan="2">
-                    <button type="button" class="tick" onclick="Control.Modal.close(); this.form.onsubmit()">{{tr}}Validate{{/tr}}</button>
+                    <button type="button" class="tick" onclick="this.form.onsubmit();Control.Modal.close();">{{tr}}Validate{{/tr}}</button>
                     <button type="button" class="cancel" onclick="closeModal('edit_{{$_date}}')">{{tr}}Close{{/tr}}</button>
                   </td>
                 </tr>
@@ -264,12 +269,7 @@
           {{/if}}
         </tr>
       {{/foreach}}
-      </table>
-      <tr>
-          <td class="button" colspan="{{$colspan}}">
-            <button type="button" class="save" onclick="this.form.onsubmit();">{{tr}}Save{{/tr}}</button>
-            <button type="button" class="cancel" onclick="Control.Modal.close();">{{tr}}Close{{/tr}}</button>
-          </td>
-        </tr>
+    </table>
+    <p style="text-align: center"><button type="button" class="cancel" onclick="Control.Modal.close();">{{tr}}Close{{/tr}}</button></p>
   </form>
 </div>
