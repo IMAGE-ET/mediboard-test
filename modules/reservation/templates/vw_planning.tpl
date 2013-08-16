@@ -367,17 +367,13 @@
     </tr>
     <tr>
       <td>
-        {{if !$readOnly}}
         <a href="#1" onclick="window.calendar_planning.datePicked(new Date(new Date(window.calendar_planning.altElement.defaultValue).setHours('-24')))">&lt;&lt;&lt;</a>
-
         <label>
         Date <input name="date_planning" type="hidden" value="{{$date_planning}}" class="date" onchange="updateSession('date_planning', this.value);"/>
         </label>
         <a href="#1" onclick="window.calendar_planning.datePicked(new Date(new Date(window.calendar_planning.altElement.defaultValue).setHours('+24')))">&gt;&gt;&gt;</a>
-        {{/if}}
       </td>
       <td>
-        {{if !$readOnly}}
           <label>
             Praticien
             <select name="planning_chir_id" onchange="updateSession('planning_chir_id', this.value);">
@@ -385,7 +381,6 @@
               {{mb_include module=mediusers template=inc_options_mediuser list=$praticiens selected=$praticien_id}}
             </select>
           </label>
-        {{/if}}
       </td>
       <td>
         <label>

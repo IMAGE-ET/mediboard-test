@@ -16,5 +16,4 @@ $dPconfig["reservation"] = array(
   "diff_hour_urgence" => "24",
   "display_dossierBloc_button" => false,
   "display_facture_button" => false,
-  "users_onlytoday"  => "",
 );

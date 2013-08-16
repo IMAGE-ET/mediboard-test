@@ -57,12 +57,6 @@
     </tr>
     {{mb_include module=system template=inc_config_bool var=display_dossierBloc_button}}
     {{mb_include module=system template=inc_config_bool var=display_facture_button}}
-
-    <tr>
-      <th class="title" colspan="2">Lecture seule</th>
-    </tr>
-    {{mb_include module=system template=inc_config_str var=users_onlytoday}}
-
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
