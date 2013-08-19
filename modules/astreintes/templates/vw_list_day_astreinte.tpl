@@ -10,17 +10,25 @@
 
 <table class="tbl">
   <tr>
-    <th colspan="2">{{tr}}CPlageAstreinte.For{{/tr}} {{$date|date_format:$conf.longdate}}</th>
+    <th colspan="4">{{tr}}CPlageAstreinte.For{{/tr}} {{$date|date_format:$conf.longdate}}</th>
+  </tr>
+  <tr>
+    <th>Personne</th>
+    <th>Tel</th>
+    <th>libelle</th>
+    <th>Plage</th>
   </tr>
   {{foreach from=$plages_astreinte item=_plage}}
   {{assign var=user value=$_plage->_ref_user}}
     <tr>
       <td style="background:#{{$_plage->_color}};">
-        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_plage->_ref_user}}
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_plage->_ref_user}}<br/>
       </td>
       <td>
-        <img src="style/mediboard/images/buttons/phone.png" alt=""/> {{mb_value object=$_plage field=phone_astreinte}} {{if $_plage->_ref_user->_user_astreinte}}({{mb_value object=$_plage->_ref_user field=_user_astreinte}}){{/if}}
+        <img src="style/mediboard/images/buttons/phone.png" alt=""/> <strong>{{mb_value object=$_plage field=phone_astreinte}}</strong> {{if $_plage->_ref_user->_user_astreinte}}({{mb_value object=$_plage->_ref_user field=_user_astreinte}}){{/if}}
       </td>
+      <td>{{$_plage->libelle}}</td>
+      <td>{{$_plage->start|date_format:"%Hh%M"}} &rarr; {{$_plage->end|date_format:"%Hh%M"}}</td>
     </tr>
   {{foreachelse}}
     <tr>
