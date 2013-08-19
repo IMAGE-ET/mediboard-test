@@ -1,9 +1,9 @@
 <?php
 
 /**
- * maternite
+ * Setup Maternité
  *  
- * @category maternite
+ * @category Maternite
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -11,8 +11,15 @@
  * @link     http://www.mediboard.org
  */
 
+/**
+ * Class CSetupmaternite
+ * Setup Maternité
+ */
 class CSetupmaternite extends CSetup {
-  
+
+  /**
+   * @see parent::__construct()
+   */
   function __construct() {
     parent::__construct();
     

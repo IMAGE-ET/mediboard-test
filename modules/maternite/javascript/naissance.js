@@ -1,3 +1,14 @@
+/**
+ * $Id$
+ *
+ * @category Maternite
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
+ */
+
 Naissance = {
   edit : function(naissance_id, operation_id, sejour_id, provisoire, callback) {
     var url = new Url('maternite', 'ajax_edit_naissance');

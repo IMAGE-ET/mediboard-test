@@ -114,4 +114,3 @@ $locales['mod-maternite-tab-vw_grossesses'] = 'Grossesses';
 $locales['mod-maternite-tab-vw_placement'] = 'Accouchements';
 $locales['module-maternite-court'] = 'Maternité';
 $locales['module-maternite-long'] = 'Maternité';
-?>

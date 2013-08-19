@@ -1,3 +1,13 @@
+{{*
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Maternite
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ *}}
+
 <script type="text/javascript">
   Main.add(function() {
     Calendar.regField(getForm("changeDate").elements["date"], null, {noView: true});

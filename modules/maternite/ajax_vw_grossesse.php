@@ -1,9 +1,9 @@
 <?php
 
 /**
- * maternite
+ * Onglet d'accouchement pour une parturiente en salle d'opération
  *  
- * @category maternite
+ * @category Maternite
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -13,7 +13,7 @@
 
 $operation_id = CValue::get("operation_id");
 
-$operation = new COperation;
+$operation = new COperation();
 $operation->load($operation_id);
 $operation->loadRefPlageOp(1);
 
@@ -27,10 +27,8 @@ $grossesse->_terme_vs_operation = CMbDT::daysRelative($grossesse->terme_prevu, C
 
 $patient = $operation->loadRefPatient();
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("operation", $operation);
 
 $smarty->display("inc_vw_grossesse.tpl");
-
-?>

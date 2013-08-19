@@ -17,15 +17,16 @@ $show_cancelled = CValue::getOrSession("show_cancelled", 0);
 $days_terme = CAppUI::conf("maternite days_terme");
 $date_min = CMbDT::date("- $days_terme days", $date);
 $date_max = CMbDT::date("+$days_terme days", $date);
-$grossesse = new CGrossesse();
 
 $where = array();
 $ljoin = array();
 $where["terme_prevu"] = "BETWEEN '$date_min' AND '$date_max'";
 $ljoin["patients"]    = "patients.patient_id = grossesse.parturiente_id";
 
-/** @var CGrossesse[] $grossesses */
+$grossesse = new CGrossesse();
 $grossesses = $grossesse->loadList($where, "terme_prevu DESC, nom ASC", null, null, $ljoin);
+
+/** @var CStoredObject[] $grossesses */
 CMbObject::massLoadFwdRef($grossesses, "parturiente_id");
 CMbObject::massCountBackRefs($grossesses, "sejours");
 CMbObject::massCountBackRefs($grossesses, "consultations");

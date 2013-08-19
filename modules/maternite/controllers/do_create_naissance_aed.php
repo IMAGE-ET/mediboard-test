@@ -1,9 +1,9 @@
 <?php
 
 /**
- * maternite
+ * Création d'un dossier de naissance
  *  
- * @category maternite
+ * @category Maternite
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -25,7 +25,6 @@ $prenom            = CValue::post("prenom");
 $poids             = CValue::post("poids");
 $taille            = CValue::post("taille");
 $num_naissance     = CValue::post("num_naissance");
-$lieu_accouchement = CValue::post("lieu_accouchement");
 $fausse_couche     = CValue::post("fausse_couche");
 $rques             = CValue::post("rques");
 $constantes_id     = CValue::post("constantes_medicales_id");
@@ -43,6 +42,13 @@ $curr_affect = $sejour->loadRefCurrAffectation();
 $datetime = CMbDT::dateTime();
 $date     = CMbDT::date($datetime);
 
+/**
+ * Fonction utilitaire pour la sauvegarde rapide d'un object avec génération du message
+ *
+ * @param CMbObject $object Objet à enregister
+ *
+ * @return void
+ */
 function storeObject($object) {
   $title = $object->_id ? "-msg-modify" : "-msg-create";
   if ($msg = $object->store()) {
@@ -114,7 +120,6 @@ if (!$naissance_id) {
   $naissance->heure             = $heure;
   $naissance->hors_etab         = $hors_etab;
   $naissance->num_naissance     = $num_naissance;
-  $naissance->lieu_accouchement = $lieu_accouchement;
   $naissance->fausse_couche     = $fausse_couche;
   $naissance->rques             = $rques;
   storeObject($naissance);
@@ -127,7 +132,6 @@ else {
   $naissance->rang              = $rang;
   $naissance->hors_etab         = $hors_etab;
   $naissance->num_naissance     = $num_naissance;
-  $naissance->lieu_accouchement = $lieu_accouchement;
   $naissance->fausse_couche     = $fausse_couche;
   $naissance->rques             = $rques;
 

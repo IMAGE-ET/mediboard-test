@@ -1,14 +1,17 @@
 <?php
 
 /**
- * maternite
- *  
- * @category maternite
+ * $Id: $
+ *
+ * @category Maternité
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @link     http://www.mediboard.org
+ */
+
+/**
+ * Gestion des grossesses d'une parturiente
  */
 
 class CGrossesse extends CMbObject{
@@ -45,14 +48,20 @@ class CGrossesse extends CMbObject{
   public $_terme_vs_operation;
   public $_operation_id;
   public $_allaitement_en_cours;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'grossesse';
     $spec->key   = 'grossesse_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["parturiente_id"] = "ref notNull class|CPatient";
@@ -72,7 +81,10 @@ class CGrossesse extends CMbObject{
     $specs["rques"]             = "text helped";
     return $specs;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["naissances"] = "CNaissance grossesse_id";
@@ -80,40 +92,72 @@ class CGrossesse extends CMbObject{
     $backProps["sejours"] = "CSejour grossesse_id";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadRefParturiente();
   }
-  
+
+  /**
+   * Chargement de la parturiente
+   *
+   * @return CMediusers
+   */
   function loadRefParturiente() {
     return $this->_ref_parturiente = $this->loadFwdRef("parturiente_id", true);
   }
-  
+
+  /**
+   * Chargement des naissances associées à la grossesse
+   *
+   * @return CNaissance[]
+   */
   function loadRefsNaissances() {
     return $this->_ref_naissances = $this->loadBackRefs("naissances");
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefParturiente();
     $this->_view = "Terme du " . CMbDT::dateToLocale($this->terme_prevu);
     // Nombre de semaines (aménorrhée = 41, grossesse = 39)
     $this->_date_fecondation = CMbDT::date("-41 weeks", $this->terme_prevu);
-    $this->_allaitement_en_cours = $this->allaitement_maternel && !$this->active && (!$this->date_fin_allaitement || $this->date_fin_allaitement > CMbDT::date());
+    $this->_allaitement_en_cours =
+      $this->allaitement_maternel && !$this->active && (!$this->date_fin_allaitement || $this->date_fin_allaitement > CMbDT::date());
     $this->_semaine_grossesse = ceil(CMbDT::daysRelative($this->_date_fecondation, CMbDT::date()) / 7);
   }
-  
+
+  /**
+   * Chargement des séjours associés à la grossesse
+   *
+   * @return CSejour[]
+   */
   function loadRefsSejours() {
     return $this->_ref_sejours = $this->loadBackRefs("sejours");
   }
-  
+
+  /**
+   * Chargement des consultations associées à la grossesse
+   *
+   * @return CConsultation[]
+   */
   function loadRefsConsultations() {
     if ($this->_ref_consultations) {
       return $this->_ref_consultations;
     }
     return $this->_ref_consultations = $this->loadBackRefs("consultations");
   }
-  
+
+  /**
+   * Chargement de la dernière consultation d'anesthésie pour une grossesse
+   *
+   * @return CConsultation
+   */
   function loadLastConsultAnesth() {
     $consultations = $this->loadRefsConsultations();
     foreach ($consultations as $_consultation) {
@@ -122,9 +166,12 @@ class CGrossesse extends CMbObject{
         return $this->_ref_last_consult_anesth = $_consultation;
       }
     }
-    return $this->_ref_last_consult_anesth = new CConsultation;
+    return $this->_ref_last_consult_anesth = new CConsultation();
   }
-  
+
+  /**
+   * @see parent::loadView()
+   */
   function loadView() {
     parent::loadView();
     $naissances = $this->loadRefsNaissances();
@@ -135,7 +182,10 @@ class CGrossesse extends CMbObject{
       $_naissance->loadRefSejourEnfant()->loadRefPatient();
     }
   }
-  
+
+  /**
+   * @see parent::delete()
+   */
   function delete() {
     $consults = $this->loadRefsConsultations();
     $sejours  = $this->loadRefsSejours();

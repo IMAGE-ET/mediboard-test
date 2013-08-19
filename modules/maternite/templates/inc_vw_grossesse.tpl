@@ -16,7 +16,7 @@
 {{/if}}
 
 <h1 style="text-align: center;">
-  Semaine {{$grossesse->_semaine_grossesse}} &mdash; Terme {{$grossesse->_terme_vs_operation}}j
+  Semaine {{$grossesse->_semaine_grossesse}} &mdash; Terme {{if $grossesse->_terme_vs_operation >= 0}}+{{/if}}{{$grossesse->_terme_vs_operation}}j
 </h1>
 <table class="main">
   

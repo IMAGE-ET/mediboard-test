@@ -1,14 +1,17 @@
 <?php
 
 /**
- * maternite
- *  
- * @category maternite
+ * $Id: $
+ *
+ * @category Maternité
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @link     http://www.mediboard.org
+ */
+
+/**
+ * Gestion des dossiers de naissance associés aux grossesses.
  */
 
 class CNaissance extends CMbObject {

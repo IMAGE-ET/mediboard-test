@@ -1,9 +1,9 @@
 <?php
 
 /**
- * maternite
+ * Création d'un dossier provisoire
  *  
- * @category maternite
+ * @category Maternite
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -25,6 +25,13 @@ $parturiente = $sejour->loadRefPatient();
 $grossesse   = $sejour->loadRefGrossesse();
 $curr_affect = $sejour->loadRefCurrAffectation();
 
+/**
+ * Fonction utilitaire pour la sauvegarde rapide d'un object avec génération du message
+ *
+ * @param CMbObject $object Objet à enregister
+ *
+ * @return void
+ */
 function storeObject($object) {
   $title = $object->_id ? "-msg-modify" : "-msg-create";
   if ($msg = $object->store()) {

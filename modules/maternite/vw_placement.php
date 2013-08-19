@@ -39,12 +39,18 @@ $where["operations.date"]     = "= '$date'";
 $where["operations.chir_id"]  = CSQLDataSource::prepareIn(array_keys($listChirs));
 $where["sejour.grossesse_id"] = "IS NOT NULL";
 
-/** @var COperation[] $urgences */
+/** @var CStoredObject[] $urgences */
 $urgences = $operation->loadGroupList($where, "salle_id, chir_id", null, null, $ljoin);
 
 $reservation_installed = CModule::getActive("reservation");
 $diff_hour_urgence = CAppUI::conf("reservation diff_hour_urgence");
 
+$sejours  = CMbObject::massLoadFwdRef($urgences, "sejour_id");
+$patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
+
+$plage = new CPlageOp();
+
+/** @var COperation[] $urgences */
 foreach ($urgences as &$urgence) {
   $urgence->loadRefsFwd();
   $urgence->loadRefAnesth();
@@ -75,7 +81,7 @@ foreach ($urgences as &$urgence) {
   $where["date"] = "= '$date'";
   $where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
   $order = "salle_id, debut";
-  $plage = new CPlageOp();
+
   $urgence->_alternate_plages = $plage->loadList($where, $order);
   foreach ($urgence->_alternate_plages as $curr_plage) {
     $curr_plage->loadRefsFwd();

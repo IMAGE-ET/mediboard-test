@@ -1,9 +1,9 @@
 <?php
 
 /**
- * maternite
+ * Liste des admissions des parturientes
  *  
- * @category maternite
+ * @category Maternite
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -16,7 +16,7 @@ $view = CValue::getOrSession("view", "all");
 
 $ds = CSQLDataSource::get("std");
 $group = CGroups::loadCurrent();
-$bank_holidays = CMbDT::bankHolidays($date);
+$bank_holidays = CMbDate::getHolidays($date);
 $next          = CMbDT::date("+1 DAY", $date);
 $month_min     = CMbDT::transform("+ 0 month", $date, "%Y-%m-01");
 $month_max     = CMbDT::transform("+ 1 month", $month_min, "%Y-%m-01");
@@ -64,7 +64,7 @@ foreach ($ds->loadHashList($query) as $day => $num2) {
 
 // Liste des admissions non préparées
 $query = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
-    FROM `sejour`
+  FROM `sejour`
   WHERE `sejour`.`entree` BETWEEN '$month_min' AND '$month_max'
     AND `sejour`.`group_id` = '$group->_id'
     AND `sejour`.`entree_preparee` = '0'
@@ -76,7 +76,7 @@ foreach ($ds->loadHashList($query) as $day => $num3) {
   $days[$day]["num3"] = $num3;
 }
 
-$sejour = new CSejour;
+$sejour = new CSejour();
 
 $sejour->type_pec = "O";
 $ljoin = array();
@@ -99,11 +99,13 @@ $sejours = $sejour->loadList($where, "patients.nom ASC", null, null, $ljoin);
 
 CMbObject::massLoadFwdRef($sejours, "patient_id");
 CMbObject::massLoadFwdRef($sejours, "grossesse_id");
+CMbObject::massCountBackRefs($sejours, "operations");
 
+/** @var  $sejours CSejour[] */
 foreach ($sejours as $_sejour) {
   $_sejour->loadRefPatient();
   $_sejour->loadRefsOperations();
-  
+
   $grossesse = $_sejour->loadRefGrossesse();
   $grossesse->_praticiens = CMbObject::massLoadFwdRef($grossesse->loadRefsSejours(), "praticien_id");
   $grossesse->_praticiens+= CMbObject::massLoadFwdRef($grossesse->loadRefsConsultations(), "_prat_id");
@@ -122,7 +124,7 @@ foreach ($sejours as $_sejour) {
   }
 }
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("sejours", $sejours);
 $smarty->assign("days"   , $days);
@@ -135,4 +137,3 @@ $smarty->assign("next_month" , $next_month);
 $smarty->assign("bank_holidays", $bank_holidays);
 
 $smarty->display("vw_admissions.tpl");
-?>

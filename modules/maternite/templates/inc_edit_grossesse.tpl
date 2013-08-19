@@ -1,3 +1,13 @@
+{{*
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Maternite
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ *}}
+
 <form name="editFormGrossesse" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="maternite"/>
   <input type="hidden" name="dosql" value="do_grossesse_aed" />

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * maternite
+ * Onglets du module Maternité
  *  
- * @category maternite
+ * @category Maternite
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -17,5 +17,3 @@ $module->registerTab("vw_admissions"      , TAB_READ);
 $module->registerTab("vw_grossesses"      , TAB_READ);
 $module->registerTab("vw_placement"       , TAB_READ);
 $module->registerTab("vw_consultations"   , TAB_READ);
-
-?>
