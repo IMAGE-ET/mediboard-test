@@ -592,8 +592,16 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $template->addProperty("Anesthésie - Examen pulmonaire"         , $this->examenPulmo);
     $template->addProperty("Anesthésie - Examen digestif"           , $this->examenDigest);
     $template->addProperty("Anesthésie - Examen autre"              , $this->examenAutre);
-    
+
     $template->addProperty("Anesthésie - Ouverture de la bouche"    , $this->getFormattedValue('bouche'), null, false);
+
+    $ventilation = $this->plus_de_55_ans ? "Plus de 55 ans, ": "";
+    $ventilation.= $this->imc_sup_26 ? "IMC > 26Kg/m², ":"";
+    $ventilation.= $this->edentation ? "Edentation, ": "";
+    $ventilation.= $this->ronflements ? "Ronflements, ": "" ;
+    $ventilation.= $this->barbe ? "Barbe": "" ;
+    $template->addProperty("Anesthésie - Critères de ventilation"   , $ventilation ? $ventilation : "Aucun", null, false);
+
     $template->addProperty("Anesthésie - Distance thyro-mentonnière", $this->getFormattedValue('distThyro'), null, false);
     $template->addProperty("Anesthésie - Etat bucco-dentaire"       , $this->etatBucco);
     $img = "";
