@@ -94,13 +94,13 @@ class CMySQLSessionHandler implements ISessionHandler {
     $user_agent = CValue::read($_SERVER, "HTTP_USER_AGENT");
     $expire = time() + $this->lifetime;
 
-    $query = "INSERT INTO session (`session_id`, `user_ip`, `user_agent`, `expire`, `data`)
-      VALUES (%1, %2, %3, %4, %5)
+    $query = "INSERT INTO session (`session_id`, `user_id`, `user_ip`, `user_agent`, `expire`, `data`)
+      VALUES (%1, %2, %3, %4, %5, %6)
       ON DUPLICATE KEY UPDATE
-        `data`   = %6,
-        `expire` = %7";
+        `data`   = %7,
+        `expire` = %8";
 
-    $query = $ds->prepare($query, $session_id, $user_ip, $user_agent, $expire, $data, $data, $expire);
+    $query = $ds->prepare($query, $session_id, CAppUI::$instance->user_id, $user_ip, $user_agent, $expire, $data, $data, $expire);
 
     if (!$ds->query($query)) {
       return false;
