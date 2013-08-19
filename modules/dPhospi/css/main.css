@@ -23,6 +23,7 @@ div.hatching {
 td.mouvement_lit {
   padding-bottom: 0;
   padding-top: 0;
+  vertical-align: top !important;
 }
 
 td.current_hour {

@@ -503,14 +503,14 @@ var Calendar = {
       timePicker: false,
       altElement: element,
       altFormat: 'yyyy-MM-dd',
-      icon: window.Mobile?"mobile/images/icons/calendar.gif":"images/icons/calendar.gif",
+      icon: "images/icons/calendar.gif",
       locale: "fr_FR",
-      timePickerAdjacent: !window.Mobile,
+      timePickerAdjacent: true,
       use24hrs: true,
       weekNumber: true,
       container: $(document.body),
       dateProperties: function(date){return Calendar.dateProperties(date, dates)},
-      center: window.Mobile,
+      center: false,
       editable: false
     }, options);
 
@@ -525,10 +525,6 @@ var Calendar = {
       element.insert({before: elementView});
     }
 
-    if(window.Mobile) {
-      elementView.disabled = "disabled";
-    }
-
     if (element.hasClassName('dateTime')) {
       options.timePicker = true;
       options.altFormat = 'yyyy-MM-dd HH:mm:ss';
@@ -537,7 +533,7 @@ var Calendar = {
       options.timePicker = true;
       options.datePicker = false;
       options.altFormat = 'HH:mm:ss';
-      options.icon = window.Mobile ? "mobile/images/icons/time.png" : "images/icons/time.png";
+      options.icon = "images/icons/time.png";
     }
 
     var datepicker = new Control.DatePicker(elementView, options);
@@ -596,28 +592,7 @@ var Calendar = {
       }
     }
     else {
-      if(window.Mobile) {
-        var div = new Element ('div',{style: 'position:absolute;opacity:0;'});
-        var parent = elementView.up();
-        // solution pour éviter de créer plusieurs div quand les pages sont chargées en ajax
-        // les insertions se font sur "content" et "content" n'est pas rafraichi
-        // trouver un id
-        parent.insert(div);
-        div.clonePosition(elementView);
-        var pos = elementView.cumulativeOffset();
-
-        div.observe('click', function(e){
-          Event.stop(e);
-          this.show.bind(datepicker)(e);
-
-          if(!this.datepicker.element) return;
-          $(this.datepicker.element).centerHV(pos.top);
-          Calendar.mobileHide(datepicker);
-        }.bindAsEventListener(datepicker));
-      }
-      else {
-        elementView.observe('click', showPicker).observe('focus', showPicker);
-      }
+      elementView.observe('click', showPicker).observe('focus', showPicker);
     }
 
     // We update the view

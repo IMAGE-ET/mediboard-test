@@ -35,8 +35,6 @@ PlageConsultation  = {
     }
 
     if (form.nbaffected.value!= 0 && form.nbaffected.value != "") {
-      Console.debug(form.debut.value);
-      Console.debug(form.fin.value);
       if (form.debut.value > form._firstconsult_time.value || form.fin.value < form._lastconsult_time.value){
         if (!(confirm("Certaines consultations se trouvent en dehors de la plage de consultation.\n\nVoulez-vous appliquer les modifications ?"))){
           return false;

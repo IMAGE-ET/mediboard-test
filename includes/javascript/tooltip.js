@@ -142,16 +142,29 @@ var ObjectTooltip = Class.create({
     if (!eTrigger || this.dontShow) return; // necessary, unless it throws an error some times (why => ?)
 
     var dim = eTrigger.getDimensions();
-    
+
+    var offset = eTrigger.cumulativeOffset();
+    var vpScroll = ViewPort.getScrollOffset();
+    var delta = eTrigger.cumulativeScrollOffset();
+    var parent = eTooltip.getOffsetParent();
+
+    if (parent != document.body) {
+      var parentOffset = parent.cumulativeOffset();
+      delta.top += parentOffset.top;
+      delta.left += parentOffset.left;
+    }
+
+    offset.top  += vpScroll.top  - delta.top  + (App.touchDevice ? -eTooltip.getHeight() : dim.height);
+    offset.left += vpScroll.left - delta.left + Math.min(dim.width, 20);
+
     eTooltip.show()
-        .setStyle({marginTop: 0, marginLeft: 0})
-        .clonePosition(eTrigger, {
-          offsetTop: (App.touchDevice ? -eTooltip.getHeight() : dim.height), 
-          offsetLeft: Math.min(dim.width, 20), 
-          setWidth: false, 
-          setHeight: false
-        })
-        .unoverflow(20);
+      .setStyle({
+        marginTop: 0,
+        marginLeft: 0,
+        top: offset.top+"px",
+        left: offset.left+"px"
+      })
+      .unoverflow(20);
         
     this.setScrollTop();
   },

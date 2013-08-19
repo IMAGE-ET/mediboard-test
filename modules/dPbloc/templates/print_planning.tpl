@@ -65,13 +65,12 @@ function printFullPlanning(form) {
   url.addElement(form._date_max);
   url.addRadio(form._ranking);
   url.addParam("_bloc_id[]", $V(form.elements["_bloc_id[]"]), true);
-  console.log(url);
   url.popup(900, 550, 'Planning');
 }
 
 function togglePrintFull(status) {
   var print_button = $("print_button");
-  $("print_button").setAttribute("onclick", status ? "printFullPlanning(this.form)" : "checkFormPrint(this.form)");
+  print_button.setAttribute("onclick", status ? "printFullPlanning(this.form)" : "checkFormPrint(this.form)");
   $$(".not-full").invoke(status ? "addClassName" : "removeClassName", "opacity-30");
 }
 

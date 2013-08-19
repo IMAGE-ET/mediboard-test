@@ -15,7 +15,7 @@
 
 <th class="text first_cell"
   {{if !$in_corridor}}
-    onclick="chooseLit('{{$_lit->_id}}'); this.down().checked = 'checked';"
+    onclick="chooseLit('{{$_lit->_id}}'); this.down('input').checked = 'checked';"
   {{/if}}
   style="text-align: left; {{if $_lit->_lines|@count}}height: {{math equation=x*y x=$_lit->_lines|@count y=$height_affectation}}em{{/if}}"
   data-rank="{{$_lit->_selected_item->rank}}">
@@ -62,7 +62,7 @@
 {{foreach from=0|range:$nb_ticks_r item=_i}}
   {{assign var=datetime value=$datetimes.$_i}}
   <td class="mouvement_lit {{if $datetime == $current}}current_hour{{/if}}"
-    data-date="{{$datetime}}" style="vertical-align: top"
+    data-date="{{$datetime}}"
       {{if $in_corridor && $_i == 0}}
         {{if $_lit->_affectation_id}}
           id="wrapper_line_{{$_lit->_affectation_id}}"
@@ -137,7 +137,7 @@
             {{else}}
               data-patient_id="{{$patient->_id}}"
               data-sejour_id="{{$sejour->_id}}"
-              data-affectations_enfant="{{'-'|implode:$object->_sejours_enfants_ids}}";
+              data-affectations_enfant="{{'-'|implode:$object->_sejours_enfants_ids}}"
             {{/if}}
 
             style="left: {{$offset}}%; width: {{$width}}%; border: 1px solid #{{$color}}; margin-left: 15.1%;
@@ -160,23 +160,23 @@
                 {{math equation=(x/y)*100 x=$_operation->_debut_offset.$object_id y=$object->_width assign=offset_op}}
                 {{math equation=(x/y)*100 x=$_operation->_width.$object_id y=$object->_width assign=width_op}}
                 <div class="operation_in_mouv {{if $mode_vue_reelle == "compacte"}}compacte{{/if}} opacity-40"
-                     style="left: {{$offset_op}}%; width: {{$width_op}}%; z-index: -1;"></div>
+                     style="left: {{$offset_op}}%; width: {{$width_op}}%; z-index: 0;"></div>
                 {{if $_operation->duree_uscpo}}
                   {{math equation=x+y x=$offset_op y=$width_op assign=offset_uscpo}}
                   {{math equation=x/y*100 x=$_operation->_width_uscpo.$object_id y=$object->_width assign=width_uscpo}}
                   <div class="soins_uscpo {{if $mode_vue_reelle == "compacte"}}compacte{{/if}} opacity-40"
-                       style="left: {{$offset_uscpo}}%; width: {{$width_uscpo}}%; z-index: -1;"></div>
+                       style="left: {{$offset_uscpo}}%; width: {{$width_uscpo}}%; z-index: 0;"></div>
                 {{/if}}
               {{/foreach}}
               {{if $is_aff && $object->_width_prolongation && $object->_is_prolong}}
                 {{math equation=(x/y)*100 x=$object->_start_prolongation y=$object->_width_prolongation assign=offset_prolongation}}
                 {{math equation=(x/y)*100 x=$object->_width_prolongation y=$object->_width_prolongation assign=width_prolongation}}
                 <div class="prolongation {{if $mode_vue_reelle == "compacte"}}compacte{{/if}} opacity-60"
-                     style="left: {{$offset_prolongation}}%; width: {{$width_prolongation}}%; z-index: -1;"></div>
+                     style="left: {{$offset_prolongation}}%; width: {{$width_prolongation}}%; z-index: 0;"></div>
               {{/if}}
 
             {{if !$readonly}}
-            <table class="layout_affectation">
+            <table class="layout_affectation" style="z-index: 2; position: relative;">
               <tr>
                 {{if $sejour->_id && $mode_vue_reelle == "classique"}}
                   <td class="narrow" style="vertical-align: top; padding-right: 2px !important;">
@@ -198,7 +198,7 @@
                       {{if $sejour->recuse == "-1"}}[Att] {{/if}}{{$patient->nom}} {{if $patient->nom_jeune_fille}}({{$patient->nom_jeune_fille}}) {{/if}}{{$patient->prenom}}
                     </span>
 
-                    <!-- Traitement (suisse)-->
+                    {{* Traitement (suisse) *}}
                     {{if $conf.ref_pays == 2}}
                       <strong>{{$sejour->_ref_charge_price_indicator->code}}</strong>
                     {{/if}}
@@ -313,8 +313,8 @@
                 var element = drgObj.element;
                 element.save_left = element.getStyle("left");
                 element.save_width = element.getStyle("width");
-                var table = element.up('table')
-                var left = element.cumulativeOffset().left
+                var table = element.up('table');
+                var left = element.cumulativeOffset().left;
                 var width = element.getWidth();
                 //var top = element.viewportOffset().top - element.cumulativeScrollOffset().top;
 
@@ -372,13 +372,7 @@
       {{/foreach}}
     {{/foreach}}
     {{if !$_lit->_lines|@count}}
-      <table style="display: none;">
-        <tr>
-          <td>
-            <span class="CPatient-view"></span>
-          </td>
-        </tr>
-      </table>
+      <span class="CPatient-view" style="display: none;"></span>
     {{/if}}
   {{/if}}
 </td>

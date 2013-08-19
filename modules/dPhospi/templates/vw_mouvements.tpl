@@ -5,32 +5,49 @@
   
   Main.add(function() {
     Calendar.regField(getForm('filterMouv').date);
+
+    var vp_height = document.viewport.getHeight();
+
     var view_affectations = $("view_affectations");
-    view_affectations.setStyle(
-      { height: document.viewport.getHeight()*(0.59)+"px"
-      });
+    view_affectations.setStyle({
+      height: vp_height*0.59+"px"
+    });
+
     var list_affectations = $("list_affectations");
-    list_affectations.setStyle(
-      { height: document.viewport.getHeight()*(0.3)+"px"
-      });
-    refreshMouvements(loadNonPlaces.curry(function() {
-      var time_line_temporelle = $("time_line_temporelle");
-      var time_line_temporelle_na = $("time_line_temporelle_non_affectes");
-      window.top_tempo = time_line_temporelle.getStyle("top");
-      time_line_temporelle.setStyle({top: window.top_tempo});
-      window.top_tempo_na = time_line_temporelle_na.getStyle("top");
-      time_line_temporelle_na.setStyle({top: window.top_tempo_na});
+    list_affectations.setStyle({
+      height: vp_height*0.3+"px"
+    });
 
-      var time_line_temporelle = $("time_line_temporelle");
-      var tableau_vue_temporelle = $("tableau_vue_temporel");
-      var view_affectations = $("view_affectations");
-      time_line_temporelle.setStyle({width: tableau_vue_temporelle.getWidth()+"px" });
-
+    if (!window.events_attached) {
       Event.observe(window, "resize", function(e){
-        time_line_temporelle.setStyle({width: tableau_vue_temporelle.getWidth()+"px" });
+        $("time_line_temporelle").style.width = $("tableau_vue_temporel").getWidth()+"px";
       });
 
-      if (!Prototype.Browser.IE)  {
+      window.events_attached = true;
+    }
+
+    refreshMouvements(loadNonPlaces.curry(function() {
+      var time_line_temporelle    = $("time_line_temporelle");
+      var time_line_temporelle_na = $("time_line_temporelle_non_affectes");
+
+      window.top_tempo = time_line_temporelle.getStyle("top");
+      time_line_temporelle.setStyle({
+        top: window.top_tempo
+      });
+
+      window.top_tempo_na = time_line_temporelle_na.getStyle("top");
+      time_line_temporelle_na.setStyle({
+        top: window.top_tempo_na
+      });
+
+      var tableau_vue_temporelle = $("tableau_vue_temporel");
+      time_line_temporelle.setStyle({
+        width: tableau_vue_temporelle.getWidth()+"px"
+      });
+
+      var view_affectations = $("view_affectations");
+
+      if (!Prototype.Browser.IE) {
         view_affectations.on('scroll', function() {
           time_line_temporelle.setClassName('scroll_shadow', view_affectations.scrollTop);
         });

@@ -571,6 +571,13 @@ var ViewPort = {
     var fFrameHeight = fNavHeight - fYFramePos;
     
     element.setAttribute("height", fFrameHeight - options.marginBottom);
+  },
+
+  getScrollOffset: function() {
+    return {
+      top:  document.documentElement.scrollTop  || document.body.scrollTop,
+      left: document.documentElement.scrollLeft || document.body.scrollLeft
+    };
   }
 };
 

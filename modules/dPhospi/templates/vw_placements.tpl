@@ -121,7 +121,10 @@
     });
     after_refresh = after_refresh || Prototype.emptyFunction;
     var url = new Url("hospi", "ajax_vw_non_places");
-    url.requestUpdate("list_affectations", after_refresh);
+    url.requestUpdate("list_affectations", {
+      onComplete: after_refresh,
+      coverIE: false
+    });
   }
  
   changeLit = function(affectation_id, link_affectation, datetime) {
@@ -249,13 +252,19 @@
   }
   
   makeDragVisible = function(container,element) {
-    if(!container || !element) { return false; }
-        var i=$(container).getStyle('width');
-        i=i.replace('px','');
-        i=Math.round(i-20)+'px';
-        element.setStyle({'width':i,'z-index':2000,'position':'absolute','cursor':'move'});
+    if(!container || !element) {
+      return false;
+    }
 
-    $(container).setStyle({});
+    var i = $(container).getStyle('width');
+    i = i.replace('px','');
+    i = Math.round(i-20)+'px';
+    element.setStyle({
+      'width':i,
+      'z-index':2000,
+      'position':'absolute',
+      'cursor':'move'
+    });
   }
   
   togglePlayPause = function(button) {
@@ -335,9 +344,10 @@
       after_refresh = Prototype.emptyFunction;
     }
     if (lit_id) {
+      var form = getForm('filterMouv');
+
       var url = new Url("dPhospi", "ajax_refresh_line_lit");
       url.addParam("lit_id", lit_id);
-      var form = getForm('filterMouv');
       url.addParam("date", $V(form.date));
       url.addParam("mode_vue_tempo", $V(form.mode_vue_tempo));
       url.addParam("prestation_id", $V(form.prestation_id));
@@ -367,7 +377,13 @@
           tableau_vue_temporel.select(".mouvement_lit").invoke("stopObserving", "dblclick");
         }
       {{/if}}
-      return onSubmitFormAjax(getForm('filterMouv'), after_refresh, 'view_affectations');
+
+      var target = $('view_affectations');
+
+      return onSubmitFormAjax(getForm('filterMouv'), {
+        onComplete: after_refresh,
+        coverIE: false
+      }, target);
     }
   }
 

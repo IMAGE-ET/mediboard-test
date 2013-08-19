@@ -1,7 +1,6 @@
 {{if !$readonly}}
   <script>
     Main.add(function() {
-      var time_line_temporelle = $("time_line_temporelle");
       var tableau_vue_temporelle = $("tableau_vue_temporel");
       var view_affectations = $("view_affectations");
       view_affectations.scrollTop = 0;

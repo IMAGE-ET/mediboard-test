@@ -221,8 +221,8 @@ $library->fileName = "scriptaculous-js-1.9.0.zip";
 $library->description = "Composant Javascript d'effets spéciaux, accompagné du framework prototype.js";
 $library->sourceDir = "scriptaculous-js-1.9.0";
 $library->targetDir = "scriptaculous";
-$library->versionFile = "CHANGELOG";
-$library->versionString = "*V1.9.0*";
+$library->versionFile = "lib/prototype.js";
+$library->versionString = "Version: '1.7.1'";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "scriptaculous";

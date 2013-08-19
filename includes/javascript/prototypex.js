@@ -296,17 +296,6 @@ else {
   };
 }
 
-if (Prototype.Browser.IE && document.documentMode >= 10) {
-  Element.addMethods({
-    setOpacity: function(element, value) {
-      element = $(element);
-      element.style.opacity = (value == 1 || value === '') ? '' :
-        (value < 0.00001) ? 0 : value;
-      return element;
-    }
-  });
-}
-
 Class.extend(Ajax.Request, {
   abort: function() {
     this.transport.abort();
@@ -337,17 +326,6 @@ Class.extend(Array, {
 }).defer();
 
 Element.addMethods({
-  // To fix a bug in Prototype 1.6.0.3 (no need to patch the lib)
-  getOffsetParent: function(element) {
-    if (element.offsetParent) return $(element.offsetParent);
-    if (element == document.body) return $(element);
-
-    while ((element = element.parentNode) && element != document.body && element != document) // Added " && element != document"
-      if (Element.getStyle(element, 'position') != 'static')
-        return $(element);
-
-    return $(document.body);
-  },
   absolutize: function (element) {
     element = $(element);
 
@@ -357,7 +335,7 @@ Element.addMethods({
 
     var offsetParent = element.getOffsetParent();
     var eOffset = element.viewportOffset(),
-     pOffset = offsetParent.viewportOffset();
+        pOffset = offsetParent.viewportOffset();
 
     var offset = eOffset.relativeTo(pOffset);
     var layout = element.getLayout();
@@ -951,7 +929,7 @@ Object.extend(String, {
 
 Class.extend(String, {
   trim: function() {
-    return this.replace(/^\s+|\s+$/g, "");
+    return this.strip();
   },
   pad: function(ch, length, right) {
     length = length || 30;
@@ -1059,34 +1037,6 @@ if (Prototype.Browser.IE) {
     }
   });
 }
-
-/**
- * Improves image resampling of big images in Firefox
- * @param {Object} element
- */
-Element.addMethods("img", {
-  resample: function(element){
-    if (!Prototype.Browser.Gecko || !element.getAttribute("width") && !element.getAttribute("height"))
-      return element;
-
-    element.onload = function() {
-      if (element.naturalWidth < 500 && element.naturalHeight < 200) return;
-
-      var canvas = document.createElement("canvas");
-      canvas.height = canvas.width * (element.height / element.width);
-      var ctx = canvas.getContext("2d");
-
-      ctx.scale(0.5, 0.5);
-      ctx.drawImage(element, 0, 0);
-      element.src = canvas.toDataURL();
-      element.onload = null;
-    };
-
-    if (element.complete) element.onload();
-
-    return element;
-  }
-});
 
 PeriodicalExecuter.addMethods({
   resume: function() {
