@@ -1,11 +1,12 @@
-<?php /* $Id: vw_prestations.php $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpersonnel
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $prestation = mbGetObjectFromGet("object_class", "object_id");
@@ -25,4 +26,3 @@ $smarty->assign("prestation", $prestation);
 
 $smarty->display("inc_list_items_prestation.tpl");
 
-?>

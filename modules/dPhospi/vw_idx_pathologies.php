@@ -1,11 +1,13 @@
 <?php
-
 /**
-* @package Mediboard
-* @subpackage dPhospi
-* @version $Revision:
-* @author Alexis Granger
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
@@ -31,7 +33,7 @@ if (CCanDo::edit()) {
   
   // Admissions du matin
   $where = array(
-    "entree_prevue" => "BETWEEN '$date 00:00:00' AND '$date ".CMbDT::time("-1 second",$heureLimit)."'",
+    "entree_prevue" => "BETWEEN '$date 00:00:00' AND '$date ".CMbDT::time("-1 second", $heureLimit)."'",
     "type" => "!= 'exte'",
     "annule" => "= '0'"
   );
@@ -69,4 +71,3 @@ $smarty->assign("heureLimit"            , $heureLimit);
 $smarty->assign("groupSejourNonAffectes", $groupSejourNonAffectes);
 $smarty->display("vw_idx_pathologies.tpl");
 
-?>

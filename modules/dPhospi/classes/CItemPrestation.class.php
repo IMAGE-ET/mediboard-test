@@ -1,34 +1,44 @@
-<?php /* $Id: CItemPrestation.class.php $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpersonnel
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * Items de prestation
+ */
 class CItemPrestation extends CMbMetaObject{
   // DB Table key
-  var $item_prestation_id = null;
+  public $item_prestation_id;
   
   // DB Fields
-  var $nom                = null;
-  var $rank               = null;
-  
-  // Ref field
-  var $_ref_object        = null;
+  public $nom;
+  public $rank;
   
   // Form field
-  var $_quantite          = null;
-  
+  public $_quantite;
+
+  /** @var CPrestationPonctuelle|CPrestationJournaliere */
+  public $_ref_object;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "item_prestation";
     $spec->key   = "item_prestation_id";
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["nom"]          = "str notNull seekable";
@@ -37,7 +47,10 @@ class CItemPrestation extends CMbMetaObject{
     $specs["rank"]         = "num pos default|1";
     return $specs;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["liaisons_souhaits"] = "CItemLiaison item_souhait_id";
@@ -45,12 +58,20 @@ class CItemPrestation extends CMbMetaObject{
     $backProps["liaisons_lits"]     = "CLitLiaisonItem item_prestation_id";
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields () {
     parent::updateFormFields();
     $this->_view = $this->nom;
   }
-  
+
+  /**
+   * Charge la prestation
+   *
+   * @return CPrestationPonctuelle|CPrestationJournaliere
+   */
   function loadRefObject(){
     $this->_ref_object = new $this->object_class;
     return $this->_ref_object = $this->_ref_object->getCached($this->object_id);

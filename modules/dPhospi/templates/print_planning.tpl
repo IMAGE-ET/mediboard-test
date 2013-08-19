@@ -135,10 +135,10 @@
     
     {{if $filter->_coordonnees}}
     <td>
-    	{{mb_value object=$patient field=adresse}}
-    	<br />
-    	{{mb_value object=$patient field=cp}} 
-    	{{mb_value object=$patient field=ville}}
+      {{mb_value object=$patient field=adresse}}
+      <br />
+      {{mb_value object=$patient field=cp}}
+      {{mb_value object=$patient field=ville}}
     </td>
     <td>
       {{mb_value object=$patient field=tel}}

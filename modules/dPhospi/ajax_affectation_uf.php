@@ -1,13 +1,13 @@
-<?php  /* $Id: ajax_affectation_uf.php  $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPhospi
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
-
 
 CCanDo::checkEdit();
 
@@ -16,6 +16,7 @@ $object_guid = CValue::get("object_guid");
 
 $object = CMbObject::loadFromGuid($object_guid);
 
+/** @var CAffectationUniteFonctionnelle[] $affectations_uf */
 $affectations_uf = $object->loadBackRefs("ufs");
 
 CMbObject::massLoadFwdRef($affectations_uf, "uf_id");
@@ -23,7 +24,8 @@ CMbObject::massLoadFwdRef($affectations_uf, "uf_id");
 $ufs_selected = array(
   "medicale"    => false,
   "hebergement" => false,
-  "soins"       => false);
+  "soins"       => false,
+);
 
 foreach ($affectations_uf as $_affectation_uf) {
   $_affectation_uf->loadRefUniteFonctionnelle();
@@ -41,4 +43,3 @@ $smarty->assign("affectations_uf", $affectations_uf);
 $smarty->assign("ufs_selected", $ufs_selected);
 
 $smarty->display("inc_affectation_uf.tpl");
-?>

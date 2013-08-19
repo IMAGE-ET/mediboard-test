@@ -1,30 +1,34 @@
 <?php
-
 /**
- * dPhospi
- *  
- * @category dPhospi
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * Secteur d'établissement, regroupe des services
+ */
 class CSecteur extends CMbObject {
   // DB Table key
-  var $secteur_id = null; 
+  public $secteur_id;
   
   // DB references
-  var $group_id       = null;
+  public $group_id;
 
   // DB Fields
-  var $nom         = null;
-  var $description = null;
+  public $nom;
+  public $description;
   
-   // Object references
-  var $_ref_services = null;
-  
+  /** @var CService[] */
+  public $_ref_services;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'secteur';
@@ -32,13 +36,19 @@ class CSecteur extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["services"] = "CService secteur_id";
     
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["group_id"]    = "ref notNull class|CGroups";
@@ -47,9 +57,13 @@ class CSecteur extends CMbObject {
     
     return $props;
   }
-  
+
+  /**
+   * Charge les services
+   *
+   * @return CService[]
+   */
   function loadRefsServices() {
     return $this->_ref_services = $this->loadBackRefs("services");
   }
-  
 }

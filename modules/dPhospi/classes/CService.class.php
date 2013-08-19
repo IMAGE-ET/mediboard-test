@@ -1,17 +1,16 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
- * @subpackage dPhospi
+ * @subpackage Hospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
- * Classe CService.
- * @abstract Gère les services d'hospitalisation
+ * Gère les services d'hospitalisation
  * - contient de chambres
  */
 class CService extends CMbObject {
@@ -34,15 +33,13 @@ class CService extends CMbObject {
   public $externe;
   public $neonatalogie;
 
-  /**
-   * @var CChambre[]
-   */
+  /** @var CChambre[] */
   public $_ref_chambres;
 
-  /**
-   * @var CGroups
-   */
+  /** @var CGroups */
   public $_ref_group;
+
+  /** @var CValidationRepas[] */
   public $_ref_validrepas;
 
   /**
@@ -113,6 +110,9 @@ class CService extends CMbObject {
     $this->_view = $this->nom;
   }
 
+  /**
+   * @see parent::store()
+   */
   function store(){
     $is_new = !$this->_id;
 
@@ -124,6 +124,8 @@ class CService extends CMbObject {
       CConfigService::emptySHM();
       CConfigMomentUnitaire::emptySHM();
     }
+
+    return null;
   }
 
   /**
@@ -172,14 +174,23 @@ class CService extends CMbObject {
     return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
 
+  /**
+   * @see parent::loadRefsBack()
+   */
   function loadRefsBack() {
     $this->loadRefsChambres();
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd(){
     $this->loadRefGroup();
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     if (!$this->_ref_group) {
       $this->loadRefsFwd();

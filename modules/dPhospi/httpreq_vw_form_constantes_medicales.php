@@ -1,11 +1,11 @@
-<?php 
+<?php
 /**
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPhospi
- * @author     Fabien Ménager <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -75,11 +75,10 @@ $smarty->assign('readonly'      , $readonly);
 $smarty->assign('selection'     , $selection);
 $smarty->assign('dates'         , $dates);
 if ($tri) {
-  $smarty->assign('real_context'	, CValue::get('real_context'));
-  $smarty->assign('display_graph'	, CValue::get('display_graph', 0));
-  $smarty->assign('tri'         	, $tri);
+  $smarty->assign('real_context'  , CValue::get('real_context'));
+  $smarty->assign('display_graph'  , CValue::get('display_graph', 0));
+  $smarty->assign('tri'           , $tri);
 }
 
 $smarty->display('inc_form_edit_constantes_medicales.tpl');
 
-?>

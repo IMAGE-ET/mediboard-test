@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPhospi
-* @version $Revision$
-* @author Thomas Despoix
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 $only_sejour  = CValue::get("only_sejour", 0);
 $with_patient = CValue::get("with_patient", 0);
@@ -27,9 +29,9 @@ if (!$only_sejour) {
       continue;
     }
     
-  	$_operation->loadRefPlageOp();
-  	$consult_anesth = $_operation->loadRefsConsultAnesth();
-  	$consult_anesth->loadRefsFwd();
+    $_operation->loadRefPlageOp();
+    $consult_anesth = $_operation->loadRefsConsultAnesth();
+    $consult_anesth->loadRefsFwd();
   }
 }
 

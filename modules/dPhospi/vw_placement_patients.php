@@ -1,11 +1,11 @@
-<?php  
+<?php
 /**
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPhospi
+ * @subpackage Hospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -62,44 +62,43 @@ foreach ($services as $serv) {
   $grille = array_fill(0, $conf_nb_colonnes, array_fill(0, $conf_nb_colonnes, 0));
   
   $chambres = $serv->loadRefsChambres();
-    
+
   foreach ($chambres as $ch) {
     $ch->loadRefEmplacement();
     if ($ch->_ref_emplacement->_id) {
-     $ch->loadRefsLits();
-     foreach ($ch->_ref_lits as $lit) {
-       $ensemble_lits_charges[$lit->_id] =0;
-     }
-     $grille[$ch->_ref_emplacement->plan_y][$ch->_ref_emplacement->plan_x] = $ch;
-     $emplacement = $ch->_ref_emplacement;
-      if ($emplacement->hauteur-1) {
-        for ($a = 0; $a <= $emplacement->hauteur-1; $a++) {
-          if ($emplacement->largeur-1) {
-           for ($b = 0; $b <= $emplacement->largeur-1; $b++) {
-             if ($b!=0) {
-               unset($grille[$emplacement->plan_y+$a][$emplacement->plan_x+$b]);
-             }
-             elseif ($a!=0) {
-               unset($grille[$emplacement->plan_y+$a][$emplacement->plan_x+$b]);
-             }
-           }
+      $ch->loadRefsLits();
+      foreach ($ch->_ref_lits as $lit) {
+        $ensemble_lits_charges[$lit->_id] = 0;
+      }
+      $grille[$ch->_ref_emplacement->plan_y][$ch->_ref_emplacement->plan_x] = $ch;
+      $emplacement                                                          = $ch->_ref_emplacement;
+      if ($emplacement->hauteur - 1) {
+        for ($a = 0; $a <= $emplacement->hauteur - 1; $a++) {
+          if ($emplacement->largeur - 1) {
+            for ($b = 0; $b <= $emplacement->largeur - 1; $b++) {
+              if ($b != 0) {
+                unset($grille[$emplacement->plan_y + $a][$emplacement->plan_x + $b]);
+              }
+              elseif ($a != 0) {
+                unset($grille[$emplacement->plan_y + $a][$emplacement->plan_x + $b]);
+              }
+            }
           }
-          elseif ($a < $emplacement->hauteur-1) {
-            $c = $a+1;
-            unset($grille[$emplacement->plan_y+$c][$emplacement->plan_x]);
+          elseif ($a < $emplacement->hauteur - 1) {
+            $c = $a + 1;
+            unset($grille[$emplacement->plan_y + $c][$emplacement->plan_x]);
           }
         }
       }
-      elseif ($emplacement->largeur-1) {
-        for ($b = 1; $b <= $emplacement->largeur-1; $b++) {
-          unset($grille[$emplacement->plan_y][$emplacement->plan_x+$b]);
+      elseif ($emplacement->largeur - 1) {
+        for ($b = 1; $b <= $emplacement->largeur - 1; $b++) {
+          unset($grille[$emplacement->plan_y][$emplacement->plan_x + $b]);
         }
-      } 
+      }
     }
   }
   
   //Traitement des lignes vides
-    $nb;  $total;
   foreach ($grille as $j => $value) {
     $nb=0;
     foreach ($value as $i => $valeur) {
@@ -136,7 +135,7 @@ foreach ($services as $serv) {
     //suppression des colonnes inutiles
     if ($nb==$total) {
       for ($a=0;$a<$conf_nb_colonnes;$a++) {
-       unset($grille[$a][$i]);
+        unset($grille[$a][$i]);
       }
     }
   }
@@ -226,4 +225,3 @@ $smarty->assign("services"              , $services_noms);
 $smarty->assign("grilles"               , $grilles);
 
 $smarty->display("vw_placement_patients.tpl");
-?>

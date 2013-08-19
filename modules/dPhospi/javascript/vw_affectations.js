@@ -121,15 +121,15 @@ Calendar.setupAffectation = function(affectation_id, options) {
       stop: options.currAffect.stop
     }
   };
-	
+
   var form;
   
   if (form = getForm("entreeAffectation" + affectation_id)) {
     Calendar.regField(form.entree, dates, {noView: true, icon: 'images/icons/calendar.gif'});
   }
-	
+
   // Sortie affectation
-	dates.limit = {
+  dates.limit = {
     start: options.currAffect.start,
     stop: options.outerAffect.stop
   };
@@ -139,7 +139,7 @@ Calendar.setupAffectation = function(affectation_id, options) {
   }
   
   // Déplacement affectation
-	dates.limit = {
+  dates.limit = {
     start: options.currAffect.start,
     stop: options.currAffect.stop
   };
@@ -189,11 +189,11 @@ ObjectTooltip.modes.timeHospi = {
 };
 
 ObjectTooltip.createTimeHospi = function(element, chir_id, codes) {
-	ObjectTooltip.createEx(element, null, 'timeHospi', { 
-		chir_id : chir_id, 
-		codes : codes, 
-		javascript : 0 
-	} );
+  ObjectTooltip.createEx(element, null, 'timeHospi', {
+    chir_id : chir_id,
+    codes : codes,
+    javascript : 0
+  } );
 };
 
 printTableau = function() {

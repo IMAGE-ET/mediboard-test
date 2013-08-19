@@ -1,32 +1,41 @@
-<?php /* $Id: CLitLiaisonItem.class.php $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPhospi
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CLitLiaisonItem extends CMbObject {
   // DB Table key
-  var $lit_liaison_item_id = null;
+  public $lit_liaison_item_id;
   
   // DB Fields
-  var $lit_id              = null;
-  var $item_prestation_id  = null;
+  public $lit_id;
+  public $item_prestation_id;
   
-  // Ref Fields
-  var $_ref_lit            = null;
-  var $_ref_item_prestation = null;
-  
+  /** @var CLit */
+  public $_ref_lit;
+
+  /** @var CItemPrestation */
+  public $_ref_item_prestation;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "lit_liaison_item";
     $spec->key   = "lit_liaison_item_id";
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["lit_id"]     = "ref notNull class|CLit cascade";
@@ -43,4 +52,3 @@ class CLitLiaisonItem extends CMbObject {
     return $this->_ref_item_prestation = $this->loadFwdRef("item_prestation_id", true);
   }
 }
-?>

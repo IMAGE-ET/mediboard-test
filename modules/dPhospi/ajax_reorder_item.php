@@ -1,11 +1,12 @@
-<?php /* $Id: vw_prestations.php $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpersonnel
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $item_id_move = CValue::get("item_id_move");
@@ -17,10 +18,10 @@ $item->load($item_id_move);
 
 switch ($direction) {
   case "up"  :
-  	$item->rank--;
-  	break;
+    $item->rank--;
+    break;
   case "down":
-  	$item->rank++;
+    $item->rank++;
 }
 
 $item_to_move = new CItemPrestation;
@@ -59,4 +60,3 @@ $smarty->assign("prestation", $prestation);
 $smarty->assign("item_id"   , $item_id);
 
 $smarty->display("inc_list_items_prestation.tpl");
-?>

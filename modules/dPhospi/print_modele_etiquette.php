@@ -1,11 +1,12 @@
-<?php /* $Id: print_reception_barcodes.php 9732 2010-08-04 09:50:58Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision: 9732 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $modele_etiquette = new CModeleEtiquette();
@@ -26,4 +27,3 @@ $modele_etiquette->font          = CValue::post("font");
 $modele_etiquette->show_border   = CValue::post("show_border");
 $modele_etiquette->text_align    = CValue::post("text_align");
 $modele_etiquette->printEtiquettes();
-?>

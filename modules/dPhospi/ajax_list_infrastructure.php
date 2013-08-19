@@ -1,11 +1,13 @@
-<?php /* $Id: ajax_list_infrastructure.php 13247 2011-09-23 08:43:46Z rhum1 $ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPhospi
-* @version $Revision: 13247 $
-* @author 
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkAdmin();
 
@@ -41,6 +43,8 @@ if ($type_name == "services") {
   $service->group_id = $group->_id;
   $service->load($service_id);
   $service->loadRefsNotes();
+
+  /** @var CService[] $services */
   $services = $service->loadListWithPerms(PERM_READ, $where, "nom");
 
   foreach ($services as $_service) {
@@ -100,10 +104,11 @@ if ($type_name == "UF") {
   
   // Récupération des ufs
   $order = "group_id, code";
-  $ufs = array("hebergement" => $uf->loadGroupList(array("type" => "= 'hebergement'"), $order),
-               "medicale"    => $uf->loadGroupList(array("type" => "= 'medicale'"), $order),
-               "soins"       => $uf->loadGroupList(array("type" => "= 'soins'"), $order));
-
+  $ufs = array(
+    "hebergement" => $uf->loadGroupList(array("type" => "= 'hebergement'"), $order),
+    "medicale"    => $uf->loadGroupList(array("type" => "= 'medicale'"), $order),
+    "soins"       => $uf->loadGroupList(array("type" => "= 'soins'"), $order),
+  );
 
   $smarty->assign("ufs", $ufs);
   $smarty->assign("uf", $uf);
@@ -119,6 +124,8 @@ if ($type_name == "prestations") {
   
   // Récupération des prestations
   $order = "group_id, nom";
+
+  /** @var CPrestation[] $prestations */
   $prestations = $prestation->loadList(null, $order);
 
   foreach ($prestations as $_prestation) {

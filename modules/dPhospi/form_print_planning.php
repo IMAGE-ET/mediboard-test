@@ -1,11 +1,13 @@
-<?php /* $Id$*/
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPhospi
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -13,8 +15,8 @@ $group = CGroups::loadCurrent();
 
 $filter = new CSejour();
 $today      = CMbDT::date();
-$filter->_date_min     = CValue::getOrSession("_date_min","$today 06:00:00");
-$filter->_date_max     = CValue::getOrSession("_date_max","$today 21:00:00");
+$filter->_date_min     = CValue::getOrSession("_date_min", "$today 06:00:00");
+$filter->_date_max     = CValue::getOrSession("_date_max", "$today 21:00:00");
 $filter->_horodatage   = CValue::getOrSession("_horodatage", "entree_prevue");
 $filter->_admission    = CValue::getOrSession("_admission");
 $filter->_service      = CValue::getOrSession("_service");
@@ -65,4 +67,3 @@ $smarty->assign("filter"  , $filter);
 
 $smarty->display("form_print_planning.tpl");
 
-?>

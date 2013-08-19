@@ -9,5 +9,5 @@
  * @version    $Revision$
  */
 
-CAppUI::requireModuleFile('soins', 'vw_bilan_prescription');
-
+$smarty = new CSmartyDP();
+$smarty->display("vw_legende_dossier_soin.tpl");

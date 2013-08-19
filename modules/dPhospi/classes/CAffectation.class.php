@@ -3,7 +3,7 @@
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPhospi
+ * @subpackage Hospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
@@ -53,10 +53,7 @@ class CAffectation extends CMbObject {
   public $_praticien;
   public $_chambre;
 
-  // Object references
-  /**
-   * @var CLit
-   */
+  /** @var CLit */
   public $_ref_lit;
 
   /** @var CService */
@@ -160,6 +157,7 @@ class CAffectation extends CMbObject {
     $affectations = $sejour->loadRefsAffectations();
 
     if (is_array($affectations) && count($affectations)) {
+      /** @var CAffectation $_affectation */
       foreach ($affectations as $_affectation) {
         $_affectation->loadRefParentAffectation();
 
@@ -222,6 +220,8 @@ class CAffectation extends CMbObject {
   }
 
   /**
+   * Check collision
+   *
    * @return string|null Store-like message
    */
   function checkCollisions(){
@@ -244,10 +244,18 @@ class CAffectation extends CMbObject {
     return null;
   }
 
+  /**
+   * Delete only one
+   *
+   * @return null|string
+   */
   function deleteOne() {
     return parent::delete();
   }
 
+  /**
+   * @see parent::delete()
+   */
   function delete() {
     $this->completeField("sejour_id", "entree", "sortie");
     if (!$this->sejour_id) {
@@ -294,6 +302,9 @@ class CAffectation extends CMbObject {
     return null;
   }
 
+  /**
+   * @see parent::store()
+   */
   function store() {
     $this->completeField("sejour_id");
     $create_affectations = false;
@@ -456,7 +467,6 @@ class CAffectation extends CMbObject {
   }
 
   /**
-   * @deprecated
    * @see parent::loadRefsFwd()
    */
   function loadRefsFwd($cache = true) {
@@ -466,6 +476,11 @@ class CAffectation extends CMbObject {
     $this->loadRefsAffectations();
   }
 
+  /**
+   * Loads siblings (pref, next)
+   *
+   * @return void
+   */
   function loadRefsAffectations() {
     $where = array (
       "affectation_id" => "!= '$this->affectation_id'",
@@ -487,12 +502,17 @@ class CAffectation extends CMbObject {
   }
 
   /**
+   * Loads child affectations
+   *
    * @return self[]
    */
   function loadRefsAffectationsEnfant() {
     return $this->_ref_affectations_enfant = $this->loadBackRefs("affectations_enfant");
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     $lit = $this->loadRefLit();
     $sejour = $this->loadRefSejour();
@@ -507,6 +527,13 @@ class CAffectation extends CMbObject {
     }
   }
 
+  /**
+   * Tells if it collides with another affectation
+   *
+   * @param self $aff Other affectation
+   *
+   * @return bool
+   */
   function collide($aff) {
     return CMbRange::collides($this->entree, $this->sortie, $aff->entree, $aff->sortie);
   }

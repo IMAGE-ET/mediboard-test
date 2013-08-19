@@ -1,28 +1,34 @@
 <?php
-
 /**
-* @package Mediboard
-* @subpackage dPhospi
-* @version $Revision:
-* @author Poiron Yohann
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
 $today = CMbDT::dateTime();
-$sejour_id 		= CValue::getOrSession("sejour_id",0);
-$operation_id = CValue::getOrSession("operation_id",0);
+$sejour_id    = CValue::getOrSession("sejour_id", 0);
+$operation_id = CValue::getOrSession("operation_id", 0);
 
-function cmp_dateDesc($arrA, $arrB)
-{
-    if ($arrA->_datetime == $arrB->_datetime) return 0;
-      return $arrA->_datetime < $arrB->_datetime ? -1 : 1;
+function cmp_dateDesc($arrA, $arrB) {
+  if ($arrA->_datetime == $arrB->_datetime) {
+    return 0;
+  }
+
+  return $arrA->_datetime < $arrB->_datetime ? -1 : 1;
 }
 
-function cmp_dateAsc($arrA, $arrB)
-{
-    if ($arrA->_datetime == $arrB->_datetime) return 0;
-      return $arrA->_datetime > $arrB->_datetime ? -1 : 1;
+function cmp_dateAsc($arrA, $arrB) {
+  if ($arrA->_datetime == $arrB->_datetime) {
+    return 0;
+  }
+
+  return $arrA->_datetime > $arrB->_datetime ? -1 : 1;
 }
 
 // Récuperation du sejour sélectionné
@@ -80,7 +86,13 @@ if ($operation_id != null) {
   $estEnSalle = $operation->entree_salle && $operation->sortie_salle == null;
   $estSortieSalle = $operation->sortie_salle && $operation->entree_reveil == null;
   $estSalleReveil = $operation->sortie_salle && $operation->entree_reveil;
-  $estSortieSalleReveil = $operation->entree_salle && $operation->sortie_salle && $operation->entree_reveil && $operation->sortie_reveil_possible;
+
+  $estSortieSalleReveil =
+    $operation->entree_salle &&
+    $operation->sortie_salle &&
+    $operation->entree_reveil &&
+    $operation->sortie_reveil_possible;
+
   if ($operation->entree_salle == null) {
     $diagramme['bloc']['type'] = "expect";
   }
@@ -93,31 +105,35 @@ if ($operation_id != null) {
   if (count($tabOperationCurrent) != 0) {
     $diagramme['bloc']['idCurrent'] = $tabOperationCurrent->_id;
     $diagramme['bloc']['checkCurrent'] = "check";
-  } else if (count($tabOperationExpect) != 0) {
+  }
+  else if (count($tabOperationExpect) != 0) {
     $diagramme['bloc']['idCurrent'] = $tabOperationExpect[0]->_id;
-      $diagramme['bloc']['checkCurrent'] = "check";
-
-  } else if (count($tabOperationDone) != 0) {
-    $diagramme['bloc']['idCurrent'] = $tabOperationDone[0]->_id;
-      $diagramme['bloc']['checkCurrent'] = "check";
-
-  } else {
-    $diagramme['bloc']['idCurrent'] = $date['id'];
-      $diagramme['bloc']['checkCurrent'] = "check";
+    $diagramme['bloc']['checkCurrent'] = "check";
 
   }
-} else {
+  else if (count($tabOperationDone) != 0) {
+    $diagramme['bloc']['idCurrent'] = $tabOperationDone[0]->_id;
+    $diagramme['bloc']['checkCurrent'] = "check";
+  }
+  else {
+    $diagramme['bloc']['idCurrent'] = $date['id'];
+    $diagramme['bloc']['checkCurrent'] = "check";
+  }
+}
+else {
   if (count($tabOperationCurrent) != 0) {
     $diagramme['bloc']['idCurrent'] = $tabOperationCurrent->_id;
     $diagramme['bloc']['type'] = "current";
     $diagramme['bloc']['checkCurrent'] = "check";
     $operation = $tabOperationCurrent;
-  } else if (count($tabOperationExpect) != 0) {		
+  }
+  else if (count($tabOperationExpect) != 0) {
     $diagramme['bloc']['idCurrent'] = $tabOperationExpect[0]->_id;
     $diagramme['bloc']['type'] = "expect";
     $diagramme['bloc']['checkCurrent'] = "check";
     $operation = $tabOperationExpect[0];
-  } else if (count($tabOperationDone) != 0) {
+  }
+  else if (count($tabOperationDone) != 0) {
     $diagramme['bloc']['idCurrent'] = $tabOperationDone[0]->_id;
     $diagramme['bloc']['type'] = "done";
     $diagramme['bloc']['checkCurrent'] = "check";
@@ -131,7 +147,7 @@ $diagramme['admission']['entree']['date'] = $sejour->entree_reelle == null ? $se
 $diagramme['admission']['sortie']['date'] = $sejour->sortie_reelle == null ? $sejour->sortie_prevue : $sejour->sortie_reelle;
 $diagramme['admission']['sortie']['reelle'] = $sejour->sortie_reelle == null ? "sortie_prevue" : "sortie_reelle";
 $diagramme['admission']['sortie']['mode_sortie'] = $sejour->mode_sortie;$diagramme['admission'];
-if($today >= $sejour->entree_prevue && $today <= $sejour->sortie_prevue) {
+if ($today >= $sejour->entree_prevue && $today <= $sejour->sortie_prevue) {
   foreach ($affectations as $affectation) {
     if ($today >= $affectation->entree && $today <= $affectation->sortie) {
       $affectation->loadRefLit();
@@ -144,20 +160,22 @@ if($today >= $sejour->entree_prevue && $today <= $sejour->sortie_prevue) {
     $diagramme['hospitalise']['chambre'] = "Pas de chambre";
     $diagramme['hospitalise']['affectation'] = "";
   }
-} else if($today < $sejour->entree_prevue) {
+}
+else if ($today < $sejour->entree_prevue) {
     $affectation = $sejour->_ref_first_affectation;
     $affectation->loadRefLit();
     $affectation->_ref_lit->loadCompleteView();
     $diagramme['hospitalise']['chambre'] = $affectation->_ref_lit->_view;
     $diagramme['hospitalise']['affectation'] = $affectation->_id;
-} else {
+}
+else {
   $affectation = $sejour->_ref_last_affectation;
     $affectation->loadRefLit();
     $affectation->_ref_lit->loadCompleteView();
     $diagramme['hospitalise']['chambre'] = $affectation->_ref_lit->_view;
     $diagramme['hospitalise']['affectation'] = $affectation->_id;
 }
-if ($operation) {	
+if ($operation) {
   $operation->loadRefsFwd();
   $diagramme['bloc']['vue'] = $operation->_view;
   $diagramme['bloc']['id'] = $operation->_id;
@@ -165,12 +183,15 @@ if ($operation) {
   $diagramme['bloc']['sortieSalle'] = $operation->sortie_salle;
   $diagramme['bloc']['salleReveil'] = $operation->entree_reveil;
   $diagramme['bloc']['sortieSalleReveil'] = $operation->sortie_reveil_possible;
-} else {
+}
+else {
   $diagramme['bloc'] = null;
 }
 
 $movement = new CMovement();
 $movement->sejour_id    = $sejour_id;
+
+/** @var CMovement[] $movements */
 $movements = $movement->loadMatchingList();
 foreach ($movements as $_movement) {
   $_movement->loadRefSejour();
@@ -181,7 +202,7 @@ foreach ($movements as $_movement) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("sejour"		    , $sejour);
+$smarty->assign("sejour"        , $sejour);
 $smarty->assign("operations"    , $operations);
 $smarty->assign("affectations"  , $affectations);
 $smarty->assign("diagramme"     , $diagramme);
@@ -190,4 +211,3 @@ $smarty->assign("movements"     , $movements);
 
 $smarty->display("vw_parcours.tpl");
 
-?>

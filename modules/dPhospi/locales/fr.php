@@ -864,7 +864,7 @@ $locales['mod-dPhospi-tab-vw_idx_pathologies'] = 'Pathologies';
 $locales['mod-dPhospi-tab-vw_idx_prestations'] = 'Prestations';
 $locales['mod-dPhospi-tab-vw_idx_sejour'] = 'Consulter un séjour';
 $locales['mod-dPhospi-tab-vw_idx_services'] = 'Services';
-$locales['mod-dPhospi-tab-vw_lengende_dossier_soin'] = 'Légende du dossier de soins';
+$locales['mod-dPhospi-tab-vw_legende_dossier_soin'] = 'Légende du dossier de soins';
 $locales['mod-dPhospi-tab-vw_mouvements'] = 'Mouvements';
 $locales['mod-dPhospi-tab-vw_parcours'] = 'Parcours';
 $locales['mod-dPhospi-tab-vw_placement_patients'] = 'Placement patiens';
@@ -886,4 +886,3 @@ $locales['pref-services_ids_hospi'] = 'Services';
 $locales['pref-services_ids_hospi-desc'] = 'Services';
 $locales['warning-hospi-stats-choose_service'] = 'Veuillez choisir un service pour consulter les statistiques de taux d\'occupation.';
 $locales['warning-hospi-stats-no_beds'] = 'Impossible de produire des statistiques sur ce service car il ne possède aucun lit';
-?>

@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPhospi
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -40,7 +42,7 @@ function loadSejourNonAffectes($where) {
 $today = CMbDT::date()." 01:00:00";
 $to = CMbDT::dateTime("-1 second", $today);
 $list = array();
-for($i = 1; $i <= 7; $i++) {
+for ($i = 1; $i <= 7; $i++) {
   $from = CMbDT::dateTime("+1 second", $to);
   $to = CMbDT::dateTime("+1 day", $to);
   $where = array();
@@ -67,4 +69,3 @@ $smarty->assign("type_admission" , $type_admission);
 
 $smarty->display("vw_etat_semaine.tpl");
 
-?>

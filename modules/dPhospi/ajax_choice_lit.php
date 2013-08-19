@@ -1,11 +1,12 @@
-<?php /** $Id:ajax_choice_lit.php $ **/
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPhospi
- * @version $Revision: 11749 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 // Récupération des  paramètres
@@ -38,7 +39,7 @@ foreach ($chambre->_ref_lits as $lit) {
   $nb_lits++;
 }
 //Si on se trouve dans le module hospi
-if ($vue_hospi) {		
+if ($vue_hospi) {
   $date_min = CMbDT::dateTime($date);
   $date_max = CMbDT::dateTime("+1 day", $date_min);
 
@@ -49,8 +50,8 @@ if ($vue_hospi) {
 
   $affs = $affectation->loadList($where);
   foreach ($affs as $_aff) {
-   $affectations[$_aff->lit_id] = "1";
-  }	
+    $affectations[$_aff->lit_id] = "1";
+  }
 }
 //Si on vient du module urgences
 else {
@@ -68,7 +69,7 @@ else {
   
   $where[] = $q;
   $rpu = new CRPU();
-  $rpus = $rpu->loadList($where, null, null,null, $ljoin);
+  $rpus = $rpu->loadList($where, null, null, null, $ljoin);
   foreach ($rpus as $_rpu) {
     $affectations[$_rpu->_ref_rpu->box_id] = "1";
   }
@@ -82,4 +83,3 @@ $smarty->assign("patient", $patient);
 $smarty->assign("affectations", $affectations);
 
 $smarty->display("inc_choice_lit.tpl");
-?>

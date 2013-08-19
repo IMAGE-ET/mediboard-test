@@ -1,35 +1,46 @@
-<?php /* $Id: CTransmissionMedicale.class.php 12900 2011-08-22 14:07:55Z rhum1 $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPhospi
- * @version $Revision: 12900 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @abstract Liste les unités fonctionnelles des établissements 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CUniteFonctionnelle extends CMbObject {
   // DB Table key
-  var $uf_id = null;	
+  public $uf_id;
   
   // DB Fields
-  var $group_id    = null;
-  var $code        = null;
-  var $libelle     = null;
-  var $description = null;
-  var $type        = null;
+  public $group_id;
+  public $code;
+  public $libelle;
+  public $description;
+  public $type;
   
-  // References
-  var $_ref_group           = null;
-  var $_ref_affectations_uf = null;
+  /** @var CGroups */
+  public $_ref_group;
+
+  /** @var CAffectationUniteFonctionnelle[] */
+  public $_ref_affectations_uf;
   
-  // Distant references
-  var $_ref_praticiens = null;
-  var $_ref_lits       = null;
-  var $_ref_chambre    = null;
-  var $_ref_service    = null;
-  
+  /** @var CMediusers[] */
+  public $_ref_praticiens;
+
+  /** @var CLit[] */
+  public $_ref_lits;
+
+  /** @var CChambre */
+  public $_ref_chambre;
+
+  /** @var CService */
+  public $_ref_service;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'uf';
@@ -37,6 +48,9 @@ class CUniteFonctionnelle extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["group_id"]    = "ref class|CGroups notNull";
@@ -47,7 +61,10 @@ class CUniteFonctionnelle extends CMbObject {
     
     return $props;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["affectations_uf"         ] = "CAffectationUniteFonctionnelle uf_id";
@@ -66,7 +83,10 @@ class CUniteFonctionnelle extends CMbObject {
     
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->libelle;
@@ -86,13 +106,11 @@ class CUniteFonctionnelle extends CMbObject {
     $uf = new self;
     $group_id = CGroups::loadCurrent()->_id;
     
-    return array("hebergement" =>
-                   $uf->loadList(array("type" => "= 'hebergement'", "group_id" => "= '$group_id'"), "libelle"),
-                 "medicale"    =>
-                   $uf->loadList(array("type" => "= 'medicale'", "group_id" => "= '$group_id'"), "libelle"),
-                 "soins"       =>
-                   $uf->loadList(array("type" => "= 'soins'", "group_id" => "= '$group_id'"), "libelle"));
+    return array(
+      "hebergement" => $uf->loadList(array("type" => "= 'hebergement'", "group_id" => "= '$group_id'"), "libelle"),
+      "medicale"    => $uf->loadList(array("type" => "= 'medicale'", "group_id" => "= '$group_id'"), "libelle"),
+      "soins"       => $uf->loadList(array("type" => "= 'soins'", "group_id" => "= '$group_id'"), "libelle"),
+    );
   }
 }
 
-?>

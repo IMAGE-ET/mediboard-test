@@ -1,11 +1,13 @@
-<?php /* $Id$*/
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPhospi
-* @version $Revision$
-* @author Romain OLLIVIER
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -91,7 +93,7 @@ $where["sejour.type"]        = CSQLDataSource::prepareIn(array_keys($mouvements)
 if ($vue) {
   $where["sejour.confirme"] = " = '0'";
 }
-if($praticien_id) {
+if ($praticien_id) {
   $where["sejour.praticien_id"] = "= '$praticien_id'";
 }
 

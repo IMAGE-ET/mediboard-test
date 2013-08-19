@@ -1,31 +1,38 @@
-<?php /* $Id: CPresctationJournaliere.class.php $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpersonnel
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CPrestationPonctuelle extends CMbObject{
   // DB Table key
-  var $prestation_ponctuelle_id = null;
+  public $prestation_ponctuelle_id;
   
   // DB fields
-  var $nom      = null;
-  var $group_id = null;
+  public $nom;
+  public $group_id;
   
   // Form fields
-  var $_count_items = 0;
-  
+  public $_count_items = 0;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "prestation_ponctuelle";
     $spec->key   = "prestation_ponctuelle_id";
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["nom"]       = "str notNull seekable";
@@ -33,27 +40,33 @@ class CPrestationPonctuelle extends CMbObject{
     
     return $specs;
   }
-  
+
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["items"] = "CItemPrestation object_id";
    
     return $backProps;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields () {
     parent::updateFormFields();
     $this->_view = $this->nom;
   }
   
   static function loadCurrentList() {
-    $prestation = new CPrestationPonctuelle;
+    $prestation = new self();
     $prestation->group_id = CGroups::loadCurrent()->_id;
     return $prestation->loadMatchingList("nom");
   }
   
   static function countCurrentList() {
-    $prestation = new CPrestationPonctuelle;
+    $prestation = new self();
     $prestation->group_id = CGroups::loadCurrent()->_id;
     return $prestation->countMatchingList();
   }

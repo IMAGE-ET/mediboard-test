@@ -1,14 +1,14 @@
-<?php 
-
+<?php
 /**
+ * $Id$
+ *
  * Visualiser les transmissions d'une cible fermée
- *  
- * @category dPhospi
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:\$ 
- * @link     http://www.mediboard.org
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -35,6 +35,7 @@ else if ($transmission->object_id && $transmission->object_class) {
   $trans->object_id = $transmission->object_id;
 }
 
+/** @var CTransmissionMedicale[] $trans */
 $trans = $trans->loadMatchingList("date DESC, transmission_medicale_id ASC");
 CMbObject::massLoadFwdRef($trans, "sejour_id");
 CMbObject::massLoadFwdRef($trans, "user_id");

@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpersonnel
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $printer = new CPrinter();
@@ -14,7 +15,7 @@ $ljoin = array();
 $ljoin["functions_mediboard"] = "functions_mediboard.function_id = printer.function_id";
 $printers = $printer->loadList(null, $order_by, null, null, $ljoin);
 
-foreach($printers as $_printer) {
+foreach ($printers as $_printer) {
   $_printer->loadTargetObject();
   $_printer->loadRefFunction();
 }
@@ -26,4 +27,3 @@ $smarty->assign("printers"  , $printers);
 $smarty->assign("printer_id", $printer_id);
 $smarty->display("inc_list_printers.tpl");
 
-?>

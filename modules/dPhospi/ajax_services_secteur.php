@@ -1,14 +1,12 @@
 <?php
-
 /**
- * dPhospi
- *  
- * @category dPhospi
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $secteur_id = CValue::get("secteur_id");
@@ -22,4 +20,3 @@ $smarty = new CSmartyDP;
 $smarty->assign("secteur", $secteur);
 
 $smarty->display("inc_services_secteur.tpl");
-?>

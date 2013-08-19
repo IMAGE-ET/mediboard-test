@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpersonnel
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $sejour_id    = CValue::get("sejour_id");
@@ -28,9 +29,10 @@ else {
 
 $order_by = "DATE DESC";
 
+/** @var CTransmissionMedicale[] $transmissions */
 $transmissions = $transmission->loadlist($where, $order_by);
 
-foreach($transmissions as $_transmission) {
+foreach ($transmissions as $_transmission) {
   $_transmission->loadRefUser();
 }
 
@@ -39,4 +41,3 @@ $smarty = new CSmartyDP;
 $smarty->assign("transmissions", $transmissions);
 $smarty->display("inc_list_transmissions_short.tpl");
 
-?>

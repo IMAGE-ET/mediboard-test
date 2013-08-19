@@ -1,11 +1,11 @@
-<?php  
+<?php
 /**
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPhospi
+ * @subpackage Hospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -15,46 +15,32 @@
 class CEmplacement extends CMbObject {
   
   // DB Table key
-  var $emplacement_id = null;
+  public $emplacement_id;
   
   // DB Fields
-  var $chambre_id   = null;
-  var $plan_x       = null; 
-  var $plan_y       = null; 
-  var $color        = null; 
-  var $hauteur      = null;
-  var $largeur      = null;
+  public $chambre_id;
+  public $plan_x;
+  public $plan_y;
+  public $color;
+  public $hauteur;
+  public $largeur;
     
-  // Object References
-  var $_ref_chambre = null;
-   
+  /** @var CChambre */
+  public $_ref_chambre;
+
   /**
-   * getSpec
-   * 
-   * @return $spec
-  **/
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'emplacement';
     $spec->key   = 'emplacement_id';
     return $spec;
   }
-  
+
   /**
-   * getBackProps
-   * 
-   * @return $backProps
-  **/
-  function getBackProps() {
-    $backProps = parent::getBackProps();
-    return $backProps;
-  }
-  
-  /**
-   * getProps
-   * 
-   * @return $props
-  **/
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["chambre_id"]  = "ref notNull class|CChambre";
@@ -65,24 +51,20 @@ class CEmplacement extends CMbObject {
     $props["largeur"]     = "num notNull default|1 min|1 max|20";
     return $props;
   }
-  
+
   /**
-   * updateFormFields
-   * 
-   * @return void
-  **/
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefChambre();
     $this->_view = $this->_ref_chambre->nom;
   }
- 
+
   /**
-   * loadRefsFwd
-   * 
-   * @return void
-  **/
-  function loadRefsFwd(){ 
+   * @see parent::loadRefsFwd()
+   */
+  function loadRefsFwd(){
     parent::loadRefsFwd();
     $this->loadRefChambre();    
   }
@@ -92,28 +74,7 @@ class CEmplacement extends CMbObject {
    * 
    * @return $this->_ref_chambre
   **/
-  function loadRefChambre(){ 
-    $this->_ref_chambre =  $this->loadFwdRef("chambre_id", true);
-    return $this->_ref_chambre;
-  }
- 
-  /**
-   * loadRefsBack
-   * 
-   * @return void
-  **/
-  function loadRefsBack(){ 
-    parent::loadRefsBack();
-  }
-  
-  /**
-   * loadRefs
-   * 
-   * @return void
-  **/
-  function loadRefs(){
-    $this->loadRefsBack();
-    $this->loadRefsFwd();
+  function loadRefChambre(){
+    return $this->_ref_chambre = $this->loadFwdRef("chambre_id", true);
   }
 }
-?>

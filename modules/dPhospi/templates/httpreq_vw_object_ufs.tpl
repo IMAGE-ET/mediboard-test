@@ -9,7 +9,7 @@
 *}}
 <table class="form"> 
 <tr>
-	<th class="category">UFs</th>
+  <th class="category">UFs</th>
 </tr>
 {{foreach from=$affectations_uf item=_affectation_uf}}
    <tr>

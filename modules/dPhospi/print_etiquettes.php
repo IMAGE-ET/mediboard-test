@@ -1,14 +1,12 @@
 <?php
-
 /**
- * aphmOdonto
- *  
- * @category aphmOdonto
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 ignore_user_abort(true);
@@ -53,4 +51,3 @@ if (count($modeles_etiquettes = $modele_etiquette->loadList($where))) {
 else {
   CAppUI::stepAjax("Aucun modèle d'étiquette configuré pour l'objet " . CAppUI::tr($object_class));
 }
-?>

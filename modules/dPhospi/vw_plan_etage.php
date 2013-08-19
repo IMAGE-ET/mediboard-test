@@ -1,11 +1,12 @@
-<?php  /** $Id: vw_plan_etage.php  $ **/
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPhospi
- * @version $Revision: 7320 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -97,4 +98,3 @@ $smarty->assign("service_selectionne"   , $service_selectionne);
 $smarty->assign("grille"                , $grille);
 
 $smarty->display("vw_plan_etage.tpl");
-?>

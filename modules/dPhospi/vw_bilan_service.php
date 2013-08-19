@@ -1,14 +1,14 @@
 <?php
-
 /**
  * Bilan par service
  *
- * @category dPhospi
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:\$
- * @link     http://www.mediboard.org
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CApp::setMemoryLimit("512M");
@@ -128,6 +128,7 @@ if ($do) {
     $where["sejour.sortie_reelle"] = 'IS NULL';
   }
 
+  /** @var CSejour[] $sejours */
   $sejours = $sejour->loadList($where, $order_by, null, "sejour.sejour_id", $ljoin);
   CMbObject::massLoadFwdRef($sejours, "patient_id");
 

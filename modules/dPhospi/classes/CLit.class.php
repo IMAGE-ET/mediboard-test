@@ -1,19 +1,18 @@
-<?php /* $Id$ */
-
+<?php
 /**
- *	@package Mediboard
- *	@subpackage dPhospi
- *	@version $Revision$
- *  @author Thomas Despoix
-*/
-
-/**
- * Classe CLit.
+ * $Id$
  *
- * @abstract Gère les lits d'hospitalisation
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
+
+/**
+ * Gère les lits d'hospitalisation
  */
 class CLit extends CMbObject {
-  
   static $_prefixe = null;
   
   // DB Table key
@@ -34,21 +33,24 @@ class CLit extends CMbObject {
   public $_sexe_other_patient;
   public $_affectation_id;
   public $_sejour_id;
-
-  // Object references
   
-  /**
-   * @var CChambre
-   */
+  /** @var CChambre*/
   public $_ref_chambre;
+
   /** @var CService */
   public $_ref_service;
+
   /** @var CAffectation[] */
   public $_ref_affectations;
+
   /** @var CAffectation  */
   public $_ref_last_dispo;
+
   /** @var CAffectation  */
   public $_ref_next_dispo;
+
+  /** @var CItemLiaison[] */
+  public $_ref_liaisons_items;
 
   /**
    * @see parent::getSpec()

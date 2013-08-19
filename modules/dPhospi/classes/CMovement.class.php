@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: CIdSante400.class.php 13724 2011-11-09 15:10:29Z lryo $
+ * $Id$
  *
  * @package    Mediboard
- * @subpackage dPhospi
+ * @subpackage Hospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision: 20044 $
+ * @version    $Revision$
  */
 
 /**
@@ -27,7 +27,10 @@ class CMovement extends CMbObject {
 
   public $_current = true;
 
+  /** @var CSejour */
   public $_ref_sejour;
+
+  /** @var CAffectation */
   public $_ref_affectation;
 
   /**

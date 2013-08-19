@@ -1,11 +1,12 @@
-<?php /* $Id: vw_idx_etiquette.php $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpersonnel
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CModeleEtiquette extends CMbMetaObject {
@@ -39,18 +40,25 @@ class CModeleEtiquette extends CMbMetaObject {
 
   static $fields;
   
-  static $listfonts =
-      array("dejavusansmono" => "DejaVu Sans Mono",
-            "freemono"       => "Free Mono",
-            "veramo"         => "Vera Sans Mono");
-      
+  static $listfonts = array(
+    "dejavusansmono" => "DejaVu Sans Mono",
+    "freemono"       => "Free Mono",
+    "veramo"         => "Vera Sans Mono",
+  );
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'modele_etiquette';
     $spec->key   = 'modele_etiquette_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["nom"]           = "str notNull";
@@ -77,7 +85,10 @@ class CModeleEtiquette extends CMbMetaObject {
     $specs["_height_etiq"]  = "float";
     return $specs;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_shortview = $this->_view = $this->nom;
@@ -88,17 +99,17 @@ class CModeleEtiquette extends CMbMetaObject {
   function replaceFields($array_fields) {
     $search = array();
     $replace = array();
-    foreach($array_fields as $_key=>$_field) {
-      # Normal
+    foreach ($array_fields as $_key=>$_field) {
+      // Normal
       $search[]  = "[$_key]";
       $replace[] = $_field;
-      # Gras
+      // Gras
       $search[]  = "*$_key*";
       $replace[] = "<b>$_field</b>";
-      # Majuscule
+      // Majuscule
       $search[]  = "+$_key+";
       $replace[] = strtoupper($_field);
-      # Gras + majuscule
+      // Gras + majuscule
       $search[]  = "#$_key#";
       $replace[] = "<b>".strtoupper($_field)."</b>";
     }
@@ -110,7 +121,7 @@ class CModeleEtiquette extends CMbMetaObject {
   }
   
   function completeLabelFields(&$fields) {
-    $fields = array_merge($fields,array(
+    $fields = array_merge($fields, array(
       "DATE COURANTE"  => CMbDT::dateToLocale(CMbDT::date()),
       "HEURE COURANTE" => CMbDT::format(null, "%H:%M")
     ));
@@ -118,8 +129,9 @@ class CModeleEtiquette extends CMbMetaObject {
   
   function printEtiquettes($printer_id = null) {
     // Affectation de la police par défault si aucune n'est choisie
-    if ($this->font == "")
+    if ($this->font == "") {
       $this->font = "dejavusansmono";
+    }
     
     // Calcul des dimensions de l'étiquette
     $largeur_etiq = ($this->largeur_page - 2 * $this->marge_horiz) / $this->nb_colonnes;

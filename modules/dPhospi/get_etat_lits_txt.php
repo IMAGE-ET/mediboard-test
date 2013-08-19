@@ -1,11 +1,13 @@
 <?php
-
 /**
-* @package Mediboard
-* @subpackage dPhospi
-* @version $Revision$
-* @author Alexis Granger
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 /*
  * Pour acceder à cette page ==>
@@ -33,11 +35,11 @@ $whereAffect["sejour.annule"]         = "= '0'";
 
 $groupAffect = "sejour_id";
 
-$affectations = $affectation->loadList($whereAffect,null,null,$groupAffect, $ljoinAffect);
+$affectations = $affectation->loadList($whereAffect, null, null, $groupAffect, $ljoinAffect);
 
 $list_affectations = array();
 
-foreach($affectations as $key=>$_affectation){
+foreach ($affectations as $key => $_affectation) {
    $_affectation->loadRefLit();
    $_affectation->_ref_lit->loadRefChambre();
    $_affectation->_ref_lit->_ref_chambre->loadRefsFwd();

@@ -13,7 +13,7 @@
    {{foreach from=$_service->_ref_chambres item=_chambre}}
     {{foreach from=$_chambre->_ref_lits item=_lit}}
     <option value="{{$_lit->_id}}" {{if $selected_id == $_lit->_id}}selected="selected"{{/if}}>
-    	{{$_lit->_view}}
+      {{$_lit->_view}}
     </option>
     {{foreachelse}}
     <option value="">Aucun lit disponible</option>

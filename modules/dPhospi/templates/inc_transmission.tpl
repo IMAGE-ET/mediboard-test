@@ -115,7 +115,7 @@ completeTrans = function(type, button){
   var oFormTrans = getForm("editTrans");
   var fieldName = "_text_"+type;
   var oField = oFormTrans.elements["_text_"+type];
-	var text = button.get("text");
+  var text = button.get("text");
   $V(oField, $V(oField) ? $V(oField)+"\n"+text : text);
 }
 

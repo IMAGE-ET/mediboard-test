@@ -79,7 +79,7 @@ submitRetraitPerf = function(oFormPerf){
 
 
 viewLegend = function(){
-  var url = new Url("dPhospi", "vw_lengende_dossier_soin");
+  var url = new Url("dPhospi", "vw_legende_dossier_soin");
   url.modal({width: 400, height: 200});
 }
 

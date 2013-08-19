@@ -1,15 +1,16 @@
-<?php 
+<?php
 /**
  * $Id$
  *
  * @package    Mediboard
- * @subpackage dPhospi
+ * @subpackage Hospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
 CCanDo::checkRead();
+
 global $g;
 
 // Récupération des paramètres
@@ -68,7 +69,6 @@ foreach ($chambres as $ch) {
 }
   
 //Traitement des lignes vides
-$nb;  $total;
 foreach ($grille as $j => $value) {
   $nb=0;
   foreach ($value as $i => $valeur) {
@@ -127,6 +127,7 @@ $where = array(
   "affectation.lit_id"  => CSQLDataSource::prepareIn(array_keys($ensemble_lits_charges), null)
 );
 
+/** @var CAffectation[] $listAff */
 $listAff = $affectation->loadList($where);
 foreach ($listAff as &$_aff) {
   $_aff->loadView();
@@ -142,4 +143,3 @@ $smarty->assign("grille"              , $grille);
 $smarty->assign("key"                 , $service->_id);
 
 $smarty->display("inc_plan_service.tpl");
-?>

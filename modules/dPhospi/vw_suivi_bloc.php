@@ -2,8 +2,6 @@
 /**
  * $Id$
  *
- * Suivi des patients au bloc depuis les services d'hospitalisation
- *
  * @package    Mediboard
  * @subpackage Hospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>

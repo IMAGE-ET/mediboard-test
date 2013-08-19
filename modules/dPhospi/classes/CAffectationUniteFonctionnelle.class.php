@@ -1,24 +1,30 @@
-<?php /* $Id: CTransmissionMedicale.class.php 12900 2011-08-22 14:07:55Z rhum1 $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPhospi
- * @version $Revision: 12900 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @abstract Permet de relier des unités fonctionnelles à des objets 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * Lien entre une UF et un élément (chambre, service, praticien, etc)
+ */
 class CAffectationUniteFonctionnelle extends CMbMetaObject {
   // DB Table key
-  var $affectation_uf_id = null;	
+  public $affectation_uf_id;
   
   // DB Fields
-  var $uf_id = null;
+  public $uf_id;
   
-  // References
-  var $_ref_uf = null;
-  
+  /** @var CUniteFonctionnelle */
+  public $_ref_uf;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'affectation_uf';
@@ -27,23 +33,33 @@ class CAffectationUniteFonctionnelle extends CMbMetaObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
-  	$props = parent::getProps();
+    $props = parent::getProps();
     $props["uf_id"]        = "ref class|CUniteFonctionnelle notNull";
     $props["object_id"]    = "ref class|CMbObject meta|object_class cascade notNull";
-  	$props["object_class"] = "enum list|CService|CChambre|CLit|CMediusers|CFunctions|CSejour|CProtocole show|0 notNull";
+    $props["object_class"] = "enum list|CService|CChambre|CLit|CMediusers|CFunctions|CSejour|CProtocole show|0 notNull";
     return $props;
   }
-  
+
+  /**
+   * Charge l'UF
+   *
+   * @return CUniteFonctionnelle
+   */
   function loadRefUniteFonctionnelle(){
     return $this->_ref_uf = $this->loadFwdRef("uf_id", true);
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
-  	parent::loadRefsFwd();
-    $this->loadRefUF();
-  	$this->_view = $this->_ref_object->_view . " : " . $this->_ref_uf->_view;
+    parent::loadRefsFwd();
+    $this->loadRefUniteFonctionnelle();
+    $this->_view = $this->_ref_object->_view . " : " . $this->_ref_uf->_view;
   }
 }
 
-?>

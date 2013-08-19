@@ -7,4 +7,3 @@ $locales['CAffectation.effectue.1'] = '1';
 $locales['CChambre'] = 'Chambre';
 $locales['CLit'] = 'Lits';
 $locales['CService'] = 'Service';
-?>

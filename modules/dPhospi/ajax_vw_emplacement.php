@@ -1,11 +1,12 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage hospi
- * @version $Revision: 6518 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -29,4 +30,3 @@ $smarty->assign("emplacement"     , $emplacement);
 $smarty->assign("chambres"        , $service->_ref_chambres);
 
 $smarty->display("inc_vw_emplacement.tpl");
-?>

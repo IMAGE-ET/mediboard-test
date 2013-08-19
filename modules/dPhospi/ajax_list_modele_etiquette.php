@@ -1,12 +1,14 @@
-<?php /* $Id: vw_idx_etiquette.php $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpersonnel
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
+
 CCanDo::checkEdit();
 
 $filter_class = CValue::getOrSession("filter_class");
@@ -28,4 +30,3 @@ $smarty->assign("filter_class"          , $filter_class);
 $smarty->assign("modele_etiquette_id"   , $modele_etiquette_id);
 $smarty->assign("liste_modele_etiquette", $liste_modele_etiquette);
 $smarty->display("inc_list_modele_etiquette.tpl");
-?>

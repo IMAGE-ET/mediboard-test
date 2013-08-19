@@ -1,14 +1,16 @@
-<?php  /** $Id: ajax_creation_affectation.php  $ **/
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPhospi
- * @version $Revision: 7320 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
+
 // Récupération des paramètres
 $sejour_id    = CValue::getOrSession("sejour_id");
 $lit_id       = CValue::getOrSession("lit_id");
@@ -22,4 +24,3 @@ $affectation->entree    = $entree;
 $affectation->sortie    = $sortie;
 
 $affectation->store();
-?>

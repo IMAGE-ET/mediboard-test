@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPhospi
-* @version $Revision$
-* @author Romain OLLIVIER
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -58,7 +60,7 @@ $where = array();
 $where["group_id"]  = "= '$group->_id'";
 $where["cancelled"] = "= '0'";
 $order = "nom";
-$services = $services->loadListWithPerms(PERM_READ,$where, $order);
+$services = $services->loadListWithPerms(PERM_READ, $where, $order);
 
 $listAff = null;
 $libre = null;
@@ -83,7 +85,7 @@ if ($typeVue == 0) {
 
   $occupes = $ds->loadlist($sql);
   $arrayIn = array();
-  foreach($occupes as $key => $occupe) {
+  foreach ($occupes as $key => $occupe) {
     $arrayIn[] = $occupe["lit_id"];
   }
   $notIn = count($arrayIn) > 0 ? implode(', ', $arrayIn) : 0;
@@ -152,7 +154,7 @@ else if ($typeVue == 1) {
     );
     $order = "service.nom, chambre.nom, lit.nom";
     $listAff["Aff"] = $affectation->loadList($where, $order, null, null, $ljoin);
-    foreach($listAff["Aff"] as &$_aff) {
+    foreach ($listAff["Aff"] as &$_aff) {
       $_aff->loadView();
       $_aff->loadRefSejour();
       $_aff->_ref_sejour->loadRefPatient();
@@ -161,7 +163,7 @@ else if ($typeVue == 1) {
 
       $_aff->loadRefLit();
       $_aff->_ref_lit->loadCompleteView();
-      foreach($_aff->_ref_sejour->_ref_operations as $_operation){
+      foreach ($_aff->_ref_sejour->_ref_operations as $_operation) {
         $_operation->loadExtCodesCCAM();
       }
     }
@@ -177,7 +179,7 @@ else if ($typeVue == 1) {
     );
     $order = "sejour.entree, sejour.sortie, sejour.praticien_id";
     $listAff["NotAff"] = $sejour->loadList($where, $order);
-    foreach($listAff["NotAff"] as &$_sejour) {
+    foreach ($listAff["NotAff"] as &$_sejour) {
       $_sejour->loadRefPatient();
       $_sejour->_ref_praticien =& $listPrat[$_sejour->praticien_id];
       $_sejour->loadRefGHM();

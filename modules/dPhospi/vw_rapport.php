@@ -1,11 +1,13 @@
-<?php  /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPhospi
-* @version $Revision$
-* @author Alexis Granger
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 $date = CValue::getOrSession("date");
 
@@ -31,11 +33,11 @@ $totalHospi = 0;
 $totalAmbulatoire = 0;
 $totalMedecin = 0;
 $total_prat = array();
-foreach($listPrat as $key => $prat){
+foreach ($listPrat as $key => $prat) {
   $totalPrat[$prat->_id]["prat"]  = $prat;
-	$totalPrat[$prat->_id]["hospi"] = 0;
-	$totalPrat[$prat->_id]["ambu"]  = 0;
-	$totalPrat[$prat->_id]["total"] = 0;
+  $totalPrat[$prat->_id]["hospi"] = 0;
+  $totalPrat[$prat->_id]["ambu"]  = 0;
+  $totalPrat[$prat->_id]["total"] = 0;
 }
 
 $sejour = new CSejour;
@@ -45,24 +47,29 @@ $whereSejour["sejour.entree_reelle"] = "IS NOT NULL";
 $whereSejour[]                       = "`sejour`.`entree_reelle` <= '$dateEntree'";
 $whereSejour["sejour.sortie"]        = ">= '$dateSortie'";
 $whereSejour["sejour.annule"]        = "= '0'";
+
+/** @var CSejour[] $listSejours */
 $listSejours = $sejour->loadList($whereSejour);
    
 // Stockage des informations liées au praticiens
-foreach($listSejours as $_sejour) {
+foreach ($listSejours as $_sejour) {
   $_sejour->loadRefPraticien(1);
-    foreach($listPrat as $key=>$_prat){
-      // Cas d'un sejour de type Ambulatoire
-      if($_prat->_id == $_sejour->_ref_praticien->_id && $_sejour->type == "ambu"){
-        $totalPrat[$_prat->_id]["ambu"]++;    
+
+  foreach ($listPrat as $key=>$_prat) {
+    // Cas d'un sejour de type Ambulatoire
+    if ($_prat->_id == $_sejour->_ref_praticien->_id && $_sejour->type == "ambu") {
+      $totalPrat[$_prat->_id]["ambu"]++;
       $totalAmbulatoire++;
-    } 
+    }
+
     // Autres cas
-    if($_prat->_id == $_sejour->_ref_praticien->_id && $_sejour->type == "comp"){
+    if ($_prat->_id == $_sejour->_ref_praticien->_id && $_sejour->type == "comp") {
       $totalPrat[$_prat->_id]["hospi"]++;
       $totalHospi++;
     }
+
     // Total des hospitalisations (Ambu + autres)
-    if($_prat->_id == $_sejour->_ref_praticien->_id){
+    if ($_prat->_id == $_sejour->_ref_praticien->_id) {
       $totalPrat[$_prat->_id]["total"] = $totalPrat[$_prat->_id]["ambu"] + $totalPrat[$_prat->_id]["hospi"];     
       $totalMedecin++;
     }
@@ -88,12 +95,12 @@ $groupAffect = "affectation.sejour_id";
 $list_affectations = $affectation->loadList($whereAffect, null, null, $groupAffect, $ljoin);
 $total_service = array();
 
-foreach($services as $_service){
-	$total_service[$_service->_id]["service"] = $_service;
-	$total_service[$_service->_id]["total"]   = 0;
+foreach ($services as $_service) {
+  $total_service[$_service->_id]["service"] = $_service;
+  $total_service[$_service->_id]["total"]   = 0;
 }
 
-foreach($list_affectations as $key=>$_affectation){
+foreach ($list_affectations as $key=>$_affectation) {
   // Chargement des références nécessaire pour parcourir les affectations
   $_affectation->loadRefLit();
   $_affectation->_ref_lit->loadRefChambre();
@@ -102,15 +109,15 @@ foreach($list_affectations as $key=>$_affectation){
   $_affectation->_ref_sejour->loadRefPraticien(1);
 
   // Stockage des informations liées aux services
-  foreach($services as $key=>$_service){
-    if($_service->_id == $_affectation->_ref_lit->_ref_chambre->_ref_service->_id && !$_affectation->_ref_sejour->annule){
+  foreach ($services as $key=>$_service) {
+    if ($_service->_id == $_affectation->_ref_lit->_ref_chambre->_ref_service->_id && !$_affectation->_ref_sejour->annule) {
       $total_service[$_service->_id]["total"]++;    
     }
   }
 }
 
-$date_debut = CMbDT::dateTime("00:01:00",$date);
-$date_fin = CMbDT::dateTime("23:59:00",$date);
+$date_debut = CMbDT::dateTime("00:01:00", $date);
+$date_fin = CMbDT::dateTime("23:59:00", $date);
 
 // present du jour
 $sejourJour = new CSejour();
@@ -149,20 +156,19 @@ $countSortieJour = $sejourSortieJour->countList($whereSortie);
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("date",$date);
-$smarty->assign("totalHospi",$totalHospi);
-$smarty->assign("totalMedecin",$totalMedecin);
-$smarty->assign("totalAmbulatoire",$totalAmbulatoire);
+$smarty->assign("date", $date);
+$smarty->assign("totalHospi", $totalHospi);
+$smarty->assign("totalMedecin", $totalMedecin);
+$smarty->assign("totalAmbulatoire", $totalAmbulatoire);
 $smarty->assign("services", $services);
-$smarty->assign("list_affectations",$list_affectations);
+$smarty->assign("list_affectations", $list_affectations);
 $smarty->assign("total_service", $total_service);
 $smarty->assign("countPresentVeille", $countPresentVeille);
-$smarty->assign("countSortieJour",$countSortieJour);
-$smarty->assign("countEntreeJour",$countEntreeJour);
+$smarty->assign("countSortieJour", $countSortieJour);
+$smarty->assign("countEntreeJour", $countEntreeJour);
 $smarty->assign("countPresentJour", $countPresentJour);
 $smarty->assign("listPrat", $listPrat);
-$smarty->assign("totalPrat",$totalPrat);
+$smarty->assign("totalPrat", $totalPrat);
 
 $smarty->display("vw_rapport.tpl");
 
-?>

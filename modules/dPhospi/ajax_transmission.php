@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpersonnel
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $transmission_id  = CValue::get("transmission_id");
@@ -24,7 +25,7 @@ $transmission =  new CTransmissionMedicale;
 if ($transmission_id) {
   $transmission->load($transmission_id);
 }
-else if ($data_id || $action_id || $result_id){
+else if ($data_id || $action_id || $result_id) {
   $transmission->sejour_id = $sejour_id;
 
   // Multi-transmissions

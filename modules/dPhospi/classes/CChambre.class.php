@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
- *	@package Mediboard
- *	@subpackage dPhospi
- *	@version $Revision$
- *  @author Thomas Despoix
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 /**
  * Classe CChambre. 
@@ -115,7 +117,7 @@ class CChambre extends CMbObject {
    *
    * @param bool $annule Annulé
    *
-   * @return CStoredObject[]
+   * @return CLit[]
    */
   function loadRefsLits($annule = false) {
     $lit = new CLit();
@@ -178,7 +180,8 @@ class CChambre extends CMbObject {
     
     assert($this->_ref_lits !== null);
     $this->_nb_lits_dispo = count($this->_ref_lits);
-    
+
+    /** @var CAffectation[] $listAff */
     $listAff = array();
     
     $this->_chambre_seule        = 0;

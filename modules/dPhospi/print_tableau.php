@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPhospi
- * @version $Revision:$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -16,7 +17,6 @@ $g        = CGroups::loadCurrent()->_id;
 $date     = CValue::get("date"    , CMbDT::date());
 $mode     = CValue::get("mode"    , 0);
 $services_ids = CValue::getOrSession("services_ids", "");
-$g        = CGroups::loadCurrent()->_id;
 
 if (is_array($services_ids)) {
   CMbArray::removeValue("", $services_ids); 
@@ -51,7 +51,7 @@ $where["service_id"] = CSQLDataSource::prepareIn($services_ids);
 $where["cancelled"]  = "= '0'";
 $service = new CService();
 $order = "nom";
-$services = $service->loadListWithPerms(PERM_READ,$where, $order);
+$services = $service->loadListWithPerms(PERM_READ, $where, $order);
 
 // Chargement de chaque services
 foreach ($services as $_service) {

@@ -1,14 +1,12 @@
 <?php
-
 /**
- * dPhospi
- *  
- * @category dPhospi
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -106,7 +104,7 @@ $where   = array();
 $where["group_id"]  = "= '$group->_id'";
 $where["cancelled"] = "= '0'";
 $order = "nom";
-$services = $service->loadListWithPerms(PERM_READ,$where, $order);
+$services = $service->loadListWithPerms(PERM_READ, $where, $order);
 
 $dates = array();
 $day = $date_min;

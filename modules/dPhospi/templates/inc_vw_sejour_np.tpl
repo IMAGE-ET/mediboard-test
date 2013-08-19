@@ -19,7 +19,7 @@
   </td>
 
   <td style="padding: 1px;" onclick="markAsSelected(this); addSejourIdToSession('{{$curr_sejour->_id}}'); loadViewSejour('{{$curr_sejour->_id}}', {{$curr_sejour->praticien_id}}, {{$curr_sejour->patient_id}}, '{{$date}}'); tab_sejour.setActiveTab('Imeds')">
-	  {{if $isImedsInstalled}}
+    {{if $isImedsInstalled}}
       {{mb_include module=Imeds template=inc_sejour_labo sejour=$curr_sejour link="#"}}
     {{/if}}
   </td>
@@ -34,21 +34,21 @@
   
   {{if $isPrescriptionInstalled}}
   <td style="padding: 1px;">
-	  {{if $prescription_sejour->_id && (!$prescription_sortie->_id || $prescription_sejour->_counts_no_valide)}}
-	    <img src="images/icons/warning.png" width="12"
-	    			onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-alertes-{{$curr_sejour->_guid}}')" />
-	  {{/if}}
-	 
-	  <div id="tooltip-content-alertes-{{$curr_sejour->_guid}}" style="display: none;">
-	    <ul>
-  	  {{if !$prescription_sortie->_id}}
+    {{if $prescription_sejour->_id && (!$prescription_sortie->_id || $prescription_sejour->_counts_no_valide)}}
+      <img src="images/icons/warning.png" width="12"
+            onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-alertes-{{$curr_sejour->_guid}}')" />
+    {{/if}}
+
+    <div id="tooltip-content-alertes-{{$curr_sejour->_guid}}" style="display: none;">
+      <ul>
+      {{if !$prescription_sortie->_id}}
         <li>Ce séjour ne possède pas de prescription de sortie</li>
       {{/if}}
       {{if $prescription_sejour->_counts_no_valide}}
         <li>Lignes non validées dans la prescription de séjour</li>
       {{/if}}
       </ul> 
-	  </div>
+    </div>
   </td>
   {{/if}}
   

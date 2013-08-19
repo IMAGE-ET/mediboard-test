@@ -1,41 +1,53 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPhospi
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @abstract Permet d'ajouter des transmissions médicales à un séjour
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/**
+ * Class CTransmissionMedicale
+ *
+ * @property CPrescriptionLine|CCategoryPrescription|CAdministration _ref_object
+ */
 class CTransmissionMedicale extends CMbMetaObject {
   // DB Table key
-  var $transmission_medicale_id = null;	
+  public $transmission_medicale_id;
 
   // DB Fields
-  var $sejour_id   = null;
-  var $user_id     = null;
-  var $degre       = null;
-  var $date        = null;
-  var $date_max    = null;
-  var $text        = null;
-  var $type        = null;
-  var $libelle_ATC = null;
-  var $locked      = null;
+  public $sejour_id;
+  public $user_id;
+  public $degre;
+  public $date;
+  public $date_max;
+  public $text;
+  public $type;
+  public $libelle_ATC;
+  public $locked;
 
-  // References
-  var $_ref_sejour = null;
-  var $_ref_user   = null;
-  var $_ref_cible  = null;
+  /** @var CSejour */
+  public $_ref_sejour;
+
+  /** @var CMediusers */
+  public $_ref_user;
+
+  /** @var CPrescriptionLine|CCategoryPrescription|CAdministration */
+  public $_ref_cible;
 
   // Form fields
-  var $_cible       = null;
-  var $_text_data   = null;
-  var $_text_action = null;
-  var $_text_result = null;
-  var $_log_lock    = null;
+  public $_cible;
+  public $_text_data;
+  public $_text_action;
+  public $_text_result;
+  public $_log_lock;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'transmission_medicale';
@@ -44,6 +56,9 @@ class CTransmissionMedicale extends CMbMetaObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["object_id"]    = "ref class|CMbObject meta|object_class";
@@ -63,16 +78,30 @@ class CTransmissionMedicale extends CMbMetaObject {
     return $props;
   }
 
+  /**
+   * Charge le séjour
+   *
+   * @return CSejour
+   */
   function loadRefSejour() {
     return $this->_ref_sejour = $this->loadFwdRef("sejour_id", true);
   }
 
+  /**
+   * Charge l'utilisateur
+   *
+   * @return CMediusers
+   */
   function loadRefUser() {
-    $this->_ref_user = $this->loadFwdRef("user_id", true);
-    $this->_ref_user->loadRefFunction();
-    return $this->_ref_user;
+    /** @var CMediusers $user */
+    $user = $this->loadFwdRef("user_id", true);
+    $user->loadRefFunction();
+    return $this->_ref_user = $user;
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     parent::loadRefsFwd();
     $this->loadRefSejour();
@@ -80,6 +109,9 @@ class CTransmissionMedicale extends CMbMetaObject {
     $this->_view = "Transmission de ".$this->_ref_user->_view;
   }
 
+  /**
+   * @see parent::canEdit()
+   */
   function canEdit(){
     $nb_hours = CAppUI::conf("soins max_time_modif_suivi_soins");
     $datetime_max = CMbDT::dateTime("+ $nb_hours HOURS", $this->date);
@@ -163,6 +195,9 @@ class CTransmissionMedicale extends CMbMetaObject {
     }
   }
 
+  /**
+   * @see parent::store()
+   */
   function store() {
     // Si une cible est définie, on Unlock la précédente transmission sur la même cible
     // (classe ATC ou catégorie de prescription)
@@ -189,6 +224,9 @@ class CTransmissionMedicale extends CMbMetaObject {
     return parent::store();
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($perm) {
     if (!isset($this->_ref_sejour->_id)) {
       $this->loadRefsFwd();

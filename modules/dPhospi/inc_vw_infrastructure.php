@@ -1,11 +1,13 @@
-<?php /* $Id: inc_vw_infrastructure.php 13247 2011-09-23 08:43:46Z rhum1 $ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPhospi
-* @version $Revision: 13247 $
-* @author 
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkAdmin();
 

@@ -1,11 +1,12 @@
-<?php /* $Id: ajax_lit_liaison_item_autocomplete.php $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage Hospi
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $keywords = CValue::get("keywords", "%%");
@@ -24,6 +25,8 @@ $where = array();
 $where["object_id"] = CSQLDataSource::prepareNotIn($items_prestations_ids);
 $where["object_class"] = " = 'CPrestationJournaliere'";
 $item_prestation = new CItemPrestation;
+
+/** @var CItemPrestation[] $items_prestations */
 $items_prestations = $item_prestation->seek($keywords, $where);
 
 $items_by_prestation = array();
@@ -50,4 +53,3 @@ $smarty->assign("items_by_prestation", $items_by_prestation);
 $smarty->assign("prestations", $prestations);
 
 $smarty->display("inc_lit_liaison_item_autocomplete.tpl");
-?>

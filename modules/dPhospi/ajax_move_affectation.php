@@ -1,11 +1,12 @@
-<?php /* $Id: ajax_move_affectation.php $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpersonnel
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $affectation_id = CValue::get("affectation_id");
@@ -94,4 +95,3 @@ if (!$affectation_id && isset($sejour)) {
 }
 
 echo CAppUI::getMsg();
-?>

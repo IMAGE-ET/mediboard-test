@@ -1,11 +1,12 @@
-<?php /* $Id: ajax_select_affectation_aed.php $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPpersonnel
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $affectation_id = CValue::get("affectation_id");
@@ -24,4 +25,3 @@ $smarty->assign("sejour_id"     , $sejour_id);
 $smarty->assign("affectations"  , array());
 $smarty->display("inc_select_action_affectation.tpl");
 
-?>

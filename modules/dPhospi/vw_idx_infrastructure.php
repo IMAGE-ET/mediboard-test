@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPhospi
-* @version $Revision$
-* @author Thomas Despoix
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 CCanDo::checkAdmin();
 
@@ -56,6 +58,8 @@ $lit->loadRefChambre();
 $where = array();
 $where["group_id"] = "= '$group->_id'";
 $order = "nom";
+
+/** @var CService[] $services */
 $services = $service->loadListWithPerms(PERM_READ, $where, $order);
 foreach ($services as $_service) {
   foreach ($_service->loadRefsChambres() as $_chambre) {

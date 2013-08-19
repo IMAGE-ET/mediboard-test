@@ -1,11 +1,12 @@
-<?php /* $Id: ajax_refresh_mouvements.php $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPhospi
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
@@ -79,7 +80,8 @@ for ($i = 0 ; $i < $nb_ticks ; $i++) {
 
   if ($granularite == "4weeks") {
     if (CMbDT::date($current) == CMbDT::date($temp_datetime) &&
-      CMbDT::time($current) >= CMbDT::time($temp_datetime) && CMbDT::time($current) > CMbDT::time($datetime)) {
+        CMbDT::time($current) >= CMbDT::time($temp_datetime) && CMbDT::time($current) > CMbDT::time($datetime)
+    ) {
       $current = $temp_datetime;
     }
     $week_a = CMbDT::transform($temp_datetime, null, "%V");
@@ -104,12 +106,14 @@ for ($i = 0 ; $i < $nb_ticks ; $i++) {
   }
   else {
     if ($granularite == "week" && CMbDT::date($current) == CMbDT::date($temp_datetime) &&
-      CMbDT::time($datetime) >= CMbDT::time($temp_datetime) && CMbDT::time($current) <= CMbDT::time($datetime)) {
+        CMbDT::time($datetime) >= CMbDT::time($temp_datetime) && CMbDT::time($current) <= CMbDT::time($datetime)
+    ) {
       $current = $temp_datetime;
     }
-    if ($granularite)
+    if ($granularite) {
       // le datetime, pour avoir soit le jour soit l'heure
       $days[] = CMbDT::date($datetime);
+    }
   }
   $temp_datetime = $datetime;
 }

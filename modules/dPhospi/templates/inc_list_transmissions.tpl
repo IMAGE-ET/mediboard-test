@@ -13,8 +13,8 @@
   {{/if}}
   <tr>
     <th colspan="9" class="title">
-			{{if !$readonly}}
-				<div style="float: right">
+      {{if !$readonly}}
+        <div style="float: right">
           <input name="_show_obs_view" id="_show_obs_view" type="checkbox" {{if $_show_obs}}checked="checked"{{elseif $cible != ""}}disabled{{/if}}
             onchange="loadSuivi('{{$sejour->_id}}', '', '', this.checked ? 1 : 0, $('_show_trans_view').checked ? 1 : 0, !$('_show_const_view') ? null : $('_show_const_view').checked ? 1 : 0)"/>
           <label for="_show_obs_view" title="{{tr}}CObservationMedicale{{/tr}}">{{tr}}CObservationMedicale._show_obs{{/tr}}</label>
@@ -29,9 +29,9 @@
             <label for="_show_const_view" title="{{tr}}CConstantesMedicales{{/tr}}">{{tr}}CConstantesMedicales._show_const{{/tr}}</label>
           {{/if}}
           
-			    <select style="width: 150px" name="selCible" onchange="loadSuivi('{{$sejour->_id}}','',this.value)" >
-			      <option value="">&mdash; Toutes les cibles</option>
-			      {{foreach from=$cibles item=cibles_by_state key=state}}
+          <select style="width: 150px" name="selCible" onchange="loadSuivi('{{$sejour->_id}}','',this.value)" >
+            <option value="">&mdash; Toutes les cibles</option>
+            {{foreach from=$cibles item=cibles_by_state key=state}}
               {{if $cibles_by_state|@count}}
                 <optgroup label="{{tr}}CTransmission.state.{{$state}}{{/tr}}"></optgroup>
                 {{foreach from=$cibles_by_state item=_cible}}
@@ -39,26 +39,26 @@
                 {{/foreach}}
               {{/if}}
             {{/foreach}}
-			    </select>
-			    
-			    {{if @$users}}
-			    <select name="user_id" onchange="loadSuivi('{{$sejour->_id}}',this.value)">
-			      <option value="">&mdash; Tous les utilisateurs</option>
-			      {{foreach from=$users item=_user}}
-			        <option value="{{$_user->_id}}" {{if $user_id == $_user->_id}} selected="selected"{{/if}}>{{$_user->_view}}</option>
-			      {{/foreach}}
-			    </select>
-			    {{/if}}
-		    </div>
-	    {{/if}}
-	    <span style="float: left;"> Suivi de soins</span>
+          </select>
+
+          {{if @$users}}
+          <select name="user_id" onchange="loadSuivi('{{$sejour->_id}}',this.value)">
+            <option value="">&mdash; Tous les utilisateurs</option>
+            {{foreach from=$users item=_user}}
+              <option value="{{$_user->_id}}" {{if $user_id == $_user->_id}} selected="selected"{{/if}}>{{$_user->_view}}</option>
+            {{/foreach}}
+          </select>
+          {{/if}}
+        </div>
+      {{/if}}
+      <span style="float: left;"> Suivi de soins</span>
     </th>
   </tr>
   <tr>
     <th rowspan="2">{{tr}}Type{{/tr}}</th>
     <th rowspan="2">{{tr}}User{{/tr}} / {{tr}}Date{{/tr}}</th>
     <th rowspan="2">{{mb_title class=CTransmissionMedicale field=object_class}}</th>
-		<th colspan="3" style="width: 50%">{{mb_title class=CTransmissionMedicale field=text}}</th>
+    <th colspan="3" style="width: 50%">{{mb_title class=CTransmissionMedicale field=text}}</th>
     <th rowspan="2" class="narrow"></th>
   </tr>
   <tr>
@@ -68,7 +68,7 @@
   </tr>
   <tbody {{if !$readonly}} id="transmissions" {{/if}}>
   {{foreach from=$list_transmissions item=_suivi}}
-	<tr class="{{if is_array($_suivi)}}
+  <tr class="{{if is_array($_suivi)}}
              {{if $_suivi.0->degre == "high"}}
                transmission_haute
              {{/if}}
@@ -91,11 +91,11 @@
                {{/if}}
              {{/if}}
            {{/if}}"
-	    {{if ($_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment) && !$readonly}}
-			  onmouseover="highlightTransmissions('{{$_suivi->_guid}}');" onmouseout="removeHighlightTransmissions();"
-			{{/if}}>
- 	  {{mb_include module=hospi template=inc_line_suivi show_patient=false nodebug=true}}
-		</tr>
+      {{if ($_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment) && !$readonly}}
+        onmouseover="highlightTransmissions('{{$_suivi->_guid}}');" onmouseout="removeHighlightTransmissions();"
+      {{/if}}>
+     {{mb_include module=hospi template=inc_line_suivi show_patient=false nodebug=true}}
+    </tr>
   {{foreachelse}}
   </tbody>
     <tr>

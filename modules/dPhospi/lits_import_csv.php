@@ -1,11 +1,12 @@
-<?php /* $Id: prat_import_csv.php 6103 2009-04-16 13:36:52Z yohann $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPhospi
- * @version $Revision: 6153 $
- * @author SARL OpenXtrem
- * @license GNU GPL
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Hospi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
