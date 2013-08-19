@@ -130,11 +130,11 @@
     <tr><th class="title">Actions</th></tr>
     <tr>
       <td>
-      <a href="#answer"  class="button"><img alt="message" src="images/icons/usermessage.png">{{tr}}CUserMail-button-answer{{/tr}}</a>
-        {{if $app->user_prefs.LinkAttachment}}
-          <a href="#{{$mail->_id}}" class="button copy" onclick="messagerie.linkAttachment('{{$mail->_id}}');">{{tr}}CMailAttachments-button-append{{/tr}}</a>
-        {{/if}}
-      <a href="#{{$mail->_id}}" class="button change">{{tr}}CUserMail-button-archive{{/tr}}</a>
+      {{*<a href="#answer"  class="button"><img alt="message" src="images/icons/usermessage.png">{{tr}}CUserMail-button-answer{{/tr}}</a>*}}
+      {{if $app->user_prefs.LinkAttachment}}
+        <a href="#{{$mail->_id}}" class="button copy" onclick="messagerie.linkAttachment('{{$mail->_id}}');">{{tr}}CMailAttachments-button-append{{/tr}}</a>
+      {{/if}}
+      <a href="#{{$mail->_id}}" class="button change" onclick="messagerie.toggleArchived('{{$mail->_id}}'); Control.Modal.close();">{{tr}}CUserMail-button-archive{{/tr}}</a>
       </td>
     </tr>
 </table>
