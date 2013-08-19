@@ -15,7 +15,7 @@ $plage_id = CValue::get("plage_id");
 $plage_date = CValue::get("date");
 $plage_hour = CValue::get("hour");
 $plage_minutes = CValue::get("minutes");
-$user_id = CValue::getOrSession("user_id", $user->_id);
+$user_id = CValue::get("user_id", $user->_id);
 
 $users = array($user);
 
