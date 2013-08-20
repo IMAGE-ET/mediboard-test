@@ -9,16 +9,7 @@
 *}}
 
 {{mb_script module="astreintes" script="plage"}}
-<script>
-
-function raz(form) {
-  $(form).clear(true);
-	$V(form.elements.start, "");
-	$V(form.elements.end, "");
-}
-
-</script>
-<button class="new" type="button" onclick="PlageAstreinte.edit('','')">
+<button class="new" type="button" onclick="PlageAstreinte.modal()">
 {{tr}}CPlageAstreinte-title-create{{/tr}}
 </button>
 <table class="main">
@@ -59,7 +50,6 @@ function raz(form) {
               </td>
               <td class="{{$class}}">
                 {{if $_plage->libelle}}{{$_plage->libelle}}{{else}}<em>{{tr}}CPlageAstreinte.noLibelle{{/tr}}</em>{{/if}}
-                </a>
               </td>
               <td class="{{$class}}">
                 {{if $_plage->start == $_plage->end}}
@@ -84,11 +74,3 @@ function raz(form) {
      </td>
   </tr>
 </table>
-{{if $filter->user_id}}
-  <script type='text/javascript'>
-    Main.add( function() {
-      PlageAstreinte.loadUser({{$filter->user_id}}, '{{$filter->_id}}');
-      PlageAstreinte.edit('{{$filter->_id}}',{{$filter->user_id}});
-    });
-  </script>
-{{/if}}
