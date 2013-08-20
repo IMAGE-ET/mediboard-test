@@ -39,11 +39,14 @@ class CHL7v2EventADTA03_FR extends CHL7v2EventADTA03 {
   function buildI18nSegments($sejour) {
     // Patient Visit - Additionale Info
     $this->addPV2($sejour);
-    
+
     // Movement segment
     $this->addZBE($sejour);
-    
+
     // Compléments sur la rencontre
     $this->addZFV($sejour);
+
+    // Mouvement PMSI
+    $this->addZFM($sejour);
   }
 }

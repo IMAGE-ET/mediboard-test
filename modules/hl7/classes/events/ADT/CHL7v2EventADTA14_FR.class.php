@@ -37,7 +37,6 @@ class CHL7v2EventADTA14_FR extends CHL7v2EventADTA14 {
    * @return void
    */
   function buildI18nSegments($sejour) {
-    
     // Movement segment
     $this->addZBE($sejour);
     

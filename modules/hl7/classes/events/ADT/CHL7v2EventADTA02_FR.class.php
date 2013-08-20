@@ -39,8 +39,11 @@ class CHL7v2EventADTA02_FR extends CHL7v2EventADTA02 {
   function buildI18nSegments($sejour) {
     // Movement segment
     $this->addZBE($sejour);
-    
+
     // Compléments sur la rencontre
     $this->addZFV($sejour);
+
+    // Mouvement PMSI
+    $this->addZFM($sejour);
   }
 }
