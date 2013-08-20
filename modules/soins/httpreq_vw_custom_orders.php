@@ -19,9 +19,10 @@ $where = array(
   "stock_class" => "= 'CProductStockGroup'",
 );
 
-$deliveries = $delivery->loadList($where);
+/** @var CProductDelivery[] $deliveries */
+$deliveries = $delivery->loadList($where, "date_dispensation DESC", 50);
 
-foreach($deliveries as $_delivery) {
+foreach ($deliveries as $_delivery) {
   $_delivery->loadRefStock();
   $_delivery->_ref_stock->loadRefsFwd();
 }

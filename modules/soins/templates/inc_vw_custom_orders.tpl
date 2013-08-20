@@ -21,7 +21,7 @@
     <td>{{mb_value object=$_delivery field=date_dispensation}}</td>
     <td>{{$_delivery->comments}}</td>
     <td>
-      <button type="button" class="cancel notext" onclick="removeCustomOrder(this, '{{$_delivery->_id}}')"></button>
+      <button type="button" class="cancel notext compact" onclick="removeCustomOrder(this, '{{$_delivery->_id}}')"></button>
     </td>
   </tr>
 {{foreachelse}}

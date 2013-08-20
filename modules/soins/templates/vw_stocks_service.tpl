@@ -12,10 +12,11 @@
 function refreshLists() {
   refreshOrders();
   refreshReceptions();
-  
-  var url = new Url("soins", "httpreq_vw_stock_inventory");
+
+  // TODO verifier que cet onglet fonctionne
+  /*var url = new Url("soins", "httpreq_vw_stock_inventory");
   url.addFormData(getForm("filter"));
-  url.requestUpdate("list-inventory");
+  url.requestUpdate("list-inventory");*/
   
   return false;
 }
@@ -90,7 +91,7 @@ Main.add(function () {
 <ul id="tab_stocks_soins" class="control_tabs">
   <li><a href="#list-order">Commandes</a></li>
   <li><a href="#list-reception">Réceptions <small>(0)</small></a></li>
-  <li><a href="#list-inventory">Inventaire</a></li>
+  {{*<li><a href="#list-inventory">Inventaire</a></li>*}}
   <li>
     <form name="filter" action="?" method="get" onsubmit="return (checkForm(this) && refreshLists())">
       <input type="hidden" name="m" value="soins" />
