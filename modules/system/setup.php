@@ -1308,7 +1308,7 @@ class CSetupsystem extends CSetup {
     $query = "DELETE user_preferences
       FROM user_preferences
       LEFT JOIN users ON users.user_id = user_preferences.user_id
-      WHERE user_preferences.user_id IS NOT NULL
+      WHERE user_preferences.user_id IS NOT NULL AND user_preferences.user_id <> '0'
       AND  users.user_id IS NULL";
     $this->addQuery($query, true);
 
