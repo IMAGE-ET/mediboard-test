@@ -86,7 +86,7 @@
       <tr>
        {{if $conf.ref_pays == 1}}
           <th>{{mb_label object=$patient field="assure_matricule"}}</th>
-          <td>{{mb_field object=$patient field="assure_matricule" onchange="copyIdentiteAssureValues(this)"}}</td>
+          <td>{{mb_field object=$patient field="assure_matricule"}}</td>
       {{/if}}
      </tr>
     </table>
