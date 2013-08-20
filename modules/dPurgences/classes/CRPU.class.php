@@ -125,15 +125,17 @@ class CRPU extends CMbObject {
    */
   function getProps() {
     $impose_degre_urgence  = CAppUI::conf("dPurgences CRPU impose_degre_urgence", CGroups::loadCurrent()) == 1;
+    $impose_diag_infirmier = CAppUI::conf("dPurgences CRPU impose_diag_infirmier", CGroups::loadCurrent()) == 1;
+    $impose_motif          = CAppUI::conf("dPurgences CRPU impose_motif", CGroups::loadCurrent()) == 1;
 
     $specsParent = parent::getProps();
     $specs = array (
       "sejour_id"        => "ref notNull class|CSejour cascade",
       "motif_entree"     => "text helped",
-      "diag_infirmier"   => "text helped",
+      "diag_infirmier"   => "text ".($impose_diag_infirmier ? 'notNull ' : '')."helped",
       "pec_douleur"      => "text helped",
       "pec_transport"    => "enum list|med|paramed|aucun",
-      "motif"            => "text helped",
+      "motif"            => "text ".($impose_motif ? 'notNull ' : '')."helped",
       "ccmu"             => "enum ".($impose_degre_urgence ? 'notNull ' : '')."list|1|P|2|3|4|5|D",
       "gemsa"            => "enum list|1|2|3|4|5|6",
       "type_pathologie"  => "enum list|C|E|M|P|T",
