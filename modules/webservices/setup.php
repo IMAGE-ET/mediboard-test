@@ -208,6 +208,19 @@ class CSetupwebservices extends CSetup {
                 ADD `return_raw` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.34";
+    $this->makeRevision("0.34");
+
+    $query = "ALTER TABLE `source_soap`
+                ADD `xop_mode` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.35");
+
+    $query = "ALTER TABLE `echange_soap`
+                CHANGE `input` `input` LONGTEXT,
+                CHANGE `output` `output` LONGTEXT;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.36";
   }
 }

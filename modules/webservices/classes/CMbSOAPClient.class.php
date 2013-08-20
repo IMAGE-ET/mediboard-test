@@ -26,7 +26,12 @@ class CMbSOAPClient extends SoapClient {
   public $encoding;
   public $options;
   public $return_raw;
+  public $xop_mode;
   public $response_body;
+  public $ca_info;
+  public $local_cert;
+  public $passphrase;
+
 
   /**
    * The constructor
@@ -51,6 +56,7 @@ class CMbSOAPClient extends SoapClient {
   ) {
 
     $this->return_raw = CMbArray::extract($options, "return_raw", false);
+    $this->xop_mode   = CMbArray::extract($options, "xop_mode", false);
 
     $this->wsdl_url = $rooturl;
 
@@ -82,14 +88,17 @@ class CMbSOAPClient extends SoapClient {
 
     // Authentification HTTP
     if ($local_cert) {
+      $this->local_cert = $local_cert;
       $options = array_merge($options, array("local_cert" => $local_cert));
     }
     if ($passphrase) {
+      $this->passphrase = $passphrase;
       $options = array_merge($options, array("passphrase" => $passphrase));
     }
 
     // Authentification SSL
     if ($verify_peer && $cafile) {
+      $this->ca_info = $cafile;
       $context = stream_context_create(
         array("ssl" =>
           array("verify_peer" => $verify_peer,
@@ -133,7 +142,43 @@ class CMbSOAPClient extends SoapClient {
   }
 
   public function __doRequest($request, $location,  $action,  $version,  $one_way = 0 ) {
-    $xml = parent::__doRequest($request, $location,  $action,  $version,  $one_way);
+    if ($this->xop_mode) {
+      $ch = curl_init();
+      $request = preg_replace("#^<\?xml[^>]*>#", "", $request);
+      $entete = utf8_encode('--MIME_boundary10
+Content-Type: application/xop+xml; charset=UTF-8; type="application/soap+xml"
+Content-Transfer-Encoding: binary
+Content-ID: <rootpart@openxtrem.com>
+');
+
+      $pied = utf8_encode("
+--MIME_boundary10--
+");
+      $request = $entete.$request.$pied;
+
+      curl_setopt($ch, CURLOPT_URL, $location);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+      curl_setopt($ch, CURLOPT_VERBOSE, 1);
+      curl_setopt($ch, CURLOPT_CAINFO, $this->ca_info);
+      curl_setopt($ch, CURLOPT_SSLCERT, $this->local_cert);
+      curl_setopt($ch, CURLOPT_SSLCERTPASSWD, $this->passphrase);
+      curl_setopt($ch, CURLOPT_POST, true );
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
+      curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: multipart/related; boundary="MIME_boundary10"; type="application/xop+xml"; start="<rootpart@openxtrem.com>"', "MIME-Version: 1.0", "SOAPAction: $action",'Content-Length: '.strlen($request) ));
+      $result = curl_exec($ch);
+      if (curl_errno($ch)) {
+        throw(new CMbException('Error: ' . curl_error($ch)));
+      }
+      curl_close($ch);
+      preg_match("#<.*Envelope>#", $result, $matches);
+      $xml = $matches[0];
+    }
+    else {
+      $xml = parent::__doRequest($request, $location,  $action,  $version,  $one_way);
+    }
+
     if (!$this->return_raw) {
       return $xml;
     }

@@ -81,6 +81,10 @@
               <th>{{mb_label object=$source field="return_raw"}}</th>
               <td>{{mb_field object=$source field="return_raw"}}</td>
             </tr>
+            <tr>
+              <th>{{mb_label object=$source field="xop_mode"}}</th>
+              <td>{{mb_field object=$source field="xop_mode"}}</td>
+            </tr>
           </table>
         </fieldset>
 

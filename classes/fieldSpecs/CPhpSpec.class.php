@@ -24,7 +24,7 @@ class CPhpSpec extends CMbFieldSpec {
    * @see parent::getDBSpec()
    */
   function getDBSpec() {
-    return "MEDIUMTEXT";
+    return "LONGTEXT";
   }
 
   /**
