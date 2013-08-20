@@ -32,7 +32,7 @@ class CXDSAssociation extends CXDSRegistryObject {
    */
   function __construct($id, $status, $sourceObject, $targetObject, $rplc = false) {
     parent::__construct($id);
-    $this->associationType = "urn:oasis:names:tc:ebxmlregrep:AssociationType:HasMember";
+    $this->associationType = "urn:oasis:names:tc:ebxml-regrep:AssociationType:HasMember";
     if ($rplc) {
       $this->associationType = "urn:ihe:iti:2007:AssociationType:RPLC";
     }
@@ -49,7 +49,7 @@ class CXDSAssociation extends CXDSRegistryObject {
    */
   function toXML() {
     $xml = new CXDSXmlDocument();
-    $xml->createAssociationRoot($this->id, $this->status, $this->associationType, $this->sourceObject, $this->targetObject);
+    $xml->createAssociationRoot($this->id, $this->associationType, $this->sourceObject, $this->targetObject, $this->objectType);
     return $xml;
   }
 

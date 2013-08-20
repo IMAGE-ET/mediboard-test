@@ -69,11 +69,9 @@ class CXDSExtrinsicObject extends CXDSRegistryObject {
    * @param String $id       String
    * @param String $mimeType String
    * @param String $status   null
-   * @param String $lid      null
    */
-  function __construct($id, $mimeType, $status = null, $lid = null) {
+  function __construct($id, $mimeType, $status = null) {
     parent::__construct($id);
-    $this->lid = $lid;
     $this->mimeType = $mimeType;
     $this->objectType = "urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1";
     $this->status = $status;
@@ -242,7 +240,7 @@ class CXDSExtrinsicObject extends CXDSRegistryObject {
    */
   function toXML() {
     $xml = new CXDSXmlDocument();
-    $xml->createExtrinsicObjectRoot($this->id, $this->lid, $this->mimeType, $this->status);
+    $xml->createExtrinsicObjectRoot($this->id, $this->mimeType, $this->objectType);
     $base_xml = $xml->documentElement;
     $variables = $this->getPropertie();
     foreach ($variables as $_variable) {

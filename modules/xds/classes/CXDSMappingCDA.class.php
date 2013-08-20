@@ -22,6 +22,9 @@ class CXDSMappingCDA {
   public $id_classification;
   public $id_external;
   public $xpath;
+  public $xcn_mediuser;
+  public $xon_etablissement;
+  public $oid = array();
 
   function __construct($cda) {
     $this->cda = $cda;
@@ -31,6 +34,33 @@ class CXDSMappingCDA {
     $this->xpath->registerNamespace("cda", "urn:hl7-org:v3");
     $this->id_classification = 0;
     $this->id_external = 0;
+    $this->xcn_mediuser = CXDSTools::getXCNMediuser();
+    $this->xon_etablissement = CXDSTools::getXONetablissement();
+  }
+
+  function generateXDS() {
+    $id_registry  = "2.25.4896.5";
+    $id_document  = "2.25.4896.4";
+    $id_signature = "2.25.4896.3";
+
+    $class = new CXDSRegistryObjectList();
+
+    $registry = $this->createRegistryPackage($id_registry);
+    $class->appendRegistryPackage($registry);
+    $extrinsic = $this->createExtrinsicObject($id_document);
+    $class->appendExtrinsicObject($extrinsic);
+
+    $signature = $this->createSignature($id_signature);
+    $class->appendExtrinsicObject($signature);
+
+    $asso1 = $this->createAssociation("association01", $id_registry, $id_document);
+    $asso2 = $this->createAssociation("association02", $id_registry, $id_signature);
+    $asso3 = $this->createAssociation("association03", $id_signature, $id_registry, true);
+    $class->appendAssociation($asso1);
+    $class->appendAssociation($asso2);
+    $class->appendAssociation($asso3);
+
+    return $class->toXML();
   }
 
   function appendNameDocument($name) {
@@ -62,15 +92,15 @@ class CXDSMappingCDA {
     $this->name_submission = $id;
     $registry = new CXDSRegistryPackage($id);
     //date de soumission
-    $registry->setSubmissionTime(array(self::getTimeUtc()));
+    $registry->setSubmissionTime(array(CXDSTools::getTimeUtc()));
     //PS qui envoie le document
     $document = new CXDSDocumentEntryAuthor("cla$cla_id", $id, true);
     $this->setClaId();
+    $document->setAuthorPerson(array($this->xcn_mediuser));
     //@todo: a faire
-    $document->setAuthorPerson(array("00B1041553^MEDECIN4155-B1^PAUL^^^^^^&amp;1.2.250.1.71.4.2.1&amp;ISO^D^^^IDNPS"));
     $document->setAuthorSpecialty(array("G15_10/SM26^Médecin - Qualifié en Médecine Générale (SM)^1.2.250.1.213.1.1.4.5"));
     //Institution qui envoie le document
-    $document->setAuthorInstitution(array("Cabinet Dr MEDECIN2154-B1 PAUL^^^^^&amp;1.2.250.1.71.4.2.2&amp;ISO^IDNST^^^00B104155300"));
+    $document->setAuthorInstitution(array($this->xon_etablissement));
     $registry->appendDocumentEntryAuthor($document);
     //type d'activité pour lequel on envoie les documents
     //@todo: a faire
@@ -80,7 +110,7 @@ class CXDSMappingCDA {
     $content->setContentTypeCodeDisplayName("Hospitalisation de jour");
     $registry->setContentType($content);
     //spécification d'un Submissionset ou d'un folder, ici submissionset
-    $registry->setSubmissionSet("cla$cla_id", $id, true);
+    $registry->setSubmissionSet("cla$cla_id", $id, false);
     $this->setClaId();
     //patient du document
     $registry->setPatientId("ei$ei_id", $id, $ins);
@@ -91,7 +121,8 @@ class CXDSMappingCDA {
     $this->setEiId();
     //OID unique  concat(oid.objet+id.doc+time)
     //@todo: a faire
-    $registry->setUniqueId("ei$ei_id", $id, "1.2.250.1.999.1.1.7898.1.20111206120801");
+    $this->oid["lot"] = "2.25.43911231647312014016.1";
+    $registry->setUniqueId("ei$ei_id", $id, $this->oid["lot"]);
     $this->setEiId();
 
     return $registry;
@@ -108,7 +139,7 @@ class CXDSMappingCDA {
     $extrinsic = new CXDSExtrinsicObject($id, "text/xml");
     //effectiveTime en UTC
     $time = $xpath->getNodeValue("/cda:ClinicalDocument/cda:effectiveTime/@value");
-    $extrinsic->setSlot("creationTime", array(self::getTimeUtc($time)));
+    $extrinsic->setSlot("creationTime", array(CXDSTools::getTimeUtc($time)));
     //languageCode
     $languageCode = $xpath->getNodeValue("/cda:ClinicalDocument/cda:languageCode/@code");
     $extrinsic->setSlot("languageCode", array($languageCode));
@@ -118,10 +149,10 @@ class CXDSMappingCDA {
     $extrinsic->setSlot("legalAuthenticator", array($legalAuthenticator));
     //documentationOf/serviceEvent/effectiveTime/low en UTC
     $serviceStart = $xpath->getNodeValue("/cda:ClinicalDocument/cda:documentationOf/cda:serviceEvent/cda:effectiveTime/cda:low/@value");
-    $extrinsic->setSlot("serviceStartTime", array(self::getTimeUtc($serviceStart)));
+    $extrinsic->setSlot("serviceStartTime", array(CXDSTools::getTimeUtc($serviceStart)));
     //documentationOf/serviceEvent/effectiveTime/high en UTC
     $serviceStop = $xpath->getNodeValue("/cda:ClinicalDocument/cda:documentationOf/cda:serviceEvent/cda:effectiveTime/cda:high/@value");
-    $extrinsic->setSlot("serviceStopTime", array(self::getTimeUtc($serviceStop)));
+    $extrinsic->setSlot("serviceStopTime", array(CXDSTools::getTimeUtc($serviceStop)));
     //recordTarget/patientRole/id
     $extrinsic->setSlot("sourcePatientId", array($ins));
     //title
@@ -259,6 +290,7 @@ class CXDSMappingCDA {
     $root = $xpath->getNodeValue("/cda:ClinicalDocument/cda:id/@root");
     $extension = $xpath->getNodeValue("/cda:ClinicalDocument/cda:id/@extension");
     $unique_id = $this->getUniqueId($root, $extension);
+    $this->oid["extrinsic"] = $unique_id;
     $extrinsic->setUniqueId("ei$ei_id", $id, $unique_id);
     $this->setEiId();
 
@@ -270,29 +302,25 @@ class CXDSMappingCDA {
     $ei_id = &$this->id_external;
 
     $extrinsic = new CXDSExtrinsicObject($id, "text/xml");
-    $extrinsic->setSlot("creationTime", array(self::getTimeUtc()));
+    $extrinsic->setSlot("creationTime", array(CXDSTools::getTimeUtc()));
     $extrinsic->setSlot("languageCode", array("art"));
-    //@todo: a faire
-    //identique à celui qui envoie
-    $extrinsic->setSlot("legalAuthenticator", array("00B1041553^MEDECIN4155-B1^PAUL^^^^^^&amp;1.2.250.1.71.4.2.1&amp;ISO^D^^^IDNPS"));
-    $extrinsic->setSlot("serviceStartTime", array(self::getTimeUtc()));
-    $extrinsic->setSlot("serviceStopTime", array(self::getTimeUtc()));
+
+    $extrinsic->setSlot("legalAuthenticator", array($this->xcn_mediuser));
+    $extrinsic->setSlot("serviceStartTime", array(CXDSTools::getTimeUtc()));
+    $extrinsic->setSlot("serviceStopTime", array(CXDSTools::getTimeUtc()));
     //@todo: a faire
     //patientId du lot de submission
-    $extrinsic->setSlot("sourcePatientId", array("1164485058822081751070^^^&amp;1.2.250.1.213.1.4.2&amp;ISO^INS-C^^20100522152212"));
+    $extrinsic->setSlot("sourcePatientId", array("0887177831579788841339^^^&1.2.250.1.213.1.4.2&ISO^INS-C"));
     $extrinsic->setTitle("Source");
 
     //identique à celui qui envoie
     $document = new CXDSDocumentEntryAuthor("cla$cla_id", $id);
     $this->setClaId();
-    //@todo: a faire
-    $document->setAuthorPerson(array("00B1041553^MEDECIN4155-B1^PAUL^^^^^^&amp;1.2.250.1.71.4.2.1&amp;ISO^D^^^IDNPS"));
+    $document->setAuthorPerson(array($this->xcn_mediuser));
     //@todo: a faire
     $document->setAuthorSpecialty(array("G15_10/SM26^Médecin - Qualifié en Médecine Générale (SM)^1.2.250.1.213.1.1.4.5"));
-    //@todo: a faire
-    $document->setAuthorInstitution(array("Cabinet Dr MEDECIN2154-B1 PAUL^^^^^&amp;1.2.250.1.71.4.2.2&amp;ISO^IDNST^^^00B104155300"));
-    //@todo: a faire
-    $document->appendAuthorRole(array(""));
+    $document->setAuthorInstitution(array($this->xon_etablissement));
+
     $extrinsic->appendDocumentEntryAuthor($document);
 
     $classification = new CXDSClass("cla$cla_id", $id, "urn:oid:1.3.6.1.4.1.19376.1.2.1.1.1");
@@ -335,7 +363,7 @@ class CXDSMappingCDA {
     $healt = new CXDSHealthcareFacilityType("cla$cla_id", $id, "SA01");
     $this->setClaId();
     $healt->setCodingScheme(array("1.2.250.1.71.4.2.4"));
-    $healt->setName("Etablissement Public de Sante");
+    $healt->setName("Etablissement Public de santé");
     $extrinsic->setHealthcareFacilityType($healt);
 
     //@todo: a faire
@@ -353,21 +381,22 @@ class CXDSMappingCDA {
 
     //@todo: a faire
     //identique au lot de submission
-    $extrinsic->setPatientId("ei$ei_id", $id, "1164485058822081751070^^^&amp;1.2.250.1.213.1.4.2&amp;ISO^INS-C^^20100522152212");
+    $extrinsic->setPatientId("ei$ei_id", $id, "0887177831579788841339^^^&1.2.250.1.213.1.4.2&ISO^INS-C^^20100522152212");
     $this->setEiId();
     //@todo: a faire
+    $this->oid["signature"] = "1.2.250.1.999.1.1.7898.3.20111206120801.0";
     $extrinsic->setUniqueId("ei$ei_id", $id, "1.2.250.1.999.1.1.7898.3.20111206120801.0");
     $this->setEiId();
 
     return $extrinsic;
   }
 
-  function createAssociation($id, $source, $target, $rplc = false) {
+  function createAssociation($id, $source, $target, $sign = false) {
     /**
      * si relatedDocument/parentDocument/id => association RPLC
      */
-    $hasmember = new CXDSHasMemberAssociation($id, $source, $target, $rplc);
-    if (!$rplc) {
+    $hasmember = new CXDSHasMemberAssociation($id, $source, $target, $sign);
+    if (!$sign) {
       $hasmember->setSubmissionSetStatus(array("Original"));
     }
 
@@ -396,20 +425,5 @@ class CXDSMappingCDA {
     $name = $node->getAttribute("name");
 
     return array($id, $oid, $name);
-  }
-
-  /**
-   * Retourne le datetime actuelle au format UTC
-   *
-   * @param String $date now
-   *
-   * @return string
-   */
-  static function getTimeUtc($date = "now") {
-    $timezone_local = new DateTimeZone(CAppUI::conf("timezone"));
-    $timezone_utc = new DateTimeZone("UTC");
-    $date = new DateTime($date, $timezone_local);
-    $date->setTimezone($timezone_utc);
-    return $date->format("YmdHis");
   }
 }

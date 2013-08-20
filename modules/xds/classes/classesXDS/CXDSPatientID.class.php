@@ -25,7 +25,7 @@ class CXDSPatientID extends CXDSExternalIdentifier {
    * @param bool   $registry       false
    */
   function __construct($id, $registryObject, $value, $registry = false) {
-    parent::__construct($id, $registry, $value);
+    parent::__construct($id, $registryObject, $value);
     $this->identificationScheme = "urn:uuid:58a6f841-87b3-4a3e-92fd-a8ffeff98427";
     if ($registry) {
       $this->identificationScheme = "urn:uuid:6b5aea1a-874d-4603-a4bc-96a0a7b38446";

@@ -21,19 +21,43 @@ class CXDSXmlDocument extends DOMDocument {
    */
   function __construct() {
     parent::__construct();
-    $this->formatOutput = true;
+    //$this->formatOutput = true;
   }
 
   /**
    * Création d'élément racine
    *
+   * @param String $namespace String
+   * @param String $name      String
+   *
+   * @return DOMElement
+   */
+  function createElemNS($namespace, $name) {
+    $namespace = utf8_encode($namespace);
+    $name = utf8_encode($name);
+    return $this->createElementNS($namespace, $name);
+  }
+
+  /**
+   * Création d'élément RIM
+   *
    * @param String $name String
    *
    * @return DOMElement
    */
-  function createRoot($name) {
-    $name = utf8_encode($name);
-    return $this->createElementNS("urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0", $name);
+  function createRimRoot($name) {
+    return $this->createElemNS("urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0", "rim:$name");
+  }
+
+  /**
+   * Création d'élément racine lcm
+   *
+   * @param String $name String
+   *
+   * @return DOMElement
+   */
+  function createLcmRoot($name) {
+    return $this->createElemNS("urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0", "lcm:$name");
   }
 
   /**
@@ -45,7 +69,7 @@ class CXDSXmlDocument extends DOMDocument {
    */
   function createSlotRoot($name) {
     $name = utf8_encode($name);
-    $element = $this->createRoot("Slot");
+    $element = $this->createRimRoot("Slot");
     $element->setAttribute("name", $name);
     $this->appendChild($element);
   }
@@ -58,12 +82,10 @@ class CXDSXmlDocument extends DOMDocument {
    *
    * @return void
    */
-  function createRegistryPackageRoot($id, $status) {
+  function createRegistryPackageRoot($id) {
     $id = utf8_encode($id);
-    $status = utf8_encode($status);
-    $element = $this->createRoot("RegistryPackage");
+    $element = $this->createRimRoot("RegistryPackage");
     $element->setAttribute("id", $id);
-    $element->setAttribute("status", $status);
     $this->appendChild($element);
   }
 
@@ -75,11 +97,11 @@ class CXDSXmlDocument extends DOMDocument {
    * @return void
    */
   function createSlotValue($data) {
-    $valueList = $this->createRoot("ValueList");
+    $valueList = $this->createRimRoot("ValueList");
     foreach ($data as $_data) {
       $_data = utf8_encode($_data);
-      $value = $this->createRoot("Value");
-      $value->nodeValue = $_data;
+      $value = $this->createRimRoot("Value");
+      $value->nodeValue = htmlspecialchars($_data);
       $valueList->appendChild($value);
     }
     $this->documentElement->appendChild($valueList);
@@ -93,7 +115,7 @@ class CXDSXmlDocument extends DOMDocument {
    * @return void
    */
   function createNameDescriptionRoot($name) {
-    $element = $this->createRoot($name);
+    $element = $this->createRimRoot($name);
     $this->appendChild($element);
   }
 
@@ -110,7 +132,7 @@ class CXDSXmlDocument extends DOMDocument {
     $value = utf8_encode($value);
     $charset = utf8_encode($charset);
     $lang = utf8_encode($lang);
-    $element = $this->createRoot("LocalizedString");
+    $element = $this->createRimRoot("LocalizedString");
     $element->setAttribute("value", $value);
     $element->setAttribute("charset", $charset);
     $element->setAttribute("lang", $lang);
@@ -126,7 +148,7 @@ class CXDSXmlDocument extends DOMDocument {
    */
   function createVersionInfo($value) {
     $value = utf8_encode($value);
-    $element = $this->createRoot("VersionInfo");
+    $element = $this->createRimRoot("VersionInfo");
     $element->setAttribute("VersionName", $value);
     $this->appendChild($element);
   }
@@ -146,7 +168,7 @@ class CXDSXmlDocument extends DOMDocument {
     $classification = utf8_encode($classification);
     $classified = utf8_encode($classified);
     $nodeRepresentation = utf8_encode($nodeRepresentation);
-    $element = $this->createRoot("Classification");
+    $element = $this->createRimRoot("Classification");
     $element->setAttribute("id", $id);
     $element->setAttribute("classificationScheme", $classification);
     $element->setAttribute("classifiedObject", $classified);
@@ -169,7 +191,7 @@ class CXDSXmlDocument extends DOMDocument {
     $identification = utf8_encode($identification);
     $registry = utf8_encode($registry);
     $value = utf8_encode($value);
-    $element = $this->createRoot("ExternalIdentifier");
+    $element = $this->createRimRoot("ExternalIdentifier");
     $element->setAttribute("id", $id);
     $element->setAttribute("identificationScheme", $identification);
     $element->setAttribute("registryObject", $registry);
@@ -187,16 +209,14 @@ class CXDSXmlDocument extends DOMDocument {
    *
    * @return void
    */
-  function createExtrinsicObjectRoot($id, $lid, $mimeType, $status) {
+  function createExtrinsicObjectRoot($id, $mimeType, $objectType) {
     $id = utf8_encode($id);
-    $lid = utf8_encode($lid);
     $mimeType = utf8_encode($mimeType);
-    $status = utf8_encode($status);
-    $element = $this->createRoot("ExtrinsicObject");
+    $objectType = utf8_encode($objectType);
+    $element = $this->createRimRoot("ExtrinsicObject");
     $element->setAttribute("id", $id);
-    $element->setAttribute("lid", $lid);
     $element->setAttribute("mimeType", $mimeType);
-    $element->setAttribute("status", $status);
+    $element->setAttribute("objectType", $objectType);
     $this->appendChild($element);
   }
 
@@ -213,7 +233,7 @@ class CXDSXmlDocument extends DOMDocument {
     $id = utf8_encode($id);
     $classifiedObject = utf8_encode($classifiedObject);
     $classificationNode = utf8_encode($classificationNode);
-    $element = $this->createRoot("Classification");
+    $element = $this->createRimRoot("Classification");
     $element->setAttribute("id", $id);
     $element->setAttribute("classificationNode", $classificationNode);
     $element->setAttribute("classifiedObject", $classifiedObject);
@@ -231,15 +251,15 @@ class CXDSXmlDocument extends DOMDocument {
    *
    * @return void
    */
-  function createAssociationRoot($id, $status, $type, $sourceObject, $targetObject) {
+  function createAssociationRoot($id, $type, $sourceObject, $targetObject, $objectType) {
     $id = utf8_encode($id);
-    $status = utf8_encode($status);
     $sourceObject = utf8_encode($sourceObject);
     $targetObject = utf8_encode($targetObject);
-    $element = $this->createRoot("Association");
+    $objectType = utf8_encode($objectType);
+    $element = $this->createRimRoot("Association");
     $element->setAttribute("id", $id);
-    $element->setAttribute("status", $status);
     $element->setAttribute("associationType", $type);
+    $element->setAttribute("objectType", $objectType);
     $element->setAttribute("sourceObject", $sourceObject);
     $element->setAttribute("targetObject", $targetObject);
     $this->appendChild($element);
@@ -251,7 +271,7 @@ class CXDSXmlDocument extends DOMDocument {
    * @return void
    */
   function createRegistryObjectListRoot() {
-    $this->appendChild($this->createRoot("RegistryObjectList"));
+    $this->appendChild($this->createRimRoot("RegistryObjectList"));
   }
 
   /**
@@ -260,9 +280,20 @@ class CXDSXmlDocument extends DOMDocument {
    * @return void
    */
   function createSubmitObjectsRequestRoot() {
-    $element = $this->createRoot("SubmitObjectsRequest");
+    $element = $this->createLcmRoot("SubmitObjectsRequest");
     $element->appendChild($this->documentElement);
     $this->appendChild($element);
+  }
+
+  /**
+   * Création d'un noeud pour l'entrepôt
+   *
+   * @param String $name String
+   *
+   * @return DOMElement
+   */
+  function createDocumentRepositoryElement($name) {
+    return $this->createElemNS("urn:ihe:iti:xds-b:2007", "xds:$name");
   }
 
   /**

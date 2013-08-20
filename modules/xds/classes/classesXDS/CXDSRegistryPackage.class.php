@@ -48,7 +48,7 @@ class CXDSRegistryPackage extends CXDSRegistryObject {
    * @return void
    */
   function setSubmissionTime($value) {
-    $this->submissionTime = new CXDSSlot("CreationTime", $value);
+    $this->submissionTime = new CXDSSlot("submissionTime", $value);
   }
 
   /**

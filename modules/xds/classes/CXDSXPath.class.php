@@ -28,7 +28,7 @@ class CXDSXPath extends CMbXPath {
     $result = $this->queryUniqueNode($xpath);
 
     if ($result) {
-      $result = $result->nodeValue;
+      $result = utf8_decode($result->nodeValue);
     }
 
     return $result;
@@ -43,7 +43,7 @@ class CXDSXPath extends CMbXPath {
    * @return string
    */
   function getValueAttributNode($node, $attName) {
-    return $node->getAttribute($attName);
+    return utf8_decode($node->getAttribute($attName));
   }
 
   /**
@@ -103,7 +103,7 @@ class CXDSXPath extends CMbXPath {
     $comp1 = $this->getValueAttributNode($id, "extension");
     $comp9 = $this->getValueAttributNode($id, "root");
     $comp13 = $this->getTypeId($comp1);
-    $result = "$comp1^$comp2^$comp3^^^^^^^&amp;$comp9&amp;ISO^$comp10^^^$comp13";
+    $result = "$comp1^$comp2^$comp3^^^^^^&$comp9&ISO^$comp10^^^$comp13";
     return $result;
   }
 
@@ -140,13 +140,14 @@ class CXDSXPath extends CMbXPath {
       $comp1 = $name->nodeValue;
     }
     if (!$this->isNullFlavor($id)) {
-      $comp7 = "DNST";
+
+      $comp7 = "IDNST";
       $comp6 = $this->getValueAttributNode($id, "root");
-      $comp6 = "&amp;$comp6&ampISO";
+      $comp6 = "&$comp6&ISO";
       $comp10 = $this->getValueAttributNode($id, "extension");
     }
 
-    return "$comp1^^^^^^$comp6^$comp7^^^$comp10";
+    return "$comp1^^^^^$comp6^$comp7^^^$comp10";
   }
 
   /**
@@ -193,11 +194,12 @@ class CXDSXPath extends CMbXPath {
     //@todo: récupérer la date pour l'INS-C
     $comp5 = "INS-C";
     $comp4 = $this->getValueAttributNode($node, "root");
+    $comp4 = "&$comp4&ISO";
     $comp1 = $this->getValueAttributNode($node, "extension");
     if ($comp4 === "1.2.250.1.213.1.4.1") {
       $comp5 = "INS-A";
     }
-    $result = "$comp1^^^&amp;$comp4&amp;ISO^$comp5";
+    $result = "$comp1^^^$comp4^$comp5";
     return $result;
   }
 }

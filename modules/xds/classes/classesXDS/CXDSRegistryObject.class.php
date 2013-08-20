@@ -17,7 +17,6 @@
 class CXDSRegistryObject {
 
   public $id;
-  public $lid;
   public $objectType;
   public $versionInfo;
 
