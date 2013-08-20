@@ -342,12 +342,27 @@ class CMbSecurity {
    *
    * @param String $certificate_client Client certificate
    *
-   * @return bool
+   * @return String[]
    */
   static function getInformationCertificate($certificate_client) {
     $x509 = new File_X509();
 
     return $x509->loadX509($certificate_client);
+  }
+
+  /**
+   * Return the certificate serial
+   *
+   * @param String $certificate_client client certificate
+   *
+   * @return String
+   */
+  static function getCertificateSerial($certificate_client) {
+    $x509 = new File_X509();
+
+    $certificate = $x509->loadX509($certificate_client);
+
+    return $certificate["tbsCertificate"]["serialNumber"]->value;
   }
 
   /**
@@ -365,7 +380,7 @@ class CMbSecurity {
       return false;
     }
 
-    $serial = $certificate['tbsCertificate']['serialNumber']->value;
+    $serial = self::getCertificateSerial($certificate_client);
 
     $x509 = new File_X509();
     $crl = $x509->loadCRL($list_revoked);

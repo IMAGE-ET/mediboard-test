@@ -6,7 +6,7 @@
  * @category Classes
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  OXOL, see http://www.mediboard.org/public/OXOL
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version  $Revision$
  * @link     http://www.mediboard.org
  */
@@ -18,6 +18,7 @@ class CSSLCertificate {
 
   public $certificate_path;
   public $certificate;
+  public $chain;
   public $pivate_key;
   public $passphrase;
   public $private_key_handle;
@@ -35,6 +36,7 @@ class CSSLCertificate {
     openssl_pkcs12_read(file_get_contents($path_certificate), $array_cert, $passphrase);
     $this->certificate = $array_cert["cert"];
     $this->pivate_key = $array_cert["pkey"];
+    $this->chain = $array_cert["extracerts"];
   }
 
   /**
@@ -49,7 +51,7 @@ class CSSLCertificate {
       return $this->certificate;
     }
 
-    return $this->deleteHeader($this->certificate);
+    return self::deleteHeader($this->certificate);
   }
 
   /**
@@ -59,7 +61,7 @@ class CSSLCertificate {
    *
    * @return String
    */
-  function deleteHeader($certificate) {
+  static function deleteHeader($certificate) {
     preg_match_all("#(?<=-{5})[^-]+(?=-{5}\\w)#", $certificate, $matches);
     return $matches[0][0];
   }
@@ -123,5 +125,45 @@ class CSSLCertificate {
 
     $rdn = substr($rdn, 0, -1);
     return $rdn;
+  }
+
+  /**
+   * Return the certificate to array format
+   *
+   * @return String[]
+   */
+  function getCertificateToArray() {
+    return CMbSecurity::getInformationCertificate($this->certificate);
+  }
+
+  /**
+   * Return the fingerPrint of the certificate
+   *
+   * @param String $certificate PEM Certificate
+   *
+   * @return string
+   */
+  static function getFingerPrint($certificate) {
+
+    $file = tempnam("", "txt");
+    file_put_contents($file, $certificate);
+
+    $cmd = "openssl x509 -in $file -outform der -fingerprint -noout";
+    $cmd = escapeshellcmd($cmd);
+    $processorInstance = proc_open($cmd, array(1 => array('pipe', 'w'), 2 => array('pipe', 'w')), $pipes);
+    $processorResult = stream_get_contents($pipes[1]);
+    $processorErrors = stream_get_contents($pipes[2]);
+    proc_close($processorInstance);
+    unlink($file);
+
+    if ($processorErrors) {
+      return $processorErrors;
+    }
+
+    preg_match_all("#(?<==|:)[^:]+#", $processorResult, $matches);
+
+    $fingerprint = implode("", $matches[0]);
+    $result = pack("H*", trim($fingerprint));
+    return $result;
   }
 }
