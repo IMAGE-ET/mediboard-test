@@ -110,7 +110,7 @@ function mbPortalURL($module, $action = null) {
 
   $url = CAppUI::conf("help_page_url");
   if (!$url || strpos($url, "%m") === false || strpos($url, "%a") === false) {
-    return;
+    return "";
   }
 
   $pairs = array(
@@ -390,7 +390,7 @@ function is_intranet_ip($ip) {
  *
  * @param string $key Value key
  *
- * @return string
+ * @return string|null
  */
 function get_server_var($key) {
   if (isset($_SERVER[$key])) {
@@ -408,14 +408,18 @@ function get_server_var($key) {
   if (function_exists('apache_getenv') && apache_getenv($key, true)) {
     return apache_getenv($key, true);
   }
+
+  return null;
 }
 
 /**
  * Get browser remote IPs using most of available methods
  *
+ * @param bool $remove_scope_id Remove the Scope ID of the IP addresses
+ *
  * @return array Array with proxy, client and remote keys as IP adresses
  */
-function get_remote_address() {
+function get_remote_address($remove_scope_id = true) {
   $address = array(
     "proxy" => null,
     "client" => null,
@@ -459,6 +463,14 @@ function get_remote_address() {
   $address["proxy"]  = reset($proxy);
   $address["client"] = reset($client);
   $address["remote"] = reset($remote);
+
+  if ($remove_scope_id) {
+    foreach ($address as $_type => $_address) {
+      if ($_address && ($pos = strpos($_address, "%"))) {
+        $address[$_type] = substr($_address, 0, $pos);
+      }
+    }
+  }
 
   return $address;
 }
