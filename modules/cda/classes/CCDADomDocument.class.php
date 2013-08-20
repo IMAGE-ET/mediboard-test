@@ -24,8 +24,8 @@ class CCDADomDocument extends DOMDocument {
   function __construct($encoding = "UTF-8") {
     parent::__construct("1.0", $encoding);
 
-    $this->preserveWhiteSpace = false;
-    $this->formatOutput = true;
+    //$this->preserveWhiteSpace = false;
+    //$this->formatOutput = true;
   }
 
   /**
