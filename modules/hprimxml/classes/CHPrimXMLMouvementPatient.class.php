@@ -71,7 +71,7 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
     
     // Ajout du mouvement (1 seul dans notre cas pas l'historique)
     $mouvements = $this->addElement($mouvementPatient, "mouvements"); 
-    $this->addMouvement($mouvements, $affectation, $referent);
+    $this->addMouvement($mouvements, $affectation);
 
     // Traitement final
     $this->purgeEmptyElements();
@@ -146,24 +146,24 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
     $codes = array();
     $avertissement = $comment = null;
 
-    // Si CIP
-    if (!CAppUI::conf('smp server')) {
-
-      // Mapping des mouvements
-      $msgMovement = $this->mappingMouvements($data['mouvements'], $newVenue);
-
-      // Notifier les autres destinataires
-      $newVenue->_eai_initiateur_group_id = $sender->group_id;
-      $newVenue->store();
-      
-      $codes = array ($msgMovement ? "A301" : "I301");
-      
-      if ($msgMovement) {
-        $avertissement = $msgMovement." ";
-      }
-
-      $comment = CEAISejour::getComment($newVenue);
+    if (!CAppUI::conf("hprimxml mvtComplet") || CAppUI::conf('smp server')) {
+      return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $comment, $newVenue);
     }
+    
+    // Mapping des mouvements
+    $msgMovement = $this->mappingMouvements($data['mouvements'], $newVenue);
+
+    // Notifier les autres destinataires
+    $newVenue->_eai_initiateur_group_id = $sender->group_id;
+    $newVenue->store();
+
+    $codes = array ($msgMovement ? "A301" : "I301");
+
+    if ($msgMovement) {
+      $avertissement = $msgMovement." ";
+    }
+
+    $comment = CEAISejour::getComment($newVenue);
 
     return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $comment, $newVenue);
   } 
