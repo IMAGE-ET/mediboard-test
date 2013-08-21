@@ -109,7 +109,7 @@ $log = new CUserLog();
 $list       = null;
 $list_count = null;
 
-$is_admin = CCanDo::checkAdmin();
+$is_admin = CCanDo::admin();
 
 if (!$stats) {
   $list       = $log->loadList($where, "user_log_id DESC", "$start, 100");
