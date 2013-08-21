@@ -35,6 +35,17 @@
     }
   };
 
+  /**
+   * used to edit multiple plages
+   *
+   * @param consult_id
+   */
+  multiPlageEdit = function(consult_id) {
+    var url = new Url("dPcabinet", "ajax_edit_multiconsult");
+    url.addParam("consult_id", consult_id);
+    url.requestModal(-50);
+  };
+
   refreshListCategorie = function(praticien_id){
     var url = new Url("dPcabinet", "httpreq_view_list_categorie");
     url.addParam("praticien_id", praticien_id);
@@ -441,13 +452,18 @@
                     {{elseif $consult->_count_matching_sejours}}
                       <button type="button" class="add" onclick="linkSejour()">{{tr}}CConsultation-_link_sejour{{/tr}}</button>
                     {{/if}}
+                    <br/>
+                    <button class="agenda button" id="buttonMultiple" type="button" onclick="multiPlageEdit('{{$consult->_id}}');" id="buttonMultiple">Modification multiple</button>
+
                   </span>
                     {{/if}}
                     <input type="text" name="_date" style="width: 15em;" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" onfocus="PlageConsultSelector.init()" readonly="readonly" onchange="if (this.value != '') $V(this.form._function_id, '')"/>
                     <input type="hidden" name="_date_planning" value="{{$date_planning}}" />
                     {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageConsultSelector.init()"}}
                     <button class="search notext" id="addedit_planning_button_select_date" type="button" onclick="PlageConsultSelector.init()">Choix de l'horaire</button>
-                  {{if !$consult->_id}}<button class="agenda notext" id="buttonMultiple" type="button" onclick="PlageConsultSelector.init(true)" id="buttonMultiple">Consultation multiple</button>{{/if}}
+                  {{if !$consult->_id}}
+                    <button class="agenda notext" id="buttonMultiple" type="button" onclick="PlageConsultSelector.init(true)" id="buttonMultiple">Consultation multiple</button>
+                  {{/if}}
                   </td>
                 </tr>
 
