@@ -24,7 +24,7 @@ class CXDSEventITI41 {
   /**
    * Création du message SOAP pour l'autorisation
    *
-   * @param String[] $data String[]
+   * @param String $data String
    *
    * @return DOMElement
    */
@@ -35,25 +35,25 @@ class CXDSEventITI41 {
 
     $xds = new CXDSMappingCDA($data);
     $header_xds = $xds->generateXDS();
-
     $xml->importDOMDocument($message, $header_xds);
+
     $document_cda = new CCDADomDocument();
     $document_cda->loadXML($data);
 
+    //ajout d'un document
     $document = $xml->createDocumentRepositoryElement("Document");
     $xml->appendAttribute($document, "id", "2.25.4896.4");
     $document->nodeValue = base64_encode($document_cda->saveXML());
     $xml->appendElement($message, $document);
     $xml->appendElement($xml, $message);
 
+    //ajout de la signature
     $dsig = new CDSIGTools($xml, CAppUI::conf("dmp path_certificat"), "1234");
     $dsig_signature = $dsig->createSignatureLot($xds->oid, $document_cda);
     $signature = $xml->createDocumentRepositoryElement("Document");
     $xml->appendAttribute($signature, "id", "2.25.4896.3");
     $signature->nodeValue = base64_encode($dsig_signature->saveXML());
     $xml->appendElement($message, $signature);
-
-    //mbTrace($xml->saveXML($message));CApp::rip();
 
     return $message;
   }
@@ -67,22 +67,23 @@ class CXDSEventITI41 {
 
     $dom = new CMbXMLDocument();
     $dom->loadXMLSafe($this->ack_data);
+
     $xpath = new CMbXPath($dom);
     $xpath->registerNamespace("ns1", "urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0");
-    $status = $xpath->query("@status");
-    $status = $status->item(0)->nodeValue;
+    $status = $xpath->queryAttributNode(".", null, "status");
+
 
     if ($status === "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Failure") {
       $nodes = $xpath->query("//ns1:RegistryErrorList/ns1:RegistryError");
       $ack = array();
       foreach ($nodes as $_node) {
-        $ack[] = array("status"  => $_node->attributes->getNamedItem("codeContext")->nodeValue,
-                       "context" => $_node->attributes->getNamedItem("errorCode")->nodeValue
+        $ack[] = array("status"  => $xpath->queryAttributNode(".", $_node, "codeContext"),
+                       "context" => $xpath->queryAttributNode(".", $_node, "errorCode")
         );
       }
     }
     else {
-      $ack = array("status" => $status, "context" => "");
+      $ack[] = array("status" => $status, "context" => "");
     }
 
     return $ack;

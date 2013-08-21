@@ -12,10 +12,7 @@
 Cxds = {
 
   showXds : function(form) {
-    var action = "?m=xds&a=ajax_entete_cda_xds";
-    Url.update(form, "highlighted");
-
-    var getParameters = action.toQueryParams();
+    var getParameters = form.action.toQueryParams();
     new Url("xds", "ajax_entete_cda_xds")
       .addFormData(form)
       .requestUpdate("enteteXds", {method: "post", getParameters :  getParameters});

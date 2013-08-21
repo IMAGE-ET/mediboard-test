@@ -14,22 +14,30 @@
 /**
  * Classe xml pour les jeux de valeurs
  */
-class CXDSXmlJvDocument extends DOMDocument {
+class CXDSXmlJvDocument extends CMbXMLDocument {
 
+  /**
+   * @see parent::__construct()
+   */
   function __construct() {
-    parent::__construct();
+    parent::__construct("UTF-8");
     $this->formatOutput = true;
-    $this->appendChild($this->createElement("jeuxValeurs"));
+    $this->addElement($this, "jeuxValeurs");
   }
 
+  /**
+   * Ajoute une ligne dans le xml
+   *
+   * @param String $oid  OID
+   * @param String $id   Identifiant
+   * @param String $name Nom
+   *
+   * @return void
+   */
   function appendLine($oid, $id, $name) {
-    $oid  = utf8_encode($oid);
-    $id   = utf8_encode($id);
-    $name = utf8_encode(trim($name));
-    $element = $this->createElement("line");
-    $element->setAttribute("id", $id);
-    $element->setAttribute("oid", $oid);
-    $element->setAttribute("name", $name);
-    $this->documentElement->appendChild($element);
+    $element = $this->addElement($this->documentElement, "line");
+    $this->addAttribute($element, "id"  , $id);
+    $this->addAttribute($element, "oid" , $oid);
+    $this->addAttribute($element, "name", $name);
   }
 }

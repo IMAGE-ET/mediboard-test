@@ -28,10 +28,9 @@ class CXDSHasMemberAssociation extends CXDSAssociation {
    * @param String $sourceObject String
    * @param String $targetObject String
    * @param bool   $sign         false
-   * @param String $status       String
    */
-  function __construct($id, $sourceObject, $targetObject, $sign = false, $status = null) {
-    parent::__construct($id, $status, $sourceObject, $targetObject);
+  function __construct($id, $sourceObject, $targetObject, $sign = false) {
+    parent::__construct($id, $sourceObject, $targetObject);
     if ($sign) {
       $this->associationType = "urn:ihe:iti:2007:AssociationType:signs";
     }
@@ -67,12 +66,15 @@ class CXDSHasMemberAssociation extends CXDSAssociation {
    */
   function toXML() {
     $xml = parent::toXML();
+
     if ($this->submissionSetStatus) {
       $xml->importDOMDocument($xml->documentElement, $this->submissionSetStatus->toXML());
     }
+
     if ($this->previousVersion) {
       $xml->importDOMDocument($xml->documentElement, $this->previousVersion->toXML());
     }
+
     return $xml;
   }
 }

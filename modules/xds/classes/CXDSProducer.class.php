@@ -12,7 +12,7 @@
  */
  
 /**
- * Description
+ * Classe Producer
  */
 class CXDSProducer {
 

@@ -17,7 +17,7 @@
  * contient les métadonnées décrivant les caractéristiques principales d'un document stocké
  * dans l'entrepôt dont l'index (uniqueId) pour pointer vers ce document.
  */
-class CXDSExtrinsicObject extends CXDSRegistryObject {
+class CXDSExtrinsicObject extends CXDSExtrinsicPackage {
 
   public $mimeType;
   /** @var  CXDSSlot */
@@ -38,12 +38,6 @@ class CXDSExtrinsicObject extends CXDSRegistryObject {
   public $uri;
   /** @var  CXDSSlot */
   public $documentAvailability;
-  /** @var  CXDSLocalizedString */
-  public $title;
-  /** @var  CXDSLocalizedString */
-  public $comments;
-  /** @var  CXDSDocumentEntryAuthor[] */
-  public $documentEntryAuthor = array();
   /** @var  CXDSClass */
   public $class;
   /** @var  CXDSConfidentiality[] */
@@ -58,23 +52,17 @@ class CXDSExtrinsicObject extends CXDSRegistryObject {
   public $practiceSetting;
   /** @var  CXDSType */
   public $type;
-  /** @var  CXDSPatientID */
-  public $patientId;
-  /** @var  CXDSUniqueID */
-  public $uniqueId;
 
   /**
    * Construction de l'instance
    *
    * @param String $id       String
    * @param String $mimeType String
-   * @param String $status   null
    */
-  function __construct($id, $mimeType, $status = null) {
+  function __construct($id, $mimeType) {
     parent::__construct($id);
     $this->mimeType = $mimeType;
     $this->objectType = "urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1";
-    $this->status = $status;
   }
 
   /**
@@ -101,17 +89,6 @@ class CXDSExtrinsicObject extends CXDSRegistryObject {
    */
   function setUniqueId($id, $registryObject, $value) {
     $this->uniqueId = new CXDSUniqueId($id, $registryObject, $value);
-  }
-
-  /**
-   * Setter comments
-   *
-   * @param String $comments String
-   *
-   * @return void
-   */
-  public function setComments($comments) {
-    $this->comments = new CXDSDescription($comments);
   }
 
   /**
@@ -170,28 +147,6 @@ class CXDSExtrinsicObject extends CXDSRegistryObject {
   }
 
   /**
-   * Setter title
-   *
-   * @param String $title String
-   *
-   * @return void
-   */
-  public function setTitle($title) {
-    $this->title = new CXDSName($title);
-  }
-
-  /**
-   * Setter DocumentEntryAuthor
-   *
-   * @param CXDSDocumentEntryAuthor $documentEntry CXDSDocumentEntryAuthor
-   *
-   * @return void
-   */
-  function appendDocumentEntryAuthor($documentEntry) {
-    array_push($this->documentEntryAuthor, $documentEntry);
-  }
-
-  /**
    * Setter Confidentiality
    *
    * @param CXDSConfidentiality $confidentiality CXDSConfidentiality
@@ -214,51 +169,11 @@ class CXDSExtrinsicObject extends CXDSRegistryObject {
   }
 
   /**
-   * Retourne les variables présent dans la classe
+   * @see parent::toXML()
    *
-   * @return array
-   */
-  function getPropertie() {
-    $reflection = new ReflectionClass($this);
-    $vars = array_keys($reflection->getdefaultProperties());
-    $reflection = new ReflectionClass(get_parent_class($this));
-    $parent_vars = array_keys($reflection->getdefaultProperties());
-
-    $my_child_vars = array();
-    foreach ($vars as $key) {
-      if (!in_array($key, $parent_vars)) {
-        $my_child_vars[] = $key;
-      }
-    }
-    return $my_child_vars;
-  }
-
-  /**
-   * Génération de XML de l'instance en cours
-   *
-   * @return CXDSXmlDocument
+   * @return CXDSXmlDocument|void
    */
   function toXML() {
-    $xml = new CXDSXmlDocument();
-    $xml->createExtrinsicObjectRoot($this->id, $this->mimeType, $this->objectType);
-    $base_xml = $xml->documentElement;
-    $variables = $this->getPropertie();
-    foreach ($variables as $_variable) {
-      $class = $this->$_variable;
-      if (!$class || $_variable === "mimeType") {
-        continue;
-      }
-      if (is_array($this->$_variable)) {
-        foreach ($this->$_variable as $_instance) {
-          $xml->importDOMDocument($base_xml, $_instance->toXML());
-        }
-      }
-      else {
-        $xml->importDOMDocument($base_xml, $class->toXML());
-      }
-    }
-
-    return $xml;
+    return parent::toXML(false);
   }
-
 }

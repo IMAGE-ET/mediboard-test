@@ -15,9 +15,8 @@ $message = stripslashes(CValue::post("message"));
 $xds = new CXDSMappingCDA($message);
 $extrinsic = $xds->createExtrinsicObject("test");
 
-mbTrace($extrinsic);
 $smarty = new CSmartyDP();
 
-$smarty->assign("message", $message);
+$smarty->assign("xds", CMbString::highlightCode("xml", $extrinsic->toXML()->saveXML()));
 
 $smarty->display("inc_display_xds.tpl");

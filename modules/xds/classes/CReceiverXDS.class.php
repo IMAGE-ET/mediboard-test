@@ -67,7 +67,7 @@ class CReceiverXDS extends CInteropReceiver {
   function sendEvent($evenement, $data, $headers) {
 
     $source = CExchangeSource::get("$this->_guid-$evenement->evenement_type");
-    $source->host = "F:/wamp/www/mediboard/modules/dmp/resources/alimentation.wsdl";
+
     if (!$source->_id || !$source->active) {
       return null;
     }

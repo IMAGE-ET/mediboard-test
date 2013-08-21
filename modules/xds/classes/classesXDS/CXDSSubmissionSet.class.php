@@ -34,7 +34,6 @@ class CXDSSubmissionSet extends CXDSClassification {
    * @see parent::toXML()
    */
   function toXML() {
-    $xml = parent::toXML(true);
-    return $xml;
+    return parent::toXML(true);
   }
 }

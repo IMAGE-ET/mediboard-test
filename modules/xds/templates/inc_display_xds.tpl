@@ -8,3 +8,4 @@
  * @version  $Revision$
  * @link     http://www.mediboard.org
 *}}
+{{$xds|smarty:nodefaults}}

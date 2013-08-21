@@ -16,28 +16,24 @@
  * rim:RegistryPackage. La distinction entre les deux classes est effectuée par l?ajout de
  * rim:Classification à rim:RegistryPackage.
  */
-class CXDSRegistryPackage extends CXDSRegistryObject {
+class CXDSRegistryPackage extends CXDSExtrinsicPackage {
 
+  /** @var  CXDSSlot */
   public $submissionTime;
-  public $title;
-  public $comments;
+  /** @var  CXDSFolder|CXDSSubmissionSet */
   public $submissionSet;
+  /** @var  CXDSContentType */
   public $contentType;
-  public $documentEntryAuthor = array();
+  /** @var  CXDSSourceId */
   public $sourceId;
-  public $uniqueId;
-  public $patientId;
-
 
   /**
    * Construction de l'instance
    *
-   * @param String $id     String
-   * @param String $status null
+   * @param String $id String
    */
-  function __construct($id, $status = null) {
+  function __construct($id) {
     parent::__construct($id);
-    $this->status = $status;
   }
 
   /**
@@ -49,39 +45,6 @@ class CXDSRegistryPackage extends CXDSRegistryObject {
    */
   function setSubmissionTime($value) {
     $this->submissionTime = new CXDSSlot("submissionTime", $value);
-  }
-
-  /**
-   * Setter comments
-   *
-   * @param String $comments String
-   *
-   * @return void
-   */
-  public function setComments($comments) {
-    $this->comments = new CXDSDescription($comments);
-  }
-
-  /**
-   * Setter DocumentEntryAuthor
-   *
-   * @param CXDSDocumentEntryAuthor $entry CXDSDocumentEntryAuthor
-   *
-   * @return void
-   */
-  function appendDocumentEntryAuthor($entry) {
-    array_push($this->documentEntryAuthor, $entry);
-  }
-
-  /**
-   * Setter title
-   *
-   * @param String $title String
-   *
-   * @return void
-   */
-  public function setTitle($title) {
-    $this->title = new CXDSName($title);
   }
 
   /**
@@ -152,49 +115,11 @@ class CXDSRegistryPackage extends CXDSRegistryObject {
   }
 
   /**
-   * Retourne les variables de la classe
-   *
-   * @return String[]
-   */
-  function getPropertie() {
-    $reflection = new ReflectionClass($this);
-    $vars = array_keys($reflection->getdefaultProperties());
-    $reflection = new ReflectionClass(get_parent_class($this));
-    $parent_vars = array_keys($reflection->getdefaultProperties());
-
-    $my_child_vars = array();
-    foreach ($vars as $key) {
-      if (!in_array($key, $parent_vars)) {
-        $my_child_vars[] = $key;
-      }
-    }
-    return $my_child_vars;
-  }
-
-  /**
-   * Génère le XML
+   * @see parent::toXML()
    *
    * @return CXDSXmlDocument|void
    */
   function toXML() {
-    $xml = new CXDSXmlDocument();
-    $xml->createRegistryPackageRoot($this->id, $this->status);
-    $base_xml = $xml->documentElement;
-    $variables = $this->getPropertie();
-    foreach ($variables as $_variable) {
-      $class = $this->$_variable;
-      if (!$class || $_variable === "mimeType") {
-        continue;
-      }
-      if (is_array($this->$_variable)) {
-        foreach ($this->$_variable as $_instance) {
-          $xml->importDOMDocument($base_xml, $_instance->toXML());
-        }
-      }
-      else {
-        $xml->importDOMDocument($base_xml, $class->toXML());
-      }
-    }
-    return $xml;
+    return parent::toXML(true);
   }
 }

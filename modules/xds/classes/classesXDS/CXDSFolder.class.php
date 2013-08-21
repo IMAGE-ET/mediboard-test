@@ -27,14 +27,13 @@ class CXDSFolder extends CXDSClassification {
   function __construct($id, $classifiedObject) {
     parent::__construct($id);
     $this->classificationNode = "urn:uuid:d9d542f3-6cc4-48b6-8870-ea235fbc94c2";
-    $this->classifiedObject = $classifiedObject;
+    $this->classifiedObject   = $classifiedObject;
   }
 
   /**
    * @see parent::toXML()
    */
   function toXML() {
-    $xml = parent::toXML(true);
-    return $xml;
+    return parent::toXML(true);
   }
 }

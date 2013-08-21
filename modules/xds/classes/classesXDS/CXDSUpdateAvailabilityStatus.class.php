@@ -24,8 +24,8 @@ class CXDSUpdateAvailabilityStatus extends CXDSAssociation {
   /**
    * @see parent::__construct()
    */
-  function __construct($id, $status, $sourceObject, $targetObject) {
-    parent::__construct($id, $status, $sourceObject, $targetObject);
+  function __construct($id, $sourceObject, $targetObject) {
+    parent::__construct($id, $sourceObject, $targetObject);
     $this->associationType = "urn:ihe:iti:2010:AssociationType:UpdateAvailabilityStatus";
   }
 
@@ -56,12 +56,15 @@ class CXDSUpdateAvailabilityStatus extends CXDSAssociation {
    */
   function toXML() {
     $xml = parent::toXML();
+
     if ($this->newStatus) {
       $xml->importDOMDocument($xml->documentElement, $this->newStatus->toXML());
     }
+
     if ($this->originalStatus) {
       $xml->importDOMDocument($xml->documentElement, $this->originalStatus->toXML());
     }
+
     return $xml;
   }
 }

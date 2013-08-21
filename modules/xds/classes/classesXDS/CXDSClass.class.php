@@ -26,21 +26,21 @@ class CXDSClass extends CXDSClassification {
   /**
    * Construction d'une instance
    *
-   * @param String $id                 String
-   * @param String $classifiedObject   String
-   * @param String $nodeRepresentation String
+   * @param String $id                 Identifiant
+   * @param String $classifiedObject   ClassifiedObject
+   * @param String $nodeRepresentation Noderepresentation
    */
   function __construct($id, $classifiedObject, $nodeRepresentation) {
     parent::__construct($id);
-    $this->classifiedObject = $classifiedObject;
+    $this->classifiedObject     = $classifiedObject;
     $this->classificationScheme = "urn:uuid:41a5887f-8865-4c09-adf7-e362475b143a";
-    $this->nodeRepresentation = $nodeRepresentation;
+    $this->nodeRepresentation   = $nodeRepresentation;
   }
 
   /**
    * Création du nom avec une instance de CXDSName
    *
-   * @param String $name String
+   * @param String $name Valeur du nom
    *
    * @return void
    */
@@ -51,7 +51,7 @@ class CXDSClass extends CXDSClassification {
   /**
    * Création du codingScheme avec un CXDSSlot
    *
-   * @param String[] $codingScheme String[]
+   * @param String[] $codingScheme CodingScheme
    *
    * @return void
    */
@@ -65,7 +65,7 @@ class CXDSClass extends CXDSClassification {
    * @return CXDSXmlDocument
    */
   function toXML() {
-    $xml = parent::toXML();
+    $xml      = parent::toXML();
     $base_xml = $xml->documentElement;
 
     if ($this->name) {

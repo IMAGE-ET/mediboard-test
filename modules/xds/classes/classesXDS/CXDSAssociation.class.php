@@ -24,19 +24,17 @@ class CXDSAssociation extends CXDSRegistryObject {
   /**
    * Construction de l'instance
    *
-   * @param String $id           String
-   * @param String $status       String
-   * @param String $sourceObject String
-   * @param String $targetObject String
-   * @param bool   $rplc         false
+   * @param String $id           Identifiant
+   * @param String $sourceObject Source
+   * @param String $targetObject Cible
+   * @param bool   $rplc         Association de type remplacement
    */
-  function __construct($id, $status, $sourceObject, $targetObject, $rplc = false) {
+  function __construct($id, $sourceObject, $targetObject, $rplc = false) {
     parent::__construct($id);
     $this->associationType = "urn:oasis:names:tc:ebxml-regrep:AssociationType:HasMember";
     if ($rplc) {
       $this->associationType = "urn:ihe:iti:2007:AssociationType:RPLC";
     }
-    $this->status = $status;
     $this->sourceObject = $sourceObject;
     $this->targetObject = $targetObject;
     $this->objectType = "urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Association";
@@ -52,5 +50,4 @@ class CXDSAssociation extends CXDSRegistryObject {
     $xml->createAssociationRoot($this->id, $this->associationType, $this->sourceObject, $this->targetObject, $this->objectType);
     return $xml;
   }
-
 }

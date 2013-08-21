@@ -10,21 +10,24 @@
  * @version  $Revision$
  * @link     http://www.mediboard.org
  */
- 
+
 /**
  * Classe outils pour le module XDS
  */
 class CXDSTools {
 
+  /**
+   * Génération des jeux de valeurs en xml
+   *
+   * @return bool
+   */
   static function generateXMLToJv() {
     $files = glob("modules/xds/resources/jeux_de_valeurs/*.jv");
 
     foreach ($files as $_file) {
       $name = self::deleteDate(basename($_file));
-      $csv = new CXDSFileJv($_file);
-      $csv->readLine();
-      $csv->readLine();
-      $csv->readLine();
+      $csv = new CCSVFile($_file);
+      $csv->jumpLine(3);
       $xml = new CXDSXmlJvDocument();
       while ($line = $csv->readLine()) {
         list(
@@ -39,6 +42,13 @@ class CXDSTools {
     return true;
   }
 
+  /**
+   * Supprime la date du nom des fichiers des jeux de valeurs
+   *
+   * @param String $name Nom du fichier
+   *
+   * @return string
+   */
   static function deleteDate($name) {
     return substr($name, 0, strrpos($name, "_"));
   }
@@ -58,12 +68,17 @@ class CXDSTools {
     return $date->format("YmdHis");
   }
 
+  /**
+   * Retourne les informations de l'etablissement sous la forme HL7v2 XON
+   *
+   * @return string
+   */
   static function getXONetablissement() {
     $etablissement = CGroups::loadCurrent();
     $comp1  = $etablissement->text;
     $comp6  = "&1.2.250.1.71.4.2.2&ISO";
     $comp7  = "IDNST";
-    $comp10 = self::getIdEtablissement();
+    $comp10 = self::getIdEtablissement(false, $etablissement);
     $xon = "$comp1^^^^^$comp6^$comp7^^^$comp10";
     return $xon;
   }
@@ -71,18 +86,21 @@ class CXDSTools {
   /**
    * Retourne l'identifiant de l'établissement courant
    *
-   * @param boolean $forPerson boolean
+   * @param boolean $forPerson Identifiant concernant une personne
    *
    * @return null|string
    */
   static function getIdEtablissement($forPerson = false) {
     $siret = "3";
     $finess = "1";
+
     if ($forPerson) {
       $siret = "5";
       $finess = "3";
     }
+
     $etablissement = CGroups::loadCurrent();
+
     if ($etablissement->siret) {
       return $siret.$etablissement->siret;
     }
@@ -94,6 +112,11 @@ class CXDSTools {
     return null;
   }
 
+  /**
+   * Retourne les informations du Mediuser sous la forme HL7v2 XCN
+   *
+   * @return string
+   */
   static function getXCNMediuser() {
     $mediuser = CMediusers::get();
     $comp1  = self::getIdEtablissement(true)."/$mediuser->_id";

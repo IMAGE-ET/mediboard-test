@@ -1,4 +1,5 @@
 <?php
+$locales['Action-done'] = 'Action effectué';
 $locales['CExchangeXDS'] = 'Echange XDS';
 $locales['CExchangeXDS-_date_max'] = 'jusqu\'au';
 $locales['CExchangeXDS-_date_max-desc'] = 'Date de fin de la recherche';
@@ -67,12 +68,16 @@ $locales['CXDSEventITI43'] = 'ITI-43';
 $locales['CXDSEventITI43-desc'] = 'Retrieve Document Set';
 $locales['CXDSProducer'] = 'Producteur';
 $locales['CXDSProducer-desc'] = 'Acteur alimentant l\'entrepôt';
+$locales['Generate-xml-jv'] = 'Générer les jeux de valeurs';
 $locales['consumer'] = 'Consommateur';
 $locales['consumer-desc'] = 'Acteur interrogeant le registre';
+$locales['mod-xds-tab-vw_generate_xds'] = 'Génération d\'un document XDS';
+$locales['mod-xds-tab-vw_tools_xds'] = 'Outils XDS';
 $locales['module-xds-court'] = 'XDS';
 $locales['module-xds-long'] = 'CrossEnterprise Document Sharing';
 $locales['producer'] = 'Producteur';
 $locales['producer-desc'] = 'Acteur alimentant l\'entrepôt';
 $locales['xds-msg-consumer'] = 'Consommateur';
 $locales['xds-msg-producer'] = 'Producteur';
-?>
+$locales['CSourceSOAP-xop_mode'] = 'Mode XOP';
+$locales['CSourceSOAP-xop_mode-desc'] = 'Activer l\'utilisation du MTOM/XOP';
