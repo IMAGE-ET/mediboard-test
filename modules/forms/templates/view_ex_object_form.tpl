@@ -116,9 +116,16 @@ Main.add(function(){
 
   {{if !$print && !$preview_mode}}
     <iframe id="printIframe" width="0" height="0" style="display: none;"></iframe>
-    <button type="button" class="print singleclick" onclick="ExObjectForms.{{$ex_form_hash}}.confirmSavePrint(this.form)" style="float: right;">
-      {{tr}}Print{{/tr}}
-    </button>
+
+    <span style="float: right;">
+      {{if "digitalpen"|module_active}}
+        {{mb_include module=digitalpen template=inc_button_print_copy ex_class_event_id=$ex_class_event->_id object_guid=$object_guid}}
+      {{/if}}
+
+      <button type="button" class="print singleclick" onclick="ExObjectForms.{{$ex_form_hash}}.confirmSavePrint(this.form)">
+        {{tr}}Print{{/tr}}
+      </button>
+    </span>
   {{/if}}
 
   {{if !$noheader}}

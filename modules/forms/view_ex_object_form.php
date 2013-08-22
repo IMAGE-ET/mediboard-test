@@ -139,6 +139,7 @@ $ex_object->getReportedValues($ex_class_event);
 $ex_object->setFieldsDisplay();
 $ex_object->loadRefAdditionalObject();
 
+// C'est fait deux fois ??? FIXME
 if (!$ex_object->_id) {
   if (!$ex_object->reference_id && !$ex_object->reference_class) {
     $reference = $ex_class_event->resolveReferenceObject($object, 1);
@@ -242,6 +243,7 @@ $smarty->assign("can_delete",   $can_delete);
 $smarty->assign("parent_view",  $parent_view);
 $smarty->assign("preview_mode", $preview);
 $smarty->assign("ui_msg",       CAppUI::getMsg());
+$smarty->assign("ex_class_event", $ex_class_event);
 
 $smarty->assign("readonly",     $readonly);
 $smarty->assign("print",        $print);
