@@ -17,6 +17,8 @@ $do_import = CValue::get("do_import");
 $start     = CValue::getOrSession("start", 0);
 $count     = CValue::get("count", 5);
 
+$group_id = CGroups::loadCurrent()->_id;
+
 $user = new CUser();
 
 // Requêtes
@@ -30,7 +32,7 @@ $where["id_sante400.tag"]          = "= '".CAppUI::conf("admin LDAP ldap_tag")."
 $where["id_sante400.id400"]        = "IS NOT NULL";
 $where["users.template"]           = "= '0'";
 $where["users_mediboard.actif"]    = "= '1'";
-$where["functions_mediboard.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+$where["functions_mediboard.group_id"] = "= '$group_id'";
 
 if (!$do_import) {
   $count_users_ldap = $user->countList($where, null, $ljoin);
@@ -42,7 +44,7 @@ if (!$do_import) {
   $where = array();
   $where["users.template"]               = "= '0'";
   $where["users_mediboard.actif"]        = "= '1'";
-  $where["functions_mediboard.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+  $where["functions_mediboard.group_id"] = "= '$group_id'";
 
   $count_users_all  = $user->countList($where, null, $ljoin);
   CAppUI::stepAjax(($count_users_all - $count_users_ldap)." comptes qui ne sont pas associés");
@@ -53,9 +55,15 @@ else {
 
   // Récupération de la liste des comptes qui ne sont pas associés
   $users_ldap = $user->loadList($where, null, null, null, $ljoin);
+
+  $ljoin = array();
+  $ljoin["users_mediboard"]     = "`users`.`user_id` = `users_mediboard`.`user_id`";
+  $ljoin["functions_mediboard"] = "`functions_mediboard`.`function_id` = `users_mediboard`.`function_id`";
+
   $where = array();
-  $where["users.template"] = "= '0'";
-  $users_all = $user->loadList($where);
+  $where["users.template"]               = "= '0'";
+  $where["functions_mediboard.group_id"] = "= '$group_id'";
+  $users_all = $user->loadList($where, null, null, null, $ljoin);
 
   /** @var $users CUser[] */
   $users = array_diff_key($users_all, $users_ldap);
