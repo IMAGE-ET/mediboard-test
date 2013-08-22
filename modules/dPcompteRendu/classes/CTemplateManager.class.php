@@ -240,9 +240,23 @@ class CTemplateManager {
     // Image (from a CFile object)
     if (isset($options["image"])) {
       $_field = &$this->sections[$section][$field];
-      $file = new CFile();
-      $file->load($_field['value']);
-      $src = $this->valueMode ? $file->getDataURI() :$_field['fieldHTML'];
+      $data = "";
+
+      if ($this->valueMode) {
+        $file = new CFile();
+        $file->load($_field['value']);
+        if ($file->_id) {
+          // Resize the image
+          CAppUI::requireLibraryFile("phpThumb/phpthumb.class");
+          include_once "lib/phpThumb/phpThumb.config.php";
+          $thumbs = new phpthumb();
+          $thumbs->setSourceFilename($file->_file_path);
+          $thumbs->w = 640;
+          $thumbs->GenerateThumbnail();
+          $data = "data:".$file->file_type.";base64,".urlencode(base64_encode($thumbs->IMresizedData));
+        }
+      }
+      $src = $this->valueMode ? $data :$_field['fieldHTML'];
       $_field["field"] = "<img src=\"".$src."\" />";
     }
   }
