@@ -120,11 +120,11 @@ class CExchangeSource extends CMbObject {
   /**
    * Get the exchange source
    *
-   * @param string $name
-   * @param null   $type
-   * @param bool   $override
-   * @param null   $type_echange
-   * @param bool   $only_active
+   * @param string $name         Nom
+   * @param string $type         Type de la source (FTP, SOAP, ...)
+   * @param bool   $override     Charger les autres sources
+   * @param string $type_echange Type de l'échange
+   * @param bool   $only_active  Seulement la source active
    *
    * @return CExchangeSource
    */
@@ -338,7 +338,12 @@ class CExchangeSource extends CMbObject {
   
   function receiveOne() {
   }
-  
+
+  /**
+   * Receive
+   *
+   * @return mixed
+   */
   function receive() {
   }
 

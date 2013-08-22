@@ -9,6 +9,7 @@
 *}}
 
 {{mb_script module=ftp script=action_ftp ajax=true}}
+{{mb_script module=system script=exchange_source ajax=true}}
 
 <table class="main"> 
   <tr>

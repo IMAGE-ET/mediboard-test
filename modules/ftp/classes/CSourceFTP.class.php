@@ -105,7 +105,7 @@ class CSourceFTP extends CExchangeSource {
       $ftp->connect();
 
       $files = array();
-      $path = "$ftp->fileprefix/$this->_path";
+      $path = $ftp->fileprefix ? "$ftp->fileprefix/$this->_path" : $this->_path;
 
       $files = $ftp->getListFiles($path);
     } catch (CMbException $e) {
@@ -143,12 +143,14 @@ class CSourceFTP extends CExchangeSource {
     return $file_get_content;
   }
 
-  function delFile($path, $current_directory) {
+  function delFile($path, $current_directory = null) {
     $ftp = $this->init($this);
 
     try {
       $ftp->connect();
-      $ftp->changeDirectory($current_directory);
+      if ($current_directory) {
+        $ftp->changeDirectory($current_directory);
+      }
 
       $ftp->delFile($path);
     } catch (CMbException $e) {
