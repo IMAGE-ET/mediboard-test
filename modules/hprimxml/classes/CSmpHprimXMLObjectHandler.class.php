@@ -38,11 +38,11 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
    *
    * @throws CMbException
    *
-   * @return void
+   * @return bool
    */
   function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
-      return;
+      return false;
     }
     
     $receiver = $mbObject->_receiver;  
@@ -82,11 +82,11 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       // Si Client
       else {
         if ($sejour->_eai_initiateur_group_id || !$receiver->isMessageSupported("CHPrimXMLVenuePatient")) {
-          return;
+          return false;
         }
           
         if (CGroups::loadCurrent()->_id != $receiver->group_id) {
-          return;
+          return false;
         }
         
         if (!$sejour->_NDA) {
@@ -119,21 +119,40 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
 
         $sejour->_NDA = null;
       }
+
+      return true;
     }
 
     // Traitement Affectation
     elseif ($mbObject instanceof CAffectation) {
       $affectation = $mbObject;
+      $current_log = $affectation->_ref_current_log;
 
-      // Si Client
-      if (!CAppUI::conf('smp server')) {
-        if (!$receiver->isMessageSupported("CHPrimXMLMouvementPatient")) {
-          return;
-        }
-        
-        //$this->sendEvenementPatient("CHPrimXMLMouvementPatient", $affectation);
+      if (!$current_log || $affectation->_no_synchro || !in_array($current_log->type, array("create", "store"))) {
+        return false;
       }
+
+      // Cas où :
+      // * on est l'initiateur du message
+      // * le destinataire ne supporte pas le message
+      if ($affectation->_eai_initiateur_group_id || !$receiver->isMessageSupported("CHPrimXMLMouvementPatient")) {
+        return false;
+      }
+
+      // Affectation non liée à un séjour
+      $sejour = $affectation->loadRefSejour();
+      if (!$sejour->_id) {
+        return false;
+      }
+
+      $sejour->loadRefPatient();
+      $sejour->_receiver = $receiver;
+
+      // Envoi de l'événement
+      $this->sendEvenementPatient("CHPrimXMLMouvementPatient", $affectation);
     }
+
+    return true;
   }
 
   /**
@@ -143,11 +162,11 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
    *
    * @throws CMbException
    *
-   * @return void
+   * @return bool
    */
   function onBeforeMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
-      return;
+      return false;
     }
   }
 
@@ -158,11 +177,11 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
    *
    * @throws CMbException
    *
-   * @return void
+   * @return bool
    */
   function onAfterMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
-      return;
+      return false;
     }
     
     // Traitement Séjour
@@ -218,6 +237,8 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
         }        
       }
     }
+
+    return true;
   }
 
   /**
@@ -225,11 +246,11 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
    *
    * @param CMbObject $mbObject Object
    *
-   * @return void
+   * @return bool
    */
   function onBeforeDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
-      return;
+      return false;
     }
   }
 
@@ -238,11 +259,11 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
    *
    * @param CMbObject $mbObject Object
    *
-   * @return void
+   * @return bool
    */
   function onAfterDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
-      return;
+      return false;
     }
   }
 }

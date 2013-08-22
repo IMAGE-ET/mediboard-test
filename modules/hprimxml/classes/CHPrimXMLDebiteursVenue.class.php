@@ -32,7 +32,7 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
   /**
    * @see parent::generateFromOperation
    */
-  function generateFromOperation($mbVenue, $referent) {  
+  function generateFromOperation(CSejour $mbVenue, $referent) {
     $evenementsPatients = $this->documentElement;
     $evenementPatient = $this->addElement($evenementsPatients, "evenementPatient");
     
@@ -54,7 +54,7 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
 
     // Ajout des débiteurs
     $debiteurs = $this->addElement($debiteursVenue, "debiteurs");
-    $this->addDebiteurs($debiteurs, $mbVenue->_ref_patient, $referent);
+    $this->addDebiteurs($debiteurs, $mbVenue->_ref_patient);
     
     // Traitement final
     $this->purgeEmptyElements();

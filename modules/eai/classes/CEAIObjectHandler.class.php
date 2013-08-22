@@ -104,7 +104,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
    *
    * @param CMbObject $mbObject Object
    *
-   * @return void
+   * @return bool
    */
   function onBeforeStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
@@ -114,6 +114,8 @@ class CEAIObjectHandler extends CMbObjectHandler {
     if (isset($mbObject->_eai_initiateur_group_id)) {
       $this->_eai_initiateur_group_id = $mbObject->_eai_initiateur_group_id;
     }
+
+    return true;
   }
 
   /**
@@ -121,7 +123,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
    *
    * @param CMbObject $mbObject Object
    *
-   * @return void
+   * @return bool
    */
   function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
@@ -142,7 +144,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
     if ($mbObject->_forwardRefMerging) {
       return false;
     }
-    
+
     return true;
   }
 
@@ -151,7 +153,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
    *
    * @param CMbObject $mbObject Object
    *
-   * @return void
+   * @return bool
    */
   function onBeforeMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
@@ -161,7 +163,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
     if (!$mbObject->_merging) {
       return false;
     }
-    
+
     return true;
   }
 
@@ -170,7 +172,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
    *
    * @param CMbObject $mbObject Object
    *
-   * @return void
+   * @return bool
    */
   function onAfterMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
@@ -180,7 +182,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
     if (!$mbObject->_merging) {
       return false;
     }
-    
+
     return true;
   }
 
@@ -189,13 +191,13 @@ class CEAIObjectHandler extends CMbObjectHandler {
    *
    * @param CMbObject $mbObject Object
    *
-   * @return void
+   * @return bool
    */
   function onBeforeDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
-    
+
     return true;
   }
 
@@ -204,13 +206,13 @@ class CEAIObjectHandler extends CMbObjectHandler {
    *
    * @param CMbObject $mbObject Object
    *
-   * @return void
+   * @return bool
    */
   function onAfterDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
-    
+
     return true;
   }
 }

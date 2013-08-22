@@ -20,7 +20,7 @@ abstract class CMbObjectHandler {
    *
    * @param CMbObject $mbObject Object
    *
-   * @return void
+   * @return bool
    */
   function onBeforeStore(CMbObject $mbObject) {
   }
@@ -30,7 +30,7 @@ abstract class CMbObjectHandler {
    *
    * @param CMbObject $mbObject Object
    *
-   * @return void
+   * @return bool
    */
   function onAfterStore(CMbObject $mbObject) {
   }
@@ -40,7 +40,7 @@ abstract class CMbObjectHandler {
    *
    * @param CMbObject $mbObject Object
    *
-   * @return void
+   * @return bool
    */
   function onBeforeMerge(CMbObject $mbObject) {
   }
@@ -50,7 +50,7 @@ abstract class CMbObjectHandler {
    *
    * @param CMbObject $mbObject Object
    *
-   * @return void
+   * @return bool
    */
   function onAfterMerge(CMbObject $mbObject) {
   }
@@ -60,7 +60,7 @@ abstract class CMbObjectHandler {
    *
    * @param CMbObject $mbObject Object
    *
-   * @return void
+   * @return bool
    */
   function onBeforeDelete(CMbObject $mbObject) {
   }
@@ -70,7 +70,7 @@ abstract class CMbObjectHandler {
    *
    * @param CMbObject $mbObject Object
    *
-   * @return void
+   * @return bool
    */
   function onAfterDelete(CMbObject $mbObject) {
   }
@@ -81,7 +81,7 @@ abstract class CMbObjectHandler {
    * @param CMbObject        $mbObject Object
    * @param CTemplateManager $template Template
    *
-   * @return void
+   * @return bool
    */
   function onBeforeFillLimitedTemplate(CMbObject $mbObject, CTemplateManager $template) {
   }
@@ -92,7 +92,7 @@ abstract class CMbObjectHandler {
    * @param CMbObject        $mbObject Object
    * @param CTemplateManager $template Template
    *
-   * @return void
+   * @return bool
    */
   function onAfterFillLimitedTemplate(CMbObject $mbObject, CTemplateManager $template) {
   }

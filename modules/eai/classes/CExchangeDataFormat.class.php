@@ -50,7 +50,9 @@ class CExchangeDataFormat extends CMbMetaObject {
   public $_count_ack_invalide;
   public $_observations             = array();
   public $_doc_errors_msg           = array();
+  public $_doc_warnings_msg         = array();
   public $_doc_errors_ack           = array();
+  public $_doc_warnings_ack         = array();
   public $_load_content             = true;
   public $_messages_supported_class = array();
   public $_to_treatment             = true;

@@ -38,13 +38,13 @@ class CSmpObjectHandler extends CEAIObjectHandler {
    *
    * @throws CMbException
    *
-   * @return void
+   * @return bool
    */
   function onAfterStore(CMbObject $mbObject) {
     if (!parent::onAfterStore($mbObject)) {
-      return;
+      return false;
     }
-    
+
     // Si pas de tag séjour
     if (!CAppUI::conf("dPplanningOp CSejour tag_dossier")) {
       throw new CMbException("no_tag_defined");
@@ -52,10 +52,12 @@ class CSmpObjectHandler extends CEAIObjectHandler {
 
     // Si serveur et pas de NDA sur le séjour
     if ((isset($mbObject->_no_num_dos) && ($mbObject->_no_num_dos == 1)) && CAppUI::conf('smp server')) {
-      return;
+      return false;
     }
-    
+
     $this->sendFormatAction("onAfterStore", $mbObject);
+
+    return true;
   }
 
   /**
@@ -65,11 +67,11 @@ class CSmpObjectHandler extends CEAIObjectHandler {
    *
    * @throws CMbException
    *
-   * @return void
+   * @return bool
    */
   function onBeforeMerge(CMbObject $mbObject) {
     if (!parent::onBeforeMerge($mbObject)) {
-      return;
+      return false;
     }
     
     // Si pas en mode alternatif
@@ -140,6 +142,8 @@ class CSmpObjectHandler extends CEAIObjectHandler {
     }
     
     $this->sendFormatAction("onBeforeMerge", $mbObject);
+
+    return true;
   }
 
   /**
@@ -149,11 +153,11 @@ class CSmpObjectHandler extends CEAIObjectHandler {
    *
    * @throws CMbException
    *
-   * @return void
+   * @return bool
    */
   function onAfterMerge(CMbObject $mbObject) {
     if (!parent::onAfterMerge($mbObject)) {
-      return;
+      return false;
     }
     
      // Si pas en mode alternatif
@@ -162,6 +166,8 @@ class CSmpObjectHandler extends CEAIObjectHandler {
     }
 
     $this->sendFormatAction("onAfterMerge", $mbObject);
+
+    return true;
   }
 
   /**
@@ -169,14 +175,16 @@ class CSmpObjectHandler extends CEAIObjectHandler {
    *
    * @param CMbObject $mbObject Object
    *
-   * @return void
+   * @return bool
    */
   function onBeforeDelete(CMbObject $mbObject) {
     if (!parent::onBeforeDelete($mbObject)) {
-      return;
+      return false;
     }
     
     $this->sendFormatAction("onBeforeDelete", $mbObject);
+
+    return true;
   }
 
   /**
@@ -184,13 +192,15 @@ class CSmpObjectHandler extends CEAIObjectHandler {
    *
    * @param CMbObject $mbObject Object
    *
-   * @return void
+   * @return bool
    */
   function onAfterDelete(CMbObject $mbObject) {
     if (!parent::onAfterDelete($mbObject)) {
-      return;
+      return false;
     }
     
     $this->sendFormatAction("onAfterDelete", $mbObject);
+
+    return true;
   }  
 }

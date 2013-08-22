@@ -149,7 +149,7 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
     if (!CAppUI::conf("hprimxml mvtComplet") || CAppUI::conf('smp server')) {
       return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $comment, $newVenue);
     }
-    
+
     // Mapping des mouvements
     $msgMovement = $this->mappingMouvements($data['mouvements'], $newVenue);
 

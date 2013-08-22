@@ -760,10 +760,6 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   function mappingMouvements(DOMNode $node, CSejour $newVenue) {
     $xpath = new CHPrimXPath($node->ownerDocument);
 
-    if (!CAppUI::conf("hprimxml mvtComplet")) {
-      return $newVenue;
-    }
-
     $movements = $xpath->query("hprim:mouvement", $node);
 
     foreach ($movements as $_movement) {
