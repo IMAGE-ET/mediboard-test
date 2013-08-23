@@ -1,0 +1,15 @@
+RPU_Sender = {
+  popupImport: function() {
+    new Url("dPurgences", "ajax_import_key")
+    .pop(500, 400, "Import de la clé publique");
+
+    return false;
+  },
+
+  updateKey: function(fingerprint) {
+    var message = fingerprint ? '<div class="info">Clé publique ajoutée au trousseau : '+fingerprint+'<\/div>' :
+      '<div class="error">Impossible d\'importer la clé publique.<\/div>';
+
+    $("import_key").update(message);
+  }
+}

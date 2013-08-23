@@ -22,9 +22,14 @@
      <td>
        <select name="{{$m}}[{{$var}}]">
          <option value="" {{if "" == $conf.$m.$var}} selected="selected" {{/if}}>&mdash; Aucun</option>
-         <option value="COscourSender" {{if "COscourSender" == $conf.$m.$var}} selected="selected" {{/if}}>{{tr}}COscourSender{{/tr}}</option>
-         <option value="COuralSender" {{if "COuralSender" == $conf.$m.$var}} selected="selected" {{/if}}>{{tr}}COuralSender{{/tr}}</option>
-         <option value="COrumipSender" {{if "COrumipSender" == $conf.$m.$var}} selected="selected" {{/if}}>{{tr}}COrumipSender{{/tr}}</option>
+         <option value="COscourSender" {{if "COscourSender" == $conf.$m.$var}} selected="selected" {{/if}}>
+           {{tr}}COscourSender{{/tr}}</option>
+         <option value="COuralSender" {{if "COuralSender" == $conf.$m.$var}} selected="selected" {{/if}}>
+           {{tr}}COuralSender{{/tr}}</option>
+         <option value="COrumipSender" {{if "COrumipSender" == $conf.$m.$var}} selected="selected" {{/if}}>
+           {{tr}}COrumipSender{{/tr}}</option>
+         <option value="CCerveauSender" {{if "CCerveauSender" == $conf.$m.$var}} selected="selected" {{/if}}>
+           {{tr}}CCerveauSender{{/tr}}</option>
        </select>
      </td>
     </tr>
