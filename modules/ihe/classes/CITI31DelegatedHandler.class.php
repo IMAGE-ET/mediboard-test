@@ -156,6 +156,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return;
       }
 
+      // Si le group_id du séjour est différent de celui du destinataire
+      if ($sejour->group_id != $receiver->group_id) {
+        return;
+      }
+
       // On envoie pas les affectations prévisionnelles 
       if (!$receiver->_configs["send_provisional_affectation"] && $sejour->_etat == "preadmission") {
         return;
