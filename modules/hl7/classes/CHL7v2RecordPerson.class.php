@@ -708,6 +708,10 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $NK1_2  = $this->queryNode("NK1.2", $node);
     $nom    = $this->queryTextNode("XPN.1/FN.1", $NK1_2);
     $prenom = $this->queryTextNode("XPN.2", $NK1_2);
+
+    if ($prenom == "") {
+      $prenom = null;
+    }
     
     $parente = $this->queryTextNode("NK1.3/CE.1", $node);
     $parente_autre = null;
