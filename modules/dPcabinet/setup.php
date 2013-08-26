@@ -1965,6 +1965,9 @@ class CSetupdPcabinet extends CSetup {
               ADD `result_autre` TEXT AFTER `result_rp`;";
     $this->addQuery($query);
     $this->addPrefQuery("viewAutreResult", "0");
-    $this->mod_version = "2.13";
+    $this->makeRevision("2.13");
+
+    $this->addPrefQuery("use_acte_date_now", "0");
+    $this->mod_version = "2.14";
   }
 }

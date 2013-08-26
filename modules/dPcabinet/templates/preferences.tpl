@@ -30,6 +30,7 @@
 {{mb_include template=inc_pref spec=bool var=displayResultsConsult}}
 {{mb_include template=inc_pref spec=bool var=viewFunctionPrats}}
 {{mb_include template=inc_pref spec=bool var=viewAutreResult}}
+{{mb_include template=inc_pref spec=bool var=use_acte_date_now}}
 <tr><th class="category" colspan="6">Planning</th></tr>
 {{mb_include template=inc_pref spec=bool var=new_semainier}}
 {{mb_include template=inc_pref spec=bool var=showIntervPlanning}}

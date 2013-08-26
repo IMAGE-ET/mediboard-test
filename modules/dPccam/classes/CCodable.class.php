@@ -800,7 +800,7 @@ class CCodable extends CMbObject {
           $possible_acte->_anesth = ($activite->numero == 4);
 
           $possible_acte->code_phase = $phase->phase;
-          $possible_acte->execution = $this->_acte_execution;
+          $this->execution = CAppUI::pref("use_acte_date_now") ? CMbDT::dateTime() : $this->_acte_execution;
 
           // Affectation du dépassement au premier acte de chirugie
           if (!$depassement_affecte and $possible_acte->code_activite == 1) {

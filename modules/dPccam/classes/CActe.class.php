@@ -245,7 +245,7 @@ class CActe extends CMbMetaObject {
     /** @var CCodable $object */
     $object = $this->loadTargetObject();
     $object->getActeExecution();
-    $this->execution = $object->_acte_execution;
+    $this->execution = CAppUI::pref("use_acte_date_now") ? CMbDT::dateTime() : $object->_acte_execution;
   }
 
   /**
