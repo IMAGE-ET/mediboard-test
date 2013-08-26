@@ -119,7 +119,7 @@ Main.add(function(){
 
     <span style="float: right;">
       {{if "digitalpen"|module_active}}
-        {{mb_include module=digitalpen template=inc_button_print_copy ex_class_event_id=$ex_class_event->_id object_guid=$object_guid}}
+        {{mb_include module=digitalpen template=inc_button_print_copy ex_class_event_id=$ex_class_event->_id object_guid=$object_guid printer_id=$printer_id}}
       {{/if}}
 
       <button type="button" class="print singleclick" onclick="ExObjectForms.{{$ex_form_hash}}.confirmSavePrint(this.form)">

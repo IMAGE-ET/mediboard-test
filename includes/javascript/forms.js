@@ -60,8 +60,8 @@ function confirmDeletion(oForm, oOptions, oOptionsAjax) {
 /**
  * Universal get/set function for form elements
  *
- * @param {HTMLInputElement,HTMLSelectElement,HTMLTextAreaElement,NodeList} element A form element (Form.Element or id) :
- *                                                                          input, textarea, select, group of radio buttons, group of checkboxes
+ * @param {HTMLInputElement,HTMLSelectElement,HTMLTextAreaElement,NodeList,String} element A form element (Form.Element or id) :
+ *                                                                                 input, textarea, select, group of radio buttons, group of checkboxes
  * @param {String,Number,Boolean=} value If set, sets the value to the element. Can be an array of values : ['elementvalue1', 'elementvalue2', ...]
  * @param {Boolean=false}          fire  Determines wether the onchange callback has to be called or not
  *

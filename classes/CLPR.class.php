@@ -11,16 +11,23 @@
  
 
 /**
- * Class CLPR
+ * LPR driver
  */
-
 class CLPR {
   public $hostname;
   public $username;
   public $port;
   public $printer_name;
-  
-  function init($source) {   
+
+  /**
+   * Initialize the LPR driver
+   *
+   * @param CSourceLPR $source The LPR source
+   *
+   * @throws CMbException
+   * @return void
+   */
+  function init(CSourceLPR $source) {
     if (!$source) {
       throw new CMbException("CSourceFTP-no-source", $source->name);
     }
@@ -30,18 +37,46 @@ class CLPR {
     $this->port     = $source->port;
     $this->printer_name = $source->printer_name;
   }
-  
-  function printFile($file) {
+
+  /**
+   * Print a file
+   *
+   * @param CFile $file The file to print
+   *
+   * @return void
+   */
+  function printFile(CFile $file) {
     // Test de la commande lpr
-    exec("whereis lpr", $ret);
-    if (preg_match("@\/lpr@", $ret[0]) == 0) {
-       CAppUI::stepAjax("La commande lpr n'est pas disponible", UI_MSG_ERROR);
+    $cmd_ok = true;
+    $windows = strpos(PHP_OS, "WIN") !== false;
+
+    // Windows
+    if ($windows) {
+      exec("lpr", $ret);
+      $cmd_ok = count($ret) > 0;
+    }
+
+    // Others
+    else {
+      exec("whereis lpr", $ret);
+      if (preg_match("@\/lpr@", $ret[0]) == 0) {
+        $cmd_ok = false;
+      }
+    }
+
+    if (!$cmd_ok) {
+      CAppUI::stepAjax("La commande 'lpr' n'est pas disponible", UI_MSG_ERROR);
     }
     
     if (file_get_contents($file->_file_path) === false) {
       CAppUI::stepAjax("Impossible d'accéder au PDF", UI_MSG_ERROR);
     }
-    
+
+    $server = "";
+    if ($windows && $this->hostname) {
+      $server = "-S " . escapeshellarg($this->hostname);
+    }
+
     $printer = "";
     if ($this->printer_name) {
       $printer = "-P " . escapeshellarg($this->printer_name);
@@ -61,7 +96,7 @@ class CLPR {
     // $command = "lpr -H $host $u $printer '$file->_file_path'";
     
     // Ajout préalable de l'imprimante via cups du serveur web
-    $command = "lpr $u $printer " . escapeshellarg($file->_file_path);
+    $command = "lpr $u $server $printer " . escapeshellarg(realpath($file->_file_path));
     
     exec($command, $res, $success);
 

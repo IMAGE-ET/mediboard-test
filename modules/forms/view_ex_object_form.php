@@ -77,6 +77,13 @@ if ($preview) {
   $ex_object->_preview = true;
 }
 
+$printer_id = null;
+$printers = CMediusers::get()->loadRefFunction()->loadBackRefs("printers");
+if (count($printers)) {
+  $printer = reset($printers);
+  $printer_id = $printer->_id;
+}
+
 $ex_object->_event_name = $event_name;
 
 // Host and reference objects
@@ -251,4 +258,5 @@ $smarty->assign("autoprint",    $autoprint);
 $smarty->assign("only_filled",  $only_filled);
 $smarty->assign("noheader",     $noheader);
 $smarty->assign("form_name",    $form_name);
+$smarty->assign("printer_id",   $printer_id);
 $smarty->display("view_ex_object_form.tpl");
