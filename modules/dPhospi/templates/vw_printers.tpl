@@ -16,7 +16,7 @@ Printer = {
     Printer.refreshList(id);
     Printer.editPrinter(id);
   }
-}
+};
 
 Main.add(function() {
   Printer.refreshList();
@@ -26,10 +26,8 @@ Main.add(function() {
 
 <table class="main">
   <tr>
-    <td id="list_printers" style="width: 45%;">
-    </td>
+    <td id="list_printers" style="width: 45%;"></td>
     <!-- Création / Modification de l'imprimante -->
-    <td id="edit_printer">
-    </td>
+    <td id="edit_printer"></td>
   </tr>
 </table>

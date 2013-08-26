@@ -52,4 +52,13 @@ class CSourcePrinter extends CMbObject{
   function sendDocument(CFile $file) {
 
   }
+
+  /**
+   * @see parent::updateFormFields()
+   */
+  function updateFormFields() {
+    parent::updateFormFields();
+
+    $this->_view = $this->printer_name;
+  }
 }

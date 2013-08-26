@@ -1,19 +1,21 @@
-<script type="text/css">
+<script>
 updateSelected = function(id) {
   removeSelected();
   var printer = $("printer-" + id);
   printer.addClassName("selected");
-}
+};
 
 removeSelected = function() {
   var printer = $$(".oprinter.selected")[0];
   if (printer) {
     printer.removeClassName("selected");
   }
-}
+};
 </script>
 
-<button class="new" onclick="removeSelected(); Printer.editPrinter(0)">{{tr}}Create{{/tr}}</button>
+<button class="new" onclick="removeSelected(); Printer.editPrinter(0)">
+  {{tr}}CPrinter-title-create{{/tr}}
+</button>
 
 <table class="tbl printerlist">
   <tr>

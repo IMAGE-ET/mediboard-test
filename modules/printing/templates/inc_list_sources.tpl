@@ -9,20 +9,20 @@
  * @link     http://www.mediboard.org
 *}}
 
-<script type="text/css">
+<script>
   updateSelected = function(guid) {
     removeSelected();
     $("type_source").selectedIndex = 0;
     var source = $("source-" + guid);
     source.addClassName("selected");
-  }
+  };
 
   removeSelected = function() {
     var source = $$(".osource.selected")[0];
     if (source) {
       source.removeClassName("selected");
     }
-  }
+  };
 </script>
 
 <select id="type_source" onchange="removeSelected(); editSource(0, this.value);">
