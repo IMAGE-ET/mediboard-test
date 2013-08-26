@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPbloc
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -31,9 +31,9 @@ $_coordonnees            = CValue::get("_coordonnees");
 $_print_numdoss          = CValue::get("_print_numdoss");
 $_print_ipp              = CValue::get("_print_ipp");
 $_print_annulees         = CValue::get("_print_annulees");
-$_materiel               = CValue::get("_materiel");
-$_extra                  = CValue::get("_extra");
-$_duree                  = CValue::get("_duree");
+$_materiel               = CValue::get("_materiel", CAppUI::conf("dPbloc CPlageOp view_materiel"));
+$_extra                  = CValue::get("_extra", CAppUI::conf("dPbloc CPlageOp view_extra"));
+$_duree                  = CValue::get("_duree", CAppUI::conf("dPbloc CPlageOp view_duree"));
 
 if (is_array($filter->_bloc_id)) {
   CMbArray::removeValue("0", $filter->_bloc_id);
