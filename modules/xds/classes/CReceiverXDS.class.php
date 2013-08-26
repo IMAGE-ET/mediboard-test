@@ -90,7 +90,7 @@ class CReceiverXDS extends CInteropReceiver {
     $ack = $source->getACQ();
 
     if (!$ack) {
-      return null;
+      return "";
     }
     $evenement->ack_data = $ack;
     $ack = $evenement->getAcknowledgment();

@@ -231,6 +231,18 @@ class CMbXMLDocument extends DOMDocument {
     $this->addElement($annotation, "documentation", $documentation, "http://www.w3.org/2001/XMLSchema");
   }
 
+  /**
+   * Import a another DOMDocument to our document
+   *
+   * @param DOMElement  $nodeParent  Receiver node
+   * @param DOMDocument $domDocument DOMDocument to import
+   *
+   * @return void
+   */
+  function importDOMDocument($nodeParent, $domDocument) {
+    $nodeParent->appendChild($this->importNode($domDocument->documentElement, true));
+  }
+
   function purgeEmptyElements() {
     $this->purgeEmptyElementsNode($this->documentElement);
   }

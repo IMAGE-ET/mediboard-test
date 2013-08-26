@@ -42,8 +42,66 @@ class CPDFToolsKit {
    */
   function fillForm($output = null, $options = null){
 
-    $command = $this->createCommand("fill_form", $output, $options);
+    $command = $this->createCommand("fill_form", $this->fdf, $output, $options);
+    $result = $this->executeCommand($command);
 
+    return $result;
+  }
+
+  /**
+   * Generate the fdf of the pdf
+   *
+   * @return bool|string
+   */
+  function generateFdf() {
+
+    $command = $this->createCommand("generate_fdf", null, $this->fdf, null);
+    $result = $this->executeCommand($command);
+
+    return $result;
+  }
+
+  /**
+   * Create the command lign
+   *
+   * @param String $command  Command to execute
+   * @param String $argument Operation argument
+   * @param String $output   File path of output
+   * @param String $options  Options
+   *
+   * @return string
+   */
+  private function createCommand($command, $argument = null, $output = null, $options = null) {
+    $cmd = "$this->exec $this->path_file_source $command";
+
+    if ($argument) {
+      $cmd .= " $argument";
+    }
+
+    $cmd .= " output";
+
+    if ($output) {
+      $cmd .= " $output";
+    }
+    else {
+      $cmd .= " -";
+    }
+
+    if ($options) {
+      $cmd .= " $options";
+    }
+
+    return escapeshellcmd($cmd);
+  }
+
+  /**
+   * Execute the command
+   *
+   * @param String $command Command to execute
+   *
+   * @return bool|string
+   */
+  private function executeCommand($command) {
     $processorInstance = proc_open($command, array(1 => array('pipe', 'w'), 2 => array('pipe', 'w')), $pipes);
     $processorResult = stream_get_contents($pipes[1]);
     $processorErrors = stream_get_contents($pipes[2]);
@@ -58,31 +116,5 @@ class CPDFToolsKit {
     }
 
     return $processorResult;
-  }
-
-  /**
-   * Create the command lign
-   *
-   * @param String $command Command to execute
-   * @param String $output  File path of output
-   * @param String $options Options
-   *
-   * @return string
-   */
-  private function createCommand($command, $output = null, $options = null) {
-    $cmd = "$this->exec $this->path_file_source $command $this->fdf";
-    $cmd .= " output";
-    if ($output) {
-      $cmd .= " $output";
-    }
-    else {
-      $cmd .= " -";
-    }
-
-    if ($options) {
-      $cmd .= " $options";
-    }
-
-    return escapeshellcmd($cmd);
   }
 }

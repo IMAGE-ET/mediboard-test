@@ -104,6 +104,20 @@ class CCSVFile {
     
     return $line;
   }
+
+  /**
+   * Ignore the N first line
+   *
+   * @param integer $n line number to skip
+   *
+   * @return void
+   */
+  function jumpLine($n) {
+    while ($n>0) {
+      fgetcsv($this->handle, null, $this->delimiter, $this->enclosure);
+      $n--;
+    }
+  }
   
   /**
    * Write a line into the file

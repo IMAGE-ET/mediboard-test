@@ -21,6 +21,8 @@ class CXDSXmlDocument extends CMbXMLDocument {
    */
   function __construct() {
     parent::__construct("UTF-8");
+    $this->preserveWhiteSpace = true;
+    $this->formatOutput = false;
   }
 
   /**
@@ -53,13 +55,14 @@ class CXDSXmlDocument extends CMbXMLDocument {
   /**
    * Création d'un noeud pour l'entrepôt
    *
-   * @param String $name  String
-   * @param String $value Valeur du noeud
+   * @param DOMNode $nodeParent Noeud parent
+   * @param String  $name       Nom du noeud
+   * @param String  $value      Valeur du noeud
    *
    * @return DOMElement
    */
-  function createDocumentRepositoryElement($name, $value) {
-    return parent::addElement($this, "xds:$name", $value, "urn:ihe:iti:xds-b:2007");
+  function createDocumentRepositoryElement($nodeParent, $name, $value = null) {
+    return parent::addElement($nodeParent, "xds:$name", $value, "urn:ihe:iti:xds-b:2007");
   }
 
   /**

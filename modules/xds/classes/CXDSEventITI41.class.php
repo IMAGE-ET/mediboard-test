@@ -29,9 +29,9 @@ class CXDSEventITI41 {
    * @return DOMElement
    */
   function build ($data) {
-    $xml = new CDMPXmlDocument();
+    $xml = new CXDSXmlDocument();
 
-    $message = $xml->createDocumentRepositoryElement("ProvideAndRegisterDocumentSetRequest");
+    $message = $xml->createDocumentRepositoryElement($xml, "ProvideAndRegisterDocumentSetRequest");
 
     $xds = new CXDSMappingCDA($data);
     $header_xds = $xds->generateXDS();
@@ -41,19 +41,16 @@ class CXDSEventITI41 {
     $document_cda->loadXML($data);
 
     //ajout d'un document
-    $document = $xml->createDocumentRepositoryElement("Document");
-    $xml->appendAttribute($document, "id", "2.25.4896.4");
+    $document = $xml->createDocumentRepositoryElement($message, "Document");
+    $xml->addAttribute($document, "id", "2.25.4896.4");
     $document->nodeValue = base64_encode($document_cda->saveXML());
-    $xml->appendElement($message, $document);
-    $xml->appendElement($xml, $message);
 
     //ajout de la signature
-    $dsig = new CDSIGTools($xml, CAppUI::conf("dmp path_certificat"), "1234");
+    $dsig = new CDSIGTools($xml, CAppUI::conf("dmp path_certificat"), CAppUI::conf("dmp passphrase_certificat"));
     $dsig_signature = $dsig->createSignatureLot($xds->oid, $document_cda);
-    $signature = $xml->createDocumentRepositoryElement("Document");
-    $xml->appendAttribute($signature, "id", "2.25.4896.3");
+    $signature = $xml->createDocumentRepositoryElement($message, "Document");
+    $xml->addAttribute($signature, "id", "2.25.4896.3");
     $signature->nodeValue = base64_encode($dsig_signature->saveXML());
-    $xml->appendElement($message, $signature);
 
     return $message;
   }
@@ -71,7 +68,6 @@ class CXDSEventITI41 {
     $xpath = new CMbXPath($dom);
     $xpath->registerNamespace("ns1", "urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0");
     $status = $xpath->queryAttributNode(".", null, "status");
-
 
     if ($status === "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Failure") {
       $nodes = $xpath->query("//ns1:RegistryErrorList/ns1:RegistryError");
