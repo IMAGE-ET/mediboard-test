@@ -324,7 +324,7 @@ if ($show_operations) {
       }
 
       //template de contenu
-      $smarty = new CSmartyDP();
+      $smarty = new CSmartyDP("modules/reservation");
       $smarty->assign("operation"           , $_operation);
       $smarty->assign("patient"             , $patient);
       $smarty->assign("sejour"              , $sejour);
