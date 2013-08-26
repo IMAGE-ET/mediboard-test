@@ -10,7 +10,7 @@
 *}}
 
 <script>
-  PlageConsultSelector.init = function(form_id) {
+  PlageConsultSelector.init_multi = function(form_id) {
     this.sForm            = "editConsult_"+form_id;
     this.sHeure           = "heure";
     this.sPlageconsult_id = "plageconsult_id";
@@ -60,7 +60,7 @@
               <th>Date</th>
               <td>
                 <input type="hidden" name="plageconsult_id" value="{{$_consult->plageconsult_id}}"/>
-                <input type="text" readonly="readonly" name="plage_date_{{$_consult->_id}}" onclick="PlageConsultSelector.init('{{$_consult->_id}}')" value='{{$_consult->_ref_plageconsult->date|date_format:"%A %d %B %Y"}}'/>
+                <input type="text" readonly="readonly" name="plage_date_{{$_consult->_id}}" onclick="PlageConsultSelector.init_multi('{{$_consult->_id}}')" value='{{$_consult->_ref_plageconsult->date|date_format:"%A %d %B %Y"}}'/>
                 à <input type="text" readonly="readonly" name="heure" value="{{$_consult->heure}}"/>
               </td>
             </tr>
