@@ -1,10 +1,10 @@
 <script>
   updateBanque = function(mode) {
-    var form = mode.form;
+    var form = getForm('reglement-add');
     var banque_id = form.banque_id;
     var reference = form.reference;
     var BVR       = form.num_bvr;
-    var mode = $V(mode);
+    var mode      = form.mode.value;
     
     banque_id.hide();
     reference.hide();
@@ -97,6 +97,9 @@
     var form = getForm("reglement-add");
     form.montant.value = eclat.substring(2, 12)/100;
   }
+  Main.add(function(){
+    updateBanque('{{$conf.dPfacturation.CReglement.use_mode_default}}');
+  });
 </script>
     
 <!-- Formulaire de suppression d'un reglement (car pas possible de les imbriquer) -->
