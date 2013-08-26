@@ -452,8 +452,10 @@
                     {{elseif $consult->_count_matching_sejours}}
                       <button type="button" class="add" onclick="linkSejour()">{{tr}}CConsultation-_link_sejour{{/tr}}</button>
                     {{/if}}
-                    <br/>
-                    <button class="agenda button" id="buttonMultiple" type="button" onclick="multiPlageEdit('{{$consult->_id}}');" id="buttonMultiple">Modification multiple</button>
+                      {{if $next_consult >= 1}}
+                        <br/>
+                        <button class="agenda button" id="buttonMultiple" type="button" onclick="multiPlageEdit('{{$consult->_id}}');" id="buttonMultiple">Modification multiple</button>
+                      {{/if}}
 
                   </span>
                     {{/if}}

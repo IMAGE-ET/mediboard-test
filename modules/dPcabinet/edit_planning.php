@@ -43,6 +43,7 @@ $correspondantsMedicaux = array();
 $medecin_adresse_par = "";
 $_function_id = null;
 $nb_plages = 0;
+$count_next_plage = 0;
 
 // Nouvelle consultation
 if (!$consultation_id) {
@@ -115,7 +116,6 @@ else {
     
   $pat = $consult->loadRefPatient();
   $pat->loadIdVitale();
-  
   // Correspondants médicaux
   $correspondants = $pat->loadRefsCorrespondants();
   foreach ($correspondants as $_correspondant) {
@@ -140,6 +140,14 @@ else {
   $whereSejour["patient_id"] = "= '$consult->patient_id'";
   $whereSejour["group_id"] = "= '$group->_id'";
   $consult->_count_matching_sejours = $sejour->countList($whereSejour);
+
+  //next consultation ?
+  $dateW = $consult->_ref_plageconsult->date;
+  $where = array();
+  $whereN["patient_id"] = " = '$consult->patient_id'";
+  $whereN["date"] = " > '$dateW'";
+  $ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
+  $count_next_plage = $consult->countList($whereN, null, $ljoin);
 }
 
 // Chargement des categories
@@ -230,5 +238,6 @@ $smarty->assign("_function_id"           , $_function_id);
 $smarty->assign("line_element_id"        , $line_element_id);
 $smarty->assign("nb_plages"              , $nb_plages);
 $smarty->assign("dialog"                 , $dialog);
+$smarty->assign("next_consult"           , $count_next_plage);
 
 $smarty->display("edit_planning.tpl");
