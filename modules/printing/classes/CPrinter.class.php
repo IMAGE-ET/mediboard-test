@@ -1,14 +1,12 @@
 <?php
-
 /**
- * CCorrespondantCourrier aed
+ * $Id$
  *
- * @category Printing
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:\$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage Printing
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -50,7 +48,6 @@ class CPrinter extends CMbMetaObject {
    */
   function getProps() {
     $props = parent::getProps();
-    
     $props["function_id"]  = "ref class|CFunctions notNull";
     $props["object_id"]    = "ref notNull class|CSourcePrinter meta|object_class";
     $props["object_class"] = "str notNull class show|0";

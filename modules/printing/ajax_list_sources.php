@@ -32,5 +32,3 @@ $smarty->assign("source_id" , $source_id);
 $smarty->assign("class", $class);
 
 $smarty->display("inc_list_sources.tpl");
-
-?>

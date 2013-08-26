@@ -10,8 +10,13 @@
  * @link     http://www.mediboard.org
  */
 
+/**
+ * Printing module setup class
+ */
 class CSetupprinting extends CSetup {
-  
+  /**
+   * @see parent::__construct()
+   */
   function __construct() {
     parent::__construct();
   
@@ -55,8 +60,5 @@ class CSetupprinting extends CSetup {
     $this->addQuery($query);
     
     $this->mod_version = "0.03";
-    
-    
   }
 }
-?>

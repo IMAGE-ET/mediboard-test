@@ -13,13 +13,11 @@
 $id = CValue::get("id");
 $class = CValue::get("class");
 
+/** @var CSourcePrinter $source */
 $source = new $class;
-
 $source->load($id);
 
 $file = new CFile;
 $file->_file_path = "modules/printing/samples/test_page.pdf";
 
 $source->sendDocument($file);
-
-?>

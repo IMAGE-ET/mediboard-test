@@ -29,4 +29,3 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("source_lpr", $source_lpr);
 $smarty->display("inc_edit_source_lpr.tpl");
-?>

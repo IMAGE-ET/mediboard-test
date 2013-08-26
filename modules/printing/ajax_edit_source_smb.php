@@ -29,4 +29,3 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("source_smb", $source_smb);
 $smarty->display("inc_edit_source_smb.tpl");
-?>

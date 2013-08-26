@@ -21,5 +21,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("source_id" , $source_id);
 $smarty->assign("class", $class);
 $smarty->display("vw_idx_sources.tpl");
-
-?>

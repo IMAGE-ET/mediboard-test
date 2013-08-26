@@ -13,4 +13,3 @@
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
 $module->registerTab("vw_idx_sources"  , TAB_READ);
-?>

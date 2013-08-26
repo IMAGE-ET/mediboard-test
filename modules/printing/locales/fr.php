@@ -97,4 +97,3 @@ $locales['CSourceSMB.all'] = 'Toutes les sources SMB';
 $locales['CSourceSMB.none'] = 'Aucune source SMB';
 $locales['CSourceSMB.one'] = 'Une source SMB';
 $locales['mod-printing-tab-vw_idx_sources'] = 'Sources d\'impression';
-?>
