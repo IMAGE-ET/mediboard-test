@@ -47,7 +47,7 @@
     
     updateMergeButton = function() {
       var button = $("merge_correspondants");
-      button.writeAttribute("disabled", $("correspondants_courrier").select("input[checked]").length ? null : true);
+      button.writeAttribute("disabled", $("correspondants_courrier").select("input:checked").length ? null : true);
     }
   </script>
 {{/if}}

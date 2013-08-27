@@ -101,7 +101,7 @@ function submitCompteRendu(callback){
       
       var destinataires = $("destinataires");
       
-      if (destinataires && destinataires.select("input[checked]").length) {
+      if (destinataires && destinataires.select("input:checked").length) {
         $V(form.do_merge, 1);
       }
       
@@ -493,7 +493,7 @@ Main.add(function(){
   {{mb_field object=$compte_rendu field="valide" hidden=1}}
 
   {{if $header_footer_fly}}
-    <div id="header_footer_fly" class="modal" style="display: none">
+    <div id="header_footer_fly" style="display: none">
       <table class="tbl">
         <tr>
           <th>
