@@ -182,6 +182,7 @@ class CConsultation extends CFacturable {
   public $_dossier_anesth_completed_id;
   public $_docitems_from_dossier_anesth;
   public $_locks;
+  public $_handler_external_booking;
   public $_list_forms = array();
 
   /**
@@ -220,6 +221,7 @@ class CConsultation extends CFacturable {
     $backProps["exchanges_hl7v2"]   = "CExchangeHL7v2 object_id";
     $backProps["fse_pyxvital"]      = "CPvFSE consult_id";
     $backProps["task"]              = "CSejourTask consult_id";
+    $backProps["identifiants"]      = "CIdSante400 object_id cascade";
 
     return $backProps;
   }

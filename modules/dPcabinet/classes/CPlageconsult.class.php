@@ -57,6 +57,9 @@ class CPlageconsult extends CPlageHoraire {
   public $_other_function_id;
   public $_user_id;
 
+  // behaviour fields
+  public $_handler_external_booking;
+
   /** @var CMediusers */
   public $_ref_chir;
 
