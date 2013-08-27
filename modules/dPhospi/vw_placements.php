@@ -26,9 +26,8 @@ if (!$services_ids || $group_id) {
   // Si la préférence existe, alors on la charge
   if (isset($pref_services_ids->{"g$group_id"})) {
     $services_ids = $pref_services_ids->{"g$group_id"};
-    if ($services_ids) {
-      $services_ids = explode("|", $services_ids); 
-    }
+    $services_ids = explode("|", $services_ids);
+    CMbArray::removeValue("", $services_ids);
     CValue::setSession("services_ids", $services_ids);
   }
   // Sinon, chargement de la liste des services en accord avec le droit de lecture
@@ -42,7 +41,7 @@ if (!$services_ids || $group_id) {
   }
 }
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("readonly", $readonly);
 
