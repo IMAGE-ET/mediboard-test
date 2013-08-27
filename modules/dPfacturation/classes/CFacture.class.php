@@ -942,6 +942,7 @@ class CFacture extends CMbObject {
     $this->loadRefsConsultation();
     foreach ($this->_ref_consults as $consult) {
       foreach ($consult->_ref_actes as $acte) {
+        /* @var CActeTarmed $acte */
         $acte->creationItemsFacture($this, $consult->_date);
       }
     }
@@ -1038,6 +1039,7 @@ class CFacture extends CMbObject {
           }
         }
         if (!$modif && ($item->type == "CActeTarmed" || $item->type == "CActeCaisse") && !$use_pm) {
+          /* @var CActeTarmed $code */
           $code = new $item->type;
           $code->code = $item->code;
           $code->updateMontantBase();
@@ -1066,6 +1068,7 @@ class CFacture extends CMbObject {
    * @return void
    */
   function cloneFrom($the_facture){
+    /* @var CFacture $facture */
     $facture = new $the_facture->_class;
     $facture->load($the_facture->_id);
     /** @var CFacture $facture*/
@@ -1119,12 +1122,52 @@ class CFacture extends CMbObject {
     $this->updateFormFields();
     $this->notify("BeforeFillLimitedTemplate", $template);
 
-    $template->addDateProperty("Facture - Date de création"   , $this->ouverture);
+    $template->addDateProperty("Facture - Date de création" , $this->ouverture);
     $template->addProperty("Facture - Du patient" , $this->du_patient);
     $template->addProperty("Facture - Du tiers"   , $this->du_tiers);
-    $template->addDateProperty("Facture - Date règlement patient" , $this->patient_date_reglement);
-    $template->addDateProperty("Facture - Date règlement tiers"   , $this->tiers_date_reglement);
 
+    $this->loadRefsReglements();
+    if (CAppUI::conf("ref_pays") == 1) {
+      $template->addProperty("Facture - Secteur 1"   , $this->_secteur1);
+      $template->addProperty("Facture - Secteur 2"   , $this->_secteur2);
+    }
+    if (CAppUI::conf("ref_pays") == 2) {
+      $this->loadRefCoeffFacture();
+      $template->addProperty("Facture - Coefficient"   , $this->_coeff);
+      $template->addProperty("Facture - Montant sans remise"  , $this->_montant_sans_remise);
+      $template->addProperty("Facture - Montant avec remise"  , $this->_montant_avec_remise);
+      $template->addProperty("Facture - Statut du patient"    , CAppUI::tr("$this->_class.statut_pro.$this->statut_pro"));
+      $this->loadRefAssurance();
+      $assurance = $this->_ref_assurance_maladie->_id ? $this->_ref_assurance_maladie : $this->_ref_assurance_accident;
+      $template->addProperty("Facture - Assurance de base"    , $assurance->nom);
+    }
+    // Règlements
+    $template->addProperty("Facture - Règlements - Nombre de règlements", count($this->_ref_reglements));
+    $template->addProperty("Facture - Règlements - Du restant patient"  , $this->_du_restant_patient);
+    $template->addProperty("Facture - Règlements - Du restant tiers"    , $this->_du_restant_tiers);
+    $template->addDateProperty("Facture - Règlements - Date acquittement patient" , $this->patient_date_reglement);
+    $template->addDateProperty("Facture - Règlements - Date acquittement tiers"   , $this->tiers_date_reglement);
+    $template->addProperty("Facture - Règlements - Total réglé patient" , $this->_reglements_total_patient);
+    $template->addProperty("Facture - Règlements - Total réglé tiers"    , $this->_reglements_total_tiers);
+
+    //Relances
+    if (CAppUI::conf("dPfacturation CRelance use_relances")) {
+      $this->loadRefsRelances();
+      $template->addProperty("Facture - Nombre de relances"           , count($this->_ref_relances));
+      $template->addProperty("Facture - Dernière relance - Numéro"    , $this->_ref_last_relance->numero);
+      $template->addDateProperty("Facture - Dernière relance - Date"  , $this->_ref_last_relance->date);
+      $template->addProperty("Facture - Dernière relance - Etat"      , CAppUI::tr("CRelance.etat.".$this->_ref_last_relance->etat));
+      $template->addProperty("Facture - Dernière relance - Montant"   , $this->_ref_last_relance->_montant);
+      $template->addProperty("Facture - Dernière relance - Statut"    , CAppUI::tr("CRelance.statut.".$this->_ref_last_relance->statut));
+      $template->addProperty("Facture - Dernière relance - Echeance"  , $this->_echeance);
+    }
+
+    //Rétrocessions
+    if (CAppUI::conf("dPfacturation CRetrocession use_retrocessions")) {
+      $this->updateMontantRetrocession();
+      $template->addProperty("Facture - Rétrocessions - Nombre de rétrocessions", count($this->_retrocessions));
+      $template->addProperty("Facture - Rétrocessions - Montant total", $this->_montant_retrocession);
+    }
     $this->notify("AfterFillLimitedTemplate", $template);
   }
 }

@@ -2136,6 +2136,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->loadRefEtablissementTransfert($cache);
     $this->loadRefServiceMutation($cache);
     $this->loadExtCodesCCAM();
+    $this->loadRefsFactureEtablissement();
   }
 
   /**
@@ -2471,6 +2472,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
   }
 
+  /**
+   * @see parent::getExecutantId()
+   */
   function getExecutantId($code_activite) {
       return $this->praticien_id;
   }
@@ -2923,6 +2927,11 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     if (CModule::getActive("forms")) {
       CExObject::addFormsToTemplate($template, $this, "Sejour");
+    }
+
+    if (CModule::getActive("dPfacturation") && CAppUI::conf("dPplanningOp CFactureEtablissement use_facture_etab")) {
+      $this->loadRefsFactureEtablissement();
+      $this->_ref_last_facture->fillLimitedTemplate($template);
     }
 
     $this->notify("AfterFillLimitedTemplate", $template);
