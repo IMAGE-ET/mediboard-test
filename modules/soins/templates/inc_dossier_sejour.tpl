@@ -1,27 +1,27 @@
 {{if $popup}}
-{{mb_script module="dPpatients" script="patient"}}
+  {{mb_script module="patients" script="patient" ajax=true}}
 
-{{if "dPmedicament"|module_active}}
-  {{mb_script module="dPmedicament" script="medicament_selector"}}
-  {{mb_script module="dPmedicament" script="equivalent_selector"}}
-{{/if}}
+  {{if "dPmedicament"|module_active}}
+    {{mb_script module="medicament" script="medicament_selector" ajax=true}}
+    {{mb_script module="medicament" script="equivalent_selector" ajax=true}}
+  {{/if}}
 
-{{mb_script module="soins" script="plan_soins"}}
+  {{mb_script module="soins" script="plan_soins" ajax=true}}
 
-{{if "dPprescription"|module_active}}
-  {{mb_script module="dPprescription" script="element_selector"}}
-  {{mb_script module="dPprescription" script="prescription"}}
-{{/if}}
+  {{if "dPprescription"|module_active}}
+    {{mb_script module="prescription" script="element_selector" ajax=true}}
+    {{mb_script module="prescription" script="prescription" ajax=true}}
+  {{/if}}
 
-{{mb_script module="dPplanningOp" script="cim10_selector"}}
+  {{mb_script module="planningOp" script="cim10_selector" ajax=true}}
 
-{{mb_script module="dPcompteRendu" script="document"}}
-{{mb_script module="dPcompteRendu" script="modele_selector"}}
-{{mb_script module="dPcabinet" script="file"}}
+  {{mb_script module="compteRendu" script="document" ajax=true}}
+  {{mb_script module="compteRendu" script="modele_selector" ajax=true}}
+  {{mb_script module="cabinet"     script="file" ajax=true}}
 {{/if}}
 
 {{if $isImedsInstalled}}
-  {{mb_script module="dPImeds" script="Imeds_results_watcher"}}
+  {{mb_script module="dPImeds" script="Imeds_results_watcher" ajax=true}}
 {{/if}}
 
 {{assign var=prescription_id value=$sejour->_ref_prescription_sejour->_id}}

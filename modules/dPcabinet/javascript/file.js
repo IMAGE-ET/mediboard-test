@@ -1,4 +1,4 @@
-var File = {
+File = {
   popup: function(object_class, object_id, element_class, element_id, sfn) {
     var url = new Url;
     url.ViewFilePopup(object_class, object_id, element_class, element_id, sfn);

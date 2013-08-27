@@ -8,19 +8,19 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module="dPcabinet" script="edit_consultation"}}
-{{mb_script module="dPplanningOp" script="operation"}}
+{{mb_script module="cabinet" script="edit_consultation"}}
+{{mb_script module="planningOp" script="operation"}}
 
 {{mb_script module="soins" script="plan_soins"}}
 
 {{if "dPprescription"|module_active}}
-  {{mb_script module="dPprescription" script="prescription"}}
-  {{mb_script module="dPprescription" script="element_selector"}}
+  {{mb_script module="prescription" script="prescription"}}
+  {{mb_script module="prescription" script="element_selector"}}
 {{/if}}
 
 {{if "dPmedicament"|module_active}}
-  {{mb_script module="dPmedicament" script="medicament_selector"}}
-  {{mb_script module="dPmedicament" script="equivalent_selector"}}
+  {{mb_script module="medicament" script="medicament_selector"}}
+  {{mb_script module="medicament" script="equivalent_selector"}}
 {{/if}}
 
 <script type="text/javascript">
@@ -29,7 +29,7 @@ Consultation.useModal();
 Operation.useModal();
 
 updateListConsults = function() {
-  var url = new Url("dPcabinet", "httpreq_vw_list_consult");
+  var url = new Url("cabinet", "httpreq_vw_list_consult");
   url.addParam("chirSel"   , "{{$prat->_id}}");
   url.addParam("date"      , "{{$date}}");
   url.addParam("vue2"      , "{{$vue}}");
@@ -39,7 +39,7 @@ updateListConsults = function() {
 };
 
 initUpdateListConsults = function() {
-  var url = new Url("dPcabinet", "httpreq_vw_list_consult");
+  var url = new Url("cabinet", "httpreq_vw_list_consult");
   url.addParam("chirSel"   , "{{$prat->_id}}");
   url.addParam("date"      , "{{$date}}");
   url.addParam("vue2"      , "{{$vue}}");
@@ -49,7 +49,7 @@ initUpdateListConsults = function() {
 };
 
 updateListOperations = function() {
-  var url = new Url("dPplanningOp", "httpreq_vw_list_operations");
+  var url = new Url("planningOp", "httpreq_vw_list_operations");
   url.addParam("pratSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.addParam("urgences", "0");
@@ -58,7 +58,7 @@ updateListOperations = function() {
 };
 
 initUpdateListOperations = function() {
-  var url = new Url("dPplanningOp", "httpreq_vw_list_operations");
+  var url = new Url("planningOp", "httpreq_vw_list_operations");
   url.addParam("pratSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.addParam("urgences", "0");
@@ -67,14 +67,14 @@ initUpdateListOperations = function() {
 };
 
 updateListHospi = function() {
-  var url = new Url("dPboard", "httpreq_vw_hospi");
+  var url = new Url("board", "httpreq_vw_hospi");
   url.addParam("chirSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.requestUpdate("hospi");
 };
 
 updateWorkList = function() {
-  var url = new Url("dPboard", "ajax_worklist");
+  var url = new Url("board", "ajax_worklist");
   url.addParam("chirSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.requestUpdate("worklist");
@@ -83,12 +83,12 @@ updateWorkList = function() {
 showDossierSoins = function(sejour_id, date, default_tab){
   var url = new Url("soins", "ajax_vw_dossier_sejour");
   url.addParam("sejour_id", sejour_id);
-  if(default_tab){
+  url.addParam("popup", "1");
+  if (default_tab){
     url.addParam("default_tab", default_tab);
   }
   url.requestModal("95%", "90%", {
-    onClose: updatePrescriptions,
-    showClose: false
+    onClose: updatePrescriptions
   });
   modalWindow = url.modalObject;
 };
