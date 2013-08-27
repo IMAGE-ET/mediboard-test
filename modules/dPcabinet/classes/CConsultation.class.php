@@ -567,6 +567,20 @@ class CConsultation extends CFacturable {
       }
     }
 
+    $this->loadRefsActes();
+
+    if ($this->concerne_ALD) {
+      foreach ($this->_ref_actes_ngap as $_acte_ngap) {
+        $_acte_ngap->ald = 1;
+        $_acte_ngap->store();
+      }
+
+      foreach ($this->_ref_actes_ccam as $_acte_ccam) {
+        $_acte_ccam->ald = 1;
+        $_acte_ccam->store();
+      }
+    }
+
     return null;
   }
 
