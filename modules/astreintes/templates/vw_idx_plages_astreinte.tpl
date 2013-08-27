@@ -9,7 +9,7 @@
 *}}
 
 {{mb_script module="astreintes" script="plage"}}
-<button class="new" type="button" onclick="PlageAstreinte.modal()">
+<button class="new" type="button" onclick="PlageAstreinte.modal(null, null, null, null, 'Control.modal.close')">
 {{tr}}CPlageAstreinte-title-create{{/tr}}
 </button>
 <table class="main">
@@ -48,7 +48,7 @@
                 {{$_plage->_ref_user}}
                 </a>
               </td>
-              <td class="{{$class}}">
+              <td class="{{$class}} {{if !$_plage->libelle}}empty{{/if}}">
                 {{if $_plage->libelle}}{{$_plage->libelle}}{{else}}<em>{{tr}}CPlageAstreinte.noLibelle{{/tr}}</em>{{/if}}
               </td>
               <td class="{{$class}}">

@@ -1,5 +1,7 @@
 PlageAstreinte = {
   module : "astreintes",
+  lastList : "",
+  user_id : "",
 
   showForUser: function(user_id) {
     new Url("astreintes", "ajax_plage_astreinte").
@@ -29,19 +31,33 @@ PlageAstreinte = {
     if (plage) plage.addUniqueClassName("selected");
   },
 
+  refreshList: function(target_id, user_id) {
+    if (this.lastList || target_id) {
+      this.user_id = user_id;
+      var url = new Url("astreintes", "vw_idx_plages_astreinte");
+      url.addParam("user_id", this.user_id);
+      if (target_id) {this.lastList = target_id;}
+      url.requestUpdate(this.lastList);
+    }
+  },
+
   content: function() {
     var url = new Url("astreintes", "vw_planning_astreinte");
     url.addParam("affiche_nom", 0);
     url.requestUpdate("planningconge");
   },
 
-  modal: function(plage_id, date, hourstart, minutestart) {
+  modal: function(plage_id, date, hourstart, minutestart, callback) {
     var url = new Url("astreintes", "ajax_edit_plage_astreinte");
     url.addParam("plage_id", plage_id);
     url.addParam("date", date);
     url.addParam("hour", hourstart);
     url.addParam("minutes", minutestart);
     url.requestModal(500,300);
+    if (callback) {
+      url.modalObject.observe('afterClose', callback);
+    }
+
   },
 
   modaleastreinteForDay: function(date) {

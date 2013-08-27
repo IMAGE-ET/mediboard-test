@@ -8,11 +8,20 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<form name="editplage" action="" method="post">
+<script>
+  onSubmitForm = function(form) {
+    var ok = onSubmitFormAjax(form);
+    PlageAstreinte.refreshList();
+    Control.Modal.close();
+    return ok;
+  }
+</script>
+
+<form name="editplage" action="" method="post" onsubmit="return onSubmitForm(this); ">
   {{mb_key object=$plageastreinte}}
   <input type="hidden" name="dosql" value="do_plageastreinte_aed" />
   <input type="hidden" name="m" value="{{$m}}" />
-  <input type="hidden" name="tab" value="{{$tab}}" />
+  <input type="hidden" name="tab" value="{{$a}}" />
   <table class="form">
     {{if $plageastreinte->_id}}
       <tr>
