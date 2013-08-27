@@ -12,7 +12,7 @@
   
   addMultiples = function() {
     var div = $("code_area");
-    var inputs = div.select(".multiples_codes[checked]");
+    var inputs = div.select(".multiples_codes:checked");
     if (inputs.length) {
       CCAMSelector.setMulti(inputs);
       Control.Modal.close();
