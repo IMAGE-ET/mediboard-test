@@ -1,7 +1,7 @@
 <?php /** $Id */
 
 /**
- * Class usef for calendar duration
+ * Class used for calendar duration
  *
  * @category Classes
  * @package  Mediboard
@@ -19,9 +19,11 @@ class CPlageCalendaire extends CMbObject{
 
   public $_duration;
 
-  /**
-   * @var self[]
-   */
+  // avoir collision check
+  /** @var bool $_skip_collision_check */
+  public $_skip_collision_check;
+
+  /** @var $_colliding_plages self[] */
   public $_colliding_plages;
   public $_collisionList = array();
 
@@ -76,7 +78,7 @@ class CPlageCalendaire extends CMbObject{
     $keys = $this->_spec->collision_keys;
     if (!is_array($keys)) {
       CModelObject::error("class%s-collision_keys-not-available", $this->_class);
-      return;
+      return array();
     }
 
     $keys = $this->_spec->collision_keys;
@@ -101,11 +103,12 @@ class CPlageCalendaire extends CMbObject{
     }
 
     // Load collision
-    $plages = new $this->_class;
+    $plages = new self();
     $this->_colliding_plages = $plages->loadList($where);
 
     // Build collision message
     $msgs = array();
+    /** @var $_plage CPlageCalendaire */
     foreach ($this->_colliding_plages as $_plage) {
       $msgs[] = CAppUI::tr("CPlageCalendaire-collision-with-plageNb%d-start%s-end%s", $_plage->_id, $_plage->start, $_plage->end);
     }
@@ -119,9 +122,11 @@ class CPlageCalendaire extends CMbObject{
    * @return null|string
    */
   function store() {
-    if ($msg = $this->hasCollisions()) {
+    //checking for collisions
+    if (!$this->_skip_collision_check && ($msg = $this->hasCollisions())) {
       return $msg;
     }
+
 
     return parent::store();
   }
