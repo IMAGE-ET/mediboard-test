@@ -38,7 +38,7 @@
   {{assign var=suffixe_icons value=""}}
 {{/if}}
 
-<script type="text/javascript">
+<script>
      
 function loadActesNGAP(sejour_id){
   var url = new Url("dPcabinet", "httpreq_vw_actes_ngap");
@@ -135,6 +135,12 @@ window.tabLoaders = {
       }
       if ($('tarif')) {
         loadTarifsSejour(sejour_id);
+      }
+      if ($('tarmed')) {
+        ActesTarmed.refreshListSejour(sejour_id, praticien_id);
+      }
+      if ($('caisse')) {
+        ActesCaisse.refreshListSejour(sejour_id, praticien_id);
       }
     },
   {{/if}}
@@ -395,11 +401,7 @@ checkAnesth = function(oField){
                   <td>
                     <select name="praticien_id" onchange="checkAnesth(this); this.form.submit();" style="width: 135px;">
                       <option value="">&mdash; Choix du praticien</option>
-                      {{foreach from=$praticiens item=_prat}}
-                        <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}" {{if $_prat->_id == $praticien_id}}selected="selected"{{/if}}>
-                          {{$_prat->_view}}
-                        </option>
-                      {{/foreach}}
+                      {{mb_include module=mediusers template=inc_options_mediuser selected=$praticien_id list=$praticiens}}
                     </select>
                   </td>
                 </tr>
@@ -426,7 +428,7 @@ checkAnesth = function(oField){
         {{if $_is_praticien && ($current_date == $date)}}
           <tr>
             <td class="button">
-              <script type="text/javascript">
+              <script>
               function createNotifications(){
                 var sejours = {{$visites.non_effectuee|@json}};
                 var url = new Url("soins", "httpreq_notifications_visite");
@@ -678,10 +680,16 @@ checkAnesth = function(oField){
           <tr>
             <td style="">
               <ul id="tab-actes" class="control_tabs">
-                <li id="tarif" style="float: right;"></li>
-                <li><a href="#one">Actes CCAM</a></li>
-                <li><a href="#two">Actes NGAP</a></li>
-                <li><a href="#three">Diagnostics</a></li>
+                {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
+                  <li id="tarif" style="float: right;"></li>
+                  <li><a href="#one">Actes CCAM</a></li>
+                  <li><a href="#two">Actes NGAP</a></li>
+                  <li><a href="#three">Diagnostics</a></li>
+                {{/if}}
+                {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
+                  <li><a href="#tarmed_tab">TARMED</a></li>
+                  <li><a href="#caisse_tab">{{tr}}CPrestationCaisse{{/tr}}</a></li>
+                {{/if}}
               </ul>
               <hr class="control_tabs" />
 
@@ -710,6 +718,29 @@ checkAnesth = function(oField){
                     </div>
                   </td>
                 </tr>
+                {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+                  {{mb_script module=tarmed script=actes}}
+                  <tr id="tarmed_tab" style="display: none;">
+                    <td id="tarmed">
+                      <div id="listActesTarmed">
+                        <div class="small-info">
+                          Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
+                          ajouter des actes Tarmed au patient concerné.
+                         </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr id="caisse_tab" style="display: none;">
+                    <td id="caisse">
+                      <div id="listActesCaisse">
+                        <div class="small-info">
+                          Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
+                          ajouter des actes caisses au patient concerné.
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                {{/if}}
               </table>
             </td>
           </tr>

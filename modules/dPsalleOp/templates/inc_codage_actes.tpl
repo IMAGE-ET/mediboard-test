@@ -94,10 +94,10 @@
     {{mb_include module=cabinet template=inc_codage_ngap}}
   </div>
 </div>
-{{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
+{{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
   <div id="tarmed_tab" style="display:none">
     <div id="listActesTarmed">
-      {{mb_include module=tarmed template=inc_codage_tarmed}}
+      {{mb_include module=tarmed template=inc_codage_tarmed object=$subject}}
     </div>
   </div>
   <div id="caisse_tab" style="display:none">
