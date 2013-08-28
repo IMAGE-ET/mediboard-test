@@ -1,7 +1,8 @@
 {{mb_script module=admin    script=preferences  ajax=true}}
 {{mb_script module=patients script=autocomplete ajax=true}}
 
-<script>
+<script type="text/javascript">
+
 Main.add(function () {
   Control.Tabs.create('tab_edit_mediuser', true).activeLink.onmouseup();
 });
@@ -15,25 +16,34 @@ Main.add(function () {
   </li>
     
   <li>
-    <a href="#edit-preferences" onmouseup="Preferences.refresh('{{$user->_id}}')">
-      {{tr}}Preferences{{/tr}}
-    </a>
-  </li>
-  
+  	<a href="#edit-preferences" onmouseup="Preferences.refresh('{{$user->_id}}')">
+  		{{tr}}Preferences{{/tr}}
+		</a>
+	</li>
+
   {{if @$modules.dPpersonnel->_can->read}}
-  <li>
-    {{mb_script module=personnel script=plage}}
-    <script>
-      PlageConge.refresh = function() {
-        PlageConge.content();
-        PlageConge.loadUser('{{$user->_id}}', '');
-        PlageConge.edit('','{{$user->_id}}');
-      }
-    </script>
-    <a href="#edit-holidays" onmouseup="PlageConge.refresh()">
-      {{tr}}Holidays{{/tr}}
-    </a>
-  </li>
+    <li>
+      {{mb_script module=personnel script=plage}}
+      <script>
+        PlageConge.refresh = function() {
+          PlageConge.content();
+          PlageConge.loadUser('{{$user->_id}}', '');
+          PlageConge.edit('','{{$user->_id}}');
+        }
+      </script>
+      <a href="#edit-holidays" onmouseup="PlageConge.refresh()">
+        {{tr}}Holidays{{/tr}}
+      </a>
+    </li>
+  {{/if}}
+
+  {{if "astreintes"|module_active}}
+    <li>
+      {{mb_script module=astreintes script=plage}}
+      <a href="#edit-astreintes" onmouseup="PlageAstreinte.refreshList('edit-astreintes','{{$user->_id}}');">
+        {{tr}}CPlageAstreinte{{/tr}}
+      </a>
+    </li>
   {{/if}}
 
   {{if "oxFacturation"|module_active}}
@@ -45,15 +55,6 @@ Main.add(function () {
     </script>
     <li>
       <a href="#edit-factureox" onmouseup="factureUser();">{{tr}}CFactureOX{{/tr}}</a>
-    </li>
-  {{/if}}
-
-  {{if "astreintes"|module_active}}
-    <li>
-      {{mb_script module=astreintes script=plage}}
-      <a href="#edit-astreintes" onmouseup="new Url('astreintes', 'vw_idx_plages_astreinte').requestUpdate('edit-astreintes');">
-        {{tr}}CPlageAstreinte{{/tr}}
-        </a>
     </li>
   {{/if}}
   
