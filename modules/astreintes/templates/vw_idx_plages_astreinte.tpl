@@ -52,11 +52,7 @@
                 {{if $_plage->libelle}}{{$_plage->libelle}}{{else}}<em>{{tr}}CPlageAstreinte.noLibelle{{/tr}}</em>{{/if}}
               </td>
               <td class="{{$class}}">
-                {{if $_plage->start == $_plage->end}}
-                  {{$_plage->start|date_format:$conf.longdate}}
-                {{else}}
-                  {{$_plage->start|date_format:$conf.longdate}} &rarr; {{$_plage->end|date_format:$conf.longdate}}
-                {{/if}}
+                {{mb_include module="system" template="inc_interval_datetime" from=$_plage->start to=$_plage->end}}
               </td>
               <td class="{{$class}}">
                 {{mb_include module=system template=inc_vw_duration duration=$_plage->_duration}}

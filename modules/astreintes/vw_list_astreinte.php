@@ -19,7 +19,7 @@ $mode = CValue::getOrSession("mode", "day");
 
 $astreinte = new CPlageAstreinte;
 $where = array();
-$order = "start,end";
+$order = "start DESC,end";
 
 switch ($mode) {
   case 'year':
