@@ -33,10 +33,10 @@ PlageAstreinte = {
 
   refreshList: function(target_id, user_id) {
     if (this.lastList || target_id) {
-      this.user_id = user_id;
+      if (user_id != null) {this.user_id = user_id;}
+      if (target_id != null) {this.lastList = target_id;}
       var url = new Url("astreintes", "vw_idx_plages_astreinte");
       url.addParam("user_id", this.user_id);
-      if (target_id) {this.lastList = target_id;}
       url.requestUpdate(this.lastList);
     }
   },
@@ -63,6 +63,6 @@ PlageAstreinte = {
   modaleastreinteForDay: function(date) {
     var url = new Url("astreintes", "ajax_list_day_astreinte");
     url.addParam("date", date);
-    url.requestModal(500,200);
+    url.requestModal(500,500);
   }
 };
