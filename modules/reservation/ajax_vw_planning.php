@@ -364,7 +364,7 @@ if ($show_operations) {
         }
       }
 
-      $event = new CPlanningEvent($_operation->_guid, $debut, $duree, $smartyL, "#$color", $important, $css, $_operation->_guid, false);
+      $event = new CPlanningEvent($_operation->_guid, $debut, $duree, utf8_encode($smartyL), "#$color", $important, $css, $_operation->_guid, false);
 
       if ($can_edit) {
         $event->addMenuItem("edit" , utf8_encode("Modifier cette opération"));
