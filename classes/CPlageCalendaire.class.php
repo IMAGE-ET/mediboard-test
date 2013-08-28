@@ -103,7 +103,8 @@ class CPlageCalendaire extends CMbObject{
     }
 
     // Load collision
-    $plages = new self();
+    /** @var CPlageCalendaire $plages */
+    $plages = new $this->_class;
     $this->_colliding_plages = $plages->loadList($where);
 
     // Build collision message
