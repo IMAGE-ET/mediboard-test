@@ -200,8 +200,9 @@ var WaitingMessage = {
    * @param {HTMLElement} element The element to cover
    */
   cover: function(element) {
-    // don't cover hidden elements in IE
-    if (Prototype.Browser.IE && document.documentMode < 9 && (element.style && element.style.display === "none")) {
+    // don't cover hidden elements in IE8
+    if (Prototype.Browser.IE && document.documentMode < 9 && /Trident\/4.0/.test(navigator.userAgent)/* && (element.style && element.style.display === "none")*/) {
+      element.update();
       return;
     }
   
