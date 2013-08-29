@@ -124,6 +124,17 @@
     <strong class="title">Adresse IP</strong>
     {{$performance.ip}}
   </li>
+
+
+  <script>
+    emptyCache = function() {
+      var url = new Url("system", "httpreq_do_empty_shared_memory");
+      url.requestUpdate("systemMsg");
+    }
+  </script>
+  <li class="performance-reloadcache" onclick="emptyCache();">
+    Cache
+  </li>
   
   <li class="export" onclick="window.open('data:text/html;charset=utf-8,'+encodeURIComponent(this.up('ul').innerHTML))" title="{{tr}}Export{{/tr}}"></li>
   <li class="close" onclick="this.up('ul').remove()" title="{{tr}}Close{{/tr}}"></li>
