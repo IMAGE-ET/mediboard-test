@@ -2042,7 +2042,7 @@ tr.observation_urgente td {
 }
 
 tr.observation_info td {
-  background-color: #ccf;
+  background-color: #ccf !important;
 }
 
 tr.transmission_haute td {
