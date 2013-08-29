@@ -1102,6 +1102,10 @@ div.about div.nav {
   background-image: url(../../images/icons/network.png);
 }
 
+#performance > li.performance-reloadcache:before {
+  background-image: url(../mediboard/images/buttons/change.png);
+}
+
 #performance > li.performance-pagesize:before {
   background-image: url(../../images/icons/kilogram_weight.png);
 }
