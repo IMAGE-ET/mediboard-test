@@ -343,6 +343,8 @@ if ($show_operations) {
       $smarty->assign("besoins"             , $besoins);
       $smarty->assign("interv_en_urgence"   , abs(CMbDT::hoursRelative("$_operation->date $debut_op", $first_log->date)) <= $diff_hour_urgence);
       $smartyL = $smarty->fetch("inc_planning/libelle_plage.tpl");
+      //@todo : UGLY, find a global better way !
+      $smartyL = htmlspecialchars_decode(CMbString::htmlEntities($smartyL, ENT_NOQUOTES), ENT_NOQUOTES);
 
       // couleurs
       $color = CAppUI::conf("hospi colors default");
@@ -364,7 +366,7 @@ if ($show_operations) {
         }
       }
 
-      $event = new CPlanningEvent($_operation->_guid, $debut, $duree, utf8_encode($smartyL), "#$color", $important, $css, $_operation->_guid, false);
+      $event = new CPlanningEvent($_operation->_guid, $debut, $duree, $smartyL, "#$color", $important, $css, $_operation->_guid, false);
 
       if ($can_edit) {
         $event->addMenuItem("edit" , utf8_encode("Modifier cette opération"));
