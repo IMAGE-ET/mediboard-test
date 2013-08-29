@@ -16,16 +16,16 @@
       {{if !$readonly}}
         <div style="float: right">
           <input name="_show_obs_view" id="_show_obs_view" type="checkbox" {{if $_show_obs}}checked="checked"{{elseif $cible != ""}}disabled{{/if}}
-            onchange="loadSuivi('{{$sejour->_id}}', '', '', this.checked ? 1 : 0, $('_show_trans_view').checked ? 1 : 0, !$('_show_const_view') ? null : $('_show_const_view').checked ? 1 : 0)"/>
+            onclick="loadSuivi('{{$sejour->_id}}', '', '', this.checked ? 1 : 0, $('_show_trans_view').checked ? 1 : 0, !$('_show_const_view') ? null : $('_show_const_view').checked ? 1 : 0)"/>
           <label for="_show_obs_view" title="{{tr}}CObservationMedicale{{/tr}}">{{tr}}CObservationMedicale._show_obs{{/tr}}</label>
           
           <input name="_show_trans_view" id="_show_trans_view" type="checkbox" {{if $_show_trans}}checked="checked"{{/if}}
-            onchange="loadSuivi('{{$sejour->_id}}', '', '', $('_show_obs_view').checked ? 1 : 0, this.checked ? 1 : 0, !$('_show_const_view') ? null : $('_show_const_view').checked ? 1 : 0)"/>
+            onclick="loadSuivi('{{$sejour->_id}}', '', '', $('_show_obs_view').checked ? 1 : 0, this.checked ? 1 : 0, !$('_show_const_view') ? null : $('_show_const_view').checked ? 1 : 0)"/>
           <label for="_show_trans_view" title="{{tr}}CTransmissionMedicale{{/tr}}">{{tr}}CTransmissionMedicale._show_trans{{/tr}}</label>
           
           {{if $conf.soins.constantes_show}}
             <input name="_show_const_view" id="_show_const_view" type="checkbox" {{if $_show_const}}checked="checked"{{elseif $cible != ""}}disabled{{/if}}
-              onchange="loadSuivi('{{$sejour->_id}}', '', '', $('_show_obs_view').checked ? 1 : 0, $('_show_trans_view').checked ? 1 : 0, this.checked ? 1 : 0)"/>
+              onclick="loadSuivi('{{$sejour->_id}}', '', '', $('_show_obs_view').checked ? 1 : 0, $('_show_trans_view').checked ? 1 : 0, this.checked ? 1 : 0)"/>
             <label for="_show_const_view" title="{{tr}}CConstantesMedicales{{/tr}}">{{tr}}CConstantesMedicales._show_const{{/tr}}</label>
           {{/if}}
           
