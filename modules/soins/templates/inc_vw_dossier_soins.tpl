@@ -406,7 +406,7 @@ Main.add(function () {
     <div id="jour" style="display:none">
     
     {{if "dPprescription"|module_active && $prescription_id}}
-      <h1 style="text-align: center;">
+      <h2 style="text-align: center;">
             <button type="button" 
                    class="left notext {{if $sejour->_entree >= $bornes_composition_dossier|@reset|@reset}}opacity-50{{/if}}" 
                    {{if $sejour->_entree < $bornes_composition_dossier|@reset|@reset}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$prev_date}}', null, null, null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
@@ -424,7 +424,7 @@ Main.add(function () {
                  class="right notext {{if $sortie_sejour <= $bornes_composition_dossier|@end|@end}}opacity-50{{/if}}"
                  {{if $sortie_sejour > $bornes_composition_dossier|@end|@end}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
                  ></button>
-      </h1>
+      </h2>
             
       <table style="width: 100%">
          <tr>
