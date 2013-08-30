@@ -154,7 +154,7 @@ function adddiagcm() {
     echo "<div class='info'> Table des diagnostics d'entrée créée</div>";
   }
   $file = @fopen($fileName, 'rw');
-  if ($file) {
+  if (!$file) {
     echo "Fichier non trouvé<br>";
     return;
   }
