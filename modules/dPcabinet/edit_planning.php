@@ -145,7 +145,7 @@ else {
   $dateW = $consult->_ref_plageconsult->date;
   $where = array();
   $whereN["patient_id"] = " = '$consult->patient_id'";
-  $whereN["date"] = " > '$dateW'";
+  $whereN["date"] = " >= '$dateW'";
   $ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
   $count_next_plage = $consult->countList($whereN, null, $ljoin);
 }
