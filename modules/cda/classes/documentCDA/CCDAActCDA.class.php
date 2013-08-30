@@ -22,9 +22,9 @@ class CCDAActCDA extends CCDADocumentCDA {
    * @return CCDAPOCD_MT000040_ClinicalDocument
    */
   function setClinicalDocument() {
-    $docItem = parent::$docItem;
-    $root = parent::$root;
-    $participation = parent::$participation;
+    $docItem         = parent::$docItem;
+    $root            = parent::$root;
+    $participation   = parent::$participation;
     $actRelationship = parent::$actRelationship;
 
     //déclaration du document
@@ -37,7 +37,17 @@ class CCDAActCDA extends CCDADocumentCDA {
     //Création de l'Id du document
     $ii = new CCDAII();
     $ii->setRoot($root);
-    $ii->setExtension("$docItem->_id/$docItem->version");
+
+    if ($docItem instanceof CFile) {
+      $version = "";
+      $nom = $docItem->file_name;
+      $nom = substr($nom, 0, strrpos($nom, "."));
+    }
+    else {
+      $nom = $docItem->nom;
+      $version = $docItem->version;
+    }
+    $ii->setExtension("$docItem->_id.$version");
     $clinicaldocument->setId($ii);
 
     //création du typeId
@@ -49,6 +59,7 @@ class CCDAActCDA extends CCDADocumentCDA {
     $clinicaldocument->appendRealmCode($cs);
 
     //Ajout du code langage fr-FR
+    //@todo voir langue
     $cs = new CCDACS();
     $cs->setCode("fr-FR");
     $clinicaldocument->setLanguageCode($cs);
@@ -69,7 +80,7 @@ class CCDAActCDA extends CCDADocumentCDA {
 
     //Ajout du numéro de version
     $int = new CCDAINT();
-    $int->setValue(intval($docItem->version));
+    $int->setValue(intval($version));
     $clinicaldocument->setVersionNumber($int);
 
     //Ajout de l'identifiant du lot
@@ -80,12 +91,20 @@ class CCDAActCDA extends CCDADocumentCDA {
 
     //Ajout du nom du document
     $st = new CCDAST();
-    $st->setData($docItem->nom);
+    $st->setData($nom);
     $clinicaldocument->setTitle($st);
 
     //Ajout du code du document (Jeux de valeurs)
     $ce = new CCDACE();
-    $ce->setCode("test");
+    $category = $docItem->loadRefCategory();
+    $object = self::$targetObject;
+    /** @var COperation|CCOnsultation|COperation $object */
+    $group_id = $object->loadRefPraticien()->_group_id;
+    $category->loadLastId400("cda_association_code_$group_id");
+    $code = CCdaTools::loadEntryJV("CI-SIS_jdv_typeCode.xml", $category->_ref_last_id400->id400);
+    $ce->setCode($code["code"]);
+    $ce->setCodeSystem($code["codeSystem"]);
+    $ce->setDisplayName($code["displayName"]);
     $clinicaldocument->setCode($ce);
 
     /**
@@ -113,7 +132,6 @@ class CCDAActCDA extends CCDADocumentCDA {
     $this->setDocumentationOF($clinicaldocument);
     $clinicaldocument->setComponentOf($actRelationship->setComponentOf());
 
-
     /**
      * Création du corp du document
      */
@@ -129,12 +147,36 @@ class CCDAActCDA extends CCDADocumentCDA {
   function setNonXMLBody() {
     $docItem = parent::$docItem;
     $nonXMLBody = new CCDAPOCD_MT000040_NonXMLBody();
+    $mediaType = "application/pdf";
+
+    if ($docItem instanceof CFile) {
+      $file = $docItem;
+      switch ($docItem->file_type) {
+        case "text/plain":
+        case "image/jpeg":
+        case "image/tiff":
+        case "application/pdf":
+          $mediaType = $docItem->file_type;
+          break;
+        case "image/jpg":
+          $mediaType = "image/jpeg";
+          break;
+        case "application/rtf":
+          $mediaType = "text/rtf";
+          break;
+        default:
+          $docItem->convertToPDF();
+          $file = $docItem->loadPDFconverted();
+      }
+    }
+    else {
+      $docItem->makePDFpreview(1);
+      $file = $docItem->_ref_file;
+    }
 
     $ed = new CCDAED();
-    $ed->setMediaType("application/pdf");
+    $ed->setMediaType($mediaType);
     $ed->setRepresentation("B64");
-    $docItem->makePDFpreview(1);
-    $file = $docItem->_ref_file;
     $ed->setData(base64_encode(file_get_contents($file->_file_path)));
 
     $nonXMLBody->setText($ed);
@@ -149,14 +191,12 @@ class CCDAActCDA extends CCDADocumentCDA {
   function setEncompassingEncounter() {
     $encompassingEncounter = new CCDAPOCD_MT000040_EncompassingEncounter();
 
-    $docItem = parent::$docItem;
-    $object = $docItem->_ref_object;
+    $object = self::$targetObject;
+    /** @var CSejour|COperation|CConsultation $object CSejour*/
+    $praticien = $object->loadRefPraticien();
     $ivl = "";
-    $praticien = "";
     switch (get_class($object)) {
       case "CSejour":
-        /** @var CSejour $object CSejour*/
-        $praticien = $object->loadRefPraticien();
         $low = $object->entree_reelle;
         if (!$low) {
           $low = $object->entree_prevue;
@@ -171,16 +211,12 @@ class CCDAActCDA extends CCDADocumentCDA {
 
         break;
       case "COperation":
-        /** @var COperation $object COperation*/
-        $praticien = $object->loadRefChir();
         $ivl = $this->createIvlTs($object->debut_op, $object->fin_op);
         $encompassingEncounter->setEffectiveTime($ivl);
 
         break;
       case "CConsultation":
-        /** @var CConsultation $object CConsultation*/
         $object->loadRefPlageConsult();
-        $praticien = $object->loadRefPraticien();
         $ivl = $this->createIvlTs($object->_datetime, $object->_date_fin, true);
         break;
     }

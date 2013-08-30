@@ -140,12 +140,24 @@ class CCDARoleCDA extends CCDADocumentCDA {
   /**
    * Retourne un HealthCareFacility
    *
+   * @var CUser|CMediusers $user praticien
+   *
    * @return CCDAPOCD_MT000040_HealthCareFacility
    */
-  function setHealthCareFacility() {
+  function setHealthCareFacility($user) {
     $healt = new CCDAPOCD_MT000040_HealthCareFacility();
 
-    //@todo: faire le mappage avec healthcareFacilityTypeCode.
+    $user->loadRefFunction();
+    $group = new CGroups();
+    $group->load($user->_group_id);
+    $group->loadLastId400("cda_association_code");
+    $valeur = CCdaTools::loadEntryJV("CI-SIS_jdv_healthcareFacilityTypeCode.xml", $group->_ref_last_id400->id400);
+
+    $ce = new CCDACE();
+    $ce->setCode($valeur["code"]);
+    $ce->setCodeSystem($valeur["codeSystem"]);
+    $ce->setDisplayName($valeur["displayName"]);
+    $healt->setCode($ce);
 
     return $healt;
   }

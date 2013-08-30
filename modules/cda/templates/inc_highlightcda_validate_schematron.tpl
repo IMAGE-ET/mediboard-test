@@ -17,7 +17,7 @@
     <th>{{tr}}Location{{/tr}}</th>
     <th>{{tr}}Error{{/tr}}</th>
   </tr>
-  {{foreach from=$treecda->validateSchematron item=_error}}
+  {{foreach from=$treecda.validateSchematron item=_error}}
     <tr>
       <td>
         {{$_error.location}}
@@ -28,7 +28,7 @@
     </tr>
     {{foreachelse}}
     <tr>
-      <td>
+      <td colspan="2">
         {{tr}}Document valide{{/tr}}
       </td>
     </tr>

@@ -11,6 +11,8 @@
  * @link     http://www.mediboard.org
  */
 
+CCanDo::checkAdmin();
+
 $action = CValue::get("action", "null");
 $resultat = false;
 switch ($action) {

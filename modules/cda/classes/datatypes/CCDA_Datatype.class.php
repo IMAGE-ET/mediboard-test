@@ -70,9 +70,6 @@ class CCDA_Datatype extends CCDAClasseBase{
   function validate() {
 
     $domDataType = $this->toXML(null, null);
-    /*if (get_class($this) === "CCDAEIVL_event") {
-      mbTrace($domDataType->saveXML());
-    }*/
     return @$domDataType->schemaValidate("modules/cda/resources/TestClasses.xsd");
   }
 

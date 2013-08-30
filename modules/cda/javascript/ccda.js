@@ -12,9 +12,9 @@
 Ccda = {
 
   showxml : function(name) {
-    var url = new Url("cda", "ajax_show_xml_type");
-    url.addParam("name", name);
-    url.requestUpdate("xmltype-view");
+    new Url("cda", "ajax_show_xml_type")
+      .addParam("name", name)
+      .requestUpdate("xmltype-view");
   },
 
   highlightMessage : function(form) {
@@ -22,22 +22,25 @@ Ccda = {
   },
 
   action : function(action) {
-    var url = new Url("cda", "vw_toolsdatatype");
-    url.addParam("action", action);
-    url.requestUpdate("resultAction");
+    new Url("cda", "vw_toolsdatatype")
+      .addParam("action", action)
+      .requestUpdate("resultAction");
   },
 
   actionTest : function(action) {
-    var url = new Url("cda", "vw_testdatatype");
-    url.addParam("action", action);
-    url.requestUpdate("resultAction");
+    new Url("cda", "vw_testdatatype")
+      .addParam("action", action)
+      .requestUpdate("resultAction");
   },
 
   testInsc : function(action) {
+    var page = "";
     switch (action) {
       case "auto" :
-        new Url("cda", "ajax_test_insc_auto")
-          .requestUpdate("test_insc");
+        page = "ajax_test_insc_auto";
+        break;
+      case "saisi" :
+        page = "ajax_test_insc_saisi";
         break;
       case "manuel" :
         Ccda.readCarte(function (data) {
@@ -46,11 +49,11 @@ Ccda = {
             .requestUpdate("test_insc");
         });
         break;
-      case "saisi" :
-        new Url("cda", "ajax_test_insc_saisi")
-          .requestUpdate("test_insc");
-        break;
     }
+
+    new Url("cda", page)
+      .requestUpdate("test_insc");
+
   },
 
   submitSaisieInsc : function(form) {
@@ -75,22 +78,26 @@ Ccda = {
     setTimeout(function(){
     var listBeneficiaires = VitaleVision.xmlDocument.getElementsByTagName("listeBenef")[0].childNodes;
     var listPerson = [];
+
     for (var i = 0; i < listBeneficiaires.length; i++) {
       var person = {};
       var ident = listBeneficiaires[i].getElementsByTagName("ident")[0];
       var amo = listBeneficiaires[i].getElementsByTagName("amo")[0];
       person["date"]        = getNodeValue("dateEnCarte", ident);
+
       if (person["date"].length === 0) {
         person["date"]        = getNodeValue("date", ident);
       }
+
       person["prenom"]      = getNodeValue("prenomUsuel", ident);
       person["nirCertifie"] = getNodeValue("nirCertifie", ident);
       var qualBenef         = getNodeValue("qualBenef"  , amo);
+
       if (person["nirCertifie"].length === 0 && qualBenef === '0') {
         person["nirCertifie"] = getNodeValue("nir", ident);
       }
-      person["nom"]         = getNodeValue("nomUsuel"   , ident);
 
+      person["nom"]         = getNodeValue("nomUsuel"   , ident);
       listPerson.push(person);
     }
       callback(Object.toJSON(listPerson));

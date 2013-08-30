@@ -24,22 +24,10 @@ class CCDAParticipationCDA extends CCDADocumentCDA {
   function setAuthor() {
     $docItem = parent::$docItem;
     $author = new CCDAPOCD_MT000040_Author();
-    $object = $docItem->loadTargetObject();
-    $praticien = "";
-    switch (get_class($object)) {
-      case "CSejour":
-        /** @var CSejour $object CSejour*/
-        $praticien = $object->loadRefPraticien();
-        break;
-      case "COperation":
-        /** @var COperation $object COperation*/
-        $praticien = $object->loadRefChir();
-        break;
-      case "CConsultation":
-        /** @var CConsultation $object CConsultation*/
-        $praticien = $object->loadRefPraticien();
-        break;
-    }
+    $object = self::$targetObject;
+    /** @var CSejour|COperation|CConsultation $object CSejour*/
+    $praticien = $object->loadRefPraticien();
+
     $date = $this->getTimeToUtc($docItem->_ref_last_log->date);
     $ts = new CCDATS();
     $ts->setValue($date);
@@ -86,22 +74,9 @@ class CCDAParticipationCDA extends CCDADocumentCDA {
     $cs = new CCDACS();
     $cs->setCode("S");
     $legalAuthenticator->setSignatureCode($cs);
-    $object = $docItem->loadTargetObject();
-    $praticien = "";
-    switch (get_class($object)) {
-      case "CSejour":
-        /** @var CSejour $object CSejour*/
-        $praticien = $object->loadRefPraticien();
-        break;
-      case "COperation":
-        /** @var COperation $object COperation*/
-        $praticien = $object->loadRefChir();
-        break;
-      case "CConsultation":
-        /** @var CConsultation $object CConsultation*/
-        $praticien = $object->loadRefPraticien();
-        break;
-    }
+    $object = self::$targetObject;
+    /** @var COperation|CSejour|CConsultation $object */
+    $praticien = $object->loadRefPraticien();
     $legalAuthenticator->setAssignedEntity(parent::$role->setAssignedEntity($praticien));
     return $legalAuthenticator;
   }

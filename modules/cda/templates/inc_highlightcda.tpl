@@ -23,12 +23,12 @@
     <li><a href="#message-cda-tree">{{tr}}tree{{/tr}}</a></li>
     <li><a href="#message-cda-xml">XML</a></li>
     <li>
-      <a href="#message-cda-errors" {{if $treecda->validate|@count == 0}}class="special"{{else}} class="wrong" {{/if}}>
+      <a href="#message-cda-errors" {{if $treecda.validate|@count == 0}}class="special"{{else}} class="wrong" {{/if}}>
         {{tr}}validation{{/tr}} XSD
       </a>
     </li>
     <li>
-      <a href="#message-cda-errors-schematron" {{if $treecda->validateSchematron}}class="wrong"{{else}} class="special" {{/if}}>
+      <a href="#message-cda-errors-schematron" {{if $treecda.validateSchematron}}class="wrong"{{else}} class="special" {{/if}}>
         {{tr}}validation{{/tr}} schematron
       </a>
     </li>
@@ -42,7 +42,7 @@
   </div>
 
   <div id="message-cda-xml" style="display: none;">
-    {{$treecda->xml|smarty:nodefaults}}
+    {{$xml|smarty:nodefaults}}
   </div>
 
   <div id="message-cda-errors" style="display: none;">

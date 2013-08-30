@@ -30,7 +30,7 @@ class CSSLCertificate {
    * @param String $path_certificate P12 file
    * @param String $passphrase       Passphrase for the certificate
    */
-  function __construct($path_certificate, $passphrase) {
+  function __construct($path_certificate, $passphrase = null) {
     $this->passphrase = $passphrase;
     $this->certificate_path = $path_certificate;
     openssl_pkcs12_read(file_get_contents($path_certificate), $array_cert, $passphrase);

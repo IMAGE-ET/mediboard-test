@@ -11,10 +11,7 @@
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
 
-CCanDo::checkAdmin();
-
-$CCDATools = new CCdaTools();
-$listtypes = $CCDATools->returnType("modules/cda/resources/datatypes-base_original.xsd");
+$listtypes = CCdaTools::returnType("modules/cda/resources/datatypes-base_original.xsd");
 
 //template
 $smarty = new CSmartyDP();

@@ -16,11 +16,11 @@ $birthDate = CValue::get("birthDate", "");
 $firstName = CValue::get("firstName", "");
 $nir       = CValue::get("nir"      , "");
 $nirKey    = CValue::get("nirKey"   , "");
-$insc = "";
+$insc      = "";
 
 if ($nir && $nirKey) {
   $firstName = CInscTools::formatString($firstName);
-  $insc = CPatient::calculInsc($nir, $nirKey, $firstName, $birthDate);
+  $insc      = CPatient::calculInsc($nir, $nirKey, $firstName, $birthDate);
 }
 
 $smarty = new CSmartyDP();

@@ -20,6 +20,7 @@ class CSetupxds extends CSetup {
     parent::__construct();
     
     $this->mod_name = "xds";
+    $this->addDependency("cda", "0.01");
     $this->makeRevision("all");
     $this->makeRevision("0.01");
 

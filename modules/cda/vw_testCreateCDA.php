@@ -11,21 +11,23 @@
  * @link     http://www.mediboard.org
  */
 
+CCanDo::checkAdmin();
+
 $cda = new CCDADocumentCDA();
-$cr = new CCompteRendu();
+$cr  = new CCompteRendu();
 $cr->load($cr->getRandomValue("compte_rendu_id", true));
 $documentCDA = $cda->generateCDA($cr);
 $cdaXML = $documentCDA->toXML("ClinicalDocument", "urn:hl7-org:v3");
 $cdaXML->purgeEmptyElements();
 $message = $cdaXML->saveXML();
 
-$cdafile = new CCdaTools();
-$cdafile->parse($message);
-$cdafile->showxml($message);
+$treecda = CCdaTools::parse($message);
+$xml     = CCdaTools::showxml($message);
 
 $smarty = new CSmartyDP();
 
 $smarty->assign("message", $message);
-$smarty->assign("treecda", $cdafile);
+$smarty->assign("treecda", $treecda);
+$smarty->assign("xml"    , $xml);
 
 $smarty->display("inc_highlightcda.tpl");

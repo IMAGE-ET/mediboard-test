@@ -13,7 +13,7 @@
   <tr>
     <th>{{tr}}Result{{/tr}}</th>
   </tr>
-  {{foreach from=$treecda->validate item=_error}}
+  {{foreach from=$treecda.validate item=_error}}
     {{if $_error !== "1"}}
     <tr>
       <td>

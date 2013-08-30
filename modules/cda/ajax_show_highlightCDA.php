@@ -14,13 +14,13 @@
 $message = CValue::post("message");
 $message = stripslashes($message);
 
-$cdafile = new CCdaTools();
-$cdafile->parse($message);
-$cdafile->showxml($message);
+$treecda = CCdaTools::parse($message);
+$xml     = CCdaTools::showxml($message);
 
 $smarty = new CSmartyDP();
 
 $smarty->assign("message", $message);
-$smarty->assign("treecda", $cdafile);
+$smarty->assign("treecda", $treecda);
+$smarty->assign("xml"    , $xml);
 
 $smarty->display("inc_highlightcda.tpl");

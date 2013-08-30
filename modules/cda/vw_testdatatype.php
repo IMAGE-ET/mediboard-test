@@ -10,21 +10,21 @@
 * @link     http://www.mediboard.org
 */
 
-$action = CValue::get("action", "null");
+CCanDo::checkAdmin();
 
-$CCDATools = new CCdaTools();
-$result = null;
+$action      = CValue::get("action", "null");
+$result      = null;
 $resultSynth = null;
 
 if ($action !== "null") {
-  $result = $CCDATools->createTest($action);
-  $resultSynth = $CCDATools->syntheseTest($result);
+  $result      = CCdaTools::createTest($action);
+  $resultSynth = CCdaTools::syntheseTest($result);
 }
 
 $smarty = new CSmartyDP();
 
-$smarty->assign("result", $result);
+$smarty->assign("result"     , $result);
 $smarty->assign("resultsynth", $resultSynth);
-$smarty->assign("action", $action);
+$smarty->assign("action"     , $action);
 
 $smarty->display("vw_testdatatype.tpl");

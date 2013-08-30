@@ -10,30 +10,30 @@
  * @link     http://www.mediboard.org
  */
 
+CCanDo::checkAdmin();
 
 $action = CValue::get("action", "null");
-
-$CCDATools = new CCdaTools();
 $result = "";
+
 switch ($action) {
   case "createClass":
-    $result = $CCDATools->createClass();
+    $result = CCDATools::createClass();
     break;
 
   case "createTest":
-    $result = $CCDATools->createAllTestSchemaClasses();
+    $result = CCDATools::createAllTestSchemaClasses();
     break;
 
   case "clearXSD":
-    $result = $CCDATools->clearXSD();
+    $result = CCDATools::clearXSD();
     break;
 
   case "missClass":
-    $result = $CCDATools->missclass();
+    $result = CCDATools::missclass();
     break;
 
   case "createClassXSD":
-    $result = $CCDATools->createClassFromXSD();
+    $result = CCDATools::createClassFromXSD();
     break;
 }
 

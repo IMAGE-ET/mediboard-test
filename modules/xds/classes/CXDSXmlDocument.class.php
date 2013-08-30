@@ -99,7 +99,7 @@ class CXDSXmlDocument extends CMbXMLDocument {
   function createSlotValue($data) {
     $valueList = $this->createRimRoot("ValueList", null, $this->documentElement);
     foreach ($data as $_data) {
-      $this->createRimRoot("Value", htmlspecialchars($_data), $valueList);
+      $this->createRimRoot("Value", CMbString::htmlspecialchars($_data), $valueList);
     }
   }
 

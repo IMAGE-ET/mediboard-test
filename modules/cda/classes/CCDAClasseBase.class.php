@@ -48,10 +48,6 @@ class CCDAClasseBase {
   function validate() {
 
     $domDataType = $this->toXML(null, "urn:hl7-org:v3");
-    /*if (get_class($this) === "CCDAPOCD_MT000040_Act") {
-      mbTrace($domDataType->saveXML());
-      return $domDataType->schemaValidate("modules/cda/resources/TestClassesCDA.xsd");
-    }*/
     return @$domDataType->schemaValidate("modules/cda/resources/TestClassesCDA.xsd");
   }
 
@@ -101,11 +97,10 @@ class CCDAClasseBase {
     }
 
     //on créé le nom racine
-    $dom->createNodeRoot($name, $namespace);
+    $baseXML = $dom->addElement($dom, $name, null, $namespace);
 
     //on récupère les specifications définie dans les props
     $spec = $this->getSpecs();
-    $baseXML = $dom->getElement($name);
 
     //On parcours les specs
     foreach ($spec as $key => $value) {
@@ -123,7 +118,7 @@ class CCDAClasseBase {
             $key = "ID";
           }
           //On créé l'attribut
-          $dom->appendAttribute($baseXML, $key, $classInstance->getData());
+          $dom->addAttribute($baseXML, $key, $classInstance->getData());
           break;
         case "data":
           //on insert la donnée avant tous les éléments
@@ -160,16 +155,14 @@ class CCDAClasseBase {
           continue;
         }
         //on cherche le noeud XML dans notre document
-        $xpath = new DOMXPath($dom);
+        $xpath = new CMbXPath($dom);
         if (!empty($namespace)) {
           $xpath->registerNamespace("cda", $namespace);
-          $nodeKey = $xpath->query("//cda:".$key);
+          $nodeKey = $xpath->queryUniqueNode("//cda:".$key);
         }
         else {
-          $nodeKey = $xpath->query("//".$key);
+          $nodeKey = $xpath->queryUniqueNode("//".$key);
         }
-
-        $nodeKey = $nodeKey->item(0);
 
         if (is_array($classInstance)) {
           foreach ($classInstance as $_class) {

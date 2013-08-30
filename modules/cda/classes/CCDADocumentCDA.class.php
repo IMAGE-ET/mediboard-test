@@ -18,25 +18,20 @@ class CCDADocumentCDA extends CCDAClasseCda{
 
   /** @var String */
   static $root;
-
   /** @var CCompteRendu */
   static $docItem;
-
+  /** @var COperation|CConsultAnesth|CConsultation|CSejour */
+  static $targetObject;
   /** @var CPatient */
   static $patient;
-
   /** @var CCDAEntiteCDA */
   static $entite;
-
   /** @var CCDARoleCDA */
   static $role;
-
   /** @var CCDAParticipationCDA */
   static $participation;
-
   /** @var CCDAActRelationshipCDA */
   static $actRelationship;
-
   /** @var CCDAActCDA */
   static $act;
 
@@ -49,12 +44,16 @@ class CCDADocumentCDA extends CCDAClasseCda{
    */
   function generateCDA(CCompteRendu $docItem) {
     $docItem->loadLastLog();
-    $docItem->loadTargetObject();
+    self::$targetObject = $object = $docItem->loadTargetObject();
+    if ($object instanceof CConsultAnesth) {
+      self::$targetObject = $object->loadRefConsultation();
+    }
     self::$participation   = new CCDAParticipationCDA();
     self::$entite          = new CCDAEntiteCDA();
     self::$act             = new CCDAActCDA();
     self::$actRelationship = new CCDAActRelationshipCDA();
     self::$role            = new CCDARoleCDA();
+
     self::$docItem         = $docItem;
     self::$root            = CAppUI::conf("cda OID_root");
     $this->getPatientFromDoc(self::$docItem);
@@ -304,6 +303,13 @@ class CCDADocumentCDA extends CCDAClasseCda{
     }
   }
 
+  function setPerformer($praticien) {
+    $performer = new CCDAPOCD_MT000040_Performer1();
+    $performer->setTypeCode("PRF");
+    $performer->setAssignedEntity(self::$role->setAssignedEntity($praticien, true));
+    return $performer;
+  }
+
   /**
    * Affectation des documents
    *
@@ -314,19 +320,18 @@ class CCDADocumentCDA extends CCDAClasseCda{
   function setDocumentationOF($clinicalDoc) {
     $docItem = self::$docItem;
     /** @var CConsultation $object CConsultation*/
-    $object = $docItem->_ref_object;
+    $object = self::$targetObject;
     $object->loadRefPraticien();
+
+    $documentationOf = new CCDAPOCD_MT000040_DocumentationOf();
+    $serviceEvent = new CCDAPOCD_MT000040_ServiceEvent();
 
     switch (get_class($object)) {
       case "CSejour":
         /** @var CSejour $object CSejour */
-        $documentationOf = new CCDAPOCD_MT000040_DocumentationOf();
-        $serviceEvent = new CCDAPOCD_MT000040_ServiceEvent();
-        $low = $object->entree_reelle;
-        if (!$object->entree_reelle) {
-          $low = $object->entree_prevue;
-        }
-        $ivlTs = $this->createIvlTs($low, $object->sortie_reelle);
+
+        $low = $object->entree;
+        $ivlTs = $this->createIvlTs($low, $object->sortie);
         $serviceEvent->setEffectiveTime($ivlTs);
 
         $ii = new CCDAII();
@@ -334,10 +339,7 @@ class CCDADocumentCDA extends CCDAClasseCda{
         $ii->setExtension($object->DP);
         $serviceEvent->appendId($ii);
 
-        $performer = new CCDAPOCD_MT000040_Performer1();
-        $performer->setTypeCode("PRF");
-        $performer->setAssignedEntity(self::$role->setAssignedEntity($object->_ref_praticien, true));
-        $serviceEvent->appendPerformer($performer);
+        $serviceEvent->appendPerformer($this->setPerformer($object->_ref_praticien));
         $documentationOf->setServiceEvent($serviceEvent);
         $clinicalDoc->appendDocumentationOf($documentationOf);
         break;
@@ -363,10 +365,7 @@ class CCDADocumentCDA extends CCDAClasseCda{
           if ($no_acte >= 1) {
             continue;
           }
-          $performer = new CCDAPOCD_MT000040_Performer1();
-          $performer->setTypeCode("PRF");
-          $performer->setAssignedEntity(self::$role->setAssignedEntity($acteCcam->_ref_executant, true));
-          $serviceEvent->appendPerformer($performer);
+          $serviceEvent->appendPerformer($this->setPerformer($acteCcam->_ref_executant));
           $documentationOf->setServiceEvent($serviceEvent);
 
           $clinicalDoc->appendDocumentationOf($documentationOf);
@@ -374,17 +373,12 @@ class CCDADocumentCDA extends CCDAClasseCda{
         }
 
         if ($no_acte === 0) {
-          $documentationOf = new CCDAPOCD_MT000040_DocumentationOf();
-          $serviceEvent = new CCDAPOCD_MT000040_ServiceEvent();
           $ii = new CCDAII();
           $ii->setNullFlavor("UNK");
           $serviceEvent->appendId($ii);
           $ivl = $this->createIvlTs($object->debut_op, $object->fin_op);
           $serviceEvent->setEffectiveTime($ivl);
-          $performer = new CCDAPOCD_MT000040_Performer1();
-          $performer->setTypeCode("PRF");
-          $performer->setAssignedEntity(self::$role->setAssignedEntity($object->_ref_chir, true));
-          $serviceEvent->appendPerformer($performer);
+          $serviceEvent->appendPerformer($this->setPerformer($object->_ref_chir));
           $documentationOf->setServiceEvent($serviceEvent);
 
           $clinicalDoc->appendDocumentationOf($documentationOf);
@@ -415,10 +409,7 @@ class CCDADocumentCDA extends CCDAClasseCda{
           if ($no_acte >= 1) {
             continue;
           }
-          $performer = new CCDAPOCD_MT000040_Performer1();
-          $performer->setTypeCode("PRF");
-          $performer->setAssignedEntity(self::$role->setAssignedEntity($acteCcam->_ref_executant, true));
-          $serviceEvent->appendPerformer($performer);
+          $serviceEvent->appendPerformer($this->setPerformer($acteCcam->_ref_executant));
           $documentationOf->setServiceEvent($serviceEvent);
 
           $clinicalDoc->appendDocumentationOf($documentationOf);
@@ -426,17 +417,12 @@ class CCDADocumentCDA extends CCDAClasseCda{
         }
 
         if ($no_acte === 0) {
-          $documentationOf = new CCDAPOCD_MT000040_DocumentationOf();
-          $serviceEvent = new CCDAPOCD_MT000040_ServiceEvent();
           $ii = new CCDAII();
           $ii->setNullFlavor("UNK");
           $serviceEvent->appendId($ii);
           $ivl = $this->createIvlTs($object->_datetime, $object->_date_fin);
           $serviceEvent->setEffectiveTime($ivl);
-          $performer = new CCDAPOCD_MT000040_Performer1();
-          $performer->setTypeCode("PRF");
-          $performer->setAssignedEntity(self::$role->setAssignedEntity($object->_ref_chir, true));
-          $serviceEvent->appendPerformer($performer);
+          $serviceEvent->appendPerformer($this->setPerformer($object->_ref_chir));
           $documentationOf->setServiceEvent($serviceEvent);
 
           $clinicalDoc->appendDocumentationOf($documentationOf);

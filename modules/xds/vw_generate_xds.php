@@ -11,5 +11,7 @@
  * @link     http://www.mediboard.org
  */
 
+CCanDo::checkAdmin();
+
 $smarty = new CSmartyDP();
 $smarty->display("vw_generate_xds.tpl");

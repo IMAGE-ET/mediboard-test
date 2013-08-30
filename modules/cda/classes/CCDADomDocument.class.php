@@ -14,7 +14,7 @@
 /**
  * Permet de cré
  */
-class CCDADomDocument extends DOMDocument {
+class CCDADomDocument extends CMbXMLDocument {
 
   /**
    * Création du xml en UTF-8
@@ -22,70 +22,10 @@ class CCDADomDocument extends DOMDocument {
    * @param String $encoding String
    */
   function __construct($encoding = "UTF-8") {
-    parent::__construct("1.0", $encoding);
+    parent::__construct($encoding);
 
-    //$this->preserveWhiteSpace = false;
-    //$this->formatOutput = true;
-  }
-
-  /**
-   * Permet de créer le noeud root
-   *
-   * @param String $name      String
-   * @param String $namespace String
-   *
-   * @return void
-   */
-  function createNodeRoot($name, $namespace = null) {
-    $name = utf8_encode($name);
-    if (empty($namespace)) {
-      $this->appendChild($this->createElement($name));
-    }
-    else {
-      $this->appendChild($this->createElementNS($namespace, $name));
-    }
-
-  }
-
-  /**
-   * Permet de créer le noeud root avec le namespace urn:hl7-org:v3
-   *
-   * @param String $namespace String
-   * @param String $name      String
-   *
-   * @return void
-   */
-  function createNodeRootNS($namespace, $name) {
-    $name = utf8_encode($name);
-    $this->appendChild($this->createElementNS($namespace, $name));
-  }
-
-  /**
-   * Retourne le premier élément trouvé
-   *
-   * @param String $name String
-   *
-   * @return DOMElement
-   */
-  function getElement($name) {
-    $name = utf8_encode($name);
-    return $this->getElementsByTagName($name)->item(0);
-  }
-
-  /**
-   * Ajoute un attribut avec sa valeur au noeud spécifié
-   *
-   * @param DOMElement $nodeParent DOMElement
-   * @param String     $name       String
-   * @param String     $value      String
-   *
-   * @return void
-   */
-  function appendAttribute($nodeParent, $name, $value) {
-    $name = utf8_encode($name);
-    $value = utf8_encode($value);
-    $nodeParent->appendChild($this->createAttribute($name));
-    $nodeParent->attributes->getNamedItem($name)->nodeValue = $value;
+    $this->preserveWhiteSpace = true;
+    $this->formatOutput = true;
   }
 
   /**
@@ -103,18 +43,6 @@ class CCDADomDocument extends DOMDocument {
   }
 
   /**
-   * Importe un DOMDocument à l'intérieur de l'élément spécifié
-   *
-   * @param DOMElement  $nodeParent  DOMElement
-   * @param DOMDocument $domDocument DOMDocument
-   *
-   * @return void
-   */
-  function importDOMDocument($nodeParent, $domDocument) {
-    $nodeParent->appendChild($this->importNode($domDocument->documentElement, true));
-  }
-
-  /**
    * Caste l'élement spécifié
    *
    * @param DOMNode $nodeParent DOMNode
@@ -127,15 +55,6 @@ class CCDADomDocument extends DOMDocument {
     $attribute = $this->createAttributeNS("http://www.w3.org/2001/XMLSchema-instance", "xsi:type");
     $attribute->nodeValue = $value;
     $nodeParent->appendChild($attribute);
-  }
-
-  /**
-   * Enlève les éléments vide du document
-   *
-   * @return void
-   */
-  function purgeEmptyElements() {
-    $this->purgeEmptyElementsNode($this->documentElement);
   }
 
   /**
@@ -164,5 +83,4 @@ class CCDADomDocument extends DOMDocument {
       $node->parentNode->removeChild($node);
     }
   }
-
 }

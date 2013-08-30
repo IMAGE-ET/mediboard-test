@@ -11,24 +11,56 @@
  * @version    $Revision$
  */
 /**
- * Class CCdaTools
+ * Outils pour le CDA
  */
 class CCdaTools {
 
-  public $contain;
-  public $validate;
-  public $validateSchematron;
-  public $xml;
+  /**
+   * Retourne un tableau issu du jeux de valeur
+   *
+   * @param String $name nom du jeux de valeurs
+   *
+   * @return array
+   */
+  static function loadJV($name) {
+    $path = "modules/cda/resources/jeuxDeValeurs/$name";
+    $dom = new CMbXMLDocument();
+    $dom->load($path);
+    $xpath = new CMbXPath($dom);
+    $xpath->registerNamespace("svs", "urn:ihe:iti:svs:2008");
+    $nodes = $xpath->query("//svs:Concept");
+
+    $jeux_valeurs = array();
+    foreach ($nodes as $_node) {
+      $jeux_valeurs[] = array("code" => $xpath->queryAttributNode(".", $_node, "code"),
+                              "displayName" => $xpath->queryAttributNode(".", $_node, "displayName"),
+                              "codeSystem" => $xpath->queryAttributNode(".", $_node, "codeSystem"));
+    }
+
+    return $jeux_valeurs;
+  }
 
   /**
-   * @var CMbXMLDocument
+   * Retourne une entrée dans un jeux de valeur
+   *
+   * @param String $name Nom du jeux de valeur
+   * @param String $code Identifiant de la valeur voulut
+   *
+   * @return array
    */
-  public $domschema;
+  static function loadEntryJV($name, $code) {
+    $path = "modules/cda/resources/jeuxDeValeurs/$name";
+    $dom = new CMbXMLDocument();
+    $dom->load($path);
+    $xpath = new CMbXPath($dom);
+    $xpath->registerNamespace("svs", "urn:ihe:iti:svs:2008");
+    $node = $xpath->queryUniqueNode("//svs:Concept[@code='$code']");
+    $valeur = array("code" => $xpath->queryAttributNode(".", $node, "code"),
+                          "displayName" => $xpath->queryAttributNode(".", $node, "displayName"),
+                          "codeSystem" => $xpath->queryAttributNode(".", $node, "codeSystem"));
 
-  /**
-   * @var CMbXPath
-   */
-  public $xpath;
+    return $valeur;
+  }
 
   /**
    * Permet de récupérer les attributs d'un noeud xml sous forme de tableau
@@ -37,7 +69,7 @@ class CCdaTools {
    *
    * @return array[nom_attribut]
    */
-  function parseattribute($node) {
+  static function parseattribute($node) {
     $tabAttribute = array();
     foreach ($node->attributes as $_attribute) {
       $tabAttribute[$_attribute->nodeName] = utf8_decode($_attribute->nodeValue);
@@ -53,14 +85,14 @@ class CCdaTools {
    *
    * @return array
    */
-  function parsedeep ($node) {
+  static function parsedeep ($node) {
     /**
      * On renseigne les informations de notre noeud dans un tableau
      */
     $tabNode = array("name" => $node->localName,
                      "child" => array(),
                      "data" => utf8_decode($node->nodeValue),
-                     "attribute" => $this->parseattribute($node));
+                     "attribute" => self::parseattribute($node));
     /**
      * On vérifie que l'élément est un DOMElement pour éviter les noeuds Text et autres
      */
@@ -77,7 +109,7 @@ class CCdaTools {
           /**
            * On affecte à notre tableau ces fils en appelant notre fonction
            */
-          $tabNode["child"][] = $this->parsedeep($_childNode);
+          $tabNode["child"][] = self::parsedeep($_childNode);
         }
       }
     }
@@ -89,39 +121,39 @@ class CCdaTools {
   }
 
   /**
-   * Permet remplir la variable $_contain avec la structure du document
+   * Permet de remplir la variable $_contain avec la structure du document
    *
    * @param String $message message
    *
-   * @return void
+   * @return void|array
    */
-  function parse ($message) {
-
-    $this->domschema = new CMbXMLDocument("UTF-8");
-    $this->domschema->load("modules/cda/resources/CDA.xsd");
-
-    $this->xpath = new CMbXPath($this->domschema);
-    $this->xpath->registerNamespace("xs", "http://www.w3.org/2001/XMLSchema");
-
-
+  static function parse ($message) {
+    $result = array();
     $dom = new CMbXMLDocument("UTF-8");
-    $returnErrors = $dom->loadXMLSafe(utf8_encode($message), null, true);
-    $tabErrors = array_filter(explode("\n", $returnErrors));
-    $returnErrors = $dom->schemaValidate("modules/cda/resources/CDA.xsd", true, false);
-    $tabErrors = array_merge($tabErrors, array_filter(explode("\n", $returnErrors)));
-    $this->validate = array_unique($tabErrors);
 
-    if ($this->validate[0] != "1") {
-      $this->contain = null;
+    $returnErrors   = $dom->loadXMLSafe(utf8_encode($message), null, true);
+    $tabErrors      = array_filter(explode("\n", $returnErrors));
+    $returnErrors   = $dom->schemaValidate("modules/cda/resources/CDA.xsd", true, false);
+    $tabErrors      = array_merge($tabErrors, array_filter(explode("\n", $returnErrors)));
+    $validate = array_unique($tabErrors);
+
+    if ($validate[0] != "1") {
+      $contain = null;
       return;
     }
 
-    $this->validateSchematron($message);
+    $validateSchematron = self::validateSchematron($message);
 
-    if ($this->validate[0] === "1" && !CMbArray::get($this->validate, 1)) {
-      $this->validate = array();
+    if ($validate[0] === "1" && !CMbArray::get($validate, 1)) {
+      $validate = array();
     }
-    $this->contain = $this->parsedeep($dom->documentElement);
+
+    $contain = self::parsedeep($dom->documentElement);
+    $result["validate"]           = $validate;
+    $result["validateSchematron"] = $validateSchematron;
+    $result["contain"]            = $contain;
+
+    return $result;
   }
 
   /**
@@ -129,10 +161,10 @@ class CCdaTools {
    *
    * @param String $message message
    *
-   * @return void
+   * @return String
    */
-  function showxml($message) {
-    $this->xml = CMbString::highlightCode("xml", $message);
+  static function showxml($message) {
+    return CMbString::highlightCode("xml", $message);
   }
 
   /**
@@ -140,7 +172,7 @@ class CCdaTools {
    *
    * @return string
    */
-  function createClass() {
+  static function createClass() {
     //On charge le XSD contenant le vocabulaire
     $dom = new CMbXMLDocument("UTF-8");
     $dom->load("modules/cda/resources/voc.xsd");
@@ -156,28 +188,27 @@ class CCdaTools {
     //On parcours la liste que retourne la requête XPATH
     foreach ($nodeList as $_node) {
       //On récupère le nom du type
-      $name = $_node->attributes->getNamedItem("name")->nodeValue;
+      $name = $xpath->queryAttributNode(".", $_node, "name");
+
       //On récupère la documentation lié au type
-      $documentation = $xpath->queryUniqueNode("//xs:*[@name='".$name."']//xs:documentation");
-      //on vérifie qu'il existe une documentation
-      if ($documentation) {
-        $documentation = $documentation->nodeValue;
-      }
+      $documentation = $xpath->queryTextNode(".//xs:documentation", $_node);
+
       //On récupère les unions du type
-      $union = $xpath->queryUniqueNode("//xs:*[@name='".$name."']//xs:union");
+      $union = $xpath->queryUniqueNode(".//xs:union", $_node);
+
       //On vérifie l'existence d'union
       if ($union) {
-        $union = $union->attributes->getNamedItem("memberTypes")->nodeValue;
+        $union = $xpath->queryAttributNode(".", $union, "memberTypes");
       }
       //on récupère les énumérations
-      $enumeration = $xpath->query("//xs:*[@name='".$name."']//xs:enumeration");
+      $enumeration = $xpath->query(".//xs:enumeration", $_node);
       $listEnumeration = array();
 
       //on met chaque enumeration dans un tableau
       foreach ($enumeration as $_enumeration) {
-        array_push($listEnumeration, $_enumeration->attributes->getNamedItem("value")->nodeValue);
+        array_push($listEnumeration, $xpath->queryAttributNode(".", $_enumeration, "value"));
       }
-      //On créé un tableau rassemblant toues les informations concernant un voc
+      //On créé un tableau rassemblant toutes les informations concernant un voc
       $listvoc[] = array( "name" => $name,
                           "documentation" => $documentation,
                           "union" => $union,
@@ -188,17 +219,17 @@ class CCdaTools {
     $cheminBase = "modules/cda/classes/datatypes/voc/";
 
     //On parcours les voc
-    foreach ($listvoc as $voc) {
+    foreach ($listvoc as $_voc) {
       //On affecte comme nom de fichier CCDA et le nom du voc
-      $nameFichier = "CCDA".$voc["name"].".class.php";
+      $nameFichier = "CCDA".$_voc["name"].".class.php";
       $smarty = new CSmartyDP();
-      $smarty->assign("documentation", $voc["documentation"]);
-      $smarty->assign("name", $voc["name"]);
-      $smarty->assign("enumeration", $this->formatArray($voc["enumeration"]));
-      $union = $this->formatArray(array());
+      $smarty->assign("documentation", $_voc["documentation"]);
+      $smarty->assign("name", $_voc["name"]);
+      $smarty->assign("enumeration", self::formatArray($_voc["enumeration"]));
+      $union = self::formatArray(array());
       //on vérifie la présence d'union
-      if (CMbArray::get($voc, "union")) {
-        $union = $this->formatArray(explode(" ", $voc["union"]));
+      if (CMbArray::get($_voc, "union")) {
+        $union = self::formatArray(explode(" ", $_voc["union"]));
       }
       $smarty->assign("union", $union);
       //on récupère la classe former
@@ -218,7 +249,7 @@ class CCdaTools {
    *
    * @return mixed
    */
-  function formatArray($array) {
+  static function formatArray($array) {
     return preg_replace('/\)$/', "  )", preg_replace("/\d+ => /", "  ", var_export($array, true)));
   }
 
@@ -227,11 +258,11 @@ class CCdaTools {
    *
    * @param String $xml String
    *
-   * @return void;
+   * @return String[]
    */
-  function validateSchematron($xml) {
+  static function validateSchematron($xml) {
     $baseDir = dirname(__FILE__)."/../resources";
-    $cmd = escapeshellarg("java");
+    $cmd     = escapeshellarg("java");
 
     $styleSheet = "$baseDir/schematron/CI-SIS_StructurationCommuneCDAr2.xsl";
 
@@ -239,10 +270,12 @@ class CCdaTools {
     file_put_contents($temp, $xml);
 
     $cmd = $cmd." -jar $baseDir/saxon9he.jar -s:$temp -xsl:$styleSheet";
+
     $processorInstance = proc_open($cmd, array(1 => array('pipe', 'w'), 2 => array('pipe', 'w')), $pipes);
     $processorResult = stream_get_contents($pipes[1]);
     $processorErrors = stream_get_contents($pipes[2]);
     proc_close($processorInstance);
+
     unlink($temp);
 
     $dom = new CMbXMLDocument();
@@ -259,9 +292,10 @@ class CCdaTools {
 
     foreach ($nodeList as $_node) {
       $tabErrors[] = array("error" => utf8_decode($_node->textContent),
-                           "location" => $_node->attributes->getNamedItem("location")->nodeValue);
+                           "location" => $xpath->queryAttributNode(".", $_node, "location"));
     }
-    $this->validateSchematron = $tabErrors;
+
+    return $tabErrors;
   }
 
   /**
@@ -272,7 +306,7 @@ class CCdaTools {
    *
    * @return string
    */
-  function showNodeXSD($name, $schema) {
+  static function showNodeXSD($name, $schema) {
     $dom = new CMbXMLDocument();
     $dom->load($schema);
 
@@ -288,15 +322,15 @@ class CCdaTools {
    *
    * @return bool
    */
-  function createAllTestSchemaClasses() {
+  static function createAllTestSchemaClasses() {
     //URI du fichier
     $nameFile = "modules/cda/resources/TestClasses.xsd";
     $glob = "modules/cda/classes/datatypes/{voc,base,datatype}/*.class.php";
-    $this->createTestSchemaClasses($nameFile, $glob);
+    self::createTestSchemaClasses($nameFile, $glob);
 
     $nameFile = "modules/cda/resources/TestClassesCDA.xsd";
     $glob = "modules/cda/classes/classesCDA/*.class.php";
-    $this->createTestSchemaClasses($nameFile, $glob);
+    self::createTestSchemaClasses($nameFile, $glob);
 
     return true;
   }
@@ -309,15 +343,15 @@ class CCdaTools {
    *
    * @return bool
    */
-  function createTestSchemaClasses($nameFile, $glob) {
+  static function createTestSchemaClasses($nameFile, $glob) {
 
-    $dom = new DOMDocument();
-    //On enregistre aps les nodeText vide
+    $dom = new CMbXMLDocument("UTF-8");
+    //On enregistre pas les nodeText vide
     $dom->preserveWhiteSpace = false;
     $dom->load($nameFile);
 
     //on récupère tous les élements
-    $xpath = new DOMXPath($dom);
+    $xpath = new CMbXPath($dom);
     $nodeList = $xpath->query("//xs:element");
 
     //on supprime tous les élements du fichier
@@ -336,7 +370,7 @@ class CCdaTools {
      */
     foreach ($file as $_file) {
       //on créé l'élément
-      $element = $dom->createElement("xs:element");
+      $element = $dom->addElement($dom->documentElement, "xs:element");
       //on formatte le nom du fichier
       $_file = CMbArray::get(explode(".", $_file), 0);
       $_file = substr($_file, strrpos($_file, "/")+1);
@@ -346,10 +380,8 @@ class CCdaTools {
       //on récupère le nom quisera égale au type et au nom de l'élément
       $_file = $instanceClass->getNameClass();
       //On ajoute les attribut type et nom
-      $element->setAttribute("name", $_file);
-      $element->setAttribute("type", $_file);
-      //on ajoute au schéma l'élément
-      $dom->documentElement->appendChild($element);
+      $dom->addAttribute($element, "name", $_file);
+      $dom->addAttribute($element, "type", $_file);
       //On ajoute un saut de ligne dans le schéma
       $dom->documentElement->appendChild($dom->createTextNode("\n"));
     }
@@ -366,7 +398,7 @@ class CCdaTools {
    *
    * @return array
    */
-  function syntheseTest($result) {
+  static function syntheseTest($result) {
     /**
      * on créé le tableau qui contiendra le nombre total de test
      * le nombre de succès et les classes qui sont en erreur
@@ -398,7 +430,7 @@ class CCdaTools {
    *
    * @return array
    */
-  function createTest($test) {
+  static function createTest($test) {
     $path = "modules/cda/classes/datatypes/$test/*.class.php";
 
     if ($test == "CDA") {
@@ -425,8 +457,8 @@ class CCdaTools {
    *
    * @return array
    */
-  function returnType($schema) {
-    $dom = new CMbXMLDocument();
+  static function returnType($schema) {
+    $dom = new CMbXMLDocument("UTF-8");
     $dom->load($schema);
 
     $xpath = new CMbXPath($dom);
@@ -434,7 +466,7 @@ class CCdaTools {
     $nodelist = $xpath->query("//xs:simpleType[@name]|//xs:complexType[@name]");
     $listName =  array();
     foreach ($nodelist as $_node) {
-      array_push($listName, $_node->attributes->getNamedItem("name")->nodeValue);
+      array_push($listName, $xpath->queryAttributNode(".", $_node, "name"));
     }
 
     return $listName;
@@ -445,14 +477,14 @@ class CCdaTools {
    *
    * @return array
    */
-  function missclass() {
+  static function missclass() {
     /**
      * On récupère les types des différents XSD
      */
-
-    $listAllType = $this->returnType("modules/cda/resources/datatypes-base.xsd");
-    $listAllType = array_merge($listAllType, $this->returnType("modules/cda/resources/voc.xsd"));
-    $listAllType = array_merge($listAllType, $this->returnType("modules/cda/resources/datatypes.xsd"));
+    $listAllType = self::returnType("modules/cda/resources/datatypes-base.xsd");
+    $voc         = self::returnType("modules/cda/resources/voc.xsd");
+    $datatype    = self::returnType("modules/cda/resources/datatypes.xsd");
+    $listAllType = array_merge($listAllType, $voc, $datatype);
     $file = glob("modules/cda/classes/{classesCDA,datatypes}/{voc,base,datatype}/*.class.php", GLOB_BRACE);
 
     $result = array();
@@ -477,9 +509,9 @@ class CCdaTools {
    *
    * @return bool
    */
-  function clearXSD() {
+  static function clearXSD() {
     $pathSource = "modules/cda/resources/datatypes-base_original.xsd";
-    $pathDest = "modules/cda/resources/datatypes-base.xsd";
+    $pathDest   = "modules/cda/resources/datatypes-base.xsd";
 
     $copyFile = copy($pathSource, $pathDest);
 
@@ -487,10 +519,10 @@ class CCdaTools {
       return false;
     }
 
-    $dom = new DOMDocument();
+    $dom = new CMbXMLDocument("UTF-8");
     $dom->load($pathDest);
 
-    $xpath = new DOMXPath($dom);
+    $xpath = new CMbXPath($dom);
     $nodeList = $xpath->query("//xs:complexType[@abstract]|xs:simpleType[@abstract]");
 
     foreach ($nodeList as $_node) {
@@ -516,7 +548,7 @@ class CCdaTools {
    *
    * @return Array
    */
-  function createPropsForElement($elements, $tabVariable, $tabProps) {
+  static function createPropsForElement($elements, $tabVariable, $tabProps) {
     $nameAttribute = "";
     $typeAttribute = "";
     foreach ($elements as $_element) {
@@ -528,8 +560,8 @@ class CCdaTools {
       }
 
       $elementProps = "";
-      $maxOccurs = false;
-      $minOccurs = false;
+      $maxOccurs    = false;
+      $minOccurs    = false;
       foreach ($attributes as $_attribute) {
         switch ($_attribute->nodeName) {
           case "name":
@@ -594,33 +626,32 @@ class CCdaTools {
    *
    * @return bool
    */
-  function createClassFromXSD() {
+  static function createClassFromXSD() {
     $pathXSD = "modules/cda/resources/POCD_MT000040.xsd";
     $pathDir = "modules/cda/classes/classesCDA/classesGenerate/";
-    $dom = new DOMDocument();
+    $dom = new CMbXMLDocument("UTF-8");
     $dom->load($pathXSD);
 
-    $xpath = new DOMXPath($dom);
+    $xpath = new CMbXPath($dom);
     $xpath->registerNamespace("xs", "http://www.w3.org/2001/XMLSchema");
     $nodeList = $xpath->query("//xs:complexType[@name] | //xs:simpleType[@name]");
 
     foreach ($nodeList as $_node) {
       $tabVariable = array();
-      $tabProps = array();
+      $tabProps    = array();
       /** @var DOMElement $_node */
-      $elements = $_node->getElementsByTagName("element");
+      $elements       = $_node->getElementsByTagName("element");
       $nodeAttributes = $_node->getElementsByTagName("attribute");
-      $nameNode = $_node->attributes->getNamedItem("name")->nodeValue;
-      $nameNode = str_replace(".", "_", $nameNode);
+      $nameNode       = $xpath->queryAttributNode(".", $_node, "name");
+      $nameNode       = str_replace(".", "_", $nameNode);
 
-      list($tabVariable, $tabProps) = $this->createPropsForElement($elements, $tabVariable, $tabProps);
-
-      list($tabVariable, $tabProps) = $this->createPropsForElement($nodeAttributes, $tabVariable, $tabProps);
+      list($tabVariable, $tabProps) = self::createPropsForElement($elements, $tabVariable, $tabProps);
+      list($tabVariable, $tabProps) = self::createPropsForElement($nodeAttributes, $tabVariable, $tabProps);
 
       $smarty = new CSmartyDP();
-      $smarty->assign("name", $nameNode);
+      $smarty->assign("name"     , $nameNode);
       $smarty->assign("variables", $tabVariable);
-      $smarty->assign("props", $tabProps);
+      $smarty->assign("props"    , $tabProps);
 
       $data = $smarty->fetch("defaultClassCDA.tpl");
 
