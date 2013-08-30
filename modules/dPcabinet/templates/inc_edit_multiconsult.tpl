@@ -65,6 +65,10 @@
               </td>
             </tr>
             <tr>
+              <th>{{mb_label object=$_consult field=annule}}</th>
+              <td>{{mb_field object=$_consult field=annule}}</td>
+            </tr>
+            <tr>
               <th>{{mb_label object=$_consult field=motif}}</th>
               <td>{{mb_field object=$_consult field=motif}}</td>
             </tr>
