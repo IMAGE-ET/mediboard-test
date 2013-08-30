@@ -43,6 +43,11 @@
             {{mb_include module=system template=CExchangeSource_inc}}
 
             <tr>
+              <th>{{mb_label object=$source field="wsdl_external"}}</th>
+              <td>{{mb_field object=$source field="wsdl_external" size="70"}}</td>
+            </tr>
+
+            <tr>
               <th style="width: 100px">{{mb_label object=$source field="type_soap"}}</th>
               <td>{{mb_field object=$source field="type_soap"}}</td>
             </tr>
@@ -113,7 +118,7 @@
           <table class="main form">
             <tr>
               <th style="width: 100px">{{mb_label object=$source field="local_cert"}}</th>
-              <td>{{mb_field object=$source field="local_cert" size="50"}}</td>
+              <td>{{mb_field object=$source field="local_cert" size="70"}}</td>
             </tr>
             <tr>
               <th>{{mb_label object=$source field="passphrase"}}</th>
@@ -136,7 +141,7 @@
             </tr>
             <tr>
               <th>{{mb_label object=$source field="cafile"}}</th>
-              <td>{{mb_field object=$source field="cafile" size="50"}}</td>
+              <td>{{mb_field object=$source field="cafile" size="70"}}</td>
             </tr>
           </table>
         </fieldset>

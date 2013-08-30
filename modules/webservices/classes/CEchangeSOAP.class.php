@@ -55,10 +55,10 @@ class CEchangeSOAP extends CExchangeTransportLayer {
     $props["web_service_name"]      = "str";
     $props["soapfault"]             = "bool";
     $props["trace"]                 = "bool";
-    $props["last_request_headers"]  = "text";
-    $props["last_response_headers"] = "text";
-    $props["last_request"]          = "xml";
-    $props["last_response"]         = "xml";
+    $props["last_request_headers"]  = "text show|0";
+    $props["last_response_headers"] = "text show|0";
+    $props["last_request"]          = "xml show|0";
+    $props["last_response"]         = "xml show|0";
     
     return $props;
   }

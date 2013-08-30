@@ -20,6 +20,7 @@ class CSourceSOAP extends CExchangeSource {
   public $source_soap_id;
   
   // DB Fields
+  public $wsdl_external;
   public $wsdl_mode;
   public $evenement_name;
   public $single_parameter;
@@ -64,6 +65,8 @@ class CSourceSOAP extends CExchangeSource {
    */
   function getProps() {
     $specs = parent::getProps();
+
+    $specs["wsdl_external"]    = "str";
     $specs["wsdl_mode"]        = "bool default|1";
     $specs["evenement_name"]   = "str";
     $specs["single_parameter"] = "str";
@@ -179,6 +182,10 @@ class CSourceSOAP extends CExchangeSource {
 
     if ($this->xop_mode) {
       $options["xop_mode"] = true;
+    }
+
+    if ($this->wsdl_external) {
+      $this->host = $this->wsdl_external;
     }
     
     $soap_client = new CSOAPClient($this->type_soap);

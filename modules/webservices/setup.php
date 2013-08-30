@@ -221,6 +221,12 @@ class CSetupwebservices extends CSetup {
                 CHANGE `output` `output` LONGTEXT;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.36";
+    $this->makeRevision("0.36");
+
+    $query = "ALTER TABLE `source_soap`
+                ADD `wsdl_external` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.37";
   }
 }
