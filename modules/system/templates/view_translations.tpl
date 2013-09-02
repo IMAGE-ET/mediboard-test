@@ -13,7 +13,7 @@
   editTrad = function(id) {
     var url = new Url("system","ajax_edit_translation");
     url.addParam("trad_id", id);
-    url.requestModal(500,400);
+    url.requestModal(700,400);
   }
 </script>
 

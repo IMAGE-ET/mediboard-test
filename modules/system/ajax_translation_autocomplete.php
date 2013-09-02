@@ -14,16 +14,36 @@ CCanDo::checkRead();
 global $locales;
 
 $keyword = CValue::get("source", "%%");
+//@TODO : utiliser regex
+$regex = CValue::get("regex", 0);
 
 $resp = array();
 
 foreach ($locales as $key => $val) {
-  if (stripos($key, $keyword) !== false) {
-    $resp[$key] = $val;
+
+  if ($regex) {
+    $keyword = "/^$keyword/";
+    if (preg_match($keyword, $key)) {
+
+      $resp[$key]["key"] = $key;
+      $resp[$key]["val"] = $val;
+    }
+    if (preg_match($keyword, $val)) {
+      $resp[$key]["key"] = $key;
+      $resp[$key]["val"] = $val;
+    }
   }
-  if (stripos($val, $keyword) !== false) {
-    $resp[$key] = $val;
+  else {
+    if (stripos($key, $keyword) !== false) {
+      $resp[$key]["key"] = str_replace($keyword, '<span style="text-decoration: underline;">'.$keyword.'</span>', $key);
+      $resp[$key]["val"] = str_replace($keyword, '<span style="text-decoration: underline;">'.$keyword.'</span>', $val);
+    }
+    if (stripos($val, $keyword) !== false) {
+      $resp[$key]["key"] = str_replace($keyword, '<span style="text-decoration: underline;">'.$keyword.'</span>', $key);
+      $resp[$key]["val"] = str_replace($keyword, '<span style="text-decoration: underline;">'.$keyword.'</span>', $val);
+    }
   }
+
 }
 
 //smarty
