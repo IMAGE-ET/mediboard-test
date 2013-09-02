@@ -222,12 +222,18 @@ $library->description = "Composant Javascript d'effets spéciaux, accompagné du f
 $library->sourceDir = "scriptaculous-js-1.9.0";
 $library->targetDir = "scriptaculous";
 $library->versionFile = "lib/prototype.js";
-$library->versionString = "Version: '1.7.1'";
+$library->versionString = "if (match && match[1])";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "scriptaculous";
-$patch->sourceName = "scriptaculous.js";
-$patch->targetDir = "src";
+$patch->sourceName = "src/scriptaculous.js";
+$library->patches[] = $patch;
+
+CLibrary::$all[$library->name] = $library;
+
+$patch = new CLibraryPatch;
+$patch->dirName = "scriptaculous";
+$patch->sourceName = "lib/prototype.js";
 $library->patches[] = $patch;
 
 CLibrary::$all[$library->name] = $library;
