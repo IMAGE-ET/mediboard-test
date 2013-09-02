@@ -48,7 +48,7 @@ class CPreferences extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["user_id"] = "ref class|CUser";
+    $props["user_id"] = "ref class|CUser cascade";
     $props["key"]     = "str notNull maxLength|40";
     $props["value"]   = "str";
     return $props;

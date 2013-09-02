@@ -1744,6 +1744,7 @@ $locales['CTranslationOverwrite.translation_mb-desc'] = 'Traduction actuellement
 $locales['CUser-back-logs'] = 'Journaux utilisateurs';
 $locales['CUser-back-owned_logs'] = 'Actions utilisateur';
 $locales['CUser-back-owned_logs.empty'] = 'Aucune action utilisateur';
+$locales['CUser-back-preferences'] = 'L\'utilisateur est lié à des préférences';
 $locales['CUser-user_password_last_change'] = 'Dernier changement de mot de passe';
 $locales['CUser-user_password_last_change-desc'] = 'Dernier changement de mot de passe';
 $locales['CUser-user_salt'] = 'Grain de sel';
