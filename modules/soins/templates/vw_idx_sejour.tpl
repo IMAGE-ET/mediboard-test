@@ -618,26 +618,26 @@ checkAnesth = function(oField){
         <li>
           <button type="button" class="hslip notext compact" style="vertical-align: bottom;" onclick="$('left-column').toggle();" title="Afficher/cacher la colonne de gauche"></button>
         </li>
-        <li><a href="#suivi_clinique" onmousedown="loadSuiviClinique(document.form_prescription.sejour_id.value)">{{tr}}CSejour.suivi_clinique{{/tr}}</a></li>
-        <li onmousedown="refreshConstantesMedicales('CSejour-'+document.form_prescription.sejour_id.value, 1)"><a href="#constantes-medicales">{{tr}}CPatient.surveillance{{/tr}}</a></li>
-        <li onmousedown="PlanSoins.loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')"><a href="#dossier_traitement">{{tr}}CSejour.suivi_soins{{/tr}}</a></li>
+        <li><a href="#suivi_clinique" onmousedown="loadSuiviClinique(document.form_prescription.sejour_id.value)">{{tr}}soins.tab.suivi_clinique{{/tr}}</a></li>
+        <li onmousedown="refreshConstantesMedicales('CSejour-'+document.form_prescription.sejour_id.value, 1)"><a href="#constantes-medicales">{{tr}}soins.tab.surveillance{{/tr}}</a></li>
+        <li onmousedown="PlanSoins.loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')"><a href="#dossier_traitement">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
         {{if "dPprescription"|module_active}}
         <li onmousedown="$('prescription_sejour').update(''); Prescription.reloadPrescSejour('', document.form_prescription.sejour_id.value, null, null, null, null, null, '', null, false);">
-          <a href="#prescription_sejour">Prescription</a>
+          <a href="#prescription_sejour">{{tr}}soins.tab.Prescription{{/tr}}</a>
         </li>
         {{/if}}
         {{if $app->user_prefs.ccam_sejour == 1 }}
-          <li><a href="#Actes">Actes</a></li>
+          <li><a href="#Actes">{{tr}}soins.tab.Actes{{/tr}}</a></li>
         {{/if}}
         {{if $isImedsInstalled}}
-          <li><a href="#Imeds">Labo</a></li>
+          <li><a href="#Imeds">{{tr}}soins.tab.Labo{{/tr}}</a></li>
         {{/if}}
-        <li onmousedown=loadDocuments(document.form_prescription.sejour_id.value)><a href="#documents">Documents</a></li>
+        <li onmousedown=loadDocuments(document.form_prescription.sejour_id.value)><a href="#documents">{{tr}}soins.tab.Documents{{/tr}}</a></li>
         {{if $can_view_dossier_medical}}
-        <li onmousedown="DossierMedical.reloadDossierSejour();"><a href="#antecedents">Antécédents</a></li>
+        <li onmousedown="DossierMedical.reloadDossierSejour();"><a href="#antecedents">{{tr}}soins.tab.antecedent_and_treatment{{/tr}}</a></li>
         {{/if}} 
         <li style="float: right">
-          <button type="button" class="button print" onclick="printDossierComplet();">Dossier soins</button>
+          <button type="button" class="button print" onclick="printDossierComplet();">{{tr}}soins.button.Dossier-soins{{/tr}}</button>
         </li>
       </ul>
       
