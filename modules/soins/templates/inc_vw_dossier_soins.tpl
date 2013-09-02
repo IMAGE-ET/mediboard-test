@@ -132,7 +132,7 @@ updateTasks = function(sejour_id){
 }
 
 showDebit = function(div, color){
-  $("_perfusion").select("."+div.down().className).each(function(elt){
+  $(div.up('tr').up('tr')).select("."+div.down().className).each(function(elt){
     elt.setStyle( { backgroundColor: '#'+color } );
   });
 }
