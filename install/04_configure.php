@@ -327,7 +327,7 @@ showHeader();
           <div class="small-warning">
             <p>
               Ce paramètre n'est pas obligatoire, il est utilisé pour le chiffrage des mots de
-              passe liés à des source de connexion SMTP, POP ou FTP.
+              passe liés à des sources de connexion SMTP, POP ou FTP.
             </p>
 
             <p>
