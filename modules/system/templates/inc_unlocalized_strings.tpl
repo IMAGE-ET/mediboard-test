@@ -64,7 +64,6 @@ Main.add(Localize.populate.curry({{$app|static:unlocalized|@json}}));
       var suppTran = $("suppTranslation");
       suppTran.name = "s["+formElt.value+"]";
       suppTran.enable();
-      console.log(suppTran);
     } else {
       suppTran.disable();
     }
