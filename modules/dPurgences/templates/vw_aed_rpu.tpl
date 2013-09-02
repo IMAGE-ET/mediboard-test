@@ -650,34 +650,34 @@
     {{if $rpu->mutation_sejour_id}}
       <div class="small-info">
         Une mutation du séjour a été effectuée, il est possible de visualiser le dossier de soins en cliquant sur le bouton suivant
-        <button type="button" class="search" onclick="showDossierSoins('{{$rpu->mutation_sejour_id}}');">Dossier de soins</button>
+        <button type="button" class="search" onclick="showDossierSoins('{{$rpu->mutation_sejour_id}}');">{{tr}}soins.button.Dossier-soins{{/tr}}</button>
       </div>
     {{else}}
       <ul id="tab-dossier" class="control_tabs">
-        <li><a href="#antecedents">Antécédents &amp; Traitements</a></li>
+        <li><a href="#antecedents">{{tr}}soins.tab.antecedent_and_treatment{{/tr}}</a></li>
         
         {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
-          <li {{if $rpu->sejour_id}} onmouseup="Prescription.reloadPrescSejour('', '{{$rpu->sejour_id}}','', '', null, null, null,'');" {{/if}}><a href="#prescription_sejour">Prescription</a></li>
-          <li {{if $rpu->sejour_id}} onmouseup="PlanSoins.loadTraitement('{{$rpu->sejour_id}}',null,'','administration');"{{/if}}><a href="#dossier_traitement">Suivi de soins</a></li>
+          <li {{if $rpu->sejour_id}} onmouseup="Prescription.reloadPrescSejour('', '{{$rpu->sejour_id}}','', '', null, null, null,'');" {{/if}}><a href="#prescription_sejour">{{tr}}soins.tab.Prescription{{/tr}}</a></li>
+          <li {{if $rpu->sejour_id}} onmouseup="PlanSoins.loadTraitement('{{$rpu->sejour_id}}',null,'','administration');"{{/if}}><a href="#dossier_traitement">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
         {{else}}
-          <li onmouseup="loadSuivi({{$rpu->sejour_id}});"><a href="#dossier_suivi">Suivi de soins</a></li>
+          <li onmouseup="loadSuivi({{$rpu->sejour_id}});"><a href="#dossier_suivi">{{tr}}soins.tab.suivi_soins{{/tr}}</a></li>
         {{/if}}
         
         
-        <li onmouseup="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">{{tr}}CPatient.surveillance{{/tr}}</a></li>
+        <li onmouseup="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">{{tr}}soins.tab.surveillance{{/tr}}</a></li>
         
         {{if "forms"|module_active}}
-          <li><a href="#ex-forms-rpu">Formulaires</a></li>
+          <li><a href="#ex-forms-rpu">{{tr}}soins.tab.Formulaires{{/tr}}</a></li>
         {{/if}}
         
-        <li onmouseup="showExamens('{{$consult->_id}}')"><a href="#examens">Dossier médical</a></li>
+        <li onmouseup="showExamens('{{$consult->_id}}')"><a href="#examens">{{tr}}soins.tab.dossier-medical{{/tr}}</a></li>
         {{if $app->user_prefs.ccam_sejour == 1 }}
-          <li onmouseup="loadActes('{{$rpu->sejour_id}}')"><a href="#actes">Cotation infirmière</a></li>
+          <li onmouseup="loadActes('{{$rpu->sejour_id}}')"><a href="#actes">{{tr}}soins.tab.Cotation-infirmiere{{/tr}}</a></li>
         {{/if}}
         {{if @$modules.dPImeds->mod_active}}
-          <li onmouseup="loadResultLabo('{{$rpu->sejour_id}}')"><a href="#Imeds">Labo</a></li>
+          <li onmouseup="loadResultLabo('{{$rpu->sejour_id}}')"><a href="#Imeds">{{tr}}soins.tab.Labo{{/tr}}</a></li>
         {{/if}}
-        <li onmouseup="loadDocItems('{{$rpu->sejour_id}}', '{{$consult->_id}}')"><a href="#doc-items">Documents</a></li>
+        <li onmouseup="loadDocItems('{{$rpu->sejour_id}}', '{{$consult->_id}}')"><a href="#doc-items">{{tr}}soins.tab.Documents{{/tr}}</a></li>
       </ul>
       
       <hr class="control_tabs" />
