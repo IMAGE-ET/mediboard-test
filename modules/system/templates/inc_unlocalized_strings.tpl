@@ -38,6 +38,11 @@
   </tbody>
 
   <tr>
+    <td><input type="text" style="width:100%;" placeholder="Traduction supplémentaire" onblur="nameInputLocalisation(this)"></td>
+    <td><input type="text" id="suppTranslation" disabled="disabled" size="70"></td>
+  </tr>
+
+  <tr>
     <td class="button" colspan="10">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
       <button class="cancel" type="button" onclick="Control.Modal.close();">{{tr}}Close{{/tr}}</button>
@@ -53,6 +58,17 @@
 
 <script type="text/javascript">
 Main.add(Localize.populate.curry({{$app|static:unlocalized|@json}}));
+
+  nameInputLocalisation = function(formElt) {
+    if (formElt.value) {
+      var suppTran = $("suppTranslation");
+      suppTran.name = "s["+formElt.value+"]";
+      suppTran.enable();
+      console.log(suppTran);
+    } else {
+      suppTran.disable();
+    }
+  }
 </script>
 
 {{/if}}
