@@ -196,7 +196,7 @@ Main.add(function () {
       PlanSoins.moveDossierSoin($('tbody_date'));
     }
 
-    var tab_dossier_soin = new Control.Tabs.create('tab_dossier_soin', true);
+    var tab_dossier_soin = Control.Tabs.create('tab_dossier_soin', true);
     tab_dossier_soin.activeLink.up('li').onmousedown();
 
     if($('tab_categories')){
@@ -235,6 +235,12 @@ Main.add(function () {
     if (oFormDate) {
       Calendar.regField(oFormDate.date, dates, {noView: true});
     }
+  {{/if}}
+
+  {{if $conf.soins.vue_condensee_dossier_soins}}
+    var url = new Url("hospi", "httpreq_vw_constantes_medicales_widget");
+    url.addParam("context_guid", "{{$sejour->_guid}}");
+    url.requestUpdate("constantes-medicales-widget");
   {{/if}}
 });
 
@@ -321,7 +327,7 @@ Main.add(function () {
                </button>
              {{/if}}
            </span>
-           <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
+           <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}">
             {{mb_include module=patients template=inc_vw_photo_identite patient=$patient size=42}}
            </a>
            
@@ -330,16 +336,16 @@ Main.add(function () {
                {{$sejour->_ref_patient->_view}}
              </span>
              -
-            <span style="font-size: 0.7em;" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">{{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
-             <br /> 
+             <span style="font-size: 0.7em;" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">{{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
+             <br />
              <span style="font-size: 0.7em;">{{$sejour->_ref_curr_affectation->_ref_lit}}</span>
-            {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
-            {{assign var=antecedents value=$dossier_medical->_ref_antecedents_by_type}}
-            {{assign var=sejour_id value=$sejour->_id}}
-            {{mb_include module="soins" template="inc_vw_antecedent_allergie"}}
+             {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
+             {{assign var=antecedents value=$dossier_medical->_ref_antecedents_by_type}}
+             {{assign var=sejour_id value=$sejour->_id}}
+             {{mb_include module="soins" template="inc_vw_antecedent_allergie"}}
             
             
-            {{if $dossier_medical->_id && $dossier_medical->_count_allergies}}
+             {{if $dossier_medical->_id && $dossier_medical->_count_allergies}}
               <script type="text/javascript">
                 ObjectTooltip.modes.allergies = {  
                   module: "patients",
@@ -350,11 +356,47 @@ Main.add(function () {
               <img src="images/icons/warning.png" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_ref_patient->_guid}}', 'allergies');" />
             {{/if}}
           
-           </h2>
+          </h2>
         </th>
       </tr>
       {{mb_include module=soins template=inc_infos_patients_soins}}
     </table>
+
+    {{if $conf.soins.vue_condensee_dossier_soins}}
+      <table class="main layout">
+        <tr>
+          <td style="width: 33%;">
+            <fieldset style="max-height: 140px; overflow-y: auto;">
+              <legend>Transmissions</legend>
+            </fieldset>
+          </td>
+
+          {{if "forms"|module_active}}
+            <td style="width: 33%;">
+              {{unique_id var=unique_id_widget_forms}}
+
+              <script type="text/javascript">
+                Main.add(function(){
+                  ExObject.loadExObjects("{{$sejour->_class}}", "{{$sejour->_id}}", "{{$unique_id_widget_forms}}", 0.5);
+                });
+              </script>
+
+              <fieldset style="max-height: 140px; overflow-y: auto;">
+                <legend>Formulaires</legend>
+                <div id="{{$unique_id_widget_forms}}"></div>
+              </fieldset>
+            </td>
+          {{/if}}
+
+          <td style="width: 33%;">
+            <fieldset>
+              <legend>Constantes</legend>
+              <div id="constantes-medicales-widget"></div>
+            </fieldset>
+          </td>
+        </tr>
+      </table>
+    {{/if}}
     
     <ul id="tab_dossier_soin" class="control_tabs" style="text-align: left;">
       
@@ -398,7 +440,7 @@ Main.add(function () {
        
     <span style="float: right;">
       <button type="button" class="print"
-            onclick="{{if isset($prescription|smarty:nodefaults)}}Prescription.printOrdonnance('{{$prescription->_id}}');{{/if}}" />Ordonnance</button>
+            onclick="{{if isset($prescription|smarty:nodefaults)}}Prescription.printOrdonnance('{{$prescription->_id}}');{{/if}}">Ordonnance</button>
     </span>
    
    <hr class="control_tabs" />

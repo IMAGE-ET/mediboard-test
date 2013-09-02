@@ -112,6 +112,8 @@ $locales['config-soins-trans_compact'] = 'Vue condensée';
 $locales['config-soins-trans_compact-desc'] = 'Vue condensée (ne voir que les cibles)';
 $locales['config-soins-transmissions_hours'] = 'Intervalle d\'affichage des transmissions';
 $locales['config-soins-transmissions_hours-desc'] = 'Intervalle d\'affichage des transmissions';
+$locales['config-soins-vue_condensee_dossier_soins'] = 'Vue condensée dossier de soins dans le suivi';
+$locales['config-soins-vue_condensee_dossier_soins-desc'] = 'Vue condensée du dossier de soins dans le suivi, regroupant les transmissions, les formulaires et les constantes de base';
 $locales['mod-brancardage-tab-ajax_edit_brancardage'] = 'Formulaire de brancardage';
 $locales['mod-brancardage-tab-ajax_prefiltre_brancardage'] = 'Formulaire de brancardage';
 $locales['mod-brancardage-tab-vw_jumelles_brancardage'] = 'Vue brancardage du patient';
@@ -146,4 +148,3 @@ $locales['mod-soins-tab-vw_stocks_service'] = 'Commande / Réception';
 $locales['module-Brancardage-long'] = 'Brancarder';
 $locales['module-soins-court'] = 'Dossier de soins';
 $locales['module-soins-long'] = 'Dossier de soins';
-?>
