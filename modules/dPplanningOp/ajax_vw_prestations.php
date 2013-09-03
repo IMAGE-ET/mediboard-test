@@ -17,6 +17,7 @@ $dates         = array();
 $prestations_p = array();
 $liaisons_j    = array();
 $liaisons_p    = array();
+$date_modif    = array();
 
 foreach ($prestations_j as $_prestation) {
   $_prestation->_ref_items = $_prestation->loadBackRefs("items", "rank");
@@ -96,6 +97,7 @@ foreach ($prestations_j as $_prestation_id => $_prestation) {
   $item_liaison->loadRefItemRealise();
   
   if (isset($liaisons_j_date[$_prestation_id])) {
+    $date_modif[$date_temp] = 1;
     $save_liaison = $liaisons_j_date[$_prestation_id];
     
       $item_liaison->item_souhait_id         = $save_liaison->item_souhait_id;
@@ -132,6 +134,7 @@ foreach ($dates as $_date => $_value) {
     $item_liaison->loadRefItemRealise();
     
     if (isset($liaisons_j_date[$_prestation_id])) {
+      $date_modif[$_date] = 1;
       $save_liaison = $liaisons_j_date[$_prestation_id];
       
         $item_liaison->item_souhait_id         = $save_liaison->item_souhait_id;
@@ -178,6 +181,7 @@ $smarty->assign("prestations_p", $prestations_p);
 $smarty->assign("empty_liaison", $empty_liaison);
 $smarty->assign("liaisons_p"   , $liaisons_p);
 $smarty->assign("liaisons_j"   , $liaisons_j);
+$smarty->assign("date_modified", $date_modif);
 $smarty->assign("context"      , $context);
-$smarty->assign("bank_holidays", CMbDT::bankHolidays(CMbDT::date()));
+$smarty->assign("bank_holidays", CMbDate::getHolidays(CMbDT::date()));
 $smarty->display("inc_vw_prestations.tpl");

@@ -131,13 +131,13 @@
           <td {{if $_date == $today}}class="current_hour"{{/if}}
             style="
             {{if $day == "S" || $day == "D"}}
-              background: #ccc;
+              background-color: #ccc;
             {{elseif in_array($day, $bank_holidays)}}
-              background: #fc0; 
+              background-color: #fc0;
             {{/if}}">
-            
+
             <span>
-              <button type="button" class="edit notext" onclick="openModal('edit_{{$_date}}');"></button>
+              <button type="button" class="{{if array_key_exists($_date, $date_modified)}}edit{{else}}add{{/if}} notext" onclick="openModal('edit_{{$_date}}');"></button>
               <strong>{{$_date|date_format:"%d/%m"}} {{$day}}</strong>
             </span>
             
@@ -226,7 +226,7 @@
                   item_superior
                 {{/if}}
               {{/if}}">
-              
+
               {{if $item_presta->_id}}
                 {{if $item_presta_realise->_id && $item_presta->nom != $item_presta_realise->nom}}
                   {{$item_presta_realise->nom}} <br />
