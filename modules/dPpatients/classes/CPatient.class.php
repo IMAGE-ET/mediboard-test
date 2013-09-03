@@ -1776,8 +1776,8 @@ class CPatient extends CPerson {
     $this->guessExoneration();
     $template->addProperty("Patient - Qualité bénéficiaire - Libellé", $this->libelle_exo);
     $template->addProperty("Patient - Numéro de sécurité sociale", $this->getFormattedValue("matricule"));
-    $template->addBarcode("Patient - Code barre ID"     , "PID$this->_id"   );
-    $template->addBarcode("Patient - Code barre IPP"    , "IPP$this->_IPP"  );
+    $template->addBarcode("Patient - Code barre ID"     , $this->_id   );
+    $template->addBarcode("Patient - Code barre IPP"    , $this->_IPP  );
 
     if ($this->sexe === "m") {
       $template->addProperty("Patient - il/elle"         , "il"              );
