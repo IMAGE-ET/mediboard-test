@@ -1,10 +1,29 @@
 {{if !$conf.dPccam.CCodeCCAM.use_cotation_ccam}}
   {{mb_return}}
 {{/if}}
+<script>
+  editDateFacture = function(form){
+    form.cloture.value = form.ouverture.value;
+    return onSubmitFormAjax(form);
+  }
 
-{{if $facture->_is_relancable && $conf.dPfacturation.CRelance.use_relances}}
-  <tr>
-    <td colspan="8">
+  Main.add(function(){
+    Calendar.regField(getForm("facture_date").ouverture);
+  });
+</script>
+<tr>
+  <td colspan="2" style="text-align: center;"><b>{{mb_label object=$facture field=ouverture}}</b></td>
+  <td>
+    <form name="facture_date" method="post" action="" onsubmit="return editDateFacture(this);">
+      {{mb_key object=$facture}}
+      {{mb_class object=$facture}}
+      <input type="hidden" name="cloture" value=""/>
+      {{mb_field object=$facture field="ouverture" class="date notNull"}}
+      <button class="save notext" type="submit"></button>
+    </form>
+  </td>
+  {{if $facture->_is_relancable && $conf.dPfacturation.CRelance.use_relances}}
+    <td colspan="3">
       <form name="facture_relance" method="post" action="" onsubmit="return Relance.create(this);">
         {{mb_class object=$facture->_ref_last_relance}}
         <input type="hidden" name="relance_id" value=""/>
@@ -13,8 +32,10 @@
         <button class="add" type="submit">Créer une relance</button>
       </form>
     </td>
-  </tr>
-{{/if}}
+  {{else}}
+    <td colspan="3"></td>
+  {{/if}}
+</tr>
 
 <tr>
   <th class="category narrow">Date</th>
@@ -90,7 +111,7 @@
           {{mb_class object=$facture}}
           {{mb_key   object=$facture}}
           <input type="hidden" name="facture_class" value="{{$facture->_class}}" />
-          <input type="hidden" name="cloture" value="{{if !$facture->cloture}}{{$date}}{{/if}}" />
+          <input type="hidden" name="cloture"       value="{{if !$facture->cloture}}{{$date}}{{/if}}" />
           <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
           {{if !$facture->cloture}}
             <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Cloturer la facture</button>
