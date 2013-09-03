@@ -158,3 +158,4 @@ $locales['soins.tab.dossier-medical'] = 'Dossier médical';
 $locales['soins.tab.suivi_clinique'] = 'Synthèse';
 $locales['soins.tab.suivi_soins'] = 'Suivi de soins';
 $locales['soins.tab.surveillance'] = 'Surveillance';
+$locales['soins.tab.Actes'] = 'Actes';
