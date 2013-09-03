@@ -11,8 +11,6 @@
  * @version    $Revision$
  */
 
-CCanDo::checkRead();
-
 $object_guid = CValue::get("object_guid");
 $level       = CValue::get("level");
 $tag         = CValue::get("tag");
