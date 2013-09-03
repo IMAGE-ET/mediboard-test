@@ -77,6 +77,11 @@ if ($object->_id) {
   $tag = CIdSante400::getMatch($object->_class, CMediusers::getTagSoftware(), null, $object->_id)->id400;
 }
 
+$password_info =
+  (CAppUI::$user->_specs['_user_password']->minLength > 4) ?
+  "Le mot de passe doit être composé d'au moins 6 caractères, comprenant des lettres et au moins un chiffre." :
+  "Le mot de passe doit être composé d'au moins 4 caractères.";
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -93,5 +98,6 @@ $smarty->assign("tag_mediuser", CMediusers::getTagMediusers($group->_id));
 $smarty->assign("is_admin",     CAppUI::$user->isAdmin());
 $smarty->assign("is_robot",     $object->isRobot());
 $smarty->assign("tag",          $tag);
+$smarty->assign("pwd_info",     $password_info);
 
 $smarty->display("inc_edit_mediuser.tpl");

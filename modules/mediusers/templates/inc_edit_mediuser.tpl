@@ -101,6 +101,10 @@ Main.add(function () {
   </div>
 {{/if}}
 
+<div class="small-info">
+  {{$pwd_info}}
+</div>
+
 <form name="mediuser" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
   {{if !$can->edit}}
   <input name="_locked" value="1" hidden="hidden" />

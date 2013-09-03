@@ -22,6 +22,10 @@
   }
 </script>
 
+<div class="small-info">
+  {{$pwd_info}}
+</div>
+
 {{if $user->_ldap_linked && !$conf.admin.LDAP.allow_change_password}}
   <div class="small-warning">{{tr}}CUser_associate-ldap-no-password-change{{/tr}}</div>
 {{elseif !$user->canChangePassword()}}
