@@ -31,5 +31,3 @@ $smarty->assign("needle"   , $needle);
 $smarty->assign("nodebug"  , true);
 
 $smarty->display("inc_do_csarr_autocomplete.tpl");
-
-?>

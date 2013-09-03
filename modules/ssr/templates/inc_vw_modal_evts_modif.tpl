@@ -45,7 +45,7 @@ updateFieldCodeModal = function(selected) {
 Main.add(function() {
   {{foreach from=$actes key=_type item=_actes}}
     var url = new Url("ssr", "httpreq_do_{{$_type}}_autocomplete");
-    url.autoComplete(getForm("editCodes").autocomplete_{{$_type}}, "other_{{$_type}}_auto_complete", {
+    url.autoComplete(getForm("editCodes").code_{{$_type}}, "other_{{$_type}}_auto_complete", {
       dropdown: true,
       minChars: 2,
       select: "value",
@@ -130,7 +130,7 @@ Main.add(function() {
 
   <tr>
     <td colspan="5" class="text">
-      <input type="text" name="autocomplete_{{$_type}}" class="autocomplete" canNull=true size="6" />
+      <input type="text" name="code_{{$_type}}" class="autocomplete" canNull=true size="6" />
       <div style="display: none;" class="autocomplete" id="other_{{$_type}}_auto_complete"></div>
       <span class="other_codes"></span>
     </td>
