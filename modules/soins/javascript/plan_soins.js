@@ -729,5 +729,19 @@ PlanSoins = {
     }
     $$(".anciennete").invoke("hide");
     $(chapitre+"_time").show();
+  },
+
+  toggleView: function(view) {
+    if (view == 'semaine') {
+      $('tab_dossier_soin').down('li.semaine').onmousedown();
+      $('jour').hide();
+      $('semaine').show();
+    }
+
+    if (view == 'jour') {
+      $('tab_dossier_soin').down('li.jour').onmousedown();
+      $('semaine').hide();
+      $('jour').show();
+    }
   }
 };

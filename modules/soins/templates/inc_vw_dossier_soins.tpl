@@ -196,8 +196,14 @@ Main.add(function () {
       PlanSoins.moveDossierSoin($('tbody_date'));
     }
 
-    var tab_dossier_soin = Control.Tabs.create('tab_dossier_soin', true);
-    tab_dossier_soin.activeLink.up('li').onmousedown();
+    {{if $conf.soins.vue_condensee_dossier_soins}}
+      $('jour').show();
+  $('semaine').hide();
+      $('tab_dossier_soin').down('li.jour').onmousedown();
+    {{else}}
+      var tab_dossier_soin = Control.Tabs.create('tab_dossier_soin', true);
+      tab_dossier_soin.activeLink.up('li').onmousedown();
+    {{/if}}
 
     if($('tab_categories')){
       tabs = Control.Tabs.create('tab_categories', true);
@@ -363,11 +369,22 @@ Main.add(function () {
     </table>
 
     {{if $conf.soins.vue_condensee_dossier_soins}}
+
       <table class="main layout">
         <tr>
           <td style="width: 33%;">
-            <fieldset style="max-height: 140px; overflow-y: auto;">
-              <legend>Transmissions</legend>
+            <script type="text/javascript">
+              Main.add(function(){
+                loadLiteSuivi('{{$sejour->_id}}');
+              });
+            </script>
+
+            <fieldset>
+              <legend>
+                Transmissions et observations importantes
+                <button class="search notext compact" type="button" onclick="showModalAllTrans('{{$sejour->_id}}')"></button>
+              </legend>
+              <div id="dossier_suivi_lite" style="height: 140px; overflow-y: auto;"></div>
             </fieldset>
           </td>
 
@@ -381,33 +398,33 @@ Main.add(function () {
                 });
               </script>
 
-              <fieldset style="max-height: 140px; overflow-y: auto;">
+              <fieldset>
                 <legend>Formulaires</legend>
-                <div id="{{$unique_id_widget_forms}}"></div>
+                <div id="{{$unique_id_widget_forms}}" style="height: 140px; overflow-y: auto;"></div>
               </fieldset>
             </td>
           {{/if}}
 
           <td style="width: 33%;">
             <fieldset>
-              <legend>Constantes</legend>
-              <div id="constantes-medicales-widget"></div>
+              <legend>Surveillance</legend>
+              <div id="constantes-medicales-widget" style="height: 140px;"></div>
             </fieldset>
           </td>
         </tr>
       </table>
     {{/if}}
     
-    <ul id="tab_dossier_soin" class="control_tabs" style="text-align: left;">
-      
-      {{if "dPprescription"|module_active}}
+    <ul id="tab_dossier_soin" class="control_tabs" style="text-align: left; {{if $conf.soins.vue_condensee_dossier_soins}}border-bottom: none;{{/if}}">
+
+    {{if "dPprescription"|module_active}}
       <!-- Plan de soins journée -->
-      <li onmousedown="refreshTabState();">
+      <li onmousedown="refreshTabState();" {{if $conf.soins.vue_condensee_dossier_soins}}style="display: none;"{{/if}} class="jour">
         <a href="#jour">{{tr}}Soin-tabSuivi-tabViewDay{{/tr}}</a>
       </li>
       
       <!-- Plan de soins semaine -->
-      <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');">
+      <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');" {{if $conf.soins.vue_condensee_dossier_soins}}style="display: none;"{{/if}} class="semaine">
         <a href="#semaine">{{tr}}Soin-tabSuivi-tabViewWeek{{/tr}}</a></li>
         {{if $conf.dPprescription.CPrescription.show_perop_suivi_soins}}
           <li onmousedown="PlanSoins.showPeropAdministrations('{{$prescription_id}}')">
@@ -417,9 +434,9 @@ Main.add(function () {
           </li>
         {{/if}}
       {{/if}}
-      
-      <!-- Tâches -->
-      <li onmousedown="updateTasks('{{$sejour->_id}}');">
+
+    <!-- Tâches -->
+      <li onmousedown="updateTasks('{{$sejour->_id}}');" {{if $conf.soins.vue_condensee_dossier_soins}}style="display: none;"{{/if}}>
         <a href="#tasks">
           Tâches 
           <small>(&ndash; / &ndash;)</small>
@@ -430,24 +447,31 @@ Main.add(function () {
       </li>
 
       <!-- Transmissions -->
-      <li onmousedown="loadSuivi('{{$sejour->_id}}')">
+      <li onmousedown="loadSuivi('{{$sejour->_id}}')" {{if $conf.soins.vue_condensee_dossier_soins}}style="display: none;"{{/if}}>
         <a href="#dossier_suivi">
           Trans. <small id="nb_trans"></small> / Obs. / Consult.
           {{if $conf.soins.constantes_show}}/ Const.{{/if}}
         </a>
       </li>
     </ul>
-       
-    <span style="float: right;">
-      <button type="button" class="print"
-            onclick="{{if isset($prescription|smarty:nodefaults)}}Prescription.printOrdonnance('{{$prescription->_id}}');{{/if}}">Ordonnance</button>
-    </span>
-   
-   <hr class="control_tabs" />
-    
+
+  {{if $conf.soins.vue_condensee_dossier_soins}}
+    <hr />
+  {{/if}}
+
+  <span style="float: right;">
+      <button type="button"
+              class="print"
+              onclick="{{if isset($prescription|smarty:nodefaults)}}Prescription.printOrdonnance('{{$prescription->_id}}');{{/if}}">
+        Ordonnance
+    </button>
+  </span>
+
     <div id="jour" style="display:none">
-    
-    {{if "dPprescription"|module_active && $prescription_id}}
+      {{if $conf.soins.vue_condensee_dossier_soins}}
+        <button type="button" class="change" onclick="PlanSoins.toggleView('semaine');" style="float: right">Vue semaine</button>
+      {{/if}}
+      {{if "dPprescription"|module_active && $prescription_id}}
       <h2 style="text-align: center;">
             <button type="button" 
                    class="left notext {{if $sejour->_entree >= $bornes_composition_dossier|@reset|@reset}}opacity-50{{/if}}" 
@@ -469,13 +493,18 @@ Main.add(function () {
       </h2>
             
       <table style="width: 100%">
-         <tr>
+        <tr>
           <td>
             <button type="button" class="search"
                     onclick="PlanSoins.regroup_lines = !{{$regroup_lines}};
                       PlanSoins.loadTraitement('{{$prescription->object_id}}', PlanSoins.date, null, null, null, null, null, null, '1')">
               Somme
             </button>
+
+            {{if $conf.soins.vue_condensee_dossier_soins}}
+              <button type="button" class="search" onclick="showModalTasks('{{$sejour->_id}}');">Tâches</button>
+            {{/if}}
+
             <button type="button" class="print" onclick="PlanSoins.printBons('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
               Bons
             </button>
