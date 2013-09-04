@@ -1,3 +1,15 @@
+<style>
+  .opacity {
+    background: red;
+    width: 40px;
+    text-align: center;
+  }
+
+  div.opacity {
+    display: inline-block;
+  }
+</style>
+
 <script type="text/javascript">
 Main.add(function(){
   var form = getForm("test");
@@ -154,14 +166,52 @@ TestModal = {
   </tr>
 </table>
 
-<hr />
 <button class="change" onclick="$$('body')[0].toggleClassName('touchscreen')">Touchscreen</button>
-
-<h1>header 1</h1>
-<h2>header 2</h2>
-<h3>header 3</h3>
+<button class="change" onclick="$$('body')[0].toggleClassName('dyslexic')">dyslexic</button>
 
 <hr />
+
+<table class="main layout">
+  <tr>
+    <td>
+      <h1>header 1</h1>
+      <h2>header 2</h2>
+      <h3>header 3</h3>
+    </td>
+    <td>
+      <h2>Test opacity &lt;div&gt;</h2>
+      <div>
+        <div class="opacity opacity-0">0</div>
+        <div class="opacity opacity-10">10</div>
+        <div class="opacity opacity-20">20</div>
+        <div class="opacity opacity-30">30</div>
+        <div class="opacity opacity-40">40</div>
+        <div class="opacity opacity-50">50</div>
+        <div class="opacity opacity-60">60</div>
+        <div class="opacity opacity-70">70</div>
+        <div class="opacity opacity-80">80</div>
+        <div class="opacity opacity-100">100</div>
+      </div>
+    </td>
+    <td>
+      <h2>Test opacity &lt;table&gt;</h2>
+      <table>
+        <tr class="opacity opacity-0"><td>0</td><th>0</th></tr>
+        <tr class="opacity opacity-10"><td>10</td><th>10</th></tr>
+        <tr class="opacity opacity-20"><td>20</td><th>20</th></tr>
+        <tr class="opacity opacity-30"><td>30</td><th>30</th></tr>
+        <tr class="opacity opacity-40"><td>40</td><th>40</th></tr>
+        <tr class="opacity opacity-50"><td>50</td><th>50</th></tr>
+        <tr class="opacity opacity-60"><td>60</td><th>60</th></tr>
+        <tr class="opacity opacity-70"><td>70</td><th>70</th></tr>
+        <tr class="opacity opacity-80"><td>80</td><th>80</th></tr>
+        <tr class="opacity opacity-90"><td>90</td><th>90</th></tr>
+        <tr class="opacity opacity-100"><td>100</td><th>100</th></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
 
 <ul class="control_tabs">
   <li><a href="#tab1">normal</a></li>

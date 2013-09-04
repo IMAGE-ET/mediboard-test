@@ -13,10 +13,13 @@
  */
 document.observe('dom:loaded', function(){
   try {
-    // Fix for IE9 in IE8 mode
+    // Fix for IE9/IE10 in IE8 mode
     try {
       if (Prototype.Browser.IE && document.documentMode == 8) {
-        $$("html")[0].removeClassName("ua-msie-9").addClassName("ua-msie-8");
+        $$("html")[0].
+          removeClassName("ua-msie-9").
+          removeClassName("ua-msie-10").
+          addClassName("ua-msie-8");
       }
     } catch (e) {}
 
@@ -1352,7 +1355,7 @@ var Modal = {
       // IE8 doesn't handle max-height well
       if (Prototype.Browser.IE && document.documentMode == 8) {
         if (!/%/.test(dimensions.height)) {
-          dimensions.height = Math.min(dimensions.height, viewportDimensions.height - 5);
+          dimensions.height = Math.min(parseInt(dimensions.height, 10), viewportDimensions.height - 5);
         }
       }
 

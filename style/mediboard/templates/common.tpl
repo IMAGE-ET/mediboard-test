@@ -119,11 +119,6 @@
 
   {{$mediboardShortIcon|smarty:nodefaults}}
   {{$mediboardStyle|smarty:nodefaults}}
-  
-  <!--[if lte IE 8]>
-  <link rel="stylesheet" type="text/css" href="style/mediboard/ie.css?build={{$version.build}}" media="all" />
-  <![endif]-->
-
   {{$mediboardScript|smarty:nodefaults}}
 
   <script type="text/javascript">
