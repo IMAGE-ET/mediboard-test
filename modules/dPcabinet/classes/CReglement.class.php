@@ -65,7 +65,7 @@ class CReglement extends CMbMetaObject {
     $props['date']          = 'dateTime notNull';
     $props['montant']       = 'currency notNull';
     $props['emetteur']      = 'enum notNull list|patient|tiers';
-    $props['mode']          = "enum notNull list|cheque|CB|especes|virement|BVR|autre default|".CAppUI::conf("dPfacturation CReglement use_mode_default");
+    $props['mode']          = "enum notNull list|cheque|CB|especes|virement|BVR|autre";
     $props['reference']     = 'str';
     $props['num_bvr']       = 'str maxLength|50';
     $props['tireur']        = 'str';

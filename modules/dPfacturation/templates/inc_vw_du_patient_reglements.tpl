@@ -193,7 +193,12 @@
     {{if ($object->_du_restant_patient) > 0 || $conf.dPfacturation.CReglement.use_lock_acquittement}}
       <tr>
         <td>
-          {{mb_field object=$reglement field=mode onchange="updateBanque(this)"}}
+          <select name="mode" onchange="updateBanque(this.value);" >
+            <option value="">&mdash; Choisir</option>
+            {{foreach from=$reglement->_specs.mode->_locales item=num key=key}}
+              <option value="{{$key}}" {{if $conf.dPfacturation.CReglement.use_mode_default == $key}}selected{{/if}}>{{$num}}</option>
+            {{/foreach}}
+          </select>
           {{mb_field object=$reglement field=banque_id options=$banques style="display: none"}}
           {{if isset($object->_num_bvr|smarty:nodefaults)}}
             <select name="num_bvr" style="display:none;" onchange="modifMontantBVR(this.value);" >

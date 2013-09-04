@@ -38,7 +38,7 @@ $dPconfig["dPfacturation"] = array (
     "use_debiteur"  => "0",
     "add_pay_not_close"     => "0",
     "use_lock_acquittement" => "0",
-    "use_mode_default"      => "cheque",
+    "use_mode_default"      => "none",
   ),
   "CRetrocession" => array(
     "use_retrocessions" => "0"
