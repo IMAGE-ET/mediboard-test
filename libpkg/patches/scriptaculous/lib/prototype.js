@@ -3040,10 +3040,6 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
           property = Object.isUndefined(elementStyle.styleFloat) ?
            'cssFloat' : 'styleFloat';
         }
-        if (value == "-6px") {
-          console.log(property, " ", value);
-        }
-        //
         elementStyle[property] = value;
       }
     }
