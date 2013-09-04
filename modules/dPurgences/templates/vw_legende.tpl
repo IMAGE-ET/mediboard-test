@@ -11,7 +11,7 @@
     <td class="text">Patient non pris en charge</td>
   </tr>
   <tr>
-    <td style="background-color:#cfc"></td>
+    <td style="background-color:#ccf"></td>
     <td class="text">Patient pris en charge</td>
   </tr>
   <tr>
