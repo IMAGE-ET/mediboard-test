@@ -87,7 +87,7 @@
     {{/foreach}}
     </tr>
     {{foreachelse}}
-    <div class="small-warning">{{tr}}dPurgences-no-service_{{$name_grille}}s_id{{/tr}}</div>
+    <div class="small-warning">Afin d'avoir accès aux fonctionnalités, veuillez indiquer un service d'{{$name_grille}} dans le module 'Hospitalisation' - Onglet Infrastruscture - Onglet service.</div>
     {{/foreach}}
   </table>
 </div>
