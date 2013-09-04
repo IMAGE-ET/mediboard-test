@@ -61,6 +61,7 @@ class CPlageOp extends CMbObject {
   
   // Behaviour Fields
   public $_verrouillee = array();
+  public $_check_collisions = true;
   
   /** @var CMediusers */
   public $_ref_chir;
@@ -452,9 +453,13 @@ class CPlageOp extends CMbObject {
    */
   function store() {
     $this->updatePlainFields();
-    if ($msg = $this->hasCollisions()) {
-      return $msg;
+
+    if ($this->_check_collisions) {
+      if ($msg = $this->hasCollisions()) {
+        return $msg;
+      }
     }
+
     $oldPlage = new CPlageOp;
     if ($this->_id) {
       $oldPlage->load($this->_id);
