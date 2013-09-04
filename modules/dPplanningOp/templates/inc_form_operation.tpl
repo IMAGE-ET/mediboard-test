@@ -202,6 +202,7 @@ refreshFunction = function(chir_id) {
       <button class="search notext" type="button" onclick="ProtocoleSelector.init()">
         Choisir un protocole
       </button>
+      {{mb_include module=planningOp template=inc_search_protocole}}
     </td>
   </tr>
   
