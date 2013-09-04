@@ -427,7 +427,7 @@ Main.add(function () {
       <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');" {{if $conf.soins.vue_condensee_dossier_soins}}style="display: none;"{{/if}} class="semaine">
         <a href="#semaine">{{tr}}Soin-tabSuivi-tabViewWeek{{/tr}}</a></li>
         {{if $conf.dPprescription.CPrescription.show_perop_suivi_soins}}
-          <li onmousedown="PlanSoins.showPeropAdministrations('{{$prescription_id}}')">
+          <li onmousedown="PlanSoins.showPeropAdministrations('{{$prescription_id}}')" {{if $conf.soins.vue_condensee_dossier_soins}}style="display: none;"{{/if}}>
             <a href="#perop_adm" {{if $count_perop_adm == 0}}class="empty"{{/if}}>
               Perop {{if $count_perop_adm}}<small>({{$count_perop_adm}})</small>{{/if}}
             </a>

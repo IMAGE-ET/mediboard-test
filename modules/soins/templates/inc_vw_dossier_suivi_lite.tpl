@@ -37,5 +37,11 @@
         {{mb_value object=$_suivi field=text}}
       </td>
     </tr>
+  {{foreachelse}}
+  <tr>
+    <td class="empty" colspan="5">
+      {{tr}}CTransmissionMedicale.none{{/tr}}
+    </td>
+  </tr>
   {{/foreach}}
 </table>

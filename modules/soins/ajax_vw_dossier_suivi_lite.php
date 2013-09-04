@@ -34,6 +34,7 @@ $ljoin["category_prescription"] = "transmission_medicale.object_id = category_pr
 
 $transmissions = $transmission->loadList($where, null, null, null, $ljoin);
 
+$suivi = array();
 foreach ($observations as $_observation) {
   $_observation->loadRefsFwd();
   $_observation->_ref_user->loadRefFunction();
