@@ -545,9 +545,15 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $this->loadRefsFwd();
     $this->_ref_consultation->fillTemplate($template);
     $this->fillLimitedTemplate($template);
-    $this->_ref_sejour->fillTemplate($template);
     $this->_ref_operation->fillLimitedTemplate($template);
-    $this->_ref_sejour->loadRefDossierMedical()->fillTemplate($template, "Sejour");
+
+    if ($this->sejour_id || !$this->_id) {
+      $this->_ref_sejour->fillTemplate($template);
+    }
+    else {
+      // Lorsqu'il n'y a pas de séjour, il faut pas écraser les champs du patient
+      $this->_ref_sejour->fillLimitedTemplate($template);
+    }
   }
 
   /**
