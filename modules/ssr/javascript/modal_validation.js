@@ -100,16 +100,9 @@ ModalValidation = {
   },
 
   open: function(){
-    // Forced size, cuz positioning takes a lot of time for big modals with IE8-
-    if (Prototype.Browser.IE && document.documentMode <= 8) {
-      $('modal_evenements').setStyle({
-        width: '700px',
-        height: '380px'
-      })
-    }
-
     this.window = Modal.open($('modal_evenements'), {
-      className: 'modal'
+      width: 700,
+      height: 380
     });
   },
 
@@ -117,4 +110,4 @@ ModalValidation = {
     this.window.close();
     $('modal_evenements').update();
   }
-}
+};
