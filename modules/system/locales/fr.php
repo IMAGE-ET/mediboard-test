@@ -2188,6 +2188,7 @@ $locales['mod-system-tab-view_user_logs'] = 'Journaux utilisateurs';
 $locales['mod-system-tab-vw_idx_redirections'] = 'Redirections http';
 $locales['mod-system-tab-vw_object_tag_manager'] = 'Gestionnaire de tags';
 $locales['mod-system-tab-vw_object_tree_explorer'] = 'Explorateur d\'objets';
+$locales['mod-system-tab-vw_purge_objects'] = 'Purge d\'objets';
 $locales['module-connectathon-court'] = 'Connectathon';
 $locales['module-connectathon-long'] = 'Outillage connectathon';
 $locales['module-eai-court'] = 'EAI';
@@ -2228,4 +2229,3 @@ $locales['utilities-source-file_system-connexion'] = 'Test d\'accessibilité';
 $locales['utilities-source-file_system-getFiles'] = 'Liste des fichiers';
 $locales['utilities-source-file_system-sendFile'] = 'Dépôt d\'un fichier';
 $locales['utilities-source-http'] = 'Utilitaires de la source HTTP';
-?>
