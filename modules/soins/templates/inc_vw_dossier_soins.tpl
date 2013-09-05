@@ -375,14 +375,14 @@ Main.add(function () {
           <td style="width: 33%;">
             <script type="text/javascript">
               Main.add(function(){
-                loadLiteSuivi('{{$sejour->_id}}');
+                PlanSoins.loadLiteSuivi('{{$sejour->_id}}');
               });
             </script>
 
             <fieldset>
               <legend>
                 Transmissions et observations importantes
-                <button class="search notext compact" type="button" onclick="showModalAllTrans('{{$sejour->_id}}')"></button>
+                <button class="search notext compact" type="button" onclick="PlanSoins.showModalAllTrans('{{$sejour->_id}}')"></button>
               </legend>
               <div id="dossier_suivi_lite" style="height: 140px; overflow-y: auto;"></div>
             </fieldset>
@@ -502,7 +502,7 @@ Main.add(function () {
             </button>
 
             {{if $conf.soins.vue_condensee_dossier_soins}}
-              <button type="button" class="search" onclick="showModalTasks('{{$sejour->_id}}');">Tâches</button>
+              <button type="button" class="search" onclick="PlanSoins.showModalTasks('{{$sejour->_id}}');">Tâches</button>
             {{/if}}
 
             <button type="button" class="print" onclick="PlanSoins.printBons('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">

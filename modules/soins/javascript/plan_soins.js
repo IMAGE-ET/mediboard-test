@@ -743,5 +743,22 @@ PlanSoins = {
       $('semaine').hide();
       $('jour').show();
     }
+  },
+
+  loadLiteSuivi: function(sejour_id) {
+    var url = new Url("soins", "ajax_vw_dossier_suivi_lite");
+    url.addParam("sejour_id", sejour_id);
+    url.requestUpdate("dossier_suivi_lite");
+  },
+
+   showModalAllTrans: function(sejour_id) {
+    loadSuivi(sejour_id);
+    var modal_suivi_lite = Modal.open("dossier_suivi", { showClose: true, width: 800, height: 600 });
+    modal_suivi_lite.observe("afterClose", PlanSoins.loadLiteSuivi.curry(sejour_id));
+  },
+
+  showModalTasks: function(sejour_id) {
+    updateTasks(sejour_id);
+    var modal_tasks = Modal.open("tasks", { showClose: true, width: 800, height: 600 });
   }
 };

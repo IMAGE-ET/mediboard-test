@@ -225,24 +225,6 @@ function loadSuivi(sejour_id, user_id, cible, show_obs, show_trans, show_const) 
   urlSuivi.requestUpdate("dossier_suivi");
 }
 
-function loadLiteSuivi(sejour_id) {
-  var url = new Url("soins", "ajax_vw_dossier_suivi_lite");
-  url.addParam("sejour_id", sejour_id);
-  url.requestUpdate("dossier_suivi_lite");
-}
-
-function showModalAllTrans(sejour_id) {
-  loadSuivi(sejour_id);
-  var modal_suivi_lite = Modal.open("dossier_suivi", { showClose: true, width: 800, height: 600 });
-  modal_suivi_lite.observe("afterClose", loadLiteSuivi.curry(sejour_id));
-}
-
-
-showModalTasks = function(sejour_id) {
-  updateTasks(sejour_id);
-  var modal_tasks = Modal.open("tasks", { showClose: true, width: 800, height: 600 });
-}
-
 function submitSuivi(oForm) {
   sejour_id = oForm.sejour_id.value;
   submitFormAjax(oForm, 'systemMsg', { onComplete: function() {
