@@ -23,6 +23,9 @@ else {
   $patient->load($patient_id);
 }
 
+$nb_sejours_annules = 0;
+$nb_ops_annulees = 0;
+
 if ($patient->_id) {
   $patient->loadDossierComplet();
   $patient->loadIPP();
@@ -31,6 +34,19 @@ if ($patient->_id) {
     $cv = CFseFactory::createCV();
     if ($cv) {
       $cv->loadIdVitale($patient);
+    }
+  }
+
+  foreach ($patient->_ref_sejours as $_key => $_sejour) {
+    foreach ($_sejour->_ref_operations as $_key_op => $_operation) {
+      if ($_operation->annulee) {
+        unset ($_sejour->_ref_operations[$_key_op]);
+        $nb_ops_annulees++;
+      }
+    }
+    if ($_sejour->annule) {
+      unset($patient->_ref_sejours[$_key]);
+      $nb_sejours_annules++;
     }
   }
 }
@@ -46,5 +62,7 @@ $smarty->assign("canPatients"     , CModule::getCanDo("dPpatients"));
 $smarty->assign("canAdmissions"   , CModule::getCanDo("dPadmissions"));
 $smarty->assign("canPlanningOp"   , CModule::getCanDo("dPplanningOp"));
 $smarty->assign("canCabinet"      , CModule::getCanDo("dPcabinet"));
+$smarty->assign("nb_sejours_annules", $nb_sejours_annules);
+$smarty->assign("nb_ops_annulees"  , $nb_ops_annulees);
 
 $smarty->display("inc_vw_patient.tpl");

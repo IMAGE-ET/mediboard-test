@@ -146,15 +146,23 @@ if ($consult->_id) {
   }
   
   // Chargement de ses séjours
-  foreach ($patient->_ref_sejours as $_sejour) {
-    $_sejour->loadRefsFwd();
+  foreach ($patient->_ref_sejours as $_key => $_sejour) {
     $_sejour->loadRefsOperations();
-    foreach ($_sejour->_ref_operations as $_operation) {
+    foreach ($_sejour->_ref_operations as $_key_op => $_operation) {
+      if ($_operation->annulee) {
+        unset($_sejour->_ref_operations[$_key_op]);
+        continue;
+      }
       $_operation->loadRefsFwd();
       $_operation->_ref_chir->loadRefFunction()->loadRefGroup();
       // Tableaux de correspondances operation_id => sejour_id
       $tabSejour[$_operation->_id] = $_sejour->_id;
     }
+    if ($_sejour->annule) {
+      unset($patient->_ref_sejours[$_key]);
+      continue;
+    }
+    $_sejour->loadRefsFwd();
   }
   
   // Affecter la date de la consultation
