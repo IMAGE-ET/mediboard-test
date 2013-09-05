@@ -130,7 +130,7 @@ Document.refreshList = function() {
   <tr>
     <th colspan="2" class="category">
       Séjours
-      {{if $nb_sejours_annules || $nb_ops_annukees}}
+      {{if $nb_sejours_annules || $nb_ops_annulees}}
         (
           {{if $nb_sejours_annules}}
             {{$nb_sejours_annules}} séjour(s) annulé(s) {{if $nb_ops_annulees}}&mdash;{{/if}}
