@@ -135,8 +135,8 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
             unset($plage->_ref_consultations[$key_consult]);
           }
         }
-        elseif (!$immediate && ($_consult->heure == CMbDT::time(null, $_consult->arrivee))
-          && ($_consult->motif == "Consultation immédiate")) {
+        if (!$immediate && ($_consult->heure == CMbDT::time(null, $_consult->arrivee))
+          && ($_consult->motif == "Consultation immédiate") && isset($plage->_ref_consultations[$key_consult])) {
           unset($plage->_ref_consultations[$key_consult]);
         }
       }
