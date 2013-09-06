@@ -132,7 +132,7 @@ class CEditJournal {
         $nom_journal = "Journal rappels/contentieux";
         break;
     }
-    $this->editCell(10, 10, 70, CAppUI::conf("dPfacturation CEditPdf home_nom"));
+    $this->editCell(10, 10, 70, CGroups::loadCurrent()->text);
     $this->pdf->Cell(160, "", $nom_journal, null, null, "C");
     $this->pdf->Cell(67, "", "Page: ".$this->page);
     $date = "Date: du ".CMbDT::transform("", $this->date_min, '%d/%m/%Y')." au ".CMbDT::transform("", $this->date_max, '%d/%m/%Y');
@@ -365,12 +365,13 @@ class CEditJournal {
     $ligne ++;
     $pos_ligne = $debut_lignes + $ligne*4;
     // Total à chaque fin de type de rappel
-    $this->editCell($pos_colonne[0], $pos_ligne, 45, "Total $rappel_nom", "L");
-    $this->editCell($pos_colonne[1], $pos_ligne, 15, "(".$totaux_rappel[$rappel_nom]["Nombre"]." rappels)", "L");
-    $this->editCell($pos_colonne[2], $pos_ligne, 15, sprintf("%.2f", $totaux_rappel[$rappel_nom]["Debit"]), "R");
-    $this->editCell($pos_colonne[3], $pos_ligne, 15, sprintf("%.2f", $totaux_rappel[$rappel_nom]["Credit"]), "R");
-    $this->editCell($pos_colonne[4], $pos_ligne, 15, sprintf("%.2f", $totaux_rappel[$rappel_nom]["Solde"]), "R");
-
+    if ($rappel_nom != " ") {
+      $this->editCell($pos_colonne[0], $pos_ligne, 45, "Total $rappel_nom", "L");
+      $this->editCell($pos_colonne[1], $pos_ligne, 15, "(".$totaux_rappel[$rappel_nom]["Nombre"]." rappels)", "L");
+      $this->editCell($pos_colonne[2], $pos_ligne, 15, sprintf("%.2f", $totaux_rappel[$rappel_nom]["Debit"]), "R");
+      $this->editCell($pos_colonne[3], $pos_ligne, 15, sprintf("%.2f", $totaux_rappel[$rappel_nom]["Credit"]), "R");
+      $this->editCell($pos_colonne[4], $pos_ligne, 15, sprintf("%.2f", $totaux_rappel[$rappel_nom]["Solde"]), "R");
+    }
     // Un récapitulatif par type
     $colonnes = array("Code rappel" => 50,  "Nombre"  => 25, "Debit"  => 25,  "Credit"  => 25, "Solde" => 25);
     $colonnes_debut = array("Code rappel" => 5, "Nombre"  => 105, "Debit" => 155, "Credit"  => 205, "Solde" => 255);
