@@ -34,8 +34,8 @@ $options = array(
   "points" => array("show" => true, "lineWidth" => 1, "radius" => 2.5),
   "candles" => array(
     "candleWidth" => 0.5,
-    "upFillColor" => '#ff8c00',
-    "downFillColor" => '#ff8c00',
+    "upFillColor" => '#C0D800',
+    "downFillColor" => '#C0D800',
     "lineWidth" => 1,
     "wickLineWidth" => 5,
   ),
@@ -55,7 +55,7 @@ $graphs_struct = array(
   "Drains" => array(
     "drain_1", "drain_2", "drain_3",
   ),
-  "Redon" => array(
+  "Redons" => array(
     "redon", "redon_2", "redon_3", "redon_4", "redon_5", "redon_6", "redon_7", "redon_8",
   ),
 );
