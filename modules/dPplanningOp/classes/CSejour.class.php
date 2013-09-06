@@ -1184,7 +1184,10 @@ class CSejour extends CFacturable implements IPatientRelated {
       if (count($this->_ref_factures) > 0) {
         $this->_ref_last_facture = end($this->_ref_factures);
         $this->_ref_last_facture->loadRefsReglements();
-        $this->_ref_last_facture->loadRefAssurance();
+        foreach ($this->_ref_factures as $_facture) {
+          /* @var CFacture $_facture*/
+          $_facture->loadRefAssurance();
+        }
       }
       else {
         $this->_ref_last_facture = new CFactureEtablissement();
@@ -2087,7 +2090,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
-   * @param int $conge_id
+   * Chargement du remplacement
+   *
+   * @param int $conge_id le congé
    *
    * @return CReplacement
    */
@@ -2330,7 +2335,9 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   /**
    * Construit le tag NPA (préad) en fonction des variables de configuration
+   *
    * @param int $group_id Permet de charger le NPA pour un établissement donné si non null
+   *
    * @return string
    */
   static function getTagNPA($group_id = null) {
@@ -2527,7 +2534,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
-   * @param string $order
+   * Chargements des affectations
+   *
+   * @param string $order order
    *
    * @return CAffectation[]
    */
@@ -2607,7 +2616,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
-   * @param array $where
+   * Chargement des opérations
+   *
+   * @param array $where xhere
    *
    * @return COperation[]
    */
@@ -3024,7 +3035,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * Builds an array containing cancel alerts for the sejour
    *
-   * @param ref|COperation excluded_id Exclude given operation
+   * @param ref|COperation $excluded_id Exclude given operation
    *
    * @return void Valuate $this->_cancel_alert
    */
@@ -3082,7 +3093,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * Count evenement SSR for a given date;
    *
-   * @param date $date
+   * @param date $date date
    *
    * @return
    */
@@ -3424,8 +3435,8 @@ class CSejour extends CFacturable implements IPatientRelated {
    * get prestations for a particular day
    * check for previous prestation to keep only "active" liaisons
    *
-   * @param $prestation_id
-   * @param $date
+   * @param int  $prestation_id prestation
+   * @param date $date          date
    *
    * @return CStoredObject[]
    */
