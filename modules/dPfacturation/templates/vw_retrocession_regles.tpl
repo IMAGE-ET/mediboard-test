@@ -9,7 +9,7 @@
       <td>
          <select name="prat_id" onchange="this.form.submit();">
             {{if $listPrat|@count > 1}}
-            <option value="">&mdash; Tous</option>
+              <option value="">&mdash; Tous</option>
             {{/if}}
             {{mb_include module=mediusers template=inc_options_mediuser list=$listPrat selected=$praticien->_id}}
           </select>
@@ -20,7 +20,7 @@
 
 {{if $praticien->_id}}
   <button type="button" class="new" onclick="Retrocession.edit('0');">{{tr}}CRetrocession-title-create{{/tr}}</button>
-  <table name="retrocessions" class="main tbl">
+  <table class="main tbl">
     <tr>
       <th colspan="7" class="title">{{tr}}CRetrocession.all{{/tr}}</th>
     </tr>
