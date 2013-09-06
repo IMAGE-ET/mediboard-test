@@ -651,8 +651,8 @@ class CAppUI {
     self::$instance->ip = $adress["client"];
     self::$instance->proxy = $adress["proxy"];
     self::$instance->_is_intranet =
-      is_intranet_ip($_SERVER["REMOTE_ADDR"]) &&
-      ($_SERVER["REMOTE_ADDR"] != self::conf("system reverse_proxy"));
+      is_intranet_ip(self::$instance->ip) &&
+      (self::$instance->ip != self::conf("system reverse_proxy"));
 
     if (!self::$instance->_is_intranet && self::$instance->user_remote == 1 && $user->user_type != 1) {
       self::setMsg("Auth-failed-user-noremoteaccess", UI_MSG_ERROR);
