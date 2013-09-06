@@ -19,6 +19,7 @@ $rhs->loadRefDependances();
 $rhs->loadRefSejour();
 
 if (!$rhs->_ref_dependances->_id) {
+  $rhs->_ref_dependances->rhs_id = $rhs->_id;
   $rhs->_ref_dependances->store();
 }
 
