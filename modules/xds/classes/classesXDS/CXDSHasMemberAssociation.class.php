@@ -30,10 +30,11 @@ class CXDSHasMemberAssociation extends CXDSAssociation {
    * @param bool   $sign         false
    */
   function __construct($id, $sourceObject, $targetObject, $sign = false) {
-    parent::__construct($id, $sourceObject, $targetObject);
+    $associationType = null;
     if ($sign) {
-      $this->associationType = "urn:ihe:iti:2007:AssociationType:signs";
+      $associationType = "urn:ihe:iti:2007:AssociationType:signs";
     }
+    parent::__construct($id, $sourceObject, $targetObject, $associationType);
   }
 
   /**

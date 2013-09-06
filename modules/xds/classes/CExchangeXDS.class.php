@@ -19,8 +19,8 @@ class CExchangeXDS extends CEchangeXML{
   public $exchange_xds_id;
 
   static $messages = array(
-    "consumer" => "CXDSConsumer",
-    "producer" => "CXDSProducer"
+    "repository" => "CXDSRepository",
+    "registry" => "CXDSRegistry"
   );
 
   /**

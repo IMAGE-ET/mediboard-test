@@ -10,15 +10,18 @@
  * @version  $Revision$
  * @link     http://www.mediboard.org
  */
- 
-/**
- * Classe de l'evenement ITI41
- */
-class CXDSEventITI41 {
 
-  public $evenement_type = "repository";
-  public $function = "DocumentRepository_ProvideAndRegisterDocumentSet-b";
+/**
+ * Classe de l'evenement ITI57
+ */
+class CXDSEventITI57 {
+
+  public $evenement_type = "registry";
+  public $function = "DocumentRegistry_UpdateDocumentSet";
   public $ack_data;
+  public $uuid;
+  public $archivage;
+  public $depublication;
 
 
   /**
@@ -31,28 +34,12 @@ class CXDSEventITI41 {
   function build ($data) {
     $xml = new CXDSXmlDocument();
 
-    $message = $xml->createDocumentRepositoryElement($xml, "ProvideAndRegisterDocumentSetRequest");
-
     $xds = new CXDSMappingCDA($data);
-    $header_xds = $xds->generateXDS41();
-    $xml->importDOMDocument($message, $header_xds);
+    $header_xds = $xds->generateXDS57($this->uuid, $this->archivage, $this->depublication);
 
-    $document_cda = new CCDADomDocument();
-    $document_cda->loadXMLSafe($data);
+    $xml->importDOMDocument($xml, $header_xds);
 
-    //ajout d'un document
-    $document = $xml->createDocumentRepositoryElement($message, "Document");
-    $xml->addAttribute($document, "id", "2.25.4896.4");
-    $document->nodeValue = base64_encode($document_cda->saveXML());
-
-    //ajout de la signature
-    $dsig = new CDSIGTools($xml, CAppUI::conf("dmp path_certificat"), CAppUI::conf("dmp passphrase_certificat"));
-    $dsig_signature = $dsig->createSignatureLot($xds->oid, $document_cda);
-    $signature = $xml->createDocumentRepositoryElement($message, "Document");
-    $xml->addAttribute($signature, "id", "2.25.4896.3");
-    $signature->nodeValue = base64_encode($dsig_signature->saveXML());
-
-    return $message;
+    return $xml->documentElement;
   }
 
   /**

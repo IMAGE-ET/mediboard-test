@@ -27,8 +27,8 @@ class CReceiverXDS extends CInteropReceiver {
     $spec->table = "receiver_xds";
     $spec->key   = "receiver_xds_id";
     $spec->messages = array(
-      "producer" => array("producer"),
-      "consumer" => array("consumer")
+      "registry" => array("registry"),
+      "repository" => array("repository")
     );
     return $spec;
   }

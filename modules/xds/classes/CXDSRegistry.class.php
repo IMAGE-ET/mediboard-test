@@ -14,19 +14,19 @@
 /**
  * Classe Producer
  */
-class CXDSProducer {
+class CXDSRegistry {
 
   /** @var array */
   static $evenements = array (
-    // Provider&register Document Set - b
-    "ITI-41" => "CXDSEventITI41",
+    "ITI-18" => "CXDSEventITI18",
+    "ITI-57" => "CXDSEventITI57",
   );
 
   /**
    * Construct
    */
   function __construct() {
-    $this->type = "producer";
+    $this->type = "registry";
   }
 
   /**

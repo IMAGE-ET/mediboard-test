@@ -19,6 +19,10 @@
  */
 class CXDSExtrinsicObject extends CXDSExtrinsicPackage {
 
+  /** @var  CXDSSlot */
+  public $hash;
+  /** @var  CXDSSlot */
+  public $size;
   public $mimeType;
   /** @var  CXDSSlot */
   public $creationTime;
@@ -52,6 +56,7 @@ class CXDSExtrinsicObject extends CXDSExtrinsicPackage {
   public $practiceSetting;
   /** @var  CXDSType */
   public $type;
+  public $lid;
 
   /**
    * Construction de l'instance
@@ -61,7 +66,7 @@ class CXDSExtrinsicObject extends CXDSExtrinsicPackage {
    */
   function __construct($id, $mimeType) {
     parent::__construct($id);
-    $this->mimeType = $mimeType;
+    $this->mimeType   = $mimeType;
     $this->objectType = "urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1";
   }
 

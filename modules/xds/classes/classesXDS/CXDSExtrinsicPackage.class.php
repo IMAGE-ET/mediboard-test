@@ -97,7 +97,7 @@ class CXDSExtrinsicPackage extends CXDSRegistryObject {
 
     foreach ($variables as $_variable) {
       $class = $this->$_variable;
-      if (!$class || $_variable === "mimeType") {
+      if (!$class || $_variable === "mimeType" || $_variable === "lid") {
         continue;
       }
       if (is_array($this->$_variable)) {

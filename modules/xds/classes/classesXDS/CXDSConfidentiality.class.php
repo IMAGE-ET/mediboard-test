@@ -29,4 +29,34 @@ class CXDSConfidentiality extends CXDSClass {
     parent::__construct($id, $classifiedObject, $nodeRepresentation);
     $this->classificationScheme = "urn:uuid:f4f85eac-e6cb-4883-b524-f2705394840f";
   }
+
+  /**
+   * Retourne un type confidentialité pour masquer au PS
+   *
+   * @param String $id               Identifiant
+   * @param String $classifiedObject ClassifiedObject
+   *
+   * @return CXDSConfidentiality
+   */
+  static function getMasquagePS($id, $classifiedObject) {
+    $confidentiality = new CXDSConfidentiality($id, $classifiedObject, "MASQUE_PS");
+    $confidentiality->setCodingScheme(array("1.2.250.1.213.1.1.4.13"));
+    $confidentiality->setName("Document masqué aux professionnels de santé");
+    return $confidentiality;
+  }
+
+  /**
+   * Retourne un type confidentialité pour masquer au  patient
+   *
+   * @param String $id               Identifiant
+   * @param String $classifiedObject ClassifiedObject
+   *
+   * @return CXDSConfidentiality
+   */
+  static function getMasquagePatient($id, $classifiedObject) {
+    $confidentiality = new CXDSConfidentiality($id, $classifiedObject, "INVISIBLE_PATIENT");
+    $confidentiality->setCodingScheme(array("1.2.250.1.213.1.1.4.13"));
+    $confidentiality->setName("Document non visible par le patient");
+    return $confidentiality;
+  }
 }

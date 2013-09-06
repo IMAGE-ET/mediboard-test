@@ -39,10 +39,46 @@ class CXDSMappingCDA {
     $this->xon_etablissement = CXDSTools::getXONetablissement();
 
     $document_cda = new CCDADomDocument();
-    $document_cda->loadXML($cda);
+    $document_cda->loadXMLSafe($cda);
 
     $this->xpath = new CMbXPath($document_cda);
     $this->xpath->registerNamespace("cda", "urn:hl7-org:v3");
+  }
+
+  /**
+   * Génération de la requête XDS57
+   *
+   * @param String $uuid          Identifiant du document dans le registre
+   * @param Bool   $archivage     Archiage du document
+   * @param Bool   $depublication Depublication du document
+   *
+   * @return CXDSXmlDocument
+   */
+  function generateXDS57($uuid, $archivage = null, $depublication = null) {
+    $id_registry  = "2.25.4896.6";
+    $id_extrinsic  = "2.25.4896.5";
+
+    $class = new CXDSRegistryObjectList();
+
+    //Ajout du lot de soumission
+    $registry = $this->createRegistryPackage($id_registry);
+    $class->appendRegistryPackage($registry);
+    $statusType = "";
+
+    if ($depublication) {
+      $statusType = "Deleted";
+    }
+    if ($archivage) {
+      $statusType = "Archived";
+    }
+
+    $asso = new CXDSAssociation("association01", $id_registry, $uuid, "urn:ihe:iti:2010:AssociationType:UpdateAvailabilityStatus");
+    $asso->setSlot("OriginalStatus", array("urn:oasis:names:tc:ebxml-regrep:StatusType:Approved"));
+    $asso->setSlot("NewStatus", array("urn:asip:ci-sis:2010:StatusType:$statusType"));
+    $class->appendAssociation($asso);
+
+
+    return $class->toXML();
   }
 
   /**
@@ -50,7 +86,7 @@ class CXDSMappingCDA {
    *
    * @return CXDSXmlDocument
    */
-  function generateXDS() {
+  function generateXDS41() {
     $id_registry  = "2.25.4896.5";
     $id_document  = "2.25.4896.4";
     $id_signature = "2.25.4896.3";
@@ -187,7 +223,7 @@ class CXDSMappingCDA {
 
     //OID unique  concat(oid.objet+id.doc+time)
     //@todo: a faire
-    $this->oid["lot"] = "2.25.43911231647312014016.1";
+    $this->oid["lot"] = "2.25.43911231647312014016.".time();
     $registry->setUniqueId("ei$ei_id", $id, $this->oid["lot"]);
     $this->setEiId();
 

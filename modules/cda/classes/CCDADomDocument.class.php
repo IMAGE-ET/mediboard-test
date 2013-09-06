@@ -18,11 +18,9 @@ class CCDADomDocument extends CMbXMLDocument {
 
   /**
    * Création du xml en UTF-8
-   *
-   * @param String $encoding String
    */
-  function __construct($encoding = "UTF-8") {
-    parent::__construct($encoding);
+  function __construct() {
+    parent::__construct("UTF-8");
 
     $this->preserveWhiteSpace = true;
     $this->formatOutput = true;

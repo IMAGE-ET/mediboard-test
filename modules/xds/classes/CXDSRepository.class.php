@@ -14,21 +14,19 @@
 /**
  * Description
  */
-class CXDSConsumer {
+class CXDSRepository {
 
   /** @var array */
   static $evenements = array (
-    // retrieve Document Set
     "ITI-43" => "CXDSEventITI43",
-    //Registry Stored Query
-    "ITI-18" => "CXDSEventITI18",
+    "ITI-41" => "CXDSEventITI41",
   );
 
   /**
    * Construct
    */
   function __construct() {
-    $this->type = "consumer";
+    $this->type = "repository";
   }
 
   /**

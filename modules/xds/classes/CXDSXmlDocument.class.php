@@ -49,7 +49,7 @@ class CXDSXmlDocument extends CMbXMLDocument {
    * @return DOMElement
    */
   function createLcmRoot($name, $value = null) {
-    return parent::addElement($this, "lcm:$name", $value, "urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0");
+    return $this->createLcmElement($this, $name, $value);
   }
 
   /**
@@ -63,6 +63,32 @@ class CXDSXmlDocument extends CMbXMLDocument {
    */
   function createDocumentRepositoryElement($nodeParent, $name, $value = null) {
     return parent::addElement($nodeParent, "xds:$name", $value, "urn:ihe:iti:xds-b:2007");
+  }
+
+  /**
+   * Création d'un noeud pour query
+   *
+   * @param DOMNode $nodeParent Noeud parent
+   * @param String  $name       Nom du noeud
+   * @param String  $value      Valeur du noeud
+   *
+   * @return DOMElement
+   */
+  function createQueryElement($nodeParent, $name, $value = null) {
+    return parent::addElement($nodeParent, "query:$name", $value, "urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0");
+  }
+
+  /**
+   * Création d'un noeud pour lcm
+   *
+   * @param DOMNode $nodeParent Noeud parent
+   * @param String  $name       Nom du noeud
+   * @param String  $value      Valeur du noeud
+   *
+   * @return DOMElement
+   */
+  function createLcmElement($nodeParent, $name, $value = null) {
+    return parent::addElement($nodeParent, "lcm:$name", $value, "urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0");
   }
 
   /**
@@ -219,7 +245,7 @@ class CXDSXmlDocument extends CMbXMLDocument {
    * @param String $targetObject TargetObject
    * @param String $objectType   ObjectType
    *
-   * @return void
+   * @return DOMElement
    */
   function createAssociationRoot($id, $type, $sourceObject, $targetObject, $objectType) {
     $element = $this->createRimRoot("Association");
@@ -228,6 +254,8 @@ class CXDSXmlDocument extends CMbXMLDocument {
     $this->addAttribute($element, "objectType"     , $objectType);
     $this->addAttribute($element, "sourceObject"   , $sourceObject);
     $this->addAttribute($element, "targetObject"   , $targetObject);
+
+    return $element;
   }
 
   /**
