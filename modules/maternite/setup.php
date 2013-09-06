@@ -118,6 +118,12 @@ class CSetupmaternite extends CSetup {
       ADD `rques` TEXT;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.11";
+    $this->makeRevision("0.11");
+    $query = "ALTER TABLE `grossesse`
+      ADD `group_id` INT (11) UNSIGNED AFTER `grossesse_id`,
+      ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.12";
   }
 }

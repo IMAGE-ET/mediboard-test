@@ -20,7 +20,8 @@ class CGrossesse extends CMbObject{
   
   // DB References
   public $parturiente_id;
-  
+  public $group_id;
+
   // DB Fields
   public $terme_prevu;
   public $active;
@@ -65,6 +66,7 @@ class CGrossesse extends CMbObject{
   function getProps() {
     $specs = parent::getProps();
     $specs["parturiente_id"] = "ref notNull class|CPatient";
+    $specs["group_id"]       = "ref class|CGroups";
     $specs["terme_prevu"]    = "date notNull";
     $specs["active"]         = "bool default|1";
     $specs["multiple"]       = "bool default|0";
@@ -214,5 +216,16 @@ class CGrossesse extends CMbObject{
     if ($msg) {
       return $msg;
     }
+  }
+
+  /**
+   * @see parent::store()
+   */
+  function store() {
+    if (!$this->_id) {
+      $this->group_id = CGroups::loadCurrent()->_id;
+    }
+
+    return parent::store();
   }
 }
