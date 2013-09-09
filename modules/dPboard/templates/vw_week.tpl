@@ -79,7 +79,7 @@ Main.add(function () {
             <td>Plage opératoire</td>
           </tr>
           <tr>
-            <td style="background-color:#9feed8;">&nbsp;&nbsp;</td>
+            <td style="background-color:#748dee;">&nbsp;&nbsp;</td>
             <td>Plage opératoire (Autre Etab.)</td>
           </tr>
         </table>

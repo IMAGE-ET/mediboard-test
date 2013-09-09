@@ -132,7 +132,7 @@ for ($i = 0; $i < 7; $i++) {
     $_op->loadRefSalle();
     $_op->_ref_salle->loadRefBloc();
     if ($_op->_ref_salle->_ref_bloc->group_id != $g->_id) {
-      $color = "#9FEED8";
+      $color = "#748dee";
     }
 
     ajoutEvent($planning, $_op, $date, $_op->_ref_salle->nom, $color, "operation");
