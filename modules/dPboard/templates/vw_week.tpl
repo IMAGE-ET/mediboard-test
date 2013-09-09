@@ -68,8 +68,9 @@ Main.add(function () {
 <table class="main">
   <tr>
     <th>
-      <div style="width:120px; float: right;">
-        <table id="weeklyPlanning" class="tbl">
+      <span style="float: right;"><button class="search button" onclick="Modal.open('legend_week_plages');">{{tr}}Legend{{/tr}}</button></span>
+      <div style="display: none" id="legend_week_plages">
+        <table class="tbl">
           <tr>
             <td style="background-color:#BFB;">&nbsp;&nbsp;</td>
             <td>Plage de consultation</td>
@@ -81,6 +82,9 @@ Main.add(function () {
           <tr>
             <td style="background-color:#748dee;">&nbsp;&nbsp;</td>
             <td>Plage opératoire (Autre Etab.)</td>
+          </tr>
+          <tr>
+            <td colspan="2"><button onclick="Control.Modal.close()" class="close">{{tr}}Close{{/tr}}</button></td>
           </tr>
         </table>
       </div>
