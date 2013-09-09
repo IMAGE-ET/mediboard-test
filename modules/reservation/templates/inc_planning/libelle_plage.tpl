@@ -31,10 +31,14 @@
       {{assign var=close value=$facture->definitive}}
     {{/if}}
 
-    {{if $couleur}}
+    {{if $close}}
       {{assign var=couleur value="blue"}}
     {{else}}
       {{assign var=couleur value="#FF0"}}
+    {{/if}}
+
+    {{if $facture->patient_date_reglement}}
+      {{assign var=couleur value="green"}}
     {{/if}}
     <button class="calcul notext" onclick="Facture.edit({{$facture->_id}}, '{{$facture->_class}}')" style="border-left: {{$couleur}} 3px solid;">Facture</button>
   {{/if}}
