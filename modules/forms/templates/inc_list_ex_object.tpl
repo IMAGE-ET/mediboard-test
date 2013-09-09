@@ -31,7 +31,7 @@ ExObject.refreshSelf['{{$self_guid}}'] = function(start){
     {{assign var=align value=left}}
   {{/if}}
   
-  {{mb_include module=system template=inc_pagination change_page="ExObject.refreshSelf.$self_guid" total=$total current=$start step=$step align=$align}}
+  {{mb_include module=system template=inc_pagination change_page="ExObject.refreshSelf.$self_guid" total=$total current=$start step=$step align=$align show_results=false}}
 {{/if}}
 
 {{* FULL DETAIL = ALL *}}

@@ -23,7 +23,6 @@ showListTransmissions = function(page, total) {
   }
   url.addParam("step", '{{$page_step}}');
   url.addParam("page", page);
-  url.addParam("show_results", 0);
   url.addParam("change_page", "showListTransmissions");
   url.requestUpdate("pagination");
 }
