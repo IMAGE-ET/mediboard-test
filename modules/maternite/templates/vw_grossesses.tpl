@@ -52,7 +52,7 @@
       <button class="new" onclick="editSejour(0);" style="float: left;">
         {{tr}}CSejour-title-create{{/tr}}
       </button>
-      Grossesses arrivant à terme entre le {{$date_min|date_format:$conf.date}} et le {{$date_max|date_format:$conf.date}}
+      {{$grossesses|@count}} Grossesse(s) arrivant à terme entre le {{$date_min|date_format:$conf.date}} et le {{$date_max|date_format:$conf.date}}
     </th>
   </tr>
   <tr>

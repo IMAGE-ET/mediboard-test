@@ -31,6 +31,7 @@ CMbObject::massLoadFwdRef($grossesses, "parturiente_id");
 CMbObject::massCountBackRefs($grossesses, "sejours");
 CMbObject::massCountBackRefs($grossesses, "consultations");
 
+/** @var CGrossesse[] $grossesses */
 foreach ($grossesses as $_grossesse) {
   $sejours = $_grossesse->loadRefsSejours();
   if (!$show_cancelled && count($sejours) == 1 && reset($sejours)->annule == 1) {
