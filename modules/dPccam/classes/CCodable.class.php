@@ -355,6 +355,13 @@ class CCodable extends CMbObject {
     return null;
   }
 
+  /**
+   * Calcul le nombre d'actes pour l'objet et selon un executant
+   *
+   * @param int $user_id executant des actes
+   *
+   * @return void
+   */
   function countActes($user_id = null) {
     $where = array();
     if ($user_id) {
@@ -383,15 +390,17 @@ class CCodable extends CMbObject {
   /**
    * Charge tous les actes du codable, quelque soit leur type
    *
+   * @param int $num_facture numéro de la facture concernée
+   *
    * @return CActe[] collection d'actes concrets
    */
-  function loadRefsActes() {
+  function loadRefsActes($num_facture = 1) {
     $this->_ref_actes = array();
 
     $this->loadRefsActesCCAM();
     $this->loadRefsActesNGAP();
-    $this->loadRefsActesTarmed();
-    $this->loadRefsActesCaisse();
+    $this->loadRefsActesTarmed($num_facture);
+    $this->loadRefsActesCaisse($num_facture);
 
     foreach ($this->_ref_actes_ccam as $acte_ccam) {
       $this->_ref_actes[] = $acte_ccam;
@@ -475,9 +484,11 @@ class CCodable extends CMbObject {
   /**
    * Charge les actes Tarmed codés
    *
+   * @param int $num_facture numéro de la facture concernée
+   *
    * @return array
    */
-  function loadRefsActesTarmed(){
+  function loadRefsActesTarmed($num_facture = null){
     $this->_ref_actes_tarmed = array();
     $totaux = array("base" => 0, "dh" => 0);
 
@@ -492,8 +503,11 @@ class CCodable extends CMbObject {
         $ljoin["consultation"] = "acte_tarmed.object_id = consultation.consultation_id";
         $ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
 
-        $where["acte_tarmed.object_class"] = " = '$this->_class'";
-        $where["acte_tarmed.object_id"] = " = '$this->_id'";
+        $where["acte_tarmed.object_class"]  = " = '$this->_class'";
+        $where["acte_tarmed.object_id"]     = " = '$this->_id'";
+        if ($num_facture) {
+          $where["acte_tarmed.num_facture"] = " = '$num_facture'";
+        }
 
         //Dans le cas ou la date est nulle on prend celle de la plage de consultation correspondante
         $order = "IFNULL(acte_tarmed.date, plageconsult.date) ,code ASC";
@@ -504,6 +518,9 @@ class CCodable extends CMbObject {
         //Dans les cas d'un séjour ou d'une intervention
         $where["object_class"] = " = '$this->_class'";
         $where["object_id"]    = " = '$this->_id'";
+        if ($num_facture) {
+          $where["num_facture"]    = " = '$num_facture'";
+        }
         $order = "code ASC";
         $this->_ref_actes_tarmed = $acte_tarmed->loadList($where, $order);
       }
@@ -530,17 +547,20 @@ class CCodable extends CMbObject {
   /**
    * Charge les actes Caisse codés
    *
-   * @return array 
+   * @param int $num_facture numéro de la facture concernée
+   *
+   * @return array
    */
-  function loadRefsActesCaisse(){
+  function loadRefsActesCaisse($num_facture = 1){
     $this->_ref_actes_caisse = array();
     $totaux = array("base" => 0, "dh" => 0);
 
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
       //Classement des actes par ordre chonologique et par code
       $where = array();
-      $where["acte_caisse.object_class"] = " = '$this->_class'";
-      $where["acte_caisse.object_id"] = " = '$this->_id'";
+      $where["acte_caisse.object_class"]  = " = '$this->_class'";
+      $where["acte_caisse.object_id"]     = " = '$this->_id'";
+      $where["acte_caisse.num_facture"]   = " = '$num_facture'";
 
       $order = "caisse_maladie_id, code ASC";
       $acte_caisse = new CActeCaisse();

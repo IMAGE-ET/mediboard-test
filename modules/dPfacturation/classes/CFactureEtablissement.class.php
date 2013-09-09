@@ -58,6 +58,9 @@ class CFactureEtablissement extends CFacture {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = sprintf("SE%08d", $this->_id);
+    if (CAppUI::conf("ref_pays") == 2) {
+      $this->_view .= " /$this->numero";
+    }
   }
   
   /**

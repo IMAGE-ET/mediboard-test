@@ -24,6 +24,7 @@ class CActe extends CMbMetaObject {
   // DB References
   public $executant_id;
   public $facturable;
+  public $num_facture;
 
   // Form fields
   public $_preserve_montant;
@@ -153,6 +154,7 @@ class CActe extends CMbMetaObject {
     $props["montant_depassement"] = "currency";
     $props["execution"]           = "dateTime notNull";
     $props["facturable"]          = "bool notNull default|1 show|0";
+    $props["num_facture"]         = "num notNull min|1 default|1";
 
     $props["_montant_facture"]    = "currency";
 

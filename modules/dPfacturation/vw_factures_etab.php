@@ -21,6 +21,7 @@ $no_finish_reglement= CValue::getOrSession("no_finish_reglement", 0);
 $type_date_search   = CValue::getOrSession("type_date_search", "ouverture");
 $chirSel            = CValue::getOrSession("chirSel", "-1");
 $num_facture        = CValue::getOrSession("num_facture", "");
+$numero             = CValue::getOrSession("numero", "1");
 
 // Liste des chirurgiens
 $user = new CMediusers();
@@ -60,9 +61,12 @@ if ($patient_id) {
 if ($num_facture) {
   $where["facture_id"] =" = '$num_facture' ";
 }
+if ($numero) {
+  $where["numero"] =" = '$numero'";
+}
 
 $facture = new CFactureEtablissement();
-$factures = $facture->loadList($where , "ouverture ASC", 50, "facture_id", $ljoin);
+$factures = $facture->loadList($where , "ouverture ASC, numero", 50, "facture_id", $ljoin);
 
 //Affichage uniquement des factures qui contiennent des séjours
 foreach ($factures as $key => $_facture) {
@@ -116,12 +120,13 @@ $smarty->assign("patient"       , $patient);
 $smarty->assign("banques"       , $banques);
 $smarty->assign("facture"       , $facture);
 $smarty->assign("etat_cloture"  , $etat_cloture);
-$smarty->assign("etat_cotation"  , $etat_cotation);
+$smarty->assign("etat_cotation" , $etat_cotation);
 $smarty->assign("etat_relance"  , $etat_relance);
 $smarty->assign("date"          , CMbDT::date());
 $smarty->assign("filter"        , $filter);
 $smarty->assign("no_finish_reglement" , $no_finish_reglement);
 $smarty->assign("type_date_search"    , $type_date_search);
-$smarty->assign("num_facture"    , $num_facture);
+$smarty->assign("num_facture"   , $num_facture);
+$smarty->assign("numero"        , $numero);
 
 $smarty->display("vw_factures.tpl");

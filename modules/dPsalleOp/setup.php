@@ -1308,7 +1308,11 @@ class CSetupdPsalleOp extends CSetup {
                 )
                 WHERE `daily_check_list`.`object_class` = 'CPoseDispositifVasculaire'";
     $this->addQuery($query);
+    $this->makeRevision("0.52");
 
-    $this->mod_version = "0.52";
+    $query = "ALTER TABLE `acte_ccam`
+                ADD `num_facture` INT (11) UNSIGNED NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+    $this->mod_version = "0.53";
   }
 }

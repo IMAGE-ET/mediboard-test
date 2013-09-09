@@ -1,7 +1,8 @@
 {{if !@$modules.tarmed->_can->read || !$conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
   {{mb_return}}
 {{/if}}
-{{mb_script module=patients script=correspondant ajax="true"}}
+{{mb_script module=patients     script=correspondant  ajax="true"}}
+{{mb_script module=facturation  script=facture        ajax="true"}}
 <script>
   refreshAssurance = function() {
     var url = new Url("facturation", "ajax_list_assurances");
@@ -39,6 +40,17 @@
     url.addParam("operation_id", operation_id);
     url.redirect();
   }
+
+  {{if $facture->_ref_sejours|@count}}
+    gestionFacture = function() {
+      var url = new Url('facturation', 'vw_factures_sejour');
+      url.addParam('facture_class', 'CFactureEtablissement');
+      url.addParam('patient_id'   , '{{$facture->patient_id}}');
+      url.addParam('object_id'    , '{{$facture->_ref_last_sejour->_id}}');
+      url.addParam('object_class' , '{{$facture->_ref_last_sejour->_class}}');
+      url.requestModal();
+    }
+  {{/if}}
 </script>
 
 {{if $facture->cloture && isset($factures|smarty:nodefaults) && count($factures) && !$facture->annule}}
@@ -73,15 +85,28 @@
       {{if $facture->_class == "CFactureEtablissement" && $facture->_ref_sejours|@count}}
         {{assign var="last_op" value=$facture->_ref_last_sejour->_ref_last_operation}}
         <button type="button" class="edit" onclick="viewInterv('{{$last_op->_id}}', '{{$last_op->plageop_id}}');" style="float:right;"> Infos interv. </button>
+        <button type="button" class="new" onclick="gestionFacture();">Gestion des factures</button>
       {{/if}}
     </td>
   </tr>
+
+  {{if ($facture->type_facture == "maladie" && $facture->assurance_maladie && !$facture->_ref_assurance_maladie->type_pec) ||
+      ($facture->type_facture == "accident" && $facture->assurance_accident && !$facture->_ref_assurance_accident->type_pec)}}
+    <tr style="height:30px;">
+      <td colspan="8">
+        <div class="small-warning" style="display:inline">
+          Le type de prise en charge de cette assurance n'est pas spécifié, merci de le renseigner
+        </div>
+      </td>
+    </tr>
+  {{/if}}
 {{elseif !$facture->cloture && isset($factures|smarty:nodefaults) && count($factures) && $facture->_class == "CFactureEtablissement" && $facture->_ref_sejours|@count}}
   <tr>
     <td colspan="8">
       {{assign var="last_op" value=$facture->_ref_last_sejour->_ref_last_operation}}
       <button type="button" class="edit" onclick="dossierBloc('{{$last_op->_id}}');"> Dossier bloc </button>
       <button type="button" class="new" onclick="viewInterv('{{$last_op->_id}}', '{{$last_op->plageop_id}}');"> Infos interv. </button>
+      <button type="button" class="new" onclick="gestionFacture();">Gestion des factures</button>
     </td>
   </tr>
 {{/if}}
@@ -98,7 +123,6 @@
           <td>{{mb_field object=$facture field=type_facture onchange="Facture.modifCloture(this.form);" readonly=$facture->cloture}}</td>
           <td class="narrow"> {{mb_label object=$facture field=cession_creance}}</td>
           <td>{{mb_field object=$facture field=cession_creance onchange="Facture.modifCloture(this.form);" readonly=$facture->cloture}}</td>
-          </td>
           <td style="width:400px;">
             {{if $facture->_class == "CFactureEtablissement"}}
               {{mb_label object=$facture field=dialyse}}
@@ -113,8 +137,7 @@
             <td>{{mb_label object=$facture field=npq}}</td>
             <td>{{mb_field object=$facture field=npq onchange="Facture.modifCloture(this.form);" readonly=$facture->cloture}}</td>
           {{else}}
-            <td></td>
-            <td></td>
+            <td colspan="2"></td>
           {{/if}}
           <td>
             {{mb_label object=$facture field=statut_pro}}
@@ -148,8 +171,7 @@
         {{if $facture->cloture}}
           {{mb_value object=$facture field="ref_accident"}} 
         {{else}}
-          {{mb_field object=$facture field="ref_accident" onchange="return onSubmitFormAjax(this.form);"}} 
-        </text
+          {{mb_field object=$facture field="ref_accident" onchange="return onSubmitFormAjax(this.form);"}}
         {{/if}}
       </form>
     </td>

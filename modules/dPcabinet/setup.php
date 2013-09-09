@@ -1968,6 +1968,14 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("2.13");
 
     $this->addPrefQuery("use_acte_date_now", "0");
-    $this->mod_version = "2.14";
+    $this->makeRevision("2.14");
+
+    $query = "ALTER TABLE `acte_ngap`
+                ADD `num_facture` INT (11) UNSIGNED NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `facture_cabinet`
+                ADD `numero` INT (11) UNSIGNED NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+    $this->mod_version = "2.15";
   }
 }

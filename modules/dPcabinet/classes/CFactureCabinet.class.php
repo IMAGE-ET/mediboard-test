@@ -45,6 +45,9 @@ class CFactureCabinet extends CFacture {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = sprintf("FA%08d", $this->_id);
+    if (CAppUI::conf("ref_pays") == 2) {
+      $this->_view .= " /$this->numero";
+    }
   }
 
   /**

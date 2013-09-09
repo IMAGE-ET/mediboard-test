@@ -5,7 +5,7 @@
  * @package    Mediboard
  * @subpackage dPfacturation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -13,10 +13,11 @@
  * Facture générique
  */
 class CFacture extends CMbObject {
-  
+
   // DB Fields
-  public $patient_id; 
+  public $patient_id;
   public $praticien_id;
+  public $numero;
   public $remise;
   public $ouverture;
   public $cloture;
@@ -43,6 +44,7 @@ class CFacture extends CMbObject {
 
   // Form fields
   public $_consult_id;
+  public $_sejour_id;
   public $_total;
   public $_duplicate;
   public $_echeance;
@@ -54,11 +56,11 @@ class CFacture extends CMbObject {
   public $_secteur2 = 0.0;
   //Champ à supprimer
   public $_montant_total;
-  
+
   public $_total_tarmed;
   public $_total_caisse;
   public $_autre_tarmed;
-  
+
   public $_du_restant_patient;
   public $_du_restant_tiers;
   public $_reglements_total_patient;
@@ -117,7 +119,7 @@ class CFacture extends CMbObject {
   public $_ref_actes_ccam   = array();
   /** @var CDebiteur[] */
   public $_ref_debiteurs;
-  
+
   /**
    * @see parent::getBackProps()
    */
@@ -126,7 +128,7 @@ class CFacture extends CMbObject {
     $backProps["items"] = "CFactureItem object_id";
     return $backProps;
   }
-  
+
   /**
    * @see parent::getProps()
    */
@@ -134,12 +136,13 @@ class CFacture extends CMbObject {
     $props = parent::getProps();
     $props["patient_id"]    = "ref class|CPatient purgeable seekable notNull show|1";
     $props["praticien_id"]  = "ref class|CMediusers";
+    $props["numero"]        = "num notNull min|1 default|1";
     $props["remise"]        = "currency default|0 decimals|2";
     $props["ouverture"]     = "date notNull";
     $props["cloture"]       = "date";
     $props["du_patient"]    = "currency notNull default|0 decimals|2";
     $props["du_tiers"]      = "currency notNull default|0 decimals|2";
-    
+
     $props["type_facture"]              = "enum notNull list|maladie|accident|esthetique default|maladie";
     $props["patient_date_reglement"]    = "date";
     $props["tiers_date_reglement"]      = "date";
@@ -231,9 +234,9 @@ class CFacture extends CMbObject {
 
   /**
    * Redéfinition du store
-   * 
+   *
    * @return void|string
-  **/
+   **/
   function store() {
     if ($this->_id && $this->_duplicate) {
       $this->_duplicate = null;
@@ -247,11 +250,11 @@ class CFacture extends CMbObject {
     if (!$this->cloture && $this->fieldModified("cloture") && count($this->_ref_reglements)) {
       return "Vous ne pouvez pas décloturer une facture ayant des règlements";
     }
-    
+
     if (!$this->cloture && $this->fieldModified("cloture") && count($this->_ref_relances)) {
       return "Vous ne pouvez pas décloturer une facture ayant des relances";
     }
-  
+
     $create_lignes = false;
     if (!$this->_id && CAppUI::conf("dPfacturation ".$this->_class." use_auto_cloture")) {
       $this->cloture    = CMbDT::date();
@@ -271,7 +274,7 @@ class CFacture extends CMbObject {
         $item->delete();
       }
     }
-    
+
     // Etat des règlement à propager sur les consultations
     if ($this->fieldModified("patient_date_reglement") || $this->fieldModified("tiers_date_reglement")) {
       $this->loadRefsConsultation();
@@ -288,13 +291,13 @@ class CFacture extends CMbObject {
         $this->_ref_last_relance->store();
       }
     }
-    
+
     //Lors de la validation de la cotation d'une consultation
     if ($this->_consult_id) {
       $consult = new CConsultation();
       $consult->load($this->_consult_id);
       $consult->loadRefPlageConsult();
-        
+
       // Si la facture existe déjà on la met à jour
       $where = array();
       $ljoin = array();
@@ -310,7 +313,7 @@ class CFacture extends CMbObject {
         $where["facture_liaison.object_class"]  = " = 'CConsultation'";
         $where["facture_liaison.facture_class"] = " = '$this->_class'";
       }
-      
+
       //Si la facture existe déjà
       if ($this->loadObject($where, null, "facture_id", $ljoin)) {
         //Dans le cas Suisse
@@ -337,37 +340,53 @@ class CFacture extends CMbObject {
         }
       }
     }
-    
+    $_sejour_id = null;
+    //Lors de la création d'une facture de séjour
+    if ($this->_sejour_id) {
+      $_sejour_id = $this->_sejour_id;
+    }
+
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
     }
-    
+
+    if ($_sejour_id) {
+      $ligne = new CFactureLiaison();
+      $ligne->facture_id    = $this->_id;
+      $ligne->facture_class = $this->_class;
+      $ligne->object_id     = $_sejour_id;
+      $ligne->object_class  = "CSejour";
+      if (!$ligne->loadMatchingObject()) {
+        $ligne->store();
+      }
+    }
+
     if ($create_lignes) {
       $this->creationLignesFacture();
     }
   }
-  
+
   /**
    * Redéfinition du delete
-   * 
+   *
    * @return void|string
-  **/
+   **/
   function delete() {
     if (count($this->_ref_reglements)) {
       return "Vous ne pouvez pas supprimer une facture ayant des règlements";
     }
-  
+
     if (count($this->_ref_relances)) {
       return "Vous ne pouvez pas supprimer une facture ayant des relances";
     }
-    
+
     if (CModule::getActive("dPfacturation")) {
       $where = array();
       $where["facture_id"]    = " = '$this->_id'";
       $where["facture_class"] = " = '$this->_class'";
       $where[] = "object_class = 'Sejour' OR object_class = 'CConsultation'";
-      
+
       $liaison = new CFactureLiaison();
       $liaisons = $liaison->loadList($where);
       foreach ($liaisons as $lien) {
@@ -376,18 +395,18 @@ class CFacture extends CMbObject {
         }
       }
     }
-    
+
     // Standard delete
     if ($msg = parent::delete()) {
       return $msg;
     }
   }
-  
+
   /**
    * Suppression d'une consult dans la facture
-   * 
+   *
    * @return void
-  **/
+   **/
   function cancelConsult() {
     if ($this->_consult_id) {
       $this->loadRefPatient();
@@ -407,12 +426,12 @@ class CFacture extends CMbObject {
       }
     }
   }
-  
+
   /**
    * Mise à jour des montant secteur 1, 2 et totaux, utilisés pour la compta
-   * 
+   *
    * @return void
-  **/
+   **/
   function updateMontants(){
     $this->_secteur1  = 0;
     $this->_secteur2  = 0;
@@ -452,7 +471,7 @@ class CFacture extends CMbObject {
           $this->_secteur1  += $item->_montant_total_base;
           $this->_secteur2  += $item->_montant_total_depassement;
         }
-        
+
         if (!CAppUI::conf("dPccam CCodeCCAM use_cotation_ccam")) {
           $this->du_patient = $this->_secteur1;
           $this->du_tiers   = $this->_secteur2;
@@ -460,12 +479,12 @@ class CFacture extends CMbObject {
       }
     }
   }
-  
+
   /**
    * Eclatement des montants de la facture utilisé uniquement en Suisse
-   * 
+   *
    * @return void
-  **/
+   **/
   function eclatementTarmed() {
     if ($this->npq) {
       $this->remise = sprintf("%.2f", (10*(($this->du_patient+$this->du_tiers)*$this->_coeff))/100);
@@ -474,14 +493,14 @@ class CFacture extends CMbObject {
     $this->_montant_factures[] = $this->du_patient + $this->du_tiers;
     $this->loadNumerosBVR();
   }
-          
+
   /**
    * Chargement du patient concerné par la facture
-   * 
+   *
    * @param bool $cache cache
-   * 
+   *
    * @return CPatient
-  **/
+   **/
   function loadRefPatient($cache = 1) {
     if (!$this->_ref_patient) {
       $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
@@ -489,47 +508,47 @@ class CFacture extends CMbObject {
     }
     return $this->_ref_patient;
   }
-   
+
   /**
    * Chargement du praticien de la facture
-   * 
+   *
    * @return CUser
-  **/
+   **/
   function loadRefPraticien() {
     if (!$this->_ref_praticien) {
       $this->_ref_praticien = $this->loadFwdRef("praticien_id", true);
     }
     return $this->_ref_praticien;
   }
-  
+
   /**
    * Chargement des règlements de la facture
-   * 
+   *
    * @return $this->_ref_reglements
-  **/
+   **/
   function loadRefsReglements() {
     $this->_montant_sans_remise = 0;
     $this->_montant_avec_remise = 0;
-    
+
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
       foreach ($this->_montant_factures as $_montant) {
         $this->_montant_sans_remise += $_montant;
       }
       $this->_montant_avec_remise = $this->_montant_sans_remise - $this->remise;
     }
-    
+
     if (!$this->_montant_sans_remise) {
       $this->_montant_sans_remise = $this->du_patient  + $this->du_tiers;
       $this->_montant_avec_remise = $this->_montant_sans_remise - $this->remise;
     }
-    
+
     $this->_du_restant_patient = $this->du_patient;
     $this->_du_restant_tiers   = $this->du_tiers  ;
-    
+
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
       $this->_du_restant_patient = $this->_montant_avec_remise;
     }
-    
+
     // Calcul des dus
     $this->_reglements_total_patient = 0.00;
     $this->_reglements_total_tiers   = 0.00;
@@ -544,7 +563,7 @@ class CFacture extends CMbObject {
         $this->_du_restant_patient       -= $_reglement->montant;
         $this->_reglements_total_patient += $_reglement->montant;
       }
-      
+
       if ($_reglement->emetteur == "tiers") {
         $this->_ref_reglements_tiers[] = $_reglement;
         $this->_du_restant_tiers       -= $_reglement->montant;
@@ -559,9 +578,9 @@ class CFacture extends CMbObject {
 
   /**
    * Dans la cas de la cotation d'acte Tarmed un facture comporte un coefficient (entre 0 et 1)
-   * 
+   *
    * @return void
-  **/
+   **/
   function loadRefCoeffFacture() {
     $this->_coeff = 1;
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
@@ -579,45 +598,45 @@ class CFacture extends CMbObject {
       }
     }
   }
-  
+
   /**
    * Chargement de l'assurance de la facture si elle a été choisie
-   * 
+   *
    * @return object
-  **/
+   **/
   function loadRefAssurance() {
     $this->_ref_assurance_maladie = $this->loadFwdRef("assurance_maladie", true);
     $this->_ref_assurance_accident = $this->loadFwdRef("assurance_accident", true);
     return $this->_ref_assurance_maladie;
   }
-  
+
   /**
    * Chargement des séjours et des consultations de la facture
-   * 
+   *
    * @return void
-  **/
+   **/
   function loadRefsObjects(){
     $this->loadRefsConsultation();
     $this->loadRefsSejour();
     $this->loadRefCoeffFacture();
-    
+
     // Eclatement des factures
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
       $this->eclatementTarmed();
     }
-    
+
     $this->updateMontants();
   }
   /**
    * Chargement de toutes les consultations de la facture
-   * 
+   *
    * @return object
-  **/
+   **/
   function loadRefsConsultation() {
     if (count($this->_ref_consults)) {
       return $this->_ref_consults;
     }
-    
+
     $consult = new CConsultation();
     if ($this->_id) {
       if (CModule::getActive("dPfacturation")) {
@@ -645,11 +664,11 @@ class CFacture extends CMbObject {
       }
       $this->_ref_consults = $consult->loadMatchingList();
     }
-    
+
     if (count($this->_ref_consults) > 0) {
       // Chargement des actes de consultations
       foreach ($this->_ref_consults as $_consult) {
-        $_consult->loadRefsActes();
+        $_consult->loadRefsActes($this->numero);
         $_consult->loadExtCodesCCAM();
         $this->rangeActes($_consult);
       }
@@ -662,12 +681,12 @@ class CFacture extends CMbObject {
     }
     return $this->_ref_consults;
   }
-  
+
   /**
    * Chargement de tous les séjours de la facture
-   * 
+   *
    * @return object
-  **/
+   **/
   function loadRefsSejour() {
     if (count($this->_ref_sejours)) {
       return $this->_ref_sejours;
@@ -679,7 +698,7 @@ class CFacture extends CMbObject {
       $where["facture_liaison.facture_id"]    = " = '$this->_id'";
       $where["facture_liaison.facture_class"] = " = '$this->_class'";
       $where["facture_liaison.object_class"]  = " = 'CSejour'";
-      
+
       $sejour = new CSejour();
       $this->_ref_sejours = $sejour->loadList($where, "sejour_id", null, "sejour_id", $ljoin);
       // Chargement des actes de séjour
@@ -687,10 +706,10 @@ class CFacture extends CMbObject {
         /** @var CSejour $sejour*/
         $sejour->loadRefsOperations();
         foreach ($sejour->_ref_operations as $op) {
-          $op->loadRefsActes();
+          $op->loadRefsActes($this->numero);
           $this->rangeActes($op);
         }
-        $sejour->loadRefsActes();
+        $sejour->loadRefsActes($this->numero);
         $this->rangeActes($sejour);
       }
     }
@@ -706,12 +725,12 @@ class CFacture extends CMbObject {
     }
     return $this->_ref_sejours;
   }
-  
+
   /**
    * Chargement des items de la facture
-   * 
+   *
    * @return object
-  **/
+   **/
   function loadRefsItems(){
     $item =  new CFactureItem();
     $item->object_id   = $this->_id;
@@ -726,27 +745,27 @@ class CFacture extends CMbObject {
     }
     return $this->_ref_items;
   }
-  
+
   /**
-   * Ligne de report pour calculer un numéro de BVR pour la facture 
-   * 
+   * Ligne de report pour calculer un numéro de BVR pour la facture
+   *
    * @param string $report l'élément à reporter
-   * 
+   *
    * @return string
-  **/
+   **/
   function ligneReport($report){
     $etalon = ('09468271350946827135');
     $lignereport = substr($etalon, $report, 10);
     return $lignereport;
   }
-  
+
   /**
    * Création du numéro de contrôle du BVR à l'aide d'un modulo 10
-   * 
+   *
    * @param string $noatraiter le début du numéro de BVR pour obtenir le numéro de controle
-   * 
+   *
    * @return string
-  **/
+   **/
   function getNoControle($noatraiter){
     if (!$noatraiter) {
       $noatraiter = $this->du_patient + $this->du_tiers;
@@ -761,12 +780,12 @@ class CFacture extends CMbObject {
     $report =  (10 - $report) % 10;
     return $report;
   }
-  
+
   /**
-   * Chargement des différents numéros de BVR de la facture 
-   * 
+   * Chargement des différents numéros de BVR de la facture
+   *
    * @return void|string
-  **/
+   **/
   function loadNumerosBVR(){
     $use_tarmed = CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed");
     if ($use_tarmed && !count($this->_montant_factures_caisse)) {
@@ -774,20 +793,20 @@ class CFacture extends CMbObject {
       $this->_total_caisse = 0;
       $this->_autre_tarmed = 0;
       $this->loadTotaux();
-      
+
       $montant_prem = round($this->_total_tarmed * $this->_coeff + $this->_autre_tarmed, 1);
       $this->_total_caisse = round($this->_total_caisse, 1);
-      
+
       if ($montant_prem < 0) {
         $montant_prem = 0;
       }
       if ($this->_total_tarmed || $this->_autre_tarmed) {
-         $this->_montant_factures_caisse[0] = sprintf("%.2f", $montant_prem - $this->remise);
+        $this->_montant_factures_caisse[0] = sprintf("%.2f", $montant_prem - $this->remise);
       }
       if ($this->_total_caisse > 0) {
         $this->_montant_factures_caisse[1] = $this->_total_caisse;
       }
-      
+
       $this->_montant_sans_remise = round($montant_prem + $this->_total_caisse, 1);
       $this->_montant_avec_remise = round($this->_montant_sans_remise - $this->remise, 1);
       if (count($this->_montant_factures) == 1) {
@@ -796,11 +815,11 @@ class CFacture extends CMbObject {
       else {
         $this->_montant_factures_caisse = $this->_montant_factures;
       }
-    
+
       if (!$this->_ref_praticien) {
         $this->loadRefPraticien();
       }
-      
+
       // Le numéro de référence doit comporter 16 ou 27 chiffres
       $num = $this->_id;
       $nbcolonnes = 27 - strlen($this->_ref_praticien->debut_bvr);
@@ -810,7 +829,7 @@ class CFacture extends CMbObject {
         $this->num_reference = $num;
         $this->store();
       }
-      
+
       $genre = "01";
       $adherent2 = str_replace(' ', '', $this->_ref_praticien->adherent);
       $adherent2 = str_replace('-', '', $adherent2);
@@ -824,10 +843,10 @@ class CFacture extends CMbObject {
   }
 
   /**
-   * Chargement des différents numéros de BVR de la facture 
-   * 
+   * Chargement des différents numéros de BVR de la facture
+   *
    * @return void
-  **/
+   **/
   function loadTotaux() {
     $this->loadRefsItems();
     if ($this->cloture && count($this->_ref_items)) {
@@ -873,14 +892,14 @@ class CFacture extends CMbObject {
       }
     }
   }
-  
+
   /**
    * Calcul des totaux à partir d'un objet
-   * 
+   *
    * @param object $object objet référence
-   * 
+   *
    * @return void
-  **/
+   **/
   function loadTotauxObject($object) {
     foreach ($object->_ref_actes_tarmed as $acte_tarmed) {
       $this->_total_tarmed += $acte_tarmed->_montant_facture * $acte_tarmed->quantite;
@@ -899,12 +918,12 @@ class CFacture extends CMbObject {
   }
   /**
    * Fonction de création des lignes(items) de la facture lorsqu'elle est cloturée
-   * 
+   *
    * @param object  $object objet référence
    * @param boolean $val    item
-   * 
+   *
    * @return void
-  **/
+   **/
   function rangeActes($object, $val = true) {
     $objets = $val ? $object->_ref_actes : $object->_ref_items;
     $type = $val ? "_class" : "type";
@@ -912,31 +931,31 @@ class CFacture extends CMbObject {
       foreach ($objets as $key => $acte) {
         switch ($acte->$type) {
           case "CActeTarmed" :
-            $this->_ref_actes_tarmed[$key] = $acte;
+            $this->_ref_actes_tarmed[] = $acte;
             break;
           case "CActeCaisse" :
-            $this->_ref_actes_caisse[$key] = $acte;
+            $this->_ref_actes_caisse[] = $acte;
             break;
           case "CActeNGAP" :
-            $this->_ref_actes_ngap[$key] = $acte;
+            $this->_ref_actes_ngap[] = $acte;
             break;
           case "CActeCCAM" :
             /** @var CActeCCAM $acte*/
             if ($type == "_class") {
               $acte->loadRefCodeCCAM();
             }
-            $this->_ref_actes_ccam[$key] = $acte;
+            $this->_ref_actes_ccam[] = $acte;
             break;
         }
       }
     }
   }
-  
+
   /**
    * Fonction de création des lignes(items) de la facture lorsqu'elle est cloturée
-   * 
+   *
    * @return void
-  **/
+   **/
   function creationLignesFacture() {
     $this->loadRefCoeffFacture();
     $this->loadRefsConsultation();
@@ -958,12 +977,12 @@ class CFacture extends CMbObject {
       }
     }
   }
-  
+
   /**
    * Fonction permettant de savoir si la facture doit être relancée
-   * 
+   *
    * @return boolean
-  **/
+   **/
   function isRelancable() {
     $this->_is_relancable = false;
 
@@ -1000,12 +1019,12 @@ class CFacture extends CMbObject {
 
     return $this->_is_relancable;
   }
-  
+
   /**
    * Calcul du montant de la retrocession pour la facture
-   * 
+   *
    * @return boolean
-  **/
+   **/
   function updateMontantRetrocession() {
     $this->_montant_retrocession = 0;
     $this->loadRefPraticien();

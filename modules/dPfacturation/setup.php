@@ -314,6 +314,11 @@ class CSetupdPfacturation extends CSetup {
     $query = "ALTER TABLE `factureitem`
                 DROP `forfait`;";
     $this->addQuery($query);
-    $this->mod_version = "0.35";
+    $this->makeRevision("0.35");
+
+    $query = "ALTER TABLE `facture_etablissement`
+                ADD `numero` INT (11) UNSIGNED NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+    $this->mod_version = "0.36";
   }
 }

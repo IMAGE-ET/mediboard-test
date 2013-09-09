@@ -1,10 +1,23 @@
+<script>
+  gestionFacture = function() {
+    var url = new Url('facturation', 'vw_factures_sejour');
+    url.addParam('facture_class', 'CFactureEtablissement');
+    url.addParam('patient_id'   , '{{$sejour->patient_id}}');
+    url.addParam('object_id'    , '{{$sejour->_id}}');
+    url.addParam('object_class' , '{{$sejour->_class}}');
+    url.requestModal();
+  }
+</script>
 <tr>
   <th colspan="4" class="category">
     {{if $sejour->patient_id}}
       <button style="float:right;" type="button" class="add notext" onclick="Correspondant.edit(0, '{{$patient->_id}}', null);"></button>
     {{/if}}
-     Assurance
-   </th>
+    Assurance
+    {{if $sejour->_ref_factures|@count && $sejour->_ref_last_facture->_id}}
+      <button style="float:right;" type="button" class="new" onclick="gestionFacture();">Gestion des factures</button>
+    {{/if}}
+  </th>
 </tr>
 <tr>
   {{if $conf.dPplanningOp.CFactureEtablissement.show_type_facture}}
@@ -42,8 +55,8 @@
         $V(form._assurance_maladie_view, selected.down(".newcode").getText(), false);
         $V(form._assurance_maladie, selected.down(".newcode").get("id"), false);
         {{if $form == "editOpEasy"}}
-          var form2 = getForm('editSejour');
-          $V(form2._assurance_maladie, selected.down(".newcode").get("id"), false);
+        var form2 = getForm('editSejour');
+        $V(form2._assurance_maladie, selected.down(".newcode").get("id"), false);
         {{/if}}
       }
     });
@@ -61,7 +74,7 @@
   <th>{{mb_label object=$sejour field="_rques_assurance_maladie"}}</th>
   <td colspan="3">
     {{mb_field object=$sejour field="_rques_assurance_maladie" onchange="Value.synchronize(this, 'editSejour');checkAssurances();"
-      form="editSejour" aidesaisie="validateOnBlur: 0"}}
+    form="editSejour" aidesaisie="validateOnBlur: 0"}}
   </td>
 </tr>
 
@@ -95,7 +108,7 @@
     <th>{{mb_label object=$sejour field="_rques_assurance_accident"}}</th>
     <td colspan="3">
       {{mb_field object=$sejour field="_rques_assurance_accident" onchange="Value.synchronize(this, 'editSejour');checkAssurances();"
-        form="editSejour" aidesaisie="validateOnBlur: 0"}}
+      form="editSejour" aidesaisie="validateOnBlur: 0"}}
     </td>
   </tr>
 {{/if}}

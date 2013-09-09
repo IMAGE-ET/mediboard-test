@@ -15,6 +15,7 @@ refreshList = function(){
   url.addElement(oForm._date_max);
   url.addElement(oForm.type_date_search);
   url.addElement(oForm.num_facture);
+  url.addElement(oForm.numero);
   {{if $conf.dPfacturation.CRelance.use_relances}}
     url.addParam("etat_relance" , $V(oForm.etat_relance) ? 1 : 0 );
   {{/if}}
@@ -72,7 +73,17 @@ Main.add(function () {
             }
           </script>
         </td>
-        <td colspan="4"></td>
+        <th>{{mb_title object=$facture field=numero}}</th>
+        <td>
+          <select name="numero">
+            <option value="0" {{if $numero == "0"}} selected="selected" {{/if}}>-- Toutes</option>
+            <option value="1" {{if $numero == "1"}} selected="selected" {{/if}}>1</option>
+            <option value="2" {{if $numero == "2"}} selected="selected" {{/if}}>2</option>
+            <option value="3" {{if $numero == "3"}} selected="selected" {{/if}}>3</option>
+            </option>
+          </select>
+        </td>
+        <td colspan="2"></td>
       </tr>
       <tr>
         <th></th>
