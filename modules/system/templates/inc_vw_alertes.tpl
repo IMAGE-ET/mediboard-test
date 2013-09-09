@@ -33,18 +33,16 @@
   {{foreach from=$alerts item=_alert}}
   <tr>
     <td class="narrow">
-      {{if $object->_canEdit}}
-        <form name="editAlert-{{$_alert->_id}}" action="?" method="post"
-              onsubmit="return onSubmitFormAjax(this, function(){
-                $('tooltip-alerts-{{$level}}-{{$object_guid}}').up().remove();
-                Alert.callback();})">
-          <input type="hidden" name="m" value="system" />
-          <input type="hidden" name="dosql" value="do_alert_aed" />
-          {{mb_key object=$_alert}}
-          <input type="hidden" name="handled" value="1" />
-          <button type="submit" class="tick notext">Traiter</button>
-        </form>
-      {{/if}}
+      <form name="editAlert-{{$_alert->_id}}" action="?" method="post"
+            onsubmit="return onSubmitFormAjax(this, function(){
+              $('tooltip-alerts-{{$level}}-{{$object_guid}}').up().remove();
+              Alert.callback();})">
+        <input type="hidden" name="m" value="system" />
+        <input type="hidden" name="dosql" value="do_alert_aed" />
+        {{mb_key object=$_alert}}
+        <input type="hidden" name="handled" value="1" />
+        <button type="submit" class="tick notext">Traiter</button>
+      </form>
     </td>
     <td class="text compact">
       {{mb_value object=$_alert field=comments}}
