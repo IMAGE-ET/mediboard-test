@@ -85,23 +85,25 @@ $hours_start      = CPlageconsult::$hours_start;
 $where            = array();
 $where["chir_id"] = "= '$chirSel'";
 
+//plages consult
 for ($i = 0; $i < 7; $i++) {
   $date             = CMbDT::date("+$i day", $debut);
   $where["date"]    = "= '$date'";
   /** @var CPlageconsult[] $plagesConsult */
   $plagesConsult = $plageConsult->loadList($where);
-  
+  $color = "#BFB";
+
   foreach ($plagesConsult as $_consult) {
     $_consult->loadFillRate();
     $_consult->countPatients();
-    ajoutEvent($planning, $_consult, $date, $_consult->libelle, "#BFB", "consultation");
+    ajoutEvent($planning, $_consult, $date, $_consult->libelle, $color, "consultation");
   }
 }
 
 $where = array();
 $where[] = "chir_id = '$chirSel' OR anesth_id = '$chirSel'";
 $operation = new COperation();
-
+//Operation
 for ($i = 0; $i < 7; $i++) {
   $date             = CMbDT::date("+$i day", $debut);
   $where["date"]    = "= '$date'";
@@ -123,7 +125,17 @@ for ($i = 0; $i < 7; $i++) {
   foreach ($plagesOp as $_op) {
     $_op->loadRefSalle();
     $_op->getNbOperations();
-    ajoutEvent($planning, $_op, $date, $_op->_ref_salle->nom, "#BCE", "operation");
+    $color = "#BCE";
+
+    //to check if group is present group
+    $g = CGroups::loadCurrent();
+    $_op->loadRefSalle();
+    $_op->_ref_salle->loadRefBloc();
+    if ($_op->_ref_salle->_ref_bloc->group_id != $g->_id) {
+      $color = "#9FEED8";
+    }
+
+    ajoutEvent($planning, $_op, $date, $_op->_ref_salle->nom, $color, "operation");
   }
 }
 

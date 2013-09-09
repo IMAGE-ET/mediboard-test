@@ -78,6 +78,10 @@ Main.add(function () {
             <td style="background-color:#BCE;">&nbsp;&nbsp;</td>
             <td>Plage opératoire</td>
           </tr>
+          <tr>
+            <td style="background-color:#9feed8;">&nbsp;&nbsp;</td>
+            <td>Plage opératoire (Autre Etab.)</td>
+          </tr>
         </table>
       </div>
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$prec}}" >&lt;&lt;&lt;</a>
