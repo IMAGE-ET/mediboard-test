@@ -19,6 +19,7 @@ $board     = CValue::get("board", 0);
 $boardItem = CValue::get("boardItem", 0);
 
 $nb_canceled = 0;
+$current_group = CGroups::loadCurrent();
 
 // Urgences du jour
 $list_urgences = array();
@@ -32,6 +33,7 @@ if ($userSel->_id) {
   if (!$canceled) {
     $where["annulee"] = "= '0'";
   }
+  /** @var COperation[] $list_urgences */
   $list_urgences = $operation->loadList($where, "annulee, date");
 
   $where["annulee"] = "= '1'";
@@ -83,10 +85,14 @@ if ($userSel->_id) {
     $in = " OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($secondary_specs));
   }
   
-  $where[] = "plagesop.chir_id = '$userSel->_id' OR plagesop.anesth_id = '$userSel->_id' OR plagesop.spec_id = '$userSel->function_id' $in";
+  $where[] = "plagesop.chir_id = '$userSel->_id'
+              OR plagesop.anesth_id = '$userSel->_id'
+              OR plagesop.spec_id = '$userSel->function_id' $in";
   $order = "debut, salle_id";
   
   $plageop = new CPlageOp();
+
+  /** @var CPlageOp[] $list_plages */
   $list_plages = $plageop->loadList($where, $order);
 
   foreach ($list_plages as $_plage) {
@@ -94,10 +100,17 @@ if ($userSel->_id) {
     $op_canceled->annulee = 1;
     $op_canceled->plageop_id = $_plage->_id;
     $nb_canceled += $op_canceled->countMatchingList();
-    
+
     $_plage->loadRefsFwd();
     $_plage->loadRefsNotes();
-    
+
+    //compare current group with bloc group
+    $_plage->loadRefSalle();
+    $_plage->_ref_salle->loadRefBloc();
+    if ($_plage->_ref_salle->_ref_bloc->group_id != $current_group->_id) {
+      $_plage->_ref_salle->_ref_bloc->loadRefGroup();
+    }
+
     $where = array();
     if ($userSel->_id && !$userSel->isAnesth()) {
       $where["chir_id"] = "= '$userSel->_id'";
