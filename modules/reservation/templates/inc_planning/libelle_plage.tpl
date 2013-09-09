@@ -9,12 +9,17 @@
  * @link     http://www.mediboard.org
 *}}
 
+{{mb_script module="dPplanningOp" script="prestations" ajax=true}}
+
 <span style="display: none;" data-duree="{{$sejour->_duree}}" data-entree_prevue='{{$sejour->entree_prevue}}' data-sortie_prevue='{{$sejour->sortie_prevue}}' data-sejour_id='{{$sejour->_id}}' data-preop='{{if $operation->presence_preop}}{{$operation->presence_preop|date_format:"%H:%M"}}{{else}}00:00{{/if}}' data-postop='{{if $operation->presence_postop}}{{$operation->presence_postop|date_format:"%H:%M"}}{{else}}00:00{{/if}}' data-traitement='{{$charge->_id}}' data-pec='{{$sejour->type_pec}}'></span>
 <!-- CADRE DROIT -->
 <span style="float:right; text-align: right">
   <!-- only switzerland -->
   {{if $conf.ref_pays == 2 }}
-    {{if $liaison_sejour}}<strong>{{$liaison_sejour}}</strong>{{/if}}{{if $conf.dPplanningOp.CSejour.use_charge_price_indicator && $charge->_id}}<strong style='color:blue; background: white;padding:2px'>{{$charge->code}}</strong>
+    {{if $liaison_sejour}}
+      <strong onclick="Prestations.edit('{{$sejour->_id}}', 'sejour')">{{$liaison_sejour}}</strong>
+    {{/if}}
+    {{if $conf.dPplanningOp.CSejour.use_charge_price_indicator && $charge->_id}}<strong style='color:blue; background: white;padding:2px'>{{$charge->code}}</strong>
   {{/if}}
 
 
