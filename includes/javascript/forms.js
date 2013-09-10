@@ -396,6 +396,8 @@ function prepareForm(oForm) {
         props.min || props.max || props.bool || props.ref || props.pct || props.num
       ), "'"+oElement.id+"' mask may conflit with other props");
     }
+
+    var observeClick = (Prototype.Browser.IE && document.documentMode == 8) && (sType === "radio" || sType === "checkbox");
     
     // Can null
     if (props.canNull && !readonly) {
@@ -403,6 +405,10 @@ function prepareForm(oForm) {
       oElement.observe("change", canNullOK)
               .observe("keyup",  canNullOK)
               .observe("ui:change", canNullOK);
+
+      if (observeClick) {
+        oElement.observe("click", canNullOK);
+      }
     }
 
     // Not null
@@ -411,6 +417,10 @@ function prepareForm(oForm) {
       oElement.observe("change", notNullOK)
               .observe("keyup",  notNullOK)
               .observe("ui:change", notNullOK);
+
+      if (observeClick) {
+        oElement.observe("click", notNullOK);
+      }
     }
     else {
       var label = Element.getLabel(oElement);
