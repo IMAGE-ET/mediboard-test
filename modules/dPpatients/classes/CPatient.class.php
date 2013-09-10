@@ -895,6 +895,7 @@ class CPatient extends CPerson {
     // Détermine la civilité du patient automatiquement (utile en cas d'import)
     $this->completeField("civilite");
     if ($this->civilite === "guess" || !$this->civilite) {
+      $this->naissance = CMbDT::dateFromLocale($this->naissance);
       $this->evalAge();
       $this->civilite = ($this->_annees < CAppUI::conf("dPpatients CPatient adult_age")) ?
         "enf" : (($this->sexe === "m") ? "m" : "mme");
