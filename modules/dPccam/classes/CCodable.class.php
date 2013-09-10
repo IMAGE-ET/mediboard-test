@@ -920,6 +920,10 @@ class CCodable extends CMbObject {
         $acte->object_class = $this->_class;
         $acte->executant_id = $chir;
         $acte->execution = $this->_datetime;
+        if ($acte_class == "CActeTarmed" || $acte_class == "CActeCCAM") {
+          $date = $this->_class == "CConsultation" ? "_date" : "date";
+          $acte->date = $this->$date;
+        }
         if (!$acte->countMatchingList()) {
           if ($msg = $acte->store()) {
             return $msg;
