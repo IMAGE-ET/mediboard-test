@@ -208,11 +208,30 @@ class CActeNGAP extends CActe {
     }
 
     if ($this->complement == "F") {
-      $this->montant_base += 19.06;
+      $ds = CSQLDataSource::get("ccamV2");
+      $query = "SELECT `tarif`
+      FROM `codes_ngap`
+      WHERE `code` = 'F';";
+      $query = $ds->prepare($query);
+      $this->montant_base += $ds->loadResult($query);
     }
 
     if ($this->complement == "N") {
-      $this->montant_base += 25;
+      $ds = CSQLDataSource::get("ccamV2");
+      $query = "SELECT `tarif`
+      FROM `codes_ngap`
+      WHERE `code` = 'MN';";
+      $query = $ds->prepare($query);
+      $this->montant_base += $ds->loadResult($query);
+    }
+
+    if ($this->complement == "U") {
+      $ds = CSQLDataSource::get("ccamV2");
+      $query = "SELECT `tarif`
+      FROM `codes_ngap`
+      WHERE `code` = 'U';";
+      $query = $ds->prepare($query);
+      $this->montant_base += $ds->loadResult($query);
     }
 
     return $this->montant_base;
