@@ -159,7 +159,7 @@
           {{/if}}
           {{assign var=prescription value=$_operation->_ref_sejour->_ref_prescription_sejour}}
           {{if $prescription && $prescription->_id && $prescription->_counts_by_chapitre|@array_sum}}
-            <img src="images/icons/ampoule_blue.png" style="float: right;" />
+            <img src="images/icons/ampoule_blue.png" style="float: right;" title="{{$prescription->_counts_by_chapitre|@array_sum}} ligne(s) prescrite(s) par le praticien" />
           {{/if}}
           {{if $_operation->annulee}}
             [ANNULEE]
