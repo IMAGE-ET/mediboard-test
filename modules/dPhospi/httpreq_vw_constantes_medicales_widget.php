@@ -37,7 +37,7 @@ $options = array(
     "upFillColor" => '#C0D800',
     "downFillColor" => '#C0D800',
     "lineWidth" => 1,
-    "wickLineWidth" => 5,
+    "wickLineWidth" => 3,
   ),
   //"markers" => array("show" => true),
   "mouse" => array("track" => true, "position" => "nw", "relative" => true),
