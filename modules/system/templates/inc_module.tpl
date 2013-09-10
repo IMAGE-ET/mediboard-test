@@ -92,8 +92,8 @@
     <div class="
       {{if $status == 'uptodate'}}info{{/if}}
       {{if $status == 'obsolete'}}warning{{/if}}
-      {{if $status == 'unavailable'}}error{{/if}}">
-      {{$dsn}}
+      {{if $status == 'unavailable'}}error{{/if}}" title="{{$dsn.1}}">
+      {{$dsn.0}}
     </div>
     {{/foreach}}
     {{/foreach}}

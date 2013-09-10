@@ -109,7 +109,7 @@ class CSetup {
    * @return void
    */
   function addDatasource($dsn, $query) {
-    $this->datasources[$dsn] = $query;
+    $this->datasources[$dsn][] = $query;
   }
 
   /**
@@ -119,12 +119,14 @@ class CSetup {
    */
   function getDatasources() {
     $dsns = array();
-    foreach ($this->datasources as $dsn => $query) {
+    foreach ($this->datasources as $dsn => $_queries) {
       if ($ds = @CSQLDataSource::get($dsn)) {
-        $dsns[$ds->loadResult($query) ? "uptodate" : "obsolete"][] = $dsn;
+        foreach ($_queries as $_query) {
+          $dsns[$ds->loadResult($_query) ? "uptodate" : "obsolete"][] = array ($dsn, $_query);
+        }
       }
       else {
-        $dsns["unavailable"][] = $dsn;
+        $dsns["unavailable"][] = array ($dsn, "");
       }
     }
     
