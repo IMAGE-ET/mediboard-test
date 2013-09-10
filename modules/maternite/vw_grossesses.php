@@ -24,7 +24,7 @@ $where["terme_prevu"] = "BETWEEN '$date_min' AND '$date_max'";
 $ljoin["patients"]    = "patients.patient_id = grossesse.parturiente_id";
 
 $grossesse = new CGrossesse();
-$grossesses = $grossesse->loadList($where, "terme_prevu DESC, nom ASC", null, null, $ljoin);
+$grossesses = $grossesse->loadGroupList($where, "terme_prevu DESC, nom ASC", null, null, $ljoin);
 
 /** @var CStoredObject[] $grossesses */
 CMbObject::massLoadFwdRef($grossesses, "parturiente_id");

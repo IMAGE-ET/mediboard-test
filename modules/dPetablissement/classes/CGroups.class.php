@@ -166,6 +166,7 @@ class CGroups extends CMbObject {
     $backProps["extension_voies"]           = "CExtensionProduitVoie group_id";
     $backProps["daily_check_lists"]         = "CDailyCheckList group_id";
     $backProps["daily_check_list_types"]    = "CDailyCheckListType group_id";
+    $backProps["grossesses"]                = "CGrossesse group_id";
     return $backProps;
   }
 
