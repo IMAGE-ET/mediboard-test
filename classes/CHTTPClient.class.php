@@ -53,8 +53,8 @@ class CHTTPClient {
   /**
    * Execute a request POST
    *
-   * @param String[] $content Data to post
-   * @param bool     $close   Close the connection
+   * @param String $content uri of post data (http_build_query)
+   * @param bool   $close   Close the connection
    *
    * @return String
    */
@@ -67,8 +67,8 @@ class CHTTPClient {
   /**
    * Execute a request PUT
    *
-   * @param String[] $content Data to post
-   * @param bool     $close   Close the connection
+   * @param String $content uri of post data (http_build_query)
+   * @param bool   $close   Close the connection
    *
    * @return String
    */
