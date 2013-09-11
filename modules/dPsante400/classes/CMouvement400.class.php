@@ -303,6 +303,7 @@ class CMouvement400 extends CRecordSante400 {
   function loadOldest() {
     $query = "SELECT * FROM $this->base.$this->table 
       ORDER BY $this->trigger_key_field ASC";
+    $query.= $this->getFilterClause();
     $this->loadOne($query);
     $this->initialize();
   }
@@ -315,6 +316,7 @@ class CMouvement400 extends CRecordSante400 {
   function loadLatest() {
     $query = "SELECT * FROM $this->base.$this->table 
       ORDER BY $this->trigger_key_field DESC";
+    $query.= $this->getFilterClause();
     $this->loadOne($query);
     $this->initialize();
   }
