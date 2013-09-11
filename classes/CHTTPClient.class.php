@@ -65,6 +65,32 @@ class CHTTPClient {
   }
 
   /**
+   * Execute a request PUT
+   *
+   * @param String[] $content Data to post
+   * @param bool     $close   Close the connection
+   *
+   * @return String
+   */
+  function put($content, $close = true) {
+    $this->setOption(CURLOPT_PUT, true);
+    $this->setOption(CURLOPT_POSTFIELDS, $content);
+    return $this->executeRequest($close);
+  }
+
+  /**
+   * Execute a request DELETE
+   *
+   * @param bool $close Close the connection
+   *
+   * @return String
+   */
+  function delete($close = true) {
+    $this->setOption(CURLOPT_CUSTOMREQUEST, "DELETE");
+    return $this->executeRequest($close);
+  }
+
+  /**
    * Assign a HTTP authentification
    *
    * @param String $username Username for the site
