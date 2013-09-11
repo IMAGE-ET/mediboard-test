@@ -12,24 +12,30 @@
  */
  
 /**
- * Create a client for manipulate the request to a site
+ * Create a client for manipulate the request HTTP to a site
  */
 class CHTTPClient {
 
   private $handle;
   public $url;
   public $option = array();
-  public $local_cert;
-  public $ca_cert;
+  public $header = array();
 
   /**
    * Construct the HTTP client
    *
    * @param String $url Site URL
+   *
+   * @throws Exception
    */
   function __construct($url) {
     $this->url = $url;
-    $this->handle = curl_init($url);
+    $init      = curl_init($url);
+    if ($init === false) {
+      throw new Exception("Initialisation impossible");
+    }
+    $this->handle = $init;
+
   }
 
   /**
@@ -41,7 +47,20 @@ class CHTTPClient {
    */
   function get($close = true) {
     $this->setOption(CURLOPT_HTTPGET, true);
-    $this->setOption(CURLOPT_RETURNTRANSFER, true);
+    return $this->executeRequest($close);
+  }
+
+  /**
+   * Execute a request POST
+   *
+   * @param String[] $content Data to post
+   * @param bool     $close   Close the connection
+   *
+   * @return String
+   */
+  function post($content, $close = true) {
+    $this->setOption(CURLOPT_POST, true);
+    $this->setOption(CURLOPT_POSTFIELDS, $content);
     return $this->executeRequest($close);
   }
 
@@ -104,6 +123,9 @@ class CHTTPClient {
    * @throws Exception
    */
   private function createOption() {
+    if (count($this->header) !== 0) {
+      $this->option[CURLOPT_HTTPHEADER] = $this->header;
+    }
     $result = curl_setopt_array($this->handle, $this->option);
     if (!$result) {
       throw new Exception("Impossible d'ajouter une option");
@@ -120,6 +142,7 @@ class CHTTPClient {
    */
   function executeRequest($close = true) {
     $handle = $this->handle;
+    $this->setOption(CURLOPT_RETURNTRANSFER, true);
     $this->createOption();
 
     $result = curl_exec($handle);
