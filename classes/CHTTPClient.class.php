@@ -73,7 +73,7 @@ class CHTTPClient {
    * @return String
    */
   function put($content, $close = true) {
-    $this->setOption(CURLOPT_PUT, true);
+    $this->setOption(CURLOPT_CUSTOMREQUEST, "PUT");
     $this->setOption(CURLOPT_POSTFIELDS, $content);
     return $this->executeRequest($close);
   }
