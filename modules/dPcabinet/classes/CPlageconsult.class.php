@@ -89,6 +89,7 @@ class CPlageconsult extends CPlageHoraire {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["consultations"] = "CConsultation plageconsult_id";
+    $backProps["identifiants"] = "CIdSante400 object_id cascade";
     return $backProps;
   }
 
