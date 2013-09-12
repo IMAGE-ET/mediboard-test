@@ -155,7 +155,7 @@ var PageFormat = {
     <td style="margin: 4px; text-align: center;">
       <div id="page_preview" style="background: #fff; border: 1px solid #000;">
         <div style="border: 1px dotted #666; width: 100%; height: 100%; margin: -1px; font-size: 2px; text-align: left; white-space: normal; overflow: hidden;">
-          {{include file="lorem_ipsum.tpl"}}
+          {{mb_include template=lorem_ipsum}}
         </div>
       </div>
     </td>

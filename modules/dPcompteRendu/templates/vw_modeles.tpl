@@ -77,7 +77,7 @@ Modele = {
   
   {{foreach from=$modeles key=owner item=_modeles}}
 	  <div id="owner-{{$owner}}" style="display: none;">
-	  {{include file=inc_modeles.tpl modeles=$modeles.$owner}}
+	  {{mb_include template=inc_modeles modeles=$modeles.$owner}}
 	  </div>
   {{/foreach}}
   

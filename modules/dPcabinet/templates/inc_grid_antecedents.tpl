@@ -109,7 +109,7 @@ Main.add(function () {
   <input type="hidden" name="pref[order_mode_grille]" value="{{$order_mode_grille|@json}}" />
 </form>
 
-<div class="modal" id="complete_atcd" style="display: none; width: 400px; height: 180px;">
+<div id="complete_atcd" style="display: none; width: 400px; height: 180px;">
  <table class="form">
    <tr>
      <th class="title">

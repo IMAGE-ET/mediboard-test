@@ -8,7 +8,7 @@
  */
 
 CKEDITOR.plugins.add('mbfooter',{
-  requires: ['iframedialog'],
+  requires: ['dialog'],
   init:function(editor) {
     editor.addCommand('mbfooter', {exec: mbfooter_onclick});
     editor.ui.addButton('mbfooter', {label:'Pied de page', command:'mbfooter',
@@ -27,9 +27,8 @@ function mbfooter_onclick(editor) {
   if (oFooter.$.style.display == "block") {
     oFooter.$.style.display = "none";
     editor.getCommand('mbfooter').setState(CKEDITOR.TRISTATE_OFF);
+    return;
   }
-  else {
-   oFooter.$.style.display = "block";
+  oFooter.$.style.display = "block";
    editor.getCommand('mbfooter').setState(CKEDITOR.TRISTATE_ON);
-  }
 }

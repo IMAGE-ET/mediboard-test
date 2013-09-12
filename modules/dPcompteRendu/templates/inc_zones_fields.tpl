@@ -17,7 +17,7 @@
           {{/if}}">
           Correspondants
         </button>
-        <div class="modal" id="correspondants_courrier" style="display: none; width: 50%"></div>
+        <div id="correspondants_courrier" style="display: none; width: 50%"></div>
       </td>
       {{if $destinataires|@count}}
         <td id="destinataires" class="text">

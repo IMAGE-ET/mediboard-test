@@ -1,74 +1,82 @@
-{{if $templateManager->editor == "ckeditor" }}
+{{if $templateManager->editor != "ckeditor" }}
+  {{mb_return}}
+{{/if}}
 
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+
 {{mb_script path="lib/ckeditor/ckeditor.js"}}
 
 <style type="text/css">
   #cke_htmlarea {
     border: none;
   }
-/* Ugly hack to display labels with plugin buttons */
-  .cke_button_mbfields span.cke_label{display:inline !important}
-  .cke_button_mbhelpers span.cke_label{display:inline !important}
-  .cke_button_mbfreetext span.cke_label{display:inline !important}
-  .cke_button_mbfreetext span.cke_label{display:inline !important}
-  .cke_button_mblists span.cke_label{display:inline !important}
+  .cke_dialog_ui_vbox {
+    height: 100%;
+  }
+  /* Ugly hack to display labels with plugin buttons */
+  .cke_button__mbfields_label   { display: inline !important }
+  .cke_button__mbhelpers_label  { display: inline !important }
+  .cke_button__mbfreetext_label { display: inline !important }
+  .cke_button__mblists_label    { display: inline !important }
 </style>
 
-<script type="text/javascript">
+<script>
+  window.time_before_thumbs = {{$conf.dPcompteRendu.CCompteRendu.time_before_thumbs}};
+  window.time_before_thumbs *= 1000;
 
-window.time_before_thumbs = {{$conf.dPcompteRendu.CCompteRendu.time_before_thumbs}};
-window.time_before_thumbs *= 1000;
+  window.nb_lists = {{$templateManager->usedLists|@count}};
+  window.nb_textes_libres = {{$templateManager->textes_libres|@count}};
 
-window.nb_lists = {{$templateManager->usedLists|@count}};
-window.nb_textes_libres = {{$templateManager->textes_libres|@count}};
+  function initCKEditor() {
+    CKEDITOR.ispasting = false;
+    window.old_source = $("htmlarea").value;
+    var editor = CKEDITOR.replace("htmlarea", {customConfig: "../../?m=compteRendu&raw=mb_fckeditor"});
 
-function initCKEditor() {
-  CKEDITOR.ispasting = false;
-  window.old_source = $("htmlarea").value;
-  var editor = CKEDITOR.replace("htmlarea", {customConfig: "../../?m=dPcompteRendu&a=mb_fckeditor&suppressHeaders=1"});
-  
-  {{if $templateManager->font != ""}}
-    editor.addCss( 'body { font-family: {{$templateManager->font}} }' );
-  {{else}}
-    editor.addCss( 'body { font-family: {{$conf.dPcompteRendu.CCompteRendu.default_font}} }' );
-  {{/if}}
-  
-  {{if $templateManager->size != ""}}
-    editor.addCss( 'body { font-size: {{$templateManager->size}} }' );
-  {{else}}
-    editor.addCss( 'body { font-size: {{$conf.dPcompteRendu.CCompteRendu.default_size}} }' );
-  {{/if}}
-  
-  editor.on("instanceReady", function(e) {  
-    window.resizeEditor = function () {
-      var dims = document.viewport.getDimensions();
-      var greedyPane = $$(".greedyPane")[0];
-      
-      if (!greedyPane) {
-        return;
+    {{if $templateManager->font != ""}}
+      CKEDITOR.addCss( 'body { font-family: {{$templateManager->font}} }' );
+    {{else}}
+      CKEDITOR.addCss( 'body { font-family: {{$conf.dPcompteRendu.CCompteRendu.default_font}} }' );
+    {{/if}}
+
+    {{if $templateManager->size != ""}}
+      CKEDITOR.addCss( 'body { font-size: {{$templateManager->size}} }' );
+    {{else}}
+      CKEDITOR.addCss( 'body { font-size: {{$conf.dPcompteRendu.CCompteRendu.default_size}} }' );
+    {{/if}}
+
+    CKEDITOR.on("instanceReady", function(e) {
+      // Onbeforeunload called on IE after closing a dialog box
+      if (CKEDITOR.env.ie) {
+        e.editor.on('dialogShow', function(dialogShowEvent) {
+          $(dialogShowEvent.data._.element.$).select('a[href*="void(0)"]').each(function(elt) { elt.removeAttribute('href') });
+        });
       }
-      
-      CKEDITOR.instances.htmlarea.resize('', (dims["height"] - greedyPane.cumulativeOffset().top - 10));
-      if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
-        $("thumbs").style.height = (dims["height"] - greedyPane.cumulativeOffset().top - 10) +"px";
+
+      window.resizeEditor = function () {
+        var greedyPane = $$(".greedyPane")[0];
+
+        if (!greedyPane) {
+          return;
+        }
+
+        var dims = document.viewport.getDimensions();
+        CKEDITOR.instances.htmlarea.resize('', (dims["height"] - greedyPane.cumulativeOffset().top - 10));
+        if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
+          $("thumbs").style.height = (dims["height"] - greedyPane.cumulativeOffset().top - 10) +"px";
+        }
       }
-    }
 
-    var ck_instance = e.editor;
+      var ck_instance = e.editor;
 
-    {{if !$templateManager->valueMode}}
-  
-      // Le content editable des champs
-      // Les plugins qui ne doivent pas être pris en compte pour le changement de valeur pour contentEditable
-      var plugins = ["source", "undo", "redo", "pastefromword", "mbprint"];    
+      {{if !$templateManager->valueMode}}
+      var plugins = ["source", "undo", "redo", "pastefromword", "mbprint"];
       window.toggleContentEditable = function(state, obj) {
         if (Object.isUndefined(obj)) {
           obj = {data: null};
         }
-        
+
         if (ck_instance.document == null || (obj.data && plugins.indexOf(obj.data.name) != -1)) return;
-        
+
         if (Prototype.Browser.IE) {
           var spans = ck_instance.document.getBody().getElementsByTag("span").$;
           for (var i in spans) {
@@ -79,164 +87,253 @@ function initCKEditor() {
               }
               else {
                 span.contentEditable = false;
-              }              
+              }
             }
           }
-          return;          
-        }          
+          return;
+        }
+
         var spans_by_class = [];
         spans_by_class[0] = ck_instance.document.$.getElementsByClassName("field");
         spans_by_class[1] = ck_instance.document.$.getElementsByClassName("name");
-        
+
         for (var s = 0; s < spans_by_class.length; s++) {
           var spans = spans_by_class[s];
-          
-          // Bug : Firefox n'efface pas un span en contentEditable à false.
-          // Il faut passer par un double span.
+
           if (spans.length) {
             for (var i = 0; i < spans.length; i++) {
               var span = spans[i];
-              
+
               if (state) {
-                if (Prototype.Browser.Gecko) {
-                  var span_parent = Element.up(span);
-                  var parent = Element.up(span_parent);
-                  var span_copy = span.cloneNode(true);
-                  span_copy.removeAttribute("contentEditable");
-                  parent.insertBefore(span_copy, span_parent);
-                  Element.remove(span_parent);
-                }
-                else {
-                  span.removeAttribute("contentEditable");
-                }
+                span.removeAttribute("contentEditable");
               }
               else {
-                if (Prototype.Browser.Gecko) {
-                  var parent = Element.up(span);
-                  var span_insert = new DOM.span();
-                  var span_copy = span.cloneNode(true);
-                  
-                  span_insert.contentEditable = false;
-                  span_copy.contentEditable = true;
-                  
-                  span_insert.insert(span_copy);
-                  parent.insertBefore(span_insert, span);
-                  
-                  Element.remove(span);
-                }
-                else {           
-                  span.contentEditable = false;
-                }
+                span.contentEditable = false;
               }
             }
-          }            
+          }
         }
       };
-      
       window.toggleContentEditable(false);
-      
+
       ck_instance.on('beforeCommandExec' , window.toggleContentEditable.curry(true));
       ck_instance.on('afterCommandExec'  , window.toggleContentEditable.curry(false));
       ck_instance.on("beforeCombo"       , window.toggleContentEditable.curry(true));
       ck_instance.on("afterCombo"        , window.toggleContentEditable.curry(false));
-      ck_instance.on("beforerenderColors", window.toggleContentEditable.curry(true));
-      ck_instance.on("afterrenderColors" , window.toggleContentEditable.curry(false));
-    {{/if}}
-    
-    // Redimensionnement de l'éditeur
-    window.resizeEditor();
+      ck_instance.on("beforeRenderColors", window.toggleContentEditable.curry(true));
+      ck_instance.on("afterRenderColors" , window.toggleContentEditable.curry(false));
+      {{/if}}
 
-    // Redimensionnement automatique de l'éditeur en même temps que celui de la fenêtre.
-    Event.observe(window, "resize", function(e){
+      // Redimensionnement de l'éditeur
       window.resizeEditor();
-    });
 
-    {{if $templateManager->printMode}}
-      ck_instance.setReadOnly();
-    {{else}}
-      {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+      // Redimensionnement automatique de l'éditeur en même temps que celui de la fenêtre.
+      Event.observe(window, "resize", function(e){
+        window.resizeEditor();
+      });
+
+      {{if $templateManager->printMode}}
+        ck_instance.setReadOnly();
+      {{else}}
+        ck_instance.document.getBody().on('keydown', autoCapHelper);
+        {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
         if (window.Thumb) {
           Thumb.content = ck_instance.getData();
           window.thumbs_timeout = setTimeout(function() {
             Thumb.refreshThumbs(1);
           }, time_before_thumbs);
         }
-      {{/if}}
+        {{/if}}
 
-      if (window.pdf_thumbnails && Prototype.Browser.IE) {
-        window.save_style = deleteStyle();
-        ck_instance.on("beforePreview", function() { restoreStyle(); });
-        ck_instance.on("afterPreview", function()  { window.save_style = deleteStyle(); });
-        ck_instance.on("beforeSource", function()  { ck_instance.fire("beforePreview");});
-        ck_instance.on("afterSource", function()   { ck_instance.fire("afterPreview");});
-      }
-      
-      // Don't close the window with escape
-      document.stopObserving('keydown', closeWindowByEscape);
-      
-      // Don't allow escape or alt+f4 to cancel the request
-      document.observe('keydown', function(e){
-        var keycode = Event.key(e);
-        if (keycode == 27 || keycode == 115 && e.altKey) {
-          return Event.stop(e);
+        if (window.pdf_thumbnails && Prototype.Browser.IE) {
+          window.save_style = deleteStyle();
+          ck_instance.on("beforePreview", function() { restoreStyle(); });
+          ck_instance.on("afterPreview", function()  { window.save_style = deleteStyle(); });
+          ck_instance.on("beforeSource", function()  { ck_instance.fire("beforePreview");});
+          ck_instance.on("afterSource", function()   { ck_instance.fire("afterPreview");});
         }
-        // Catches command+s
-        if (keycode == 83 && e.metaKey) {
-          submitCompteRendu();
-          Event.stop(e);
-        }
-        {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+
+        // Don't close the window with escape
+        document.stopObserving('keydown', closeWindowByEscape);
+
+        // Don't allow escape or alt+f4 to cancel the request
+        document.observe('keydown', function(e){
+          var keycode = Event.key(e);
+          if (keycode == 27 || keycode == 115 && e.altKey) {
+            return Event.stop(e);
+          }
+          // Catches command+s
+          if (keycode == 83 && e.metaKey) {
+            submitCompteRendu();
+            Event.stop(e);
+          }
+          {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
           if (keycode == 80 && (e.ctrlKey || e.metaKey)) {
             ck_instance.getCommand("mbprintPDF").exec();
             Event.stop(e);
           }
-        {{/if}}
-      });
+          {{/if}}
+        });
 
-    // Surveillance de modification de l'éditeur de texte
-    if (window.Thumb) {
-      ck_instance.on("key", loadOld);
+        // Surveillance de modification de l'éditeur de texte
+        if (window.Thumb) {
+          ck_instance.on("key", loadOld);
+        }
+
+        // Redéfinition du copier-coller dans CKEditor pour firefox, car le comportement par défaut ne convient pas
+        if (Prototype.Browser.Gecko) {
+          ck_instance.on("paste", function(evt) {
+            if (CKEDITOR.ispasting) {
+              return;
+            }
+
+            CKEDITOR.ispasting = true;
+
+            evt.cancel();
+
+            // Tenir compte de la façon dont on colle :
+            // - sans mise en forme
+            // - depuis word
+
+            var paste = evt.data.html || evt.data.text;
+
+            var alltags = paste.match(/<[a-z]+/g);
+
+            if (alltags) {
+              alltags=alltags.uniq();
+            }
+
+            if (alltags == null || (alltags.length == 1 && alltags.indexOf("br") != -1)) {
+              paste = paste.replace(/<br(\s)*(\\)*>/g, '\n');
+              paste = paste.replace(/&nbsp/g, ' ');
+              CKEDITOR.instances.htmlarea.fire("paste", {'text': paste.replace(/<br(\s)*(\\)*>/, '\n')});
+            }
+            else {
+              CKEDITOR.instances.htmlarea.fire("paste", {'html': paste});
+            }
+            CKEDITOR.ispasting = false;
+          });
+        }
+      {{/if}}
+
+
+    });
+  }
+
+  Main.add(initCKEditor);
+
+  function autoCapHelper(event) {
+    var editor = CKEDITOR.instances.htmlarea;
+
+    var mbcap     = editor.getCommand('mbcap');
+    var mbreplace = editor.getCommand('mbreplace');
+
+    if (mbcap.state === CKEDITOR.TRISTATE_OFF && mbreplace.state === CKEDITOR.TRISTATE_OFF) {
+      return;
     }
-    
-    // Redéfinition du copier-coller dans CKEditor pour firefox, car le comportement par défaut ne convient pas
-    if (Prototype.Browser.Gecko) {
-      ck_instance.on("paste", function(evt) {
-        if (CKEDITOR.ispasting) {
-          return;
+
+    var keystroke = event.data.getKeystroke();
+
+    // Majuscule auto
+    if (mbcap.state === CKEDITOR.TRISTATE_ON && keystroke >= 65 && keystroke <= 90) {
+      var range, walker, selection, native, chars, data;
+
+      selection = editor.getSelection();
+      range = selection.getRanges()[0];
+      range.setStartAt(editor.document.getBody(), CKEDITOR.POSITION_AFTER_START);
+      walker = new CKEDITOR.dom.walker(range);
+
+      var node = walker.previous();
+
+      if (!node) {
+        return insertUpperCase(editor, event, keystroke);
+      }
+
+      native = selection.getNative();
+
+      if ("focusNode" in native && native.focusNode.data) {
+        chars = native.focusNode.data.substr(native.anchorOffset-2, +2);
+      }
+
+      var elt = node.$;
+
+      if (!Object.isUndefined(elt.innerHTML)) {
+        data = elt.innerHTML;
+      }
+      else if (!Object.isUndefined(elt.data)) {
+        data = elt.data;
+      }
+
+      if (!Prototype.Browser.IE) {
+        data = data.strip();
+      }
+
+      if (
+      /* Commence par un retour chariot ou une ligne verticale */
+        elt.nodeName === "BR" ||
+          data == ""       ||
+          (data && data.length == 0) ||
+          (window.parent.Prototype.Browser.IE && !Object.isUndefined(data) && /[\.\?!]\s/.test(data.substr(-2))) ||
+          /(<br|<hr)/.test(data) ||
+          (native.focusNode && native.focusNode.length == 0) ||
+          /* Les 2 derniers caractères sont :
+           - un point ou
+           - un point d'exclamation ou
+           - un point d'interrogation
+           et un espace */
+          /[\.\?!]\s/.test(chars)) {
+        insertUpperCase(editor, event, keystroke);
+      }
+    }
+
+    // Remplacement d'aide à la saisie (après un espace)
+    if (mbreplace.state === CKEDITOR.TRISTATE_ON && keystroke == 32) {
+      var range, selection, selected_ranges, container, chars, text;
+
+      selection = editor.getSelection();
+      selected_ranges = selection.getRanges();
+      range = selected_ranges[0];
+      container = range.startContainer;
+      chars = text = container.getText();
+      chars = chars.strip().trim();
+
+      var last_space = chars.lastIndexOf(" ");
+
+      if (last_space != -1) {
+        chars = chars.substr(last_space+1);
+      }
+
+      // Espace insécable pour IE
+      if (Prototype.Browser.IE) {
+        last_space = chars.lastIndexOf(" ");
+        if (last_space != -1) {
+          chars = chars.substr(last_space+1);
         }
-        
-        CKEDITOR.ispasting = true;
-        
-        evt.cancel();
-        
-        // Tenir compte de la façon dont on colle :
-        // - sans mise en forme
-        // - depuis word
-        
-        var paste = evt.data.html || evt.data.text;
-        
-        var alltags = paste.match(/<[a-z]+/g);
-             
-        if (alltags) {
-          alltags=alltags.uniq();
+      }
+
+      $H(helpers[0].options).each(function(categ) {
+        var helpers = categ[1];
+        if (Object.isUndefined(helpers.length)) {
+          $H(helpers).each(function(helper) {
+            var key = helper[0];
+            if (key.toLowerCase() === chars) {
+
+              var pattern = new RegExp(key+"$", "gi");
+
+              // On insère un espace insécable après le remplacement de l'aide
+              container.setText(text.replace(pattern, helper[1]+" "));
+              selection.selectElement(container);
+              selected_ranges = selection.getRanges();
+              selected_ranges[0].collapse(false);
+              selection.selectRanges(selected_ranges);
+
+              event.data.preventDefault();
+              throw $break;
+            }
+          });
         }
-  
-        if (alltags == null || (alltags.length == 1 && alltags.indexOf("br") != -1)) {
-          paste = paste.replace(/<br(\s)*(\\)*>/g, '\n');
-          paste = paste.replace(/&nbsp/g, ' ');
-          CKEDITOR.instances.htmlarea.fire("paste", {'text': paste.replace(/<br(\s)*(\\)*>/, '\n')});
-        }
-        else {
-          CKEDITOR.instances.htmlarea.fire("paste", {'html': paste});
-        }
-        CKEDITOR.ispasting = false;
       });
     }
-    {{/if}}
-  });
-}
-
-Main.add(initCKEditor);
+  }
 
 </script>
-{{/if}}

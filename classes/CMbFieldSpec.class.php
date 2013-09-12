@@ -827,7 +827,7 @@ class CMbFieldSpec {
       }
       
       $sHtml .= '});});</script>';
-      $sHtml .= '<div style="display:none;width:0;" class="autocomplete" id="'.$id.'_autocomplete"></div>';
+      $sHtml .= '<div style="display:none;width:0;" class="autocomplete text" id="'.$id.'_autocomplete"></div>';
     }
     else {
       if ($multiline) {

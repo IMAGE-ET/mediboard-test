@@ -8,7 +8,7 @@
  */
 
 CKEDITOR.plugins.add('mbspace',{
-  requires: ['iframedialog'],
+  requires: ['dialog'],
   init:function(editor) {
     editor.addCommand('mbspace', {exec: mbspace_onclick});
     editor.ui.addButton('mbspace', {label:'Espace insécable', command:'mbspace',

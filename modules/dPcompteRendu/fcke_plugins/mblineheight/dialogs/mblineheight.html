@@ -8,7 +8,7 @@
   </head>
   
   <body>
-    <h6>Valeur de l'interligne : <input type="text" id="line_height" value=""/></h6>
+    <h6>Valeur de l'interligne : <input type="text" id="line_height" value="" /></h6>
   </body>
 
   <script type="text/javascript">
@@ -21,18 +21,11 @@
       var styleCK = new CKEDITOR.style(style);
       instance.addCommand('subscript', new CKEDITOR.styleCommand(styleCK));
       instance.execCommand("subscript");
-      removeListeners();
       return true;
     }
-    
-    function removeListeners() {
-      CKEDITOR.dialog.getCurrent().removeListener("ok", insertLineHeight);
-      CKEDITOR.dialog.getCurrent().removeListener("cancel", removeListeners);
-    }
-    
+
     window.onload=function(){
       CKEDITOR.dialog.getCurrent().on('ok', insertLineHeight);
-      CKEDITOR.dialog.getCurrent().on('cancel', removeListeners);
     }
   </script>
 </html>

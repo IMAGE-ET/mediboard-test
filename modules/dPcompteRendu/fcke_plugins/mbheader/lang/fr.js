@@ -7,4 +7,4 @@
  *
  */
 
-FCKLang['mbHeader'] = 'En-tête'; 
+FCKLang['mbheader'] = 'En-tête';

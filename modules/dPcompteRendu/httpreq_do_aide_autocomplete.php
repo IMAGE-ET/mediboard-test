@@ -32,9 +32,6 @@ if ($hide_exact_match) {
     if (trim($needle) === trim($_aide->text)) {
       unset($object->_aides_new[$_id]);
     }
-    else {
-      $_aide->loadViewDependValues($object);
-    }
   }
 }
 

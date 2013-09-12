@@ -1,4 +1,5 @@
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+{{assign var=pdf_and_thumbs value=$app->user_prefs.pdf_and_thumbs}}
 {{assign var=choice_factory value=$app->user_prefs.choice_factory}}
 {{assign var=header_footer_fly value=$conf.dPcompteRendu.CCompteRendu.header_footer_fly}}
 
@@ -91,6 +92,7 @@ function submitCompteRendu(callback){
     
     if(checkForm(form) && User.id) {
       editor.getCommand('save').setState(CKEDITOR.TRISTATE_DISABLED);
+      editor.getCommand('mbprint').setState(CKEDITOR.TRISTATE_DISABLED);
       editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_DISABLED);
       editor.on("key", loadOld);
       form.onsubmit=function(){ return true; };
@@ -150,26 +152,28 @@ function refreshZones(id, obj) {
     var url = new Url("dPcompteRendu", "edit_compte_rendu");
     url.addParam("compte_rendu_id", id);
     url.addParam("reloadzones", 1);
-    url.requestUpdate("reloadzones",
-        {onComplete: function(){
-           refresh();
-           window.resizeEditor();
-           var form = getForm("editFrm");
-           $V(form.compte_rendu_id, id);
-           if (Thumb.print) {
-             pdfAndPrintServer(id);
-           }
-           else if (window.callback){
-             window.callback();
-           }
-           form.onsubmit = function() { Url.ping({onComplete: submitCompteRendu}); return false;};
-    }});
+    url.requestUpdate("reloadzones", { onComplete:
+      function() {
+        refresh();
+        window.resizeEditor();
+        var form = getForm("editFrm");
+        $V(form.compte_rendu_id, id);
+        if (Thumb.print) {
+          pdfAndPrintServer(id);
+        }
+        else if (window.callback){
+          window.callback();
+        }
+        form.onsubmit = function() { Url.ping({onComplete: submitCompteRendu}); return false;};
+        editor.getCommand('save').setState(CKEDITOR.TRISTATE_OFF);
+        editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_OFF);
+        editor.getCommand('mbprint').setState(CKEDITOR.TRISTATE_OFF);
+      }
+    });
   }
-    
+
   // Remise du content sauvegardé, avec le refresh des vignettes si dispo, et/ou l'impression en callback
-  CKEDITOR.instances.htmlarea.setData(obj._source, afterSetData);
-  editor.getCommand('save').setState(CKEDITOR.TRISTATE_OFF);
-  editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_OFF);
+  editor.setData(obj._source, afterSetData);
   window.saving_doc = false;
 }
 
@@ -204,7 +208,7 @@ function openModalPrinters() {
   modalPrinters.requestModal(700, 400);
 }
 
-{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+{{if $pdf_thumbnails && $pdf_and_thumbs}}
 
   togglePageLayout = function() {
     $("page_layout").toggle();
@@ -324,7 +328,7 @@ function afterDuplicate(cr_id) {
   }
 }
 
-Main.add(function(){
+Main.add(function() {
   if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
     PageFormat.init(getForm("editFrm"));
     Thumb.compte_rendu_id = '{{$compte_rendu->_id}}';
@@ -333,6 +337,7 @@ Main.add(function(){
     Thumb.mode = "doc";
     Thumb.object_class = '{{$compte_rendu->object_class}}';
     Thumb.object_id = '{{$compte_rendu->object_id}}';
+    Thumb.instance = CKEDITOR.instances.htmlarea;
   }
   
   // Les correspondants doivent être présent pour le store du compte-rendu
@@ -458,7 +463,7 @@ Main.add(function(){
 
 <!-- Formulaire pour streamer le pdf -->
 <form style="display: none;" name="download-pdf-form" target="{{if $choice_factory == "CDomPDFConverter"}}download_pdf{{else}}_blank{{/if}}" method="post" action="?m=dPcompteRendu&amp;a=ajax_pdf"
-      onsubmit="{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}completeLayout();{{/if}} this.submit();">
+      onsubmit="{{if $pdf_thumbnails && $pdf_and_thumbs}}completeLayout();{{/if}} this.submit();">
   <input type="hidden" name="content" value=""/>
   <input type="hidden" name="compte_rendu_id" value='{{if $compte_rendu->_id != ''}}{{$compte_rendu->_id}}{{else}}{{$modele_id}}{{/if}}' />
   <input type="hidden" name="object_id" value="{{$compte_rendu->object_id}}"/>
@@ -569,13 +574,13 @@ Main.add(function(){
           {{if $prevnext.prev}}
             href="?m=compteRendu&a=edit_compte_rendu&compte_rendu_id={{$prevnext.prev}}&dialog=1"
           {{/if}}>
-          {{tr}}Previous{{/tr}}
+          Préc.
         </a>
         <a style="float: right;" class="button right {{if !$prevnext.next}}disabled{{/if}}"
           {{if $prevnext.next}}
             href="?m=compteRendu&a=edit_compte_rendu&compte_rendu_id={{$prevnext.next}}&dialog=1"
           {{/if}}>
-          {{tr}}Next{{/tr}}
+          Suiv.
         </a>
         {{mb_include module=system template=inc_object_idsante400 object=$compte_rendu}}
         {{mb_include module=system template=inc_object_history object=$compte_rendu}}
@@ -591,24 +596,22 @@ Main.add(function(){
           <option value="{{$currCat->file_category_id}}"{{if $currCat->file_category_id==$compte_rendu->file_category_id}} selected="selected"{{/if}}>{{$currCat->nom}}</option>
         {{/foreach}}
       </select>
-      
+
+      &mdash;
+      {{mb_label object=$compte_rendu field=language}}
+      {{mb_field object=$compte_rendu field=language}}
+
       &mdash;
       <label>
         {{tr}}CCompteRendu-private{{/tr}}
         {{mb_field object=$compte_rendu field=private typeEnum="checkbox"}}
       </label>
-      {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
-        &mdash;
+      {{if $pdf_thumbnails && $pdf_and_thumbs}}
         <button type="button" class="pagelayout notext" title="{{tr}}CCompteRendu-Pagelayout{{/tr}}"
                 onclick="save_page_layout(); Modal.open($('page_layout'), {
                 closeOnClick: $('page_layout').down('button.tick')
                 });">
         </button>
-        {{if $compte_rendu->_id != null}}
-          &mdash;
-          <button class="hslip" type="button" title="Afficher / Masquer les vignettes"
-                  onclick = "Thumb.choixAffiche(1);">Vignettes</button>
-        {{/if}}
         <div id="page_layout" style="display: none;">
           {{mb_include module=compteRendu template=inc_page_layout droit=1}}
           <button class="tick" type="button">{{tr}}Validate{{/tr}}</button>
@@ -616,17 +619,15 @@ Main.add(function(){
         </div>
       {{/if}}
       {{if $header_footer_fly}}
-        &mdash;
         <button type="button" class="header_footer notext" onclick="modalHeaderFooter(1)"
           title="Entête / pied de page à la volée"></button>
       {{/if}}
       {{if $can_lock}}
-        &mdash;
         <button type="button" class="{{if $compte_rendu->valide}}unlock{{else}}lock{{/if}} notext"
                 onclick="toggleLock(this)">Verrouiller / Déverouiller le document</button>
       {{/if}}
       {{if $compte_rendu->_id}}
-        <button type="button" class="add" onclick="duplicateDoc(this.form)">Dupliquer le document</button>
+        <button type="button" class="add" onclick="duplicateDoc(this.form)">{{tr}}Duplicate{{/tr}}</button>
       {{/if}}
     </th>
   </tr>
@@ -666,16 +667,16 @@ Main.add(function(){
   {{/if}}
   <tr>
     <td class = "greedyPane" style="width: 1200px;"
-      {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+      {{if $pdf_thumbnails && $pdf_and_thumbs}}
         colspan="1"
       {{else}}
         colspan="2"
-      {{/if}} id="editeur">
+      {{/if}}>
       <textarea id="htmlarea" name="_source">
         {{$templateManager->document}}
       </textarea>
     </td>
-    {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+    {{if $pdf_thumbnails && $pdf_and_thumbs}}
       <td id="thumbs_button" class="narrow">
         <div id="mess" class="oldThumbs opacity-60" style="display: none;">
         </div>

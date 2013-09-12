@@ -12,10 +12,10 @@
     </style>
     <script type="text/javascript" src="../../../../../lib/scriptaculous/lib/prototype.js"></script>
     <script type="text/javascript">
-      var valueMode = window.parent.parent.fields[0].spanClass == "value";
-      var fields = window.parent.parent.fields[0].options;
+      var valueMode = window.parent.parent.fields.spanClass == "value";
+      var fields = window.parent.parent.fields.options;
       var CKEDITOR = window.parent.parent.CKEDITOR;
-      
+
       // Au chargement, on initialise la liste déroulante avec les sections
       window.onload = function () {
         var section = $("section");
@@ -37,7 +37,7 @@
         var oItem = $("item").update();
 
         // Rien à faire si la section est vide
-        if (section == '') return; 
+        if (section == '') return;
         // On vide la section des sous-items
         reloadSubItem('');
 
@@ -57,10 +57,10 @@
         oItem.selectedIndex = -1;
         oItem.scrollTop = 0;
       }
-    
+
       function reloadSubItem(section, item) {
         var oSubItem = $("subitem").update();
-  
+
         // Rien à faire si l'item est vide
         if (item == null) return;
           subItems = fields[section][item];
@@ -82,55 +82,31 @@
         if (fields[section][item].item != null)
           insertHTML(fields[section][item].item);
       }
-      
+
       function insertSubItem(section, item, subitem){
         if (fields[section][item][subitem].item != null)
           insertHTML(fields[section][item][subitem].item);
       }
 
       function insertHTML(string) {
+        var editor = CKEDITOR.instances.htmlarea;
         if (valueMode) {
           var sHtml = "<span class='field'>" + string + "</span>&nbsp;";
         }
         else {
-          if (Prototype.Browser.Gecko) {
-            var sHtml = "<span contenteditable='false'><span class='field' contenteditable='true'>" + string + "</span></span>&nbsp;";
-          }
-          else {
-            var sHtml = "<span class='field' contenteditable='false'>" + string + "</span>&nbsp;";
-          }
+          var sHtml = "<span class='field' contenteditable='false'>" + string + "</span>&nbsp;";
         }
-        CKEDITOR.instances.htmlarea.focus();
-        if (CKEDITOR.env.gecko && string.match(/Code barre/) == -1) {
-          insertSpecialChar(sHtml);
-        } else {
-          CKEDITOR.instances.htmlarea.insertHtml(sHtml);
-        }
+        editor.focus();
+        editor.insertHtml(sHtml);
         CKEDITOR.dialog.getCurrent().hide();
-        CKEDITOR.instances.htmlarea.fire("key", []);
-        return true ;
-      }
-      
-      function insertSpecialChar(specialChar) { 
-        var selection = CKEDITOR.instances.htmlarea.getSelection(), 
-            ranges    = selection.getRanges(), 
-            range, textNode;  
-         
-        for ( var i = 0, len = ranges.length ; i < len ; i++ ) { 
-          range = ranges[ i ]; 
-          range.deleteContents(); 
-          textNode = CKEDITOR.dom.element.createFromHtml( specialChar ); 
-          range.insertNode( textNode ); 
-        } 
-         
-        range.moveToPosition( textNode, CKEDITOR.POSITION_AFTER_END ); 
-        range.select(); 
+        editor.fire("key", []);
+        return true;
       }
 
       function eventKey(e) {
         return (window.event && (window.event.keyCode || window.event.which)) || e.which || e.keyCode || false;
       }
-      
+
       var empty = true;
       function searchWord(event) {
         if (this.value == "" && !empty) {
@@ -176,14 +152,14 @@
 
           // Recherche
           resultsearch.update();
-          
+
           for (var section in fields) {
             if (typeof fields[section] == "function") continue;
-            
-            var items = fields[section];            
+
+            var items = fields[section];
             for (var item in items) {
               if (typeof items[item] == "function") continue;
-              
+
               // Si l'item contient des sous-items
               if (items[item].length != undefined) {
                 var subItems = items[item];
@@ -229,7 +205,7 @@
       </tr>
       <tr id="search" style="display: none">
         <td>
-          <select id="resultsearch" size="10" style="height: 270px; width: 750px;" ondblclick="insertHTML(this.value)">
+          <select id="resultsearch" size="10" style="width: 750px; height: 270px;" ondblclick="insertHTML(this.value)">
           </select>
         </td>
       </tr>

@@ -29,4 +29,5 @@ CPreferences::$modules["dPcompteRendu"] = array(
   "choice_factory",
   "multiple_docs",
   "auto_capitalize",
+  "auto_replacehelper",
 );

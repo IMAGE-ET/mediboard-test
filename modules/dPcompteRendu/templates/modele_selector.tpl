@@ -59,11 +59,11 @@ function setClose(modele_id, object_id) {
 	<hr class="control_tabs" />
 	
 	{{foreach from=$modelesCompat key=class item=modeles}}
-	  {{include file="inc_vw_list_models.tpl"}}
+	  {{mb_include template=inc_vw_list_models}}
 	{{/foreach}}
 	
 	{{foreach from=$modelesNonCompat key=class item=modeles}}
-	  {{include file="inc_vw_list_models.tpl"}}
+	  {{mb_include template=inc_vw_list_models}}
 	{{/foreach}}
 	
 	<div class="small-info">

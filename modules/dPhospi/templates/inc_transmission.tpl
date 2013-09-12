@@ -34,10 +34,12 @@ Main.add(function() {
         var data = selected.get("data");
         if(isNaN(data)){
           $V(oForm.libelle_ATC, data);
+          $V(oForm._cible, data);
           updateListTransmissions(data);
         } else {
           $V(oForm.object_id, data);
           $V(oForm.object_class, 'CCategoryPrescription');
+          $V(oForm._cible, data);
           updateListTransmissions(data, 'CCategoryPrescription');
         }
         var view = $(selected).down(".view").innerHTML.split(' : ')[1];
@@ -144,7 +146,8 @@ toggleDateMax = function() {
   <input type="hidden" name="action_id" value="{{$action_id}}" />
   <input type="hidden" name="result_id" value="{{$result_id}}" />
   <input type="hidden" name="callback" value="" />
-  <input type="hidden"  name="_locked" />
+  <input type="hidden" name="_cible" value="" />
+  <input type="hidden" name="_locked" />
   <table style="width: 100%;">
     <tr>
       <td>
@@ -206,7 +209,7 @@ toggleDateMax = function() {
               {{mb_field object=$transmission field="_text_data" rows=6 form="editTrans"
                 aidesaisie="property: 'text',
                             dependField1: getForm('editTrans')._type_data,
-                            dependField2: getForm('editTrans').cible,
+                            dependField2: getForm('editTrans')._cible,
                             classDependField2: 'CCategoryPrescription',
                             validateOnBlur: 0,
                             updateDF: 0,
@@ -227,7 +230,7 @@ toggleDateMax = function() {
               {{mb_field object=$transmission field="_text_action" rows=6 form="editTrans"
                 aidesaisie="property: 'text',
                             dependField1: getForm('editTrans')._type_action,
-                            dependField2: getForm('editTrans').cible,
+                            dependField2: getForm('editTrans')._cible,
                             classDependField2: 'CCategoryPrescription',
                             validateOnBlur: 0,
                             updateDF: 0,
@@ -249,7 +252,7 @@ toggleDateMax = function() {
               {{mb_field object=$transmission field="_text_result" rows=6 form="editTrans"
                 aidesaisie="property: 'text',
                             dependField1: getForm('editTrans')._type_result,
-                            dependField2: getForm('editTrans').cible,
+                            dependField2: getForm('editTrans')._cible,
                             classDependField2: 'CCategoryPrescription',
                             validateOnBlur: 0,
                             updateDF: 0,
@@ -267,7 +270,7 @@ toggleDateMax = function() {
           {{mb_field object=$transmission field="text" rows=6 form="editTrans"
                 aidesaisie="property: 'text',
                             dependField1: getForm('editTrans').type,
-                            dependField2: getForm('editTrans').cible,
+                            dependField2: getForm('editTrans')._cible,
                             classDependField2: 'CCategoryPrescription',
                             validateOnBlur: 0,
                             updateDF: 0,

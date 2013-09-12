@@ -917,6 +917,21 @@ class CSetupdPcompteRendu extends CSetup {
                 ADD `version` INT (11) DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.91";
+    $this->makeRevision("0.91");
+    $this->addPrefQuery("auto_replacehelper", 0);
+
+    $this->makeRevision("0.92");
+    $query = "UPDATE aide_saisie
+      JOIN category_prescription ON category_prescription.nom = aide_saisie.depend_value_2
+      SET aide_saisie.depend_value_2 = category_prescription.category_prescription_id
+      WHERE category_prescription_id IS NOT NULL";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.93");
+    $query = "ALTER TABLE `compte_rendu`
+      ADD `language` ENUM ('en-EN','es-ES','fr-CH','fr-FR') DEFAULT 'fr-FR' AFTER modele_id";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.94";
   }
 }

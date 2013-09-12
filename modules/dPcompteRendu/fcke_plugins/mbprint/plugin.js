@@ -17,6 +17,7 @@ CKEDITOR.plugins.add('mbprint',{
 });
 
 function mbprint_onclick(editor) {
+  editor.getCommand('mbprint').setState(CKEDITOR.TRISTATE_DISABLED);
   var printDoc = function() {
     if ( CKEDITOR.env.gecko )
       editor.window.$.print();

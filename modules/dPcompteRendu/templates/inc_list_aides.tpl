@@ -50,7 +50,7 @@
           style="width: 10em;"
           onchange="this.form.onsubmit()" 
           name="depend_value_1" 
-          onmousedown="getListDependValues(this, '{{$class}}', '{{$_aide->_depend_field_1}}')"
+          onmousedown="getListDependValues.bindAsEventListener(this, this, '{{$class}}', '{{$_aide->_depend_field_1}}')()"
         >
           <option value="{{$_aide->depend_value_1}}">
             {{if $_aide->depend_value_1}}
@@ -62,7 +62,7 @@
         </select>
       </form>
     {{elseif $_aide->_is_ref_dp_1}}
-      {{$_aide->depend_value_1}}
+      {{$_aide->_vw_depend_field_1}}
     {{else}}
       &mdash;
     {{/if}}
@@ -90,7 +90,7 @@
         </select>
       </form>
     {{elseif $_aide->_is_ref_dp_2}}
-      {{$_aide->depend_value_2}}
+      {{$_aide->_vw_depend_field_2}}
     {{else}}
       &mdash;
     {{/if}}

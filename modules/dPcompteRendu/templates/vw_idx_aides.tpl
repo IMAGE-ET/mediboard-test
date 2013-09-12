@@ -309,7 +309,7 @@ Main.add(function () {
         {{if $aide->_is_ref_dp_1}}
           {{mb_field object=$aide field="depend_value_1" hidden=true}}
             <input type="hidden" name="_ref_class_depend_value_1" value="{{$aide->_class_dp_1}}" />
-            <input type="text" name="_depend_value_2_view" value="{{$aide->depend_value_1}}" />
+            <input type="text" name="_depend_value_2_view" value="{{$aide->_vw_depend_field_1}}" />
             <script type="text/javascript">
               Main.add(function(){
                 var form = getForm("editFrm");
@@ -318,14 +318,14 @@ Main.add(function () {
                 url.addParam("object_class", $V(form._ref_class_depend_value_1));
                 url.addParam("field", "depend_value_1");
                 url.addParam("input_field", "_depend_value_1_view");
+                url.addParam("show_view", "true");
                 url.autoComplete(form.elements._depend_value_1_view, null, {
                   minChars: 3,
                   method: "get",
                   select: "view",
                   dropdown: true,
-                  afterUpdateElement: function(field,selected){
-                    var value = selected.down('.view').innerHTML;
-                    $V(field.form.elements.depend_value_1, value);
+                  afterUpdateElement: function(field, selected){
+                    $V(field.form.elements.depend_value_1, selected.get("id"));
                   }
                 });
               });
@@ -344,7 +344,7 @@ Main.add(function () {
         {{if $aide->_is_ref_dp_2}}
           {{mb_field object=$aide field="depend_value_2" hidden=true}}
             <input type="hidden" name="_ref_class_depend_value_2" value="{{$aide->_class_dp_2}}" />
-            <input type="text" name="_depend_value_2_view" value="{{$aide->depend_value_2}}" />
+            <input type="text" name="_depend_value_2_view" value="{{$aide->_vw_depend_field_2}}" />
             <script type="text/javascript">
               Main.add(function(){
                 var form = getForm("editFrm");
@@ -353,14 +353,14 @@ Main.add(function () {
                 url.addParam("object_class", $V(form._ref_class_depend_value_2));
                 url.addParam("field", "depend_value_2");
                 url.addParam("input_field", "_depend_value_2_view");
+                url.addParam("show_view", "true");
                 url.autoComplete(form.elements._depend_value_2_view, null, {
                   minChars: 3,
                   method: "get",
                   select: "view",
                   dropdown: true,
-                  afterUpdateElement: function(field,selected){
-                    var value = selected.down('.view').innerHTML;
-                    $V(field.form.elements.depend_value_2, value);
+                  afterUpdateElement: function(field, selected){
+                    $V(field.form.elements.depend_value_2, selected.get("id"));
                   }
                 });
               });

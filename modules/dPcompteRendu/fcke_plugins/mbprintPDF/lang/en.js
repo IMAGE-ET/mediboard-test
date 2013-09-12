@@ -7,4 +7,4 @@
  *
  */
 
-FCKLang['mbPrintPDF'] = 'Export in PDF' ; 
+FCKLang['mbprintPDF'] = 'Export in PDF' ;

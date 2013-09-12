@@ -7,4 +7,4 @@
  *
  */
 
-FCKLang['mbFooter'] = 'Pied-de-page'; 
+FCKLang['mbfooter'] = 'Pied-de-page';

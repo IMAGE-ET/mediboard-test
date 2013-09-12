@@ -8,45 +8,43 @@
  * Add fields in the editor.
  */
 
-CKEDITOR.plugins.add('mblists',{
-  requires: ['iframedialog'],
-  init:function(editor){
-  CKEDITOR.dialog.add('mblists_dialog', function () {
+CKEDITOR.plugins.add('mblists', {
+  requires: ['dialog'],
+  init: function(editor) {
+  CKEDITOR.dialog.add('mblists_dialog', function() {
     return {
-    title : 'Insérer une liste de choix',
-    buttons: [
-    {
-       id: 'close_button',
-       type: 'button',
-       title: 'Fermer',
-       label: "Fermer",
-       onClick: function(e) { CKEDITOR.dialog.getCurrent().hide(); }
-     }
-  ],
-    minWidth : 350,
-    minHeight : 210,
-    contents :
-    [
-      {
-        id : 'iframe',
-        label : 'Insertion de liste de choix',
-        expand : true,
-        elements :
+      buttons: [
+        {
+          id: 'close_button',
+          type: 'button',
+          title: 'Fermer',
+          label: "Fermer",
+          onClick: function(e) { CKEDITOR.dialog.getCurrent().hide(); }
+        }
+      ],
+      title : 'Insérer une liste de choix',
+      minWidth : 350,
+      minHeight : 210,
+      contents :
+      [
+        {
+          label : 'Insertion de liste de choix',
+          expand : true,
+          elements :
           [
             {
-              type : 'iframe',
-              src : 'modules/dPcompteRendu/fcke_plugins/mblists/dialogs/lists.html',
-              width : 350,
-              height : 210
+              type : 'html',
+              html : '<iframe src="modules/dPcompteRendu/fcke_plugins/mblists/dialogs/lists.html" style="width: 100%; height: 100%"></iframe>'
             }
           ]
-     }
-   ]
-   };
+        }
+      ]
+
+     };
    });
-   
+
    editor.addCommand('mblists', {exec: mblists_onclick});
-   editor.ui.addButton('mblists', {label:'Listes de choix', command:'mblists',
+   editor.ui.addButton('mblists', {label: 'Listes de choix', command: 'mblists',
      icon:'../../modules/dPcompteRendu/fcke_plugins/mblists/images/mblists.png' });
   }
 });

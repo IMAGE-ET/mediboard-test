@@ -8,4 +8,4 @@
  * Mediboard additional custom combo plugin for FCKeditor
  */
 
-FCKLang['mbPageBreak']  = 'Zone de texte' ;
+FCKLang['mbpagebreak']  = 'Zone de texte' ;

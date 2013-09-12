@@ -138,6 +138,7 @@ function changeUser(user_id) {
     
     {{foreach from=1|range:2 item=i}}
       {{assign var=key value="depend_value_`$i`"}}
+      {{assign var=key_view value="_vw_depend_field_`$i`"}}
       {{if array_key_exists($key, $dependValues)}}
         <tr>
           <th>{{mb_label object=$aide field=$key}}</th>
@@ -149,7 +150,7 @@ function changeUser(user_id) {
               {{mb_field object=$aide field=$key hidden=true}}
               {{assign var=obj_class_dp value="$object_class_dp"}}
               <input type="hidden" name="_ref_class_depend_value_{{$i}}" value="{{$obj_class_dp}}" />
-              <input type="text" name="_depend_value_{{$i}}_view" value="{{$aide->$key}}" />
+              <input type="text" name="_depend_value_{{$i}}_view" value="{{$aide->$key_view}}" />
               <button type="button" class="search notext" onclick="ObjectSelector.init()"></button>
               <script type="text/javascript">
                 Main.add(function(){
@@ -166,8 +167,7 @@ function changeUser(user_id) {
                     select: "view",
                     dropdown: true,
                     afterUpdateElement: function(field,selected){
-                      var value = selected.down('.view').innerHTML;
-                      $V(field.form.elements.depend_value_{{$i}}, value);
+                      $V(field.form.elements.depend_value_{{$i}}, selected.get("id"));
                     }
                   });
                 });
@@ -176,7 +176,6 @@ function changeUser(user_id) {
                   this.sView     = "keywords_dp{{$i}}";
                   this.sClass    = "_ref_class_depend_value_{{$i}}";
                   this.onlyclass = "false";
-                  this.pop();
                   this.pop();
                 }
               </script>
@@ -253,10 +252,10 @@ function changeUser(user_id) {
             {{if array_key_exists($key_dp, $dependValues.depend_value_1)}}
               {{$dependValues.depend_value_1.$key_dp}}
             {{else}}
-              {{$_aide->depend_value_1}}
+              {{$_aide->_vw_depend_field_1}}
             {{/if}}
           {{else}}
-            {{$_aide->depend_value_1}}
+            {{$_aide->_vw_depend_field_1}}
           {{/if}}
         </td>
         <td class="text">
@@ -265,10 +264,10 @@ function changeUser(user_id) {
             {{if array_key_exists($key_dp, $dependValues.depend_value_2)}}
               {{$dependValues.depend_value_2.$key_dp}}
             {{else}}
-              {{$_aide->depend_value_2}}
+              {{$_aide->_vw_depend_field_2}}
             {{/if}}
           {{else}}
-            {{$_aide->depend_value_2}}
+            {{$_aide->_vw_depend_field_2}}
           {{/if}}
         </td>
       </tr>

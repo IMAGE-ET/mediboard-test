@@ -99,17 +99,9 @@ $orderby = "name";
 $aides = $aidebis->loadList($where, $orderby);
 
 $aide = new CAideSaisie();
-if ($aide_id) {
-  // Chargement de l'aide
-  $aide->load($aide_id);
-  if ($aide->depend_value_1 && !array_key_exists($aide->depend_value_1, $dependValues)) {
-    $dependValues["depend_value_1"][$aide->depend_value_1] = $aide->depend_value_1;
-  }
-  if ($aide->depend_value_2 && !array_key_exists($aide->depend_value_2, $dependValues)) {
-    $dependValues["depend_value_2"][$aide->depend_value_2] = $aide->depend_value_2;
-  }
-}
-else {
+$aide->load($aide_id);
+
+if (!$aide->_id) {
   // Nouvelle Aide à la saisie
   $aide->class        = $class;
   $aide->field        = $field;
@@ -125,7 +117,6 @@ else {
     /*case "group":*/ $aide->group_id = $group->_id;
   //}
 }
-
 
 $fields = array(
     "user_id"     => $user_id,

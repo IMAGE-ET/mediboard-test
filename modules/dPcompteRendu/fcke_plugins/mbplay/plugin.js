@@ -8,8 +8,8 @@
  */
 
 CKEDITOR.plugins.add('mbplay',{
-  requires: ['iframedialog'],
-  init:function(editor){ 
+  requires: ['dialog'],
+  init: function(editor){
    editor.addCommand('mbplay', {exec: mbplay_onclick});
    editor.ui.addButton('mbplay', {label:'Mode play', command:'mbplay',
      icon:'../../modules/dPcompteRendu/fcke_plugins/mbplay/images/mbplay_on.png' });
@@ -72,10 +72,7 @@ function mbplay_onclick(editor) {
   
   var content = editor.getData();
   var field,re = /\[Liste - ([^\]]+)\]|\[\[Texte libre - ([^\]]+)\]\]/g;
-  
-  /*while (field = re.exec(content)) {
-    console.log(field);
-  }*/
+
   while (field = re.exec(content)) {
     // On sort de la fonction s'il n'y a plus de champ
     if (!field) {
@@ -94,7 +91,6 @@ function mbplay_onclick(editor) {
   
     // Recherche de l'élément dans l'éditeur pour le scroll
     var elements = editor.document.getBody().$.querySelectorAll("span."+class_span);
-    //console.log(elements);
     var editor_element = null;
     
     
@@ -137,7 +133,7 @@ function mbplay_onclick(editor) {
         }
       });
     }
-    //console.log(element);
+
     // Si pas de correspondance
     if (!element) {
       if (window_parent.not_found.join(" ").indexOf(name) == -1) {

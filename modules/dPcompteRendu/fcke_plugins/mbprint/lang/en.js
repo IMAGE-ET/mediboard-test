@@ -7,4 +7,4 @@
  *
  */
 
-FCKLang['mbPrint'] = 'Print' ; 
+FCKLang['mbprint'] = 'Print' ;

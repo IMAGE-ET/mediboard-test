@@ -8,7 +8,7 @@
 */
 
 CKEDITOR.plugins.add('mbprinting',{
-  requires: ['iframedialog'],
+  requires: ['dialog'],
   init:function(editor){ 
    editor.addCommand('mbprinting', {exec: mbprinting_onclick});
    editor.ui.addButton('mbprinting', {label:'Imprimer par le serveur', command:'mbprinting',

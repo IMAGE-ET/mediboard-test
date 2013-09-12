@@ -10,8 +10,8 @@
 
  
 CKEDITOR.plugins.add('mbpagebreak',{
-  requires: ['iframedialog'],
-  init:function(editor) {
+  requires: ['dialog'],
+  init: function(editor) {
     editor.addCommand('mbpagebreak', {exec: mbpagebreak_onclick});
     editor.ui.addButton('mbpagebreak', {label:'Saut de page', command:'mbpagebreak',
       icon:'../../modules/dPcompteRendu/fcke_plugins/mbpagebreak/images/mbpagebreak.gif' });

@@ -278,12 +278,12 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "CKEditor";
 $library->url = "http://ckeditor.com/";
-$library->fileName = "ckeditor_3.6.4.tar.gz";
+$library->fileName = "ckeditor_4.2.1.zip";
 $library->description = "Composant Javascript d'édition de texte au format HTML";
 $library->sourceDir = "ckeditor";
 $library->targetDir = "ckeditor";
-$library->versionFile = "skins/kama/skin.js";
-$library->versionString = "kama";
+$library->versionFile = "ckeditor.js";
+$library->versionString = "4.2.1";
 
 CLibrary::$all[$library->name] = $library;
 

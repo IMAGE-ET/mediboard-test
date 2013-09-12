@@ -37,7 +37,7 @@
     {{/if}}
   
     <td rowspan="2" style="vertical-align: top;">
-      {{include file=CMbObject_view.tpl}}
+      {{mb_include module=system template=CMbObject_view}}
     </td>
   </tr>
   

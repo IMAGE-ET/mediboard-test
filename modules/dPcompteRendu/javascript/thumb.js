@@ -8,21 +8,16 @@ var Thumb = {
   first_time: 1,
   changed: false,
   contentChanged: false,
-  choixAffiche: function(isNotModele) {
+  instance: null,
+
+  choixAffiche: function() {
     $("thumbs").toggle();
-    if (isNotModele == 1) {
-      $("thumbs_button").toggle();
-      var editeur = $("editeur");
-    }
-    else {
-      var editeur = $("htmlarea");
-    }
+    var editeur = $("htmlarea");
     var colspan_editeur = editeur.readAttribute("colspan");
     colspan_editeur == '1' ? editeur.writeAttribute("colspan",'2') : editeur.writeAttribute("colspan",'1');
   },
 
   refreshThumbs: function(first_time, print) {
-    
     $("thumbs").stopObserving("scroll", Thumb.refreshThumb);
     this.changed = false;
     var mess = null;
@@ -37,11 +32,11 @@ var Thumb = {
     
     var content = '';
     
-    if (window.CKEDITOR && CKEDITOR.instances.htmlarea.getData) {
+    if (Thumb.instance && Thumb.instance.getData) {
       if (window.pdf_thumbnails && Prototype.Browser.IE) {
         restoreStyle();
       }
-      content = CKEDITOR.instances.htmlarea.getData();
+      content = Thumb.instance.getData();
       if (window.pdf_thumbnails && Prototype.Browser.IE) {
         window.save_style = deleteStyle();
       }
@@ -91,12 +86,11 @@ var Thumb = {
         if(!Thumb.thumb_up2date) {
           Thumb.thumb_up2date = true;
           Thumb.old();
+          return;
         }
-        else {
-          // Requête pour la première vignette
-          (function() { Thumb.refreshThumb()}).defer();
-          $("thumbs").observe("scroll", Thumb.refreshThumb);
-        }
+        // Requête pour la première vignette
+        (function() { Thumb.refreshThumb()}).defer();
+        $("thumbs").observe("scroll", Thumb.refreshThumb);
       }
     });
   },
@@ -110,8 +104,7 @@ var Thumb = {
       return;
     }
     
-    for(var thumb in thumbs_empty) {
-     
+    for (var thumb in thumbs_empty) {
       thumb = thumbs_empty[thumb];
       if (typeof thumb == "function") continue;
       
@@ -140,12 +133,11 @@ var Thumb = {
   old: function() {
     if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
       if (this.thumb_refreshing) {
-        
         this.thumb_up2date = false;
         return;
       }
       var on_click = function(){
-        CKEDITOR.instances.htmlarea.on("key", loadOld);
+        Thumb.instance.on("key", loadOld);
         Thumb.changed = true;
         Thumb.first_time = 0;
         Thumb.thumb_refreshing = true;
@@ -166,13 +158,12 @@ var Thumb = {
 
 
 function loadOld() {
-  var instance = CKEDITOR.instances.htmlarea;
-  if (!instance.checkDirty()) return;
-  var html = instance.getData();
+  if (!Thumb.instance.checkDirty()) return;
+  var html = Thumb.instance.getData();
   if (html != Thumb.content) {
     Thumb.contentChanged = true;
     Thumb.changed = true;
-    instance.removeListener("key", loadOld);
+    Thumb.instance.removeListener("key", loadOld);
     Thumb.content = html;
     if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
       clearTimeout(window.thumbs_timeout);
@@ -182,10 +173,8 @@ function loadOld() {
 }
 
 function restoreStyle() {
-  var instance = CKEDITOR.instances.htmlarea;
-  
   if (!window.save_style) return;
-  var tag = instance.document.getBody().getFirst();
+  var tag = Thumb.instance.document.getBody().getFirst();
   if (tag.$.tagName == "STYLE") return;
   window.save_style.insertBefore(tag);
   //tag.insertBeforeMe(window.save_style);
@@ -193,10 +182,8 @@ function restoreStyle() {
 }
 
 function deleteStyle() {
-  var instance = CKEDITOR.instances.htmlarea;
-  
-  if (!instance.document) return;
-  var styleTag = instance.document.getBody().getFirst();
+  if (!Thumb.instance.document) return;
+  var styleTag = Thumb.instance.document.getBody().getFirst();
   if (styleTag && styleTag.$.tagName == "STYLE") {
     return styleTag.remove();
   }

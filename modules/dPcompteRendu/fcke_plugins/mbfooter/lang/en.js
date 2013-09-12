@@ -7,4 +7,4 @@
  *
  */
 
-FCKLang['mbFooter'] = 'Footer'; 
+FCKLang['mbfooter'] = 'Footer';

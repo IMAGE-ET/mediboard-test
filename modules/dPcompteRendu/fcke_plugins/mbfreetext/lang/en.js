@@ -8,4 +8,4 @@
  * Mediboard additional custom combo plugin for FCKeditor
  */
 
-FCKLang['mbPageBreak']  = 'Free text area' ;
+FCKLang['mbpagebreak']  = 'Free text area' ;

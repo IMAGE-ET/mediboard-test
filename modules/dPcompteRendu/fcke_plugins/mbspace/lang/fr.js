@@ -7,4 +7,4 @@
  *
  */
 
-FCKLang['mbFooter'] = 'Espace insécable';
+FCKLang['mbspace'] = 'Espace insécable';

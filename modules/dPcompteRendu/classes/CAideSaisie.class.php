@@ -163,7 +163,10 @@ class CAideSaisie extends CMbObject {
           $this->_class_dp_2 = "CCategoryPrescription";
           break;
       }
+      $this->loadViewDependValues($object);
     }
+
+    $this->searchRefsObject();
   }
 
   /**
@@ -206,7 +209,6 @@ class CAideSaisie extends CMbObject {
     $this->loadRefUser(true);
     $this->loadRefFunction(true);
     $this->loadRefGroup(true);
-    $this->searchRefsObject();
   }
 
   /**
@@ -284,6 +286,14 @@ class CAideSaisie extends CMbObject {
       if ($spec instanceof CRefSpec) {
         $key = "_is_ref_dp_".($i+1);
         $this->$key = true;
+        $key = "depend_value_".($i+1);
+        if (is_numeric($this->$key)) {
+          $key_class = "_class_dp_".($i+1);
+          $object = new $this->$key_class;
+          $object->load($this->$key);
+          $key_field = "_vw_depend_field_".($i+1);
+          $this->$key_field = $object->_view;
+        }
       }
     }
   }

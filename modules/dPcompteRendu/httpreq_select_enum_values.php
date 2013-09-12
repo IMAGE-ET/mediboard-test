@@ -25,6 +25,8 @@ if ($object->_specs[$field] instanceof CEnumSpec) {
 
 array_unshift($list, " - ".CAppUI::tr("None"));
 
+ksort($list);
+
 $smarty = new CSmartyDP();
 
 $smarty->assign("list", $list);

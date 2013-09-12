@@ -17,30 +17,31 @@ CKEDITOR.plugins.addExternal("mbprinting"  , "../../modules/dPcompteRendu/fcke_p
 CKEDITOR.plugins.addExternal("mbprintPDF"  , "../../modules/dPcompteRendu/fcke_plugins/mbprintPDF/plugin.js");
 CKEDITOR.plugins.addExternal("mbpagebreak" , "../../modules/dPcompteRendu/fcke_plugins/mbpagebreak/plugin.js");
 CKEDITOR.plugins.addExternal("mblineheight", "../../modules/dPcompteRendu/fcke_plugins/mblineheight/plugin.js");
-CKEDITOR.plugins.addExternal("usermessage"      , "../../modules/dPcompteRendu/fcke_plugins/usermessage/plugin.js");
+CKEDITOR.plugins.addExternal("usermessage" , "../../modules/dPcompteRendu/fcke_plugins/usermessage/plugin.js");
 {{if $use_apicrypt}}
-  CKEDITOR.plugins.addExternal("apicrypt"    , "../../modules/dPcompteRendu/fcke_plugins/apicrypt/plugin.js");
+  CKEDITOR.plugins.addExternal("apicrypt"  , "../../modules/dPcompteRendu/fcke_plugins/apicrypt/plugin.js");
 {{/if}}
 
 {{if $can->admin}}
   CKEDITOR.plugins.addExternal("mbthumbs"  , "../../modules/dPcompteRendu/fcke_plugins/mbthumbs/plugin.js");
 {{/if}}
-CKEDITOR.plugins.addExternal("mbbreakage"  , "../../modules/dPcompteRendu/fcke_plugins/mbbreakage/plugin.js");
 CKEDITOR.plugins.addExternal("mbcap"       , "../../modules/dPcompteRendu/fcke_plugins/mbcap/plugin.js");
 CKEDITOR.plugins.addExternal("mbspace"     , "../../modules/dPcompteRendu/fcke_plugins/mbspace/plugin.js");
+CKEDITOR.plugins.addExternal("mbreplace"   , "../../modules/dPcompteRendu/fcke_plugins/mbreplace/plugin.js");
 
-// CK editor general configuration
 CKEDITOR.editorConfig = function(config) {
   config.language = 'fr';
   config.defaultLanguage = 'fr';
   config.contentsLanguage = 'fr';
   config.enterMode = CKEDITOR.ENTER_BR;
+  config.allowedContent = true;
+  //config.startupFocus = true;
   config.pasteFromWordPromptCleanup = true;
   config.pasteFromWordRemoveFontStyles = "{{$clean_word}}";
   config.pasteFromWordRemoveStyles = "{{$clean_word}}";
   config.fontSize_sizes  = '8/8pt;9/9pt;10/10pt;11/11pt;12/12pt;14/14pt;16/16pt;18/18pt;20/20pt;22/22pt;24/24pt;26/26pt;28/28pt;36/36pt;48/48pt;72/72pt;';
   config.fontSize_sizes += 'xx-small/xx-small;x-small/x-small;small/small;medium/medium;large/large;x-large/x-large;xx-large/xx-large';
-  
+
   config.font_names =
   'Arial/Arial, Helvetica, sans-serif;' +
   'Calibri/Calibri, Helvetica, sans-serif;'+
@@ -54,13 +55,13 @@ CKEDITOR.editorConfig = function(config) {
   'Trebuchet MS/Trebuchet MS, Helvetica, sans-serif;' +
   'Verdana/Verdana, Geneva, sans-serif;' +
   'ZapfDingBats/ZapfDingBats';
-  
+
   var css = ["style/mediboard/htmlarea.css?build={{$version.build}}"];
   if (Prototype.Browser.IE) {
-    css.push("style/mediboard/ie.css?build={{$version.build}}");
+  css.push("style/mediboard/ie.css?build={{$version.build}}");
   }
   config.contentsCss = css;
-  
+
   config.docType = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
   config.filebrowserImageBrowseUrl = "lib/kcfinder/browse.php?type=image";
   config.tabSpaces = 13;
@@ -74,54 +75,56 @@ CKEDITOR.editorConfig = function(config) {
   {{else}}
     config.font_defaultLabel = '{{$conf.dPcompteRendu.CCompteRendu.default_font}}';
   {{/if}}
-  
+
   {{if $templateManager->size != ""}}
-    config.fontSize_defaultLabel = '{{$templateManager->size}}' 
+    config.fontSize_defaultLabel = '{{$templateManager->size}}'
   {{else}}
     config.fontSize_defaultLabel = '{{$conf.dPcompteRendu.CCompteRendu.default_size}}'
   {{/if}}
-  
+
   // Suppression du redimensionnement manuel
   config.resize_enabled = false;
   // Suppression du bouton de masquage des barres d'outils
   config.toolbarCanCollapse = false;
   // Suppression de la barre d'état avec la dom
-  config.removePlugins = 'a11yhelp,about,elementspath,flash,iframe,link,newpage,pagebreak,scayt,showblocks,smiley,templates,wsc{{if $templateManager->printMode}},save{{/if}}';
-  
+  config.removePlugins = 'elementspath,iframe,showblocks,templates,wsc{{if $templateManager->printMode}},save{{/if}}';
+
   {{if $templateManager->printMode}}
-    config.toolbar_Full = [['Preview', 'Print', '-','Find']];
+    config.toolbar = [['Preview', 'Print', '-','Find']];
 
   {{elseif $templateManager->simplifyMode}}
-    config.toolbar_Full = [
-        ['Save', 'Preview'],
-        ['Font', 'FontSize'],
-        ['Bold', 'Italic', 'Underline', '-', 'Subscript', 'Superscript'],
-        ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-        ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'],
-        ['TextColor', 'BGColor']
-      ];
+    config.toolbar = [
+    ['Save', 'Preview'],
+    ['Font', 'FontSize'],
+    ['Bold', 'Italic', 'Underline', '-', 'Subscript', 'Superscript'],
+    ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+    ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'],
+    ['TextColor', 'BGColor']
+    ];
   {{else}}
     {{if $app->user_prefs.saveOnPrint}}
       var textForPrint = 'mbprint';
     {{else}}
       var textForPrint = 'Print';
     {{/if}}
-    
+
     config.extraPlugins =  'mbfields,mbfreetext,mbhelpers,mblists,{{if $mode_play && !$templateManager->isModele}}mbplay,{{/if}},mbprint,mbprintPDF,mbspace,';
-    config.extraPlugins += 'mbheader,mbfooter,mbpagebreak,mblineheight{{if "printing"|module_active && !$templateManager->isModele}},mbprinting{{/if}}{{if $can->admin}},mbthumbs{{/if}},mbcap,mbbreakage';
+    config.extraPlugins += 'mbheader,mbfooter,mbpagebreak,mblineheight{{if "printing"|module_active && !$templateManager->isModele}},mbprinting{{/if}}{{if $can->admin}},mbthumbs{{/if}},mbcap,mbreplace';
     {{if !$templateManager->isModele}}
       config.extraPlugins += ',usermessage{{if $use_apicrypt}},apicrypt{{/if}}';
-    {{/if}}    
-    config.toolbar_Full = [
-      ['Save','Preview'], [{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}'mbprintPDF',{{/if}} textForPrint, 'mbprinting', 'SelectAll', 'Cut', 'Copy', 'PasteText', 'PasteFromWord', 'Find', 'Undo', 'Redo'],
-      [{{if !$templateManager->isModele}}'mbheader', 'mbfooter',{{/if}} 'mbpagebreak'],
-      ['Table','HorizontalRule','Image','SpecialChar', 'mbspace', 'Checkbox'],
-      ['Maximize', 'Source'], '/',
-      ['Font', 'FontSize'],
-      ['RemoveFormat', 'Bold', 'Italic', 'Underline', 'Strike', 'mbbreakage', 'mbcap'],
-      ['Subscript', 'Superscript', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList'],'/',
-      ['Outdent', 'Indent', 'mblineheight', 'TextColor', 'BGColor'],
-      [{{if !$templateManager->isModele && $mode_play}}'mbplay', {{/if}} 'mbfields', {{if $templateManager->isModele}}'mblists', 'mbfreetext', {{/if}}{{if !$templateManager->isModele}}'mbhelpers', 'usermessage', {{if $use_apicrypt}}'apicrypt', {{/if}}{{/if}}{{if $can->admin}}'mbthumbs'{{/if}}]];
+    {{/if}}
+
+    config.toolbar = [
+    ['Save','Preview'], [{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}'mbprintPDF',{{/if}} textForPrint, 'mbprinting', 'SelectAll', 'Cut', 'Copy', 'PasteText', 'PasteFromWord', 'Find', 'Undo', 'Redo'],
+    [{{if !$templateManager->isModele}}'mbheader', 'mbfooter',{{/if}} 'mbpagebreak'],
+    ['Table','HorizontalRule','Image','SpecialChar', 'mbspace', 'Checkbox'],
+    ['Maximize', 'Source'], '/',
+    ['Font', 'FontSize'],
+    ['RemoveFormat', 'Bold', 'Italic', 'Underline', 'Strike', 'mbcap', 'mbreplace'],
+    ['TransformTextSwitcher', 'TransformTextToLowercase', 'TransformTextToUppercase', 'TransformTextCapitalize'],
+    ['Subscript', 'Superscript', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList'],
+    ['Outdent', 'Indent', 'mblineheight', 'TextColor', 'BGColor'],'/',
+    [{{if !$templateManager->isModele && $mode_play}}'mbplay', {{/if}} 'mbfields', {{if $templateManager->isModele}}'mblists', 'mbfreetext', {{/if}}{{if !$templateManager->isModele}}'mbhelpers', 'usermessage', {{if $use_apicrypt}}'apicrypt', {{/if}}{{/if}}{{if $can->admin}}'mbthumbs', {{/if}}{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}'mbhidethumbs'{{/if}}]];
 
     window.parent.fields = [];
     window.parent.listeChoix = [];
@@ -130,108 +133,98 @@ CKEDITOR.editorConfig = function(config) {
     // Champs
     var aOptionsFields = [];
 
-    window.parent.fields.push({
-      commandName: "MbField",
-      spanClass: {{if $templateManager->valueMode}} "value" {{else}} "field" {{/if}},
-      commandLabel: "Champs",
-      options: aOptionsFields
-    });
+    window.parent.fields = {
+    commandName: "MbField",
+    spanClass: {{if $templateManager->valueMode}} "value" {{else}} "field" {{/if}},
+    commandLabel: "Champs",
+    options: aOptionsFields
+    };
 
     {{assign var=i value=0}}
     {{foreach from=$templateManager->sections key=title item=section}}
-    
+
       aOptionsFields[{{$i}}] = [];
-  {{assign var=j value=0}}
-  {{foreach from=$section item=property key=_index}}
-    {{if strpos($_index, ' - ') === false}}
-      aOptionsFields[{{$i}}][{{$j}}] = [
-      {{foreach from=$property item=_property name=subproperty}}
-        {
-        section: "{{$title|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}",
-        itemname: "{{$_index|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}",
-        view: "{{$_property.view|smarty:nodefaults|escape:"javascript"}}" ,
-        item:
-          {{if $templateManager->valueMode}}
-            "{{$_property.value|smarty:nodefaults|nl2br|escape:"javascript"}}",
-          {{else}}
-            {{if @$_property.options.data}}
-              "[{{$_property.field|smarty:nodefaults|escape:"javascript"}}]",
+      {{assign var=j value=0}}
+      {{foreach from=$section item=property key=_index}}
+        {{if strpos($_index, ' - ') === false}}
+          aOptionsFields[{{$i}}][{{$j}}] = [
+          {{foreach from=$property item=_property name=subproperty}}
+            {
+            section: "{{$title|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}",
+            itemname: "{{$_index|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}",
+            view: "{{$_property.view|smarty:nodefaults|escape:"javascript"}}" ,
+            item:
+            {{if $templateManager->valueMode}}
+              "{{$_property.value|smarty:nodefaults|nl2br|escape:"javascript"}}",
             {{else}}
-              "[{{$_property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]",
+              {{if @$_property.options.data}}
+                "[{{$_property.field|smarty:nodefaults|escape:"javascript"}}]",
+              {{else}}
+                "[{{$_property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]",
+              {{/if}}
             {{/if}}
-          {{/if}}
-         shortview: "{{$_property.shortview|smarty:nodefaults|escape:"javascript"}}"
-        }
-      {{if $smarty.foreach.subproperty.index != $smarty.foreach.subproperty.last}}
-        ,
-      {{/if}}
-      {{/foreach}}
-      ];
-    {{else}}
-    aOptionsFields[{{$i}}][{{$j}}] =
-    {   section: "{{$title|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}",
-        view: '{{$property.view|smarty:nodefaults|escape:"javascript"}}' ,
-        item: 
+            shortview: "{{$_property.shortview|smarty:nodefaults|escape:"javascript"}}"
+            }
+            {{if $smarty.foreach.subproperty.index != $smarty.foreach.subproperty.last}}
+              ,
+            {{/if}}
+          {{/foreach}}
+          ];
+        {{else}}
+          aOptionsFields[{{$i}}][{{$j}}] =
+          {   section: "{{$title|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}",
+          view: '{{$property.view|smarty:nodefaults|escape:"javascript"}}' ,
+          item:
           {{if $templateManager->valueMode}}
             {{if @$property.options.barcode || @$property.options.image || @$property.options.data}}
               "{{$property.field|smarty:nodefaults|escape:"javascript"}}" ,
             {{else}}
               "{{$property.value|smarty:nodefaults|nl2br|escape:"javascript"}}",
             {{/if}}
-          {{else}} 
+          {{else}}
             {{if @$property.options.barcode || @$property.options.image || @$property.options.data}}
               "{{$property.field|smarty:nodefaults|escape:"javascript"}}",
             {{else}}
-              "[{{$property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]", 
+              "[{{$property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]",
             {{/if}}
           {{/if}}
-         shortview: "{{$property.shortview|smarty:nodefaults|escape:"javascript"}}"
-      };
-    {{/if}}
-    {{math equation="$j+1" assign=j}}
-  {{/foreach}}
-    {{math equation="$i+1" assign=i}}
-{{/foreach}}
+          shortview: "{{$property.shortview|smarty:nodefaults|escape:"javascript"}}"
+          };
+        {{/if}}
+        {{math equation="$j+1" assign=j}}
+      {{/foreach}}
+      {{math equation="$i+1" assign=i}}
+    {{/foreach}}
 
-  // Liste de choix
-  {{if !$templateManager->valueMode}}
-    // Add name lists Combo
-    var aOptionsList = [];
-    window.parent.listeChoix.push({
+    // Liste de choix
+    {{if !$templateManager->valueMode}}
+      // Add name lists Combo
+      var aOptionsList = [];
+      window.parent.listeChoix.push({
       commandName: "MbNames",
       spanClass: "name",
       commandLabel: "Liste de choix",
       options: aOptionsList
-    });
+      });
 
-    
-    {{foreach from=$templateManager->lists item=list}}
-      aOptionsList.push( {
+      {{foreach from=$templateManager->lists item=list}}
+        aOptionsList.push( {
         view: "{{$list.name|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}" ,
         item: "[Liste - {{$list.name|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]"
         });
-    {{/foreach}}
-  {{/if}}
+      {{/foreach}}
+    {{/if}}
 
-  // Aides à la saisie
-  aOptionsHelpers = {{"utf8_encode"|array_map_recursive:$templateManager->helpers|@json|smarty:nodefaults}};
-  window.parent.helpers.push({
+    // Aides à la saisie
+    aOptionsHelpers = {{"utf8_encode"|array_map_recursive:$templateManager->helpers|@json|smarty:nodefaults}};
+    window.parent.helpers.push({
     commandName: "MbHelpers",
     spanClass: "helper",
     commandLabel: "Aides &agrave; la saisie",
     options: aOptionsHelpers
-  });
-  
-  window.parent.destinataires = {{"utf8_encode"|array_map_recursive:$templateManager->destinataires|@json|smarty:nodefaults}};
-{{/if}}
+    });
 
+    window.parent.destinataires = {{"utf8_encode"|array_map_recursive:$templateManager->destinataires|@json|smarty:nodefaults}};
 
-  // Definition of custom keystrokes
-  config.keystrokes.push( [CKEDITOR.CTRL + 72 /*H*/, "mbheader"] );
-  config.keystrokes.push( [CKEDITOR.CTRL + 79 /*O*/, "mbfooter"] );
-  config.keystrokes.push( [CKEDITOR.CTRL + 75 /*K*/, "mbpagebreak"] );
-  config.keystrokes.push( [CKEDITOR.CTRL + CKEDITOR.ALT + 85 /*U*/, "Source"] );
-  config.keystrokes.push( [CKEDITOR.CTRL + 83 /*S*/, "save"] );  
-  if (window.parent.pdf_thumbnails && window.parent.Preferences.pdf_and_thumbs == 1)
-    config.keystrokes.push( [CKEDITOR.CTRL + 80 /*P*/, "mbprintPDF"] );
+  {{/if}}
 }

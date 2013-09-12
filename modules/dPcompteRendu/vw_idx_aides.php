@@ -33,29 +33,30 @@ foreach ($classes as $class => &$infos) {
   $object = new $class;
   $infos = array();
   foreach ($object->_specs as $field => $spec) {
-    if (isset($spec->helped)) {
-      $info =& $infos[$field];
-      $helped = $spec->helped;
+    if (!isset($spec->helped)) {
+      continue;
+    }
+    $info =& $infos[$field];
+    $helped = $spec->helped;
 
-      if (!is_array($helped)) {
-        $info = null;
+    if (!is_array($helped)) {
+      $info = null;
+      continue;
+    }
+
+    foreach ($helped as $i => $depend_field) {
+      $key = "depend_value_" . ($i+1);
+      $info[$key] = array();
+      $list = &$info[$key];
+      $list = array();
+      // Because some depend_fields are not enums (like object_class from CCompteRendu)
+      if (!isset($object->_specs[$depend_field]->_list)) {
         continue;
       }
-
-      foreach ($helped as $i => $depend_field) {
-        $key = "depend_value_" . ($i+1);
-        $info[$key] = array();
-        $list = &$info[$key];
-        $list = array();
-        // Because some depend_fields are not enums (like object_class from CCompteRendu)
-        if (!isset($object->_specs[$depend_field]->_list)) {
-          continue;
-        }
-        foreach ($object->_specs[$depend_field]->_list as $value) {
-          $locale = "$class.$depend_field.$value";
-          $list[$value] = $locale;
-          $listTraductions[$locale] = CAppUI::tr($locale);
-        }
+      foreach ($object->_specs[$depend_field]->_list as $value) {
+        $locale = "$class.$depend_field.$value";
+        $list[$value] = $locale;
+        $listTraductions[$locale] = CAppUI::tr($locale);
       }
     }
   }
@@ -88,7 +89,7 @@ $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
 $listEtab = CGroups::loadGroups(PERM_EDIT);
 
 $userSel = CMediusers::get($filter_user_id);
-$userSel->loadRefs();
+$userSel->loadRefFunction();
 $userSel->_ref_function->loadRefGroup();
 
 if ($userSel->isPraticien()) {
@@ -99,9 +100,11 @@ if ($userSel->isPraticien()) {
 // Aide sélectionnée
 $aide = new CAideSaisie();
 $aide->load($aide_id); 
-$aide->loadRefs();
 
-if (!$aide_id) {
+if ($aide->_id) {
+  $aide->loadRefs();
+}
+else {
   $aide->user_id = $userSel->user_id;
 }
 

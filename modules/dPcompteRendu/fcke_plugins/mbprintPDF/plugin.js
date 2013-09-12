@@ -8,8 +8,8 @@
  */
 
 CKEDITOR.plugins.add('mbprintPDF',{
-  requires: ['iframedialog'],
-  init:function(editor){ 
+  requires: ['dialog'],
+  init: function(editor){
    editor.addCommand('mbprintPDF', {exec: mbprintPDF_onclick});
    editor.ui.addButton('mbprintPDF', {label:'Imprimer en PDF', command:'mbprintPDF',
    	 icon:'../../modules/dPcompteRendu/fcke_plugins/mbprintPDF/images/mbprintPDF.png' });

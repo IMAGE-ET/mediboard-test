@@ -102,7 +102,6 @@ foreach ($listObjectClass as $keyClass => $value) {
 }
 
 // Headers and footers
-$component = new CCompteRendu();
 $headers  = array();
 $prefaces = array();
 $endings  = array();

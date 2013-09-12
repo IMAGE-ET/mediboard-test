@@ -9,44 +9,41 @@
  */
 
 CKEDITOR.plugins.add('mbhelpers',{
-  requires: ['iframedialog'],
+  requires: ['dialog'],
   init:function(editor){
-  CKEDITOR.dialog.add('mbhelpers_dialog', function () {
+  CKEDITOR.dialog.add('mbhelpers_dialog', function() {
     return {
-    title : 'Insérer une aide à la saisie',
-    buttons: [
-    {
-       id: 'close_button',
-       type: 'button',
-       title: 'Fermer',
-       label: "Fermer",
-       onClick: function(e) { CKEDITOR.dialog.getCurrent().hide(); }
-     }
-	],
-    minWidth : 450,
-    minHeight : 210,
-    contents :
-    [
+      title : 'Insérer une aide à la saisie',
+      buttons: [
       {
-        id : 'iframe',
-        label : 'Insertion d\'aide à la saisie',
-        expand : true,
-        elements :
+         id: 'close_button',
+         type: 'button',
+         title: 'Fermer',
+         label: "Fermer",
+         onClick: function(e) { CKEDITOR.dialog.getCurrent().hide(); }
+       }
+    ],
+      minWidth : 450,
+      minHeight : 210,
+      contents :
+      [
+        {
+          label : 'Insertion d\'aide à la saisie',
+          expand : true,
+          elements :
           [
             {
-              type : 'iframe',
-              src : 'modules/dPcompteRendu/fcke_plugins/mbhelpers/dialogs/helpers.html',
-              width : 450,
-              height : 210
+              type : 'html',
+              html : '<iframe src="modules/dPcompteRendu/fcke_plugins/mbhelpers/dialogs/helpers.html" style="width: 100%; height: 100%"></iframe>'
             }
           ]
-     }
-   ]
-   };
+         }
+       ]
+     };
    });
    
    editor.addCommand('mbhelpers', {exec: mbhelpers_onclick});
-   editor.ui.addButton('mbhelpers', {label:'Aides à la saisie', command:'mbhelpers',
+   editor.ui.addButton('mbhelpers', {label: 'Aides à la saisie', command: 'mbhelpers',
    	 icon:'../../modules/dPcompteRendu/fcke_plugins/mbhelpers/images/mbhelpers.png' });
   }
 });

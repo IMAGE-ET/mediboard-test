@@ -33,6 +33,7 @@ class CCompteRendu extends CDocumentItem {
   // DB fields
   public $nom;
   public $type;
+  public $language;
   public $font;
   public $size;
   public $valide;
@@ -199,6 +200,7 @@ class CCompteRendu extends CDocumentItem {
     $props["size"]             = "enum list|xx-small|x-small|small|medium|large|x-large|xx-large|".
                                  "8pt|9pt|10pt|11pt|12pt|14pt|16pt|18pt|20pt|22pt|24pt|26pt|28pt|36pt|48pt|72pt show|0";
     $props["type"]             = "enum list|header|preface|body|ending|footer default|body";
+    $props["language"]         = "enum list|en-EN|es-ES|fr-CH|fr-FR default|fr-FR show|0";
     $props["_list_classes"]    = "enum list|".implode("|", array_keys(CCompteRendu::getTemplatedClasses()));
     $props["header_id"]        = "ref class|CCompteRendu";
     $props["footer_id"]        = "ref class|CCompteRendu";
@@ -1090,8 +1092,8 @@ class CCompteRendu extends CDocumentItem {
     $this->loadRefsFwd();
     $file = $this->loadFile();
 
-    // Fichier existe déjà et rempli
-    if ($file->_id && file_exists($file->_file_path) && filesize($file->_file_path)) {
+    // Fichier existe déjà et rempli et que la génération n'est pas forcée
+    if (!$force_generating && $file->_id && file_exists($file->_file_path) && filesize($file->_file_path)) {
       return null;
     }
 

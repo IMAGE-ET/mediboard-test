@@ -9,19 +9,19 @@
  */
 
 CKEDITOR.plugins.add('mbheader',{
-  requires: ['iframedialog'],
-  init:function(editor) {
+  requires: ['dialog'],
+  init: function(editor) {
     editor.addCommand('mbheader', {exec: mbheader_onclick});
-    editor.ui.addButton('mbheader', {label:'Entête', command:'mbheader',
+    editor.ui.addButton('mbheader', {label: 'Entête', command: 'mbheader',
       	 icon:'../../modules/dPcompteRendu/fcke_plugins/mbheader/images/icon.gif' });
     editor.on("instanceReady", function() {
       // On regarde la présence d'un entête dans la source une fois que l'éditeur est prêt.
       // S'il y a un entête, alors on coche le bouton, sinon on le désactive.
       if (window.parent.document.getElementById('htmlarea').innerHTML.indexOf("header") != -1) {
         editor.getCommand('mbheader').setState(CKEDITOR.TRISTATE_ON);
-      } else {
-        editor.getCommand('mbheader').setState(CKEDITOR.TRISTATE_DISABLED);
+        return;
       }
+      editor.getCommand('mbheader').setState(CKEDITOR.TRISTATE_DISABLED);
     });
   }
 });
@@ -31,12 +31,9 @@ function mbheader_onclick(editor) {
   if (!oHeader) return;
   if (oHeader.$.style.display == "block" || oHeader.$.style.display == "") {
     oHeader.setStyle("display", "none");
-    //oHeader.$.style.display = "none";
     editor.getCommand('mbheader').setState(CKEDITOR.TRISTATE_OFF);
+    return;
   }
-  else {
-    oHeader.setStyle("display",  "block");
-   //oHeader.$.style.display = "block";
-   editor.getCommand('mbheader').setState(CKEDITOR.TRISTATE_ON);
-  }
+  oHeader.setStyle("display",  "block");
+  editor.getCommand('mbheader').setState(CKEDITOR.TRISTATE_ON);
 }

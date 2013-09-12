@@ -1,4 +1,5 @@
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+{{assign var=pdf_and_thumbs value=$app->user_prefs.pdf_and_thumbs}}
 
 <script type="text/javascript">
 window.same_print = {{$conf.dPcompteRendu.CCompteRendu.same_print}};
@@ -35,13 +36,13 @@ var Modele = {
   
   create: function() {
     var url = new Url;
-    url.setModuleTab("dPcompteRendu", "addedit_modeles");
+    url.setModuleTab("compteRendu", "addedit_modeles");
     url.addParam("compte_rendu_id", "0");
     url.redirect();
   },
   
   preview: function(id) {
-    var url = new Url("dPcompteRendu", "print_cr");
+    var url = new Url("compteRendu", "print_cr");
     url.addParam("compte_rendu_id", id);
     url.popup(800, 800);
   },
@@ -62,7 +63,7 @@ var Modele = {
     $V(getForm("editFrm").height, (container.getHeight()).round());
   },
   showUtilisation: function() {
-    var url = new Url("dPcompteRendu", "ajax_show_utilisation");
+    var url = new Url("compteRendu", "ajax_show_utilisation");
     url.addParam("compte_rendu_id", "{{$compte_rendu->_id}}");
     url.requestModal(640, 480);
   }
@@ -128,25 +129,25 @@ function reloadHeadersFooters() {
       var compte_rendu_id = $V(oForm.compte_rendu_id);
       var object_class = $V(oForm.object_class);
       
-      var url = new Url("dPcompteRendu", "ajax_headers_footers");
+      var url = new Url("compteRendu", "ajax_headers_footers");
       url.addParam("compte_rendu_id", compte_rendu_id);
       url.addParam("object_class", object_class);
       url.addParam("type", "header");
       url.requestUpdate(oForm.header_id);
       
-      url = new Url("dPcompteRendu", "ajax_headers_footers");
+      url = new Url("compteRendu", "ajax_headers_footers");
       url.addParam("compte_rendu_id", compte_rendu_id);
       url.addParam("object_class", object_class);
       url.addParam("type", "preface");
       url.requestUpdate(oForm.preface_id);
       
-      url = new Url("dPcompteRendu", "ajax_headers_footers");
+      url = new Url("compteRendu", "ajax_headers_footers");
       url.addParam("compte_rendu_id", compte_rendu_id);
       url.addParam("object_class", object_class);
       url.addParam("type", "ending");
       url.requestUpdate(oForm.ending_id);
       
-      url = new Url("dPcompteRendu", "ajax_headers_footers");
+      url = new Url("compteRendu", "ajax_headers_footers");
       url.addParam("compte_rendu_id", compte_rendu_id);
       url.addParam("object_class", object_class);
       url.addParam("type", "footer");
@@ -172,7 +173,9 @@ function setTemplateName(object_class, name, type) {
 Main.add(function () {
   loadObjectClass('{{$compte_rendu->object_class}}');
   loadCategory('{{$compte_rendu->file_category_id}}');
-  {{if $compte_rendu->_id && $droit && $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+  Thumb.instance = CKEDITOR.instances.htmlarea;
+
+  {{if $compte_rendu->_id && $droit && $pdf_thumbnails && $pdf_and_thumbs}}
     Thumb.modele_id = '{{$compte_rendu->_id}}';
     Thumb.user_id = '{{$user_id}}';
     Thumb.mode = "modele";
@@ -218,9 +221,9 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
   </table>
 </div>
 
-{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+{{if $pdf_thumbnails && $pdf_and_thumbs}}
   <form style="display: none;" name="download-pdf-form" target="_blank" method="post"
-    action="?m=dPcompteRendu&amp;a=ajax_pdf"
+    action="?m=compteRendu&a=ajax_pdf"
     onsubmit="PageFormat.completeForm();">
     <input type="hidden" name="content" value="" />
     <input type="hidden" name="compte_rendu_id" value="{{$compte_rendu->_id}}"/>
@@ -239,31 +242,28 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
  onsubmit="Url.ping({onComplete: submitCompteRendu}); return false;"
  class="{{$compte_rendu->_spec}}">
 
-{{if (!$pdf_thumbnails || !$app->user_prefs.pdf_and_thumbs || $compte_rendu->type != "body")}}
-  <input type="hidden" name="fast_edit_pdf" value="{{$compte_rendu->fast_edit_pdf}}" />
-{{/if}}
+<input type="hidden" name="m" value="{{$m}}" />
+<input type="hidden" name="del" value="0" />
+<input type="hidden" name="dosql" value="do_modele_aed" />
+{{mb_key object=$compte_rendu}}
+{{mb_field object=$compte_rendu field="object_id" hidden=1}}
 
 {{if $compte_rendu->type != "body"}}
   <input type="hidden" name="fast_edit" value="{{$compte_rendu->fast_edit}}" />
+
+  {{if !$pdf_thumbnails || !$pdf_and_thumbs}}
+    <input type="hidden" name="fast_edit_pdf" value="{{$compte_rendu->fast_edit_pdf}}" />
+  {{/if}}
+
 {{/if}}
 
 <table class="main">
   <tr>
     <td style="width: 300px;">
-      <input type="hidden" name="m" value="{{$m}}" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_modele_aed" />
-      {{mb_key object=$compte_rendu}}
-      {{mb_field object=$compte_rendu field="object_id" hidden=1}}
-      
       {{if $compte_rendu->_id}}
         <button class="new" type="button" onclick="Modele.create()">
           {{tr}}CCompteRendu-title-create{{/tr}}
         </button>
-        {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
-          <button class="hslip notext" type="button" title="Afficher / Masquer les vignettes"
-            onclick = "Thumb.choixAffiche(0);" style="float: right;"></button>  
-        {{/if}}
       {{/if}}
       
       <table class="form">
@@ -283,9 +283,7 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
         <li><a href="#info">Informations</a></li>
         <li><a href="#layout">Mise en page</a></li>
       </ul>
-    
-      <hr class="control_tabs" />
-      
+
       <table class="form" id="info" style="display: none;">
         <tr>
           <th>{{mb_label object=$compte_rendu field="nom"}}</th>
@@ -362,7 +360,7 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
             </td>
           </tr>
         
-          {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+          {{if $pdf_thumbnails && $pdf_and_thumbs}}
             <tr>
               <th style="text-align: right;">
                 {{mb_label object=$compte_rendu field="fast_edit_pdf" style="display: none"}}
@@ -553,7 +551,14 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
             </select>
           </td>
         </tr>
-        
+
+        <tr>
+          <th>{{mb_label object=$compte_rendu field="language"}}</th>
+          <td>
+            {{mb_field object=$compte_rendu field=language}}
+          </td>
+        </tr>
+
         <tr>
           <th>{{mb_label object=$compte_rendu field="purge_field"}}</th>
           <td>{{mb_field object=$compte_rendu field="purge_field"}}</td>
@@ -571,7 +576,7 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
             </tr>
             
             <tbody class="fields">
-              {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+              {{if $pdf_thumbnails && $pdf_and_thumbs}}
               <tr>
                 <th class="category" colspan="2">
                   {{tr}}CCompteRendu-Pagelayout{{/tr}}
@@ -579,7 +584,7 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
               </tr>
               <tr id="page_layout" style="display: none;">
                 <td colspan="2">
-                  {{include file="inc_page_layout.tpl"}}
+                  {{mb_include template=inc_page_layout}}
                 </td>
               </tr>
               {{/if}}
@@ -600,11 +605,11 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
                 <td>
                   <div id="preview_page" style="color: #000; height: 84px; padding: 7px; width: 58px; background: #fff; border: 1px solid #000; overflow: hidden;">
                     <div id="header_footer_content" style="color: #000; white-space: normal; background: #fff; overflow: hidden; margin: -1px; height: 30px; width: 100%; font-size: 3px;">
-                      {{include file="lorem_ipsum.tpl"}}
+                      {{mb_include template=lorem_ipsum}}
                     </div>
                     <hr style="width: 100%; margin-top: 3px; margin-bottom: 3px;"/>
                     <div id="body_content" style="margin: -1px; color: #999; height: 50px; width: 100%; font-size: 3px; white-space: normal; overflow: hidden;">
-                      {{include file="lorem_ipsum.tpl"}}  
+                      {{mb_include template=lorem_ipsum}}
                     </div>
                   </div>
                 </td>
@@ -635,19 +640,20 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
           {{/if}}
         </tr>
 
-        <tr>
-          <th class="category" colspan="2">{{tr}}CCompteRendu-other-actions{{/tr}}</th>
-        </tr>
-        
-        <tr>
-          <td class="button" colspan="2">
-             <button type="button" class="duplicate" onclick="Modele.copy(this.form)">{{tr}}Duplicate{{/tr}}</button>
-             <button type="button" class="search" onclick="Modele.preview($V(this.form.compte_rendu_id))">{{tr}}Preview{{/tr}}</button>
-             <br />
-             <button type="button" class="search" onclick="Modele.showUtilisation()">Utilisation ({{$compte_rendu->_count_utilisation}})</button>
-          </td>
-        </tr>
-        
+        {{if $compte_rendu->_id}}
+          <tr>
+            <th class="category" colspan="2">{{tr}}CCompteRendu-other-actions{{/tr}}</th>
+          </tr>
+
+          <tr>
+            <td class="button" colspan="2">
+               <button type="button" class="duplicate" onclick="Modele.copy(this.form)">{{tr}}Duplicate{{/tr}}</button>
+               <button type="button" class="search" onclick="Modele.preview($V(this.form.compte_rendu_id))">{{tr}}Preview{{/tr}}</button>
+               <br />
+               <button type="button" class="search" onclick="Modele.showUtilisation()">Utilisation ({{$compte_rendu->_count_utilisation}})</button>
+            </td>
+          </tr>
+        {{/if}}
       </table>
     </td>
     
@@ -664,7 +670,7 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
         {{mb_field object=$compte_rendu field="_source" id="htmlarea" name="_source"}}
       {{/if}}
     </td>
-    {{if $pdf_thumbnails && $compte_rendu->_id && $app->user_prefs.pdf_and_thumbs}}
+    {{if $pdf_thumbnails && $compte_rendu->_id && $pdf_and_thumbs}}
       <td id="thumbs_button" class="narrow">
         <div id="mess" class="oldThumbs opacity-60" style="display: none;">
         </div>

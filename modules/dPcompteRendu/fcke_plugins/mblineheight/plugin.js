@@ -9,31 +9,27 @@
  */
 
 CKEDITOR.plugins.add('mblineheight',{
-  requires: ['iframedialog'],
-  init:function(editor){
-  CKEDITOR.dialog.add('mblineheight_dialog', function () {
+  init: function(editor){
+  CKEDITOR.dialog.add('mblineheight_dialog', function() {
     return {
-    title : 'Augmenter / Réduire l\'interligne',
-    minWidth : 300,
-    minHeight : 90,
-    contents :
-    [
-      {
-        id : 'iframe',
-        label : 'Augmenter / Réduire l\'interligne',
-        expand : true,
-        elements :
+      title : 'Augmenter / Réduire l\'interligne',
+      minWidth : 300,
+      minHeight : 90,
+      contents :
+      [
+        {
+          label : 'Augmenter / Réduire l\'interligne',
+          expand : true,
+          elements :
           [
             {
-              type : 'iframe',
-              src : 'modules/dPcompteRendu/fcke_plugins/mblineheight/dialogs/mblineheight.html',
-              width : 300,
-              height : 90
+              type : 'html',
+              html : '<iframe src="modules/dPcompteRendu/fcke_plugins/mblineheight/dialogs/mblineheight.html"></iframe>'
             }
           ]
-     }
-   ]
-   };
+         }
+       ]
+     };
    });
    
    editor.addCommand('mblineheight', {exec: mblineheight_onclick});

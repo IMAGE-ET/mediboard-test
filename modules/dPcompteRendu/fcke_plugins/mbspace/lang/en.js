@@ -7,4 +7,4 @@
  *
  */
 
-FCKLang['mbFooter'] = 'Non-breaking space';
+FCKLang['mbspace'] = 'Non-breaking space';
