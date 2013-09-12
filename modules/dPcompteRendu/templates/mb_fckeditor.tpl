@@ -3,31 +3,37 @@
 {{assign var=mode_play value=$app->user_prefs.mode_play}}
 
 // Preloading extra plugins
-CKEDITOR.plugins.addExternal("mbheader"    , "../../modules/dPcompteRendu/fcke_plugins/mbheader/plugin.js");
-CKEDITOR.plugins.addExternal("mbfooter"    , "../../modules/dPcompteRendu/fcke_plugins/mbfooter/plugin.js");
-CKEDITOR.plugins.addExternal("mbfields"    , "../../modules/dPcompteRendu/fcke_plugins/mbfields/plugin.js");
-CKEDITOR.plugins.addExternal("mbfreetext"  , "../../modules/dPcompteRendu/fcke_plugins/mbfreetext/plugin.js");
-CKEDITOR.plugins.addExternal("mbhelpers"   , "../../modules/dPcompteRendu/fcke_plugins/mbhelpers/plugin.js");
-CKEDITOR.plugins.addExternal("mblists"     , "../../modules/dPcompteRendu/fcke_plugins/mblists/plugin.js");
-{{if $mode_play && !$templateManager->isModele}}
-  CKEDITOR.plugins.addExternal("mbplay"    , "../../modules/dPcompteRendu/fcke_plugins/mbplay/plugin.js");
-{{/if}}
-CKEDITOR.plugins.addExternal("mbprint"     , "../../modules/dPcompteRendu/fcke_plugins/mbprint/plugin.js");
-CKEDITOR.plugins.addExternal("mbprinting"  , "../../modules/dPcompteRendu/fcke_plugins/mbprinting/plugin.js");
-CKEDITOR.plugins.addExternal("mbprintPDF"  , "../../modules/dPcompteRendu/fcke_plugins/mbprintPDF/plugin.js");
-CKEDITOR.plugins.addExternal("mbpagebreak" , "../../modules/dPcompteRendu/fcke_plugins/mbpagebreak/plugin.js");
-CKEDITOR.plugins.addExternal("mblineheight", "../../modules/dPcompteRendu/fcke_plugins/mblineheight/plugin.js");
-CKEDITOR.plugins.addExternal("usermessage" , "../../modules/dPcompteRendu/fcke_plugins/usermessage/plugin.js");
-{{if $use_apicrypt}}
-  CKEDITOR.plugins.addExternal("apicrypt"  , "../../modules/dPcompteRendu/fcke_plugins/apicrypt/plugin.js");
-{{/if}}
+var list_plugins = {
+  apicrypt:     "../../modules/dPcompteRendu/fcke_plugins/apicrypt/",
+  mbcap:        "../../modules/dPcompteRendu/fcke_plugins/mbcap/",
+  mbfields:     "../../modules/dPcompteRendu/fcke_plugins/mbfields/",
+  mbfooter:     "../../modules/dPcompteRendu/fcke_plugins/mbfooter/",
+  mbfreetext:   "../../modules/dPcompteRendu/fcke_plugins/mbfreetext/",
+  mbheader:     "../../modules/dPcompteRendu/fcke_plugins/mbheader/",
+  mbhelpers:    "../../modules/dPcompteRendu/fcke_plugins/mbhelpers/",
+  mblineheight: "../../modules/dPcompteRendu/fcke_plugins/mblineheight/",
+  mblists:      "../../modules/dPcompteRendu/fcke_plugins/mblists/",
+  mbpagebreak:  "../../modules/dPcompteRendu/fcke_plugins/mbpagebreak/",
+  {{if $mode_play && !$templateManager->isModele}}
+  mbplay:       "../../modules/dPcompteRendu/fcke_plugins/mbplay/",
+  {{/if}}
+  mbprint:      "../../modules/dPcompteRendu/fcke_plugins/mbprint/",
+  mbprinting:   "../../modules/dPcompteRendu/fcke_plugins/mbprinting/",
+  mbprintPDF:   "../../modules/dPcompteRendu/fcke_plugins/mbprintPDF/",
+  mbreplace:    "../../modules/dPcompteRendu/fcke_plugins/mbreplace/",
+  mbspace:      "../../modules/dPcompteRendu/fcke_plugins/mbspace/",
+  {{if $can->admin}}
+  mbthumbs:     "../../modules/dPcompteRendu/fcke_plugins/mbthumbs/",
+  {{/if}}
+  usermessage:  "../../modules/dPcompteRendu/fcke_plugins/usermessage/",
+};
 
-{{if $can->admin}}
-  CKEDITOR.plugins.addExternal("mbthumbs"  , "../../modules/dPcompteRendu/fcke_plugins/mbthumbs/plugin.js");
-{{/if}}
-CKEDITOR.plugins.addExternal("mbcap"       , "../../modules/dPcompteRendu/fcke_plugins/mbcap/plugin.js");
-CKEDITOR.plugins.addExternal("mbspace"     , "../../modules/dPcompteRendu/fcke_plugins/mbspace/plugin.js");
-CKEDITOR.plugins.addExternal("mbreplace"   , "../../modules/dPcompteRendu/fcke_plugins/mbreplace/plugin.js");
+date = new Date();
+date = Math.round(date.getTime()/3600000);
+
+$H(list_plugins).each(function(plugin) {
+  CKEDITOR.plugins.addExternal(plugin[0], plugin[1], "plugin.js?"+date);
+});
 
 CKEDITOR.editorConfig = function(config) {
   config.language = 'fr';
