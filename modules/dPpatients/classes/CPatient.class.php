@@ -1988,6 +1988,10 @@ class CPatient extends CPerson {
     $template->addProperty("Patient - Bénéficiaire de soin - libellé exo", addslashes($this->libelle_exo));
     $template->addProperty("Patient - Bénéficiaire de soin - notes amc"  , addslashes($this->notes_amc));
 
+    if (CModule::getActive("forms")) {
+      CExObject::addFormsToTemplate($template, $this, "Patient");
+    }
+
     $this->notify("AfterFillLimitedTemplate", $template);
   }
 

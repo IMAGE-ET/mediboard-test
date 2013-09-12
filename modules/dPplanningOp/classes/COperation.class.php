@@ -1446,6 +1446,10 @@ class COperation extends CCodable implements IPatientRelated {
       $template->addProperty("Opération - personnel prévu - $locale", $property);
     }
 
+    if (CModule::getActive("forms")) {
+      CExObject::addFormsToTemplate($template, $this, "Opération");
+    }
+
     $this->notify("AfterFillLimitedTemplate", $template);
   }
 

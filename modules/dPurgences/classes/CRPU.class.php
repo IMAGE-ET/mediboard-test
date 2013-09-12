@@ -591,6 +591,10 @@ class CRPU extends CMbObject {
       $template->addProperty("RPU - Orientation"          , $this->getFormattedValue("orientation"));
     }
 
+    if (CModule::getActive("forms")) {
+      CExObject::addFormsToTemplate($template, $this, "RPU");
+    }
+
     $this->notify("AfterFillLimitedTemplate", $template);
   }
 

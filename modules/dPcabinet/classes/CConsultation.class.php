@@ -1717,6 +1717,10 @@ class CConsultation extends CFacturable {
       $exams = isset($this->_types_examen[$key]) ? $this->_types_examen[$key] : array();
       $template->addListProperty("Consultation - Examens complémentaires - $locale", $exams);
     }
+
+    if (CModule::getActive("forms")) {
+      CExObject::addFormsToTemplate($template, $this, "Consultation");
+    }
     
     $this->notify("AfterFillLimitedTemplate", $template);
   }
