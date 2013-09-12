@@ -96,6 +96,9 @@ class CAppUI {
   static $dialog;
   static $do_login;
 
+  /** @var  string Authentication method used */
+  public $auth_method;
+
   /**
    * Initializes the CAppUI singleton
    *
@@ -553,6 +556,7 @@ class CAppUI {
       $token->applyParams();
 
       $user->load($token->user_id);
+      self::$instance->auth_method = "token";
     }
 
     // -------------- Standard sign-in
@@ -575,6 +579,7 @@ class CAppUI {
 
     if (!$user->_id) {
       $user->loadMatchingObject();
+      self::$instance->auth_method = "basic";
     }
 
     // User template case
@@ -1074,6 +1079,10 @@ class CAppUI {
     }
 
     return CMbDT::dateTime() >= CAppUI::$token_expiration;
+  }
+
+  static function getAuthMethod() {
+    return self::$instance->auth_method;
   }
 }
 

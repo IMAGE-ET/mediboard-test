@@ -35,6 +35,7 @@ class CLDAP {
     // Login succesful
     if ($user->_bound) {
       $user = self::searchAndMap($user, $source_ldap, $source_ldap->_ldapconn);
+      CAppUI::$instance->auth_method = "ldap";
     }
 
     return $user;
@@ -384,6 +385,8 @@ class CLDAP {
     if (!$id_ext->_id) {
       throw new CMbException("CUser_ldap-guid-no-user");
     }
+
+    CAppUI::$instance->auth_method = "ldap_guid";
     
     return $id_ext->loadTargetObject();
   }
