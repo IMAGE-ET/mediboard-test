@@ -25,7 +25,7 @@
 
   {{/if}}
 
-  {{if $conf.reservation.display_dossierBloc_button && $charge->_id}}
+  {{if $conf.reservation.display_dossierBloc_button}}
     <button class="bistouri notext" onclick="modalDossierBloc('{{$operation->_id}}')">Dossier Bloc</button>
   {{/if}}
 
