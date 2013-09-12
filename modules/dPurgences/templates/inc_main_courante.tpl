@@ -152,7 +152,7 @@
       {{/if}}
         <button type="button" class="search notext" title="Synthèse" onclick="showSynthese('{{$_sejour->_id}}');" style="float: right">Synthèse</button>
 
-        {{if $patient->_ref_IPP}}
+        {{if $patient->_ref_IPP && @$modules.hprim21}}
           <script type="text/javascript">
             PatHprimSelector.init{{$patient->_id}} = function(){
               this.sForm      = "editIPP{{$patient->_id}}";
@@ -199,9 +199,8 @@
               <input type="hidden" class="notNull" name="object_class" value="CSejour" />
               <input type="hidden" class="notNull" name="sejour_id" value="{{$_sejour->_id}}" />
               <input type="hidden" name="last_update" value="{{$_sejour->_ref_NDA->last_update}}" />
-              {{if @$modules.hprim21}}
-                <button type="button" class="edit notext" onclick="setExternalIds(this.form)" style="float: right">Edit external Ids</button>
-              {{/if}}
+
+              <button type="button" class="edit notext" onclick="setExternalIds(this.form)" style="float: right">Edit external Ids</button>
             </form>
           {{/if}}
         {{/if}}
