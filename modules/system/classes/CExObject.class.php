@@ -1016,7 +1016,7 @@ class CExObject extends CMbMetaObject {
 
     $ex_class = new CExClass();
     /** @var CExClass[] $ex_classes */
-    $ex_classes = $ex_class->loadList($where, "name", null, null, $ljoin);
+    $ex_classes = $ex_class->loadList($where, "name", null, "ex_class.ex_class_id", $ljoin);
     foreach ($ex_classes as $_ex_class) {
       $_name = "Form. ".str_replace(" - ", " ", $_ex_class->name);
       $fields = $_ex_class->loadRefsAllFields();
