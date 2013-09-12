@@ -76,7 +76,7 @@ class CMbXPath extends DOMXPath {
    * @return string The textual value of the node
    */
   function queryTextNode($query, DOMNode $contextNode = null, $purgeChars = "", $addslashes = false) {
-    $text = "";
+    $text = null;
     if ($node = $this->queryUniqueNode($query, $contextNode)) {
       $text = $this->convertEncoding($node->textContent);
 
@@ -105,7 +105,7 @@ class CMbXPath extends DOMXPath {
    * @return string The textual value of the node
    */
   function queryMultilineTextNode($query, DOMNode $contextNode = null, $prefix = "") {
-    $text = "";
+    $text = null;
 
     if ($node = $this->queryUniqueNode($query, $contextNode)) {
       $text = $this->convertEncoding($node->textContent);
@@ -130,7 +130,7 @@ class CMbXPath extends DOMXPath {
    * @return string
    */
   function queryAttributNode($query, DOMNode $contextNode = null, $attName, $purgeChars = "", $optional = true, $addslashes = false) {
-    $text = "";
+    $text = null;
 
     if ($node = $this->queryUniqueNode($query, $contextNode, $optional)) {
       $text = $this->convertEncoding($node->getAttribute($attName));
@@ -175,7 +175,7 @@ class CMbXPath extends DOMXPath {
    * @return string
    */
   function getValueAttributNode(DOMNode $node, $attName, $purgeChars = "", $addslashes = false) {
-    $text = "";
+    $text = null;
 
     if ($att = $node->getAttributeNode($attName)) {
       $text = $this->convertEncoding($att->value);
