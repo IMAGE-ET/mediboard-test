@@ -40,6 +40,22 @@
      }});
   }
   {{/if}}
+
+  {{if array_key_exists('activite', $types)}}
+  function extractActivite(form) {
+    if (!checkForm(form)) {
+      return;
+    }
+    var url = new Url("dPurgences", "ajax_extract_passages_activite");
+    url.addParam("debut_selection", $V(form.debut_selection));
+    url.addParam("fin_selection", $V(form.fin_selection));
+    url.requestUpdate('td_extract_activite', { onComplete: function(){
+      if (!$('td_extract_activite').select('.error, .warning').length) {
+        $('encrypt_activite').disabled = false;
+      }
+    }});
+  }
+  {{/if}}
   
   function encrypt(type) {
     var url = new Url("dPurgences", "ajax_encrypt_passages");
@@ -76,6 +92,9 @@
   {{if array_key_exists('urg', $types)}}
     <li><a href="#URG">{{tr}}extract-urg{{/tr}}</a></li>
   {{/if}}
+  {{if array_key_exists('activite', $types)}}
+    <li><a href="#ACTIVITE">{{tr}}extract-activite{{/tr}}</a></li>
+  {{/if}}
 </ul>
 
 <hr class="control_tabs" />
@@ -90,4 +109,10 @@
 <div id="URG" style="display: none;">
   {{mb_include template=inc_extract_urg}}
 </div>
+{{/if}}
+
+{{if array_key_exists('activite', $types)}}
+  <div id="ACTIVITE" style="display: none;">
+    {{mb_include template=inc_extract_activite}}
+  </div>
 {{/if}}

@@ -1,20 +1,56 @@
 <?php
 /**
- * $Id$
+ * $Id: CRPU.class.php 20203 2013-08-20 10:19:16Z flaviencrochard $
  *
  * @package    Mediboard
  * @subpackage Urgences
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision: 20203 $
  */
 
+/**
+ * Class CRPUSender
+ */
 abstract class CRPUSender {
-  function loadExtractPassages(CExtractPassages &$extractPassages) {}
+  /**
+   * Load extract passages
+   *
+   * @param CExtractPassages &$extractPassages Passages
+   *
+   * @return void
+   */
+  function loadExtractPassages(CExtractPassages &$extractPassages) {
+  }
 
-  function extract(CExtractPassages $extractPassages, $rpus) {}
-    
-  function encrypt(CExtractPassages $extractPassages) {}
-  
-  function transmit(CExtractPassages $extractPassages) {}
+  /**
+   * Extract
+   *
+   * @param CExtractPassages $extractPassages Passage
+   * @param CRPU[]           $rpus            RPUS
+   *
+   * @return void
+   */
+  function extract(CExtractPassages $extractPassages, $rpus) {
+  }
+
+  /**
+   * Encrypt extract passages
+   *
+   * @param CExtractPassages $extractPassages Passages
+   *
+   * @return void
+   */
+  function encrypt(CExtractPassages $extractPassages) {
+  }
+
+  /**
+   * Transmit extract passages
+   *
+   * @param CExtractPassages $extractPassages Passages
+   *
+   * @return void
+   */
+  function transmit(CExtractPassages $extractPassages) {
+  }
 }

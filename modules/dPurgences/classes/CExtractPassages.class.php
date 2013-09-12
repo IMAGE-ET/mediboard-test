@@ -1,14 +1,17 @@
 <?php
 /**
- * $Id$
+ * $Id: CRPU.class.php 20203 2013-08-20 10:19:16Z flaviencrochard $
  *
  * @package    Mediboard
  * @subpackage Urgences
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision: 20203 $
  */
 
+/**
+ * Class CExtractPassages
+ */
 class CExtractPassages extends CMbObject {
   // DB Table key
   public $extract_passages_id;
@@ -70,6 +73,8 @@ class CExtractPassages extends CMbObject {
   }
 
   /**
+   * Load group
+   *
    * @return CGroups
    */
   function loadRefGroup() {
@@ -91,7 +96,12 @@ class CExtractPassages extends CMbObject {
         
     $this->_nb_rpus = $this->countRPUs();
   }
-  
+
+  /**
+   * Count RPU
+   *
+   * @return int
+   */
   function countRPUs() {
     $rpu_passage = new CRPUPassage();
     $rpu_passage->extract_passages_id = $this->_id;
