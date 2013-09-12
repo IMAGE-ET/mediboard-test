@@ -16,16 +16,6 @@
  */
 class CCDADocumentCDA extends CCDAClasseCda{
 
-  /** @var String */
-  static $root;
-  /** @var CCompteRendu */
-  static $docItem;
-  /** @var COperation|CConsultAnesth|CConsultation|CSejour */
-  static $targetObject;
-  /** @var CPatient */
-  static $patient;
-  /** @var CCDAEntiteCDA */
-  static $entite;
   /** @var CCDARoleCDA */
   static $role;
   /** @var CCDAParticipationCDA */
@@ -34,49 +24,30 @@ class CCDADocumentCDA extends CCDAClasseCda{
   static $actRelationship;
   /** @var CCDAActCDA */
   static $act;
+  /** @var CCDAEntiteCDA */
+  static $entite;
+  /** @var  CCDAFactory */
+  static $cda_factory;
 
   /**
    * Création du CDA
    *
-   * @param CCompteRendu $docItem CCompteRendu
+   * @param CCDAFactory $cda_factory cda factory
    *
    * @return CCDAPOCD_MT000040_ClinicalDocument
    */
-  function generateCDA(CCompteRendu $docItem) {
-    $docItem->loadLastLog();
-    self::$targetObject = $object = $docItem->loadTargetObject();
-    if ($object instanceof CConsultAnesth) {
-      self::$targetObject = $object->loadRefConsultation();
-    }
+  function generateCDA($cda_factory) {
     self::$participation   = new CCDAParticipationCDA();
     self::$entite          = new CCDAEntiteCDA();
     self::$act             = new CCDAActCDA();
     self::$actRelationship = new CCDAActRelationshipCDA();
     self::$role            = new CCDARoleCDA();
-
-    self::$docItem         = $docItem;
-    self::$root            = CAppUI::conf("cda OID_root");
-    $this->getPatientFromDoc(self::$docItem);
+    self::$cda_factory     = $cda_factory;
 
     $act = new CCDAActCDA();
     $CDA = $act->setClinicalDocument();
 
     return $CDA;
-  }
-
-  /**
-   * Création de templateId
-   *
-   * @param String $root      String
-   * @param String $extension null
-   *
-   * @return CCDAII
-   */
-  function createTemplateID($root, $extension = null) {
-    $ii = new CCDAII();
-    $ii->setRoot($root);
-    $ii->setExtension($extension);
-    return $ii;
   }
 
   /**
@@ -123,22 +94,6 @@ class CCDADocumentCDA extends CCDAClasseCda{
     $ad->append("streetAddressLine", $street2);
 
     return $ad;
-  }
-
-  /**
-   * Récupère le patient du document
-   *
-   * @param CCompteRendu $docItem CCompteRendu
-   *
-   * @return CPatient
-   */
-  function getPatientFromDoc(CCompteRendu $docItem) {
-    $object = $docItem->_ref_object;
-    if ($object instanceof CPatient) {
-      return self::$patient = $object;
-    }
-    /** @var CConsultation $object CConsultation*/
-    return self::$patient = $object->loadRefPatient();
   }
 
   /**
@@ -303,6 +258,13 @@ class CCDADocumentCDA extends CCDAClasseCda{
     }
   }
 
+  /**
+   * Création du performer
+   *
+   * @param CMediusers $praticien praticien
+   *
+   * @return CCDAPOCD_MT000040_Performer1
+   */
   function setPerformer($praticien) {
     $performer = new CCDAPOCD_MT000040_Performer1();
     $performer->setTypeCode("PRF");
@@ -318,10 +280,8 @@ class CCDADocumentCDA extends CCDAClasseCda{
    * @return void
    */
   function setDocumentationOF($clinicalDoc) {
-    $docItem = self::$docItem;
     /** @var CConsultation $object CConsultation*/
-    $object = self::$targetObject;
-    $object->loadRefPraticien();
+    $object = self::$cda_factory->targetObject;
 
     $documentationOf = new CCDAPOCD_MT000040_DocumentationOf();
     $serviceEvent = new CCDAPOCD_MT000040_ServiceEvent();

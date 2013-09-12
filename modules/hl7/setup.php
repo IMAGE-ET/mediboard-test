@@ -1170,7 +1170,13 @@ class CSetuphl7 extends CSetup {
                 ADD `ignore_fields` VARCHAR (255);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.74";
+    $this->makeRevision("0.74");
+
+    $query = "ALTER TABLE `exchange_hl7v3`
+                CHANGE `object_class` `object_class` ENUM ('CPatient','CSejour','COperation','CAffectation','CConsultation','CFile','CCompteRendu');";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.75";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

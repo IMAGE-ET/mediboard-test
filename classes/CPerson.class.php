@@ -12,7 +12,7 @@
  */
  
 /**
- * Description
+ * class to harmonize person fields and represent a person
  */
 class CPerson extends CMbObject {
   public $_p_city;

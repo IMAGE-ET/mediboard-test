@@ -18,7 +18,8 @@
 
 class CExchangeHL7v3 extends CEchangeXML {
   static $messages = array(
-    "PRPA" => "CPRPAMessaging"
+    "PRPA" => "CPRPA",
+    "XDS"  => "CXDS"
   );
 
   // DB Table key
@@ -43,7 +44,7 @@ class CExchangeHL7v3 extends CEchangeXML {
 
     $props["receiver_id"]   = "ref class|CReceiverHL7v3";
     $props["initiateur_id"] = "ref class|CExchangeHL7v3";
-    $props["object_class"]  = "enum list|CPatient|CSejour|COperation|CAffectation|CConsultation show|0";
+    $props["object_class"]  = "enum list|CPatient|CSejour|COperation|CAffectation|CConsultation|CFile|CCompteRendu show|0";
 
     return $props;
   }

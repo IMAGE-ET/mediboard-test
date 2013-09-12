@@ -22,17 +22,13 @@ class CCDAParticipationCDA extends CCDADocumentCDA {
    * @return CCDAPOCD_MT000040_Author
    */
   function setAuthor() {
-    $docItem = parent::$docItem;
     $author = new CCDAPOCD_MT000040_Author();
-    $object = self::$targetObject;
-    /** @var CSejour|COperation|CConsultation $object CSejour*/
-    $praticien = $object->loadRefPraticien();
 
-    $date = $this->getTimeToUtc($docItem->_ref_last_log->date);
+    $date = $this->getTimeToUtc(self::$cda_factory->date_author);
     $ts = new CCDATS();
     $ts->setValue($date);
     $author->setTime($ts);
-    $author->setAssignedAuthor(parent::$role->setAssignedAuthor($praticien));
+    $author->setAssignedAuthor(parent::$role->setAssignedAuthor());
     return $author;
   }
 
@@ -65,7 +61,6 @@ class CCDAParticipationCDA extends CCDADocumentCDA {
    * @return CCDAPOCD_MT000040_LegalAuthenticator
    */
   function setLegalAuthenticator() {
-    $docItem = parent::$docItem;
     $legalAuthenticator = new CCDAPOCD_MT000040_LegalAuthenticator();
     $date = $this->getTimeToUtc(CMbDT::dateTime());
     $ts = new CCDATS();
@@ -74,9 +69,7 @@ class CCDAParticipationCDA extends CCDADocumentCDA {
     $cs = new CCDACS();
     $cs->setCode("S");
     $legalAuthenticator->setSignatureCode($cs);
-    $object = self::$targetObject;
-    /** @var COperation|CSejour|CConsultation $object */
-    $praticien = $object->loadRefPraticien();
+    $praticien = self::$cda_factory->practicien;
     $legalAuthenticator->setAssignedEntity(parent::$role->setAssignedEntity($praticien));
     return $legalAuthenticator;
   }
@@ -84,14 +77,12 @@ class CCDAParticipationCDA extends CCDADocumentCDA {
   /**
    * Création de la location
    *
-   * @param CUser|CMediUsers $user CUser|CMediUsers
-   *
    * @return CCDAPOCD_MT000040_Location
    */
-  function setLocation($user) {
+  function setLocation() {
     $location = new CCDAPOCD_MT000040_Location();
 
-    $location->setHealthCareFacility(parent::$role->setHealthCareFacility($user));
+    $location->setHealthCareFacility(parent::$role->setHealthCareFacility());
 
     return $location;
   }

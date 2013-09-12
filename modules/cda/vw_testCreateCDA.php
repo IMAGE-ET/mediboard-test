@@ -13,13 +13,11 @@
 
 CCanDo::checkAdmin();
 
-$cda = new CCDADocumentCDA();
 $cr  = new CCompteRendu();
 $cr->load($cr->getRandomValue("compte_rendu_id", true));
-$documentCDA = $cda->generateCDA($cr);
-$cdaXML = $documentCDA->toXML("ClinicalDocument", "urn:hl7-org:v3");
-$cdaXML->purgeEmptyElements();
-$message = $cdaXML->saveXML();
+
+$factory = new CCDAFactory($cr);
+$message = $factory->generateCDA();
 
 $treecda = CCdaTools::parse($message);
 $xml     = CCdaTools::showxml($message);

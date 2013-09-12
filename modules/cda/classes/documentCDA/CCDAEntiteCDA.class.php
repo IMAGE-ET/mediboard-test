@@ -63,7 +63,7 @@ class CCDAEntiteCDA extends CCDADocumentCDA {
   function setPatient() {
     $patientCDA = new CCDAPOCD_MT000040_Patient();
 
-    $patient = parent::$patient;
+    $patient = self::$cda_factory->patient;
     $pn = new CCDAPN();
 
     $enxp = new CCDA_en_family();
@@ -122,7 +122,7 @@ class CCDAEntiteCDA extends CCDADocumentCDA {
    */
   function setPlace() {
     $place = new CCDAPOCD_MT000040_Place();
-    $patient = parent::$patient;
+    $patient = self::$cda_factory->patient;
     $birthPlace = $patient->lieu_naissance;
     $birthPostalCode = $patient->cp_naissance;
 
@@ -153,7 +153,7 @@ class CCDAEntiteCDA extends CCDADocumentCDA {
     $custOrg = new CCDAPOCD_MT000040_CustodianOrganization();
     $this->setIdEtablissement($custOrg, $etablissement);
     $ii = new CCDAII();
-    $ii->setRoot(parent::$root);
+    $ii->setRoot(self::$cda_factory->root);
     $custOrg->appendId($ii);
 
     if ($etablissement->raison_sociale) {
@@ -192,6 +192,7 @@ class CCDAEntiteCDA extends CCDADocumentCDA {
    * @return CCDAPOCD_MT000040_Organization
    */
   function setOrganization($user) {
+    $factory = self::$cda_factory;
     $organization = new CCDAPOCD_MT000040_Organization();
 
     $user->loadRefFunction();
@@ -199,13 +200,15 @@ class CCDAEntiteCDA extends CCDADocumentCDA {
 
     $this->setIdEtablissement($organization, $etablissement);
     $ii = new CCDAII();
-    $ii->setRoot(parent::$root);
+    $ii->setRoot($factory->root);
     $organization->appendId($ii);
 
+    $insdustry = $factory->industry_code;
+
     $ce = new CCDACE();
-    $ce->setCode("ETABLISSEMENT");
-    $ce->setDisplayName("Etablissement de santé");
-    $ce->setCodeSystem("1.2.250.1.213.1.1.4.9");
+    $ce->setCode($insdustry["code"]);
+    $ce->setDisplayName($insdustry["displayName"]);
+    $ce->setCodeSystem($insdustry["codeSystem"]);
     $organization->setStandardIndustryClassCode($ce);
 
     if ($etablissement->raison_sociale) {

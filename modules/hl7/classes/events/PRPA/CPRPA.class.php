@@ -12,10 +12,10 @@
  */
 
 /**
- * Class CPRPAMessaging
+ * Class CPRPA
  * Patient Administration
  */
-class CPRPAMessaging extends CHL7v3Messaging {
+class CPRPA extends CHL7v3Messaging {
 
   /** @var array */
   static $versions = array (
@@ -50,7 +50,7 @@ class CPRPAMessaging extends CHL7v3Messaging {
   /**
    * Construct
    *
-   * @return CPRPAMessaging
+   * @return CPRPA
    */
   function __construct() {
     $this->type = "PRPA";

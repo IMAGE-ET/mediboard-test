@@ -3,7 +3,7 @@
 /**
  * $Id$
  *  
- * @category XDS
+ * @category HL7
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -12,41 +12,46 @@
  */
  
 /**
- * Description
+ * CHL7v3EventXDSRegistryStoredQuery
+ * Registry stored query
  */
-class CXDSEventITI18 {
-
-  public $evenement_type = "registry";
-  public $function = "DocumentRegistry_RegistryStoredQuery";
-  public $ack_data;
-
+class CHL7v3EventXDSRegistryStoredQuery extends CHL7v3EventXDS implements CHL7EventXDSRegistryStoredQuery {
+  /** @var string */
+  public $interaction_id = "RegistryStoredQuery";
 
   /**
-   * Construit la requête
+   * Build ProvideAndRegisterDocumentSetRequest event
    *
-   * @param String $data données nécessaires
+   * @param CCompteRendu|CFile $object compte rendu
    *
-   * @return DOMElement
+   * @see parent::build()
+   *
+   * @return void
    */
-  function build($data) {
+  function build($object) {
+    parent::build($object);
+
     $xml = new CXDSXmlDocument();
 
+    $oid = CMbOID::getOIDFromClass($object);
+    //@todo voir pour version envoyé.
+    $oid = $oid.".".$object->_id.".".$object->version;
     $message = $xml->createQueryElement($xml, "AdhocQueryRequest");
     $response_option = $xml->createQueryElement($message, "ResponseOption");
     $xml->addAttribute($response_option, "returnComposedObjects", "false");
     $xml->addAttribute($response_option, "returnType", "ObjectRef");
     $adhocQuery = $xml->createRimRoot("AdhocQuery", null, $message);
     $xml->addAttribute($adhocQuery, "id", "urn:uuid:5c4f972b-d56b-40ac-a5fc-c8ca9b40b9d4");
-    $slot = new CXDSSlot("\$XDSDocumentEntryUniqueId", array("('$data')"));
+    $slot = new CXDSSlot("\$XDSDocumentEntryUniqueId", array("('$oid')"));
     $xml->importDOMDocument($adhocQuery, $slot->toXML());
-    //@todo voir pour chercher document archivé
-    return $message;
+
+    $this->message = $xml->saveXML();
+
+    $this->updateExchange(false);
   }
 
   /**
-   * Retourne le message d'acquittement
-   *
-   * @return array
+   * @see parent::getAcknowledgment
    */
   function getAcknowledgment() {
 

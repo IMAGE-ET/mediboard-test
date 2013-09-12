@@ -41,17 +41,16 @@ class CCDARoleCDA extends CCDADocumentCDA {
   /**
    * Création du role de l'auteur
    *
-   * @param CUser|CMediUsers $mediUser CUser|CMediUsers
-   *
    * @return CCDAPOCD_MT000040_AssignedAuthor
    */
-  function setAssignedAuthor($mediUser) {
+  function setAssignedAuthor() {
     $assigned = new CCDAPOCD_MT000040_AssignedAuthor();
 
-    $this->setAssigned($assigned, $mediUser);
+    $praticien = self::$cda_factory->practicien;
+    $this->setAssigned($assigned, $praticien);
 
-    $assigned->setAssignedPerson(parent::$entite->setPerson($mediUser));
-
+    $assigned->setAssignedPerson(parent::$entite->setPerson($praticien));
+    $assigned->setRepresentedOrganization(parent::$entite->setOrganization($praticien));
     return $assigned;
   }
 
@@ -73,8 +72,7 @@ class CCDARoleCDA extends CCDADocumentCDA {
    */
   function setPatientRole() {
     $patientRole = new CCDAPOCD_MT000040_PatientRole();
-    $patient = parent::$patient;
-    $patient->loadIPP();
+    $patient = self::$cda_factory->patient;
 
     /*if (!$patient->INSC) {
       return;
@@ -89,7 +87,7 @@ class CCDARoleCDA extends CCDADocumentCDA {
     /* @todo Gérer le master domaine*/
     //$group_domain = new CGroupDomain();
     //$group_domain->loadM
-    $ii->setRoot(parent::$root);
+    $ii->setRoot(self::$cda_factory->root);
     $ii->setExtension($patient->_IPP);
     //libelle du domaine
     $ii->setAssigningAuthorityName("");
@@ -140,19 +138,11 @@ class CCDARoleCDA extends CCDADocumentCDA {
   /**
    * Retourne un HealthCareFacility
    *
-   * @var CUser|CMediusers $user praticien
-   *
    * @return CCDAPOCD_MT000040_HealthCareFacility
    */
-  function setHealthCareFacility($user) {
+  function setHealthCareFacility() {
     $healt = new CCDAPOCD_MT000040_HealthCareFacility();
-
-    $user->loadRefFunction();
-    $group = new CGroups();
-    $group->load($user->_group_id);
-    $group->loadLastId400("cda_association_code");
-    $valeur = CCdaTools::loadEntryJV("CI-SIS_jdv_healthcareFacilityTypeCode.xml", $group->_ref_last_id400->id400);
-
+    $valeur = self::$cda_factory->healt_care;
     $ce = new CCDACE();
     $ce->setCode($valeur["code"]);
     $ce->setCodeSystem($valeur["codeSystem"]);

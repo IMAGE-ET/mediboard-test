@@ -16,33 +16,40 @@
  */
 class CXDSMappingCDA {
 
-  public $cda;
+  public $factory;
   public $name_submission;
   public $id_classification;
   public $id_external;
   public $xpath;
   public $xcn_mediuser;
   public $xon_etablissement;
-  public $oid = array();
+  public $ins_patient;
+  public $practice_setting;
+  public $health_care_facility;
+  public $uuid          = array();
+  public $oid           = array();
   public $name_document = array();
 
   /**
    * Constructeur
    *
-   * @param String $cda Document CDA
+   * @param CCDAFactory $factory CDA factory
    */
-  function __construct($cda) {
-    $this->cda               = $cda;
+  function __construct($factory) {
+    $this->factory           = $factory;
     $this->id_classification = 0;
     $this->id_external       = 0;
     $this->xcn_mediuser      = CXDSTools::getXCNMediuser();
     $this->xon_etablissement = CXDSTools::getXONetablissement();
 
-    $document_cda = new CCDADomDocument();
-    $document_cda->loadXMLSafe($cda);
-
-    $this->xpath = new CMbXPath($document_cda);
+    $this->xpath = new CMbXPath($factory->dom_cda);
     $this->xpath->registerNamespace("cda", "urn:hl7-org:v3");
+
+    $this->ins_patient = $this->getIns();
+    $uuid = CMbSecurity::generateUUID();
+    $this->uuid["registry"]  = $uuid."1";
+    $this->uuid["extrinsic"] = $uuid."2";
+    $this->uuid["signature"] = $uuid."3";
   }
 
   /**
@@ -55,8 +62,7 @@ class CXDSMappingCDA {
    * @return CXDSXmlDocument
    */
   function generateXDS57($uuid, $archivage = null, $depublication = null) {
-    $id_registry  = "2.25.4896.6";
-    $id_extrinsic  = "2.25.4896.5";
+    $id_registry  = $this->uuid["registry"];
 
     $class = new CXDSRegistryObjectList();
 
@@ -77,7 +83,6 @@ class CXDSMappingCDA {
     $asso->setSlot("NewStatus", array("urn:asip:ci-sis:2010:StatusType:$statusType"));
     $class->appendAssociation($asso);
 
-
     return $class->toXML();
   }
 
@@ -87,9 +92,9 @@ class CXDSMappingCDA {
    * @return CXDSXmlDocument
    */
   function generateXDS41() {
-    $id_registry  = "2.25.4896.5";
-    $id_document  = "2.25.4896.4";
-    $id_signature = "2.25.4896.3";
+    $id_registry  = $this->uuid["registry"];
+    $id_document  = $this->uuid["extrinsic"];
+    $id_signature = $this->uuid["signature"];
 
     $class = new CXDSRegistryObjectList();
 
@@ -133,23 +138,13 @@ class CXDSMappingCDA {
    * @return string
    */
   function getIns () {
-    $xpath = $this->xpath;
+    $patient = $this->factory->patient;
+    //@todo: faire l'INSA
 
-    //Récupération de l'INSA
-    $patientRole = "/cda:ClinicalDocument/cda:recordTarget/cda:patientRole";
-    $node = $xpath->queryUniqueNode("$patientRole/cda:id[@root='1.2.250.1.213.1.4.1']");
-    $comp5 = "INS-A";
-
-    if (!$node) {
-      //Récupération de l'INSC
-      $node = $xpath->queryUniqueNode("$patientRole/cda:id[@root='1.2.250.1.213.1.4.2']");
-      $comp5 = "INS-C";
-    }
-
-    //@todo: récupérer la date pour l'INS-C
-    $comp4 = $xpath->queryAttributNode(".", $node, "root");
+    $comp5 = "INS-C";
+    $comp4 = "1.2.250.1.213.1.4.2";
     $comp4 = "&$comp4&ISO";
-    $comp1 = $xpath->queryAttributNode(".", $node, "extension");
+    $comp1 = $patient->INSC;
 
     $result = "$comp1^^^$comp4^$comp5";
     return $result;
@@ -183,7 +178,7 @@ class CXDSMappingCDA {
   function createRegistryPackage($id) {
     $cla_id                = &$this->id_classification;
     $ei_id                 = &$this->id_external;
-    $ins                   = $this->getIns();
+    $ins                   = $this->ins_patient;
     $this->name_submission = $id;
 
     $registry = new CXDSRegistryPackage($id);
@@ -201,7 +196,7 @@ class CXDSMappingCDA {
     $registry->appendDocumentEntryAuthor($document);
 
     //type d'activité pour lequel on envoie les documents
-    //@todo: a faire
+    //@todo : a faire
     $content = new CXDSContentType("cla$cla_id", $id, "04");
     $this->setClaId();
     $content->setCodingScheme(array("1.2.250.1.213.2.2"));
@@ -217,13 +212,13 @@ class CXDSMappingCDA {
     $this->setEiId();
 
     //OID de l'instance serveur
-    //@todo: a faire
-    $registry->setSourceId("ei$ei_id", $id, "1.2.250.1.999.1.1.7898");
+    $oid_instance = CMbOID::getOIDOfInstance($registry);
+    $registry->setSourceId("ei$ei_id", $id, $oid_instance);
     $this->setEiId();
 
-    //OID unique  concat(oid.objet+id.doc+time)
-    //@todo: a faire
-    $this->oid["lot"] = "2.25.43911231647312014016.".time();
+    //OID unique @todo : voir pour id du registre
+    $oid = CMbOID::getOIDFromClass($registry);
+    $this->oid["lot"] = $oid.".".CXDSTools::getTimeUtc();
     $registry->setUniqueId("ei$ei_id", $id, $this->oid["lot"]);
     $this->setEiId();
 
@@ -238,25 +233,23 @@ class CXDSMappingCDA {
    * @return CXDSExtrinsicObject
    */
   function createExtrinsicObject($id) {
+    $factory = $this->factory;
     $cla_id = &$this->id_classification;
     $ei_id  = &$this->id_external;
     $xpath  = $this->xpath;
-    $ins    = $this->getIns();
+    $ins    = $this->ins_patient;
     $this->appendNameDocument($id);
 
     $extrinsic = new CXDSExtrinsicObject($id, "text/xml");
 
     //effectiveTime en UTC
-    $time = $xpath->queryAttributNode("/cda:ClinicalDocument/cda:effectiveTime", null, "value");
-    $extrinsic->setSlot("creationTime", array(CXDSTools::getTimeUtc($time)));
+    $extrinsic->setSlot("creationTime", array(CXDSTools::getTimeUtc($factory->date_creation)));
 
     //languageCode
-    $languageCode = $xpath->queryAttributNode("/cda:ClinicalDocument/cda:languageCode", null, "code");
-    $extrinsic->setSlot("languageCode", array($languageCode));
+    $extrinsic->setSlot("languageCode", array($factory->langage));
 
     //legalAuthenticator XCN
-    $node = $xpath->queryUniqueNode("/cda:ClinicalDocument/cda:legalAuthenticator/cda:assignedEntity");
-    $legalAuthenticator = $this->getPerson($node);
+    $legalAuthenticator = $this->getPerson($factory->practicien);
     $extrinsic->setSlot("legalAuthenticator", array($legalAuthenticator));
 
     //documentationOf/serviceEvent/effectiveTime/low en UTC
@@ -272,74 +265,70 @@ class CXDSMappingCDA {
     $extrinsic->setSlot("sourcePatientId", array($ins));
 
     //title
-    $title = $xpath->queryTextNode("/cda:ClinicalDocument/cda:title");
-    $extrinsic->setTitle($title);
+    $extrinsic->setTitle($factory->nom);
 
     //Auteur du document
     $document = new CXDSDocumentEntryAuthor("cla$cla_id", $id);
     $this->setClaId();
 
     //author/assignedAuthor
-    $assigned_author = "/cda:ClinicalDocument/cda:author/cda:assignedAuthor";
-    $node = $xpath->queryUniqueNode($assigned_author);
-    $author = $this->getPerson($node);
+    $author = $this->getPerson($factory->practicien);
     $document->setAuthorPerson(array($author));
 
     //author/assignedAuthor/code
+    $assigned_author = "/cda:ClinicalDocument/cda:author/cda:assignedAuthor";
     $node = $xpath->queryUniqueNode("$assigned_author/cda:code");
-    $speciality = $this->getSpeciality($node);
-    $document->setAuthorSpecialty(array($speciality));
+    if ($node) {
+      $speciality = $this->getSpeciality($node);
+      $document->setAuthorSpecialty(array($speciality));
+    }
 
     //author/assignedAuthor/representedOrganization - si absent, ne pas renseigner
     //si nom pas présent - champ vide
     //si id nullflavor alors 6-7-10 vide
     $node = $xpath->queryUniqueNode("$assigned_author/cda:representedOrganization");
-    if (!$xpath->queryAttributNode(".", $node, "nullFlavor")) {
+
+    if ($node && !$xpath->queryAttributNode(".", $node, "nullFlavor")) {
       $institution = $this->getOrganisation($node);
       $document->setAuthorInstitution(array($institution));
     }
     $extrinsic->appendDocumentEntryAuthor($document);
 
     //confidentialityCode
-    $confidentiality_code = "/cda:ClinicalDocument/cda:confidentialityCode";
-    $confidentiality = $xpath->queryAttributNode($confidentiality_code, null, "code");
-    $confid = new CXDSConfidentiality("cla$cla_id", $id, $confidentiality);
-    $this->setClaId();
-    $confidentialityCode = $xpath->queryAttributNode($confidentiality_code, null, "codeSystem");
-    $confid->setCodingScheme(array($confidentialityCode));
-    $confidentialityName = $xpath->queryAttributNode($confidentiality_code, null, "displayName");
-    $confid->setName($confidentialityName);
+    $confidentialite = $factory->confidentialite;
+    $confid = new CXDSConfidentiality("cla$cla_id", $id, $confidentialite["code"]);
+    $confid->setCodingScheme(array($confidentialite["codeSystem"]));
+    $confid->setName($confidentialite["displayName"]);
     $extrinsic->appendConfidentiality($confid);
 
     //documentationOf/serviceEvent/code - table de correspondance
     $eventCode = $xpath->queryAttributNode("$service_event/cda:code", null, "code");
     $eventName = $xpath->queryAttributNode("$service_event/cda:code", null, "displayName");
     $eventSystem = $xpath->queryAttributNode("$service_event/cda:code", null, "codeSystem");
-    $event = new CXDSEventCodeList("cla$cla_id", $id, $eventCode);
-    $this->setClaId();
-    $event->setCodingScheme(array($eventSystem));
-    $event->setName($eventName);
-    $extrinsic->appendEventCodeList($event);
+    if ($eventCode) {
+      $event = new CXDSEventCodeList("cla$cla_id", $id, $eventCode);
+      $this->setClaId();
+      $event->setCodingScheme(array($eventSystem));
+      $event->setName($eventName);
+      $extrinsic->appendEventCodeList($event);
+    }
 
     //En fonction d'un corps structuré
-    $type = $xpath->queryAttributNode("/cda:ClinicalDocument/cda:component/cda:nonXMLBody/cda:text", null, "mediaType");
+    $type = $factory->mediaType;
     $codingScheme = "";
     $name = "";
     $formatCode = "";
     if ($type) {
-      $correspondance = new DOMDocument();
-      $correspondance->load("modules/xds/resources/Document_non_structure.xml");
-      $correspondanceXpath = new CMbXPath($correspondance);
-      $node         = $correspondanceXpath->queryUniqueNode("/mappage/line[@id='$type']");
-      $codingScheme = $correspondanceXpath->queryAttributNode("./xds", $node, "codingScheme");
-      $name         = $correspondanceXpath->queryAttributNode("./mediaType", $node, "contenu");
-      $formatCode   = $correspondanceXpath->queryAttributNode("./xds", $node, "formatCode");
+      $entry = CXDSTools::loadEntryDocument("Document_non_structure.xml", $type);
+      $codingScheme = $entry["codingScheme"];
+      $name         = $entry["contenu"];
+      $formatCode   = $entry["formatCode"];
     }
     else {
       $correspondance = new DOMDocument();
       $correspondance->load("modules/xds/resources/Document_structure.xml");
       $correspondanceXpath = new CMbXPath($correspondance);
-      $type = $xpath->query("/cda:ClinicalDocument/cda:templateId");
+      $type = $factory->templateId;
       foreach ($type as $_type) {
         $type_id = $correspondanceXpath->queryAttributNode(".", $_type, "root");
         $node = $correspondanceXpath->queryUniqueNode("/mappage/line[@id='$type_id']");
@@ -365,15 +354,13 @@ class CXDSMappingCDA {
     $extrinsic->setFormat($format);
 
     //componentOf/encompassingEncounter/location/healthCareFacility/code
-    $healtcare_facility = "/cda:ClinicalDocument/cda:componentOf/cda:encompassingEncounter/cda:location/cda:healthCareFacility";
-    $healtcare     = $xpath->queryAttributNode("$healtcare_facility/cda:code", null, "code");
-    $healtcareName = $xpath->queryAttributNode("$healtcare_facility/cda:code", null, "displayName");
-    $healtcareCode = $xpath->queryAttributNode("$healtcare_facility/cda:code", null, "codeSystem");
-    $healt         = new CXDSHealthcareFacilityType("cla$cla_id", $id, $healtcare);
+    $healtcare     = $factory->healt_care;
+    $healt         = new CXDSHealthcareFacilityType("cla$cla_id", $id, $healtcare["code"]);
     $this->setClaId();
-    $healt    ->setCodingScheme(array($healtcareCode));
-    $healt    ->setName($healtcareName);
+    $healt    ->setCodingScheme(array($healtcare["codeSystem"]));
+    $healt    ->setName($healtcare["displayName"]);
     $extrinsic->setHealthcareFacilityType($healt);
+    $this->health_care_facility = $healt;
 
     //documentationOf/serviceEvent/performer/assignedEntity/representedOrganization/standardIndustryClassCode
     $standard_industry = "$service_event/cda:performer/cda:assignedEntity/cda:representedOrganization/cda:standardIndustryClassCode";
@@ -384,21 +371,19 @@ class CXDSMappingCDA {
     $this->setClaId();
     $pratice  ->setCodingScheme(array($pracSystem));
     $pratice  ->setName($pracName);
+    $this->practice_setting = $pratice;
     $extrinsic->setPracticeSetting($pratice);
 
     //code
-    $code_xpath = "/cda:ClinicalDocument/cda:code";
-    $code       = $xpath->queryAttributNode($code_xpath, null, "code");
-    $codeName   = $xpath->queryAttributNode($code_xpath, null, "displayName");
-    $codeSystem = $xpath->queryAttributNode($code_xpath, null, "codeSystem");
-    $type       = new CXDSType("cla$cla_id", $id, $code);
+    $code = $factory->code;
+    $type = new CXDSType("cla$cla_id", $id, $code["code"]);
     $this->setClaId();
-    $type     ->setCodingScheme(array($codeSystem));
-    $type     ->setName($codeName);
+    $type     ->setCodingScheme(array($code["codeSystem"]));
+    $type     ->setName($code["displayName"]);
     $extrinsic->setType($type);
 
     //code - table de correspondance X04
-    list($classCode, $oid, $name) = $this->getClassCodeFromCode($code);
+    list($classCode, $oid, $name) = $this->getClassCodeFromCode($code["code"]);
     $classification = new CXDSClass("cla$cla_id", $id, $classCode);
     $this->setClaId();
     $classification->setCodingScheme(array($oid));
@@ -409,14 +394,10 @@ class CXDSMappingCDA {
     $extrinsic->setPatientId("ei$ei_id", $id, $ins);
     $this->setEiId();
 
-    //id - root+extension
-    //@todo : voir pour extension
-    $id_xpath  = "/cda:ClinicalDocument/cda:id";
-    $root      = $xpath->queryAttributNode($id_xpath, null, "root");
-    $extension = $xpath->queryAttributNode($id_xpath, null, "extension");
-    $unique_id = $this->getUniqueId($root, $extension);
-    $this->oid["extrinsic"] = $unique_id;
-    $extrinsic->setUniqueId("ei$ei_id", $id, $unique_id);
+    //id - root
+    $root = $factory->id_cda;
+    $this->oid["extrinsic"] = $root;
+    $extrinsic->setUniqueId("ei$ei_id", $id, $root);
     $this->setEiId();
 
     return $extrinsic;
@@ -432,6 +413,7 @@ class CXDSMappingCDA {
   function createSignature($id) {
     $cla_id = &$this->id_classification;
     $ei_id  = &$this->id_external;
+    $ins    = $this->ins_patient;
 
     //Création du document
     $extrinsic = new CXDSExtrinsicObject($id, "text/xml");
@@ -441,9 +423,8 @@ class CXDSMappingCDA {
     $extrinsic->setSlot("serviceStartTime"  , array(CXDSTools::getTimeUtc()));
     $extrinsic->setSlot("serviceStopTime"   , array(CXDSTools::getTimeUtc()));
 
-    //@todo: a faire
     //patientId du lot de submission
-    $extrinsic->setSlot("sourcePatientId", array("0887177831579788841339^^^&1.2.250.1.213.1.4.2&ISO^INS-C"));
+    $extrinsic->setSlot("sourcePatientId", array($ins));
     $extrinsic->setTitle("Source");
 
     //@todo: a faire
@@ -467,16 +448,12 @@ class CXDSMappingCDA {
     $confid->setName("Normal");
     $extrinsic->appendConfidentiality($confid);
 
-    $confid2 = new CXDSConfidentiality("cla$cla_id", $id, "MASQUE_PS");
+    $confid2 = CXDSConfidentiality::getMasquagePS("cla$cla_id", $id);
     $this->setClaId();
-    $confid2->setCodingScheme(array("1.2.250.1.213.1.1.4.13"));
-    $confid2->setName("Document masqué aux professionnels de santé");
     $extrinsic->appendConfidentiality($confid2);
 
-    $confid3 = new CXDSConfidentiality("cla$cla_id", $id, "INVISIBLE_PATIENT");
+    $confid3 = CXDSConfidentiality::getMasquagePatient("cla$cla_id", $id);
     $this->setClaId();
-    $confid3->setCodingScheme(array("1.2.250.1.213.1.1.4.13"));
-    $confid3->setName("Document non visible par le patient");
     $extrinsic->appendConfidentiality($confid3);
 
     $event = new CXDSEventCodeList("cla$cla_id", $id, "1.2.840.10065.1.12.1.14");
@@ -491,18 +468,10 @@ class CXDSMappingCDA {
     $format->setName("Default Signature Style");
     $extrinsic->setFormat($format);
 
-    //@todo: a faire
-    $healt = new CXDSHealthcareFacilityType("cla$cla_id", $id, "SA01");
-    $this->setClaId();
-    $healt->setCodingScheme(array("1.2.250.1.71.4.2.4"));
-    $healt->setName("Etablissement Public de santé");
+    $healt = $this->health_care_facility;
     $extrinsic->setHealthcareFacilityType($healt);
 
-    //@todo: a faire
-    $pratice = new CXDSPracticeSetting("cla$cla_id", $id, "ETABLISSEMENT");
-    $this->setClaId();
-    $pratice->setCodingScheme(array("1.2.250.1.213.1.1.4.9"));
-    $pratice->setName("Etablissement de santé");
+    $pratice = $this->practice_setting;
     $extrinsic->setPracticeSetting($pratice);
 
     $type = new CXDSType("cla$cla_id", $id, "E1762");
@@ -511,14 +480,13 @@ class CXDSMappingCDA {
     $type->setName("Full Document");
     $extrinsic->setType($type);
 
-    //@todo: a faire
     //identique au lot de submission
-    $extrinsic->setPatientId("ei$ei_id", $id, "0887177831579788841339^^^&1.2.250.1.213.1.4.2&ISO^INS-C^^20100522152212");
+    $extrinsic->setPatientId("ei$ei_id", $id, $ins);
     $this->setEiId();
 
-    //@todo: a faire
-    $this->oid["signature"] = "1.2.250.1.999.1.1.7898.3.20111206120801.0";
-    $extrinsic->setUniqueId("ei$ei_id", $id, "1.2.250.1.999.1.1.7898.3.20111206120801.0");
+    //identifiant de la signature
+    $this->oid["signature"] = $this->oid["lot"]."0";
+    $extrinsic->setUniqueId("ei$ei_id", $id, $this->oid["signature"]);
     $this->setEiId();
 
     return $extrinsic;
@@ -548,21 +516,6 @@ class CXDSMappingCDA {
   }
 
   /**
-   * Concatène le root et l'extension
-   *
-   * @param String $root      Racine
-   * @param String $extension Extension
-   *
-   * @return string
-   */
-  function getUniqueId($root, $extension) {
-    if ($extension) {
-      $extension = "^$extension";
-    }
-    return $root.$extension;
-  }
-
-  /**
    * Retourne l'oid, l'identifiant et le nom d'une classe selon le code
    *
    * @param String $code Code
@@ -570,20 +523,11 @@ class CXDSMappingCDA {
    * @return array
    */
   function getClassCodeFromCode($code) {
-    $xml_jv_x04 = new DOMDocument();
-    $xml_jv_x04->load("modules/xds/resources/jeux_de_valeurs/ASIP-SANTE_X04.xml");
-
-    $xpath_x04 = new CMbXPath($xml_jv_x04);
-    $node      = $xpath_x04->queryUniqueNode("/jeuxValeurs/line[@id='$code']");
-    $id        = $node->getAttribute("name");
-
-    $xml_classCode = new DOMDocument();
-    $xml_classCode->load("modules/xds/resources/jeux_de_valeurs/ASIP-SANTE_classCode.xml");
-
-    $xpath_classCode = new CMbXPath($xml_classCode);
-    $node            = $xpath_classCode->queryUniqueNode("/jeuxValeurs/line[@id='$id']");
-    $oid             = $node->getAttribute("oid");
-    $name            = $node->getAttribute("name");
+    $entry = CXDSTools::loadEntryJV("ASIP-SANTE_X04.xml", $code);
+    $entry = CXDSTools::loadEntryJV("ASIP-SANTE_classCode.xml", $entry["name"]);
+    $id   = $entry["id"];
+    $oid  = $entry["oid"];
+    $name = $entry["name"];
 
     return array($id, $oid, $name);
   }
@@ -591,22 +535,28 @@ class CXDSMappingCDA {
   /**
    * Retourne la person
    *
-   * @param DOMElement $node DOMElement
+   * @param CMediusers $praticien CMediusers
    *
    * @return string
    */
-  function getPerson($node) {
-    $xpath = $this->xpath;
-    $comp10 = "D";
-    $id = $node->getElementsByTagName("id")->item(0);
+  function getPerson($praticien) {
 
-    $person = $node->getElementsByTagName("assignedPerson");
-    $person = $person->item(0);
-    /** @var DOMElement $person */
-    $comp2 = $person->getElementsByTagName("family")->item(0)->nodeValue;
-    $comp3 = $person->getElementsByTagName("given")->item(0)->nodeValue;
-    $comp1 = $xpath->queryAttributNode(".", $id, "extension");
-    $comp9 = $xpath->queryAttributNode(".", $id, "root");
+    if (!$praticien->adeli && !$praticien->rpps) {
+      return null;
+    }
+    $comp1 = "";
+    $comp2 = $praticien->_p_last_name;
+    $comp3 = $praticien->_p_first_name;
+    $comp9 = "1.2.250.1.71.4.2.1";
+    $comp10 = "D";
+
+    if ($praticien->adeli) {
+      $comp1 = "0$praticien->adeli";
+    }
+
+    if ($praticien->rpps) {
+      $comp1 = "8$praticien->rpps";
+    }
     $comp13 = $this->getTypeId($comp1);
     $result = "$comp1^$comp2^$comp3^^^^^^&$comp9&ISO^$comp10^^^$comp13";
     return $result;

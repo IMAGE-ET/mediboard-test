@@ -32,7 +32,8 @@ class CReceiverHL7v3 extends CInteropReceiver {
     $spec->table = 'receiver_hl7v3';
     $spec->key   = 'receiver_hl7v3_id';
     $spec->messages = array(
-      "PRPA" => array ("CPRPAMessaging"),
+      "PRPA" => array ("CPRPA"),
+      "XDS"  => array ("CXDS"),
     );
     
     return $spec;
@@ -97,7 +98,7 @@ class CReceiverHL7v3 extends CInteropReceiver {
     $this->loadConfigValues();
     $evenement->build($mbObject);
 
-    $source = CExchangeSource::get("$this->_guid-C{$evenement->event_type}Messaging");
+    $source = CExchangeSource::get("$this->_guid-C{$evenement->event_type}");
 
     if (!$source->_id || !$source->active) {
       return null;
@@ -117,7 +118,8 @@ class CReceiverHL7v3 extends CInteropReceiver {
 
     $source->setData($msg, null, $exchange);
     try {
-      $source->send($evenement->_dmp_event_name);
+      $event_name = isset($evenement->_event_name) ? $evenement->_event_name : null;
+      $source->send($event_name);
     }
     catch (Exception $e) {
       throw $e;
@@ -132,14 +134,17 @@ class CReceiverHL7v3 extends CInteropReceiver {
       return null;
     }
 
-    if (!$ack = CPRPAMessaging::getAcknowledgment($ack_data)) {
+    $class_name = "C{$evenement->event_type}";
+    if (!$ack = $class_name::getAcknowledgment($ack_data)) {
       $exchange->store();
       return null;
     }
 
     $exchange->date_echange        = CMbDT::dateTime();
     $exchange->statut_acquittement = $ack->getStatutAcknowledgment();
-    $exchange->acquittement_valide = $ack->dom->schemaValidate() ? 1 : 0;
+    $exchange->acquittement_valide = $ack->dom->schemafilename ?
+                                        $ack->dom->schemaValidate() ? 1 : 0
+                                        : 1;
     $exchange->_acquittement       = $ack_data;
     $exchange->store();
 

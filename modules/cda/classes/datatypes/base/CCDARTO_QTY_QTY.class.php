@@ -10,7 +10,7 @@
  * @link     http://www.mediboard.org */
 
 /**
- * Description
+ * Classe pour répésenter des ratios de quantité
  */
 class CCDARTO_QTY_QTY extends CCDAQTY {
 

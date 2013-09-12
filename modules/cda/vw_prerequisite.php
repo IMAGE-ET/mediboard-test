@@ -13,14 +13,11 @@
 
 CCanDo::checkAdmin();
 
-//@todo voir checker les OID
-
 $group      = CGroups::loadCurrent();
 $tag        = "cda_association_code";
 $category   = new CFilesCategory();
 $categories = $category->loadGroupList();
 $mb_oid     = CAppUI::conf("mb_oid");
-$cda_oid    = CAppUI::conf("cda OID_root");
 
 foreach ($categories as $_category) {
   /** @var CFilesCategory $_category */
@@ -46,7 +43,6 @@ $smarty->assign("categories", $categories);
 $smarty->assign("type_code" , $type_code);
 $smarty->assign("group"     , $group);
 $smarty->assign("mb_oid"    , $mb_oid);
-$smarty->assign("cda_oid"   , $cda_oid);
 $smarty->assign("java"      , $java);
 $smarty->assign("type_group", $type_group);
 $smarty->display("vw_prerequisite.tpl");

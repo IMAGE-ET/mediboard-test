@@ -23,7 +23,7 @@ class CCDADomDocument extends CMbXMLDocument {
     parent::__construct("UTF-8");
 
     $this->preserveWhiteSpace = true;
-    $this->formatOutput = true;
+    $this->formatOutput = false;
   }
 
   /**

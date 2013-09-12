@@ -86,6 +86,8 @@ class CIHE {
         return CSWF::getEvent($exchange);
       case "PDQ" :
         return CPDQ::getEvent($exchange);
+      case "XDS" :
+        return CXDS::getEvent($exchange);
       default :
         throw new CMbException("CIHE_event-unknown");
         break;

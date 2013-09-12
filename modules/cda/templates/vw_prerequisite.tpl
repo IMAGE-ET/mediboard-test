@@ -56,18 +56,6 @@
     </tr>
     <tr>
       <td>
-        {{tr}}Cda_oid{{/tr}}
-      </td>
-      <td class="{{if $cda_oid}}ok{{else}}error{{/if}}">
-        {{if $cda_oid}}
-          {{tr}}Present{{/tr}}
-        {{else}}
-          {{tr}}Not_present{{/tr}}
-        {{/if}}
-      </td>
-    </tr>
-    <tr>
-      <td>
         {{tr}}Install_Java{{/tr}}
       </td>
       <td class="{{if $java}}ok{{else}}error{{/if}}">

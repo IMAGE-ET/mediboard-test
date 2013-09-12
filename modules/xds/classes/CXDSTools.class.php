@@ -43,6 +43,48 @@ class CXDSTools {
   }
 
   /**
+   * Retourne une entrée pour un document
+   *
+   * @param String $name Nom du jeux de valeur
+   * @param String $code Identifiant de la valeur voulut
+   *
+   * @return array
+   */
+  static function loadEntryDocument($name, $code) {
+    $path = "modules/xds/resources/$name";
+    $dom = new CMbXMLDocument();
+    $dom->load($path);
+    $xpath = new CMbXPath($dom);
+    $node = $xpath->queryUniqueNode("//line[@id='$code']");
+    $valeur = array("contenu" => $xpath->queryAttributNode("./mediaType", $node, "contenu"),
+                    "formatCode" => $xpath->queryAttributNode("./xds", $node, "formatCode"),
+                    "codingScheme" => $xpath->queryAttributNode("./xds", $node, "codingScheme"));
+
+    return $valeur;
+  }
+
+  /**
+   * Retourne une entrée dans un jeux de valeur
+   *
+   * @param String $name Nom du jeux de valeur
+   * @param String $code Identifiant de la valeur voulut
+   *
+   * @return array
+   */
+  static function loadEntryJV($name, $code) {
+    $path = "modules/xds/resources/jeux_de_valeurs/$name";
+    $dom = new CMbXMLDocument();
+    $dom->load($path);
+    $xpath = new CMbXPath($dom);
+    $node = $xpath->queryUniqueNode("//line[@id='$code']");
+    $valeur = array("id" => $xpath->queryAttributNode(".", $node, "id"),
+                    "oid" => $xpath->queryAttributNode(".", $node, "oid"),
+                    "name" => $xpath->queryAttributNode(".", $node, "name"));
+
+    return $valeur;
+  }
+
+  /**
    * Supprime la date du nom des fichiers des jeux de valeurs
    *
    * @param String $name Nom du fichier

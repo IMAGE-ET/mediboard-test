@@ -73,7 +73,7 @@ class CHL7v3Messaging {
   static function getEvent(CExchangeDataFormat $exchange) {
     switch ($exchange->type) {
       case "PRPA" :
-        return CPRPAMessaging::getEvent($exchange);
+        return CPRPA::getEvent($exchange);
 
       default :
         throw new CMbException("CHL7v3Messaging_event-unknown");

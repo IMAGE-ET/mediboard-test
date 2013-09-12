@@ -14,11 +14,22 @@
 /**
  * Classe mère de RegistryPackage, ExtrinsicObject, externalIdentifier, Association, classification
  */
-class CXDSRegistryObject {
+class CXDSRegistryObject extends CMbMetaObject {
 
   public $id;
   public $objectType;
   public $versionInfo;
+
+  public $_group_id;
+
+  /**
+   * @see parent::getProps
+   */
+  function getProps() {
+    $specs = parent::getProps();
+    $specs["_group_id"] = "ref notNull class|CGroups";
+    return $specs;
+  }
 
   /**
    * Création d'une instance de la classe
@@ -26,7 +37,9 @@ class CXDSRegistryObject {
    * @param String $id String
    */
   function __construct($id) {
+    parent::__construct();
     $this->id = $id;
+    $this->_group_id = CGroups::loadCurrent()->_id;
   }
 
   /**
