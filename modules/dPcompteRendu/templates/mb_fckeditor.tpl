@@ -3,36 +3,36 @@
 {{assign var=mode_play value=$app->user_prefs.mode_play}}
 
 // Preloading extra plugins
-var list_plugins = {
-  apicrypt:     "../../modules/dPcompteRendu/fcke_plugins/apicrypt/",
-  mbcap:        "../../modules/dPcompteRendu/fcke_plugins/mbcap/",
-  mbfields:     "../../modules/dPcompteRendu/fcke_plugins/mbfields/",
-  mbfooter:     "../../modules/dPcompteRendu/fcke_plugins/mbfooter/",
-  mbfreetext:   "../../modules/dPcompteRendu/fcke_plugins/mbfreetext/",
-  mbheader:     "../../modules/dPcompteRendu/fcke_plugins/mbheader/",
-  mbhelpers:    "../../modules/dPcompteRendu/fcke_plugins/mbhelpers/",
-  mblineheight: "../../modules/dPcompteRendu/fcke_plugins/mblineheight/",
-  mblists:      "../../modules/dPcompteRendu/fcke_plugins/mblists/",
-  mbpagebreak:  "../../modules/dPcompteRendu/fcke_plugins/mbpagebreak/",
+window.list_plugins = [
+  "apicrypt",
+  "mbcap",
+  "mbfields",
+  "mbfooter",
+  "mbfreetext",
+  "mbheader",
+  "mbhelpers",
+  "mblineheight",
+  "mblists",
+  "mbpagebreak",
   {{if $mode_play && !$templateManager->isModele}}
-  mbplay:       "../../modules/dPcompteRendu/fcke_plugins/mbplay/",
+  "mbplay",
   {{/if}}
-  mbprint:      "../../modules/dPcompteRendu/fcke_plugins/mbprint/",
-  mbprinting:   "../../modules/dPcompteRendu/fcke_plugins/mbprinting/",
-  mbprintPDF:   "../../modules/dPcompteRendu/fcke_plugins/mbprintPDF/",
-  mbreplace:    "../../modules/dPcompteRendu/fcke_plugins/mbreplace/",
-  mbspace:      "../../modules/dPcompteRendu/fcke_plugins/mbspace/",
+  "mbprint",
+  "mbprinting",
+  "mbprintPDF",
+  "mbreplace",
+  "mbspace",
   {{if $can->admin}}
-  mbthumbs:     "../../modules/dPcompteRendu/fcke_plugins/mbthumbs/",
+  "mbthumbs",
   {{/if}}
-  usermessage:  "../../modules/dPcompteRendu/fcke_plugins/usermessage/",
-};
+  "usermessage"
+];
 
 date = new Date();
 date = Math.round(date.getTime()/3600000);
 
-$H(list_plugins).each(function(plugin) {
-  CKEDITOR.plugins.addExternal(plugin[0], plugin[1], "plugin.js?"+date);
+list_plugins.each(function(plugin) {
+  CKEDITOR.plugins.addExternal(plugin, "../../modules/dPcompteRendu/fcke_plugins/" + plugin + "/", "plugin.js?"+date);
 });
 
 CKEDITOR.editorConfig = function(config) {
