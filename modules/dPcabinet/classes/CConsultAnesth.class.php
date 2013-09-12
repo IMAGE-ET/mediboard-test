@@ -441,7 +441,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
 
     // Calcul de la Clairance créatinine
     $patient =& $this->_ref_consultation->_ref_patient;
-    $patient->loadRefConstantesMedicales();
+    $patient->loadRefConstantesMedicales(null, null, $this->_ref_consultation, false);
     $const_med = $patient->_ref_constantes_medicales;
     $const_med->updateFormFields();
     $age = intval($patient->_annees);
@@ -612,6 +612,10 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $template->addProperty("Anesthésie - Mallampati (texte seul)", $this->getFormattedValue("mallampati"));
     $template->addProperty("Anesthésie - Remarques",  $this->conclusion);
     $template->addProperty("Anesthésie - Score APFEL", $this->_score_apfel);
+
+    if (CModule::getActive("forms")) {
+      CExObject::addFormsToTemplate($template, $this, "Anesthésie");
+    }
     
     $this->notify("AfterFillLimitedTemplate", $template);
   }
