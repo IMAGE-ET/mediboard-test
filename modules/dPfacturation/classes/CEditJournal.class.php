@@ -154,11 +154,12 @@ class CEditJournal {
   function editPaiements() {
     $colonnes = array(
       "Date"        => 10,  "Nom"       => 25,
-      "Garant"      => 25,  "Libellé"   => 35,
+      "Garant"      => 25,  "Libellé"   => 30,
       "Facture"     => 10,  "Débit"     => 15,
-      "Crédit C/C"  => 15, "Solde fact." => 15);
+      "Crédit C/C"  => 15,  "R" => 5,
+      "Solde fact." => 15);
     $this->editTableau($colonnes, 5, 25);
-    $colonnes_x = array(125, 215, 245);
+    $colonnes_x = array(125, 200, 235);
     $debut_lignes = 30;
     $ligne = 0;
     $debiteur_nom = "";
@@ -166,6 +167,7 @@ class CEditJournal {
     $totaux = array();
     foreach ($this->reglements as $reglement) {
       $reglement->_ref_facture->loadRefsReglements();
+      $reglement->_ref_facture->loadRefsRelances();
       $reglement->loadRefDebiteur();
       if (!strstr($debiteur_nom, $reglement->_ref_debiteur->nom)) {
         $debiteur_nom = $reglement->_ref_debiteur->numero." - ".$reglement->_ref_debiteur->nom;
@@ -194,6 +196,7 @@ class CEditJournal {
         "Facture" => $reglement->_ref_facture->_id,
         "Débit"   => "",
         "Crédit C/C" => sprintf("%.2f", $reglement->montant),
+        "R" => count($reglement->_ref_facture->_ref_relances),
         "Solde fact." => sprintf("%.2f", $reglement->_ref_facture->_du_restant_patient));
       $totaux[$debiteur_nom]["Débit"] += 0.00;
       $totaux[$debiteur_nom]["Crédit"] += sprintf("%.2f", $reglement->montant);
