@@ -23,6 +23,7 @@ $concept_type    = CValue::get("_concept_type");
 $ex_list_id      = CValue::get("ex_list_id");
 $multiple        = CValue::get("_multiple");
 
+/** @var CExListItemsOwner $context */
 $context = CMbObject::loadFromGuid($context_guid);
 $context->loadView();
 

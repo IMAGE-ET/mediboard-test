@@ -103,7 +103,7 @@ Main.add(function(){
             {{if $concept_type == "custom"}}Type{{/if}}
           </label>
         {{/if}}
-      </td>
+      </th>
 
       <td>
         {{* LIST *}}
@@ -144,7 +144,7 @@ Main.add(function(){
             {{/if}}
           {{/if}}
         </div>
-      </th>
+      </td>
     </tr>
 
     <tr>
