@@ -55,8 +55,10 @@ autoriserEffectuerSortie = function() {
       </button>
       
       {{if !$sejour->sortie_reelle}}
-        <input type="hidden" name="sortie_reelle" value="{{$now}}" />
-        <button class="tick" type="button" onclick="autoriserEffectuerSortie()">Autoriser et effectuer la sortie</button>
+        {{if $rpu->sejour_id != $rpu->mutation_sejour_id}}
+          <input type="hidden" name="sortie_reelle" value="{{$now}}" />
+          <button class="tick" type="button" onclick="autoriserEffectuerSortie()">Autoriser et effectuer la sortie</button>
+        {{/if}}
       {{else}}
         Sortie à 
           {{mb_field object=$sejour field="sortie_reelle" register=true form="editSortieReelle" 

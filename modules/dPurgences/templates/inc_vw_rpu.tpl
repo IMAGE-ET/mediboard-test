@@ -325,12 +325,12 @@ function showEtabEntreeTransfert(mode) {
             {{if $conf.dPurgences.gerer_hospi == "1" && ($conf.dPurgences.create_sejour_hospit == "0" || !$sejour->sortie_reelle)}} 
               {{assign var=label value=$conf.dPurgences.create_sejour_hospit|ternary:"simple":"transfert"}}
               <!-- Hospitalisation immediate, creation d'un sejour et transfert des actes dans le nouveau sejour -->
-              <form name="transfertHospi" method="post" action="?m={{$m}}" onsubmit="return confirm($T('confirm-RPU-Hospitalisation-{{$label}}'));">
+              <form name="transfertHospi" method="post" action="?m={{$m}}" onsubmit="if (confirm($T('confirm-RPU-Hospitalisation-{{$label}}'))) { return onSubmitFormAjax(this)} return false;">
                 <input type="hidden" name="dosql" value="do_transfert_aed" />
                 <input type="hidden" name="m" value="dPurgences" /> 
                 <input type="hidden" name="del" value="0" />
                 <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
-                <button class="new" type="submit">Hospitaliser</button>
+                <button class="new" type="button" onclick="this.form.onsubmit()">Hospitaliser</button>
               </form>
             {{/if}}
           {{/if}}

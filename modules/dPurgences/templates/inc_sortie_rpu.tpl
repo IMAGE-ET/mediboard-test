@@ -174,34 +174,38 @@
   </td>
 
   {{if $conf.dPurgences.check_can_leave}}
-  <td id="rpu-{{$rpu->_id}}" style="font-weight: bold" class="text {{if !$rpu->sortie_autorisee}}arretee{{/if}} {{$rpu->_can_leave_level}}">
-    {{if $sejour->sortie_reelle}}
-      {{if !$rpu->sortie_autorisee}}
-        {{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}
-      {{/if}}
-    {{elseif $rpu->_can_leave == -1}}
-      {{if $sejour->type != "urg"}}
-        {{mb_value object=$sejour field=type}}<br />
-      {{elseif !$atu->_id}}
-        Pas encore de prise en charge<br />
-      {{else}}
-        {{tr}}CConsultation{{/tr}} {{tr}}CConsultation.chrono.48{{/tr}} <br />
-      {{/if}}
-      {{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}
-    {{elseif $rpu->_can_leave != -1 && !$rpu->sortie_autorisee}}
-      {{tr}}CConsultation{{/tr}} {{tr}}CConsultation.chrono.64{{/tr}} <br />
-      {{tr}}CRPU-sortie_assuree.0{{/tr}}
+    {{if $sejour->mode_sortie == "mutation"}}
+      <td></td>
     {{else}}
-      {{if $rpu->_can_leave_since}}
-        {{tr}}CRPU-_can_leave_since{{/tr}}
-      {{/if}}
-      {{if $rpu->_can_leave_about}}
-        {{tr}}CRPU-_can_leave_about{{/tr}}
-      {{/if}}
-      <span title="{{$sejour->sortie_prevue}}">{{mb_value object=$rpu field="_can_leave"}}</span><br />
-      {{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}
+      <td id="rpu-{{$rpu->_id}}" style="font-weight: bold" class="text {{if !$rpu->sortie_autorisee}}arretee{{/if}} {{$rpu->_can_leave_level}}">
+        {{if $sejour->sortie_reelle}}
+          {{if !$rpu->sortie_autorisee}}
+            {{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}
+          {{/if}}
+        {{elseif $rpu->_can_leave == -1}}
+          {{if $sejour->type != "urg"}}
+            {{mb_value object=$sejour field=type}}<br />
+          {{elseif !$atu->_id}}
+            Pas encore de prise en charge<br />
+          {{else}}
+            {{tr}}CConsultation{{/tr}} {{tr}}CConsultation.chrono.48{{/tr}} <br />
+          {{/if}}
+          {{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}
+        {{elseif $rpu->_can_leave != -1 && !$rpu->sortie_autorisee}}
+          {{tr}}CConsultation{{/tr}} {{tr}}CConsultation.chrono.64{{/tr}} <br />
+          {{tr}}CRPU-sortie_assuree.0{{/tr}}
+        {{else}}
+          {{if $rpu->_can_leave_since}}
+            {{tr}}CRPU-_can_leave_since{{/tr}}
+          {{/if}}
+          {{if $rpu->_can_leave_about}}
+            {{tr}}CRPU-_can_leave_about{{/tr}}
+          {{/if}}
+          <span title="{{$sejour->sortie_prevue}}">{{mb_value object=$rpu field="_can_leave"}}</span><br />
+          {{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}
+        {{/if}}
+      </td>
     {{/if}}
-  </td>
   {{/if}}
 
 {{/if}}

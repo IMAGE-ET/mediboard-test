@@ -37,14 +37,18 @@ $where[] = "sejour.entree BETWEEN '$date' AND '$date_after'
 // RPU Existants
 $where["rpu.rpu_id"] = "IS NOT NULL";
 
-if ($view_sortie == "sortie") {
-  $where["sortie_reelle"] = "IS NULL";
-  $where["rpu.mutation_sejour_id"] = "IS NULL";
-}
-
-if (in_array($view_sortie, array("normal", "mutation", "transfert"))) {
-  $where["sortie_reelle"] = "IS NOT NULL";
-  $where["mode_sortie"] = "= '$view_sortie'";
+switch ($view_sortie) {
+  case "sortie":
+    $where["sortie_reelle"] = "IS NULL";
+    $where["rpu.mutation_sejour_id"] = "IS NULL";
+  case "tous":
+    break;
+  case "mutation":
+    $where["mode_sortie"] = "= '$view_sortie'";
+    break;
+  default:
+    $where["sortie_reelle"] = "IS NOT NULL";
+    $where["mode_sortie"] = "= '$view_sortie'";
 }
 
 $order_col = "_pec_transport";
@@ -54,6 +58,8 @@ $sejour = new CSejour;
 
 /** @var CSejour[] $listSejours */
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
+CMbObject::massLoadFwdRef($listSejours, "patient_id");
+
 foreach ($listSejours as &$_sejour) {
   $_sejour->loadRefsFwd();
   $_sejour->loadRefRPU();

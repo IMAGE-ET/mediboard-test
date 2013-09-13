@@ -28,20 +28,22 @@
   
   {{if $can->edit}}
   
-  <tr {{if !$ajax}} style="display: none" {{/if}}>
-    <th>{{mb_label object=$sejour field=entree_reelle}}</th>
-    <td>
-      {{mb_field object=$sejour field=entree_reelle hidden=true}}
-      {{mb_value object=$sejour field=entree_reelle}}
-    </td> 
-  </tr>
+    <tr {{if !$ajax}} style="display: none" {{/if}}>
+      <th>{{mb_label object=$sejour field=entree_reelle}}</th>
+      <td>
+        {{mb_field object=$sejour field=entree_reelle hidden=true}}
+        {{mb_value object=$sejour field=entree_reelle}}
+      </td>
+    </tr>
 
-  <tr>
-    <th>{{mb_label object=$sejour field=sortie_reelle}}</th>
-    <td>
-      {{mb_field object=$sejour field=sortie_reelle form=editSejour onchange="this.form.onsubmit();" register=true}}
-    </td> 
-  </tr>
+    {{if $rpu->sejour_id !== $rpu->mutation_sejour_id}}
+      <tr>
+        <th>{{mb_label object=$sejour field=sortie_reelle}}</th>
+        <td>
+          {{mb_field object=$sejour field=sortie_reelle form=editSejour onchange="this.form.onsubmit();" register=true}}
+        </td>
+      </tr>
+    {{/if}}
   {{/if}}
 
   <tr>
@@ -151,21 +153,23 @@
       </script>
     </td>
   </tr>
-  
-  <tr>
-    <th>{{mb_label object=$sejour field=transport_sortie}}</th>
-    <td>
-      {{mb_field object=$sejour field=transport_sortie form=editSejour onchange="this.form.onsubmit();" register=true}}
-    </td> 
-  </tr>
-  
-  <tr>
-    <th>{{mb_label object=$sejour field=rques_transport_sortie}}</th>
-    <td>
-      {{mb_field object=$sejour field=rques_transport_sortie form=editSejour onchange="this.form.onsubmit();" register=true}}
-    </td> 
-  </tr>
-  
+
+  {{if $rpu->sejour_id !== $rpu->mutation_sejour_id}}
+    <tr>
+      <th>{{mb_label object=$sejour field=transport_sortie}}</th>
+      <td>
+        {{mb_field object=$sejour field=transport_sortie form=editSejour onchange="this.form.onsubmit();" register=true}}
+      </td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$sejour field=rques_transport_sortie}}</th>
+      <td>
+        {{mb_field object=$sejour field=rques_transport_sortie form=editSejour onchange="this.form.onsubmit();" register=true}}
+      </td>
+    </tr>
+  {{/if}}
+
   <tr id="commentaires_sortie">
     <th>{{mb_label object=$sejour field="commentaires_sortie"}}</th>
     <td>

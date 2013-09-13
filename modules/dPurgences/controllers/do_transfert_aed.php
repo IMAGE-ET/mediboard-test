@@ -64,4 +64,5 @@ $sejour->_no_synchro = false;
 $msg = $sejour->store();
 viewMsg($msg, "CSejour-title-modify");
 
-CAppUI::redirect("m=dPplanningOp&tab=vw_edit_sejour&sejour_id=$sejour->_id");
+CAppUI::callbackAjax("Sejour.editModal", $sejour->_id);
+
