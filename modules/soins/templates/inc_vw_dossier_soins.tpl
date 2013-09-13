@@ -472,13 +472,16 @@ Main.add(function () {
         <button type="button" class="change" onclick="PlanSoins.toggleView('semaine');" style="float: right">Vue semaine</button>
       {{/if}}
       {{if "dPprescription"|module_active && $prescription_id}}
+      {{assign var=borne_inf value="CMbDT::date"|static_call:"-1 day":$sejour->_entree|@date_format:"%Y-%m-%d"}}
+      {{assign var=borne_sup value="CMbDT::date"|static_call:"+1 day":$sejour->_sortie|@date_format:"%Y-%m-%d"}}
+
       <h2 style="text-align: center;">
             <button type="button" 
-                   class="left notext {{if $sejour->_entree >= $bornes_composition_dossier|@reset|@reset}}opacity-50{{/if}}" 
-                   {{if $sejour->_entree < $bornes_composition_dossier|@reset|@reset}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$prev_date}}', null, null, null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
+                   class="left notext {{if $date <= $borne_inf}}opacity-50{{/if}}"
+                   {{if $date > $borne_inf}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$prev_date}}', null, null, null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
                    ></button>
     
-         Plan de soins du {{$date|@date_format:"%d/%m/%Y"}}       
+         Plan de soins du {{$date|@date_format:"%d/%m/%Y"}}
          
          {{foreach from=$prescription->_jour_op item=_info_jour_op}}
            (<span onmouseover="ObjectTooltip.createEx(this, '{{$_info_jour_op.operation_guid}}');">J{{$_info_jour_op.jour_op}}</span>)
@@ -487,8 +490,8 @@ Main.add(function () {
            <input type="hidden" name="date" class="date" value="{{$date}}" onchange="PlanSoins.loadTraitement('{{$sejour->_id}}',this.value,'','administration', null, null, null, null, '1', '{{$hide_close}}');"/>
          </form>
          <button type="button"
-                 class="right notext {{if $sortie_sejour <= $bornes_composition_dossier|@end|@end}}opacity-50{{/if}}"
-                 {{if $sortie_sejour > $bornes_composition_dossier|@end|@end}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
+                 class="right notext {{if $date >= $borne_sup}}opacity-50{{/if}}"
+                 {{if $date < $borne_sup}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
                  ></button>
       </h2>
             
