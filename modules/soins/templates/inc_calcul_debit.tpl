@@ -200,7 +200,8 @@
       
       Prescription.updateVolumeTotal('{{$line->_id}}', 1, null, null, null, function() {
         $V(formPerf.volume_debit, $V(formQteTotale._quantite_totale), false);
-        $V(formPerf.duree_debit, duree);
+        $V(formPerf.duree_debit, duree, false);
+        formPerf.duree_debit.onchange();
         Control.Modal.close();
       });
     });
