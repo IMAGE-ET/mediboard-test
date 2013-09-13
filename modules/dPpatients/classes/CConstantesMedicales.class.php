@@ -16,9 +16,17 @@
  * @property float $taille
  * @property float $pouls
  * @property float $temperature
+ * @property float $_imc
+ * @property float $_diurese
+ * @property float $ecpa_avant
+ * @property float $ecpa_apres
+ * @property float $_ecpa_total
  * @property string $ta
  */
 class CConstantesMedicales extends CMbObject {
+  const CONV_ROUND_UP   = 3;
+  const CONV_ROUND_DOWN = 2;
+
   public $constantes_medicales_id;
 
   // DB Fields
@@ -77,6 +85,7 @@ class CConstantesMedicales extends CMbObject {
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
       "candles" => true,
+      "unit_config" => "unite_ta",
     ),
     "ta_gauche"         => array(
       "type" => "physio",
@@ -87,6 +96,7 @@ class CConstantesMedicales extends CMbObject {
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
       "candles" => true,
+      "unit_config" => "unite_ta",
     ),
     "ta_droit"          => array(
       "type" => "physio",
@@ -97,6 +107,7 @@ class CConstantesMedicales extends CMbObject {
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
       "candles" => true,
+      "unit_config" => "unite_ta",
     ),
     "ta_couche"          => array(
       "type" => "physio",
@@ -107,6 +118,7 @@ class CConstantesMedicales extends CMbObject {
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
       "candles" => true,
+      "unit_config" => "unite_ta",
     ),
     "ta_assis"          => array(
       "type" => "physio",
@@ -117,6 +129,7 @@ class CConstantesMedicales extends CMbObject {
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
       "candles" => true,
+      "unit_config" => "unite_ta",
     ),
     "ta_debout"          => array(
       "type" => "physio",
@@ -127,6 +140,7 @@ class CConstantesMedicales extends CMbObject {
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
       "candles" => true,
+      "unit_config" => "unite_ta",
     ),
     "_vst"              => array(
       "type" => "physio",
@@ -180,12 +194,18 @@ class CConstantesMedicales extends CMbObject {
     "glycemie"          => array(
       "type" => "biolo",
       "unit" => "g/l",
-      "min" => 0, "max" => 4
+      "min" => 0, "max" => 4,
+      "conversion" => array("mmol/l" => 5.56), // 1 g/l => 5.56 mmol/l
+      "unit_config" => "unite_glycemie",
+      "formfields" => array("_glycemie"),
     ),
     "cetonemie"         => array(
       "type" => "biolo",
       "unit" => "g/l",
-      "min" => 0, "max" => 4
+      "min" => 0, "max" => 4,
+      "conversion" => array("mmol/l" => 17.2), // 1 g/l => 17.2 mmol/l
+      "unit_config" => "unite_cetonemie",
+      "formfields" => array("_cetonemie"),
     ),
     "hemoglobine_rapide" => array(
       "type" => "biolo",
@@ -665,39 +685,28 @@ class CConstantesMedicales extends CMbObject {
       return;
     }
 
-    $func_min = create_function('$matches', 'return "min|".$matches[1]*10;');
-    $func_max = create_function('$matches', 'return "max|".$matches[1]*10;');
-
     foreach (self::$list_constantes as $_constant => &$_params) {
-      $unit = "mmHg";
+      if (empty($_params["unit_config"])) {
+        continue;
+      }
 
-      if (isset($_params["conversion"][$unit])) {
-        if (in_array($_constant, array("ta", "ta_gauche", "ta_droit", "ta_couche", "ta_assis", "ta_debout"))) {
-          if (CAppUI::conf("dPpatients CConstantesMedicales unite_ta") == "cmHg") {
-            continue;
-          }
-        }
+      $unit_config = $_params["unit_config"];
+      $unit = CAppUI::conf("dPpatients CConstantesMedicales $unit_config");
 
+      if ($unit == $_params["orig_unit"]) {
+        continue;
+      }
+
+      if (isset($_params["formfields"])) {
         $conv = $_params["conversion"][$unit];
 
-        if (isset($_params["formfields"])) {
-          foreach ($_params["formfields"] as $_formfield) {
-            $spec = $this->_specs[$_formfield];
-            $this->_specs[$_formfield]->prop = preg_replace_callback("/min\|([0-9]+)/", $func_min, $spec);
-            $this->_specs[$_formfield]->prop = preg_replace_callback("/max\|([0-9]+)/", $func_max, $spec);
+        $func_min = create_function('$matches', "return 'min|'.\$matches[1]*$conv;");
+        $func_max = create_function('$matches', "return 'max|'.\$matches[1]*$conv;");
 
-            if (isset($spec->min)) {
-              $spec->min *= $conv;
-            }
-            if (isset($spec->max)) {
-              $spec->max *= $conv;
-            }
-          }
-        }
-        else {
-          $spec = $this->_specs[$_constant];
-          $this->_specs[$_formfield]->prop = preg_replace_callback("/min\|([0-9]+)/", $func_min, $spec);
-          $this->_specs[$_formfield]->prop = preg_replace_callback("/max\|([0-9]+)/", $func_max, $spec);
+        foreach ($_params["formfields"] as $_formfield) {
+          $spec = $this->_specs[$_formfield];
+          $spec->prop = preg_replace_callback("/min\|([0-9]+)/", $func_min, $spec->prop);
+          $spec->prop = preg_replace_callback("/max\|([0-9]+)/", $func_max, $spec->prop);
 
           if (isset($spec->min)) {
             $spec->min *= $conv;
@@ -706,6 +715,9 @@ class CConstantesMedicales extends CMbObject {
             $spec->max *= $conv;
           }
         }
+      }
+      else {
+        trigger_error("Un champ avec conversion d'unité doit avoir au moins un 'formfield'");
       }
     }
 
@@ -768,8 +780,13 @@ class CConstantesMedicales extends CMbObject {
     $props['EVA']                    = 'float min|0 max|10';
     $props['score_sedation']         = 'float';
     $props['frequence_respiratoire'] = 'float pos';
+
     $props['glycemie']               = 'float pos max|10';
+    $props['_glycemie']              = $props['glycemie'];
+
     $props['cetonemie']              = 'float pos max|10';
+    $props['_cetonemie']             = $props['cetonemie'];
+
     $props['hemoglobine_rapide']     = 'float';
     $props['PVC']                    = 'float min|0';
     $props['perimetre_abdo']         = 'float min|0';
@@ -868,6 +885,29 @@ class CConstantesMedicales extends CMbObject {
   }
 
   /**
+   * Get conversion ratio for a constant
+   *
+   * @param string $field Constante name
+   *
+   * @return float
+   */
+  static function getConv($field) {
+    $conv = 1.0;
+    $params = self::$list_constantes[$field];
+
+    if (!empty($params["unit_config"])) {
+      $unit_config = $params["unit_config"];
+      $unit = CAppUI::conf("dPpatients CConstantesMedicales $unit_config");
+
+      if ($unit != $params["orig_unit"]) {
+        $conv = $params["conversion"][$unit];
+      }
+    }
+
+    return $conv;
+  }
+
+  /**
    * @see parent::updateFormFields()
    */
   function updateFormFields() {
@@ -914,72 +954,24 @@ class CConstantesMedicales extends CMbObject {
       $this->_vst = (($this->_ref_patient->sexe != 'm') ? 65 : 70) * $this->poids;
     }
 
-    $unite_ta = CAppUI::conf("dPpatients CConstantesMedicales unite_ta");
-
-    $_ta = explode('|', $this->ta);
-    if ($this->ta && isset($_ta[0]) && isset($_ta[1])) {
-      $this->_ta_systole  = $_ta[0];
-      $this->_ta_diastole = $_ta[1];
-      if ($unite_ta == "mmHg") {
-        $this->_ta_systole *= 10;
-        $this->_ta_diastole *= 10;
+    foreach (self::$list_constantes as $_constant => &$_params) {
+      if ($this->$_constant === null || $this->$_constant === "") {
+        continue;
       }
-    }
 
-    $_ta_gauche = explode('|', $this->ta_gauche);
-    if ($this->ta_gauche && isset($_ta_gauche[0]) && isset($_ta_gauche[1])) {
-      $this->_ta_gauche_systole  = $_ta_gauche[0];
-      $this->_ta_gauche_diastole = $_ta_gauche[1];
-      if ($unite_ta == "mmHg") {
-        $this->_ta_gauche_systole *= 10;
-        $this->_ta_gauche_diastole *= 10;
+      if (isset($_params["formfields"])) {
+        $conv = self::getConv($_constant);
+
+        $_parts = explode("|", $this->$_constant);
+
+        foreach ($_params["formfields"] as $_i => $_formfield) {
+          $this->$_formfield = $_parts[$_i];
+
+          if ($conv != 1.0) {
+            $this->$_formfield = round($this->$_formfield * $conv, self::CONV_ROUND_DOWN);
+          }
+        }
       }
-    }
-
-    $_ta_droit = explode('|', $this->ta_droit);
-    if ($this->ta_droit && isset($_ta_droit[0]) && isset($_ta_droit[1])) {
-      $this->_ta_droit_systole  = $_ta_droit[0];
-      $this->_ta_droit_diastole = $_ta_droit[1];
-      if ($unite_ta == "mmHg") {
-        $this->_ta_droit_systole *= 10;
-        $this->_ta_droit_diastole *= 10;
-      }
-    }
-
-    $_ta_couche = explode('|', $this->ta_couche);
-    if ($this->ta_couche && isset($_ta_couche[0]) && isset($_ta_couche[1])) {
-      $this->_ta_couche_systole  = $_ta_couche[0];
-      $this->_ta_couche_diastole = $_ta_couche[1];
-      if ($unite_ta == "mmHg") {
-        $this->_ta_couche_systole *= 10;
-        $this->_ta_couche_diastole *= 10;
-      }
-    }
-
-    $_ta_assis = explode('|', $this->ta_assis);
-    if ($this->ta_assis && isset($_ta_assis[0]) && isset($_ta_assis[1])) {
-      $this->_ta_assis_systole  = $_ta_assis[0];
-      $this->_ta_assis_diastole = $_ta_assis[1];
-      if ($unite_ta == "mmHg") {
-        $this->_ta_assis_systole *= 10;
-        $this->_ta_assis_diastole *= 10;
-      }
-    }
-
-    $_ta_debout = explode('|', $this->ta_debout);
-    if ($this->ta_debout && isset($_ta_debout[0]) && isset($_ta_debout[1])) {
-      $this->_ta_debout_systole  = $_ta_debout[0];
-      $this->_ta_debout_diastole = $_ta_debout[1];
-      if ($unite_ta == "mmHg") {
-        $this->_ta_debout_systole *= 10;
-        $this->_ta_debout_diastole *= 10;
-      }
-    }
-
-    $_injection = explode('|', $this->injection);
-    if ($this->injection && isset($_injection[0]) && isset($_injection[1])) {
-      $this->_inj  = $_injection[0];
-      $this->_inj_essai = $_injection[1];
     }
 
     // Calcul de l'ECPA total
@@ -996,84 +988,59 @@ class CConstantesMedicales extends CMbObject {
    * @see parent::updatePlainFields()
    */
   function updatePlainFields() {
-    // TODO: Utiliser les specs
-
-    $unite_ta = CAppUI::conf("dPpatients CConstantesMedicales unite_ta");
-
-    if (!empty($this->_ta_systole) && !empty($this->_ta_diastole)) {
-      if ($unite_ta ==  "mmHg") {
-        $this->_ta_systole /= 10;
-        $this->_ta_diastole /= 10;
+    foreach (self::$list_constantes as $_constant => &$_params) {
+      // If field is a
+      if ($this->$_constant === null && empty($_params["formfields"])) {
+        continue;
       }
-      $this->ta = "$this->_ta_systole|$this->_ta_diastole";
-    }
-    if ($this->_ta_systole === '' && $this->_ta_diastole === '') {
-      $this->ta = '';
-    }
 
-    if (!empty($this->_ta_gauche_systole) && !empty($this->_ta_gauche_diastole)) {
-      if ($unite_ta == "mmHg") {
-        $this->_ta_gauche_systole /= 10;
-        $this->_ta_gauche_diastole /= 10;
+      if (isset($_params["formfields"])) {
+        $conv = self::getConv($_constant);
+
+        $_parts = array();
+        $_empty = true;
+
+        foreach ($_params["formfields"] as $_formfield) {
+          if (empty($this->$_formfield)) {
+            break;
+          }
+
+          $_empty = false;
+
+          $_value = $this->$_formfield;
+
+          if ($conv != 1.0) {
+            $_value = round($_value / $conv, self::CONV_ROUND_UP);
+          }
+
+          $_parts[] = $_value;
+        }
+
+        // no value at all
+        if ($_empty) {
+          $this->$_constant = "";
+        }
+
+        // not enough values
+        elseif (count($_parts) != count($_params["formfields"])) {
+          $this->$_constant = null;
+        }
+
+        // it's ok
+        else {
+          $this->$_constant = implode("|", $_parts);
+        }
       }
-      $this->ta_gauche = "$this->_ta_gauche_systole|$this->_ta_gauche_diastole";
-    }
-    if ($this->_ta_gauche_systole === '' && $this->_ta_gauche_diastole === '') {
-      $this->ta_gauche = '';
     }
 
-    if (!empty($this->_ta_droit_systole) && !empty($this->_ta_droit_diastole)) {
-      if ($unite_ta ==  "mmHg") {
-        $this->_ta_droit_systole /= 10;
-        $this->_ta_droit_diastole /= 10;
-      }
-      $this->ta_droit = "$this->_ta_droit_systole|$this->_ta_droit_diastole";
-    }
-    if ($this->_ta_droit_systole === '' && $this->_ta_droit_diastole === '') {
-      $this->ta_droit = '';
-    }
-
-    if (!empty($this->_ta_couche_systole) && !empty($this->_ta_couche_diastole)) {
-      if ($unite_ta ==  "mmHg") {
-        $this->_ta_couche_systole /= 10;
-        $this->_ta_couche_diastole /= 10;
-      }
-      $this->ta_couche = "$this->_ta_couche_systole|$this->_ta_couche_diastole";
-    }
-    if ($this->_ta_couche_systole === '' && $this->_ta_couche_diastole === '') {
-      $this->ta_couche = '';
-    }
-
-    if (!empty($this->_ta_assis_systole) && !empty($this->_ta_assis_diastole)) {
-      if ($unite_ta ==  "mmHg") {
-        $this->_ta_assis_systole /= 10;
-        $this->_ta_assis_diastole /= 10;
-      }
-      $this->ta_assis = "$this->_ta_assis_systole|$this->_ta_assis_diastole";
-    }
-    if ($this->_ta_assis_systole === '' && $this->_ta_assis_diastole === '') {
-      $this->ta_assis = '';
-    }
-
-    if (!empty($this->_ta_debout_systole) && !empty($this->_ta_debout_diastole)) {
-      if ($unite_ta ==  "mmHg") {
-        $this->_ta_debout_systole /= 10;
-        $this->_ta_debout_diastole /= 10;
-      }
-      $this->ta_debout = "$this->_ta_debout_systole|$this->_ta_debout_diastole";
-    }
-    if ($this->_ta_debout_systole === '' && $this->_ta_debout_diastole === '') {
-      $this->ta_debout = '';
-    }
-
-    if (!empty($this->_inj) && !empty($this->_inj_essai)) {
-      $this->injection = "$this->_inj|$this->_inj_essai";
-    }
-    if ($this->_inj === '' && $this->_inj_essai === '') {
-      $this->injection = '';
-    }
+    parent::updatePlainFields();
   }
 
+  /**
+   * Load context
+   *
+   * @return CConsultation|CSejour|CPatient
+   */
   function loadRefContext() {
     if ($this->context_class && $this->context_id) {
       $this->_ref_context = new $this->context_class;
@@ -1081,6 +1048,11 @@ class CConstantesMedicales extends CMbObject {
     }
   }
 
+  /**
+   * Get patient
+   *
+   * @return CPatient
+   */
   function loadRefPatient() {
     $this->_ref_patient = new CPatient;
     $this->_ref_patient = $this->_ref_patient->getCached($this->patient_id);
@@ -1484,6 +1456,14 @@ class CConstantesMedicales extends CMbObject {
     );
   }
 
+  /**
+   * Sort constant names
+   *
+   * @param string[]  $names Constants to sort
+   * @param CMbObject $host  Host object (to get the configuration from)
+   *
+   * @return array
+   */
   static function sortConstNames($names, CMbObject $host = null) {
     $new_names = array();
     $constants = self::getConstantsByRank(false, $host);
@@ -1502,8 +1482,20 @@ class CConstantesMedicales extends CMbObject {
     return array_unique($new_names);
   }
 
+  /**
+   * Get related constant values
+   *
+   * @param string[]  $selection Constants selection
+   * @param CPatient  $patient   Related patient
+   * @param CMbObject $context   Related context
+   * @param null      $date_min  Minimal date
+   * @param null      $date_max  Maximal date
+   * @param null      $limit     Limit count
+   *
+   * @return self[]
+   */
   static function getRelated(
-    $selection, CPatient $patient, CMbObject $context = null, $date_min = null, $date_max = null, $limit = null
+      $selection, CPatient $patient, CMbObject $context = null, $date_min = null, $date_max = null, $limit = null
   ) {
     $where = array(
       "patient_id" => " = '$patient->_id'"
@@ -1536,6 +1528,11 @@ class CConstantesMedicales extends CMbObject {
     return array_reverse($constantes->loadList($where, "datetime DESC", $limit), true);
   }
 
+  /**
+   * Intialize params
+   *
+   * @return void
+   */
   static function initParams(){
     // make a copy of the array as it will be modified
     $list_constantes = CConstantesMedicales::$list_constantes;
@@ -1544,23 +1541,25 @@ class CConstantesMedicales extends CMbObject {
       self::$list_constantes_type[$_params["type"]][$_constant] = &$_params;
 
       // Conversion des unités
-      // FIXME Vraiment pas logique !!
-      $unit = "mmHg";
-
-      if (isset($_params["conversion"][$unit])) {
-        if (in_array($_constant, array("ta", "ta_gauche", "ta_droit", "ta_couche", "ta_assis", "ta_debout"))) {
-          if (CAppUI::conf("dPpatients CConstantesMedicales unite_ta") == "cmHg") {
-            continue;
-          }
-        }
-
-        $conv = $_params["conversion"][$unit];
+      if (isset($_params["unit_config"])) {
+        $_unit_config = $_params["unit_config"];
+        $unit = CAppUI::conf("dPpatients CConstantesMedicales $_unit_config");
 
         $_params_ref = &CConstantesMedicales::$list_constantes[$_constant];
-        $_params_ref["unit"]      = $unit;
-        $_params_ref["standard"] *= $conv;
-        $_params_ref["min"]      *= $conv;
-        $_params_ref["max"]      *= $conv;
+        $_params_ref["orig_unit"] = $_params_ref["unit"];
+
+        if ($unit != $_params_ref["orig_unit"]) {
+          $conv = $_params["conversion"][$unit];
+
+          $_params_ref["orig_unit"] = $_params_ref["unit"];
+          $_params_ref["unit"]      = $unit;
+          $_params_ref["min"]      *= $conv;
+          $_params_ref["max"]      *= $conv;
+
+          if (isset($_params_ref["standard"])) {
+            $_params_ref["standard"] *= $conv;
+          }
+        }
       }
 
       // Champs de cumuls

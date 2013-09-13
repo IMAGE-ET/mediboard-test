@@ -9,7 +9,9 @@
   <col style="width: 50%" />
 
   <tr>
-    {{mb_include module=system template=inc_config_enum var=unite_ta values=cmHg|mmHg}}
+    {{mb_include module=system template=inc_config_enum skip_locales=true var=unite_ta values=cmHg|mmHg}}
+    {{mb_include module=system template=inc_config_enum skip_locales=true var=unite_glycemie values=g/l|mmol/l}}
+    {{mb_include module=system template=inc_config_enum skip_locales=true var=unite_cetonemie values=g/l|mmol/l}}
   </tr>
   <tr>
     <td class="button" colspan="2">

@@ -165,14 +165,25 @@ Main.add(function () {
               {{if array_key_exists("formfields", $_params)}}
                 {{if $real_context}}
                   <td>
-                    {{mb_field object=$constantes field=$_params.formfields.0 size="2" style="width:1.7em;"}} /
-                    {{mb_field object=$constantes field=$_params.formfields.1 size="2" style="width:1.7em;"}}
+                    {{foreach from=$_params.formfields item=_formfield_name key=_key name=_formfield}}
+                      {{assign var=_style value="width:1.7em;"}}
+                      {{assign var=_size value=2}}
+                      {{if $_params.formfields|@count == 1}}
+                        {{assign var=_style value=""}}
+                        {{assign var=_size value=3}}
+                      {{/if}}
+
+                      {{if !$smarty.foreach._formfield.first}}/{{/if}}
+                      {{mb_field object=$constantes field=$_params.formfields.$_key size=$_size style=$_style}}
+                    {{/foreach}}
                   </td>
                 {{/if}}
                 <td style="text-align: center" title="{{$dates.$_constant|date_format:$conf.datetime}}">
                   {{if $const->$_constant}}
-                    {{mb_value object=$const field=$_params.formfields.0}} /
-                    {{mb_value object=$const field=$_params.formfields.1}}
+                    {{foreach from=$_params.formfields item=_formfield_name key=_key name=_formfield}}
+                      {{if !$smarty.foreach._formfield.first}}/{{/if}}
+                      {{mb_value object=$const field=$_params.formfields.$_key}}
+                    {{/foreach}}
                   {{/if}}
                 </td>
               {{else}}
@@ -217,7 +228,7 @@ Main.add(function () {
               <td>
                 {{if $_readonly !="readonly" && $real_context == 1 && $constantes->$_constant != ""}}
                   {{if array_key_exists("formfields", $_params)}}
-                    <button type="button" class="cancel notext compact" onclick="emptyAndSubmit(['{{$_params.formfields.0}}', '{{$_params.formfields.1}}']);"></button>
+                    <button type="button" class="cancel notext compact" onclick="emptyAndSubmit({{$_params.formfields|@json|smarty:nodefaults|JSAttribute}});"></button>
                   {{else}}
                     <button type="button" class="cancel notext compact" onclick="emptyAndSubmit(['{{$_constant}}']);"></button>
                   {{/if}}

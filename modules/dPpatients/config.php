@@ -38,7 +38,9 @@ $dPconfig["dPpatients"] = array (
   ),
 
   "CConstantesMedicales" => array(
-    "unite_ta" => "cmHg",
+    "unite_ta"        => "cmHg",
+    "unite_glycemie"  => "g/l",
+    "unite_cetonemie" => "g/l",
   ),
 
   "CMedecin" => array(
