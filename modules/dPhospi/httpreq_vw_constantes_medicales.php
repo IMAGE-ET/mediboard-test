@@ -538,7 +538,7 @@ foreach ($data as $name => &$_data) {
   
   $margin_ratio = 0;
   
-  if (in_array($name, array("ta", "ta_gauche", "ta_droit"))) {
+  if (isset($params["candles"])) {
     $margin_ratio = 0.25;
   }
   
