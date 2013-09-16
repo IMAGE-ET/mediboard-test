@@ -203,12 +203,10 @@ class CMbObject extends CStoredObject {
           continue;
         }
         $_doc->_is_editable = $is_editable;
-
-        $last_log = $_doc->loadLastLogForContent();
-
+        $_doc->loadContent();
         // Document verrouillé
         if (($_doc->valide && $_doc->author_id != $user->_id) ||
-            (CMbDT::daysRelative($last_log->date, CMbDT::dateTime()) > $days)
+            (CMbDT::daysRelative($_doc->_ref_content->last_modified, CMbDT::dateTime()) > $days)
         ) {
           $_doc->_is_editable = false;
           $_doc->_can->edit = false;

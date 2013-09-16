@@ -212,8 +212,7 @@ else {
     $days = isset($days[$compte_rendu->object_class]) ?
       $days[$compte_rendu->object_class] : $days["base"];
 
-    $last_log = $compte_rendu->loadLastLogForContent();
-    if (CMbDT::daysRelative($last_log->date, CMbDT::dateTime()) > $days) {
+    if (CMbDT::daysRelative($compte_rendu->_ref_content->last_modified, CMbDT::dateTime()) > $days) {
       $is_locked = true;
     }
   }

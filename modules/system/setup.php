@@ -1503,7 +1503,12 @@ class CSetupsystem extends CSetup {
                 ADD `is_private` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.49";
+    $this->makeRevision("1.1.49");
+    $query = "ALTER TABLE `content_html`
+      ADD `last_modified` DATETIME;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.50";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,

@@ -329,7 +329,7 @@ class CCompteRendu extends CDocumentItem {
   function loadContent($field_source = true) {
     $curr_user = CMediusers::get();
 
-    $content = $this->loadFwdRef("content_id", true);;
+    $content = $this->loadFwdRef("content_id", true);
     /** @var  CContentHTML $content */
     $this->_ref_content = $content;
 
@@ -339,10 +339,13 @@ class CCompteRendu extends CDocumentItem {
     $days = isset($days[$this->object_class]) ?
       $days[$this->object_class] : $days["base"];
 
-    $last_log = $this->_ref_content->loadLastLogForField("content");
+    if (!$content->last_modified) {
+      $content->store();
+    }
+
     if (
-        (CMbDT::daysRelative($last_log->date, CMbDT::dateTime()) > $days) ||
-        (!CCAnDo::admin() && $this->valide && $this->author_id != $curr_user->_id)
+        (!CCAnDo::admin() && $this->valide && $this->author_id != $curr_user->_id) ||
+        (CMbDT::daysRelative($content->last_modified, CMbDT::dateTime()) > $days)
     ) {
       $this->_is_locked = true;
     }
@@ -1435,19 +1438,6 @@ class CCompteRendu extends CDocumentItem {
     $model->loadMatchingObject();
 
     return $model;
-  }
-
-  /**
-   * Retourne le dernier log de modification d'un document
-   *
-   * @return CUserLog
-   */
-  function loadLastLogForContent() {
-    $log = new CUserLog();
-    $log->object_class = "CContentHTML";
-    $log->object_id = $this->content_id;
-    $log->loadMatchingObject("date DESC");
-    return $log;
   }
 
   /**

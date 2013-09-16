@@ -18,6 +18,7 @@ class CContentHTML extends CMbObject {
 
   // DB Fields
   public $content;
+  public $last_modified;
 
   // Form fields
   public $_list_classes;
@@ -37,8 +38,9 @@ class CContentHTML extends CMbObject {
    */
   function getProps() { 
     $props = parent::getProps();
-    $specs["_list_classes"] = "enum list|".implode("|", array_keys(CCompteRendu::getTemplatedClasses()));
+    $props["_list_classes"] = "enum list|".implode("|", array_keys(CCompteRendu::getTemplatedClasses()));
     $props["content"] = "html helped|_list_classes";
+    $props["last_modified"] = "dateTime";
     return $props;
   }
 
@@ -61,5 +63,16 @@ class CContentHTML extends CMbObject {
     $backProps["compte_rendus"] = "CCompteRendu content_id";
     $backProps["usermail_html"]     = "CUserMail text_html_id";
     return $backProps;
+  }
+
+  /**
+   * @see parent::store()
+   */
+  function store() {
+    if ($this->fieldModified("content") || !$this->last_modified) {
+      $this->last_modified = CMbDT::dateTime();
+    }
+
+    return parent::store();
   }
 }
