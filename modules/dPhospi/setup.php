@@ -728,6 +728,15 @@ class CSetupdPhospi extends CSetup {
                 ADD INDEX (`service_id`)";
     $this->addQuery($query);
 
-    $this->mod_version = "0.78";
+    $this->makeRevision("0.78");
+
+    $query = "UPDATE  `affectation`, `chambre`, `lit`
+        SET  `affectation`.`service_id` =  `chambre`.`service_id`
+        WHERE  `lit`.`lit_id` = `affectation`.`lit_id`
+        AND `chambre`.`chambre_id` = `lit`.`chambre_id`
+        AND `affectation`.`service_id` != `chambre`.`service_id`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.79";
   }
 }
