@@ -18,6 +18,7 @@ class CEchangeHprim21 extends CExchangeTabular {
   static $messages = array(
     "ADM" => "CADM",
     "REG" => "CREG",
+    "ORU" => "CORU",
   );
   
   // DB Table key

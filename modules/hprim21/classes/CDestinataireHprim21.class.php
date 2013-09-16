@@ -29,6 +29,7 @@ class CDestinataireHprim21 extends CInteropReceiver {
     $spec->messages = array(
       "ADM" => array ("ADM"),
       "REG" => array ("REG"),
+      "ORU" => array ("ORU"),
     );
 
     return $spec;

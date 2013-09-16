@@ -33,6 +33,11 @@ class CHPrim21MessageXML extends CMbXMLDocument {
     if (substr($event_name, 0, 11) == "CHPrim21REG") {
       return new CHprim21RecordPayment($encoding);
     }
+
+    // Transfert de données de règlement
+    if (substr($event_name, 0, 11) == "CHPrim21ORU") {
+      return new CHprim21RecordFiles($encoding);
+    }
     
     return new CHPrim21MessageXML($encoding);
   }

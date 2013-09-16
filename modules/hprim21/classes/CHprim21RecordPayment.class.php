@@ -30,7 +30,7 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
   function handle($ack, CMbObject $object, $data) {
     // Traitement du message des erreurs
     $comment = "";
-    
+
     $exchange_hpr = $this->_ref_exchange_hpr;
     $exchange_hpr->_ref_sender->loadConfigValues();
     $sender       = $exchange_hpr->_ref_sender;
