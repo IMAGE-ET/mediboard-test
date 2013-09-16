@@ -230,7 +230,7 @@ CKEDITOR.editorConfig = function(config) {
     options: aOptionsHelpers
     });
 
-    window.parent.destinataires = {{"utf8_encode"|array_map_recursive:$templateManager->destinataires|@json|smarty:nodefaults}};
+    window.parent.destinataires_courrier = {{"utf8_encode"|array_map_recursive:$templateManager->destinataires|@json|smarty:nodefaults}};
 
   {{/if}}
 }

@@ -96,16 +96,18 @@ function submitCompteRendu(callback){
       editor.getCommand('save').setState(CKEDITOR.TRISTATE_DISABLED);
       editor.getCommand('mbprint').setState(CKEDITOR.TRISTATE_DISABLED);
       editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_DISABLED);
-      editor.on("key", loadOld);
+      if (window.pdf_thumbnails == 1 && window.Preferences.pdf_and_thumbs == 1) {
+        editor.on("key", loadOld);
+      }
       form.onsubmit=function(){ return true; };
       if (Thumb.modele_id && Thumb.contentChanged) {
         emptyPDF();
       }
       clearTimeout(window.thumbs_timeout);
       
-      var destinataires = $("destinataires");
+      var dests = $("destinataires");
       
-      if (destinataires && destinataires.select("input:checked").length) {
+      if (dests && dests.select("input:checked").length) {
         $V(form.do_merge, 1);
       }
       

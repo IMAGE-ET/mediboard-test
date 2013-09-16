@@ -13,10 +13,10 @@
   {{mb_return}}
 {{/if}}
 
-<script type="text/javascript">
+<script>
   Main.add(function() {
     var tabMail = $("tabMail");
-    destinataires.each(function(item) {
+    destinataires_courrier.each(function(item) {
       var disabled = '';
       if (item.email == null || item.email.indexOf("@") == -1) {
         item.email = '';

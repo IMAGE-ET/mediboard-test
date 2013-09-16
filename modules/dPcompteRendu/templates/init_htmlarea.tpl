@@ -175,10 +175,12 @@
           {{/if}}
         });
 
-        // Surveillance de modification de l'éditeur de texte
-        if (window.Thumb) {
-          ck_instance.on("key", loadOld);
-        }
+        {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+          // Surveillance de modification de l'éditeur de texte
+          if (window.Thumb) {
+            ck_instance.on("key", loadOld);
+          }
+        {{/if}}
 
         // Redéfinition du copier-coller dans CKEditor pour firefox, car le comportement par défaut ne convient pas
         if (Prototype.Browser.Gecko) {
