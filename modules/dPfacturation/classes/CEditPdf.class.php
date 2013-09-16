@@ -82,37 +82,39 @@ class CEditPdf{
   /**
    * Edition de la facture
    *
-   * @param bool $ts tiers soldant
+   * @param bool   $ts     tiers soldant
+   * @param string $stream format de sortie
    *
    * @return void
    */
-  function editFactureBVR($ts = false) {
+  function editFactureBVR($ts = false, $stream = "I") {
     $this->type_pdf = $ts ? "BVR_TS" : "BVR"; 
     $this->editFacture();
     //enregistrement pour chaque facture l'ensemble des factures
     if (count($this->factures)) {
-      $this->pdf->Output($this->facture->cloture."_".$this->patient->nom.'.pdf', "I");
+      return $this->pdf->Output($this->facture->cloture."_".$this->patient->nom.'.pdf', $stream);
     }
     else {
-      $this->pdf->Output('Factures.pdf', "I");
+      return $this->pdf->Output('Factures.pdf', $stream);
     }
   }
 
   /**
    * Edition du justifiactif
    *
-   * @param bool $ts tiers soldant
+   * @param bool   $ts     tiers soldant
+   * @param string $stream format de sortie
    *
    * @return void
    */
-  function editJustificatif($ts = false) {
+  function editJustificatif($ts = false, $stream = "I") {
     $this->type_pdf = $ts ? "justif_TS" : "justif"; 
     $this->editFacture();
     if (count($this->factures)) {
-      $this->pdf->Output($this->facture->cloture."_".$this->patient->nom.'.pdf', "I");
+      return $this->pdf->Output($this->facture->cloture."_".$this->patient->nom.'.pdf', $stream);
     }
     else {
-      $this->pdf->Output('Justificatifs.pdf', "I");
+      return $this->pdf->Output('Justificatifs.pdf', $stream);
     }
   }
   
@@ -131,7 +133,7 @@ class CEditPdf{
       $this->pdf->Output('Relances.pdf', "I");
     }
   }
-  
+
   /**
    * Edition de la facture
    *
