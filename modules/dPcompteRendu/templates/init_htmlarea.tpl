@@ -286,9 +286,11 @@
       }
     }
 
-    // Remplacement d'aide à la saisie (après un espace)
-    if (mbreplace.state === CKEDITOR.TRISTATE_ON && keystroke == 32) {
-      var range, selection, selected_ranges, container, chars, text;
+    // Remplacement d'aide à la saisie (après un espace, virgule, point, deux points, point d'exclamation, point d'interrogation)
+    var keystrokes = {32:'', 188:',', 2228414:'.', 186:':', 191:':', 49:'!', 223:'!',2228415:'?', 2228412:'?'}
+
+    if (mbreplace.state === CKEDITOR.TRISTATE_ON && keystroke in keystrokes) {
+      var range, selection, selected_ranges, container, chars, text, last_char, last_space;
 
       selection = editor.getSelection();
       selected_ranges = selection.getRanges();
@@ -296,20 +298,21 @@
       container = range.startContainer;
       chars = text = container.getText();
       chars = chars.strip().trim();
+      last_char = keystrokes[keystroke];
 
-      var last_space = chars.lastIndexOf(" ");
+      // Espace insécable pour IE
+      if (Prototype.Browser.IE) {
+        last_space = chars.lastIndexOf(" ");
+      }
+      else {
+        last_space = chars.lastIndexOf(" ");
+      }
 
       if (last_space != -1) {
         chars = chars.substr(last_space+1);
       }
 
-      // Espace insécable pour IE
-      if (Prototype.Browser.IE) {
-        last_space = chars.lastIndexOf(" ");
-        if (last_space != -1) {
-          chars = chars.substr(last_space+1);
-        }
-      }
+      chars = chars.toLowerCase();
 
       $H(helpers[0].options).each(function(categ) {
         var helpers = categ[1];
@@ -321,7 +324,7 @@
               var pattern = new RegExp(key+"$", "gi");
 
               // On insère un espace insécable après le remplacement de l'aide
-              container.setText(text.replace(pattern, helper[1]+" "));
+              container.setText(text.replace(pattern, helper[1] + last_char + " "));
               selection.selectElement(container);
               selected_ranges = selection.getRanges();
               selected_ranges[0].collapse(false);
