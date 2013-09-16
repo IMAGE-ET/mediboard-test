@@ -44,7 +44,7 @@ class CSourceLPR extends CSourcePrinter {
    * @see parent::sendDocument()
    */
   function sendDocument(CFile $file) {
-    $lpr = new CLPR;
+    $lpr = new CLPR();
     $lpr->init($this);
     $lpr->printFile($file);
   }

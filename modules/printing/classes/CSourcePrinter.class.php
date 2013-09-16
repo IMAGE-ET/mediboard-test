@@ -59,6 +59,6 @@ class CSourcePrinter extends CMbObject{
   function updateFormFields() {
     parent::updateFormFields();
 
-    $this->_view = $this->printer_name;
+    $this->_view = $this->name;
   }
 }

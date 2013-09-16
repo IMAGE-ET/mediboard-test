@@ -58,7 +58,12 @@ class CSetupprinting extends CSetup {
       `object_class` VARCHAR (255) DEFAULT NULL
     ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-    
-    $this->mod_version = "0.03";
+
+    $this->makeRevision("0.03");
+    $query = "ALTER TABLE `printer`
+      ADD `label` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.04";
   }
 }

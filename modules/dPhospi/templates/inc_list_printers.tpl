@@ -19,16 +19,19 @@ removeSelected = function() {
 
 <table class="tbl printerlist">
   <tr>
-    <th class="title" colspan="2">
+    <th class="title" colspan="3">
       {{tr}}CPrinter.list{{/tr}}
     </th>
   </tr>
   <tr>
     <th class="category">
-      {{tr}}CPrinter.name{{/tr}}
+      {{tr}}CPrinter-object_class{{/tr}}
     </th>
     <th class="category">
       {{tr}}CPrinter-function_id{{/tr}}
+    </th>
+    <th class="category">
+      {{tr}}CPrinter-label{{/tr}}
     </th>
   </tr>
   {{foreach from=$printers item=_printer}}
@@ -41,10 +44,13 @@ removeSelected = function() {
       <td>
         {{$_printer->_ref_function->text}}
       </td>
+      <td>
+        {{mb_value object=$_printer field=label}}
+      </td>
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="2" class="empty">
+      <td colspan="3" class="empty">
         {{tr}}CPrinter.none{{/tr}}
       </td>
     </tr>

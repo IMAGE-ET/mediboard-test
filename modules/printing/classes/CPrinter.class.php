@@ -18,7 +18,8 @@ class CPrinter extends CMbMetaObject {
   
   // DB Fields
   public $function_id;
-  
+  public $label;
+
   // Ref fields
   public $_ref_function;
   public $_ref_source;
@@ -51,7 +52,7 @@ class CPrinter extends CMbMetaObject {
     $props["function_id"]  = "ref class|CFunctions notNull";
     $props["object_id"]    = "ref notNull class|CSourcePrinter meta|object_class";
     $props["object_class"] = "str notNull class show|0";
-    
+    $props["label"]        = "str";
     return $props;
   }
 

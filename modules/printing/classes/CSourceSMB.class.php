@@ -47,7 +47,7 @@ class CSourceSMB extends CSourcePrinter {
    * @see parent::sendDocument()
    */
   function sendDocument($file) {
-    $smb = new CSMB;
+    $smb = new CSMB();
     $smb->init($this);
     $smb->printFile($file);
   }

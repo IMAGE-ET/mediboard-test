@@ -1,8 +1,10 @@
 {{if !$printer->_id}}
-  {{main}}
-    var oForm = getForm("editPrinter");
-    $V(oForm.object_class, oForm.object_id.options[oForm.object_id.selectedIndex].getAttribute('object_class'));
-  {{/main}}
+  <script>
+    Main.add(function() {
+      var oForm = getForm("editPrinter");
+      $V(oForm.object_class, oForm.object_id.options[oForm.object_id.selectedIndex].getAttribute('object_class'));
+    });
+  </script>
 {{/if}}
 
 {{if $sources|@count}}
@@ -21,27 +23,27 @@
         {{/if}}
       </tr>
       <tr>
-        <td>
+        <th>
           {{mb_label object=$printer field=function_id}}
-        </td>
+        </th>
         <td>
           <select name="function_id">
             {{foreach from=$functions item=_function}}
               <option value='{{$_function->_id}}'
-                {{if $printer->function_id == $_function->_id}}selected = "selected"{{/if}}>{{$_function->_view}}</option>
+                {{if $printer->function_id == $_function->_id}}selected{{/if}}>{{$_function->_view}}</option>
             {{/foreach}}
           </select>
         </td>
       </tr>
       <tr>
-        <td>
+        <th>
           {{mb_label object=$printer field=object_class}}
-        </td>
+        </th>
         <td>
           <select name="object_id" onchange="$V(this.form.object_class, this.options[this.selectedIndex].getAttribute('object_class'));">
             {{foreach from=$sources item=_source}}
               <option value="{{$_source->_id}}" object_class="{{$_source->_class}}"
-                {{if $printer->object_id == $_source->_id && $printer->object_class == $_source->_class}}selected="selected"{{/if}}>
+                {{if $printer->object_id == $_source->_id && $printer->object_class == $_source->_class}}selected{{/if}}>
                 {{$_source->name}}
               </option>
             {{/foreach}}
@@ -50,6 +52,11 @@
         </td>
       </tr>
       <tr>
+        <th>{{mb_label object=$printer field=label}}</th>
+        <td>{{mb_field object=$printer field=label}}</td>
+      </tr>
+      <tr>
+        <tr>
         <td colspan="4" style="text-align: center">
           <button class="modify">{{tr}}Save{{/tr}}</button>
           {{if $printer->_id}}

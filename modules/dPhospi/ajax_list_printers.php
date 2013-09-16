@@ -9,6 +9,8 @@
  * @version    $Revision$
  */
 
+$printer_id = CValue::getOrSession("printer_id", 0);
+
 $printer = new CPrinter();
 $order_by = "object_id, text";
 $ljoin = array();
@@ -20,10 +22,10 @@ foreach ($printers as $_printer) {
   $_printer->loadRefFunction();
 }
 
-$printer_id = CValue::getOrSession("printer_id", 0);
 $smarty = new CSmartyDP();
 
 $smarty->assign("printers"  , $printers);
 $smarty->assign("printer_id", $printer_id);
+
 $smarty->display("inc_list_printers.tpl");
 
