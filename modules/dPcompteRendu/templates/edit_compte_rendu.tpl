@@ -66,12 +66,14 @@ function playField(element, class_name, editor_element, name) {
 }
 
 function submitCompteRendu(callback){
-  if (window.saving_doc) {
+  var editor = CKEDITOR.instances.htmlarea;
+
+  if (!editor.document || window.saving_doc) {
     return;
   }
+
   window.saving_doc = true;
 
-  var editor = CKEDITOR.instances.htmlarea;
   editor.document.getBody().setStyle("background", "#ddd");
 
   var mess = null;
