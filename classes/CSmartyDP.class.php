@@ -295,9 +295,10 @@ class CSmartyDP extends CSmartyMB {
     $order_suffixe = CMbArray::extract($params, "order_suffixe", ""  , false);
     $url           = CMbArray::extract($params, "url"          , null, false);
     $function      = CMbArray::extract($params, "function"     , null, false);
+    $label         = CMbArray::extract($params, "label"        , null, false);
 
     $sHtml  = "<label for=\"$field\" title=\"".CAppUI::tr("$class-$field-desc")."\">";
-    $sHtml .= CAppUI::tr("$class-$field-court");
+    $sHtml .= ($label) ? $label : CAppUI::tr("$class-$field-court");
     $sHtml .= "</label>";
 
     $css_class = ($order_col == $field) ? "sorted" : "sortable";
