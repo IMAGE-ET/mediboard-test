@@ -3192,7 +3192,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $count_prescription = 0;
     foreach ($sejours as $_sejour) {
       $_sejour->loadRefPrescriptionSejour();
-      if ($_sejour->_ref_prescription_sejour->_id) {
+      if ($_sejour->_ref_prescription_sejour && $_sejour->_ref_prescription_sejour->_id) {
 
         // Suppression des prescriptions vide
         $prescription = new CPrescription;

@@ -436,7 +436,7 @@ class CConsultation extends CFacturable {
 
     $this->completeField("sejour_id", "plageconsult_id");
 
-    if ($this->sejour_id) {
+    if ($this->sejour_id && !$this->_forwardRefMerging) {
       $this->loadRefPlageConsult();
       $sejour = $this->loadRefSejour();
 
