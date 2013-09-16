@@ -33,6 +33,7 @@ class CFile extends CDocumentItem {
 
   // Form fields
   public $_extensioned;
+  public $_no_extension;
   public $_file_size;
   public $_sub_dir;
   public $_absolute_dir;
@@ -78,6 +79,7 @@ class CFile extends CDocumentItem {
     $backProps["documents_ged_suivi"] = "CDocGedSuivi file_id";
     $backProps["mail_attachment"]     = "CMailAttachments file_id";
     $backProps["mail_content_id"]     = "CUserMail text_file_id";
+    $backProps["observation_results"] = "CObservationResult file_id";
 
     return $backProps;
   }
@@ -184,6 +186,10 @@ class CFile extends CDocumentItem {
     parent::updateFormFields();
     
     $this->_extensioned = $this->file_name;
+
+    $last_point = strrpos($this->_extensioned, '.');
+    $this->_no_extension = substr($this->_extensioned, 0, $last_point);
+
     $this->_file_size = CMbString::toDecaBinary($this->file_size);
     
     $this->completeField("object_id");

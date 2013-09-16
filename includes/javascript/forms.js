@@ -699,6 +699,38 @@ Object.extend(Form, {
     });
   },
   onSubmitComplete: Prototype.emptyFunction,
+  chainSubmit: function(forms, options) {
+    if (Object.isFunction(options)) {
+      options = {
+        onComplete: options
+      };
+    }
+
+    options = Object.extend({
+      useDollarV: false,
+      check: checkForm,
+      target: SystemMessage.id
+    }, options);
+
+    if (options.check && !$A(forms).all(options.check)) {
+      return false;
+    }
+
+    var onComplete = options.onComplete;
+    delete options.onComplete;
+
+    forms.each(function(form){
+      options.onComplete = (function(){
+        this.__completed = true;
+
+        if (forms.all(function(form){ return form.__completed; })) {
+          onComplete();
+        }
+      }).bind(form);
+
+      onSubmitFormAjax(form, options);
+    });
+  },
   multiSubmit: function(forms, options) {
     options = Object.extend({
       useDollarV: false,

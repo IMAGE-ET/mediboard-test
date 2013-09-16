@@ -2,10 +2,13 @@
 Main.add(function(){
   var ph = jQuery("#placeholder-preview");
   var series = {{$data.series|@json}};
+  var xaxes = {{$data.xaxes|@json}};
+
+  xaxes[0].ticks = 10;
 
   jQuery.plot(ph, series, {
     series: SupervisionGraph.defaultSeries,
-    xaxes: {{$data.xaxes|@json}},
+    xaxes: xaxes,
     yaxes: {{$data.yaxes|@json}}
   });
 });

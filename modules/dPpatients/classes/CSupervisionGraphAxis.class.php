@@ -36,6 +36,7 @@ class CSupervisionGraphAxis extends CMbObject {
     "reserveSpace" => true,
     "label"        => "",
     "symbolChar"   => "",
+    "axis_id"      => null,
   );
 
   static $_symbol_chars = array(
@@ -99,6 +100,7 @@ class CSupervisionGraphAxis extends CMbObject {
       "label"      => $this->title,
       "min"        => null,
       "max"        => null,
+      "axis_id"    => $this->_id,
     ) + self::$default_yaxis;
 
     $height = $this->loadRefGraph()->height;

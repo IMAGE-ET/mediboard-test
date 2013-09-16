@@ -2279,7 +2279,59 @@ class CSetupdPpatients extends CSetup {
                 ADD `lactates` FLOAT UNSIGNED;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.85";
+    $this->makeRevision("1.85");
+    $query = "CREATE TABLE `supervision_timed_picture` (
+                `supervision_timed_picture_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `owner_class` ENUM ('CGroups') NOT NULL,
+                `owner_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `title` VARCHAR (255) NOT NULL,
+                `disabled` ENUM ('0','1') NOT NULL DEFAULT '1',
+                `value_type_id` INT (11) UNSIGNED NOT NULL
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `supervision_timed_picture`
+                ADD INDEX `owner` (`owner_class`, `owner_id`);";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `supervision_graph_to_pack`
+                CHANGE `graph_class` `graph_class` VARCHAR (80);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `observation_result`
+                CHANGE `unit_id` `unit_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `supervision_timed_data`
+                CHANGE `period` `period` ENUM ('1','5','10','15','20','30','60'),
+                ADD `value_type_id` INT (11) UNSIGNED NOT NULL;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `supervision_timed_data`
+                ADD INDEX (`value_type_id`);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `observation_result`
+                ADD `file_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `observation_value_type`
+                CHANGE `datatype` `datatype` ENUM ('NM','ST','TX','FILE') NOT NULL;";
+    $this->addQuery($query);
+
+    $this->makeRevision("1.86");
+    $mdil_params = array(
+      "0002-4a15" => array("ABPs", "ABP (systolic)"),
+      "0002-4a16" => array("ABPd", "ABP (diastolic)"),
+      "0002-4a17" => array("ABPm", "ABP (mean)"),
+    );
+    $values = array();
+    foreach ($mdil_params as $_code => $_labels) {
+      list($_label, $_desc) = $_labels;
+      $values[] = "('MDIL', '$_code', '$_label', '$_desc', 'NM')";
+    }
+    $query = "INSERT INTO `observation_value_type` (`coding_system`, `code`, `label`, `desc`, `datatype`) VALUES ".
+      implode("\n, ", $values);
+    $this->addQuery($query);
+
+    $this->mod_version = "1.87";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

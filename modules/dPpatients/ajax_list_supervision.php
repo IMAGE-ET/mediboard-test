@@ -13,9 +13,10 @@ CCanDo::checkAdmin();
 
 $group = CGroups::loadCurrent();
 
-$graphs     = CSupervisionGraph::getAllFor($group);
-$timed_data = CSupervisionTimedData::getAllFor($group);
-$packs      = CSupervisionGraphPack::getAllFor($group);
+$graphs        = CSupervisionGraph::getAllFor($group);
+$timed_data    = CSupervisionTimedData::getAllFor($group);
+$timed_picture = CSupervisionTimedPicture::getAllFor($group);
+$packs         = CSupervisionGraphPack::getAllFor($group);
 
 foreach ($graphs as $_graph) {
   $_axes = $_graph->loadRefsAxes();
@@ -28,7 +29,8 @@ foreach ($graphs as $_graph) {
 CSupervisionGraph::includeFlot();
 
 $smarty = new CSmartyDP();
-$smarty->assign("graphs",     $graphs);
-$smarty->assign("packs",      $packs);
-$smarty->assign("timed_data", $timed_data);
+$smarty->assign("graphs",        $graphs);
+$smarty->assign("packs",         $packs);
+$smarty->assign("timed_data",    $timed_data);
+$smarty->assign("timed_picture", $timed_picture);
 $smarty->display("inc_list_supervision_graph.tpl");

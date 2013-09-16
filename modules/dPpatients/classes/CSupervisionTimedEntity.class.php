@@ -22,6 +22,9 @@ class CSupervisionTimedEntity extends CMbObject {
   /** @var CMbObject */
   public $_ref_owner;
 
+  /** @var array */
+  public $_graph_data = array();
+
   /**
    * @see parent::getSpec()
    */
@@ -61,5 +64,9 @@ class CSupervisionTimedEntity extends CMbObject {
     parent::updateFormFields();
 
     $this->_view = $this->title;
+  }
+
+  function getPosition($datetime, $time_min, $time_max){
+    return 100 * (CMbDate::toUTCTimestamp($datetime) - $time_min) / ($time_max - $time_min);
   }
 }

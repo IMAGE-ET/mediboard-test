@@ -45,8 +45,8 @@ function getWidth($datetime_start, $datetime_end){
 // ---------------------------------------------------
 // Gestes, Medicaments, Perfusions peranesth
 $evenements = array(
-  "CAffectationPersonnel" => array(),
   "CAnesthPerop" => array(),
+  "CAffectationPersonnel" => array(),
 );
 
 // Personnel de l'interv

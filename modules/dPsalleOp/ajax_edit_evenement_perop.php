@@ -17,7 +17,7 @@ $interv = new COperation;
 $interv->load($operation_id);
 
 if (!$datetime) {
-  $datetime = $interv->loadRefPlageOp()->date." ".CMbDT::time();
+  $datetime = CMbDT::date($interv->_datetime)." ".CMbDT::time();
 }
 
 list($evenement_class, $evenement_id) = explode("-", $evenement_guid);
@@ -27,13 +27,14 @@ $evenement = new $evenement_class;
 
 if ($evenement_id) {
   $evenement->load($evenement_id);
+  $evenement->loadRefsNotes();
 }
 
 $evenement->datetime = $datetime;
+$evenement->operation_id = $interv->_id;
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("evenement", $evenement);
-$smarty->assign("operation_id", $operation_id);
 $smarty->assign("datetime", $datetime);
 $smarty->display("inc_edit_evenement_perop.tpl");

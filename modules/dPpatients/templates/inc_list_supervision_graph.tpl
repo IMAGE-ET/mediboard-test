@@ -36,7 +36,7 @@
   <tr>
     <th colspan="2" class="title">
       <button class="new notext compact" onclick="SupervisionGraph.editTimedData(0)" style="float: right;">
-      {{tr}}New{{/tr}}
+        {{tr}}New{{/tr}}
       </button>
       Données horodatées
     </th>
@@ -52,6 +52,28 @@
     {{foreachelse}}
     <tr>
       <td class="empty" colspan="2">{{tr}}CSupervisionTimedData.none{{/tr}}</td>
+    </tr>
+  {{/foreach}}
+
+  <tr>
+    <th colspan="2" class="title">
+      <button class="new notext compact" onclick="SupervisionGraph.editTimedPicture(0)" style="float: right;">
+        {{tr}}New{{/tr}}
+      </button>
+      Images
+    </th>
+  </tr>
+  {{foreach from=$timed_picture item=_timed_picture}}
+    <tr id="list-{{$_timed_picture->_guid}}" class="{{if $_timed_picture->disabled}} opacity-50 {{/if}}">
+      <td colspan="2">
+        <a href="#edit-{{$_timed_picture->_guid}}" onclick="return SupervisionGraph.editTimedPicture({{$_timed_picture->_id}})">
+          {{mb_value object=$_timed_picture field=title}}
+        </a>
+      </td>
+    </tr>
+    {{foreachelse}}
+    <tr>
+      <td class="empty" colspan="2">{{tr}}CSupervisionTimedPicture.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 

@@ -17,12 +17,8 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
 
   public $height;
 
-  /**
-   * @var CSupervisionGraphAxis[]
-   */
+  /** @var CSupervisionGraphAxis[] */
   public $_ref_axes;
-
-  public $_graph_data = array();
 
   /**
    * @see parent::getSpec()
@@ -121,15 +117,17 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
 
         foreach ($_series as $_serie) {
           $_series_data = $_serie->initSeriesData($yaxis_i);
+          $_unit_id = ($_serie->value_unit_id ? $_serie->value_unit_id : "none");
 
-          if (!isset($results[$_serie->value_type_id][$_serie->value_unit_id])) {
+          if (!isset($results[$_serie->value_type_id][$_unit_id])) {
             continue;
           }
 
           if (!$first_data) {
             $first_data = $_series_data;
             $first_data["label"] = $_axis->title;
-            $first_data["data"] = $results[$_serie->value_type_id][$_serie->value_unit_id];
+            $first_data["axis_id"] = $_axis->_id;
+            $first_data["data"] = $results[$_serie->value_type_id][$_unit_id];
 
             if ($graph_yaxis["min"] !== null) {
               $graph_yaxis["min"] = min($graph_yaxis["min"], self::_getMin($first_data["data"]));
@@ -140,7 +138,7 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
             }
           }
           else {
-            $new_data = $results[$_serie->value_type_id][$_serie->value_unit_id];
+            $new_data = $results[$_serie->value_type_id][$_unit_id];
             foreach ($new_data as $_i => $_d) {
               $first_data["data"][$_i][] = $_d[1];
             }
@@ -155,17 +153,20 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
           }
         }
 
-        $graph["series"][] = $first_data;
+        if ($first_data) {
+          $graph["series"][] = $first_data;
+        }
       }
       else {
         foreach ($_series as $_serie) {
           $_series_data = $_serie->initSeriesData($yaxis_i);
+          $_unit_id = ($_serie->value_unit_id ? $_serie->value_unit_id : "none");
 
-          if (!isset($results[$_serie->value_type_id][$_serie->value_unit_id])) {
+          if (!isset($results[$_serie->value_type_id][$_unit_id])) {
             continue;
           }
 
-          $_series_data["data"] = $results[$_serie->value_type_id][$_serie->value_unit_id];
+          $_series_data["data"] = $results[$_serie->value_type_id][$_unit_id];
 
           if ($graph_yaxis["min"] !== null) {
             $graph_yaxis["min"] = min($graph_yaxis["min"], self::_getMin($_series_data["data"]));

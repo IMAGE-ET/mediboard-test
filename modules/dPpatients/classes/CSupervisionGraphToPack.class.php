@@ -44,7 +44,7 @@ class CSupervisionGraphToPack extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["graph_class"] = "enum list|CSupervisionGraph|CSupervisionTimedData";
+    $props["graph_class"] = "enum list|CSupervisionGraph|CSupervisionTimedData|CSupervisionTimedPicture";
     $props["graph_id"]    = "ref notNull class|CSupervisionTimedEntity meta|graph_class cascade";
     $props["pack_id"]     = "ref notNull class|CSupervisionGraphPack";
     $props["rank"]        = "num notNull";
@@ -54,7 +54,7 @@ class CSupervisionGraphToPack extends CMbObject {
   /**
    * Get the graph
    *
-   * @return CSupervisionTimedEntity|CSupervisionGraph|CSupervisionTimedData
+   * @return CSupervisionTimedEntity|CSupervisionGraph|CSupervisionTimedData|CSupervisionTimedPicture
    */
   function loadRefGraph(){
     return $this->_ref_graph = $this->loadFwdRef("graph_id");

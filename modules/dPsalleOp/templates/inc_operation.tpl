@@ -216,6 +216,39 @@
     }
   };
 
+  createObservationResultSet = function(object_guid, axis_id) {
+    if($('surveillance_perop')){
+      var url = new Url("patients", "ajax_edit_observation_result_set");
+      url.addParam("object_guid", object_guid);
+      url.addParam("axis_id", axis_id);
+      url.requestModal(400, 400, {
+        onClose: reloadSurveillancePerop
+      });
+    }
+  };
+
+  createObservationTimedData = function(object_guid, timed_data_id) {
+    if($('surveillance_perop')){
+      var url = new Url("patients", "ajax_edit_observation_timed_data");
+      url.addParam("object_guid", object_guid);
+      url.addParam("timed_data_id", timed_data_id);
+      url.requestModal(400, 200, {
+        onClose: reloadSurveillancePerop
+      });
+    }
+  };
+
+  createObservationTimedPicture = function(object_guid, timed_picture_id) {
+    if($('surveillance_perop')){
+      var url = new Url("patients", "ajax_edit_observation_timed_picture");
+      url.addParam("object_guid", object_guid);
+      url.addParam("timed_picture_id", timed_picture_id);
+      url.requestModal(500, 500, {
+        onClose: reloadSurveillancePerop
+      });
+    }
+  };
+
   loadPosesDispVasc = function() {
     var url = new Url("planningOp", "ajax_list_pose_disp_vasc");
     url.addParam("operation_id", "{{$selOp->_id}}");

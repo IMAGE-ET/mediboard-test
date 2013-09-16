@@ -17,7 +17,7 @@ $patient_id     = CValue::post("patient_id");
 
 $datetime_start = CValue::post("datetime_start");
 $datetime_end   = CValue::post("datetime_end");
-$period         = CValue::post("period", 30); // in seconds
+$period         = CValue::post("period", 120); // in seconds
 
 $graph = new CSupervisionGraph();
 /** @var CSupervisionGraph[] $graphs */
@@ -58,7 +58,7 @@ foreach ($graphs as $_graph) {
         
         $result = new CObservationResult;
         $result->observation_result_set_id = $times[$_datetime]->_id;
-        $result->unit_id = $_serie->value_unit_id;
+        $result->unit_id = $_serie->value_unit_id ? $_serie->value_unit_id : "";
         $result->value_type_id = $_serie->value_type_id;
         $result->status = "I";
         $result->method = "SAMPLE";

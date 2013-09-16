@@ -21,9 +21,8 @@
           Event.observe(form.file_name, evt, File.switchFile.curry('{{$_file->_id}}', form));
         </script>
         <span id="buttons_{{$_file->_guid}}" style="display: none;">
-          <button class="tick notext" type="button"
+          <button class="tick notext compact" type="button"
             onclick="if (File.checkFileName($V(this.form.file_name))) this.form.onsubmit();">{{tr}}Valid{{/tr}}</button>
-        </span>
         </span>
       </form>
       <small>({{$_file->_file_size}})</small>
@@ -41,21 +40,21 @@
           {{mb_field object=$_file field="_view" hidden=1}}
           <span style="white-space: nowrap;">
             {{if !$name_readonly}}
-              <button class="edit notext" id="edit_{{$_file->_guid}}" type="button"
+              <button class="edit notext compact" id="edit_{{$_file->_guid}}" type="button"
                 onclick="File.editNom('{{$_file->_guid}}'); File.toggleClass(this);">{{tr}}Modify{{/tr}}</button>
             {{/if}}
             {{if $can->admin}}
               <input type="hidden" name="del" value="1" />
-              <button class="trash notext" type="button" onclick="File.remove(this, '{{$object_id}}', '{{$object_class}}')">
+              <button class="trash notext compact" type="button" onclick="File.remove(this, '{{$object_id}}', '{{$object_class}}')">
                 {{tr}}Delete{{/tr}}
               </button>
             {{elseif !$_file->annule}}
               <input type="hidden" name="annule" value="1" />
-              <button class="trash notext" type="button" onclick="File.cancel(this.form, '{{$object_id}}', '{{$object_class}}')">
+              <button class="trash notext compact" type="button" onclick="File.cancel(this.form, '{{$object_id}}', '{{$object_class}}')">
                 {{tr}}Delete{{/tr}}
               </button>
             {{/if}}
-            <a class="button print notext" target="_blank"
+            <a class="button print notext compact" target="_blank"
               href="?m=files&a=fileviewer&file_id={{$_file->_id}}"></a>
           </span>
         </form>

@@ -19,23 +19,28 @@
   {{mb_key object=$pack}}
 
   <table class="main form">
-  {{mb_include module=system template=inc_form_table_header object=$pack colspan=5}}
+    {{mb_include module=system template=inc_form_table_header object=$pack colspan=2}}
 
     <tr>
       <th>{{mb_label object=$pack field=title}}</th>
       <td>{{mb_field object=$pack field=title}}</td>
+    </tr>
 
+    <tr>
       <th>{{mb_label object=$pack field=disabled}}</th>
       <td>{{mb_field object=$pack field=disabled typeEnum=checkbox}}</td>
+    </tr>
 
+    <tr>
+      <td></td>
       <td>
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
 
-      {{if $pack->_id}}
-        <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'', objName:'{{$pack->_view|smarty:nodefaults|JSAttribute}}'})">
-          {{tr}}Delete{{/tr}}
-        </button>
-      {{/if}}
+        {{if $pack->_id}}
+          <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'', objName:'{{$pack->_view|smarty:nodefaults|JSAttribute}}'})">
+            {{tr}}Delete{{/tr}}
+          </button>
+        {{/if}}
       </td>
     </tr>
   </table>

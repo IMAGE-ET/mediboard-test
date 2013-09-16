@@ -125,10 +125,16 @@ class CObservationResultSet extends CMbObject {
     foreach ($results as $_result) {
       $_time = CMbDate::toUTCTimestamp($_result["datetime"]);
       $times[$_time] = $_time;
+
+      $unit_id = $_result["unit_id"] ? $_result["unit_id"] : "none";
       
-      $data[$_result["value_type_id"]][$_result["unit_id"]][] = array(
-        $_time,
-        floatval($_result["value"]),
+      $data[$_result["value_type_id"]][$unit_id][] = array(
+        0          => $_time,
+        1          => floatval($_result["value"]),
+        "ts"       => $_time,
+        "value"    => $_result["value"],
+        "datetime" => $_result["datetime"],
+        "file_id"  => $_result["file_id"],
       );
     }
     
@@ -172,6 +178,12 @@ class CObservationResultSet extends CMbObject {
 
       if ($_go instanceof CSupervisionGraph) {
         $_go->buildGraph($results, $time_min, $time_max);
+      }
+      elseif ($_go instanceof CSupervisionTimedData) {
+        $_go->loadTimedData($results, $time_min, $time_max);
+      }
+      elseif ($_go instanceof CSupervisionTimedPicture) {
+        $_go->loadTimedPictures($results, $time_min, $time_max);
       }
     }
 

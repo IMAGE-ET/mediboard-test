@@ -65,6 +65,20 @@ SupervisionGraph = {
       SupervisionGraph.editTimedData(id);
     });
   },
+
+  editTimedPicture: function(id) {
+    var url = new Url("dPpatients", "ajax_edit_supervision_timed_picture");
+    url.addParam("supervision_timed_picture_id", id);
+    url.requestUpdate("supervision-graph-editor");
+
+    return false;
+  },
+
+  callbackEditTimedPicture: function(id) {
+    SupervisionGraph.list(function(){
+      SupervisionGraph.editTimedPicture(id);
+    });
+  },
   
   // Series
   listSeries: function(axis_id) {
@@ -124,7 +138,7 @@ SupervisionGraph = {
     if (pack_id) {
       url.addParam("supervision_graph_pack_id", pack_id);
     }
-    url.requestModal(600, 600);
+    url.requestModal(400, 400);
     return false;
   },
 

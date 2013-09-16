@@ -28,7 +28,7 @@ foreach ($axes as $_axis) {
   $_series = $_axis->loadRefsSeries();
   
   foreach ($_series as $_serie) {
-    $sample[$_serie->value_type_id][$_serie->value_unit_id] = $_serie->getSampleData($times);
+    $sample[$_serie->value_type_id][$_serie->value_unit_id ? $_serie->value_unit_id : "none"] = $_serie->getSampleData($times);
   }
 }
 

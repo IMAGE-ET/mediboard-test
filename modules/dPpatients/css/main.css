@@ -1,0 +1,38 @@
+div.outlined {
+  float: left;
+  margin: 3px;
+  text-align: center;
+  font-weight: bold;
+  position: relative;
+}
+
+div.outlined label {
+  display: block;
+  padding: 2px;
+  z-index: 20;
+}
+
+div.outlined label:hover {
+  background: #cccccc;
+}
+
+div.outlined input {
+  display: none;
+}
+
+.ua-msie-8 div.outlined input {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  -ms-filter: "alpha(opacity=0)";
+}
+
+div.outlined input[type="radio"]:checked + label {
+  outline: 2px solid orange;
+}
+div.outlined input[type=radio].checked + label {
+  outline: 2px solid orange;
+}

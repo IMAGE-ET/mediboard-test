@@ -29,11 +29,11 @@ plothover = function (event, pos, item) {
     jQuery("#flot-tooltip").remove();
     window.previousPoint = null;
   }
-}
+};
 
 enChantier = function(){
   Modal.alert("Fonctionnalité en cours de développement");
-}
+};
   
 Main.add(function(){
   
@@ -47,18 +47,23 @@ Main.add(function(){
         ph = $("#placeholder-{{$i}}");
         series = {{$_graph_data.series|@json}};
         xaxes  = {{$_graph_data.xaxes|@json}};
+        xaxes[0].ticks = 10;
 
-        {{if !$smarty.foreach.graphs.last}}
+        {{if false && !$smarty.foreach.graphs.last}}
           xaxes[0].tickFormatter = function(){return " "};
           xaxes[0].labelHeight = 0;
           //xaxes[0].show = false;
         {{/if}}
 
-        ph.bind("plothover", plothover);
+    ph.bind("plothover", plothover);
+    /*ph.bind("plotclick", function(event, pos, item){
+      console.log(pos);
+    });*/
 
         var plot = $.plot(ph, series, {
           grid: {
             hoverable: true,
+            //clickable: true,
             markings: [
               // Debut op
               {xaxis: {from: 0, to: {{$time_debut_op}}}, color: "rgba(0,0,0,0.05)"},
@@ -81,7 +86,7 @@ Main.add(function(){
 editEvenementPerop = function(guid, operation_id, datetime) {
   var url = new Url("dPsalleOp", "ajax_edit_evenement_perop");
   url.addParam("evenement_guid", guid);
-  url.addParam("operation", operation_id);
+  url.addParam("operation_id", operation_id);
   url.addParam("datetime", datetime);
   url.requestModal(600, 400);
   
@@ -172,40 +177,86 @@ editEvenementPerop = function(guid, operation_id, datetime) {
       {{assign var=_graph_data value=$_graph->_graph_data}}
       <div class="yaxis-labels">
         {{foreach from=$_graph_data.yaxes|@array_reverse item=_yaxis}}
-          <div>
+          <div style="position: relative;">
             {{$_yaxis.label}}
-            {{if $_yaxis.symbolChar}}
-              <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}</div>
+            <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}</div>
+            {{if $_yaxis.axis_id}}
+              <button class="new notext compact" style="position: absolute; z-index: 20; left: 15px; bottom: -25px;"
+                      onclick="createObservationResultSet('{{$interv->_guid}}', '{{$_yaxis.axis_id}}')"></button>
             {{/if}}
           </div>
         {{/foreach}}
         <span class="title">{{$_graph_data.title}}</span>
       </div>
       <div id="placeholder-{{$i}}" style="width:{{$width}}px; height:{{$_graph->height}}px;" class="graph-placeholder"></div>
-    {{else}}
-      <table class="main evenements" style="table-layout: fixed; width: {{$width}}px; margin-top: -1px;">
+    {{elseif $_graph instanceof CSupervisionTimedData}}
+      <table class="main evenements" style="table-layout: fixed; width: {{$width-12}}px; margin-bottom: -1px;">
         <col style="width: {{$yaxes_count*78-12}}px;" />
 
         <tr>
-          <th style="word-wrap: break-word;">{{$_graph->title}}</th>
-          {{math assign=_periods equation="minutes/period" minutes=$nb_minutes period=$_graph->period}}
-          {{foreach from=1|range:$_periods item=n}}
-            <td style="padding: 0; height: 18px; position: relative;">
-              <textarea class="noresize" style="position: absolute; top:0;left:0;right:0;bottom:0; resize: none; border:none; margin: 0;"></textarea>
-            </td>
-          {{/foreach}}
+          <th style="word-wrap: break-word;">
+            <button class="new notext compact" style="float: right;" onclick="createObservationTimedData('{{$interv->_guid}}', '{{$_graph->_id}}')"></button>
+            {{$_graph->title}}
+          </th>
+          <td>
+            {{foreach from=$_graph->_graph_data item=_evenement}}
+              {{if $_evenement.position <= 100}}
+              <div style="padding-left: {{$_evenement.position}}%; margin-left: -1px;" class="evenement">
+                <div>
+                  <div class="marking"></div>
+                  <div class="label" title="{{$_evenement.datetime|date_format:$conf.datetime}}">
+                    {{$_evenement.value|truncate:40}}
+                  </div>
+                </div>
+              </div>
+              {{/if}}
+            {{/foreach}}
+          </td>
+        </tr>
+      </table>
+    {{elseif $_graph instanceof CSupervisionTimedPicture}}
+      <table class="main evenements" style="table-layout: fixed; width: {{$width-12}}px; margin-bottom: -1px; height: 66px;">
+        <col style="width: {{$yaxes_count*78-12}}px;" />
+
+        <tr>
+          <th style="word-wrap: break-word;">
+            <button class="new notext compact" style="float: right;" onclick="createObservationTimedPicture('{{$interv->_guid}}', '{{$_graph->_id}}')"></button>
+            {{$_graph->title}}
+          </th>
+          <td>
+            <div style="position: relative;">
+              {{foreach from=$_graph->_graph_data item=_picture}}
+                {{if $_picture.file_id && $_picture.position <= 100}}
+                  <div style="position: absolute; left: {{$_picture.position}}%; margin-left: -25px; text-align: center; padding-top: 5px;" title="{{$_picture.datetime|date_format:$conf.datetime}}">
+                    <span style="position: absolute; left: 20px; top: -2px; width: 10px;">^</span>
+                    <img style="width: 50px;"
+                         src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$_picture.file_id}}&amp;phpThumb=1&amp;w=100&amp;q=95" />
+                    <br />
+                    {{$_picture.file->_no_extension}}
+                  </div>
+                {{/if}}
+              {{/foreach}}
+            </div>
+          </td>
         </tr>
       </table>
     {{/if}}
 
   {{/foreach}}
   
-  <table class="main evenements" style="table-layout: fixed; width: {{$width}}px;">
+  <table class="main evenements" style="table-layout: fixed; width: {{$width-12}}px;">
     <col style="width: {{$yaxes_count*78-12}}px;" />
     
     {{foreach from=$evenements key=_label item=_evenements}}
       <tr>
-        <th>{{tr}}{{$_label}}{{/tr}}</th>
+        <th>
+          {{tr}}{{$_label}}{{/tr}}
+
+          {{if $_label == "CAnesthPerop"}}
+            <button class="new notext compact" style="float: right;"
+                    onclick="return editEvenementPerop('CAnesthPerop-0', '{{$interv->_id}}')"></button>
+          {{/if}}
+        </th>
         <td>
         {{foreach from=$_evenements item=_evenement}}
           {{if $_evenement.position <= 100}}
@@ -214,11 +265,9 @@ editEvenementPerop = function(guid, operation_id, datetime) {
             {{assign var=evenement_width value="width: `$_evenement.width`%;"}}
           {{/if}}
           
-          <div style="padding-left: {{$_evenement.position}}%; {{if $_evenement.alert}} color: red; {{/if}} {{if array_key_exists('width', $_evenement)}} margin-bottom: 2px; {{/if}}" class="evenement">
+          <div style="padding-left: {{$_evenement.position}}%; margin-left: -1px; {{if $_evenement.alert}} color: red; {{/if}} {{if array_key_exists('width', $_evenement)}} margin-bottom: 2px; {{/if}}" class="evenement">
             <div onmouseover="ObjectTooltip.createEx(this, '{{$_evenement.object->_guid}}');" style="{{$evenement_width}}; {{if $_evenement.alert}} background: red; {{/if}}">
-              <div class="marking">
-                <!--<span>{{$_evenement.datetime|date_format:$conf.datetime}}</span>-->
-              </div>
+              <div class="marking"></div>
               <div class="label" title="{{$_evenement.datetime|date_format:$conf.datetime}} - {{if $_evenement.unit}}{{$_evenement.unit}}{{/if}} {{$_evenement.label}}">
                 {{if $_evenement.editable}} 
                   <a href="#{{$_evenement.object->_guid}}"

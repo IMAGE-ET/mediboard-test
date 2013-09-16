@@ -22,3 +22,7 @@ if (CAppUI::$user->_user_type == 0) {
   $module->registerTab("vw_identito_vigilance"      , TAB_ADMIN);
 }
 
+if (CAppUI::conf("dPsalleOp enable_surveillance_perop")) {
+  $module->registerTab("vw_config_param_surveillance", TAB_ADMIN);
+  $module->registerTab("vw_supervision_graph",         TAB_ADMIN);
+}

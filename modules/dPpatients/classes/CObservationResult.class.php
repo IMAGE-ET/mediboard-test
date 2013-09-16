@@ -23,6 +23,8 @@ class CObservationResult extends CMbObject {
   public $method;        // OBX.17
   public $status;        // OBX.11
 
+  public $file_id;
+
   public $_ref_context;
 
   /** @var CObservationValueType */
@@ -33,6 +35,9 @@ class CObservationResult extends CMbObject {
 
   /** @var CObservationResultSet */
   public $_ref_result_set;
+
+  /** @var CFile */
+  public $_ref_file;
 
   /**
    * @see parent::getSpec()
@@ -51,10 +56,11 @@ class CObservationResult extends CMbObject {
     $props = parent::getProps();
     $props["observation_result_set_id"] = "ref notNull class|CObservationResultSet";
     $props["value_type_id"]             = "ref notNull class|CObservationValueType";
-    $props["unit_id"]                   = "ref notNull class|CObservationValueUnit";
+    $props["unit_id"]                   = "ref class|CObservationValueUnit";
     $props["value"]                     = "str notNull";
     $props["method"]                    = "str";
     $props["status"]                    = "enum list|C|D|F|I|N|O|P|R|S|U|W|X default|F";
+    $props["file_id"]                   = "ref class|CFile";
     return $props;
   }
 
@@ -87,6 +93,15 @@ class CObservationResult extends CMbObject {
    */
   function loadRefValueUnit() {
     return $this->_ref_value_unit = CObservationValueUnit::get($this->unit_id);
+  }
+
+  /**
+   * Load file
+   *
+   * @return CFile
+   */
+  function loadRefFile() {
+    return $this->_ref_file = $this->loadFwdRef("file_id");
   }
 
   /**

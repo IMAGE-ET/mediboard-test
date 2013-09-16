@@ -12,10 +12,9 @@
 /**
  * A supervision timed data representation
  */
-class CSupervisionTimedData extends CSupervisionTimedEntity {
-  public $supervision_timed_data_id;
+class CSupervisionTimedPicture extends CSupervisionTimedEntity {
+  public $supervision_timed_picture_id;
 
-  public $period;
   public $value_type_id;
 
   /**
@@ -23,8 +22,8 @@ class CSupervisionTimedData extends CSupervisionTimedEntity {
    */
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = "supervision_timed_data";
-    $spec->key   = "supervision_timed_data_id";
+    $spec->table = "supervision_timed_picture";
+    $spec->key   = "supervision_timed_picture_id";
     return $spec;
   }
 
@@ -33,7 +32,6 @@ class CSupervisionTimedData extends CSupervisionTimedEntity {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["period"] = "enum list|1|5|10|15|20|30|60";
     $props["value_type_id"] = "ref notNull class|CObservationValueType autocomplete|label dependsOn|datatype";
     return $props;
   }
@@ -47,9 +45,8 @@ class CSupervisionTimedData extends CSupervisionTimedEntity {
     return $backProps;
   }
 
-  function loadTimedData($results, $time_min, $time_max) {
+  function loadTimedPictures($results, $time_min, $time_max) {
     $type_id = $this->value_type_id;
-
     if (!isset($results[$type_id]["none"])) {
       return $this->_graph_data = array();
     }
@@ -58,6 +55,12 @@ class CSupervisionTimedData extends CSupervisionTimedEntity {
 
     foreach ($data as $_i => $_d) {
       $data[$_i]["position"] = $this->getPosition($_d["datetime"], $time_min, $time_max);
+
+      if ($_d["file_id"]) {
+        $file = new CFile();
+        $file->load($_d["file_id"]);
+        $data[$_i]["file"] = $file;
+      }
     }
 
     return $this->_graph_data = $data;
