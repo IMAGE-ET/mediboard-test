@@ -1027,6 +1027,10 @@ class CExObject extends CMbMetaObject {
         $_ex_object = $_ex_class->getLatestExObject($object);
       }
 
+      if ($template->valueMode && (!$_ex_object || !$_ex_object->_id)) {
+        continue;
+      }
+
       foreach ($fields as $_field) {
         if (!$_field->in_doc_template) {
           continue;
@@ -1036,7 +1040,9 @@ class CExObject extends CMbMetaObject {
 
         $_template_field_name = "Sejour - $_name - $_field_name";
         $_template_key_name = "CExObject|$_ex_class->_id|$_field->name";
-        $_template_value = (($_ex_object && $_ex_object->_id) ? $_ex_object->getFormattedValue($_field->name) : "");
+
+        $_has_value = ($_ex_object && $_ex_object->_id && $_field->name != "");
+        $_template_value = ($_has_value ? $_ex_object->getFormattedValue($_field->name) : "");
 
         $template->addAdvancedData($_template_field_name, $_template_key_name, $_template_value);
       }
