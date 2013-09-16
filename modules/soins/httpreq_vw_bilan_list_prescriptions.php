@@ -31,12 +31,15 @@ $prescription = new CPrescription();
 // Recherche des prescriptions
 $where = array();
 if ($type_prescription == "sejour" || $type_prescription == "sortie_manquante") {
+  $group_id = CGroups::loadCurrent()->_id;
+
   $ljoin["sejour"] = "prescription.object_id = sejour.sejour_id";
   $ljoin["patients"] = "patients.patient_id = sejour.patient_id";
   
   $where["prescription.type"] = " = 'sejour'";
   $where["sejour.entree"]     = " <= '$date_max'";
   $where["sejour.sortie"]     = " >= '$date_min'";
+  $where["sejour.group_id"]   = " = '$group_id'";
 }
 else {
   $ljoin["consultation"] = "prescription.object_id = consultation.consultation_id";
