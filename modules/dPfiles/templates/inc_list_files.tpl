@@ -20,6 +20,9 @@
     </td>
     <td class="text {{cycle name=celltxt values="dark, light"}}" style="vertical-align: middle;">
       <strong>
+        {{if $_doc_item instanceof CCompteRendu && $_doc_item->valide}}
+          <img src="style/mediboard/images/buttons/lock.png" onmouseover="ObjectTooltip.createEx(this, '{{$_doc_item->_guid}}', 'locker')"/>
+        {{/if}}
         {{$_doc_item}}
         {{if $_doc_item->private}}
           &mdash; <em>{{tr}}CCompteRendu-private{{/tr}}</em>

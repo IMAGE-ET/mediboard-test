@@ -607,13 +607,13 @@ class CTemplateManager {
     $aide = new CAideSaisie();
 
     /** @var CAideSaisie $aidesUser */
-    $aidesUser   = $aide->loadList($whereUser, $order);
+    $aidesUser   = $aide->loadList($whereUser, $order, null, "aide_id");
 
     /** @var CAideSaisie $aidesFunc */
-    $aidesFunc   = $aide->loadList($whereFunc, $order);
+    $aidesFunc   = $aide->loadList($whereFunc, $order, null, "aide_id");
 
     /** @var CAideSaisie $aidesGroup */
-    $aidesGroup  = $aide->loadList($whereGroup, $order);
+    $aidesGroup  = $aide->loadList($whereGroup, $order, null, "aide_id");
 
     $this->helpers["Aide de l'utilisateur"] = array();
     foreach ($aidesUser as $aideUser) {

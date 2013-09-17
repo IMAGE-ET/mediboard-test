@@ -35,6 +35,12 @@
   <script type="text/javascript">
   
   Main.add(function() {
+    ObjectTooltip.modes.locker = {
+      module: "compteRendu",
+      action: "ajax_show_locker",
+      sClass: "tooltip"
+    };
+
     var form = getForm('DocumentAdd-{{$unique_id}}-{{$object->_guid}}');
     var url;
     

@@ -29,6 +29,9 @@
       {{if $document->_is_editable && $document->_can->edit}}
         <a href="#{{$document->_guid}}" onclick="Document.edit({{$document->_id}}); return false;" style="display: inline;">
       {{/if}}
+      {{if $document->valide}}
+        <img src="style/mediboard/images/buttons/lock.png" onmouseover="ObjectTooltip.createEx(this, '{{$document->_guid}}', 'locker')"/>
+      {{/if}}
         <span onmouseover="ObjectTooltip.createEx(this, '{{$document->_guid}}', 'objectView')">
           {{$document}}
         </span>

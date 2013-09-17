@@ -14,6 +14,11 @@ Main.add(function () {
   {{else}}
   var tabs = Control.Tabs.create('tab-consult', true);
   {{/if}}
+  ObjectTooltip.modes.locker = {
+    module: "compteRendu",
+    action: "ajax_show_locker",
+    sClass: "tooltip"
+  };
 });
 </script>
 

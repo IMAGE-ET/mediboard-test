@@ -5,7 +5,7 @@
   * @package  Mediboard
   * @author   SARL OpenXtrem <dev@openxtrem.com>
   * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-  * @version  SVN: $Id:$
+  * @version  SVN: $Id$
   * @link     http://www.mediboard.org
 *}}
 
@@ -18,19 +18,24 @@
   {{assign var=object_id value=""}}
 {{/if}}
 
-<script type="text/javascript">
-Main.add(function () {
-  {{if $accordDossier}}
-  var tabs{{$object_id}}{{$object_class}} = Control.Tabs.create('tab-{{$object_class}}{{$object_id}}', false);
-  {{else}}
-  var tabs = Control.Tabs.create('tab-consult', true);
-  {{/if}}
+<script>
+  Main.add(function () {
+    {{if $accordDossier}}
+    var tabs{{$object_id}}{{$object_class}} = Control.Tabs.create('tab-{{$object_class}}{{$object_id}}', false);
+    {{else}}
+    var tabs = Control.Tabs.create('tab-consult', true);
+    {{/if}}
 
-  if ($("docItem_{{$object->_guid}}")) {
-    $("docItem_{{$object->_guid}}").update({{$nbItems}});
-  }
-});
+    if ($("docItem_{{$object->_guid}}")) {
+      $("docItem_{{$object->_guid}}").update({{$nbItems}});
+    }
 
+    ObjectTooltip.modes.locker = {
+      module: "compteRendu",
+      action: "ajax_show_locker",
+      sClass: "tooltip"
+    };
+  });
 </script>
 
 <ul id="tab-{{if $accordDossier}}{{$object_class}}{{$object_id}}{{else}}consult{{/if}}" class="control_tabs">
