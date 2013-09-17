@@ -9,9 +9,6 @@ SupervisionGraph = {
   },
 
   editGraph: function(id) {
-    if (!id) {
-      return false;
-    }
     var url = new Url("dPpatients", "ajax_edit_supervision_graph");
     url.addParam("supervision_graph_id", id);
     url.requestUpdate("supervision-graph-editor");
