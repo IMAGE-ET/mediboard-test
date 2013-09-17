@@ -15,3 +15,8 @@ li.atcd_hover a {
   margin: 0;
   outline: 3px #f88 solid;
 }
+
+
+.planning div.event-container div.pour_tiers {
+  background-image: url("../../../images/icons/ray_blue.gif");
+}

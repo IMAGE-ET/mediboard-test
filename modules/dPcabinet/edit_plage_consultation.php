@@ -55,6 +55,10 @@ else {
 $plageSel->loadRefsFwd(1);
 $plageSel->loadRefsNotes();
 $plageSel->loadRefsBack();
+//check 3333tel
+if (CModule::getActive("3333tel")) {
+  C3333TelTools::checkPlagesConsult($plageSel);
+}
 
 if ($plageSel->_affected) {
   $firstconsult = reset($plageSel->_ref_consultations);

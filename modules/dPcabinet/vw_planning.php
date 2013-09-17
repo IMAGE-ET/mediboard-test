@@ -186,7 +186,7 @@ for ($i = 0; $i < 7; $i++) {
     if (CMbDT::minutesRelative($_plage->debut, $_plage->fin) >= 30 ) {
       $libelle = $_plage->libelle;
     }
-    
+
     $color = "#DDD";
     if ($_plage->desistee) {
       if (!$_plage->remplacant_id) {
@@ -205,8 +205,21 @@ for ($i = 0; $i < 7; $i++) {
     elseif ($_plage->pour_compte_id) {
       $color = "#EDC";
     }
+
+    $class = null;
+    if ($_plage->pour_tiers) {
+      $class = "pour_tiers";
+    }
+
     $event = new CPlanningEvent(
-      $_plage->_guid, $debute, CMbDT::minutesRelative($_plage->debut, $_plage->fin), $libelle, $color, true, null, null
+      $_plage->_guid,
+      $debute,
+      CMbDT::minutesRelative($_plage->debut, $_plage->fin),
+      $libelle,
+      $color,
+      true,
+      $class,
+      null
     );
     $event->useHeight = true;
 
