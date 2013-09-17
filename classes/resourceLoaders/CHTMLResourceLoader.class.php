@@ -152,11 +152,25 @@ abstract class CHTMLResourceLoader {
    */
   static function output(){
     if (self::$_aio) {
-      $path = CAppUI::conf("aio_output_path");
+      $path = CAppUI::getTmpPath("embed-".md5(uniqid("", true)));
 
-      if (self::$_aio === "savefile" && is_dir($path)) {
+      if (self::$_aio === "savefile") {
         $str = self::allInOne($path);
-        file_put_contents($path."index.html", $str);
+        file_put_contents("$path/index.html", $str);
+
+        $zip_path = "$path.zip";
+        CMbPath::zip($path, $zip_path);
+
+        header("Content-Type: application/zip");
+        header("Content-Disposition: attachment; filename=\"".basename($zip_path)."\";");
+        header("Content-Transfer-Encoding: binary");
+        header("Content-Length: ".filesize($zip_path));
+        readfile($zip_path);
+
+        unlink($zip_path);
+        CMbPath::remove($path);
+
+        CApp::rip();
       }
       else {
         self::allInOne();
