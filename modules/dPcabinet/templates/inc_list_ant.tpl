@@ -67,6 +67,18 @@ Traitement = {
   }
 };
 
+showModalTP = function(dossier_medical_id, sejour_id, prescription_sejour_id) {
+  window.modalUrlTp = new Url("prescription", "ajax_vw_traitements_personnels");
+  window.modalUrlTp.addParam("dossier_medical_id", dossier_medical_id);
+  window.modalUrlTp.addParam("sejour_id", sejour_id);
+  window.modalUrlTp.addParam("prescription_sejour_id", prescription_sejour_id);
+  window.modalUrlTp.requestModal("60%", "40%", {
+    onClose: function() {
+    window.tab_sejour.setActiveTab("prescription_sejour");
+    Prescription.reloadPrescSejour(null, '{{$sejour->_id}}');
+  } });
+}
+
 </script>
 
 <!--  Formulaire de création de prescription si inexistante -->
@@ -151,6 +163,9 @@ Traitement = {
       Afficher les {{$dossier_medical->_count_cancelled_traitements}} traitements stoppés
     </button>
   {{/if}}
+
+  <button class="tick" type="button" style="float: right" onclick="showModalTP('{{$dossier_medical->_id}}','{{$sejour->_id}}','{{$prescription_sejour_id}}');">Represcrire les traitements personnels</button>
+
   <strong>Traitements personnels</strong>
 {{/if}}
 
