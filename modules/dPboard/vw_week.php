@@ -96,7 +96,14 @@ for ($i = 0; $i < 7; $i++) {
   foreach ($plagesConsult as $_consult) {
     $_consult->loadFillRate();
     $_consult->countPatients();
-    ajoutEvent($planning, $_consult, $date, $_consult->libelle, $color, "consultation");
+    $class = null;
+    if ($_consult->pour_tiers) {
+      $class = "pour_tiers";
+    }
+    if (CModule::getActive("3333tel")) {
+      C3333TelTools::checkPlagesConsult($_consult);
+    }
+    ajoutEvent($planning, $_consult, $date, $_consult->libelle, $color, "consultation", $class);
   }
 }
 
@@ -148,14 +155,15 @@ for ($i = 0; $i < 7; $i++) {
  * @param string        $libelle   libellé de l'évènement
  * @param string        $color     couleur de l'évènement
  * @param string        $type      type de l'évènement
+ * @param string|null   $class     css class to apply
  *
  * @return void
  */
-function ajoutEvent(&$planning, $_plage, $date, $libelle, $color, $type) {
+function ajoutEvent(&$planning, $_plage, $date, $libelle, $color, $type, $class= null) {
   $debute = "$date $_plage->debut";
   $event = new CPlanningEvent(
     $_plage->_guid, $debute, CMbDT::minutesRelative($_plage->debut, $_plage->fin),
-    $libelle, $color, true, null, null
+    $libelle, $color, true, $class, null
   );
   $event->resizable = true;
   
