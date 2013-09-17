@@ -10,7 +10,6 @@
  */
 CCanDo::checkEdit();
 $date       = CValue::get("date", CMbDT::date());
-$type_print = CValue::get("type_print", "bvr");
 
 $facture = new CFactureEtablissement();
 $facture->cloture = $date;
@@ -29,28 +28,38 @@ $facture->cloture = $date;
 $facture->definitive = 1;
 $factures = $facture->loadMatchingList();
 
+
 if (count($factures)) {
-  $facture_pdf = new CEditPdf();
-  $facture_pdf->factures = $factures;
-  $pdf = "";
-  if ($type_print == "bvr") {
-    $pdf = $facture_pdf->editFactureBVR(false, "S");
-  }
+  $user = CMediusers::get();
+  $printer_bvr = new CPrinter();
+  $printer_bvr->function_id = $user->function_id;
+  $printer_bvr->label = "bvr";
+  $printer_bvr->loadMatchingObject();
 
-  if ($type_print == "justif") {
-    $pdf = $facture_pdf->editJustificatif(false, "S");
-  }
-
-  $printer = new CPrinter();
-  $printer->function_id = CMediusers::get()->function_id;
-  $printer->label = $type_print;
-  $printer->loadMatchingObject();
+  $printer_justif = new CPrinter();
+  $printer_justif->function_id = $user->function_id;
+  $printer_justif->label = "justif";
+  $printer_justif->loadMatchingObject();
 
   $file = new CFile();
-  $file_path = tempnam("tmp", "facture");
-  $file->_file_path = $file_path;
-  file_put_contents($file_path, $pdf);
 
-  $printer->loadRefSource()->sendDocument($file);
-  unlink($file_path);
+  foreach ($factures as $facture) {
+    $facture_pdf = new CEditPdf();
+    $facture_pdf->factures = array($facture);
+    $pdf = "";
+    $pdf = $facture_pdf->editFactureBVR(false, "S");
+    $file_path = tempnam("tmp", "facture");
+    $file->_file_path = $file_path;
+    file_put_contents($file_path, $pdf);
+    $printer_bvr->loadRefSource()->sendDocument($file);
+    unlink($file_path);
+
+    $pdf = "";
+    $pdf = $facture_pdf->editJustificatif(false, "S");
+    $file_path = tempnam("tmp", "facture");
+    $file->_file_path = $file_path;
+    file_put_contents($file_path, $pdf);
+    $printer_justif->loadRefSource()->sendDocument($file);
+    unlink($file_path);
+  }
 }
