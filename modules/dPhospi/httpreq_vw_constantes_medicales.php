@@ -141,11 +141,13 @@ if ($print) {
 
 $old_constants_to_draw = ($print == 1 ? $selection : CConstantesMedicales::$list_constantes);
 
+$show_cat_tabs = CConstantesMedicales::getHostConfig("show_cat_tabs", $host);
+$show_enable_all_button = CConstantesMedicales::getHostConfig("show_enable_all_button", $host);
 /*
  * Organisation differente que l'on affiche par volet ou pas
  * TODO on n'a pas déjà ça dans CConstantesMedicales ?
  */
-if (CConstantesMedicales::getHostConfig("show_cat_tabs", $host)) {
+if ($show_cat_tabs) {
   $constants_to_draw = array("all" => array());
   foreach ($selection as $_type => $_ranks) {
     foreach ($_ranks as $_rank => $_constants) {
@@ -604,4 +606,6 @@ $smarty->assign('total_constantes', $total_constantes);
 $smarty->assign('paginate',      $paginate);
 $smarty->assign('constantes_medicales_grid', $constantes_medicales_grid);
 $smarty->assign('simple_view',   $simple_view);
+$smarty->assign('show_cat_tabs', $show_cat_tabs);
+$smarty->assign('show_enable_all_button', $show_enable_all_button);
 $smarty->display('inc_vw_constantes_medicales.tpl');

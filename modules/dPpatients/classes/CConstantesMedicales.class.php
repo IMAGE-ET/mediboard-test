@@ -1801,51 +1801,74 @@ class CConstantesMedicales extends CMbObject {
   /**
    * Return the selected constants in an formatted array (see getConstantsByRank to see the format)
    *
-   * @param array $selection The constant you want to select
+   * @param array            $selection The constant you want to select
+   * @param CMbObject|string $host      Host from which we'll get the configuration
    *
    * @return array
    */
-  static function selectConstants($selection) {
-    $result = array();
-
-    $constants_list = CConstantesMedicales::$list_constantes;
-    if (CConstantesMedicales::getConfig("show_cat_tabs")) {
-      foreach ($constants_list as $_constant_name => $_constant_attrs) {
-        if (strpos($_constant_name, "_") === 0) {
-          continue;
-        }
-
-        $_type = $_constant_attrs["type"];
-
-        if (!array_key_exists($_type, $result)) {
-          $result[$_type] = array();
-        }
-        if (in_array($_constant_name, $selection)) {
-          $result[$_type][] = array($_constant_name);
-        }
-        else {
-          if (!array_key_exists("hidden", $result[$_type])) {
-            $result[$_type]["hidden"] = array();
-          }
-          $result[$_type]["hidden"][] = $_constant_name;
-        }
-      }
+  static function selectConstants($selection, $host = null) {
+    if ($host) {
+      $constants_by_rank = CConstantesMedicales::getHostConfig("selection", $host);
+      $show_cat_tabs = CConstantesMedicales::getHostConfig("show_cat_tabs", $host);
     }
     else {
-      $result["all"] = array();
+      $constants_by_rank = CConstantesMedicales::getConfig("selection");
+      $show_cat_tabs = CConstantesMedicales::getConfig("show_cat_tabs");
+    }
+    $list_constants = CConstantesMedicales::$list_constantes;
 
-      foreach ($constants_list as $_constant_name => $_constant_attrs) {
-        if (strpos($_constant_name, "_") === 0) {
+      // Keep only valid constant names
+    $constants_by_rank = array_intersect_key($constants_by_rank, $list_constants);
+
+    $constants_by_rank = CMbArray::flip($constants_by_rank);
+    ksort($constants_by_rank);
+
+    $result = array();
+    foreach ($constants_by_rank as $_rank => $_constants) {
+      if ($_rank === -1) {
+        continue;
+      }
+      foreach ($_constants as $_constant) {
+        if (strpos($_constant, "_") === 0) {
           continue;
         }
-        if (in_array($_constant_name, $selection)) {
-          $result["all"][] = array($_constant_name);
+
+        if ($show_cat_tabs) {
+          $_type = $list_constants[$_constant]["type"];
+
+          if (!array_key_exists($_type, $result)) {
+            $result[$_type] = array();
+          }
+
+          if (!in_array($_constant, $selection)) {
+            $rank = 'hidden';
+          }
+          else {
+            $rank = $_rank;
+          }
+          if (!array_key_exists($rank, $result[$_type])) {
+            $result[$_type][$rank] = array();
+          }
+
+          $result[$_type][$rank][] = $_constant;
         }
         else {
-          if (!array_key_exists("hidden", $result["all"])) {
-            $result["all"]["hidden"] = array();
+          if (!array_key_exists('all', $result)) {
+            $result['all'] = array();
           }
-          $result["all"]["hidden"][] = $_constant_name;
+
+          if (!in_array($_constant, $selection)) {
+            $rank = 'hidden';
+          }
+          else {
+            $rank = $_rank;
+          }
+
+          if (!array_key_exists($rank, $result['all'])) {
+            $result['all'][$rank] = array();
+          }
+
+          $result['all'][$rank][] = $_constant;
         }
       }
     }

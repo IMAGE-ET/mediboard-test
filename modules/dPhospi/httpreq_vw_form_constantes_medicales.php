@@ -22,18 +22,20 @@ if ($context_guid) {
   $context = CMbObject::loadFromGuid($context_guid);
 }
 
+/** @var CGroups|CService|CRPU $host */
+// On cherche le meilleur "herbegement" des constantes, pour charger les configuration adequat
+if ($host_guid) {
+  $host = CMbObject::loadFromGuid($host_guid);
+}
+else {
+  $host = CConstantesMedicales::guessHost($context);
+}
+
+$show_cat_tabs = CConstantesMedicales::getHostConfig("show_cat_tabs", $host);
+$show_enable_all_button = CConstantesMedicales::getHostConfig("show_enable_all_button", $host);
+
 $dates = array();
 if (!$selection) {
-  /** @var CGroups|CService|CRPU $host */
-
-  // On cherche le meilleur "herbegement" des constantes, pour charger les configuration adequat
-  if ($host_guid) {
-    $host = CMbObject::loadFromGuid($host_guid);
-  }
-  else {
-    $host = CConstantesMedicales::guessHost($context);
-  }
-
   $selection = CConstantesMedicales::getConstantsByRank(true, $host);
 }
 else {
@@ -74,6 +76,8 @@ $smarty->assign('context_guid'  , $context_guid);
 $smarty->assign('readonly'      , $readonly);
 $smarty->assign('selection'     , $selection);
 $smarty->assign('dates'         , $dates);
+$smarty->assign('show_cat_tabs', $show_cat_tabs);
+$smarty->assign('show_enable_all_button', $show_enable_all_button);
 if ($tri) {
   $smarty->assign('real_context'  , CValue::get('real_context'));
   $smarty->assign('display_graph'  , CValue::get('display_graph', 0));

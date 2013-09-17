@@ -3,15 +3,9 @@
 {{mb_default var=display_graph value=1}}
 {{mb_default var=tri value=""}}
 
-{{assign var=show_cat_tabs value=false}}
-{{if "CConstantesMedicales::getConfig"|static_call:"show_cat_tabs"}}
-  {{assign var=show_cat_tabs value=true}}
-{{/if}}
+{{mb_default var=show_cat_tabs value="CConstantesMedicales::getConfig"|static_call:"show_cat_tabs"}}
 
-{{assign var=show_enable_all_button value=false}}
-{{if "CConstantesMedicales::getConfig"|static_call:"show_enable_all_button"}}
-  {{assign var=show_enable_all_button value=true}}
-{{/if}}
+{{mb_default var=show_enable_all_button value="CConstantesMedicales::getConfig"|static_call:"show_enable_all_button"}}
 
 <script type="text/javascript">
 submitConstantesMedicales = function(oForm) {
