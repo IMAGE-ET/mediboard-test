@@ -14,7 +14,13 @@
 
     <tr>
       <th>{{mb_label object=$chambre field=service_id}}</th>
-      <td>{{mb_field object=$chambre field=service_id options=$services}}</td>
+      <td>
+        {{if $chambre->_id}}
+          {{$chambre->_ref_service->_view}}
+        {{else}}
+          {{mb_field object=$chambre field=service_id options=$services}}
+        {{/if}}
+      </td>
     </tr>
 
     <tr>
