@@ -1,13 +1,13 @@
 {{if $selOp->_ref_sejour->_ref_consult_anesth->_id}}
   {{assign var="consult_anesth" value=$selOp->_ref_sejour->_ref_consult_anesth}}
 
-  <form name="linkConsultAnesth" action="?" method="post" onsubmit="return checkForm(this)">
+  <form name="linkConsultAnesth" action="?" method="post" onsubmit="return onSubmitFormAjax(this, function() { document.location.reload() })">
     <input type="hidden" name="m" value="cabinet" />
-    <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-    <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->_id}}" />
-    <input type="hidden" name="sejour_id" value="" />
+    <input type="hidden" name="dosql" value="do_duplicate_dossier_anesth_aed" />
+    <input type="hidden" name="_consult_anesth_id" value="{{$consult_anesth->_id}}" />
+    <input type="hidden" name="sejour_id" value="{{$selOp->sejour_id}}" />
     <input type="hidden" name="operation_id" value="{{$selOp->_id}}" />
+    <input type="hidden" name="redirect" value="0" />
     <table class="form">
       <tr>
         <td class="text">
@@ -15,13 +15,13 @@
             Une consultation d'anesthésie a été effectuée pour le séjour de ce patient
             le <strong>{{$consult_anesth->_date_consult|date_format:"%d/%m/%Y"}}</strong>
             par le <strong>Dr {{$consult_anesth->_ref_consultation->_ref_chir->_view}}</strong>.
-            Vous devez <strong>relier cette consultation à l'intervention courante</strong> si vous désirez y accéder.
+            Vous devez <strong>dupliquer le dossier d'anesthésie pour le relier à l'intervention courante</strong> si vous désirez y accéder.
           </div>
         </td>
       </tr>
       <tr>
         <td class="button">
-          <button type="submit" class="submit">Relier</button>
+          <button type="button" class="submit" onclick="this.form.onsubmit()">Dupliquer et relier</button>
         </td>
       </tr>
     </table>

@@ -2771,6 +2771,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     $template->addProperty("Sejour - Libelle"                 , $this->getFormattedValue("libelle"));
     $template->addProperty("Sejour - Transport"               , $this->getFormattedValue("transport"));
 
+    $last_exam_igs = $this->loadLastBackRef("exams_igs");
+    $template->addProperty("Sejour - Score IGS"               , $last_exam_igs->_id ? $last_exam_igs->scoreIGS : "");
+
     $consult_anesth = $this->loadRefsConsultAnesth();
     $consult = $consult_anesth->loadRefConsultation();
     $consult->loadRefPlageConsult();

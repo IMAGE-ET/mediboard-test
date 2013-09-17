@@ -12,11 +12,22 @@
  */
 
 $dossier_anesth_id = CValue::post("_consult_anesth_id");
+$sejour_id         = CValue::post("sejour_id");
+$operation_id      = CValue::post("operation_id");
+$redirect          = CValue::post("redirect", 1);
 
 $consult_anesth = new CConsultAnesth();
 $consult_anesth->load($dossier_anesth_id);
 
 $consult_anesth->_id = $consult_anesth->operation_id = $consult_anesth->sejour_id = null;
+
+if ($sejour_id) {
+  $consult_anesth->sejour_id = $sejour_id;
+}
+
+if ($operation_id) {
+  $consult_anesth->operation_id = $operation_id;
+}
 
 $msg = $consult_anesth->store();
 
@@ -27,7 +38,13 @@ else {
   CAppUI::setMsg(CAppUI::tr("CConsultAnesth-msg-duplicate"));
 }
 
-CAppUI::redirect(
-  "m=cabinet&tab=edit_consultation&selConsult=".
-  $consult_anesth->consultation_id."&dossier_anesth_id=".$consult_anesth->_id
-);
+echo CAppUI::getMsg();
+
+if ($redirect) {
+  CAppUI::redirect(
+    "m=cabinet&tab=edit_consultation&selConsult=".
+    $consult_anesth->consultation_id."&dossier_anesth_id=".$consult_anesth->_id
+  );
+}
+
+CApp::rip();
