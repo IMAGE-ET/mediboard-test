@@ -65,7 +65,14 @@
 {{mb_key object=$plageSel}}
 
 <table class="form">
-  {{mb_include module=system template=inc_form_table_header object=$plageSel colspan=4}}
+  {{if @$modules.3333tel->mod_active}}
+    <tr>
+      <td>
+        {{mb_include module=3333tel template=inc_check_3333tel object=$plageSel}}
+      </td>
+    </tr>
+  {{/if}}
+  {{mb_include module=system template=inc_form_table_header object=$plageSel colspan=1}}
   <tr>
     <td>
       <fieldset>
@@ -238,9 +245,6 @@
     <td class="button" colspan="4"><button id="edit_plage_consult_button_create_new_plage" type="submit" class="submit">{{tr}}Create{{/tr}}</button></td>
     {{else}}
     <td class="button" colspan="4">
-      {{if @$modules.3333tel->mod_active}}
-        {{mb_include module=3333tel template=inc_check_3333tel object=$plageSel}}
-      {{/if}}
       <button type="submit" class="modify" id="edit_plage_consult_button_modify_plage">{{tr}}Modify{{/tr}}</button>
       <button class="trash" type='button'
         onclick="confirmDeletion(this.form, {
