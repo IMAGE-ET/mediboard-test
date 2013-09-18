@@ -91,6 +91,18 @@ class CHTTPClient {
   }
 
   /**
+   * Execute a request HEAD
+   *
+   * @param bool $close Close the connection
+   *
+   * @return String
+   */
+  function head($close = true) {
+    $this->setOption(CURLOPT_NOBODY, true);
+    return $this->executeRequest($close);
+  }
+
+  /**
    * Assign a HTTP authentification
    *
    * @param String $username Username for the site
@@ -190,5 +202,36 @@ class CHTTPClient {
    */
   function closeConnection() {
     curl_close($this->handle);
+  }
+
+  /**
+   * Check the URL disponibility
+   *
+   * @param String   $url         URL site
+   * @param String[] $option      Option array
+   * @param Boolean  $return_body Return the content of the page
+   *
+   * @return bool|int
+   */
+  static function checkUrl($url, $option = null, $return_body = false) {
+    try {
+      $http_client = new CHTTPClient($url);
+      if ($option) {
+        $http_client->setSSLAuthentification($option["local_cert"], $option["passphrase"]);
+        $http_client->setSSLPeer($option["ca_cert"]);
+        $http_client->setHTTPAuthentification($option["username"], $option["password"]);
+      }
+      $http_client->setOption(CURLOPT_HEADER, true);
+      $result = $http_client->get();
+    }
+    catch (Exception $e) {
+      return false;
+    }
+
+    if ($return_body) {
+      return $result;
+    }
+
+    return (preg_match("|200|", $result));
   }
 }
