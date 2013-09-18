@@ -612,6 +612,12 @@ class CSetupmediusers extends CSetup {
               DROP `service_account`;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.53";
+    $this->makeRevision("0.53");
+    $query = "ALTER TABLE `users_mediboard`
+              ADD `other_specialty_id` INT (11) UNSIGNED,
+              ADD INDEX (`other_specialty_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.54";
   }
 }

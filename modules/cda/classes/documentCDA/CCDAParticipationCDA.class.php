@@ -86,4 +86,18 @@ class CCDAParticipationCDA extends CCDADocumentCDA {
 
     return $location;
   }
+
+  /**
+   * Création du performer
+   *
+   * @param CMediusers $praticien praticien
+   *
+   * @return CCDAPOCD_MT000040_Performer1
+   */
+  function setPerformer($praticien) {
+    $performer = new CCDAPOCD_MT000040_Performer1();
+    $performer->setTypeCode("PRF");
+    $performer->setAssignedEntity(self::$role->setAssignedEntity($praticien, true));
+    return $performer;
+  }
 }

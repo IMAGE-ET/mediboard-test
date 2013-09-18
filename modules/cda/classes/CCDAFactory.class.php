@@ -23,7 +23,7 @@ class CCDAFactory {
   public $targetObject;
   /** @var CPatient */
   public $patient;
-  /** @var CMediusers|CUser */
+  /** @var CUser|CMediusers */
   public $practicien;
   /** @var CCDADomDocument */
   public $dom_cda;
@@ -42,6 +42,7 @@ class CCDAFactory {
   public $date_author;
   public $industry_code;
   public $healt_care;
+  public $service_event = array();
   public $templateId = array();
 
   /**
@@ -61,21 +62,21 @@ class CCDAFactory {
   function extractData() {
     $docItem = $this->docItem;
     $this->realm_code    = "FR";
-    $this->langage       = "fr-FR";
+    $this->langage       = $docItem->language;
     $docItem->loadLastLog();
     $this->date_creation = $docItem->_ref_last_log->date;
     $this->date_author = $docItem->_ref_last_log->date;
     $this->targetObject = $object = $docItem->loadTargetObject();
     if ($object instanceof CConsultAnesth) {
-      $this->targetObject = $object->loadRefConsultation();
+      $this->targetObject = $object = $object->loadRefConsultation();
     }
     $this->practicien = $object->loadRefPraticien();
     $this->patient    = $object->loadRefPatient();
     $this->docItem    = $docItem;
     $this->root       = CMbOID::getOIDFromClass($docItem);
-    $this->getPatientFromDoc($docItem);
 
     $this->practicien->loadRefFunction();
+    $this->practicien->loadRefOtherSpec();
     $group = new CGroups();
     $group->load($this->practicien->_group_id);
     $group->loadLastId400("cda_association_code");
@@ -104,7 +105,7 @@ class CCDAFactory {
 
     $category = $docItem->loadRefCategory();
     $object = $this->targetObject;
-    /** @var COperation|CCOnsultation|COperation $object */
+    /** @var COperation|CCOnsultation|CSejour $object */
     $group_id = $object->loadRefPraticien()->_group_id;
     $category->loadLastId400("cda_association_code_$group_id");
     $this->code = CCdaTools::loadEntryJV("CI-SIS_jdv_typeCode.xml", $category->_ref_last_id400->id400);
@@ -116,9 +117,6 @@ class CCDAFactory {
     $this->templateId[] = $this->createTemplateID("1.3.6.1.4.1.19376.1.2.20", "IHE XDS-SD");
 
     $this->industry_code = CCdaTools::loadEntryJV("CI-SIS_jdv_practiceSettingCode.xml", "ETABLISSEMENT");
-    if ($object instanceof CSejour && $object->_type_sejour === "AMBU") {
-      $this->industry_code = CCdaTools::loadEntryJV("CI-SIS_jdv_practiceSettingCode.xml", "AMBULATOIRE");
-    }
 
     $mediaType = "application/pdf";
 
@@ -148,6 +146,82 @@ class CCDAFactory {
     }
     $this->file      = $file;
     $this->mediaType = $mediaType;
+    $service["nullflavor"] = null;
+
+    switch (get_class($object)) {
+      case "CSejour":
+        /** @var CSejour $object CSejour */
+
+        $dp = $object->DP;
+        $service["time_start"] = $object->entree;
+        $service["time_stop"]  = $object->_sortie;
+        $service["executant"] = $object->loadRefPraticien();
+        if ($dp) {
+          $service["oid"]       = "2.16.840.1.113883.6.3";
+          $service["code"]      = $dp;
+          $service["type_code"] = "cim10";
+        }
+        else {
+          $service["nullflavor"] = "UNK";
+        }
+        break;
+      case "COperation":
+        /** @var COperation $object COperation */
+        $object->loadRefsActesCCAM();
+        $no_acte = 0;
+        foreach ($object->_ref_actes_ccam as $acteCcam) {
+          if ($acteCcam->code_activite === "4" || !$acteCcam->_check_coded  || $no_acte >= 1) {
+            continue;
+          }
+
+          $service["time_start"] = $acteCcam->execution;
+          $service["time_stop"]  = "";
+          $service["code"]       = $acteCcam->code_acte;
+          $service["oid"]        = "1.2.250.1.213.2.5";
+          $acteCcam->loadRefExecutant();
+          $service["executant"] = $acteCcam->_ref_executant;
+          $service["type_code"] = "ccam";
+          $no_acte++;
+        }
+
+        if ($no_acte === 0) {
+          $service["time_start"] = $object->debut_op;
+          $service["time_stop"]  = $object->fin_op;
+          $service["executant"]  = $object->loadRefPraticien();
+          $service["nullflavor"] = "UNK";
+        }
+        break;
+      case "CConsultation":
+        /** @var CConsultation $object CConsultation */
+        $object->loadRefPlageConsult();
+
+        $object->loadRefsActesCCAM();
+        $no_acte = 0;
+        foreach ($object->_ref_actes_ccam as $acteCcam) {
+          if (!$acteCcam->_check_coded || $acteCcam->code_activite === "4" || $no_acte >= 1) {
+            continue;
+          }
+
+          $service["time_start"] = $acteCcam->execution;
+          $service["time_stop"]  = "";
+          $service["code"]       = $acteCcam->code_acte;
+          $service["oid"]        = "1.2.250.1.213.2.5";
+          $acteCcam->loadRefExecutant();
+          $service["executant"] = $acteCcam->_ref_executant;
+          $service["type_code"] = "ccam";
+          $no_acte++;
+        }
+
+        if ($no_acte === 0) {
+          $service["time_start"] = $object->_datetime;
+          $service["time_stop"]  = $object->_date_fin;
+          $service["executant"]  = $object->loadRefPraticien();
+          $service["nullflavor"] = "UNK";
+        }
+        break;
+    }
+
+    $this->service_event = $service;
   }
 
   /**
@@ -178,19 +252,5 @@ class CCDAFactory {
     $ii->setRoot($root);
     $ii->setExtension($extension);
     return $ii;
-  }
-
-  /**
-   * Récupère le patient du document
-   *
-   * @return CPatient
-   */
-  function getPatientFromDoc() {
-    $object = $this->docItem->_ref_object;
-    if ($object instanceof CPatient) {
-      return $this->patient = $object;
-    }
-    /** @var CConsultation $object CConsultation*/
-    return $this->patient = $object->loadRefPatient();
   }
 }

@@ -47,7 +47,6 @@ class CCDAActCDA extends CCDADocumentCDA {
     $clinicaldocument->appendRealmCode($cs);
 
     //Ajout du code langage fr-FR
-    //@todo voir langue
     $cs = new CCDACS();
     $cs->setCode($factory->langage);
     $clinicaldocument->setLanguageCode($cs);
@@ -104,7 +103,7 @@ class CCDAActCDA extends CCDADocumentCDA {
     $clinicaldocument->setCustodian($participation->setCustodian());
     $clinicaldocument->appendAuthor($participation->setAuthor());
     $clinicaldocument->setLegalAuthenticator($participation->setLegalAuthenticator());
-    $this->setDocumentationOF($clinicaldocument);
+    $clinicaldocument->appendDocumentationOf($actRelationship->setDocumentationOF());
     $clinicaldocument->setComponentOf($actRelationship->setComponentOf());
 
     /**
@@ -173,5 +172,32 @@ class CCDAActCDA extends CCDADocumentCDA {
     $encompassingEncounter->setLocation(parent::$participation->setLocation());
 
     return $encompassingEncounter;
+  }
+
+  /**
+   * Création de service event
+   *
+   * @return CCDAPOCD_MT000040_ServiceEvent
+   */
+  function setServiceEvent() {
+    $service_event = self::$cda_factory->service_event;
+
+    $serviceEvent = new CCDAPOCD_MT000040_ServiceEvent();
+    $ce           = new CCDACE();
+    $time_start   = $service_event["time_start"];
+    $time_stop    = $service_event["time_stop"];
+    $ivl = parent::createIvlTs($time_start, $time_stop);
+    $serviceEvent->setEffectiveTime($ivl);
+    if ($service_event["nullflavor"]) {
+      $ce->setNullFlavor($service_event["nullflavor"]);
+    }
+    else {
+      $ce->setCode($service_event["code"]);
+      $ce->setCodeSystem($service_event["oid"]);
+    }
+    $serviceEvent->appendPerformer(parent::$participation->setPerformer($service_event["executant"]));
+    $serviceEvent->setCode($ce);
+
+    return $serviceEvent;
   }
 }

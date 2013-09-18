@@ -250,5 +250,9 @@ class CSetupeai extends CSetup {
     $this->addQuery($query);
 
     $this->mod_version = "0.15";
+
+    $query = "SELECT * FROM `authorspecialty_20121112` WHERE `code`=  'G15_10/PAC00';";
+
+    $this->addDatasource("ASIP", $query);
   }
 }

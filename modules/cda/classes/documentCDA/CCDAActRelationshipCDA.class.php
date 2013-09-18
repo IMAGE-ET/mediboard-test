@@ -38,4 +38,15 @@ class CCDAActRelationshipCDA extends CCDADocumentCDA {
     $componentOf->setEncompassingEncounter(parent::$act->setEncompassingEncounter());
     return $componentOf;
   }
+
+  /**
+   * Création de documentationOf
+   *
+   * @return CCDAPOCD_MT000040_DocumentationOf
+   */
+  function setDocumentationOF() {
+    $documentationOf = new CCDAPOCD_MT000040_DocumentationOf();
+    $documentationOf->setServiceEvent(parent::$act->setServiceEvent());
+    return $documentationOf;
+  }
 }

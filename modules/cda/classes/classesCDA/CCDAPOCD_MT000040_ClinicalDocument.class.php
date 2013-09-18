@@ -15,79 +15,35 @@
  */
 class CCDAPOCD_MT000040_ClinicalDocument extends CCDARIMDocument {
 
-  /**
-   * @var CCDAPOCD_MT000040_RecordTarget
-   */
+  /** @var CCDAPOCD_MT000040_RecordTarget */
   public $recordTarget = array();
-
-  /**
-   * @var CCDAPOCD_MT000040_Author
-   */
+  /** @var CCDAPOCD_MT000040_Author */
   public $author = array();
-
-  /**
-   * @var CCDAPOCD_MT000040_DataEnterer
-   */
+  /** @var CCDAPOCD_MT000040_DataEnterer */
   public $dataEnterer;
-
-  /**
-   * @var CCDAPOCD_MT000040_Informant12
-   */
+  /** @var CCDAPOCD_MT000040_Informant12 */
   public $informant = array();
-
-  /**
-   * @var CCDAPOCD_MT000040_Custodian
-   */
+  /** @var CCDAPOCD_MT000040_Custodian */
   public $custodian;
-
-  /**
-   * @var CCDAPOCD_MT000040_InformationRecipient
-   */
+  /** @var CCDAPOCD_MT000040_InformationRecipient */
   public $informationRecipient = array();
-
-  /**
-   * @var CCDAPOCD_MT000040_LegalAuthenticator
-   */
+  /** @var CCDAPOCD_MT000040_LegalAuthenticator */
   public $legalAuthenticator;
-
-  /**
-   * @var CCDAPOCD_MT000040_Authenticator
-   */
+  /** @var CCDAPOCD_MT000040_Authenticator */
   public $authenticator = array();
-
-  /**
-   * @var CCDAPOCD_MT000040_Participant1
-   */
+  /** @var CCDAPOCD_MT000040_Participant1 */
   public $participant = array();
-
-  /**
-   * @var CCDAPOCD_MT000040_InFulfillmentOf
-   */
+  /** @var CCDAPOCD_MT000040_InFulfillmentOf */
   public $inFulfillmentOf = array();
-
-  /**
-   * @var CCDAPOCD_MT000040_DocumentationOf
-   */
+  /** @var CCDAPOCD_MT000040_DocumentationOf */
   public $documentationOf = array();
-
-  /**
-   * @var CCDAPOCD_MT000040_RelatedDocument
-   */
+  /** @var CCDAPOCD_MT000040_RelatedDocument */
   public $relatedDocument = array();
-
-  /**
-   * @var CCDAPOCD_MT000040_Authorization
-   */
+  /** @var CCDAPOCD_MT000040_Authorization */
   public $authorization = array();
-
-  /**
-   * @var CCDAPOCD_MT000040_Component1
-   */
+  /** @var CCDAPOCD_MT000040_Component1 */
   public $componentOf;
-
-  /**
-   * @var CCDAPOCD_MT000040_Component2
-   */
+  /** @var CCDAPOCD_MT000040_Component2 */
   public $component;
 
 

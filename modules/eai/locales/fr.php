@@ -1,4 +1,5 @@
 <?php
+$locales['ASIP'] = 'ASIP';
 $locales['CDomain'] = 'Domaine d\'identification';
 $locales['CDomain-OID'] = 'OID';
 $locales['CDomain-OID-desc'] = 'OID';
@@ -406,6 +407,8 @@ $locales['CObjectToInteropSender-title-create'] = 'Associer un objet à l\'expédi
 $locales['CObjectToInteropSender-title-modify'] = 'Modifier le lien';
 $locales['CSourceFTP-ssl'] = 'SSL';
 $locales['CSourceFTP-ssl-desc'] = 'Le serveur supporte-t-il le mode FTPS ?';
+$locales['Import_asip'] = 'Importation des tables de l\'ASIP';
+$locales['Import_tables'] = 'Import des tables';
 $locales['config-eai'] = 'EAI';
 $locales['config-eai-exchange_format_delayed'] = 'Temps de retard d\'un message';
 $locales['config-eai-exchange_format_delayed-desc'] = 'Temps de retard d\'un message (minute)';
@@ -443,4 +446,3 @@ $locales['mod-eai-tab-vw_stats'] = 'Stats';
 $locales['mod-eai-tab-vw_tools'] = 'Outils';
 $locales['module-eai-court'] = 'EAI';
 $locales['module-eai-long'] = 'Enterprise Application Integration';
-?>

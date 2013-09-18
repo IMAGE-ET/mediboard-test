@@ -47,7 +47,15 @@ class CCDARoleCDA extends CCDADocumentCDA {
     $assigned = new CCDAPOCD_MT000040_AssignedAuthor();
 
     $praticien = self::$cda_factory->practicien;
+    $spec = $praticien->_ref_other_spec;
     $this->setAssigned($assigned, $praticien);
+    if ($spec->libelle) {
+      $ce = new CCDACE();
+      $ce->setCode($spec->code);
+      $ce->setDisplayName($spec->libelle);
+      $ce->setCodeSystem($spec->oid);
+      $assigned->setCode($ce);
+    }
 
     $assigned->setAssignedPerson(parent::$entite->setPerson($praticien));
     $assigned->setRepresentedOrganization(parent::$entite->setOrganization($praticien));

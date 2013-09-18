@@ -14,7 +14,7 @@ Main.add(function () {
       {{tr}}Account{{/tr}}
     </a>
   </li>
-    
+
   <li>
   	<a href="#edit-preferences" onmouseup="Preferences.refresh('{{$user->_id}}')">
   		{{tr}}Preferences{{/tr}}
@@ -57,7 +57,7 @@ Main.add(function () {
       <a href="#edit-factureox" onmouseup="factureUser();">{{tr}}CFactureOX{{/tr}}</a>
     </li>
   {{/if}}
-  
+
   {{if "ecap"|module_active}}
     <li>
       {{mb_script module=astreintes script=plage}}
@@ -78,7 +78,7 @@ Main.add(function () {
       {{mb_include template=inc_info_mediuser}}
       {{mb_include template=inc_info_exchange_source}}
     </td>
-    
+
     <td class="halfPane">
       {{mb_include template=inc_info_function}}
     </td>

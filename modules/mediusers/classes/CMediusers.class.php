@@ -31,6 +31,7 @@ class CMediusers extends CPerson {
   public $mail_apicrypt;
   public $compta_deleguee;
   public $last_ldap_checkout;
+  public $other_specialty_id;
 
   // DB References
   public $function_id;
@@ -102,6 +103,9 @@ class CMediusers extends CPerson {
 
   /** @var CSpecCPAM */
   public $_ref_spec_cpam;
+
+  /** @var CSpecialtyAsip */
+  public $_ref_other_spec;
 
   /** @var CDiscipline */
   public $_ref_discipline;
@@ -199,6 +203,7 @@ class CMediusers extends CPerson {
     $props["cps"]                    = "str";
     $props["function_id"]            = "ref notNull class|CFunctions seekable";
     $props["discipline_id"]          = "ref class|CDiscipline";
+    $props["other_specialty_id"]     = "ref class|CSpecialtyAsip autocomplete|libelle";
     $props["titres"]                 = "text";
     $props["initials"]               = "str";
     $props["commentaires"]           = "text";
@@ -554,6 +559,15 @@ class CMediusers extends CPerson {
    */
   function loadRefSpecCPAM(){
     return $this->_ref_spec_cpam = $this->loadFwdRef("spec_cpam_id", true);
+  }
+
+  /**
+   * Chargement de l'aute spécialité
+   *
+   * @return CSpecialtyAsip
+   */
+  function loadRefOtherSpec(){
+    return $this->_ref_other_spec = $this->loadFwdRef("other_specialty_id", true);
   }
 
   /**

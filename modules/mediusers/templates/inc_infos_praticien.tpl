@@ -18,6 +18,13 @@
   <td>{{mb_field object=$object field=spec_cpam_id options=$spec_cpam style="width: 250px;"}}</td> 
 </tr>
 
+{{if @$modules.eai}}
+  <tr>
+    <th>{{mb_label object=$object field=other_specialty_id}}</th>
+    <td>{{mb_field object=$object field=other_specialty_id autocomplete="true,1,50,true,true" form=$name_form}}</td>
+  </tr>
+{{/if}}
+
 {{if $conf.ref_pays == 1}}
   <tr>
     <th>{{mb_label object=$object field="adeli"}}</th>

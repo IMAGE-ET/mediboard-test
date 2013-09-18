@@ -19,7 +19,7 @@ loadProfil = function(type){
 
   // Liste des profils dispo pour le type selectionné
   var listProfil = tabProfil[type] || [];
-    
+
   $A(document.mediuser._profile_id).each( function(input) {
     input.disabled = !listProfil.include(input.value) && input.value;
     input.selected = input.selected && !input.disabled;
@@ -28,15 +28,15 @@ loadProfil = function(type){
 
 changeRemote = function(input) {
   var oPassword = $(input.form._user_password);
-    
+
   // can the user connect remotely ?
   var canRemote = $V(input)==0;
-    
+
   // we change the form element's spec 
   oPassword.className = canRemote?
     '{{$object->_props._user_password_strong}}':
     '{{$object->_props._user_password_weak}}';
-    
+
   {{if !$object->user_id}}oPassword.addClassName('notNull');{{/if}}
 
   // Admin user can force the remote field toggle
@@ -77,7 +77,7 @@ Main.add(function () {
   <a class="button search" style="" href="?m=admin&amp;tab=view_edit_users&amp;user_username={{$object->_user_username}}&amp;user_id={{$object->_id}}">
     {{tr}}CMediusers_administer{{/tr}}
   </a>
-  
+
   {{if $configLDAP}}
     <button class="search" {{if $readOnlyLDAP}}disabled="disabled"{{/if}} onclick="searchUserLDAP('{{$object->_id}}')">
       {{tr}}CMediusers_search-ldap{{/tr}}
@@ -133,30 +133,30 @@ Main.add(function () {
     </tr>
   </table>
 
-	<script type="text/javascript">
-	Main.add(Control.Tabs.create.curry('tabs-form', true));
-	</script>
-	
-	<ul id="tabs-form" class="control_tabs">
-	  <li><a href="#identification">Identification</a></li>
-	  <li><a href="#infos_praticien">Professionnel de santé</a></li>
-	  <li><a href="#iconographie">Iconographie</a></li>
-	</ul>
-	
-	<hr class="control_tabs" />
+  <script type="text/javascript">
+  Main.add(Control.Tabs.create.curry('tabs-form', true));
+  </script>
+
+  <ul id="tabs-form" class="control_tabs">
+    <li><a href="#identification">Identification</a></li>
+    <li><a href="#infos_praticien">Professionnel de santé</a></li>
+    <li><a href="#iconographie">Iconographie</a></li>
+  </ul>
+
+  <hr class="control_tabs" />
 
   <table id="identification" class="form">
   {{mb_include template=inc_identification}}
   </table>
-  
+
   <table id="infos_praticien" class="form" style="display: none;">
-  {{mb_include template=inc_infos_praticien}}
+  {{mb_include template=inc_infos_praticien name_form="mediuser"}}
   </table>
-    
+
   <table id="iconographie" class="form" style="display: none;">
   {{mb_include template=inc_iconographie}}
   </table>
-    
+
   <table class="form">
     <tr>
       <td class="button" colspan="2">
