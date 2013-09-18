@@ -11,6 +11,7 @@
 {{if "dPfacturation"|module_active}}
   {{mb_script module=facturation script=facture}}
 {{/if}}
+{{mb_script module=dPplanningOp script=operation}}
 <script type="text/javascript">
   Main.add(function() {
     var form = getForm("filterPlanning");
