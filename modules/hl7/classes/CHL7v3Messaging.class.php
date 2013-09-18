@@ -52,6 +52,15 @@ class CHL7v3Messaging {
   }
 
   /**
+   * Retrieve document elements
+   *
+   * @return array
+   */
+  function getDocumentElements() {
+    return array();
+  }
+
+  /**
    * Retrieve transaction name
    *
    * @param string $code Event code

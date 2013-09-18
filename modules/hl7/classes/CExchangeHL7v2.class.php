@@ -135,7 +135,7 @@ class CExchangeHL7v2 extends CExchangeTabular {
    * @param string        $data  Data
    * @param CInteropActor $actor Actor
    *
-   * @return bool|void
+   * @return bool
    */
   function understand($data, CInteropActor $actor = null) {
     if (!$this->isWellFormed($data, $actor)) {
@@ -166,6 +166,8 @@ class CExchangeHL7v2 extends CExchangeTabular {
         return true;
       }
     }
+
+    return false;
   }
 
   /**
