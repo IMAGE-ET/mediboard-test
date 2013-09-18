@@ -15,7 +15,7 @@ CCanDo::checkEdit();
 
 $salle_1  = CValue::get("salle_1");
 $salle_2  = CValue::get("salle_2");
-$date     = CValue::get("date");
+$date     = CValue::get("date", CMbDT::date());
 $callback = CValue::get("callback");
 
 //same salle

@@ -49,6 +49,8 @@ Operation = {
     url.addParam("salle_1", salle1);
     url.addParam("salle_2", salle2);
     url.addParam("date", date);
-    url.requestUpdate("systemMsg", {onComplete: callback});
+    if (confirm("Etes vous sur de vouloir échanger les interventions de ces deux salles")) {
+      url.requestUpdate("systemMsg", {onComplete: callback});
+    }
   }
 };
