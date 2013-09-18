@@ -551,7 +551,7 @@ class CCodable extends CMbObject {
    *
    * @return array
    */
-  function loadRefsActesCaisse($num_facture = 1){
+  function loadRefsActesCaisse($num_facture = null){
     $this->_ref_actes_caisse = array();
     $totaux = array("base" => 0, "dh" => 0);
 
@@ -560,8 +560,9 @@ class CCodable extends CMbObject {
       $where = array();
       $where["acte_caisse.object_class"]  = " = '$this->_class'";
       $where["acte_caisse.object_id"]     = " = '$this->_id'";
-      $where["acte_caisse.num_facture"]   = " = '$num_facture'";
-
+      if ($num_facture) {
+        $where["acte_caisse.num_facture"] = " = '$num_facture'";
+      }
       $order = "caisse_maladie_id, code ASC";
       $acte_caisse = new CActeCaisse();
       $this->_ref_actes_caisse = $acte_caisse->loadList($where, $order);
