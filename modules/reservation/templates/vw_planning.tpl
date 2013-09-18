@@ -137,10 +137,9 @@
     } });
   };
   
-  pasteIntervention = function(operation_id, salle_id, heure, sejour_id, duree) {
-    var heure = heure+":00:00";
+  pasteIntervention = function(operation_id, salle_id, time, sejour_id, duree) {
     var date = window.calendar_planning.altElement.defaultValue;
-    var datetime_interv = date + " " + heure;
+    var datetime_interv = date + " " + time;
     
     // Mode copier
     // Ouverture de modale pour modifier éventuellement les dates du séjour
@@ -149,7 +148,7 @@
       { "operation_id": operation_id,
         "date": date,
         "duree": duree,
-        "time_operation": heure,
+        "time_operation": time,
         "salle_id": salle_id
       };
       
@@ -169,7 +168,7 @@
       window.save_cut_operation =
       { "operation_id": operation_id,
         "date": date,
-        "time_operation": heure,
+        "time_operation": time,
         "salle_id": salle_id
       };
       
@@ -182,7 +181,7 @@
     $V(form.operation_id  , operation_id);
     $V(form.date          , date);
     $V(form.salle_id      , salle_id);
-    $V(form.time_operation, heure);
+    $V(form.time_operation, time);
     
     onSubmitFormAjax(form, {onComplete: function() {
       window.cut_operation_id = null;

@@ -277,6 +277,7 @@
           if (minutes < 10 && minutes.length < 2) {
             minutes = "0"+minutes;
           }
+          var time = hour+":"+minutes+":00";
           var salle_id = planning.salles_ids[classes[0].split("-")[1]];
 
           // Mode commentaire
@@ -291,22 +292,21 @@
 
           // - copier coller commentaire
           if (window.copy_commentaire_id) {
-            var time_debut = hour+":"+minutes+":00";
-            var hour_debut = Date.fromTIME(time_debut);
+            var hour_debut = Date.fromTIME(time);
             var time_fin = hour_debut.addMinutes(window.save_duree).toTIME();
-            pasteCommentaire("{{$date_planning}}", salle_id, time_debut, time_fin, window.save_color, "");
+            pasteCommentaire("{{$date_planning}}", salle_id, time, time_fin, window.save_color, "");
             return;
           }
           
           // - Couper coller interv
           if (window.cut_operation_id) {
-            pasteIntervention(window.cut_operation_id, salle_id, hour);
+            pasteIntervention(window.cut_operation_id, salle_id, time);
             return;
           }
           
           // - Copier coller interv
           if (window.copy_operation_id) {
-            pasteIntervention(window.copy_operation_id, salle_id, hour, window.save_sejour_id, window.save_duree);
+            pasteIntervention(window.copy_operation_id, salle_id, time, window.save_sejour_id, window.save_duree);
             return;
           }
           
