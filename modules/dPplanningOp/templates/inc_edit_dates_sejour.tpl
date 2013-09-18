@@ -46,6 +46,8 @@
   {{mb_field object=$sejour field=charge_id hidden=1}}
   {{mb_field object=$sejour field=type hidden=1}}
   {{mb_field object=$sejour field=type_pec hidden=1}}
+  {{mb_field object=$sejour field=recuse hidden=1}}
+  {{mb_field object=$sejour field=annule hidden=1}}
   <table class="form">
     <tr>
       <th colspan="2" class="title">
