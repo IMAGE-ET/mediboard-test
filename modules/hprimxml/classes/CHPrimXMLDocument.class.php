@@ -57,16 +57,17 @@ class CHPrimXMLDocument extends CMbXMLDocument {
    * Construct
    *
    * @param string $dirschemaname  Schema name directory
-   * @param null   $schemafilename Schema filename
+   * @param string $schemafilename Schema filename
+   * @param string $mod_name       Module name
    *
    * @return CHPrimXMLDocument
    */
-  function __construct($dirschemaname, $schemafilename = null) {
+  function __construct($dirschemaname, $schemafilename = null, $mod_name = "hprimxml") {
     parent::__construct();
 
     $this->formatOutput = false;
     
-    $this->patharchiveschema = "modules/hprimxml/xsd";
+    $this->patharchiveschema = "modules/$mod_name/xsd";
     $this->schemapath        = "$this->patharchiveschema/$dirschemaname";
     $this->schemafilename    = ($schemafilename) ? 
                                 ((!CAppUI::conf("hprimxml concatenate_xsd")) ? 
@@ -74,7 +75,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
                                   "$this->schemapath/$schemafilename.xml") :
                                 "$this->schemapath/schema.xml";
     $this->documentfilename  = "$this->schemapath/document.xml";
-    $this->finalpath         = CFile::$directory . "/hprim/$dirschemaname";
+    $this->finalpath         = CFile::$directory . "/$mod_name/$dirschemaname";
     
     $this->now               = time();
   }
@@ -102,7 +103,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
    */
   function checkSchema() {
     if (!is_dir($this->schemapath)) {
-      trigger_error("HPRIMXML schemas are missing. Please extract them from archive in '$this->schemapath/' directory", E_USER_WARNING);
+      $msg = "HPRIMXML schemas are missing. Please extract them from archive in '$this->schemapath/' directory";
+      trigger_error($msg, E_USER_WARNING);
       return false;
     }
     
@@ -117,29 +119,44 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     return true;
   }
 
-  function addElement($elParent, $elName, $elValue = null, $elNS = "http://www.hprim.org/hprimXML") {
+  /**
+   * @see parent::addElement
+   */
+  function addElement(DOMNode $elParent, $elName, $elValue = null, $elNS = "http://www.hprim.org/hprimXML") {
     return parent::addElement($elParent, $elName, $elValue, $elNS);
   }
-  
+
+  /**
+   * @see parent::addNameSpaces
+   */
   function addNameSpaces() {
     // Ajout des namespace pour XML Spy
     $this->addAttribute($this->documentElement, "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
     $this->addAttribute($this->documentElement, "xsi:schemaLocation", "http://www.hprim.org/hprimXML schema.xml");
   }
-  
+
+  /**
+   * @see parent::saveTempFile
+   */
   function saveTempFile() {
     parent::save(utf8_encode($this->documentfilename));
   }
-  
+
+  /**
+   * @see parent::saveFinalFile
+   */
   function saveFinalFile() {
     $this->documentfinalfilename = "$this->finalpath/$this->documentfinalprefix-$this->now.xml";
     CMbPath::forceDir(dirname($this->documentfinalfilename));
     parent::save($this->documentfinalfilename);
   }
-  
+
+  /**
+   * @see parent::getSentFiles
+   */
   function getSentFiles() {
     $pattern = "$this->finalpath/$this->documentfinalprefix-*.xml";
-    foreach(glob($pattern) as $sentFile) {
+    foreach (glob($pattern) as $sentFile) {
       $baseName = basename($sentFile);
       $matches = null;
       preg_match("`^[[:alpha:]]{2,3}[[:digit:]]{6}-([[:digit:]]*)\.xml$`", $baseName, $matches);
@@ -151,15 +168,27 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       );
     }
   }
-  
+
+  /**
+   * Récupération de l'attribut système
+   *
+   * @return string
+   */
   function getAttSysteme() {
     $systeme = "système";
     
     return (CAppUI::conf("hprimxml ".$this->evenement." version") < "1.07") ? 
       $systeme : CMbString::removeDiacritics($systeme);
   }
-  
-  function addEnteteMessage($elParent) {
+
+  /**
+   * Ajout de l'entête du message
+   *
+   * @param DOMNode $elParent Node
+   *
+   * @return void
+   */
+  function addEnteteMessage(DOMNode $elParent) {
     $echg_hprim      = $this->_ref_echange_hprim;
     $dest            = $this->_ref_receiver;
     $identifiant     = $echg_hprim->_id ? str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT) : "ES{$this->now}";
@@ -194,8 +223,17 @@ class CHPrimXMLDocument extends CMbXMLDocument {
 
     $this->addAgent($agents, $this->getAttSysteme(), $dest->code_syst, $dest->libelle);
   }
-  
-  function generateTypeEvenement($mbObject, $referent = null, $initiateur = null) {
+
+  /**
+   * Génération de l'évènement
+   *
+   * @param CMbObject $mbObject   Object
+   * @param bool      $referent   Référent ?
+   * @param bool      $initiateur Initiateur ?
+   *
+   * @return string
+   */
+  function generateTypeEvenement(CMbObject $mbObject, $referent = false, $initiateur = false) {
     $echg_hprim = new CEchangeHprim();
     $echg_hprim->date_production = CMbDT::dateTime();
     $echg_hprim->sender_id       = $this->_ref_sender ? $this->_ref_sender->_id : null;
@@ -234,14 +272,41 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
 
   /**
+   * Generate header message
+   *
+   * @return void
+   */
+  function generateEnteteMessage() {
+  }
+
+  /**
+   * Generate content message
+   *
+   * @param CMbObject $mbObject Object
+   * @param bool      $referent Is referring ?
+   *
+   * @return void
+   */
+  function generateFromOperation(CMbObject $mbObject, $referent = false) {
+  }
+
+  /**
    * Get content XML
    *
    * @return array
    */
   function getContentsXML() {
   }
-  
-  function getIdSource($node, $valeur = true) {
+
+  /**
+   * Récupération de l'identifiant source (emetteur)
+   *
+   * @param DOMNode $node   Node
+   * @param bool    $valeur Valeur
+   *
+   * @return string
+   */
+  function getIdSource(DOMNode $node, $valeur = true) {
     $xpath = new CHPrimXPath($this);
     
     $identifiant = $xpath->queryUniqueNode("hprim:identifiant", $node);
@@ -256,8 +321,16 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       return $xpath->queryTextNode("hprim:emetteur", $identifiant);
     }
   }
-  
-  function getIdCible($node, $valeur = true) {
+
+  /**
+   * Récupération de l'identifiant source (emetteur)
+   *
+   * @param DOMNode $node   Node
+   * @param bool    $valeur Valeur
+   *
+   * @return string
+   */
+  function getIdCible(DOMNode $node, $valeur = true) {
     $xpath = new CHPrimXPath($this);
     
     $identifiant = $xpath->queryUniqueNode("hprim:identifiant", $node);
@@ -271,24 +344,39 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       return $xpath->queryTextNode("hprim:recepteur", $identifiant);
     }
   }
-  
+
+  /**
+   * Récupération du tag du mediuser
+   *
+   * @return string
+   */
   function getTagMediuser() {
     $this->_ref_echange_hprim->loadRefsInteropActor();
     
     return $this->_ref_echange_hprim->_ref_receiver->_tag_mediuser;
   }
-  
-  function addTexte($elParent, $elName, $elValue, $elMaxSize = 35) {
+
+  /**
+   * Ajout de l'élèment texte
+   *
+   * @param DOMNode $elParent
+   * @param     $elName
+   * @param     $elValue
+   * @param int $elMaxSize
+   *
+   * @return DOMElement
+   */
+  function addTexte(DOMNode $elParent, $elName, $elValue, $elMaxSize = 35) {
     $elValue = substr($elValue, 0, $elMaxSize);
     return $this->addElement($elParent, $elName, $elValue);
   }
   
-  function addDateHeure($elParent, $dateTime = null) {
+  function addDateHeure(DOMNode $elParent, $dateTime = null) {
     $this->addElement($elParent, "date", CMbDT::date(null, $dateTime));
     $this->addElement($elParent, "heure", CMbDT::time(null, $dateTime));
   }
   
-  function addCodeLibelle($elParent, $nodeName, $code, $libelle) {
+  function addCodeLibelle(DOMNode $elParent, $nodeName, $code, $libelle) {
     $codeLibelle = $this->addElement($elParent, $nodeName);
     $code = str_replace(" ", "", $code);
     $this->addTexte($codeLibelle, "code", $code, 10);
@@ -300,7 +388,15 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     return $codeLibelle;
   }
 
-  function addCodeLibelleCommentaire($elParent, $nodeName, $code, $libelle, $dictionnaire = null, $commentaire = null) {
+  function addCodeLibelleAttribute(DOMNode $elParent, $code, $libelle, $attName, $attValue) {
+    $code = str_replace(" ", "", $code);
+    $this->addTexte($elParent, "code"   , $code, 10);
+    $this->addTexte($elParent, "libelle", $libelle, 35);
+
+    $this->addAttribute($elParent, $attName, $attValue);
+  }
+
+  function addCodeLibelleCommentaire(DOMNode $elParent, $nodeName, $code, $libelle, $dictionnaire = null, $commentaire = null) {
     $codeLibelleCommentaire = $this->addElement($elParent, $nodeName);
 
     $this->addTexte($codeLibelleCommentaire, "code", str_replace(" ", "", $code), 10);
@@ -311,17 +407,17 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     return $codeLibelleCommentaire;
   }
 
-  function addCommentaire($elParent, $commentaire) {
+  function addCommentaire(DOMNode $elParent, $commentaire) {
     $this->addTexte($elParent, "commentaire", $commentaire, 4000);
   }
   
-  function addAgent($elParent, $categorie, $code, $libelle) {
+  function addAgent(DOMNode $elParent, $categorie, $code, $libelle) {
     $agent = $this->addCodeLibelle($elParent, "agent", $code, $libelle);
     $this->addAttribute($agent, "categorie", $categorie);
     return $agent;
   }
   
-  function addIdentifiantPart($elParent, $partName, $partValue, $referent = null) {
+  function addIdentifiantPart(DOMNode $elParent, $partName, $partValue, $referent = null) {
     $part = $this->addElement($elParent, $partName);
     $this->addTexte($part, "valeur", $partValue, 17);
     $this->addAttribute($part, "etat", "permanent");
@@ -330,7 +426,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addAttribute($part, "referent", $ref);
   }
     
-  function addUniteFonctionnelle($elParent, COperation $operation) {
+  function addUniteFonctionnelle(DOMNode $elParent, COperation $operation) {
     $salle = $operation->updateSalle();
 
     $nom = CMbString::removeDiacritics($salle->nom);
@@ -340,11 +436,11 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addCodeLibelle($elParent, "uniteFonctionnelle", substr($nom, 0, 10), "");
   }
   
-  function addUniteFonctionnelleResponsable($elParent, $mbOp) {
+  function addUniteFonctionnelleResponsable(DOMNode $elParent, $mbOp) {
     $this->addCodeLibelle($elParent, "uniteFonctionnelleResponsable", $mbOp->code_uf, $mbOp->libelle_uf);
   }
   
-  function addProfessionnelSante($elParent, $mbMediuser) {
+  function addProfessionnelSante(DOMNode $elParent, $mbMediuser) {
     $this->addElement($elParent, "numeroAdeli", $mbMediuser->adeli);
     $identification = $this->addElement($elParent, "identification");
 
@@ -358,7 +454,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($prenoms, "prenom", $mbMediuser->_user_first_name);
   }
   
-  function addActeCCAM($elParent, CActeCCAM $mbActeCCAM, CCodable $codable) {
+  function addActeCCAM(DOMNode $elParent, CActeCCAM $mbActeCCAM, CCodable $codable) {
     $acteCCAM = $this->addElement($elParent, "acteCCAM");
 
     // Gestion des attributs
@@ -453,7 +549,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     return $acteCCAM;
   }
   
-  function addActeNGAP($elParent, CActeNGAP $mbActeNGAP, CCodable $codable) {
+  function addActeNGAP(DOMNode $elParent, CActeNGAP $mbActeNGAP, CCodable $codable) {
     $acteNGAP = $this->addElement($elParent, "acteNGAP");
     $this->addAttribute($acteNGAP, "action", "création");
     
@@ -507,7 +603,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     return $acteNGAP;
   }
     
-  function addActeCCAMAcquittement($elParent, $acteCCAM) {
+  function addActeCCAMAcquittement(DOMNode $elParent, $acteCCAM) {
     $mbActeCCAM = $acteCCAM["codeActe"];
     
     $this->addAttribute($elParent, "valide", "oui");
@@ -531,7 +627,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($execute, "heure", CMbDT::time($mbActeCCAM->execution));
   }
   
-  function addPatient($elParent, $mbPatient, $referent = false, $light = false) {
+  function addPatient(DOMNode $elParent, CPatient $mbPatient, $referent = false, $light = false) {
     $identifiant = $this->addElement($elParent, "identifiant");
     
     if (!$referent) {
@@ -1321,15 +1417,31 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addCodeLibelle($elParent, "cote", $cote[$operation->cote], CMbString::capitalize($operation->cote));
     }
   }
-  
-  function addDebiteurs($elParent, CPatient $mbPatient, $referent = null) {
+
+  /**
+   * Ajout des débiteurs
+   *
+   * @param DOMNode  $elParent  Node
+   * @param CPatient $mbPatient Patient
+   *
+   * @return void
+   */
+  function addDebiteurs(DOMNode $elParent, CPatient $mbPatient, $referent = null) {
     $debiteur = $this->addElement($elParent, "debiteur");
     
     $assurance = $this->addElement($debiteur, "assurance");
-    $this->addAssurance($assurance, $mbPatient, $referent);
+    $this->addAssurance($assurance, $mbPatient);
   }
-  
-  function addAssurance($elParent, CPatient $mbPatient, $referent = null) {
+
+  /**
+   * Ajout de l'assurance
+   *
+   * @param DOMNode  $elParent  Node
+   * @param CPatient $mbPatient Patient
+   *
+   * @return void
+   */
+  function addAssurance(DOMNode $elParent, CPatient $mbPatient) {
     $identifiant = $this->addElement($elParent, "identifiant");
     
     $this->addElement($elParent, "nom", $mbPatient->regime_sante);
@@ -1356,8 +1468,16 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addAttribute($exonerationTM, "typeExoneration", $mbPatient->_type_exoneration);  
     }
   }
-  
-  function addAssure($elParent, CPatient $mbPatient) {
+
+  /**
+   * Ajout de l'assuré
+   *
+   * @param DOMNode  $elParent  Node
+   * @param CPatient $mbPatient Patient
+   *
+   * @return void
+   */
+  function addAssure(DOMNode $elParent, CPatient $mbPatient) {
     $this->addElement($elParent, "immatriculation", $mbPatient->matricule);     
     
     $personne = $this->addElement($elParent, "personne");
@@ -1389,8 +1509,16 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     $this->addElement($elParent, "lienAssure", $mbPatient->rang_beneficiaire);
   }
-  
-  function addSaisieDelocalisee($elParent, CSejour $mbSejour) {
+
+  /**
+   * Ajout de la saisie délocalisée
+   *
+   * @param DOMNode $elParent Node
+   * @param CSejour $mbSejour Séjour
+   *
+   * @return void
+   */
+  function addSaisieDelocalisee(DOMNode $elParent, CSejour $mbSejour) {
     $this->addAttribute($elParent, "action", "création");
     $this->addDateTimeElement($elParent, "dateAction");
     $dateHeureOptionnelle = $this->addElement($elParent, "dateHeureReference");
@@ -1441,7 +1569,15 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       }
     }
   }
-  
+
+  /**
+   * Ajout du SSR
+   *
+   * @param DOMNode $elParent Node
+   * @param CSejour $mbSejour Séjour
+   *
+   * @return void
+   */
   function addSsr($elParent, CSejour $mbSejour) {    
     // Identifiant du séjour
     $identifiant = $this->addElement($elParent, "identifiantSSR");
@@ -1454,8 +1590,17 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addRhs($rhs, $mbSejour, $_mbRhs);
     }
   }
-  
-  function addRhs($elParent, CSejour $mbSejour, CRHS $mbRhs) {    
+
+  /**
+   * Ajout du RHS
+   *
+   * @param DOMNode $elParent Node
+   * @param CSejour $mbSejour Séjour
+   * @param CRHS    $mbRhs    RHS
+   *
+   * @return void
+   */
+  function addRhs(DOMNode $elParent, CSejour $mbSejour, CRHS $mbRhs) {
     $this->addAttribute($elParent, "action", "création");
     $this->addAttribute($elParent, "version", "M01");
     
@@ -1476,7 +1621,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addJoursPresence($joursPresence, $mbRhs);
     }
     
-    $diagnostics = $this->addElement($elParent, "diagnostics");
+    $this->addElement($elParent, "diagnostics");
     
     $actesReeducation = $this->addElement($elParent, "actesReeducation");
     $this->addActesReeducation($actesReeducation, $mbRhs);
@@ -1484,8 +1629,16 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $dependances = $this->addElement($elParent, "dependances");
     $this->addDependances($dependances, $mbRhs);
   }
-  
-  function addJoursPresence($elParent, CRHS $mbRhs) {
+
+  /**
+   * Ajout des jours de présence
+   *
+   * @param DOMNode $elParent Node
+   * @param CRHS    $mbRhs    RHS
+   *
+   * @return void
+   */
+  function addJoursPresence(DOMNode $elParent, CRHS $mbRhs) {
     if ($mbRhs->_in_bounds_mon) {
       $jourPresence = $this->addElement($elParent, "jourPresence");
       $this->addAttribute($jourPresence, "jour", "lundi");
@@ -1515,8 +1668,16 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addAttribute($jourPresence, "jour", "dimanche");
     }
   }
-  
-  function addDependances($elParent, CRHS $mbRhs) {
+
+  /**
+   * Ajout des dépendances
+   *
+   * @param DOMNode $elParent Node
+   * @param CRHS    $mbRhs    RHS
+   *
+   * @return void
+   */
+  function addDependances(DOMNode $elParent, CRHS $mbRhs) {
     $mbRhs->loadRefDependances();
     $dependances = $mbRhs->_ref_dependances;
     $this->addElement($elParent, "habillage"   , $dependances->habillage);
@@ -1526,8 +1687,16 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($elParent, "comportement"  , $dependances->comportement);
     $this->addElement($elParent, "relation"    , $dependances->relation);
   }
-  
-  function addActesReeducation($elParent, CRHS $mbRhs) {
+
+  /**
+   * Ajout des actes de rééducation
+   *
+   * @param DOMNode $elParent Node
+   * @param CRHS    $mbRhs    RHS
+   *
+   * @return void
+   */
+  function addActesReeducation(DOMNode $elParent, CRHS $mbRhs) {
     $mbRhs->loadRefLignesActivites();
     $lignes = $mbRhs->_ref_lignes_activites;
     
@@ -1535,35 +1704,57 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     foreach ($lignes as $_ligne) {
       $this->addActeReeducation($elParent, $_ligne);
     }
-    
-    // Ajout des chapitres de rééducation
-    //$this->addChapitreActeReeducation($elParent, $mbRhs);
   }
-  
-  function addActeReeducation($elParent, CLigneActivitesRHS $ligneActiviteRhs) {
+
+  /**
+   * Ajout d'un acte de rééducation
+   *
+   * @param DOMNode            $elParent         Node
+   * @param CLigneActivitesRHS $ligneActiviteRhs Ligne d'activité RHS
+   *
+   * @return void
+   */
+  function addActeReeducation(DOMNode $elParent, CLigneActivitesRHS $ligneActiviteRhs) {
     $acteReeducation = $this->addElement($elParent, "acteReeducation");
 
     $this->addElement($acteReeducation, "codeCDARR", $ligneActiviteRhs->code_activite_cdarr);
     $this->addElement($acteReeducation, "duree", $ligneActiviteRhs->_qty_total);
   }
-  
-  function addChapitreActeReeducation($elParent, CRHS $mbRhs) {
-    $totauxType = array();
+
+  /**
+   * Ajout d'un chapitre d'un acte de rééducation
+   *
+   * @param DOMNode $elParent Node
+   * @param CRHS    $mbRhs    RHS
+   *
+   * @return void
+   */
+  function addChapitreActeReeducation(DOMNode $elParent, CRHS $mbRhs) {
     $totauxType = $mbRhs->countTypeActivite();
     
     foreach ($totauxType as $mnemonique => $_total_type) {
-      if ($_total_type) {
-        $chapitreActeReeducation = $this->addElement($elParent, "chapitreActeReeducation");
-    
-        $this->addAttribute($chapitreActeReeducation, "mnemonique", strtolower($mnemonique));
-        
-        $this->addElement($chapitreActeReeducation, "duree", $_total_type);
-        $this->addElement($chapitreActeReeducation, "commentaire", CActiviteCdARR::getLibelle($mnemonique));
+      if (!$_total_type) {
+        continue;
       }
+
+      $chapitreActeReeducation = $this->addElement($elParent, "chapitreActeReeducation");
+
+      $this->addAttribute($chapitreActeReeducation, "mnemonique", strtolower($mnemonique));
+
+      $this->addElement($chapitreActeReeducation, "duree", $_total_type);
+      $this->addElement($chapitreActeReeducation, "commentaire", CActiviteCdARR::get($mnemonique)->libelle);
     }
   }
-  
-  function addDiagnosticsEtat($elParent, CSejour $mbSejour) {
+
+  /**
+   * Ajout des diagnostics
+   *
+   * @param DOMNode $elParent Node
+   * @param CSejour $mbSejour Séjour
+   *
+   * @return void
+   */
+  function addDiagnosticsEtat(DOMNode $elParent, CSejour $mbSejour) {
     $send_only_das_diags = CAppUI::conf("hprimxml send_only_das_diags");
     $this->addDiagnosticEtat($elParent, strtoupper($mbSejour->DP), $send_only_das_diags ? "ds" : "dp");
     if ($mbSejour->DR) {
@@ -1572,22 +1763,39 @@ class CHPrimXMLDocument extends CMbXMLDocument {
 
     $mbSejour->loadRefDossierMedical();
     $codes_cim = $mbSejour->_ref_dossier_medical->_codes_cim;
-    if (count($codes_cim)) {
-      foreach($codes_cim as $_diag_significatif) {
-        $this->addDiagnosticEtat($elParent, strtoupper($_diag_significatif), "ds");
-      }
+    if (count($codes_cim) <= 0) {
+      return;
+    }
+
+    foreach($codes_cim as $_diag_significatif) {
+      $this->addDiagnosticEtat($elParent, strtoupper($_diag_significatif), "ds");
     }
   }
-  
-  function addDiagnosticEtat($elParent, $codeCim10, $typeDiagnostic) {
+
+  /**
+   * Ajout d'un diagnostic
+   *
+   * @param DOMNode $elParent       Node
+   * @param string  $codeCim10      Code CIM10
+   * @param string  $typeDiagnostic Type du diagnostic
+   */
+  function addDiagnosticEtat(DOMNode $elParent, $codeCim10, $typeDiagnostic) {
     $diagnostic = $this->addElement($elParent, "diagnostic");
     $this->addAttribute($diagnostic, "action", "création");
     $this->addAttribute($diagnostic, "type", $typeDiagnostic);
     
     $this->addElement($diagnostic, "codeCim10", $codeCim10);
   }
-  
-  function addFraisDivers($elParent, CFraisDivers $mbFraisDivers) {
+
+  /**
+   * Ajout des frais divers
+   *
+   * @param DOMNode      $elParent      Node
+   * @param CFraisDivers $mbFraisDivers Frais divers
+   *
+   * @return void
+   */
+  function addFraisDivers(DOMNode $elParent, CFraisDivers $mbFraisDivers) {
     $fraisDivers = $this->addElement($elParent, "FraisDivers");
     
     // Action réalisée
@@ -1622,17 +1830,41 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $montant = $this->addElement($fraisDivers, "montant");
     $this->addTypeMontant($montant, $mbFraisDivers);
   }
-  
+
+  /**
+   * Ajout du type du montant
+   *
+   * @param DOMNode      $elParent      Node
+   * @param CFraisDivers $mbFraisDivers Frais divers
+   *
+   * @return void
+   */
   function addTypeMontant($elParent, CFraisDivers $mbFraisDivers) {
     $this->addElement($elParent, "total", $mbFraisDivers->montant_base);
   }
-  
-  function addMouvement($elParent, CAffectation  $affectation, $referent = null) {
+
+  /**
+   * Ajout du mouvement
+   *
+   * @param DOMNode      $elParent    Node
+   * @param CAffectation $affectation Affectation
+   *
+   * @return void
+   */
+  function addMouvement(DOMNode$elParent, CAffectation  $affectation) {
+    $receiver = $this->_ref_receiver;
+
     $mouvement = $this->addElement($elParent, "mouvement");
 
     // Correspond à l'identification de l'affectation
     $identifiant = $this->addElement($mouvement, "identifiant");
-    $this->addElement($identifiant, "emetteur", "$affectation->_id");
+
+    // Recherche d'une affectation existante
+    $tag = $receiver->_tag_hprimxml;
+
+    $idex = CIdSante400::getMatch("CAffectation", $tag, null, $affectation->_id);
+
+    $this->addElement($identifiant, "emetteur", $idex->_id ? $idex->id400 : $affectation->_id);
 
     // Traitement du médecin responsable du séjour
     $this->addMedecinResponsable($mouvement, $affectation->_ref_sejour->_ref_praticien);
@@ -1649,12 +1881,19 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addDateHeure($fin, $affectation->sortie);
 
     $unitesFonctionnellesResponsables = $this->addElement($mouvement, "unitesFonctionnellesResponsables");
-    $uniteFonctionnelleResponsable    = $this->addElement($unitesFonctionnellesResponsables, "uniteFonctionnelleResponsable");
 
-    $this->addUFResponsable($uniteFonctionnelleResponsable, $affectation);
+    $this->addUFResponsable($unitesFonctionnellesResponsables, $affectation);
   }
 
-  function addEmplacement($elParent, CAffectation $affectation) {
+  /**
+   * Ajout de l'emplacement du mouvement
+   *
+   * @param DOMNode      $elParent    Node
+   * @param CAffectation $affectation Affectation
+   *
+   * @return void
+   */
+  function addEmplacement(DOMNode$elParent, CAffectation $affectation) {
     $receiver = $this->_ref_receiver;
 
     if (!$receiver->_configs["send_movement_location"]) {
@@ -1681,28 +1920,33 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addAttribute($emplacement, "chambreSeul", $chambre->_chambre_seule ? "oui" : "non");
   }
 
-  function addUFResponsable($elParent, CAffectation $affectation) {
+  /**
+   * Ajout de l'UF responsable
+   *
+   * @param DOMNode      $elParent    Node
+   * @param CAffectation $affectation Affectation
+   *
+   * @return void
+   */
+  function addUFResponsable(DOMNode $elParent, CAffectation $affectation) {
     $ufs = $affectation->getUFs();
 
-    $uf_hebergement = isset($ufs["hebergement"]) ? $ufs["hebergement"] : null;
+    $uf_hebergement = CMbArray::get($ufs, "hebergement");
     if (isset($uf_hebergement->_id)) {
-      $this->addAttribute($elParent, "responsabilite", "h");
-      $this->addTexte($elParent, "code", $uf_hebergement->code, 10);
-      $this->addTexte($elParent, "libelle", $uf_hebergement->libelle, 35);
+      $uniteFonctionnelleResponsable = $this->addElement($elParent, "uniteFonctionnelleResponsable");
+      $this->addCodeLibelleAttribute($uniteFonctionnelleResponsable, $uf_hebergement->code, $uf_hebergement->libelle, "responsabilite", "h");
     }
 
-    $uf_medicale = isset($ufs["medicale"]) ? $ufs["medicale"] : null;
+    $uf_medicale = CMbArray::get($ufs, "medicale");;
     if (isset($uf_medicale->_id)) {
-      $this->addAttribute($elParent, "responsabilite", "m");
-      $this->addTexte($elParent, "code", $uf_medicale->code, 10);
-      $this->addTexte($elParent, "libelle", $uf_medicale->libelle, 35);
+      $uniteFonctionnelleResponsable = $this->addElement($elParent, "uniteFonctionnelleResponsable");
+      $this->addCodeLibelleAttribute($uniteFonctionnelleResponsable, $uf_medicale->code, $uf_medicale->libelle, "responsabilite", "m");
     }
 
-    $uf_soins = isset($ufs["soins"]) ? $ufs["soins"] : null;
+    $uf_soins = CMbArray::get($ufs, "soins");
     if (isset($uf_soins->_id)) {
-      $this->addAttribute($elParent, "responsabilite", "s");
-      $this->addTexte($elParent, "code", $uf_soins->code, 10);
-      $this->addTexte($elParent, "libelle", $uf_soins->libelle, 35);
+      $uniteFonctionnelleResponsable = $this->addElement($elParent, "uniteFonctionnelleResponsable");
+      $this->addCodeLibelleAttribute($uniteFonctionnelleResponsable, $uf_soins->code, $uf_soins->libelle, "responsabilite", "s");
     }
   }
 }
