@@ -112,6 +112,23 @@
       onClose: function(){ refreshPlanning(); } // Laisser dans une fonction anonyme a cause de l'argument "period"
     });
   };
+
+  pasteCommentaire = function(date_planning, salle_id, hour_debut, hour_fin, color, commentaire_id) {
+    //if commentaire_id => cut
+    var form = getForm("editCommentairePlanning");
+    $V(form.commentaire_planning_id, commentaire_id);
+    $V(form.debut, date_planning+" "+hour_debut);
+    $V(form.fin, date_planning+" "+hour_fin);
+    $V(form.salle_id, salle_id);
+    $V(form.commentaire, window.copy_commentaire_commentaire);
+    $V(form.libelle, window.copy_commentaire_libelle);
+    $V(form.color, color);
+
+    onSubmitFormAjax(form, {onComplete: function() {
+      updateStatusCut();
+      refreshPlanning();
+    } });
+  };
   
   pasteIntervention = function(operation_id, salle_id, heure, sejour_id, duree) {
     var heure = heure+":00:00";
@@ -170,11 +187,15 @@
   updateStatusCut = function() {
     var div = $("status_cut");
     if (window.cut_operation_id) {
-      div.update("Couper en cours");
+      div.update("Intervention coupée");
       div.setStyle({borderColor: "#080"});
     }
     else if (window.copy_operation_id) {
-      div.update("Copier en cours");
+      div.update("Intervention copiée");
+      div.setStyle({borderColor: "#080"});
+    }
+    else if (window.copy_commentaire_id) {
+      div.update("Commentaire copié");
       div.setStyle({borderColor: "#080"});
     }
     else {
@@ -349,6 +370,9 @@
   <input type="hidden" name="debut" />
   <input type="hidden" name="fin" />
   <input type="hidden" name="salle_id" />
+  <input type="hidden" name="commentaire" />
+  <input type="hidden" name="libelle" />
+  <input type="hidden" name="color"/>
 </form>
 
 <form name="filterPlanning" method="get"> 

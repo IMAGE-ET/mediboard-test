@@ -113,39 +113,54 @@
           break;
         case 'cut':
         case 'copy':
-          if (elem.up().up().hasClassName("commentaire_planning")) {
-            modifCommentaire(null, null, null, object_id, true);
-            break;
-          }
 
+          //cleaning up
           window.cut_operation_id = null;
           window.copy_operation_id = null;
-          
+          window.copy_commentaire_id = null;
+
+          //opacity
           if (window.save_elem && window.save_elem != elem) {
             window.save_elem.removeClassName("opacity-50");
           }
-          
           if (elem.hasClassName("opacity-50")) {
             elem.removeClassName("opacity-50");
             window.save_elem = null;
           }
           else {
             elem.addClassName("opacity-50");
-            if (event == "cut") {
-              window.cut_operation_id = object_id;
-            }
-            else {
-              window.copy_operation_id = object_id;
-            }
-            var span_infos = elem.up('div.toolbar').next('div.body').down('span').down('span');
-            window.save_entree_prevue = span_infos.get("entree_prevue");
-            window.save_sortie_prevue = span_infos.get("sortie_prevue");
-            window.save_sejour_id     = span_infos.get("sejour_id");
-            window.save_chir_id       = span_infos.get("chir_id");
-            window.save_duree         = span_infos.get("duree");
-            window.save_pec           = span_infos.get("pec");
-            window.save_elem = elem;
           }
+
+          //commentaire
+          if (elem.up().up().hasClassName("commentaire_planning")) {
+            window.copy_commentaire_id = object_id;
+            var com_infos = elem.up().up().down("div.body").down("span").down("span");
+            window.copy_commentaire_libelle     = com_infos.get("libelle");
+            window.copy_commentaire_commentaire = com_infos.get("commentaire");
+            window.save_duree                   = com_infos.get("duree");
+            window.save_color                   = com_infos.get("color");
+            window.save_elem                    = elem;
+            updateStatusCut();
+            break;
+          }
+          
+
+          
+          // DHE
+          if (event == "cut") {
+            window.cut_operation_id = object_id;
+          }
+          else {
+            window.copy_operation_id = object_id;
+          }
+          var span_infos = elem.up('div.toolbar').next('div.body').down('span').down('span');
+          window.save_entree_prevue = span_infos.get("entree_prevue");
+          window.save_sortie_prevue = span_infos.get("sortie_prevue");
+          window.save_sejour_id     = span_infos.get("sejour_id");
+          window.save_chir_id       = span_infos.get("chir_id");
+          window.save_duree         = span_infos.get("duree");
+          window.save_pec           = span_infos.get("pec");
+          window.save_elem = elem;
           updateStatusCut();
           break;
         case 'clock':
@@ -242,6 +257,9 @@
           var classes = elt.className.split("  ");
           var hour = $(elt).get("hour");
           var minutes = $(elt).get("minutes");
+          if (minutes < 10) {
+            minutes = "0"+minutes;
+          }
           var salle_id = planning.salles_ids[classes[0].split("-")[1]];
 
           // Mode commentaire
@@ -253,14 +271,23 @@
           }
           
           // Mode DHE
+
+          // - copier coller commentaire
+          if (window.copy_commentaire_id) {
+            var time_debut = hour+":"+minutes+":00";
+            var hour_debut = Date.fromTIME(time_debut);
+            var time_fin = hour_debut.addMinutes(window.save_duree).toTIME();
+            pasteCommentaire("{{$date_planning}}", salle_id, time_debut, time_fin, window.save_color, "");
+            return;
+          }
           
-          // - Couper coller
+          // - Couper coller interv
           if (window.cut_operation_id) {
             pasteIntervention(window.cut_operation_id, salle_id, hour);
             return;
           }
           
-          // - Copier coller
+          // - Copier coller interv
           if (window.copy_operation_id) {
             pasteIntervention(window.copy_operation_id, salle_id, hour, window.save_sejour_id, window.save_duree);
             return;
