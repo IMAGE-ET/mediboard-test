@@ -25,9 +25,10 @@ $facture->loadRefPatient()->loadRefsCorrespondantsPatient();
 $sejour = new CSejour();
 $sejour->load($object_id);
 $sejour->loadRefsFactureEtablissement();
-$facture->ouverture = $sejour->_ref_last_facture->ouverture;
-$facture->numero = $numero+1;
-$facture->praticien_id = $sejour->praticien_id;
+$facture->ouverture     = $sejour->_ref_last_facture->ouverture;
+$facture->statut_pro    = $sejour->_ref_last_facture->statut_pro;
+$facture->numero        = $numero+1;
+$facture->praticien_id  = $sejour->praticien_id;
 
 // Création du template
 $smarty = new CSmartyDP();
