@@ -2670,6 +2670,14 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_last_operation = $operation;
   }
 
+  function loadRefFirstOperation() {
+    $operation = new COperation;
+    $operation->sejour_id = $this->_id;
+    $operation->loadMatchingObject("date ASC");
+
+    return $this->_ref_first_operation = $operation;
+  }
+
   function getCurrOperation($date, $show_trace = false, $only_one = true) {
     $date = CMbDT::date($date);
 
