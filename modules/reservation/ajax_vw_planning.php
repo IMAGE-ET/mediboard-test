@@ -147,13 +147,9 @@ $i = 0;
 $today = CMbDT::date();
 
 foreach ($salles as $_salle) {
-  if ($bloc_id) {
-    $planning->addDayLabel($i, $_salle->_shortview);
-  }
-  else {
-    //@TODO : find a better way
-    $planning->addDayLabel($i, str_replace("-", "<br/>", $_salle->_view));
-  }
+  $label_day = $bloc_id ? $_salle->_shortview : str_replace("-", "<br/>", $_salle->_view);
+  $planning->addDayLabel($i, $label_day, null, null,null, true, array("salle_id" => $_salle->_id));
+
   if ($today == $date_planning) {
     $planning->addEvent(new CPlanningEvent(null, "$i ".CMbDT::time(), null, null, "red", null, "now"));
   }

@@ -315,5 +315,28 @@
         });
       });
     {{/if}}
+
+
+    //drag & drop label
+    $$("label.droppable").each(function(li) {
+      Droppables.add(li, {
+        onDrop: function(from, to, event) {
+          Event.stop(event);
+          var fromSalle = from.get("salle_id");
+          var toSalle   = to.get("salle_id");
+          Operation.switchOperationsFromSalles(fromSalle, toSalle, "{{$date_planning}}", refreshPlanning);
+        },
+        accept: 'draggable',
+        hoverclass:'dropover'
+      });
+    });
+
+    $$("label.draggable").each(function(a) {
+      new Draggable(a, {
+        onEnd: function(element, event) {
+          Event.stop(event);
+        },
+        ghosting: true});
+    });
   });
   </script>
