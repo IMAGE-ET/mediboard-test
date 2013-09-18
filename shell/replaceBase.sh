@@ -1,7 +1,8 @@
 #!/bin/sh
 
-BASH_PATH=$(dirname $(readlink -f $0))
+BASH_PATH=$(dirname $0)
 . $BASH_PATH/utils.sh
+MB_PATH=$(cd $BASH_PATH/../; pwd);
 
 ########
 # Replace mediboard database
@@ -54,7 +55,7 @@ source_database=$3
 target_directory=$4
 target_database=$5
 
-event=$BASH_PATH/../tmp/monitevent.txt
+event=$MB_PATH/tmp/monitevent.txt
 
 if [ $restart -eq 1 ]
 then

@@ -1,7 +1,8 @@
 #!/bin/sh
 
-BASH_PATH=$(dirname $(readlink -f $0))
+BASH_PATH=$(dirname $0)
 . $BASH_PATH/utils.sh
+MB_PATH=$(cd $BASH_PATH/../; pwd);
 export LANG=fr_FR.utf-8
 
 ########
@@ -66,7 +67,7 @@ then
       echo "Do you want to update $line (y or n) [default n] ? \c" ; read REPLY < /dev/tty
       if [ "$REPLY" = "y" ] ; then
         echo "-- Rsync $line --"
-        eval rsync -avpgz $dry_run --stats $BASH_PATH/.. --delete $line --exclude-from=$BASH_PATH/rsyncupdate.exclude \
+        eval rsync -avpgz $dry_run --stats $MB_PATH/ --delete $line --exclude-from=$BASH_PATH/rsyncupdate.exclude \
           --exclude includes/config_overload.php \
           --exclude /tmp \
           --exclude /lib \
@@ -75,9 +76,9 @@ then
           --exclude modules/hprimxml/xsd \
           --exclude images/pictures/logo_custom.png
         check_errs $? "Failed to rsync $line" "Succesfully rsync-ed $line"
-        eval rsync -avzp $dry_run $BASH_PATH/../tmp/svnlog.txt $line/tmp/
-        eval rsync -avzp $dry_run $BASH_PATH/../tmp/svnstatus.txt $line/tmp/
-        eval rsync -avzp $dry_run $BASH_PATH/../tmp/monitevent.txt $line/tmp/
+        eval rsync -avzp $dry_run $MB_PATH/tmp/svnlog.txt $line/tmp/
+        eval rsync -avzp $dry_run $MB_PATH/tmp/svnstatus.txt $line/tmp/
+        eval rsync -avzp $dry_run $MB_PATH/tmp/monitevent.txt $line/tmp/
       fi
     fi
   done < $conf_file

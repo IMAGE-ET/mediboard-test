@@ -1,7 +1,9 @@
 #!/bin/sh
 
-BASH_PATH=$(dirname $(readlink -f $0))
+BASH_PATH=$(dirname $0)
 . $BASH_PATH/utils.sh
+MB_PATH=$(cd $BASH_PATH/../; pwd);
+
 export LANG=fr_FR.utf-8
 
 ########
@@ -21,7 +23,6 @@ then
   exit 1
 fi
    
-MB_PATH=$BASH_PATH/..
 log=$MB_PATH/tmp/svnlog.txt
 tmp=$MB_PATH/tmp/svnlog.tmp
 dif=$MB_PATH/tmp/svnlog.dif

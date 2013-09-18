@@ -1,8 +1,8 @@
 #!/bin/sh
 
-BASH_PATH=$(dirname $(readlink -f $0))
+BASH_PATH=$(dirname $0)
 . $BASH_PATH/utils.sh
-MB_PATH=$(dirname $BASH_PATH)
+MB_PATH=$(cd $BASH_PATH/../; pwd);
 
 # Compilation de ttf2ufm
 make -C $MB_PATH/lib/dompdf/lib/ttf2ufm/src/ all

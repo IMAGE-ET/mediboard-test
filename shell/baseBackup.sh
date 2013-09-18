@@ -1,7 +1,8 @@
 #!/bin/sh
 
-BASH_PATH=$(dirname $(readlink -f $0))
+BASH_PATH=$(dirname $0)
 . $BASH_PATH/utils.sh
+MB_PATH=$(cd $BASH_PATH/../; pwd);
 
 ########
 # Backups database on a daily basis
@@ -104,7 +105,7 @@ then
   then
     info_script "Send a mail using $login login"
     # Name of the instance of mediboard
-    instance=$(cd $BASH_PATH/../; pwd);
+    instance=$(cd $MB_PATH ; pwd);
     instance=${instance##*/}
     wget "http://localhost/${instance}/?login=${login}&m=system&a=ajax_send_mail_diskfull"
   fi
@@ -195,7 +196,7 @@ then
 fi
 
 # Write event file
-event=$BASH_PATH/../tmp/monitevent.txt
+event=$MB_PATH/tmp/monitevent.txt
 
 echo "#$(date +%Y-%m-%dT%H:%M:%S)" >> $event
 echo "<strong>$database</strong> base backup: <strong>$method</strong> method" >> $event

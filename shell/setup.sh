@@ -1,7 +1,8 @@
 #!/bin/sh
 
-BASH_PATH=$(dirname $(readlink -f $0))
+BASH_PATH=$(dirname $0)
 . $BASH_PATH/utils.sh
+MB_PATH=$(cd $BASH_PATH/../; pwd);
 
 ########
 # Configures groups and mods for Mediboard directories
@@ -69,7 +70,6 @@ SUB_DIR=$2
   fi
 
 # Change to Mediboard directory
-MB_PATH=$(dirname $BASH_PATH)
 cd $MB_PATH
 
 # Change group to allow Appache to access files as group
