@@ -16,7 +16,7 @@ CCanDo::checkAdmin();
 if (null == $exchange_source_name = CValue::get("exchange_source_name")) {
   CAppUI::stepAjax("Aucun nom de source d'échange spécifié", UI_MSG_ERROR);
 }
-
+/** @var CSourceSOAP $exchange_source */
 $exchange_source = CExchangeSource::get($exchange_source_name, "soap", true, null, false);
 
 if (!$exchange_source) {
@@ -33,7 +33,9 @@ $options = array(
 
 $soap_client = new CSOAPClient($exchange_source->type_soap);
 $soap_client->make(
-  $exchange_source->host, $exchange_source->user, $exchange_source->password, $exchange_source->type_echange, $options
+  $exchange_source->host, $exchange_source->user, $exchange_source->password, $exchange_source->type_echange, $options,
+  null, null, $exchange_source->local_cert, $exchange_source->passphrase, false, $exchange_source->verify_peer,
+  $exchange_source->cafile, $exchange_source->wsdl_external
 );
 
 if (!$soap_client || $soap_client->client->soap_client_error) {

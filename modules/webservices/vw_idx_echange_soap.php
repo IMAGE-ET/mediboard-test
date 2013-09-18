@@ -34,8 +34,8 @@ $echange_soap = new CEchangeSOAP();
 
 $echange_soap->load($echange_soap_id);
 if ($echange_soap->_id) {
-  $echange_soap->loadRefs(); 
-    
+  $echange_soap->loadRefs();
+
   $echange_soap->input  = unserialize($echange_soap->input);
   if ($echange_soap->soapfault != 1) {
   	$echange_soap->output = unserialize($echange_soap->output);
@@ -73,7 +73,12 @@ if (($service && $web_service) || ($service && $_date_min && $_date_max)) {
   
 foreach ($echangesSoap as $_echange_soap) {
   /** @var $_echange_soap CEchangeSOAP  */
-  $url = parse_url($_echange_soap->destinataire);
+  $destinataire = $_echange_soap->destinataire;
+  $url = parse_url($destinataire);
+  if (!CMbArray::get($url, "host")) {
+    $name = basename($destinataire);
+    $url['host'] = $name;
+  }
   $_echange_soap->destinataire = $url['host'];
 }
 

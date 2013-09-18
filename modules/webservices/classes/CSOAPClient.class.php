@@ -54,6 +54,7 @@ class CSOAPClient {
    * @param boolean $safe_mode      Safe mode
    * @param boolean $verify_peer    Require verification of SSL certificate used
    * @param string  $cafile         Location of Certificate Authority file on local filesystem
+   * @param String  $wsdl_external  Location of external wsdl
    *
    * @throws CMbException
    *
@@ -71,7 +72,8 @@ class CSOAPClient {
       $passphrase = null,
       $safe_mode = false,
       $verify_peer = false,
-      $cafile = null
+      $cafile = null,
+      $wsdl_external = null
   ) {
     if (($login && $password) || (array_key_exists('login', $options) && array_key_exists('password', $options))) {
       $login = $login ? $login : $options['login'];
@@ -91,8 +93,14 @@ class CSOAPClient {
       }
     }
 
+    $check_option["local_cert"] = $local_cert;
+    $check_option["ca_cert"]    = $cafile;
+    $check_option["passphrase"] = $passphrase;
+    $check_option["username"]   = $login;
+    $check_option["password"]   = $password;
+
     if (!$safe_mode) {
-      if (!url_exists($rooturl, $stream_context)) {
+      if (!CHTTPClient::checkUrl($rooturl, $check_option)) {
         throw new CMbException("CSourceSOAP-unreachable-source", $rooturl);
       }
     }
@@ -106,7 +114,7 @@ class CSOAPClient {
         
       default :
         $this->client = new CMbSOAPClient(
-          $rooturl, $type, $options, $loggable, $local_cert, $passphrase, $safe_mode, $verify_peer, $cafile
+          $rooturl, $type, $options, $loggable, $local_cert, $passphrase, $safe_mode, $verify_peer, $cafile, $wsdl_external
         );
         break;
     }

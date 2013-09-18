@@ -31,20 +31,23 @@ class CMbSOAPClient extends SoapClient {
   public $ca_info;
   public $local_cert;
   public $passphrase;
+  public $wsdl_original;
+  public $check_option;
 
 
   /**
    * The constructor
    *
-   * @param string  $rooturl     The URL of the wsdl file
-   * @param string  $type        The type of exchange
-   * @param array   $options     An array of options
-   * @param boolean $loggable    True if you want to log all the exchanges with the web service
-   * @param string  $local_cert  Path of the certifacte
-   * @param string  $passphrase  Pass phrase for the certificate
-   * @param bool    $safe_mode   Safe mode
-   * @param boolean $verify_peer Require verification of SSL certificate used
-   * @param string  $cafile      Location of Certificate Authority file on local filesystem
+   * @param string  $rooturl       The URL of the wsdl file
+   * @param string  $type          The type of exchange
+   * @param array   $options       An array of options
+   * @param boolean $loggable      True if you want to log all the exchanges with the web service
+   * @param string  $local_cert    Path of the certifacte
+   * @param string  $passphrase    Pass phrase for the certificate
+   * @param bool    $safe_mode     Safe mode
+   * @param boolean $verify_peer   Require verification of SSL certificate used
+   * @param string  $cafile        Location of Certificate Authority file on local filesystem
+   * @param String  $wsdl_external Location of external wsdl
    *
    * @throws CMbException
    *
@@ -52,11 +55,11 @@ class CMbSOAPClient extends SoapClient {
    */
   function __construct(
       $rooturl, $type = null, $options = array(), $loggable = null, $local_cert = null, $passphrase = null, $safe_mode = false,
-      $verify_peer = false, $cafile = null
+      $verify_peer = false, $cafile = null, $wsdl_external = null
   ) {
 
-    $this->return_raw = CMbArray::extract($options, "return_raw", false);
-    $this->xop_mode   = CMbArray::extract($options, "xop_mode", false);
+    $this->return_raw    = CMbArray::extract($options, "return_raw", false);
+    $this->xop_mode      = CMbArray::extract($options, "xop_mode", false);
 
     $this->wsdl_url = $rooturl;
 
@@ -68,8 +71,17 @@ class CMbSOAPClient extends SoapClient {
       $this->type_echange_soap = $type;
     }
 
+    $login    = CMbArray::get($this->options, "login");
+    $password = CMbArray::get($this->options, "password");
+    $check_option["local_cert"] = $local_cert;
+    $check_option["ca_cert"]    = $cafile;
+    $check_option["passphrase"] = $passphrase;
+    $check_option["username"]   = $login;
+    $check_option["password"]   = $password;
+    $this->check_option = $check_option;
+
     if (!$safe_mode) {
-      if (!$html = file_get_contents($this->wsdl_url)) {
+      if (!$html = CHTTPClient::checkUrl($this->wsdl_url, $this->check_option, true)) {
         $this->soap_client_error = true;
         throw new CMbException("CSourceSOAP-unable-to-parse-url", $this->wsdl_url);
       }
@@ -111,6 +123,10 @@ class CMbSOAPClient extends SoapClient {
 
     $this->options = $options;
 
+    if ($wsdl_external) {
+      $this->wsdl_url = $wsdl_external;
+    }
+
     parent::__construct($this->wsdl_url, $options);
   }
 
@@ -141,37 +157,48 @@ class CMbSOAPClient extends SoapClient {
     }
   }
 
+  /**
+   * Execute the request
+   *
+   * @param string $request  Request to execute
+   * @param string $location Webservice URL
+   * @param string $action   Action
+   * @param int    $version  SOAP version
+   * @param int    $one_way  One way
+   *
+   * @see parent::__doRequest
+   *
+   * @return null|string
+   * @throws CMbException
+   */
   public function __doRequest($request, $location,  $action,  $version,  $one_way = 0 ) {
     if ($this->xop_mode) {
-      $ch = curl_init();
-      $request = preg_replace("#^<\?xml[^>]*>#", "", $request);
-      $entete = utf8_encode('--MIME_boundary10
+      $entete = '--MIME_boundary10
 Content-Type: application/xop+xml; charset=UTF-8; type="application/soap+xml"
 Content-Transfer-Encoding: binary
 Content-ID: <rootpart@openxtrem.com>
-');
+';
 
-      $pied = utf8_encode("
---MIME_boundary10--
-");
+      $pied = utf8_encode("\n--MIME_boundary10--\n");
+
+      $request = preg_replace("#^<\?xml[^>]*>#", "", $request);
       $request = $entete.$request.$pied;
 
-      curl_setopt($ch, CURLOPT_URL, $location);
-      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
-      curl_setopt($ch, CURLOPT_VERBOSE, 1);
-      curl_setopt($ch, CURLOPT_CAINFO, $this->ca_info);
-      curl_setopt($ch, CURLOPT_SSLCERT, $this->local_cert);
-      curl_setopt($ch, CURLOPT_SSLCERTPASSWD, $this->passphrase);
-      curl_setopt($ch, CURLOPT_POST, true );
-      curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
-      curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: multipart/related; boundary="MIME_boundary10"; type="application/xop+xml"; start="<rootpart@openxtrem.com>"', "MIME-Version: 1.0", "SOAPAction: $action",'Content-Length: '.strlen($request) ));
-      $result = curl_exec($ch);
-      if (curl_errno($ch)) {
-        throw(new CMbException('Error: ' . curl_error($ch)));
+      $header = array('Content-Type: multipart/related', 'boundary="MIME_boundary10"', 'type="application/xop+xml"',
+                      'start="<rootpart@openxtrem.com>"', 'MIME-Version: 1.0', "SOAPAction: $action",
+                      "Content-Length: ".strlen($request));
+
+      try {
+        $http_client = new CHTTPClient($location);
+        $http_client->header = $header;
+        $http_client->setSSLAuthentification($this->local_cert, $this->passphrase);
+        $http_client->setSSLPeer($this->ca_info);
+        $result = $http_client->post($request);
       }
-      curl_close($ch);
+      catch (Exception $e) {
+        throw(new CMbException("Error: ".$e->getMessage()));
+      }
+
       preg_match("#<.*Envelope>#", $result, $matches);
       $xml = $matches[0];
     }
@@ -232,7 +259,11 @@ Content-ID: <rootpart@openxtrem.com>
    * @return void
    */
   public function checkServiceAvailability() {
-    $xml = file_get_contents($this->wsdl_url);
+    $url = $this->wsdl_url;
+    if ($this->wsdl_original) {
+      $url = $this->wsdl_original;
+    }
+    $xml = file_get_contents($url);
 
     $dom = new CMbXMLDocument();
     $dom->loadXML($xml);
@@ -240,6 +271,7 @@ Content-ID: <rootpart@openxtrem.com>
     $xpath = new CMbXPath($dom);
     $xpath->registerNamespace("wsdl", "http://schemas.xmlsoap.org/wsdl/");
     $xpath->registerNamespace("soap", "http://schemas.xmlsoap.org/wsdl/soap/");
+    $xpath->registerNamespace("soap12", "http://schemas.xmlsoap.org/wsdl/soap12");
 
     $login    = CMbArray::get($this->options, "login");
     $password = CMbArray::get($this->options, "password");
@@ -250,7 +282,7 @@ Content-ID: <rootpart@openxtrem.com>
 
       $port_nodes = $xpath->query("wsdl:port", $_service_node);
       foreach ($port_nodes as $_port_node) {
-        $address = $xpath->queryAttributNode("soap:address", $_port_node, "location");
+        $address = $xpath->queryAttributNode("soap:address|soap12:address", $_port_node, "location");
 
         if (!$address) {
           continue;
@@ -261,7 +293,7 @@ Content-ID: <rootpart@openxtrem.com>
         }
 
         // Url exist
-        $url_exist = url_exists($address);
+        $url_exist = CHTTPClient::checkUrl($address, $this->check_option);
 
         if (!$url_exist) {
           throw new CMbException("Service '$service_name' injoignable à l'adresse : <em>$address</em>");

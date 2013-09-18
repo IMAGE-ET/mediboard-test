@@ -183,10 +183,6 @@ class CSourceSOAP extends CExchangeSource {
     if ($this->xop_mode) {
       $options["xop_mode"] = true;
     }
-
-    if ($this->wsdl_external) {
-      $this->host = $this->wsdl_external;
-    }
     
     $soap_client = new CSOAPClient($this->type_soap);
     $this->_soap_client = $soap_client;
@@ -197,7 +193,7 @@ class CSourceSOAP extends CExchangeSource {
     $soap_client->make(
       $this->host, $this->user, $password, $this->type_echange, $options, null,
       $this->stream_context, $this->local_cert, $passphrase, $this->safe_mode,
-      $this->verify_peer, $this->cafile
+      $this->verify_peer, $this->cafile, $this->wsdl_external
     );
     
     if ($soap_client->client->soap_client_error) {
@@ -233,8 +229,14 @@ class CSourceSOAP extends CExchangeSource {
    * @return bool|void
    */
   function isReachableSource() {
+    $check_option["local_cert"] = $this->local_cert;
+    $check_option["ca_cert"]    = $this->cafile;
+    $check_option["passphrase"] = $this->getPassword($this->passphrase, "iv_passphrase");
+    $check_option["username"]   = $this->user;
+    $check_option["password"]   = $this->getPassword();
+
     if (!$this->safe_mode) {
-      if (!url_exists($this->host)) {
+      if (!CHTTPClient::checkUrl($this->host, $check_option)) {
         $this->_reachable = 0;
         $this->_message   = CAppUI::tr("CSourceSOAP-unreachable-source", $this->host);
 
@@ -254,12 +256,16 @@ class CSourceSOAP extends CExchangeSource {
     $options = array(
       "encoding" => $this->encoding
     );
-    
+
     try {
       $soap_client = new CSOAPClient($this->type_soap);
 
       $password   = $this->getPassword();
-      $soap_client->make($this->host, $this->user, $password, $this->type_echange, $options);
+      $soap_client->make(
+        $this->host, $this->user, $password, $this->type_echange, $options,
+        null, null, $this->local_cert, $this->passphrase, false, $this->verify_peer,
+        $this->cafile, $this->wsdl_external
+      );
 
       $soap_client->checkServiceAvailability();
     }
