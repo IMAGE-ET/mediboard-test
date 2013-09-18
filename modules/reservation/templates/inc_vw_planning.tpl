@@ -88,6 +88,12 @@
           planningInter(object_id);
           break;
 
+        case 'cancel':
+          if (elem.up().up().hasClassName("commentaire_planning")) {
+            deleteCommentaire(object_id);
+          }
+          break;
+
 
         case 'edit':
           // Commentaire
@@ -276,7 +282,7 @@
           // Mode commentaire
           var form = getForm("filterPlanning");
           
-          if (form._comment_mode.checked) {
+          if (form._comment_mode.checked && !window.copy_commentaire_id) {
             modifCommentaire("{{$date_planning}}", hour, salle_id, null);
             return;
           }

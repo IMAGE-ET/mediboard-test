@@ -113,6 +113,13 @@
     });
   };
 
+  deleteCommentaire = function(commentaire_id) {
+    var form = getForm("editCommentairePlanning");
+    $V(form.commentaire_planning_id, commentaire_id);
+    confirmDeletion(form, {typeName:'Commentaire '+commentaire_id, ajax: true}, {onComplete: refreshPlanning});
+    $V(form.del, 0);
+  };
+
   pasteCommentaire = function(date_planning, salle_id, hour_debut, hour_fin, color, commentaire_id) {
     //if commentaire_id => cut
     var form = getForm("editCommentairePlanning");
@@ -367,6 +374,7 @@
   <input type="hidden" name="m" value="reservation" />
   <input type="hidden" name="dosql" value="do_commentaire_planning_aed" />
   <input type="hidden" name="commentaire_planning_id" />
+  <input type="hidden" name="del" value="0"/>
   <input type="hidden" name="debut" />
   <input type="hidden" name="fin" />
   <input type="hidden" name="salle_id" />

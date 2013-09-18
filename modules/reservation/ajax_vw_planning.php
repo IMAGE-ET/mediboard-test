@@ -427,6 +427,7 @@ foreach ($commentaires_by_salle as $salle_id => $_commentaires) {
     if ($can_edit) {
       $event->addMenuItem("edit" , utf8_encode("Modifier ce commentaire"));
       $event->addMenuItem("copy" , utf8_encode("Copier ce commentaire"));
+      $event->addMenuItem("cancel" , utf8_encode("Supprimer ce commentaire"));
     }
     
     $planning->addEvent($event);
