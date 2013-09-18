@@ -22,24 +22,37 @@ class CXDSTools {
    * @return bool
    */
   static function generateXMLToJv() {
-    $files = glob("modules/xds/resources/jeux_de_valeurs/*.jv");
+    $path = "modules/xds/resources/jeux_de_valeurs";
+    $files = glob("$path/*.jv");
 
     foreach ($files as $_file) {
-      $name = self::deleteDate(basename($_file));
-      $csv = new CCSVFile($_file);
-      $csv->jumpLine(3);
-      $xml = new CXDSXmlJvDocument();
-      while ($line = $csv->readLine()) {
-        list(
-          $oid,
-          $code,
-          $code_xds,
-          ) = $line;
-        $xml->appendLine($oid, $code, $code_xds);
-      }
-      $xml->save("modules/xds/resources/jeux_de_valeurs/$name.xml");
+      self::jvToXML($_file, $path);
     }
     return true;
+  }
+
+  /**
+   * Génére un xml d'après un jeu de valeurs
+   *
+   * @param String $file chemin du fichier
+   * @param String $path Chemin du répertoire
+   *
+   * @return void
+   */
+  static function jvToXML($file, $path) {
+    $name = self::deleteDate(basename($file));
+    $csv = new CCSVFile($file);
+    $csv->jumpLine(3);
+    $xml = new CXDSXmlJvDocument();
+    while ($line = $csv->readLine()) {
+      list(
+        $oid,
+        $code,
+        $code_xds,
+        ) = $line;
+      $xml->appendLine($oid, $code, $code_xds);
+    }
+    $xml->save("$path/$name.xml");
   }
 
   /**
@@ -113,10 +126,15 @@ class CXDSTools {
   /**
    * Retourne les informations de l'etablissement sous la forme HL7v2 XON
    *
+   * @param CGroups $etablissement etablissement
+   *
    * @return string
    */
-  static function getXONetablissement() {
-    $etablissement = CGroups::loadCurrent();
+  static function getXONetablissement($etablissement = null) {
+    if (!$etablissement) {
+      $etablissement = CGroups::loadCurrent();
+    }
+
     $comp1  = $etablissement->text;
     $comp6  = "&1.2.250.1.71.4.2.2&ISO";
     $comp7  = "IDNST";
@@ -129,10 +147,11 @@ class CXDSTools {
    * Retourne l'identifiant de l'établissement courant
    *
    * @param boolean $forPerson Identifiant concernant une personne
+   * @param CGroups $group     etablissement
    *
    * @return null|string
    */
-  static function getIdEtablissement($forPerson = false) {
+  static function getIdEtablissement($forPerson = false, $group = null) {
     $siret = "3";
     $finess = "1";
 
@@ -141,14 +160,12 @@ class CXDSTools {
       $finess = "3";
     }
 
-    $etablissement = CGroups::loadCurrent();
-
-    if ($etablissement->siret) {
-      return $siret.$etablissement->siret;
+    if ($group->siret) {
+      return $siret.$group->siret;
     }
 
-    if ($etablissement->finess) {
-      return $finess.$etablissement->finess;
+    if ($group->finess) {
+      return $finess.$group->finess;
     }
 
     return null;
@@ -161,7 +178,8 @@ class CXDSTools {
    */
   static function getXCNMediuser() {
     $mediuser = CMediusers::get();
-    $comp1  = self::getIdEtablissement(true)."/$mediuser->_id";
+    $group = $mediuser->loadRefFunction()->loadRefGroup();
+    $comp1  = self::getIdEtablissement(true, $group)."/$mediuser->_id";
     $comp2  = $mediuser->_p_last_name;
     $comp3  = $mediuser->_p_first_name;
     $comp9  = "&1.2.250.1.71.4.2.1&ISO";

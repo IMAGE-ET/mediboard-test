@@ -30,7 +30,7 @@ class CHL7v3EventXDSProvideAndRegisterDocumentSetRequest
    * @return void
    */
   function build($object) {
-    parent::build($object);
+    parent::build($object);;
 
     $xml = new CXDSXmlDocument();
 
@@ -39,6 +39,8 @@ class CHL7v3EventXDSProvideAndRegisterDocumentSetRequest
     $factory = new CCDAFactory($object);
     $cda = $factory->generateCDA();
     $xds = new CXDSMappingCDA($factory);
+    $xds->hide_patient = $this->hide_patient;
+    $xds->hide_ps      = $this->hide_ps;
     $header_xds = $xds->generateXDS41();
     $xml->importDOMDocument($message, $header_xds);
 

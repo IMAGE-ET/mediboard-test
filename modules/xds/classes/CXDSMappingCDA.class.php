@@ -16,13 +16,17 @@
  */
 class CXDSMappingCDA {
 
+  /** @var \CCDAFactory  */
   public $factory;
+  public $hide_patient;
+  public $hide_ps;
   public $name_submission;
   public $id_classification;
   public $id_external;
   public $xpath;
   public $xcn_mediuser;
   public $xon_etablissement;
+  public $specialty;
   public $ins_patient;
   public $practice_setting;
   public $health_care_facility;
@@ -36,6 +40,9 @@ class CXDSMappingCDA {
    * @param CCDAFactory $factory CDA factory
    */
   function __construct($factory) {
+    $mediuser = CMediusers::get();
+    $specialty = $mediuser->loadRefOtherSpec();
+    $this->specialty = $specialty->code."^".$specialty->libelle."^".$specialty->oid;
     $this->factory           = $factory;
     $this->id_classification = 0;
     $this->id_external       = 0;
@@ -180,7 +187,8 @@ class CXDSMappingCDA {
     $ei_id                 = &$this->id_external;
     $ins                   = $this->ins_patient;
     $this->name_submission = $id;
-
+    $specialty             = $this->specialty;
+    $object                = $this->factory->targetObject;
     $registry = new CXDSRegistryPackage($id);
     //date de soumission
     $registry->setSubmissionTime(array(CXDSTools::getTimeUtc()));
@@ -189,18 +197,40 @@ class CXDSMappingCDA {
     $document = new CXDSDocumentEntryAuthor("cla$cla_id", $id, true);
     $this->setClaId();
     $document->setAuthorPerson(array($this->xcn_mediuser));
-    //@todo: a faire
-    $document->setAuthorSpecialty(array("G15_10/SM26^Médecin - Qualifié en Médecine Générale (SM)^1.2.250.1.213.1.1.4.5"));
+    $document->setAuthorSpecialty(array($specialty));
     //Institution qui envoie le document
     $document->setAuthorInstitution(array($this->xon_etablissement));
     $registry->appendDocumentEntryAuthor($document);
 
     //type d'activité pour lequel on envoie les documents
-    //@todo : a faire
-    $content = new CXDSContentType("cla$cla_id", $id, "04");
+    $code = "";
+    switch (get_class($object)) {
+      case "COperation";
+        $object = $object->loadRefSejour();
+      case "CSejour":
+        switch ($object->type) {
+          case "comp":
+            $code = "03";
+            break;
+          case "ambu":
+            $code = "23";
+            break;
+          case "urg":
+            $code = "10";
+            break;
+          default:
+            $code = "07";
+        }
+        break;
+      case "CConsultation";
+        $code = "07";
+        break;
+    }
+    $entry = CDMPTools::loadEntryJV("ASIP-SANTE_contentTypeCode.xml", $code);
+    $content = new CXDSContentType("cla$cla_id", $id, $entry["id"]);
     $this->setClaId();
-    $content->setCodingScheme(array("1.2.250.1.213.2.2"));
-    $content->setContentTypeCodeDisplayName("Hospitalisation de jour");
+    $content->setCodingScheme(array($entry["oid"]));
+    $content->setContentTypeCodeDisplayName($entry["name"]);
     $registry->setContentType($content);
 
     //spécification d'un Submissionset ou d'un folder, ici submissionset
@@ -233,11 +263,15 @@ class CXDSMappingCDA {
    * @return CXDSExtrinsicObject
    */
   function createExtrinsicObject($id) {
-    $factory = $this->factory;
-    $cla_id = &$this->id_classification;
-    $ei_id  = &$this->id_external;
-    $xpath  = $this->xpath;
-    $ins    = $this->ins_patient;
+    $factory      = $this->factory;
+    $cla_id       = &$this->id_classification;
+    $ei_id        = &$this->id_external;
+    $ins          = $this->ins_patient;
+    $hide_patient = $this->hide_patient;
+    $hide_ps      = $this->hide_ps;
+    $service      = $factory->service_event;
+    $industry     = $factory->industry_code;
+    $praticien    = $factory->practicien;
     $this->appendNameDocument($id);
 
     $extrinsic = new CXDSExtrinsicObject($id, "text/xml");
@@ -249,17 +283,14 @@ class CXDSMappingCDA {
     $extrinsic->setSlot("languageCode", array($factory->langage));
 
     //legalAuthenticator XCN
-    $legalAuthenticator = $this->getPerson($factory->practicien);
+    $legalAuthenticator = $this->getPerson($praticien);
     $extrinsic->setSlot("legalAuthenticator", array($legalAuthenticator));
 
     //documentationOf/serviceEvent/effectiveTime/low en UTC
-    $service_event = "/cda:ClinicalDocument/cda:documentationOf/cda:serviceEvent";
-    $serviceStart = $xpath->queryAttributNode("$service_event/cda:effectiveTime/cda:low", null, "value");
-    $extrinsic->setSlot("serviceStartTime", array(CXDSTools::getTimeUtc($serviceStart)));
+    $extrinsic->setSlot("serviceStartTime", array(CXDSTools::getTimeUtc($service["time_start"])));
 
     //documentationOf/serviceEvent/effectiveTime/high en UTC
-    $serviceStop = $xpath->queryAttributNode("$service_event/cda:effectiveTime/cda:high", null, "value");
-    $extrinsic->setSlot("serviceStopTime", array(CXDSTools::getTimeUtc($serviceStop)));
+    $extrinsic->setSlot("serviceStopTime", array(CXDSTools::getTimeUtc($service["time_stop"])));
 
     //recordTarget/patientRole/id
     $extrinsic->setSlot("sourcePatientId", array($ins));
@@ -272,24 +303,21 @@ class CXDSMappingCDA {
     $this->setClaId();
 
     //author/assignedAuthor
-    $author = $this->getPerson($factory->practicien);
+    $author = $this->getPerson($praticien);
     $document->setAuthorPerson(array($author));
 
     //author/assignedAuthor/code
-    $assigned_author = "/cda:ClinicalDocument/cda:author/cda:assignedAuthor";
-    $node = $xpath->queryUniqueNode("$assigned_author/cda:code");
-    if ($node) {
-      $speciality = $this->getSpeciality($node);
-      $document->setAuthorSpecialty(array($speciality));
+    $spec = $praticien->loadRefOtherSpec();
+    if ($spec->libelle) {
+      $document->setAuthorSpecialty(array("$spec->code^$spec->libelle^$spec->oid"));
     }
 
     //author/assignedAuthor/representedOrganization - si absent, ne pas renseigner
     //si nom pas présent - champ vide
     //si id nullflavor alors 6-7-10 vide
-    $node = $xpath->queryUniqueNode("$assigned_author/cda:representedOrganization");
-
-    if ($node && !$xpath->queryAttributNode(".", $node, "nullFlavor")) {
-      $institution = $this->getOrganisation($node);
+    $author_organization = $praticien->loadRefFunction()->loadRefGroup();
+    if ($author_organization->_id) {
+      $institution = CXDSTools::getXONetablissement($author_organization);
       $document->setAuthorInstitution(array($institution));
     }
     $extrinsic->appendDocumentEntryAuthor($document);
@@ -301,15 +329,38 @@ class CXDSMappingCDA {
     $confid->setName($confidentialite["displayName"]);
     $extrinsic->appendConfidentiality($confid);
 
+    if ($hide_ps) {
+      $confid2 = CXDSConfidentiality::getMasquagePS("cla$cla_id", $id);
+      $this->setClaId();
+      $extrinsic->appendConfidentiality($confid2);
+    }
+
+    if ($hide_patient) {
+      $confid3 = CXDSConfidentiality::getMasquagePatient("cla$cla_id", $id);
+      $this->setClaId();
+      $extrinsic->appendConfidentiality($confid3);
+    }
+
     //documentationOf/serviceEvent/code - table de correspondance
-    $eventCode = $xpath->queryAttributNode("$service_event/cda:code", null, "code");
-    $eventName = $xpath->queryAttributNode("$service_event/cda:code", null, "displayName");
-    $eventSystem = $xpath->queryAttributNode("$service_event/cda:code", null, "codeSystem");
-    if ($eventCode) {
+    if (!$service["nullflavor"]) {
+      $eventSystem = $service["oid"];
+      $eventCode = $service["code"];
+      switch ($service["type_code"]) {
+        case "cim10":
+          $cim10 = new CCodeCIM10($eventCode, true);
+          $libelle = $cim10->libelle;
+          break;
+        case "ccam":
+          $ccam = new CCodeCCAM($eventCode);
+          $ccam->load(CCodeCCAM::LITE);
+          $libelle = $ccam->libelleCourt;
+          break;
+      }
+
       $event = new CXDSEventCodeList("cla$cla_id", $id, $eventCode);
       $this->setClaId();
       $event->setCodingScheme(array($eventSystem));
-      $event->setName($eventName);
+      $event->setName($libelle);
       $extrinsic->appendEventCodeList($event);
     }
 
@@ -363,14 +414,10 @@ class CXDSMappingCDA {
     $this->health_care_facility = $healt;
 
     //documentationOf/serviceEvent/performer/assignedEntity/representedOrganization/standardIndustryClassCode
-    $standard_industry = "$service_event/cda:performer/cda:assignedEntity/cda:representedOrganization/cda:standardIndustryClassCode";
-    $prac       = $xpath->queryAttributNode($standard_industry, null, "code");
-    $pracName   = $xpath->queryAttributNode($standard_industry, null, "displayName");
-    $pracSystem = $xpath->queryAttributNode($standard_industry, null, "codeSystem");
-    $pratice    = new CXDSPracticeSetting("cla$cla_id", $id, $prac);
+    $pratice    = new CXDSPracticeSetting("cla$cla_id", $id, $industry["code"]);
     $this->setClaId();
-    $pratice  ->setCodingScheme(array($pracSystem));
-    $pratice  ->setName($pracName);
+    $pratice  ->setCodingScheme(array($industry["codeSystem"]));
+    $pratice  ->setName($industry["displayName"]);
     $this->practice_setting = $pratice;
     $extrinsic->setPracticeSetting($pratice);
 
@@ -411,9 +458,10 @@ class CXDSMappingCDA {
    * @return CXDSExtrinsicObject
    */
   function createSignature($id) {
-    $cla_id = &$this->id_classification;
-    $ei_id  = &$this->id_external;
-    $ins    = $this->ins_patient;
+    $cla_id    = &$this->id_classification;
+    $ei_id     = &$this->id_external;
+    $ins       = $this->ins_patient;
+    $specialty = $this->specialty;
 
     //Création du document
     $extrinsic = new CXDSExtrinsicObject($id, "text/xml");
@@ -427,12 +475,11 @@ class CXDSMappingCDA {
     $extrinsic->setSlot("sourcePatientId", array($ins));
     $extrinsic->setTitle("Source");
 
-    //@todo: a faire
     //identique à celui qui envoie
     $document = new CXDSDocumentEntryAuthor("cla$cla_id", $id);
     $this->setClaId();
     $document->setAuthorPerson(array($this->xcn_mediuser));
-    $document->setAuthorSpecialty(array("G15_10/SM26^Médecin - Qualifié en Médecine Générale (SM)^1.2.250.1.213.1.1.4.5"));
+    $document->setAuthorSpecialty(array($specialty));
     $document->setAuthorInstitution(array($this->xon_etablissement));
     $extrinsic->appendDocumentEntryAuthor($document);
 
@@ -577,52 +624,9 @@ class CXDSMappingCDA {
     if (strlen($id) === 22) {
       $result = "INS-C";
     }
-    //todo : Faire l'INS-A
+    if (strlen($id) === 12) {
+      $result = "INS-A";
+    }
     return $result;
-  }
-
-  /**
-   * Retourne l'organisation
-   *
-   * @param DOMElement $node DOMElement
-   *
-   * @return String
-   */
-  function getOrganisation($node) {
-    $xpath = $this->xpath;
-    $comp1  = "";
-    $comp6  = "";
-    $comp7  = "";
-    $comp10 = "";
-    $id = $node->getElementsByTagName("id")->item(0);
-    $name = $node->getElementsByTagName("name")->item(0);
-
-    if (!$xpath->queryAttributNode(".", $name, "nullFlavor")) {
-      $comp1 = $name->nodeValue;
-    }
-
-    if (!$xpath->queryAttributNode(".", $id, "nullFlavor")) {
-      $comp7 = "IDNST";
-      $comp6 = $xpath->queryAttributNode(".", $id, "root");
-      $comp6 = "&$comp6&ISO";
-      $comp10 = $xpath->queryAttributNode(".", $id, "extension");
-    }
-
-    return "$comp1^^^^^$comp6^$comp7^^^$comp10";
-  }
-
-  /**
-   * Retourne la speciality
-   *
-   * @param DOMElement $node DOMElement
-   *
-   * @return string
-   */
-  function getSpeciality($node) {
-    $xpath = $this->xpath;
-    $comp1 = $xpath->queryAttributNode(".", $node, "code");
-    $comp2 = $xpath->queryAttributNode(".", $node, "displayName");
-    $comp3 = $xpath->queryAttributNode(".", $node, "codeSystem");
-    return "$comp1^$comp2^$comp3";
   }
 }
