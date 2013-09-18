@@ -115,6 +115,7 @@ class CObservationResultSet extends CMbObject {
         "observation_result_set.context_id"    => "= '$object->_id'",
       )
     );
+    $request->addOrder("observation_result_set.datetime");
     $request->addOrder("observation_result.observation_result_id");
     
     $results = $object->_spec->ds->loadList($request->getRequest());

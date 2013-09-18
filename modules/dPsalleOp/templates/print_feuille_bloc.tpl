@@ -371,33 +371,36 @@ Main.add(function(){
       var ph, series, xaxes;
 
       {{foreach from=$perop_graphs item=_graph key=i name=graphs}}
-        ph = $("#placeholder-{{$i}}");
-        series = {{$_graph.series|@json}};
-        xaxes  = {{$_graph.xaxes|@json}};
+        {{if $_graph instanceof CSupervisionGraph}}
+          {{assign var=_graph_data value=$_graph->_graph_data}}
 
-        {{if !$smarty.foreach.graphs.last}}
-          xaxes[0].tickFormatter = function(){return " "};
+          ph = $("#placeholder-{{$i}}");
+          series = {{$_graph_data.series|@json}};
+          xaxes  = {{$_graph_data.xaxes|@json}};
+          xaxes[0].ticks = 10;
+
+          $.plot(ph, series, {
+            grid: { hoverable: true, markings: [
+              // Debut op
+              {xaxis: {from: 0, to: {{$time_debut_op}}}, color: "rgba(0,0,0,0.05)"},
+              {xaxis: {from: {{$time_debut_op}}, to: {{$time_debut_op+1000}}}, color: "black"},
+
+              // Fin op
+              {xaxis: {from: {{$time_fin_op}}, to: Number.MAX_VALUE}, color: "rgba(0,0,0,0.05)"},
+              {xaxis: {from: {{$time_fin_op}}, to: {{$time_fin_op+1000}}}, color: "black"}
+            ] },
+            series: SupervisionGraph.defaultSeries,
+            xaxes: xaxes,
+            yaxes: {{$_graph_data.yaxes|@json}}
+          });
         {{/if}}
-
-        $.plot(ph, series, {
-          grid: { hoverable: true, markings: [
-            // Debut op
-            {xaxis: {from: 0, to: {{$time_debut_op}}}, color: "rgba(0,0,0,0.05)"},
-            {xaxis: {from: {{$time_debut_op}}, to: {{$time_debut_op+1000}}}, color: "black"},
-
-            // Fin op
-            {xaxis: {from: {{$time_fin_op}}, to: Number.MAX_VALUE}, color: "rgba(0,0,0,0.05)"},
-            {xaxis: {from: {{$time_fin_op}}, to: {{$time_fin_op+1000}}}, color: "black"}
-          ] },
-          series: SupervisionGraph.defaultSeries,
-          xaxes: xaxes,
-          yaxes: {{$_graph.yaxes|@json}}
-        });
       {{/foreach}}
 
     })(jQuery);
   });
 </script>
+
+{{assign var=width value=700}}
 
 <table class="main print">
   <tr>
@@ -407,17 +410,120 @@ Main.add(function(){
     <td>
       <div style="position: relative;" class="supervision">
         {{foreach from=$perop_graphs item=_graph key=i}}
-          <div class="yaxis-labels">
-            {{foreach from=$_graph.yaxes|@array_reverse item=_yaxis}}
-              <div>
-                {{$_yaxis.label}}
-                <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}</div>
-              </div>
-            {{/foreach}}
-            <span class="title">{{$_graph.title}}</span>
-          </div>
-          <div id="placeholder-{{$i}}" style="width:{{$width}}px;height:200px;"></div>
-          <br />
+          {{if $_graph instanceof CSupervisionGraph}}
+            {{assign var=_graph_data value=$_graph->_graph_data}}
+
+            <div class="yaxis-labels" style="height:{{$_graph->height}}px;">
+              {{foreach from=$_graph_data.yaxes|@array_reverse item=_yaxis}}
+                <div style="position: relative;">
+                  {{$_yaxis.label}}
+                  <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}&nbsp;</div>
+                </div>
+              {{/foreach}}
+              {{*<span class="title">{{$_graph_data.title}}</span>*}}
+            </div>
+            <div id="placeholder-{{$i}}" style="width:{{$width}}px; height:{{$_graph->height}}px;"></div>
+
+          {{elseif $_graph instanceof CSupervisionTimedData}}
+            {{*
+            <table class="main evenements" style="table-layout: fixed; width: {{$width-12}}px; margin-bottom: -1px;">
+              <col style="width: {{$yaxes_count*78-12}}px;" />
+
+              <tr>
+                <th style="word-wrap: break-word;">
+                  {{$_graph->title}}
+                </th>
+                <td>
+                  {{foreach from=$_graph->_graph_data item=_evenement}}
+                    {{if $_evenement.position <= 100}}
+                      <div style="padding-left: {{$_evenement.position}}%; margin-left: -1px;" class="evenement">
+                        <div>
+                          <div class="marking"></div>
+                          <div class="label" title="{{$_evenement.datetime|date_format:$conf.datetime}}">
+                            {{$_evenement.value|truncate:40}}
+                          </div>
+                        </div>
+                      </div>
+                    {{/if}}
+                  {{/foreach}}
+                </td>
+              </tr>
+            </table>
+            *}}
+            <table class="main tbl">
+              <tr>
+                <th colspan="2" class="category">
+                  {{$_graph->title}}
+                </th>
+              </tr>
+
+              {{foreach from=$_graph->_graph_data item=_evenement}}
+              <tr>
+                <td class="narrow" style="white-space: nowrap;">
+                  {{$_evenement.datetime|date_format:$conf.datetime}}
+                </td>
+                <td>
+                  {{$_evenement.value}}
+                </td>
+              </tr>
+              {{/foreach}}
+            </table>
+
+          {{elseif $_graph instanceof CSupervisionTimedPicture}}
+            <table class="main tbl">
+              <tr>
+                <th colspan="3" class="category">
+                  {{$_graph->title}}
+                </th>
+              </tr>
+
+              {{foreach from=$_graph->_graph_data item=_picture}}
+                <tr>
+                  <td class="narrow" style="white-space: nowrap;">
+                    {{$_picture.datetime|date_format:$conf.datetime}}
+                  </td>
+                  <td class="narrow" style="white-space: nowrap;">
+                    {{if array_key_exists("file", $_picture)}}
+                      {{$_picture.file->_no_extension}}
+                    {{/if}}
+                  </td>
+                  <td>
+                    {{if $_picture.file_id}}
+                      <img style="width: 50px;"
+                           src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$_picture.file_id}}&amp;phpThumb=1&amp;w=100&amp;q=95" />
+                    {{/if}}
+                  </td>
+                </tr>
+              {{/foreach}}
+            </table>
+
+            {{*
+            <table class="main evenements" style="table-layout: fixed; width: {{$width-12}}px; margin-bottom: -1px; height: 66px;">
+              <col style="width: {{$yaxes_count*78-12}}px;" />
+
+              <tr>
+                <th style="word-wrap: break-word;">
+                  {{$_graph->title}}
+                </th>
+                <td>
+                  <div style="position: relative;">
+                    {{foreach from=$_graph->_graph_data item=_picture}}
+                      {{if $_picture.file_id && $_picture.position <= 100}}
+                        <div style="position: absolute; left: {{$_picture.position}}%; margin-left: -25px; text-align: center; padding-top: 5px;" title="{{$_picture.datetime|date_format:$conf.datetime}}">
+                          <span style="position: absolute; left: 20px; top: -2px; width: 10px;">^</span>
+                          <img style="width: 50px;"
+                               src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$_picture.file_id}}&amp;phpThumb=1&amp;w=100&amp;q=95" />
+                          <br />
+                          {{$_picture.file->_no_extension}}
+                        </div>
+                      {{/if}}
+                    {{/foreach}}
+                  </div>
+                </td>
+              </tr>
+            </table>
+            *}}
+          {{/if}}
         {{/foreach}}
       </div>
     </td>

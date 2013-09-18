@@ -24,7 +24,7 @@ Main.add(function(){
         <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}</div>
       </div>
     {{/foreach}}
-    <span class="title">{{$data.title}}</span>
+    {{*<span class="title">{{$data.title}}</span>*}}
   </div>
   <div id="placeholder-preview" style="width:600px;height:{{$graph->height}}px;"></div>
 </div>

@@ -171,22 +171,27 @@ editEvenementPerop = function(guid, operation_id, datetime) {
 <hr />
 *}}
 
+<button class="new" onclick="createObservationResultSet('{{$interv->_guid}}', '{{$pack->_id}}')">
+  {{tr}}CObservationResultSet-title-create{{/tr}}
+</button>
+
 <div style="position: relative;" class="supervision">
   {{foreach from=$graphs item=_graph key=i}}
     {{if $_graph instanceof CSupervisionGraph}}
       {{assign var=_graph_data value=$_graph->_graph_data}}
-      <div class="yaxis-labels">
+      <div class="yaxis-labels" style="height:{{$_graph->height}}px;">
         {{foreach from=$_graph_data.yaxes|@array_reverse item=_yaxis}}
           <div style="position: relative;">
             {{$_yaxis.label}}
-            <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}</div>
+            <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}&nbsp;</div>
             {{if $_yaxis.axis_id}}
-              <button class="new notext compact" style="position: absolute; z-index: 20; left: 15px; bottom: -25px;"
+              <br />
+              <button class="new notext compact"
                       onclick="createObservationResultSet('{{$interv->_guid}}', '{{$_yaxis.axis_id}}')"></button>
             {{/if}}
           </div>
         {{/foreach}}
-        <span class="title">{{$_graph_data.title}}</span>
+        {{*<span class="title">{{$_graph_data.title}}</span>*}}
       </div>
       <div id="placeholder-{{$i}}" style="width:{{$width}}px; height:{{$_graph->height}}px;" class="graph-placeholder"></div>
     {{elseif $_graph instanceof CSupervisionTimedData}}

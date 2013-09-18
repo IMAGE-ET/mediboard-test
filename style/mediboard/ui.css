@@ -1371,15 +1371,19 @@ span.countertip {
 }
 
 .supervision .yaxis-labels {
-  margin-top: 4px;
+  position: absolute;
 }
 
 .supervision .yaxis-labels > div {
   display: inline-block;
-  text-align: center;
+  text-align: left;
+  padding: 4px;
   font-size: 10px;
   line-height: 0.8;
   width: 70px;
+  box-sizing: border-box;
+  top: 20%;
+  z-index: 10;
 }
 
 .supervision .yaxis-labels .symbol {

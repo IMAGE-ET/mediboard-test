@@ -12,6 +12,7 @@
 CCanDo::checkRead();
 
 $operation_id = CValue::get("operation_id");
+$pack_id = 1; // FIXME
 
 $interv = new COperation;
 $interv->load($operation_id);
@@ -20,13 +21,16 @@ $interv->loadRefPlageOp();
 
 $consult_anesth = $interv->loadRefsConsultAnesth();
 
+$pack = new CSupervisionGraphPack();
+$pack->load($pack_id);
+
 global $time_min, $time_max;
 
 list(
   $graphs, $yaxes_count,
   $time_min, $time_max,
   $time_debut_op_iso, $time_fin_op_iso
-) = CObservationResultSet::buildGraphs($interv, 1 /* FIXME pack_id */);
+) = CObservationResultSet::buildGraphs($interv, $pack_id);
 
 $time_debut_op = CMbDate::toUTCTimestamp($time_debut_op_iso);
 $time_fin_op   = CMbDate::toUTCTimestamp($time_fin_op_iso);
@@ -193,6 +197,7 @@ $now = 100 * (CMbDate::toUTCTimestamp(CMbDT::dateTime()) - $time_min) / ($time_m
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("pack",        $pack);
 $smarty->assign("interv",      $interv);
 $smarty->assign("graphs",      $graphs);
 $smarty->assign("evenements",   $evenements);

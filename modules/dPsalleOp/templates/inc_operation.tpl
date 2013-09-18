@@ -216,12 +216,12 @@
     }
   };
 
-  createObservationResultSet = function(object_guid, axis_id) {
+  createObservationResultSet = function(object_guid, pack_id) {
     if($('surveillance_perop')){
       var url = new Url("patients", "ajax_edit_observation_result_set");
       url.addParam("object_guid", object_guid);
-      url.addParam("axis_id", axis_id);
-      url.requestModal(400, 400, {
+      url.addParam("pack_id", pack_id);
+      url.requestModal(600, 600, {
         onClose: reloadSurveillancePerop
       });
     }
