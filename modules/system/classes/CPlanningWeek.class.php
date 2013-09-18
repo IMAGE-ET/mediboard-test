@@ -336,20 +336,24 @@ class CPlanningWeek{
   /**
    * Add a label to a day
    *
-   * @param string $day     The label's day
-   * @param string $text    The label
-   * @param string $detail  [optional] Details about the label
-   * @param string $color   [optional] The label's color
-   * @param string $onclick [optional] a function for the onclick event
+   * @param string $day       The label's day
+   * @param string $text      The label
+   * @param string $detail    [optional] Details about the label
+   * @param string $color     [optional] The label's color
+   * @param string $onclick   [optional] a function for the onclick event
+   * @param bool   $draggable [optional] is the label draggable ?
+   * @param array  $datas     [optional] html data-elements data-$key => $value
    *
    * @return void
    */
-  function addDayLabel($day, $text, $detail = null, $color = null, $onclick = null) {
+  function addDayLabel($day, $text, $detail = null, $color = null, $onclick = null, $draggable=false, $datas= array()) {
     $this->day_labels[$this->no_dates ? $day : CMbDT::date($day)][] = array(
-      "text"   => $text, 
-      "detail" => $detail, 
-      "color"  => $color,
-      "onclick" => $onclick
+      "text"        => $text,
+      "detail"      => $detail,
+      "color"       => $color,
+      "onclick"     => $onclick,
+      "draggable"   => $draggable,
+      "datas"       => $datas
     );
   }
   
