@@ -434,12 +434,18 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     if ($type_config) {
       $mbVenue->type = $type_config;
     }
-      
+
+    // Cas des urgences : dans tous les cas ce sera de l'hospi comp.
+    $rpu = $mbVenue->loadRefRPU();
+    if ($rpu->_id && $rpu->sejour_id == $rpu->mutation_sejour_id) {
+      $mbVenue->type = "comp";
+    }
+
     if (!$mbVenue->type) {
       if ($nature) {
         $mbVenue->type = $attrNatureVenueHprim[$nature];
       }
-    } 
+    }
 
     if (!$mbVenue->type) {      
       $mbVenue->type = "comp";
