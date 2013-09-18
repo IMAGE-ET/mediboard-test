@@ -167,7 +167,8 @@
           modifSejour(object_id, null, null, null, null, null, "Control.Modal.close");
       }
     };
-    
+
+    //drag&Drop
     planning.onEventChange = function(e) {
       var time = e.getTime();
       var start = time.start;
@@ -179,23 +180,33 @@
         return;
       }
 
+
       var object_guid = e.draggable_guid;
-      var object_id = object_guid.split("-")[1];
-      var entree_prevue = /entree_prevue='([0-9 \:-]*)'/.exec(e.title)[1];
-      var prevue_split = entree_prevue.split(" ");
-      var date_entree_prevue = prevue_split[0];
-      var heure_entree_prevue = prevue_split[1];
-      var sortie_prevue = /sortie_prevue='([0-9 \:-]*)'/.exec(e.title)[1];
-      var heure_sortie_prevue = sortie_prevue.split(" ")[1];
+      var object = object_guid.split("-");
+      var object_class = object[0];
+      var object_id = object[1];
+      if (object_class == "COperation") {
+        var entree_prevue = /entree_prevue='([0-9 \:-]*)'/.exec(e.title)[1];
+        var prevue_split = entree_prevue.split(" ");
+        var date_entree_prevue = prevue_split[0];
+        var heure_entree_prevue = prevue_split[1];
+        var sortie_prevue = /sortie_prevue='([0-9 \:-]*)'/.exec(e.title)[1];
+        var heure_sortie_prevue = sortie_prevue.split(" ")[1];
+      }
+
 
       // Pour un commentaire
       if (e.type == "commentaire_planning") {
-        var form = getForm("editCommentairePlanning");
 
+        var temp_object = $(e.internal_id).down("div.body").down("span").down("span");
+        var form = getForm("editCommentairePlanning");
         $V(form.commentaire_planning_id, object_id);
         $V(form.debut, "{{$date_planning}} " + start.format("HH:mm"));
         $V(form.fin, "{{$date_planning}} " + end.format("HH:mm"));
         $V(form.salle_id, salle_id);
+        $V(form.commentaire, temp_object.get("commentaire"));
+        $V(form.libelle, temp_object.get("libelle"));
+        $V(form.color, temp_object.get("color"));
         
         onSubmitFormAjax(form, {onComplete: refreshPlanning});
         return;
@@ -257,7 +268,7 @@
           var classes = elt.className.split("  ");
           var hour = $(elt).get("hour");
           var minutes = $(elt).get("minutes");
-          if (minutes < 10) {
+          if (minutes < 10 && minutes.length < 2) {
             minutes = "0"+minutes;
           }
           var salle_id = planning.salles_ids[classes[0].split("-")[1]];
