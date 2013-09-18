@@ -339,7 +339,9 @@ class CCompteRendu extends CDocumentItem {
     $days = isset($days[$this->object_class]) ?
       $days[$this->object_class] : $days["base"];
 
-    if (!$content->last_modified) {
+    // Passage de la date de dernière modification du content dans la table compte_rendu
+    if (!$content->last_modified && $content->_id) {
+      $content->last_modified = $content->loadLastLog()->date;
       $content->store();
     }
 
