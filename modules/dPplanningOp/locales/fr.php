@@ -1731,6 +1731,7 @@ $locales['config-dPplanningOp-CSejour-use_recuse'] = 'Utiliser la gestion des ré
 $locales['config-dPplanningOp-CSejour-use_recuse-desc'] = 'Utiliser la gestion des récusations';
 $locales['config-discipline_tarifaire-table'] = 'Import table discipline tarifaire';
 $locales['config-sae-base'] = 'Import de la base SAE';
+$locales['dPplanningOp-msg-succeed_switchin_salle1%s_salle2%s'] = 'Les interventions de la salle "%s" ont été échangées avec celles de la salle "%s" avec succès';
 $locales['merge-interv'] = 'Fusion des interventions en doublons';
 $locales['merge-sejours'] = 'Fusion des séjours ayant le même NDA';
 $locales['mod-dPhospi-tab-ajax_choose_modele_etiquette'] = 'Choix du modèle d\'étiquette';
@@ -1816,4 +1817,3 @@ $locales['pref-mode_dhe-0'] = 'Mode simple';
 $locales['pref-mode_dhe-1'] = 'Mode expert';
 $locales['pref-mode_dhe-desc'] = 'Sélection du mode de création d\'interventions';
 $locales['type_adm'] = 'Admission en';
-?>

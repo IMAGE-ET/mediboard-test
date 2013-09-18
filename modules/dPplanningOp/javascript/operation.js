@@ -42,5 +42,13 @@ Operation = {
 
   useModal: function() {
     this.edit = this.editModal;
+  },
+
+  switchOperationsFromSalles : function(salle1, salle2, date, callback) {
+    var url = new Url("planningOp", "controllers/do_switch_operations_from_2_salles");
+    url.addParam("salle_1", salle1);
+    url.addParam("salle_2", salle2);
+    url.addParam("date", date);
+    url.requestUpdate("systemMsg", {onComplete: callback});
   }
 };
