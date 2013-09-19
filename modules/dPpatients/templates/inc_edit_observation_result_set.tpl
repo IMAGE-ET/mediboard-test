@@ -5,12 +5,18 @@
     if (Prototype.Browser.IE && document.documentMode == 8) {
       $$("div.outlined input").each(function(input){
         input.observe("click", function(){
-          $$("div.outlined input.checked").invoke("removeClassName", "checked");
+          input.form.select("div.outlined input.checked").invoke("removeClassName", "checked");
           input.addClassName("checked");
         });
       });
     }
   });
+
+  resetPicture = function(radio) {
+    $V(radio.form.elements.value,'');
+    $V(radio.form.elements.file_id,'');
+    radio.form.select("div.outlined input.checked").invoke("removeClassName", "checked");
+  };
 
   submitObservationResults = function(id, obj) {
     var forms = $$(".result-form").filter(function(form){ return $V(form.elements.value) !== ""; });
@@ -147,6 +153,7 @@
       {{mb_field object=$_result field=observation_result_set_id hidden=true}}
       {{mb_field object=$_result field=value hidden=true}}
 
+      <button type="button" class="cancel notext" onclick="resetPicture(this)"></button>
       {{foreach from=$_graph->_ref_files item=_file}}
         <div class="outlined">
           <input type="radio" name="file_id" value="{{$_file->_id}}" />

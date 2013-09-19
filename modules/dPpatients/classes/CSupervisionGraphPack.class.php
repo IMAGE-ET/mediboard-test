@@ -56,6 +56,7 @@ class CSupervisionGraphPack extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["graph_links"] = "CSupervisionGraphToPack pack_id";
+    $backProps["operations"] = "COperation graph_pack_id";
     return $backProps;
   }
 

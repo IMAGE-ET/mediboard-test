@@ -34,6 +34,7 @@ class COperation extends CCodable implements IPatientRelated {
   public $salle_id;
   public $poste_sspi_id;
   public $examen_operation_id;
+  public $graph_pack_id;
 
   // DB Fields S@nté.com communication
   public $code_uf;
@@ -196,6 +197,9 @@ class COperation extends CCodable implements IPatientRelated {
   /** @var CBrancardage */
   public $_ref_brancardage;
 
+  /** @var CSupervisionGraphPack */
+  public $_ref_graph_pack;
+
   // Filter Fields
   public $_date_min;
   public $_date_max;
@@ -267,6 +271,7 @@ class COperation extends CCodable implements IPatientRelated {
     $props["salle_id"]             = "ref class|CSalle";
     $props["poste_sspi_id"]        = "ref class|CPosteSSPI";
     $props["examen_operation_id"]  = "ref class|CExamenOperation";
+    $props["graph_pack_id"]        = "ref class|CSupervisionGraphPack";
     $props["date"]                 = "date";
     $props["code_uf"]              = "str length|3";
     $props["libelle_uf"]           = "str maxLength|35";
@@ -1270,6 +1275,15 @@ class COperation extends CCodable implements IPatientRelated {
    */
   function loadRefsBesoins() {
     return $this->_ref_besoins = $this->loadBackRefs("besoins_ressources");
+  }
+
+  /**
+   * Charge le pack de graphiques
+   *
+   * @return CSupervisionGraphPack
+   */
+  function loadRefGraphPack(){
+    return $this->_ref_graph_pack = $this->loadFwdRef("graph_pack_id");
   }
 
   /**

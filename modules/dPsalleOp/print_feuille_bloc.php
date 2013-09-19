@@ -87,18 +87,13 @@ $perop_graphs = array();
 $time_debut_op = null;
 $time_fin_op = null;
 $yaxes_count = null;
+$grid = array();
+$labels = array();
 
 if (CAppUI::conf("dPsalleOp enable_surveillance_perop")) {
   CSupervisionGraph::includeFlot();
 
-  list(
-    $perop_graphs, $yaxes_count,
-    $time_min, $time_max,
-    $time_debut_op_iso, $time_fin_op_iso
-  ) = CObservationResultSet::buildGraphs($operation, 1);
-
-  $time_debut_op = CMbDate::toUTCTimestamp($time_debut_op_iso);
-  $time_fin_op   = CMbDate::toUTCTimestamp($time_fin_op_iso);
+  list($list, $grid, $graphs, $labels) = CObservationResultSet::getChronological($operation, $operation->graph_pack_id);
 }
 
 // Création du template
@@ -111,5 +106,7 @@ $smarty->assign("perop_graphs" , $perop_graphs);
 $smarty->assign("yaxes_count"  , $yaxes_count);
 $smarty->assign("time_debut_op", $time_debut_op);
 $smarty->assign("time_fin_op"  , $time_fin_op);
+$smarty->assign("observation_grid", $grid);
+$smarty->assign("observation_labels", $labels);
 
 $smarty->display("print_feuille_bloc.tpl");

@@ -103,6 +103,23 @@ editEvenementPerop = function(guid, operation_id, datetime) {
 </div>
 *}}
 
+<form name="change-operation-graph-pack" method="post" action="?" onsubmit="return onSubmitFormAjax(this, reloadSurveillancePerop)">
+  {{mb_class object=$interv}}
+  {{mb_key object=$interv}}
+
+  {{mb_label object=$interv field=graph_pack_id}}
+
+  <select name="graph_pack_id" onchange="this.form.onsubmit()">
+    <option value="">&ndash; {{tr}}CSupervisionGraphPack.none{{/tr}}</option>
+
+    {{foreach from=$graph_packs item=_pack}}
+      <option value="{{$_pack->_id}}" {{if $_pack->_id == $interv->graph_pack_id}}selected{{/if}}>
+        {{$_pack}}
+      </option>
+    {{/foreach}}
+  </select>
+</form>
+
 <table class="main tbl">
   <tr>
     <td>
@@ -171,6 +188,10 @@ editEvenementPerop = function(guid, operation_id, datetime) {
 <hr />
 *}}
 
+{{if !$interv->graph_pack_id}}
+  {{mb_return}}
+{{/if}}
+
 <button class="new" onclick="createObservationResultSet('{{$interv->_guid}}', '{{$pack->_id}}')">
   {{tr}}CObservationResultSet-title-create{{/tr}}
 </button>
@@ -184,11 +205,6 @@ editEvenementPerop = function(guid, operation_id, datetime) {
           <div style="position: relative;">
             {{$_yaxis.label}}
             <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}&nbsp;</div>
-            {{if $_yaxis.axis_id}}
-              <br />
-              <button class="new notext compact"
-                      onclick="createObservationResultSet('{{$interv->_guid}}', '{{$_yaxis.axis_id}}')"></button>
-            {{/if}}
           </div>
         {{/foreach}}
         {{*<span class="title">{{$_graph_data.title}}</span>*}}
@@ -200,7 +216,6 @@ editEvenementPerop = function(guid, operation_id, datetime) {
 
         <tr>
           <th style="word-wrap: break-word;">
-            <button class="new notext compact" style="float: right;" onclick="createObservationTimedData('{{$interv->_guid}}', '{{$_graph->_id}}')"></button>
             {{$_graph->title}}
           </th>
           <td>
@@ -225,7 +240,6 @@ editEvenementPerop = function(guid, operation_id, datetime) {
 
         <tr>
           <th style="word-wrap: break-word;">
-            <button class="new notext compact" style="float: right;" onclick="createObservationTimedPicture('{{$interv->_guid}}', '{{$_graph->_id}}')"></button>
             {{$_graph->title}}
           </th>
           <td>
@@ -314,9 +328,3 @@ editEvenementPerop = function(guid, operation_id, datetime) {
     {{/if}}
   </table>
 </div>
-
-<table class="main tbl">
-  <tr>
-    <th class="title" colspan="3">Historique</th>
-  </tr>
-</table>

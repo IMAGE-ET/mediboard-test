@@ -96,12 +96,14 @@ class CObservationResultSet extends CMbObject {
   }
 
   /**
-   * @param CMbObject $object
+   * Get observation results for this object
    *
-   * @return array
+   * @param CMbObject $object Reference object
+   *
+   * @return array|self[]
    */
   static function getResultsFor(CMbObject $object) {
-    $request = new CRequest;
+    $request = new CRequest();
     $request->addTable("observation_result");
     $request->addSelect("*");
     $request->addLJoin(
@@ -143,17 +145,13 @@ class CObservationResultSet extends CMbObject {
   }
 
   /**
-   * Chargement des graphiques d'intervention
+   * Donne les heures limites d'une intervention
    *
-   * @param COperation $interv  Intervention
-   *
-   * @param int        $pack_id Pack de graphiques
+   * @param COperation $interv Reference interv
    *
    * @return array
    */
-  static function buildGraphs(COperation $interv, $pack_id) {
-    list($results, /*$times*/) = CObservationResultSet::getResultsFor($interv);
-
+  static function getLimitTimes(COperation $interv) {
     $time_min = $interv->entree_salle;
     $time_max = CMbDT::time("+".CMbDT::minutesRelative("00:00:00", $interv->temp_operation)." MINUTES", $interv->entree_salle);
 
@@ -167,6 +165,33 @@ class CObservationResultSet extends CMbObject {
 
     $time_min = floor(CMbDate::toUTCTimestamp("$date $time_min") / $round) * $round;
     $time_max =  ceil(CMbDate::toUTCTimestamp("$date $time_max") / $round) * $round;
+
+    return array(
+      $time_min,
+      $time_max,
+      $time_debut_op_iso,
+      $time_fin_op_iso,
+    );
+  }
+
+  /**
+   * Chargement des graphiques d'intervention
+   *
+   * @param COperation $interv  Intervention
+   *
+   * @param int        $pack_id Pack de graphiques
+   *
+   * @return array
+   */
+  static function buildGraphs(COperation $interv, $pack_id) {
+    list($results, /*$times*/) = CObservationResultSet::getResultsFor($interv);
+
+    list (
+      $time_min,
+      $time_max,
+      $time_debut_op_iso,
+      $time_fin_op_iso,
+    ) = self::getLimitTimes($interv);
 
     $pack = new CSupervisionGraphPack();
     $pack->load($pack_id);
@@ -222,5 +247,125 @@ class CObservationResultSet extends CMbObject {
       $time_min, $time_max,
       $time_debut_op_iso, $time_fin_op_iso,
     );
+  }
+
+  /**
+   * Get chronological list
+   *
+   * @param COperation $interv  Intervention
+   * @param int        $pack_id Pack ID
+   *
+   * @return CObservationResultSet[]
+   */
+  static function getChronological(COperation $interv, $pack_id) {
+    list (
+      $time_min,
+      $time_max,
+      $time_debut_op_iso,
+      $time_fin_op_iso,
+    ) = self::getLimitTimes($interv);
+
+    $result_set = new self();
+    $where = array(
+      "observation_result_set.context_class" => "= '$interv->_class'",
+      "observation_result_set.context_id"    => "= '$interv->_id'",
+    );
+    $order = array(
+      "observation_result_set.datetime",
+      "observation_result_set.observation_result_set_id"
+    );
+
+    $pack = new CSupervisionGraphPack();
+    $pack->load($pack_id);
+    $graph_links = $pack->loadRefsGraphLinks();
+
+    $graphs = array();
+    foreach ($graph_links as $_gl) {
+      $_go = $_gl->loadRefGraph();
+      $graphs[] = $_go;
+    }
+
+    /** @var self[] $list */
+    $list = $result_set->loadList($where, $order);
+    $grid = array();
+
+    $count = 0;
+    $labels = array();
+    foreach ($graphs as $_graph) {
+      if ($_graph instanceof CSupervisionGraph) {
+        $_axes = $_graph->loadRefsAxes();
+
+        foreach ($_axes as $_axis) {
+          $_series = $_axis->loadRefsSeries();
+
+          $count += count($_series);
+
+          foreach ($_series as $_serie) {
+            $labels[] = $_serie;
+          }
+        }
+      }
+      elseif (
+        $_graph instanceof CSupervisionTimedData ||
+        $_graph instanceof CSupervisionTimedPicture
+      ) {
+        $count++;
+        $labels[] = $_graph;
+      }
+    }
+
+    foreach ($list as $_set) {
+      $results = $_set->loadRefsResults();
+
+      foreach ($results as $_result) {
+        $_result->loadRefFile();
+        $_result->loadRefValueUnit();
+      }
+
+      $p = 0;
+      $_row = array_fill(0, $count, null);
+
+      foreach ($graphs as $_graph) {
+        if ($_graph instanceof CSupervisionGraph) {
+          $_axes = $_graph->loadRefsAxes();
+
+          foreach ($_axes as $_axis) {
+            $_series = $_axis->loadRefsSeries();
+
+            foreach ($_series as $_serie) {
+              foreach ($results as $_result) {
+                if (
+                    $_result->value_type_id == $_serie->value_type_id &&
+                    $_result->unit_id       == $_serie->value_unit_id
+                ) {
+                  $_row[$p] = $_result;
+                }
+              }
+
+              $p++;
+            }
+          }
+        }
+        elseif (
+            $_graph instanceof CSupervisionTimedData ||
+            $_graph instanceof CSupervisionTimedPicture
+        ) {
+          foreach ($results as $_result) {
+            if (
+                $_result->value_type_id == $_graph->value_type_id &&
+                $_result->unit_id       == null
+            ) {
+              $_row[$p] = $_result;
+            }
+          }
+
+          $p++;
+        }
+      }
+
+      $grid[$_set->datetime] = $_row;
+    }
+
+    return array($list, $grid, $graphs, $labels);
   }
 }

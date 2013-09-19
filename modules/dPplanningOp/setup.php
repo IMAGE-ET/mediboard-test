@@ -1653,6 +1653,11 @@ class CSetupdPplanningOp extends CSetup {
                 CHANGE `mode_sortie` `mode_sortie` ENUM ('normal','transfert','mutation','deces');";
     $this->addQuery($query);
 
-    $this->mod_version = "1.77";
+    $this->makeRevision("1.77");
+    $query = "ALTER TABLE `operations`
+                ADD `graph_pack_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.78";
   }
 }
