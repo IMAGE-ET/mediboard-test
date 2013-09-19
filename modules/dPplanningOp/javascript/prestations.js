@@ -10,9 +10,13 @@ Prestations = {
       url.addParam('context', context);
     }
     url.requestModal(800, 600);
-    
-    if (this.callback) {
-      url.modalObject.observe('afterClose', this.callback);
+    url.modalObject.observe('afterClose', Prestations.refreshAfterEdit());
+
+  },
+
+  refreshAfterEdit : function() {
+    if (window.refreshMouvements) {
+      refreshMouvements();
     }
   }
 };
