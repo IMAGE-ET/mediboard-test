@@ -59,4 +59,3 @@ $salle_n1->load($salle_1);
 $salle_n2 = new CSalle();
 $salle_n2->load($salle_2);
 CAppUI::stepAjax("dPplanningOp-msg-succeed_switchin_salle1%s_salle2%s", UI_MSG_OK, $salle_n1->nom, $salle_n2->nom);
-return true;

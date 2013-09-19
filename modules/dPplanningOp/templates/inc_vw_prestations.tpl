@@ -1,4 +1,6 @@
-<script type="text/javascript">
+{{mb_default var=editRights value=0}}
+
+<script>
   uncheckPrestation = function(elts) {
     elts.each(function(elt) {
       elt.checked = "";
@@ -30,7 +32,6 @@
     $A(input.form.elements[name]).each(function(elt) {
       if (elt.value == input.value) {
         elt.checked = "checked";
-        return;
       }
     });
   };
@@ -83,44 +84,44 @@
         {{/foreach}}
         {{if $context == "all"}}
           <th>
-            <div>
-              <input type="hidden" name="date" class="date" value="{{$today}}"/>
-              <input type="text" class="autocomplete" name="prestation_ponctuelle_view"/>
-              <div class="autocomplete" id="prestation_autocomplete" style="display: none; color: #000; text-align: left;"></div>
-            </div>
-            <script type="text/javascript">
-              Main.add(function() {
-                var form = getForm("edit_prestations");
-                var url = new Url("system", "httpreq_field_autocomplete");
-                url.addParam("class","CItemPrestation");
-                url.addParam("field", "nom");
-                url.addParam("limit", 30);
-                url.addParam("view_field", "name");
-                url.addParam("show_view", true);
-                url.addParam("input_field", "prestation_ponctuelle_view");
-                url.addParam("where[object_class]", "CPrestationPonctuelle");
-                url.autoComplete(form.prestation_ponctuelle_view, "prestation_autocomplete", {
-                  minChars: 3,
-                  method: "get",
-                  select: "view",
-                  dropdown: true,
-                  afterUpdateElement: function(field,selected){
-                    var item_prestation_id = selected.id.split("-").last();
-                    var form_prestation = getForm("add_prestation_ponctuelle");
-                    $V(form_prestation.item_prestation_id, item_prestation_id);
-                    $V(form_prestation.date, $V(form.date));
-                    form_prestation.onsubmit();
-                  }
+              {{if $editRights}}
+                <input type="hidden" name="date" class="date" value="{{$today}}"/>
+                <input type="text" class="autocomplete" name="prestation_ponctuelle_view"/>
+                <div class="autocomplete" id="prestation_autocomplete" style="display: none; color: #000; text-align: left;"></div>
+              {{/if}}
+              <script>
+                Main.add(function() {
+                  var form = getForm("edit_prestations");
+                  var url = new Url("system", "httpreq_field_autocomplete");
+                  url.addParam("class","CItemPrestation");
+                  url.addParam("field", "nom");
+                  url.addParam("limit", 30);
+                  url.addParam("view_field", "name");
+                  url.addParam("show_view", true);
+                  url.addParam("input_field", "prestation_ponctuelle_view");
+                  url.addParam("where[object_class]", "CPrestationPonctuelle");
+                  url.autoComplete(form.prestation_ponctuelle_view, "prestation_autocomplete", {
+                    minChars: 3,
+                    method: "get",
+                    select: "view",
+                    dropdown: true,
+                    afterUpdateElement: function(field,selected){
+                      var item_prestation_id = selected.id.split("-").last();
+                      var form_prestation = getForm("add_prestation_ponctuelle");
+                      $V(form_prestation.item_prestation_id, item_prestation_id);
+                      $V(form_prestation.date, $V(form.date));
+                      form_prestation.onsubmit();
+                    }
+                  });
+                  var dates = {
+                    limit: {
+                      start: "{{$sejour->entree}}",
+                      stop:  "{{$sejour->sortie}}"
+                    }
+                  };
+                  new Calendar.regField(form.date, dates);
                 });
-                var dates = {
-                  limit: {
-                    start: "{{$sejour->entree}}",
-                    stop:  "{{$sejour->sortie}}"
-                  }
-                };
-                new Calendar.regField(form.date, dates);
-              });
-            </script>
+              </script>
           </th>
         {{/if}}
       </tr>
@@ -137,7 +138,9 @@
             {{/if}}">
 
             <span>
-              <button type="button" class="{{if array_key_exists($_date, $date_modified)}}edit{{else}}add{{/if}} notext" onclick="openModal('edit_{{$_date}}');"></button>
+              {{if $editRights}}
+                <button type="button" class="{{if array_key_exists($_date, $date_modified)}}edit{{else}}add{{/if}} notext" onclick="openModal('edit_{{$_date}}');"></button>
+              {{/if}}
               <strong>{{$_date|date_format:"%d/%m"}} {{$day}}</strong>
             </span>
             

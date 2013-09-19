@@ -26,6 +26,9 @@ foreach ($prestations_j as $_prestation) {
 $sejour = new CSejour;
 $sejour->load($sejour_id);
 
+//droits d'édition
+$editRights = CModule::getCanDo("dPhospi")->edit;
+
 $duree = strtotime($sejour->sortie) - strtotime($sejour->entree);
 $affectations = $sejour->loadRefsAffectations();
 
@@ -183,5 +186,6 @@ $smarty->assign("liaisons_p"   , $liaisons_p);
 $smarty->assign("liaisons_j"   , $liaisons_j);
 $smarty->assign("date_modified", $date_modif);
 $smarty->assign("context"      , $context);
+$smarty->assign("editRights"   , $editRights);
 $smarty->assign("bank_holidays", CMbDate::getHolidays(CMbDT::date()));
 $smarty->display("inc_vw_prestations.tpl");
