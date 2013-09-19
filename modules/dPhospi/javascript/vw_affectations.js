@@ -1,14 +1,14 @@
 flipChambre = function(chambre_id) {
   Element.classNames("chambre-" + chambre_id).flip("chambrecollapse", "chambreexpand");
-}
+};
 
 flipSejour = function(sejour_id) {
   Element.classNames("sejour_" + sejour_id).flip("sejourcollapse", "sejourexpand");
-}
+};
 
 flipAffectationCouloir = function(affectation_id) {
   Element.classNames("affectation_" + affectation_id).flip("sejourcollapse", "sejourexpand");
-}
+};
 
 var selected_hospitalisation = null;
 var selected_hospi = false;
@@ -20,7 +20,7 @@ selectHospitalisation = function(sejour_id) {
   selected_hospitalisation = sejour_id;
   selected_hospi = true;
   submitAffectation();
-}
+};
 
 var selected_lit = null;
 selectLit = function(lit_id) {
@@ -30,7 +30,7 @@ selectLit = function(lit_id) {
   }
   selected_lit = lit_id;
   submitAffectation();
-}
+};
 
 var selected_affectation = null;
 selectAffectation = function(affectation_id) {
@@ -41,18 +41,15 @@ selectAffectation = function(affectation_id) {
   }
   selected_affectation = affectation_id;
   submitAffectation();
-}
+};
 
 submitAffectation = function() {
   if (selected_lit) {
     // Séjour
     if (selected_hospi) {
-      if(selected_hospitalisation){
-        var oForm = getForm("addAffectationsejour_" + selected_hospitalisation);
-      }
-      else{
-        var oForm = getForm("addAffectationsejour");
-      }
+      var oForm = selected_hospitalisation ?
+        getForm("addAffectationsejour_" + selected_hospitalisation) :
+        getForm("addAffectationsejour") ;
       oForm.lit_id.value = selected_lit;
 
       return onSubmitFormAjax(oForm, reloadTableau);
@@ -64,7 +61,8 @@ submitAffectation = function() {
       return onSubmitFormAjax(form, reloadTableau);
     }
   }
-}
+  return false;
+};
 
 Droppables.addLit = function(lit_id) {
   Droppables.add("lit-" + lit_id, { 
@@ -83,13 +81,13 @@ DragDropSejour = function(sejour_id, lit_id) {
   var oForm = getForm("addAffectation" + sejour_id);
   oForm.lit_id.value = lit_id;
   return onSubmitFormAjax(oForm, {onComplete: reloadTableau});
-}
+};
 
 submitAffectationSplit = function(oForm) {
   oForm._new_lit_id.value = selected_lit;
   if (!selected_lit) {
     alert("Veuillez sélectionner un nouveau lit et revalider la date");
-    return;
+    return false;
   }
   
   if (oForm._date_split.value <= oForm.entree.value || 
@@ -98,10 +96,10 @@ submitAffectationSplit = function(oForm) {
     msg += "\n- la date d'entrée: " + oForm.entree.value;
     msg += "\n- la date de sortie: " + oForm.sortie.value;
     alert(msg);
-    return;
+    return false;
   }
   return onSubmitFormAjax(oForm, {onComplete: reloadTableau});
-}
+};
 
 Calendar.setupAffectation = function(affectation_id, options) {
   options = Object.extend({
@@ -152,19 +150,19 @@ Calendar.setupAffectation = function(affectation_id, options) {
 popPlanning = function() {
   var url = new Url("dPhospi", "vw_affectations");
   url.popup(700, 550, "Planning");
-}
+};
 
 showRapport = function(date) {
   var url = new Url("dPhospi", "vw_rapport");
   url.addParam("date", date);
   url.popup(800, 600, "Rapport");
-}
+};
 
 showAlerte = function(sType_admission) {
   var url = new Url("dPhospi", "vw_etat_semaine");
   url.addParam("type_admission", sType_admission);
   url.popup(500, 250, "Alerte");
-}
+};
 
 toggleService = function(trigger, mode) {
   var cookie = new CookieJar(),
@@ -180,7 +178,7 @@ toggleService = function(trigger, mode) {
   
   $(container_id).setVisible(trigger.checked);
   cookie.setValue("fullService", container_id, trigger.checked);
-}
+};
 
 ObjectTooltip.modes.timeHospi = {
   module: "dPplanningOp",
@@ -203,7 +201,7 @@ printTableau = function() {
   url.addParam("date", $V(oForm.date));
   url.addParam("mode", $V(oForm.mode));
   url.popup(850, 600, "printAffService");
-}
+};
 
 reloadTableau = function() {
   $("hospitalisation").checked = false;
@@ -228,4 +226,4 @@ reloadTableau = function() {
   url.addElement(oForm.mode);
   url.addElement(form.prestation_id);
   url.requestUpdate("tableauAffectations");
-}
+};
