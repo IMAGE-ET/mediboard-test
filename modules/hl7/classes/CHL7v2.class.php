@@ -37,6 +37,9 @@ abstract class CHL7v2 {
 
     // Hprim 2.1
     "H2.1",
+
+    // Hprim 2.2
+    "H2.2"
   );
 
   static $schemas = array();
