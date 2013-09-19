@@ -89,8 +89,14 @@ editEvenementPerop = function(guid, operation_id, datetime) {
   url.addParam("operation_id", operation_id);
   url.addParam("datetime", datetime);
   url.requestModal(600, 400);
-  
+
   return false;
+}
+
+printPartogramme = function(operation_id) {
+  var url = new Url("dPsalleOp", "vw_partogramme");
+  url.addParam("operation_id", operation_id);
+  url.pop(750, 700, "Partogramme");
 }
 </script>
 
@@ -195,6 +201,8 @@ editEvenementPerop = function(guid, operation_id, datetime) {
 <button class="new" onclick="createObservationResultSet('{{$interv->_guid}}', '{{$pack->_id}}')">
   {{tr}}CObservationResultSet-title-create{{/tr}}
 </button>
+
+<button class="print" onclick="printPartogramme({{$interv->_id}})">Partogramme</button>
 
 <div style="position: relative;" class="supervision">
   {{foreach from=$graphs item=_graph key=i}}

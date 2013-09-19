@@ -368,4 +368,154 @@ class CObservationResultSet extends CMbObject {
 
     return array($list, $grid, $graphs, $labels);
   }
+
+  static function buildEventsGrid(COperation $interv, $time_debut_op_iso, $time_fin_op_iso, $time_min , $time_max) {
+    // ---------------------------------------------------
+    // Gestes, Medicaments, Perfusions peranesth
+    $evenements = array(
+      "CAnesthPerop" => array(),
+      "CAffectationPersonnel" => array(),
+    );
+
+    // Personnel de l'interv
+    $interv->loadAffectationsPersonnel();
+    foreach ($interv->_ref_affectations_personnel as $affectations) {
+      foreach ($affectations as $_affectation) {
+        if (!$_affectation->debut || !$_affectation->fin) {
+          continue;
+        }
+
+        $evenements["CAffectationPersonnel"][$_affectation->_id] = array(
+          "icon" => null,
+          "label" => $_affectation->_ref_personnel,
+          "unit"  => null,
+          "alert" => false,
+          "datetime" => $_affectation->debut,
+          "position" => CSupervisionTimedEntity::getPosition($_affectation->debut, $time_min, $time_max),
+          "width" => CSupervisionTimedEntity::getWidth($_affectation->debut, $_affectation->fin, $time_min, $time_max),
+          "object" => $_affectation,
+          "editable" => false,
+        );
+      }
+    }
+
+    // Personnel de la plage
+    $plageop = $interv->_ref_plageop;
+    $plageop->loadAffectationsPersonnel();
+    foreach ($plageop->_ref_affectations_personnel as $affectations) {
+      foreach ($affectations as $_affectation) {
+        if (!$_affectation->debut || !$_affectation->fin) {
+          continue;
+        }
+
+        $evenements["CAffectationPersonnel"][$_affectation->_id] = array(
+          "icon" => null,
+          "label" => $_affectation->_ref_personnel,
+          "unit"  => null,
+          "alert" => false,
+          "datetime" => $_affectation->debut,
+          "position" => CSupervisionTimedEntity::getPosition($_affectation->debut, $time_min, $time_max),
+          "width" => CSupervisionTimedEntity::getWidth($_affectation->debut, $_affectation->fin, $time_min, $time_max),
+          "object" => $_affectation,
+          "editable" => false,
+        );
+      }
+    }
+
+    // Gestes perop
+    $interv->loadRefsAnesthPerops();
+    foreach ($interv->_ref_anesth_perops as $_perop) {
+      $evenements["CAnesthPerop"][$_perop->_id] = array(
+        "icon" => null,
+        "label" => $_perop->libelle,
+        "unit"  => null,
+        "alert" => $_perop->incident,
+        "datetime" => $_perop->datetime,
+        "position" => CSupervisionTimedEntity::getPosition($_perop->datetime, $time_min, $time_max),
+        "object" => $_perop,
+        "editable" => true,
+      );
+    }
+
+    // Lignes de medicaments et d'elements
+    $sejour = $interv->loadRefSejour();
+    $prescription = $sejour->loadRefPrescriptionSejour();
+
+    if ($prescription->_id) {
+      $lines = $prescription->loadPeropLines(false);
+
+      foreach ($lines as $_line_array) {
+        $_line = $_line_array["object"];
+
+        $_view = "";
+
+        if ($_line instanceof CPrescriptionLineElement) {
+          $_view = $_line->_view;
+        }
+        elseif ($_line instanceof CPrescriptionLineMix) {
+          foreach ($_line->_ref_lines as $_mix_item) {
+            $_view .= "$_mix_item->_ucd_view / ";
+          }
+        }
+        else {
+          $_view = $_line->_ucd_view;
+        }
+
+        $key = "CPrescription._chapitres.$_line->_chapitre";
+        if (!isset($evenements[$key])) {
+          $evenements[$key] = array();
+        }
+
+        /*
+        foreach($_line_array["planifications"] as $_planifs) {
+          foreach($_planifs as $_planif) {
+            if ($_planif->_ref_object instanceof CPrescriptionLineMixItem) {
+              $quantite = $_planif->_ref_object->_quantite_administration;
+            }
+            else {
+              $quantite = $_planif->_ref_prise->_quantite_administrable;
+            }
+
+            if ($_line instanceof CPrescriptionLineMedicament || $_line instanceof CPrescriptionLineMix) {
+              $unite = $_planif->_ref_object->_ref_produit->libelle_unite_presentation;
+            }
+            else {
+              $unite = $_line->_unite_prise;
+            }
+
+            $evenements[$_line->_class][] = array(
+              "label" => "$quantite $unite",
+              "alert" => false,
+              "datetime" => $_planif->dateTime,
+              "position" => 100 * (CMbDate::toUTCTimestamp($_planif->dateTime) - $time_min) / ($time_max - $time_min),
+            );
+          }
+        }*/
+
+        foreach ($_line_array["administrations"] as $_adms) {
+          $_adms = CModelObject::naturalSort($_adms, array("dateTime"));
+
+          foreach ($_adms as $_adm) {
+            $unite = "";
+            if ($_line instanceof CPrescriptionLineMedicament || $_line instanceof CPrescriptionLineMix) {
+              $unite = $_adm->_ref_object->_ref_produit->libelle_unite_presentation;
+            }
+
+            $evenements[$key][] = array(
+              "icon"  => $_line->_chapitre,
+              "label" => $_view,
+              "unit"  => "$_adm->quantite $unite",
+              "alert" => false,
+              "datetime" => $_adm->dateTime,
+              "position" => CSupervisionTimedEntity::getPosition($_adm->dateTime, $time_min, $time_max),
+              "object"   => $_line,
+              "editable" => false,
+            );
+          }
+        }
+      }
+    }
+
+    return $evenements;
+  }
 }

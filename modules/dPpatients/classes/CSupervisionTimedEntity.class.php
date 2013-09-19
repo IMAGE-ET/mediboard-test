@@ -66,7 +66,12 @@ class CSupervisionTimedEntity extends CMbObject {
     $this->_view = $this->title;
   }
 
-  function getPosition($datetime, $time_min, $time_max){
+  static function getPosition($datetime, $time_min, $time_max){
     return 100 * (CMbDate::toUTCTimestamp($datetime) - $time_min) / ($time_max - $time_min);
+  }
+
+  static function getWidth($datetime_start, $datetime_end, $time_min, $time_max){
+    $delta = strtotime($datetime_end) - strtotime($datetime_start);
+    return 100 * ($delta*1000) / ($time_max - $time_min);
   }
 }
