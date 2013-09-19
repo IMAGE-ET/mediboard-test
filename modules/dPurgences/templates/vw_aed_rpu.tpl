@@ -275,10 +275,10 @@
   <input type="hidden" name="m" value="dPurgences" />
   <input type="hidden" name="dosql" value="do_rpu_aed" />
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
+  {{mb_key object=$rpu}}
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
   <input type="hidden" name="_annule" value="{{$rpu->_annule|default:"0"}}" />
-  
+
   <input type="hidden" name="_bind_sejour" value="1" />
   <table class="form">
     <colgroup>
@@ -559,6 +559,14 @@
                                     resetDependFields: 0"}}
         </td>
       </tr>
+      {{if !$rpu->_id && "CAppUI::conf"|static_call:"dPurgences CRPU impose_motif":"CGroups-$g"}}
+        <tr>
+          <th>{{mb_label object=$rpu field="motif"}}</th>
+          <td>{{mb_field object=$rpu field="motif" class="autocomplete" form="editRPU"
+          aidesaisie="validateOnBlur: 0, resetSearchField: 0,resetDependFields: 0"}}
+          <td colspan="2"></td>
+        </tr>
+      {{/if}}
     {{else}}
       <th>{{mb_label object=$rpu field="motif_entree"}}</th>
       <td>
@@ -611,16 +619,16 @@
       </td>
     </tr>
     {{if !$rpu->_id}}
-    <tr>
-      <td colspan="4">
-        <fieldSet>
-          <legend>Infos patient</legend>
-          <div class="text" id="infoPat">
-            <div class="empty">Aucun patient sélectionné</div>
-          </div>
-        </fieldSet>
-      </td>
-    </tr>
+      <tr>
+        <td colspan="4">
+          <fieldSet>
+            <legend>Infos patient</legend>
+            <div class="text" id="infoPat">
+              <div class="empty">Aucun patient sélectionné</div>
+            </div>
+          </fieldSet>
+        </td>
+      </tr>
     {{/if}}
     
   </table>
@@ -637,10 +645,10 @@
     
       <tr>
         <td style="width: 60%">
-          {{include file="inc_vw_rpu_attente.tpl"}}
+          {{mb_include module="urgences" template="inc_vw_rpu_attente"}}
         </td>
         <td class="button {{if $sejour->type != "urg"}}arretee{{/if}}">
-          {{include file="inc_pec_praticien.tpl"}}
+          {{mb_include module="urgences" template="inc_pec_praticien"}}
         </td>
       </tr>
     </table>

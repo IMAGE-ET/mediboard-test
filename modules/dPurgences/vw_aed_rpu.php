@@ -19,8 +19,9 @@ $listResponsables = CAppUI::conf("dPurgences only_prat_responsable") ?
 
 $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 
-$rpu    = new CRPU;
+$rpu    = new CRPU();
 $rpu_id = CValue::getOrSession("rpu_id");
+
 if ($rpu_id && !$rpu->load($rpu_id)) {
   global $m, $tab;
   CAppUI::setMsg("Ce RPU n'est pas ou plus disponible", UI_MSG_WARNING);
@@ -30,7 +31,7 @@ $rpu->loadRefBox()->loadRefChambre();
 
 // Création d'un RPU pour un séjour existant
 if ($sejour_id = CValue::get("sejour_id")) {
-  $rpu = new CRPU;
+  $rpu = new CRPU();
   $rpu->sejour_id = $sejour_id;
   $rpu->loadMatchingObject();
   $rpu->updateFormFields();
@@ -63,13 +64,6 @@ else {
   $patient              = new CPatient;
   $praticien            = new CMediusers;
 }
-
-// Gestion des traitements, antecedents, diagnostics
-$traitement = new CTraitement();
-$traitement->loadAides($user->_id);
-
-$antecedent = new CAntecedent();
-$antecedent->loadAides($user->_id);
 
 // Contraintes sur le mode d'entree / provenance
 $contrainteProvenance[6] = array("", 1, 2, 3, 4);
@@ -149,8 +143,6 @@ $smarty->assign("services_type"       , $services_type);
 $smarty->assign("contrainteProvenance", $contrainteProvenance);
 $smarty->assign("userSel"             , $user);
 $smarty->assign("today"               , CMbDT::date());
-$smarty->assign("traitement"          , $traitement);
-$smarty->assign("antecedent"          , $antecedent);
 $smarty->assign("rpu"                 , $rpu);
 $smarty->assign("sejour"              , $sejour);
 $smarty->assign("patient"             , $patient);
