@@ -138,8 +138,8 @@ if (CModule::getActive("dPprescription")) {
   if (count($prescription->_ref_lines_med_comments["med"])) {
     foreach ($prescription->_ref_lines_med_comments["med"] as $_atc => $lines_by_type) {
       if (!isset($atc_classes[$_atc])) {
-        $classe_atc = new CBcbClasseATC();
-        $atc_classes[$_atc] = $classe_atc->getLibelle($_atc);
+        $medicament_produit = new CMedicamentProduit();
+        $atc_classes[$_atc] = $medicament_produit->getLibelleATC($_atc);
       }
       foreach ($lines_by_type as $med_id => $_line_med) {
         $list_lines["medicament"][$_line_med->_id] = $_line_med;
