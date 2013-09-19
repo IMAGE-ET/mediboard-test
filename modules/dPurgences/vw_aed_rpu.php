@@ -151,6 +151,8 @@ $smarty->assign("listPrats"           , $listPrats);
 $smarty->assign("praticien"           , $praticien);
 $smarty->assign("orumip_active"       , $orumip_active);
 $smarty->assign("nb_printers"         , $nb_printers);
+$smarty->assign("traitement"          , new CTraitement());
+$smarty->assign("antecedent"          , new CAntecedent());
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isImedsInstalled"    , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("list_mode_entree"    , $list_mode_entree);
