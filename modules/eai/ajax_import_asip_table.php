@@ -27,8 +27,8 @@ foreach ($files as $_file) {
   $name = basename($_file);
   $name = substr($name, strpos($name, "_")+1);
   $table = substr($name, 0, strrpos($name, "."));
-  if ($ds && $ds->loadTable($table)) {
-    CAppUI::stepAjax("Import impossible - Table déjà présente", UI_MSG_ERROR);
+  if (!$ds) {
+    CAppUI::stepAjax("Import impossible - Source non présente", UI_MSG_ERROR);
     continue;
   }
   $ds->query("CREATE TABLE IF NOT EXISTS `$table` (
@@ -38,6 +38,8 @@ foreach ($files as $_file) {
                 `libelle` VARCHAR (255) NOT NULL,
                 INDEX (`table_id`)
               )/*! ENGINE=MyISAM */;");
+
+  $ds->query("DELETE FROM `$table`");
 
   $csv = new CCSVFile($_file);
   $csv->jumpLine(3);
