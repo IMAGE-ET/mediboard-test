@@ -369,6 +369,7 @@ class CMediusers extends CPerson {
     $backProps["regles_sectorisation_mediuser"]   = "CRegleSectorisation praticien_id";
     $backProps["retrocession"]                    = "CRetrocession praticien_id";
     $backProps["user_debiteur"]                   = "CDebiteurOX user_id";
+    $backProps["user_bioserveur"]                 = "CUserBioserveur user_id";
     return $backProps;
   }
 
