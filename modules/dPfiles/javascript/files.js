@@ -4,7 +4,7 @@ var file_deleted = null;
  popFile = function(objectClass, objectId, elementClass, elementId, sfn){
   var url = new Url;
   url.ViewFilePopup(objectClass, objectId, elementClass, elementId, sfn);
-}
+ };
 
 ZoomAjax = function(objectClass, objectId, elementClass, elementId, sfn){
   file_preview = elementId;
@@ -17,7 +17,7 @@ ZoomAjax = function(objectClass, objectId, elementClass, elementId, sfn){
     url.addParam('sfn', sfn);
   }
   url.requestUpdate('bigView');
-}
+};
 
 setObject = function(oObject){
   var oForm = getForm('FrmClass');
@@ -33,7 +33,7 @@ setObject = function(oObject){
   if(window.saveObjectInfos){
     saveObjectInfos(oObject);
   }
-}
+};
 
 reloadListFileDossier = function(sAction){
   var oForm = getForm('FrmClass');
@@ -41,7 +41,7 @@ reloadListFileDossier = function(sAction){
   var sSelKey   = oForm.selKey.value;
   
   if($('tab-'+sSelClass+sSelKey)){
-    return false;
+    return;
   }
   
   var url = new Url('files', 'httpreq_vw_listfiles');
@@ -50,19 +50,19 @@ reloadListFileDossier = function(sAction){
   url.addParam('typeVue', oForm.typeVue.value);
   url.addParam('accordDossier', 1);
   url.requestUpdate('File'+sSelClass+sSelKey);
-}
+};
 
 reloadAfterUploadFile = function(category_id){
   reloadListFile('add', category_id);
-}
+};
 
 reloadAfterMoveFile = function(category_id){
   reloadListFile('move', category_id);
-}
+};
 
 reloadAfterDeleteFile = function(category_id){
   reloadListFile('delete', category_id);
-}
+};
 
 reloadListFile = function(sAction, category_id){
   if(sAction == 'delete' && file_preview == file_deleted){
@@ -86,12 +86,12 @@ reloadListFile = function(sAction, category_id){
   else {
     url.requestUpdate('listView');
   }
-}
+};
 
 submitFileChangt = function(oForm){
   file_deleted = null;
   onSubmitFormAjax(oForm, reloadAfterMoveFile);
-}
+};
 
 if (window.Document) {
   Document.refreshList = reloadAfterUploadFile;
@@ -99,11 +99,69 @@ if (window.Document) {
 
 showCancelled = function(button) {
   $('listView').select('div.file_cancelled').invoke('toggle');
-}
+};
 
 cancelFile = function(form, category_id) {
   if (confirm($T('CFile-comfirm_cancel'))) {
     onSubmitFormAjax(form, reloadAfterDeleteFile.curry(category_id));
   }
   return false;
-}
+};
+
+// used for move a file
+File_Attach = {
+  object_class  : null,
+  object_id     : null,
+  object_guid   : null,
+  file_id       : null,
+  file_class    : null,
+  file_guid     : null,
+  patient_id    : null,
+  is_valid      : false,
+  button_Attach : null,
+
+  listRefsForPatient : function(patient_id, target_dom_id) {
+    this.patient_id = patient_id;
+    var url = new Url("dPpatients", "ajax_list_refs_to_attach_select");
+    url.addParam("patient_id", patient_id);
+    url.requestUpdate(target_dom_id);
+  },
+
+
+  setFile: function (file_id, file_class) {
+    this.file_id = file_id;
+    this.file_class = file_class;
+    this.file_guid = this.file_class+"-"+this.file_id;
+    this.checkLink();
+  },
+
+  setObject: function(object_class, object_id) {
+    this.object_class = object_class;
+    this.object_id = object_id;
+    this.object_guid = this.object_class+"-"+this.object_id;
+    this.checkLink();
+  },
+
+  doMovefile : function(file_id, file_class, destination_id, destination_class) {
+    if (file_id && file_class) {
+      this.setFile(file_id, file_class);
+    }
+    if (destination_id && destination_class) {
+      this.setObject(destination_class, destination_id);
+    }
+    var url = new Url("files", "controllers/do_move_file");
+    url.addParam("object_id", this.file_id);
+    url.addParam("object_class", this.file_class);
+    url.addParam("destination_guid", this.object_guid);
+    url.requestUpdate("systemMsg", Control.Modal.close);
+  },
+
+  checkLink : function() {
+    if (this.object_class && this.object_id && this.file_id) {
+      this.is_valid = true;
+      if (this.button_Attach) {
+        $(this.button_Attach).show();
+      }
+    }
+  }
+};
