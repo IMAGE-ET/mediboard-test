@@ -60,16 +60,16 @@ Main.add(function(){
             <td>{{mb_field object=$type field=coding_system}}</td>
           </tr>
           <tr>
+            <th>{{mb_label object=$type field=label}}</th>
+            <td>{{mb_field object=$type field=label}}</td>
+          </tr>
+          <tr>
             <th>{{mb_label object=$type field=code}}</th>
             <td>{{mb_field object=$type field=code}}</td>
           </tr>
           <tr>
             <th>{{mb_label object=$type field=datatype}}</th>
             <td>{{mb_field object=$type field=datatype}}</td>
-          </tr>
-          <tr>
-            <th>{{mb_label object=$type field=label}}</th>
-            <td>{{mb_field object=$type field=label}}</td>
           </tr>
           <tr>
             <th>{{mb_label object=$type field=desc}}</th>
@@ -137,12 +137,12 @@ Main.add(function(){
             <td>{{mb_field object=$unit field=coding_system}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$unit field=code}}</th>
-            <td>{{mb_field object=$unit field=code}}</td>
-          </tr>
-          <tr>
             <th>{{mb_label object=$unit field=label}}</th>
             <td>{{mb_field object=$unit field=label}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$unit field=code}}</th>
+            <td>{{mb_field object=$unit field=code}}</td>
           </tr>
           <tr>
             <th>{{mb_label object=$unit field=desc}}</th>

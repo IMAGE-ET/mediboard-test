@@ -511,4 +511,45 @@ abstract class CMbPath {
 
     return $zip->close();
   }
+
+  /**
+   * Build recursive tree
+   *
+   * @param string $dir Directory to get the tree of
+   *
+   * @return array
+   */
+  static function getTree($dir) {
+    $tree = array();
+
+    self::_getTree($dir, $tree);
+
+    return $tree;
+  }
+
+  /**
+   * Private tree builder
+   *
+   * @param string $dir   Directory to parse
+   * @param array  &$tree Tree to fill
+   *
+   * @return void
+   */
+  private static function _getTree($dir, &$tree) {
+    /** @var SplFileInfo[] $path */
+    $path = new RecursiveDirectoryIterator($dir);
+
+    foreach ($path as $_subpath) {
+      $_realpath = str_replace("\\", "/", $_subpath->getPathname());
+
+      if ($_subpath->isDir()) {
+        $subtree = array();
+        self::_getTree($_realpath, $subtree);
+        $tree[$_realpath] = $subtree;
+      }
+      else {
+        $tree[$_realpath] = basename($_realpath);
+      }
+    }
+  }
 }

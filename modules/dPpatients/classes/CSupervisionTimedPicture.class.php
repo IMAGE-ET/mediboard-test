@@ -13,6 +13,8 @@
  * A supervision timed data representation
  */
 class CSupervisionTimedPicture extends CSupervisionTimedEntity {
+  const PICTURES_ROOT = "modules/dPpatients/images/supervision";
+
   public $supervision_timed_picture_id;
 
   public $value_type_id;

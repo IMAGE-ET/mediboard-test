@@ -5,6 +5,14 @@
       item.addUniqueClassName("selected");
     }
   });
+
+  chosePredefinedPicture = function(timed_picture_id){
+    var url = new Url("patients", "ajax_vw_supervision_pictures");
+    url.addParam("timed_picture_id", timed_picture_id);
+    url.requestModal(400, 400, {
+      onClose: SupervisionGraph.editTimedPicture.curry({{$picture->_id}})
+    });
+  }
 </script>
 
 <form name="edit-supervision-graph-timed-picture" method="post" action="?m=dPpatients" onsubmit="return onSubmitFormAjax(this)">
@@ -48,9 +56,15 @@
   </table>
 </form>
 
+{{if $picture->_id}}
 <table class="main tbl">
   <tr>
     <th class="category">Images</th>
+  </tr>
+  <tr>
+    <td>
+      <button onclick="chosePredefinedPicture({{$picture->_id}})" class="new">Images prédéfinies</button>
+    </td>
   </tr>
   <tr id="files_{{$picture->_guid}}">
     <script type="text/javascript">
@@ -58,3 +72,4 @@
     </script>
   </tr>
 </table>
+{{/if}}

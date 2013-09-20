@@ -18,6 +18,9 @@ $picture->load($supervision_timed_picture_id);
 $picture->loadRefsNotes();
 $picture->loadRefsFiles();
 
+$tree = CMbPath::getTree("modules/dPpatients/images/supervision");
+
 $smarty = new CSmartyDP();
 $smarty->assign("picture",  $picture);
+$smarty->assign("tree",  $tree);
 $smarty->display("inc_edit_supervision_timed_picture.tpl");

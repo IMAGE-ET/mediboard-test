@@ -16,12 +16,22 @@ $type_id = CValue::getOrSession("value_type_id");
 
 $unit = new CObservationValueUnit();
 $unit->load($unit_id);
-$unit->loadRefsNotes();
+if (!$unit->_id) {
+  $unit->coding_system = "MB";
+}
+else {
+  $unit->loadRefsNotes();
+}
 $units = $unit->loadList(null, "coding_system, code");
 
 $type = new CObservationValueType();
 $type->load($type_id);
-$type->loadRefsNotes();
+if (!$type->_id) {
+  $type->coding_system = "MB";
+}
+else {
+  $type->loadRefsNotes();
+}
 $types = $type->loadList(null, "coding_system, code");
 
 // Création du template
