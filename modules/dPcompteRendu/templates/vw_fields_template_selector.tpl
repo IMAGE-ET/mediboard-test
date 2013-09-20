@@ -11,7 +11,7 @@
 
 {{mb_script module="compteRendu" script="field_selector" ajax=true}}
 
-<form>
+<form method="get">
   <label><input type="text" id="searchInput">
   <button type="submit" onclick="FieldSelector.searchField($V('searchInput'), '{{$class}}');return false;" class="search" >{{tr}}Search{{/tr}}</button>
   </label>
