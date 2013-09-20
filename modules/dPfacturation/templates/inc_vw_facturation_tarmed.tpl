@@ -84,7 +84,9 @@
       </form>
       {{if $facture->_class == "CFactureEtablissement" && $facture->_ref_sejours|@count}}
         {{assign var="last_op" value=$facture->_ref_last_sejour->_ref_last_operation}}
-        <button type="button" class="edit" onclick="viewInterv('{{$last_op->_id}}', '{{$last_op->plageop_id}}');" style="float:right;"> Infos interv. </button>
+        {{if $facture->numero == 1}}
+          <button type="button" class="edit" onclick="viewInterv('{{$last_op->_id}}', '{{$last_op->plageop_id}}');" style="float:right;"> Infos interv. </button>
+        {{/if}}
         <button type="button" class="new" onclick="gestionFacture();">Gestion des factures</button>
       {{/if}}
     </td>
@@ -105,7 +107,9 @@
     <td colspan="8">
       {{assign var="last_op" value=$facture->_ref_last_sejour->_ref_last_operation}}
       <button type="button" class="edit" onclick="dossierBloc('{{$last_op->_id}}');"> Dossier bloc </button>
-      <button type="button" class="new" onclick="viewInterv('{{$last_op->_id}}', '{{$last_op->plageop_id}}');"> Infos interv. </button>
+      {{if $facture->numero == 1}}
+        <button type="button" class="new" onclick="viewInterv('{{$last_op->_id}}', '{{$last_op->plageop_id}}');"> Infos interv. </button>
+      {{/if}}
       <button type="button" class="new" onclick="gestionFacture();">Gestion des factures</button>
     </td>
   </tr>
