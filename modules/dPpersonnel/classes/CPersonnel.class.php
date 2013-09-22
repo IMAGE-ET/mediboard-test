@@ -84,11 +84,14 @@ class CPersonnel extends CMbObject {
   
   /**
    * Charge le personnel pour l'établissement courant
-   * @param string $emplacement filter
-   * @param bool $actif
-   * @return array[CPersonnel] 
+   *
+   * @param string $emplacement Emplacement du personnel
+   * @param bool   $actif       Seulement les actifs
+   * @param bool   $groupby     Grouper par utilisateur
+   *
+   * @return CPersonnel[]
    */
-  static function loadListPers($emplacement, $actif = true, $groupByUser = false){
+  static function loadListPers($emplacement, $actif = true, $groupby = false){
     $personnel = new CPersonnel();
     
     $where = array();
@@ -107,7 +110,7 @@ class CPersonnel extends CMbObject {
     
     $ljoin["users"] = "personnel.user_id = users.user_id";
     $order = "users.user_last_name";
-    $group = $groupByUser ? "personnel.user_id" : null;
+    $group = $groupby ? "personnel.user_id" : null;
     
     $listPers = $personnel->loadGroupList($where, $order, null, $group, $ljoin);
     $users = CMbObject::massLoadFwdRef($listPers, "user_id");
