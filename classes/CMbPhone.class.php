@@ -58,6 +58,38 @@ class CMbPhone {
     return false;
   }
 
+  /**
+   * get the phone from guid
+   *
+   * @param string $guid        object guid
+   * @param bool   $checkmobile check for a valide mobile number
+   *
+   * @return bool|string number found or false if not found or invalid
+   */
+  static function getPhoneFromGuid($guid, $checkmobile=false) {
+    $object = CMbObject::loadFromGuid($guid);
+    $object->updateFormFields();
+
+    if ($object instanceof CPerson) {
+      $phone_number =  $object->_p_phone_number;
+      if (isset($phone_number)) {
+        if ($checkmobile && !self::checkMobileNumber($phone_number)) {
+          return false;
+        }
+        return $phone_number;
+      }
+
+      $mobile_phone_number = $object->_p_mobile_phone_number;
+      if (isset($mobile_phone_number)) {
+        if ($checkmobile && !self::checkMobileNumber($mobile_phone_number)) {
+          return false;
+        }
+        return $mobile_phone_number;
+      }
+    }
+    return false;
+  }
+
 
   /**
    * get the mobine phone of an user object
