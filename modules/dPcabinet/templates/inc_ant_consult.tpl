@@ -200,7 +200,13 @@ updateTP = function(selected){
   resetEditLineTP();
   Element.cleanWhitespace(selected);
   var dn = selected.childElements();
-  $V(oFormTP._code, dn[0].innerHTML);
+  dn = dn[0].innerHTML;
+
+  // On peut saisir un traitement personnel seulement le code CIP est valide
+  if (isNaN(parseInt(dn))) {
+    return
+  }
+  $V(oFormTP._code, dn);
   $("_libelle").insert("<button type='button' class='cancel notext' onclick='resetEditLineTP(); resetFormTP();'></button><a href=\"#nothing\" onclick=\"Prescription.showMonographyMedicament('','','"+selected.down(".code-cis").getText()+"')\">"+selected.down(".libelle").getText()+"</a>");
   $V(oFormTP.produit, '');
   $('button_submit_traitement').focus();
@@ -210,7 +216,7 @@ updateTP = function(selected){
 var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
 urlAuto.autoComplete(getForm('editLineTP').produit, "_produit_auto_complete", {
   minChars: 3,
-  updateElement: updateFieldsMedicamentTP, 
+  updateElement: updateFieldsMedicamentTP,
   callback: function(input, queryString){
     return (queryString + "&produit_max=40&only_prescriptible_sf=0");
   }
