@@ -10,12 +10,10 @@
  */
 
 CCanDo::checkRead();
+
 // Type d'affichage
 $view_sortie = CValue::postOrSession("view_sortie", "tous");
-
-// Parametre de tri
-$order_way = CValue::getOrSession("order_way", "ASC");
-$order_col = CValue::getOrSession("order_col", "_pec_transport");
+$service_id  = CValue::postOrSession("service_id");
 
 // Chargement des urgences prises en charge
 $ljoin = array();
@@ -37,6 +35,10 @@ $where[] = "sejour.entree BETWEEN '$date' AND '$date_after'
 // RPU Existants
 $where["rpu.rpu_id"] = "IS NOT NULL";
 
+if ($service_id) {
+  $where["sejour.service_id"] = "= '$service_id'";
+}
+
 switch ($view_sortie) {
   case "sortie":
     $where["sortie_reelle"] = "IS NULL";
@@ -51,16 +53,15 @@ switch ($view_sortie) {
     $where["mode_sortie"] = "= '$view_sortie'";
 }
 
-$order_col = "_pec_transport";
-$order = "consultation.heure $order_way";
-
-$sejour = new CSejour;
+$sejour = new CSejour();
 
 /** @var CSejour[] $listSejours */
-$listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
+$listSejours = $sejour->loadList($where, "consultation.heure", null, null, $ljoin);
 CMbObject::massLoadFwdRef($listSejours, "patient_id");
+$prats = CMbObject::massLoadFwdRef($listSejours, "praticien_id");
+CMbObject::massLoadFwdRef($prats, "function_id");
 
-foreach ($listSejours as &$_sejour) {
+foreach ($listSejours as $_sejour) {
   $_sejour->loadRefsFwd();
   $_sejour->loadRefRPU();
   $_sejour->loadNDA();
@@ -68,7 +69,7 @@ foreach ($listSejours as &$_sejour) {
   $_sejour->_veille = CMbDT::date($_sejour->entree) != $date;
 
   // Détail du RPU
-  $rpu =& $_sejour->_ref_rpu;
+  $rpu = $_sejour->_ref_rpu;
   $rpu->loadRefSejourMutation();
   $sejour_mutation = $rpu->_ref_sejour_mutation;
   $sejour_mutation->loadRefsAffectations();
@@ -96,7 +97,7 @@ foreach ($listSejours as &$_sejour) {
   $rpu->_ref_consult->loadRefsActes();
 
   // Détail du patient
-  $patient =& $_sejour->_ref_patient;
+  $patient = $_sejour->_ref_patient;
   $patient->loadIPP();
 }
 
@@ -123,28 +124,29 @@ $listPrats = CAppUI::$user->loadPraticiens(PERM_READ, $group->service_urgences_i
 // Si accès au module PMSI : peut modifier le diagnostic principal
 $access_pmsi = 0;
 if (CModule::exists("dPpmsi")) {
-  $module = new CModule;
+  $module = new CModule();
   $module->mod_name = "dPpmsi";
   $module->loadMatchingObject();
   $access_pmsi = $module->getPerm(PERM_EDIT);
 }
 
 // Si praticien : peut modifier le CCMU, GEMSA et diagnostic principal
-$is_praticien = CAppUI::$user->isPraticien();
+$is_praticien = CMediusers::get()->isPraticien();
 
 // Création du template
 $smarty = new CSmartyDP();
+
 $smarty->assign("contrainteDestination", $contrainteDestination);
 $smarty->assign("contrainteOrientation", $contrainteOrientation);
-$smarty->assign("services", $services);
-$smarty->assign("order_col" , $order_col);
-$smarty->assign("order_way" , $order_way);
-$smarty->assign("listSejours", $listSejours);
-$smarty->assign("view_sortie", $view_sortie);
-$smarty->assign("listPrats", $listPrats);
-$smarty->assign("date", $date);
-$smarty->assign("access_pmsi", $access_pmsi);
+$smarty->assign("services_urg", CService::loadServicesUrgence());
+$smarty->assign("services"    , $services);
+$smarty->assign("service_id"  , $service_id);
+$smarty->assign("listSejours" , $listSejours);
+$smarty->assign("view_sortie" , $view_sortie);
+$smarty->assign("listPrats"   , $listPrats);
+$smarty->assign("date"        , $date);
+$smarty->assign("access_pmsi" , $access_pmsi);
 $smarty->assign("is_praticien", $is_praticien);
-$smarty->assign("today", CMbDT::date());
+$smarty->assign("today"       , CMbDT::date());
 
 $smarty->display("vw_sortie_rpu.tpl");

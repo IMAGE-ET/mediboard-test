@@ -20,6 +20,9 @@ $order_col = CValue::getOrSession("order_col", "_pec_transport");
 // Type d'affichage main courante
 $selAffichage = CValue::postOrSession("selAffichage", CAppUI::conf("dPurgences default_view"));
 
+// Service en session pour la main courante
+$service_id = CValue::postOrSession("service_id");
+
 // Type d'affichage UHCD
 $uhcd_affichage = CValue::postOrSession("uhcd_affichage", CAppUI::conf("dPurgences default_view"));
 
@@ -29,8 +32,11 @@ $today = CMbDT::date();
 
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("services"        , CService::loadServicesUrgence());
 $smarty->assign("group"           , CGroups::loadCurrent());
 $smarty->assign("selAffichage"    , $selAffichage);
+$smarty->assign("service_id"      , $service_id);
 $smarty->assign("uhcd_affichage"  , $uhcd_affichage);
 $smarty->assign("date"            , $date);
 $smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));

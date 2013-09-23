@@ -13,78 +13,78 @@
 
 {{mb_script module=ecap script=dhe}}
 
-<script type="text/javascript">
-var refreshExecuter;
+<script>
+  var refreshExecuter;
 
-Main.add(function () {
-	Missing.refresh();
-  
-  refreshExecuter = new PeriodicalExecuter(function(){
-    getForm("changeDate").submit();
-  }, 60);
-});
+  Main.add(function() {
+    Missing.refresh();
 
-function validCotation(consutation_id) {
-  return onSubmitFormAjax(getForm('validCotation-'+consutation_id));
-}
+    refreshExecuter = new PeriodicalExecuter(function(){
+      getForm("changeDate").submit();
+    }, 60);
+  });
 
-Sortie = {
-  modal: null,
-	refresh: function(rpu_id) {
-	  var url = new Url("dPurgences", "ajax_refresh_sortie");
-	  url.addParam("rpu_id", rpu_id);
-	  url.requestUpdate('CRPU-'+rpu_id, {onComplete: function(){refreshExecuter.resume()}});
-	},
-	
-	edit: function(rpu_id) {
-	  refreshExecuter.stop();
-	  var url = new Url("dPurgences", "ajax_edit_sortie")
-    url.addParam("rpu_id", rpu_id);
-		url.requestModal(500, 300);
-    this.modal = url.modalObject;
-	},
-	
-	close: function() {
-    refreshExecuter.resume();
-	  if (this.modal) {
-		  this.modal.close();
-			this.modal = null;
-		}
-	}
-}
-
-function filterPatient(input, indicator) {
-  $$("#list-sorties tr").invoke("show");
-  indicator = $(indicator);
-  
-  var term = $V(input);
-  if (!term) return;
-  
-  if (indicator) {
-    indicator.show();
+  function validCotation(consutation_id) {
+    return onSubmitFormAjax(getForm('validCotation-'+consutation_id));
   }
-  
-  $$("#list-sorties .CPatient-view").each(function(p) {
-    if (!p.innerHTML.like(term)) {
-      p.up("tr").hide();
+
+  Sortie = {
+    modal: null,
+    refresh: function(rpu_id) {
+      var url = new Url("dPurgences", "ajax_refresh_sortie");
+      url.addParam("rpu_id", rpu_id);
+      url.requestUpdate('CRPU-'+rpu_id, {onComplete: function(){refreshExecuter.resume()}});
+    },
+
+    edit: function(rpu_id) {
+      refreshExecuter.stop();
+      var url = new Url("dPurgences", "ajax_edit_sortie")
+      url.addParam("rpu_id", rpu_id);
+      url.requestModal(500, 300);
+      this.modal = url.modalObject;
+    },
+
+    close: function() {
+      refreshExecuter.resume();
+      if (this.modal) {
+        this.modal.close();
+        this.modal = null;
+      }
     }
-  });
-}
+  }
 
-function editFieldsRpu(rpu_id) {
-  refreshExecuter.stop();
-  var url = new Url("dPurgences", "ajax_edit_fields_rpu");
-  url.addParam("rpu_id", rpu_id);
-  url.requestModal(500, 240);
-  url.modalObject.observe("afterClose", function(){
-    refreshExecuter.resume();
-    Sortie.refresh(rpu_id);  
-  });
-}
+  function filterPatient(input, indicator) {
+    $$("#list-sorties tr").invoke("show");
+    indicator = $(indicator);
 
-function submitSejour() {
-  return onSubmitFormAjax(getForm("editSejour"));
-}
+    var term = $V(input);
+    if (!term) return;
+
+    if (indicator) {
+      indicator.show();
+    }
+
+    $$("#list-sorties .CPatient-view").each(function(p) {
+      if (!p.innerHTML.like(term)) {
+        p.up("tr").hide();
+      }
+    });
+  }
+
+  function editFieldsRpu(rpu_id) {
+    refreshExecuter.stop();
+    var url = new Url("dPurgences", "ajax_edit_fields_rpu");
+    url.addParam("rpu_id", rpu_id);
+    url.requestModal(500, 240);
+    url.modalObject.observe("afterClose", function(){
+      refreshExecuter.resume();
+      Sortie.refresh(rpu_id);
+    });
+  }
+
+  function submitSejour() {
+    return onSubmitFormAjax(getForm("editSejour"));
+  }
 </script>
 
 <table class="main">
@@ -100,21 +100,28 @@ function submitSejour() {
         <input type="hidden" name="tab" value="{{$tab}}" />
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       </form>
-      <script type="text/javascript">
-          Main.add(Calendar.regField.curry(getForm("changeDate").date, null, {noView: true}));
+      <script>
+        Main.add(Calendar.regField.curry(getForm("changeDate").date, null, {noView: true}));
       </script>
     </th>
 
     <td style="text-align: right;">
-      Type d'affichage
-      <form name="selView" action="?m=dPurgences&amp;tab=vw_sortie_rpu" method="post">
+      <form name="selView" action="?m=urgences&tab=vw_sortie_rpu" method="post">
+        {{tr}}CService{{/tr}}
+        <select name="service_id" onchange="this.form.submit()">
+          <option value="" {{if !$service_id}}selected{{/if}}>&mdash; Tous les services</option>
+          {{foreach from=$services_urg item=_service}}
+            <option value="{{$_service->_id}}" {{if $_service->_id == $service_id}}selected{{/if}}>{{$_service}}</option>
+          {{/foreach}}
+        </select>
+        Type d'affichage
         <select name="view_sortie" onchange="this.form.submit()">
-          <option value="tous"      {{if $view_sortie == "tous"     }} selected="selected" {{/if}}>Tous</option>
-          <option value="sortie"    {{if $view_sortie == "sortie"   }} selected="selected" {{/if}}>Sorties à effectuer</option>
-          <option value="normal"    {{if $view_sortie == "normal"   }} selected="selected" {{/if}}>Sorties normales</option>
-          <option value="mutation"  {{if $view_sortie == "mutation" }} selected="selected" {{/if}}>Sorties en mutation</option>
-          <option value="transfert" {{if $view_sortie == "transfert"}} selected="selected" {{/if}}>Sorties en transfert</option>
-          <option value="deces"     {{if $view_sortie == "deces"    }} selected="selected" {{/if}}>Sorties en décès</option>
+          <option value="tous"      {{if $view_sortie == "tous"     }}selected{{/if}}>Tous</option>
+          <option value="sortie"    {{if $view_sortie == "sortie"   }}selected{{/if}}>Sorties à effectuer</option>
+          <option value="normal"    {{if $view_sortie == "normal"   }}selected{{/if}}>Sorties normales</option>
+          <option value="mutation"  {{if $view_sortie == "mutation" }}selected{{/if}}>Sorties en mutation</option>
+          <option value="transfert" {{if $view_sortie == "transfert"}}selected{{/if}}>Sorties en transfert</option>
+          <option value="deces"     {{if $view_sortie == "deces"    }}selected{{/if}}>Sorties en décès</option>
         </select>
       </form>
       <button class="print" onclick="MainCourante.printSortie('{{$date}}','{{$view_sortie}}')">Sortie des patients</button>

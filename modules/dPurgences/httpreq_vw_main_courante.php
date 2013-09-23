@@ -13,6 +13,7 @@ CCanDo::checkRead();
 
 // Type d'affichage
 $selAffichage = CValue::postOrSession("selAffichage", CAppUI::conf("dPurgences default_view"));
+$service_id = CValue::postOrSession("service_id");
 
 // Parametre de tri
 $order_way = CValue::getOrSession("order_way", "DESC");
@@ -31,9 +32,9 @@ $medicalView = $user->isMedical();
 $group = CGroups::loadCurrent();
 $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 
-$sejour = new CSejour;
+$sejour = new CSejour();
 $where = array();
-$ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
+$ljoin["rpu"]      = "sejour.sejour_id = rpu.sejour_id";
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $where[] = "sejour.entree BETWEEN '$date' AND '$date_after' 
   OR (sejour.sortie_reelle IS NULL AND sejour.entree BETWEEN '$date_before' AND '$date_after' AND sejour.annule = '0')";
@@ -42,43 +43,50 @@ $where[] = CAppUI::pref("showMissingRPU") ?
   "rpu.rpu_id IS NOT NULL";
 $where["sejour.group_id"] = "= '$group->_id'";
 
-if ($selAffichage == "prendre_en_charge") {
-  $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
-  $where["consultation.consultation_id"] = "IS NULL";
-} 
+if ($service_id) {
+  $where["sejour.service_id"] = "= '$service_id'";
+}
 
-if ($selAffichage == "presents") {
-  $where["sejour.sortie_reelle"] = "IS NULL";
-  $where["sejour.annule"] = " = '0'";
-
-  if (CAppUI::conf("dPurgences create_sejour_hospit")) {
-    $where["rpu.mutation_sejour_id"] = "IS NULL";
-  }
-} 
-
-if ($selAffichage == "annule_hospitalise") {
-  $where["sejour.sortie_reelle"] = "IS NOT NULL";
-  $where["sejour.mode_sortie"] = " = 'mutation'";
+switch ($selAffichage) {
+  case "prendre_en_charge":
+    $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
+    $where["consultation.consultation_id"] = "IS NULL";
+    break;
+  case "presents":
+    $where["sejour.sortie_reelle"] = "IS NULL";
+    $where["sejour.annule"] = " = '0'";
+    if (CAppUI::conf("dPurgences create_sejour_hospit")) {
+      $where["rpu.mutation_sejour_id"] = "IS NULL";
+    }
+    break;
+  case "annule_hospitalise":
+    $where["sejour.sortie_reelle"] = "IS NOT NULL";
+    $where["sejour.mode_sortie"] = " = 'mutation'";
 }
 
 if ($order_col != "_entree" && $order_col != "ccmu" && $order_col != "_patient_id") {
-  $order_col = "ccmu";  
+  $order_col = "ccmu";
 }
 
-if ($order_col == "_entree") {
-  $order = "entree $order_way, rpu.ccmu $order_way";
-}
-
-if ($order_col == "ccmu") {
-  $order = "rpu.ccmu $order_way, entree $order_way";
-}
-
-if ($order_col == "_patient_id") {
-  $order = "patients.nom $order_way, ccmu $order_way";
+switch ($order_col) {
+  case "_entree":
+    $order = "entree $order_way, rpu.ccmu $order_way";
+    break;
+  case "ccmu":
+    $order = "rpu.ccmu $order_way, entree $order_way";
+    break;
+  case "_patient_id":
+    $order = "patients.nom $order_way, ccmu $order_way";
 }
 
 /** @var CSejour[] $listSejours */
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
+CMbObject::massLoadFwdRef($listSejours, "patient_id");
+CMbObject::massLoadFwdRef($listSejours, "group_id");
+$prats = CMbObject::massLoadFwdRef($listSejours, "praticien_id");
+CMbObject::massLoadFwdRef($prats, "function_id");
+CMbObject::massCountBackRefs($listSejours, "notes");
+
 foreach ($listSejours as &$sejour) {
   // Chargement du numero de dossier
   $sejour->loadNDA();
@@ -151,7 +159,7 @@ foreach (CService::loadServicesUrgence() as $service) {
 
 // Si admin sur le module urgences, alors modification autorisée du diagnostic
 // infirmier depuis la main courante.
-$module = new CModule;
+$module = new CModule();
 $module->mod_name = "dPurgences";
 $module->loadMatchingObject();
 $admin_urgences = $module->canAdmin();
@@ -172,4 +180,5 @@ $smarty->assign("today"       , CMbDT::date());
 $smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("admin_urgences", $admin_urgences);
 $smarty->assign("type"        , "MainCourante");
+
 $smarty->display("inc_main_courante.tpl");
