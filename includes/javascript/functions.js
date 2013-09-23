@@ -24,7 +24,7 @@ document.observe('dom:loaded', function(){
     } catch (e) {}
 
     if (window.sessionLocked) {
-      Session.lock();
+      Session.lockScreen();
     }
 
     prepareForms();
@@ -1554,13 +1554,17 @@ var Session = {
   window: null,
   isLocked: false,
   lock: function(){
-    this.isLocked = true;
+    Session.lockScreen();
+
     var url = new Url;
     url.addParam("lock", true);
     url.requestUpdate("systemMsg", {
       method: "post",
       getParameters: {m: 'admin', a: 'ajax_unlock_session'}
     });
+  },
+  lockScreen: function(){
+    this.isLocked = true;
 
     var container = $('sessionLock');
     this.window = Modal.open(container, {
@@ -1568,10 +1572,10 @@ var Session = {
       height: 150,
       title: $T("Session locked") + " - " + User.view
     });
-    
+
     container.down('form').reset();
     container.down('input[type=text], input[type=password]').focus();
-    
+
     $('main').hide();
   },
   request: function(form){
@@ -1615,7 +1619,7 @@ var UserSwitch = {
       title: $T("User switch"),
       onClose: UserSwitch.cancel
     });
-    
+
     container.down('form').reset();
     container.down('input[type=text], input[type=password]').focus();
   },
@@ -1641,7 +1645,7 @@ var UserSwitch = {
   },
   cancel: function(){
     if (Session.isLocked) {
-      Session.lock();
+      Session.lockScreen();
     }
   }
 };
