@@ -120,6 +120,24 @@ function viewTarmed(codeacte) {
               <td rowspan="{{$nbActes.$sejour_id}}">
                 {{$montantSejour.$sejour_id|currency}}
               </td>
+              <td class="text" rowspan="{{$nbActes.$sejour_id}}">
+                {{if $sejour->_ref_actes|@count}}
+                  Sejour du {{mb_value object=$sejour field=_entree}}
+                  au {{mb_value object=$sejour field=_sortie}}
+                {{/if}}
+                {{foreach from=$sejour->_ref_operations item=operation}}
+                  {{if $operation->_ref_actes|@count}}
+                    <br/>Intervention du {{mb_value object=$operation field=_datetime_best}}
+                    {{if $operation->libelle}}<br /> {{$operation->libelle}}{{/if}}
+                  {{/if}}
+                {{/foreach}}
+                {{foreach from=$sejour->_ref_consultations item=consult}}
+                  {{if $consult->_ref_actes|@count}}
+                    <br/>Consultation du {{$consult->_datetime|date_format:"%d %B %Y"}}
+                    {{if $consult->motif}}: {{$consult->motif}}{{/if}}
+                  {{/if}}
+                {{/foreach}}
+              </td>
 
               {{mb_include module=dPplanningOp template=inc_acte_realise codable=$sejour}}
               {{if $sejour->_ref_operations}}
