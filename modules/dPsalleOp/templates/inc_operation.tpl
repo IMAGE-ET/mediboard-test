@@ -227,6 +227,18 @@
     }
   };
 
+  editObservationResultSet = function(result_set_id, pack_id, result_id) {
+    if($('surveillance_perop')){
+      var url = new Url("patients", "ajax_edit_observation_result_set");
+      url.addParam("result_set_id", result_set_id);
+      url.addParam("pack_id", pack_id);
+      url.addParam("result_id", result_id);
+      url.requestModal(600, 600, {
+        onClose: reloadSurveillancePerop
+      });
+    }
+  };
+
   createObservationTimedData = function(object_guid, timed_data_id) {
     if($('surveillance_perop')){
       var url = new Url("patients", "ajax_edit_observation_timed_data");

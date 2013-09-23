@@ -56,14 +56,20 @@ Main.add(function(){
         {{/if}}
 
     ph.bind("plothover", plothover);
-    /*ph.bind("plotclick", function(event, pos, item){
-      console.log(pos);
-    });*/
+    ph.bind("plotclick", function(event, pos, item){
+      if (!item) {
+        return;
+      }
+
+      var data = item.series.data[item.dataIndex];
+      editObservationResultSet(data.set_id, '{{$pack->_id}}', data.result_id);
+      //console.log(data);
+    });
 
         var plot = $.plot(ph, series, {
           grid: {
             hoverable: true,
-            //clickable: true,
+            clickable: true,
             markings: [
               // Debut op
               {xaxis: {from: 0, to: {{$time_debut_op}}}, color: "rgba(0,0,0,0.05)"},
@@ -233,7 +239,9 @@ printPartogramme = function(operation_id) {
                 <div>
                   <div class="marking"></div>
                   <div class="label" title="{{$_evenement.datetime|date_format:$conf.datetime}}">
-                    {{$_evenement.value|truncate:40}}
+                    <a href="#" onclick="editObservationResultSet('{{$_evenement.set_id}}', '{{$pack->_id}}', '{{$_evenement.result_id}}')">
+                      {{$_evenement.value|truncate:40}}
+                    </a>
                   </div>
                 </div>
               </div>
@@ -254,7 +262,10 @@ printPartogramme = function(operation_id) {
             <div style="position: relative;">
               {{foreach from=$_graph->_graph_data item=_picture}}
                 {{if $_picture.file_id && $_picture.position <= 100}}
-                  <div style="position: absolute; left: {{$_picture.position}}%; margin-left: -25px; text-align: center; padding-top: 5px;" title="{{$_picture.datetime|date_format:$conf.datetime}}">
+                  <div style="position: absolute; left: {{$_picture.position}}%; margin-left: -25px; text-align: center; padding-top: 5px; cursor: pointer;"
+                       title="{{$_picture.datetime|date_format:$conf.datetime}}"
+                       onclick="editObservationResultSet('{{$_picture.set_id}}', '{{$pack->_id}}', '{{$_picture.result_id}}')"
+                    >
                     <span style="position: absolute; left: 20px; top: -2px; width: 10px;">^</span>
                     <img style="width: 50px;"
                          src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$_picture.file_id}}&amp;phpThumb=1&amp;w=100&amp;q=95" />
@@ -296,7 +307,7 @@ printPartogramme = function(operation_id) {
             <div onmouseover="ObjectTooltip.createEx(this, '{{$_evenement.object->_guid}}');" style="{{$evenement_width}}; {{if $_evenement.alert}} background: red; {{/if}}">
               <div class="marking"></div>
               <div class="label" title="{{$_evenement.datetime|date_format:$conf.datetime}} - {{if $_evenement.unit}}{{$_evenement.unit}}{{/if}} {{$_evenement.label}}">
-                {{if $_evenement.editable}} 
+                {{if $_evenement.editable}}
                   <a href="#{{$_evenement.object->_guid}}"
                      onclick="return editEvenementPerop('{{$_evenement.object->_guid}}', '{{$interv->_id}}')"
                     {{if $_evenement.alert}} style="color: red;" {{/if}}>
@@ -311,8 +322,8 @@ printPartogramme = function(operation_id) {
                   {{else}}
                     {{$_evenement.label|truncate:40}}
                   {{/if}}
-                
-                {{if $_evenement.editable}} 
+
+                {{if $_evenement.editable}}
                   </a>
                 {{/if}}
               </div>

@@ -1,6 +1,10 @@
 <script>
   Main.add(function(){
-    $$(".result-form")[0].focusFirstElement();
+    {{if $result_id}}
+      $$("form[data-result_id={{$result_id}}]")[0].focusFirstElement();
+    {{else}}
+      $$(".result-form")[0].focusFirstElement();
+    {{/if}}
 
     if (Prototype.Browser.IE && document.documentMode == 8) {
       $$("div.outlined input").each(function(input){
@@ -88,7 +92,8 @@
         {{assign var=_value_type value=$_result->_ref_value_type}}
         {{unique_id var=uid_form}}
 
-        <form name="form-edit-observation-{{$uid_form}}" method="post" action="?" class="result-form" onsubmit="submitObservationResultSet(); return false;">
+        <form name="form-edit-observation-{{$uid_form}}" method="post" action="?"
+              class="result-form" onsubmit="submitObservationResultSet(); return false;" data-result_id="{{$_result->_id}}">
           {{mb_class object=$_result}}
           {{mb_key object=$_result}}
           {{mb_field object=$_result field=value_type_id hidden=true}}
@@ -125,7 +130,8 @@
     {{assign var=_value_type value=$_result->_ref_value_type}}
     {{unique_id var=uid_form}}
 
-    <form name="form-edit-observation-{{$uid_form}}" method="post" action="?" class="result-form" onsubmit="submitObservationResultSet(); return false;">
+    <form name="form-edit-observation-{{$uid_form}}" method="post" action="?"
+          class="result-form" onsubmit="submitObservationResultSet(); return false;" data-result_id="{{$_result->_id}}">
       {{mb_class object=$_result}}
       {{mb_key object=$_result}}
       {{mb_field object=$_result field=value_type_id hidden=true}}
@@ -146,7 +152,8 @@
     {{assign var=_value_type value=$_result->_ref_value_type}}
     {{unique_id var=uid_form}}
 
-    <form name="form-edit-observation-{{$uid_form}}" method="post" action="?" class="result-form" onsubmit="submitObservationResultSet(); return false;">
+    <form name="form-edit-observation-{{$uid_form}}" method="post" action="?"
+          class="result-form" onsubmit="submitObservationResultSet(); return false;" data-result_id="{{$_result->_id}}">
       {{mb_class object=$_result}}
       {{mb_key object=$_result}}
       {{mb_field object=$_result field=value_type_id hidden=true}}
@@ -156,8 +163,8 @@
       <button type="button" class="cancel notext" onclick="resetPicture(this)"></button>
       {{foreach from=$_graph->_ref_files item=_file}}
         <div class="outlined">
-          <input type="radio" name="file_id" value="{{$_file->_id}}" />
-          <label for="file_id_{{$_file->_id}}" ondblclick="submitTimedPicture()">
+          <input type="radio" name="file_id" value="{{$_file->_id}}" {{if $_file->_id == $_result->file_id}}checked class="checked"{{/if}} />
+          <label for="file_id_{{$_file->_id}}" ondblclick="this.form.onsubmit()">
             <div style="background: no-repeat center center url(?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$_file->_id}}&amp;phpThumb=1&amp;h=80&amp;w=80&amp;q=95); height: 80px; width: 80px;"></div>
             {{$_file->_no_extension}}
           </label>

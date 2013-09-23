@@ -132,12 +132,14 @@ class CObservationResultSet extends CMbObject {
       $unit_id = $_result["unit_id"] ? $_result["unit_id"] : "none";
       
       $data[$_result["value_type_id"]][$unit_id][] = array(
-        0          => $_time,
-        1          => floatval($_result["value"]),
-        "ts"       => $_time,
-        "value"    => $_result["value"],
-        "datetime" => $_result["datetime"],
-        "file_id"  => $_result["file_id"],
+        0           => $_time,
+        1           => floatval($_result["value"]),
+        "ts"        => $_time,
+        "value"     => $_result["value"],
+        "datetime"  => $_result["datetime"],
+        "file_id"   => $_result["file_id"],
+        "set_id"    => $_result["observation_result_set_id"],
+        "result_id" => $_result["observation_result_id"],
       );
     }
     
