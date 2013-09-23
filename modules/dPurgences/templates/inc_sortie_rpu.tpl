@@ -92,16 +92,6 @@
        <strong>{{mb_label object=$rpu field=orientation}}</strong> :
        {{mb_value object=$rpu field=orientation}}      
      {{/if}}
-  {{else}}
-    <form name="editRPU-{{$rpu->_id}}" method="post" action="?" class="prepared" onsubmit="return onSubmitFormAjax(this);">
-      <input type="hidden" name="m" value="dPurgences" />
-      <input type="hidden" name="dosql" value="do_rpu_aed" />
-      <input type="hidden" name="_bind_sejour" value="1" />
-      <input type="hidden" name="del" value="0" />
-      {{mb_key object=$rpu}}
-      {{mb_field object=$rpu field="_destination" emptyLabel="CRPU-_destination" onchange="this.form.onsubmit()"}}<br />
-      {{mb_field object=$rpu field="orientation"  emptyLabel="CRPU-orientation"  onchange="this.form.onsubmit()"}}
-    </form>
   {{/if}}
 </td>
 

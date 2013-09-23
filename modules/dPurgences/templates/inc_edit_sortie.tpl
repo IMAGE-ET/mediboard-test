@@ -8,69 +8,86 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-  
-submitSejour = function(force) {
-  if (!force) {
-    return;
-  }
-  
-  var form = getForm('editSejour');
-  return onSubmitFormAjax(form, { onComplete: function() {
-    Sortie.refresh('{{$rpu->_id}}');
-    Sortie.close();
-  }});
-} 
+<script>
+  submitSejour = function(force) {
+    if (!force) {
+      return;
+    }
 
-Fields = {
-  init: function(mode_sortie) {
-    $('etablissement_sortie_transfert').setVisible(mode_sortie == "transfert");
-    if($('lit_sortie_transfert')) {
-      $('lit_sortie_transfert').setVisible(mode_sortie == "mutation");
-      $('service_sortie_transfert').setVisible(mode_sortie == "mutation");
-    }
-    else{
-      $('service_sortie_transfert').setVisible(mode_sortie == "mutation");      
-    }
-    $('date_deces').setVisible(mode_sortie === "deces");
-    var date_deces = getForm("editSejour")._date_deces;
-    if (mode_sortie != "deces") {
-      $V(date_deces, "", false);
-      $V(date_deces.previous().down("input"), "", false);
-      date_deces.removeClassName("notNull");
-    }
-  },
-  
-  modif: function(lit_id) {
     var form = getForm('editSejour');
-    $('service_sortie_transfert').setVisible(lit_id);
-    
-    var service = $('CLit-'+lit_id).className;
-    service = service.split("-");
-    form.service_sortie_id.value = service[1];
-    
-    form.service_sortie_id_autocomplete_view.value = service[2];
-  },
-  
-  clear: function() {
-    if (confirm($T('CSejour-sortie-confirm-clearall'))) {
+    return onSubmitFormAjax(form, { onComplete: function() {
+      Sortie.refresh('{{$rpu->_id}}');
+      Sortie.close();
+    }});
+  }
+
+  Fields = {
+    init: function(mode_sortie) {
+      $('etablissement_sortie_transfert').setVisible(mode_sortie == "transfert");
+      if($('lit_sortie_transfert')) {
+        $('lit_sortie_transfert').setVisible(mode_sortie == "mutation");
+        $('service_sortie_transfert').setVisible(mode_sortie == "mutation");
+      }
+      else{
+        $('service_sortie_transfert').setVisible(mode_sortie == "mutation");
+      }
+      $('date_deces').setVisible(mode_sortie === "deces");
+      var date_deces = getForm("editSejour")._date_deces;
+      if (mode_sortie != "deces") {
+        $V(date_deces, "", false);
+        $V(date_deces.previous().down("input"), "", false);
+        date_deces.removeClassName("notNull");
+      }
+    },
+
+    modif: function(lit_id) {
       var form = getForm('editSejour');
-      form.mode_sortie.clear();
-      form.sortie_reelle.clear();
-      form.sortie_reelle_da.clear();
-      form.etablissement_sortie_id_autocomplete_view.clear();
-      form.etablissement_sortie_id.clear();
-      form.service_sortie_id_autocomplete_view.clear();
-      form.service_sortie_id.clear();
-      form.commentaires_sortie.clear();
-      
-      submitSejour(true);
+      $('service_sortie_transfert').setVisible(lit_id);
+
+      var service = $('CLit-'+lit_id).className;
+      service = service.split("-");
+      form.service_sortie_id.value = service[1];
+
+      form.service_sortie_id_autocomplete_view.value = service[2];
+    },
+
+    clear: function() {
+      if (confirm($T('CSejour-sortie-confirm-clearall'))) {
+        var form = getForm('editSejour');
+        form.mode_sortie.clear();
+        form.sortie_reelle.clear();
+        form.sortie_reelle_da.clear();
+        form.etablissement_sortie_id_autocomplete_view.clear();
+        form.etablissement_sortie_id.clear();
+        form.service_sortie_id_autocomplete_view.clear();
+        form.service_sortie_id.clear();
+        form.commentaires_sortie.clear();
+
+        submitSejour(true);
+      }
     }
   }
-}
 </script>
 
 {{mb_include template=inc_form_sortie}}
+
+<form name="editRPU" method="post" action="?" onsubmit="return onSubmitFormAjax(this);">
+  <input type="hidden" name="m" value="urgences"/>
+  <input type="hidden" name="dosql" value="do_rpu_aed"/>
+  {{mb_key object=$rpu}}
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="_bind_sejour" value="1" />
+  <table class="form">
+    <tr>
+      <th style="width: 30%;">{{mb_label object=$rpu field="_destination"}}</th>
+      <td>{{mb_field object=$rpu field="_destination" emptyLabel="CRPU-_destination" onchange="this.form.onsubmit()"}}<br /></td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$rpu field="orientation"}}</th>
+      <td>{{mb_field object=$rpu field="orientation"  emptyLabel="CRPU-orientation"  onchange="this.form.onsubmit()"}}</td>
+    </tr>
+  </table>
+</form>
 
 <table class="form">
   <tr>
