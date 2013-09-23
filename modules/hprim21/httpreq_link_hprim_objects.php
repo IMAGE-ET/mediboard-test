@@ -14,6 +14,7 @@
 CCanDo::checkRead();
 
 CApp::setTimeLimit(240);
+CApp::setMemoryLimit("512M");
 
 $date_limite = CMbDT::date("- 1 month");
 $qte_limite  = 1000;
