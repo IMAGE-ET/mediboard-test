@@ -40,15 +40,16 @@ if ($service_id) {
 }
 
 switch ($view_sortie) {
+  case "tous":
+    break;
   case "sortie":
     $where["sortie_reelle"] = "IS NULL";
     $where["rpu.mutation_sejour_id"] = "IS NULL";
-  case "tous":
     break;
+  case "normal":
   case "mutation":
-    $where["mode_sortie"] = "= '$view_sortie'";
-    break;
-  default:
+  case "transfert":
+  case "deces":
     $where["sortie_reelle"] = "IS NOT NULL";
     $where["mode_sortie"] = "= '$view_sortie'";
 }
