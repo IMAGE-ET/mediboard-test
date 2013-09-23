@@ -38,15 +38,17 @@ if ($extract_passages_id) {
   }  
 }
 else {
-  $leftjoin["files_mediboard"] = "files_mediboard.object_id = extract_passages.extract_passages_id AND files_mediboard.object_class = 'CExtractPassages'";
-  
-  $where["files_mediboard.file_id"] = "IS NOT NULL";
-  $where["extract_passages.date_echange"] = "IS NULL";
+  $leftjoin["files_mediboard"] = "files_mediboard.object_id = extract_passages.extract_passages_id
+    AND files_mediboard.object_class = 'CExtractPassages'";
+
+  $where["files_mediboard.file_id"]         = "IS NOT NULL";
+  $where["extract_passages.date_echange"]   = "IS NULL";
   $where['extract_passages.message_valide'] = " = '1'";
-  $where['extract_passages.group_id'] = " = '".CGroups::loadCurrent()->_id."'";
+  $where['extract_passages.group_id']       = " = '".CGroups::loadCurrent()->_id."'";
   
   $order = "extract_passages.date_extract DESC";
-  
+
+  /** @var CExtractPassages[] $passages */
   $passages = $extractPassages->loadList($where, $order, null, null, $leftjoin);
   foreach ($passages as $_passage) {
     $tentative = 5;

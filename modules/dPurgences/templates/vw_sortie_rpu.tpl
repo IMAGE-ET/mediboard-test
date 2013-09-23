@@ -38,7 +38,7 @@
 
     edit: function(rpu_id) {
       refreshExecuter.stop();
-      var url = new Url("dPurgences", "ajax_edit_sortie")
+      var url = new Url("dPurgences", "ajax_edit_sortie");
       url.addParam("rpu_id", rpu_id);
       url.requestModal(500, 300);
       this.modal = url.modalObject;
@@ -51,7 +51,7 @@
         this.modal = null;
       }
     }
-  }
+  };
 
   function filterPatient(input, indicator) {
     $$("#list-sorties tr").invoke("show");

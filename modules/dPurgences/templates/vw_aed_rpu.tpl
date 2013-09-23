@@ -36,7 +36,7 @@
 {{if $conf.ref_pays == 2}}
   <script>
     Main.add(function () {
-      var tab_rpu = Control.Tabs.create('tab-rpu');
+      var tab_rpu = Control.Tabs.create('tab-rpu', false);
       var hash = Url.parse().fragment;
       if (hash == "Imeds") {
         {{if $rpu->_id}}
@@ -88,7 +88,7 @@
   }
 
   function submitSuivi(oForm) {
-    sejour_id = oForm.sejour_id.value;
+    var sejour_id = $V(oForm.sejour_id);
     submitFormAjax(oForm, 'systemMsg', { onComplete: function() { Control.Modal.close(); loadSuivi(sejour_id); } });
   }
 
@@ -209,6 +209,7 @@
     url.addParam("patient_id", iPatient_id);
     url.addParam("is_anesth", 0);
     url.requestUpdate("infoPat");
+    return true;
   }
 
   function printEtiquettes() {
@@ -235,20 +236,20 @@
       showClose: false
     });
     modalWindow = url.modalObject;
-  }
+  };
 
   updateModeEntree = function(select) {
     var selected = select.options[select.selectedIndex];
     var form = select.form;
     $V(form.elements.mode_entree, selected.get("mode"));
-  }
+  };
 
   Main.add(function () {
     {{if $rpu->_id && $can->edit}}
       if (window.DossierMedical){
         DossierMedical.reloadDossierPatient();
       }
-      var tab_sejour = Control.Tabs.create('tab-dossier');
+      var tab_sejour = Control.Tabs.create('tab-dossier', false);
       loadDocItems('{{$rpu->sejour_id}}', '{{$rpu->_ref_consult->_id}}');
     {{/if}}
 
@@ -320,7 +321,7 @@
 
     <div id="rpu">
       {{mb_include module="urgences" template="inc_aed_rpu"}}
-      <table width="100%" class="tbl">
+      <table style="width: 100%;" class="tbl">
         <tr>
           <th class="category">Attentes</th>
           <th class="category">Prise en charge médicale</th>

@@ -19,6 +19,18 @@ $period = CValue::getOrSession('period', "MONTH");
 $count  = CValue::getOrSession('count', 30);
 $hide_cancelled = CValue::getOrSession("hide_cancelled", 1);
 
+/**
+ * @param $areas
+ * @param $series
+ * @param $where
+ * @param $ljoin
+ * @param $dates
+ * @param $period
+ * @param $sejour       CSejour
+ * @param $total
+ * @param $start_field
+ * @param $end_field
+ */
 function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejour, &$total, $start_field, $end_field) {
   $only_duration = empty($areas);
   
@@ -70,6 +82,7 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
     foreach ($dates as $i => $_date) {
       $_date_next = CMbDT::date("+1 $period", $_date);
       $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
+      /** @var CSejour[] $_sejours */
       $_sejours = $sejour->loadList($where, null, null, null, $ljoin);
       // FIXME
       

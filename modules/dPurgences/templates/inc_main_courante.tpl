@@ -17,7 +17,7 @@
     
     {{if $type == "MainCourante"}}
       $$("a[href=#holder_main_courante] small")[0].update("({{$listSejours|@count}})");
-    {{else if $type == "UHCD"}}
+    {{elseif $type == "UHCD"}}
       var tab = $$("a[href=#holder_uhcd]")[0];
       tab.down("small").update("({{$listSejours|@count}})");
       {{if $listSejours|@count == '0'}}
@@ -36,12 +36,12 @@
     var oForm = getForm("editRPU-"+rpu_id);
     $V(oForm[type], "current");
     oForm.onsubmit();
-  }
+  };
 
   fillDiag = function(rpu_id) {
     {{if $type == "MainCourante"}}
       MainCourante.stop();
-    {{else if $type == "UHCD"}}
+    {{elseif $type == "UHCD"}}
       UHCD.stop();
     {{/if}}
     var url = new Url("dPurgences", "ajax_edit_diag");
@@ -50,7 +50,7 @@
     url.modalObject.observe("afterClose", function(){
       {{if $type == "MainCourante"}}
         MainCourante.start();
-      {{else if $type == "UHCD"}}
+      {{elseif $type == "UHCD"}}
         UHCD.start();
       {{/if}}
     });
@@ -63,7 +63,7 @@
   Les résultats sont filtrés et le rafraîchissement est désactivé. 
   {{if $type == "MainCourante"}}
     <button class="change" onclick="MainCourante.start()">Relancer</button>
-  {{else if $type == "UHCD"}}
+  {{elseif $type == "UHCD"}}
     <button class="change" onclick="UHCD.start()">Relancer</button>
   {{/if}}
 </div>
@@ -80,7 +80,7 @@
     <th class="narrow">
       {{if $type == "MainCourante"}}
         <input type="text" size="6" onkeyup="MainCourante.filter(this, 'filter-indicator')" id="filter-patient-name-{{$type}}" />
-      {{else if $type == "UHCD"}}
+      {{elseif $type == "UHCD"}}
         <input type="text" size="6" onkeyup="UHCD.filter(this, 'filter-indicator')" id="filter-patient-name-{{$type}}" />
       {{/if}}
     </th>
@@ -101,7 +101,7 @@
       {{/if}}
       </th>
     {{/if}}
-    <th style="width: 0em;">{{tr}}CRPU.pec{{/tr}}</th>
+    <th style="width: 0;">{{tr}}CRPU.pec{{/tr}}</th>
   </tr>
 
   {{foreach from=$listSejours item=_sejour key=sejour_id}}
@@ -239,7 +239,7 @@
             {{if $type == "MainCourante"}}
               <form name="editRPU-{{$rpu->_id}}"
                 onsubmit="return onSubmitFormAjax(this, {onComplete: function() { MainCourante.start() }});" method="post" action="?">              
-            {{else if $type == "UHCD"}}
+            {{elseif $type == "UHCD"}}
               <form name="editRPU-{{$rpu->_id}}"
                 onsubmit="return onSubmitFormAjax(this, {onComplete: function() { UHCD.start() }});" method="post" action="?">
             {{/if}}

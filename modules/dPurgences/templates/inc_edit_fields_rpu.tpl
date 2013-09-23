@@ -6,7 +6,9 @@
     <input type="hidden" name="del" value="0" />
     {{mb_key object=$sejour}}
     <table class="form">
-      <th class="category" colspan="2">{{tr}}CSejour{{/tr}}</th>
+      <tr>
+        <th class="category" colspan="2">{{tr}}CSejour{{/tr}}</th>
+      </tr>
       <tr>
         {{mb_include module=urgences template=inc_diagnostic_principal}}
       </tr>

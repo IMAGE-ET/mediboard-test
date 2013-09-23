@@ -49,9 +49,9 @@
               Main.add(function () {
                 var form = getForm("editBox");
                 var ccmu = form.ccmu;
-                ccmu.options[2].disabled=true;
-                ccmu.options[6].disabled=true;
-                ccmu.options[7].disabled=true;
+                ccmu.options[2].disabled = true;
+                ccmu.options[6].disabled = true;
+                ccmu.options[7].disabled = true;
                 ccmu.options[2].hide();
                 ccmu.options[6].hide();
                 ccmu.options[7].hide();
@@ -71,10 +71,10 @@
         </tr>
       {{/if}}
       <tr>
-        <th>{{mb_label object=$rpu field="box_id"}}</td>
+        <th>{{mb_label object=$rpu field="box_id"}}</th>
         <td>
           {{mb_include module=dPhospi template="inc_select_lit" field=box_id selected_id=$rpu->box_id ajaxSubmit=0 listService=$services}}
-          <button type="button" class="cancel opacity-60 notext" onclick="this.form.elements['box_id'].selectedIndex=0"></button>
+          <button type="button" class="cancel opacity-60 notext" onclick="this.form.elements['box_id'].selectedIndex = 0"></button>
           &mdash; {{tr}}CRPU-_service_id{{/tr}} :
           {{if $services|@count == 1}}
             {{assign var=first_service value=$services|@reset}}

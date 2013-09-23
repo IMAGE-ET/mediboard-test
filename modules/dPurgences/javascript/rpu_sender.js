@@ -12,4 +12,4 @@ RPU_Sender = {
 
     $("import_key").update(message);
   }
-}
+};

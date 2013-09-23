@@ -66,7 +66,7 @@
   </tr>
   <tr>
     <td>
-      <img src="images/icons/attente_first_part.png"></img>
+      <img src="images/icons/attente_first_part.png" />
     </td>
     <td>
       Attente depuis moins de {{$conf.dPurgences.attente_first_part|date_format:"%Hh%M"}}
@@ -74,7 +74,7 @@
   </tr>
   <tr>
     <td>
-      <img src="images/icons/attente_second_part.png"></img>
+      <img src="images/icons/attente_second_part.png" />
     </td>
     <td>
       Attente entre {{$conf.dPurgences.attente_first_part|date_format:"%Hh%M"}} et {{$conf.dPurgences.attente_second_part|date_format:"%Hh%M"}}
@@ -82,7 +82,7 @@
   </tr>
   <tr>
     <td>
-      <img src="images/icons/attente_third_part.png"></img>
+      <img src="images/icons/attente_third_part.png" />
     </td>
     <td>
       Attente entre {{$conf.dPurgences.attente_second_part|date_format:"%Hh%M"}} et {{$conf.dPurgences.attente_third_part|date_format:"%Hh%M"}}
@@ -90,7 +90,7 @@
   </tr>
   <tr>
     <td>
-      <img src="images/icons/attente_fourth_part.png"></img>
+      <img src="images/icons/attente_fourth_part.png" />
     </td>
     <td>
       Attente de plus de {{$conf.dPurgences.attente_third_part|date_format:"%Hh%M"}}

@@ -140,7 +140,7 @@
             
           {{else}}
             {{if !$sejour->sortie_reelle}}
-              <td />
+              <td></td>
             {{else}}
               <td style="text-align: right;">{{mb_value object=$sejour field=_sortie}}</td>
             {{/if}}

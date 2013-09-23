@@ -4,18 +4,18 @@ showActesNGAP = function(sejour_id){
   url.addParam("object_id"   , sejour_id);
   url.addParam("object_class", "CSejour");
   url.requestUpdate('listActesNGAP');
-}
+};
 
 showFraisDivers = function(sejour_id) {
-	var url = new Url("dPurgences", "ajax_show_frais_divers");
+  var url = new Url("dPurgences", "ajax_show_frais_divers");
   url.addParam("sejour_id", sejour_id);
   url.requestUpdate('fraisdivers');
-}
+};
 
 Main.add(function () {
-	var tab_actes = Control.Tabs.create('tab-actes', false);
+  var tab_actes = Control.Tabs.create('tab-actes', false);
 
-	showActesNGAP('{{$sejour->_id}}');
+  showActesNGAP('{{$sejour->_id}}');
 });
 </script>
 

@@ -145,7 +145,7 @@ Main.add(function () {
           </tr>
         </table>
         {{if $ecap_installed}}
-          <button class="change" type="button" onclick="new Url('ecap', 'vw_anap').requestModal()">ANAP</a>
+          <button class="change" type="button" onclick="new Url('ecap', 'vw_anap').requestModal()">ANAP</button>
         {{/if}}
       </td>
       <td style="white-space: normal;">

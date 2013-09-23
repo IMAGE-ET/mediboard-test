@@ -17,19 +17,19 @@ autoriserSortie = function(value){
     $V(sejourForm.elements.mode_sortie, "normal");
   }
   submitRPU();
-}
+};
 
 autoriserEffectuerSortie = function() {
-	getForm('editSortieAutorise').elements.sortie_autorisee.value=1;
-	{{if $conf.dPurgences.valid_cotation_sortie_reelle}}
-  	return onSubmitFormAjax(getForm('ValidCotation'), { onComplete : function(){ 
-  		submitSejRpuConsult(); 
-  		$('button_reconvoc').disabled=null; 
-  	}});
-	{{else}}
-	  $('button_reconvoc').disabled=null; 
-	  return submitSejRpuConsult(); 
-	{{/if}}
+  getForm('editSortieAutorise').elements.sortie_autorisee.value = 1;
+  {{if $conf.dPurgences.valid_cotation_sortie_reelle}}
+    return onSubmitFormAjax(getForm('ValidCotation'), { onComplete : function(){ 
+      submitSejRpuConsult(); 
+      $('button_reconvoc').disabled = null;
+    }});
+  {{else}}
+    $('button_reconvoc').disabled = null;
+    return submitSejRpuConsult(); 
+  {{/if}}
 }
 </script>
 
@@ -39,17 +39,17 @@ autoriserEffectuerSortie = function() {
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
   {{if $sejour->sortie_reelle && $rpu->sortie_autorisee}}
-  	{{tr}}CRPU-sortie_assuree.1{{/tr}} à 
-    {{mb_field object=$sejour field="sortie_reelle" register=true form="editSortieReelle" onchange="submitFormAjax(this.form, 'systemMsg')"}}	
-		<button class="cancel" type="button" onclick="autoriserSortie(0)">
-		  Annuler l'autorisation de sortie
-		</button>
+    {{tr}}CRPU-sortie_assuree.1{{/tr}} à 
+    {{mb_field object=$sejour field="sortie_reelle" register=true form="editSortieReelle" onchange="submitFormAjax(this.form, 'systemMsg')"}}  
+    <button class="cancel" type="button" onclick="autoriserSortie(0)">
+      Annuler l'autorisation de sortie
+    </button>
   {{else}}    
-	  {{if $rpu->sortie_autorisee}}
-	    <button class="cancel" type="button" onclick="autoriserSortie(0)">
-	      Annuler l'autorisation de sortie
+    {{if $rpu->sortie_autorisee}}
+      <button class="cancel" type="button" onclick="autoriserSortie(0)">
+        Annuler l'autorisation de sortie
       </button>
-		{{else}} 		  
+    {{else}}       
       <button class="tick" type="button" onclick="autoriserSortie(1)">
         {{mb_label object=$rpu field="sortie_autorisee"}}
       </button>
@@ -64,7 +64,7 @@ autoriserEffectuerSortie = function() {
           {{mb_field object=$sejour field="sortie_reelle" register=true form="editSortieReelle" 
             onchange="submitFormAjax(this.form, 'systemMsg'); reloadSortieReelle();"}}
       {{/if}}
-		{{/if}}
+    {{/if}}
   {{/if}}
 </form>
 

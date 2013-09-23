@@ -21,7 +21,7 @@ $orumip_active = $module_orumip && $module_orumip->mod_active;
 $circonstances = array();
 
 if ($orumip_active) {
-  $circonstance = new COrumip;
+  $circonstance = new COrumip();
   $circonstances = $circonstance->seek($_keywords_circonstance);
 }
 else {

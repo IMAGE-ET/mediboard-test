@@ -36,6 +36,7 @@ $where["sortie"] = ">= '$sejour->sortie_reelle'";
 $where["function_id"] = "IS NOT NULL";
 
 $affectation = new CAffectation();
+/** @var CAffectation[] $blocages_lit */
 $blocages_lit = $affectation->loadList($where);
 
 $where["function_id"] = "IS NULL";

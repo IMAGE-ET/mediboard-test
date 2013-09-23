@@ -37,22 +37,22 @@
     stop: function() {
       Consultations.updater.stop();
     }
-  }
+  };
 
   onMergeComplete = function() {
     IdentitoVigilance.start(0, 80);
     MainCourante.start(1, 60);
-  }
+  };
 
   reloadSynthese = function() {
     $$(".modal")[0].down("button.change").click();
-  }
+  };
 
   showSynthese = function(sejour_id) {
     var url = new Url("soins", "ajax_vw_suivi_clinique");
     url.addParam("sejour_id", sejour_id);
     url.requestModal(800);
-  }
+  };
 
   var ExtRefManager = {
     sejour_id : null,
@@ -81,13 +81,13 @@
 
   setExternalIds = function(oForm) {
     SejourHprimSelector["init"+oForm.sejour_id.value]();
-  }
+  };
 
   PatHprimSelector.doSet = function(){
     var oForm = document[PatHprimSelector.sForm];
     $V(oForm[PatHprimSelector.sId], PatHprimSelector.prepared.id);
     ExtRefManager.submitIPPForm(oForm.patient_id.value);
-  }
+  };
 
   SejourHprimSelector.doSet = function(){
     var oFormSejour = document[SejourHprimSelector.sForm];
@@ -98,7 +98,7 @@
       $V(oFormIPP[SejourHprimSelector.sIPPId]  , SejourHprimSelector.prepared.IPPid);
       ExtRefManager.submitIPPForm(oFormIPP.object_id.value);
     }
-  }
+  };
 
   Main.add(function () {
     // Delays prevent potential overload with periodical previous updates

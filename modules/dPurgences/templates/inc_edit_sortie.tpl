@@ -11,7 +11,7 @@
 <script>
   submitSejour = function(force) {
     if (!force) {
-      return;
+      return null;
     }
 
     var form = getForm('editSejour');
@@ -19,7 +19,7 @@
       Sortie.refresh('{{$rpu->_id}}');
       Sortie.close();
     }});
-  }
+  };
 
   Fields = {
     init: function(mode_sortie) {

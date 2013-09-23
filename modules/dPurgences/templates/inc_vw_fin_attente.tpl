@@ -31,7 +31,7 @@
     <input type="hidden" name="{{$fin}}" value="" />
     <input type="text" name="_fin_da" value="{{$rpu->$fin|date_format:$conf.time}}" class="time" readonly="readonly"/>
     <input type="hidden" name="_fin" autocomplete="off" id="editHeure{{$change_heure}}_fin" value="{{$rpu->$fin|iso_time}}" class="time"
-    onchange="$V(this.form.{{$fin}}, '{{$rpu->$fin|iso_date}} ' + $V(this.form._fin)); onSubmitFormAjax(this.form, {onComplete:refreshAttente.curry('{{$debut}}', '{{$fin}}', '{{$rpu->_id}}')})"></input> 
+    onchange="$V(this.form.{{$fin}}, '{{$rpu->$fin|iso_date}} ' + $V(this.form._fin)); onSubmitFormAjax(this.form, {onComplete:refreshAttente.curry('{{$debut}}', '{{$fin}}', '{{$rpu->_id}}')})" />
     <button class="edit notext" type="button" onclick="Calendar.regField(this.form._fin); $(this).remove()">
       Modifier l'heure
     </button>

@@ -15,16 +15,16 @@
   {{mb_return}}
 {{/if}}
 
-{{include file=CMbObject_view.tpl}}
+{{mb_include template=CMbObject_view}}
 
 <script type="text/javascript">
-	printDossier = function(id) {
-	  var url = new Url("dPurgences", "print_dossier");
-	  url.addParam("rpu_id", id);
-	  url.popup(700, 550, "RPU");
-	}
+  printDossier = function(id) {
+    var url = new Url("dPurgences", "print_dossier");
+    url.addParam("rpu_id", id);
+    url.popup(700, 550, "RPU");
+  }
 </script>
-	
+  
 <table class="tbl tooltip">
   <tr>
     <td class="button">

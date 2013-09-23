@@ -9,6 +9,7 @@
     url.addParam("patient_id" , iPatient_id);
     url.addParam("is_anesth"  , 0);
     url.requestUpdate("infoPat");
+    return true;
   }
   
   function refreshConstantesMedicalesTri(context_guid){

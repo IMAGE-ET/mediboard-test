@@ -9,12 +9,14 @@
     </tr>
     <tr>
       <th>{{mb_label object=$rpu field=diag_infirmier}}</th>
-      <td>{{mb_field object=$rpu field=diag_infirmier onchange="this.form.onsubmit();" class="autocomplete" form="editDiag"
+      <td>
+        {{mb_field object=$rpu field=diag_infirmier onchange="this.form.onsubmit();" class="autocomplete" form="editDiag"
              aidesaisie="validate: function() { form.onsubmit();},
                          resetSearchField: 0,
                          resetDependFields: 0,
                          validateOnBlur: 0,
-                         height: '100px'"}}</th>
+                         height: '100px'"}}
+      </td>
     </tr>
   </table>
 </form>

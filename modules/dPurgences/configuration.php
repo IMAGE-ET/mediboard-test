@@ -9,14 +9,16 @@
  * @version    $Revision$
  */
 
-CConfiguration::register(array(
-  "CGroups" => array(
-    "dPurgences" => array(
-      "CRPU" => array(
-        "impose_degre_urgence" => "bool default|0",
-        "impose_diag_infirmier" => "bool default|0",
-        "impose_motif" => "bool default|0"
-      )
+CConfiguration::register(
+  array(
+    "CGroups" => array(
+      "dPurgences" => array(
+        "CRPU" => array(
+          "impose_degre_urgence" => "bool default|0",
+          "impose_diag_infirmier" => "bool default|0",
+          "impose_motif" => "bool default|0"
+        )
+      ),
     ),
-  ),
-));
+  )
+);

@@ -208,8 +208,8 @@ class CSetupdPurgences extends CSetup {
       " ou tentative par agent vulnérant type arme à feu.');";
     $this->addQuery($query);
     
-    $query = "INSERT INTO `circonstance` VALUES ( 'COUTEAU', 'Objet tranchant ou perforant', 'Pour toute agression, rixe, accident et ".
-      "suicide ou tentative par agent vulnérant type arme blanche.');";
+    $query = "INSERT INTO `circonstance` VALUES ( 'COUTEAU', 'Objet tranchant ou perforant', 'Pour toute agression, rixe,".
+      " accident et suicide ou tentative par agent vulnérant type arme blanche.');";
     $this->addQuery($query);
     
     $query = "INSERT INTO `circonstance` VALUES ( 'SPORT', 'Accident de sport ou de loisir', 'Traumatisme en rapport ".
@@ -257,7 +257,8 @@ class CSetupdPurgences extends CSetup {
     $query = "INSERT INTO `circonstance` VALUES ( 'SECOND', 'Transfert secondaire', 'Pour tout transfert secondaire.');";
     $this->addQuery($query);
     
-    $query = "INSERT INTO `circonstance` VALUES ( 'AUTRE', 'Autres', 'Autre traumatisme avec circonstance particulière non répertorié.');";
+    $query = "INSERT INTO `circonstance` VALUES ( 'AUTRE', 'Autres', 'Autre traumatisme avec circonstance particulière'.
+      'non répertorié.');";
     $this->addQuery($query);
     
     $query = "INSERT INTO `circonstance` VALUES ( 'CATA', 'Accident nombreuses victimes', 'Accident catastrophique mettant ".

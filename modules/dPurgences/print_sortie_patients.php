@@ -10,7 +10,7 @@
  */
 
 // Type d'affichage
-$view_sortie = CValue::get("view_sortie","tous");
+$view_sortie = CValue::get("view_sortie", "tous");
 
 // Parametre de tri
 $order_way = CValue::getOrSession("order_way", "ASC");

@@ -15,23 +15,23 @@
 <script type="text/javascript">
   reloadDiagnostic = function(sejour_id, modeDAS) {
     if ($("dp_"+sejour_id)) {
-  	  var url = new Url("dPurgences", "ajax_diagnostic_principal");
-  	  url.addParam("sejour_id", sejour_id);
-  	  url.requestUpdate("dp_"+sejour_id);
+      var url = new Url("dPurgences", "ajax_diagnostic_principal");
+      url.addParam("sejour_id", sejour_id);
+      url.requestUpdate("dp_"+sejour_id);
     }
     if ($("cim")) {
-  	  var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
-  	  url.addParam("sejour_id", sejour_id);
-  	  url.addParam("modeDAS", modeDAS);
-  	  url.requestUpdate("cim");
+      var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
+      url.addParam("sejour_id", sejour_id);
+      url.addParam("modeDAS", modeDAS);
+      url.requestUpdate("cim");
     }
-  }
+  };
   deleteCodeCim10 = function() {
-	  var oForm = getForm("editSejour");
-	  $V(oForm.keywords_code, '');
-	  $V(oForm.DP, '');
-	  submitSejour('{{$sejour->_id}}');
-  }
+    var oForm = getForm("editSejour");
+    $V(oForm.keywords_code, '');
+    $V(oForm.DP, '');
+    submitSejour('{{$sejour->_id}}');
+  };
   Main.add(function() {
     var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
     url.addParam("sejour_id", '{{$sejour->_id}}');
@@ -41,7 +41,7 @@
       select: "code",
       width: "250px",
       afterUpdateElement: function(oHidden) {
-  	    $V(getForm('editSejour').DP, oHidden.value);
+        $V(getForm('editSejour').DP, oHidden.value);
       }
     });
   });
@@ -63,7 +63,7 @@
     {{tr}}button-CCodeCIM10-choix{{/tr}}
   </button>
   <button type="button" class="cancel notext" onclick="deleteCodeCim10();">
-  	{{tr}}Delete{{/tr}}
+    {{tr}}Delete{{/tr}}
   </button>
 </td>
 

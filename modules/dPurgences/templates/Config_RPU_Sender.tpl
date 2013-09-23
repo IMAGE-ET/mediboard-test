@@ -12,7 +12,7 @@
 
 <script type="text/javascript">
   Main.add(function() {
-    Control.Tabs.create("tabs_configure");
+    Control.Tabs.create("tabs_configure", false);
 
     {{if !$writable}}
       $('import-key').disabled = true;

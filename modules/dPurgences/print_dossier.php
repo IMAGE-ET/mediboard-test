@@ -153,22 +153,22 @@ ksort($dossier);
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("rpu"    , $rpu);
-$smarty->assign("patient", $patient);
-$smarty->assign("sejour" , $sejour);
-$smarty->assign("consult", $consult);
-$smarty->assign("today"  , $today  );
-$smarty->assign("offline", $offline);
-$smarty->assign("formulaires", $formulaires);
-$smarty->assign("dossier", $dossier);
-$smarty->assign("list_lines", $list_lines);
+$smarty->assign("rpu"            , $rpu);
+$smarty->assign("patient"        , $patient);
+$smarty->assign("sejour"         , $sejour);
+$smarty->assign("consult"        , $consult);
+$smarty->assign("today"          , $today  );
+$smarty->assign("offline"        , $offline);
+$smarty->assign("formulaires"    , $formulaires);
+$smarty->assign("dossier"        , $dossier);
+$smarty->assign("list_lines"     , $list_lines);
+$smarty->assign("formulaires"    , $formulaires);
+$smarty->assign("praticien"      , new CMediusers());
+$smarty->assign("atc_classes"    , $atc_classes);
+$smarty->assign("dossier_medical", $dossier_medical);
+$smarty->assign("constantes_medicales_grid", $constantes_medicales_grid);
 if (CModule::getActive("dPprescription")) {
   $smarty->assign("prescription", $prescription);
 }
-$smarty->assign("formulaires", $formulaires);
-$smarty->assign("praticien", new CMediusers);
-$smarty->assign("atc_classes", $atc_classes);
-$smarty->assign("dossier_medical", $dossier_medical);
-$smarty->assign("constantes_medicales_grid", $constantes_medicales_grid);
 
 $smarty->display("print_dossier.tpl");

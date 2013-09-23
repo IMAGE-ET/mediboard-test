@@ -130,6 +130,7 @@
                 if (field) {
                   query += "&where[cancelled]=" + $V(field);  return query;
                 }
+                return null;
               }
             });
           });
