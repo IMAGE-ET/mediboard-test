@@ -35,7 +35,7 @@ class CIHE {
   /**
    * @var array
    */
-  var $_categories   = array();
+  public $_categories   = array();
 
   /**
    * Retrieve handlers list
@@ -53,6 +53,15 @@ class CIHE {
    */
   function getEvenements() {
     return self::$evenements;
+  }
+
+  /**
+   * Retrieve document elements
+   *
+   * @return array
+   */
+  function getDocumentElements() {
+    return array();
   }
   
   /**

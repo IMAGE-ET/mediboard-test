@@ -58,6 +58,7 @@ class CEAIDispatcher {
       return self::dispatchError($data, $actor);
     }
 
+    /** @var CExchangeDataFormat $data_format */
     if (($data_format = self::understand($data, $actor, $contexts)) === null) {
       self::$errors[] = CAppUI::tr("CEAIDispatcher-no_understand");
       return self::dispatchError($data, $actor);
@@ -69,6 +70,7 @@ class CEAIDispatcher {
                                 get_class($data_format->_family_message) : $data_format->_family_message_class;
 
     $msg_supported_classes = $data_format->getMessagesSupported($actor->_guid, false, null, true);
+
     foreach ($msg_supported_classes as $_msg_supported_class => $_msg_supported) {
       if ($family_message_class == $_msg_supported_class) {
         $supported = true;
@@ -114,13 +116,13 @@ class CEAIDispatcher {
    * @return bool Understood ? 
    */  
   static function understand($data, $actor = null, $contexts = null) {
-    foreach (CExchangeDataFormat::getAll() as $key => $_exchange_class) {  
+    foreach (CExchangeDataFormat::getAll() as $key => $_exchange_class) {
       foreach (CApp::getChildClasses($_exchange_class, array(), true) as $under_key => $_data_format) {
         /**
          * @var CExchangeDataFormat
          */
         $data_format = new $_data_format;
-        
+
         // Test si le message est compris
         if ($contexts) {
           $understand = $data_format->understand($data, $actor, $contexts); 
