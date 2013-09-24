@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
 
 {{assign var=_page_formats value="CCompteRendu"|static:"_page_formats"}}
 
@@ -44,7 +44,7 @@ var PageFormat = {
     this.changePage();
   },
 
-  toggleMode: function(mode){
+  toggleMode: function(mode) {
     if(((mode == "landscape") && (parseFloat(this.form.page_width.value) < parseFloat(this.form.page_height.value))) ||
        ((mode == "portrait") && (parseFloat(this.form.page_width.value) > parseFloat(this.form.page_height.value))))
     {
@@ -105,7 +105,7 @@ var PageFormat = {
 	                                (resolution * this.form["margin_" + y].value)) + "px";
   },
 
-  completeForm: function(){
+  completeForm: function() {
     var tab_margin = new Array("top", "right", "bottom", "left");
     var dform = getForm('download-pdf-form');
     if($("input_margin_top") != null) {
@@ -131,11 +131,11 @@ var PageFormat = {
 };
 </script>
 
-<table class="layout" style="margin: auto !important; width:100%;">
+<table class="layout" style="margin: auto !important;">
   <tr>
     <td style="text-align: center" colspan="3">
       {{if $droit}}
-        {{mb_field object=$compte_rendu field="margin_top" onchange="Thumb.old(); PageFormat.changeMarges('top');" onkeyup="PageFormat.changeMarges('top');" size="3" increment=true form=editFrm step=1}}cm
+        {{mb_field object=$compte_rendu field="margin_top" onchange="Thumb.old(); PageFormat.changeMarges('top');" onkeyup="PageFormat.changeMarges('top');" size="3" increment=true form=editFrm step=0.1}}cm
       {{else}}
         {{mb_field object=$compte_rendu field="margin_top" readonly="readonly"}}
       {{/if}}
@@ -145,7 +145,7 @@ var PageFormat = {
   <tr>
     <td style="vertical-align: middle;">
       {{if $droit}}
-        {{mb_field object=$compte_rendu field="margin_left" onchange="Thumb.old(); PageFormat.changeMarges('left');" onkeyup="PageFormat.changeMarges('left');" size="3" increment=true form=editFrm step=1}}cm
+        {{mb_field object=$compte_rendu field="margin_left" onchange="Thumb.old(); PageFormat.changeMarges('left');" onkeyup="PageFormat.changeMarges('left');" size="3" increment=true form=editFrm step=0.1}}cm
       {{else}}
         {{mb_field object=$compte_rendu field="margin_left" readonly="readonly"}}
       {{/if}}
@@ -162,7 +162,7 @@ var PageFormat = {
 
     <td style="text-align: right; vertical-align: middle;">
       {{if $droit}}
-        {{mb_field object=$compte_rendu field="margin_right" onchange="Thumb.old(); PageFormat.changeMarges('left');" onkeyup="PageFormat.changeMarges('left');" size="3" increment=true form=editFrm step=1}}cm
+        {{mb_field object=$compte_rendu field="margin_right" onchange="Thumb.old(); PageFormat.changeMarges('left');" onkeyup="PageFormat.changeMarges('left');" size="3" increment=true form=editFrm step=0.1}}cm
       {{else}}
         {{mb_field object=$compte_rendu field="margin_right" readonly="readonly"}}
       {{/if}}
@@ -172,7 +172,7 @@ var PageFormat = {
   <tr>
     <td style="text-align: center" colspan="3">
       {{if $droit}}
-        {{mb_field object=$compte_rendu field="margin_bottom" onchange="Thumb.old(); PageFormat.changeMarges('top');" onkeyup="PageFormat.changeMarges('top');" size="3" increment=true form=editFrm step=1}}cm
+        {{mb_field object=$compte_rendu field="margin_bottom" onchange="Thumb.old(); PageFormat.changeMarges('top');" onkeyup="PageFormat.changeMarges('top');" size="3" increment=true form=editFrm step=0.1}}cm
       {{else}}
         {{mb_field object=$compte_rendu field="margin_bottom" readonly="readonly"}}
       {{/if}}
@@ -180,7 +180,7 @@ var PageFormat = {
   </tr>
 </table>
 
-<table width="100%">
+<table class="form">
   <tr>
     <th>{{mb_label object=$compte_rendu field="_page_format"}}</th>
     <td>
@@ -193,7 +193,7 @@ var PageFormat = {
     </th>
     <td>	
       {{if $droit}}  
-        {{mb_field object=$compte_rendu field="page_width" onchange="Thumb.old(); PageFormat.updateFormat();" onkeyup="PageFormat.updateFormat();" size="4" increment=true form=editFrm step=1}}cm
+        {{mb_field object=$compte_rendu field="page_width" onchange="Thumb.old(); PageFormat.updateFormat();" onkeyup="PageFormat.updateFormat();" size="4" increment=true form=editFrm step=0.1}}cm
       {{else}}
         {{mb_field object=$compte_rendu field="page_width" readonly="readonly"}}
       {{/if}}
@@ -205,7 +205,7 @@ var PageFormat = {
     </th>
     <td>
       {{if $droit}}
-        {{mb_field object=$compte_rendu field="page_height" onchange="Thumb.old(); PageFormat.updateFormat();" onkeyup="PageFormat.updateFormat();" size="4" increment=true form=editFrm step=1}}cm
+        {{mb_field object=$compte_rendu field="page_height" onchange="Thumb.old(); PageFormat.updateFormat();" onkeyup="PageFormat.updateFormat();" size="4" increment=true form=editFrm step=0.1}}cm
       {{else}}
         {{mb_field object=$compte_rendu field="page_height" readonly="readonly"}}
       {{/if}}

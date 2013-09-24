@@ -1801,10 +1801,16 @@ class CPatient extends CPerson {
       $medecin = $this->_ref_medecin_traitant;
       $template->addProperty("Patient - médecin traitant"          , "$medecin->nom $medecin->prenom");
       $template->addProperty("Patient - médecin traitant - adresse", "$medecin->adresse \n $medecin->cp $medecin->ville");
+      $template->addProperty("Patient - médecin traitant - voie"   , $medecin->adresse);
+      $template->addProperty("Patient - médecin traitant - cp"     , $medecin->cp);
+      $template->addProperty("Patient - médecin traitant - ville"  , $medecin->ville);
     }
     else {
       $template->addProperty("Patient - médecin traitant");
       $template->addProperty("Patient - médecin traitant - adresse");
+      $template->addProperty("Patient - médecin traitant - voie");
+      $template->addProperty("Patient - médecin traitant - cp");
+      $template->addProperty("Patient - médecin traitant - ville");
     }
 
     // Employeur
