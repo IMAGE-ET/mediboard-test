@@ -340,6 +340,13 @@
     url.requestModal(1000,500);
   };
 
+  resetCopy = function() {
+    window.cut_operation_id = null;
+    window.copy_operation_id = null;
+    window.copy_commentaire_id = null;
+    updateStatusCut();
+  };
+
 </script>
 
 <form name="editOperation" method="post">
@@ -444,7 +451,7 @@
       </td>
       <td class="narrow">
         <div id="status_cut" style="width: 100px; height: 14px; border: 2px dashed #ddd; font-weight: bold; text-align: center; cursor: pointer;"
-          onclick="window.cut_operation_id = null; window.copy_operation_id = null; updateStatusCut();">
+          onclick="resetCopy();">
         </div>
       </td>
     </tr>
