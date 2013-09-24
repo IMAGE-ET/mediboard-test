@@ -72,8 +72,8 @@ class CMbPhone {
 
     if ($object instanceof CPerson) {
       //mobile
-      $mobile_phone_number = $object->_p_mobile_phone_number;
-      if (isset($mobile_phone_number)) {
+
+      if ($mobile_phone_number = $object->_p_mobile_phone_number) {
         if ($checkmobile && !self::checkMobileNumber($mobile_phone_number)) {
           return false;
         }
@@ -81,8 +81,7 @@ class CMbPhone {
       }
 
       //fixe
-      $phone_number =  $object->_p_phone_number;
-      if (isset($phone_number)) {
+      if ($phone_number =  $object->_p_phone_number) {
         if ($checkmobile && !self::checkMobileNumber($phone_number)) {
           return false;
         }
