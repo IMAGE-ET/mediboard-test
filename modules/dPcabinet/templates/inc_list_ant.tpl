@@ -164,7 +164,9 @@ showModalTP = function(dossier_medical_id, sejour_id, prescription_sejour_id) {
     </button>
   {{/if}}
 
+  {{if  $dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_ref_prescription_lines && $_is_anesth}}
   <button class="tick" type="button" style="float: right" onclick="showModalTP('{{$dossier_medical->_id}}','{{$sejour->_id}}','{{$prescription_sejour_id}}');">Represcrire les traitements personnels</button>
+  {{/if}}
 
   <strong>Traitements personnels</strong>
 {{/if}}
