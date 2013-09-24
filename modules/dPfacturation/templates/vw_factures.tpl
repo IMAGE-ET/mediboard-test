@@ -8,21 +8,26 @@ refreshList = function(){
     oForm.patient_id.value = '';
   }
   var url = new Url("facturation" , "{{$tab}}");
-  url.addElement(oForm.etat_cloture);
   url.addElement(oForm.patient_id);
   url.addElement(oForm.chirSel);
   url.addElement(oForm._date_min);
   url.addElement(oForm._date_max);
   url.addElement(oForm.type_date_search);
   url.addElement(oForm.num_facture);
-  url.addElement(oForm.numero);
-  {{if $conf.dPfacturation.CRelance.use_relances}}
-    url.addParam("etat_relance" , $V(oForm.etat_relance) ? 1 : 0 );
+
+  {{if !$conf.dPfacturation.Other.use_search_easy}}
+    url.addElement(oForm.etat_cloture);
+    url.addElement(oForm.numero);
+    {{if $conf.dPfacturation.CRelance.use_relances}}
+      url.addParam("etat_relance" , $V(oForm.etat_relance) ? 1 : 0 );
+    {{/if}}
+    {{if $facture->_class == "CFactureEtablissement"}}
+      url.addParam("etat_cotation" , $V(oForm.etat_cotation) ? 1 : 0 );
+    {{/if}}
+    url.addParam("no_finish_reglement" , $V(oForm.no_finish_reglement) ? 1 : 0);
+  {{else}}
+    url.addElement(oForm.search_easy);
   {{/if}}
-  {{if $facture->_class == "CFactureEtablissement"}}
-    url.addParam("etat_cotation" , $V(oForm.etat_cotation) ? 1 : 0 );
-  {{/if}}
-  url.addParam("no_finish_reglement" , $V(oForm.no_finish_reglement) ? 1 : 0);
   url.requestUpdate("factures");
 }
 
@@ -73,17 +78,41 @@ Main.add(function () {
             }
           </script>
         </td>
-        <th>{{mb_title object=$facture field=numero}}</th>
-        <td>
-          <select name="numero">
-            <option value="0" {{if $numero == "0"}} selected="selected" {{/if}}>-- Toutes</option>
-            <option value="1" {{if $numero == "1"}} selected="selected" {{/if}}>1</option>
-            <option value="2" {{if $numero == "2"}} selected="selected" {{/if}}>2</option>
-            <option value="3" {{if $numero == "3"}} selected="selected" {{/if}}>3</option>
-            </option>
-          </select>
-        </td>
-        <td colspan="2"></td>
+        {{if !$conf.dPfacturation.Other.use_search_easy}}
+          <th>{{mb_title object=$facture field=numero}}</th>
+          <td>
+            <select name="numero">
+              <option value="0" {{if $numero == "0"}} selected="selected" {{/if}}>-- Toutes</option>
+              <option value="1" {{if $numero == "1"}} selected="selected" {{/if}}>1</option>
+              <option value="2" {{if $numero == "2"}} selected="selected" {{/if}}>2</option>
+              <option value="3" {{if $numero == "3"}} selected="selected" {{/if}}>3</option>
+              </option>
+            </select>
+          </td>
+          <td colspan="2"></td>
+        {{else}}
+          <th>{{mb_label object=$facture field=type_facture}}</th>
+          <td>
+            <select name="search_easy">
+              <option value="0" {{if $search_easy == "0"}} selected="selected" {{/if}}>-- Toutes</option>
+              {{if $conf.dPfacturation.Other.use_field_definitive}}
+                <option value="1" {{if $search_easy == "1"}} selected="selected" {{/if}}>Définitive</option>
+              {{/if}}
+              {{if !$conf.dPfacturation.$classe.use_auto_cloture}}
+                <option value="2" {{if $search_easy == "2"}} selected="selected" {{/if}}>Cloturée</option>
+                <option value="3" {{if $search_easy == "3"}} selected="selected" {{/if}}>Non cloturée</option>
+              {{/if}}
+              {{if $facture->_class == "CFactureEtablissement"}}
+                <option value="4" {{if $search_easy == "4"}} selected="selected" {{/if}}>Non cotée</option>
+                <option value="5" {{if $search_easy == "5"}} selected="selected" {{/if}}>Extournée</option>
+              {{/if}}
+              <option value="6" {{if $search_easy == "6"}} selected="selected" {{/if}}>Réglée</option>
+              {{if $conf.dPfacturation.CRelance.use_relances}}
+                <option value="7" {{if $search_easy == "7"}} selected="selected" {{/if}}>Relancée</option>
+              {{/if}}
+            </select>
+          </td>
+        {{/if}}
       </tr>
       <tr>
         <th></th>
@@ -112,19 +141,21 @@ Main.add(function () {
             });
           </script>
         </td>
-        {{if !$conf.dPfacturation.$classe.use_auto_cloture}}
-          <th>Etat</th>
-          <td>
-            <select name="etat_cloture">
-              <option value="0" {{if $etat_cloture == "0"}} selected="selected" {{/if}}>-- Toutes</option>
-              <option value="1" {{if $etat_cloture == "1"}} selected="selected" {{/if}}>Non cloturées</option>
-              <option value="2" {{if $etat_cloture == "2"}} selected="selected" {{/if}}>Cloturées</option>
-              </option>
-            </select>
-          </td>
-        {{else}}
-          <th></th>
-          <td><input type="hidden" name="etat_cloture" value="0" /></td>
+        {{if !$conf.dPfacturation.Other.use_search_easy}}
+          {{if !$conf.dPfacturation.$classe.use_auto_cloture}}
+            <th>Etat</th>
+            <td>
+              <select name="etat_cloture">
+                <option value="0" {{if $etat_cloture == "0"}} selected="selected" {{/if}}>-- Toutes</option>
+                <option value="1" {{if $etat_cloture == "1"}} selected="selected" {{/if}}>Non cloturées</option>
+                <option value="2" {{if $etat_cloture == "2"}} selected="selected" {{/if}}>Cloturées</option>
+                </option>
+              </select>
+            </td>
+          {{else}}
+            <th></th>
+            <td><input type="hidden" name="etat_cloture" value="0" /></td>
+          {{/if}}
         {{/if}}
         <th>Depuis le</th>
         <td>{{mb_field object=$filter field="_date_min" form="choice-facture" canNull="false" register=true}}</td>
@@ -140,19 +171,21 @@ Main.add(function () {
             {{mb_include module=mediusers template=inc_options_mediuser selected=$chirSel list=$listChirs}}
           </select>
         </td>
-        <th></th>
-        <td class="narrow">
-          <label>
-            <input type="checkbox" name="no_finish_reglement" value="0" {{if $no_finish_reglement }}checked="checked"{{/if}}/>
-            Uniquement réglées
-          </label>
-          {{if $conf.dPfacturation.CRelance.use_relances}}
+        {{if !$conf.dPfacturation.Other.use_search_easy}}
+          <th></th>
+          <td class="narrow">
             <label>
-              <input name="etat_relance" value="1" type="checkbox" {{if $etat_relance == 1}}checked="checked"{{/if}}/>
-               Relancées 
+              <input type="checkbox" name="no_finish_reglement" value="0" {{if $no_finish_reglement }}checked="checked"{{/if}}/>
+              Uniquement réglées
             </label>
-          {{/if}}
-        </td>
+            {{if $conf.dPfacturation.CRelance.use_relances}}
+              <label>
+                <input name="etat_relance" value="1" type="checkbox" {{if $etat_relance == 1}}checked="checked"{{/if}}/>
+                 Relancées
+              </label>
+            {{/if}}
+          </td>
+        {{/if}}
         <th>Jusqu'au</th>
         <td>{{mb_field object=$filter field="_date_max" form="choice-facture" canNull="false" register=true}}</td>
       </tr>
@@ -160,15 +193,17 @@ Main.add(function () {
       <tr>
         <th>Numéro de facture</th>
         <td><input name="num_facture" value="{{$num_facture}}" type="text" /></td>
-        <th></th>
-        <td>
-          {{if $facture->_class == "CFactureEtablissement"}}
-            <label>
-              <input name="etat_cotation" value="1" type="checkbox" {{if $etat_cotation == 1}}checked="checked"{{/if}}/>
-              Non cotées
-            </label>
-          {{/if}}
-        </td>
+        {{if !$conf.dPfacturation.Other.use_search_easy}}
+          <th></th>
+          <td>
+            {{if $facture->_class == "CFactureEtablissement"}}
+              <label>
+                <input name="etat_cotation" value="1" type="checkbox" {{if $etat_cotation == 1}}checked="checked"{{/if}}/>
+                Non cotées
+              </label>
+            {{/if}}
+          </td>
+        {{/if}}
         {{if !$conf.dPfacturation.$classe.use_auto_cloture}}
           <th>Date de</th>
           <td>

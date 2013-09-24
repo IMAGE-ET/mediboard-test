@@ -22,6 +22,7 @@ $type_date_search   = CValue::getOrSession("type_date_search", "ouverture");
 $chirSel            = CValue::getOrSession("chirSel", "-1");
 $num_facture        = CValue::getOrSession("num_facture", "");
 $numero             = CValue::getOrSession("numero", "1");
+$search_easy        = CValue::getOrSession("search_easy", "0");
 
 // Liste des chirurgiens
 $user = new CMediusers();
@@ -33,19 +34,19 @@ $patient->load($patient_id);
 
 $ljoin = array();
 $where = array();
-if ($etat_relance) {
+if ($etat_relance || $search_easy == 7) {
   $ljoin["facture_relance"] = "facture_relance.object_id = facture_etablissement.facture_id";
   $where["facture_relance.object_class"] = " = 'CFactureEtablissement'";
 }
 
 $where["$type_date_search"] = "BETWEEN '$date_min' AND '$date_max'";
-if ($etat_cloture == "1" && $type_date_search != "cloture") {
+if (($etat_cloture == "1" || $search_easy == 3) && $type_date_search != "cloture") {
   $where["cloture"] = "IS NULL";
 }
-elseif ($etat_cloture == "2" && $type_date_search != "cloture") {
+elseif (($etat_cloture == "2" || $search_easy == 2) && $type_date_search != "cloture") {
   $where["cloture"] = "IS NOT NULL";
 }
-if ($no_finish_reglement) {
+if ($no_finish_reglement || $search_easy == 6) {
   $where["patient_date_reglement"] = "IS NOT NULL";
 }
 if ($chirSel == -1) {
@@ -57,14 +58,18 @@ elseif ($chirSel) {
 if ($patient_id) {
   $where["patient_id"] =" = '$patient_id' ";
 }
-
 if ($num_facture) {
   $where["facture_id"] =" = '$num_facture' ";
 }
-if ($numero) {
+if ($numero && !CAppUI::conf("dPfacturation Other use_search_easy")) {
   $where["numero"] =" = '$numero'";
 }
-
+if ($search_easy == 5) {
+  $where["annule"] =" = '1'";
+}
+if ($search_easy == 1) {
+  $where["definitive"] =" = '1'";
+}
 $facture = new CFactureEtablissement();
 $factures = $facture->loadList($where , "ouverture ASC, numero", 50, "facture_id", $ljoin);
 
@@ -81,7 +86,10 @@ foreach ($factures as $key => $_facture) {
   if (!count($_facture->_ref_sejours) && !count($_facture->_ref_consults)) {
     unset($factures[$key]);
   }
-  elseif ($nb_tarmed == 0 && $nb_caisse == 0 && $nb_ngap == 0 && $nb_ccam == 0 && !$etat_cotation) {
+  elseif ($nb_tarmed == 0 && $nb_caisse == 0 && $nb_ngap == 0 && $nb_ccam == 0 && !$etat_cotation && $search_easy != 4) {
+    unset($factures[$key]);
+  }
+  elseif (($nb_tarmed != 0 || $nb_caisse != 0 || $nb_ngap != 0 || $nb_ccam != 0) && $search_easy == 4) {
     unset($factures[$key]);
   }
 }
@@ -128,5 +136,6 @@ $smarty->assign("no_finish_reglement" , $no_finish_reglement);
 $smarty->assign("type_date_search"    , $type_date_search);
 $smarty->assign("num_facture"   , $num_facture);
 $smarty->assign("numero"        , $numero);
+$smarty->assign("search_easy"   , $search_easy);
 
 $smarty->display("vw_factures.tpl");

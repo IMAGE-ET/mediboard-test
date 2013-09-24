@@ -32,6 +32,7 @@
       <th class="category" colspan="2">{{tr}}Other{{/tr}}</th>
     </tr>
     {{assign var=class value=Other}}
+    {{mb_include module=system template=inc_config_bool var=use_search_easy}}
     {{mb_include module=system template=inc_config_bool var=use_view_chainage}}
     {{mb_include module=system template=inc_config_bool var=use_view_quantitynull}}
     {{mb_include module=system template=inc_config_bool var=use_strict_cloture}}
