@@ -15,6 +15,8 @@ $date       = CValue::getOrSession("date", CMbDT::date());
 $type_hospi = CValue::getOrSession("type_hospi", null);
 $vue        = CValue::getOrSession("vue", 0);
 $group_id   = CValue::get("g");
+$mode       = CValue::getOrSession("mode", 0);
+$hour_instantane = CValue::getOrSession("hour_instantane", CMbDT::format(CMbDT::time(), "%H"));
 
 $mouvements = array("comp" => array("entrees" => array("place" => 0, "non_place" => 0),
                                     "sorties" => array("place" => 0, "non_place" => 0)),
@@ -114,13 +116,26 @@ if ($praticien_id) {
   $whereNP["sejour.praticien_id"] = "= '$praticien_id'";
 }
 
+$datetime_check = "$date $hour_instantane:00:00";
+
 // Comptage des patients présents
 $wherePresents     = $where;
-$wherePresents[]   = "'$date' BETWEEN DATE(affectation.entree) AND DATE(affectation.sortie)";
+if ($mode) {
+  $wherePresents[]   = "'$date' BETWEEN DATE(affectation.entree) AND DATE(affectation.sortie)";
+}
+else {
+  $wherePresents[] = "('$datetime_check' BETWEEN affectation.entree AND affectation.sortie) AND affectation.effectue = '0'";
+}
 $presents          = $affectation->countList($wherePresents, null, $ljoin);
 
 $wherePresentsNP   = $whereNP;
-$wherePresentsNP[] = "'$date' BETWEEN DATE(sejour.entree) AND DATE(sejour.sortie)";
+if ($mode) {
+  $wherePresentsNP[] = "'$date' BETWEEN DATE(sejour.entree) AND DATE(sejour.sortie)";
+}
+else {
+  $wherePresentsNP[] = "'$datetime_check' BETWEEN sejour.entree AND sejour.sortie";
+}
+
 $presentsNP        = $sejour->countList($wherePresentsNP, null, $ljoinNP);
 
 // Comptage des déplacements
@@ -172,6 +187,7 @@ foreach ($mouvements as $type => &$_mouvement) {
       $where["sejour.sortie"]      = "= affectation.sortie";
       $whereNP["sejour.sortie"]    = "BETWEEN '$limit1' AND '$limit2'";
     }
+
     $_liste["place"]     = $affectation->countList($where, null, $ljoin);
     $_liste["non_place"] = $sejour->countList($whereNP, null, $ljoinNP);
   }
@@ -188,6 +204,8 @@ $smarty->assign("praticien_id", $praticien_id);
 $smarty->assign("type_hospi"  , $type_hospi);
 $smarty->assign("vue"         , $vue);
 $smarty->assign("date"        , $date);
+$smarty->assign("mode"        , $mode);
+$smarty->assign("hour_instantane", $hour_instantane);
 $smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 
 $smarty->display("edit_sorties.tpl");

@@ -18,6 +18,9 @@ $order_way      = CValue::getOrSession("order_way"   , "ASC");
 $order_col      = CValue::getOrSession("order_col"   , "_patient");
 $show_duree_preop = CAppUI::conf("dPplanningOp COperation show_duree_preop");
 $show_hour_anesth = CAppUI::conf("dPhospi show_hour_anesth_mvt");
+$mode           = CValue::getOrSession("mode", 0);
+
+$hour_instantane = CValue::getOrSession("hour_instantane", CMbDT::format(CMbDT::time(), "%H"));
 
 if (is_array($services_ids)) {
   CMbArray::removeValue("", $services_ids);
@@ -119,16 +122,28 @@ if ($order_col == "entree") {
 
 // Récupération des présents du jour
 if ($type == "presents") {
+  $datetime_check = "$date $hour_instantane:00:00";
+
   // Patients placés
-  $where[] = "'$date' BETWEEN DATE(affectation.entree) AND DATE(affectation.sortie)";
+  if ($mode) {
+    $where[] = "'$date' BETWEEN DATE(affectation.entree) AND DATE(affectation.sortie)";
+  }
+  else {
+    $where[] = "('$datetime_check' BETWEEN affectation.entree AND affectation.sortie) AND affectation.effectue = '0'";
+  }
   if ($vue) {
     $where["sejour.confirme"] = " = '0'";
   }
   /** @var CAffectation[] $presents */
-  $presents = $affectation->loadList($where, $order, null, null, $ljoin);
+  $presents = $affectation->loadList($where, $order, null, "affectation_id", $ljoin);
   
   // Patients non placés
-  $whereNP[]  = "'$date' BETWEEN DATE(sejour.entree) AND DATE(sejour.sortie)";
+  if ($mode) {
+    $whereNP[]  = "'$date' BETWEEN DATE(sejour.entree) AND DATE(sejour.sortie)";
+  }
+  else {
+    $whereNP[] = "'$datetime_check' BETWEEN sejour.entree AND sejour.sortie";
+  }
 
   /** @var CSejour[] $presentsNP */
   $presentsNP = $sejour->loadList($whereNP, $orderNP, null, "sejour.sejour_id", $ljoinNP);
@@ -136,7 +151,7 @@ if ($type == "presents") {
   $update_count = count($presents)."/".count($presentsNP);
 
   // Chargements des détails des séjours
-  foreach ($presents as $_present) {
+  foreach ($presents as $key => $_present) {
     $_present->loadRefsFwd();
     $sejour = $_present->_ref_sejour;
     $sejour->loadRefPatient(1);
@@ -175,7 +190,7 @@ if ($type == "presents") {
       }
     }
   }
-  
+
   $presents_by_service = array();
   $presentsNP_by_service = array();
   
@@ -225,8 +240,8 @@ elseif ($type == "deplacements") {
   /** @var CAffectation[] $deplacements */
   /** @var CAffectation[] $dep_entrants */
   /** @var CAffectation[] $dep_sortants */
-  $dep_entrants = $affectation->loadList($whereEntrants, $order, null, null, $ljoin);
-  $dep_sortants = $affectation->loadList($whereSortants, $order, null, null, $ljoin);
+  $dep_entrants = $affectation->loadList($whereEntrants, $order, null, "affectation_id", $ljoin);
+  $dep_sortants = $affectation->loadList($whereSortants, $order, null, "affectation.id", $ljoin);
   $deplacements = array_merge($dep_entrants, $dep_sortants);
   $sejours      = CMbObject::massLoadFwdRef($deplacements, "sejour_id");
   $patients     = CMbObject::massLoadFwdRef($sejours, "patient_id");
@@ -503,6 +518,8 @@ elseif ($type == "presents") {
   $smarty->assign("mouvements"  , $presents);
   $smarty->assign("mouvementsNP", $presentsNP);
   $smarty->assign("update_count", $update_count);
+  $smarty->assign("mode"        , $mode);
+  $smarty->assign("hour_instantane", $hour_instantane);
 }
 else {
   $smarty->assign("mouvements"  , $mouvements);

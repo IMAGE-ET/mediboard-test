@@ -5,7 +5,7 @@
 {{assign var=show_collation_mvt value=$conf.dPhospi.show_collation_mvt}}
 {{assign var=show_sortie_mvt value=$conf.dPhospi.show_sortie_mvt}}
 
-<script type="text/javascript">
+<script>
   $('count_{{$type}}_{{$type_mouvement}}').update('('+'{{$update_count}}'+')');
   Main.add(function () {
     {{if $type != "deplacements"}}
@@ -22,7 +22,7 @@
 {{assign var=update_splitted value="/"|split:$update_count}}
 
 {{if $type == "deplacements"}}
-  <script type="text/javascript">
+  <script>
     refreshList_deplacements = function(order_col, order_way) {
       refreshList(order_col, order_way, 'deplacements');
     }
@@ -137,7 +137,7 @@
     </table>
   </div>
 {{else}}
-  <script type="text/javascript">
+  <script>
     refreshList_{{$type}}{{$type_mouvement}} = function(order_col, order_way) {
       refreshList(order_col, order_way, '{{$type}}', '{{$type_mouvement}}');
     }
@@ -149,6 +149,29 @@
     <li>
       <a href="#non-places-{{$type}}_{{$type_mouvement}}">Non placés <small id="count_presents">({{$update_splitted.1}})</small></a>
     </li>
+    {{if $type == "presents"}}
+      <li>
+        <div>
+          <form name="chgAff" method="get">
+            <input type="hidden" name="type" value="{{$type}}" />
+            <input type="hidden" name="type_mouvement" value="{{$type_mouvement}}" />
+            <select name="mode" onchange="$V(getForm('typeVue').mode, this.value)">
+              <option value="0" {{if $mode == 0}}selected="selected"{{/if}}>{{tr}}Instant view{{/tr}}</option>
+              <option value="1" {{if $mode == 1}}selected="selected"{{/if}}>{{tr}}Day view{{/tr}}</option>
+            </select>
+            <label>
+              Heure pour vue instantanée :
+              <select name="hour_instantane" onchange="$V(getForm('typeVue').hour_instantane, this.value)">
+                {{foreach from=0|range:23 item=i}}
+                  {{assign var=j value=$i|str_pad:2:"0":$smarty.const.STR_PAD_LEFT}}
+                  <option value="{{$j}}" {{if $j == $hour_instantane}}selected{{/if}}>{{$j}}h</option>
+                {{/foreach}}
+              </select>
+            </label>
+          </form>
+        </div>
+      </li>
+    {{/if}}
   </ul>
   <hr class="control_tabs" />
   <div id="places-{{$type}}_{{$type_mouvement}}" style="display: none;">
