@@ -1,8 +1,10 @@
 <?php
+$locales[0] = 'Actes';
 $locales['CActe'] = 'Actes';
 $locales['CActeCCAM-title-modify'] = 'Modification Acte CCAM';
 $locales['CCAM'] = 'CCAM';
 $locales['CCodable'] = 'Codable';
+$locales['CCodable-actes'] = 'Actes';
 $locales['CCodeCCAM'] = 'Code CCAM';
 $locales['CCodeCCAM.remboursement.1'] = 'Remboursable';
 $locales['CCodeCCAM.remboursement.2'] = 'Non remboursable';
@@ -42,12 +44,12 @@ $locales['CFraisDivers-coefficient-desc'] = 'Coefficient';
 $locales['CFraisDivers-executant_id'] = 'Exécutant';
 $locales['CFraisDivers-executant_id-court'] = 'Exécutant';
 $locales['CFraisDivers-executant_id-desc'] = 'Exécutant';
-$locales['CFraisDivers-facturable'] = 'Facturable';
-$locales['CFraisDivers-facturable-court'] = 'Facturable';
-$locales['CFraisDivers-facturable-desc'] = 'Facturable';
 $locales['CFraisDivers-execution'] = 'Exécution';
 $locales['CFraisDivers-execution-court'] = 'Date d\'exécution';
 $locales['CFraisDivers-execution-desc'] = 'Exécution';
+$locales['CFraisDivers-facturable'] = 'Facturable';
+$locales['CFraisDivers-facturable-court'] = 'Facturable';
+$locales['CFraisDivers-facturable-desc'] = 'Facturable';
 $locales['CFraisDivers-frais_divers_id'] = 'Id';
 $locales['CFraisDivers-frais_divers_id-court'] = 'Id';
 $locales['CFraisDivers-frais_divers_id-desc'] = 'Id';
@@ -120,4 +122,3 @@ $locales['pref-new_search_ccam'] = 'Nouvelle recherche de code CCAM';
 $locales['pref-new_search_ccam-desc'] = 'Nouvelle ergonomie de recherche de code CCAM';
 $locales['pref-user_executant'] = 'Utilisateur exécutant';
 $locales['pref-user_executant-desc'] = 'L\'utilisateur connecté est toujours pré-sélectionné en tant qu\'exécutant';
-?>

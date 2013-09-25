@@ -68,7 +68,7 @@
   
   <ul id="tabs-pmsi" class="control_tabs">
     <li><a href="#tab-PMSI">{{tr}}PMSI{{/tr}}</a></li>
-    <li><a href="#ServeurActes" {{if !$sejour->_ref_operations}}class="empty"{{/if}}>Actes</a></li>
+    <li><a href="#ServeurActes" {{if !$sejour->_ref_operations}}class="empty"{{/if}}>{{tr}}CCodable-actes{{/tr}}</a></li>
     <li onmousedown="loadDocuments()"><a href="#Docs">Documents</a></li>
     {{if "dmi"|module_active}}
       <li><a href="#tab-dmi">{{tr}}CDMI{{/tr}}</a></li>

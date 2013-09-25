@@ -94,7 +94,7 @@
     {{/if}}
   {{/if}}
   {{if $app->user_prefs.ccam_consultation == 1}}
-    <li><a href="#Actes">Cotation</a></li>
+    <li><a href="#Actes">{{tr}}CCodable-actes{{/tr}}</a></li>
   {{/if}}
 </ul>
 

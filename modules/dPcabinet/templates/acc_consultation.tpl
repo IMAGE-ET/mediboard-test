@@ -122,7 +122,7 @@ Main.add(function () {
   {{/if}}
   
   {{if $app->user_prefs.ccam_consultation == 1}}
-  <li><a id="acc_consultation_a_Actes" href="#Actes">Actes</a></li>
+  <li><a id="acc_consultation_a_Actes" href="#Actes">{{tr}}CCodable-actes{{/tr}}</a></li>
   {{/if}}
   
   {{if $consult->_is_dentiste}}

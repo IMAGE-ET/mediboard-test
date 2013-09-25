@@ -59,7 +59,7 @@
 </table>
 
 <table class="{{$tbl_class}}">
-  <tr><th class="category" colspan="10">Actes</th></tr>
+  <tr><th class="category" colspan="10">{{tr}}CCodable-actes{{/tr}}</th></tr>
 </table>
 
 {{mb_include module=cabinet template=print_actes readonly=true}}

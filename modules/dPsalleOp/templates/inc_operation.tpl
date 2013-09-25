@@ -395,7 +395,7 @@
 
   {{if !$conf.dPsalleOp.mode_anesth}}
     {{if (!$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && $codage_prat))}}
-    <li><a href="#codage_tab">Actes</a></li>
+    <li><a href="#codage_tab">{{tr}}CCodable-actes{{/tr}}</a></li>
     <li><a href="#diag_tab">Diags.</a></li>
     {{/if}}
     

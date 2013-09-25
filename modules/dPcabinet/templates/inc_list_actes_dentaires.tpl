@@ -16,7 +16,7 @@
 
 <table class="tbl">
   <tr>
-    <th class="category">Actes</th>
+    <th class="category">{{tr}}CCodable-actes{{/tr}}</th>
   </tr>
   
   {{if $actes_dentaires|@count}}
@@ -48,7 +48,7 @@
             <span>
               <button type="button" class="notext trash" onclick="this.form.onsubmit();" title="Supprimer"></button>
               
-			  <big style="border: 2px solid #888; background: #fff; width: 2em; border-radius: 1em;">&nbsp;{{$_acte_dentaire->rank}}&nbsp;</big>
+              <big style="border: 2px solid #888; background: #fff; width: 2em; border-radius: 1em;">&nbsp;{{$_acte_dentaire->rank}}&nbsp;</big>
               <a style="display: inline;" onclick="CodeCCAM.show('{{$_acte_dentaire->code}}', 'CConsultation')" href="#1">
                 {{$_acte_dentaire->code}}
               </a>

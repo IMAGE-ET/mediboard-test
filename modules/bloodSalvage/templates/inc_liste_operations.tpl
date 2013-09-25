@@ -23,7 +23,7 @@
   {{/if}}
   <th>Patient</th>
   {{if !$vueReduite}}
-  <th>Actes</th>
+  <th>{{tr}}CCodable-actes{{/tr}}</th>
   <th>Coté</th>
   <th>Durée</th>
   {{/if}}

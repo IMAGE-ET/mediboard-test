@@ -239,7 +239,7 @@ Main.add(function () {
           Pour créer un tarif contenant des codes {{if $conf.ref_pays == 1}}CCAM et NGAP{{else}}Tarmed et Prestation{{/if}}, effectuer une cotation réelle
           pendant une consultation en trois étapes :
           <ul>
-            <li><em>Ajouter</em> des actes dans le volet <strong>Actes</strong></li>
+            <li><em>Ajouter</em> des actes dans le volet <strong>{{tr}}CCodable-actes{{/tr}}</strong></li>
             <li><em>Valider</em> la cotation dans le volet <strong>Docs. et Règlements</strong></li>
             <li><em>Cliquer</em> <strong>Nouveau tarif</strong> dans cette même section</li>
           </ul>
