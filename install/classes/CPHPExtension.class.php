@@ -143,6 +143,16 @@ class CPHPExtension  extends CPrerequisite {
     $extension->description = "GNU Privacy Guard (GPG ou GnuPG)";
     $extension->reasons[] = "Transmettre des messages signés et/ou chiffrés";
     $extensions[] = $extension;
+
+    $extension = new CPHPExtension();
+    $extension->name = "Mcrypt";
+    $extension->description = "Chiffrage des données";
+    $extension->reasons[] = "Recommandé pour les performances.";
+
+    $extension = new CPHPExtension();
+    $extension->name = "OpenSSL";
+    $extension->description = "Chiffrage des données";
+    $extension->reasons[] = "Interopérabilité avec systèmes tiers.";
     
     return $extensions;
   }

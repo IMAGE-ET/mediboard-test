@@ -21,6 +21,7 @@ class Chronometer {
   public $main = false;
   public $latestStep = 0;
 
+  /** @var self[] */
   public $report = array();
   
   /**

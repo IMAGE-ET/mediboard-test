@@ -17,23 +17,23 @@ if (CAppUI::conf("readonly")) {
   return;
 }
 
-global $m, $action, $dosql;
+global $m, $m_post, $action, $dosql;
 
 if (!$action) {
   $action = $dosql;
 }
-
-// Check prerequisites
-$ds = CSQLDataSource::get("std");
 
 // $action may not defined when the module is inactive
 if (!$action) {
   return;
 }
 
+// Check prerequisites
+$ds = CSQLDataSource::get("std");
+
 // Key initialisation
 $log = new CAccessLog();
-$log->module   = $m;
+$log->module   = isset($m_post) ? $m_post : $m;
 $log->action   = $action;
 
 $minutes     = CMbDT::format(null, "%M");
@@ -43,10 +43,17 @@ $arr_minutes = (floor($minutes / 10) * 10) % 60;
 // 10 min. long aggregation
 $log->period = CMbDT::format(null, "%Y-%m-%d %H:" . $arr_minutes . ":00");
 
+$chrono = CApp::$chrono;
+
+// Stop chrono if not already done
+if ($chrono->step > 0) {
+  $chrono->stop();
+}
+
 // Probe aquisition
 $rusage = getrusage();
 $log->hits++;
-$log->duration    += CApp::$chrono->total;
+$log->duration    += $chrono->total;
 $log->processus   += floatval($rusage["ru_utime.tv_usec"]) / 1000000 + $rusage["ru_utime.tv_sec"];
 $log->processor   += floatval($rusage["ru_stime.tv_usec"]) / 1000000 + $rusage["ru_stime.tv_sec"];
 $log->request     += $ds->chrono->total;
