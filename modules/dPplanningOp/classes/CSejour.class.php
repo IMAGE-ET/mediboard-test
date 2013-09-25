@@ -877,7 +877,7 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return null|string|void
    */
   function store() {
-    $this->completeField("entree_reelle", "entree", "patient_id", "type_pec");
+    $this->completeField("entree_reelle", "entree", "patient_id", "type_pec", "grossesse_id");
 
     // Sectorisation Rules
     $this->getServiceFromSectorisationRules();
@@ -1057,9 +1057,25 @@ class CSejour extends CFacturable implements IPatientRelated {
       }
     }
 
+    // Si on change la grossesse d'un séjour, il faut remapper les naissances éventuelles
+    $change_grossesse = $this->fieldModified("grossesse_id");
+    $naissances = array();
+    if ($change_grossesse) {
+      $naissances = $this->loadOldObject()->loadRefGrossesse()->loadRefsNaissances();
+    }
+
     // On fait le store du séjour
     if ($msg = parent::store()) {
       return $msg;
+    }
+
+    if ($change_grossesse) {
+      foreach ($naissances as $_naissance) {
+        $_naissance->grossesse_id = $this->grossesse_id;
+        if ($msg = $_naissance->store()) {
+          return $msg;
+        }
+      }
     }
 
     if (CModule::getActive("dPfacturation") && CAppUI::conf("dPplanningOp CFactureEtablissement use_facture_etab")) {
