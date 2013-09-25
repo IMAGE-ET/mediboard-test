@@ -217,9 +217,15 @@ class CHTTPClient {
     try {
       $http_client = new CHTTPClient($url);
       if ($option) {
-        $http_client->setSSLAuthentification($option["local_cert"], $option["passphrase"]);
-        $http_client->setSSLPeer($option["ca_cert"]);
-        $http_client->setHTTPAuthentification($option["username"], $option["password"]);
+        if (CMbArray::get($option, "ca_cert")) {
+          $http_client->setSSLPeer($option["ca_cert"]);
+        }
+        if (CMbArray::get($option, "username")||CMbArray::get($option, "password")) {
+          $http_client->setHTTPAuthentification($option["username"], $option["password"]);
+        }
+        if (CMbArray::get($option, "local_cert")) {
+          $http_client->setSSLAuthentification($option["local_cert"], $option["passphrase"]);
+        }
       }
       $http_client->setOption(CURLOPT_HEADER, true);
       $result = $http_client->get();
