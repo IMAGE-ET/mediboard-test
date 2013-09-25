@@ -239,28 +239,6 @@
     }
   };
 
-  createObservationTimedData = function(object_guid, timed_data_id) {
-    if($('surveillance_perop')){
-      var url = new Url("patients", "ajax_edit_observation_timed_data");
-      url.addParam("object_guid", object_guid);
-      url.addParam("timed_data_id", timed_data_id);
-      url.requestModal(400, 200, {
-        onClose: reloadSurveillancePerop
-      });
-    }
-  };
-
-  createObservationTimedPicture = function(object_guid, timed_picture_id) {
-    if($('surveillance_perop')){
-      var url = new Url("patients", "ajax_edit_observation_timed_picture");
-      url.addParam("object_guid", object_guid);
-      url.addParam("timed_picture_id", timed_picture_id);
-      url.requestModal(500, 500, {
-        onClose: reloadSurveillancePerop
-      });
-    }
-  };
-
   loadPosesDispVasc = function() {
     var url = new Url("planningOp", "ajax_list_pose_disp_vasc");
     url.addParam("operation_id", "{{$selOp->_id}}");
@@ -412,10 +390,6 @@
   {{if !$conf.dPsalleOp.mode_anesth && (!$currUser->_is_praticien || $currUser->_is_praticien && $can->edit)}}
     <li><a href="#timing_tab">Timings</a></li>
   {{/if}}
-  
-  {{if $conf.dPsalleOp.enable_surveillance_perop}}
-    <li onmouseup="reloadSurveillancePerop();"><a href="#surveillance_perop">Perop</a></li>
-  {{/if}}
 
   <li><a href="#disp_vasculaire">Dispositifs vasc.</a></li>
 
@@ -456,6 +430,10 @@
     <li onmouseup="refreshGrossesse('{{$selOp->_id}}')">
       <a href="#grossesse">Accouchement</a>
     </li>
+  {{else}}
+    {{if $conf.dPsalleOp.enable_surveillance_perop}}
+      <li onmouseup="reloadSurveillancePerop();"><a href="#surveillance_perop">Perop</a></li>
+    {{/if}}
   {{/if}}
 </ul>
   
@@ -474,10 +452,6 @@
     {{* include file="inc_vw_personnel.tpl" *}}
   </div>
 </div>
-{{/if}}
-  
-{{if $conf.dPsalleOp.enable_surveillance_perop}}
-  <div id="surveillance_perop" style="display:none"></div>
 {{/if}}
 
 <div id="disp_vasculaire" style="display:none">
@@ -606,4 +580,8 @@
 
 {{if "maternite"|module_active && $sejour->grossesse_id}}
   <div id="grossesse" style="display: none;"></div>
+{{else}}
+  {{if $conf.dPsalleOp.enable_surveillance_perop}}
+    <div id="surveillance_perop" style="display:none"></div>
+  {{/if}}
 {{/if}}

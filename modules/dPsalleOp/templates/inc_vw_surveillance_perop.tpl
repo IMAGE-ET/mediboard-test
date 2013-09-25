@@ -115,25 +115,26 @@ printPartogramme = function(operation_id) {
 </div>
 *}}
 
-<form name="change-operation-graph-pack" method="post" action="?" onsubmit="return onSubmitFormAjax(this, reloadSurveillancePerop)">
-  {{mb_class object=$interv}}
-  {{mb_key object=$interv}}
-
-  {{mb_label object=$interv field=graph_pack_id}}
-
-  <select name="graph_pack_id" onchange="this.form.onsubmit()">
-    <option value="">&ndash; {{tr}}CSupervisionGraphPack.none{{/tr}}</option>
-
-    {{foreach from=$graph_packs item=_pack}}
-      <option value="{{$_pack->_id}}" {{if $_pack->_id == $interv->graph_pack_id}}selected{{/if}}>
-        {{$_pack}}
-      </option>
-    {{/foreach}}
-  </select>
-</form>
-
 <table class="main tbl">
   <tr>
+    <td class="narrow">
+      <form name="change-operation-graph-pack" method="post" action="?" onsubmit="return onSubmitFormAjax(this, reloadSurveillancePerop)">
+        {{mb_class object=$interv}}
+        {{mb_key object=$interv}}
+
+        {{mb_label object=$interv field=graph_pack_id}}
+
+        <select name="graph_pack_id" onchange="this.form.onsubmit()">
+          <option value="">&ndash; {{tr}}CSupervisionGraphPack.none{{/tr}}</option>
+
+          {{foreach from=$graph_packs item=_pack}}
+            <option value="{{$_pack->_id}}" {{if $_pack->_id == $interv->graph_pack_id}}selected{{/if}}>
+              {{$_pack}}
+            </option>
+          {{/foreach}}
+        </select>
+      </form>
+    </td>
     <td>
       <strong>
         {{$interv->_ref_sejour->_ref_patient->_ref_constantes_medicales->poids}} Kg &ndash;
