@@ -1,14 +1,12 @@
 <?php
-
 /**
- * dPbloc
+ * $Id:$
  *
- * @category Bloc
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage dPpersonnel
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
  
 CCanDo::checkEdit();
@@ -36,10 +34,14 @@ $plage->loadAffectationsPersonnel();
 $listPersIADE     = CPersonnel::loadListPers("iade");
 $listPersAideOp   = CPersonnel::loadListPers("op");
 $listPersPanseuse = CPersonnel::loadListPers("op_panseuse");
+$listPersSageFem  = CPersonnel::loadListPers("sagefemme");
+$listPersManip    = CPersonnel::loadListPers("manipulateur");
 
-$affectations_plage["iade"] = $plage->_ref_affectations_personnel["iade"];
-$affectations_plage["op"] = $plage->_ref_affectations_personnel["op"];
-$affectations_plage["op_panseuse"] = $plage->_ref_affectations_personnel["op_panseuse"];
+$affectations_plage["iade"]         = $plage->_ref_affectations_personnel["iade"];
+$affectations_plage["op"]           = $plage->_ref_affectations_personnel["op"];
+$affectations_plage["op_panseuse"]  = $plage->_ref_affectations_personnel["op_panseuse"];
+$affectations_plage["sagefemme"]    = $plage->_ref_affectations_personnel["sagefemme"];
+$affectations_plage["manipulateur"] = $plage->_ref_affectations_personnel["manipulateur"];
 
 if (!$affectations_plage["iade"]) {
   $affectations_plage["iade"] = array();
@@ -49,6 +51,12 @@ if (!$affectations_plage["op"]) {
 }
 if (!$affectations_plage["op_panseuse"]) {
   $affectations_plage["op_panseuse"] = array();
+}
+if (!$affectations_plage["sagefemme"]) {
+  $affectations_plage["sagefemme"] = array();
+}
+if (!$affectations_plage["manipulateur"]) {
+  $affectations_plage["manipulateur"] = array();
 }
 
 foreach ($affectations_plage["iade"] as $key => $affectation) {
@@ -66,6 +74,16 @@ foreach ($affectations_plage["op_panseuse"] as $key => $affectation) {
     unset($listPersPanseuse[$affectation->personnel_id]);
   }
 }
+foreach ($affectations_plage["sagefemme"] as $key => $affectation) {
+  if (array_key_exists($affectation->personnel_id, $listPersSageFem)) {
+    unset($listPersSageFem[$affectation->personnel_id]);
+  }
+}
+foreach ($affectations_plage["manipulateur"] as $key => $affectation) {
+  if (array_key_exists($affectation->personnel_id, $listPersManip)) {
+    unset($listPersManip[$affectation->personnel_id]);
+  }
+}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -73,6 +91,8 @@ $smarty->assign("affectations_plage", $affectations_plage);
 $smarty->assign("listPersIADE"      , $listPersIADE);
 $smarty->assign("listPersAideOp"    , $listPersAideOp);
 $smarty->assign("listPersPanseuse"  , $listPersPanseuse);
+$smarty->assign("listPersSageFem"   , $listPersSageFem);
+$smarty->assign("listPersManip"     , $listPersManip);
 $smarty->assign("listAnesth"        , $listAnesth);
 $smarty->assign("plage"             , $plage);
 

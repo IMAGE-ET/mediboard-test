@@ -71,7 +71,7 @@
     {{/if}}
 
     {{foreach from=$curr_op->_ref_affectations_personnel key=type_personnel item=_affectations}}
-      {{if ($type_personnel == "op" || $type_personnel == "op_panseuse" || $type_personnel == "iade") && $_affectations|@count > 0}}
+      {{if ($type_personnel == "op" || $type_personnel == "op_panseuse" || $type_personnel == "iade" || $type_personnel == "sagefemme" || $type_personnel == "manipulateur") && $_affectations|@count > 0}}
         <strong>{{tr}}CPersonnel.emplacement.{{$type_personnel}}{{/tr}}</strong>
         <ul>
           {{foreach from=$_affectations item=_affectation}}

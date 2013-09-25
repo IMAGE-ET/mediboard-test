@@ -1,20 +1,21 @@
-<?php /* $Id: index.php 7320 2009-11-14 22:42:28Z lryo $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage dPpersonnel
- * @version $Revision: 7320 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 // CCanDo::checkRead();
+$choix        = CValue::get("choix", "mois");
+$affiche_nom  = CValue::get("affiche_nom", 1);
 
-$choix = CValue::get("choix", "mois");
-$affiche_nom = CValue::get("affiche_nom",1); 
 $filter = new CPlageConge();
 $filter->user_id = CValue::get("user_id", CAppUI::$user->_id);
-$filter->date_debut = CValue::get("date_debut",CMbDT::date());
+$filter->date_debut = CValue::get("date_debut", CMbDT::date());
 
 $mediuser  = new CMediusers();
 $mediusers = $mediuser->loadListFromType();
@@ -27,41 +28,41 @@ if (!$filter->date_debut) {
 
 $tab_start = array();
 if ($choix=="semaine") {
-  $last_sunday = CMbDT::transform('last sunday',$filter->date_debut,'%Y-%m-%d');
-  $last_monday = CMbDT::transform('+1 day',$last_sunday,'%Y-%m-%d');
+  $last_sunday = CMbDT::transform('last sunday', $filter->date_debut, '%Y-%m-%d');
+  $last_monday = CMbDT::transform('+1 day', $last_sunday, '%Y-%m-%d');
   $debut_periode = $last_monday;
   
-  $fin_periode = CMbDT::transform('+6 day',$debut_periode,'%Y-%m-%d');
+  $fin_periode = CMbDT::transform('+6 day', $debut_periode, '%Y-%m-%d');
 }
-else if ($choix=="annee") {
-  list($year,$m,$j)=explode("-",$filter->date_debut);
-  $debut_periode = "$year-01-01";
-  $fin_periode = "$year-12-31";
+elseif ($choix=="annee") {
+  list($year,$m,$j)=explode("-", $filter->date_debut);
+  $debut_periode  = "$year-01-01";
+  $fin_periode    = "$year-12-31";
   $j=1;
-  for ($i=1;$i<13;$i++){
-    if (!date("w", mktime(0,0,0,$i,1,$year))) {
+  for ($i=1;$i<13;$i++) {
+    if (!date("w", mktime(0, 0, 0, $i, 1, $year))) {
       $tab_start[$j] = 7;
-    } else {
-    $tab_start[$j]= date("w", mktime(0,0,0,$i,1,$year));
+    }
+    else {
+      $tab_start[$j]= date("w", mktime(0, 0, 0, $i, 1, $year));
     }
     $j++;
-    $tab_start[$j]= date("t", mktime(0,0,0,$i,1,$year));
+    $tab_start[$j]= date("t", mktime(0, 0, 0, $i, 1, $year));
     $j++;
   }
 }
 else {
-  list($a,$m,$j)=explode("-",$filter->date_debut);
+  list($a,$m,$j)=explode("-", $filter->date_debut);
   $debut_periode  = "$a-$m-01";
-  $fin_periode = CMbDT::transform('+1 month',$debut_periode,'%Y-%m-%d');
-  $fin_periode  = CMbDT::transform('-1 day', $fin_periode,'%Y-%m-%d');
+  $fin_periode  = CMbDT::transform('+1 month', $debut_periode, '%Y-%m-%d');
+  $fin_periode  = CMbDT::transform('-1 day', $fin_periode, '%Y-%m-%d');
 }
 
 $tableau_periode = array();
 
-for($i = 0 ; $i < CMbDT::daysRelative($debut_periode,$fin_periode) + 1; $i ++) {
-  $tableau_periode[$i] = CMbDT::transform('+'.$i.'day',$debut_periode,'%Y-%m-%d');
+for ($i = 0 ; $i < CMbDT::daysRelative($debut_periode, $fin_periode) + 1; $i ++) {
+  $tableau_periode[$i] = CMbDT::transform('+'.$i.'day', $debut_periode, '%Y-%m-%d');
 }
-
 
 $where = array();
 $where[] = "((date_debut >= '$debut_periode' AND date_debut <= '$fin_periode'" .
@@ -79,9 +80,9 @@ $tabUser_plage_indices = array();
 foreach ($plagesconge as $_plage) {
   $_plage->loadRefUser();
   $_plage->_ref_user->loadRefFunction();
-  $_plage->_deb = CMbDT::daysRelative($debut_periode,$_plage->date_debut);
+  $_plage->_deb = CMbDT::daysRelative($debut_periode, $_plage->date_debut);
   $_plage->_fin = CMbDT::daysRelative($_plage->date_debut, $_plage->date_fin)+1;
-  $_plage->_duree = CMbDT::daysRelative($_plage->date_debut,$_plage->date_fin)+1;
+  $_plage->_duree = CMbDT::daysRelative($_plage->date_debut, $_plage->date_fin)+1;
 }
 
 $smarty = new CSmartyDP();

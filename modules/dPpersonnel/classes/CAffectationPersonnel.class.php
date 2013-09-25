@@ -1,33 +1,40 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage dPpersonnel
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
+/**
+ * Class CAffectationPersonnel
+ */
 class CAffectationPersonnel extends CMbMetaObject {
   // DB Table key
-  var $affect_id = null;
+  public $affect_id;
   
   // DB references
-  var $personnel_id = null;
+  public $personnel_id;
   
   // DB fields
-  var $realise = null;
-  var $debut   = null;
-  var $fin     = null;
+  public $realise;
+  public $debut;
+  public $fin;
 
   // Form fields
-  var $_debut  = null;
-  var $_fin    = null;
+  public $_debut;
+  public $_fin;
   
   // References
-  var $_ref_personnel = null;
-  var $_ref_object = null;
-  
+  public $_ref_personnel;
+  public $_ref_object;
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "affectation_personnel";
@@ -35,26 +42,34 @@ class CAffectationPersonnel extends CMbMetaObject {
     $spec->uniques["unique"] = array("personnel_id", "object_class", "object_id");
     return $spec;
   }
-	
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
-    $specs = parent::getProps();
-    $specs["personnel_id"] = "ref notNull class|CPersonnel";
-    $specs["realise"]  = "bool notNull";
-    $specs["debut"]    = "dateTime";
-    $specs["fin"]      = "dateTime moreThan|debut";
+    $props = parent::getProps();
+    $props["personnel_id"] = "ref notNull class|CPersonnel";
+    $props["realise"]  = "bool notNull";
+    $props["debut"]    = "dateTime";
+    $props["fin"]      = "dateTime moreThan|debut";
+
+    $props["_debut"]   = "time";
+    $props["_fin"]     = "time moreThan|_debut";
     
-    $specs["_debut"]   = "time";
-    $specs["_fin"]     = "time moreThan|_debut";
-    
-    return $specs;
+    return $props;
   }
-  
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     parent::loadRefsFwd();
     $this->loadRefPersonnel();
   }
 
   /**
+   * Load Personnel
+   *
    * @return CPersonnel|null
    */
   function loadRefPersonnel() {
@@ -67,6 +82,7 @@ class CAffectationPersonnel extends CMbMetaObject {
    
   /**
    * Trouve les affectations avec cible et personnel identique
+   *
    * @return $array Liste des siblings
    */
   function getSiblings() {
@@ -86,65 +102,70 @@ class CAffectationPersonnel extends CMbMetaObject {
     unset($siblings[$this->_id]);
     return $siblings;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefs();  
-    if ($this->object_class == "CPlageOp"){
+    if ($this->object_class == "CPlageOp") {
       $this->_debut = CMbDT::addDateTime($this->_ref_object->debut, $this->_ref_object->date);
-    	$this->_fin = CMbDT::addDateTime($this->_ref_object->fin, $this->_ref_object->date);
+      $this->_fin = CMbDT::addDateTime($this->_ref_object->fin, $this->_ref_object->date);
     }
     
-    if ($this->object_class == "COperation" || $this->object_class == "CBloodSalvage" ){
-      if($this->debut){
+    if ($this->object_class == "COperation" || $this->object_class == "CBloodSalvage" ) {
+      if ($this->debut) {
         $this->_debut = CMbDT::time($this->debut);
       }
-      if($this->fin){
+      if ($this->fin) {
         $this->_fin   = CMbDT::time($this->fin);
       }
     }
   }
-  
+
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields(){
-    if($this->object_class == "COperation" || $this->object_class == "CBloodSalvage" ){
+    if ($this->object_class == "COperation" || $this->object_class == "CBloodSalvage" ) {
       $this->loadRefObject();
       $this->_ref_object->loadRefPlageOp();
       
-      if($this->_debut =="current") {
-      	$this->_debut = CMbDT::time();
+      if ($this->_debut =="current") {
+        $this->_debut = CMbDT::time();
       }
       
-      if($this->_fin =="current") {
-      	$this->_fin = CMbDT::time();
+      if ($this->_fin =="current") {
+        $this->_fin = CMbDT::time();
       }
 
-      if($this->_debut !== null && $this->_debut != ""){
+      if ($this->_debut !== null && $this->_debut != "") {
         $this->_debut = CMbDT::time($this->_debut);
         $this->debut = CMbDT::addDateTime($this->_debut, CMbDT::date($this->_ref_object->_datetime));
       }
       
-      if($this->_fin !== null && $this->_fin != ""){
+      if ($this->_fin !== null && $this->_fin != "") {
         $this->_fin = CMbDT::time($this->_fin);
         $this->fin = CMbDT::addDateTime($this->_fin, CMbDT::date($this->_ref_object->_datetime));
       }
       
       // Suppression de la valeur
-      if($this->_debut === ""){
+      if ($this->_debut === "") {
         $this->debut = "";
       }
-      if($this->_fin === ""){
+      if ($this->_fin === "") {
         $this->fin = "";
       } 
       
       // Mise a jour du champ realise
-      if($this->debut !== null && $this->fin !== null){
+      if ($this->debut !== null && $this->fin !== null) {
         $this->realise = 1;
       }
       
-      if($this->debut === "" || $this->fin === ""){
+      if ($this->debut === "" || $this->fin === "") {
         $this->realise = 0;
       }
     }
   }
 }
-?>

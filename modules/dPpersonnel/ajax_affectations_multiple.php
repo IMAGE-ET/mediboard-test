@@ -1,11 +1,12 @@
-<?php /* $Id: vw_affectations_pers.php 6326 2009-05-19 07:20:26Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage dPpersonnel
- * @version $Revision: 6326 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 global $can;
@@ -30,4 +31,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("_multiple", $_multiple);
 
 $smarty->display("inc_affectations_multiple.tpl");
-?>

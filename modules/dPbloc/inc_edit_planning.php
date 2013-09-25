@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage dPbloc
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 $date       = CValue::getOrSession("date", CMbDT::date());
@@ -81,11 +81,15 @@ foreach ($chirs as $_chir) {
 $listPersIADE     = CPersonnel::loadListPers("iade");
 $listPersAideOp   = CPersonnel::loadListPers("op");
 $listPersPanseuse = CPersonnel::loadListPers("op_panseuse");
+$listPersSageFem  = CPersonnel::loadListPers("sagefemme");
+$listPersManip    = CPersonnel::loadListPers("manipulateur");
 
 if ($plagesel->_id) {
   $affectations_plage["iade"]        = $plagesel->_ref_affectations_personnel["iade"];
   $affectations_plage["op"]          = $plagesel->_ref_affectations_personnel["op"];
   $affectations_plage["op_panseuse"] = $plagesel->_ref_affectations_personnel["op_panseuse"];
+  $affectations_plage["sagefemme"]   = $plagesel->_ref_affectations_personnel["sagefemme"];
+  $affectations_plage["manipulateur"]= $plagesel->_ref_affectations_personnel["manipulateur"];
   foreach ($affectations_plage["iade"] as $key => $affectation) {
     if (array_key_exists($affectation->personnel_id, $listPersIADE)) {
       unset($listPersIADE[$affectation->personnel_id]);
@@ -99,6 +103,16 @@ if ($plagesel->_id) {
   foreach ($affectations_plage["op_panseuse"] as $key => $affectation) {
     if (array_key_exists($affectation->personnel_id, $listPersPanseuse)) {
       unset($listPersPanseuse[$affectation->personnel_id]);
+    }
+  }
+  foreach ($affectations_plage["sagefemme"] as $key => $affectation) {
+    if (array_key_exists($affectation->personnel_id, $listPersSageFem)) {
+      unset($listPersSageFem[$affectation->personnel_id]);
+    }
+  }
+  foreach ($affectations_plage["manipulateur"] as $key => $affectation) {
+    if (array_key_exists($affectation->personnel_id, $listPersManip)) {
+      unset($listPersManip[$affectation->personnel_id]);
     }
   }
 }
@@ -116,6 +130,8 @@ $smarty->assign("chirs"             , $chirs            );
 $smarty->assign("listPersIADE"      , $listPersIADE     );
 $smarty->assign("listPersAideOp"    , $listPersAideOp   );
 $smarty->assign("listPersPanseuse"  , $listPersPanseuse );
+$smarty->assign("listPersSageFem"   , $listPersSageFem);
+$smarty->assign("listPersManip"     , $listPersManip);
 $smarty->assign("_functions"        , $_functions       );
 
 $smarty->display("inc_edit_planning.tpl");

@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage personnel
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 /**
@@ -36,9 +36,7 @@ class CPlageConge extends CMbObject {
   public $_activite; // For pseudo plages
 
   /**
-   * get specs
-   *
-   * @return CMbObjectSpec
+   * @see parent::getSpec()
    */
   function getSpec() {
     $specs = parent::getSpec();
@@ -48,9 +46,7 @@ class CPlageConge extends CMbObject {
   }
 
   /**
-   * class props
-   *
-   * @return array
+   * @see parent::getProps()
    */
   function getProps() { 
     $specs = parent::getProps();
@@ -64,9 +60,7 @@ class CPlageConge extends CMbObject {
   }
 
   /**
-   * backprops
-   *
-   * @return array
+   * @see parent::getBackProps()
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
@@ -75,9 +69,7 @@ class CPlageConge extends CMbObject {
   }
 
   /**
-   * updateFormField
-   *
-   * @return null
+   * @see parent::updateFormFields()
    */
   function updateFormFields() {
     parent::updateFormFields();

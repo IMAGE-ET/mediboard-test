@@ -1,13 +1,17 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage dPpersonnel
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
+/**
+ * Class CSetupdPpersonnel
+ */
 class CSetupdPpersonnel extends CSetup {
   
   function __construct() {
@@ -152,12 +156,18 @@ class CSetupdPpersonnel extends CSetup {
     $query = "RENAME TABLE  `plageVacances` TO  `plageconge`;";
     $this->addQuery($query);
     
-    $this->makeRevision("0.22");		
+    $this->makeRevision("0.22");
     $query = "ALTER TABLE `personnel` 
               CHANGE `emplacement` `emplacement` ENUM ('op','op_panseuse','reveil','service','iade','brancardier') NOT NULL DEFAULT 'op';";
     $this->addQuery($query);
-    
-    $this->mod_version = "0.23";
+
+    $this->makeRevision("0.23");
+
+    $query = "ALTER TABLE `personnel`
+                CHANGE `emplacement` `emplacement` ENUM ('op','op_panseuse','reveil','service','iade','brancardier','sagefemme','manipulateur') NOT NULL DEFAULT 'op';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.24";
     
   }
 }

@@ -1,11 +1,9 @@
-<script type="text/javascript">
-
+<script>
 submitPersonnel = function(oForm){
-  submitFormAjax(oForm, 'systemMsg', { onComplete : function() {
+  return onSubmitFormAjax(oForm, { onComplete : function() {
     reloadPersonnel(oForm.object_id.value);
   } });
 }
-
 </script>
        
 <table class="form">
@@ -19,12 +17,11 @@ submitPersonnel = function(oForm){
     <th class="category" style="width: 50%;">Personnel prévu</th>
   {{/if}}
   <th class="category" style="width: 50%;">Personnel ajouté<br />
-	  <form name="affectationPers-iade" action="?m={{$m}}" method="post">
+    <form name="affectationPers-iade" action="?m={{$m}}" method="post">
       <input type="hidden" name="m" value="dPpersonnel" />
       <input type="hidden" name="dosql" value="do_affectation_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="affect_id" value="" />
-
       <input type="hidden" name="object_class" value="COperation" />
       <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
       <input type="hidden" name="realise" value="0" />
@@ -41,7 +38,6 @@ submitPersonnel = function(oForm){
       <input type="hidden" name="dosql" value="do_affectation_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="affect_id" value="" />
-
       <input type="hidden" name="object_class" value="COperation" />
       <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
       <input type="hidden" name="realise" value="0" />
@@ -58,14 +54,42 @@ submitPersonnel = function(oForm){
       <input type="hidden" name="dosql" value="do_affectation_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="affect_id" value="" />
-
       <input type="hidden" name="object_class" value="COperation" />
       <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
       <input type="hidden" name="realise" value="0" />
-
       <select name="personnel_id" onchange="submitPersonnel(this.form)" style="width: 10em;">
         <option value="">&mdash; {{tr}}CPersonnel.emplacement.op_panseuse{{/tr}}</option>
         {{foreach from=$listPersPanseuse item="pers"}}
+        <option value="{{$pers->_id}}" class="mediuser" style="border-color: #{{$pers->_ref_user->_ref_function->color}};">{{$pers->_ref_user->_view}}</option>
+        {{/foreach}}
+      </select>
+    </form>
+    <form name="affectationPers-sagefemme" action="?m={{$m}}" method="post">
+      <input type="hidden" name="m" value="dPpersonnel" />
+      <input type="hidden" name="dosql" value="do_affectation_aed" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="affect_id" value="" />
+      <input type="hidden" name="object_class" value="COperation" />
+      <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
+      <input type="hidden" name="realise" value="0" />
+      <select name="personnel_id" onchange="submitPersonnel(this.form)" style="width: 10em;">
+        <option value="">&mdash; {{tr}}CPersonnel.emplacement.sagefemme{{/tr}}</option>
+        {{foreach from=$listPersSageFem item="pers"}}
+        <option value="{{$pers->_id}}" class="mediuser" style="border-color: #{{$pers->_ref_user->_ref_function->color}};">{{$pers->_ref_user->_view}}</option>
+        {{/foreach}}
+      </select>
+    </form>
+    <form name="affectationPers-manipulateur" action="?m={{$m}}" method="post">
+      <input type="hidden" name="m" value="dPpersonnel" />
+      <input type="hidden" name="dosql" value="do_affectation_aed" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="affect_id" value="" />
+      <input type="hidden" name="object_class" value="COperation" />
+      <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
+      <input type="hidden" name="realise" value="0" />
+      <select name="personnel_id" onchange="submitPersonnel(this.form)" style="width: 10em;">
+        <option value="">&mdash; {{tr}}CPersonnel.emplacement.manipulateur{{/tr}}</option>
+        {{foreach from=$listPersManip item="pers"}}
         <option value="{{$pers->_id}}" class="mediuser" style="border-color: #{{$pers->_ref_user->_ref_function->color}};">{{$pers->_ref_user->_view}}</option>
         {{/foreach}}
       </select>
@@ -130,29 +154,29 @@ submitPersonnel = function(oForm){
 
     <table class="form">
       <tr>
-      	<td {{if $in_salle}}style="width: 40%;"{{/if}} class="text">
-					{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$affectation->_ref_personnel->_ref_user}}
-					<br />
-					<span class="opacity-60">
+        <td {{if $in_salle}}style="width: 40%;"{{/if}} class="text">
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$affectation->_ref_personnel->_ref_user}}
+          <br />
+          <span class="opacity-60">
             {{tr}}CPersonnel.emplacement.{{$affectation->_ref_personnel->emplacement}}{{/tr}}
           </span>
-      	</td>
+        </td>
         {{if $in_salle}}
           {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_debut}}
           {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_fin}}
         {{/if}}
-				<td {{if !$in_salle}}class="narrow"{{/if}}>
-					{{if $modif_operation}}
+        <td {{if !$in_salle}}class="narrow"{{/if}}>
+          {{if $modif_operation}}
             <button type="button" class="cancel notext" onclick="$V(this.form.del, '1'); submitPersonnel(this.form)">{{tr}}Cancel{{/tr}}</button>
           {{/if}}
-				</td>
-	    </tr>
+        </td>
+      </tr>
     </table>
    </form>
-   <hr style="margin-top: 0px;"/>   
-	 {{foreachelse}}
-	   <div class="small-info">Aucun personnel ajouté</div>
-	 {{/foreach}}
-	</td>
+   <hr style="margin-top: 0px;"/>
+   {{foreachelse}}
+     <div class="small-info">Aucun personnel ajouté</div>
+   {{/foreach}}
+  </td>
 </tr>
 </table>

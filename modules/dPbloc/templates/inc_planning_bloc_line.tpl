@@ -45,7 +45,7 @@
       {{/if}}
       {{assign var=affectations value=$plage->_ref_affectations_personnel}}
 
-      {{if ($affectations.op|@count) || ($affectations.op_panseuse|@count) || ($affectations.iade|@count)}}
+      {{if ($affectations.op|@count) || ($affectations.op_panseuse|@count) || ($affectations.iade|@count) || ($affectations.manipulateur|@count) || ($affectations.sagefemme|@count)}}
         <a onclick="EditPlanning.order('{{$plage->_id}}');" href="#" title="Agencer les interventions">
         <img src="images/icons/personnel.png" border="0" height="16" width="16" 
              onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-plage-{{$plage->_id}}")' />
@@ -54,7 +54,7 @@
         <div id="tooltip-content-plage-{{$plage->_id}}" style="display: none; width: 200px;">
           <table class="tbl">
             {{foreach from=$affectations key=type_personnel item=_affectations}}
-              {{if $type_personnel == "op" || $type_personnel == "op_panseuse" || $type_personnel == "iade"}} 
+              {{if ($type_personnel == "op" || $type_personnel == "op_panseuse" || $type_personnel == "iade" || $type_personnel == "manipulateur" || $type_personnel == "sagefemme") && $_affectations|@count}}
               <tr>
                 <th>{{tr}}CPersonnel.emplacement.{{$type_personnel}}{{/tr}}</th>
               </tr>

@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
 checkPlage = function() {
   var form = getForm('editFrm');
   
@@ -214,67 +214,16 @@ Main.add(function(){
         <legend>Personnel en salle</legend>
         <table class="form">
           <tr>
-            <td class="narrow">
-              <select name="_iade_id" style="width: 10em;">
-                <option value="">&mdash; {{tr}}CPersonnel.emplacement.iade{{/tr}}</option>
-                {{foreach from=$listPersIADE item=_personnelBloc}}
-                  <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
-                {{/foreach}}
-              </select>
-            </td>
-            <td class="text">
-              {{foreach from=$plagesel->_ref_affectations_personnel.iade item=_affectation_personnel}}
-                {{assign var=personnel value=$_affectation_personnel->_ref_personnel}}
-                <span style="white-space: nowrap;">
-                  <input type="hidden" name="_del_iade_ids[{{$personnel->_id}}]" value="{{$personnel->_id}}" disabled/>
-                  <button type="button" class="cancel notext"
-                    onclick="toggleDel(this.form.elements['_del_iade_ids[{{$personnel->_id}}]'])"></button>
-                 {{$personnel->_ref_user}}
-                 </span>
-              {{/foreach}}
-            </td>
+            {{mb_include module=bloc template=inc_edit_plage_personnel  list=$listPersIADE     type="iade"}}
+            {{mb_include module=bloc template=inc_edit_plage_personnel  list=$listPersSageFem  type="sagefemme"}}
           </tr>
           <tr>
-            <td>
-              <select name="_op_id" style="width: 10em;">
-                <option value="">&mdash; {{tr}}CPersonnel.emplacement.op{{/tr}}</option>
-                {{foreach from=$listPersAideOp item=_personnelBloc}}
-                  <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
-                {{/foreach}}
-              </select>
-            </td>
-            <td class="text">
-              {{foreach from=$plagesel->_ref_affectations_personnel.op item=_affectation_personnel}}
-                {{assign var=personnel value=$_affectation_personnel->_ref_personnel}}
-                <span style="white-space: nowrap;">
-                  <input type="hidden" name="_del_op_ids[{{$personnel->_id}}]" value="{{$personnel->_id}}" disabled/>
-                  <button type="button" class="cancel notext"
-                    onclick="toggleDel(this.form.elements['_del_op_ids[{{$personnel->_id}}]'])"></button>
-                 {{$personnel->_ref_user}}
-                 </span>
-              {{/foreach}}
-            </td>
+            {{mb_include module=bloc template=inc_edit_plage_personnel  list=$listPersAideOp   type="op"}}
+            {{mb_include module=bloc template=inc_edit_plage_personnel  list=$listPersManip    type="manipulateur"}}
           </tr>
           <tr>
-            <td>
-              <select name="_op_panseuse_id" style="width: 10em;">
-                <option value="">&mdash; {{tr}}CPersonnel.emplacement.op_panseuse{{/tr}}</option>
-                {{foreach from=$listPersPanseuse item=_personnelBloc}}
-                  <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
-                {{/foreach}}
-              </select>
-            </td>
-            <td class="text">
-              {{foreach from=$plagesel->_ref_affectations_personnel.op_panseuse item=_affectation_personnel}}
-                {{assign var=personnel value=$_affectation_personnel->_ref_personnel}}
-                <span style="white-space: nowrap;">
-                  <input type="hidden" name="_del_op_panseuse_ids[{{$personnel->_id}}]" value="{{$personnel->_id}}" disabled/>
-                  <button type="button" class="cancel notext"
-                    onclick="toggleDel(this.form.elements['_del_op_panseuse_ids[{{$personnel->_id}}]'])"></button>
-                 {{$personnel->_ref_user}}
-                 </span>
-              {{/foreach}}
-            </td>
+            {{mb_include module=bloc template=inc_edit_plage_personnel  list=$listPersPanseuse type="op_panseuse"}}
+            <td colspan="2"></td>
           </tr>
         </table>
       </fieldset>

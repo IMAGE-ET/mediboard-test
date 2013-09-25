@@ -26,6 +26,8 @@ $tabPersonnel = array();
 $listPersIADE     = CPersonnel::loadListPers("iade");
 $listPersAideOp   = CPersonnel::loadListPers("op");
 $listPersPanseuse = CPersonnel::loadListPers("op_panseuse");
+$listPersSageFem  = CPersonnel::loadListPers("sagefemme");
+$listPersManip    = CPersonnel::loadListPers("manipulateur");
 
 // Chargement des affectations de la plageOp
 $plageOp = $selOp->_ref_plageop;
@@ -35,7 +37,9 @@ $affectations_personnel = $plageOp->_ref_affectations_personnel;
 $affectations_plage = array_merge(
   $affectations_personnel["iade"],
   $affectations_personnel["op"],
-  $affectations_personnel["op_panseuse"]
+  $affectations_personnel["op_panseuse"],
+  $affectations_personnel["sagefemme"],
+  $affectations_personnel["manipulateur"]
 );
 
 // Tableau de stockage des affectations
@@ -61,7 +65,9 @@ $affectations_personnel = $selOp->_ref_affectations_personnel;
 $affectations_operation = array_merge(
   $affectations_personnel["iade"],
   $affectations_personnel["op"],
-  $affectations_personnel["op_panseuse"]
+  $affectations_personnel["op_panseuse"],
+  $affectations_personnel["sagefemme"],
+  $affectations_personnel["manipulateur"]
 );
 
 foreach ($affectations_operation as $key => $affectation_personnel) {
@@ -70,7 +76,9 @@ foreach ($affectations_operation as $key => $affectation_personnel) {
       (!array_key_exists($affectation_personnel->_ref_personnel->_id, $tabPersonnel["plage"]))
       && ($affectation_personnel->_ref_personnel->emplacement == "op" ||
       $affectation_personnel->_ref_personnel->emplacement == "op_panseuse" ||
-      $affectation_personnel->_ref_personnel->emplacement == "iade")
+      $affectation_personnel->_ref_personnel->emplacement == "iade" ||
+      $affectation_personnel->_ref_personnel->emplacement == "sagefemme" ||
+      $affectation_personnel->_ref_personnel->emplacement == "manipulateur")
   ) {
     $tabPersonnel["operation"][$affectation_personnel->_ref_personnel->_id] = $affectation_personnel;  
   }
@@ -92,6 +100,16 @@ foreach ($listPersPanseuse as $key => $pers) {
     unset($listPersPanseuse[$key]);
   }
 }
+foreach ($listPersSageFem as $key => $pers) {
+  if (array_key_exists($pers->_id, $tabPersonnel["plage"]) || array_key_exists($pers->_id, $tabPersonnel["operation"])) {
+    unset($listPersSageFem[$key]);
+  }
+}
+foreach ($listPersManip as $key => $pers) {
+  if (array_key_exists($pers->_id, $tabPersonnel["plage"]) || array_key_exists($pers->_id, $tabPersonnel["operation"])) {
+    unset($listPersManip[$key]);
+  }
+}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -101,6 +119,8 @@ $smarty->assign("tabPersonnel"    , $tabPersonnel);
 $smarty->assign("listPersIADE"    , $listPersIADE);
 $smarty->assign("listPersAideOp"  , $listPersAideOp);
 $smarty->assign("listPersPanseuse", $listPersPanseuse);
+$smarty->assign("listPersSageFem" , $listPersSageFem);
+$smarty->assign("listPersManip"   , $listPersManip);
 $smarty->assign("modif_operation" , $modif_operation);
 $smarty->assign("in_salle"        , $in_salle);
 

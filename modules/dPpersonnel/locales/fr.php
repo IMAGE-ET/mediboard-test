@@ -76,9 +76,11 @@ $locales['CPersonnel-user_id-desc'] = 'Personne physique (utilisateur)';
 $locales['CPersonnel.all'] = 'Tous le personnel';
 $locales['CPersonnel.emplacement.brancardier'] = 'Brancardier';
 $locales['CPersonnel.emplacement.iade'] = 'IADE';
+$locales['CPersonnel.emplacement.manipulateur'] = 'Manipulateur';
 $locales['CPersonnel.emplacement.op'] = 'Aide opératoire';
 $locales['CPersonnel.emplacement.op_panseuse'] = 'Panseur';
 $locales['CPersonnel.emplacement.reveil'] = 'Reveil';
+$locales['CPersonnel.emplacement.sagefemme'] = 'Sage femme';
 $locales['CPersonnel.emplacement.service'] = 'Service';
 $locales['CPersonnel.none'] = 'Pas de personnel';
 $locales['CPersonnel.one'] = 'Un membre du personnel';
@@ -144,4 +146,3 @@ $locales['mod-dPpersonnel-tab-vw_idx_plages_conge'] = 'Gestion plages de congés'
 $locales['mod-dPpersonnel-tab-vw_planning_conge'] = 'Planning des congés';
 $locales['module-dPpersonnel-court'] = 'Personnel';
 $locales['module-dPpersonnel-long'] = 'Affectation du personnel';
-?>

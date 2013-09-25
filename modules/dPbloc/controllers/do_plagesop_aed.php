@@ -1,14 +1,12 @@
 <?php
-
 /**
- * dPbloc
+ * $Id:$
  *
- * @category Bloc
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage dPbloc
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 global $m;
@@ -20,19 +18,22 @@ $obj->bind($_POST);
 $del    = CValue::post("del"    , 0);
 $repeat = CValue::post("_repeat", 1);
 
-$_iade_id = CValue::post("_iade_id");
-$_aideop_id = CValue::post("_op_id");
-$_op_panseuse_id = CValue::post("_op_panseuse_id");
+$_iade_id         = CValue::post("_iade_id");
+$_aideop_id       = CValue::post("_op_id");
+$_op_panseuse_id  = CValue::post("_op_panseuse_id");
+$_sagefemme_id    = CValue::post("_sagefemme_id");
+$_manipulateur_id = CValue::post("_manipulateur_id");
 
-$_del_iade_ids = CValue::post("_del_iade_ids", array());
-$_del_op_ids   = CValue::post("_del_op_ids", array());
+$_del_iade_ids        = CValue::post("_del_iade_ids", array());
+$_del_op_ids          = CValue::post("_del_op_ids", array());
 $_del_op_panseuse_ids = CValue::post("_del_op_panseuse_ids", array());
+$_del_sagefemme_ids   = CValue::post("_del_sagefemme_ids", array());
+$_del_manipulateur_ids= CValue::post("_del_manipulateur_ids", array());
 
-$del_personnel = array_merge($_del_iade_ids, $_del_op_ids, $_del_op_panseuse_ids);
+$del_personnel = array_merge($_del_iade_ids, $_del_op_ids, $_del_op_panseuse_ids, $_del_sagefemme_ids, $_del_manipulateur_ids);
 
 // si l'id de l'objet est nul => creation
 // si l'objet a un id, alors, modification
-
 
 $body_msg = null;
 $header   = array();
@@ -102,7 +103,7 @@ else {
 }
 
 function managePersonnel($obj) {
-  global $_iade_id, $_aideop_id, $_op_panseuse_id, $del_personnel;
+  global $_iade_id, $_aideop_id, $_op_panseuse_id, $_sagefemme_id, $_manipulateur_id, $del_personnel;
   
   if ($_iade_id) {
     $affectation_personnel = new CAffectationPersonnel;
@@ -142,7 +143,33 @@ function managePersonnel($obj) {
       CAppUI::setMsg("Panseuse ajoutée", UI_MSG_OK);
     }
   }
-  
+
+  if ($_sagefemme_id) {
+    $affectation_personnel = new CAffectationPersonnel;
+    $affectation_personnel->object_class = $obj->_class;
+    $affectation_personnel->object_id    = $obj->_id;
+    $affectation_personnel->personnel_id = $_sagefemme_id;
+    if ($msg = $affectation_personnel->store()) {
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
+    }
+    else {
+      CAppUI::setMsg("Sage femme ajoutée", UI_MSG_OK);
+    }
+  }
+
+  if ($_manipulateur_id) {
+    $affectation_personnel = new CAffectationPersonnel;
+    $affectation_personnel->object_class = $obj->_class;
+    $affectation_personnel->object_id    = $obj->_id;
+    $affectation_personnel->personnel_id = $_manipulateur_id;
+    if ($msg = $affectation_personnel->store()) {
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
+    }
+    else {
+      CAppUI::setMsg("Manipulateur ajouté", UI_MSG_OK);
+    }
+  }
+
   foreach ($del_personnel as $_personnel_id) {
     if ($_personnel_id) {
       $affectation_personnel = new CAffectationPersonnel;

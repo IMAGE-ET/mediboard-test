@@ -1,11 +1,12 @@
-<?php /* $Id: vw_affectations_pers.php 6326 2009-05-19 07:20:26Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage dPpersonnel
- * @version $Revision: 6326 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 global $can;
@@ -21,9 +22,9 @@ $query = "CREATE TEMPORARY TABLE `affectations_multiples` AS (
 $ds->exec($query);
 
 $query = "SELECT * 
-	FROM `affectations_multiples`
-	WHERE `affect_count` > 1
-	ORDER BY `affect_count` DESC";
+  FROM `affectations_multiples`
+  WHERE `affect_count` > 1
+  ORDER BY `affect_count` DESC";
 $multiples = $ds->loadList($query);
 
 $objects = array();
@@ -49,4 +50,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("multiples", $multiples);
 
 $smarty->display("vw_affectations_multiples.tpl");
-?>

@@ -1,11 +1,12 @@
-<?php /* $Id: configure.php 8400 2010-03-22 16:39:15Z lryo $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage ecap
- * @version $Revision: 8400 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id:$
+ *
+ * @package    Mediboard
+ * @subpackage dPpersonnel
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 CCanDo::checkAdmin();

@@ -1,11 +1,12 @@
-<?php /* $Id: */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage dPpersonnel
- * @version $Revision:
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
@@ -27,8 +28,7 @@ unset($replacers[$user->_id]);
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("user",      $user);
-$smarty->assign("plageconge",  $plageconge);
-$smarty->assign("replacers", $replacers);
+$smarty->assign("user",       $user);
+$smarty->assign("plageconge", $plageconge);
+$smarty->assign("replacers",  $replacers);
 $smarty->display("inc_edit_plage_conge.tpl");
-?>

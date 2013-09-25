@@ -1,11 +1,12 @@
-<?php /* $Id */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage dPpersonnel
- * @version $Revision:
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
  
 // Get filter
@@ -13,7 +14,7 @@ $filter = new CPlageConge;
 $year = date("Y");
 
 $filter->user_id    = CValue::get("user_id", CAppUI::$user->_id);
-$filter->_id = CValue::get("plage_id","");
+$filter->_id        = CValue::get("plage_id", "");
 $filter->date_debut = CValue::get("date_debut", "$year-01-01");
 $filter->date_fin   = CValue::get("date_fin"  , "$year-12-31");
 
@@ -21,10 +22,9 @@ $filter->date_fin   = CValue::get("date_fin"  , "$year-12-31");
 $mediuser  = new CMediusers();
 $mediusers = $mediuser->loadListFromType();
 
-
 // load ref function
-foreach($mediusers as $_medius) {
-	$_medius->loadRefFunction();
+foreach ($mediusers as $_medius) {
+  $_medius->loadRefFunction();
 }
 
 // Query
@@ -45,12 +45,12 @@ $plages = $filter->loadList($where);
 $found_users = array();
 $plages_per_user = array();
 foreach ($plages as $_plage) {
-	$found_users[$_plage->user_id] = $mediusers[$_plage->user_id];
-	
-	if (!isset($plages_per_user[$_plage->user_id])){
-	  $plages_per_user[$_plage->user_id] = 0;
-	}
-	$plages_per_user[$_plage->user_id]++;
+  $found_users[$_plage->user_id] = $mediusers[$_plage->user_id];
+  
+  if (!isset($plages_per_user[$_plage->user_id])) {
+    $plages_per_user[$_plage->user_id] = 0;
+  }
+  $plages_per_user[$_plage->user_id]++;
 }
 
 $nbusers = count($found_users);
