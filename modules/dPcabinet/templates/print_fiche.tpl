@@ -1,9 +1,11 @@
 {{mb_default var=display value=false}}
 
 {{if !@$offline || @$multi}}
-      </td>
-    </tr>
-  </table>
+  {{if !$offline}}
+        </td>
+      </tr>
+    </table>
+  {{/if}}
   
   {{if $print && !@$multi}}
     <script>
@@ -23,7 +25,7 @@
 
 {{mb_include module=cabinet template=inc_header_fiche_anesth}}
 
-<table class="{{$tbl_class}}">
+<table class="{{$tbl_class}}" style="page-break-after: always">
   <tr>
     <td colspan="2">
       <table width="100%">
