@@ -114,8 +114,9 @@ class CSetSpec extends CEnumSpec {
                 tokenField = new TokenField(element, {" .($onchange ? "onChange: function(){ $onchange }.bind(element)" : "")."});
 
             select.observe('change', function(event){
-              element.fire('ui:change');
               tokenField.setValues(\$A(select.options).filter(function(o){return o.selected}).pluck('value'));
+
+              element.fire('ui:change');
             });
           });
         </script>";
@@ -147,9 +148,10 @@ class CSetSpec extends CEnumSpec {
                 tokenField = new TokenField(element, {" .($onchange ? "onChange: function(){ $onchange }.bind(element)" : "")."});
 
             cont.select('input[type=checkbox]').invoke('observe', 'click', function(event){
-              element.fire('ui:change');
               var elt = Event.element(event);
               tokenField.toggle(elt.value, elt.checked);
+
+              element.fire('ui:change');
             });
           });
         </script>";
