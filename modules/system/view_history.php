@@ -19,8 +19,6 @@ if (!CCanDo::edit() && !$dialog) {
   $can->redirect();
 }
 
-$smarty = new CSmartyDP();
-
 $filter = new CUserLog();
 
 if (!$dialog) {
@@ -111,6 +109,8 @@ $list_count = null;
 
 $is_admin = CCanDo::admin();
 
+$dossiers_medicaux_shared = CAppUI::conf("dPetablissement dossiers_medicaux_shared");
+
 if (!$stats) {
   $list       = $log->loadList($where, "user_log_id DESC", "$start, 100");
   $list_count = $log->countList($where);
@@ -126,7 +126,7 @@ if (!$stats) {
     $mediuser = $log->_ref_user->_ref_mediuser;
     $mediuser->loadRefFunction();
 
-    if (!$is_admin && $mediuser->_ref_function->group_id != $group_id) {
+    if (!$is_admin && !$dossiers_medicaux_shared && $mediuser->_ref_function->group_id != $group_id) {
       unset($list[$key]);
       continue;
     }
@@ -135,6 +135,8 @@ if (!$stats) {
     $log->getOldValues();
   }
 }
+
+$smarty = new CSmartyDP();
 
 $smarty->assign("dialog",      $dialog      );
 $smarty->assign("filter",      $filter      );

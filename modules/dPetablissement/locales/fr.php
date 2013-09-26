@@ -174,6 +174,8 @@ $locales['CGroupsConfig.all'] = 'Toutes les configs établissement';
 $locales['CGroupsConfig.none'] = 'Aucune config établissement';
 $locales['CGroupsConfig.one'] = 'config établissement';
 $locales['config-dPetablissement'] = 'Configuration des Établissements';
+$locales['config-dPetablissement-dossiers_medicaux_shared'] = 'Dossiers médicaux partagés';
+$locales['config-dPetablissement-dossiers_medicaux_shared-desc'] = 'Dossiers médicaux partagés (multi établissement)';
 $locales['config-dPetablissement-object-config'] = 'Configuration ';
 $locales['config-dPetablissement-object-config-classes'] = 'Cliquer sur le volet Configuration';
 $locales['config-dPetablissement-tag_group'] = 'Tag établissement';
@@ -184,4 +186,3 @@ $locales['mod-dPetablissement-tab-vw_etab_externe'] = 'Etablissements externes';
 $locales['mod-dPetablissement-tab-vw_idx_groups'] = 'Gestion des établissements';
 $locales['module-dPetablissement-court'] = 'Etablissements';
 $locales['module-dPetablissement-long'] = 'Gestion des établissements';
-?>

@@ -10,5 +10,6 @@
  */
 
 $dPconfig["dPetablissement"] = array (
-  "tag_group" => ""
+  "tag_group" => "",
+  "dossiers_medicaux_shared" => "0"
 );

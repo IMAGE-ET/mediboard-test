@@ -8,15 +8,16 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<form name="editConfigGroup" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return onSubmitFormAjax(this)">
-  <input type="hidden" name="dosql" value="do_configure" />
+<form name="editConfigGroup" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="system" />
-  <table class="form">    
+  <input type="hidden" name="dosql" value="do_configure" />
+  <table class="form">
     <tr>
       <th class="category" colspan="10">{{tr}}config-{{$m}}{{/tr}}</th>
     </tr>
 
-    {{mb_include module=system template=inc_config_str var=tag_group}}
+    {{mb_include module=system template=inc_config_str  var=tag_group}}
+    {{mb_include module=system template=inc_config_bool var=dossiers_medicaux_shared}}
       
     <tr>
       <td class="button" colspan="10">
