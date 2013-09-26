@@ -23,7 +23,7 @@
 
 {{mb_include module=cabinet template=inc_header_fiche_anesth}}
 
-<table class="{{$tbl_class}}" style="page-break-after: always;">
+<table class="{{$tbl_class}}">
   <tr>
     <td colspan="2">
       <table width="100%">
@@ -406,7 +406,7 @@
   {{mb_include module=cabinet template=inc_header_fiche_anesth}}
 {{/if}}
 
-<table class="{{$tbl_class}}" style="page-break-after: always;">
+<table class="{{$tbl_class}}">
   <tr>
     <td>
       <table width="100%">
@@ -778,7 +778,7 @@
   {{/if}}
 </table>
 
-{{if !@$offline || @$multi}}
+{{if !@$offline}}
 <table class="main">
   <tr>
     <td>
