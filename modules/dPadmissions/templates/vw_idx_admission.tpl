@@ -8,13 +8,14 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=hprim21 script=pat_hprim_selector}}
-{{mb_script module=hprim21 script=sejour_hprim_selector}}
-{{mb_script module=admissions script=admissions}}
-{{mb_script module=patients script=antecedent}}
+{{mb_script module=hprim21     script=pat_hprim_selector}}
+{{mb_script module=hprim21     script=sejour_hprim_selector}}
+{{mb_script module=admissions  script=admissions}}
+{{mb_script module=patients    script=antecedent}}
 {{mb_script module=compteRendu script=document}}
 {{mb_script module=compteRendu script=modele_selector}}
-{{mb_script module=cabinet script=file}}
+{{mb_script module=cabinet     script=file}}
+{{mb_script module=planningOp  script=sejour}}
 
 {{if "web100T"|module_active}}
   {{mb_script module=web100T script=web100T}}

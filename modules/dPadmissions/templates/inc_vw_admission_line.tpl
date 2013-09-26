@@ -120,16 +120,19 @@
       {{/if}}
 
       {{foreach from=$_sejour->_ref_operations item=_op}}
-      <a class="action" title="Imprimer la DHE de l'intervention" href="#printDHE" onclick="Admissions.printDHE('operation_id', {{$_op->_id}}); return false;">
+      <a class="action" title="Imprimer la DHE de l'intervention" href="#printDHE"
+         onclick="Admissions.printDHE('operation_id', {{$_op->_id}}); return false;">
         <img src="images/icons/print.png" />
       </a>
       {{foreachelse}}
-      <a class="action" title="Imprimer la DHE du séjour" href="#printDHE" onclick="Admissions.printDHE('sejour_id', {{$_sejour->_id}}); return false;">
+      <a class="action" title="Imprimer la DHE du séjour" href="#printDHE"
+         onclick="Admissions.printDHE('sejour_id', {{$_sejour->_id}}); return false;">
         <img src="images/icons/print.png" />
       </a>
       {{/foreach}}
 
-      <a class="action" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
+      <a class="action" title="Modifier le séjour" href="#editDHE"
+        onclick="Sejour.editModal({{$_sejour->_id}}, reloadAdmission); return false;">
         <img src="images/icons/planning.png" />
       </a>
 

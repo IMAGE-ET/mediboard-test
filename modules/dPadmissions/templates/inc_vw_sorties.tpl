@@ -195,9 +195,10 @@
             <img src="images/icons/print.png" />
           </a>
           {{/foreach}}
-          
-          <a class="action" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
-            <img src="images/icons/planning.png" title="{{tr}}Edit{{/tr}}" />
+
+          <a class="action" title="Modifier le séjour" href="#editDHE"
+             onclick="Sejour.editModal({{$_sejour->_id}}, reloadSorties); return false;">
+            <img src="images/icons/planning.png" />
           </a>
           
           {{mb_include module=system template=inc_object_notes object=$_sejour}}
