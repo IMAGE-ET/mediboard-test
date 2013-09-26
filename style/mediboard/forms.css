@@ -485,6 +485,10 @@ button.pdf:before, a.button.pdf:before {
   content: url(images/buttons/pdf.png);
 }
 
+button.archive:before, a.button.archive:before {
+  content: url("images/buttons/archive.png");
+}
+
 button.down:before, a.button.down:before {
   content: url(images/buttons/down.png);
 }
