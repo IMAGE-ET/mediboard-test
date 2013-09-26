@@ -87,7 +87,11 @@
     {{/foreach}}
     </tr>
     {{foreachelse}}
-    <div class="small-warning">Afin d'avoir accès aux fonctionnalités, veuillez indiquer un service d'{{$name_grille}} dans le module 'Hospitalisation' - Onglet Infrastruscture - Onglet service.</div>
+      {{if $exist_plan.$name_grille == 0}}
+        <div class="small-warning">Afin d'avoir accès aux fonctionnalités, veuillez paramétrer le plan d'étage du service {{$name_grille}}.</div>
+      {{else}}
+        <div class="small-warning">Afin d'avoir accès aux fonctionnalités, veuillez indiquer un service d'{{$name_grille}} dans le module 'Hospitalisation' - Onglet Infrastruscture - Onglet service.</div>
+      {{/if}}
     {{/foreach}}
   </table>
 </div>

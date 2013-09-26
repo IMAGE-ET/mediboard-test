@@ -185,6 +185,7 @@ for ($num = 0; $num <= 1; $num++) {
     }
   }
 }
+$exist_plan = array("urgence" => count($chambres_urgences), "uhcd" => count($chambres_uhcd));
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -194,5 +195,6 @@ $smarty->assign("grilles"        , $grille);
 $smarty->assign("date"           , $date);
 $smarty->assign("suiv"           , CMbDT::date("+1 day", $date));
 $smarty->assign("prec"           , CMbDT::date("-1 day", $date));
+$smarty->assign("exist_plan"     ,$exist_plan);
 
 $smarty->display("vw_placement_patients.tpl");
