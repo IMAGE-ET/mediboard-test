@@ -7,7 +7,7 @@
   
   {{if $print && !@$multi}}
     <script>
-    Main.add(window.print);
+      Main.add(window.print);
     </script> 
   {{/if}}
   
@@ -406,7 +406,7 @@
   {{mb_include module=cabinet template=inc_header_fiche_anesth}}
 {{/if}}
 
-<table class="{{$tbl_class}}">
+<table class="{{$tbl_class}}" style="page-break-after: always;">
   <tr>
     <td>
       <table width="100%">
@@ -778,7 +778,7 @@
   {{/if}}
 </table>
 
-{{if !@$offline}}
+{{if !@$offline || @$multi}}
 <table class="main">
   <tr>
     <td>

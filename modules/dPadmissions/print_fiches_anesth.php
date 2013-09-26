@@ -26,8 +26,6 @@ $sejours = $sejour->loadList($where);
 
 $result = "";
 
-$last_sejour = end($sejours);
-
 CMbObject::massLoadFwdRef($sejours, "patient_id");
 
 foreach ($sejours as $_sejour) {
@@ -56,10 +54,6 @@ foreach ($sejours as $_sejour) {
         "multi"           => 1,
       )
     );
-    
-    if ($_sejour != $last_sejour ) {
-      $result .= "<br style=\"page-break-after: always;\" />";
-    }
   }
 }
 
