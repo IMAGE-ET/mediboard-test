@@ -277,10 +277,11 @@ Object.extend(ObjectTooltip, {
 
   init: function(){
     // Init object tooltips on elements with the "data-object_guid" attribute
-    var selector = "span[data-object_guid],div[data-object_guid],label[data-object_guid],strong[data-object_guid]";
+    // Do not use yet because slows down IE8
+    /*var selector = "span[data-object_guid],div[data-object_guid],label[data-object_guid],strong[data-object_guid]";
     document.on("mouseover", selector, function(event, element){
       ObjectTooltip.createEx(element, element.get("object_guid"));
-    });
+    });*/
   },
 
   /**
