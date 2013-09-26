@@ -46,6 +46,8 @@
           {{if $type_aff}}
             <th rowspan="2" class="narrow">{{mb_title class=CFactureCabinet field=_secteur1}}</th>
             <th rowspan="2" class="narrow">{{mb_title class=CFactureCabinet field=_secteur2}}</th>
+            <th rowspan="2" class="narrow">{{mb_title class=CFactureCabinet field=_secteur3}}</th>
+            <th rowspan="2" class="narrow">{{mb_title class=CFactureCabinet field=du_tva}}</th>
           {{else}}
             <th rowspan="2" class="narrow">Montant</th>
             <th rowspan="2" class="narrow">Remise</th>
@@ -100,6 +102,8 @@
           {{if $type_aff}}
             <td {{if $facture->_secteur1 < 0.001}} class="empty" {{/if}} style="text-align: right;">{{mb_value object=$facture field=_secteur1}}</td>
             <td {{if $facture->_secteur2 < 0.001}} class="empty" {{/if}} style="text-align: right;">{{mb_value object=$facture field=_secteur2}}</td>
+            <td {{if $facture->_secteur3 < 0.001}} class="empty" {{/if}} style="text-align: right;">{{mb_value object=$facture field=_secteur3}}</td>
+            <td {{if $facture->du_tva < 0.001}} class="empty" {{/if}} style="text-align: right;">{{mb_value object=$facture field=du_tva}}</td>
             <td {{if $facture->_montant_avec_remise < 0.001}} class="empty" {{/if}} style="text-align: right;">{{mb_value object=$facture field=_montant_avec_remise}}</td>
           {{else}}
             <td style="text-align: right;">{{mb_value object=$facture field=_montant_sans_remise}}</td>
@@ -127,7 +131,7 @@
         </tr>
         {{/foreach}}
         <tr>
-          <td colspan="{{if $type_aff}}7{{else}}8{{/if}}"></td>
+          <td colspan="{{if $type_aff}}10{{else}}8{{/if}}"></td>
           <td><strong>{{tr}}Total{{/tr}}</strong></td>
           <td><strong>{{$_date.total.patient|currency}} </strong></td>
           {{if $type_aff}}

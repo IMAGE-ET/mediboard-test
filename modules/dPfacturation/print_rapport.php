@@ -70,7 +70,9 @@ $recapReglement["total"]      = array(
   "nb_impayes_tiers"     => "0",
   "nb_impayes_patient"   => "0",
   "secteur1"             => "0",
-  "secteur2"             => "0"
+  "secteur2"             => "0",
+  "secteur3"             => "0",
+  "du_tva"               => "0"
 );
 
 foreach (array_merge($reglement->_specs["mode"]->_list, array("")) as $_mode) {
@@ -140,6 +142,7 @@ foreach ($listFactures as $_facture) {
     $recapReglement["total"]["nb_consultations"] += count($_facture->_ref_consults);
 
     $recapReglement["total"]["du_patient"]      += $_facture->_reglements_total_patient;
+    $recapReglement["total"]["du_tva"]          += $_facture->du_tva;
     $recapReglement["total"]["reste_patient"]   += $_facture->_du_restant_patient;
     if ($_facture->_du_restant_patient) {
       $recapReglement["total"]["nb_impayes_patient"]++;
@@ -156,6 +159,7 @@ foreach ($listFactures as $_facture) {
     if (CAppUI::conf("dPccam CCodeCCAM use_cotation_ccam")) {
       $recapReglement["total"]["secteur1"]             += $_facture->_secteur1;
       $recapReglement["total"]["secteur2"]             += $_facture->_secteur2;
+      $recapReglement["total"]["secteur3"]             += $_facture->_secteur3;
     }
     else {
       $recapReglement["total"]["secteur1"]             += $_facture->_montant_avec_remise;
@@ -179,6 +183,8 @@ foreach ($listFactures as $_facture) {
         $listPlages["$debut_plage"]["plage"] = $plage;
         $listPlages["$debut_plage"]["total"]["secteur1"] = 0;
         $listPlages["$debut_plage"]["total"]["secteur2"] = 0;
+        $listPlages["$debut_plage"]["total"]["secteur3"] = 0;
+        $listPlages["$debut_plage"]["total"]["du_tva"] = 0;
         $listPlages["$debut_plage"]["total"]["total"]    = 0;
         $listPlages["$debut_plage"]["total"]["patient"]  = 0;
         $listPlages["$debut_plage"]["total"]["tiers"]    = 0;
@@ -193,6 +199,8 @@ foreach ($listFactures as $_facture) {
       else {
         $listPlages["$debut_plage"]["total"]["secteur2"] += $_facture->remise;
       }
+      $listPlages["$debut_plage"]["total"]["secteur3"] += $_facture->_secteur3;
+      $listPlages["$debut_plage"]["total"]["du_tva"]   += $_facture->du_tva;
       $listPlages["$debut_plage"]["total"]["total"]    += $_facture->_montant_avec_remise;
       $listPlages["$debut_plage"]["total"]["patient"]  += $_facture->_reglements_total_patient;
       $listPlages["$debut_plage"]["total"]["tiers"]    += $_facture->_reglements_total_tiers;

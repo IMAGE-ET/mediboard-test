@@ -91,7 +91,7 @@
 
 <tbody class="hoverable">
   <tr>
-    <td colspan="3" rowspan="4"></td>
+    <td colspan="3" rowspan="5"></td>
     <td colspan="2">Dû Patient</td>
     <td style="text-align:right;">{{mb_value object=$facture field="du_patient"}}</td>
   </tr>
@@ -99,6 +99,10 @@
     <td colspan="2">Dû Tiers</td>
     <td style="text-align:right;">{{mb_value object=$facture field="du_tiers"}}</td>
   </tr>
+  <tr>
+    <td colspan="2"><i>Dont TVA ({{$facture->taux_tva}}%)</i></td>
+    <td style="text-align:right;"><i>{{mb_value object=$facture field="du_tva"}}</i></td>
+  <tr>
   <tr>
     <td colspan="2"><b>Montant Total</b></td>
     <td style="text-align:right;"><b>{{mb_value object=$facture field="_montant_avec_remise"}}</b></td>

@@ -11,18 +11,7 @@
 
 CCanDo::checkEdit();
 
-// Edite t'on un tarif ?
-$tarif_id = CValue::getOrSession("tarif_id");
-$tarif = new CTarif;
-$tarif->load($tarif_id);
-if (!$tarif->getPerm(PERM_EDIT)) {
-  CAppUI::setMsg("Vous n'avez pas le droit de modifier ce tarif");
-  $tarif = new CTarif;
-}
-$tarif->loadRefsNotes();
-$tarif->getSecteur1Uptodate();
-$tarif->loadView();
-$tarif->getPrecodeReady();
+$tarif = new CTarif();
 
 // L'utilisateur est-il praticien ?
 $user = CAppUI::$user;
@@ -45,13 +34,6 @@ if ($user->isPraticien()) {
 
 if ($user->isSecretaire()) {
   $prat_id = CValue::getOrSession("prat_id");
-
-  // Toujours choisir le praticien du tarif choisi
-  if ($tarif->_id && $tarif->chir_id) {
-    $prat_id = $tarif->chir_id;
-    CValue::setSession("prat_id", $prat_id);
-  }
-
   if ($prat_id) {
     $prat->load($prat_id);
     $prat->loadRefFunction();
@@ -97,13 +79,8 @@ if (CAppUI::conf("dPcabinet Tarifs show_tarifs_etab")) {
 }
 
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
-$listPrat = $user->isSecretaire() ?
-  CConsultation::loadPraticiens(PERM_READ) :
-  array($user->_id => $user);
+$listPrat = $user->isSecretaire() ? CConsultation::loadPraticiens(PERM_READ) : array($user->_id => $user);
 
-if (!$tarif->_id) {
-  $tarif->secteur1 = 0;
-}
 // Création du template
 $smarty = new CSmartyDP();
 

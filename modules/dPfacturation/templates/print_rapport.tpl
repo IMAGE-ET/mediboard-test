@@ -85,6 +85,8 @@
           {{if $type_aff}}
             <th class="narrow">{{mb_title class=CConsultation field=secteur1}}</th>
             <th class="narrow">{{mb_title class=CConsultation field=secteur2}}</th>
+            <th class="narrow">{{mb_title class=CConsultation field=secteur3}}</th>
+            <th class="narrow">{{mb_title class=CConsultation field=du_tva}}</th>
             <th class="narrow">{{mb_title class=CConsultation field=_somme}}</th>
             <th style="width: 20%;">{{mb_title class=CConsultation field=du_patient}}</th>
             <th style="width: 20%;">{{mb_title class=CConsultation field=du_tiers}}</th>
@@ -136,6 +138,8 @@
           <td>{{mb_value object=$_facture field=_secteur1 empty=1}}</td>
           {{if $type_aff}}
             <td>{{mb_value object=$_facture field=_secteur2 empty=1}}</td>
+            <td>{{mb_value object=$_facture field=_secteur3 empty=1}}</td>
+            <td>{{mb_value object=$_facture field=du_tva empty=1}}</td>
           {{else}}
             <td>{{mb_value object=$_facture field=remise empty=1}}</td>
           {{/if}}
@@ -230,6 +234,10 @@
           </td>
           <td><strong>{{$_plage.total.secteur1|currency}}</strong></td>
           <td><strong>{{$_plage.total.secteur2|currency}}</strong></td>
+          {{if $type_aff}}
+            <td><strong>{{$_plage.total.secteur3|currency}}</strong></td>
+            <td><strong>{{$_plage.total.du_tva|currency}}</strong></td>
+          {{/if}}
           <td><strong>{{$_plage.total.total|currency}}</strong></td>
           <td><strong>{{$_plage.total.patient|currency}}</strong></td>
           {{if $type_aff}}

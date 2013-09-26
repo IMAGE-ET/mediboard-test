@@ -64,6 +64,8 @@
 
     {{mb_include module=system template=inc_config_bool var=show_IPP_print_consult}}
 
+    {{mb_include module=system template=inc_config_str var=default_taux_tva}}
+
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

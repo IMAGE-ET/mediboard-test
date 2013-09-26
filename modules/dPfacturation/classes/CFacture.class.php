@@ -23,6 +23,8 @@ class CFacture extends CMbObject {
   public $cloture;
   public $du_patient;
   public $du_tiers;
+  public $du_tva;
+  public $taux_tva;
   public $type_facture;
   public $patient_date_reglement;
   public $tiers_date_reglement;
@@ -54,6 +56,7 @@ class CFacture extends CMbObject {
   public $_montant_avec_remise;
   public $_secteur1 = 0.0;
   public $_secteur2 = 0.0;
+  public $_secteur3 = 0.0;
   //Champ à supprimer
   public $_montant_total;
 
@@ -142,6 +145,8 @@ class CFacture extends CMbObject {
     $props["cloture"]       = "date";
     $props["du_patient"]    = "currency notNull default|0 decimals|2";
     $props["du_tiers"]      = "currency notNull default|0 decimals|2";
+    $props["du_tva"]        = "currency default|0 decimals|2 show|0";
+    $props["taux_tva"]      = "enum list|".CAppUI::conf("dPcabinet CConsultation default_taux_tva");
 
     $props["type_facture"]              = "enum notNull list|maladie|accident|esthetique default|maladie";
     $props["patient_date_reglement"]    = "date";
@@ -170,6 +175,7 @@ class CFacture extends CMbObject {
     $props["_montant_avec_remise"]      = "currency";
     $props["_secteur1"]                 = "currency";
     $props["_secteur2"]                 = "currency";
+    $props["_secteur3"]                 = "currency";
     $props["_montant_total"]            = "currency";
     $specs["_total"]                    = "currency";
     $specs["_montant_retrocession"]     = "currency";
@@ -202,7 +208,7 @@ class CFacture extends CMbObject {
     }
 
     $this->loadRefsReglements();
-    foreach($this->_ref_reglements as $reglement) {
+    foreach ($this->_ref_reglements as $reglement) {
       // Clonage
       $new_reglement = new CReglement();
       foreach ($reglement->getProperties() as $name => $value) {
@@ -217,7 +223,7 @@ class CFacture extends CMbObject {
     }
 
     $this->loadRefsRelances();
-    foreach($this->_ref_relances as $relance) {
+    foreach ($this->_ref_relances as $relance) {
       // Clonage
       $new_relance = new CRelance();
       foreach ($relance->getProperties() as $name => $value) {
@@ -240,7 +246,7 @@ class CFacture extends CMbObject {
   function store() {
     if ($this->_id && $this->_duplicate) {
       $this->_duplicate = null;
-      if ($msg = $this->duplicate()){
+      if ($msg = $this->duplicate()) {
         return $msg;
       }
       $this->annule = 1;
@@ -435,6 +441,7 @@ class CFacture extends CMbObject {
   function updateMontants(){
     $this->_secteur1  = 0;
     $this->_secteur2  = 0;
+    $this->_secteur3  = 0;
     if (count($this->_ref_sejours) != 0 || count($this->_ref_consults) != 0) {
       if (!count($this->_ref_items)) {
         $this->du_patient = 0;
@@ -459,6 +466,7 @@ class CFacture extends CMbObject {
           foreach ($this->_ref_consults as $_consult) {
             $this->_secteur1 += $_consult->secteur1;
             $this->_secteur2 += $_consult->secteur2;
+            $this->_secteur3 += $_consult->secteur3;
             $this->du_patient += $_consult->du_patient;
             $this->du_tiers   += $_consult->du_tiers;
           }

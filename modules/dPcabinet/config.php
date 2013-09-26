@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: $
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision: $
+ * @version    $Revision:$
  */
 
 $dPconfig["dPcabinet"] = array(
@@ -30,9 +30,10 @@ $dPconfig["dPcabinet"] = array(
     "hours_after_changing_prat"     => 0,
     "fix_doc_edit"                  => 0,
     "search_sejour_all_groups"      => 0,
-    "consult_readonly"             => 0,
+    "consult_readonly"              => 0,
     "surbooking_readonly"   => 1,
-    "tag" => ""
+    "tag"                   => "",
+    "default_taux_tva"      => "19.6"
   ),
   "CConsultAnesth" => array(
     "feuille_anesthesie" => "print_fiche",

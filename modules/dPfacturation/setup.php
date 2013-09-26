@@ -319,6 +319,12 @@ class CSetupdPfacturation extends CSetup {
     $query = "ALTER TABLE `facture_etablissement`
                 ADD `numero` INT (11) UNSIGNED NOT NULL DEFAULT '1';";
     $this->addQuery($query);
-    $this->mod_version = "0.36";
+    $this->makeRevision("0.36");
+
+    $query = "ALTER TABLE `facture_etablissement`
+                ADD `du_tva` DECIMAL (10,2) DEFAULT '0',
+                ADD `taux_tva` ENUM ('19.6');";
+    $this->addQuery($query);
+    $this->mod_version = "0.37";
   }
 }

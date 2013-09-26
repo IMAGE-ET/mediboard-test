@@ -227,6 +227,27 @@ function popupImport(facture_class) {
               </div>
             </td>
           </tr>
+          {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
+            <tr>
+              <td class="button" colspan="4">
+                <hr />
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" class="button">
+                <button class="print" type="submit" onclick="document.printFrm.a.value='print_tva';">Totaux TVA</button>
+              </td>
+              <td colspan="2"></td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <div class="small-info" style="text-align:center;">
+                  Affichage le total assujetti à la TVA ainsi que la répartition par taux.
+                </div>
+              </td>
+              <td colspan="2"></td>
+            </tr>
+          {{/if}}
           {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
             <tr>
               <td class="button" colspan="4">

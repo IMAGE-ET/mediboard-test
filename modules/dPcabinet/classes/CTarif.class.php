@@ -25,6 +25,8 @@ class CTarif extends CMbObject {
   public $description;
   public $secteur1;
   public $secteur2;
+  public $secteur3;
+  public $taux_tva;
   public $codes_ccam;
   public $codes_ngap;
   public $codes_tarmed;
@@ -32,6 +34,7 @@ class CTarif extends CMbObject {
   
   // Form fields
   public $_type;
+  public $_du_tva;
   public $_somme;
   public $_codes_ngap = array();
   public $_codes_ccam = array();
@@ -87,10 +90,13 @@ class CTarif extends CMbObject {
     $props["description"] = "str notNull confidential seekable";
     $props["secteur1"]    = "currency notNull min|0";
     $props["secteur2"]    = "currency";
+    $props["secteur3"]    = "currency";
+    $props["taux_tva"]    = "enum list|".CAppUI::conf("dPcabinet CConsultation default_taux_tva");
     $props["codes_ccam"]  = "str";
     $props["codes_ngap"]  = "str";
     $props["codes_tarmed"]= "str";
     $props["codes_caisse"]= "str";
+    $props["_du_tva"]      = "currency";
     $props["_somme"]      = "currency";
     $props["_type"]       = "";
     
@@ -123,7 +129,8 @@ class CTarif extends CMbObject {
     CMbArray::removeValue("", $this->_codes_ccam);
     CMbArray::removeValue("", $this->_codes_tarmed);
     CMbArray::removeValue("", $this->_codes_caisse);
-    $this->_somme = $this->secteur1 + $this->secteur2;
+    $this->_du_tva = round($this->secteur3 * $this->taux_tva/100 , 2);
+    $this->_somme = $this->secteur1 + $this->secteur2 + $this->secteur3 + $this->_du_tva;
   }
 
   /**
@@ -182,6 +189,7 @@ class CTarif extends CMbObject {
       $consultation->loadRefPlageConsult();
       $this->secteur1    = $consultation->secteur1;
       $this->secteur2    = $consultation->secteur2;
+      $this->secteur3    = $consultation->secteur3;
       $this->description = $consultation->tarif;
     }
   }
@@ -218,8 +226,8 @@ class CTarif extends CMbObject {
     $types_code = array(
       "codes_ccam" => "CActeCCAM",
       "codes_ngap" => "CActeNGAP"
-    )
-    ;
+    );
+
     if (CModule::getActive("tarmed")) {
       $types_code["codes_tarmed"] = "CActeTarmed";
       $types_code["codes_caisse"] = "CActeCaisse";
@@ -257,7 +265,7 @@ class CTarif extends CMbObject {
     if ((!$this->codes_ngap && !$this->codes_ccam) || (!$this->codes_tarmed && !$this->codes_caisse)) {
       return $this->_secteur1_uptodate = "1";
     }
-    
+
     // Backup ...
     $secteur1   = $this->secteur1;
     $codes_ccam = $this->_codes_ccam;

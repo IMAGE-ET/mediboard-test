@@ -58,28 +58,27 @@
   <tr>
     <th class="title" colspan="9">Récapitulatif des consultations concernées</th>
   </tr>
-  <tr>
-    <th>Nb de {{tr}}CConsultation{{/tr}}</th>
-    <td colspan="{{if $type_aff}}4{{else}}8{{/if}}">{{$recapReglement.total.nb_consultations}}</td>
-  </tr>
-  
   {{if $type_aff}}
     <tr>
-      <th>
-        {{tr}}Total{{/tr}}
-        {{mb_label class=CConsultation field=secteur1}}
-      </th>
+      <th> {{tr}}Total{{/tr}} {{mb_label class=CConsultation field=secteur1}} </th>
       <td colspan="4">{{$recapReglement.total.secteur1|currency}}</td>
+      <th colspan="4">Nb de {{tr}}CConsultation{{/tr}}</th>
+    </tr>
+    <tr>
+      <th> {{tr}}Total{{/tr}} {{mb_label class=CConsultation field=secteur2}} </th>
+      <td colspan="4">{{$recapReglement.total.secteur2|currency}}</td>
+      <td colspan="{{if $type_aff}}4{{else}}8{{/if}}">{{$recapReglement.total.nb_consultations}}</td>
+    </tr>
+    <tr>
+      <th> {{tr}}Total{{/tr}} {{mb_label class=CConsultation field=secteur3}} </th>
+      <td colspan="4">{{$recapReglement.total.secteur3|currency}}</td>
       <th colspan="4">{{mb_label class=CConsultation field=_somme}}</th>
     </tr>
     <tr>
-      <th>
-        {{tr}}Total{{/tr}}
-        {{mb_label class=CConsultation field=secteur2}}
-      </th>
-      <td colspan="4">{{$recapReglement.total.secteur2|currency}}</td>
+      <th> {{tr}}Total{{/tr}} {{mb_label class=CConsultation field=du_tva}} </th>
+      <td colspan="4">{{$recapReglement.total.du_tva|currency}}</td>
       <td colspan="4" class="button">
-        {{$recapReglement.total.secteur1+$recapReglement.total.secteur2|currency}}
+        {{$recapReglement.total.secteur1+$recapReglement.total.secteur2+$recapReglement.total.secteur3+$recapReglement.total.du_tva|currency}}
       </td>
     </tr>
     <tr>

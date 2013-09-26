@@ -58,7 +58,9 @@ $recapReglement["total"] = array(
   "nb_reglement_patient" => "0",
   "nb_reglement_tiers"   => "0",
   "secteur1"             => "0",
-  "secteur2"             => "0"
+  "secteur2"             => "0",
+  "secteur3"             => "0",
+  "du_tva"               => "0"
 );
 
 foreach (array_merge($reglement->_specs["mode"]->_list, array("")) as $_mode) {
@@ -89,6 +91,8 @@ foreach ($reglements as $_reglement) {
         $listConsults[$_consult->_id] = $_consult;
         $recapReglement["total"]["secteur1"] += $_consult->secteur1;
         $recapReglement["total"]["secteur2"] += $_consult->secteur2;
+        $recapReglement["total"]["secteur3"] += $_consult->secteur3;
+        $recapReglement["total"]["du_tva"] += $_consult->du_tva;
       }
     }
   }

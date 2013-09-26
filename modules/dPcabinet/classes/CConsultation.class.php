@@ -35,6 +35,9 @@ class CConsultation extends CFacturable {
   public $duree;
   public $secteur1;
   public $secteur2;
+  public $secteur3; // Assujetti à la TVA
+  public $du_tva;
+  public $taux_tva;
   public $chrono;
   public $annule;
 
@@ -245,6 +248,9 @@ class CConsultation extends CFacturable {
     $props["duree"]             = "num min|1 max|15 notNull default|1 show|0";
     $props["secteur1"]          = "currency min|0 show|0";
     $props["secteur2"]          = "currency show|0";
+    $props["secteur3"]          = "currency show|0";
+    $props["taux_tva"]          = "enum list|".CAppUI::conf("dPcabinet CConsultation default_taux_tva");
+    $props["du_tva"]            = "currency show|0";
     $props["chrono"]            = "enum notNull list|16|32|48|64 show|0";
     $props["annule"]            = "bool show|0";
     $props["_etat"]             = "str";
@@ -365,11 +371,21 @@ class CConsultation extends CFacturable {
   }
 
   /**
+   * Calcul de la TVA assujetti au secteur 3
+   *
+   * @return int
+   */
+  function calculTVA() {
+    return $this->du_tva = round($this->secteur3 * $this->taux_tva/100 , 2);
+  }
+
+  /**
    * @see parent::updateFormFields()
    */
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_somme = $this->secteur1 + $this->secteur2;
+    $this->calculTVA();
+    $this->_somme = $this->secteur1 + $this->secteur2 + $this->secteur3 + $this->du_tva;
     if ($this->patient_date_reglement === "0000-00-00") {
       $this->patient_date_reglement = null;
     }
@@ -413,7 +429,7 @@ class CConsultation extends CFacturable {
 
     // Cas du paiement d'un séjour
     if ($this->sejour_id !== null && $this->sejour_id && $this->secteur1 !== null && $this->secteur2 !== null) {
-      $this->du_tiers = $this->secteur1 + $this->secteur2;
+      $this->du_tiers = $this->secteur1 + $this->secteur2 + $this->secteur3 + $this->du_tva;
       $this->du_patient = 0;
     }
   }
@@ -524,16 +540,19 @@ class CConsultation extends CFacturable {
       // Cas de la cotation poursuivie
       $this->secteur1 += $tarif->secteur1;
       $this->secteur2 += $tarif->secteur2;
+      $this->secteur3 += $tarif->secteur3;
       $this->tarif     = "composite";
     }
     else {
       // Cas de la cotation normale
       $this->secteur1 = $tarif->secteur1;
       $this->secteur2 = $tarif->secteur2;
+      $this->secteur3 = $tarif->secteur3;
       $this->tarif    = $tarif->description;
     }
 
-    $this->du_patient   = $this->secteur1 + $this->secteur2;
+    $this->calculTVA();
+    $this->du_patient   = $this->secteur1 + $this->secteur2 + $this->secteur3 + $this->du_tva;
 
     // Mise à jour de codes CCAM prévus, sans information serialisée complémentaire
     foreach ($tarif->_codes_ccam as $_code_ccam) {
@@ -643,7 +662,7 @@ class CConsultation extends CFacturable {
     $this->secteur2 = $secteur2_NGAP + $secteur2_CCAM + $secteur2_TARMED + $secteur2_CAISSE;
 
     if ($secteur1_NGAP == 0 && $secteur1_CCAM == 0 && $secteur2_NGAP==0 && $secteur2_CCAM ==0) {
-      $this->du_patient = $this->secteur1 + $this->secteur2;
+      $this->du_patient = $this->secteur1 + $this->secteur2 +  $this->secteur3 + $this->du_tva;
     }
 
     // Cotation manuelle
@@ -935,6 +954,8 @@ class CConsultation extends CFacturable {
       $facture->_consult_id = $this->_id;
       $facture->du_patient  = $this->du_patient;
       $facture->du_tiers    = $this->du_tiers;
+      $facture->du_tva      = $this->du_tva;
+      $facture->taux_tva    = $this->taux_tva;
       $facture->store();
       if (CModule::getActive("dPfacturation")) {
         $ligne = new CFactureLiaison();
