@@ -27,13 +27,13 @@ $today        = CMbDT::date();
 $tomorow      = CMbDT::date("+1 DAY");
 
 // L'utilisateur est-il un praticien
-$user = CAppUI::$user;
+$user = CMediusers::get();
 if ($user->isPraticien() and !$chir_id) {
   $chir_id = $user->_id;
 }
 
 // Chargement du praticien
-$chir = new CMediusers;
+$chir = new CMediusers();
 if ($chir_id) {
   $testChir = new CMediusers();
   $testChir->load($chir_id);
@@ -45,7 +45,7 @@ $chir->loadRefFunction();
 $prat = $chir;
 
 // Chargement du patient
-$patient = new CPatient;
+$patient = new CPatient();
 if ($patient_id && !$operation_id && !$sejour_id) {
   $patient->load($patient_id);
   $patient->loadRefsSejours();
@@ -53,10 +53,10 @@ if ($patient_id && !$operation_id && !$sejour_id) {
 
 // Vérification des droits sur les praticiens
 if ($user->isAnesth()) {
-  $listPraticiens = $chir->loadPraticiens(null);
+  $listPraticiens = $user->loadPraticiens(null);
 }
 else {
-  $listPraticiens = $chir->loadPraticiens(PERM_EDIT);
+  $listPraticiens = $user->loadPraticiens(PERM_EDIT);
 }
 
 $categorie_prat = array();
@@ -66,7 +66,7 @@ foreach ($listPraticiens as &$_prat) {
 }
 
 // On récupère le séjour
-$sejour = new CSejour;
+$sejour = new CSejour();
 
 if ($sejour_id && !$operation_id) {
   $sejour->load($sejour_id);
@@ -81,7 +81,7 @@ if ($sejour_id && !$operation_id) {
 }
 
 // Liste des types d'anesthésie
-$listAnesthType = new CTypeAnesth;
+$listAnesthType = new CTypeAnesth();
 $orderanesth = "name";
 $listAnesthType = $listAnesthType->loadList(null, $orderanesth);
 
@@ -89,7 +89,7 @@ $listAnesthType = $listAnesthType->loadList(null, $orderanesth);
 $anesthesistes = $user->loadAnesthesistes(PERM_READ);
 
 // On récupère l'opération
-$op = new COperation;
+$op = new COperation();
 $op->load($operation_id);
 if ($op->_id) {
   $op->loadRefs();
@@ -241,7 +241,7 @@ $smarty->assign("heure_entree_veille", $heure_entree_veille);
 $smarty->assign("heure_entree_jour",   $heure_entree_jour);
 
 $smarty->assign("op"        , $op);
-$smarty->assign("plage"     , $op->plageop_id ? $op->_ref_plageop : new CPlageOp );
+$smarty->assign("plage"     , $op->plageop_id ? $op->_ref_plageop : new CPlageOp() );
 $smarty->assign("sejour"    , $sejour);
 $smarty->assign("chir"      , $chir);
 $smarty->assign("praticien" , $prat);

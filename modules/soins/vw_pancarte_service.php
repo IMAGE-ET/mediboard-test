@@ -222,7 +222,7 @@ foreach ($prescriptions as $_prescription) {
         continue;
       }
       
-      if($_planif->_ref_object->_ref_prescription_line_mix->_continuite == "discontinue"){
+      if($_planif->_ref_object->_ref_prescription_line_mix->continuite == "discontinue"){
         $planification = new CAdministration();
         $where = array();
         $where["object_class"] = " = 'CPrescriptionLineMixItem'";

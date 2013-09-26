@@ -49,7 +49,7 @@ if ($chir->isPraticien() and !$chir_id) {
 }
 
 // Chargement du praticien
-$chir = new CMediusers;
+$chir = new CMediusers();
 if ($chir_id) {
   $testChir = new CMediusers();
   $testChir->load($chir_id);
@@ -61,14 +61,14 @@ $chir->loadRefFunction();
 $prat = $chir;
 
 // Chargement du patient
-$patient = new CPatient;
+$patient = new CPatient();
 if ($patient_id && !$operation_id && !$sejour_id) {
   $patient->load($patient_id);
   $patient->loadRefsSejours();
 }
 
 // Vérification des droits sur les praticiens
-$listPraticiens = $user->_is_anesth ? $chir->loadPraticiens(PERM_READ) : $chir->loadPraticiens(PERM_EDIT);
+$listPraticiens = $user->_is_anesth ? $user->loadPraticiens(PERM_READ) : $user->loadPraticiens(PERM_EDIT);
 $categorie_prat = array();
 foreach ($listPraticiens as $keyPrat =>$prat) {
   $prat->loadRefsFwd();
@@ -76,7 +76,7 @@ foreach ($listPraticiens as $keyPrat =>$prat) {
 }
 
 // On récupère le séjour
-$sejour = new CSejour;
+$sejour = new CSejour();
 if ($sejour_id && !$operation_id) {
   $sejour->load($sejour_id);
   $sejour->loadRefsFwd();
@@ -89,7 +89,7 @@ if ($sejour_id && !$operation_id) {
 }
 
 // On récupère l'opération
-$op = new COperation;
+$op = new COperation();
 $op->load($operation_id);
 if ($op->_id) {
   $op->loadRefs();
@@ -128,7 +128,7 @@ $orderanesth = "name";
 $listAnesthType = $listAnesthType->loadList(null, $orderanesth);
 
 // Liste des anesthésistes
-$anesthesistes = $chir->loadAnesthesistes(PERM_READ);
+$anesthesistes = $user->loadAnesthesistes(PERM_READ);
 
 // Compléments de chargement du séjour
 $sejour->makeDatesOperations();
