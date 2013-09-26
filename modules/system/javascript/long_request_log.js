@@ -10,12 +10,10 @@
 
 LongRequestLog = {
   refresh: function() {
-    var form = getForm('Filter-Log');
-    new Url('system', 'ajax_list_long_request_logs') .
-      addElement(form._date_min) .
-      addElement(form._date_max) .
-      addElement(form.user_id) .
-      requestUpdate('list-logs');
+    var form = getForm("Filter-Log");
+    var url = new Url('system', 'ajax_list_long_request_logs');
+    url.addFormData(form);
+    url.requestUpdate('list-logs');
 
     return false;
   },

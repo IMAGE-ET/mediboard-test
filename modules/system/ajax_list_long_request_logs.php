@@ -12,7 +12,7 @@
 
 CCanDo::checkAdmin();
 
-$start  = CValue::get("start", 0);
+$start = (int) CValue::get("start", 0);
 
 $filter = new CLongRequestLog();
 $filter->_date_min = CValue::get("_date_min");
