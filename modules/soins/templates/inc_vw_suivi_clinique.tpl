@@ -402,7 +402,10 @@
                       {{/if}}
                       {{assign var=is_first value=0}}
                       {{math equation="x+1" x=$total assign=total}}
-                      {{$_line->_ref_produit->libelle_abrege}}
+                      <span {{if $_line->_fin_reelle|iso_date <= $date_after|iso_date}}style="border-bottom: 2px solid orange"{{/if}}
+                            onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}')">
+                        {{$_line->_ref_produit->libelle_abrege}}
+                      </span>
                     {{/if}}
                   {{/foreach}}
                   {{if $total == 0}}
@@ -468,8 +471,12 @@
                         {{/if}}
                         {{assign var=is_first value=0}}
                         {{math equation="x+1" x=$total assign=total}}
-                        {{$_line->_libelle_voie}}
-                        ({{$_line->_compact_view}})
+
+                        <span {{if $_line->_fin|iso_date <= $date_after|iso_date}}style="border-bottom: 2px solid orange"{{/if}}
+                              onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}')">
+                          {{$_line->_libelle_voie}}
+                          ({{$_line->_compact_view}})
+                        </span>
                       {{/if}}
                     {{/foreach}}
                     {{if $total == 0}}
@@ -561,7 +568,11 @@
                         {{assign var=is_first_cat value=0}}
                         {{math equation="x+1" x=$total assign=total}}
                         {{math equation="x+1" x=$count_elts assign=count_elts}}
-                        {{$element->_view}}
+
+                        <span {{if $element->_fin_reelle|iso_date <= $date_after|iso_date}}style="border-bottom: 2px solid orange"{{/if}}
+                              onmouseover="ObjectTooltip.createEx(this, '{{$element->_guid}}')">
+                          {{$element->_view}}
+                        </span>
                       {{/if}}
                     {{/foreach}}
                   {{/foreach}}
