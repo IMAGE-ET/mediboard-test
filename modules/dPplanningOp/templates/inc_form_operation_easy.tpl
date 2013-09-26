@@ -310,7 +310,7 @@
     </tr>
   {{/if}}
   
-  {{if $conf.dPplanningOp.CSejour.easy_chambre_simple || $conf.dPplanningOp.COperation.easy_regime || $conf.dPbloc.CPlageOp.systeme_materiel == "expert"}}
+  {{if $conf.dPplanningOp.CSejour.easy_chambre_simple || $conf.dPplanningOp.COperation.easy_regime || $conf.dPbloc.CPlageOp.systeme_materiel == "expert" || $conf.dPhospi.systeme_prestations == "expert"}}
     <tr>
       <td></td>
       <td colspan="2">
