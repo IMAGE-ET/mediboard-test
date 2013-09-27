@@ -13,7 +13,7 @@
   Main.add(Control.Tabs.create.curry('tabs-configure', true));
 
   function importAsipTable(){
-    var url = new Url("eai", "ajax_import_Asip_table");
+    var url = new Url("eai", "ajax_import_asip_table");
     url.requestUpdate("import-log");
   }
 </script>
