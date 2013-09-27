@@ -54,7 +54,9 @@ class CExClassConstraint extends CMbObject {
   }
 
   /**
-   * @param CMbObject $object
+   * Get field and object corresponding to $this->field field
+   *
+   * @param CMbObject $object Object
    *
    * @return array(CMbObject,string)
    */
@@ -62,6 +64,14 @@ class CExClassConstraint extends CMbObject {
     return self::getFieldAndObjectStatic($object, $this->field);
   }
 
+  /**
+   * Get field and object corresponding to $field field
+   *
+   * @param CMbObject $object Object
+   * @param string    $field  Field name
+   *
+   * @return array
+   */
   static function getFieldAndObjectStatic(CMbObject $object, $field) {
     if (strpos($field, "CONNECTED_USER") === 0) {
       $object = CMediusers::get();
@@ -75,12 +85,14 @@ class CExClassConstraint extends CMbObject {
   }
 
   /**
-   * @param CModelObject $ref_object
+   * Resolve spec from $this->field
+   *
+   * @param CModelObject $ref_object Ref object
    *
    * @return CMbFieldSpec|null
    */
   function resolveSpec(CModelObject $ref_object){
-    /** @var CModelObject $ref_object */
+    /** @var CMbObject $ref_object */
     /** @var string $field */
     list($ref_object, $field) = $this->getFieldAndObject($ref_object);
 
@@ -98,6 +110,7 @@ class CExClassConstraint extends CMbObject {
     else {
       $subparts = explode(".", $parts[0]);
 
+      /** @var CRefSpec $_spec */
       if ($subparts[0] == "CONNECTED_USER") {
         $_spec = $connected_user;
       }
@@ -150,6 +163,7 @@ class CExClassConstraint extends CMbObject {
       $subparts = explode(".", $parts[0]);
       $_field = $subparts[0];
 
+      /** @var CRefSpec $_spec */
       $_spec = $object->_specs[$_field];
 
       if (count($subparts) <= 1 && !$_spec->class) {
@@ -164,7 +178,9 @@ class CExClassConstraint extends CMbObject {
   }
 
   /**
-   * @param CMbObject $object
+   * Resolve ovject field from $this->field
+   *
+   * @param CMbObject $object Object
    *
    * @return array(CMBobject,string)
    */
@@ -175,6 +191,8 @@ class CExClassConstraint extends CMbObject {
   }
 
   /**
+   * Load target object, similar to CMbMetaObject's
+   *
    * @return CMbObject
    */
   function loadTargetObject(){
@@ -208,7 +226,7 @@ class CExClassConstraint extends CMbObject {
   function updateFormFields(){
     parent::updateFormFields();
 
-    $this->loadRefExClassEvent();
+    $this->loadRefExClassEvent(true);
 
     $host_class = $this->_ref_ex_class_event->host_class;
 
@@ -220,12 +238,12 @@ class CExClassConstraint extends CMbObject {
     $parts = explode("-", $field);
     $subparts = explode(".", $parts[0]);
 
-    // first part
     if (count($subparts) > 1) {
+      // first part
       $this->_view = CAppUI::tr("$host_class-{$subparts[0]}")." de type ".CAppUI::tr("{$subparts[1]}");
     }
-    // second part
     else {
+      // second part
       if (count($parts) > 1) {
         $this->_view = CAppUI::tr("$host_class-{$parts[0]}");
       }
@@ -240,6 +258,7 @@ class CExClassConstraint extends CMbObject {
         $class = $subparts[1];
       }
       else {
+        /** @var CRefSpec $_spec */
         $_spec = $object->_specs[$subparts[0]];
         $class = $_spec->class;
       }
@@ -253,7 +272,9 @@ class CExClassConstraint extends CMbObject {
   }
 
   /**
-   * @param CMbObject $object
+   * Check constraint
+   *
+   * @param CMbObject $object Object
    *
    * @return bool
    */
@@ -266,8 +287,6 @@ class CExClassConstraint extends CMbObject {
       return false;
     }
 
-    $object->loadView();
-
     /** @var CMbObject $object */
     $object = $object_field["object"];
     $field  = $object_field["field"];
@@ -277,7 +296,16 @@ class CExClassConstraint extends CMbObject {
       return false;
     }
 
-    $object->loadView();
+    // ----- FIXME
+    if (!$object instanceof CPrescriptionLine && !$object instanceof CPrescription) {
+      $object->loadView();
+    }
+
+    if ($object instanceof CPrescriptionLineMedicament) {
+      $object->isHorsT2A();
+      $object->loadClasseATC();
+    }
+    // -----
 
     if ($field == "CONNECTED_USER") {
       $value = $object->_guid;
@@ -295,9 +323,11 @@ class CExClassConstraint extends CMbObject {
   }
 
   /**
+   * Load class event object
+   *
    * @return CExClassEvent
    */
-  function loadRefExClassEvent(){
-    return $this->_ref_ex_class_event = $this->loadFwdRef("ex_class_event_id");
+  function loadRefExClassEvent($cache = false){
+    return $this->_ref_ex_class_event = $this->loadFwdRef("ex_class_event_id", $cache);
   }
 }

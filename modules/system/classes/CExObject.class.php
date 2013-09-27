@@ -65,7 +65,7 @@ class CExObject extends CMbMetaObject {
   /**
    * Custom constructor
    *
-   * @param ref $ex_class_id CExClass id
+   * @param int $ex_class_id CExClass id
    */
   function __construct($ex_class_id = null){
     parent::__construct();

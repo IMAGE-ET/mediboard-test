@@ -42,6 +42,9 @@ class CExClass extends CMbObject {
   static $_list_cache = array();
   
   static $_native_views = array(
+    //"atcd"       => array("CSejour", "CConsultation"),
+    //"constantes" => array("CSejour", "CConsultation"),
+    //"corresp"    => array("CPatient"),
     "atcd"       => "CSejour",
     "constantes" => "CSejour",
     "corresp"    => "CPatient",
@@ -871,6 +874,7 @@ class CExClass extends CMbObject {
    */
   private function duplicateBackRefs(CMbObject $object, $backname, $fwd_field, $fwd_value) {
     foreach ($object->loadBackRefs($backname) as $_back) {
+      /** @var CMbObject $_back */
       $this->duplicateObject($_back, $fwd_field, $fwd_value);
     }
   }

@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * ExClass field
+ */
 class CExClassField extends CExListItemsOwner {
   public $ex_class_field_id;
 
@@ -157,6 +160,14 @@ class CExClassField extends CExListItemsOwner {
   );
 
   // types pouvant être utilisés pour des calculs / concaténation
+
+  /**
+   * Check if a data type can de used in arithemtic formulas
+   *
+   * @param string $type Data type
+   *
+   * @return bool
+   */
   static function formulaCanArithmetic($type) {
     return in_array($type, self::$_formula_valid_types) ||
       $type == "enum" ||
@@ -164,24 +175,68 @@ class CExClassField extends CExListItemsOwner {
       $type == "datetime" || $type == "dateTime" ||
       $type == "time";
   }
+
+  /**
+   * Check if a data type can be used in concatenation formulas
+   *
+   * @param string $type Data type
+   *
+   * @return bool
+   */
   static function formulaCanConcat($type) {
     return in_array($type, self::$_concat_valid_types);
   }
+
+  /**
+   * Check if a data type can be used in concatenation ro arithmetic formulas
+   *
+   * @param string $type Data type
+   *
+   * @return bool
+   */
   static function formulaCan($type) {
     return self::formulaCanConcat($type) || self::formulaCanArithmetic($type);
   }
 
   // types pouvant herberger des resultats
+  /**
+   * Check if a data type can be used as result of arithmetic formulas
+   *
+   * @param string $type Data type
+   *
+   * @return bool
+   */
   static function formulaCanResultArithmetic($type) {
     return in_array($type, self::$_formula_valid_types);
   }
+
+  /**
+   * Check if a data type can be used as result of concatenation formulas
+   *
+   * @param string $type Data type
+   *
+   * @return bool
+   */
   static function formulaCanResultConcat($type) {
     return $type === "text";
   }
+
+  /**
+   * Check if a data type can be used as result of arithmetic or concatenation formulas
+   *
+   * @param string $type Data type
+   *
+   * @return bool
+   */
   static function formulaCanResult($type) {
     return self::formulaCanResultConcat($type) || self::formulaCanResultArithmetic($type);
   }
 
+  /**
+   * Get all useable data types
+   *
+   * @return array
+   */
   static function getTypes(){
     $types = array(
       "enum",
@@ -205,6 +260,8 @@ class CExClassField extends CExListItemsOwner {
   }
 
   /**
+   * Get property fields
+   *
    * @return array
    */
   function getPropertyFields(){
@@ -335,6 +392,7 @@ class CExClassField extends CExListItemsOwner {
    * @see parent::getAutocompleteList()
    */
   function getAutocompleteList($keywords, $where = null, $limit = null, $ljoin = null, $order = null) {
+    /** @var self[] $list */
     $list = $this->loadList($where, null, null, null, $ljoin);
 
     $real_list = array();
@@ -427,12 +485,21 @@ class CExClassField extends CExListItemsOwner {
     return $ret;
   }
 
+  /**
+   * Validate formula
+   *
+   * @param string $formula Formula
+   *
+   * @return void
+   */
   function validateFormula($formula) {
 
   }
 
   /**
-   * @param bool $update
+   * Convert formula to be stored in DB
+   *
+   * @param bool $update Update $this->formula
    *
    * @return string|null
    */
@@ -455,17 +522,15 @@ class CExClassField extends CExListItemsOwner {
 
     $msg = array();
 
-    //if (isset($matches)) {
-      foreach ($matches[1] as $_match) {
-        $_trimmed = trim($_match);
-        if (!array_key_exists($_trimmed, $field_names)) {
-          $msg[] = "\"$_match\"";
-        }
-        else {
-          $formula = str_replace("[$_match]", "[".$field_names[$_trimmed]."]", $formula);
-        }
+    foreach ($matches[1] as $_match) {
+      $_trimmed = trim($_match);
+      if (!array_key_exists($_trimmed, $field_names)) {
+        $msg[] = "\"$_match\"";
       }
-    //}
+      else {
+        $formula = str_replace("[$_match]", "[".$field_names[$_trimmed]."]", $formula);
+      }
+    }
 
     if (empty($msg)) {
       if ($update) {
@@ -477,11 +542,16 @@ class CExClassField extends CExListItemsOwner {
     return "Des éléments n'ont pas été reconnus dans la formule: ".implode(", ", $msg);
   }
 
+  /**
+   * Convert formula from DB, to be used in the form
+   *
+   * @return string|null Message if error
+   */
   function formulaFromDB(){
     //$this->completeField("formula"); memory limit :(
 
     if (!$this->formula) {
-      return;
+      return null;
     }
 
     $field_names = $this->getFieldNames(true);
@@ -492,20 +562,22 @@ class CExClassField extends CExListItemsOwner {
       return "Formule invalide";
     }
 
-    //if (isset($matches)) {
-      foreach ($matches[1] as $_match) {
-        $_trimmed = trim($_match);
-        if (array_key_exists($_trimmed, $field_names)) {
-          $formula = str_replace($_match, $field_names[$_trimmed], $formula);
-        }
+    foreach ($matches[1] as $_match) {
+      $_trimmed = trim($_match);
+      if (array_key_exists($_trimmed, $field_names)) {
+        $formula = str_replace($_match, $field_names[$_trimmed], $formula);
       }
-    //}
+    }
 
     $this->_formula = $formula;
+
+    return null;
   }
 
   /**
-   * @see parent::check()
+   * Check formula
+   *
+   * @return null|string
    */
   function checkFormula(){
     return $this->formulaToDB(false);
@@ -532,7 +604,9 @@ class CExClassField extends CExListItemsOwner {
   }
 
   /**
+   * Load trigger data
    *
+   * @return void
    */
   function loadTriggeredData(){
     $triggers = $this->loadBackRefs("ex_triggers");

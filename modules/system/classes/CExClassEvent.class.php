@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Class event
+ */
 class CExClassEvent extends CMbObject {
   public $ex_class_event_id;
   
@@ -36,6 +39,9 @@ class CExClassEvent extends CMbObject {
 
   /** @var array */
   public $_available_native_views;
+
+  /** @var CMbObject */
+  public $_host_object;
   
   static $_extendable_classes = array(
     "CPrescriptionLineElement",
@@ -47,10 +53,13 @@ class CExClassEvent extends CMbObject {
     "CConsultAnesth",
     "CAdministration",
     "CRPU",
+    //"CGrossesse",
     "CBilanSSR",
   );
 
   /**
+   * Get extendable specs
+   *
    * @return array
    */
   static function getExtendableSpecs(){
@@ -72,6 +81,8 @@ class CExClassEvent extends CMbObject {
   }
 
   /**
+   * Get reportable classes
+   *
    * @return string[]
    */
   static function getReportableClasses(){
@@ -100,7 +111,8 @@ class CExClassEvent extends CMbObject {
     $props["host_class"]  = "str notNull protected";
     $props["event_name"]  = "str notNull protected canonical";
     $props["disabled"]    = "bool notNull default|1";
-    $props["unicity"]     = "enum notNull list|no|host default|no vertical"; //"enum notNull list|no|host|reference1|reference2 default|no vertical";
+    //"enum notNull list|no|host|reference1|reference2 default|no vertical";
+    $props["unicity"]     = "enum notNull list|no|host default|no vertical";
     return $props;
   }
 
@@ -124,6 +136,8 @@ class CExClassEvent extends CMbObject {
   }
 
   /**
+   * Get available native views
+   *
    * @return string[]
    */
   function getAvailableNativeViews(){
@@ -135,7 +149,7 @@ class CExClassEvent extends CMbObject {
     
     $options = $this->getHostClassOptions();
     $available_views = array();
-    
+
     foreach (CExClass::$_native_views as $_name => $_class) {
       foreach ($levels as $_level) {
         if ($_level == "host") {
@@ -149,6 +163,24 @@ class CExClassEvent extends CMbObject {
         }
       }
     }
+
+    /*foreach (CExClass::$_native_views as $_name => $_classes) {
+      foreach ($levels as $_level) {
+        if (isset($available_views[$_name])) {
+          continue;
+        }
+
+        if ($_level == "host") {
+          $ref_class = $this->host_class;
+        }
+        else {
+          list($ref_class) = CValue::read($options, "reference$_level");
+        }
+        if (in_array($ref_class, $_classes)) {
+          $available_views[$_name] = $ref_class;
+        }
+      }
+    }*/
     
     /*$field = "native_views";
     $this->_props[$field] = "set vertical list|".implode("|", array_keys($available_views));
@@ -159,6 +191,8 @@ class CExClassEvent extends CMbObject {
   }
 
   /**
+   * Get class options
+   *
    * @return null|string[]
    */
   function getHostClassOptions(){
@@ -171,7 +205,9 @@ class CExClassEvent extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Load ex class
+   *
+   * @param bool $cache Use cache
    *
    * @return CExClass
    */
@@ -182,7 +218,7 @@ class CExClassEvent extends CMbObject {
   /**
    * Returns an instance of CExObject which corresponds to the unicity
    *
-   * @param CMbObject $host
+   * @param CMbObject $host Host object
    *
    * @return CExObject|CExObject[]
    */
@@ -223,7 +259,9 @@ class CExClassEvent extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * Get ExObject instance
+   *
+   * @param bool $cache Use cache
    *
    * @return CExObject
    */
@@ -232,10 +270,12 @@ class CExClassEvent extends CMbObject {
   }
 
   /**
-   * @param CMbObject $object
-   * @param integer   $level
+   * Resolve reference object
    *
-   * @return CMbObject
+   * @param CMbObject $object MbObject
+   * @param integer   $level  Object's level (1 or 2)
+   *
+   * @return CMbObject|null
    */
   function resolveReferenceObject(CMbObject $object, $level = 1){
     $options = $this->getHostClassOptions();
@@ -245,7 +285,9 @@ class CExClassEvent extends CMbObject {
       return new $ref_class;
     }
     
-    if (!$path) return;
+    if (!$path) {
+      return null;
+    }
     
     $parts = explode(".", $path);
     
@@ -258,21 +300,29 @@ class CExClassEvent extends CMbObject {
   }
 
   /**
+   * Load constraints list
+   *
+   * @param bool $cache Use cache
+   *
    * @return CExClassConstraint[]
    */
-  function loadRefsConstraints(){
+  function loadRefsConstraints($cache = false){
+    if ($cache && !empty($this->_ref_constraints)) {
+      return $this->_ref_constraints;
+    }
+
     return $this->_ref_constraints = $this->loadBackRefs("constraints");
   }
 
   /**
    * constraint1 OR constraint2 OR ...
    *
-   * @param CMbObject $object
+   * @param CMbObject $object Check constraints
    *
    * @return bool
    */
   function checkConstraints(CMbObject $object){
-    $constraints = $this->loadRefsConstraints();
+    $constraints = $this->loadRefsConstraints(true);
     
     if (empty($constraints)) {
       return true;
@@ -288,7 +338,9 @@ class CExClassEvent extends CMbObject {
   }
 
   /**
-   * @param $object
+   * Get host object's specs list
+   *
+   * @param CMbObject $object Object
    *
    * @return CMbFieldSpec[]
    */
@@ -299,6 +351,8 @@ class CExClassEvent extends CMbObject {
   }
 
   /**
+   * Get "connected user" spec
+   *
    * @return CMbFieldSpec
    */
   static function getConnectedUserSpec() {
@@ -330,6 +384,14 @@ class CExClassEvent extends CMbObject {
     return null;
   }
 
+  /**
+   * Get available fields for the object
+   *
+   * @param CMbObject $object       Object
+   * @param array     $class_fields Class fields
+   *
+   * @return array|CMbFieldSpec[]|null
+   */
   static function getAvailableFieldsOfObject(CMbObject $object, $class_fields = null) {
     if ($class_fields === null) {
       $class_fields = $object->_specs;
@@ -347,9 +409,13 @@ class CExClassEvent extends CMbObject {
       }*/
 
       // LEVEL 1
-      if (($_field[0] === "_" && ($_spec->show === null || $_spec->show == 0)) || // form field
-        !($_spec->show === null || $_spec->show == 1) || // not shown
-        $_spec instanceof CRefSpec && $_spec->meta && !$class_fields[$_spec->meta] instanceof CEnumSpec // not a finite meta class field
+      if (
+          // form field
+          ($_field[0] === "_" && ($_spec->show === null || $_spec->show == 0)) ||
+          // not shown
+          !($_spec->show === null || $_spec->show == 1) ||
+          // not a finite meta class field
+          $_spec instanceof CRefSpec && $_spec->meta && !$class_fields[$_spec->meta] instanceof CEnumSpec
       ) {
         unset($class_fields[$_field]);
         continue;
@@ -377,9 +443,13 @@ class CExClassEvent extends CMbObject {
                 continue;
               }
 
-              if ($_subfield[0] === "_" || // form field
-                !($_subspec->show === null || $_subspec->show == 1) || // not shown
-                $_subspec instanceof CRefSpec && $_subspec->meta && !$_target->_specs[$_subspec->meta] instanceof CEnumSpec // not a finite meta class field
+              if (
+                  // form field
+                  $_subfield[0] === "_" ||
+                  // not shown
+                  !($_subspec->show === null || $_subspec->show == 1) ||
+                  // not a finite meta class field
+                  $_subspec instanceof CRefSpec && $_subspec->meta && !$_target->_specs[$_subspec->meta] instanceof CEnumSpec
               ) {
                 continue;
               }
@@ -388,9 +458,8 @@ class CExClassEvent extends CMbObject {
             }
           }
         }
-
-        // LEVEL 2 + Single class
         else {
+          // LEVEL 2 + Single class
           $_key = $_field;
           $class_fields[$_key]->_subspecs = array();
 
@@ -406,9 +475,15 @@ class CExClassEvent extends CMbObject {
               continue;
             }
 
-            if ($_subfield[0] === "_" || // form field
-              !($_subspec->show === null || $_subspec->show == 1) || // not shown
-              $_subspec instanceof CRefSpec && $_subspec->meta && isset($object->_specs[$_subspec->meta]) && !$object->_specs[$_subspec->meta] instanceof CEnumSpec // not a finite meta class field
+            if (
+                // form field
+                $_subfield[0] === "_" ||
+                // not shown
+                !($_subspec->show === null || $_subspec->show == 1) ||
+                // not a finite meta class field
+                $_subspec instanceof CRefSpec && $_subspec->meta &&
+                isset($object->_specs[$_subspec->meta]) &&
+                !$object->_specs[$_subspec->meta] instanceof CEnumSpec
             ) {
               continue;
             }
@@ -423,6 +498,8 @@ class CExClassEvent extends CMbObject {
   }
 
   /**
+   * Get available fields
+   *
    * @return CMbFieldSpec[]
    */
   function getAvailableFields(){
@@ -435,6 +512,10 @@ class CExClassEvent extends CMbObject {
   }
 
   /**
+   * Build host fields list
+   *
+   * @param string $prefix Prefix, to restrain list
+   *
    * @return array
    */
   function buildHostFieldsList($prefix = null) {
@@ -464,6 +545,7 @@ class CExClassEvent extends CMbObject {
       // Level 1 title
       if ($_spec instanceof CRefSpec && $_spec->class) {
         if ($_spec->meta) {
+          /** @var CEnumSpec $_meta_spec */
           $_meta_spec = $this->_host_class_fields[$_spec->meta];
           $element["type"] = implode(" OU ", $_meta_spec->_locales);
         }
@@ -507,11 +589,7 @@ class CExClassEvent extends CMbObject {
           );
           
           if ($_subspec instanceof CRefSpec && $_subspec->class) {
-            if ($_subspec->meta) {
-              //$_meta_spec = $ex_class->_host_class_fields[$_spec->meta];
-              //$element["type"] = implode(" OU ", $_meta_spec->_locales);
-            }
-            else {
+            if (!$_subspec->meta) {
               $element["type"] = CAppUI::tr("$_subspec->class");
             }
           }
@@ -533,7 +611,9 @@ class CExClassEvent extends CMbObject {
   }
 
   /**
-   * @param CMbObject $host
+   * Check if we can create a new instance of the ExObject
+   *
+   * @param CMbObject $host Host object
    *
    * @return bool
    */
@@ -571,7 +651,14 @@ class CExClassEvent extends CMbObject {
     
     return true;
   }
-  
+
+  /**
+   * Build JS code for the trigger
+   *
+   * @param CExClassEvent[] $ex_class_events List of events
+   *
+   * @return string
+   */
   static function getJStrigger($ex_class_events) {
     if (count($ex_class_events) == 0) {
       return "";
@@ -584,11 +671,18 @@ class CExClassEvent extends CMbObject {
       (window.ExObject || window.opener.ExObject).triggerMulti(".json_encode($forms).");
     </script>";
   }
-  
-  static function getFormsStruct($ex_class_event) {
+
+  /**
+   * Get forms structure, to be used in self::getJStrigger
+   *
+   * @param CExClassEvent[] $ex_class_events List of events
+   *
+   * @return array
+   */
+  static function getFormsStruct($ex_class_events) {
     $forms = array();
     
-    foreach ($ex_class_event as $_ex_class_event) {
+    foreach ($ex_class_events as $_ex_class_event) {
       // We may have more than one form per exclass
       $forms[] = array(
         "ex_class_event_id" => $_ex_class_event->_id,
@@ -602,14 +696,18 @@ class CExClassEvent extends CMbObject {
   }
 
   /**
-   * @param CMbObject|string $object
-   * @param string           $event_name
-   * @param string           $type
-   * @param array            $exclude_ex_class_event_ids
+   * Get events for an object
+   *
+   * @param CMbObject|string $object                     Object or GUID
+   * @param string           $event_name                 Event name
+   * @param string           $type                       Type: required, disabled or conditional
+   * @param array            $exclude_ex_class_event_ids List of class events' ids
    *
    * @return CExClassEvent[]
    */
   static function getForObject($object, $event_name, $type = "required", $exclude_ex_class_event_ids = array()) {
+    static $events_cache = array();
+
     if (is_string($object)) {
       $object = CMbObject::loadFromGuid($object);
     }
@@ -622,28 +720,38 @@ class CExClassEvent extends CMbObject {
     
     $group_id = CGroups::loadCurrent()->_id;
     $ds = $ex_class_event->_spec->ds;
-    
-    $where = array(
-      "ex_class_event.host_class" => $ds->prepare("=%", $object->_class),
-      "ex_class_event.event_name" => $ds->prepare("=%", $event_name),
-      "ex_class_event.disabled"   => $ds->prepare("=%", 0),
-      "ex_class.conditional"      => $ds->prepare("=%", 0),
-      $ds->prepare("ex_class.group_id = % OR group_id IS NULL", $group_id),
-    );
-    $ljoin = array(
-      "ex_class" => "ex_class.ex_class_id = ex_class_event.ex_class_id"
-    );
-    
-    switch ($type) {
-      case "disabled":
-        $where["ex_class_event.disabled"] = 1;
-        break;
-      case "conditional":
-        $where["ex_class.conditional"] = 1;
-        break;
+
+    $key = "$object->_class/$event_name/$group_id/$type";
+
+    if (isset($events_cache[$key])) {
+      $ex_class_events = $events_cache[$key];
     }
-    
-    $ex_class_events = $ex_class_event->loadList($where, null, null, null, $ljoin);
+    else {
+      $where = array(
+        "ex_class_event.host_class" => $ds->prepare("=%", $object->_class),
+        "ex_class_event.event_name" => $ds->prepare("=%", $event_name),
+        "ex_class_event.disabled"   => $ds->prepare("=%", 0),
+        "ex_class.conditional"      => $ds->prepare("=%", 0),
+        $ds->prepare("ex_class.group_id = % OR group_id IS NULL", $group_id),
+      );
+      $ljoin = array(
+        "ex_class" => "ex_class.ex_class_id = ex_class_event.ex_class_id"
+      );
+
+      switch ($type) {
+        case "disabled":
+          $where["ex_class_event.disabled"] = 1;
+          break;
+        case "conditional":
+          $where["ex_class.conditional"] = 1;
+          break;
+      }
+
+      /** @var CExClassEvent[] $ex_class_events */
+      $ex_class_events = $ex_class_event->loadList($where, null, null, null, $ljoin);
+
+      $events_cache[$key] = $ex_class_events;
+    }
     
     foreach ($ex_class_events as $_id => $_ex_class_event) {
       if (isset($exclude_ex_class_event_ids[$_id]) || !$_ex_class_event->checkConstraints($object)) {
