@@ -100,6 +100,7 @@ class CSupervisionGraphPack extends CMbObject {
     $where = array(
       "owner_class" => "= '$object->_class'",
       "owner_id"    => "= '$object->_id'",
+      "disabled"    => "= '0'",
     );
 
     return $pack->loadList($where, "title");
