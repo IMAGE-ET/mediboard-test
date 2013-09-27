@@ -1,0 +1,89 @@
+.prio1 { background-color: #e40 !important; }
+.prio2 { background-color: #06b !important; }
+.prio3 { background-color: #39f !important; }
+
+.task-completed .prio1 { background-color: #666 !important; }
+.task-completed .prio2 { background-color: #999 !important; }
+.task-completed .prio3 { background-color: #ccc !important; }
+
+label[for='edit-tasking_ticket_priority_1']:before,
+label[for='edit-tasking_ticket_priority_2']:before,
+label[for='edit-tasking_ticket_priority_3']:before {
+  content: "\0000a0";
+  margin-right: 2px;
+}
+
+label[for='edit-tasking_ticket_priority_1']:before { background-color: #e40 !important; }
+label[for='edit-tasking_ticket_priority_2']:before { background-color: #06b !important; }
+label[for='edit-tasking_ticket_priority_3']:before { background-color: #39f !important; }
+
+fieldset .creation_date { background-color: #CCCCFF !important; }
+fieldset .due_date      { background-color: #FF9999 !important; }
+fieldset .closing_date  { background-color: #FFCD75 !important; }
+
+.tag_task {
+  float: right;
+  color: black;
+  font-weight: bold;
+  font-size: 0.95em;
+  border-radius: 3px;
+  background-color: #999;
+  padding: 1px 4px;
+  margin: 1px
+}
+
+.status_new        { background-color: #BDCEFA !important; }
+.status_accepted   { background-color: #94DD89 !important; }
+.status_inprogress { background-color: #FFDD44 !important; }
+.status_invalide   { color: #999 !important; font-style: italic !important; background-image: url("../../../style/mediboard/images/icons/ray.gif"); }
+.status_duplicate  { background-color: #999 !important; }
+.status_cancelled  { color: #ff2634 !important; font-style: italic !important; background-image: url("../../../style/mediboard/images/icons/ray.gif"); }
+.status_closed     { background-color: #FF6666 !important; }
+.status_refused    { color: #555555 !important; font-style: italic !important; background-image: url("../../../style/mediboard/images/icons/ray.gif"); }
+
+.type_erg    { background-color: #FFCC99 !important; }
+.type_ref    { background-color: #99FF99 !important; }
+.type_fnc    { background-color: #99CCFF !important; }
+.type_bug    { background-color: #FF9999 !important; }
+.type_action { background-color: #999    !important; }
+
+@media screen {
+  .tag_task {
+    text-shadow:  0 0 0 transparent,
+   -1px  0   .0px rgba(255,255,255,.7),
+    0    1px .0px rgba(255,255,255,.7),
+    1px  0   .0px rgba(255,255,255,.7),
+    0   -1px .0px rgba(255,255,255,.7);
+  }
+}
+
+@media print {
+  .tag_task {
+    border: 1px solid black;
+  }
+}
+
+.taskduetoday {
+  font-weight: bold;
+}
+.taskoverdue {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.dateoverdue {
+  color: red;
+}
+
+.task-completed .taskduetoday {
+  font-weight: normal;
+}
+
+.task-completed .taskoverdue {
+  font-weight: normal;
+  text-decoration: none;
+}
+
+.task-completed .dateoverdue {
+  color: black;
+}
