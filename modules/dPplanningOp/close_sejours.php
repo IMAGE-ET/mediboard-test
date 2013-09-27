@@ -34,6 +34,7 @@ $sejours = $sejour->loadList($where, $order, $limit);
 CAppUI::stepAjax(count($sejours)." séjours à clôturer", UI_MSG_OK);
 
 foreach ($sejours as $_sejour) {
+  $_sejour->mode_sortie   = "normal";
   $_sejour->sortie_reelle = $now;
   $msg = $_sejour->store();  
   CAppUI::stepAjax($msg ? "Séjour non clôturé" : "Séjour clôturé", $msg ? UI_MSG_WARNING : UI_MSG_OK);	
