@@ -748,7 +748,7 @@ class COperation extends CCodable implements IPatientRelated {
     }
 
     // On recopie la sortie réveil possible sur le réel si pas utilisée en config
-    if (!CAppUI::conf("dPsalleOp COperation use_sortie_reveil_reel")) {
+    if (!CAppUI::conf("dPsalleOp COperation use_sortie_reveil_reel", CGroups::loadCurrent()->_guid)) {
       $this->sortie_reveil_reel = $this->sortie_reveil_possible;
     }
 
