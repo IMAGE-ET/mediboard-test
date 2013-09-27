@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage SalleOp
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -89,10 +89,11 @@ if ($use_poste) {
   CMbObject::massLoadFwdRef($listOperations, "poste_sspi_id");
 }
 
+$group = CGroups::loadCurrent();
 $nb_sorties_non_realisees = 0;
 $now = CMbDT::time();
 
-$use_sortie_reveil_reel = CAppUI::conf("dPsalleOp COperation use_sortie_reveil_reel");
+$use_sortie_reveil_reel = CAppUI::conf("dPsalleOp COperation use_sortie_reveil_reel", $group->_guid);
 
 /** @var $op COperation */
 foreach ($listOperations as $key => $op) {
@@ -173,7 +174,7 @@ $smarty->assign("date"                   , $date);
 $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("hour"                   , CMbDT::time());
 $smarty->assign("modif_operation"        , $modif_operation);
-$smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
+$smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC($group)));
 $smarty->assign("nb_sorties_non_realisees", $nb_sorties_non_realisees);
 $smarty->assign("present_only"           , $present_only);
 $smarty->assign("present_only_reel"      , $present_only_reel);

@@ -12,7 +12,7 @@
   }
 </script>
 
-{{assign var=use_sortie_reveil_reel value=$conf.dPsalleOp.COperation.use_sortie_reveil_reel}}
+{{assign var=use_sortie_reveil_reel value="dPsalleOp COperation use_sortie_reveil_reel"|conf:"CGroups-$g"}}
 {{assign var=use_poste value=$conf.dPplanningOp.COperation.use_poste}}
 
 {{if $present_only || $present_only_reel}}

@@ -18,7 +18,6 @@ $dPconfig["dPsalleOp"] = array(
     "mode"                   => "0",
     "modif_salle"            => "0",
     "modif_actes"            => "oneday",
-    "use_sortie_reveil_reel" => "0",
     "postdater_reveil"       => "0"
   ),
   "CActeCCAM"                 => array(
