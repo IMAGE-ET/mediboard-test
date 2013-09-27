@@ -4,7 +4,7 @@
 {{mb_script module="dPplanningOp" script="plage_selector"}}
 {{mb_script module="dPpatients"   script="pat_selector"}}
 
-<script type="text/javascript">
+<script>
 Main.add(function(){
    Document.refreshList('{{$op->_id}}');
 });
@@ -202,6 +202,10 @@ refreshFunction = function(chir_id) {
       <button class="search notext" type="button" onclick="ProtocoleSelector.init()">
         Choisir un protocole
       </button>
+      {{if @$modules.mvsante->_can->read && "mvsante"|module_active}}
+        {{mb_script module="mvsante" script="libelle"}}
+        <button style="float:right;" class="edit notext" type="button" onclick="LiaisonOp.edit('{{$op->_id}}');"></button>
+      {{/if}}
       {{mb_include module=planningOp template=inc_search_protocole}}
     </td>
   </tr>
@@ -211,7 +215,7 @@ refreshFunction = function(chir_id) {
     <td colspan="2">
       <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" style="width: 12em" value="" class="autocomplete"/>
       <div style="display: none; width: 200px !important" class="autocomplete" id="_codes_ccam_auto_complete"></div>
-      <script type="text/javascript">
+      <script>
         Main.add(function(){
           var oForm = getForm('editOp');
           var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
@@ -315,7 +319,7 @@ refreshFunction = function(chir_id) {
           document.editSejour._curr_op_date.value = this.value;
           modifSejour();  $V(this.form._date, this.value);" />
         
-        <script type="text/javascript">
+        <script>
           Main.add(function() {
             var dates = {
               limit: {
@@ -410,7 +414,7 @@ refreshFunction = function(chir_id) {
       <td colspan="3">
         <input type="hidden" name="poste_sspi_id" value="{{$op->poste_sspi_id}}"/>
         <input type="text" name="_poste_sspi_id_autocomplete" value="{{$op->_ref_poste}}"/>
-        <script type="text/javascript">
+        <script>
           Main.add(function() {
             var form=getForm("editOp");
             var url = new Url("system", "ajax_seek_autocomplete");
