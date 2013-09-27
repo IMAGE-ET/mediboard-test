@@ -27,6 +27,10 @@
     <tr class="clear">
       <td colspan="10" class="text">
         <h2>
+          <span style="float: right">
+            {{$curr_plage->_ref_consultations|@count}} consultation(s)
+          </span>
+
           {{$curr_plage->date|date_format:$conf.longdate}}
           - 
           Dr {{$curr_plage->_ref_chir->_view}}
