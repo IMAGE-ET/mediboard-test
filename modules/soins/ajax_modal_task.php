@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+CCanDo::checkEdit();
+
 $task_id                      = CValue::get("task_id");
 $sejour_id                    = CValue::get("sejour_id");
 $prescription_line_element_id = CValue::get("prescription_line_element_id");

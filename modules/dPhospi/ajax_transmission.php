@@ -9,6 +9,8 @@
  * @version    $Revision$
  */
 
+CModule::getCanDo("soins")->needsEdit();
+
 $transmission_id  = CValue::get("transmission_id");
 $data_id          = CValue::get("data_id");
 $action_id        = CValue::get("action_id");

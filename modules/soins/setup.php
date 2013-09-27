@@ -70,7 +70,14 @@ class CSetupsoins extends CSetup {
       ADD `consult_id` INT (11) UNSIGNED,
       ADD INDEX (`consult_id`)";
     $this->addQuery($query);
-    
-    $this->mod_version = '0.16';
+
+    $this->makeRevision("0.16");
+    $query = "UPDATE perm_module
+              LEFT JOIN modules ON perm_module.mod_id = modules.mod_id
+              SET permission = '2'
+              WHERE modules.mod_name = 'soins'";
+    $this->addQuery($query);
+
+    $this->mod_version = '0.17';
   }
 }
