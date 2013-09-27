@@ -1981,17 +1981,17 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `consultation`
                 ADD `secteur3` FLOAT( 6 ) DEFAULT '0' NOT NULL,
                 ADD `du_tva` FLOAT( 6 ) DEFAULT '0' NOT NULL,
-                ADD `taux_tva` ENUM ('19.6');";
+                ADD `taux_tva` ENUM ('0', '19.6');";
     $this->addQuery($query);
 
     $query = "ALTER TABLE `tarifs`
                 ADD `secteur3` FLOAT( 6 ) DEFAULT '0' NOT NULL,
-                ADD `taux_tva` ENUM ('19.6');";
+                ADD `taux_tva` ENUM ('0', '19.6');";
     $this->addQuery($query);
 
     $query = "ALTER TABLE `facture_cabinet`
                 ADD `du_tva` DECIMAL (10,2) DEFAULT '0',
-                ADD `taux_tva` ENUM ('19.6') DEFAULT '0';";
+                ADD `taux_tva` ENUM ('0', '19.6') DEFAULT '0';";
     $this->addQuery($query);
     $this->mod_version = "2.16";
   }

@@ -323,7 +323,7 @@ class CSetupdPfacturation extends CSetup {
 
     $query = "ALTER TABLE `facture_etablissement`
                 ADD `du_tva` DECIMAL (10,2) DEFAULT '0',
-                ADD `taux_tva` ENUM ('19.6');";
+                ADD `taux_tva` ENUM ('0', '19.6');";
     $this->addQuery($query);
     $this->mod_version = "0.37";
   }
