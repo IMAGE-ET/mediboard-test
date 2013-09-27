@@ -45,8 +45,9 @@ $do            = CValue::get("do");
 if ($offline) {
   $by_patient = true;
   $do = 1;
-  $dateTime_min = CMbDT::dateTime(" - 12 HOURS");
-  $dateTime_max = CMbDT::dateTime(" + 24 HOURS");
+  $group = CGroups::loadCurrent();
+  $dateTime_min = CMbDT::dateTime(" - ". CAppUI::conf("soins bilan hour_before", $group->_guid). " HOURS");
+  $dateTime_max = CMbDT::dateTime(" + ". CAppUI::conf("soins bilan hour_after" , $group->_guid). " HOURS");
 }
 else {
   $dateTime_min = CValue::getOrSession("_dateTime_min", "$date 00:00:00");
