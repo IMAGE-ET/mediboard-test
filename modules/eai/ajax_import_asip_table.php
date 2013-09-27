@@ -27,6 +27,7 @@ foreach ($files as $_file) {
   $name = basename($_file);
   $name = substr($name, strpos($name, "_")+1);
   $table = substr($name, 0, strrpos($name, "."));
+  $table = strtolower($table);
   if (!$ds) {
     CAppUI::stepAjax("Import impossible - Source non présente", UI_MSG_ERROR);
     continue;
