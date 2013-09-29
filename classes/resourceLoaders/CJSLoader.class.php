@@ -41,26 +41,23 @@ abstract class CJSLoader extends CHTMLResourceLoader {
   
   /**
    * Loads a list of Javascript files, with or without minification
-   * 
-   * @param boolean $compress True to minify the Javascript files
-   * @param string  $type     The mime type to use to include the Javascript files
+   *
+   * @param string $type The mime type to use to include the Javascript files
    * 
    * @return string A list or a single HTML script tag
    */
-  static function loadFiles($compress = false, $type = "text/javascript") {
+  static function loadFiles($type = "text/javascript") {
     $result = "";
     $compress = CAppUI::conf("minify_javascript");
     
     /** 
-     * There is a speed boost on the page load when using compression 
+     * There is a speed boost on the page load when using concatenation in a single file
      * between the top of the head and the dom:loaded event of about 25%.
      * This is because of parse time that is reduced (compare the global __pageLoad variable)
      * The number of requests from a regular page goes down from 100 to 70.
      * The total size of the JS goes down from 300kB to 230kB (gzipped).
      */
     if ($compress) {
-      $compress = 1; // force Normal compression
-      
       $files = self::$files;
       $excluded = array();
       $uptodate = false;
@@ -73,7 +70,7 @@ abstract class CJSLoader extends CHTMLResourceLoader {
         }
       }
       
-      $hash = self::getHash(implode("", $files)."-level-$compress");
+      $hash = self::getHash(implode("", $files));
       $cachefile = "tmp/$hash.js";
       
       // If it exists, we check if it is up to date
@@ -99,10 +96,6 @@ abstract class CJSLoader extends CHTMLResourceLoader {
           $all_scripts .= $_script."\n";
         }
         
-        if ($compress == 2) {
-          $all_scripts = self::minify($all_scripts);
-        }
-        
         file_put_contents($cachefile, $all_scripts);
         $last_update = time();
       }
@@ -120,17 +113,6 @@ abstract class CJSLoader extends CHTMLResourceLoader {
     }
     
     return $result;
-  }
-  
-  /**
-   * Minify a Javascript script
-   * 
-   * @param string $js Javascript source code
-   * 
-   * @return string The minified Javascript source code
-   */
-  static function minify($js) {
-    return JSMin::minify($js);
   }
   
   /**

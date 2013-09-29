@@ -68,7 +68,7 @@ Main.add(function(){
         Compression des scripts et feuilles de style
       </th>
     </tr>
-    {{mb_include module=system template=inc_config_enum var=minify_javascript values="0|1"}} {{* |2 *}}
+    {{mb_include module=system template=inc_config_enum var=minify_javascript values="0|1"}}
     {{mb_include module=system template=inc_config_enum var=minify_css values="1|2"}}
     
     <tr>

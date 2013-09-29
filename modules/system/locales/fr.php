@@ -2063,7 +2063,6 @@ $locales['config-minify_css-desc'] = 'Permet de réduire énormément le nombre de 
 $locales['config-minify_javascript'] = 'Compression JavaScript';
 $locales['config-minify_javascript-0'] = 'Aucune';
 $locales['config-minify_javascript-1'] = 'Normale';
-$locales['config-minify_javascript-2'] = 'Avancée (expérimental)';
 $locales['config-minify_javascript-desc'] = 'Permet de réduire énormément le nombre de requêtes HTTP';
 $locales['config-object-servers'] = 'Serveurs d\'objets';
 $locales['config-object_handlers-CPrescriptionAlerteHandler'] = 'Gestion des alertes manuelles';

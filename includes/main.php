@@ -139,7 +139,7 @@ if (!CAppUI::$instance->user_id) {
     $tplLogin->assign("mediboardStyle"       , $mediboardStyle);
     
     // JS
-    $tplLogin->assign("mediboardScript"      , CJSLoader::loadFiles(!$debug));
+    $tplLogin->assign("mediboardScript"      , CJSLoader::loadFiles());
     
     $tplLogin->assign("errorMessage"         , CAppUI::getMsg());
     $tplLogin->assign("time"                 , time());
@@ -324,7 +324,7 @@ if (!$suppressHeaders) {
   $tplHeader->assign("mediboardStyle"       , $mediboardStyle);
 
   //JS
-  $tplHeader->assign("mediboardScript"      , CJSLoader::loadFiles(!$debug));
+  $tplHeader->assign("mediboardScript"      , CJSLoader::loadFiles());
   
   $tplHeader->assign("dialog"               , $dialog);
   $tplHeader->assign("messages"             , $messages);
