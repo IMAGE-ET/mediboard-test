@@ -24,42 +24,42 @@
     <input type="hidden" name="_file_path" value="" />
     <input type="hidden" name="_checksum" value="" />
     
-		<div style="max-height: 400px; overflow: auto;">
-			
+    <div style="max-height: 400px; overflow: auto;">
+
     <table class="tbl">
       <tr>
         <th class="title" colspan="5">
-        	Fichiers disponibles dans : 
-					<br />
- 					{{$app->user_prefs.directory_to_watch}}
-				</th>
+          Fichiers disponibles dans :
+          <br />
+           {{$app->user_prefs.directory_to_watch}}
+        </th>
       </tr>
-			<tr>
+      <tr>
         <th class="narrow"></th>
         <th>{{mb_title class=CFile field=file_name}}</th>
         <th style="width: 2em;">
-				  <img src="style/mediboard/images/buttons/change.png" title="{{tr}}Send{{/tr}}"/>
-				</th>
+          <img src="style/mediboard/images/buttons/change.png" title="{{tr}}Send{{/tr}}"/>
+        </th>
         <th style="width: 2em;">
           <img src="style/mediboard/images/buttons/merge.png" title="{{tr}}Link{{/tr}}"/>
-				</th>
+        </th>
         <th style="width: 2em;">
           <img src="style/mediboard/images/buttons/trash.png" title="{{tr}}Delete{{/tr}}"/>
-				</th>
-			</tr>
+        </th>
+      </tr>
       <tbody id="file-list">
       </tbody>
-		</table>
-		
-		</div>
-		<hr />
-		
-		<table class="form">
+    </table>
+
+    </div>
+    <hr />
+
+    <table class="form">
       <tr>
         <th style="width: 1px;">
           {{mb_label class=CFile field=_rename}}
         </th>
-				<td>
+        <td>
           <input type="text" name="_rename" value="" />
         </td>
       </tr>
@@ -74,21 +74,21 @@
       </tr>
       <tr>
         <td colspan="2">
-				  <input type="checkbox" name="delete_auto" checked="checked"/>
-					<label for="delete_auto">{{tr}}Delete after send{{/tr}}</label>
-				</td>
+          <input type="checkbox" name="delete_auto" checked="checked"/>
+          <label for="delete_auto">{{tr}}Delete after send{{/tr}}</label>
+        </td>
       </tr>
       <tr>
         <td class="button" colspan="2">
-	        <button type="button" class="cancel" onclick="File.applet.cancelModal();">
-	        	{{tr}}Cancel{{/tr}}
-					</button>
-	        <button type="button" class="change uploadinmodal" onclick="this.disabled = 'disabled'; File.applet.uploadFiles();">
-	          {{tr}}Upload{{/tr}}
-					</button>
-	        <button type="button" class="tick" onclick="File.applet.closeModal();">
-	          {{tr}}Close{{/tr}}
-	        </button>
+          <button type="button" class="cancel" onclick="File.applet.cancelModal();">
+            {{tr}}Cancel{{/tr}}
+          </button>
+          <button type="button" class="change uploadinmodal" onclick="this.disabled = 'disabled'; File.applet.uploadFiles();">
+            {{tr}}Upload{{/tr}}
+          </button>
+          <button type="button" class="tick" onclick="File.applet.closeModal();">
+            {{tr}}Close{{/tr}}
+          </button>
         </td>
       </tr>
     </table>

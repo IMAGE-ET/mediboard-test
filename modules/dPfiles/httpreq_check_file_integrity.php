@@ -1,11 +1,14 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Thomas Despoix
-*/
+ * $Id$
+ *
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
+ */
 
 CCanDo::checkEdit();
 
@@ -21,7 +24,7 @@ $filesWithoutDocCount = 0;
 $filesWithoutDocTruncated = array();
 $filesWithBadDocCount = 0;
 $filesWithBadDocTruncated = array();
-foreach($files as $filePath) {
+foreach ($files as $filePath) {
   $filesCount++;
   $fileName = basename($filePath);
   $fileObjectId = basename(dirname($filePath));
@@ -73,8 +76,10 @@ do {
   
   $limit = "$offset, $stepSize";
   $docs = new CFile();
+
+  /** @var CFile[] $docs */
   $docs = $docs->loadList(null, null, $limit);
-  foreach($docs as $keyDoc => $valDoc) {
+  foreach ($docs as $keyDoc => $valDoc) {
     $doc =& $docs[$keyDoc];
     $docsCount++;
     if (!is_file($doc->_file_path)) {
@@ -102,4 +107,3 @@ $smarty->assign("filesCount", $filesCount);
 
 $smarty->display("inc_check_file_integrity.tpl");
 
-?>

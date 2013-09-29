@@ -51,7 +51,7 @@ window.destinataires = {{"utf8_encode"|array_map_recursive:$destinataires|@json|
       {{tr}}CDocumentItem-next{{/tr}}
     </button>
   {{/if}}
-	<!-- Nom du fichier -->
+  <!-- Nom du fichier -->
   {{if $fileSel}}
     <strong {{if $elementClass == "CFile"}}onclick="modifTitle(this)"{{/if}}>
       <span id="fileName">{{$fileSel->_view}}</span>
@@ -70,14 +70,14 @@ window.destinataires = {{"utf8_encode"|array_map_recursive:$destinataires|@json|
         {{/mb_form}}
       </div>
     {{/if}}
-  	<!-- Category -->
+    <!-- Category -->
     {{if $catFileSel->nom}}
       <br />
       {{mb_label object=$fileSel field=file_category_id}} :
       {{$catFileSel->nom}}
-  	{{/if}}
+    {{/if}}
   
-  	<!-- Date -->
+    <!-- Date -->
     {{if $fileSel->_class=="CFile"}}
       <br />
       {{mb_label object=$fileSel field=file_date}} :

@@ -1,11 +1,13 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPfiles
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 $file_data = base64_decode(CValue::post("file_data"));
@@ -21,4 +23,3 @@ $res = exec("{$path_python}python ./modules/dPfiles/script/doctopdf.py {$temp_na
 @unlink($temp_name_from);
 
 echo $res;
-?>

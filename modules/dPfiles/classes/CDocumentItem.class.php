@@ -2,11 +2,12 @@
 /**
  * $Id$
  *
- * @package    Mediboard
- * @subpackage Files
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 /**
@@ -33,7 +34,10 @@ class CDocumentItem extends CMbMetaObject {
 
   /** @var CFilesCategory */
   public $_ref_category;
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     
@@ -81,7 +85,10 @@ class CDocumentItem extends CMbMetaObject {
     
     return new $system_sender;
   }
-  
+
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->getSendProblem();
@@ -98,7 +105,10 @@ class CDocumentItem extends CMbMetaObject {
       $this->_send_problem = $sender->getSendProblem($this);
     }
   }
-  
+
+  /**
+   * @see parent::store()
+   */
   function store() {
     $this->completeField("etat_envoi");
     $this->completeField("object_class");
@@ -149,8 +159,11 @@ class CDocumentItem extends CMbMetaObject {
       default:
         return "Fonction d'envoi '$this->etat_envoi' non reconnue.";
     }
-  }  
-  
+  }
+
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     parent::loadRefsFwd();
     $this->loadRefCategory();
@@ -158,6 +171,8 @@ class CDocumentItem extends CMbMetaObject {
   }
 
   /**
+   * Load category
+   *
    * @return CFilesCategory
    */
   function loadRefCategory() {
@@ -165,6 +180,8 @@ class CDocumentItem extends CMbMetaObject {
   }
 
   /**
+   * Load author
+   *
    * @return CMediusers
    */
   function loadRefAuthor() {
@@ -174,7 +191,10 @@ class CDocumentItem extends CMbMetaObject {
     
     return $this->_ref_author = $this->loadFwdRef("author_id", true);
   }
-  
+
+  /**
+   * @see parent::canRead()
+   */
   function canRead() {
     if (!$this->private) {
       return parent::canRead();

@@ -1,11 +1,13 @@
-<?php /* $Id:  $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPfiles
- * @version $Revision:  $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkEdit();
@@ -38,21 +40,23 @@ $count["CCompteRendu"] = $document->countList($where);
 $max_send = CAppUI::conf("dPfiles CDocumentSender auto_max_send");
 foreach ($items as $_items) {
   $sent = 0;
+
+  /** @var CDocumentItem[] $_items */
   foreach ($_items as $_item) {
-	  $_item->loadTargetObject();
-	  if ($do && !$_item->_send_problem) {
+    $_item->loadTargetObject();
+    if ($do && !$_item->_send_problem) {
       // Max sent
       if (++$sent > $max_send) {
         break;
       }
 
-	    $_item->_send = "1";
-	    $_item->_send_problem = $_item->store();
-	    
-			// To track whether sending has been tried
-	    $_item->_send = "1";
-			
-	  }
+      $_item->_send = "1";
+      $_item->_send_problem = $_item->store();
+
+      // To track whether sending has been tried
+      $_item->_send = "1";
+
+    }
   }
 }
 
@@ -67,4 +71,3 @@ $smarty->assign("max_load", $max_load);
 $smarty->assign("max_send", $max_send);
 
 $smarty->display("send_documents.tpl");
-?>

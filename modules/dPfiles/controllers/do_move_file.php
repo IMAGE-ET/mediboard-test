@@ -1,17 +1,18 @@
-<?php 
-
+<?php
 /**
- * move a file (id) to a mediboard object
- *  
+ * Move a file (id) to a mediboard object
+ *
+ * $Id$
+ *
  * @category Files
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:\$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
  * @link     http://www.mediboard.org
  */
- 
- CCanDo::checkEdit();
+
+CCanDo::checkEdit();
 
 $file_id          = CValue::get("object_id");
 $file_class       = CValue::get("object_class");

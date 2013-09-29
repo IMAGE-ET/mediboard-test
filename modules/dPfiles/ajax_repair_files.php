@@ -1,11 +1,13 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage includes
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 $nb_files   = round(CValue::get("nb_files", 0));
@@ -52,6 +54,8 @@ else {
   else {
     $where = array();
     $where["file_size"] = " = '0'";
+
+    /** @var CFile[] $files */
     $files = $file->loadList($where, null, $nb_files);
     
     if (count($files) == 0 ) {
@@ -64,10 +68,9 @@ else {
         }
         else {
           $_file->file_size = filesize($_file->_file_path);
-          CAppUI::stepAjax("File id : " . $_file->_id . " - mise à jour de la taille ({$_file->file_size} octets)- Update :" . $_file->store());
+          CAppUI::stepAjax("File id : $_file->_id - mise à jour de la taille ({$_file->file_size} octets)- Update :".$_file->store());
         }
       }
     }
   }
 }
-?>

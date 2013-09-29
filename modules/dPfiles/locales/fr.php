@@ -212,4 +212,3 @@ $locales['pref-debug_yoplet'] = 'Débogage de yoplet';
 $locales['pref-debug_yoplet-desc'] = 'Débogage de yoplet';
 $locales['pref-directory_to_watch'] = 'Répertoire à surveiller pour l\'enregistrement de fichiers';
 $locales['pref-directory_to_watch-desc'] = 'Répertoire à surveiller';
-?>

@@ -2,11 +2,12 @@
 /**
  * $Id$
  *
- * @package    Mediboard
- * @subpackage Files
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 /**
@@ -27,6 +28,9 @@ class CFilesCategory extends CMbObject {
   public $_count_unsent_files;
   public $_count_unsent_doc_items;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'files_category';
@@ -34,6 +38,9 @@ class CFilesCategory extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["categorized_documents"] = "CCompteRendu file_category_id";
@@ -41,6 +48,9 @@ class CFilesCategory extends CMbObject {
     return $backProps;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["nom"]   = "str notNull seekable";
@@ -49,12 +59,20 @@ class CFilesCategory extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::countDocItems()
+   */
   function countDocItems($permType = null) {
     $this->_count_documents = $this->countBackRefs("categorized_documents");
     $this->_count_files     = $this->countBackRefs("categorized_files"    );
     $this->_count_doc_items = $this->_count_documents + $this->_count_files;
   }
 
+  /**
+   * Count unsent document items
+   *
+   * @return void
+   */
   function countUnsentDocItems() {
     $where["file_category_id"] = "= '$this->_id'";
     $where["etat_envoi"      ] = "!= 'oui'";
@@ -68,6 +86,11 @@ class CFilesCategory extends CMbObject {
     $this->_count_unsent_doc_items = $this->_count_unsent_documents + $this->_count_unsent_files;
   }
 
+  /**
+   * Load categories by class
+   *
+   * @return self[]
+   */
   static function loadListByClass() {
     $category = new CFilesCategory();
 
@@ -82,6 +105,13 @@ class CFilesCategory extends CMbObject {
     return $catsByClass;
   }
 
+  /**
+   * Get the list of categories for a specific class
+   *
+   * @param string $class Class name
+   *
+   * @return self[]
+   */
   static function listCatClass($class = null) {
     $instance = new CFilesCategory();
     $where = array(
@@ -90,6 +120,9 @@ class CFilesCategory extends CMbObject {
     return $instance->loadList($where);
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields(){
     parent::updateFormFields();
     $this->_view = $this->nom;

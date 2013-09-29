@@ -1,11 +1,14 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPfiles
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * $Id$
+ *
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
+ */
 
 $object = mbGetObjectFromGetOrSession("object_class", "object_id", "object_guid");
 
@@ -31,4 +34,3 @@ $smarty->assign("_rename"         , $_rename);
 $smarty->assign("named"           , $named);
 $smarty->assign("file"            , $file);
 $smarty->display("upload_file.tpl");
-?>

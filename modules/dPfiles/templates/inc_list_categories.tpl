@@ -13,7 +13,7 @@
   <tr {{if $_category->_id == $category->_id}}class="selected"{{/if}}>
     <td class="text">
       <a href="?m={{$m}}&amp;tab=vw_category&amp;file_category_id={{$_category->_id}}">
-				{{mb_value object=$_category field=nom}}
+        {{mb_value object=$_category field=nom}}
       </a>
     </td>
 

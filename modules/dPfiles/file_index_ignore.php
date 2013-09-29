@@ -1,15 +1,17 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
+ */
 
-##
-## strings to ignore when indexing files
-##
+// strings to ignore when indexing files
+
 $ignore = array(
 "a",
 "about",
@@ -113,4 +115,3 @@ $ignore = array(
 "MSWordDoc",
 "bjbjU"
 );
-?>

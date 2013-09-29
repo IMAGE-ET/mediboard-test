@@ -1,12 +1,15 @@
-<?php /* $Id: vw_files.php 6345 2009-05-22 14:10:55Z mytto $ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPfiles
-* @version $Revision: 6345 $
-* @author Thomas Despoix
-*/
- 
+ * $Id$
+ *
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
+ */
+
 CCanDo::checkAdmin();
 
 // Get concrete class
@@ -29,6 +32,7 @@ if ($owner instanceof CUser || $owner instanceof CMediusers) {
 }
 
 // Query prepare
+/** @var CDocumentItem $doc */
 $doc = new $doc_class;
 $results = $doc->getUsersStatsDetails($user_ids);
 
@@ -80,4 +84,3 @@ $smarty->assign("big_totals", $big_totals);
 $smarty->assign("categories", $categories);
 $smarty->assign("classes", $classes);
 $smarty->display("stats_details.tpl");
-?>

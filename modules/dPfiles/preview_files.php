@@ -1,11 +1,14 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPfiles
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * $Id$
+ *
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
+ */
 
 // Récupération des variables
 $objectClass  = CValue::get("objectClass"  , null);
@@ -41,6 +44,7 @@ $smarty = new CSmartyDP();
 
 if ($objectClass && $objectId && $elementClass && $elementId) {
   // Chargement de l'objet
+  /** @var CMbObject $object */
   $object = new $objectClass;
 
   if ($object->load($objectId)) {
@@ -237,7 +241,7 @@ if ($popup==1) {
     // Récupération du fichier/doc préc et suivant
     $aAllFilesDocs = array();
     foreach ($affichageFile as $keyCat => $currCat) {
-      $aAllFilesDocs = array_merge($aAllFilesDocs,$affichageFile[$keyCat]["items"]);
+      $aAllFilesDocs = array_merge($aAllFilesDocs, $affichageFile[$keyCat]["items"]);
     }
         
     $aFilePrevNext = CMbArray::getPrevNextKeys($aAllFilesDocs, $keyFileSel);
@@ -262,10 +266,11 @@ if ($popup==1) {
         if (!isset($_destinataire->nom) || strlen($_destinataire->nom) == 0 || $_destinataire->nom === " ") {
           continue;
         }
-        $destinataires[] =
-          array("nom"   => $_destinataire->nom,
-                "email" => $_destinataire->email,
-                "tag"   => $_destinataire->tag);
+        $destinataires[] = array(
+          "nom"   => $_destinataire->nom,
+          "email" => $_destinataire->email,
+          "tag"   => $_destinataire->tag,
+        );
       }
     }
     

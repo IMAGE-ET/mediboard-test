@@ -2,11 +2,12 @@
 /**
  * $Id$
  *
- * @package    Mediboard
- * @subpackage Files
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 /**
@@ -66,7 +67,12 @@ class CMedinetSender extends CDocumentSender {
 
   public $clientSOAP;
 
-  function initClientSOAP () {
+  /**
+   * Init SOAP client
+   *
+   * @return void
+   */
+  function initClientSOAP() {
     if ($this->clientSOAP instanceof SoapClient) {
       return;
     }
@@ -77,6 +83,9 @@ class CMedinetSender extends CDocumentSender {
     }
   }
 
+  /**
+   * @see parent::send()
+   */
   function send($docItem) {
     $this->initClientSOAP();
 
@@ -311,6 +320,9 @@ class CMedinetSender extends CDocumentSender {
     return true; 
   }
 
+  /**
+   * @see parent::cancel()
+   */
   function cancel($docItem) {
     $this->initClientSOAP();
 
@@ -349,6 +361,9 @@ class CMedinetSender extends CDocumentSender {
     return true;
   }
 
+  /**
+   * @see parent::resend()
+   */
   function resend($docItem) {
     $this->initClientSOAP();
 
@@ -365,6 +380,9 @@ class CMedinetSender extends CDocumentSender {
     return true;
   }
 
+  /**
+   * @see parent::getSendProblem()
+   */
   function getSendProblem(CDocumentItem $docItem) {
     $docItem->loadTargetObject();
 
@@ -380,6 +398,13 @@ class CMedinetSender extends CDocumentSender {
     return sprintf("Type d'objet '%s' non pris en charge", CAppUI::tr($docItem->_ref_object->_class));
   }
 
+  /**
+   * Get transaction ID
+   *
+   * @param CDocumentItem $docItem Document
+   *
+   * @return string
+   */
   function getTransactionId($docItem) {
     $idex = new CIdSante400();
     $idex->loadLatestFor($docItem, CMedinetSender::$tag);
@@ -393,6 +418,13 @@ class CMedinetSender extends CDocumentSender {
     return $transactionId;
   }
 
+  /**
+   * Check parameters
+   *
+   * @param CMbObject $object Object containing a patient
+   *
+   * @return null|string
+   */
   function checkParameters($object) {
     $messages = null;
 

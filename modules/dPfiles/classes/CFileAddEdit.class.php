@@ -2,15 +2,22 @@
 /**
  * $Id$
  *
- * @package    Mediboard
- * @subpackage Files
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
+/**
+ * CFile controller
+ */
 class CFileAddEdit extends CDoObjectAddEdit {
-  function CFileAddEdit() {
+  /**
+   * @see parent::__construct()
+   */
+  function __construct() {
     $this->CDoObjectAddEdit("CFile", "file_id");
 
     global $m;    
@@ -22,15 +29,14 @@ class CFileAddEdit extends CDoObjectAddEdit {
     }
   }
 
-  function bindFilePart(){
-
-  }
-
+  /**
+   * @see parent::doStore()
+   */
   function doStore() {
     $upload     = null;
-    $multifiles = false;
 
     if (CValue::POST("_from_yoplet") == 1) {
+      /** @var CFile $obj */
       $obj = $this->_obj;
       $array_file_name = array();
       $path = CAppUI::conf("dPfiles yoplet_upload_path");
@@ -103,7 +109,10 @@ class CFileAddEdit extends CDoObjectAddEdit {
       if ($merge_files) {
         CAppUI::requireLibraryFile("PDFMerger/PDFMerger");
         $pdf = new PDFMerger;
+
         $this->_obj = new $this->_obj->_class;
+
+        /** @var CFile $obj */
         $obj = $this->_obj;
         $file_name = "";
         $nb_converted = 0;
@@ -202,6 +211,8 @@ class CFileAddEdit extends CDoObjectAddEdit {
           // Reinstanciate
 
           $this->_obj = new $this->_obj->_class;
+
+          /** @var CFile $obj */
           $obj = $this->_obj;
           $obj->bind($file);
           $obj->file_name = empty($file["_rename"]) ? $file["name"] : $file["_rename"];

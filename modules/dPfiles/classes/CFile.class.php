@@ -2,11 +2,12 @@
 /**
  * $Id$
  *
- * @package    Mediboard
- * @subpackage Files
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 /**
@@ -477,7 +478,7 @@ class CFile extends CDocumentItem {
     }
 
     //Ajout des fichiers dans le tableau
-    foreach ($object->_ref_files as $keyFile=>&$_file) {
+    foreach ($object->_ref_files as &$_file) {
       $cat_id = $_file->file_category_id ? $_file->file_category_id : 0;
       $affichageFile[$cat_id]["items"]["$_file->file_name-$_file->_guid"] =& $_file;
       if (!isset($affichageFile[$cat_id]["name"])) {
@@ -486,7 +487,7 @@ class CFile extends CDocumentItem {
     }
     
     //Ajout des document dans le tableau
-    foreach ($object->_ref_documents as $keyDoc=>&$_doc) {
+    foreach ($object->_ref_documents as &$_doc) {
       $cat_id = $_doc->file_category_id ? $_doc->file_category_id : 0;
       $affichageFile[$cat_id]["items"]["$_doc->nom-$_doc->_guid"] =& $_doc;
       if (!isset($affichageFile[$cat_id]["name"])) {

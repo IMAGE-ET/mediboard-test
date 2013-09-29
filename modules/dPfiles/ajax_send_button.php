@@ -1,14 +1,16 @@
-<?php /* $Id: httpreq_check_file_integrity.php 6135 2009-04-21 10:49:02Z phenxdesign $ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision: 6135 $
-* @author Thomas Despoix
-*/
+ * $Id$
+ *
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
+ */
 
-global $can;
-$can->needsEdit();
+CCanDo::checkEdit();
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -19,4 +21,3 @@ $smarty->assign("onComplete", CValue::get("onComplete"));
 
 $smarty->display("inc_file_send_button.tpl");
 
-?>

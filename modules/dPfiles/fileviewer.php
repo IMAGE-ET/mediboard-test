@@ -1,10 +1,14 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
+ */
 
 $user = CUser::get();
 
@@ -40,7 +44,8 @@ if ($file_path) {
     header("Content-disposition: attachment; filename=\"".$file_name."\"");
     readfile($file_path);
     return;
-  } else {
+  }
+  else {
     CAppUI::setMsg("Permissions administrateur obligatoire", UI_MSG_ERROR);
     CAppUI::redirect();
   }
@@ -53,7 +58,8 @@ if ($file_id = CValue::get("file_id")) {
   if (!is_file($file->_file_path)) {
     header("Location: images/pictures/notfound.png");
     return;
-  } elseif (!$file->canRead()) {
+  }
+  elseif (!$file->canRead()) {
     header("Location: images/pictures/accessdenied.png");
     return;
   }
@@ -73,43 +79,82 @@ if ($file_id = CValue::get("file_id")) {
     //creation fin URL
     $finUrl="";
 
-    if($f){ $finUrl.="&f=$f";}    
-    if($q){ $finUrl.="&q=$q";}  
+    if ($f) {
+      $finUrl.="&f=$f";
+    }
+    if ($q) {
+      $finUrl.="&q=$q";
+    }
 
-    if (strpos($file->file_type, "image") !== false && strpos($file->file_type,"svg") == false) {
-      if($hp){$finUrl.="&hp=$hp";}
-      if($wl){$finUrl.="&wl=$wl";}
-      if($h){$finUrl.="&h=$h";}
-      if($w){$finUrl.="&w=$w";}
-      if($zc){$finUrl.="&zc=$zc";}
+    if (strpos($file->file_type, "image") !== false && strpos($file->file_type, "svg") == false) {
+      if ($hp) {
+        $finUrl .= "&hp=$hp";
+      }
+      if ($wl) {
+        $finUrl .= "&wl=$wl";
+      }
+      if ($h) {
+        $finUrl .= "&h=$h";
+      }
+      if ($w) {
+        $finUrl .= "&w=$w";
+      }
+      if ($zc) {
+        $finUrl .= "&zc=$zc";
+      }
       //trigger_error("Source is $file->_file_path$finUrl");
-      header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path".$finUrl);
-    } elseif (strpos($file->file_type, "pdf") !== false) {
-      
-      if($hp){$finUrl.="&h=$hp";}
-      if($wl){$finUrl.="&w=$wl";}
-      
-      if($sfn){$finUrl.="&sfn=$sfn";}
-      if($dpi){$finUrl.="&dpi=$dpi";}
-      
-      if($file->oldImageMagick() && ($file->rotation % 180 == 90)) {
+      header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path" . $finUrl);
+    }
+    elseif (strpos($file->file_type, "pdf") !== false) {
+
+      if ($hp) {
+        $finUrl .= "&h=$hp";
+      }
+      if ($wl) {
+        $finUrl .= "&w=$wl";
+      }
+
+      if ($sfn) {
+        $finUrl .= "&sfn=$sfn";
+      }
+      if ($dpi) {
+        $finUrl .= "&dpi=$dpi";
+      }
+
+      if ($file->oldImageMagick() && ($file->rotation % 180 == 90)) {
         $w = intval($w * sqrt(2));
       }
-      
+
       $finUrl .= "&ra={$file->rotation}";
-      
-      if($h){$finUrl.="&h=$h";}
-      if($w){$finUrl.="&w=$w";}
 
-      header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path".$finUrl);
+      if ($h) {
+        $finUrl .= "&h=$h";
+      }
+      if ($w) {
+        $finUrl .= "&w=$w";
+      }
 
-    } elseif ($file->isPDFconvertible()) {
-      if($hp){$finUrl.="&h=$hp";}
-      if($wl){$finUrl.="&w=$wl";}
-      if($h){$finUrl.="&h=$h";}
-      if($w){$finUrl.="&w=$w";}
-      if($sfn){$finUrl.="&sfn=$sfn";}
-      if($dpi){$finUrl.="&dpi=$dpi";}
+      header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path" . $finUrl);
+    }
+    elseif ($file->isPDFconvertible()) {
+      if ($hp) {
+        $finUrl .= "&h=$hp";
+      }
+      if ($wl) {
+        $finUrl .= "&w=$wl";
+      }
+      if ($h) {
+        $finUrl .= "&h=$h";
+      }
+      if ($w) {
+        $finUrl .= "&w=$w";
+      }
+      if ($sfn) {
+        $finUrl .= "&sfn=$sfn";
+      }
+      if ($dpi) {
+        $finUrl .= "&dpi=$dpi";
+      }
       
       $fileconvert = $file->loadPDFconverted();
       $success = 1;
@@ -123,11 +168,12 @@ if ($file_id = CValue::get("file_id")) {
       else {
         header("Location: images/pictures/medifile.png");
       }
-    } else {
+    }
+    else {
       header("Location: images/pictures/medifile.png");
     }
-  } else {
-
+  }
+  else {
     // BEGIN extra headers to resolve IE caching bug (JRP 9 Feb 2003)
     // [http://bugs.php.net/bug.php?id=16173]
 
@@ -146,8 +192,8 @@ if ($file_id = CValue::get("file_id")) {
     header('Content-disposition: inline; filename="'.$file->file_name.'"');
     readfile($file->_file_path);
   }
-} else {
+}
+else {
   CAppUI::setMsg("fileIdError", UI_MSG_ERROR);
   CAppUI::redirect();
 }
-?>

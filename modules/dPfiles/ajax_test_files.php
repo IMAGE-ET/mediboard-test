@@ -1,11 +1,13 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage classes
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 $dir = CFile::$directory . "/test";
@@ -41,4 +43,3 @@ CAppUI::stepAjax("Création de fichier Ok", UI_MSG_OK);
 CAppUI::stepAjax("Fin de test de création de fichier", UI_MSG_WARNING);
 
 
-?>

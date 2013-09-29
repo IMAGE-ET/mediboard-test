@@ -1,11 +1,14 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPfiles
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * $Id$
+ *
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
+ */
 
 CCanDo::checkRead();
 
@@ -25,18 +28,21 @@ $affichageFile = array();
 $object = null;
 $canFile       = new CCanDo;
 
-if($selClass && $selKey){
+if ($selClass && $selKey) {
   // Chargement de l'objet
+  /** @var CMbObject $object */
   $object = new $selClass;
   $object->load($selKey);
   $canFile = $object->canDo();
   $affichageFile = CFile::loadDocItemsByObject($object);
 }
 
-foreach($affichageFile as $_cat) {
-  if (!isset($_cat["items"])) break;
+foreach ($affichageFile as $_cat) {
+  if (!isset($_cat["items"])) {
+    break;
+  }
   
-  foreach($_cat["items"] as $_item) {
+  foreach ($_cat["items"] as $_item) {
     $_item->loadRefCategory();
     if ($_item->_class === "CCompteRendu") {
       $_item->makePDFpreview();
@@ -60,4 +66,3 @@ $smarty->assign("fileSel"        , null);
 $smarty->assign("accordDossier"  , $accordDossier);
 $smarty->display("vw_files.tpl");
 
-?>

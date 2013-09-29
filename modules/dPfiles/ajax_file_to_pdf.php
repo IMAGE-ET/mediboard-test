@@ -1,11 +1,13 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage includes
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 $nb_files = CValue::get("nb_files", 20);
@@ -18,7 +20,7 @@ $where["object_class"] = " NOT LIKE 'CFile'";
 $like = "";
 $types = preg_split("/[\s]+/", $extensions);
 
-foreach($types as $key => $_type) {
+foreach ($types as $key => $_type) {
   $like .= " file_name LIKE '%.$_type'";
   if ($key != (count($types) -1)) {
     $like .= " OR";
@@ -36,7 +38,7 @@ $nb_files_total = $file->countList($where);
 $converted = 0;
 $not_converted = "";
 
-foreach($files as $_file) {
+foreach ($files as $_file) {
   if ($_file->convertToPDF()) {
     $converted ++;
   }
@@ -51,4 +53,3 @@ if ($converted != count($files)) {
   trigger_error("Les fichiers suivants n'ont pas été convertis : $not_converted", E_USER_ERROR);
 }
 
-?>

@@ -5,7 +5,7 @@
   * @package  Mediboard
   * @author   SARL OpenXtrem <dev@openxtrem.com>
   * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-  * @version  SVN: $Id:$
+  * @version  SVN: $Id$
   * @link     http://www.mediboard.org
 *}}
 
@@ -20,7 +20,7 @@
   <!-- Déplacement dans les pages -->
     
     <button type="button" {{if $page_prev === null}}disabled="disabled"{{/if}} title="Page précédente" onclick="ZoomAjax('{{$objectClass}}', '{{$objectId}}', '{{$elementClass}}', '{{$elementId}}', '{{$page_prev}}');">
-    	<img src="images/icons/prev.png" />
+      <img src="images/icons/prev.png" />
     </button>
     
     {{if $fileSel->_nb_pages && $fileSel->_nb_pages>=2}}
@@ -36,7 +36,7 @@
     {{/if}}
     
     <button type="button" {{if !$page_next}}disabled="disabled"{{/if}} title="Page suivante" onclick="ZoomAjax('{{$objectClass}}', '{{$objectId}}', '{{$elementClass}}', '{{$elementId}}', '{{$page_next}}');">
-    	<img src="images/icons/next.png" />
+      <img src="images/icons/next.png" />
     </button>
   {{/if}}
   

@@ -1,11 +1,13 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage classes
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 $object_class = CValue::get("object_class");
@@ -23,4 +25,3 @@ $smarty->assign("categories", $categories);
 $smarty->assign("nodebug"   , true);
 $smarty->assign("keywords"  , $keywords);
 $smarty->display("inc_category_autocomplete.tpl");
-?>

@@ -22,16 +22,16 @@
 
 {{foreach from=$categories item=_category}}
 <tr>
-	<td>
-		<span onmouseover="ObjectTooltip.createEx(this, '{{$_category->_guid}}')">
-		  {{mb_value object=$_category field=nom}}
-	  </span>
-	</td>
-	<td>{{tr}}{{$_category->class}}{{/tr}}</td>
-	<td style="text-align: center">{{$_category->_count_unsent_files}}</td>
-	<td style="text-align: center">{{$_category->_count_files}}</td>
-	<td style="text-align: center">{{$_category->_count_unsent_documents}}</td>
-	<td style="text-align: center">{{$_category->_count_documents}}</td>
+  <td>
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$_category->_guid}}')">
+      {{mb_value object=$_category field=nom}}
+    </span>
+  </td>
+  <td>{{tr}}{{$_category->class}}{{/tr}}</td>
+  <td style="text-align: center">{{$_category->_count_unsent_files}}</td>
+  <td style="text-align: center">{{$_category->_count_files}}</td>
+  <td style="text-align: center">{{$_category->_count_unsent_documents}}</td>
+  <td style="text-align: center">{{$_category->_count_documents}}</td>
 </tr>
 {{/foreach}}
 
@@ -54,14 +54,14 @@
 
 <table class="tbl">
 {{foreach from=$items item=_items key=class}} 
-	<tr>
-		<th class="title" colspan="10">
-			{{tr}}{{$class}}{{/tr}}
-			<small>
-				({{$_items|@count}} chargés / {{$count.$class}} disponibles)
-			</small>
-		</th>
-	</tr>
+  <tr>
+    <th class="title" colspan="10">
+      {{tr}}{{$class}}{{/tr}}
+      <small>
+        ({{$_items|@count}} chargés / {{$count.$class}} disponibles)
+      </small>
+    </th>
+  </tr>
   
   <tr>
     <th>{{mb_title class=$class field=file_category_id}}</th>
@@ -75,7 +75,7 @@
   <tr>
     <td>
       {{assign var=category_id value=$_item->file_category_id}}
-    	{{$categories.$category_id}}
+      {{$categories.$category_id}}
     </td>
     {{if $_item->_ref_object}}
       <td onmouseover="ObjectTooltip.createEx(this,'{{$_item->_ref_object->_guid}}')">
@@ -85,28 +85,28 @@
       <td class="empty">Cible non chargée</td>
     {{/if}}
     <td onmouseover="ObjectTooltip.createEx(this,'{{$_item->_guid}}')">
-    	{{mb_value object=$_item field=_extensioned}}
+      {{mb_value object=$_item field=_extensioned}}
     </td>
     <td>{{mb_value object=$_item field=etat_envoi}}</td>
     <td>
       {{if $_item->_send_problem}}
       <div class="{{$_item->_send|ternary:error:warning}}">
-    	{{mb_value object=$_item field=_send_problem}}
+      {{mb_value object=$_item field=_send_problem}}
       </div>
-			{{else}}
-				{{if $_item->_send}}
-	      <div class="info">
-		      {{tr}}Sent{{/tr}} !
-	      </div>
-				{{/if}}
-			{{/if}}
-    	
+      {{else}}
+        {{if $_item->_send}}
+        <div class="info">
+          {{tr}}Sent{{/tr}} !
+        </div>
+        {{/if}}
+      {{/if}}
+
     </td>
   </tr>
   {{foreachelse}}
-	<tr>
-		<td colspan="5" class="empty">{{tr}}{{$class}}.none{{/tr}}</td>
-	</tr>
+  <tr>
+    <td colspan="5" class="empty">{{tr}}{{$class}}.none{{/tr}}</td>
+  </tr>
   {{/foreach}}
 {{/foreach}}
 </table>

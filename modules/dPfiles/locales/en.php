@@ -10,4 +10,3 @@ $locales['CFilesCategory'] = 'Catégorie de Fichier';
 $locales['config-dPfiles-upload_max_filesize'] = 'Upload max file size';
 $locales['module-dPfiles-court'] = 'Files';
 $locales['module-dPfiles-long'] = 'Files management';
-?>

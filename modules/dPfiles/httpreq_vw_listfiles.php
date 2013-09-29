@@ -1,11 +1,13 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPfiles
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
  */
 
 //CCanDO::checkRead();
@@ -40,7 +42,7 @@ if ($object_id && $object_class) {
   // To add the modele selector in the toolbar
   if ($object_class == 'CConsultation') {
     $praticienId = $object->_praticien_id;
-  } 
+  }
   else if ($object_class == 'CConsultAnesth') {
     $praticienId = $object->_ref_consultation->_praticien_id;
   }
@@ -57,7 +59,9 @@ if ($object_id && $object_class) {
   $affichageFile = CFile::loadDocItemsByObject($object);
 
   foreach ($affichageFile as $_cat) {
-    if (!isset($_cat["items"])) break;
+    if (!isset($_cat["items"])) {
+      break;
+    }
 
     foreach ($_cat["items"] as $_item) {
       $nbItems++;

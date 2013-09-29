@@ -3,8 +3,8 @@
 
 {{if $_doc_item->_send_problem}}
 <button class="send-problem {{$notext}}" type="button" 
-	onclick="alert('{{tr escape=JSAttribute}}CDocumentSender-alert_problem{{/tr}}' 
-		+ '\n\t- ' + '{{$_doc_item->_send_problem|smarty:nodefaults|JSAttribute}}' );">
+  onclick="alert('{{tr escape=JSAttribute}}CDocumentSender-alert_problem{{/tr}}'
+    + '\n\t- ' + '{{$_doc_item->_send_problem|smarty:nodefaults|JSAttribute}}' );">
   {{tr}}Send{{/tr}}
   {{tr}}Impossible{{/tr}}
 </button>
@@ -12,16 +12,16 @@
 {{else}}
 <script type="text/javascript">
 submitSendAjax = function(button, confirm_auto, onComplete) {
-	if (confirm_auto) {
-	  if (!confirm('{{tr escape=JSAttribute}}CDocumentSender-confirm_auto{{/tr}}')) {
-	  	return;
-	  };
-	}
-	$V(button.form._send, true);
-	
-	return onSubmitFormAjax(button.form, { 
-		onComplete : onComplete
-	} );  	  
+  if (confirm_auto) {
+    if (!confirm('{{tr escape=JSAttribute}}CDocumentSender-confirm_auto{{/tr}}')) {
+      return;
+    };
+  }
+  $V(button.form._send, true);
+
+  return onSubmitFormAjax(button.form, {
+    onComplete : onComplete
+  } );
 }
 </script>
 

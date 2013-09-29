@@ -1,11 +1,14 @@
-<?php /* $Id: upload_file.php 15530 2012-05-15 12:15:45Z mytto $ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPfiles
-* @version $Revision: 15530 $
-* @author Sébastien Fillonneau
-*/
+ * $Id$
+ *
+ * @category Files
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
+ */
 
 CCanDo::checkRead();
 
@@ -25,4 +28,3 @@ $smarty->assign("size"  , $size);
 $smarty->assign("mode"  , $mode);
 
 $smarty->display("inc_named_file.tpl");
-?>
