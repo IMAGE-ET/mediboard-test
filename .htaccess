@@ -31,7 +31,7 @@ Options -Indexes
   </FilesMatch>
 </IfModule>
 
-<FilesMatch "\.(tpl|tpl\.php|class\.php|sh)$">
+<FilesMatch "\.(tpl|tpl\.php|class\.php|sh|cer|p7b|crl)$">
   order allow,deny
   deny from all
 </FilesMatch>
@@ -51,16 +51,19 @@ Options -Indexes
   RedirectMatch 403 modules/[^/]+/[^/]+\.php$
 
   # modules/*/controllers/*.php
-  RedirectMatch 403 modules/[^/]+/controllers/[^/]+/\.php$
+  RedirectMatch 403 modules/[^/]+/controllers/[^/]+\.php$
 
-  # (cli|shell)/*.(php|tpl|sh|ttf)
-  RedirectMatch 403 (cli|shell)/[^/]+\.(php|ttf)$
+  # vendor/*.php
+  RedirectMatch 403 vendor/[^/]+(/[^/]+)?\.php$
+
+  # (cli|shell)/*
+  RedirectMatch 403 (cli|shell|bin|libpkg)/*$
 
   # (includes|locales|shell|templates).*
-  RedirectMatch 403 (includes|locales)/[^/]+\.(php|ttf)$
+  RedirectMatch 403 (includes|locales)/[^/]+(/[^/]+)?\.(php|ttf)$
 
   # tmp/templates_c
-  RedirectMatch 403 /tmp/(templates_c|phpthumb)/
+  RedirectMatch 403 /tmp/(templates_c|phpthumb|shared)/
 </IfModule>
 
 php_flag magic_quotes_gpc off
