@@ -37,6 +37,7 @@
     {{mb_include module=system template=inc_config_bool var=use_view_quantitynull}}
     {{mb_include module=system template=inc_config_bool var=use_strict_cloture}}
     {{mb_include module=system template=inc_config_bool var=use_field_definitive}}
+    {{mb_include module=system template=inc_config_bool var=edit_bill_alone}}
 
     {{if $conf.ref_pays == 2}}
       {{assign var=class value=CEditPdf}}

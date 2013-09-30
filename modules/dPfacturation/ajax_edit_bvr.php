@@ -46,12 +46,16 @@ if ($type_pdf == "justificatif") {
   $facture_pdf->editJustificatif();
 }
 
+if ($type_pdf == "bvr_justif") {
+  $facture_pdf->editFactureBVRJustif();
+}
+if ($type_pdf == "impression") {
+  $facture_pdf->printBill();
+}
+
 if ($type_pdf == "relance") {
   $relance = new CRelance();
   $relance->load($relance_id);
-  $facture_pdf->factures = $factures;
   $facture_pdf->relance = $relance;
   $facture_pdf->editRelance();
 }
-
-?>

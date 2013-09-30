@@ -18,7 +18,19 @@
     url.addParam('facture_id'   , facture_id);
     url.addParam('type_pdf'     , type_pdf);
     url.addParam('suppressHeaders', '1');
-    url.popup(1000, 600);
+
+    if (type_pdf == "impression") {
+      var urlbis = new Url('facturation', 'ajax_edit_definitive');
+      urlbis.addParam('facture_class', '{{$facture->_class}}');
+      urlbis.addParam('facture_id'   , facture_id);
+      urlbis.requestModal(300, 150);
+      urlbis.modalObject.observe('afterClose', function(){
+        url.requestUpdate(SystemMessage.id);
+      });
+    }
+    else {
+      url.popup(1000, 600);
+    }
   }
 
   dossierBloc = function(operation_id) {
@@ -56,14 +68,22 @@
 {{if $facture->cloture && isset($factures|smarty:nodefaults) && count($factures) && !$facture->annule}}
   <tr>
     <td colspan="8">
-      <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 'bvr');">Edition des BVR</button>
-      <button class="print" onclick="printFacture('{{$facture->_id}}', 'justificatif');">Justificatif de remboursement</button>
+      {{if $conf.dPfacturation.Other.edit_bill_alone}}
+        <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 'bvr');">Edition des BVR</button>
+        <button class="print" onclick="printFacture('{{$facture->_id}}', 'justificatif');">Justificatif de remboursement</button>
+      {{else}}
+        <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 'impression');">Edition des documents</button>
+      {{/if}}
+
       {{if $facture->_ref_reglements|@count}}
         {{if ($facture->_ref_assurance_maladie->_id && $facture->type_facture == "maladie" && $facture->_ref_assurance_maladie->type_pec == "TS")
-          || ($facture->_ref_assurance_accident->_id && $facture->type_facture == "accident" && $facture->_ref_assurance_accident->type_pec == "TS" && "tarmed coefficient pt_maladie"|conf:"CGroups-$g") }}
+        || ($facture->_ref_assurance_accident->_id && $facture->type_facture == "accident" && $facture->_ref_assurance_accident->type_pec == "TS" && "tarmed coefficient pt_maladie"|conf:"CGroups-$g") }}
           <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 'bvr_TS');">Facture Patient</button>
         {{/if}}
       {{/if}}
+
+      <button class="print" onclick="printFacture('{{$facture->_id}}', 'impression');">Impression</button>
+
       {{if $facture->_is_relancable && $conf.dPfacturation.CRelance.use_relances}}
         <form name="facture_relance" method="post" action="" onsubmit="return Relance.create(this);">
           {{mb_class object=$facture->_ref_last_relance}}

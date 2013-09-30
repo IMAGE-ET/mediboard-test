@@ -100,6 +100,27 @@ class CEditPdf{
   }
 
   /**
+   * Edition de la facture BVR et du justificatif
+   *
+   * @param bool $ts tiers soldant
+   *
+   * @return void
+   */
+  function editFactureBVRJustif($ts = false) {
+    $this->type_pdf = $ts ? "BVR_TS" : "BVR";
+    $this->editFacture();
+    $this->type_pdf = $ts ? "justif_TS" : "justif";
+    $this->editFacture(false);
+    //enregistrement pour chaque facture l'ensemble des factures
+    if (count($this->factures)) {
+      $this->pdf->Output($this->facture->cloture."_".$this->patient->nom.'.pdf', "I");
+    }
+    else {
+      $this->pdf->Output('Factures.pdf', "I");
+    }
+  }
+
+  /**
    * Edition du justifiactif
    *
    * @param bool   $ts     tiers soldant
@@ -135,17 +156,29 @@ class CEditPdf{
   }
 
   /**
-   * Edition de la facture
+   * Création du Pdf
    *
    * @return void
    */
-  function editFacture() {
+  function createPdf() {
     // Creation du PDF
     $this->pdf = new CMbPdf('P', 'mm');
     $this->pdf->setPrintHeader(false);
     $this->pdf->setPrintFooter(false);
     $this->font = "vera";
     $this->fontb = $this->font."b";
+  }
+  /**
+   * Edition de la facture
+   *
+   * @param bool $create création ou non du pdf
+   *
+   * @return void
+   */
+  function editFacture($create = true) {
+    if ($create) {
+      $this->createPdf();
+    }
 
     foreach ($this->factures as $the_facture) {
       $this->facture = $the_facture;
@@ -1098,6 +1131,53 @@ class CEditPdf{
       $this->auteur["RCC"]      = CAppUI::conf("dPfacturation CEditPdf home_RCC");
       $this->auteur["tel"]      = CAppUI::conf("dPfacturation CEditPdf home_tel");
       $this->auteur["fax"]      = CAppUI::conf("dPfacturation CEditPdf home_fax"); 
+    }
+  }
+
+  /**
+   * Impression des factures
+   *
+   * @return void
+   */
+  function printBill(){
+    if (count($this->factures)) {
+      $user = CMediusers::get();
+      $printer_bvr = new CPrinter();
+      $printer_bvr->function_id = $user->function_id;
+      $printer_bvr->label = "bvr";
+      $printer_bvr->loadMatchingObject();
+
+      $printer_justif = new CPrinter();
+      $printer_justif->function_id = $user->function_id;
+      $printer_justif->label = "justif";
+      $printer_justif->loadMatchingObject();
+
+      if (!$printer_bvr->_id || !$printer_justif->_id) {
+        CAppUI::setMsg("Les imprimantes ne sont pas paramétrées", UI_MSG_ERROR);
+        echo CAppUI::getMsg();
+        return false;
+      }
+      $file = new CFile();
+
+      foreach ($this->factures as $facture) {
+        $facture_pdf = new CEditPdf();
+        $facture_pdf->factures = array($facture);
+        $pdf = "";
+        $pdf = $facture_pdf->editFactureBVR(false, "S");
+        $file_path = tempnam("tmp", "facture");
+        $file->_file_path = $file_path;
+        file_put_contents($file_path, $pdf);
+        $printer_bvr->loadRefSource()->sendDocument($file);
+        unlink($file_path);
+
+        $pdf = "";
+        $pdf = $facture_pdf->editJustificatif(false, "S");
+        $file_path = tempnam("tmp", "facture");
+        $file->_file_path = $file_path;
+        file_put_contents($file_path, $pdf);
+        $printer_justif->loadRefSource()->sendDocument($file);
+        unlink($file_path);
+      }
     }
   }
 }
