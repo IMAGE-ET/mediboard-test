@@ -41,6 +41,8 @@ filterExClasses = function(input){
 };
 </script>
 
+{{mb_include module=digitalpen template=inc_widget_forms_to_validate object_guid="$reference_class-$reference_id"}}
+
 <table class="main tbl treegrid">
   <tr>
     <td colspan="3">

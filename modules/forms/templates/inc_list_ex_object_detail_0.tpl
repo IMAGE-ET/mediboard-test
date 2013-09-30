@@ -1,6 +1,8 @@
 <table class="main layout">
   <tr>
     <td class="narrow" style="min-width: 20em; vertical-align: top;">
+      {{mb_include module=digitalpen template=inc_widget_forms_to_validate object_guid="$reference_class-$reference_id" narrow=true}}
+
       {{if $ex_classes_creation|@count}}
         <select onchange="ExObject.showExClassFormSelect(this, '{{$self_guid}}')" style="width: 22em;">
           <option value=""> &ndash; Remplir nouveau formulaire </option>
