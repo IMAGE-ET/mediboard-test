@@ -1,6 +1,8 @@
+{{mb_script module=hospi script=affectation}}
 {{mb_script module=hospi script=affectation_uf}}
 
 <script>
+  Affectation.from_tempo = true;
   Position.includeScrollOffsets = true;
   Placement = {
     tabs: null,
@@ -136,21 +138,6 @@
     }
     
     url.requestModal(700, 400);
-  }
-  
-  editAffectation = function(affectation_id, lit_id, urgence) {
-    var url = new Url("hospi", "ajax_edit_affectation");
-    url.addParam("affectation_id", affectation_id);
-
-    if (!Object.isUndefined(lit_id)) {
-      url.addParam("lit_id", lit_id);
-    }
-    if (!Object.isUndefined(urgence)) {
-      url.addParam("urgence", urgence);
-    }
-
-    Placement.stop();
-    url.requestModal(500, null, {showReload: false, onClose: Placement.resume});
   }
    
   moveAffectation = function(affectation_id, lit_id, sejour_id, lit_id_origine) {
@@ -379,6 +366,7 @@
       {{/if}}
 
       var target = $('view_affectations');
+      Placement.scrollAffectations = target.scrollTop;
 
       return onSubmitFormAjax(getForm('filterMouv'), {
         onComplete: after_refresh,

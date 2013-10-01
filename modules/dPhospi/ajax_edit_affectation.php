@@ -13,7 +13,8 @@ CCanDo::checkEdit();
 
 $affectation_id = CValue::get("affectation_id");
 $lit_id         = CValue::get("lit_id");
-$urgence         = CValue::get("urgence");
+$urgence        = CValue::get("urgence");
+$from_tempo     = CValue::get("from_tempo", 0);
 
 $affectation = new CAffectation();
 $affectation->load($affectation_id);
@@ -54,5 +55,6 @@ $smarty->assign("lit"         , $lit);
 $smarty->assign("lit_id"      , $lit_id);
 $smarty->assign("sejour_maman", $sejour_maman);
 $smarty->assign("urgence"     , $urgence);
+$smarty->assign("from_tempo"  , $from_tempo);
 
 $smarty->display("inc_edit_affectation.tpl");

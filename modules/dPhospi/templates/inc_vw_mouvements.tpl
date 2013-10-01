@@ -5,6 +5,8 @@
       var view_affectations = $("view_affectations");
       view_affectations.scrollTop = 0;
 
+      $("time_line_temporelle").style.width = $("tableau_vue_temporel").getWidth()+"px";
+
       view_affectations.select(".droppable").each(function(tr) {
          Droppables.add(tr, {
           onDrop: function(div, tr, event) {
@@ -15,11 +17,11 @@
             
             // Création d'une affectation pour bloquer un lit
             if (div.id == "lit_bloque") {
-              editAffectation(null, lit_id, 0);
+              Affectation.edit(null, lit_id, 0);
             }
             else {
               if (div.id == "lit_urgence") {
-                editAffectation(null, lit_id, 1);
+                Affectation.edit(null, lit_id, 1);
               }
               else{
                 var ctrl_pressed = event.ctrlKey;

@@ -1,14 +1,16 @@
 <form name="editAffect" method="post" action="?"
-  onsubmit="return onSubmitFormAjax(this, {onComplete: function() {
-    if($V(this._lock_all_lits)){
-      refreshMouvements(Control.Modal.close, '{{$affectation->lit_id}}'); 
+  onsubmit="return onSubmitFormAjax(this, (function() {
+    Control.Modal.close();
+    if (window.refreshMouvements) {
+      if ((this._lock_all_lits && this._lock_all_lits.checked) || (this._lock_all_lits_urgences && this._lock_all_lits_urgences.checked)) {
+        refreshMouvements(window.loadNonPlaces);
+      }
+      else {
+        refreshMouvements(window.loadNonPlaces, '{{$affectation->lit_id}}');
+      }
     }
-    else{
-      refreshMouvements(Control.Modal.close);
-    }
-    loadNonPlaces();
-    }});">
-  <input type="hidden" name="m" value="dPhospi" />
+    }).bind(this));">
+  <input type="hidden" name="m" value="hospi" />
   <input type="hidden" name="dosql" value="do_affectation_aed" />
   <input type="hidden" name="del" value="0" />
   {{mb_key object=$affectation}}

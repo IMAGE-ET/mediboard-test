@@ -274,7 +274,7 @@
                       {{if $is_aff}}
                         <button type="button" class="edit notext opacity-40"
                           onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"
-                          onclick="editAffectation('{{$object->_id}}')"></button>
+                          onclick="Affectation.edit('{{$object->_id}}')"></button>
                         <input type="radio" name="affectation_move" onclick="chooseAffectation('{{$object->_id}}');" />
                       {{else}}
                          <input type="radio" name="sejour_move" id="sejour_move_{{$sejour->_id}}" onclick="chooseSejour('{{$sejour->_id}}');"/>
