@@ -241,7 +241,7 @@ elseif ($type == "deplacements") {
   /** @var CAffectation[] $dep_entrants */
   /** @var CAffectation[] $dep_sortants */
   $dep_entrants = $affectation->loadList($whereEntrants, $order, null, "affectation_id", $ljoin);
-  $dep_sortants = $affectation->loadList($whereSortants, $order, null, "affectation.id", $ljoin);
+  $dep_sortants = $affectation->loadList($whereSortants, $order, null, "affectation_id", $ljoin);
   $deplacements = array_merge($dep_entrants, $dep_sortants);
   $sejours      = CMbObject::massLoadFwdRef($deplacements, "sejour_id");
   $patients     = CMbObject::massLoadFwdRef($sejours, "patient_id");
