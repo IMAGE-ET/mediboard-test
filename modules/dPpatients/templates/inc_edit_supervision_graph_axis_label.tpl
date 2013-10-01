@@ -1,3 +1,9 @@
+{{if $label->_id}}
+  <div class="small-warning">
+    Si ce libellé est déjà utilisé, il est dangereux de le modifrer car cela impacte les graphiques déjà enregistrés.
+  </div>
+{{/if}}
+
 <form name="edit-supervision-graph-axis-label" method="post" action="?m=dPpatients" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="@class" value="CSupervisionGraphAxisValueLabel" />
   <input type="hidden" name="supervision_graph_axis_id" value="{{$label->supervision_graph_axis_id}}" />
@@ -32,4 +38,3 @@
   </table>
 </form>
 
-<div id="supervision-graph-axis-label"></div>

@@ -6,7 +6,32 @@ Main.add(function(){
 
   xaxes[0].ticks = 10;
 
+  var plothover = function (event, pos, item) {
+    if (item) {
+      var key = item.dataIndex+"-"+item.seriesIndex;
+      if (window.previousPoint != key) {
+        window.previousPoint = key;
+        jQuery("#flot-tooltip").remove();
+
+        var contents = SupervisionGraph.formatTrack(item);
+
+        $$("body")[0].insert(DOM.div({className: "tooltip", id: "flot-tooltip"}, contents).setStyle({
+          position: 'absolute',
+          top:  item.pageY + 5 + "px",
+          left: item.pageX + 5 + "px"
+        }));
+      }
+    }
+    else {
+      jQuery("#flot-tooltip").remove();
+      window.previousPoint = null;
+    }
+  };
+
+  ph.bind("plothover", plothover);
+
   jQuery.plot(ph, series, {
+    grid: { hoverable: true },
     series: SupervisionGraph.defaultSeries,
     xaxes: xaxes,
     yaxes: {{$data.yaxes|@json}}

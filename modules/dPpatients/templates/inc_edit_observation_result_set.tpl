@@ -6,14 +6,16 @@
       $$(".result-form")[0].focusFirstElement();
     {{/if}}
 
-    if (Prototype.Browser.IE && document.documentMode == 8) {
-      $$("div.outlined input").each(function(input){
-        input.observe("click", function(){
-          input.form.select("div.outlined input.checked").invoke("removeClassName", "checked");
-          input.addClassName("checked");
-        });
+    // For IE8
+    $$("div.outlined input").each(function(input){
+      input.observe("click", function(){
+        input.form.select("div.outlined input.checked").invoke("removeClassName", "checked");
+        input.addClassName("checked");
+
+        var form = input.form;
+        $V(form.elements.value, "FILE");
       });
-    }
+    });
   });
 
   resetPicture = function(radio) {
@@ -108,16 +110,26 @@
                 <label for="value" title="{{$_value_type}}">{{$_result->_serie_title}}</label>
               </th>
               <td>
-                {{if $_value_type->datatype == "NM"}}
-                  {{assign var=_prop value="float"}}
-                {{elseif $_value_type->datatype == "ST"}}
-                  {{assign var=_prop value="str"}}
-                {{else}}
-                  {{assign var=_prop value="text"}}
-                {{/if}}
+                {{if $_axis->_labels|@count}}
+                  <input type="hidden" name="value" value="{{$_result->value}}" />
 
-                {{mb_field object=$_result field=value prop="$_prop"}}
-                {{$_result->_ref_value_unit->desc}}
+                  <select name="label_id" onchange="$V(this.form.elements.value, this.selectedIndex ? this.options[this.selectedIndex].get('value') : '')">
+                    <option value="">&ndash; Valeur</option>
+                    {{foreach from=$_axis->_ref_labels item=_label}}
+                      <option
+                        value="{{$_label->_id}}"
+                        data-value="{{$_label->value}}"
+                        {{if $_result->label_id == $_label->_id}}selected{{/if}}>
+                        {{$_label->title}}
+                      </option>
+                    {{/foreach}}
+                  </select>
+                {{else}}
+                  {{assign var=_prop value="float"}}
+
+                  {{mb_field object=$_result field=value prop="$_prop"}}
+                  {{$_result->_ref_value_unit->desc}}
+                {{/if}}
               </td>
             </tr>
           </table>
@@ -162,13 +174,15 @@
 
       <button type="button" class="cancel notext" onclick="resetPicture(this)"></button>
       {{foreach from=$_graph->_ref_files item=_file}}
-        <div class="outlined">
-          <input type="radio" name="file_id" value="{{$_file->_id}}" {{if $_file->_id == $_result->file_id}}checked class="checked"{{/if}} />
-          <label for="file_id_{{$_file->_id}}" ondblclick="this.form.onsubmit()">
-            <div style="background: no-repeat center center url(?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$_file->_id}}&amp;phpThumb=1&amp;h=80&amp;w=80&amp;q=95); height: 80px; width: 80px;"></div>
-            {{$_file->_no_extension}}
-          </label>
-        </div>
+        {{if !$_file->annule || $_file->_id == $_result->file_id}}
+          <div class="outlined">
+            <input type="radio" name="file_id" value="{{$_file->_id}}" {{if $_file->_id == $_result->file_id}}checked class="checked"{{/if}} />
+            <label for="file_id_{{$_file->_id}}" ondblclick="this.form.onsubmit()">
+              <div style="background: no-repeat center center url(?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$_file->_id}}&amp;phpThumb=1&amp;h=80&amp;w=80&amp;q=95); height: 80px; width: 80px;"></div>
+              {{$_file->_no_extension}}
+            </label>
+          </div>
+        {{/if}}
       {{/foreach}}
     </form>
   {{/if}}

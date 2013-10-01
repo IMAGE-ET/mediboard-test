@@ -307,7 +307,7 @@
           xaxes[0].ticks = 10;
 
           $.plot(ph, series, {
-            grid: { hoverable: true, markings: [
+            grid: { markings: [
               // Debut op
               {xaxis: {from: 0, to: {{$time_debut_op}}}, color: "rgba(0,0,0,0.05)"},
               {xaxis: {from: {{$time_debut_op}}, to: {{$time_debut_op+1000}}}, color: "black"},
@@ -379,7 +379,7 @@
             </table>
 
           {{elseif $_graph instanceof CSupervisionTimedPicture}}
-            <table class="main evenements" style="table-layout: fixed; width: {{$width-$font_size}}px; margin-bottom: -1px; height: 85px;">
+            <table class="main evenements" style="table-layout: fixed; width: {{$width-$font_size}}px; margin-bottom: -1px; height: 90px;">
               <col style="width: {{$yaxes_count*78-$font_size}}px;" />
 
               <tr>
@@ -392,7 +392,7 @@
                       {{if $_picture.file_id && $_picture.position <= 100}}
                         <div style="position: absolute; left: {{$_picture.position}}%; margin-left: -25px; text-align: center; padding-top: 5px;" title="{{$_picture.datetime|date_format:$conf.datetime}}">
                           <span style="position: absolute; left: 20px; top: -2px; width: 10px;">^</span>
-                          <img style="width: 50px;"
+                          <img style="height: 50px;"
                                src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$_picture.file_id}}&amp;phpThumb=1&amp;w=100&amp;q=95" />
                           <br />
                           {{$_picture.file->_no_extension}}

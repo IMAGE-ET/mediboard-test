@@ -394,6 +394,8 @@ Main.add(function(){
               {{if $_cell->file_id}}
                 <img style="width: 50px;"
                      src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$_cell->file_id}}&amp;phpThumb=1&amp;w=100&amp;q=95" />
+              {{elseif $_cell->label_id}}
+                {{mb_value object=$_cell field=label_id}}
               {{else}}
                 {{$_cell->value}}
                 {{if $_cell->unit_id}}

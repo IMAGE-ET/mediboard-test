@@ -44,6 +44,7 @@ foreach ($links as $_link) {
 
     foreach ($axes as $_axis) {
       $series = $_axis->loadRefsSeries();
+      $_axis->loadRefsLabels();
 
       foreach ($series as $_serie) {
         $_result = new CObservationResult();
@@ -79,7 +80,6 @@ foreach ($links as $_link) {
   elseif ($_graph instanceof CSupervisionTimedPicture) {
     $_result = new CObservationResult();
     $_result->value_type_id = $_graph->value_type_id;
-    $_result->value = "FILE";
 
     if ($result_set->_id) {
       $_result->observation_result_set_id = $result_set->_id;

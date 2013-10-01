@@ -13,6 +13,7 @@ ColorSelector.init = function() {
   <input type="hidden" name="@class" value="CSupervisionGraphSeries" />
   <input type="hidden" name="supervision_graph_axis_id" value="{{$series->supervision_graph_axis_id}}" />
   <input type="hidden" name="callback" value="SupervisionGraph.callbackEditSeries" />
+  <input type="hidden" name="datatype" value="NM" />
   {{mb_key object=$series}}
   
   <table class="main form">
@@ -65,7 +66,3 @@ ColorSelector.init = function() {
     </tr>
   </table>
 </form>
-
-<div id="supervision-graph-series-list">
-  
-</div>

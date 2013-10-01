@@ -48,7 +48,7 @@ class CSupervisionGraphSeries extends CMbObject {
     $props = parent::getProps();
     $props["supervision_graph_axis_id"] = "ref notNull class|CSupervisionGraphAxis cascade";
     $props["title"]                = "str";
-    $props["value_type_id"]        = "ref notNull class|CObservationValueType autocomplete|label|true";
+    $props["value_type_id"]        = "ref notNull class|CObservationValueType autocomplete|label|true dependsOn|datatype";
     $props["value_unit_id"]        = "ref class|CObservationValueUnit autocomplete|label|true";
     $props["color"]                = "str notNull length|6";
     $props["integer_values"]       = "bool notNull default|0";

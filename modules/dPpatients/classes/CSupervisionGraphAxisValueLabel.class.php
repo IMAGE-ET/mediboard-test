@@ -44,6 +44,15 @@ class CSupervisionGraphAxisValueLabel extends CMbObject {
   }
 
   /**
+   * @see parent::getBackProps()
+   */
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["observation_results"] = "CObservationResult label_id";
+    return $backProps;
+  }
+
+  /**
    * Load axis
    *
    * @param bool $cache Use object cache

@@ -2346,7 +2346,12 @@ class CSetupdPpatients extends CSetup {
                 CHANGE `value_unit_id` `value_unit_id` INT (11) UNSIGNED;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.88";
+    $this->makeRevision("1.88");
+    $query = "ALTER TABLE `observation_result`
+                ADD `label_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.89";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

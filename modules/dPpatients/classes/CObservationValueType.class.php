@@ -34,7 +34,7 @@ class CObservationValueType extends CObservationValueCodingSystem {
   function getProps() {
     $props = parent::getProps();
     // AD|CF|CK|CN|CP|CWE|CX|DT|DTM|ED|FT|MO|NM|PN|RP|SN|ST|TM|TN|TX|XAD|XCN|XON|XPN|XTN
-    $props["datatype"] = "enum notNull list|NM|ST|TX|FILE";
+    $props["datatype"] = "enum notNull list|NM|ST|FILE"; // TX|
     return $props;
   }
 

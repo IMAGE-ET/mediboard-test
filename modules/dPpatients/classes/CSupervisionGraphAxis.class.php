@@ -31,6 +31,9 @@ class CSupervisionGraphAxis extends CMbObject {
 
   /** @var CSupervisionGraph */
   public $_ref_graph;
+
+  /** @var array  */
+  public $_labels = array();
   
   static $default_yaxis = array(
     "position"     => "left",
@@ -170,7 +173,16 @@ class CSupervisionGraphAxis extends CMbObject {
    * @return CSupervisionGraphAxisValueLabel[]
    */
   function loadRefsLabels() {
-    return $this->_ref_labels = $this->loadBackRefs("labels");
+    /** @var CSupervisionGraphAxisValueLabel[] $ref_labels */
+    $ref_labels = $this->loadBackRefs("labels");
+
+    $labels = array();
+    foreach ($ref_labels as $_label) {
+      $labels[$_label->value] = $_label->title;
+    }
+    $this->_labels = $labels;
+
+    return $this->_ref_labels = $ref_labels;
   }
 
   /**

@@ -24,6 +24,7 @@ class CObservationResult extends CMbObject {
   public $status;        // OBX.11
 
   public $file_id;
+  public $label_id;
 
   public $_ref_context;
 
@@ -38,6 +39,9 @@ class CObservationResult extends CMbObject {
 
   /** @var CFile */
   public $_ref_file;
+
+  /** @var CSupervisionGraphAxisValueLabel */
+  public $_ref_label;
 
   /**
    * @see parent::getSpec()
@@ -61,6 +65,7 @@ class CObservationResult extends CMbObject {
     $props["method"]                    = "str";
     $props["status"]                    = "enum list|C|D|F|I|N|O|P|R|S|U|W|X default|F";
     $props["file_id"]                   = "ref class|CFile";
+    $props["label_id"]                  = "ref class|CSupervisionGraphAxisValueLabel";
     return $props;
   }
 
@@ -102,6 +107,15 @@ class CObservationResult extends CMbObject {
    */
   function loadRefFile() {
     return $this->_ref_file = $this->loadFwdRef("file_id");
+  }
+
+  /**
+   * Load label object
+   *
+   * @return CSupervisionGraphAxisValueLabel
+   */
+  function loadRefLabel() {
+    return $this->_ref_label = $this->loadFwdRef("label_id");
   }
 
   /**

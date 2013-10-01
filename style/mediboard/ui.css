@@ -1382,7 +1382,7 @@ span.countertip {
   line-height: 0.8;
   width: 70px;
   box-sizing: border-box;
-  top: 20%;
+  top: 0;
   z-index: 10;
 }
 

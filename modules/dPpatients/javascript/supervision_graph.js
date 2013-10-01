@@ -208,5 +208,22 @@ SupervisionGraph = {
         ctx.stroke();
       }
     }
+  },
+
+  formatTrack: function(item) {
+    var x = item.datapoint[0],
+        y = item.datapoint[1];
+
+    var date = new Date();
+    date.setTime(x);
+
+    var label = y+" "+item.series.unit;
+    var point = item.series.data[item.dataIndex];
+    if (point.label) {
+      label = point.label;
+    }
+
+    return "<big style='font-weight:bold'>"+label+"</big>"+
+        "<hr />"+item.series.label+"<br />" + printf("%02d:%02d:%02d", date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
   }
 };

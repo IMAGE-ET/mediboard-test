@@ -130,6 +130,13 @@ class CObservationResultSet extends CMbObject {
       $times[$_time] = $_time;
 
       $unit_id = $_result["unit_id"] ? $_result["unit_id"] : "none";
+
+      $label = null;
+      if ($_result["label_id"]) {
+        $label_obj = new CSupervisionGraphAxisValueLabel();
+        $label_obj->load($_result["label_id"]);
+        $label = $label_obj->title;
+      }
       
       $data[$_result["value_type_id"]][$unit_id][] = array(
         0           => $_time,
@@ -140,6 +147,8 @@ class CObservationResultSet extends CMbObject {
         "file_id"   => $_result["file_id"],
         "set_id"    => $_result["observation_result_set_id"],
         "result_id" => $_result["observation_result_id"],
+        "label_id"  => $_result["label_id"],
+        "label"     => utf8_encode($label),
       );
     }
     

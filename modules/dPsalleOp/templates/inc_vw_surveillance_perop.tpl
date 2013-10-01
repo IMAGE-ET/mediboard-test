@@ -4,19 +4,11 @@ window.previousPoint = null;
 plothover = function (event, pos, item) {
   if (item) {
     var key = item.dataIndex+"-"+item.seriesIndex;
-    if (previousPoint != key) {
+    if (window.previousPoint != key) {
       window.previousPoint = key;
       jQuery("#flot-tooltip").remove();
-      
-      var x = item.datapoint[0],
-          y = item.datapoint[1];
-      
-      var date = new Date();
-      date.setTime(x);
-      
-      var contents = 
-      "<big style='font-weight:bold'>"+y+" "+item.series.unit+"</big>"+
-      "<hr />"+item.series.label+"<br />" + printf("%02d:%02d:%02d", date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+
+      var contents = SupervisionGraph.formatTrack(item);
       
       $$("body")[0].insert(DOM.div({className: "tooltip", id: "flot-tooltip"}, contents).setStyle({
         position: 'absolute',
@@ -252,7 +244,7 @@ printPartogramme = function(operation_id) {
         </tr>
       </table>
     {{elseif $_graph instanceof CSupervisionTimedPicture}}
-      <table class="main evenements" style="table-layout: fixed; width: {{$width-12}}px; margin-bottom: -1px; height: 66px;">
+      <table class="main evenements" style="table-layout: fixed; width: {{$width-12}}px; margin-bottom: -1px; height: 70px;">
         <col style="width: {{$yaxes_count*78-12}}px;" />
 
         <tr>
@@ -268,7 +260,7 @@ printPartogramme = function(operation_id) {
                        onclick="editObservationResultSet('{{$_picture.set_id}}', '{{$pack->_id}}', '{{$_picture.result_id}}')"
                     >
                     <span style="position: absolute; left: 20px; top: -2px; width: 10px;">^</span>
-                    <img style="width: 50px;"
+                    <img style="height: 50px;"
                          src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$_picture.file_id}}&amp;phpThumb=1&amp;w=100&amp;q=95" />
                     <br />
                     {{$_picture.file->_no_extension}}
