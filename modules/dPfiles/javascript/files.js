@@ -184,7 +184,6 @@ File_Attach = {
    * guesses = [[], [], [], []]
    */
   guessElement : function(guesses) {
-    console.log(guesses);
     var lenght = (guesses.length-1);
     for (var i = lenght; i>0; i--) {
 
