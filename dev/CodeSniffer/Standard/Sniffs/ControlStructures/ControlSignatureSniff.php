@@ -195,6 +195,7 @@ class Standard_Sniffs_ControlStructures_ControlSignatureSniff
             $stackPtr = ($startComment - 1);
           }
 
+          $has_comment = false;
           if ($tokens[$stackPtr]['code'] === T_WHITESPACE) {
             if ($tokens[$stackPtr]['content'] !== $phpcsFile->eolChar) {
               $found = $tokens[$stackPtr]['content'].$found;
@@ -212,6 +213,9 @@ class Standard_Sniffs_ControlStructures_ControlSignatureSniff
                   $stackPtr--;
                 }
               }
+              else {
+                $has_comment = true;
+              }
             }
             else {
               $found = 'EOL'.$found;
@@ -223,13 +227,13 @@ class Standard_Sniffs_ControlStructures_ControlSignatureSniff
           }
 
           // Removed to allow multiple empty lines
-          /*if ($hasError === false && $pattern[($i - 1)]['type'] !== 'newline') {
+          if (!$has_comment && $hasError === false && $pattern[($i - 1)]['type'] !== 'newline') {
             // Make sure they only have 1 newline.
             $prev = $phpcsFile->findPrevious($ignoreTokens, ($stackPtr - 1), null, true);
             if ($prev !== false && $tokens[$prev]['line'] !== $tokens[$stackPtr]['line']) {
               $hasError = true;
             }
-          }*/
+          }
         }//end if
       }//end for
     }//end if
