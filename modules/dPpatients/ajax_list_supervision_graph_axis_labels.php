@@ -13,12 +13,12 @@ CCanDo::checkAdmin();
 
 $supervision_graph_axis_id = CValue::get("supervision_graph_axis_id");
 
-$axis = new CSupervisionGraphAxis;
+$axis = new CSupervisionGraphAxis();
 $axis->load($supervision_graph_axis_id);
 
-$series = $axis->loadRefsSeries();
+$labels = $axis->loadRefsLabels();
 
 $smarty = new CSmartyDP();
-$smarty->assign("series",  $series);
+$smarty->assign("labels",  $labels);
 $smarty->assign("axis", $axis);
-$smarty->display("inc_list_supervision_graph_series.tpl");
+$smarty->display("inc_list_supervision_graph_labels.tpl");

@@ -2,13 +2,16 @@
 <script type="text/javascript">
 Main.add(function(){
   {{if $axis->_id}}
-    SupervisionGraph.listSeries({{$axis->_id}});
+  SupervisionGraph.listSeries({{$axis->_id}});
+  SupervisionGraph.listAxisLabels({{$axis->_id}});
   {{/if}}
   
   var row = $$("tr[data-axis_id={{$axis->_id}}]")[0];
   if (row) {
     row.addUniqueClassName("selected");
   }
+
+  Control.Tabs.create("axis-tabs");
 });
 </script>
 
@@ -60,6 +63,10 @@ Main.add(function(){
   </table>
 </form>
 
-<div id="supervision-graph-series-list">
-  
-</div>
+
+<ul class="control_tabs" id="axis-tabs">
+  <li><a href="#supervision-graph-series-list">Séries</a></li>
+  <li><a href="#supervision-graph-axis-labels-list">Libellés d'axes</a></li>
+</ul>
+<div id="supervision-graph-series-list" style="display: none;"></div>
+<div id="supervision-graph-axis-labels-list" style="display: none;"></div>

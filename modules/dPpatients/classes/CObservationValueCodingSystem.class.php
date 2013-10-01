@@ -36,11 +36,12 @@ class CObservationValueCodingSystem extends CMbObject {
    */
   function updateFormFields(){
     parent::updateFormFields();
-    
-    $this->_view = $this->label;
-    
+
     if ($this->desc) {
-      $this->_view .= " [$this->desc]";
+      $this->_view = "$this->desc [$this->label]";
+    }
+    else {
+      $this->_view = $this->label;
     }
   }
 

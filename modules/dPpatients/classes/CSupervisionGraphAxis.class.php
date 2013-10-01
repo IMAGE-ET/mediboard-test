@@ -26,6 +26,9 @@ class CSupervisionGraphAxis extends CMbObject {
   /** @var CSupervisionGraphSeries[] */
   public $_ref_series;
 
+  /** @var CSupervisionGraphAxisValueLabel[] */
+  public $_ref_labels;
+
   /** @var CSupervisionGraph */
   public $_ref_graph;
   
@@ -103,8 +106,18 @@ class CSupervisionGraphAxis extends CMbObject {
       "axis_id"    => $this->_id,
     ) + self::$default_yaxis;
 
-    $height = $this->loadRefGraph()->height;
-    $axis_data["ticks"] = round($height / 25);
+    $labels = $this->loadRefsLabels();
+    if (count($labels) > 0) {
+      $ticks = array();
+      foreach ($labels as $_label) {
+        $ticks[] = array(floatval($_label->value), utf8_encode($_label->title));
+      }
+      $axis_data["ticks"] = $ticks;
+    }
+    else {
+      $height = $this->loadRefGraph()->height;
+      $axis_data["ticks"] = round($height / 25);
+    }
 
     if ($count_yaxes) {
       $axis_data["alignTicksWithAxis"] = 1;
@@ -127,6 +140,7 @@ class CSupervisionGraphAxis extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["series"] = "CSupervisionGraphSeries supervision_graph_axis_id";
+    $backProps["labels"] = "CSupervisionGraphAxisValueLabel supervision_graph_axis_id";
     return $backProps;
   }
 
@@ -148,6 +162,15 @@ class CSupervisionGraphAxis extends CMbObject {
    */
   function loadRefsSeries() {
     return $this->_ref_series = $this->loadBackRefs("series");
+  }
+
+  /**
+   * Load value labels
+   *
+   * @return CSupervisionGraphAxisValueLabel[]
+   */
+  function loadRefsLabels() {
+    return $this->_ref_labels = $this->loadBackRefs("labels");
   }
 
   /**

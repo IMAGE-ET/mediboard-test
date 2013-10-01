@@ -76,7 +76,7 @@ SupervisionGraph = {
       SupervisionGraph.editTimedPicture(id);
     });
   },
-  
+
   // Series
   listSeries: function(axis_id) {
     var url = new Url("dPpatients", "ajax_list_supervision_graph_series");
@@ -86,13 +86,13 @@ SupervisionGraph = {
   editSeries: function(id, axis_id) {
     var url = new Url("dPpatients", "ajax_edit_supervision_graph_series");
     url.addParam("supervision_graph_series_id", id);
-    
+
     if (axis_id) {
       url.addParam("supervision_graph_axis_id", axis_id);
     }
-    
+
     url.requestModal(400, 300);
-    
+
     return false;
   },
   callbackEditSeries: function(id, obj) {
@@ -100,8 +100,32 @@ SupervisionGraph = {
     SupervisionGraph.listAxes(SupervisionGraph.currentGraphId);
     Control.Modal.close();
     SupervisionGraph.editSeries(id, obj.supervision_graph_axis_id);
-  }, 
-  
+  },
+
+  // Axis labels
+  listAxisLabels: function(axis_id) {
+    var url = new Url("dPpatients", "ajax_list_supervision_graph_axis_labels");
+    url.addParam("supervision_graph_axis_id", axis_id);
+    url.requestUpdate("supervision-graph-axis-labels-list");
+  },
+  editAxisLabel: function(id, axis_id) {
+    var url = new Url("dPpatients", "ajax_edit_supervision_graph_axis_label");
+    url.addParam("supervision_graph_axis_label_id", id);
+
+    if (axis_id) {
+      url.addParam("supervision_graph_axis_id", axis_id);
+    }
+
+    url.requestModal(400, 300);
+
+    return false;
+  },
+  callbackAxisLabel: function(id, obj) {
+    SupervisionGraph.listAxisLabels(obj.supervision_graph_axis_id);
+    Control.Modal.close();
+    SupervisionGraph.editAxisLabel(id, obj.supervision_graph_axis_id);
+  },
+
   preview: function(graph_id) {
     if (!graph_id) {
       return;

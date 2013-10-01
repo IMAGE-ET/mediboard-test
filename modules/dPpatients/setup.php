@@ -2331,7 +2331,22 @@ class CSetupdPpatients extends CSetup {
       implode("\n, ", $values);
     $this->addQuery($query);
 
-    $this->mod_version = "1.87";
+    $this->makeRevision("1.87");
+    $query = "CREATE TABLE `supervision_graph_value_label` (
+                `supervision_graph_value_label_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `supervision_graph_axis_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `value` INT (11) NOT NULL,
+                `title` VARCHAR (255) NOT NULL
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `supervision_graph_value_label`
+                ADD INDEX (`supervision_graph_axis_id`);";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `supervision_graph_series`
+                CHANGE `value_unit_id` `value_unit_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.88";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
