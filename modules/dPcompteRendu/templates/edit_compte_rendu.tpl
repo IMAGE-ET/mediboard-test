@@ -333,6 +333,8 @@ function afterDuplicate(cr_id) {
 }
 
 Main.add(function() {
+  Thumb.instance = CKEDITOR.instances.htmlarea;
+
   if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
     PageFormat.init(getForm("editFrm"));
     Thumb.compte_rendu_id = '{{$compte_rendu->_id}}';
@@ -341,9 +343,8 @@ Main.add(function() {
     Thumb.mode = "doc";
     Thumb.object_class = '{{$compte_rendu->object_class}}';
     Thumb.object_id = '{{$compte_rendu->object_id}}';
-    Thumb.instance = CKEDITOR.instances.htmlarea;
   }
-  
+
   // Les correspondants doivent être présent pour le store du compte-rendu
   // Chargement en arrière-plan de la modale
   {{if $isCourrier}}
