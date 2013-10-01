@@ -120,10 +120,12 @@ File_Attach = {
   is_valid      : false,
   button_Attach : null,
 
-  listRefsForPatient : function(patient_id, target_dom_id) {
+  listRefsForPatient : function(patient_id, prat_id, guess_date, target_dom_id) {
     this.patient_id = patient_id;
     var url = new Url("dPpatients", "ajax_list_refs_to_attach_select");
     url.addParam("patient_id", patient_id);
+    url.addParam("prat_id", prat_id);
+    url.addParam("date", guess_date);
     url.requestUpdate(target_dom_id);
   },
 
@@ -135,10 +137,22 @@ File_Attach = {
     this.checkLink();
   },
 
-  setObject: function(object_class, object_id) {
+  setObject: function(object_class, object_id, elt) {
+    if (object_class == "CPatient") {
+      if (!confirm("Associer ce fichier à un dossier patient implique qu'il sera visible de tous les utilisateurs ayant accès au dossier patient, êtes vous sur ?")) {
+        if (elt) {
+          $V(elt, 0);
+        }
+        return;
+      }
+    }
+
     this.object_class = object_class;
     this.object_id = object_id;
     this.object_guid = this.object_class+"-"+this.object_id;
+    if (elt) {
+      $V(elt, 1);
+    }
     this.checkLink();
   },
 
@@ -161,6 +175,36 @@ File_Attach = {
       this.is_valid = true;
       if (this.button_Attach) {
         $(this.button_Attach).show();
+      }
+    }
+  },
+
+  /**
+   * try to find the maximum guess of the elements
+   * guesses = [[], [], [], []]
+   */
+  guessElement : function(guesses) {
+    console.log(guesses);
+    var lenght = (guesses.length-1);
+    for (var i = lenght; i>0; i--) {
+
+      //one result and maximum : check it
+      if (guesses[i].length == 1 ) {
+        this.setObject(
+          guesses[i][0].get("class"),
+          guesses[i][0].get("id"),
+          guesses[i][0]
+        );
+        return;
+      }
+
+      if (guesses[i].length > 0) {
+        this.setObject(
+          guesses[guesses[i].length-1][0].get("class"),
+          guesses[guesses[i].length-1][0].get("id"),
+          guesses[guesses[i].length-1][0]
+        );
+        return;
       }
     }
   }
