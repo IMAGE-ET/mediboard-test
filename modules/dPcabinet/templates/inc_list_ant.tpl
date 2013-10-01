@@ -75,7 +75,12 @@ showModalTP = function(dossier_medical_id, sejour_id, prescription_sejour_id) {
   window.modalUrlTp.addParam("refresh_prescription", true);
   window.modalUrlTp.requestModal("60%", "40%", {
     onClose: function() {
-    window.tab_sejour.setActiveTab("prescription_sejour");
+      if (window.tab_sejour) {
+        window.tab_sejour.setActiveTab("prescription_sejour");
+      }
+      if (window.tabsConsultAnesth) {
+        window.tabsConsultAnesth.setActiveTab("prescription_sejour");
+      }
     Prescription.reloadPrescSejour(null, '{{$sejour->_id}}');
   } });
 }
