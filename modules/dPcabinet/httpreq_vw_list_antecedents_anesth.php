@@ -45,6 +45,10 @@ if ($prescription && $prescription->_id) {
   $line_tp->prescription_id = $prescription->_id;
   $line_tp->traitement_personnel = 1;
   $lines_tp = $line_tp->loadMatchingList();
+
+  foreach ($lines_tp as $_line_tp) {
+    $_line_tp->loadRefsPrises();
+  }
 }
 
 // Création du template

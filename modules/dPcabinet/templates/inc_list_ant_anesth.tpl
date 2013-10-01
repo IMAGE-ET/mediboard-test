@@ -144,10 +144,23 @@ toggleCancelledAnesth = function(list) {
           {{tr}}delete{{/tr}}
         </button>
       {{/if}}
+
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
-        <a href="#1" onclick="Prescription.showMonographyMedicament(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
-          {{$_line->_ucd_view}} ({{$_line->_forme_galenique}})</a>
-      </span>
+          <a href="#1" onclick="Prescription.showMonographyMedicament(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
+            {{$_line->_ucd_view}}
+          </a>
+        </span>
+
+        <span class="compact" style="display: inline;">
+          {{$_line->commentaire}}
+          {{if $_line->_ref_prises|@count}}
+            <br />
+            ({{foreach from=`$_line->_ref_prises` item=_prise name=foreach_prise}}
+            {{$_prise}}{{if !$smarty.foreach.foreach_prise.last}},{{/if}}
+          {{/foreach}})
+          {{/if}}
+        </span>
+
     </form>
   </li>
   {{foreachelse}}
