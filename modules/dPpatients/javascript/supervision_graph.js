@@ -99,7 +99,6 @@ SupervisionGraph = {
     SupervisionGraph.listSeries(obj.supervision_graph_axis_id);
     SupervisionGraph.listAxes(SupervisionGraph.currentGraphId);
     Control.Modal.close();
-    SupervisionGraph.editSeries(id, obj.supervision_graph_axis_id);
   },
 
   // Axis labels
@@ -123,7 +122,6 @@ SupervisionGraph = {
   callbackAxisLabel: function(id, obj) {
     SupervisionGraph.listAxisLabels(obj.supervision_graph_axis_id);
     Control.Modal.close();
-    SupervisionGraph.editAxisLabel(id, obj.supervision_graph_axis_id);
   },
 
   preview: function(graph_id) {
