@@ -28,6 +28,7 @@ class CCodable extends CMbObject {
   public $_count_actes;
   public $_actes_non_cotes;
   public $_datetime;
+  public $_guess_status;    //0 => no chance, 1 => good date, 2=> 1 + good function_id, 3 => 2 + Good praticien
 
   // Tarif
   public $_bind_tarif;
