@@ -25,6 +25,8 @@ class CMessageExterne extends CMbObject {
   public $starred;        //bool
   public $date_read;      //dateTime
   public $date_received;  //date of mb received
+
+  public $_ref_account;
   
   /**
    * Get collections specifications
@@ -36,7 +38,11 @@ class CMessageExterne extends CMbObject {
 
     return $backProps;
   }
-  
+
+  function loadRefAccount() {
+    return $this->_ref_account = $this->loadFwdRef("account_id");
+  }
+
   /**
    * Get the properties of our class as strings
    *
