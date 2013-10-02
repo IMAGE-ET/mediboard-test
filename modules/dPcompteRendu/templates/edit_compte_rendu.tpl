@@ -96,9 +96,8 @@ function submitCompteRendu(callback){
       editor.getCommand('save').setState(CKEDITOR.TRISTATE_DISABLED);
       editor.getCommand('mbprint').setState(CKEDITOR.TRISTATE_DISABLED);
       editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_DISABLED);
-      if (window.pdf_thumbnails == 1 && window.Preferences.pdf_and_thumbs == 1) {
-        editor.on("key", loadOld);
-      }
+      editor.on("key", loadOld);
+
       form.onsubmit=function(){ return true; };
       if (Thumb.modele_id && Thumb.contentChanged) {
         emptyPDF();
