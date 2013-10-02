@@ -26,7 +26,6 @@ $date_guess   = CValue::get("date");  //datetime
 // patient
 $patient = new CPatient();
 $patient->load($patient_id);
-$patient->loadRefPhotoIdentite();
 
 // praticien
 $praticien = new CMediusers();
@@ -43,10 +42,13 @@ foreach ($patient->loadRefsSejours($where) as $_sejour) {
   $_sejour->_guess_status = 0;
 
   if ($date_guess >= $_sejour->entree && $date_guess <= $_sejour->sortie) {
+    //date matched
     $_sejour->_guess_status = 1;
     if ($_sejour->_ref_praticien->function_id == $praticien->function_id) {
+      //function matched
       $_sejour->_guess_status = 2;
       if ($_sejour->_ref_praticien->_id == $prat_id) {
+        //prat matched
         $_sejour->_guess_status = 3;
       }
     }
@@ -60,10 +62,13 @@ foreach ($patient->loadRefsSejours($where) as $_sejour) {
     $_consult->_guess_status = 0;
 
     if ($date_guess >= $_sejour->entree && $date_guess <= $_sejour->sortie) {
+      //date matched
       $_consult->_guess_status = 1;
       if ($_consult->_ref_praticien->function_id == $praticien->function_id) {
+        //function matched
         $_consult->_guess_status = 2;
         if ($_consult->_ref_praticien->_id == $prat_id) {
+          //prat matched
           $_consult->_guess_status = 3;
         }
       }
@@ -75,10 +80,13 @@ foreach ($patient->loadRefsSejours($where) as $_sejour) {
     $_operation->loadRefsFwd();
 
     if ($date_guess >= $_operation->debut_op && $date_guess <= $_operation->fin_op) {
+      //date matched
       $_operation->_guess_status = 1;
       if ($_operation->_ref_praticien->function_id == $praticien->function_id) {
+        //function matched
         $_operation->_guess_status = 2;
         if ($_operation->_ref_praticien->_id == $prat_id) {
+          //prat matched
           $_operation->_guess_status = 3;
         }
       }

@@ -30,7 +30,8 @@
 
 <ul style="text-align: left;" id="list_Relations">
   <li>
-    <input type="radio" name="object" data-class="{{$patient->_class}}" data-id="{{$patient->_id}}" data-guid="{{$patient->_guid}}" onclick="File_Attach.setObject('{{$patient->_class}}','{{$patient->_id}}', this);" {{if $patient->_guid == $object_guid}}checked="checked"{{/if}} /><strong>{{$patient}}(Dossier Patient)</strong>
+    <input type="radio" name="object" data-class="{{$patient->_class}}" data-id="{{$patient->_id}}" data-guid="{{$patient->_guid}}" onclick="File_Attach.setObject('{{$patient->_class}}','{{$patient->_id}}', this);" {{if $patient->_guid == $object_guid}}checked="checked"{{/if}} />
+    <strong>{{$patient}}(Dossier Patient)</strong>
     <ul id="listCodables">
       <li class="title"><strong>Sejours ({{$patient->_ref_sejours|@count}})</strong></li>
         <!-- SEJOURS -->
