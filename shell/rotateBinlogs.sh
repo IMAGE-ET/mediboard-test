@@ -60,9 +60,9 @@ date=$(date '+%Y-%m-%dT%H:%M:%S')
 
 # Archive binlogs
 if [ -n "$passphrase" ]; then
-  tar -vcjf - -C $backup $backup/*bin.0* | openssl $cryptage -salt -out $backup/binlogs_$date.tar.bz2.aes -k $passphrase
+  nice -n 10 tar -vcjf - -C $backup $backup/*bin.0* | openssl $cryptage -salt -out $backup/binlogs_$date.tar.bz2.aes -k $passphrase
 else
-  tar -vcjf $backup/binlogs_$date.tar.bz2 -C $backup $backup/*bin.0*
+  nice -n 10 tar -vcjf $backup/binlogs_$date.tar.bz2 -C $backup $backup/*bin.0*
 fi
 
 # Rotate binlogs and indeces for a week
