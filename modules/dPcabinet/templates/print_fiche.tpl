@@ -27,8 +27,8 @@
 
 <table class="{{$tbl_class}}" style="page-break-after: always">
   <tr>
-    <td colspan="2">
-      <table width="100%">
+    <td colspan="2" class="text">
+      <table style="width: 100%">
         <tr>
           <th class="category" colspan="2">Intervention</th>
         </tr>
@@ -68,7 +68,7 @@
         </tr>
         {{/if}}
         <tr>
-          <td class="halfPane text">
+          <td class="halfPane">
             {{if $operation->_id}}
               <table>
                 {{if $conf.dPplanningOp.COperation.show_duree_uscpo != "0"}}
@@ -144,8 +144,8 @@
   {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
   {{assign var=ant value=$dossier_medical->_ref_antecedents_by_type}}
   <tr>
-    <td class="halfPane" {{if !$dossier_medical->_count_allergies}}colspan="2"{{/if}}>
-      <table width="100%">
+    <td class="halfPane text" {{if !$dossier_medical->_count_allergies}}colspan="2"{{/if}}>
+      <table style="width: 100%">
         <tr>
           <th class="category" colspan="2">Informations sur le patient</th>
         </tr>
@@ -177,13 +177,13 @@
               {{if $dossier_anesth->groupe!="?" || $dossier_anesth->rhesus!="?"}}
               <tr>
                 <th style="font-weight: normal;">Groupe sanguin</th>
-                <td style="font-weight: bold; white-space: nowrap; font-size:130%;">&nbsp;{{tr}}CConsultAnesth.groupe.{{$dossier_anesth->groupe}}{{/tr}} &nbsp;{{tr}}CConsultAnesth.rhesus.{{$dossier_anesth->rhesus}}{{/tr}}</td>
+                <td style="font-weight: bold; font-size:130%;">&nbsp;{{tr}}CConsultAnesth.groupe.{{$dossier_anesth->groupe}}{{/tr}} &nbsp;{{tr}}CConsultAnesth.rhesus.{{$dossier_anesth->rhesus}}{{/tr}}</td>
               </tr>
               {{/if}}
               {{if $dossier_anesth->rai && $dossier_anesth->rai!="?"}}
               <tr>
                 <th style="font-weight: normal;">RAI</th>
-                <td style="font-weight: bold; white-space: nowrap; font-size:130%;">&nbsp;{{tr}}CConsultAnesth.rai.{{$dossier_anesth->rai}}{{/tr}}</td>
+                <td style="font-weight: bold; font-size:130%;">&nbsp;{{tr}}CConsultAnesth.rai.{{$dossier_anesth->rai}}{{/tr}}</td>
               </tr>
               {{/if}}
               <tr>
@@ -192,7 +192,7 @@
               </tr>
               <tr>
                 <th style="font-weight: normal;">VST</th>
-                <td style="font-weight: bold; white-space: nowrap;">
+                <td style="font-weight: bold;">
                   {{if $const_med->_vst}}{{$const_med->_vst}} ml{{/if}}
                 </td>
               </tr>
@@ -203,7 +203,7 @@
               {{if $dossier_anesth->_psa}}
               <tr>
                 <th style="font-weight: normal;">PSA</th>
-                <td style="font-weight: bold; white-space: nowrap;">
+                <td style="font-weight: bold;">
                   {{$dossier_anesth->_psa}} ml/GR
                 </td>
                 <td colspan="2"></td>
@@ -215,18 +215,18 @@
       </table>
     </td>
     {{if $dossier_medical->_count_allergies}}
-    <td class="halfPane">
-      <table width="100%">
+    <td class="halfPane text" style="word-break: break-all">
+      <table style="width: 100% ">
         <tr>
           <th class="category" colspan="2">Allergies</th>
         </tr>
         <tr>
-          <td style="font-weight: bold; white-space: normal; font-size:130%;" class="text">
+          <td style="font-weight: bold; font-size:130%;">
           {{if $dossier_medical->_ref_antecedents_by_type && $dossier_medical->_ref_antecedents_by_type.alle|@count}}
             <div class="small-warning">
             {{foreach from=$dossier_medical->_ref_antecedents_by_type.alle item=currAnt}}
               <ul>
-                <li> 
+                <li>
                   {{if $currAnt->date}}
                     {{mb_value object=$currAnt field=date}} :
                   {{/if}}
@@ -247,20 +247,20 @@
     {{/if}}
   </tr>
   <tr>
-    <td class="halfPane" rowspan="2">
-      <table width="100%">
+    <td class="halfPane text" rowspan="2" style="word-break: break-all">
+      <table style="width: 100%">
         <tr>
           <th class="category">Antécédents</th>
         </tr>
         <tr>
-          <td class="text">
+          <td>
           {{if $dossier_medical->_ref_antecedents_by_type}}
             {{foreach from=$dossier_medical->_ref_antecedents_by_type key=keyAnt item=currTypeAnt}}
               {{if $currTypeAnt}}
                 <strong>{{tr}}CAntecedent.type.{{$keyAnt}}{{/tr}}</strong>
                 {{foreach from=$currTypeAnt item=currAnt}}
                 <ul>
-                  <li> 
+                  <li>
                     {{if $currAnt->appareil}}<strong>{{tr}}CAntecedent.appareil.{{$currAnt->appareil}}{{/tr}}</strong>{{/if}} 
                     {{if $currAnt->date}}
                       {{mb_value object=$currAnt field=date}} :
@@ -283,8 +283,8 @@
     
     {{if is_array($dossier_medical->_ref_traitements) || $dossier_medical->_ref_prescription}}
     <!-- Traitements -->
-    <td class="halfPane">
-      <table width="100%">
+    <td class="halfPane text">
+      <table style="width: 100%">
         <tr>
           <th class="category">Traitements</th>
         </tr>
@@ -339,14 +339,14 @@
     <tr>
     
     <!-- Examens cliniques -->
-    <td class="halfPane">
-      <table width="100%">
+    <td class="halfPane text">
+      <table style="width: 100%">
         <tr>
           <th class="category" colspan="6">Examens Clinique</th>
         </tr>
         <tr>
           <th style="font-weight: normal;">Pouls</th>
-          <td style="font-weight: bold; white-space: nowrap;">
+          <td style="font-weight: bold;">
             {{if $const_med->pouls}}
             {{$const_med->pouls}} / min
             {{else}}
@@ -354,7 +354,7 @@
             {{/if}}
           </td>
           <th style="font-weight: normal;">TA</th>
-          <td style="font-weight: bold; white-space: nowrap;">
+          <td style="font-weight: bold;">
             {{if $const_med->ta_gauche}}
               {{$const_med->_ta_gauche_systole}} / {{$const_med->_ta_gauche_diastole}} cm Hg
             {{elseif $const_med->ta_droit}}
@@ -366,7 +366,7 @@
             {{/if}}
           </td>
           <th style="font-weight: normal;">Spo2</th>
-          <td style="font-weight: bold; white-space: nowrap;">
+          <td class="text" style="font-weight: bold;">
             {{if $const_med->spo2}}
             {{$const_med->spo2}} %
             {{else}}
@@ -411,7 +411,7 @@
 <table class="{{$tbl_class}}">
   <tr>
     <td>
-      <table width="100%">
+      <table style="width: 100%">
         <tr>
           <th colspan="3" class="category">Conditions d'intubation</th>
         </tr>
@@ -427,7 +427,7 @@
         {{/if}}
         <tr>
           {{if $dossier_anesth->mallampati && $conf.dPcabinet.CConsultAnesth.show_mallampati}}
-          <td rowspan="4" class="button" style="white-space: nowrap;">
+          <td rowspan="4" class="button text">
             <img src="images/pictures/{{$dossier_anesth->mallampati}}.png" alt="{{tr}}CConsultAnesth.mallampati.{{$dossier_anesth->mallampati}}{{/tr}}" />
             <br />Mallampati<br />de {{tr}}CConsultAnesth.mallampati.{{$dossier_anesth->mallampati}}{{/tr}}
           </td>
@@ -467,7 +467,7 @@
         </tr>
       </table>    
 
-      <table width="100%">
+      <table style="width: 100%">
         <tr>
           <th class="category" colspan="3">
             Examens Complémentaires
@@ -482,7 +482,7 @@
               {{assign var="donnees" value=$unites.$champ}}
               <tr>
                 <th style="font-weight: normal;">{{$donnees.nom}}</th>
-                <td style="font-weight: bold; white-space: nowrap;">
+                <td class="text" style="font-weight: bold;">
                   {{if $champ=="tca"}}
                     {{$dossier_anesth->tca_temoin}} s / {{$dossier_anesth->tca}}
                   {{elseif $champ=="tsivy"}}
@@ -508,9 +508,9 @@
   {{if $dossier_anesth->result_ecg || $dossier_anesth->result_rp || ($dossier_anesth->result_autre && $app->user_prefs.viewAutreResult)}}
   <tr>
     <td>
-      <table width="100%">
+      <table style="width: 100%">
         <tr>
-          <td width="{{if $app->user_prefs.viewAutreResult}}33%{{else}}50%{{/if}}">
+          <td style="width: {{if $app->user_prefs.viewAutreResult}}33%{{else}}50%{{/if}}">
             {{if $dossier_anesth->result_ecg}}
             <strong>{{mb_label object=$dossier_anesth field="result_ecg"}}</strong>
             <br />
@@ -540,7 +540,7 @@
   {{/if}}
   <tr>
     <td>
-      <table width="100%">
+      <table style="width: 100%">
         {{foreach from=$consult->_types_examen key=curr_type item=list_exams}}
         {{if $list_exams|@count}}
         <tr>
@@ -567,7 +567,7 @@
       {{/foreach}}
       </table>
       
-      <table width="100%">
+      <table style="width: 100%">
       {{if $consult->_ref_exampossum->_id}}
         <tr>
           <th>Score Possum</th>
@@ -586,7 +586,7 @@
       {{/if}}
       </table>
 
-      <table width="100%" style="padding-bottom: 10px;">
+      <table style="width: 100%; padding-bottom: 10px;">
         <tr>
           <th class="category">
             Liste des Documents Edités
@@ -608,7 +608,7 @@
         </tr>
       </table>
 
-      <table width="100%" style="padding-bottom: 10px;">
+      <table style="width: 100%; padding-bottom: 10px;">
         <tr>
           <th class="category">
             Prémédication
@@ -643,7 +643,7 @@
       </table>
       
       {{if $dossier_anesth->prepa_preop}}
-      <table width="100%">
+      <table style="width: 100%">
         <tr>
           <th class="category">
             Préparation pré-opératoire
@@ -658,7 +658,7 @@
       {{/if}}
       
       {{if $dossier_medical->_ext_codes_cim}}
-      <table width="100%">
+      <table style="width: 100%">
         <tr>
           <th class="category">Diagnostics PMSI du patient</th>
         </tr>
