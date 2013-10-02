@@ -19,17 +19,28 @@
   <tr>
     <th class="narrow">{{mb_label object=$op field="chir_id"}}</th>
     <td colspan="2">
-      <select name="chir_id" class="{{$op->_props.chir_id}}"
-        onchange="synchroPrat(); Value.synchronize(this); removePlageOp(true);"
-         style="width: 15em">
-        <option value="">&mdash; Choisir un chirurgien</option>
-        {{mb_include module=mediusers template=inc_options_mediuser list=$listPraticiens selected=$chir->_id}}
-      </select>
+      <script>
+        Main.add(function () {
+          var formeasy = getForm("editOpEasy");
+          selectPraticien(formeasy.chir_id, formeasy.chir_id_view);
+        });
+      </script>
+      {{mb_field object=$op field="chir_id" hidden=hidden value=$chir->_id onchange="synchroPrat(); Value.synchronize(this); removePlageOp(true);"}}
+      <input type="text" name="chir_id_view" class="autocomplete" style="width:15em;" onchange="Value.synchronize(this);"
+             value="{{if $chir->_id}}{{$chir->_view}}{{/if}}" placeholder="&mdash; Choisir un chirurgien"/>
       <button type="button"onclick="toggleOtherPrats()" title="{{tr}}Add{{/tr}}"
         class="notext {{if $op->chir_2_id || $op->chir_3_id || $op->chir_4_id}}up{{else}}down{{/if}}"></button>
     </td>
   </tr>
   {{if $conf.dPplanningOp.COperation.show_secondary_function && !$op->_id}}
+    <script>
+      Main.add(function () {
+        var formeasy = getForm("editOpEasy");
+        selectPraticien(formeasy.chir_2_id, formeasy.chir_2_id_view);
+        selectPraticien(formeasy.chir_3_id, formeasy.chir_3_id_view);
+        selectPraticien(formeasy.chir_4_id, formeasy.chir_4_id_view);
+      });
+    </script>
     <tr>
       <th>
         {{mb_label class=CMediusers field=function_id}}
@@ -44,10 +55,9 @@
       {{mb_label object=$op field="chir_2_id"}}
     </th>
     <td colspan="2">
-      <select name="chir_2_id" onchange="Value.synchronize(this)">
-        <option value="">&mdash; Choisir un chirurgien</option>
-        {{mb_include module=mediusers template=inc_options_mediuser list=$listPraticiens selected=$op->chir_2_id}}
-      </select>
+      {{mb_field object=$op field="chir_2_id" hidden=hidden value=$op->chir_2_id onchange="Value.synchronize(this);"}}
+      <input type="text" name="chir_2_id_view" class="autocomplete" style="width:15em;" onchange="Value.synchronize(this);"
+             value="{{if $op->chir_2_id}}{{$op->chir_2_id}}{{/if}}" placeholder="&mdash; Choisir un chirurgien"/>
     </td>
   </tr>
   <tr class="other_prats" {{if !$op->chir_2_id && !$op->chir_3_id && !$op->chir_4_id}}style="display: none"{{/if}}>
@@ -55,10 +65,9 @@
       {{mb_label object=$op field="chir_3_id"}}
     </th>
     <td colspan="2">
-      <select name="chir_3_id" onchange="Value.synchronize(this)">
-        <option value="">&mdash; Choisir un chirurgien</option>
-        {{mb_include module=mediusers template=inc_options_mediuser list=$listPraticiens selected=$op->chir_3_id}}
-      </select>
+      {{mb_field object=$op field="chir_3_id" hidden=hidden value=$op->chir_3_id onchange="Value.synchronize(this);"}}
+      <input type="text" name="chir_3_id_view" class="autocomplete" style="width:15em;" onchange="Value.synchronize(this);"
+             value="{{if $op->chir_3_id}}{{$op->chir_3_id}}{{/if}}" placeholder="&mdash; Choisir un chirurgien"/>
     </td>
   </tr>
   <tr class="other_prats" {{if !$op->chir_2_id && !$op->chir_3_id && !$op->chir_4_id}}style="display: none"{{/if}}>
@@ -66,10 +75,9 @@
       {{mb_label object=$op field="chir_4_id"}}
     </th>
     <td colspan="2">
-      <select name="chir_4_id" onchange="Value.synchronize(this)">
-        <option value="">&mdash; Choisir un chirurgien</option>
-        {{mb_include module=mediusers template=inc_options_mediuser list=$listPraticiens selected=$op->chir_4_id}}
-      </select>
+      {{mb_field object=$op field="chir_4_id" hidden=hidden value=$op->chir_4_id onchange="Value.synchronize(this);"}}
+      <input type="text" name="chir_4_id_view" class="autocomplete" style="width:15em;" onchange="Value.synchronize(this);"
+             value="{{if $op->chir_4_id}}{{$op->chir_4_id}}{{/if}}" placeholder="&mdash; Choisir un chirurgien"/>
     </td>
   </tr>
   

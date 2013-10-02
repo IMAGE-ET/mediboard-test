@@ -29,6 +29,27 @@
 {{/if}}
 
 <script>
+selectPraticien = function (element2, element) {
+  // Autocomplete des chirurgiens
+  var form = getForm("editOp");
+  // Autocomplete des users
+  var url = new Url("mediusers", "ajax_prat_autocomplete");
+  url.addParam("input_field", element.name);
+  url.autoComplete(element, null, {
+    minChars: 0,
+    method: "get",
+    select: "view",
+    dropdown: true,
+    afterUpdateElement: function(field, selected) {
+      if ($V(element) == "") {
+        $V(element, selected.down('.view').innerHTML);
+      }
+      Value.synchronize(element);
+      var id = selected.getAttribute("id").split("-")[2];
+      $V(element2, id);
+    }
+  });
+}
 function modifLits(lit_id){
   var form = getForm('editSejour');
 
@@ -595,11 +616,16 @@ Main.add( function(){
     {{if $sejour->praticien_id && !array_key_exists($sejour->praticien_id, $listPraticiens)}}
     {{mb_field object=$sejour field=praticien_id hidden=1}}
     {{mb_value object=$sejour field=praticien_id}}
-    {{else}} 
-    <select name="praticien_id" onchange="modifPrat()" class="{{$sejour->_props.praticien_id}}" style="width: 15em">
-      <option value="">&mdash; Choisir un praticien</option>
-      {{mb_include module=mediusers template=inc_options_mediuser selected=$praticien->_id list=$listPraticiens}}
-    </select>
+    {{else}}
+      <script>
+        Main.add(function () {
+          var form = getForm("editSejour");
+          selectPraticien(form.praticien_id, form.praticien_id_view);
+        });
+      </script>
+      {{mb_field object=$sejour field="praticien_id" hidden=hidden value=$praticien->_id onchange="modifPrat();"}}
+      <input type="text" name="praticien_id_view" class="autocomplete" style="width:15em;" placeholder="&mdash; Choisir un chirurgien"
+             value="{{if $praticien->_id}}{{$praticien->_view}}{{/if}}" />
     {{/if}}
   </td>
 </tr>

@@ -170,6 +170,7 @@ function synchroPrat() {
   var oSejourForm = document.editSejour;
   if (!oSejourForm.sejour_id.value) {
     $V(oSejourForm.praticien_id, oOpForm.chir_id.value);
+    $V(oSejourForm.praticien_id_view, oOpForm.chir_id_view.value);
   }
   updateTime();
 }
