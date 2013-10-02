@@ -47,7 +47,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLAcquittements {
   function generateEnteteMessageAcquittement($statut, $codes = null, $commentaires = null) {
     $echg_hprim      = $this->_ref_echange_hprim;
     $identifiant     = isset($echg_hprim->_id) ? str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT) : "ES{$this->now}";
-    
+
     $acquittementsPatients = $this->addElement($this, "acquittementsPatients", null, "http://www.hprim.org/hprimXML");
 
     $enteteMessageAcquittement = $this->addElement($acquittementsPatients, "enteteMessageAcquittement");
@@ -63,7 +63,9 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLAcquittements {
     $group->loadLastId400();
     $this->addAgent($agents, $this->getAttSysteme(), CAppUI::conf('mb_id'), $group->text);
 
-    $echg_hprim->loadRefsInteropActor();
+    if (!$echg_hprim->_ref_sender) {
+      $echg_hprim->loadRefsInteropActor();
+    }
     // Pour un acquittement l'emetteur du message devient destinataire
     $destinataire = $this->addElement($enteteMessageAcquittement, "destinataire");
     $agents = $this->addElement($destinataire, "agents");

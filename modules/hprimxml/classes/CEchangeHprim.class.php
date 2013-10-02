@@ -240,7 +240,7 @@ class CEchangeHprim extends CEchangeXML {
     $statut      = $avertissement ? $dom_acq->_codes_erreurs["avt"] : $dom_acq->_codes_erreurs["ok"];
 
     $msgAcq = $dom_acq->generateAcquittements($statut, $codes, $commentaire, $mbObject);
-    $doc_valid = $dom_acq->schemaValidate(null, false, $this->_ref_receiver->display_errors);
+    $doc_valid = $dom_acq->schemaValidate(null, false, $this->_ref_receiver ? $this->_ref_receiver->display_errors : true);
     
     $this->acquittement_valide = $doc_valid ? 1 : 0;
     $this->statut_acquittement = $statut;
@@ -269,7 +269,7 @@ class CEchangeHprim extends CEchangeXML {
     $statut = $dom_acq->_codes_erreurs["err"];
     
     $msgAcq    = $dom_acq->generateAcquittements($dom_acq->_codes_erreurs["err"], $code_erreur, $commentaires, $mbObject);
-    $doc_valid = $dom_acq->schemaValidate(null, false, $this->_ref_receiver->display_errors);
+    $doc_valid = $dom_acq->schemaValidate(null, false, $this->_ref_receiver ? $this->_ref_receiver->display_errors : true);
     
     $this->acquittement_valide = $doc_valid ? 1 : 0;
     $this->statut_acquittement = $statut;

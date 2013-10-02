@@ -410,7 +410,8 @@ class CExchangeDataFormat extends CMbMetaObject {
     if (!$ack_data) {
       return;
     }
-    
+
+    $ack_valid = 0;
     if ($this instanceof CEchangeHprim) {
       $dom_evt = $sender->_data_format->_family_message->getHPrimXMLEvenements($this->_message);
       $ack = CHPrimXMLAcquittements::getAcquittementEvenementXML($dom_evt);

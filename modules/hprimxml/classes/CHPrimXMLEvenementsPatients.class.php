@@ -99,8 +99,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     //$mbPatient = $this->getPersonnesPrevenir($node, $mbPatient);
     
     $sender = $this->_ref_echange_hprim->_ref_sender;
-    
-    if (!$sender->_configs["fully_qualified"]) {
+
+    if (isset($sender->_configs) && array_key_exists("fully_qualified", $sender->_configs) && !$sender->_configs["fully_qualified"]) {
       $mbPatient->nullifyAlteredFields();
     }
     
