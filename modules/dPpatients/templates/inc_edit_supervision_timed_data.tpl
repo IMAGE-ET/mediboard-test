@@ -28,10 +28,12 @@
       <td>{{mb_field object=$timed_data field=value_type_id autocomplete="true,1,50,true,true" form="edit-supervision-graph-timed-data"}}</td>
     </tr>
 
+    {{*
     <tr>
       <th>{{mb_label object=$timed_data field=period}}</th>
       <td>{{mb_field object=$timed_data field=period typeEnum=select emptyLabel="Libre"}}</td>
     </tr>
+    *}}
 
     <tr>
       <th>{{mb_label object=$timed_data field=disabled}}</th>
