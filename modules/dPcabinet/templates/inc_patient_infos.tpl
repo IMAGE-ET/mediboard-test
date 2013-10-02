@@ -1,10 +1,9 @@
-<script type="text/javascript">
-function showSummary(patient_id) {
-  var url = new Url('cabinet', 'vw_resume');
-  url.addParam("patient_id", patient_id);
-  url.popup(800, 500, 'Summary'+patient_id);
-}
-
+<script>
+  function showSummary(patient_id) {
+    var url = new Url('cabinet', 'vw_resume');
+    url.addParam("patient_id", patient_id);
+    url.popup(800, 500, 'Summary' + (Preferences.multi_popups_resume == '1' ? patient_id : null));
+  }
 </script>
 
 <!-- Dossier complet -->

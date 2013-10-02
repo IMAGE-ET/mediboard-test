@@ -1993,6 +1993,10 @@ class CSetupdPcabinet extends CSetup {
                 ADD `du_tva` DECIMAL (10,2) DEFAULT '0',
                 ADD `taux_tva` ENUM ('0', '19.6') DEFAULT '0';";
     $this->addQuery($query);
-    $this->mod_version = "2.16";
+
+    $this->makeRevision("2.16");
+    $this->addPrefQuery("multi_popups_resume", "1");
+
+    $this->mod_version = "2.17";
   }
 }

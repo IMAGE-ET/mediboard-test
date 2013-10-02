@@ -37,5 +37,6 @@ CPreferences::$modules["dPcabinet"] = array (
   "create_dossier_anesth",
   "showIntervPlanning",
   "NbConsultMultiple",
-  "use_acte_date_now"
+  "use_acte_date_now",
+  "multi_popups_resume"
 );

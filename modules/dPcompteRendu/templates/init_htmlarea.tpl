@@ -28,7 +28,6 @@
   window.nb_textes_libres = {{$templateManager->textes_libres|@count}};
 
   function initCKEditor() {
-    CKEDITOR.ispasting = false;
     window.old_source = $("htmlarea").value;
     var editor = CKEDITOR.replace("htmlarea", {customConfig: "../../?m=compteRendu&raw=mb_fckeditor"});
 
@@ -179,41 +178,6 @@
         // Surveillance de modification de l'éditeur de texte
         if (window.Thumb) {
           ck_instance.on("key", loadOld);
-        }
-
-        // Redéfinition du copier-coller dans CKEditor pour firefox, car le comportement par défaut ne convient pas
-        if (Prototype.Browser.Gecko) {
-          ck_instance.on("paste", function(evt) {
-            if (CKEDITOR.ispasting) {
-              return;
-            }
-
-            CKEDITOR.ispasting = true;
-
-            evt.cancel();
-
-            // Tenir compte de la façon dont on colle :
-            // - sans mise en forme
-            // - depuis word
-
-            var paste = evt.data.html || evt.data.text;
-
-            var alltags = paste.match(/<[a-z]+/g);
-
-            if (alltags) {
-              alltags=alltags.uniq();
-            }
-
-            if (alltags == null || (alltags.length == 1 && alltags.indexOf("br") != -1)) {
-              paste = paste.replace(/<br(\s)*(\\)*>/g, '\n');
-              paste = paste.replace(/&nbsp/g, ' ');
-              CKEDITOR.instances.htmlarea.fire("paste", {'text': paste.replace(/<br(\s)*(\\)*>/, '\n')});
-            }
-            else {
-              CKEDITOR.instances.htmlarea.fire("paste", {'html': paste});
-            }
-            CKEDITOR.ispasting = false;
-          });
         }
       {{/if}}
 
