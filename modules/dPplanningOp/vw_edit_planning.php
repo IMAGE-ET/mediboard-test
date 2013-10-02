@@ -219,6 +219,9 @@ $exchange_source = CExchangeSource::get("mediuser-" . CAppUI::$user->_id, "smtp"
 if (CAppUI::conf("dPplanningOp COperation use_poste")) {
   $op->loadRefPoste();
 }
+$op->loadRefChir2();
+$op->loadRefChir3();
+$op->loadRefChir4();
 
 $_functions = array();
 

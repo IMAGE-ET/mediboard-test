@@ -57,7 +57,7 @@
     <td colspan="2">
       {{mb_field object=$op field="chir_2_id" hidden=hidden value=$op->chir_2_id onchange="Value.synchronize(this);"}}
       <input type="text" name="chir_2_id_view" class="autocomplete" style="width:15em;" onchange="Value.synchronize(this);"
-             value="{{if $op->chir_2_id}}{{$op->chir_2_id}}{{/if}}" placeholder="&mdash; Choisir un chirurgien"/>
+             value="{{if $op->chir_2_id}}{{$op->_ref_chir_2->_view}}{{/if}}" placeholder="&mdash; Choisir un chirurgien"/>
     </td>
   </tr>
   <tr class="other_prats" {{if !$op->chir_2_id && !$op->chir_3_id && !$op->chir_4_id}}style="display: none"{{/if}}>
@@ -67,7 +67,7 @@
     <td colspan="2">
       {{mb_field object=$op field="chir_3_id" hidden=hidden value=$op->chir_3_id onchange="Value.synchronize(this);"}}
       <input type="text" name="chir_3_id_view" class="autocomplete" style="width:15em;" onchange="Value.synchronize(this);"
-             value="{{if $op->chir_3_id}}{{$op->chir_3_id}}{{/if}}" placeholder="&mdash; Choisir un chirurgien"/>
+             value="{{if $op->chir_3_id}}{{$op->_ref_chir_3->_view}}{{/if}}" placeholder="&mdash; Choisir un chirurgien"/>
     </td>
   </tr>
   <tr class="other_prats" {{if !$op->chir_2_id && !$op->chir_3_id && !$op->chir_4_id}}style="display: none"{{/if}}>
@@ -77,7 +77,7 @@
     <td colspan="2">
       {{mb_field object=$op field="chir_4_id" hidden=hidden value=$op->chir_4_id onchange="Value.synchronize(this);"}}
       <input type="text" name="chir_4_id_view" class="autocomplete" style="width:15em;" onchange="Value.synchronize(this);"
-             value="{{if $op->chir_4_id}}{{$op->chir_4_id}}{{/if}}" placeholder="&mdash; Choisir un chirurgien"/>
+             value="{{if $op->chir_4_id}}{{$op->_ref_chir_4->_view}}{{/if}}" placeholder="&mdash; Choisir un chirurgien"/>
     </td>
   </tr>
   
