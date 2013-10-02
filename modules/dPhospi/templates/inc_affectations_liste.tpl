@@ -67,7 +67,7 @@
               {{mb_include module=hospi template=inc_vw_liaisons_prestation liaisons=$_sejour->_liaisons_for_prestation}}
             {{/if}}
           {{else}}
-            <em style="color: #f00;" title="Chambre seule">
+            <em style="color: #f00;" title="Chambre {{if $_sejour->chambre_seule}}seule{{else}}double{{/if}}">
             {{if $_sejour->chambre_seule}}CS{{else}}CD{{/if}}
             {{if $_sejour->prestation_id}}- {{$_sejour->_ref_prestation->code}}{{/if}}
             </em>
