@@ -23,6 +23,7 @@ class CFTP {
   public $fileextension;
   public $filenbroll;
   public $loggable;
+  public $type_system;
   
   private static $aliases = array(
     'sslconnect' => 'ssl_connect',
@@ -209,6 +210,8 @@ class CFTP {
     if ($this->passif_mode && !@ftp_pasv($this->connexion, true)) {
       throw new CMbException("CSourceFTP-passive-mode-on-failed");
     }
+
+    $this->type_system   = ftp_systype($this->connexion);
     
     return true;
   }
@@ -260,25 +263,51 @@ class CFTP {
       throw new CMbException("CSourceFTP-getlistfiles-failed", $this->hostname);
     }
 
+    $system = $this->type_system;
+    $limit = 9;
+    if ($system && strpos($system, "Windows") !== false) {
+      $limit = 4;
+    }
+
     $fileInfo = array();
     foreach ($files as $_file) {
-      $pregInfo = preg_split("/[\s]+/", $_file, 9);
-      if (strpos($pregInfo[0], "d") !== false || $pregInfo[0] == "total") {
+      $pregInfo = preg_split("/[\s]+/", $_file, $limit);
+
+      if ($system && strpos($system, "Windows") !== false) {
+        $format = "m-d-y h:iA";
+        $datetime = "$pregInfo[0] $pregInfo[1]";
+        $type = strpos($pregInfo[2], "DIR") ? "d" : "f";
+        $user = "";
+        $size = $pregInfo[2];
+        $name = $pregInfo[3];
+      }
+      else {
+        $year = $pregInfo[7];
+        if (strpos($year, ":")) {
+          $year = explode("-", CMbDT::date());
+          $year = $year[0]." $pregInfo[7]";
+        }
+        $format = "M-d-Y H:i";
+        $datetime = "$pregInfo[5]-$pregInfo[6]-$year";
+        $type = $pregInfo[0];
+        $user = "$pregInfo[2] $pregInfo[3]";
+        $size = $pregInfo[4];
+        $name = $pregInfo[8];
+      }
+
+      if (strpos($type, "d") !== false || $pregInfo[0] == "total") {
         continue;
       }
-      $month = self::$month_to_number[$pregInfo[5]];
-      $day = $pregInfo[6];
-      $year = $pregInfo[7];
-      if (strpos($year, ":")) {
-        $year = explode("-", CMbDT::date());
-        $year = $year[0]." $pregInfo[7]";
-      }
-      $fileInfo[] = array("type"  => $pregInfo[0],
-                          "user"  => $pregInfo[2]." ".$pregInfo[3],
-                          "size"  => CMbString::toDecaBinary($pregInfo[4]),
-                          "date"  => $day."-".$month."-".$year,
-                          "name"  => $pregInfo[8],
-                          "relativeDate" => CMbDT::daysRelative($day."-".$month."-".$year, CMbDT::date()));
+
+      $datetime = DateTime::createFromFormat($format, $datetime);
+      $date = $datetime->format("d-m-Y H:m");
+
+      $fileInfo[] = array("type"  => $type,
+                          "user"  => $user,
+                          "size"  => CMbString::toDecaBinary($size),
+                          "date"  => $date,
+                          "name"  => $name,
+                          "relativeDate" => CMbDT::daysRelative($date, CMbDT::date()));
     }
     return $fileInfo;
   }
@@ -294,13 +323,27 @@ class CFTP {
       throw new CMbException("CSourceFTP-getlistfiles-failed", $this->hostname);
     }
 
+    $system = $this->type_system;
+    $limit = 9;
+    if ($system && strpos($system, "Windows") !== false) {
+      $limit = 4;
+    }
+
     $fileInfo = array();
     foreach ($files as $_file) {
-      $pregInfo = preg_split("/[\s]+/", $_file, 9);
-      if (strpos($pregInfo[0], "d") === false) {
+      $pregInfo = preg_split("/[\s]+/", $_file, $limit);
+      if ($system && strpos($system, "Windows") !== false) {
+        $type = strpos($pregInfo[2], "DIR") ? "d" : "f";
+        $name = $pregInfo[3];
+      }
+      else {
+        $type = $pregInfo[0];
+        $name = $pregInfo[8];
+      }
+      if (strpos($type, "d") === false) {
         continue;
       }
-      $fileInfo[] = $pregInfo[8];
+      $fileInfo[] = $name;
     }
 
     return $fileInfo;
