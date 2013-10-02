@@ -15,6 +15,7 @@ File = {
   
   cancel: function(form, object_id, object_class){
     if (confirm($T('CFile-comfirm_cancel'))) {
+      $V(form.annule, 1);
       onSubmitFormAjax(form, File.refresh.curry(object_id, object_class, 0));
     }
     return false;

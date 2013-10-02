@@ -220,14 +220,35 @@ class CSetupdPfiles extends CSetup {
     
     $this->makeRevision("0.28");
     $query = "ALTER TABLE `files_mediboard`
-                CHANGE `file_owner` `author_id` INT(11);";
+      CHANGE `file_owner` `author_id` INT(11);";
     $this->addQuery($query);
 
     $this->makeRevision("0.29");
     $query = "ALTER TABLE `files_mediboard`
-                ADD `annule` ENUM ('0','1') DEFAULT '0';";
+      ADD `annule` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.30";
+    $this->makeRevision("0.30");
+    $query = "ALTER TABLE `files_mediboard`
+      CHANGE `rotation` `rotation` INT (11) DEFAULT '0';";
+    $this->addQuery($query);
+
+    $query = "UPDATE `files_mediboard`
+      SET `rotation` = '0' WHERE `rotation` = '1';";
+    $this->addQuery($query);
+
+    $query = "UPDATE `files_mediboard`
+      SET `rotation` = '90' WHERE `rotation` = '2';";
+    $this->addQuery($query);
+
+    $query = "UPDATE `files_mediboard`
+      SET `rotation` = '180' WHERE `rotation` = '3';";
+    $this->addQuery($query);
+
+    $query = "UPDATE `files_mediboard`
+      SET `rotation` = '270' WHERE `rotation` = '4';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.31";
   }
 }

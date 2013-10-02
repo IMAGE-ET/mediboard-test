@@ -96,7 +96,7 @@ class CFile extends CDocumentItem {
     $props["file_real_filename"] = "str notNull show|0";
     $props["file_type"]          = "str";
     $props["file_name"]          = "str notNull show|0";
-    $props["rotation"]           = "enum list|0|90|180|270 default|0 show|0";
+    $props["rotation"]           = "num default|0 show|0";
     $props["annule"]             = "bool default|0 show|0";
 
     // Form Fields

@@ -60,6 +60,7 @@
       <input type="hidden" name="dosql" value="do_file_aed" />
       <input type="hidden" name="file_id" value="{{$_doc_item->_id}}" />
       <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="annule" value="0" />
       {{assign var="confirmDeleteType" value="le fichier"}}
       {{assign var="confirmDeleteName" value=$_doc_item->file_name|smarty:nodefaults|JSAttribute}}
     {{/if}}
@@ -77,9 +78,9 @@
         } );">
         {{tr}}Delete{{/tr}}
       </button>
-    {{elseif $_doc_item->_class == "CFile" && $_doc_item->annule == "0"}}
-      <input type="hidden" name="annule" value="1" />
-      <button type="button" class="trash notext" onclick="cancelFile(this.form, '{{$_doc_item->file_category_id}}')">{{tr}}Delete{{/tr}}</button>
+    {{/if}}
+    {{if $_doc_item->_class == "CFile" && $_doc_item->annule == "0"}}
+      <button type="button" class="cancel notext" onclick="cancelFile(this.form, '{{$_doc_item->file_category_id}}')">{{tr}}Annuler{{/tr}}</button>
     {{/if}}
 
 
