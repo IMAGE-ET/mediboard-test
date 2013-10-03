@@ -44,6 +44,7 @@ class CProtocole extends CMbObject {
   public $examen;
   public $materiel;
   public $duree_hospi;
+  public $duree_heure_hospi;
   public $rques_operation; // Operation->rques
   public $depassement;
   public $forfait;
@@ -132,6 +133,7 @@ class CProtocole extends CMbObject {
     $props["examen"]          = "text confidential seekable";
     $props["materiel"]        = "text confidential seekable";
     $props["duree_hospi"]     = "num notNull min|0 max|36500";
+    $props["duree_heure_hospi"] = "num min|0 max|23 default|0";
     $props["rques_operation"] = "text confidential";
     $props["depassement"]     = "currency min|0 confidential";
     $props["forfait"]         = "currency min|0 confidential";

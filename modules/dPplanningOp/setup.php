@@ -1658,6 +1658,11 @@ class CSetupdPplanningOp extends CSetup {
                 ADD `graph_pack_id` INT (11) UNSIGNED;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.78";
+    $this->makeRevision("1.78");
+    $query = "ALTER TABLE `protocole`
+                ADD `duree_heure_hospi` TINYINT (4) UNSIGNED DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.79";
   }
 }

@@ -1,7 +1,7 @@
 {{mb_script module="dPplanningOp" script="cim10_selector" ajax=true}}
 {{mb_script module="dPplanningOp" script="ccam_selector" ajax=true}}
 
-<script type="text/javascript">
+<script>
 
 window.oCcamFieldProtocole = null;
 
@@ -147,8 +147,19 @@ Main.add(function () {
     onChange : refreshListCCAMProtocole,
     sProps : "notNull code ccam"
   } );
+  editHour();
 });
 
+editHour = function () {
+  var form = getForm('editProtocole');
+  if (form.duree_hospi.value == 0 && form.type.value == "ambu") {
+    $('duree_heure_hospi_view').show();
+  }
+  else {
+    $('duree_heure_hospi_view').hide();
+    form.duree_heure_hospi.value = 0;
+  }
+}
 </script>
 
 
@@ -187,12 +198,7 @@ Main.add(function () {
                         $V(this.form.protocole_prescription_chir_id, '');"
               style="width: 15em;">
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-        {{foreach from=$listPraticiens item=_prat}}
-        <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}"
-                {{if $chir->_id == $_prat->_id}}selected="selected"{{/if}}>
-        {{$_prat->_view}}
-        </option>
-        {{/foreach}}
+        {{mb_include module=mediusers template=inc_options_mediuser selected=$chir->_id list=$listPraticiens}}
       </select>
     </td>
   </tr>
@@ -243,7 +249,7 @@ Main.add(function () {
             <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()"  style="width: 12em" value="" />
             <button class="add notext" type="button" onclick="oCcamFieldProtocole.add($V(this.form._codes_ccam), true)">{{tr}}Add{{/tr}}</button>
             <button class="search notext" type="button" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>
-            <script type="text/javascript">
+            <script>
               Main.add(function() {
                 var oForm = getForm("editProtocole");
                 var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
@@ -406,7 +412,7 @@ Main.add(function () {
             {{mb_label object=$protocole field="DP"}}
           </th>
           <td>
-            <script type="text/javascript">
+            <script>
             Main.add(function(){
               var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
               url.autoComplete(getForm("editProtocole").keywords_code, '', {
@@ -425,7 +431,7 @@ Main.add(function () {
             <input type="hidden" name="DP" value="{{$protocole->DP}}" onchange="$V(this.form.keywords_code, this.value)"/>
             <button type="button" class="cancel notext" onclick="$V(this.form.DP, '');" />
             <button type="button" class="search notext" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
-              <script type="text/javascript">
+              <script>
                 CIM10Selector.init = function(){
                   this.sForm = "editProtocole";
                   this.sView = "DP";
@@ -438,12 +444,17 @@ Main.add(function () {
         
         <tr>
           <th>{{mb_label object=$protocole field="duree_hospi"}}</th>
-          <td>{{mb_field object=$protocole field="duree_hospi" size="2"}} {{tr}}night{{/tr}}(s)</td>
+          <td>{{mb_field object=$protocole field="duree_hospi" size="2" onchange="editHour();"}} {{tr}}night{{/tr}}(s)</td>
+        </tr>
+
+        <tr id="duree_heure_hospi_view">
+          <th>{{mb_label object=$protocole field="duree_heure_hospi"}}</th>
+          <td>{{mb_field object=$protocole field="duree_heure_hospi" size="2"}} {{tr}}hour{{/tr}}(s)</td>
         </tr>
         
         <tr>
           <th>{{mb_label object=$protocole field="type"}}</th>
-          <td>{{mb_field object=$protocole field="type" style="width: 15em;"}}</td>
+          <td>{{mb_field object=$protocole field="type" style="width: 15em;" onchange="editHour();"}}</td>
         </tr>
         <tr>
           <th></th>
@@ -473,7 +484,7 @@ Main.add(function () {
         {{if array_key_exists("dPprescription", $modules)}}
         <tr>
           <th>
-            <script type="text/javascript">
+            <script>
             Main.add(function(){
               var form = getForm("editProtocole");
               var url = new Url("dPprescription", "httpreq_vw_select_protocole");
