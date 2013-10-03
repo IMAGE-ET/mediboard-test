@@ -2464,7 +2464,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   function clone(element, deep) {
     if (!(element = $(element))) return;
     var clone = element.cloneNode(deep);
-    if (!HAS_UNIQUE_ID_PROPERTY) {
+    //if (!HAS_UNIQUE_ID_PROPERTY) {
       clone._prototypeUID = UNDEFINED;
       if (deep) {
         var descendants = Element.select(clone, '*'),
@@ -2472,7 +2472,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
         while (i--)
           descendants[i]._prototypeUID = UNDEFINED;
       }
-    }
+    //}
     return Element.extend(clone);
   }
 
@@ -2480,7 +2480,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
     var uid = getUniqueElementID(element);
     if (uid) {
       Element.stopObserving(element);
-      if (!HAS_UNIQUE_ID_PROPERTY)
+      //if (!HAS_UNIQUE_ID_PROPERTY)
         element._prototypeUID = UNDEFINED;
       delete Element.Storage[uid];
     }
@@ -2492,7 +2492,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
       purgeElement(elements[i]);
   }
 
-  function purgeCollection_IE(elements) {
+  /*function purgeCollection_IE(elements) {
     var i = elements.length, element, uid;
     while (i--) {
       element = elements[i];
@@ -2504,7 +2504,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
 
   if (HAS_UNIQUE_ID_PROPERTY) {
     purgeCollection = purgeCollection_IE;
-  }
+  }*/
 
 
   function purge(element) {
@@ -3187,7 +3187,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
     return element._prototypeUID;
   }
 
-  function getUniqueElementID_IE(element) {
+  /*function getUniqueElementID_IE(element) {
     if (element === window) return 0;
     if (element == document) return 1;
     return element.uniqueID;
@@ -3195,7 +3195,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
 
   var HAS_UNIQUE_ID_PROPERTY = ('uniqueID' in DIV);
   if (HAS_UNIQUE_ID_PROPERTY)
-    getUniqueElementID = getUniqueElementID_IE;
+    getUniqueElementID = getUniqueElementID_IE;*/
 
   function getStorage(element) {
     if (!(element = $(element))) return;
@@ -6389,14 +6389,14 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
     return element._prototypeUID;
   }
 
-  function getUniqueElementID_IE(element) {
+  /*function getUniqueElementID_IE(element) {
     if (element === window) return 0;
     if (element == document) return 1;
     return element.uniqueID;
   }
 
   if ('uniqueID' in DIV)
-    getUniqueElementID = getUniqueElementID_IE;
+    getUniqueElementID = getUniqueElementID_IE;*/
 
   function isCustomEvent(eventName) {
     return eventName.include(':');

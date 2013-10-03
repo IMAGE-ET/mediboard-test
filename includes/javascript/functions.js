@@ -204,11 +204,11 @@ var WaitingMessage = {
    */
   cover: function(element) {
     // don't cover hidden elements in IE8
-    if (Prototype.Browser.IE && document.documentMode < 9 && /Trident\/4.0/.test(navigator.userAgent)/* && (element.style && element.style.display === "none")*/) {
-      element.update();
-      return;
-    }
-  
+    //if (Prototype.Browser.IE && document.documentMode < 9 && /Trident\/4.0/.test(navigator.userAgent)/* && (element.style && element.style.display === "none")*/) {
+    //  element.update();
+    //  return;
+    //}
+
     element = $(element);
     
     var coverContainer = new Element("div", {style: "border:none;background:none;padding:0;margin:0;position:relative;"}).addClassName("cover-container").hide(),
@@ -1072,11 +1072,16 @@ DOM.tags.each(DOM.defineTag);
 
 // To let the tooltips on top
 Control.Window.baseZIndex = 800;
-Control.Overlay.styles.zIndex = 799;
-Control.Overlay.ieStyles.zIndex = 799;
 
 if (document.documentMode >= 8) {
-  Control.Overlay.ieStyles.position = "fixed";
+  Control.Overlay.getIeStyles = function() {
+    return {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      zIndex: Control.Window.baseZIndex - 1
+    };
+  };
 }
 
 // Replacements for the javascript alert() and confirm()

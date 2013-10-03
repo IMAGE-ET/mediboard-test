@@ -487,7 +487,14 @@ Element.addMethods({
     if (!element || !element.form || !element.id) return;
     
     var htmlFor = "", match, byId;
-    
+
+    // Watch for parent label
+    /*var parent = element.parentNode;
+    if (parent.nodeName === "LABEL") {
+      parent.id = "labelFor_"+element.id;
+      return parent;
+    }*/
+
     if (!strict && /radio|checkbox/i.test(element.type)){
       match = new RegExp("(\.*)_"+RegExp.escape(element.value)+"$", "i").exec(element.id);
       if (match) {
@@ -498,7 +505,7 @@ Element.addMethods({
         htmlFor = "label[for='"+match[1]+"'], ";
       }
     }
-    
+
     if (byId = $("labelFor_"+element.id)) {
       return byId;
     }

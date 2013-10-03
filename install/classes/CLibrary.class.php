@@ -222,7 +222,7 @@ $library->description = "Composant Javascript d'effets spéciaux, accompagné du f
 $library->sourceDir = "scriptaculous-js-1.9.0";
 $library->targetDir = "scriptaculous";
 $library->versionFile = "lib/prototype.js";
-$library->versionString = "//var pointer";
+$library->versionString = "//if (!HAS_UNIQUE_ID_PROPERTY)";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "scriptaculous";
@@ -331,8 +331,8 @@ $library->description = "High Quality Controls & Widgets for Prototype";
 $library->extraDir = "livepipe";
 $library->sourceDir = "livepipe";
 $library->targetDir = "livepipe";
-$library->versionFile = "livepipe.js";
-$library->versionString = "@copyright 2010 PersonalGrid";
+$library->versionFile = "window.js";
+$library->versionString = "'center', 'center_once'";
 
 CLibrary::$all[$library->name] = $library;
 
