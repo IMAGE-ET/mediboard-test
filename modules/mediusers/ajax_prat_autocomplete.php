@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage mediusers
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 $object_class = CValue::get('object_class');
@@ -28,7 +28,7 @@ if ($user->isAnesth()) {
   $listPraticiens = $user->loadPraticiens(null, null, $keywords);
 }
 else {
-  $listPraticiens = $user->loadPraticiens(PERM_EDIT, null, );
+  $listPraticiens = $user->loadPraticiens(PERM_EDIT, null, $keywords);
 }
 
 $template = $object->getTypedTemplate("autocomplete");
