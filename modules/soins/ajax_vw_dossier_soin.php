@@ -159,6 +159,9 @@ if (CModule::getActive("dPprescription")) {
       $line->countVariantes();
       $line->countBackRefs("administration");
       $line->loadRefsVariantes();
+      if ($line->delay_prise) {
+        $line->loadRefLastAdministration();
+      }
       $line->_ref_produit->loadRefsFichesATC();
     }
   
@@ -262,6 +265,9 @@ if (CModule::getActive("dPprescription")) {
           $_line_med->countVariantes();
           $_line_med->countBackRefs("administration");
           $_line_med->loadRefsVariantes();
+          if ($_line_med->delay_prise) {
+            $_line_med->loadRefLastAdministration();
+          }
           if (in_array($_line_med->jour_decalage, array("ER", "R"))) {
             $_line_med->loadRefOperation();
           }
