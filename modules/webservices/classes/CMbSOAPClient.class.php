@@ -33,6 +33,7 @@ class CMbSOAPClient extends SoapClient {
   public $passphrase;
   public $wsdl_original;
   public $check_option;
+  public $use_tunnel;
 
 
   /**
@@ -60,6 +61,7 @@ class CMbSOAPClient extends SoapClient {
 
     $this->return_raw    = CMbArray::extract($options, "return_raw", false);
     $this->xop_mode      = CMbArray::extract($options, "xop_mode", false);
+    $this->use_tunnel    = CMbArray::extract($options, "use_tunnel", false);
 
     $this->wsdl_url = $rooturl;
 
@@ -172,6 +174,26 @@ class CMbSOAPClient extends SoapClient {
    * @throws CMbException
    */
   public function __doRequest($request, $location,  $action,  $version,  $one_way = 0 ) {
+    $ca_file = $this->ca_info;
+    if ($this->use_tunnel) {
+      $tunnel_exist = false;
+      $tunnel_pass = CAppUI::conf("eai tunnel_pass");
+      $tunnel_object = new CHTTPTunnelObject();
+      $tunnels = $tunnel_object->loadActiveTunnel();
+
+      foreach ($tunnels as $_tunnel) {
+        if ($_tunnel->checkStatus()) {
+          $location = preg_replace("#[^/]*//[^/]*#", $_tunnel->address, $location);
+          $ca_file = $_tunnel->ca_file;
+          $tunnel_exist = true;
+          break;
+        }
+      }
+      if (!$tunnel_exist && $tunnel_pass === "0") {
+        throw new CMbException("Pas de tunnel actif");
+      }
+    }
+
     if ($this->xop_mode) {
       $entete = '--MIME_boundary10
 Content-Type: application/xop+xml; charset=UTF-8; type="application/soap+xml"
@@ -191,8 +213,12 @@ Content-ID: <rootpart@openxtrem.com>
       try {
         $http_client = new CHTTPClient($location);
         $http_client->header = $header;
-        $http_client->setSSLAuthentification($this->local_cert, $this->passphrase);
-        $http_client->setSSLPeer($this->ca_info);
+        if ($this->local_cert) {
+          $http_client->setSSLAuthentification($this->local_cert, $this->passphrase);
+        }
+        if ($ca_file) {
+          $http_client->setSSLPeer($ca_file);
+        }
         $result = $http_client->post($request);
       }
       catch (Exception $e) {

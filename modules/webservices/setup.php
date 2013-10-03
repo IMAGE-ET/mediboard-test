@@ -227,6 +227,12 @@ class CSetupwebservices extends CSetup {
                 ADD `wsdl_external` VARCHAR (255);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.37";
+    $this->makeRevision("0.37");
+
+    $query = "ALTER TABLE `source_soap`
+                ADD `use_tunnel` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.38";
   }
 }

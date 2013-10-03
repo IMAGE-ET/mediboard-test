@@ -9,7 +9,7 @@
  * @link     http://www.mediboard.org
 *}}
 
-<h2>{{tr}}Import_asip{{/tr}}Importation de la table ASIP</h2>
+<h2>{{tr}}Import_asip{{/tr}}</h2>
 
 {{mb_include module=system template=configure_dsn dsn=ASIP}}
 

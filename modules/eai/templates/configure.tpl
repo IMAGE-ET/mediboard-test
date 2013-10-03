@@ -22,6 +22,7 @@
   <li><a href="#object-servers">{{tr}}config-object-servers{{/tr}}</a></li>
   <li><a href="#config-eai">{{tr}}config-eai{{/tr}}</a></li>
   <li><a href="#config-import-asip">{{tr}}ASIP{{/tr}}</a></li>
+  <li><a href="#config-tunnel">{{tr}}Tunnel{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -36,4 +37,8 @@
 
 <div id="config-import-asip" style="display: none;">
   {{mb_include template=inc_config_import_asip}}
+</div>
+
+<div id="config-tunnel" style="display: none;">
+  {{mb_include template=inc_config_tunnel}}
 </div>

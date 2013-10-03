@@ -249,9 +249,24 @@ class CSetupeai extends CSetup {
                 ADD `OID` VARCHAR (255);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.15";
+    $this->makeRevision("0.15");
 
-    $query = "SELECT * FROM `authorspecialty_20121112` WHERE `code`=  'G15_10/PAC00';";
+    $query = "CREATE TABLE `http_tunnel` (
+                `http_tunnel_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `address` VARCHAR (255) NOT NULL,
+                `status` ENUM ('0','1') NOT NULL DEFAULT '1',
+                `start_date` DATETIME,
+                `ca_file` VARCHAR (255)
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `http_tunnel`
+                ADD INDEX (`start_date`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.16";
+
+    $query = "SELECT * FROM `authorspecialty_20121112` WHERE `code` = 'G15_10/PAC00';";
 
     $this->addDatasource("ASIP", $query);
   }

@@ -17,5 +17,5 @@ $module->registerTab("vw_idx_exchange_data_format", TAB_READ);
 $module->registerTab("vw_stats"                   , TAB_ADMIN);
 $module->registerTab("vw_servers_socket"          , TAB_ADMIN);
 $module->registerTab("vw_domains"                 , TAB_ADMIN);
+$module->registerTab('vw_tunnel_tools'            , TAB_ADMIN);
 $module->registerTab("vw_tools"                   , TAB_ADMIN);
-

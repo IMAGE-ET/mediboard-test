@@ -90,6 +90,10 @@
               <th>{{mb_label object=$source field="xop_mode"}}</th>
               <td>{{mb_field object=$source field="xop_mode"}}</td>
             </tr>
+            <tr>
+              <th>{{mb_label object=$source field="use_tunnel"}}</th>
+              <td>{{mb_field object=$source field="use_tunnel"}}</td>
+            </tr>
           </table>
         </fieldset>
 
