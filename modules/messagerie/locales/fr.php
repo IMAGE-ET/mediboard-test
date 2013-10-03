@@ -244,6 +244,7 @@ $locales['CUserMessage._to_state.received'] = 'Reçu';
 $locales['CUserMessage._to_state.starred'] = 'Marqué';
 $locales['CUserMessage.all'] = 'Pas de message';
 $locales['CUserMessage.answer'] = 'Répondre';
+$locales['CUserMessage.edit'] = 'Reprendre';
 $locales['CUserMessage.none'] = 'Pas de message utilisateur';
 $locales['CUserMessage.one'] = 'Un message utilisateur';
 $locales['CUserMessage.read'] = 'Lire';
@@ -315,4 +316,3 @@ $locales['pref-nbMailList-150'] = '150';
 $locales['pref-nbMailList-desc'] = 'Nombre de couriels à afficher dans la messagerie';
 $locales['pref-showImgInMail'] = 'Afficher les images des courriels';
 $locales['pref-showImgInMail-desc'] = 'Afficher toutes les images embarquées dans un courriel dès l\'ouverture';
-?>

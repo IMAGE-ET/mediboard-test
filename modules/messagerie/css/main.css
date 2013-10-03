@@ -16,3 +16,7 @@
   color:white;
   background-color: limegreen;
 }
+
+ul#listUser li {
+  display: inline;
+}

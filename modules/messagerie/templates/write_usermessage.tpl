@@ -4,10 +4,53 @@
   {{assign var=destform value="m=$m&tab=$tab"}}
 {{/if}}
 
-<script type="text/javascript">
-Main.add(function() {
-  new Control.Tabs.create('tabs-usermessage');
-});
+<script>
+  var to = [];
+
+  addTo = function (to_id, element_to_update) {
+    //exist ?
+    var index = to.indexOf(to_id);
+    if (index >= 0 || to_id == "") {
+      $V(element_to_update, "");
+      return;
+    }
+
+    //insert in array
+    to.push(to_id);
+
+    //insert value in form
+    var oform = getForm("EditUserMessage");
+    $V(oform.to_list, to.join("|"));
+    $V(oform.to, to_id);
+
+    //clear the input
+    var prat = $V(element_to_update);
+    $V(element_to_update, "");
+
+    //list update
+    var list = $('listUser');
+    list.insert(DOM.li({}, "<button type='button' id=\"listUser-"+to_id+"\" onclick=\"removeTo('"+to_id+"');\" class='cancel'>"+prat+"</button>"));
+  };
+
+  removeTo = function(to_id) {
+    var list = $('listUser');
+    var position = to.indexOf(to_id);
+
+    //exist
+    if (position >= 0) {
+      to.splice(position,1);
+      $("listUser-"+to_id).remove();
+    }
+  };
+
+
+  Main.add(function() {
+    Control.Tabs.create('tabs-usermessage');
+    {{if $usermessage->to && !$usermessage->date_sent}}
+      var element_to_update = getForm("EditUserMessage")._to_autocomplete_view;
+      addTo('{{$usermessage->to}}', element_to_update);
+    {{/if}}
+  });
 </script>
 
 <ul id="tabs-usermessage" class="control_tabs">
@@ -38,7 +81,6 @@ Main.add(function() {
       {{mb_field object=$usermessage field=starred hidden=true}}
     {{/if}}
     <table class="form">
-      
       <tr>
         <th class="narrow">{{mb_label object=$usermessage field=from}}</th>
         <td>
@@ -60,15 +102,18 @@ Main.add(function() {
         <th>{{mb_label object=$usermessage field=to}}</th>
         <td>
           {{if $usermessage->date_sent}}
-          <div class="mediuser" style="border-color: #{{$usermessage->_ref_user_to->_ref_function->color}};">
-            {{$usermessage->_ref_user_to}}
-          </div>
+            <div class="mediuser" style="border-color: #{{$usermessage->_ref_user_to->_ref_function->color}};">
+              {{$usermessage->_ref_user_to}}
+            </div>
           {{else}}
             {{mb_field object=$usermessage field=to hidden=true}}
-            <input type="text" name="_to_autocomplete_view" style="width: 16em;" class="autocomplete" value="{{$usermessage->_ref_user_to}}"
-              onchange='if(!this.value){this.form.user_id.value=""}' />
-            
-            <script type="text/javascript">
+            <input type="hidden" name="to_list" value=""/>
+            <ul id="listUser" style="padding:0;">
+            <li>
+              <input type="text" name="_to_autocomplete_view" style="width: 16em;" class="autocomplete" value="{{$usermessage->_ref_user_to}}"/>
+            </li>
+            </ul>
+            <script>
               Main.add(function(){
                 var form = getForm("EditUserMessage");
                 var element = form.elements._to_autocomplete_view;
@@ -83,10 +128,7 @@ Main.add(function() {
                   dropdown: true,
                   afterUpdateElement: function(field,selected){
                     var id = selected.getAttribute("id").split("-")[2];
-                    $V(form.to, id);
-                    if ($V(element) == "") {
-                      $V(element, selected.down('.view').innerHTML);
-                    }
+                    addTo(id, element);
                   }
                 });
               });

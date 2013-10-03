@@ -136,10 +136,6 @@ Main.add(function () {
             <a style="display: inline;" href="#nothing" onclick="UserMessage.edit({{$_mail->_id}})">
               {{tr}}CUserMessage.read{{/tr}}
             </a>
-            /
-            <a style="display: inline;" href="#nothing" onclick="UserMessage.create({{$_mail->_ref_user_to->_id}}, 'Re: {{$_mail->_clean_subject}}')">
-              {{tr}}CUserMessage.answer{{/tr}}
-            </a>
           </td>
 	      </tr>
 	      {{/foreach}}
@@ -164,7 +160,7 @@ Main.add(function () {
 	        <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
 	        <td>
             <a style="display: inline;" href="#nothing" onclick="UserMessage.edit({{$_mail->_id}})">
-              {{tr}}CUserMessage.read{{/tr}}
+              {{tr}}CUserMessage.edit{{/tr}}
             </a>
 	        </td>
 	      </tr>
