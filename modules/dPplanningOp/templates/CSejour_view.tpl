@@ -73,7 +73,7 @@
       {{/if}}
       
       {{if @$modules.soins->_can->read}}
-      <button type="button" class="search" onclick="Sejour.showDossierSoins('{{$sejour->_id}}')">
+      <button type="button" class="search" onclick="Sejour.showDossierSoinsModal('{{$sejour->_id}}')">
         {{tr}}module-soins-court{{/tr}}
       </button>
       {{/if}}

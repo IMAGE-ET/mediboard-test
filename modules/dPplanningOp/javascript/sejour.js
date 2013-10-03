@@ -31,6 +31,12 @@ Sejour = {
       redirectOpener();
   },
 
+  showDossierSoinsModal: function(sejour_id) {
+    new Url("soins", "vw_dossier_sejour").
+      addParam("sejour_id", sejour_id).
+      requestModal("95%", "95%");
+  },
+
   modalCallback: function() {
     document.location.reload();
   },
