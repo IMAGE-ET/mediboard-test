@@ -151,8 +151,13 @@ PlanSoins = {
 
     var prise_id = !isNaN(key_tab) ? key_tab : '';
     var unite_prise = isNaN(key_tab) ? key_tab : '';
-  
-    $V(oForm.unite_prise, unite_prise);
+
+    if (unite_sans_planif) {
+      $V(oForm.unite_prise, unite_sans_planif);
+    }
+    else {
+      $V(oForm.unite_prise, unite_prise);
+    }
     $V(oForm.prise_id, prise_id);
     $V(oForm.quantite, quantite);
   
@@ -483,11 +488,13 @@ PlanSoins = {
             }
             else {
               var _td = td.id.split("_");
-              var line_id = _td[1];
-              var line_class = _td[2];
-              var unite_prise = td.getAttribute("data-uniteprise");
-              var date = _td[4];
-              var hour = _td[5];
+              line_id = _td[1];
+              line_class = _td[2];
+              unite_prise = td.getAttribute("data-uniteprise");
+              unite_sans_planif = td.getAttribute("data-unite_sans_planif");
+
+              date = _td[4];
+              hour = _td[5];
               
               // Hack pour corriger le probleme des planifications sur aucune prise prevue
               if(_td[3] == 'aucune' && _td[4] == 'prise'){
@@ -496,7 +503,7 @@ PlanSoins = {
                 hour = _td[6];
               }
               // Ajout de la planification
-              PlanSoins.addPlanification(date, hour+":00:00", unite_prise, line_id, line_class, element.id);
+              PlanSoins.addPlanification(date, hour+":00:00", unite_prise, line_id, line_class, element.id, unite_sans_planif);
             }
             // Suppression des zones droppables
             Droppables.drops.clear(); 
@@ -766,6 +773,6 @@ PlanSoins = {
 
   showModalTasks: function(sejour_id) {
     updateTasks(sejour_id);
-    Modal.open("tasks", { showClose: true, width: 800, height: 600 });
+    var modal_tasks = Modal.open("tasks", { showClose: true, width: 800, height: 600 });
   }
 };
