@@ -17,12 +17,14 @@
 
 {{mb_default var=count_prestations value=0}}
 {{mb_default var=_duree_prevue value=0}}
+{{mb_default var=_duree_prevue_heure value=0}}
 {{mb_default var=dialog value=0}}
 
 {{if "maternite"|module_active}}
   {{assign var=maternite_active value="1"}}
   {{if !$sejour->_id && $sejour->grossesse_id}}
     {{assign var=_duree_prevue value=$sejour->_duree_prevue}}
+    {{assign var=_duree_prevue value=$sejour->_duree_prevue_heure}}
   {{/if}}
 {{else}}
   {{assign var=maternite_active value="0"}}
@@ -858,6 +860,8 @@ Main.add( function(){
   <td colspan="3" style="vertical-align: middle">
     {{mb_field object=$sejour field="_duree_prevue" increment=true form=editSejour prop="num min|0" size=2 onchange="updateSortiePrevue(); checkDureeHospi('syncType'); \$('jours_prevus').update(parseInt(this.value)+1)" value=$sejour->sejour_id|ternary:$sejour->_duree_prevue:$_duree_prevue}}
     {{tr}}night{{/tr}}(s)
+    {{mb_field object=$sejour field="_duree_prevue_heure" increment=true form=editSejour size=2 value=$sejour->sejour_id|ternary:$sejour->_duree_prevue_heure:$_duree_prevue_heure onchange="updateHeureSortie();"}}
+    {{tr}}hour{{/tr}}(s)
     - (<span id="dureeEst"></span>)
     <span {{if !$conf.dPplanningOp.CSejour.show_days_duree}}style="display: none"{{/if}}>
       <span id="jours_prevus">{{math equation=x+1 x=$sejour->sejour_id|ternary:$sejour->_duree_prevue:$_duree_prevue}}</span> {{tr}}day{{/tr}}(s)

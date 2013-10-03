@@ -1,16 +1,16 @@
-{{* $Id$ *}}
+{{* $Id:$ *}}
 
 {{*
  * @package Mediboard
  * @subpackage dPplanningOp
- * @version $Revision$
+ * @version $Revision:$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
 {{$match->loadRefsFwd()}}
 
-<script type="text/javascript">
+<script>
   {{if $match->for_sejour}}
     {{assign var=type value="sejour"}}
   {{else}}
@@ -24,6 +24,7 @@
     {{if $match->protocole_prescription_chir_class == "CPrescriptionProtocolePack"}}
     {{assign var="type_prot_chir" value="pack-"}}
   {{/if}}
+
   aProtocoles['{{$type}}'][{{$match->protocole_id}}] = {
     protocole_id     : "{{$match->protocole_id}}",
     chir_id          : "{{$match->chir_id}}",
@@ -44,6 +45,9 @@
     type             : "{{$match->type}}",
     type_pec         : "{{$match->type_pec}}",
     duree_hospi      : {{$match->duree_hospi}},
+    duree_heure_hospi : {{$match->duree_heure_hospi}},
+    cote             : "{{$match->cote}}",
+    exam_extempo     : "{{$match->exam_extempo}}",
     rques_sejour     : "{{$match->rques_sejour|smarty:nodefaults|escape:"javascript"}}",
     rques_operation  : "{{$match->rques_operation|smarty:nodefaults|escape:"javascript"}}",
     protocole_prescription_anesth_id: "{{$type_prot_anesth}}{{$match->protocole_prescription_anesth_id}}",

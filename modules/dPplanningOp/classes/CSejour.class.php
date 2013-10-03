@@ -117,6 +117,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_entree;
   public $_sortie;
   public $_duree_prevue;
+  public $_duree_prevue_heure;
   public $_duree_reelle;
   public $_duree;
   public $_date_entree_prevue;
@@ -389,7 +390,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $service_id_notNull = CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1;
     $props = parent::getProps();
     $props["patient_id"]               = "ref notNull class|CPatient seekable";
-    $props["praticien_id"]             = "ref notNull class|CMediusers seekable";
+    $props["praticien_id"]             = "ref notNull class|CMediusers seekable autocomplete|nom";
     $props["group_id"]                 = "ref notNull class|CGroups";
     $props["grossesse_id"]             = "ref class|CGrossesse unlink";
     $props["uf_hebergement_id"]        = "ref class|CUniteFonctionnelle seekable";
@@ -505,6 +506,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $props["_etat"]             = "enum list|preadmission|encours|cloture";
 
     $props["_duree_prevue"]                     = "num";
+    $props["_duree_prevue_heure"]               = "num";
     $props["_duree_reelle"]                     = "num";
     $props["_duree"]                            = "num";
     $props["_date_entree_prevue"]               = "date";
@@ -1282,6 +1284,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Durées
     $this->_duree_prevue       = CMbDT::daysRelative($this->entree_prevue, $this->sortie_prevue);
+    $this->_duree_prevue_heure = CMbDT::timeRelative(CMbDT::time($this->entree_prevue), CMbDT::time($this->sortie_prevue), "%02d");
     $this->_duree_reelle       = CMbDT::daysRelative($this->entree_reelle, $this->sortie_reelle);
     $this->_duree              = CMbDT::daysRelative($this->_entree, $this->_sortie);
 

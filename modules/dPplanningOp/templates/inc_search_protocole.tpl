@@ -5,17 +5,56 @@
 <br />
 <input type="text" name="search_protocole" style="width: 13em;" placeholder="{{tr}}fast-search{{/tr}}" onblur="$V(this, '')"/>
 <div style="display:none;" id="{{$id_protocole}}"></div>
+
 <script>
+  ProtocoleSelector.inite = function(){
+    this.sForSejour     = false;
+    this.sChir_id       = "chir_id";
+    this.sCodes_ccam    = "codes_ccam";
+    this.sCote          = "cote";
+    this.sLibelle       = "libelle";
+    this.sHour_op       = "_hour_op";
+    this.sMin_op        = "_min_op";
+    this.sMateriel      = "materiel";
+    this.sExamen        = "examen";
+    this.sDepassement   = "depassement";
+    this.sForfait       = "forfait";
+    this.sFournitures   = "fournitures";
+    this.sRques_op      = "rques";
+    this.sServiceId     = "service_id";
+    this.sPresencePreop = "presence_preop";
+    this.sPresencePostop = "presence_postop";
+    this.sType          = "type";
+    this.sTypeAnesth    = "type_anesth";
+    this.sUf_hebergement_id = "uf_hebergement_id";
+    this.sUf_medicale_id = "uf_medicale_id";
+    this.sUf_soins_id = "uf_soins_id";
+    this.sTypesRessourcesIds = "_types_ressources_ids";
+    {{if $conf.dPplanningOp.CSejour.show_type_pec == 1}}
+    this.sTypePec     = "type_pec";
+    {{/if}}
+    this.sDuree_uscpo   = "duree_uscpo";
+    this.sDuree_preop   = "duree_preop";
+    this.sDuree_prevu   = "_duree_prevue";
+    this.sDuree_prevu_heure   = "_duree_prevue_heure";
+    this.sConvalescence = "convalescence";
+    this.sDP            = "DP";
+    this.sRques_sej     = "rques";
+    this.sExamExtempo   = "exam_extempo";
+
+    this.sChir_id_easy    = "chir_id";
+    this.sServiceId_easy  = "service_id";
+    this.sLibelle_easy    = "libelle";
+    this.sCodes_ccam_easy = "codes_ccam";
+    this.sLibelle_sejour  = "libelle";
+
+    this.sProtoPrescAnesth = "_protocole_prescription_anesth_id";
+    this.sProtoPrescChir   = "_protocole_prescription_chir_id";
+  }
+
   ajoutProtocole = function(protocole_id) {
-    if (aProtocoles[protocole_id]) {
-      ProtocoleSelector.set(aProtocoles[protocole_id]);
-      Control.Modal.close();
-    }
-    else {
-      var url = new Url('planningOp', 'ajax_get_protocole');
-      url.addParam('protocole_id', protocole_id);
-      url.addParam('chir_id'     , $V(getForm('{{$formOp}}').chir_id));
-      url.requestUpdate("{{$id_protocole}}");
+    if (aProtocoles['interv'][protocole_id]) {
+      ProtocoleSelector.set(aProtocoles['interv'][protocole_id]);
     }
   }
 
@@ -24,6 +63,7 @@
       sejour: {},
       interv: {}
     };
+    ProtocoleSelector.inite();
     var oForm = getForm('{{$formOp}}');
     var url = new Url('planningOp', 'ajax_protocoles_autocomplete');
     url.addParam('field'          , 'protocole_id');
@@ -36,9 +76,7 @@
       dropdown: true,
       afterUpdateElement: function(field, selected){
         ajoutProtocole(selected.get('id'));
-        $V(field.form.libelle, selected.down('strong').getText());
-        $V(getForm('{{$formSecondOp}}').libelle, selected.down('strong').getText());
-        $V(field.form.elements.search_protocole, "");
+        $V(field.form.elements.search_protocole, "")
       },
       callback: function(input, queryString){
         return queryString + "&chir_id=" + $V(input.form.chir_id);

@@ -2,7 +2,7 @@
 
 {{mb_default var=modurgence value=0}}
 
-<script type="text/javascript">
+<script>
 
 checkAld = function(){
   var oForm = getForm("editSejour");
@@ -16,7 +16,7 @@ var Value = {
   // Synchronize elements value between Easy and Expert forms
   synchronize: function(element, expert) {
     expert = expert || "editOp";
-    
+
     var other = element.form.name == expert ?
       document.editOpEasy :
       document.forms[expert];
@@ -86,6 +86,7 @@ function reinitDureeSejour(){
   var form = document.editSejour;
   field2 = form._duree_prevue;
   field2.value = '0';
+  form._duree_prevue_heure.value = '0';
 }
 
 function removePlageOp(bIgnoreGroup){
@@ -176,20 +177,20 @@ function modifSejour() {
 
 function updateSortiePrevue() {
   var oForm = document.editSejour;
-    
+
   if (!oForm._duree_prevue.value) {
     $V(oForm._duree_prevue, 0);
   }
-  
+
   var sDate = oForm._date_entree_prevue.value;
   if (!sDate) {
     return;
   }
-  
+
   // Add days
   var dDate = Date.fromDATE(sDate);
   var nDuree = parseInt(oForm._duree_prevue.value, 10);
-    
+
   dDate.addDays(nDuree);
 
   // Update fields
@@ -199,7 +200,7 @@ function updateSortiePrevue() {
   updateHeureSortie();
   
   // Si meme jour, sortie apres entree
-  if (nDuree == 0){
+  if (nDuree == 0 && oForm._duree_prevue.value == 0){
     oForm._hour_sortie_prevue.value = Math.max(oForm._hour_sortie_prevue.value, parseInt(oForm._hour_entree_prevue.value,10)+1);
   }
 }
@@ -207,7 +208,7 @@ function updateSortiePrevue() {
 function updateDureePrevue() {
   var oForm = document.editSejour;
   
-  if(oForm._date_entree_prevue.value) {
+  if(oForm._duree_prevue_heure.value == 0) {
     var dEntreePrevue = Date.fromDATE(oForm._date_entree_prevue.value);
     var dSortiePrevue = Date.fromDATE(oForm._date_sortie_prevue.value);
     var iSecondsDelta = dSortiePrevue - dEntreePrevue;
@@ -222,8 +223,25 @@ function updateHeureSortie() {
   duree_prevu  = oForm._duree_prevue; 
   heure_sortie = oForm._hour_sortie_prevue;
   min_sortie   = oForm._min_sortie_prevue;
-  
-  heure_sortie.value = duree_prevu.value < 1 ? "{{$heure_sortie_ambu}}" : "{{$heure_sortie_autre}}";
+
+  if (!oForm._duree_prevue_heure.value) {
+    $V(oForm._duree_prevue_heure, 0);
+  }
+
+  var hour_entree = oForm._hour_entree_prevue.value;
+  if (oForm._duree_prevue_heure.value != 0) {
+    var hour_sortie = parseInt(oForm._hour_entree_prevue.value) + parseInt(oForm._duree_prevue_heure.value);
+    if (hour_sortie >= 24) {
+      hour_sortie = 23;
+      oForm._duree_prevue_heure.value = 23 - parseInt(oForm._hour_entree_prevue.value);
+    }
+    oForm._hour_sortie_prevue.value = hour_sortie;
+  }
+  else {
+    $V(oForm._duree_prevue_heure, 0);
+    heure_sortie.value = duree_prevu.value < 1 ? "{{$heure_sortie_ambu}}" : "{{$heure_sortie_autre}}";
+  }
+
   min_sortie.value = "0";
 }
 

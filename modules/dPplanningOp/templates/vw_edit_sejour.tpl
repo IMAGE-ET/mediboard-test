@@ -12,6 +12,7 @@ ProtocoleSelector.init = function(){
   this.sLibelle_sejour = "libelle";
   this.sType           = "type";
   this.sDuree_prevu    = "_duree_prevue";
+  this.sDuree_prevu_heure = "_duree_prevue_heure";
   this.sConvalescence  = "convalescence";
   this.sRques_sej      = "rques";
   

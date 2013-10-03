@@ -135,6 +135,7 @@ ProtocoleSelector.init = function(){
   this.sDuree_uscpo   = "duree_uscpo";
   this.sDuree_preop   = "duree_preop";
   this.sDuree_prevu   = "_duree_prevue";
+  this.sDuree_prevu_heure   = "_duree_prevue_heure";
   this.sConvalescence = "convalescence";
   this.sDP            = "DP";
   this.sRques_sej     = "rques";

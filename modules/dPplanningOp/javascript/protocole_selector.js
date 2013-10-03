@@ -11,6 +11,7 @@ ProtocoleSelector = {
   sCodes_ccam_easy : null,
   sCote            : null,
   sDuree_prevu     : null,
+  sDuree_prevu_heure : null,
   sHour_op         : null,
   sMateriel        : null,
   sExamen          : null,
@@ -127,6 +128,8 @@ ProtocoleSelector = {
         oSejourForm[this.sType].value = protocole.type;
       }
     }
+    $V(oSejourForm[this.sDuree_prevu_heure], protocole.duree_heure_hospi);
+
     if (this.sUf_hebergement_id) {
       oSejourForm[this.sUf_hebergement_id].value = protocole.uf_hebergement_id;
     }

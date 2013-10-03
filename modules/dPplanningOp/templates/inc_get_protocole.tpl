@@ -1,11 +1,11 @@
 {{*
- * $Id$
+ * $Id:$
  * 
  * @package    Mediboard
  * @subpackage dPbloc
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  *}}
 
 {{assign var="type_prot_chir" value="prot-"}}
@@ -45,6 +45,7 @@
     duree_uscpo      : "{{$protocole->duree_uscpo}}",
     duree_preop      : "{{$protocole->duree_preop}}",
     duree_hospi      : {{$protocole->duree_hospi}},
+    duree_heure_hospi : {{$protocole->duree_heure_hospi}},
     rques_sejour     : "{{$protocole->rques_sejour|smarty:nodefaults|escape:"javascript"}}",
     rques_operation  : "{{$protocole->rques_operation|smarty:nodefaults|escape:"javascript"}}",
     protocole_prescription_anesth_id: "{{$type_prot_anesth}}{{$protocole->protocole_prescription_anesth_id}}",
