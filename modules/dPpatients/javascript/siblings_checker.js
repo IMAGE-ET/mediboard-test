@@ -4,7 +4,7 @@
 SiblingsChecker = {
   textDifferent: null,
   textSiblings: null,
-  formName: null,
+  form: null,
   
   // Mutex
   running : false,
@@ -19,9 +19,9 @@ SiblingsChecker = {
     }
             
     this.running = true;
-    this.formName = oForm.name;
+    this.form = oForm;
      
-    var url = new Url("dPpatients", "httpreq_get_siblings");
+    var url = new Url("patients", "httpreq_get_siblings");
        
     url.addElement(oForm.patient_id);
     url.addElement(oForm.nom);
@@ -75,7 +75,12 @@ SiblingsChecker = {
     confirmed &= !this.textSiblings || confirm(this.textSiblings+"\nVoulez-vous tout de même sauvegarder ?");
     
     if (this.submit && confirmed) {
-      document.forms[this.formName].submit();
+      if ($V(this.form.ajax)) {
+        onSubmitFormAjax(this.form, Control.Modal.close);
+      }
+      else {
+        this.form.submit();
+      }
     } 
     
     this.running = false;
@@ -91,7 +96,12 @@ SiblingsChecker = {
     confirmed &= !this.textSiblings || confirm(this.textSiblings+"\nVoulez-vous tout de même sauvegarder ?");
     
     if (this.submit && confirmed) {
-      document.forms[this.formName].submit();
+      if ($V(this.form.ajax)) {
+        onSubmitFormAjax(this.form, Control.Modal.close);
+      }
+      else {
+        this.form.submit();
+      }
     }
      
     this.running = false;

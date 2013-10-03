@@ -18,9 +18,10 @@ $naissance_day   = CValue::get("naissance_day");
 $naissance_month = CValue::get("naissance_month");
 $naissance_year  = CValue::get("naissance_year");
 $useVitale  = CValue::get("useVitale");
-$covercard =  CValue::get("covercard");
+$covercard  = CValue::get("covercard");
+$callback   = CValue::get("callback");
 
-$patient = new CPatient;
+$patient = new CPatient();
 $patient->load($patient_id);
 $patient->loadRefPhotoIdentite();
 $patient->countDocItems();
@@ -77,7 +78,10 @@ $nom_jeune_fille_mandatory = $group->_configs['dPpatients_CPatient_nom_jeune_fil
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("patient", $patient);
+
+$smarty->assign("patient"  , $patient);
 $smarty->assign("useVitale", $useVitale);
 $smarty->assign('nom_jeune_fille_mandatory', $nom_jeune_fille_mandatory);
+$smarty->assign("callback", $callback);
+
 $smarty->display("vw_edit_patients.tpl");

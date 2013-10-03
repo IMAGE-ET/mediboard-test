@@ -49,5 +49,5 @@ class CDoPatientAddEdit extends CDoObjectAddEdit {
   }
 }
 
-$do = new CDoPatientAddEdit;
+$do = new CDoPatientAddEdit();
 $do->doIt();

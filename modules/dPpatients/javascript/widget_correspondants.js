@@ -1,6 +1,6 @@
-var Correspondants = Correspondants || Class.create({
+Correspondants = window.Correspondants || Class.create({
   initialize: function (patient_id, options) {
-    this.module = "dPpatients";
+    this.module = "patients";
     this.action = "httpreq_widget_correspondants";
     
     this.patient_id = patient_id;

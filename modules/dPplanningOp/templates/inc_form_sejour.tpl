@@ -660,7 +660,7 @@ Main.add( function(){
       Choisir un patient
     </button>
     <button id="button-edit-patient" type="button" 
-        onclick="location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id='+this.form.patient_id.value" 
+        onclick="Patient.editModal(this.form.patient_id.value)"
             class="edit notext" {{if !$patient->_id}}style="display: none;"{{/if}}>
       {{tr}}Edit{{/tr}}
     </button>
