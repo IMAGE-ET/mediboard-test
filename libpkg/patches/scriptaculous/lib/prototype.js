@@ -2477,7 +2477,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
   }
 
   function purgeElement(element) {
-    var uid = getUniqueElementID(element);
+    var uid = getUniqueElementID(element, false);
     if (uid) {
       Element.stopObserving(element);
       //if (!HAS_UNIQUE_ID_PROPERTY)
@@ -2492,19 +2492,21 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
       purgeElement(elements[i]);
   }
 
-  /*function purgeCollection_IE(elements) {
+  function purgeCollection_IE(elements) {
     var i = elements.length, element, uid;
     while (i--) {
       element = elements[i];
-      uid = getUniqueElementID(element);
-      delete Element.Storage[uid];
-      delete Event.cache[uid];
+      uid = getUniqueElementID(element, false);
+      if (uid) {
+        delete Element.Storage[uid];
+        delete Event.cache[uid];
+      }
     }
   }
 
   if (HAS_UNIQUE_ID_PROPERTY) {
     purgeCollection = purgeCollection_IE;
-  }*/
+  }
 
 
   function purge(element) {
@@ -3179,7 +3181,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
 
   GLOBAL.Element.Storage = { UID: 1 };
 
-  function getUniqueElementID(element) {
+  function getUniqueElementID(element, create) {
     if (element === window) return 0;
 
     if (typeof element._prototypeUID === 'undefined')
@@ -3187,20 +3189,28 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
     return element._prototypeUID;
   }
 
-  /*function getUniqueElementID_IE(element) {
+  function getUniqueElementID_IE(element, create) {
     if (element === window) return 0;
     if (element == document) return 1;
-    return element.uniqueID;
+
+    if (create) {
+      element._uniqueIDexists = true;
+      return element.uniqueID;
+    }
+
+    if (element._uniqueIDexists) {
+      return element.uniqueID;
+    }
   }
 
   var HAS_UNIQUE_ID_PROPERTY = ('uniqueID' in DIV);
   if (HAS_UNIQUE_ID_PROPERTY)
-    getUniqueElementID = getUniqueElementID_IE;*/
+    getUniqueElementID = getUniqueElementID_IE;
 
   function getStorage(element) {
     if (!(element = $(element))) return;
 
-    var uid = getUniqueElementID(element);
+    var uid = getUniqueElementID(element, true);
 
     if (!Element.Storage[uid])
       Element.Storage[uid] = $H();
@@ -3277,7 +3287,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
 
   var EXTENDED = {};
   function elementIsExtended(element) {
-    var uid = getUniqueElementID(element);
+    var uid = getUniqueElementID(element, false);
     return (uid in EXTENDED);
   }
 
@@ -3292,7 +3302,7 @@ Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
     if (ByTag[tagName]) Object.extend(methods, ByTag[tagName]);
 
     extendElementWith(element, methods);
-    EXTENDED[getUniqueElementID(element)] = true;
+    EXTENDED[getUniqueElementID(element, true)] = true;
     return element;
   }
 
@@ -6381,7 +6391,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
   if (MOUSEENTER_MOUSELEAVE_EVENTS_SUPPORTED)
     getDOMEventName = Prototype.K;
 
-  function getUniqueElementID(element) {
+  function getUniqueElementID(element, create) {
     if (element === window) return 0;
 
     if (typeof element._prototypeUID === 'undefined')
@@ -6389,14 +6399,23 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
     return element._prototypeUID;
   }
 
-  /*function getUniqueElementID_IE(element) {
+  function getUniqueElementID_IE(element, create) {
     if (element === window) return 0;
     if (element == document) return 1;
-    return element.uniqueID;
+
+    if (create) {
+      element._uniqueIDexists = true;
+      //console.log(Element.Storage.UID++);
+      return element.uniqueID;
+    }
+
+    if (element._uniqueIDexists) {
+      return element.uniqueID;
+    }
   }
 
   if ('uniqueID' in DIV)
-    getUniqueElementID = getUniqueElementID_IE;*/
+    getUniqueElementID = getUniqueElementID_IE;
 
   function isCustomEvent(eventName) {
     return eventName.include(':');
@@ -6407,15 +6426,17 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
   function getRegistryForElement(element, uid) {
     var CACHE = GLOBAL.Event.cache;
     if (Object.isUndefined(uid))
-      uid = getUniqueElementID(element);
+      uid = getUniqueElementID(element, true);
     if (!CACHE[uid]) CACHE[uid] = { element: element };
     return CACHE[uid];
   }
 
   function destroyRegistryForElement(element, uid) {
     if (Object.isUndefined(uid))
-      uid = getUniqueElementID(element);
-    delete GLOBAL.Event.cache[uid];
+      uid = getUniqueElementID(element, false);
+
+    if (uid)
+      delete GLOBAL.Event.cache[uid];
   }
 
 
@@ -6428,7 +6449,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
     while (i--)
       if (entries[i].handler === handler) return null;
 
-    var uid = getUniqueElementID(element);
+    var uid = getUniqueElementID(element, true);
     var responder = GLOBAL.Event._createResponder(uid, eventName, handler);
     var entry = {
       responder: responder,
@@ -6537,8 +6558,11 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
 
 
   function stopObservingElement(element) {
-    var uid = getUniqueElementID(element),
-      registry = getRegistryForElement(element, uid);
+    var uid = getUniqueElementID(element);
+    if (!uid) {
+      return;
+    }
+    var registry = getRegistryForElement(element, uid);
 
     destroyRegistryForElement(element, uid);
 
