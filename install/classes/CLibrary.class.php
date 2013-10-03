@@ -258,8 +258,8 @@ $library->description = "Composant de création de thumbnails";
 $library->extraDir = "phpThumb";
 $library->sourceDir = "phpThumb";
 $library->targetDir = "phpThumb";
-$library->versionFile = "phpThumb.php";
-$library->versionString = "/*'fltr',*/";
+$library->versionFile = "phpThumb.config.php";
+$library->versionString = "disable_debug']            = true";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "phpThumb";
