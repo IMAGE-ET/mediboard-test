@@ -52,12 +52,11 @@ PlanSoins = {
     constraint: 'horizontal',
     revert: true,
     //ghosting: true,
-    starteffect : function(element) { 
-      new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 }); 
+    starteffect : function(element) {
+      new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 });
      // element.hide();
     },
     reverteffect: function(element, top_offset, left_offset) {
-      var dur = Math.sqrt(Math.abs(top_offset^2)+Math.abs(left_offset^2))*0.02;
       element._revert = new Effect.Move(element, { 
         x: -left_offset, 
         y: -top_offset, 
@@ -67,9 +66,9 @@ PlanSoins = {
      Droppables.drops.clear(); 
      element.show();
     },
-    endeffect: function(element) { 
+    endeffect: function(element) {
       new Effect.Opacity(element, { duration:0.2, from:0.7, to:1.0 } ); 
-    }       
+    }
   },
   
   addAdministration: function(line_id, quantite, key_tab, object_class, dateTime, administrations, planification_id, multiple_adm, lock_hour) {
@@ -169,9 +168,9 @@ PlanSoins = {
     }
     
     if(original_date != dateTime || PlanSoins.manual_planif){
-      submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
-        PlanSoins.loadTraitement(null,PlanSoins.date,PlanSoins.nb_decalage, 'planification', object_id, object_class, key_tab);
-      } } ); 
+      onSubmitFormAjax(oForm, function(){
+        PlanSoins.loadTraitement(null, PlanSoins.date, PlanSoins.nb_decalage, 'planification', object_id, object_class, key_tab);
+      });
     }
   },
   
@@ -307,10 +306,11 @@ PlanSoins = {
     }
     if(object_id && object_class){
       if(object_class == 'CPrescriptionLineMix'){
-        url.requestUpdate("line_"+object_class+"-"+object_id, { onComplete: function() { 
-          $("line_"+object_class+"-"+object_id).hide();
-          PlanSoins.moveDossierSoin($("line_"+object_class+"-"+object_id), false);
-        } } );
+        url.requestUpdate("line_"+object_class+"-"+object_id, function() {
+          var elt = $("line_"+object_class+"-"+object_id);
+          elt.hide();
+          PlanSoins.moveDossierSoin(elt);
+        });
       }
       else {
         unite_prise = (unite_prise+"").replace(/[^a-z0-9_-]/gi, '_');
@@ -321,22 +321,29 @@ PlanSoins = {
         // Suppression des td entre les 2 td bornes
         var td = first_td;
         var colSpan = 0;
-        
-        while(td.next().id != last_td.id){
-          if(td.next().visible()){
+
+        var next;
+        while((next = td.next()) && (next.id != last_td.id)){
+          if(next.visible()){
             colSpan++;
           }
-          td.next().remove();
-          first_td.show();
+          next.remove();
         }
-        
-        first_td.colSpan = colSpan;
+
+        var IE9 = Prototype.Browser.IEDetail.browser == 9;
+        if (!IE9) {
+          first_td.show();
+          first_td.colSpan = colSpan;
+        }
                 
         url.requestUpdate(first_td, {
           insertion: Insertion.After,
           onComplete: function(){
             PlanSoins.moveDossierSoin($("line_"+object_class+"_"+object_id+"_"+unite_prise), false);
-            first_td.hide().colSpan = 1;
+            if (!IE9) {
+              first_td.hide();
+              first_td.colSpan = 1;
+            }
           }
         } );
       }
@@ -421,7 +428,7 @@ PlanSoins = {
         if(date >= bornes_visibles["min"] && date <= bornes_visibles["max"]){
           planif.setStyle({
             marginLeft: margin_left + "px"
-          })
+          });
           planif.show();
           planif.addClassName("planif_poste");
           margin_left = margin_left + 5;
@@ -441,13 +448,13 @@ PlanSoins = {
     if (hack_ie && Prototype.Browser.IE) {
       element.hide();
     }
-    
+
     PlanSoins.composition_dossier.each(function(moment){
       element.select('.' + moment).invoke("setVisible", moment == periode_visible);
     });
     
     PlanSoins.viewDossierSoin(element);
-  
+
     if (hack_ie && Prototype.Browser.IE) {
       element.show();
     }
@@ -476,11 +483,11 @@ PlanSoins = {
             }
             else {
               var _td = td.id.split("_");
-              line_id = _td[1];
-              line_class = _td[2];
-              unite_prise = td.getAttribute("data-uniteprise");
-              date = _td[4];
-              hour = _td[5];
+              var line_id = _td[1];
+              var line_class = _td[2];
+              var unite_prise = td.getAttribute("data-uniteprise");
+              var date = _td[4];
+              var hour = _td[5];
               
               // Hack pour corriger le probleme des planifications sur aucune prise prevue
               if(_td[3] == 'aucune' && _td[4] == 'prise'){
@@ -759,6 +766,6 @@ PlanSoins = {
 
   showModalTasks: function(sejour_id) {
     updateTasks(sejour_id);
-    var modal_tasks = Modal.open("tasks", { showClose: true, width: 800, height: 600 });
+    Modal.open("tasks", { showClose: true, width: 800, height: 600 });
   }
 };

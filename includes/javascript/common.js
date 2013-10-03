@@ -8,7 +8,26 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-Prototype.Browser.IPad = /iPad/i.test(navigator.userAgent);
+// "Precise" user agent based browser detection
+(function(ua, browser){
+  browser.IPad = /iPad/i.test(ua);
+
+  var IE = {
+    documentMode: document.documentMode,
+    browser: null,
+    document: null
+  };
+
+  if (Prototype.Browser.IE) {
+    try {
+      IE.browser  = parseInt(/trident\/(\d+)/i.exec(ua)[1])+4;
+      IE.document = parseInt(/msie (\d+)/i.exec(ua)[1]);
+    }
+    catch (e) {}
+  }
+
+  browser.IEDetail = IE;
+})(navigator.userAgent, Prototype.Browser);
 
 // Javascript error logging
 function errorHandler(errorMsg, url, lineNumber, exception) {
@@ -165,9 +184,9 @@ var Main = {
         callback();
       }
       catch (e) {
-        var msg = "Main.add exception";
+        var msg = "Main.add exception: "+(Prototype.Browser.IE ? "" : e);
         errorHandler(msg, location.href, -1, e);
-        console.error(msg, e);
+        console.error(msg, e, callback);
       }
     });
     
