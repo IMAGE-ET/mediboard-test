@@ -84,30 +84,30 @@ if (!window.File.applet) {
       var nb_files = 0;
 
       result.files.each(function(res, index) {
-          var truncate = File.applet.directory.length + 1;
+        var truncate;
 
-          // Si le répertoire à surveiller n'a que 3 caractères, il faut prendre en compte le slash
-          // exemple : C:\
-          if (File.applet.directory.length == 3) {
-            truncate --; 
-          }
+        var truncate = res.path.lastIndexOf("\\");
+        if (truncate == -1) {
+          truncate = res.path.lastIndexOf("/") ;
+        }
+        truncate++;
 
-          var base_name = res.path.slice(truncate);
-          // Ajout du fichier dans la liste et dans la modale
-          list_files.insert(
-            DOM.tr({},
-              DOM.td({},
-                DOM.input({className: "upload-file", type: "checkbox", value: res.path, checked: 'checked'})
-              ),
-              DOM.td({},
-                DOM.span({}, base_name)
-              ),
-              DOM.td({className: "upload"}),
-              DOM.td({className: "assoc"}),
-              DOM.td({className: "delete"})));
-          File.applet.current_list.push(res);
-          
-          nb_files ++;
+        var base_name = res.path.substring(truncate);
+        // Ajout du fichier dans la liste et dans la modale
+        list_files.insert(
+          DOM.tr({},
+            DOM.td({},
+              DOM.input({className: "upload-file", type: "checkbox", value: res.path, checked: 'checked'})
+            ),
+            DOM.td({},
+              DOM.span({}, base_name)
+            ),
+            DOM.td({className: "upload"}),
+            DOM.td({className: "assoc"}),
+            DOM.td({className: "delete"})));
+        File.applet.current_list.push(res);
+
+        nb_files ++;
       });
       
        if (nb_files > 0) {
