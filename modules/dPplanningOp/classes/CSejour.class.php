@@ -243,6 +243,8 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_ref_prestation;
   /** @var CEchangeHprim */
   public $_ref_echange_hprim;
+  /** @var CConsultation */
+  public $_ref_obs_entree;
 
   // Collections
   /** @var COperation[] */
@@ -2754,6 +2756,14 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->_ref_GHM->getGHM();
   }
 
+  function loadRefObsEntree() {
+    $consult = new CConsultation();
+    $consult->sejour_id = $this->_id;
+    $consult->type = "entree";
+    $consult->loadMatchingObject();
+    return $this->_ref_obs_entree = $consult;
+  }
+
   function fillLimitedTemplate(&$template) {
     // Ajout du praticien pour les destinataires possibles (dans l'envoi d'un email)
     $chir = $this->loadRefPraticien();
@@ -2887,6 +2897,15 @@ class CSejour extends CFacturable implements IPatientRelated {
       }
     }
     $template->addListProperty("Sejour - Observations", $observations);
+
+    // Observation d'entrée
+    /** @var CConsultation $obs_entree */
+    $obs_entree = $this->loadRefObsEntree();
+
+    $template->addProperty("Sejour - Observation d'entrée - Motif"          , $obs_entree->getFormattedValue("motif"));
+    $template->addProperty("Sejour - Observation d'entrée - Examen clinique", $obs_entree->getFormattedValue("examen"));
+    $template->addProperty("Sejour - Observation d'entrée - Remarques"      , $obs_entree->getFormattedValue("rques"));
+    $template->addProperty("Sejour - Observation d'entrée - Traitements"    , $obs_entree->getFormattedValue("traitement"));
 
     // Prescriptions
     $lines = array();
