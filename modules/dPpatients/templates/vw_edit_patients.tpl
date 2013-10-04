@@ -17,20 +17,25 @@
 {{assign var=modFSE value="fse"|module_active}}
 {{assign var=patient_id value=$patient->_id}}
 
-<script>
-  {{if !$ajax}}
-    {{if $app->user_prefs.VitaleVision}}
-      {{mb_include template=inc_vitalevision}}
+
+{{if !$ajax}}
+  {{if $app->user_prefs.VitaleVision}}
+    {{mb_include template=inc_vitalevision}}
+    <script>
       var lireVitale = VitaleVision.read;
-    {{else}}
+    </script>
+  {{else}}
+    <script>
       var urlFSE = new Url();
       urlFSE.addParam("m", "dPpatients");
       urlFSE.addParam("{{$actionType}}",  "vw_edit_patients");
       urlFSE.addParam("dialog",  "{{$dialog}}");
       urlFSE.addParam("useVitale", 1);
-    {{/if}}
+    </script>
   {{/if}}
+{{/if}}
 
+<script>
   copyAssureValues = function(element) {
     // Hack pour gérer les form fields
     var sPrefix = element.name[0] == "_" ? "_assure" : "assure_";
