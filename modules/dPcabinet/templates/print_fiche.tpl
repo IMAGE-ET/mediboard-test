@@ -27,7 +27,7 @@
 
 <table class="{{$tbl_class}}" style="page-break-after: always">
   <tr>
-    <td colspan="2" class="text">
+    <td colspan="2" class="text" style="word-break: break-all">
       <table style="width: 100%">
         <tr>
           <th class="category" colspan="2">Intervention</th>
@@ -144,7 +144,7 @@
   {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
   {{assign var=ant value=$dossier_medical->_ref_antecedents_by_type}}
   <tr>
-    <td class="halfPane text" {{if !$dossier_medical->_count_allergies}}colspan="2"{{/if}}>
+    <td class="halfPane text" {{if !$dossier_medical->_count_allergies}}colspan="2"{{/if}} style="word-break: break-all">
       <table style="width: 100%">
         <tr>
           <th class="category" colspan="2">Informations sur le patient</th>
@@ -410,7 +410,7 @@
 
 <table class="{{$tbl_class}}">
   <tr>
-    <td>
+    <td style="word-break: break-all">
       <table style="width: 100%">
         <tr>
           <th colspan="3" class="category">Conditions d'intubation</th>
@@ -507,7 +507,7 @@
   </tr>
   {{if $dossier_anesth->result_ecg || $dossier_anesth->result_rp || ($dossier_anesth->result_autre && $app->user_prefs.viewAutreResult)}}
   <tr>
-    <td>
+    <td style="word-break: break-all">
       <table style="width: 100%">
         <tr>
           <td style="width: {{if $app->user_prefs.viewAutreResult}}33%{{else}}50%{{/if}}">
@@ -539,7 +539,7 @@
   </tr>
   {{/if}}
   <tr>
-    <td>
+    <td style="word-break: break-all">
       <table style="width: 100%">
         {{foreach from=$consult->_types_examen key=curr_type item=list_exams}}
         {{if $list_exams|@count}}
@@ -682,7 +682,7 @@
 
   {{if $conf.dPcabinet.CConsultAnesth.show_facteurs_risque}}
   <tr>
-    <td>
+    <td style="word-break: break-all">
       <table style="width: 100%">
         <tr>
           <th class="category" colspan="3">Facteurs de risque</th>
@@ -741,7 +741,7 @@
   </tr>
   {{if $operation->date_visite_anesth}}
   <tr>
-    <td>
+    <td style="word-break: break-all">
       <table>
         <tr>
           <th>{{mb_label object=$operation field="prat_visite_anesth_id"}}</th>
@@ -760,7 +760,7 @@
   </tr>
   {{else}}
   <tr>
-    <td>
+    <td style="word-break: break-all">
       <table>
         <tr>
           <th>{{mb_label object=$operation field="prat_visite_anesth_id"}}</th>
