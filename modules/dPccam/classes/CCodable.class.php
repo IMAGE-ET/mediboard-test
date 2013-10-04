@@ -511,7 +511,7 @@ class CCodable extends CMbObject {
         }
 
         //Dans le cas ou la date est nulle on prend celle de la plage de consultation correspondante
-        $order = "IFNULL(acte_tarmed.date, plageconsult.date) ,code ASC";
+        $order = "IFNULL(acte_tarmed.date, plageconsult.date), acte_tarmed.num_facture, code ASC";
 
         $this->_ref_actes_tarmed = $acte_tarmed->loadList($where, $order, null, null, $ljoin );
       }
@@ -522,7 +522,7 @@ class CCodable extends CMbObject {
         if ($num_facture) {
           $where["num_facture"]    = " = '$num_facture'";
         }
-        $order = "code ASC";
+        $order = "acte_tarmed.num_facture, code ASC";
         $this->_ref_actes_tarmed = $acte_tarmed->loadList($where, $order);
       }
 
@@ -564,7 +564,7 @@ class CCodable extends CMbObject {
       if ($num_facture) {
         $where["acte_caisse.num_facture"] = " = '$num_facture'";
       }
-      $order = "caisse_maladie_id, code ASC";
+      $order = "acte_caisse.num_facture, caisse_maladie_id, code ASC";
       $acte_caisse = new CActeCaisse();
       $this->_ref_actes_caisse = $acte_caisse->loadList($where, $order);
 
