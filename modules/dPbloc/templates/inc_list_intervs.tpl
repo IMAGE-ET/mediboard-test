@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
   ObjectTooltip.modes.allergies = {  
     module: "patients",
     action: "ajax_vw_allergies",
@@ -112,7 +112,7 @@
     </td>
     
     <td class="text" style="vertical-align: top;">
-      <a onclick="Operation.editModal({{$_op->_id}}, {{$_op->plageop_id}})" href="#">
+      <a onclick="Operation.editModal({{$_op->_id}}, {{$_op->plageop_id}}, function() { window.url_edit_planning.refreshModal();} );" href="#">
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}');">
           {{if $_op->libelle}}
             <strong>{{$_op->libelle}}</strong>

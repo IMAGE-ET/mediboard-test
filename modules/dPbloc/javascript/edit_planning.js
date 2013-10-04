@@ -19,6 +19,7 @@ EditPlanning  = {
         document.location.reload();
       }
     });
+    window.url_edit_planning = url;
     this.modal = url.modalObject;
   },
   
