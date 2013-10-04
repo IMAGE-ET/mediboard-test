@@ -129,7 +129,7 @@ PlanSoins = {
     url.popup(800,600,"Administration d'une prescription_line_mix");
   },
 
-  addPlanification: function(date, time, key_tab, object_id, object_class, element_id){
+  addPlanification: function(date, time, key_tab, object_id, object_class, element_id, unite_sans_planif){
     // Split de l'element_id
     var element = element_id.split("_");
     var original_date = element[3]+" "+element[4]+":00:00";
@@ -488,13 +488,13 @@ PlanSoins = {
             }
             else {
               var _td = td.id.split("_");
-              line_id = _td[1];
-              line_class = _td[2];
-              unite_prise = td.getAttribute("data-uniteprise");
-              unite_sans_planif = td.getAttribute("data-unite_sans_planif");
+              var line_id = _td[1];
+              var line_class = _td[2];
+              var unite_prise = td.getAttribute("data-uniteprise");
+              var unite_sans_planif = td.getAttribute("data-unite_sans_planif");
 
-              date = _td[4];
-              hour = _td[5];
+              var date = _td[4];
+              var hour = _td[5];
               
               // Hack pour corriger le probleme des planifications sur aucune prise prevue
               if(_td[3] == 'aucune' && _td[4] == 'prise'){
@@ -773,6 +773,6 @@ PlanSoins = {
 
   showModalTasks: function(sejour_id) {
     updateTasks(sejour_id);
-    var modal_tasks = Modal.open("tasks", { showClose: true, width: 800, height: 600 });
+    Modal.open("tasks", { showClose: true, width: 800, height: 600 });
   }
 };
