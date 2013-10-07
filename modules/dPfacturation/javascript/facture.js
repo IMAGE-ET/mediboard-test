@@ -49,10 +49,12 @@ window.Facture = {
       }
     });
   },
-  edit: function(facture_id, facture_class) {
+  edit: function(facture_id, facture_class, show_button) {
+    show_button = show_button || 1;
     var url = new Url('facturation', 'ajax_view_facture');
     url.addParam('facture_id'    , facture_id);
     url.addParam("object_class", facture_class);
+    url.addParam("show_button", show_button);
     url.requestModal(1000, 550);
     Facture.url = url;
   }

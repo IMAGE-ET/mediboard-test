@@ -122,7 +122,8 @@
       </td>
     </tr>
   {{/if}}
-{{elseif !$facture->cloture && isset($factures|smarty:nodefaults) && count($factures) && $facture->_class == "CFactureEtablissement" && $facture->_ref_sejours|@count}}
+{{elseif !$facture->cloture && isset($factures|smarty:nodefaults) && count($factures) && $facture->_class == "CFactureEtablissement"
+  && $facture->_ref_sejours|@count && (!isset($show_button|smarty:nodefaults) || $show_button)}}
   <tr>
     <td colspan="8">
       {{assign var="last_op" value=$facture->_ref_last_sejour->_ref_last_operation}}
@@ -291,7 +292,8 @@
 
 {{assign var="classe" value=$facture->_class}}
 {{if (!$facture->_reglements_total_patient || $conf.dPfacturation.CReglement.add_pay_not_close)
-  && !$conf.dPfacturation.$classe.use_auto_cloture && !$facture->annule && !$facture->definitive}}
+  && !$conf.dPfacturation.$classe.use_auto_cloture && !$facture->annule && !$facture->definitive
+  && (!isset($show_button|smarty:nodefaults) || $show_button)}}
   <tr>
     <td colspan="7">
       <form name="change_type_facture" method="post">

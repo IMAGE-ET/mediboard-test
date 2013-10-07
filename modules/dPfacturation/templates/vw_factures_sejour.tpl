@@ -3,6 +3,7 @@
     var url = new Url('facturation', 'ajax_view_facture');
     url.addParam('facture_id'    , facture_id);
     url.addParam("object_class", facture_class);
+    url.addParam("show_button", 0);
     url.requestModal();
     url.modalObject.observe('afterClose', function() { Control.Modal.close();gestionFacture();});
   }

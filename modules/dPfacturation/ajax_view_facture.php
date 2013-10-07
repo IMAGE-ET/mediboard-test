@@ -17,6 +17,7 @@ $facture = new $object_class;
 $assurances_patient = array();
 
 if ($facture_id) {
+  /* @var CFactureCabinet $facture */
   $facture->load($facture_id);
   $facture->loadRefPatient();
   $facture->_ref_patient->loadRefsCorrespondantsPatient();
@@ -45,8 +46,8 @@ if (!CValue::get("not_load_banque")) {
 
 $smarty->assign("etat_ouvert"   , CValue::getOrSession("etat_ouvert", 1));
 $smarty->assign("etat_cloture"  , CValue::getOrSession("etat_cloture", 1));
+$smarty->assign("show_button"   , CValue::get("show_button", 1));
 $smarty->assign("date"          , CMbDT::date());
 $smarty->assign("chirSel"       , CValue::getOrSession("chirSel", "-1"));
 
 $smarty->display("inc_vw_facturation.tpl");
-?>
