@@ -1,20 +1,8 @@
 {{assign var=consultation value=$exam_possum->_ref_consult}}
 
-<script type="text/javascript">
-
-// Lancement du reload
-window.opener.ExamDialog.reload('{{$consultation->_id}}');
-
-var listScorePhysio = {{$exam_possum->_score_possum_physio|@json}};
-var listScoreOper   = {{$exam_possum->_score_possum_oper|@json}};
-var scorePhysio = {{$exam_possum->_score_physio}};
-var scoreOper   = {{$exam_possum->_score_oper}};
-</script>
-
 {{mb_script module=$m script="exam_possum"}}
 
-
-<form name="editFrmPossum" action="?m=dPcabinet&amp;a=exam_possum&amp;dialog=1" method="post" onsubmit="return checkForm(this)">
+<form name="editFrmPossum" action="" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="dPcabinet" />
 <input type="hidden" name="dosql" value="do_exam_possum_aed" />

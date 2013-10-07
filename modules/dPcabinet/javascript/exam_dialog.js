@@ -5,7 +5,7 @@ var ExamDialog = {
   sConsultId: null,
   sDossierAnesthId: null,
   options : {
-    width : 900,
+    width : 1000,
     height: 600
   },
 
@@ -17,8 +17,9 @@ var ExamDialog = {
     if (oForm.elements[this.sDossierAnesthId]) {
       url.addParam("dossier_anesth_id", oForm.elements[this.sDossierAnesthId].value);
     }
-    url.popup(this.options.width, this.options.height, type_exam);
-  }, 
+    url.requestModal(this.options.width, this.options.height, type_exam);
+  },
+
   reload: function(consultation_id, dossier_anesth_id){
     var url = new Url("dPcabinet", "httpreq_vw_examens_comp");
     url.addParam("consultation_id", consultation_id);
@@ -27,12 +28,14 @@ var ExamDialog = {
     }
     url.requestUpdate("examDialog-"+consultation_id);
   },
+
   register: function(consultation_id, dossier_anesth_id){
     document.write('<div id="examDialog-'+consultation_id+'"></div>');
     Main.add( function() {
       ExamDialog.reload(consultation_id, dossier_anesth_id);
     } );
   },
+
   remove: function(oButton, object_id){
     var oOptions = {
       typeName: 'l\'examen',

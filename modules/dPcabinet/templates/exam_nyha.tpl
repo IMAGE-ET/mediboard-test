@@ -7,7 +7,7 @@ window.opener.ExamDialog.reload('{{$consultation->_id}}');
 
 </script>
 
-<form name="editFrmNyha" action="?m=dPcabinet&amp;a=exam_nyha&amp;dialog=1" method="post" onsubmit="return checkForm(this)">
+<form name="editFrmNyha" action="" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="dPcabinet" />
 <input type="hidden" name="dosql" value="do_exam_nyha_aed" />
