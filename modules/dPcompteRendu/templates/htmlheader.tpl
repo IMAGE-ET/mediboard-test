@@ -6,13 +6,14 @@
     </style>
   </head>
   <body>
-    <script type="text/javascript">
-      try {
-        this.print();
-      }
-      catch(e){ }
-    </script>
-    
+    {{if $auto_print}}
+      <script type="text/javascript">
+        try {
+          this.print();
+        }
+        catch(e){ }
+      </script>
+    {{/if}}
     {{$content|smarty:nodefaults}}
   </body>
 </html>

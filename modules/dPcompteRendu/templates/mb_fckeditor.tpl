@@ -121,7 +121,7 @@ CKEDITOR.editorConfig = function(config) {
     {{/if}}
 
     config.toolbar = [
-    ['Save','Preview'], [{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}'mbprintPDF',{{/if}} textForPrint, 'mbprinting', 'SelectAll', 'PasteText', 'PasteFromWord', 'Find', 'Undo', 'Redo'],
+    ['Save','Preview'], [{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}'mbprintPDF',{{/if}} textForPrint, 'mbprinting', 'SelectAll', 'Cut', 'Copy', 'PasteText', 'PasteFromWord', 'Find', 'Undo', 'Redo'],
     [{{if !$templateManager->isModele}}'mbheader', 'mbfooter',{{/if}} 'mbpagebreak'],
     ['Table','HorizontalRule','Image','SpecialChar', 'mbspace', 'Checkbox'],
     ['Maximize', 'Source'], '/',

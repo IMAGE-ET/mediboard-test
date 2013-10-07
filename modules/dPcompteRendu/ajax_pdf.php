@@ -72,7 +72,7 @@ if ($ids_corres) {
   CApp::rip();
 } 
 
-$file = new CFile;
+$file = new CFile();
 if ($compte_rendu->_id) {
   $compte_rendu->loadFile();
   $file = $compte_rendu->_ref_file;
@@ -106,6 +106,7 @@ else {
           $margins,
           CCompteRendu::$fonts[$compte_rendu->font],
           $compte_rendu->size,
+          true,
           $type, "", $height,
           "",
           ""
@@ -151,6 +152,7 @@ else {
           $margins,
           CCompteRendu::$fonts[$compte_rendu->font],
           $compte_rendu->size,
+          true,
           $type,
           $header,
           $sizeheader,

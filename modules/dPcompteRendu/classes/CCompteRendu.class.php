@@ -967,6 +967,7 @@ class CCompteRendu extends CDocumentItem {
       $margins = array(),
       $font = "",
       $size = "",
+      $auto_print = true,
       $type = "body",
       $header = "",
       $sizeheader = 0,
@@ -1077,6 +1078,7 @@ class CCompteRendu extends CDocumentItem {
     $smarty = new CSmartyDP();
     $smarty->assign("style"  , $style);
     $smarty->assign("content", $content);
+    $smarty->assign("auto_print", $auto_print);
     return $smarty->fetch("../../dPcompteRendu/templates/htmlheader.tpl");
   }
 
@@ -1084,10 +1086,11 @@ class CCompteRendu extends CDocumentItem {
    * Generate a pdf preview for the document
    * 
    * @param boolean $force_generating [optional]
+   * @param boolean $auto_print [optional]
    * 
    * @return string|null
    */
-  function makePDFpreview($force_generating = false) {
+  function makePDFpreview($force_generating = false, $auto_print = true) {
     if ((!CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") ||!CAppUI::pref("pdf_and_thumbs"))
         && !$force_generating
     ) {
@@ -1122,7 +1125,7 @@ class CCompteRendu extends CDocumentItem {
     );
 
     $this->loadContent();
-    $content = $this->loadHTMLcontent($this->_source, '', $margins, CCompteRendu::$fonts[$this->font], $this->size);
+    $content = $this->loadHTMLcontent($this->_source, '', $margins, CCompteRendu::$fonts[$this->font], $this->size, $auto_print);
     $htmltopdf = new CHtmlToPDF();
     $htmltopdf->generatePDF($content, 0, $this->_page_format, $this->_orientation, $file);
     $file->file_size = filesize($file->_file_path);
