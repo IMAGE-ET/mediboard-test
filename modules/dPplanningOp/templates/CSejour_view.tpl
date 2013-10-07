@@ -13,18 +13,26 @@
 {{assign var=affectations value=$object->_ref_affectations}}
 
 
-<script type="text/javascript">
+<script>
   popEtatSejour = function(sejour_id) {
     var url = new Url('hospi', 'vw_parcours');
     url.addParam('sejour_id', sejour_id);
     url.requestModal(700, 550);
   },
-  
+
+
+  afterValideSortie = function(form) {
+    form.up('div').hide().update();
+    if (window.refreshMouvements) {
+      refreshMouvements(loadNonPlaces);
+    }
+  }
+
   ModeleEtiquette.nb_printers = {{$sejour->_nb_printers|@json}};
 </script>
 
-<form name="download_etiq_{{$object->_class}}_{{$sejour->_id}}" style="display: none;" action="?" target="_blank" method="get" class="prepared">
-  <input type="hidden" name="m" value="dPhospi" />
+<form name="download_etiq_{{$object->_class}}_{{$sejour->_id}}" style="display: none;" target="_blank" method="get" class="prepared">
+  <input type="hidden" name="m" value="hospi" />
   <input type="hidden" name="a" value="print_etiquettes" />
   <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
   <input type="hidden" name="object_class" value="{{$sejour->_class}}" />
@@ -61,6 +69,17 @@
       <button type="button" class="edit" onclick="Sejour.editModal('{{$sejour->_id}}');">
         {{tr}}Modify{{/tr}}
       </button>
+
+      {{if !$sejour->sortie_reelle}}
+      <form name="valideSortie" method="post" onsubmit="onSubmitFormAjax(this, afterValideSortie.curry(this))">
+        <input type="hidden" name="m" value="planningOp" />
+        <input type="hidden" name="dosql" value="do_sejour_aed" />
+        {{mb_key object=$sejour}}
+        <input type="hidden" name="sortie_reelle" value="now" />
+        <button type="button" class="tick" onclick="this.form.onsubmit()">Valider la sortie</button>
+      </form>
+      {{/if}}
+
       {{if $conf.dPhospi.systeme_prestations == "expert"}}
         <button type="button" class="search" onclick="Prestations.edit('{{$sejour->_id}}')">Prestations</button>
       {{/if}}
