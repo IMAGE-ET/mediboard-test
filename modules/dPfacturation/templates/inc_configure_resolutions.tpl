@@ -16,8 +16,8 @@ Il y a {{$factures|@count}} problèmes de doubles facture
     <th>Date Consultation</th>
   </tr>
   {{foreach from=$factures item=facture}}
+    {{foreach from=$facture->_ref_consults item=consult}}
     <tr>
-      {{foreach from=$facture->_ref_consults item=consult}}
         <td>{{$facture->_view}}</td>
         <td>
           <a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$facture->_ref_patient->_guid}}')">
@@ -28,8 +28,8 @@ Il y a {{$factures|@count}} problèmes de doubles facture
           <a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$consult->_guid}}')">
             {{$consult->_date}}</a>
         </td>
-      {{/foreach}}
     </tr>
+    {{/foreach}}
   {{/foreach}}
 </table>
 

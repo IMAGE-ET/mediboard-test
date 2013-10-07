@@ -1,7 +1,7 @@
 {{if $debiteur_dec}}
   <input name="debiteur_desc" type="text" value="{{$debiteur->description}}" />
 {{else}}
-  <form name="Edit-CDebiteur" action="?m={{$m}}" method="post" onsubmit="Debiteur.submit(this);">
+  <form name="Edit-CDebiteur" action="?m={{$m}}" method="post" onsubmit="return Debiteur.submit(this);">
     {{mb_key    object=$debiteur}}
     {{mb_class  object=$debiteur}}
     <input type="hidden" name="del" value="0"/>
