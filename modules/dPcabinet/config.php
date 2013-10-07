@@ -48,11 +48,13 @@ $dPconfig["dPcabinet"] = array(
      * %e - Heure d'entrée
      * %T - Type de séjour (A, O, E...)
      */
-    "format_auto_motif"  => "Pré-anésth. %I %L %S",
-    "format_auto_rques"  => "%T %E %e",
-    "view_premedication" => "0",
-    "show_facteurs_risque" => "0",
-    "show_mallampati" => "0",
+    "format_auto_motif"     => "Pré-anésth. %I %L %S",
+    "format_auto_rques"     => "%T %E %e",
+    "view_premedication"    => "0",
+    "show_facteurs_risque"  => "0",
+    "show_mallampati"       => "0",
+    "check_poids"           => "0",
+    "check_scoreasa"        => "0",
   ),
   "CPrescription" => array (
     "view_prescription" => "0"
