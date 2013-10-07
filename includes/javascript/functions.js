@@ -671,7 +671,8 @@ function guid_ids(guid) {
   var url = new Url("dPsante400", "view_identifiants");
   url.addParam("object_class", parts[0]);
   url.addParam("object_id", parts[1]);
-  url.popup(750, 400, "sante400");
+  url.addParam("dialog", 1);
+  url.requestModal(750, 400);
 }
 
 function uploadFile(object_guid, file_category_id, _rename, named){
