@@ -54,8 +54,14 @@ showHeader();
     each($$('.params-'+value), showElement);
   };
 
+  toggleSessionMutex = function(value) {
+    each($$('.session-mutex'), hideElement);
+    each($$('.session-mutex-'+value), showElement);
+  };
+
   window.onload = function(){
     toggleMemoryParams($$('#shared_memory')[0].value);
+    toggleSessionMutex($$('#session_handler')[0].value);
   };
 </script>
 
@@ -92,29 +98,6 @@ showHeader();
             <option value="prod"   <?php if ($dPconfig['instance_role'] == 'prod'  ) { echo 'selected'; } ?> >Production</option>
             <option value="qualif" <?php if ($dPconfig['instance_role'] == 'qualif') { echo 'selected'; } ?> >Qualification</option>
           </select>
-        </td>
-      </tr>
-
-      <tr>
-        <th>
-          <label for="session_handler" title="Choisir quel mode de gestion de sessions utiliser (celui-ci doit être installé)">
-            Gestionnaire de sessions
-          </label>
-        </th>
-        <td>
-          <select name="session_handler">
-            <option value="files"    <?php if ($dPconfig['session_handler'] == 'files'   ) { echo 'selected'; } ?> >Fichiers</option>
-            <option value="memcache" <?php if ($dPconfig['session_handler'] == 'memcache') { echo 'selected'; } ?> >Memcache (Obsolète)</option>
-            <option value="mysql"    <?php if ($dPconfig['session_handler'] == 'mysql'   ) { echo 'selected'; } ?> >MySQL (Utile pour les environnements répliqués)</option>
-            <option value="zebra"    <?php if ($dPconfig['session_handler'] == 'zebra'   ) { echo 'selected'; } ?> >Zebra (Obsolète)</option>
-          </select>
-        </td>
-        <td class="text">
-          <div class="small-warning">
-            Le changement de ce paramètre <strong>mettra fin à toutes les session des utilisateurs actuellement connectés</strong>.
-            <br />
-            Si vous choisissez le mode Memcache, veuillez vous assurer que le serveur est correctement configuré.
-          </div>
         </td>
       </tr>
 
@@ -259,6 +242,52 @@ showHeader();
         <td colspan="2">
           <input type="text" size="90" id="shared_memory_params" name="shared_memory_params"
                  value="<?php echo $dPconfig["shared_memory_params"]; ?>" />
+        </td>
+      </tr>
+    </table>
+  </fieldset>
+
+  <fieldset>
+    <legend>Sessions</legend>
+
+    <table class="form">
+      <col style="width: 25%" />
+
+      <tr>
+        <th>
+          <label for="session_handler" title="Choisir quel mode de gestion de sessions utiliser (celui-ci doit être installé)">
+            Gestionnaire de sessions
+          </label>
+        </th>
+        <td>
+          <select id="session_handler" name="session_handler" onchange="toggleSessionMutex(this.value)">
+            <option value="files"    <?php if ($dPconfig['session_handler'] == 'files'   ) { echo 'selected'; } ?> >Fichiers</option>
+            <option value="memcache" <?php if ($dPconfig['session_handler'] == 'memcache') { echo 'selected'; } ?> >Memcache (Obsolète)</option>
+            <option value="mysql"    <?php if ($dPconfig['session_handler'] == 'mysql'   ) { echo 'selected'; } ?> >MySQL (Utile pour les environnements répliqués)</option>
+            <option value="zebra"    <?php if ($dPconfig['session_handler'] == 'zebra'   ) { echo 'selected'; } ?> >Zebra (Obsolète)</option>
+          </select>
+        </td>
+        <td class="text">
+          <div class="small-warning">
+            Le changement de ce paramètre <strong>mettra fin à toutes les session des utilisateurs actuellement connectés</strong>.
+            <br />
+            Si vous choisissez le mode Memcache, veuillez vous assurer que le serveur est correctement configuré.
+          </div>
+        </td>
+      </tr>
+
+      <tr class="session-mutex session-mutex-mysql">
+        <th>
+          <label for="session_handler_mutex_type" title="Mode de mutex pour les sessions, seulement pour MySQL">
+            Mode mutex des sessions de mode MySQL
+          </label>
+        </th>
+        <td colspan="2">
+          <select name="session_handler_mutex_type">
+            <option value=""       <?php if ($dPconfig['session_handler_mutex_type'] == ''      ) { echo 'selected'; } ?> >Par défaut (GET_LOCK MySQL)</option>
+            <option value="files"  <?php if ($dPconfig['session_handler_mutex_type'] == 'files' ) { echo 'selected'; } ?> >Fichiers</option>
+            <option value="system" <?php if ($dPconfig['session_handler_mutex_type'] == 'system') { echo 'selected'; } ?> >Système (Mutex système: Redis, etc)</option>
+          </select>
         </td>
       </tr>
     </table>

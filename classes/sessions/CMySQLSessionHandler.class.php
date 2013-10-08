@@ -17,14 +17,21 @@ class CMySQLSessionHandler implements ISessionHandler {
   private static $ds;
 
   private $lock_name;
-  private $lock_timeout = 300;
+  private $lock_timeout = 30;
 
   private $lifetime;
+
+  private $mutex_type;
+
+  /** @var CMbMutex */
+  private $mutex;
 
   /**
    * @see parent::init()
    */
   function init() {
+    $this->mutex_type = @CAppUI::conf("session_handler_mutex_type");
+
     return ini_set("session.save_handler", "user");
   }
 
@@ -50,12 +57,16 @@ class CMySQLSessionHandler implements ISessionHandler {
    * @see parent::close()
    */
   function close() {
-    $ds = self::$ds;
+    if ($this->mutex) {
+      $this->mutex->release();
+    }
+    else {
+      $ds = self::$ds;
+      $query = $ds->prepare("SELECT RELEASE_LOCK(%1)", $this->lock_name);
 
-    $query = $ds->prepare("SELECT RELEASE_LOCK(%1)", $this->lock_name);
-
-    if (!$ds->query($query)) {
-      return false;
+      if (!$ds->query($query)) {
+        return false;
+      }
     }
 
     return true;
@@ -70,8 +81,27 @@ class CMySQLSessionHandler implements ISessionHandler {
     $this->lock_name = "session_$session_id";
     $this->lifetime = ini_get('session.gc_maxlifetime');
 
-    $query = $ds->prepare("SELECT GET_LOCK(%1, %2)", $this->lock_name, $this->lock_timeout);
-    $ds->query($query);
+    // Init the right mutex type
+    $mutex = null;
+    switch ($this->mutex_type) {
+      case "files":
+        $mutex = new CMbFileMutex($this->lock_name);
+        break;
+
+      case "system":
+        $mutex = new CMbMutex($this->lock_name);
+        break;
+
+      default:
+        $query = $ds->prepare("SELECT GET_LOCK(%1, %2)", $this->lock_name, $this->lock_timeout);
+        $ds->query($query);
+        break;
+    }
+
+    if ($mutex) {
+      $mutex->acquire($this->lock_timeout);
+      $this->mutex = $mutex;
+    }
 
     $query = $ds->prepare("SELECT `data` FROM `session` WHERE `session_id` = %1 AND `expire` > %2", $session_id, time());
     $result = $ds->exec($query);

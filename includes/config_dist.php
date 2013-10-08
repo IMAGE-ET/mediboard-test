@@ -41,6 +41,7 @@ $dPconfig["readonly"]             = "0";
 $dPconfig["shared_memory"]        = "none";
 $dPconfig["shared_memory_params"] = "";
 $dPconfig["session_handler"]      = "files";
+$dPconfig["session_handler_mutex_type"] = ""; // Default
 $dPconfig["mutex_drivers"]       = array(
   "CMbRedisMutex" => "0",
   "CMbAPCMutex"   => "0",
