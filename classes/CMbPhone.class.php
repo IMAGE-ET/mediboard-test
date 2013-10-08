@@ -59,10 +59,10 @@ class CMbPhone {
   }
 
   /**
-   * get the phone from guid
+   * get the phone from guid, ( and check number ?)
    *
    * @param string $guid        object guid
-   * @param bool   $checkmobile check for a valide mobile number
+   * @param bool   $checkmobile check for a valid mobile number
    *
    * @return bool|string number found or false if not found or invalid
    */
@@ -72,7 +72,6 @@ class CMbPhone {
 
     if ($object instanceof CPerson) {
       //mobile
-
       if ($mobile_phone_number = $object->_p_mobile_phone_number) {
         if ($checkmobile && !self::checkMobileNumber($mobile_phone_number)) {
           return false;
