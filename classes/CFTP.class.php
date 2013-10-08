@@ -99,9 +99,13 @@ class CFTP {
       $output = call_user_func_array(array($this, $function_name), $args);
     } 
     catch(CMbException $fault) {
-      $echange_ftp->output    = $fault->getMessage();
-      $echange_ftp->ftp_fault = 1;
+      $echange_ftp->date_echange = CMbDT::dateTime();
+      $echange_ftp->output      = $fault->getMessage();
+      $echange_ftp->ftp_fault    = 1;
+      $echange_ftp->store();
+
       CApp::$chrono->start();
+
       throw $fault;
     }
     $chrono->stop();
