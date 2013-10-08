@@ -19,6 +19,7 @@
     <th>{{tr}}SSPI.Salle{{/tr}}</th>
     <th>{{tr}}SSPI.Praticien{{/tr}}</th>
     <th>{{tr}}SSPI.Patient{{/tr}}</th>
+    <th class="narrow"></th>
     {{if $use_poste}}
       <th>{{tr}}SSPI.Poste{{/tr}}</th>
     {{/if}}
@@ -49,18 +50,16 @@
         {{if $isImedsInstalled}}
           {{mb_include module=Imeds template=inc_sejour_labo link="#1" sejour=$_operation->_ref_sejour float="none"}}
         {{/if}}
-        
-        <a href="#" style="display: inline" onclick="codageCCAM('{{$_operation->_id}}');">
-          <img src="images/icons/anesth.png" alt="Anesth" />
-        </a>
       </div>
 
-      <a href="#" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">
         <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
             onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
         {{$_operation->_ref_patient->_view}}
         </span>
-      </a>
+    </td>
+    <td>
+      <button class="soins button notext" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">Dossier de soins</button>
+      <button class="injection notext button" onclick="codageCCAM('{{$_operation->_id}}');">Dossier de bloc</button>
     </td>
     {{if $use_poste}}
       <td>

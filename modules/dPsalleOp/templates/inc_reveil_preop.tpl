@@ -1,7 +1,7 @@
 <script>
   submitPrepaForm = function(oFormPrepa) {
     submitFormAjax(oFormPrepa,'systemMsg', {onComplete: function(){ refreshTabsReveil() }});
-  }
+  };
   
   Main.add(function () {    
     Control.Tabs.setTabCount("preop", "{{$listOperations|@count}}");
@@ -18,6 +18,7 @@
     <th>Salle</th>
     <th>Praticien</th>
     <th>Patient</th>
+    <th class="narrow"></th>
     <th>Interv</th>
     <th>Coté</th>
     {{if @$modules.brancardage->_can->read}}
@@ -41,32 +42,32 @@
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}
     </td>
     <td class="text">
-      <div style="float: right;">
-        {{if $isImedsInstalled}}
-          {{mb_include module=Imeds template=inc_sejour_labo link="#1" sejour=$_operation->_ref_sejour float="none"}}
-        {{/if}}
-        
-        <a href="#" style="display: inline" onclick="codageCCAM('{{$_operation->_id}}');">
-          <img src="images/icons/anesth.png" alt="Anesth" />
-        </a>
-      </div>
-      
-      <a href="#" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">
-      <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
-            onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}');">
-        {{$_operation->_ref_patient->_view}}
-      </span>
-      </a>
+        <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
+              onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}');">
+          {{$_operation->_ref_patient->_view}}
+        </span>
+    </td>
+    <td>
+      <button class="button soins notext" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">
+        Dossier séjour
+      </button>
+      {{if $isImedsInstalled}}
+        {{mb_include module=Imeds template=inc_sejour_labo link="#1" sejour=$_operation->_ref_sejour float="none"}}
+      {{/if}}
+
+      <button class="button injection notext" onclick="codageCCAM('{{$_operation->_id}}');">
+        Dossier de bloc
+      </button>
     </td>
     <td class="text">
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
-      {{if $_operation->libelle}}
-        {{$_operation->libelle}}
-      {{else}}
-        {{foreach from=$_operation->_ext_codes_ccam item=curr_code}}
-          {{$curr_code->code}}
-        {{/foreach}}
-      {{/if}}
+        {{if $_operation->libelle}}
+          {{$_operation->libelle}}
+        {{else}}
+          {{foreach from=$_operation->_ext_codes_ccam item=curr_code}}
+            {{$curr_code->code}}
+          {{/foreach}}
+        {{/if}}
       </span>
     </td>
     <td class="text">{{mb_value object=$_operation field="cote"}}</td>

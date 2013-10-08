@@ -32,6 +32,7 @@
     <th>{{tr}}SSPI.Salle{{/tr}}</th>
     <th>{{tr}}SSPI.Praticien{{/tr}}</th>
     <th>{{tr}}SSPI.Patient{{/tr}}</th>
+    <th class="narrow"></th>
     {{if $use_poste}}
       <th>{{tr}}SSPI.Poste{{/tr}}</th>
     {{/if}}
@@ -58,12 +59,15 @@
         {{/if}}
       </div>
       
-      <a href="#" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">
-        <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
-              onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
-          {{$_operation->_ref_patient->_view}}
-        </span>
-      </a>
+      <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
+            onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
+        {{$_operation->_ref_patient->_view}}
+      </span>
+    </td>
+    <td>
+      <button class="button soins notext" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">
+        Dossier de soin
+      </button>
     </td>
     {{if $use_poste}}
       <td>
