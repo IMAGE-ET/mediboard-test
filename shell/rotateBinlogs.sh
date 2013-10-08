@@ -21,6 +21,11 @@ passphrase=''
 cryptage='aes-128-cbc'
 
 args=$(getopt c:e: $*)
+
+if [ $? != 0 ] ; then
+  echo "Invalid argument. Check your command line"; exit 0;
+fi
+
 set -- $args
 for i; do
   case "$i" in
@@ -40,33 +45,52 @@ announce_script "Rotate binlogs"
 backup=$5
 mkdir -p $5
 
+# Tmp dir to compress
+dir=$3
+tmpdir=$3/tmp_binlogs
+mkdir -p $tmpdir
+
+info_script "Flush logs to start a new one"
 # Flush logs to start a new one
 mysqladmin -u $1 -p$2 flush-logs
 
-# Move all logs but latest to backup
-dir="$3"
+# Move all logs without latest to tmp dir
+info_script "Move all logs without latest to tmp dir"
 index="$dir/$4"
 last=$(tail -n 1 $index)
 for log in $dir/*bin.0* ; do
   if [ "$log" != "$last" ]; then
-    mv $log $backup
+    info_script "Moving $(ls -sh $log)"
+    mv $log $tmpdir
   fi
 done
-
 # Copy binlog indeces to binlog backup
+info_script "Copying binlog indeces to binlog backup"
 cp $index $backup
 
 date=$(date '+%Y-%m-%dT%H:%M:%S')
 
 # Archive binlogs
+cd $tmpdir
 if [ -n "$passphrase" ]; then
-  nice -n 10 tar -vcjf - -C $backup $backup/*bin.0* | openssl $cryptage -salt -out $backup/binlogs_$date.tar.bz2.aes -k $passphrase
+  info_script "Compress binlogs"
+  nice -n 10 tar -vcjf - *bin.0* | openssl $cryptage -salt -out $tmpdir/binlogs_$date.tar.bz2.aes -k $passphrase
+  info_script "Moving compressed binlogs to $backup"
+  mv $tmpdir/binlogs_$date.tar.bz2.aes $backup
 else
-  nice -n 10 tar -vcjf $backup/binlogs_$date.tar.bz2 -C $backup $backup/*bin.0*
+  info_script "Compress binlogs"
+  nice -n 10 tar -vcjf $tmpdir/binlogs_$date.tar.bz2 *bin.0*
+  info_script "Moving compressed binlogs to $backup"
+  mv $tmpdir/binlogs_$date.tar.bz2 $backup
 fi
 
-# Rotate binlogs and indeces for a week
-find $backup -name "*bin.0*" -exec rm -f {} \;
+# Remove temp directory
+info_script "Remove temp directory"
+cd ..
+rm -rf $tmpdir
+
+# Rotate binlogs for a week
+info_script "Rotating binlogs for a week"
 
 if [ -n "$passphrase" ]; then
   find $backup -name "binlogs_*.tar.bz2.aes" -mtime +7 -exec rm -f {} \;
