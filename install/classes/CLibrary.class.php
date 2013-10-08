@@ -312,18 +312,6 @@ $library->patches[] = $patch;
 CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
-$library->name = "Dojo";
-$library->url = "http://www.dojotoolkit.org/";
-$library->fileName = "dojo-0.4.1-storage.tar.gz";
-$library->description = "Composant Javascript de sauvegarde de données";
-$library->sourceDir = "dojo-0.4.1-storage";
-$library->targetDir = "dojo";
-$library->versionFile = "dojo.js.uncompressed.js";
-$library->versionString = "bootstrap1.js 6824";
-
-CLibrary::$all[$library->name] = $library;
-
-$library = new CLibrary;
 $library->name = "Livepipe UI";
 $library->url = "http://livepipe.net/";
 $library->fileName = "livepipe.tar.gz";

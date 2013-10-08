@@ -134,21 +134,6 @@ function stringNotEmpty($string){
 }
 
 /**
- * Get a string containing loaded Dojo components for storage purposes
- *
- * @return string
- */
-function mbLoadScriptsStorage(){
-  $scripts = "";
-  $scripts .= CJSLoader::loadFile("lib/dojo/dojo.js");
-  $scripts .= CJSLoader::loadFile("lib/dojo/src/io/__package__.js");
-  $scripts .= CJSLoader::loadFile("lib/dojo/src/html/__package__.js");
-  $scripts .= CJSLoader::loadFile("lib/dojo/src/lfx/__package__.js");
-  $scripts .= CJSLoader::loadFile("includes/javascript/storage.js");
-  return $scripts;
-}
-
-/**
  * Set memory limit alternative with a minimal value approach
  * Shoud *always* be used
  *
