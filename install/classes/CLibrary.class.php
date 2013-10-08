@@ -385,8 +385,8 @@ $library->fileName = "dompdf-24-09-12.tar.gz";
 $library->description ="HTML to PDF Converter";
 $library->sourceDir = "dompdf";
 $library->targetDir = "dompdf";
-$library->versionFile = "lib/class.pdf.php";
-$library->versionString = "0 && extensio";
+$library->versionFile = "include/cpdf_adapter.cls.php";
+$library->versionString = '//$time';
 CLibrary::$all[$library->name] = $library;
 
 CLibrary::$all[$library->name] = $library;
