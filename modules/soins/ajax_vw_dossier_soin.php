@@ -236,6 +236,9 @@ if (CModule::getActive("dPprescription")) {
           if (in_array($_line_med->jour_decalage, array("ER", "R"))) {
             $_line_med->loadRefOperation();
           }
+          if ($_line_med->delay_prise) {
+            $_line_med->loadRefLastAdministration();
+          }
         }
         
         // Chargement des prescription_line_mixes
