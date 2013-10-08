@@ -1,21 +1,19 @@
-
 {{assign var=modFSE value="fse"|module_active}}
 
 {{if !$board}}
   {{if $app->user_prefs.VitaleVision}}
-    {{include file="../../dPpatients/templates/inc_vitalevision.tpl" debug=false keepFiles=true}}
+    {{mb_include module="patients" template="inc_vitalevision" debug=false keepFiles=true}}
   {{elseif $modFSE && $modFSE->canRead()}}
-     <script type="text/javascript">
+     <script>
        var urlFSE = new Url;
-       urlFSE.setModuleTab("dPpatients", "vw_idx_patients");
+       urlFSE.setModuleTab("patients", "vw_idx_patients");
        urlFSE.addParam("useVitale", 1);
      </script>
   {{/if}}
-  <script type="text/javascript">
+  <script>
     var Patient = {
       create : function(form) {
-        var url = new Url;
-        url.setModuleTab("dPpatients", "vw_edit_patients");
+        var url = new Url("patients", "vw_edit_patients", "tab");
         url.addParam("patient_id", 0);
         url.addParam("useVitale", $V(form.useVitale));
         url.addParam("name",      $V(form.nom));
@@ -56,9 +54,7 @@
     };
 
     doLink = function(oForm) {
-      var url = new Url();
-      url.addParam("m", "dPpatients");
-      url.addParam("dosql", "do_link");
+      var url = new Url("patients", "do_link", "dosql");
       url.addParam("objects_id", $V(oForm["objects_id[]"]).join("-"));
       url.requestUpdate("systemMsg", {
         method: 'post'
@@ -67,82 +63,82 @@
   </script>
 {{/if}}
 
-<script type="text/javascript">
+<script>
+  reloadPatient = function(patient_id, link, vw_cancelled){
+    {{if $board}}
+      var url = new Url('patients', 'vw_full_patients');
+      url.addParam("patient_id", patient_id);
+      url.redirect();
+    {{else}}
+      var url = new Url('patients', 'httpreq_vw_patient');
+      url.addParam('patient_id', patient_id);
+      url.addParam("vw_cancelled", vw_cancelled);
+      url.requestUpdate('vwPatient', { onComplete: markAsSelected.curry(link) } );
+    {{/if}}
+  };
 
-reloadPatient = function(patient_id, link){
-  {{if $board}}
-    var url = new Url('dPpatients', 'vw_full_patients');
-    url.addParam("patient_id", patient_id);
-    url.redirect();
-  {{else}}
-    var url = new Url('dPpatients', 'httpreq_vw_patient');
-    url.addParam('patient_id', patient_id);
-    url.requestUpdate('vwPatient', { onComplete: markAsSelected.curry(link) } );
-  {{/if}}
-};
+  toggleSearch = function() {
+    $$(".field_advanced").invoke("toggle");
+    $$(".field_basic").invoke("toggle");
+  };
 
-toggleSearch = function() {
-  $$(".field_advanced").invoke("toggle");
-  $$(".field_basic").invoke("toggle");
-};
+  emptyForm = function() {
+    var form = getForm("find");
+    $V(form.Date_Day, '');
+    $V(form.Date_Month, '');
+    $V(form.Date_Year, '');
+    $V(form.prat_id, '');
+    form.select("input[type=text]").each(function(elt) {
+      $V(elt, '');
+    });
+    form.nom.focus();
+  };
 
-emptyForm = function() {
-  var form = getForm("find");
-  $V(form.Date_Day, '');
-  $V(form.Date_Month, '');
-  $V(form.Date_Year, '');
-  $V(form.prat_id, '');
-  form.select("input[type=text]").each(function(elt) {
-    $V(elt, '');
+  checkEnoughTraits = function() {
+    var form = getForm("find");
+
+    return $V(form.nom).length >=2 ||
+      $V(form.prenom).length >=2 ||
+      $V(form.cp).length >=2 ||
+      $V(form.ville).length >=2 ||
+      $V(form.Date_Year) ||
+      ($V(form.Date_Day) && $V(form.Date_Month) && $V(form.Date_Year));
+  };
+
+  togglePraticien = function(){
+    var praticien = getForm("find").prat_id;
+    var praticien_message = $("prat_id_message");
+    var enough = checkEnoughTraits();
+
+    praticien.setVisible(enough);
+    praticien_message.setVisible(!enough);
+
+    if (!enough) {
+      $V(praticien, '');
+    }
+  };
+
+  Main.add(function(){
+    togglePraticien();
+
+    var form = getForm("find");
+
+    [
+      form.nom,
+      form.prenom,
+      form.cp,
+      form.ville,
+      form.Date_Day,
+      form.Date_Month,
+      form.Date_Year
+    ].each(function(select){
+      select.observe("change", togglePraticien);
+    })
+
+    {{if $cp || $ville || ($conf.dPpatients.CPatient.tag_ipp && $patient_ipp) || $prat_id || $sexe || ($conf.dPplanningOp.CSejour.tag_dossier && $patient_nda) }}
+      toggleSearch();
+    {{/if}}
   });
-  form.nom.focus();
-};
-
-checkEnoughTraits = function() {
-  var form = getForm("find");
-
-  return $V(form.nom).length >=2 ||
-    $V(form.prenom).length >=2 ||
-    $V(form.cp).length >=2 ||
-    $V(form.ville).length >=2 ||
-    $V(form.Date_Year) ||
-    ($V(form.Date_Day) && $V(form.Date_Month) && $V(form.Date_Year));
-};
-
-togglePraticien = function(){
-  var praticien = getForm("find").prat_id;
-  var praticien_message = $("prat_id_message");
-  var enough = checkEnoughTraits();
-
-  praticien.setVisible(enough);
-  praticien_message.setVisible(!enough);
-
-  if (!enough) {
-    $V(praticien, '');
-  }
-};
-
-Main.add(function(){
-  togglePraticien();
-
-  var form = getForm("find");
-
-  [
-    form.nom,
-    form.prenom,
-    form.cp,
-    form.ville,
-    form.Date_Day,
-    form.Date_Month,
-    form.Date_Year
-  ].each(function(select){
-    select.observe("change", togglePraticien);
-  })
-});
-
-{{if $cp || $ville || ($conf.dPpatients.CPatient.tag_ipp && $patient_ipp) || $prat_id || $sexe || ($conf.dPplanningOp.CSejour.tag_dossier && $patient_nda) }}
-  Main.add(toggleSearch);
-{{/if}}
 </script>
 
 <div id="modal-beneficiaire" style="display:none; text-align:center;">

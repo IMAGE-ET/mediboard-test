@@ -5,66 +5,64 @@
 {{mb_script module="compteRendu" script="modele_selector"}}
 
 <script>
+  var ViewFullPatient = {
+    select: function(eLink) {
+      // Unselect previous row
+      if (this.idCurrent) {
+        $(this.idCurrent).removeClassName("selected");
+      }
 
-var ViewFullPatient = {
-  select: function(eLink) {
-    // Unselect previous row
-    if (this.idCurrent) {
-      $(this.idCurrent).removeClassName("selected");
+      // Select current row
+      this.idCurrent = $(eLink).up(1).identify();
+      $(this.idCurrent).addClassName("selected");
     }
-    
-    // Select current row
-    this.idCurrent = $(eLink).up(1).identify();
-    $(this.idCurrent).addClassName("selected");
-  }
-};
+  };
 
-function popEtatSejour(sejour_id) {
-  var url = new Url("hospi", "vw_parcours");
-  url.addParam("sejour_id",sejour_id);
-  url.pop(1000, 550, 'Etat du Séjour');
-}
-
-window.checkedMerge = [];
-checkOnlyTwoSelected = function(checkbox) {
-  checkedMerge = checkedMerge.without(checkbox);
-    
-  if (checkbox.checked)
-    checkedMerge.push(checkbox);
-    
-  if (checkedMerge.length > 2)
-    checkedMerge.shift().checked = false;
-};
-
-function doMerge(oForm) {
-  var operation_checkbox = $V(oForm["operation_ids[]"]);
-
-  var checkboxs, object_class;
-  if (operation_checkbox && operation_checkbox.length > 0) {
-    checkboxs    = operation_checkbox;
-    object_class = "COperation";
-  }
-  else {
-    checkboxs    = $V(oForm["objects_id[]"]);
-    object_class = "CSejour";
+  function popEtatSejour(sejour_id) {
+    var url = new Url("hospi", "vw_parcours");
+    url.addParam("sejour_id",sejour_id);
+    url.pop(1000, 550, 'Etat du Séjour');
   }
 
-  var url = new Url("system", "object_merger");
-  url.addParam("objects_class", object_class);
-  url.addParam("objects_id"   , checkboxs.join("-"));
-  url.popup(800, 600, "merge_sejours");
-}
+  window.checkedMerge = [];
+  checkOnlyTwoSelected = function(checkbox) {
+    checkedMerge = checkedMerge.without(checkbox);
 
-onMergeComplete = function() {
-  location.reload();
-};
+    if (checkbox.checked)
+      checkedMerge.push(checkbox);
 
-{{if $isImedsInstalled}}
-  Main.add(function(){
-    ImedsResultsWatcher.loadResults();
-  });
-{{/if}}
- 
+    if (checkedMerge.length > 2)
+      checkedMerge.shift().checked = false;
+  };
+
+  function doMerge(oForm) {
+    var operation_checkbox = $V(oForm["operation_ids[]"]);
+
+    var checkboxs, object_class;
+    if (operation_checkbox && operation_checkbox.length > 0) {
+      checkboxs    = operation_checkbox;
+      object_class = "COperation";
+    }
+    else {
+      checkboxs    = $V(oForm["objects_id[]"]);
+      object_class = "CSejour";
+    }
+
+    var url = new Url("system", "object_merger");
+    url.addParam("objects_class", object_class);
+    url.addParam("objects_id"   , checkboxs.join("-"));
+    url.popup(800, 600, "merge_sejours");
+  }
+
+  onMergeComplete = function() {
+    location.reload();
+  };
+
+  {{if $isImedsInstalled}}
+    Main.add(function(){
+      ImedsResultsWatcher.loadResults();
+    });
+  {{/if}}
 </script>
 
 <form name="fusion" action="?" method="get" onsubmit="return false;">
@@ -94,12 +92,6 @@ onMergeComplete = function() {
   <!-- Séjours -->
   <tr>
     <th colspan="4">
-      {{if !$vw_cancelled}}
-        {{if $nb_ops_annulees || $nb_sejours_annules}}
-          <a class="button search" style="float: right" href="?m=patients&tab=vw_full_patients&patient_id={{$patient->_id}}&vw_cancelled=1"
-             title="Voir {{if $nb_sejours_annules}}{{$nb_sejours_annules}} séjour(s) annulé(s){{if $nb_ops_annulees}} et {{/if}}{{/if}}{{if $nb_ops_annulees}}{{$nb_ops_annulees}} opération(s) annulée(s){{/if}}"></a>
-        {{/if}}
-      {{/if}}
       {{if $can->admin}}
         <button type="button" class="merge notext compact" title="{{tr}}Merge{{/tr}}" style="float: left;" onclick="doMerge(this.form);">
           {{tr}}Merge{{/tr}}
@@ -107,6 +99,15 @@ onMergeComplete = function() {
       {{/if}}
       {{tr}}CPatient-back-sejours{{/tr}}
       <small>({{$patient->_ref_sejours|@count}})</small>
+      {{if !$vw_cancelled}}
+        {{if $nb_ops_annulees || $nb_sejours_annules}}
+          <br />
+          <a class="button search" style="float: right" href="?m=patients&tab=vw_full_patients&patient_id={{$patient->_id}}&vw_cancelled=1"
+             title="Voir {{if $nb_sejours_annules}}{{$nb_sejours_annules}} séjour(s) annulé(s){{if $nb_ops_annulees}} et {{/if}}{{/if}}{{if $nb_ops_annulees}}{{$nb_ops_annulees}} opération(s) annulée(s){{/if}}">
+            Afficher les annulés
+          </a>
+        {{/if}}
+      {{/if}}
     </th>
   </tr>
   <tbody id="sejours">

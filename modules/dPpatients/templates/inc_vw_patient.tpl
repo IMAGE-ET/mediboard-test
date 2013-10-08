@@ -126,19 +126,28 @@ Document.refreshList = function() {
   </tr>
   {{/if}}
 
-  {{if $patient->_ref_sejours}}
+  {{if $patient->_ref_sejours || $nb_sejours_annules || $nb_ops_annulees}}
   <tr>
     <th colspan="2" class="category">
       Séjours
       {{if $nb_sejours_annules || $nb_ops_annulees}}
         (
-          {{if $nb_sejours_annules}}
-            {{$nb_sejours_annules}} séjour(s) annulé(s) {{if $nb_ops_annulees}}&mdash;{{/if}}
-          {{/if}}
-          {{if $nb_ops_annulees}}
-            {{$nb_ops_annulees}} intervention(s) annulée(s)
-          {{/if}}
+        {{if $nb_sejours_annules}}
+          {{$nb_sejours_annules}} séjour(s) annulé(s) {{if $nb_ops_annulees}}&mdash;{{/if}}
+        {{/if}}
+        {{if $nb_ops_annulees}}
+          {{$nb_ops_annulees}} intervention(s) annulée(s)
+        {{/if}}
         )
+      {{/if}}
+      {{if !$vw_cancelled}}
+        {{if $nb_ops_annulees || $nb_sejours_annules}}
+          <br />
+          <a class="button search" style="float: right" onclick="reloadPatient('{{$patient->_id}}', null, 1)"
+             title="Voir {{if $nb_sejours_annules}}{{$nb_sejours_annules}} séjour(s) annulé(s){{if $nb_ops_annulees}} et {{/if}}{{/if}}{{if $nb_ops_annulees}}{{$nb_ops_annulees}} opération(s) annulée(s){{/if}}">
+            Afficher les annulés
+          </a>
+        {{/if}}
       {{/if}}
     </th>
   </tr>
