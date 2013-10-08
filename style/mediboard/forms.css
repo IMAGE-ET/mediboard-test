@@ -757,6 +757,11 @@ button.switch:before, a.button.switch:before {
   content: url(images/buttons/switch.png);
 }
 
+/** dossier de soins **/
+button.soins:before, a.button.soins:before {
+  content: url(images/buttons/soins.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }
