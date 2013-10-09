@@ -115,6 +115,8 @@ if (CModule::getActive("dPprescription")) {
   $prescription->loadRefsLinesMedComments("1", "1", "1", "", "", "0", "1");
   $prescription->loadRefsLinesElementsComments();
   $prescription->loadRefsPrescriptionLineMixes();
+  $prescription->loadRefsLinesInscriptions();
+
 
   if (count($prescription->_ref_prescription_line_mixes)) {
     foreach ($prescription->_ref_prescription_line_mixes as $_prescription_line_mix) {
@@ -171,6 +173,25 @@ if (CModule::getActive("dPprescription")) {
               $dossier[CMbDT::date($_administration_elt->dateTime)][$chap][$_line_elt->_id][$_administration_elt->quantite][$_administration_elt->_id] = $_administration_elt;
             }
           }
+        }
+      }
+    }
+  }
+
+  foreach ($prescription->_ref_lines_inscriptions as $inscriptions_by_type) {
+    foreach ($inscriptions_by_type as $_inscription) {
+      $_inscription->loadRefsAdministrations();
+      foreach ($_inscription->_ref_administrations as $_adm_inscription) {
+        $_adm_inscription->loadRefAdministrateur();
+        if (!$_adm_inscription->planification) {
+          if ($_inscription instanceof CPrescriptionLineMedicament) {
+            $chapitre = "medicament";
+          }
+          else {
+            $chapitre = $_inscription->_chapitre;
+          }
+          $list_lines[$chapitre][$_inscription->_id] = $_inscription;
+          $dossier[CMbDT::date($_adm_inscription->dateTime)][$chapitre][$_inscription->_id][$_adm_inscription->quantite][$_adm_inscription->_id] = $_adm_inscription;
         }
       }
     }
