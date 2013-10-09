@@ -33,3 +33,15 @@
    </tr>
   </table>
 </form>
+{{if @$modules.mvsante->_can->read && "mvsante"|module_active}}
+  {{mb_script module=mvsante script=libelle ajax=true}}
+  <script>
+    Main.add(function () {
+      var url = new Url('mvsante', 'ajax_vw_libelles_op');
+      url.addParam('operation_id', '{{$operation->_id}}');
+      url.requestUpdate('libelles');
+    });
+  </script>
+  <div id="libelles">
+  </div>
+{{/if}}
