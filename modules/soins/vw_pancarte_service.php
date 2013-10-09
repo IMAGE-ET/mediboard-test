@@ -40,15 +40,16 @@ $configs = CConfigService::getAllFor($service_id);
 
 if (!$date) {
   $date = CMbDT::date();
+
+  // Si la date actuelle est inférieure a l'heure affichée sur le plan de soins, on affiche le plan de soins de la veille (cas de la nuit)
+  $datetime_limit = CMbDT::dateTime($configs["Poste 1"].":00:00");
+  $datetime = $date . " " . CMbDT::format(null, "%H:%M:%S");
+
+  if ($datetime < $datetime_limit) {
+    $date = CMbDT::date("- 1 DAY", $date);
+  }
 }
 
-// Si la date actuelle est inférieure a l'heure affichée sur le plan de soins, on affiche le plan de soins de la veille (cas de la nuit)
-$datetime_limit = CMbDT::dateTime($configs["Poste 1"].":00:00");
-$datetime = $date . " " . CMbDT::format(null, "%H:%M:%S");
-
-if ($datetime < $datetime_limit) {
-  $date = CMbDT::date("- 1 DAY", $date);
-}
 
 $filter_line = new CPrescriptionLineMedicament();
 $filter_line->debut = $date;
