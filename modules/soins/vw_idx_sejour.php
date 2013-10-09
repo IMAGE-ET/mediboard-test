@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage soins
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
@@ -22,6 +22,27 @@ $service_id     = CValue::getOrSession("service_id");
 $praticien_id   = CValue::getOrSession("praticien_id");
 $_active_tab    = CValue::get("_active_tab");
 $type_admission = CValue::getOrSession("type");
+
+// récuperation du service par défaut dans les préférences utilisateur
+$services_ids_hospi = CAppUI::pref("services_ids_hospi");
+
+if (!$services_ids_hospi) {
+  $services_ids_hospi = "{}";
+}
+
+$group_id = CGroups::loadCurrent()->_id;
+
+// Récuperation du service à afficher par défaut (on prend le premier s'il y en a plusieurs)
+$default_service_id = "";
+
+$default_services_id = json_decode($services_ids_hospi);
+if (isset($default_services_id->{"g$group_id"})) {
+  $default_service_id = reset(explode("|", $default_services_id->{"g$group_id"}));
+}
+
+if (!$service_id && $default_service_id) {
+  $service_id = $default_service_id;
+}
 
 if (!$date) {
   $date = CMbDT::date();
@@ -372,6 +393,8 @@ function cacheLit(CAffectation $affectation) {
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("default_service_id", $default_service_id);
+$smarty->assign("services_ids_hospi", $services_ids_hospi);
 $smarty->assign("_active_tab", $_active_tab);
 $smarty->assign("_is_praticien"           , $_is_praticien);
 $smarty->assign("anesthesistes"           , $anesthesistes);
@@ -401,5 +424,5 @@ $smarty->assign("acte_tarmed"             , $acte_tarmed);
 $smarty->assign("acte_caisse"             , $acte_caisse);
 $smarty->assign("soustotal_base"          , $soustotal_base);
 $smarty->assign("soustotal_dh"            , $soustotal_dh);
-
+$smarty->assign("group_id"                , CGroups::loadCurrent()->_id);
 $smarty->display("vw_idx_sejour.tpl");

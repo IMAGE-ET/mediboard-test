@@ -341,6 +341,21 @@ checkAnesth = function(oField){
   }
 }
 
+savePref = function(form) {
+  var formPref = getForm('editPrefServiceSoins');
+  var formService = getForm('selService');
+  var service_id = $V(form.default_service_id);
+
+  var services_ids_hospi_elt = formPref.elements['pref[services_ids_hospi]'];
+  var services_ids_hospi = $V(services_ids_hospi_elt).evalJSON();
+  services_ids_hospi.g{{$group_id}} = service_id;
+  $V(services_ids_hospi_elt, Object.toJSON(services_ids_hospi));
+  return onSubmitFormAjax(formPref, {onComplete: function() {
+    Control.Modal.close();
+    $V(formService.service_id, service_id);
+  } });
+}
+
 </script>
 
 <form name="form_prescription" action="" method="get">
@@ -381,7 +396,12 @@ checkAnesth = function(oField){
                 </tr>
                 
                 <tr>
-                  <th><label for="service_id">Service</label></th>
+                  <th>
+                    <label for="service_id">
+                      <button type="button" class="search notext" title="Service par défaut" onclick="Modal.open('select_default_service', { showClose: true, title: 'Service par défaut' })"></button>
+                      Service
+                    </label>
+                  </th>
                   <td>
                     <select name="service_id" onchange="checkAnesth(this); this.form.submit()" style="max-width: 135px;">
                       <option value="">&mdash; Service</option>
@@ -393,9 +413,30 @@ checkAnesth = function(oField){
                     {{if $service_id && $isPrescriptionInstalled && $service_id != "NP"}}
                       <button type="button" class="search compact" onclick="viewBilanService('{{$service_id}}','{{$date}}');">Bilan</button>
                     {{/if}}
+
+
+                    <div id="select_default_service" style="display: none;">
+                      <table class="form">
+                        <tr>
+                          <td style="text-align: center;">
+                            <select name="default_service_id">
+                              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+                              {{foreach from=$services item=_service}}
+                                <option value="{{$_service->_id}}" {{if $default_service_id == $_service->_id}}selected{{/if}}>{{$_service->_view}}</option>
+                              {{/foreach}}
+                            </select>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="button">
+                            <button type="button" class="submit" onclick="savePref(this.form);">{{tr}}Save{{/tr}}</button>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
                   </td>
                 </tr>
-                
+
                 <tr>
                   <th><label for="praticien_id">Praticien</label></th>
                   <td>
@@ -421,6 +462,13 @@ checkAnesth = function(oField){
                   </td>
                 </tr>
               </table>
+            </form>
+
+            <form name="editPrefServiceSoins" method="post">
+              <input type="hidden" name="m" value="admin" />
+              <input type="hidden" name="dosql" value="do_preference_aed" />
+              <input type="hidden" name="user_id" value="{{$app->user_id}}" />
+              <input type="hidden" name="pref[services_ids_hospi]" value="{{$services_ids_hospi}}" />
             </form>
           </td>
         </tr>
