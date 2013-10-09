@@ -55,8 +55,12 @@
       if (confirm($T('CSejour-sortie-confirm-clearall'))) {
         var form = getForm('editSejour');
         form.mode_sortie.clear();
-        form.sortie_reelle.clear();
-        form.sortie_reelle_da.clear();
+        if (form.sortie_reelle) {
+          form.sortie_reelle.clear();
+        }
+        if (form.sortie_reelle_da) {
+          form.sortie_reelle_da.clear();
+        }
         form.etablissement_sortie_id_autocomplete_view.clear();
         form.etablissement_sortie_id.clear();
         form.service_sortie_id_autocomplete_view.clear();
