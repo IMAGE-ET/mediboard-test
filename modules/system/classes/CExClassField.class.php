@@ -763,6 +763,7 @@ class CExClassField extends CExListItemsOwner {
 
   function getSQLSpec($union = true){
     $spec_obj = $this->getSpecObject();
+    $spec_obj->default = null;
     $db_spec = $spec_obj->getFullDBSpec();
 
     if ($union) {
@@ -843,9 +844,9 @@ class CExClassField extends CExListItemsOwner {
     }
 
     // pour la valeur par defaut des enums
-    if ($this->prop !== null) {
+    /*if ($this->prop !== null) {
       $this->prop = str_replace("\\", "\\\\", $this->prop);
-    }
+    }*/
 
     if (!$this->_id && $this->_make_unique_name) {
       $this->name = self::getUniqueName();

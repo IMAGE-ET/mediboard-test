@@ -37,7 +37,8 @@ if ($concept_type == "list" && !$ex_concept_id && $context instanceof CExConcept
   $prop = ($multiple ? "set" : "enum") . " list|" . implode("|", CMbArray::pluck($ex_list_items, "_id"));
 }
 
-$prop = str_replace("\\\\x", "\\x", $prop);
+$prop = stripslashes($prop);
+
 $prop_type = explode(" ", $prop);
 $prop_type = reset($prop_type);
 

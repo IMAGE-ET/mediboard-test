@@ -160,8 +160,9 @@ Main.add(function(){
         {{if !$concept_based}}
           {{* str *}}
           {{if $_type == "str"}}
-            <input type="text" name="{{$_name}}" value="{{$spec_value|replace:"\\x20":" "|replace:"\\x7C":"|"}}" class="str {{if $_name != "default"}}nospace pattern|\s*[a-zA-Z0-9_]*\s*{{/if}}" />
-            
+            <input type="text" name="{{$_name}}" value="{{$spec_value|smarty:nodefaults|replace:"\\x20":" "|replace:"\\x7C":"|"}}"
+                   class="str {{if $_name != "default"}}nospace pattern|\s*[a-zA-Z0-9_]*\s*{{/if}}" />
+
           {{* num *}}
           {{elseif $_type == "num"}}
             <script type="text/javascript">
@@ -277,12 +278,12 @@ Main.add(function(){
             $_type == "bool" && ($_name == "notNull" || $_name == "vertical") ||
             $_type == "num" && $_name == "columns"
           )}}
-            <input type="hidden" name="{{$_name}}" value="{{$spec_value}}" />
+            <input type="hidden" name="{{$_name}}" value="{{$spec_value|smarty:nodefaults}}" />
           {{/if}}
         
           {{* str *}}
           {{if $_type == "str"}}
-            {{$spec_value|replace:"\\x20":" "|replace:"\\x7C":"|"}}
+            {{$spec_value|smarty:nodefaults|replace:"\\x20":" "|replace:"\\x7C":"|"}}
             
           {{* num *}}
           {{elseif $_type == "num"}}
