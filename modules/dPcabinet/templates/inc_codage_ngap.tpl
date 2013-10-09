@@ -1,6 +1,6 @@
-<script type="text/javascript">
-
+<script>
 refreshTarif = function(){
+  $('inc_codage_ngap_button_create').disabled = true;
   var oForm = document.editNGAP;
   var url = new Url("dPcabinet", "httpreq_vw_tarif_code_ngap");
   url.addElement(oForm.quantite);
@@ -8,7 +8,9 @@ refreshTarif = function(){
   url.addElement(oForm.coefficient);
   url.addElement(oForm.demi);
   url.addElement(oForm.complement);
-  url.requestUpdate('tarifActe');
+  url.requestUpdate('tarifActe', function() {
+    $('inc_codage_ngap_button_create').disabled = false;
+  });
 };
   
 ActesNGAP = {
@@ -30,13 +32,13 @@ ActesNGAP = {
     var oForm = document.changeExecutant;
     $V(oForm.acte_ngap_id, acte_ngap_id); 
     $V(oForm.executant_id, executant_id);
-    
+
     submitFormAjax(oForm, 'systemMsg');
   },
-  
+
   submit: function() {
     var oForm = document.editNGAP;
-    submitFormAjax(oForm, 'systemMsg', { 
+    submitFormAjax(oForm, 'systemMsg', {
       onComplete: function() { 
         ActesNGAP.refreshList();
         if (window.Reglement) {
@@ -150,10 +152,10 @@ ActesNGAP = {
         <tr>
           <td>{{mb_field object=$acte_ngap field="quantite" onchange="refreshTarif()" onkeyup="refreshTarif()"}}</td>
           <td>
-            {{mb_field object=$acte_ngap field="code" onchange="refreshTarif()"}}
+            {{mb_field object=$acte_ngap field="code"}}
             <div style="display: none; width: 300px;" class="autocomplete" id="code_auto_complete"></div>
           </td>
-          <td>{{mb_field object=$acte_ngap field="coefficient" size="3" onchange="refreshTarif()" onkeyup="refreshTarif()"}}</td>
+          <td>{{mb_field object=$acte_ngap field="coefficient" size="3" onkeyup="refreshTarif()"}}</td>
           <td>{{mb_field object=$acte_ngap field="demi" onchange="refreshTarif()" onkeyup="refreshTarif()"}}</td>
           <td id="tarifActe">
             {{mb_field object=$acte_ngap field="montant_base"}}
@@ -280,7 +282,7 @@ ActesNGAP = {
   <input type="hidden" name="executant_id" value="" />
 </form>
 
-<script type="text/javascript">
+<script>
 
 {{if !$object->_coded}}
 
@@ -289,7 +291,8 @@ prepareForm(document.editNGAP);
 
 // UpdateFields de l'autocomplete
 function updateFields(selected) {
-  $V(document.editNGAP.code, selected.down('.code').innerHTML, true);
+  $V(document.editNGAP.code, selected.down('.code').innerHTML, false);
+  refreshTarif();
 }
 
 // Autocomplete
@@ -302,5 +305,5 @@ url.autoComplete(getForm('editNGAP').code, 'code_auto_complete', {
 } );
 
 {{/if}}
-  
+
 </script>
