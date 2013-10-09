@@ -9,8 +9,13 @@
    </a>
 </td>
 <td style="width: 10%">
-	{{$_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_ref_chambre->_view}}
-  {{$_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_shortview}}
+  {{assign var=_lit value=$_prescription->_ref_object->_ref_curr_affectation->_ref_lit}}
+
+  {{if $_lit->nom_complet}}
+     {{$_lit->nom_complet}}
+  {{else}}
+    {{$_lit->_ref_chambre->_view}} - {{$_lit->_shortview}}
+  {{/if}}
 </td>
 <td style="width: 10%">
   <div class="mediuser" style="border-color: #{{$_prescription->_ref_praticien->_ref_function->color}};">
