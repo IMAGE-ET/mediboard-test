@@ -679,7 +679,7 @@ Element.addMethods({
 
           if (!element["triggered"+eventName]) {
             // event bubbling
-            var bubble = (element.onclick || element.href) ? element : element.up("[onclick], :link");
+            var bubble = (element.onclick || element.href) ? element : element.up("[onclick], a[href]");
 
             // simulate event firing
             if (bubble.href && (!bubble.onclick || bubble.onclick() !== false)) {
@@ -1135,7 +1135,8 @@ Event.initKeyboardEvents = function() {
 
     // Escape in a modal window containing a visible "close" button
     if(key == Event.KEY_ESC && Control.Modal.stack.length) {
-      if (Control.Modal.stack.last().container.down("button.close:visible")) {
+      var closeButton = Control.Modal.stack.last().container.down("button.close");
+      if (closeButton && closeButton.visible()) {
         Control.Modal.close();
         Event.stop(e);
       }
