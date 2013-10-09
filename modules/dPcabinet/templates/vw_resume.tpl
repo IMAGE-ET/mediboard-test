@@ -87,8 +87,8 @@ function newExam(sAction, consultation_id) {
           <th>Résumé</th>
           <th>Documents</th>
           <th class="compta">
-            <label title="Réglements du patient et l'assurance maladie, en rouge si non réglé en totalité">
-              Règlement<br />Patient - AM
+            <label title="Réglements du patient et du tiers, en rouge si non réglé en totalité">
+              Règlement<br />Patient - Tiers
             </label>
           </th>
         </tr>
@@ -97,47 +97,55 @@ function newExam(sAction, consultation_id) {
         {{foreach from=$patient->_ref_consultations item=_consult}}
           {{if !$_consult->annule}}
             <tr>
+              <th class="section" colspan="3">
+                <div>
+                  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consult->_ref_plageconsult->_ref_chir}}
+                  &mdash;
+                  {{$_consult->_datetime|date_format:"%A"}}
+                  {{$_consult->_datetime|date_format:$conf.datetime}}
+                </div>
+              </th>
+            </tr>
+            <tr>
               <td class="text top">
-                {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consult->_ref_plageconsult->_ref_chir}}
-                
-                &mdash; {{$_consult->_ref_plageconsult->date|date_format:$conf.date}}
-                  {{if $_consult->motif}}
-                  <br />
+                {{if $_consult->motif}}
                   <strong>{{mb_label object=$_consult field=motif}}</strong>
-                  <em>{{mb_value object=$_consult field=motif}}</em>
+                  <div>{{mb_value object=$_consult field=motif}}</div>
                 {{/if}}
+
                 {{if $_consult->rques}}
-                  <br />
                   <strong>{{mb_label object=$_consult field=rques}}</strong>
-                  <em>{{mb_value object=$_consult field=rques}}</em>
+                  <div>{{mb_value object=$_consult field=rques}}</div>
                 {{/if}}
+
                 {{if $_consult->examen}}
-                  <br />
                   <strong>{{mb_label object=$_consult field=examen}}</strong>
-                  <em>{{mb_value object=$_consult field=examen}}</em>
+                  <div>{{mb_value object=$_consult field=examen}}</div>
                 {{/if}}
+
                 {{if $_consult->traitement}}
-                  <br />
                   <strong>{{mb_label object=$_consult field=traitement}}</strong>
-                  <em>{{mb_value object=$_consult field=traitement}}</em>
+                  <div>{{mb_value object=$_consult field=traitement}}</div>
                 {{/if}}
+
                 {{if $_consult->histoire_maladie && $conf.dPcabinet.CConsultation.show_histoire_maladie}}
-                  <br />
                   <strong>{{mb_label object=$_consult field=histoire_maladie}}</strong>
-                  <em>{{mb_value object=$_consult field=histoire_maladie}}</em>
+                  <div>{{mb_value object=$_consult field=histoire_maladie}}</div>
                 {{/if}}
+
                 {{if $_consult->conclusion && $conf.dPcabinet.CConsultation.show_conclusion}}
-                  <br />
                   <strong>{{mb_label object=$_consult field=conclusion}}</strong>
-                  <em>{{mb_value object=$_consult field=conclusion}}</em>
+                  <div>{{mb_value object=$_consult field=conclusion}}</div>
                 {{/if}}
-                {{if $_consult->_ref_examaudio->examaudio_id}}
+
+                {{if $_consult->_ref_examaudio->_id}}
                   <br />
-                  <a href="#" onclick="newExam('exam_audio', {{$_consult->consultation_id}})">
+                  <a href="#" onclick="newExam('exam_audio', {{$_consult->_id}})">
                     <strong>Audiogramme</strong>
                   </a>
                 {{/if}}
               </td>
+
               <td class="top">
                 {{mb_include module=files template=inc_list_docitems list=$_consult->_refs_docitems_by_cat}}
 
@@ -159,21 +167,30 @@ function newExam(sAction, consultation_id) {
                 {{if isset($listPrat.$chir_id|smarty:nodefaults)}}
                   {{if $_consult->tarif}}
                     {{if $_consult->du_patient}}
-                    <div style="display: inline; {{if !$_consult->patient_date_reglement}} color: #f00;{{/if}}">
-                      {{mb_value object=$_consult field=_reglements_total_patient}}
-                    </div>
-                    /
+                      <div>
+                        P:
+                        {{if !$_consult->patient_date_reglement}}
+                        <span style="color: #f00;">
+                          {{mb_value object=$_consult field=_reglements_total_patient}}
+                        </span>
+                        {{/if}}
+                        /
+                        {{mb_value object=$_consult field=du_patient}}
+                      </div>
                     {{/if}}
-              
-                    {{mb_value object=$_consult field=du_patient}}
-                    -
+
                     {{if $_consult->du_tiers}}
-                    <div style="display: inline; {{if !$_consult->tiers_date_reglement}} color: #f00;{{/if}}">
-                      {{mb_value object=$_consult field=_reglements_total_tiers}}
-                    </div>
-                    /
+                      <div>
+                        T:
+                        {{if !$_consult->tiers_date_reglement}}
+                          <span style="color: #f00;">
+                          {{mb_value object=$_consult field=_reglements_total_tiers}}
+                        </span>
+                        {{/if}}
+                        /
+                        {{mb_value object=$_consult field=du_tiers}}
+                      </div>
                     {{/if}}
-                    {{mb_value object=$_consult field=du_tiers}}
                   {{/if}}
                 {{/if}}
               </td>
