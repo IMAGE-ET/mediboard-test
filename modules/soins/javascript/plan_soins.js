@@ -624,19 +624,25 @@ PlanSoins = {
     url.popup(800, 600, "Ajout d'une inscription");
   },
   
-  viewFicheATC: function(fiche_ATC_id){
-    var url = new Url("dPmedicament", "vw_fiche_ATC");
+  viewFicheATC: function(fiche_ATC_id) {
+    var url = new Url("medicament", "vw_fiche_ATC");
     url.addParam("fiche_ATC_id", fiche_ATC_id);
     url.popup(700, 550, "Fiche ATC");  
   }, 
   
-  printBons: function(prescription_id){
-    var url = new Url("dPprescription", "print_bon");
+  printBons: function(prescription_id) {
+    var url = new Url("prescription", "print_bon");
     url.addParam("prescription_id", prescription_id);
     url.addParam("debut", PlanSoins.date);
     url.popup(900, 600, "Impression des bons");
   },
-  
+
+  printAdministrations: function(prescription_id) {
+    var url = new Url("prescription", "print_administrations");
+    url.addParam("prescription_id", prescription_id);
+    url.popup(900, 600, "Impression des administrations");
+  },
+
   closeAllAlertes: function(chapitre, ampoule, urgence, chapitre_plan_soins){
     // Si le chapitre n'est pas visibe
     if(!$(chapitre_plan_soins).visible()) {
