@@ -9,6 +9,8 @@
 *}}
 
 {{mb_script module="dPcabinet" script="icone_selector" ajax=true}}
+{{mb_script module="dPpatients" script="patient" ajax=true}}
+
 
 <table class="tbl">
   <tr>
