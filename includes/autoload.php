@@ -1,8 +1,6 @@
 <?php 
 /**
  * Autoload strategies
- *
- * PHP version 5.1.x+
  *  
  * @category   Dispatcher
  * @package    Mediboard
@@ -57,14 +55,36 @@ function mbAutoload($class) {
   
   // Other class
   else {
+    $class_file = $class;
+    $suffix = ".class";
+
+    // Namespaced class
+    if (strpos($class_file, "\\") !== false) {
+      $namespace = explode("\\", $class_file);
+
+      // Mediboard class
+      if ($namespace[0] === "Mediboard") {
+        array_shift($namespace);
+        $class_file = implode("/", $namespace);
+      }
+
+      // Vendor class
+      else {
+        $class_file = "vendor/".implode("/", $namespace);
+        $suffix = "";
+      }
+    }
+
+    $class_file .= $suffix;
+
     $dirs = array(
-      "classes/$class.class.php", 
-      "classes/*/$class.class.php",
-      "mobile/*/$class.class.php",
-      "modules/*/classes/$class.class.php",
-      "modules/*/classes/*/$class.class.php",
-      "modules/*/classes/*/*/$class.class.php",
-      "install/classes/$class.class.php", 
+      "classes/$class_file.php",
+      "classes/*/$class_file.php",
+      "mobile/*/$class_file.php",
+      "modules/*/classes/$class_file.php",
+      "modules/*/classes/*/$class_file.php",
+      "modules/*/classes/*/*/$class_file.php",
+      "install/classes/$class_file.php",
     );
   }
   
@@ -96,18 +116,4 @@ function mbAutoload($class) {
   return $class_path !== false;
 }
 
-if (function_exists("spl_autoload_register")) {
-  spl_autoload_register("mbAutoload");
-}
-else {
-  /**
-   * Autoload magic function redefinition
-   * 
-   * @param string $class Class to be loaded
-   * 
-   * @return bool
-   */
-  function __autoload($class) {
-    return mbAutoload($class);
-  }
-}
+spl_autoload_register("mbAutoload");

@@ -128,7 +128,7 @@ class CFloatSpec extends CMbFieldSpec {
   /**
    * @see parent::sample()
    */
-  function sample(&$object, $consistent = true){
+  function sample($object, $consistent = true){
     parent::sample($object, $consistent);
     $object->{$this->fieldName} = self::randomString(CMbFieldSpec::$nums, 2).".".self::randomString(CMbFieldSpec::$nums, 2);
   }
@@ -166,8 +166,9 @@ class CFloatSpec extends CMbFieldSpec {
     if ($decimals == null) {
       $decimals = isset($this->precise) ? 4 : 2;
     }
-    
-    $step = CMbFieldSpec::checkNumeric(CMbArray::extract($params, "step"), false);
+
+    $step = CMbArray::extract($params, "step");
+    $step = CMbFieldSpec::checkNumeric($step, false);
     
     CMbArray::defaultValue($params, "size", 4);
 

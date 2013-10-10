@@ -23,6 +23,9 @@ class CFraisDivers extends CActe {
 
   public $_ref_type;
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["type_id"]     = "ref notNull class|CFraisDiversType autocomplete|code";
@@ -33,6 +36,9 @@ class CFraisDivers extends CActe {
     return $props;
   }
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "frais_divers";
@@ -44,6 +50,9 @@ class CFraisDivers extends CActe {
     return $this->_ref_type = $this->loadFwdRef("type_id", true);
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefType();

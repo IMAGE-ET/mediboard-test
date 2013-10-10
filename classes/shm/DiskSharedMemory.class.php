@@ -91,7 +91,7 @@ class DiskSharedMemory implements ISharedMemory {
    */
   function modDate($key) {
     $filename = $this->dir.$key;
-    @clearstatcache(true, $filename);
+    clearstatcache(true, $filename);
 
     if (!file_exists($filename)) {
       return null;

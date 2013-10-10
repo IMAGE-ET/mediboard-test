@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -23,6 +23,9 @@ class CFavoriCCAM extends CMbObject {
   public $_filter_class;
   public $_ref_code;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'ccamfavoris';
@@ -30,6 +33,9 @@ class CFavoriCCAM extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["favoris_user"] = "ref notNull class|CUser";
@@ -39,6 +45,9 @@ class CFavoriCCAM extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->_ref_code = CCodeCCAM::get($this->favoris_code, CCodeCCAM::LITE);
     $this->_ref_code->getChaps();

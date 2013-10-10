@@ -1,8 +1,6 @@
 <?php 
 /**
- * Access logging 
- *
- * PHP version 5.1.x+
+ * Access logging
  *  
  * @category   Dispatcher
  * @package    Mediboard

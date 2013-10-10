@@ -170,7 +170,7 @@ class CNumSpec extends CMbFieldSpec {
   /**
    * @see parent::sample()
    */
-  function sample(&$object, $consistent = true){
+  function sample($object, $consistent = true){
     parent::sample($object, $consistent);
     $propValue =& $object->{$this->fieldName};
     
@@ -219,8 +219,9 @@ class CNumSpec extends CMbFieldSpec {
     if ($new_value !== null) {
       $value = $new_value;
     }
-    
-    $step = CMbFieldSpec::checkNumeric(CMbArray::extract($params, "step"));
+
+    $step = CMbArray::extract($params, "step");
+    $step = CMbFieldSpec::checkNumeric($step);
     
     CMbArray::defaultValue($params, "size", 4);
 

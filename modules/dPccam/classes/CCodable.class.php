@@ -347,6 +347,9 @@ class CCodable extends CMbObject {
   function doUpdateMontants(){
   }
 
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     // Should update codes CCAM. Very sensible, test a lot before uncommenting
     // $this->updateDBCodesCCAMField();
@@ -667,6 +670,9 @@ class CCodable extends CMbObject {
     return null;
   }
 
+  /**
+   * @see parent::check()
+   */
   function check() {
     if ($msg = $this->checkCodeCcam()) {
       return $msg;

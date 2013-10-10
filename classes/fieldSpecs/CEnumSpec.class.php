@@ -113,7 +113,7 @@ class CEnumSpec extends CMbFieldSpec {
   /**
    * @see parent::sample()
    */
-  function sample(&$object, $consistent = true){
+  function sample($object, $consistent = true){
     parent::sample($object, $consistent);
     $specFragments = $this->getListValues($this->list);
     $object->{$this->fieldName} = self::randomString($specFragments, 1);

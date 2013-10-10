@@ -20,6 +20,9 @@ class CFraisDiversType extends CMbObject {
   public $tarif;
   public $facturable;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "frais_divers_type";
@@ -28,6 +31,9 @@ class CFraisDiversType extends CMbObject {
     return $spec;
   }
 
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     $props["code"]        = "str notNull maxLength|16";
@@ -37,11 +43,17 @@ class CFraisDiversType extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = "$this->libelle ($this->code)";
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["frais_divers"] = "CFraisDivers type_id";

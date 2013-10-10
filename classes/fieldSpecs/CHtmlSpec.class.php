@@ -63,7 +63,7 @@ class CHtmlSpec extends CMbFieldSpec {
   /**
    * @see parent::sample()
    */
-  function sample(&$object, $consistent = true){
+  function sample($object, $consistent = true){
     parent::sample($object, $consistent);
     $object->{$this->fieldName} = <<<EOD
 <h1>Titre 1</h1>

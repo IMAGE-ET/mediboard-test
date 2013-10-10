@@ -52,7 +52,7 @@ class CHPRSpec extends CTextSpec {
   /**
    * @see parent::sample()
    */
-  function sample(&$object, $consistent = true){
+  function sample($object, $consistent = true){
     $object->{$this->fieldName} = <<<HPR
 H|^~&\|C152203.HPR||111111^MEDIBOARD ATL||ADM|||MDB^MEDIBOARD|LS1||H2.1^C|201210251522
 P|1|00209272||12411338|NOM^PRENOM^^^M^||19810508|M|||||||||||||||||

@@ -207,7 +207,7 @@ class CBoolSpec extends CMbFieldSpec {
   /**
    * @see parent::sample()
    */
-  function sample(&$object, $consistent = true){
+  function sample($object, $consistent = true){
     parent::sample($object, $consistent);
     $object->{$this->fieldName} = rand(0, 1);
   }

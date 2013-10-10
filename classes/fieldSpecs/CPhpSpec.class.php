@@ -47,7 +47,7 @@ class CPhpSpec extends CMbFieldSpec {
   /**
    * @see parent::sample()
    */
-  function sample(&$object, $consistent = true){
+  function sample($object, $consistent = true){
     $object->{$this->fieldName} = '<?php
 $file = fopen("welcome.txt", "r") or exit("Unable to open file!");
 //Output a line of the file until the end is reached

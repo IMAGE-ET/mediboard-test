@@ -15,7 +15,7 @@ class CMbXMLObjectExport extends CMbXMLDocument {
   
   public $objects_values = array();
   
-  function load($file){
+  function load($file, $options = null){
     parent::load($file);
     
     $root = $this->documentElement;

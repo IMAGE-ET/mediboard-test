@@ -255,11 +255,11 @@ class CProductStockGroup extends CProductStock {
   /**
    * Set host
    *
-   * @param CGroups $host Host
+   * @param CGroups|CMbObject $host Host
    *
    * @return void
    */
-  function setHost(CGroups $host){
+  function setHost(CMbObject $host){
     $this->_ref_group = $host;
     $this->group_id = $host->_id;
   }

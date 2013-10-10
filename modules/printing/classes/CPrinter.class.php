@@ -37,8 +37,8 @@ class CPrinter extends CMbMetaObject {
   /**
    * @see parent::loadTargetObject
    */
-  function loadTargetObject() {
-    $object = parent::loadTargetObject();
+  function loadTargetObject($cache = true) {
+    $object = parent::loadTargetObject($cache);
 
     /** @var $object CSourcePrinter */
     $this->_view = $object->_view;

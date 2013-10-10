@@ -43,8 +43,7 @@ class CMbLock {
    */
   function acquire($lock_lifetime = 300.0) {
     // No lock, we acquire
-    // @todo Delete the mute operator as soon as PHP 5.2 not maintained
-    @clearstatcache(true, $this->filename);
+    clearstatcache(true, $this->filename);
     if (!file_exists($this->filename)) {
       return touch($this->filename);
     }
@@ -69,8 +68,7 @@ class CMbLock {
    * @return bool
    */
   function release() {
-    // @todo Delete the mute operator as soon as PHP 5.2 not maintained
-    @clearstatcache(true, $this->filename);
+    clearstatcache(true, $this->filename);
     if (file_exists($this->filename)) {
       return unlink($this->filename);
     }

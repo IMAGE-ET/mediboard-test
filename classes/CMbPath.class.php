@@ -451,14 +451,7 @@ abstract class CMbPath {
    * @return resource The resource to the temporary file
    */
   static function getTempFile() {
-    // PHP 5.1+
-    $f = @fopen("php://temp", "rb+");
-    
-    if (!$f) {
-      $f = fopen(tempnam(sys_get_temp_dir(), "mb_"), "rb+");
-    }
-    
-    return $f;
+    return fopen("php://temp", "rb+");
   }
 
   /**

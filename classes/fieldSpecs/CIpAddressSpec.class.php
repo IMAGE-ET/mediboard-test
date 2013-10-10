@@ -52,7 +52,7 @@ class CIpAddressSpec extends CMbFieldSpec {
   /**
    * @see parent::sample()
    */
-  function sample(&$object, $consistent = true){
+  function sample($object, $consistent = true){
     parent::sample($object, $consistent);
     $object->{$this->fieldName} = inet_pton("127.0.0.1");
   }

@@ -44,7 +44,7 @@ class CXmlSpec extends CMbFieldSpec {
   /**
    * @see parent::sample()
    */
-  function sample(&$object, $consistent = true){
+  function sample($object, $consistent = true){
     $object->{$this->fieldName} = <<<XML
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <note>

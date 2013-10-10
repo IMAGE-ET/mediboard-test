@@ -115,7 +115,7 @@ class CPasswordSpec extends CMbFieldSpec {
   /**
    * @see parent::sample()
    */
-  function sample(&$object, $consistent = true) {
+  function sample($object, $consistent = true) {
     parent::sample($object, $consistent);
     $object->{$this->fieldName} = self::randomString(array_merge(range('0', '9'), range('a', 'z'), range('A', 'Z')), 8);
   }

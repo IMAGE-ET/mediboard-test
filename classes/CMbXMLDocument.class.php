@@ -108,21 +108,20 @@ class CMbXMLDocument extends DOMDocument {
 
     return $chain_errors;
   }
-  
+
   /**
    * Try to validate the document against a schema
    * will trigger errors when not validating
-   * @param string Path of schema, use document inline schema if null 
-   * @return boolean  
+   *
+   * @param string $filename       Path of schema, use document inline schema if null
+   * @param bool   $returnErrors   Return errors, or false
+   * @param bool   $display_errors Display errors
+   *
+   * @return bool
    */
   function schemaValidate($filename = null, $returnErrors = false, $display_errors = true) {
     if (!$filename) {
       $filename = $this->schemafilename;
-    }
-
-    // PHP < 5.1.x
-    if (!function_exists("libxml_use_internal_errors")) {
-      return parent::schemaValidate($filename);
     }
     
     // Enable user error handling

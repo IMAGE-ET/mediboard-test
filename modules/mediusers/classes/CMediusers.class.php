@@ -1441,14 +1441,9 @@ class CMediusers extends CPerson {
   }
 
   /**
-   * @param string $keywords keywords
-   * @param array  $where    where
-   * @param string $limit    limit
-   * @param array  $ljoin    ljoin
-   *
-   * @return self[]
+   * @see parent::getAutocompleteList()
    */
-  function getAutocompleteList($keywords, $where = null, $limit = null, $ljoin= null) {
+  function getAutocompleteList($keywords, $where = null, $limit = null, $ljoin = null, $order = null) {
     $ljoin = array_merge($ljoin, array("users" => "users.user_id = users_mediboard.user_id"));
     /** @var CMediusers[] $list */
     $list = $this->seek($keywords, $where, $limit, null, $ljoin, "users.user_last_name");

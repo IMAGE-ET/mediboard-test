@@ -62,7 +62,7 @@ class CPctSpec extends CFloatSpec {
   /**
    * @see parent::sample()
    */
-  function sample(&$object, $consistent = true) {
+  function sample($object, $consistent = true) {
     parent::sample($object, $consistent);
     $object->{$this->fieldName} = rand(0, 100);
   }

@@ -2,7 +2,7 @@
 /**
  * Main URL Dispatcher
  *
- * PHP version 5.1.x+
+ * PHP version 5.3.x+
  *
  * @category Dispatcher
  * @package  Mediboard
