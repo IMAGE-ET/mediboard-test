@@ -333,6 +333,12 @@ class CPlageconsult extends CPlageHoraire {
       }
     }
 
+    //plage blocked by holiday config
+    $holidays = CMbDate::getHolidays();
+    if (!CAppUI::conf("dPcabinet CPlageconsult allow_create_holliday") && array_key_exists($this->date, $holidays)) {
+      $msg.= CAppUI::tr("CPlageConsult-errror-plage_blocked_by_holidays", $holidays[$this->date]);
+    }
+
     //chir_id se remplace lui même
     if ($this->chir_id == $this->pour_compte_id) {
       $msg .= CAppUI::tr("CPlageConsult-error-pour_compte-equal-chir_id");

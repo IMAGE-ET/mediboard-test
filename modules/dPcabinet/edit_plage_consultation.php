@@ -107,6 +107,8 @@ for ($i = 0; $i < 7; $i++) {
   $listDaysSelect[$dateArr] = $dateArr;    
 }
 
+$holidays = CMbDate::getHolidays();
+
 // Variable permettant de compter les jours pour la suppression du samedi et du dimanche
 $i = 0;
 
@@ -149,6 +151,7 @@ $smarty->assign("chirSel"           , $chirSel);
 $smarty->assign("plageSel"          , $plageSel);
 $smarty->assign("listChirs"         , $listChirs);
 $smarty->assign("listDaysSelect"    , $listDaysSelect);
+$smarty->assign("holidays"          , $holidays);
 $smarty->assign("listHours"         , $hours);
 $smarty->assign("listMins"          , CPlageconsult::$minutes);
 $smarty->assign("nb_intervals_hour" , intval(60/CPlageconsult::$minutes_interval));

@@ -95,8 +95,11 @@
               <select name="date" class="{{$plageSel->_props.date}}" style="width: 15em;">
                 <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                 {{foreach from=$listDaysSelect item=curr_day}}
-                  <option value="{{$curr_day}}" {{if $curr_day == $plageSel->date}} selected="selected" {{/if}}>
-                    {{$curr_day|date_format:"%A"}}
+                  <option value="{{$curr_day}}"
+                    {{if $curr_day == $plageSel->date}} selected="selected" {{/if}}
+                    {{if array_key_exists($curr_day, $holidays) && !$conf.dPcabinet.CPlageconsult.allow_create_holliday}}disabled="disabled"{{/if}}
+                    >
+                    {{$curr_day|date_format:"%A"}} {{if array_key_exists($curr_day, $holidays)}}(férié){{/if}}
                   </option>
                 {{/foreach}}
               </select>
