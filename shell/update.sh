@@ -35,7 +35,7 @@ revision_external=HEAD
 # First external
 externals=$(svn propget svn:externals modules)
 first_external=$(echo $externals|head -n 1|cut -d' ' -f 1)
-all_externals=$(echo $externals|awk '{ if ($1 != "") { print "modules/"$1 } }'|tr '\n' ' ')
+all_externals=$(echo $externals|tr ' ' '\n'|sed 'n;d'|awk -F ' ' '{ if ($1 != "") { print "modules/"$1 } }'|tr '\n' ' ')
 path_external=$MB_PATH/modules/$first_external
 
 # Choose the target revision
