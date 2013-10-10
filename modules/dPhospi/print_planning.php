@@ -36,9 +36,9 @@ CMbArray::removeValue(0, $filter->_service);
 
 $total   = 0;
 
-$sejours = new CSejour;
+$sejours = new CSejour();
 
-$sejourReq = new CRequest;
+$sejourReq = new CRequest();
 
 $sejourReq->addLJoinClause("patients", "patients.patient_id = sejour.patient_id");
 $sejourReq->addLJoinClause("users", "users.user_id = sejour.praticien_id");
@@ -106,6 +106,18 @@ $where["cancelled"] = "= '0'";
 $order = "nom";
 $services = $service->loadListWithPerms(PERM_READ, $where, $order);
 
+$prestation_id = CAppUI::pref("prestation_id_hospi");
+
+if ($prestation_id == "all") {
+  $prestation_id = "";
+}
+
+$prestation = new CPrestationJournaliere();
+$prestation->load($prestation_id);
+
+CMbObject::massLoadFwdRef($sejours, "patient_id");
+CMbObject::massLoadFwdRef($sejours, "praticien_id");
+
 // ATTENTION ne pas supprimer le "&" car pose des problemes
 foreach ($sejours as $key => &$sejour) {
   /** @var CSejour $sejour*/
@@ -115,6 +127,10 @@ foreach ($sejours as $key => &$sejour) {
   $sejour->_ref_first_affectation->loadRefLit()->loadRefChambre();
   $affectation = $sejour->_ref_first_affectation;
   $affectation->_ref_lit->loadCompleteView();
+
+  if ($prestation_id) {
+    $sejour->loadLiaisonsForPrestation($prestation_id, $filter->_date_min);
+  }
 
   $service_id = $affectation->service_id ? $affectation->service_id : $affectation->_ref_lit->_ref_chambre->service_id;
   if (count($filter->_service) && !in_array($service_id, $filter->_service)) {
@@ -140,9 +156,10 @@ foreach ($sejours as $key => &$sejour) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("filter"   , $filter);
-$smarty->assign("listDays" , $listDays);
-$smarty->assign("listPrats", $listPrats);
-$smarty->assign("total"    , count($sejours));
+$smarty->assign("filter"    , $filter);
+$smarty->assign("listDays"  , $listDays);
+$smarty->assign("listPrats" , $listPrats);
+$smarty->assign("total"     , count($sejours));
+$smarty->assign("prestation", $prestation);
 
 $smarty->display("print_planning.tpl");

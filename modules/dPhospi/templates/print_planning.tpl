@@ -40,6 +40,9 @@
     <th>Dur.</th>
     <th>Conv.</th>
     <th>Chambre</th>
+    {{if $prestation->_id}}
+      <th>{{mb_value object=$prestation field=nom}}</th>
+    {{/if}}
     <th>Remarques</th>
     <th>Date</th>
     <th>Dénomination</th>
@@ -72,6 +75,11 @@
       
       ({{tr}}chambre_seule.{{$curr_sejour->chambre_seule}}{{/tr}})
     </td>
+    {{if $prestation->_id}}
+      <td>
+        {{mb_include module=hospi template=inc_vw_liaisons_prestation liaisons=$curr_sejour->_liaisons_for_prestation}}
+      </td>
+    {{/if}}
     <td class="text">{{$curr_sejour->rques}}</td>
     <td class="text">
       {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
