@@ -18,6 +18,7 @@ class CCodable extends CMbObject {
   public $codes_ccam;
   /** @var bool Séjour facturé ou non  */
   public $facture;
+  public $tarif;
 
   // Form fields
   public $_acte_execution;
@@ -94,6 +95,7 @@ class CCodable extends CMbObject {
 
   // Behaviour fields
   public $_delete_actes;
+  public $_delete_actes_type;
 
   /**
    * Détruit les actes CCAM et NGAP
@@ -122,22 +124,26 @@ class CCodable extends CMbObject {
     $this->_tokens_ngap = "";
 
     if (CModule::getActive("tarmed")) {
-      // Suppression des anciens actes Tarmed
-      $this->loadRefsActesTarmed();
-      foreach ($this->_ref_actes_tarmed as $acte) {
-        if ($msg = $acte->delete()) {
-          return $msg;
+      if (!$this->_delete_actes_type || $this->_delete_actes_type == "tarmed") {
+        // Suppression des anciens actes Tarmed
+        $this->loadRefsActesTarmed();
+        foreach ($this->_ref_actes_tarmed as $acte) {
+          if ($msg = $acte->delete()) {
+            return $msg;
+          }
         }
+        $this->_tokens_tarmed = "";
       }
-      $this->_tokens_tarmed = "";
 
-      $this->loadRefsActesCaisse();
-      foreach ($this->_ref_actes_caisse as $acte) {
-        if ($msg = $acte->delete()) {
-          return $msg;
+      if (!$this->_delete_actes_type || $this->_delete_actes_type == "caisse") {
+        $this->loadRefsActesCaisse();
+        foreach ($this->_ref_actes_caisse as $acte) {
+          if ($msg = $acte->delete()) {
+            return $msg;
+          }
         }
+        $this->_tokens_caisse = "";
       }
-      $this->_tokens_caisse = "";
     }
     return null;
   }
@@ -261,6 +267,7 @@ class CCodable extends CMbObject {
     $props = parent::getProps();
     $props["codes_ccam"]      = "str show|0";
     $props["facture"]         = "bool default|0";
+    $props["tarif"]           = "str show|0";
 
     $props["_tokens_ccam"]    = "";
     $props["_tokens_ngap"]    = "";
@@ -757,6 +764,10 @@ class CCodable extends CMbObject {
     $tarif = new CTarif();
     $tarif->load($this->_tarif_id);
 
+    if ($this->_class != "CConsultation") {
+      $this->tarif = $this->tarif ? "composite" : $tarif->description;
+    }
+
     // Mise à jour de codes CCAM prévus, sans information serialisée complémentaire
     $this->_codes_ccam = array();
     foreach ($tarif->_codes_ccam as $_code_ccam) {
@@ -791,6 +802,7 @@ class CCodable extends CMbObject {
         return $msg;
       }
     }
+
     return null;
   }
 

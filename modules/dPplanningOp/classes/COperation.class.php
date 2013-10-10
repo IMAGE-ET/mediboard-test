@@ -888,6 +888,13 @@ class COperation extends CCodable implements IPatientRelated {
       }
     }
 
+    // Gestion du tarif et precodage des actes
+    if ($this->_bind_tarif && $this->_id) {
+      if ($msg = $this->bindTarif()) {
+        return $msg;
+      }
+    }
+
     // Standard storage bis
     if ($msg = parent::store()) {
       return $msg;
@@ -901,13 +908,6 @@ class COperation extends CCodable implements IPatientRelated {
       }
 
       $this->_ref_plageop->reorderOp($reorder_rank_voulu ? CPlageOp::RANK_REORDER : null);
-    }
-  
-    // Gestion du tarif et precodage des actes
-    if ($this->_bind_tarif && $this->_id) {
-      if ($msg = $this->bindTarif()) {
-        return $msg;
-      }
     }
     return null;
   }
@@ -1400,6 +1400,11 @@ class COperation extends CCodable implements IPatientRelated {
     $template->addProperty("Opération - CCAM3 - montant activité 1", @$this->_ext_codes_ccam[2]->activites[1]->phases[0]->tarif);
     $template->addProperty("Opération - CCAM3 - montant activité 4", @$this->_ext_codes_ccam[2]->activites[4]->phases[0]->tarif);
     $template->addProperty("Opération - CCAM - codes"              , implode(" - ", $this->_codes_ccam));
+    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
+      $this->loadRefsActes();
+      $template->addProperty("Opération - TARMED - codes"            , CActeTarmed::actesHtml($this), '', false);
+      $template->addProperty("Opération - Caisse - codes"            , CActeCaisse::actesHtml($this), '', false);
+    }
     $template->addProperty(
       "Opération - CCAM - descriptions", implode(" - ", CMbArray::pluck($this->_ext_codes_ccam, "libelleLong"))
     );

@@ -78,6 +78,18 @@
   {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
     <li><a href="#tarmed_tab">TARMED</a></li>
     <li><a href="#caisse_tab">{{tr}}CPrestationCaisse{{/tr}}</a></li>
+    <script>
+      Main.add (function () {
+        {{if $subject instanceof COperation}}
+          var url = new Url("tarmed", "ajax_save_acte_modele");
+          url.addParam("object_id", '{{$subject->_id}}');
+          url.addParam("object_class", "COperation");
+          url.requestUpdate('pdf_doc_tarmed');
+        {{/if}}
+      });
+    </script>
+    <li id="pdf_doc_tarmed"></li>
+    <li style="float:right;"><button type="button" class="cancel" onclick="delActes('');">Vider la cotation</button></li>
   {{/if}}
 </ul>
 

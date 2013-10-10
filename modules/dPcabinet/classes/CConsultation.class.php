@@ -56,7 +56,6 @@ class CConsultation extends CFacturable {
   public $derniere;
   public $adresse; // Le patient a-t'il été adressé ?
   public $adresse_par_prat_id;
-  public $tarif;
 
   public $arrivee;
   public $categorie_id;
@@ -268,7 +267,6 @@ class CConsultation extends CFacturable {
     $props["derniere"]            = "bool show|0";
     $props["adresse"]             = "bool show|0";
     $props["adresse_par_prat_id"] = "ref class|CMedecin";
-    $props["tarif"]               = "str show|0";
     $props["arrivee"]             = "dateTime show|0";
     $props["concerne_ALD"]        = "bool";
 

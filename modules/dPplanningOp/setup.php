@@ -1663,6 +1663,15 @@ class CSetupdPplanningOp extends CSetup {
                 ADD `duree_heure_hospi` TINYINT (4) UNSIGNED DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.79";
+    $this->makeRevision("1.79");
+    $query = "ALTER TABLE `operations`
+                ADD `tarif` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `sejour`
+                ADD `tarif` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.80";
   }
 }
