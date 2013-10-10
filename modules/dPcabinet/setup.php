@@ -1997,6 +1997,9 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("2.16");
     $this->addPrefQuery("multi_popups_resume", "1");
 
-    $this->mod_version = "2.17";
+    $this->makeRevision("2.17");
+    $this->addPrefQuery("allow_plage_holiday", "1");
+
+    $this->mod_version = "2.18";
   }
 }

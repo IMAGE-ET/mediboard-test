@@ -17,7 +17,6 @@ $dPconfig["dPcabinet"] = array(
     "hours_stop"       => "20",
     "minutes_interval" => "15",
     "hour_limit_matin" => "12",
-    "allow_create_holliday" => 1,
   ),
   "CConsultation" => array(
     "use_last_consult"       => 0,
