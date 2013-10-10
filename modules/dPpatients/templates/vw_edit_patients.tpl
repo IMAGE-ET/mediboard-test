@@ -255,6 +255,9 @@
       </ul>
 
       <form name="editFrm" {{if !$ajax}}action="?m={{$m}}"{{/if}} method="post" onsubmit="return confirmCreation(this)">
+        {{if $ajax}}
+          <input type="hidden" name="m" value="patients" />
+        {{/if}}
         <input type="hidden" name="dosql" value="do_patients_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="_purge" value="0" />
