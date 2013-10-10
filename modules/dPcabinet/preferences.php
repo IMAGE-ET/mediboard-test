@@ -38,5 +38,6 @@ CPreferences::$modules["dPcabinet"] = array (
   "showIntervPlanning",
   "NbConsultMultiple",
   "use_acte_date_now",
-  "multi_popups_resume"
+  "multi_popups_resume",
+  "allow_plage_holiday"
 );

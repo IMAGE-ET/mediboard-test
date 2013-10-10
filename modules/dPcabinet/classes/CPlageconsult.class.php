@@ -335,7 +335,7 @@ class CPlageconsult extends CPlageHoraire {
 
     //plage blocked by holiday config
     $holidays = CMbDate::getHolidays();
-    if (!CAppUI::conf("dPcabinet CPlageconsult allow_create_holliday") && array_key_exists($this->date, $holidays)) {
+    if (!CAppUI::pref("allow_plage_holiday") && array_key_exists($this->date, $holidays)) {
       $msg.= CAppUI::tr("CPlageConsult-errror-plage_blocked_by_holidays", $holidays[$this->date]);
     }
 
