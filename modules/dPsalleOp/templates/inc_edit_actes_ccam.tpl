@@ -312,7 +312,7 @@
               {{if $confCCAM.commentaire}}
               <tr class="{{$view}} commentaire" {{if !$acte->commentaire}}style="display: none;"{{/if}}>
                 <th>{{mb_label object=$acte field=commentaire}}</th>
-                <td class="text" colspan="10">{{mb_field object=$acte field=commentaire}}</td>
+                <td class="text" colspan="10">{{mb_field object=$acte field=commentaire class="autocomplete" form="formActe-$view"}}</td>
               </tr>
               {{/if}}
       

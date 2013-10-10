@@ -94,7 +94,7 @@ class CActeCCAM extends CActe {
     $props["code_phase"]             = "num notNull min|0 max|99";
     $props["modificateurs"]          = "str maxLength|4";
     $props["motif_depassement"]      = "enum list|d|e|f|n";
-    $props["commentaire"]            = "text";
+    $props["commentaire"]            = "text helped";
     $props["code_association"]       = "enum list|1|2|3|4|5";
     $props["extension_documentaire"] = "enum list|1|2|3|4|5|6";
     $props["rembourse"]              = "bool default|1";
