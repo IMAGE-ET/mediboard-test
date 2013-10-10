@@ -2906,6 +2906,8 @@ class CSejour extends CFacturable implements IPatientRelated {
     $template->addProperty("Sejour - Observation entrée - Examen clinique", $obs_entree->getFormattedValue("examen"));
     $template->addProperty("Sejour - Observation entrée - Remarques"      , $obs_entree->getFormattedValue("rques"));
     $template->addProperty("Sejour - Observation entrée - Traitements"    , $obs_entree->getFormattedValue("traitement"));
+    $template->addProperty("Sejour - Observation entrée - Histoire de la maladie", $obs_entree->getFormattedValue("histoire_maladie"));
+    $template->addProperty("Sejour - Observation entrée - Au total"       , $obs_entree->getFormattedValue("conclusion"));
 
     // Prescriptions
     $lines = array();
