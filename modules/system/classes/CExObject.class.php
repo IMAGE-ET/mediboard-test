@@ -992,7 +992,7 @@ class CExObject extends CMbMetaObject {
     $template->addProperty("$name - Formulaires - 5 derniers", $formulaires, null, false);
 
     $params["limit"] = 1;
-    $params["only_direct"] = 1;
+    $params["only_host"] = 1;
     if ($object->_id) {
       $formulaires = CApp::fetch("forms", "ajax_list_ex_object", $params);
       $formulaires = preg_replace("/\s+/", " ", $formulaires); // Remove CRLF which CKEditor transform to <br />
