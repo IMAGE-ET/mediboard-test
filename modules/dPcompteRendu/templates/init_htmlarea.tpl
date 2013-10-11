@@ -233,6 +233,12 @@
         data = data.strip();
       }
 
+      var previous = elt.previousElementSibling;
+
+      if (data == "" && elt.nodeName != "BR" && previous && previous.nodeName == "SPAN" && previous.className == "field") {
+        return;
+      }
+
       if (
       /* Commence par un retour chariot ou une ligne verticale */
         elt.nodeName === "BR" ||

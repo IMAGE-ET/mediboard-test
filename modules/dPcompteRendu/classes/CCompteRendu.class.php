@@ -1147,10 +1147,6 @@ class CCompteRendu extends CDocumentItem {
   function generateDocFromModel($other_source = null, $header_id = null, $footer_id = null) {
     $source = $this->_source;
 
-    if ($other_source) {
-      $source = $other_source;
-    }
-
     $this->loadComponents();
 
     $header  = $this->_ref_header;
@@ -1163,6 +1159,13 @@ class CCompteRendu extends CDocumentItem {
     }
     if ($footer_id) {
       $footer->load($footer_id);
+    }
+
+    if ($other_source) {
+      $source = $other_source;
+      // Si on utilise une source existante, l'intro et la conclusion sont déjà inclues
+      $preface = new CCompteRendu();
+      $ending = new CCompteRendu();
     }
 
     $header->loadContent();
@@ -1194,7 +1197,6 @@ class CCompteRendu extends CDocumentItem {
         }";
 
       if ($header->_id) {
-
         $header->loadContent();
         $header->_source = "<div id=\"header\">$header->_source</div>";
 
