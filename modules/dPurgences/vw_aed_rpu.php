@@ -49,7 +49,9 @@ if ($rpu->_id || $rpu->sejour_id) {
   
   // Chargement de l'IPP ($_IPP)
   $patient->loadIPP();
-  
+
+  $patient->loadRefPhotoIdentite();
+
   // Chargement du numero de dossier ($_NDA)
   $sejour->loadNDA();
   $sejour->loadRefPraticien(1);

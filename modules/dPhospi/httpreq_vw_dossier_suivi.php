@@ -21,6 +21,7 @@ $cible       = CValue::getOrSession("cible", "");
 $_show_obs   = CValue::getOrSession("_show_obs", 1);
 $_show_trans = CValue::getOrSession("_show_trans", 1);
 $_show_const = CValue::getOrSession("_show_const", 0);
+$show_header = CValue::get("show_header", 0);
 
 if ($cible != "") {
   $_show_obs = $_show_const = 0;
@@ -31,6 +32,10 @@ $sejour = new CSejour();
 $sejour->load($sejour_id);
 $sejour->loadSuiviMedical();
 $sejour->loadRefPraticien();
+
+if ($show_header) {
+  $sejour->loadRefPatient()->loadRefPhotoIdentite();
+}
 
 $sejour->loadRefPrescriptionSejour();
 $prescription =& $sejour->_ref_prescription_sejour;
@@ -253,5 +258,6 @@ $smarty->assign("last_trans_cible", $last_trans_cible);
 $smarty->assign("_show_obs"   , $_show_obs);
 $smarty->assign("_show_trans" , $_show_trans);
 $smarty->assign("_show_const" , $_show_const);
+$smarty->assign("show_header" , $show_header);
 
 $smarty->display("inc_vw_dossier_suivi.tpl");

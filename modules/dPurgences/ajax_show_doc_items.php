@@ -16,11 +16,15 @@ $consult = new CConsultation();
 $consult->load($consult_id);
 $consult->loadRefsFwd();
 
+$consult->loadRefPatient()->loadRefPhotoIdentite();
+
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 
 // Création du template
 $smarty = new CSmartyDP();
+
 $smarty->assign("consult", $consult);
 $smarty->assign("sejour" , $sejour);
+
 $smarty->display("inc_rpu_docitems.tpl");

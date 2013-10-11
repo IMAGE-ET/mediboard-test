@@ -272,6 +272,26 @@ App.readonly = false;
   {{mb_include module=hospi template=inc_legend_suivi}}
 </div>
 
+{{if $show_header}}
+  {{assign var=patient value=$sejour->_ref_patient}}
+  <table class="tbl">
+    <tr>
+      <th class="title" colspan="2">
+        <a style="float: left" href="?m=patients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}">
+          {{mb_include module=patients template=inc_vw_photo_identite size=42}}
+        </a>
+
+        <h2 style="color: #fff; font-weight: bold;">
+          {{$patient}}
+          {{if isset($sejour|smarty:nodefaults)}}
+            <span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
+          {{/if}}
+        </h2>
+      </th>
+    </tr>
+  </table>
+{{/if}}
+
 <button type="button" class="search" onclick="Modal.open('legend_suivi')" style="float: right;">Légende</button>
 
 {{if !$isPraticien}}

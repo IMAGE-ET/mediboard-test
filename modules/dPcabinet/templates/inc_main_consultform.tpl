@@ -30,7 +30,29 @@ Main.add(function () {
 </script>
 
 {{mb_default var=readonly value=0}}
+{{mb_default var=show_header value=0}}
 {{mb_default var=isPrescriptionInstalled value=isset($modules.dPprescription|smarty:nodefaults)}}
+
+{{if $show_header}}
+  {{assign var=patient value=$consult->_ref_patient}}
+  {{assign var=sejour value=$consult->_ref_sejour}}
+  <table class="tbl">
+    <tr>
+      <th class="title" colspan="2">
+        <a style="float: left" href="?m=patients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}">
+          {{mb_include module=patients template=inc_vw_photo_identite size=42}}
+        </a>
+
+        <h2 style="color: #fff; font-weight: bold;">
+          {{$patient}}
+          {{if isset($sejour|smarty:nodefaults)}}
+            <span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
+          {{/if}}
+        </h2>
+      </th>
+    </tr>
+  </table>
+{{/if}}
 
 <table class="form">
   <tr>

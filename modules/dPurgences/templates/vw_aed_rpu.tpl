@@ -75,6 +75,7 @@
     urlSuivi.addParam("sejour_id", sejour_id);
     urlSuivi.addParam("user_id", user_id);
     urlSuivi.addParam("cible", cible);
+    urlSuivi.addParam("show_header", 1);
     if (!Object.isUndefined(show_obs)) {
       urlSuivi.addParam("_show_obs", show_obs);
     }
@@ -345,7 +346,7 @@
       {{assign var="_is_anesth" value="0"}}
       {{assign var=sejour_id    value=""}}
 
-      {{mb_include module=cabinet template=inc_ant_consult chir_id=$app->user_id}}
+      {{mb_include module=cabinet template=inc_ant_consult chir_id=$app->user_id show_header=1}}
     </div>
 
     <div id="constantes" style="display:none"></div>
