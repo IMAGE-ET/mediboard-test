@@ -31,7 +31,12 @@
   <tr>
     <td class="button">
       <div>{{mb_include module=cabinet  template=inc_patient_infos}}</div>
-      <div>{{mb_include module=patients template=inc_patient_planification}}</div>
+      <div>
+        {{mb_include module=patients template=inc_patient_planification
+          patient_id=$patient->_id
+          consult=$consult
+          praticien_id=$consult->_ref_plageconsult->chir_id}}
+      </div>
     </td>
     <td class="text" id="consultAnesth">
       {{mb_include module=cabinet template=inc_consult_anesth/interventions}}

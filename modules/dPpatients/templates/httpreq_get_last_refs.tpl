@@ -1,4 +1,11 @@
-<table style="width: 100%;">
+<fieldset style="float:right; text-align: center">
+  <legend>Accès rapides</legend>
+  {{mb_include module=patients template="inc_patient_planification" ajax=1 patient_id=$patient->_id consult=$consultation}}
+  <br/>
+  {{mb_include module=cabinet template="inc_patient_infos" vertical=1 ajax=1}}
+</fieldset>
+
+<table>
   <tr>
     <td style="font-weight: bold;">
       <a href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}">
