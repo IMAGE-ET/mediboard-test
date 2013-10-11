@@ -9,7 +9,7 @@
 *}}
 
 <script>
-  redirectOffline = function(type) {
+  redirectOffline = function(type, embed) {
     switch(type) {
       case 'sejour':
         var url = new Url("soins", "offline_sejours");
@@ -20,7 +20,15 @@
     
     url.addParam("service_id", $("service_id").value);
     url.addParam("dialog", 1);
-    url.redirect();
+
+    if (embed) {
+      url.addParam("embed", 1);
+      url.addParam("_aio", "savefile");
+      url.pop(500, 400, "Vue embarquée");
+    }
+    else {
+      url.redirect();
+    }
   }
 
   Main.add(function () {

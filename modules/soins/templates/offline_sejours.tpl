@@ -18,12 +18,6 @@
     }
   }
   @media screen {
-    div.modal_view {
-      width: 700px;
-      height: 500px;
-      overflow-x: hidden;
-      overflow-y: scroll;
-    }
     thead {
       display: none;
     }
@@ -95,8 +89,8 @@
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
       </td>
       <td>
-        <button class="search" onclick="Modal.open($('dossier-{{$_sejour->_id}}'), {width: 1000, height: 800})">Dossier soins</button>
-        <button class="print notext" onclick="printOneDossier('{{$_sejour->_id}}')" title="Imprimer le dossier"></button>
+        <button class="search compact" onclick="Modal.open($('dossier-{{$_sejour->_id}}'), {width: 1000})">Dossier soins</button>
+        <button class="print notext compact" onclick="printOneDossier('{{$_sejour->_id}}')" title="Imprimer le dossier"></button>
       </td>
     </tr>
   {{foreachelse}}
@@ -107,7 +101,7 @@
 </table>
 
 {{foreach from=$dossiers_complets item=_dossier key=sejour_id name=dossier}}
-  <div id="dossier-{{$sejour_id}}" class="modal modal_view" style="display: none;">
+  <div id="dossier-{{$sejour_id}}" class="modal_view" style="display: none;">
     {{$_dossier|smarty:nodefaults}}
   </div>
   {{if !$smarty.foreach.dossier.last}}

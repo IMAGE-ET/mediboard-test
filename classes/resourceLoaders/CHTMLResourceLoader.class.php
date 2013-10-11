@@ -352,11 +352,26 @@ abstract class CHTMLResourceLoader {
       return null;
     }
 
-    if ($src[0] == "/") {
+    if ($src[0] === "/") {
       $src = $_SERVER['DOCUMENT_ROOT'] . $src;
     }
 
-    $file = self::getFileContents($src);
+    $sub_matches = array();
+    if (preg_match("/^(\w+),(\d+)$/", $src, $sub_matches)) {
+      list($all, $class, $id) = $sub_matches;
+
+      /** @var CDocumentItem $obj */
+      $obj = new $class;
+      $obj->load($id);
+      if (!$obj->canRead()) {
+        return null;
+      }
+
+      $file = $obj->getBinaryContent();
+    }
+    else {
+      $file = self::getFileContents($src);
+    }
 
     $href = " href=\"".self::getEmbedURL($orig_src, $file, "embed")."\" ";
 
@@ -448,7 +463,9 @@ abstract class CHTMLResourceLoader {
     
     // End Output Buffering
     ob_end_clean();
-    
+
+    ob_start();
+
     rewind(self::$_fp_in);
     while (!feof(self::$_fp_in)) {
       $line = fgets(self::$_fp_in);
@@ -463,6 +480,8 @@ abstract class CHTMLResourceLoader {
 
       fwrite(self::$_fp_out, $line);
     }
+
+    ob_end_clean();
     
     $length = 0;
     rewind(self::$_fp_out);

@@ -8,7 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if !@$offline}}
+{{mb_default var=offline value=false}}
+{{mb_default var=embed value=false}}
+
+{{if !$offline}}
 <!-- Fermeture du tableau pour faire fonctionner le page-break -->
     </td>
   </tr>
@@ -37,16 +40,17 @@
 <script type="text/javascript">
   getDossierSoin = function(sejour_id) {
     return $("dossier-"+sejour_id) || $(document.documentElement);
-  }
+  };
   
   printDossierFromSejour = function(sejour_id){
-    if ($("dossier-"+sejour_id)) {
-      Element.print($("dossier-"+sejour_id).childElements());
+    var dossier = $("dossier-"+sejour_id);
+    if (dossier) {
+      Element.print(dossier.childElements());
     }
     else {
       window.print();
     }
-  }
+  };
   
   togglePrintZone = function(name, sejour_id) {
     var dossier_soin = getDossierSoin(sejour_id);
@@ -97,7 +101,7 @@
       prescr .setStyle({pageBreakAfter: "always"});
       task   .setStyle({pageBreakAfter: "always"});
     }
-  }
+  };
   
   loadExForms = function(checkbox, sejour_id) {
     if (checkbox._loaded) return;
@@ -114,7 +118,7 @@
     }});
     
     checkbox._loaded = true;
-  }
+  };
   
   resetPrintable = function(sejour_id) {
     var dossier_soin = getDossierSoin(sejour_id);
@@ -124,10 +128,11 @@
     dossier_soin.select(".print_prescription")[0].removeClassName("not-printable").setStyle({pageBreakAfter: "always"});
     {{/if}}
     dossier_soin.select(".print_tasks")[0].removeClassName("not-printable").setStyle({pageBreakAfter: "auto"});
-  }
+  };
 </script>
 
 <table class="not-printable tbl">
+  {{if !$embed}}
   <tr>
     <td style="vertical-align: middle;">
       <strong>Choix des blocs à imprimer : </strong>
@@ -144,8 +149,12 @@
       {{/if}}
       
       <button class="print" type="button" onclick="printDossierFromSejour({{$sejour->_id}})">{{tr}}Print{{/tr}}</button>
+
+      <a class="button download" href="?{{$smarty.server.QUERY_STRING|html_entity_decode}}&offline=1&embed=1&_aio=savefile" target="_blank">{{tr}}Download{{/tr}}</a>
     </td>
   </tr>
+  {{/if}}
+
   <tr>
     <th class="title">
       {{if $in_modal}}
@@ -158,7 +167,7 @@
   </tr>
 </table>
 
-{{mb_include module=patients template=CPatient_complete no_header=true}}
+{{mb_include module=patients template=CPatient_complete no_header=true embed=true}}
 
 {{assign var=object value=$sejour}}
 <table class="tbl print_sejour" style="border: none !important; page-break-after: always;">
@@ -190,7 +199,6 @@
     </td>
   </tr>
 </table>
-
 
 <div class="print_sejour" style="page-break-after: always;">
   {{foreach from=$fiches_anesthesies key=operation_id item=_fiche}}
@@ -340,7 +348,63 @@
 </div>
 {{/if}}
 
-{{if !@$offline}}
+{{if $embed}}
+  {{mb_include module=files template=inc_embed_document_items object=$sejour}}
+
+  <table class="main tbl">
+    <tr>
+      <th class="title">{{tr}}CConsultAnesth{{/tr}}</th>
+    </tr>
+    <tr>
+      <td>
+        {{mb_include module=files template=inc_embed_document_items object=$sejour->_ref_consult_anesth section=true}}
+        {{mb_include module=files template=inc_embed_document_items object=$sejour->_ref_consult_anesth->_ref_consultation section=true}}
+      </td>
+    </tr>
+  </table>
+
+  <table class="main tbl">
+    <tr>
+      <th class="title">{{tr}}CSejour-back-operations{{/tr}}</th>
+    </tr>
+    {{foreach from=$sejour->_ref_operations item=_object}}
+      <tr>
+        <th class="category">{{$_object}}</th>
+      </tr>
+      <tr>
+        <td>
+          {{mb_include module=files template=inc_embed_document_items object=$_object section=true}}
+        </td>
+      </tr>
+      {{foreachelse}}
+      <tr>
+        <td class="empty">{{tr}}COperation.none{{/tr}}</td>
+      </tr>
+    {{/foreach}}
+  </table>
+
+  <table class="main tbl">
+    <tr>
+      <th class="title">{{tr}}CSejour-back-consultations{{/tr}}</th>
+    </tr>
+    {{foreach from=$sejour->_ref_consultations item=_object}}
+      <tr>
+        <th class="category">{{$_object}}</th>
+      </tr>
+      <tr>
+        <td>
+          {{mb_include module=files template=inc_embed_document_items object=$_object section=true}}
+        </td>
+      </tr>
+      {{foreachelse}}
+      <tr>
+        <td class="empty">{{tr}}CConsultation.none{{/tr}}</td>
+      </tr>
+    {{/foreach}}
+  </table>
+{{/if}}
+
+{{if !$offline}}
 
 <!-- re-ouverture du tableau -->
 <table>

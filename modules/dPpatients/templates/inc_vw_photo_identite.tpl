@@ -61,10 +61,10 @@ deletePhoto = function(file_id){
   {{assign var=border_photo value="#88f"}}
   {{assign var=background_photo value="#f6f6ff"}}
 {{/if}}
-<img 
-  src="{{$src}}" 
-  style="width: {{$size}}px; height: {{$size}}px; border: 2px solid {{$border_photo}}; background: {{$background_photo}};" 
-  alt="Identité" 
+
+{{* Laisser le src sur la meme ligne que img !! pour le mode all in one, sinon le parseur ne le reconnait pas *}}
+<img src="{{$src}}"
+  style="width: {{$size}}px; height: {{$size}}px; border: 2px solid {{$border_photo}}; background: {{$background_photo}};" alt="Identité"
   {{if $file->_id}} 
   onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-patient-{{$patient->_id}}')"
   {{/if}} 

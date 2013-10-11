@@ -16,6 +16,7 @@ CApp::setTimeLimit(240);
 
 $service_id = CValue::get("service_id");
 $date       = CValue::get("date", CMbDT::date());
+$embed      = CValue::get("embed");
 
 $service = new CService();
 $service->load($service_id);
@@ -59,9 +60,10 @@ foreach ($sejours as $sejour) {
 
   $params = array(
     "sejour_id" => $sejour->_id,
-    "dialog" => 1,
-    "offline" => 1,
-    "in_modal" => 1
+    "dialog"    => 1,
+    "offline"   => 1,
+    "in_modal"  => 1,
+    "embed"     => $embed,
   );
 
   $dossiers_complets[$sejour->_id] = CApp::fetch("soins", "print_dossier_soins", $params);

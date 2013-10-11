@@ -11,8 +11,9 @@
 $sejour_id = CValue::get("sejour_id");
 $offline   = CValue::get("offline");
 $in_modal  = CValue::get("in_modal");
+$embed     = CValue::get("embed");
 
-if (!$sejour_id){
+if (!$sejour_id) {
   CAppUI::stepMessage(UI_MSG_WARNING, "Veuillez sélectionner un sejour pour visualiser le dossier complet");
   return;
 }
@@ -92,6 +93,27 @@ if ($offline && CModule::getActive("forms")) {
   );
 
   $formulaires = CApp::fetch("forms", "ajax_list_ex_object", $params);
+}
+
+if ($embed) {
+  // Fichiers et documents du sejour
+  $sejour->loadRefsDocItems(false);
+
+  // Fichiers et documents des interventions
+  $interventions = $sejour->_ref_operations;
+  foreach ($interventions as $_interv) {
+    $_interv->loadRefPlageOp();
+    $_interv->loadRefsDocItems(false);
+  }
+
+  // Fichiers et documents des consultations
+  $consultations = $sejour->loadRefsConsultations();
+  foreach ($consultations as $_consult) {
+    $_consult->loadRefsDocItems(false);
+  }
+
+  $sejour->_ref_consult_anesth->_ref_consultation->loadRefsDocItems(false);
+  $sejour->_ref_consult_anesth->loadRefsDocItems(false);
 }
 
 // Chargement du patient
@@ -221,6 +243,7 @@ if (CModule::getActive("dPprescription")) {
 $smarty->assign("formulaires", $formulaires);
 $smarty->assign("praticien"  , $praticien);
 $smarty->assign("offline"    , $offline);
+$smarty->assign("embed"      , $embed);
 $smarty->assign("in_modal"   , $in_modal);
 $smarty->assign("fiches_anesthesies", $fiches_anesthesies);
 $smarty->assign("atc_classes", $atc_classes);

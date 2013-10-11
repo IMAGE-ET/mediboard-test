@@ -44,6 +44,7 @@
       </td>
       <td>
         <a class="button search" onclick="redirectOffline('sejour');">{{tr}}CSejour.all{{/tr}}</a>
+        <a class="button download" onclick="redirectOffline('sejour', true);">{{tr}}Download{{/tr}} {{tr}}CSejour.all{{/tr}}</a>
         {{if "dPprescription"|module_active}}
           <br/>
           <a class="button search" onclick="redirectOffline('bilan');">{{tr}}CService.bilan{{/tr}}</a>
