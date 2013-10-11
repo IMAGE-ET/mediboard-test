@@ -307,7 +307,7 @@
       <li onmouseup="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">{{tr}}soins.tab.surveillance{{/tr}}</a></li>
 
       {{if "forms"|module_active}}
-        <li><a href="#ex-forms-rpu">{{tr}}soins.tab.Formulaires{{/tr}}</a></li>
+        <li><a href="#ex-forms-rpu-tab">{{tr}}soins.tab.Formulaires{{/tr}}</a></li>
       {{/if}}
 
       <li onmouseup="showExamens('{{$consult->_id}}')"><a href="#examens">{{tr}}soins.tab.dossier-medical{{/tr}}</a></li>
@@ -350,7 +350,23 @@
     </div>
 
     <div id="constantes" style="display:none"></div>
-    <div id="ex-forms-rpu" style="display: none"></div>
+    <div id="ex-forms-rpu-tab" style="display: none">
+      <table class="main">
+        <tr>
+          <th class="title" colspan="2">
+            <a style="float: left" href="?m=patients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->_ref_patient->_id}}">
+              {{mb_include module=patients template=inc_vw_photo_identite size=42 patient=$sejour->_ref_patient}}
+            </a>
+
+            <h2 style="color: #fff; font-weight: bold;">
+              {{$sejour->_ref_patient}}
+              <span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
+            </h2>
+          </th>
+        </tr>
+      </table>
+      <div id="ex-forms-rpu"></div>
+    </div>
 
     <div id="examens"    style="display:none">
       <div class="small-info">
