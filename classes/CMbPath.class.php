@@ -535,6 +535,12 @@ abstract class CMbPath {
     foreach ($path as $_subpath) {
       $_realpath = str_replace("\\", "/", $_subpath->getPathname());
 
+      // We don't list "dot" files/folders
+      $_dirname = basename($_realpath);
+      if (strpos($_dirname, ".") === 0) {
+        continue;
+      }
+
       if ($_subpath->isDir()) {
         $subtree = array();
         self::_getTree($_realpath, $subtree);
