@@ -173,7 +173,7 @@ function print_infos($var, $name = '') {
  */
 function filterInput(&$params) {
   $patterns = array(
-    "/password|passphrase/i",
+    "/password|passphrase|pwd/i",
     "/login/i"
   );
 
