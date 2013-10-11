@@ -372,11 +372,7 @@ Main.add( function(){
               <tr>
                 <th>{{mb_label object=$consult field="secteur2"}}</th>
                 <td>
-                  {{if !$consult->_ref_actes|@count}}
-                    {{mb_field object=$consult field="secteur2" onchange="modifTotal()"}}
-                  {{else}}
-                    {{mb_field object=$consult field="secteur2" readonly=readonly}}
-                  {{/if}}
+                  {{mb_field object=$consult field="secteur2" onchange="modifTotal()"}}
                 </td>
                 {{if !$consult->patient_date_reglement && !$consult->sejour_id}}
                   <th>{{mb_label object=$consult field="du_patient"}}</th>
