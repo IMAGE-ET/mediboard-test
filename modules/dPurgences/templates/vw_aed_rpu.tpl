@@ -315,7 +315,7 @@
         <li onmouseup="loadActes('{{$rpu->sejour_id}}')"><a href="#actes">{{tr}}soins.tab.Cotation-infirmiere{{/tr}}</a></li>
       {{/if}}
       {{if "dPImeds"|module_active}}
-        <li onmouseup="loadResultLabo('{{$rpu->sejour_id}}')"><a href="#Imeds">{{tr}}soins.tab.Labo{{/tr}}</a></li>
+        <li onmouseup="loadResultLabo('{{$rpu->sejour_id}}')"><a href="#Imeds-tab">{{tr}}soins.tab.Labo{{/tr}}</a></li>
       {{/if}}
       <li onmouseup="loadDocItems('{{$rpu->sejour_id}}', '{{$consult->_id}}')"><a href="#doc-items">{{tr}}soins.tab.Documents{{/tr}}</a></li>
     </ul>
@@ -394,11 +394,22 @@
     {{/if}}
 
     {{if "dPImeds"|module_active}}
-    <div id="Imeds" style="display: none;">
-      <div class="small-info">
-        Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
-        consulter les résultats de laboratoire disponibles pour le patient concerné.
-      </div>
+    <div id="Imeds-tab" style="display: none;">
+      <table class="main">
+        <tr>
+          <th class="title" colspan="2">
+            <a style="float: left" href="?m=patients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->_ref_patient->_id}}">
+              {{mb_include module=patients template=inc_vw_photo_identite size=42 patient=$sejour->_ref_patient}}
+            </a>
+
+            <h2 style="color: #fff; font-weight: bold;">
+              {{$sejour->_ref_patient}}
+              <span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
+            </h2>
+          </th>
+        </tr>
+      </table>
+      <div id="Imeds"></div>
     </div>
     {{/if}}
 
