@@ -21,9 +21,7 @@ $module->registerTab("vw_compta"            , TAB_READ);
 if (CAppUI::conf("dPfacturation Other use_view_chainage")) {
   $module->registerTab("vw_edit_tarifs"     , TAB_READ);
 }
-if (CAppUI::conf("dPfacturation CRelance use_relances")) {
-  $module->registerTab("vw_relances"        , TAB_READ);
-}
+
 if (CAppUI::conf("dPfacturation CRetrocession use_retrocessions")) {
   $module->registerTab("vw_retrocessions"   , TAB_READ);
   $module->registerTab("vw_retrocession_regles" , TAB_ADMIN);
@@ -31,7 +29,4 @@ if (CAppUI::conf("dPfacturation CRetrocession use_retrocessions")) {
 
 if (CAppUI::conf("dPfacturation CReglement use_debiteur")) {
   $module->registerTab("vw_debiteurs"       , TAB_READ);
-}
-if (CAppUI::conf("ref_pays") == 2) {
-  $module->registerTab("vw_journaux"        , TAB_READ);
 }

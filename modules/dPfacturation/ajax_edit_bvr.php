@@ -17,12 +17,25 @@ $date_min       = CValue::get("_date_min", CMbDT::date());
 $date_max       = CValue::get("_date_max", CMbDT::date());
 $type_relance   = CValue::get("type_relance");
 $type_pdf       = CValue::get("type_pdf", "bvr");
+$factures       = CValue::get("factures", array());
+$definitive     = CValue::get("definitive", 0);
+
+//impression
+$factures_id = array();
+foreach ($factures as $value) {
+  $factures_id[$value] = $value;
+}
 
 $factures = array();
 $facture = new $facture_class;
 //si on a une facture_id on la charge
 if ($facture_id) {
   $factures[$facture_id] = $facture->load($facture_id);
+}
+elseif (count($factures_id)) {
+  $where = array();
+  $where["facture_id"] = CSQLDataSource::prepareIn(array_keys($factures_id));
+  $factures = $facture->loadList($where);
 }
 else {
   $where = array();
@@ -51,6 +64,20 @@ if ($type_pdf == "bvr_justif") {
 }
 if ($type_pdf == "impression") {
   $facture_pdf->printBill();
+  if (!$facture_id) {
+    if ($definitive) {
+      foreach ($factures as $_facture) {
+        if (!$_facture->definitive) {
+          $_facture->definitive = 1;
+          if ($msg = $_facture->store()) {
+            CAppUI::setMsg($msg, UI_MSG_ERROR);
+          }
+        }
+      }
+    }
+    unset($_GET["suppressHeaders"]);
+    CAppUI::redirect("m=dPfacturation&tab=vw_compta");
+  }
 }
 
 if ($type_pdf == "relance") {
