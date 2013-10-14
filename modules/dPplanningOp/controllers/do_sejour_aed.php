@@ -12,11 +12,16 @@
 if ($praticien_id = CValue::post("praticien_id")) {
   CValue::setSession("praticien_id", $praticien_id);
 }
-$lit_id            = CValue::post("lit_id");
-$service_sortie_id = CValue::post("service_sortie_id");
+
+$lit_id             = CValue::post("lit_id");
+$service_sortie_id  = CValue::post("service_sortie_id");
+$mode_sortie        = CValue::post("mode_sortie");
+$type               = CValue::post("type");
+
+$create_affectation = CAppUI::conf("urgences create_affectation");
 
 // Pour un séjour ayant comme mode de sortie urgence:
-if (CValue::post("mode_sortie") == "mutation" && CValue::post("type") == "urg" && ($lit_id || $service_sortie_id)) {
+if ($create_affectation && $mode_sortie  == "mutation" && $type == "urg" && ($lit_id || $service_sortie_id)) {
   $sejour_id = CValue::post("sejour_id");
 
   $sejour = new CSejour();
