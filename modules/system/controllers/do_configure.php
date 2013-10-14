@@ -25,6 +25,7 @@ $config_db = CAppUI::conf("config_db");
 $forbidden_values = array(
   "db",
   "config_db",
+  "instance_role",
 );
 
 if ($config_db) {
