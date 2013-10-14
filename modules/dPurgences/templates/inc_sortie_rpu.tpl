@@ -175,7 +175,7 @@
         {{elseif $rpu->_can_leave == -1}}
           {{if $sejour->type != "urg"}}
             {{mb_value object=$sejour field=type}}<br />
-          {{elseif !$atu->_id}}
+          {{elseif !$atu->_id && (!$rpu->mutation_sejour_id || $rpu->sejour_id == $rpu->mutation_sejour_id)}}
             Pas encore de prise en charge<br />
           {{else}}
             {{tr}}CConsultation{{/tr}} {{tr}}CConsultation.chrono.48{{/tr}} <br />
