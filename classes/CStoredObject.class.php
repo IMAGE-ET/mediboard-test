@@ -1351,7 +1351,7 @@ class CStoredObject extends CModelObject {
   function loadLastLog() {
     $log = new CUserLog;
     $log->setObject($this);
-    $log->loadMatchingObject("user_log_id DESC");
+    $log->loadMatchingObject("user_log_id DESC", null, null, "object_id");
     return $this->_ref_last_log = $log;
   }
   
@@ -1363,7 +1363,7 @@ class CStoredObject extends CModelObject {
   function loadFirstLog() {
     $log = new CUserLog;
     $log->setObject($this);
-    $log->loadMatchingObject("user_log_id ASC");
+    $log->loadMatchingObject("user_log_id ASC", null, null, "object_id");
     return $this->_ref_first_log = $log;
   }
 
