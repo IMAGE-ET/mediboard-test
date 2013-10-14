@@ -283,7 +283,7 @@ $library->description = "Composant Javascript d'édition de texte au format HTML"
 $library->sourceDir = "ckeditor";
 $library->targetDir = "ckeditor";
 $library->versionFile = "ckeditor.js";
-$library->versionString = "4.2.1b";
+$library->versionString = "new Date()";
 
 CLibrary::$all[$library->name] = $library;
 
