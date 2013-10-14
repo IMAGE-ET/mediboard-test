@@ -6,6 +6,11 @@
 {{assign var=patient value=$sejour->_ref_patient}}
 {{assign var=atu value=$sejour->_ref_consult_atu}}
 
+{{* La consultation de l'urgentiste peut être sur le séjour reliquat *}}
+{{if $rpu->mutation_sejour_id && $rpu->mutation_sejour_id != $rpu->sejour_id}}
+  {{assign var=atu value=$rpu->_ref_sejour_mutation->_ref_consult_atu}}
+{{/if}}
+
 {{mb_ternary var=rpu_link_param test=$rpu->_id value="rpu_id=$rpu_id" other="sejour_id=$sejour_id"}}
 {{assign var=rpu_link value="?m=dPurgences&tab=vw_aed_rpu&$rpu_link_param"}}
 
@@ -175,7 +180,7 @@
         {{elseif $rpu->_can_leave == -1}}
           {{if $sejour->type != "urg"}}
             {{mb_value object=$sejour field=type}}<br />
-          {{elseif !$atu->_id && (!$rpu->mutation_sejour_id || $rpu->sejour_id == $rpu->mutation_sejour_id)}}
+          {{elseif !$atu->_id}}
             Pas encore de prise en charge<br />
           {{else}}
             {{tr}}CConsultation{{/tr}} {{tr}}CConsultation.chrono.48{{/tr}} <br />

@@ -2029,7 +2029,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     $this->_ref_consult_atu = new CConsultation;
 
-    if ($this->countBackRefs("rpu") > 0) {
+    if ($this->countBackRefs("rpu") > 0 || !CAppUI::conf("dPurgences create_sejour_hospit")) {
       foreach ($this->_ref_consultations as $_consult) {
         /** @var CConsultation $_consult */
         $_consult->loadRefPraticien();
