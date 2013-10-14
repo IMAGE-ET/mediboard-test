@@ -17,7 +17,7 @@ var ExamDialog = {
     if (oForm.elements[this.sDossierAnesthId]) {
       url.addParam("dossier_anesth_id", oForm.elements[this.sDossierAnesthId].value);
     }
-    url.requestModal(this.options.width, this.options.height, type_exam);
+    url.popup(this.options.width, this.options.height, type_exam);
   },
 
   reload: function(consultation_id, dossier_anesth_id){
