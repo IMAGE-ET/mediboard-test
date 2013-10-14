@@ -333,7 +333,7 @@ foreach ($constants_to_draw["all"] as $rank => $_constants) {
       foreach ($params["formfields"] as $_field) {
         $serie[] = array(
           "data" => array(),
-          "label" => CAppUI::tr("CConstantesMedicales-$_field-court"),
+          "label" => utf8_encode(CAppUI::tr("CConstantesMedicales-$_field-court")),
         );
       }
     }
