@@ -249,6 +249,11 @@ class CSetupdPfiles extends CSetup {
       SET `rotation` = '270' WHERE `rotation` = '4';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.31";
+    $this->makeRevision("0.31");
+    $query = "ALTER TABLE `files_mediboard`
+      ADD `language` ENUM ('en-EN','es-ES','fr-CH','fr-FR') DEFAULT 'fr-FR' AFTER `file_type`";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.32";
   }
 }

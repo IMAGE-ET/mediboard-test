@@ -79,8 +79,9 @@ class CFileAddEdit extends CDoObjectAddEdit {
       $aFiles = array();
       $upload =& $_FILES["formfile"];
       $_file_category_id = CValue::post("_file_category_id");
-      $named = CValue::post("named");
-      $rename = CValue::post("_rename");
+      $language = CValue::post("language");
+      $named    = CValue::post("named");
+      $rename   = CValue::post("_rename");
 
       CValue::setSession("_rename", $rename);
 
@@ -96,6 +97,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
             "tmp_name"         => $upload["tmp_name"][$fileNumber],
             "error"            => $upload["error"][$fileNumber],
             "size"             => $upload["size"][$fileNumber],
+            "language"         => $language,
             "file_category_id" => $_file_category_id,
             "object_id"        => CValue::post("object_id"),
             "object_class"     => CValue::post("object_class"),

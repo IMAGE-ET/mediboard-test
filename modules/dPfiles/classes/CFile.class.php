@@ -31,6 +31,7 @@ class CFile extends CDocumentItem {
   public $file_size;
   public $rotation;
   public $annule;
+  public $language;
 
   // Form fields
   public $_extensioned;
@@ -90,7 +91,7 @@ class CFile extends CDocumentItem {
    */
   function getProps() {
     $props = parent::getProps();
-    
+
     $props["file_date"]          = "dateTime notNull";
     $props["file_size"]          = "num pos show|0";
     $props["file_real_filename"] = "str notNull show|0";
@@ -98,6 +99,7 @@ class CFile extends CDocumentItem {
     $props["file_name"]          = "str notNull show|0";
     $props["rotation"]           = "num default|0 show|0";
     $props["annule"]             = "bool default|0 show|0";
+    $props["language"]           = "enum list|en-EN|es-ES|fr-CH|fr-FR default|fr-FR show|0";
 
     // Form Fields
     $props["_sub_dir"]      = "str";
