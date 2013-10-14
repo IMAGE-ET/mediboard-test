@@ -307,7 +307,14 @@ class CRPU extends CMbObject {
 
     $sejour =& $this->_ref_sejour;
     $sejour->loadRefsConsultations();
-    $this->_ref_consult = $this->_ref_sejour->_ref_consult_atu;
+
+    if (!CAppUI::conf("dPurgences create_sejour_hospit") && $this->mutation_sejour_id) {
+      $this->loadRefSejourMutation()->loadRefsConsultations();
+      $this->_ref_consult = $this->_ref_sejour_mutation->_ref_consult_atu;
+    }
+    else {
+      $this->_ref_consult = $this->_ref_sejour->_ref_consult_atu;
+    }
 
     // Calcul du l'attente
     $this->_attente  = $this->_presence;
