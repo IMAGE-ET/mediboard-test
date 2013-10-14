@@ -261,7 +261,9 @@
         <input type="hidden" name="dosql" value="do_patients_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="_purge" value="0" />
-        <input type="hidden" name="ajax" value="{{$ajax}}" />
+        {{if $ajax}}
+          <input type="hidden" name="ajax" value="{{$ajax}}" />
+        {{/if}}
         <input type="hidden" name="callback" value="{{$callback}}" />
         {{mb_key object=$patient}}
 

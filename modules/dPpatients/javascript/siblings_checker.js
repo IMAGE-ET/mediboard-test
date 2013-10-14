@@ -75,7 +75,7 @@ SiblingsChecker = {
     confirmed &= !this.textSiblings || confirm(this.textSiblings+"\nVoulez-vous tout de même sauvegarder ?");
     
     if (this.submit && confirmed) {
-      if ($V(this.form.ajax)) {
+      if (this.form.ajax) {
         onSubmitFormAjax(this.form, Control.Modal.close);
       }
       else {
@@ -96,7 +96,7 @@ SiblingsChecker = {
     confirmed &= !this.textSiblings || confirm(this.textSiblings+"\nVoulez-vous tout de même sauvegarder ?");
     
     if (this.submit && confirmed) {
-      if ($V(this.form.ajax)) {
+      if (this.form.ajax) {
         onSubmitFormAjax(this.form, Control.Modal.close);
       }
       else {
