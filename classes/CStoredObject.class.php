@@ -1281,8 +1281,8 @@ class CStoredObject extends CModelObject {
     else {
       $where["fields"] = " LIKE '%$fieldName%'";
     }
-    
-    return $log->loadList($where, "`user_log_id` DESC", $limit);
+
+    return $log->loadList($where, "`user_log_id` DESC", $limit, null, null, "object_id");
   }
   
   /**
