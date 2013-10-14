@@ -488,8 +488,10 @@ class CRPU extends CMbObject {
     }
 
     // Bind affectation
-    if ($msg = $this->storeAffectation()) {
-      return $msg;
+    if (CAppUI::conf("dPurgences create_affectation")) {
+      if ($msg = $this->storeAffectation()) {
+        return $msg;
+      }
     }
     
     // Standard Store
