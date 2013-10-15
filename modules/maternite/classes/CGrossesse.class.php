@@ -193,7 +193,23 @@ class CGrossesse extends CMbObject{
     foreach ($naissances as $_naissance) {
       $_naissance->loadRefSejourEnfant()->loadRefPatient();
     }
+  }
 
+  /**
+   * @see parent::loadComplete()
+   */
+  function loadComplete(){
+    parent::loadComplete();
+
+    $this->loadLastConsult();
+  }
+
+  /**
+   * Load last consult
+   *
+   * @return CConsultation|null
+   */
+  function loadLastConsult(){
     $consultations = $this->loadRefsConsultations();
     $last_consult = end($consultations);
 
@@ -202,6 +218,8 @@ class CGrossesse extends CMbObject{
     if ($last_consult && $last_consult->_id) {
       $this->_last_consult_id = $last_consult->_id;
     }
+
+    return $last_consult;
   }
 
   /**

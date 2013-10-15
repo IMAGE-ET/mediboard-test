@@ -31,6 +31,7 @@
           <input type="radio" name="unique_grossesse_id" data-active="{{$_grossesse->active}}"
           {{if $_grossesse->_id == $object->grossesse_id}}checked="checked"{{/if}} value="{{$_grossesse->_id}}"
           data-view_grossesse="{{$_grossesse}}" />
+        </td>
         <td>
           <a href="#1" onclick="Grossesse.editGrossesse('{{$_grossesse->_id}}')">{{$_grossesse}}</a>
         </td>
@@ -54,8 +55,13 @@
 
         {{if "forms"|module_active}}
           <td class="narrow">
-            <button class="forms notext compact" type="button"
-                    onclick="ExObject.loadExObjects('{{$_grossesse->_class}}', '{{$_grossesse->_id}}', 'edit_grossesse', 0.5)">Formulaires</button>
+            <button class="forms notext compact" type="button" {{if $_grossesse->_count.consultations == 0}}disabled{{/if}}
+                    onclick="ExObject.loadExObjects('{{$_grossesse->_class}}', '{{$_grossesse->_id}}', 'edit_grossesse', 0.5)">
+              Formulaires
+              {{if $_grossesse->_count.consultations == 0}}
+                (la grossesse doit être liée à une consultation pour accèder aux formulaires)
+              {{/if}}
+            </button>
           </td>
         {{/if}}
       </tr>
