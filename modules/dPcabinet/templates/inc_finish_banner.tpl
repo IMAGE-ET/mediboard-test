@@ -1,6 +1,12 @@
 {{mb_default var=current_m value=""}}
 
-<script type="text/javascript">
+<script>
+
+function checkConsult() {
+  var url = new Url("dPcabinet", "ajax_check_consult_anesth");
+  url.addParam("consult_id", "{{$consult->_id}}");
+  url.requestModal(800);
+}
 
 function submitConsultWithChrono(chrono) {
   var oForm = document.editFrmFinish;
@@ -9,8 +15,7 @@ function submitConsultWithChrono(chrono) {
 }
 
 function reloadFinishBanner() {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "httpreq_vw_finish_banner");
+  var url = new Url("dPcabinet", "httpreq_vw_finish_banner");
   url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   url.addParam("_is_anesth", "{{$_is_anesth}}");
   url.requestUpdate('finishBanner');
@@ -104,9 +109,13 @@ function changePratPec(prat_id) {
       Consultation
       (Etat : {{$consult->_etat}}
       {{if $consult->chrono <= $consult|const:'EN_COURS'}}
-        / 
-        <button class="submit" type="button" onclick="submitAll(); submitConsultWithChrono({{$consult|const:'TERMINE'}})">
-          Terminer
+        /
+        {{if $conf.dPcabinet.CConsultAnesth.check_close}}
+          <button class="submit" type="button" onclick="checkConsult();">
+        {{else}}
+          <button class="submit" type="button" onclick="submitAll(); submitConsultWithChrono({{$consult|const:'TERMINE'}})">
+        {{/if}}
+        Terminer
         </button>
       {{/if}})
     </th>

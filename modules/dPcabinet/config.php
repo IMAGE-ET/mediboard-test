@@ -53,8 +53,7 @@ $dPconfig["dPcabinet"] = array(
     "view_premedication"    => "0",
     "show_facteurs_risque"  => "0",
     "show_mallampati"       => "0",
-    "check_poids"           => "0",
-    "check_scoreasa"        => "0",
+    "check_close"           => "0"
   ),
   "CPrescription" => array (
     "view_prescription" => "0"

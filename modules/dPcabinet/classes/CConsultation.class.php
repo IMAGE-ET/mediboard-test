@@ -488,24 +488,6 @@ class CConsultation extends CFacturable {
       }
     }
 
-    $check_poids = CAppUI::conf("dPcabinet CConsultAnesth check_poids");
-    $check_asa = CAppUI::conf("dPcabinet CConsultAnesth check_scoreasa");
-    if ($this->fieldModified("chrono", CConsultation::TERMINE) &&  ($check_poids|| $check_asa)) {
-      if ($consult_anesth = $this->loadRefConsultAnesth()) {
-        $this->loadRefPatient()->loadRefConstantesMedicales(null, array("poids"));
-        $const_med = $this->_ref_patient->_ref_constantes_medicales;
-
-        if ($check_poids && !$const_med->poids) {
-          $msg .= "Vous ne pouvez pas terminer la consultation d'anesthésie sans renseigner le poids du patient";
-        }
-
-        $consult_anesth->loadRefOperation();
-        if ($consult_anesth->_ref_operation->_id && $check_asa && !$consult_anesth->_ref_operation->ASA) {
-          $msg .= "Vous ne pouvez pas terminer la consultation d'anesthésie sans renseigner le score ASA";
-        }
-      }
-    }
-
     return $msg . parent::check();
   }
 
