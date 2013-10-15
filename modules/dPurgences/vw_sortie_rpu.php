@@ -57,7 +57,7 @@ switch ($view_sortie) {
 $sejour = new CSejour();
 
 /** @var CSejour[] $listSejours */
-$listSejours = $sejour->loadList($where, "consultation.heure", null, null, $ljoin);
+$listSejours = $sejour->loadList($where, "consultation.heure", null, "sejour.sejour_id", $ljoin);
 CMbObject::massLoadFwdRef($listSejours, "patient_id");
 $prats = CMbObject::massLoadFwdRef($listSejours, "praticien_id");
 CMbObject::massLoadFwdRef($prats, "function_id");
