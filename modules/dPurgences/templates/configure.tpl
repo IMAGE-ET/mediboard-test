@@ -25,6 +25,7 @@
   <li onmousedown="Configuration.edit('dPurgences', 'CGroups', $('CConfigEtab'))">
     <a href="#CConfigEtab">Config par établissement</a>
   </li>
+  <li><a href="#Maintenance">{{tr}}config-dPurgences-maintenance{{/tr}}</a></li>
 </ul>
 <hr class="control_tabs" />
 
@@ -44,4 +45,8 @@
   {{mb_include template=inc_config_sender}}
 </div>
 
-<div id="CConfigEtab" style="display: none">
+<div id="CConfigEtab" style="display: none"></div>
+
+<div id="Maintenance" style="display: none;">
+  {{mb_include template=inc_config_maintenance}}
+</div>

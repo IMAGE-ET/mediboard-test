@@ -13,8 +13,10 @@ IdentitoVigilance.guesses = {{$guesses|@json}};
 Main.add(function() {
   getForm("Merger");
   var tab = $$("a[href=#identito_vigilance]")[0];
-  tab.down("small").update("({{$mergeables_count}})");
-  tab.setClassName("wrong", "{{$mergeables_count}}" != 0);
+  if (tab) {
+    tab.down("small").update("({{$mergeables_count}})");
+    tab.setClassName("wrong", "{{$mergeables_count}}" != 0);
+  }
 })
 </script>
 

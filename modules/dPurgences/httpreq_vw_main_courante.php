@@ -80,7 +80,7 @@ switch ($order_col) {
 }
 
 /** @var CSejour[] $listSejours */
-$listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
+$listSejours = $sejour->loadList($where, $order, null, "`sejour`.sejour_id", $ljoin);
 CMbObject::massLoadFwdRef($listSejours, "patient_id");
 CMbObject::massLoadFwdRef($listSejours, "group_id");
 $prats = CMbObject::massLoadFwdRef($listSejours, "praticien_id");
