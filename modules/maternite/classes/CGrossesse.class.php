@@ -49,6 +49,7 @@ class CGrossesse extends CMbObject{
   public $_terme_vs_operation;
   public $_operation_id;
   public $_allaitement_en_cours;
+  public $_last_consult_id;
 
   /**
    * @see parent::getSpec()
@@ -57,6 +58,13 @@ class CGrossesse extends CMbObject{
     $spec = parent::getSpec();
     $spec->table = 'grossesse';
     $spec->key   = 'grossesse_id';
+
+    $spec->events = array(
+      "suivi" => array(
+        "reference1" => array("CConsultation", "_last_consult_id"),
+        "reference2" => array("CPatient", "parturiente_id"),
+      ),
+    );
     return $spec;
   }
 
@@ -81,6 +89,7 @@ class CGrossesse extends CMbObject{
     $specs["lieu_accouchement"] = "enum list|sur_site|exte default|sur_site";
     $specs["fausse_couche"]     = "enum list|inf_15|sup_15";
     $specs["rques"]             = "text helped";
+    $specs["_last_consult_id"]  = "ref class|CConsultation";
     return $specs;
   }
 
@@ -176,12 +185,22 @@ class CGrossesse extends CMbObject{
    */
   function loadView() {
     parent::loadView();
+
     $naissances = $this->loadRefsNaissances();
     $sejours = CMbObject::massLoadFwdRef($naissances, "sejour_enfant_id");
     CMbObject::massLoadFwdRef($sejours, "patient_id");
     
     foreach ($naissances as $_naissance) {
       $_naissance->loadRefSejourEnfant()->loadRefPatient();
+    }
+
+    $consultations = $this->loadRefsConsultations();
+    $last_consult = end($consultations);
+
+    $this->_last_consult_id = null;
+
+    if ($last_consult && $last_consult->_id) {
+      $this->_last_consult_id = $last_consult->_id;
     }
   }
 
@@ -216,6 +235,8 @@ class CGrossesse extends CMbObject{
     if ($msg) {
       return $msg;
     }
+
+    return null;
   }
 
   /**
