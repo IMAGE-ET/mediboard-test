@@ -10,7 +10,7 @@
   <input type="hidden" name="facture_class" value="{{$facture_class}}" />
   <input type="file" name="import" />
   <input type="checkbox" name="dryrun" value="1" checked="checked" />
-  <label for="dryrun">Essai à blanc</label>
+  <label for="dryrun">{{tr}}DryRun{{/tr}}</label>
   <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
 </form>
 
