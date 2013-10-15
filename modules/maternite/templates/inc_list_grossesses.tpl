@@ -42,12 +42,12 @@
           {{/if}}
           {{if $_grossesse->_count.consultations}}
             <div>
-              {{$_grossesse->_count.consultations}} {{tr}}CGrossesse-back-sejours{{/tr}}
+              {{$_grossesse->_count.consultations}} {{tr}}CGrossesse-back-consultations{{/tr}}
             </div>
           {{/if}}
           {{if $_grossesse->_count.naissances}}
             <div>
-              {{$_grossesse->_count.naissances}} {{tr}}CGrossesse-back-consultations{{/tr}}
+              {{$_grossesse->_count.naissances}} {{tr}}CGrossesse-back-naissances{{/tr}}
             </div>
           {{/if}}
         </td>
