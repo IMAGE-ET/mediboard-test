@@ -9,6 +9,11 @@
  * @version    $Revision$
  */
 
+// Redirection pour gérer le cas ou le volet par defaut est l'autre affichage des sejours
+if (CAppUI::pref("vue_sejours") == "global") {
+  CAppUI::redirect("m=soins&tab=vw_sejours");
+}
+
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
 CCanDo::checkRead();
@@ -40,7 +45,7 @@ if (isset($default_services_id->{"g$group_id"})) {
   $default_service_id = reset(explode("|", $default_services_id->{"g$group_id"}));
 }
 
-if (!$service_id && $default_service_id) {
+if (!$service_id && $default_service_id && !$praticien_id) {
   $service_id = $default_service_id;
 }
 

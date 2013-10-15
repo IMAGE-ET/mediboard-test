@@ -78,6 +78,9 @@ class CSetupsoins extends CSetup {
               WHERE modules.mod_name = 'soins'";
     $this->addQuery($query);
 
-    $this->mod_version = '0.17';
+    $this->makeRevision("0.17");
+    $this->addPrefQuery("vue_sejours", "standard");
+
+    $this->mod_version = '0.18';
   }
 }

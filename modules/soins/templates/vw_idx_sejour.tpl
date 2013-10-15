@@ -368,6 +368,16 @@ savePref = function(form) {
       <table class="form" id="left-column" style="width:240px;">
         <tr>
           <th class="title">
+
+            <form name="editPrefVueSejour" method="post" style="float: left">
+              <input type="hidden" name="m" value="admin" />
+              <input type="hidden" name="dosql" value="do_preference_aed" />
+              <input type="hidden" name="user_id" value="{{$app->user_id}}" />
+              <input type="hidden" name="pref[vue_sejours]" value="global" />
+              <input type="hidden" name="postRedirect" value="m=soins&tab=vw_sejours" />
+              <button type="submit" class="change notext">Vue par défaut</button>
+            </form>
+
             {{$date|date_format:$conf.longdate}}
             <form action="?" name="changeDate" method="get">
               <input type="hidden" name="m" value="{{$m}}" />
@@ -394,7 +404,7 @@ savePref = function(form) {
                     </select>
                   </td>
                 </tr>
-                
+
                 <tr>
                   <th>
                     <label for="service_id">
@@ -413,7 +423,6 @@ savePref = function(form) {
                     {{if $service_id && $isPrescriptionInstalled && $service_id != "NP"}}
                       <button type="button" class="search compact" onclick="viewBilanService('{{$service_id}}','{{$date}}');">Bilan</button>
                     {{/if}}
-
 
                     <div id="select_default_service" style="display: none;">
                       <table class="form">
