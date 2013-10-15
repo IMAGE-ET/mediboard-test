@@ -8,6 +8,16 @@
  * @version    $Revision$
  *}}
 
+{{unique_id var=forms_uid}}
+
+<script>
+Main.add(function(){
+  {{if "forms"|module_active}}
+    ExObject.loadExObjects("{{$grossesse->_class}}", "{{$grossesse->_id}}", "list-ex_objects-{{$forms_uid}}", 0.5);
+  {{/if}}
+});
+</script>
+
 <form name="createProvisoire" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() { refreshGrossesse('{{$operation->_id}}'); } });">
   <input type="hidden" name="m" value="maternite" />
   <input type="hidden" name="dosql" value="do_dossier_provisoire_aed" />
@@ -71,3 +81,12 @@
     </tr>
   {{/foreach}}
 </table>
+
+{{if "forms"|module_active}}
+  <table class="tbl">
+    <tr>
+      <th class="title">Formulaires</th>
+    </tr>
+  </table>
+  <div id="list-ex_objects-{{$forms_uid}}"></div>
+{{/if}}

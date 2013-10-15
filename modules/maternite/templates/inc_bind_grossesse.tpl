@@ -14,17 +14,17 @@
   });
 </script>
 
-<button class="new" onclick="Grossesse.editGrossesse(0, '{{$parturiente_id}}')" style="float: left;">Nouvelle grossesse</button>
+<button class="new" onclick="Grossesse.editGrossesse(0, '{{$parturiente_id}}')" style="float: left;">{{tr}}CGrossesse-title-create{{/tr}}</button>
 
-<table class="main">
+<table class="main layout">
   <tr>
-    <td id="list_grossesses" style="width: 50%"></td>
-    <td id="edit_grossesse"></td>
-  </tr>
-  <tr>
-    <td colspan="2" class="button">
-      <button type="button" class="tick" onclick="Grossesse.bindGrossesse(); Control.Modal.close();">Sélectionner</button>
-      <button type="button" class="cancel" onclick="Grossesse.emptyGrossesses(); Control.Modal.close();">Vider</button>
+    <td style="width: 40%">
+      <div id="list_grossesses"></div>
+      <div style="text-align: right;">
+        <button type="button" class="tick" onclick="Grossesse.bindGrossesse(); Control.Modal.close();">Sélectionner</button>
+        <button type="button" class="cancel" onclick="Grossesse.emptyGrossesses(); Control.Modal.close();">Vider</button>
+      </div>
     </td>
+    <td id="edit_grossesse"></td>
   </tr>
 </table>

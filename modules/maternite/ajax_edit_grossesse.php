@@ -16,6 +16,7 @@ $parturiente_id    = CValue::getOrSession("parturiente_id");
 
 $grossesse = new CGrossesse();
 $grossesse->load($grossesse_id);
+$grossesse->loadRefsNotes();
 
 if (!$grossesse->_id) {
   $grossesse->parturiente_id = $parturiente_id;

@@ -21,7 +21,7 @@
 <form name="bindFormGrossesse" method="get">
   <table class="tbl">
     <tr>
-      <th colspan="3" class="category">
+      <th colspan="4" class="category">
         Liste des grossesses
       </th>
     </tr>
@@ -51,10 +51,17 @@
             </div>
           {{/if}}
         </td>
+
+        {{if "forms"|module_active}}
+          <td class="narrow">
+            <button class="forms notext compact" type="button"
+                    onclick="ExObject.loadExObjects('{{$_grossesse->_class}}', '{{$_grossesse->_id}}', 'edit_grossesse', 0.5)">Formulaires</button>
+          </td>
+        {{/if}}
       </tr>
     {{foreachelse}}
       <tr>
-        <td class="empty">{{tr}}CGrossesse.none{{/tr}}</td>
+        <td class="empty" colspan="4">{{tr}}CGrossesse.none{{/tr}}</td>
       </tr>
     {{/foreach}}
   </table>

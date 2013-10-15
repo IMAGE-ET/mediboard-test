@@ -483,6 +483,7 @@ $locales['CExClassField.report_class.CAdministration'] = 'Administration';
 $locales['CExClassField.report_class.CBilanSSR'] = 'Bilan SSR';
 $locales['CExClassField.report_class.CConsultAnesth'] = 'Consultation d\'anésthésie';
 $locales['CExClassField.report_class.CConsultation'] = 'Consultation';
+$locales['CExClassField.report_class.CGrossesse'] = 'Grossesse';
 $locales['CExClassField.report_class.CMediusers'] = 'Utilisateur';
 $locales['CExClassField.report_class.COperation'] = 'Intervention';
 $locales['CExClassField.report_class.CPatient'] = 'Patient';
