@@ -65,7 +65,7 @@
         {{mb_title object=$_suivi field=$_key}} :
         {{if array_key_exists("formfields", $_field)}}
           {{mb_value object=$_suivi field=$_field.formfields.0 size="2"}}
-          {{if array_key_exists(1, $_fields.formfields)}}
+          {{if array_key_exists(1, $_field.formfields)}}
             /
             {{mb_value object=$_suivi field=$_field.formfields.1 size="2"}}
           {{/if}}
