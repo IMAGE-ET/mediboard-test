@@ -162,6 +162,24 @@ showModalTP = function(dossier_medical_id, sejour_id, prescription_sejour_id) {
   {{/if}}
 </ul>
 
+{{assign var=display value="none"}}
+{{if !($dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_ref_prescription_lines|@count)}}
+  {{assign var=display value="inline"}}
+{{elseif $dossier_medical->absence_traitement}}
+  <script>
+    Main.add(function(){
+      var form = getForm("save_absence_ttt");
+      $V(form.absence_traitement, "0");
+    });
+  </script>
+{{/if}}
+<form name="save_absence_ttt" action="?" method="post" onsubmit="return onSubmitFormAjax(this);" style="float: right;display: {{$display}}">
+  {{mb_key    object=$dossier_medical}}
+  {{mb_class  object=$dossier_medical}}
+  {{mb_label object=$dossier_medical field=absence_traitement}}
+  {{mb_field object=$dossier_medical field=absence_traitement typeEnum=checkbox onchange="return onSubmitFormAjax(this.form);"}}
+</form>
+
 <!-- Traitements -->
 {{if is_array($dossier_medical->_ref_traitements) || $dossier_medical->_ref_prescription}}
   {{if $dossier_medical->_count_cancelled_traitements}}

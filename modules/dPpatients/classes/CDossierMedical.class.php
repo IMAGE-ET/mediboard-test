@@ -21,6 +21,7 @@ class CDossierMedical extends CMbMetaObject {
   public $risque_thrombo_patient;
   public $risque_MCJ_patient;
   public $facteurs_risque;
+  public $absence_traitement;
 
   // Dossier medical Sejour
   public $risque_thrombo_chirurgie;
@@ -78,7 +79,8 @@ class CDossierMedical extends CMbMetaObject {
     $specs = parent::getProps();
     $specs["object_class"]   = "enum list|CPatient|CSejour";
     $specs["codes_cim"]      = "text";
-    
+    $specs["absence_traitement"] = "bool";
+
     // TODO Activer ces champs
     //$specs["groupe_sanguin"] = "enum list|?|O|A|B|AB default|?";
     //$specs["rhesus"]         = "enum list|?|NEG|POS default|?";

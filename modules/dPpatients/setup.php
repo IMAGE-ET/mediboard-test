@@ -2351,7 +2351,12 @@ class CSetupdPpatients extends CSetup {
                 ADD `label_id` INT (11) UNSIGNED;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.89";
+    $this->makeRevision("1.89");
+    $query = "ALTER TABLE `dossier_medical`
+                ADD `absence_traitement` ENUM ('0','1');";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.90";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
