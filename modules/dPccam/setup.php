@@ -129,6 +129,7 @@ class CSetupdPccam extends CSetup {
 
     // Data source query
     $query = "SHOW TABLES LIKE 'convergence'";
+    $this->addDatasource("ccamV2", $query);
 
     /*
     $query = "SELECT *
