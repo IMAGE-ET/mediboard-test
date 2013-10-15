@@ -92,11 +92,13 @@ function submitCompteRendu(callback){
     
     var form = getForm("editFrm");
     
-    if(checkForm(form) && User.id) {
-      editor.getCommand('save').setState(CKEDITOR.TRISTATE_DISABLED);
-      editor.getCommand('mbprint').setState(CKEDITOR.TRISTATE_DISABLED);
-      editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_DISABLED);
-      editor.on("key", loadOld);
+    if (checkForm(form) && User.id) {
+      {{if !$is_locked}}
+        editor.getCommand('save').setState(CKEDITOR.TRISTATE_DISABLED);
+        editor.getCommand('mbprint').setState(CKEDITOR.TRISTATE_DISABLED);
+        editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_DISABLED);
+        editor.on("key", loadOld);
+      {{/if}}
 
       form.onsubmit=function(){ return true; };
       if (Thumb.modele_id && Thumb.contentChanged) {
@@ -168,9 +170,11 @@ function refreshZones(id, obj) {
           window.callback();
         }
         form.onsubmit = function() { Url.ping({onComplete: submitCompteRendu}); return false;};
-        editor.getCommand('save').setState(CKEDITOR.TRISTATE_OFF);
-        editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_OFF);
-        editor.getCommand('mbprint').setState(CKEDITOR.TRISTATE_OFF);
+        {{if !$is_locked}}
+          editor.getCommand('save').setState(CKEDITOR.TRISTATE_OFF);
+          editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_OFF);
+          editor.getCommand('mbprint').setState(CKEDITOR.TRISTATE_OFF);
+        {{/if}}
       }
     });
   }
