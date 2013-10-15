@@ -203,23 +203,29 @@
 {{/if}}
 
 <table class="main tbl">
-  <tr>
-    <th class="title" colspan="14" {{if $print}}onclick="window.print();"{{/if}}>
-      {{if !$print}}
-      <button type="button" class="print notext" style="float: right;" onclick="printSejours();">{{tr}}Print{{/tr}}</button>
-      {{/if}}
-      {{if $service->_id}}
-        Séjours du service {{$service}}
-      {{elseif $function->_id}}
-        Séjours du cabinet {{$function}}
-      {{elseif $praticien->_id}}
-        Séjours  du praticien {{$praticien}}
-      {{else}}
-        Patients non placés
-      {{/if}}
-      ({{$sejours|@count}})
-    </th>
-  </tr>
+  <thead>
+    <tr>
+      <th class="title" colspan="14" {{if $print}}onclick="window.print();"{{/if}}>
+        {{if !$print}}
+        <button type="button" class="print notext" style="float: right;" onclick="printSejours();">{{tr}}Print{{/tr}}</button>
+        {{/if}}
+        {{if $service->_id}}
+          Séjours du service {{$service}}
+        {{elseif $function->_id}}
+          Séjours du cabinet {{$function}}
+        {{elseif $praticien->_id}}
+          Séjours  du praticien {{$praticien}}
+        {{else}}
+          Patients non placés
+        {{/if}}
+        ({{$sejours|@count}})
+
+        {{if $print}}
+          <span style="font-weight: normal;"> - {{$smarty.now|date_format:$conf.datetime}}</span>
+        {{/if}}
+      </th>
+    </tr>
+  </thead>
 
   {{if !$print}}
   <tr>
