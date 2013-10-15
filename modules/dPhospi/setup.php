@@ -737,6 +737,15 @@ class CSetupdPhospi extends CSetup {
         AND `affectation`.`service_id` != `chambre`.`service_id`;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.79";
+    $this->makeRevision("0.79");
+    $this->addUpdateMessage("Suppression de l'index multiple, ajout de l'index de date");
+    $query = "ALTER TABLE `transmission_medicale` DROP INDEX sejour_id";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `transmission_medicale` ADD INDEX (  `date` )";
+    $this->addQuery($query);
+    $query = "ALTER TABLE  `transmission_medicale` ADD INDEX (  `user_id` )";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.80";
   }
 }
