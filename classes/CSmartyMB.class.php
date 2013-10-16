@@ -37,17 +37,12 @@ class CSmartyMB extends Smarty {
     $rootDir = CAppUI::conf("root_dir");
     $extraPath = self::$extraPath;
 
-    $root = $extraPath ? "$rootDir/$extraPath" : $rootDir;
-
-    $tmpDir = "$rootDir/tmp";
-
     if (!$dir) {
-      $dir = "$root/modules/$m"; 
-      $this->compile_dir = "$tmpDir/templates_c/{$extraPath}modules/$m/";
+      $root = $extraPath ? "$rootDir/$extraPath" : $rootDir;
+      $dir = "$root/modules/$m";
     }
-    else {
-      $this->compile_dir = "$tmpDir/templates_c/{$extraPath}$dir/";
-    }
+
+    $this->compile_dir = "$rootDir/tmp/templates_c/";
 
     // Directories initialisation
     $this->template_dir = "$dir/templates/";
@@ -65,8 +60,8 @@ class CSmartyMB extends Smarty {
     $this->default_modifiers = array("@cleanField");
 
     // Register mediboard functions
-    $this->register_block   ("tr"                , array($this,"tr"));
-    $this->register_block   ("main"              , array($this,"main"));
+    $this->register_block("tr"                , array($this,"tr"));
+    $this->register_block("main"              , array($this,"main"));
     
     $this->register_function("mb_default"        , array($this,"mb_default"));
     $this->register_function("mb_ditto"          , array($this,"mb_ditto"));
@@ -242,24 +237,28 @@ class CSmartyMB extends Smarty {
    *
    * @param array $params Array of parameters
    *
-   * @return string
+   * @return string|null
    */
   function mb_token($params) {
-    if (CAppUI::conf("csrf_protection")) {
-      $lifetime = CMbArray::extract($params, "lifetime",  CAppUI::conf("csrf_token_lifetime"));
-      $lifetime = abs(round($lifetime));
+    if (!CAppUI::conf("csrf_protection")) {
+      return null;
+    }
 
-      $token = CCSRF::generateToken();
-      if ($token) {
-        // Store in session
-        if (isset($_SESSION)) {
-          // Key is token, value is expiration date
-          $_SESSION["tokens"][$token] = array("lifetime" => time() + $lifetime, "fields" => array());
+    $lifetime = CMbArray::extract($params, "lifetime",  CAppUI::conf("csrf_token_lifetime"));
+    $lifetime = abs(round($lifetime));
 
-          return "<input type=\"hidden\" name=\"csrf\" value=\"".$token."\" />";
-        }
+    $token = CCSRF::generateToken();
+    if ($token) {
+      // Store in session
+      if (isset($_SESSION)) {
+        // Key is token, value is expiration date
+        $_SESSION["tokens"][$token] = array("lifetime" => time() + $lifetime, "fields" => array());
+
+        return "<input type=\"hidden\" name=\"csrf\" value=\"".$token."\" />";
       }
     }
+
+    return null;
   }
 
   /**
@@ -273,7 +272,9 @@ class CSmartyMB extends Smarty {
    */
   function _get_auto_filename($auto_base, $auto_source = null, $auto_id = null){
     $_compile_dir_sep =  $this->use_sub_dirs ? DIRECTORY_SEPARATOR : '^';
-    $_return = $auto_base . DIRECTORY_SEPARATOR;
+
+    // Get real template path
+    $_return = $this->_get_template_compile_dir($auto_base, $auto_source);
 
     if (isset($auto_id)) {
       // make auto_id safe for directory names
@@ -295,6 +296,19 @@ class CSmartyMB extends Smarty {
     }
 
     return $_return;
+  }
+
+  protected function _get_template_compile_dir($base, $source) {
+    $realpath = realpath($this->template_dir.$source);
+    $path = mbRelativePath($realpath);
+    $path = explode("/", $path);
+
+    // Remove "templates" subdir
+    CMbArray::removeValue("templates", $path);
+
+    $subdir = dirname(implode("/", $path));
+
+    return "$base$subdir/";
   }
 
   /**
@@ -433,8 +447,8 @@ class CSmartyMB extends Smarty {
    */
   function pad($string, $length, $pad_string = ' ', $pad_type = 'left') {
     static $pads = array(
-      'left' => STR_PAD_LEFT, 
-      'right'=> STR_PAD_RIGHT, 
+      'left' => STR_PAD_LEFT,
+      'right'=> STR_PAD_RIGHT,
       'both' => STR_PAD_BOTH
     );
     return str_pad($string, $length, $pad_string, $pads[$pad_type]);
