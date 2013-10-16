@@ -17,6 +17,7 @@ CConfiguration::register(
       "dPsalleOp" => array(
         "COperation" => array(
           "use_sortie_reveil_reel" => "bool default|0",
+          "use_tto" => "bool default|0",
         )
       )
     )

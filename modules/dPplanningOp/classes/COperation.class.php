@@ -54,6 +54,7 @@ class COperation extends CCodable implements IPatientRelated {
   public $info;
   public $type_anesth;
   public $rques;
+  public $rques_personnel;
   public $rank;
   public $rank_voulu;
   public $anapath;
@@ -95,6 +96,8 @@ class COperation extends CCodable implements IPatientRelated {
   public $fin_op;
   public $retrait_garrot;
   public $sortie_salle;
+  public $remise_chir;
+  public $tto;
   public $entree_reveil;
   public $sortie_reveil_possible;
   public $sortie_reveil_reel;
@@ -116,6 +119,7 @@ class COperation extends CCodable implements IPatientRelated {
   // Form fields
   public $_hour_op;
   public $_min_op;
+
   public $_hour_urgence;
   public $_min_urgence;
   public $_lu_type_anesth;
@@ -282,6 +286,8 @@ class COperation extends CCodable implements IPatientRelated {
     $props["fin_prepa_preop"]      = "time show|0";
     $props["entree_salle"]         = "time show|0";
     $props["sortie_salle"]         = "time show|0";
+    $props["remise_chir"]          = "time show|0";
+    $props["tto"]                  = "time show|0";
     $props["time_operation"]       = "time show|0";
     $props["examen"]               = "text helped";
     $props["exam_extempo"]         = "bool";
@@ -290,6 +296,7 @@ class COperation extends CCodable implements IPatientRelated {
     $props["info"]                 = "bool";
     $props["type_anesth"]          = "ref class|CTypeAnesth";
     $props["rques"]                = "text helped";
+    $props["rques_personnel"]      = "text";
     $props["rank"]                 = "num max|255 show|0";
     $props["rank_voulu"]           = "num max|255 show|0";
     $props["depassement"]          = "currency min|0 confidential show|0";

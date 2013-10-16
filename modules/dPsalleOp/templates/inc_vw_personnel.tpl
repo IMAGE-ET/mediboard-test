@@ -126,7 +126,7 @@ submitPersonnel = function(oForm){
             <span class="opacity-60">{{tr}}CPersonnel.emplacement.{{$affectation->_ref_personnel->emplacement}}{{/tr}}</span>
             </td>
             {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_debut}}
-            {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_fin}}
+            {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_fin disabled=$affectation->_debut|default:'yes'}}
           </tr>
         </table>
        </form>
@@ -163,7 +163,7 @@ submitPersonnel = function(oForm){
         </td>
         {{if $in_salle}}
           {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_debut}}
-          {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_fin}}
+          {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_fin disabled=$affectation->_debut|default:'yes'}}
         {{/if}}
         <td {{if !$in_salle}}class="narrow"{{/if}}>
           {{if $modif_operation}}
@@ -177,6 +177,13 @@ submitPersonnel = function(oForm){
    {{foreachelse}}
      <div class="small-info">Aucun personnel ajouté</div>
    {{/foreach}}
+
+    <form name="rques_personnel" action="?m={{$m}}" method="post" onchange="return onSubmitFormAjax(this);">
+      {{mb_key   object=$selOp}}
+      {{mb_class object=$selOp}}
+      {{mb_label object=$selOp field=rques_personnel}}
+      {{mb_field object=$selOp field=rques_personnel onchange="return onSubmitFormAjax(this.form);"}}
+    </form>
   </td>
 </tr>
 </table>

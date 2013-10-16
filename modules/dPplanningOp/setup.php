@@ -1672,6 +1672,13 @@ class CSetupdPplanningOp extends CSetup {
                 ADD `tarif` VARCHAR (255);";
     $this->addQuery($query);
 
-    $this->mod_version = "1.80";
+    $this->makeRevision("1.80");
+    $query = "ALTER TABLE `operations`
+                ADD `remise_chir` TIME,
+                ADD `tto` TIME,
+                ADD `rques_personnel` TEXT;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.81";
   }
 }

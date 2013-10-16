@@ -18,7 +18,13 @@ $dPconfig["dPsalleOp"] = array(
     "mode"                   => "0",
     "modif_salle"            => "0",
     "modif_actes"            => "oneday",
-    "postdater_reveil"       => "0"
+    "postdater_reveil"       => "0",
+    "use_entree_sortie_salle" => "1",
+    "use_garrot"              => "1",
+    "use_debut_fin_op"        => "1",
+    "use_entree_bloc"         => "0",
+    "use_remise_chir"         => "0",
+    "use_check_timing"        => "0"
   ),
   "CActeCCAM"                 => array(
     "contraste"                    => "0",

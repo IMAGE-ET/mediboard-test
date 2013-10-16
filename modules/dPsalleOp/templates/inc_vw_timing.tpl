@@ -7,8 +7,9 @@
 
   <table class="form" style="table-layout: fixed;">
     <tr>
-      <th class="title" colspan="4">Horodatage</th>
-
+      <th class="title" colspan="{{if $conf.dPsalleOp.COperation.use_remise_chir}}6{{else}}4{{/if}}">
+        Horodatage
+      </th>
     </tr>
 
     {{assign var=submit value=submitTiming}}
@@ -23,14 +24,44 @@
         </td>
       {{/if}}
 
-      {{include file=inc_field_timing.tpl object=$selOp field=entree_salle}}
-      {{include file=inc_field_timing.tpl object=$selOp field=pose_garrot }}
-      {{include file=inc_field_timing.tpl object=$selOp field=debut_op    }}
+      {{if $conf.dPsalleOp.COperation.use_entree_bloc}}
+        {{include file=inc_field_timing.tpl object=$selOp field=entree_bloc}}
+      {{/if}}
+      {{if $conf.dPsalleOp.COperation.use_entree_sortie_salle}}
+        {{include file=inc_field_timing.tpl object=$selOp field=entree_salle}}
+      {{/if}}
+      {{if $conf.dPsalleOp.COperation.use_remise_chir}}
+        {{include file=inc_field_timing.tpl object=$selOp field=remise_chir}}
+      {{/if}}
+      {{if "CAppUI::conf"|static_call:"dPsalleOp COperation use_tto":"CGroups-$g"}}
+        {{include file=inc_field_timing.tpl object=$selOp field=tto}}
+      {{/if}}
+      {{if $conf.dPsalleOp.COperation.use_garrot}}
+        {{include file=inc_field_timing.tpl object=$selOp field=pose_garrot}}
+      {{/if}}
+      {{if $conf.dPsalleOp.COperation.use_debut_fin_op}}
+        {{include file=inc_field_timing.tpl object=$selOp field=debut_op use_disabled=$selOp->entree_salle|default:'yes'}}
+      {{/if}}
     </tr>
     <tr>
-      {{include file=inc_field_timing.tpl object=$selOp field=sortie_salle  }}
-      {{include file=inc_field_timing.tpl object=$selOp field=retrait_garrot}}
-      {{include file=inc_field_timing.tpl object=$selOp field=fin_op        }}
+      {{if $conf.dPsalleOp.COperation.use_entree_bloc}}
+        <td></td>
+      {{/if}}
+      {{if $conf.dPsalleOp.COperation.use_entree_sortie_salle}}
+        {{include file=inc_field_timing.tpl object=$selOp field=sortie_salle use_disabled=$selOp->fin_op|default:'yes'}}
+      {{/if}}
+      {{if "CAppUI::conf"|static_call:"dPsalleOp COperation use_tto":"CGroups-$g"}}
+        <td></td>
+      {{/if}}
+      {{if $conf.dPsalleOp.COperation.use_remise_chir}}
+        <td></td>
+      {{/if}}
+      {{if $conf.dPsalleOp.COperation.use_garrot}}
+        {{include file=inc_field_timing.tpl object=$selOp field=retrait_garrot}}
+      {{/if}}
+      {{if $conf.dPsalleOp.COperation.use_debut_fin_op}}
+        {{include file=inc_field_timing.tpl object=$selOp field=fin_op use_disabled=$selOp->debut_op|default:'yes'}}
+      {{/if}}
     </tr>
   </table>
 </form>

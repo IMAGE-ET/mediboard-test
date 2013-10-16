@@ -25,7 +25,8 @@
     {{mb_include module=system template=inc_config_bool var=mode}}
     {{mb_include module=system template=inc_config_bool var=modif_salle}}
     {{mb_include module=system template=inc_config_bool var=postdater_reveil}}
-    
+    {{mb_include module=system template=inc_config_bool var=use_check_timing}}
+
     {{assign var="var" value="modif_actes"}}
     <tr>
       <th>
@@ -72,8 +73,14 @@
     </tr>
   
     <tr>
-      <th class="title" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
+      <th class="title" colspan="2">Affichage des timings</th>
     </tr>
+    {{mb_include module=system template=inc_config_bool var=use_entree_sortie_salle}}
+    {{mb_include module=system template=inc_config_bool var=use_garrot}}
+    {{mb_include module=system template=inc_config_bool var=use_debut_fin_op}}
+    {{mb_include module=system template=inc_config_bool var=use_entree_bloc}}
+    {{mb_include module=system template=inc_config_bool var=use_remise_chir}}
+
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
