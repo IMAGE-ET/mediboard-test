@@ -522,4 +522,34 @@ abstract class CMbArray {
     }
     return $ordered;
   }
+
+  /**
+   * A recursive version of array_search (works for multidimensional array).
+   * The result is an array reproducing the structure of the haystack
+   *
+   * @param mixed $needle   The needle
+   * @param array $haystack The haystack
+   *
+   * @return array
+   */
+  static function searchRecursive($needle, $haystack) {
+    $path = array();
+    foreach ($haystack as $id => $val) {
+      if ($val === $needle) {
+        $path[] = $id;
+
+        break;
+      }
+      elseif (is_array($val)) {
+        $found = CMbArray::searchRecursive($needle, $val);
+        if (count($found)>0) {
+          $path[$id] = $found;
+
+          break;
+        }
+      }
+    }
+
+    return $path;
+  }
 }

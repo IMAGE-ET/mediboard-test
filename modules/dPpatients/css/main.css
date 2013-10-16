@@ -36,3 +36,13 @@ div.outlined input[type="radio"]:checked + label {
 div.outlined input[type=radio].checked + label {
   outline: 2px solid orange;
 }
+
+div.axis-onhover {
+  font-weight: bold;
+  color: black;
+}
+
+td.legend-onhover {
+  font-weight: bold;
+  color: black;
+}

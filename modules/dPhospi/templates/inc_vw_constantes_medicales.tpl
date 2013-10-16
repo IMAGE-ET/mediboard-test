@@ -1,279 +1,260 @@
 {{mb_default var=simple_view value=0}}
 
-<script type="text/javascript">  
-g = [];
-data = {{$data|@json}};
-dates = {{$dates|@json}};
-hours = {{$hours|@json}};
-comments = {{$comments|@json}};
+<script type="text/javascript">
 const_ids = {{$const_ids|@json}};
 keys_selection = {{$custom_selection|@array_keys|@json}};
-last_date = null;
 paginate = {{$paginate|@json}};
 
-var xRange = {min: -0.5, max: Math.max(dates.length, 14)-0.5};
-var xOffset = ((xRange.max+0.5) - 14);
-window.globalXOffset = 0;
+window.previousPoint = null;
+window.minXIndex = {{$min_x_index}};
+window.minXValue = {{$min_x_value}};
+window.xTicks = null;
+window.drawnConstants = {{$drawn_constants|@json}};
 
-if (xOffset > 0) {
-  xRange.min += xOffset;
+newConstants = function(context_guid){
+  var url = new Url('dPhospi', 'httpreq_vw_form_constantes_medicales');
+  url.addParam("context_guid", context_guid);
+  url.addParam("selection[]", keys_selection);
+  url.addParam("patient_id", '{{$patient->_id}}');
+  url.requestUpdate('constantes-medicales-form', {onComplete: initCheckboxes.curry()});
 }
 
-editConstantes = function (const_id, context_guid, start){
+editConstants = function(const_id, context_guid, start){
   var url = new Url('dPhospi', 'httpreq_vw_form_constantes_medicales');
   url.addParam("const_id", const_id);
   url.addParam("context_guid", context_guid);
   url.addParam("readonly", '{{$readonly}}');
   url.addParam("start", start || 0);
-  //url.addParam("selection[]", keys_selection);
+  url.addParam("selection[]", keys_selection);
   url.addParam("patient_id", '{{$patient->_id}}');
-  url.requestUpdate('constantes-medicales-form');
+  url.requestUpdate('constantes-medicales-form', {onComplete: initCheckboxes.curry()});
 }
 
-insertGraph = function (container, data, id, width, height) {
-  var element = $(id);
-  
-  if (!element) {
-    container.insert('<div id="'+id+'" style="width:'+width+';height:'+height+';margin:auto; margin-bottom: 12px;" class="constantes-graph"></div>');
-    element = $(id);
-  }
-  
-  last_date = null;
-  
-  var o = Flotr.clone(data.options);
-  o.xaxis.min += window.globalXOffset;
-  o.xaxis.max += window.globalXOffset;
-  
-  return Flotr.draw(element, data.series, o);
-}
+plotHover = function(event, pos, item) {
+  if (item) {
+    var key = item.dataIndex+"-"+item.seriesIndex;
+    if (previousPoint != key && item.datapoint[0] >= window.minXValue && item.datapoint[0] <= window.minXValue + 10) {
+      var axis_labels = $$('.axis-onhover');
+      axis_labels.each(function(item){
+        item.removeClassName('axis-onhover');
+      });
 
-tickFormatter = function (n) {
-  n = parseInt(n);
-  if (!const_ids[n]) {
-    return "";
-  }
-  
-  var comment = comments[n];
-  
-  var s = '<a href="#1" '+(comment ? (' title="'+comment+'" style="color:red;font-weight:bold;" ') : '')+
-          ' onclick="editConstantes('+const_ids[n]+', \'{{$context_guid}}\')">';
-  
-  if (dates[n] && dates[n] == last_date) {
-    s += '<strong>'+hours[n]+'</strong>';
-  } else if (dates[n] && hours[n]) {
-    s += '<strong>'+hours[n]+'</strong><br />'+dates[n].substr(0, 5)+(new Array(50).join(" ")); // argh, flotr checks the length of the longest string, not the biggest element
-    last_date = dates[n];
-  }
-  
-  return s+'</a>';
-};
+      var legend_labels = $$('.legend-onhover');
+      legend_labels.each(function(item) {
+        item.removeClassName('legend-onhover');
+      });
 
-yTickFormatter = function (n) {
-  return "<span style='display: inline-block; width: 3em;'>"+n+"</span>";
-};
-
-trackFormatter = function (obj) {
-  var n = parseInt(obj.x);
-  var data = obj.series.data[obj.index];
-  var unit = (data[7] || "");
-  
-  if ("cumul" in obj.series) {
-    return obj.series.cumul + "<br /><strong>" + data[1] + " " + unit + "</strong>";
-  }
-  
-  var str = dates[n] + ' ' + hours[n] + "<br /><strong>" + data[1] + " " + unit + "</strong><br />" + data[5];
-         
-  if (data[6]) {
-    str += '<hr />' + data[6];
-  }
-  
-  str += '<hr /><button class="edit" onclick="editConstantes('+const_ids[n]+', \'{{$context_guid}}\')">{{tr}}Edit{{/tr}}</button>';
-  
-  return str;
-};
-
-shiftGraphs = function(side){
-  var offset = 5;
-  window.globalXOffset += {before: -offset, after: +offset}[side]; 
-  last_date = null; 
-  drawGraph(); 
-  toggleAllGraphs();
-}
-
-initializeGraph = function (src, data) {
-  src.options = {
-    title: src.options.title || '',
-    xaxis: src.options.xaxis || {},
-    yaxis: src.options.yaxis || {},
-    mouse: src.options.mouse || {},
-    points: src.options.points || {},
-    lines: src.options.lines || {},
-    grid: src.options.grid || {},
-    legend: src.options.legend || {},
-    colors: src.options.colors || {},
-    selection: src.options.selection || {}
-  };
-
-  Flotr.merge(data, src.options);
-  
-  // Suppression des valeurs Y nulles
-  src.series.each(function(serie) {
-    serie.data = serie.data.reject(
-      function(v) {return v[1] == null;}
-    );
-  });
-  
-  // Ajout de la ligne de niveau standard
-  if (src.standard) {
-    src.series.unshift({
-      data: [[-1000, src.standard], [1000, src.standard]], 
-      points: {show: false},
-      markers: {show: false},
-      mouse: {track: false},
-      lines: {lineWidth: 1},
-      color: "silver"
-    });
-  }
-}
-
-// Default options for the graphs
-options = {
-  mouse: {
-    track: true,
-    trackFormatter: trackFormatter,
-    trackDecimals: 2,
-    position: 'nw',
-    relative: true
-  },
-  xaxis: {
-    noTicks: 12,
-    tickDecimals: 1,
-    ticks: false,
-    tickFormatter: tickFormatter,
-    min: xRange.min,
-    max: xRange.max
-  },
-  yaxis: {
-    tickFormatter: yTickFormatter
-  },
-  points: {
-    show: true
-  },
-  lines: {
-    show: true
-  },
-  candles: {
-    upFillColor: '#ff8c00',
-    downFillColor: '#ff8c00',
-    candleWidth: 0.2
-  },
-  grid: {
-    outlineWidth: 1,
-    backgroundColor: '#fff'
-  },
-  legend: {
-    position: 'nw',
-    backgroundOpacity: 0
-  }
-};
-
-if (Prototype.Browser.IE) {
-  options.shadowSize = 0;
-}
-
-{{if $print}}
-  options.resolution = 2;
-  options.mouse.track = false;
-  options.markers = {show: true};
-  options.grid.outlineWidth = 1;
-  options.xaxis.min = -0.2;
-{{/if}}
-
-// We initalize the graphs with the default options
-{{foreach from=$data key=name item=field}}
-initializeGraph(data.{{$name}}, options);
-{{/foreach}}
-
-drawGraph = function() {
-  var c = $('constantes-medicales-graph');
-  if (!c) return;
-  
-  var width, height;
-  
-  {{if $print}}
-    width = "700px";
-    height = "160px";
-  {{else}}
-    width = "550px";
-    height = "140px";
-  {{/if}}
-  
-  $H(data).each(function(pair){
-    var id = 'constantes-medicales-'+pair.key;
-    
-    data[pair.key].draw = function(){(function(c, d, id, width, height){
-      var graph = insertGraph(c, d, id, width, height);
-      last_date = null;
-    })(c, pair.value, id, width, height)};
-    
-    {{if $print}}
-      data[pair.key].draw();
-      data[pair.key].draw = null;
-    {{/if}}
-  });
-};
-
-toggleGraph = function (key, b) {
-  if (b && data[key].draw) {
-    data[key].draw();
-    data[key].draw = null;
-  }
-  
-  var c = $('constantes-medicales-'+key);
-  if (c) {
-    c.setVisible(b);
-  }
-}
-
-toggleAllGraphs = function() {
-  var oForm = getForm('edit-constantes-medicales');
-  var checkbox;
-  
-  {{if $print}}
-    {{foreach from=$data item=curr_data key=key}}
-      $('constantes-medicales-{{$key}}').setVisible(
-        data.{{$key}}.series.last().data.length > 0
-      );
-    {{/foreach}}
-  {{else}}
-    {{foreach from=$data item=curr_data key=key}}
-      checkbox = oForm["checkbox-constantes-medicales-{{$key}}"];
-      if (checkbox) {
-        checkbox.checked = keys_selection.indexOf("{{$key}}") > -1 || (data.{{$key}}.series.last().data.length > 0);
-        toggleGraph("{{$key}}", checkbox.checked);
+      window.previousPoint = key;
+      jQuery("#flot-tooltip").remove();
+      var oPh = $(event.target.id);
+      var top = item.pageY;
+      var left;
+      if (item.pageX < oPh.offsetLeft) {
+        left = oPh.offsetLeft + 30;
       }
+      else {
+        left = item.pageX - 15;
+      }
+
+      var content = item.series.data[item.dataIndex].date;
+      if (item.series.data[item.dataIndex].hour != null) {
+        content = content + ' ' + item.series.data[item.dataIndex].hour;
+      }
+
+      content = content + "<br /><strong>" + item.datapoint[1];
+      if (item.series.bandwidth.show) {
+        content = content + "/" + item.series.data[item.dataIndex][2];
+      }
+      content = content + " " + item.series.unit;
+
+      if (item.series.data[item.dataIndex].users != null) {
+        content = content + "</strong>";
+        item.series.data[item.dataIndex].users.each(function(user) {
+          content = content + "<br />" + user;
+        });
+      }
+
+      if (item.series.data[item.dataIndex].comment != null) {
+        content = content + '<hr/>' + item.series.data[item.dataIndex].comment;
+      }
+
+      $$("body")[0].insert(DOM.div({className: "tooltip", id: "flot-tooltip"}, content).setStyle({
+        position: 'absolute',
+        top:  top + "px",
+        left: left + "px",
+        opacity: 0.7,
+        backgroundColor: '#000000',
+        color: '#FFFFFF',
+        borderRadius: '4px',
+        textAlign: 'center'
+      }));
+
+      var yaxis_labels = $$('#' + event.target.id + ' .flot-text .y' + item.series.yaxis.n + 'Axis .tickLabel');
+      yaxis_labels.each(function (item) {
+        item.addClassName('axis-onhover');
+      });
+
+      var legend_labels = $$('#legend' + event.target.id.substring(11) + ' td.legendLabel');
+      var i = item.seriesIndex;
+
+      if (item.series.bars.show) {
+        i = 0;
+      }
+      if (i >= legend_labels.length) {
+        i = legend_labels.length - 1;
+      }
+      legend_labels[i].addClassName('legend-onhover');
+    }
+  }
+  else {
+    var axis_labels = $$('.axis-onhover');
+    axis_labels.each(function(item){
+      item.removeClassName('axis-onhover');
+    });
+
+    $$('.legend-onhover').invoke('removeClassName', 'legend-onhover');
+
+
+    jQuery("#flot-tooltip").remove();
+    window.previousPoint = null;
+  }
+};
+
+plotClick = function(event, pos, item) {
+  if (item) {
+    editConstants(item.series.data[item.dataIndex].id, '{{$context_guid}}');
+  }
+};
+
+initCheckboxes = function() {
+  {{foreach from=$graphs_datas key=_rank item=_graphs_for_rank}}
+    {{foreach from=$_graphs_for_rank key=_graph_id item=_graph}}
+      var oForm = getForm('edit-constantes-medicales');
+      var checkbox;
+      {{foreach from=$graphs_structure[$_rank][$_graph_id] key=_key item=_constant}}
+        checkbox = oForm['checkbox-constantes-medicales-{{$_constant}}'];
+        if (checkbox) {
+          checkbox.addClassName('checkbox-graph-{{$_rank}}_{{$_graph_id}}');
+          checkbox.checked = true;
+          {{if $_key > 0}}
+            checkbox.setAttribute('readonly', 1);
+          {{/if}}
+        }
+      {{/foreach}}
     {{/foreach}}
-  {{/if}}
+  {{/foreach}}
 }
 
-hideMouseTrack = function(event){
-  var element = Event.element(event);
-  var container = element.up(".constantes-graph");
-  
-  if (!container) return;
-  
-  //"constantes-graph"
-  $$(".flotr-mouse-value").each(function(track){
-    if (track.up(".constantes-graph") != container) {
-      track.hide();
-    }
+drawGraphs = function() {
+  var oPh,oDatas, oOptions, sTitle;
+  {{foreach from=$graphs_datas key=_rank item=_graphs_for_rank}}
+    {{foreach from=$_graphs_for_rank key=_graph_id item=_graph}}
+      // Modification of the checkboxes
+      var oForm = getForm('edit-constantes-medicales');
+      var checkbox;
+      {{foreach from=$graphs_structure[$_rank][$_graph_id] key=_key item=_constant}}
+        checkbox = oForm['checkbox-constantes-medicales-{{$_constant}}'];
+        if (checkbox) {
+          checkbox.addClassName('checkbox-graph-{{$_rank}}_{{$_graph_id}}');
+          {{if $_key > 0}}
+            checkbox.setAttribute('readonly', 1);
+          {{/if}}
+        }
+      {{/foreach}}
+
+      var oDatas = {{$_graph.datas|@json}};
+      var oOptions = {{$_graph.options|@json}};
+      var cumul = {{$_graph.cumul}};
+      if (window.xTicks == null) {
+        window.xTicks = oOptions.xaxis.ticks;
+      }
+
+      oOptions.legend = {container: jQuery('#legend_{{$_rank}}_{{$_graph_id}}')};
+      oOptions.xaxis.ticks = window.xTicks.slice(window.minXIndex, window.minXIndex + 10);
+      oOptions.xaxis.min = window.minXValue - 0.5;
+      oOptions.xaxis.max = window.minXValue + 9.5;
+
+      // Deleting the datas of the bandwidth series who are not displayed, because they can appear in the yaxis space
+      oDatas.each(function(serie) {
+        if (serie.bandwidth) {
+          var data = new Array();
+          serie.data.each(function(point) {
+            if (point[0] >= window.minXValue && point[0] <= window.minXValue + 10) {
+              data.push(point);
+            }
+          });
+          serie.data = data;
+        }
+      });
+
+      var oPh = jQuery('#placeholder_{{$_rank}}_{{$_graph_id}}');
+      oPh.bind('plothover', plotHover);
+      oPh.bind('plotclick', plotClick);
+      var plot = jQuery.plot(oPh, oDatas, oOptions);
+
+      // Display the value for the cumul graphs
+      if (cumul) {
+        oDatas.each(function (serie) {
+          if (serie.bars) {
+            serie.data.each(function (data) {
+              var oPoint = plot.pointOffset({x: data[0], y: data[1]});
+              if (data[0] >= window.minXValue && data[0] <= window.minXValue + 10) {
+                oPh.append('<div style="position: absolute; left:' + (oPoint.left + 5) + 'px; top: ' + (oPoint.top + 5) + 'px; font-size: smaller">' + data[1] + '</div>');
+              }
+            });
+          }
+        });
+      }
+
+      // Make the labels of the xaxis clickable
+      $$('#placeholder_{{$_rank}}_{{$_graph_id}} .x1Axis .tickLabel').each(function(item) {
+        item.style.zIndex = 1000;
+      });
+    {{/foreach}}
+  {{/foreach}}
+};
+
+toggleGraph = function(checkbox) {
+  var className = $w(checkbox.className)[1];
+
+  var checkboxes = $$('.' + className);
+  checkboxes.each(function(cb) {
+    cb.checked = checkbox.checked;
   });
-}
+  var id_graph = className.substring(15);
+  var row = $('graph_row_' + id_graph);
+  row.setVisible(checkbox.checked);
+};
+
+shiftGraphs = function(direction) {
+  var offset = 5;
+  window.minXIndex += {before: -offset, after: +offset}[direction];
+
+  if (window.minXIndex < 0) {
+    window.minXIndex = 0;
+  }
+  var actualLength = window.xTicks.length - window.minXIndex;
+  if (window.xTicks.length > 10 && actualLength < 10) {
+    window.minXIndex -= 10 - actualLength;
+  }
+
+  window.minXValue = window.xTicks[window.minXIndex][0];
+  drawGraphs();
+};
 
 Main.add(function () {
-  drawGraph();
-  toggleAllGraphs();
-  document.observe("mouseover", hideMouseTrack);
+  var oForm = getForm('edit-constantes-medicales');
+  var checkbox;
+
+  drawnConstants.each(function(constant) {
+    checkbox = oForm['checkbox-constantes-medicales-' + constant];
+    if (checkbox) {
+      checkbox.checked = true;
+    }
+  });
+
+  drawGraphs();
+  ViewPort.SetAvlHeight('graphs', 1.0);
 });
 
 loadConstantesMedicales  = function(context_guid) {
@@ -426,8 +407,25 @@ refreshFiches = function(sejour_id){
           
           <button id="constantes-medicales-graph-before" class="left" style="float: left;"       onclick="shiftGraphs('before');">Avant</button>
           <button id="constantes-medicales-graph-after"  class="right rtl" style="float: right;" onclick="shiftGraphs('after');">Après</button>
-          
-          <div id="constantes-medicales-graph" style="text-align: center; clear: both;"></div>
+          <br/>
+
+          <div id="graphs">
+            <table class="layout">
+              {{foreach from=$graphs_datas key=_rank item=_graphs_for_rank}}
+                {{foreach from=$_graphs_for_rank key=_graph_id item=_graph}}
+                  <tr id="graph_row_{{$_rank}}_{{$_graph_id}}">
+                    <td>
+                      <p style="text-align: center"><strong>{{$_graph.title}}</strong></p>
+                      <div id="placeholder_{{$_rank}}_{{$_graph_id}}" style="width: {{$_graph.width}}px; height: 200px; margin-top: 10px; margin-bottom: 10px; margin-left: {{$_graph.margin_left}}px"></div>
+                    </td>
+                    <td>
+                      <div id="legend_{{$_rank}}_{{$_graph_id}}" style="margin-top: 30px; width: 15em"></div>
+                    </td>
+                  </tr>
+                {{/foreach}}
+              {{/foreach}}
+            </table>
+          </div>
         </div>
         
         <div id="constantes-table" style="display: none; text-align: left;">

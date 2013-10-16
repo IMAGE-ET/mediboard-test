@@ -343,14 +343,8 @@ $library->fileName = "flot-0.8.1.zip";
 $library->description = "Création de graphiques en JS";
 $library->sourceDir = "flot";
 $library->targetDir = "flot";
-$library->versionFile = "jquery.flot.js";
-$library->versionString = '0.8.1';
-
-$patch = new CLibraryPatch;
-$patch->dirName     = "flot";
-$patch->sourceName  = "jquery.flot.bandwidth.js";
-$patch->targetDir   = "";
-$library->patches[] = $patch;
+$library->versionFile = "jquery.flot.JUMlib.js";
+$library->versionString = 'var pluginName = "JUMlib", pluginVersion = "0.5";';
 
 CLibrary::$all[$library->name] = $library;
 

@@ -64,24 +64,35 @@ if ($context) {
   $constantes->context_id    = $context->_id;
 }
 
+$can_create = 0;
+$modif_timeout = CAppUI::conf("dPpatients CConstantesMedicales constants_modif_timeout", $host->_guid);
+if (
+  $constantes->_id &&
+  $modif_timeout > 0 &&
+  time() - strtotime($constantes->datetime) > $modif_timeout * 3600
+) {
+  $can_create = 1;
+  $readonly = 1;
+}
+
 $patient_id = $constantes->patient_id ? $constantes->patient_id : $patient_id;
 $latest_constantes = CConstantesMedicales::getLatestFor($patient_id);
-
 // Création du template
 $smarty = new CSmartyDP("modules/dPhospi");
 
-$smarty->assign('constantes'    , $constantes);
-$smarty->assign('latest_constantes', $latest_constantes);
-$smarty->assign('context_guid'  , $context_guid);
-$smarty->assign('readonly'      , $readonly);
-$smarty->assign('selection'     , $selection);
-$smarty->assign('dates'         , $dates);
-$smarty->assign('show_cat_tabs', $show_cat_tabs);
+$smarty->assign('constantes'            , $constantes);
+$smarty->assign('latest_constantes'     , $latest_constantes);
+$smarty->assign('context_guid'          , $context_guid);
+$smarty->assign('readonly'              , $readonly);
+$smarty->assign('selection'             , $selection);
+$smarty->assign('dates'                 , $dates);
+$smarty->assign('can_create'            , $can_create);
+$smarty->assign('show_cat_tabs'         , $show_cat_tabs);
 $smarty->assign('show_enable_all_button', $show_enable_all_button);
 if ($tri) {
-  $smarty->assign('real_context'  , CValue::get('real_context'));
-  $smarty->assign('display_graph'  , CValue::get('display_graph', 0));
-  $smarty->assign('tri'           , $tri);
+  $smarty->assign('real_context'        , CValue::get('real_context'));
+  $smarty->assign('display_graph'       , CValue::get('display_graph', 0));
+  $smarty->assign('tri'                 , $tri);
 }
 
 $smarty->display('inc_form_edit_constantes_medicales.tpl');

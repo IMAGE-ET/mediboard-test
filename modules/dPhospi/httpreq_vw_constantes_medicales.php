@@ -10,7 +10,9 @@
  */
 
 /**
- * @param string|null $v
+ * Convert a string in a float value
+ *
+ * @param string|null $v The value
  *
  * @return float|null
  */
@@ -18,69 +20,15 @@ function getValue($v) {
   return ($v === null) ? null : floatval($v);
 }
 
-/**
- * @param float $n     Reference value
- * @param array $array List of values to compare with
- *
- * @return float|mixed
- */
-function getMax($n, $array) {
-  $orig_n = $n;
-
-  if (substr($n, 0, 1) == "@") {
-    $n = -10e6;
-  }
-
-  $max = $n;
-  foreach ($array as $a) {
-    if (isset($a[1])) {
-      $max = max($n, $a[1], $max);
-    }
-  }
-
-  if ($orig_n != $n) {
-    $max += floatval(substr($orig_n, 1));
-  }
-
-  return $max;
-}
-
-/**
- * @param float $n     Reference value
- * @param array $array List of values to compare with
- *
- * @return float|mixed
- */
-function getMin($n, $array) {
-  $orig_n = $n;
-
-  if (substr($n, 0, 1) == "@") {
-    $n = +10e6;
-  }
-
-  $min = $n;
-  foreach ($array as $a) {
-    if (isset($a[1])) {
-      $min = min($n, $a[1], $min);
-    }
-  }
-
-  if ($orig_n != $n) {
-    $min += floatval(substr($orig_n, 1));
-  }
-
-  return $min;
-}
-
 global $m;
 
 $user = CMediusers::get();
 
 if (
-    !$user->isMedical() &&
-    !CModule::getCanDo('soins')->read &&
-    !CModule::getCanDo('dPurgences')->read &&
-    !CModule::getCanDo('dPcabinet')->edit
+  !$user->isMedical() &&
+  !CModule::getCanDo('soins')->read &&
+  !CModule::getCanDo('dPurgences')->read &&
+  !CModule::getCanDo('dPcabinet')->edit
 ) {
   CModule::getCanDo($m)->redirect();
 }
@@ -127,8 +75,10 @@ else {
   $host = CConstantesMedicales::guessHost($current_context);
 }
 
+$show_cat_tabs = CConstantesMedicales::getHostConfig("show_cat_tabs", $host);
+
 if (!$selection || $selected_context_guid === 'all') {
-  $selection = CConstantesMedicales::getConstantsByRank(true, $host);
+  $selection = CConstantesMedicales::getConstantsByRank($show_cat_tabs, $host);
 }
 else {
   $selection = CConstantesMedicales::selectConstants($selection);
@@ -141,28 +91,13 @@ if ($print) {
 
 $old_constants_to_draw = ($print == 1 ? $selection : CConstantesMedicales::$list_constantes);
 
-$show_cat_tabs = CConstantesMedicales::getHostConfig("show_cat_tabs", $host);
 $show_enable_all_button = CConstantesMedicales::getHostConfig("show_enable_all_button", $host);
+
 /*
  * Organisation differente que l'on affiche par volet ou pas
- * TODO on n'a pas déjà ça dans CConstantesMedicales ?
  */
 if ($show_cat_tabs) {
-  $constants_to_draw = array("all" => array());
-  foreach ($selection as $_type => $_ranks) {
-    foreach ($_ranks as $_rank => $_constants) {
-      if (!array_key_exists($_rank, $constants_to_draw["all"])) {
-        $constants_to_draw["all"][$_rank] = $_constants;
-      }
-      else {
-        $constants_to_draw["all"][$_rank] = array_merge_recursive($constants_to_draw["all"][$_rank], $_constants);
-      }
-    }
-  }
-  $hidden_constants = $constants_to_draw["all"]["hidden"];
-  unset($constants_to_draw["all"]["hidden"]);
-  ksort($constants_to_draw["all"]);
-  $constants_to_draw["all"]["hidden"] = $hidden_constants;
+  $constants_to_draw = CConstantesMedicales::getConstantsByRank(false, $host);
 }
 else {
   $constants_to_draw = $selection;
@@ -175,7 +110,7 @@ if ($selected_context_guid !== 'all') {
 else {
   $context = CMbObject::loadFromGuid($context_guid);
 }
-  
+
 $context->loadRefs();
 
 if ($context) {
@@ -264,7 +199,7 @@ if (!count($list_contexts)) {
 if ($context && $selected_context_guid !== 'all') {
   $where["context_class"] = " = '$context->_class'";
   $where["context_id"] = " = '$context->_id'";
-  
+
   // Needed to know if we are in the right context
   $constantes->context_class = $context->_class;
   $constantes->context_id = $context->_id;
@@ -272,12 +207,14 @@ if ($context && $selected_context_guid !== 'all') {
 }
 
 $whereOr = array();
-foreach ($constants_to_draw["all"] as $rank => $_constants) {
-  foreach ($_constants as $name) {
-    if ($name[0] === "_") {
-      continue;
+foreach ($constants_to_draw as $_cat => $_ranks) {
+  foreach ($_ranks as $rank => $_constants) {
+    foreach ($_constants as $name) {
+      if ($name[0] === "_") {
+        continue;
+      }
+      $whereOr[] = "$name IS NOT NULL ";
     }
-    $whereOr[] = "$name IS NOT NULL ";
   }
 }
 $where[] = implode(" OR ", $whereOr);
@@ -298,284 +235,22 @@ $total_constantes = $constantes->countList($where);
 
 $constantes_medicales_grid = CConstantesMedicales::buildGrid($list_constantes, false);
 
+$const_ids = array();
+foreach ($list_constantes as $_cst) {
+  $const_ids[] = $_cst->_id;
+}
+
 $list_constantes = array_reverse($list_constantes, true);
 
-$standard_struct = array(
-  "series" => array(
-    array(
-      "data" => array(),
-      //"options" => array()
-    )
-  )
-);
+$graphs_structure = CConstantesMedicales::sortConstantsbyGraph($list_constantes, $host);
+$graphs_datas = CConstantesMedicales::formatGraphDatas($list_constantes, $host);
 
-$dates     = array();
-$hours     = array();
-$comments  = array();
-$const_ids = array();
-$data      = array();
-$graphs    = array();
-
-
-foreach ($constants_to_draw["all"] as $rank => $_constants) {
-  foreach ($_constants as $name) {
-    $params = CConstantesMedicales::$list_constantes[$name];
-    if ($name[0] === "_" && empty($params["plot"]) && empty($params["formula"])) {
-      continue;
-    }
-
-    $data[$name] = $standard_struct;
-
-    if (isset($params["formfields"]) && empty($params["candles"])) {
-      $serie = &$data[$name]["series"];
-
-      $serie = array();
-      foreach ($params["formfields"] as $_field) {
-        $serie[] = array(
-          "data" => array(),
-          "label" => utf8_encode(CAppUI::tr("CConstantesMedicales-$_field-court")),
-        );
-      }
-    }
-  }
-}
-
-$cumuls_day = array();
-
-// Si le séjour a des constantes médicales
-if ($list_constantes) {
-  $reset_hours = array();
-  foreach ($list_constantes as $cst) {
-    $comment = utf8_encode($cst->comment);
-    $dates[] = CMbDT::transform($cst->datetime, null, '%d/%m/%y');
-    $hours[] = CMbDT::transform($cst->datetime, null, '%Hh%M');
-    $comments[] = $comment;
-    $const_ids[] = $cst->_id;
-    $cst->loadLogs();
-    
-    foreach ($constants_to_draw["all"] as $rank => $_constants) {
-      foreach ($_constants as $name) {
-        $params = CConstantesMedicales::$list_constantes[$name];
-
-        if ($name[0] === "_" && empty($params["plot"]) && empty($params["formula"])) {
-          continue;
-        }
-
-        $candles = isset($params["candles"]);
-
-        $d = &$data[$name];
-
-        $user_view = "";
-
-        if ($cst->$name !== null && $name[0] !== "_") {
-          $log = $cst->loadLastLogForField($name);
-          if (!$log->_id && $cst->_ref_last_log) {
-            $log = $cst->_ref_last_log;
-          }
-
-          $_user = $log->loadRefUser();
-
-          if ($_user) {
-            $user_view = utf8_encode($_user->_view);
-          }
-        }
-
-        // normal plots
-        if (empty($params["candles"])) {
-          if (isset($params["formfields"])) {
-            $fields = $params["formfields"];
-          }
-          else {
-            $fields = array($name);
-          }
-
-          $i = count($d["series"][0]["data"]);
-          foreach ($fields as $n => $_field) {
-            $ya = $yb = $yc = $yd = null;
-
-            $ya = getValue($cst->$_field);
-
-            $d["series"][$n]["data"][] = array(
-              $i,
-              $ya, $yb, $yc, $yd,
-              $user_view,
-              $comment,
-              utf8_encode($params['unit']),
-            );
-
-            if (isset($params["cumul_reset_config"])) {
-              $reset_hour = CConstantesMedicales::getResetHour($name);
-              $day_24h = CMbDT::transform("-$reset_hour hours", $cst->datetime, '%d/%m/%y');
-
-              if (!isset($cumuls_day[$name][$day_24h])) {
-                $cumuls_day[$name][$day_24h] = array("n" => 0, "value" => null);
-              }
-
-              if (isset($params["formula"])) {
-                $formula = $params["formula"];
-
-                foreach ($formula as $_field => $_sign) {
-                  $_value = $cst->$_field;
-
-                  if ($_value !== null && $_value !== "") {
-                    if ($_sign === "+") {
-                      $cumuls_day[$name][$day_24h]["value"] += $_value;
-                    }
-                    else {
-                      $cumuls_day[$name][$day_24h]["value"] -= $_value;
-                    }
-                  }
-                }
-              }
-              else {
-                if ($ya !== null && $ya !== "") {
-                  $cumuls_day[$name][$day_24h]["value"] += $ya;
-                }
-              }
-
-              $cumuls_day[$name][$day_24h]["n"]++;
-            }
-          }
-        }
-
-        // composite plots (TA)
-        else {
-          $fields = $params["formfields"];
-          $first = true;
-
-          $i = count($d["series"][0]["data"]);
-          foreach ($fields as $n => $_field) {
-            $ya = $yb = $yc = $yd = null;
-
-            // first series : all values
-            if ($first) {
-              $ya = $yb = getValue($cst->{$fields[1]});
-              $yc = $yd = getValue($cst->{$fields[0]});
-
-              $d["series"][$n]["candles"]["show"] = true;
-              $d["series"][$n]["markers"]["position"] = "cb";
-            }
-
-            // second series : only second value
-            else {
-              $ya = getValue($cst->$fields[0]);
-              $d["series"][$n]["markers"]["position"] = "ct";
-            }
-
-            $d["series"][$n]["markers"]["show"] = true;
-            $d["series"][$n]["lines"]["show"] = false;
-            $d["series"][$n]["points"]["show"] = false;
-
-            $d["series"][$n]["data"][] = array(
-              $i,
-              $ya, $yb, $yc, $yd,
-              $user_view,
-              $comment,
-              utf8_encode($params['unit']),
-            );
-
-            $first = false;
-          }
-        }
-
-        $graphs[] = "constantes-medicales-$name";
-      }
-    }
-  }
-}
-
-// Pour les tensions artérielles, changer les unités suivant la config
-$unite_ta = CAppUI::conf("dPpatients CConstantesMedicales unite_ta");
-
-foreach ($cumuls_day as $name => $days) {
-  $_data = &$data[$name];
-  $_params = CConstantesMedicales::$list_constantes[$name];
-  
-  $offset = 0;
-  foreach ($days as $day => $values) {
-    $_color = CConstantesMedicales::getColor($values["value"], $_params, "#4DA74D");
-    
-    $_data["series"][] = array(
-      "data" => array(array(
-        $offset-0.5, 
-        $values["value"], 
-        utf8_encode(CAppUI::tr("CConstantesMedicales-$name-desc")), 
-        null,
-        utf8_encode(CValue::read($_params, "unit")),
-      )),
-      "cumul" => $day,
-      "lines" => array("show" => false),
-      "points" => array("show" => false),
-      "markers" => array(
-        "show" => true,
-        "position" => "rt",
-      ),
-      "bars" => array(
-        "show" => true,
-        "barWidth" => $values["n"],
-        "centered" => false,
-        "lineWidth" => 1,
-      ),
-      "color" => $_color,
-      "mouse" => array(
-        "relative" => false,
-        "position" => "nw",
-      ),
-    );
-    
-    $offset += $values["n"];
-  }
-  
-  $first = array_shift($_data["series"]);
-  array_push($_data["series"], $first);
-}
-
-foreach ($data as $name => &$_data) {
-  $params = CConstantesMedicales::$list_constantes[$name];
-  
-  // And the options
-  if (isset($params["standard"])) {
-    $_data["standard"] = $params["standard"];
-  }
-  
-  $margin_ratio = 0;
-  
-  if (isset($params["candles"])) {
-    $margin_ratio = 0.25;
-  }
-  
-  // On cache les valeurs, qui sont a zero à cause du " " de la valeur de _diurese (pour forcer son affichage)
-  if (isset($params["formula"])) {
-    $_data["series"][count($_data["series"])-1]["hide"] = true;
-  }
-  
-  $all_y_values = CMbArray::pluck($_data["series"], "data");
-  $y_values = array();
-  
-  foreach ($all_y_values as $_values) {
-    $y_values = array_merge($y_values, $_values);
-  }
-  
-  $margin = abs($params["min"] - $params["max"]) * $margin_ratio;
-  
-  $margin_top = $margin_bottom = $margin;
-  
-  if (isset($params["cumul_reset_config"])) {
-    $margin_top = getMax($params["max"], $y_values) * 0.2;
-  }
-  
-  $_data["options"] = array(
-    "title" => utf8_encode(CAppUI::tr("CConstantesMedicales-$name-desc").($params['unit'] ? " ({$params['unit']})" : "")),
-    "yaxis" => array(
-      "min" => getMin($params["min"], $y_values) - $margin_bottom, // min
-      "max" => getMax($params["max"], $y_values) + $margin_top, // max
-    )
-  );
-  
-  if (isset($params["colors"])) {
-    $_data["options"]["colors"] = $params["colors"];
-  }
-}
+$min_x_index = $graphs_datas['min_x_index'];
+$min_x_value = $graphs_datas['min_x_value'];
+$drawn_constants = $graphs_datas['drawn_constants'];
+unset($graphs_datas['min_x_index']);
+unset($graphs_datas['min_x_value']);
+unset($graphs_datas['drawn_constants']);
 
 // On récupère dans tous les cas le poids et la taille du patient
 $patient->loadRefConstantesMedicales(null, array("poids", "taille"), null, false);
@@ -583,29 +258,29 @@ $patient->loadRefConstantesMedicales(null, array("poids", "taille"), null, false
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign('readonly',      $readonly);
-$smarty->assign('constantes',    $constantes);
-$smarty->assign('context',       $context);
-$smarty->assign('context_guid',  $context_guid);
-$smarty->assign('list_contexts', $list_contexts);
-$smarty->assign('all_contexts',  $selected_context_guid == 'all');
-$smarty->assign('patient',       $patient);
-$smarty->assign('data',          $data);
-$smarty->assign('dates',         $dates);
-$smarty->assign('hours',         $hours);
-$smarty->assign('comments',      $comments);
-$smarty->assign('const_ids',     $const_ids);
-$smarty->assign('latest_constantes', $latest_constantes);
-$smarty->assign('selection',     $selection);
-$smarty->assign('custom_selection', $custom_selection);
-$smarty->assign('print',         $print);
-$smarty->assign('graphs',        $graphs);
-$smarty->assign('start',         $start);
-$smarty->assign('count',         $count);
-$smarty->assign('total_constantes', $total_constantes);
-$smarty->assign('paginate',      $paginate);
-$smarty->assign('constantes_medicales_grid', $constantes_medicales_grid);
-$smarty->assign('simple_view',   $simple_view);
-$smarty->assign('show_cat_tabs', $show_cat_tabs);
-$smarty->assign('show_enable_all_button', $show_enable_all_button);
+$smarty->assign('readonly',                   $readonly);
+$smarty->assign('constantes',                 $constantes);
+$smarty->assign('context',                    $context);
+$smarty->assign('context_guid',               $context_guid);
+$smarty->assign('list_contexts',              $list_contexts);
+$smarty->assign('all_contexts',               $selected_context_guid == 'all');
+$smarty->assign('patient',                    $patient);
+$smarty->assign('const_ids',                  $const_ids);
+$smarty->assign('latest_constantes',          $latest_constantes);
+$smarty->assign('selection',                  $selection);
+$smarty->assign('custom_selection',           $custom_selection);
+$smarty->assign('print',                      $print);
+$smarty->assign('graphs_datas',               $graphs_datas);
+$smarty->assign('graphs_structure',            $graphs_structure);
+$smarty->assign('min_x_index',                $min_x_index);
+$smarty->assign('min_x_value',                $min_x_value);
+$smarty->assign('drawn_constants',            $drawn_constants);
+$smarty->assign('start',                      $start);
+$smarty->assign('count',                      $count);
+$smarty->assign('total_constantes',           $total_constantes);
+$smarty->assign('paginate',                   $paginate);
+$smarty->assign('constantes_medicales_grid',  $constantes_medicales_grid);
+$smarty->assign('simple_view',                $simple_view);
+$smarty->assign('show_cat_tabs',              $show_cat_tabs);
+$smarty->assign('show_enable_all_button',     $show_enable_all_button);
 $smarty->display('inc_vw_constantes_medicales.tpl');

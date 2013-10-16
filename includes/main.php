@@ -99,6 +99,19 @@ CJSLoader::$files = array(
   "includes/javascript/plugin.js",
 
   "includes/javascript/usermessage.js",
+
+  //Flot
+  "lib/flot/jquery.min.js",
+  "includes/javascript/no_conflicts.js",
+  "lib/flot/jquery.flot.min.js",
+  "lib/flot/jquery.flot.JUMlib.js",
+  "lib/flot/jquery.flot.mouse.js",
+  "lib/flot/jquery.flot.symbol.min.js",
+  "lib/flot/jquery.flot.crosshair.min.js",
+  "lib/flot/jquery.flot.resize.min.js",
+  "lib/flot/jquery.flot.stack.min.js",
+  "lib/flot/jquery.flot.bandwidth.js",
+  "lib/flot/jquery.flot.time.min.js",
 );
 
 $support = "modules/support/javascript/support.js";
