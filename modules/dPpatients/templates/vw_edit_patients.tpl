@@ -1,17 +1,15 @@
 <!-- $Id$ -->
 
-{{mb_script module="patients"    script="autocomplete" ajax=$ajax}}
-{{mb_script module="patients"    script="siblings_checker" ajax=$ajax}}
-{{mb_script module="patients"    script="patient" ajax=$ajax}}
-{{mb_script module="compteRendu" script="document" ajax=$ajax}}
-{{mb_script module="files"       script="files" ajax=$ajax}}
-{{mb_script module="cabinet"     script="file" ajax=$ajax}}
-{{mb_script module="compteRendu" script="modele_selector" ajax=$ajax}}
+{{mb_script module="patients"    script="autocomplete"}}
+{{mb_script module="patients"    script="siblings_checker"}}
+{{mb_script module="patients"    script="patient"}}
+{{mb_script module="compteRendu" script="document"}}
+{{mb_script module="files"       script="files"}}
+{{mb_script module="cabinet"     script="file"}}
+{{mb_script module="compteRendu" script="modele_selector"}}
 {{if $patient->_id}}
-  {{if !$ajax}}
-    {{mb_include module="files" template="yoplet_uploader" object=$patient}}
-  {{/if}}
-  {{mb_script module="patients"  script="correspondant" ajax=$ajax}}
+  {{mb_include module="files" template="yoplet_uploader" object=$patient}}
+  {{mb_script module="patients"  script="correspondant"}}
 {{/if}}
 
 {{assign var=modFSE value="fse"|module_active}}
@@ -149,7 +147,7 @@
         view: '{{$patient->_view|smarty:nodefaults|JSAttribute}}' });
     {{/if}}
 
-    {{if !$ajax && $useVitale && $app->user_prefs.VitaleVision}}
+    {{if !$modal && $useVitale && $app->user_prefs.VitaleVision}}
       lireVitale.delay(1); // 1 second
     {{/if}}
   });
@@ -172,7 +170,7 @@
   <input type="hidden" name="typeVue"  value="1" />
 </form>
 
-{{if $patient->_id && !$ajax}}
+{{if $patient->_id && !$modal}}
   <a class="button new" href="?m={{$m}}&{{$actionType}}={{$action}}&dialog={{$dialog}}&patient_id=0">
     {{tr}}CPatient-title-create{{/tr}}
   </a>
@@ -254,16 +252,14 @@
           {{if $patient->_id}}onmousedown="reloadListFileEditPatient('load')"{{/if}}>Documents ({{$patient->_nb_files_docs}})</a></li>
       </ul>
 
-      <form name="editFrm" {{if !$ajax}}action="?m={{$m}}"{{/if}} method="post" onsubmit="return confirmCreation(this)">
-        {{if $ajax}}
+      <form name="editFrm" {{if !$modal}}action="?m={{$m}}"{{/if}} method="post" onsubmit="return confirmCreation(this)">
+        {{if $modal}}
           <input type="hidden" name="m" value="patients" />
         {{/if}}
         <input type="hidden" name="dosql" value="do_patients_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="_purge" value="0" />
-        {{if $ajax}}
-          <input type="hidden" name="ajax" value="{{$ajax}}" />
-        {{/if}}
+        <input type="hidden" name="modal" value="{{$modal}}" />
         <input type="hidden" name="callback" value="{{$callback}}" />
         {{mb_key object=$patient}}
 
@@ -308,7 +304,7 @@
     <td class="button" colspan="5" style="text-align:center;" id="button">
       <div id="divSiblings" style="display:none;"></div>
       {{if $patient->_id}}
-        <button tabindex="400" id="submit-patient" type="{{if $ajax}}button{{else}}submit{{/if}}" class="submit" onclick="return document.editFrm.onsubmit();">
+        <button tabindex="400" id="submit-patient" type="{{if $modal}}button{{else}}submit{{/if}}" class="submit" onclick="return document.editFrm.onsubmit();">
           {{tr}}Save{{/tr}}
           {{if $patient->_bind_vitale}}
           & {{tr}}BindVitale{{/tr}}

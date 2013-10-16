@@ -30,7 +30,8 @@ Patient = Object.extend({
     new Url("patients", "vw_edit_patients").
       addParam("patient_id", patient_id).
       addParam("use_vitale", use_vitale).
-      requestModal("90%", "90%");
+      addParam("modal", 1).
+      modal({width: "90%", height: "90%"});
   },
   
   exportVcard: function(patient_id) {
@@ -43,7 +44,7 @@ Patient = Object.extend({
   doUnlink: function(patient_id) {
     var url = new Url("dPpatients", "do_unlink", "dosql");
     url.addParam("patient_id", patient_id);
-    url.requestUpdate("systemMsg", { 
+    url.requestUpdate("systemMsg", {
       method: 'post',
       onComplete : function() {
         if (window.reloadPatient) {

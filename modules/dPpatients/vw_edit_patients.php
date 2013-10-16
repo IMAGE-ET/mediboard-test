@@ -20,6 +20,7 @@ $naissance_year  = CValue::get("naissance_year");
 $useVitale  = CValue::get("useVitale");
 $covercard  = CValue::get("covercard");
 $callback   = CValue::get("callback");
+$modal      = CValue::get("modal", 0);
 
 $patient = new CPatient();
 $patient->load($patient_id);
@@ -83,5 +84,6 @@ $smarty->assign("patient"  , $patient);
 $smarty->assign("useVitale", $useVitale);
 $smarty->assign('nom_jeune_fille_mandatory', $nom_jeune_fille_mandatory);
 $smarty->assign("callback", $callback);
+$smarty->assign("modal", $modal);
 
 $smarty->display("vw_edit_patients.tpl");
