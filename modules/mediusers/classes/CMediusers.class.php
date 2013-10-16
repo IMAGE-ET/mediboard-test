@@ -1218,7 +1218,7 @@ class CMediusers extends CPerson {
    * @return bool
    */
   function isMedical() {
-    return $this->isFromType(array("Administrator", "Chirurgien", "Anesthésiste", "Infirmière", "Médecin", "Rééducateur", "Sage Femme", "Dentiste"));
+    return $this->isFromType(array("Administrator", "Chirurgien", "Anesthésiste", "Infirmière", "Médecin", "Rééducateur", "Sage Femme", "Dentiste", "Pharmacien"));
   }
 
   /**
