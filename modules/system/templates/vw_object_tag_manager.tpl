@@ -9,7 +9,7 @@
 *}}
 
 {{if $root}}
-  {{mb_script module=mediusers script=color_selector}}
+  {{mb_script module=mediusers script=color_selector ajax=true}}
   
   <script type="text/javascript">
     Main.add(function(){
