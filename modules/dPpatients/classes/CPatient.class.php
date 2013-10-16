@@ -1746,7 +1746,7 @@ class CPatient extends CPerson {
     }
 
     $this->loadRefsFwd();
-    $this->loadRefConstantesMedicales();
+    $this->loadRefConstantesMedicales(null, array(), null, false);
     $this->loadIPP();
 
     $this->notify("BeforeFillLimitedTemplate", $template);
