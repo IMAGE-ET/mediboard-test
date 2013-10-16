@@ -107,6 +107,9 @@
       <button class="search notext" type="button" onclick="ProtocoleSelector.init()">
         Choisir un protocole
       </button>
+      {{if @$modules.mvsante->_can->read && "mvsante"|module_active}}
+        <button style="float:right;" class="edit notext" type="button" onclick="LiaisonOp.edit('{{$op->_id}}');"></button>
+      {{/if}}
       {{mb_include module=planningOp template="inc_search_protocole" formOp="editOpEasy" formSecondOp="editOp" id_protocole="get_protocole_easy"}}
     </td>
   </tr>
