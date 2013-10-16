@@ -65,7 +65,7 @@ if ($context) {
 }
 
 $can_create = 0;
-$modif_timeout = CAppUI::conf("dPpatients CConstantesMedicales constants_modif_timeout", $host->_guid);
+$modif_timeout = intval(CAppUI::conf("dPpatients CConstantesMedicales constants_modif_timeout", $host->_guid));
 if (
   $constantes->_id &&
   $modif_timeout > 0 &&

@@ -255,6 +255,7 @@ Main.add(function () {
 
   drawGraphs();
   ViewPort.SetAvlHeight('graphs', 1.0);
+  $('graphs').setStyle({overflowX: 'auto'});
 });
 
 loadConstantesMedicales  = function(context_guid) {
@@ -409,7 +410,7 @@ refreshFiches = function(sejour_id){
           <button id="constantes-medicales-graph-after"  class="right rtl" style="float: right;" onclick="shiftGraphs('after');">Après</button>
           <br/>
 
-          <div id="graphs">
+          <div id="graphs" style="clear: both;">
             <table class="layout">
               {{foreach from=$graphs_datas key=_rank item=_graphs_for_rank}}
                 {{foreach from=$_graphs_for_rank key=_graph_id item=_graph}}
