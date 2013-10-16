@@ -103,6 +103,7 @@ showCancelled = function(button) {
 
 cancelFile = function(form, category_id) {
   if (confirm($T('CFile-comfirm_cancel'))) {
+    $V(form.annule, 1);
     onSubmitFormAjax(form, reloadAfterDeleteFile.curry(category_id));
   }
   return false;
