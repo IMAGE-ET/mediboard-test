@@ -159,7 +159,7 @@ class CHtmlToPDF {
 
     $str = CMbString::convertHTMLToXMLEntities($str);
     $str = CHtmlToPDF::cleanWord($str);
-    
+
     // Suppression des caractères de contrôle
     $from = array(
       chr(3), // ETX (end of text)
@@ -211,6 +211,23 @@ class CHtmlToPDF {
     $this->recursiveRemove($html);
     $this->recursiveRemoveNestedFont($html);
     $this->resizeTable($html);
+
+    // Suppression des sauts de pages dans l'entête et le pied de page
+    $elements = $xpath->query("//div[@id='header']//hr[@class='pagebreak']");
+
+    if (!is_null($elements)) {
+      foreach ($elements as $_element) {
+        $_element->parentNode->removeChild($_element);
+      }
+    }
+
+    $elements = $xpath->query("//div[@id='footer']//hr[@class='pagebreak']");
+
+    if (!is_null($elements)) {
+      foreach ($elements as $_element) {
+        $_element->parentNode->removeChild($_element);
+      }
+    }
 
     $str = $xml->saveHTML();
     $str = preg_replace("/<br>/", "<br/>", $str);

@@ -335,6 +335,15 @@ class CCompteRendu extends CDocumentItem {
 
     $this->_ref_content->content = preg_replace("/#body\s*{\s*padding/", "body { margin", $this->_ref_content->content);
 
+    // Supprimer les sauts de pages dans les entêtes et pieds de pages
+    if (in_array($this->type, array('header', 'footer'))) {
+      $this->_ref_content->content = str_ireplace('<hr class="pagebreak" />', '', $this->_ref_content->content);
+    }
+    elseif ($this->object_id) {
+      $this->_ref_content->content = preg_replace('/(<div id="header">)(.*)(<hr class="pagebreak" \/>)(.*)(<div id="body")/s', '$1$2$4$5', $this->_ref_content->content);
+      $this->_ref_content->content = preg_replace('/(<div id="footer">)(.*)(<hr class="pagebreak" \/>)(.*)(<div id="body")/s', '$1$2$4$5', $this->_ref_content->content);
+    }
+
     $days = CAppUI::conf("dPcompteRendu CCompteRendu days_to_lock");
     $days = isset($days[$this->object_class]) ?
       $days[$this->object_class] : $days["base"];
@@ -354,8 +363,6 @@ class CCompteRendu extends CDocumentItem {
 
     if ($field_source) {
       $this->_source = $this->_ref_content->content;
-      $this->_source = preg_replace("/<meta[^>]+>/", '', $this->_source);
-      $this->_source = preg_replace("/<\/meta>/", '', $this->_source);
 
       // Suppression des commentaires, provenant souvent de Word
       $this->_source =  preg_replace("/<!--.+?-->/s", "", $this->_source);
