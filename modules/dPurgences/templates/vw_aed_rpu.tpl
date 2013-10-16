@@ -286,6 +286,7 @@
   {{assign var=consult value=$rpu->_ref_consult}}
 
   {{if $rpu->mutation_sejour_id}}
+    {{mb_include module="urgences" template="inc_aed_rpu"}}
     <div class="small-info">
       Une mutation du séjour a été effectuée, il est possible de visualiser le dossier de soins en cliquant sur le bouton suivant
       <button type="button" class="search" onclick="showDossierSoins('{{$rpu->mutation_sejour_id}}');">{{tr}}soins.button.Dossier-soins{{/tr}}</button>
