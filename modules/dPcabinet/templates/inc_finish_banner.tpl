@@ -110,7 +110,7 @@ function changePratPec(prat_id) {
       (Etat : {{$consult->_etat}}
       {{if $consult->chrono <= $consult|const:'EN_COURS'}}
         /
-        {{if $conf.dPcabinet.CConsultAnesth.check_close}}
+        {{if $conf.dPcabinet.CConsultAnesth.check_close && $consult_anesth && $consult_anesth->_id}}
           <button class="submit" type="button" onclick="checkConsult();">
         {{else}}
           <button class="submit" type="button" onclick="submitAll(); submitConsultWithChrono({{$consult|const:'TERMINE'}})">
