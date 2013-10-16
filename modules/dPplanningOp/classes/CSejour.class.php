@@ -1286,7 +1286,9 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Durées
     $this->_duree_prevue       = CMbDT::daysRelative($this->entree_prevue, $this->sortie_prevue);
-    $this->_duree_prevue_heure = CMbDT::timeRelative(CMbDT::time($this->entree_prevue), CMbDT::time($this->sortie_prevue), "%02d");
+    if ($this->_duree_prevue_heure) {
+      $this->_duree_prevue_heure = CMbDT::timeRelative(CMbDT::time($this->entree_prevue), CMbDT::time($this->sortie_prevue), "%02d");
+    }
     $this->_duree_reelle       = CMbDT::daysRelative($this->entree_reelle, $this->sortie_reelle);
     $this->_duree              = CMbDT::daysRelative($this->_entree, $this->_sortie);
 

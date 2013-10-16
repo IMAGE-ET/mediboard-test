@@ -860,8 +860,10 @@ Main.add( function(){
   <td colspan="3" style="vertical-align: middle">
     {{mb_field object=$sejour field="_duree_prevue" increment=true form=editSejour prop="num min|0" size=2 onchange="updateSortiePrevue(); checkDureeHospi('syncType'); \$('jours_prevus').update(parseInt(this.value)+1)" value=$sejour->sejour_id|ternary:$sejour->_duree_prevue:$_duree_prevue}}
     {{tr}}night{{/tr}}(s)
-    {{mb_field object=$sejour field="_duree_prevue_heure" increment=true form=editSejour size=2 value=$sejour->sejour_id|ternary:$sejour->_duree_prevue_heure:$_duree_prevue_heure onchange="updateHeureSortie();"}}
+    <span id="duree_prevue_view" {{if $sejour->_duree_prevue >0}}style="display: none;"{{/if}}>
+      {{mb_field object=$sejour field="_duree_prevue_heure" increment=true form=editSejour size=2 value=$sejour->sejour_id|ternary:$sejour->_duree_prevue_heure:$_duree_prevue_heure onchange="updateHeureSortie();"}}
     {{tr}}hour{{/tr}}(s)
+    </span>
     - (<span id="dureeEst"></span>)
     <span {{if !$conf.dPplanningOp.CSejour.show_days_duree}}style="display: none"{{/if}}>
       <span id="jours_prevus">{{math equation=x+1 x=$sejour->sejour_id|ternary:$sejour->_duree_prevue:$_duree_prevue}}</span> {{tr}}day{{/tr}}(s)

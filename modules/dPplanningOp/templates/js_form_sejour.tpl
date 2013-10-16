@@ -198,7 +198,7 @@ function updateSortiePrevue() {
   oView = getForm('editSejour')._date_sortie_prevue_da;
   $V(oView, dDate.toLocaleDate());
   updateHeureSortie();
-  
+
   // Si meme jour, sortie apres entree
   if (nDuree == 0 && oForm._duree_prevue.value == 0){
     oForm._hour_sortie_prevue.value = Math.max(oForm._hour_sortie_prevue.value, parseInt(oForm._hour_entree_prevue.value,10)+1);
@@ -225,12 +225,25 @@ function updateHeureSortie() {
   min_sortie   = oForm._min_sortie_prevue;
 
   if (!oForm._duree_prevue_heure.value) {
-    $V(oForm._duree_prevue_heure, 0);
+    oForm._duree_prevue_heure.value = 0;
+  }
+
+  if (oForm._duree_prevue.value == 0) {
+    $('duree_prevue_view').show();
+  }
+  else {
+    $('duree_prevue_view').hide();
+    oForm._duree_prevue_heure.value = 0;
   }
 
   var hour_entree = oForm._hour_entree_prevue.value;
-  if (oForm._duree_prevue_heure.value != 0) {
-    var hour_sortie = parseInt(oForm._hour_entree_prevue.value) + parseInt(oForm._duree_prevue_heure.value);
+  if (oForm._duree_prevue_heure.value != 0 && oForm._duree_prevue.value == 0) {
+    if (oForm._duree_prevue_heure.value >= 0) {
+      var hour_sortie = parseInt(oForm._hour_entree_prevue.value) + parseInt(oForm._duree_prevue_heure.value);
+    }
+    else {
+      var hour_sortie = parseInt(oForm._hour_entree_prevue.value) - Math.abs(parseInt(oForm._duree_prevue_heure.value));
+    }
     if (hour_sortie >= 24) {
       hour_sortie = 23;
       oForm._duree_prevue_heure.value = 23 - parseInt(oForm._hour_entree_prevue.value);
@@ -238,8 +251,10 @@ function updateHeureSortie() {
     oForm._hour_sortie_prevue.value = hour_sortie;
   }
   else {
-    $V(oForm._duree_prevue_heure, 0);
     heure_sortie.value = duree_prevu.value < 1 ? "{{$heure_sortie_ambu}}" : "{{$heure_sortie_autre}}";
+    if (oForm._duree_prevue.value == 0) {
+      oForm._duree_prevue_heure.value = parseInt(heure_sortie.value) - parseInt(oForm._hour_entree_prevue.value);
+    }
   }
 
   min_sortie.value = "0";
