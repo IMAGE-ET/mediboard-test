@@ -472,7 +472,11 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       "type_sej_chimio"  => "seances",
       "type_sej_dialyse" => "seances",
     );
-    
+
+    if (!$sender->_configs) {
+      return null;
+    }
+
     foreach ($types as $config => $type) {
       if (!$sender->_configs[$config]) {
         continue;

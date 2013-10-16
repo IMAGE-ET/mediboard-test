@@ -106,7 +106,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     // Si CIP
     if (!CAppUI::conf('sip server')) {
       $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $idSourcePatient);
-     
+
       // idSource non connu
       if (!$IPP->_id) {
         // idCible fourni

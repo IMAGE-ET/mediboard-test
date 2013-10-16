@@ -154,6 +154,17 @@ class CHPrimXMLEvenements extends CHPrimXMLDocument {
    * @return string
    */
   function getDateHeure(DOMNode $node) {
-    return $this->getDate($node)." ".$this->getHeure($node);
+    if (!$node) {
+      return null;
+    }
+
+    $date  = $this->getDate($node);
+    $heure = $this->getHeure($node);
+
+    if (!$date || !$heure) {
+      return null;
+    }
+
+    return "$date $heure";
   }
 }
