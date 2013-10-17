@@ -211,7 +211,7 @@
   </tr>
   {{/if}}
   
-  {{if $conf.dPplanningOp.CSejour.assurances}}
+  {{if $conf.dPplanningOp.CSejour.assurances && $conf.dPplanningOp.CFactureEtablissement.use_facture_etab}}
     {{assign var="facture" value=$sejour->_ref_last_facture}}
     {{if $facture->assurance_maladie}}
     <tr>

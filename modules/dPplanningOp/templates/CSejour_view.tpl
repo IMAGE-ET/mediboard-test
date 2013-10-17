@@ -18,7 +18,13 @@
     var url = new Url('hospi', 'vw_parcours');
     url.addParam('sejour_id', sejour_id);
     url.requestModal(700, 550);
-  },
+  };
+
+  printDossierSejour = function(sejour_id) {
+    var url = new Url('planningOp', "view_planning");
+    url.addParam("sejour_id", sejour_id);
+    url.popup(700, 800);
+  };
 
 
   afterValideSortie = function(form) {
@@ -26,7 +32,7 @@
     if (window.refreshMouvements) {
       refreshMouvements(loadNonPlaces);
     }
-  }
+  };
 
   ModeleEtiquette.nb_printers = {{$sejour->_nb_printers|@json}};
 </script>
@@ -115,9 +121,11 @@
         {{tr}}module-Brancardage-long{{/tr}}
         </button>
       {{/if}}
+
+      <br />
+      <button type="button" class="print" onclick="printDossierSejour('{{$sejour->_id}}');">{{tr}}Print{{/tr}}</button>
       
       {{if @$modules.dPhospi->_can->read}}
-        <br />
         <button type="button" class="print"
           {{if $sejour->_count_modeles_etiq == 1}}
             onclick="ModeleEtiquette.print('{{$sejour->_class}}', '{{$sejour->_id}}');"
