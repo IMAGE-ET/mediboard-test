@@ -87,7 +87,7 @@ class CNuSOAPClient extends nusoap_client {
       );
     }
 
-    parent::__construct($rooturl, true);
+    parent::__construct($rooturl, true, false, false, false, false, CAppUI::conf("webservices connection_timeout"));
 
     $this->wsdl_url = $rooturl;
   }
