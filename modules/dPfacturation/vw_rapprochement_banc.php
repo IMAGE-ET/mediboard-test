@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPfacturation
@@ -18,8 +18,12 @@ if (!$facture_class) {
   $facture_class = CValue::get("facture_class");
 }
 
-$results = array();
-$unfound = array();
+$results  = array();
+$totaux   = array(
+  "impute"  =>  array("count" => 0, "total" => 0.00, "dates" => array()),
+  "rejete"  =>  array("count" => 0, "total" => 0.00),
+  "total"   =>  array("count" => 0, "total" => 0.00)
+);
 $i = 0;
 
 if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
@@ -59,27 +63,37 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $results[$i]["errors"][] = "Le numéro de référence n'est pas défini";
     }
     else {
-      //Facture d'établissement
+      /* @var CFactureEtablissement $facture*/
       $facture = new $facture_class;
       $facture->num_reference = $results[$i]["reference"];
       $facture->loadMatchingObject();
 
       if (!$facture->_id) {
-        $results[$i]["errors"][] = "Facture introuvable";
+        //Facture introuvable
+        $results[$i]["errors"][] = "Extourne";
       }
+      $facture->loadRefPatient();
+      $facture->loadRefsObjects();
+      $facture->loadRefsReglements();
+      $facture->loadRefsRelances();
 
       $reglement = new CReglement();
       $reglement->mode = "BVR";
       $reglement->object_id    = $facture->_id;
       $reglement->object_class = $facture->_class;
       $reglement->reference    = $results[$i]["reference"];
-      //A voir / vérifier !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       $reglement->emetteur     = "patient";
       $date = $results[$i]["date_depot"];
       $reglement->date         = "20".substr($date, 0, 2)."-".substr($date, 2, 2)."-".substr($date, 4, 2)." 00:00:00";
-      $montant = $results[$i]["montant"];
-      $reglement->montant      = substr($montant, 0, 8).",".substr($montant, 8, 2);
+      $results[$i]["date_depot"] = CMbDT::date($reglement->date);
+      $date = $results[$i]["date_traitement"];
+      $results[$i]["date_traitement"] = CMbDT::date("20".substr($date, 0, 2)."-".substr($date, 2, 2)."-".substr($date, 4, 2));
+      $date = $results[$i]["date_inscription"];
+      $results[$i]["date_inscription"] = CMbDT::date("20".substr($date, 0, 2)."-".substr($date, 2, 2)."-".substr($date, 4, 2));
 
+      $montant = $results[$i]["montant"];
+      $results[$i]["montant"] = sprintf("%.2f", substr($montant, 0, 8).".".substr($montant, 8, 2));
+      $reglement->montant      = $results[$i]["montant"];
       // Field check final
       if ($reglement->montant == "") {
         $results[$i]["errors"][] = "Montant manquant";
@@ -87,12 +101,24 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       if ($reglement->date == "") {
         $results[$i]["errors"][] = "Date de dépot manquant";
       }
-      if ($facture->patient_date_reglement) {
-        $results[$i]["errors"][] = "La facture est déjà acquittée";
+      if ($facture->_id && ($facture->patient_date_reglement || ($facture->_du_restant_patient-$reglement->montant) < 0)) {
+        $results[$i]["errors"][] = "Solde créditeur";
       }
+
+      $results[$i]["facture"] = $facture;
+
+      $totaux["total"]["count"] ++;
+      $totaux["total"]["total"] += $reglement->montant;
+
       // No store on errors
       if (count($results[$i]["errors"])) {
+        $totaux["rejete"]["count"] ++;
+        $totaux["rejete"]["total"] += $reglement->montant;
         continue;
+      }
+
+      if (($facture->_du_restant_patient-$reglement->montant) >0) {
+        $results[$i]["errors"][] = "Paiement partiel";
       }
 
       // Dry run to check references
@@ -107,6 +133,17 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
         $results[$i]["errors"][] = $msg;
         continue;
       }
+      else {
+        $totaux["impute"]["count"] ++;
+        $totaux["impute"]["total"] += $reglement->montant;
+
+        if (!isset($totaux["impute"]["dates"]["$reglement->date"])) {
+          $totaux["impute"]["dates"]["$reglement->date"] = array("count" => 0, "total" => 0.00);
+        }
+        $totaux["impute"]["dates"]["$reglement->date"]["count"] ++;
+        $totaux["impute"]["dates"]["$reglement->date"]["total"] += $reglement->montant;
+      }
+
       CAppUI::setMsg($existing ? "CReglement-msg-modify" : "CReglement-msg-create", UI_MSG_OK);
     }
   }
@@ -119,7 +156,8 @@ CAppUI::callbackAjax('$("systemMsg").insert', CAppUI::getMsg());
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("results", $results);
+$smarty->assign("results"   , $results);
+$smarty->assign("totaux"    , $totaux);
 $smarty->assign("facture_class", $facture_class);
 
 $smarty->display("vw_rapprochement_banc.tpl");
