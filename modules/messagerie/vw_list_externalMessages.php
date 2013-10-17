@@ -53,7 +53,7 @@ if ($user_id == $user_connected->_id) {
 $accounts_user = $account->loadList($where, null, null, null, $ljoin);
 
 //if no account_id, selecting the first one
-if (!$account_id) {
+if (!$account_id && count($accounts_available)) {
   $account_temp = reset($accounts_available);
   $account_id = $account_temp->_id;
 }

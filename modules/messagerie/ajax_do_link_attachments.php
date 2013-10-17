@@ -44,7 +44,7 @@ foreach ($attachments as $_attachment) {
     $attachment->loadRefsFwd();
 
     //already linked = skip, no id, skip
-    if ($attachment->file_id || !$_attachment->_id) {
+    if ($attachment->file_id || !$attachment->_id) {
       continue;
     }
   }

@@ -304,7 +304,25 @@ class CUserMail extends CMbObject{
         if (!$file->loadMatchingObject()) {
           $file_pop = $popClient->decodeMail($_attch->encoding, $popClient->openPart($this->uid, $_attch->getpartDL()));
           $file->file_name  = $_attch->name;
-          $file->file_type  = $_attch->getType($_attch->type, $_attch->subtype);
+
+
+          //apicrypt attachment
+          if (strpos($_attch->name, ".apz") !== false) {
+            $file_pop = CApicrypt::uncryptAttachment($popClient->source->object_id, $file_pop);
+          }
+
+          //file type detection
+          $mime = $this->extensionDetection(reset($file_pop));
+
+          //file name
+          $infos = pathinfo($_attch->name);
+          $extension = $infos['extension'];
+          $mime_extension = strtolower(end(explode("/", $mime)));
+          if (strtolower($extension) != $mime_extension) {
+            $file->file_name  = $infos['filename'].".".$mime_extension;
+          }
+
+          $file->file_type  = $mime ? $mime : $_attch->getType($_attch->type, $_attch->subtype);
           $file->fillFields();
           $file->updateFormFields();
           $file->putContent($file_pop);
@@ -312,6 +330,14 @@ class CUserMail extends CMbObject{
         }
       }
     }
+  }
+
+  function extensionDetection($file_contents) {
+    $dir = dirname(dirname(dirname(dirname(__FILE__)))) . "/tmp/attachment";
+    file_put_contents($dir, $file_contents);
+    $mime = mime_content_type($dir);
+    unset($dir);
+    return $mime;
   }
 
 
