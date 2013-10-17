@@ -18,6 +18,7 @@ class CHTTPClient {
 
   private $handle;
   public $url;
+  public $timeout = 5;
   public $option = array();
   public $header = array();
 
@@ -164,6 +165,7 @@ class CHTTPClient {
     if (count($this->header) !== 0) {
       $this->option[CURLOPT_HTTPHEADER] = $this->header;
     }
+    $this->option[CURLOPT_CONNECTTIMEOUT] = $this->timeout;
     $result = curl_setopt_array($this->handle, $this->option);
     if (!$result) {
       throw new Exception("Impossible d'ajouter une option");
