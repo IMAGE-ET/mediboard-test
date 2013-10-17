@@ -406,6 +406,12 @@ Main.add(function() {
       });
     }
   {{/if}}
+
+  ObjectTooltip.modes.locker = {
+    module: "compteRendu",
+    action: "ajax_show_locker",
+    sClass: "tooltip"
+  };
 });
 
 </script>
@@ -633,6 +639,10 @@ Main.add(function() {
       {{if $can_lock}}
         <button type="button" class="{{if $compte_rendu->valide}}unlock{{else}}lock{{/if}} notext"
                 onclick="toggleLock(this)">Verrouiller / Déverouiller le document</button>
+      {{else}}
+        {{if $compte_rendu->valide}}
+          <img src="style/mediboard/images/buttons/lock.png" onmouseover="ObjectTooltip.createEx(this, '{{$compte_rendu->_guid}}', 'locker')"/>
+        {{/if}}
       {{/if}}
       {{if $compte_rendu->_id}}
         <button type="button" class="add" onclick="duplicateDoc(this.form)">{{tr}}Duplicate{{/tr}}</button>

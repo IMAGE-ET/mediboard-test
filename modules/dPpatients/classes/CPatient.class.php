@@ -1786,6 +1786,7 @@ class CPatient extends CPerson {
       $template->addProperty("Patient - le/la"           , "le"              );
       $template->addProperty("Patient - Le/La (majuscule)", "Le"             );
       $template->addProperty("Patient - du/de la"        , "du"              );
+      $template->addProperty("Patient - au/à la"         , "au"              );
       $template->addProperty("Patient - accord genre"    , ""                );
     }
     else {
@@ -1794,6 +1795,7 @@ class CPatient extends CPerson {
       $template->addProperty("Patient - le/la"           , "la"              );
       $template->addProperty("Patient - Le/La (majuscule)", "La"             );
       $template->addProperty("Patient - du/de la"        , "de la"           );
+      $template->addProperty("Patient - au/à la"         , "à la"            );
       $template->addProperty("Patient - accord genre"    , "e"               );
     }
 
