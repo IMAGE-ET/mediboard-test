@@ -1,14 +1,17 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage Hospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
+/**
+ * Unité fonctionnelle
+ */
 class CUniteFonctionnelle extends CMbObject {
   // DB Table key
   public $uf_id;
@@ -91,7 +94,16 @@ class CUniteFonctionnelle extends CMbObject {
     parent::updateFormFields();
     $this->_view = $this->libelle;
   }
-  
+
+  /**
+   * Récupération de l'uf
+   *
+   * @param string $code_uf  code de l'uf
+   * @param string $type     type de l'uf
+   * @param int    $group_id group_id
+   *
+   * @return CUniteFonctionnelle
+   */
   static function getUF($code_uf, $type = null, $group_id = null) {
     $uf       = new self;
     $uf->code = $code_uf;
@@ -101,16 +113,37 @@ class CUniteFonctionnelle extends CMbObject {
 
     return $uf;
   }
-  
-  static function getUFs() {
+
+  /**
+   * Chargement des types d'ufs
+   *
+   * @param string $object_class classe concernée
+   *
+   * @return array()
+   */
+  static function getUFs($object_class = null) {
     $uf = new self;
     $group_id = CGroups::loadCurrent()->_id;
-    
-    return array(
+
+    $tab_ufs = array(
       "hebergement" => $uf->loadList(array("type" => "= 'hebergement'", "group_id" => "= '$group_id'"), "libelle"),
       "medicale"    => $uf->loadList(array("type" => "= 'medicale'", "group_id" => "= '$group_id'"), "libelle"),
       "soins"       => $uf->loadList(array("type" => "= 'soins'", "group_id" => "= '$group_id'"), "libelle"),
     );
+
+    if ($object_class == "CChambre" || $object_class == "CLit") {
+      unset($tab_ufs["medicale"]);
+      unset($tab_ufs["soins"]);
+    }
+    elseif ($object_class == "CService") {
+      unset($tab_ufs["medicale"]);
+    }
+    elseif ($object_class == "CMediusers" || $object_class == "CFunctions") {
+      unset($tab_ufs["hebergement"]);
+      unset($tab_ufs["soins"]);
+    }
+
+    return $tab_ufs;
   }
 }
 

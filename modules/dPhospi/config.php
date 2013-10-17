@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage Hospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 $dPconfig["dPhospi"] = array (
@@ -39,6 +39,7 @@ $dPconfig["dPhospi"] = array (
   "show_collation_mvt"    => "0",
   "show_sortie_mvt"       => "0",
   "show_uf"               => "1",
+  "use_one_uf_speciality" => "1",
   "nb_days_prolongation"  => "30",
   "CLit" => array(
     "prefixe"         => "",

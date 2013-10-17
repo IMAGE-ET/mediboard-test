@@ -1,9 +1,9 @@
-{{* $Id: inc_affectation_uf.tpl $ *}}
+{{* $Id:$ *}}
 
 {{*
  * @package Mediboard
  * @subpackage dPhospi
- * @version $Revision: 6341 $
+ * @version $Revision:$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
@@ -53,7 +53,8 @@
             {{foreach from=$ufs item=_ufs key=type}}
               <optgroup label="{{tr}}CUniteFonctionnelle.type.{{$type}}{{/tr}}">
                 {{foreach from=$_ufs item=uf}}
-                  <option value="{{$uf->_id}}" {{if $ufs_selected.$type}}disabled{{/if}}>
+                  {{assign var=uf_id value=$uf->_id}}
+                  <option value="{{$uf->_id}}" {{if $ufs_selected.$type || isset($ufs_selected.$uf_id|smarty:nodefaults)}}disabled{{/if}}>
                     {{$uf->libelle}}
                   </option>
                 {{/foreach}}

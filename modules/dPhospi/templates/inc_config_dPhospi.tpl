@@ -29,7 +29,7 @@
   {{mb_include module=system template=inc_config_enum var=systeme_prestations values=standard|expert}}
 
   {{mb_include module=system template=inc_config_bool var=use_vue_topologique}}
-  
+
   {{mb_include module=system template=inc_config_str var=nb_colonnes_vue_topologique}}
   
   {{mb_include module=system template=inc_config_bool var=stats_for_all}}
@@ -44,6 +44,7 @@
 
   {{mb_include module=system template=inc_config_bool var=show_sortie_mvt}}
   {{mb_include module=system template=inc_config_bool var=show_uf}}
+  {{mb_include module=system template=inc_config_bool var=use_one_uf_speciality}}
 
   <tr>
     <th class="title" colspan="2">Vue temporelle</th>
