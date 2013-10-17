@@ -675,6 +675,12 @@ abstract class CMbString {
       return $cache[$html];
     }
 
+    // Unicode alphanum characters and whitespaces
+    if (preg_match("/[\p{L}\p{N}\s]/", $html)) {
+      // No need to purify
+      return $html;
+    }
+
     if (!$purifier) {
       if (!class_exists("HTMLPurifier", false) || !class_exists("HTMLPurifier_Config", false)) {
         $root = CAppUI::conf("root_dir");
