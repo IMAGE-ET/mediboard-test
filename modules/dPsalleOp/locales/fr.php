@@ -494,7 +494,6 @@ $locales['mod-dPsalleOp-tab-configure'] = 'Configuration';
 $locales['mod-dPsalleOp-tab-print_feuille_bloc'] = 'Impression feuille de bloc';
 $locales['mod-dPsalleOp-tab-print_intervention_anesth'] = 'Fiche d\'intervention d\'anesthésie';
 $locales['mod-dPsalleOp-tab-vw_anesthesie'] = 'Anesthésie';
-$locales['mod-dPsalleOp-tab-vw_brancardage'] = 'Brancardage';
 $locales['mod-dPsalleOp-tab-vw_daily_check_item_category'] = 'Catégories de checklist';
 $locales['mod-dPsalleOp-tab-vw_daily_check_item_type'] = 'Questions check list';
 $locales['mod-dPsalleOp-tab-vw_daily_check_list_preview'] = 'Aperçu de check list';
