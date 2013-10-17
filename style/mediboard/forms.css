@@ -481,6 +481,10 @@ button.tick:before, a.button.tick:before {
   content: url(images/buttons/tick.png);
 }
 
+button.tick_cancel:before, a.button.tick_cancel:before {
+  content: url(images/buttons/tick_cancel.png);
+}
+
 button.pdf:before, a.button.pdf:before {
   content: url(images/buttons/pdf.png);
 }
