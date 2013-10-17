@@ -39,7 +39,7 @@ class Chronometer {
    * 
    * @param string $key The key of the step
    * 
-   * @return void
+   * @return float Step duration in seconds
    */
   function stop($key = "") {
     if ($this->step === 0) {
@@ -67,6 +67,7 @@ class Chronometer {
     }
     
     $this->latestStep = $this->step;
-    $this->step = 0; 
+    $this->step = 0;
+    return $this->latestStep;
   }
 }
