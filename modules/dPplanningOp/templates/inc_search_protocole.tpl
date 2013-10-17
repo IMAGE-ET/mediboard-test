@@ -9,7 +9,6 @@
 <script>
   ProtocoleSelector.inite = function(){
     this.sForSejour     = false;
-    this.sChir_id       = "chir_id";
     this.sCodes_ccam    = "codes_ccam";
     this.sCote          = "cote";
     this.sLibelle       = "libelle";
@@ -42,7 +41,6 @@
     this.sRques_sej     = "rques";
     this.sExamExtempo   = "exam_extempo";
 
-    this.sChir_id_easy    = "chir_id";
     this.sServiceId_easy  = "service_id";
     this.sLibelle_easy    = "libelle";
     this.sCodes_ccam_easy = "codes_ccam";
