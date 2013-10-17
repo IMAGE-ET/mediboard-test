@@ -536,7 +536,9 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
 
     $newPatient->ville      = $adress["ville"];
     $newPatient->cp         = $adress["cp"];
-    $newPatient->pays_insee = $adress["pays_insee"];
+    if ($adress["pays_insee"]) {
+      $newPatient->pays_insee = $adress["pays_insee"];
+    }
   }
 
   /**
