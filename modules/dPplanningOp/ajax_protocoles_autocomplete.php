@@ -47,6 +47,12 @@ $order = "libelle, libelle_sejour, codes_ccam";
 
 $matches = $object->getAutocompleteList($keywords, $where, $limit, null, $order);
 
+if (CAppUI::conf("dPbloc CPlageOp systeme_materiel")) {
+  foreach($matches as $protocole) {
+    $protocole->_types_ressources_ids = implode(",", CMbArray::pluck($protocole->loadRefsBesoins(), "type_ressource_id"));
+  }
+}
+
 $template = $object->getTypedTemplate("autocomplete");
 
 // Création du template
