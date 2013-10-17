@@ -664,6 +664,10 @@ abstract class CMbString {
    * @return string
    */
   static function purifyHTML($html) {
+    if (trim($html) == "") {
+      return $html;
+    }
+
     static $cache = array();
     static $purifier;
 
