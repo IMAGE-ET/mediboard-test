@@ -23,6 +23,9 @@
         Main.add(function () {
           var formeasy = getForm("editOpEasy");
           selectPraticien(formeasy.chir_id, formeasy.chir_id_view);
+          selectPraticien(formeasy.chir_2_id, formeasy.chir_2_id_view);
+          selectPraticien(formeasy.chir_3_id, formeasy.chir_3_id_view);
+          selectPraticien(formeasy.chir_4_id, formeasy.chir_4_id_view);
         });
       </script>
       {{mb_field object=$op field="chir_id" hidden=hidden value=$chir->_id onchange="synchroPrat(); Value.synchronize(this); removePlageOp(true);"}}
@@ -33,14 +36,6 @@
     </td>
   </tr>
   {{if $conf.dPplanningOp.COperation.show_secondary_function && !$op->_id}}
-    <script>
-      Main.add(function () {
-        var formeasy = getForm("editOpEasy");
-        selectPraticien(formeasy.chir_2_id, formeasy.chir_2_id_view);
-        selectPraticien(formeasy.chir_3_id, formeasy.chir_3_id_view);
-        selectPraticien(formeasy.chir_4_id, formeasy.chir_4_id_view);
-      });
-    </script>
     <tr>
       <th>
         {{mb_label class=CMediusers field=function_id}}

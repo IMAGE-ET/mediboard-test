@@ -143,6 +143,9 @@ refreshFunction = function(chir_id) {
         Main.add(function () {
           var form = getForm("editOp");
           selectPraticien(form.chir_id, form.chir_id_view);
+          selectPraticien(form.chir_2_id, form.chir_2_id_view);
+          selectPraticien(form.chir_3_id, form.chir_3_id_view);
+          selectPraticien(form.chir_4_id, form.chir_4_id_view);
         });
       </script>
       {{mb_field object=$op field="chir_id" hidden=hidden value=$chir->_id onchange="synchroPrat(); Value.synchronize(this); removePlageOp(true); refreshFunction(this.value)"}}
@@ -153,14 +156,6 @@ refreshFunction = function(chir_id) {
     </td>
   </tr>
   {{if $conf.dPplanningOp.COperation.show_secondary_function && !$op->_id}}
-    <script>
-      Main.add(function () {
-        var form = getForm("editOp");
-        selectPraticien(form.chir_2_id, form.chir_2_id_view);
-        selectPraticien(form.chir_3_id, form.chir_3_id_view);
-        selectPraticien(form.chir_4_id, form.chir_4_id_view);
-      });
-    </script>
     <tr>
       <th>
         {{mb_label class=CMediusers field=function_id}}
