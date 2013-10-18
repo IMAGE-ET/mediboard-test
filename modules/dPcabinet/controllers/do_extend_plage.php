@@ -14,10 +14,10 @@
 CCanDo::checkEdit();
 
 $plage_id     = CValue::get("plage_id");
-$repeat       = min(CValue::get("_repeat", 0)+1, 100);
+$repeat       = min(CValue::get("_repeat", 0), 100);
 $repeat_mode  = CValue::get("_type_repeat");
 
-//if 1: current week, 2: next week
+// because of current plage
 $nb_extend = $repeat++;
 
 //load plage
@@ -31,7 +31,10 @@ $created = 0;
 $failed = 0;
 
 //do the repeat work (2 = startng next week)
-while (2 <= $nb_extend) {
+while (1 <= $nb_extend) {
+  //switch to next direct, to avoid current plage
+  $nb_extend -= $plage_consult->becomeNext();
+
   //plage doesn't exist
   if (!$plage_consult->_id) {
     if ($msg = $plage_consult->store()) {
@@ -45,10 +48,9 @@ while (2 <= $nb_extend) {
   else {
     $skipped++;
   }
-  $nb_extend -= $plage_consult->becomeNext();
 }
 
-CAppUI::setMsg("Cplageconsult-msg-extend_finished_nb%d_week", UI_MSG_OK, $repeat);
+CAppUI::setMsg("Cplageconsult-msg-extend_finished_nb%d_week", UI_MSG_OK, $repeat-1);
 if ($created) {
   CAppUI::setMsg('Cplageconsult-msg-creation_created_nb%d', UI_MSG_OK, $created);
 }
