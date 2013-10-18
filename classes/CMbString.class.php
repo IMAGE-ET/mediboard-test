@@ -675,8 +675,8 @@ abstract class CMbString {
       return $cache[$html];
     }
 
-    // Unicode alphanum characters and whitespaces
-    if (preg_match("/[\p{L}\p{N}\s]/", $html)) {
+    // Only Unicode alphanum characters and whitespaces
+    if (!preg_match("/[^\p{L}\p{N}\s]/u", $html)) {
       // No need to purify
       return $html;
     }
