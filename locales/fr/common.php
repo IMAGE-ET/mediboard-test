@@ -163,6 +163,7 @@ $locales['Example'] = 'Exemple';
 $locales['Execute'] = 'Exécuter';
 $locales['Export'] = 'Exporter';
 $locales['Export-CSV'] = 'Exporter au format CSV';
+$locales['Extend'] = 'Prolonger';
 $locales['Field'] = 'Champ';
 $locales['File'] = 'Fichier';
 $locales['Filter'] = 'Filtrer';
