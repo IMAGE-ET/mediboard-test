@@ -135,7 +135,7 @@ class CCdaTools {
     $tabErrors      = array_filter(explode("\n", $returnErrors));
     $returnErrors   = $dom->schemaValidate("modules/cda/resources/CDA.xsd", true, false);
     $tabErrors      = array_merge($tabErrors, array_filter(explode("\n", $returnErrors)));
-    $validate = array_unique($tabErrors);
+    $validate       = array_unique($tabErrors);
 
     if ($validate[0] != "1") {
       $contain = null;
@@ -154,6 +154,29 @@ class CCdaTools {
     $result["contain"]            = $contain;
 
     return $result;
+  }
+
+  /**
+   * Valide le CDA
+   *
+   * @param String $cda CDA
+   *
+   * @throws CMbException
+   * @return void
+   */
+  static function validateCDA($cda) {
+    $dom = new CMbXMLDocument("UTF-8");
+
+    $returnErrors = $dom->loadXMLSafe($cda, null, true);
+    if ($returnErrors !== true) {
+      throw new CMbException("Erreur lors de la conception du document");
+    }
+
+    $returnErrors = $dom->schemaValidate("modules/cda/resources/CDA.xsd", true, false);
+    $validateSchematron = self::validateSchematron($cda);
+    if ($returnErrors !== true || $validateSchematron) {
+      throw new CMbException("Problème de conformité, vérifiez les informations nécessaires pour le DMP et le CDA");
+    }
   }
 
   /**

@@ -105,6 +105,7 @@ class CCDAActCDA extends CCDADocumentCDA {
     $clinicaldocument->setLegalAuthenticator($participation->setLegalAuthenticator());
     $clinicaldocument->appendDocumentationOf($actRelationship->setDocumentationOF());
     $clinicaldocument->setComponentOf($actRelationship->setComponentOf());
+    $clinicaldocument->appendRelatedDocument($actRelationship->appendRelatedDocument());
 
     /**
      * Création du corp du document
@@ -199,5 +200,13 @@ class CCDAActCDA extends CCDADocumentCDA {
     $serviceEvent->setCode($ce);
 
     return $serviceEvent;
+  }
+
+  function setParentDocument() {
+    $parent = new CCDAPOCD_MT000040_ParentDocument();
+    $ii = new CCDAII();
+    $ii->setRoot(parent::$cda_factory->old_version);
+    $parent->appendId($ii);
+    return $parent;
   }
 }

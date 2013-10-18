@@ -61,8 +61,9 @@ class CCDAParticipationCDA extends CCDADocumentCDA {
    * @return CCDAPOCD_MT000040_LegalAuthenticator
    */
   function setLegalAuthenticator() {
+    $date_signature = parent::$cda_factory->date_creation;
     $legalAuthenticator = new CCDAPOCD_MT000040_LegalAuthenticator();
-    $date = $this->getTimeToUtc(CMbDT::dateTime());
+    $date = $this->getTimeToUtc($this->getTimeToUtc($date_signature));
     $ts = new CCDATS();
     $ts->setValue($date);
     $legalAuthenticator->setTime($ts);

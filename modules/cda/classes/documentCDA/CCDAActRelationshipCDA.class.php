@@ -49,4 +49,13 @@ class CCDAActRelationshipCDA extends CCDADocumentCDA {
     $documentationOf->setServiceEvent(parent::$act->setServiceEvent());
     return $documentationOf;
   }
+
+  function appendRelatedDocument() {
+    $related = new CCDAPOCD_MT000040_RelatedDocument();
+    if (parent::$cda_factory->old_version) {
+      $related->setTypeCode("RPLC");
+      $related->setParentDocument(parent::$act->setParentDocument());
+    }
+    return $related;
+  }
 }

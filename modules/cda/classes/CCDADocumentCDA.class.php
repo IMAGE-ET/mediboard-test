@@ -59,6 +59,9 @@ class CCDADocumentCDA extends CCDAClasseCda{
    * @return string
    */
   function getTimeToUtc($date, $naissance = false) {
+    if (!$date) {
+      return null;
+    }
     $timezone = new DateTimeZone(CAppUI::conf("timezone"));
     $date     = new DateTime($date, $timezone);
     if ($naissance) {

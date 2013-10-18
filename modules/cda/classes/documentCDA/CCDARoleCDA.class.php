@@ -82,24 +82,26 @@ class CCDARoleCDA extends CCDADocumentCDA {
     $patientRole = new CCDAPOCD_MT000040_PatientRole();
     $patient = self::$cda_factory->patient;
 
-    /*if (!$patient->INSC) {
+    if (!$patient->_ref_last_ins->_id) {
       return;
-    }*/
+    }
 
     $ii = new CCDAII();
     $ii->setRoot("1.2.250.1.213.1.4.2");
-    $ii->setExtension($patient->INSC);
+    $ii->setExtension($patient->_ref_last_ins->ins);
     $patientRole->appendId($ii);
 
-    $ii = new CCDAII();
-    /* @todo Gérer le master domaine*/
-    //$group_domain = new CGroupDomain();
-    //$group_domain->loadM
-    $ii->setRoot(self::$cda_factory->root);
-    $ii->setExtension($patient->_IPP);
-    //libelle du domaine
-    $ii->setAssigningAuthorityName("");
-    $patientRole->appendId($ii);
+    if ($patient->_IPP) {
+      $ii = new CCDAII();
+      /* @todo Gérer le master domaine*/
+      //$group_domain = new CGroupDomain();
+      //$group_domain->loadM
+      $ii->setRoot(self::$cda_factory->root);
+      $ii->setExtension($patient->_IPP);
+      //libelle du domaine
+      $ii->setAssigningAuthorityName("");
+      $patientRole->appendId($ii);
+    }
 
     $ad = $this->setAddress($patient);
     $patientRole->appendAddr($ad);

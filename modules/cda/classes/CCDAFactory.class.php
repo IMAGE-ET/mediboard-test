@@ -44,6 +44,7 @@ class CCDAFactory {
   public $healt_care;
   public $service_event = array();
   public $templateId = array();
+  public $old_version;
 
   /**
    * construct
@@ -72,6 +73,7 @@ class CCDAFactory {
     }
     $this->practicien = $object->loadRefPraticien();
     $this->patient    = $object->loadRefPatient();
+    $this->patient->loadLastINS();
     $this->docItem    = $docItem;
     $this->root       = CMbOID::getOIDFromClass($docItem);
 
@@ -141,7 +143,7 @@ class CCDAFactory {
       }
     }
     else {
-      $docItem->makePDFpreview(1);
+      $docItem->makePDFpreview(1, 0);
       $file = $docItem->_ref_file;
     }
     $this->file      = $file;
@@ -222,6 +224,11 @@ class CCDAFactory {
     }
 
     $this->service_event = $service;
+
+    if ($this->old_version) {
+      $oid = CMbOID::getOIDFromClass($docItem);
+      $this->old_version = "$oid.$this->old_version";
+    }
   }
 
   /**
