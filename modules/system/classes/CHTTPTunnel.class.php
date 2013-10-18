@@ -9,9 +9,11 @@
  * @version    $Revision: 17637 $
  */
 
-require_once "../../../lib/phpseclib/phpseclib/Math/BigInteger.php";
-require_once "../../../lib/phpseclib/phpseclib/File/ASN1.php";
-require_once "../../../lib/phpseclib/phpseclib/File/X509.php";
+// Don't use requireLib because used in CLI
+require_once __DIR__."/../../../lib/phpseclib/phpseclib/Math/BigInteger.php";
+require_once __DIR__."/../../../lib/phpseclib/phpseclib/File/ASN1.php";
+require_once __DIR__."/../../../lib/phpseclib/phpseclib/File/X509.php";
+
 /**
  * An HTTP tunnel
  */
