@@ -27,7 +27,7 @@ $right_sampling = CValue::getOrSession("right_sampling", "total"); // total, mea
 $DBorNotDB = CValue::getOrSession("DBorNotDB_hidden", false); // Do we use DB or datasource_logs?
 
 // Human/bot filter
-$human_bot = CValue::getOrSession("human_bot", 0);
+$human_bot = CValue::getOrSession("human_bot", "0");
 
 $module = null;
 if (!is_numeric($groupmod)) {
