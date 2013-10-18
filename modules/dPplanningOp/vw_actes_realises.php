@@ -24,38 +24,56 @@ $montantTotalActes = 0;
 $praticien = new CMediusers();
 $praticien->load($_prat_id);
 
-$date_min = $_date_min . " 00:00:00";
-$date_max = $_date_max . " 23:59:59";
+$date_min = CMbDT::date("-1 day", $_date_min);
+$date_max = CMbDT::date("+1 day", $_date_max);
 
-$sejour = new CSejour();
 $ljoin = array();
 $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
 $ljoin["acte_ccam"] = "consultation.consultation_id = acte_ccam.object_id AND acte_ccam.object_class = 'CConsultation'";
-$ljoin["acte_ngap"] = "consultation.consultation_id = acte_ngap.object_id AND acte_ngap.object_class = 'CConsultation'";
-
 $where = array();
-$where[] = "acte_ccam.execution BETWEEN '$date_min' AND '$date_max' OR acte_ngap.execution BETWEEN '$date_min' AND '$date_max'";
-$where[] = "acte_ccam.executant_id = '$_prat_id' OR acte_ngap.executant_id = '$_prat_id'";
-/** @var  CSejour[] $sejours*/
+$where[] = "acte_ccam.execution BETWEEN '$date_min' AND '$date_max'";
+$where[] = "acte_ccam.executant_id = '$_prat_id'";
+$sejour = new CSejour();
 $sejours = $sejour->loadList($where, null, null, "sejour_id", $ljoin);
 
+$ljoin = array();
+$ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
+$ljoin["acte_ngap"] = "consultation.consultation_id = acte_ngap.object_id AND acte_ngap.object_class = 'CConsultation'";
+$where2 = array();
+$where2[] = "acte_ngap.execution BETWEEN '$date_min' AND '$date_max'";
+$where2[] = "acte_ngap.executant_id = '$_prat_id'";
 $sejour = new CSejour();
+$sejours_ngap = $sejour->loadList($where2, null, null, "sejour_id", $ljoin);
+foreach ($sejours_ngap as $key => $_sejour) {
+  if (!isset($sejours[$key])) {
+    $sejours[$key] = $_sejour;
+  }
+}
+
 $ljoin = array();
 $ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
 $ljoin["acte_ccam"] = "operations.operation_id = acte_ccam.object_id AND acte_ccam.object_class = 'COperation'";
-$ljoin["acte_ngap"] = "operations.operation_id = acte_ngap.object_id AND acte_ngap.object_class = 'COperation'";
-
 $where["operations.annulee"] = " = '0'";
-
-/** @var  CSejour[] $sejours_consult*/
 $sejours_consult = $sejour->loadList($where, null, null, "sejour_id", $ljoin);
-foreach ($sejours_consult as $key => $sejour) {
+foreach ($sejours_consult as $key => $_sejour) {
   if (!isset($sejours[$key])) {
-    $sejours[$key] = $sejour;
+    $sejours[$key] = $_sejour;
+  }
+}
+
+$ljoin = array();
+$ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
+$ljoin["acte_ngap"] = "operations.operation_id = acte_ngap.object_id AND acte_ngap.object_class = 'COperation'";
+$where2["operations.annulee"] = " = '0'";
+$sejours_consult_ngap = $sejour->loadList($where2, null, null, "sejour_id", $ljoin);
+foreach ($sejours_consult_ngap as $key => $_sejour) {
+  if (!isset($sejours[$key])) {
+    $sejours[$key] = $_sejour;
   }
 }
 
 foreach ($sejours as $key => $sejour) {
+  /* @var CSejour $sejour*/
   $sejour->loadRefPatient();
   $sejour->loadRefsOperations();
   $sejour->loadRefsConsultations();
