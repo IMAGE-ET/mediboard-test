@@ -676,10 +676,12 @@ abstract class CMbString {
     }
 
     // Only Unicode alphanum characters and whitespaces
+    /*
     if (!preg_match("/[^\p{L}\p{N}\s]/u", $html)) {
       // No need to purify
       return $html;
     }
+    */
 
     if (!$purifier) {
       if (!class_exists("HTMLPurifier", false) || !class_exists("HTMLPurifier_Config", false)) {
