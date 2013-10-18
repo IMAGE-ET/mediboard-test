@@ -474,13 +474,13 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "phpseclib";
 $library->url = "https://github.com/phpseclib/phpseclib";
-$library->fileName = "phpseclib0.3.1.zip";
+$library->fileName = "phpseclib0.3.5.zip";
 $library->description = "PHP Secure Communications Library";
 $library->extraDir = "phpseclib";
 $library->sourceDir = "phpseclib";
 $library->targetDir = "phpseclib";
-$library->versionFile = "phpseclib/Crypt/Random.php";
-$library->versionString = "crypt_random_string";
+$library->versionFile = "README.md";
+$library->versionString = "Download (0.3.5)";
 
 CLibrary::$all[$library->name] = $library;
 
