@@ -413,7 +413,6 @@ foreach ($commentaires_by_salle as $salle_id => $_commentaires) {
     data-color='$_commentaire->color'></span>".
     "<span style='font-size: 11px; font-weight: bold;'>".CMbString::htmlEntities($_commentaire->libelle)."</span>".
     "\n<span class='compact'>".CMbString::htmlEntities($_commentaire->commentaire)."</span>";
-    $libelle = utf8_encode($libelle);
 
     $event = new CPlanningEvent($_commentaire->_guid, $debut, $duree, $libelle, "#$_commentaire->color", true, null, $_commentaire->_guid, false);
     
