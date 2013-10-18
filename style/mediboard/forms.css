@@ -441,6 +441,10 @@ button.cancel:hover, a.button.cancel:hover {
   border-color: #f00;
 }
 
+button.user:before, a.button.user:before {
+  content: url(images/icons/myinfos.png);
+}
+
 button.close:before, a.button.close:before {
   content: url(images/buttons/cancel.png);
 }
