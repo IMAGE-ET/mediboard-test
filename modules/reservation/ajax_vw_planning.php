@@ -365,9 +365,9 @@ if ($show_operations) {
       $event = new CPlanningEvent($_operation->_guid, $debut, $duree, $smartyL, "#$color", $important, $css, $_operation->_guid, false);
 
       if ($can_edit) {
-        $event->addMenuItem("edit" , utf8_encode("Modifier cette opération"));
-        $event->addMenuItem("cut"  , utf8_encode("Couper cette opération"));
-        $event->addMenuItem("copy" , utf8_encode("Copier cette opération"));
+        $event->addMenuItem("edit" , "Modifier cette intervention");
+        $event->addMenuItem("cut"  , "Couper cette intervention");
+        $event->addMenuItem("copy" , "Copier cette intervention");
         $event->addMenuItem("clock", utf8_encode("Modifier les dates d'entrée et sortie du séjour"));
       }
 
