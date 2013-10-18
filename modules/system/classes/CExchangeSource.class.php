@@ -396,6 +396,15 @@ class CExchangeSource extends CMbObject {
   
   function getResponseTime() {
   }
+
+  /**
+   * Get child exchanges
+   *
+   * @return string[] Data format classes collection
+   */
+  static function getAll() {
+    return CApp::getChildClasses("CExchangeSource", array(), true);
+  }
 }
 
 if (CModule::getActive("hl7")) {

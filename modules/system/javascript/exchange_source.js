@@ -132,5 +132,31 @@ ExchangeSource = {
     var br = form.insertBefore(DOM.br(), elt.nextSibling);
     form.insertBefore(DOM.input({type: "file", name: "import["+number_file +"]", size: 0, onchange: "ExchangeSource.addInputFile(this); this.onchange=''"})
       , br.nextSibling);
+  },
+
+  editSource : function (guid) {
+    new Url("eai", "ajax_edit_source")
+      .addParam("source_guid", guid)
+      .requestModal();
+  },
+
+  dispoSource : function (element) {
+    if (!element.get('id')) {
+      return;
+    }
+
+    var url = new Url("system", "ajax_get_source_status");
+
+    element.title = "";
+    element.src   = "style/mediboard/images/icons/loading.gif";
+
+    url.addParam("source_guid", element.get('guid'));
+    url.requestJSON(function(status) {
+      element.src = ExchangeSource.status_images[status.reachable];
+      var tdmessage = element.up().next();
+      $(tdmessage).update(status.message);
+      var tdtime = tdmessage.next();
+      $(tdtime).update(status.response_time);
+    })
   }
 };
