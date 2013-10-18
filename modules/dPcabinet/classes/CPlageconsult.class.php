@@ -59,6 +59,7 @@ class CPlageconsult extends CPlageHoraire {
 
   // behaviour fields
   public $_handler_external_booking;
+  public $_immediate_plage;
 
   /** @var CMediusers */
   public $_ref_chir;
@@ -333,10 +334,12 @@ class CPlageconsult extends CPlageHoraire {
       }
     }
 
-    //plage blocked by holiday config
-    $holidays = CMbDate::getHolidays();
-    if (!CAppUI::pref("allow_plage_holiday") && array_key_exists($this->date, $holidays)) {
-      $msg.= CAppUI::tr("CPlageConsult-errror-plage_blocked_by_holidays", $holidays[$this->date]);
+    //plage blocked by holiday config if not immediate consultation
+    if (!$this->_immediate_plage) {
+      $holidays = CMbDate::getHolidays();
+      if (!CAppUI::pref("allow_plage_holiday") && array_key_exists($this->date, $holidays)) {
+        $msg.= CAppUI::tr("CPlageConsult-errror-plage_blocked_by_holidays", $holidays[$this->date]);
+      }
     }
 
     //chir_id se remplace lui même

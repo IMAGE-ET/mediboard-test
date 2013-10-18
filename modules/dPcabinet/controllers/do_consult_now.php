@@ -110,6 +110,7 @@ if (!$plage->_id) {
     $plage->debut   = $hour_now;
     $plage->fin     = $hour_next;
     $plage->libelle = "automatique";
+    $plage->_immediate_plage = 1;
   }
   $plage->updateFormFields();
   if ($msg = $plage->store()) {
