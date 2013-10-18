@@ -14,6 +14,6 @@
 $guid   = CValue::get("source_guid");
 $source = CMbObject::loadFromGuid($guid);
 
-$smarty = new CSmartyDP("modules/ftp");
+$smarty = new CSmartyDP("modules/".$source->_ref_module->mod_name);
 $smarty->assign("source", $source);
-$smarty->display("CSourceFTP_inc_config.tpl");
+$smarty->display($source->_class."_inc_config.tpl");
