@@ -24,6 +24,7 @@ $chirSel            = CValue::getOrSession("chirSel", "-1");
 $num_facture        = CValue::getOrSession("num_facture", "");
 $numero             = CValue::getOrSession("numero", "1");
 $search_easy        = CValue::getOrSession("search_easy", "0");
+$page               = CValue::get("page", "0");
 
 //Patient sélectionné
 $patient = new CPatient();
@@ -67,9 +68,12 @@ if ($num_facture) {
 }
 
 $facture = new CFactureCabinet();
-$factures = $facture->loadList($where , "ouverture ASC", 50, null, $ljoin);
+$factures = $facture->loadList($where , "ouverture ASC", "$page, 25", null, $ljoin);
+$total_factures = $facture->countMultipleList($where, "facture_id", $ljoin);
+$total_factures = $total_factures[0]['total'];
 
 foreach ($factures as $key => $_facture) {
+  /* @var CFactureCabinet $_facture*/
   $_facture->loadRefPatient();
   $_facture->loadRefsItems();
   $_facture->loadRefsConsultation();
@@ -83,7 +87,6 @@ foreach ($factures as $key => $_facture) {
 }
 
 $derconsult_id = null;
-$assurances_patient = array();
 if ($facture_id && isset($factures[$facture_id])) {
   $facture->load($facture_id);
   $facture->loadRefPatient();
@@ -133,5 +136,7 @@ $smarty->assign("type_date_search"    , $type_date_search);
 $smarty->assign("num_facture"   , $num_facture);
 $smarty->assign("numero"        , $numero);
 $smarty->assign("search_easy"   , $search_easy);
+$smarty->assign("page"          , $page);
+$smarty->assign("total_factures" , $total_factures);
 
 $smarty->display("vw_factures.tpl");

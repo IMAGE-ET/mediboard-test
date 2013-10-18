@@ -23,6 +23,7 @@ $chirSel            = CValue::getOrSession("chirSel", "-1");
 $num_facture        = CValue::getOrSession("num_facture", "");
 $numero             = CValue::getOrSession("numero", "1");
 $search_easy        = CValue::getOrSession("search_easy", "0");
+$page               = CValue::get("page", "0");
 
 // Liste des chirurgiens
 $user = new CMediusers();
@@ -71,7 +72,9 @@ if ($search_easy == 1) {
   $where["definitive"] =" = '1'";
 }
 $facture = new CFactureEtablissement();
-$factures = $facture->loadList($where , "ouverture ASC, numero", 50, "facture_id", $ljoin);
+$total_factures = $facture->countMultipleList($where, "facture_id", $ljoin);
+$total_factures = $total_factures[0]['total'];
+$factures = $facture->loadList($where , "ouverture ASC, numero", "$page, 25", "facture_id", $ljoin);
 
 //Affichage uniquement des factures qui contiennent des séjours
 foreach ($factures as $key => $_facture) {
@@ -94,7 +97,6 @@ foreach ($factures as $key => $_facture) {
   }
 }
 
-$assurances_patient = array();
 if ($facture_id && isset($factures[$facture_id])) {
   $facture->load($facture_id);
   $facture->loadRefPatient();
@@ -137,5 +139,7 @@ $smarty->assign("type_date_search"    , $type_date_search);
 $smarty->assign("num_facture"   , $num_facture);
 $smarty->assign("numero"        , $numero);
 $smarty->assign("search_easy"   , $search_easy);
+$smarty->assign("page"          , $page);
+$smarty->assign("total_factures" , $total_factures);
 
 $smarty->display("vw_factures.tpl");

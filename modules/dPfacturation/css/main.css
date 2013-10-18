@@ -12,3 +12,13 @@ table.tbl td.acte-CActeCaisse, table.tbl tr:hover td.acte-CActeCaisse{
   background-color:#DA70D6;
   width:140px;
 }
+
+table.main td.reglee, table.main tr.reglee{
+  background-color:#cfc;
+}
+table.main td.cloture, table.main tr.cloture{
+  background-color:#fcc;
+}
+table.main td.noncotee, table.main tr.noncotee{
+  background-color:#ffcd75;
+}

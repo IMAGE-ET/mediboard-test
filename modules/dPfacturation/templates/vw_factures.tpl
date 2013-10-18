@@ -2,7 +2,14 @@
 {{mb_script module="dPpatients"   script="pat_selector"}}
 
 <script>
-refreshList = function(){
+  changePage = function(page) {
+    var url = new Url("facturation" , "ajax_list_factures");
+    url.addParam('facture_class', '{{$facture->_class}}');
+    url.addParam('page'         , page);
+    url.requestUpdate("liste_factures");
+  }
+
+  refreshList = function(){
   var oForm = getForm("choice-facture");
   if(!oForm._pat_name.value){
     oForm.patient_id.value = '';
@@ -14,6 +21,7 @@ refreshList = function(){
   url.addElement(oForm._date_max);
   url.addElement(oForm.type_date_search);
   url.addElement(oForm.num_facture);
+  url.addElement(oForm.page);
 
   {{if !$conf.dPfacturation.Other.use_search_easy}}
     url.addElement(oForm.etat_cloture);
@@ -59,6 +67,7 @@ Main.add(function () {
   <form name="choice-facture" action="" method="get">
     <input type="hidden" name="m" value="{{$m}}" />
     <input type="hidden" name="tab" value="{{$tab}}" />
+    <input type="hidden" name="page" value="{{$page}}" onchange="refreshList()"/>
     <table class="form" name="choix_type_facture">
       {{assign var="classe" value=$facture->_class}}
       <tr>
@@ -223,7 +232,7 @@ Main.add(function () {
       </tr>
       <tr>
         <td class="button" colspan="6">
-          <button type="button" onclick="refreshList();" class="submit" >{{tr}}Validate{{/tr}}</button>
+          <button type="button" onclick="$V(this.form.page, 0);refreshList();" class="submit" >{{tr}}Validate{{/tr}}</button>
           <button type="button" onclick="showLegend();" class="search" style="float:right;">Légende</button>
         </td>
       </tr>
