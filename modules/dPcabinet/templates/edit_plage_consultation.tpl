@@ -28,6 +28,17 @@
       }
     }
   };
+
+  extendPlage = function (plage_id, repetition_type, nb_repeat) {
+    if (confirm("Prolonger la plage sur "+nb_repeat+" semaines de type "+ repetition_type)) {
+      var url = new Url("cabinet", "controllers/do_extend_plage");
+      url.addParam("plage_id", plage_id);
+      url.addParam("_type_repeat", repetition_type);
+      url.addParam("_repeat", nb_repeat);
+      url.requestUpdate("systemMsg");
+    }
+
+  };
   
   modifPourCompte = function(valeur){
     if(valeur != 0){
@@ -258,6 +269,9 @@
             form.submit();
           }})">
         {{tr}}Delete{{/tr}}
+      </button>
+      <button type="button" class="button add" onclick="extendPlage('{{$plageSel->_id}}', $V(this.form._type_repeat), $V(this.form._repeat) );">
+        {{tr}}Extend{{/tr}}
       </button>
     </td>
     {{/if}}
