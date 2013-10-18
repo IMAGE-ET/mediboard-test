@@ -130,10 +130,6 @@ foreach ($sejours as $key => &$sejour) {
 
   if ($prestation_id) {
     $sejour->loadLiaisonsForPrestation($prestation_id);
-    // On ne prend que le dernier changement de prestation
-    if (is_array($sejour->_liaisons_for_prestation)) {
-      $sejour->_liaisons_for_prestation = end($sejour->_liaisons_for_prestation);
-    }
   }
 
   $service_id = $affectation->service_id ? $affectation->service_id : $affectation->_ref_lit->_ref_chambre->service_id;
