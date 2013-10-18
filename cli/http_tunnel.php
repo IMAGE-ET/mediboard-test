@@ -1,6 +1,6 @@
 <?php
 
-include "../modules/system/classes/CHTTPTunnel.class.php";
+require_once "../modules/system/classes/CHTTPTunnel.class.php";
 
 declare(ticks = 1);
 set_time_limit(0);
@@ -34,6 +34,7 @@ $ca_target         = $configuration["CA_TARGET"];
 $cert_listen       = $configuration["CERT_LISTEN"];
 $passphrase_listen = $configuration["PASSWORD_LISTEN"];
 $ca_listen         = $configuration["CA_LISTEN"];
+$revocation        = $configuration["REVOCATION"];
 
 $pid_file = "../tmp/tunnel.pid";
 file_put_contents($pid_file, getmypid());
@@ -47,5 +48,5 @@ if (function_exists("pcntl_signal")) {
   pcntl_signal(SIGHUP , array($proxy, "sigHandler")); // Restart
 }
 
-$proxy->setAuthentificationCertificate($cert_target, $passphrase_target, $ca_target);
+$proxy->setAuthentificationCertificate($cert_target, $passphrase_target, $ca_target, $revocation);
 $proxy->run();

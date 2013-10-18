@@ -9,6 +9,9 @@
  * @version    $Revision: 17637 $
  */
 
+require_once "../../../lib/phpseclib/phpseclib/Math/BigInteger.php";
+require_once "../../../lib/phpseclib/phpseclib/File/ASN1.php";
+require_once "../../../lib/phpseclib/phpseclib/File/X509.php";
 /**
  * An HTTP tunnel
  */
@@ -27,6 +30,7 @@ class CHTTPTunnel {
   public $running = true;
   public $restart = false;
   public $header_continue = false;
+  public $revocation;
 
   const DATA_LENGTH = 1500;
 
@@ -60,12 +64,12 @@ class CHTTPTunnel {
   /**
    * Open a connection to the target address
    *
-   * @return void
+   * @return Bool
    */
   function openTarget(){
     $old_timer = $this->timer;
     if ($old_timer && ((time() - $old_timer) < 3600)) {
-      return;
+      return true;
     }
     echo "-------------- Create the Target -------------\n";
 
@@ -89,10 +93,20 @@ class CHTTPTunnel {
     //Active the blocking
     stream_set_blocking($target, true);
     //Active the crypto SSL/TLS for the connection
-    stream_socket_enable_crypto($target, true, STREAM_CRYPTO_METHOD_SSLv23_CLIENT);
+    $crypto = stream_socket_enable_crypto($target, true, STREAM_CRYPTO_METHOD_SSLv23_CLIENT);
+    if (!$crypto) {
+      return false;
+    }
 
     $this->target_socket = $target;
+    if ($this->revocation) {
+      if (!$this->checkCertificate()) {
+        stream_socket_shutdown($this->target_socket, STREAM_SHUT_RDWR);
+        return false;
+      }
+    }
     $this->timer = time();
+    return true;
   }
 
   /**
@@ -146,8 +160,22 @@ class CHTTPTunnel {
           $response = "HTTP/1.1 200 OK\nContent-Type: text/html\n\n$result";
         }
         else {
-          $this->openTarget();
-          $response = $this->serve($request);
+          if ($this->openTarget($sock)) {
+            $response = $this->serve($request);
+          }
+          else {
+            $response = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body>
+  <soap:Fault>
+    <faultcode>soap:Server</faultcode>
+    <faultstring>Impossible d\'initialiser la connexion</faultstring>
+    <faultactor>openTarget</faultactor>
+    <detail>
+    </detail>
+  </soap:Fault>
+</soap:Body></soap:Envelope>';
+            $header = "HTTP/1.1 200 OK\nContent-Type: text/xml;charset=UTF-8\nContent-Length: ".strlen($response);
+            $response = $header."\n\n".$response;
+          }
           $this->setLogClient($peer_name, "hits", 1);
           $this->setLogClient($peer_name, "data_received", strlen($response));
           $this->setLogClient($peer_name, "data_sent", strlen($request));
@@ -228,11 +256,13 @@ class CHTTPTunnel {
    * @param String $path_cert  Path certificate
    * @param String $passphrase Passphrase of the certificate
    * @param String $path_ca    Path ca certificate
+   * @param String $revocation Path revocation certificat
    *
    * @return void
    */
-  function setAuthentificationCertificate($path_cert, $passphrase, $path_ca) {
+  function setAuthentificationCertificate($path_cert, $passphrase, $path_ca, $revocation = null) {
     echo "--------- Configurate the HTTP Proxy ---------\n";
+    $this->revocation = $revocation;
     $this->context = $this->createContext($path_cert, $passphrase, $path_ca);
   }
 
@@ -263,6 +293,8 @@ class CHTTPTunnel {
       stream_context_set_option($context, "ssl", "local_cert" , $path_cert);
       stream_context_set_option($context, "ssl", "passphrase" , $passphrase);
     }
+
+    stream_context_set_option($context, "ssl", "capture_peer_cert", true);
 
     return $context;
   }
@@ -403,5 +435,36 @@ class CHTTPTunnel {
     if ($status !== "restart") {
       exit(0);
     }
+  }
+
+  /**
+   * Verify the revocation of the certificate and the name
+   *
+   * @return bool
+   */
+  function checkCertificate() {
+    $path_revocation = $this->revocation;
+    $certificate = "";
+    $option = stream_context_get_options($this->target_socket);
+
+    if ($option["ssl"]["peer_certificate"]) {
+      $peer_certificate = $option["ssl"]["peer_certificate"];
+      openssl_x509_export($peer_certificate, $certificate);
+      $x509 = new File_X509();
+      $cert = $x509->loadX509($certificate);
+      $dn = $x509->getSubjectDN();
+      $dn = array_pop($dn["rdnSequence"]);
+      $host = explode(":", $this->target_host);
+      if ($dn[0]["value"]["printableString"] !== $host[0]) {
+        return false;
+      }
+      $serial = strtoupper($cert['tbsCertificate']['serialNumber']->toHex());
+      $revocation = file($path_revocation);
+      if (in_array("$serial\n", $revocation, true)) {
+        return false;
+      }
+      return true;
+    }
+    return false;
   }
 }
