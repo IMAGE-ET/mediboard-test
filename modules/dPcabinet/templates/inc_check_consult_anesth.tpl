@@ -79,7 +79,7 @@
   </tr>
   <tr>
     <td colspan="3" class="button">
-      <button type="button" class="cancel" onclick="Control.Modal.close();">Continuer la consultation</button>
+      <button type="button" class="left" onclick="Control.Modal.close();">Continuer la consultation</button>
       <button type="button" class="save" onclick="document.formCheckConsultAnesth.submit();">Terminer la consultation</button>
     </td>
   </tr>
