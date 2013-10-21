@@ -220,7 +220,8 @@ class CEditPdf{
         $this->num_fact = 0;
         $montant = 0;
         if ($this->acompte < $this->facture->_montant_avec_remise) {
-          $montant = $this->facture->_montant_avec_remise - $this->facture->_reglements_total_patient - $this->facture->_reglements_total_tiers;
+          $montant = $this->facture->_montant_avec_remise - $this->facture->_reglements_total_patient;
+          $montant = $montant - $this->facture->_reglements_total_tiers;
           $this->editHautFacture(" ", $montant);
           $this->editBVR($montant);
         }
@@ -291,7 +292,7 @@ class CEditPdf{
         $qte_null = ($acte->quantite != 0 && $use_qte_null) || !$use_qte_null;
 
         $tab_tarmed = $cle_facture == 0 && $keytab == "tarmed";
-        $tab_caisse = ($cle_facture == 1 && !$acte->use_tarmed_bill) || ($cle_facture == 0 &&$acte->type == "CActeCaisse" && $acte->use_tarmed_bill);
+        $tab_caisse = ($cle_facture == 1 && !$acte->use_tarmed_bill) || ($cle_facture == 0 && $acte->type == "CActeCaisse" && $acte->use_tarmed_bill);
 
         if (($tab_tarmed || ($keytab == "caisse" && $tab_caisse)) && $qte_null) {
           $ligne++;
@@ -574,6 +575,10 @@ class CEditPdf{
         $messages = explode('/*****/', CAppUI::conf("dPfacturation CRelance message_relance3_$type"));
         break;
     }
+
+    if (count($messages) == 1) {
+      $messages[1] = "";
+    }
     $this->pdf->setXY(10, $this->pdf->getY()+18);
     $this->pdf->Write(3, "Madame, Monsieur,");
     $this->pdf->setXY(10, $this->pdf->getY()+8);
@@ -608,7 +613,6 @@ class CEditPdf{
     $this->pdf->Write(4, CAppUI::conf("dPfacturation CEditPdf home_nom"));
     $this->pdf->setXY(120, $this->pdf->getY()+4);
     $this->pdf->Write(3, "Service comptabilité");
-
   }
 
   /**
@@ -835,7 +839,8 @@ class CEditPdf{
       $this->pdf->Text($l_colonne*11 + $decalage, $h_ligne*10.75+$haut_doc , $this->adherent);
       
       $this->pdf->setFont($this->font, '', 10);
-      $this->pdf->Text($l_colonne*(17-strlen($montant_facture*100)) + $decalage, $h_ligne*13+$haut_doc, sprintf("%d", $montant_facture));
+      $placement_colonne = $l_colonne*(17-strlen($montant_facture*100)) + $decalage;
+      $this->pdf->Text($placement_colonne, $h_ligne*13+$haut_doc, sprintf("%d", $montant_facture));
       
       $cents = floor(sprintf("%.2f", $montant_facture - sprintf("%d", $montant_facture))*100);
       if ($cents<10) {
@@ -896,7 +901,8 @@ class CEditPdf{
     }
     
     $loi = $this->facture->type_facture == "accident" ? "LAA" : "LAMal";
-    if ($this->facture->type_facture == "accident" && $this->facture->_coeff == CAppUI::conf("tarmed coefficient pt_maladie", CGroups::loadCurrent())) {
+    $conf_cab = CAppUI::conf("tarmed coefficient pt_maladie", CGroups::loadCurrent());
+    if ($this->facture->type_facture == "accident" && $this->facture->_coeff == $conf_cab) {
       $loi = "LAMal";
     }
     if ($this->facture->statut_pro == "invalide") {
@@ -925,7 +931,8 @@ class CEditPdf{
     $assur["cp"]      = "$assurance_patient->cp $assurance_patient->ville";
     
     $motif = $this->facture->type_facture;
-    if ($this->facture->type_facture == "accident" && $this->facture->_coeff == CAppUI::conf("tarmed coefficient pt_maladie", CGroups::loadCurrent())) {
+
+    if ($this->facture->type_facture == "accident" && $this->facture->_coeff == $conf_cab) {
       $motif = "Accident (Caisse-Maladie)";
     }
     $naissance =  CMbDT::format($this->patient->naissance, "%d.%m.%Y");
@@ -1008,13 +1015,15 @@ class CEditPdf{
     $this->pdf->SetFillColor(255, 255, 255);
     $this->pdf->SetDrawColor(0);
     $this->pdf->Rect(10, 18, 180, 20);
-    
+    $auteur = substr($this->auteur["adresse1"], 0, 29)." ". $this->auteur["cp"]." ".$this->auteur["ville"];
+    $presta = $this->fourn_presta;
+    $presta_adresse = substr($presta["adresse1"], 0, 29)." ". $presta["0"]->cp." ".$presta["0"]->ville;
     $lignes = array(
-      array("Document"    , "Identification"  , $this->facture->_id." ".CMbDT::format(null, "%d.%m.%Y %H:%M:%S"), "", "Page $nb"),
-      array("Auteur"      , "N° EAN(B)"       , $this->auteur["EAN"], $this->auteur["nom"], " Tél: ".$this->auteur["tel"]),
-      array("Facture"     , "N° RCC(B)"       , $this->auteur["RCC"], substr($this->auteur["adresse1"], 0, 29)." ". $this->auteur["cp"]." ".$this->auteur["ville"], "Fax: ".$this->auteur["fax"]),
-      array("Four.de"     , "N° EAN(P)"       , $this->fourn_presta["EAN"], $this->fourn_presta["nom_dr"], " Tél: ".$this->fourn_presta["0"]->tel),
-      array("prestations" , "N° RCC(B)"       , $this->fourn_presta["RCC"], substr($this->fourn_presta["adresse1"], 0, 29)." ". $this->fourn_presta["0"]->cp." ".$this->fourn_presta["0"]->ville, "Fax: ".$this->fourn_presta["0"]->fax)
+      array("Document"    , "Identification", $this->facture->_id." ".CMbDT::format(null, "%d.%m.%Y %H:%M:%S"), "", "Page $nb"),
+      array("Auteur"      , "N° EAN(B)"     , $this->auteur["EAN"], $this->auteur["nom"], " Tél: ".$this->auteur["tel"]),
+      array("Facture"     , "N° RCC(B)"     , $this->auteur["RCC"], $auteur, "Fax: ".$this->auteur["fax"]),
+      array("Four.de"     , "N° EAN(P)"     , $presta["EAN"], $presta["nom_dr"], " Tél: ".$presta["0"]->tel),
+      array("prestations" , "N° RCC(B)"     , $presta["RCC"], $presta_adresse, "Fax: ".$presta["0"]->fax)
     );
     
     $this->pdf->setXY(10, $this->pdf->getY()-4);
