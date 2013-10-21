@@ -52,12 +52,15 @@
     }
 
     function insertHTML(index){
+      var editor = CKEDITOR.instances.htmlarea;
       var string = arrayHelperContent[index];
-      var sHtml = "<span class='field'>" + string.replace(/\n/g, "<br/>") + "</span>&nbsp;";
-      CKEDITOR.instances.htmlarea.focus();
-      CKEDITOR.instances.htmlarea.insertHtml(sHtml);
+      var sHtml = "<span class='field'>" + string.replace(/\n/g, "<br/>") + "</span>";
+      var elt = CKEDITOR.dom.element.createFromHtml(sHtml, editor.document);
+      editor.focus();
+      editor.insertElement(elt);
+      editor.insertText(" ");
       CKEDITOR.dialog.getCurrent().hide();
-      CKEDITOR.instances.htmlarea.fire("key", []);
+      editor.fire("key", []);
       return true ;
     }
     

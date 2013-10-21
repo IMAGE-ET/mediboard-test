@@ -11,16 +11,18 @@
       }
     </style>
     <script>
-      var editor = window.parent.parent.CKEDITOR.instances.htmlarea;
+      var CKEDITOR = window.parent.parent.CKEDITOR;
 
       function Ok(e) {
+        var editor = CKEDITOR.instances.htmlarea;
         var txtData = document.getElementById('txtData');
         var content = txtData.value;
         txtData.value = '';
         if (content != '') {
-          var sHtml = "<span class='field' contenteditable='false'>[[Texte libre - " + content + "]]</span>&nbsp;";
-
-          editor.insertHtml(sHtml);
+          var sHtml = "<span class='field' contenteditable='false'>[[Texte libre - " + content + "]]</span>;";
+          var elt = CKEDITOR.dom.element.createFromHtml(sHtml, editor.document);
+          editor.insertElement(elt);
+          editor.insertText(" ");
           editor.fire("key", []);
         }
         return true;

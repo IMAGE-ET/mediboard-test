@@ -94,10 +94,12 @@
           var sHtml = "<span class='field'>" + string + "</span>&nbsp;";
         }
         else {
-          var sHtml = "<span class='field' contenteditable='false'>" + string + "</span>&nbsp;";
+          var sHtml = "<span class='field' contenteditable='false'>" + string + "</span>";
         }
         editor.focus();
-        editor.insertHtml(sHtml);
+        var elt = CKEDITOR.dom.element.createFromHtml(sHtml, editor.document);
+        editor.insertElement(elt);
+        editor.insertText(" ");
         CKEDITOR.dialog.getCurrent().hide();
         editor.fire("key", []);
         return true;

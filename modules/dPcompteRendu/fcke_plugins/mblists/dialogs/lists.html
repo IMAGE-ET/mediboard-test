@@ -31,8 +31,10 @@
       function insertHTML(string) {
         var editor = CKEDITOR.instances.htmlarea;
         var sHtml = "<span class='name' contenteditable='false'>" + string + "</span>&nbsp;";
+        var elt = CKEDITOR.dom.element.createFromHtml(sHtml, editor.document);
         editor.focus();
-        editor.insertHtml(sHtml);
+        editor.insertElement(elt);
+        editor.insertText(" ");
         CKEDITOR.dialog.getCurrent().hide();
         editor.fire("key", []);
         return true;
