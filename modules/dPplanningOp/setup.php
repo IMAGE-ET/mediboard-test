@@ -1679,6 +1679,11 @@ class CSetupdPplanningOp extends CSetup {
                 ADD `rques_personnel` TEXT;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.81";
+    $this->makeRevision("1.81");
+    $query = "ALTER TABLE `operations`
+                CHANGE `ASA` `ASA` ENUM ('1','2','3','4','5','6');";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.82";
   }
 }
