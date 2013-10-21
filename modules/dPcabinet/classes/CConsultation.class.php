@@ -944,10 +944,19 @@ class CConsultation extends CFacturable {
     if ($this->fieldModified("fin_at") && $this->fin_at) {
       $this->reprise_at = CMbDT::dateTime("+1 DAY", $this->fin_at);
     }
-    
+
     //Lors de la validation de la consultation
     // Enregistrement de la facture
     if ($this->fieldModified("valide", "1")) {
+      //Si le DH est modifié, ceui ci se répercute sur le premier acte coté
+      if ($this->fieldModified("secteur2") && (count($this->_tokens_ngap) || count($this->_tokens_ccam))) {
+        $acte = reset($this->loadRefsActes());
+        $acte->montant_depassement += ($this->secteur2-$this->_old->secteur2);
+        if ($msg = $acte->store()) {
+          return $msg;
+        }
+      }
+
       $facture = $this->sejour_id ? new CFactureEtablissement() : new CFactureCabinet();
       $facture->_consult_id = $this->_id;
       $facture->du_patient  = $this->du_patient;
