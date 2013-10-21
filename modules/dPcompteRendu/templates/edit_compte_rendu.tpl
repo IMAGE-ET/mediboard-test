@@ -196,7 +196,8 @@ function openWindowMail() {
 }
 
 function openWindowApicrypt() {
-  {{if $exchange_source->_id}}
+  {{assign var=user value='CMediusers::get'|static_call:null}}
+  {{if ($user->isPraticien() && $exchange_source->_id) || !$user->isPraticien()}}
     var form = getForm("editFrm");
     var url = new Url("apicrypt", "ajax_view_apicrypt_mail");
     url.addParam("object_id", '{{$compte_rendu->object_id}}');
