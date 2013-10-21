@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPfacturation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 CCanDo::checkEdit();
 $date_min           = CValue::getOrSession("_date_min", "01/01/1970");
@@ -70,7 +70,7 @@ if ($search_easy == 1) {
 }
 
 $facture = new $facture_class;
-$total_factures = $facture->countMultipleList($where, "facture_id", $ljoin);
+$total_factures = $facture->countMultipleList($where, "facture_id", null, $ljoin);
 $total_factures = $total_factures[0]['total'];
 $factures = $facture->loadList($where , "ouverture ASC, numero", "$page, 25", "facture_id", $ljoin);
 

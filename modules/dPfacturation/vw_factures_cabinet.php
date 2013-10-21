@@ -69,7 +69,7 @@ if ($num_facture) {
 
 $facture = new CFactureCabinet();
 $factures = $facture->loadList($where , "ouverture ASC", "$page, 25", null, $ljoin);
-$total_factures = $facture->countMultipleList($where, "facture_id", $ljoin);
+$total_factures = $facture->countMultipleList($where, "facture_id", null, $ljoin);
 $total_factures = $total_factures[0]['total'];
 
 foreach ($factures as $key => $_facture) {
@@ -82,6 +82,12 @@ foreach ($factures as $key => $_facture) {
   $nb_ngap    = count($_facture->_ref_actes_ngap);
   $nb_ccam    = count($_facture->_ref_actes_ccam);
   if (count($_facture->_ref_consults) == 0) {
+    unset($factures[$key]);
+  }
+  elseif ($nb_tarmed == 0 && $nb_caisse == 0 && $nb_ngap == 0 && $nb_ccam == 0 && !$etat_cotation && $search_easy != 4 && $search_easy != 0) {
+    unset($factures[$key]);
+  }
+  elseif (($nb_tarmed != 0 || $nb_caisse != 0 || $nb_ngap != 0 || $nb_ccam != 0) && $search_easy == 4) {
     unset($factures[$key]);
   }
 }

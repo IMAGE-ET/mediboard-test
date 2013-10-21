@@ -72,7 +72,7 @@ if ($search_easy == 1) {
   $where["definitive"] =" = '1'";
 }
 $facture = new CFactureEtablissement();
-$total_factures = $facture->countMultipleList($where, "facture_id", $ljoin);
+$total_factures = $facture->countMultipleList($where, "facture_id", null, $ljoin);
 $total_factures = $total_factures[0]['total'];
 $factures = $facture->loadList($where , "ouverture ASC, numero", "$page, 25", "facture_id", $ljoin);
 
@@ -89,7 +89,7 @@ foreach ($factures as $key => $_facture) {
   if (!count($_facture->_ref_sejours) && !count($_facture->_ref_consults)) {
     unset($factures[$key]);
   }
-  elseif ($nb_tarmed == 0 && $nb_caisse == 0 && $nb_ngap == 0 && $nb_ccam == 0 && !$etat_cotation && $search_easy != 4) {
+  elseif ($nb_tarmed == 0 && $nb_caisse == 0 && $nb_ngap == 0 && $nb_ccam == 0 && !$etat_cotation && $search_easy != 4 && $search_easy != 0) {
     unset($factures[$key]);
   }
   elseif (($nb_tarmed != 0 || $nb_caisse != 0 || $nb_ngap != 0 || $nb_ccam != 0) && $search_easy == 4) {
