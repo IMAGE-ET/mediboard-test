@@ -34,7 +34,7 @@ Sejour = {
   showDossierSoinsModal: function(sejour_id) {
     new Url("soins", "vw_dossier_sejour").
       addParam("sejour_id", sejour_id).
-      requestModal("95%", "95%");
+      modal({width: "95%", height: "95%"});
   },
 
   modalCallback: function() {
