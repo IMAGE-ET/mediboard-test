@@ -373,6 +373,10 @@ button.copy:before, a.button.copy:before {
   content: url(images/buttons/copy.png);
 }
 
+button.cleanup:before, a.button.cleanup:before {
+  content: url(images/buttons/cleanup.png);
+}
+
 button.agenda:before, a.button.agenda:before {
   content: url(images/buttons/agenda.png);
 }
