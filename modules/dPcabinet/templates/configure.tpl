@@ -11,8 +11,14 @@
 {{mb_script module="cabinet" script="consultation"}}
 
 <script>
+configCabinet = function() {
+  var url = new Url("cabinet", "ajax_config_cabinet");
+  url.requestUpdate("cabinet_config");
+};
+
 Main.add(function () {
-  Control.Tabs.create('tabs-configure', true);
+  var tabs = Control.Tabs.create('tabs-configure', true);
+  configCabinet();
 });
 </script>
 
@@ -29,6 +35,7 @@ Main.add(function () {
   <li><a href="#tag">{{tr}}tag-config{{/tr}}</a></li>
   <li><a href="#actions">Autres actions</a></li>
   <li><a href="#offline">Mode offline</a></li>
+  <li><a href="#cabinet_config" onmousedown="configCabinet();">{{tr}}cabinet-creator{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -98,4 +105,8 @@ Main.add(function () {
       </tr>
     </table>
   </form>
+</div>
+
+<div id="cabinet_config" style="display: none;">
+  test
 </div>
