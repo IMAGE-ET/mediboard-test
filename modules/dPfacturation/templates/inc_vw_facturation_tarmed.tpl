@@ -81,8 +81,8 @@
           <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 'bvr_TS');">Facture Patient</button>
         {{/if}}
       {{/if}}
-
-      <button class="print" onclick="printFacture('{{$facture->_id}}', 'impression');">Impression</button>
+      {{*Modification temporaire!! bvr_justif=impression*}}
+      <button class="print" onclick="printFacture('{{$facture->_id}}', 'bvr_justif');">Impression</button>
 
       {{if $facture->_is_relancable && $conf.dPfacturation.CRelance.use_relances}}
         <form name="facture_relance" method="post" action="" onsubmit="return Relance.create(this);">
