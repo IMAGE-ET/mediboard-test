@@ -375,7 +375,7 @@ Main.add(function(){
 
   <table class="main tbl print">
     <tr>
-      <th class="title" colspan="{{math equation="x+1" x=$observation_grid|@count}}">Constantes pérop</th>
+      <th class="title" colspan="20">Constantes pérop</th>
     </tr>
     <tr>
       <th>{{mb_title class=CObservationResultSet field=datetime}}</th>

@@ -91,8 +91,6 @@ $grid = array();
 $labels = array();
 
 if (CAppUI::conf("dPsalleOp enable_surveillance_perop")) {
-  CSupervisionGraph::includeFlot();
-
   list($list, $grid, $graphs, $labels) = CObservationResultSet::getChronological($operation, $operation->graph_pack_id);
 }
 

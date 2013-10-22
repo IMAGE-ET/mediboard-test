@@ -13,8 +13,6 @@ CCanDo::checkAdmin();
 
 $supervision_graph_id = CValue::getOrSession("supervision_graph_id");
 
-CSupervisionGraph::includeFlot();
-
 $smarty = new CSmartyDP();
 $smarty->assign("supervision_graph_id", $supervision_graph_id);
 $smarty->display("vw_supervision_graph.tpl");

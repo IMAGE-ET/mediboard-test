@@ -12,6 +12,8 @@
 {{assign var=patient value=$sejour->_ref_patient}}
 {{assign var=consult_anesth value=$operation->_ref_consult_anesth}}
 
+{{mb_script module=patients script=supervision_graph}}
+
 <table class="print">
   <tr>
     <th class="title">

@@ -205,25 +205,4 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
 
     return $graph->loadList($where, "title");
   }
-
-  /**
-   * Include jQuery Flot
-   *
-   * @return void
-   */
-  static function includeFlot(){
-    CJSLoader::$files = array(
-      "lib/flot/jquery.min.js",
-      "lib/flot/jquery.flot.min.js",
-      "lib/flot/jquery.flot.symbol.min.js",
-      "lib/flot/jquery.flot.crosshair.min.js",
-      "lib/flot/jquery.flot.resize.min.js",
-      "lib/flot/jquery.flot.stack.min.js",
-      "lib/flot/jquery.flot.bandwidth.js",
-      "lib/flot/jquery.flot.time.min.js",
-      "modules/dPpatients/javascript/supervision_graph.js",
-    );
-    echo CJSLoader::loadFiles();
-    CAppUI::js('jQuery.noConflict()');
-  }
 }

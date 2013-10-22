@@ -26,8 +26,6 @@ foreach ($graphs as $_graph) {
   }
 }
 
-CSupervisionGraph::includeFlot();
-
 $smarty = new CSmartyDP();
 $smarty->assign("graphs",        $graphs);
 $smarty->assign("packs",         $packs);

@@ -30,8 +30,6 @@ $sejour =& $operation->_ref_sejour;
 $sejour->loadRefsFwd();
 $sejour->loadRefPrescriptionSejour();
 
-CSupervisionGraph::includeFlot();
-
 list(
   $perop_graphs, $yaxes_count,
   $time_min, $time_max,

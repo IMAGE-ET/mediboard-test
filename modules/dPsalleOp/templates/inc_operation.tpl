@@ -19,6 +19,10 @@
 {{mb_script module=planningOp script=cim10_selector ajax=$ajax}}
 {{mb_include module=salleOp template=js_codage_ccam}}
 
+{{if $conf.dPsalleOp.enable_surveillance_perop}}
+  {{mb_script module=patients script=supervision_graph}}
+{{/if}}
+
 <script>
   printFicheAnesth = function(dossier_anesth_id) {
     var url = new Url("cabinet", "print_fiche");

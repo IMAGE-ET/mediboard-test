@@ -227,11 +227,6 @@ $group->loadConfigValues();
 $listValidateurs = CPersonnel::loadListPers(array("op", "op_panseuse", "iade"), true, true);
 $operateurs_disp_vasc = implode("-", array_merge(CMbArray::pluck($listChirs, "_id"), CMbArray::pluck($listValidateurs, "user_id")));
 
-// Lib Flot pour les graphiques de surveillance perop
-if (CAppUI::conf("dPsalleOp enable_surveillance_perop")) {
-  CSupervisionGraph::includeFlot();
-}
-
 $smarty->assign("soustotal_base" , $soustotal_base);
 $smarty->assign("soustotal_dh"   , $soustotal_dh);
 $smarty->assign("total"          , $total);
