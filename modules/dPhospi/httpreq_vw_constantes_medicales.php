@@ -217,7 +217,10 @@ foreach ($constants_to_draw as $_cat => $_ranks) {
     }
   }
 }
-$where[] = implode(" OR ", $whereOr);
+
+if (!empty($whereOr)) {
+  $where[] = implode(" OR ", $whereOr);
+}
 
 if ($date_min) {
   $where[] = "datetime >= '$date_min'";
@@ -228,7 +231,6 @@ if ($date_max) {
 }
 
 /** @var CConstantesMedicales[] $list_constantes */
-
 // Les constantes qui correspondent (dans le contexte cette fois)
 $list_constantes = $constantes->loadList($where, "datetime DESC", $limit);
 $total_constantes = $constantes->countList($where);
