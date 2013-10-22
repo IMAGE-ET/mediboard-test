@@ -91,10 +91,10 @@ editEvenementPerop = function(guid, operation_id, datetime) {
   return false;
 }
 
-printPartogramme = function(operation_id) {
+printSurveillance = function(operation_id) {
   var url = new Url("dPsalleOp", "vw_partogramme");
   url.addParam("operation_id", operation_id);
-  url.pop(750, 700, "Partogramme");
+  url.pop(750, 700, "Impression surveillance");
 }
 </script>
 
@@ -201,7 +201,7 @@ printPartogramme = function(operation_id) {
   {{tr}}CObservationResultSet-title-create{{/tr}}
 </button>
 
-<button class="print" onclick="printPartogramme({{$interv->_id}})">Partogramme</button>
+<button class="print" onclick="printSurveillance({{$interv->_id}})">Imprimer surveillance</button>
 
 <div style="position: relative;" class="supervision">
   {{foreach from=$graphs item=_graph key=i}}

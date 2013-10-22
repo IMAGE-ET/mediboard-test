@@ -18,7 +18,7 @@
   <tr>
     <th class="title">
       <a href="#" onclick="window.print()" style="font-size: 1.3em;">
-        Partogramme
+        Surveillance
       </a>
     </th>
   </tr>
