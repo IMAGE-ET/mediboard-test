@@ -74,14 +74,14 @@ date=$(date '+%Y-%m-%dT%H:%M:%S')
 cd $tmpdir
 if [ -n "$passphrase" ]; then
   info_script "Compress binlogs"
-  nice -n 10 tar -vcjf - *bin.0* | openssl $cryptage -salt -out $tmpdir/binlogs_$date.tar.bz2.aes -k $passphrase
+  nice -n 10 tar -vczf - *bin.0* | openssl $cryptage -salt -out $tmpdir/binlogs_$date.tar.gz.aes -k $passphrase
   info_script "Moving compressed binlogs to $backup"
-  mv $tmpdir/binlogs_$date.tar.bz2.aes $backup
+  mv $tmpdir/binlogs_$date.tar.gz.aes $backup
 else
   info_script "Compress binlogs"
-  nice -n 10 tar -vcjf $tmpdir/binlogs_$date.tar.bz2 *bin.0*
+  nice -n 10 tar -vczf $tmpdir/binlogs_$date.tar.gz *bin.0*
   info_script "Moving compressed binlogs to $backup"
-  mv $tmpdir/binlogs_$date.tar.bz2 $backup
+  mv $tmpdir/binlogs_$date.tar.gz $backup
 fi
 
 # Remove temp directory
@@ -93,7 +93,7 @@ rm -rf $tmpdir
 info_script "Rotating binlogs for a week"
 
 if [ -n "$passphrase" ]; then
-  find $backup -name "binlogs_*.tar.bz2.aes" -mtime +7 -exec rm -f {} \;
+  find $backup -name "binlogs_*.tar.gz.aes" -mtime +7 -exec rm -f {} \;
 else
-  find $backup -name "binlogs_*.tar.bz2" -mtime +7 -exec rm -f {} \;
+  find $backup -name "binlogs_*.tar.gz" -mtime +7 -exec rm -f {} \;
 fi
