@@ -32,6 +32,7 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
     // Handle
     "use_sortie_matching",
     "fully_qualified",
+    "check_similar",
     
     // Format
     "encoding", 
@@ -58,6 +59,7 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
   // Handle
   public $use_sortie_matching;
   public $fully_qualified;
+  public $check_similar;
   
   // Format
   public $encoding;
@@ -80,6 +82,7 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
     "handle" => array(
       "use_sortie_matching",
       "fully_qualified",
+      "check_similar",
     ),
     
     // Digit
@@ -139,6 +142,7 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
     // Handle
     $props["use_sortie_matching"] = "bool default|1";
     $props["fully_qualified"]     = "bool default|1";
+    $props["check_similar"]       = "bool default|0";
         
     // Repair
     $props["repair_patient"]       = "bool default|1";

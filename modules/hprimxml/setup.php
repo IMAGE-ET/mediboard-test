@@ -458,6 +458,12 @@ class CSetuphprimxml extends CSetup {
                 ADD `display_errors` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.51";
+    $this->makeRevision("0.51");
+
+    $query = "ALTER TABLE `destinataire_hprim_config`
+                ADD `check_similar` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.52";
   }
 }

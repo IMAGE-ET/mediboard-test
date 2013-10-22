@@ -308,6 +308,8 @@ $locales['CHPrimXMLMouvementPatient-desc'] = 'Mouvement patient';
 $locales['CHPrimXMLVenuePatient'] = 'Venue Patient';
 $locales['CHPrimXMLVenuePatient-desc'] = 'Venue patient';
 $locales['CHprimXMLConfig'] = 'Configuration H\'XML';
+$locales['CHprimXMLConfig-check_similar-court'] = 'Vérification patients similaires';
+$locales['CHprimXMLConfig-check_similar-desc'] = 'Vérification si le patient chargé par son ID est différent (nom/prénom) par rapport à celui du message H\'XML';
 $locales['CHprimXMLConfig-display_errors-court'] = 'Afficher les erreurs';
 $locales['CHprimXMLConfig-display_errors-desc'] = 'Afficher les erreurs XML dans les logs';
 $locales['CHprimXMLConfig-encoding'] = 'Encodage';
@@ -594,4 +596,3 @@ $locales['mod-hprimxml-tab-vw_idx_dest_hprim'] = 'Destinataires H\'XML';
 $locales['mod-hprimxml-tab-vw_idx_echange_hprim'] = 'Echanges H\'XML';
 $locales['module-hprimxml-court'] = 'HPRIM XML';
 $locales['module-hprimxml-long'] = 'HPRIM XML';
-?>

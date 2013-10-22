@@ -113,14 +113,9 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         if ($idCiblePatient) {
           if ($newPatient->load($idCiblePatient)) {
             // Le patient trouvé est-il différent ?
-            /*if (!$this->checkSimilarPatient($newPatient, $data['patient'])) {
-              $commentaire = "Le nom et/ou le prénom sont très différents."; 
-              $msgAcq = $dom_acq->generateAcquittements("erreur", "E016", $commentaire);
-              $doc_valid = $dom_acq->schemaValidate();
-              $echg_hprim->setObjectIdClass("CPatient", $newPatient->_id);
-              $echg_hprim->setAckError($doc_valid, $msgAcq, "erreur");
-              return $msgAcq;
-            }*/
+            if ($commentaire = $this->checkSimilarPatient($newPatient, $data['patient'])) {
+              return $echg_hprim->setAckError($dom_acq, "E016", $commentaire, $newPatient);
+            }
         
             // Mapping du patient
             $newPatient = $this->mappingPatient($data['patient'], $newPatient);
@@ -178,14 +173,9 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       // idSource connu
       else {
         $newPatient->load($IPP->object_id);
-        /*if (!$this->checkSimilarPatient($newPatient, $data['patient'])) {
-          $commentaire = "Le nom et/ou le prénom sont très différents."; 
-          $msgAcq = $dom_acq->generateAcquittements("erreur", "E016", $commentaire);
-          $doc_valid = $dom_acq->schemaValidate();
-          $echg_hprim->setObjectIdClass("CPatient", $newPatient->_id);
-          $echg_hprim->setAckError($doc_valid, $msgAcq, "erreur");
-          return $msgAcq;
-        }*/
+        if ($commentaire = $this->checkSimilarPatient($newPatient, $data['patient'])) {
+          return $echg_hprim->setAckError($dom_acq, "E016", $commentaire, $newPatient);
+        }
             
         // Mapping du patient
         $newPatient = $this->mappingPatient($data['patient'], $newPatient);

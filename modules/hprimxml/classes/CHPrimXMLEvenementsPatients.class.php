@@ -270,9 +270,15 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
    * @param CPatient $mbPatient  Patient
    * @param DOMNode  $xmlPatient Patient provenant des données XML
    *
-   * @return bool
+   * @return string
    */
   function checkSimilarPatient(CPatient $mbPatient, $xmlPatient) {
+    $sender = $this->_ref_echange_hprim->_ref_sender;
+
+    if (isset($sender->_configs) && array_key_exists("check_similar", $sender->_configs) && !$sender->_configs["check_similar"]) {
+      return null;
+    }
+
     $xpath = new CHPrimXPath($this);
         
     // Création de l'element personnePhysique
@@ -281,8 +287,14 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $nom     = $xpath->queryTextNode("hprim:nomUsuel", $personnePhysique);
     $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $personnePhysique);
     $prenom  = CMbArray::get($prenoms, 0);
-    
-    return $mbPatient->checkSimilar($nom, $prenom);
+
+    $commentaire = null;
+
+    if (!$mbPatient->checkSimilar($nom, $prenom)) {
+      $commentaire = "Le nom ($nom/$mbPatient->nom) et/ou le prénom ($prenom/$mbPatient->prenom) sont très différents.";
+    }
+
+    return $commentaire;
   }
 
   /**
