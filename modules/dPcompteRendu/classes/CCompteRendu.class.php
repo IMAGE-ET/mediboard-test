@@ -947,6 +947,10 @@ class CCompteRendu extends CDocumentItem {
       }
     }
 
+    if (!count($classes)) {
+      $classes["CMbObject"] = CAppUI::tr("CMbObject");
+    }
+
     return self::$templated_classes = $classes;
   }
 

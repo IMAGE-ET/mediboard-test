@@ -173,13 +173,15 @@ function setTemplateName(object_class, name, type) {
 Main.add(function () {
   loadObjectClass('{{$compte_rendu->object_class}}');
   loadCategory('{{$compte_rendu->file_category_id}}');
-  Thumb.instance = CKEDITOR.instances.htmlarea;
 
-  {{if $compte_rendu->_id && $droit && $pdf_thumbnails && $pdf_and_thumbs}}
-    Thumb.modele_id = '{{$compte_rendu->_id}}';
-    Thumb.user_id = '{{$user_id}}';
-    Thumb.mode = "modele";
-    PageFormat.init(getForm("editFrm"));
+  {{if $compte_rendu->_id}}
+    Thumb.instance = CKEDITOR.instances.htmlarea;
+    {{if $droit && $pdf_thumbnails && $pdf_and_thumbs}}
+      Thumb.modele_id = '{{$compte_rendu->_id}}';
+      Thumb.user_id = '{{$user_id}}';
+      Thumb.mode = "modele";
+      PageFormat.init(getForm("editFrm"));
+    {{/if}}
   {{/if}}
 });
 
