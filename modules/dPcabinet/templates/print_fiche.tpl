@@ -303,8 +303,10 @@
                 <i>{{$curr_trmt->traitement}}</i>
               </li>
               {{foreachelse}}
-                {{if !($dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_ref_prescription_lines|@count)}}
-                <li>Pas de traitements</li>
+                {{if $dossier_medical->absence_traitement}}
+                  <li>{{tr}}CTraitement.absence{{/tr}}</li>
+                {{elseif !($dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_ref_prescription_lines|@count)}}
+                  <li>{{tr}}CTraitement.none{{/tr}}</li>
                 {{/if}}
               {{/foreach}}
             </ul>

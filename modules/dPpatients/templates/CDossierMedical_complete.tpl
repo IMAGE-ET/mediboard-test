@@ -91,6 +91,10 @@
         {{/if}}
         
       </td>
+    {{elseif $object->absence_traitement}}
+      <td class="top">
+        <div class="empty">{{tr}}CTraitement.absence{{/tr}}</div>
+      </td>
     {{else}}
       <td class="top">
         <div class="empty">{{tr}}CTraitement.none{{/tr}}</div>
