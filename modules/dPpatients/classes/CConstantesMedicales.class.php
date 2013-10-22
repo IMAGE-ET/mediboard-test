@@ -1008,6 +1008,7 @@ class CConstantesMedicales extends CMbObject {
           $_empty = false;
 
           $_value = $this->$_formfield;
+          $_value = CMbFieldSpec::checkNumeric($_value, false);
 
           if ($conv != 1.0) {
             $_value = round($_value / $conv, self::CONV_ROUND_UP);
