@@ -12,7 +12,9 @@
  */
 
 CCanDo::checkEdit();
-global $locales;
+
+$locales = CAppUI::flattenCachedLocales(CAppUI::$lang);
+
 $in_use_locales = $locales;
 
 //load old locales
@@ -20,7 +22,7 @@ $locale = CAppUI::pref("LOCALE", "fr");
 foreach (CAppUI::getLocaleFilesPaths($locale) as $_path) {
   include_once $_path;
 }
-$locales = array_filter($locales, "stringNotEmpty");
+$locales = CMbString::filterEmpty($locales);
 foreach ($locales as &$_locale) {
   $_locale = CMbString::unslash($_locale);
 }
@@ -28,8 +30,6 @@ foreach ($locales as &$_locale) {
 //get the list of translations made
 $translation = new CTranslationOverwrite();
 $translations_bdd = $translation->loadList();
-
-
 
 /** @var CTranslationOverwrite[] $translations_bdd */
 foreach ($translations_bdd as $_translation) {

@@ -11,20 +11,20 @@
 
 CCanDo::checkRead();
 
-global $locales;
-
 $keyword = CValue::get("source", "%%");
 //@TODO : utiliser regex
 $regex = CValue::get("regex", 0);
 
 $resp = array();
 
+$locales = CAppUI::flattenCachedLocales(CAppUI::$lang);
+
 foreach ($locales as $key => $val) {
 
   if ($regex) {
     $keyword = "/^$keyword/";
-    if (preg_match($keyword, $key)) {
 
+    if (preg_match($keyword, $key)) {
       $resp[$key]["key"] = $key;
       $resp[$key]["val"] = $val;
     }
@@ -43,7 +43,6 @@ foreach ($locales as $key => $val) {
       $resp[$key]["val"] = str_replace($keyword, '<span style="text-decoration: underline;">'.$keyword.'</span>', $val);
     }
   }
-
 }
 
 //smarty

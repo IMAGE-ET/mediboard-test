@@ -9,15 +9,9 @@
  * @version    $Revision$
  */
 
-global $locales;
-
 $types = array();
 foreach (CSejour::$types as $_type) {
   $types[$_type] = "str default|$_type";
-
-  $tr = CAppUI::tr("CSejour.type.$_type");
-  $locales["config-dPsante400-CIncrementer-type_sejour-$_type"]      = $tr;
-  $locales["config-dPsante400-CIncrementer-type_sejour-$_type-desc"] = $tr;
 }
 
 CConfiguration::register(

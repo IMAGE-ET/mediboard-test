@@ -9,9 +9,8 @@
  * @version    $Revision$
  */
 
-$dir = dirname(__FILE__);
-require_once "$dir/CMbPath.class.php";
-require_once "$dir/shm/ISharedMemory.class.php";
+require_once __DIR__."/CMbPath.class.php";
+require_once __DIR__."/shm/ISharedMemory.class.php";
 
 /**
  * Shared memory container
@@ -56,17 +55,15 @@ abstract class SHM {
       $engine_name = "disk";
     }
 
-    $dir = dirname(__FILE__);
-
     $class_name = self::$availableEngines[$engine_name];
-    include_once "$dir/shm/$class_name.class.php";
+    include_once __DIR__."/shm/$class_name.class.php";
 
     /** @var ISharedMemory $engine */
     $engine = new $class_name;
 
     if (!$engine->init()) {
       $class_name = self::$availableEngines["disk"];
-      include_once "$dir/shm/$class_name.class.php";
+      include_once __DIR__."/shm/$class_name.class.php";
 
       $engine = new $class_name;
       $engine->init();

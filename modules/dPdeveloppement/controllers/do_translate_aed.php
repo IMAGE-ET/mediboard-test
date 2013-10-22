@@ -52,7 +52,7 @@ else {
 
 if (!is_file($translateModule->targetPath)) {
   CMbPath::forceDir(dirname($translateModule->targetPath));
-  file_put_contents($translateModule->targetPath, '<?php $locales["module-'.$module_name.'-court"] = "'.$module_name.'"; ?>');
+  file_put_contents($translateModule->targetPath, '<?php $locales["module-'.$module_name.'-court"] = "'.$module_name.'";');
 }
 
 $translateModule->load();
@@ -70,7 +70,7 @@ uksort($translateModule->values, "strnatcmp");
 
 $error = $translateModule->update($translateModule->values, false);
 
-SHM::rem("locales-$language");
+SHM::remKeys("locales-$language-*");
 
 if ($error instanceof PEAR_Error) {
   CAppUI::setMsg("Error while saving locales file : {$error->message}", UI_MSG_ERROR);

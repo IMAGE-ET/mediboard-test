@@ -122,18 +122,6 @@ function mbPortalURL($module, $action = null) {
 }
 
 /**
- * Check whether a string is NOT empty, to be used as a filter callback
- *
- * @param string $string String to check
- *
- * @return bool
- * @deprecated cf. CMbArray
- */
-function stringNotEmpty($string){
-  return $string !== "";
-}
-
-/**
  * Set memory limit alternative with a minimal value approach
  * Shoud *always* be used
  *

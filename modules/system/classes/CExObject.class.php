@@ -170,7 +170,7 @@ class CExObject extends CMbMetaObject {
     
     $lang = CAppUI::pref("LOCALE");
 
-    $_locales = array();
+    $_all_locales = array();
 
     $request = new CRequest();
     $request->addTable("ex_class_field_translation");
@@ -234,17 +234,23 @@ class CExObject extends CMbMetaObject {
     }
 
     foreach ($list as $_item) {
-      $key = "CExObject_{$_item['ex_class_id']}-{$_item['name']}";
+      $_locales = array();
+
+      $key = "-{$_item['name']}";
       $_locales[$key]         = $_item["std"];
       $_locales["$key-desc"]  = $_item["desc"];
       $_locales["$key-court"] = $_item["court"];
 
+      $_ex_class_id = $_item['ex_class_id'];
+      $_prefix = "CExObject_$_ex_class_id";
+
       $prop = $_item["prop"];
       if (strpos($prop, "enum") === false && strpos($prop, "set") === false) {
+        CAppUI::addLocales($_prefix, $_locales);
         continue;
       }
 
-      $key = "CExObject_{$_item['ex_class_id']}.{$_item['name']}";
+      $key = ".{$_item['name']}";
       $_locales["$key."] = CAppUI::tr("Undefined");
 
       $concept_id = $_item["concept_id"];
@@ -273,10 +279,17 @@ class CExObject extends CMbMetaObject {
       foreach ($enum_list as $_value => $_locale) {
         $_locales["$key.$_value"] = $_locale;
       }
+
+      if (!isset($_all_locales[$_prefix])) {
+        $_all_locales[$_prefix] = array();
+      }
+
+      $_all_locales[$_prefix] = array_merge($_all_locales[$_prefix], $_locales);
     }
 
-    global $locales;
-    $locales = array_merge($locales, $_locales);
+    foreach ($_all_locales as $_prefix => $_locales) {
+      CAppUI::addLocales($_prefix, $_locales);
+    }
     
     self::$_locales_ready = true;
   }

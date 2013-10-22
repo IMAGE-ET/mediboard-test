@@ -25,7 +25,7 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
     }
   }
   
-  $locales = array_filter($locales, "stringNotEmpty");
+  $locales = CMbString::filterEmpty($locales);
   foreach ($locales as &$_locale) {
     $_locale = CMbString::unslash($_locale);
   }
@@ -44,19 +44,20 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
     continue;
   }
 
-  if (null == $sharedLocale = SHM::get("locales-$localeName")) {
+  if (null == SHM::get("locales-$localeName-__prefixes__")) {
     CAppUI::stepAjax("Locales-shm-none", UI_MSG_OK, $localeName);
     continue;
   }
-
 
   // Load overwritten locales if the table exists
   $overwrite = new CTranslationOverwrite();
   if ($overwrite->isInstalled()) {
     $locales = $overwrite->transformLocales($locales);
   }
-  
-  if ($sharedLocale != $locales) {
+
+  $cached_locales = CAppUI::flattenCachedLocales($localeName);
+
+  if ($cached_locales != $locales) {
     CAppUI::stepAjax("Locales-shm-ko", UI_MSG_WARNING, $localeName);
     continue;
   }

@@ -46,20 +46,19 @@ class CExClassFieldEnumTranslation extends CMbObject {
   function getKey(CExClassField $base = null){
     $field = $base ? $base : $this->loadRefExClassField();
     $class = $base ? $base->loadRefExClass() : $field->loadRefExClass();
-    $key = "CExObject";
+    $prefix = "CExObject";
 
     if ($class->_id) {
-      $key .= "_{$class->_id}";
+      $prefix .= "_{$class->_id}";
     }
 
-    return "$key.{$field->name}.{$this->key}";
+    return array($prefix, ".{$field->name}.{$this->key}");
   }
 
   function updateLocales(CExClassField $base = null){
-    $key = $this->getKey($base);
+    list($prefix, $key) = $this->getKey($base);
 
-    global $locales;
-    $locales[$key] = $this->value;
+    CAppUI::addLocale($prefix, $key, $this->value);
     $this->_view = $this->value;
   }
 

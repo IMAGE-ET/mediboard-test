@@ -143,8 +143,7 @@ abstract class CJSLoader extends CHTMLResourceLoader {
     $path = self::getLocaleFilePath($language, $label);
 
     if ($fp = fopen($path, 'w')) {
-      // The callback will filter on empty strings (without it, "0" will be removed too).
-      $locales = array_filter($locales, "stringNotEmpty");
+      $locales = CMbString::filterEmpty($locales);
       // TODO: change the invalid keys (with accents) of the locales to simplify this
       $keys   = array_map('utf8_encode', array_keys($locales));
       $values = array_map('utf8_encode', array_values($locales));

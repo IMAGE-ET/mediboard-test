@@ -657,6 +657,22 @@ abstract class CMbString {
   }
 
   /**
+   * Filter empty strings
+   *
+   * @param array $strings An array of strings
+   *
+   * @return array Filtered array, without empty strings
+   */
+  static function filterEmpty(array $strings) {
+    return array_filter(
+      $strings,
+      function ($string) {
+        return $string !== "";
+      }
+    );
+  }
+
+  /**
    * HTML cleaning method
    *
    * @param string $html HTML to purify

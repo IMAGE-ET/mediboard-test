@@ -18,12 +18,12 @@ foreach (glob("../locales/*", GLOB_ONLYDIR) as $localeDir) {
   $localeName = basename($localeDir);
   $sharedName = "locales-$localeName";
   
-  if (!SHM::get($sharedName)) {
+  if (!SHM::get("$sharedName-__prefixes__")) {
     echo "Table absente en mémoire pour langage '$localeName'<br />";
     continue;
   }
   
-  if (!SHM::rem($sharedName)) {
+  if (!SHM::remKeys("$sharedName-*")) {
     echo "Impossible de supprimer la table pour le langage '$localeName'<br />";
     continue;
   }

@@ -54,7 +54,9 @@ class CTranslationOverwrite extends CMbObject {
    */
   function loadOldTranslation($locales = array()) {
     if (!count($locales)) {
+      $locales = array();
       $locale = CAppUI::pref("LOCALE", "fr");
+
       foreach (CAppUI::getLocaleFilesPaths($locale) as $_path) {
         include_once $_path;
       }
@@ -69,9 +71,13 @@ class CTranslationOverwrite extends CMbObject {
    * @return bool
    */
   function checkInCache() {
-    global $locales;
+    static $locales;
 
-    return $this->_in_cache = ($locales[$this->source] != $this->translation);
+    if (!$locales) {
+      $locales = CAppUI::flattenCachedLocales(CAppUI::$lang);
+    }
+
+    return $this->_in_cache = ($locales[$this->source] == $this->translation);
   }
 
   /**
@@ -89,10 +95,12 @@ class CTranslationOverwrite extends CMbObject {
    * @return string
    */
   function check() {
-    global $locales;
+    $locales = CAppUI::flattenCachedLocales(CAppUI::$lang);
+
     if (!isset($locales[$this->source])) {
       return "CTranslationOverwrite-failed-locale-doesnot-exist";
     }
+
     return parent::check();
   }
 

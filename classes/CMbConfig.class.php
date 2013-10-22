@@ -12,10 +12,8 @@
 // Throws some E_STRICT errors
 @require_once "Config.php";
 
-$path = dirname(__FILE__);
-
 $GLOBALS['CONFIG_TYPES']['mbconfig'] = array(
-  "$path/CMbConfig_Container_PHPArray.class.php",
+  __DIR__."/CMbConfig_Container_PHPArray.class.php",
   'CMbConfig_Container_PHPArray',
 );
 
@@ -156,10 +154,8 @@ class CMbConfig {
     }
 
     // Réinclusion du config_overload
-    $path = dirname(__FILE__);
-    if (is_file("$path/config_overload.php")) {
-      include "$path/config_overload.php";
+    if (is_file(__DIR__."/config_overload.php")) {
+      include __DIR__."/config_overload.php";
     }
-
   }
 }

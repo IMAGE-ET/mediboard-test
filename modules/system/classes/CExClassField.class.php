@@ -705,20 +705,20 @@ class CExClassField extends CExListItemsOwner {
 
     $ex_class = $this->loadRefExClass();
 
-    $key = $ex_class->getExClassName().".$this->name";
+    $key = ".$this->name";
+    $_class_name = $ex_class->getExClassName();
 
-    global $locales;
-    $locales["{$key}."] = CAppUI::tr("Undefined");
+    CAppUI::addLocale($_class_name, "$key.", CAppUI::tr("Undefined"));
 
     foreach ($items as $_id => $_item) {
-      $locales["$key.$_id"] = $_item;
+      CAppUI::addLocale($_class_name, "$key.$_id", $_item);
     }
 
     $trans = null;
 
     $local_key = "$key-$this->name";
-    if (isset($locales[$local_key])) {
-      $this->_locale = $locales[$local_key];
+    if (isset(CAppUI::$locales[$_class_name][$local_key])) {
+      $this->_locale = CAppUI::$locales[$_class_name][$local_key];
     }
     else {
       $trans = $trans ? $trans : $this->loadRefTranslation();
@@ -726,8 +726,8 @@ class CExClassField extends CExListItemsOwner {
     }
 
     $local_key = "$key-$this->name-desc";
-    if (isset($locales[$local_key])) {
-      $this->_locale_desc = $locales[$local_key];
+    if (isset(CAppUI::$locales[$_class_name][$local_key])) {
+      $this->_locale_desc = CAppUI::$locales[$_class_name][$local_key];
     }
     else {
       $trans = $trans ? $trans : $this->loadRefTranslation();
@@ -735,8 +735,8 @@ class CExClassField extends CExListItemsOwner {
     }
 
     $local_key = "$key-$this->name-court";
-    if (isset($locales[$local_key])) {
-      $this->_locale_court = $locales[$local_key];
+    if (isset(CAppUI::$locales[$_class_name][$local_key])) {
+      $this->_locale_court = CAppUI::$locales[$_class_name][$local_key];
     }
     else {
       $trans = $trans ? $trans : $this->loadRefTranslation();

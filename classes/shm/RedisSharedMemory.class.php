@@ -23,7 +23,7 @@ class RedisSharedMemory implements ISharedMemory {
    */
   function init() {
     // Don't use autloader
-    include dirname(__FILE__)."/../../lib/yampee-redis/autoloader.php";
+    include __DIR__."/../../lib/yampee-redis/autoloader.php";
 
     if (class_exists('Yampee_Redis_Client')) {
       $servers = SHM::getServerAddresses();

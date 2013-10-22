@@ -12,7 +12,7 @@
 
 set_time_limit(180);
 
-$session_name = basename(dirname(dirname(dirname(__FILE__))));
+$session_name = basename(dirname(dirname(__DIR__)));
 $session_name = preg_replace("/[^a-z0-9]/i", "", $session_name)."-installer";
 
 session_name($session_name);
@@ -42,7 +42,7 @@ require_once $mbpath."classes/Chronometer.class.php";
 
 // Autoloader
 function autoloader($class_name) {
-  $dir = dirname(__FILE__)."/../classes";
+  $dir = __DIR__."/../classes";
   $file = "$dir/$class_name.class.php";
 
   if (file_exists($file)) {

@@ -10,22 +10,20 @@
  * @link     http://www.mediboard.org
  */
 
-$path = dirname(__FILE__);
-
 // Distribution configuration
-require "$path/config_dist.php";
+require __DIR__."/config_dist.php";
 
 // Local configuration
-require "$path/config.php";
+require __DIR__."/config.php";
 
 // Modules configuration 
 // !!!! doesn't work when the code is here and not in config_dist.php, don't know why
-//$config_files = glob("$path/../modules/*/config.php");
+//$config_files = glob(__DIR__."/../modules/*/config.php");
 //foreach ($config_files as $file) {
 //  require $file;
 //}
 
 // Overload configuration (for master/slave)
-if (is_file("$path/config_overload.php")) {
-  include "$path/config_overload.php";
+if (is_file(__DIR__."/config_overload.php")) {
+  include __DIR__."/config_overload.php";
 }

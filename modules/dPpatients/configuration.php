@@ -9,18 +9,8 @@
  * @version    $Revision$
  */
 
-global $locales;
-
-$list_all = CConstantesMedicales::$list_constantes;
-
-foreach ($list_all as $name => $params) {
-  $tr = CAppUI::tr("CConstantesMedicales-$name");
-  $locales["config-dPpatients-CConstantesMedicales-selection-$name"]         = $tr;
-  $locales["config-dPpatients-CConstantesMedicales-selection_cabinet-$name"] = $tr;
-}
-
 $list = array();
-foreach ($list_all as $_const => $_params) {
+foreach (CConstantesMedicales::$list_constantes as $_const => $_params) {
   if (!isset($_params["cumul_for"])) {
     $list[] = $_const;
   }

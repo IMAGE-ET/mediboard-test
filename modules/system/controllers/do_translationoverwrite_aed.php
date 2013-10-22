@@ -16,4 +16,4 @@ $language = CValue::post("language", "fr");
 $do = new CDoObjectAddEdit("CTranslationOverwrite", "translation_id");
 $do->doIt();
 
-SHM::rem("locales-$language");
+SHM::remKeys("locales-$language-*");

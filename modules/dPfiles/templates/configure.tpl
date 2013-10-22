@@ -7,7 +7,7 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
   <li><a href="#CFilesCategory" >{{tr}}CFilesCategory{{/tr}}</a></li>
   <li><a href="#CDocumentSender">{{tr}}CDocumentSender{{/tr}}</a></li>
   <li><a href="#ooo">OpenOffice.org</a></li>
-  <li><a href="#test">{{tr}}Cfile-test_operations{{/tr}}</a></li>
+  <li><a href="#test">{{tr}}CFile-test_operations{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />

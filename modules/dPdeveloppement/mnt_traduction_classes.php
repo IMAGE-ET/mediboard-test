@@ -54,7 +54,7 @@ else {
 $translateModule = new CMbConfig;
 $translateModule->sourcePath = null;
 $contenu_file = array();
-foreach($localesDirs as $locale => $path){
+foreach ($localesDirs as $locale => $path) {
   $translateModule->options = array("name" => "locales");
   $translateModule->targetPath = $path;
   $translateModule->load();
@@ -64,8 +64,8 @@ foreach($localesDirs as $locale => $path){
 // Réattribution des clés et organisation
 global $trans;
 $trans = array();
-foreach($localesDirs as $locale => $path){
-  foreach($contenu_file[$locale] as $k=>$v){
+foreach ($localesDirs as $locale => $path) {
+  foreach ($contenu_file[$locale] as $k=>$v) {
     $trans[ (is_int($k) ? $v : $k) ][$locale] = $v;
   }
 }
@@ -151,7 +151,7 @@ foreach ($classes as $class) {
     if ($spec instanceof CRefSpec && $prop[0] != "_") {
       if ($spec->meta && $object->_specs[$spec->meta] instanceof CEnumSpec) {
         $classes = $object->_specs[$spec->meta]->_list;
-        foreach($classes as $fwdClass) {
+        foreach ($classes as $fwdClass) {
           $fwdObject = new $fwdClass;
           
           // Find corresponding back name
@@ -214,11 +214,12 @@ if ($module != "common") {
   addLocale("Module", "Name", "module-$module-court");
   addLocale("Module", "Name", "module-$module-long");
   
-  foreach($files as $_file) {
+  foreach ($files as $_file) {
     $_tab = substr($_file, 0, -4);
     
-    if (in_array($_tab, array("setup", "index", "config", "preferences"))/* ||
-        preg_match("/^httpreq|^ajax/", $_tab)*/) continue;
+    if (in_array($_tab, array("setup", "index", "config", "preferences"))) {
+      continue;
+    }
     
     addLocale("Module", "Tabs", "mod-$module-tab-$_tab");
   }
@@ -244,4 +245,3 @@ $smarty->assign("other_locales", $all_locales);
 $smarty->assign("empty_locales", $empty_locales);
 
 $smarty->display("mnt_traduction_classes.tpl");
-?>

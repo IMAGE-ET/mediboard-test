@@ -179,7 +179,7 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
    * @return void
    */
   function render() {
-    global $root_dir;
+    $root_dir = CAppUI::conf("root_dir");
 
     $arch = CAppUI::conf("dPcompteRendu CCompteRendu arch_wkhtmltopdf");
     if ($arch != "i386" && $arch != "amd64") {

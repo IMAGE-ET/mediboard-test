@@ -27,24 +27,57 @@ define("UI_MSG_ERROR"  , 4);
  * @todo Is being split into CApp et CUI classes
  */
 class CAppUI {
-  /**
-   * @var CAppUI
-   */
+  /** @var CAppUI */
   static $instance;
 
-  /**
-   * @var CMediusers
-   */
+  /** @var CMediusers Connected user */
   static $user;
 
-  public $user_id = 0;
+  /** @var bool Mobile flag => use mobile folder */
+  static $mobile = false;
 
+  /** @var bool Dialog mode */
+  static $dialog;
+
+  /** @var bool Do login  */
+  static $do_login;
+
+  /** @var int Global unique id */
+  static $unique_id = 0;
+
+  /** @var int Token expiration ISO datetime */
+  static $token_expiration;
+
+  /* --- <Localization> --- */
+  /** @var bool Localization skipped if false */
+  static $localize = true;
+
+  /** @var string Current language */
+  static $lang;
+
+  /** @var string Language alert mask */
+  static $locale_mask = "";
+
+  /** @var string[] List of unlocalized strings */
+  static $unlocalized  = array();
+
+  /** @var string Mask of strings to ignore for the localization warning */
+  static $localize_ignore = '/(^CExObject|^CMbObject\.dummy)/';
+
+  /** @var array[] Array of locales, groupes by prefix */
+  static $locales = array();
+
+  /** @var bool[] List of flags indicating loaded locales groups */
+  static protected $locales_loaded = array();
+  /* --- </Localization> --- */
+
+  /* -- SESSION VARS BELOW -- */
+  public $user_id = 0;
   public $_is_intranet;
   public $ip;
   public $proxy;
 
   // DEPRECATED Use CAppUI::$user instead
-
   // @todo Remove all calls to these variables
   public $user_first_name;
   public $user_last_name;
@@ -58,45 +91,26 @@ class CAppUI {
   // @todo Handle the CMediusers::get() and CUser::get() cases
   /** @var CMediusers */
   public $_ref_user;
-
   // END DEPRECATED
 
-  // Weak password
+  /** @var bool Weak password */
   public $weak_password;
 
-  // Language alert mask
-  static $locale_mask = "";
-
-  // Language alert mask
-  static $unlocalized  = array();
-
-  //mobile flag => use mobile folder
-  static $mobile = false;
-  //device used
+  /** @var bool Touch device */
   public $touch_device = false;
-
-
-  static $token_expiration;
 
   // Global collections
   public $messages   = array();
   public $user_prefs = array();
   public $update_hash;
 
-  /**
-   * @var string Default page for a redirect call
-   */
+  /** @var string Default page for a redirect call */
   public $defaultRedirect = "";
 
-  /**
-   * @var string Session name
-   */
+  /** @var string Session name */
   public $session_name = "";
 
-  static $dialog;
-  static $do_login;
-
-  /** @var  string Authentication method used */
+  /** @var string Authentication method used */
   public $auth_method;
 
   /**
@@ -700,6 +714,7 @@ class CAppUI {
       return false;
     }
 
+    /** @var CPasswordSpec $pwdSpecs */
     $pwdSpecs = $user->_specs['_user_password'];
 
     // minLength
@@ -845,6 +860,72 @@ class CAppUI {
   }
 
   /**
+   * Load locales from cache or build the cache
+   *
+   * @return void
+   */
+  public static function loadLocales() {
+    $lang = CAppUI::pref("LOCALE", "fr");
+
+    self::$lang = $lang;
+
+    $shared_name = "locales-$lang";
+
+    $locales_prefixes = SHM::get("$shared_name-__prefixes__");
+
+    // Load from shared memory if possible
+    if ($locales_prefixes) {
+      return;
+    }
+
+    $locales = array();
+
+    foreach (self::getLocaleFilesPaths($lang) as $_path) {
+      include_once $_path;
+    }
+
+    $locales = CMbString::filterEmpty($locales);
+    foreach ($locales as &$_locale) {
+      $_locale = CMbString::unslash($_locale);
+    }
+    unset($_locale);
+
+    // Load overwritten locales if the table exists
+    $overwrite = new CTranslationOverwrite();
+    if ($overwrite->isInstalled()) {
+      $locales = $overwrite->transformLocales($locales, $lang);
+    }
+
+    // Prefix = everything before "." and "-"
+    $by_prefix = array();
+    $hashes = array();
+
+    foreach ($locales as $_key => $_value) {
+      /** @var string $_prefix */
+      /** @var string $_rest */
+      /** @var string $_prefix_raw */
+
+      list($_prefix, $_rest, $_prefix_raw) = self::splitLocale($_key);
+
+      if (!isset($by_prefix[$_prefix])) {
+        $hashes[$_prefix] = $_prefix_raw;
+        $by_prefix[$_prefix] = array();
+      }
+
+      $by_prefix[$_prefix][$_rest] = $_value;
+    }
+
+    SHM::put("$shared_name-__prefixes__", $hashes);
+
+    foreach ($by_prefix as $_prefix => $_locales) {
+      self::$locales[$_prefix] = $_locales;
+      self::$locales_loaded[$_prefix] = true;
+
+      SHM::put("$shared_name-$_prefix", $_locales);
+    }
+  }
+
+  /**
    * Returns the list of $locale files
    *
    * @param string $locale The locale name of the paths
@@ -852,11 +933,15 @@ class CAppUI {
    * @return array The paths
    */
   static function getLocaleFilesPaths($locale) {
-    global $root_dir;
+    $root_dir = CAppUI::conf("root_dir");
+
+    $overload = glob("$root_dir/modules/*/locales/$locale.overload.php");
+    sort($overload);
 
     $paths = array_merge(
       glob("$root_dir/locales/$locale/*.php"),
-      glob("$root_dir/modules/*/locales/$locale.php")
+      glob("$root_dir/modules/*/locales/$locale.php"),
+      $overload
     );
 
     return $paths;
@@ -870,21 +955,64 @@ class CAppUI {
    * @return boolean if translated statement exists
    */
   static function isTranslated($str) {
-    global $locales;
-    return array_key_exists($str, $locales);
+    return CAppUI::tr($str) == $str;
   }
 
   /**
-   * Localization skipped if false
-   * @var boolean
+   * Get locale prefix CRC32 hash
+   *
+   * @param string $prefix_raw Prefix, raw value
+   *
+   * @return string
    */
-  static $localize = true;
+  static function getLocalePrefixHash($prefix_raw) {
+    // Cache of [prefix => crc32(prefix)]
+    static $prefixes = array();
+
+    if ($prefix_raw === "__common__") {
+      return $prefix_raw;
+    }
+
+    if (isset($prefixes[$prefix_raw])) {
+      return $prefixes[$prefix_raw];
+    }
+
+    $prefix = hash("crc32", $prefix_raw); // Faster than crc32() and md5()
+    $prefixes[$prefix_raw] = $prefix;
+
+    return $prefix;
+  }
 
   /**
-   * Mask of strings to ignore for the localization warning
-   * @var string
+   * Split a locale key into prefix + rest
+   *
+   * @param string $str The locale key to split
+   *
+   * @return array
    */
-  static $localize_ignore = '/(^CExObject|^CMbObject\.dummy)/';
+  static function splitLocale($str) {
+    $positions = array(
+      strpos($str, "-"),
+      strpos($str, "."),
+    );
+    $positions = array_filter($positions);
+
+    // If a separator is present, it's a prefixed locale
+    if (count($positions) && ($min_pos = min($positions))) {
+      $_prefix_raw = substr($str, 0, $min_pos);
+      $_rest       = substr($str, $min_pos);
+    }
+
+    // else a common locales
+    else {
+      $_prefix_raw = "__common__";
+      $_rest       = $str;
+    }
+
+    $_prefix = self::getLocalePrefixHash($_prefix_raw);
+
+    return array($_prefix, $_rest, $_prefix_raw);
+  }
 
   /**
    * Localize given statement
@@ -895,18 +1023,44 @@ class CAppUI {
    * @return string translated statement
    */
   static function tr($str, $args = null) {
-    global $locales;
-
-    $str = trim($str);
     if (empty($str)) {
       return "";
     }
 
+    $str = trim($str);
+
     // Defined and not empty
-    if (isset($locales) && self::$localize) {
-      if (isset($locales[$str]) && $locales[$str] !== "") {
-        $str = $locales[$str];
+    if (self::$localize) {
+      list($_prefix, $_rest) = CAppUI::splitLocale($str);
+
+      $_lang_prefix = self::$lang.$_prefix;
+
+      // Not in self::$locales cache
+      if (empty(self::$locales_loaded[$_lang_prefix])) {
+        $shared_name = "locales-".self::$lang."-".$_prefix;
+
+        $_loc = SHM::get($shared_name);
+
+        if ($_loc !== false) {
+          if (empty(self::$locales[$_prefix])) {
+            self::$locales[$_prefix] = $_loc;
+          }
+          else {
+            self::$locales[$_prefix] = array_merge(self::$locales[$_prefix], $_loc);
+          }
+        }
+
+        self::$locales_loaded[$_lang_prefix] = true;
       }
+
+      // dereferecing makes the systme a lots slower ! :(
+      //$by_prefix = array_key_exists($_prefix, self::$locales) ? self::$locales[$_prefix] : null;
+      //$by_prefix = self::$locales[$_prefix];
+
+      if (isset(self::$locales[$_prefix][$_rest]) && self::$locales[$_prefix][$_rest] !== "") {
+        $str = self::$locales[$_prefix][$_rest];
+      }
+
       // Other wise keep it in a stack...
       else {
         if (!in_array($str, self::$unlocalized) && !preg_match(self::$localize_ignore, $str)) {
@@ -930,6 +1084,73 @@ class CAppUI {
     }
 
     return nl2br($str);
+  }
+
+  /**
+   * Get a flattened version of all cached locales
+   *
+   * @param string $lang Language: fr, en
+   *
+   * @return array
+   */
+  static function flattenCachedLocales($lang) {
+    $shared_name = "locales-$lang";
+    $prefixes = SHM::get("$shared_name-__prefixes__");
+
+    $locales = array();
+    foreach ($prefixes as $_hash => $_prefix) {
+      $prefixed = SHM::get("$shared_name-$_hash");
+      if ($_prefix === "__common__") {
+        $_prefix = "";
+      }
+
+      foreach ($prefixed as $_key => $_value) {
+        $locales["$_prefix$_key"] = $_value;
+      }
+    }
+
+    return $locales;
+  }
+
+  /**
+   * Add a locale at run-time
+   *
+   * @param string $prefix Prefix
+   * @param string $rest   All after the prefix
+   * @param string $value  Locale value
+   *
+   * @return void
+   */
+  static function addLocale($prefix, $rest, $value) {
+    $prefix = self::getLocalePrefixHash($prefix);
+
+    if (empty(self::$locales[$prefix])) {
+      self::$locales[$prefix] = array(
+        $rest => $value
+      );
+    }
+    else {
+      self::$locales[$prefix][$rest] = $value;
+    }
+  }
+
+  /**
+   * Add a list of locales at run-time
+   *
+   * @param string $prefix_raw Prefix
+   * @param array  $locales    Locales
+   *
+   * @return void
+   */
+  static function addLocales($prefix_raw, array $locales) {
+    $prefix = self::getLocalePrefixHash($prefix_raw);
+
+    if (empty(self::$locales[$prefix])) {
+      self::$locales[$prefix] = $locales;
+    }
+    else {
+      self::$locales[$prefix] = array_merge(self::$locales[$prefix], $locales);
+    }
   }
 
   /**
@@ -1005,11 +1226,6 @@ class CAppUI {
   }
 
   /**
-   * @var int Global unique id
-   **/
-  static $unique_id = 0;
-
-  /**
    * Produce a unique ID in the HTTP request scope
    *
    * @return integer The ID
@@ -1025,7 +1241,7 @@ class CAppUI {
    * @param array $array   Array of array of values for the table
    * @param array $options Array of options
    *
-   * @return html HTML table
+   * @return string HTML table
    * @todo TO BE REMOVED, should not exist, build a template instead
    */
   static function htmlTable($array, $options = array()) {
@@ -1073,6 +1289,11 @@ class CAppUI {
     }
   }
 
+  /**
+   * Tell if session is expired
+   *
+   * @return bool
+   */
   static function isTokenSessionExpired(){
     if (!CAppUI::$token_expiration) {
       return false;
@@ -1081,6 +1302,11 @@ class CAppUI {
     return CMbDT::dateTime() >= CAppUI::$token_expiration;
   }
 
+  /**
+   * Get authentification method
+   *
+   * @return string
+   */
   static function getAuthMethod() {
     return self::$instance->auth_method;
   }
