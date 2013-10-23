@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -36,24 +36,35 @@ $where["sejour.sortie"]   = ">= '$date 00:00:00'";
 $where["sejour.annule"]   = "= '0'";
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
-$ljoin["affectation"] = "affectation.sejour_id = sejour.sejour_id";
-$ljoin["lit"]         = "lit.lit_id = affectation.lit_id";
-$ljoin["chambre"]     = "chambre.chambre_id = lit.chambre_id";
-$ljoin["service"]     = "service.service_id = chambre.service_id";
-
-$order = "`service`.`nom`, `chambre`.`nom`, `lit`.`nom`, `sejour`.`sortie` ASC, `sejour`.`entree` DESC";
-
 $sejour = new CSejour();
 /** @var CSejour[] $listSejours */
-$listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
+$listSejours = $sejour->loadList($where, null, null, null, $ljoin);
 
-foreach ($listSejours as &$_sejour) {
-  $_sejour->loadRefsFwd();
+CStoredObject::massLoadFwdRef($listSejours, "patient_id");
+foreach ($listSejours as $_sejour) {
+  $_sejour->loadRefPatient();
   $_sejour->loadRefsOperations();
   $_sejour->loadRefCurrAffectation($date);
   $_sejour->_ref_curr_affectation->loadRefLit();
   $_sejour->_ref_curr_affectation->_ref_lit->loadCompleteView();
 }
+
+$lits = CMbArray::pluck($listSejours, "_ref_curr_affectation", "_ref_lit");
+
+$sorter_chambre       = CMbArray::pluck($lits, "_ref_chambre", "_view");
+$sorter_service       = CMbArray::pluck($lits, "_ref_chambre", "_ref_service", "_view");
+$sorter_lit           = CMbArray::pluck($lits, "_view");
+$sorter_sejour_sortie = CMbArray::pluck($listSejours, "sortie");
+$sorter_sejour_entree = CMbArray::pluck($listSejours, "entree");
+
+array_multisort(
+  $sorter_service, SORT_ASC,
+  $sorter_chambre, SORT_ASC,
+  $sorter_lit, SORT_ASC,
+  $sorter_sejour_sortie, SORT_ASC,
+  $sorter_sejour_entree, SORT_DESC,
+  $listSejours
+);
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -62,9 +62,7 @@ $ljoin                           = array();
 $ljoin["sejour"]                 = "sejour.sejour_id = affectation.sejour_id";
 $ljoin["patients"]               = "sejour.patient_id = patients.patient_id";
 $ljoin["users"]                  = "sejour.praticien_id = users.user_id";
-$ljoin["lit"]                    = "lit.lit_id = affectation.lit_id";
-$ljoin["chambre"]                = "chambre.chambre_id = lit.chambre_id";
-$ljoin["service"]                = "service.service_id = chambre.service_id";
+$ljoin["service"]                = "service.service_id = affectation.service_id";
 $where                           = array();
 $where["service.group_id"]       = "= '$group->_id'";
 $where["affectation.service_id"] = CSQLDataSource::prepareIn($services_ids);
@@ -106,7 +104,6 @@ if ($order_col == "_praticien") {
 }
 
 if ($order_col == "_chambre") {
-  $order = "chambre.nom $order_way, patients.nom, patients.prenom";
   $orderNP = "patients.nom ASC, patients.prenom, sejour.entree";
 }
 
@@ -136,7 +133,7 @@ if ($type == "presents") {
   }
   /** @var CAffectation[] $presents */
   $presents = $affectation->loadList($where, $order, null, "affectation_id", $ljoin);
-  
+
   // Patients non placés
   if ($mode) {
     $whereNP[]  = "'$date' BETWEEN DATE(sejour.entree) AND DATE(sejour.sortie)";
@@ -173,6 +170,19 @@ if ($type == "presents") {
     
     $_present->_ref_next->loadRefLit(1)->loadCompleteView();
   }
+
+  if ($order_col == "_chambre") {
+    //$order = "chambre.nom $order_way, patients.nom, patients.prenom";
+    $sorter_lit       = CMbArray::pluck($presents, "_view");
+    $sorter_patient   = CMbArray::pluck($presents, "_ref_sejour", "_ref_patient", "_view");
+
+    array_multisort(
+      $sorter_lit, constant("SORT_$order_way"),
+      $sorter_patient, SORT_ASC,
+      $presents
+    );
+  }
+
   foreach ($presentsNP as $sejour) {
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
@@ -225,16 +235,10 @@ elseif ($type == "deplacements") {
   $whereEntrants["sejour.entree"] = "!= affectation.entree";
   $whereSortants["sejour.sortie"] = "!= affectation.sortie";
 
-  // Tenir compte des affectations "dans les couloirs"
-  // (avec service_id mais pas de lit_id)
   unset($whereEntrants["service.group_id"]);
   unset($whereSortants["service.group_id"]);
 
-  $ljoin["lit"]     = "lit.lit_id = affectation.lit_id OR affectation.lit_id IS NULL";
-  $ljoin["chambre"] = "chambre.chambre_id = lit.chambre_id OR lit.chambre_id IS NULL";
-  $ljoin["service"] = "service.service_id = chambre.service_id OR chambre.service_id IS NULL";
-
-  $whereSortants["sejour.group_id"]       = "= '$group->_id'";
+  $whereEntrants["sejour.group_id"]       = "= '$group->_id'";
   $whereSortants["sejour.group_id"]       = "= '$group->_id'";
 
   /** @var CAffectation[] $deplacements */

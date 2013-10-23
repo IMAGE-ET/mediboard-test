@@ -30,11 +30,6 @@ $where  = array();
 $ljoin  = array();
 
 $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
-$ljoin["lit"] = "affectation.lit_id = lit.lit_id";
-$ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
-$ljoin["service"] = "chambre.service_id = service.service_id";
-
-$order_by = "chambre.nom";
 
 $where["sejour.entree"] = "<= '$datetime_max'";
 $where["sejour.sortie"] = " >= '$datetime_min'";
@@ -42,10 +37,11 @@ $where["affectation.entree"] = "<= '$datetime_max'";
 $where["affectation.sortie"] = ">= '$datetime_min'";
 $where["affectation.service_id"] = " = '$service_id'";
 
-$sejours = $sejour->loadList($where, $order_by, null, "sejour.sejour_id", $ljoin);
+$sejours = $sejour->loadList($where, null, null, "sejour.sejour_id", $ljoin);
 
 CMbObject::massLoadFwdRef($sejours, "patient_id");
 CMbObject::massLoadFwdRef($sejours, "praticien_id");
+
 $dossiers_complets = array();
 
 /** @var CSejour[] $sejours */
@@ -57,7 +53,18 @@ foreach ($sejours as $sejour) {
   $sejour->loadNDA();
   $sejour->loadRefsNotes();
   $sejour->loadRefCurrAffectation($datetime_avg, $service_id)->loadRefLit();
+}
 
+$sorter_affectation = CMbArray::pluck($sejours, "_ref_curr_affectation", "_ref_lit", "_view");
+$sorter_patient     = CMbArray::pluck($sejours, "_ref_patient", "nom");
+
+array_multisort(
+  $sorter_affectation, SORT_ASC,
+  $sorter_patient, SORT_ASC,
+  $sejours
+);
+
+foreach ($sejours as $sejour) {
   $params = array(
     "sejour_id" => $sejour->_id,
     "dialog"    => 1,

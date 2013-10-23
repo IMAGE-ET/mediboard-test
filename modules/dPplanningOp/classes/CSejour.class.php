@@ -1620,9 +1620,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
     $where[] = "'$date' BETWEEN entree AND sortie";
     $affectation->loadObject($where);
-    if ($affectation->_id) {
-      $affectation->loadRefLit()->loadCompleteView();
-    }
+    $affectation->loadRefLit()->loadCompleteView();
 
     return  $this->_ref_curr_affectation = $affectation;
   }

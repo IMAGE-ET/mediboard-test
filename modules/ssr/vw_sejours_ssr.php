@@ -58,15 +58,6 @@ if ($order_col == "service_id") {
   $order = "sejour.service_id $order_way, patients.nom, patients.prenom";
 }
 
-if ($order_col == "lit_id") {
-  $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id AND '$date' BETWEEN affectation.entree AND affectation.sortie";
-  $ljoin["lit"]         = "lit.lit_id = affectation.lit_id";
-  $ljoin["chambre"]     = "lit.chambre_id = chambre.chambre_id";
-  $ljoin["service"]     = "chambre.service_id = service.service_id";
-
-  $order = "service.nom $order_way, chambre.nom $order_way, lit.nom $order_way, patients.nom, patients.prenom";
-}
-
 // Masquer les services inactifs
 if (!$show_cancelled_services) {
   $service = new CService;
@@ -159,6 +150,19 @@ foreach ($sejours as $_sejour) {
 
   // Chargement du lit
   $_sejour->loadRefCurrAffectation();
+}
+
+if ($order_col == "lit_id") {
+  $sorter_lit     = CMbArray::pluck($sejours, "_ref_curr_affectation", "_ref_lit", "_view");
+  $sorter_patient_nom = CMbArray::pluck($sejours, "_ref_patient", "nom");
+  $sorter_patient_prenom = CMbArray::pluck($sejours, "_ref_patient", "prenom");
+
+  array_multisort(
+    $sorter_lit, constant("SORT_$order_way"),
+    $sorter_patient_nom, SORT_ASC,
+    $sorter_patient_prenom, SORT_ASC,
+    $sejours
+  );
 }
 
 // Ajustements services

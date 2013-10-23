@@ -114,11 +114,6 @@ if ($do) {
   }
   else {
     $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
-    $ljoin["lit"] = "affectation.lit_id = lit.lit_id";
-    $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
-    $ljoin["service"] = "chambre.service_id = service.service_id";
-
-    $order_by = "chambre.nom";
 
     $where["affectation.entree"] = "<= '$dateTime_max'";
     $where["affectation.sortie"] = ">= '$dateTime_min'";
@@ -153,9 +148,21 @@ if ($do) {
     }
   }
 
-  if ($do_trans) {
-    $sejours_ids = array_keys($sejours);
+  $sorter_affectation = CMbArray::pluck($sejours, "_ref_last_affectation", "_view");
+  $sorter_patient     = CMbArray::pluck($sejours, "_ref_patient", "nom");
 
+  array_multisort(
+    $sorter_affectation, SORT_ASC,
+    $sorter_patient, SORT_ASC,
+    $sejours
+  );
+
+  if ($do_trans) {
+    $sejours_ids = array();
+    if (count($sejours)) {
+      $sejours = array_combine(CMbArray::pluck($sejours, "_id"), $sejours);
+      $sejours_ids = array_keys($sejours);
+    }
     $trans = new CTransmissionMedicale();
     $whereTrans = array();
     $whereTrans[] = "(degre = 'high' AND (date_max IS NULL OR date_max >= '$dateTime_min')) OR (date >= '$dateTime_min' AND date <= '$dateTime_max')";
