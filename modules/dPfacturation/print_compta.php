@@ -84,51 +84,53 @@ foreach ($reglements as $_reglement) {
   $facture->loadRefsNotes();
   $facture->loadRefsConsultation();
   $facture->loadRefsReglements();
-  
-  if (CAppUI::conf("dPccam CCodeCCAM use_cotation_ccam")) {
-    foreach ($facture->_ref_consults as $_consult) {
-      if (!array_key_exists($_consult->_id, $listConsults)) {
-        $listConsults[$_consult->_id] = $_consult;
-        $recapReglement["total"]["secteur1"] += $_consult->secteur1;
-        $recapReglement["total"]["secteur2"] += $_consult->secteur2;
-        $recapReglement["total"]["secteur3"] += $_consult->secteur3;
-        $recapReglement["total"]["du_tva"] += $_consult->du_tva;
+
+  if (count($facture->_ref_consults)) {
+    if (CAppUI::conf("dPccam CCodeCCAM use_cotation_ccam")) {
+      foreach ($facture->_ref_consults as $_consult) {
+        if (!array_key_exists($_consult->_id, $listConsults)) {
+          $listConsults[$_consult->_id] = $_consult;
+          $recapReglement["total"]["secteur1"] += $_consult->secteur1;
+          $recapReglement["total"]["secteur2"] += $_consult->secteur2;
+          $recapReglement["total"]["secteur3"] += $_consult->secteur3;
+          $recapReglement["total"]["du_tva"] += $_consult->du_tva;
+        }
       }
     }
-  }
-  else {
-    foreach ($facture->_ref_consults as $_consult) {
-      $listConsults[$_consult->_id] = $_consult;
+    else {
+      foreach ($facture->_ref_consults as $_consult) {
+        $listConsults[$_consult->_id] = $_consult;
+      }
+      $recapReglement["total"]["secteur1"] += $facture->_montant_avec_remise;
     }
-    $recapReglement["total"]["secteur1"] += $facture->_montant_avec_remise;
+    $recapReglement["total"]["nb_consultations"] += count($facture->_ref_consults);
+
+    if ($_reglement->emetteur == "patient") {
+      $recapReglement["total"]["du_patient"] += $_reglement->montant;
+      $recapReglement["total"]["nb_reglement_patient"]++;
+      $recapReglement[$_reglement->mode]["du_patient"] += $_reglement->montant;
+      $recapReglement[$_reglement->mode]["nb_reglement_patient"]++;
+    }
+
+    if ($_reglement->emetteur == "tiers") {
+      $recapReglement["total"]["du_tiers"] += $_reglement->montant;
+      $recapReglement["total"]["nb_reglement_tiers"]++;
+      $recapReglement[$_reglement->mode]["du_tiers"] += $_reglement->montant;
+      $recapReglement[$_reglement->mode]["nb_reglement_tiers"]++;
+    }
+
+    // Totaux par date
+    $date = CMbDT::date($_reglement->date);
+    if (!isset($listReglements[$date])) {
+      $listReglements[$date]["total"]["patient"]  = 0;
+      $listReglements[$date]["total"]["tiers"]    = 0;
+      $listReglements[$date]["total"]["total"]    = 0;
+    }
+
+    $listReglements[$date]["total"][$_reglement->emetteur] += $_reglement->montant;
+    $listReglements[$date]["total"]["total"]               += $_reglement->montant;
+    $listReglements[$date]["reglements"][$_reglement->_id]  = $_reglement;
   }
-  $recapReglement["total"]["nb_consultations"] += count($facture->_ref_consults);
-  
-  if ($_reglement->emetteur == "patient") {
-    $recapReglement["total"]["du_patient"] += $_reglement->montant;
-    $recapReglement["total"]["nb_reglement_patient"]++;
-    $recapReglement[$_reglement->mode]["du_patient"] += $_reglement->montant;
-    $recapReglement[$_reglement->mode]["nb_reglement_patient"]++;
-  }
-  
-  if ($_reglement->emetteur == "tiers") {
-    $recapReglement["total"]["du_tiers"] += $_reglement->montant;
-    $recapReglement["total"]["nb_reglement_tiers"]++;
-    $recapReglement[$_reglement->mode]["du_tiers"] += $_reglement->montant;
-    $recapReglement[$_reglement->mode]["nb_reglement_tiers"]++;
-  }
-  
-  // Totaux par date
-  $date = CMbDT::date($_reglement->date);
-  if (!isset($listReglements[$date])) {
-    $listReglements[$date]["total"]["patient"]  = 0;
-    $listReglements[$date]["total"]["tiers"]    = 0;
-    $listReglements[$date]["total"]["total"]    = 0;
-  }
-  
-  $listReglements[$date]["total"][$_reglement->emetteur] += $_reglement->montant;
-  $listReglements[$date]["total"]["total"]               += $_reglement->montant;
-  $listReglements[$date]["reglements"][$_reglement->_id]  = $_reglement;
 }
 
 // Création du template
