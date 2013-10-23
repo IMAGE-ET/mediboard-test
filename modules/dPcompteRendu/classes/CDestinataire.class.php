@@ -46,11 +46,11 @@ class CDestinataire {
     if (!$mbObject->_id) {
       return;
     }
-    
+
     if ($mbObject instanceof CPatient) {
       $patient = $mbObject;
       $patient->loadRefsCorrespondantsPatient();
-      
+
       // Patient
       $dest = new CDestinataire($tag);
       $dest->tag     = "patient";
@@ -60,7 +60,7 @@ class CDestinataire {
       $dest->email   = $patient->email;
       $dest->_guid_object = $patient->_guid;
       self::$destByClass[$mbObject->_class][] = $dest;
-      
+
       // Assuré
       $dest = new CDestinataire($tag);
       $dest->tag     = "assure";
@@ -70,7 +70,7 @@ class CDestinataire {
       $dest->_guid_object = $patient->_guid;
       $dest->email   = "";
       self::$destByClass[$mbObject->_class][] = $dest;
-      
+
       // Personne à prévenir et employeur
       foreach ($patient->_ref_correspondants_patient as $_corres) {
         if ($_corres->relation == "confiance") {
@@ -86,7 +86,7 @@ class CDestinataire {
         self::$destByClass[$mbObject->_class][] = $dest;
       }
     }
-    
+
     if ($mbObject instanceof CMedecin) {
       $medecin = $mbObject;
       
@@ -112,7 +112,6 @@ class CDestinataire {
    */
   static function makeAllFor(CMbObject &$mbObject) {
     self::$destByClass = array();
-    
     if ($mbObject instanceof CPatient) {
       $patient = $mbObject;
       // Garder une référence vers le patient pour l'ajout de correspondants
@@ -149,6 +148,12 @@ class CDestinataire {
       
       $sejour->loadRefPatient();
       self::makeAllFor($sejour->_ref_patient);
+
+      $chir = $sejour->loadRefPraticien();
+      $dest = new CDestinataire("Praticien");
+      $dest->nom = "Dr " . $chir->_user_last_name . " " . $chir->_user_first_name;
+      $dest->email = $chir->_user_email;
+      self::$destByClass[$sejour->_class][] = $dest;
     }
     
     if ($mbObject instanceof COperation) {

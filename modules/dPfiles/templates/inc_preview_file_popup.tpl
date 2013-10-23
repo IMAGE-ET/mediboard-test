@@ -25,7 +25,7 @@ function openWindowMail() {
   url.requestModal(700, 320);
 }
 
-window.destinataires = {{"utf8_encode"|array_map_recursive:$destinataires|@json|smarty:nodefaults}};
+window.destinataires_courrier = {{"utf8_encode"|array_map_recursive:$destinataires|@json|smarty:nodefaults}};
 
   modifTitle = function(elt) {
     $("fileName").hide();

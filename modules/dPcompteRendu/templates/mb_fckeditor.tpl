@@ -96,7 +96,8 @@ CKEDITOR.editorConfig = function(config) {
   config.removePlugins = 'elementspath,iframe,magicline,showblocks,templates,wsc{{if $templateManager->printMode}},save{{/if}}';
 
   {{if $templateManager->printMode}}
-    config.toolbar = [['Preview', 'Print', '-','Find']];
+    config.extraPlugins = 'usermessage';
+    config.toolbar = [['Preview', 'Print', '-','Find', 'usermessage']];
 
   {{elseif $templateManager->simplifyMode}}
     config.toolbar = [
@@ -162,6 +163,7 @@ CKEDITOR.editorConfig = function(config) {
             item:
             {{if $templateManager->valueMode}}
               "{{$_property.value|smarty:nodefaults|nl2br|escape:"javascript"}}",
+
             {{else}}
               {{if @$_property.options.data}}
                 "[{{$_property.field|smarty:nodefaults|escape:"javascript"}}]",
@@ -229,8 +231,6 @@ CKEDITOR.editorConfig = function(config) {
     commandLabel: "Aides &agrave; la saisie",
     options: aOptionsHelpers
     });
-
-    window.parent.destinataires_courrier = {{"utf8_encode"|array_map_recursive:$templateManager->destinataires|@json|smarty:nodefaults}};
-
   {{/if}}
+  window.parent.destinataires_courrier = {{"utf8_encode"|array_map_recursive:$templateManager->destinataires|@json|smarty:nodefaults}};
 }
