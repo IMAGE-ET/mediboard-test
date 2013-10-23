@@ -63,7 +63,7 @@
     {{/if}}
     
     {{assign var=consult_anesth value=$curr_consult->_ref_consult_anesth}}
-    <td {{if !$consult_anesth->operation_id}}rowspan="2"{{/if}} class="text" style="{{$consult_background}}">
+    <td {{if !$consult_anesth->operation_id}}rowspan="2"{{/if}} class="text" style="{{$consult_background}} word-break: break-all">
       {{if $categorie->_id}}
         <div>
           {{mb_include module=cabinet template=inc_icone_categorie_consult 
@@ -75,7 +75,7 @@
       {{mb_value object=$curr_consult field=motif}}
     </td>
     
-    <td {{if !$consult_anesth->operation_id}}rowspan="2"{{/if}} class="text" style="{{$consult_background}}">
+    <td {{if !$consult_anesth->operation_id}}rowspan="2"{{/if}} class="text" style="{{$consult_background}} word-break: break-all">
       {{mb_value object=$curr_consult field=rques}}
     </td>
     
