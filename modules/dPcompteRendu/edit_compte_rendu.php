@@ -204,7 +204,6 @@ $can_unclock   = $compte_rendu->canUnlock();
 $can_duplicate = $compte_rendu->canDuplicate();
 $is_locked     = $compte_rendu->isLocked();
 if ($is_locked) {
-  mbTrace($is_locked, "locked");
   $templateManager->printMode = true;
 }
 if(!$compte_rendu->canEdit()) {
