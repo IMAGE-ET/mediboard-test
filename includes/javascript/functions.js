@@ -1509,7 +1509,10 @@ Object.extend(Control.Modal,{
       
       /* Didacticiel management*/
       if (window.Didacticiel && Didacticiel.main_didacticiel.state) {
-        Didacticiel.main_didacticiel.closeAfterModal();
+        Didacticiel.main_didacticiel.positionTour();
+        if (Didacticiel.main_didacticiel.nbiframe > 0) {
+          Didacticiel.main_didacticiel.closeAfterModal();
+        }
       }
     }
   }
