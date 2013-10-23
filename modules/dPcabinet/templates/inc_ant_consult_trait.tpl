@@ -58,7 +58,7 @@ Main.add(function () {
           </tr>
           <tr>
             <td class="button" colspan="3">
-              <button class="tick" type="button" onclick="this.form.onsubmit();">
+              <button id="inc_ant_consult_trait_button_add_atcd" class="tick" type="button" onclick="this.form.onsubmit();">
                 {{tr}}Add{{/tr}} l'antécédent
               </button>
             </td>
@@ -68,7 +68,7 @@ Main.add(function () {
     </fieldset>
     
     {{if $isPrescriptionInstalled || $conf.dPpatients.CTraitement.enabled}}
-    <fieldset>
+    <fieldset id="inc_ant_consult_fieldset_trt_perso">
       <legend>Traitements personnels</legend>
       <table class="layout main">
         <tr>

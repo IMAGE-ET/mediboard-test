@@ -14,14 +14,14 @@
   });
 </script>
 
-<button class="new" onclick="Grossesse.editGrossesse(0, '{{$parturiente_id}}')" style="float: left;">{{tr}}CGrossesse-title-create{{/tr}}</button>
+<button id="button_new_grossesse" class="new" onclick="Grossesse.editGrossesse(0, '{{$parturiente_id}}')" style="float: left;">{{tr}}CGrossesse-title-create{{/tr}}</button>
 
 <table class="main layout">
   <tr>
     <td style="width: 40%">
       <div id="list_grossesses"></div>
       <div style="text-align: right;">
-        <button type="button" class="tick" onclick="Grossesse.bindGrossesse(); Control.Modal.close();">Sélectionner</button>
+        <button id="button_select_grossesse" type="button" class="tick" onclick="Grossesse.bindGrossesse(); Control.Modal.close();">Sélectionner</button>
         <button type="button" class="cancel" onclick="Grossesse.emptyGrossesses(); Control.Modal.close();">Vider</button>
       </div>
     </td>

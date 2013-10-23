@@ -99,7 +99,7 @@
           <button type="button" class="cancel"
             onclick="confirmDeletion(this.form, {objName: '{{$grossesse}}', ajax: 1})">{{tr}}Delete{{/tr}}</button>
         {{else}}
-          <button type="button" class="save" onclick="this.form.onsubmit()">{{tr}}Create{{/tr}}</button>
+          <button id="button_create_grossesse" type="button" class="save" onclick="this.form.onsubmit()">{{tr}}Create{{/tr}}</button>
         {{/if}}
       </td>
     </tr>
