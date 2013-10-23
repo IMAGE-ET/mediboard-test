@@ -198,7 +198,16 @@
     {{/if}}
 
     {{mb_label class="CSejour" field="_type_admission"}}
-    {{mb_field object=$_sejour field="_type_admission" typeEnum="radio" onclick="this.form.submit()"}}
+    <label>
+      <input type="radio" name="_type_admission" value="" {{if !$_sejour->_type_admission}}checked{{/if}} onclick="this.form.submit()" /> Tous types
+    </label>
+    {{assign var=specs value=$_sejour->_specs._type_admission}}
+    {{foreach from=$specs->_list item=_type}}
+      <label>
+        <input type="radio" name="_type_admission" value="{{$_type}}" {{if $_sejour->_type_admission == $_type}}checked{{/if}} onclick="this.form.submit()" />
+        {{tr}}CSejour._type_admission.{{$_type}}{{/tr}}
+      </label>
+    {{/foreach}}
   </form>
 {{/if}}
 

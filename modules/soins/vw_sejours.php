@@ -15,7 +15,7 @@ $sejour_id    = CValue::get("sejour_id");
 $show_affectation = CValue::get("show_affectation", false);
 $only_non_checked = CValue::get("only_non_checked", 0);
 $print        = CValue::get("print", false);
-$_type_admission = CValue::getOrSession("_type_admission", "ambucomp");
+$_type_admission = CValue::getOrSession("_type_admission", "");
 $select_view = CValue::get("select_view", false);
 
 // Mode Dossier de soins, chargement de la liste des service, praticiens, functions
@@ -85,9 +85,9 @@ if (!isset($sejours)) {
     $where["sejour.group_id"] = " = '$group_id'";
     $where["sejour.annule"] = " = '0'";
 
-
-    $where["sejour.type"] = $_type_admission == "ambucomp" ? "IN ('ambu', 'comp')" : "= '$_type_admission'";
-
+    if ($_type_admission) {
+      $where["sejour.type"] = $_type_admission == "ambucomp" ? "IN ('ambu', 'comp')" : "= '$_type_admission'";
+    }
     $sejours = $sejour->loadList($where, null, null, null, $ljoin);
   
   } else {
@@ -102,7 +102,9 @@ if (!isset($sejours)) {
     $where = array();
     $where["affectation.sejour_id"] = "!= 0";
     $where["sejour.group_id"] = "= '$group_id'";
-    $where["sejour.type"] = $_type_admission == "ambucomp" ? "IN ('ambu', 'comp')" : "= '$_type_admission'";
+    if ($_type_admission) {
+      $where["sejour.type"] = $_type_admission == "ambucomp" ? "IN ('ambu', 'comp')" : "= '$_type_admission'";
+    }
 
     if ($service_id) {
       $where["affectation.entree"] = "<= '$date_max'";
