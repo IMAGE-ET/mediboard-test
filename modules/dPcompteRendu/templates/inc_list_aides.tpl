@@ -41,7 +41,7 @@
   <td class="text"><a href="{{$href}}">{{tr}}{{$class}}-{{$field}}{{/tr}}</a></td>
   <td>
     {{if $_aide->_depend_field_1 && !$_aide->_is_ref_dp_1}}
-      <form name="edit-CAidesSaisie-depend1" action="" method="post" onsubmit="return onSubmitFormAjax(this)">
+      <form name="edit-CAidesSaisie-depend1-{{$_aide->_id}}" action="" method="post" onsubmit="return onSubmitFormAjax(this)">
         <input type="hidden" name="m" value="dPcompteRendu" />
         <input type="hidden" name="dosql" value="do_aide_aed" />
         {{mb_key object=$_aide}}
@@ -50,7 +50,7 @@
           style="width: 10em;"
           onchange="this.form.onsubmit()" 
           name="depend_value_1" 
-          onmousedown="getListDependValues.bindAsEventListener(this, this, '{{$class}}', '{{$_aide->_depend_field_1}}')()"
+          onmouseover="getListDependValues(this, '{{$class}}', '{{$_aide->_depend_field_1}}')"
         >
           <option value="{{$_aide->depend_value_1}}">
             {{if $_aide->depend_value_1}}
@@ -69,7 +69,7 @@
   </td>
   <td>
     {{if $_aide->_depend_field_2 && !$_aide->_is_ref_dp_2}}
-      <form name="edit-CAidesSaisie-depend2" action="" method="post" onsubmit="return onSubmitFormAjax(this)">
+      <form name="edit-CAidesSaisie-depend2-{{$_aide->_id}}" action="" method="post" onsubmit="return onSubmitFormAjax(this)">
         <input type="hidden" name="m" value="dPcompteRendu" />
         <input type="hidden" name="dosql" value="do_aide_aed" />
         {{mb_key object=$_aide}}
@@ -78,7 +78,7 @@
           style="width: 10em;"
           onchange="this.form.onsubmit()" 
           name="depend_value_2" 
-          onmousedown="getListDependValues(this, '{{$class}}', '{{$_aide->_depend_field_2}}')"
+          onmouseover="getListDependValues(this, '{{$class}}', '{{$_aide->_depend_field_2}}')"
         >
           <option value="{{$_aide->depend_value_2}}">
             {{if $_aide->depend_value_2}}
