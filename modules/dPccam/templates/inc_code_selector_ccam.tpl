@@ -88,7 +88,7 @@ em {
           {{/if}}
           <td>
             {{if $multiple_select}}
-              <input type="checkbox" class="multiples_codes" value="{{$curr_code->code}}"/>
+              <input type="checkbox" class="multiples_codes" value="{{$curr_code->code}}" style="width: 25px;"/>
             {{else}}
               <button type="button" class="tick compact" onclick="CCAMSelector.set('{{$curr_code->code}}', '{{$curr_code->_default}}'); Control.Modal.close();">Sélectionner</button>
             {{/if}}
