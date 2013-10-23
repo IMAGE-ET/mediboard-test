@@ -156,6 +156,15 @@ foreach (CService::loadServicesUrgence() as $service) {
     }
   }
 }
+if (CAppUI::conf("dPurgences view_rpu_uhcd")) {
+  foreach (CService::loadServicesUHCD() as $service) {
+    foreach ($service->_ref_chambres as $chambre) {
+      foreach ($chambre->_ref_lits as $lit) {
+        $boxes[$lit->_id] = $lit;
+      }
+    }
+  }
+}
 
 // Si admin sur le module urgences, alors modification autorisée du diagnostic
 // infirmier depuis la main courante.
