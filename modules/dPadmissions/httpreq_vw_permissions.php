@@ -41,9 +41,7 @@ $group = CGroups::loadCurrent();
 $ljoin["sejour"]   = "affectation.sejour_id = sejour.sejour_id";
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $ljoin["users"]    = "sejour.praticien_id = users.user_id";
-$ljoin["lit"]      = "affectation.lit_id = lit.lit_id";
-$ljoin["chambre"]  = "lit.chambre_id = chambre.chambre_id";
-$ljoin["service"]  = "chambre.service_id = service.service_id";
+$ljoin["service"]  = "affectation.service_id = service.service_id";
 
 $where["service.externe"] = "= '1'";
 

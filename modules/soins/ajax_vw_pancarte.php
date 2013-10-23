@@ -84,13 +84,10 @@ else {
   $ljoin = array();
   $ljoin["sejour"]      = "prescription.object_id = sejour.sejour_id";
   $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
-  $ljoin["lit"]         = "lit.lit_id = affectation.lit_id";
-  $ljoin["chambre"]     = "chambre.chambre_id = lit.chambre_id";
-  $ljoin["service"]     = "service.service_id = chambre.service_id";
   $where = array();
   $where["prescription.object_class"] = " = 'CSejour'";
   $where["prescription.type"]         = " = 'sejour'";
-  $where["service.service_id"]        = " = '$service_id'";
+  $where["affectation.service_id"]        = " = '$service_id'";
   $where["affectation.entree"]      = " < '$date 23:59:59'";
   $where["affectation.sortie"]      = " > '$date 00:00:00'";
   $prescriptions = $prescription->loadList($where, null, null, null, $ljoin);

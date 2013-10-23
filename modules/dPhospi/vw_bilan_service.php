@@ -122,7 +122,7 @@ if ($do) {
 
     $where["affectation.entree"] = "<= '$dateTime_max'";
     $where["affectation.sortie"] = ">= '$dateTime_min'";
-    $where["service.service_id"] = " = '$service_id'";
+    $where["affectation.service_id"] = " = '$service_id'";
   }
 
   if ($_present_only) {

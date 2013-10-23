@@ -35,9 +35,7 @@ $limit2 = $date." 23:59:59";
 
 // ljoin pour filtrer par le service
 $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
-$ljoin["lit"]         = "affectation.lit_id = lit.lit_id";
-$ljoin["chambre"]     = "lit.chambre_id = chambre.chambre_id";
-$ljoin["service"]     = "chambre.service_id = service.service_id";
+$ljoin["service"]     = "affectation.service_id = service.service_id";
 
 if ($service_id) {
   $where["service.service_id"] = " = '$service_id'";

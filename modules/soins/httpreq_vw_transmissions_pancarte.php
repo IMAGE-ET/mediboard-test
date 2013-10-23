@@ -38,7 +38,7 @@ $observations = array();
 $users = array();
 $ljoin = array();
 $where = array();
-$where["service.service_id"] = " = '$service_id'";
+$where["affectation.service_id"] = " = '$service_id'";
 
 $where[] = "date >= '$date_min' AND date <= '$date_max'";
 if ($user_id) {
@@ -57,9 +57,7 @@ if ($degre) {
 if ($load_transmissions == "1") {
   $ljoin["sejour"] = "transmission_medicale.sejour_id = sejour.sejour_id";
   $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
-  $ljoin["lit"]      = "lit.lit_id = affectation.lit_id";
-  $ljoin["chambre"]  = "chambre.chambre_id = lit.chambre_id";
-  $ljoin["service"]  = "service.service_id = chambre.service_id";
+
   $transmission = new CTransmissionMedicale();
   $transmissions = $transmission->loadList($where, null, null, "transmission_medicale_id", $ljoin);
 }
@@ -68,9 +66,7 @@ if ($load_transmissions == "1") {
 if ($load_observations == "1") {
   $ljoin["sejour"] = "observation_medicale.sejour_id = sejour.sejour_id";
   $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
-  $ljoin["lit"]      = "lit.lit_id = affectation.lit_id";
-  $ljoin["chambre"]  = "chambre.chambre_id = lit.chambre_id";
-  $ljoin["service"]  = "service.service_id = chambre.service_id";
+
   $observation = new CObservationMedicale();
   $observations = $observation->loadList($where, null, null, "observation_medicale_id", $ljoin);
 }

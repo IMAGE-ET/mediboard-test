@@ -37,17 +37,11 @@ if (!$nb_decalage) {
 // Chargement des sejours pour le service selectionné
 $affectation = new CAffectation();
 
-$ljoin = array();
-$ljoin["lit"] = "affectation.lit_id = lit.lit_id";
-$ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
-$ljoin["service"] = "chambre.service_id = service.service_id";
-  
 $where = array();
-
 $where[] = "'$date' <= affectation.sortie && '$date_max' >= affectation.entree";
-$where["service.service_id"] = " = '$service_id'";
+$where["affectation.service_id"] = " = '$service_id'";
 
-$affectations = $affectation->loadList($where, null, null, null, $ljoin);
+$affectations = $affectation->loadList($where);
 
 CMbObject::massLoadFwdRef($affectations, "sejour_id");
 

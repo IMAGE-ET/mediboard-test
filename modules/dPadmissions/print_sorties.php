@@ -42,10 +42,7 @@ $ljoin = array();
 $ljoin["users"] = "users.user_id = sejour.praticien_id";
 if ($service->_id) {
   $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
-  $ljoin["lit"]                = "affectation.lit_id = lit.lit_id";
-  $ljoin["chambre"]            = "lit.chambre_id = chambre.chambre_id";
-  $ljoin["service"]            = "chambre.service_id = service.service_id";
-  $where["service.service_id"] = "= '$service->_id'";
+  $where["affectation.service_id"] = "= '$service->_id'";
 }
 $order = "users.user_last_name, users.user_first_name, sejour.sortie";
 

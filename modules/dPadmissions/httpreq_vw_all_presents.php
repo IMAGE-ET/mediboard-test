@@ -66,10 +66,7 @@ else {
 // filtre sur les services
 if (count($service_id)) {
   $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
-  $ljoin["lit"]                = "affectation.lit_id = lit.lit_id";
-  $ljoin["chambre"]            = "lit.chambre_id = chambre.chambre_id";
-  $ljoin["service"]            = "chambre.service_id = service.service_id";
-  $where["service.service_id"] = CSQLDataSource::prepareIn($service_id);
+  $where["affectation.service_id"] = CSQLDataSource::prepareIn($service_id);
 }
 
 // filtre sur le praticien

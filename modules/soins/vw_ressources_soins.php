@@ -33,21 +33,15 @@ $services = $service->loadGroupList($where);
 $sejours = array();
 $affectation = new CAffectation();
 
-$ljoin = array();
-$ljoin["lit"] = "affectation.lit_id = lit.lit_id";
-$ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
-$ljoin["service"] = "chambre.service_id = service.service_id";
-  
 $where = array();
-
 $datetime_min = CMbDT::dateTime($datetime);
 $datetime_max = CMbDT::dateTime("+$nb_periods $period", $datetime);
 
 $where["sortie"] = ">= '$datetime_min'";
 $where["entree"] = "<= '$datetime_max'";
-$where["service.service_id"] = " = '$service_id'";
+$where["affectation.service_id"] = " = '$service_id'";
 
-$affectations = $affectation->loadList($where, null, null, null, $ljoin);
+$affectations = $affectation->loadList($where);
 $planifications = array();
 $ressources = array();
 
@@ -69,13 +63,11 @@ foreach ($affectations as $_affectation){
   $planif = new CPlanificationSysteme();
   $ljoin = array();
   $ljoin["affectation"] = "affectation.sejour_id = planification_systeme.sejour_id";
-  $ljoin["lit"        ] = "lit.lit_id = affectation.lit_id";
-  $ljoin["chambre"    ] = "chambre.chambre_id = lit.chambre_id";
   
   $where = array();
   $where["planification_systeme.sejour_id"] = " = '$sejour->_id'";
   $where["dateTime"          ] = " BETWEEN '$datetime_min' AND '$datetime_max'";
-  $where["chambre.service_id"] = " = '$service_id'";
+  $where["affectation.service_id"] = " = '$service_id'";
   $where["object_class"      ] = " = 'CPrescriptionLineElement'";
   $planifs = $planif->loadList($where, null, null, null, $ljoin);
   

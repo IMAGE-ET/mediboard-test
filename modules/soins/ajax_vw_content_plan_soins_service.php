@@ -62,14 +62,11 @@ $ljoin = array();
 $ljoin["prescription"] = "prescription.prescription_id = prescription_line_element.prescription_id AND prescription.type = 'sejour'";
 $ljoin["sejour"] = "sejour.sejour_id = prescription.object_id";
 $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
-$ljoin["lit"] = "affectation.lit_id = lit.lit_id";
-$ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
-$ljoin["service"] = "chambre.service_id = service.service_id";
 
 $where = array();
 $where["element_prescription_id"] =  CSQLDataSource::prepareIn($categories_id);
 $where[] = "'$date' <= sejour.sortie && '$date_max' >= sejour.entree";
-$where["service.service_id"] = " = '$service_id'";
+$where["affectation.service_id"] = " = '$service_id'";
 $where["inscription"] = " = '0'";
 $where["active"] = " = '1'";
 

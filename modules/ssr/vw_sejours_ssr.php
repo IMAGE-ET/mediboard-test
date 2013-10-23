@@ -58,12 +58,12 @@ if ($order_col == "service_id") {
   $order = "sejour.service_id $order_way, patients.nom, patients.prenom";
 }
 
-$ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id AND '$date' BETWEEN affectation.entree AND affectation.sortie";
-$ljoin["lit"]         = "lit.lit_id = affectation.lit_id";
-$ljoin["chambre"]     = "lit.chambre_id = chambre.chambre_id";
-$ljoin["service"]     = "chambre.service_id = service.service_id";
-
 if ($order_col == "lit_id") {
+  $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id AND '$date' BETWEEN affectation.entree AND affectation.sortie";
+  $ljoin["lit"]         = "lit.lit_id = affectation.lit_id";
+  $ljoin["chambre"]     = "lit.chambre_id = chambre.chambre_id";
+  $ljoin["service"]     = "chambre.service_id = service.service_id";
+
   $order = "service.nom $order_way, chambre.nom $order_way, lit.nom $order_way, patients.nom, patients.prenom";
 }
 

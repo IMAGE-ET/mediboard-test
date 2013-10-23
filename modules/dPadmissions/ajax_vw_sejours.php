@@ -58,10 +58,7 @@ $ljoin["users"]    = "sejour.praticien_id = users.user_id";
 // Filtre sur les services
 if ($service_id) {
   $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie_prevue";
-  $ljoin["lit"]                = "affectation.lit_id = lit.lit_id";
-  $ljoin["chambre"]            = "lit.chambre_id = chambre.chambre_id";
-  $ljoin["service"]            = "chambre.service_id = service.service_id";
-  $where["service.service_id"] = "= '$service_id'";
+  $where["affectation.service_id"] = "= '$service_id'";
 }
 
 // Filtre sur le type du séjour

@@ -96,12 +96,9 @@ if (!isset($sejours)) {
     
     // Chargement des sejours pour le service selectionné
     $affectation = new CAffectation();
-    
+
     $ljoin = array();
-    $ljoin["lit"] = "affectation.lit_id = lit.lit_id";
-    $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
-    $ljoin["service"] = "chambre.service_id = service.service_id";
-      
+
     $where = array();
     $where["affectation.sejour_id"] = "!= 0";
     $where["sejour.group_id"] = "= '$group_id'";
@@ -112,7 +109,7 @@ if (!isset($sejours)) {
       $where["affectation.sortie"] = ">= '$date'";
       $ljoin["sejour"] = "affectation.sejour_id = sejour.sejour_id";
       $where["sejour.annule"] = " = '0'";
-      $where["service.service_id"] = " = '$service_id'";
+      $where["affectation.service_id"] = " = '$service_id'";
     }
     elseif ($praticien_id && !$only_non_checked) {
       $where["affectation.entree"] = "<= '$date_max'";

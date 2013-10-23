@@ -40,7 +40,7 @@ $where["sejour.entree"] = "<= '$datetime_max'";
 $where["sejour.sortie"] = " >= '$datetime_min'";
 $where["affectation.entree"] = "<= '$datetime_max'";
 $where["affectation.sortie"] = ">= '$datetime_min'";
-$where["service.service_id"] = " = '$service_id'";
+$where["affectation.service_id"] = " = '$service_id'";
 
 $sejours = $sejour->loadList($where, $order_by, null, "sejour.sejour_id", $ljoin);
 
