@@ -9,8 +9,10 @@
  * @version    $Revision$
  */
 
+global $m;
+
 // Redirection pour gérer le cas ou le volet par defaut est l'autre affichage des sejours
-if (CAppUI::pref("vue_sejours") == "global") {
+if (CAppUI::pref("vue_sejours") == "global" && $m == "soins") {
   CAppUI::redirect("m=soins&tab=vw_sejours");
 }
 
