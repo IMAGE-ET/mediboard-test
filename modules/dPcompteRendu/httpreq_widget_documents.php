@@ -51,7 +51,7 @@ if ($object->loadRefsDocs()) {
 }
 
 // Compter les modèles d'étiquettes
-$modele_etiquette = new CModeleEtiquette;
+$modele_etiquette = new CModeleEtiquette();
 
 $where = array();
 
@@ -63,7 +63,7 @@ $nb_modeles_etiquettes = $modele_etiquette->countList($where);
 $nb_printers = 0;
 
 if (CModule::getActive("printing")) {
-  // Chargement des imprimantes pour l'impression d'étiquettes 
+  // Chargement des imprimantes pour l'impression d'étiquettes
   $user_printers = CMediusers::get();
   $function      = $user_printers->loadRefFunction();
   $nb_printers   = $function->countBackRefs("printers");
@@ -74,12 +74,12 @@ $compte_rendu = new CCompteRendu();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("praticien"     , $user);
-$smarty->assign("object"        , $object);
-$smarty->assign("mode"          , CValue::get("mode"));
-$smarty->assign("notext"        , "notext");
-$smarty->assign("nb_printers"   , $nb_printers);
+$smarty->assign("praticien"            , $user);
+$smarty->assign("object"               , $object);
+$smarty->assign("mode"                 , CValue::get("mode"));
+$smarty->assign("notext"               , "notext");
+$smarty->assign("nb_printers"          , $nb_printers);
 $smarty->assign("nb_modeles_etiquettes", $nb_modeles_etiquettes);
-$smarty->assign("can_doc", $compte_rendu->loadPermClass());
+$smarty->assign("can_doc"              , $compte_rendu->canCreate($object));
 
 $smarty->display($only_docs ? "inc_widget_list_documents.tpl" : "inc_widget_documents.tpl");

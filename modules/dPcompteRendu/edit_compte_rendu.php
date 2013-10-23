@@ -199,28 +199,16 @@ if ($isCourrier) {
   $destinataires = CDestinataire::$destByClass;
 }
 
-$can_lock = false;
-$is_locked = false;
-
-if ($curr_user->isAdmin()) {
-  $can_lock = true;
+$can_lock      = $compte_rendu->canLock();
+$can_unclock   = $compte_rendu->canUnlock();
+$can_duplicate = $compte_rendu->canDuplicate();
+$is_locked     = $compte_rendu->isLocked();
+if ($is_locked) {
+  mbTrace($is_locked, "locked");
+  $templateManager->printMode = true;
 }
-else {
-  // Vérification de la date de dernière modification (lock si trop ancien et pas admin)
-  if ($compte_rendu->_id) {
-    $days = CAppUI::conf("dPcompteRendu CCompteRendu days_to_lock");
-    $days = isset($days[$compte_rendu->object_class]) ?
-      $days[$compte_rendu->object_class] : $days["base"];
-
-    if (CMbDT::daysRelative($compte_rendu->_ref_content->last_modified, CMbDT::dateTime()) > $days) {
-      $is_locked = true;
-    }
-  }
-  // Droit de lock du fichier
-  $can_lock = (!$compte_rendu->_id || ($curr_user->_id == $compte_rendu->author_id)) && !$is_locked;
-  if ($is_locked || (!$can_lock && $compte_rendu->valide)) {
-    $templateManager->printMode = true;
-  }
+if(!$compte_rendu->canEdit()) {
+  $templateManager->printMode = true;
 }
 
 // Création du template
@@ -239,6 +227,8 @@ $smarty->assign("nb_printers"   , $nb_printers);
 $smarty->assign("pack_id"       , $pack_id);
 $smarty->assign("destinataires" , $destinataires);
 $smarty->assign("can_lock"      , $can_lock);
+$smarty->assign("can_unlock"    , $can_unclock);
+$smarty->assign("can_duplicate" , $can_duplicate);
 $smarty->assign("is_locked"     , $is_locked);
 
 preg_match_all("/(:?\[\[Texte libre - ([^\]]*)\]\])/i", $compte_rendu->_source, $matches);

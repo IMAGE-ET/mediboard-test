@@ -1,6 +1,8 @@
-{{if $canFile->edit && !$accordDossier}}
-  {{assign var=object_guid value="$object_class-$object_id"}}
+{{mb_default var=canFile value=0}}
+{{mb_default var=canDoc  value=0}}
 
+{{assign var=object_guid value="$object_class-$object_id"}}
+{{if $canFile && !$accordDossier}}
   <button style="float: left" class="new" type="button" onclick="uploadFile('{{$object_guid}}')">
    {{tr}}CFile-title-create{{/tr}}
   </button>
@@ -14,12 +16,12 @@
   {{if $object && $object->_nb_cancelled_files}}
     <button class="hslip" onclick="showCancelled(this)">Voir / Masquer {{$object->_nb_cancelled_files}} fichier(s) annulé(s)</button>
   {{/if}}
+{{/if}}
+{{if $canDoc}}
   <div style="float: left" id="document-add-{{$object_guid}}"></div>
-  
   <script type="text/javascript">
   Main.add(function () {
     Document.register('{{$object_id}}', '{{$object_class}}', '{{$praticienId}}', "document-add-{{$object_guid}}", "hide");
   });
   </script>
-
 {{/if}}

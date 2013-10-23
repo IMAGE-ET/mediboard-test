@@ -42,7 +42,7 @@ Main.add(function () {
 
 {{if $docCount || $conf.dPfiles.CFilesCategory.show_empty}}
 <table class="tbl" id="Category-{{$_cat_id}}" style="display: none;">
-  {{if $canFile->edit && !$accordDossier}}
+  {{if $canFile && !$accordDossier}}
   <tr>
     <td colspan="2" class="text">
       <button class="new" onclick="uploadFile('{{$object->_guid}}', '{{$_cat_id}}')">

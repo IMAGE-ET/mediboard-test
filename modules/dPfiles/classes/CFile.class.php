@@ -144,7 +144,7 @@ class CFile extends CDocumentItem {
     // Check global directory
     if (!CMbPath::forceDir(self::$directory)) {
       trigger_error("Files directory is not writable : " . self::$directory, E_USER_WARNING);
-      return false;
+      return;
     }
     
     // Checks complete file directory
@@ -212,20 +212,39 @@ class CFile extends CDocumentItem {
    * @see parent::getPerm()
    */
   function getPerm($permType) {
-    // Delegate on target object
+
     $this->loadTargetObject();
-    if ($this->_ref_object->_id) {
-      $author = $this->loadRefAuthor();
-      
-      if ($author->_id == CMediusers::get()->_id) {
-        $can = new CCanDo();
-        $can->read = $can->edit = 1;
-        return $can;
-      }
-      
-      return $this->_ref_object->getPerm($permType);
+    $this->loadRefAuthor();
+
+    $parentPerm = parent::getPerm($permType);
+
+    if ($this->private) {
+      $sameFunction = $this->_ref_author->function_id == CMediusers::get()->function_id;
+      $isAdmin = CMediusers::get()->isAdmin();
+      return $parentPerm && ($sameFunction || $isAdmin);
     }
-    return false;
+
+    if ($this->_id && $this->author_id && ($this->_ref_author->_id == CMediusers::get()->_id)) {
+      return $parentPerm;
+    }
+
+    if ($this->_ref_object->_id) {
+      return $parentPerm && $this->_ref_object->getPerm($permType);
+    }
+
+    return $parentPerm;
+  }
+
+  /**
+   * Vérification du droit de créer un fichier au sein d'un contexte donné
+   *
+   * @param CMbObject $object Contexte de création du Document
+   *
+   * @return bool Droit de création d'un document
+   */
+  static function canCreate(CMbObject $object) {
+    $file = new CFile();
+    return $object->canRead() && $file->loadPermClass()->permission >= PERM_EDIT;
   }
 
   /**

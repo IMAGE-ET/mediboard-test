@@ -173,7 +173,6 @@
         </td>
 
         <td style="text-align: right;">
-
         {{if $_sejour->_canRead}}
           {{mb_include module=patients template=inc_form_docitems_button object=$_consult}}
          {{/if}}

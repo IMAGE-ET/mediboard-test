@@ -68,7 +68,6 @@ reloadListFile = function(sAction, category_id){
   if(sAction == 'delete' && file_preview == file_deleted){
     ZoomAjax('','','','', 0);
   }
-  
   var oForm = getForm('FrmClass');
   var url = new Url('files', 'httpreq_vw_listfiles');
   url.addParam('selKey', oForm.selKey.value);

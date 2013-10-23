@@ -15,54 +15,33 @@ CCanDo::checkRead();
 $keywords      = CValue::getOrSession("keywords", null);
 $selClass      = CValue::getOrSession("selClass", null);
 $selKey        = CValue::getOrSession("selKey"  , null);
-$selView       = CValue::getOrSession("selView" , null);
 $typeVue       = CValue::getOrSession("typeVue" , 0);
 $file_id       = CValue::get("file_id"          , null);
 $accordDossier = CValue::get("accordDossier"    , 0);
 
-$file = new CFile;
+$object = new CMbObject();
+
+$file = new CFile();
 $file->load($file_id);
 
-$listCategory = CFilesCategory::listCatClass($selClass);
-$affichageFile = array();
-$object = null;
-$canFile       = new CCanDo;
-
+// Chargement de l'objet
 if ($selClass && $selKey) {
-  // Chargement de l'objet
   /** @var CMbObject $object */
   $object = new $selClass;
   $object->load($selKey);
-  $canFile = $object->canDo();
-  $affichageFile = CFile::loadDocItemsByObject($object);
-}
-
-foreach ($affichageFile as $_cat) {
-  if (!isset($_cat["items"])) {
-    break;
-  }
-  
-  foreach ($_cat["items"] as $_item) {
-    $_item->loadRefCategory();
-    if ($_item->_class === "CCompteRendu") {
-      $_item->makePDFpreview();
-    }
-  }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("affichageFile"  , $affichageFile);
-$smarty->assign("canFile"        , $canFile     );
-$smarty->assign("listCategory"   , $listCategory);
-$smarty->assign("selClass"       , $selClass    );
-$smarty->assign("selKey"         , $selKey      );
-$smarty->assign("selView"        , $selView     );
-$smarty->assign("file"           , $file        );
-$smarty->assign("keywords"       , $keywords    );
-$smarty->assign("object"         , $object      );
-$smarty->assign("typeVue"        , $typeVue     );
-$smarty->assign("fileSel"        , null);
-$smarty->assign("accordDossier"  , $accordDossier);
+
+$smarty->assign("selClass"     , $selClass);
+$smarty->assign("selKey"       , $selKey);
+$smarty->assign("selView"      , $object->_view);
+$smarty->assign("keywords"     , $keywords);
+$smarty->assign("object"       , $object);
+$smarty->assign("file"         , $file);
+$smarty->assign("typeVue"      , $typeVue);
+$smarty->assign("accordDossier", $accordDossier);
+
 $smarty->display("vw_files.tpl");
 

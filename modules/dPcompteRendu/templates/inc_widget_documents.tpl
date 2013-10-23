@@ -23,7 +23,7 @@
 {{/if}}
 
 
-{{if $can_doc->permission >= PERM_READ}}
+{{if $can_doc}}
   <form name="unmergePack_{{$object->_guid}}" method="post" onsubmit="return onSubmitFormAjax(this);">
     <input type="hidden" name="m" value="dPcompteRendu" />
     <input type="hidden" name="dosql" value="do_pack_multi_aed" />
@@ -120,7 +120,7 @@
   {{/if}}
   
   <form name="DocumentAdd-{{$unique_id}}-{{$object->_guid}}" action="?m={{$m}}" method="post" class="prepared">
-    {{if $object->_can->read && $can_doc->permission == PERM_EDIT}}
+    {{if $can_doc}}
       <input type="text" value="&mdash; Modèle" name="keywords_modele" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 5em;" />
       <input type="text" value="&mdash; Pack" name="keywords_pack" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 4em;"/>
     

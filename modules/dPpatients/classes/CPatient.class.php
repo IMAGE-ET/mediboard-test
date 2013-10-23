@@ -1410,8 +1410,7 @@ class CPatient extends CPerson {
     }
 
     // Patient permission
-    $this->canRead();
-    $this->canEdit();
+    $this->canDo();
 
     // Doc items
     $this->loadRefsFiles();
@@ -1454,8 +1453,7 @@ class CPatient extends CPerson {
       }
 
       // Permission
-      $consult->canRead();
-      $consult->canEdit();
+      $consult->canDo();
 
       $consult->loadRefConsultAnesth();
       $consult->loadRefsFichesExamen();
@@ -1487,8 +1485,7 @@ class CPatient extends CPerson {
     // Sejours
     foreach ($this->_ref_sejours as $_sejour) {
       // Permission
-      $_sejour->canRead();
-      $_sejour->canEdit();
+      $_sejour->canDo();
 
       //
       $_sejour->loadNDA();
@@ -1546,8 +1543,7 @@ class CPatient extends CPerson {
         $_consult->getType();
         $_consult->_ref_chir->loadRefFunction();
         $_consult->_ref_chir->_ref_function->loadRefGroup();
-        $_consult->canRead();
-        $_consult->canEdit();
+        $_consult->canDo();
       }
     }
   }

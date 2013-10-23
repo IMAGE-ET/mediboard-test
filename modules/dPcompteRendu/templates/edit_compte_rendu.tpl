@@ -54,7 +54,7 @@ function playField(element, class_name, editor_element, name) {
   modal.select(".cancel")[0].onclick = function() {
     Control.Modal.close();
     Element.setStyle(editor_element, {backgroundColor: ""});
-  }
+  };
   
   // Réouverture si la modale est fermée 
   if (!window.modal_mode_play || !window.modal_mode_play.isOpen) {
@@ -177,7 +177,7 @@ function refreshZones(id, obj) {
         {{/if}}
       }
     });
-  }
+  };
 
   // Remise du content sauvegardé, avec le refresh des vignettes si dispo, et/ou l'impression en callback
   editor.setData(obj._source, afterSetData);
@@ -220,7 +220,7 @@ function openModalPrinters() {
 
   togglePageLayout = function() {
     $("page_layout").toggle();
-  }
+  };
   
   completeLayout = function() {
     var tab_margin = ["top", "right", "bottom", "left"];
@@ -234,7 +234,7 @@ function openModalPrinters() {
     }
     $V(dform.orientation, $V(form._orientation));
     $V(dform.page_format, form._page_format.value);
-  }
+  };
   
   save_page_layout = function() {
     page_layout_save = { 
@@ -247,7 +247,7 @@ function openModalPrinters() {
       page_height:   PageFormat.form.page_height.value,
       orientation:   $V(PageFormat.form._orientation)
     };
-  }
+  };
   
   cancel_page_layout = function() {
     $V(PageFormat.form.margin_top,    page_layout_save.margin_top);
@@ -265,7 +265,7 @@ function openModalPrinters() {
       $('thumbs').setOpacity(1);
     }
     Control.Modal.close();
-  }
+  };
 
   emptyPDF = function() {
     Thumb.old();
@@ -286,7 +286,7 @@ function openModalPrinters() {
     url.addParam("compte_rendu_id", $V(f.compte_rendu_id));
     
     url.requestJSON(function(){}, {method: "post"});
-  }
+  };
 {{/if}}
 
 function saveAndMerge() {
@@ -299,9 +299,12 @@ function saveAndMerge() {
 function toggleLock(button) {
   var form = button.form;
   $V(form.valide, $V(form.valide) == 1 ? 0 : 1);
-  var classes = Element.classNames(button);
-  classes.flip('lock', 'unlock');
+  $V(form.callback, "afterLock");
   form.onsubmit();
+}
+
+function afterLock() {
+  location.reload();
 }
 
 function modalHeaderFooter(state) {
@@ -637,15 +640,20 @@ Main.add(function() {
         <button type="button" class="header_footer notext" onclick="modalHeaderFooter(1)"
           title="Entête / pied de page à la volée"></button>
       {{/if}}
-      {{if $can_lock}}
-        <button type="button" class="{{if $compte_rendu->valide}}unlock{{else}}lock{{/if}} notext"
-                onclick="toggleLock(this)">Verrouiller / Déverouiller le document</button>
-      {{else}}
-        {{if $compte_rendu->valide}}
-          <img src="style/mediboard/images/buttons/lock.png" onmouseover="ObjectTooltip.createEx(this, '{{$compte_rendu->_guid}}', 'locker')"/>
-        {{/if}}
+      {{if $compte_rendu->_id && !$is_locked && $can_lock}}
+        <button type="button" class="lock notext"
+                onclick="toggleLock(this)">
+          {{tr}}Lock{{/tr}}
+        </button>
+      {{elseif $compte_rendu->_id && $is_locked && $can_unlock}}
+        <button type="button" class="unlock notext"
+                onclick="toggleLock(this)"
+                onmouseover="ObjectTooltip.createEx(this, '{{$compte_rendu->_guid}}', 'locker')">
+        </button>
+      {{elseif $compte_rendu->valide}}
+        <img src="style/mediboard/images/buttons/lock.png" onmouseover="ObjectTooltip.createEx(this, '{{$compte_rendu->_guid}}', 'locker')"/>
       {{/if}}
-      {{if $compte_rendu->_id}}
+      {{if $compte_rendu->_id && $can_duplicate}}
         <button type="button" class="add" onclick="duplicateDoc(this.form)">{{tr}}Duplicate{{/tr}}</button>
       {{/if}}
     </th>

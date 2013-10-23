@@ -19,7 +19,6 @@ $accordDossier = CValue::get("accordDossier"    , 0);
 $category_id   = CValue::get("category_id");
 $only_list     = isset($_GET["category_id"]);
 
-
 // Liste des Class
 $listCategory = CFilesCategory::listCatClass($object_class);
 
@@ -27,8 +26,9 @@ $listCategory = CFilesCategory::listCatClass($object_class);
 $mediuser = CMediusers::get();
 $mediuser->loadRefs();
 
-$object = null;
-$canFile  = new CCanDo;
+$object  = null;
+$canFile = false;
+$canDoc  = false;
 $praticienId = null;
 $affichageFile = array();
 $nbItems = 0;
@@ -37,7 +37,10 @@ if ($object_id && $object_class) {
   // Chargement de l'objet
   $object = new $object_class;
   $object->load($object_id);
-  $canFile = $object->canDo();
+  $file = new CFile();
+  $canFile  = $file->canCreate($object);
+  $cr = new CCompteRendu();
+  $canDoc  = $cr->canCreate($object);
   
   // To add the modele selector in the toolbar
   if ($object_class == 'CConsultation') {
@@ -73,10 +76,12 @@ if ($object_id && $object_class) {
     }
   }
 }
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("canFile"      , $canFile);
+$smarty->assign("canDoc"       , $canDoc);
 $smarty->assign("listCategory" , $listCategory);
 $smarty->assign("praticienId"  , $praticienId);
 $smarty->assign("object"       , $object);

@@ -128,7 +128,7 @@ class CDocumentItem extends CMbMetaObject {
    */
   function handleSend() {
     if (!$this->_send) {
-      return;
+      return null;
     }
     
     $this->_send = false;
@@ -159,6 +159,7 @@ class CDocumentItem extends CMbMetaObject {
       default:
         return "Fonction d'envoi '$this->etat_envoi' non reconnue.";
     }
+    return null;
   }
 
   /**
@@ -190,20 +191,6 @@ class CDocumentItem extends CMbMetaObject {
     }
     
     return $this->_ref_author = $this->loadFwdRef("author_id", true);
-  }
-
-  /**
-   * @see parent::canRead()
-   */
-  function canRead() {
-    if (!$this->private) {
-      return parent::canRead();
-    }
-    
-    $author = $this->loadRefAuthor();
-
-    global $can;
-    return $this->_canRead = ($author->function_id == CAppUI::$user->function_id || $can->admin) && $this->getPerm(PERM_READ);
   }
   
   /**

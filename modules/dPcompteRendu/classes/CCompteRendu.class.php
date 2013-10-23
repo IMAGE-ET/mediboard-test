@@ -53,9 +53,9 @@ class CCompteRendu extends CDocumentItem {
   public $version;
 
   // Form fields
-  public $_is_document      = false;
-  public $_is_modele        = false;
-  public $_is_locked        = false;
+  public $_is_document = false;
+  public $_is_modele   = false;
+  public $_is_locked   = false;
   public $_owner;
   public $_page_format;
   public $_orientation;
@@ -327,7 +327,6 @@ class CCompteRendu extends CDocumentItem {
    * @return void
    */
   function loadContent($field_source = true) {
-    $curr_user = CMediusers::get();
 
     $content = $this->loadFwdRef("content_id", true);
     /** @var  CContentHTML $content */
@@ -344,22 +343,13 @@ class CCompteRendu extends CDocumentItem {
       $this->_ref_content->content = preg_replace('/(<div id="footer">)(.*)(<hr class="pagebreak" \/>)(.*)(<div id="body")/s', '$1$2$4$5', $this->_ref_content->content);
     }
 
-    $days = CAppUI::conf("dPcompteRendu CCompteRendu days_to_lock");
-    $days = isset($days[$this->object_class]) ?
-      $days[$this->object_class] : $days["base"];
-
     // Passage de la date de dernière modification du content dans la table compte_rendu
     if (!$content->last_modified && $content->_id) {
       $content->last_modified = $content->loadLastLog()->date;
       $content->store();
     }
 
-    if (
-        (!CCAnDo::admin() && $this->valide && $this->author_id != $curr_user->_id) ||
-        (CMbDT::daysRelative($content->last_modified, CMbDT::dateTime()) > $days)
-    ) {
-      $this->_is_locked = true;
-    }
+    $this->isLocked();
 
     if ($field_source) {
       $this->_source = $this->_ref_content->content;
@@ -438,7 +428,6 @@ class CCompteRendu extends CDocumentItem {
     parent::loadRefsFwd();
 
     $object = $this->_ref_object;
-    $object->loadRefsFwd();
 
     // Utilisateur
     $this->_ref_user = new CMediusers();
@@ -449,16 +438,21 @@ class CCompteRendu extends CDocumentItem {
       switch ($this->object_class) {
         case "CConsultation" :
           /** @var $object CConsultation */
+          $object->loadRefPlageConsult();
           $this->_ref_user->load($object->_ref_plageconsult->chir_id);
           break;
         case "CConsultAnesth" :
           /** @var $object CConsultAnesth */
-          $object->_ref_consultation->loadRefsFwd();
+          $object->loadRefConsultation()->loadRefPlageConsult();
           $this->_ref_user->load($object->_ref_consultation->_ref_plageconsult->chir_id);
           break;
         case "COperation" :
           /** @var $object COperation */
           $this->_ref_user->load($object->chir_id);
+          break;
+        case "CSejour" :
+          /** @var $object CSejour */
+          $this->_ref_user->load($object->praticien_id);
           break;
       }
     }
@@ -714,25 +708,113 @@ class CCompteRendu extends CDocumentItem {
 
     $this->loadRefAuthor();
 
-    if ($this->_ref_author->_id == CMediusers::get()->_id) {
-      $can = new CCanDo();
-      $can->read = $can->edit = 1;
-      return $can;
+    $parentPerm = parent::getPerm($permType);
+
+    if ($this->private) {
+      $sameFunction = $this->_ref_author->function_id == CMediusers::get()->function_id;
+      $isAdmin = CMediusers::get()->isAdmin();
+      return $parentPerm && ($sameFunction || $isAdmin);
+    }
+
+    if ($this->_id && $this->author_id && ($this->_ref_author->_id == CMediusers::get()->_id)) {
+      return $parentPerm;
     }
 
     if ($this->_ref_object->_id) {
-      $can = $this->_ref_object->getPerm($permType);
+      $parentPerm = $parentPerm && $this->_ref_object->getPerm($permType);
     }
-    elseif ($this->_ref_user->_id) {
-      $can = $this->_ref_user->getPerm($permType);
+    if ($this->_ref_user->_id) {
+      $parentPerm = $parentPerm && $this->_ref_user->getPerm($permType);
     }
-    elseif ($this->_ref_function->_id) {
-      $can = $this->_ref_function->getPerm($permType);
+    if ($this->_ref_function->_id) {
+      $parentPerm = $parentPerm && $this->_ref_function->getPerm($permType);
     }
-    else {
-      $can = $this->_ref_group->getPerm($permType);
+    if ($this->_ref_group->_id) {
+      $parentPerm = $parentPerm && $this->_ref_group->getPerm($permType);
     }
-    return $can;
+    return $parentPerm;
+  }
+
+  /**
+   * Vérification du droit de créer un document au sein d'un contexte donné
+   *
+   * @param CMbObject $object Contexte de création du Document
+   *
+   * @return bool Droit de création d'un document
+   */
+  static function canCreate(CMbObject $object) {
+    $cr = new CCompteRendu();
+    return $object->canRead() && $cr->loadPermClass()->permission >= PERM_EDIT;
+  }
+
+  /**
+   * Vérification du droit de duplication d'un modèle
+   *
+   * @return bool
+   */
+  function canDuplicate() {
+    $this->loadTargetObject();
+    return self::canCreate($this->_ref_object);
+  }
+
+  /**
+   * Vérification du droit de verouillage du document
+   *
+   * @return bool Droit de verrouillage
+   */
+  function canLock() {
+    if (!$this->_id) {
+      return false;
+    }
+    if (CMediusers::get()->isAdmin()) {
+      return true;
+    }
+    if (CMediusers::get() == $this->author_id) {
+      return true;
+    }
+    return $this->canEdit();
+  }
+
+  /**
+   * Vérification du droit de déverouillage du document
+   *
+   * @return bool Droit de déverrouillage
+   */
+  function canUnLock() {
+    if (!$this->_id) {
+      return false;
+    }
+    if (CMediusers::get()->isAdmin()) {
+      return true;
+    }
+    $last_log = $this->loadLastLogForField("valide");
+    if (!$last_log->_id) {
+      $last_log = $this->loadFirstLog();
+    }
+    $mediuser = $last_log->loadRefUser()->loadRefMediuser();
+    if (CMediusers::get() == $mediuser->_id) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Vérification de l'état de verruoillage du document
+   *
+   * @return bool Etat de verrouillage du document
+   */
+  function isLocked() {
+    if(!$this->_id) {
+      return false;
+    }
+    $days = CAppUI::conf("dPcompteRendu CCompteRendu days_to_lock");
+    $days = isset($days[$this->object_class]) ?
+      $days[$this->object_class] : $days["base"];
+
+    if (CMbDT::daysRelative($this->_ref_content->last_modified, CMbDT::dateTime()) > $days) {
+      return $this->_is_locked = true;
+    }
+    return $this->_is_locked = $this->valide;
   }
 
   /**

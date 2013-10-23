@@ -117,7 +117,7 @@ class CFilesCategory extends CMbObject {
     $where = array(
       $instance->_spec->ds->prepare("`class` IS NULL OR `class` = %", $class)
     );
-    return $instance->loadList($where);
+    return $instance->loadList($where, "nom");
   }
 
   /**

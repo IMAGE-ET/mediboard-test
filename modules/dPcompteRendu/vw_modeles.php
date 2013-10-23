@@ -51,6 +51,7 @@ foreach ($modeles as $_modeles) {
   CStoredObject::massCountBackRefs($_modeles, "documents_generated");
   /** @var $_modele CCompteRendu */
   foreach ($_modeles as $_modele) {
+    $_modele->canDo();
     $_modele->countBackRefs("documents_generated");
     if ($_modele->type == "body") {
       $_modele->loadComponents();
