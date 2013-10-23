@@ -192,6 +192,16 @@ class CDocumentItem extends CMbMetaObject {
     
     return $this->_ref_author = $this->loadFwdRef("author_id", true);
   }
+
+  function getPerm($permType) {
+
+    if ($this->private) {
+      $sameFunction = $this->_ref_author->function_id == CMediusers::get()->function_id;
+      $isAdmin = CMediusers::get()->isAdmin();
+      return parent::getPerm($permType) && ($sameFunction || $isAdmin);
+    }
+    return parent::getPerm($permType);
+  }
   
   /**
    * Load aggregated doc item ownership
