@@ -28,7 +28,8 @@
 }
 
 /* A transparent pixel because IE doesn't consider "transparent" color as opaque for the mouse pointer */
-.ua-msie-8 .dent {
+.ua-msie-8 .dent,
+.ua-msie-9 .dent {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQAAAAA3bvkkAAAAAnRSTlMAAQGU%2Fa4AAAAKSURBVHjaY2oAAACGAIOk3dDiAAAAAElFTkSuQmCC);
 }
 
