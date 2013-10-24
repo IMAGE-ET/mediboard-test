@@ -15,13 +15,16 @@ CCanDo::checkRead();
 
 $page       = intval(CValue::getOrSession('page', 0));
 
+$filter     = CValue::getOrSession("filter",    "");
+
+$type       = CValue::getOrSession("_user_type");
+
 $pro_sante  = CValue::get("pro_sante",  false);
 $inactif    = CValue::get("inactif",    false);
 $ldap_bound = CValue::get("ldap_bound", false);
 $human      = CValue::get("human",      false);
 $robot      = CValue::get("robot",      false);
 
-$filter     = CValue::getOrSession("filter",    "");
 $order_way  = CValue::getOrSession("order_way", "ASC");
 $order_col  = CValue::getOrSession("order_col", "function_id");
 $user_id    = CValue::getOrSession("user_id");
@@ -80,6 +83,10 @@ if ($pro_sante) {
 
 if ($inactif) {
   $where["users_mediboard.actif"] = "!= '1'";
+}
+
+if($type) {
+  $where["users.user_type"] = "= '$type'";
 }
 
 if ($ldap_bound) {
@@ -170,12 +177,13 @@ $smarty = new CSmartyDP();
 $smarty->assign("utypes"        , CUser::$types);
 $smarty->assign("total_mediuser", $total_mediuser);
 $smarty->assign("page"          , $page);
+$smarty->assign("filter"        , $filter);
+$smarty->assign("type"          , $type);
 $smarty->assign("pro_sante"     , $pro_sante);
 $smarty->assign("human"         , $human);
 $smarty->assign("robot"         , $robot);
 $smarty->assign("inactif"       , $inactif);
 $smarty->assign("ldap_bound"    , $ldap_bound);
-$smarty->assign("filter"        , $filter);
 $smarty->assign("mediusers"     , $mediusers);
 $smarty->assign("user_id"       , $user_id);
 $smarty->assign("group"         , $group);

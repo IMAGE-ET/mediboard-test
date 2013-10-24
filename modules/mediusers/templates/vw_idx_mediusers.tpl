@@ -68,7 +68,20 @@ Main.add(function() {
           <tr>
             <th>Champ de recherche</th>
             <td>
-              <input type="text" name="filter" value="{{$filter}}" onchange="$V(this.form.page, 0)" />
+              <input type="text" name="filter" value="{{$filter}}" style="width: 15em;" onchange="$V(this.form.page, 0)" />
+            </td>
+          </tr>
+          <tr>
+            <th>{{mb_label class="CMediusers" field="_user_type"}}</th>
+            <td>
+              <select name="_user_type" style="width: 15em;">
+                <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+                {{foreach from=$utypes key=curr_key item=_type}}
+                  <option value="{{if $curr_key != 0}}{{$curr_key}}{{/if}}" {{if $type == $curr_key}}selected="selected"{{/if}}>
+                    {{$_type}}
+                  </option>
+                {{/foreach}}
+              </select>
             </td>
           </tr>
           <tr>
