@@ -603,7 +603,7 @@ class CMediusers extends CPerson {
       /** @var  CSecondaryFunction $_link */
       $fonction = $_link->loadRefFunction();
       $fonction->load($_link->function_id);
-      $perm = $perm || CPermObject::getPermObject($fonction, $permType);
+      $perm = $perm || CPermObject::getPermObject($this, $permType, $fonction);
     }
 
     return $perm;
