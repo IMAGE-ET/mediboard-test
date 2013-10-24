@@ -596,14 +596,18 @@ class CMediusers extends CPerson {
       return true;
     }
     $this->loadRefFunction();
-    $perm = CPermObject::getPermObject($this, $permType, $this->_ref_function);
+    if($perm = CPermObject::getPermObject($this, $permType, $this->_ref_function)) {
+      return $perm;
+    }
 
     $this->loadBackRefs("secondary_functions");
     foreach ($this->_back["secondary_functions"] as $_link) {
       /** @var  CSecondaryFunction $_link */
       $fonction = $_link->loadRefFunction();
       $fonction->load($_link->function_id);
-      $perm = $perm || CPermObject::getPermObject($this, $permType, $fonction);
+      if($perm = $perm || CPermObject::getPermObject($this, $permType, $fonction)) {
+        return $perm;
+      }
     }
 
     return $perm;
