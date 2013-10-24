@@ -26,13 +26,13 @@ $where = array();
 $where["service.urgence"]    = "= '1'";
 $where["service.group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
 $where["emplacement.plan_x"] = "IS NOT NULL";
-$chambres_urgences = $chambre->loadList($where, null, null, null, $ljoin);
+$chambres_urgences = $chambre->loadList($where, null, null, "chambre_id", $ljoin);
 
 $where = array();
 $where["service.uhcd"]       = "= '1'";
 $where["service.group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
 $where["emplacement.plan_x"] = "IS NOT NULL";
-$chambres_uhcd = $chambre->loadList($where, null, null, null, $ljoin);
+$chambres_uhcd = $chambre->loadList($where, null, null, "chambre_id", $ljoin);
 
 $conf_nb_colonnes = CAppUI::conf("dPhospi nb_colonnes_vue_topologique");
 
