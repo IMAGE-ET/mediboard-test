@@ -26,8 +26,7 @@ class CDocumentItem extends CMbMetaObject {
   public $_send_problem;
 
   // Behavior Field
-  public $_send; 
-  public $_is_editable = true;
+  public $_send;
 
   /** @var CMediusers */
   public $_ref_author;

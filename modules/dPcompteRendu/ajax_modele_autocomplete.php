@@ -20,7 +20,7 @@ $user = new CMediusers();
 $user->load($user_id);
 $user->loadRefFunction();
 
-$compte_rendu = new CCompteRendu;
+$compte_rendu = new CCompteRendu();
 $modeles      = array();
 $order        = "nom";
 

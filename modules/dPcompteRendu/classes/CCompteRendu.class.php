@@ -778,7 +778,7 @@ class CCompteRendu extends CDocumentItem {
       $last_log = $this->loadFirstLog();
     }
     $mediuser = $last_log->loadRefUser()->loadRefMediuser();
-    if (CMediusers::get() == $mediuser->_id) {
+    if (CMediusers::get()->_id == $mediuser->_id) {
       return true;
     }
     return false;
@@ -796,7 +796,6 @@ class CCompteRendu extends CDocumentItem {
     $days = CAppUI::conf("dPcompteRendu CCompteRendu days_to_lock");
     $days = isset($days[$this->object_class]) ?
       $days[$this->object_class] : $days["base"];
-
     if (CMbDT::daysRelative($this->_ref_content->last_modified, CMbDT::dateTime()) > $days) {
       return $this->_is_locked = true;
     }

@@ -26,16 +26,16 @@
   {{foreach from=$object->_ref_documents item=document}}
   <tr>
     <td class="text">
-      {{if $document->_is_editable && $document->_can->edit}}
+      {{if $document->_can->read}}
         <a href="#{{$document->_guid}}" onclick="Document.edit({{$document->_id}}); return false;" style="display: inline;">
       {{/if}}
-      {{if $document->valide}}
+      {{if $document->_is_locked}}
         <img src="style/mediboard/images/buttons/lock.png" onmouseover="ObjectTooltip.createEx(this, '{{$document->_guid}}', 'locker')"/>
       {{/if}}
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$document->_guid}}', 'objectView')">
-          {{$document}}
-        </span>
-      {{if $document->_is_editable && $document->_can->edit}}
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$document->_guid}}', 'objectView')">
+        {{$document}}
+      </span>
+      {{if $document->_can->read}}
         </a>
       {{/if}}
       {{if $document->private}}
@@ -61,7 +61,7 @@
           {{/if}}">
           {{tr}}Print{{/tr}}
         </button>
-        {{if $document->_is_editable && $document->_can->edit}}
+        {{if $document->_can->edit}}
           <button type="button" class="trash notext" onclick="Document.del(this.form, '{{$document->nom|smarty:nodefaults|JSAttribute}}')">
             {{tr}}Delete{{/tr}}
           </button>
