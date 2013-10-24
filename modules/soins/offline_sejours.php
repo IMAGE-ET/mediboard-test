@@ -11,7 +11,7 @@
  * @link     http://www.mediboard.org
  */
 
-CApp::setMemoryLimit("1536M");
+CApp::setMemoryLimit("1024M");
 CApp::setTimeLimit(240);
 
 $service_id = CValue::get("service_id");
