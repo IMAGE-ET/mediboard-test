@@ -15,15 +15,16 @@ CCanDo::checkAdmin();
 
 $group = CGroups::loadCurrent();
 $group_id = $group->_id;
-
 // --------------------------------
 // cabinet
 $cabinet_text     = CValue::post("text");
-$compta_partagee  = CValue::post("compta_partagee");
-$consult_partagee = CValue::post("consults_partagees");
 $cabinet_adresse  = CValue::post("adresse");
 $cabinet_ville    = CValue::post("ville");
 $cabinet_cp       = CValue::post("cp");
+$cabinet_tel      = CValue::post("tel");
+$cabinet_fax      = CValue::post("fax");
+$compta_partagee  = CValue::post("compta_partagee");
+$consult_partagee = CValue::post("consults_partagees");
 
 $cabinet = new CFunctions();
 $cabinet->group_id = $group_id;
@@ -43,10 +44,11 @@ else {
   $cabinet->adresse = $cabinet_adresse;
   $cabinet->compta_partagee = $compta_partagee;
   $cabinet->consults_partagees = $consult_partagee;
-}
-
-if ($msg = $cabinet->store()) {
-  CAppUI::stepAjax($msg, UI_MSG_ERROR);
+  $cabinet->tel = $cabinet_tel;
+  $cabinet->fax = $cabinet_fax;
+  if ($msg = $cabinet->store()) {
+    CAppUI::stepAjax($msg, UI_MSG_ERROR);
+  }
 }
 
 CAppUI::stepAjax("Cabinet_msg_cabinet%s_created_num%d", UI_MSG_OK, $cabinet->text, $cabinet->_id);

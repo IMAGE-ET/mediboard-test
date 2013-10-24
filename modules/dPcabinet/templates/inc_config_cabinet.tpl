@@ -99,7 +99,7 @@
     background-image: url('modules/dPcabinet/images/big/phone.png');
   }
 </style>
-<form method="post" name="edit_do_create_cabinet" onsubmit="return onSubmitFormAjax(this, null, 'response')">
+<form method="post" name="edit_do_create_cabinet" onsubmit="return onSubmitFormAjax(this, null)">
   <input type="hidden" name="dosql" value="do_configure_cabinet"/>
   <input type="hidden" name="m" value="cabinet"/>
 
