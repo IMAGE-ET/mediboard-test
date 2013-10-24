@@ -35,10 +35,6 @@ $where[] = "sejour.entree BETWEEN '$date' AND '$date_after'
 // RPU Existants
 $where["rpu.rpu_id"] = "IS NOT NULL";
 
-if ($service_id) {
-  $where["sejour.service_id"] = "= '$service_id'";
-}
-
 switch ($view_sortie) {
   case "tous":
     break;
@@ -62,7 +58,14 @@ CMbObject::massLoadFwdRef($listSejours, "patient_id");
 $prats = CMbObject::massLoadFwdRef($listSejours, "praticien_id");
 CMbObject::massLoadFwdRef($prats, "function_id");
 
-foreach ($listSejours as $_sejour) {
+foreach ($listSejours as $key=> $_sejour) {
+  if ($service_id) {
+    $curr_aff = $_sejour->getCurrAffectation();
+    if ((!$curr_aff->_id && (!$_sejour->service_id || $_sejour->service_id != $service_id)) || $curr_aff->service_id != $service_id) {
+      unset($listSejours[$key]);
+      continue;
+    }
+  }
   $_sejour->loadRefsFwd();
   $_sejour->loadRefRPU();
   $_sejour->loadNDA();

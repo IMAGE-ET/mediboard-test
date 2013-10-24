@@ -43,10 +43,6 @@ $where[] = CAppUI::pref("showMissingRPU") ?
   "rpu.rpu_id IS NOT NULL";
 $where["sejour.group_id"] = "= '$group->_id'";
 
-if ($service_id) {
-  $where["sejour.service_id"] = "= '$service_id'";
-}
-
 switch ($selAffichage) {
   case "prendre_en_charge":
     $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
@@ -87,7 +83,15 @@ $prats = CMbObject::massLoadFwdRef($listSejours, "praticien_id");
 CMbObject::massLoadFwdRef($prats, "function_id");
 CMbObject::massCountBackRefs($listSejours, "notes");
 
-foreach ($listSejours as &$sejour) {
+foreach ($listSejours as $key => &$sejour) {
+  if ($service_id) {
+    $curr_aff = $sejour->getCurrAffectation();
+    if ((!$curr_aff->_id && (!$sejour->service_id || $sejour->service_id != $service_id)) || $curr_aff->service_id != $service_id) {
+      unset($listSejours[$key]);
+      continue;
+    }
+  }
+
   // Chargement du numero de dossier
   $sejour->loadNDA();
   $sejour->loadRefsFwd();
