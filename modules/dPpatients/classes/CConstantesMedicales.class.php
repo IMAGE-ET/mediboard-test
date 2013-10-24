@@ -1929,22 +1929,23 @@ class CConstantesMedicales extends CMbObject {
         $series = array();
         $axis_id = 1;
         $graph_datas = array();
-        $colors = array('#00CCFF', '#FF0000', '#FF6600', '#009900', '#9900CC');
+        $colors = array('#006EFF', '#FF0000', '#FF9600', '#009900', '#9900CC');
         $cumul = 0;
 
         foreach ($_graph_constants as $_constant) {
           $drawn_constants[] = $_constant;
 
-          // The label of the yaxis and the title of the graph are formatted
-          $label = CAppUI::tr("CConstantesMedicales-$_constant-court");
-          if (self::$list_constantes[$_constant]['unit']) {
-            $label .= ' (' . self::$list_constantes[$_constant]['unit'] . ')';
-          }
           if ($axis_id == 1) {
             $title = CAppUI::tr("CConstantesMedicales-$_constant-court");
           }
           else {
             $title .= " + " . CAppUI::tr("CConstantesMedicales-$_constant-court");
+          }
+          // The label of the yaxis and the title of the graph are formatted
+          $label = CAppUI::tr("CConstantesMedicales-$_constant-court");
+          if (self::$list_constantes[$_constant]['unit']) {
+            $label .= ' (' . self::$list_constantes[$_constant]['unit'] . ')';
+            $title .= ' (' . self::$list_constantes[$_constant]['unit'] . ')';
           }
           $label = utf8_encode($label);
 
@@ -1985,7 +1986,7 @@ class CConstantesMedicales extends CMbObject {
             $color = $colors[$axis_id - 1];
             $color = 'rgba(' . hexdec(substr($color, 1, 2)) .
               ', ' . hexdec(substr($color, 3, 2)) .
-              ', ' . hexdec(substr($color, 5, 2)) . ', 0.5)';
+              ', ' . hexdec(substr($color, 5, 2)) . ', 0.3)';
 
             $markings[] = array(
               'y' . $axis_id . 'axis' => array(
@@ -2040,9 +2041,6 @@ class CConstantesMedicales extends CMbObject {
                 ),
                 'points'  => array(
                   'show'      => 1,
-                  'symbol'    => 'circle',
-                  'radius'    => 3,
-                  'lineWidth' => 1
                 )
               );
               break;
@@ -2053,7 +2051,7 @@ class CConstantesMedicales extends CMbObject {
                   'data'  => array($_cumul),
                   'yaxis' => $axis_id,
                   'label' => $i == 0 ? $label : null,
-                  'color' => '#00CCFF',
+                  'color' => '#006EFF',
                   'unit'  => utf8_encode(CMbString::htmlEntities(self::$list_constantes[$_constant]['unit'])),
                   'bars' => array(
                     'show'  => true,
@@ -2076,10 +2074,7 @@ class CConstantesMedicales extends CMbObject {
                   'show'    => 1
                 ),
                 'points'  => array(
-                  'show'      => 1,
-                  'symbol'    => 'circle',
-                  'radius'    => 3,
-                  'lineWidth' => 1
+                  'show'      => 1
                 ),
                 'name' => utf8_encode($_constant)
               );
@@ -2106,6 +2101,12 @@ class CConstantesMedicales extends CMbObject {
             'grid' => array(
               'clickable' => 1,
               'hoverable' => 1,
+              'borderColor' => array(
+                'top' => '#4B4B4B',
+                'right' => '#4B4B4B',
+                'left' => $colors[0],
+                'bottom' => '#4B4B4B'
+              ),
             )
           ),
           'cumul'       => $cumul,
@@ -2435,6 +2436,9 @@ class CConstantesMedicales extends CMbObject {
         $max = max($max_param, $max);
       }
     }
+    if (isset(self::$list_constantes[$constant]['candles']) && self::$list_constantes[$constant]['candles'] === true) {
+      $max += 10;
+    }
 
     return $max;
   }
@@ -2457,6 +2461,9 @@ class CConstantesMedicales extends CMbObject {
       else {
         $min = min($min_param, $min);
       }
+    }
+    if (isset(self::$list_constantes[$constant]['candles']) && self::$list_constantes[$constant]['candles'] === true) {
+      $min -= 10;
     }
 
     return $min;

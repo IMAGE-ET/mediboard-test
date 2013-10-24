@@ -179,7 +179,7 @@ drawGraphs = function() {
         if (serie.bandwidth) {
           var data = new Array();
           serie.data.each(function(point) {
-            if (point[0] >= window.minXValue && point[0] <= window.minXValue + 10) {
+            if (point[0] >= window.minXValue && point[0] < window.minXValue + 10) {
               data.push(point);
             }
           });
@@ -192,19 +192,27 @@ drawGraphs = function() {
       oPh.bind('plotclick', plotClick);
       var plot = jQuery.plot(oPh, oDatas, oOptions);
 
-      // Display the value for the cumul graphs
-      if (cumul) {
-        oDatas.each(function (serie) {
-          if (serie.bars) {
-            serie.data.each(function (data) {
-              var oPoint = plot.pointOffset({x: data[0], y: data[1]});
-              if (data[0] >= window.minXValue && data[0] <= window.minXValue + 10) {
-                oPh.append('<div style="position: absolute; left:' + (oPoint.left + 5) + 'px; top: ' + (oPoint.top + 5) + 'px; font-size: smaller">' + data[1] + '</div>');
-              }
-            });
-          }
-        });
-      }
+      oDatas.each(function (serie) {
+        if (serie.bars) {
+          serie.data.each(function (data) {
+            var oPoint = plot.pointOffset({x: data[0], y: data[1]});
+            if (data[0] >= window.minXValue && data[0] < window.minXValue + 10) {
+              oPh.append('<div style="position: absolute; left:' + (oPoint.left + 5) + 'px; top: ' + (oPoint.top + 5) + 'px; font-size: smaller">' + data[1] + '</div>');
+            }
+          });
+        }
+        else if(serie.bandwidth) {
+          serie.data.each(function (data) {
+            var max = Math.max(data[1], data[2]);
+            var min = Math.min(data[1], data[2]);
+            var oPointMax = plot.pointOffset({x: data[0], y: max, yaxis: serie.yaxis});
+            var oPointMin = plot.pointOffset({x: data[0], y: min, yaxis: serie.yaxis});
+
+            oPh.append('<div style="position: absolute; left: ' + (oPointMax.left - 8) + 'px; top: ' + (oPointMax.top - 15) + 'px; font-size: smaller">' + max + '</div>');
+            oPh.append('<div style="position: absolute; left: ' + (oPointMin.left - 8) + 'px; top: ' + (oPointMin.top + 5) + 'px; font-size: smaller">' + min + '</div>');
+          });
+        }
+      });
 
       // Make the labels of the xaxis clickable
       $$('#placeholder_{{$_rank}}_{{$_graph_id}} .x1Axis .tickLabel').each(function(item) {
@@ -417,7 +425,7 @@ refreshFiches = function(sejour_id){
                   <tr id="graph_row_{{$_rank}}_{{$_graph_id}}">
                     <td>
                       <p style="text-align: center"><strong>{{$_graph.title}}</strong></p>
-                      <div id="placeholder_{{$_rank}}_{{$_graph_id}}" style="width: {{$_graph.width}}px; height: 200px; margin-top: 10px; margin-bottom: 10px; margin-left: {{$_graph.margin_left}}px"></div>
+                      <div id="placeholder_{{$_rank}}_{{$_graph_id}}" style="width: {{$_graph.width}}px; height: 175px; margin-bottom: 5px; margin-left: {{$_graph.margin_left}}px"></div>
                     </td>
                     <td>
                       <div id="legend_{{$_rank}}_{{$_graph_id}}" style="margin-top: 30px; width: 15em"></div>
