@@ -46,7 +46,7 @@ $user->canDo();
 if ($object->loadRefsDocs()) {
   foreach ($object->_ref_documents as $_doc) {
     $_doc->loadRefCategory();
-    $_doc->loadContent(false);
+    $_doc->isLocked();
     $_doc->canDo();
   }
 }
