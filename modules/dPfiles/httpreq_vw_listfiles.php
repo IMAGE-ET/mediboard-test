@@ -35,6 +35,7 @@ $nbItems = 0;
 
 if ($object_id && $object_class) {
   // Chargement de l'objet
+  /** @var CMbObject $object */
   $object = new $object_class;
   $object->load($object_id);
   $file = new CFile();
@@ -67,8 +68,10 @@ if ($object_id && $object_class) {
     }
 
     foreach ($_cat["items"] as $_item) {
+      /** @var CDocumentItem $_item */
       $nbItems++;
       $_item->loadRefCategory();
+      $_item->canDo();
       
       if ($_item->_class === "CCompteRendu") {
         $_item->makePDFpreview();
