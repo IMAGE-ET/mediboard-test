@@ -443,6 +443,7 @@ $locales['CObjectToInteropSender-sender_id-desc'] = 'Expéditeur';
 $locales['CObjectToInteropSender-title-create'] = 'Associer un objet à l\'expéditeur';
 $locales['CObjectToInteropSender-title-modify'] = 'Modifier le lien';
 $locales['CSenderSFTP'] = 'Expéditeur SFTP';
+$locales['CSenderSFTP-utilities'] = 'Utilitaires expéditeur SFTP';
 $locales['CSenderSFTP_actions'] = 'Actions';
 $locales['CSenderSFTP_configs-formats'] = 'Configs formats';
 $locales['CSenderSFTP_formats-available'] = 'Formats disponibles';

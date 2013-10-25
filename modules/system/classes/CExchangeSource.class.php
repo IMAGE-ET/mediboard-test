@@ -16,6 +16,7 @@
  */
 class CExchangeSource extends CMbObject {
   static $typeToClass = array (
+    "sftp"        => "CSourceSFTP",
     "ftp"         => "CSourceFTP",
     "soap"        => "CSourceSOAP",
     "smtp"        => "CSourceSMTP",

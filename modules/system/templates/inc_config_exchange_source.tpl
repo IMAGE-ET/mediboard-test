@@ -59,6 +59,14 @@
             {{/if}}
           </div>
 
+          <div id="CSourceSFTP-{{$sourcename}}" class="source" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceSFTP)}}block{{else}}none{{/if}};">
+            {{if !"ftp"|module_active}}
+              {{mb_include module=system template=module_missing mod=ftp}}
+            {{else}}
+              {{mb_include module=system template=CExchangeSource_inc_config mod=ftp class="CSourceSFTP"}}
+            {{/if}}
+          </div>
+
           <div id="CSourceSOAP-{{$sourcename}}" class="source" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceSOAP)}}block{{else}}none{{/if}};">
             {{if !"webservices"|module_active}}
               {{mb_include module=system template=module_missing mod=webservices}}

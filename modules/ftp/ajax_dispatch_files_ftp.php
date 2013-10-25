@@ -99,7 +99,12 @@ foreach ($files as $_filepath) {
 
   try {
     if ($sender->_delete_file !== false) {
-      $source->delFile($_filepath);
+      if ($acq) {
+        $source->delFile($_filepath);
+      }
+      else {
+        $source->renameFile($_filepath, str_replace("checkedout", "read", $_filepath));
+      }
     }
     else {
       CAppUI::stepAjax("CEAIDispatcher-error_deleting_file", UI_MSG_WARNING);

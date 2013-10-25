@@ -149,6 +149,46 @@ class CSetupftp extends CSetup {
                ADD `ssl` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query, true);
 
-    $this->mod_version = "0.15";
+    $this->makeRevision("0.15");
+    $query = "CREATE TABLE `source_sftp` (
+                `source_sftp_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `port` INT (11) DEFAULT '22',
+                `timeout` INT (11) DEFAULT '10',
+                `name` VARCHAR (255) NOT NULL,
+                `role` ENUM ('prod','qualif') NOT NULL DEFAULT 'qualif',
+                `host` TEXT NOT NULL,
+                `user` VARCHAR (255),
+                `password` VARCHAR (50),
+                `iv` VARCHAR (255),
+                `type_echange` VARCHAR (255),
+                `active` ENUM ('0','1') NOT NULL DEFAULT '1',
+                `loggable` ENUM ('0','1') NOT NULL DEFAULT '1',
+                `fileprefix` VARCHAR (255),
+                `fileextension_write_end` VARCHAR (255),
+                `fileextension` VARCHAR (255)
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.16");
+    $query = "CREATE TABLE `sender_sftp` (
+                `sender_sftp_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `user_id` INT (11) UNSIGNED,
+                `save_unsupported_message` ENUM ('0','1') DEFAULT '1',
+                `create_ack_file` ENUM ('0','1') DEFAULT '1',
+                `delete_file` ENUM ('0','1') DEFAULT '1',
+                `nom` VARCHAR (255) NOT NULL,
+                `libelle` VARCHAR (255),
+                `group_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `actif` ENUM ('0','1') NOT NULL DEFAULT '0'
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.17");
+    $query = "ALTER TABLE `sender_sftp`
+                ADD INDEX (`user_id`),
+                ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.18";
   }
 }
