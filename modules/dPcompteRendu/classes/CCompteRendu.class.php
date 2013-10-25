@@ -329,7 +329,6 @@ class CCompteRendu extends CDocumentItem {
     if ($this->_id && $this->valide && !$this->locker_id) {
       $log = $this->loadLastLogForField("valide");
       $this->locker_id = $log->user_id;
-      $this->store();
     }
   }
 
