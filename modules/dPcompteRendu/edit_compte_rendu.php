@@ -202,8 +202,10 @@ if ($isCourrier) {
 $can_lock      = $compte_rendu->canLock();
 $can_unclock   = $compte_rendu->canUnlock();
 $can_duplicate = $compte_rendu->canDuplicate();
-$is_locked     = $compte_rendu->isLocked();
-if ($is_locked) {
+$compte_rendu->isLocked();
+$lock_bloked = $compte_rendu->_is_locked ? !$can_unclock : !$can_lock;
+
+if ($compte_rendu->_is_locked) {
   $templateManager->printMode = true;
 }
 if($compte_rendu->_id && !$compte_rendu->canEdit()) {
@@ -226,10 +228,8 @@ $smarty->assign('object_class'  , CValue::get("object_class", $compte_rendu->obj
 $smarty->assign("nb_printers"   , $nb_printers);
 $smarty->assign("pack_id"       , $pack_id);
 $smarty->assign("destinataires" , $destinataires);
-$smarty->assign("can_lock"      , $can_lock);
-$smarty->assign("can_unlock"    , $can_unclock);
+$smarty->assign("lock_bloked"   , $lock_bloked);
 $smarty->assign("can_duplicate" , $can_duplicate);
-$smarty->assign("is_locked"     , $is_locked);
 
 preg_match_all("/(:?\[\[Texte libre - ([^\]]*)\]\])/i", $compte_rendu->_source, $matches);
 

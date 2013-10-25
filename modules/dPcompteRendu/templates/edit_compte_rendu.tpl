@@ -304,6 +304,20 @@ function saveAndMerge() {
   form.onsubmit();
 }
 
+function checkLock(oCheckbox) {
+  if($V(oCheckbox) == 1) {
+    Modal.open('lock_area', {width: '390px', height: '330px'});
+    getForm('LockDoc').user_password.focus()
+  }
+  else {
+    var form = oCheckbox.form;
+    $V(form.valide, 0);
+    $V(form.locker_id, "");
+    $V(form.callback, "afterLock");
+    form.onsubmit();
+  }
+}
+
 function toggleLock(user_id) {
   var form = getForm('editFrm');
   $V(form.valide, $V(form.valide) == '1' ? 0 : 1);
@@ -525,7 +539,12 @@ Main.add(function() {
       <tr>
         <td class="button" colspan="2">
           <button type="button" class="tick" onclick="toggleLock('{{$curr_user->_id}}')">Ok</button>
-          <button type="button" class="cancel" onclick="Control.Modal.close()">Annuler</button>
+          <button type="button" class="cancel"
+                  onclick="$V(getForm('editFrm')._is_locked, 0, false);
+                    $V(getForm('editFrm').___is_locked, 0, false);
+                    Control.Modal.close()">
+            Annuler
+          </button>
         </td>
       </tr>
       <tr>
@@ -684,12 +703,17 @@ Main.add(function() {
         {{mb_include module=system template=inc_object_idsante400 object=$compte_rendu}}
         {{mb_include module=system template=inc_object_history object=$compte_rendu}}
       {{/if}}
+
       {{mb_label object=$compte_rendu field=nom}}
-      {{mb_field object=$compte_rendu field=nom}}
+      {{if $compte_rendu->_is_locked}}
+        {{mb_field object=$compte_rendu field=nom readonly="readonly" disabled="disabled"}}
+      {{else}}
+        {{mb_field object=$compte_rendu field=nom}}
+      {{/if}}
       
       &mdash;
       {{mb_label object=$compte_rendu field=file_category_id}}
-      <select name="file_category_id" style="width: 8em;">
+      <select name="file_category_id" style="width: 8em;" {{if $compte_rendu->_is_locked}}readonly="1" disabled="1"{{/if}}>
         <option value=""{{if !$compte_rendu->file_category_id}} selected="selected"{{/if}}>&mdash; Aucune</option>
         {{foreach from=$listCategory item=currCat}}
           <option value="{{$currCat->file_category_id}}"{{if $currCat->file_category_id==$compte_rendu->file_category_id}} selected="selected"{{/if}}>{{$currCat->nom}}</option>
@@ -698,18 +722,41 @@ Main.add(function() {
 
       &mdash;
       {{mb_label object=$compte_rendu field=language}}
-      {{mb_field object=$compte_rendu field=language}}
+      {{mb_field object=$compte_rendu field=language readonly=$compte_rendu->_is_locked}}
 
-      &mdash;
+      {{if !$compte_rendu->_is_locked}}
+        &mdash;
+        <button type="submit" class="save notext">{{tr}}Save{{/tr}}</button>
+      {{/if}}
+
+      <br />
       <label>
         {{tr}}CCompteRendu-private{{/tr}}
-        {{mb_field object=$compte_rendu field=private typeEnum="checkbox"}}
+        {{mb_field object=$compte_rendu field=private typeEnum="checkbox" readonly=$compte_rendu->_is_locked
+        onchange="this.form.onsubmit()"}}
       </label>
+
+      &mdash;
+      <label onmouseover="ObjectTooltip.createEx(this, '{{$compte_rendu->_guid}}', 'locker')">
+        {{tr}}CCompteRendu-_is_locked{{/tr}}
+        {{mb_field object=$compte_rendu field=_is_locked typeEnum="checkbox" readonly=$lock_bloked
+        onChange="checkLock(this)"}}
+      </label>
+
+      {{if $compte_rendu->_id && $can_duplicate}}
+        &mdash;
+        <button type="button" class="add" onclick="duplicateDoc(this.form)">{{tr}}Duplicate{{/tr}}</button>
+      {{/if}}
+
       {{if $pdf_thumbnails && $pdf_and_thumbs}}
-        <button type="button" class="pagelayout notext" title="{{tr}}CCompteRendu-Pagelayout{{/tr}}"
-                onclick="save_page_layout(); Modal.open($('page_layout'), {
-                closeOnClick: $('page_layout').down('button.tick')
-                });">
+        &mdash;
+        <button type="button" class="pagelayout" title="{{tr}}CCompteRendu-Pagelayout{{/tr}}"
+                {{if $compte_rendu->_is_locked}}readonly="1" disabled="1"{{/if}}
+                onclick="save_page_layout();
+                  Modal.open($('page_layout'), {
+                    closeOnClick: $('page_layout').down('button.tick')
+                  });">
+          Mise en page
         </button>
         <div id="page_layout" style="display: none;">
           {{mb_include module=compteRendu template=inc_page_layout droit=1}}
@@ -717,30 +764,19 @@ Main.add(function() {
           <button class="cancel" type="button" onclick="cancel_page_layout();">{{tr}}Cancel{{/tr}}</button>
         </div>
       {{/if}}
+
       {{if $header_footer_fly}}
-        <button type="button" class="header_footer notext" onclick="modalHeaderFooter(1)"
-          title="Entête / pied de page à la volée"></button>
-      {{/if}}
-      {{if $compte_rendu->_id && !$is_locked && $can_lock}}
-        <button type="button" class="lock notext"
-                onclick="Modal.open('lock_area', {width: '390px', height: '330px'}); getForm('LockDoc').user_password.focus()">
-          {{tr}}Lock{{/tr}}
+        &mdash;
+        <button type="button" class="header_footer" onclick="modalHeaderFooter(1)"
+                title="Entête / pied de page à la volée"
+                {{if $compte_rendu->_is_locked}}readonly="1" disabled="1"{{/if}}>
+          Modifier en-tête et pied de page
         </button>
-      {{elseif $compte_rendu->_id && $is_locked && $can_unlock}}
-        <button type="button" class="unlock notext"
-                onclick="toggleLock('')"
-                onmouseover="ObjectTooltip.createEx(this, '{{$compte_rendu->_guid}}', 'locker')">
-        </button>
-      {{elseif $compte_rendu->valide}}
-        <img src="style/mediboard/images/buttons/lock.png" onmouseover="ObjectTooltip.createEx(this, '{{$compte_rendu->_guid}}', 'locker')"/>
-      {{/if}}
-      {{if $compte_rendu->_id && $can_duplicate}}
-        <button type="button" class="add" onclick="duplicateDoc(this.form)">{{tr}}Duplicate{{/tr}}</button>
       {{/if}}
     </th>
   </tr>
 
-  {{if !$compte_rendu->valide}}
+  {{if !$compte_rendu->_is_locked}}
     <tr>
       <td colspan="2">
         <div id="reloadzones">

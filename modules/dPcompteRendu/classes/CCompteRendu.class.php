@@ -54,9 +54,10 @@ class CCompteRendu extends CDocumentItem {
   public $version;
 
   // Form fields
-  public $_is_document = false;
-  public $_is_modele   = false;
-  public $_is_locked   = false;
+  public $_is_document    = false;
+  public $_is_modele      = false;
+  public $_is_auto_locked = false;
+  public $_is_locked      = false;
   public $_owner;
   public $_page_format;
   public $_orientation;
@@ -102,6 +103,9 @@ class CCompteRendu extends CDocumentItem {
 
   /** @var CContentHTML */
   public $_ref_content;
+
+  /** @var CMediusers */
+  public $_ref_locker;
 
   /** @var CCorrespondantCourrier[] */
   public $_refs_correspondants_courrier;
@@ -203,6 +207,7 @@ class CCompteRendu extends CDocumentItem {
     $props["type"]             = "enum list|header|preface|body|ending|footer default|body";
     $props["language"]         = "enum list|en-EN|es-ES|fr-CH|fr-FR default|fr-FR show|0";
     $props["_list_classes"]    = "enum list|".implode("|", array_keys(CCompteRendu::getTemplatedClasses()));
+    $props["_is_locked"]       = "bool default|0";
     $props["locker_id"]        = "ref class|CMediusers purgeable";
     $props["header_id"]        = "ref class|CCompteRendu";
     $props["footer_id"]        = "ref class|CCompteRendu";
@@ -328,6 +333,21 @@ class CCompteRendu extends CDocumentItem {
     }
   }
 
+
+
+  /**
+   * Load locker
+   *
+   * @return CMediusers
+   */
+  function loadRefLocker() {
+    if (!$this->_id) {
+      return null;
+    }
+
+    return $this->_ref_locker = $this->loadFwdRef("locker_id", true);
+  }
+
   /**
    * Charge le contenu html
    * 
@@ -357,8 +377,6 @@ class CCompteRendu extends CDocumentItem {
       $content->last_modified = $content->loadLastLog()->date;
       $content->store();
     }
-
-    $this->isLocked();
 
     if ($field_source) {
       $this->_source = $this->_ref_content->content;
@@ -779,36 +797,32 @@ class CCompteRendu extends CDocumentItem {
     if (!$this->_id) {
       return false;
     }
+    if($this->isAutoLock()) {
+      return false;
+    }
     if (CMediusers::get()->isAdmin()) {
       return true;
     }
-    $last_log = $this->loadLastLogForField("valide");
-    if (!$last_log->_id) {
-      $last_log = $this->loadFirstLog();
-    }
-    $mediuser = $last_log->loadRefUser()->loadRefMediuser();
-    if (CMediusers::get()->_id == $mediuser->_id) {
+    if (CMediusers::get()->_id == $this->locker_id) {
       return true;
     }
     return false;
   }
 
   /**
-   * Vérification de l'état de verruoillage du document
+   * Vérification de l'état de verrouillage automatique
    *
-   * @return bool Etat de verrouillage du document
+   * @return bool Etat de verrouillage automatique du document
    */
-  function isLocked() {
-    if(!$this->_id) {
-      return false;
-    }
+  function isAutoLock() {
+    $this->_is_auto_locked = false;
     switch($this->object_class) {
       case "CConsultation" :
         $fix_edit_doc = CAppUI::conf("dPcabinet CConsultation fix_doc_edit");
         if($fix_edit_doc) {
           $consult = $this->loadTargetObject();
           $consult->loadRefPlageConsult();
-          $this->_is_locked = CMbDT::dateTime("+ 24 HOUR", "{$consult->_date} {$consult->heure}") > CMbDT::dateTime();
+          $this->_is_auto_locked = CMbDT::dateTime("+ 24 HOUR", "{$consult->_date} {$consult->heure}") > CMbDT::dateTime();
         }
         break;
       case "CConsultAnesth" :
@@ -816,29 +830,41 @@ class CCompteRendu extends CDocumentItem {
         if($fix_edit_doc) {
           $consult = $this->loadTargetObject()->loadRefConsultation();
           $consult->loadRefPlageConsult();
-          $this->_is_locked = CMbDT::dateTime("+ 24 HOUR", "{$consult->_date} {$consult->heure}") > CMbDT::dateTime();
+          $this->_is_auto_locked = CMbDT::dateTime("+ 24 HOUR", "{$consult->_date} {$consult->heure}") > CMbDT::dateTime();
         }
         break;
       case "CSejour" :
         $fix_edit_doc = CAppUI::conf("dPplanningOp CSejour fix_doc_edit");
-        $this->_is_locked = $fix_edit_doc && ($this->sortie_reelle === null);
+        $this->_is_auto_locked = $fix_edit_doc && ($this->sortie_reelle === null);
         break;
       case "COperation" :
         $fix_edit_doc = CAppUI::conf("dPplanningOp CSejour fix_doc_edit");
         $sejour = $this->loadTargetObject();
-        $this->_is_locked = $fix_edit_doc && ($sejour->sortie_reelle === null);
+        $this->_is_auto_locked = $fix_edit_doc && ($sejour->sortie_reelle === null);
         break;
       default :
-        $this->_is_locked = false;
+        $this->_is_auto_locked = false;
     }
-    if(!$this->_is_locked) {
+    if(!$this->_is_auto_locked) {
+      $this->loadContent();
       $days = CAppUI::conf("dPcompteRendu CCompteRendu days_to_lock");
       $days = isset($days[$this->object_class]) ?
         $days[$this->object_class] : $days["base"];
-      $this->_is_locked = CMbDT::daysRelative($this->_ref_content->last_modified, CMbDT::dateTime()) > $days;
+      $this->_is_auto_locked = CMbDT::daysRelative($this->_ref_content->last_modified, CMbDT::dateTime()) > $days;
     }
+    return $this->_is_auto_locked;
+  }
 
-    return $this->_is_locked = $this->_is_locked || $this->valide;
+  /**
+   * Vérification de l'état de verrouillage du document
+   *
+   * @return bool Etat de verrouillage du document
+   */
+  function isLocked() {
+    if(!$this->_id) {
+      return false;
+    }
+    return $this->_is_locked = $this->isAutoLock() || $this->valide;
   }
 
   /**

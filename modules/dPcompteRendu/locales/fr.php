@@ -69,6 +69,7 @@ $locales['CCompteRendu-_date-desc'] = 'Date de création';
 $locales['CCompteRendu-_extensioned'] = 'Avec extension';
 $locales['CCompteRendu-_extensioned-court'] = 'Ext.';
 $locales['CCompteRendu-_extensioned-desc'] = 'Nom du document avec extension';
+$locales['CCompteRendu-_is_locked'] = 'Verouillé';
 $locales['CCompteRendu-_list_classes'] = 'Types disponibles';
 $locales['CCompteRendu-_list_classes-court'] = 'Types';
 $locales['CCompteRendu-_list_classes-desc'] = 'Listes des types disponibles';
