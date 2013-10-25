@@ -12,7 +12,13 @@
 {{mb_script module=system script=exchange_source}}
 
 <script type="text/javascript">
-  Main.add(Control.Tabs.create.curry('tabs-configure', true));
+  Main.add(function () {
+    Control.Tabs.create("tabs-configure", true, {
+      afterChange: function(container) {
+        ExchangeSource.SourceAvailability(container);
+      }
+    })
+  });
 
   refreshExchangeSource = function(exchange_source_name, type){
     var url = new Url("system", "ajax_refresh_exchange_source");
@@ -37,12 +43,17 @@
         .addFormData(form)
         .requestUpdate("purge-echange-"+source_class);
     }
+
   }
 </script>
 
 <ul id="tabs-configure" class="control_tabs">
 {{foreach from=$all_sources key=name item=_sources}}
-  <li><a href="#tab{{$name}}">{{tr}}{{$name}}{{/tr}}</a></li>
+  <li>
+    <a href="#tab{{$name}}">
+      {{tr}}{{$name}}{{/tr}} ({{$_sources|@count}})
+    </a>
+  </li>
 {{/foreach}}
 </ul>
 
@@ -75,9 +86,6 @@
           </td>
           <td class="narrow">
             {{unique_id var=uid}}
-            {{main}}
-              ExchangeSource.dispoSource($('{{$uid}}'));
-            {{/main}}
             <img class="status" id="{{$uid}}" data-id="{{$_source->_id}}"
                  data-guid="{{$_source->_guid}}" src="images/icons/status_grey.png"
                  title="{{$_source->name}}"/>

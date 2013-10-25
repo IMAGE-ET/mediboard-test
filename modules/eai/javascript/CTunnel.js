@@ -41,5 +41,33 @@ CTunnel = {
   confirmDeletion : function(form, options) {
 
     confirmDeletion(form, options, this.ajax);
+  },
+
+  verifyAvaibility : function(element) {
+    element.src   = "style/mediboard/images/icons/loading.gif";
+    new Url("eai", "ajax_get_tunnel_status")
+      .addParam("source_guid", element.get('guid'))
+      .requestJSON(function(status) {
+        var title = element.title;
+        element.title = "";
+        element.src = "images/icons/status_red.png";
+        if (status.reachable === "1") {
+          element.src = "images/icons/status_green.png";
+        }
+        element.onmouseover = function() {
+          ObjectTooltip.createDOM(element,
+            DOM.div(null,
+              DOM.table({className:"main tbl", style:"max-width:350px"},
+                DOM.tr(null,
+                  DOM.th(null, title)
+                ),
+                DOM.tr(null,
+                  DOM.td({className:"text"},
+                    DOM.strong(null, "Message : "), status.message)
+                )
+              )
+            ).hide())
+        };
+      })
   }
 };

@@ -14,10 +14,6 @@
 $http_tunnel = new CHTTPTunnelObject();
 $tunnels = $http_tunnel->loadList();
 
-foreach ($tunnels as $_tunnel) {
-  $_tunnel->checkStatus();
-}
-
 $smarty = new CSmartyDP();
 $smarty->assign("tunnels", $tunnels);
 $smarty->display("vw_tunnel_tools.tpl");
