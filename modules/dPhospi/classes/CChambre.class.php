@@ -26,9 +26,12 @@ class CChambre extends CMbObject {
 
   // DB Fields
   public $nom;
-  public $caracteristiques; // côté rue, fenêtre, lit accompagnant, ...
+  public $caracteristiques;       // côté rue, fenêtre, lit accompagnant, ...
   public $lits_alpha;
   public $annule;
+  public $is_waiting_room;        //salle d'attente
+  public $is_examination_room;    // salle d'examen
+  public $is_sas_dechoc;          // sas de dechoquage
 
   // Form Fields
   public $_nb_lits_dispo;
@@ -78,11 +81,14 @@ class CChambre extends CMbObject {
    */
   function getProps() {
     $specs = parent::getProps();
-    $specs["service_id"]       = "ref notNull class|CService seekable";
-    $specs["nom"]              = "str notNull seekable";
-    $specs["caracteristiques"] = "text";
-    $specs["lits_alpha"]       = "bool default|0";
-    $specs["annule"]           = "bool";
+    $specs["service_id"]          = "ref notNull class|CService seekable";
+    $specs["nom"]                 = "str notNull seekable";
+    $specs["caracteristiques"]    = "text";
+    $specs["lits_alpha"]          = "bool default|0";
+    $specs["annule"]              = "bool";
+    $specs["is_waiting_room"]     = "bool";
+    $specs["is_examination_room"] = "bool";
+    $specs["is_sas_dechoc"]       = "bool";
     return $specs;
   }
 

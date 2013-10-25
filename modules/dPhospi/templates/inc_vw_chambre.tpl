@@ -39,6 +39,21 @@
     </tr>
 
     <tr>
+      <th>{{mb_label object=$chambre field=is_waiting_room}}</th>
+      <td>{{mb_field object=$chambre field=is_waiting_room}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$chambre field=is_examination_room}}</th>
+      <td>{{mb_field object=$chambre field=is_examination_room}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$chambre field=is_sas_dechoc}}</th>
+      <td>{{mb_field object=$chambre field=is_sas_dechoc}}</td>
+    </tr>
+
+    <tr>
       <td class="button" colspan="2">
         {{if $chambre->_id}}
           <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>

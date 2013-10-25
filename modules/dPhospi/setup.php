@@ -746,6 +746,13 @@ class CSetupdPhospi extends CSetup {
     $query = "ALTER TABLE  `transmission_medicale` ADD INDEX (  `user_id` )";
     $this->addQuery($query);
 
-    $this->mod_version = "0.80";
+    $this->makeRevision("0.80");
+    $query = "ALTER TABLE `chambre`
+                ADD `is_waiting_room` ENUM ('0','1') DEFAULT '0',
+                ADD `is_examination_room` ENUM ('0','1') DEFAULT '0',
+                ADD `is_sas_dechoc` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.81";
   }
 }
