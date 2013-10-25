@@ -349,6 +349,9 @@ function duplicateDoc(form) {
   var element = CKEDITOR.instances.htmlarea.element;
   $V(form.modele_id, $V(form.compte_rendu_id));
   $V(form.compte_rendu_id, '');
+  $V(form.private, 0);
+  $V(form.valide, 0);
+  $V(form.locker_id, "");
   element.$.disabled=false;
   element.$.contentEditable=true;
   element.$.designMode="On";
@@ -706,14 +709,14 @@ Main.add(function() {
 
       {{mb_label object=$compte_rendu field=nom}}
       {{if $compte_rendu->_is_locked}}
-        {{mb_field object=$compte_rendu field=nom readonly="readonly" disabled="disabled"}}
+        {{mb_field object=$compte_rendu field=nom readonly="readonly"}}
       {{else}}
         {{mb_field object=$compte_rendu field=nom}}
       {{/if}}
       
       &mdash;
       {{mb_label object=$compte_rendu field=file_category_id}}
-      <select name="file_category_id" style="width: 8em;" {{if $compte_rendu->_is_locked}}readonly="1" disabled="1"{{/if}}>
+      <select name="file_category_id" style="width: 8em;" {{if $compte_rendu->_is_locked}}disabled="disabled"{{/if}}>
         <option value=""{{if !$compte_rendu->file_category_id}} selected="selected"{{/if}}>&mdash; Aucune</option>
         {{foreach from=$listCategory item=currCat}}
           <option value="{{$currCat->file_category_id}}"{{if $currCat->file_category_id==$compte_rendu->file_category_id}} selected="selected"{{/if}}>{{$currCat->nom}}</option>
