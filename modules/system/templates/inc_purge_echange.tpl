@@ -27,6 +27,14 @@
     </tr>
     <tr>
       <th>
+        <label for="max">Traitement max à effectuer</label>
+      </th>
+      <td>
+        <input name="max" type="text" value="1000"/>
+      </td>
+    </tr>
+    <tr>
+      <th>
         <label for="delete">Supprimer les échanges antérieurs à 6 mois : </label>
       </th>
       <td>

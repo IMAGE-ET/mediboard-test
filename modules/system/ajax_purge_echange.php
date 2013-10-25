@@ -37,25 +37,25 @@ $ds = $exchange->_spec->ds;
 
 // comptage des echanges à supprimer
 $count_delete = 0;
-$date_max_delete = CMbDT::date("-6 MONTHS", $date_max);
-
-if ($delete) {
-  $where = array();
-  $where["date_echange"] = "< '$date_max_delete'";
-  $count_delete = $exchange->countList($where);
-
-  CAppUI::stepAjax("$exchange_class-msg-delete_count", UI_MSG_OK, $count_delete);
-}
-
-// comptage des echanges à vider qui ne le sont pas deja
-$where = array();
-$where["date_echange"] = "< '$date_max'";
-$where["purge"] = "= '0'";
-$count_purge = $exchange->countList($where);
-
-CAppUI::stepAjax("$exchange_class-msg-purge_count", UI_MSG_OK, max(0, $count_purge - $count_delete));
 
 if (!$do_purge) {
+  if ($delete) {
+    $date_max_delete = CMbDT::date("-6 MONTHS", $date_max);
+    $where = array();
+    $where["date_echange"] = "< '$date_max_delete'";
+    $count_delete = $exchange->countList($where);
+
+    CAppUI::stepAjax("$exchange_class-msg-delete_count", UI_MSG_OK, $count_delete);
+  }
+
+  // comptage des echanges à vider qui ne le sont pas deja
+  $where = array();
+  $where["date_echange"] = "< '$date_max'";
+  $where["purge"] = "= '0'";
+  $count_purge = $exchange->countList($where);
+
+  CAppUI::stepAjax("$exchange_class-msg-purge_count", UI_MSG_OK, max(0, $count_purge - $count_delete));
+
   return;
 }
 

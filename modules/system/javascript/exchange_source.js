@@ -11,6 +11,7 @@
 
 ExchangeSource = {
   status_images : ["images/icons/status_red.png", "images/icons/status_orange.png", "images/icons/status_green.png"],
+  sources_actif : {},
 
   resfreshImageStatus : function(element){
     if (!element.get('id')) {
@@ -140,11 +141,20 @@ ExchangeSource = {
       .requestModal();
   },
 
-  dispoSource : function (element) {
-    if (!element.get('id')) {
+  SourceAvailability : function (container) {
+    if (!container.id) {
       return;
     }
 
+    var list = container.down().select("img");
+    ExchangeSource.sources_actif[container.id] = 0;
+
+    for(var i=0;i<list.length;i++) {
+      ExchangeSource.testAvailability(list[i], container.id);
+    }
+  },
+
+  testAvailability : function (element, id_div) {
     var url = new Url("system", "ajax_get_source_status");
 
     element.title = "";
@@ -157,6 +167,10 @@ ExchangeSource = {
       $(tdmessage).update(status.message);
       var tdtime = tdmessage.next();
       $(tdtime).update(status.response_time);
+      if (status.reachable === 2) {
+        ExchangeSource.sources_actif[id_div] = ExchangeSource.sources_actif[id_div]+1;
+      }
+      Control.Tabs.setTabCount(id_div, ExchangeSource.sources_actif[id_div]);
     })
   }
 };
