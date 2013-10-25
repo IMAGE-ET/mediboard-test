@@ -14,16 +14,26 @@ class CRecordSante400 {
 
   /** @var Chronometer */
   static $chrono = null;
+  /** @var bool */
   static $verbose = false;
+  /** @var bool */
   static $consumeUnsets = true;
- 
+
   /** @var CMySQLDataSource Fake data source for chrono purposes */
   static $ds = null;
-  
+  /** @var string */
+  static $last_query = null;
+  /** @var array */
+  static $last_values = null;
+
+  /** @var array */
   public $data = array();
+  /** @var string  */
   public $value_prefix = "";
-  
-  
+
+  /**
+   * Standard constructor
+   */
   function __construct() {
   }
 
@@ -70,6 +80,16 @@ class CRecordSante400 {
    * @return void
    */
   static function traceChrono($trace) {
+    // Allways log slow queries
+    $log_step = floor(self::$chrono->latestStep);
+    if ($log_step) {
+      $query = self::$last_query;
+      $values = implode(", ", $query);
+      mbLog("slow '$trace' in '$log_step' seconds", "CRecordSante400");
+      mbLog("last query was \n $query \n with values [$values]" , "CRecordSante400");
+    }
+
+    // Trace to output
     if (self::$verbose) {
       $step = self::$chrono->latestStep * 1000;
       $total = self::$chrono->total * 1000;
@@ -91,6 +111,9 @@ class CRecordSante400 {
    * @return void
    */
   static function traceQuery($query, $values = array()) {
+    self::$last_query = $query;
+    self::$last_values = $values;
+
     // Verbose
     if (!self::$verbose) {
       return;
@@ -189,11 +212,11 @@ class CRecordSante400 {
   
   /**
    * Load a unique record from query
-   * @throws Exception if no record fount
-   * 
+   *
    * @param string $query  Query to execute
    * @param array  $values Values to prepare against
    *
+   * @throws Exception if no record fount
    * @return int the number of affected rows (-1 for SELECTs);
    */
   function loadOne($query, $values = array()) {
