@@ -84,7 +84,7 @@ class CRecordSante400 {
     $log_step = floor(self::$chrono->latestStep);
     if ($log_step) {
       $query = self::$last_query;
-      $values = implode(", ", $query);
+      $values = implode(", ", self::$last_values);
       mbLog("slow '$trace' in '$log_step' seconds", "CRecordSante400");
       mbLog("last query was \n $query \n with values [$values]" , "CRecordSante400");
     }
