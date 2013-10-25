@@ -1855,9 +1855,24 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_exams_igs = $this->loadBackRefs("exams_igs");
   }
 
-  function loadSuiviMedical() {
-    $this->loadBackRefs("observations");
-    $this->loadBackRefs("transmissions");
+  function loadSuiviMedical($datetime_min = "") {
+    if ($datetime_min) {
+      $trans = new CTransmissionMedicale();
+      $whereTrans = array();
+      $whereTrans[] = "(degre = 'high' AND (date_max IS NULL OR date_max >= '$datetime_min')) OR (date >= '$datetime_min')";
+      $whereTrans["sejour_id"] = " = '$this->_id'";
+      $this->_back["transmissions"] = $trans->loadList($whereTrans);
+
+      $obs = new CObservationMedicale();
+      $whereObs = array();
+      $whereObs[] = "(degre = 'high') OR (date >= '$datetime_min')";
+      $whereObs["sejour_id"] = " = '$this->_id'";
+      $this->_back["observations"] = $obs->loadList($whereObs);
+    }
+    else {
+      $this->loadBackRefs("observations");
+      $this->loadBackRefs("transmissions");
+    }
 
     $consultations = $this->loadRefsConsultations();
     $consultations_patient = $this->loadRefPatient()->loadRefsConsultations();

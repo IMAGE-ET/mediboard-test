@@ -64,6 +64,8 @@ array_multisort(
   $sejours
 );
 
+$period = CAppUI::conf("soins offline_sejour period", CGroups::loadCurrent()->_guid);
+
 foreach ($sejours as $sejour) {
   $params = array(
     "sejour_id" => $sejour->_id,
@@ -71,6 +73,7 @@ foreach ($sejours as $sejour) {
     "offline"   => 1,
     "in_modal"  => 1,
     "embed"     => $embed,
+    "period"    => $period
   );
 
   $dossiers_complets[$sejour->_id] = CApp::fetch("soins", "print_dossier_soins", $params);

@@ -12,6 +12,7 @@ $sejour_id = CValue::get("sejour_id");
 $offline   = CValue::get("offline");
 $in_modal  = CValue::get("in_modal");
 $embed     = CValue::get("embed");
+$period    = CValue::get("period");
 
 if (!$sejour_id) {
   CAppUI::stepMessage(UI_MSG_WARNING, "Veuillez sélectionner un sejour pour visualiser le dossier complet");
@@ -24,6 +25,11 @@ $formulaires = null;
 global $atc_classes;
 $atc_classes = array();
 
+$datetime_min = "";
+if ($period) {
+  $datetime_min = CMbDT::dateTime("- $period HOURS");
+}
+
 // Chargement du sejour
 $sejour = new CSejour();
 $sejour->load($sejour_id);
@@ -31,7 +37,7 @@ $sejour->loadNDA();
 $sejour->loadExtDiagnostics();
 $sejour->loadRefsConsultAnesth();
 $sejour->_ref_consult_anesth->loadRefConsultation();
-$sejour->loadSuiviMedical();
+$sejour->loadSuiviMedical($datetime_min);
 
 $sejour->canRead();
 
@@ -139,6 +145,12 @@ if (CModule::getActive("dPprescription")) {
   $prescription->loadRefsPrescriptionLineMixes();
   $prescription->loadRefsLinesInscriptions();
 
+  $where = array();
+  $where["planification"] = " = '0'";
+
+  if ($datetime_min) {
+    $where["dateTime"] = " >= '$datetime_min'";
+  }
 
   if (count($prescription->_ref_prescription_line_mixes)) {
     foreach ($prescription->_ref_prescription_line_mixes as $_prescription_line_mix) {
@@ -147,7 +159,7 @@ if (CModule::getActive("dPprescription")) {
       $_prescription_line_mix->loadRefPraticien();
       foreach ($_prescription_line_mix->_ref_lines as $_perf_line) {
         $list_lines["prescription_line_mix"][$_perf_line->_id] = $_perf_line;
-        $_perf_line->loadRefsAdministrations();
+        $_perf_line->loadRefsAdministrations($where);
         foreach ($_perf_line->_ref_administrations as $_administration_perf) {
           $_administration_perf->loadRefAdministrateur();
           $dossier[CMbDT::date($_administration_perf->dateTime)]["prescription_line_mix"][$_perf_line->_id][$_administration_perf->quantite][$_administration_perf->_id] = $_administration_perf;
@@ -166,7 +178,7 @@ if (CModule::getActive("dPprescription")) {
       foreach ($lines_by_type as $med_id => $_line_med) {
         $list_lines["medicament"][$_line_med->_id] = $_line_med;
 
-        $_line_med->loadRefsAdministrations(null, true);
+        $_line_med->loadRefsAdministrations(null, $where);
         foreach ($_line_med->_ref_administrations as $_administration_med) {
           $_administration_med->loadRefAdministrateur();
           $dossier[CMbDT::date($_administration_med->dateTime)]["medicament"][$_line_med->_id][$_administration_med->quantite][$_administration_med->_id] = $_administration_med;
@@ -184,7 +196,7 @@ if (CModule::getActive("dPprescription")) {
         }
         foreach ($_lines_by_cat["element"] as $_line_elt) {
           $list_lines[$chap][$_line_elt->_id] = $_line_elt;
-          $_line_elt->loadRefsAdministrations(null, true);
+          $_line_elt->loadRefsAdministrations(null, $where);
           foreach ($_line_elt->_ref_administrations as $_administration_elt) {
             $_administration_elt->loadRefAdministrateur();
             $dossier[CMbDT::date($_administration_elt->dateTime)][$chap][$_line_elt->_id][$_administration_elt->quantite][$_administration_elt->_id] = $_administration_elt;
@@ -196,7 +208,7 @@ if (CModule::getActive("dPprescription")) {
 
   foreach ($prescription->_ref_lines_inscriptions as $inscriptions_by_type) {
     foreach ($inscriptions_by_type as $_inscription) {
-      $_inscription->loadRefsAdministrations(null, true);
+      $_inscription->loadRefsAdministrations(null, $where);
       foreach ($_inscription->_ref_administrations as $_adm_inscription) {
         $_adm_inscription->loadRefAdministrateur();
         if ($_inscription instanceof CPrescriptionLineMedicament) {
@@ -215,7 +227,12 @@ if (CModule::getActive("dPprescription")) {
 ksort($dossier);
 
 // Constantes du séjour
-$sejour->loadListConstantesMedicales();
+$where = array();
+if ($datetime_min) {
+  $where["datetime"] = " >= '$datetime_min'";
+}
+$sejour->loadListConstantesMedicales($where);
+
 $constantes_grid = CConstantesMedicales::buildGrid($sejour->_list_constantes_medicales, false);
 
 $praticien = new CMediusers();

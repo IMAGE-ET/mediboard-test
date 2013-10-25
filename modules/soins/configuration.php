@@ -18,7 +18,10 @@ CConfiguration::register(
         "bilan"=> array(
           "hour_before" => "num min|0 default|12",
           "hour_after"  => "num min|0 default|24"
-        )
+        ),
+        "offline_sejour" => array(
+          "period" => "num min|0 default|72"
+        ),
       )
     )
   )
