@@ -1471,7 +1471,7 @@ class CPatient extends CPerson {
 
       foreach ($consult->_refs_dossiers_anesth as $_dossier_anesth) {
         $_dossier_anesth->_ref_consultation = $consult;
-        $_dossier_anesth->countDocItems();
+        $_dossier_anesth->countDocItems($permType);
       }
       
       // Grossesse
@@ -1517,10 +1517,10 @@ class CPatient extends CPerson {
 
         // Consultation d'anesthésie
         $consult_anesth = $_operation->loadRefsConsultAnesth();
-        $consult_anesth->countDocItems();
+        $consult_anesth->countDocItems($permType);
 
         $consultation = $consult_anesth->loadRefConsultation();
-        $consultation->countDocItems();
+        $consultation->countDocItems($permType);
         $consultation->canRead();
         $consultation->canEdit();
       }

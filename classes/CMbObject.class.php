@@ -290,7 +290,7 @@ class CMbObject extends CStoredObject {
       self::filterByPerm($this->_ref_documents, $permType);
       $this->_nb_docs = count($this->_ref_documents);
     }
-    
+
     return $this->_nb_files + $this->_nb_docs;
   }
   
