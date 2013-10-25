@@ -352,6 +352,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
       $this->_ref_consultation->loadRefsDocs();
       $this->_ref_documents = $this->_ref_documents + $this->_ref_consultation->_ref_documents;
     }
+    return count($this->_ref_documents);
   }
 
   /**
