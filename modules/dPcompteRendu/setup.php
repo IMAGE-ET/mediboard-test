@@ -932,6 +932,15 @@ class CSetupdPcompteRendu extends CSetup {
       ADD `language` ENUM ('en-EN','es-ES','fr-CH','fr-FR') DEFAULT 'fr-FR' AFTER modele_id";
     $this->addQuery($query);
 
-    $this->mod_version = "0.94";
+    $this->makeRevision("0.94");
+    $query = "ALTER TABLE `compte_rendu`
+      ADD `locker_id` INT(11) UNSIGNED AFTER `author_id`;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `compte_rendu`
+      ADD INDEX (`locker_id`)";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.95";
   }
 }

@@ -24,6 +24,7 @@ class CCompteRendu extends CDocumentItem {
   public $function_id; // not null when is a template associated to a function
   public $group_id; // not null when is a template associated to a group
   public $content_id;
+  public $locker_id;
   public $header_id;
   public $footer_id;
   public $preface_id;
@@ -202,6 +203,7 @@ class CCompteRendu extends CDocumentItem {
     $props["type"]             = "enum list|header|preface|body|ending|footer default|body";
     $props["language"]         = "enum list|en-EN|es-ES|fr-CH|fr-FR default|fr-FR show|0";
     $props["_list_classes"]    = "enum list|".implode("|", array_keys(CCompteRendu::getTemplatedClasses()));
+    $props["locker_id"]        = "ref class|CMediusers purgeable";
     $props["header_id"]        = "ref class|CCompteRendu";
     $props["footer_id"]        = "ref class|CCompteRendu";
     $props["preface_id"]       = "ref class|CCompteRendu";
@@ -316,6 +318,13 @@ class CCompteRendu extends CDocumentItem {
 
     if ($this->page_width > $this->page_height) {
       $this->_orientation = "landscape";
+    }
+
+    // Le champ valide stocke le user_id de la personne qui l'a verrouillé
+    if ($this->_id && $this->valide && !$this->locker_id) {
+      $log = $this->loadLastLogForField("valide");
+      $this->locker_id = $log->user_id;
+      $this->store();
     }
   }
 

@@ -16,7 +16,7 @@ window.saving_doc = false;
 document.title = "{{$compte_rendu->_ref_object}} - {{$compte_rendu->nom}}";
 
 function openCorrespondants(compte_rendu_id, object_guid, show_modal) {
-  var url = new Url("dPcompteRendu", "ajax_edit_correspondants_courrier");
+  var url = new Url("compteRendu", "ajax_edit_correspondants_courrier");
   url.addParam("compte_rendu_id", compte_rendu_id);
   url.addParam("object_guid", object_guid);
   url.requestUpdate("correspondants_courrier", {onComplete: function() {
@@ -93,12 +93,16 @@ function submitCompteRendu(callback){
     var form = getForm("editFrm");
     
     if (checkForm(form) && User.id) {
-      {{if !$is_locked}}
-        editor.getCommand('save').setState(CKEDITOR.TRISTATE_DISABLED);
-        editor.getCommand('mbprint').setState(CKEDITOR.TRISTATE_DISABLED);
-        editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_DISABLED);
+        if (editor.getCommand('save')) {
+          editor.getCommand('save').setState(CKEDITOR.TRISTATE_DISABLED);
+        }
+        if (editor.getCommand('mbprint')) {
+          editor.getCommand('mbprint').setState(CKEDITOR.TRISTATE_DISABLED);
+        }
+        if (editor.getCommand('mbprintPDF')) {
+          editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_DISABLED);
+        }
         editor.on("key", loadOld);
-      {{/if}}
 
       form.onsubmit=function(){ return true; };
       if (Thumb.modele_id && Thumb.contentChanged) {
@@ -154,7 +158,7 @@ function refreshZones(id, obj) {
       }, 0)};
     }
     
-    var url = new Url("dPcompteRendu", "edit_compte_rendu");
+    var url = new Url("compteRendu", "edit_compte_rendu");
     url.addParam("compte_rendu_id", id);
     url.addParam("reloadzones", 1);
     url.requestUpdate("reloadzones", { onComplete:
@@ -170,11 +174,15 @@ function refreshZones(id, obj) {
           window.callback();
         }
         form.onsubmit = function() { Url.ping({onComplete: submitCompteRendu}); return false;};
-        {{if !$is_locked}}
+        if (editor.getCommand('save')) {
           editor.getCommand('save').setState(CKEDITOR.TRISTATE_OFF);
+        }
+        if (editor.getCommand('mbprintPDF')) {
           editor.getCommand('mbprintPDF').setState(CKEDITOR.TRISTATE_OFF);
+        }
+        if (editor.getCommand('mbprint')) {
           editor.getCommand('mbprint').setState(CKEDITOR.TRISTATE_OFF);
-        {{/if}}
+        }
       }
     });
   };
@@ -187,7 +195,7 @@ function refreshZones(id, obj) {
 function openWindowMail() {
   {{if $exchange_source->_id}}
     var form = getForm("editFrm");
-    var url = new Url("dPcompteRendu", "ajax_view_mail");
+    var url = new Url("compteRendu", "ajax_view_mail");
     url.addParam("object_guid", "CCompteRendu-"+$V(form.compte_rendu_id));
     url.requestModal(700, 320);
   {{else}}
@@ -212,7 +220,7 @@ function openWindowApicrypt() {
 function openModalPrinters() {
   // Mise à jour de la date d'impression
   $V(getForm("editFrm").date_print, "now");
-  window.modalPrinters = new Url("dPcompteRendu", "ajax_choose_printer");
+  window.modalPrinters = new Url("compteRendu", "ajax_choose_printer");
   modalPrinters.requestModal(700, 400);
 }
 
@@ -280,7 +288,7 @@ function openModalPrinters() {
     else {
       var url = new window.opener.Url();
     }
-    url.addParam("m", "dPcompteRendu");
+    url.addParam("m", "compteRendu");
     url.addParam("dosql", "do_modele_aed");
     url.addParam("_do_empty_pdf", 1);
     url.addParam("compte_rendu_id", $V(f.compte_rendu_id));
@@ -296,11 +304,13 @@ function saveAndMerge() {
   form.onsubmit();
 }
 
-function toggleLock(button) {
-  var form = button.form;
-  $V(form.valide, $V(form.valide) == 1 ? 0 : 1);
+function toggleLock(user_id) {
+  var form = getForm('editFrm');
+  $V(form.valide, $V(form.valide) == '1' ? 0 : 1);
+  $V(form.locker_id, user_id);
   $V(form.callback, "afterLock");
   form.onsubmit();
+  Control.Modal.close();
 }
 
 function afterLock() {
@@ -354,26 +364,28 @@ Main.add(function() {
 
   // Les correspondants doivent être présent pour le store du compte-rendu
   // Chargement en arrière-plan de la modale
-  {{if $isCourrier}}
+  {{if $isCourrier && !$compte_rendu->valide}}
     openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}', 0);
   {{/if}}
-  
-  window.onbeforeunload = function(e) {
-    e = e || window.event;
-    
-    if (Thumb.contentChanged == false) return;
 
-    if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1 && Thumb.contentChanged == true) {
-      emptyPDF();
-    }
-    
-    if (e) {
-      e.returnValue = ' ';
-    }
-    
-    return ' ';
-  };
-  
+  {{if $compte_rendu->_id}}
+    window.onbeforeunload = function(e) {
+      e = e || window.event;
+
+      if (Thumb.contentChanged == false) return;
+
+      if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1 && Thumb.contentChanged == true) {
+        emptyPDF();
+      }
+
+      if (e) {
+        e.returnValue = ' ';
+      }
+
+      return ' ';
+    };
+  {{/if}}
+
   var htmlarea = $('htmlarea');
   
   // documentGraphs est un tableau si vide ($H donnera les mauvaises clés), un objet sinon
@@ -416,6 +428,22 @@ Main.add(function() {
     action: "ajax_show_locker",
     sClass: "tooltip"
   };
+
+  var form = getForm("LockDoc");
+  var url = new Url("mediusers", "ajax_prat_autocomplete");
+  url.addParam("input_field", form._user_view.name);
+  url.autoComplete(form._user_view, null, {
+    minChars: 0,
+    method: "get",
+    select: "view",
+    dropdown: true,
+    width: '200px',
+    afterUpdateElement: function(field, selected) {
+      $V(form._user_view, selected.down('.view').innerHTML);
+      var id = selected.getAttribute("id").split("-")[2];
+      $V(form.user_id, id);
+    }
+  });
 });
 
 </script>
@@ -451,7 +479,7 @@ Main.add(function() {
 
 <!-- Formulaire d'ajout de correspondant courrier par autocomplete -->
 <form name="addCorrespondant" method="post">
-  <input type="hidden" name="m" value="dPcompteRendu" />
+  <input type="hidden" name="m" value="compteRendu" />
   <input type="hidden" name="dosql" value="do_correspondant_courrier_aed" />
   <input type="hidden" name="correspondant_courrier_id" />
   <input type="hidden" name="compte_rendu_id" value="" />
@@ -462,7 +490,7 @@ Main.add(function() {
 
 
 <form name="addCorrespondantToDossier" method="post">
-  <input type="hidden" name="m" value="dPpatients"/>
+  <input type="hidden" name="m" value="patients"/>
   <input type="hidden" name="dosql" value="do_correspondant_aed" />
   <input type="hidden" name="patient_id" value="" />
   <input type="hidden" name="medecin_id" value="" />
@@ -470,7 +498,7 @@ Main.add(function() {
 
 
 <!-- Formulaire pour l'impression server side -->
-<form name="print-server" method="post" action="?m=dPcompteRendu&amp;ajax_print_server">
+<form name="print-server" method="post" action="?m=compteRendu&ajax_print_server">
   <input type="hidden" name="content" value=""/>
   <input type="hidden" name=""/>
 </form>
@@ -478,10 +506,58 @@ Main.add(function() {
 <!-- Zone cachée pour la génération PDF et l'impression server side -->
 <div id="pdf_area" style="display: none;"></div>
 
-
+<!-- Zone de confirmation de verrouillage du document -->
+<div id="lock_area" style="display: none;">
+  <form name="LockDoc" method="post" action="?m=compteRendu&a=ajax_lock_doc"
+        onsubmit="return onSubmitFormAjax(this, {useFormAction: true})">
+    <input type="hidden" name="user_id" class="notNull" value="" />
+    <table class="form">
+      <tr>
+        <th class="title" colspan="2" >
+          Verrouillage du document
+        </th>
+      </tr>
+      <tr>
+        <td class="text button" colspan="2">
+          <strong>Souhaitez-vous réellement verrouiller ce document sous votre nom ?</strong>
+        </td>
+      </tr>
+      <tr>
+        <td class="button" colspan="2">
+          <button type="button" class="tick" onclick="toggleLock('{{$curr_user->_id}}')">Ok</button>
+          <button type="button" class="cancel" onclick="Control.Modal.close()">Annuler</button>
+        </td>
+      </tr>
+      <tr>
+        <td class="text button" colspan="2">
+          <strong>Souhaitez-vous verrouiller ce document pour un autre utilisateur ?</strong>
+        </td>
+      </tr>
+      <tr>
+        <th>Utilisateur</th>
+        <td>
+          <input type="text" name="_user_view" class="autocomplete" value="" />
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <label for="user_password">Mot de passe</label>
+        </th>
+        <td>
+          <input type="password" name="user_password" class="notNull password str" />
+        </td>
+      </tr>
+      <tr>
+        <td class="button" colspan="2">
+          <button class="tick singleclick" onclick="return this.form.onsubmit();">Ok</button>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
 <!-- Formulaire pour streamer le pdf -->
-<form style="display: none;" name="download-pdf-form" target="{{if $choice_factory == "CDomPDFConverter"}}download_pdf{{else}}_blank{{/if}}" method="post" action="?m=dPcompteRendu&amp;a=ajax_pdf"
-      onsubmit="{{if $pdf_thumbnails && $pdf_and_thumbs}}completeLayout();{{/if}} this.submit();">
+<form style="display: none;" name="download-pdf-form" target="{{if $choice_factory == "CDomPDFConverter"}}download_pdf{{else}}_blank{{/if}}" method="post"
+      action="?m=compteRendu&a=ajax_pdf" onsubmit="{{if $pdf_thumbnails && $pdf_and_thumbs}}completeLayout();{{/if}} this.submit();">
   <input type="hidden" name="content" value=""/>
   <input type="hidden" name="compte_rendu_id" value='{{if $compte_rendu->_id != ''}}{{$compte_rendu->_id}}{{else}}{{$modele_id}}{{/if}}' />
   <input type="hidden" name="object_id" value="{{$compte_rendu->object_id}}"/>
@@ -493,9 +569,14 @@ Main.add(function() {
 </form>
 
 <form name="editFrm" action="?m={{$m}}" method="post"
-      onsubmit="Url.ping({onComplete: submitCompteRendu}); return false;" 
+      onsubmit="Url.ping(function() {
+        {{if $compte_rendu->_id}}
+          submitCompteRendu()
+        {{else}}
+          getForm('editFrm').submit(){{/if}}
+        }); return false;"
       class="{{$compte_rendu->_spec}}">
-  <input type="hidden" name="m" value="dPcompteRendu" />
+  <input type="hidden" name="m" value="compteRendu" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="do_modele_aed" />
   <input type="hidden" name="function_id" value="" />
@@ -514,7 +595,7 @@ Main.add(function() {
   {{mb_field object=$compte_rendu field="font" hidden=1}}
   {{mb_field object=$compte_rendu field="size" hidden=1}}
   {{mb_field object=$compte_rendu field="valide" hidden=1}}
-
+  {{mb_field object=$compte_rendu field="locker_id" hidden=1}}
   {{if $header_footer_fly}}
     <div id="header_footer_fly" style="display: none">
       <table class="tbl">
@@ -642,12 +723,12 @@ Main.add(function() {
       {{/if}}
       {{if $compte_rendu->_id && !$is_locked && $can_lock}}
         <button type="button" class="lock notext"
-                onclick="toggleLock(this)">
+                onclick="Modal.open('lock_area', {width: '390px', height: '330px'}); getForm('LockDoc').user_password.focus()">
           {{tr}}Lock{{/tr}}
         </button>
       {{elseif $compte_rendu->_id && $is_locked && $can_unlock}}
         <button type="button" class="unlock notext"
-                onclick="toggleLock(this)"
+                onclick="toggleLock('')"
                 onmouseover="ObjectTooltip.createEx(this, '{{$compte_rendu->_guid}}', 'locker')">
         </button>
       {{elseif $compte_rendu->valide}}
@@ -659,13 +740,15 @@ Main.add(function() {
     </th>
   </tr>
 
-  <tr>
-    <td colspan="2">
-      <div id="reloadzones">
-        {{mb_include module=compteRendu template=inc_zones_fields}}
-      </div>
-    </td>
-  </tr>
+  {{if !$compte_rendu->valide}}
+    <tr>
+      <td colspan="2">
+        <div id="reloadzones">
+          {{mb_include module=compteRendu template=inc_zones_fields}}
+        </div>
+      </td>
+    </tr>
+  {{/if}}
 
   {{if $compte_rendu->_id && $conf.dPfiles.system_sender}}
   <tr>

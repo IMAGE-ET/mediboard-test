@@ -216,6 +216,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("listCategory"  , $listCategory);
 $smarty->assign("compte_rendu"  , $compte_rendu);
 $smarty->assign("modele_id"     , $modele_id);
+$smarty->assign("curr_user"     , $curr_user);
 $smarty->assign("lists"         , $lists);
 $smarty->assign("isCourrier"    , $isCourrier);
 $smarty->assign("user_id"       , $user->_id);
