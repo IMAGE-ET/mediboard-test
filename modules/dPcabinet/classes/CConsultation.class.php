@@ -1821,26 +1821,6 @@ class CConsultation extends CFacturable {
   }
 
   /**
-   * @see parent::docsEditable()
-   */
-  function docsEditable() {
-    if (parent::docsEditable()) {
-      return true;
-    }
-
-    $fix_edit_doc = CAppUI::conf("dPcabinet CConsultation fix_doc_edit");
-    if (!$fix_edit_doc) {
-       return true;
-    }
-    if ($this->annule) {
-      return false;
-    }
-    $this->loadRefPlageConsult();
-
-    return (CMbDT::dateTime("+ 24 HOUR", "{$this->_date} {$this->heure}") > CMbDT::dateTime());
-  }
-
-  /**
    * @see parent::completeLabelFields()
    */
   function completeLabelFields(&$fields) {

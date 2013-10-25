@@ -793,13 +793,43 @@ class CCompteRendu extends CDocumentItem {
     if(!$this->_id) {
       return false;
     }
-    $days = CAppUI::conf("dPcompteRendu CCompteRendu days_to_lock");
-    $days = isset($days[$this->object_class]) ?
-      $days[$this->object_class] : $days["base"];
-    if (CMbDT::daysRelative($this->_ref_content->last_modified, CMbDT::dateTime()) > $days) {
-      return $this->_is_locked = true;
+    switch($this->object_class) {
+      case "CConsultation" :
+        $fix_edit_doc = CAppUI::conf("dPcabinet CConsultation fix_doc_edit");
+        if($fix_edit_doc) {
+          $consult = $this->loadTargetObject();
+          $consult->loadRefPlageConsult();
+          $this->_is_locked = CMbDT::dateTime("+ 24 HOUR", "{$consult->_date} {$consult->heure}") > CMbDT::dateTime();
+        }
+        break;
+      case "CConsultAnesth" :
+        $fix_edit_doc = CAppUI::conf("dPcabinet CConsultation fix_doc_edit");
+        if($fix_edit_doc) {
+          $consult = $this->loadTargetObject()->loadRefConsultation();
+          $consult->loadRefPlageConsult();
+          $this->_is_locked = CMbDT::dateTime("+ 24 HOUR", "{$consult->_date} {$consult->heure}") > CMbDT::dateTime();
+        }
+        break;
+      case "CSejour" :
+        $fix_edit_doc = CAppUI::conf("dPplanningOp CSejour fix_doc_edit");
+        $this->_is_locked = $fix_edit_doc && ($this->sortie_reelle === null);
+        break;
+      case "COperation" :
+        $fix_edit_doc = CAppUI::conf("dPplanningOp CSejour fix_doc_edit");
+        $sejour = $this->loadTargetObject();
+        $this->_is_locked = $fix_edit_doc && ($sejour->sortie_reelle === null);
+        break;
+      default :
+        $this->_is_locked = false;
     }
-    return $this->_is_locked = $this->valide;
+    if(!$this->_is_locked) {
+      $days = CAppUI::conf("dPcompteRendu CCompteRendu days_to_lock");
+      $days = isset($days[$this->object_class]) ?
+        $days[$this->object_class] : $days["base"];
+      $this->_is_locked = CMbDT::daysRelative($this->_ref_content->last_modified, CMbDT::dateTime()) > $days;
+    }
+
+    return $this->_is_locked = $this->_is_locked || $this->valide;
   }
 
   /**

@@ -2186,10 +2186,6 @@ class CPatient extends CPerson {
     }
   }
 
-  function docsEditable() {
-    return true;
-  }
-
   static function calculInsc($nir, $nir_key, $first_name = " ", $birth_date = "000000") {
     $nir_complet = $nir.$nir_key;
 

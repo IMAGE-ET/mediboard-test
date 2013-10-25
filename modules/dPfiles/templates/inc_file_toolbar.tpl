@@ -5,7 +5,7 @@
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 
 
-{{if $_doc_item->_can->edit && $_doc_item->_is_editable}}
+{{if $_doc_item->_can->edit}}
   {{assign var=edit value=1}}
 {{else}}
   {{assign var=edit value=0}}

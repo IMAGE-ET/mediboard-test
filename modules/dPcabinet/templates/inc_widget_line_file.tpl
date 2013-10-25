@@ -30,7 +30,7 @@
         &mdash; <em>{{tr}}CCompteRendu-private{{/tr}}</em>
       {{/if}}
     </td>
-    {{if $_file->_can->edit && $_file->_is_editable}}
+    {{if $_file->_can->edit}}
       <td class="button" style="width: 1px">
         <form name="Delete-{{$_file->_guid}}" action="?" enctype="multipart/form-data" method="post"
           onsubmit="return checkForm(this)">

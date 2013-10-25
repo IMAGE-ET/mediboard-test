@@ -3272,16 +3272,6 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
   }
 
-  function docsEditable() {
-    if (parent::docsEditable()) {
-      return true;
-    }
-
-    $fix_edit_doc = CAppUI::conf("dPplanningOp CSejour fix_doc_edit");
-
-    return !$fix_edit_doc ? true : $this->sortie_reelle === null;
-  }
-
   function getUFs($date = null, $affectation_id = null) {
     if (!$date) {
       $date = CMbDT::dateTime();

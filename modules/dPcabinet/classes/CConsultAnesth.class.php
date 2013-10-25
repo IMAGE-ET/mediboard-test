@@ -651,26 +651,4 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
 
     return parent::store();
   }
-
-  /**
-   * @see parent::docsEditable()
-   */
-  function docsEditable() {
-    if (parent::docsEditable()) {
-      return true;
-    }
-    
-    $this->loadRefConsultation();
-   
-    $fix_edit_doc = CAppUI::conf("dPcabinet CConsultation fix_doc_edit");
-    if (!$fix_edit_doc) {
-       return true;
-    }
-    if ($this->_ref_consultation->annule) {
-      return false;
-    }
-    $this->_ref_consultation->loadRefPlageConsult();
-
-    return (CMbDT::dateTime("+ 24 HOUR", "{$this->_ref_consultation->_date} {$this->_ref_consultation->heure}") > CMbDT::dateTime());
-  }
 }

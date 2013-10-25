@@ -617,13 +617,6 @@ class CRPU extends CMbObject {
     $patient = $sejour->loadRefPatient();
     $patient->completeLabelFields($fields);
   }
-
-  /**
-   * @see parent::docsEditable()
-   */
-  function docsEditable() {
-    return true;
-  }
   
   /**
    * Chargement du motif de l'urgence

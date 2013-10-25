@@ -145,18 +145,14 @@ class CMbObject extends CStoredObject {
     if (null == $this->_ref_files = $this->loadBackRefs("files", "file_name")) {
       return null;
     }
-
-    $is_editable = $this->docsEditable();
     // Read permission
     foreach ($this->_ref_files as $_file) {
       /** @var CFile $_file */
-      $_file->canDo();
       if (!$_file->canRead()) {
         unset($this->_ref_files[$_file->_id]);
         continue;
       }
       $this->_ref_files_by_name[$_file->file_name] = $_file;
-      $_file->_is_editable = $is_editable;
       if ($_file->annule) {
         $this->_nb_cancelled_files++;
       }
@@ -185,14 +181,6 @@ class CMbObject extends CStoredObject {
     if (null == $this->_ref_documents = $this->loadBackRefs("documents", "nom")) {
       return null;
     }
-
-    $is_editable = $this->docsEditable();
-
-    $days = CAppUI::conf("compteRendu CCompteRendu days_to_lock");
-    $days = isset($days[$this->_class]) ? $days[$this->_class] : $days["base"];
-
-    global $can;
-    $user = CAppUI::$user;
     foreach ($this->_ref_documents as $_doc) {
       /** @var CCompteRendu $_doc */
       if (!$_doc->canRead()) {
@@ -720,17 +708,6 @@ class CMbObject extends CStoredObject {
     if (class_exists($object_class)) {
       $this->_ref_object_configs = $this->loadUniqueBackRef("object_configs");
     }
-  }
-  
-  /**
-   * Evaluate if an object is editable according to a date.
-   *
-   * @return bool
-   */
-  function docsEditable() {
-    // Un admin doit toujours pouvoir modifier un document
-    global $can;
-    return $can->admin;
   }
     
   /**

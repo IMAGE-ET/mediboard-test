@@ -1562,19 +1562,6 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   /**
-   * @see parent::docsEditable()
-   */
-  function docsEditable() {
-    if (parent::docsEditable()) {
-      return true;
-    }
-
-    $fix_edit_doc = CAppUI::conf("dPplanningOp CSejour fix_doc_edit");
-    $this->loadRefSejour();
-    return !$fix_edit_doc ? true : $this->_ref_sejour->sortie_reelle === null;
-  }
-
-  /**
    * @see parent::completeLabelFields()
    */
   function completeLabelFields(&$fields) {
