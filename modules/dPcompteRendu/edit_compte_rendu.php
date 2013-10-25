@@ -206,7 +206,7 @@ $is_locked     = $compte_rendu->isLocked();
 if ($is_locked) {
   $templateManager->printMode = true;
 }
-if(!$compte_rendu->canEdit()) {
+if($compte_rendu->_id && !$compte_rendu->canEdit()) {
   $templateManager->printMode = true;
 }
 

@@ -195,22 +195,9 @@ class CMbObject extends CStoredObject {
     $user = CAppUI::$user;
     foreach ($this->_ref_documents as $_doc) {
       /** @var CCompteRendu $_doc */
-      $_doc->canDo();
-
-      if (!$can->admin) {
-        if (!$_doc->canRead()) {
-          unset($this->_ref_documents[$_doc->_id]);
-          continue;
-        }
-        $_doc->_is_editable = $is_editable;
-        $_doc->loadContent();
-        // Document verrouillé
-        if (($_doc->valide && $_doc->author_id != $user->_id) ||
-            (CMbDT::daysRelative($_doc->_ref_content->last_modified, CMbDT::dateTime()) > $days)
-        ) {
-          $_doc->_is_editable = false;
-          $_doc->_can->edit = false;
-        }
+      if (!$_doc->canRead()) {
+        unset($this->_ref_documents[$_doc->_id]);
+        continue;
       }
     }
 

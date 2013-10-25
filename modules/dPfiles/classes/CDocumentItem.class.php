@@ -193,7 +193,7 @@ class CDocumentItem extends CMbMetaObject {
   }
 
   function getPerm($permType) {
-
+    $this->loadRefAuthor();
     if ($this->private) {
       $sameFunction = $this->_ref_author->function_id == CMediusers::get()->function_id;
       $isAdmin = CMediusers::get()->isAdmin();
