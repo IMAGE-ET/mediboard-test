@@ -204,6 +204,8 @@ $can_unclock   = $compte_rendu->canUnlock();
 $can_duplicate = $compte_rendu->canDuplicate();
 $compte_rendu->isLocked();
 $lock_bloked = $compte_rendu->_is_locked ? !$can_unclock : !$can_lock;
+$compte_rendu->canDo();
+$read_only = $compte_rendu->_is_locked || !$compte_rendu->_can->edit;
 
 if ($compte_rendu->_is_locked) {
   $templateManager->printMode = true;
@@ -230,6 +232,7 @@ $smarty->assign("pack_id"       , $pack_id);
 $smarty->assign("destinataires" , $destinataires);
 $smarty->assign("lock_bloked"   , $lock_bloked);
 $smarty->assign("can_duplicate" , $can_duplicate);
+$smarty->assign("read_only"     , $read_only);
 
 preg_match_all("/(:?\[\[Texte libre - ([^\]]*)\]\])/i", $compte_rendu->_source, $matches);
 

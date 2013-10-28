@@ -708,7 +708,7 @@ Main.add(function() {
       {{/if}}
 
       {{mb_label object=$compte_rendu field=nom}}
-      {{if $compte_rendu->_is_locked}}
+      {{if $read_only}}
         {{mb_field object=$compte_rendu field=nom readonly="readonly"}}
       {{else}}
         {{mb_field object=$compte_rendu field=nom}}
@@ -716,7 +716,7 @@ Main.add(function() {
       
       &mdash;
       {{mb_label object=$compte_rendu field=file_category_id}}
-      <select name="file_category_id" style="width: 8em;" {{if $compte_rendu->_is_locked}}disabled="disabled"{{/if}}>
+      <select name="file_category_id" style="width: 8em;" {{if $read_only}}disabled="disabled"{{/if}}>
         <option value=""{{if !$compte_rendu->file_category_id}} selected="selected"{{/if}}>&mdash; Aucune</option>
         {{foreach from=$listCategory item=currCat}}
           <option value="{{$currCat->file_category_id}}"{{if $currCat->file_category_id==$compte_rendu->file_category_id}} selected="selected"{{/if}}>{{$currCat->nom}}</option>
@@ -725,9 +725,9 @@ Main.add(function() {
 
       &mdash;
       {{mb_label object=$compte_rendu field=language}}
-      {{mb_field object=$compte_rendu field=language readonly=$compte_rendu->_is_locked}}
+      {{mb_field object=$compte_rendu field=language readonly= $read_only}}
 
-      {{if !$compte_rendu->_is_locked}}
+      {{if !$read_only}}
         &mdash;
         <button type="submit" class="save notext">{{tr}}Save{{/tr}}</button>
       {{/if}}
@@ -735,7 +735,7 @@ Main.add(function() {
       <br />
       <label>
         {{tr}}CCompteRendu-private{{/tr}}
-        {{mb_field object=$compte_rendu field=private typeEnum="checkbox" readonly=$compte_rendu->_is_locked
+        {{mb_field object=$compte_rendu field=private typeEnum="checkbox" readonly=$read_only
         onchange="this.form.onsubmit()"}}
       </label>
 
@@ -754,7 +754,7 @@ Main.add(function() {
       {{if $pdf_thumbnails && $pdf_and_thumbs}}
         &mdash;
         <button type="button" class="pagelayout" title="{{tr}}CCompteRendu-Pagelayout{{/tr}}"
-                {{if $compte_rendu->_is_locked}}readonly="1" disabled="1"{{/if}}
+                {{if $read_only}}readonly="1" disabled="1"{{/if}}
                 onclick="save_page_layout();
                   Modal.open($('page_layout'), {
                     closeOnClick: $('page_layout').down('button.tick')
@@ -772,14 +772,14 @@ Main.add(function() {
         &mdash;
         <button type="button" class="header_footer" onclick="modalHeaderFooter(1)"
                 title="Entête / pied de page à la volée"
-                {{if $compte_rendu->_is_locked}}readonly="1" disabled="1"{{/if}}>
+                {{if $read_only}}readonly="1" disabled="1"{{/if}}>
           Modifier en-tête et pied de page
         </button>
       {{/if}}
     </th>
   </tr>
 
-  {{if !$compte_rendu->_is_locked}}
+  {{if !$read_only}}
     <tr>
       <td colspan="2">
         <div id="reloadzones">
