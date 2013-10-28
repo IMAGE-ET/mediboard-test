@@ -291,7 +291,7 @@
           // Mode DHE
 
           // - copier coller commentaire
-          if (window.copy_commentaire_id && form._comment_mode.checked) {
+          if (window.copy_commentaire_id) {
             var hour_debut = Date.fromTIME(time);
             var time_fin = hour_debut.addMinutes(window.save_duree).toTIME();
             pasteCommentaire("{{$date_planning}}", salle_id, time, time_fin, window.save_color, "");
