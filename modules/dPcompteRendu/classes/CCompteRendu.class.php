@@ -464,13 +464,13 @@ class CCompteRendu extends CDocumentItem {
       switch ($this->object_class) {
         case "CConsultation" :
           /** @var $object CConsultation */
-          $object->loadRefPlageConsult();
-          $this->_ref_user->load($object->_ref_plageconsult->chir_id);
+          $plage = $object->loadRefPlageConsult();
+          $this->_ref_user->load($plage->chir_id);
           break;
         case "CConsultAnesth" :
           /** @var $object CConsultAnesth */
-          $object->loadRefConsultation()->loadRefPlageConsult();
-          $this->_ref_user->load($object->_ref_consultation->_ref_plageconsult->chir_id);
+          $plage = $object->loadRefConsultation()->loadRefPlageConsult();
+          $this->_ref_user->load($plage->chir_id);
           break;
         case "COperation" :
           /** @var $object COperation */
@@ -741,14 +741,16 @@ class CCompteRendu extends CDocumentItem {
     if ($this->_ref_object->_id) {
       $parentPerm = $parentPerm && $this->_ref_object->getPerm($permType);
     }
-    if ($this->_ref_user->_id) {
-      $parentPerm = $parentPerm && $this->_ref_user->getPerm($permType);
-    }
-    if ($this->_ref_function->_id) {
-      $parentPerm = $parentPerm && $this->_ref_function->getPerm($permType);
-    }
-    if ($this->_ref_group->_id) {
-      $parentPerm = $parentPerm && $this->_ref_group->getPerm($permType);
+    else {
+      if ($this->_ref_user->_id) {
+        $parentPerm = $parentPerm && $this->_ref_user->getPerm($permType);
+      }
+      if ($this->_ref_function->_id) {
+        $parentPerm = $parentPerm && $this->_ref_function->getPerm($permType);
+      }
+      if ($this->_ref_group->_id) {
+        $parentPerm = $parentPerm && $this->_ref_group->getPerm($permType);
+      }
     }
     return $parentPerm;
   }

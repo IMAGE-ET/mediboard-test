@@ -2526,14 +2526,14 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @see parent::getPerm()
    */
   function getPerm($permType) {
-    if (!$this->_ref_praticien) {
-      $this->loadRefPraticien();
-    }
-    if (!$this->_ref_group) {
-      $this->loadRefEtablissement();
-    }
     switch ($permType) {
       case PERM_EDIT :
+        if (!$this->_ref_praticien) {
+          $this->loadRefPraticien();
+        }
+        if (!$this->_ref_group) {
+          $this->loadRefEtablissement();
+        }
         return ($this->_ref_group->getPerm($permType) && $this->_ref_praticien->getPerm($permType));
         break;
       default :
