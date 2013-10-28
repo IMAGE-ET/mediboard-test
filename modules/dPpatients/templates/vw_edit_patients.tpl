@@ -150,6 +150,10 @@
     {{if !$modal && $useVitale && $app->user_prefs.VitaleVision}}
       lireVitale.delay(1); // 1 second
     {{/if}}
+
+    {{if $useVitale}}
+      SiblingsChecker.request(getForm('editFrm'));
+    {{/if}}
   });
 
 </script>
