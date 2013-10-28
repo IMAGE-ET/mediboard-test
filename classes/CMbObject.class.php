@@ -184,7 +184,6 @@ class CMbObject extends CStoredObject {
     foreach ($this->_ref_documents as $_doc) {
       /** @var CCompteRendu $_doc */
       if (!$_doc->canRead()) {
-        mbTrace($_doc->_id, "id supprimé");
         unset($this->_ref_documents[$_doc->_id]);
         continue;
       }
