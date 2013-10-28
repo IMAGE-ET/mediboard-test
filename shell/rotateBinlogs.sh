@@ -62,32 +62,44 @@ for log in $dir/*bin.0* ; do
   if [ "$log" != "$last" ]; then
     info_script "Moving $(ls -sh $log)"
     mv $log $tmpdir
+    check_errs $? "Failed to move $log" "$log moved to tmp dir"
   fi
 done
+
 # Copy binlog indeces to binlog backup
 info_script "Copying binlog indeces to binlog backup"
 cp $index $backup
-
-date=$(date '+%Y-%m-%dT%H:%M:%S')
+check_errs $? "Failed to copy binlog indeces to binlog backup" "Binlog indeces moved to binlog backup"
 
 # Archive binlogs
 cd $tmpdir
+info_script "Compress binlogs"
+
 if [ -n "$passphrase" ]; then
-  info_script "Compress binlogs"
-  nice -n 10 tar -vczf - *bin.0* | openssl $cryptage -salt -out $tmpdir/binlogs_$date.tar.gz.aes -k $passphrase
-  info_script "Moving compressed binlogs to $backup"
-  mv $tmpdir/binlogs_$date.tar.gz.aes $backup
+  for i in $(ls *.0*)
+  do
+    nice -n 10 tar -vczf - $i | openssl $cryptage -salt -out $tmpdir/binlogs_$i.tar.gz.aes -k $passphrase
+    check_errs $? "Failed to compress and crypt $i" "$i compressed and crypted"
+    info_script "Moving compressed and crypted binlog to $backup"
+    mv $tmpdir/binlogs_$i.tar.gz.aes $backup
+    check_errs $? "Failed to move compressed binlog to $backup" "binlog moved to $backup"
+  done
 else
-  info_script "Compress binlogs"
-  nice -n 10 tar -vczf $tmpdir/binlogs_$date.tar.gz *bin.0*
-  info_script "Moving compressed binlogs to $backup"
-  mv $tmpdir/binlogs_$date.tar.gz $backup
+  for i in $(ls *.0*)
+  do
+    nice -n 10 tar -vczf $tmpdir/binlogs_$i.tar.gz $i
+    check_errs $? "Failed to compress $i" "$i compressed"
+    info_script "Moving compressed binlog to $backup"
+    mv $tmpdir/binlogs_$i.tar.gz $backup
+    check_errs $? "Failed to move compressed binlog to $backup" "binlog moved to $backup"
+  done
 fi
 
 # Remove temp directory
 info_script "Remove temp directory"
 cd ..
 rm -rf $tmpdir
+check_errs $? "Failed to remove $tmpdir" "$tmpdir removed"
 
 # Rotate binlogs for a week
 info_script "Rotating binlogs for a week"
