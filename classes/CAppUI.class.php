@@ -1062,7 +1062,7 @@ class CAppUI {
       }
 
       // Other wise keep it in a stack...
-      else {
+      elseif (self::$lang) {
         if (!in_array($str, self::$unlocalized) && !preg_match(self::$localize_ignore, $str)) {
           self::$unlocalized[] = $str;
         }
