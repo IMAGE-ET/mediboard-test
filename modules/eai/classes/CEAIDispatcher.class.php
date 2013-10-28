@@ -116,10 +116,10 @@ class CEAIDispatcher {
    * @return bool Understood ? 
    */  
   static function understand($data, $actor = null, $contexts = null) {
-    foreach (CExchangeDataFormat::getAll() as $key => $_exchange_class) {
-      foreach (CApp::getChildClasses($_exchange_class, array(), true) as $under_key => $_data_format) {
+    foreach (CExchangeDataFormat::getAll() as $_exchange_class) {
+      foreach (CApp::getChildClasses($_exchange_class, array(), true) as $_data_format) {
         /**
-         * @var CExchangeDataFormat
+         * @var CExchangeDataFormat $data_format
          */
         $data_format = new $_data_format;
 

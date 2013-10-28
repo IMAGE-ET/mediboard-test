@@ -273,9 +273,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
    * @return string
    */
   function checkSimilarPatient(CPatient $mbPatient, $xmlPatient) {
-    $sender = $this->_ref_echange_hprim->_ref_sender;
+    $sender = $this->_ref_sender;
 
-    if (isset($sender->_configs) && array_key_exists("check_similar", $sender->_configs) && !$sender->_configs["check_similar"]) {
+    if (!$sender->_configs || (isset($sender->_configs) && array_key_exists("check_similar", $sender->_configs) && !$sender->_configs["check_similar"])) {
       return null;
     }
 

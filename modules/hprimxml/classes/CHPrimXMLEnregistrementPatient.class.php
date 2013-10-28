@@ -90,10 +90,11 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     $codes = array();
     $commentaire = $avertissement = $msgID400 = $msgIPP = "";
     $_modif_patient = false;
-    
-    $echg_hprim = $this->_ref_echange_hprim; 
-    $echg_hprim->_ref_sender->loadConfigValues();
-    $sender     = $echg_hprim->_ref_sender;
+
+    $echg_hprim = $this->_ref_echange_hprim;
+    $sender = $echg_hprim->_ref_sender;
+    $sender->loadConfigValues();
+    $this->_ref_sender = $sender;
 
     $idSourcePatient = $data['idSourcePatient'];
     $idCiblePatient  = $data['idCiblePatient'];

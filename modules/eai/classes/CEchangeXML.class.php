@@ -125,7 +125,7 @@ class CEchangeXML extends CExchangeDataFormat {
   function understand($data, CInteropSender $actor = null) {
     if (!$dom = $this->isWellFormed($data)) {
       return false;
-    } 
+    }
 
     $root = $dom->documentElement;
     $nodeName = $root->nodeName;

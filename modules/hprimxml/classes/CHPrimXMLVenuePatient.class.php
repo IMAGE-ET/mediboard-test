@@ -137,8 +137,11 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     // Traitement du message des erreurs
     $avertissement = $msgID400 = $msgVenue = $msgNDA = "";    
     $_code_Venue   = $_code_NumDos = $_num_dos_create = $_modif_venue = false;
-    
+
     $sender = $echg_hprim->_ref_sender;
+    $sender->loadConfigValues();
+    $this->_ref_sender = $sender;
+
     $idSourceVenue = $data['idSourceVenue'];
     $idCibleVenue  = $data['idCibleVenue'];
     

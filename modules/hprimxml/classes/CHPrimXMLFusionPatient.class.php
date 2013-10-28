@@ -90,6 +90,10 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
     $commentaire = $avertissement = "";
     $codes = array();
 
+    $sender = $echg_hprim->_ref_sender;
+    $sender->loadConfigValues();
+    $this->_ref_sender = $sender;
+
     // Si CIP
     if (!CAppUI::conf('sip server')) {
       $mbPatientElimine = new CPatient();

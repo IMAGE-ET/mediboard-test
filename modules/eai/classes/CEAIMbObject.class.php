@@ -118,7 +118,7 @@ class CEAIMbObject {
    * 
    * @return null|string null if successful otherwise returns and error message
    */ 
-  function storeIdex(CIdSante400 $idex, CMbObject $object, CInteropSender $sender) {
+  static function storeIdex(CIdSante400 $idex, CMbObject $object, CInteropSender $sender) {
     $idex->object_id   = $object->_id; 
     $idex->last_update = CMbDT::dateTime();
 

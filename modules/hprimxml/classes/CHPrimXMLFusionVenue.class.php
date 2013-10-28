@@ -95,6 +95,8 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
   function fusionVenue(CHPrimXMLAcquittementsPatients $dom_acq, CPatient $newPatient, $data) {
     $echg_hprim = $this->_ref_echange_hprim;
     $sender     = $echg_hprim->_ref_sender;
+    $sender->loadConfigValues();
+    $this->_ref_sender = $sender;
     
     // Traitement du patient
     $domEnregistrementPatient = new CHPrimXMLEnregistrementPatient();

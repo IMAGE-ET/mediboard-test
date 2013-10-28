@@ -71,7 +71,7 @@ class CEAIPatient extends CEAIMbObject {
     $group->loadConfigValues();
     
     // Purge de l'IPP existant sur le patient et on le remplace par le nouveau
-    if ($sender->_configs["purge_idex_movements"]) {
+    if ($sender->_configs && $sender->_configs["purge_idex_movements"]) {
       // On charge l'IPP courant du patient
       $patient->loadIPP($sender->group_id);
       
@@ -96,7 +96,7 @@ class CEAIPatient extends CEAIMbObject {
 
     // Génération de l'IPP ? 
     // Non
-    if (!$group->_configs["sip_idex_generator"]) {
+    if ($sender->_configs && !$group->_configs["sip_idex_generator"]) {
       if (!$IPP->id400) {
         return null;
       }
@@ -160,7 +160,7 @@ class CEAIPatient extends CEAIMbObject {
     $newPatient->_generate_IPP            = $generateIPP;
     
     if ($msg = $newPatient->store()) {
-      if ($sender->_configs["repair_patient"]) {
+      if ($sender->_configs && $sender->_configs["repair_patient"]) {
         $newPatient->repair();
       }
       
