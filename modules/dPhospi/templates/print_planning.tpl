@@ -18,7 +18,7 @@
   {{foreach from=$curr_day key=key_prat item=curr_prat}}
   {{assign var="praticien" value=$curr_prat.praticien}}
   <tr class="clear">
-    <td colspan="16">
+    <td colspan="{{if $prestation->_id}}17{{else}}16{{/if}}">
       <h2>
         <strong>
           {{$key_day|date_format:"%a %d %b %Y"}} 
@@ -30,7 +30,7 @@
     </td>
   </tr>
   <tr>
-    <th colspan="6"><strong>Séjour</strong></th>
+    <th colspan="{{if $prestation->_id}}7{{else}}6{{/if}}"><strong>Séjour</strong></th>
     <th colspan="5"><strong>Intervention(s)</strong></th>
     <th colspan="5"><strong>Patient</strong></th>
   </tr>
