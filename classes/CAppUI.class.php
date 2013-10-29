@@ -1280,8 +1280,9 @@ class CAppUI {
 
     $query = "SELECT GROUP_CONCAT(`mod_name`, `mod_version`) FROM `modules`";
     $hash  = CSQLDataSource::get("std")->loadResult($query);
-
     $hash .= $version["build"];
+
+    $hash = md5($hash);
 
     if (!isset($instance->update_hash) || $instance->update_hash != $hash) {
       self::buildPrefs();

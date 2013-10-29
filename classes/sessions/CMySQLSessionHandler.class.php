@@ -26,6 +26,9 @@ class CMySQLSessionHandler implements ISessionHandler {
   /** @var CMbMutex */
   private $mutex;
 
+  /** @var string */
+  private $data_hash;
+
   /**
    * @see parent::init()
    */
@@ -103,11 +106,20 @@ class CMySQLSessionHandler implements ISessionHandler {
       $this->mutex = $mutex;
     }
 
-    $query = $ds->prepare("SELECT `data` FROM `session` WHERE `session_id` = %1 AND `expire` > %2", $session_id, time());
+    $query = $ds->prepare("SELECT `data` FROM `session` WHERE `session_id` = ?1 AND `expire` > ?2", $session_id, time());
     $result = $ds->exec($query);
 
     if ($record = $ds->fetchAssoc($result)) {
-      return $record['data'];
+      $data = $record['data'];
+
+      $new_data = @gzuncompress($data);
+      if ($new_data) {
+        $data = $new_data;
+      }
+
+      $this->data_hash = md5($data);
+
+      return $data;
     }
 
     return '';
@@ -119,18 +131,51 @@ class CMySQLSessionHandler implements ISessionHandler {
   function write($session_id, $data) {
     $ds = self::$ds;
 
-    $address = get_remote_address();
-    $user_ip  = $address["remote"] ? inet_pton($address["remote"]) : null;
+    $address    = get_remote_address();
+    $user_id    = CAppUI::$instance->user_id;
+    $user_ip    = $address["remote"] ? inet_pton($address["remote"]) : null;
     $user_agent = CValue::read($_SERVER, "HTTP_USER_AGENT");
-    $expire = time() + $this->lifetime;
+    $expire     = time() + $this->lifetime;
 
-    $query = "INSERT INTO session (`session_id`, `user_id`, `user_ip`, `user_agent`, `expire`, `data`)
-      VALUES (%1, %2, %3, %4, %5, %6)
+    $new_hash = md5($data);
+
+    $data = gzcompress($data);
+
+    // If session is to be updated
+    if ($this->data_hash) {
+      if ($this->data_hash !== $new_hash) {
+        $query = "UPDATE `session` SET
+          `user_id`    = ?1,
+          `user_ip`    = ?2,
+          `user_agent` = ?3,
+          `expire`     = ?4,
+          `data`       = ?5
+          WHERE `session_id` = ?6;";
+
+        $query = $ds->prepare($query, $user_id, $user_ip, $user_agent, $expire, $data, $session_id);
+      }
+      else {
+        $query = "UPDATE `session` SET
+          `user_id`    = ?1,
+          `user_ip`    = ?2,
+          `user_agent` = ?3,
+          `expire`     = ?4
+          WHERE `session_id` = ?5;";
+
+        $query = $ds->prepare($query, $user_id, $user_ip, $user_agent, $expire, $session_id);
+      }
+    }
+
+    // No session yet
+    else {
+      $query = "INSERT INTO `session` (`session_id`, `user_id`, `user_ip`, `user_agent`, `expire`, `data`)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6)
       ON DUPLICATE KEY UPDATE
-        `data`   = %7,
-        `expire` = %8";
+        `data`   = ?7,
+        `expire` = ?8";
 
-    $query = $ds->prepare($query, $session_id, CAppUI::$instance->user_id, $user_ip, $user_agent, $expire, $data, $data, $expire);
+      $query = $ds->prepare($query, $session_id, $user_id, $user_ip, $user_agent, $expire, $data, $data, $expire);
+    }
 
     if (!$ds->query($query)) {
       return false;
@@ -145,7 +190,7 @@ class CMySQLSessionHandler implements ISessionHandler {
   function destroy($session_id) {
     $ds = self::$ds;
 
-    $query = $ds->prepare("DELETE FROM `session` WHERE `session_id` = %", $session_id);
+    $query = $ds->prepare("DELETE FROM `session` WHERE `session_id` = ?", $session_id);
 
     if (!$ds->query($query)) {
       return false;
@@ -160,7 +205,7 @@ class CMySQLSessionHandler implements ISessionHandler {
   function gc($max) {
     $ds = self::$ds;
 
-    $query = $ds->prepare("DELETE FROM `session` WHERE `expire` < %", time());
+    $query = $ds->prepare("DELETE FROM `session` WHERE `expire` < ?", time());
 
     if (!$ds->query($query)) {
       return false;
