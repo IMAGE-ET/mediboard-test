@@ -43,7 +43,7 @@ $where[] = "rpu.rpu_id IS NOT NULL";
 $where["sejour.group_id"] = "= '$group_id'";
 $order = "sejour.entree ASC";
 /** @var CSejour[] $sejours */
-$sejours = $sejour->loadList($where, $order, null, null, $ljoin);
+$sejours = $sejour->loadList($where, $order, null, "sejour.sejour_id", $ljoin);
 
 //work
 foreach ($sejours as $_sejour) {
