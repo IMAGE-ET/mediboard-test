@@ -53,7 +53,7 @@ editPerf = function(prescription_line_mix_id, date, mode_dossier, sejour_id){
   url.addParam("date", date);
   url.addParam("mode_dossier", mode_dossier);
   url.addParam("sejour_id", sejour_id);
-  url.popup(800,600,"Pefusion",null, "toto");
+  url.popup(800,600,"Pefusion");
 }
 
 submitPosePerf = function(oFormPerf){
