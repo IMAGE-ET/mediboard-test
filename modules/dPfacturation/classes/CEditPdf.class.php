@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: CFacturable.class.php 17904 2013-01-30 09:17:44Z aurelie17 $
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage dPfacturation
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    $Revision: 17904 $
+ * @version    $Revision:$
  */
 
 /**
