@@ -73,7 +73,20 @@ class CEditPdf{
     }
     return $tab;
   }
-  
+
+  /**
+   * Fontion qui permet de positionner le curseur et ecrire une cellule
+   *
+   * @param int    $x       position du curseur à placer en x
+   * @param int    $y       position du curseur à placer en y
+   * @param int    $largeur largeur de la cellule
+   * @param string $text    text de la cellule
+   * @param string $align   alignement à gauche par défault
+   * @param string $border  bordure
+   * @param int    $hauteur hauteur
+   *
+   * @return void
+   */
   function editCell($x, $y, $largeur, $text, $align = "", $border = "", $hauteur = "") {
     $this->pdf->setXY($x, $y);
     $this->pdf->Cell($largeur, $hauteur, $text, $border, null, $align);
@@ -1146,9 +1159,11 @@ class CEditPdf{
   /**
    * Impression des factures
    *
+   * @param bool $ts tiers soldant
+   *
    * @return void
    */
-  function printBill(){
+  function printBill($ts = false){
     if (count($this->factures)) {
       $user = CMediusers::get();
       $printer_bvr = new CPrinter();
@@ -1172,7 +1187,7 @@ class CEditPdf{
         $facture_pdf = new CEditPdf();
         $facture_pdf->factures = array($facture);
         $pdf = "";
-        $pdf = $facture_pdf->editFactureBVR(false, "S");
+        $pdf = $facture_pdf->editFactureBVR($ts, "S");
         $file_path = tempnam("tmp", "facture");
         $file->_file_path = $file_path;
         file_put_contents($file_path, $pdf);
@@ -1180,7 +1195,7 @@ class CEditPdf{
         unlink($file_path);
 
         $pdf = "";
-        $pdf = $facture_pdf->editJustificatif(false, "S");
+        $pdf = $facture_pdf->editJustificatif($ts, "S");
         $file_path = tempnam("tmp", "facture");
         $file->_file_path = $file_path;
         file_put_contents($file_path, $pdf);
