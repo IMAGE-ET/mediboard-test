@@ -176,18 +176,23 @@
       <td style="text-align: right;">
         {{mb_value object=$_reglement field=montant}}
       </td>
-      <td>
-        <input type="hidden" name="date_{{$_reglement->_id}}" class="{{$_reglement->_props.date}}" value="{{$_reglement->date}}" />
-        <button type="button" class="submit notext" onclick="editReglementDate('{{$_reglement->_id}}', this.up('td').down('input[name=date_{{$_reglement->_id}}]').value);"></button>
-        <script>
-          Main.add(function(){
-            Calendar.regField(getForm("reglement-add").date_{{$_reglement->_id}});
-          });
-        </script>
-      </td>
-      <td>
-        <button type="button" class="remove notext" onclick="delReglement('{{$_reglement->_id}}');"></button>
-      </td>
+      {{if $_reglement->lock}}
+        <td>{{mb_value object=$_reglement field=date}}</td>
+        <td> <button class="lock notext" disabled>{{mb_label object=$_reglement field=lock}}</button></td>
+      {{else}}
+        <td>
+          <input type="hidden" name="date_{{$_reglement->_id}}" class="{{$_reglement->_props.date}}" value="{{$_reglement->date}}" />
+          <button type="button" class="submit notext" onclick="editReglementDate('{{$_reglement->_id}}', this.up('td').down('input[name=date_{{$_reglement->_id}}]').value);"></button>
+          <script>
+            Main.add(function(){
+              Calendar.regField(getForm("reglement-add").date_{{$_reglement->_id}});
+            });
+          </script>
+        </td>
+        <td>
+          <button type="button" class="remove notext" onclick="delReglement('{{$_reglement->_id}}');"></button>
+        </td>
+      {{/if}}
     </tr>
     {{/foreach}}
     {{if ($object->_du_restant_patient) > 0 || $conf.dPfacturation.CReglement.use_lock_acquittement}}

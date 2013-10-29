@@ -32,6 +32,7 @@ class CReglement extends CMbMetaObject {
   public $tireur;
   public $debiteur_id;
   public $debiteur_desc;
+  public $lock;
 
   // Behaviour fields
   public $_update_facture = true;
@@ -71,6 +72,7 @@ class CReglement extends CMbMetaObject {
     $props['tireur']        = 'str';
     $props["debiteur_id"]   = "ref class|CDebiteur";
     $props["debiteur_desc"] = "str";
+    $props["lock"]          = "bool default|0";
     return $props;
   }
   

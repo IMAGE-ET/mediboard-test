@@ -2000,6 +2000,11 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("2.17");
     $this->addPrefQuery("allow_plage_holiday", "1");
 
-    $this->mod_version = "2.18";
+    $this->makeRevision("2.18");
+    $query = "ALTER TABLE `reglement`
+                ADD `lock` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.19";
   }
 }
