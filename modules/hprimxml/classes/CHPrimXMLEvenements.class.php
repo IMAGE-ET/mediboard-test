@@ -161,8 +161,12 @@ class CHPrimXMLEvenements extends CHPrimXMLDocument {
     $date  = $this->getDate($node);
     $heure = $this->getHeure($node);
 
-    if (!$date || !$heure) {
+    if (!$date) {
       return null;
+    }
+
+    if (!$heure) {
+      "00:00:00";
     }
 
     return "$date $heure";
