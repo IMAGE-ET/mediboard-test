@@ -57,9 +57,15 @@ mysqladmin -u $1 -p$2 flush-logs
 # Move all logs without latest to tmp dir
 info_script "Move all logs without latest to tmp dir"
 index="$dir/$4"
-last=$(tail -n 1 $index)
+last=$(tail -n 4 $index);
+
+if [ $(ls $dir/*bin.0*|wc -l) -le 4 ]; then
+  info_script "Too few binlogs to rotate... Exiting..."
+  exit 0
+fi
+
 for log in $dir/*bin.0* ; do
-  if [ "$log" != "$last" ]; then
+  if [ $(echo $last|grep -c ${log}) -eq 0 ]; then
     info_script "Moving $(ls -sh $log)"
     mv $log $tmpdir
     check_errs $? "Failed to move $log" "$log moved to tmp dir"
