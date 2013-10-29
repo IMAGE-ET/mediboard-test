@@ -36,7 +36,7 @@ function loadSuivi(sejour_id, user_id, cible, show_obs, show_trans, show_const) 
     if (!Object.isUndefined(show_const)) {
       urlSuivi.addParam("_show_const", show_const);
     }
-    urlSuivi.requestUpdate("dossier_suivi", {onComplete: function() { Control.Modal.close(); } });
+    urlSuivi.requestUpdate("dossier_suivi");
   }
 }
 

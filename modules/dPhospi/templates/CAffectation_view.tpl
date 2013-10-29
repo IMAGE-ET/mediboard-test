@@ -30,7 +30,7 @@
     <input type="hidden" name="m" value="hospi" />
     <input type="hidden" name="dosql" value="do_affectation_aed" />
     <input type="hidden" name="del" value="1" />
-    <input type="hidden" name="affectation_id" value="" />
+    {{mb_key object=$object}}
   </form>
   
   <table class="tbl">
@@ -39,7 +39,7 @@
         <button type="button" class="edit"
           onclick="this.up('div').hide(); Affectation.edit('{{$object->_id}}')">Modifier</button>
         <button type="button" class="cancel"
-          onclick="Affectation.delAffectation(getForm('delAffect_{{$object->_id}}'), '{{$object->lit_id}}', 'CSejour-{{$object->sejour_id}}') }">{{tr}}Delete{{/tr}}</button>
+          onclick="Affectation.delAffectation(getForm('delAffect_{{$object->_id}}'), '{{$object->lit_id}}', 'CSejour-{{$object->sejour_id}}')">{{tr}}Delete{{/tr}}</button>
         {{if $object->sejour_id && $conf.dPhospi.systeme_prestations == "expert"}}
           <button type="button" class="search" onclick="Prestations.edit('{{$object->sejour_id}}')">Prestations</button>
         {{/if}}
