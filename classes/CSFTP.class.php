@@ -175,6 +175,7 @@ class CSFTP {
    * Connect to the host
    *
    * @return bool
+   * @throws CMbException
    */
   private function _connect() {
     if ($this->connexion) {
@@ -182,11 +183,11 @@ class CSFTP {
     }
     define('NET_SFTP_LOGGING', NET_SFTP_LOG_COMPLEX);
     if (!$sftp = new Net_SFTP($this->hostname, $this->port, $this->timeout)) {
-      $this->getLastError();
+      throw new CMbException("Connexion impossible");
     }
 
     if (!$sftp->login($this->username, $this->userpass)) {
-      $this->getLastError();
+      throw new CMbException("Authentification échoué");
     }
 
     /*
@@ -384,20 +385,28 @@ class CSFTP {
   /**
    * Add a file
    *
-   * @param String $source_file source path
    * @param String $file_name   name of the target file
+   * @param String $source_file source path
+   * @param Bool   $data_string The source file is a content or a path
    *
    * @return bool
    * @throws CMbException
    */
-  private function _addFile($source_file, $file_name) {
+  private function _addFile($file_name, $source_file, $data_string = true) {
     if (!$this->connexion) {
       throw new CMbException("CSourceSFTP-connexion-failed", $this->hostname);
     }
 
     // Upload the file
-    if (!$this->connexion->put($file_name, $source_file, NET_SFTP_LOCAL_FILE)) {
-      throw new CMbException("CSourceSFTP-upload-file-failed", $source_file);
+    if ($data_string) {
+      if (!$this->connexion->put($file_name, $source_file)) {
+        throw new CMbException("CSourceSFTP-upload-file-failed", $source_file);
+      }
+    }
+    else {
+      if (!$this->connexion->put($file_name, $source_file, NET_SFTP_LOCAL_FILE)) {
+        throw new CMbException("CSourceSFTP-upload-file-failed", $source_file);
+      }
     }
 
     return true;

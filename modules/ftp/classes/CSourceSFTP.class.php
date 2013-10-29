@@ -93,10 +93,10 @@ class CSourceSFTP extends CExchangeSource {
   /**
    * @see parent::addFile
    */
-  function addFile($file, $file_remote) {
+  function addFile($name_file, $data_file, $data_string = true) {
     $sftp = $this->init();
     $sftp->connect();
-    return $sftp->addFile($file, $file_remote);
+    return $sftp->addFile($name_file, $data_file, $data_string);
   }
 
   /**
