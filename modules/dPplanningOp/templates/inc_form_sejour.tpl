@@ -35,7 +35,8 @@ selectPraticien = function (element2, element) {
   // Autocomplete des chirurgiens
   var form = getForm("editOp");
   // Autocomplete des users
-  var url = new Url("mediusers", "ajax_prat_autocomplete");
+  var url = new Url("mediusers", "ajax_users_autocomplete");
+  url.addParam("praticiens", '1');
   url.addParam("input_field", element.name);
   url.autoComplete(element, null, {
     minChars: 0,

@@ -539,9 +539,9 @@ class CMediusers extends CPerson {
    * @return CFunctions
    */
   function loadRefFunction() {
-    $this->_ref_function = $this->loadFwdRef("function_id", true);
-    $this->_group_id     = $this->_ref_function->group_id;
-    return $this->_ref_function;
+    $function = $this->loadFwdRef("function_id", true);
+    $this->_group_id = $function ? $function->group_id : null;
+    return $this->_ref_function = $function;
   }
 
   /**

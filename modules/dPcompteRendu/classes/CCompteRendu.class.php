@@ -340,10 +340,6 @@ class CCompteRendu extends CDocumentItem {
    * @return CMediusers
    */
   function loadRefLocker() {
-    if (!$this->_id) {
-      return null;
-    }
-
     return $this->_ref_locker = $this->loadFwdRef("locker_id", true);
   }
 

@@ -306,7 +306,7 @@ function saveAndMerge() {
 
 function checkLock(oCheckbox) {
   if($V(oCheckbox) == 1) {
-    Modal.open('lock_area', {width: '390px', height: '330px'});
+    Modal.open('lock_area', {width: '400px', height: '330px'});
     getForm('LockDoc').user_password.focus()
   }
   else {
@@ -447,7 +447,7 @@ Main.add(function() {
   };
 
   var form = getForm("LockDoc");
-  var url = new Url("mediusers", "ajax_prat_autocomplete");
+  var url = new Url("mediusers", "ajax_users_autocomplete");
   url.addParam("input_field", form._user_view.name);
   url.autoComplete(form._user_view, null, {
     minChars: 0,

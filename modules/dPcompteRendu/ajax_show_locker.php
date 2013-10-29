@@ -17,19 +17,12 @@ $object_guid = CValue::get("object_guid");
 
 /** @var CCompteRendu $compte_rendu */
 $compte_rendu = CMbObject::loadFromGuid($object_guid);
-
-$auto_lock = $compte_rendu->isAutoLock();
-
-$mediuser = $compte_rendu->loadRefLocker();
-if ($mediuser->_id) {
-  $mediuser->loadRefFunction();
-}
+$compte_rendu->isAutoLock();
+$compte_rendu->loadRefLocker()->loadRefFunction();
 
 
 $smarty = new CSmartyDP();
 
 $smarty->assign("compte_rendu", $compte_rendu);
-$smarty->assign("mediuser"    , $mediuser);
-$smarty->assign("auto_lock"   , $auto_lock);
 
 $smarty->display("inc_show_locker.tpl");
