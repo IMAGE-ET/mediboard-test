@@ -1928,7 +1928,6 @@ $locales['ConfigModel-shm-rem-ko'] = 'Impossible sur supprimer le cache de modèl
 $locales['ConfigModel-shm-rem-ok'] = 'Cache de modèle des configurations supprimé';
 $locales['ConfigValues-shm-none'] = 'Cache de valeurs des configurations absent';
 $locales['ConfigValues-shm-ok'] = 'Cache de valeurs des configurations à jour';
-$locales['ConfigValues-shm-rem-ko'] = 'Impossible sur supprimer le cache de valeurs des configurations';
 $locales['ConfigValues-shm-rem-ok'] = 'Cache de valeurs des configurations supprimé';
 $locales['Configure-failed-modify'] = 'Echec de la modification de configuration : %s';
 $locales['Configure-success-modify'] = 'Configuration modifiée';

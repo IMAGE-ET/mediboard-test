@@ -11,6 +11,8 @@
 
 CCanDo::checkRead();
 
+CAppUI::conf("dPpatients CConstantesMedicales selection_cabinet pouls", "global");
+
 $smarty = new CSmartyDP();
 $smarty->display("about.tpl");
 

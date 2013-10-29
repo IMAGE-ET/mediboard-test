@@ -11,30 +11,6 @@
 
 CCanDo::checkAdmin();
 
-// Remove locales
-foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
-  $localeName = basename($localeDir);
-  $sharedName = "locales-$localeName";
-  
-  if (!SHM::get("$sharedName-__prefixes__")) {
-    CAppUI::stepAjax("Locales-shm-none", UI_MSG_OK, $localeName);
-    continue;
-  }
-  
-  if (!SHM::remKeys("$sharedName-*")) {
-    CAppUI::stepAjax("Locales-shm-rem-ko", UI_MSG_WARNING, $localeName);
-    continue;
-  }
-  
-  CAppUI::stepAjax("Locales-shm-rem-ok", UI_MSG_OK, $localeName);
-}
-
-// Don't generate locale files for all languages, will be generated when needed
-//foreach (CAppUI::getAvailableLanguages() as $_language) {
-//  CJSLoader::writeLocaleFile($_language);
-//}
-//CAppUI::stepAjax("Locales-javascript-cache-allup", UI_MSG_OK);
-
 // Remove class paths
 if (!SHM::get("class-paths")) {
   CAppUI::stepAjax("Classes-shm-none", UI_MSG_WARNING);
@@ -84,13 +60,11 @@ else {
 }
 
 // Remove configuration values
-if (!SHM::get("config-values")) {
+if (!SHM::get("config-values-__HOSTS__")) {
   CAppUI::stepAjax("ConfigValues-shm-none", UI_MSG_OK);
 }
 else {
-  if (!SHM::rem("config-values")) {
-    CAppUI::stepAjax("ConfigValues-shm-rem-ko", UI_MSG_WARNING);
-  }
+  CConfiguration::clearDataCache();
   
   CAppUI::stepAjax("ConfigValues-shm-rem-ok", UI_MSG_OK);
 }
@@ -126,4 +100,22 @@ CAppUI::stepAjax("template-cache-removed", UI_MSG_OK, count($templates));
 ////////// Module specific removals
 foreach (glob("modules/*/empty_shared_memory.php") as $script) {
   include $script;
+}
+
+// Remove locales, at the end because otherwise, next message aren't translated
+foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
+  $localeName = basename($localeDir);
+  $sharedName = "locales-$localeName";
+
+  if (!SHM::get("$sharedName-__prefixes__")) {
+    CAppUI::stepAjax("Locales-shm-none", UI_MSG_OK, $localeName);
+    continue;
+  }
+
+  if (!SHM::remKeys("$sharedName-*")) {
+    CAppUI::stepAjax("Locales-shm-rem-ko", UI_MSG_WARNING, $localeName);
+    continue;
+  }
+
+  CAppUI::stepAjax("Locales-shm-rem-ok", UI_MSG_OK, $localeName);
 }

@@ -552,4 +552,26 @@ abstract class CMbArray {
 
     return $path;
   }
+
+  /**
+   * Get a value in a $tree, from a $path built with $separator
+   *
+   * @param array  $tree      The tree containing the value
+   * @param string $path      The path to browse
+   * @param string $separator The separator used in the path
+   *
+   * @return mixed
+   */
+  static function readFromPath($tree, $path, $separator = " ") {
+    if (!$path) {
+      return $tree;
+    }
+
+    $items = explode($separator, $path);
+    foreach ($items as $part) {
+      $tree = $tree[$part];
+    }
+
+    return $tree;
+  }
 }

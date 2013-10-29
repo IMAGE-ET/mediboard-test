@@ -15,6 +15,10 @@
 class CConfiguration extends CMbMetaObject {
   const INHERIT = "@@INHERIT@@";
 
+  const STATUS_OK    = "ok";
+  const STATUS_DIRTY = "dirty";
+  const STATUS_EMPTY = "empty";
+
   public $configuration_id;
 
   public $feature;
@@ -25,6 +29,7 @@ class CConfiguration extends CMbMetaObject {
   private static $model = array();
 
   private static $values = array();
+  private static $hosts = array();
 
   /**
    * @see parent::getSpec()
@@ -139,22 +144,33 @@ class CConfiguration extends CMbMetaObject {
   }
 
   /**
+   * Get hash of the data
+   *
+   * @param array $data The data to get the hash of (MD5 of serialization)
+   *
+   * @return string
+   */
+  static protected function _getHash($data) {
+    return md5(serialize($data));
+  }
+
+  /**
    * Get model cache status
    *
-   * @return string Can be "empty", "dirty" or "ok"
+   * @return string Can be self::STATUS_EMPTY, self::STATUS_DIRTY or self::STATUS_OK
    */
   static function getModelCacheStatus() {
     $model = SHM::get("config-model");
 
     if (!$model) {
-      return "empty";
+      return self::STATUS_EMPTY;
     }
 
     if (self::_isModelCacheDirty($model["hash"])) {
-      return "dirty";
+      return self::STATUS_DIRTY;
     }
 
-    return "ok";
+    return self::STATUS_OK;
   }
 
   /**
@@ -180,7 +196,7 @@ class CConfiguration extends CMbMetaObject {
    * @return bool True if cache is out of date
    */
   static protected function _isModelCacheDirty($hash) {
-    return $hash !== md5(serialize(self::$model_raw));
+    return $hash !== self::_getHash(self::$model_raw);
   }
 
   /**
@@ -191,6 +207,12 @@ class CConfiguration extends CMbMetaObject {
    * @return bool True if the values cache is out of date
    */
   static protected function _isValuesCacheDirty($date) {
+    $model_status = self::getModelCacheStatus($date);
+
+    if ($model_status !== self::STATUS_OK) {
+      return true;
+    }
+
     $spec = self::_getSpec();
 
     $status_result = $spec->ds->loadHash("SHOW TABLE STATUS LIKE '{$spec->table}'");
@@ -219,7 +241,7 @@ class CConfiguration extends CMbMetaObject {
           "config-model",
           array(
             "date"    => CMbDT::dateTime(),
-            "hash"    => md5(serialize(self::$model_raw)),
+            "hash"    => self::_getHash(self::$model_raw),
             "content" => self::$model,
           )
         );
@@ -270,7 +292,34 @@ class CConfiguration extends CMbMetaObject {
       }
     }
 
-    self::$values = $values_flat;
+    $values = array();
+    $hosts = array();
+    foreach ($values_flat as $_host => $_values) {
+      $values[$_host] = self::unflatten($_values);
+      $hosts[] = $_host;
+    }
+
+    self::$hosts = $hosts;
+    self::$values = $values;
+  }
+
+  /**
+   * Unflatten a dictionnary
+   *
+   * @param array  $array     The dictionnary
+   * @param string $separator The separator
+   *
+   * @return array
+   */
+  static function unflatten(array $array, $separator = " ") {
+    $tree = array();
+
+    foreach ($array as $_key => $_value) {
+      $path = explode($separator, $_key);
+      self::_unflattenFeatureList($path, $_value, $tree);
+    }
+
+    return $tree;
   }
 
   /**
@@ -282,12 +331,22 @@ class CConfiguration extends CMbMetaObject {
     self::buildAllConfig();
 
     SHM::put(
-      "config-values",
+      "config-values-__HOSTS__",
       array(
         "date"    => CMbDT::dateTime(),
-        "content" => self::$values,
+        "content" => array_keys(self::$values),
       )
     );
+
+    foreach (self::$values as $_host => $_configs) {
+      SHM::put(
+        "config-values-$_host",
+        array(
+          "date"    => CMbDT::dateTime(),
+          "content" => $_configs,
+        )
+      );
+    }
   }
 
   /**
@@ -296,31 +355,46 @@ class CConfiguration extends CMbMetaObject {
    * @return void
    */
   static function clearDataCache() {
-    SHM::rem("config-values");
+    SHM::remKeys("config-values-*");
+    self::$values = array();
+    self::$hosts = array();
   }
 
   /**
    * Get the config values for an object or for all objects
    *
-   * @param string|null $object_guid The object to get config values of, or null for all objects
+   * @param string $object_guid The object to get config values of
    *
    * @return array|mixed The config values
    */
-  static function getValues($object_guid = null){
-    if (empty(self::$values)) {
-      if ($values = SHM::get("config-values")) {
-        self::$values = $values["content"];
-      }
-      else {
+  static function getValues($object_guid){
+    static $dirty = null;
+
+    // Check values status, only once per request
+    if ($dirty === null && self::getValuesCacheStatus() === self::STATUS_DIRTY) {
+      self::refreshDataCache();
+      $dirty = false;
+    }
+
+    // Check if the cache exists
+    if (empty(self::$hosts)) {
+      $hosts = SHM::get("config-values-__HOSTS__");
+
+      if (empty($hosts)) {
         self::refreshDataCache();
       }
+      else {
+        self::$hosts = $hosts["content"];
+      }
     }
 
-    if (isset($object_guid)) {
-      return CValue::read(self::$values, $object_guid);
+    // For a single host
+    if (empty(self::$values[$object_guid])) {
+      $_values = SHM::get("config-values-$object_guid");
+      self::$values[$object_guid] = $_values["content"];
     }
 
-    return self::$values;
+    return self::$values[$object_guid];
   }
 
   /**
@@ -333,49 +407,27 @@ class CConfiguration extends CMbMetaObject {
    */
   static function getValue($object_guid, $feature) {
     $values = self::getValues($object_guid);
-    $value = CValue::read($values, $feature);
 
-    if ($value === null) {
-      $features = array();
-      $feature_prefix = "$feature ";
-      $feature_length = strlen($feature_prefix);
-
-      foreach ($values as $_feature => $_value) {
-        if (strpos($_feature, $feature_prefix) !== false) {
-          $_feature = substr($_feature, $feature_length);
-          $features[$_feature] = $_value;
-        }
-      }
-
-      $tree = array();
-      foreach ($features as $_key => $_value) {
-        $path = explode(" ", $_key);
-        self::_unflattenFeatureList($path, $_value, $tree);
-      }
-
-      return $tree;
-    }
-
-    return $value;
+    return CMbArray::readFromPath($values, $feature);
   }
 
   /**
    * Get the values cache status
    *
-   * @return string The values cache status: "empty", "dirty", "ok"
+   * @return string The values can be self::STATUS_EMPTY, self::STATUS_DIRTY or self::STATUS_OK
    */
   static function getValuesCacheStatus() {
-    $values = SHM::get("config-values");
+    $hosts = SHM::get("config-values-__HOSTS__");
 
-    if (!$values) {
-      return "empty";
+    if (!$hosts) {
+      return self::STATUS_EMPTY;
     }
 
-    if (self::_isValuesCacheDirty($values["date"])) {
-      return "dirty";
+    if (self::_isValuesCacheDirty($hosts["date"])) {
+      return self::STATUS_DIRTY;
     }
 
-    return "ok";
+    return self::STATUS_OK;
   }
 
   /**
