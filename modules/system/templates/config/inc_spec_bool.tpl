@@ -1,0 +1,29 @@
+{{*
+ * $Id$
+ *  
+ * @package    Mediboard
+ * @subpackage system
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ * @link       http://www.mediboard.org
+*}}
+
+{{if $is_last}}
+  <label>
+    <input type="radio" class="{{$_prop.string}}" name="c[{{$_feature}}]" value="1" {{if $value == 1}} checked {{/if}} {{if $is_inherited}} disabled {{/if}} />
+    {{tr}}Yes{{/tr}}
+  </label>
+  <label>
+    <input type="radio" class="{{$_prop.string}}" name="c[{{$_feature}}]" value="0" {{if $value == 0}} checked {{/if}} {{if $is_inherited}} disabled {{/if}} />
+    {{tr}}No{{/tr}}
+  </label>
+{{else}}
+  {{if $value === "1"}}
+    {{tr}}Yes{{/tr}}
+  {{elseif $value === "0"}}
+    {{tr}}No{{/tr}}
+  {{else}}
+    {{tr}}Unknown{{/tr}}
+  {{/if}}
+{{/if}}

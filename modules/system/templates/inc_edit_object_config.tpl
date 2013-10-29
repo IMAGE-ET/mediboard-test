@@ -1,16 +1,28 @@
 <script type="text/javascript">
+enableFormElements = function(element) {
+  var inputs = element.select("input,select,textarea,button:not(.keepEnable)");
+  inputs.invoke("enable");
+  return element.show();
+}
+
+disableFormElements = function(element) {
+  var inputs = element.select("input,select,textarea,button:not(.keepEnable)");
+  inputs.invoke("disable");
+  return element.hide();
+}
+
 toggleCustomValue = function(button, b) {
   var customValue = button.up('div.custom-value');
   var inheritValue = button.up('td');
 
   if (b) {
-    customValue.enableInputs();
+    enableFormElements(customValue);
     inheritValue.down('input.inherit-value').disable();
     customValue.down("button.edit").hide();
     customValue.down("button.cancel").show();
   }
   else {
-    customValue.disableInputs().show();
+    disableFormElements(customValue).show();
     inheritValue.down('input.inherit-value').enable();
     customValue.down("button.edit").show();
     customValue.down("button.cancel").hide();
@@ -23,7 +35,7 @@ toggleCustomValue = function(button, b) {
   <input type="hidden" name="dosql" value="do_configuration_aed" />
   <input type="hidden" name="object_guid" value="{{$object_guid}}" />
 
-  <table class="main tbl">
+  <table class="main tbl" style="height: calc(100% - 2.5em);">
     {{assign var=cols value=$ancestor_configs|@count}}
 
     {{foreach from=$ancestor_configs item=_ancestor}}
@@ -109,93 +121,11 @@ toggleCustomValue = function(button, b) {
 
               <div class="custom-value {{if !$smarty.foreach.ancestor.last && $is_inherited}}opacity-30{{/if}}">
                 {{if $smarty.foreach.ancestor.last}}
-                  <button type="button" class="edit notext compact" onclick="toggleCustomValue(this, true)" {{if !$is_inherited}} style="display: none;" {{/if}}></button>
-                  <button type="button" class="cancel notext compact" onclick="toggleCustomValue(this, false)" {{if $is_inherited}} style="display: none;" {{/if}}></button>
-
-                  {{if $_prop.type == "bool"}}
-                    <label>
-                      <input type="radio" class="{{$_prop.string}}" name="c[{{$_feature}}]" value="1" {{if $value == 1}} checked {{/if}} {{if $is_inherited}} disabled {{/if}} />
-                      {{tr}}Yes{{/tr}}
-                    </label>
-                    <label>
-                      <input type="radio" class="{{$_prop.string}}" name="c[{{$_feature}}]" value="0" {{if $value == 0}} checked {{/if}} {{if $is_inherited}} disabled {{/if}} />
-                      {{tr}}No{{/tr}}
-                    </label>
-
-                  {{elseif $_prop.type == "num"}}
-                    <script type="text/javascript">
-                      Main.add(function(){
-                        var form = getForm("edit-configuration");
-                        form["c[{{$_feature}}]"][1].addSpinner({{$_prop|@json}});
-                      });
-                    </script>
-                    <input type="text" class="{{$_prop.string}}" name="c[{{$_feature}}]" value="{{$value}}" {{if $is_inherited}} disabled {{/if}} size="4" />
-
-                  {{elseif $_prop.type == "enum"}}
-                    {{assign var=_list value="|"|explode:$_prop.list}}
-                    <select class="{{$_prop.string}}" name="c[{{$_feature}}]" {{if $is_inherited}} disabled {{/if}}>
-                      {{foreach from=$_list item=_item}}
-                        <option value="{{$_item}}" {{if $_item == $value}} selected {{/if}}>{{$_item}}</option>
-                      {{/foreach}}
-                    </select>
-
-                  {{elseif $_prop.type == "set"}}
-                    {{unique_id var=uid}}
-                    <script type="text/javascript">
-                      Main.add(function(){
-                        var cont = $('set-container-{{$uid}}'),
-                            element = cont.down('input[type=hidden]'),
-                            tokenField = new TokenField(element);
-
-                          cont.select('input[type=checkbox]').invoke('observe', 'click', function(event){
-                          element.fire('ui:change');
-                          var elt = Event.element(event);
-                          tokenField.toggle(elt.value, elt.checked);
-                        });
-                      });
-                    </script>
-
-                    <div style="max-height: 24em; overflow-y: scroll; border: 1px solid #999; background: rgba(255,255,255,0.5); padding: 3px;" class="columns-2" id="set-container-{{$uid}}">
-                      {{assign var=_list value="|"|explode:$_prop.list}}
-                      {{assign var=_list_value value="|"|explode:$value}}
-                      <input type="hidden" class="{{$_prop.string}}" name="c[{{$_feature}}]" {{if $is_inherited}} disabled {{/if}} value="{{$value}}" />
-
-                      {{foreach from=$_list item=_item}}
-                        <label title="{{tr}}config-{{$_feature|replace:' ':'-'}}.{{$_item}}{{/tr}}">
-                          <input type="checkbox" value="{{$_item}}" {{if in_array($_item,$_list_value)}} checked {{/if}} {{if $is_inherited}} disabled {{/if}} />
-                          {{tr}}config-{{$_feature|replace:' ':'-'}}.{{$_item}}{{/tr}}
-                        </label>
-                        <br />
-                      {{/foreach}}
-                    </div>
-                  {{else}}
-                    <input type="text" class="{{$_prop.string}}" name="c[{{$_feature}}]" value="{{$value}}" {{if $is_inherited}} disabled {{/if}} />
-                  {{/if}}
-                {{else}}
-                  {{if $_prop.type == "bool"}}
-                    {{if $value === "1"}}
-                      {{tr}}Yes{{/tr}}
-                    {{elseif $value === "0"}}
-                      {{tr}}No{{/tr}}
-                    {{else}}
-                      {{tr}}Unknown{{/tr}}
-                    {{/if}}
-
-                  {{elseif $_prop.type == "num"}}
-                    {{$value}}
-
-                  {{elseif $_prop.type == "enum"}}
-                    {{$value}}
-
-                  {{elseif $_prop.type == "set"}}
-                    {{assign var=_list value="|"|explode:$value}}
-                    {{foreach from=$_list item=_item name=_list}}
-                      {{tr}}config-{{$_feature|replace:' ':'-'}}.{{$_item}}{{/tr}}{{if !$smarty.foreach._list.last}}, {{/if}}
-                    {{/foreach}}
-                  {{else}}
-                    {{$value}}
-                  {{/if}}
+                  <button type="button" class="edit notext compact keepEnable" onclick="toggleCustomValue(this, true)" {{if !$is_inherited}} style="display: none;" {{/if}}></button>
+                  <button type="button" class="cancel notext compact keepEnable" onclick="toggleCustomValue(this, false)" {{if $is_inherited}} style="display: none;" {{/if}}></button>
                 {{/if}}
+                {{assign var=tpl value='config/inc_spec_'|cat:$_prop.type}}
+                {{mb_include module=system template=$tpl is_last=$smarty.foreach.ancestor.last}}
               </div>
             </td>
           {{/if}}
@@ -204,7 +134,7 @@ toggleCustomValue = function(button, b) {
         {{/foreach}}
       </tr>
     {{/foreach}}
-      <tr>
+      {{*<tr>
         <td></td>
         {{foreach from=$ancestor_configs item=_ancestor name=ancestor}}
           {{if $_ancestor.object != "default"}}
@@ -215,6 +145,9 @@ toggleCustomValue = function(button, b) {
             </td>
           {{/if}}
       {{/foreach}}
-      </tr>
+      </tr>*}}
   </table>
+  <div style="position: fixed; bottom: 0px; width: 100%; height: 2.5em; background-color: #ffffff; text-align: center">
+    <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
+  </div>
 </form>
