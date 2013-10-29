@@ -1,3 +1,4 @@
+{{mb_default var=total_factures valu=24}}
 <table class="tbl">
   {{if $total_factures > 25}}
     {{mb_include module=system template=inc_pagination total=$total_factures current=$page step=25 change_page='changePage'}}
