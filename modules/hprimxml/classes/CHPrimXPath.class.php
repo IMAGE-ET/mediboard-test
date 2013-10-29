@@ -64,13 +64,4 @@ class CHPrimXPath extends CMbXPath {
     }
     return $implode ? implode(" ", $array) : $array;
   }
-
-  /**
-   * @see parent::getFirstNode
-   */
-  function getFirstNode($query, DOMNode $contextNode = null) {
-    $textNodes = $this->getMultipleTextNodes($query, $contextNode);
-    
-    return isset($textNodes[0]) ? $textNodes[0] : null;
-  }
 }

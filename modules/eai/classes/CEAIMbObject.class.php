@@ -93,6 +93,7 @@ class CEAIMbObject {
         case "merge" : 
           $comment  = "Le séjour avec l'IC '$object->_id' a été fusionné avec 
                        le séjour dont l'IC est '$otherObject->_id'.";
+          break;
         default :
           $comment = "";
       }     

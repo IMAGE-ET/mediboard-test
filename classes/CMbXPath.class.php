@@ -192,6 +192,39 @@ class CMbXPath extends DOMXPath {
   }
 
   /**
+   * Get first text node
+   *
+   * @param string  $query       The XPath to the node
+   * @param DOMNode $contextNode The context node from which the XPath starts
+   *
+   * @return string
+   */
+  function getFirstTextNode($query, DOMNode $contextNode = null) {
+    $textNodes = $this->getMultipleTextNodes($query, $contextNode);
+
+    return isset($textNodes[0]) ? $textNodes[0] : null;
+  }
+
+  /**
+   * Get first node
+   *
+   * @param string  $query       The XPath to the node
+   * @param DOMNode $contextNode The context node from which the XPath starts
+   *
+   * @return DOMElement|null The node
+   */
+  function getFirstNode($query, DOMNode $contextNode = null) {
+    $query = utf8_encode($query);
+    $nodeList = $contextNode ? parent::query($query, $contextNode) : parent::query($query);
+
+    if ($nodeList->length < 1) {
+      return null;
+    }
+
+    return $nodeList->item(0);
+  }
+
+  /**
    * Convert value with ISO-8859-1 characters encoded with UTF-8
    *
    * @param string $value Value

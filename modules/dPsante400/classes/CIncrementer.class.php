@@ -100,6 +100,10 @@ class CIncrementer extends CMbObject {
     
     $this->loadMasterDomain();
 
+    if (!$this->_object_class) {
+      return;
+    }
+
     $object = new $this->_object_class;
     $this->_view = self::formatValue($object, $this->pattern, $this->value);
   }

@@ -75,6 +75,25 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     
     return $data;
   }
+
+  /**
+   * Check datas
+   *
+   * @param CHPrimXMLAcquittementsPatients $dom_acq    Acquittement
+   * @param CPatient                       $newPatient Patient
+   * @param array                          $data       Datas
+   *
+   * @return string
+   */
+  function check($dom_acq, $newPatient, $data) {
+    $idSourcePatient = $data['idSourcePatient'];
+    $idCiblePatient  = $data['idCiblePatient'];
+
+    // Acquittement d'erreur : identifiants source et cible non fournis
+    if (!$idCiblePatient && !$idSourcePatient) {
+      return $this->_ref_echange_hprim->setAckError($dom_acq, "E005", null, $newPatient);
+    }
+  }
   
   /**
    * Recording a patient with an IPP in the system
@@ -96,13 +115,12 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     $sender->loadConfigValues();
     $this->_ref_sender = $sender;
 
+    if ($msg = $this->check($dom_acq, $newPatient, $data)) {
+      return $msg;
+    }
+
     $idSourcePatient = $data['idSourcePatient'];
     $idCiblePatient  = $data['idCiblePatient'];
-    
-    // Acquittement d'erreur : identifiants source et cible non fournis
-    if (!$idCiblePatient && !$idSourcePatient) {
-      return $echg_hprim->setAckError($dom_acq, "E005", $commentaire, $newPatient);
-    }    
     
     // Si CIP
     if (!CAppUI::conf('sip server')) {

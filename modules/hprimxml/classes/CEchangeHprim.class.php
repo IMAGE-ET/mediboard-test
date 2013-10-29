@@ -100,11 +100,16 @@ class CEchangeHprim extends CEchangeXML {
     } 
     
     if ($this->_acquittement !== null) {
+      $domGetAcquittement = null;
       $this->type == "patients" ?
         $domGetAcquittement = new CHPrimXMLAcquittementsPatients() : null;
       $this->type == "pmsi" ?
         $domGetAcquittement = new CHPrimXMLAcquittementsServeurActivitePmsi::$evenements[$this->sous_type] : null;
-      
+
+      if (!$domGetAcquittement) {
+        return;
+      }
+
       $domGetAcquittement->loadXML($this->_acquittement);
       $domGetAcquittement->formatOutput = true;
       
@@ -239,7 +244,7 @@ class CEchangeHprim extends CEchangeXML {
     $commentaire = $avertissement ? $avertissement : $commentaires;                    
     $statut      = $avertissement ? $dom_acq->_codes_erreurs["avt"] : $dom_acq->_codes_erreurs["ok"];
 
-    $msgAcq = $dom_acq->generateAcquittements($statut, $codes, $commentaire, $mbObject);
+    $msgAcq    = $dom_acq->generateAcquittements($statut, $codes, $commentaire, $mbObject);
     $doc_valid = $dom_acq->schemaValidate(null, false, $this->_ref_receiver ? $this->_ref_receiver->display_errors : true);
     
     $this->acquittement_valide = $doc_valid ? 1 : 0;
@@ -249,7 +254,7 @@ class CEchangeHprim extends CEchangeXML {
       $this->setObjectIdClass($mbObject);
     }
     $this->_acquittement = $msgAcq;
-    $this->date_echange = CMbDT::dateTime();
+    $this->date_echange  = CMbDT::dateTime();
     $this->store();
     
     return $msgAcq;

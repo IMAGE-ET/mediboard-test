@@ -163,15 +163,18 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       "bb"    => "enf",
       "enf"   => "enf",
     );
-    $nom = $xpath->queryTextNode("hprim:nomUsuel", $node);
-    $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $node);
-    $adresses = $xpath->queryUniqueNode("hprim:adresses", $node);
-    $adresse = $xpath->queryUniqueNode("hprim:adresse", $adresses);
-    $ligne = $xpath->getMultipleTextNodes("hprim:ligne", $adresse, true);
-    $ville = $xpath->queryTextNode("hprim:ville", $adresse);
-    $cp = $xpath->queryTextNode("hprim:codePostal", $adresse);
+    $nom        = $xpath->queryTextNode("hprim:nomUsuel", $node);
+    $prenoms    = $xpath->getMultipleTextNodes("hprim:prenoms/*", $node);
+    $adresses   = $xpath->queryUniqueNode("hprim:adresses", $node);
+    $adresse    = $xpath->queryUniqueNode("hprim:adresse", $adresses);
+    $ligne      = $xpath->getMultipleTextNodes("hprim:ligne", $adresse, true);
+    $ville      = $xpath->queryTextNode("hprim:ville", $adresse);
+    $cp         = $xpath->queryTextNode("hprim:codePostal", $adresse);
+    if ($cp) {
+      $cp       = preg_replace("/[^0-9]/", "", $cp);
+    }
     $telephones = $xpath->getMultipleTextNodes("hprim:telephones/*", $node);
-    $email = $xpath->getFirstNode("hprim:emails/*", $node);    
+    $email      = $xpath->getFirstTextNode("hprim:emails/*", $node);
     
     if ($mbPersonne instanceof CPatient) {
       if ($civilite) {
