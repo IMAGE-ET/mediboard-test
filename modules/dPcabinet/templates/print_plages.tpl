@@ -47,7 +47,7 @@
     </tr>
     
     <tr>
-      <th style="width: 15%;">Nom / Prénom</th>
+      <th style="width: 20%;">Nom / Prénom</th>
       {{if $filter->_coordonnees}}
         <th style="width: 15%;">Adresse</th>
         <th class="narrow">Tel</th>
@@ -59,8 +59,8 @@
       {{if $show_lit}}
         <th class="narrow">Lit</th>
       {{/if}}
-      <th style="width: 25%;">Motif</th>
-      <th style="width: 25%;">Remarques</th>
+      <th style="width: 20%;">Motif</th>
+      <th style="width: 20%;">Remarques</th>
       <th>Durée</th>
     </tr>
   

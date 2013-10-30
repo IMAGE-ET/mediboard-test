@@ -16,7 +16,7 @@
     
     {{if $curr_consult->patient_id}}
     {{assign var=patient value=$curr_consult->_ref_patient}}
-    <td rowspan="2" style="{{$consult_background}}">
+    <td rowspan="2" style="{{$consult_background}} class="text">
       {{$patient}}
       {{if $filter->_print_ipp && $patient->_IPP}}
         [{{$patient->_IPP}}]
