@@ -26,7 +26,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
   /**
    * @see parent::__construct()
    */
-  function __construct() {    
+  function __construct() {
     $this->sous_type = "venuePatient";
             
     parent::__construct();
@@ -161,6 +161,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $newVenue->group_id = $sender->group_id;
     
     $commentaire = "";
+    $codes       = array();
     
     // Si CIP
     if (!CAppUI::conf('smp server')) {
@@ -191,16 +192,12 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             else {
                // Mapping du séjour si pas de numéro de dossier
               $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
-              
-              // Notifier les autres destinataires autre que le sender
-              $newVenue->_eai_initiateur_group_id = $sender->group_id;
-              $msgVenue = $newVenue->store();
-          
-              $modified_fields = CEAISejour::getModifiedFields($newVenue);
+
+              $msgVenue        = CEAISejour::storeSejour($newVenue, $sender);
+              $commentaire     = CEAISejour::getComment($newVenue);
               
               $_code_NumDos = "I121";
               $_code_Venue = true;
-              $commentaire = "Séjour modifiée : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields.";
             }
           }
           else {
@@ -235,10 +232,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
                 // Mapping du séjour
                 $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
 
-                // Notifier les autres destinataires autre que le sender
-                $newVenue->_eai_initiateur_group_id = $sender->group_id;
-                $msgVenue = $newVenue->store();
-
+                $msgVenue    = CEAISejour::storeSejour($newVenue, $sender);
                 $commentaire = CEAISejour::getComment($newVenue);
 
                 $_code_NumDos = "A121";
@@ -267,9 +261,9 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
               else {
                 // Mapping du séjour
                 $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
-                $msgVenue = $newVenue->store();
 
-                $commentaire = CEAISejour::getComment($newVenue);
+                $msgVenue     = CEAISejour::storeSejour($newVenue, $sender);
+                $commentaire  = CEAISejour::getComment($newVenue);
                 
                 $_code_NumDos = "A122";
                 $_code_Venue = true;
@@ -279,12 +273,9 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           if (!$newVenue->_id && !isset($nda->_trash)) {
             // Mapping du séjour
             $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
-            
-            // Notifier les autres destinataires autre que le sender
-            $newVenue->_eai_initiateur_group_id = $sender->group_id;
-            $msgVenue = $newVenue->store();
-            
-            $commentaire = "Séjour créé : $newVenue->_id. ";
+
+            $msgVenue    = CEAISejour::storeSejour($newVenue, $sender);
+            $commentaire = CEAISejour::getComment($newVenue);
           }
         }
         
@@ -350,9 +341,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             $_code_NumDos = "A120";
           }
         }
-        // Notifier les autres destinataires autre que le sender
-        $newVenue->_eai_initiateur_group_id = $sender->group_id;
-        $msgVenue = $newVenue->store();
+
+        $msgVenue = CEAISejour::storeSejour($newVenue, $sender);
 
         $codes = array($msgVenue ? "A103" : "I102", $_code_NumDos);
         
