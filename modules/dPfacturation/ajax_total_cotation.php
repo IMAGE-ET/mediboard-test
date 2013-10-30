@@ -28,12 +28,12 @@ CMbObject::massLoadFwdRef($prats, "function_id");
 $ds = CSQLDataSource::get("std");
 
 $object_classes = array(
-  "CSejour"       => array(
+  "Etablissement"       => array(
     "CConsultation",
     "CSejour",
     "COperation"
   ),
-  "CConsultation" => array("CConsultation")
+  "Cabinet" => array("CConsultation")
 );
 
 $secteurs =  array(
@@ -85,7 +85,7 @@ foreach ($prats as $_chir_id => $_prat) {
         }
         elseif ($_class == "CConsultation") {
           $query .= ", consultation c WHERE ";
-          if ($type == "CConsultation") {
+          if ($type == "Cabinet") {
             $query .= "c.sejour_id IS NULL ";
           }
           else {

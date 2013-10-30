@@ -8,8 +8,8 @@
       Praticien
     </th>
     {{foreach from=$object_classes item=classes key=classe}}
-      <th colspan="{{if $classe == "CConsultation"}}2{{else}}6{{/if}}" class="title">
-        {{tr}}{{$classe}}{{/tr}}
+      <th colspan="{{if $classe == "Cabinet"}}2{{else}}6{{/if}}" class="title">
+        {{$classe}}
       </th>
     {{/foreach}}
     <th colspan="2" rowspan="3" style="width: 20%;">
@@ -18,15 +18,11 @@
   </tr>
   <tr>
     {{foreach from=$object_classes item=type key=nom_type}}
-      {{if $nom_type != "CConsultation"}}
-        {{foreach from=$type item=classe}}
-          <th colspan="2">
-            {{tr}}{{$classe}}{{/tr}}
-          </th>
-        {{/foreach}}
-      {{else}}
-        <th colspan="2"></th>
-      {{/if}}
+      {{foreach from=$type item=classe}}
+        <th colspan="2">
+          {{tr}}{{$classe}}{{/tr}}
+        </th>
+      {{/foreach}}
     {{/foreach}}
   </tr>
   <tr>
