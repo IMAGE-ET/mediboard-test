@@ -249,29 +249,33 @@
     {{if $conf.dPadmissions.show_dh}}
       <td>
         {{foreach from=$_sejour->_ref_operations item=curr_op}}
-        {{if $curr_op->_ref_actes_ccam|@count}}
-          <span style="color: #484;">
-          {{foreach from=$curr_op->_ref_actes_ccam item=_acte}}
-            {{if $_acte->montant_depassement}}
-              {{if $_acte->code_activite == 1}}
-              Chir :
-              {{elseif $_acte->code_activite == 4}}
-              Anesth :
-              {{else}}
-              Activité {{$_acte->code_activite}} :
+          {{if $curr_op->_ref_actes_ccam|@count}}
+            <span style="color: #484;">
+            {{foreach from=$curr_op->_ref_actes_ccam item=_acte}}
+              {{if $_acte->montant_depassement}}
+                {{if $_acte->code_activite == 1}}
+                Chir :
+                {{elseif $_acte->code_activite == 4}}
+                Anesth :
+                {{else}}
+                Activité {{$_acte->code_activite}} :
+                {{/if}}
+                {{mb_value object=$_acte field=montant_depassement}}
+                <br />
               {{/if}}
-              {{mb_value object=$_acte field=montant_depassement}}
-              <br />
-            {{/if}}
-          {{/foreach}}
-          </span>
-        {{/if}}
-        {{if $curr_op->depassement}}
-          Prévu : {{mb_value object=$curr_op field="depassement"}}
-          <br />
-        {{/if}}
+            {{/foreach}}
+            </span>
+          {{/if}}
+          {{if $curr_op->depassement}}
+            Prévu chir : {{mb_value object=$curr_op field="depassement"}}
+            <br />
+          {{/if}}
+          {{if $curr_op->depassement_anesth}}
+            Prévu anesth : {{mb_value object=$curr_op field="depassement_anesth"}}
+            <br />
+          {{/if}}
         {{foreachelse}}
-        -
+          -
         {{/foreach}}
       </td>
     {{/if}}
