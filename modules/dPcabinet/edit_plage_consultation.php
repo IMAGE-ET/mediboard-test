@@ -57,7 +57,7 @@ $plageSel->loadRefsNotes();
 $plageSel->loadRefsBack();
 //check 3333tel
 if (CModule::getActive("3333tel")) {
-  C3333TelTools::checkPlagesConsult($plageSel);
+  C3333TelTools::checkPlagesConsult($plageSel, $plageSel->_ref_chir->function_id);
 }
 
 if ($plageSel->_affected) {
