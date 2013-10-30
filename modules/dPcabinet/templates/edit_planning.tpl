@@ -278,7 +278,7 @@
 <input type="hidden" name="_line_element_id" value="{{$line_element_id}}" />
 
 
-  {{if $consult->_id}}
+  {{if $consult->_id && !$dialog}}
     <a class="button search" href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}" style="float: right;">
       {{tr}}CConsultation-title-access{{/tr}}
     </a>

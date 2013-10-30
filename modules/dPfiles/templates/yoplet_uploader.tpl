@@ -30,6 +30,7 @@
     <param name="content" value="a" />
     <param name="cookies" value="{{$app->session_name}} {{$cookies}}" />
     <param name="user_agent" value="{{$smarty.server.HTTP_USER_AGENT}}" />
+    <param name="permissions" value="all-permissions" />
   </applet>
 
   {{if $app->user_prefs.debug_yoplet}}

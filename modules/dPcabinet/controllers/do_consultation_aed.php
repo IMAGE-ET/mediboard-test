@@ -27,7 +27,8 @@ if ($consultation_ids = CValue::post("consultation_ids")) {
   $_POST = array(
     "consultation_ids" => CValue::post("consultation_ids"),
     "annule"           => CValue::post("annule"),
-    "del"              => CValue::post("del")
+    "del"              => CValue::post("del"),
+    "postRedirect"     => CValue::post("postRedirect")
   );
 }
 
