@@ -28,9 +28,12 @@ CMbObject::massLoadFwdRef($prats, "function_id");
 $ds = CSQLDataSource::get("std");
 
 $object_classes = array(
-  "CConsultation",
-  "CSejour",
-  "COperation",
+  "CSejour"       => array(
+    "CConsultation",
+    "CSejour",
+    "COperation"
+  ),
+  "CConsultation" => array("CConsultation")
 );
 
 $secteurs =  array(
@@ -53,9 +56,12 @@ else {
   $tab_actes["caisse"] = $secteurs;
 }
 
-foreach ($object_classes as $_class) {
-  foreach ($tab_actes as $nom => $other) {
-    $total_by_class[$_class][$nom] = 0;
+foreach ($object_classes as $type => $class_type) {
+  $total_by_class[$type] = array();
+  foreach ($class_type as $_class) {
+    foreach ($tab_actes as $nom => $other) {
+      $total_by_class[$type][$_class][$nom] = 0;
+    }
   }
 }
 
@@ -64,35 +70,48 @@ foreach ($prats as $_chir_id => $_prat) {
   $cotation[$_chir_id] = array();
   $total_by_prat[$_chir_id] = 0;
 
-  foreach ($object_classes as $_class) {
-    $cotation[$_chir_id][$_class] = $tab_actes;
-    foreach ($cotation[$_chir_id][$_class] as $_type => $value) {
-      $query = "SELECT SUM(a.montant_base) AS sect1, SUM(a.montant_depassement) AS sect2
-        FROM acte_$_type a";
-      if ($_class == "COperation") {
-        $query .= ", operations o
-        WHERE o.annulee = '0'
-        AND o.operation_id = a.object_id
-        AND ";
-      }
-      else {
-        $query .= " WHERE ";
-      }
-      $query .= "a.object_class = '$_class'
-        AND a.executant_id = '$_chir_id'
-        AND DATE(a.execution) BETWEEN '$debut' AND '$fin';";
-      $result = $ds->loadHash($query);
+  foreach ($object_classes as $type => $class_type) {
+    foreach ($class_type as $_class) {
+      $cotation[$_chir_id][$type][$_class] = $tab_actes;
 
-      $sect1 = round($result["sect1"], 2);
-      $sect2 = round($result["sect2"], 2);
-      $total_sect = $sect1 + $sect2;
-      $cotation[$_chir_id][$_class][$_type]["sect1"] = $sect1;
-      $cotation[$_chir_id][$_class][$_type]["sect2"] = $sect2;
-      
-      $total_by_prat[$_chir_id] += $total_sect;
-      
-      $total_by_class[$_class][$_type] += $total_sect;
-      $total += $total_sect;
+      foreach ($cotation[$_chir_id][$type][$_class] as $_type => $value) {
+        $query = "SELECT SUM(a.montant_base) AS sect1, SUM(a.montant_depassement) AS sect2
+          FROM acte_$_type a";
+        if ($_class == "COperation") {
+          $query .= ", operations o
+          WHERE o.annulee = '0'
+          AND o.operation_id = a.object_id
+          AND ";
+        }
+        elseif ($_class == "CConsultation") {
+          $query .= ", consultation c WHERE ";
+          if ($type == "CConsultation") {
+            $query .= "c.sejour_id IS NULL ";
+          }
+          else {
+            $query .= "c.sejour_id IS NOT NULL ";
+          }
+          $query .= "AND c.consultation_id = a.object_id AND ";
+        }
+        else {
+          $query .= " WHERE ";
+        }
+        $query .= "a.object_class = '$_class'
+          AND a.executant_id = '$_chir_id'
+          AND DATE(a.execution) BETWEEN '$debut' AND '$fin';";
+        $result = $ds->loadHash($query);
+
+        $sect1 = round($result["sect1"], 2);
+        $sect2 = round($result["sect2"], 2);
+        $total_sect = $sect1 + $sect2;
+        $cotation[$_chir_id][$type][$_class][$_type]["sect1"] = $sect1;
+        $cotation[$_chir_id][$type][$_class][$_type]["sect2"] = $sect2;
+
+        $total_by_prat[$_chir_id] += $total_sect;
+
+        $total_by_class[$type][$_class][$_type] += $total_sect;
+        $total += $total_sect;
+      }
     }
   }
 }

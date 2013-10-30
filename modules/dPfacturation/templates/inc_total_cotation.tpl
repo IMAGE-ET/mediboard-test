@@ -4,24 +4,39 @@
 
 <table class="tbl">
   <tr>
-    <th rowspan="2" colspan="2" style="width: 20%;">
+    <th rowspan="3" colspan="2" style="width: 20%;">
       Praticien
     </th>
-    {{foreach from=$object_classes item=classe}}
-      <th colspan="2" style="width: 20%;">
+    {{foreach from=$object_classes item=classes key=classe}}
+      <th colspan="{{if $classe == "CConsultation"}}2{{else}}6{{/if}}" class="title">
         {{tr}}{{$classe}}{{/tr}}
       </th>
     {{/foreach}}
-    <th colspan="2" rowspan="2" style="width: 20%;">
+    <th colspan="2" rowspan="3" style="width: 20%;">
       Totaux
     </th>
   </tr>
   <tr>
-    {{foreach from=$object_classes item=classe}}
-      {{foreach from=$tab_actes item=acte key=nom}}
-      <th>
-        {{$nom|upper}}
-      </th>
+    {{foreach from=$object_classes item=type key=nom_type}}
+      {{if $nom_type != "CConsultation"}}
+        {{foreach from=$type item=classe}}
+          <th colspan="2">
+            {{tr}}{{$classe}}{{/tr}}
+          </th>
+        {{/foreach}}
+      {{else}}
+        <th colspan="2"></th>
+      {{/if}}
+    {{/foreach}}
+  </tr>
+  <tr>
+    {{foreach from=$object_classes item=type}}
+      {{foreach from=$type item=classe}}
+        {{foreach from=$tab_actes item=acte key=nom}}
+        <th>
+          {{$nom|upper}}
+        </th>
+        {{/foreach}}
       {{/foreach}}
     {{/foreach}}
   </tr>
@@ -36,14 +51,16 @@
           Sec 2
         {{/if}}
       </td>
-      {{foreach from=$_cotation item=_total_by_class}}
-        {{foreach from=$_total_by_class item=_total}}
-          <td style="text-align: right;">
-            <div>{{$_total.sect1|currency}}</div>
-            {{if $conf.ref_pays == 1}}
-              <div>{{$_total.sect2|currency}}</div>
-            {{/if}}
-          </td>
+      {{foreach from=$_cotation item=type}}
+        {{foreach from=$type item=_total_by_class}}
+          {{foreach from=$_total_by_class item=_total}}
+            <td style="text-align: right;">
+              <div>{{$_total.sect1|currency}}</div>
+              {{if $conf.ref_pays == 1}}
+                <div>{{$_total.sect2|currency}}</div>
+              {{/if}}
+            </td>
+          {{/foreach}}
         {{/foreach}}
       {{/foreach}}
       <td style="text-align: right;">
@@ -62,11 +79,13 @@
       <td  rowspan="2"  colspan="2" style="text-align: right;">
         <strong>Total</strong>
       </td>
-      {{foreach from=$total_by_class item=_total_by_code}}
-        {{foreach from=$_total_by_code item=_total}}
-          <td style="text-align: right;">
-            <strong>{{$_total|currency}}</strong>
-          </td>
+      {{foreach from=$total_by_class item=type}}
+        {{foreach from=$type item=_total_by_code}}
+          {{foreach from=$_total_by_code item=_total}}
+            <td style="text-align: right;">
+              <strong>{{$_total|currency}}</strong>
+            </td>
+          {{/foreach}}
         {{/foreach}}
       {{/foreach}}
       <td rowspan="2" style="text-align: right;">
@@ -77,23 +96,25 @@
       </td>
     </tr>
     <tr>
-      {{foreach from=$total_by_class item=_total_by_code}}
-        <td colspan="2" style="text-align: center;">
-          {{if $total}}
-            {{if $conf.ref_pays == 1}}
-              {{math equation=x+y x=$_total_by_code.ccam y=$_total_by_code.ngap assign=sub_total}}
-            {{else}}
-              {{math equation=x+y x=$_total_by_code.tarmed y=$_total_by_code.caisse assign=sub_total}}
-            {{/if}}
-            {{math equation=(x/y)*100 x=$sub_total y=$total assign=percent_total}}
-            <strong>
-              {{$sub_total|currency}}
-              {{if $percent_total}}
-                ({{$percent_total|round:2}}%)
+      {{foreach from=$total_by_class item=type}}
+        {{foreach from=$type item=_total_by_code}}
+          <td colspan="2" style="text-align: center;">
+            {{if $total}}
+              {{if $conf.ref_pays == 1}}
+                {{math equation=x+y x=$_total_by_code.ccam y=$_total_by_code.ngap assign=sub_total}}
+              {{else}}
+                {{math equation=x+y x=$_total_by_code.tarmed y=$_total_by_code.caisse assign=sub_total}}
               {{/if}}
-            </strong>
-          {{/if}}
-        </td>
+              {{math equation=(x/y)*100 x=$sub_total y=$total assign=percent_total}}
+              <strong>
+                {{$sub_total|currency}}
+                {{if $percent_total}}
+                  ({{$percent_total|round:2}}%)
+                {{/if}}
+              </strong>
+            {{/if}}
+          </td>
+        {{/foreach}}
       {{/foreach}}
     </tr>
   </tbody>
