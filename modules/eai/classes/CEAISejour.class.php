@@ -153,15 +153,22 @@ class CEAISejour extends CEAIMbObject {
 
   /**
    * Recording admit
-   * 
-   * @param CSejour     $newSejour Admit
-   * @param CIdSante400 $NDA       Object id400
-   * 
+   *
+   * @param CSejour        $newSejour   Admit
+   * @param CInteropSender $sender      Sender
+   * @param bool           $generateNDA Generate NDA ?
+   *
    * @return null|string null if successful otherwise returns and error message
-   */ 
-  static function storeSejour(CSejour $newSejour, $NDA) {
-    $newSejour->_NDA = $NDA;
-    
-    return $newSejour->store();
+   */
+  static function storeSejour(CSejour $newSejour, CInteropSender $sender, $generateNDA = false) {
+    // Notifier les autres destinataires autre que le sender
+    $newSejour->_eai_initiateur_group_id = $sender->group_id;
+    $newSejour->_generate_NDA            = $generateNDA;
+
+    if ($msg = $newSejour->store()) {
+      $newSejour->repair();
+
+      return $newSejour->store();
+    }
   }
 }
