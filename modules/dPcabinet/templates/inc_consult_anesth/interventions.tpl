@@ -92,10 +92,9 @@
   <select name="operation_id" style="width: 20em;" onchange="submitOpConsult()">
     <option value="">Pas d'Intervention</option>
     {{foreach from=$patient->_ref_sejours item=curr_sejour}}
-    <optgroup label="{{if $curr_sejour->annule}}ANNULE - {{/if}}Séjour du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}} au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}"
-    {{if $consult_anesth->sejour_id!=$curr_sejour->_id && $consult_anesth->sejour_id}}disabled="disabled"{{/if}}>
+    <optgroup label="{{if $curr_sejour->annule}}ANNULE - {{/if}}Séjour du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}} au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}">
       {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
-      <option value="{{$curr_op->operation_id}}"
+      <option value="{{$curr_op->_id}}"
         {{if $consult_anesth->operation_id==$curr_op->_id}}
           selected
         {{elseif $curr_op->_ref_consult_anesth->_id && $curr_op->_ref_consult_anesth->_id != $consult_anesth->_id}}
