@@ -28,6 +28,16 @@ toggleCustomValue = function(button, b) {
     customValue.down("button.cancel").hide();
   }
 }
+
+Main.add(function() {
+  var browserHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+  if (document.body.getHeight() > browserHeight) {
+    $('div-submit-configs').setStyle({position: 'fixed', bottom: '0px'});
+    var row = $('table-edit-config').insertRow(-1);
+    row.setStyle({height: '2.5em'});
+    row.insertCell(-1);
+  }
+});
 </script>
 
 <form name="edit-configuration" method="post" action="?" onsubmit="return onSubmitFormAjax(this, editObjectConfig.curry('{{$object_guid}}'))">
@@ -35,7 +45,7 @@ toggleCustomValue = function(button, b) {
   <input type="hidden" name="dosql" value="do_configuration_aed" />
   <input type="hidden" name="object_guid" value="{{$object_guid}}" />
 
-  <table class="main tbl" style="height: calc(100% - 2.5em);">
+  <table id="table-edit-config" class="main tbl">
     {{assign var=cols value=$ancestor_configs|@count}}
 
     {{foreach from=$ancestor_configs item=_ancestor}}
@@ -134,20 +144,8 @@ toggleCustomValue = function(button, b) {
         {{/foreach}}
       </tr>
     {{/foreach}}
-      {{*<tr>
-        <td></td>
-        {{foreach from=$ancestor_configs item=_ancestor name=ancestor}}
-          {{if $_ancestor.object != "default"}}
-            <td>
-              {{if $smarty.foreach.ancestor.last}}
-                <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
-              {{/if}}
-            </td>
-          {{/if}}
-      {{/foreach}}
-      </tr>*}}
   </table>
-  <div style="position: fixed; bottom: 0px; width: 100%; height: 2.5em; background-color: #ffffff; text-align: center">
+  <div id="div-submit-configs" style="background-color: #ffffff; width: 100%; height: 2.5em; text-align: center;">
     <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
   </div>
 </form>
