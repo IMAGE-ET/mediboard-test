@@ -1,8 +1,9 @@
 <table class="tbl">
   <tr>
-    <th>{{mb_colonne class=CCompteRendu field=nom          order_col=$order_col order_way=$order_way url="?m=dPcompteRendu&tab=vw_modeles"}}</th>
-    <th>{{mb_colonne class=CCompteRendu field=object_class order_col=$order_col order_way=$order_way url="?m=dPcompteRendu&tab=vw_modeles"}}</th>
-    <th>{{mb_colonne class=CCompteRendu field=type         order_col=$order_col order_way=$order_way url="?m=dPcompteRendu&tab=vw_modeles"}}</th>
+    <th>{{mb_colonne class=CCompteRendu field=nom              order_col=$order_col order_way=$order_way url="?m=dPcompteRendu&tab=vw_modeles"}}</th>
+    <th>{{mb_colonne class=CCompteRendu field=object_class     order_col=$order_col order_way=$order_way url="?m=dPcompteRendu&tab=vw_modeles"}}</th>
+    <th>{{mb_colonne class=CCompteRendu field=file_category_id order_col=$order_col order_way=$order_way url="?m=dPcompteRendu&tab=vw_modeles"}}</th>
+    <th>{{mb_colonne class=CCompteRendu field=type             order_col=$order_col order_way=$order_way url="?m=dPcompteRendu&tab=vw_modeles"}}</th>
     <th class="narrow" colspan="2">{{tr}}Stats{{/tr}}</th>
     <th class="narrow">{{tr}}Action{{/tr}}</th>
   </tr>
@@ -31,6 +32,8 @@
     </td>
   
     <td>{{mb_value object=$_modele field=object_class}}</td>
+
+    <td>{{$_modele->_ref_category->_view}}</td>
   
     <td>
       {{mb_value object=$_modele field=type}}

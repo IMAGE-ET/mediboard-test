@@ -27,7 +27,6 @@ $listFunc = $listFunc->loadListWithPerms(PERM_EDIT, $where, "text");
 
 // Liste des praticiens accessibles
 $listUser = new CMediusers();
-//$listUser = $listUser->loadPraticiens(PERM_EDIT);
 $listUser = $listUser->loadUsers(PERM_EDIT);
 
 $mediuser = CMediusers::get();

@@ -95,7 +95,7 @@ class CFilesCategory extends CMbObject {
     $category = new CFilesCategory();
 
     /** @var CFilesCategory[] $categories */
-    $categories = $category->loadList(null, "nom");
+    $categories = $category->loadListWithPerms(PERM_READ, null, "nom");
 
     $catsByClass = array();
     foreach ($categories as $_category) {
@@ -117,7 +117,7 @@ class CFilesCategory extends CMbObject {
     $where = array(
       $instance->_spec->ds->prepare("`class` IS NULL OR `class` = %", $class)
     );
-    return $instance->loadList($where, "nom");
+    return $instance->loadListWithPerms(PERM_READ, $where, "nom");
   }
 
   /**

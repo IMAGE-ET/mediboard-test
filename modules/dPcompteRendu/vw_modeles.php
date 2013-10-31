@@ -25,6 +25,9 @@ switch ($order_col) {
     break;
   case "type":
     $order = "type $order_way, object_class, nom";
+    break;
+  case "file_category_id":
+    $order = "file_category_id $order_way, object_class, nom";
 }
 
 // Liste des praticiens et cabinets accessibles

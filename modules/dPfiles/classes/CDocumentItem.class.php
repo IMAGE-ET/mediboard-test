@@ -185,21 +185,27 @@ class CDocumentItem extends CMbMetaObject {
    * @return CMediusers
    */
   function loadRefAuthor() {
-    if (!$this->_id) {
-      return null;
-    }
-    
     return $this->_ref_author = $this->loadFwdRef("author_id", true);
   }
 
   function getPerm($permType) {
     $this->loadRefAuthor();
+    $this->loadRefCategory();
+
+    // Permission de base
+    $perm = parent::getPerm($permType);
+
+    // Droit sur les catégories
+    $perm &= $this->_ref_category->getPerm($permType);
+
+    // Gestion d'un document confidentiel
     if ($this->private) {
       $sameFunction = $this->_ref_author->function_id == CMediusers::get()->function_id;
       $isAdmin = CMediusers::get()->isAdmin();
-      return parent::getPerm($permType) && ($sameFunction || $isAdmin);
+      $perm &= ($sameFunction || $isAdmin);
     }
-    return parent::getPerm($permType);
+
+    return $perm;
   }
   
   /**

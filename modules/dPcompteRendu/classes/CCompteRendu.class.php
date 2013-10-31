@@ -660,7 +660,7 @@ class CCompteRendu extends CDocumentItem {
         $where["user_id"]     = "= '$prat->_id'";
         $where["function_id"] = "IS NULL";
         $where["group_id"]    = "IS NULL";
-        $modeles["prat"] = $modele->loadlist($where, $order);
+        $modeles["prat"] = $modele->loadListWithPerms(PERM_READ, $where, $order);
 
       case 'func': // Modèle de la fonction
         if (isset($prat)) {
@@ -677,7 +677,7 @@ class CCompteRendu extends CDocumentItem {
         $where["user_id"]     = "IS NULL";
         $where["function_id"] = "= '$func_id'";
         $where["group_id"]    = "IS NULL";
-        $modeles["func"] = $modele->loadlist($where, $order);
+        $modeles["func"] = $modele->loadListWithPerms(PERM_READ, $where, $order);
 
       case 'etab': // Modèle de l'établissement
         $etab_id = CGroups::loadCurrent()->_id;
@@ -701,7 +701,7 @@ class CCompteRendu extends CDocumentItem {
         $where["user_id"]     = "IS NULL";
         $where["function_id"] = "IS NULL";
         $where["group_id"]    = " = '$etab_id'";
-        $modeles["etab"] = $modele->loadlist($where, $order);
+        $modeles["etab"] = $modele->loadListWithPerms(PERM_READ, $where, $order);
         break;
 
       default: 
