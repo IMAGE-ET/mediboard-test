@@ -34,7 +34,7 @@ $options = array(
 $soap_client = new CSOAPClient($exchange_source->type_soap);
 $soap_client->make(
   $exchange_source->host, $exchange_source->user, $exchange_source->password, $exchange_source->type_echange, $options,
-  null, null, $exchange_source->local_cert, $exchange_source->passphrase, false, $exchange_source->verify_peer,
+  null, null, $exchange_source->local_cert, $exchange_source->passphrase, $exchange_source->safe_mode, $exchange_source->verify_peer,
   $exchange_source->cafile, $exchange_source->wsdl_external
 );
 
