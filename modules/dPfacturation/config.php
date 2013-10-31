@@ -62,5 +62,8 @@ $dPconfig["dPfacturation"] = array (
     "use_field_definitive"  => "0",
     "edit_bill_alone"       => "1"
   ),
+  "CJournalBill" => array(
+    "use_journaux"  => "0",
+  ),
 );
 ?>

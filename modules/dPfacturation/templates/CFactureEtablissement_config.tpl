@@ -28,6 +28,19 @@
     {{mb_include module=system template=inc_config_bool var=add_pay_not_close}}
     {{mb_include module=system template=inc_config_bool var=use_lock_acquittement}}
     {{mb_include module=system template=inc_config_enum var=use_mode_default values="none|cheque|CB|especes|virement|BVR|autre"}}
+
+    <tr>
+      <th class="category" colspan="2">{{tr}}CRetrocession{{/tr}}</th>
+    </tr>
+    {{assign var=class value=CRetrocession}}
+    {{mb_include module=system template=inc_config_bool var=use_retrocessions}}
+
+    <tr>
+      <th class="category" colspan="2">{{tr}}CJournalBill{{/tr}}</th>
+    </tr>
+    {{assign var=class value=CJournalBill}}
+    {{mb_include module=system template=inc_config_bool var=use_journaux}}
+
     <tr>
       <th class="category" colspan="2">{{tr}}Other{{/tr}}</th>
     </tr>
