@@ -2356,7 +2356,32 @@ class CSetupdPpatients extends CSetup {
                 ADD `absence_traitement` ENUM ('0','1');";
     $this->addQuery($query);
 
-    $this->mod_version = "1.90";
+    $this->makeRevision("1.90");
+
+    function modifyConstantsRanksConfigs($setup) {
+      /** @var CSQLDataSource $ds */
+      $ds = $setup->ds;
+
+      $old_configs = $ds->exec("SELECT * FROM `configuration` WHERE `feature` LIKE 'dPpatients CConstantesMedicales selection%';");
+
+      if ($old_configs) {
+        while ($row = $ds->fetchAssoc($old_configs)) {
+          $query = "UPDATE `configuration` SET `value` = %1 WHERE `configuration_id` = %2";
+          $query = $ds->prepare(
+            $query,
+            $row['value'] . '|' . $row['value'] . '|' ,
+            $row['configuration_id']
+          );
+          $ds->exec($query);
+        }
+      }
+
+      return true;
+    }
+
+    $this->addFunction('modifyConstantsRanksConfigs');
+
+    $this->mod_version = "1.91";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

@@ -80,7 +80,7 @@ Main.add(function () {
   {{assign var=real_context value=0}}
 {{/if}}
 
-<div id="constant_form">
+<div id="constant_form" style="padding-right: 1.5em">
   <form name="edit-constantes-medicales{{$tri}}" action="?" method="post" onsubmit="return {{if $real_context}}checkForm(this){{else}}false{{/if}}">
     <input type="hidden" name="m" value="dPpatients" />
     <input type="hidden" name="del" value="0" />
@@ -255,9 +255,6 @@ Main.add(function () {
                 {{tr}}Save{{/tr}}
               </button>
               {{if $constantes->datetime}}
-                <button class="new singleclick" type="button" onclick="$V(this.form.constantes_medicales_id, ''); $V(this.form._new_constantes_medicales, 1); return submitConstantesMedicales(this.form);">
-                  {{tr}}Create{{/tr}}
-                </button>
                 <br />
                 <button class="trash" type="button" onclick="if (confirm('Etes-vous sûr de vouloir supprimer ce relevé ?')) {$V(this.form.del, 1); return submitConstantesMedicales(this.form);}">
                   {{tr}}CConstantesMedicales.delete_all{{/tr}}

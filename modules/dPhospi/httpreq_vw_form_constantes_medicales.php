@@ -36,10 +36,10 @@ $show_enable_all_button = CConstantesMedicales::getHostConfig("show_enable_all_b
 
 $dates = array();
 if (!$selection) {
-  $selection = CConstantesMedicales::getConstantsByRank(true, $host);
+  $selection = CConstantesMedicales::getConstantsByRank('form', true, $host);
 }
 else {
-  $selection = CConstantesMedicales::selectConstants($selection);
+  $selection = CConstantesMedicales::selectConstants($selection, 'form');
 }
 
 foreach (CConstantesMedicales::$list_constantes as $key => $cst) {

@@ -17,19 +17,25 @@ foreach (CConstantesMedicales::$list_constantes as $_const => $_params) {
 }
 
 $selection = array(
-  "poids"       => "num min|0 default|1",
-  "pouls"       => "num min|0 default|2",
-  "ta_gauche"   => "num min|0 default|3",
-  "temperature" => "num min|0 default|4",
+  "poids"                   => "custom tpl|inc_config_constant components|form|graph|color default|1|0|0066FF",
+  "taille"                  => "custom tpl|inc_config_constant components|form|graph|color default|2|0|0066FF",
+  "pouls"                   => "custom tpl|inc_config_constant components|form|graph|color default|3|1|FF0000",
+  "temperature"             => "custom tpl|inc_config_constant components|form|graph|color default|4|1|0066FF",
+  "ta"                      => "custom tpl|inc_config_constant components|form|graph|color default|5|1|000000",
+  "EVA"                     => "custom tpl|inc_config_constant components|form|graph|color default|6|1|FF00FF",
+  "frequence_respiratoire"  => "custom tpl|inc_config_constant components|form|graph|color default|7|1|009900"
 );
 
-CMbArray::removeValue("poids",       $list);
-CMbArray::removeValue("pouls",       $list);
-CMbArray::removeValue("ta_gauche",   $list);
-CMbArray::removeValue("temperature", $list);
+CMbArray::removeValue("poids",                  $list);
+CMbArray::removeValue("taille",                 $list);
+CMbArray::removeValue("pouls",                  $list);
+CMbArray::removeValue("temperature",            $list);
+CMbArray::removeValue("ta",                     $list);
+CMbArray::removeValue("EVA",                    $list);
+CMbArray::removeValue("frequence_respiratoire", $list);
 
 foreach ($list as $_constante) {
-  $selection[$_constante] = "num min|0 default|0";
+  $selection[$_constante] = "custom tpl|inc_config_constant components|form|graph|color default|0|0|0066FF";
 }
 
 CConfiguration::register(

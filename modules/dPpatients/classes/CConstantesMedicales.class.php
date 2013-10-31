@@ -1355,7 +1355,7 @@ class CConstantesMedicales extends CMbObject {
     $reset_hours = array();
 
     if (!$full) {
-      $conf_constantes = array_filter(CConstantesMedicales::getConfig("selection"));
+      $conf_constantes = array_filter(CConstantesMedicales::getRanksFor());
       $selection = array_keys($conf_constantes);
 
       foreach ($list as $_constante_medicale) {
@@ -1762,21 +1762,70 @@ class CConstantesMedicales extends CMbObject {
   }
 
   /**
-   * Return the selected constant, ordered by rank
+   * Get the constants's ranks, for the graphs or the form
    *
+   * @param string           $type graph or form
+   * @param CMbObject|string $host Host from which we'll get the configuration
+   *
+   * @return array
+   */
+  static function getRanksFor($type = 'form', $host = null) {
+    if ($host) {
+      $configs = CConstantesMedicales::getHostConfig('selection', $host);
+    }
+    else {
+      $configs = CConstantesMedicales::getConfig('selection');
+    }
+
+    foreach ($configs as $_constant => $_config) {
+      $_config = explode('|', $_config);
+      $id = $type == 'graph' ? 1 : 0;
+      $configs[$_constant] = $_config[$id];
+    }
+
+    return $configs;
+  }
+
+  /**
+   * Get the color configs for the constants
+   *
+   * @param CMbObject|string $host Host from which we'll get the configuration
+   *
+   * @return array
+   */
+  static function getColors($host = null) {
+    if ($host) {
+      $configs = CConstantesMedicales::getHostConfig('selection', $host);
+    }
+    else {
+      $configs = CConstantesMedicales::getConfig('selection');
+    }
+
+    foreach ($configs as $_constant => $_config) {
+      $_config = explode('|', $_config);
+      if (array_key_exists(2, $_config) && $_config[2] != '') {
+        $configs[$_constant] = "#$_config[2]";
+      }
+      else {
+        unset($configs[$_constant]);
+      }
+    }
+
+    return $configs;
+  }
+
+  /**
+   * Return the constants, ordered by rank
+   *
+   * @param string           $type           'form' or 'graph'
    * @param boolean          $order_by_types If false, the constants won't be ordered by types,
    *                                         even if the config show_cat_tabs is set to true
    * @param CMbObject|string $host           Host from which we'll get the configuration
    *
    * @return array
    */
-  static function getConstantsByRank($order_by_types = true, $host = null) {
-    if ($host) {
-      $selection = CConstantesMedicales::getHostConfig("selection", $host);
-    }
-    else {
-      $selection = CConstantesMedicales::getConfig("selection");
-    }
+  static function getConstantsByRank($type = 'form',$order_by_types = true, $host = null) {
+    $selection = self::getRanksFor($type, $host);
 
     $list_constants = CConstantesMedicales::$list_constantes;
 
@@ -1826,19 +1875,19 @@ class CConstantesMedicales extends CMbObject {
    * Return the selected constants in an formatted array (see getConstantsByRank to see the format)
    *
    * @param array            $selection The constant you want to select
+   * @param string           $type      'form' or 'graph'
    * @param CMbObject|string $host      Host from which we'll get the configuration
    *
    * @return array
    */
-  static function selectConstants($selection, $host = null) {
+  static function selectConstants($selection, $type = 'form', $host = null) {
     if ($host) {
-      $constants_by_rank = CConstantesMedicales::getHostConfig("selection", $host);
       $show_cat_tabs = CConstantesMedicales::getHostConfig("show_cat_tabs", $host);
     }
     else {
-      $constants_by_rank = CConstantesMedicales::getConfig("selection");
       $show_cat_tabs = CConstantesMedicales::getConfig("show_cat_tabs");
     }
+    $constants_by_rank = self::getRanksFor($type, $host);
     $list_constants = CConstantesMedicales::$list_constantes;
 
       // Keep only valid constant names
@@ -1920,6 +1969,8 @@ class CConstantesMedicales extends CMbObject {
     $min_x_value = $xaxis['min_x_value'];
     $ticks = $xaxis['ticks'];
     $drawn_constants = array();
+    $colors = self::getColors($host);
+    $default_colors = array('#0066FF', '#FF0000', '#FF9600', '#009900', '#9900CC');
 
     foreach ($constants_by_graph as $_rank => $_graphs) {
       foreach ($_graphs as $_graph_constants) {
@@ -1929,10 +1980,12 @@ class CConstantesMedicales extends CMbObject {
         $series = array();
         $axis_id = 1;
         $graph_datas = array();
-        $colors = array('#006EFF', '#FF0000', '#FF9600', '#009900', '#9900CC');
         $cumul = 0;
 
         foreach ($_graph_constants as $_constant) {
+          if (!isset($colors[$_constant])) {
+            $colors[$_constant] = $default_colors[$axis_id - 1];
+          }
           $drawn_constants[] = $_constant;
 
           if ($axis_id == 1) {
@@ -1978,12 +2031,12 @@ class CConstantesMedicales extends CMbObject {
             'reserveSpace'        => true
           );
           if ($axis_id != 1) {
-            $yaxis['color'] = $colors[$axis_id - 1];
+            $yaxis['color'] = $colors[$_constant];
           }
 
           /* Create the markings for the standard value */
           if (isset(self::$list_constantes[$_constant]['standard'])) {
-            $color = $colors[$axis_id - 1];
+            $color = $colors[$_constant];
             $color = 'rgba(' . hexdec(substr($color, 1, 2)) .
               ', ' . hexdec(substr($color, 3, 2)) .
               ', ' . hexdec(substr($color, 5, 2)) . ', 0.3)';
@@ -2004,11 +2057,11 @@ class CConstantesMedicales extends CMbObject {
                 'data'      => $values['values'],
                 'yaxis'     => $axis_id,
                 'label'     => $label,
-                'color'     => $colors[$axis_id - 1],
+                'color'     => $colors[$_constant],
                 'unit'      => utf8_encode(CMbString::htmlEntities(self::$list_constantes[$_constant]['unit'])),
                 'bandwidth' => array(
                   'show'      => true,
-                  'lineWidth' => "8px"
+                  'lineWidth' => "6px"
                 )
               );
               break;
@@ -2034,7 +2087,7 @@ class CConstantesMedicales extends CMbObject {
                 'data'    => $values['values'],
                 'yaxis'   => $axis_id,
                 'label'   => $label,
-                'color'   => $colors[$axis_id - 1],
+                'color'   => $colors[$_constant],
                 'unit'    => utf8_encode(CMbString::htmlEntities(self::$list_constantes[$_constant]['unit'])),
                 'lines'   => array(
                   'show'    => 1
@@ -2068,7 +2121,7 @@ class CConstantesMedicales extends CMbObject {
                 'data'    => $values['values'],
                 'yaxis'   => $axis_id,
                 'label'   => $label,
-                'color'   => $colors[$axis_id - 1],
+                'color'   => $colors[$_constant],
                 'unit'    => utf8_encode(CMbString::htmlEntities(self::$list_constantes[$_constant]['unit'])),
                 'lines'   => array(
                   'show'    => 1
@@ -2101,18 +2154,21 @@ class CConstantesMedicales extends CMbObject {
             'grid' => array(
               'clickable' => 1,
               'hoverable' => 1,
-              'borderColor' => array(
-                'top' => '#4B4B4B',
-                'right' => '#4B4B4B',
-                'left' => $colors[0],
-                'bottom' => '#4B4B4B'
-              ),
             )
           ),
           'cumul'       => $cumul,
           'margin_left' => (5 - count($yaxes)) * 40,
           'width'       => 700 - ((5 - count($yaxes)) * 40),
         );
+
+        if (sizeof($_graph_constants) > 1) {
+          $graph['options']['grid']['borderColor'] = array(
+            'top' => '#4B4B4B',
+            'right' => '#4B4B4B',
+            'left' => $colors[$_graph_constants[0]],
+            'bottom' => '#4B4B4B'
+          );
+        }
 
         if (!empty($markings)) {
           $graph['options']['grid']['markings'] = $markings;
@@ -2139,7 +2195,7 @@ class CConstantesMedicales extends CMbObject {
   static function sortConstantsbyGraph($constants, $host) {
     $constants_list = array();
     $constants_by_graph = array();
-    $constants_by_rank = self::getConstantsByRank(false, $host);
+    $constants_by_rank = self::getConstantsByRank('graph', false, $host);
 
     /* The valued constants are sorted by rank */
     foreach (self::$list_constantes as $cst_name => $cst_attr) {
@@ -2176,11 +2232,12 @@ class CConstantesMedicales extends CMbObject {
       $constants_by_graph[$_rank] = array();
 
       if ($_rank != 'hidden' && $stacked_graphs) {
+        $cumuls_constants = array();
         foreach ($_constants as $_key => $_constant) {
           /* The constants with a cumul can't be stacked with other constants */
           if (isset(self::$list_constantes[$_constant]['cumul_reset_config'])) {
             unset($_constants[$_key]);
-            $constants_by_graph[$_rank][] = array($_constant);
+            $cumuls_constants[] = array($_constant);
           }
         }
 
@@ -2190,11 +2247,11 @@ class CConstantesMedicales extends CMbObject {
           for ($i = 0; $i < count($_constants); $i = $i + 5) {
             $constants[] = array_slice($_constants, $i, 5);
           }
-          $constants_by_graph[$_rank] = $constants;
+          $constants_by_graph[$_rank] = array_merge($constants, $cumuls_constants);
         }
         else {
           if (!empty($_constants)) {
-            $constants_by_graph[$_rank][] = $_constants;
+            $constants_by_graph[$_rank][] = array_merge($_constants, $cumuls_constants);;
           }
         }
       }
