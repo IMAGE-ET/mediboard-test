@@ -264,7 +264,26 @@ class CSetupeai extends CSetup {
                 ADD INDEX (`start_date`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.16";
+    $this->makeRevision("0.16");
+
+    $query = "CREATE TABLE `eai_router` (
+                `eai_router_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `sender_id` INT (11) UNSIGNED,
+                `sender_class` CHAR (80),
+                `receiver_id` INT (11) UNSIGNED,
+                `receiver_class` CHAR (80),
+                `active` ENUM ('0','1') DEFAULT '1'
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `eai_router`
+                ADD INDEX (`sender_id`),
+                ADD INDEX (`sender_class`),
+                ADD INDEX (`receiver_id`),
+                ADD INDEX (`receiver_class`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.17";
 
     $query = "SELECT * FROM `authorspecialty_20121112` WHERE `code` = 'G15_10/PAC00';";
 

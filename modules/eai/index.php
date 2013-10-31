@@ -15,6 +15,7 @@ $module = CModule::getInstalled(basename(dirname(__FILE__)));
 $module->registerTab("vw_idx_interop_actors"      , TAB_READ);
 $module->registerTab("vw_idx_exchange_data_format", TAB_READ);
 $module->registerTab("vw_sources"                 , TAB_READ);
+$module->registerTab("vw_routers"                 , TAB_READ);
 $module->registerTab("vw_stats"                   , TAB_ADMIN);
 $module->registerTab("vw_servers_socket"          , TAB_ADMIN);
 $module->registerTab("vw_domains"                 , TAB_ADMIN);
