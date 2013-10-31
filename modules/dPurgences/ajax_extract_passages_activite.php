@@ -116,5 +116,9 @@ $where["chambre.is_examination_room"] = " IS NOT NULL";
 $where["chambre.is_sas_dechoc"] = " = '1'";
 $datas["totdechoc"] = $lit->countList($where, null, $ljoin);
 
-//
-return $datas;
+// Appel de la fonction d'extraction du RPUSender
+$rpuSender = $extractPassages->getRPUSender();
+if (!$rpuSender) {
+  CAppUI::stepAjax("Aucun sender définit dans le module dPurgences.", UI_MSG_ERROR);
+}
+$extractPassages = $rpuSender->extractActivite($extractPassages, $datas);
