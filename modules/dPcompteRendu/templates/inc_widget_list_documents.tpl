@@ -57,11 +57,11 @@
           onclick="{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
             Document.printPDF({{$document->_id}}, '{{$app->user_prefs.choice_factory}}');
           {{else}}
-            Document.print({{$document->_id}})
+            Document.print({{$document->_id}});
           {{/if}}">
           {{tr}}Print{{/tr}}
         </button>
-        {{if $document->_can->edit}}
+        {{if $document->_can->edit && !$document->_is_locked}}
           <button type="button" class="trash notext" onclick="Document.del(this.form, '{{$document->nom|smarty:nodefaults|JSAttribute}}')">
             {{tr}}Delete{{/tr}}
           </button>

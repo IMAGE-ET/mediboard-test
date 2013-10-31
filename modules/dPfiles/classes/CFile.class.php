@@ -504,6 +504,7 @@ class CFile extends CDocumentItem {
     
     //Ajout des document dans le tableau
     foreach ($object->_ref_documents as &$_doc) {
+      $_doc->isLocked();
       $cat_id = $_doc->file_category_id ? $_doc->file_category_id : 0;
       $affichageFile[$cat_id]["items"]["$_doc->nom-$_doc->_guid"] =& $_doc;
       if (!isset($affichageFile[$cat_id]["name"])) {

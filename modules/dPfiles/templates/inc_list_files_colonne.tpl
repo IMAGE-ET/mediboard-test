@@ -116,7 +116,7 @@
 
           <!-- Tooltip -->
           <td class="text {{if $_doc_item instanceof CFile && $_doc_item->annule}}cancelled{{/if}}" style="height: 35px; overflow: auto">
-            {{if $_doc_item instanceof CCompteRendu && $_doc_item->valide}}
+            {{if $_doc_item instanceof CCompteRendu && $_doc_item->_is_locked}}
               <img src="style/mediboard/images/buttons/lock.png" onmouseover="ObjectTooltip.createEx(this, '{{$_doc_item->_guid}}', 'locker')"/>
             {{/if}}
             <span onmouseover="ObjectTooltip.createEx(this, '{{$_doc_item->_guid}}');">

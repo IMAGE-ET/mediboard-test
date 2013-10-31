@@ -4,13 +4,6 @@
 
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 
-
-{{if $_doc_item->_can->edit}}
-  {{assign var=edit value=1}}
-{{else}}
-  {{assign var=edit value=0}}
-{{/if}}
-
 {{if !$accordDossier}}
 
   {{if $_doc_item->_can->read}}
@@ -35,14 +28,14 @@
         {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
           Document.printPDF('{{$_doc_item->_id}}', '{{$app->user_prefs.choice_factory}}');
         {{else}}
-          Document.print('{{$_doc_item->_id}}')
+          Document.print('{{$_doc_item->_id}}');
         {{/if}}">
         {{tr}}Print{{/tr}}
       </button>
     {{/if}}
   {{/if}}
 
-  {{if $edit}}
+  {{if $_doc_item->_can->edit}}
     <!-- Deletion -->
     {{if $_doc_item->_class=="CCompteRendu"}}
       <form name="editDoc{{$_doc_item->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -65,7 +58,7 @@
       {{assign var="confirmDeleteName" value=$_doc_item->file_name|smarty:nodefaults|JSAttribute}}
     {{/if}}
 
-    {{if $can->admin || $_doc_item->_class == "CCompteRendu"}}
+    {{if $can->admin || ($_doc_item instanceof CCompteRendu && !$_doc_item->_is_locked)}}
       <!-- Deletion -->
       <button type="button" class="trash  {{$notext}}" onclick="file_deleted={{$elementId}};confirmDeletion(
         this.form, {
@@ -79,7 +72,7 @@
         {{tr}}Delete{{/tr}}
       </button>
     {{/if}}
-    {{if $_doc_item->_class == "CFile" && $_doc_item->annule == "0"}}
+    {{if $_doc_item instanceof CFile && $_doc_item->annule == "0"}}
       <button type="button" class="cancel notext" onclick="cancelFile(this.form, '{{$_doc_item->file_category_id}}')">{{tr}}Annuler{{/tr}}</button>
     {{/if}}
 
