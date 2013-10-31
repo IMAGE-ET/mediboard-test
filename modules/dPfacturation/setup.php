@@ -325,6 +325,32 @@ class CSetupdPfacturation extends CSetup {
                 ADD `du_tva` DECIMAL (10,2) DEFAULT '0',
                 ADD `taux_tva` ENUM ('0', '19.6');";
     $this->addQuery($query);
-    $this->mod_version = "0.37";
+    $this->makeRevision("0.37");
+
+    $query = "CREATE TABLE `facture_journal` (
+                `journal_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `nom` TEXT NOT NULL,
+                `type` ENUM ('paiement','debiteur','rappel','checklist'),
+                `checklist_id` INT (11) UNSIGNED
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `facture_journal`
+                ADD INDEX (`checklist_id`);";
+    $this->addQuery($query);
+
+    $query = "CREATE TABLE `facture_link_journal` (
+                `journal_liaison_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `object_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `object_class` ENUM ('CFactureCabinet','CFactureEtablissement') NOT NULL DEFAULT 'CFactureCabinet',
+                `journal_id` INT (11) UNSIGNED NOT NULL DEFAULT '0'
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `facture_link_journal`
+                ADD INDEX (`object_id`),
+                ADD INDEX (`journal_id`);";
+    $this->addQuery($query);
+    $this->mod_version = "0.38";
   }
 }
