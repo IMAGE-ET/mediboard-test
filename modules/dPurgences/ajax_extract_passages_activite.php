@@ -13,24 +13,28 @@ CCanDo::checkAdmin();
 
 CApp::setMemoryLimit("512M");
 
-$now = CValue::get("datetime", CMbDT::dateTime());
+$now = CValue::get("debut_selection", CMbDT::dateTime());
+
 $group_id = CGroups::loadCurrent()->_id;
 
+$extractPassages = new CExtractPassages();
+$extractPassages->debut_selection = $now;
+$extractPassages->fin_selection   = $now;
+$extractPassages->group_id        = CGroups::loadCurrent()->_id;
+$extractPassages->date_extract    = $now;
+
 $datas = array(
-  "extract"     => CMbDT::dateToLocale($now),
-  "csite"       => '',  //todo
-  "nsite"       => '',  //todo
-  "presents"    => 0,
-  "attente"     => 0,
-  "aval"        => 0,
-  "box"         => 0,
-  "dechoc"      => 0,
-  "porte"       => 0,
-  "radio"       => 0,
-  "maxpatients" => 0,   //todo
-  "totbox"      => 0,
-  "totdechoc"   => 0,
-  "totporte"    => 0
+  "PRESENTS"    => 0,
+  "ATTENTE"     => 0,
+  "AVAL"        => 0,
+  "BOX"         => 0,
+  "DECHOC"      => 0,
+  "PORTE"       => 0,
+  "RADIO"       => 0,
+  "MAXPATIENTS" => CAppUI::conf("cerveau max_patient"),
+  "TOTBOX"      => 0,
+  "TOTDECHOC"   => 0,
+  "TOTPORTE"    => 0
 );
 
 // Chargement des rpu de la main courante
@@ -50,7 +54,7 @@ foreach ($sejours as $_sejour) {
   $affectation = $_sejour->getCurrAffectation($now);
 
   //total
-  $datas['presents']++;
+  $datas['PRESENTS']++;
 
   //placé
   if ($affectation->_id) {
@@ -59,16 +63,16 @@ foreach ($sejours as $_sejour) {
     if ($chambre->_id) {
       // salle d'attente
       if ($chambre->is_waiting_room) {
-        $datas["attente"]++;
+        $datas["ATTENTE"]++;
       }
 
       //salle d'examen
       if ($chambre->is_examination_room) {
-        $datas["box"]++;
+        $datas["BOX"]++;
       }
 
       if ($chambre->is_sas_dechoc) {
-        $datas["dechoc"]++;
+        $datas["DECHOC"]++;
       }
     }
   }
@@ -76,17 +80,17 @@ foreach ($sejours as $_sejour) {
 
   //mutation
   if ($rpu->mutation_sejour_id) {
-    $datas["aval"]++;
+    $datas["AVAL"]++;
   }
 
   //porte
   if ($_sejour->UHCD) {
-    $datas["porte"]++;
+    $datas["PORTE"]++;
   }
 
   //radio
   if ($rpu->radio_debut && !$rpu->radio_fin) {
-    $datas['radio']++;
+    $datas['RADIO']++;
   }
 }
 
@@ -103,18 +107,18 @@ $where["service.group_id"] = " = '$group_id'";
 $where["lit.annule"] = " = '0'";
 
 //uhcd
-$datas["totporte"] = $lit->countList($where, null, $ljoin);
+$datas["TOTPORTE"] = $lit->countList($where, null, $ljoin);
 
 //urgences
 $where["service.uhcd"] = " IS NOT NULL";
 $where["service.urgence"] = "= '1'";
 
 $where["chambre.is_examination_room"] = " = '1'";
-$datas["totbox"] = $lit->countList($where, null, $ljoin);
+$datas["TOTBOX"] = $lit->countList($where, null, $ljoin);
 
 $where["chambre.is_examination_room"] = " IS NOT NULL";
 $where["chambre.is_sas_dechoc"] = " = '1'";
-$datas["totdechoc"] = $lit->countList($where, null, $ljoin);
+$datas["TOTDECHOC"] = $lit->countList($where, null, $ljoin);
 
 // Appel de la fonction d'extraction du RPUSender
 $rpuSender = $extractPassages->getRPUSender();

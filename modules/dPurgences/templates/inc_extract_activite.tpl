@@ -29,10 +29,6 @@
                <button class="tick" type="button" onclick="extractActivite(this.form)">Extraire</button>
              </td>
            </tr>
-           <tr>
-             <th>{{mb_label object=$extractPassages field="fin_selection"}}</th>
-             <td>{{mb_field object=$extractPassages field="fin_selection" form="formExtraction_activite" register="true"}}</td>
-           </tr>
          </table>
        </form>
     </td>

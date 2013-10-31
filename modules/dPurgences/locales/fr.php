@@ -482,6 +482,7 @@ $locales['config-dPurgences-hide_reconvoc_sans_sortie'] = 'Désactivation reconvo
 $locales['config-dPurgences-hide_reconvoc_sans_sortie-desc'] = 'Désactivation reconvocation tant que pas de sortie réelle';
 $locales['config-dPurgences-import-key'] = 'Importer la clé publique';
 $locales['config-dPurgences-maintenance'] = 'Maintenance';
+$locales['config-dPurgences-max_patient'] = 'Patient max';
 $locales['config-dPurgences-mode_procedure'] = 'Mode de la procédure';
 $locales['config-dPurgences-mode_procedure-auto'] = 'Automatique';
 $locales['config-dPurgences-mode_procedure-desc'] = 'Mode de la procédure';

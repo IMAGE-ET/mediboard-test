@@ -47,8 +47,7 @@
       return;
     }
     var url = new Url("dPurgences", "ajax_extract_passages_activite");
-    url.addParam("debut_selection", $V(form.debut_selection));
-    url.addParam("fin_selection", $V(form.fin_selection));
+    url.addFormData(form);
     url.requestUpdate('td_extract_activite', { onComplete: function(){
       if (!$('td_extract_activite').select('.error, .warning').length) {
         $('encrypt_activite').disabled = false;
