@@ -465,9 +465,6 @@ Main.add(function() {
 
 </script>
 
-<iframe name="download_pdf" style="width: 0; height: 0; position: absolute; top: -1000px;">
-</iframe>
-
 <div style="position: absolute; top: -1500px;">
   <div style="position: relative; width: 900px; height: 600px;" id="graph-container"></div>
 </div>
@@ -706,6 +703,8 @@ Main.add(function() {
         {{mb_include module=system template=inc_object_idsante400 object=$compte_rendu}}
         {{mb_include module=system template=inc_object_history object=$compte_rendu}}
       {{/if}}
+
+      <iframe name="download_pdf" style="width: 1px; height: 1px;"></iframe>
 
       {{mb_label object=$compte_rendu field=nom}}
       {{if $read_only}}
