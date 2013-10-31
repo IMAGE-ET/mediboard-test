@@ -348,6 +348,7 @@ class CMediusers extends CPerson {
     $backProps["replacements"]                    = "CReplacement replacer_id";
     $backProps["frais_divers"]                    = "CFraisDivers executant_id";
     $backProps["expediteur_ftp"]                  = "CSenderFTP user_id";
+    $backProps["expediteur_sftp"]                 = "CSenderSFTP user_id";
     $backProps["expediteur_soap"]                 = "CSenderSOAP user_id";
     $backProps["expediteur_mllp"]                 = "CSenderMLLP user_id";
     $backProps["expediteur_fs"]                   = "CSenderFileSystem user_id";

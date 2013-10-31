@@ -78,10 +78,12 @@ class CFile extends CDocumentItem {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
+
     $backProps["documents_ged_suivi"] = "CDocGedSuivi file_id";
     $backProps["mail_attachment"]     = "CMailAttachments file_id";
     $backProps["mail_content_id"]     = "CUserMail text_file_id";
     $backProps["observation_results"] = "CObservationResult file_id";
+    $backProps["echanges_hl7v3"]      = "CExchangeHL7v3 object_id";
 
     return $backProps;
   }

@@ -177,14 +177,15 @@ class CCompteRendu extends CDocumentItem {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["listes_choix"]   = "CListeChoix compte_rendu_id";
-    $backProps["modeles_headed"] = "CCompteRendu header_id";
-    $backProps["modeles_footed"] = "CCompteRendu footer_id";
-    $backProps["modeles_prefaced"] = "CCompteRendu preface_id";
-    $backProps["modeles_ended"]  = "CCompteRendu ending_id";
-    $backProps["documents_generated"] = "CCompteRendu modele_id";
-    $backProps["pack_links"]     = "CModeleToPack modele_id";
+    $backProps["listes_choix"]            = "CListeChoix compte_rendu_id";
+    $backProps["modeles_headed"]          = "CCompteRendu header_id";
+    $backProps["modeles_footed"]          = "CCompteRendu footer_id";
+    $backProps["modeles_prefaced"]        = "CCompteRendu preface_id";
+    $backProps["modeles_ended"]           = "CCompteRendu ending_id";
+    $backProps["documents_generated"]     = "CCompteRendu modele_id";
+    $backProps["pack_links"]              = "CModeleToPack modele_id";
     $backProps["correspondants_courrier"] = "CCorrespondantCourrier compte_rendu_id";
+    $backProps["echanges_hl7v3"]          = "CExchangeHL7v3 object_id cascade";
     return $backProps;
   }
 

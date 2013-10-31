@@ -45,10 +45,12 @@ class CContentXML extends CMbObject {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["messages"]            = "CEchangeHprim message_content_id";
-    $backProps["acquittements"]       = "CEchangeHprim acquittement_content_id";
-    $backProps["messages_phast"]      = "CExchangePhast message_content_id";
-    $backProps["acquittements_phast"] = "CExchangePhast acquittement_content_id";
+    $backProps["messages_hprimxml"]      = "CEchangeHprim message_content_id";
+    $backProps["acquittements_hprimxml"] = "CEchangeHprim acquittement_content_id";
+    $backProps["messages_hl7v3"]         = "CExchangeHL7v3 message_content_id";
+    $backProps["acquittements_hl7v3"]    = "CExchangeHL7v3 acquittement_content_id";
+    $backProps["messages_phast"]         = "CExchangePhast message_content_id";
+    $backProps["acquittements_phast"]    = "CExchangePhast acquittement_content_id";
     return $backProps;
   }
 }

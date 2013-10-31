@@ -32,24 +32,6 @@ class CSenderSFTP extends CInteropSender {
     $spec->key    = "sender_sftp_id";
     return $spec;  
   }
-  
-  /**
-   * Get collections specifications
-   *
-   * @return array
-   */
-  function getBackProps() {
-    $backProps = parent::getBackProps();
-    $backProps["expediteur_hprimxml"] = "CEchangeHprim sender_id";
-    $backProps["expediteur_hprim21"]  = "CEchangeHprim21 sender_id";
-    $backProps["expediteur_hl7v2"]    = "CExchangeHL7v2 sender_id";
-    $backProps["expediteur_phast"]    = "CExchangePhast sender_id";
-    $backProps["expediteur_any"]      = "CExchangeAny sender_id";
-
-    $backProps["config_hprimxml"]     = "CHprimXMLConfig sender_id";
-    $backProps["config_hl7"]          = "CHL7Config sender_id";
-    return $backProps;
-  }
 
   /**
    * @see parent::loadRefsExchangesSources

@@ -44,4 +44,13 @@ class CSpecialtyAsip extends CMbObject {
 
     return $props;
   }
+
+  /**
+   * @see parent::getBackProps()
+   */
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["other_specialties"] = "CMediusers other_specialty_id";
+    return $backProps;
+  }
 }
