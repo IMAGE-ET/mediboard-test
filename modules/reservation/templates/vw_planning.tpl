@@ -12,341 +12,309 @@
   {{mb_script module=facturation script=facture}}
 {{/if}}
 {{mb_script module=dPplanningOp script=operation}}
-<script type="text/javascript">
-  Main.add(function() {
-    var form = getForm("filterPlanning");
-    window.calendar_planning = Calendar.regField(form.date_planning);
-    autorefreshPlanning.start();
+
+<script>
+
+togglePlayPause = function(button) {
+  button.toggleClassName("play");
+  button.toggleClassName("pause");
+  if (!(window.autoRefreshPlanningResa)) {
+    window.autoRefreshPlanningResa = setInterval(function(){
+      refreshPlanning();
+    }, ({{math equation="a*1000" a=$conf.dPbloc.CPlageOp.time_autorefresh}}));
+  }
+  else {
+    clearTimeout(window.autoRefreshPlanningResa);
+  }
+};
+
+refreshPlanning = function() {
+  var form = getForm("filterPlanning");
+  var url = new Url("reservation", "ajax_vw_planning");
+  url.addParam("current_m"    , "{{$current_m}}");
+  var week_container = $$(".week-container")[0];
+  if (week_container) {
+    url.addParam("scroll_top", week_container.scrollTop);
+  }
+  url.requestUpdate("planning");
+};
+
+modifPlage = function(plage_id, date) {
+  var url = new Url("dPbloc", "inc_edit_planning");
+  url.addParam("plageop_id", plage_id);
+  url.addParam("date", date);
+  url.requestModal();
+  url.modalObject.observe("afterClose", function() {
+    refreshPlanning();
   });
+};
 
-
-  togglePlayPause = function(button) {
-    button.toggleClassName("play");
-    button.toggleClassName("pause");
-    if (button.hasClassName("play")) {
-      autorefreshPlanning.stop();
-    }
-    else {
-      autorefreshPlanning.resume();
-    }
-  };
-
-  function strpad(val){
-    return (!isNaN(val) && val.toString().length==1) ? "0" + val : val;
+modifIntervention = function(date, hour, salle_id, operation_id, enplage, chir_id, minutes) {
+  if (enplage) {
+    var url = new Url("dPplanningOp", "vw_edit_planning");
+  }
+  else {
+    var url = new Url("dPplanningOp", "vw_edit_urgence");
+    url.addParam("date_urgence", date);
+    url.addParam("hour_urgence", hour);
+    url.addParam("salle_id"    , salle_id);
+    url.addParam("min_urgence" , minutes);
   }
 
-  autorefreshPlanning = {
-    frequency: 90, //sec
-    updater: null,
+  if (chir_id) {
+    url.addParam("chir_id", chir_id);
+  }
 
-    start : function() {
-      this.stop();
-      this.updater = refreshPlanning();
-    },
+  url.addParam("operation_id", operation_id);
+  url.addParam("dialog", 1);
+  url.modal({
+    width: "95%",
+    height: "95%",
+    onClose: function(){ refreshPlanning(); } // Laisser dans une fonction anonyme a cause de l'argument "period"
+  });
+};
 
-    stop: function(){
-      if (this.updater) {
-        this.updater.stop();
-      }
-    },
+deleteCommentaire = function(commentaire_id) {
+  var form = getForm("editCommentairePlanning");
+  $V(form.commentaire_planning_id, commentaire_id);
+  confirmDeletion(form, {typeName:'Commentaire '+commentaire_id, ajax: true}, {onComplete: refreshPlanning});
+  $V(form.del, 0);
+};
 
-    resume: function(){
-      if (this.updater) {
-        this.updater.resume();
-      } else {
-        this.updater = refreshPlanning(this.frequency);
-      }
-    }
+pasteCommentaire = function(date_planning, salle_id, hour_debut, hour_fin, color, commentaire_id) {
+  //if commentaire_id => cut
+  var form = getForm("editCommentairePlanning");
+  $V(form.commentaire_planning_id, commentaire_id);
+  $V(form.debut, date_planning+" "+hour_debut);
+  $V(form.fin, date_planning+" "+hour_fin);
+  $V(form.salle_id, salle_id);
+  $V(form.commentaire, window.copy_commentaire_commentaire);
+  $V(form.libelle, window.copy_commentaire_libelle);
+  $V(form.color, color);
 
+  onSubmitFormAjax(form, {onComplete: function() {
+    updateStatusCut();
+    refreshPlanning();
+  } });
+};
 
-  };
+pasteIntervention = function(operation_id, salle_id, time, sejour_id, duree) {
+  var date = window.calendar_planning.altElement.defaultValue;
+  var datetime_interv = date + " " + time;
 
+  // Mode copier
+  // Ouverture de modale pour modifier éventuellement les dates du séjour
+  if (sejour_id) {
+    window.save_copy_operation =
+    { "operation_id": operation_id,
+      "date": date,
+      "duree": duree,
+      "time_operation": time,
+      "salle_id": salle_id
+    };
 
-  refreshPlanning = function(period) {
-    var form = getForm("filterPlanning");
-    var url = new Url("reservation", "ajax_vw_planning");
-    url.addParam("current_m"    , "{{$current_m}}");
-    var week_container = $$(".week-container")[0];
-    
-    if (week_container) {
-      url.addParam("scroll_top", week_container.scrollTop);
-    }
-
-    if (period) {
-      return url.periodicalUpdate("planning", {
-        frequency: period});
-    }
-    url.requestUpdate("planning");
-  };
-
-  modifPlage = function(plage_id, date) {
-    var url = new Url("dPbloc", "inc_edit_planning");
-    url.addParam("plageop_id", plage_id);
-    url.addParam("date", date);
-    url.requestModal();
-    url.modalObject.observe("afterClose", function() {
-      refreshPlanning();
-    });
-  };
-  
-  modifIntervention = function(date, hour, salle_id, operation_id, enplage, chir_id, minutes) {
-    if (enplage) {
-      var url = new Url("dPplanningOp", "vw_edit_planning");
-    }
-    else {
-      var url = new Url("dPplanningOp", "vw_edit_urgence");
-      url.addParam("date_urgence", date);
-      url.addParam("hour_urgence", hour);
-      url.addParam("salle_id"    , salle_id);
-      url.addParam("min_urgence" , minutes);
-    }
-
-    if (chir_id) {
-      url.addParam("chir_id", chir_id);
-    }
-
-    url.addParam("operation_id", operation_id);
-    url.addParam("dialog", 1);
-    url.modal({
-      width: "95%",
-      height: "95%",
-      onClose: function(){ refreshPlanning(); } // Laisser dans une fonction anonyme a cause de l'argument "period"
-    });
-  };
-
-  deleteCommentaire = function(commentaire_id) {
-    var form = getForm("editCommentairePlanning");
-    $V(form.commentaire_planning_id, commentaire_id);
-    confirmDeletion(form, {typeName:'Commentaire '+commentaire_id, ajax: true}, {onComplete: refreshPlanning});
-    $V(form.del, 0);
-  };
-
-  pasteCommentaire = function(date_planning, salle_id, hour_debut, hour_fin, color, commentaire_id) {
-    //if commentaire_id => cut
-    var form = getForm("editCommentairePlanning");
-    $V(form.commentaire_planning_id, commentaire_id);
-    $V(form.debut, date_planning+" "+hour_debut);
-    $V(form.fin, date_planning+" "+hour_fin);
-    $V(form.salle_id, salle_id);
-    $V(form.commentaire, window.copy_commentaire_commentaire);
-    $V(form.libelle, window.copy_commentaire_libelle);
-    $V(form.color, color);
-
-    onSubmitFormAjax(form, {onComplete: function() {
-      updateStatusCut();
-      refreshPlanning();
-    } });
-  };
-  
-  pasteIntervention = function(operation_id, salle_id, time, sejour_id, duree) {
-    var date = window.calendar_planning.altElement.defaultValue;
-    var datetime_interv = date + " " + time;
-    
-    // Mode copier
-    // Ouverture de modale pour modifier éventuellement les dates du séjour
-    if (sejour_id) {
-      window.save_copy_operation =
-      { "operation_id": operation_id,
-        "date": date,
-        "duree": duree,
-        "time_operation": time,
-        "salle_id": salle_id
-      };
-      
-      // Création d'un nouveau séjour si la date d'intervention ne colle pas
-      if (datetime_interv < window.save_entree_prevue || datetime_interv > window.save_sortie_prevue) {
-        modifSejour(null, datetime_interv, sejour_id, null, null, true, "afterCopy");
-      }
-      // Sinon, on passe le sejour_id pour une modification
-      else {
-        modifSejour(null, datetime_interv, sejour_id, window.save_entree_prevue, window.save_sortie_prevue, false, "afterCopy");
-      }
-      return;
-    }
-    
-    // Mode couper
+    // Création d'un nouveau séjour si la date d'intervention ne colle pas
     if (datetime_interv < window.save_entree_prevue || datetime_interv > window.save_sortie_prevue) {
-      window.save_cut_operation =
-      { "operation_id": operation_id,
-        "date": date,
-        "time_operation": time,
-        "salle_id": salle_id
-      };
-      
-      modifSejour(operation_id, datetime_interv, null, null, null, null, "afterModifSejour");
-      return;
+      modifSejour(null, datetime_interv, sejour_id, null, null, true, "afterCopy");
     }
-    
-    var form = getForm("cutOperation");
-    
-    $V(form.operation_id  , operation_id);
-    $V(form.date          , date);
-    $V(form.salle_id      , salle_id);
-    $V(form.time_operation, time);
-    
+    // Sinon, on passe le sejour_id pour une modification
+    else {
+      modifSejour(null, datetime_interv, sejour_id, window.save_entree_prevue, window.save_sortie_prevue, false, "afterCopy");
+    }
+    return;
+  }
+
+  // Mode couper
+  if (datetime_interv < window.save_entree_prevue || datetime_interv > window.save_sortie_prevue) {
+    window.save_cut_operation =
+    { "operation_id": operation_id,
+      "date": date,
+      "time_operation": time,
+      "salle_id": salle_id
+    };
+
+    modifSejour(operation_id, datetime_interv, null, null, null, null, "afterModifSejour");
+    return;
+  }
+
+  var form = getForm("cutOperation");
+
+  $V(form.operation_id  , operation_id);
+  $V(form.date          , date);
+  $V(form.salle_id      , salle_id);
+  $V(form.time_operation, time);
+
+  onSubmitFormAjax(form, {onComplete: function() {
+    window.cut_operation_id = null;
+    updateStatusCut();
+    refreshPlanning();
+  } });
+};
+
+updateStatusCut = function() {
+  var div = $("status_cut");
+  if (window.cut_operation_id) {
+    div.update("Intervention coupée");
+    div.setStyle({borderColor: "#080"});
+  }
+  else if (window.copy_operation_id) {
+    div.update("Intervention copiée");
+    div.setStyle({borderColor: "#080"});
+  }
+  else if (window.copy_commentaire_id) {
+    div.update("Commentaire copié");
+    div.setStyle({borderColor: "#080"});
+  }
+  else {
+    div.update();
+    div.setStyle({borderColor: "#ddd"});
+    if (window.save_elem) {
+      window.save_elem.removeClassName("opacity-50");
+    }
+  }
+};
+
+modifSejour = function(operation_id, date_move, sejour_id, entree_prevue, sortie_prevue, new_sejour, callback) {
+  var url = new Url("dPplanningOp", "ajax_edit_dates_sejour");
+  if (sejour_id) {
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("new_sejour", new_sejour ? 1 : 0);
+    if (new_sejour) {
+      url.addParam("hour_intervention", window.save_copy_operation.time_operation);
+      url.addParam("duree", window.save_copy_operation.duree);
+    }
+  }
+  else {
+    url.addParam("operation_id", operation_id);
+  }
+
+  url.addParam("date_move", date_move);
+  if (callback) {
+    url.addParam("callback", callback);
+  }
+  if (entree_prevue && sortie_prevue) {
+    url.addParam("entree_prevue", entree_prevue);
+    url.addParam("sortie_prevue", sortie_prevue);
+  }
+  url.requestModal(300);
+  url.modalObject.observe("afterClose", refreshPlanning);
+};
+
+afterModifSejour = function() {
+  // Après un drag and drop
+  if (window.save_operation) {
+    var form = getForm("editOperation");
+    $V(form.operation_id  , window.save_operation.operation_id);
+    $V(form.time_operation, window.save_operation.time_operation);
+    $V(form.temp_operation, window.save_operation.temp_operation);
+    $V(form.salle_id      , window.save_operation.salle_id);
+
     onSubmitFormAjax(form, {onComplete: function() {
+      getForm("editSejour").onsubmit = "";
       window.cut_operation_id = null;
       updateStatusCut();
-      refreshPlanning();
-    } });
-  };
-  
-  updateStatusCut = function() {
-    var div = $("status_cut");
-    if (window.cut_operation_id) {
-      div.update("Intervention coupée");
-      div.setStyle({borderColor: "#080"});
+      onSubmitFormAjax(getForm("editSejour"), {onComplete: Control.Modal.close});
     }
-    else if (window.copy_operation_id) {
-      div.update("Intervention copiée");
-      div.setStyle({borderColor: "#080"});
-    }
-    else if (window.copy_commentaire_id) {
-      div.update("Commentaire copié");
-      div.setStyle({borderColor: "#080"});
-    }
-    else {
-      div.update();
-      div.setStyle({borderColor: "#ddd"});
-      if (window.save_elem) {
-        window.save_elem.removeClassName("opacity-50");
-      }
-    }
-  };
-  
-  modifSejour = function(operation_id, date_move, sejour_id, entree_prevue, sortie_prevue, new_sejour, callback) {
-    var url = new Url("dPplanningOp", "ajax_edit_dates_sejour");
-    if (sejour_id) {
-      url.addParam("sejour_id", sejour_id);
-      url.addParam("new_sejour", new_sejour ? 1 : 0);
-      if (new_sejour) {
-        url.addParam("hour_intervention", window.save_copy_operation.time_operation);
-        url.addParam("duree", window.save_copy_operation.duree);
-      }
-    }
-    else {
-      url.addParam("operation_id", operation_id);
-    }
-    
-    url.addParam("date_move", date_move);
-    if (callback) {
-      url.addParam("callback", callback);
-    }
-    if (entree_prevue && sortie_prevue) {
-      url.addParam("entree_prevue", entree_prevue);
-      url.addParam("sortie_prevue", sortie_prevue);
-    }
-    url.requestModal(300);
-    url.modalObject.observe("afterClose", refreshPlanning);
-  };
-  
-  afterModifSejour = function() {
-    // Après un drag and drop
-    if (window.save_operation) {
-      var form = getForm("editOperation");
-      $V(form.operation_id  , window.save_operation.operation_id);
-      $V(form.time_operation, window.save_operation.time_operation);
-      $V(form.temp_operation, window.save_operation.temp_operation);
-      $V(form.salle_id      , window.save_operation.salle_id);
-      
-      onSubmitFormAjax(form, {onComplete: function() {
-        getForm("editSejour").onsubmit = "";
-        window.cut_operation_id = null;
-        updateStatusCut();
-        onSubmitFormAjax(getForm("editSejour"), {onComplete: Control.Modal.close});
-        }
-      });
-      window.save_cut_operation = null;
-      return;
-    }
-    
-    
-    // Après un couper
-    if (window.save_cut_operation) {
-      var form = getForm("cutOperation");
-      $V(form.operation_id, window.save_cut_operation.operation_id);
-      $V(form.date, window.save_cut_operation.date);
-      $V(form.time_operation, window.save_cut_operation.time_operation);
-      $V(form.salle_id, window.save_cut_operation.salle_id);
-      onSubmitFormAjax(form, {onComplete: function() {
-        getForm("editSejour").onsubmit = "";
-        window.cut_operation_id = null;
-        updateStatusCut();
-        onSubmitFormAjax(getForm("editSejour"), {onComplete: Control.Modal.close});
-        }
-      });
-      window.save_cut_operation = null;
-    }
-  };
-  
-  modifCommentaire = function(date, hour, salle_id, commentaire_id, clone) {
-    var url = new Url("reservation", "ajax_edit_commentaire");
-    
-    if (commentaire_id) {
-      url.addParam("commentaire_id", commentaire_id);
-    }
-
-    if (clone) {
-      url.addParam("clone", true);
-    }
-
-    url.addParam("date", date);
-    url.addParam("hour", hour);
-    url.addParam("salle_id", salle_id);
-    
-    url.requestModal(500, 300);
-    url.modalObject.observe("afterClose", refreshPlanning);
-  };
-
-  afterCopy = function(sejour_id, sejour) {
-    // Après la copie de séjour et intervention,
-    // on ne vide pas l'opération sauvegardée
-    // pour continuer à la coller
-    var form = getForm("copyOperation");
-    $V(form.copy_operation_id, window.save_copy_operation.operation_id);
-    $V(form.salle_id, window.save_copy_operation.salle_id);
-    $V(form.sejour_id, sejour_id);
-    $V(form.date, window.save_copy_operation.date);
-    $V(form.time_operation, window.save_copy_operation.time_operation);
-    onSubmitFormAjax(form, {onComplete: Control.Modal.close});
-  };
-
-  planningInter = function(plageop_id) {
-    var url = new Url("dPbloc", "vw_edit_interventions");
-    url.addParam("plageop_id", plageop_id);
-    url.requestModal(1000,700);
-    url.modalObject.observe("afterClose", refreshPlanning);
-  };
-
-  openLegend = function() {
-    var url = new Url("reservation", "ajax_legend_planning");
-    url.requestModal();
-  };
-
-
-  updateSession = function(variable, value) {
-    var url = new Url("{{$current_m}}", "ajax_assign_session");
-    url.addParam("var", variable);
-    url.addParam("value", value);
-    url.requestUpdate("systemMsg", function() {
-      refreshPlanning();
     });
-  };
+    window.save_cut_operation = null;
+    return;
+  }
 
-  modalDossierBloc = function(operation_id) {
-    var url = new Url("dPsalleOp", "ajax_vw_operation");
-    url.addParam("op", operation_id);
-    url.addParam("hide_finished", 1);
-    url.requestModal(1000,500);
-  };
 
-  resetCopy = function() {
-    window.cut_operation_id = null;
-    window.copy_operation_id = null;
-    window.copy_commentaire_id = null;
-    updateStatusCut();
-  };
+  // Après un couper
+  if (window.save_cut_operation) {
+    var form = getForm("cutOperation");
+    $V(form.operation_id, window.save_cut_operation.operation_id);
+    $V(form.date, window.save_cut_operation.date);
+    $V(form.time_operation, window.save_cut_operation.time_operation);
+    $V(form.salle_id, window.save_cut_operation.salle_id);
+    onSubmitFormAjax(form, {onComplete: function() {
+      getForm("editSejour").onsubmit = "";
+      window.cut_operation_id = null;
+      updateStatusCut();
+      onSubmitFormAjax(getForm("editSejour"), {onComplete: Control.Modal.close});
+    }
+    });
+    window.save_cut_operation = null;
+  }
+};
 
+modifCommentaire = function(date, hour, salle_id, commentaire_id, clone) {
+  var url = new Url("reservation", "ajax_edit_commentaire");
+
+  if (commentaire_id) {
+    url.addParam("commentaire_id", commentaire_id);
+  }
+
+  if (clone) {
+    url.addParam("clone", true);
+  }
+
+  url.addParam("date", date);
+  url.addParam("hour", hour);
+  url.addParam("salle_id", salle_id);
+
+  url.requestModal(500, 300);
+  url.modalObject.observe("afterClose", refreshPlanning);
+};
+
+afterCopy = function(sejour_id, sejour) {
+  // Après la copie de séjour et intervention,
+  // on ne vide pas l'opération sauvegardée
+  // pour continuer à la coller
+  var form = getForm("copyOperation");
+  $V(form.copy_operation_id, window.save_copy_operation.operation_id);
+  $V(form.salle_id, window.save_copy_operation.salle_id);
+  $V(form.sejour_id, sejour_id);
+  $V(form.date, window.save_copy_operation.date);
+  $V(form.time_operation, window.save_copy_operation.time_operation);
+  onSubmitFormAjax(form, {onComplete: Control.Modal.close});
+};
+
+planningInter = function(plageop_id) {
+  var url = new Url("dPbloc", "vw_edit_interventions");
+  url.addParam("plageop_id", plageop_id);
+  url.requestModal(1000,700);
+  url.modalObject.observe("afterClose", refreshPlanning);
+};
+
+openLegend = function() {
+  var url = new Url("reservation", "ajax_legend_planning");
+  url.requestModal();
+};
+
+
+updateSession = function(variable, value) {
+  var url = new Url("{{$current_m}}", "ajax_assign_session");
+  url.addParam("var", variable);
+  url.addParam("value", value);
+  url.requestUpdate("systemMsg", function() {
+    refreshPlanning();
+  });
+};
+
+modalDossierBloc = function(operation_id) {
+  var url = new Url("dPsalleOp", "ajax_vw_operation");
+  url.addParam("op", operation_id);
+  url.addParam("hide_finished", 1);
+  url.requestModal(1000,500);
+};
+
+resetCopy = function() {
+  window.cut_operation_id = null;
+  window.copy_operation_id = null;
+  window.copy_commentaire_id = null;
+  updateStatusCut();
+};
+
+Main.add(function() {
+  var form = getForm("filterPlanning");
+  window.calendar_planning = Calendar.regField(form.date_planning);
+  refreshPlanning();
+  if (Preferences.startAutoRefreshAtStartup == 1) {
+    togglePlayPause($('autorefreshPlanningButton'));
+  }
+});
 </script>
 
 <form name="editOperation" method="post">
@@ -394,7 +362,7 @@
   <table class="form">
     <tr>
       <th class="category" colspan="5">
-        <span style="float:left;"><button class="play" title="Arrêter / Relancer le rafraîchissement automatique" onclick="togglePlayPause(this);" type="button">Rech. auto</button></span>
+        <span style="float:left;"><button id="autorefreshPlanningButton" class="play" title="Arrêter / Relancer le rafraîchissement automatique" onclick="togglePlayPause(this);" type="button">Rech. auto</button></span>
         Filtre
       </th>
       <th class="category">
