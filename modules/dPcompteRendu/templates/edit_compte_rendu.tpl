@@ -587,6 +587,10 @@ Main.add(function() {
   <input type="hidden" name="_ids_corres" value="" />
 </form>
 
+{{if $smarty.session.browser.name == "msie"}}
+  <iframe name="download_pdf" style="width: 0; height: 0; position: absolute; top: -1000px;"></iframe>
+{{/if}}
+
 <form name="editFrm" action="?m={{$m}}" method="post"
       onsubmit="Url.ping(function() {
         {{if $compte_rendu->_id}}
@@ -704,7 +708,9 @@ Main.add(function() {
         {{mb_include module=system template=inc_object_history object=$compte_rendu}}
       {{/if}}
 
-      <iframe name="download_pdf" style="width: 1px; height: 1px;"></iframe>
+      {{if $smarty.session.browser.name != "msie"}}
+        <iframe name="download_pdf" style="width: 1px; height: 1px;"></iframe>
+      {{/if}}
 
       {{mb_label object=$compte_rendu field=nom}}
       {{if $read_only}}
