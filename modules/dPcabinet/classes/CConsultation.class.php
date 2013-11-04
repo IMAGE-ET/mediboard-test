@@ -1253,12 +1253,12 @@ class CConsultation extends CFacturable {
       $plage->_ref_remplacant :
       $plage->_ref_chir;
 
-    $this->_date     = $plage->date;
-    $this->_datetime = CMbDT::addDateTime($this->heure, $this->_date);
+    $this->_date           = $plage->date;
+    $this->_datetime       = CMbDT::addDateTime($this->heure, $this->_date);
     $this->_acte_execution = $this->_datetime;
-    $this->_is_anesth    = $chir->isAnesth();
-    $this->_is_dentiste  = $chir->isDentiste();
-    $this->_praticien_id = $chir->_id;
+    $this->_is_anesth      = $chir->isAnesth();
+    $this->_is_dentiste    = $chir->isDentiste();
+    $this->_praticien_id   = $chir->_id;
 
     $this->_ref_chir = $chir;
     return $this->_ref_plageconsult = $plage;
@@ -1623,10 +1623,7 @@ class CConsultation extends CFacturable {
    */
   function getPerm($permType) {
     $this->loadRefPlageConsult();
-    $this->_ref_plageconsult->loadRefChir();
-    return $this->_ref_plageconsult->_ref_chir->getPerm($permType) && parent::getPerm($permType);
-    // Délégation sur la plage
-    //return $this->loadRefPlageConsult()->getPerm($permType);
+    return $this->_ref_chir->getPerm($permType) && parent::getPerm($permType);
   }
 
   /**

@@ -1453,9 +1453,6 @@ class CPatient extends CPerson {
         continue;
       }
 
-      // Permission
-      $consult->canDo();
-
       $consult->loadRefConsultAnesth();
       $consult->loadRefsFichesExamen();
       $consult->loadRefsExamsComp();
@@ -1481,6 +1478,9 @@ class CPatient extends CPerson {
         $consult->_semaine_grossesse = $result;
         $this->_ref_grossesses[$consult->grossesse_id]->_ref_consultations[$consult->_id] = $consult;
       }
+
+      // Permission
+      $consult->canDo();
     }
 
     // Sejours
@@ -1504,8 +1504,7 @@ class CPatient extends CPerson {
 
       $_sejour->loadRefsOperations();
       foreach ($_sejour->_ref_operations as $_operation) {
-        $_operation->canRead();
-        $_operation->canEdit();
+        $_operation->canDo();
 
         // Praticien
         $praticien = $_operation->loadRefPraticien(1);

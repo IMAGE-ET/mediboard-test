@@ -189,6 +189,8 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_ref_last_affectation;
   /** @var CAffectation */
   public $_ref_curr_affectation;
+  /** @var CAffectation */
+  public $_ref_next_affectation;
   /** @var CGHM */
   public $_ref_GHM;
   /** @var CGroups */
@@ -845,12 +847,6 @@ class CSejour extends CFacturable implements IPatientRelated {
     $regles = $regle->loadList($where);
     $count  = count($regles);
 
-    //no result, no work
-    if ($count == 0) {
-      CAppUI::setMsg("CRegleSectorisation-no-rules-found", UI_MSG_WARNING);
-      return false;
-    }
-
     // one or more rules, lets do the work
     if ($count > 0) {
       //check if all result = same service
@@ -873,6 +869,10 @@ class CSejour extends CFacturable implements IPatientRelated {
       CAppUI::setMsg("CRegleSectorisation-rule%d-rule%s", UI_MSG_OK, $count, $first->_ref_service->nom);
       return true;
     }
+
+    //no result, no work
+    CAppUI::setMsg("CRegleSectorisation-no-rules-found", UI_MSG_WARNING);
+    return false;
 
   }
 
@@ -1064,6 +1064,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Si on change la grossesse d'un séjour, il faut remapper les naissances éventuelles
     $change_grossesse = $this->fieldModified("grossesse_id");
+    /** @var CNaissance[] $naissances */
     $naissances = array();
     if ($change_grossesse) {
       $naissances = $this->loadOldObject()->loadRefGrossesse()->loadRefsNaissances();
@@ -1222,17 +1223,19 @@ class CSejour extends CFacturable implements IPatientRelated {
   function generateNDA() {
     $group = CGroups::loadCurrent();
     if (!$group->isNDASupplier()) {
-      return;
+      return null;
     }
 
     $this->loadNDA($group->_id);
     if ($this->_NDA) {
-      return;
+      return null;
     }
 
     if (!$NDA = CIncrementer::generateIdex($this, self::getTagNDA($group->_id), $group->_id)) {
       return CAppUI::tr("CIncrementer_undefined");
     }
+
+    return null;
   }
 
   function delAffectations() {
@@ -1887,6 +1890,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     if (isset($this->_back["observations"])) {
       foreach ($this->_back["observations"] as $curr_obs) {
+        /** @var CObservationMedicale $curr_obs */
         $curr_obs->loadRefsFwd();
         $curr_obs->_ref_user->loadRefFunction();
         $this->_ref_suivi_medical[$curr_obs->date.$curr_obs->_id."obs"] = $curr_obs;
@@ -1895,6 +1899,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     if (isset($this->_back["transmissions"])) {
       foreach ($this->_back["transmissions"] as $curr_trans) {
+        /** @var CTransmissionMedicale $curr_trans */
         $curr_trans->loadRefsFwd();
         if ($curr_trans->_ref_object instanceof CAdministration) {
           $curr_trans->_ref_object->loadRefsFwd();
@@ -1962,9 +1967,8 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   function loadRefConstantes($user_id = null) {
-    $this->loadListConstantesMedicales();
-    $constantes = $this->_list_constantes_medicales;
-
+    /** @var CConstantesMedicales[] $constantes */
+    $constantes = $this->loadListConstantesMedicales();
     foreach ($constantes as $_const) {
       $_const->loadRefUser();
       if ($_const->context_class != "CSejour" || $_const->context_id != $this->_id) {
@@ -2048,19 +2052,17 @@ class CSejour extends CFacturable implements IPatientRelated {
   function loadRefsConsultations() {
     $this->_ref_consultations = $this->loadBackRefs("consultations");
 
-    $this->_ref_consult_atu = new CConsultation;
+    $this->_ref_consult_atu = new CConsultation();
 
-    if ($this->countBackRefs("rpu") > 0 || !CAppUI::conf("dPurgences create_sejour_hospit")) {
-      foreach ($this->_ref_consultations as $_consult) {
-        /** @var CConsultation $_consult */
-        $_consult->loadRefPraticien();
-        $praticien = $_consult->_ref_praticien;
-        $praticien->loadRefFunction();
-        if ($praticien->isUrgentiste()) {
-          $this->_ref_consult_atu = $_consult;
-          $this->_ref_consult_atu->countDocItems();
-          break;
-        }
+    foreach ($this->_ref_consultations as $_consult) {
+      /** @var CConsultation $_consult */
+      $praticien = $_consult->loadRefPraticien();
+      $praticien->loadRefFunction();
+      $_consult->canDo();
+      if ($praticien->isUrgentiste() && ($this->countBackRefs("rpu") > 0 || !CAppUI::conf("dPurgences create_sejour_hospit"))) {
+        $this->_ref_consult_atu = $_consult;
+        $this->_ref_consult_atu->countDocItems();
+        break;
       }
     }
 
@@ -2424,7 +2426,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     // Aucune configuration de numéro de dossier
     if (null == $tag_NDA = $this->getTagNDA($group_id)) {
       $this->_NDA_view = $this->_NDA = str_pad($this->_id, 6, "0", STR_PAD_LEFT);
-      return;
+      return null;
     }
 
 
@@ -2437,6 +2439,8 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Cas de l'utilisation du rang
     $this->loadNRA($group_id);
+
+    return null;
   }
 
   /**
@@ -2455,7 +2459,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     // Aucune configuration de numéro de dossier
     if (null == $tag_NPA = $this->getTagNDA($group_id, "tag_dossier_pa")) {
       $this->_NPA = str_pad($this->_id, 6, "0", STR_PAD_LEFT);
-      return;
+      return null;
     }
 
     // Recuperation de la valeur de l'id400
@@ -2464,6 +2468,8 @@ class CSejour extends CFacturable implements IPatientRelated {
     // Stockage de la valeur de l'id400
     $this->_ref_NPA = $idex;
     $this->_NPA     = $idex->id400;
+
+    return null;
   }
 
   /**
@@ -2476,7 +2482,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   function loadNRA($group_id = null) {
     // Utilise t-on le rang pour le dossier
     if (!CAppUI::conf("dPplanningOp CSejour use_dossier_rang")) {
-      return;
+      return null;
     }
 
     // Objet inexistant
@@ -2486,7 +2492,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Aucune configuration du numero de rang
     if (null == $tag_NRA = $this->getTagNRA($group_id)) {
-      return;
+      return null;
     }
 
     // Recuperation de la valeur de l'id400
@@ -2501,6 +2507,8 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->_ref_patient->loadIPP();
 
     $this->_NDA_view = $this->_ref_patient->_IPP."/".$NRA;
+
+    return null;
   }
 
   function loadFromNDA($nda) {
@@ -3167,11 +3175,11 @@ class CSejour extends CFacturable implements IPatientRelated {
    *
    * @param date $date date
    *
-   * @return
+   * @return void|int
    */
   function countEvenementsSSR($date) {
     if (!$this->_id) {
-      return;
+      return null;
     }
 
     $evenement = new CEvenementSSR;
@@ -3184,17 +3192,17 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   function countEvenementsSSRWeek($kine_id, $date_min, $date_max) {
     if (!$this->_id) {
-      return;
+      return null;
     }
 
-    $evenement = new CEvenementSSR;
+    $evenement = new CEvenementSSR();
     $ljoin[] = "evenement_ssr AS evt_seance ON (evt_seance.seance_collective_id = evenement_ssr.evenement_ssr_id)";
     $where[] = "(evenement_ssr.sejour_id = '$this->_id') OR (evenement_ssr.sejour_id IS NULL AND evt_seance.sejour_id = '$this->_id')";
     $where["evenement_ssr.therapeute_id"] = "= '$kine_id'";
     $this->_count_evenements_ssr      = $evenement->countList($where, null, $ljoin);
 
     $where["evenement_ssr.debut"] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
-    $this->_count_evenements_ssr_week = $evenement->countList($where, null, $ljoin);
+    return $this->_count_evenements_ssr_week = $evenement->countList($where, null, $ljoin);
   }
 
   function getNbJourPlanning($date){
@@ -3257,7 +3265,14 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
   }
 
-  function checkMerge($sejours = array()/*<CSejour>*/) {
+  /**
+   * Vérification de la possibilité de merger plusieurs séjours
+   *
+   * @param CSejour[] $sejours
+   *
+   * @return void|string
+   */
+  function checkMerge($sejours = array()) {
     if ($msg = parent::checkMerge($sejours)) {
       return $msg;
     }
@@ -3291,6 +3306,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         $count_prescription++;
       }
     }
+    return null;
   }
 
   function getUFs($date = null, $affectation_id = null) {
@@ -3401,11 +3417,14 @@ class CSejour extends CFacturable implements IPatientRelated {
     if ($this->_etat == "cloture") {
       return "SORT";
     }
+
+    return null;
   }
 
   function getPrestations() {
     $this->_ref_prestations = array();
 
+    /** @var CItemLiaison[] $items_liaisons */
     $items_liaisons = $this->loadBackRefs("items_liaisons");
 
     CMbObject::massLoadFwdRef($items_liaisons, "item_souhait_id");
@@ -3590,6 +3609,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     if ($idex->tag == self::getTagNDA()) {
       return "NDA";
     }
+    return null;
   }
 }
 
