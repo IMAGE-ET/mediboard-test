@@ -260,7 +260,7 @@
     {{else}}
     <td class="button" colspan="4">
       <button type="submit" class="modify" id="edit_plage_consult_button_modify_plage">{{tr}}Modify{{/tr}}</button>
-      <button class="trash" type='button'
+      <button class="trash" type='button'  id="edit_plage_consult_button_delete_plage"
         onclick="confirmDeletion(this.form, {
           typeName:'la plage de consultations du',objName:'{{$plageSel->date|date_format:$conf.longdate}}',
           callback: function() {

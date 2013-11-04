@@ -114,7 +114,7 @@
         <td class="button" colspan="2">
           {{if $categorie->_id}}
           <button id="vw_categorie_button_modif_categorie" class="modify" type="submit">Valider</button>
-          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la catégorie ',objName:'{{$categorie->nom_categorie|smarty:nodefaults|JSAttribute}}'})">
+          <button id="vw_categorie_button_trash_categorie" class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la catégorie ',objName:'{{$categorie->nom_categorie|smarty:nodefaults|JSAttribute}}'})">
             Supprimer
           </button>
           {{else}}

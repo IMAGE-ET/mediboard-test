@@ -75,10 +75,10 @@ Main.add(function () {
     <li onmousedown="refreshFacteursRisque();"><a href="#facteursRisque">Facteurs de risque</a></li>
   {{/if}}
   {{if $app->user_prefs.ccam_consultation == 1}}
-  <li><a href="#Actes">{{tr}}CCodable-actes{{/tr}}</a></li>
+  <li><a id="acc_consultation_a_Actes" href="#Actes">{{tr}}CCodable-actes{{/tr}}</a></li>
   {{/if}}
   <li><a href="#fdrConsult">Documents</a></li>
-  <li><a href="#reglement">Réglements</a></li>
+  <li><a id="a_reglements_consult"  href="#reglement">Réglements</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -121,7 +121,7 @@ Main.add(function () {
   <ul id="tab-actes" class="control_tabs">
     {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
       <li><a href="#ccam">Actes CCAM</a></li>
-      <li><a href="#ngap">Actes NGAP</a></li>
+      <li><a id="acc_consultations_a_actes_ngap" href="#ngap">Actes NGAP</a></li>
       {{if $consult->sejour_id}}
         <li><a href="#cim">Diagnostics</a></li>
       {{/if}}
