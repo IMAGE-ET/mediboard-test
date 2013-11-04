@@ -76,6 +76,8 @@
     </tr>
     {{mb_include module=system template=inc_config_bool var=view_prepost_suivi}}
     {{mb_include module=system template=inc_config_bool var=chambre_operation}}
+    {{mb_include module=system template=inc_config_enum var=time_autorefresh values="120|300|600"}}
+
 
 
     <tr>
