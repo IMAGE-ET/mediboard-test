@@ -17,7 +17,7 @@
     if (!(window.autoRefreshSuivi)) {
       window.autoRefreshSuivi = setInterval(function(){
         updateSuiviSalle();
-      }, ({{math equation="a*100" a=$conf.dPbloc.CPlageOp.time_autorefresh}}));
+      }, ({{math equation="a*1000" a=$conf.dPbloc.CPlageOp.time_autorefresh}}));
     }
     else {
       clearTimeout(window.autoRefreshSuivi);
@@ -69,7 +69,7 @@
   Main.add(function () {
     Calendar.regField(getForm("changeDate").date, null, {noView: true});
     updateSuiviSalle();
-    if (Preferences.startAutoRefreshAtStartup) {
+    if (Preferences.startAutoRefreshAtStartup == 1) {
       togglePlayPause($('autorefreshSuiviSalleButton'));
     }
   });
