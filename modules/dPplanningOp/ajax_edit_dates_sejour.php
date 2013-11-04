@@ -9,21 +9,20 @@
  * @version    $Revision$
  */
 
-$operation_id  = CValue::get("operation_id");
-$sejour_id     = CValue::get("sejour_id");
-$date_move     = CValue::get("date_move");
-$callback      = CValue::get("callback");
-$entree_prevue = CValue::get("entree_prevue");
-$sortie_prevue = CValue::get("sortie_prevue");
-$new_sejour    = CValue::get("new_sejour");
-$hour_intervention = CValue::get("hour_intervention");
-$duree         = CValue::get("duree");  //days
-$duree_hours = $duree*24;               // hours
+$operation_id       = CValue::get("operation_id");
+$sejour_id          = CValue::get("sejour_id");
+$date_move          = CValue::get("date_move");
+$callback           = CValue::get("callback");
+$entree_prevue      = CValue::get("entree_prevue");
+$sortie_prevue      = CValue::get("sortie_prevue");
+$new_sejour         = CValue::get("new_sejour");
+$hour_intervention  = CValue::get("hour_intervention");
+$duree              = CValue::get("duree");               //days
+$duree_hours        = $duree*24;                          // hours
 
 if ($operation_id) {
   $operation = new COperation();
   $operation->load($operation_id);
-  
   $sejour = $operation->loadRefSejour();
 }
 else {

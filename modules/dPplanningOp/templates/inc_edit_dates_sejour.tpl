@@ -10,7 +10,7 @@
 
 {{if $date_move < $sejour->entree_prevue || $date_move > $sejour->sortie_prevue}}
   <div class="small-warning">
-    L'intervention du {{$date_move|date_format:$conf.datetime}} n'est pas dans les bornes du séjour
+    L'intervention du {{$date_move|date_format:$conf.datetime}} n'est pas dans les bornes du séjour <br/>({{mb_value object=$sejour field=entree_prevue}} &rarr; {{mb_value object=$sejour field=sortie_prevue}})
   </div>
 {{/if}}
 
