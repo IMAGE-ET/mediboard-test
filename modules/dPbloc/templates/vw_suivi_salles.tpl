@@ -11,9 +11,22 @@
 {{mb_script module=bloc script=edit_planning}}
 
 <script>
+  togglePlayPause = function(button) {
+    button.toggleClassName("play");
+    button.toggleClassName("pause");
+    if (!(window.autoRefreshSuivi)) {
+      window.autoRefreshSuivi = setInterval(function(){
+        updateSuiviSalle();
+      }, ({{math equation="a*100" a=$conf.dPbloc.CPlageOp.time_autorefresh}}));
+    }
+    else {
+      clearTimeout(window.autoRefreshSuivi);
+    }
+  };
+
   updateSuiviSalle = function() {
-    var oform = getForm('changeDate');
-    var date = $V(oform.date);
+    var oform   = getForm('changeDate');
+    var date    = $V(oform.date);
     var bloc_id = $V(oform.bloc_id);
 
     var url = new Url("dPbloc", "ajax_vw_suivi_salle");
@@ -24,7 +37,6 @@
       str= str+" (Aujourd'hui)";
     }
     $('dateSuiviSalle').update(str);
-
     url.requestUpdate("result_suivi");
   };
 
@@ -56,7 +68,10 @@
 
   Main.add(function () {
     Calendar.regField(getForm("changeDate").date, null, {noView: true});
-    updateSuiviSalle('{{$first_bloc->_id}}');
+    updateSuiviSalle();
+    if (Preferences.startAutoRefreshAtStartup) {
+      togglePlayPause($('autorefreshSuiviSalleButton'));
+    }
   });
 </script>
 
@@ -64,6 +79,7 @@
 <table class="main">
   <tr>
     <td>
+      <button id="autorefreshSuiviSalleButton" style="float: left;" class="play" onclick="togglePlayPause(this);">Rech. Auto</button>
       <button type="button" onclick="showLegend()" class="search" style="float: right;">Légende</button>
       <button type="button" onclick="$('suivi-salles').print();" class="print" style="float: right;">{{tr}}Print{{/tr}}</button>
       <button type="button" onclick="printAnapath();" class="print" style="float: right;">{{tr}}COperation-anapath{{/tr}}</button>
