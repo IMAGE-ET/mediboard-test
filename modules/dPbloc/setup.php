@@ -408,6 +408,10 @@ class CSetupdPbloc extends CSetup {
                 ADD `type` ENUM ('chir','obst') NOT NULL DEFAULT 'chir' AFTER `nom`;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.41";
+    $this->makeEmptyRevision("0.41");
+    $this->addPrefQuery("startAutoRefreshAtStartup", 0);
+
+
+    $this->mod_version = "0.42";
   }
 }

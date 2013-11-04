@@ -14,5 +14,6 @@
  
  // Préférences par Module
 CPreferences::$modules["dPbloc"] = array (
-  "suivisalleAutonome"
+  "suivisalleAutonome",
+  "startAutoRefreshAtStartup"
 );

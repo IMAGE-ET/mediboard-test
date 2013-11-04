@@ -393,5 +393,6 @@ $locales['mod-dPbloc-tab-vw_urgences'] = 'Hors plage';
 $locales['mod-dPdPbloc-tab-ajax_edit_extra_interv'] = 'Changement de salle et ajout de personnel sur l\'intervention';
 $locales['module-dPbloc-court'] = 'Bloc opératoire';
 $locales['module-dPbloc-long'] = 'Planning du bloc opératoire';
+$locales['pref-startAutoRefreshAtStartup'] = 'Rechargement auto. dès le premier affichage';
+$locales['pref-startAutoRefreshAtStartup-desc'] = 'Démarrer le rechargement automatique des pages dès le premier affichage';
 $locales['pref-suivisalleAutonome'] = 'Date du suivi de salle autonome';
-?>

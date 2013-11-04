@@ -10,3 +10,4 @@
 
   
 {{mb_include template=inc_pref spec=bool var=suivisalleAutonome}}
+{{mb_include template=inc_pref spec=bool var=startAutoRefreshAtStartup}}
