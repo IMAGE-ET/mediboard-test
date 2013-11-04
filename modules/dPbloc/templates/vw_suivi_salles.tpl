@@ -10,100 +10,81 @@
 
 {{mb_script module=bloc script=edit_planning}}
 
-<script type="text/javascript">
-Main.add(function () {
-  Calendar.regField(getForm("changeDate").date, null, {noView: true});
-});
+<script>
+  updateSuiviSalle = function() {
+    var oform = getForm('changeDate');
+    var date = $V(oform.date);
+    var bloc_id = $V(oform.bloc_id);
 
-function printFicheBloc(interv_id) {
+    var url = new Url("dPbloc", "ajax_vw_suivi_salle");
+    url.addParam('bloc_id', bloc_id);
+    url.addParam('date', date);
+    var str = DateFormat.format(new Date(date), " d/M/yyyy");
+    if (date == '{{$date}}') {
+      str= str+" (Aujourd'hui)";
+    }
+    $('dateSuiviSalle').update(str);
+
+    url.requestUpdate("result_suivi");
+  };
+
+  printFicheBloc = function(interv_id) {
   var url = new Url("dPsalleOp", "print_feuille_bloc");
   url.addParam("operation_id", interv_id);
   url.popup(700, 600, 'FeuilleBloc');
-}
+  };
 
-function printAnapath() {
-  var form = getForm(changeDate);
-  var url = new Url("dPbloc", "print_anapath");
-  url.addParam("date"   , $V(form.date));
-  url.addParam("bloc_id", $V(form.bloc_id));
-  url.popup(700, 600, 'Anapath');
-}
+  printAnapath = function() {
+    var form = getForm('changeDate');
+    var url = new Url("dPbloc", "print_anapath");
+    url.addParam("date"   , $V(form.date));
+    url.addParam("bloc_id", $V(form.bloc_id));
+    url.popup(700, 600, 'Anapath');
+  };
 
-function printBacterio() {
-  var form = getForm(changeDate);
-  var url = new Url("dPbloc", "print_bacterio");
-  url.addParam("date"   , $V(form.date));
-  url.addParam("bloc_id", $V(form.bloc_id));
-  url.popup(700, 600, 'Bacterio');
-}
+  printBacterio = function() {
+    var form = getForm('changeDate');
+    var url = new Url("dPbloc", "print_bacterio");
+    url.addParam("date"   , $V(form.date));
+    url.addParam("bloc_id", $V(form.bloc_id));
+    url.popup(700, 600, 'Bacterio');
+  };
 
-function showLegend() {
-  var url = new Url('bloc', 'legende').requestModal()
-}
+  showLegend = function() {
+    var url = new Url('bloc', 'legende').requestModal()
+  };
+
+  Main.add(function () {
+    Calendar.regField(getForm("changeDate").date, null, {noView: true});
+    updateSuiviSalle('{{$first_bloc->_id}}');
+  });
 </script>
 
-<table class="main" id="suivi-salles">
-  <tr class="only-printable">
-    <th colspan="100">
-      <h1 class="no-break">{{$date_suivi|date_format:$conf.longdate}}</h1>
-    </th>
-  </tr>
-  <tr class="not-printable">
-    <th colspan="100">
-      <button type="button" onclick="showLegend()" class="search" style="float: left;">Légende</button>
+
+<table class="main">
+  <tr>
+    <td>
+      <button type="button" onclick="showLegend()" class="search" style="float: right;">Légende</button>
       <button type="button" onclick="$('suivi-salles').print();" class="print" style="float: right;">{{tr}}Print{{/tr}}</button>
       <button type="button" onclick="printAnapath();" class="print" style="float: right;">{{tr}}COperation-anapath{{/tr}}</button>
       <button type="button" onclick="printBacterio();" class="print" style="float: right;">{{tr}}COperation-labo{{/tr}}</button>
 
       <form action="?" name="changeDate" method="get">
-        <input type="hidden" name="m" value="{{$m}}" />
-        <input type="hidden" name="tab" value="{{$tab}}" />
-
-        <select name="bloc_id" onchange="this.form.submit()">
-        {{foreach from=$listBlocs item=curr_bloc}}
-          <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $bloc->_id}}selected="selected"{{/if}}>
-            {{$curr_bloc->nom}}
-          </option>
-        {{/foreach}}
-        </select>
-        {{$date_suivi|date_format:$conf.longdate}}
-        <input type="hidden" name="date" class="date" value="{{$date_suivi}}" onchange="this.form.submit()" />
+        <label> Bloc :
+          <select name="bloc_id" onchange="updateSuiviSalle();">
+            {{foreach from=$blocs item=curr_bloc}}
+              <option value="{{$curr_bloc->_id}}">
+                {{$curr_bloc->nom}}
+              </option>
+            {{/foreach}}
+          </select>
+        </label>
+        <label>Date :
+          <input type="hidden" name="date" class="date" value="{{$date}}" onchange="updateSuiviSalle();" /><span id="dateSuiviSalle"></span>
+        </label>
       </form>
-    </th>
-  </tr>
-  <tr class="not-printable">
-    <td class="button" colspan="100">
-      {{foreach from=$bloc->_ref_salles item=_salle}}
-        <label><input type="checkbox" onclick="Effect.toggle('salle-{{$_salle->_id}}', 'appear');" checked="checked" /> {{$_salle->nom}}</label>
-      {{/foreach}}
-      {{if $non_traitees|@count}}
-        <label><input type="checkbox" onclick="Effect.toggle('non-traitees', 'appear');" checked="checked" /> {{tr}}CSejour.type.hors_plage{{/tr}}</label>
-      {{/if}}
     </td>
-  </tr>
-  <tr>
-    {{foreach from=$bloc->_ref_salles item=_salle}}
-    <td id="salle-{{$_salle->_id}}">
-      <table class="tbl">
-        <tr>
-          <th class="title">{{$_salle->nom}}</th>
-        </tr>
-      </table>
-      {{mb_include module=salleOp template=inc_details_plages salle=$_salle}}
-    </td>
-    {{foreachelse}}
-    <td class="empty">{{tr}}CSalle.none{{/tr}}</td>
-    {{/foreach}}
-    {{if $non_traitees|@count}}
-      {{assign var=salle value=""}}
-      <td id="non-traitees">
-        <table class="tbl">
-          <tr>
-            <th class="title" colspan="5">{{tr}}CSejour.type.hors_plage{{/tr}}</th>
-          </tr>
-          {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=1 operations=$non_traitees}}
-        </table>
-      </td>
-    {{/if}}
   </tr>
 </table>
+
+<div id="result_suivi"></div>
