@@ -86,8 +86,8 @@
   {{/if}}
 {{/if}}
 
-{{if (!$sejour || $sejour->type != "urg") && !$consult}}
-  <br/>urg"}}
+{{if (!$sejour || $sejour->type != "urg")}}
+  <br/>
   <button class="new" type="button" onclick="newConsultation({{$praticien_id}},{{$patient_id}})" style="width: 12em;">
     {{tr}}CConsultation-title-create{{/tr}}
   </button>
