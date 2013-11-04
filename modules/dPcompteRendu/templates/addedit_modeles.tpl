@@ -283,7 +283,7 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
 
       <ul id="tabs-edit" class="control_tabs small">
         <li><a href="#info">Informations</a></li>
-        <li><a href="#layout">Mise en page</a></li>
+        <li><a href="#layout" id="a_addedit_modeles_mise_en_page">Mise en page</a></li>
       </ul>
 
       <table class="form" id="info" style="display: none;">
@@ -594,7 +594,7 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
                 <th>{{mb_label object=$compte_rendu field=height}}</th>
                 <td>
                 {{if $droit}}
-                  <button type="button" class="change" onclick="Thumb.old(); Modele.generate_auto_height(); Modele.preview_layout();">{{tr}}CCompteRendu.auto_height{{/tr}}</button><br/>
+                  <button id="button_addedit_modeles_generate_auto_height" type="button" class="change" onclick="Thumb.old(); Modele.generate_auto_height(); Modele.preview_layout();">{{tr}}CCompteRendu.auto_height{{/tr}}</button><br/>
                     {{mb_field object=$compte_rendu field=height increment=true form=editFrm onchange="Thumb.old(); Modele.preview_layout();" step="10" onkeyup="Modele.preview_layout();"}}
                 {{else}}
                   {{mb_field object=$compte_rendu field=height readonly="readonly"}}
@@ -631,12 +631,12 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
           {{if $droit}}
             <td class="button" colspan="2">
             {{if $compte_rendu->_id}}
-            <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+            <button id="button_addedit_modeles_save_mise_en_page" class="modify" type="submit">{{tr}}Save{{/tr}}</button>
             <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$compte_rendu->nom|smarty:nodefaults|JSAttribute}}'})">
             {{tr}}Delete{{/tr}}
             </button>
             {{else}}
-            <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+            <button id="button_addedit_modeles_create" class="submit" type="submit">{{tr}}Create{{/tr}}</button>
             {{/if}}
             </td>
           {{/if}}
@@ -650,7 +650,7 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
           <tr>
             <td class="button" colspan="2">
                <button type="button" class="duplicate" onclick="Modele.copy(this.form)">{{tr}}Duplicate{{/tr}}</button>
-               <button type="button" class="search" onclick="Modele.preview($V(this.form.compte_rendu_id))">{{tr}}Preview{{/tr}}</button>
+               <button id="button_addedit_modeles_preview" type="button" class="search" onclick="Modele.preview($V(this.form.compte_rendu_id))">{{tr}}Preview{{/tr}}</button>
                <br />
                <button type="button" class="search" onclick="Modele.showUtilisation()">Utilisation ({{$compte_rendu->_count_utilisation}})</button>
             </td>

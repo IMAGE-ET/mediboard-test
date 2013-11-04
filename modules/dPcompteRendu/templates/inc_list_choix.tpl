@@ -46,7 +46,7 @@
   
   <table class="form">
     <tr>
-      <th class="category" colspan="2">Ajouter un choix</th>
+      <th id="inc_list_choix_ajouter_choix" class="category" colspan="2">Ajouter un choix</th>
     </tr>
     <tr>
       <td>
@@ -55,7 +55,7 @@
     </tr>
     <tr>
       <td class="button">
-        <button type="submit" class="add">{{tr}}Add{{/tr}}</button>
+        <button id="inc_list_choix_ajouter_choix_button" type="submit" class="add">{{tr}}Add{{/tr}}</button>
       </td>
      </tr>
   </table>

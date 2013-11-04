@@ -73,14 +73,14 @@
     <tr>
       <td class="button" colspan="2">
         {{if $liste->_id}}
-        <button class="modify" type="submit">
+        <button id="inc_form_list_choix_button_save" class="modify" type="submit">
           {{tr}}Save{{/tr}}
         </button>
         <button class="trash" type="button" onclick="ListeChoix.confirmDeletion(this)">
           {{tr}}Delete{{/tr}}
         </button>
         {{else}}
-        <button class="submit" type="submit">
+        <button id="inc_form_list_choix_button_create" class="submit" type="submit">
           {{tr}}Create{{/tr}}
         </button>
         {{/if}}

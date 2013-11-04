@@ -6,7 +6,7 @@
   Main.add(ListeChoix.filter);
 </script>
 
-<button class="new singleclick" onclick="ListeChoix.edit(0);">
+<button id="vw_idx_list_create_list_choix" class="new singleclick" onclick="ListeChoix.edit(0);">
   {{tr}}CListeChoix-title-create{{/tr}}
 </button>
     
