@@ -17,6 +17,10 @@ CApp::setMemoryLimit("1024M");
 
 $dry_run = CValue::get("dry_run", false);
 
+$sup_agg = 1440;
+$avg_agg =   60;
+$std_agg =   10;
+
 // Check prerequisites
 $ds = CSQLDataSource::get("std");
 
@@ -25,47 +29,37 @@ $query = "SELECT MAX(`accesslog_id`)
 
 $last_ID = $ds->loadResult($query);
 
-$month = CMbDT::transform("- 1 MONTH", CMbDT::dateTime(), "%Y-%m-%d 00:00:00");
-$year  = CMbDT::transform("- 1 YEAR", CMbDT::dateTime(), "%Y-%m-%d 00:00:00");
+$last_month = CMbDT::transform("- 1 MONTH", CMbDT::dateTime(), "%Y-%m-%d 00:00:00");
+$last_year  = CMbDT::transform("- 1 YEAR",  CMbDT::dateTime(), "%Y-%m-%d 00:00:00");
 
 // Get the oldest log to aggregate
 $query = "SELECT MIN(`period`)
           FROM `access_log`
-          WHERE `period` < '$year'
-            AND `aggregate` < '1440';";
+          WHERE `period` <= '$last_month'
+            AND `aggregate` <= IF (`period` <= '$last_year', '$avg_agg', '$std_agg');";
 
-$oldest = $ds->loadResult($query);
+$oldest_from = $ds->loadResult($query);
 
-// Take the 6 months period to aggregate (for logs older than 1 year)
-$year = min(CMbDT::transform("+ 6 MONTH", $oldest, "%Y-%m-%d 00:00:00"), $year);
+if (!$oldest_from) {
+  CAppUI::stepAjax("No log to aggregate", UI_MSG_OK);
+  return;
+}
+
+// Take the 6 months period to aggregate
+$oldest_to = min(CMbDT::transform("+ 6 MONTHS", $oldest_from, "%Y-%m-%d 00:00:00"), $last_month);
 
 // Dry run mode, just compute the number of logs to aggregate
 if ($dry_run) {
   // Récupération des IDs de journaux à supprimer
-  $query = "SELECT
-            count(`accesslog_id`) as count
-          FROM `access_log`
-          WHERE
-          (
-            `period` < '$year'
-             AND `aggregate` < '1440'
-          )
-          OR
-          (
-            `period` < '$month'
-            AND `period` >= '$year'
-            AND `aggregate` < '60'
-          )";
+  $query = "SELECT count(`accesslog_id`) as count
+            FROM `access_log`
+            WHERE `period` BETWEEN '$oldest_from' AND '$oldest_to'
+               AND `aggregate` <= IF (`period` <= '$last_year', '$avg_agg', '$std_agg');";
 
   $count = $ds->loadResult($query);
 
-  $msg = "%d access logs to aggregate from %s";
-  if ($oldest) {
-    $msg = "%d access logs to aggregate from %s to %s";
-  }
-
-  CAppUI::stepAjax($msg, UI_MSG_OK, $count, CMbDT::date($year), CMbDT::date($oldest));
-
+  $msg = "%d access logs to aggregate from %s to %s";
+  CAppUI::stepAjax($msg, UI_MSG_OK, $count, CMbDT::date($oldest_from), CMbDT::date($oldest_to));
   return;
 }
 
@@ -74,191 +68,228 @@ $query = "SELECT
             CAST(GROUP_CONCAT(`accesslog_id` SEPARATOR ', ') AS CHAR) AS ids,
             `module`,
             `action`,
-            date_format(`period`, '%Y-%m-%d 00:00:00'),
+            `period`,
             `bot`
           FROM `access_log`
-          WHERE `period` < '$year'
-            AND `aggregate` < '1440'
-          GROUP BY `module`, `action`, date_format(`period`, '%Y-%m-%d 00:00:00'), `bot`
-          ORDER BY `accesslog_id`";
+          WHERE `period` BETWEEN '$oldest_from' AND '$oldest_to'
+            AND `period` <= '$last_year'
+            AND `aggregate` < '$sup_agg'
+          GROUP BY `module`, `action`, date_format(`period`, '%Y-%m-%d 00:00:00'), `bot`";
 
 $year_IDs_to_aggregate = $ds->loadList($query);
+
+if ($year_IDs_to_aggregate) {
+  // Insert aggregated logs then delete previous logs, insert aggregated datasource logs and delete previous logs, step by step
+  foreach ($year_IDs_to_aggregate as $_aggregate) {
+    $query = "INSERT INTO `access_log` (
+                `module`,
+                `action`,
+                `period`,
+                `aggregate`,
+                `bot`,
+                `hits`,
+                `duration`,
+                `request`,
+                `size`,
+                `errors`,
+                `warnings`,
+                `notices`,
+                `processus`,
+                `processor`,
+                `peak_memory`
+              )
+              SELECT
+                `module`,
+                `action`,
+                date_format(`period`, '%Y-%m-%d 00:00:00'),
+                '$sup_agg',
+                `bot`,
+                @hits        := SUM(`hits`),
+                @duration    := SUM(`duration`),
+                @request     := SUM(`request`),
+                @size        := SUM(`size`),
+                @errors      := SUM(`errors`),
+                @warnings    := SUM(`warnings`),
+                @notices     := SUM(`notices`),
+                @processus   := SUM(`processus`),
+                @processor   := SUM(`processor`),
+                @peak_memory := SUM(`peak_memory`)
+              FROM `access_log`
+              WHERE `accesslog_id` IN (".$_aggregate['ids'].")
+              GROUP BY `module`, `action`, DATE_FORMAT(`period`, '%Y-%m-%d 00:00:00'), `bot`
+              ON DUPLICATE KEY UPDATE
+                `hits`        = `hits`        + @hits,
+                `duration`    = `duration`    + @duration,
+                `request`     = `request`     + @request,
+                `size`        = `size`        + @size,
+                `errors`      = `errors`      + @errors,
+                `warnings`    = `warnings`    + @warnings,
+                `notices`     = `notices`     + @notices,
+                `processus`   = `processus`   + @processus,
+                `processor`   = `processor`   + @processor,
+                `peak_memory` = `peak_memory` + @peak_memory";
+
+    if (!$ds->exec($query)) {
+      trigger_error("Failed to insert aggregated access logs", E_USER_ERROR);
+      return;
+    }
+
+    $last_insert_id = $ds->insertId();
+
+    // Delete previous logs
+    $query = "DELETE
+              FROM `access_log`
+              WHERE `accesslog_id` IN (".$_aggregate['ids'].")";
+
+    $ds->exec($query);
+
+    // Compression des journaux de sources de données
+    $query = "INSERT INTO `datasource_log` (
+                `datasource`,
+                `requests`,
+                `duration`,
+                `accesslog_id`
+              )
+              SELECT
+                `datasource`,
+                @requests := SUM(`requests`),
+                @duration := SUM(`duration`),
+                $last_insert_id
+              FROM `datasource_log`
+              WHERE `accesslog_id` IN (".$_aggregate['ids'].")
+              GROUP BY `datasource`
+              ON DUPLICATE KEY UPDATE
+                `requests` = `requests` + @requests,
+                `duration` = `duration` + @duration";
+
+    if (!$ds->exec($query)) {
+      trigger_error("Failed to insert aggregated datasource logs", E_USER_ERROR);
+      return;
+    }
+
+    // Delete previous logs
+    $query = "DELETE
+              FROM `datasource_log`
+              WHERE `accesslog_id` IN (".$_aggregate['ids'].")";
+
+    $ds->exec($query);
+  }
+}
 
 $query = "SELECT
             CAST(GROUP_CONCAT(`accesslog_id` SEPARATOR ', ') AS CHAR) AS ids,
             `module`,
             `action`,
-            date_format(`period`, '%Y-%m-%d 00:00:00'),
+            `period`,
             `bot`
           FROM `access_log`
-          WHERE `period` < '$month'
-            AND `period` >= '$year'
-            AND `aggregate` < '60'
-          GROUP BY `module`, `action`, date_format(`period`, '%Y-%m-%d 00:00:00'), `bot`
-          ORDER BY `accesslog_id`";
+          WHERE `period` BETWEEN '$oldest_from' AND '$oldest_to'
+            AND `period` <= '$last_month'
+            AND `period`  > '$last_year'
+            AND `aggregate` < '$avg_agg'
+          GROUP BY `module`, `action`, date_format(`period`, '%Y-%m-%d %H:00:00'), `bot`";
 
 $month_IDs_to_aggregate = $ds->loadList($query);
 
+if ($month_IDs_to_aggregate) {
+  // Insert aggregated logs then delete previous logs, insert aggregated datasource logs and delete previous logs, step by step
+  foreach ($month_IDs_to_aggregate as $_aggregate) {
+    $query = "INSERT INTO `access_log` (
+                `module`,
+                `action`,
+                `period`,
+                `aggregate`,
+                `bot`,
+                `hits`,
+                `duration`,
+                `request`,
+                `size`,
+                `errors`,
+                `warnings`,
+                `notices`,
+                `processus`,
+                `processor`,
+                `peak_memory`
+              )
+              SELECT
+                `module`,
+                `action`,
+                date_format(`period`, '%Y-%m-%d %H:00:00'),
+                '$avg_agg',
+                `bot`,
+                @hits        := SUM(`hits`),
+                @duration    := SUM(`duration`),
+                @request     := SUM(`request`),
+                @size        := SUM(`size`),
+                @errors      := SUM(`errors`),
+                @warnings    := SUM(`warnings`),
+                @notices     := SUM(`notices`),
+                @processus   := SUM(`processus`),
+                @processor   := SUM(`processor`),
+                @peak_memory := SUM(`peak_memory`)
+              FROM `access_log`
+              WHERE `accesslog_id` IN (".$_aggregate['ids'].")
+              GROUP BY `module`, `action`, DATE_FORMAT(`period`, '%Y-%m-%d %H:00:00'), `bot`
+              ON DUPLICATE KEY UPDATE
+                `hits`        = `hits`        + @hits,
+                `duration`    = `duration`    + @duration,
+                `request`     = `request`     + @request,
+                `size`        = `size`        + @size,
+                `errors`      = `errors`      + @errors,
+                `warnings`    = `warnings`    + @warnings,
+                `notices`     = `notices`     + @notices,
+                `processus`   = `processus`   + @processus,
+                `processor`   = `processor`   + @processor,
+                `peak_memory` = `peak_memory` + @peak_memory";
+
+    if (!$ds->exec($query)) {
+      trigger_error("Failed to insert aggregated access logs", E_USER_ERROR);
+      return;
+    }
+
+    $last_insert_id = $ds->insertId();
+
+    // Delete previous logs
+    $query = "DELETE
+              FROM `access_log`
+              WHERE `accesslog_id` IN (".$_aggregate['ids'].")";
+
+    $ds->exec($query);
+
+    // Compression des journaux de sources de données
+    $query = "INSERT INTO `datasource_log` (
+                `datasource`,
+                `requests`,
+                `duration`,
+                `accesslog_id`
+              )
+              SELECT
+                `datasource`,
+                @requests := SUM(`requests`),
+                @duration := SUM(`duration`),
+                $last_insert_id
+              FROM `datasource_log`
+              WHERE `accesslog_id` IN (".$_aggregate['ids'].")
+              GROUP BY `datasource`
+              ON DUPLICATE KEY UPDATE
+                `requests` = `requests` + @requests,
+                `duration` = `duration` + @duration";
+
+    if (!$ds->exec($query)) {
+      trigger_error("Failed to insert aggregated datasource logs", E_USER_ERROR);
+      return;
+    }
+
+    // Delete previous logs
+    $query = "DELETE
+              FROM `datasource_log`
+              WHERE `accesslog_id` IN (".$_aggregate['ids'].")";
+
+    $ds->exec($query);
+  }
+}
+
 $IDs_to_aggregate = array_merge($year_IDs_to_aggregate, $month_IDs_to_aggregate);
-$IDs_to_aggregate = CMbArray::pluck($IDs_to_aggregate, "ids");
 
-// Compression des journaux de plus d'une année à la journée
-$query = "INSERT INTO `access_log` (
-            `module`,
-            `action`,
-            `period`,
-            `aggregate`,
-            `bot`,
-            `hits`,
-            `duration`,
-            `request`,
-            `size`,
-            `errors`,
-            `warnings`,
-            `notices`,
-            `processus`,
-            `processor`,
-            `peak_memory`
-          )
-          SELECT
-            `module`,
-            `action`,
-            date_format(`period`, '%Y-%m-%d 00:00:00'),
-            '1440',
-            `bot`,
-            SUM(`hits`),
-            SUM(`duration`),
-            SUM(`request`),
-            SUM(`size`),
-            SUM(`errors`),
-            SUM(`warnings`),
-            SUM(`notices`),
-            SUM(`processus`),
-            SUM(`processor`),
-            SUM(`peak_memory`)
-          FROM `access_log`
-          WHERE `period` < '$year'
-            AND `aggregate` < '1440'
-          GROUP BY `module`, `action`, date_format(`period`, '%Y-%m-%d 00:00:00'), `bot`
-          ORDER BY `accesslog_id`";
-
-$ds->exec($query);
-
-// Suppression des journaux vieux de plus d'une année
-$query = "DELETE
-          FROM `access_log`
-          WHERE `period` < '$year'
-            AND `aggregate` < '1440'";
-
-$ds->exec($query);
-
-// Compression des journaux vieux de plus d'un mois et de moins d'une année
-$query = "INSERT INTO `access_log` (
-            `module`,
-            `action`,
-            `period`,
-            `aggregate`,
-            `bot`,
-            `hits`,
-            `duration`,
-            `request`,
-            `size`,
-            `errors`,
-            `warnings`,
-            `notices`,
-            `processus`,
-            `processor`,
-            `peak_memory`
-          )
-          SELECT
-            `module`,
-            `action`,
-            date_format(`period`, '%Y-%m-%d 00:00:00'),
-            '60',
-            `bot`,
-            SUM(`hits`),
-            SUM(`duration`),
-            SUM(`request`),
-            SUM(`size`),
-            SUM(`errors`),
-            SUM(`warnings`),
-            SUM(`notices`),
-            SUM(`processus`),
-            SUM(`processor`),
-            SUM(`peak_memory`)
-          FROM `access_log`
-          WHERE `period` < '$month'
-            AND `period` >= '$year'
-            AND `aggregate` < '60'
-          GROUP BY `module`, `action`, date_format(`period`, '%Y-%m-%d 00:00:00'), `bot`
-          ORDER BY `accesslog_id`";
-
-$ds->exec($query);
-
-// Suppression des journaux vieux de plus d'un mois et de moins d'une année
-$query = "DELETE
-          FROM `access_log`
-          WHERE `period` < '$month'
-            AND `period` >= '$year'
-            AND `aggregate` < '60'";
-
-$ds->exec($query);
-
-// Récupération des IDs des journaux agrégés de plus d'un an qui viennent d'être insérés
-$query = "SELECT `accesslog_id`, `accesslog_id`
-          FROM `access_log`
-          WHERE `period` < '$year'
-            AND `aggregate` > '60'
-            AND `accesslog_id` > '$last_ID'
-          ORDER BY `accesslog_id`";
-
-$year_IDs_to_insert = $ds->loadHashList($query);
-
-// Récupération des IDs des journaux agrégés de plus d'un mois et moins d'un an qui viennent d'être insérés
-$query = "SELECT `accesslog_id`, `accesslog_id`
-          FROM `access_log`
-          WHERE `period` < '$month'
-            AND `period` >= '$year'
-            AND `aggregate` > '10'
-            AND `accesslog_id` > '$last_ID'
-          ORDER BY `accesslog_id`";
-
-$month_IDs_to_insert = $ds->loadHashList($query);
-
-$IDs_to_insert = array_merge($year_IDs_to_insert, $month_IDs_to_insert);
-
-$msg = "%d access logs inserted from %s";
-if ($oldest) {
-  $msg = "%d access logs inserted from %s to %s";
-}
-
-CAppUI::stepAjax($msg, UI_MSG_OK, count($IDs_to_insert), CMbDT::date($year), CMbDT::date($oldest));
-
-foreach ($IDs_to_aggregate as $key => $ids) {
-  $id = $IDs_to_insert[$key];
-
-  // Compression des journaux de sources de données
-  $query = "INSERT INTO `datasource_log` (
-            `datasource`,
-            `requests`,
-            `duration`,
-            `accesslog_id`
-          )
-          SELECT
-            `datasource`,
-            SUM(`requests`),
-            SUM(`duration`),
-            $id
-          FROM `datasource_log`
-          WHERE `accesslog_id` IN ($ids)
-          GROUP BY `datasource`";
-
-  $ds->exec($query);
-
-  // Compression des journaux de sources de données
-  $query = "DELETE
-            FROM `datasource_log`
-            WHERE `accesslog_id` IN ($ids)";
-
-  $ds->exec($query);
-}
+$msg = "%d access logs inserted from %s to %s";
+CAppUI::stepAjax($msg, UI_MSG_OK, count($IDs_to_aggregate), CMbDT::date($oldest_from), CMbDT::date($oldest_to));

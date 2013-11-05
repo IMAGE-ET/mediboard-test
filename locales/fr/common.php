@@ -186,6 +186,7 @@ $locales['Import'] = 'Importer';
 $locales['Import-CSV'] = 'Importer un fichier CSV';
 $locales['Imports/Exports'] = 'Imports/Exports';
 $locales['Impossible'] = 'Impossible';
+$locales['Indexes'] = 'Indexes';
 $locales['Info'] = 'Info';
 $locales['Information'] = 'Information';
 $locales['Infos'] = 'Infos';
