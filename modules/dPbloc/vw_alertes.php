@@ -8,9 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$type    = CValue::get("type", "week");
-$date    = CValue::get("date", CMbDT::date());
-$bloc_id = CValue::get("bloc_id");
+$type       = CValue::get("type", "week");
+$date       = CValue::get("date", CMbDT::date());
+$bloc_id    = CValue::get("bloc_id");
+$edit_mode  = CValue::get("edit_mode");
 
 if ($type == "week") {
   $date = CMbDT::date("last sunday", $date);
@@ -104,9 +105,10 @@ foreach ($listHorsPlage as &$op) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("blocs"    ,       $listBlocs);
-$smarty->assign("nbAlertes"    ,       $nbAlertes);
-$smarty->assign("listNonValidees", $listNonValidees       );
-$smarty->assign("listHorsPlage"  , $listHorsPlage         );
+$smarty->assign("blocs"           , $listBlocs);
+$smarty->assign("nbAlertes"       , $nbAlertes);
+$smarty->assign("listNonValidees" , $listNonValidees);
+$smarty->assign("listHorsPlage"   , $listHorsPlage);
+$smarty->assign("edit_mode"       , $edit_mode);
 
 $smarty->display("vw_alertes.tpl");

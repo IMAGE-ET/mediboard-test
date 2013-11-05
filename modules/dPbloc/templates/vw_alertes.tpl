@@ -45,7 +45,7 @@
       <th>Intervention</th>
     </tr>
     {{foreach from=$listHorsPlage item=_operation}}
-      {{mb_include module=bloc template=inc_line_alerte is_alerte=0}}
+      {{mb_include module=bloc template=inc_line_alerte is_alerte=0 edit_mode=$edit_mode}}
     {{/foreach}}
   {{/if}}
 </table>
