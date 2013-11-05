@@ -23,7 +23,8 @@ if (!file_exists($flag_path)) {
   exit(0);
 }
 
-if (filemtime($flag_path)+10 < time()) {
+$ttl = 120;
+if (filemtime($flag_path)+$ttl < time()) {
   echo "Flag path too old, exiting\n";
   exit(0);
 }
