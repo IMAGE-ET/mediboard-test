@@ -51,6 +51,9 @@ then
   check_errs $? "Wrong parameters" "Successfully updated"
 fi
 
+info_script "Install libs"
+php $MB_PATH/install/cli/install_libs.php
+
 # File must exists (touch doesn't override)
 touch $BASH_PATH/rsyncupdate.exclude
 
