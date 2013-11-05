@@ -60,7 +60,6 @@ touch $BASH_PATH/rsyncupdate.exclude
 # Rsyncing -- Parsing rsyncupdate.conf
 if [ "$action" != "info" ]
 then
-  touch $MB_PATH/tmp/clearcache.flag
   while read line
   do
     first_character=$(expr substr "$line" 1 1)
@@ -70,6 +69,7 @@ then
       echo "Do you want to update $line (y or n) [default n] ? \c" ; read REPLY < /dev/tty
       if [ "$REPLY" = "y" ] ; then
         echo "-- Rsync $line --"
+        touch $MB_PATH/tmp/clearcache.flag
         eval rsync -avpgz $dry_run --stats $MB_PATH/ --delete $line --exclude-from=$BASH_PATH/rsyncupdate.exclude \
           --exclude includes/config_overload.php \
           --exclude /tmp \
