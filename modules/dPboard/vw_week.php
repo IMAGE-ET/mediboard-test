@@ -96,12 +96,13 @@ for ($i = 0; $i < 7; $i++) {
   foreach ($plagesConsult as $_consult) {
     $_consult->loadFillRate();
     $_consult->countPatients();
+    $_consult->loadRefChir();
     $class = null;
     if ($_consult->pour_tiers) {
       $class = "pour_tiers";
     }
     if (CModule::getActive("3333tel")) {
-      C3333TelTools::checkPlagesConsult($_consult);
+      C3333TelTools::checkPlagesConsult($_consult, $_consult->_ref_chir->function_id);
     }
     ajoutEvent($planning, $_consult, $date, $_consult->libelle, $color, "consultation", $class);
   }
