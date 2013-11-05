@@ -33,10 +33,11 @@ $last_month = CMbDT::transform("- 1 MONTH", CMbDT::dateTime(), "%Y-%m-%d 00:00:0
 $last_year  = CMbDT::transform("- 1 YEAR",  CMbDT::dateTime(), "%Y-%m-%d 00:00:00");
 
 // Get the oldest log to aggregate
-$query = "SELECT MIN(`period`)
+$query = "SELECT `period`
           FROM `access_log`
           WHERE `period` <= '$last_month'
-            AND `aggregate` <= IF (`period` <= '$last_year', '$avg_agg', '$std_agg');";
+            AND `aggregate` <= IF (`period` <= '$last_year', '$avg_agg', '$std_agg')
+          ORDER BY `period` LIMIT 1;";
 
 $oldest_from = $ds->loadResult($query);
 
