@@ -60,7 +60,7 @@ touch $BASH_PATH/rsyncupdate.exclude
 # Rsyncing -- Parsing rsyncupdate.conf
 if [ "$action" != "info" ]
 then
-
+  touch $MB_PATH/tmp/clearcache.flag
   while read line
   do
     first_character=$(expr substr "$line" 1 1)
@@ -81,6 +81,22 @@ then
         eval rsync -avzp $dry_run $MB_PATH/tmp/svnlog.txt $line/tmp/
         eval rsync -avzp $dry_run $MB_PATH/tmp/svnstatus.txt $line/tmp/
         eval rsync -avzp $dry_run $MB_PATH/tmp/monitevent.txt $line/tmp/
+        eval rsync -avzp $dry_run $MB_PATH/tmp/clearcache.flag $line/tmp/
+
+        # Call clear apc cache
+        path=$(echo $line|grep -P "(/var/www/html|/var/www|/srv/www/htdocs).*" -o)
+        echo $path
+        path=${path#/var/www/html/}
+        path=${path#/var/www/}
+        path=${path#/srv/www/htdocs/}
+        ip="localhost"
+
+        if [ "$first_character" != "/" ]
+        then
+          ip=$(echo $line|grep -P "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+" -o)
+        fi
+
+        wget "http://$ip/$path/modules/system/public/clear_apc_cache.php -O -"
       fi
     fi
   done < $conf_file
