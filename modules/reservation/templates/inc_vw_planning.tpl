@@ -11,11 +11,12 @@
 {{mb_script module=ssr script=planning ajax=1}}
 
 <script>
-  showAlerte = function(date, bloc_id, type) {
+  showAlerte = function(date, bloc_id, type, edit) {
     var url = new Url("dPbloc", "vw_alertes");
     url.addParam("date"   , date);
     url.addParam("type"   , type);
     url.addParam("bloc_id", bloc_id);
+    url.addParam("edit_mode", edit);
     url.requestModal(800, 500);
     url.modalObject.observe("afterClose", function() {
       refreshPlanning();
@@ -56,7 +57,7 @@
 </style>
   {{if $can->edit && ($nbIntervNonPlacees || $nbIntervHorsPlage || $nbAlertesInterv)}}
   <div class="warning" style="margin:0 auto">
-    <a href="#nothing" onclick="showAlerte('{{$date_planning}}', '{{$bloc_id}}', 'day')">
+    <a href="#nothing" onclick="showAlerte('{{$date_planning}}', '{{$bloc_id}}', 'day', 1)">
       {{if $nbAlertesInterv}}
         {{$nbAlertesInterv}} alerte(s) sur des interventions<br/>
       {{/if}}
