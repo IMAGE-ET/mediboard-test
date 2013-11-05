@@ -73,7 +73,6 @@ then
         eval rsync -avpgz $dry_run --stats $MB_PATH/ --delete $line --exclude-from=$BASH_PATH/rsyncupdate.exclude \
           --exclude includes/config_overload.php \
           --exclude /tmp \
-          --exclude /lib \
           --exclude /files \
           --exclude includes/config.php \
           --exclude modules/hprimxml/xsd \
