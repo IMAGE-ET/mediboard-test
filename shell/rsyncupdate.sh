@@ -60,7 +60,6 @@ touch $BASH_PATH/rsyncupdate.exclude
 # Rsyncing -- Parsing rsyncupdate.conf
 if [ "$action" != "info" ]
 then
-
   while read line
   do
     first_character=$(expr substr "$line" 1 1)
@@ -70,6 +69,7 @@ then
       echo "Do you want to update $line (y or n) [default n] ? \c" ; read REPLY < /dev/tty
       if [ "$REPLY" = "y" ] ; then
         echo "-- Rsync $line --"
+        touch $MB_PATH/tmp/clearcache.flag
         eval rsync -avpgz $dry_run --stats $MB_PATH/ --delete $line --exclude-from=$BASH_PATH/rsyncupdate.exclude \
           --exclude includes/config_overload.php \
           --exclude /tmp \
@@ -81,6 +81,28 @@ then
         eval rsync -avzp $dry_run $MB_PATH/tmp/svnlog.txt $line/tmp/
         eval rsync -avzp $dry_run $MB_PATH/tmp/svnstatus.txt $line/tmp/
         eval rsync -avzp $dry_run $MB_PATH/tmp/monitevent.txt $line/tmp/
+        eval rsync -avzp $dry_run $MB_PATH/tmp/clearcache.flag $line/tmp/
+
+        # Call clear apc cache
+        path=$(echo $line|grep -P "(/var/www/html|/var/www|/srv/www/htdocs).*" -o)
+        path=${path#/var/www/html/}
+        path=${path#/var/www/}
+        path=${path#/srv/www/htdocs/}
+        ip="localhost"
+
+        if [ "$first_character" != "/" ]
+        then
+          ip=$(echo $line|grep -P "([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+|@[a-zA-Z\-0-9]+:)" -o)
+        fi
+        first_character_ip=$(expr substr "$ip" 1 1)
+        if [ "$first_character_ip" = "@" ]
+        then
+          ip=$(echo $ip|sed 's/.\{1\}//'|sed 's/.$//')
+        fi
+
+        url="http://$ip/$path/modules/system/public/clear_apc_cache.php"
+        info_script "-- Clearing apc cache // $url --"
+        wget $url -q -O -
       fi
     fi
   done < $conf_file
