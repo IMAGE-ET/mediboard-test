@@ -84,8 +84,8 @@ then
         eval rsync -avzp $dry_run $MB_PATH/tmp/clearcache.flag $line/tmp/
 
         # Call clear apc cache
+        info_script "-- Clearing apc cache --"
         path=$(echo $line|grep -P "(/var/www/html|/var/www|/srv/www/htdocs).*" -o)
-        echo $path
         path=${path#/var/www/html/}
         path=${path#/var/www/}
         path=${path#/srv/www/htdocs/}
@@ -96,7 +96,7 @@ then
           ip=$(echo $line|grep -P "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+" -o)
         fi
 
-        wget "http://$ip/$path/modules/system/public/clear_apc_cache.php -O -"
+        wget "http://$ip/$path/modules/system/public/clear_apc_cache.php" -q -O -
       fi
     fi
   done < $conf_file
