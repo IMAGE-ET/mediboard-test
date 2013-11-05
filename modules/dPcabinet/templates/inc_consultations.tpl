@@ -117,6 +117,9 @@
         {{else}}
           {{$_consult->rques|truncate:35:"...":false|nl2br}}
         {{/if}}
+        {{if @$modules.3333tel->mod_active}}
+          {{mb_include module=3333tel template=inc_check_3333tel object=$_consult tiny=1}}
+        {{/if}}
       </td>
       <td {{$style|smarty:nodefaults}}>
         <form name="etatFrm{{$_consult->_id}}" action="?m=dPcabinet" method="post">

@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -64,7 +64,11 @@ foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
   $consultation->loadRefSejour(1);
   $consultation->loadRefPatient(1);
   $consultation->loadRefCategorie(1);
-  $consultation->countDocItems();    
+  $consultation->countDocItems();
+  //check 3333tel
+  if (CModule::getActive("3333tel")) {
+    C3333TelTools::checkConsults($consultation, $plageSel->_ref_chir->function_id);
+  }
 }
 
 if ($plageSel->chir_id != $chirSel && $plageSel->remplacant_id != $chirSel &&  $plageSel->pour_compte_id != $chirSel) {
