@@ -142,8 +142,13 @@ class CHPrimXMLEvenements extends CHPrimXMLDocument {
    */
   function getHeure(DOMNode $node) {
     $xpath = new CHPrimXPath($node->ownerDocument);
+
+    $heure = $xpath->queryTextNode("hprim:heure", $node);
+    if ($heure) {
+      return CMbDT::time($heure);
+    }
     
-    return $xpath->queryTextNode("hprim:heure", $node);
+    return null;
   }
 
   /**
