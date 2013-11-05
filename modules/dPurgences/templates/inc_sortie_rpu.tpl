@@ -143,9 +143,9 @@
     {{if $sejour->mode_sortie == "mutation" && $sejour->service_sortie_id}}
       {{assign var=service_id value=$sejour->service_sortie_id}}
       {{assign var=service value=$services.$service_id}}
-      <br />&gt; <strong>{{$service}}</strong>
+      <br />Vers: <strong>{{$service}}</strong>
       {{foreach from=$rpu->_ref_sejour_mutation->_ref_affectations item=_affectation}}
-        <br />&gt;&gt; <strong>{{$_affectation}}</strong>
+        &rarr; <strong>{{$_affectation}}</strong>
       {{/foreach}}
     {{/if}}
 
