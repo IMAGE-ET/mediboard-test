@@ -52,7 +52,14 @@
         {{if $operation->_id}}
         <tr>
           <td colspan="2" class="text">
-            Intervention le <strong>{{$operation->_ref_plageop->date|date_format:"%A %d/%m/%Y"}}</strong>
+            Intervention le
+            <strong>
+              {{if $operation->_ref_plageop->_id}}
+                {{$operation->_ref_plageop->date|date_format:"%A %d/%m/%Y"}}
+              {{else}}
+                {{$operation->date|date_format:"%A %d/%m/%Y"}}
+              {{/if}}
+            </strong>
             {{if $operation->libelle}}
               - {{$operation->libelle}}
             {{/if}}
