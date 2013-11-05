@@ -1258,6 +1258,15 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   /**
+   * Chargement de la salle concernée
+   *
+   * @return CSalle
+   */
+  function loadRefSalle() {
+    return $this->_ref_salle = $this->loadRefsFwd("salle_id", true);
+  }
+
+  /**
    * @see parent::loadRefsFwd()
    */
   function loadRefsFwd($cache = true) {
