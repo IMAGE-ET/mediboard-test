@@ -91,6 +91,8 @@ class CSetupdPccam extends CSetup {
     $this->addPrefQuery("user_executant", "0");
 
     $this->makeRevision("0.18");
+    $this->addDependency("dPcabinet", "0.1");
+    $this->addDependency("dPplanningOp", "0.1");
 
     $query = "ALTER TABLE `frais_divers`
                 ADD `execution` DATETIME NOT NULL;";
