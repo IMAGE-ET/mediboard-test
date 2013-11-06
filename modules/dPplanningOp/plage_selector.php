@@ -16,9 +16,7 @@ $chir         = CValue::get("chir"         , 0);
 $date         = CValue::getOrSession("date_plagesel", CMbDT::date());
 $group_id     = CValue::get("group_id"     , CGroups::loadCurrent()->_id);
 $operation_id = CValue::get("operation_id" , null);
-$curr_op_hour = CValue::get("curr_op_hour" , "25");
-$curr_op_min  = CValue::get("curr_op_min"  , "00");
-
+$curr_op_time = CValue::get("curr_op_time" , "25:00");
 $resp_bloc = CModule::getInstalled("dPbloc")->canEdit();
 
 // Liste des mois selectionnables
@@ -70,7 +68,8 @@ foreach ($blocs as $_bloc) {
   }
 }
 
-$nb_secondes = $curr_op_hour*3600 + $curr_op_min*60;
+$time = explode(":", $curr_op_time);
+$nb_secondes = $time[0]*3600 + $time[1]*60;
 
 $_plage = new CPlageOp();
 foreach ($listPlages as &$_bloc) {
@@ -108,8 +107,7 @@ $smarty->assign("listMonthes" , $listMonthes);
 $smarty->assign("operation_id", $operation_id);
 $smarty->assign("chir"        , $chir);
 $smarty->assign("group_id"    , $group_id);
-$smarty->assign("curr_op_hour", $curr_op_hour);
-$smarty->assign("curr_op_min" , $curr_op_min);
+$smarty->assign("curr_op_time", $curr_op_time);
 $smarty->assign("blocs"       , $blocs);
 $smarty->assign("listPlages"  , $listPlages);
 

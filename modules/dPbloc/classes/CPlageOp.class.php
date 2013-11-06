@@ -335,8 +335,7 @@ class CPlageOp extends CMbObject {
         if ($plage_multipraticien && ($action & self::RANK_VALIDATE)) {
           if ($prev_op->_id) {
             $op->time_operation = max($new_time, $op->horaire_voulu);
-            
-            $prev_op->_pause_hour = $prev_op->_pause_min = null; // FIXME ARHHHH
+
             $prev_op->pause = CMbDT::subTime($new_time, $op->time_operation);
             $prev_op->store(false);
           }

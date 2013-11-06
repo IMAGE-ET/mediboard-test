@@ -12,8 +12,7 @@
     this.sCodes_ccam    = "codes_ccam";
     this.sCote          = "cote";
     this.sLibelle       = "libelle";
-    this.sHour_op       = "_hour_op";
-    this.sMin_op        = "_min_op";
+    this.sTime_op       = "_time_op";
     this.sMateriel      = "materiel";
     this.sExamen        = "examen";
     this.sDepassement   = "depassement";

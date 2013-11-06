@@ -117,11 +117,8 @@ class COperation extends CCodable implements IPatientRelated {
   public $autorisation_anesth;
 
   // Form fields
-  public $_hour_op;
-  public $_min_op;
-
-  public $_hour_urgence;
-  public $_min_urgence;
+  public $_time_op;
+  public $_time_urgence;
   public $_lu_type_anesth;
   public $_codes_ccam = array();
   public $_fin_prevue;
@@ -130,12 +127,8 @@ class COperation extends CCodable implements IPatientRelated {
   public $_duree_induction;
   public $_presence_salle;
   public $_duree_sspi;
-  public $_hour_voulu;
-  public $_min_voulu;
   public $_deplacee;
   public $_compteur_jour;
-  public $_pause_min;
-  public $_pause_hour;
   public $_protocole_prescription_anesth_id;
   public $_protocole_prescription_chir_id;
   public $_move;
@@ -378,14 +371,11 @@ class COperation extends CCodable implements IPatientRelated {
     $props["_bloc_id"]                = "ref class|CBlocOperatoire";
     $props["_specialite"]             = "text";
     $props["_ccam_libelle"]           = "bool default|1";
-    $props["_hour_op"]                = "";
-    $props["_min_op"]                 = "";
+    $props["_time_op"]                = "time";
     $props["_datetime"]               = "dateTime show";
     $props["_datetime_reel"]          = "dateTime";
     $props["_datetime_reel_fin"]      = "dateTime";
     $props["_datetime_best"]          = "dateTime";
-    $props["_pause_min"]              = "numchar length|2";
-    $props["_pause_hour"]             = "numchar length|2";
     $props["_move"]                   = "str";
     $props["_password_visite_anesth"] = "password notNull";
     $props["_heure_us"]               = "time";
@@ -506,21 +496,8 @@ class COperation extends CCodable implements IPatientRelated {
    */
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_hour_op = intval(substr($this->temp_operation, 0, 2));
-    $this->_min_op  = intval(substr($this->temp_operation, 3, 2));
-    $this->_hour_urgence = intval(substr($this->time_operation, 0, 2));
-    $this->_min_urgence  = intval(substr($this->time_operation, 3, 2));
-
-    if ($this->horaire_voulu) {
-      $this->_hour_voulu = intval(substr($this->horaire_voulu, 0, 2));
-      $this->_min_voulu  = intval(substr($this->horaire_voulu, 3, 2));
-      $this->_horaire_voulu = $this->horaire_voulu;
-    }
-
-    if ($this->pause) {
-      $this->_pause_hour = intval(substr($this->pause, 0, 2));
-      $this->_pause_min  = intval(substr($this->pause, 3, 2));
-    }
+    $this->_time_op = $this->temp_operation;
+    $this->_time_urgence = $this->time_operation;
 
     $this->_ref_type_anesth = $this->loadFwdRef("type_anesth", true);
     $this->_lu_type_anesth = $this->_ref_type_anesth->name;
@@ -575,20 +552,14 @@ class COperation extends CCodable implements IPatientRelated {
       }
       $this->codes_ccam = implode("|", $codes_ccam);
     }
-    if ($this->_hour_op !== null and $this->_min_op !== null) {
-      $this->temp_operation = sprintf("%02d:%02d:00", $this->_hour_op, $this->_min_op);
+    if ($this->_time_op !== null) {
+      $this->temp_operation = $this->_time_op;
     }
-    if ($this->_hour_urgence !== null and $this->_min_urgence !== null) {
-      $this->time_operation = sprintf("%02d:%02d:00", $this->_hour_urgence, $this->_min_urgence);
-    }
-    if ($this->_hour_voulu != null and $this->_min_voulu != null) {
-      $this->horaire_voulu = sprintf("%02d:%02d:00", $this->_hour_voulu, $this->_min_voulu);
+    if ($this->_time_urgence !== null) {
+      $this->time_operation = $this->_time_urgence;
     }
     elseif ($this->_horaire_voulu) {
       $this->horaire_voulu = $this->_horaire_voulu;
-    }
-    if ($this->_pause_hour !== null and $this->_pause_min !== null) {
-      $this->pause = sprintf("%02d:%02d:00", $this->_pause_hour, $this->_pause_min);
     }
 
     $this->completeField('rank', 'plageop_id');

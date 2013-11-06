@@ -158,8 +158,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     
     // Traitement de la date/heure début, et durée de l'opération
     $operation->temp_operation = CMbDT::subTime(CMbDT::time($debut), CMbDT::time($fin));
-    $operation->_hour_op       = null;
-    $operation->_min_op        = null;
+    $operation->_time_op       = null;
 
     // Si une intervention du passée    
     if (CMbDT::date($debut) < CMbDT::date()) {
@@ -174,8 +173,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     }
     // Si dans le futur
     else {
-      $operation->_hour_urgence  = null;
-      $operation->_min_urgence   = null;
+      $operation->_time_urgence  = null;
       $operation->time_operation = CMbDT::time($debut);
     }
     

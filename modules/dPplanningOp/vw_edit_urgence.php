@@ -115,8 +115,9 @@ if ($op->_id) {
 }
 else {
   if ($hour_urgence && isset($min_urgence)) {
-    $op->_hour_urgence = intval(substr($hour_urgence, 0, 2));
-    $op->_min_urgence  = intval(substr($min_urgence, 0, 2));
+    $hour = intval(substr($hour_urgence, 0, 2));
+    $min = intval(substr($min_urgence, 0, 2));
+    $op->_time_urgence = "$hour:$min:00";
   }
 
   $op->date = $op->_datetime = $date_urgence ? $date_urgence : CMbDT::date();

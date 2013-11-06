@@ -7,17 +7,6 @@ function showProgramme(plage_id) {
   url.requestUpdate("prog_plageop");
 }
 
-function setMinVouluPlage() {
-  oForm= getForm("plageSelectorFrm");
-  if(oForm._hour_voulu.value && !oForm._min_voulu.value) {
-    //oForm._min_voulu.value = "00";
-    $V(oForm._min_voulu, "00");
-  } else if(!oForm._hour_voulu.value) {
-    //oForm._min_voulu.value = "";
-    $V(oForm._min_voulu, "");
-  }
-}
-
 function setClose(date, salle_id) {
   var oForm = getForm("plageSelectorFrm");
   
@@ -79,8 +68,7 @@ Main.add(function () {
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="a" value="plage_selector" />
         <input type="hidden" name="dialog" value="1" />
-        <input type="hidden" name="curr_op_hour" value="{{$curr_op_hour}}" />
-        <input type="hidden" name="curr_op_min" value="{{$curr_op_min}}" />
+        <input type="hidden" name="curr_op_time" value="{{$curr_op_time}}" />
         <input type="hidden" name="chir" value="{{$chir}}" />
         <input type="hidden" name="group_id" value="{{$group_id}}" />
         <input type="hidden" name="operation_id" value="{{$operation_id}}" />

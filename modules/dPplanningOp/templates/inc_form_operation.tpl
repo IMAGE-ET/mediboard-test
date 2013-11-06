@@ -27,8 +27,7 @@ PlageOpSelector.init = function(){
   this.s_min_entree_prevue  = "_min_entree_prevue";
   this.s_date_entree_prevue = "_date_entree_prevue";
   
-  this.pop(oOpForm.chir_id.value, oOpForm._hour_op.value,
-           oOpForm._min_op.value, oSejourForm.group_id.value,
+  this.pop(oOpForm.chir_id.value, oOpForm._time_op.value, oSejourForm.group_id.value,
            oOpForm.operation_id.value);
 };
 
@@ -282,25 +281,21 @@ refreshFunction = function(chir_id) {
     </td>
   </tr> 
   {{/if}}
-  
 
   <tr>
-    <th>{{mb_label object=$op field="_hour_op"}}</th>
+    <th>{{mb_label object=$op field="_time_op"}}</th>
     <td>
-      <select name="_hour_op" class="notNull num">
-      {{foreach from=$hours_duree|smarty:nodefaults item=hour}}
-        <option value="{{$hour}}" {{if (!$op && $hour == 1) || $op->_hour_op == $hour}} selected="selected" {{/if}}>{{$hour}}</option>
-      {{/foreach}}
-      </select> h
-      <select name="_min_op">
-      {{foreach from=$mins_duree|smarty:nodefaults item=min}}
-        <option value="{{$min}}" {{if (!$op && $min == 0) || $op->_min_op == $min}} selected="selected" {{/if}}>{{$min}}</option>
-      {{/foreach}}
-      </select> min
+      <input name="_time_op" class="notNull time" type="hidden" value="{{$op->_time_op}}"/>
     </td>
     <td id="timeEst">
     </td>
   </tr>
+
+  <script>
+    Main.add(function() {
+      Calendar.regField(getForm("editOp")._time_op, null, {datePicker:false, timePicker:true});
+    });
+  </script>
   
   <tr>
     {{if $modurgence}}
@@ -335,16 +330,13 @@ refreshFunction = function(chir_id) {
         </script>
         
         à
-        <select name="_hour_urgence" onchange="Value.synchronize(this)">
-        {{foreach from=$hours_urgence|smarty:nodefaults item=hour}}
-          <option value="{{$hour}}" {{if $op->_hour_urgence == $hour}} selected="selected" {{/if}}>{{$hour}}</option>
-        {{/foreach}}
-        </select> h
-        <select name="_min_urgence" onchange="Value.synchronize(this);">
-        {{foreach from=$mins_duree|smarty:nodefaults item=min}}
-          <option value="{{$min}}" {{if $op->_min_urgence == $min}}selected="selected"{{/if}}>{{$min}}</option>
-        {{/foreach}}
-        </select> min
+        <input name="_time_urgence" class="notNull time" type="hidden" value="{{$op->_time_urgence}}"/>
+
+        <script>
+          Main.add(function() {
+            Calendar.regField(getForm("editOp")._time_urgence, null, {datePicker:false, timePicker:true});
+          });
+        </script>
       </td>
     {{else}}
       <th>

@@ -18,7 +18,7 @@ $time_operation = CValue::post("time_operation");
 $operation = new COperation();
 $operation->load($copy_operation_id);
 
-$operation->_id = $operation->_hour_urgence = $operation->_min_urgence = null;
+$operation->_id = $operation->_time_urgence = null;
 $operation->date = $date;
 $operation->salle_id = $salle_id;
 $operation->sejour_id = $sejour_id;

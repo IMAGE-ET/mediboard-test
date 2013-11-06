@@ -90,8 +90,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
 
     // Protocole
     $protocole = new CProtocole();
-    $protocole->_hour_op    = null;
-    $protocole->_min_op     = null;
+    $protocole->_time_op    = null;
     $protocole->for_sejour  = 0;
     $protocole->libelle     = $results[$i]["motif"];
     if ($prat->_id) {

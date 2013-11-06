@@ -66,8 +66,7 @@ class CProtocole extends CMbObject {
 
   // Form fields
   public $_owner;
-  public $_hour_op;
-  public $_min_op;
+  public $_time_op;
   public $_codes_ccam = array();
   public $_types_ressources_ids;
 
@@ -155,8 +154,7 @@ class CProtocole extends CMbObject {
     $props["protocole_prescription_anesth_id"]    = "ref class|CMbObject meta|protocole_prescription_anesth_class";
     $props["protocole_prescription_anesth_class"] = "enum list|CPrescription|CPrescriptionProtocolePack";
 
-    $props["_hour_op"]        = "num";
-    $props["_min_op"]         = "num";
+    $props["_time_op"]        = "time";
     $props["_owner"]          = "enum list|user|function|group";
 
     return $props;
@@ -185,8 +183,7 @@ class CProtocole extends CMbObject {
       $this->_codes_ccam = array();
     }
 
-    $this->_hour_op = intval(substr($this->temp_operation, 0, 2));
-    $this->_min_op  = intval(substr($this->temp_operation, 3, 2));
+    $this->_time_op = intval(substr($this->temp_operation, 0, 4));
 
     if ($this->libelle_sejour) {
       $this->_view = $this->libelle_sejour;
@@ -225,10 +222,8 @@ class CProtocole extends CMbObject {
       }
       $this->codes_ccam = implode("|", $codes_ccam);
     }
-    if ($this->_hour_op !== null and $this->_min_op !== null) {
-      $this->temp_operation =
-        $this->_hour_op.":".
-        $this->_min_op.":00";
+    if ($this->_time_op !== null) {
+      $this->temp_operation = CMbDT::transform(null, $this->_time_op, "%H:%M:00");
     }
   }
 

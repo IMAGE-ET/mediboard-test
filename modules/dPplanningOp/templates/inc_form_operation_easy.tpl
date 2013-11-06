@@ -204,16 +204,13 @@
         });
       </script>
       à
-      <select name="_hour_urgence" onchange="Value.synchronize(this)">
-      {{foreach from=$hours_urgence|smarty:nodefaults item=hour}}
-        <option value="{{$hour}}" {{if $op->_hour_urgence == $hour}} selected="selected" {{/if}}>{{$hour}}</option>
-      {{/foreach}}
-      </select> h
-      <select name="_min_urgence" onchange="Value.synchronize(this);">
-      {{foreach from=$mins_duree|smarty:nodefaults item=min}}
-        <option value="{{$min}}" {{if $op->_min_urgence == $min}}selected="selected"{{/if}}>{{$min}}</option>
-      {{/foreach}}
-      </select> mn
+      <input name="_time_urgence" class="notNull time" type="hidden" value="{{$op->_time_urgence}}"/>
+
+      <script>
+        Main.add(function() {
+          Calendar.regField(getForm("editOpEasy")._time_urgence, null, {datePicker:false, timePicker:true});
+        });
+      </script>
     </td>
   </tr>
   

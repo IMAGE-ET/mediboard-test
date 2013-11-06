@@ -24,12 +24,11 @@ PlageOpSelector = {
   
   options : {},
 
-  pop: function(iChir, iHour_op, iMin_op, iGroup_id, iOperation_id) {
+  pop: function(iChir, iTime_op, iGroup_id, iOperation_id) {
     if (checkChir() && checkDuree()) {
       var url = new Url("dPplanningOp", "plage_selector");
       url.addParam("chir"        , iChir);
-      url.addParam("curr_op_hour", iHour_op);
-      url.addParam("curr_op_min" , iMin_op);
+      url.addParam("curr_op_time", iTime_op);
       url.addParam("group_id"    , iGroup_id);
       url.addParam("operation_id", iOperation_id);
       url.modal(this.options);

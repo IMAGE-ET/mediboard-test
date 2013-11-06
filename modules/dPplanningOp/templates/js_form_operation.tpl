@@ -38,15 +38,14 @@ function refreshListCCAM(mode) {
 
 function updateTime() {
   var oForm = document.editOp;
+	
   if(oForm.chir_id.value) {
-    var timeUrl = new Url;
-    timeUrl.setModuleAction("dPplanningOp", "httpreq_get_op_time");
+    var timeUrl = new Url("dPplanningOp", "httpreq_get_op_time");
     timeUrl.addElement(oForm.chir_id, "chir_id");
     timeUrl.addElement(oForm.codes_ccam, "codes");
     timeUrl.requestUpdate('timeEst');
     
-    var dureeUrl = new Url;
-    timeUrl.setModuleAction("dPplanningOp", "httpreq_get_hospi_time");
+    var dureeUrl = new Url("dPplanningOp", "httpreq_get_hospi_time");
     timeUrl.addElement(oForm.chir_id, "chir_id");
     timeUrl.addElement(oForm.codes_ccam, "codes");
     timeUrl.requestUpdate('dureeEst');
@@ -55,24 +54,7 @@ function updateTime() {
 
 function checkFormOperation() {
   var oForm = document.editOp;
-  
-  if (!checkForm(oForm)) {
-    return false;
-  }
-
-  if (!checkDuree()) {
-    return false;
-  }
-  
-  if(!checkCCAM()) {
-    return false;
-  }
-  
-  if(!checkCompatOpAdm()) {
-    return false;
-  }
-
-  return true;
+  return checkForm(oForm) && checkDuree() && checkCCAM() && checkCompatOpAdm();
 }
 
 function checkCCAM() {
@@ -109,23 +91,13 @@ function checkChir() {
 
 function checkDuree() {
   var form = document.editOp;
-  var formEasy = document.editOpEasy;
-  field1 = form._hour_op;
-  field2 = form._min_op;
-  field1Easy = formEasy._hour_voulu;
-  
-  if (field1 && field2) {
-    if (field1.value == 0 && field2.value == 0) {
-      alert("Temps opératoire invalide");
-      try {
-        field1.focus();
-      } catch(e) {}
-      try {
-        field1Easy.focus();
-      } catch(e2) {}
-      return false;
-    }
+  var field1 = form._time_op;
+
+  if (field1 && field1.value == "00:00:00") {
+    alert("Temps opératoire invalide");
+    return false;
   }
+
   return true;
 }
 
@@ -153,16 +125,6 @@ function checkCompatOpAdm() {
 
 function modifOp() {
   modifSejour();
-}
-
-function setMinVoulu(oForm) {
-  if(oForm._hour_voulu.value && !oForm._min_voulu.value) {
-    oForm._min_voulu.value = "00";
-    oForm._min_voulu.onchange();
-  } else if(!oForm._hour_voulu.value) {
-    oForm._min_voulu.value = "";
-    oForm._min_voulu.onchange();
-  }
 }
 
 function synchroPrat() {
