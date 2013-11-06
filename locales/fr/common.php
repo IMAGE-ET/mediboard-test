@@ -168,6 +168,7 @@ $locales['Field'] = 'Champ';
 $locales['File'] = 'Fichier';
 $locales['Filter'] = 'Filtrer';
 $locales['FormObserver-msg-confirm'] = 'Vous avez modifié certaines informations sur cette page sans les sauvegarder. Si vous cliquez sur OK, ces données seront perdues.';
+$locales['Free'] = 'Libre';
 $locales['From'] = 'De';
 $locales['From_Today'] = 'D\'aujourd\'hui';
 $locales['Function'] = 'Fonction';
