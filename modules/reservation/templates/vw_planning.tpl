@@ -15,6 +15,10 @@
 
 <script>
 
+function strpad(val){
+  return (!isNaN(val) && val.toString().length==1) ? "0" + val : val;
+}
+
 togglePlayPause = function(button) {
   button.toggleClassName("play");
   button.toggleClassName("pause");
