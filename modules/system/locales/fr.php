@@ -197,6 +197,7 @@ $locales['CContentXML-title-modify'] = 'Modification de contenu XML';
 $locales['CContentXML.all'] = 'Tous les contenus XML';
 $locales['CContentXML.none'] = 'Aucun contenu XML';
 $locales['CContentXML.one'] = 'Un contenu XML';
+$locales['CDataSourceLog.none'] = 'Aucun log de source de données';
 $locales['CEAIDispatcher-_family_message_no_supported_for_this_actor'] = 'Le message \'%s\' est compris mais n\'est pas supporté par cet utilisateur Mediboard. Veuillez contacter votre administrateur.';
 $locales['CEAIDispatcher-message_dispatch'] = 'Message retraité';
 $locales['CEAIDispatcher-no_actor'] = 'Aucun utilisateur Mediboard associé à ce message. Veuillez contacter votre administrateur.';
