@@ -277,6 +277,7 @@ $locales['Reminder'] = 'Pense-bête';
 $locales['Remove'] = 'Supprimer';
 $locales['Rendez-vous'] = 'Rendez-vous';
 $locales['Repair'] = 'Réparer';
+$locales['Repeat'] = 'Répéter';
 $locales['Report'] = 'Rapport';
 $locales['Reprocess'] = 'Retraiter';
 $locales['Reprocessing'] = 'Retraiter';
