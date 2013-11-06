@@ -600,7 +600,7 @@ Element.addMethods({
   },
   getText: function(element) {
     // using || may not work
-    return ("innerText" in element ? element.innerText : element.textContent)+"";
+    return ("textContent" in element ? element.textContent : element.innerText)+"";
   },
 
   /**
