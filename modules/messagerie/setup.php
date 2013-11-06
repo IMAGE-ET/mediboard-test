@@ -147,6 +147,11 @@ class CSetupmessagerie extends CSetup {
     $this->makeRevision("0.27");
     $this->addPrefQuery("mailReadOnServerGoToArchived", 1);
 
-    $this->mod_version = "0.28";
+    $this->makeRevision("0.28");
+    $query = "ALTER TABLE `usermessage`
+                ADD `grouped` INT (11);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.29";
   }
 }

@@ -7,7 +7,7 @@
 <script>
   var to = [];
 
-  addTo = function (to_id, element_to_update) {
+  addTo = function (to_id, element_to_update, label) {
     //exist ?
     var index = to.indexOf(to_id);
     if (index >= 0 || to_id == "") {
@@ -24,7 +24,7 @@
     $V(oform.to, to_id);
 
     //clear the input
-    var prat = $V(element_to_update);
+    var prat = label ? label : $V(element_to_update);
     $V(element_to_update, "");
 
     //list update
@@ -46,9 +46,12 @@
 
   Main.add(function() {
     Control.Tabs.create('tabs-usermessage');
-    {{if $usermessage->to && !$usermessage->date_sent}}
+    {{if count($usermessage->_ref_users_to) && !$usermessage->date_sent}}
       var element_to_update = getForm("EditUserMessage")._to_autocomplete_view;
-      addTo('{{$usermessage->to}}', element_to_update);
+      {{foreach from=$usermessage->_ref_users_to item=_user}}
+
+        addTo('{{$_user->_id}}', element_to_update, '{{$_user->_view}}');
+      {{/foreach}}
     {{/if}}
   });
 </script>
@@ -74,6 +77,7 @@
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="usermessage_id" value="{{$usermessage->_id}}" />
     <input type="hidden" name="postRedirect" value="{{$destform}}" />
+    <input type="hidden" name="grouped" value="{{$usermessage->grouped}}" />
     {{if !$usermessage->date_sent}}
       {{mb_field object=$usermessage field=date_sent hidden=true}}
     {{else}}
@@ -102,16 +106,18 @@
         <th>{{mb_label object=$usermessage field=to}}</th>
         <td>
           {{if $usermessage->date_sent}}
-            <div class="mediuser" style="border-color: #{{$usermessage->_ref_user_to->_ref_function->color}};">
-              {{$usermessage->_ref_user_to}}
+            {{foreach from=$usermessage->_ref_users_to item=user_to}}
+            <div class="mediuser" style="border-color: #{{$user_to->_ref_function->color}};">
+              {{$user_to}}
             </div>
+            {{/foreach}}
           {{else}}
             {{mb_field object=$usermessage field=to hidden=true}}
             <input type="hidden" name="to_list" value=""/>
             <ul id="listUser" style="padding:0;">
-            <li>
-              <input type="text" name="_to_autocomplete_view" style="width: 16em;" class="autocomplete" value="{{$usermessage->_ref_user_to}}"/>
-            </li>
+              <li>
+                <input type="text" name="_to_autocomplete_view" style="width: 16em;" class="autocomplete" value=""/>
+              </li>
             </ul>
             <script>
               Main.add(function(){
@@ -222,7 +228,9 @@
           {{$_usermessage->_ref_user_from}}
         </td>
         <td>
-          {{$_usermessage->_ref_user_to}}
+          {{foreach from=$_usermessage->_ref_users_to item=_user_to}}
+            {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_user_to}}
+          {{/foreach}}
         </td>
         <td>
           <a href="#1" onmouseover="ObjectTooltip.createDOM(this, 'usermessage_{{$_usermessage->_id}}')">{{$_usermessage->subject}}</a>

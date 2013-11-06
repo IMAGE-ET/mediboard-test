@@ -39,7 +39,7 @@ $where = array();
 $where["from"]      = "= '$user->_id'";
 $where["date_sent"] = "IS NOT NULL";
 $order = "date_sent DESC";
-$listSent = $usermessage->loadList($where, $order);
+$listSent = $usermessage->loadList($where, $order, null, "date_sent");
 foreach ($listSent as &$mail) {
   $mail->loadRefsFwd();
 }
@@ -49,7 +49,7 @@ $where = array();
 $where["from"]      = "= '$user->_id'";
 $where["date_sent"] = "IS NULL";
 $order = "date_sent DESC";
-$listDraft = $usermessage->loadList($where, $order);
+$listDraft = $usermessage->loadList($where, $order, null, "grouped");
 foreach ($listDraft as &$mail) {
   $mail->loadRefsFwd();
 }

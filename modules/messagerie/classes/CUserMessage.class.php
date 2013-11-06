@@ -22,14 +22,17 @@ class CUserMessage extends CMbObject {
   public $date_read;
   public $archived;
   public $starred;
-  
+  public $grouped;
+
   // Form Fields
   public $_from_state;
   public $_to_state;
+  public $_is_draft;
+
   
   // References
   public $_ref_user_from;
-  public $_ref_user_to;
+  public $_ref_users_to;
   public $_clean_subject;
 
   /**
@@ -59,13 +62,22 @@ class CUserMessage extends CMbObject {
     $specs["date_read"]   = "dateTime";
     $specs["archived"]    = "bool default|0";
     $specs["starred"]     = "bool default|0";
+    $specs["grouped"]     = "num";
 
     $specs["_from_state"] = "enum list|saved|sent|read";
     $specs["_to_state"]   = "enum list|pending|received|read|archived|starred";
     
     return $specs;
   }
-  
+
+  static function getLastGroupId() {
+    $user = new self;
+    $ds = $user->getDS();
+    $sql = "SELECT MAX(`grouped`) FROM `usermessage`;";
+    $num = $ds->loadResult($sql);
+    return $num;
+  }
+
   /**
    * Load all visible mails for current user
    * grouped by status (sent and starred only)
@@ -136,27 +148,42 @@ class CUserMessage extends CMbObject {
   /**
    * load Ref User From
    *
-   * @param int $cache using cache
-   *
    * @return CMediusers|null
    */
-  function loadRefUserFrom($cache = 0) {
-    $this->_ref_user_from = $this->loadFwdRef("from", $cache);
-    $this->_ref_user_from->loadRefFunction();
-    return $this->_ref_user_from;
+  function loadRefUserFrom() {
+    /** @var CMediusers $user */
+    $user = $this->loadFwdRef("from", true);
+    $user->loadRefFunction();
+    return $this->_ref_user_from = $user;
   }
 
   /**
-   * load ref user to
+   * load the list of destinataire
    *
-   * @param int $cache use cache
-   *
-   * @return CMbObject|null
+   * @return array
    */
-  function loadRefUserTo($cache = 0) {
-    $this->_ref_user_to = $this->loadFwdRef("to", $cache);
-    $this->_ref_user_to->loadRefFunction();
-    return $this->_ref_user_to;
+  function loadRefUsersTo() {
+    $user = CMediusers::get();
+    $listUser = array();
+    if (!$this->_id) {
+      return $listUser;
+    }
+
+    $where = array();
+    if ($this->grouped && $this->from == $user->_id) {
+      $where['grouped'] = " = '$this->grouped'";
+    }
+    else {
+      $where['usermessage_id'] = " = '$this->_id'";
+    }
+    foreach ($this->loadList($where) as $_usermessage) {
+      /** @var CMediusers $user */
+      $user = $_usermessage->loadFwdRef("to");
+      $user->loadRefFunction();
+      $listUser[] = $user;
+    }
+
+    return $this->_ref_users_to = $listUser;
   }
 
   /**
@@ -166,6 +193,6 @@ class CUserMessage extends CMbObject {
    */
   function loadRefsFwd(){
     $this->loadRefUserFrom(); 
-    $this->loadRefUserTo(); 
+    $this->loadRefUsersTo();
   }
 }

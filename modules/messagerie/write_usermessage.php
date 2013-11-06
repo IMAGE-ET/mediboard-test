@@ -23,22 +23,23 @@ if ($usermessage->to == $user->_id && $usermessage->date_sent && ! $usermessage-
 }
 
 if ($usermessage->to) {
-  $usermessage->loadRefUserTo();
+  $usermessage->loadRefUsersTo();
 }
 
 // Historique des messages avec le destinataire
 $where = array();
 $where[] = "(usermessage.from = '$usermessage->from' AND usermessage.to = '$usermessage->to')".
            "OR (usermessage.from = '$usermessage->to' AND usermessage.to = '$usermessage->from')";
+$where["date_sent"] =" IS NOT NULL";
 
-$historique = $usermessage->loadList($where, "date_sent DESC", "20");
+$historique = $usermessage->loadList($where, "date_sent DESC", "20", "date_sent, subject");
 CMbObject::massLoadFwdRef($historique, "from");
 CMbObject::massLoadFwdRef($historique, "to");
 
 /** @var $historique CUserMessage[] */
 foreach ($historique as $_mail) {
-  $_mail->loadRefUserFrom(1);
-  $_mail->loadRefUserTo(1);
+  $_mail->loadRefUserFrom();
+  $_mail->loadRefUsersTo();
 }
 
 // Initialisation de CKEditor
