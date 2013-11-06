@@ -86,6 +86,9 @@ if (!$show_cancelled) {
 }
 //$where["operations.plageop_id"] = "IS NULL";
 if ($bloc_id) {
+  $ljoin["sallesbloc"] = "sallesbloc.salle_id = operations.salle_id";
+  $ljoin["bloc_operatoire"] = "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id";
+  $where["operations.salle_id"] = CSQLDataSource::prepareIn($salles_ids);
   $where["sallesbloc.bloc_id"] = "= '$bloc_id'";
 }
 
