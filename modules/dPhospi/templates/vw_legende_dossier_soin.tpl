@@ -17,7 +17,7 @@
   </tr>
   <tr>
     <td style="background-color: #f88;"></td>
-    <td class="text">Non administré</td>
+    <td class="text">En retard</td>
   </tr>
   <tr>
     <td style="background-color: #F00;"></td>
