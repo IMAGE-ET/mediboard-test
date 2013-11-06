@@ -134,6 +134,7 @@ $date_max = CMbDT::dateTime("+ 1 HOUR", $date_max);
 
 foreach ($prescriptions as $_prescription) {
   $_prescription->calculAllPlanifSysteme();
+  $_prescription->loadJourOp(CMbDT::date());
 
   $_prescription->loadRefPatient();
   $patients[$_prescription->_ref_patient->_id] = $_prescription->_ref_patient;

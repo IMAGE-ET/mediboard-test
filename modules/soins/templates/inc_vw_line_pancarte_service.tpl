@@ -7,6 +7,10 @@
         {{$_prescription->_ref_patient->_view}}
      </span>
    </a>
+
+  {{foreach from=$_prescription->_jour_op item=_info_jour_op}}
+    (<span onmouseover="ObjectTooltip.createEx(this, '{{$_info_jour_op.operation_guid}}');">J{{$_info_jour_op.jour_op}}</span>)
+  {{/foreach}}
 </td>
 <td style="width: 10%">
   {{assign var=_lit value=$_prescription->_ref_object->_ref_curr_affectation->_ref_lit}}

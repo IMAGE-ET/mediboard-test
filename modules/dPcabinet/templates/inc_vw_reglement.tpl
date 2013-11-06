@@ -170,18 +170,20 @@ Main.add( function(){
           {{if $patient->cmu}}
             Couverture Maladie Universelle<br/>
           {{/if}}
-        
-          {{if $patient->ald}}
-            Affection Longue Durée<br/>
-          {{else}}
-            {{mb_form name="frm-Patient-ALD" m="patients" dosql="do_patients_aed" method="post" onsubmit="return onSubmitFormAjax(this);"}}
-              {{mb_class object=$patient}}
-              {{mb_key object=$patient}}
-              <input type="hidden" name="callback" value="Reglement.reload"/>
 
-              {{mb_title object=$patient field=ald}}
-              {{mb_field object=$patient field=ald onchange="this.form.onsubmit();"}}
-            {{/mb_form}}
+          {{if $conf.ref_pays == 1}}
+            {{if $patient->ald}}
+              Affection Longue Durée<br/>
+            {{else}}
+              {{mb_form name="frm-Patient-ALD" m="patients" dosql="do_patients_aed" method="post" onsubmit="return onSubmitFormAjax(this);"}}
+                {{mb_class object=$patient}}
+                {{mb_key object=$patient}}
+                <input type="hidden" name="callback" value="Reglement.reload"/>
+
+                {{mb_title object=$patient field=ald}}
+                {{mb_field object=$patient field=ald onchange="this.form.onsubmit();"}}
+              {{/mb_form}}
+            {{/if}}
           {{/if}}
         </div>
 

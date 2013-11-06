@@ -19,6 +19,7 @@ $patient = $sejour->loadRelPatient();
 $patient->loadRefsCorrespondantsPatient();
 $patient->loadRefPhotoIdentite();
 $patient->loadRefsNotes();
+$patient->loadRefConstantesMedicales(null, array("poids", "taille"));
 $dossier_medical = $patient->loadRefDossierMedical();
 
 if ($dossier_medical->_id) {
@@ -73,7 +74,7 @@ $sejour->_ref_consult_anesth->loadRefConsultation();
 
 if (CModule::getActive("dPprescription")) {
   $prescription_sejour = $sejour->loadRefPrescriptionSejour();
-
+  $prescription_sejour->loadJourOp(CMbDt::date());
   // Chargement des lignes de prescriptions
   $prescription_sejour->loadRefsLinesMedComments();
   foreach ($prescription_sejour->_ref_lines_med_comments["med"] as $_line_med) {

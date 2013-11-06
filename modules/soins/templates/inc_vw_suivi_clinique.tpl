@@ -99,9 +99,24 @@
             </script> 
             <img src="images/icons/warning.png" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" />
           {{/if}}
+
+          {{assign var=prescription value=$sejour->_ref_prescription_sejour}}
+          {{if $prescription->_jour_op}}
+            <br/>
+            {{foreach from=$prescription->_jour_op item=_info_jour_op}}
+              (<span onmouseover="ObjectTooltip.createEx(this, '{{$_info_jour_op.operation_guid}}');">J{{$_info_jour_op.jour_op}}</span>)
+            {{/foreach}}
+          {{/if}}
         </h2>
       </form>
     </th>
+  </tr>
+  <tr>
+    <td colspan="2" style="text-align: center;">
+      <table class="form">
+        {{mb_include module=soins template=inc_infos_patients_soins add_class_poids=1}}
+      </table>
+    </td>
   </tr>
   <tr>
     <!-- Informations sur le patient -->
@@ -132,22 +147,10 @@
                 {{mb_value object=$patient field="tel"}}
               </div>
             {{/if}}
-            {{if $patient->naissance}}
-              <div class="cellule_patient">
-                <strong>{{mb_label object=$patient field="naissance"}}</strong>
-                {{mb_value object=$patient field="naissance"}}
-              </div>
-            {{/if}}
             {{if $patient->tel2}}
               <div class="cellule_patient">
                 <strong>{{mb_label object=$patient field="tel2"}}</strong>
                 {{mb_value object=$patient field="tel2"}}
-              </div>
-            {{/if}}
-            {{if $patient->sexe}}
-              <div class="cellule_patient">
-                <strong>{{mb_label object=$patient field="sexe"}}</strong>
-                {{mb_value object=$patient field="sexe"}}
               </div>
             {{/if}}
             {{if $patient->tel_autre}}
