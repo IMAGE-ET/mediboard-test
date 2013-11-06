@@ -12,7 +12,12 @@
   <td class="text">{{$_suivi->_ref_sejour->_ref_last_affectation->_ref_lit->_view}}</td>
   {{/if}}
   <td style="text-align: center;">
-    <strong>Obs</strong>
+    <strong>
+      Obs
+      {{if $_suivi->type == "reevaluation"}}
+        <br /><span class="compact"><label title="Réévaluation antibiothérapie">(rééval. antitio.)</label></span>
+      {{/if}}
+    </strong>
   </td>
   <td class="narrow">
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi->_ref_user}}

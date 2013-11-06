@@ -76,6 +76,9 @@ if (CModule::getActive("dPprescription")) {
 
   // Chargement des lignes de prescriptions
   $prescription_sejour->loadRefsLinesMedComments();
+  foreach ($prescription_sejour->_ref_lines_med_comments["med"] as $_line_med) {
+    $_line_med->updateAlerteAntibio();
+  }
   $prescription_sejour->loadRefsLinesElementsComments();
 
   // Chargement des prescription_line_mixes
@@ -83,6 +86,9 @@ if (CModule::getActive("dPprescription")) {
 
   foreach ($prescription_sejour->_ref_prescription_line_mixes as $curr_prescription_line_mix) {
     $curr_prescription_line_mix->loadRefsLines();
+
+    $curr_prescription_line_mix->updateAlerteAntibio();
+
     $curr_prescription_line_mix->_compact_view = array();
     foreach ($curr_prescription_line_mix->_ref_lines as $_line) {
       if (!$_line->solvant) {

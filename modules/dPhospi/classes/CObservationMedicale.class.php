@@ -24,7 +24,8 @@ class CObservationMedicale extends CMbMetaObject {
   public $degre;
   public $date;
   public $text;
-  
+  public $type;
+
   /** @var CSejour */
   public $_ref_sejour;
 
@@ -54,6 +55,7 @@ class CObservationMedicale extends CMbMetaObject {
     $specs["degre"]        = "enum notNull list|low|high|info default|low";
     $specs["date"]         = "dateTime notNull";
     $specs["text"]         = "text helped|degre";
+    $specs["type"]         = "enum list|reevaluation";
     return $specs;
   }
 

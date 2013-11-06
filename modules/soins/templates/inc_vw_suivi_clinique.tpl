@@ -405,6 +405,9 @@
                       <span {{if $_line->_fin_reelle|iso_date <= $date_after|iso_date}}style="border-bottom: 2px solid orange"{{/if}}
                             onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}')">
                         {{$_line->_ref_produit->libelle_abrege}}
+                        {{if $_line->_alerte_antibio}}
+                          <label title="Réévaluation antibiothérapie" style="font-weight: bold; color: red;">(Reeval ATB)</label>
+                        {{/if}}
                       </span>
                     {{/if}}
                   {{/foreach}}
@@ -476,6 +479,9 @@
                               onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}')">
                           {{$_line->_libelle_voie}}
                           ({{$_line->_compact_view}})
+                          {{if $_line->_alerte_antibio}}
+                            <label title="Réévaluation antibiothérapie" style="font-weight: bold; color: red;">(Reeval ATB)</label>
+                          {{/if}}
                         </span>
                       {{/if}}
                     {{/foreach}}

@@ -121,7 +121,6 @@ if (CModule::getActive("dPprescription")) {
   
   $prescription->loadJourOp($date);
 
-
   $composition_dossier = array();
   $bornes_composition_dossier = array();
   $count_composition_dossier = array();
@@ -202,7 +201,8 @@ if (CModule::getActive("dPprescription")) {
         $line->calculPrisesPrevues($curr_date, $planif_manuelle);
       }
       $line->calculAdministrations();
-      
+      $line->updateAlerteAntibio();
+
       // Chargement des transmissions de la prescription_line_mix
       $transmission = new CTransmissionMedicale();
       $transmission->object_class = "CPrescriptionLineMix";
@@ -239,6 +239,7 @@ if (CModule::getActive("dPprescription")) {
           if ($_line_med->delay_prise) {
             $_line_med->loadRefLastAdministration();
           }
+          $_line_med->updateAlerteAntibio();
         }
         
         // Chargement des prescription_line_mixes
@@ -255,6 +256,7 @@ if (CModule::getActive("dPprescription")) {
           if (in_array($_prescription_line_mix->jour_decalage, array("ER", "R"))) {
             $_prescription_line_mix->loadRefOperation();
           }
+          $_prescription_line_mix->updateAlerteAntibio();
         }
         // Chargement des lignes d'éléments
         if ($chapitre == "all_chaps") {
@@ -271,6 +273,7 @@ if (CModule::getActive("dPprescription")) {
           if ($_line_med->delay_prise) {
             $_line_med->loadRefLastAdministration();
           }
+          $_line_med->updateAlerteAntibio();
           if (in_array($_line_med->jour_decalage, array("ER", "R"))) {
             $_line_med->loadRefOperation();
           }
@@ -291,6 +294,7 @@ if (CModule::getActive("dPprescription")) {
           if (in_array($_prescription_line_mix->jour_decalage, array("ER", "R"))) {
             $_prescription_line_mix->loadRefOperation();
           }
+          $_prescription_line_mix->updateAlerteAntibio();
         }
       }
       elseif ($chapitre == "inscription") {

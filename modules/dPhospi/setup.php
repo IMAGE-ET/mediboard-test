@@ -753,6 +753,10 @@ class CSetupdPhospi extends CSetup {
                 ADD `is_sas_dechoc` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.81";
+    $this->makeRevision("0.81");
+    $query = "ALTER TABLE `observation_medicale` ADD `type` ENUM ('reevaluation');";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.82";
   }
 }
