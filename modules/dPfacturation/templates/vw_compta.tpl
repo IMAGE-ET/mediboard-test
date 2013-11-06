@@ -64,15 +64,17 @@
     </table>
   </form>
 
-  {{if $conf.dPfacturation.CRelance.use_relances || $conf.ref_pays == 2}}
+  {{if $conf.dPfacturation.CRelance.use_relances || $conf.dPfacturation.CJournalBill.use_journaux || $conf.ref_pays == 2}}
     <ul id="tabs-configure" class="control_tabs">
       <li><a href="#compta">Général</a></li>
       {{if $conf.dPfacturation.CRelance.use_relances}}
         <li><a href="#relances">Relances</a></li>
       {{/if}}
-      {{if $conf.ref_pays == 2}}
+      {{if $conf.dPfacturation.CJournalBill.use_journaux}}
         <li><a href="#journaux">Journaux</a></li>
-        <li><a href="#impression">Impression</a></li>
+      {{/if}}
+      {{if $conf.ref_pays == 2}}
+        <li><a href="#impression">{{tr}}CFactureEtablissement.print{{/tr}}</a></li>
       {{/if}}
     </ul>
     <hr class="control_tabs" />
@@ -87,10 +89,13 @@
       </div>
     {{/if}}
 
-    {{if $conf.ref_pays == 2}}
+    {{if $conf.dPfacturation.CJournalBill.use_journaux}}
       <div id="journaux" style="display: none;">
         {{mb_include module=facturation template=vw_journaux}}
       </div>
+    {{/if}}
+
+    {{if $conf.ref_pays == 2}}
       <div id="impression" style="display: none;">
         {{mb_include module=facturation template=vw_print_bill}}
       </div>

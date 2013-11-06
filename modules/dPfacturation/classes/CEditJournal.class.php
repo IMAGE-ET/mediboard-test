@@ -23,6 +23,8 @@ class CEditJournal {
   public $page;
   public $date_min;
   public $date_max;
+  public $definitive;
+  public $journal_id;
 
   /** @var CReglement[] $reglements */
   public $reglements;
@@ -83,10 +85,26 @@ class CEditJournal {
   /**
    * Edition des journaux selon le type
    *
+   * @param bool $read           lecture
+   * @param bool $create_journal Création du journal
+   *
    * @return void
    */
-  function editJournal() {
-    // Creation du PDF
+  function editJournal($read = true, $create_journal = true) {
+    if ($create_journal) {
+      $journal = new CJournalBill();
+      $journal->type  = $this->type_pdf;
+      $journal->nom   = "Journal_".$this->type_pdf."_".CMbDT::date();
+      $journal->_factures = $this->factures;
+      if ($msg = $journal->store()) {
+        mbTrace($msg);
+      }
+      else {
+        $this->journal_id = $journal->_id;
+      }
+    }
+
+      // Creation du PDF
     $this->pdf = new CMbPdf('l', 'mm');
     $this->pdf->setPrintHeader(false);
     $this->pdf->setPrintFooter(false);
@@ -107,9 +125,50 @@ class CEditJournal {
       case "rappel" :
         $this->editRappel();
         break;
+      case "checklist" :
+        $this->editCheckList();
+        break;
     }
-    //Affichage du fichier pdf
-    $this->pdf->Output('Factures.pdf', "I");
+
+    if ($create_journal) {
+      $file = new CFile();
+      $file->file_name = $journal->nom.".pdf";
+      $file->file_type  = "application/pdf";
+      $file->author_id = CMediusers::get()->_id;
+      $file->file_category_id = 1;
+      $file->setObject($journal);
+      $file->fillFields();
+      $file->putContent($this->pdf->Output('Factures.pdf', "S"));
+
+      if ($msg = $file->store()) {
+        echo $msg;
+      }
+      if ($this->type_pdf == "checklist") {
+        $user = CMediusers::get();
+        $printer = new CPrinter();
+        $printer->function_id = $user->function_id;
+        $printer->label = "justif";
+        $printer->loadMatchingObject();
+
+        if (!$printer->_id) {
+          CAppUI::setMsg("Les imprimantes ne sont pas paramétrées", UI_MSG_ERROR);
+          echo CAppUI::getMsg();
+          return false;
+        }
+
+        $file = new CFile();
+        $pdf = $this->pdf->Output('Factures.pdf', "S");
+        $file_path = tempnam("tmp", "facture");
+        $file->_file_path = $file_path;
+        file_put_contents($file_path, $pdf);
+        $printer->loadRefSource()->sendDocument($file);
+        unlink($file_path);
+      }
+    }
+    if ($read) {
+      //Affichage du fichier pdf
+      $this->pdf->Output('Factures.pdf', "I");
+    }
   }
 
   /**
@@ -121,6 +180,7 @@ class CEditJournal {
     $this->page ++;
     $this->pdf->AddPage();
     $this->pdf->setFont($this->font, '', 10);
+    $nom_journal = "";
     switch ($this->type_pdf) {
       case "paiement" :
         $nom_journal = "Journal des paiements";
@@ -131,12 +191,18 @@ class CEditJournal {
       case "rappel" :
         $nom_journal = "Journal rappels/contentieux";
         break;
+      case "checklist" :
+        $definitive = $this->definitive ? "définitives" : "provisoires";
+        $nom_journal = "Liste factures $definitive arrétées au ".CMbDT::transform("", CMbDT::date(), '%d/%m/%Y');
+        break;
     }
     $this->editCell(10, 10, 70, CGroups::loadCurrent()->text);
     $this->pdf->Cell(160, "", $nom_journal, null, null, "C");
     $this->pdf->Cell(67, "", "Page: ".$this->page);
-    $date = "Date: du ".CMbDT::transform("", $this->date_min, '%d/%m/%Y')." au ".CMbDT::transform("", $this->date_max, '%d/%m/%Y');
-    $this->editCell(10, 15, 70, $date);
+    $this->editCell(10, 15, 70, "Date : ".CMbDT::transform("", CMbDT::dateTime(), '%d/%m/%Y - %H:%M'));
+    $this->editCell(240, 15, 70, "Numéro journal: ".$this->journal_id);
+
+    //Les lignes
     $this->pdf->Line(5, 20, 293, 20);
     $this->pdf->Line(5, 30, 293, 30);
     $this->pdf->Line(5, 5, 5, 205);
@@ -154,12 +220,12 @@ class CEditJournal {
   function editPaiements() {
     $colonnes = array(
       "Date"        => 10,  "Nom"       => 25,
-      "Garant"      => 25,  "Libellé"   => 30,
-      "Facture"     => 10,  "Débit"     => 15,
+      "Garant"      => 25,  "Libellé"   => 25,
+      "Facture"     => 15,  "Débit"     => 15,
       "Crédit C/C"  => 15,  "R" => 5,
       "Solde fact." => 15);
     $this->editTableau($colonnes, 5, 25);
-    $colonnes_x = array(125, 200, 235);
+    $colonnes_x = array(125, 205, 235);
     $debut_lignes = 30;
     $ligne = 0;
     $debiteur_nom = "";
@@ -169,6 +235,9 @@ class CEditJournal {
       $reglement->_ref_facture->loadRefsReglements();
       $reglement->_ref_facture->loadRefsRelances();
       $reglement->loadRefDebiteur();
+      if (!$reglement->_ref_debiteur->nom) {
+        $reglement->_ref_debiteur->nom = " ";
+      }
       if (!strstr($debiteur_nom, $reglement->_ref_debiteur->nom)) {
         $debiteur_nom = $reglement->_ref_debiteur->numero." - ".$reglement->_ref_debiteur->nom;
         $totaux[$debiteur_nom] = array("Débit" => 0.00, "Crédit" => 0.00, "Solde" => 0.00);
@@ -188,16 +257,17 @@ class CEditJournal {
 
       $this->pdf->setX(5);
       $ligne++;
+      $restant = $reglement->_ref_facture->_du_restant_patient;
       $valeurs = array(
         "Date"    => CMbDT::transform("", $reglement->date, '%d/%m/%Y'),
         "Nom"     => $reglement->_ref_facture->_ref_patient->nom." ".$reglement->_ref_facture->_ref_patient->prenom,
         "Garant"  => $this->loadGarant($reglement->_ref_facture),
         "Libellé" => $reglement->mode,
-        "Facture" => $reglement->_ref_facture->_id,
+        "Facture" => $reglement->_ref_facture->_view,
         "Débit"   => "",
         "Crédit C/C" => sprintf("%.2f", $reglement->montant),
         "R" => count($reglement->_ref_facture->_ref_relances),
-        "Solde fact." => sprintf("%.2f", $reglement->_ref_facture->_du_restant_patient));
+        "Solde fact." => sprintf("%.2f", $restant < "0.05" ? 0 : $restant));
       $totaux[$debiteur_nom]["Débit"] += 0.00;
       $totaux[$debiteur_nom]["Crédit"] += sprintf("%.2f", $reglement->montant);
       $totaux[$debiteur_nom]["Solde"] += sprintf("%.2f", $reglement->montant);
@@ -207,7 +277,7 @@ class CEditJournal {
       }
       $x = 0;
       foreach ($colonnes as $key => $value) {
-        $cote = ($key == "Crédit C/C" || $key == "Solde fact.") ? "R" : "L";
+        $cote = ($key == "Crédit C/C" || $key == "Solde fact." || $key == "Débit") ? "R" : "L";
         $this->editCell($this->pdf->getX()+$x, $debut_lignes + $ligne*4, $value, $valeurs[$key], $cote);
         $x = $value;
       }
@@ -226,13 +296,20 @@ class CEditJournal {
     $pos_ligne = $debut_lignes + $ligne*4;
     $this->editCell($colonnes_x[0], $pos_ligne, 45, "Total général", "L");
     $this->editCell($colonnes_x[1], $pos_ligne, 15, "0.00", "R");
-    $this->editCell($colonnes_x[2], $pos_ligne, 15, $totaux_reglement, "R");
+    $this->editCell($colonnes_x[2], $pos_ligne, 15, sprintf("%.2f", $totaux_reglement), "R");
 
-    $colonnes = array(
-      "Contre-partie comptable" => 80,  "Débit"     => 25,
-      "Crédit"  => 25, "Solde" => 25);
+    $colonnes = array("Contre-partie comptable" => 80,  "Débit"     => 25,
+                      "Crédit"  => 25, "Solde" => 25);
     $colonnes_x = array(5, 125, 215, 245);
-    $this->ajoutPage($colonnes);
+
+    $this->editEntete();
+
+    $this->pdf->setXY(5, 25);
+    $this->editCell($this->pdf->getX()    , 25, 80, "Contre-partie comptable");
+    $this->editCell($this->pdf->getX()+80 , 25, 25, "Débit" , "R");
+    $this->editCell($this->pdf->getX()+25 , 25, 25, "Crédit", "R");
+    $this->editCell($this->pdf->getX()+25 , 25, 25, "Solde" , "R");
+
     $this->pdf->setFont($this->font, '', 10);
     $this->editCell(80, 15, 160, "Récapitulatif par contre-parties", "C");
     $this->pdf->setFont($this->font, '', 9);
@@ -257,14 +334,14 @@ class CEditJournal {
   }
 
   /**
-   * Edition du journal des débiteurs
+   * Edition du journal des débiteurs / de facturation
    *
    * @return void
    */
   function editDebiteur() {
     $colonnes = array(
-      "Facture"     => 10,  "Date Fact."  => 10,
-      "T.adm."     => 6,    "Nom"         => 35,
+      "Facture"     => 15,  "Date Fact."  => 10,
+      "T.adm."     => 6,    "Nom"         => 30,
       "Séjour du"   => 10, "Séjour au"    => 10,
       "Total Fact." => 15, "Acomptes"     => 15,
       "Net à payer" => 15, "Echéance"     => 10,
@@ -273,11 +350,12 @@ class CEditJournal {
 
     $debut_lignes = 30;
     $ligne = 0;
+    $totaux = array("Fact" => 0, "Acompte" => 0, "Net" => 0);
     foreach ($this->factures as $facture) {
       $this->pdf->setX(5);
       $ligne++;
       $valeurs = array(
-        "Facture"     => $facture->_id,
+        "Facture"     => $facture->_view,
         "Date Fact."  => CMbDT::transform("", $facture->cloture, '%d/%m/%Y'),
         "T.adm."      => "AMBU",
         "Nom"         => $facture->_ref_patient->_view,
@@ -298,7 +376,18 @@ class CEditJournal {
       if ($debut_lignes + $ligne*4 >= 200) {
         $ligne = $this->ajoutPage($colonnes);
       }
+      $totaux["Fact"]    += $facture->_montant_avec_remise;
+      $totaux["Acompte"] += $facture->_reglements_total_patient;
+      $totaux["Net"]     += $facture->_du_restant_patient;
     }
+
+    $pos_colonne = array(67, 157, 187, 217);
+    $ligne +=2;
+    $pos_ligne = $debut_lignes + $ligne*4;
+    $this->editCell($pos_colonne[0], $pos_ligne, 80, "Total général", "L");
+    $this->editCell($pos_colonne[1], $pos_ligne, 25, sprintf("%.2f", $totaux["Fact"]), "R");
+    $this->editCell($pos_colonne[2], $pos_ligne, 25, sprintf("%.2f", $totaux["Acompte"]), "R");
+    $this->editCell($pos_colonne[3], $pos_ligne, 25, sprintf("%.2f", $totaux["Net"]), "R");
   }
 
   /**
@@ -308,11 +397,11 @@ class CEditJournal {
    */
   function editRappel() {
     $colonnes = array("Concerne" => 25, "Destinataire"  => 25,
-      "N° fact." => 10, "Débit"     => 15,
+      "N° fact." => 15, "Débit"     => 15,
       "Crédit"   => 15, "Solde"     => 15,
       "Echéance" => 10, "Pas de rappel jusqu'au" => 15);
     $this->editTableau($colonnes, 5, 25);
-    $pos_colonne = array(5, 55, 125, 155, 185);
+    $pos_colonne = array(5, 55, 135, 165, 195);
     $rappel_nom = " ";
     $totaux_rappel = array();
     $debut_lignes = 30;
@@ -349,7 +438,7 @@ class CEditJournal {
       $valeurs = array(
         "Concerne"      => $relance->_ref_object->_ref_patient->nom." ".$relance->_ref_object->_ref_patient->prenom,
         "Destinataire"  => $this->loadGarant($relance->_ref_object),
-        "N° fact."      => $relance->_ref_object->_id,
+        "N° fact."      => $relance->_ref_object->_view,
         "Débit"         => sprintf("%.2f", $relance->_ref_object->_montant_avec_remise),
         "Crédit"        => sprintf("%.2f", $relance->_ref_object->_reglements_total_patient),
         "Solde"         => sprintf("%.2f", $relance->_ref_object->_du_restant_patient),
@@ -407,6 +496,53 @@ class CEditJournal {
     $this->editCell($pos_colonne[2], $pos_ligne, 25, sprintf("%.2f", $total_final["Debit"]), "R");
     $this->editCell($pos_colonne[3], $pos_ligne, 25, sprintf("%.2f", $total_final["Credit"]), "R");
     $this->editCell($pos_colonne[4], $pos_ligne, 25, sprintf("%.2f", $total_final["Solde"]), "R");
+  }
+
+  /**
+   * Edition de la liste de contrôle
+   *
+   * @return void
+   */
+  function editCheckList() {
+    $colonnes = array(
+      "Nom"     => 20 , "Prenom"  => 20,
+      "Dossier" => 25 , "Type"    => 15,
+      "Entree"  => 15 , "Sortie"  => 15,
+      "Statut"  => 20 , "Montant" => 25);
+    $this->editTableau($colonnes, 5, 25);
+
+    $debut_lignes = 30;
+    $ligne = 0;
+    $montant_total = 0;
+    foreach ($this->factures as $facture) {
+      $this->pdf->setX(5);
+      $ligne++;
+      $valeurs = array(
+        "Nom"     => $facture->_ref_patient->nom,
+        "Prenom"  => $facture->_ref_patient->prenom,
+        "Dossier" => $facture->_view." ".$facture->_ref_last_sejour->type,
+        "Type"    => $facture->type_facture,
+        "Entree"  => CMbDT::transform("", $facture->_ref_last_sejour->entree_prevue, '%d/%m/%Y'),
+        "Sortie"  => CMbDT::transform("", $facture->_ref_last_sejour->sortie_prevue, '%d/%m/%Y'),
+        "Statut"  => $facture->envoi_xml ? "Facture électronique" : "",
+        "Montant" => sprintf("%.2f", $facture->_montant_avec_remise));
+      $x = 0;
+      foreach ($colonnes as $key => $value) {
+        $cote = ($key == "Montant") ? "R" : "L";
+        $this->editCell($this->pdf->getX()+$x, $debut_lignes + $ligne*4, $value, $valeurs[$key], $cote);
+        $x = $value;
+      }
+      if ($debut_lignes + $ligne*4 >= 200) {
+        $ligne = $this->ajoutPage($colonnes);
+      }
+      $montant_total += $facture->_montant_avec_remise;
+    }
+
+    $ligne +=2;
+    $pos_ligne = $debut_lignes + $ligne*4;
+    $this->editCell(180 , $pos_ligne, 80, "Montant total:", "R");
+    $this->editCell(210 , $pos_ligne, 80, $montant_total, "R");
+
   }
 
   /**

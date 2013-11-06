@@ -19,6 +19,7 @@ $type_relance   = CValue::get("type_relance");
 $type_pdf       = CValue::get("type_pdf", "bvr");
 $factures       = CValue::get("factures", array());
 $definitive     = CValue::get("definitive", 0);
+$tiers_soldant  = CValue::get("tiers_soldant", 0);
 
 //impression
 $factures_id = array();
@@ -63,20 +64,37 @@ if ($type_pdf == "bvr_justif") {
   $facture_pdf->editFactureBVRJustif();
 }
 if ($type_pdf == "impression") {
-  $facture_pdf->printBill();
+  $facture_pdf->printBill($tiers_soldant);
+
+  $journal_pdf = new CEditJournal();
+  $journal_pdf->type_pdf = "debiteur";
+  $journal_pdf->factures = $factures;
+  foreach ($journal_pdf->factures as $fact) {
+    /** @var CFacture $fact */
+    $fact->loadRefsObjects();
+    $fact->loadRefPatient();
+    $fact->loadRefPraticien();
+    $fact->loadRefsReglements();
+    $fact->isRelancable();
+  }
+  $journal_pdf->editJournal(false);
+
+  $journal_pdf->type_pdf = "checklist";
+  $journal_pdf->definitive = $definitive;
+  $journal_pdf->editJournal(false);
+
   if (!$facture_id) {
     if ($definitive) {
       foreach ($factures as $_facture) {
         if (!$_facture->definitive) {
           $_facture->definitive = 1;
           if ($msg = $_facture->store()) {
-            CAppUI::setMsg($msg, UI_MSG_ERROR);
+            mbLog($msg);
           }
         }
       }
     }
     unset($_GET["suppressHeaders"]);
-    CAppUI::redirect("m=dPfacturation&tab=vw_compta");
   }
 }
 
