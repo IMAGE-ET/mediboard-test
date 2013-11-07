@@ -45,11 +45,10 @@
 
 
   Main.add(function() {
-    Control.Tabs.create('tabs-usermessage');
+    Control.Tabs.create('tabs-usermessage', true);
     {{if count($usermessage->_ref_users_to) && !$usermessage->date_sent}}
       var element_to_update = getForm("EditUserMessage")._to_autocomplete_view;
       {{foreach from=$usermessage->_ref_users_to item=_user}}
-
         addTo('{{$_user->_id}}', element_to_update, '{{$_user->_view}}');
       {{/foreach}}
     {{/if}}
@@ -77,6 +76,7 @@
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="usermessage_id" value="{{$usermessage->_id}}" />
     <input type="hidden" name="postRedirect" value="{{$destform}}" />
+    <input type="hidden" name="in_reply_to" value="{{$usermessage->in_reply_to}}" />
     <input type="hidden" name="grouped" value="{{$usermessage->grouped}}" />
     {{if !$usermessage->date_sent}}
       {{mb_field object=$usermessage field=date_sent hidden=true}}

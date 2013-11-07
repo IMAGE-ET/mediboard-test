@@ -152,6 +152,15 @@ class CSetupmessagerie extends CSetup {
                 ADD `grouped` INT (11);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.29";
+    $this->makeRevision("0.29");
+    $query = "ALTER TABLE `usermessage`
+                ADD `in_reply_to` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `usermessage`
+                ADD INDEX (`in_reply_to`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.30";
   }
 }

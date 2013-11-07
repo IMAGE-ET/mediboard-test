@@ -312,7 +312,8 @@ class CUserMail extends CMbObject{
           }
 
           //file type detection
-          $mime = $this->extensionDetection(reset($file_pop));
+          $first = (is_array($file_pop)) ? reset($file_pop) : $file_pop;
+          $mime = $this->extensionDetection($first);
 
           //file name
           $infos = pathinfo($_attch->name);

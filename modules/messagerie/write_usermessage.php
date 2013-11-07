@@ -10,9 +10,10 @@
 CCanDo::checkRead();
 $user = CUser::get();
 $usermessage = new CUserMessage();
-$usermessage->from    = $user->_id;
-$usermessage->to      = CValue::get("to");
-$usermessage->subject = CValue::get("subject");
+$usermessage->from        = $user->_id;
+$usermessage->to          = CValue::get("to");
+$usermessage->subject     = CValue::get("subject");
+$usermessage->in_reply_to = CValue::get("in_reply_to");
 $usermessage->load(CValue::getOrSession("usermessage_id"));
 $usermessage->loadRefsFwd();
 
@@ -22,10 +23,19 @@ if ($usermessage->to == $user->_id && $usermessage->date_sent && ! $usermessage-
   $usermessage->store();
 }
 
+if ($usermessage->in_reply_to) {
+  $origin = $usermessage->loadOriginMessage();
+  if ($origin->_id) {
+    if (!$usermessage->subject) {
+      $usermessage->subject = "Re: ".$origin->subject;
+    }
+    $usermessage->to = $origin->from;
+  }
+}
+
 if ($usermessage->to) {
   $usermessage->loadRefUsersTo();
 }
-
 // Historique des messages avec le destinataire
 $where = array();
 $where[] = "(usermessage.from = '$usermessage->from' AND usermessage.to = '$usermessage->to')".

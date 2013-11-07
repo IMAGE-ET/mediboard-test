@@ -58,22 +58,24 @@ Main.add(function () {
 	      </tr>
 
 	      <tr>
-	        <th>{{mb_title class=CUserMessage field=from}}</th>
-	        <th>{{mb_title class=CUserMessage field=subject}}</th>
-	        <th>{{mb_title class=CUserMessage field=date_sent}}</th>
-	        <th>{{mb_title class=CUserMessage field=date_read}}</th>
-	        <th>{{tr}}Action{{/tr}}</th>
+	        <th class="narrow">{{mb_title class=CUserMessage field=from}}</th>
+	        <th class="text">{{mb_title class=CUserMessage field=subject}}</th>
+          <th class="text">{{mb_title class=CUserMessage field=source}}</th>
+          <th class="narrow">{{mb_title class=CUserMessage field=date_sent}}</th>
+	        <th class="narrow">{{mb_title class=CUserMessage field=date_read}}</th>
+	        <th class="narrow">{{tr}}Action{{/tr}}</th>
 	      </tr>
 	      {{foreach from=$listInbox item=_mail}}
 
 	      <tr {{if !$_mail->date_read}}style="font-weight: bold;"{{/if}}>
-	        <td class="text">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_mail->_ref_user_from}}</td>
-	        <td class="text">{{$_mail->subject}}</td>
-	        <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
+	        <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_mail->_ref_user_from}}</td>
+	        <td>{{$_mail->subject}}</td>
+          <td class="compact">{{$_mail->source|smarty:nodefaults|truncate:20:' ...'}}</td>
+          <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
 	        <td>{{mb_value object=$_mail field=date_read format=relative}}</td>
 	        <td>
             <button class="search" onclick="UserMessage.edit({{$_mail->_id}})" >{{tr}}CUserMessage.read{{/tr}}</button>
-            <button class="mail" onclick="UserMessage.create({{$_mail->_ref_user_from->_id}}, 'Re: {{$_mail->_clean_subject}}')">{{tr}}CUserMessage.answer{{/tr}}</button>
+            <button class="mail" onclick="UserMessage.create({{$_mail->_ref_user_from->_id}}, null, '{{$_mail->_id}}')">{{tr}}CUserMessage.answer{{/tr}}</button>
             <form name="archive_usermessage_{{$_mail->_id}}" method="post">
               <input type="hidden" name="m" value="{{$m}}"/>
               <input type="hidden" name="dosql" value="do_usermessage_aed"/>
@@ -84,7 +86,7 @@ Main.add(function () {
 	        </td>
 	      </tr>
         {{foreachelse}}
-          <tr><td class="empty" colspan="5">{{tr}}CUserMessage.none{{/tr}}</td></tr>
+          <tr><td class="empty" colspan="6">{{tr}}CUserMessage.none{{/tr}}</td></tr>
 	      {{/foreach}}
 	    </table>
 
@@ -95,51 +97,55 @@ Main.add(function () {
 	      </tr>
 
 	      <tr>
-	        <th>{{mb_title class=CUserMessage field=from}}</th>
+	        <th class="narrow">{{mb_title class=CUserMessage field=from}}</th>
 	        <th>{{mb_title class=CUserMessage field=subject}}</th>
-	        <th>{{mb_title class=CUserMessage field=date_sent format=relative}}</th>
-	        <th>{{tr}}Action{{/tr}}</th>
+          <th class="text">{{mb_title class=CUserMessage field=source}}</th>
+          <th class="narrow">{{mb_title class=CUserMessage field=date_sent format=relative}}</th>
+          <th class="narrow">{{mb_title class=CUserMessage field=date_read format=relative}}</th>
+          <th class="narrow">{{tr}}Action{{/tr}}</th>
 	      </tr>
 
 	      {{foreach from=$listArchived item=_mail}}
 	      <tr {{if !$_mail->date_read}}style="font-weight: bold;"{{/if}}>
-	        <td class="text">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_mail->_ref_user_from}}</td>
-	        <td class="text">{{$_mail->subject}}</td>
-	        <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
+	        <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_mail->_ref_user_from}}</td>
+	        <td>{{$_mail->subject}}</td>
+          <td class="text compact">{{$_mail->source}}</td>
+          <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
+          <td>{{mb_value object=$_mail field=date_read format=relative}}</td>
           <td>
             <button class="search" onclick="UserMessage.edit({{$_mail->_id}})" >{{tr}}CUserMessage.read{{/tr}}</button>
             <button class="mail" onclick="UserMessage.create({{$_mail->_ref_user_from->_id}}, 'Re: {{$_mail->_clean_subject}}')">{{tr}}CUserMessage.answer{{/tr}}</button>
           </td>
 	      </tr>
         {{foreachelse}}
-          <tr><td class="empty" colspan="4">{{tr}}CUserMessage.none{{/tr}}</td></tr>
+          <tr><td class="empty" colspan="5">{{tr}}CUserMessage.none{{/tr}}</td></tr>
 	      {{/foreach}}
 	    </table>
 
       <!-- SENT -->
       <table class="main tbl" id="sentbox" style="display: none;">
 	      <tr>
-	        <th class="title" colspan="10">{{tr}}CUserMessage-sentbox{{/tr}}</th>
+	        <th class="title" colspan="5">{{tr}}CUserMessage-sentbox{{/tr}}</th>
 	      </tr>
 
 	      <tr>
-	        <th>{{mb_label class=CUserMessage field=to}}</th>
-	        <th>{{mb_title class=CUserMessage field=subject}}</th>
-	        <th>{{mb_title class=CUserMessage field=date_sent format=relative}}</th>
-	        <th>{{mb_title class=CUserMessage field=date_read format=relative}}</th>
-	        <th>{{tr}}Action{{/tr}}</th>
+	        <th class="narrow">{{mb_label class=CUserMessage field=to}}</th>
+          <th>{{mb_title class=CUserMessage field=subject}}</th>
+          <th>{{mb_title class=CUserMessage field=source}}</th>
+	        <th class="narrow">{{mb_title class=CUserMessage field=date_sent format=relative}}</th>
+	        <th class="narrow">{{tr}}Action{{/tr}}</th>
 	      </tr>
 
 	      {{foreach from=$listSent item=_mail}}
-	      <tr {{if !$_mail->date_read}}style="font-weight: bold;"{{/if}}>
-	        <td class="text">
+	      <tr>
+	        <td>
             {{foreach from=$_mail->_ref_users_to item=_to}}
               {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_to}}
             {{/foreach}}
           </td>
-	        <td class="text">{{$_mail->subject}}</td>
-	        <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
-	        <td>{{mb_value object=$_mail field=date_read format=relative}}</td>
+	        <td>{{$_mail->subject}}</td>
+          <td class="text compact">{{$_mail->source|smarty:nodefaults|truncate:20:" ..."}}</td>
+          <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
           <td>
             <button class="search" onclick="UserMessage.edit({{$_mail->_id}})" >{{tr}}CUserMessage.read{{/tr}}</button>
           </td>
@@ -156,27 +162,27 @@ Main.add(function () {
 	      </tr>
 
 	      <tr>
-	        <th>{{mb_label class=CUserMessage field=to}}</th>
-	        <th>{{mb_label class=CUserMessage field=subject}}</th>
-	        <th>{{mb_label class=CUserMessage field=date_sent}}</th>
-	        <th>{{tr}}Action{{/tr}}</th>
+	        <th class="narrow">{{mb_label class=CUserMessage field=to}}</th>
+	        <th class="text">{{mb_label class=CUserMessage field=subject}}</th>
+          <th>{{mb_label class=CUserMessage field=source}}</th>
+	        <th class="narrow">{{tr}}Action{{/tr}}</th>
 	      </tr>
 
 	      {{foreach from=$listDraft item=_mail}}
 	      <tr>
-          <td class="text">
+          <td>
             {{foreach from=$_mail->_ref_users_to item=_to}}
               {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_to}}
             {{/foreach}}
           </td>
 	        <td class="text">{{$_mail->subject}}</td>
-	        <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
+          <td class="text compact">{{$_mail->source|smarty:nodefaults|truncate:100:" (...)"}}</td>
 	        <td>
             <button class="edit" onclick="UserMessage.edit({{$_mail->_id}})" >{{tr}}CUserMessage.edit{{/tr}}</button>
 	        </td>
 	      </tr>
         {{foreachelse}}
-          <tr><td class="empty" colspan="4">{{tr}}CUserMessage.none{{/tr}}</td></tr>
+          <tr><td class="empty" colspan="3">{{tr}}CUserMessage.none{{/tr}}</td></tr>
 	      {{/foreach}}
 	    </table>
     </td>

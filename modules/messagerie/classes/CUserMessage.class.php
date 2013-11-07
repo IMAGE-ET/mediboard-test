@@ -20,6 +20,7 @@ class CUserMessage extends CMbObject {
   public $source;
   public $date_sent;
   public $date_read;
+  public $in_reply_to;      // origin message id in the case of an answer
   public $archived;
   public $starred;
   public $grouped;
@@ -32,6 +33,7 @@ class CUserMessage extends CMbObject {
   
   // References
   public $_ref_user_from;
+  public $_ref_answer_from;
   public $_ref_users_to;
   public $_clean_subject;
 
@@ -60,6 +62,7 @@ class CUserMessage extends CMbObject {
     $specs["source"]      = "html";
     $specs["date_sent"]   = "dateTime";
     $specs["date_read"]   = "dateTime";
+    $specs["in_reply_to"] = "ref class|CUserMessage";
     $specs["archived"]    = "bool default|0";
     $specs["starred"]     = "bool default|0";
     $specs["grouped"]     = "num";
@@ -158,6 +161,13 @@ class CUserMessage extends CMbObject {
   }
 
   /**
+   * @return CUserMessage|null
+   */
+  function loadOriginMessage() {
+    return $this->_ref_answer_from =  $this->loadFwdRef("in_reply_to", true);
+  }
+
+  /**
    * load the list of destinataire
    *
    * @return array
@@ -165,13 +175,13 @@ class CUserMessage extends CMbObject {
   function loadRefUsersTo() {
     $user = CMediusers::get();
     $listUser = array();
-    if (!$this->_id) {
-      return $listUser;
-    }
 
     $where = array();
-    if ($this->grouped && $this->from == $user->_id) {
+    if ($this->grouped && $this->from && $this->from == $user->_id) {
       $where['grouped'] = " = '$this->grouped'";
+    }
+    elseif($this->in_reply_to) {
+      $where['usermessage_id'] = " = '$this->in_reply_to'";
     }
     else {
       $where['usermessage_id'] = " = '$this->_id'";
