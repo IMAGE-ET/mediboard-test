@@ -1,6 +1,6 @@
 <!--  $Id$ -->
 
-<script type="text/javascript">
+<script>
 
 var aTraduction = {};
 {{foreach from=$listTraductions key=key item=currClass}}
@@ -91,6 +91,7 @@ function loadDependances(depend_value_1, depend_value_2){
         select_depend_1.options[select_depend_1.length] = new Option(aTraduction[option], elm, elm == depend_value_1);
       }
     }
+    $V(select_depend_1, '{{$aide->depend_value_1}}');
   {{/if}}
 
   {{if !$aide->_is_ref_dp_2}}
@@ -102,6 +103,7 @@ function loadDependances(depend_value_1, depend_value_2){
         select_depend_2.options[select_depend_2.length] = new Option(aTraduction[option], elm, elm == depend_value_2);
       }
     }
+    $V(select_depend_2, '{{$aide->depend_value_2}}');
   {{/if}}
 }
 

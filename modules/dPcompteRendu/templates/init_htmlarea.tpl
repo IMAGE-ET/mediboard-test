@@ -156,33 +156,11 @@
         // Don't close the window with escape
         document.stopObserving('keydown', closeWindowByEscape);
 
-        // Don't allow escape or alt+f4 to cancel the request
-        document.observe('keydown', function(e){
-          var keycode = Event.key(e);
-          if (keycode == 27 || keycode == 115 && e.altKey) {
-            return Event.stop(e);
-          }
-          // Catches command+s
-          if (keycode == 83 && e.metaKey) {
-            submitCompteRendu();
-            Event.stop(e);
-          }
-          {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
-          if (keycode == 80 && (e.ctrlKey || e.metaKey)) {
-            ck_instance.getCommand("mbprintPDF").exec();
-            Event.stop(e);
-          }
-          {{/if}}
-        });
-
-
         // Surveillance de modification de l'éditeur de texte
         if (window.Thumb) {
           ck_instance.on("key", loadOld);
         }
       {{/if}}
-
-
     });
   }
 

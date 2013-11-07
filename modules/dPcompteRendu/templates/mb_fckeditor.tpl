@@ -41,6 +41,7 @@ CKEDITOR.editorConfig = function(config) {
   config.contentsLanguage = 'fr';
   config.enterMode = CKEDITOR.ENTER_BR;
   config.allowedContent = true;
+  config.title = false;
   //config.startupFocus = true;
   config.pasteFromWordPromptCleanup = true;
   config.pasteFromWordRemoveFontStyles = "{{$clean_word}}";
