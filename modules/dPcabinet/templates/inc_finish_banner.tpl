@@ -5,7 +5,7 @@
 function checkConsult() {
   var url = new Url("dPcabinet", "ajax_check_consult_anesth");
   url.addParam("consult_id", "{{$consult->_id}}");
-  url.requestModal(800);
+  url.requestModal();
 }
 
 function submitConsultWithChrono(chrono) {
