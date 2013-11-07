@@ -190,7 +190,7 @@ showModalTP = function(dossier_medical_id, sejour_id, prescription_sejour_id) {
     </button>
   {{/if}}
 
-  {{if  $dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_ref_prescription_lines && $_is_anesth && ($app->_ref_user->isPraticien() || $app->_ref_user->isSageFemme())}}
+  {{if  $dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_ref_prescription_lines && $_is_anesth && ($app->_ref_user->isPraticien() || $app->_ref_user->isSageFemme() || !$conf.dPprescription.CPrescription.role_propre)}}
   <button class="tick" type="button" style="float: right" onclick="showModalTP('{{$dossier_medical->_id}}','{{$sejour->_id}}','{{$prescription_sejour_id}}');">Gérer les traitements personnels</button>
   {{/if}}
 
