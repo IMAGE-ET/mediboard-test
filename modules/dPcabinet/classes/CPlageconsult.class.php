@@ -171,13 +171,17 @@ class CPlageconsult extends CPlageHoraire {
   /**
    * Calcul du nombre de patient dans la plage
    *
+   * @param bool $include_pause count pauses too
+   *
    * @return int The patient count
    */
-  function countPatients(){
+  function countPatients($include_pause = false){
     $consultation = new CConsultation();
     $consultation->plageconsult_id = $this->_id;
     $where["plageconsult_id"] = "= '$this->_id'";
-    $where["patient_id"] = " IS NOT NULL";
+    if (!$include_pause) {
+      $where["patient_id"] = " IS NOT NULL";
+    }
     $where["annule"] = "= '0'";
     return $this->_nb_patients = $consultation->countList($where);
   }
@@ -209,7 +213,6 @@ class CPlageconsult extends CPlageHoraire {
     $query = "SELECT SUM(`consultation`.`duree`)
               FROM `consultation`
               WHERE `consultation`.`plageconsult_id` = '$this->_id'
-                AND `consultation`.`patient_id` IS NOT NULL
                 AND `consultation`.`annule` = '0'";
 
     $this->_affected = intval($this->_spec->ds->loadResult($query));

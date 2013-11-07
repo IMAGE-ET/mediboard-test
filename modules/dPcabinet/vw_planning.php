@@ -180,7 +180,7 @@ for ($i = 0; $i < 7; $i++) {
   $listPlages = $plage->loadList($where, "date, debut");
   foreach ($listPlages as $_plage) {
     $_plage->loadRefsBack();
-    $_plage->countPatients();
+    $_plage->countPatients(true);
     $debute = "$jour $_plage->debut";
     $libelle = "";
     if (CMbDT::minutesRelative($_plage->debut, $_plage->fin) >= 30 ) {
@@ -261,7 +261,7 @@ for ($i = 0; $i < 7; $i++) {
 
     //Ajout de l'évènement au planning 
     $planning->addEvent($event);
-  }    
+  }
 }
 
 $planning->allow_superposition = false;
