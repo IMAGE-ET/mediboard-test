@@ -15,6 +15,7 @@
 class CTimeSpec extends CMbFieldSpec {
   public $min;
   public $max;
+  public $duration;
 
   /**
    * @see parent::getSpecType()
@@ -90,6 +91,7 @@ class CTimeSpec extends CMbFieldSpec {
     
     $propValue = $object->{$this->fieldName};
     $format = CValue::first(@$params["format"], CAppUI::conf("time"));
+
     return $propValue ? smarty_modifier_date_format($propValue, $format) : "";
   }
 
@@ -108,6 +110,10 @@ class CTimeSpec extends CMbFieldSpec {
    * @see parent::getFormHtmlElement()
    */
   function getFormHtmlElement($object, $params, $value, $className) {
+    if ($this->duration && !$value) {
+      $value = "00:00:00";
+    }
+
     return $this->getFormElementDateTime($object, $params, $value, $className, CAppUI::conf("time"));
   }
 }
