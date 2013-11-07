@@ -11,7 +11,7 @@
 $type       = CValue::get("type", "week");
 $date       = CValue::get("date", CMbDT::date());
 $bloc_id    = CValue::get("bloc_id");
-$edit_mode  = CValue::get("edit_mode");
+$edit_mode  = CValue::get("edit_mode", false);
 
 if ($type == "week") {
   $date = CMbDT::date("last sunday", $date);
