@@ -289,16 +289,18 @@ refreshFunction = function(chir_id) {
     <th>{{mb_label object=$op field="_time_op"}}</th>
     <td>
       <input name="_time_op" class="notNull time" type="hidden" value="{{$op->_time_op}}"/>
+      <script>
+        Main.add(function() {
+          Calendar.regField(getForm("editOp")._time_op, null, {datePicker:false, timePicker:true,
+            minHours: parseInt({{$hours_duree.deb}}),
+            maxHours: parseInt({{$hours_duree.fin}}),
+            minInterval: parseInt({{$mins_duree}})});
+        });
+      </script>
     </td>
     <td id="timeEst">
     </td>
   </tr>
-
-  <script>
-    Main.add(function() {
-      Calendar.regField(getForm("editOp")._time_op, null, {datePicker:false, timePicker:true});
-    });
-  </script>
   
   <tr>
     {{if $modurgence}}
@@ -333,11 +335,16 @@ refreshFunction = function(chir_id) {
         </script>
         
         à
-        <input name="_time_urgence" class="notNull time" type="hidden" value="{{$op->_time_urgence}}"/>
+        <input type="text" class="time" name="_time_urgence_da" readonly value="{{$op->_time_urgence|date_format:"%H:%M"}}" />
+        <input name="_time_urgence" class="notNull time" type="hidden" value="{{$op->_time_urgence}}"
+               onchange="Value.synchronize($(this.form._time_urgence_da));Value.synchronize(this);"/>
 
         <script>
           Main.add(function() {
-            Calendar.regField(getForm("editOp")._time_urgence, null, {datePicker:false, timePicker:true});
+            Calendar.regField(getForm("editOp")._time_urgence, null, {datePicker:false, timePicker:true,
+              minHours: parseInt({{$hours_urgence.deb}}),
+              maxHours: parseInt({{$hours_urgence.fin}}),
+              minInterval: parseInt({{$mins_duree}})});
           });
         </script>
       </td>

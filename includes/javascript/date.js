@@ -520,7 +520,7 @@ var Calendar = {
     var elementView;
 
     if (!(elementView = $(element.form.elements[element.name+'_da']))) {
-      elementView = new Element('input', {type: 'text', readonly: 'readonly'});
+      elementView = new Element('input', {type: 'text', readonly: 'readonly', name: element.name+'_da'});
       elementView.className = (element.className || 'date');
       element.insert({before: elementView});
     }

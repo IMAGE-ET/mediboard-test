@@ -171,9 +171,9 @@ foreach ($list_minutes_voulu as &$minute) {
 }
 
 $config = CAppUI::conf("dPplanningOp COperation");
-$hours_duree = range($config["duree_deb"], $config["duree_fin"]);
-$hours_urgence = range($config["hour_urgence_deb"], $config["hour_urgence_fin"]);
-$mins_duree = range(0, 59, $config["min_intervalle"]);
+$hours_duree = array("deb" => $config["duree_deb"], "fin" =>$config["duree_fin"]);
+$hours_urgence = array("deb" => $config["hour_urgence_deb"], "fin" => $config["hour_urgence_fin"]);
+$mins_duree = $config["min_intervalle"];
 
 // Récupération de la liste des services
 $where = array();
@@ -227,6 +227,10 @@ $_functions = array();
 
 if ($chir->_id) {
   $_functions = $chir->loadBackRefs("secondary_functions");
+}
+
+if (!$op->_time_op && ! $op->temp_operation) {
+  $op->_time_op = $op->temp_operation = "00:00:00";
 }
 
 // Création du template

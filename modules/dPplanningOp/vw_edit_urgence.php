@@ -171,9 +171,9 @@ $hours = range($config["heure_deb"], $config["heure_fin"]);
 $mins = range(0, 59, $config["min_intervalle"]);
 
 $config = CAppUI::conf("dPplanningOp COperation");
-$hours_duree = range($config["duree_deb"], $config["duree_fin"]);
-$hours_urgence = range($config["hour_urgence_deb"], $config["hour_urgence_fin"]);
-$mins_duree = range(0, 59, $config["min_intervalle"]);
+$hours_duree = array("deb" => $config["duree_deb"], "fin" =>$config["duree_fin"]);
+$hours_urgence = array("deb" => $config["hour_urgence_deb"], "fin" => $config["hour_urgence_fin"]);
+$mins_duree = $config["min_intervalle"];
 
 $config = CAppUI::conf("dPplanningOp CSejour");
 $heure_sortie_ambu   = $config["heure_sortie_ambu"];
@@ -219,6 +219,11 @@ $_functions = array();
 
 if ($chir->_id) {
   $_functions = $chir->loadBackRefs("secondary_functions");
+}
+
+if (!$op->_id) {
+  $op->_time_op = $op->temp_operation = "00:00:00";
+  $op->_time_urgence = $op->time_operation = str_pad($hours_urgence["deb"], 2, "0", STR_PAD_LEFT).":00:00";
 }
 
 // Création du template

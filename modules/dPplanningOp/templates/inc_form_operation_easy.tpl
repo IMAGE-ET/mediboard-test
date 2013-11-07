@@ -207,7 +207,9 @@
         });
       </script>
       à
-      <input name="_time_urgence" class="notNull time" type="hidden" value="{{$op->_time_urgence}}"/>
+      <input type="text" class="time" name="_time_urgence_da" readonly value="{{$op->_time_urgence|date_format:"%H:%M"}}" />
+      <input name="_time_urgence" class="notNull time" type="hidden" value="{{$op->_time_urgence}}"
+             onchange="Value.synchronize($(this.form._time_urgence_da));Value.synchronize(this);"/>
 
       <script>
         Main.add(function() {
