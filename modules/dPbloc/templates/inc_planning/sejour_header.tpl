@@ -12,3 +12,6 @@
 <th>Hospi</th>
 <th>Entrée</th>
 <th>Chambre</th>
+{{if $prestation->_id}}
+  <th>{{$prestation}}</th>
+{{/if}}

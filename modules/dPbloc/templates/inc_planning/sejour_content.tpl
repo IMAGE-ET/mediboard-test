@@ -31,3 +31,8 @@
     &mdash;
   {{/if}}
 </td>
+{{if $prestation->_id}}
+  <td>
+    {{mb_include module=hospi template=inc_vw_liaisons_prestation liaisons=$sejour->_liaisons_for_prestation}}
+  </td>
+{{/if}}

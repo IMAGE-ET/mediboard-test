@@ -13,7 +13,7 @@ CCanDo::checkRead();
 
 $ds = CSQLDataSource::get("std");
 
-$now       = CMbDT::date();
+$now    = CMbDT::date();
 $filter = new COperation();
 $filter->_date_min       = CValue::get("_date_min", $now);
 $filter->_date_max       = CValue::get("_date_max", $now);
@@ -189,6 +189,15 @@ $order = "operations.rank, operations.horaire_voulu, sejour.entree_prevue";
 
 $listDates = array();
 
+$prestation_id = CAppUI::pref("prestation_id_hospi");
+
+if (CAppUI::conf("dPhospi systeme_prestations") == "standard" || $prestation_id == "all") {
+  $prestation_id = "";
+}
+
+$prestation = new CPrestationJournaliere();
+$prestation->load($prestation_id);
+
 // Operations de chaque plage
 foreach ($plagesop as &$plage) {
   $plage->loadRefsFwd(1);
@@ -219,7 +228,11 @@ foreach ($plagesop as &$plage) {
     if ($_print_numdoss) {
       $sejour->loadNDA();
     }
-    
+
+    if ($prestation_id) {
+      $sejour->loadLiaisonsForPrestation($prestation_id);
+    }
+
     // Chargement de l'affectation
     $affectation = $operation->getAffectation();
     
@@ -272,6 +285,10 @@ foreach ($operations as $operation) {
     $sejour->_ref_patient->loadIPP();
   }
 
+  if ($prestation_id) {
+    $sejour->loadLiaisonsForPrestation($prestation_id);
+  }
+
   // Chargement de l'affectation
   $affectation = $operation->getAffectation();
   
@@ -292,6 +309,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("affectations_plage", $affectations_plage);
 $smarty->assign("filter"            , $filter);
+$smarty->assign("prestation"        , $prestation);
 $smarty->assign("_coordonnees"      , $_coordonnees);
 $smarty->assign("_print_numdoss"    , $_print_numdoss);
 $smarty->assign("_print_ipp"        , $_print_ipp);
