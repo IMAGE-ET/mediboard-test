@@ -210,10 +210,11 @@ class CMbXPath extends DOMXPath {
    *
    * @param string  $query       The XPath to the node
    * @param DOMNode $contextNode The context node from which the XPath starts
+   * @param int     $index       Index
    *
    * @return DOMElement|null The node
    */
-  function getFirstNode($query, DOMNode $contextNode = null) {
+  function getNode($query, DOMNode $contextNode = null, $index = 0) {
     $query = utf8_encode($query);
     $nodeList = $contextNode ? parent::query($query, $contextNode) : parent::query($query);
 
@@ -221,7 +222,7 @@ class CMbXPath extends DOMXPath {
       return null;
     }
 
-    return $nodeList->item(0);
+    return $nodeList->item($index);
   }
 
   /**
