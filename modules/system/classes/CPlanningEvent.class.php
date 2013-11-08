@@ -55,6 +55,7 @@ class CPlanningEvent  {
   public $css_class;
 
   public $_ref_object;
+  public $_ref_disponibility;
 
   /**
    * constructor
