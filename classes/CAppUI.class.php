@@ -955,7 +955,7 @@ class CAppUI {
    * @return boolean if translated statement exists
    */
   static function isTranslated($str) {
-    return CAppUI::tr($str) == $str;
+    return CAppUI::tr($str) !== $str;
   }
 
   /**
