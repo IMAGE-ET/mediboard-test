@@ -1261,7 +1261,7 @@ class CSetupdPsalleOp extends CSetup {
     $this->moveCheckListCategory("05b", "preendoscopie_bronchique", "05");
 
     $this->makeRevision("0.51");
-    $this->addDependency("dPplanningOp", "0.37");
+    $this->addDependency("dPplanningOp", "1.50");
     $this->addDependency("dPbloc", "0.23");
     $query = "ALTER TABLE `daily_check_list`
                 ADD `group_id` INT (11) UNSIGNED NOT NULL,
