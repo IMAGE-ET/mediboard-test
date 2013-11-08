@@ -80,8 +80,15 @@ if ($dossier_medical->_id) {
 
 $const_med = $patient->_ref_constantes_medicales;
 $poids = $const_med->poids;
+$risques_cis = array();
 
 if (CModule::getActive("dPprescription")) {
+
+  // Chargement des cis à risque
+  $where = array();
+  $where["risque"]    = " = '1'";
+  $risques_cis = CProduitLivretTherapeutique::getCISList($where);
+
   // Chargement de la prescription à partir du sejour
   $prescription = new CPrescription();
   $prescription->object_id = $sejour_id;
@@ -378,6 +385,7 @@ if (CAppUI::conf("dPprescription CPrescription show_perop_suivi_soins") && $pres
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("risques_cis"         , $risques_cis);
 $smarty->assign("plan_soins_unite_prescription", CAppUI::conf("dPprescription CPrescription unite_prescription_plan_soins", CGroups::loadCurrent()));
 $smarty->assign("sortie_sejour"       , $sortie_sejour);
 $smarty->assign("signe_decalage"      , $signe_decalage);
