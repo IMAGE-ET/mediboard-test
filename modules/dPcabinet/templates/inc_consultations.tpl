@@ -122,6 +122,9 @@
         {{/if}}
       </td>
       <td {{$style|smarty:nodefaults}}>
+        {{if $_consult->duree > 1}}
+          <div style="float:right;">({{math equation="a*b" a=$_consult->duree b=$_consult->_ref_plageconsult->_freq}} min)</div>
+        {{/if}}
         <form name="etatFrm{{$_consult->_id}}" action="?m=dPcabinet" method="post">
           <input type="hidden" name="m" value="dPcabinet" />
           <input type="hidden" name="dosql" value="do_consultation_aed" />
