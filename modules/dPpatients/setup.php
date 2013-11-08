@@ -2381,7 +2381,15 @@ class CSetupdPpatients extends CSetup {
 
     $this->addFunction('modifyConstantsRanksConfigs');
 
-    $this->mod_version = "1.91";
+    $this->makeRevision('1.91');
+
+    $query = 'ALTER TABLE `constantes_medicales`
+                ADD `hemo_glycquee` FLOAT UNSIGNED,
+                ADD `saturation_air` FLOAT UNSIGNED,
+                ADD `clair_creatinine` FLOAT UNSIGNED;';
+    $this->addQuery($query);
+
+    $this->mod_version = "1.92";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

@@ -33,7 +33,7 @@ editConstants = function(const_id, context_guid, start){
 plotHover = function(event, pos, item) {
   if (item) {
     var key = item.dataIndex+"-"+item.seriesIndex;
-    if (previousPoint != key && item.datapoint[0] >= window.minXValue && item.datapoint[0] <= window.minXValue + 10) {
+    if (previousPoint != key && item.datapoint[0] >= window.minXValue && item.datapoint[0] <= window.minXValue + 15) {
       var axis_labels = $$('.axis-onhover');
       axis_labels.each(function(item){
         item.removeClassName('axis-onhover');
@@ -170,16 +170,16 @@ drawGraphs = function() {
       }
 
       oOptions.legend = {container: jQuery('#legend_{{$_rank}}_{{$_graph_id}}')};
-      oOptions.xaxis.ticks = window.xTicks.slice(window.minXIndex, window.minXIndex + 10);
+      oOptions.xaxis.ticks = window.xTicks.slice(window.minXIndex, window.minXIndex + 15);
       oOptions.xaxis.min = window.minXValue - 0.5;
-      oOptions.xaxis.max = window.minXValue + 9.5;
+      oOptions.xaxis.max = window.minXValue + 14.5;
 
       // Deleting the datas of the bandwidth series who are not displayed, because they can appear in the yaxis space
       oDatas.each(function(serie) {
         if (serie.bandwidth) {
           var data = new Array();
           serie.data.each(function(point) {
-            if (point[0] >= window.minXValue && point[0] < window.minXValue + 10) {
+            if (point[0] >= window.minXValue && point[0] < window.minXValue + 15) {
               data.push(point);
             }
           });
@@ -196,7 +196,7 @@ drawGraphs = function() {
         if (serie.bars) {
           serie.data.each(function (data) {
             var oPoint = plot.pointOffset({x: data[0], y: data[1]});
-            if (data[0] >= window.minXValue && data[0] < window.minXValue + 10) {
+            if (data[0] >= window.minXValue && data[0] < window.minXValue + 15) {
               oPh.append('<div style="position: absolute; left:' + (oPoint.left + 5) + 'px; top: ' + (oPoint.top + 5) + 'px; font-size: smaller">' + data[1] + '</div>');
             }
           });
@@ -242,8 +242,8 @@ shiftGraphs = function(direction) {
     window.minXIndex = 0;
   }
   var actualLength = window.xTicks.length - window.minXIndex;
-  if (window.xTicks.length > 10 && actualLength < 10) {
-    window.minXIndex -= 10 - actualLength;
+  if (window.xTicks.length > 15 && actualLength < 15) {
+    window.minXIndex -= 15 - actualLength;
   }
 
   window.minXValue = window.xTicks[window.minXIndex][0];

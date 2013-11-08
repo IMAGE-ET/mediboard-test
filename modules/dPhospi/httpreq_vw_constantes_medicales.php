@@ -78,7 +78,7 @@ else {
 $show_cat_tabs = CConstantesMedicales::getHostConfig("show_cat_tabs", $host);
 
 if (!$selection || $selected_context_guid === 'all') {
-  $selection = CConstantesMedicales::getConstantsByRank($show_cat_tabs, $host);
+  $selection = CConstantesMedicales::getConstantsByRank('form', $show_cat_tabs, $host);
 }
 else {
   $selection = CConstantesMedicales::selectConstants($selection);
@@ -93,15 +93,7 @@ $old_constants_to_draw = ($print == 1 ? $selection : CConstantesMedicales::$list
 
 $show_enable_all_button = CConstantesMedicales::getHostConfig("show_enable_all_button", $host);
 
-/*
- * Organisation differente que l'on affiche par volet ou pas
- */
-if ($show_cat_tabs) {
-  $constants_to_draw = CConstantesMedicales::getConstantsByRank(false, $host);
-}
-else {
-  $constants_to_draw = $selection;
-}
+$constants_to_draw = $selection;
 
 /** @var CMbObject|CPatient|CSejour $context */
 if ($selected_context_guid !== 'all') {

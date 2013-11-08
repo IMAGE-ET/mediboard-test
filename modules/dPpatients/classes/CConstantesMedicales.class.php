@@ -655,6 +655,16 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "",
       "min" => 3, "max" => 15,
     ),
+    'hemo_glycquee' => array(
+      'type' => 'biolo',
+      'unit' => '%',
+      'min'  => 0, 'max' => 50,
+    ),
+    'clair_creatinine' => array(
+      'type' => 'biolo',
+      'unit' => 'ml/min',
+      'min' => 0,
+    ),
   );
 
   static $list_constantes_type = array(
@@ -872,6 +882,9 @@ class CConstantesMedicales extends CMbObject {
     $props['ph_sanguin']             = 'float min|0';
     $props['lactates']               = 'float min|0';
     $props['glasgow']                = 'float min|0';
+    $props['hemo_glycquee']          = 'float min|0';
+    $props['saturation_air']         = 'float min|0';
+    $props['clair_creatinine']       = 'float min|0';
     return $props;
   }
 
@@ -1557,7 +1570,10 @@ class CConstantesMedicales extends CMbObject {
    *
    * @return void
    */
-  static function initParams(){
+  static function initParams() {
+    if (CAppUi::conf('ref_pays') == 2) {
+      self::$list_constantes['saturation_air'] = array('type' => 'physio', 'unit' => '%', 'min'  => 50, 'max' => 100);
+    }
     // make a copy of the array as it will be modified
     $list_constantes = CConstantesMedicales::$list_constantes;
 
@@ -1630,6 +1646,7 @@ class CConstantesMedicales extends CMbObject {
 
     $group_id = null;
     $service_id = null;
+    $function_id = null;
 
     // Etablissement
     if ($host instanceof CGroups) {
@@ -1642,7 +1659,13 @@ class CConstantesMedicales extends CMbObject {
       $group_id   = $host->group_id;
     }
 
-    return self::getConfig($name, $group_id, $service_id);
+    // Cabinet
+    if ($host instanceof CFunctions) {
+      $function_id = $host->_id;
+      $group_id = $host->group_id;
+    }
+
+    return self::getConfig($name, $group_id, $service_id, $function_id);
   }
 
   /**
@@ -1734,13 +1757,14 @@ class CConstantesMedicales extends CMbObject {
   /**
    * Get service or group specific configuration value
    *
-   * @param string $name       Configuration name
-   * @param int    $group_id   Group ID
-   * @param int    $service_id Service ID
+   * @param string $name        Configuration name
+   * @param int    $group_id    Group ID
+   * @param int    $service_id  Service ID
+   * @param int    $function_id Function ID
    *
    * @return mixed
    */
-  static function getConfig($name, $group_id = null, $service_id = null) {
+  static function getConfig($name, $group_id = null, $service_id = null, $function_id = null) {
     if (!$service_id) {
       if (isset($_SESSION["soins"]["service_id"])) {
         $service_id = $_SESSION["soins"]["service_id"];
@@ -1753,6 +1777,9 @@ class CConstantesMedicales extends CMbObject {
     $guid = "global";
     if ($service_id && is_numeric($service_id)) {
       $guid = "CService-$service_id";
+    }
+    elseif ($function_id && is_numeric($function_id)) {
+      $guid = "CFunctions-$function_id";
     }
     elseif ($group_id && is_numeric($group_id)) {
       $guid = "CGroups-$group_id";
@@ -1777,9 +1804,9 @@ class CConstantesMedicales extends CMbObject {
       $configs = CConstantesMedicales::getConfig('selection');
     }
 
+    $id = $type == 'graph' ? 1 : 0;
     foreach ($configs as $_constant => $_config) {
       $_config = explode('|', $_config);
-      $id = $type == 'graph' ? 1 : 0;
       $configs[$_constant] = $_config[$id];
     }
 
@@ -2228,6 +2255,7 @@ class CConstantesMedicales extends CMbObject {
     }
 
     $stacked_graphs = self::getHostConfig('stacked_graphs', $host);
+
     foreach ($constants_by_graph as $_rank => $_constants) {
       $constants_by_graph[$_rank] = array();
 
@@ -2237,7 +2265,7 @@ class CConstantesMedicales extends CMbObject {
           /* The constants with a cumul can't be stacked with other constants */
           if (isset(self::$list_constantes[$_constant]['cumul_reset_config'])) {
             unset($_constants[$_key]);
-            $cumuls_constants[] = array($_constant);
+            $cumuls_constants[] = $_constant;
           }
         }
 
@@ -2247,11 +2275,17 @@ class CConstantesMedicales extends CMbObject {
           for ($i = 0; $i < count($_constants); $i = $i + 5) {
             $constants[] = array_slice($_constants, $i, 5);
           }
+          foreach ($cumuls_constants as $_key => $_cumul) {
+            $cumuls_constants[$_key] = array($_cumul);
+          }
           $constants_by_graph[$_rank] = array_merge($constants, $cumuls_constants);
         }
         else {
           if (!empty($_constants)) {
-            $constants_by_graph[$_rank][] = array_merge($_constants, $cumuls_constants);;
+            $constants_by_graph[$_rank][] = $_constants;
+          }
+          if (!empty($cumuls_constants)) {
+            $constants_by_graph[$_rank][] = $cumuls_constants;
           }
         }
       }
@@ -2296,8 +2330,8 @@ class CConstantesMedicales extends CMbObject {
 
     $min_x_value = 1;
     $min_x_index = 0;
-    if (count($ticks) > 10) {
-      $min_x_index = count($ticks) - 10;
+    if (count($ticks) > 15) {
+      $min_x_index = count($ticks) - 15;
       $min_x_value = $ticks[$min_x_index][0];
     }
 
