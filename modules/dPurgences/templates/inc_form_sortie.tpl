@@ -14,10 +14,17 @@
     var form = select.form;
     $V(form.elements.mode_sortie, selected.get("mode"));
   }
+  updateLitMutation = function(element) {
+    {{if $conf.dPurgences.use_blocage_lit}}
+      var url = new Url('urgences', 'ajax_refresh_lit');
+      url.addParam('rpu_id'  , '{{$rpu}}');
+      url.addParam('sortie_reelle'  , element.value);
+      url.requestUpdate("lit_sortie_transfert");
+    {{/if}}
+  }
 </script>
 
 <form name="editSejour" action="?" method="post"  onsubmit="return submitSejour()">
-
   <input type="hidden" name="dosql" value="do_sejour_aed" />
   <input type="hidden" name="m" value="planningOp" />
   <input type="hidden" name="del" value="0" />
@@ -38,7 +45,7 @@
         <tr>
           <th>{{mb_label object=$sejour field=sortie_reelle}}</th>
           <td>
-            {{mb_field object=$sejour field=sortie_reelle form=editSejour onchange="this.form.onsubmit();" register=true}}
+            {{mb_field object=$sejour field=sortie_reelle form=editSejour onchange="this.form.onsubmit();updateLitMutation(this);" register=true}}
           </td>
         </tr>
       {{/if}}
@@ -77,22 +84,7 @@
     </tr>
 
     {{if $conf.dPurgences.use_blocage_lit}}
-      <tr id="lit_sortie_transfert" {{if $sejour->mode_sortie != "mutation"}} style="display:none;" {{/if}}>
-        <th>Lit</th>
-        <td>
-          <select name="lit_id" style="width: 15em;" onchange="Fields.modif(this.value);"  >
-            <option value="">&mdash; Choisir Lit </option>
-            {{foreach from=$blocages_lit item=blocage_lit}}
-              <option id="{{$blocage_lit->_ref_lit->_guid}}" value="{{$blocage_lit->lit_id}}"
-               class="{{$blocage_lit->_ref_lit->_ref_chambre->_ref_service->_guid}}-{{$blocage_lit->_ref_lit->_ref_chambre->_ref_service->nom}}"
-               {{if $blocage_lit->_ref_lit->_view|strpos:"indisponible"}}disabled{{/if}}
-               {{if $blocage_lit->lit_id == $sejour->_ref_curr_affectation->lit_id}}selected{{/if}}>
-                {{$blocage_lit->_ref_lit->_view}}
-              </option>
-            {{/foreach}}
-          </select>
-        </td>
-      </tr>
+      {{mb_include module=urgences template=inc_form_sortie_lit}}
     {{/if}}
 
     <tr id="service_sortie_transfert" {{if $sejour->mode_sortie != "mutation"}} style="display:none;" {{/if}}>
