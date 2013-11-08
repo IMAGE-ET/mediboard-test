@@ -11,6 +11,7 @@
   <script type="text/javascript">
     File.register('{{$object->_id}}','{{$object->_class}}', 'files-{{$object->_guid}}');
   </script>
+  {{mb_include module="dPfiles" template="yoplet_uploader" object=$object}}
 </div>
 
 {{assign var=object value=$operation->_ref_sejour}}
