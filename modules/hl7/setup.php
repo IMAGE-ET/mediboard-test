@@ -1125,6 +1125,7 @@ class CSetuphl7 extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("0.70");
+    $this->addDependency("ihe", "0.28");
 
     $query = "UPDATE user_log
                 SET user_log.object_class = 'CReceiverHL7v2'
@@ -1138,10 +1139,12 @@ class CSetuphl7 extends CSetup {
 
     $this->makeRevision("0.71");
 
-    $query = "UPDATE message_supported
+    if (CModule::getActive("eai")) {
+      $query = "UPDATE message_supported
                 SET message_supported.object_class = 'CReceiverHL7v2'
                 WHERE message_supported.object_class = 'CReceiverIHE';";
-    $this->addQuery($query);
+      $this->addQuery($query);
+    }
 
     self::updateTableSource("source_file_system");
     self::updateTableSource("source_mllp");
