@@ -185,9 +185,9 @@ class CSetupdPbloc extends CSetup {
     $query = "CREATE TABLE `bloc_operatoire` (
             `bloc_operatoire_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
             `group_id` INT (11) UNSIGNED NOT NULL,
-            `nom` VARCHAR (255) NOT NULL);";
+            `nom` VARCHAR (255) NOT NULL) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-    
+
     $query = "ALTER TABLE `bloc_operatoire` ADD INDEX (`group_id`);";
     $this->addQuery($query);
     
