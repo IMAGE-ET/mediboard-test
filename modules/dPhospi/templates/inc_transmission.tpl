@@ -89,7 +89,7 @@ submitTrans = function(form) {
   {{if $cible_mandatory_trans}}
     if (!$V(form.libelle_ATC) && !$V(form.object_class) && !$V(form.object_id)) {
       alert("{{tr}}CTransmissionMedicale.cible_mandatory_trans{{/tr}}");
-      return; 
+      return;
     }
   {{/if}}
   {{if $refreshTrans || $update_plan_soin}}
@@ -281,7 +281,7 @@ toggleDateMax = function() {
     {{if !$hide_button_add}}
       <tr>
         <td class="button" {{if !$transmission->_id}}colspan="3"{{/if}}>
-          <button type="button" class="oneclick {{if $transmission->_id || $data_id || $action_id || $result_id}}save{{else}}add{{/if}}" onclick="submitTrans(this.form);">
+          <button type="button" class="singleclick {{if $transmission->_id || $data_id || $action_id || $result_id}}save{{else}}add{{/if}}" onclick="submitTrans(this.form);">
             {{if $transmission->_id || $data_id || $action_id || $result_id}}
               {{tr}}Save{{/tr}}
             {{else}}
@@ -289,7 +289,7 @@ toggleDateMax = function() {
             {{/if}}
           </button>
           {{if !$transmission->_id && !$data_id && !$action_id && !$result_id}}
-            <button type="button" class="oneclick add" onclick="$V(this.form._locked, 1); submitTrans(this.form);">Ajouter et fermer la cible</button>
+            <button type="button" class="singleclick add" onclick="$V(this.form._locked, 1); submitTrans(this.form);">Ajouter et fermer la cible</button>
           {{/if}}
         </td>
       </tr>
