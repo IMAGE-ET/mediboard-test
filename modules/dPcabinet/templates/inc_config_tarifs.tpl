@@ -17,3 +17,16 @@
     </tr>
   </table>
 </form>
+
+<form name="recalculTarifs" method="post" action="?" onsubmit="return onSubmitFormAjax(this);">
+  <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="dosql" value="do_tarif_aed" />
+  <input type="hidden" name="reloadAlltarifs" value="1" />
+  <table class="form">
+  <tr>
+    <td class="button" colspan="2">
+      <button class="reboot" type="submit">Recalculer l'ensemble des tarifs</button>
+    </td>
+  </tr>
+  </table>
+</form>

@@ -1447,6 +1447,7 @@ $locales['CTarif.none'] = 'Pas de tarif';
 $locales['CTarif.one'] = 'Un tarif';
 $locales['CTarif.select'] = 'Choisir un tarif';
 $locales['CTarif.taux_tva.'] = '-';
+$locales['CTarif.taux_tva.0'] = '0%';
 $locales['CTarif.taux_tva.19.6'] = '19.6 %';
 $locales['CTechniqueComp'] = 'Techniques Complémentaires';
 $locales['CTechniqueComp-msg-create'] = 'Technique complémentaire créée';

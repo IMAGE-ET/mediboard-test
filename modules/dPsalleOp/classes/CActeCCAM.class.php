@@ -932,7 +932,7 @@ class CActeCCAM extends CActe {
     $code = $this->loadRefCodeCCAM();
     $phase = $code->activites[$this->code_activite]->phases[$this->code_phase];
     $this->_tarif_sans_asso = $phase->tarif;
-    
+
     // Application des modificateurs
     $forfait     = 0;
     $coefficient = 100;
@@ -942,7 +942,7 @@ class CActeCCAM extends CActe {
       $coefficient += $result["coefficient"] - 100;
     }
     
-    return $this->_tarif_sans_asso = ($this->_tarif_sans_asso * ($coefficient / 100) + $forfait);    
+    return $this->_tarif_sans_asso = ($this->_tarif_sans_asso * ($coefficient / 100) + $forfait);
   }
 
   /**
@@ -951,18 +951,22 @@ class CActeCCAM extends CActe {
    * @return float
    */
   function getTarif() {
-    $this->_tarif = $this->getTarifSansAssociationNiCharge();
-    
     // Coefficient d'association
     $code = $this->loadRefCodeCCAM();
-    $this->_tarif *= ($code->getCoeffAsso($this->code_association) / 100);
-    
-    // Charges supplémentaires
-    $phase = $code->activites[$this->code_activite]->phases[$this->code_phase];
-    if ($this->charges_sup) {
-      $this->_tarif += $phase->charges;
+
+    if ($this->code_activite) {
+      $this->_tarif = $this->getTarifSansAssociationNiCharge();
+      $this->_tarif *= ($code->getCoeffAsso($this->code_association) / 100);
+      // Charges supplémentaires
+      $phase = $code->activites[$this->code_activite]->phases[$this->code_phase];
+      if ($this->charges_sup) {
+        $this->_tarif += $phase->charges;
+      }
     }
-    
+    else {
+      $this->_tarif = 0;
+    }
+
     return $this->_tarif;
   }
 
