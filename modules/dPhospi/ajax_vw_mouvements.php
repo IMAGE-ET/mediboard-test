@@ -24,7 +24,7 @@ if (is_array($services_ids)) {
 }
 
 if (!$services_ids) {
-  $smarty = new CSmartyDP;
+  $smarty = new CSmartyDP();
   $smarty->display("inc_no_services.tpl");
   CApp::rip();
 }
@@ -130,6 +130,7 @@ $group_id = CGroups::loadCurrent()->_id;
 $where = array();
 $where["chambre.service_id"] = CSQLDataSource::prepareIn($services_ids);
 $where["service.group_id"] = " = '$group_id'";
+$where["chambre.annule"] = "= '0'";
 $where["lit.annule"] = "= '0'";
 $ljoin = array();
 $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
@@ -168,10 +169,10 @@ $where["lit_id"] = CSQLDataSource::prepareIn(array_keys($lits));
 $where["entree"] = "< '$date_max'";
 $where["sortie"] = "> '$date_min'";
 
-$affectation = new CAffectation;
+$affectation = new CAffectation();
 $nb_affectations = $affectation->countList($where);
 if ($nb_affectations > CAppUI::conf("dPhospi max_affectations_view")) {
-  $smarty = new CSmartyDP;
+  $smarty = new CSmartyDP();
   $smarty->display("inc_vw_max_affectations.tpl");
   CApp::rip();
 }
@@ -239,7 +240,7 @@ if (!CAppUI::conf("dPhospi hide_alertes_temporel")) {
   }
 }
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("services"    , $services);
 $smarty->assign("affectations", $affectations);
