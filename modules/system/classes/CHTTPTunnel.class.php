@@ -46,14 +46,14 @@ class CHTTPTunnel {
    * @param String $ca         Authority certificate
    */
   function __construct($target, $listen = 'tcp://0.0.0.0:8080', $path_cert = null, $passphrase = null, $ca = null) {
-    echo "------------ Construct HTTP Proxy ------------\n";
+    $this->printLn("Construct HTTP Tunnel");
 
     //Initialize a socket server for listen the client request
     $context = $this->createContext($path_cert, $passphrase, $ca, true);
     $socket = stream_socket_server($listen, $errno, $errstr, STREAM_SERVER_BIND|STREAM_SERVER_LISTEN, $context);
     if (!$socket) {
-      echo "$errstr ($errno) \n";
-      exit(-1);
+      $this->printLn("Error : $errstr ($errno)");
+      $this->restartScript();
     }
 
     stream_set_blocking($socket, false);
@@ -73,7 +73,7 @@ class CHTTPTunnel {
     if ($old_timer && ((time() - $old_timer) < 3600)) {
       return true;
     }
-    echo "-------------- Create the Target -------------\n";
+    $this->printLn("Create the Target");
 
     //Add the context of the connection
     $context = null;
@@ -86,10 +86,10 @@ class CHTTPTunnel {
     }
 
     //Create the client for request the target address
-    $target = stream_socket_client($this->target_host, $errno, $errstr, 3600, STREAM_CLIENT_CONNECT, $context);
+    $target = stream_socket_client($this->target_host, $errno, $errstr, 5, STREAM_CLIENT_CONNECT, $context);
     if (!$target) {
-      echo "$errstr ($errno) \n";
-      exit(-1);
+      $this->printLn("Error : $errstr ($errno)");
+      $this->restartScript();
     }
 
     //Active the blocking
@@ -112,12 +112,12 @@ class CHTTPTunnel {
   }
 
   /**
-   * Run the proxy
+   * Run the Tunnel
    *
    * @return void
    */
   function run(){
-    echo "----------- Running the HTTP Proxy -----------\n\n";
+    $this->printLn("Running the HTTP Tunnel\n");
     $client_socks = array();
     $master_sock = $this->listen_socket;
 
@@ -128,15 +128,15 @@ class CHTTPTunnel {
       $read_socks[] = $master_sock;
       //We check the evolution of master socket
       if (!@stream_select($read_socks, $write, $except, null) && $this->running) {
-        echo "$except \n";
-        exit(-1);
+        $this->printLn("Error : $except");
+        $this->restartScript();
       }
 
       if (in_array($master_sock, $read_socks)) {
         //We continue the program when a client to connect
         $new_client = stream_socket_accept($master_sock, 15, $peer_name);
         if ($new_client) {
-          echo '** Connection accepted from ' . $peer_name . " **\n";
+          $this->printLn("Connection accepted from $peer_name");
           //We place the new client to the list
           $client_socks[] = $new_client;
         }
@@ -145,11 +145,13 @@ class CHTTPTunnel {
       }
 
       foreach ($read_socks as $sock) {
-        echo "----------- Receive request client -----------\n";
+        $this->printLn("Receive request client");
         //Active the crypto SSL/TLS for the connection for a new connection
         if (!$this->header_continue) {
           stream_set_blocking($sock, true);
-          stream_socket_enable_crypto($sock, true, STREAM_CRYPTO_METHOD_SSLv23_SERVER);
+          if (!stream_socket_enable_crypto($sock, true, STREAM_CRYPTO_METHOD_SSLv23_SERVER)) {
+            $this->restartScript();
+          }
         }
 
         $request = $this->read($sock);
@@ -157,7 +159,7 @@ class CHTTPTunnel {
 
         $t = microtime(true);
         if (strpos($request, "CMD") !== false) {
-          echo "--------------- Command system ---------------\n";
+          $this->printLn("Command system");
           $result = $this->executeCommand($request);
           $response = "HTTP/1.1 200 OK\nContent-Type: text/html\n\n$result";
         }
@@ -183,10 +185,10 @@ class CHTTPTunnel {
           $this->setLogClient($peer_name, "data_sent", strlen($request));
         }
 
-        echo "** Request done in ".((microtime(true) - $t) * 1000)." ms ! **\n";
+        $this->printLn("Request done in ".((microtime(true) - $t) * 1000)." ms !");
 
         //return the response to the client
-        echo "---------- Send response for client ----------\n";
+        $this->printLn("Send response for client");
         fwrite($sock, $response);
         $this->header_continue = true;
         if (strpos($response, "100 Continue") === false) {
@@ -194,7 +196,7 @@ class CHTTPTunnel {
           //We delete the client and close her connection
           unset($client_socks[array_search($sock, $client_socks)]);
           stream_socket_shutdown($sock, STREAM_SHUT_RDWR);
-          echo '** Connection closed from ' . $peer_name . " **\n\n";
+          $this->printLn("Connection closed from $peer_name\n");
         }
       }
     }
@@ -213,9 +215,9 @@ class CHTTPTunnel {
    */
   function serve($data) {
     $this->timer = time();
-    echo "------------ Send request client ------------\n";
+    $this->printLn("Send request client");
     fwrite($this->target_socket, $data);
-    echo "--------- Receive response for client --------\n";
+    $this->printLn("Receive response for client");
     $response = $this->read($this->target_socket);
     return $response;
   }
@@ -263,7 +265,7 @@ class CHTTPTunnel {
    * @return void
    */
   function setAuthentificationCertificate($path_cert, $passphrase, $path_ca, $revocation = null) {
-    echo "--------- Configurate the HTTP Proxy ---------\n";
+    $this->printLn("Configurate the HTTP Tunnel");
     $this->revocation = $revocation;
     $this->context = $this->createContext($path_cert, $passphrase, $path_ca);
   }
@@ -414,7 +416,7 @@ class CHTTPTunnel {
       return;
     }
     $this->quit("restart");
-    echo "----------- Restart the HTTP Proxy -----------\n";
+    $this->printLn("Restart the HTTP Tunnel");
     pcntl_exec($_SERVER["_"], $_SERVER["argv"]);
   }
 
@@ -426,7 +428,7 @@ class CHTTPTunnel {
    * @return void
    */
   function quit($status = "ok"){
-    echo "------------- Stop the HTTP Proxy ------------\n";
+    $this->printLn("Stop the HTTP Tunnel");
 
     $this->running = false;
     if ($this->target_socket) {
@@ -445,6 +447,7 @@ class CHTTPTunnel {
    * @return bool
    */
   function checkCertificate() {
+    $this->printLn("Verify the certificate");
     $path_revocation = $this->revocation;
     $certificate = "";
     $option = stream_context_get_options($this->target_socket);
@@ -458,15 +461,31 @@ class CHTTPTunnel {
       $dn = array_pop($dn["rdnSequence"]);
       $host = explode(":", $this->target_host);
       if ($dn[0]["value"]["printableString"] !== $host[0]) {
+        $this->printLn("Error : the server name does not match that of the certificate");
         return false;
       }
       $serial = strtoupper($cert['tbsCertificate']['serialNumber']->toHex());
       $revocation = file($path_revocation);
       if (in_array("$serial\n", $revocation, true)) {
+        $this->printLn("Error : revoked certificate");
         return false;
       }
       return true;
     }
+
+    $this->printLn("Error : untransmitted certificate");
+
     return false;
+  }
+
+  /**
+   * Print the text
+   *
+   * @param String $text Text
+   *
+   * @return void;
+   */
+  function printLn($text) {
+    echo strftime("[%Y-%m-%d %H:%M:%S]")." $text\n";
   }
 }
