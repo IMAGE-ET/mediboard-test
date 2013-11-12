@@ -183,7 +183,7 @@ class CProtocole extends CMbObject {
       $this->_codes_ccam = array();
     }
 
-    $this->_time_op = intval(substr($this->temp_operation, 0, 4));
+    $this->_time_op = $this->temp_operation;
 
     if ($this->libelle_sejour) {
       $this->_view = $this->libelle_sejour;
@@ -223,7 +223,7 @@ class CProtocole extends CMbObject {
       $this->codes_ccam = implode("|", $codes_ccam);
     }
     if ($this->_time_op !== null) {
-      $this->temp_operation = CMbDT::transform(null, $this->_time_op, "%H:%M:00");
+      $this->temp_operation = $this->_time_op;
     }
   }
 

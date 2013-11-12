@@ -288,7 +288,9 @@ refreshFunction = function(chir_id) {
   <tr>
     <th>{{mb_label object=$op field="_time_op"}}</th>
     <td>
-      <input name="_time_op" class="notNull time" type="hidden" value="{{$op->_time_op}}"/>
+      <input type="text" class="time" name="_time_op_da" readonly value="{{$op->_time_op|date_format:"%H:%M"}}" />
+      <input name="_time_op" class="notNull time" type="hidden"
+             onchange="$V(this.form.elements._time_op_da, this.value.substr(0, 5))" value="{{$op->_time_op}}"/>
       <script>
         Main.add(function() {
           Calendar.regField(getForm("editOp")._time_op, null, {datePicker:false, timePicker:true,
