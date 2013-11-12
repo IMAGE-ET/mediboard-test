@@ -101,6 +101,15 @@
 </td>
 
 <td class="text sortie {{$sejour->mode_sortie}}">
+  <span style="float: right">
+    {{if $sejour->UHCD}}
+      <img src="images/icons/uhcd.png" />
+    {{/if}}
+
+    {{if $rpu->mutation_sejour_id}}
+      <img src="images/icons/mutation.png" />
+    {{/if}}
+  </span>
   <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
     {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
     {{if !$sejour->sortie_reelle}} 

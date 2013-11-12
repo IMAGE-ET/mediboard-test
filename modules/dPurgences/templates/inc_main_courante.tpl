@@ -8,7 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{assign var="show_statut" value=$conf.dPurgences.show_statut}}
+{{assign var=show_statut value=$conf.dPurgences.show_statut}}
+{{assign var=create_sejour_hospit value=$conf.dPurgences.create_sejour_hospit}}
 
 <script type="text/javascript">
   Main.add(function() {
@@ -128,7 +129,7 @@
       {{else}}
   
       <td class="ccmu-{{if $conf.ref_pays == 2}}2{{/if}}{{$rpu->ccmu}} text" 
-        {{if $_sejour->sortie_reelle || ($rpu->mutation_sejour_id && $conf.dPurgences.create_sejour_hospit)}}
+        {{if $_sejour->sortie_reelle || ($rpu->mutation_sejour_id && $create_sejour_hospit)}}
           style="border-right: 5px solid black"
         {{/if}}>
         <a href="{{$rpu_link}}">
@@ -266,7 +267,7 @@
                   </a>
                 {{/if}}
               {{elseif !$rpu->radio_fin}}
-               <img src="images/icons/placeholder.png"/>
+               <img src="images/icons/placeholder.png" />
               {{/if}}
              
               {{if $rpu->bio_depart}}
@@ -283,7 +284,7 @@
                    </a>
                 {{/if}}
               {{elseif !$rpu->bio_retour}}
-                <img src="images/icons/placeholder.png"/>
+                <img src="images/icons/placeholder.png" />
               {{/if}}
   
               {{if $rpu->specia_att}}
@@ -295,12 +296,12 @@
                     title="{{tr}}CRPU-specia_att{{/tr}} à {{$rpu->specia_att|date_format:$conf.time}}"
                   {{else}}
                     title="{{tr}}CRPU-specia_arr{{/tr}} à {{$rpu->specia_arr|date_format:$conf.time}}"
-                  {{/if}}/>
+                  {{/if}} />
                 {{if !$rpu->specia_arr}}
                   </a>
                 {{/if}}
               {{elseif !$rpu->specia_arr}}
-                <img src="images/icons/placeholder.png"/>
+                <img src="images/icons/placeholder.png" />
               {{/if}}
   
               {{if $_sejour->_nb_files_docs > 0}}
@@ -308,24 +309,28 @@
                   <img src="images/icons/docitem.png"
                     title="{{$_sejour->_nb_files|default:0}} {{tr}}CMbObject-back-files{{/tr}} / {{$_sejour->_nb_docs|default:0}} {{tr}}CMbObject-back-documents{{/tr}}"/></a>
               {{else}}
-                <img src="images/icons/placeholder.png"/>
+                <img src="images/icons/placeholder.png" />
               {{/if}}
   
               {{assign var=prescription value=$_sejour->_ref_prescription_sejour}}
               {{if $prescription->_id}}
                 <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}#suivisoins" style="display: inline;">
                   {{if $prescription->_count_recent_modif_presc}}
-                    <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
+                    <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')" />
                   {{else}}
-                    <img src="images/icons/ampoule_grey.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
+                    <img src="images/icons/ampoule_grey.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')" />
                   {{/if}}
                 </a>
               {{else}}
-                <img src="images/icons/placeholder.png"/>
+                <img src="images/icons/placeholder.png" />
               {{/if}}
               
               {{if $_sejour->UHCD}}
-                <img src="images/icons/uhcd.png"/>
+                <img src="images/icons/uhcd.png" />
+              {{/if}}
+
+              {{if $rpu->mutation_sejour_id}}
+                <img src="images/icons/mutation.png" />
               {{/if}}
             </form>
           </div>

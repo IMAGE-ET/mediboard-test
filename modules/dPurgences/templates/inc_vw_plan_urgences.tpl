@@ -21,17 +21,17 @@
                     {{mb_key object=$rpu}}
                     <input type="hidden" name="box_id"      value="{{$rpu->box_id}}"/>
                   </form>
-                   <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}">
-                     <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');" >
-                       {{$patient->nom}} {{$patient->prenom}}
-                     </span>
-                   </a>                 
+                  <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}">
+                    <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');" >
+                      {{$patient->nom}} {{$patient->prenom}}
+                    </span>
+                  </a>
                   {{mb_include template=inc_icone_attente rpu=$_sejour->_ref_rpu width=16}}
-                 <div class="libelle compact" >
+                  <div class="libelle compact" >
                     {{$rpu->motif|truncate:30|lower}}
                     <div>({{$patient->_age}}) Arrivée: {{mb_value object=$_sejour field=_entree date=$date}}</div>
                     <div>{{$rpu->diag_infirmier|spancate:60:"..."|lower}}</div>
-                 </div>
+                  </div>
                  
                   {{if $rpu->radio_debut}}
                     <img src="modules/soins/images/radio{{if !$rpu->radio_fin}}_grey{{/if}}.png"
@@ -39,7 +39,7 @@
                         title="{{tr}}CRPU-radio_debut{{/tr}} à {{$rpu->radio_debut|date_format:$conf.time}}"
                       {{else}}
                         title="{{tr}}CRPU-radio_fin{{/tr}} à {{$rpu->radio_fin|date_format:$conf.time}}"
-                      {{/if}}/>
+                      {{/if}} />
                   {{/if}}
                  
                   {{if $rpu->bio_depart}}
@@ -48,7 +48,7 @@
                         title="{{tr}}CRPU-bio_depart{{/tr}} à {{$rpu->bio_depart|date_format:$conf.time}}"
                       {{else}}
                         title="{{tr}}CRPU-bio_retour{{/tr}} à {{$rpu->bio_retour|date_format:$conf.time}}"
-                      {{/if}}/>
+                      {{/if}} />
                   {{/if}}
       
                   {{if $rpu->specia_att}}
@@ -57,25 +57,29 @@
                         title="{{tr}}CRPU-specia_att{{/tr}} à {{$rpu->specia_att|date_format:$conf.time}}"
                       {{else}}
                         title="{{tr}}CRPU-specia_arr{{/tr}} à {{$rpu->specia_arr|date_format:$conf.time}}"
-                      {{/if}}/>
+                      {{/if}} />
                   {{/if}}
       
                   {{if $_sejour->_nb_files_docs > 0}}
                       <img src="images/icons/docitem.png"
-                        title="{{$_sejour->_nb_files|default:0}} {{tr}}CMbObject-back-files{{/tr}} / {{$_sejour->_nb_docs|default:0}} {{tr}}CMbObject-back-documents{{/tr}}"/>
+                        title="{{$_sejour->_nb_files|default:0}} {{tr}}CMbObject-back-files{{/tr}} / {{$_sejour->_nb_docs|default:0}} {{tr}}CMbObject-back-documents{{/tr}}" />
                   {{/if}}
                   
                   {{assign var=prescription value=$_sejour->_ref_prescription_sejour}}
                   {{if $prescription->_id}}
-                      {{if $prescription->_count_fast_recent_modif}}
-                        <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
-                      {{else}}
-                        <img src="images/icons/ampoule_grey.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
-                      {{/if}}
+                    {{if $prescription->_count_fast_recent_modif}}
+                      <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
+                    {{else}}
+                      <img src="images/icons/ampoule_grey.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
+                    {{/if}}
                   {{/if}}
                   
                   {{if $_sejour->UHCD}}
-                    <img src="images/icons/uhcd.png"/>
+                    <img src="images/icons/uhcd.png" />
+                  {{/if}}
+
+                  {{if $rpu->mutation_sejour_id}}
+                    <img src="images/icons/mutation.png" />
                   {{/if}}
                 </div>
               {{/foreach}}
