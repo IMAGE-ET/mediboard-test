@@ -53,6 +53,15 @@ interface ISharedMemory {
   function rem($key);
 
   /**
+   * Tell if a key exists in shared memory
+   *
+   * @param string $key Key of value to chek if exists
+   *
+   * @return bool
+   */
+  function exists($key);
+
+  /**
    * Clears the shared memory
    *
    * @return bool job-done

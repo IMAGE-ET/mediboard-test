@@ -79,6 +79,13 @@ class MemcachedSharedMemory implements ISharedMemory {
     return $this->conn->delete($key);
   }
 
+  /**
+   * @see parent::exists()
+   */
+  function exists($key) {
+    return $this->conn->get($key);
+  }
+
   /*function clear() {
     return $this->conn->flush();
   }*/

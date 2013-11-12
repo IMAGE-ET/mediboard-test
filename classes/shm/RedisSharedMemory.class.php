@@ -89,6 +89,13 @@ class RedisSharedMemory implements ISharedMemory {
   }
 
   /**
+   * @see parent::exists()
+   */
+  function exists($key) {
+    return $this->conn->has($key);
+  }
+
+  /**
    * @see parent::listKeys()
    */
   function listKeys($prefix) {

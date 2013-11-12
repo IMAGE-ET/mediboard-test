@@ -64,6 +64,13 @@ class DiskSharedMemory implements ISharedMemory {
     return false;
   }
 
+  /**
+   * @see parent::exists()
+   */
+  function exists($key) {
+    return file_exists($this->dir.$key);
+  }
+
   /*function clear() {
     $files = glob($this->dir);
     $ok = true;

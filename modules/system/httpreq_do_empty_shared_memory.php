@@ -85,13 +85,21 @@ CAppUI::stepAjax("JS-cache-ok", UI_MSG_OK, count($js_files));
 
 ////////// Smarty templates
 // DO NOT use CMbPath::removed because it must be used in the installer
-$templates = array_merge(glob("tmp/templates_c/*/*/*/*"), glob("tmp/templates_c/*/*/*"));
+$templates = array_merge(
+  glob("tmp/templates_c/*/*/*/*/*"),
+  glob("tmp/templates_c/*/*/*/*"),
+  glob("tmp/templates_c/*/*/*")
+);
 foreach ($templates as $_template) {
   if (is_file($_template)) {
     unlink($_template);
   }
 }
-$template_dirs = array_merge(glob("tmp/templates_c/*/*/*", GLOB_ONLYDIR), glob("tmp/templates_c/*/*", GLOB_ONLYDIR));
+$template_dirs = array_merge(
+  glob("tmp/templates_c/*/*/*/*", GLOB_ONLYDIR),
+  glob("tmp/templates_c/*/*/*", GLOB_ONLYDIR),
+  glob("tmp/templates_c/*/*", GLOB_ONLYDIR)
+);
 foreach ($template_dirs as $_dir) {
   rmdir($_dir);
 }

@@ -45,6 +45,13 @@ class APCSharedMemory implements ISharedMemory {
     return apc_delete($key);
   }
 
+  /**
+   * @see parent::exists()
+   */
+  function exists($key) {
+    return apc_exists($key);
+  }
+
   /*function clear() {
     return apc_clear_cache('user');
   }*/
