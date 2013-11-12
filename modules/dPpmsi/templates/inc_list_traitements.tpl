@@ -1,12 +1,12 @@
-{{* $Id: configure.tpl 8820 2010-05-03 13:18:20Z lryo $ *}}
-
 {{*
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage dPpmsi
- * @version $Revision: 8820 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
+ * @author     SARL OpenXtrem
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
+ *}}
 
 <tr>
   <td class="text" colspan="2">
@@ -16,7 +16,7 @@
           {{foreach from=$patient->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
           <li>
             {{if $curr_trmt->fin}}
-              Depuis {{mb_value object=$curr_trmt field=debut}} 
+              Depuis {{mb_value object=$curr_trmt field=debut}}
               jusqu'à {{mb_value object=$curr_trmt field=fin}} :
             {{elseif $curr_trmt->debut}}
               Depuis {{mb_value object=$curr_trmt field=debut}} :
@@ -24,7 +24,11 @@
             <em>{{$curr_trmt->traitement}}</em>
           </li>
           {{foreachelse}}
-          <li class="empty">{{tr}}CTraitement.none{{/tr}}</li>
+            {{if $patient->_ref_dossier_medical->absence_traitement}}
+              <li class="empty">{{tr}}CTraitement.absence{{/tr}}</li>
+            {{else}}
+              <li class="empty">{{tr}}CTraitement.none{{/tr}}</li>
+            {{/if}}
           {{/foreach}}
         </ul>
       </li>
@@ -41,7 +45,7 @@
             <em>{{$curr_trmt->traitement}}</em>
           </li>
           {{foreachelse}}
-          <li class="empty">{{tr}}CTraitement.none{{/tr}}</li>
+            <li class="empty">{{tr}}CTraitement.none{{/tr}}</li>
           {{/foreach}}
         </ul>
       </li>
