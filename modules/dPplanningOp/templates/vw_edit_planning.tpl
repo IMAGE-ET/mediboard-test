@@ -109,6 +109,7 @@ function cancelObjects() {
 ProtocoleSelector.init = function(){
   this.sForSejour     = false;
   this.sChir_id       = "chir_id";
+  this.sChir_view     = "chir_id_view";
   this.sCodes_ccam    = "codes_ccam";
   this.sCote          = "cote";
   this.sLibelle       = "libelle";

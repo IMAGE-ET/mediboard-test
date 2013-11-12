@@ -25,6 +25,7 @@
   aProtocoles[{{$protocole->_id}}] = {
     protocole_id     : {{$protocole->_id}},
     chir_id          : {{if $protocole->chir_id}}"{{$protocole->chir_id}}"{{else}}"{{$chir_id}}"{{/if}},
+    chir_view        : "{{if $protocole->chir_id}}{{$protocole->_ref_chir->_view}}{{/if}}",
     codes_ccam       : "{{$protocole->codes_ccam}}",
     cote             : "{{$protocole->cote}}",
     DP               : "{{$protocole->DP}}",

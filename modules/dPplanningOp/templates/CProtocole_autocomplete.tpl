@@ -28,6 +28,7 @@
   aProtocoles['{{$type}}'][{{$match->protocole_id}}] = {
     protocole_id     : "{{$match->protocole_id}}",
     chir_id          : "{{$match->chir_id}}",
+    chir_view        : "{{if $match->chir_id}}{{$match->_ref_chir->_view}}{{/if}}",
     codes_ccam       : "{{$match->codes_ccam}}",
     DP               : "{{$match->DP}}",
     libelle          : "{{$match->libelle|smarty:nodefaults|escape:"javascript"}}",

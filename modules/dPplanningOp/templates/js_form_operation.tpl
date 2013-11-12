@@ -130,6 +130,10 @@ function modifOp() {
 function synchroPrat() {
   var oOpForm = document.editOp;
   var oSejourForm = document.editSejour;
+  if (oOpForm.chir_id.value == 0) {
+    oOpForm.chir_id.value = '';
+    oOpForm.chir_id_view.value = '';
+  }
   if (!oSejourForm.sejour_id.value) {
     $V(oSejourForm.praticien_id, oOpForm.chir_id.value);
     $V(oSejourForm.praticien_id_view, oOpForm.chir_id_view.value);

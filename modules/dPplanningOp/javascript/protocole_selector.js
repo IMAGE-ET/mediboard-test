@@ -5,6 +5,7 @@ ProtocoleSelector = {
   sForSejour       : null,
   sChir_id         : null,
   sChir_id_easy    : null,
+  sChir_view       : null,
   sLibelle         : null,
   sLibelle_easy    : null,
   sCodes_ccam      : null,
@@ -70,7 +71,11 @@ ProtocoleSelector = {
 
     // Champs de l'intervention
     if (oOpForm) {
-      $V(oOpForm[this.sChir_id], protocole.chir_id, true);
+      $V(oOpForm[this.sChir_view], protocole.chir_view, true);
+      if (protocole.chir_id) {
+        $V(oOpForm[this.sChir_id], protocole.chir_id, true);
+      }
+
       $V(oOpForm[this.sServiceId], protocole.service_id, true);
       if(oOpFormEasy) {
         $V(oOpFormEasy[this.sChir_id_easy]   , protocole.chir_id);
