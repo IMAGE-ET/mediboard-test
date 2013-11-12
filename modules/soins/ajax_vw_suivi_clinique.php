@@ -54,7 +54,24 @@ $transmissions = array();
 
 foreach ($sejour->_ref_transmissions as $_trans) {
   $_trans->loadTargetObject();
-  $nom = get_class($_trans->_ref_object) == "CCategoryPrescription" ? $_trans->_ref_object->nom : "Autres";
+
+  switch (get_class($_trans->_ref_object)) {
+    case "CCategoryPrescription":
+      $nom = $_trans->_ref_object->nom;
+      break;
+    case "CAdministration":
+      $target_object = $_trans->_ref_object->loadTargetObject();
+
+      if ($target_object instanceof CPrescriptionLineElement) {
+        $nom = $target_object->_ref_element_prescription->_ref_category_prescription->nom;
+      }
+      else {
+        $nom = "Autres";
+      }
+      break;
+    default:
+      $nom = "Autres";
+  }
   if (!isset($transmissions[$nom])) {
     $transmissions[$nom] = array();
   }
