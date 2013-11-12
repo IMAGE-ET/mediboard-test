@@ -11,13 +11,12 @@
 
 CCanDo::checkRead();
 
+$rpu_id  = CValue::get("rpu_id", 0);
+$offline = CValue::get("offline", 0);
+
 $today = date("d/m/Y");
 
-$rpu_id = CValue::get("rpu_id", 0);
-$offline = CValue::get("offline", 0);
-$formulaires = null;
-
-//Création du rpu
+// Création du rpu
 $rpu = new CRPU();
 $rpu->load($rpu_id);
 
@@ -37,7 +36,9 @@ $patient = $sejour->_ref_patient;
 $patient->loadRefConstantesMedicales();
 $patient->loadIPP();
 $patient->loadRefDossierMedical();
-
+$patient->loadRefsCorrespondantsPatient();
+$patient->loadRefsCorrespondants();
+$patient->loadRefPhotoIdentite();
 $dossier_medical = $patient->_ref_dossier_medical;
 $dossier_medical->countAntecedents();
 $dossier_medical->loadRefPrescription();
@@ -48,13 +49,14 @@ $consult->loadRefPatient();
 $consult->loadRefPraticien();
 $consult->loadRefsBack();
 $consult->loadRefsDocs();
+
 foreach ($consult->_ref_actes_ccam as $_ccam) {
   $_ccam->loadRefExecutant();
 }
 
-
 $constantes_medicales_grid = CConstantesMedicales::buildGrid($sejour->_list_constantes_medicales, false);
 
+$formulaires = null;
 if (CModule::getActive("forms")) {
   $params = array(
     "detail" => 3,
@@ -73,12 +75,7 @@ $atc_classes = array();
 
 if (CModule::getActive("dPprescription")) {
   // Chargement du dossier de soins cloturé
-  $prescription = new CPrescription();
-  $prescription->object_class = "CSejour";
-  $prescription->type = "sejour";
-  $prescription->object_id = $sejour->_id;
-
-  $prescription->loadMatchingObject();
+  $prescription = $sejour->loadRefPrescriptionSejour();
 
   // Chargement des lignes
   $prescription->loadRefsLinesMedComments("0", "0", "1", "", "", "0", "1");
@@ -147,8 +144,8 @@ if (CModule::getActive("dPprescription")) {
     }
   }
 }
-ksort($dossier);
 
+ksort($dossier);
 
 // Création du template
 $smarty = new CSmartyDP();

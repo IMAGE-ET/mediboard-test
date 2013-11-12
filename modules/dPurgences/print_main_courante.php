@@ -10,15 +10,15 @@
  */
 
 $offline = CValue::get("offline");
+$date    = CValue::getOrSession("date", CMbDT::date());
 
 // Chargement des rpu de la main courante
-$sejour = new CSejour;
+$sejour = new CSejour();
 
 $where = array();
 $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
 
 // Par date
-$date = CValue::getOrSession("date", CMbDT::date());
 $date_tolerance = CAppUI::conf("dPurgences date_tolerance");
 $date_before = CMbDT::date("-$date_tolerance DAY", $date);
 $date_after  = CMbDT::date("+1 DAY", $date);
@@ -41,17 +41,20 @@ $stats = array (
     "total" => 0,
     "less_than_1" => 0,
     "more_than_75" => 0,
-),
+  ),
   "sortie" => array (
     "total" => 0,
     "transferts_count" => 0, 
     "mutations_count" => 0,
     "etablissements_transfert" => array(),
     "services_mutation" => array(),
-),
+  )
 );
 
 $offlines = array();
+
+CMbObject::massLoadFwdRef($sejours, "patient_id");
+CMbObject::massLoadFwdRef($sejours, "praticien_id");
 
 // Détail du chargement
 foreach ($sejours as &$_sejour) {
@@ -112,10 +115,10 @@ foreach ($sejours as &$_sejour) {
   // Chargement nécessaire du mode offline
   if ($offline) {
     $params = array(
-        "rpu_id" => $_sejour->_ref_rpu->_id,
-        "dialog" => 1,
-        "offline" => 1,
-      );
+      "rpu_id" => $_sejour->_ref_rpu->_id,
+      "dialog" => 1,
+      "offline" => 1,
+    );
     $offlines[$_sejour->_id] = CApp::fetch("dPurgences", "print_dossier", $params);
   }
 }

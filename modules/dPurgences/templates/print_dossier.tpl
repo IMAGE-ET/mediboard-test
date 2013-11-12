@@ -1,7 +1,7 @@
 {{assign var=tbl_class value="main tbl"}}
 
 {{if !@$offline}}
-  <script type="text/javascript">
+  <script>
     Main.add(window.print);
   </script>
 
@@ -25,9 +25,9 @@
       </span>
     </th>
   </tr>
-
-  {{mb_include module=cabinet template=print_inc_dossier_medical}}
 </table>
+
+{{mb_include module=patients template=CPatient_complete no_header=true embed=true object=$patient}}
 
 <br />
 <table class="{{$tbl_class}}">
