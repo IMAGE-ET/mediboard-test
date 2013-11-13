@@ -155,6 +155,22 @@ class CSetupdPsante400 extends CSetup {
      CHANGE `done` `done` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.27";
+    $this->makeRevision('0.27');
+
+    $query = "CREATE TABLE `hypertext_link` (
+                `hypertext_link_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `name` VARCHAR (255) NOT NULL,
+                `link` VARCHAR (255) NOT NULL,
+                `object_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `object_class` VARCHAR (80) NOT NULL
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = 'ALTER TABLE `hypertext_link`
+                ADD INDEX (`object_id`),
+                ADD INDEX (`object_class`);';
+    $this->addQuery($query);
+
+    $this->mod_version = '0.28';
   } 
 }

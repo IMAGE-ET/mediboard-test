@@ -778,6 +778,10 @@ button.soins:before, a.button.soins:before {
   content: url(images/buttons/soins.png);
 }
 
+button.glob:before, a.button.glob:before {
+  content: url(images/buttons/globe_blue.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }
