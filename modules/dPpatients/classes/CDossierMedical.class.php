@@ -341,7 +341,7 @@ class CDossierMedical extends CMbMetaObject {
   /**
    * Chargement des allergies
    *
-   * @return CStoredObject[]
+   * @return CAntecedent[]
    */
   function loadRefsAllergies(){
     return $this->_ref_allergies = $this->loadRefsAntecedentsOfType("alle");

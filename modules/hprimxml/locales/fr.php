@@ -481,6 +481,7 @@ $locales['hprimxml-error-A022'] = 'IPP non connu, IC non connu. Patient retrouvé
 $locales['hprimxml-error-A101'] = 'Numéro de dossier envoyé non existant sur le SMP, attribution numéro de dossier forcée.';
 $locales['hprimxml-error-A102'] = 'L\'enregistrement du séjour a échoué.';
 $locales['hprimxml-error-A103'] = 'Modification du séjour a échoué.';
+$locales['hprimxml-error-A104'] = 'Enregistrement des allergies a échoué.';
 $locales['hprimxml-error-A105'] = 'Création du numéro dossier a échoué.';
 $locales['hprimxml-error-A120'] = 'Numéro dossier connu, IC non connu. Mauvais IC sur le SIP.';
 $locales['hprimxml-error-A121'] = 'Numéro dossier non connu, IC non fourni. Séjour retrouvé. Association Numéro dossier.';
