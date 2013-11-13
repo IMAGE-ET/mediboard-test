@@ -65,6 +65,7 @@ if ($userSel->user_id) {
   $aidesCount["user"] = $_aide->_totalSeek;
   foreach ($aides["user"] as $aide) {
     $aide->loadRefsFwd();
+    $aide->loadBackRefs('hypertext_links');
   }
   unset($where["user_id"]);
 
@@ -74,6 +75,7 @@ if ($userSel->user_id) {
   $aidesCount["func"] = $_aide->_totalSeek;
   foreach ($aides["func"] as $aide) {
     $aide->loadRefsFwd();
+    $aide->loadBackRefs('hypertext_links');
   }
   unset($where["function_id"]);
 
@@ -83,6 +85,7 @@ if ($userSel->user_id) {
   $aidesCount["etab"] = $_aide->_totalSeek;
   foreach ($aides["etab"] as $aide) {
     $aide->loadRefsFwd();
+    $aide->loadBackRefs('hypertext_links');
   }
   unset($where["group_id"]);
 }

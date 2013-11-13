@@ -1,5 +1,7 @@
 <!--  $Id$ -->
 
+{{mb_script module=sante400 script=hyperTextLink ajax=true}}
+
 <script>
 
 var aTraduction = {};
@@ -158,7 +160,7 @@ Main.add(function () {
   loadDependances('{{$aide->depend_value_1}}', '{{$aide->depend_value_2}}');
 
   loadTabsAides(form);
-
+  HyperTextLink.getListFor('{{$aide->_id}}', '{{$aide->_class}}');
   ["user", "func", "etab"].each(function(type){
     changePage[type] = function(page) {
       $V(form["start["+type+"]"], page);
@@ -385,6 +387,10 @@ Main.add(function () {
       <td>{{mb_field object=$aide field="text"}}</td>
     </tr>
 
+    <tr>
+      <th>{{tr}}CHyperTextLink{{/tr}}</th>
+      <td id="list-hypertext_links"></td>
+    </tr>
     <tr>
       <td class="button" colspan="2">
         {{if $aide->aide_id}}

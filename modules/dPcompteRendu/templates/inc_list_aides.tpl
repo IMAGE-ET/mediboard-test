@@ -97,7 +97,12 @@
   </td>
   
   <td class="text"><a href="{{$href}}">{{mb_value object=$_aide field=name}}</a></td>
-  <td class="text compact" title="{{$_aide->text}}">{{mb_value object=$_aide field=text truncate=60}}</td>
+  <td class="text compact" title="{{$_aide->text}}">
+    <div style="float: right;">
+      {{mb_include module=sante400 template=inc_hypertext_links object=$_aide}}
+    </div>
+    {{mb_value object=$_aide field=text truncate=60}}
+  </td>
     
   <td>
     <form name="delete-{{$_aide->_guid}}" action="?m={{$m}}" method="post">
