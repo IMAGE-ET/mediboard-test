@@ -35,7 +35,7 @@
 {{if $results|@count}}
 <table class="tbl">
   <tr>
-    <th class="title" colspan="4">{{$results|@count}} lits trouvés</th>
+    <th class="title" colspan="10">{{$results|@count}} lits trouvés</th>
   </tr>
   <tr>
     <th>Etat</th>
