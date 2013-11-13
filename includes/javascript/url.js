@@ -276,8 +276,16 @@ var Url = Class.create({
    * @return {String} The URL string
    */
   make: function(questionMark) {
-    var sUrl = (questionMark ? "&" : "?") + $H(this.oParams).toQueryString();
-    if (this.sFragment) sUrl += "#"+this.sFragment;
+    var params = $H(this.oParams);
+    var sUrl = "";
+
+    if (params.size()) {
+      sUrl = (questionMark ? "&" : "?") + params.toQueryString();
+    }
+    if (this.sFragment) {
+      sUrl += "#"+this.sFragment;
+    }
+
     return sUrl;
   },
 
