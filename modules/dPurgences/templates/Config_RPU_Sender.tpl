@@ -96,17 +96,6 @@
           <input class="str" name="{{$m}}[{{$var}}]" value="{{$conf.$m.$var}}" />
         </td>
       </tr>
-      {{assign var="var" value="max_patient"}}
-      <tr>
-        <th>
-          <label for="{{$m}}[{{$var}}]" title="{{tr}}config-dPurgences-{{$var}}{{/tr}}">
-            {{tr}}config-dPurgences-{{$var}}{{/tr}}
-          </label>
-        </th>
-        <td>
-          <input class="str" name="{{$m}}[{{$var}}]" value="{{$conf.$m.$var}}" />
-        </td>
-      </tr>
 
       {{mb_include module=$m template="Config_RPU_Sender_inc"}}
 
