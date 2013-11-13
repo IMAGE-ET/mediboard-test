@@ -1,12 +1,12 @@
-{{* $Id: inc_vw_rpu.tpl 11346 2011-02-17 20:38:29Z MyttO $ *}}
-
 {{*
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage dPurgences
- * @version $Revision: 11346 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
+ * @author     SARL OpenXtrem
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
+ *}}
 
 <script>
   updateModeSortie = function(select) {
@@ -16,10 +16,13 @@
   }
   updateLitMutation = function(element) {
     {{if $conf.dPurgences.use_blocage_lit}}
-      var url = new Url('urgences', 'ajax_refresh_lit');
-      url.addParam('rpu_id'  , '{{$rpu}}');
-      url.addParam('sortie_reelle'  , element.value);
-      url.requestUpdate("lit_sortie_transfert");
+      var form = getForm('editSejour');
+      if (form.mode_sortie.value == "mutation") {
+        var url = new Url('urgences', 'ajax_refresh_lit');
+        url.addParam('rpu_id'  , '{{$rpu}}');
+        url.addParam('sortie_reelle'  , element.value);
+        url.requestUpdate("lit_sortie_transfert");
+      }
     {{/if}}
   }
 </script>
