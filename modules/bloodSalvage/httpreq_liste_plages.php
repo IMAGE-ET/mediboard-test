@@ -1,18 +1,18 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage bloodSalvage
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
-
-$date  = CValue::getOrSession("date", CMbDT::date());
+$date         = CValue::getOrSession("date", CMbDT::date());
 $operation_id = CValue::getOrSession("operation_id");
-$salle_id = CValue::getOrSession("salle");
+$salle_id     = CValue::getOrSession("salle");
 
 // Chargement des praticiens
 $listAnesths = new CMediusers;
@@ -40,4 +40,3 @@ $smarty->assign("date"          , $date        );
 $smarty->assign("operation_id"  , $operation_id);
 
 $smarty->display("inc_liste_plages.tpl");
-?>

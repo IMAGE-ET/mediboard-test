@@ -1,13 +1,17 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage bloodSalvage
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
+/**
+ * CTypeEi
+ */
 class CTypeEi extends CMbObject {
   public $type_ei_id;
 
@@ -24,6 +28,9 @@ class CTypeEi extends CMbObject {
   /** @var CEiItem[] */
   public $_ref_items;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'type_ei';
@@ -32,7 +39,7 @@ class CTypeEi extends CMbObject {
   }
 
   /**
-   * Spécifications. Indique les formats des différents éléments et références de la classe.
+   * @see parent::getProps()
    */
   function getProps() {
     $props = parent::getProps();
@@ -44,12 +51,18 @@ class CTypeEi extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::getBackProps()
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["blood_salvages"] = "CBloodSalvage type_ei_id";
     return $backProps;
   }
 
+  /**
+   * @see parent::updateFormFields()
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->name;
@@ -60,6 +73,8 @@ class CTypeEi extends CMbObject {
   }
 
   /**
+   * Chargement des items
+   *
    * @return CEiItem[]
    */
   function loadRefItems() {

@@ -1,15 +1,15 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage bloodSalvage
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
-
 $salle            = CValue::getOrSession("salle");
 $op               = CValue::getOrSession("op");
 $date             = CValue::getOrSession("date", CMbDT::date());
@@ -19,7 +19,7 @@ $timing = array();
 
 $inLivretTherapeutique = CAppUI::conf("bloodSalvage inLivretTherapeutique");
 
-if(CModule::getActive("dPmedicament")) {
+if (CModule::getActive("dPmedicament")) {
   $anticoagulant = new CBcbClasseATC(); 
   if ($inLivretTherapeutique) {
     $anticoagulant_list = $anticoagulant->loadRefProduitsLivret("B01AB");
@@ -28,7 +28,8 @@ if(CModule::getActive("dPmedicament")) {
     $anticoagulant->loadRefsProduits("B01AB");
     $anticoagulant_list = $anticoagulant->_ref_produits;
   }
-} else {
+}
+else {
   $list = CAppUI::conf("bloodSalvage AntiCoagulantList");
   $anticoagulant_list = explode("|", $list);
 }
@@ -52,8 +53,9 @@ if ($op) {
   $blood_salvage->loadMatchingObject();
   $blood_salvage->loadRefs();
   $timing["_recuperation_start"] = array();
-  foreach($timing as $key => $value) {
-    for($i = -CAppUI::conf("dPsalleOp max_sub_minutes"); $i < CAppUI::conf("dPsalleOp max_add_minutes") && $blood_salvage->$key !== null; $i++) {
+  $max_add_minutes = CAppUI::conf("dPsalleOp max_add_minutes");
+  foreach ($timing as $key => $value) {
+    for ($i = -CAppUI::conf("dPsalleOp max_sub_minutes"); $i < $max_add_minutes && $blood_salvage->$key !== null; $i++) {
       $timing[$key][] = CMbDT::time("$i minutes", $blood_salvage->$key);
     }
   }
@@ -67,16 +69,15 @@ $list_cell_saver = $cell_saver->loadList();
 
 $smarty = new CSmartyDP();
 
-$smarty->assign("blood_salvage", $blood_salvage); 
-$smarty->assign("salle", $salle);
-$smarty->assign("selOp", $selOp);
-$smarty->assign("date", $date);
+$smarty->assign("blood_salvage",  $blood_salvage);
+$smarty->assign("salle",          $salle);
+$smarty->assign("selOp",          $selOp);
+$smarty->assign("date",           $date);
 $smarty->assign("modif_operation", $modif_operation);
-$smarty->assign("totaltime", "00:00:00");
+$smarty->assign("totaltime",      "00:00:00");
 $smarty->assign("anticoagulant_list", $anticoagulant_list);
-$smarty->assign("timing", $timing);
+$smarty->assign("timing",         $timing);
 $smarty->assign("list_cell_saver", $list_cell_saver);
 $smarty->assign("inLivretTherapeutique", $inLivretTherapeutique);
 
 $smarty->display("inc_bloodSalvage.tpl");
-?>

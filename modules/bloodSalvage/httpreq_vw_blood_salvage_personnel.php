@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage bloodSalvage
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 CAppUI::requireModuleFile("bloodSalvage", "inc_personnel");
@@ -22,18 +23,17 @@ $list_nurse_sspi= CPersonnel::loadListPers("reveil");
 $tabAffected = array();
 $timingAffect = array();
 
-if($blood_salvage_id) {
+if ($blood_salvage_id) {
   $blood_salvage->load($blood_salvage_id);
   loadAffected($blood_salvage_id, $list_nurse_sspi, $tabAffected, $timingAffect);
 }
 
 $smarty = new CSmartyDP();
 
-$smarty->assign("modif_operation",$modif_operation);
-$smarty->assign("list_nurse_sspi",$list_nurse_sspi);
-$smarty->assign("blood_salvage",$blood_salvage);
-$smarty->assign("tabAffected",$tabAffected);
-$smarty->assign("timingAffect",$timingAffect);
+$smarty->assign("modif_operation",  $modif_operation);
+$smarty->assign("list_nurse_sspi",  $list_nurse_sspi);
+$smarty->assign("blood_salvage",    $blood_salvage);
+$smarty->assign("tabAffected",      $tabAffected);
+$smarty->assign("timingAffect",     $timingAffect);
 
 $smarty->display("inc_vw_blood_salvage_personnel.tpl");
-?>

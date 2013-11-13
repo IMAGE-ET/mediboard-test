@@ -1,18 +1,16 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage bloodSalvage
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
-
-/*
- * Récupération des variables en session et ou issues des formulaires.
- */
+/* Récupération des variables en session et ou issues des formulaires.*/
 $salle            = CValue::getOrSession("salle");
 $op               = CValue::getOrSession("op");
 $date             = CValue::getOrSession("date", CMbDT::date());
@@ -31,10 +29,9 @@ if ($op) {
 
 $smarty = new CSmartyDP();
 
-$smarty->assign("blood_salvage", $blood_salvage);
+$smarty->assign("blood_salvage",    $blood_salvage);
 $smarty->assign("blood_salvage_id", $blood_salvage->_id);
-$smarty->assign("selOp", $selOp);
-$smarty->assign("date", $date);
+$smarty->assign("selOp",            $selOp);
+$smarty->assign("date",             $date);
 
 $smarty->display("vw_bloodSalvage.tpl");
-?>

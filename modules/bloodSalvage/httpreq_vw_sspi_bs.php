@@ -1,22 +1,23 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage bloodSalvage
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 CAppUI::requireModuleFile("bloodSalvage", "inc_personnel");
 
-$blood_salvage      = new CBloodSalvage();
-$date               = CValue::getOrSession("date", CMbDT::date());
-$op                 = CValue::getOrSession("op");
-$totaltime          = "00:00:00";
-$modif_operation    = CCanDo::edit() || $date >= CMbDT::date();
-$timing             = array();
-$tabAffected        = array();
+$blood_salvage    = new CBloodSalvage();
+$date             = CValue::getOrSession("date", CMbDT::date());
+$op               = CValue::getOrSession("op");
+$totaltime        = "00:00:00";
+$modif_operation  = CCanDo::edit() || $date >= CMbDT::date();
+$timing           = array();
+$tabAffected      = array();
 /*
  * Liste des cell saver.
  */
@@ -40,7 +41,7 @@ $liste_incident = $incident->loadList();
 $tabAffected = array();
 $timingAffect = array();
 
-if($op) {
+if ($op) {
   $where = array();
   $where["operation_id"] = "='$op'";  
   $blood_salvage->loadObject($where);
@@ -51,30 +52,27 @@ if($op) {
   $timing["_recuperation_end"]         = array();
   $timing["_transfusion_start"]        = array();
   $timing["_transfusion_end"]          = array();
-  foreach($timing as $key => $value) {
-    for($i = -CAppUI::conf("dPsalleOp max_sub_minutes"); $i < CAppUI::conf("dPsalleOp max_add_minutes") && $blood_salvage->$key !== null; $i++) {
+  $max_add_minutes = CAppUI::conf("dPsalleOp max_add_minutes");
+  foreach ($timing as $key => $value) {
+    for ($i = -CAppUI::conf("dPsalleOp max_sub_minutes"); $i < $max_add_minutes && $blood_salvage->$key !== null; $i++) {
       $timing[$key][] = CMbDT::time("$i minutes", $blood_salvage->$key);
     }
   }
   
   loadAffected($blood_salvage->_id, $list_nurse_sspi, $tabAffected, $timingAffect);
-  
 }
 
 $smarty = new CSmartyDP();
 
-$smarty->assign("date", $date);
-$smarty->assign("blood_salvage",$blood_salvage);
-$smarty->assign("totaltime", $totaltime);
+$smarty->assign("date",           $date);
+$smarty->assign("blood_salvage",  $blood_salvage);
+$smarty->assign("totaltime",      $totaltime);
 $smarty->assign("modif_operation", $modif_operation);
-$smarty->assign("timing", $timing);
-$smarty->assign("timingAffect", $timingAffect);
-$smarty->assign("tabAffected",$tabAffected);
+$smarty->assign("timing",         $timing);
+$smarty->assign("timingAffect",   $timingAffect);
+$smarty->assign("tabAffected",    $tabAffected);
 $smarty->assign("list_cell_saver", $list_cell_saver);
 $smarty->assign("list_nurse_sspi", $list_nurse_sspi);
 $smarty->assign("liste_incident", $liste_incident);
 
-
 $smarty->display("inc_vw_sspi_bs.tpl");
-
-?>

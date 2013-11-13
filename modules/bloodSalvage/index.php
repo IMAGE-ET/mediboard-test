@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage bloodSalvage
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 /**
@@ -21,8 +22,6 @@ $module->registerTab("vw_bloodSalvage_sspi", TAB_READ);
 $module->registerTab("vw_stats",             TAB_READ);
 $module->registerTab("vw_cellSaver",         TAB_EDIT);
 
-if(CModule::getActive("dPqualite")) {
+if (CModule::getActive("dPqualite")) {
   $module->registerTab("vw_typeEi_manager", TAB_EDIT);
 }
-
-?>

@@ -1,11 +1,12 @@
-<?php /* $Id: vw_stats.php 7207 2009-11-03 12:03:30Z rhum1 $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage bloodSalvage
- * @version $Revision: 7207 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
@@ -32,7 +33,9 @@ $comparison_right = CValue::get('comparison_right');
 $mode             = CValue::get('mode');
 
 foreach ($possible_filters as $n) {
-  if (!isset($filters[$n])) $filters[$n] = null;
+  if (!isset($filters[$n])) {
+    $filters[$n] = null;
+  }
 }
 
 function fillData(&$where, $ljoin, &$serie, $dates) {
@@ -56,12 +59,12 @@ function computeMeanValue(&$where, &$ljoin, &$serie, $dates, $prop) {
   $pos = end(array_keys($where));
   $i = 0;
   
-  foreach ($dates as $month => $date) {
+  foreach ($dates as $date) {
     $where['plagesop.date'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
     $list = $bs->loadList($where, null, null, null, $ljoin);
     
     $total = 0;
-    foreach($list as $_bs) {
+    foreach ($list as $_bs) {
       $total += $_bs->$prop;
     }
     $count = count($list);
@@ -125,7 +128,7 @@ $data['age'] = array(
 );
 $series = &$data['age']['series'];
 $age_areas = array(0, 20, 40, 50, 60, 70, 80);
-foreach($age_areas as $key => $age) {
+foreach ($age_areas as $key => $age) {
   $limits = array($age, CValue::read($age_areas, $key+1));
   $label = $limits[1] ? ("$limits[0] - ".($limits[1]-1)) : ">= $limits[0]";
   
@@ -149,7 +152,7 @@ $data['6h'] = array(
 );
 $series = &$data['6h']['series'];
 $areas = array("< 6", ">= 6", "IS NULL");
-foreach($areas as $key => $area) {
+foreach ($areas as $key => $area) {
   $where[] = "HOUR(TIMEDIFF(blood_salvage.transfusion_end, blood_salvage.recuperation_start)) $area";
   $series[$key] = array('data' => array(), 'label' => (($area == 'IS NULL') ? CAppUI::tr("Unknown") : $area.'h'));
   fillData($where, $ljoin, $series[$key], $dates);
@@ -165,7 +168,7 @@ $data['sexe'] = array(
 $series = &$data['sexe']['series'];
 $areas = array("= 'm'", "= 'f'");
 $areas_labels = array("= 'm'" => "Homme", "= 'f'" => "Femme");
-foreach($areas as $key => $area) {
+foreach ($areas as $key => $area) {
   $where[] = "patients.sexe $area";
   $series[$key] = array('data' => array(), 'label' => $areas_labels[$area]);
   fillData($where, $ljoin, $series[$key], $dates);
@@ -182,7 +185,7 @@ if ($filters['codes_ccam']) {
     'data' => array()
   );
   $series = &$data['ccam']['series'];
-  foreach($list_codes_ccam as $key => $ccam) {
+  foreach ($list_codes_ccam as $key => $ccam) {
     $where[] = "operations.codes_ccam LIKE '%$ccam%'";
     $series[$key] = array('data' => array(), 'label' => $ccam);
     fillData($where, $ljoin, $series[$key], $dates);
@@ -198,7 +201,7 @@ $mean_props = array(
   "hgb_patient" => "",
 );
 
-foreach($mean_props as $_prop => $_unit) {
+foreach ($mean_props as $_prop => $_unit) {
   $data[$_prop] = array(
     'options' => array(
       'title' => utf8_encode(CAppUI::tr("CBloodSalvage-$_prop").($_unit ? " ($_unit)" : ""))
@@ -217,8 +220,9 @@ $cell_saver = new CCellSaver;
 }*/
 $list_cell_savers = $cell_saver->loadMatchingList("marque, modele");
 
-if (count($list_cell_savers) == 0)
+if (count($list_cell_savers) == 0) {
   $list_cell_savers[] = null;
+}
 
 $data['cell_saver_id'] = array(
   'options' => array(
@@ -229,11 +233,13 @@ $data['cell_saver_id'] = array(
 $series = &$data['cell_saver_id']['series'];
 
 // array_values() to have contiguous keys
-foreach(array_values($list_cell_savers) as $key => $_cell_saver) {
-  if ($_cell_saver && $_cell_saver->_id)
+foreach (array_values($list_cell_savers) as $key => $_cell_saver) {
+  if ($_cell_saver && $_cell_saver->_id) {
     $where[] = "blood_salvage.cell_saver_id = $_cell_saver->_id";
-  else
+  }
+  else {
     $where[] = "blood_salvage.cell_saver_id IS NULL || blood_salvage.cell_saver_id = ''";
+  }
   
   $series[$key] = array('data' => array(), 'label' => $_cell_saver ? utf8_encode($_cell_saver) : CAppUI::tr("Unknown"));
   fillData($where, $ljoin, $series[$key], $dates);
@@ -245,7 +251,7 @@ if ($mode === "comparison") {
   
   $title = $data_left["options"]["title"]." / ".$data_right["options"]["title"];
   
-  foreach($data_right["series"] as &$_serie) {
+  foreach ($data_right["series"] as &$_serie) {
     $_serie["yaxis"] = 2;
     $_serie["lines"] = array(
       "show" => true,
@@ -274,7 +280,7 @@ foreach ($dates as $month => $date) {
   $i++;
 }
 
-foreach($data as &$_data) {
+foreach ($data as &$_data) {
   $ticks[] = array(count($ticks), "Total");
   
   $_data["options"] = CFlotrGraph::merge("bars", $_data["options"]);
@@ -285,6 +291,5 @@ foreach($data as &$_data) {
   
   CFlotrGraph::computeTotals($_data["series"], $_data["options"]);
 }
-
 
 CApp::json($data, "text/plain");

@@ -1,17 +1,15 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage bloodSalvage
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
-
-$blood_salvage      = new CBloodSalvage();
-
 $operation_id       = CValue::getOrSession("operation_id");
 $date               = CValue::getOrSession("date", CMbDT::date());
 $hour               = CMbDT::time();
@@ -32,19 +30,16 @@ $where["sortie_reveil_possible"] = "IS NULL";
 $leftjoin["blood_salvage"] = "operations.operation_id = blood_salvage.operation_id";
 $where["blood_salvage.operation_id"] = "IS NOT NULL";
 $order = "entree_reveil";
-$listReveil = $listReveil->loadList($where,$order, null, null, $leftjoin);
-foreach($listReveil as $key => $value) {
+$listReveil = $listReveil->loadList($where, $order, null, null, $leftjoin);
+foreach ($listReveil as $key => $value) {
   $listReveil[$key]->loadRefs();
 }
 
 $smarty = new CSmartyDP();
 
 $smarty->assign("listReveil", $listReveil);
-$smarty->assign("date", $date);
-$smarty->assign("hour", $hour);
+$smarty->assign("date",       $date);
+$smarty->assign("hour",       $hour);
 $smarty->assign("operation_id", $operation_id);
 
 $smarty->display("inc_liste_patients_bs.tpl");
-
-
-?>

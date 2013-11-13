@@ -1,16 +1,19 @@
-<?php /* $Id$ */
+<?php
+/**
+ * $Id:$
+ *
+ * @package    Mediboard
+ * @subpackage bloodSalvage
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
+ */
 
 /**
- * @package Mediboard
- * @subpackage bloodSalvage
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * The blood salvage Class. 
  * This class registers informations about an intraoperative blood salvage operation.
  * A blood salvage operation is referenced to an operation (@param $_ref_operation_id) 
  */
-
 class CBloodSalvage extends CMbObject {
   //DB Table Key
   public $blood_salvage_id;
@@ -62,7 +65,10 @@ class CBloodSalvage extends CMbObject {
 
   /** @var CPatient */
   public $_ref_patient;
-  
+
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'blood_salvage';
@@ -70,8 +76,8 @@ class CBloodSalvage extends CMbObject {
     return $spec;
   }
 
-  /*
-   * Spécifications. Indique les formats des différents éléments et références de la classe.
+  /**
+   * @see parent::getProps()
    */
   function getProps() {
     $props = parent::getProps();
@@ -106,6 +112,9 @@ class CBloodSalvage extends CMbObject {
     return $props;
   }
 
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadRefOperation();
     $this->loadRefPatient();
@@ -113,27 +122,52 @@ class CBloodSalvage extends CMbObject {
     $this->loadRefTypeEi();
     $this->_view = "RSPO de {$this->_ref_patient->_view}";
   }
-  
+
+  /**
+   * Chargement du patient
+   *
+   * @return CPatient
+   */
   function loadRefPatient() {
     return $this->_ref_patient = $this->_ref_operation->loadRefPatient(1);
   }
-  
+
+  /**
+   * Chargement de l'opération
+   *
+   * @return void
+   */
   function loadRefOperation() {
     $this->_ref_operation = new COperation();
     $this->_ref_operation = $this->_ref_operation->getCached($this->operation_id);
     $this->_ref_operation->loadRefPlageOp(1);
   }
-  
+
+  /**
+   * Chargement de Cell Saver
+   *
+   * @return void
+   */
   function loadRefCellSaver() {
     $this->_ref_cell_saver = new CCellSaver();
     $this->_ref_cell_saver = $this->_ref_cell_saver->getCached($this->cell_saver_id);  
   }
-  
+
+  /**
+   * Chargement de l'incident
+   *
+   * @return void
+   */
   function loadRefTypeEi() {
     $this->_ref_incident_type = new CTypeEi();
     $this->_ref_incident_type = $this->_ref_incident_type->getCached($this->type_ei_id);
   }
-  
+
+  /**
+   * Chargement de la plage opératoire
+   *
+   * @return void
+   */
   function loadRefPlageOp() {
     $this->_ref_operation = new COperation();
     $this->_ref_operation = $this->_ref_operation->getCached($this->operation_id);
@@ -141,8 +175,8 @@ class CBloodSalvage extends CMbObject {
     $this->_datetime = $this->_ref_operation->_datetime;
   }
 
-  /*
-   * Mise à jour des champs des formulaires (affichage des dateTime en time).
+  /**
+   * @see parent::updateFormFields()
    */
   function updateFormFields() {
     if ($this->recuperation_start) {
@@ -158,7 +192,10 @@ class CBloodSalvage extends CMbObject {
       $this->_transfusion_end = CMbDT::time($this->transfusion_end);
     }
   }
-  
+
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     $this->loadRefPlageOp();
     
@@ -204,14 +241,17 @@ class CBloodSalvage extends CMbObject {
       $this->transfusion_end= "";
     }
   }
-  
-  /*
-   * fillTemplate permet de donner des champs qui seront disponibles dans FCK Editor
+
+  /**
+   * @see parent::fillTemplate()
    */
   function fillTemplate(&$template) {
     $this->fillLimitedTemplate($template);
   }
-  
+
+  /**
+   * @see parent::fillLimitedTemplate()
+   */
   function fillLimitedTemplate(&$template) {
     $this->loadRefCellSaver();
     $this->loadRefTypeEi();

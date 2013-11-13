@@ -1,16 +1,16 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage bloodSalvage
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
-
-$date  = CValue::getOrSession("date", CMbDT::date());
+$date         = CValue::getOrSession("date", CMbDT::date());
 $operation_id = CValue::getOrSession("operation_id");
 
 // Liste des blocs
@@ -26,8 +26,8 @@ $where = array();
 $where["date"] = "= '$date'";
 $groupby = "chir_id";
 $plagesJour = $plagesJour->loadList($where, null, null, $groupby);
-foreach($plagesJour as $curr_plage) {
-  if(array_key_exists($curr_plage->chir_id, $listPermPrats)) {
+foreach ($plagesJour as $curr_plage) {
+  if (array_key_exists($curr_plage->chir_id, $listPermPrats)) {
     $listPrats[$curr_plage->chir_id] = $listPermPrats[$curr_plage->chir_id];
   }
 }
@@ -36,8 +36,8 @@ $where = array();
 $where["date"] = "= '$date'";
 $groupby = "chir_id";
 $opsJour = $opsJour->loadList($where, null, null, $groupby);
-foreach($opsJour as $curr_op) {
-  if(array_key_exists($curr_op->chir_id, $listPermPrats)) {
+foreach ($opsJour as $curr_op) {
+  if (array_key_exists($curr_op->chir_id, $listPermPrats)) {
     $listPrats[$curr_op->chir_id] = $listPermPrats[$curr_op->chir_id];
   }
 }
@@ -62,4 +62,3 @@ $smarty->assign("date"          , $date        );
 $smarty->assign("operation_id"  , $operation_id);
 
 $smarty->display("inc_liste_op_prat.tpl");
-?>
