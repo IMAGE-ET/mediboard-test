@@ -1,11 +1,11 @@
 {{*
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPurgences
  * @author     SARL OpenXtrem
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  *}}
 
 <script>
@@ -19,7 +19,7 @@
       var form = getForm('editSejour');
       if (form.mode_sortie.value == "mutation") {
         var url = new Url('urgences', 'ajax_refresh_lit');
-        url.addParam('rpu_id'  , '{{$rpu}}');
+        url.addParam('rpu_id'  , '{{$rpu->_id}}');
         url.addParam('sortie_reelle'  , element.value);
         url.requestUpdate("lit_sortie_transfert");
       }
@@ -63,6 +63,15 @@
             {{foreach from=$list_mode_sortie item=_mode}}
               <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $sejour->mode_sortie_id == $_mode->_id}}selected{{/if}}>
                 {{$_mode}}
+              </option>
+            {{/foreach}}
+          </select>
+        {{elseif "CAppUI::conf"|static_call:"dPurgences CRPU impose_create_sejour_mutation":"CGroups-$g"}}
+          <select name="mode_sortie" onchange="Fields.init(this.value); this.form.onsubmit();">
+            {{foreach from=$sejour->_specs.mode_sortie->_list item=_mode}}
+              <option value="{{$_mode}}" {{if $sejour->mode_sortie == $_mode}}selected{{/if}}
+                {{if $_mode == "mutation" && !$rpu->mutation_sejour_id}}disabled{{/if}}>
+                {{tr}}CSejour.mode_sortie.{{$_mode}}{{/tr}}
               </option>
             {{/foreach}}
           </select>
@@ -182,5 +191,4 @@
     </tr>
     {{/if}}
   </table>
-
 </form>
