@@ -114,7 +114,11 @@ fi
 
 info_script "Needed space ($needed_size) less than available space ($available_size)"
 
-## Make MySQL medthod
+# Flush query cache to prevent fragmentation
+mysql --user=$username --password=$password --execute="FLUSH QUERY CACHE"
+check_errs $? "Failed to flush query cache" "Query cache flushed"
+
+## Make MySQL method
 
 # removes previous hotcopy/dump if something went wrong
 rm -Rf $database
