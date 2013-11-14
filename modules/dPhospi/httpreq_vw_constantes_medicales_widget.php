@@ -17,17 +17,6 @@ $context = CStoredObject::loadFromGuid($context_guid);
 $date_min = CMbDT::dateTime("-6 DAYS", CMbDT::date());
 $date_max = CMbDT::dateTime("+1 DAY", CMbDT::date());
 
-$ticks = array();
-$date = $date_min;
-while ($date <= $date_max) {
-  $ts = strtotime($date)*1000;
-  $ticks[] = array($ts, CMbDT::transform(null, $date, "%d/%m"));
-  $date = CMbDT::dateTime("+1 DAY", $date);
-}
-
-$date_min_ts = strtotime($date_min) * 1000;
-$date_max_ts = strtotime($date_max) * 1000;
-
 $options = array(
   "shadowSize" => 0,
   "lines" => array("show" => true, "lineWidth" => 1),
@@ -42,22 +31,39 @@ $options = array(
   //"markers" => array("show" => true),
   "mouse" => array("track" => true, "position" => "nw", "relative" => true),
   "grid" => array("outlineWidth" => 1),
-  "xaxis" => array("mode" => "time", "min" => $date_min_ts, "max" => $date_max_ts, "ticks" => $ticks),
+  "xaxis" => array("mode" => "time"),
   "yaxis" => array("min" => PHP_INT_MAX, "max" => -PHP_INT_MAX),
   "legend" => array("show" => true, "labelBoxWidth" => 10, "labelBoxHeight" => 5, "labelBoxMargin" => 2, "labelBoxBorderColor" => "transparent"),
 );
 
+// Displays only constants with rank 1
+$ranks = CConstantesMedicales::getRanksFor('graph', CConstantesMedicales::guessHost($context));
+
+$list_cste   = array();
+$list_drains = array();
+$list_redons = array();
+
+foreach ($ranks as $_cste => $rank) {
+  if ($rank != 1) {
+    continue;
+  }
+  if (strpos($_cste, 'drain') !== false) {
+    $list_drains[] = $_cste;
+    continue;
+  }
+  if (strpos($_cste, 'redon') !== false) {
+    $list_redons[] = $_cste;
+    continue;
+  }
+
+  $list_cste[] = $_cste;
+}
+
 // Global structure
 $graphs_struct = array(
-  "Constantes" => array(
-    "temperature", "ta", "pouls",
-  ),
-  "Drains" => array(
-    "drain_1", "drain_2", "drain_3",
-  ),
-  "Redons" => array(
-    "redon", "redon_2", "redon_3", "redon_4", "redon_5", "redon_6", "redon_7", "redon_8",
-  ),
+  "Constantes" => $list_cste,
+  "Drains"     => $list_drains,
+  "Redons"     => $list_redons
 );
 
 $yaxis_margin_top = 10;
@@ -65,20 +71,21 @@ $yaxis_margin_bottom = 5;
 
 $graphs = array();
 foreach ($graphs_struct as $_name => $_fields) {
-  $graphs[$_name] = array(
-    "series" => array(),
-    "options" => $options,
-  );
-
-  foreach ($_fields as $_field) {
-    $unit = CConstantesMedicales::$list_constantes[$_field]["unit"];
-
-    $graphs[$_name]["series"][] = array(
-      "key"   => $_field,
-      "label" => utf8_encode(CAppUI::tr("CConstantesMedicales-$_field-court")." ($unit)"),
-      "unit"  => utf8_encode($unit),
-      "data"  => array(),
+  if (count($_fields)) {
+    $graphs[$_name] = array(
+      "series" => array(),
+      "options" => $options,
     );
+    foreach ($_fields as $_field) {
+      $unit = CConstantesMedicales::$list_constantes[$_field]["unit"];
+
+      $graphs[$_name]["series"][] = array(
+        "key"   => $_field,
+        "label" => utf8_encode(CAppUI::tr("CConstantesMedicales-$_field-court")." ($unit)"),
+        "unit"  => utf8_encode($unit),
+        "data"  => array(),
+      );
+    }
   }
 }
 
@@ -100,7 +107,13 @@ foreach ($graphs as $_name => $_fields) {
   /** @var CConstantesMedicales[] $list */
   $list = $constante->loadList($where, "datetime DESC", 100);
 
+  if (!count($list)) {
+    unset($graphs[$_name]);
+    continue;
+  }
+  $ticks = array();
   foreach ($list as $_constante) {
+    $ticks[] = array(strtotime($_constante->datetime)*1000, CMbDT::format($_constante->datetime, '%Hh%M') . "<br/>".CMbDT::transform(null, $_constante->datetime, "%d/%m"));
     foreach ($_fields["series"] as $_i => $_field) {
       $_field_name = $_field["key"];
       $_value = $_constante->$_field_name;
@@ -151,11 +164,17 @@ foreach ($graphs as $_name => $_fields) {
       $graphs[$_name]["series"][$_i]["data"][] = $point;
     }
   }
+
+  if (count($ticks)) {
+    $graphs[$_name]["options"]["xaxis"]["ticks"] = $ticks;
+    $graphs[$_name]["options"]["xaxis"]["max"] = $ticks[0][0];
+    $min = end($ticks);
+    $graphs[$_name]["options"]["xaxis"]["min"] = $min[0];
+  }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("graphs", $graphs);
-$smarty->assign("date_min", $date_min);
 $smarty->assign("date_min", $date_min);
 $smarty->display('inc_vw_constantes_medicales_widget.tpl');

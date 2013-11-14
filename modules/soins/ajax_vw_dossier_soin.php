@@ -347,16 +347,9 @@ if (CModule::getActive("dPprescription")) {
         
         foreach ($_operations as $_operation) {
           if ($_operation->time_operation != "00:00:00") {
-            if ($_operation->plageop_id) {
-              $_operation->loadRefPlageOp(); 
-              $date_operation = $_operation->_ref_plageop->date;
-            }
-            else {
-              $date_operation = $_operation->date;
-            }
-            $hour_op = $_operation->debut_op ? $_operation->debut_op : $_operation->time_operation; 
-            $hour_operation = CMbDT::format($hour_op, '%H');
-            $hour_operation .= ":00:00";
+            $date_operation = CMbDT::date($operation->_datetime_best);
+            $hour_op = CMbDT::time($operation->_datetime_best);
+            $hour_operation = CMbDT::format($hour_op, '%H:00:00');
             $operations["$date_operation $hour_operation"] = $hour_op;
             $operations["$date_operation $hour_operation object"] = $_operation;
           }

@@ -392,14 +392,21 @@ Main.add(function () {
             <td style="width: 33%;">
               {{unique_id var=unique_id_widget_forms}}
 
-              <script type="text/javascript">
+              <script>
                 Main.add(function(){
                   ExObject.loadExObjects("{{$sejour->_class}}", "{{$sejour->_id}}", "{{$unique_id_widget_forms}}", 0.5);
                 });
               </script>
 
+              <div id="{{$unique_id_widget_forms}}_modal" style="width: 900px; height: 600px; display: none;"></div>
+
               <fieldset>
-                <legend>Formulaires</legend>
+                <legend>
+                  Formulaires
+                  <button class="search notext compact" type="button"
+                          onclick="ExObject.loadExObjects('{{$sejour->_class}}', '{{$sejour->_id}}', '{{$unique_id_widget_forms}}_modal', 0);
+                                   Modal.open('{{$unique_id_widget_forms}}_modal', {showClose: true})"></button>
+                </legend>
                 <div id="{{$unique_id_widget_forms}}" style="height: 140px; overflow-y: auto;"></div>
               </fieldset>
             </td>
