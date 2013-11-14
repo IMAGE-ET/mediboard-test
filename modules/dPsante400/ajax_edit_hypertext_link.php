@@ -11,8 +11,6 @@
  * @link       http://www.mediboard.org
  */
 
-/* check rights */
-
 $object_id = CValue::get('object_id');
 $object_class = CValue::get('object_class');
 $hypertext_link_id = CValue::get('hypertext_link_id', 0);

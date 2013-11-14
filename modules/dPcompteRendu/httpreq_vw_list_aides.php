@@ -90,6 +90,9 @@ if ($userSel->user_id) {
   unset($where["group_id"]);
 }
 
+CMbObject::massCountBackRefs($aides['user'], 'hypertext_links');
+CMbObject::massCountBackRefs($aides['func'], 'hypertext_links');
+CMbObject::massCountBackRefs($aides['etab'], 'hypertext_links');
 // Création du template
 $smarty = new CSmartyDP();
 

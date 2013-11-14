@@ -28,7 +28,7 @@
 
   <table class="form">
     <tr>
-      <th class="title" colspan="2">{{if $hypertext_link->_id}}{{tr}}CHyperTextLink-title-modify{{/tr}}{{else}}{{tr}}CHyperTextLink-msg-create{{/tr}}{{/if}}</th>
+      <th class="title" colspan="2">{{if $hypertext_link->_id}}{{tr}}CHyperTextLink-title-modify{{/tr}}{{else}}{{tr}}CHyperTextLink-title-create{{/tr}}{{/if}}</th>
     </tr>
     <tr>
       <th>{{mb_label object=$hypertext_link field=name}}</th>
