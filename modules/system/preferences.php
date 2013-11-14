@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage System
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 // Préférences par Module
@@ -29,12 +29,12 @@ CPreferences::$modules["common"] = array (
   "sessionLifetime",
   "planning_resize",
   "planning_dragndrop",
-  "planning_hour_division"
+  "planning_hour_division",
+  "notes_anonymous",
 );
   
 CPreferences::$modules["system"] = array (
   "INFOSYSTEM",
   "showTemplateSpans",
   "moduleFavicon",
-  "notes_anonymous",
 );
