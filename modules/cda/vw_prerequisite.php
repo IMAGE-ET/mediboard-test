@@ -19,12 +19,6 @@ $category   = new CFilesCategory();
 $categories = $category->loadGroupList();
 $mb_oid     = CAppUI::conf("mb_oid");
 
-foreach ($categories as $_category) {
-  /** @var CFilesCategory $_category */
-  $_category->loadLastId400($tag."_$group->_id");
-}
-$type_code = CCdaTools::loadJV("CI-SIS_jdv_typeCode.xml");
-
 $group->loadLastId400($tag);
 
 $type_group = CCdaTools::loadJV("CI-SIS_jdv_healthcareFacilityTypeCode.xml");
@@ -39,8 +33,6 @@ if ($processorResult) {
 }
 
 $smarty = new CSmartyDP();
-$smarty->assign("categories", $categories);
-$smarty->assign("type_code" , $type_code);
 $smarty->assign("group"     , $group);
 $smarty->assign("mb_oid"    , $mb_oid);
 $smarty->assign("java"      , $java);

@@ -78,38 +78,6 @@
     <table class="form">
       <tr>
         <th class="title">
-          {{tr}}File_category{{/tr}}
-        </th>
-        <th class="title">
-          {{tr}}Association{{/tr}}
-        </th>
-      </tr>
-      {{foreach from=$categories item=_category}}
-        <tr>
-          <td>
-            {{$_category->nom}}
-          </td>
-          <td>
-            <select name="select[{{$_category->_id}}]">
-              <option value="">&mdash; {{tr}}Association.none{{/tr}} &mdash;</option>
-              {{foreach from=$type_code item=_type_code}}
-                <option value="{{$_type_code.code}}"
-                        {{if $_category->_ref_last_id400->id400 === $_type_code.code}}selected{{/if}}>
-                  {{$_type_code.code}} - {{$_type_code.displayName}}
-                </option>
-              {{/foreach}}
-            </select>
-          </td>
-        </tr>
-        {{foreachelse}}
-        <tr>
-          <td class="empty" colspan="2">
-            {{tr}}Category.none{{/tr}}
-          </td>
-        </tr>
-      {{/foreach}}
-      <tr>
-        <th class="title">
           {{tr}}Group{{/tr}}
         </th>
         <th class="title">

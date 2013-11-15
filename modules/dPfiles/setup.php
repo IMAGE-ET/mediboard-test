@@ -254,6 +254,11 @@ class CSetupdPfiles extends CSetup {
       ADD `language` ENUM ('en-EN','es-ES','fr-CH','fr-FR') DEFAULT 'fr-FR' AFTER `file_type`";
     $this->addQuery($query);
 
-    $this->mod_version = "0.32";
+    $this->makeRevision("0.32");
+    $query = "ALTER TABLE `files_mediboard`
+      ADD `type_doc` VARCHAR(128);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.33";
   }
 }

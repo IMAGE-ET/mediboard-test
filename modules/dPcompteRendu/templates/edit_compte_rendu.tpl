@@ -738,6 +738,11 @@ Main.add(function() {
       {{/if}}
 
       <br />
+
+      {{if "cda"|module_active}}
+        {{mb_label object=$compte_rendu field=type_doc}}
+        {{mb_field object=$compte_rendu field="type_doc" readonly= $read_only emptyLabel="Choose" style="width: 15em;"}}
+      {{/if}}
       <label>
         {{tr}}CCompteRendu-private{{/tr}}
         {{mb_field object=$compte_rendu field=private typeEnum="checkbox" readonly=$read_only

@@ -19,6 +19,7 @@ class CDocumentItem extends CMbMetaObject {
   public $etat_envoi;
   public $author_id;
   public $private;
+  public $type_doc;
 
   // Derivated fields
   public $_extensioned;
@@ -44,6 +45,15 @@ class CDocumentItem extends CMbMetaObject {
     $props["etat_envoi"]       = "enum notNull list|oui|non|obsolete default|non";
     $props["author_id"]        = "ref class|CMediusers";
     $props["private"]          = "bool default|0";
+    $type_doc = "";
+    if (CModule::getActive("cda")) {
+      $jdv_type = CCdaTools::loadJV("CI-SIS_jdv_typeCode.xml");
+      foreach ($jdv_type as $_type) {
+        $type_doc .= $_type["codeSystem"]."^".$_type["code"]."|";
+      }
+      $type_doc = substr($type_doc, 0, -1);
+    }
+    $props["type_doc"]         = "enum list|$type_doc";
     $props["_extensioned"]     = "str notNull";
     $props["_send_problem"]    = "text";
 

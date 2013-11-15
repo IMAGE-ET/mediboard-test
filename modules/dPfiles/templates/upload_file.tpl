@@ -106,12 +106,23 @@
         <td>
           {{mb_field object=$file field="language"}}
         </td>
+        </tr>
+      <tr>
+        {{if "cda"|module_active}}
+          <th>
+            {{mb_label object=$file field="type_doc"}}
+          </th>
+          <td>
+            {{mb_field object=$file field="type_doc" emptyLabel="Choose" style="width: 15em;"}}
+          </td>
+        {{/if}}
         <th>
           {{mb_label object=$file field="private" typeEnum=checkbox}}
         </th>
         <td>
           {{mb_field object=$file field="private" typeEnum=checkbox}}
         </td>
+        <td colspan="2"></td>
       </tr>
     {{/if}}
   

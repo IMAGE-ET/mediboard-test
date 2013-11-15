@@ -926,7 +926,7 @@ class CCompteRendu extends CDocumentItem {
    * @return string 
    */
   function store() {
-    $this->completeField("content_id", "_source");
+    $this->completeField("content_id", "_source", "language", "version");
 
     // Prevent source modified wben sending, comparison is working when editing
     $this->loadContent($this->_send);

@@ -105,12 +105,11 @@ class CCDAFactory {
     }
     $this->confidentialite = CCdaTools::loadEntryJV("CI-SIS_jdv_confidentialityCode.xml", $confidentialite);
 
-    $category = $docItem->loadRefCategory();
-    $object = $this->targetObject;
-    /** @var COperation|CCOnsultation|CSejour $object */
-    $group_id = $object->loadRefPraticien()->_group_id;
-    $category->loadLastId400("cda_association_code_$group_id");
-    $this->code = CCdaTools::loadEntryJV("CI-SIS_jdv_typeCode.xml", $category->_ref_last_id400->id400);
+    if ($docItem->type_doc) {
+      $type = explode("^", $docItem->type_doc);
+      $this->code = CCdaTools::loadEntryJV("CI-SIS_jdv_typeCode.xml", $type[1]);
+    }
+
     //conformité HL7
     $this->templateId[] = $this->createTemplateID("2.16.840.1.113883.2.8.2.1", "HL7 France");
     //Conformité CI-SIS

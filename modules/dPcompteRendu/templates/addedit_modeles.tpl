@@ -561,6 +561,15 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
           </td>
         </tr>
 
+        {{if "cda"|module_active}}
+          <tr>
+            <th>{{mb_label object=$compte_rendu field="type_doc"}}</th>
+            <td>
+              {{mb_field object=$compte_rendu field="type_doc" emptyLabel="Choose" style="width: 15em;"}}
+            </td>
+          </tr>
+        {{/if}}
+
         <tr>
           <th>{{mb_label object=$compte_rendu field="purge_field"}}</th>
           <td>{{mb_field object=$compte_rendu field="purge_field"}}</td>

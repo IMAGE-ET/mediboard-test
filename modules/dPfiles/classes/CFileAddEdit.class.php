@@ -61,6 +61,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
       $obj->_old_file_path = $this->request['_file_path'];
       $obj->file_size = filesize($file_path);
       $obj->author_id = CAppUI::$user->_id;
+      $obj->type_doc = $this->request["type_doc"];
       $obj->fillFields();
       $obj->updateFormFields();
       $obj->file_type = CMbPath::guessMimeType($file_name);
@@ -80,6 +81,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
       $upload =& $_FILES["formfile"];
       $_file_category_id = CValue::post("_file_category_id");
       $language = CValue::post("language");
+      $type_doc = CValue::post("type_doc");
       $named    = CValue::post("named");
       $rename   = CValue::post("_rename");
 
@@ -98,6 +100,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
             "error"            => $upload["error"][$fileNumber],
             "size"             => $upload["size"][$fileNumber],
             "language"         => $language,
+            "type_doc"         => $type_doc,
             "file_category_id" => $_file_category_id,
             "object_id"        => CValue::post("object_id"),
             "object_class"     => CValue::post("object_class"),

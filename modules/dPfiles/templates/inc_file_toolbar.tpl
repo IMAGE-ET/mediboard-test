@@ -76,7 +76,6 @@
       <button type="button" class="cancel notext" onclick="cancelFile(this.form, '{{$_doc_item->file_category_id}}')">{{tr}}Annuler{{/tr}}</button>
     {{/if}}
 
-
     <!-- Send File -->
     {{assign var=doc_class   value=$_doc_item->_class}}
     {{assign var=doc_id      value=$_doc_item->_id   }}
@@ -98,5 +97,8 @@
     </select>
     
     </form>
+    {{if @$modules.dmp}}
+      {{mb_include module=dmp template=inc_buttons_files_dmp}}
+    {{/if}}
   {{/if}}
 {{/if}}
