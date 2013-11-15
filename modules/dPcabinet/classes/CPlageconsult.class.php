@@ -224,7 +224,7 @@ class CPlageconsult extends CPlageHoraire {
         /** @var CConsultation $consult */
         $consult = $consults_ok[$time];
         // classic
-        if ($consult->patient_id) {
+        if ($consult->patient_id && !$consult->annule) {
           $status = 1;
         }
 
