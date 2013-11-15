@@ -7,13 +7,13 @@
       <!-- Modification de la fiche patient -->
       <script>
         function editPatient(patient_id) {
-          var url = new Url('patients', 'vw_edit_patients');
+          var url = new Url('patients', 'vw_edit_patients', 'tab');
           url.addParam("patient_id", patient_id);
           url.redirect();
         }
 
       </script>
-      <a class="action" style="float: right" title="Modifier la fiche" href="" onclick="editPatient('{{$patient->_id}}');">
+      <a class="action" style="float: right" title="Modifier la fiche" href="#" onclick="editPatient('{{$patient->_id}}');">
         <img src="images/icons/edit.png" alt="modifier" />
       </a>
 
