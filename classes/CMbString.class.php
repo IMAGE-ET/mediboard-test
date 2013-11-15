@@ -700,8 +700,9 @@ abstract class CMbString {
     */
 
     if (!$purifier) {
+      $root = CAppUI::conf("root_dir");
+
       if (!class_exists("HTMLPurifier", false) || !class_exists("HTMLPurifier_Config", false)) {
-        $root = CAppUI::conf("root_dir");
         $file = "$root/lib/htmlpurifier/library/HTMLPurifier.auto.php";
         if (is_readable($file)) {
           include_once $file;
@@ -711,6 +712,7 @@ abstract class CMbString {
       $config = HTMLPurifier_Config::createDefault();
       // App encoding (in order to prevent from removing diacritics)
       $config->set('Core.Encoding', CApp::$encoding);
+      $config->set('Cache.SerializerPath', "$root/tmp");
 
       $purifier = new HTMLPurifier($config);
     }
