@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage dPprescription
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
  */
 
 $sejour_id = CValue::get("sejour_id");
@@ -80,12 +81,6 @@ foreach ($sejour->_ref_transmissions as $_trans) {
 
 $sejour->_ref_transmissions = $transmissions;
 
-foreach ($sejour->_ref_operations as $_operation) {
-  $_operation->loadRefsFwd();
-  $_operation->_ref_chir->loadRefFunction();
-  $_operation->loadBrancardage();
-}
-
 $sejour->loadRefsConsultAnesth();
 $sejour->_ref_consult_anesth->loadRefConsultation();
 
@@ -133,6 +128,12 @@ if (CModule::getActive("dPprescription")) {
   $days_config = CAppUI::conf("dPprescription CPrescription nb_days_prescription_current");
   $date_before = CMbDT::dateTime("-$days_config DAY", $date);
   $date_after  = CMbDT::dateTime("+$days_config DAY", $date);
+}
+
+foreach ($sejour->_ref_operations as $_operation) {
+  $_operation->loadRefsFwd();
+  $_operation->_ref_chir->loadRefFunction();
+  $_operation->loadBrancardage();
 }
 
 $smarty = new CSmartyDP;
