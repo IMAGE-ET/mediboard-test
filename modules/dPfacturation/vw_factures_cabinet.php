@@ -84,7 +84,7 @@ foreach ($factures as $key => $_facture) {
   if (count($_facture->_ref_consults) == 0) {
     unset($factures[$key]);
   }
-  elseif ($nb_tarmed == 0 && $nb_caisse == 0 && $nb_ngap == 0 && $nb_ccam == 0 && !$etat_cotation && $search_easy != 4 && $search_easy != 0) {
+  elseif ($nb_tarmed == 0 && $nb_caisse == 0 && $nb_ngap == 0 && $nb_ccam == 0 && $search_easy != 4 && $search_easy != 0) {
     unset($factures[$key]);
   }
   elseif (($nb_tarmed != 0 || $nb_caisse != 0 || $nb_ngap != 0 || $nb_ccam != 0) && $search_easy == 4) {
