@@ -79,6 +79,8 @@ foreach (CLibrary::$all as $library) {
   }
 }
 
+$servers_ip = CAppUI::conf("servers_ip");
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -86,5 +88,6 @@ $smarty->assign("upgradable"  , $upgradable);
 $smarty->assign("mbmodules"   , $mbmodules);
 $smarty->assign("coreModules" , $coreModules);
 $smarty->assign("obsoleteLibs", $obsoleteLibs);
+$smarty->assign("servers_ip"  , $servers_ip);
 
 $smarty->display("view_modules.tpl");

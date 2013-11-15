@@ -64,6 +64,11 @@
         check: function(ie) {
           var url = new Url("system", "httpreq_check_shared_memory");
           url.requestUpdate(this.id, updateControlTabs.bind(this));
+        },
+
+        allEmpty : function() {
+          new Url("system", "httpreq_do_empty_shared_memory_all_servers")
+            .requestUpdate("CacheManagerAllLog");
         }
       }
       
@@ -86,6 +91,20 @@
           </td>
           <td id="CacheManagerLog"></td>
         </tr>
+        {{if $servers_ip}}
+          <tr>
+            <td style="text-align: right;">
+              <button class="cancel singleclick" onclick="CacheManager.allEmpty();">
+                Vider le cache de tous les serveurs
+              </button><br/>
+              127.0.0.1
+              {{foreach from=$servers_ip item=_server}}
+                <br/>{{$_server}}
+              {{/foreach}}
+            </td>
+            <td id="CacheManagerAllLog"></td>
+          </tr>
+        {{/if}}
       </table>
   </div>
   {{/if}}
