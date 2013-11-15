@@ -20,3 +20,33 @@ li.atcd_hover a {
 .planning div.event-container div.pour_tiers {
   background-image: url("../../../images/icons/ray_blue.gif");
 }
+
+
+/** barre des disponibilités **/
+
+div.progressBar_dispo {
+  width:90%;
+  margin: 2px auto;
+  font-size: 2px;
+}
+
+div.progressBar_dispo div.disponibility_bar {
+  background: transparent;
+  height:10px;
+  margin:0;
+  padding:0;
+  width: 3px;
+  display:inline-block;
+}
+
+div.progressBar_dispo div.disponibility_planning_0 {
+  background: #008000;
+}
+
+div.progressBar_dispo div.disponibility_planning_-1 {
+  background: #ff8431;
+}
+
+div.progressBar_dispo div.disponibility_planning_1 {
+  background: red;
+}

@@ -180,7 +180,8 @@ for ($i = 0; $i < 7; $i++) {
   $listPlages = $plage->loadList($where, "date, debut");
   foreach ($listPlages as $_plage) {
     $_plage->loadRefsBack();
-    $_plage->countPatients(true);
+    $_plage->countPatients();
+    $_plage->loadDisponibilities();
     $debute = "$jour $_plage->debut";
     $libelle = "";
     if (CMbDT::minutesRelative($_plage->debut, $_plage->fin) >= 30 ) {
@@ -258,6 +259,7 @@ for ($i = 0; $i < 7; $i++) {
     $event->plage["add_class"]    = "clock";
     $event->plage["list_title"]   = "Voir le contenu de la plage";
     $event->plage["add_title"]    = "Planifier une consultation dans cette plage";
+    $event->_ref_disponibility    = $_plage->_ref_disponibility;
 
     //Ajout de l'évènement au planning 
     $planning->addEvent($event);
