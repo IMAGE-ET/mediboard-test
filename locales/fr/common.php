@@ -202,6 +202,7 @@ $locales['Latest update'] = 'Màj il y a';
 $locales['Legend'] = 'Légende';
 $locales['Length'] = 'Longueur';
 $locales['Link'] = 'Associer';
+$locales['Link-Research'] = 'Lier la recherche. Si activé, les résultats retournés seront ceux correspondants à tous les termes saisis. Sinon, les résultats correspondront à au moins l\'un des termes.';
 $locales['Loading in progress'] = 'Chargement en cours';
 $locales['Loading tooltip'] = 'Chargement infobulle';
 $locales['Locales file saved'] = 'Fichier de traduction sauvegardé';
