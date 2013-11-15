@@ -3609,6 +3609,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     if ($idex->tag == self::getTagNDA()) {
       return "NDA";
     }
+
+    if (CModule::getActive("mvsante")) {
+      return CMVSante::getSpecialIdex($idex);
+    }
+
     return null;
   }
 }

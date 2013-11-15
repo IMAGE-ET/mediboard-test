@@ -2275,6 +2275,11 @@ class CPatient extends CPerson {
     if ($idex->tag == self::getTagIPP()) {
       return "IPP";
     }
+
+    if (CModule::getActive("mvsante")) {
+      return CMVSante::getSpecialIdex($idex);
+    }
+
     return null;
   }
 

@@ -1583,5 +1583,18 @@ class COperation extends CCodable implements IPatientRelated {
     return $this->_ref_brancardage = $brancardage;
   }
 
+  /**
+   * Return idex type if it's special (e.g. Idex/...)
+   *
+   * @param CIdSante400 $idex Idex
+   *
+   * @return string|null
+   */
+  function getSpecialIdex(CIdSante400 $idex) {
+    if (CModule::getActive("mvsante")) {
+      return CMVSante::getSpecialIdex($idex);
+    }
 
+    return null;
+  }
 }
