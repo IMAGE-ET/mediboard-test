@@ -63,11 +63,13 @@ class CXDSExtrinsicObject extends CXDSExtrinsicPackage {
    *
    * @param String $id       String
    * @param String $mimeType String
+   * @param String $lid      String
    */
-  function __construct($id, $mimeType) {
+  function __construct($id, $mimeType, $lid = null) {
     parent::__construct($id);
     $this->mimeType   = $mimeType;
     $this->objectType = "urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1";
+    $this->lid = $lid;
   }
 
   /**

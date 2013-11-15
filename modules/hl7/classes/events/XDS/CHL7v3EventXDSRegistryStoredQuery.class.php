@@ -34,7 +34,6 @@ class CHL7v3EventXDSRegistryStoredQuery extends CHL7v3EventXDS implements CHL7Ev
     $xml = new CXDSXmlDocument();
 
     $oid = CMbOID::getOIDFromClass($object);
-    //@todo voir pour version envoyé.
     $oid = $oid.".".$object->_id.".".$object->version;
     $message = $xml->createQueryElement($xml, "AdhocQueryRequest");
     $response_option = $xml->createQueryElement($message, "ResponseOption");

@@ -210,14 +210,18 @@ class CXDSXmlDocument extends CMbXMLDocument {
    * @param String $id         Identifiant
    * @param String $mimeType   MimeType
    * @param String $objectType ObjectType
+   * @param String $lid        Lid
    *
    * @return void
    */
-  function createExtrinsicObjectRoot($id, $mimeType, $objectType) {
+  function createExtrinsicObjectRoot($id, $mimeType, $objectType, $lid = null) {
     $element = $this->createRimRoot("ExtrinsicObject");
     $this->addAttribute($element, "id"        , $id);
     $this->addAttribute($element, "mimeType"  , $mimeType);
     $this->addAttribute($element, "objectType", $objectType);
+    if ($lid) {
+      $this->addAttribute($element, "lid", $lid);
+    }
   }
 
   /**

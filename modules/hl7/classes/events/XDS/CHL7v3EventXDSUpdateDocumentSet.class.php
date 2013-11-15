@@ -26,21 +26,27 @@ class CHL7v3EventXDSUpdateDocumentSet extends CHL7v3EventXDS implements CHL7Even
    *
    * @see parent::build()
    *
+   * @throws CMbException
    * @return void
    */
   function build($object) {
     parent::build($object);
-    $uuid      = $this->uuid;
-    $archived  = $this->archived;
-    $unpublish = $this->unpublish;
+    $uuid = $this->uuid;
 
     $factory = new CCDAFactory($object);
-    $factory->generateCDA();
+    $cda = $factory->generateCDA();
+    try {
+      CCdaTools::validateCDA($cda);
+    }
+    catch (CMbException $e) {
+      throw $e;
+    }
 
     $xml = new CXDSXmlDocument();
 
     $xds = new CXDSMappingCDA($factory);
-    $header_xds = $xds->generateXDS57($uuid, $archived, $unpublish);
+    $xds->type = $this->type;
+    $header_xds = $xds->generateXDS57($uuid, $this->action);
 
     $xml->importDOMDocument($xml, $header_xds);
 

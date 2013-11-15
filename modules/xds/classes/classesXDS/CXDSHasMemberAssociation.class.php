@@ -28,11 +28,15 @@ class CXDSHasMemberAssociation extends CXDSAssociation {
    * @param String $sourceObject String
    * @param String $targetObject String
    * @param bool   $sign         false
+   * @param bool   $rplc         false
    */
-  function __construct($id, $sourceObject, $targetObject, $sign = false) {
+  function __construct($id, $sourceObject, $targetObject, $sign = false, $rplc = false) {
     $associationType = null;
     if ($sign) {
       $associationType = "urn:ihe:iti:2007:AssociationType:signs";
+    }
+    if ($rplc) {
+      $associationType = "urn:ihe:iti:2007:AssociationType:RPLC";
     }
     parent::__construct($id, $sourceObject, $targetObject, $associationType);
   }

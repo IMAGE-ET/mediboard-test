@@ -27,9 +27,11 @@ class CXDSPatientID extends CXDSExternalIdentifier {
   function __construct($id, $registryObject, $value, $registry = false) {
     parent::__construct($id, $registryObject, $value);
     $this->identificationScheme = "urn:uuid:58a6f841-87b3-4a3e-92fd-a8ffeff98427";
+    $name = "XDSDocumentEntry";
     if ($registry) {
       $this->identificationScheme = "urn:uuid:6b5aea1a-874d-4603-a4bc-96a0a7b38446";
+      $name = "XDSSubmissionSet";
     }
-    $this->name = new CXDSName("XDSSumissionSet.patientId");
+    $this->name = new CXDSName("$name.patientId");
   }
 }

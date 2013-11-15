@@ -27,20 +27,37 @@ class CHL7v3EventXDSProvideAndRegisterDocumentSetRequest
    *
    * @see parent::build()
    *
+   * @throws CMbException
    * @return void
    */
   function build($object) {
-    parent::build($object);;
+    parent::build($object);
 
     $xml = new CXDSXmlDocument();
 
     $message = $xml->createDocumentRepositoryElement($xml, "ProvideAndRegisterDocumentSetRequest");
 
     $factory = new CCDAFactory($object);
+    $factory->old_version = $this->old_version;
     $cda = $factory->generateCDA();
+    try {
+      CCdaTools::validateCDA($cda);
+    }
+    catch (CMbException $e) {
+      throw $e;
+    }
+
     $xds = new CXDSMappingCDA($factory);
-    $xds->hide_patient = $this->hide_patient;
-    $xds->hide_ps      = $this->hide_ps;
+    $xds->type = $this->type;
+    $xds->doc_uuid = $this->uuid;
+    switch ($this->hide) {
+      case "hide_ps":
+        $xds->hide_ps = true;
+        break;
+      case "hide_patient":
+        $xds->hide_patient = true;
+        break;
+    }
     $header_xds = $xds->generateXDS41();
     $xml->importDOMDocument($message, $header_xds);
 

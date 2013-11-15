@@ -90,7 +90,7 @@ class CXDSExtrinsicPackage extends CXDSRegistryObject {
       $xml->createRegistryPackageRoot($this->id);
     }
     else {
-      $xml->createExtrinsicObjectRoot($this->id, $this->mimeType, $this->objectType);
+      $xml->createExtrinsicObjectRoot($this->id, $this->mimeType, $this->objectType, $this->lid);
     }
 
     $base_xml  = $xml->documentElement;

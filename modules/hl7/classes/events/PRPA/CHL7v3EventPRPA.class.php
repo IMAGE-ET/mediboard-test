@@ -189,7 +189,7 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
     $this->setCode($code_elt, $code, $codeSystem, $displayName);
 
     if ($effectiveTime) {
-      $date = $this->getTimeToUtc(CMbDT::date());
+      $date = $this->getDateToFormatCDA(CMbDT::date());
       $effectiveTime = $dom->addElement($administrativeObservation, "effectiveTime");
       $dom->addAttribute($effectiveTime, "value", $date);
     }
@@ -218,17 +218,19 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
   }
 
   /**
-   * Transforme une chaine date au format time CDA
+   * Transforme une chaine date au format date CDA
    *
    * @param String $date String
    *
    * @return string
    */
-  function getTimeToUtc($date) {
-    $timezone = new DateTimeZone(CAppUI::conf("timezone"));
-    $date     = new DateTime($date, $timezone);
+  function getDateToFormatCDA($date) {
+    if ($date) {
+      $date = explode("-", $date);
+      return $date[0].$date[1].$date[2];
+    }
 
-    return $date->format("Ymd");
+    return null;
   }
 
   /**
@@ -380,7 +382,7 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
 
     $civilite = null;
     if ($patient->civilite == "m" || $patient->civilite == "mme" || $patient->civilite == "mlle") {
-      $civilite = strtoupper($patient->civilite);
+      $civilite = ucfirst($patient->civilite);
     }
     else {
       $civilite = $patient->sexe == "m" ? "M" : "Mme";
@@ -442,7 +444,10 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
     $dom = $this->dom;
 
     $addr = $dom->addElement($elParent, "addr");
-    $dom->addElement($addr, "streetAddressLine", $patient->_p_street_address);
+    $addresses = preg_split("#[\t\n\v\f\r]+#", $patient->_p_street_address, -1, PREG_SPLIT_NO_EMPTY);
+    foreach ($addresses as $_addr) {
+      $dom->addElement($addr, "streetAddressLine", $_addr);
+    }
     $dom->addElement($addr, "postalCode", $patient->_p_postal_code);
     $dom->addElement($addr, "city", $patient->_p_city);
     $dom->addElement($addr, "country", $patient->_p_country);
@@ -499,8 +504,15 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
     $this->setClassCode($contactParty, "CON");
   }
 
+  /**
+   * Add a represented contact party
+   *
+   * @param DOMNode  $elParent Parent element
+   * @param CPatient $patient  Patient
+   *
+   * @return void
+   */
   function addContactParty(DOMNode $elParent, CPatient $patient) {
-    $carte = $patient->_carte_vitale;
     $dom = $this->dom;
     $contactParty = $dom->addElement($elParent, "contactParty");
     $this->setClassCode($contactParty, "CON");
@@ -514,16 +526,21 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
     $contactPerson = $dom->addElement($contactParty, "contactPerson");
     $name = $dom->addElement($contactPerson, "name");
 
-    $family = $dom->addElement($name, "family", $carte["nomUsuel"]);
+    $family = $dom->addElement($name, "family", $patient->_dmp_vitale_nom_usuel);
     $this->setQualifier($family, "SP");
 
-    $family = $dom->addElement($name, "family", $carte["nomPatronymique"]);
+    $family = $dom->addElement($name, "family", $patient->_dmp_vitale_nom_patronymique);
     $this->setQualifier($family, "BR");
 
-    $dom->addElement($name, "given", $carte["prenomUsuel"]);
+    $dom->addElement($name, "given", $patient->_dmp_vitale_prenom_usuel);
 
     $birthTime = $dom->addElement($contactPerson, "birthTime");
-    $dom->addAttribute($birthTime, "value", $carte["date"]);
+    $date = $patient->_dmp_vitale_date;
+    if (strlen($date) > 6) {
+      list($day, $month, $year, $year2) = str_split($date, 2);
+      $date = $day.$month.$year2;
+    }
+    $dom->addAttribute($birthTime, "value", $date);
 
   }
 }

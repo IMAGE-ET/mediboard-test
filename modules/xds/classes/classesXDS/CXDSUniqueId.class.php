@@ -28,9 +28,11 @@ class CXDSUniqueId extends CXDSExternalIdentifier {
   function __construct($id, $registryObject, $value, $registryPackage = false) {
     parent::__construct($id, $registryObject, $value);
     $this->identificationScheme = "urn:uuid:2e82c1f6-a085-4c72-9da3-8640a32e42ab";
+    $name = "XDSDocumentEntry";
     if ($registryPackage) {
       $this->identificationScheme = "urn:uuid:96fdda7c-d067-4183-912e-bf5ee74998a8";
+      $name = "XDSSubmissionSet";
     }
-    $this->name = new CXDSName("XDSRegistryPackage.uniqueId");
+    $this->name = new CXDSName("$name.uniqueId");
   }
 }
