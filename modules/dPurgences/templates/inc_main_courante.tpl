@@ -333,7 +333,7 @@
       </td>
       
       {{if $conf.dPurgences.responsable_rpu_view}}
-      <td class="text" style="background-color: {{$background}};">
+        <td class="text compact" style="background-color: {{$background}};">
         <a href="{{$rpu_link}}">
           {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
         </a>
@@ -398,8 +398,8 @@
             {{/if}}
           </td>
         {{/if}}
-    
-        <td class="button {{if $_sejour->type != "urg"}}arretee{{/if}}" style="background-color: {{$background}};">
+
+        <td class="narrow button {{if $_sejour->type != "urg"}}arretee{{/if}}" style="background-color: {{$background}};">
           {{mb_include template="inc_pec_praticien"}}
         </td>
   
