@@ -210,7 +210,7 @@ class CPlageconsult extends CPlageHoraire {
     $time = $this->debut;
     $nb_plage_prise = 0;
 
-    $consults_ok = array_combine(CMbArray::pluck($this->_ref_consultations, "heure"), $this->_ref_consultations);
+    $consults_ok = count($this->_ref_consultations) ? array_combine(CMbArray::pluck($this->_ref_consultations, "heure"), $this->_ref_consultations) : $this->_ref_consultations;
     $nb_place_consult = round((CMbDT::minutesRelative($this->debut, $this->fin)/$this->_freq));
 
     for ($a=0; $a < $nb_place_consult; $a++) {
