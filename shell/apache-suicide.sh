@@ -55,10 +55,10 @@ LOAD1MIN=$(uptime | awk -F "$FTEXT" '{ print $2 }' | cut -d, -f1 | sed 's/ //g')
 
 if [ $LOAD1MIN -gt $MAX ] && [ $NO_FILE -eq 1 ] && [ $RUNNING -eq 1 ]
 then
-  if [ $DRY_RUN -eq 1 ]
+  echo "Stopping service, MAX load average: $MAX, CURRENT load average: $LOAD1MIN"
+
+  if [ $DRY_RUN -eq 0 ]
   then
-    echo "Stopping service, MAX load average: $MAX, CURRENT load average: $LOAD1MIN"
-  else
     service $SERVICE stop
   fi
 
@@ -68,10 +68,10 @@ fi
 
 if [ $LOAD1MIN -lt $MIN ] && [ $NO_FILE -eq 0 ] && [ $RUNNING -eq 0 ]
 then
-  if [ $DRY_RUN -eq 1 ]
+  echo "Starting service, MIN load average: $MIN, CURRENT load average: $LOAD1MIN"
+
+  if [ $DRY_RUN -eq 0 ]
   then
-    echo "Starting service, MIN load average: $MIN, CURRENT load average: $LOAD1MIN"
-  else
     service $SERVICE start
   fi
 

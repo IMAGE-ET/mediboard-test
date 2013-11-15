@@ -94,8 +94,6 @@ try {
   }
 
   if (!empty($processes)) {
-    echo "=====\n" . date("d/m/Y H:i:s") . "\n";
-
     if ($dry_run) {
       echo "[Dry run]\n";
     }
@@ -104,11 +102,11 @@ try {
   foreach ($processes as $_process) {
     $kill_query = "KILL " . $_process["ID"];
 
+    echo "\n# " . $_process["INFO"] . " # " . $_process["TIME"] . "s\n";
+
     if (!$dry_run) {
       mysql_query($kill_query, $conn);
     }
-
-    echo "\n# " . $_process["INFO"] . " # " . $_process["TIME"] . "s\n";
   }
 
   if (!empty($processes)) {
