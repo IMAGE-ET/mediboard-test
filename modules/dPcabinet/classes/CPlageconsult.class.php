@@ -73,6 +73,8 @@ class CPlageconsult extends CPlageHoraire {
   /** @var CMediusers */
   public $_ref_pour_compte;
 
+  public $_ref_disponibility;
+
   /**
    * @see parent::getSpec()
    */
@@ -198,6 +200,52 @@ class CPlageconsult extends CPlageHoraire {
   function loadRefsBack($withCanceled = true, $withClosed = true, $withPayees = true) {
     $this->loadRefsConsultations($withCanceled, $withClosed, $withPayees);
     $this->loadFillRate();
+  }
+
+  /**
+   *
+   */
+  function loadDisponibilities()  {
+    $fill = array();
+    $time = $this->debut;
+    $nb_plage_prise = 0;
+
+    $consults_ok = array_combine(CMbArray::pluck($this->_ref_consultations, "heure"), $this->_ref_consultations);
+    $nb_place_consult = round((CMbDT::minutesRelative($this->debut, $this->fin)/$this->_freq));
+
+    for ($a=0; $a < $nb_place_consult; $a++) {
+      if (!isset($fill[$time])) {
+        $fill[$time] = 0;
+      }
+
+      //there is something ...
+      if (isset($consults_ok[$time])) {
+        $status = 0;
+        /** @var CConsultation $consult */
+        $consult = $consults_ok[$time];
+        // classic
+        if ($consult->patient_id) {
+          $status = 1;
+        }
+
+        // pause
+        if (!$consult->patient_id) {
+          $status = -1;
+        }
+
+        // more than one
+        $temp_time = $time;
+          for ($b=0; $b<$consult->duree; $b++) {
+            $nb_plage_prise++;
+            $fill[$temp_time] = $status;
+            $temp_time = CMbDT::addTime($this->freq, $temp_time);
+          }
+      }
+      $time = CMbDT::addTime($this->freq, $time);
+    }
+
+    $this->_affected = $nb_plage_prise;
+    return $this->_ref_disponibility = $fill;
   }
 
   /**
