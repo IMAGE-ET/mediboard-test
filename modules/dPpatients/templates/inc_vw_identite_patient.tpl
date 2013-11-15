@@ -1,11 +1,17 @@
 {{mb_default var=tooltip value=0}}
 
+{{if "dmp"|module_active}}
+  {{mb_script module="dmp" script="cdmp" ajax="true"}}
+{{/if}}
+
 <table class="form">
   <tr>
     <th class="title text" colspan="5">
       {{if $patient->date_lecture_vitale}}
       <div style="float: right;">
-        <img src="images/icons/carte_vitale.png" title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$patient field="date_lecture_vitale" format=relative}}" />
+        <img src="images/icons/carte_vitale.png"
+             title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$patient field="date_lecture_vitale" format=relative}}"
+             onclick="Patient.openINS({{$patient->_id}})"/>
       </div>
       {{/if}}
 
@@ -116,6 +122,12 @@
         <button type="button" class="edit" onclick="Patient.edit('{{$patient->_id}}', '{{$useVitale}}')">
           {{tr}}Modify{{/tr}}
           {{if $useVitale}}avec Vitale{{/if}}
+        </button>
+      {{/if}}
+
+      {{if "dmp"|module_active}}
+        <button type="button" class="dmp-creer" onclick="Cdmp.openDMP('{{$patient->_id}}')">
+          {{tr}}DMP{{/tr}}
         </button>
       {{/if}}
       

@@ -413,7 +413,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     if ($data["personIdentifiers"]) {
       // Mapping de l'INS-C
       if ($data && array_key_exists("INSC", $data["personIdentifiers"])) {
-        $newPatient->INSC = $data["personIdentifiers"]["INSC"];
+        //@todo créé un l'insc avec un CINSPatient
+        //$newPatient->INSC = $data["personIdentifiers"]["INSC"];
       }
 
       // NSS

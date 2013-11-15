@@ -30,6 +30,13 @@ class CXDSMappingCDA {
   public $ins_patient;
   public $practice_setting;
   public $health_care_facility;
+  public $iti57;
+  public $size;
+  public $hash;
+  public $repository;
+  public $doc_uuid;
+  public $id_submission;
+  public $type;
   public $uuid          = array();
   public $oid           = array();
   public $name_document = array();
@@ -60,15 +67,14 @@ class CXDSMappingCDA {
   }
 
   /**
-   * Génération de la requête XDS57
+   * Génération de la requête XDS57 concernant le dpubliage et l'archivage
    *
-   * @param String $uuid          Identifiant du document dans le registre
-   * @param Bool   $archivage     Archiage du document
-   * @param Bool   $depublication Depublication du document
+   * @param String $uuid   Identifiant du document dans le registre
+   * @param Bool   $action Action fait sur le document
    *
    * @return CXDSXmlDocument
    */
-  function generateXDS57($uuid, $archivage = null, $depublication = null) {
+  function generateXDS57($uuid, $action = null) {
     $id_registry  = $this->uuid["registry"];
 
     $class = new CXDSRegistryObjectList();
@@ -78,11 +84,13 @@ class CXDSMappingCDA {
     $class->appendRegistryPackage($registry);
     $statusType = "";
 
-    if ($depublication) {
-      $statusType = "Deleted";
-    }
-    if ($archivage) {
-      $statusType = "Archived";
+    switch ($action) {
+      case "unpublished":
+        $statusType = "Deleted";
+        break;
+      case "archived":
+        $statusType = "Archived";
+        break;
     }
 
     $asso = new CXDSAssociation("association01", $id_registry, $uuid, "urn:ihe:iti:2010:AssociationType:UpdateAvailabilityStatus");
@@ -96,12 +104,14 @@ class CXDSMappingCDA {
   /**
    * Génère le corps XDS
    *
+   * @throws CMbException
    * @return CXDSXmlDocument
    */
   function generateXDS41() {
     $id_registry  = $this->uuid["registry"];
     $id_document  = $this->uuid["extrinsic"];
     $id_signature = $this->uuid["signature"];
+    $doc_uuid     = $this->doc_uuid;
 
     $class = new CXDSRegistryObjectList();
 
@@ -113,6 +123,13 @@ class CXDSMappingCDA {
     $extrinsic = $this->createExtrinsicObject($id_document);
     $class->appendExtrinsicObject($extrinsic);
 
+    $cxds_submissionlot_document = new CXDSSubmissionLotToDocument();
+    $cxds_submissionlot_document->submissionlot_id = $this->id_submission;
+    $cxds_submissionlot_document->setObject($this->factory->docItem);
+    if ($msg = $cxds_submissionlot_document->store()) {
+      throw new CMbException($msg);
+    }
+
     //Ajout du document de signature
     $signature = $this->createSignature($id_signature);
     $class->appendExtrinsicObject($signature);
@@ -121,9 +138,15 @@ class CXDSMappingCDA {
     $asso1 = $this->createAssociation("association01", $id_registry, $id_document);
     $asso2 = $this->createAssociation("association02", $id_registry, $id_signature);
     $asso3 = $this->createAssociation("association03", $id_signature, $id_registry, true);
+
     $class->appendAssociation($asso1);
     $class->appendAssociation($asso2);
     $class->appendAssociation($asso3);
+
+    if ($doc_uuid) {
+      $asso4 = $this->createAssociation("association04", $id_document, $doc_uuid, false, true);
+      $class->appendAssociation($asso4);
+    }
 
     return $class->toXML();
   }
@@ -145,13 +168,17 @@ class CXDSMappingCDA {
    * @return string
    */
   function getIns () {
+    $ins = null;
     $patient = $this->factory->patient;
     //@todo: faire l'INSA
-
+    $last_ins = $patient->_ref_last_ins;
+    if ($last_ins) {
+      $ins = $last_ins->ins;
+    }
     $comp5 = "INS-C";
     $comp4 = "1.2.250.1.213.1.4.2";
     $comp4 = "&$comp4&ISO";
-    $comp1 = $patient->INSC;
+    $comp1 = $ins;
 
     $result = "$comp1^^^$comp4^$comp5";
     return $result;
@@ -180,6 +207,7 @@ class CXDSMappingCDA {
    *
    * @param String $id Identifiant du lot de soumission
    *
+   * @throws CMbException
    * @return CXDSRegistryPackage
    */
   function createRegistryPackage($id) {
@@ -246,9 +274,16 @@ class CXDSMappingCDA {
     $registry->setSourceId("ei$ei_id", $id, $oid_instance);
     $this->setEiId();
 
-    //OID unique @todo : voir pour id du registre
+    //OID unique
     $oid = CMbOID::getOIDFromClass($registry);
-    $this->oid["lot"] = $oid.".".CXDSTools::getTimeUtc();
+    $cxds_submissionlot = new CXDSSubmissionLot();
+    $cxds_submissionlot->date = "now";
+    $cxds_submissionlot->type = $this->type;
+    if ($msg = $cxds_submissionlot->store()) {
+      throw new CMbException($msg);
+    }
+    $this->id_submission = $cxds_submissionlot->_id;
+    $this->oid["lot"] = $oid.".".$cxds_submissionlot->_id;
     $registry->setUniqueId("ei$ei_id", $id, $this->oid["lot"]);
     $this->setEiId();
 
@@ -258,11 +293,12 @@ class CXDSMappingCDA {
   /**
    * Création  d'un document
    *
-   * @param String $id Identifiant
+   * @param String $id  Identifiant
+   * @param String $lid Lid
    *
    * @return CXDSExtrinsicObject
    */
-  function createExtrinsicObject($id) {
+  function createExtrinsicObject($id, $lid = null) {
     $factory      = $this->factory;
     $cla_id       = &$this->id_classification;
     $ei_id        = &$this->id_external;
@@ -274,10 +310,12 @@ class CXDSMappingCDA {
     $praticien    = $factory->practicien;
     $this->appendNameDocument($id);
 
-    $extrinsic = new CXDSExtrinsicObject($id, "text/xml");
+    $extrinsic = new CXDSExtrinsicObject($id, "text/xml", $lid);
 
     //effectiveTime en UTC
-    $extrinsic->setSlot("creationTime", array(CXDSTools::getTimeUtc($factory->date_creation)));
+    if ($factory->date_creation) {
+      $extrinsic->setSlot("creationTime", array(CXDSTools::getTimeUtc($factory->date_creation)));
+    }
 
     //languageCode
     $extrinsic->setSlot("languageCode", array($factory->langage));
@@ -287,10 +325,14 @@ class CXDSMappingCDA {
     $extrinsic->setSlot("legalAuthenticator", array($legalAuthenticator));
 
     //documentationOf/serviceEvent/effectiveTime/low en UTC
-    $extrinsic->setSlot("serviceStartTime", array(CXDSTools::getTimeUtc($service["time_start"])));
+    if ($service["time_start"]) {
+      $extrinsic->setSlot("serviceStartTime", array(CXDSTools::getTimeUtc($service["time_start"])));
+    }
 
     //documentationOf/serviceEvent/effectiveTime/high en UTC
-    $extrinsic->setSlot("serviceStopTime", array(CXDSTools::getTimeUtc($service["time_stop"])));
+    if ($service["time_stop"]) {
+      $extrinsic->setSlot("serviceStopTime", array(CXDSTools::getTimeUtc($service["time_stop"])));
+    }
 
     //recordTarget/patientRole/id
     $extrinsic->setSlot("sourcePatientId", array($ins));
@@ -357,11 +399,11 @@ class CXDSMappingCDA {
           break;
       }
 
-      $event = new CXDSEventCodeList("cla$cla_id", $id, $eventCode);
-      $this->setClaId();
-      $event->setCodingScheme(array($eventSystem));
-      $event->setName($libelle);
-      $extrinsic->appendEventCodeList($event);
+        $event = new CXDSEventCodeList("cla$cla_id", $id, $eventCode);
+        $this->setClaId();
+        $event->setCodingScheme(array($eventSystem));
+        $event->setName($libelle);
+        $extrinsic->appendEventCodeList($event);
     }
 
     //En fonction d'un corps structuré
@@ -546,16 +588,13 @@ class CXDSMappingCDA {
    * @param String $source Source
    * @param String $target Cible
    * @param bool   $sign   Association de type signature
+   * @param bool   $rplc   Remplacement
    *
    * @return CXDSHasMemberAssociation
    */
-  function createAssociation($id, $source, $target, $sign = false) {
-    //@todo: a faire
-    /**
-     * si relatedDocument/parentDocument/id => association RPLC
-     */
-    $hasmember = new CXDSHasMemberAssociation($id, $source, $target, $sign);
-    if (!$sign) {
+  function createAssociation($id, $source, $target, $sign = false, $rplc = false) {
+    $hasmember = new CXDSHasMemberAssociation($id, $source, $target, $sign, $rplc);
+    if (!$sign || !$rplc) {
       $hasmember->setSubmissionSetStatus(array("Original"));
     }
 

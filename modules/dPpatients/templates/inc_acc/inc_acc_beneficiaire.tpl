@@ -79,10 +79,10 @@ Main.add(checkFinAmo);
   	<th>{{mb_label object=$patient field="medecin_traitant_declare"}}</th>
   	<td>{{mb_field object=$patient field="medecin_traitant_declare"}}</td>
   </tr>
-  {{if $patient->INSC}}
+  {{if $patient->_ref_last_ins}}
     <tr>
-      <th>{{mb_label object=$patient field="INSC"}}</th>
-      <td>{{mb_value object=$patient field="INSC"}} ({{$patient->INSC_date|date_format:$conf.date}})</td>
+      <th>{{mb_label object=$patient->_ref_last_ins field="ins"}}</th>
+      <td>{{mb_value object=$patient->_ref_last_ins field="ins"}} ({{$patient->_ref_last_ins->date|date_format:$conf.date}})</td>
     </tr>
   {{/if}}
 </table>

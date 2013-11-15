@@ -27,7 +27,8 @@ class CHL7v2SegmentPID_FR extends CHL7v2SegmentPID {
    * @return null
    */
   function fillOtherIdentifiers(&$identifiers, CPatient $patient, CInteropActor $actor = null) {
-    if ($patient->INSC) {
+    //@todo recupéré l'insc avec la fonction loadLastINS
+    /*if ($patient->INSC) {
       $identifiers[] = array(
         $patient->INSC,
         null,
@@ -38,7 +39,7 @@ class CHL7v2SegmentPID_FR extends CHL7v2SegmentPID {
         null,
         CMbDT::date($patient->INSC_date)
       );
-    }
+    }*/
 
     if ($actor->_configs["send_own_identifier"]) {
       $identifiers[] = array(

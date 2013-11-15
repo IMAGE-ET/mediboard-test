@@ -89,7 +89,7 @@ class CHL7v3EventPRPAIN201311UV02 extends CHL7v3EventPRPA implements CHL7EventPR
     $this->setClassCode($patient_dom, "PAT");
 
     $id = $dom->addElement($patient_dom, "id");
-    $this->setII($id, $patient->INSC, "1.2.250.1.213.1.4.2");
+    $this->setII($id, $patient->_ref_last_ins->ins, "1.2.250.1.213.1.4.2");
 
     $statusCode = $dom->addElement($patient_dom, "statusCode");
     $dom->addAttribute($statusCode, "code", "active");
@@ -106,7 +106,7 @@ class CHL7v3EventPRPAIN201311UV02 extends CHL7v3EventPRPA implements CHL7EventPR
     $dom->addAttribute($administrativeGenderCode, "code", strtoupper($patient->sexe));
 
     $birthTime = $dom->addElement($patientPerson, "birthTime");
-    $date = $this->getTimeToUtc($patient->_p_birth_date);
+    $date = $this->getDateToFormatCDA($patient->_p_birth_date);
     $dom->addAttribute($birthTime, "value", $date);
 
     $this->addAdress($patientPerson, $patient);
@@ -127,13 +127,13 @@ class CHL7v3EventPRPAIN201311UV02 extends CHL7v3EventPRPA implements CHL7EventPR
     );
 
     // subjectOf
-    $dmp_bris_de_glace = $patient->_dmp_bris_de_glace ? "true" : "false";
+    $dmp_bris_de_glace = $patient->_dmp_urgence_PS ? "true" : "false";
     $this->addSubjectOf(
       $patient_dom, "OPPOSITION_BRIS_DE_GLACE", "1.2.250.1.213.4.1.2.3", "opposition au mode bris de glace", $dmp_bris_de_glace
     );
 
     // subjectOf
-    $dmp_acces_urgence = $patient->_dmp_acces_urgence ? "true" : "false";
+    $dmp_acces_urgence = $patient->_dmp_urgence_15 ? "true" : "false";
     $this->addSubjectOf(
       $patient_dom, "OPPOSITION_ACCES_URGENCE", "1.2.250.1.213.4.1.2.3", "opposition à l'accès au mode urgence", $dmp_acces_urgence
     );

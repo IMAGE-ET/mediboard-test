@@ -81,7 +81,7 @@ class CHL7v3EventPRPAIN201307UV02 extends CHL7v3EventPRPA implements CHL7EventPR
     // patientIdentifer
     $patientIdentifer = $dom->addElement($parameterList, "patientIdentifier");
     $value = $dom->addElement($patientIdentifer, "value");
-    $this->setII($value, $patient->INSC, "1.2.250.1.213.1.4.2");
+    $this->setII($value, $patient->_ref_last_ins->ins, "1.2.250.1.213.1.4.2");
 
     $dom->addElement($patientIdentifer, "semanticsText", "Patient.id");
   }

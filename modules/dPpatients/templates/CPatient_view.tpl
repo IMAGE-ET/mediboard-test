@@ -5,13 +5,19 @@
   {{mb_return}}
 {{/if}}
 
+{{if "dmp"|module_active}}
+  {{mb_script module="dmp" script="cdmp" ajax="true"}}
+{{/if}}
+
 {{assign var="patient" value=$object}}
 <table class="tbl tooltip">
   <tr>
     <th class="title text" colspan="3">
       {{if $patient->date_lecture_vitale}}
         <div style="float: right;">
-          <img src="images/icons/carte_vitale.png" title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$patient field="date_lecture_vitale" format=relative}}" />
+          <img src="images/icons/carte_vitale.png"
+               title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$patient field="date_lecture_vitale" format=relative}}"
+               onclick="Patient.openINS({{$patient->_id}})"/>
         </div>
       {{/if}}
 
@@ -97,6 +103,12 @@
       {{if $app->user_prefs.vCardExport}}
         <button type="button" class="vcard" onclick="Patient.exportVcard('{{$patient->_id}}')">
           {{tr}}Export{{/tr}}
+        </button>
+      {{/if}}
+
+      {{if "dmp"|module_active}}
+        <button type="button" class="dmp-creer" onclick="Cdmp.openDMP('{{$patient->_id}}')">
+          {{tr}}DMP{{/tr}}
         </button>
       {{/if}}
       

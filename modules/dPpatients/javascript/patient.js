@@ -40,6 +40,12 @@ Patient = Object.extend({
       addParam("suppressHeaders", 1).
       pop(700, 550, "Patient");
   },
+
+  openINS : function($id) {
+    new Url("cda", "ajax_history_ins")
+      .addParam("id_patient", $id)
+      .requestModal();
+  },
   
   doUnlink: function(patient_id) {
     var url = new Url("dPpatients", "do_unlink", "dosql");

@@ -2389,7 +2389,30 @@ class CSetupdPpatients extends CSetup {
                 ADD `clair_creatinine` FLOAT UNSIGNED;';
     $this->addQuery($query);
 
-    $this->mod_version = "1.92";
+    $this->makeRevision("1.92");
+    $query = "CREATE TABLE `ins_patient` (
+                `ins_patient_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `patient_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `ins` VARCHAR (255) NOT NULL,
+                `type` ENUM ('A','C') NOT NULL,
+                `date` DATETIME NOT NULL,
+                `provider` VARCHAR (255) NOT NULL
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $this->makeRevision("1.93");
+    $query = "ALTER TABLE `ins_patient`
+                ADD INDEX (`patient_id`),
+                ADD INDEX (`date`);";
+    $this->addQuery($query);
+
+    $this->makeRevision("1.94");
+    $query = "ALTER TABLE `patients`
+                DROP `INSC`,
+                DROP `INSC_DATE`";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.95";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

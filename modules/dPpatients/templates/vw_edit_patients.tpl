@@ -214,7 +214,9 @@
 
       {{if $patient->date_lecture_vitale}}
       <div style="float: right;">
-        <img src="images/icons/carte_vitale.png" title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$patient field="date_lecture_vitale" format=relative}}" />
+        <img src="images/icons/carte_vitale.png"
+             title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$patient field="date_lecture_vitale" format=relative}}"
+             onclick="Patient.openINS({{$patient->_id}})"/>
       </div>
       {{/if}}
 
@@ -265,6 +267,11 @@
         <input type="hidden" name="_purge" value="0" />
         <input type="hidden" name="modal" value="{{$modal}}" />
         <input type="hidden" name="callback" value="{{$callback}}" />
+        {{mb_field object=$patient field="_vitale_firstname" hidden=1}}
+        {{mb_field object=$patient field="_vitale_birthdate" hidden=1}}
+        {{mb_field object=$patient field="_vitale_nir_certifie" hidden=1}}
+        {{mb_field object=$patient field="_vitale_lastname" hidden=1}}
+
         {{mb_key object=$patient}}
 
         {{if $patient->_bind_vitale}}

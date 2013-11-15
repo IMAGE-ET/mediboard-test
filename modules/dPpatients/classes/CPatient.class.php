@@ -114,7 +114,6 @@ class CPatient extends CPerson {
   public $incapable_majeur;
   public $ATNC;
   public $matricule;
-  public $INSC;
   public $avs;
 
   public $code_regime;
@@ -175,7 +174,6 @@ class CPatient extends CPerson {
   public $assure_matricule;
 
   // Other fields
-  public $INSC_date;
   public $date_lecture_vitale;
   public $_pays_naissance;
   public $_pays_naissance_insee;
@@ -211,6 +209,10 @@ class CPatient extends CPerson {
   public $_bind_vitale;
   public $_update_vitale;
   public $_id_vitale;
+  public $_vitale_lastname;
+  public $_vitale_firstname;
+  public $_vitale_birthdate;
+  public $_vitale_nir_certifie;
 
   //ean (for switzerland)
   public $_assuranceCC_ean;
@@ -233,11 +235,21 @@ class CPatient extends CPerson {
   public $_fusion; // fusion
 
   // DMP
-  public $_dmp_bris_de_glace;
-  public $_dmp_acces_urgence;
+  public $_dmp_create;
+  // Accès urgence
+  public $_dmp_urgence_15;
+  // Accès bris de glace
+  public $_dmp_urgence_PS;
+  public $_dmp_medecin_traitant;
+  public $_dmp_access_authorization;
+
   /** @var  CMediusers */
   public $_dmp_mediuser;
-  public $_carte_vitale;
+  public $_dmp_vitale_nir_certifie;
+  public $_dmp_vitale_nom_usuel;
+  public $_dmp_vitale_nom_patronymique;
+  public $_dmp_vitale_prenom_usuel;
+  public $_dmp_vitale_date;
 
   /**
    * @var CPatient
@@ -297,6 +309,10 @@ class CPatient extends CPerson {
   public $_ref_constantes_medicales;
   /** @var CDevenirDentaire[] */
   public $_refs_devenirs_dentaires;
+  /** @var  CINSPatient[] */
+  public $_refs_ins;
+  /** @var  CINSPatient */
+  public $_ref_last_ins;
 
 
   // Distant fields
@@ -340,6 +356,7 @@ class CPatient extends CPerson {
     $backProps["patient_observation_result_sets"] = "CObservationResultSet patient_id";
     $backProps["patient_links"]         = "CPatient patient_link_id";
     $backProps["CV_pyxvital"]           = "CPvCV id_patient";
+    $backProps["ins_patient"]           = "CINSPatient patient_id";
     return $backProps;
   }
 
@@ -362,7 +379,6 @@ class CPatient extends CPerson {
     $props["medecin_traitant"]  = "ref class|CMedecin";
     $conf = CAppUI::conf("dPpatients CPatient check_code_insee");
     $props["matricule"]         = $conf ? "code insee confidential mask|9S99S99S9xS999S999S99" : "str maxLength|15";
-    $props["INSC"]              = "str length|22";
     $props["code_regime"]       = "numchar length|2";
     $props["caisse_gest"]       = "numchar length|3";
     $props["centre_gest"]       = "numchar length|4";
@@ -439,7 +455,6 @@ class CPatient extends CPerson {
     $props["assure_profession"]           = "str autocomplete";
     $props["assure_rques"]                = "text";
     $props["assure_matricule"]            = "code insee confidential mask|9S99S99S99S999S999S99";
-    $props["INSC_date"]                   = "dateTime";
     $props["date_lecture_vitale"]         = "dateTime";
     $props["_id_vitale"]                  = "num";
     $props["_pays_naissance_insee"]       = "str";
@@ -457,22 +472,39 @@ class CPatient extends CPerson {
       "fns",
     );
 
-    $props["_type_exoneration"]           = "enum list|".implode("|", $types_exo);
-    $props["_annees"]                     = "num show|1";
-    $props["_age"]                        = "str";
-    $props["_vip"]                        = "bool";
-    $props["_age_assure"]                 = "num";
-    $props["_poids"]                      = "float show|1";
-    $props["_taille"]                     = "float show|1";
+    $props["_type_exoneration"] = "enum list|".implode("|", $types_exo);
+    $props["_annees"]           = "num show|1";
+    $props["_age"]              = "str";
+    $props["_vip"]              = "bool";
+    $props["_age_assure"]       = "num";
+    $props["_poids"]            = "float show|1";
+    $props["_taille"]           = "float show|1";
 
-    $props["_age_min"]                    = "num min|0";
-    $props["_age_max"]                    = "num min|0";
+    $props["_age_min"]          = "num min|0";
+    $props["_age_max"]          = "num min|0";
 
-    $props["_assuranceCC_id"]             = "str length|5";
-    $props["_assureCC_id"]                = "str maxLength|20";
-    $props["_assuranceCC_ean"]            = "str";
+    $props["_assuranceCC_id"]   = "str length|5";
+    $props["_assureCC_id"]      = "str maxLength|20";
+    $props["_assuranceCC_ean"]  = "str";
 
-    $props["_IPP"]                        = "str show|1";
+    $props["_IPP"]              = "str show|1";
+
+    // DMP
+    $props["_dmp_create"]               = "bool";
+    $props["_dmp_access_authorization"] = "bool default|1";
+    $props["_dmp_medecin_traitant"]     = "bool";
+    $props["_dmp_urgence_15"]           = "bool";
+    $props["_dmp_urgence_PS"]           = "bool";
+    //@todo à factoriser _dmp_vitale et _vitale
+    $props["_dmp_vitale_nir_certifie"]     = "str confidential";
+    $props["_dmp_vitale_nom_usuel"]        = "str";
+    $props["_dmp_vitale_nom_patronymique"] = "str";
+    $props["_dmp_vitale_prenom_usuel"]     = "str";
+    $props["_dmp_vitale_date"]             = "str confidential";
+    $props["_vitale_lastname"]             = "str";
+    $props["_vitale_firstname"]             = "str";
+    $props["_vitale_birthdate"]             = "str confidential";
+    $props["_vitale_nir_certifie"]          = "str confidential";
 
     return $props;
   }
@@ -571,8 +603,6 @@ class CPatient extends CPerson {
    * @see parent::store()
    */
   function store() {
-    //$this->INSC      = "1075102722581011056235";
-    //$this->INSC_date = " 2012-03-12 16:59:21";
 
     $this->completeField("patient_link_id");
     if ($this->_id && $this->_id == $this->patient_link_id) {
@@ -611,6 +641,13 @@ class CPatient extends CPerson {
         return $msg;
       }
     }
+
+    if ($this->_vitale_nir_certifie) {
+      if ($msg = CInscTools::createINSC($this)) {
+        return $msg;
+      }
+    }
+
     return null;
   }
 
@@ -1581,6 +1618,29 @@ class CPatient extends CPerson {
   }
 
   /**
+   * Load the INS of the patient
+   *
+   * @return CINSPatient[]|null
+   */
+  function loadRefsINS() {
+    return $this->_refs_ins = $this->loadBackRefs("ins_patient", "date DESC");
+  }
+
+  /**
+   * Load the last INS of the patient
+   *
+   * @return CINSPatient|null
+   */
+  function loadLastINS() {
+    $ins = null;
+    $array = $this->loadBackRefs("ins_patient", "date DESC", 1);
+    if ($array) {
+      $ins = current($array);
+    }
+    return $this->_ref_last_ins = $ins;
+  }
+
+  /**
    * Construit le tag IPP en fonction des variables de configuration
    *
    * @param int $group_id Permet de charger l'IPP pour un établissement donné si non null
@@ -2061,6 +2121,11 @@ class CPatient extends CPerson {
     $pays = new CPaysInsee();
     $pays->nom_fr = $this->_spec->ds->escape($nomPays);
     $pays->loadMatchingObject();
+
+    if (!$pays->_id) {
+      return "000";
+    }
+
     return $pays->numerique;
   }
 
@@ -2255,6 +2320,10 @@ class CPatient extends CPerson {
     $len = strlen($hex);
     for ($i = 1; $i <= $len; $i++) {
       $dec = bcadd($dec, bcmul(hexdec($hex[$i - 1]), bcpow('16', $len - $i)));
+    }
+    if (strpos($dec, ".") !== false) {
+      $array = explode(".", $dec);
+      $dec = $array[0];
     }
     return $dec;
   }
