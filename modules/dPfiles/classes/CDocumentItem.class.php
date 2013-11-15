@@ -53,7 +53,7 @@ class CDocumentItem extends CMbMetaObject {
       }
       $type_doc = substr($type_doc, 0, -1);
     }
-    $props["type_doc"]         = "enum list|$type_doc";
+    $props["type_doc"]         = (empty($type_doc) ? "str" : "enum list|$type_doc");
     $props["_extensioned"]     = "str notNull";
     $props["_send_problem"]    = "text";
 
