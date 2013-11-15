@@ -1878,18 +1878,17 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   function getExpectedAdmitDischarge(DOMNode $node, CSejour $newVenue) {
     $entree_prevue = $this->queryTextNode("PV2.8", $node);
     $sortie_prevue = $this->queryTextNode("PV2.9", $node);
-    
+
     if (!$entree_prevue) {
       $entree_prevue = $newVenue->entree_reelle ? $newVenue->entree_reelle : $newVenue->entree_prevue;
     }
     $newVenue->entree_prevue = $entree_prevue;
-    
-    if ($sortie_prevue) {
-      $newVenue->sortie_prevue = $sortie_prevue;
-    }
-    elseif (!$sortie_prevue && !$newVenue->sortie_prevue) {
+    if ((!$sortie_prevue && !$newVenue->sortie_prevue) || ($sortie_prevue && preg_match("/\d{4}-\d\d-\d\d 00:00:00/", $sortie_prevue))) {
       $newVenue->sortie_prevue = CMbDT::addDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$newVenue->type).":00:00",
-                    $newVenue->entree_reelle ? $newVenue->entree_reelle : $newVenue->entree_prevue);
+        $newVenue->entree_reelle ? $newVenue->entree_reelle : $newVenue->entree_prevue);
+    }
+    elseif ($sortie_prevue && preg_match("/\d{4}-\d\d-\d\d \d\d:\d\d:\d\d/", $sortie_prevue)) {
+      $newVenue->sortie_prevue = $sortie_prevue;
     } 
     else {
       $newVenue->sortie_prevue = $newVenue->sortie_reelle ? $newVenue->sortie_reelle : $newVenue->sortie_prevue;
