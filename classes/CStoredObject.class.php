@@ -1340,7 +1340,7 @@ class CStoredObject extends CModelObject {
     $where["object_class"] = "= '$this->_class'";
     $where["date"] = "> '$recent'";
     $log = new CUserLog();
-    return $log->countList($where);
+    return $log->countList($where, null, null, "object_id");
   }
   
   /**
