@@ -180,15 +180,18 @@ var VitaleVision = {
         cmu = benef.getElementsByTagName("cmu")[0];
   
     form.insert(DOM.input({type: 'hidden', name: 'date_lecture_vitale', value: 'now'}));
-    
-    $V(form.nom, getNodeValue("nomUsuel", ident));  
-    $V(form.prenom, getNodeValue("prenomUsuel", ident));  
-    
+    var nom = getNodeValue("nomUsuel", ident);
+    $V(form._vitale_lastname, nom);
+    $V(form.nom, nom);
+    var prenom = getNodeValue("prenomUsuel", ident);
+    $V(form.prenom, prenom);
+    $V(form._vitale_firstname, prenom);
+
     if((getNodeValue("nomPatronymique", ident) != "") && (getNodeValue("nomUsuel", ident) != getNodeValue("nomPatronymique", ident))) {
       $V(form.nom_jeune_fille, getNodeValue("nomPatronymique", ident));
     }
-    
-    if(getNodeValue("naissance date", ident) != "") { // Si format FR
+    var date = getNodeValue("naissance date", ident);
+    if(date != "") { // Si format FR
       var dateNaissance = getNodeValue("naissance date", ident),
           jour  = dateNaissance.substring(0, 2),
           mois  = dateNaissance.substring(2, 4);
@@ -203,6 +206,7 @@ var VitaleVision = {
       }
     } else { // Si format ISO
       var dateNaissance = getNodeValue("naissance dateEnCarte", ident);
+      date = dateNaissance;
       if(dateNaissance.length == 8){
         var jour  = dateNaissance.substring(6, 8),
             mois  = dateNaissance.substring(4, 6),
@@ -218,8 +222,19 @@ var VitaleVision = {
     }
   
     $V(form.naissance, jour + "/" + mois + "/" + annee);
+    $V(form._vitale_birthdate, date);
     
     $V(form.matricule, getNodeValue("nir", ident));
+
+    var nir_certifie = getNodeValue("nirCertifie", ident);
+    var qualBenef = parseInt(getNodeValue("qualBenef", amo));
+
+    if (nir_certifie.length === 0 && qualBenef === 0) {
+      nir_certifie = getNodeValue("nir", ident);
+    }
+
+    $V(form._vitale_nir_certifie, nir_certifie);
+    $V(form.matricule_certifie, nir_certifie);
 
     tabs.setActiveTab('identite');
     $(form.matricule).focus(); // Application du mask
