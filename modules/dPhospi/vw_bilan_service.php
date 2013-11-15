@@ -157,12 +157,13 @@ if ($do) {
     $sejours
   );
 
+  $sejours_ids = array();
+  if (count($sejours)) {
+    $sejours = array_combine(CMbArray::pluck($sejours, "_id"), $sejours);
+    $sejours_ids = array_keys($sejours);
+  }
+
   if ($do_trans) {
-    $sejours_ids = array();
-    if (count($sejours)) {
-      $sejours = array_combine(CMbArray::pluck($sejours, "_id"), $sejours);
-      $sejours_ids = array_keys($sejours);
-    }
     $trans = new CTransmissionMedicale();
     $whereTrans = array();
     $whereTrans[] = "(degre = 'high' AND (date_max IS NULL OR date_max >= '$dateTime_min')) OR (date >= '$dateTime_min' AND date <= '$dateTime_max')";
