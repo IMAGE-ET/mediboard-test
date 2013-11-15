@@ -11,7 +11,7 @@ announce_script "Service suicide"
 
 if [ "$#" -lt 3 ]
 then
-  echo "Usage: $0 <min> <max> <password> options"
+  echo "Usage: $0 <min> <max> <service> options"
   echo " <min> is minimal load average for restarting service"
   echo " <max> is the max authorised load average before killing service"
   echo " <service> is the service to manage, ie httpd"
@@ -51,7 +51,7 @@ RUNNING=$?
 
 FTEXT='load average:'
 # Get the load average for the last 1 minute
-LOAD1MIN=$(uptime | awk -F "$FTEXT" '{ print $2 }' | cut -d, -f1 | sed 's/ //g')
+LOAD1MIN=$(uptime | awk -F "$FTEXT" '{ print $2 }' | cut -d. -f1 | sed 's/ //g')
 
 if [ $LOAD1MIN -gt $MAX ] && [ $NO_FILE -eq 1 ] && [ $RUNNING -eq 1 ]
 then
