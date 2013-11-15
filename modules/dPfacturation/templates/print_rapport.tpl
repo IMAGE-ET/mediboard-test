@@ -1,5 +1,5 @@
 {{mb_script module=cabinet script=reglement}}
-{{mb_script module=cabinet script=rapport}}
+{{mb_script module=facturation script=rapport}}
 
 {{assign var=type_aff value=1}}
 {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
@@ -57,7 +57,7 @@
     <td colspan="2">
       <br />
       <br />
-      <strong onclick="Rapport.refresh('{{$_plage.plage->_id}}')">
+      <strong>
         {{$_plage.plage->_ref_chir}}
         {{if $_plage.plage->_ref_pour_compte->_id}}
           pour le compte de {{$_plage.plage->_ref_pour_compte->_view}}
@@ -150,7 +150,7 @@
               {{foreach from=$_facture->_ref_reglements_patient item=_reglement}}
               <tr>
                 <td class="narrow">
-                  <button class="edit notext" type="button" onclick="Rapport.editReglement('{{$_reglement->_id}}', '{{$_plage.plage->_id}}');">
+                  <button class="edit notext" type="button" onclick="Rapport.editReglement('{{$_reglement->_id}}', '{{$_reglement->date}}');">
                     {{tr}}Edit{{/tr}}
                   </button>
                 </td>
@@ -165,7 +165,7 @@
                 <td colspan="4" class="button">
                   {{assign var=new_reglement value=$_facture->_new_reglement_patient}}
                   {{assign var=object_guid value=$new_reglement->_ref_object->_guid}}
-                  <button class="add" type="button" onclick="Rapport.addReglement('{{$object_guid}}', '{{$new_reglement->emetteur}}', '{{$new_reglement->montant}}', '{{$new_reglement->mode}}', '{{$_plage.plage->_id}}');">
+                  <button class="add" type="button" onclick="Rapport.addReglement('{{$object_guid}}', '{{$new_reglement->emetteur}}', '{{$new_reglement->montant}}', '{{$new_reglement->mode}}', '{{$new_reglement->date}}');">
                     {{tr}}Add{{/tr}} <strong>{{mb_value object=$new_reglement field=montant}}</strong>
                   </button>
                 </td>
@@ -180,7 +180,7 @@
               {{foreach from=$_facture->_ref_reglements_tiers item=_reglement}}
               <tr>
                 <td class="narrow">
-                  <button class="edit notext" type="button" onclick="Rapport.editReglement('{{$_reglement->_id}}', '{{$_plage.plage->_id}}');">
+                  <button class="edit notext" type="button" onclick="Rapport.editReglement('{{$_reglement->_id}}', '{{$_reglement->date}}');">
                     {{tr}}Edit{{/tr}}
                   </button>
                 </td>
@@ -195,7 +195,7 @@
                 <td colspan="4" class="button">
                   {{assign var=new_reglement value=$_facture->_new_reglement_tiers}}
                   {{assign var=object_guid value=$new_reglement->_ref_object->_guid}}
-                  <button class="add" type="button" onclick="Rapport.addReglement('{{$object_guid}}', '{{$new_reglement->emetteur}}', '{{$new_reglement->montant}}', '{{$new_reglement->mode}}', '{{$_plage.plage->_id}}');">
+                  <button class="add" type="button" onclick="Rapport.addReglement('{{$object_guid}}', '{{$new_reglement->emetteur}}', '{{$new_reglement->montant}}', '{{$new_reglement->mode}}', '{{$new_reglement->date}}');">
                     {{tr}}Add{{/tr}} <strong>{{mb_value object=$new_reglement field=montant}}</strong>
                   </button>
                 </td>

@@ -7,32 +7,5 @@ window.Facture = {
     url.addParam('not_load_banque', not_load_banque);
     url.addParam('facture_id'     , facture_id);
     url.requestUpdate('load_facture');
-  },
-  modifCloture: function(oForm) {
-    onSubmitFormAjax(oForm, {
-      onComplete : function() {
-      var url = new Url('dPcabinet'   , 'ajax_view_facture');
-        url.addElement(oForm.facture_id);
-        url.addElement(oForm.not_load_banque);
-        url.addParam('object_class'     , oForm.facture_class.value);
-        url.requestUpdate('load_facture');
-    }
-    });
-  },
-  reloadReglement: function(facture_id) {
-    var url = new Url('dPcabinet', 'ajax_refresh_reglement');
-    url.addParam('facture_id'    , facture_id);
-    url.requestUpdate('reglements_facture');
-  },
-  cut: function(oForm) {
-    onSubmitFormAjax(oForm, {
-      onComplete : function() {
-        var url = new Url('dPcabinet', 'ajax_view_facture');
-        url.addElement(oForm.facture_id);
-        url.addParam('object_class'     , oForm.facture_class.value);
-        url.requestUpdate("load_facture");
-        Facture.modal.close();
-      }
-    });
   }
 };

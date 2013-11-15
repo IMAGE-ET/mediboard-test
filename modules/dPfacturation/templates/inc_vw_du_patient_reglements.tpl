@@ -3,17 +3,20 @@
     var form = getForm('reglement-add');
     var banque_id = form.banque_id;
     var reference = form.reference;
+    var tireur    = form.tireur;
     var BVR       = form.num_bvr;
     var mode      = form.mode.value;
     
     banque_id.hide();
     reference.hide();
     BVR.hide();
+    tireur.hide();
     
     switch(mode) {
       case "cheque":
         banque_id.show();
         reference.show();
+        tireur.show();
         break;
         
       case "virement":
@@ -41,6 +44,9 @@
     
     return confirmDeletion(oForm, { ajax: true, typeName:'le règlement' }, {
        onComplete : function() {
+         {{if isset($consult|smarty:nodefaults)}}
+         Reglement.reload(true);
+         {{/if}}
          if (!$('load_facture')) {
            Facture.url.refreshModal();
          }
@@ -65,23 +71,30 @@
     $V(oForm.date,         date);
     
     return onSubmitFormAjax(oForm, function() {
+      {{if isset($consult|smarty:nodefaults)}}
+      Reglement.reload(true);
+      {{/if}}
       Facture.reloadReglement('{{$facture->_id}}', '{{$facture->_class}}');
     });
   }
   
-  editAquittementDate = function(object_id, date){
+  editAquittementDate = function(date){
     var oForm = getForm('edit-date-aquittement');
-    $V(oForm.facture_id , object_id);
-    $V(oForm.dosql      , 'do_facture_aed');
     $V(oForm.patient_date_reglement,     date);
     
     return onSubmitFormAjax(oForm, function() {
+      {{if isset($consult|smarty:nodefaults)}}
+      Reglement.reload(true);
+      {{/if}}
       Facture.reloadReglement('{{$facture->_id}}', '{{$facture->_class}}');
     });
   }
   
   addReglement = function (oForm){
     return onSubmitFormAjax(oForm, function() {
+      {{if isset($consult|smarty:nodefaults)}}
+      Reglement.reload(true);
+      {{/if}}
       Facture.reloadReglement('{{$facture->_id}}', '{{$facture->_class}}');
       {{if !$facture->_ref_reglements|@count}}
         var url = new Url('dPfacturation', 'ajax_view_facture');
@@ -119,12 +132,8 @@
 </form>
 
 <form name="edit-date-aquittement" action="#" method="post">
-  <input type="hidden" name="m" value="dPcabinet" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="dosql" value="" />
-  <input type="hidden" name="facture_id" value="" />
-  <input type="hidden" name="consultation_id" value="" />
-  <input type="hidden" name="patient_id" value="{{$object->patient_id}}" />
+  {{mb_class object=$object}}
+  {{mb_key   object=$object}}
   <input type="hidden" name="patient_date_reglement" value="" />
 </form>
 
@@ -246,7 +255,7 @@
         <strong>
           {{mb_label object=$object field=patient_date_reglement}}
           <input type="hidden" name="patient_date_reglement" class="date" value="{{$object->patient_date_reglement}}" />
-          <button type="button" class="submit notext" onclick="editAquittementDate('{{$object->_id}}', this.up('td').down('input[name=patient_date_reglement]').value);"></button>
+          <button type="button" class="submit notext" onclick="editAquittementDate(this.up('td').down('input[name=patient_date_reglement]').value);"></button>
         </strong>
         <script>
           Main.add(function(){
