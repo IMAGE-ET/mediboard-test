@@ -40,7 +40,9 @@
     </div>
   </a>
   {{if $_event->_ref_disponibility|@count}}
-    <div class="progressBar_dispo" title="Statut des créneaux">
+    {{assign var=count_dispo value=$_event->_ref_disponibility|@array_count_values}}
+
+    <div class="progressBar_dispo" title="{{foreach from=$count_dispo key=type item=_dispo name=loop}}{{tr}}{{$_event->type}}_planning_disponibility_{{$type}}{{/tr}} : {{$_dispo}}{{if !$smarty.foreach.loop.last}}, {{/if}}{{/foreach}}">
       {{foreach from=$_event->_ref_disponibility item=_dispo}}
         <div class="disponibility_bar disponibility_planning_{{$_dispo}}"></div>
       {{/foreach}}

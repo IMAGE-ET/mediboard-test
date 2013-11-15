@@ -32,6 +32,7 @@ class CPlanning {
   public $resizable = 0;                // resizable by drag & drop
   public $allow_superposition = false;  // allow superposition of Events
   public $adapt_range = null;           // adapt range
+  public $explode_multidays = false;    //if a plage is composed by more than day, explode it in sub_days
 
 
   //events
@@ -122,7 +123,7 @@ class CPlanning {
   function addEvent(CPlanningEvent $event) {
 
     //@TODO: fix problem in other way if the date start != date end (chevauchement de plusieurs jours) (before every check)
-    if (CMbDT::date($event->start) != CMbDT::date($event->end)) {
+    if (($this->explode_multidays) && (CMbDT::date($event->start) != CMbDT::date($event->end))) {
       $this->explodeEvent($event);
       return;
     }
