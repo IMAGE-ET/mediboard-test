@@ -22,13 +22,18 @@ class CHL7v2DataTypeDateTime extends CHL7v2DataType {
     if ($parsed === false) {
       return;
     }
-    
-    return $parsed["year"].
-            "-".CValue::read($parsed, "month",  "00").
-            "-".CValue::read($parsed, "day",    "00").
-            " ".CValue::read($parsed, "hour",   "00").
-            ":".CValue::read($parsed, "minute", "00").
-            ":".CValue::read($parsed, "second", "00");
+
+    $datetime = $parsed["year"].
+                "-".CValue::read($parsed, "month",  "00").
+                "-".CValue::read($parsed, "day",    "00");
+
+    if (isset($parsed["hour"])) {
+      $datetime .= " ".CValue::read($parsed, "hour",   "00").
+                   ":".CValue::read($parsed, "minute", "00").
+                   ":".CValue::read($parsed, "second", "00");
+    }
+
+    return $datetime;
   }
   
   function toHL7($value, CHL7v2Field $field) {
