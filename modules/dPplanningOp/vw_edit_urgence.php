@@ -221,6 +221,10 @@ if ($chir->_id) {
   $_functions = $chir->loadBackRefs("secondary_functions");
 }
 
+$op->loadRefChir2();
+$op->loadRefChir3();
+$op->loadRefChir4();
+
 if (!$op->_id) {
   $op->_time_op = $op->temp_operation = "00:00:00";
   if ($hour_urgence && $min_urgence) {
