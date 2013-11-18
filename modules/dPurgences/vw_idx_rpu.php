@@ -41,4 +41,8 @@ $smarty->assign("uhcd_affichage"  , $uhcd_affichage);
 $smarty->assign("date"            , $date);
 $smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 
+$smarty->assign("main_courante_refresh_frequency",      CAppUI::conf("dPurgences main_courante_refresh_frequency"));
+$smarty->assign("uhcd_refresh_frequency",               CAppUI::conf("dPurgences uhcd_refresh_frequency"));
+$smarty->assign("identito_vigilance_refresh_frequency", CAppUI::conf("dPurgences identito_vigilance_refresh_frequency"));
+
 $smarty->display("vw_idx_rpu.tpl");

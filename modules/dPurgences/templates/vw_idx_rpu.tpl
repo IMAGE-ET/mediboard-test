@@ -104,11 +104,11 @@
     // Delays prevent potential overload with periodical previous updates
 
     // Main courante
-    MainCourante.start(0, 60);
+    MainCourante.start(0, {{$main_courante_refresh_frequency}});
 
     // UHCD
     UHCD.date = "{{$date}}";
-    UHCD.start(1, 80);
+    UHCD.start(1, {{$uhcd_refresh_frequency}});
 
     // Reconvocations
     {{if $conf.dPurgences.gerer_reconvoc == "1"}}
@@ -117,7 +117,7 @@
 
     // Identito-vigilance
     IdentitoVigilance.date = "{{$date}}";
-    IdentitoVigilance.start(3, 120);
+    IdentitoVigilance.start(3, {{$identito_vigilance_refresh_frequency}});
 
     var tabs = Control.Tabs.create('tab_main_courante', false);
   });

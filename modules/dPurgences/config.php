@@ -45,5 +45,8 @@ $dPconfig["dPurgences"] = array (
   "display_regule_par"        => "0",
   "view_rpu_uhcd"             => "0",
   "use_blocage_lit"           => "0",
-  "create_affectation"        => "1"
+  "create_affectation"        => "1",
+  "main_courante_refresh_frequency"      => "90",
+  "uhcd_refresh_frequency"               => "180",
+  "identito_vigilance_refresh_frequency" => "300"
 );
