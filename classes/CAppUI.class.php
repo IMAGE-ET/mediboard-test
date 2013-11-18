@@ -875,7 +875,26 @@ class CAppUI {
 
     // Load from shared memory if possible
     if ($locales_prefixes) {
-      return;
+      $all_keys = SHM::listKeys("$shared_name-");
+      $all_keys = preg_grep("/^$shared_name-.*/", $all_keys);
+
+      $all_keys = array_values($all_keys);
+      $all_keys = preg_replace_callback(
+        "/^$shared_name-(.*)/",
+        function ($matches) {
+          return $matches[1];
+        },
+        $all_keys
+      );
+
+      CMbArray::removeValue("__prefixes__", $all_keys);
+
+      $prefixes = array_keys($locales_prefixes);
+
+      // Use cache if the list is complete
+      if (count(array_diff($prefixes, $all_keys)) == 0) {
+        return;
+      }
     }
 
     $locales = array();

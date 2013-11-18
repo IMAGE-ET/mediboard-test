@@ -376,7 +376,7 @@ class CConfiguration extends CMbMetaObject {
       $dirty = false;
     }
 
-    // Check if the cache exists
+    // Check if all the keys exist
     if (empty(self::$hosts)) {
       $hosts = SHM::get("config-values-__HOSTS__");
 
@@ -384,7 +384,30 @@ class CConfiguration extends CMbMetaObject {
         self::refreshDataCache();
       }
       else {
-        self::$hosts = $hosts["content"];
+        // Check if we have all the keys
+        $all_keys = SHM::listKeys("config-values-");
+        $all_keys = preg_grep("/^config-values-.*/", $all_keys);
+
+        $all_keys = array_values($all_keys);
+        $all_keys = preg_replace_callback(
+          "/^config-values-(.*)/",
+          function ($matches) {
+            return $matches[1];
+          },
+          $all_keys
+        );
+
+        CMbArray::removeValue("__HOSTS__", $all_keys);
+
+        $prefixes = $hosts["content"];
+
+        // Refresh the cache if the list is NOT complete
+        if (count(array_diff($prefixes, $all_keys)) > 0) {
+          self::refreshDataCache();
+        }
+        else {
+          self::$hosts = $hosts["content"];
+        }
       }
     }
 
