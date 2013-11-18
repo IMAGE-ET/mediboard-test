@@ -915,14 +915,14 @@ class CAppUI {
       $by_prefix[$_prefix][$_rest] = $_value;
     }
 
-    SHM::put("$shared_name-__prefixes__", $hashes);
-
     foreach ($by_prefix as $_prefix => $_locales) {
       self::$locales[$_prefix] = $_locales;
       self::$locales_loaded[$_prefix] = true;
 
       SHM::put("$shared_name-$_prefix", $_locales);
     }
+
+    SHM::put("$shared_name-__prefixes__", $hashes);
   }
 
   /**
