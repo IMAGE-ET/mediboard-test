@@ -28,7 +28,9 @@
         <img src="style/mediboard/images/buttons/phone.png" alt=""/> <strong>{{mb_value object=$_plage field=phone_astreinte}}</strong> {{if $_plage->_ref_user->_user_astreinte}}({{mb_value object=$_plage->_ref_user field=_user_astreinte}}){{/if}}
       </td>
       <td>{{$_plage->libelle}}</td>
-      <td>{{$_plage->start|date_format:"%Hh%M"}} &rarr; {{if $_plage->start|date_format:"%d" != $_plage->end|date_format:"%d"}}{{$_plage->end|date_format:"%A"}} {{/if}}{{$_plage->end|date_format:"%Hh%M"}}</td>
+      <td>
+        {{mb_include module=system template=inc_interval_datetime from=$_plage->start to=$_plage->end}}
+      </td>
     </tr>
   {{foreachelse}}
     <tr>
