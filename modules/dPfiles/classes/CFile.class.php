@@ -762,7 +762,6 @@ class CFile extends CDocumentItem {
     header("MIME-Version: 1.0");
     header("Content-length: {$this->file_size}");
     header("Content-type: $this->file_type");
-    header("Accept-Ranges: bytes");
     header("Content-disposition: inline; filename=\"".$this->file_name."\"");
     
     echo file_get_contents($this->_file_path);
