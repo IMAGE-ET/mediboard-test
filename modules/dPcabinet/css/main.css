@@ -23,17 +23,14 @@ li.atcd_hover a {
 
 
 /** barre des disponibilités **/
-
 div.progressBar_dispo {
-  width:90%;
-  margin: 2px auto;
   font-size: 2px;
 }
 
 div.progressBar_dispo div.disponibility_bar {
   background: transparent;
   height:10px;
-  margin:0;
+  margin-top:1px;
   padding:0;
   width: 3px;
   display:inline-block;
