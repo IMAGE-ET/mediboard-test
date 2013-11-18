@@ -210,7 +210,7 @@ if ($selOp->_id) {
 $group = CGroups::loadCurrent();
 $group->loadConfigValues();
 
-$listValidateurs = CPersonnel::loadListPers(array("op", "op_panseuse"), true, true);
+$listValidateurs = CPersonnel::loadListPers(array("op", "op_panseuse", "iade", "sagefemme", "manipulateur"), true, true);
 $operateurs_disp_vasc = implode("-", array_merge(CMbArray::pluck($listChirs, "_id"), CMbArray::pluck($listValidateurs, "user_id")));
 
 $smarty->assign("soustotal_base" , $soustotal_base);
