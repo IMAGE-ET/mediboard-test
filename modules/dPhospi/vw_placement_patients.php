@@ -10,7 +10,6 @@
  */
 
 CCanDo::checkRead();
-
 // Récupération des paramètres
 $date           = CValue::getOrSession("date", CMbDT::dateTime());
 $services_ids   = CValue::getOrSession("services_ids");
@@ -49,6 +48,7 @@ $services = $service->loadAll($services_ids);
 
 $services_noms = array();
 foreach ($services as $serv) {
+  /* @var CService $serv*/
   $services_noms[$serv->_id] = $serv->nom;
 }
 $chambres = array();
@@ -57,13 +57,14 @@ $ensemble_lits_charges = array();
 
 $conf_nb_colonnes = CAppUI::conf("dPhospi nb_colonnes_vue_topologique");
 
-foreach ($services as $serv) {  
+foreach ($services as $serv) {
   $grille = null;
   $grille = array_fill(0, $conf_nb_colonnes, array_fill(0, $conf_nb_colonnes, 0));
   
   $chambres = $serv->loadRefsChambres();
 
   foreach ($chambres as $ch) {
+    /* @var CChambre $ch*/
     $ch->loadRefEmplacement();
     if ($ch->_ref_emplacement->_id) {
       $ch->loadRefsLits();
@@ -161,6 +162,7 @@ $sejours = CMbObject::massLoadFwdRef($listAff, "sejour_id");
 CMbObject::massLoadFwdRef($sejours, "patient_id");
 
 foreach ($listAff as &$_aff) {
+  /* @var CAffectation $_aff*/
   $_aff->loadView();
   $_aff->loadRefSejour();
   $_aff->_ref_sejour->checkDaysRelative($date);
@@ -187,14 +189,15 @@ $where["group_id"] = "= '$group->_id'";
 $listNotAff["Non placés"] = $sejour->loadList($where);
 
 foreach ($listNotAff["Non placés"] as $key => $_sejour) {
+  /* @var CSejour $_sejour*/
   $_sejour->loadRefsAffectations();
-  if (!empty($_sejour->_ref_affectations)) {
+  if (!empty($_sejour->_ref_affectations) || ($_sejour->service_id && !in_array($_sejour->service_id, $services_ids))) {
     unset($listNotAff["Non placés"][$key]);
   }
   else {
     $_sejour->loadRefPatient();
+    $_sejour->checkDaysRelative($date);
   }
-  $_sejour->checkDaysRelative($date);
 }
 
 // Chargement des affectations dans les couloirs (sans lit_id)
