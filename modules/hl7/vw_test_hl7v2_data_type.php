@@ -24,16 +24,16 @@ $test_suite = array(
       "2011-00-00" => "2011",
     ),
   ),
-  
+
   "DateTime" => array(
     "MB" => array(
       "20110829140306.0052" => "2011-08-29 14:03:06",
       "20110829140306"      => "2011-08-29 14:03:06",
       "201108291403"        => "2011-08-29 14:03:00",
       "2011082914"          => "2011-08-29 14:00:00",
-      "20110829"            => "2011-08-29 00:00:00",
-      "201108"              => "2011-08-00 00:00:00",
-      "2011"                => "2011-00-00 00:00:00",
+      "20110829"            => "2011-08-29",
+      "201108"              => "2011-08-00",
+      "2011"                => "2011-00-00",
       "20110829140360.0052" => null,
     ),
     "HL7" => array(
@@ -42,7 +42,7 @@ $test_suite = array(
       "2011-08-29 14:03:00" => "20110829140300",
     ),
   ),
-  
+
   "Time" => array(
     "MB" => array(
       "140306.0052" => "14:03:06",
@@ -91,19 +91,24 @@ $test_suite = array(
   ),
 );
 
+$dummy_doc = new CHL7v2DOMDocument();
+$dummy_doc->registerNodeClass("DOMElement", "CHL7v2DOMElement");
+$dummy_doc->loadXML('<?xml version="1.0" ?><root/>');
+$dummy_element = $dummy_doc->documentElement;
+
 $results = array();
 $dummy_message = new CHL7v2Message;
 $dummy_segment = new CHL7v2Segment($dummy_message);
-$dummy_field = new CHL7v2Field($dummy_segment, new CHL7v2SimpleXMLElement('<?xml version="1.0" <root/>'));
+$dummy_field = new CHL7v2Field($dummy_segment, $dummy_element);
 
-foreach($test_suite as $type => $systems) {
+foreach ($test_suite as $type => $systems) {
   echo "<h1>$type</h1>";
   $dt = CHL7v2DataType::load($dummy_message, $type, "2.5", "none");
   
-  foreach($systems as $system => $tests) {
+  foreach ($systems as $system => $tests) {
     echo "<h2>vers $system</h2>";
     
-    foreach($tests as $from => $to) {
+    foreach ($tests as $from => $to) {
       $method = ($system == "MB" ? "toMB" : "toHL7");
       $result = null;
       
@@ -113,8 +118,10 @@ foreach($test_suite as $type => $systems) {
       catch(Exception $e) {
         $result = $e;
       }
-       
-      echo "<pre style='text-indent: 3em; color:".(($result === $to || $result instanceof Exception && $to == null) ? 'green' : 'red')."'>'$from' => ".($result instanceof Exception ? $result->getMessage() : var_export($result, true))." (expected ".var_export($to,true).")</pre>\n";
+
+      $color = (($result === $to || $result instanceof Exception && $to == null) ? 'green' : 'red');
+      $value = ($result instanceof Exception ? $result->getMessage() : var_export($result, true));
+      echo "<pre style='text-indent: 3em; color:$color'>'$from' => $value (expected ".var_export($to, true).")</pre>\n";
     }
   }
 }
