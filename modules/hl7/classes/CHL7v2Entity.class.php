@@ -25,7 +25,7 @@ abstract class CHL7v2Entity extends CHL7v2 {
   public $spec_filename;
   
 
-  /** @var CHL7v2SimpleXMLElement */
+  /** @var CHL7v2DOMDocument */
   public $specs;
   public $data;
   

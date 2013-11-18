@@ -16,7 +16,7 @@ class CHL7v2FieldItem extends CHL7v2Component {
   /** @var CHL7v2Field */
   public $parent;
   
-  function __construct(CHL7v2Field $field, CHL7v2SimpleXMLElement $specs, $self_pos) {
+  function __construct(CHL7v2Field $field, CHL7v2DOMDocument $specs, $self_pos) {
     $message = $field->getMessage();
     
     $separators = array(

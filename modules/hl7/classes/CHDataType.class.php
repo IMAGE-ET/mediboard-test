@@ -207,7 +207,10 @@ class CHDataType extends CHL7v2 {
   function toHL7($value, CHL7v2Field $field) {
     return $value;
   }
-  
+
+  /**
+   * @return CHL7v2DOMElement
+   */
   function getSpecs(){
     return $this->message->getSchema(self::PREFIX_COMPOSITE_NAME, $this->type, $this->extension);
   }

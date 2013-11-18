@@ -71,7 +71,7 @@ class CHL7v2Component extends CHL7v2Entity {
 
   public $invalid = false;
 
-  function __construct(CHL7v2Entity $parent, CHL7v2SimpleXMLElement $specs, $self_pos, $separators) {
+  function __construct(CHL7v2Entity $parent, CHL7v2DOMElement $specs, $self_pos, $separators) {
     parent::__construct();
 
     $this->parent = $parent;
@@ -81,10 +81,10 @@ class CHL7v2Component extends CHL7v2Entity {
     $this->separators = $separators;
 
     // Intrinsic properties
-    $this->length      = (int)$specs->attributes()->length;
-    $this->table       = (int)$specs->attributes()->table;
-    $this->datatype    = (string)$specs->datatype;
-    $this->description = (string)$specs->description;
+    $this->length      = (int)$specs->getAttribute("length");
+    $this->table       = (int)$specs->getAttribute("table");
+    $this->datatype    = $specs->queryTextNode("datatype");
+    $this->description = $specs->queryTextNode("description");
     $this->self_pos    = $self_pos;
   }
 

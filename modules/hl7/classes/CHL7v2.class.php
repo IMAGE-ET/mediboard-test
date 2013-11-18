@@ -176,7 +176,7 @@ abstract class CHL7v2 {
   /**
    * Get the specs of the entity
    *
-   * @return CHL7v2SimpleXMLElement The spec
+   * @return CHL7v2DOMDocument The spec
    */
   abstract function getSpecs();
 

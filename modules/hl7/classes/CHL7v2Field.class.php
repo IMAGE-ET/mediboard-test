@@ -25,19 +25,19 @@ class CHL7v2Field extends CHL7v2Entity {
   public $items         = array();
 
 
-  /** @var CHL7v2SimpleXMLElement */
+  /** @var CHL7v2DOMDocument */
   public $meta_spec;
   
   // private $_ts_fixed = false;
   
-  function __construct(CHL7v2Segment $segment, $spec) {
+  function __construct(CHL7v2Segment $segment, CHL7v2DOMElement $spec) {
     parent::__construct($segment);
     
     $this->owner_segment = $segment;
-    $this->name     = (string)$spec->name;
-    $this->datatype = (string)$spec->datatype;
-    $this->length   = (int)$spec->attributes()->length;
-    $this->table    = (int)$spec->attributes()->table;
+    $this->name     = $spec->queryTextNode("name");
+    $this->datatype = $spec->queryTextNode("datatype");
+    $this->length   = (int)$spec->getAttribute("length");
+    $this->table    = (int)$spec->getAttribute("table");
     
     $this->meta_spec = $spec;
     
@@ -45,7 +45,7 @@ class CHL7v2Field extends CHL7v2Entity {
       $this->datatype = "DTM";
     }*/
     
-    $this->description = (string)$spec->description;
+    $this->description = $spec->queryTextNode("description");
     $this->required    = $spec->isRequired();
     $this->forbidden   = $spec->isForbidden();
     $this->unbounded   = $spec->isUnbounded();

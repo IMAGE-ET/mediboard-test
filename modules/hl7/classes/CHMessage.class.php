@@ -117,7 +117,7 @@ abstract class CHMessage extends CHL7v2SegmentGroup {
     return CValue::read($this->lines, $this->current_line+$offset, null);
   }
   
-  static function getNext(CHL7v2SimpleXMLElement $current_node, CHL7v2Entity $current_group) {
+  static function getNext(CHL7v2DOMElement $current_node, CHL7v2Entity $current_group) {
     // On remet les compteurs d'utilisation a zero
     CHL7v2::d("RESET", "green");
     $current_node->reset();
@@ -143,7 +143,7 @@ abstract class CHMessage extends CHL7v2SegmentGroup {
     return array($current_node, $current_group);
   }
   
-  function handleLine(CHL7v2SimpleXMLElement $current_node, CHL7v2Entity $current_group) {
+  function handleLine(CHL7v2DOMElement $current_node, CHL7v2Entity $current_group) {
     // Increment du nb d'occurences
     $current_node->markUsed();
     
@@ -163,14 +163,14 @@ abstract class CHMessage extends CHL7v2SegmentGroup {
     /**
      * Premier segment/groupe dans le fichier de spec
      * 
-     * @var CHL7v2SimpleXMLElement
+     * @var CHL7v2DOMElement $current_node
      */
-    $current_node = next($specs->xpath("/message/segments/*"));
+    $current_node = $specs->query("/message/segments/*")->item(0);
     
     /**
      * Groupe courant dans lequel on va placer les CHL7v2Segment créés
      * 
-     * @var CHL7v2SegmentGroup
+     * @var CHL7v2SegmentGroup $current_group
      */
     $current_group = $this;
     
@@ -184,7 +184,7 @@ abstract class CHMessage extends CHL7v2SegmentGroup {
         break;
       }
         
-      switch ($current_node->getName()) {
+      switch ($current_node->nodeName) {
         // SEGMENT //
         case "segment":
           CHL7v2::d($current_node->getSegmentHeader()." ".$current_node->state(), "red");
@@ -247,7 +247,7 @@ abstract class CHMessage extends CHL7v2SegmentGroup {
           $current_node->markEmpty();
 
           if ($current_node->isUnbounded() || !$current_node->isUsed()) {
-            $current_node->attributes()->mbOpen = 0;
+            $current_node->setAttribute("mbOpen", 0);
             
             CHL7v2::d(" --> Groupe multiple ou pas encore utilisé, on entre dedans");
             $current_group = new CHL7v2SegmentGroup($current_group, $current_node);
@@ -294,7 +294,7 @@ abstract class CHMessage extends CHL7v2SegmentGroup {
   }
   
   /**
-   * @return CHL7v2SimpleXMLElement
+   * @return CHL7v2DOMDocument
    */
   function getSpecs(){
     return $this->getSchema(self::PREFIX_MESSAGE_NAME, $this->event_name);

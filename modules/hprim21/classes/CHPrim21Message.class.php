@@ -172,7 +172,7 @@ class CHPrim21Message extends CHMessage {
       throw new CHL7v2Exception(CHL7v2Exception::UNKNOWN_MSG_CODE);
     }
 
-    $this->description = (string)$spec->description;
+    $this->description = $spec->queryTextNode("description");
 
     $this->readHeader();
     
@@ -224,7 +224,9 @@ class CHPrim21Message extends CHMessage {
       $this->error(CHL7v2Exception::SPECS_FILE_MISSING, $this->spec_filename);
     }
 
-    $schema = @simplexml_load_file($this->spec_filename, "CHL7v2SimpleXMLElement");
+    $schema = new CHL7v2DOMDocument();
+    $schema->registerNodeClass('DOMElement', 'CHL7v2DOMElement');
+    $schema->load($this->spec_filename);
 
     self::$schemas[$version][$type][$name][$this->type] = $schema;
 

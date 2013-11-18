@@ -45,7 +45,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     
     $specs = $this->getSpecs();
     
-    $this->description = (string)$specs->description;
+    $this->description = $specs->queryTextNode("description");
     
     if ($this->name === $message->getHeaderSegmentName()) {
       array_unshift($fields, $message->fieldSeparator);
@@ -144,7 +144,7 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
 
   /**
-   * @return CHL7v2SimpleXMLElement
+   * @return CHL7v2DOMDocument
    */
   function getSpecs(){
     return $this->getMessage()->getSchema(self::PREFIX_SEGMENT_NAME, $this->name);
