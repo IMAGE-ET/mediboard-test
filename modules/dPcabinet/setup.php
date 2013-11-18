@@ -1133,14 +1133,7 @@ class CSetupdPcabinet extends CSetup {
       WHERE 
         `tiers_date_reglement` IS NOT NULL;";
     $this->addQuery($query);
-    
-    // On supprime les champs inutiles des consultations
-    /*$query = 'ALTER TABLE `consultation` 
-      DROP `tiers_mode_reglement`,
-      DROP `patient_mode_reglement`,
-      DROP `banque_id`;';
-    $this->addQuery($query);*/
-    
+
     $this->makeRevision("1.05");
     $query = "ALTER TABLE `acte_ngap` 
       ADD `executant_id` int(11) unsigned NOT NULL DEFAULT '0',
@@ -2005,6 +1998,18 @@ class CSetupdPcabinet extends CSetup {
                 ADD `lock` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "2.19";
+    $this->makeRevision("2.19");
+    // On supprime les champs inutiles des consultations
+    $query = 'ALTER TABLE `consultation`
+      DROP `tiers_mode_reglement`,
+      DROP `patient_mode_reglement`,
+      DROP `banque_id`;';
+    $this->addQuery($query);
+
+    // On supprime le champ facture_id de consult
+    // !Ne pas décommenter!
+    /*$query = "ALTER TABLE `consultation` DROP `facture_id`;";
+    $this->addQuery($query);*/
+    $this->mod_version = "2.20";
   }
 }
