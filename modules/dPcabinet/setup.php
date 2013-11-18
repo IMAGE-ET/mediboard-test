@@ -2010,6 +2010,25 @@ class CSetupdPcabinet extends CSetup {
     // !Ne pas décommenter!
     /*$query = "ALTER TABLE `consultation` DROP `facture_id`;";
     $this->addQuery($query);*/
-    $this->mod_version = "2.20";
+
+    $this->makeRevision("2.20");
+    // On supprime les champs inutiles des consultations anesth
+    $query = "ALTER TABLE `consultation_anesth`
+      DROP `poid`,
+      DROP `taille`,
+      DROP `tasys`,
+      DROP `tadias`,
+      DROP `pouls`,
+      DROP `spo2`;";
+    $this->addQuery($query);
+
+    // On supprime les champs inutiles des consultations anesth
+    // !Ne pas décommenter!
+    /*$query = "ALTER TABLE `consultation_anesth`
+      DROP `groupe`,
+      DROP `groupe_ok`,
+      DROP `rhesus`;";
+    $this->addQuery($query);*/
+    $this->mod_version = "2.21";
   }
 }
