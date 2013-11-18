@@ -223,7 +223,13 @@ if ($chir->_id) {
 
 if (!$op->_id) {
   $op->_time_op = $op->temp_operation = "00:00:00";
-  $op->_time_urgence = $op->time_operation = str_pad($hours_urgence["deb"], 2, "0", STR_PAD_LEFT).":00:00";
+  if ($hour_urgence && $min_urgence) {
+    $time = "$hour_urgence:$min_urgence:00";
+  }
+  else {
+    $time = str_pad($hours_urgence["deb"], 2, "0", STR_PAD_LEFT).":00:00";
+  }
+  $op->_time_urgence = $op->time_operation = $time;
 }
 
 // Création du template
