@@ -10,8 +10,6 @@
 
 namespace SVNClient;
 
-use Symfony\Component\Process\ProcessBuilder;
-
 class Util {
 
   /**
@@ -25,33 +23,58 @@ class Util {
    * @return string
    * @throws \Exception
    */
-  public static function exec($cmd, $arguments = array(), $options = array(), $path = null) {
+  public static function exec($cmd, $arguments = array(), $options = array(), $path = null, $output = false) {
     if (!is_array($arguments)) {
       $arguments = array($arguments);
     }
+    $arguments = array_map("escapeshellarg", $arguments);
+
+    $opts = array(
+      0 => array("pipe", "r"), // stdin
+      1 => array("pipe", "w"), // stdout
+      2 => array("pipe", "a"), // stderr
+    );
 
     $new_options = array();
     foreach ($options as $key => $value) {
       $new_options[] = preg_replace("/[^-\w]/", "", $key);
 
       if ($value !== true) {
-        $new_options[] = $value;
+        $new_options[] = escapeshellarg($value);
       }
     }
 
-    $arguments = array_merge(array("svn", $cmd), $arguments, $new_options);
+    $cmdline = "svn $cmd " . implode(" ", $arguments) . " " . implode(" ", $new_options);
 
-    $builder = new ProcessBuilder($arguments);
-    $builder->setWorkingDirectory($path);
+    $pipes   = array();
+    $process = proc_open($cmdline, $opts, $pipes, $path);
 
-    $process = $builder->getProcess();
-    $process->run();
+    if (is_resource($process)) {
+      $err = stream_get_contents($pipes[2]);
+      fclose($pipes[2]);
+      if ($err) {
+        throw new Exception($err);
+      }
 
-    if (!$process->isSuccessful()) {
-      throw new Exception($process->getErrorOutput());
+      stream_get_contents($pipes[0]);
+      //fwrite($pipes[0], 'Init OK');
+      fclose($pipes[0]);
+
+      if ($output) {
+        if ($fout = fopen("php://output", "w")) {
+          stream_copy_to_stream($pipes[1], $fout);
+          fclose($fout);
+        }
+      }
+
+      $out = stream_get_contents($pipes[1]);
+
+      proc_close($process);
+
+      return $out;
     }
 
-    return $process->getOutput();
+    throw new Exception("'$cmdline' could not be executed");
   }
 
   /**

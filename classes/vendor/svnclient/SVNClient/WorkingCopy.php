@@ -111,7 +111,7 @@ class WorkingCopy {
       "--revision" => $revision,
     );
 
-    return Util::exec("update", $paths, $options, $this->path);
+    return Util::exec("update", $paths, $options, $this->path, true);
   }
 
   function cleanup($path) {

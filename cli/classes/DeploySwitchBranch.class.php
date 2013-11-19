@@ -27,9 +27,15 @@ class DeploySwitchBranch extends MediboardCommand {
    * @see parent::configure()
    */
   protected function configure() {
+    $aliases = array(
+      'deploy:sb'
+    );
+
     $this
       ->setName('deploy:switchbranch')
+      ->setAliases($aliases)
       ->setDescription('Switch to another branch')
+      ->setHelp('Executes an "svn switch" on the root, and changes every external folder to the right branch')
       ->addArgument(
         'branch',
         InputArgument::OPTIONAL,
@@ -100,6 +106,11 @@ class DeploySwitchBranch extends MediboardCommand {
     foreach ($paths as $_path) {
       $this->switchExternal($wc, $branch, $_path, $output);
     }
+
+    $this->out($output, "Updating ...");
+    $wc->update();
+
+    $this->out($output, "Switch succeeded");
   }
 
   /**
