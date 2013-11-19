@@ -27,7 +27,6 @@ class CConsultation extends CFacturable {
   public $patient_id;
   public $sejour_id;
   public $grossesse_id;
-  public $facture_id;
 
   // DB fields
   public $type;
@@ -240,7 +239,6 @@ class CConsultation extends CFacturable {
     $props["patient_id"]        = "ref class|CPatient purgeable seekable show|1";
     $props["categorie_id"]      = "ref class|CConsultationCategorie show|1";
     $props["grossesse_id"]      = "ref class|CGrossesse show|0 unlink";
-    $props["facture_id"]        = "ref class|CFactureCabinet show|0 nullify";
 
     $props["motif"]             = "text helped seekable";
     $props["type"]              = "enum list|classique|entree|chimio default|classique";
@@ -965,17 +963,6 @@ class CConsultation extends CFacturable {
       $facture->du_tva      = $this->du_tva;
       $facture->taux_tva    = $this->taux_tva;
       $facture->store();
-      if (CModule::getActive("dPfacturation")) {
-        $ligne = new CFactureLiaison();
-        $ligne->facture_id    = $facture->_id;
-        $ligne->facture_class = $facture->_class;
-        $ligne->object_id     = $this->_id;
-        $ligne->object_class  = 'CConsultation';
-        $ligne->store();
-      }
-      else {
-        $this->facture_id = $facture->_id;
-      }
     }
 
     //Lors de dévalidation de la consultation 
@@ -1199,9 +1186,8 @@ class CConsultation extends CFacturable {
       }
     }
     if (!$this->_ref_facture) {
-      return $this->_ref_facture = $this->loadFwdRef("facture_id", true);
+      $this->_ref_facture = new CFactureCabinet();
     }
-
     return $this->_ref_facture;
   }
 
@@ -2144,11 +2130,6 @@ class CConsultation extends CFacturable {
     }
     
     $facture->store();
-    
-    // Ajout de l'id de la facture dans la consultation
-    $this->facture_id = $facture->_id;
-    $this->store();
-    
     return $facture;
   }
 }

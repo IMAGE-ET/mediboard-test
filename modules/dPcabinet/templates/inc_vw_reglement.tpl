@@ -52,7 +52,7 @@ validTarif = function(){
 };
 
 reloadFacture = function() {
-  Facture.reload('{{$consult->patient_id}}', '{{$consult->_id}}', 1, '{{$consult->facture_id}}');
+  Facture.reload('{{$consult->patient_id}}', '{{$consult->_id}}', 1, '{{$consult->_ref_facture->_id}}');
 };
 
 modifTotal = function(){
@@ -110,8 +110,7 @@ printActes = function(){
 
 checkActe = function(button) {
   button.form.du_tiers.value = 0; 
-  button.form.du_patient.value = 0; 
-  button.form.facture_id.value = ""; 
+  button.form.du_patient.value = 0;
   cancelTarif(null, reloadFacture);
 };
 
@@ -424,7 +423,6 @@ Main.add( function(){
                 <input type="hidden" name="secteur2" value="{{$consult->secteur2}}" />
                 <input type="hidden" name="du_patient" value="{{$consult->du_patient}}" />
                 <input type="hidden" name="du_tiers" value="{{$consult->du_tiers}}" />
-                <input type="hidden" name="facture_id" value="{{$consult->facture_id}}" />
                 
                 {{if $app->user_prefs.autoCloseConsult}}
                 <input type="hidden" name="chrono" value="{{$consult->chrono}}" />

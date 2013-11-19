@@ -298,6 +298,8 @@ class CFacture extends CMbObject {
       }
     }
 
+    $_object_id = null;
+    $_object_class = null;
     //Lors de la validation de la cotation d'une consultation
     if ($this->_consult_id) {
       $consult = new CConsultation();
@@ -345,11 +347,14 @@ class CFacture extends CMbObject {
           $create_lignes = true;
         }
       }
+      $_object_id = $this->_consult_id;
+      $_object_class = "CConsultation";
     }
-    $_sejour_id = null;
+
     //Lors de la création d'une facture de séjour
     if ($this->_sejour_id) {
-      $_sejour_id = $this->_sejour_id;
+      $_object_id = $this->_sejour_id;
+      $_object_class = "CSejour";
     }
 
     // Standard store
@@ -357,12 +362,12 @@ class CFacture extends CMbObject {
       return $msg;
     }
 
-    if ($_sejour_id) {
+    if ($_object_id) {
       $ligne = new CFactureLiaison();
       $ligne->facture_id    = $this->_id;
       $ligne->facture_class = $this->_class;
-      $ligne->object_id     = $_sejour_id;
-      $ligne->object_class  = "CSejour";
+      $ligne->object_id     = $_object_id;
+      $ligne->object_class  = $_object_class;
       if (!$ligne->loadMatchingObject()) {
         $ligne->store();
       }
@@ -656,20 +661,9 @@ class CFacture extends CMbObject {
         $where["facture_liaison.object_class"]  = " = 'CConsultation'";
         $this->_ref_consults = $consult->loadList($where, null, null, "consultation.consultation_id", $ljoin);
       }
-      if (!count($this->_ref_consults) && $this->_class == "CFactureCabinet") {
-        $this->_ref_consults = $this->loadBackRefs("consultations", "consultation_id");
-      }
     }
     elseif ($this->_consult_id) {
-      $consult_new = new CConsultation();
-      $consult_new->consultation_id = $this->_consult_id;
-      $consult_new->loadMatchingObject();
-      if ($consult_new->facture_id) {
-        $consult->facture_id = $consult_new->facture_id;
-      }
-      else {
-        $consult->consultation_id = $this->_consult_id;
-      }
+      $consult->consultation_id = $this->_consult_id;
       $this->_ref_consults = $consult->loadMatchingList();
     }
 

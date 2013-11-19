@@ -1,16 +1,15 @@
 <?php
 /**
- * $Id: $
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision: $
+ * @version    $Revision:$
  */
 
 CCanDo::checkAdmin();
-
 $type   = CValue::get("type", "RDV");
 $date   = CValue::get("date");
 $period = CValue::get("period", "month");
@@ -28,12 +27,7 @@ if ($type == "consult") {
      OR consultation.histoire_maladie IS NOT NULL
      OR consultation.conclusion       IS NOT NULL
      OR consultation.examen           IS NOT NULL
-     OR consultation.facture_id       IS NOT NULL
   ";
-}
-
-if ($type == "fse") {
-  $query_complement = "1";
 }
 
 $query = "SELECT COUNT(*) total, user_id, $stats->sql_date AS refdate

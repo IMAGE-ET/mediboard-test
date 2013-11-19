@@ -112,7 +112,6 @@ $listFactures = $facture->loadList($where, $order, null, null, $ljoin);
 $listPlages = array();
 CMbObject::massLoadFwdRef($listFactures, "praticien_id");
 CMbObject::massLoadFwdRef($listFactures, "patient_id");
-CMbObject::massCountBackRefs($listFactures, "consultations");
 CMbObject::massCountBackRefs($listFactures, "reglements");
 CMbObject::massCountBackRefs($listFactures, "notes");
 foreach ($listFactures as $_facture) {

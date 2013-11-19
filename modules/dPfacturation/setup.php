@@ -351,6 +351,23 @@ class CSetupdPfacturation extends CSetup {
                 ADD INDEX (`object_id`),
                 ADD INDEX (`journal_id`);";
     $this->addQuery($query);
-    $this->mod_version = "0.38";
+    $this->makeRevision("0.38");
+
+    $query = "INSERT INTO `facture_liaison` (`facture_id`, `facture_class`, `object_id`, `object_class`)
+                SELECT f.facture_id, 'CFactureCabinet', c.consultation_id, 'CConsultation'
+                FROM `facture_cabinet` f, `consultation` c
+                WHERE c.facture_id IS NOT NULL
+                AND c.valide = '1'
+                AND f.facture_id = c.facture_id
+                AND NOT EXISTS (
+                  SELECT * FROM facture_liaison AS fl
+                  WHERE fl.facture_id = c.facture_id
+                  AND fl.facture_class = 'CFactureCabinet'
+                  AND fl.object_class = 'CConsultation'
+                  AND fl.object_id = c.consultation_id
+                )
+                GROUP BY f.facture_id;";
+    $this->addQuery($query);
+    $this->mod_version = "0.39";
   }
 }
