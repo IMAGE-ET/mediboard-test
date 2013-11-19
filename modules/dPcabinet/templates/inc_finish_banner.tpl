@@ -117,7 +117,7 @@ function changePratPec(prat_id) {
         {{/if}}
         Terminer
         </button>
-      {{else}}
+      {{elseif $conf.dPcabinet.CConsultAnesth.check_close && $consult_anesth && $consult_anesth->_id}}
         <button class="search" type="button" onclick="checkConsult();">IPAQSS</button>
       {{/if}})
     </th>
