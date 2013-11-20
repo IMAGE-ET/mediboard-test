@@ -84,6 +84,12 @@
                       {{if !$smarty.foreach.foreach_prise.last}},{{/if}}
                     {{/foreach}})
                   {{/if}}
+                  {{if $_line->commentaire}}
+                    <span class="compact">
+                      {{mb_value object=$_line field=commentaire}}
+                    </span>
+                  {{/if}}
+                </span>
                 </li>
               {{/foreach}}
             </ul>
