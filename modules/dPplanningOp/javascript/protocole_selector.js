@@ -71,8 +71,8 @@ ProtocoleSelector = {
 
     // Champs de l'intervention
     if (oOpForm) {
-      $V(oOpForm[this.sChir_view], protocole.chir_view, true);
       if (protocole.chir_id) {
+        $V(oOpForm[this.sChir_view], protocole.chir_view, true);
         $V(oOpForm[this.sChir_id], protocole.chir_id, true);
       }
 
