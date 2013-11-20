@@ -170,7 +170,6 @@ Main.add(function(){
             </td>
             <th><label for="function_id" title="Filtrer les protocoles d'une fonction">Fonction</label></th>
             <td>
-              {{if $can->admin}}
               <select name="function_id" style="width: 20em;" onchange="if (this.form.chir_id) { this.form.chir_id.selectedIndex=0; } refreshList(this.form);">
                 <option value="0">&mdash; {{tr}}Choose{{/tr}}</option>
                 {{foreach from=$listFunc item=curr_function}}
@@ -180,7 +179,6 @@ Main.add(function(){
                 </option>
                 {{/foreach}}
               </select>
-              {{/if}}
             </td>
             <th>{{tr}}Search{{/tr}}</th>
             <td>
