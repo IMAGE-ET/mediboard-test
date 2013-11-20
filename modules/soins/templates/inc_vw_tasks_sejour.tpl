@@ -17,7 +17,9 @@ editTask = function(task_id){
 
 {{if ($sejour->_count_tasks !== null)}}
 <script>
-Control.Tabs.setTabCount('tasks', {{$sejour->_count_pending_tasks}}, {{$sejour->_count_tasks}});
+if ($('tasks')) {
+  Control.Tabs.setTabCount('tasks', {{$sejour->_count_pending_tasks}}, {{$sejour->_count_tasks}});
+}
 </script>
 {{/if}}
 

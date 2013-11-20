@@ -16,8 +16,9 @@ $sejour->load($sejour_id);
 
 $sejour->countTasks();
 $sejour->loadRefsTasks();
+
 foreach ($sejour->_ref_tasks as $_task){
-  $_task->loadRefPrescriptionLineElement();	
+  $_task->loadRefPrescriptionLineElement();
 } 
 
 // Smarty template

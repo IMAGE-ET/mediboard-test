@@ -122,10 +122,10 @@ class CDossierMedical extends CMbMetaObject {
   /**
    * @see parent::loadRefsBack()
    */
-  function loadRefsBack() {
-    parent::loadRefsBack();
-    $this->loadRefsAntecedents();
-    $this->loadRefsTraitements();
+    function loadRefsBack() {
+      parent::loadRefsBack();
+      $this->loadRefsAntecedents();
+      $this->loadRefsTraitements();
   }
 
   /**
@@ -283,6 +283,29 @@ class CDossierMedical extends CMbMetaObject {
   }
 
   /**
+   * MassCount des antecedents
+   *
+   * @param array $dossiers Dossier médicaux
+   *
+   * @return array
+   */
+  function massCountAntecedents($dossiers = array()) {
+    $antecedent = new CAntecedent();
+    $where = array();
+    $where["dossier_medical_id"] = " = '$this->_id'";
+    $where["annule"] = " != '1'";
+    $where["dossier_medical_id"] = CSQLDataSource::prepareIn($dossiers);
+
+    $request = new CRequest();
+    $request->addTable("antecedent");
+    $request->addColumn("dossier_medical_id");
+    $request->addColumn("count(*)", "c");
+    $request->addWhere($where);
+    $request->addGroup("dossier_medical_id");
+    return $antecedent->getDS()->loadHashList($request->getRequest());
+  }
+
+  /**
    * Compte les antécédents annulés et non-annulés
    * 
    * @return void
@@ -318,6 +341,32 @@ class CDossierMedical extends CMbMetaObject {
     
     return $this->_count_allergies = $antecedent->countList($where);
   }
+
+
+  /**
+   * MassCount des allergies
+   *
+   * @param array $dossiers Dossier médicaux
+   *
+   * @return array
+   */
+  function massCountAllergies($dossiers = array()) {
+    $antecedent = new CAntecedent();
+    $where["type"] = "= 'alle'";
+    $where["annule"] = " ='0'";
+    $where["dossier_medical_id"] = CSQLDataSource::prepareIn($dossiers);
+    $where["rques"] = 'NOT IN ("'.str_replace('|', '","', CAppUI::conf('soins ignore_allergies')) . '")';
+
+    $request = new CRequest();
+    $request->addColumn("dossier_medical_id");
+    $request->addColumn("count(*)", "c");
+    $request->addWhere($where);
+    $request->addGroup("dossier_medical_id");
+    $request->addTable("antecedent");
+
+    return $antecedent->getDS()->loadHashList($request->getRequest());
+  }
+
 
   /**
    * Chargmeent des antécédents par type

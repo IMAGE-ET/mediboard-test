@@ -1531,16 +1531,17 @@ class CStoredObject extends CModelObject {
   }
 
   /**
-   * Count number back reference colletion object
+   * Count number back reference collection object
    * 
-   * @param string $backName name the of the back references to count
-   * @param array  $where    Additional where clauses
-   * @param array  $ljoin    Additionnal ljoin clauses
-   * @param bool   $cache    Cache
+   * @param string $backName    Name the of the back references to count
+   * @param array  $where       Additional where clauses
+   * @param array  $ljoin       Additionnal ljoin clauses
+   * @param bool   $cache       Cache
+   * @param string $backNameAlt BackName Alt
    *
    * @return int|null The count, null if collection count is unavailable
    */
-  function countBackRefs($backName, $where = array(), $ljoin = array(), $cache = true) {
+  function countBackRefs($backName, $where = array(), $ljoin = array(), $cache = true, $backNameAlt = "") {
     if (!$backSpec = $this->makeBackSpec($backName)) {
       return null;
     }
@@ -1558,13 +1559,16 @@ class CStoredObject extends CModelObject {
       return null;
     }
 
+    $backName = $backNameAlt ? $backNameAlt : $backName;
+    $cache = $cache && (!count($where) || $backNameAlt);
+
     // Empty object
     if (!$this->_id || !$backObject->_spec->table || !$backObject->_spec->key) {
       return $this->_count[$backName] = 0;
     }
 
     // Mass count optimization
-    if ($cache && isset($this->_count[$backName]) && !count($where) && !count($ljoin)) {
+    if ($cache && isset($this->_count[$backName])) {
       return $this->_count[$backName];
     }
     
@@ -1599,14 +1603,15 @@ class CStoredObject extends CModelObject {
   /**
    * Mass count mechanism for back reference collections of an object collection
    *
-   * @param self[] $objects  Array of objects
-   * @param string $backName Name of backward reference
-   * @param array  $where    Additional where clauses
-   * @param array  $ljoin    Additionnal ljoin clauses
+   * @param self[] $objects     Array of objects
+   * @param string $backName    Name of backward reference
+   * @param array  $where       Additional where clauses
+   * @param array  $ljoin       Additionnal ljoin clauses
+   * @param string $backNameAlt BackName Alt
    *
    * @return int|null Total count among objects, null if collection count is unavailable
    */
-  static function massCountBackRefs($objects, $backName, $where = array(), $ljoin = array()) {
+  static function massCountBackRefs($objects, $backName, $where = array(), $ljoin = array(), $backNameAlt = "") {
     if (!count($objects)) {
       return null;
     }
@@ -1633,6 +1638,8 @@ class CStoredObject extends CModelObject {
     // With old versions of mysql, remove '' fields
     $ids = CMbArray::pluck($objects, "_id");
     CMbArray::removeValue("", $ids);
+
+    $backName = $backNameAlt ? $backNameAlt : $backName;
 
     if (!count($ids)) {
       foreach ($objects as $_object) {

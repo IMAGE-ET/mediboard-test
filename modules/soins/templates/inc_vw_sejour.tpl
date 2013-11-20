@@ -96,51 +96,14 @@
 {{/if}}
 
 <td style="text-align: center;">
-  {{if $dossier_medical->_ref_allergies|@count}}
-    <img src="images/icons/warning.png" onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-allergies-{{$sejour->_id}}")' />
-    {{mb_include module=system template=inc_vw_counter_tip count=$dossier_medical->_ref_allergies|@count}}
-    <div id="tooltip-content-allergies-{{$sejour->_id}}" style="display: none;">
-      <table class="tbl">
-        <tr>
-          <th>Allergies</th>
-        </tr>
-        <tr>
-        {{foreach from=$dossier_medical->_ref_allergies item=_allergie}}
-          <tr>
-            <td>
-              {{$_allergie}}
-            </td>
-          </tr>
-        {{/foreach}}
-      </table>
-    </div>
+  {{if $dossier_medical->_id && $dossier_medical->_count_allergies}}
+    <img src="images/icons/warning.png" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_ref_patient->_guid}}', 'allergies');" />
+    {{mb_include module=system template=inc_vw_counter_tip count=$dossier_medical->_count_allergies}}
   {{/if}}
 </td>
 <td style="text-align: center;">
   {{if $dossier_medical->_count_antecedents && ($dossier_medical->_count_antecedents > $dossier_medical->_count_allergies)}}
-    {{assign var=antecedents value=$dossier_medical->_ref_antecedents_by_type}}
-    <img src="images/icons/antecedents.gif" onmouseover="ObjectTooltip.createDOM(this, 'antecedents{{$sejour->_id}}')" />
-    <div id="antecedents{{$sejour->_id}}" style="text-align:left;  display: none;">
-      <ul>
-        {{foreach from=$antecedents key=name item=cat}}
-          {{if $name != "alle" && $cat|@count}}
-            <li>
-              <strong>{{tr}}CAntecedent.type.{{$name}}{{/tr}}</strong>
-              <ul>
-                {{foreach from=$cat item=ant}}
-                  <li>
-                    {{if $ant->date}}
-                      {{mb_value object=$ant field=date}}:
-                    {{/if}}
-                    {{$ant->rques}}
-                  </li>
-                {{/foreach}}
-              </ul>
-            </li>
-          {{/if}}
-        {{/foreach}}
-      </ul>   
-    </div>  
+    <img src="images/icons/antecedents.gif" onmouseover="ObjectTooltip.createEx(this, '{{$dossier_medical->_guid}}', 'antecedents');" />
   {{/if}}
 </td>
 <td>
