@@ -22,6 +22,7 @@ $select_view = CValue::get("select_view", false);
 $services = array();
 $functions = array();
 $praticiens = array();
+$dossiers = array();
 
 if ($select_view || (!$service_id && !$praticien_id && !$function_id && !$sejour_id)) {
   // Redirection pour gérer le cas ou le volet par defaut est l'autre affichage des sejours
