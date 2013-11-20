@@ -477,21 +477,25 @@ refreshFunction = function(chir_id) {
   {{if $conf.dPplanningOp.COperation.show_remarques}}
     <tr>
       <td class="text">{{mb_label object=$op field="examen"}}</td>
-      <td class="text">{{mb_label object=$op field="materiel"}}</td>
-      <td class="text">{{mb_label object=$op field="rques"}}</td>
+      <td class="text" colspan="2">{{mb_label object=$op field="materiel"}}</td>
     </tr>
     <tr>
       <td style="width: 33%;">
         {{mb_field object=$op field="examen" form="editOp"
           aidesaisie="validateOnBlur: 0"}}
       </td>
-      <td style="width: 33%;">
+      <td colspan="2" style="width: 66%;">
         {{mb_field object=$op field="materiel" onchange="Value.synchronize(this);" form="editOp"
         aidesaisie="validateOnBlur: 0"}}
       </td>
-      <td style="width: 33%;">
+    </tr>
+    <tr>
+      <td colspan="3" class="text">{{mb_label object=$op field="rques"}}</td>
+    </tr>
+    <tr>
+      <td colspan="3">
         {{mb_field object=$op field="rques" onchange="Value.synchronize(this);" form="editOp"
-          aidesaisie="validateOnBlur: 0"}}
+        aidesaisie="validateOnBlur: 0"}}
       </td>
     </tr>
   {{/if}}
