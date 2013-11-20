@@ -181,10 +181,11 @@
         <tr>
           <td colspan="2">
             <table>
-              {{if $dossier_anesth->groupe!="?" || $dossier_anesth->rhesus!="?"}}
+              {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
+              {{if $dossier_medical->groupe_sanguin != "?" || $dossier_medical->rhesus != "?"}}
               <tr>
                 <th style="font-weight: normal;">Groupe sanguin</th>
-                <td style="font-weight: bold; font-size:130%;">&nbsp;{{tr}}CConsultAnesth.groupe.{{$dossier_anesth->groupe}}{{/tr}} &nbsp;{{tr}}CConsultAnesth.rhesus.{{$dossier_anesth->rhesus}}{{/tr}}</td>
+                <td style="font-weight: bold; font-size:130%;">&nbsp;{{tr}}CDossierMedical.groupe_sanguin.{{$dossier_medical->groupe}}{{/tr}} &nbsp;{{tr}}CDossierMedical.rhesus.{{$dossier_medical->rhesus}}{{/tr}}</td>
               </tr>
               {{/if}}
               {{if $dossier_anesth->rai && $dossier_anesth->rai!="?"}}

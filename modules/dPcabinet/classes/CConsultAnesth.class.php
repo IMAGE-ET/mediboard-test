@@ -29,10 +29,6 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   public $date_interv;
   public $libelle_interv;
 
-  public $groupe;
-  public $rhesus;
-  public $groupe_ok;
-
   // @todo A supprimer
   public $antecedents;
   public $traitements;
@@ -156,9 +152,6 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
 
     $props["date_interv"]      = "date";
     $props["libelle_interv"]   = "str";
-    $props["groupe"]           = "enum list|?|O|A|B|AB default|? show|0";
-    $props["rhesus"]           = "enum list|?|NEG|POS default|? show|0";
-    $props["groupe_ok"]        = "bool default|0 show|0";
     
     // @todo: Supprimer ces quatre champs
     $props["antecedents"]      = "text confidential";
@@ -562,7 +555,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $template->addProperty("Anesthésie - Tabac"                  , $this->tabac);
     $template->addProperty("Anesthésie - Oenolisme"              , $this->oenolisme);
 
-    $template->addProperty("Anesthésie - Groupe sanguin"         , "$this->groupe $this->rhesus");
+    $template->addProperty("Anesthésie - Groupe sanguin"         , $this->_ref_patient->_ref_dossier_medial->groupe_sanguin." ".$this->_ref_patient->_ref_dossier_medial->rhesus);
     $template->addProperty("Anesthésie - RAI"                    , $this->rai);
     $template->addProperty("Anesthésie - Hb"                     , "$this->hb g/dl");
     $template->addProperty("Anesthésie - Ht"                     , "$this->ht %");

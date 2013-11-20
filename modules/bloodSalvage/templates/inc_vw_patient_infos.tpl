@@ -1,12 +1,12 @@
-{{* $Id$ *}}
-
 {{*
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage bloodSalvage
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
+ * @author     SARL OpenXtrem
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
+ *}}
 
 <table class="form">
   <tr>
@@ -14,9 +14,10 @@
   </tr>
   {{assign var=consult_anesth value=$selOp->_ref_consult_anesth}}
   {{assign var=constantes value=$patient->_ref_constantes_medicales}}
+  {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
    <tr>
-    <th style="width: 16%; font-weight: bold;">{{mb_label object=$consult_anesth field=groupe}}</th>
-    <td style="width: 16%">{{$consult_anesth->groupe}} {{$consult_anesth->rhesus}}</td>
+    <th style="width: 16%; font-weight: bold;">{{mb_label object=$dossier_medical field=groupe_sanguin}}</th>
+    <td style="width: 16%">{{$dossier_medical->groupe_sanguin}} {{$dossier_medical->rhesus}}</td>
     <th style="width: 16%; font-weight: bold;">{{mb_label object=$consult_anesth field=rai}}</th>
     <td style="width: 16%">{{$consult_anesth->rai}} </td>
     <th style="width: 16%; font-weight: bold;">{{mb_label object=$selOp field=ASA}}</th>

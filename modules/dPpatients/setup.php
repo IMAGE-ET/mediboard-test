@@ -795,15 +795,6 @@ class CSetupdPpatients extends CSetup {
         `plageconsult`.`plageconsult_id` = `consultation`.`plageconsult_id`";
     $this->addQuery($query);
 
-    /*$query = "ALTER TABLE `consultation_anesth`
-      DROP `poid`
-      DROP `taille`
-      DROP `tasys`
-      DROP `tadias`
-      DROP `pouls`
-      DROP `spo2`;";
-    $this->addQuery($query);*/
-
     $repl = array("Patient - poids",
                   "Patient - taille",
                   "Patient - Pouls",
@@ -2411,8 +2402,67 @@ class CSetupdPpatients extends CSetup {
                 DROP `INSC`,
                 DROP `INSC_DATE`";
     $this->addQuery($query);
+    $this->makeRevision("1.95");
 
-    $this->mod_version = "1.95";
+    $query = "ALTER TABLE `dossier_medical`
+                ADD `groupe_sanguin` ENUM ('?','O','A','B','AB') DEFAULT '?',
+                ADD `rhesus` ENUM ('?','NEG','POS') DEFAULT '?',
+                ADD `groupe_ok` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    $this->makeRevision('1.96');
+
+    //Création des dossiers médicaux manquants correspondant aux consultations d'anesthésie
+    $query = "INSERT INTO `dossier_medical` (`object_class`, `object_id`)
+                SELECT 'CPatient', c.patient_id
+                FROM `consultation_anesth` ca, `consultation` c
+                WHERE ca.consultation_id = c.consultation_id
+                AND c.patient_id IS NOT NULL
+                AND ( (ca.rhesus != '?' AND ca.rhesus != '')
+                      OR ca.groupe_ok = '1'
+                      OR (ca.groupe != '?' AND ca.groupe != '') )
+                AND NOT EXISTS (
+                  SELECT * FROM dossier_medical AS d
+                  WHERE c.patient_id = d.object_id
+                  AND d.object_class = 'CPatient'
+                );";
+    $this->addQuery($query);
+
+    //Mise à jour des rhésus dans les dossiers médicaux
+    $query = "UPDATE `dossier_medical` d, `consultation_anesth` ca, `consultation` c
+                SET d.rhesus = ca.rhesus
+                WHERE d.object_class = 'CPatient'
+                AND ca.consultation_id = c.consultation_id
+                AND c.patient_id = d.object_id
+                AND c.patient_id IS NOT NULL
+                AND ca.rhesus != '?'
+                AND ca.rhesus != ''
+                AND d.rhesus = '?';";
+    $this->addQuery($query);
+
+    //Mise à jour du groupe_ok dans les dossiers médicaux
+    $query = "UPDATE `dossier_medical` d, `consultation_anesth` ca, `consultation` c
+                SET d.groupe_ok = ca.groupe_ok
+                WHERE d.object_class = 'CPatient'
+                AND ca.consultation_id = c.consultation_id
+                AND c.patient_id = d.object_id
+                AND c.patient_id IS NOT NULL
+                AND ca.groupe_ok = '1'
+                AND d.groupe_ok = '0';";
+    $this->addQuery($query);
+
+    //Mise à jour du groupe sanguin dans les dossiers médicaux
+    $query = "UPDATE `dossier_medical` d, `consultation_anesth` ca, `consultation` c
+                SET d.groupe_sanguin = ca.groupe
+                WHERE d.object_class = 'CPatient'
+                AND ca.consultation_id = c.consultation_id
+                AND c.patient_id = d.object_id
+                AND c.patient_id IS NOT NULL
+                AND ca.groupe != '?'
+                AND ca.groupe != ''
+                AND d.groupe_sanguin = '?';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.97";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

@@ -28,11 +28,11 @@ class CDossierMedical extends CMbMetaObject {
   public $risque_antibioprophylaxie;
   public $risque_prophylaxie;
   public $risque_MCJ_chirurgie;
-  
-  // TODO Activer ces champs
-  //public $groupe_sanguin;
-  //public $rhesus;
-  
+
+  public $groupe_sanguin;
+  public $rhesus;
+  public $groupe_ok;
+
   // Form Fields
   public $_added_code_cim;
   public $_deleted_code_cim;
@@ -76,23 +76,23 @@ class CDossierMedical extends CMbMetaObject {
    * @see parent::getProps()
    */
   function getProps() {
-    $specs = parent::getProps();
-    $specs["object_class"]   = "enum list|CPatient|CSejour";
-    $specs["codes_cim"]      = "text";
-    $specs["absence_traitement"] = "bool";
+    $props = parent::getProps();
+    $props["object_class"]   = "enum list|CPatient|CSejour";
+    $props["codes_cim"]      = "text";
+    $props["absence_traitement"] = "bool";
 
-    // TODO Activer ces champs
-    //$specs["groupe_sanguin"] = "enum list|?|O|A|B|AB default|?";
-    //$specs["rhesus"]         = "enum list|?|NEG|POS default|?";
-    
-    $specs["risque_thrombo_patient"   ] = "enum list|NR|faible|modere|eleve|majeur default|NR";
-    $specs["risque_thrombo_chirurgie" ] = "enum list|NR|faible|modere|eleve default|NR";
-    $specs["risque_MCJ_patient"       ] = "enum list|NR|sans|avec|suspect|atteint default|NR";
-    $specs["risque_MCJ_chirurgie"     ] = "enum list|NR|sans|avec default|NR";
-    $specs["risque_antibioprophylaxie"] = "enum list|NR|non|oui default|NR";
-    $specs["risque_prophylaxie"       ] = "enum list|NR|non|oui default|NR";
-    $specs["facteurs_risque"]           = "text helped";
-    return $specs;
+    $props["groupe_sanguin"]  = "enum list|?|O|A|B|AB default|? show|0";
+    $props["rhesus"]          = "enum list|?|NEG|POS default|? show|0";
+    $props["groupe_ok"]       = "bool default|0 show|0";
+
+    $props["risque_thrombo_patient"   ] = "enum list|NR|faible|modere|eleve|majeur default|NR";
+    $props["risque_thrombo_chirurgie" ] = "enum list|NR|faible|modere|eleve default|NR";
+    $props["risque_MCJ_patient"       ] = "enum list|NR|sans|avec|suspect|atteint default|NR";
+    $props["risque_MCJ_chirurgie"     ] = "enum list|NR|sans|avec default|NR";
+    $props["risque_antibioprophylaxie"] = "enum list|NR|non|oui default|NR";
+    $props["risque_prophylaxie"       ] = "enum list|NR|non|oui default|NR";
+    $props["facteurs_risque"]           = "text helped";
+    return $props;
   }  
 
   /**

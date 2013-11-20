@@ -1,5 +1,4 @@
-
-<script type="text/javascript">
+<script>
 window.previousPoint = null;
 plothover = function (event, pos, item) {
   if (item) {
@@ -133,7 +132,8 @@ printSurveillance = function(operation_id) {
         {{$interv->_ref_sejour->_ref_patient->_ref_constantes_medicales->taille}} cm
       </strong>
     </td>
-    <td>Gr. sang. / Rh: <strong>{{mb_value object=$consult_anesth field=groupe}} {{mb_value object=$consult_anesth field=rhesus}}</strong></td>
+    {{assign var=dossier_medical value=$interv->_ref_sejour->_ref_patient->_ref_dossier_medical}}
+    <td>Gr. sang. / Rh: <strong>{{mb_value object=$dossier_medical field=groupe_sanguin}} {{mb_value object=$dossier_medical field=rhesus}}</strong></td>
     <td>Mallampati: <strong>{{mb_value object=$consult_anesth field=mallampati}}</strong></td>
     <td>ASA: <strong>{{mb_value object=$interv field=ASA}}</strong> </td>
   </tr>

@@ -4,7 +4,7 @@
   </table>
   
   {{if $print && !@$multi}}
-    <script type="text/javascript">
+    <script>
     Main.add(window.print);
     </script> 
   {{/if}}
@@ -343,8 +343,8 @@
                     {{mb_label object=$dossier_anesth field=date_analyse}} {{mb_value object=$dossier_anesth field=date_analyse}}
                     <br />
                   {{/if}}
-                  {{if $dossier_anesth->groupe!="?" || $dossier_anesth->rhesus!="?"}}
-                    Groupe sanguin&nbsp;:&nbsp;{{tr}}CConsultAnesth.groupe.{{$dossier_anesth->groupe}}{{/tr}}&nbsp;{{tr}}CConsultAnesth.rhesus.{{$dossier_anesth->rhesus}}{{/tr}}
+                  {{if $dossier_medical->groupe_sanguin!="?" || $dossier_medical->rhesus!="?"}}
+                    Groupe sanguin&nbsp;:&nbsp;{{tr}}CDossierMedical.groupe_sanguin.{{$dossier_medical->groupe_sanguin}}{{/tr}}&nbsp;{{tr}}CDossierMedical.rhesus.{{$dossier_medical->rhesus}}{{/tr}}
                     <br />
                   {{/if}}
                   {{if $dossier_anesth->rai && $dossier_anesth->rai!="?"}}

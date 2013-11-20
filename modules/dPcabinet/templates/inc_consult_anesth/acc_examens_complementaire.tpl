@@ -36,6 +36,15 @@ function calculPSA () {
     $V(oFormExam._psa, "");
   }
 }
+
+function saveDossierMedical() {
+  var formDossier = getForm("dossier_medical_patient");
+  var formExam    = getForm("editExamCompFrm");
+  $V(formDossier.groupe_sanguin, formExam.groupe_sanguin.value);
+  $V(formDossier.groupe_ok, formExam.groupe_ok.value);
+  $V(formDossier.rhesus, formExam.rhesus.value);
+  return onSubmitFormAjax(formDossier);
+}
 </script>
 
 <table class="form" style="width: 100%">
@@ -71,6 +80,17 @@ function calculPSA () {
           </table>     
       </fieldset> 
       </form>
+      {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
+      <form name="dossier_medical_patient" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
+        {{mb_key   object=$dossier_medical}}
+        {{mb_class object=$dossier_medical}}
+        <input type="hidden" name="object_id"     value="{{$patient->_id}}" />
+        <input type="hidden" name="object_class"  value="{{$patient->_class}}" />
+        <input type="hidden" name="groupe_sanguin"  value="{{$dossier_medical->groupe_sanguin}}" />
+        <input type="hidden" name="rhesus"          value="{{$dossier_medical->rhesus}}" />
+        <input type="hidden" name="groupe_ok"       value="{{$dossier_medical->groupe_ok}}" />
+      </form>
+
       <form name="editExamCompFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
@@ -92,11 +112,11 @@ function calculPSA () {
               </td>
             </tr>
             <tr>
-              <th>{{mb_label object=$consult_anesth field="groupe"}}</th>
+              <th>{{mb_label object=$dossier_medical field="groupe_sanguin"}}</th>
               <td>
-                {{mb_field object=$consult_anesth field="groupe" tabindex="101" onchange="submitForm(this.form)"}}
+                {{mb_field object=$dossier_medical field="groupe_sanguin" tabindex="101" onchange="saveDossierMedical()"}}
                 /
-                {{mb_field object=$consult_anesth field="rhesus" tabindex="102" onchange="submitForm(this.form)"}}
+                {{mb_field object=$dossier_medical field="rhesus" tabindex="102" onchange="saveDossierMedical();"}}
               </td>
               <th>{{mb_label object=$consult_anesth field="_clairance"}}</th>
               <td>
@@ -105,9 +125,9 @@ function calculPSA () {
               </td>
             </tr>
             <tr>
-              <th>{{mb_label object=$consult_anesth field="groupe_ok"}}</th>
+              <th>{{mb_label object=$dossier_medical field="groupe_ok"}}</th>
               <td>
-                {{mb_field object=$consult_anesth field="groupe_ok" typeEnum="checkbox" tabindex="103" onchange="submitForm(this.form)"}}
+                {{mb_field object=$dossier_medical field="groupe_ok" typeEnum="checkbox" tabindex="103" onchange="saveDossierMedical();"}}
               </td>
               <th>{{mb_label object=$consult_anesth field="fibrinogene"}}</th>
               <td>

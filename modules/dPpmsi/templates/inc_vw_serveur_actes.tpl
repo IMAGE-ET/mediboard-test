@@ -1,21 +1,18 @@
-{{* $Id: configure.tpl 8820 2010-05-03 13:18:20Z lryo $ *}}
-
 {{*
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage dPpmsi
- * @version $Revision: 8820 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
-
+ * @author     SARL OpenXtrem
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
+ *}}
 <script>
-
 Main.add(function () {
   {{foreach from=$sejour->_ref_operations item=curr_op}}
     PMSI.loadExportActes('{{$curr_op->_id}}', 'COperation');
   {{/foreach}}
 });
-
 </script>
 
 <table class="form">
@@ -88,7 +85,7 @@ Main.add(function () {
       avec le Dr {{$curr_op->_ref_consult_anesth->_ref_plageconsult->_ref_chir->_view}}
     </td>
   </tr>
-  {{assign var=const_med value=$curr_op->_ref_consult_anesth->_ref_consultation->_ref_patient->_ref_constantes_medicales}}
+    {{assign var=const_med value=$curr_op->_ref_consult_anesth->_ref_consultation->_ref_patient->_ref_constantes_medicales}}
   <tr>
     <td class="button">Poids</td>
     <td class="button">Taille</td>
@@ -98,7 +95,8 @@ Main.add(function () {
   <tr>
     <td class="button">{{$const_med->poids}} kg</td>
     <td class="button">{{$const_med->taille}} cm</td>
-    <td class="button">{{tr}}CConsultAnesth.groupe.{{$curr_op->_ref_consult_anesth->groupe}}{{/tr}} {{tr}}CConsultAnesth.rhesus.{{$curr_op->_ref_consult_anesth->rhesus}}{{/tr}}</td>
+    {{assign var=dossier_medical value=$curr_op->_ref_sejour->_ref_patient->_ref_dossier_medical}}
+    <td class="button">{{tr}}CDossierMedical.groupe_sanguin.{{$dossier_medical->groupe_sanguin}}{{/tr}} {{tr}}CDossierMedical.rhesus.{{$dossier_medical->rhesus}}{{/tr}}</td>
     <td class="button">{{$const_med->_ta_gauche_systole}}/{{$const_med->_ta_gauche_diastole}}</td>
   </tr>
   {{/if}}

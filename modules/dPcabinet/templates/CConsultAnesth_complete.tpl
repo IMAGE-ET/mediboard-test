@@ -1,5 +1,5 @@
 {{assign var="consult" value=$object->_ref_consultation}}
-<script type="text/javascript">
+<script>
 newExam = function(sAction, consultation_id) {
   if (sAction) {
     var url = new Url;
@@ -102,6 +102,7 @@ newExam = function(sAction, consultation_id) {
   </tr>
   
   {{assign var=const_med value=$object->_ref_consultation->_ref_patient->_ref_constantes_medicales}}
+  {{assign var=dossier_medical value=$object->_ref_consultation->_ref_patient->_ref_dossier_medical}}
   <tr>
     <th class="title" colspan="4">
       Informations sur le patient
@@ -119,7 +120,7 @@ newExam = function(sAction, consultation_id) {
     </td>
     <td class="text">
       <strong>Groupe sanguin :</strong>
-      <i>{{tr}}CConsultAnesth.groupe.{{$object->groupe}}{{/tr}} &nbsp;{{tr}}CConsultAnesth.rhesus.{{$object->rhesus}}{{/tr}}</i>
+      <i>{{tr}}CDossierMedical.groupe_sanguin.{{$dossier_medical->groupe_sanguin}}{{/tr}} &nbsp;{{tr}}CDossierMedical.rhesus.{{$dossier_medical->rhesus}}{{/tr}}</i>
     </td>
     <td class="text">
       <strong>RAI :</strong>

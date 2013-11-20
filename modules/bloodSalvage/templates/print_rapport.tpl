@@ -1,12 +1,12 @@
-{{* $Id$ *}}
-
 {{*
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage bloodSalvage
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
+ * @author     SARL OpenXtrem
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
+ *}}
 
 {{assign var=operation value=$blood_salvage->_ref_operation}}
 {{assign var=patient value=$blood_salvage->_ref_operation->_ref_patient}}
@@ -61,10 +61,11 @@
         <tr>
           <td colspan="2">
             <table>
-              {{if $consult_anesth->groupe!="?" || $consult_anesth->rhesus!="?"}}
+              {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
+              {{if $dossier_medical->groupe_sanguin != "?" || $dossier_medical->rhesus != "?"}}
               <tr>
                 <th>Groupe sanguin</th>
-                <td style="white-space: nowrap;font-size:130%;"><b>&nbsp;{{tr}}{{$consult_anesth->groupe}}{{/tr}} &nbsp;{{tr}}{{$consult_anesth->rhesus}}{{/tr}}</b></td>
+                <td style="white-space: nowrap;font-size:130%;"><b>&nbsp;{{tr}}{{$dossier_medical->groupe_sanguin}}{{/tr}} &nbsp;{{tr}}{{$dossier_medical->rhesus}}{{/tr}}</b></td>
               </tr>
               {{/if}}
               {{if $consult_anesth->rai && $consult_anesth->rai!="?"}}
