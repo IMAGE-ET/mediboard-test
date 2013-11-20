@@ -22,5 +22,10 @@ urgencesMaintenance = {
   checkRPU : function () {
     new Url("urgences", "ajax_check_rpu")
       .requestModal(1024, 768);
+  },
+
+  importMotif : function () {
+    new Url("urgences", "ajax_import_motif_sfmu")
+      .requestUpdate("import_sfmu");
   }
 };

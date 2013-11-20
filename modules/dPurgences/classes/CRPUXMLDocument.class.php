@@ -93,11 +93,9 @@ class CRPUXMLDocument extends CMbXMLDocument {
     $this->addElement($elParent, "TRANSPORT_PEC", strtoupper($mbObject->pec_transport));
     
     $motif = CMbString::htmlSpecialChars($mbObject->motif);
-    if (CAppUI::conf("dPurgences gerer_circonstance")) {
-      $module_orumip = CModule::getActive("orumip");
-      $orumip_active = $module_orumip && $module_orumip->mod_active;
-      
-      $motif = $orumip_active ? $mbObject->circonstance : CMbString::htmlSpecialChars($mbObject->_libelle_circonstance);
+    if (CAppUI::conf("dPurgences gestion_motif_sfmu")) {
+      $motif_sfmu = $mbObject->loadRefMotifSFMU();
+      $motif = $motif_sfmu->code;
     }
     
     $this->addElement($elParent, "MOTIF", $motif);

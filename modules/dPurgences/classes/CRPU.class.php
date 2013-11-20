@@ -24,6 +24,7 @@ class CRPU extends CMbObject {
   public $pec_transport;
   public $pec_douleur;
   public $motif;
+  public $motif_sfmu;
   public $ccmu;
   public $gemsa;
   public $orientation;
@@ -90,6 +91,9 @@ class CRPU extends CMbObject {
   /** @var CMotif */
   public $_ref_motif;
 
+  /** @var CMotifSFMU */
+  public $_ref_motif_sfmu;
+
   /** @var CLit */
   public $_ref_box;
 
@@ -127,6 +131,7 @@ class CRPU extends CMbObject {
     $impose_degre_urgence  = CAppUI::conf("dPurgences CRPU impose_degre_urgence", CGroups::loadCurrent()) == 1;
     $impose_diag_infirmier = CAppUI::conf("dPurgences CRPU impose_diag_infirmier", CGroups::loadCurrent()) == 1;
     $impose_motif          = CAppUI::conf("dPurgences CRPU impose_motif", CGroups::loadCurrent()) == 1;
+    $impose_motif_sfmu     = CAppUI::conf("dPurgences gestion_motif_sfmu");
 
     $specsParent = parent::getProps();
     $specs = array (
@@ -136,6 +141,7 @@ class CRPU extends CMbObject {
       "pec_douleur"      => "text helped",
       "pec_transport"    => "enum list|med|paramed|aucun",
       "motif"            => "text ".($impose_motif ? 'notNull ' : '')."helped",
+      "motif_sfmu"       => "ref ".($impose_motif_sfmu ? 'notNull ' : '')."class|CMotifSFMU autocomplete|libelle",
       "ccmu"             => "enum ".($impose_degre_urgence ? 'notNull ' : '')."list|1|P|2|3|4|5|D",
       "gemsa"            => "enum list|1|2|3|4|5|6",
       "type_pathologie"  => "enum list|C|E|M|P|T",
@@ -631,6 +637,17 @@ class CRPU extends CMbObject {
       $motif->loadRefChapitre();
     }
     return $this->_ref_motif = $motif;
+  }
+
+  /**
+   * Return the SFMU Motif
+   *
+   * @return CMotifSFMU
+   */
+  function loadRefMotifSFMU() {
+    $motif_sfmu = new CMotifSFMU();
+    $motif_sfmu->load($this->motif_sfmu);
+    return $this->_ref_motif_sfmu = $motif_sfmu;
   }
 
   /**

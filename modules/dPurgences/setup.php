@@ -358,7 +358,22 @@ class CSetupdPurgences extends CSetup {
                 `nom` VARCHAR (255)
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-    
-    $this->mod_version = "0.41";
+
+    $this->makeRevision("0.41");
+
+    $query = "CREATE TABLE `motif_sfmu` (
+                `motif_sfmu_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `code` VARCHAR (255),
+                `libelle` VARCHAR (255)
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.42");
+
+    $query = "ALTER TABLE `rpu`
+                ADD `motif_sfmu` INT (11) UNSIGNED";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.43";
   }  
 }

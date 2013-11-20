@@ -265,8 +265,17 @@
               });
             </script>
           </td>
+          <th>{{mb_label object=$rpu field="motif_sfmu"}}</th>
+          <td>{{mb_field object=$rpu field="motif_sfmu" autocomplete="true,1,10,true,true" form=editRPU}}</td>
+        </tr>
+      {{/if}}
+
+      {{if !$gerer_circonstance}}
+        <tr>
           <th></th>
           <td></td>
+          <th>{{mb_label object=$rpu field="motif_sfmu"}}</th>
+          <td>{{mb_field object=$rpu field="motif_sfmu" autocomplete="true,1,10,true,true" form=editRPU}}</td>
         </tr>
       {{/if}}
 
