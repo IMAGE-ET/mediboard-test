@@ -343,12 +343,12 @@ if (CModule::getActive("dPprescription")) {
         $operation->sejour_id = $prescription->object_id;
         $operation->annulee = "0";
         $_operations  = $operation->loadMatchingList();
-        
-        
+
         foreach ($_operations as $_operation) {
           if ($_operation->time_operation != "00:00:00") {
-            $date_operation = CMbDT::date($operation->_datetime_best);
-            $hour_op = CMbDT::time($operation->_datetime_best);
+            $_operation->loadRefPlageop();
+            $date_operation = CMbDT::date($_operation->_datetime_best);
+            $hour_op = CMbDT::time($_operation->_datetime_best);
             $hour_operation = CMbDT::format($hour_op, '%H:00:00');
             $operations["$date_operation $hour_operation"] = $hour_op;
             $operations["$date_operation $hour_operation object"] = $_operation;
