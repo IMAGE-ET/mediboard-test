@@ -1,14 +1,18 @@
 <table class="tbl">
   {{foreach from=$identifiers item=_identifier}}
   <tr>
-    <td><strong>{{mb_value object=$_identifier field=tag}}</strong></td>
     <td>{{mb_value object=$_identifier field=id400}}</td>
-    <td>
-    {{if $_identifier->_type}}
-      <span class="idex-special idex-special-{{$_identifier->_type}}">
-        {{$_identifier->_type}}
-      </span>
+    {{if $can->admin && $_identifier->_type}}
+      <td><strong>{{mb_value object=$_identifier field=tag}}</strong></td>
     {{/if}}
+    <td>
+      {{if $_identifier->_type}}
+        <span class="idex-special idex-special-{{$_identifier->_type}}">
+          {{$_identifier->_type}}
+        </span>
+      {{else}}
+        <strong>{{mb_value object=$_identifier field=tag}}</strong>
+      {{/if}}
     </td>
   </tr>
   {{foreachelse}}
