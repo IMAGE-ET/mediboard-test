@@ -44,7 +44,7 @@ $list_drains = array();
 $list_redons = array();
 
 foreach ($ranks as $_cste => $rank) {
-  if ($rank != 1) {
+  if ($rank != 1 || substr($_cste, 0, 1) === "_") {
     continue;
   }
   if (strpos($_cste, 'drain') !== false) {
