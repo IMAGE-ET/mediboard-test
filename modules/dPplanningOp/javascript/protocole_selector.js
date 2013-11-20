@@ -71,14 +71,16 @@ ProtocoleSelector = {
 
     // Champs de l'intervention
     if (oOpForm) {
-      if (protocole.chir_id) {
+      if (protocole.chir_id && protocole.chir_view) {
         $V(oOpForm[this.sChir_view], protocole.chir_view, true);
         $V(oOpForm[this.sChir_id], protocole.chir_id, true);
       }
 
       $V(oOpForm[this.sServiceId], protocole.service_id, true);
       if(oOpFormEasy) {
-        $V(oOpFormEasy[this.sChir_id_easy]   , protocole.chir_id);
+        if (protocole.chir_id && protocole.chir_view) {
+          $V(oOpFormEasy[this.sChir_id_easy]   , protocole.chir_id);
+        }
         $V(oOpFormEasy[this.sServiceId_easy] , protocole.service_id);
         $V(oOpFormEasy[this.sLibelle_easy]   , protocole.libelle);
         $V(oOpFormEasy[this.sCodes_ccam_easy], protocole.codes_ccam);
