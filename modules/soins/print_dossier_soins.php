@@ -157,6 +157,7 @@ if (CModule::getActive("dPprescription")) {
       $_prescription_line_mix->loadRefsLines();
       $_prescription_line_mix->calculQuantiteTotal();
       $_prescription_line_mix->loadRefPraticien();
+      $_prescription_line_mix->loadRefsVariations();
       foreach ($_prescription_line_mix->_ref_lines as $_perf_line) {
         $list_lines["prescription_line_mix"][$_perf_line->_id] = $_perf_line;
         $_perf_line->loadRefsAdministrations($where);
