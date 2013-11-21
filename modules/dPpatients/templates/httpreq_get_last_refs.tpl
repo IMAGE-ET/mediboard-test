@@ -42,7 +42,7 @@
           {{/foreach}}
           
           {{foreach from=$_sejour->_ref_consultations item=_consult}}
-            <li style="list-style-type: none;" class="iconed-text {{$_consult->_type}}">
+            <li style="list-style-type: none;" class="{{if $_consult->annule}}cancelled{{/if}} iconed-text {{$_consult->_type}}">
               <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
               Consultation le  {{mb_value object=$_consult field=_datetime}}
               </span>
@@ -64,7 +64,7 @@
       <strong>Consultations:</strong>
       <ul>
         {{foreach from=$patient->_ref_consultations item=_consult}}
-          <li class="iconed-text {{$_consult->_type}}" >
+          <li class="{{if $_consult->annule}}cancelled{{/if}} iconed-text {{$_consult->_type}}" >
             {{assign var=facture value=$_consult->_ref_facture}}
             <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
               Consultation le  {{mb_value object=$_consult field=_datetime}}
