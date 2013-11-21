@@ -97,6 +97,9 @@ class CRPU extends CMbObject {
   /** @var CLit */
   public $_ref_box;
 
+  /** @var  CCirconstance */
+  public $_ref_circonstance;
+
   // Behaviour fields
   public $_bind_sejour;
   public $_sortie;
@@ -538,6 +541,17 @@ class CRPU extends CMbObject {
     $circonstance = new CCirconstance();
     $circonstance->load($this->circonstance);
     $this->_libelle_circonstance = $circonstance->libelle;
+  }
+
+  /**
+   * Load the circonstance
+   *
+   * @return CCirconstance
+   */
+  function loadRefCirconstance() {
+    $circonstance = new CCirconstance();
+    $circonstance->load($this->circonstance);
+    return $this->_ref_circonstance = $circonstance;
   }
 
   /**

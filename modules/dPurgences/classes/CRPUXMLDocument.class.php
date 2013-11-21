@@ -93,12 +93,17 @@ class CRPUXMLDocument extends CMbXMLDocument {
     $this->addElement($elParent, "TRANSPORT_PEC", strtoupper($mbObject->pec_transport));
     
     $motif = CMbString::htmlSpecialChars($mbObject->motif);
-    if (CAppUI::conf("dPurgences gestion_motif_sfmu")) {
+    if ($mbObject->motif_sfmu) {
       $motif_sfmu = $mbObject->loadRefMotifSFMU();
       $motif = $motif_sfmu->code;
     }
     
     $this->addElement($elParent, "MOTIF", $motif);
+
+    if (CModule::getActive("oscour") && CAppUI::conf("dPurgences gerer_circonstance") && CAppUI::conf("oscour version_complete")) {
+      $circonstance = $mbObject->loadRefCirconstance();
+      $this->addElement($elParent, "CIRCONSTANCE", $circonstance->code);
+    }
     $this->addElement($elParent, "GRAVITE", strtoupper($mbObject->ccmu));
 
     $this->addElement($elParent, "DP", $mbObject->_DP[0].preg_replace("/[^\d]/", "", substr($mbObject->_DP, 1)));
