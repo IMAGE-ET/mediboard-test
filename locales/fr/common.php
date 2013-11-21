@@ -324,6 +324,7 @@ $locales['Type'] = 'Type';
 $locales['Unarchive'] = 'Désarchiver';
 $locales['Unavailable'] = 'Indisponible';
 $locales['Unavailable information'] = 'Information non disponible';
+$locales['Unclassified'] = 'Non classé';
 $locales['Undefined'] = 'Indéfini';
 $locales['Unknown'] = 'Inconnu';
 $locales['Unlink'] = 'Désassocier';
