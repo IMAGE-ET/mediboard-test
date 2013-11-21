@@ -73,7 +73,7 @@ class CPlageconsult extends CPlageHoraire {
   /** @var CMediusers */
   public $_ref_pour_compte;
 
-  public $_ref_disponibility;
+  public $_disponibilities;
 
   /**
    * @see parent::getSpec()
@@ -245,7 +245,7 @@ class CPlageconsult extends CPlageHoraire {
     }
 
     $this->_affected = $nb_plage_prise;
-    return $this->_ref_disponibility = $fill;
+    return $this->_disponibilities = $fill;
   }
 
   /**

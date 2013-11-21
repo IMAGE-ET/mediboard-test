@@ -259,7 +259,7 @@ for ($i = 0; $i < 7; $i++) {
     $event->plage["add_class"]    = "clock";
     $event->plage["list_title"]   = "Voir le contenu de la plage";
     $event->plage["add_title"]    = "Planifier une consultation dans cette plage";
-    $event->_ref_disponibility    = $_plage->_ref_disponibility;
+    $event->_disponibilities    = $_plage->_disponibilities;
 
     //Ajout de l'évènement au planning 
     $planning->addEvent($event);
