@@ -27,6 +27,7 @@
     {{mb_include module=system template=inc_config_bool var=gerer_hospi}}
     {{mb_include module=system template=inc_config_bool var=gerer_circonstance}}
     {{mb_include module=system template=inc_config_bool var=gestion_motif_sfmu}}
+    {{mb_include module=system template=inc_config_bool var=display_motif_sfmu}}
     {{mb_include module=system template=inc_config_str var=sibling_hours size="2" suffix="h"}}
     {{mb_include module=system template=inc_config_bool var=pec_change_prat}}
     {{mb_include module=system template=inc_config_bool var=pec_after_sortie}}

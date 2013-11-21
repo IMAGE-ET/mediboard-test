@@ -50,4 +50,5 @@ $dPconfig["dPurgences"] = array (
   "uhcd_refresh_frequency"               => "180",
   "identito_vigilance_refresh_frequency" => "300",
   "gestion_motif_sfmu"                   => "0",
+  "display_motif_sfmu"                   => "0",
 );
