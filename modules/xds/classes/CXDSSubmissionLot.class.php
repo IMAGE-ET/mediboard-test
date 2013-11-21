@@ -44,7 +44,7 @@ class CXDSSubmissionLot extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
 
-    $backProps["submissionset_document"] = "CXDSSubmissionlot_document submissionlot_id";
+    $backProps["submissionset_document"] = "CXDSSubmissionLotToDocument submissionlot_id";
 
     return $backProps;
   }

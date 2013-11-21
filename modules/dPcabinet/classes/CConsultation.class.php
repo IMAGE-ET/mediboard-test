@@ -221,6 +221,8 @@ class CConsultation extends CFacturable {
     $backProps["echanges_hprimxml"] = "CEchangeHprim object_id cascade";
     $backProps["exchanges_hl7v2"]   = "CExchangeHL7v2 object_id cascade";
     $backProps["echanges_hl7v3"]    = "CExchangeHL7v3 object_id cascade";
+    $backProps["echanges_dmp"]      = "CExchangeDMP object_id cascade";
+    $backProps["echanges_mvsante"]  = "CExchangeMVSante object_id cascade";
     $backProps["fse_pyxvital"]      = "CPvFSE consult_id";
     $backProps["task"]              = "CSejourTask consult_id";
     $backProps["identifiants"]      = "CIdSante400 object_id cascade";

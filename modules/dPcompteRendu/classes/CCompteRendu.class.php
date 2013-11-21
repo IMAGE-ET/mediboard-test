@@ -186,6 +186,8 @@ class CCompteRendu extends CDocumentItem {
     $backProps["pack_links"]              = "CModeleToPack modele_id";
     $backProps["correspondants_courrier"] = "CCorrespondantCourrier compte_rendu_id";
     $backProps["echanges_hl7v3"]          = "CExchangeHL7v3 object_id cascade";
+    $backProps["dmp_documents"]           = "CDMPDocument object_id";
+    $backProps["xds_submission_lot"]      = "CXDSSubmissionLotToDocument object_id";
     return $backProps;
   }
 

@@ -110,6 +110,7 @@ class CAffectation extends CMbObject {
     $backProps["echanges_hprim"]      = "CEchangeHprim object_id cascade";
     $backProps["echanges_hl7v2"]      = "CExchangeHL7v2 object_id cascade";
     $backProps["echanges_hl7v3"]      = "CExchangeHL7v3 object_id cascade";
+    $backProps["echanges_mvsante"]    = "CExchangeMVSante object_id cascade";
     $backProps["repas"]               = "CRepas affectation_id";
     $backProps["affectations_enfant"] = "CAffectation parent_affectation_id";
     $backProps["movements"]           = "CMovement affectation_id";

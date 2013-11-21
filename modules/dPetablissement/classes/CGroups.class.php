@@ -124,6 +124,7 @@ class CGroups extends CMbObject {
     $backProps["destinataires_HL7v2"]       = "CReceiverHL7v2 group_id";
     $backProps["destinataires_HL7v3"]       = "CReceiverHL7v3 group_id";
     $backProps["destinataires_dmp"]         = "CReceiverDMP group_id";
+    $backProps["destinataires_mvsante"]     = "CReceiverMVSante group_id";
     $backProps["echanges_generique"]        = "CExchangeAny group_id";
     $backProps["echanges_hprim"]            = "CEchangeHprim group_id";
     $backProps["echanges_hprim21"]          = "CEchangeHprim21 group_id";
@@ -132,6 +133,7 @@ class CGroups extends CMbObject {
     $backProps["echanges_dmp"]              = "CExchangeDMP group_id";
     $backProps["echanges_phast"]            = "CExchangePhast group_id";
     $backProps["echanges_dicom"]            = "CExchangeDicom group_id";
+    $backProps["echanges_mvsante"]          = "CExchangeMVSante group_id";
     $backProps["extract_passages"]          = "CExtractPassages group_id";
     $backProps["destinataires_phast"]       = "CPhastDestinataire group_id";
     $backProps["senders_ftp"]               = "CSenderFTP group_id";
@@ -174,6 +176,9 @@ class CGroups extends CMbObject {
     $backProps["daily_check_list_types"]    = "CDailyCheckListType group_id";
     $backProps["grossesses"]                = "CGrossesse group_id";
     $backProps["libelle_mvsante"]           = "CLibelleOp group_id";
+    $backProps["ex_object"]                 = "CExObject group_id";
+    $backProps["cn_test"]                   = "CCnTest group_id";
+    $backProps["digital_pen_printer"]       = "CDigitalPenPrinter group_id";
     return $backProps;
   }
 

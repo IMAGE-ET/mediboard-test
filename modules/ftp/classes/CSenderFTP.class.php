@@ -42,9 +42,11 @@ class CSenderFTP extends CInteropSender {
     $backProps["expediteur_dmp"]      = "CExchangeDMP sender_id";
     $backProps["expediteur_phast"]    = "CExchangePhast sender_id";
     $backProps["expediteur_any"]      = "CExchangeAny sender_id";
+    $backProps["expediteur_mvsante"]  = "CExchangeMVSante sender_id";
     
     $backProps["config_hprimxml"]     = "CHprimXMLConfig sender_id";
     $backProps["config_hl7"]          = "CHL7Config sender_id";
+    $backProps["config_mvsante"]      = "CMVSanteXMLConfig sender_id";
     
     
     return $backProps;

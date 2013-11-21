@@ -50,6 +50,16 @@ class CUserMessage extends CMbObject {
   }
 
   /**
+   * @see parent::getBackProps()
+   */
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["user_message"]   = "CUserMessage in_reply_to";
+
+    return $backProps;
+  }
+
+  /**
    * get props
    *
    * @return array

@@ -121,7 +121,8 @@ class CExClassEvent extends CMbObject {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["constraints"]  = "CExClassConstraint ex_class_event_id";
+    $backProps["constraints"]      = "CExClassConstraint ex_class_event_id";
+    $backProps["digital_pen_copy"] = "CDigitalPenCopy ex_class_event_id";
     //$backProps["ex_triggers"]  = "CExClassFieldTrigger ex_class_event_triggered_id";
     return $backProps;
   }

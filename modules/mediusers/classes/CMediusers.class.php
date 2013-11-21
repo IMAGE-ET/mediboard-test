@@ -371,6 +371,9 @@ class CMediusers extends CPerson {
     $backProps["retrocession"]                    = "CRetrocession praticien_id";
     $backProps["user_debiteur"]                   = "CDebiteurOX user_id";
     $backProps["user_bioserveur"]                 = "CUserBioserveur user_id";
+    $backProps["bioserveur_account"]              = "CBioServeurAccount user_id";
+    $backProps["compte_rendu"]                    = "CCompteRendu locker_id";
+    $backProps["long_request_log"]                = "CLongRequestLog user_id";
     return $backProps;
   }
 

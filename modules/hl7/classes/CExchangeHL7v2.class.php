@@ -74,6 +74,15 @@ class CExchangeHL7v2 extends CExchangeTabular {
   }
 
   /**
+   * @see parent::getBackProps()
+   */
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["cn_steps"] = "CCnStep exchange_hl7v2";
+    return $backProps;
+  }
+
+  /**
    * Handle exchange
    *
    * @return null|string|void
