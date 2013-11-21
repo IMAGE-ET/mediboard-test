@@ -27,8 +27,17 @@ function drawGraphs(size) {
     container.setStyle(size);
     g.options.y2axis.noTicks = size.yaxisNoTicks;
     g.options.yaxis.noTicks = size.yaxisNoTicks;
-    g.options.yaxis.tickFormatter = yAxisTickFormatter;
+    g.options.yaxis.tickFormatter  = yAxisTickFormatter;
     g.options.y2axis.tickFormatter = yAxisTickFormatter;
+    g.options.mouse                = {
+      track: true,
+      position: "ne",
+      relative: true,
+      sensibility: 2,
+      trackFormatter: function (obj) {
+        return "Valeur : " + obj.y + "<br />Date : " + g.datetime_by_index[obj.index];
+      }
+    };
     var f = Flotr.draw(container, g.series, g.options);
     
     {{if $groupmod==1}}

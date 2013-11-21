@@ -67,6 +67,8 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
     
     $hits = array();
     $size = array();
+
+    $datetime_by_index = array();
     
     $errors_total = 0;
     foreach ($datax as $x) {
@@ -82,7 +84,8 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
       
       $hits[$x[0]] = array($x[0], 0);
       $size[$x[0]] = array($x[0], 0);
-      
+
+
       foreach ($logs as $log) {
         if ($x[1] == CMbDT::format($log->period, $period_format)) {
           $duration[$x[0]]    = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'duration'});
@@ -97,6 +100,8 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
           
           $hits[$x[0]] = array($x[0], $log->{($right[1] == 'mean' ? '_average_' : '').'hits'} / ($right[1] == 'mean' ? $hours : 1));
           $size[$x[0]] = array($x[0], $log->{($right[1] == 'mean' ? '_average_' : '').'size'} / ($right[1] == 'mean' ? $hours : 1));
+
+          $datetime_by_index[$x[0]] = $log->period;
         }
       }
     }
@@ -116,7 +121,7 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
         }
       }
     }
-    
+
     $title = '';
     if ($module_name) {
       $title .= CAppUI::tr("module-$module_name-court");
@@ -283,6 +288,8 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
   else {
     $duration = array();
     $requests = array();
+
+    $datetime_by_index = array();
     
     foreach ($datax as $x) {
       // Needed
@@ -295,6 +302,8 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
         if ($x[1] == CMbDT::format($log['period'], $period_format)) {
           $duration[$log['datasource']][$x[0]] = array($x[0], $log['duration']);
           $requests[$log['datasource']][$x[0]] = array($x[0], $log['requests']);
+
+          $datetime_by_index[$x[0]] = $log['period'];
         }
       }
     }
@@ -377,8 +386,8 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
          'show' => true
        ),
       );
-    } 
+    }
   }
   
-  return array('series' => $series, 'options' => $options, 'module' => $module_name);
+  return array('series' => $series, 'options' => $options, 'module' => $module_name, 'datetime_by_index' => $datetime_by_index);
 }
