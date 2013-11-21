@@ -157,29 +157,6 @@ class CAffectation extends CMbObject {
     $sejour->loadRefPatient()->loadRefPhotoIdentite();
     $affectations = $sejour->loadRefsAffectations();
 
-    if (is_array($affectations) && count($affectations)) {
-      /** @var CAffectation $_affectation */
-      foreach ($affectations as $_affectation) {
-        $_affectation->loadRefParentAffectation();
-
-        if (!$_affectation->lit_id) {
-          $_affectation->_view = $_affectation->loadRefService()->_view;
-          continue;
-        }
-
-        $_affectation->loadRefLit()->loadCompleteView();
-        $_affectation->_view = $_affectation->_ref_lit->_view;
-      }
-    }
-
-    if (!$this->lit_id) {
-      $this->_view = $this->loadRefService()->_view;
-    }
-    else {
-      $this->loadRefLit()->loadCompleteView();
-      $this->_view = $this->_ref_lit->_view;
-    }
-
     $this->loadRefParentAffectation();
 
     foreach ($sejour->loadRefsOperations() as $_operation) {
@@ -196,6 +173,15 @@ class CAffectation extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_duree = CMbDT::daysRelative($this->entree, $this->sortie);
+
+    if (!$this->lit_id) {
+      $this->_view = $this->loadRefService()->_view;
+    }
+    else {
+      $this->loadRefLit()->loadCompleteView();
+      $this->_view = $this->_ref_lit->_view;
+    }
+
   }
 
   /**
