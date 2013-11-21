@@ -140,10 +140,13 @@
   </tr>
   {{/if}}
   {{foreach from=$listPlace item=_place}}
+    {{assign var=count_places value=$_place.consultations|@count}}
     <tr {{if !$multiple && ($_place.time == $consultation->heure)}}class="selected"{{/if}}>
       <td>
+        {{if $count_places> 1}}
+          <img src="style/mediboard/images/icons/small-warning.png" alt="SURB" title="surbooking : {{$count_places}} patients" style="float:right;"/>
+        {{/if}}
         <div style="float:left">
-          {{assign var=count_places value=$_place.consultations|@count}}
           {{if $online && !$plage->locked && ($conf.dPcabinet.CConsultation.surbooking_readonly || $plage->_canEdit || $count_places == 0)}}
             {{if !$multiple}}
               <button type="button" class="tick validPlage"

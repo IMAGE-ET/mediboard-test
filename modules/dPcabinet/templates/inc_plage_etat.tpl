@@ -18,10 +18,18 @@
 {{else}}
   {{assign var="backgroundClass" value="full"}}
 {{/if}}
-{{if $_plage->locked}}
-  <img style="float: right; height: 12px;" src="style/mediboard/images/buttons/lock.png" />
-{{/if}}
-<a href="#{{$_plage->_id}}" onclick="RDVmultiples.loadPlageConsult({{$_plage->_id}}, null{{if $multiple}}, true{{/if}}); return false;">
-  {{$_plage->date|date_format:"%A %d"}}
+
+<div class="progressBar">
+  <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
+  <div class="text">
+    {{if $_plage->locked}}
+      <img style="float: right; height: 12px;" src="style/mediboard/images/buttons/lock.png" />
+    {{/if}}
+    <a href="#{{$_plage->_id}}" onclick="RDVmultiples.loadPlageConsult({{$_plage->_id}}, null{{if $multiple}}, true{{/if}}); return false;">
+      {{$_plage->date|date_format:"%A %d"}}
+    </a>
+  </div>
+</div>
+<div id="plage_dispo_{{$_plage->_id}}" style="text-align: center;" >
   {{mb_include module=system template=calendars/inc_week/inc_disponibilities object=$_plage}}
-</a>
+</div>
