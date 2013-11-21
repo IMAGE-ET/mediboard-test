@@ -257,7 +257,7 @@
   
   {{if $prescription->_ref_prescription_line_mixes|@count}}
   <tr>
-    <th>Perfusions</th>
+    <th>Perfusions et oxygènes</th>
   </tr>
   {{/if}}
   {{foreach from=$prescription->_ref_prescription_line_mixes item=_prescription_line_mix}}
