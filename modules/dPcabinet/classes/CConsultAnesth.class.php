@@ -549,13 +549,14 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   function fillLimitedTemplate(&$template) {
     global $rootName;
     $this->updateFormFields();
-    
+
     $this->notify("BeforeFillLimitedTemplate", $template);
     
     $template->addProperty("Anesthésie - Tabac"                  , $this->tabac);
     $template->addProperty("Anesthésie - Oenolisme"              , $this->oenolisme);
 
-    $template->addProperty("Anesthésie - Groupe sanguin"         , $this->_ref_patient->_ref_dossier_medial->groupe_sanguin." ".$this->_ref_patient->_ref_dossier_medial->rhesus);
+    $dossier_medical = $this->loadRefPatient()->loadRefDossierMedical();
+    $template->addProperty("Anesthésie - Groupe sanguin"         , $dossier_medical->groupe_sanguin." ".$dossier_medical->rhesus);
     $template->addProperty("Anesthésie - RAI"                    , $this->rai);
     $template->addProperty("Anesthésie - Hb"                     , "$this->hb g/dl");
     $template->addProperty("Anesthésie - Ht"                     , "$this->ht %");
