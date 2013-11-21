@@ -29,3 +29,5 @@ if (CAppUI::conf("ref_pays") == 2) {
 }
 
 $module->registerTab("vw_stats"         , TAB_ADMIN);
+
+$module->registerTab("vw_circonstances" , TAB_ADMIN);

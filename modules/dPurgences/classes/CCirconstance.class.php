@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Class CCirconstance
+ */
 class CCirconstance extends CMbObject {
   public $circonstance_id;
   
@@ -16,6 +19,7 @@ class CCirconstance extends CMbObject {
   public $code;
   public $libelle;
   public $commentaire;
+  public $actif;
 
   /**
    * @see parent::getSpec()
@@ -32,9 +36,19 @@ class CCirconstance extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["code"]    = "str notNull";
-    $props["libelle"] = "str notNull seekable";
-    $props["commentaire"]   = "text notNull seekable";
+    $props["code"]        = "str notNull";
+    $props["libelle"]     = "str notNull seekable";
+    $props["commentaire"] = "text notNull seekable";
+    $props["actif"]       = "bool";
     return $props;
+  }
+
+  /**
+   * @see parent::getBackProps()
+   */
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["RPU"] = "CRPU circonstance";
+    return $backProps;
   }
 }

@@ -156,7 +156,7 @@ class CRPU extends CMbObject {
       "box_id"           => "ref class|CLit",
       "sortie_autorisee" => "bool",
       "date_at"          => "date",
-      "circonstance"     => "str",
+      "circonstance"     => "ref class|CCirconstance autocomplete|libelle dependsOn|actif",
       "regule_par"       => "enum list|centre_15|medecin",
       "code_diag"        => "num",
 
@@ -535,24 +535,9 @@ class CRPU extends CMbObject {
    * @return void
    */
   function getCirconstance() {
-    $ds = $this->_spec->ds;
-
-    $module_orumip = CModule::getActive("orumip");
-    $orumip_active = $module_orumip && $module_orumip->mod_active;
-
-    $request = new CRequest;
-    $request->addSelect("libelle");
-
-    if ($orumip_active) {
-      $request->addTable("orumip_circonstance");
-      $request->addWhere("code = '".$this->circonstance."'");
-      $this->_libelle_circonstance = $ds->loadResult($request->getRequest());
-    }
-    else {
-      $request->addTable("circonstance");
-      $request->addWhere("code = '".$this->circonstance."'");
-      $this->_libelle_circonstance = $ds->loadResult($request->getRequest());
-    }
+    $circonstance = new CCirconstance();
+    $circonstance->load($this->circonstance);
+    $this->_libelle_circonstance = $circonstance->libelle;
   }
 
   /**

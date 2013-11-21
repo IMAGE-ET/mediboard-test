@@ -374,6 +374,21 @@ class CSetupdPurgences extends CSetup {
                 ADD `motif_sfmu` INT (11) UNSIGNED";
     $this->addQuery($query);
 
-    $this->mod_version = "0.43";
+    $this->makeRevision("0.43");
+
+    $query = "ALTER TABLE `circonstance`
+                ADD `actif` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.44");
+
+    $query = "UPDATE `rpu`
+                SET `rpu`.`circonstance` = (SELECT `circonstance_id`
+                                            FROM `circonstance` WHERE `circonstance`.`code` = `rpu`.`circonstance`)
+                WHERE `rpu`.circonstance IS NOT NULL";
+    $this->addQuery($query);
+
+
+    $this->mod_version = "0.45";
   }  
 }

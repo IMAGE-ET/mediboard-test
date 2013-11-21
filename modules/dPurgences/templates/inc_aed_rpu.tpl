@@ -239,31 +239,8 @@
         <tr>
           <th>{{mb_label object=$rpu field="circonstance"}}</th>
           <td>
-            <input type="hidden" name="circonstance" value="{{$rpu->circonstance}}" />
-            <input type="text" name="_keywords_circonstance" value="{{if $orumip_active}}{{$rpu->_libelle_circonstance}}{{else}}{{$rpu->circonstance}}{{/if}}" class="autocomplete"/>
-            <br/>
-            <span id="libelle_circonstance" onclick="emptyCirconstance()" style="width: 150px;">{{$rpu->_libelle_circonstance}}</span>
-            <script>
-              function emptyCirconstance() {
-                var oForm = getForm("editRPU");
-                $V(oForm.circonstance, "");
-                $V(oForm._keywords_circonstance, "");
-                $("libelle_circonstance").update();
-              }
-              Main.add(function(){
-                var url = new Url("dPurgences", "ajax_circonstance_autocomplete");
-                url.autoComplete(getForm("editRPU")._keywords_circonstance, '', {
-                  minChars: 1,
-                  dropdown: true,
-                  width: "250px",
-                  select: "view",
-                  afterUpdateElement: function(input, selected) {
-                    $V(getForm("editRPU").circonstance, selected.select(".code")[0].innerHTML);
-                    $("libelle_circonstance").innerHTML = selected.select(".libelle_circonstance")[0].innerHTML;
-                  }
-                });
-              });
-            </script>
+            <input type="hidden" name="actif" value="1" />
+            {{mb_field object=$rpu field="circonstance" autocomplete="true,1,10,true,true" form=editRPU}}
           </td>
           {{if $conf.dPurgences.display_motif_sfmu}}
             <th>{{mb_label object=$rpu field="motif_sfmu"}}</th>
