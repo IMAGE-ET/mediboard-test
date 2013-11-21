@@ -137,6 +137,9 @@ foreach ($listPlage as $currPlage) {
   $currPlage->loadFillRate();
   $currPlage->loadCategorieFill();
   $currPlage->loadRefsNotes();
+  $currPlage->loadRefsBack();
+  $currPlage->countPatients();
+  $currPlage->loadDisponibilities();
 }
 // Création du template
 $smarty = new CSmartyDP();
@@ -147,6 +150,7 @@ $smarty->assign("hour"           , $hour);
 $smarty->assign("hours"          , CPlageconsult::$hours);
 $smarty->assign("hide_finished"  , $hide_finished);
 $smarty->assign("date"           , $date);
+$smarty->assign("today"          , CMbDT::date());
 $smarty->assign("refDate"        , $refDate);
 $smarty->assign("ndate"          , $ndate);
 $smarty->assign("pdate"          , $pdate);

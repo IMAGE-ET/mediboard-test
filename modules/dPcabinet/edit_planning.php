@@ -209,9 +209,8 @@ $following_consultations = array();
 if ($pat->_id) {
   $where["date"] = ">= '$consult->_date'";
   $following_consultations = $pat->loadRefsConsultations($where);
-  unset($following_consultations[$consult->_id]);
+  unset($following_consultations[$consult->_id]);                   //removing the targeted consultation
   foreach ($following_consultations as $_consultation) {
-    $_consultation->loadRefPlageConsult();
     $_consultation->loadRefPraticien()->loadRefFunction();
     $_consultation->canEdit();
   }

@@ -18,12 +18,70 @@ $hour             = CValue::get("hour");
 $hide_finished    = CValue::get("hide_finished", true);
 $_line_element_id = CValue::get("_line_element_id");
 $multipleMode     = CValue::get("multipleMode", false);
+$multiple_edit    = CValue::get("multipleEdit", 0);
+
+if ($multiple_edit || $consultation_id) {
+  $hide_finished = false;
+}
 
 //if multiple, no weekly planner
 if ($multipleMode) {
   $periods         = array("day", "week", "month");
   if ($period == "weekly") {
     $period = "month";
+  }
+}
+
+$consultation_ids = array();
+// next consultations in editMultiple
+if ($consultation_id) {
+  $consultation_ids = array();
+  $consultation_temp = new CConsultation();
+  $consultation_temp->load($consultation_id);
+  if (!$consultation_temp->patient_id) {
+    CAppUI::stepAjax("no_patient", UI_MSG_ERROR);
+  }
+  $consultation_temp->loadRefPlageConsult()->loadRefChir();
+
+  // we add the first consult to the future json list
+  $consultation_ids[] = array(
+    $consultation_temp->plageconsult_id,
+    $consultation_temp->_id,
+    $consultation_temp->_ref_plageconsult->date,
+    $consultation_temp->heure,
+    $consultation_temp->_ref_plageconsult->_ref_chir->_view,
+    $consultation_temp->annule
+  );
+
+  //edit mod
+  if ($multiple_edit) {
+    $plage_temp = $consultation_temp->_ref_plageconsult;
+    if (!$function_id) {
+      $function_id = $plage_temp->_ref_chir->function_id;
+    }
+    $function_id = $plage_temp->_ref_chir->function_id;
+    $where_next = array();
+    $ljoin_next = array();
+    $limit = CAppUI::pref("NbConsultMultiple");
+    $ljoin_next["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
+    $ljoin_next["users_mediboard"] = "plageconsult.chir_id = users_mediboard.user_id";
+    $where_next["patient_id"] = "= '$consultation_temp->patient_id'";
+    $where_next["users_mediboard.function_id"] = "= '$function_id'";
+    $where_next["date"] = ">= '$plage_temp->date'";
+    $where_next[$consultation_temp->_spec->key] = "!= '$consultation_id'";
+    /** @var $_consult CConsultation */
+    foreach ($consultation_temp->loadList($where_next, "date", null, null, $ljoin_next) as $_consult) {
+      $consultation_temp->loadRefPlageConsult()->loadRefChir();
+      $consultation_ids[]= array(
+        $_consult->plageconsult_id,
+        $_consult->_id,
+        $_consult->_ref_plageconsult->date,
+        $_consult->heure,
+        $_consult->_ref_chir->_id,
+        $_consult->_ref_chir->_view,
+        $_consult->annule
+      );
+    }
   }
 }
 
@@ -134,8 +192,10 @@ $smarty->assign("plage"          , $plage);
 $smarty->assign("listPlage"      , $listPlage);
 $smarty->assign("listFunctions"  , $listFunctions);
 $smarty->assign("consultation_id", $consultation_id);
+$smarty->assign("consultation_ids", $consultation_ids);
 $smarty->assign("online"         , true);
 $smarty->assign("_line_element_id", $_line_element_id);
 $smarty->assign("multipleMode"   , $multipleMode);
+$smarty->assign("multiple_edit"  , $multiple_edit);
 
 $smarty->display("plage_selector.tpl");

@@ -1,54 +1,36 @@
 {{if $online && !$plage->locked}}
 
   <script>
-    PlageConsult.setClose = function(time, multiples, elt) {
-      if (multiples) {
-        var plage_id  = $(elt).get("plageid");
-        var date      = $(elt).get("date");
-        var chir_id   = $(elt).get("chir");
-        var chir_name   = $(elt).get("chir_name");
-        window.parent.PlageConsultSelector.addConsult(
-          plage_id,
-          date,
-          time,
-          chir_id,
-          chir_name);
-      }
-      // simple
-      else {
-        window.parent.PlageConsultSelector.set(time,
-          "{{$plage->_id}}",
-          "{{$plage->date|date_format:"%A %d/%m/%Y"}}",
-          "{{$plage->chir_id}}");
-        window.parent.Control.Modal.close();
-        var form = window.parent.getForm(window.parent.PlageConsultSelector.sForm);
-        if (Preferences.choosePatientAfterDate == 1 && !$V(form.patient_id) && !form._pause.checked) {
-          window.parent.PatSelector.init();
-        }
-      }
-    };
-
-    PlageConsult.addPlaceBefore = function(plage_id) {
+    addPlaceBefore = function(plage_id) {
       var form = getForm("editPlage-"+plage_id);
-      var page_id = form.up().id.split("-")[1]; //get parent
+      var slot_id = form.up().up().get("slot_number"); //get parent
       var date = new Date();
       date.setHours({{$plage->debut|date_format:"%H"}});
       date.setMinutes({{$plage->debut|date_format:"%M"}} - {{$plage->freq|date_format:"%M"}});
       date.setSeconds({{$plage->debut|date_format:"%S"}});
       form.debut.value = printf('%02d:%02d:%02d',date.getHours(), date.getMinutes(), date.getSeconds());
-      return onSubmitFormAjax(form, function() { PlageConsult.refreshPlage(page_id, "{{$multiple}}"); });
+      return onSubmitFormAjax(form, function() { RDVmultiples.refreshSlot(slot_id, "{{$multiple}}"); });
     };
 
-    PlageConsult.addPlaceAfter = function(plage_id) {
+    addPlaceAfter = function(plage_id) {
       var form = getForm("editPlage-"+plage_id);
-      var page_id = form.up().id.split("-")[1]; //get parent
+      var slot_id = form.up().up().get("slot_number");
       var date = new Date();
       date.setHours({{$plage->fin|date_format:"%H"}});
       date.setMinutes({{$plage->fin|date_format:"%M"}} + {{$plage->freq|date_format:"%M"}});
       date.setSeconds({{$plage->fin|date_format:"%S"}});
       form.fin.value = printf('%02d:%02d:%02d', date.getHours(), date.getMinutes(), date.getSeconds());
-      return onSubmitFormAjax(form, function() { PlageConsult.refreshPlage(page_id, "{{$multiple}}"); });
+      return onSubmitFormAjax(form, function() {RDVmultiples.refreshSlot(slot_id, "{{$multiple}}"); });
     };
+
+    Main.add(function() {
+      //multiple edit init
+      {{if $consultation->_id}}
+        var dom = $("Places_{{$plage->_id}}");
+        var consult_target = dom.up().up().down("input[name='consult_id']");
+        $V(consult_target,'{{$consultation->_id}}');
+      {{/if}}
+      });
   </script>
 
   <form action="?m=dPcabinet" method="post" name="editPlage-{{$plage->_id}}" onsubmit="return checkForm(this);">
@@ -61,7 +43,6 @@
     <input type="hidden" name="chir_id" value="{{$plage->chir_id}}" />
     <input type="hidden" name="_repeat" value="1" />
   </form>
-
 {{/if}}
 
 <table class="tbl" id="Places_{{$plage->_id}}">
@@ -74,9 +55,6 @@
       {{else}}
         {{if $display_nb_consult}}4{{else}}2{{/if}}
       {{/if}}">
-        {{if $multiple}}
-          <button class="cancel notext" style="float:right;" onclick="PlageConsult.changePlage('{{$plage->_id}}'{{if $multiple}}, true{{/if}});">{{tr}}Clean{{/tr}}</button>
-        {{/if}}
         {{if $online}}
           {{mb_include module=system template=inc_object_notes object=$plage}}
         {{/if}}
@@ -91,18 +69,6 @@
         à {{$plage->fin|date_format:$conf.time}}
       </th>
     </tr>
-    {{if $online && !$plage->locked}}
-      <tr>
-        <td class="button" colspan="{{if $display_nb_consult}}5{{else}}3{{/if}}">
-          <button type="button" class="add singleclick" onclick="PlageConsult.addPlaceBefore('{{$plage->_id}}')" {{if !$plage->_canEdit}}disabled="disabled"{{/if}}>
-            Avant
-          </button>
-          <button type="button" class="add singleclick" onclick="PlageConsult.addPlaceAfter('{{$plage->_id}}')" {{if !$plage->_canEdit}}disabled="disabled"{{/if}}>
-            Après
-          </button>
-        </td>
-      </tr>
-    {{/if}}
     <tr>
       <th class="narrow" {{if $online && !$multiple}}rowspan="2"{{/if}}>Heure</th>
       <th {{if $online && !$multiple}}rowspan="2"{{/if}}>Patient</th>
@@ -126,65 +92,20 @@
     </tr>
   {{/if}}
   {{foreach from=$listBefore item =_consultation}}
-  <tr>
-    <td>
-      <div style="float:left">
-        {{$_consultation->heure|date_format:$conf.time}}
-      </div>
-      <div style="float:right">
-        {{if $_consultation->categorie_id}}
-          {{mb_include module=cabinet template=inc_icone_categorie_consult
-            categorie=$_consultation->_ref_categorie
-          }}
-        {{/if}}
-      </div>
-    </td>
-    <td>
-      {{if !$_consultation->patient_id}}
-        {{assign var="style" value="style='background: #ffa;'"}}
-      {{elseif $_consultation->premiere}}
-        {{assign var="style" value="style='background: #faa;'"}}
-      {{elseif $_consultation->derniere}}
-        {{assign var="style" value="style='background: #faf;'"}}
-      {{else}}
-        {{assign var="style" value=""}}
-      {{/if}}
-      <div {{$style|smarty:nodefaults}}>
-        {{$_consultation->patient_id|ternary:$_consultation->_ref_patient:"[PAUSE]"}}
-        {{if $_consultation->duree > 1}}
-          x{{$_consultation->duree}}
-        {{/if}}
-        {{if $_consultation->motif}}
-          <div class="compact">
-            {{$_consultation->motif|spancate}}
-          </div>
-        {{/if}}
-      </div>
-    </td>
-    <td {{if $display_nb_consult}}colspan="3"{{/if}}></td>
-  </tr>
-  {{/foreach}}
-  {{foreach from=$listPlace item=_place}}
     <tr>
       <td>
         <div style="float:left">
-          {{assign var=count_places value=$_place.consultations|@count}}
-          {{if $online && !$plage->locked && ($conf.dPcabinet.CConsultation.surbooking_readonly || $plage->_canEdit || $count_places == 0)}}
-            {{if !$multiple}}
-              <button type="button" class="tick" onclick="PlageConsult.setClose('{{$_place.time}}')">{{$_place.time|date_format:$conf.time}}</button>
-            {{else}}
-              <label>
-                <input name="checkbox-{{$plage->_id}}" type="radio" data-chir_name="{{$plage->_ref_chir}}" data-plageid="{{$plage->_id}}" data-date="{{$plage->date}}" data-chir="{{$plage->chir_id}}" onclick="PlageConsult.setClose('{{$_place.time}}',true, this)"> {{$_place.time|date_format:$conf.time}}
-              </label>
-            {{/if}}
-          {{else}}
-            {{$_place.time|date_format:$conf.time}}
+          {{$_consultation->heure|date_format:$conf.time}}
+        </div>
+        <div style="float:right">
+          {{if $_consultation->categorie_id}}
+            {{mb_include module=cabinet template=inc_icone_categorie_consult
+              categorie=$_consultation->_ref_categorie
+            }}
           {{/if}}
         </div>
       </td>
-      <td class="text">
-        {{foreach from=$_place.consultations item=_consultation}}
-
+      <td>
         {{if !$_consultation->patient_id}}
           {{assign var="style" value="style='background: #ffa;'"}}
         {{elseif $_consultation->premiere}}
@@ -199,26 +120,92 @@
           {{if $_consultation->duree > 1}}
             x{{$_consultation->duree}}
           {{/if}}
-          {{assign var=categorie value=$_consultation->_ref_categorie}}
-          {{if $categorie->_id}}
-            <div class="compact">
-              {{mb_include module=cabinet template=inc_icone_categorie_consult
-                categorie=$categorie
-                display_name=true
-              }}
-            </div>
-          {{/if}}
           {{if $_consultation->motif}}
             <div class="compact">
               {{$_consultation->motif|spancate}}
             </div>
           {{/if}}
-          {{if $_consultation->rques}}
-            <div class="compact">
-              {{$_consultation->rques|spancate}}
-            </div>
+        </div>
+      </td>
+      <td {{if $display_nb_consult}}colspan="3"{{/if}}></td>
+    </tr>
+  {{/foreach}}
+  {{if $online && !$plage->locked}}
+  <tr>
+    <td class="button" colspan="{{if $display_nb_consult}}5{{else}}3{{/if}}">
+      <button type="button" class="up singleclick" onclick="addPlaceBefore('{{$plage->_id}}')" {{if !$plage->_canEdit}}disabled="disabled"{{/if}}>
+        Ajouter Avant
+      </button>
+    </td>
+  </tr>
+  {{/if}}
+  {{foreach from=$listPlace item=_place}}
+    <tr {{if !$multiple && ($_place.time == $consultation->heure)}}class="selected"{{/if}}>
+      <td>
+        <div style="float:left">
+          {{assign var=count_places value=$_place.consultations|@count}}
+          {{if $online && !$plage->locked && ($conf.dPcabinet.CConsultation.surbooking_readonly || $plage->_canEdit || $count_places == 0)}}
+            {{if !$multiple}}
+              <button type="button" class="tick validPlage"
+            {{else}}
+              <input type="radio" class="validPlage" name="checkbox-{{$plage->_id}}" {{if $_place.time == $consultation->heure}}checked="checked"{{/if}}
+            {{/if}}
+              data-consult_id="{{$consultation->_id}}"
+              data-chir_name="{{$plage->_ref_chir}}"
+              data-plageid="{{$plage->_id}}"
+              data-date="{{$plage->date}}"
+              data-chir_id="{{$plage->chir_id}}"
+              data-time="{{$_place.time}}"
+            {{if !$multiple}}
+                >
+            {{else}}
+                />
+            {{/if}}
+            {{$_place.time|date_format:$conf.time}}
+            {{if !$multiple}}
+              </button>
+            {{/if}}
+          {{else}} <!-- not online or locked or surbooking -->
+            {{$_place.time|date_format:$conf.time}}
           {{/if}}
         </div>
+      </td>
+      <td class="text">
+        {{foreach from=$_place.consultations item=_consultation}}
+          {{if !$_consultation->patient_id}}
+            {{assign var="style" value="style='background: #ffa;'"}}
+          {{elseif $_consultation->premiere}}
+            {{assign var="style" value="style='background: #faa;'"}}
+          {{elseif $_consultation->derniere}}
+            {{assign var="style" value="style='background: #faf;'"}}
+          {{else}}
+            {{assign var="style" value=""}}
+          {{/if}}
+          <div {{$style|smarty:nodefaults}}>
+            {{$_consultation->patient_id|ternary:$_consultation->_ref_patient:"[PAUSE]"}}
+            {{if $_consultation->duree > 1}}
+              x{{$_consultation->duree}}
+            {{/if}}
+            {{assign var=categorie value=$_consultation->_ref_categorie}}
+            {{if $categorie->_id}}
+              <div class="compact">
+                {{mb_include module=cabinet template=inc_icone_categorie_consult
+                  categorie=$categorie
+                  display_name=true
+                }}
+              </div>
+            {{/if}}
+            {{if $_consultation->motif}}
+              <div class="compact">
+                {{$_consultation->motif|spancate}}
+              </div>
+            {{/if}}
+            {{if $_consultation->rques}}
+              <div class="compact">
+                {{$_consultation->rques|spancate}}
+              </div>
+            {{/if}}
+          </div>
         {{/foreach}}
       </td>
       {{if $online && !$multiple}}
@@ -236,6 +223,15 @@
       {{/if}}
     </tr>
   {{/foreach}}
+  {{if $online && !$plage->locked}}
+    <tr>
+      <td class="button" colspan="{{if $display_nb_consult}}5{{else}}3{{/if}}">
+        <button type="button" class="down singleclick" onclick="addPlaceAfter('{{$plage->_id}}')" {{if !$plage->_canEdit}}disabled="disabled"{{/if}}>
+          Ajouter Après
+        </button>
+      </td>
+    </tr>
+  {{/if}}
   {{foreach from=$listAfter item =_consultation}}
     <tr>
       <td>

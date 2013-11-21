@@ -14,10 +14,12 @@ CCanDo::checkRead();
 $ds = CSQLDataSource::get("std");
 
 // Initialisation des variables
-$plageconsult_id = CValue::get("plageconsult_id");
+$plageconsult_id    = CValue::get("plageconsult_id");
+$consult_id         = CValue::get("consult_id");
 $multiple           = CValue::get("multipleMode", false);
 $display_nb_consult = CAppUI::conf("dPcabinet display_nb_consult");
-$quotas = null;
+$quotas             = null;
+
 
 // Récupération des consultations de la plage séléctionnée
 $plage = new CPlageconsult;
@@ -30,6 +32,12 @@ else {
   $date  = CValue::get("date", CMbDT::date());
 }
 
+
+// consultation précise
+$consultation_target = new CConsultation();
+if ($consult_id) {
+  $consultation_target->load($consult_id);
+}
 /**
  * Calcul le taux d'utilisation de prise de rendez-vous par créneaux de 5 minutes
  *
@@ -100,7 +108,6 @@ if ($plageconsult_id) {
   }
   $plage->loadRefs(false);
   $plage->_ref_chir->loadRefFunction();
-  
   for ($i = 0; $i < $plage->_total; $i++) {
     $minutes = $plage->_freq * $i;
     $listPlace[$i]["time"]          = CMbDT::time("+ $minutes minutes", $plage->debut);
@@ -173,6 +180,8 @@ $smarty->assign("listBefore"     , $listBefore);
 $smarty->assign("listAfter"      , $listAfter);
 $smarty->assign("quotas"         , $quotas);
 $smarty->assign("multiple"       , $multiple);
+$smarty->assign("consultation"   , $consultation_target);
+$smarty->assign("date"           , $date);
 
 if ($display_nb_consult == "cab" || $display_nb_consult == "etab") {
   $smarty->assign("utilisation_func", $utilisation_func);

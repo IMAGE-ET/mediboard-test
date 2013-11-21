@@ -43,7 +43,7 @@
   multiPlageEdit = function(consult_id) {
     var url = new Url("dPcabinet", "ajax_edit_multiconsult");
     url.addParam("consult_id", consult_id);
-    url.requestModal(-50);
+    url.requestModal();
   };
 
   refreshListCategorie = function(praticien_id){
@@ -105,7 +105,7 @@
   checkFormRDV = function(form){
     if(!form._pause.checked && form.patient_id.value == ""){
       alert("Veuillez sélectionner un patient");
-      PatSelector.init(false);
+      PatSelector.init();
       return false;
     }
     else{
@@ -177,6 +177,8 @@
     $V(oForm["heure_"+id], "");
     $V(oForm["chir_id_"+id], "");
     $V(oForm["_consult"+id], "");
+    $V(oForm["del"+id], "");
+    $('place_reca_'+id).hide();
   };
 
   Main.add(function () {
@@ -208,10 +210,10 @@
       $V(form.chir_id, '{{$plageConsult->chir_id}}', false);
       $V(form.plageconsult_id, '{{$plageConsult->_id}}');
       refreshListCategorie({{$plageConsult->chir_id}});
-      PlageConsultSelector.init();
+      PlageConsultSelector.init(0,0);
     {{elseif ($pat->_id || $date_planning) && !$consult->_id && !$consult->heure}}
       if($V(form.chir_id)) {
-        PlageConsultSelector.init();
+        PlageConsultSelector.init(0,0);
       }
     {{/if}}
 
@@ -221,8 +223,8 @@
 
   });
 
-  PlageConsultSelector.init = function(mode){
-    this.multipleMode   = (mode) ? 1 : 0;
+  PlageConsultSelector.init = function(multiple, edit){
+    this.multipleMode     = multiple;
     this.sForm            = "editFrm";
     this.sHeure           = "heure";
     this.sPlageconsult_id = "plageconsult_id";
@@ -233,10 +235,8 @@
     this.sConsultId       = "consultation_id";
     this.sLineElementId   = "_line_element_id";
     this.options          = {width: -30, height: -30};
-    if (mode) {
-      this.resetConsult();
-      this.resetPage();
-    }
+
+    this.multipleEdit    = (edit == 1 && multiple == 1) ? 1 : 0;
     this.modal();
   };
 
@@ -447,24 +447,22 @@
                 <td>
                   {{if $consult->_id}}
                     <span style="float: right">
-                    {{if $consult->sejour_id && $consult->_ref_sejour->type != "consult"}}
-                      <button type="button" class="remove" onclick="unlinkSejour()" title="{{$consult->_ref_sejour}}">{{tr}}CConsultation-_unlink_sejour{{/tr}}</button>
-                    {{elseif $consult->_count_matching_sejours}}
-                      <button type="button" class="add" onclick="linkSejour()">{{tr}}CConsultation-_link_sejour{{/tr}}</button>
-                    {{/if}}
-                      {{if $next_consult >= 1}}
-                        <br/>
-                        <button class="agenda button" id="buttonMultiple" type="button" onclick="multiPlageEdit('{{$consult->_id}}');" id="buttonMultiple">Modification multiple</button>
+                      {{if $consult->sejour_id && $consult->_ref_sejour->type != "consult"}}
+                        <button type="button" class="remove" onclick="unlinkSejour()" title="{{$consult->_ref_sejour}}">{{tr}}CConsultation-_unlink_sejour{{/tr}}</button>
+                      {{elseif $consult->_count_matching_sejours}}
+                        <button type="button" class="add" onclick="linkSejour()">{{tr}}CConsultation-_link_sejour{{/tr}}</button>
                       {{/if}}
-
-                  </span>
-                    {{/if}}
-                    <input type="text" name="_date" style="width: 15em;" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" onfocus="PlageConsultSelector.init()" readonly="readonly" onchange="if (this.value != '') $V(this.form._function_id, '')"/>
+                    </span>
+                  {{/if}}
+                    <input type="text" name="_date" style="width: 15em;" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" onfocus="PlageConsultSelector.init(false)" readonly="readonly" onchange="if (this.value != '') $V(this.form._function_id, '')"/>
                     <input type="hidden" name="_date_planning" value="{{$date_planning}}" />
                     {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageConsultSelector.init()"}}
-                    <button class="search notext" id="addedit_planning_button_select_date" type="button" onclick="PlageConsultSelector.init()">Choix de l'horaire</button>
+                    <button class="search notext" id="addedit_planning_button_select_date" type="button" onclick="PlageConsultSelector.init(0,0)">Choix de l'horaire</button>
                   {{if !$consult->_id}}
-                    <button class="agenda notext" id="buttonMultiple" type="button" onclick="PlageConsultSelector.init(true)" id="buttonMultiple">Consultation multiple</button>
+                    <button class="agenda notext" id="buttonMultiple" type="button" onclick="PlageConsultSelector.init(1,0)" id="buttonMultiple">Consultation multiple</button>
+                  {{elseif $following_consultations|@count}}
+                    <button class="agenda button notext" id="buttonMultiple" type="button" onclick="PlageConsultSelector.init(1, 1);" id="buttonMultiple">Modification multiple, permet de modifier la consultation actuelle et les suivantes</button>
+                    <!--<button class="agenda button" id="buttonMultiple" type="button" onclick="multiPlageEdit('{{$consult->_id}}');" id="buttonMultiple">Modification multiple</button>-->
                   {{/if}}
                   </td>
                 </tr>
@@ -594,14 +592,16 @@
             </table>
           </td>
           <td id="multiplePlaces">
-            {{foreach from=2|range:$app->user_prefs.NbConsultMultiple item=j}}
+            {{foreach from=1|range:$app->user_prefs.NbConsultMultiple-1 item=j}}
               <fieldset id="place_reca_{{$j}}" style="display: none;">
-                <legend>Rendez-vous {{$j}} <button class="button cancel notext" type="button" onclick="resetPlage('{{$j}}')">{{tr}}Delete{{/tr}}</button></legend>
+                <legend>Rendez-vous {{$j+1}} <button class="button cleanup notext" type="button" onclick="resetPlage('{{$j}}')">{{tr}}Delete{{/tr}}</button></legend>
                 <input type="text" name="_consult{{$j}}" value="" readonly="readonly" style="width: 30em;"/>
+                <input type="hidden" name="consult_id_{{$j}}" value=""/>
                 <input type="hidden" name="plage_id_{{$j}}" value=""/>
                 <input type="hidden" name="date_{{$j}}" value=""/>
                 <input type="hidden" name="heure_{{$j}}" value=""/>
                 <input type="hidden" name="chir_id_{{$j}}" value=""/>
+                <input type="hidden" name="cancel_{{$j}}" value="0"/>
                 <p><input type="text" name="rques_{{$j}}" placeholder="Remarque..." style="width: 30em;"/></p>
               </fieldset>
             {{/foreach}}

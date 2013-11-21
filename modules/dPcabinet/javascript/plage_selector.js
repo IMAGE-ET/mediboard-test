@@ -1,6 +1,7 @@
 // $Id: $
 
 PlageConsultSelector = {
+  is_multiple      : false,
   sForm            : null,
   sHeure           : null,
   sPlageconsult_id : null,
@@ -10,60 +11,76 @@ PlageConsultSelector = {
   sDatePlanning    : null,
   sConsultId       : null,
   multipleMode     : 0,
+  multipleEdit     : 0,
   options          : {},
   pages            : [],
   consultations    : {},
   sLineElementId   : null,
 
-  modal: function() {
-    var oForm = getForm(this.sForm);
-    var url = new Url("dPcabinet", "plage_selector");
-    url.addParam("chir_id"        , $V(oForm[this.sChir_id]));
-    url.addParam("function_id"    , $V(oForm[this.sFunction_id]));
-    url.addParam("plageconsult_id", $V(oForm[this.sPlageconsult_id]));
-    url.addParam("multipleMode"       , this.multipleMode);
-    url.addParam("_line_element_id", $V(oForm[this.sLineElementId]));
-    url.addParam("consultation_id", $V(oForm[this.sConsultId]));
-    if (this.sDatePlanning != null && $V(oForm[this.sDatePlanning])) {
-      url.addParam("date", $V(oForm[this.sDatePlanning]));
+    modal: function() {
+      var oForm = getForm(this.sForm);
+      var chir_id = $V(oForm[this.sChir_id]);
+      var function_id = $V(oForm[this.sFunction_id]);
+
+      // no chir, no function = heavy load
+      if (!chir_id && !function_id) {
+        if (!confirm("Vous n'avez pas selectionné de praticien ni de cabinet, voulez-vous continuer ?")) {
+          return;
+        }
+      }
+
+      var url = new Url("dPcabinet", "plage_selector");
+      url.addParam("chir_id"        , chir_id);
+      url.addParam("function_id"    , function_id);
+      url.addParam("plageconsult_id", $V(oForm[this.sPlageconsult_id]));
+      url.addParam("multipleMode"       , this.multipleMode);
+      url.addParam("_line_element_id", $V(oForm[this.sLineElementId]));
+      url.addParam("consultation_id", $V(oForm[this.sConsultId]));
+      if (this.multipleEdit) {
+        url.addParam("multipleEdit", this.multipleEdit);
+        url.addParam("hide_finished", 0);
+
+      }
+      if (this.sDatePlanning != null && $V(oForm[this.sDatePlanning])) {
+        url.addParam("date", $V(oForm[this.sDatePlanning]));
+      }
+      url.modal(this.options);
+    },
+
+  updateFromSelector : function() {
+    if (!this.consultations.size()) {
+      console.log("error, pas de plages du selecteur");
+      return;
     }
-    url.modal(this.options);
-  },
-  checkMultiple : function() {
+
     var oForm = getForm(window.PlageConsultSelector.sForm);
-    var consults = $H(window.PlageConsultSelector.consultations);
-
-    if(consults.size() <= 0) {
-      alert("Selectionner au moins un créneau avant de valider.");
-      return false;
-    }
-
-    Control.Modal.close();
-    if (consults.size() > 0) {
-      var iterator = 1;
-      consults.each(function(consult) {
-        var consultObj = consult[1];
-        if (iterator == 1) {
-          window.PlageConsultSelector.set(consultObj.heure, consultObj.plage_id, consultObj.date, consultObj.chir_id);
+    var iterator = 0;
+    this.consultations.each(function(elt) {
+      var consult = elt.value;
+      console.log(iterator+ " -> ", consult);
+      // main consult
+      if (iterator == 0) {
+        window.PlageConsultSelector.set(consult.heure, consult.plage_id, consult.date, consult.chir_id);
+      }
+      // multiple
+      else {
+        $V(oForm["consult_multiple"], '1');
+        $V(oForm["plage_id_"+iterator], consult.plage_id);
+        $V(oForm["date_"+iterator], consult.date);
+        $V(oForm["heure_"+iterator], consult.heure);
+        $V(oForm["chir_id_"+iterator], consult.chir_id);
+        $V(oForm["consult_id_"+iterator], consult.consult_id);
+        $V(oForm["cancel_"+iterator], consult.is_cancelled);
+        $V(oForm["_consult"+iterator], consult._chirview+" le "+DateFormat.format(new Date(consult.date), "d/M/yyyy")+" à "+consult.heure);
+        if ($V(oForm["_consult"+iterator])) {
+          $("place_reca_"+iterator).show();
         }
-        else {
-          $V(oForm["consult_multiple"], '1');
-          $V(oForm["plage_id_"+iterator], consultObj.plage_id);
-          $V(oForm["date_"+iterator], consultObj.date);
-          $V(oForm["heure_"+iterator], consultObj.heure);
-          $V(oForm["chir_id_"+iterator], consultObj.chir_id);
-          $V(oForm["_consult"+iterator], consultObj.chir_name+" "+consultObj.date+" "+consultObj.heure);
-          if ($V(oForm["_consult"+iterator])) {
-            $("place_reca_"+iterator).show();
-          }
-        }
-        iterator++;
-      });
-    }
-    //clean the array
-    window.PlageConsultSelector.consultations = {};
+      }
+      iterator++;
+    });
   },
 
+  // classic set for mono consult
   set: function(heure, plage_id, date, chir_id) {
     var oForm = getForm(this.sForm);
     $V(oForm[this.sChir_id] , chir_id, false);
@@ -74,31 +91,10 @@ PlageConsultSelector = {
       $V(oForm[this.sFunction_id], '');
     }
     $V(oForm[this.sHeure]          , heure);
-    $V(oForm[this.sDate]           , date);
+    $V(oForm[this.sDate]           , DateFormat.format(new Date(date), "d/M/yyyy"));
     $V(oForm[this.sPlageconsult_id], plage_id, true);
   },
 
-  addOrRemovePage : function(key, plage_consult_id) {
-    if (this.pages[key]){
-      delete this.pages[key];
-      if($("listPlaces-"+key)) {
-        $("listPlaces-"+key).update("");
-      }
-    }
-    else {
-      this.pages[key] = plage_consult_id;
-    }
-  },
-  resetPage : function() {
-    this.pages = [];
-  },
-
-  resetConsult : function() {
-    this.consultations = {};
-  },
-  addConsult : function(plage_id, date, heure, chir_id, chir_name) {
-    this.consultations[plage_id] = {date:date, heure:heure, plage_id:plage_id, chir_id:chir_id, chir_name:chir_name};
-  },
   removeConsult : function(plage_id) {
     if(this.consultations[plage_id]) {
       delete this.consultations[plage_id];
