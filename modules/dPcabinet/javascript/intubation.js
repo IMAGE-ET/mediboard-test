@@ -164,7 +164,7 @@ SchemaDentaire = {
         var id = parseInt(o.id.substr(5)), etat;
         oDent.id = this.sId+'-dent-'+id;
         oDent.dentId = id;
-        this.aDentsId[id] = oDent.id;
+        this.aDentsId.push(oDent.id);
         
         if (etat = this.oListEtats[oDent.dentId]) {
           this.setState(oDent.dentId, etat, true);
