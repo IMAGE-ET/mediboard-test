@@ -163,7 +163,8 @@ class CViewAccessToken extends CMbObject {
     }
 
     foreach ($params as $key => $value) {
-      $_GET[$key] = $value;
+      $_GET    [$key] = $value;
+      $_REQUEST[$key] = $value;
     }
   }
 
