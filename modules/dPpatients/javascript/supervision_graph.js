@@ -187,9 +187,12 @@ SupervisionGraph = {
     bandwidth: {
       active: true,
       drawBandwidth: function(ctx,bandwidth, x,y1,y2,color,isOverlay) {
+        var width = 2;
+        var offset = width / 2;
+
         ctx.beginPath();
         ctx.strokeStyle = color;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = width;
         ctx.moveTo(x, y1);
         ctx.lineTo(x, y2);
         ctx.stroke();
@@ -201,10 +204,10 @@ SupervisionGraph = {
           ctx.strokeStyle = color;
         }
         ctx.lineWidth = 10;
-        ctx.moveTo(x, y1 - 1);
-        ctx.lineTo(x, y1 + 1);
-        ctx.moveTo(x, y2 - 1);
-        ctx.lineTo(x, y2 + 1);
+        ctx.moveTo(x, y1 - offset);
+        ctx.lineTo(x, y1 + offset);
+        ctx.moveTo(x, y2 - offset);
+        ctx.lineTo(x, y2 + offset);
         ctx.stroke();
       }
     }
@@ -213,6 +216,10 @@ SupervisionGraph = {
   formatTrack: function(item) {
     var x = item.datapoint[0],
         y = item.datapoint[1];
+
+    if (item.series.bandwidth && item.series.bandwidth.show) {
+      y += " / " + item.series.data[item.dataIndex][2];
+    }
 
     var date = new Date();
     date.setTime(x);

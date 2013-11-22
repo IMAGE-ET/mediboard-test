@@ -27,6 +27,11 @@ enChantier = function(){
 };
   
 Main.add(function(){
+  var width = $("surveillance_perop").getWidth();
+
+  $$(".graph-placeholder").invoke("setStyle", {width: width+"px"});
+
+  $$(".supervision .evenement").invoke("setStyle", {width: (width-12)+"px"});
   
   (function ($){
     var ph, series, xaxes;
@@ -46,16 +51,16 @@ Main.add(function(){
           //xaxes[0].show = false;
         {{/if}}
 
-    ph.bind("plothover", plothover);
-    ph.bind("plotclick", function(event, pos, item){
-      if (!item) {
-        return;
-      }
+        ph.bind("plothover", plothover);
+        ph.bind("plotclick", function(event, pos, item){
+          if (!item) {
+            return;
+          }
 
-      var data = item.series.data[item.dataIndex];
-      editObservationResultSet(data.set_id, '{{$pack->_id}}', data.result_id);
-      //console.log(data);
-    });
+          var data = item.series.data[item.dataIndex];
+          editObservationResultSet(data.set_id, '{{$pack->_id}}', data.result_id);
+          //console.log(data);
+        });
 
         var plot = $.plot(ph, series, {
           grid: {
@@ -216,9 +221,9 @@ printSurveillance = function(operation_id) {
         {{/foreach}}
         {{*<span class="title">{{$_graph_data.title}}</span>*}}
       </div>
-      <div id="placeholder-{{$i}}" style="width:{{$width}}px; height:{{$_graph->height}}px;" class="graph-placeholder"></div>
+      <div id="placeholder-{{$i}}" style="height:{{$_graph->height}}px;" class="graph-placeholder"></div>
     {{elseif $_graph instanceof CSupervisionTimedData}}
-      <table class="main evenements" style="table-layout: fixed; width: {{$width-12}}px; margin-bottom: -1px;">
+      <table class="main evenements" style="table-layout: fixed; margin-bottom: -1px;">
         <col style="width: {{$yaxes_count*78-12}}px;" />
 
         <tr>
@@ -244,7 +249,7 @@ printSurveillance = function(operation_id) {
         </tr>
       </table>
     {{elseif $_graph instanceof CSupervisionTimedPicture}}
-      <table class="main evenements" style="table-layout: fixed; width: {{$width-12}}px; margin-bottom: -1px; height: 70px;">
+      <table class="main evenements" style="table-layout: fixed; margin-bottom: -1px; height: 70px;">
         <col style="width: {{$yaxes_count*78-12}}px;" />
 
         <tr>
@@ -275,7 +280,7 @@ printSurveillance = function(operation_id) {
 
   {{/foreach}}
   
-  <table class="main evenements" style="table-layout: fixed; width: {{$width-12}}px;">
+  <table class="main evenements" style="table-layout: fixed;">
     <col style="width: {{$yaxes_count*78-12}}px;" />
     
     {{foreach from=$evenements key=_label item=_evenements}}

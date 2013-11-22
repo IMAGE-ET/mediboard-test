@@ -125,6 +125,9 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
 
           if (!$first_data) {
             $first_data = $_series_data;
+            $first_data['bandwidth'] = array(
+              'show' => true,
+            );
             $first_data["label"] = $_axis->title;
             $first_data["axis_id"] = $_axis->_id;
             $first_data["data"] = $results[$_serie->value_type_id][$_unit_id];
