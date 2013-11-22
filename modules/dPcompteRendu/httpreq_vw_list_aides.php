@@ -63,6 +63,11 @@ if ($userSel->user_id) {
   $aides["user_ids"] = array_keys($_aide->seek($keywords, $where, 1000));
   $aides["user"] = $_aide->seek($keywords, $where, $start["user"].", 30", true, null, $order_by);
   $aidesCount["user"] = $_aide->_totalSeek;
+
+  CMbObject::massCountBackRefs($aides['user'], 'hypertext_links');
+  CMbObject::massCountBackRefs($aides['func'], 'hypertext_links');
+  CMbObject::massCountBackRefs($aides['etab'], 'hypertext_links');
+
   foreach ($aides["user"] as $aide) {
     $aide->loadRefsFwd();
     $aide->loadBackRefs('hypertext_links');
@@ -90,9 +95,6 @@ if ($userSel->user_id) {
   unset($where["group_id"]);
 }
 
-CMbObject::massCountBackRefs($aides['user'], 'hypertext_links');
-CMbObject::massCountBackRefs($aides['func'], 'hypertext_links');
-CMbObject::massCountBackRefs($aides['etab'], 'hypertext_links');
 // Création du template
 $smarty = new CSmartyDP();
 
