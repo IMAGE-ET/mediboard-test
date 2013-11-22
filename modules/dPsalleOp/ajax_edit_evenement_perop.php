@@ -29,8 +29,9 @@ if ($evenement_id) {
   $evenement->load($evenement_id);
   $evenement->loadRefsNotes();
 }
-
-$evenement->datetime = $datetime;
+else {
+  $evenement->datetime = $datetime;
+}
 $evenement->operation_id = $interv->_id;
 
 // Création du template
