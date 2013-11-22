@@ -71,4 +71,12 @@ class CURLSpec extends CMbFieldSpec {
     parent::sample($object, $consistent);
     $object->{$this->fieldName} = "http://mediboard.org";
   }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    return "Chaine de caractère de type url'. ".
+    parent::getLitteralDescription();
+  }
 }

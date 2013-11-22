@@ -100,7 +100,7 @@ class CFloatSpec extends CMbFieldSpec {
     // min
     if ($this->min) {
       if (!$min = CMbFieldSpec::checkNumeric($this->min, false)) {
-        trigger_error("Spécification de minimum numérique invalide (min = $this->min)", E_USER_WARNING);
+        CModelObject::warning("Specification-de-minimum-numerique-invalide-min=min%d", $this->min);
         return "Erreur système";
       }
       
@@ -113,7 +113,7 @@ class CFloatSpec extends CMbFieldSpec {
     if ($this->max) {
       $max = CMbFieldSpec::checkNumeric($this->max, false);
       if ($max === null) {
-        trigger_error("Spécification de maximum numérique invalide (max = $this->max)", E_USER_WARNING);
+        CModelObject::warning("Specification-de-maximum-numerique-invalide-max=max%d", $this->max);
         return "Erreur système";
       }
       

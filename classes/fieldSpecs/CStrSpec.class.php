@@ -190,4 +190,36 @@ class CStrSpec extends CMbFieldSpec {
     }
     return parent::filter($value);
   }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    $litteral = "Chaîne de caractère, longueurs : ";
+
+    $properties =  array();
+
+    if ($this->minLength) {
+      $properties[]="min : $this->minLength";
+    }
+
+    if ($this->maxLength) {
+      $properties[]="max : $this->maxLength";
+    }
+
+    if (!$this->maxLength && !$this->minLength && $this->length) {
+      $properties[]="$this->length caractères";
+    }
+
+    if (!$this->maxLength && !$this->length) {
+      $properties[]= "max : 255";
+    }
+
+    if (count($properties)) {
+      $litteral.= "[".implode(", ", $properties)."]";
+    }
+
+    return "$litteral. ".
+    parent::getLitteralDescription();
+  }
 }

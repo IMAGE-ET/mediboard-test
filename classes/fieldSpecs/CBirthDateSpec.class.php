@@ -26,7 +26,7 @@ class CBirthDateSpec extends CMbFieldSpec {
   /**
    * @see parent::getDBSpec()
    */
-  function getDBSpec(){
+  function getDBSpec() {
     return "CHAR(10)";
   }
 
@@ -84,5 +84,13 @@ class CBirthDateSpec extends CMbFieldSpec {
     CMbArray::defaultValue($params, "size", $maxLength);
     CMbArray::defaultValue($params, "maxlength", $maxLength);
     return $this->getFormElementText($object, $params, $value, $className);
+  }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    return "Date de naissance au format : 'YYYY-MM-DD', accepte les mois lunaires.".
+      parent::getLitteralDescription();
   }
 }

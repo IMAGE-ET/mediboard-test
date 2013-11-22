@@ -66,4 +66,12 @@ class CPctSpec extends CFloatSpec {
     parent::sample($object, $consistent);
     $object->{$this->fieldName} = rand(0, 100);
   }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    return "Nombre réel . ".
+    parent::getLitteralDescription();
+  }
 }

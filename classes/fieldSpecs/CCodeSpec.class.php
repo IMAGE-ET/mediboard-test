@@ -224,4 +224,32 @@ class CCodeSpec extends CMbFieldSpec {
       $propValue = "100000000000047";
     }
   }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    $litteral = "Code";
+
+    if ($this->ccam) {
+      $litteral = "Code CCAM de la forme : 'AAAANNN'";
+    }
+    if ($this->cim10) {
+      $litteral = "Code CIM10 de la forme : 'ANNN' ou 'ANNNN'";
+    }
+    if ($this->adeli) {
+      $litteral = "Code ADELI de 9 chiffres dont le dernier assure le contrôle de parité";
+    }
+    if ($this->insee) {
+      $litteral = "Code INSEE de 15 chiffres";
+    }
+    if ($this->rib) {
+      $litteral = "Code RIP de 23 chiffres dont les 2 derniers assurent le contrôle de parité";
+    }
+    if ($this->siret) {
+      $litteral = "Code SIRET de 14 chiffres";
+    }
+    return "$litteral. ".
+      parent::getLitteralDescription();
+  }
 }

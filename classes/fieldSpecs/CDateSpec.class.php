@@ -114,4 +114,12 @@ class CDateSpec extends CMbFieldSpec {
   function getFormHtmlElement($object, $params, $value, $className) {
     return $this->getFormElementDateTime($object, $params, $value, $className, CAppUI::conf("date"));
   }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    return "Date au format : 'YYYY-MM-DD'. ".
+    parent::getLitteralDescription();
+  }
 }

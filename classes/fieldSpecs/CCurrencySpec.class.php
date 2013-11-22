@@ -56,4 +56,12 @@ class CCurrencySpec extends CFloatSpec {
     $size = $this->precise ? "12, 5" : "10, 3";
     return "DECIMAL ($size)".($this->pos ? " UNSIGNED" : "");
   }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    return "Booléen au format : '0, 1'".
+    parent::getLitteralDescription();
+  }
 }

@@ -56,4 +56,12 @@ class CIpAddressSpec extends CMbFieldSpec {
     parent::sample($object, $consistent);
     $object->{$this->fieldName} = inet_pton("127.0.0.1");
   }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    return "Adresse IP au format binaire. ".
+    parent::getLitteralDescription();
+  }
 }

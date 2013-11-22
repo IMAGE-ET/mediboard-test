@@ -252,4 +252,31 @@ class CNumSpec extends CMbFieldSpec {
     }
     return $sHtml;
   }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    $literral = "Nombre entier";
+
+    if ($this->max !== null) {
+      $max = $this->max;
+      $literral.= " à 4 chiffres maximum";
+
+      if ($max > pow(2, 8)) {
+        $literral.= " à 4 chiffres maximum";
+      }
+
+      if ($max > pow(2, 16)) {
+        $literral.= " à 11 chiffres maximum";
+      }
+
+      if ($max > pow(2, 32)) {
+        $literral.= " à 20 chiffres maximum";
+      }
+    }
+
+    return "$literral. ".
+    parent::getLitteralDescription();
+  }
 }

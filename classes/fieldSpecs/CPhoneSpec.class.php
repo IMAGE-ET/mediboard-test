@@ -79,4 +79,12 @@ class CPhoneSpec extends CMbFieldSpec {
     
     return "<input type=\"tel\" name=\"$field\" value=\"$value\" class=\"$class styled-element\" $extra />";
   }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    return "Numéro de téléphone (chiffres seulement, pas d'espaces). ".
+    parent::getLitteralDescription();
+  }
 }

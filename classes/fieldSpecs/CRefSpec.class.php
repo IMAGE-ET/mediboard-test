@@ -149,4 +149,12 @@ class CRefSpec extends CMbFieldSpec {
     CMbArray::defaultValue($params, "size", 25);
     return $this->getFormElementText($object, $params, $value, $className);
   }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    return "Référence de classe, identifiant. ".
+    parent::getLitteralDescription();
+  }
 }

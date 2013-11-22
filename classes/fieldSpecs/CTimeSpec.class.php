@@ -116,4 +116,27 @@ class CTimeSpec extends CMbFieldSpec {
 
     return $this->getFormElementDateTime($object, $params, $value, $className, CAppUI::conf("time"));
   }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    $litteral = "Heure";
+    if ($this->duration) {
+      $litteral = "Durée";
+    }
+    $litteral.= " au format 'HH:mm:ss'";
+
+    if ($this->min || $this->max) {
+      if ($this->min) {
+        $litteral.=", minimum : '$this->min'";
+      }
+      if ($this->max) {
+        $litteral.=", maximum : '$this->max'";
+      }
+    }
+
+    return "$litteral. ".
+      parent::getLitteralDescription();
+  }
 }

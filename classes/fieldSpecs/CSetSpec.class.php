@@ -190,4 +190,12 @@ class CSetSpec extends CEnumSpec {
     $typeEnum = CMbArray::extract($params, "typeEnum");
     return parent::getLabelForAttribute($object, $params);
   }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    return "Liste de valeurs possible séparée par la chaine '|' (pipe). ".
+    parent::getLitteralDescription();
+  }
 }

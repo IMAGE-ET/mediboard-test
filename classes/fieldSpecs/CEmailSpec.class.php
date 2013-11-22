@@ -70,4 +70,12 @@ class CEmailSpec extends CMbFieldSpec {
     parent::sample($object, $consistent);
     $object->{$this->fieldName} = "noone@nowhere.com";
   }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    return "Courriel au format : 'XXXXX@XXXXXX.XXXX'. ".
+    parent::getLitteralDescription();
+  }
 }

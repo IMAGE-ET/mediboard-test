@@ -93,7 +93,7 @@ class CEnumSpec extends CMbFieldSpec {
   function checkOptions(){
     parent::checkOptions();
     if (!$this->list) {
-      trigger_error("Spécification 'list' manquante pour le champ '$this->fieldName' de la classe '$this->className'", E_USER_WARNING);
+      CModelObject::warning("CEnumSpec-list-missing-for-field-fieldName%s-of-class-className%s", $this->fieldName, $this->className);
     }
   }
 
@@ -228,5 +228,17 @@ class CEnumSpec extends CMbFieldSpec {
     // to extract the XHTML invalid attribute "typeEnum"
     $typeEnum = CMbArray::extract($params, "typeEnum");
     return parent::getLabelForAttribute($object, $params);
+  }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    $litterals = array();
+    foreach ($this->_list as $_list) {
+      $litterals[] = "'$_list' (".CAppUI::tr($this->className.".".$this->fieldName.".".$_list).")";
+    }
+    return "Chaine de caractère dont les valeurs possibles sont : ".implode(", ", $litterals).". ".
+    parent::getLitteralDescription();
   }
 }

@@ -100,7 +100,7 @@ class CMbFieldSpec {
           $field,
           get_class($this)
         );
-        trigger_error($error, E_USER_WARNING);
+        CModelObject::warning($error);
       }
     }
 
@@ -113,7 +113,7 @@ class CMbFieldSpec {
     
     $this->checkOptions();
   }
-  
+
   /**
    * Get spec options and there own meta-prop
    * 
@@ -510,7 +510,7 @@ class CMbFieldSpec {
     $fields = get_object_vars($object);
     if (!$field || $field === true || !is_scalar($field) || !array_key_exists($field, $fields)) {
       $class = get_class($this);
-      trigger_error("Elément cible '$field' invalide ou inexistant dans la classe '$class'", E_USER_WARNING);
+      CModelObject::warning("Element-cible-field%s-invalide-ou-inexistant-dans-la-classe%s", $field, $class);
       return "Erreur système";
     }
   }
@@ -1130,6 +1130,44 @@ class CMbFieldSpec {
    */
   function filter($value) {
     return trim($value);
+  }
+
+  /**
+   * Get the litteral description of the spec
+   *
+   * @return string
+   */
+  function getLitteralDescription() {
+    $lines = array();
+
+    if ($this->notNull) {
+      $lines[] = "Obligatoire";
+    }
+    if ($this->moreThan) {
+      $lines[] = "Doit être supérieur au champ : '$this->moreThan'";
+    };
+    if ($this->moreEquals) {
+      $lines[] = "Doit être supérieur ou égal au champ : '$this->moreEquals'";
+    };
+    if ($this->sameAs) {
+      $lines[] = "Doit être identique à : '$this->sameAs'";
+    };
+    if ($this->notContaining) {
+      $lines[] = "Ne doit pas contenir : '$this->notContaining'";
+    };
+    if ($this->notNear) {
+      $lines[] = "Ne doit pas être proche de : '$this->notContaining'";
+    };
+    if ($this->alphaAndNum) {
+      $lines[] = "Doit contenir au moins un chiffre ET une lettre sans diacritique (et aucun autre type de caractère)";
+    };
+    if ($this->dependsOn) {
+      $lines[] = "Doit contenir au moins un chiffre ET une lettre";
+    };
+    if ($this->default) {
+      $lines[] = "Valeur par défaut : '$this->default'";
+    }
+    return implode(". ", $lines);
   }
 }
 

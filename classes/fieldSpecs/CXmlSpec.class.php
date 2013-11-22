@@ -55,4 +55,14 @@ class CXmlSpec extends CMbFieldSpec {
 </note>
 XML;
   }
+
+  /**
+   * Get the litteral description of the spec
+   *
+   * @return string
+   */
+  function getLitteralDescription() {
+    return "texte formaté en xml'. ".
+    parent::getLitteralDescription();
+  }
 }

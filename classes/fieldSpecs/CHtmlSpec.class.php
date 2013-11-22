@@ -53,7 +53,7 @@ class CHtmlSpec extends CMbFieldSpec {
 
     // Escape warnings, returns false if really invalid
     if (!@DOMDocument::loadXML($source)) {
-      trigger_error("Error: Html document bad formatted", E_USER_WARNING);
+      CModelObject::warning("Error-Html-document-bad-formatted");
       return "Le document HTML est mal formé, ou la requête n'a pas pu se terminer.";
     }
 
@@ -81,5 +81,13 @@ EOD;
    */
   function getFormHtmlElement($object, $params, $value, $className){
     return $this->getFormElementTextarea($object, $params, $value, $className);
+  }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    return "Un texte formaté au format html. ".
+    parent::getLitteralDescription();
   }
 }

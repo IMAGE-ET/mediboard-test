@@ -70,4 +70,12 @@ class CTextSpec extends CMbFieldSpec {
     }
     return parent::filter($value);
   }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    return "Texte long. ".
+      parent::getLitteralDescription();
+  }
 }

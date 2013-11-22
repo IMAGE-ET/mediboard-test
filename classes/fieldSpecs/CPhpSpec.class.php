@@ -57,4 +57,12 @@ while(!feof($file)) {
 fclose($file);
 ?>';
   }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    return "Texte contenant du code PHP. ".
+    parent::getLitteralDescription();
+  }
 }

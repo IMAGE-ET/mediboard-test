@@ -211,4 +211,12 @@ class CBoolSpec extends CMbFieldSpec {
     parent::sample($object, $consistent);
     $object->{$this->fieldName} = rand(0, 1);
   }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    return "Booléen au format : '0, 1'. ".
+      parent::getLitteralDescription();
+  }
 }

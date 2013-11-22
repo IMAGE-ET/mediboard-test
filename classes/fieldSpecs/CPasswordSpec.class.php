@@ -119,4 +119,12 @@ class CPasswordSpec extends CMbFieldSpec {
     parent::sample($object, $consistent);
     $object->{$this->fieldName} = self::randomString(array_merge(range('0', '9'), range('a', 'z'), range('A', 'Z')), 8);
   }
+
+  /**
+   * @see parent::getLitteralDescription()
+   */
+  function getLitteralDescription() {
+    return "Mot de passe. ".
+    parent::getLitteralDescription();
+  }
 }
