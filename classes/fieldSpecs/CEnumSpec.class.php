@@ -101,9 +101,9 @@ class CEnumSpec extends CMbFieldSpec {
    * @see parent::checkProperty()
    */
   function checkProperty($object){
-    $propValue = $object->{$this->fieldName};
+    $value = $object->{$this->fieldName};
     $specFragments = $this->getListValues($this->list);
-    if (!in_array($propValue, $specFragments)) {
+    if (!in_array($value, $specFragments)) {
       return "N'a pas une valeur possible";
     }
 
@@ -117,6 +117,13 @@ class CEnumSpec extends CMbFieldSpec {
     parent::sample($object, $consistent);
     $specFragments = $this->getListValues($this->list);
     $object->{$this->fieldName} = self::randomString($specFragments, 1);
+  }
+
+  /**
+   * @see parent::regressionSamples()
+   */
+  function regressionSamples() {
+    return $this->getListValues($this->list);;
   }
 
   /**
@@ -241,4 +248,6 @@ class CEnumSpec extends CMbFieldSpec {
     return "Chaine de caractère dont les valeurs possibles sont : ".implode(", ", $litterals).". ".
     parent::getLitteralDescription();
   }
+
+
 }

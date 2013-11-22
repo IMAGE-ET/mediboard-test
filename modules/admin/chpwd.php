@@ -11,18 +11,18 @@
  * @link     http://www.mediboard.org
  */
 
-$forceChange  = CValue::request("forceChange");
-$lifeDuration = CValue::request("lifeDuration");
+$forceChange  = CView::request("forceChange", "bool");
+$lifeDuration = CView::request("lifeDuration", "bool");
+CView::checkin();
 
 $user = new CUser;
 $user->load(CAppUI::$user->_id);
 $user->updateSpecs();
 $user->isLDAPLinked();
 
-$password_info =
-  (CAppUI::$user->_specs['_user_password']->minLength > 4) ?
-    "Le mot de passe doit être composé d'au moins 6 caractères, comprenant des lettres et au moins un chiffre." :
-    "Le mot de passe doit être composé d'au moins 4 caractères.";
+$password_info = (CAppUI::$user->_specs['_user_password']->minLength > 4) ?
+  "Le mot de passe doit être composé d'au moins 6 caractères, comprenant des lettres et au moins un chiffre." :
+  "Le mot de passe doit être composé d'au moins 4 caractères.";
 
 // Création du template
 $smarty = new CSmartyDP();

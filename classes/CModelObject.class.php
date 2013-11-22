@@ -13,6 +13,7 @@
  * - Metamodel: properties, class, validation
  * - Observation: handlers
  *
+ *
  * @abstract Mediboard model definition
  */
 class CModelObject {

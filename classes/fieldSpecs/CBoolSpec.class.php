@@ -75,13 +75,16 @@ class CBoolSpec extends CMbFieldSpec {
    * @see parent::checkProperty()
    */
   function checkProperty($object){
-    $propValue = CMbFieldSpec::checkNumeric($object->{$this->fieldName}, true);
+    $value = $object->{$this->fieldName};
 
-    if ($propValue === null) {
+    // Has to be numeric
+    $value = CMbFieldSpec::checkNumeric($value, true);
+    if ($value === null) {
       return "N'est pas une chaîne numérique";
     }
 
-    if ($propValue != 0 && $propValue != 1) {
+    // Only two options
+    if ($value !== 0 && $value != 1) {
       return "Ne peut être différent de 0 ou 1";
     }
 
@@ -210,6 +213,13 @@ class CBoolSpec extends CMbFieldSpec {
   function sample($object, $consistent = true){
     parent::sample($object, $consistent);
     $object->{$this->fieldName} = rand(0, 1);
+  }
+
+  /**
+   * @see parent::regressionSamples()
+   */
+  function regressionSamples() {
+    return array("0","1");
   }
 
   /**

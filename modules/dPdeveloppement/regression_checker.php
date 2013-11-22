@@ -19,6 +19,7 @@ $ignored = array(
   "/index.php",
   "/setup.php",
   "/config.php",
+  "/configuration.php",
   "/preferences.php",
 );
 

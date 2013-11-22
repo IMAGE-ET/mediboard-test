@@ -69,15 +69,11 @@ class CMbFieldSpecFact {
    */
   static function getSpecWithClassName($class, $field, $prop) {
     $spec_class  = "CMbFieldSpec";
+
+    // Get Spec type
     $first_space = strpos($prop, " ");
-    
-    if ($first_space === false) {
-      $spec_type = $prop;
-    }
-    else {
-      $spec_type = substr($prop, 0, $first_space);
-    }
-    
+    $spec_type = $first_space === false ? $prop : substr($prop, 0, $first_space);
+
     // Get spec class
     if ($spec_type && (null == $spec_class = CMbArray::get(self::$classes, $spec_type))) {
       trigger_error("No spec class name for '$class::$field' = '$prop'", E_USER_ERROR);

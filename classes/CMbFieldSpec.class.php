@@ -62,12 +62,12 @@ class CMbFieldSpec {
 
   /**
    * Standard constructor
-   * 
-   * @param string $className Class name of the owner object
-   * @param string $field     Field name 
-   * @param string $prop      Serialized prop
-   * 
-   * @return void
+   *
+   * @param string      $className Class name of the owner object
+   * @param string      $field     Field name
+   * @param string|null $prop      Serialized prop
+   *
+   * @return \CMbFieldSpec
    */
   function __construct($className, $field, $prop = null) {
     $this->className = $className;
@@ -518,7 +518,7 @@ class CMbFieldSpec {
   /**
    * Check property value with regard to this specification
    * 
-   * @param object $object Objcet holding de field
+   * @param object $object Object holding de field
    * 
    * @return string Error-like message
    * @todo rename to checkValue()
@@ -1008,7 +1008,7 @@ class CMbFieldSpec {
   }
   
   /**
-   * Check whether property value bound to objects is compliant to the specification
+   * Check whether property value bound to object is compliant with the specification
    * 
    * @param object $object Object bound to property
    * 
@@ -1030,6 +1030,15 @@ class CMbFieldSpec {
     if ($consistent) {
       srand(crc32($object->{$this->fieldName}));
     }
+  }
+
+  /**
+   * Produce sample values to be checked for non regression
+   *
+   * @return array
+   */
+  function regressionSamples() {
+    return array();
   }
 
   /**

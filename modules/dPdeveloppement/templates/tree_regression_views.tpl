@@ -2,11 +2,11 @@
   <div id="files-{{$dir}}-trigger" class="tree-trigger">{{tr}}Toggle{{/tr}}</div>
   <div class="regression">
     {{if !is_array($views)}}
-      <button type="button" class="change notext singleclick" onclick="RegressionChecker.run(this);">
+      <button type="button" class="change notext singleclick" onclick="RegressionChecker.show(this);">
         {{tr}}Run{{/tr}}
       </button>
     {{else}}
-      <button type="button" class="search notext singleclick" onclick="RegressionChecker.show(this);">
+      <button type="button" class="search notext singleclick" onclick="RegressionChecker.run(this);">
         {{tr}}Show{{/tr}}
       </button>
     {{/if}}

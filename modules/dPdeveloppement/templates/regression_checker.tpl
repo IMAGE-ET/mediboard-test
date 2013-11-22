@@ -1,12 +1,10 @@
 {{mb_script module=developpement script=regression_checker}}
 
 <script type="text/javascript">
-  Main.add(function () {
-    PairEffect.initGroup('tree-content');
-  });
-</script>
+  // Too many IDs to warn duplicates
+  Element.warnDuplicates = Prototype.emptyFunction;
 
-<script type="text/javascript">
+  Main.add(PairEffect.initGroup.curry('tree-content'));
   Main.add(ViewPort.SetAvlHeight.curry('tree-files', 1));
 </script>
 
