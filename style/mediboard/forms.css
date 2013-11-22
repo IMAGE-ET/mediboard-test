@@ -369,6 +369,10 @@ a.button.big.notext {
   padding-top: 6px;
 }
 
+button.target:before, a.button.target:before {
+  content: url(images/buttons/target.png);
+}
+
 button.copy:before, a.button.copy:before {
   content: url(images/buttons/copy.png);
 }
