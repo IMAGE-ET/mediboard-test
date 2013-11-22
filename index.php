@@ -115,41 +115,6 @@ if (!CAppUI::$instance->user_id) {
 // Update session lifetime
 CSessionHandler::setUserDefinedLifetime();
 
-// Default view
-$index = "index";
-
-// Don't output anything. Usefull for fileviewers, ajax requests, exports, etc.
-$suppressHeaders = CValue::request("suppressHeaders");
-$token_hash = CValue::get("token");
-
-// WSDL if often stated as final with no value (&wsdl) wrt client compat
-$wsdl = CValue::request("wsdl");
-if (isset($wsdl)) {
-  $suppressHeaders = 1;
-  $index = $wsdl;
-  $wsdl = 1;
-}
-
-// Output the charset header in case of an ajax request
-if ($ajax = CValue::request("ajax")) {
-  $suppressHeaders = 1;
-  $index = $ajax;
-  $ajax = 1;
-}
-
-// Raw output for export purposes
-if ($raw = CValue::request("raw")) {
-  $suppressHeaders = 1;
-  $index = $raw;
-}
-
-// Check if we are in the dialog mode
-if ($dialog = CValue::request("dialog")) {
-  $index = $dialog;
-  $dialog = 1;
-}
-CAppUI::$dialog = &$dialog;
-
 /*
 try {
   include "./classes/CAuth.class.php";
@@ -162,9 +127,9 @@ catch (AuthenticationFailedException $e) {
 
 // If the user uses a token, his session should not be reset, but only redirected
 $do_login = false;
+$token_hash = CValue::get("token");
 if ($token_hash) {
   $token = CViewAccessToken::getByHash($token_hash);
-
   // If the user is already logged in (in a normal session), keep his session, but use the params
   if (CAppUI::$instance->user_id && !CAppUI::$token_expiration) {
     if ($token->isValid() && CAppUI::$instance->user_id == $token->user_id) {
@@ -214,12 +179,15 @@ if (isset($_REQUEST["login"])) {
     CApp::rip();
   }
 
+  // Login OK redirection for popup authentication
   $redirect = CValue::request("redirect");
+  $dialog = CValue::request("dialog");
   parse_str($redirect, $parsed_redirect);
   if ($ok && $dialog && isset($parsed_redirect["login_info"])) {
     $redirect = "m=system&a=login_ok&dialog=1";
   }
 
+  // Actual refirection
   if ($redirect) {
     CAppUI::redirect($redirect);
   }
@@ -229,6 +197,46 @@ if (isset($_REQUEST["login"])) {
     CApp::emptyPostData();
   }
 }
+
+// Default view
+$index = "index";
+
+// Don't output anything. Usefull for fileviewers, ajax requests, exports, etc.
+$suppressHeaders = CValue::request("suppressHeaders");
+
+// WSDL if often stated as final with no value (&wsdl) wrt client compat
+$wsdl = CValue::request("wsdl");
+if (isset($wsdl)) {
+  $suppressHeaders = 1;
+  $index = $wsdl;
+  $wsdl = 1;
+}
+
+// Info output for view reflexion purposes
+if ($info = CValue::request("info")) {
+  $index = $info;
+  $info = 1;
+}
+
+// Output the charset header in case of an ajax request
+if ($ajax = CValue::request("ajax")) {
+  $suppressHeaders = 1;
+  $index = $ajax;
+  $ajax = 1;
+}
+
+// Raw output for export purposes
+if ($raw = CValue::request("raw")) {
+  $suppressHeaders = 1;
+  $index = $raw;
+}
+
+// Check if we are in the dialog mode
+if ($dialog = CValue::request("dialog")) {
+  $index = $dialog;
+  $dialog = 1;
+}
+CAppUI::$dialog = &$dialog;
 
 // clear out main url parameters
 $m = $a = $u = $g = "";
