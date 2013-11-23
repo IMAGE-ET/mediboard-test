@@ -1,6 +1,3 @@
-// Used in big DOM with lots of IDs, check
-Element.warnDuplicates = Prototype.emptyFunction;
-
 Chrono = {
   total: 0,
   start: function() {

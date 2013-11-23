@@ -1,9 +1,9 @@
 {{mb_script module=developpement script=code_sniffer}}
 
 <script type="text/javascript">
-  Main.add(function () {
-    PairEffect.initGroup('tree-content');
-  });
+  // Too many IDs to warn duplicates
+  Element.warnDuplicates = Prototype.emptyFunction;
+  Main.add(PairEffect.initGroup.curry('tree-content'));
 </script>
 
 <div id="sniff-run" style="display: none; width: 800px;">
