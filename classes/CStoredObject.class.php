@@ -248,7 +248,7 @@ class CStoredObject extends CModelObject {
   /**
    * Load the object database version
    * 
-   * @return CMbObject of the same class
+   * @return self
    */
   function loadOldObject() {
     if (!$this->_old) {

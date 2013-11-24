@@ -128,7 +128,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
       }
 
       // Récupération de l'opération courante à la date du relevé
-      $operation = $sejour->getCurrOperation($observation_dt);
+      $operation = $sejour->loadRefCurrOperation($observation_dt);
 
       if (!$operation->_id) {
         return $exchange_hl7v2->setAckAR($ack, "E301", null, $operation);

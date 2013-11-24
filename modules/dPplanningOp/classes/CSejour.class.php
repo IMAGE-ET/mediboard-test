@@ -114,8 +114,11 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $nature_accident;
 
   // Form Fields
+  /** @deprecated */
   public $_entree;
+  /** @deprecated */
   public $_sortie;
+
   public $_duree_prevue;
   public $_duree_prevue_heure;
   public $_duree_reelle;
@@ -154,6 +157,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_count_modeles_etiq;
   public $_count_tasks;
   public $_count_pending_tasks;
+  public $_count_prescriptions;
+  public $_count_evenements_ssr;
+  public $_count_evenements_ssr_week;
   public $_collisions = array();
   public $_rques_sejour;
 
@@ -180,6 +186,8 @@ class CSejour extends CFacturable implements IPatientRelated {
   
   // References
   /** @var COperation */
+  public $_ref_first_operation;
+  /** @var COperation */
   public $_ref_last_operation;
   /** @var CAffectation[] */
   public $_ref_affectations;
@@ -189,6 +197,8 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_ref_last_affectation;
   /** @var CAffectation */
   public $_ref_curr_affectation;
+  /** @var CAffectation */
+  public $_ref_prev_affectation;
   /** @var CAffectation */
   public $_ref_next_affectation;
   /** @var CGHM */
@@ -281,6 +291,14 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_ref_suivi_medical;
   /** @var CItemPrestation[] */
   public $_ref_prestations;
+  /** @var CNaissance */
+  public $_ref_naissances;
+  /** @var CUniteFonctionnelle */
+  public $_ref_uf_hebergement;
+  /** @var CUniteFonctionnelle */
+  public $_ref_uf_soins;
+  /** @var CUniteFonctionnelle */
+  public $_ref_uf_medicale;
 
   // External objects
   /** @var CCodeCIM10 */
@@ -321,9 +339,19 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_modifier_sortie;
   public $_modifier_entree;
 
-  function CSejour() {
+  /**
+   * Standard constructor
+   */
+  function __construct() {
     parent::__construct();
-    $this->_locked = CAppUI::conf("dPplanningOp CSejour locked");
+
+    // Conf cache
+    static $conf_locked;
+    if (null === $conf_locked) {
+      $conf_locked = $this->conf("locked");
+    }
+
+    $this->_locked = $conf_locked;
   }
 
   /**
@@ -879,9 +907,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
-   * Object store in DB
-   *
-   * @return null|string|void
+   * @see parent::store()
    */
   function store() {
     $this->completeField("entree_reelle", "entree", "patient_id", "type_pec", "grossesse_id");
@@ -1069,7 +1095,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     /** @var CNaissance[] $naissances */
     $naissances = array();
     if ($change_grossesse) {
-      $naissances = $this->loadOldObject()->loadRefGrossesse()->loadRefsNaissances();
+      /** @var CSejour $old */
+      $old =  $this->loadOldObject();
+      $naissances = $old->loadRefGrossesse()->loadRefsNaissances();
     }
 
     // On fait le store du séjour
@@ -1221,7 +1249,12 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     return null;
   }
-  
+
+  /**
+   * Generate NDA
+   *
+   * @return null|string Error message if not null
+   */
   function generateNDA() {
     $group = CGroups::loadCurrent();
     if (!$group->isNDASupplier()) {
@@ -1240,11 +1273,16 @@ class CSejour extends CFacturable implements IPatientRelated {
     return null;
   }
 
+  /**
+   * Delete affectations
+   *
+   * @return null|string Store-like message
+   */
   function delAffectations() {
     $this->loadRefsAffectations();
 
     $msg = null;
-    // dPhospi might not be active
+    // Module might not be active
     if ($this->_ref_affectations) {
       foreach ($this->_ref_affectations as $key => $value) {
         $msg .= $this->_ref_affectations[$key]->deleteOne();
@@ -1254,6 +1292,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $msg;
   }
 
+  /**
+   * Cancel all ope
+   *
+   * @return null|string
+   */
   function cancelOperations() {
     $this->loadRefsOperations();
 
@@ -1266,15 +1309,29 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $msg;
   }
 
+  /**
+   * @see parent::getActeExecution()
+   */
   function getActeExecution() {
     $this->updateFormFields();
   }
 
+  /**
+   * Update mixed entree and sortie
+   *
+   * @deprecated
+   * @return void
+   */
   function updateEntreeSortie() {
     $this->_entree = CValue::first($this->entree_reelle, $this->entree_prevue);
     $this->_sortie = CValue::first($this->sortie_reelle, $this->sortie_prevue);
   }
 
+  /**
+   * Update date isolement within sejour bounds
+   *
+   * @return void
+   */
   function updateIsolement() {
     $this->_isolement_date = CValue::first($this->isolement_date, $this->_entree);
   }
@@ -1613,14 +1670,14 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * Load current affectation relative to a date
    *
-   * @param datetime $date Reference datetime, now if null
+   * @param datetime $datetime   Reference datetime, now if null
+   * @param ref      $service_id Service filter
    *
    * @return CAffectation
    */
-  /* @todo A dédoublonner avec getCurrAffectation  */
-  function loadRefCurrAffectation($date = "", $service_id = "") {
-    if (!$date) {
-      $date = CMbDT::dateTime();
+  function loadRefCurrAffectation($datetime = null, $service_id = null) {
+    if (!$datetime) {
+      $datetime = CMbDT::dateTime();
     }
 
     $affectation = new CAffectation();
@@ -1629,7 +1686,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     if ($service_id) {
       $where["service_id"] = " = '$service_id'";
     }
-    $where[] = "'$date' BETWEEN entree AND sortie";
+    $where[] = "'$datetime' BETWEEN entree AND sortie";
     $affectation->loadObject($where);
     $affectation->loadRefLit()->loadCompleteView();
 
@@ -1644,7 +1701,7 @@ class CSejour extends CFacturable implements IPatientRelated {
    *
    * @return CAffectation[] Affectations array with curr, prev and next keys
    */
-  function loadSurrAffectations($date = "") {
+  function loadSurrAffectations($date = null) {
     if (!$date) {
       $date = CMbDT::dateTime();
     }
@@ -1679,6 +1736,8 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
+   * Charge le dossier médical
+   *
    * @return CDossierMedical
    */
   function loadRefDossierMedical() {
@@ -1686,51 +1745,71 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
+   * Charge l'établissement externe de provenance
+   *
    * @return CEtabExterne
    */
-  function loadRefEtablissementProvenance($cache = true) {
-    return $this->_ref_etablissement_provenance = $this->loadFwdRef("etablissement_entree_id", $cache);
+  function loadRefEtablissementProvenance() {
+    return $this->_ref_etablissement_provenance = $this->loadFwdRef("etablissement_entree_id", true);
   }
 
   /**
+   * Charge l'établissement externe de transfert
+   *
    * @return CEtabExterne
    */
-  function loadRefEtablissementTransfert($cache = true) {
-    return $this->_ref_etablissement_transfert = $this->loadFwdRef("etablissement_sortie_id", $cache);
+  function loadRefEtablissementTransfert() {
+    return $this->_ref_etablissement_transfert = $this->loadFwdRef("etablissement_sortie_id", true);
   }
 
   /**
+   * Charge le service de mutation
+   *
    * @return CService
    */
-  function loadRefServiceMutation($cache = true) {
-    return $this->_ref_service_mutation = $this->loadFwdRef("service_sortie_id", $cache);
+  function loadRefServiceMutation() {
+    return $this->_ref_service_mutation = $this->loadFwdRef("service_sortie_id", true);
   }
 
   /**
+   * Charge l'indicateur de prix
+   *
    * @return CChargePriceIndicator
    */
-  function loadRefChargePriceIndicator($cache = true) {
-    return $this->_ref_charge_price_indicator = $this->loadFwdRef("charge_id", $cache);
+  function loadRefChargePriceIndicator() {
+    return $this->_ref_charge_price_indicator = $this->loadFwdRef("charge_id", true);
   }
 
   /**
+   * Charge le mode d'entrée
+   *
    * @return CModeEntreeSejour
    */
-  function loadRefModeEntree($cache = true) {
-    return $this->_ref_mode_entree = $this->loadFwdRef("mode_entree_id", $cache);
+  function loadRefModeEntree() {
+    return $this->_ref_mode_entree = $this->loadFwdRef("mode_entree_id", true);
   }
 
   /**
+   * Charge le mode de sortie
+   *
    * @return CModeSortieSejour
    */
-  function loadRefModeSortie($cache = true) {
-    return $this->_ref_mode_sortie = $this->loadFwdRef("mode_sortie_id", $cache);
+  function loadRefModeSortie() {
+    return $this->_ref_mode_sortie = $this->loadFwdRef("mode_sortie_id", true);
   }
 
-  function countNotificationVisite($date = '') {
+  /**
+   * Compte les observations de visite du praticien responsable
+   *
+   * @param date $date A une date donnée, maintenant si null
+   *
+   * @return int
+   */
+  function countNotificationVisite($date = null) {
     if (!$date) {
       $date = CMbDT::date();
     }
+
     $this->completeField("praticien_id");
     $observation = new CObservationMedicale();
     $where = array();
@@ -1742,7 +1821,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
-   * @param bool $cache Use cache
+   * Charge le patient
+   *
+   * @param bool $cache Utilise le cache
    *
    * @return CPatient
    */
@@ -1759,22 +1840,37 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
-   * @param bool $cache
+   * Charge le praticien responsable
+   *
+   * @param bool $cache Utiliser le cache
    *
    * @return CMediusers
    */
   function loadRefPraticien($cache = true) {
-    $this->_ref_praticien = $this->loadFwdRef("praticien_id", $cache);
-    $this->_ref_executant = $this->_ref_praticien;
-    $this->_ref_praticien->loadRefFunction();
-    return $this->_ref_praticien;
+    /** @var CMediusers $praticien */
+    $praticien = $this->loadFwdRef("praticien_id", $cache);
+    $this->_ref_executant = $praticien;
+    $praticien->loadRefFunction();
+    return $this->_ref_praticien = $praticien;
   }
 
+  /**
+   * Charge les diagnostics CIM principal et relié
+   *
+   * @return void
+   */
   function loadExtDiagnostics() {
     $this->_ext_diagnostic_principal = $this->DP ? new CCodeCIM10($this->DP, 1) : null;
     $this->_ext_diagnostic_relie     = $this->DR ? new CCodeCIM10($this->DR, 1) : null;
   }
 
+  /**
+   * Charge les diagnostics CIM associés
+   *
+   * @param bool $split Notation française avec le point séparateur après trois caractères
+   *
+   * @return string[] Codes CIM
+   */
   function loadDiagnosticsAssocies($split = true) {
     $this->_diagnostics_associes = array();
     if ($this->_ref_dossier_medical->_id) {
@@ -1792,16 +1888,29 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
+   * Charge le niveau de prestation principal
+   *
    * @return CPrestation
    */
   function loadRefPrestation() {
     return $this->_ref_prestation = $this->loadFwdRef("prestation_id", true);
   }
 
-  function loadRefsTransmissions($cible_importante = false, $important = false, $macro_cible = false, $limit = "") {
+  /**
+   * Charge les transmissions du séjour
+   *
+   * @param bool $cible_importante Filtrer sur les cibles importantes
+   * @param bool $important        Filtrer sur le degré important
+   * @param bool $macro_cible      N'utiliser que les macrocible (uniquement pour les cibles importantes)
+   * @param null $limit            Limite SQL
+   *
+   * @return array|CStoredObject[]|null
+   */
+  function loadRefsTransmissions($cible_importante = false, $important = false, $macro_cible = false, $limit = null) {
     $this->_ref_transmissions = array();
+
+    // Chargement des dernieres transmissions des cibles importantes
     if ($cible_importante) {
-      // Chargement de la derniere transmission importante (macrocible)
       $transmission = new CTransmissionMedicale();
       $ljoin = array();
       $ljoin["category_prescription"] = "category_prescription.category_prescription_id = transmission_medicale.object_id";
@@ -1818,15 +1927,18 @@ class CSejour extends CFacturable implements IPatientRelated {
       $order = "date DESC";
       $this->_ref_transmissions = $transmission->loadList($where, $order, $limit, null, $ljoin);
     }
+
+    // Chargement des transmissions de degré important
     if ($important) {
-      // Chargement des transmissions de degré important
       $transmission = new CTransmissionMedicale;
       $where = array();
       $where["sejour_id"] =  "= '$this->_id'";
       $order = "date DESC";
       $where["degre"] = " = 'high'";
+
       $this->_ref_transmissions = $this->_ref_transmissions + $transmission->loadList($where, $order, $limit);
     }
+
     if (!$cible_importante && !$important) {
       $this->_ref_transmissions = $this->loadBackRefs("transmissions");
     }
@@ -1835,12 +1947,15 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
-   * @param bool $important
+   * Charge les observations du séjour
+   *
+   * @param bool $important Filtrer les observations importantes
    *
    * @return CObservationMedicale[]
    */
   function loadRefsObservations($important = false) {
     $order = "date DESC";
+
     if ($important) {
       $obs = new CObservationMedicale;
       $where = array();
@@ -1852,21 +1967,43 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_observations = $this->loadBackRefs("observations", $order);
   }
 
+  /**
+   * Comptes les tâches en court et réalisées
+   *
+   * @return int|null
+   */
   function countTasks() {
     $where["realise"] = "!= '1'";
     $this->_count_pending_tasks =  $this->countBackRefs("tasks", $where);
     return $this->_count_tasks = $this->countBackRefs("tasks");
   }
 
+  /**
+   * Charge les tâches d'un séjour
+   *
+   * @return CSejourTask[]
+   */
   function loadRefsTasks() {
     return $this->_ref_tasks = $this->loadBackRefs("tasks");
   }
 
+  /**
+   * Charge les examens IGS
+   *
+   * @return CExamIgs[]
+   */
   function loadRefsExamsIGS() {
     return $this->_ref_exams_igs = $this->loadBackRefs("exams_igs");
   }
 
-  function loadSuiviMedical($datetime_min = "") {
+  /**
+   * Charge tout le suivi médical, composé d'observations, transmissions, consultations et prescriptions
+   *
+   * @param date $datetime_min Date de référence à partir de laquelle filtrer
+   *
+   * @return array
+   */
+  function loadSuiviMedical($datetime_min = null) {
     if ($datetime_min) {
       $trans = new CTransmissionMedicale();
       $whereTrans = array();
@@ -1968,6 +2105,13 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_suivi_medical;
   }
 
+  /**
+   * Charge toutes les constantes médicales et l'ajoute au suivi médical
+   *
+   * @param ref $user_id Filtrer sur les créateur de la ligne
+   *
+   * @return CMbObject[]
+   */
   function loadRefConstantes($user_id = null) {
     /** @var CConstantesMedicales[] $constantes */
     $constantes = $this->loadListConstantesMedicales();
@@ -1997,8 +2141,8 @@ class CSejour extends CFacturable implements IPatientRelated {
    *
    * @return CGroups
    */
-  function loadRefEtablissement($cache = true) {
-    return $this->_ref_group = $this->loadFwdRef("group_id", $cache);
+  function loadRefEtablissement() {
+    return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
 
   /**
@@ -2028,22 +2172,26 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_fiche_autonomie = $this->loadUniqueBackRef("fiche_autonomie");
   }
 
+  /**
+   * Charge le praticien adressant
+   *
+   * @return CMedecin
+   */
   function loadRefAdresseParPraticien() {
-    $this->_ref_adresse_par_prat = new CMedecin();
-    return $this->_ref_adresse_par_prat->load($this->adresse_par_prat_id);
+    return $this->_ref_adresse_par_prat = $this->loadFwdRef($this->adresse_par_prat_id, true);
   }
 
+  /**
+   * Charge le dossier d'anesthésie associé au séjour
+   *
+   * @return CConsultAnesth
+   */
   function loadRefsConsultAnesth() {
     if ($this->_ref_consult_anesth) {
       return $this->_ref_consult_anesth;
     }
 
-    $order = "consultation_anesth_id ASC";
-    $this->_ref_consult_anesth = new CConsultAnesth();
-    $this->_ref_consult_anesth->sejour_id = $this->_id;
-    $this->_ref_consult_anesth->loadMatchingObject($order);
-
-    return $this->_ref_consult_anesth;
+    return $this->_ref_consult_anesth = $this->loadFirstBackRef("consultations_anesths", "consultation_anesth_id ASC");
   }
 
   /**
@@ -2071,10 +2219,10 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_consultations;
   }
 
-  /*
+  /**
    * Chargement de toutes les prescriptions liées au sejour (object_class CSejour)
    *
-   * @return void|CPrescription[]
+   * @return CPrescription[]
    */
   function loadRefsPrescriptions() {
     $prescriptions = $this->loadBackRefs("prescriptions");
@@ -2097,7 +2245,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
-   * @return CPrescription|null
+   * Chargement de la prescription d'hospitalisation
+   *
+   * @return CPrescription
    */
   function loadRefPrescriptionSejour() {
     if (!CModule::getActive("dPprescription")) {
@@ -2113,7 +2263,13 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_prescription_sejour;
   }
 
+  /**
+   * Chargement de l'ensemble des prescripteurs
+   *
+   * @return CMediusers[]
+   */
   function loadRefsPrescripteurs() {
+    $this->_ref_prescripteurs = array();
     $this->loadRefsPrescriptions();
     foreach ($this->_ref_prescriptions as $_prescription) {
       $_prescription->getPraticiens();
@@ -2126,9 +2282,13 @@ class CSejour extends CFacturable implements IPatientRelated {
         }
       }
     }
+
+    return $$this->_ref_prescripteurs;
   }
 
   /**
+   * Chargement des remplacements pour ce séjour
+   *
    * @return CReplacement[]
    */
   function loadRefReplacements(){
@@ -2151,12 +2311,21 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
+   * Chargement de la grossesse associée
+   *
    * @return CGrossesse
    */
   function loadRefGrossesse() {
-    return $this->_ref_grossesse = $this->loadFwdRef("grossesse_id");
+    return $this->_ref_grossesse = $this->loadFwdRef("grossesse_id", true);
   }
 
+  /**
+   * Cherche si utilisateur est remplacant pour le séjour
+   *
+   * @param ref $replacer_id Filtre sur l'utilisateur
+   *
+   * @return int Nombre de remplacement
+   */
   function isReplacer($replacer_id) {
     $replacement = new CReplacement;
     $replacement->sejour_id   = $this->_id;
@@ -2164,6 +2333,13 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $replacement->countMatchingList();
   }
 
+  /**
+   * Chargement de constantes médicales
+   *
+   * @param array $where Clauses where
+   *
+   * @return CConstantesMedicales[]
+   */
   function loadListConstantesMedicales($where = array()) {
     if ($this->_list_constantes_medicales) {
       return $this->_list_constantes_medicales;
@@ -2183,9 +2359,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   function loadRefsFwd($cache = true) {
     $this->loadRefPatient($cache);
     $this->loadRefPraticien($cache);
-    $this->loadRefEtablissement($cache);
-    $this->loadRefEtablissementTransfert($cache);
-    $this->loadRefServiceMutation($cache);
+    $this->loadRefEtablissement();
+    $this->loadRefEtablissementTransfert();
+    $this->loadRefServiceMutation();
     $this->loadExtCodesCCAM();
     $this->loadRefsFactureEtablissement();
   }
@@ -2281,10 +2457,15 @@ class CSejour extends CFacturable implements IPatientRelated {
    * Charge le sejour ayant les traits suivants :
    * - Meme patient
    * - Meme praticien si praticien connu
-   * - Date de d'entree et de sortie équivalentes
+   * - Date d'entree équivalente
+   *
+   * @param bool $strict    Le séjour this exclu
+   * @param bool $notCancel Seulement les non annulés
+   * @param bool $useSortie Filtrer aussi sur la date de sortie
+   *
    * @return int|void Nombre d'occurences trouvées
    */
-  function loadMatchingSejour($strict = null, $notCancel = false, $useSortie = true) {
+  function loadMatchingSejour($strict = false, $notCancel = false, $useSortie = true) {
     if ($strict && $this->_id) {
       $where["sejour_id"] = " != '$this->_id'";
     }
@@ -2323,9 +2504,10 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
-   * Construit le tag NDOS en fonction des variables de configuration
+   * Construit le tag NDA en fonction des variables de configuration
    *
-   * @param int $group_id Permet de charger le NDOS pour un établissement donné si non null
+   * @param int    $group_id Permet de charger le NDA pour un établissement donné si non null
+   * @param string $type_tag Permet de spécifier le type de tag
    *
    * @return string|void
    */
@@ -2513,6 +2695,13 @@ class CSejour extends CFacturable implements IPatientRelated {
     return null;
   }
 
+  /**
+   * Charge le séjour depuis son NDA
+   *
+   * @param string $nda NDA du séjour
+   *
+   * @return void
+   */
   function loadFromNDA($nda) {
     // Aucune configuration de numéro de dossier
     if (null == $tag_NDA = $this->getTagNDA()) {
@@ -2557,7 +2746,14 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
   }
 
-  /* @todo A dédoublonner avec loadRefCurrAffectation  */
+  /**
+   * Charge l'affectation courante
+   *
+   * @param datetime $dateTime Permet de spécifier un horaire de références, maintenant si null
+   *
+   * @todo A dédoublonner avec loadRefCurrAffectation
+   * @return CAffectation
+   */
   function getCurrAffectation($dateTime = null) {
     if (!$dateTime) {
       $dateTime = CMbDT::dateTime();
@@ -2596,7 +2792,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $affectations = $this->loadBackRefs("affectations", $order);
 
     if (count($affectations) > 0) {
-      $this->_ref_first_affectation = end  ($affectations);
+      $this->_ref_first_affectation = end($affectations);
       $this->_ref_last_affectation  = reset($affectations);
     }
     else {
@@ -2607,12 +2803,17 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_affectations = $affectations;
   }
 
+  /**
+   * Charge les mouvements du séjour
+   *
+   * @return CMovement[]
+   */
   function loadRefsMovements() {
     return $this->_ref_movements = $this->loadBackRefs("movements");
   }
 
   /**
-   * Load first transfer
+   * Charge la première affectation
    *
    * @return CAffectation
    */
@@ -2624,6 +2825,14 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_first_affectation;
   }
 
+  /**
+   * Force la création d'une affectation (?)
+   *
+   * @param CAffectation $affectation Affectation concernée
+   *
+   * @todo A détailler
+   * @return CAffectation|null|string|void
+   */
   function forceAffectation(CAffectation $affectation) {
     $datetime   = $affectation->entree;
     $lit_id     = $affectation->lit_id;
@@ -2714,14 +2923,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_operations;
   }
 
-  function loadRefLastOperation() {
-    $operation = new COperation;
-    $operation->sejour_id = $this->_id;
-    $operation->loadMatchingObject("date DESC");
-
-    return $this->_ref_last_operation = $operation;
-  }
-
+  /**
+   * Charge la première opération d'un séjour
+   *
+   * @return COperation
+   */
   function loadRefFirstOperation() {
     $operation = new COperation;
     $operation->sejour_id = $this->_id;
@@ -2730,41 +2936,50 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_first_operation = $operation;
   }
 
-  function getCurrOperation($date, $show_trace = false, $only_one = true) {
-    $date = CMbDT::date($date);
-
-    $where["operations.sejour_id"] = "= '$this->_id'";
-    $where[]            = "plagesop.date = '$date' OR operations.date = '$date'";
-
-    $leftjoin = array();
-    $leftjoin["plagesop"]   = "plagesop.plageop_id = operations.plageop_id";
-
+  /**
+   * Charge la dernière opération d'un séjour
+   *
+   * @return COperation
+   */
+  function loadRefLastOperation() {
     $operation = new COperation;
-    if ($show_trace) {
-      CSQLDataSource::$trace = true;
-    }
+    $operation->sejour_id = $this->_id;
+    $operation->loadMatchingObject("date DESC");
 
-    if ($only_one) {
-      $operation->loadObject($where, null, null, $leftjoin);
-    }
-    else {
-      // C'est bien la liste d'interventions que l'on retourne
-      $operation = $operation->loadList($where, null, null, null, $leftjoin);
-    }
-
-    if ($show_trace) {
-      CSQLDataSource::$trace = false;
-    }
-
-    return $operation;
+    return $this->_ref_last_operation = $operation;
   }
 
+  /**
+   * Charge la première internvention du jour
+   *
+   * @param datetime $date Datetime de référence
+   *
+   * @return COperation
+   */
   function loadRefCurrOperation($date) {
-    return $this->_ref_curr_operation = $this->getCurrOperation($date, false);
+    $date = CMbDT::date($date);
+    $where["operations.sejour_id"] = "= '$this->_id'";
+    $where[] = "plagesop.date = '$date' OR operations.date = '$date'";
+    $leftjoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
+    $operation = new COperation;
+    $operation->loadObject($where, null, null, $leftjoin);
+    return $this->_ref_curr_operation = $operation;
   }
 
+  /**
+   * Charge toutes les interventions du jour
+   *
+   * @param datetime $date Datetime de référence
+   *
+   * @return COperation[]
+   */
   function loadRefCurrOperations($date) {
-    return $this->_ref_curr_operations = $this->getCurrOperation($date, false, false);
+    $date = CMbDT::date($date);
+    $where["operations.sejour_id"] = "= '$this->_id'";
+    $where[] = "plagesop.date = '$date' OR operations.date = '$date'";
+    $leftjoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
+    $operation = new COperation;
+    return $this->_ref_curr_operations = $operation->loadList($where, null, null, null, $leftjoin);
   }
 
   /**
@@ -2777,16 +2992,30 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->loadRefsActesCCAM();
   }
 
+  /**
+   * Charge le GHM du séjour
+   *
+   * @return CGHM
+   */
   function loadRefGHM() {
-    $this->_ref_GHM = $this->loadUniqueBackRef("ghm");
-    if (!$this->_ref_GHM->_id) {
-      $this->_ref_GHM->sejour_id = $this->sejour_id;
+    /** @var CGHM $GHM */
+    $GHM = $this->loadUniqueBackRef("ghm");
+
+    if (!$GHM->_id) {
+      $GHM->sejour_id = $this->sejour_id;
     }
-    $this->_ref_GHM->_ref_sejour = $this;
-    $this->_ref_GHM->bindInfos();
-    $this->_ref_GHM->getGHM();
+    $GHM->_ref_sejour = $this;
+    $GHM->bindInfos();
+    $GHM->getGHM();
+
+    $this->_ref_GHM = $GHM;
   }
 
+  /**
+   * Charge l'observation d'entrée du séjour
+   *
+   * @return CConsultation
+   */
   function loadRefObsEntree() {
     $consult = new CConsultation();
     $consult->sejour_id = $this->_id;
@@ -2795,6 +3024,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_obs_entree = $consult;
   }
 
+  /**
+   * @see parent::fillLimitedTemplate()
+   */
   function fillLimitedTemplate(&$template) {
     // Ajout du praticien pour les destinataires possibles (dans l'envoi d'un email)
     $chir = $this->loadRefPraticien();
@@ -2839,17 +3071,19 @@ class CSejour extends CFacturable implements IPatientRelated {
     $template->addProperty("Sejour - Libelle"                 , $this->getFormattedValue("libelle"));
     $template->addProperty("Sejour - Transport"               , $this->getFormattedValue("transport"));
 
+    /** @var CExamIgs $last_exam_igs */
     $last_exam_igs = $this->loadLastBackRef("exams_igs");
     $template->addProperty("Sejour - Score IGS"               , $last_exam_igs->_id ? $last_exam_igs->scoreIGS : "");
 
     $consult_anesth = $this->loadRefsConsultAnesth();
     $consult = $consult_anesth->loadRefConsultation();
     $consult->loadRefPlageConsult();
-    
-    $template->addDateProperty("Sejour - Consultation anesthésie - Date", $consult->_id ? $consult->_datetime : "");
-    $template->addLongDateProperty("Sejour - Consultation anesthésie - Date (longue)", $consult->_id ? $consult->_datetime : "");
-    $template->addLongDateProperty("Sejour - Consultation anesthésie - Date (longue, minuscule)", $consult->_id ? $consult->_datetime : "", true);
-    $template->addTimeProperty("Sejour - Consultation anesthésie - Heure", $consult->_id ? $consult->_datetime : "");
+
+    $cpa_datetime = $consult->_id ? $consult->_datetime : "";
+    $template->addDateProperty("Sejour - Consultation anesthésie - Date", $cpa_datetime);
+    $template->addLongDateProperty("Sejour - Consultation anesthésie - Date (longue)", $cpa_datetime);
+    $template->addLongDateProperty("Sejour - Consultation anesthésie - Date (longue, minuscule)", $cpa_datetime);
+    $template->addTimeProperty("Sejour - Consultation anesthésie - Heure", $cpa_datetime);
     
     $this->loadRefsFiles();
     $list = CMbArray::pluck($this->_ref_files, "file_name");
@@ -2918,7 +3152,6 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     $template->addListProperty("Sejour - Transmissions - macrocible", $transmissions_macro);
 
-
     // Observations
     $observations = array();
     if (isset($this->_back["observations"])) {
@@ -2951,7 +3184,8 @@ class CSejour extends CFacturable implements IPatientRelated {
       if (isset($prescription->_ref_prescription_lines_all_comments)) {
         foreach ($prescription->_ref_prescription_lines_all_comments as $_comment) {
           $datetime = CMbDT::format("$_comment->debut $_comment->time_debut", CAppUI::conf('datetime'));
-          $lines["$_comment->debut $_comment->time_debut $_comment->_guid"] = "$_comment->_view, $datetime, {$_comment->_ref_praticien->_view}";
+          $lines["$_comment->debut $_comment->time_debut $_comment->_guid"] =
+            "$_comment->_view, $datetime, {$_comment->_ref_praticien->_view}";
         }
       }
 
@@ -3030,6 +3264,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->notify("AfterFillLimitedTemplate", $template);
   }
 
+  /**
+   * @see parent::fillTemplate()
+   */
   function fillTemplate(&$template) {
 
     // Chargement du fillTemplate du praticien
@@ -3045,14 +3282,14 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Prescription
     if (CModule::getActive('dPprescription')) {
-      $this->loadRefsPrescriptions();
-      $prescription = isset($this->_ref_prescriptions["pre_admission"]) ? $this->_ref_prescriptions["pre_admission"] : new CPrescription();
+      $prescriptions = $this->loadRefsPrescriptions();
+      $prescription = isset($prescriptions["pre_admission"]) ? $prescriptions["pre_admission"] : new CPrescription();
       $prescription->type = "pre_admission";
       $prescription->fillLimitedTemplate($template);
-      $prescription = isset($this->_ref_prescriptions["sejour"]) ? $this->_ref_prescriptions["sejour"] : new CPrescription();
+      $prescription = isset($prescriptions["sejour"]) ? $prescriptions["sejour"] : new CPrescription();
       $prescription->type = "sejour";
       $prescription->fillLimitedTemplate($template);
-      $prescription = isset($this->_ref_prescriptions["sortie"]) ? $this->_ref_prescriptions["sortie"] : new CPrescription();
+      $prescription = isset($prescriptions["sortie"]) ? $prescriptions["sortie"] : new CPrescription();
       $prescription->type = "sortie";
       $prescription->fillLimitedTemplate($template);
     }
@@ -3065,7 +3302,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /**
-   * Builds an array containing surgery dates
+   * Build an array containing surgery dates
+   *
+   * @return date[]
    */
   function makeDatesOperations() {
     $this->_dates_operations = array();
@@ -3087,10 +3326,14 @@ class CSejour extends CFacturable implements IPatientRelated {
 
       $this->_dates_operations[$operation->_id] = CMbDT::date($operation->_datetime);
     }
+
+    return $this->_dates_operations;
   }
 
   /**
    * Builds an array containing consults dates
+   *
+   * @return date[]
    */
   function makeDatesConsultations() {
     $this->_dates_consultations = array();
@@ -3112,6 +3355,8 @@ class CSejour extends CFacturable implements IPatientRelated {
 
       $this->_dates_consultations[$consultation->_id] = CMbDT::date($consultation->_datetime);
     }
+
+    return $this->_dates_consultations;
   }
 
   /**
@@ -3159,23 +3404,10 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
   }
 
-  function closeSejour() {
-    $where = array();
-    $where[] = "sejour.patient_id = '$this->patient_id'";
-    $where[] = "sejour.entree_reelle IS NOT NULL";
-    $where[] = "sejour.sortie_reelle IS NULL";
-
-    $sejours = self::loadListForDateTime($this->entree_reelle, $where);
-    foreach ($sejours as $_sejour) {
-      $_sejour->sortie_reelle = CMbDT::dateTime();
-      $_sejour->store();
-    }
-  }
-
   /**
-   * Count evenement SSR for a given date;
+   * Count evenement SSR for a given date
    *
-   * @param date $date date
+   * @param date $date Date
    *
    * @return void|int
    */
@@ -3192,6 +3424,15 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_count_evenements_ssr = $evenement->countList($where, null, $ljoin);
   }
 
+  /**
+   * Count evenement SSR for a given week and a given kine
+   *
+   * @param ref  $kine_id  Filtrer sur le kine
+   * @param date $date_min Date minimale
+   * @param date $date_max Date maximale
+   *
+   * @return void|int
+   */
   function countEvenementsSSRWeek($kine_id, $date_min, $date_max) {
     if (!$this->_id) {
       return null;
@@ -3207,7 +3448,14 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_count_evenements_ssr_week = $evenement->countList($where, null, $ljoin);
   }
 
-  function getNbJourPlanning($date){
+  /**
+   * Détermine le nombre de jours du planning pour la semaine
+   *
+   * @param date $date Date de référence
+   *
+   * @return int 5, 6 ou 7 jours
+   */
+  function getNbJourPlanning($date) {
     $sunday = CMbDT::date("next sunday", CMbDT::date("- 1 DAY", $date));
     $saturday = CMbDT::date("-1 DAY", $sunday);
 
@@ -3234,6 +3482,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $nb_days;
   }
 
+  /**
+   * @see parent::completeLabelFields()
+   */
   function completeLabelFields(&$fields) {
     $this->loadRefPatient()->completeLabelFields($fields);
     $this->loadRefPraticien();
@@ -3243,16 +3494,20 @@ class CSejour extends CFacturable implements IPatientRelated {
     $affectation = $this->getCurrAffectation($this->entree > $now ? $this->entree : null);
     $affectation->loadView();
 
-    $fields = array_merge($fields,
-      array("DATE ENT"         => CMbDT::dateToLocale(CMbDT::date($this->entree)),
-            "HEURE ENT"        => CMbDT::transform($this->entree, null, "%H:%M"),
-            "DATE SORTIE"      => CMbDT::dateToLocale(CMbDT::date($this->sortie)),
-            "HEURE SORTIE"     => CMbDT::transform($this->sortie, null, "%H:%M"),
-            "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
-            "NDOS"             => $this->_NDA,
-            "NRA"              => $this->_ref_NRA ? $this->_ref_NRA->id400 : "",
-            "CODE BARRE NDOS"  => "@BARCODE_".$this->_NDA."@",
-            "CHAMBRE COURANTE" => $affectation->_view));
+    $fields = array_merge(
+      $fields,
+      array(
+        "DATE ENT"         => CMbDT::dateToLocale(CMbDT::date($this->entree)),
+        "HEURE ENT"        => CMbDT::transform($this->entree, null, "%H:%M"),
+        "DATE SORTIE"      => CMbDT::dateToLocale(CMbDT::date($this->sortie)),
+        "HEURE SORTIE"     => CMbDT::transform($this->sortie, null, "%H:%M"),
+        "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
+        "NDOS"             => $this->_NDA,
+        "NRA"              => $this->_ref_NRA ? $this->_ref_NRA->id400 : "",
+        "CODE BARRE NDOS"  => "@BARCODE_".$this->_NDA."@",
+        "CHAMBRE COURANTE" => $affectation->_view
+      )
+    );
 
     if (CAppUI::conf("ref_pays") == 2) {
       $fields["NATURE SEJOUR"]  = $this->getFormattedValue("_type_sejour");
@@ -3270,7 +3525,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * Vérification de la possibilité de merger plusieurs séjours
    *
-   * @param CSejour[] $sejours
+   * @param CSejour[] $sejours Séjours concernés
    *
    * @return void|string
    */
@@ -3311,6 +3566,15 @@ class CSejour extends CFacturable implements IPatientRelated {
     return null;
   }
 
+  /**
+   * Détermine les UFs d'hébergement, de soins et médicaux pour une date donnée
+   * et éventuellement une affectation donnée
+   *
+   * @param null $date           Date de référence
+   * @param null $affectation_id Affectation spécifique
+   *
+   * @return array|CUniteFonctionnelle[]
+   */
   function getUFs($date = null, $affectation_id = null) {
     if (!$date) {
       $date = CMbDT::dateTime();
@@ -3365,6 +3629,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     );
   }
 
+  /**
+   * Détermine les incréments
+   *
+   * @return array
+   */
   function getIncrementVars() {
     $group_guid = $this->group_id ? "CGroups-$this->group_id" : CGroups::loadCurrent()->_guid;
 
@@ -3375,6 +3644,13 @@ class CSejour extends CFacturable implements IPatientRelated {
     );
   }
 
+  /**
+   * Détermine les types de mouvements en fonction du code de message
+   *
+   * @param null $code Code du message
+   *
+   * @return null|string
+   */
   function getMovementType($code = null) {
     // Cas d'une pré-admission
     if ($this->_etat == "preadmission") {
@@ -3423,6 +3699,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     return null;
   }
 
+  /**
+   * Charge les items de prestations souhaités et réalisés
+   *
+   * @return CItemPrestation[]
+   */
   function getPrestations() {
     $this->_ref_prestations = array();
 
@@ -3451,6 +3732,13 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_prestations;
   }
 
+  /**
+   * Chrage la première liaison de prestation journalière pour une prestation
+   *
+   * @param ref $prestation_id Prestation concernée
+   *
+   * @return void
+   */
   function loadRefFirstLiaisonForPrestation($prestation_id) {
     $this->_first_liaison_for_prestation = new CItemLiaison();
     $where = array();
@@ -3465,6 +3753,15 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->_first_liaison_for_prestation->loadObject($where, null, null, $ljoin);
   }
 
+  /**
+   * Charge les liaisons de prestations pour une prestation entre deux date
+   *
+   * @param ref  $prestation_id Prestation de référence
+   * @param null $date_min      Date minimale
+   * @param null $date_max      Date maximale
+   *
+   * @return CStoredObject[]
+   */
   function loadLiaisonsForPrestation($prestation_id, $date_min = null, $date_max = null) {
     $item_liaison = new CItemLiaison();
     $where    = array();
@@ -3573,30 +3870,62 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_liaisons_for_prestation;
   }
 
+  /**
+   * Compte les prestations souhaitées
+   *
+   * @return int
+   */
   function countPrestationsSouhaitees() {
     $where["item_souhait_id"] = "IS NOT NULL";
     return $this->countBackRefs("items_liaisons", $where);
   }
-  
+
+  /**
+   * Comptage de masse des prestations souhaitées pour une collection de séjours
+   *
+   * @param CSejour[] $sejours Collection
+   *
+   * @return void
+   */
   static function massCountPrestationSouhaitees($sejours) {
     $where["item_souhait_id"] = "IS NOT NULL";
     CStoredObject::massCountBackRefs($sejours, "items_liaisons", $where);
   }
 
+  /**
+   * Chargement de naissances
+   *
+   * @return CNaissance
+   */
   function loadRefsNaissances() {
     return $this->_ref_naissances = $this->loadBackRefs("naissances");
   }
 
-  function loadRefUFHebergement($cache = true) {
-    return $this->_ref_uf_hebergement = $this->loadFwdRef("uf_hebergement_id", $cache);
+  /**
+   * Chargement de l'UF d'hébergement
+   *
+   * @return CUniteFonctionnelle
+   */
+  function loadRefUFHebergement() {
+    return $this->_ref_uf_hebergement = $this->loadFwdRef("uf_hebergement_id", true);
   }
 
-  function loadRefUFMedicale($cache = true) {
-    return $this->_ref_uf_medicale = $this->loadFwdRef("uf_medicale_id", $cache);
+  /**
+   * Chargement de l'UF médicale
+   *
+   * @return CUniteFonctionnelle
+   */
+  function loadRefUFMedicale() {
+    return $this->_ref_uf_medicale = $this->loadFwdRef("uf_medicale_id", true);
   }
 
-  function loadRefUFSoins($cache = true) {
-    return $this->_ref_uf_soins = $this->loadFwdRef("uf_soins_id", $cache);
+  /**
+   * Chargement de l'UF de soins
+   *
+   * @return CUniteFonctionnelle
+   */
+  function loadRefUFSoins() {
+    return $this->_ref_uf_soins = $this->loadFwdRef("uf_soins_id", true);
   }
 
   /**
