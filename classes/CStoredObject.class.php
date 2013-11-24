@@ -1205,7 +1205,7 @@ class CStoredObject extends CModelObject {
    * @return void
    */
   function loadLogs() {
-    $this->_ref_logs = $this->loadBackRefs("logs", "user_log_id DESC", 100);
+    $this->_ref_logs = $this->loadBackRefs("logs", "user_log_id DESC", 100, null, null, "object_id");
 
     /** @var CUserLog $_log */
     foreach ($this->_ref_logs as $_log) {
@@ -1697,10 +1697,11 @@ class CStoredObject extends CModelObject {
    * @param string       $limit    MySQL limit clause
    * @param array|string $group    Group by SQL statement
    * @param array        $ljoin    Array of left join clauses
+   * @param array        $index    Force index
    *
    * @return self[]|null Total count among objects, null if collection is unavailable
    */
-  function loadBackRefs($backName, $order = null, $limit = null, $group = null, $ljoin = null) {
+  function loadBackRefs($backName, $order = null, $limit = null, $group = null, $ljoin = null, $index = null) {
     if (!$backSpec = $this->makeBackSpec($backName)) {
       return null;
     }
@@ -1740,7 +1741,7 @@ class CStoredObject extends CModelObject {
       $where[$backMeta] = "= '$this->_class'";
     }
     
-    return $this->_back[$backName] = $backObject->loadList($where, $order, $limit, $group, $ljoin);
+    return $this->_back[$backName] = $backObject->loadList($where, $order, $limit, $group, $ljoin, $index);
   }
 
   /**
