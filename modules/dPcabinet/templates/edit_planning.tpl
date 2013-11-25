@@ -465,13 +465,12 @@
                       {{/if}}
                     </span>
                   {{/if}}
-                    <input type="text" name="_date" style="width: 15em;" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" onfocus="PlageConsultSelector.init(false)" readonly="readonly" onchange="if (this.value != '') $V(this.form._function_id, '')"/>
+                    <input type="text" name="_date" style="width: 15em;" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" onfocus="PlageConsultSelector.init(0,0)" readonly="readonly" onchange="if (this.value != '') $V(this.form._function_id, '')"/>
                     <input type="hidden" name="_date_planning" value="{{$date_planning}}" />
-                    {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageConsultSelector.init()"}}
+                    {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageConsultSelector.init(0,0)"}}
                     <button class="search notext" id="addedit_planning_button_select_date" type="button" onclick="PlageConsultSelector.init(0,0)">Choix de l'horaire</button>
                   {{if $following_consultations|@count}}
                     <button class="agenda button " id="buttonMultiple" type="button" onclick="PlageConsultSelector.init(1, 1);" id="buttonMultiple">{{$following_consultations|@count}} consultation ultérieures</button>
-                    <!--<button class="agenda button" id="buttonMultiple" type="button" onclick="multiPlageEdit('{{$consult->_id}}');" id="buttonMultiple">Modification multiple</button>-->
                   {{else}}
                     <button class="agenda notext" id="buttonMultiple" type="button" onclick="PlageConsultSelector.init(1,0)" id="buttonMultiple">Consultation multiple</button>
                   {{/if}}
