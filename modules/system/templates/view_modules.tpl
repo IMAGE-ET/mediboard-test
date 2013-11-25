@@ -96,7 +96,7 @@
           </td>
           <td id="CacheManagerLog"></td>
         </tr>
-        {{if $servers_ip}}
+        {{if $servers_ip|@count > 0}}
           <tr>
             <td style="text-align: right;">
               <button class="lookup singleclick" onclick="CacheManager.allCheck();">
