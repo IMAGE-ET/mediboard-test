@@ -2,7 +2,7 @@
 
   <script>
     addPlaceBefore = function(plage_id, slot_id) {
-      var form = getForm("editPlage-"+plage_id);
+      var form = getForm("editPlage-"+plage_id+"-"+{{$slot_id}});
       var date = new Date();
       date.setHours({{$plage->debut|date_format:"%H"}});
       date.setMinutes({{$plage->debut|date_format:"%M"}} - {{$plage->freq|date_format:"%M"}});
@@ -12,7 +12,7 @@
     };
 
     addPlaceAfter = function(plage_id, slot_id) {
-      var form = getForm("editPlage-"+plage_id);
+      var form = getForm("editPlage-"+plage_id+"-"+{{$slot_id}});
       var date = new Date();
       date.setHours({{$plage->fin|date_format:"%H"}});
       date.setMinutes({{$plage->fin|date_format:"%M"}} + {{$plage->freq|date_format:"%M"}});
@@ -145,30 +145,32 @@
           <img src="style/mediboard/images/icons/small-warning.png" alt="SURB" title="surbooking : {{$count_places}} patients" style="float:right;"/>
         {{/if}}
         <div style="float:left">
-          {{if $online && !$plage->locked && ($conf.dPcabinet.CConsultation.surbooking_readonly || $plage->_canEdit || $count_places == 0)}}
-            {{if !$multiple}}
-              <button type="button" class="tick validPlage"
-            {{else}}
-              <input type="radio" class="validPlage" name="checkbox-{{$plage->_id}}-{{$slot_id}}" {{if $_place.time == $consultation->heure}}checked="checked"{{/if}}
+          <label>
+            {{if $online && !$plage->locked && ($conf.dPcabinet.CConsultation.surbooking_readonly || $plage->_canEdit || $count_places == 0)}}
+              {{if !$multiple}}
+                <button type="button" class="tick validPlage"
+              {{else}}
+                <input type="radio" class="validPlage" name="checkbox-{{$plage->_id}}-{{$slot_id}}" {{if $_place.time == $consultation->heure}}checked="checked"{{/if}}
+              {{/if}}
+                data-consult_id="{{$consultation->_id}}"
+                data-chir_name="{{$plage->_ref_chir}}"
+                data-plageid="{{$plage->_id}}"
+                data-date="{{$plage->date}}"
+                data-chir_id="{{$plage->chir_id}}"
+                data-time="{{$_place.time}}"
+              {{if !$multiple}}
+                  >
+              {{else}}
+                  />
+              {{/if}}
+              {{$_place.time|date_format:$conf.time}}
+              {{if !$multiple}}
+                </button>
+              {{/if}}
+            {{else}} <!-- not online or locked or surbooking -->
+              {{$_place.time|date_format:$conf.time}}
             {{/if}}
-              data-consult_id="{{$consultation->_id}}"
-              data-chir_name="{{$plage->_ref_chir}}"
-              data-plageid="{{$plage->_id}}"
-              data-date="{{$plage->date}}"
-              data-chir_id="{{$plage->chir_id}}"
-              data-time="{{$_place.time}}"
-            {{if !$multiple}}
-                >
-            {{else}}
-                />
-            {{/if}}
-            {{$_place.time|date_format:$conf.time}}
-            {{if !$multiple}}
-              </button>
-            {{/if}}
-          {{else}} <!-- not online or locked or surbooking -->
-            {{$_place.time|date_format:$conf.time}}
-          {{/if}}
+          </label>
         </div>
       </td>
       <td class="text">
