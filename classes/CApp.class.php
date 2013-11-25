@@ -549,4 +549,73 @@ class CApp {
 
     return self::$requestUID;
   }
+
+  /**
+   * Execute a script on all servers
+   *
+   * @param String[] $get  Parameters GET
+   * @param String[] $post Parameters POST
+   *
+   * @return Array
+   */
+  static function multipleServerCall($get, $post = null) {
+    $base = "mediboard/index.php?";
+    $address = array("127.0.0.1" => "");
+    foreach ($get as $_param => $_value) {
+      $base .= "$_param=$_value&";
+    }
+    $base = substr($base, 0, -1);
+
+    $servers = array();
+    $list_ip = trim(CAppUI::conf("servers_ip"));
+    if ($list_ip) {
+      $servers = preg_split("/\s*,\s*/", $list_ip, -1, PREG_SPLIT_NO_EMPTY);
+      $servers = array_flip($servers);
+    }
+    $address = array_merge($address, $servers);
+
+    foreach ($address as $_ip => $_value) {
+      $address[$_ip] = self::serverCall("http://$_ip/$base", $post);
+    }
+
+    return $address;
+  }
+
+  /**
+   * Send the request on the server
+   *
+   * @param String   $url  URL
+   * @param String[] $post Parameters POST
+   *
+   * @return bool|string
+   */
+  private static function serverCall($url, $post = null) {
+    CSessionHandler::writeClose();
+    global $rootName, $version;
+    $session_name = preg_replace("/[^a-z0-9]/i", "", $rootName);
+    $cookie = CValue::cookie($session_name);
+    $result = array("code" => "", "body" => "");
+    try {
+      $http_client = new CHTTPClient($url);
+      $http_client->setCookie("$session_name=$cookie");
+      $http_client->setUserAgent("Mediboard-".$version["version"]);
+      if ($post) {
+        $request = $http_client->post(http_build_query($post));
+      }
+      else {
+        $request = $http_client->get();
+      }
+    }
+    catch (Exception $e) {
+      CSessionHandler::start();
+      $result["body"] = $e->getMessage();
+      return $result;
+    }
+    CSessionHandler::start();
+
+    $result["code"]   = $http_client->last_information["http_code"];
+    $result["body"]   = $request;
+
+    return $result;
+  }
 }
