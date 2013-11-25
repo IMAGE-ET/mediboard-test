@@ -683,7 +683,7 @@
   {{/if}}
   
   <tr>
-    <th class="category" colspan="2">Visite de pré-anesthésie {{if $operation->date_visite_anesth}}- {{$operation->date_visite_anesth|date_format:$conf.datetime}}{{/if}}</th>
+    <th class="category" colspan="2">Visite de pré-anesthésie {{if $operation->date_visite_anesth}}- {{$operation->date_visite_anesth|date_format:$conf.date}}{{/if}}</th>
   </tr>
   {{if $operation->date_visite_anesth}}
   <tr>
