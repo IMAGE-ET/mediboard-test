@@ -66,6 +66,11 @@
           url.requestUpdate(this.id, updateControlTabs.bind(this));
         },
 
+        allCheck: function() {
+          new Url("system", "httpreq_check_shared_memory_all_servers")
+            .requestUpdate("CacheManagerAllLog");
+        },
+
         allEmpty : function() {
           new Url("system", "httpreq_do_empty_shared_memory_all_servers")
             .requestUpdate("CacheManagerAllLog");
@@ -94,10 +99,12 @@
         {{if $servers_ip}}
           <tr>
             <td style="text-align: right;">
+              <button class="lookup singleclick" onclick="CacheManager.allCheck();">
+                Vérifier le cache de tous les serveurs
+              </button><br/>
               <button class="cancel singleclick" onclick="CacheManager.allEmpty();">
                 Vider le cache de tous les serveurs
-              </button><br/>
-              127.0.0.1
+              </button>
               {{foreach from=$servers_ip item=_server}}
                 <br/>{{$_server}}
               {{/foreach}}

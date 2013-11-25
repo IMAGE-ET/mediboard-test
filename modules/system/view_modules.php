@@ -79,7 +79,7 @@ foreach (CLibrary::$all as $library) {
   }
 }
 
-$servers_ip = CAppUI::conf("servers_ip");
+$servers_ip = explode(",", CAppUI::conf("servers_ip"));
 
 // Création du template
 $smarty = new CSmartyDP();
