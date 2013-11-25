@@ -38,9 +38,6 @@ if ($consultation_id) {
   $consultation_ids = array();
   $consultation_temp = new CConsultation();
   $consultation_temp->load($consultation_id);
-  if (!$consultation_temp->patient_id) {
-    CAppUI::stepAjax("no_patient", UI_MSG_ERROR);
-  }
   $consultation_temp->loadRefPlageConsult()->loadRefChir();
 
   // we add the first consult to the future json list
