@@ -560,19 +560,17 @@ class CApp {
    */
   static function multipleServerCall($get, $post = null) {
     $base = "mediboard/index.php?";
-    $address = array("127.0.0.1" => "");
     foreach ($get as $_param => $_value) {
       $base .= "$_param=$_value&";
     }
     $base = substr($base, 0, -1);
 
-    $servers = array();
+    $address = array();
     $list_ip = trim(CAppUI::conf("servers_ip"));
     if ($list_ip) {
-      $servers = preg_split("/\s*,\s*/", $list_ip, -1, PREG_SPLIT_NO_EMPTY);
-      $servers = array_flip($servers);
+      $address = preg_split("/\s*,\s*/", $list_ip, -1, PREG_SPLIT_NO_EMPTY);
+      $address = array_flip($address);
     }
-    $address = array_merge($address, $servers);
 
     foreach ($address as $_ip => $_value) {
       $address[$_ip] = self::serverCall("http://$_ip/$base", $post);
@@ -599,6 +597,7 @@ class CApp {
       $http_client = new CHTTPClient($url);
       $http_client->setCookie("$session_name=$cookie");
       $http_client->setUserAgent("Mediboard-".$version["version"]);
+      $http_client->setOption(CURLOPT_FOLLOWLOCATION, true);
       if ($post) {
         $request = $http_client->post(http_build_query($post));
       }
