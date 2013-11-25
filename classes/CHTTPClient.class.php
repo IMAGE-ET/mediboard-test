@@ -21,6 +21,7 @@ class CHTTPClient {
   public $timeout = 5;
   public $option = array();
   public $header = array();
+  public $last_information;
 
   /**
    * Construct the HTTP client
@@ -104,6 +105,17 @@ class CHTTPClient {
   }
 
   /**
+   * Assign a user agent
+   *
+   * @param String $user_agent user agent
+   *
+   * @return void
+   */
+  function setUserAgent($user_agent) {
+    $this->setOption(CURLOPT_USERAGENT, $user_agent);
+  }
+
+  /**
    * Assign a HTTP authentification
    *
    * @param String $username Username for the site
@@ -141,6 +153,17 @@ class CHTTPClient {
   function setSSLPeer($ca_cert) {
     $this->setOption(CURLOPT_SSL_VERIFYPEER, 1);
     $this->setOption(CURLOPT_CAINFO, $ca_cert);
+  }
+
+  /**
+   * Assign cookie to the request
+   *
+   * @param String $cookie cookie seperate with a ; and space like "fruit=pomme; couleur=rouge"
+   *
+   * @return void
+   */
+  function setCookie($cookie) {
+    $this->setOption(CURLOPT_COOKIE, $cookie);
   }
 
   /**
@@ -186,6 +209,7 @@ class CHTTPClient {
     $this->createOption();
 
     $result = curl_exec($handle);
+    $this->last_information = curl_getinfo($handle);
     if (curl_errno($handle)) {
       throw new Exception(curl_error($handle));
     }
