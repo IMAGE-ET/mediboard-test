@@ -30,4 +30,5 @@ CPreferences::$modules["dPcompteRendu"] = array(
   "multiple_docs",
   "auto_capitalize",
   "auto_replacehelper",
+  "pass_lock",
 );

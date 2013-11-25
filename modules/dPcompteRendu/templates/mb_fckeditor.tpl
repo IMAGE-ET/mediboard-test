@@ -25,6 +25,7 @@ window.list_plugins = [
   {{if $can->admin}}
   "mbthumbs",
   {{/if}}
+  "nid_forms",
   "usermessage"
 ];
 
@@ -94,7 +95,7 @@ CKEDITOR.editorConfig = function(config) {
   // Suppression du bouton de masquage des barres d'outils
   config.toolbarCanCollapse = false;
   // Suppression de la barre d'état avec la dom
-  config.removePlugins = 'elementspath,iframe,magicline,showblocks,templates,wsc{{if $templateManager->printMode}},save{{/if}}';
+  config.removePlugins = 'elementspath,iframe,magicline,showblocks,templates,wsc,forms{{if $templateManager->printMode}},save{{/if}}';
 
   {{if $templateManager->printMode}}
     config.extraPlugins = 'usermessage';
@@ -117,7 +118,7 @@ CKEDITOR.editorConfig = function(config) {
     {{/if}}
 
     config.extraPlugins =  'mbfields,mbfreetext,mbhelpers,mblists,{{if $mode_play && !$templateManager->isModele}}mbplay,{{/if}},mbprint,mbprintPDF,mbspace,';
-    config.extraPlugins += 'mbheader,mbfooter,mbpagebreak,mblineheight{{if "printing"|module_active && !$templateManager->isModele}},mbprinting{{/if}}{{if $can->admin}},mbthumbs{{/if}},mbcap,mbreplace';
+    config.extraPlugins += 'mbheader,mbfooter,mbpagebreak,mblineheight{{if "printing"|module_active && !$templateManager->isModele}},mbprinting{{/if}}{{if $can->admin}},mbthumbs{{/if}},mbcap,mbreplace,nid_forms';
     {{if !$templateManager->isModele}}
       config.extraPlugins += ',usermessage{{if $use_apicrypt}},apicrypt{{/if}}';
     {{/if}}
