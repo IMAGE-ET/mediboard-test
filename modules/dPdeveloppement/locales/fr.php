@@ -26,6 +26,7 @@ $locales['mod-dPdeveloppement-tab-sniff_file'] = 'Inspection du code d\'un fichi
 $locales['mod-dPdeveloppement-tab-view_logs'] = 'Journal sys.';
 $locales['mod-dPdeveloppement-tab-view_metrique'] = 'Métrique';
 $locales['mod-dPdeveloppement-tab-vw_create_module'] = 'Créateur module';
+$locales['module-dPdeveloppement-court'] = 'Outils';
 $locales['module-dPdeveloppement-long'] = 'Outils de développement';
 $locales['mutex_tester-info1'] = 'Les actions ci-dessous sont mutuellement exclues par un verrou posé et relâché par chacune d\'entre elle.';
 $locales['mutex_tester-info2'] = 'Il suffit de les lancer chacune à son tour dans l\'ordre voulu pour tester les capacités du Mutex de Mediboard.';
