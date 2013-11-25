@@ -883,7 +883,9 @@ class CConstantesMedicales extends CMbObject {
     $props['lactates']               = 'float min|0';
     $props['glasgow']                = 'float min|0';
     $props['hemo_glycquee']          = 'float min|0';
-    $props['saturation_air']         = 'float min|0';
+    if (CAppUi::conf('ref_pays') == 2) {
+      $props['saturation_air']         = 'float min|0';
+    }
     $props['clair_creatinine']       = 'float min|0';
     return $props;
   }
