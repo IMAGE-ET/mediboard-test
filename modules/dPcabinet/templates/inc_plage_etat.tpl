@@ -30,6 +30,3 @@
     </a>
   </div>
 </div>
-<div id="plage_dispo_{{$_plage->_id}}" style="text-align: center;" >
-  {{mb_include module=system template=calendars/inc_week/inc_disponibilities object=$_plage}}
-</div>

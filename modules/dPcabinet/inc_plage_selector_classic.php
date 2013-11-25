@@ -49,6 +49,7 @@ if ($consultation_id) {
     $consultation_temp->_id,
     $consultation_temp->_ref_plageconsult->date,
     $consultation_temp->heure,
+    $consultation_temp->_ref_plageconsult->chir_id,
     $consultation_temp->_ref_plageconsult->_ref_chir->_view,
     $consultation_temp->annule
   );

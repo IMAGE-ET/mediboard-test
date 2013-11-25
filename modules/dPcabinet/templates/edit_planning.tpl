@@ -171,14 +171,21 @@
 
   resetPlage = function(id) {
     var oForm = getForm(window.PlageConsultSelector.sForm);
-    $V(oForm["rques_"+id], "");
-    $V(oForm["plage_id_"+id], "");
-    $V(oForm["date_"+id], "");
-    $V(oForm["heure_"+id], "");
-    $V(oForm["chir_id_"+id], "");
-    $V(oForm["_consult"+id], "");
-    $V(oForm["del"+id], "");
-    $('place_reca_'+id).hide();
+    if ($V(oForm["consult_id_"+id]) && !$V(oForm["cancel_"+id])) {
+      $V(oForm["cancel_"+id], "");
+      SystemMessage.notify("Cette consultation sera annulée");
+    }
+    else {
+      SystemMessage.notify("Cette consultation ne sera pas créée");
+      $V(oForm["_consult"+id], "");
+      $V(oForm["consult_id_"+id], "");
+      $V(oForm["plage_id_"+id], "");
+      $V(oForm["date_"+id], "");
+      $V(oForm["heure_"+id], "");
+      $V(oForm["chir_id_"+id], "");
+      $V(oForm["cancel"+id], "");
+      $V(oForm["rques_"+id], "");
+    }
   };
 
   Main.add(function () {
@@ -462,11 +469,11 @@
                     <input type="hidden" name="_date_planning" value="{{$date_planning}}" />
                     {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageConsultSelector.init()"}}
                     <button class="search notext" id="addedit_planning_button_select_date" type="button" onclick="PlageConsultSelector.init(0,0)">Choix de l'horaire</button>
-                  {{if !$consult->_id}}
-                    <button class="agenda notext" id="buttonMultiple" type="button" onclick="PlageConsultSelector.init(1,0)" id="buttonMultiple">Consultation multiple</button>
-                  {{elseif $following_consultations|@count}}
-                    <button class="agenda button notext" id="buttonMultiple" type="button" onclick="PlageConsultSelector.init(1, 1);" id="buttonMultiple">Modification multiple, permet de modifier la consultation actuelle et les suivantes</button>
+                  {{if $following_consultations|@count}}
+                    <button class="agenda button " id="buttonMultiple" type="button" onclick="PlageConsultSelector.init(1, 1);" id="buttonMultiple">{{$following_consultations|@count}} consultation ultérieures</button>
                     <!--<button class="agenda button" id="buttonMultiple" type="button" onclick="multiPlageEdit('{{$consult->_id}}');" id="buttonMultiple">Modification multiple</button>-->
+                  {{else}}
+                    <button class="agenda notext" id="buttonMultiple" type="button" onclick="PlageConsultSelector.init(1,0)" id="buttonMultiple">Consultation multiple</button>
                   {{/if}}
                   </td>
                 </tr>

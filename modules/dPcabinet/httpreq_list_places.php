@@ -16,10 +16,10 @@ $ds = CSQLDataSource::get("std");
 // Initialisation des variables
 $plageconsult_id    = CValue::get("plageconsult_id");
 $consult_id         = CValue::get("consult_id");
+$slot_id            = CValue::get("slot_id");
 $multiple           = CValue::get("multipleMode", false);
 $display_nb_consult = CAppUI::conf("dPcabinet display_nb_consult");
 $quotas             = null;
-
 
 // Récupération des consultations de la plage séléctionnée
 $plage = new CPlageconsult;
@@ -182,6 +182,7 @@ $smarty->assign("quotas"         , $quotas);
 $smarty->assign("multiple"       , $multiple);
 $smarty->assign("consultation"   , $consultation_target);
 $smarty->assign("date"           , $date);
+$smarty->assign('slot_id'        , $slot_id);
 
 if ($display_nb_consult == "cab" || $display_nb_consult == "etab") {
   $smarty->assign("utilisation_func", $utilisation_func);

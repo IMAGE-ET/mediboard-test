@@ -27,7 +27,7 @@ RDVmultiples = {
   slots           : {},
   current_rank    : 0,
   automatic_rank  : 1,
-  max_rank        : 8,
+  max_rank        : {{$app->user_prefs.NbConsultMultiple}},
 
   init: function(consultation_ids, multiple) {
     // selected
@@ -55,7 +55,6 @@ RDVmultiples = {
       }
       else {
         var selected = $("tr.selected");
-        console.log(selected);
       }
     }
   },
@@ -77,19 +76,21 @@ RDVmultiples = {
   },
 
   resetSlots : function() {
-    var consult_list = $H(this.slots);
-    consult_list.each(function(elt) {
-      RDVmultiples.removeSlot(elt[0]);
-    });
+    for (var a = 0; a<this.max_rank; a++ ) {
+      RDVmultiples.removeSlot(a, 1);
+    }
   },
 
   //enlever un slot (ne doit pas avoir de consult_id)
-  removeSlot : function(rank) {
+  removeSlot : function(rank, reset) {
+    var _reset = reset ? 1 : 0;
     var slot = this.slots[rank];
 
     // si consult_id => annulation du rendez-vous
     if (slot && slot.consult_id) {
-      slot.is_cancelled = 1;
+      if (!_reset) {
+        slot.is_cancelled = 1;
+      }
     }
     // sinon on le supprime + refresh
     else {
@@ -98,7 +99,6 @@ RDVmultiples = {
     }
   },
   selRank: function(rank) {
-    console.log(rank);
     if (rank <= this.max_rank) {
       RDVmultiples.current_rank = rank;
       if (this.is_multiple) {
@@ -132,6 +132,7 @@ RDVmultiples = {
   url.addParam("plageconsult_id", plageconsult_id);
   url.addParam("consult_id"     , consult_id);
   url.addParam("multipleMode", multiple);
+  url.addParam("slot_id", this.current_rank);
   url.requestUpdate("listPlaces-"+this.current_rank);
   },
 
@@ -270,7 +271,7 @@ Main.add(function () {
 </form>
 
 <div id="help_consult_multiple" style="display: none;">
-  <button onclick="Control.Modal.close();" class="cancel button" style="float:right;">Merci</button>
+  <button onclick="Control.Modal.close();" class="tick button" style="float:right;">Merci</button>
   <h2>Aide consultations multiple</h2>
   <ul>
     <li>La plage active selectionnée est de couleur brune, il faut selectionner la plage puis cliquer à gauche dans le selecteur pour changer de plage de consultation</li>
@@ -297,9 +298,10 @@ Main.add(function () {
   {{foreach from=1|range:$nbConsult:-1 item=j}}
     <div id="listPlage_dom_{{$j-1}}" data-slot_number="{{$j-1}}" style="width:{{$width}}%; float:left;">
       {{if $multipleMode}}
-        <div id="tools_plage_{{$j-1}}" class="tools_plage">
-          <button type="button" class="trash notext" style="float:right" onclick="RDVmultiples.removeSlot('{{$j-1}}')"></button>
-          <button class="button right" onclick="RDVmultiples.selRank('{{$j-1}}')">Plage {{$j}}</button>
+        <div id="tools_plage_{{$j-1}}" class="tools_plage" style="text-align: center;">
+          <button class="button target" onclick="RDVmultiples.selRank('{{$j-1}}')"> RDV {{$j}}</button>
+
+          <button type="button" class="trash notext" onclick="RDVmultiples.removeSlot('{{$j-1}}')"></button>
           <input type="hidden" name="consult_id" value=""/>
 
         </div>
@@ -307,7 +309,7 @@ Main.add(function () {
       <div id="listPlaces-{{$j-1}}" class="listPlace"></div>
     </div>
     <script>
-      ViewPort.SetAvlHeight('listPlage_dom_{{$j-1}}',.95);
+      ViewPort.SetAvlHeight('listPlaces-{{$j-1}}',.95);
     </script>
   {{/foreach}}
 </div>

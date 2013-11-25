@@ -1,9 +1,8 @@
 {{if $online && !$plage->locked}}
 
   <script>
-    addPlaceBefore = function(plage_id) {
+    addPlaceBefore = function(plage_id, slot_id) {
       var form = getForm("editPlage-"+plage_id);
-      var slot_id = form.up().up().get("slot_number"); //get parent
       var date = new Date();
       date.setHours({{$plage->debut|date_format:"%H"}});
       date.setMinutes({{$plage->debut|date_format:"%M"}} - {{$plage->freq|date_format:"%M"}});
@@ -12,9 +11,8 @@
       return onSubmitFormAjax(form, function() { RDVmultiples.refreshSlot(slot_id, "{{$multiple}}"); });
     };
 
-    addPlaceAfter = function(plage_id) {
+    addPlaceAfter = function(plage_id, slot_id) {
       var form = getForm("editPlage-"+plage_id);
-      var slot_id = form.up().up().get("slot_number");
       var date = new Date();
       date.setHours({{$plage->fin|date_format:"%H"}});
       date.setMinutes({{$plage->fin|date_format:"%M"}} + {{$plage->freq|date_format:"%M"}});
@@ -33,7 +31,7 @@
       });
   </script>
 
-  <form action="?m=dPcabinet" method="post" name="editPlage-{{$plage->_id}}" onsubmit="return checkForm(this);">
+  <form action="?m=dPcabinet" method="post" name="editPlage-{{$plage->_id}}-{{$slot_id}}" onsubmit="return checkForm(this);">
     <input type="hidden" name="m" value="dPcabinet" />
     <input type="hidden" name="dosql" value="do_plageconsult_aed" />
     <input type="hidden" name="plageconsult_id" value="{{$plage->_id}}" />
@@ -44,7 +42,6 @@
     <input type="hidden" name="_repeat" value="1" />
   </form>
 {{/if}}
-
 <table class="tbl" id="Places_{{$plage->_id}}">
   {{assign var=display_nb_consult value=$conf.dPcabinet.display_nb_consult}}
   {{if $plage->_id}}
@@ -60,13 +57,14 @@
         {{/if}}
         {{$plage->_ref_chir}}
         <br />
-        {{if $app->user_prefs.viewFunctionPrats}}
-          {{$plage->_ref_chir->_ref_function}}
-          <br />
+        {{if $consultation->_id}}<img src="http://localhost/mediboard/style/mediboard/images/buttons/edit.png" alt="" />{{/if}}
+        {{if !$multiple}}
+          Plage du {{$plage->date|date_format:$conf.longdate}}
+          de {{$plage->debut|date_format:$conf.time}}
+          à {{$plage->fin|date_format:$conf.time}}
+        {{else}}
+          {{$plage->date|date_format:"%a %d %b"}}
         {{/if}}
-        {{if !$multiple}}Plage du {{$plage->date|date_format:$conf.longdate}}{{else}}{{$plage->date|date_format:"%a %d %b"}}{{/if}}
-        de {{$plage->debut|date_format:$conf.time}}
-        à {{$plage->fin|date_format:$conf.time}}
       </th>
     </tr>
     <tr>
@@ -127,13 +125,13 @@
           {{/if}}
         </div>
       </td>
-      <td {{if $display_nb_consult}}colspan="3"{{/if}}></td>
+      {{if $display_nb_consult}}<td colspan="3"></td>{{/if}}
     </tr>
   {{/foreach}}
   {{if $online && !$plage->locked}}
   <tr>
-    <td class="button" colspan="{{if $display_nb_consult}}5{{else}}3{{/if}}">
-      <button type="button" class="up singleclick" onclick="addPlaceBefore('{{$plage->_id}}')" {{if !$plage->_canEdit}}disabled="disabled"{{/if}}>
+    <td class="button" colspan="{{if $display_nb_consult}}4{{else}}3{{/if}}">
+      <button type="button" class="up singleclick" onclick="addPlaceBefore('{{$plage->_id}}', '{{$slot_id}}')" {{if !$plage->_canEdit}}disabled="disabled"{{/if}}>
         Ajouter Avant
       </button>
     </td>
@@ -151,7 +149,7 @@
             {{if !$multiple}}
               <button type="button" class="tick validPlage"
             {{else}}
-              <input type="radio" class="validPlage" name="checkbox-{{$plage->_id}}" {{if $_place.time == $consultation->heure}}checked="checked"{{/if}}
+              <input type="radio" class="validPlage" name="checkbox-{{$plage->_id}}-{{$slot_id}}" {{if $_place.time == $consultation->heure}}checked="checked"{{/if}}
             {{/if}}
               data-consult_id="{{$consultation->_id}}"
               data-chir_name="{{$plage->_ref_chir}}"
@@ -229,7 +227,7 @@
   {{if $online && !$plage->locked}}
     <tr>
       <td class="button" colspan="{{if $display_nb_consult}}5{{else}}3{{/if}}">
-        <button type="button" class="down singleclick" onclick="addPlaceAfter('{{$plage->_id}}')" {{if !$plage->_canEdit}}disabled="disabled"{{/if}}>
+        <button type="button" class="down singleclick" onclick="addPlaceAfter('{{$plage->_id}}', '{{$slot_id}}')" {{if !$plage->_canEdit}}disabled="disabled"{{/if}}>
           Ajouter Après
         </button>
       </td>
