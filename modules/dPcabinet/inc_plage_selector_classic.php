@@ -17,7 +17,7 @@ global $period, $periods, $chir_id, $function_id, $date, $ndate, $pdate, $plagec
 $hour             = CValue::get("hour");
 $hide_finished    = CValue::get("hide_finished", true);
 $_line_element_id = CValue::get("_line_element_id");
-$multipleMode     = CValue::get("multipleMode", false);
+$multipleMode     = CValue::get("multipleMode", 0);
 $multiple_edit    = CValue::get("multipleEdit", 0);
 
 if ($multiple_edit || $consultation_id) {

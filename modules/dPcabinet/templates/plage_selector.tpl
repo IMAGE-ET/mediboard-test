@@ -32,7 +32,6 @@ RDVmultiples = {
   init: function(consultation_ids, multiple) {
     // selected
     RDVmultiples.is_multiple = multiple;
-
     if (consultation_ids.length > 0) {
       for (var b=0; b<consultation_ids.length; b++) {
         var plage_id    = consultation_ids[b][0];
@@ -44,7 +43,7 @@ RDVmultiples = {
         var annule      = consultation_ids[b][6];
         RDVmultiples.addSlot(this.current_rank, plage_id, consult_id, date, time, chir_id, chir_view, annule);        // insert
         RDVmultiples.loadPlageConsult(plage_id, consult_id, RDVmultiples.is_multiple);  // display
-        if (multiple) {
+        if (multiple && b <= this.max_rank) {
           this.selRank(this.current_rank+1);
         }
       }
@@ -107,7 +106,9 @@ RDVmultiples = {
         });
 
         var target = $('tools_plage_'+rank);
-        $(target).addUniqueClassName('selected');
+        if ($(target)) {
+          $(target).addUniqueClassName('selected');
+        }
       }
     }
   },
