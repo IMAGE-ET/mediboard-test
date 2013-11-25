@@ -3,29 +3,28 @@
   {{mb_script module="dPprescription" script="prescription_editor"}}
 {{/if}}
 
-{{mb_script module="dPcompteRendu" script="document"}}
-{{mb_script module="dPcompteRendu" script="modele_selector"}}
-{{mb_script module="dPcabinet" script="edit_consultation"}}
+{{mb_script module="compteRendu" script="document"}}
+{{mb_script module="compteRendu" script="modele_selector"}}
+{{mb_script module="cabinet" script="edit_consultation"}}
 
-<script type="text/javascript">
-{{if !$consult->_canEdit}}
-  App.readonly = true;
-{{/if}}
+<script>
+  {{if !$consult->_canEdit}}
+    App.readonly = true;
+  {{/if}}
 
-function printAllDocs() {
-  var url = new Url("dPcabinet", "print_select_docs"); 
-  url.addElement(document.editFrmFinish.consultation_id);
-  url.popup(700, 500, "printDocuments");
-}
+  function printAllDocs() {
+    var url = new Url("cabinet", "print_select_docs");
+    url.addParam('consultation_id', '{{$consult->_id}}');
+    url.popup(700, 500, "printDocuments");
+  }
 
-function submitAll() {
-  onSubmitFormAjax(getForm("editFrmExams"));
-}
+  function submitAll() {
+    onSubmitFormAjax(getForm("editFrmExams"));
+  }
 
-Main.add(function () {
-  ListConsults.init("{{$consult->_id}}", "{{$userSel->_id}}", "{{$date}}", "{{$vue}}", "{{$current_m}}");
-} );
-
+  Main.add(function () {
+    ListConsults.init("{{$consult->_id}}", "{{$userSel->_id}}", "{{$date}}", "{{$vue}}", "{{$current_m}}");
+  } );
 </script>
 
 
@@ -53,11 +52,11 @@ Main.add(function () {
         </div>
 
         <!-- Reglement -->
-        {{mb_script module="dPcabinet" script="reglement"}}
-        <script type="text/javascript">
+        {{mb_script module="cabinet" script="reglement"}}
+        <script>
           Reglement.consultation_id = '{{$consult->_id}}';
           Reglement.user_id = '{{$userSel->_id}}';
-          Reglement.register('{{$consult->_id}}');
+          Reglement.register(false);
         </script>
       
       {{/if}}

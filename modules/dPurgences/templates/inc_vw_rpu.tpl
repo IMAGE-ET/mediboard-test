@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=urgences script=contraintes_rpu}}
+{{mb_script module=urgences script=contraintes_rpu ajax=1}}
 
 <script type="text/javascript">
 

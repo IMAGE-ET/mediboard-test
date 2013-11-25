@@ -11,12 +11,10 @@
           url.addParam("patient_id", patient_id);
           url.redirect();
         }
-
       </script>
       <a class="action" style="float: right" title="Modifier la fiche" href="#" onclick="editPatient('{{$patient->_id}}');">
         <img src="images/icons/edit.png" alt="modifier" />
       </a>
-
       Patient
     </th>
     <th class="category">{{tr}}CConsultAnesth{{/tr}}</th>
@@ -39,7 +37,9 @@
       </div>
     </td>
     <td class="text" id="consultAnesth">
-      {{mb_include module=cabinet template=inc_consult_anesth/interventions}}
+      {{if !$app->user_prefs.new_consultation}}
+        {{mb_include module=cabinet template=inc_consult_anesth/interventions}}
+      {{/if}}
     </td>
     <td>
       {{mb_include module=cabinet template=inc_patient_history}}

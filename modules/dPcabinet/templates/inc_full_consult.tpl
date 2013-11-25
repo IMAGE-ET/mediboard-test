@@ -14,9 +14,6 @@
 {{mb_script module="dPcabinet" script="edit_consultation"}}
 
 <script type="text/javascript">
-
-tabSejour = {{$tabSejour|@json}};
-
 {{if !$consult->_canEdit}}
   App.readonly = true;
 {{/if}}
@@ -29,11 +26,8 @@ printFiche = function() {
 };
 
 reloadConsultAnesth = function() {
-  var sejour_id = tabSejour[document.addOpFrm.operation_id.value];
-  if (!sejour_id) {
-    sejour_id = document.addOpFrm.sejour_id.value;
-  }
-  
+  sejour_id = document.addOpFrm.sejour_id.value;
+
   // Mise a jour du sejour_id
   DossierMedical.updateSejourId(sejour_id);
   
@@ -47,7 +41,7 @@ reloadConsultAnesth = function() {
   consultUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   consultUrl.addParam("dossier_anesth_id", document.editFrmFinish._consult_anesth_id.value);
   consultUrl.requestUpdate('consultAnesth');
-  
+
   // Reload Infos Anesth
   var infosAnesthUrl = new Url("dPcabinet", "httpreq_vw_choix_anesth");
   infosAnesthUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);

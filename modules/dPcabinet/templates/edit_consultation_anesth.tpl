@@ -2,16 +2,16 @@
 
 Main.add(function () {
   ListConsults.init("{{$consult->_id}}", "{{$userSel->_id}}", "{{$date}}", "{{$vue}}", "{{$current_m}}");
-  
+
   // @todo : Chargements inutiles ?
   // Chargement pour le sejour
   // DossierMedical.reloadDossierSejour();
-  
+
   {{if $consult->_id}}
   // Chargement des antecedents, traitements, diagnostics du patients
   // DossierMedical.reloadDossierPatient();
   {{/if}}
-  
+
   if (document.editAntFrm) {
     document.editAntFrm.type.onchange();
   }

@@ -1,7 +1,7 @@
-{{mb_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_script module="dPplanningOp" script="cim10_selector" ajax=1}}
 
 {{if "dPmedicament"|module_active}}
-{{mb_script module="dPmedicament" script="medicament_selector"}}
+{{mb_script module="dPmedicament" script="medicament_selector" ajax=1}}
 {{/if}}
 
 <script type="text/javascript">
@@ -124,22 +124,22 @@ Main.add(function () {
 
 <table class="main">
   {{mb_default var=show_header value=0}}
-  {{if $show_header}} 
+  {{if $show_header}}
     <tr>
       <th class="title" colspan="2">
         <a style="float: left" href="?m=patients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}">
           {{mb_include module=patients template=inc_vw_photo_identite size=42}}
         </a>
-       
+
         <h2 style="color: #fff; font-weight: bold;">
           {{$patient}}
           {{if isset($sejour|smarty:nodefaults)}}
           <span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
           {{/if}}
-        </h2> 
+        </h2>
       </th>
-    </tr>   
-  {{/if}}   
+    </tr>
+  {{/if}}
   
   <tr>
     <td class="halfPane">

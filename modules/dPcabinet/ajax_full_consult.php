@@ -38,8 +38,6 @@ $consult = new CConsultation();if ($current_m == "dPurgences") {
   $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 }
 
-$tabSejour = array();
-
 // Chargement des banques
 $orderBanque = "nom ASC";
 $banque = new CBanque();
@@ -113,8 +111,6 @@ if ($consult->_id) {
     foreach ($_sejour->_ref_operations as $_operation) {
       $_operation->loadRefsFwd();
       $_operation->_ref_chir->loadRefFunction()->loadRefGroup();
-      // Tableaux de correspondances operation_id => sejour_id
-      $tabSejour[$_operation->_id] = $_sejour->_id;
     }
   }
   
@@ -267,7 +263,6 @@ $smarty->assign("services"        , $services);
 $smarty->assign("acte_ngap"      , $acte_ngap);
 $smarty->assign("acte_tarmed"    , $acte_tarmed);
 $smarty->assign("acte_caisse"    , $acte_caisse);
-$smarty->assign("tabSejour"      , $tabSejour);
 $smarty->assign("banques"        , $banques);
 $smarty->assign("listAnesths"    , $listAnesths);
 $smarty->assign("listChirs"      , $listChirs);

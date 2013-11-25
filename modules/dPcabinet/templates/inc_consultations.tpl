@@ -46,7 +46,11 @@
     <tr {{if $_consult->chrono == $_consult|const:'TERMINE'}} class="hatching" {{/if}}>
       {{assign var=consult_id    value=$_consult->_id}}
       {{assign var=patient       value=$_consult->_ref_patient}}
-      {{assign var=href_consult  value="?m=$m&tab=edit_consultation&selConsult=$consult_id"}}
+      {{if $app->user_prefs.new_consultation}}
+        {{assign var=href_consult  value="?m=$m&tab=vw_consultation&selConsult=$consult_id"}}
+      {{else}}
+        {{assign var=href_consult  value="?m=$m&tab=edit_consultation&selConsult=$consult_id"}}
+      {{/if}}
       {{assign var=href_planning value="?m=$m&tab=edit_planning&consultation_id=$consult_id"}}
       {{assign var=href_patient  value="?m=patients&tab=vw_edit_patients&patient_id=$patient->_id"}}
 

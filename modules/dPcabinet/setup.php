@@ -2029,6 +2029,10 @@ class CSetupdPcabinet extends CSetup {
       DROP `groupe_ok`,
       DROP `rhesus`;";
     $this->addQuery($query);*/
-    $this->mod_version = "2.21";
+
+    $this->makeRevision("2.21");
+    $this->addPrefQuery("new_consultation", "0");
+
+    $this->mod_version = "2.22";
   }
 }

@@ -1,15 +1,15 @@
-<script type="text/javascript">
-  function selectOperation(operation_id) {
+<script>
+  selectOperation = function(operation_id) {
     var oForm = getForm("addOpFrm");
     $V(oForm.operation_id, operation_id, false);
     submitOpConsult();
   }
-  function selectSejour(sejour_id) {
+  selectSejour = function(sejour_id) {
     var oForm = getForm("addOpFrm");
     $V(oForm.sejour_id, sejour_id, false);
     submitOpConsult();
   }
-  function newOperation(chir_id, pat_id) {
+  newOperation = function(chir_id, pat_id) {
     var url = new Url;
     url.setModuleTab("dPplanningOp", "vw_edit_planning");
     url.addParam("chir_id", chir_id);
@@ -19,10 +19,10 @@
     url.redirect();
   }
   {{if !$consult_anesth->libelle_interv && !$consult_anesth->sejour_id && !$consult_anesth->operation_id && ($nextSejourAndOperation.COperation->_id || $nextSejourAndOperation.CSejour->_id)}}
-  modalWindow = null;
-  Main.add(function () {
-    modalWindow = Modal.open($('evenement-chooser-modal'));
-  });
+    modalWindow = null;
+    Main.add(function () {
+      modalWindow = Modal.open($('evenement-chooser-modal'));
+    });
   {{/if}}
 </script>
 

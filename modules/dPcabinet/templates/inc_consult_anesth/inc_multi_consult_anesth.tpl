@@ -33,7 +33,7 @@
     });
   };
   reloadDossierAnesth = function(dossier_anesth_id) {
-    var url = new Url("cabinet", "edit_consultation", "tab");
+    var url = new Url("cabinet", Preferences.new_consultation ? "vw_consultation" : "edit_consultation", "tab");
     url.addParam("selConsult", "{{$consult->_id}}");
     url.addParam("dossier_anesth_id", dossier_anesth_id);
     url.redirect();
@@ -47,7 +47,11 @@
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="consultation_anesth_id" />
   <input type="hidden" name="consultation_id" disabled/>
-  <input type="hidden" name="postRedirect" value="m=cabinet&tab=edit_consultation&selConsult={{$consult->_id}}" />
+  {{if $app->user_prefs.new_consultation}}
+    <input type="hidden" name="postRedirect" value="m=cabinet&tab=vw_consultation&selConsult={{$consult->_id}}" />
+  {{else}}
+    <input type="hidden" name="postRedirect" value="m=cabinet&tab=edit_consultation&selConsult={{$consult->_id}}" />
+  {{/if}}
   {{if $dossiers_anesth|@count}}
     <select name="_consult_anesth_id" style="width: 20em;" onchange="reloadDossierAnesth(this.value)">
       {{foreach from=$dossiers_anesth item=_dossier}}

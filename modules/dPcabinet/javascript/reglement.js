@@ -2,9 +2,15 @@ var Reglement = {
   consultation_id   : null,
   user_id : null,
 
-  register: function(){
+  register: function(load) {
+    if (Object.isUndefined(load)) {
+      load = true;
+    }
+
     document.write('<div id="reglement"></div>');
-    Main.add(Reglement.reload.curry(false));
+    if (load) {
+      Main.add(Reglement.reload.curry(false));
+    }
   },
 
   submit: function(oForm, reload_acts, callback) {

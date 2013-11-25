@@ -80,6 +80,9 @@ Main.add(function () {
   loadSuivi({{$rpu->sejour_id}});
   {{/if}}
 
+
+  loadInterv();
+
   {{if @$modules.dPImeds->mod_active && $consult->sejour_id}}
     if($('Imeds')){
       loadResultLabo('{{$consult->sejour_id}}');
@@ -275,5 +278,5 @@ Main.add(function () {
 <script type="text/javascript">
   Reglement.consultation_id = '{{$consult->_id}}';
   Reglement.user_id = '{{$userSel->_id}}';
-  Reglement.register('{{$consult->_id}}');
+  Reglement.register(false);
 </script>

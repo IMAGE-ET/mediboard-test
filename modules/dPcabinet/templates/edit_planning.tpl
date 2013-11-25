@@ -279,7 +279,11 @@
 
 
   {{if $consult->_id && !$dialog}}
-    <a class="button search" href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}" style="float: right;">
+    {{if $app->user_prefs.new_consultation}}
+      <a class="button search" href="?m={{$m}}&tab=vw_consultation&selConsult={{$consult->_id}}" style="float: right;">
+    {{else}}
+      <a class="button search" href="?m={{$m}}&tab=edit_consultation&selConsult={{$consult->_id}}" style="float: right;">
+    {{/if}}
       {{tr}}CConsultation-title-access{{/tr}}
     </a>
   {{/if}}

@@ -5,12 +5,12 @@
 function calculClairance () {
   var oFormExam  = document.forms["editExamCompFrm"];
   var oFormConst = document.forms["edit-constantes-medicales"];
-  
+
   var poids      = parseFloat($V(oFormConst._last_poids));
   var creatinine = parseFloat($V(oFormExam.creatinine));
-  
-  if({{if $patient->_annees && $patient->_annees!="??" && $patient->_annees>=18 && $patient->_annees<=110}}1{{else}}0{{/if}} && 
-    poids && !isNaN(poids) && poids >= 35 && poids <= 120 && 
+
+  if({{if $patient->_annees && $patient->_annees!="??" && $patient->_annees>=18 && $patient->_annees<=110}}1{{else}}0{{/if}} &&
+    poids && !isNaN(poids) && poids >= 35 && poids <= 120 &&
     creatinine && !isNaN(creatinine) && creatinine >= 6 && creatinine <= 70) {
     $V(oFormExam._clairance, Math.round(({{if $patient->sexe=="m"}}1.04{{else}}0.85{{/if}}*poids*(140-{{if $patient->_annees!="??"}}{{$patient->_annees}}{{else}}0{{/if}})/(creatinine*7.2))*100)/100);
   }
@@ -22,12 +22,12 @@ function calculClairance () {
 function calculPSA () {
   var oFormExam     = getForm("editExamCompFrm");
   var oFormConst    = getForm("edit-constantes-medicales");
-  
+
   var vst      = parseFloat($V(oFormConst._last__vst));
   var ht       = parseFloat($V(oFormExam.ht));
   var ht_final = parseFloat($V(oFormExam.ht_final));
-  
-  if (vst && !isNaN(vst) && 
+
+  if (vst && !isNaN(vst) &&
     ht && !isNaN(ht) && ht > 0 &&
     ht_final && !isNaN(ht_final) && ht_final > 0) {
     $V(oFormExam._psa, Math.round(vst * (ht - ht_final))/100);
@@ -77,8 +77,8 @@ function saveDossierMedical() {
                 </button>
               </td>
             </tr>
-          </table>     
-      </fieldset> 
+          </table>
+      </fieldset>
       </form>
       {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
       <form name="dossier_medical_patient" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
@@ -146,7 +146,7 @@ function saveDossierMedical() {
                 mmol/l
               </td>
             </tr>
-            <tr> 
+            <tr>
               <th>{{mb_label object=$consult_anesth field="hb"}}</th>
               <td>
                 {{mb_field object=$consult_anesth field="hb" tabindex="104" size="4" onchange="submitForm(this.form)"}}
@@ -239,18 +239,18 @@ function saveDossierMedical() {
             </td>
           </tr>
         {{/if}}
-      </table> 
+      </table>
       </form>
     </td>
     <td class="text">
       <div id="listExamComp">
         {{include file="../../dPcabinet/templates/exam_comp.tpl"}}
       </div>
-      
+
       {{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription && $view_prescription}}
         <button class="tick" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour');">Accéder à la prescription</button>
       {{/if}}
-      
+
       {{if $app->user_prefs.displayDocsConsult}}
         <table class="form">
           <!-- Documents ExamComp -->

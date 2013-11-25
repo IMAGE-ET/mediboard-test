@@ -41,8 +41,9 @@ else {
 echo CAppUI::getMsg();
 
 if ($redirect) {
+  $vw_tab = CAppUI::pref("new_consultation") ? "vw_consultation" : "edit_consultation";
   CAppUI::redirect(
-    "m=cabinet&tab=edit_consultation&selConsult=".
+    "m=cabinet&tab=$vw_tab&selConsult=".
     $consult_anesth->consultation_id."&dossier_anesth_id=".$consult_anesth->_id
   );
 }

@@ -19,7 +19,12 @@ else {
 }
 $module->registerTab("vw_journee"                , TAB_READ);
 $module->registerTab("edit_planning"             , TAB_READ);
-$module->registerTab("edit_consultation"         , TAB_EDIT);
+if (CAppUI::pref("new_consultation") == "1") {
+  $module->registerTab("vw_consultation"         , TAB_EDIT);
+}
+else {
+  $module->registerTab("edit_consultation"         , TAB_EDIT);
+}
 //$module->registerTab("vw_dossier"                , TAB_EDIT);
 $module->registerTab("form_print_plages"         , TAB_READ);
 $module->registerTab("vw_compta"                 , TAB_EDIT);

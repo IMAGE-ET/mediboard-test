@@ -31,7 +31,7 @@ Main.add(function () {
 
 {{mb_default var=readonly value=0}}
 {{mb_default var=show_header value=0}}
-{{mb_default var=isPrescriptionInstalled value=isset($modules.dPprescription|smarty:nodefaults)}}
+{{mb_default var=isPrescriptionInstalled value="dPprescription"|module_active}}
 
 {{if $show_header}}
   {{assign var=patient value=$consult->_ref_patient}}

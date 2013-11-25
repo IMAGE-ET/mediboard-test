@@ -29,9 +29,7 @@ $selConsult   = CValue::getOrSession("selConsult");
 $dossier_anesth_id = CValue::getOrSession("dossier_anesth_id");
 
 $listPrats = CConsultation::loadPraticiens(PERM_EDIT);
-
 $listChirs = $user->loadPraticiens(PERM_READ);
-
 $listAnesths = $user->loadAnesthesistes();
 
 $list_mode_sortie = array();
@@ -47,8 +45,6 @@ if ($current_m == "dPurgences") {
   $group = CGroups::loadCurrent();
   $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 }
-
-$tabSejour = array();
 
 // Chargement des banques
 $orderBanque = "nom ASC";
@@ -135,28 +131,22 @@ if ($consult->_id) {
  
   // Chargement du patient
   $patient = $consult->_ref_patient;
+  $patient->countBackRefs("consultations");
+  $patient->countBackRefs("sejours");
   $patient->loadRefs();
   $patient->loadRefsNotes();  
   $patient->loadRefPhotoIdentite();
-  
-  // Chargement de ses consultations
-  foreach ($patient->_ref_consultations as $_consultation) {
-    $_consultation->loadRefsFwd();
-    $_consultation->_ref_chir->loadRefFunction()->loadRefGroup();
-  }
-  
+
   // Chargement de ses séjours
   foreach ($patient->_ref_sejours as $_key => $_sejour) {
     $_sejour->loadRefsOperations();
     foreach ($_sejour->_ref_operations as $_key_op => $_operation) {
       $_operation->loadRefsFwd();
       $_operation->_ref_chir->loadRefFunction()->loadRefGroup();
-      // Tableaux de correspondances operation_id => sejour_id
-      $tabSejour[$_operation->_id] = $_sejour->_id;
     }
     $_sejour->loadRefsFwd();
   }
-  
+
   // Affecter la date de la consultation
   $date = $consult->_ref_plageconsult->date;
 }
@@ -314,7 +304,6 @@ $smarty->assign("services"        , $services);
 $smarty->assign("acte_ngap"      , $acte_ngap);
 $smarty->assign("acte_tarmed"    , $acte_tarmed);
 $smarty->assign("acte_caisse"    , $acte_caisse);
-$smarty->assign("tabSejour"      , $tabSejour);
 $smarty->assign("banques"        , $banques);
 $smarty->assign("listAnesths"    , $listAnesths);
 $smarty->assign("listChirs"      , $listChirs);

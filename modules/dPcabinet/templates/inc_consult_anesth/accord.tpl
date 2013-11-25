@@ -52,6 +52,7 @@ Main.add(function () {
       }    
      }
   });
+
   {{if $app->user_prefs.ccam_consultation == 1}}
   var tabsActes = Control.Tabs.create('tab-actes', false);
   {{/if}}
@@ -78,7 +79,9 @@ Main.add(function () {
   <li><a id="acc_consultation_a_Actes" href="#Actes">{{tr}}CCodable-actes{{/tr}}</a></li>
   {{/if}}
   <li><a href="#fdrConsult">Documents</a></li>
-  <li><a id="a_reglements_consult"  href="#reglement">Réglements</a></li>
+  <li onmousedown="Reglement.reload(true);">
+    <a id="a_reglements_consult"  href="#reglement">Réglements</a>
+  </li>
 </ul>
 
 <hr class="control_tabs" />
@@ -175,5 +178,5 @@ Main.add(function () {
 <script type="text/javascript">
   Reglement.consultation_id = '{{$consult->_id}}';
   Reglement.user_id = '{{$userSel->_id}}';
-  Reglement.register('{{$consult->_id}}');
+  Reglement.register(false);
 </script>
