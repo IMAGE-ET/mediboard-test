@@ -106,7 +106,9 @@ if ($plageconsult_id) {
   if (!$plage->plageconsult_id) {
     $plage->load($plageconsult_id);
   }
-  $plage->loadRefs(false);
+  $plage->loadRefsFwd(true);
+  $plage->loadRefsConsultations(true, true, true);
+  $plage->loadFillRate();
   $plage->_ref_chir->loadRefFunction();
   for ($i = 0; $i < $plage->_total; $i++) {
     $minutes = $plage->_freq * $i;

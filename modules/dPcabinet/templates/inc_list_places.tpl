@@ -139,7 +139,7 @@
   {{/if}}
   {{foreach from=$listPlace item=_place}}
     {{assign var=count_places value=$_place.consultations|@count}}
-    <tr {{if !$multiple && ($_place.time == $consultation->heure)}}class="selected"{{/if}}>
+    <tr {{if ($_place.time == $consultation->heure)}}class="selected"{{/if}}>
       <td>
         {{if $count_places> 1}}
           <img src="style/mediboard/images/icons/small-warning.png" alt="SURB" title="surbooking : {{$count_places}} patients" style="float:right;"/>
@@ -183,7 +183,7 @@
             {{assign var="style" value=""}}
           {{/if}}
           <div {{$style|smarty:nodefaults}}>
-            {{$_consultation->patient_id|ternary:$_consultation->_ref_patient:"[PAUSE]"}}
+            {{$_consultation->patient_id|ternary:$_consultation->_ref_patient:"[PAUSE]"}} {{if $_consultation->annule}}<span style="color:red;">(ANNULE)</span>{{/if}}
             {{if $_consultation->duree > 1}}
               x{{$_consultation->duree}}
             {{/if}}

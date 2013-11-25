@@ -61,9 +61,15 @@ RDVmultiples = {
   // add a slot to the list.
   addSlot : function(slot_number, plage_id, consult_id, date, time, chir_id, _chir_view, toTrash) {
     var oldslot = this.slots[slot_number];
+
     // if consult_id, We keep it
     if (oldslot && oldslot.consult_id && consult_id != oldslot.consult_id) {
       consult_id = oldslot.consult_id;
+    }
+
+    // if consult && is_cancelled, we keep the status
+    if (oldslot && oldslot.is_cancelled == 1 && !toTrash) {
+      toTrash = 1;
     }
     this.slots[slot_number] = new consultationRdV(plage_id, consult_id, date, time, chir_id, _chir_view, toTrash);
 
@@ -88,7 +94,18 @@ RDVmultiples = {
     // si consult_id => annulation du rendez-vous
     if (slot && slot.consult_id) {
       if (!_reset) {
-        slot.is_cancelled = 1;
+        console.log(slot.is_cancelled);
+
+        if (slot.is_cancelled == 1) {
+          slot.is_cancelled = 0;
+          $('cancel_plage_'+rank).hide();
+          $('discancel_plage_'+rank).show();
+        }
+        else {
+          slot.is_cancelled = 1;
+          $('cancel_plage_'+rank).show();
+          $('discancel_plage_'+rank).hide();
+        }
       }
     }
     // sinon on le supprime + refresh
@@ -301,10 +318,10 @@ Main.add(function () {
       {{if $multipleMode}}
         <div id="tools_plage_{{$j-1}}" class="tools_plage" style="text-align: center;">
           <button class="button target" onclick="RDVmultiples.selRank('{{$j-1}}')"> RDV {{$j}}</button>
-
           <button type="button" class="trash notext" onclick="RDVmultiples.removeSlot('{{$j-1}}')"></button>
           <input type="hidden" name="consult_id" value=""/>
-
+          <div id="cancel_plage_{{$j-1}}" style="display: none;">Ce RDV sera annulé</div>
+          <div id="discancel_plage_{{$j-1}}" style="display: none;">Ce RDV ne sera pas annulé</div>
         </div>
       {{/if}}
       <div id="listPlaces-{{$j-1}}" class="listPlace"></div>

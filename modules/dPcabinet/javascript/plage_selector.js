@@ -60,7 +60,7 @@ PlageConsultSelector = {
       console.log(iterator+ " -> ", consult);
       // main consult
       if (iterator == 0) {
-        window.PlageConsultSelector.set(consult.heure, consult.plage_id, consult.date, consult.chir_id);
+        window.PlageConsultSelector.set(consult.heure, consult.plage_id, consult.date, consult.chir_id, consult.is_cancelled);
       }
       // multiple
       else {
@@ -81,7 +81,7 @@ PlageConsultSelector = {
   },
 
   // classic set for mono consult
-  set: function(heure, plage_id, date, chir_id) {
+  set: function(heure, plage_id, date, chir_id, is_cancelled) {
     var oForm = getForm(this.sForm);
     $V(oForm[this.sChir_id] , chir_id, false);
     oForm[this.sChir_id].fire("ui:change");
@@ -90,6 +90,7 @@ PlageConsultSelector = {
       refreshFunction(chir_id);
       $V(oForm[this.sFunction_id], '');
     }
+    $V(oForm.annule          , is_cancelled);
     $V(oForm[this.sHeure]          , heure);
     $V(oForm[this.sDate]           , DateFormat.format(new Date(date), "d/M/yyyy"));
     $V(oForm[this.sPlageconsult_id], plage_id, true);
