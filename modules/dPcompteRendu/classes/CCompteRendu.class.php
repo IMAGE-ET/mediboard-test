@@ -1270,7 +1270,7 @@ class CCompteRendu extends CDocumentItem {
     $this->loadContent();
     $content = $this->loadHTMLcontent($this->_source, '', $margins, CCompteRendu::$fonts[$this->font], $this->size, $auto_print);
     $htmltopdf = new CHtmlToPDF();
-    $htmltopdf->generatePDF($content, 0, $this->_page_format, $this->_orientation, $file);
+    $htmltopdf->generatePDF($content, 0, $this, $file);
     $file->file_size = filesize($file->_file_path);
     $this->_ref_file = $file;
 
@@ -1536,7 +1536,7 @@ class CCompteRendu extends CDocumentItem {
     $object->fillTemplate($template);
     $template->renderDocument($source);
     $htmltopdf = new CHtmlToPDF($factory);
-    $htmltopdf->generatePDF($template->document, 1, $compte_rendu->_page_format, $compte_rendu->_orientation, new CFile());
+    $htmltopdf->generatePDF($template->document, 1, $compte_rendu, new CFile());
     CApp::rip();
   }
 

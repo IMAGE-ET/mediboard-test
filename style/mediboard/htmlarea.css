@@ -133,6 +133,11 @@ span.page:before {
     background: #dde;
   }
 
+  span.metadata,
+  span.metada * {
+    background: #19a;
+  }
+
   span.value,
   span.value * {
     background: #eee;

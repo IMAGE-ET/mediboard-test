@@ -65,6 +65,14 @@ class CTemplateManager {
     $this->addLongDateProperty("Général - date du jour (longue, minuscule)", $now, true);
     $this->addTimeProperty("Général - heure courante", $now);
 
+    if (isset($parameters["isModele"])) {
+      $this->addProperty("Meta Données - Date de verrouillage - Date");
+      $this->addProperty("Meta Données - Date de verrouillage - Heure");
+      $this->addProperty("Meta Données - Verrouilleur - Nom");
+      $this->addProperty("Meta Données - Verrouilleur - Prénom");
+      $this->addProperty("Meta Données - Verrouilleur - Initiales");
+    }
+
     // Connected user
     $user_complete = $user->_view;
     if ($user->isPraticien()) {

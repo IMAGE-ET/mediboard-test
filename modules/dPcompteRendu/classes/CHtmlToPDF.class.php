@@ -37,14 +37,14 @@ class CHtmlToPDF {
 
   static $_width_page = 595.28;
   static $_marges = 2;
-  
+
   static $_font_size_lookup = array(
     // For basefont support
-    -3 => "4pt", 
-    -2 => "5pt", 
-    -1 => "6pt", 
-     0 => "7pt", 
-    
+    -3 => "4pt",
+    -2 => "5pt",
+    -1 => "6pt",
+     0 => "7pt",
+
      1 => "8pt",
      2 => "10pt",
      3 => "12pt",
@@ -52,14 +52,14 @@ class CHtmlToPDF {
      5 => "18pt",
      6 => "24pt",
      7 => "34pt",
-     
+
     // For basefont support
-     8 => "48pt", 
-     9 => "44pt", 
-    10 => "52pt", 
-    11 => "60pt", 
+     8 => "48pt",
+     9 => "44pt",
+    10 => "52pt",
+    11 => "60pt",
   );
-  
+
   /**
    * Constructeur à partir d'une factory
    *
@@ -69,10 +69,10 @@ class CHtmlToPDF {
     if (!$factory) {
       $factory = CAppUI::pref("choice_factory");
     }
-    
+
     CHtmlToPDFConverter::init($factory);
   }
-  
+
   /**
    * Destructeur standard
    */
@@ -80,30 +80,44 @@ class CHtmlToPDF {
     $this->content = null;
     unset($this->content);
   }
-  
+
   /**
    * Génération d'un pdf à partir d'une source, avec stream au client si demandé
-   * 
-   * @param string  $content     source html
-   * @param boolean $stream      envoi du pdf au navigateur 
-   * @param string  $format      format de la page
-   * @param string  $orientation orientation de la page
-   * @param CFile   $file        le CFile pour lequel générer le pdf
-   * 
+   *
+   * @param string        $content      source html
+   * @param boolean       $stream       envoi du pdf au navigateur
+   * @param CCompteRendu  $compte_rendu compte-rendu ciblé
+   * @param CFile         $file         le CFile pour lequel générer le pdf
+   *
    * @return string
    */
-  function generatePDF($content, $stream, $format, $orientation, $file) {
+  function generatePDF($content, $stream, $compte_rendu, $file) {
     $this->content = $this->fixBlockElements($content);
+
+    // Remplacement des champs seulement à l'impression
     $this->content = str_replace("[Général - numéro de page]", "<span class='page'></span>", $this->content);
-    
-    // Problème sous IE : supression de i'id sur la div
-    
-    $pdf_content = CHtmlToPDFConverter::convert($this->content, $format, $orientation);
+
+    $date_lock = "";
+    $locker = new CMediusers();
+
+    if ($compte_rendu->valide) {
+      $locker = $compte_rendu->loadRefLocker();
+      $log_lock = $compte_rendu->loadLastLogForField("valide");
+      $date_lock = $log_lock->date;
+    }
+
+    $this->content = str_replace("[Meta Données - Date de verrouillage - Date]" , $compte_rendu->valide ? CMbDT::format($date_lock, "%d/%m/%Y") : "", $this->content);
+    $this->content = str_replace("[Meta Données - Date de verrouillage - Heure]", $compte_rendu->valide ? CMbDT::format($date_lock, "%Hh%m") : "", $this->content);
+    $this->content = str_replace("[Meta Données - Verrouilleur - Nom]"      , $locker->_user_last_name, $this->content);
+    $this->content = str_replace("[Meta Données - Verrouilleur - Prénom]"   , $locker->_user_first_name, $this->content);
+    $this->content = str_replace("[Meta Données - Verrouilleur - Initiales]", $locker->initials, $this->content);
+
+    $pdf_content = CHtmlToPDFConverter::convert($this->content, $compte_rendu->_page_format, $compte_rendu->_orientation);
 
     if ($file->_file_path) {
       file_put_contents($file->_file_path, $pdf_content);
     }
-    
+
     $this->nbpages = preg_match_all("/\/Page\W/", $pdf_content, $matches);
 
     if ($stream) {
@@ -118,18 +132,18 @@ class CHtmlToPDF {
       header("Content-length: ".strlen($pdf_content));
       header('Content-type: application/pdf');
       header("Content-disposition: inline; filename=\"".$file->file_name."\"");
-      
+
       echo $pdf_content;
     }
   }
-  
+
   /**
    * Nettoyage de la source qui peut être altérée par un copier-coller provenant de word
    * Expressions régulières provenant de FCKEditor
    * cf http://docs.cksource.com/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options/CleanWordKeepsStructure
-   * 
+   *
    * @param string $str source html
-   * 
+   *
    * @return string
    */
   static function cleanWord($str) {
