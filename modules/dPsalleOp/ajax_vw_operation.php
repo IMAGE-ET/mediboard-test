@@ -152,20 +152,6 @@ $unites["ecbu"]       = array("nom"=>"ECBU","unit"=>"");
 // Initialisation d'un acte NGAP
 $acte_ngap = CActeNGAP::createEmptyFor($selOp);
 
-// Si le module Tarmed est installé chargement d'un acte tarmed et caisse
-$acte_tarmed = null;
-$acte_caisse = null;
-if (CModule::getActive("tarmed")) {
-  $acte_tarmed = CActeTarmed::createEmptyFor($selOp);
-  $acte_caisse = CActeCaisse::createEmptyFor($selOp);
-}
-$total_tarmed = $selOp->loadRefsActesTarmed();
-$total_caisse = $selOp->loadRefsActesCaisse();
-$soustotal_base = array("tarmed" => $total_tarmed["base"], "caisse" => $total_caisse["base"]);
-$soustotal_dh   = array("tarmed" => $total_tarmed["dh"], "caisse" => $total_caisse["dh"]);
-$total["tarmed"] = round($total_tarmed["base"]+$total_tarmed["dh"], 2);
-$total["caisse"] = round($total_caisse["base"]+$total_caisse["dh"], 2);
-
 // Vérification de la check list journalière
 $daily_check_list = CDailyCheckList::getList($salle, $date);
 $daily_check_list->loadItemTypes();
@@ -213,15 +199,9 @@ $group->loadConfigValues();
 $listValidateurs = CPersonnel::loadListPers(array("op", "op_panseuse", "iade", "sagefemme", "manipulateur"), true, true);
 $operateurs_disp_vasc = implode("-", array_merge(CMbArray::pluck($listChirs, "_id"), CMbArray::pluck($listValidateurs, "user_id")));
 
-$smarty->assign("soustotal_base" , $soustotal_base);
-$smarty->assign("soustotal_dh"   , $soustotal_dh);
-$smarty->assign("total"          , $total);
-
 $smarty->assign("anesth_perop"           , new CAnesthPerop());
 $smarty->assign("unites"                 , $unites);
 $smarty->assign("acte_ngap"              , $acte_ngap);
-$smarty->assign("acte_tarmed"            , $acte_tarmed);
-$smarty->assign("acte_caisse"            , $acte_caisse);
 $smarty->assign("op"                     , $op);
 $smarty->assign("salle"                  , $salle->_id);
 $smarty->assign("currUser"               , $currUser);

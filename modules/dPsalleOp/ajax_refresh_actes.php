@@ -37,14 +37,9 @@ $listChirs = $listChirs->loadPraticiens(PERM_DENY);
 //Initialisation d'un acte NGAP
 $acte_ngap = CActeNGAP::createEmptyFor($operation);
 
-$acte_tarmed = null;
-if (CModule::getActive("tarmed")) {
-  $acte_tarmed = CActeTarmed::createEmptyFor($operation);
-}
 // Création du template
 $smarty = new CSmartyDP("modules/dPsalleOp");
 $smarty->assign("acte_ngap"  , $acte_ngap      );
-$smarty->assign("acte_tarmed", $acte_tarmed    );
 $smarty->assign("subject"    , $operation      );
 $smarty->assign("listAnesths", $listAnesths    );
 $smarty->assign("listChirs"  , $listChirs      );

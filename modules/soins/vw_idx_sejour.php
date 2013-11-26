@@ -339,20 +339,6 @@ if ($type_admission) {
   $sejour->type = $type_admission;
 }
 
-// Si le module Tarmed est installé chargement d'un acte
-$acte_tarmed = null;
-$acte_caisse = null;
-if (CModule::getActive("tarmed")) {
-  $acte_tarmed = CActeTarmed::createEmptyFor($sejour);
-  $acte_caisse = CActeCaisse::createEmptyFor($sejour);
-}
-$total_tarmed = $sejour->loadRefsActesTarmed();
-$total_caisse = $sejour->loadRefsActesCaisse();
-$soustotal_base = array("tarmed" => $total_tarmed["base"], "caisse" => $total_caisse["base"]);
-$soustotal_dh   = array("tarmed" => $total_tarmed["dh"], "caisse" => $total_caisse["dh"]);
-$total["tarmed"] = round($total_tarmed["base"]+$total_tarmed["dh"], 2);
-$total["caisse"] = round($total_caisse["base"]+$total_caisse["dh"], 2);
-
 /**
  * Mettre en cache les lits
  *
@@ -426,10 +412,5 @@ $smarty->assign("tab_sejour"              , $tab_sejour);
 $smarty->assign("visites"                 , $visites);
 $smarty->assign("current_date"            , CMbDT::date());
 
-$smarty->assign("total"                   , $total);
-$smarty->assign("acte_tarmed"             , $acte_tarmed);
-$smarty->assign("acte_caisse"             , $acte_caisse);
-$smarty->assign("soustotal_base"          , $soustotal_base);
-$smarty->assign("soustotal_dh"            , $soustotal_dh);
 $smarty->assign("group_id"                , CGroups::loadCurrent()->_id);
 $smarty->display("vw_idx_sejour.tpl");

@@ -266,20 +266,6 @@ if ($consult->_id) {
   }
 }
 
-// Si le module Tarmed est installé chargement d'un acte
-$acte_tarmed = null;
-$acte_caisse = null;
-if (CModule::getActive("tarmed")) {
-  $acte_tarmed = CActeTarmed::createEmptyFor($consult);
-  $acte_caisse = CActeCaisse::createEmptyFor($consult);
-}
-$total_tarmed = $consult->loadRefsActesTarmed();
-$total_caisse = $consult->loadRefsActesCaisse();
-$soustotal_base = array("tarmed" => $total_tarmed["base"], "caisse" => $total_caisse["base"]);
-$soustotal_dh   = array("tarmed" => $total_tarmed["dh"], "caisse" => $total_caisse["dh"]);
-$total["tarmed"] = round($total_tarmed["base"]+$total_tarmed["dh"], 2);
-$total["caisse"] = round($total_caisse["base"]+$total_caisse["dh"], 2);
-
 if (CModule::getActive("maternite")) {
   $consult->loadRefGrossesse();
 }
@@ -302,8 +288,6 @@ $smarty->assign("contrainteOrientation", $contrainteOrientation);
 $smarty->assign("services"        , $services);
 
 $smarty->assign("acte_ngap"      , $acte_ngap);
-$smarty->assign("acte_tarmed"    , $acte_tarmed);
-$smarty->assign("acte_caisse"    , $acte_caisse);
 $smarty->assign("banques"        , $banques);
 $smarty->assign("listAnesths"    , $listAnesths);
 $smarty->assign("listChirs"      , $listChirs);
@@ -330,10 +314,6 @@ $smarty->assign("list_mode_sortie", $list_mode_sortie);
 if (CModule::getActive("dPprescription")) {
   $smarty->assign("line"           , new CPrescriptionLineMedicament());
 }
-
-$smarty->assign("soustotal_base" , $soustotal_base);
-$smarty->assign("soustotal_dh"   , $soustotal_dh);
-$smarty->assign("total"          , $total);
 
 if ($consult->_is_dentiste) {
   $devenirs_dentaires = $consult->_ref_patient->loadRefsDevenirDentaire();

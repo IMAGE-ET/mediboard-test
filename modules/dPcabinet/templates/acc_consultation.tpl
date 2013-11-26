@@ -19,7 +19,7 @@
 {{mb_script module="soins" script="plan_soins"}}
 
 
-<script type="text/javascript">
+<script>
 
 function loadSuivi(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
   if(sejour_id) {
@@ -245,15 +245,18 @@ Main.add(function () {
     {{/if}}
     
     {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+      {{mb_script module=tarmed script=actes ajax=true}}
+      <script>
+        Main.add(function() {
+          ActesTarmed.loadList('{{$consult->_id}}', '{{$consult->_class}}', '{{$consult->_ref_chir->_id}}');
+          ActesCaisse.loadList('{{$consult->_id}}', '{{$consult->_class}}', '{{$consult->_ref_chir->_id}}');
+        });
+      </script>
       <div id="tarmed_tab" style="display:none">
-        <div id="listActesTarmed">
-          {{mb_include module=tarmed template=inc_codage_tarmed }}
-        </div>
+        <div id="listActesTarmed"></div>
       </div>
       <div id="caisse_tab" style="display:none">
-        <div id="listActesCaisse">
-          {{mb_include module=tarmed template=inc_codage_caisse}}
-        </div>
+        <div id="listActesCaisse"></div>
       </div>
     {{/if}}
   {{/if}}
@@ -275,7 +278,7 @@ Main.add(function () {
 
 <!-- Reglement -->
 {{mb_script module="dPcabinet" script="reglement"}}
-<script type="text/javascript">
+<script>
   Reglement.consultation_id = '{{$consult->_id}}';
   Reglement.user_id = '{{$userSel->_id}}';
   Reglement.register(false);

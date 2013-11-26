@@ -107,14 +107,17 @@
   </div>
 </div>
 {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+  {{mb_script module=tarmed script=actes ajax=true}}
+  <script>
+    Main.add(function() {
+      ActesTarmed.loadList('{{$subject->_id}}', '{{$subject->_class}}', '{{$subject->_ref_chir->_id}}');
+      ActesCaisse.loadList('{{$subject->_id}}', '{{$subject->_class}}', '{{$subject->_ref_chir->_id}}');
+    });
+  </script>
   <div id="tarmed_tab" style="display:none">
-    <div id="listActesTarmed">
-      {{mb_include module=tarmed template=inc_codage_tarmed object=$subject}}
-    </div>
+    <div id="listActesTarmed"></div>
   </div>
   <div id="caisse_tab" style="display:none">
-    <div id="listActesCaisse">
-      {{mb_include module=tarmed template=inc_codage_caisse}}
-    </div>
+    <div id="listActesCaisse"></div>
   </div>
 {{/if}}

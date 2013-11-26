@@ -547,6 +547,7 @@ class CCodable extends CMbObject {
         $_acte_tarmed->loadRefExecutant();
         $_acte_tarmed->loadRefTarmed();
         $_acte_tarmed->countActesAssocies();
+        $_acte_tarmed->loadAlertes();
         $totaux["base"] += $_acte_tarmed->montant_base * $_acte_tarmed->quantite;
         $totaux["dh"]   += $_acte_tarmed->montant_depassement;
       }
