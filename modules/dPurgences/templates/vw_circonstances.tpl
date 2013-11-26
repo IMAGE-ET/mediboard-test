@@ -11,7 +11,7 @@
 
 {{mb_script module=urgences script=CCirconstance}}
 
-<button class="new" type="button" onclick="CCirconstance.edit('0')">{{tr}}New{{/tr}} {{tr}}CCirconstance{{/tr}}</button>
+<button class="new" type="button" onclick="CCirconstance.edit('0')">{{tr}}New-female{{/tr}} {{tr}}CCirconstance{{/tr}}</button>
 <table class="tbl">
   <tr>
     <th class="title" colspan="3">

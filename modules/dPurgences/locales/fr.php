@@ -450,6 +450,7 @@ $locales['Check_rpu'] = 'Vérifier les doublons RPU';
 $locales['Config_RPU_Sender'] = 'Configuration';
 $locales['Import-Motif'] = 'Importer les motifs';
 $locales['Nb-month'] = 'Nombre de mois avant la date actuelle';
+$locales['New-female'] = 'Nouvelle';
 $locales['RPU_sender_source'] = 'Source';
 $locales['config-dPurgence-check_cotation-desc'] = 'Vérifier que la cotation des actes CCAM et NGAP a été réalisé et validé par le praticien dans l\'onglet des sorties';
 $locales['config-dPurgences-CRPU-impose_create_sejour_mutation'] = 'Création du séjour de mutation obligatoire pour la sortie';

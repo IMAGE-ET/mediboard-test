@@ -25,7 +25,7 @@
   </tr>
   <tr>
     <td class="narrow">
-      <button type="button" class="" onclick="urgencesMaintenance.importMotif()">{{tr}}Import-Motif{{/tr}}</button>
+      <button type="button" class="add" onclick="urgencesMaintenance.importMotif()">{{tr}}Import-Motif{{/tr}}</button>
     </td>
     <td id="import_sfmu">
     </td>
