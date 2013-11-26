@@ -1824,7 +1824,7 @@ class CConstantesMedicales extends CMbObject {
    *
    * @return array
    */
-  static function getConstantsByRank($type = 'form',$order_by_types = true, $host = null) {
+  static function getConstantsByRank($type = 'form', $order_by_types = true, $host = null) {
     $selection = self::getRanksFor($type, $host);
 
     $list_constants = CConstantesMedicales::$list_constantes;
@@ -2205,6 +2205,9 @@ class CConstantesMedicales extends CMbObject {
       foreach ($constants as $cst) {
         if (!is_null($cst->$cst_name) && array_search($cst_name, $constants_list) === false) {
           $rank = CMbArray::searchRecursive($cst_name, $constants_by_rank);
+          if (empty($rank)) {
+            continue;
+          }
           $rank = array_keys($rank['all']);
           $rank = $rank[0];
 
