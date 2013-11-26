@@ -13,7 +13,7 @@
 
 
 $circonstance = new CCirconstance();
-$list_circonstances = $circonstance->loadList();
+$list_circonstances = $circonstance->loadList(null, "Code");
 
 $smarty = new CSmartyDP();
 $smarty->assign("list_circonstances", $list_circonstances);
