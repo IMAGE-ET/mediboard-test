@@ -33,6 +33,7 @@ $locales['config-sa-server'] = 'Mode Serveur';
 $locales['config-sa-server-desc'] = 'Mode Serveur';
 $locales['config-sa-trigger_consultation'] = 'Trigger sur la consultation';
 $locales['config-sa-trigger_consultation-desc'] = 'Trigger sur la consultation';
+$locales['config-sa-trigger_consultation-facture'] = 'Facturée';
 $locales['config-sa-trigger_consultation-sortie_reelle'] = 'Sortie réelle du séjour';
 $locales['config-sa-trigger_consultation-valide'] = 'Validée';
 $locales['config-sa-trigger_operation'] = 'Trigger sur l\'intervention';

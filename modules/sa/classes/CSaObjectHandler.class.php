@@ -126,15 +126,20 @@ class CSaObjectHandler extends CEAIObjectHandler {
       // CConsultation
       // Envoi des actes dans le cas de la clôture de la cotation
       case 'CConsultation':
+        /** @var CConsultation $consultation */
         $consultation = $mbObject;
         
         if ($consultation->sejour_id) {
-          $sejour = $consultation->loadRefSejour();
-          
           switch (CAppUI::conf("sa trigger_consultation")) {
             case 'sortie_reelle':
               break;
-            
+
+            case 'facture':
+              if ($consultation->fieldModified('facture', 1)) {
+                $this->sendFormatAction("onAfterStore", $consultation);
+              }
+              break;
+
             default:
               if ($consultation->fieldModified('valide', 1)) {
                 $this->sendFormatAction("onAfterStore", $consultation);
