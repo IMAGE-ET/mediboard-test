@@ -757,6 +757,11 @@ class CSetupdPhospi extends CSetup {
     $query = "ALTER TABLE `observation_medicale` ADD `type` ENUM ('reevaluation');";
     $this->addQuery($query);
 
-    $this->mod_version = "0.82";
+    $this->makeRevision("0.82");
+    $query = "ALTER TABLE `uf`
+                ADD `type_sejour` ENUM ('comp','ambu','exte','seances','ssr','psy','urg','consult');";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.83";
   }
 }

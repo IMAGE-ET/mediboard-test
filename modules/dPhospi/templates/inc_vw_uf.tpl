@@ -17,6 +17,11 @@
     <th>{{mb_label object=$uf field=type}}</th>
     <td>{{mb_field object=$uf field=type typeEnum=radio}}</td>
   </tr>
+
+  <tr>
+    <th>{{mb_label object=$uf field=type_sejour}}</th>
+    <td>{{mb_field object=$uf field=type_sejour emptyLabel="Choose"}}</td>
+  </tr>
   
   <tr>
     <th>{{mb_label object=$uf field=code}}</th>
@@ -45,7 +50,5 @@
       {{/if}}
     </td>
   </tr>
-
-</table>   
-
+</table>
 </form>

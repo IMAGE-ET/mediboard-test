@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Hospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -22,6 +22,7 @@ class CUniteFonctionnelle extends CMbObject {
   public $libelle;
   public $description;
   public $type;
+  public $type_sejour;
   
   /** @var CGroups */
   public $_ref_group;
@@ -61,6 +62,7 @@ class CUniteFonctionnelle extends CMbObject {
     $props["libelle"]     = "str notNull seekable";
     $props["description"] = "text";
     $props["type"]        = "enum list|hebergement|soins|medicale default|hebergement";
+    $props["type_sejour"] = "enum list|comp|ambu|exte|seances|ssr|psy|urg|consult";
     
     return $props;
   }
