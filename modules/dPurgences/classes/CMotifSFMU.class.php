@@ -21,6 +21,7 @@ class CMotifSFMU extends CMbObject {
   public $motif_sfmu_id;
   public $code;
   public $libelle;
+  public $categorie;
 
   /**
    * Initialize the class specifications
@@ -55,8 +56,9 @@ class CMotifSFMU extends CMbObject {
   function getProps() {
     $props = parent::getProps();
 
-    $props["code"]    = "str";
-    $props["libelle"] = "str";
+    $props["code"]      = "str";
+    $props["libelle"]   = "str";
+    $props["categorie"] = "str";
 
     return $props;
   }
