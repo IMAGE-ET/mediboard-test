@@ -42,4 +42,4 @@ while ($line = $motif_csv->readLine()) {
   $count++;
 }
 
-CAppUI::stepAjax("$count motif ajouté", UI_MSG_OK);
+CAppUI::stepAjax("$count motifs ajoutés", UI_MSG_OK);
