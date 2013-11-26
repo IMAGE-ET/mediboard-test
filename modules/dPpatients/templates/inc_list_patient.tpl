@@ -259,7 +259,7 @@
 
   <tr>
     <td class="button" colspan="4">
-      <button type="button" class="cancel" onclick="emptyForm()"
+      <button type="button" class="cleanup" onclick="emptyForm()"
           title="Vider les champs du formulaire">{{tr}}Empty{{/tr}}</button>
       <button id="ins_list_patient_button_search" class="search" tabindex="10" type="submit" {{if !$board}}onclick="Patient.search(this.form);"{{/if}}>{{tr}}Search{{/tr}}</button>
 
