@@ -377,7 +377,7 @@ class CSetupdPurgences extends CSetup {
     $this->makeRevision("0.43");
 
     $query = "ALTER TABLE `circonstance`
-                ADD `actif` ENUM ('0','1') DEFAULT '0';";
+                ADD `actif` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
 
     $this->makeRevision("0.44");
