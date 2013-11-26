@@ -388,7 +388,13 @@ class CSetupdPurgences extends CSetup {
                 WHERE `rpu`.circonstance IS NOT NULL";
     $this->addQuery($query);
 
+    $this->makeRevision("0.45");
 
-    $this->mod_version = "0.45";
+    $query = "ALTER TABLE `motif_sfmu`
+                ADD `categorie` VARCHAR (255);";
+    $this->addQuery($query);
+
+
+    $this->mod_version = "0.46";
   }  
 }
