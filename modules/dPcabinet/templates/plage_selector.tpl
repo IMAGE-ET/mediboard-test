@@ -135,13 +135,9 @@ RDVmultiples = {
     $('plistPlaces-'+rank).update('');
   },
 
-  refreshSlot : function(rank, multiple) {
+  refreshSlot : function(rank, plage_id, consult_id, multiple) {
   this.selRank(rank);
-  var consult_list = $H(this.slots);
-  var consult = consult_list._object[rank];
-    if (consult) {
-      this.loadPlageConsult(consult.plage_id, consult.consult_id, multiple);
-    }
+  this.loadPlageConsult(plage_id, consult_id, multiple);
   },
 
   // load the plageconsult to the right
@@ -162,7 +158,7 @@ RDVmultiples = {
       window.parent.Control.Modal.close();
     }
     else {
-      alert("test");
+      alert("Selectionner au moins une plage");
     }
   }
 };
@@ -280,7 +276,7 @@ Main.add(function () {
       {{if $multipleMode}}
         <td>
           <button type="button" id="consult_multiple_button_validate" class="button tick" onclick="RDVmultiples.sendData(); Control.Modal.close()">Valider</button>
-          <button type="button" class="button cleanup" onclick="RDVmultiples.resetSlots()">Réinitialiser</button>
+          <button type="button" class="button cleanup notext" onclick="RDVmultiples.resetSlots()">Vider les plages créées</button>
           <button type="button" class="help" onclick="Modal.open('help_consult_multiple');">{{tr}}Help{{/tr}}</button>
         </td>
       {{/if}}
