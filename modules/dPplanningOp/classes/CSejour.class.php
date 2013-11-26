@@ -3258,7 +3258,13 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     if (CModule::getActive("dPfacturation") && CAppUI::conf("dPplanningOp CFactureEtablissement use_facture_etab")) {
       $this->loadRefsFactureEtablissement();
+      $this->loadNRA();
+
       $this->_ref_last_facture->fillLimitedTemplate($template);
+      $template->addProperty("Sejour - Nature du séjour", $this->getFormattedValue("_type_sejour"));
+      $template->addProperty("Sejour - Remarques base"  , $this->getFormattedValue("_rques_assurance_maladie"));
+      $template->addProperty("Sejour - Remarques compl.", $this->getFormattedValue("_rques_assurance_accident"));
+      $template->addProperty("Sejour - Numéro de cas"   , $this->_ref_NRA && $this->_ref_NRA->_id ? $this->_ref_NRA->id400 : "-");
     }
 
     $this->notify("AfterFillLimitedTemplate", $template);
@@ -3486,6 +3492,11 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @see parent::completeLabelFields()
    */
   function completeLabelFields(&$fields) {
+    if (!isset($this->_from_op)) {
+      $this->loadRefLastOperation()->_from_sejour = 1;
+      $this->_ref_last_operation->completeLabelFields($fields);
+    }
+
     $this->loadRefPatient()->completeLabelFields($fields);
     $this->loadRefPraticien();
     $this->loadNDA();

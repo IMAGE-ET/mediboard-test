@@ -1548,7 +1548,10 @@ class COperation extends CCodable implements IPatientRelated {
    * @see parent::completeLabelFields()
    */
   function completeLabelFields(&$fields) {
-    $this->loadRefSejour()->completeLabelFields($fields);
+    if (!isset($this->_from_sejour)) {
+      $this->loadRefSejour()->_from_op = 1;
+      $this->_ref_sejour->completeLabelFields($fields);
+    }
     $this->loadRefPlageOp();
     $this->loadRefAnesth();
 
