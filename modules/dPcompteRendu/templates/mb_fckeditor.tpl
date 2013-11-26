@@ -25,7 +25,6 @@ window.list_plugins = [
   {{if $can->admin}}
   "mbthumbs",
   {{/if}}
-  "nid_forms",
   "usermessage"
 ];
 
@@ -118,7 +117,7 @@ CKEDITOR.editorConfig = function(config) {
     {{/if}}
 
     config.extraPlugins =  'mbfields,mbfreetext,mbhelpers,mblists,{{if $mode_play && !$templateManager->isModele}}mbplay,{{/if}},mbprint,mbprintPDF,mbspace,';
-    config.extraPlugins += 'mbheader,mbfooter,mbpagebreak,mblineheight{{if "printing"|module_active && !$templateManager->isModele}},mbprinting{{/if}}{{if $can->admin}},mbthumbs{{/if}},mbcap,mbreplace,nid_forms';
+    config.extraPlugins += 'mbheader,mbfooter,mbpagebreak,mblineheight{{if "printing"|module_active && !$templateManager->isModele}},mbprinting{{/if}}{{if $can->admin}},mbthumbs{{/if}},mbcap,mbreplace';
     {{if !$templateManager->isModele}}
       config.extraPlugins += ',usermessage{{if $use_apicrypt}},apicrypt{{/if}}';
     {{/if}}
