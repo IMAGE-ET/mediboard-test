@@ -1,7 +1,7 @@
 {{if $online && !$plage->locked}}
 
   <script>
-    addPlaceBefore = function(plage_id, slot_id, consult_id) {
+    addPlaceBefore_{{$slot_id}} = function(plage_id, slot_id, consult_id) {
       var form = getForm("editPlage-"+plage_id+"-"+slot_id);
       var date = new Date();
       date.setHours({{$plage->debut|date_format:"%H"}});
@@ -11,7 +11,7 @@
       return onSubmitFormAjax(form, function() { RDVmultiples.refreshSlot(slot_id, plage_id, consult_id, "{{$multiple}}"); });
     };
 
-    addPlaceAfter = function(plage_id, slot_id, consult_id) {
+    addPlaceAfter_{{$slot_id}} = function(plage_id, slot_id, consult_id) {
       var form = getForm("editPlage-"+plage_id+"-"+slot_id);
       var date = new Date();
       date.setHours({{$plage->fin|date_format:"%H"}});
@@ -131,7 +131,7 @@
   {{if $online && !$plage->locked}}
   <tr>
     <td class="button" colspan="{{if $display_nb_consult}}4{{else}}3{{/if}}">
-      <button type="button" class="up singleclick" onclick="addPlaceBefore('{{$plage->_id}}', '{{$slot_id}}' ,'{{$consultation->_id}}')" {{if !$plage->_canEdit}}disabled="disabled"{{/if}}>
+      <button type="button" class="up singleclick" onclick="addPlaceBefore_{{$slot_id}}('{{$plage->_id}}', '{{$slot_id}}' ,'{{$consultation->_id}}')" {{if !$plage->_canEdit}}disabled="disabled"{{/if}}>
         Ajouter Avant
       </button>
     </td>
@@ -230,7 +230,7 @@
   {{if $online && !$plage->locked}}
     <tr>
       <td class="button" colspan="{{if $display_nb_consult}}5{{else}}3{{/if}}">
-        <button type="button" class="down singleclick" onclick="addPlaceAfter('{{$plage->_id}}', '{{$slot_id}}' ,'{{$consultation->_id}}')" {{if !$plage->_canEdit}}disabled="disabled"{{/if}}>
+        <button type="button" class="down singleclick" onclick="addPlaceAfter_{{$slot_id}}('{{$plage->_id}}', '{{$slot_id}}' ,'{{$consultation->_id}}')" {{if !$plage->_canEdit}}disabled="disabled"{{/if}}>
           Ajouter Après
         </button>
       </td>

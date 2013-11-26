@@ -54,21 +54,15 @@ if ($consultation_id) {
   //edit mod
   if ($multiple_edit) {
     $plage_temp = $consultation_temp->_ref_plageconsult;
-    if (!$function_id) {
-      $function_id = $plage_temp->_ref_chir->function_id;
-    }
-    $function_id = $plage_temp->_ref_chir->function_id;
     $where_next = array();
     $ljoin_next = array();
     $limit = CAppUI::pref("NbConsultMultiple");
     $ljoin_next["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
-    $ljoin_next["users_mediboard"] = "plageconsult.chir_id = users_mediboard.user_id";
-    $where_next["patient_id"] = "= '$consultation_temp->patient_id'";
-    $where_next["users_mediboard.function_id"] = "= '$function_id'";
-    $where_next["date"] = ">= '$plage_temp->date'";
+    $where_next["consultation.patient_id"] = "= '$consultation_temp->patient_id'";
+    $where_next["plageconsult.date"] = ">= '$plage_temp->date'";
     $where_next[$consultation_temp->_spec->key] = "!= '$consultation_id'";
     /** @var $_consult CConsultation */
-    foreach ($consultation_temp->loadList($where_next, "date", null, null, $ljoin_next) as $_consult) {
+    foreach ($consultation_temp->loadListWithPerms(PERM_READ, $where_next, "date", $limit, null, $ljoin_next) as $_consult) {
       $consultation_temp->loadRefPlageConsult()->loadRefChir();
       $consultation_ids[]= array(
         $_consult->plageconsult_id,
