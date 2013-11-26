@@ -25,25 +25,28 @@ li.atcd_hover a {
 /** barre des disponibilités **/
 div.progressBar_dispo {
   font-size: 2px;
+  margin:2px auto;
+  line-height: 1;
+  display:inline-block;
+  text-align: center;
 }
 
 div.progressBar_dispo div.disponibility_bar {
   background: transparent;
   height:10px;
-  margin-top:1px;
   padding:0;
   width: 3px;
   display:inline-block;
 }
 
 div.progressBar_dispo div.disponibility_planning_0 {
-  background: #288024;
+  background: #80b859;
 }
 
 div.progressBar_dispo div.disponibility_planning_-1 {
-  background: #ff7f3e;
+  background: #ffb670;
 }
 
 div.progressBar_dispo div.disponibility_planning_1 {
-  background: #ff4730;
+  background: #ff7b66;
 }

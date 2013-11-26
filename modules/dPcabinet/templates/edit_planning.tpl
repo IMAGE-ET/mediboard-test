@@ -465,7 +465,8 @@
                       {{/if}}
                     </span>
                   {{/if}}
-                    <input type="text" name="_date" style="width: 15em;" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" onfocus="PlageConsultSelector.init(0,0)" readonly="readonly" onchange="if (this.value != '') $V(this.form._function_id, '')"/>
+                    {{* this.blur to void infinie alert message *}}
+                    <input type="text" name="_date" style="width: 15em;" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" onfocus="this.blur(); PlageConsultSelector.init(0,0)" readonly="readonly" onchange="if (this.value != '') $V(this.form._function_id, '')"/>
                     <input type="hidden" name="_date_planning" value="{{$date_planning}}" />
                     {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageConsultSelector.init(0,0)"}}
                     <button class="search notext" id="addedit_planning_button_select_date" type="button" onclick="PlageConsultSelector.init(0,0)">Choix de l'horaire</button>
