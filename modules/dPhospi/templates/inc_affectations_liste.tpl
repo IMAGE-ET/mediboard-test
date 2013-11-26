@@ -34,11 +34,13 @@
         {{/if}}
       </td>
       <td class="patient" onclick="flipSejour({{$_sejour->_id}})">
-        <strong class="{{if !$_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_sejour->septique}}septique{{/if}} {{if $_sejour->recuse == "-1"}}opacity-70{{/if}}">
-          <a name="sejour{{$_sejour->_id}}" {{if $_sejour->type == "ambu"}}style="font-style: italic;"{{/if}}>
-            {{if $_sejour->recuse == "-1"}}[Att] {{/if}}{{$_sejour->_ref_patient}}
-          </a>
-        </strong>
+        <span {{if $app->touch_device}}onclick{{else}}onmouseover{{/if}}="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
+          <strong class="{{if !$_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_sejour->septique}}septique{{/if}} {{if $_sejour->recuse == "-1"}}opacity-70{{/if}}">
+            <a name="sejour{{$_sejour->_id}}" {{if $_sejour->type == "ambu"}}style="font-style: italic;"{{/if}}>
+              {{if $_sejour->recuse == "-1"}}[Att] {{/if}}{{$_sejour->_ref_patient}}
+            </a>
+          </strong>
+        </span>
         {{if $_sejour->type != "ambu" && $_sejour->type != "exte"}}
         ({{$_sejour->_duree}}j - {{$_sejour->_ref_praticien->_shortview}})
         {{else}}
