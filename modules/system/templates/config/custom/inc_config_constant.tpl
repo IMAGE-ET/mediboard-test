@@ -34,8 +34,8 @@
 
     Main.add(function() {
       var form = getForm("edit-configuration");
-      form["{{$_feature}}-{{$components[0]}}"].addSpinner({type: 'num', min: 0, string:'num min|0'});
-      form["{{$_feature}}-{{$components[1]}}"].addSpinner({type: 'num', min: 0, string:'num min|0'});
+      form["{{$_feature}}-{{$components[0]}}"].addSpinner({type: 'num', min: -1, string:'num min|-1'});
+      form["{{$_feature}}-{{$components[1]}}"].addSpinner({type: 'num', min: -1, string:'num min|-1'});
     });
   </script>
 
