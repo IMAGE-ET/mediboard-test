@@ -27,7 +27,7 @@ $categorie = null;
 while ($line = $motif_csv->readLine()) {
   list($libelle, $code) = $line;
   if (!$code) {
-    $categorie = strtolower($libelle);
+    $categorie = ucfirst(strtolower($libelle));
     continue;
   }
   $motif_sfmu = new CMotifSFMU();
