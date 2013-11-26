@@ -203,7 +203,7 @@ Main.add(function () {
     var date        = element.get("date");
     var chir_id     = element.get("chir_id");
     var chir_view   = element.get("chir_name");
-    var slot_id     = element.up().up().up().up().up().up().up().up().get('slot_number');
+    var slot_id     = element.get("slot_id");
     RDVmultiples.addSlot(slot_id, plage_id, consult_id, date, time, chir_id, chir_view);
 
     //end of treatment

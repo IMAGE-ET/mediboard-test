@@ -158,6 +158,7 @@
                 data-date="{{$plage->date}}"
                 data-chir_id="{{$plage->chir_id}}"
                 data-time="{{$_place.time}}"
+                data-slot_id="{{$slot_id|default:0}}"
               {{if !$multiple}}
                   >
               {{else}}
