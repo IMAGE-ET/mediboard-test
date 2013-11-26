@@ -37,13 +37,13 @@ div.progressBar_dispo div.disponibility_bar {
 }
 
 div.progressBar_dispo div.disponibility_planning_0 {
-  background: #008000;
+  background: #288024;
 }
 
 div.progressBar_dispo div.disponibility_planning_-1 {
-  background: #ff8431;
+  background: #ff7f3e;
 }
 
 div.progressBar_dispo div.disponibility_planning_1 {
-  background: red;
+  background: #ff4730;
 }
