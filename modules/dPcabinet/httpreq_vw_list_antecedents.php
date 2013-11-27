@@ -66,7 +66,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("sejour"    , $sejour);
 $smarty->assign("patient"   , $patient);
 $smarty->assign("_is_anesth", $_is_anesth);
-$smarty->assign("trt_repris", $trt_repris);
 
 $smarty->assign("user", $user);
 $smarty->assign("sort_by_date", $sort_by_date);
