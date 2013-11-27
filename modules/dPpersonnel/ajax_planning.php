@@ -18,8 +18,8 @@ $filter->date_debut = CValue::get("date_debut", CMbDT::date());
 
 // Tableau des jours fériés sur 2 ans, car
 // en mode semaine : 31 décembre - 1 janvier
-$bank_holidays = array_merge(CMbDT::getHolidays($filter->date_debut),
-  CMbDT::getHolidays(CMbDT::transform("+1 YEAR", $filter->date_debut, "%Y-%m-%d")));
+$bank_holidays = array_merge(CMbDate::getHolidays($filter->date_debut),
+  CMbDate::getHolidays(CMbDT::transform("+1 YEAR", $filter->date_debut, "%Y-%m-%d")));
 
 $mediuser  = new CMediusers();
 $mediusers = $mediuser->loadListFromType();
@@ -78,6 +78,7 @@ $where["user_id"] = CSQLDataSource::prepareIn(array_keys($mediusers), $filter->u
 $plageconge = new CPlageConge();
 $plagesconge = array();
 $orderby="user_id";
+/** @var CPlageConge[] $plagesconge */
 $plagesconge = $plageconge->loadList($where, $orderby);
 $tabUser_plage = array();
 $tabUser_plage_indices = array();
