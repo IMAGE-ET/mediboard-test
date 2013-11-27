@@ -92,6 +92,13 @@
 
 <table class="tbl" style="table-layout: fixed;">
   <col style="width: 10%" />
+  {{if !$operation->_id}}
+    <tr>
+      <td colspan="{{math equation=x+1 x=$hours|@count}}">
+        <div class="small-warning">Attention, veuillez selectionner la date de l'intervention dans le calendrier</div>
+      </td>
+    </tr>
+  {{/if}}
   <tr>
     <th colspan="{{math equation=x+1 x=$hours|@count}}" class="title">
       <button type="button" class="search" style="float: right;" onclick="Modal.open('legend')">Légende</button>
