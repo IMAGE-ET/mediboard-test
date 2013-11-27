@@ -49,19 +49,7 @@ CKEDITOR.editorConfig = function(config) {
   config.fontSize_sizes  = '8/8pt;9/9pt;10/10pt;11/11pt;12/12pt;14/14pt;16/16pt;18/18pt;20/20pt;22/22pt;24/24pt;26/26pt;28/28pt;36/36pt;48/48pt;72/72pt;';
   config.fontSize_sizes += 'xx-small/xx-small;x-small/x-small;small/small;medium/medium;large/large;x-large/x-large;xx-large/xx-large';
 
-  config.font_names =
-  'Arial/Arial, Helvetica, sans-serif;' +
-  'Calibri/Calibri, Helvetica, sans-serif;'+
-  'Comic Sans MS/Comic Sans MS, cursive;' +
-  'Courier New/Courier New, Courier, monospace;' +
-  'Georgia/Georgia, serif;' +
-  'Lucida Sans Unicode/Lucida Sans Unicode, Lucida Grande, sans-serif;' +
-  'Symbol/Symbol;' +
-  'Tahoma/Tahoma, Geneva, sans-serif;' +
-  'Times New Roman/Times New Roman, Times, serif;' +
-  'Trebuchet MS/Trebuchet MS, Helvetica, sans-serif;' +
-  'Verdana/Verdana, Geneva, sans-serif;' +
-  'ZapfDingBats/ZapfDingBats';
+  config.font_names = "{{$conf.dPcompteRendu.CCompteRendu.default_fonts}}";
 
   var css = ["style/mediboard/htmlarea.css?build={{$version.build}}"];
   if (Prototype.Browser.IE) {

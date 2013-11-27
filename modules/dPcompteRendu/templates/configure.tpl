@@ -147,6 +147,10 @@
         {{mb_include module=system template=inc_config_bool}}
       </tr>
       <tr>
+        {{assign var="var" value="default_fonts"}}
+        {{mb_include module=system template=inc_config_str}}
+      </tr>
+      <tr>
         <th class="category" colspan="2">
           Horodatage pour les aides à la saisie
         </th>
