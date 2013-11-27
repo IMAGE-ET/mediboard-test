@@ -50,7 +50,11 @@
 {{if $object instanceof CSejour}}
   <tr>
     <td class="text" colspan="2">
-      <strong>{{mb_value object=$object field=type}}</strong>
+      {{if $conf.dPplanningOp.CSejour.use_charge_price_indicator}}
+        <strong>{{mb_value object=$object field=charge_id}}</strong>
+      {{else}}
+        <strong>{{mb_value object=$object field=type}}</strong>
+      {{/if}}
     </td>
     <td class="text">
       {{$object->_ref_group}}
