@@ -14,9 +14,10 @@ CCanDo::check();
 $canPatient = CModule::getCanDo("dPpatients");
 $canPatient->needsEdit();
 
-$patient_id  = CValue::getOrSession("patient_id", 0);
-$_is_anesth  = CValue::getOrSession("_is_anesth", null);
-$sejour_id = CValue::getOrSession("sejour_id");
+$patient_id     = CValue::getOrSession("patient_id", 0);
+$_is_anesth     = CValue::getOrSession("_is_anesth", null);
+$sejour_id      = CValue::getOrSession("sejour_id");
+$sort_by_date   = CValue::getOrSession("sort_by_date");
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
@@ -31,7 +32,7 @@ $dossier_medical =& $patient->_ref_dossier_medical;
 
 // Chargements des antecedents et traitements du dossier_medical
 if ($dossier_medical->_id) {
-  $dossier_medical->loadRefsAntecedents(true); // On doit charger TOUS les antecedents, meme les annulés (argument true)
+  $dossier_medical->loadRefsAntecedents(true, $sort_by_date); // On doit charger TOUS les antecedents, meme les annulés (argument true)
   $dossier_medical->loadRefsTraitements(true);
   $dossier_medical->countAntecedents();
   $dossier_medical->countTraitements();
@@ -65,6 +66,7 @@ $smarty->assign("sejour" , $sejour);
 $smarty->assign("patient"    , $patient);
 $smarty->assign("_is_anesth" , $_is_anesth);
 $smarty->assign("user", $user);
+$smarty->assign("sort_by_date", $sort_by_date);
 
 
 $smarty->display("inc_list_ant.tpl");

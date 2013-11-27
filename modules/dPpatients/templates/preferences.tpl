@@ -12,4 +12,5 @@
 {{mb_include template=inc_pref spec=bool var=VitaleVision}}
 {{mb_include template=inc_pref spec=bool var=vCardExport}}
 {{mb_include template=inc_pref spec=str  var=medecin_cps_pref}}
-  
+{{mb_include template=inc_pref spec=bool var=sort_atc_by_date}}
+

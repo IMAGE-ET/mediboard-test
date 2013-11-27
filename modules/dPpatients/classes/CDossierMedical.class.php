@@ -215,12 +215,13 @@ class CDossierMedical extends CMbMetaObject {
    * Chargement des antécédents du dossier
    *
    * @param bool $cancelled Prise en compte des annulés
+   * @param bool $bydate    Sort by date the list
    *
    * @return CStoredObject[]|null
    */
-  function loadRefsAntecedents($cancelled = false) {
+  function loadRefsAntecedents($cancelled = false, $bydate = false) {
     // Initialisation du classement
-    $order = "CAST(type AS CHAR), CAST(appareil AS CHAR), rques";
+    $order = $bydate ? "date DESC" : "CAST(type AS CHAR), CAST(appareil AS CHAR), rques";
     if (null === $this->_all_antecedents = $this->loadBackRefs("antecedents", $order)) {
       return null;
     }
@@ -247,13 +248,13 @@ class CDossierMedical extends CMbMetaObject {
     foreach ($this->_all_antecedents as $_atcd) {
       $this->_ref_antecedents_by_appareil[$_atcd->appareil][$_atcd->_id] = $_atcd;
     }
-    
+
     // Classement par type puis appareil
     $this->_ref_antecedents_by_type_appareil = array_fill_keys($atcd->_specs["type"]->_list, array());
     foreach ($this->_all_antecedents as $_atcd) {
       @$this->_ref_antecedents_by_type_appareil[$_atcd->type][$_atcd->appareil][$_atcd->_id] = $_atcd;
     }
-    
+
     return $this->_all_antecedents;
   }
 

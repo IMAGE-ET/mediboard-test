@@ -2462,7 +2462,12 @@ class CSetupdPpatients extends CSetup {
                 AND d.groupe_sanguin = '?';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.97";
+    $this->makeRevision("1.97");
+    //preference pour ranger les antecedents par date
+    $this->addPrefQuery("sort_atc_by_date", "0");
+    $this->addQuery($query);
+
+    $this->mod_version = "1.98";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

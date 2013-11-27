@@ -14,5 +14,6 @@ CPreferences::$modules["dPpatients"] = array (
   "VitaleVisionDir", 
   "VitaleVision",
   "vCardExport",
-  "medecin_cps_pref"
+  "medecin_cps_pref",
+  "sort_atc_by_date"
 );
