@@ -6,7 +6,7 @@
   <tr>
     <th class="category" style="width: 33%">{{tr}}CTypeRessource-libelle{{/tr}}</th>
     <th class="category">{{tr}}CRessourceMaterielle.all{{/tr}}</th>
-    <th class="category narrow"></th>
+    <th class="category narrow">{{tr}}Action{{/tr}}</th>
   </tr>
   {{foreach from=$type_ressources item=_type_ressource}}
     <tr class="ressource {{if $type_ressource_id == $_type_ressource->_id}}selected{{/if}}"">
@@ -27,8 +27,9 @@
         {{/foreach}}
       </td>
       <td>
-        <button type="button" class="add notext"
-          onclick="updateSelected('list_type_ressources', this.up('tr')); Ressource.editRessource(0, '{{$_type_ressource->_id}}')"></button>
+        <button type="button" class="add " onclick="updateSelected('list_type_ressources', this.up('tr')); Ressource.editRessource(0, '{{$_type_ressource->_id}}')">
+          {{tr}}Add{{/tr}} {{tr}}CRessourceMaterielle{{/tr}}
+        </button>
       </td>
     </tr>
   {{foreachelse}}
