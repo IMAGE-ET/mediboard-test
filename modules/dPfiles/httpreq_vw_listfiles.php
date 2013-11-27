@@ -33,49 +33,52 @@ $praticienId = null;
 $affichageFile = array();
 $nbItems = 0;
 
-if ($object_id && $object_class) {
-  // Chargement de l'objet
-  /** @var CMbObject $object */
-  $object = new $object_class;
-  $object->load($object_id);
-  $file = new CFile();
-  $canFile  = $file->canCreate($object);
-  $cr = new CCompteRendu();
-  $canDoc  = $cr->canCreate($object);
-  
-  // To add the modele selector in the toolbar
-  if ($object_class == 'CConsultation') {
-    $praticienId = $object->_praticien_id;
-  }
-  else if ($object_class == 'CConsultAnesth') {
-    $praticienId = $object->_ref_consultation->_praticien_id;
-  }
-  else if ($object_class == 'CSejour') {
-    $praticienId = $object->praticien_id;
-  }
-  else if ($object_class == 'COperation') {
-    $praticienId = $object->chir_id;
-  }
-  else if ($mediuser->isPraticien()) {
-    $praticienId = $mediuser->_id;
-  }
-  
-  $affichageFile = CFile::loadDocItemsByObject($object);
+if (!$object_class && !$object_id) {
+  CAppUI::stepMessage(UI_MSG_ERROR, "Problème de récupération de la liste des fichiers");
+  CApp::rip();
+}
 
-  foreach ($affichageFile as $_cat) {
-    if (!isset($_cat["items"])) {
-      break;
-    }
+// Chargement de l'objet
+/** @var CMbObject $object */
+$object = new $object_class;
+$object->load($object_id);
+$file = new CFile();
+$canFile  = $file->canCreate($object);
+$cr = new CCompteRendu();
+$canDoc  = $cr->canCreate($object);
 
-    foreach ($_cat["items"] as $_item) {
-      /** @var CDocumentItem $_item */
-      $nbItems++;
-      $_item->loadRefCategory();
-      $_item->canDo();
-      
-      if ($_item->_class === "CCompteRendu") {
-        $_item->makePDFpreview();
-      }
+// To add the modele selector in the toolbar
+if ($object_class == 'CConsultation') {
+  $praticienId = $object->_praticien_id;
+}
+else if ($object_class == 'CConsultAnesth') {
+  $praticienId = $object->_ref_consultation->_praticien_id;
+}
+else if ($object_class == 'CSejour') {
+  $praticienId = $object->praticien_id;
+}
+else if ($object_class == 'COperation') {
+  $praticienId = $object->chir_id;
+}
+else if ($mediuser->isPraticien()) {
+  $praticienId = $mediuser->_id;
+}
+
+$affichageFile = CFile::loadDocItemsByObject($object);
+
+foreach ($affichageFile as $_cat) {
+  if (!isset($_cat["items"])) {
+    break;
+  }
+
+  foreach ($_cat["items"] as $_item) {
+    /** @var CDocumentItem $_item */
+    $nbItems++;
+    $_item->loadRefCategory();
+    $_item->canDo();
+
+    if ($_item->_class === "CCompteRendu") {
+      $_item->makePDFpreview();
     }
   }
 }
