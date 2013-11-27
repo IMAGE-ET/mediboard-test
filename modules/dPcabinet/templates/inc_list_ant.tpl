@@ -140,8 +140,8 @@ showModalTP = function(dossier_medical_id, sejour_id, prescription_sejour_id) {
         {{/if}}
         
         {{if $_is_anesth && $sejour->_id}}
-        <button title="{{tr}}Add{{/tr}}" class="add notext" type="button" onclick="copyAntecedent({{$_antecedent->_id}})">
-          {{tr}}Add{{/tr}}
+        <button class="add notext" type="button" onclick="copyAntecedent({{$_antecedent->_id}})">
+          {{tr}}Add{{/tr}} comme élément significatif
         </button>
         {{/if}}         
       </form>
