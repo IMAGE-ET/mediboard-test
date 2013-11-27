@@ -47,7 +47,7 @@ if ($consultation_id) {
     $consultation_temp->_ref_plageconsult->date,
     $consultation_temp->heure,
     $consultation_temp->_ref_plageconsult->chir_id,
-    $consultation_temp->_ref_plageconsult->_ref_chir->_view,
+    utf8_encode($consultation_temp->_ref_plageconsult->_ref_chir->_view),
     $consultation_temp->annule
   );
 
@@ -70,7 +70,7 @@ if ($consultation_id) {
         $_consult->_ref_plageconsult->date,
         $_consult->heure,
         $_consult->_ref_chir->_id,
-        $_consult->_ref_chir->_view,
+        utf8_encode($_consult->_ref_chir->_view),
         $_consult->annule
       );
     }

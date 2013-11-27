@@ -107,7 +107,7 @@ if ($plageconsult_id) {
     $plage->load($plageconsult_id);
   }
   $plage->loadRefsFwd(true);
-  $plage->loadRefsConsultations(true, true, true);
+  $plage->loadRefsConsultations(false, true, true);
   $plage->loadFillRate();
   $plage->_ref_chir->loadRefFunction();
   for ($i = 0; $i < $plage->_total; $i++) {
