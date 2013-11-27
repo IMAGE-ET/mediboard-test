@@ -2178,7 +2178,7 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return CMedecin
    */
   function loadRefAdresseParPraticien() {
-    return $this->_ref_adresse_par_prat = $this->loadFwdRef($this->adresse_par_prat_id, true);
+    return $this->_ref_adresse_par_prat = $this->loadFwdRef("adresse_par_prat_id", true);
   }
 
   /**
