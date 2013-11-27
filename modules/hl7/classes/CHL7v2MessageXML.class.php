@@ -240,7 +240,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     
     $function = "get$name";
     
-    $this->$function($data[$name], $object);
+    $this->$function($data[$name], $object, $data);
   }
 
   /**

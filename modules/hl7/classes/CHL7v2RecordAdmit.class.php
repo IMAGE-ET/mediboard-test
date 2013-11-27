@@ -309,7 +309,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
       // Mapping de la venue
       $this->mappingVenue($data, $newVenue);
-      
+
       // RI non fourni
       if (!$venueRI) {
         $code_NDA = "I223"; 
@@ -335,6 +335,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $newVenue->_eai_initiateur_group_id = $sender->group_id;
       // On ne check pas la cohérence des dates des consults/intervs
       $newVenue->_skip_date_consistencies = true;
+
       if ($msgVenue = $newVenue->store()) {
         if ($newVenue->_collisions) {
           return $exchange_hl7v2->setAckAR($ack, "E213", $msgVenue, reset($newVenue->_collisions));
@@ -342,7 +343,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         
         return $exchange_hl7v2->setAckAR($ack, "E201", $msgVenue, $newVenue);
       }
-      
+
       // Création du VN, voir de l'objet
       if ($msgVN = $this->createObjectByVisitNumber($newVenue, $data)) {
         return $exchange_hl7v2->setAckAR($ack, "E210", $msgVN, $newVenue);
@@ -1201,8 +1202,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         $newVenue->uf_hebergement_id = $affectation_uf->uf_id;
       }
 
-      $newVenue->uf_medicale_id = $this->mappingUFMedicale($data);
-      $newVenue->uf_soins_id    = $this->mappingUFSoins($data);
+      $uf_med = $this->mappingUFMedicale($data);
+      $newVenue->uf_medicale_id = $uf_med ? $uf_med->_id : null;
+
+      $uf_soins = $this->mappingUFSoins($data);
+      $newVenue->uf_soins_id  = $uf_soins ? $uf_soins->_id : null;
 
       // On ne check pas la cohérence des dates des consults/intervs
       $newVenue->_skip_date_consistencies = true;
@@ -1213,8 +1217,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     // Récupération du Lit et UFs
     $this->getPL($PV1_3, $affectation);
-    $affectation->uf_medicale_id = $this->mappingUFMedicale($data);
-    $affectation->uf_soins_id    = $this->mappingUFSoins($data);
+    $uf_med = $this->mappingUFMedicale($data);
+    $affectation->uf_medicale_id = $uf_med ? $uf_med->_id : null;
+
+    $uf_soins = $this->mappingUFSoins($data);
+    $affectation->uf_soins_id = $uf_soins ? $uf_soins->_id : null;
 
     if ($msg = $affectation->store()) {
       return $msg;
@@ -1302,18 +1309,19 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $naissance->_eai_initiateur_group_id = $sender->group_id;
     
     return $naissance->store();
-  }  
-  
+  }
+
+
   function mappingUFMedicale($data) {
     if (!array_key_exists("ZBE", $data)) {
       return;
     }
   
-  if (!($ZBE_7 = $this->queryNode("ZBE.7", $data["ZBE"]))) {
-    return;
-  }
+    if (!($ZBE_7 = $this->queryNode("ZBE.7", $data["ZBE"]))) {
+      return;
+    }
     
-    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_7), "medicale")->_id;
+    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_7), "medicale");
   }
   
   function mappingUFSoins($data) {
@@ -1325,7 +1333,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return;
     }
 
-    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_8), "soins")->_id;
+    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_8), "soins");
   }  
   
   function mappingMovement($data, CSejour $newVenue, CMovement $movement) {
@@ -1337,9 +1345,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     return $this->getZBE($data["ZBE"], $newVenue, $movement);
   }
   
-  function getPV1(DOMNode $node, CSejour $newVenue) {    
+  function getPV1(DOMNode $node, CSejour $newVenue, $data = array()) {
     // Classe de patient
-    $this->getPatientClass($node, $newVenue);
+    $this->getPatientClass($node, $newVenue, $data);
     
     // Type de l'admission
     $this->getAdmissionType($node, $newVenue);
@@ -1378,10 +1386,19 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $this->getAlternateVisitID($node, $newVenue);
   }
   
-  function getPatientClass(DOMNode $node, CSejour $newVenue) {
+  function getPatientClass(DOMNode $node, CSejour $newVenue, $data = array()) {
     $patient_class = CHL7v2TableEntry::mapFrom("4", $this->queryTextNode("PV1.2", $node));
- 
-    $newVenue->type = $patient_class ? $patient_class : "comp";
+
+    $type = $patient_class ? $patient_class : "comp";
+
+    if ($data && array_key_exists("ZBE", $data)) {
+      $uf_med = $this->mappingUFMedicale($data);
+      if ($uf_med && $uf_med->type_sejour) {
+        $type = $uf_med->type_sejour;
+      }
+    }
+
+    $newVenue->type = $type;
   }
   
   function getPL(DOMNode $node, CAffectation $affectation) {
@@ -1756,6 +1773,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $PV1_21 = $this->queryTextNode("PV1.21", $node);
     
     $sender = $this->_ref_sender;
+
+    if (!$PV1_21) {
+      return;
+    }
     
     $charge           = new CChargePriceIndicator();
     $charge->code     = $PV1_21;
