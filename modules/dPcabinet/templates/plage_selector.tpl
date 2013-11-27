@@ -52,7 +52,6 @@ RDVmultiples = {
       if (multiple) {
         $('tools_plage_0').addUniqueClassName('selected');
       }
-
       //show the default page
       var aselected = $$("tr.selected");
       if (aselected.length > 0) {

@@ -481,7 +481,8 @@
                 <tr>
                   <th>{{mb_label object=$consult field="heure"}}</th>
                   <td>
-                    <input type="text" name="heure" value="{{$consult->heure}}" style="width: 15em;" onfocus="PlageConsultSelector.init()" readonly="readonly" />
+                    {{* this.blur to void infinie alert message *}}
+                    <input type="text" name="heure" value="{{$consult->heure}}" style="width: 15em;" onfocus="this.blur();PlageConsultSelector.init(0,0)" readonly="readonly" />
                     {{if $consult->patient_id}}
                       ({{$consult->_etat}})
                       <br />
