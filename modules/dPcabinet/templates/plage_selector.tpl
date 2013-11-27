@@ -52,8 +52,11 @@ RDVmultiples = {
       if (multiple) {
         $('tools_plage_0').addUniqueClassName('selected');
       }
-      else {
-        var selected = $("tr.selected");
+
+      //show the default page
+      var aselected = $$("tr.selected");
+      if (aselected.length > 0) {
+        aselected[0].select("a").invoke('onclick');
       }
     }
   },
@@ -163,10 +166,8 @@ RDVmultiples = {
   }
 };
 
-updatePlage = function(sdate) {
+updatePlage = function(sdate, callback) {
   var form = getForm("Filter");
-  $V(form.date, sdate);
-
   if ($V(form.period) == "weekly") {
     form.submit();
   }
@@ -183,13 +184,12 @@ updatePlage = function(sdate) {
   url.addParam("date"               , sdate ? sdate : $V(form.date));
   url.addParam("hide_finished"      , $V(form.hide_finished));
   url.addParam("function_id"       , $V(form._function_id));
-  url.requestUpdate('listePlages');
+  url.requestUpdate('listePlages', callback);
 };
 
 Main.add(function () {
   {{* Calendar.regField(getForm("Filter").date, null, {noView: true}); *}}
-  updatePlage();
-  RDVmultiples.init({{$consultation_ids|@json}}, {{$multipleMode}});
+  updatePlage(null, RDVmultiples.init.curry({{$consultation_ids|@json}}, {{$multipleMode}}));
 
 
   $('plage_list_container').on("click", '{{if !$multipleMode}}button.validPlage{{else}}input.validPlage{{/if}}', function(event, element) {
