@@ -75,6 +75,9 @@ showModalTP = function(dossier_medical_id, sejour_id, prescription_sejour_id) {
   window.modalUrlTp.addParam("refresh_prescription", true);
   window.modalUrlTp.requestModal("60%", "40%", {
     onClose: function() {
+      if (window.DossierMedical) {
+        window.DossierMedical.reloadDossierPatient();
+      }
       if (window.tab_sejour) {
         window.tab_sejour.setActiveTab("prescription_sejour");
       }
@@ -191,8 +194,11 @@ showModalTP = function(dossier_medical_id, sejour_id, prescription_sejour_id) {
     </button>
   {{/if}}
 
-  {{if  $dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_ref_prescription_lines && $_is_anesth && ($app->_ref_user->isPraticien() || $app->_ref_user->isSageFemme() || !$conf.dPprescription.CPrescription.role_propre)}}
-  <button class="tick" type="button" style="float: right" onclick="showModalTP('{{$dossier_medical->_id}}','{{$sejour->_id}}','{{$prescription_sejour_id}}');">Gérer les traitements personnels</button>
+  {{if $dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_ref_prescription_lines && $_is_anesth &&
+       ($app->_ref_user->isPraticien() || $app->_ref_user->isSageFemme() || !$conf.dPprescription.CPrescription.role_propre)}}
+    <button class="tick" type="button" style="float: right" onclick="showModalTP('{{$dossier_medical->_id}}','{{$sejour->_id}}','{{$prescription_sejour_id}}');">
+      Gestion des traitements personnels ({{$sejour->_ref_prescription_sejour->_count_lines_tp}}/{{$dossier_medical->_ref_prescription->_ref_prescription_lines|@count}})
+    </button>
   {{/if}}
 
   <strong>Traitements personnels</strong>
