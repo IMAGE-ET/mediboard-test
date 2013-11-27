@@ -117,7 +117,8 @@ showModalTP = function(dossier_medical_id, sejour_id, prescription_sejour_id) {
     Afficher les {{$dossier_medical->_count_cancelled_antecedents}} antécédents annulés
   </button>
 {{/if}}
-<strong {{if $dossier_medical->_count_cancelled_antecedents}}style="line-height: 22px;"{{/if}}>Antécédents</strong>
+<button class="vslip" style="float:right" onclick="DossierMedical.toggleSortAntecedent()">Classer {{if $sort_by_date}}par type{{else}}par date{{/if}}</button>
+<strong {{if $dossier_medical->_count_cancelled_antecedents}}style="line-height: 22px;"{{/if}}>Antécédents (par {{if $sort_by_date}}Date{{else}}Type/Appareil{{/if}})</strong>
 
 <ul id="antecedents-{{$dossier_medical->_guid}}">
   {{if $dossier_medical->_count_antecedents || $dossier_medical->_count_cancelled_antecedents}}

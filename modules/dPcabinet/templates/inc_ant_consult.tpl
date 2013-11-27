@@ -73,6 +73,7 @@ easyMode = function() {
  */
 DossierMedical = {
   sejour_id: '{{$sejour_id}}',
+  sort_by_date : Preferences.sort_atc_by_date,
   updateSejourId : function(sejour_id) {
     this.sejour_id = sejour_id;
     
@@ -89,6 +90,7 @@ DossierMedical = {
     var antUrl = new Url("dPcabinet", "httpreq_vw_list_antecedents");
     antUrl.addParam("patient_id", "{{$patient->_id}}");
     antUrl.addParam("_is_anesth", "{{$_is_anesth}}");
+    antUrl.addParam("sort_by_date", DossierMedical.sort_by_date);
     {{if $_is_anesth}}
       antUrl.addParam("sejour_id", DossierMedical.sejour_id);
     {{/if}}
@@ -96,6 +98,18 @@ DossierMedical = {
     {{if $conf.ref_pays == 2 && $m == "dPurgences"}}
       refreshAntecedentsPatient();
     {{/if}}
+  },
+
+  toggleSortAntecedent: function () {
+    if (DossierMedical.sort_by_date == 1) {
+      DossierMedical.sort_by_date = 0;
+    }
+    else {
+      DossierMedical.sort_by_date = 1;
+    }
+    DossierMedical.reloadDossierPatient();
+
+
   },
   reloadDossierSejour: function(){
       var antUrl = new Url("dPcabinet", "httpreq_vw_list_antecedents_anesth");  
