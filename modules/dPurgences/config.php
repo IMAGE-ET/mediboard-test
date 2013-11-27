@@ -45,5 +45,5 @@ $dPconfig["dPurgences"] = array (
   "display_regule_par"        => "0",
   "view_rpu_uhcd"             => "0",
   "use_blocage_lit"           => "0",
-  "create_affectation"        => "1"
+  "create_affectation"        => "0"
 );
