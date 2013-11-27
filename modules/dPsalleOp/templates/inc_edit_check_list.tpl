@@ -238,7 +238,7 @@ Main.add(function(){
             {{/if}}
 
             {{if $list_anesths}}
-              <optgroup label="Anesthésiqtes">
+              <optgroup label="Anesthésistes">
                 {{foreach from=$list_anesths item=_user}}
                   <option value="{{$_user->_id}}" {{if $app->user_id == $_user->_id}}selected="selected"{{/if}}>
                     {{$_user->_view}}

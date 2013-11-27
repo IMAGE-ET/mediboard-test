@@ -31,7 +31,7 @@ Main.add(function(){
 
   $$(".graph-placeholder").invoke("setStyle", {width: width+"px"});
 
-  $$(".supervision .evenement").invoke("setStyle", {width: (width-12)+"px"});
+  $$(".supervision .evenements").invoke("setStyle", {width: (width-12)+"px"});
   
   (function ($){
     var ph, series, xaxes;
