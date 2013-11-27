@@ -35,6 +35,6 @@
       </td>
     </tr>
   {{foreachelse}}
-    <tr><td class="empty">{{tr}}CMotifSFMU.one{{/tr}}</td></tr>
+    <tr><td colspan="3" class="empty">{{tr}}CMotifSFMU.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>
