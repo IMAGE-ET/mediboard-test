@@ -729,6 +729,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
 
     $NK1_5 = $this->queryNodes("NK1.5", $node)->item(0);
 
+    $tel = null;
     if ($NK1_5) {
       $tel = $this->queryTextNode("XTN.12", $NK1_5);
 
