@@ -98,7 +98,7 @@ function mbplay_onclick(editor) {
       var cur_name = unescapeHtml(cur.innerHTML);
       if ( cur_name && cur_name.indexOf(unescapeHtml(search)) != -1) {
         editor_element = cur;
-        throw window_parent.$break;
+        throw $break;
       }
     });
     
@@ -113,11 +113,13 @@ function mbplay_onclick(editor) {
           var list_name = unescapeHtml(list.getAttribute("data-nom"));
           if (list_name && list_name.indexOf(name_escape) != -1) {
             // On supprime la 1ère option (nom de la liste de choix)
-            window_parent.Element.remove(list.down());
+            if (list.options[0].value == "undef") {
+              window_parent.Element.remove(list.down());
+            }
             list.selectedIndex = -1;
             Element.setStyle(list, {width: "100%"});
             element = list;
-            throw window_parent.$break;
+            throw $break;
           }
         });
       }
@@ -178,7 +180,7 @@ function mbplay_onclick(editor) {
   
 }
 
-//Remplacement des champs
+// Remplacement des champs
 window.parent.replaceField = function(elt, class_name, empty) {
   var window_parent = window.parent;
   window_parent.current_playing = null;
@@ -216,6 +218,9 @@ window.parent.replaceField = function(elt, class_name, empty) {
   var correspondances = CKEDITOR.instances.htmlarea.document.getBody().$.querySelectorAll("span."+class_name);
   
   window_parent.$A(correspondances).each(function(corr) {
+    // On efface le background apposé lors du lancement du mode play
+    Element.setStyle(corr, {background: ''});
+
     // Remplacement de toutes occurrences
     var corr_name = unescapeHtml(corr.innerHTML);
     var nom = unescapeHtml(elt.getAttribute("data-nom"));
@@ -243,13 +248,18 @@ window.parent.replaceField = function(elt, class_name, empty) {
           unescapeHtml(corr.innerHTML.substr(begin, end)).replace(pattern, textReplacement) +
           corr.innerHTML.substr(end);
       }
+      if (class_name == "name") {
+        throw $break;
+      }
     }
-    // On efface le background apposé lors du lancement du mode play
-    Element.setStyle(corr, {background: ''});
   });
-  
-  Element.remove(elt);
-  
+
+  if (class_name == "name") {
+    window_parent.$("liste").down("div").insert({top: elt});
+  }
+  else {
+    Element.remove(elt);
+  }
   /*var purge_field = document.forms.editFrm.purge_field.value;
   
   purge_field = purge_field.replace(/\//, "\/");
