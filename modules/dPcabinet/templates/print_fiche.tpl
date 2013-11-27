@@ -185,7 +185,7 @@
               {{if $dossier_medical->groupe_sanguin != "?" || $dossier_medical->rhesus != "?"}}
               <tr>
                 <th style="font-weight: normal;">Groupe sanguin</th>
-                <td style="font-weight: bold; font-size:130%;">&nbsp;{{tr}}CDossierMedical.groupe_sanguin.{{$dossier_medical->groupe}}{{/tr}} &nbsp;{{tr}}CDossierMedical.rhesus.{{$dossier_medical->rhesus}}{{/tr}}</td>
+                <td style="font-weight: bold; font-size:130%;">&nbsp;{{tr}}CDossierMedical.groupe_sanguin.{{$dossier_medical->groupe_sanguin}}{{/tr}} &nbsp;{{tr}}CDossierMedical.rhesus.{{$dossier_medical->rhesus}}{{/tr}}</td>
               </tr>
               {{/if}}
               {{if $dossier_anesth->rai && $dossier_anesth->rai!="?"}}
