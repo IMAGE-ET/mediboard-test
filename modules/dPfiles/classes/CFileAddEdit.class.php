@@ -61,7 +61,9 @@ class CFileAddEdit extends CDoObjectAddEdit {
       $obj->_old_file_path = $this->request['_file_path'];
       $obj->file_size = filesize($file_path);
       $obj->author_id = CAppUI::$user->_id;
-      $obj->type_doc = $this->request["type_doc"];
+      if (CModule::getActive("cda")) {
+        $obj->type_doc = $this->request["type_doc"];
+      }
       $obj->fillFields();
       $obj->updateFormFields();
       $obj->file_type = CMbPath::guessMimeType($file_name);
