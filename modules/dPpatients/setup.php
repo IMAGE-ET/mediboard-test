@@ -2381,7 +2381,18 @@ class CSetupdPpatients extends CSetup {
 
     $this->addFunction('modifyConstantsRanksConfigs');
 
-    $this->mod_version = "1.91";
+    // Index manquants dans la table Patient
+    $this->makeRevision('1.91');
+    $query = "ALTER TABLE `patients`
+      ADD INDEX (`deces`),
+      ADD INDEX (`ville`),
+      ADD INDEX (`profession`),
+      ADD INDEX (`patient_link_id`),
+      ADD INDEX (`assure_profession`),
+      ADD INDEX (`date_lecture_vitale`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.92";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
