@@ -234,7 +234,8 @@ Main.add(function(){
               <td class="narrow" style="text-align: right;">{{mb_value object=$_log field=line_number}}</td>
             </tr>
             {{foreach from=$_log->_stacktrace_output item=_output name=output}}
-              {{if $smarty.foreach.output.iteration < 4 }}
+              {{if $smarty.foreach.output.iteration < 4 ||
+                ($smarty.foreach.output.iteration == 4 && count($_log->_stacktrace_output) == 4)}}
                 <tr>
                   <td class="text">{{$_output.function}}</td>
                   <td class="text">{{$_output.file}}</td>
