@@ -184,7 +184,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
         $mbPersonne->civilite = "guess";
       }
       $mbPersonne->nom = $nom;
-      $mbPersonne->_nom_naissance = $xpath->queryTextNode("hprim:nomNaissance", $node);
+      $mbPersonne->nom_jeune_fille = $xpath->queryTextNode("hprim:nomNaissance", $node);
       $mbPersonne->prenom     = CMbArray::get($prenoms, 0);
       $mbPersonne->prenom_2   = CMbArray::get($prenoms, 1);
       $mbPersonne->prenom_3   = CMbArray::get($prenoms, 2);
