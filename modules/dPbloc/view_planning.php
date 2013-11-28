@@ -34,6 +34,7 @@ $_print_annulees         = CValue::get("_print_annulees");
 $_materiel               = CValue::get("_materiel", CAppUI::conf("dPbloc CPlageOp view_materiel"));
 $_extra                  = CValue::get("_extra", CAppUI::conf("dPbloc CPlageOp view_extra"));
 $_duree                  = CValue::get("_duree", CAppUI::conf("dPbloc CPlageOp view_duree"));
+$no_consult_anesth       = CValue::get("no_consult_anesth");
 
 if (is_array($filter->_bloc_id)) {
   CMbArray::removeValue("0", $filter->_bloc_id);
@@ -215,6 +216,9 @@ foreach ($plagesop as &$plage) {
   foreach ($listOp as $operation) {
     $operation->loadRefPlageOp();
     $operation->loadRefsConsultAnesth();
+    if ($no_consult_anesth && !$operation->_ref_consult_anesth->_id) {
+      unset($listOp[$operation->_id]);
+    }
     $operation->loadRefPraticien();
     $operation->loadExtCodesCCAM();
     $operation->updateHeureUS();
@@ -272,6 +276,10 @@ foreach ($plagesop as &$plage) {
 foreach ($operations as $operation) {
   $operation->loadRefPlageOp();
   $operation->loadRefsConsultAnesth();
+  if ($no_consult_anesth && !$operation->_ref_consult_anesth->_id) {
+    unset($operations[$operation->_id]);
+    continue;
+  }
   $operation->loadRefPraticien();
   $operation->loadExtCodesCCAM();
   $operation->updateHeureUS();

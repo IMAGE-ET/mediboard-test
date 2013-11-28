@@ -25,6 +25,7 @@ function popPlanning(form) {
   url.addElement(form._date_max);
   url.addElement(form._codes_ccam);
   url.addElement(form.exam_extempo);
+  url.addElement(form.no_consult_anesth);
   url.addElement(form._prat_id);
   url.addElement(form._specialite);
   url.addElement(form.salle_id);
@@ -271,6 +272,10 @@ function showCheckboxAnesth(element){
         <tr class="not-full">
           <th>{{mb_label object=$filter field="exam_extempo"}}</th>
           <td>{{mb_field object=$filter field="exam_extempo" typeEnum=checkbox}}</td>
+        </tr>
+        <tr class="not-full">
+          <th>Sans consultation d'anesthésie</th>
+          <td><input type="checkbox" name="no_consult_anesth" onclick="$V(this.form.no_consult_anesth, $V(this)?1:0);" value="0"/></td>
         </tr>
       </table>
 
