@@ -66,7 +66,7 @@ class CInscTools {
 
     $last_ins = $patient->loadLastINS();
 
-    if ($last_ins->ins === $insc) {
+    if (!$last_ins && $last_ins->ins === $insc) {
       return null;
     }
 
