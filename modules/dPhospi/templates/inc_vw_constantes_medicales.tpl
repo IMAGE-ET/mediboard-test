@@ -87,8 +87,8 @@ plotHover = function(event, pos, item) {
         color: '#FFFFFF',
         borderRadius: '4px',
         textAlign: 'center',
-        'max-width': '300px',
-        'white-space': 'normal'
+        maxWidth: '300px',
+        whiteSpace: 'normal'
       }));
 
       var yaxis_labels = $$('#' + event.target.id + ' .flot-text .y' + item.series.yaxis.n + 'Axis .tickLabel');
