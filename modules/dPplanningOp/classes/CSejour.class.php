@@ -2283,7 +2283,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       }
     }
 
-    return $$this->_ref_prescripteurs;
+    return $this->_ref_prescripteurs;
   }
 
   /**
