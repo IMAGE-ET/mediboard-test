@@ -1,12 +1,12 @@
-{{* $Id$ *}}
-
 {{*
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage dPbloc
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
+ * @author     SARL OpenXtrem
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
+ *}}
 
 <!-- Intervention -->
 <td class="text">
@@ -44,6 +44,9 @@
   {{/if}}
   {{if $curr_op->anesth_id}}
     <br /> {{$curr_op->_ref_anesth->_view}}
+  {{/if}}
+  {{if !$curr_op->_ref_consult_anesth->_id}}
+    <div class="small-warning">{{tr}}COperation-back-dossiers_anesthesie.empty{{/tr}}</div>
   {{/if}}
 </td>
 <td class="text">
