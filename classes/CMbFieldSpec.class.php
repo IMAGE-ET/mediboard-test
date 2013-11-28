@@ -43,6 +43,7 @@ class CMbFieldSpec {
   public $pattern;
   public $derived;
   public $loggable;
+  public $index;
 
   static $chars  = array();
   static $nums   = array();

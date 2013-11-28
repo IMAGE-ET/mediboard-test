@@ -101,7 +101,9 @@ foreach ($selected_classes as $_class) {
         isset($spec->class) || 
         $spec instanceof CDateTimeSpec || 
         $spec instanceof CDateSpec || 
-        $k == $details['key']
+        $k == $details['key'] ||
+        $spec->autocomplete ||
+        $spec->index
       );
       $db_spec['null'] = !(isset($spec->notNull)) && !$is_key;
 

@@ -367,15 +367,15 @@ class CPatient extends CPerson {
   function getProps() {
     $props = parent::getProps();
 
-    $props["nom"]               = "str notNull confidential seekable|begin";
-    $props["prenom"]            = "str notNull seekable|begin";
+    $props["nom"]               = "str notNull confidential seekable|begin index";
+    $props["prenom"]            = "str notNull seekable|begin index";
     $props["prenom_2"]          = "str";
     $props["prenom_3"]          = "str";
     $props["prenom_4"]          = "str";
-    $props["nom_jeune_fille"]   = "str confidential seekable|begin";
-    $props["nom_soundex2"]      = "str";
-    $props["prenom_soundex2"]   = "str";
-    $props["nomjf_soundex2"]    = "str";
+    $props["nom_jeune_fille"]   = "str confidential seekable|begin index";
+    $props["nom_soundex2"]      = "str index";
+    $props["prenom_soundex2"]   = "str index";
+    $props["nomjf_soundex2"]    = "str index";
     $props["medecin_traitant_declare"] = "bool";
     $props["medecin_traitant"]  = "ref class|CMedecin";
     $conf = CAppUI::conf("dPpatients CPatient check_code_insee");
@@ -389,7 +389,7 @@ class CPatient extends CPerson {
     $props["sexe"]              = "enum list|m|f";
     $props["civilite"]          = "enum list|m|mme|mlle|enf|dr|pr|me|vve";
     $props["adresse"]           = "text confidential";
-    $props["province"]          = "str";
+    $props["province"]          = "str maxLength|40";
     $props["is_smg"]            = "bool default|0";
     $props["ville"]             = "str confidential seekable|begin";
     $props["cp"]                = "str minLength|4 maxLength|5 confidential";
@@ -426,10 +426,10 @@ class CPatient extends CPerson {
     $props["mutuelle_types_contrat"] = "text";
 
     $props["pays"]                 = "str";
-    $props["pays_insee"]           = "str";
+    $props["pays_insee"]           = "numchar length|3";
     $props["lieu_naissance"]       = "str";
     $props["cp_naissance"]         = "str minLength|4 maxLength|5 confidential";
-    $props["pays_naissance_insee"] = "str";
+    $props["pays_naissance_insee"] = "numchar length|3";
     $props["profession"]           = "str autocomplete";
     $props["csp" ]                 = "numchar length|2";
     $props["patient_link_id"]      = "ref class|CPatient";
@@ -449,10 +449,10 @@ class CPatient extends CPerson {
     $props["assure_tel"]                  = "phone confidential";
     $props["assure_tel2"]                 = "phone confidential";
     $props["assure_pays"]                 = "str";
-    $props["assure_pays_insee"]           = "str";
+    $props["assure_pays_insee"]           = "numchar length|3";
     $props["assure_lieu_naissance"]       = "str";
     $props["assure_cp_naissance"]         = "str minLength|4 maxLength|5 confidential";
-    $props["assure_pays_naissance_insee"] = "str";
+    $props["assure_pays_naissance_insee"] = "numchar length|3";
     $props["assure_profession"]           = "str autocomplete";
     $props["assure_rques"]                = "text";
     $props["assure_matricule"]            = "code insee confidential mask|9S99S99S99S999S999S99";
