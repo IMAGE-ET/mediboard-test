@@ -2402,13 +2402,14 @@ class CSetupdPpatients extends CSetup {
                 DROP `INSC`,
                 DROP `INSC_DATE`";
     $this->addQuery($query);
-    $this->makeRevision("1.95");
 
+    $this->makeRevision("1.95");
     $query = "ALTER TABLE `dossier_medical`
                 ADD `groupe_sanguin` ENUM ('?','O','A','B','AB') DEFAULT '?',
                 ADD `rhesus` ENUM ('?','NEG','POS') DEFAULT '?',
                 ADD `groupe_ok` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
+
     $this->makeRevision('1.96');
 
     //Création des dossiers médicaux manquants correspondant aux consultations d'anesthésie
@@ -2462,12 +2463,24 @@ class CSetupdPpatients extends CSetup {
                 AND d.groupe_sanguin = '?';";
     $this->addQuery($query);
 
+    // Preference pour ranger les antecedents par date
     $this->makeRevision("1.97");
-    //preference pour ranger les antecedents par date
     $this->addPrefQuery("sort_atc_by_date", "0");
     $this->addQuery($query);
 
-    $this->mod_version = "1.98";
+    // Index manquants dans la table Patient
+    $this->makeRevision('1.98');
+    $query = "ALTER TABLE `patients`
+      ADD INDEX (`deces`),
+      ADD INDEX (`ville`),
+      ADD INDEX (`profession`),
+      ADD INDEX (`patient_link_id`),
+      ADD INDEX (`assure_profession`),
+      ADD INDEX (`date_lecture_vitale`);";
+    $this->addQuery($query);
+
+
+    $this->mod_version = "1.99";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
