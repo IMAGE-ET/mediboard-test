@@ -11,6 +11,8 @@
  * @link     http://www.mediboard.org
  */
 
+CCanDo::checkAdmin();
+
 global $dPconfig;
 $dPconfig["sa"]["trigger_sejour"] = "facture";
 $limit = CValue::get("limit", 10);
