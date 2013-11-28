@@ -2033,6 +2033,11 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("2.21");
     $this->addPrefQuery("new_consultation", "0");
 
-    $this->mod_version = "2.22";
+    $this->makeRevision("2.22");
+    $query = "ALTER TABLE `acte_ngap`
+                ADD INDEX (`execution`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.23";
   }
 }
