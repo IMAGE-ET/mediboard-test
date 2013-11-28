@@ -1531,16 +1531,17 @@ class CStoredObject extends CModelObject {
   }
 
   /**
-   * Count number back reference colletion object
-   * 
-   * @param string $backName name the of the back references to count
-   * @param array  $where    Additional where clauses
-   * @param array  $ljoin    Additionnal ljoin clauses
-   * @param bool   $cache    Cache
+   * Count number back reference collection object
+   *
+   * @param string $backName    Name the of the back references to count
+   * @param array  $where       Additional where clauses
+   * @param array  $ljoin       Additionnal ljoin clauses
+   * @param bool   $cache       Cache
+   * @param string $backNameAlt BackName Alt
    *
    * @return int|null The count, null if collection count is unavailable
    */
-  function countBackRefs($backName, $where = array(), $ljoin = array(), $cache = true) {
+  function countBackRefs($backName, $where = array(), $ljoin = array(), $cache = true, $backNameAlt = "") {
     if (!$backSpec = $this->makeBackSpec($backName)) {
       return null;
     }
@@ -1552,11 +1553,14 @@ class CStoredObject extends CModelObject {
 
     $backObject = new $backSpec->class;
     $backField = $backSpec->field;
-    
+
     // Cas du module non installé
     if (!$backObject->_ref_module) {
       return null;
     }
+
+    $backName = $backNameAlt ? $backNameAlt : $backName;
+    $cache = $cache && (!count($where) || $backNameAlt);
 
     // Empty object
     if (!$this->_id || !$backObject->_spec->table || !$backObject->_spec->key) {
@@ -1564,36 +1568,36 @@ class CStoredObject extends CModelObject {
     }
 
     // Mass count optimization
-    if ($cache && isset($this->_count[$backName]) && !count($where) && !count($ljoin)) {
+    if ($cache && isset($this->_count[$backName])) {
       return $this->_count[$backName];
     }
-    
+
     // @todo Refactor using CRequest
     $query = "SELECT COUNT({$backObject->_spec->key}) 
       FROM `{$backObject->_spec->table}`";
-    
+
     if ($ljoin && count($ljoin)) {
       foreach ($ljoin as $table => $condition) {
         $query .= "\nLEFT JOIN `$table` ON $condition ";
       }
     }
-    
+
     $query .= "WHERE `$backField` = '$this->_id'";
 
     // Additional where clauses
     foreach ($where as $_field => $_clause) {
       $query .= "\nAND `$_field` $_clause";
     }
-    
+
     // Cas des meta objects
     $backSpec =& $backObject->_specs[$backField];
     $backMeta = $backSpec->meta;
     if ($backMeta) {
       $query .= "\nAND `$backMeta` = '$this->_class'";
     }
-    
+
     // Comptage des backrefs
-    return $this->_count[$backName] = $this->_spec->ds->loadResult($query); 
+    return $this->_count[$backName] = $this->_spec->ds->loadResult($query);
   }
 
   /**
@@ -1603,10 +1607,11 @@ class CStoredObject extends CModelObject {
    * @param string $backName Name of backward reference
    * @param array  $where    Additional where clauses
    * @param array  $ljoin    Additionnal ljoin clauses
+   * @param string $backNameAlt BackName Alt
    *
    * @return int|null Total count among objects, null if collection count is unavailable
    */
-  static function massCountBackRefs($objects, $backName, $where = array(), $ljoin = array()) {
+  static function massCountBackRefs($objects, $backName, $where = array(), $ljoin = array(), $backNameAlt = "") {
     if (!count($objects)) {
       return null;
     }
@@ -1624,7 +1629,7 @@ class CStoredObject extends CModelObject {
     /** @var self $backObject */
     $backObject = new $backSpec->class;
     $backField = $backSpec->field;
-    
+
     // Cas du module non installé
     if (!$backObject->_ref_module) {
       return null;
@@ -1634,6 +1639,8 @@ class CStoredObject extends CModelObject {
     $ids = CMbArray::pluck($objects, "_id");
     CMbArray::removeValue("", $ids);
 
+    $backName = $backNameAlt ? $backNameAlt : $backName;
+
     if (!count($ids)) {
       foreach ($objects as $_object) {
         $_object->_count[$backName] = 0;
@@ -1642,15 +1649,15 @@ class CStoredObject extends CModelObject {
     }
 
     // @TODO Refactor using CRequest
-    $query = "SELECT $backField, COUNT({$backObject->_spec->key}) 
+    $query = "SELECT $backField, COUNT({$backObject->_spec->key})
       FROM `{$backObject->_spec->table}`";
-    
+
     if ($ljoin && count($ljoin)) {
       foreach ($ljoin as $table => $condition) {
         $query .= "\nLEFT JOIN `$table` ON $condition ";
       }
     }
-    
+
     $ds = $backObject->_spec->ds;
     $query .= "WHERE `$backField` " . $ds->prepareIn($ids);
 
@@ -1658,7 +1665,7 @@ class CStoredObject extends CModelObject {
     foreach ($where as $_field => $_clause) {
       $query .= "\nAND `$_field` $_clause";
     }
-    
+
     // Meta objects case
     /** @var CRefSpec $backSpec */
     $backSpec = $backObject->_specs[$backField];
@@ -1666,7 +1673,7 @@ class CStoredObject extends CModelObject {
     if ($backMeta) {
       $query .= "\nAND `$backMeta` = '$object->_class'";
     }
-    
+
     // Group by object key
     $query .= "\nGROUP BY $backField";
     $counts = $ds->loadHashList($query);
@@ -1677,9 +1684,9 @@ class CStoredObject extends CModelObject {
       $count = isset($counts[$_object->_id]) ? $counts[$_object->_id] : 0;
       $total += $_object->_count[$backName] = $count;
     }
-    
+
     // Total count
-    return $total; 
+    return $total;
   }
 
   /**
