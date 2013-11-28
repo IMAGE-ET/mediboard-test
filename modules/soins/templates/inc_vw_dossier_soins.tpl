@@ -467,6 +467,9 @@ Main.add(function () {
   {{/if}}
 
   <span style="float: right;">
+      {{if $conf.soins.vue_condensee_dossier_soins}}
+        <button type="button" class="search" onclick="PlanSoins.showModalTasks('{{$sejour->_id}}');">Tâches</button>
+      {{/if}}
       <button type="button"
               class="print"
               onclick="{{if isset($prescription|smarty:nodefaults)}}Prescription.printOrdonnance('{{$prescription->_id}}');{{/if}}">
@@ -510,10 +513,6 @@ Main.add(function () {
                       PlanSoins.loadTraitement('{{$prescription->object_id}}', PlanSoins.date, null, null, null, null, null, null, '1')">
               Somme
             </button>
-
-            {{if $conf.soins.vue_condensee_dossier_soins}}
-              <button type="button" class="search" onclick="PlanSoins.showModalTasks('{{$sejour->_id}}');">Tâches</button>
-            {{/if}}
 
             <button type="button" class="print" onclick="PlanSoins.printBons('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
               Bons
