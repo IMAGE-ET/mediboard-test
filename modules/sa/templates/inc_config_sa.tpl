@@ -32,7 +32,7 @@
     
     {{mb_include module=system template=inc_config_enum var=trigger_operation    values=facture|testCloture|sortie_reelle}}
     
-    {{mb_include module=system template=inc_config_enum var=trigger_consultation values=valide|sortie_reelle}}
+    {{mb_include module=system template=inc_config_enum var=trigger_consultation values=valide|facture|sortie_reelle}}
     
     {{mb_include module=system template=inc_config_bool var=send_only_with_ipp_nda}}
     {{assign var=list_types_sejour value='|'|implode:$sejour_types}}
