@@ -66,16 +66,18 @@ class CInscTools {
 
     $last_ins = $patient->loadLastINS();
 
-    if (!$last_ins && $last_ins->ins === $insc) {
+    if ($last_ins && $last_ins->ins === $insc) {
       return null;
     }
 
     $ins = new CINSPatient();
     $ins->patient_id = $patient->_id;
     $ins->ins        = $insc;
+
     $ins->type       = "C";
     $ins->date       = "now";
     $ins->provider   = "Mediboard";
+
 
     if ($msg = $ins->store()) {
       return $msg;
