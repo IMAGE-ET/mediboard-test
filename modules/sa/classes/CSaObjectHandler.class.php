@@ -62,27 +62,6 @@ class CSaObjectHandler extends CEAIObjectHandler {
           case 'sortie_reelle':
             if ($sejour->fieldModified('sortie_reelle')) {
               $this->sendFormatAction("onAfterStore", $sejour);
-              
-              if (CAppUI::conf("sa send_actes_consult")) {
-                if ($sejour->loadRefsConsultations()) {
-                  foreach ($sejour->_ref_consultations as $_consultation) {
-                    if (!$_consultation->sejour_id || !$_consultation->valide) {
-                      continue;
-                    }  
-                    
-                    $sejour = $_consultation->loadRefSejour();
-                    $this->sendFormatAction("onAfterStore", $_consultation);
-                  }
-                }
-              }
-              
-              if (CAppUI::conf("sa send_actes_interv")) {
-                if ($sejour->loadRefsOperations()) {
-                  foreach ($sejour->_ref_operations as $_operation) {
-                    $this->sendFormatAction("onAfterStore", $_operation);
-                  }
-                }
-              }
             }
             break;
             
@@ -98,6 +77,28 @@ class CSaObjectHandler extends CEAIObjectHandler {
             }
             break;
         }
+
+        if (CAppUI::conf("sa send_actes_consult")) {
+          if ($sejour->loadRefsConsultations()) {
+            foreach ($sejour->_ref_consultations as $_consultation) {
+              if (!$_consultation->sejour_id || !$_consultation->valide) {
+                continue;
+              }
+
+              $sejour = $_consultation->loadRefSejour();
+              $this->sendFormatAction("onAfterStore", $_consultation);
+            }
+          }
+        }
+
+        if (CAppUI::conf("sa send_actes_interv")) {
+          if ($sejour->loadRefsOperations()) {
+            foreach ($sejour->_ref_operations as $_operation) {
+              $this->sendFormatAction("onAfterStore", $_operation);
+            }
+          }
+        }
+
         break;
       
       // COperation
@@ -129,26 +130,29 @@ class CSaObjectHandler extends CEAIObjectHandler {
         /** @var CConsultation $consultation */
         $consultation = $mbObject;
         
-        if ($consultation->sejour_id) {
-          switch (CAppUI::conf("sa trigger_consultation")) {
-            case 'sortie_reelle':
-              break;
-
-            case 'facture':
-              if ($consultation->fieldModified('facture', 1)) {
-                $this->sendFormatAction("onAfterStore", $consultation);
-              }
-              break;
-
-            default:
-              if ($consultation->fieldModified('valide', 1)) {
-                $this->sendFormatAction("onAfterStore", $consultation);
-              }
-              break;
-          }
+        if (!$consultation->sejour_id) {
+          return;
         }
-       
-        break; 
+
+        switch (CAppUI::conf("sa trigger_consultation")) {
+          case 'sortie_reelle':
+            break;
+
+          case 'facture':
+            if ($consultation->fieldModified('facture', 1)) {
+              $this->sendFormatAction("onAfterStore", $consultation);
+            }
+            break;
+
+          default:
+            if ($consultation->fieldModified('valide', 1)) {
+              $this->sendFormatAction("onAfterStore", $consultation);
+            }
+            break;
+        }
+
+        break;
+
       default:
         return;
     } 
