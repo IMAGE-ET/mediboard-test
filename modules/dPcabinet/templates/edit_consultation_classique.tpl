@@ -56,7 +56,7 @@
         <script>
           Reglement.consultation_id = '{{$consult->_id}}';
           Reglement.user_id = '{{$userSel->_id}}';
-          Reglement.register(false);
+          Reglement.register(true);
         </script>
       
       {{/if}}
