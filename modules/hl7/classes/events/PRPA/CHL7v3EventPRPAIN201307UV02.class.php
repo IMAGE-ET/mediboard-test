@@ -69,7 +69,7 @@ class CHL7v3EventPRPAIN201307UV02 extends CHL7v3EventPRPA implements CHL7EventPR
 
     // queryId
     $queryId = $dom->addElement($queryByParameter, "queryId");
-    $this->setII($queryId, $this->_exchange_hl7v3->_id, "OID");
+    $this->setII($queryId, $this->_exchange_hl7v3->_id, CMbOID::getOIDFromClass($this->_exchange_hl7v3));
 
     // statusCode
     $statusCode = $dom->addElement($queryByParameter, "statusCode");
