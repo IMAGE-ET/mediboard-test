@@ -72,6 +72,16 @@
           <input type="hidden" name="file_category_id" value="" />
         </td>
       </tr>
+      {{if "cda"|module_active}}
+        <tr>
+          <th>
+            {{mb_label class=CFile field="type_doc"}}
+          </th>
+          <td>
+            {{mb_field class=CFile field="type_doc" emptyLabel="Choose" style="width: 15em;"}}
+          </td>
+        </tr>
+      {{/if}}
       <tr>
         <td colspan="2">
           <input type="checkbox" name="delete_auto" checked="checked"/>
