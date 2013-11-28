@@ -144,7 +144,7 @@
   {{/if}}
 </td>
 <td>
-  <span onmousemove="ObjectTooltip.createEx(this, '{{$sejour->_guid}}');">
+  <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}');">
     {{mb_value object=$sejour field=entree format=$conf.date}}
   </span>
 
@@ -177,7 +177,7 @@
 {{if !$lite_view}}
 <td class="text compact">
   {{foreach from=$sejour->_ref_transmissions item=_transmission}}
-    <div onmousemove="ObjectTooltip.createEx(this, '{{$_transmission->_guid}}')">
+    <div onmouseover="ObjectTooltip.createEx(this, '{{$_transmission->_guid}}')">
       <strong>{{$_transmission->type|substr:0:1|upper}}</strong>:{{$_transmission->text}}
     </div>
   {{/foreach}}
