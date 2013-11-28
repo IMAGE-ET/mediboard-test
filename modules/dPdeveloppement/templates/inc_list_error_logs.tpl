@@ -43,13 +43,129 @@ Main.add(function(){
 
 {{mb_include module=system template=inc_pagination change_page="changePage" total=$total current=$start step=30}}
 
+{{foreach from=$error_logs item=_log}}
+  <div id="details-error-log-{{$_log->_id}}" style="display: none; width: 800px;">
+    <table class="tbl">
+      <tr>
+        <th>{{tr}}What{{/tr}}</th>
+        <th>{{tr}}When{{/tr}}</th>
+        <th>{{tr}}Who{{/tr}}</th>
+        <th>{{tr}}Where{{/tr}}</th>
+      </tr>
+      
+      <tr>
+        <td class="text">
+          <strong>
+            {{$_log->text}}
+          </strong>
+        </td>
+
+        <td>
+          {{if $_log->_datetime_min && $_log->_datetime_max && $_log->_datetime_min !== $_log->_datetime_max}}
+            <div title="{{$_log->_datetime_min}}">
+              {{mb_value object=$_log field=_datetime_min}}
+              ({{mb_value object=$_log field=_datetime_min format=relative}})
+            </div>
+            <div title="{{$_log->_datetime_max}}">
+              {{mb_value object=$_log field=_datetime_max}}
+              ({{mb_value object=$_log field=_datetime_max format=relative}})
+            </div>
+          {{else}}
+            <div title="{{$_log->_datetime_max}}">
+              {{mb_value object=$_log field=datetime}}
+              ({{mb_value object=$_log field=datetime format=relative}})
+            </div>
+          {{/if}}
+        </td>
+
+        <td>
+          {{foreach from=$_log->_similar_user_ids item=_user_id}}
+            <div>
+              {{$users.$_user_id}}
+            </div>
+          {{foreachelse}}
+            <div>
+              {{assign var=user_id value=$_log->user_id}}
+              {{$users.$user_id}}
+            </div>
+          {{/foreach}}
+        </td>
+
+        <td>
+          {{foreach from=$_log->_similar_server_ips item=_server_ip}}
+            <div>
+              {{$_server_ip}}
+            </div>
+            {{foreachelse}}
+            <div>
+              {{$_log->server_ip}}
+            </div>
+          {{/foreach}}
+        </td>
+
+      </tr>
+    </table>
+
+
+    <table class="tbl">
+      <tr>
+        <th>{{tr}}Call{{/tr}}</th>
+        <th>{{tr}}File{{/tr}}</th>
+        <th>{{tr}}Line{{/tr}}</th>
+      </tr>
+      <tr>
+        <td style="width: 20%;"></td>
+        <td>{{mb_value object=$_log field=file_name}}</td>
+        <td class="narrow" style="text-align: right;">{{mb_value object=$_log field=line_number}}</td>
+      </tr>
+      {{foreach from=$_log->_stacktrace_output item=_output name=output}}
+        <tr>
+          <td class="text">{{$_output.function}}</td>
+          <td class="text">{{$_output.file}}</td>
+          <td style="text-align: right;">{{$_output.line}}</td>
+        </tr>
+      {{/foreach}}
+    </table>
+
+    <table class="tbl">
+      <tr>
+        <th style="width: 33%;">{{mb_title class=CErrorLog field=param_GET_id}}</th>
+        <th style="width: 33%;">{{mb_title class=CErrorLog field=param_POST_id}}</th>
+        <th style="width: 33%;">{{mb_title class=CErrorLog field=session_data_id}}</th>
+      </tr>
+      <tr>
+        <td>
+          <pre style="width: 250px; height: 200px;">{{$_log->_param_GET|@print_r:true}}</pre>
+        </td>
+
+        <td>
+          <pre style="width: 250px; height: 200px;">{{$_log->_param_POST|@print_r:true}}</pre>
+        </td>
+
+        <td>
+          <pre style="width: 250px; height: 200px;">{{$_log->_session_data|@print_r:true}}</pre>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="button" colspan="3">
+          {{if $_log->_url}}
+            <a href="{{$_log->_url}}" class="button link" target="_blank" style="position: absolute; right: 0;">
+              Lien
+            </a>
+          {{/if}}
+          <button class="cancel" type="button" onclick="Control.Modal.close()">{{tr}}Close{{/tr}}</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+{{/foreach}}
+
 <table class="main tbl error-logs">
   <tr>
     <th></th>
     <th>{{mb_title class=CErrorLog field=stacktrace_id}}</th>
-    <th>{{mb_title class=CErrorLog field=param_GET_id}}</th>
-    <th>{{mb_title class=CErrorLog field=param_POST_id}}</th>
-    <th>{{mb_title class=CErrorLog field=session_data_id}}</th>
   </tr>
   {{foreach from=$error_logs item=_log}}
     <tbody>
@@ -77,59 +193,61 @@ Main.add(function(){
             </form>
           {{/if}}
 
-          <br />
-          {{mb_value object=$_log field=server_ip}}<br />
-          {{mb_value object=$_log field=datetime}}<br />
-
-          {{mb_value object=$_log field=user_id tooltip=true}}
-        </td>
-
-        <td class="narrow text" style="font-weight: bold;">
-          {{$_log->text}}
-        </td>
-
-        <td style="width: 15%; max-width: 200px; position: relative;" rowspan="2">
-          {{if $_log->_url}}
-            <a href="{{$_log->_url}}" class="button link" target="_blank" style="position: absolute; right: 0;">
-              Lien
-            </a>
-          {{/if}}
-
-          <pre>{{$_log->_param_GET|@print_r:true}}</pre>
-        </td>
-
-        <td style="width: 15%; max-width: 200px;" rowspan="2">
-          <pre>{{$_log->_param_POST|@print_r:true}}</pre>
-        </td>
-
-        <td style="width: 30%; max-width: 200px;" rowspan="2">
-          <button class="lookup compact" onclick="this.next().toggle()">
-            {{$_log->_session_data|@count}}
-          </button>
-          <div style="display: none;">
-            <pre>{{$_log->_session_data|@print_r:true}}</pre>
+          <div>
+            {{if $_log->_similar_server_ips|@count > 1}}
+              {{$_log->_similar_server_ips|@count}} servers
+            {{else}}
+              {{mb_value object=$_log field=server_ip}}
+            {{/if}}
           </div>
-        </td>
-      </tr>
 
-      <tr>
-        <td style="padding: 0; background: none !important;">
+          <div>
+            {{if $_log->_datetime_min && $_log->_datetime_max && $_log->_datetime_min !== $_log->_datetime_max}}
+              {{mb_value object=$_log field=_datetime_min}}
+              <br />
+              {{mb_value object=$_log field=_datetime_max}}
+            {{else}}
+              {{mb_value object=$_log field=datetime}}
+            {{/if}}
+          </div>
+
+          <div>
+            {{if $_log->_similar_user_ids|@count > 1}}
+              {{$_log->_similar_user_ids|@count}} users
+            {{else}}
+              {{mb_value object=$_log field=user_id tooltip=true}}
+            {{/if}}
+          </div>
+
+        </td>
+
+        <td class="text">
+          <button class="search" style="float:right" type="button" onclick="Modal.open('details-error-log-{{$_log->_id}}')">
+            {{tr}}Details{{/tr}}
+          </button>
+
+          <strong>{{$_log->text|truncate:200}}</strong>
           <table class="main tbl">
             <tr>
-              <td class="narrow"></td>
+              <td style="width: 20%;"></td>
               <td>{{mb_value object=$_log field=file_name}}</td>
               <td class="narrow" style="text-align: right;">{{mb_value object=$_log field=line_number}}</td>
             </tr>
-            {{foreach from=$_log->_stacktrace_output item=_output}}
-              <tr>
-                <td>{{$_output.function}}</td>
-                <td>{{$_output.file}}</td>
-                <td style="text-align: right;">{{$_output.line}}</td>
-              </tr>
+            {{foreach from=$_log->_stacktrace_output item=_output name=output}}
+              {{if $smarty.foreach.output.iteration < 4 }}
+                <tr>
+                  <td class="text">{{$_output.function}}</td>
+                  <td class="text">{{$_output.file}}</td>
+                  <td style="text-align: right;">{{$_output.line}}</td>
+                </tr>
+              {{elseif $smarty.foreach.output.iteration == 4 }}
+                <tr><td colspan="3">...</td></tr>
+              {{/if}}
             {{/foreach}}
           </table>
         </td>
       </tr>
+
     </tbody>
   {{foreachelse}}
     <tr>

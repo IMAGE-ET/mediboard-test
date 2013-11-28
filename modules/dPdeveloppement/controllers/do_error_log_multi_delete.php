@@ -19,5 +19,6 @@ if ($ids) {
   $ids = explode("-", $ids);
 
   $error_log = new CErrorLog();
-  $error_log->deleteMulti($ids);
+  $rows = $error_log->deleteMulti($ids);
+  CAppUI::stepAjax("'$rows' rows deleted");
 }
