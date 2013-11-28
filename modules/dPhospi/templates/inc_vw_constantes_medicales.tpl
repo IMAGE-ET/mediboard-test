@@ -82,11 +82,13 @@ plotHover = function(event, pos, item) {
         position: 'absolute',
         top:  top + "px",
         left: left + "px",
-        opacity: 0.7,
+        opacity: 0.8,
         backgroundColor: '#000000',
         color: '#FFFFFF',
         borderRadius: '4px',
-        textAlign: 'center'
+        textAlign: 'center',
+        'max-width': '300px',
+        'white-space': 'normal'
       }));
 
       var yaxis_labels = $$('#' + event.target.id + ' .flot-text .y' + item.series.yaxis.n + 'Axis .tickLabel');
