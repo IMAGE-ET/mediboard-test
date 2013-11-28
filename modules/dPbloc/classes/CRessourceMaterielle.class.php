@@ -138,7 +138,7 @@ class CRessourceMaterielle extends CMbObject {
         $where["ressource_materielle.type_ressource_id"] = "= '$this->type_ressource_id'";
       }
       /** @var CUsageRessource[] $usages */
-      $usages = $usage->loadList($where, null, null, null, $ljoin);
+      $usages = $usage->loadList($where, null, null, "usage_ressource_id", $ljoin);
       $besoins = CMbObject::massLoadFwdRef($usages, "besoin_ressource_id");
       CMbObject::massLoadFwdRef($besoins, "operation_id");
       CMbObject::massLoadFwdRef($usages, "ressource_materielle_id");
@@ -231,7 +231,7 @@ class CRessourceMaterielle extends CMbObject {
       $where["ressource_materielle.type_ressource_id"] = "= '$this->type_ressource_id'";
     }
     /** @var CBesoinRessource[] $besoins */
-    $besoins = $besoin->loadList($where, null, null, null, $ljoin);
+    $besoins = $besoin->loadList($where, null, null, "besoin_ressource_id", $ljoin);
     CMbObject::massLoadFwdRef($besoins, "operation_id");
 
     foreach ($besoins as $key => $_besoin) {
