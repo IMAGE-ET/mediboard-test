@@ -75,7 +75,7 @@ PoseDispVasc = {
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="7" class="empty">{{tr}}CPoseDispositifVasculaire.none{{/tr}}</td>
+      <td colspan="8" class="empty">{{tr}}CPoseDispositifVasculaire.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>
