@@ -305,7 +305,7 @@ abstract class CMbString {
     }
 
     // Value with 3 significant digits
-    $value = round($value, 2 - intval(log10($value)));
+    $value = number_format($value, 2 - intval(log10($value)));
     return "$value$suffix";
   }
 
