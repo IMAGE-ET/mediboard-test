@@ -1508,7 +1508,17 @@ class CSetupsystem extends CSetup {
       ADD `last_modified` DATETIME;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.50";
+    $this->makeRevision("1.1.50");
+    $query = "ALTER TABLE `access_log`
+      ADD `nb_requests` INT (11) AFTER `request`;";
+    $this->addQuery($query);
+    $query = "UPDATE `access_log`, `datasource_log`
+      SET `access_log`.`nb_requests` = `datasource_log`.`requests`
+      WHERE `access_log`.`accesslog_id` = `datasource_log`.`accesslog_id`
+        AND `datasource_log`.`datasource` = 'std';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.51";
 
     /*$query = "ALTER TABLE `user_log`
         DROP INDEX `object_id`,

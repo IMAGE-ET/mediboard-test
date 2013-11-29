@@ -45,6 +45,13 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
       $step          = "+10 MINUTES";
       $period_format = "%H:%M";
       $hours         = 1/6;
+      break;
+
+    default:
+      $step          = "+10 MINUTES";
+      $period_format = "%H:%M";
+      $hours         = 1/6;
+      break;
   }
   
   $datax = array();
@@ -57,13 +64,15 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
   $logs = CAccessLog::loadPeriodAggregation($startx, $endx, $period_format, $module_name, $action_name, $DBorNotDB, $human_bot);
 
   if (!$DBorNotDB) {
-    $duration  = array();
-    $processus = array();
-    $processor = array();
-    $request   = array();
-    $errors    = array();
-    $warnings  = array();
-    $notices   = array();
+    $duration    = array();
+    $processus   = array();
+    $processor   = array();
+    $request     = array();
+    $nb_requests = array();
+    $peak_memory = array();
+    $errors      = array();
+    $warnings    = array();
+    $notices     = array();
     
     $hits = array();
     $size = array();
@@ -77,6 +86,7 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
       $processus[$x[0]]   = array($x[0], 0);
       $processor[$x[0]]   = array($x[0], 0);
       $request[$x[0]]     = array($x[0], 0);
+      $nb_requests[$x[0]] = array($x[0], 0);
       $peak_memory[$x[0]] = array($x[0], 0);
       $errors[$x[0]]      = array($x[0], 0);
       $warnings[$x[0]]    = array($x[0], 0);
@@ -92,6 +102,7 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
           $processus[$x[0]]   = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'processus'});
           $processor[$x[0]]   = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'processor'});
           $request[$x[0]]     = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'request'});
+          $nb_requests[$x[0]] = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'nb_requests'});
           $peak_memory[$x[0]] = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'peak_memory'});
           $errors[$x[0]]      = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'errors'});
           $warnings[$x[0]]    = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'warnings'});
@@ -143,7 +154,8 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
         'min'   => 0,
         'title' => utf8_encode(($left[0] == 'request_time' ? 'Temps de réponse' :
                                   ($left[0] == 'cpu_time' ? 'Temps CPU' :
-                                    ($left[0] == 'errors' ? 'Erreurs' : 'Mémoire'))) .
+                                    ($left[0] == 'errors' ? 'Erreurs' :
+                                      ($left[0] == 'peak_memory' ? 'Mémoire' : 'Requetes SQL')))) .
                                 ($left[1] == 'mean' ? ' (par hit)' : '')),
         'autoscaleMargin' => 1
       ),
@@ -275,7 +287,7 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
        ),
       );
     }
-    else {
+    elseif ($left[0] == 'memory_peak') {
       $series[] = array(
        'label' => 'Pic (byte)',
        'data'  => $peak_memory,
@@ -283,6 +295,16 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
          'show' => true
        ),
       );
+    }
+    else {
+      $series[] = array(
+        'label' => 'Requetes SQL',
+        'data'  => $nb_requests,
+        'lines' => array(
+          'show' => true
+        ),
+      );
+
     }
   }
   else {

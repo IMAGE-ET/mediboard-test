@@ -72,7 +72,7 @@ var AccessLog = {
       Modal.confirm("Agréger ?", {onValidate: function(v) { if (v) {url.requestUpdate("aggregate")} } });
     }
   }
-}
+};
 
 Main.add(function () {
   Calendar.regField(getForm("typevue").date, null, {noView: true});
@@ -161,6 +161,7 @@ Main.add(function () {
           <option value="cpu_time"     {{if $left_mode == 'cpu_time'}}    selected="selected"{{/if}}>Temps CPU</option>
           <option value="errors"       {{if $left_mode == 'errors'}}      selected="selected"{{/if}}>Erreurs</option>
           <option value="memory_peak"  {{if $left_mode == 'memory_peak'}} selected="selected"{{/if}}>Pics de mémoire</option>
+          <option value="nb_requests"  {{if $left_mode == 'nb_requests'}} selected="selected"{{/if}}>Requêtes SQL</option>
         </select>
         <select name="left_sampling" onchange="this.form.submit()">
           <option value="total" {{if $left_sampling == 'total'}}selected="selected"{{/if}}>Total</option>

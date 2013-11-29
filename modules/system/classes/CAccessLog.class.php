@@ -24,6 +24,7 @@ class CAccessLog extends CMbObject {
   public $processus;
   public $processor;
   public $request;
+  public $nb_requests;
   public $peak_memory;
   public $size;
   public $errors;
@@ -38,6 +39,7 @@ class CAccessLog extends CMbObject {
   public $_average_processus   = 0;
   public $_average_processor   = 0;
   public $_average_request     = 0;
+  public $_average_nb_requests = 0;
   public $_average_peak_memory = 0;
   public $_average_size        = 0;
   public $_average_errors      = 0;
@@ -66,6 +68,7 @@ class CAccessLog extends CMbObject {
     $props["hits"]        = "num pos notNull";
     $props["duration"]    = "float notNull";
     $props["request"]     = "float notNull";
+    $props["nb_requests"] = "num";
     $props["processus"]   = "float";
     $props["processor"]   = "float";
     $props["peak_memory"] = "num min|0";
@@ -76,7 +79,8 @@ class CAccessLog extends CMbObject {
     $props["aggregate"]   = "num min|0 default|10";
     $props["bot"]         = "enum list|0|1 default|0";
 
-    $props["_average_duration"] = "num min|0";
+    $props["_average_duration"]    = "num min|0";
+    $props["_average_nb_requests"] = "num min|0";
     
     return $props;
   }
@@ -138,6 +142,7 @@ class CAccessLog extends CMbObject {
       $this->_average_processus   = $this->processus   / $this->hits;
       $this->_average_processor   = $this->processor   / $this->hits;
       $this->_average_request     = $this->request     / $this->hits;
+      $this->_average_nb_requests = $this->nb_requests / $this->hits;
       $this->_average_peak_memory = $this->peak_memory / $this->hits;
       $this->_average_errors      = $this->errors      / $this->hits;
       $this->_average_warnings    = $this->warnings    / $this->hits;
@@ -158,48 +163,27 @@ class CAccessLog extends CMbObject {
    * @param bool   $DBorNotDB Load database stats or not
    * @param string $human_bot Human/bot filter
    *
-   * @return array|CStoredObject[]
+   * @return CAccessLog[]
    */
   static function loadAgregation($start, $end, $groupmod = 0, $module = null, $DBorNotDB = false, $human_bot = null) {
     $query = "SELECT
-        accesslog_id,
-        module,
+        `access_log`.`accesslog_id`,
+        `access_log`.`module`,
         action,
-        SUM(hits)        AS hits,
-        SUM(size)        AS size,
-        SUM(duration)    AS duration, 
-        SUM(duration)    AS processus, 
-        SUM(duration)    AS processor, 
-        SUM(request)     AS request,
-        SUM(peak_memory) AS peak_memory,
-        SUM(errors)      AS errors,
-        SUM(warnings)    AS warnings,
-        SUM(notices)     AS notices,
+        SUM(`access_log`.`hits`)         AS hits,
+        SUM(`access_log`.`size`)         AS size,
+        SUM(`access_log`.`duration`)     AS duration,
+        SUM(`access_log`.`duration`)     AS processus,
+        SUM(`access_log`.`duration`)     AS processor,
+        SUM(`access_log`.`request`)      AS request,
+        SUM(`access_log`.`nb_requests`)  AS nb_requests,
+        SUM(`access_log`.`peak_memory`)  AS peak_memory,
+        SUM(`access_log`.`errors`)       AS errors,
+        SUM(`access_log`.`warnings`)     AS warnings,
+        SUM(`access_log`.`notices`)      AS notices,
         0 AS grouping
-      FROM access_log
-      USE INDEX (period)
-      WHERE period BETWEEN '$start' AND '$end' ";
-
-    // 2 means for both of them
-    if ($human_bot === '0' || $human_bot === '1') {
-      $query .= "\nAND bot = '$human_bot' ";
-    }
-
-    if ($module && !$groupmod) {
-      $query .= "AND module = '$module' ";
-    }
-    
-    switch ($groupmod) {
-      case 2 :
-        $query .= "GROUP BY grouping ";
-        break;
-      case 1 :
-        $query .= "GROUP BY module ORDER BY module ";
-        break;
-      case 0 :
-        $query .= "GROUP BY module, action ORDER BY module, action ";
-        break;
-    }
+      FROM `access_log`
+      USE INDEX (`period`)";
     
     if ($DBorNotDB) {
       $query = "SELECT 
@@ -209,32 +193,30 @@ class CAccessLog extends CMbObject {
         `access_log`.`period`,
         0 AS grouping
       FROM `access_log`
-      USE INDEX (`period`)
-      WHERE `access_log`.`period` BETWEEN '$start' AND '$end' ";
+      USE INDEX (`period`)";
+    }
 
-      // 2 means for both of them
-      if ($human_bot === '0' || $human_bot === '1') {
-        $query .= "\nAND bot = '$human_bot' ";
-      }
+    $query .= "\nWHERE `access_log`.`period` BETWEEN '$start' AND '$end'";
 
-      if ($module && !$groupmod) {
-        $query .= "\nAND module = '$module' ";
-      }
-      
-      switch ($groupmod) {
-        case 2:
-          $query .= "GROUP BY grouping ";
-          break;
-        case 1:
-          $query .= "GROUP BY module ORDER BY module ";
-          break;
-        case 0:
-          $query .= "GROUP BY module, action ORDER BY module, action ";
-          break;
-      }
-      
-      $log = new self;
-      return $log->_spec->ds->loadList($query);
+    // 2 means for both of them
+    if ($human_bot === '0' || $human_bot === '1') {
+      $query .= "\nAND `access_log`.`bot` = '$human_bot' ";
+    }
+
+    if ($module && !$groupmod) {
+      $query .= "\nAND `access_log`.`module` = '$module' ";
+    }
+
+    switch ($groupmod) {
+      case 2:
+        $query .= "GROUP BY grouping ";
+        break;
+      case 1:
+        $query .= "GROUP BY `access_log`.`module` ORDER BY `access_log`.`module` ";
+        break;
+      case 0:
+        $query .= "GROUP BY `access_log`.`module`, `access_log`.`action` ORDER BY `access_log`.`module`, `access_log`.`action` ";
+        break;
     }
 
     $log = new self;
@@ -252,7 +234,7 @@ class CAccessLog extends CMbObject {
    * @param bool   $DBorNotDB     Include database logs stats
    * @param string $human_bot     Human/bot filter
    *
-   * @return array|CStoredObject[]
+   * @return CAccessLog[]
    */
   static function loadPeriodAggregation($start, $end, $period_format, $module_name, $action_name, $DBorNotDB = false, $human_bot = null) {
     // Convert date format from PHP to MySQL
@@ -267,6 +249,7 @@ class CAccessLog extends CMbObject {
         AVG(processus/hits)   AS _average_processus,
         AVG(processor/hits)   AS _average_processor,
         AVG(request/hits)     AS _average_request,
+        AVG(nb_requests/hits) AS _average_nb_requests,
         AVG(peak_memory/hits) AS _average_peak_memory,
         SUM(hits)             AS hits,
         SUM(size)             AS size,
@@ -274,13 +257,14 @@ class CAccessLog extends CMbObject {
         SUM(processus)        AS processus,
         SUM(processor)        AS processor,
         SUM(request)          AS request,
+        SUM(nb_requests)      AS nb_requests,
         SUM(peak_memory)      AS peak_memory,
         SUM(errors)           AS errors,
         SUM(warnings)         AS warnings,
         SUM(notices)          AS notices,
       DATE_FORMAT(`period`, '$period_format') AS `gperiod`
       FROM `access_log`
-      USE INDEX (period)
+      USE INDEX (`period`)
       WHERE `period` BETWEEN '$start' AND '$end'";
 
     // 2 means for both of them
@@ -326,11 +310,7 @@ class CAccessLog extends CMbObject {
       }
       
       $query .= "\nGROUP BY `gperiod`, `datasource_log`.`datasource` ORDER BY `period`";
-      
-      $log = new self;
-      return $log->_spec->ds->loadList($query);
     }
-
     $log = new self;
     return $log->loadQueryList($query);
   }

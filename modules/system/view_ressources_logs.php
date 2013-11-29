@@ -36,7 +36,7 @@ switch ($interval) {
 
 $graphs = array();
 if ($groupres == 1) {
-  if ($element != "_average_duration" && $element != "_average_request") {
+  if ($element != "_average_duration" && $element != "_average_request" && $element != "_average_nb_requests") {
     $graphs[] = graphRessourceLog('modules', $date, $element, $interval, $numelem);
   }
   $graphs[] = graphRessourceLog('total', $date, $element, $interval, $numelem);

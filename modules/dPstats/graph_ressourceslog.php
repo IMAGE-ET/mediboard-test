@@ -9,6 +9,18 @@
  * @version    $Revision$
  */
 
+/**
+ * Génération des données des graphiques du palmarès ressources
+ *
+ * @param string $module   Module concerné
+ * @param string $date     Date de référence
+ * @param string $element  Type de données à afficher
+ * @param string $interval Interval de temps à analyser
+ * @param int    $numelem  Nombre d'éléments maximum
+ *
+ * @return array Les données de palmarès
+ */
+
 function graphRessourceLog($module, $date, $element = 'duration', $interval = 'day', $numelem = 4) {
   if (!$date) $date = CMbDT::date();
 
@@ -46,12 +58,20 @@ function graphRessourceLog($module, $date, $element = 'duration', $interval = 'd
   $series = array();
   $i = 0;
   foreach ($logs as $data) {
-    $series[$i]["data"] = array(array(0, $data->$element));
+    $series[$i]["data"]  = array(array(0, $data->$element));
     $series[$i]["label"] = $module != 'modules' ? $data->action : $data->module;
     $i++;
   }
 
   if (!function_exists('compareDataPie')) {
+    /**
+     * Comparaison entre deux données du graphique en pie
+     *
+     * @param array $a Première donnée
+     * @param array $b Deuxième donnée
+     *
+     * @return bool La première valeur est-elle inférieure à la deuxième
+     */
     function compareDataPie($a, $b) {
       return $a["data"][0][1] < $b["data"][0][1];
     }
@@ -64,8 +84,8 @@ function graphRessourceLog($module, $date, $element = 'duration', $interval = 'd
     $seriesNew[$numelem]["data"] = array(array(0, 0));
     $seriesNew[$numelem]["label"] = "Autres";
     $n = 0;
-    foreach ($other as $curr_other) {
-      $seriesNew[$numelem]["data"][0][1] += $curr_other["data"][0][1];
+    foreach ($other as $_other) {
+      $seriesNew[$numelem]["data"][0][1] += $_other["data"][0][1];
       $n++;
     }
     $seriesNew[$numelem]["label"] .= " ($n)";
@@ -74,7 +94,9 @@ function graphRessourceLog($module, $date, $element = 'duration', $interval = 'd
 
   // Set up the title for the graph
   $title = CMbDT::format($date, "%A %d %b %Y");
-  if($module) $title .= " : ".CAppUI::tr($module);
+  if ($module) {
+    $title .= " : ".CAppUI::tr($module);
+  }
 
   $options = array(
     'title' => utf8_encode($title),
