@@ -82,11 +82,11 @@
         </div>
       </td>
 
-      <td {{$style|smarty:nodefaults}}>
+      <td {{$style|smarty:nodefaults}} class="text">
         {{if !$patient->_id}}
           [PAUSE]
         {{else}}
-          <button class="edit notext button" style="float: right"  title="Modifier le dossier administratif" onclick="Patient.editModal('{{$patient->_id}}')">
+          <button class="edit notext button" style="float: right;"  title="Modifier le dossier administratif" onclick="Patient.editModal('{{$patient->_id}}')">Modifier le patient
           </button>
           <a href="{{$href_consult}}">
           {{mb_value object=$patient}}
