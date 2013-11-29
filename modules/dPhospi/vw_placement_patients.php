@@ -61,8 +61,7 @@ foreach ($services as $serv) {
   $grille = null;
   $grille = array_fill(0, $conf_nb_colonnes, array_fill(0, $conf_nb_colonnes, 0));
   
-  $chambres = $serv->loadRefsChambres();
-
+  $chambres = $serv->loadRefsChambres(false);
   foreach ($chambres as $ch) {
     /* @var CChambre $ch*/
     $ch->loadRefEmplacement();

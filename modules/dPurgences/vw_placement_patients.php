@@ -23,12 +23,14 @@ $ljoin = array();
 $ljoin["service"]     = "service.service_id = chambre.service_id";
 $ljoin["emplacement"] = "emplacement.chambre_id = chambre.chambre_id";
 $where = array();
+$where["annule"]    = "= '0'";
 $where["service.urgence"]    = "= '1'";
 $where["service.group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
 $where["emplacement.plan_x"] = "IS NOT NULL";
 $chambres_urgences = $chambre->loadList($where, null, null, "chambre_id", $ljoin);
 
 $where = array();
+$where["annule"]    = "= '0'";
 $where["service.uhcd"]       = "= '1'";
 $where["service.group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
 $where["emplacement.plan_x"] = "IS NOT NULL";
@@ -73,7 +75,7 @@ for ($num = 0; $num <= 1; $num++) {
   }
   
   foreach ($chambres as $chambre) {
-    $chambre->loadRefsFwd();
+    $chambre->loadRefService();
     $chambre->loadRefsLits();
     $chambre->loadRefEmplacement();
     $grille[$nom][$chambre->_ref_emplacement->plan_y][$chambre->_ref_emplacement->plan_x] = $chambre;
@@ -114,7 +116,8 @@ for ($num = 0; $num <= 1; $num++) {
         $sejour->loadRefRPU();
         $sejour->loadRefPrescriptionSejour();
         if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
-          $sejour->_ref_prescription_sejour->_count_fast_recent_modif = $sejour->_ref_prescription_sejour->countAlertsNotHandled("medium");
+          $countAlertsNotHandled = $sejour->_ref_prescription_sejour->countAlertsNotHandled("medium");
+          $sejour->_ref_prescription_sejour->_count_fast_recent_modif = $countAlertsNotHandled;
         }
         else {
           $sejour->_ref_prescription_sejour->countFastRecentModif();
@@ -195,6 +198,6 @@ $smarty->assign("grilles"        , $grille);
 $smarty->assign("date"           , $date);
 $smarty->assign("suiv"           , CMbDT::date("+1 day", $date));
 $smarty->assign("prec"           , CMbDT::date("-1 day", $date));
-$smarty->assign("exist_plan"     ,$exist_plan);
+$smarty->assign("exist_plan"     , $exist_plan);
 
 $smarty->display("vw_placement_patients.tpl");

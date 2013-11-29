@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage Hospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
@@ -34,6 +34,7 @@ $ljoin = array();
 $ljoin["service"] = "service.service_id = chambre.service_id";
 $ljoin["emplacement"] = "emplacement.chambre_id = chambre.chambre_id";
 $where=array();
+$where["annule"] = "= '0'";
 $where["emplacement.plan_x"] = "IS NOT NULL";
 $where["emplacement.plan_y"] = "IS NOT NULL";
 $where["service.service_id"] = " = '$service_id'";
@@ -43,13 +44,14 @@ $chambre_places = $chambre->loadGroupList($where, null, null, null, $ljoin);
 $chambres_non_placees = $chambres_service;
 if (count($chambre_places)) {
   $where=array();
+  $where["annule"]     = " = '0'";
   $where["service_id"] = " = '$service_id'";
   $where["chambre_id"] = " NOT ". CSQLDataSource::prepareIn(array_keys($chambre_places));
   $chambres_non_placees = $chambre->loadGroupList($where);
 }
 
 foreach ($chambres_non_placees as $ch) {
-  $ch->loadRefsFwd();
+  $ch->loadRefService();
   $ch->loadRefEmplacement();
 }
 
@@ -59,7 +61,7 @@ $grille = array_fill(0, $conf_nb_colonnes, array_fill(0, $conf_nb_colonnes, 0));
 
 if ($service_id!="") {
   foreach ($chambre_places as $chambre) {
-    $chambre->loadRefsFwd();
+    $chambre->loadRefService();
     $emplacement = $chambre->loadRefEmplacement();
     $grille[$emplacement->plan_y][$emplacement->plan_x] = $chambre;
     if ($emplacement->hauteur-1) {
