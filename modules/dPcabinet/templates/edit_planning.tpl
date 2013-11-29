@@ -98,7 +98,7 @@
     $V(oForm._date, "");
     $V(oForm.heure, "");
     if (Preferences.choosePatientAfterDate == 1) {
-      PlageConsultSelector.init();
+      PlageConsultSelector.init(0,0);
     }
   };
 
