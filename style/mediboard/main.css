@@ -1802,7 +1802,7 @@ table.tbl td.hour-plan {
 }
 
 table.tbl td.hour-plan.partial {
-  background-color: #dfd !important;
+  background-image: url(images/icons/ray.gif);
 }
 
 table.tbl td.hour-plan.active {

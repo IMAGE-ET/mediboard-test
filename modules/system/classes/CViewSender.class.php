@@ -95,10 +95,10 @@ class CViewSender extends CMbObject {
     $every  = intval($this->every);
     $minute = intval($minute);
     $hour   = intval($hour);
-    $minute_actuve = $minute % $period == $offset;
+    $minute_active = $minute % $period == $offset;
     $hour_active = $hour === null || ($hour % $every == 0);
     
-    return $this->_active = $minute_actuve && $hour_active;
+    return $this->_active = $minute_active && $hour_active;
   }
   
   function makeHourPlan($minute = null) {
@@ -106,9 +106,23 @@ class CViewSender extends CMbObject {
     $offset = intval($this->offset);
     $every  = intval($this->every );
 
+    // Microplan on several minutes in case duration is more than 60s
+    $microplan = array();
+    $duration = $this->last_duration;
+    while ($duration > 0) {
+      $microplan[] = min($duration, 60);
+      $duration -= 60;
+    }
+
     // Hour plan
-    foreach (range(0, 59) as $min) {
-      $this->_hour_plan[$min] = ($min % $period == $offset) / $every;
+    $hour_plan = array_fill(0, 60, 0);
+    foreach (range(0, 59) as $_min) {
+      if ($_min % $period == $offset) {
+        foreach ($microplan as $_offset => $_duration) {
+          $hour_plan[($_min+$_offset) % 60] += $_duration / 60 / $every;
+        }
+
+      }
     }
 
     // Active
@@ -116,7 +130,7 @@ class CViewSender extends CMbObject {
       $this->getActive($minute);
     }
     
-    return $this->_hour_plan;
+    return $this->_hour_plan = $hour_plan;
   }
 
   function loadRefSendersSource() {

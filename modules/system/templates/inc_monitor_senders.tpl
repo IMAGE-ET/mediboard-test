@@ -40,25 +40,34 @@
         {{mb_value object=$_sender field=name}}
       </td>
       
-      <td rowspan="{{$count_sources}}">
+      <td rowspan="{{$count_sources}}" style="text-align: right;">
         {{$_sender->last_duration|string_format:"%.3f"}}s
       </td>
-      
-      <td rowspan="{{$count_sources}}" title="{{$_sender->last_size}}">
-        {{$_sender->last_size|decabinary}}
+
+      <td rowspan="{{$count_sources}}" style="text-align: right;">
+        <span title="{{$_sender->last_size}}">
+          {{$_sender->last_size|decabinary}}
+        </span>
       </td>
 
 	    {{foreach from=$_sender->_ref_senders_source item=_sender_source name=sender_source}}
-	    <td>{{mb_value object=$_sender_source field=source_id tooltip=true}}</td>
-	    <td>{{$_sender_source->last_duration|string_format:"%.3f"}}s</td>
+      <td>
+        {{mb_value object=$_sender_source field=source_id tooltip=true}}
+      </td>
+
+	    <td style="text-align: right;">
+        {{$_sender_source->last_duration|string_format:"%.3f"}}s
+      </td>
 			
       {{assign var=class value=ok}}
-      {{if $_sender_source->last_size < 1000}} 
+      {{if $_sender_source->last_size < 1000}}
         {{assign var=class value=error}}
       {{/if}}
 	    
-      <td class="{{$class}}" title="{{$_sender_source->last_size}}">
-        {{$_sender_source->last_size|decabinary}}
+      <td class="{{$class}}"  style="text-align: right;">
+        <span title="{{$_sender_source->last_size}}">
+          {{$_sender_source->last_size|decabinary}}
+        </span>
       </td>
       
       {{assign var=class value=ok}}
