@@ -395,6 +395,12 @@ class CSetupdPurgences extends CSetup {
     $this->addQuery($query);
 
 
-    $this->mod_version = "0.46";
+    $this->makeRevision("0.46");
+
+    $query = "ALTER TABLE `extract_passages`
+                CHANGE `type` `type` ENUM ('rpu','urg','activite') DEFAULT 'rpu';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.47";
   }  
 }

@@ -20,6 +20,7 @@ $group_id = CGroups::loadCurrent()->_id;
 $extractPassages = new CExtractPassages();
 $extractPassages->debut_selection = $now;
 $extractPassages->fin_selection   = $now;
+$extractPassages->type            = "activite";
 $extractPassages->group_id        = CGroups::loadCurrent()->_id;
 $extractPassages->date_extract    = $now;
 
@@ -49,8 +50,12 @@ $order = "sejour.entree ASC";
 /** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, $order, null, "sejour.sejour_id", $ljoin);
 
+
+$count_sejour = 0;
 //work
 foreach ($sejours as $_sejour) {
+  $count_sejour++;
+
   $affectation = $_sejour->getCurrAffectation($now);
 
   //total
@@ -126,3 +131,14 @@ if (!$rpuSender) {
   CAppUI::stepAjax("Aucun sender définit dans le module dPurgences.", UI_MSG_ERROR);
 }
 $extractPassages = $rpuSender->extractActivite($extractPassages, $datas);
+
+CAppUI::stepAjax("Extraction de $count_sejour séjours du $now terminée.", UI_MSG_OK);
+if (!$extractPassages->message_valide) {
+  CAppUI::stepAjax("Le document produit n'est pas valide.", UI_MSG_WARNING);
+}
+else {
+  CAppUI::stepAjax("Le document produit est valide.", UI_MSG_OK);
+}
+
+echo "<script>extract_passages_id = $extractPassages->_id;</script>";
+

@@ -1,5 +1,5 @@
 <?php
-$locales['CCerveauSender'] = 'Cerveau';
+$locales['CExtractPassages.type.activite'] = 'Activité';
 $locales['CChapitreMotif'] = 'Chapitre de motif d\'urgence';
 $locales['CChapitreMotif-back-motif'] = 'Chapitre du motif';
 $locales['CChapitreMotif-back-motif.empty'] = 'Pas de chapitre pour ce motif';
@@ -147,6 +147,7 @@ $locales['CMotifSFMU.search'] = 'Rechercher les motifs SFMU par catégorie';
 $locales['COrumipSender'] = 'Oru-Mip';
 $locales['COscourSender'] = 'Oscour';
 $locales['COuralSender'] = 'Oural';
+$locales['CCerveauSender'] = 'Cerveau';
 $locales['CRPU'] = 'Résumé de passage aux urgences';
 $locales['CRPU-ATU-missing'] = 'Aucune PEC médicale';
 $locales['CRPU-_DP'] = 'Dagnostic Principal';

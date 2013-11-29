@@ -14,8 +14,8 @@ CCanDo::checkAdmin();
 $extract_passages_id = CValue::get("extract_passages_id");
 $view                = CValue::get("view", 0);
 
+$extractPassages = new CExtractPassages();
 if ($extract_passages_id) {
-  $extractPassages = new CExtractPassages();
   $extractPassages->load($extract_passages_id);
 }
 
@@ -29,7 +29,7 @@ if (!$extractPassages->message_valide) {
 
 // Appel de la fonction d'extraction du RPUSender
 $rpuSender = $extractPassages->getRPUSender();
-$extractPassages = $rpuSender->encrypt($extractPassages);
+$extractPassages = $rpuSender->encryptActivite($extractPassages);
 
 if ($view) {
   $extractPassages->loadRefsFiles();

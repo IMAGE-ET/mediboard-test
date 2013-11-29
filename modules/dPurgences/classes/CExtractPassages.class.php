@@ -65,7 +65,7 @@ class CExtractPassages extends CMbObject {
     $props["nb_tentatives"]   = "num";
     $props["message"]         = "xml show|0";
     $props["message_valide"]  = "bool";
-    $props["type"]            = "enum list|rpu|urg default|rpu";
+    $props["type"]            = "enum list|rpu|urg|activite default|rpu";
     $props["group_id"]        = "ref notNull class|CGroups";
     
     $props["_nb_rpus"]        = "num";
@@ -136,7 +136,7 @@ class CExtractPassages extends CMbObject {
   /**
    * Try and instanciate document sender according to module configuration
    *
-   * @return CRPUSender|null sender or null on error
+   * @return CRPUSender|COscourSender|COuralSender|CCerveauSender sender or null on error
    */
   static function getRPUSender() {
     if (null == $rpu_sender = CAppUI::conf("dPurgences rpu_sender")) {
