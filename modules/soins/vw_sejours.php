@@ -22,6 +22,7 @@ $select_view = CValue::get("select_view", false);
 $services = array();
 $functions = array();
 $praticiens = array();
+$dossiers = array();
 
 if ($select_view || (!$service_id && !$praticien_id && !$function_id && !$sejour_id)) {
   // Redirection pour gérer le cas ou le volet par defaut est l'autre affichage des sejours
@@ -89,8 +90,8 @@ if (!isset($sejours)) {
       $where["sejour.type"] = $_type_admission == "ambucomp" ? "IN ('ambu', 'comp')" : "= '$_type_admission'";
     }
     $sejours = $sejour->loadList($where, null, null, null, $ljoin);
-  
-  } else {
+  }
+  else {
     // Chargement du service
     $service->load($service_id);
     
@@ -247,6 +248,7 @@ if (!isset($sejours)) {
 
 CMbObject::massLoadFwdRef($sejours, "patient_id");
 CMbObject::massLoadFwdRef($sejours, "praticien_id");
+CMbObject::massCountBackRefs($sejours, "tasks", array("realise" => " = '0'"), array(), "taches_non_realisees");
 
 foreach ($sejours as $sejour) {
   $sejour->loadRefPatient(1)->loadIPP();
@@ -260,17 +262,18 @@ foreach ($sejours as $sejour) {
   if ($prescription->_id) {
     $prescription->loadJourOp(CMbDT::date());
   }
+
   // Chargement des taches non effectuées
-  $task = new CSejourTask();
-  $task->sejour_id = $sejour->_id;
-  $task->realise = 0;
-  $sejour->_count_tasks = $task->countMatchingList();
-  
+  $sejour->_count_tasks = $sejour->_count["taches_non_realisees"];
+
   if ($print) {
+    $task = new CSejourTask();
+    $task->sejour_id = $sejour->_id;
+    $task->realise = 0;
     $sejour->_ref_tasks = $task->loadMatchingList();
     foreach ($sejour->_ref_tasks as $_task) {
       $_task->loadRefPrescriptionLineElement();
-    }  
+    }
   }
   
   // Chargement des lignes non associées à des taches
@@ -312,15 +315,30 @@ foreach ($sejours as $sejour) {
   
   $patient = $sejour->_ref_patient;
   $patient->loadRefPhotoIdentite();
-  $patient->loadRefDossierMedical();
+  $patient->loadRefDossierMedical(false);
+
   $dossier_medical = $patient->_ref_dossier_medical;
-  
   if ($dossier_medical->_id) {
-    $dossier_medical->loadRefsAllergies();
-    $dossier_medical->loadRefsAntecedents();
-    $dossier_medical->countAntecedents();
-    $dossier_medical->countAllergies();
+    $dossiers[$dossier_medical->_id] = $dossier_medical;
   }
+}
+
+// Récupération des identifiants des dossiers médicaux
+$dossiers_id = CMbArray::pluck($sejours, "_ref_patient", "_ref_dossier_medical", "_id");
+
+// Suppressions des dossiers médicaux inexistants
+CMbArray::removeValue("", $dossiers);
+
+$_counts_allergie    = CDossierMedical::massCountAllergies($dossiers_id);
+$_counts_antecedent  = CDossierMedical::massCountAntecedents($dossiers_id);
+
+foreach ($dossiers as $_dossier) {
+  if ($print) {
+    $_dossier->loadRefsAllergies();
+    $_dossier->loadRefsAntecedents();
+  }
+  $_dossier->_count_allergies = array_key_exists($_dossier->_id, $_counts_allergie) ? $_counts_allergie[$_dossier->_id] : 0;
+  $_dossier->_count_antecedents = array_key_exists($_dossier->_id, $_counts_antecedent) ? $_counts_antecedent[$_dossier->_id] : 0;
 }
 
 if ($service_id == "NP") {
