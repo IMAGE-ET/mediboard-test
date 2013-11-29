@@ -158,7 +158,6 @@ RDVmultiples = {
     if (consult_list.size()) {
       window.parent.PlageConsultSelector.consultations = consult_list;
       window.parent.PlageConsultSelector.updateFromSelector();
-      window.parent.Control.Modal.close();
     }
     else {
       alert("Selectionner au moins une plage");

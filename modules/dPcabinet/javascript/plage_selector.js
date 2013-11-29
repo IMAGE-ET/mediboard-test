@@ -39,7 +39,6 @@ PlageConsultSelector = {
       if (this.multipleEdit) {
         url.addParam("multipleEdit", this.multipleEdit);
         url.addParam("hide_finished", 0);
-
       }
       if (this.sDatePlanning != null && $V(oForm[this.sDatePlanning])) {
         url.addParam("date", $V(oForm[this.sDatePlanning]));
@@ -57,7 +56,7 @@ PlageConsultSelector = {
     var iterator = 0;
     this.consultations.each(function(elt) {
       var consult = elt.value;
-      console.log(iterator+ " -> ", consult);
+      //console.log(iterator+ " -> ", consult);
       // main consult
       if (iterator == 0) {
         window.PlageConsultSelector.set(consult.heure, consult.plage_id, consult.date, consult.chir_id, consult.is_cancelled);
@@ -78,6 +77,13 @@ PlageConsultSelector = {
       }
       iterator++;
     });
+    // close the modal (there is at least one consult)
+    window.Control.Modal.close();
+
+    // if fast RDV, I pop the patselector
+    if (Preferences.choosePatientAfterDate == 1 && !$V(oForm["patient_id"]) && !oForm._pause.checked) {
+      window.PatSelector.init();
+    }
   },
 
   // classic set for mono consult
