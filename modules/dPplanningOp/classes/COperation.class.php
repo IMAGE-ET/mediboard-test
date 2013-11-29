@@ -190,7 +190,7 @@ class COperation extends CCodable implements IPatientRelated {
   public $_ref_naissances;
   public $_ref_poses_disp_vasc;
   /** @var  CBloodSalvage */
-  public $blood_salvage;
+  public $_ref_blood_salvage;
   /** @var CBrancardage */
   public $_ref_brancardage;
 
@@ -383,16 +383,25 @@ class COperation extends CCodable implements IPatientRelated {
     return $props;
   }
 
+  /**
+   * @see parent::loadRelPatient()
+   */
   function loadRelPatient(){
     return $this->loadRefPatient();
   }
 
+  /**
+   * @see parent::getExecutantId()
+   */
   function getExecutantId($code_activite) {
     $this->loadRefChir();
     $this->loadRefPlageOp();
     return ($code_activite == 4 ? $this->_ref_anesth->user_id : $this->chir_id);
   }
-  
+
+  /**
+   * @see parent::getExtensionDocumentaire()
+   */
   function getExtensionDocumentaire() {
     $this->_ref_type_anesth = $this->loadFwdRef("type_anesth", true);
     return $this->_ref_type_anesth->ext_doc;
@@ -1152,6 +1161,11 @@ class COperation extends CCodable implements IPatientRelated {
     return $this->_ref_plageop;
   }
 
+  /**
+   * @see parent::preparePossibleActes()
+   *
+   * @return void
+   */
   function preparePossibleActes() {
     $this->loadRefPlageOp();
   }
@@ -1241,6 +1255,7 @@ class COperation extends CCodable implements IPatientRelated {
 
   /**
    * @see parent::loadRefsFwd()
+   * @deprecated
    */
   function loadRefsFwd($cache = true) {
     $consult_anesth = $this->loadRefsConsultAnesth();
@@ -1257,6 +1272,15 @@ class COperation extends CCodable implements IPatientRelated {
     $this->loadRefChir($cache)->loadRefFunction();
     $this->loadRefPatient($cache);
     $this->_view = "Intervention de {$this->_ref_sejour->_ref_patient->_view} par le Dr {$this->_ref_chir->_view}";
+  }
+
+  /**
+   * Chargement du bloodsalvage associé
+   *
+   * @return CBloodSalvage
+   */
+  function loadRefBloodSalvage() {
+    return $this->_ref_blood_salvage = $this->loadUniqueBackRef("blood_salvages");
   }
 
   /**

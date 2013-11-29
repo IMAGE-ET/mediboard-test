@@ -18,7 +18,7 @@
     // sinon, on ne submit que l'operation
       submitOperationForm(oFormOperation,1);
     }
-  }
+  };
   
   submitOperationForm = function(oFormOperation) {
     submitFormAjax(oFormOperation,'systemMsg', {onComplete: function(){ refreshTabsReveil() }});
@@ -75,19 +75,20 @@
       </td>
     {{/if}}
     {{if $isbloodSalvageInstalled}}
+      {{assign var=salvage value=$_operation->_ref_blood_salvage}}
       <td>
-        {{if $_operation->blood_salvage->_id}}
+        {{if $salvage->_id}}
         <div style="float:left ; display:inline">
           <a href="#" title="Voir la procédure RSPO" onclick="viewRSPO({{$_operation->_id}});">         
           <img src="images/icons/search.png" title="Voir la procédure RSPO" alt="vw_rspo">
-          {{if $_operation->blood_salvage->totaltime > "00:00:00"}}  
-            Débuté à {{$_operation->blood_salvage->_recuperation_start|date_format:$conf.time}}
+          {{if $salvage->_totaltime > "00:00:00"}}
+            Débuté à {{$salvage->_recuperation_start|date_format:$conf.time}}
           {{else}}
             Non débuté
           {{/if}} 
         </a>
         </div>
-        {{if $_operation->blood_salvage->totaltime|date_format:$conf.time > "05:00"}} 
+        {{if $salvage->_totaltime|date_format:$conf.time > "05:00"}}
         <div style="float:right; display:inline">
         
         <img src="images/icons/warning.png" title="Durée légale bientôt atteinte !" alt="alerte-durée-RSPO">

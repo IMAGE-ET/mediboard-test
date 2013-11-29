@@ -11,26 +11,28 @@
 
 CCanDo::checkRead();
 
-$date    = CValue::getOrSession("date", CMbDT::date());
-$bloc_id = CValue::getOrSession("bloc_id");
-$type    = CValue::get("type"); // Type d'affichage => encours, ops, reveil, out
-$present_only = CValue::getOrSession("present_only", 0);
+$date              = CValue::getOrSession("date", CMbDT::date());
+$bloc_id           = CValue::getOrSession("bloc_id");
+$type              = CValue::get("type"); // Type d'affichage => encours, ops, reveil, out
+$present_only      = CValue::getOrSession("present_only", 0);
 $present_only_reel = CValue::getOrSession("present_only_reel", 0);
-$modif_operation = CCanDo::edit() || $date >= CMbDT::date();
+$modif_operation   = CCanDo::edit() || $date >= CMbDT::date();
 
 // Chargement des Chirurgiens
 $chir      = new CMediusers();
 $listChirs = $chir->loadPraticiens(PERM_READ);
 
-// Selection des plages opératoires de la journée
-$plage = new CPlageOp();
-$plage->date = $date;
-$plages = $plage->loadMatchingList();
-
 // Selection des salles du bloc
 $salle = new CSalle();
 $whereSalle = array("bloc_id" => " = '$bloc_id'");
 $listSalles = $salle->loadListWithPerms(PERM_READ, $whereSalle);
+
+// Selection des plages opératoires de la journée
+$plage = new CPlageOp();
+$where = array();
+$where["date"] = "= '$date'";
+$where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
+$plages = $plage->loadList($where);
 
 $where = array();
 $where["annulee"] = "= '0'";
@@ -45,32 +47,32 @@ if (CAppUI::conf("dPplanningOp COperation use_poste")) {
 else {
   $where["operations.salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
 }
-$where[] = "plageop_id ".CSQLDataSource::prepareIn(array_keys($plages))." OR (plageop_id IS NULL AND date = '$date')";
+$where[] = "operations.plageop_id ".CSQLDataSource::prepareIn(array_keys($plages))." OR (operations.plageop_id IS NULL AND operations.date = '$date')";
 
 switch ($type) {
   case 'preop':
-    $where["entree_salle"] = "IS NULL";
-    $order = "time_operation";
+    $where["operations.entree_salle"] = "IS NULL";
+    $order = "operations.time_operation";
     break;
   case 'encours':
-    $where["entree_salle"] = "IS NOT NULL";
-    $where["sortie_salle"] = "IS NULL";
-    $order = "entree_salle";
+    $where["operations.entree_salle"] = "IS NOT NULL";
+    $where["operations.sortie_salle"] = "IS NULL";
+    $order = "operations.entree_salle";
     break;
   case 'ops':
-    $where["sortie_salle"] = "IS NOT NULL";
-    $where["entree_reveil"] = "IS NULL";
-    $where["sortie_reveil_possible"] = "IS NULL";
-    $order = "sortie_salle";
+    $where["operations.sortie_salle"] = "IS NOT NULL";
+    $where["operations.entree_reveil"] = "IS NULL";
+    $where["operations.sortie_reveil_possible"] = "IS NULL";
+    $order = "operations.sortie_salle";
     break;
   case 'reveil':
-    $where["entree_reveil"] = "IS NOT NULL";
-    $where["sortie_reveil_possible"] = "IS NULL";
-    $order = "entree_reveil";
+    $where["operations.entree_reveil"] = "IS NOT NULL";
+    $where["operations.sortie_reveil_possible"] = "IS NULL";
+    $order = "operations.entree_reveil";
     break;
   case 'out':
-    $where["sortie_reveil_possible"] = "IS NOT NULL";
-    $order = "sortie_reveil_possible DESC";
+    $where["operations.sortie_reveil_possible"] = "IS NOT NULL";
+    $order = "operations.sortie_reveil_possible DESC";
     break;
 }
 
@@ -83,11 +85,16 @@ $listOperations = $operation->loadList($where, $order, null, null, $ljoin);
 $chirs = CMbObject::massLoadFwdRef($listOperations, "chir_id");
 CMbObject::massLoadFwdRef($chirs, "function_id");
 CMbObject::massLoadFwdRef($listOperations, "plageop_id");
-$sejours = CMbObject::massLoadFwdRef($listOperations, "sejour_id");
-CMbObject::massLoadFwdRef($sejours, "patient_id");
 if ($use_poste) {
   CMbObject::massLoadFwdRef($listOperations, "poste_sspi_id");
 }
+
+if (($type == "ops" || $type == "reveil") && CModule::getActive("bloodSalvage")) {
+  CMbObject::massCountBackRefs($listOperations, "blood_salvages");
+}
+
+$sejours = CMbObject::massLoadFwdRef($listOperations, "sejour_id");
+CMbObject::massLoadFwdRef($sejours, "patient_id");
 
 $group = CGroups::loadCurrent();
 $nb_sorties_non_realisees = 0;
@@ -97,7 +104,7 @@ $use_sortie_reveil_reel = CAppUI::conf("dPsalleOp COperation use_sortie_reveil_r
 
 /** @var $op COperation */
 foreach ($listOperations as $key => $op) {
-  $sejour = $op->loadRefSejour(1);
+  $sejour = $op->loadRefSejour();
   $sejour->loadNDA();
   
   if ($sejour->type == "exte") {
@@ -116,10 +123,9 @@ foreach ($listOperations as $key => $op) {
     }
   }
 
-  $op->loadRefChir(1);
-  $op->_ref_chir->loadRefFunction();
-  $op->loadRefPlageOp(1);
-  $op->loadRefPatient(1);
+  $op->loadRefChir()->loadRefFunction();
+  $op->loadRefPlageOp();
+  $op->loadRefPatient();
   $op->loadAffectationsPersonnel();
   $op->loadBrancardage();
   
@@ -128,19 +134,16 @@ foreach ($listOperations as $key => $op) {
   }
   
   if (($type == "ops" || $type == "reveil") && CModule::getActive("bloodSalvage")) {
-    $op->blood_salvage = new CBloodSalvage();
-    $where = array();
-    $where["operation_id"] = "= '$key'";
-    $op->blood_salvage->loadObject($where);
-    $op->blood_salvage->loadRefPlageOp();
-    $op->blood_salvage->totaltime = "00:00:00";
-    if ($op->blood_salvage->recuperation_start && $op->blood_salvage->transfusion_end) {
-      $op->blood_salvage->totaltime = CMbDT::timeRelative($op->blood_salvage->recuperation_start, $op->blood_salvage->transfusion_end);
+    $salvage = $op->loadRefBloodSalvage();;
+    $salvage->loadRefPlageOp();
+    $salvage->_totaltime = "00:00:00";
+    if ($salvage->recuperation_start && $salvage->transfusion_end) {
+      $salvage->_totaltime = CMbDT::timeRelative($salvage->recuperation_start, $salvage->transfusion_end);
     }
-    elseif ($op->blood_salvage->recuperation_start) {
-      $from = $op->blood_salvage->recuperation_start;
-      $to   = CMbDT::date($op->blood_salvage->_datetime)." ".CMbDT::time();
-      $op->blood_salvage->totaltime = CMbDT::timeRelative($from, $to);
+    elseif ($salvage->recuperation_start) {
+      $from = $salvage->recuperation_start;
+      $to   = CMbDT::date($salvage->_datetime)." ".CMbDT::time();
+      $salvage->_totaltime = CMbDT::timeRelative($from, $to);
     }
   }
   
@@ -167,16 +170,16 @@ if (Cmodule::getActive("dPpersonnel")) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("personnels"             , $personnels);
-$smarty->assign("listOperations"         , $listOperations);
-$smarty->assign("plages"                 , $plages);
-$smarty->assign("date"                   , $date);
-$smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
-$smarty->assign("hour"                   , CMbDT::time());
-$smarty->assign("modif_operation"        , $modif_operation);
-$smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC($group)));
+$smarty->assign("personnels"              , $personnels);
+$smarty->assign("listOperations"          , $listOperations);
+$smarty->assign("plages"                  , $plages);
+$smarty->assign("date"                    , $date);
+$smarty->assign("isbloodSalvageInstalled" , CModule::getActive("bloodSalvage"));
+$smarty->assign("hour"                    , CMbDT::time());
+$smarty->assign("modif_operation"         , $modif_operation);
+$smarty->assign("isImedsInstalled"        , (CModule::getActive("dPImeds") && CImeds::getTagCIDC($group)));
 $smarty->assign("nb_sorties_non_realisees", $nb_sorties_non_realisees);
-$smarty->assign("present_only"           , $present_only);
-$smarty->assign("present_only_reel"      , $present_only_reel);
+$smarty->assign("present_only"            , $present_only);
+$smarty->assign("present_only_reel"       , $present_only_reel);
 
 $smarty->display("inc_reveil_$type.tpl");

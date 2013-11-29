@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage bloodSalvage
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -40,6 +40,7 @@ class CBloodSalvage extends CMbObject {
   public $sample;
   
   // Form Fields
+  public $_totaltime;
   public $_recuperation_start;
   public $_recuperation_end;
   public $_transfusion_start;
@@ -129,38 +130,37 @@ class CBloodSalvage extends CMbObject {
    * @return CPatient
    */
   function loadRefPatient() {
-    return $this->_ref_patient = $this->_ref_operation->loadRefPatient(1);
+    return $this->_ref_patient = $this->_ref_operation->loadRefPatient();
   }
 
   /**
    * Chargement de l'opération
    *
-   * @return void
+   * @return COperation
    */
   function loadRefOperation() {
-    $this->_ref_operation = new COperation();
-    $this->_ref_operation = $this->_ref_operation->getCached($this->operation_id);
-    $this->_ref_operation->loadRefPlageOp(1);
+    /** @var COperation $operation */
+    $operation = $this->loadFwdRef("operation_id", true);
+    $operation->loadRefPlageOp();
+    return $this->_ref_operation = $operation;
   }
 
   /**
    * Chargement de Cell Saver
    *
-   * @return void
+   * @return CCellSaver
    */
   function loadRefCellSaver() {
-    $this->_ref_cell_saver = new CCellSaver();
-    $this->_ref_cell_saver = $this->_ref_cell_saver->getCached($this->cell_saver_id);  
+    return $this->_ref_cell_saver = $this->loadFwdRef("cell_saver_id", true);
   }
 
   /**
    * Chargement de l'incident
    *
-   * @return void
+   * @return CTypeEi
    */
   function loadRefTypeEi() {
-    $this->_ref_incident_type = new CTypeEi();
-    $this->_ref_incident_type = $this->_ref_incident_type->getCached($this->type_ei_id);
+    return $this->_ref_incident_type = $this->loadFwdRef("type_ei_id", true);
   }
 
   /**
@@ -169,10 +169,8 @@ class CBloodSalvage extends CMbObject {
    * @return void
    */
   function loadRefPlageOp() {
-    $this->_ref_operation = new COperation();
-    $this->_ref_operation = $this->_ref_operation->getCached($this->operation_id);
-    $this->_ref_operation->loadRefPlageOp(1);
-    $this->_datetime = $this->_ref_operation->_datetime;
+    $operation = $this->loadRefOperation();
+    $this->_datetime = $operation->_datetime;
   }
 
   /**
