@@ -1603,10 +1603,10 @@ class CStoredObject extends CModelObject {
   /**
    * Mass count mechanism for back reference collections of an object collection
    *
-   * @param self[] $objects  Array of objects
-   * @param string $backName Name of backward reference
-   * @param array  $where    Additional where clauses
-   * @param array  $ljoin    Additionnal ljoin clauses
+   * @param self[] $objects     Array of objects
+   * @param string $backName    Name of backward reference
+   * @param array  $where       Additional where clauses
+   * @param array  $ljoin       Additionnal ljoin clauses
    * @param string $backNameAlt BackName Alt
    *
    * @return int|null Total count among objects, null if collection count is unavailable
@@ -1692,15 +1692,16 @@ class CStoredObject extends CModelObject {
   /**
    * Load named back reference collection
    *
-   * @param string       $backName Name of the collection
-   * @param array|string $order    Order SQL statement
-   * @param string       $limit    MySQL limit clause
-   * @param array|string $group    Group by SQL statement
-   * @param array        $ljoin    Array of left join clauses
+   * @param string       $backName    Name of the collection
+   * @param array|string $order       Order SQL statement
+   * @param string       $limit       MySQL limit clause
+   * @param array|string $group       Group by SQL statement
+   * @param array        $ljoin       Array of left join clauses
+   * @param string       $backNameAlt BackName Alt
    *
    * @return self[]|null Total count among objects, null if collection is unavailable
    */
-  function loadBackRefs($backName, $order = null, $limit = null, $group = null, $ljoin = null) {
+  function loadBackRefs($backName, $order = null, $limit = null, $group = null, $ljoin = null, $backNameAlt = "") {
     if (!$backSpec = $this->makeBackSpec($backName)) {
       return null;
     }
@@ -1717,6 +1718,8 @@ class CStoredObject extends CModelObject {
     if (!$backObject->_ref_module) {
       return null;
     }
+
+    $backName = $backNameAlt ? $backNameAlt : $backName;
 
     // Empty object
     if (!$this->_id) {
@@ -1797,16 +1800,17 @@ class CStoredObject extends CModelObject {
    * Load the unique back reference for given collection name
    * Will check for uniqueness
    *
-   * @param string       $backName The collection name
-   * @param array|string $order    Order SQL statement
-   * @param string       $limit    MySQL limit clause
-   * @param array|string $group    Group by SQL statement
-   * @param array        $ljoin    Array of left join clauses
+   * @param string       $backName    The collection name
+   * @param array|string $order       Order SQL statement
+   * @param string       $limit       MySQL limit clause
+   * @param array|string $group       Group by SQL statement
+   * @param array        $ljoin       Array of left join clauses
+   * @param string       $backNameAlt BackName Alt
    *
    * @return CMbObject Unique back reference if exist, concrete type empty object otherwise, null if unavailable
    */
-  function loadUniqueBackRef($backName, $order = null, $limit = null, $group = null, $ljoin = null) {
-    if (null === $backRefs = $this->loadBackRefs($backName, $order, $limit, $group, $ljoin)) {
+  function loadUniqueBackRef($backName, $order = null, $limit = null, $group = null, $ljoin = null, $backNameAlt = "") {
+    if (null === $backRefs = $this->loadBackRefs($backName, $order, $limit, $group, $ljoin, $backNameAlt)) {
       return null;
     }
 
