@@ -221,11 +221,13 @@ div.ssr-sejour-bar {
 {{if count($services)}}
 <table class="main">
   <tr>
-    <td>
-      <table id="patients_non_places">
-        {{mb_include module=hospi template=inc_patients_non_places}}
-      </table>
-    </td>
+    {{if $can->edit}}
+      <td>
+        <table id="patients_non_places">
+          {{mb_include module=hospi template=inc_patients_non_places}}
+        </table>
+      </td>
+    {{/if}}
     <td style="width:100%;">
       <table style="width:100%;">
         {{foreach from=$grilles item=grille key=key}}
