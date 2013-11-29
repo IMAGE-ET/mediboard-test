@@ -34,7 +34,7 @@ foreach (range(0, 59) as $min) {
   }
 }
 
-// Création du template
+// Crï¿½ation du template
 $smarty = new CSmartyDP();
 $smarty->assign("senders", $senders);
 $smarty->assign("hour_sum", $hour_sum);

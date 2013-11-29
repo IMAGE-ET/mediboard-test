@@ -33,7 +33,7 @@
     </th>
   </tr>
 
-  {{foreach from=$senders item=_sender}}
+  {{foreach from=$senders item=_sender name=senders}}
     {{assign var=senders_source value=$_sender->_ref_senders_source}}
     <tr>
       <td class="narrow">
@@ -48,6 +48,10 @@
         <div class="compact">
           {{mb_value object=$_sender field=description}}
         </div>
+        <div class="compact">
+          {{$_sender->last_duration|string_format:"%.3f"}}s /
+          {{$_sender->last_size|decabinary}}
+        </div>
       </td>
       <td class="narrow">
         <script type="text/javascript">
@@ -58,7 +62,16 @@
         </button>
       </td>
       <td class="text compact">
-        {{$_sender->params|nl2br|replace:"=":" = "}}
+        {{foreach from=$_sender->_params key=_param item=_value name=params}}
+          {{if $smarty.foreach.params.iteration < 4}}
+          <div>
+            {{$_param}} = {{$_value}}
+            {{if $smarty.foreach.params.iteration == 3 && count($_sender->_params) > 3 }}
+            ...
+            {{/if}}
+          </div>
+          {{/if}}
+        {{/foreach}}
       </td>
       <td>          
         <button class="add notext" onclick="SourceToViewSender.edit('{{$_sender->_id}}');">
@@ -84,41 +97,48 @@
       <td style="text-align: right; padding-right: 0.5em;">
         {{mb_value object=$_sender field=offset}}mn
       </td>
+
       {{assign var=status value=$_sender->active|ternary:"ok":"off"}}
+
       {{foreach from=$_sender->_hour_plan key=min item=plan}}
-      
-      {{assign var=active value=""}}
-      {{if ($min == $minute && $_sender->_active)}}{{assign var=active value=active}}{{/if}}
+        {{assign var=status value=off}}
+        {{if $plan  > 0.0}}{{assign var=status value=ok     }}{{/if}}
+        {{if $plan >= 0.5}}{{assign var=status value=warning}}{{/if}}
+        {{if $plan >= 1.0}}{{assign var=status value=error  }}{{/if}}
 
-      {{assign var=partial value=""}}
-      {{if $_sender->every > 1}}{{assign var=partial value=partial}}{{/if}}
+        {{assign var=active value=""}}
+        {{if ($min == $minute && $_sender->_active)}}{{assign var=active value=active}}{{/if}}
 
-        <td class="hour-plan min-{{$min}} {{$plan|ternary:$status:''}} {{$active}} {{$partial}}" title="{{$min}}"></td>
+        {{assign var=partial value=""}}
+        {{if $_sender->every > 1}}{{assign var=partial value=partial}}{{/if}}
+
+        <td class="hour-plan min-{{$min}} {{$status}} {{$active}} {{$partial}}" title="{{$plan}} @ {{$min}}"></td>
       {{/foreach}}
     </tr>
+
+    <!-- Bilan horaire -->
+    {{if $smarty.foreach.senders.iteration % 20 == 0 || $smarty.foreach.senders.last}}
+    <tr style="height: 2px; border-top: 2px solid #888;"></tr>
+    <tr>
+      <td colspan="8" style="text-align: right;"><strong>Bilan horaire</strong></td>
+      {{foreach from=$hour_sum key=min item=sum}}
+
+      {{assign var=status value=""}}
+      {{if $sum  > 0}}{{assign var=status value=ok     }}{{/if}}
+      {{if $sum >= 1}}{{assign var=status value=warning}}{{/if}}
+      {{if $sum >= 2}}{{assign var=status value=error  }}{{/if}}
+
+      {{assign var=active value=""}}
+      {{if $sum && $min == $minute}}{{assign var=active value=active}}{{/if}}
+
+      <td class="hour-plan {{$status}} {{$active}}" title="{{$sum}} @ {{$min}}" style="height: 2em;"></td>
+      {{/foreach}}
+    </tr>
+    {{/if}}
+
   {{foreachelse}}
     <tr>
       <td class="empty" colspan="65">{{tr}}CViewSender.none{{/tr}}</td>
     </tr>
   {{/foreach}}
-
-  <!-- Bilan horaire -->
-  {{if count($senders)}} 
-  <tr style="height: 2px; border-top: 2px solid #888;"></tr>
-  <tr>
-    <td colspan="8" style="text-align: right;"><strong>Bilan horaire</strong></td>
-    {{foreach from=$hour_sum key=min item=sum}}
-
-    {{assign var=status value=""}}
-    {{if $sum  > 0}}{{assign var=status value=ok     }}{{/if}}
-    {{if $sum >= 2}}{{assign var=status value=warning}}{{/if}}
-    {{if $sum >= 4}}{{assign var=status value=error  }}{{/if}}
-
-    {{assign var=active value=""}}
-    {{if $sum && $min == $minute}}{{assign var=active value=active}}{{/if}}
-    
-    <td class="hour-plan {{$status}} {{$active}}" title="{{$sum}} @ {{$min}}"></td>
-    {{/foreach}}
-  </tr>
-  {{/if}}
 </table>

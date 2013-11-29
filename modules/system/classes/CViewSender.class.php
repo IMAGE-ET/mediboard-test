@@ -95,10 +95,10 @@ class CViewSender extends CMbObject {
     $every  = intval($this->every);
     $minute = intval($minute);
     $hour   = intval($hour);
-    $minute_actuve = $minute % $period == $offset;
+    $minute_active = $minute % $period == $offset;
     $hour_active = $hour === null || ($hour % $every == 0);
     
-    return $this->_active = $minute_actuve && $hour_active;
+    return $this->_active = $minute_active && $hour_active;
   }
   
   function makeHourPlan($minute = null) {
@@ -106,9 +106,23 @@ class CViewSender extends CMbObject {
     $offset = intval($this->offset);
     $every  = intval($this->every );
 
+    // Microplan on several minutes in case duration is more than 60s
+    $microplan = array();
+    $duration = $this->last_duration;
+    while ($duration > 0) {
+      $microplan[] = min($duration, 60);
+      $duration -= 60;
+    }
+
     // Hour plan
-    foreach (range(0, 59) as $min) {
-      $this->_hour_plan[$min] = ($min % $period == $offset) / $every;
+    $hour_plan = array_fill(0, 60, 0);
+    foreach (range(0, 59) as $_min) {
+      if ($_min % $period == $offset) {
+        foreach ($microplan as $_offset => $_duration) {
+          $hour_plan[($_min+$_offset) % 60] += $_duration / 60 / $every;
+        }
+
+      }
     }
 
     // Active
@@ -116,7 +130,7 @@ class CViewSender extends CMbObject {
       $this->getActive($minute);
     }
     
-    return $this->_hour_plan;
+    return $this->_hour_plan = $hour_plan;
   }
 
   function loadRefSendersSource() {
@@ -148,7 +162,7 @@ class CViewSender extends CMbObject {
     $chrono = new Chronometer();
     $chrono->start();
     
-    // On récupère et écrit les données dans le fichier temporaire
+    // On rï¿½cupï¿½re et ï¿½crit les donnï¿½es dans le fichier temporaire
     $contents = file_get_contents($this->_url);
     
     if (file_put_contents($file, $contents) === false) {
@@ -196,7 +210,7 @@ class CViewSender extends CMbObject {
           if ($ftp->connect()) {
             $file_name = $destination_basename.($compressed ? ".zip" : ".html");
             
-            // Création de l'archive si nécessaire
+            // Crï¿½ation de l'archive si nï¿½cessaire
             if ($compressed && !file_exists($this->_file_compressed)) {
               $this->_file_compressed = $this->_file.".zip";
               $archive = new ZipArchive();
@@ -210,7 +224,7 @@ class CViewSender extends CMbObject {
             $ftp->sendFile($file, $file_name);
             $_sender_source->last_status = "uploaded";
 
-            // Vérification de la taille du fichier uploadé
+            // Vï¿½rification de la taille du fichier uploadï¿½
             $_sender_source->last_size = $ftp->getSize($file_name);
             if ($_sender_source->last_size == filesize($file)) {
               $_sender_source->last_status = "checked";
@@ -258,7 +272,7 @@ class CViewSender extends CMbObject {
    */
   function archiveFile(CFTP $ftp, $basename, $compressed) {
     try {
-      // Répertoire d'archivage
+      // Rï¿½pertoire d'archivage
       $directory = $ftp->fileprefix.$basename;
       $datetime = CMbDT::format(null, "%Y-%m-%d_%H-%M-%S");
       $ftp->createDirectory($directory);
