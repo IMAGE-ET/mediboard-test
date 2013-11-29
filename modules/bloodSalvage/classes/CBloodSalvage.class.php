@@ -37,6 +37,7 @@ class CBloodSalvage extends CMbObject {
   public $sample;
   
   // Form Fields
+  public $_totaltime;
   public $_recuperation_start;
   public $_recuperation_end;
   public $_transfusion_start;
@@ -115,29 +116,27 @@ class CBloodSalvage extends CMbObject {
   }
   
   function loadRefPatient() {
-    return $this->_ref_patient = $this->_ref_operation->loadRefPatient(1);
+    return $this->_ref_patient = $this->_ref_operation->loadRefPatient();
   }
   
   function loadRefOperation() {
-    $this->_ref_operation = new COperation();
-    $this->_ref_operation = $this->_ref_operation->getCached($this->operation_id);
-    $this->_ref_operation->loadRefPlageOp(1);
+    $operation = $this->loadRefOperation();
+    $this->_datetime = $operation->_datetime;
   }
   
   function loadRefCellSaver() {
-    $this->_ref_cell_saver = new CCellSaver();
-    $this->_ref_cell_saver = $this->_ref_cell_saver->getCached($this->cell_saver_id);  
+    return $this->_ref_cell_saver = $this->loadFwdRef("cell_saver_id", true);
   }
   
   function loadRefTypeEi() {
-    $this->_ref_incident_type = new CTypeEi();
-    $this->_ref_incident_type = $this->_ref_incident_type->getCached($this->type_ei_id);
+    return $this->_ref_incident_type = $this->loadFwdRef("type_ei_id", true);
   }
   
   function loadRefPlageOp() {
-    $this->_ref_operation = new COperation();
-    $this->_ref_operation = $this->_ref_operation->getCached($this->operation_id);
-    $this->_ref_operation->loadRefPlageOp(1);
+    /** @var COperation $operation */
+    $operation = $this->loadFwdRef("operation_id", true);
+    $operation->loadRefPlageOp();
+    return $this->_ref_operation = $operation;
     $this->_datetime = $this->_ref_operation->_datetime;
   }
 
