@@ -141,6 +141,7 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_trans_const) {
         $has_obs_entree = 1;
       }
 
+      CExObject::$_load_lite = true;
       $forms = CExObject::loadExObjectsFor($_trans_const);
 
       foreach ($_trans_const->_refs_dossiers_anesth as $_dossier_anesth) {
