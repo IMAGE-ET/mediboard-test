@@ -94,10 +94,10 @@ $consult->_ref_chir =& $userSel;
 
 // Chargement de la consultation
 if ($consult->_id) {
-  $consult->loadRefPatient();
+  $patient = $consult->loadRefPatient();
   $consult->loadRefConsultAnesth();
 
-  if ($consult->_ref_patient->_vip) {
+  if ($patient->_vip) {
     CCanDo::redirect();
   }
 
@@ -107,11 +107,11 @@ if ($consult->_id) {
   }
 
   // Chargement du patient
-  $patient = $consult->_ref_patient;
   $patient->countBackRefs("consultations");
   $patient->countBackRefs("sejours");
 
   $patient->loadRefPhotoIdentite();
+  $patient->loadRefsNotes();
   $patient->loadRefsCorrespondants();
 
   // Affecter la date de la consultation
