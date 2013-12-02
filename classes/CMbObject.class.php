@@ -268,6 +268,16 @@ class CMbObject extends CStoredObject {
       $this->countFiles() + $this->countDocs();
     return $this->_nb_files_docs;
   }
+
+  /**
+   * Mass count doc items shortcut
+   *
+   * @param self[] $objects
+   */
+  static function massCountDocItems($objects) {
+    self::massCountBackRefs($objects, "documents");
+    self::massCountBackRefs($objects, "files");
+  }
   
   /**
    * Count doc items according to given permission
