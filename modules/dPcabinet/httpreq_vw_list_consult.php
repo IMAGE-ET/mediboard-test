@@ -14,19 +14,22 @@ CCanDO::checkEdit();
 global $m;
 $current_m = CValue::get("current_m", $m);
 
-$ds = CSQLDataSource::get("std");
-$date      = CValue::getOrSession("date", CMbDT::date());
-$hour      = CMbDT::time();
-$board     = CValue::get("board", 0);
-$boardItem = CValue::get("boardItem", 0);
-$plageconsult_id = CValue::get("plageconsult_id");
+$today            = CMbDT::date();
+$ds               = CSQLDataSource::get("std");
 
-$user = CUser::get();
-$prat_id    = CValue::getOrSession("chirSel", $user->_id);
-$selConsult = CValue::getOrSession("selConsult");
+// get
+$user             = CUser::get();
+$board            = CValue::get("board", 0);
+$boardItem        = CValue::get("boardItem", 0);
+$plageconsult_id  = CValue::get("plageconsult_id");
+
+// get or session
+$date             = CValue::getOrSession("date", $today);
+$prat_id          = CValue::getOrSession("chirSel", $user->_id);
+$selConsult       = CValue::getOrSession("selConsult");
+$vue              = CValue::getOrSession("vue2", 0);
 
 $consult = new CConsultation;
-
 // Test compliqué afin de savoir quelle consultation charger
 if (isset($_GET["selConsult"])) {
   if ($consult->load($selConsult)) {
@@ -79,31 +82,28 @@ $order = "debut";
 /** @var CPlageconsult[] $listPlage */
 $listPlage = $plage->loadList($where, $order);
 
-$vue = CValue::getOrSession("vue2", 0);
 
-foreach ($listPlage as &$plage) {
-  $plage->_ref_chir =& $userSel;
-  $plage->loadRefsConsultations(false, !$vue);
-  $plage->loadRefsNotes();
+foreach ($listPlage as $_plage) {
+  $_plage->_ref_chir =& $userSel;
+  $consultations = $_plage->loadRefsConsultations(false, !$vue);
+  $_plage->loadRefsNotes();
   
   // Mass preloading
-  CMbObject::massLoadFwdRef($plage->_ref_consultations, "patient_id");
-  CMbObject::massLoadFwdRef($plage->_ref_consultations, "sejour_id");
-  CMbObject::massLoadFwdRef($plage->_ref_consultations, "categorie_id");
+  CMbObject::massLoadFwdRef($consultations, "patient_id");
+  CMbObject::massLoadFwdRef($consultations, "sejour_id");
+  CMbObject::massLoadFwdRef($consultations, "categorie_id");
+  CMbObject::massCountDocItems($consultations);
 
-  foreach ($plage->_ref_consultations as &$consultation) {
-    $consultation->loadRefPatient(1);
-    $consultation->loadRefSejour(1);
-    $consultation->loadRefCategorie(1);
-    $consultation->countDocItems();
+  foreach ($consultations as $_consultation) {
+    $_consultation->loadRefPatient();
+    $_consultation->loadRefSejour();
+    $_consultation->loadRefCategorie();
+    $_consultation->countDocItems();
   }
 }
 
 // Récupération de la date du jour si $date
-$current_date = null;
-if ($date != CMbDT::date()) {
-  $current_date = CMbDT::date();
-}
+$current_date = ($date != $today) ? $today : null;
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -112,7 +112,7 @@ $smarty->assign("boardItem", $boardItem);
 $smarty->assign("tab"      , CAppUI::pref("new_consultation") ? "vw_consultation" : "edit_consultation");
 $smarty->assign("board"    , $board);
 $smarty->assign("date"     , $date);
-$smarty->assign("hour"     , $hour);
+$smarty->assign("hour"     , CMbDT::time());
 $smarty->assign("vue"      , $vue);
 $smarty->assign("userSel"  , $userSel);
 $smarty->assign("listPlage", $listPlage);
