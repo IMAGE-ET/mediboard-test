@@ -77,11 +77,6 @@ switch ($order_col) {
 
 /** @var CSejour[] $listSejours */
 $listSejours = $sejour->loadList($where, $order, null, "`sejour`.sejour_id", $ljoin);
-CMbObject::massLoadFwdRef($listSejours, "patient_id");
-CMbObject::massLoadFwdRef($listSejours, "group_id");
-$prats = CMbObject::massLoadFwdRef($listSejours, "praticien_id");
-CMbObject::massLoadFwdRef($prats, "function_id");
-CMbObject::massCountBackRefs($listSejours, "notes");
 
 foreach ($listSejours as $key => &$sejour) {
   if ($service_id) {
@@ -91,7 +86,21 @@ foreach ($listSejours as $key => &$sejour) {
       continue;
     }
   }
+}
 
+CMbObject::massLoadFwdRef($listSejours, "patient_id");
+CMbObject::massLoadFwdRef($listSejours, "group_id");
+$prats = CMbObject::massLoadFwdRef($listSejours, "praticien_id");
+CMbObject::massLoadFwdRef($prats, "function_id");
+CMbObject::massCountBackRefs($listSejours, "notes");
+
+CMbObject::massCountBackRefs($listSejours, "rpu");
+CMbObject::massCountBackRefs($listSejours, "consultations");
+CMbObject::massCountBackRefs($listSejours, "prescriptions");
+CMbObject::massCountBackRefs($listSejours, "documents");
+CMbObject::massCountBackRefs($listSejours, "files");
+
+foreach ($listSejours as $key => &$sejour) {
   // Chargement du numero de dossier
   $sejour->loadNDA();
   $sejour->loadRefsFwd();
@@ -102,13 +111,13 @@ foreach ($listSejours as $key => &$sejour) {
   $sejour->countDocItems();
   $sejour->loadRefPrescriptionSejour();
 
-  $prescription = $sejour->_ref_prescription_sejour;
-  if ($prescription) {
-    $prescription->loadRefsPrescriptionLineMixes();
-    $prescription->loadRefsLinesMedByCat();
-    $prescription->loadRefsLinesElementByCat();
-
-    $sejour->_ref_prescription_sejour->countRecentModif();
+  if ($sejour->_ref_prescription_sejour->_id) {
+    if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
+      $sejour->_ref_prescription_sejour->_count_fast_recent_modif = $sejour->_ref_prescription_sejour->countAlertsNotHandled("medium");
+    }
+    else {
+      $sejour->_ref_prescription_sejour->countFastRecentModif();
+    }
   }
 
   // Chargement de l'IPP
