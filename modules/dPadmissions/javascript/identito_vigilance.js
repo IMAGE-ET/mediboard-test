@@ -4,7 +4,7 @@ IdentitoVigilance = {
   date    : null,
 
   init: function(frequency) {
-  var url = new Url("dPadmissions", "ajax_identito_vigilance");
+    var url = new Url("dPadmissions", "ajax_identito_vigilance");
     var form = getForm("Merger");
     
     // Get extra filter params
@@ -17,8 +17,8 @@ IdentitoVigilance = {
       url.addParam("date", IdentitoVigilance.date);
     }
     url.addParam("module", App.m);
-    
-  IdentitoVigilance.updater = url.periodicalUpdate('identito_vigilance', { frequency: frequency } );
+
+    IdentitoVigilance.updater = url.periodicalUpdate('identito_vigilance', { frequency: frequency } );
   },
 
   start: function(delay, frequency) {

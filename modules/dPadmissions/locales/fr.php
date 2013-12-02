@@ -11,6 +11,12 @@ $locales['CSejour.type.ambu.short'] = 'Ambu';
 $locales['CSejour.type.comp.short'] = 'Hospi';
 $locales['CSejour.type.consult.short'] = 'Cons';
 $locales['CSejour.type.exte.short'] = 'Ext';
+$locales['config-dPadmissions-auto_refresh_frequency'] = 'Fréquence de rafraîchissement';
+$locales['config-dPadmissions-auto_refresh_frequency-90'] = '90 secondes';
+$locales['config-dPadmissions-auto_refresh_frequency-180'] = '3 minutes';
+$locales['config-dPadmissions-auto_refresh_frequency-300'] = '5 minutes';
+$locales['config-dPadmissions-auto_refresh_frequency-600'] = '10 minutes';
+$locales['config-dPadmissions-auto_refresh_frequency-desc'] = 'Fréquence de rafraîchissement automatique de l\'onglet \'Identito-vigilance\'';
 $locales['config-dPadmissions-fiche_admission'] = 'Modèle de fiche d\'admission';
 $locales['config-dPadmissions-fiche_admission-a4'] = 'Modèle A4';
 $locales['config-dPadmissions-fiche_admission-a5'] = 'Modèle A5';
@@ -48,4 +54,3 @@ $locales['mod-dPadmissions-tab-vw_legende'] = 'Légende';
 $locales['mod-dPadmissions-tab-vw_sejours_validation'] = 'Validation séjours';
 $locales['module-dPadmissions-court'] = 'Admissions';
 $locales['module-dPadmissions-long'] = 'Gestion des admissions';
-?>

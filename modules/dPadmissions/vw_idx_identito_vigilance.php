@@ -18,4 +18,5 @@ $date = CValue::getOrSession("date", CMbDT::date());
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("date", $date);
+$smarty->assign("auto_refresh_frequency", CAppUI::conf("dPadmissions auto_refresh_frequency"));
 $smarty->display("vw_idx_identito_vigilance.tpl");
