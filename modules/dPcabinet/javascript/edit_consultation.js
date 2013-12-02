@@ -12,7 +12,7 @@ ListConsults = {
     url.addParam("vue2", vue);
     url.addParam("current_m", current_m);
     url.addParam("fixed_width", "1");
-    this.request = url.periodicalUpdate(this.target, { frequency: 90 } );
+    this.request = url.periodicalUpdate(this.target, { frequency: 240 } );
 
     if (consult_id && Preferences.dPcabinet_show_program == "0") {
       this.hide();    
