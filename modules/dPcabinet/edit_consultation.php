@@ -311,6 +311,8 @@ $smarty->assign("now"            , $now);
 $smarty->assign("listPrats"      , $listPrats);
 $smarty->assign("list_mode_sortie", $list_mode_sortie);
 
+$smarty->assign("auto_refresh_frequency", CAppUI::conf("dPcabinet CConsultation auto_refresh_frequency"));
+
 if (CModule::getActive("dPprescription")) {
   $smarty->assign("line"           , new CPrescriptionLineMedicament());
 }
