@@ -216,7 +216,7 @@ foreach ($plagesop as &$plage) {
   foreach ($listOp as $operation) {
     $operation->loadRefPlageOp();
     $operation->loadRefsConsultAnesth();
-    if ($no_consult_anesth && !$operation->_ref_consult_anesth->_id) {
+    if ($no_consult_anesth && $operation->_ref_consult_anesth->_id) {
       unset($listOp[$operation->_id]);
     }
     $operation->loadRefPraticien();
@@ -276,7 +276,7 @@ foreach ($plagesop as &$plage) {
 foreach ($operations as $operation) {
   $operation->loadRefPlageOp();
   $operation->loadRefsConsultAnesth();
-  if ($no_consult_anesth && !$operation->_ref_consult_anesth->_id) {
+  if ($no_consult_anesth && $operation->_ref_consult_anesth->_id) {
     unset($operations[$operation->_id]);
     continue;
   }
