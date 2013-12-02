@@ -150,18 +150,18 @@
         {{if isset($facture|smarty:nodefaults)}}
           {{mb_include module=system template=inc_object_notes object=$facture}}
         {{/if}}
-        {{mb_label object=$reglement field=mode}}
-        ({{mb_label object=$reglement field=banque_id}})
+        {{mb_label class=CReglement field=mode}}
+        ({{mb_label class=CReglement field=banque_id}})
       </th>
-      <th class="category">{{mb_label object=$reglement field=reference}}</th>
+      <th class="category">{{mb_label class=CReglement field=reference}}</th>
       {{if $conf.dPfacturation.CReglement.use_debiteur}}
-        <th class="category narrow">{{mb_label object=$reglement field=debiteur_id}}</th>
-        <th class="category narrow">{{mb_label object=$reglement field=debiteur_desc}}</th>
+        <th class="category narrow">{{mb_label class=CReglement field=debiteur_id}}</th>
+        <th class="category narrow">{{mb_label class=CReglement field=debiteur_desc}}</th>
       {{else}}
-        <th class="category">{{mb_label object=$reglement field=tireur}}</th>
+        <th class="category">{{mb_label class=CReglement field=tireur}}</th>
       {{/if}}
-      <th class="category narrow">{{mb_label object=$reglement field=montant}}</th>
-      <th class="category narrow">{{mb_label object=$reglement field=date}}</th>
+      <th class="category narrow">{{mb_label class=CReglement field=montant}}</th>
+      <th class="category narrow">{{mb_label class=CReglement field=date}}</th>
       <th class="category narrow"></th>
     </tr>
     

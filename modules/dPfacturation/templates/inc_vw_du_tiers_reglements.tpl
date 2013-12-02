@@ -1,13 +1,13 @@
 <table class="main tbl">
   <tr>
     <th class="category" style="width: 50%;">
-      {{mb_label object=$reglement field=mode}}
-      ({{mb_label object=$reglement field=banque_id}})
+      {{mb_label class=CReglement field=mode}}
+      ({{mb_label class=CReglement field=banque_id}})
     </th>
-    <th class="category">{{mb_label object=$reglement field=reference}}</th>
-    <th class="category">{{mb_label object=$reglement field=tireur}}</th>
-    <th class="category narrow">{{mb_label object=$reglement field=montant}}</th>
-    <th class="category narrow">{{mb_label object=$reglement field=date}}</th>
+    <th class="category">{{mb_label class=CReglement field=reference}}</th>
+    <th class="category">{{mb_label class=CReglement field=tireur}}</th>
+    <th class="category narrow">{{mb_label class=CReglement field=montant}}</th>
+    <th class="category narrow">{{mb_label class=CReglement field=date}}</th>
   </tr>
   
   <!--  Liste des reglements deja effectués -->
