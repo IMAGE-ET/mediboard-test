@@ -1149,6 +1149,7 @@ class CStoredObject extends CModelObject {
    
     if ($type === "store" || $type === "merge") {
       $old_values = array();
+      $count_not_loggable = 0;
       foreach ($fields as $_field) {
         $_spec = $this->_specs[$_field];
         if (
@@ -1158,10 +1159,19 @@ class CStoredObject extends CModelObject {
             $_spec instanceof CPhpSpec ||
             $_spec->loggable == "0"
         ) {
+          if ($_spec->loggable == "0") {
+            $count_not_loggable++;
+          }
+
           continue;
         }
         $old_values[$_field] = utf8_encode($old->$_field);
       }
+
+      if (count($fields) == $count_not_loggable) {
+        return null;
+      }
+
       $extra = json_encode($old_values);
     }
     
