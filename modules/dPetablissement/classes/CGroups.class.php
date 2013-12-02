@@ -257,9 +257,10 @@ class CGroups extends CMbObject {
   /**
    * Load blocs operatoires with given permission
    *
-   * @param int   $permType    Permission level
-   * @param bool  $load_salles Load salles
-   * @param array $where       SQL WHERE parameters
+   * @param int    $permType    Permission level
+   * @param bool   $load_salles Load salles
+   * @param string $order       Ordre de chargmeent SQL
+   * @param array  $where       SQL WHERE parameters
    *
    * @return CBlocOperatoire[]
    */
