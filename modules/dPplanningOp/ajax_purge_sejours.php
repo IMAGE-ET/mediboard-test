@@ -12,6 +12,7 @@
 CCanDo::checkAdmin();
 
 $sejour = new CSejour();
+$group = CGroups::loadCurrent();
 
 // Supression de patients
 $suppr    = 0;
@@ -19,7 +20,8 @@ $error    = 0;
 $qte      = CValue::get("qte", 1);
 $date_min = CValue::get("date_min", CMbDT::date());
 $date_min = $date_min ? $date_min : CMbDT::date();
-$where = array("entree" => ">= '$date_min 00:00:00'");
+$where = array("entree" => ">= '$date_min 00:00:00'",
+               "group_id" => "= '$group->_id'");
 $listSejours = $sejour->loadList($where, null, $qte);
 
 foreach ($listSejours as $_sejour) {

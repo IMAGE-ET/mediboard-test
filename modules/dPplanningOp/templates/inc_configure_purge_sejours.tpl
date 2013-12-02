@@ -15,12 +15,19 @@ function repeatPurge() {
 
 </script>
 
-<div class="big-warning">
+<div class="small-warning">
   La purge des séjours est une action irreversible qui supprime aléatoirement
   une partie des séjours de la base de données et toutes les données
   qui y sont associées.
   <strong>
     N'utilisez cette fonctionnalité que si vous savez parfaitement ce que vous faites
+  </strong>
+</div>
+
+<div class="small-warning">
+  Vous allez supprimé les séjours de l'établissement
+  <strong>
+    {{$group}}
   </strong>
 </div>
 <table class="tbl">

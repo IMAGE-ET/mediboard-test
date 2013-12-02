@@ -16,9 +16,11 @@ $minutes = range(0, 59);
 $intervals = array("5", "10", "15", "20", "30");
 $patient_ids = array("0", "1", "2");
 $today = CMbDT::date();
+$group = CGroups::loadCurrent();
 
 // Nombre de patients
-$where = array("entree" => ">= '$today 00:00:00'");
+$where = array("entree" => ">= '$today 00:00:00'",
+               "group_id" => "= '$group->_id'");
 $sejour = new CSejour();
 $nb_sejours = $sejour->countList($where);
 
@@ -43,5 +45,6 @@ $smarty->assign("patient_ids", $patient_ids);
 $smarty->assign("list_cpi", $list_cpi);
 $smarty->assign("list_modes_entree", $list_modes_entree);
 $smarty->assign("list_modes_sortie", $list_modes_sortie);
+$smarty->assign("group"            , $group);
 
 $smarty->display("configure.tpl");
