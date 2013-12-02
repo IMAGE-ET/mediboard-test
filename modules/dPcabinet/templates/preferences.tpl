@@ -41,3 +41,4 @@
 {{mb_include template=inc_pref spec=enum var=DefaultPeriod values="day|week|month|weekly" value_locale_prefix="Period."}}
 <tr><th class="category" colspan="6">Consultations multiples</th></tr>
 {{mb_include template=inc_pref spec=enum var=NbConsultMultiple values="2|3|4|5|6"}}
+{{mb_include template=inc_pref spec=enum var=today_ref_consult_multiple values="0|1"}}

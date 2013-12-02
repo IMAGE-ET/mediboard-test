@@ -471,7 +471,13 @@
                     {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageConsultSelector.init(0,0)"}}
                     <button class="search notext" id="addedit_planning_button_select_date" type="button" onclick="PlageConsultSelector.init(0,0)">Choix de l'horaire</button>
                   {{if $following_consultations|@count}}
-                    <button class="agenda button " id="buttonMultiple" type="button" onclick="PlageConsultSelector.init(1, 1);" id="buttonMultiple">{{$following_consultations|@count}} consultation{{if $following_consultations|@count > 1}}s{{/if}} ultérieure{{if $following_consultations|@count > 1}}s{{/if}}</button>
+                    <button class="agenda button " id="buttonMultiple" type="button" onclick="PlageConsultSelector.init(1, 1);" id="buttonMultiple">
+                      {{if $today_ref_multiple}}
+                        {{$following_consultations|@count}} future{{if $following_consultations|@count > 1}}s{{/if}} consultation{{if $following_consultations|@count > 1}}s{{/if}}
+                      {{else}}
+                        {{$following_consultations|@count}} consultation{{if $following_consultations|@count > 1}}s{{/if}} ultérieure{{if $following_consultations|@count > 1}}s{{/if}}
+                      {{/if}}
+                    </button>
                   {{else}}
                     <button class="agenda notext" id="buttonMultiple" type="button" onclick="PlageConsultSelector.init(1,0)" id="buttonMultiple">Consultation multiple</button>
                   {{/if}}

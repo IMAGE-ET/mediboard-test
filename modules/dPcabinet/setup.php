@@ -2038,6 +2038,9 @@ class CSetupdPcabinet extends CSetup {
                 ADD INDEX (`execution`);";
     $this->addQuery($query);
 
-    $this->mod_version = "2.23";
+    $this->makeRevision("2.23");
+    $this->addPrefQuery("today_ref_consult_multiple", "1");
+
+    $this->mod_version = "2.24";
   }
 }

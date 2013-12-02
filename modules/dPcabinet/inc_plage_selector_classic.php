@@ -40,16 +40,18 @@ if ($consultation_id) {
   $consultation_temp->load($consultation_id);
   $consultation_temp->loadRefPlageConsult()->loadRefChir();
 
-  // we add the first consult to the future json list
-  $consultation_ids[] = array(
-    $consultation_temp->plageconsult_id,
-    $consultation_temp->_id,
-    $consultation_temp->_ref_plageconsult->date,
-    $consultation_temp->heure,
-    $consultation_temp->_ref_plageconsult->chir_id,
-    utf8_encode($consultation_temp->_ref_plageconsult->_ref_chir->_view),
-    $consultation_temp->annule
-  );
+  // we add the first consult to the future json list (first element)
+  if (!$consultation_temp->annule && $consultation_temp->chrono = 16) {
+    $consultation_ids[] = array(
+      $consultation_temp->plageconsult_id,
+      $consultation_temp->_id,
+      $consultation_temp->_ref_plageconsult->date,
+      $consultation_temp->heure,
+      $consultation_temp->_ref_plageconsult->chir_id,
+      utf8_encode($consultation_temp->_ref_plageconsult->_ref_chir->_view),
+      $consultation_temp->annule
+    );
+  }
 
   //edit mod
   if ($multiple_edit) {
@@ -57,9 +59,12 @@ if ($consultation_id) {
     $where_next = array();
     $ljoin_next = array();
     $limit = CAppUI::pref("NbConsultMultiple");
+    $date_ref = CAppUI::pref("today_ref_consult_multiple") ? CMbDT::date() : $plage_temp->date ;
     $ljoin_next["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
     $where_next["consultation.patient_id"] = "= '$consultation_temp->patient_id'";
-    $where_next["plageconsult.date"] = ">= '$plage_temp->date'";
+    $where_next["consultation.annule"] = "= '0'";     //only not cancelled
+    $where_next["consultation.chrono"] = "< '48'";     //only not finished and not arrived
+    $where_next["plageconsult.date"] = ">= '$date_ref'";
     $where_next[$consultation_temp->_spec->key] = "!= '$consultation_id'";
     /** @var $_consult CConsultation */
     foreach ($consultation_temp->loadListWithPerms(PERM_READ, $where_next, "date", $limit, null, $ljoin_next) as $_consult) {

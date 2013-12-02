@@ -207,7 +207,10 @@ if (CModule::getActive("maternite")) {
 // Consultation suivantes, en cas de suppression ou annulation
 $following_consultations = array();
 if ($pat->_id) {
-  $where["date"] = ">= '$consult->_date'";
+  $from_date = CAppUI::pref("today_ref_consult_multiple") ? CMbDT::date() : $consult->_date ;
+  $where["date"] = ">= '$from_date'";
+  $where["chrono"] = "< '48'";
+  $where["annule"] = "= '0'";
   $following_consultations = $pat->loadRefsConsultations($where);
   unset($following_consultations[$consult->_id]);                   //removing the targeted consultation
   foreach ($following_consultations as $_consultation) {
@@ -224,6 +227,7 @@ $smarty->assign("categories"             , $categories);
 $smarty->assign("plageConsult"     	     , $plageConsult);
 $smarty->assign("consult"                , $consult);
 $smarty->assign("following_consultations", $following_consultations);
+$smarty->assign("today_ref_multiple", CAppUI::pref("today_ref_consult_multiple"));
 $smarty->assign("chir"                   , $chir);
 $smarty->assign("_functions"             , $_functions);
 $smarty->assign("pat"                    , $pat);
