@@ -138,12 +138,12 @@ Main.add(function () {
   <tr>
     <td class="button" colspan="2">
       {{if $retrocession->_id}}
-      <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
-      <button class="trash" type="reset" onclick="confirmDeletion(this.form,{typeName:'la rétrocession du',objName: $V(this.form.date) })">
+      <button class="submit" type="button" onclick="Retrocession.submit(this.form);">{{tr}}Save{{/tr}}</button>
+      <button class="trash" type="reset" onclick="confirmDeletion(this.form,{typeName:'la rétrocession ',objName: $V(this.form.nom)})">
         {{tr}}Delete{{/tr}}
       </button>
       {{else}}
-      <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+      <button class="submit" type="button" onclick="Retrocession.submit(this.form);">{{tr}}Create{{/tr}}</button>
       {{/if}}
     </td>
   </tr>
