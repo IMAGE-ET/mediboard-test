@@ -2524,12 +2524,12 @@ class CConstantesMedicales extends CMbObject {
   static function getMax($constant, $max_value) {
     $max = ceil($max_value * 1.05);
     if (isset(self::$list_constantes[$constant]['max'])) {
-      $max_param = intval(self::$list_constantes[$constant]['max']);
+      $max_param = self::$list_constantes[$constant]['max'];
       if (substr($max_param, 0, 1) == '@') {
         $max = $max_value + intval(substr($max_param, 1));
       }
       else {
-        $max = max($max_param, $max);
+        $max = max(intval($max_param), $max);
       }
     }
     if (isset(self::$list_constantes[$constant]['candles']) && self::$list_constantes[$constant]['candles'] === true) {
@@ -2550,12 +2550,12 @@ class CConstantesMedicales extends CMbObject {
   static function getMin($constant, $min_value) {
     $min = floor($min_value * 0.95);
     if (isset(self::$list_constantes[$constant]['min'])) {
-      $min_param = intval(self::$list_constantes[$constant]['min']);
+      $min_param = self::$list_constantes[$constant]['min'];
       if (substr($min_param, 0, 1) == '@') {
         $min = $min_value + intval(substr($min_param, 1));
       }
       else {
-        $min = min($min_param, $min);
+        $min = min(intval($min_param), $min);
       }
     }
     if (isset(self::$list_constantes[$constant]['candles']) && self::$list_constantes[$constant]['candles'] === true) {
