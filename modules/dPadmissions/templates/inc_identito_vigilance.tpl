@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{assign var=auto_refresh_frequency value=$conf.dPadmissions.auto_refresh_frequency}}
+
 <script type="text/javascript">
 IdentitoVigilance.guesses = {{$guesses|@json}};
 Main.add(function() {

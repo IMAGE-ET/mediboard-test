@@ -138,6 +138,4 @@ $smarty->assign("patients"        , $patients );
 $smarty->assign("guesses"         , $guesses );
 $smarty->assign("module"          , $module );
 
-$smarty->assign("auto_refresh_frequency", CAppUI::conf("dPadmissions auto_refresh_frequency"));
-
 $smarty->display("inc_identito_vigilance.tpl");

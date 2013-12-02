@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{assign var=auto_refresh_frequency value=$conf.dPadmissions.auto_refresh_frequency}}
+
 {{mb_script module=admissions script=identito_vigilance}}
 
 <script type="text/javascript">
