@@ -2,12 +2,12 @@
 
 /**
  * Source FTP
- *  
+ *
  * @category FTP
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
  * @link     http://www.mediboard.org
  */
 
@@ -52,7 +52,7 @@ class CSourceFTP extends CExchangeSource {
     $specs["timeout"]    = "num default|5";
     $specs["pasv"]       = "bool default|0";
     $specs["mode"]       = "enum list|FTP_ASCII|FTP_BINARY default|FTP_ASCII";
-    $specs["counter"]    = "str protected";
+    $specs["counter"]    = "str protected loggable|0";
     $specs["fileprefix"] = "str";
     $specs["fileextension"] = "str";
     $specs["filenbroll"]    = "enum list|1|2|3|4";
@@ -290,7 +290,7 @@ class CSourceFTP extends CExchangeSource {
 
     try {
       $ftp->testSocket();
-    } 
+    }
     catch (CMbException $e) {
       $this->_reachable = 0;
       $this->_message   = $e->getMessage();
@@ -305,7 +305,7 @@ class CSourceFTP extends CExchangeSource {
 
     try {
       $ftp->connect();
-    } 
+    }
     catch (CMbException $e) {
       $this->_reachable = 0;
       $this->_message   = $e->getMessage();

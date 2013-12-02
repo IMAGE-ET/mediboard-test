@@ -1146,22 +1146,32 @@ class CStoredObject extends CModelObject {
       $this->_ref_last_log = null;
       return null;
     }
-   
+
     if ($type === "store" || $type === "merge") {
       $old_values = array();
+      $count_not_loggable = 0;
       foreach ($fields as $_field) {
         $_spec = $this->_specs[$_field];
         if (
-            $_spec instanceof CTextSpec ||
-            $_spec instanceof CHtmlSpec ||
-            $_spec instanceof CXmlSpec ||
-            $_spec instanceof CPhpSpec ||
-            $_spec->loggable == "0"
+          $_spec instanceof CTextSpec ||
+          $_spec instanceof CHtmlSpec ||
+          $_spec instanceof CXmlSpec ||
+          $_spec instanceof CPhpSpec ||
+          $_spec->loggable == "0"
         ) {
+          if ($_spec->loggable == "0") {
+            $count_not_loggable++;
+          }
+
           continue;
         }
         $old_values[$_field] = utf8_encode($old->$_field);
       }
+
+      if (count($fields) == $count_not_loggable) {
+        return null;
+      }
+
       $extra = json_encode($old_values);
     }
     
