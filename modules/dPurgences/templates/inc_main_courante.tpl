@@ -315,7 +315,7 @@
               {{assign var=prescription value=$_sejour->_ref_prescription_sejour}}
               {{if $prescription->_id}}
                 <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}#suivisoins" style="display: inline;">
-                  {{if $prescription->_count_recent_modif_presc}}
+                  {{if $prescription->_count_fast_recent_modif}}
                     <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')" />
                   {{else}}
                     <img src="images/icons/ampoule_grey.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')" />
