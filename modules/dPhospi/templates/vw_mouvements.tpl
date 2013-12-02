@@ -105,9 +105,8 @@
     &mdash;
     
     Date :
-    <input type="hidden" class="date" name="date" value="{{$date}}"
+    <input type="hidden" class="date notNull" name="date" value="{{$date}}"
       onchange="$V(this.form.date_da, new Date(Date.fromDATE($V(this))).toLocaleDate()); refreshMouvements(loadNonPlaces); ">
-    <input type="text" readonly="readonly" name="date_da" />
     
     &mdash;
     
