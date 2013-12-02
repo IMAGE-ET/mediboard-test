@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -16,9 +16,6 @@ class CCodeCIM10 {
   const LANG_EN = "EN_OMS";
   const LANG_DE = "GE_DIMDI";
 
-  /** @var CMbObjectSpec */
-  public $_spec;
-  
   // Lite props
   public $code;
   public $sid;
@@ -54,6 +51,22 @@ class CCodeCIM10 {
   // Other
   public $_isInfo;
 
+  // niveaux de chargement
+  const LITE   = 1;
+  const FULL   = 2;
+
+  // table de chargement
+  static $loadLevel = array();
+
+  static $loadedCodes = array();
+  static $cacheCount = 0;
+  static $useCount = array(
+    CCodeCIM10::LITE   => 0,
+    CCodeCIM10::FULL   => 0,
+  );
+
+  static $spec = null;
+
   function __construct($code = "(A00-B99)", $loadlite = 0) {
     // Static initialisation
     static $spec = null;
@@ -63,13 +76,14 @@ class CCodeCIM10 {
       $spec->init();
     }
     
-    $this->_spec =& $spec;
+    $this->_spec = $spec;
 
     $this->code = strtoupper($code);
     
     if ($loadlite) {
       $this->loadLite();
     }
+
   }
   
   // Chargement des données Lite
@@ -223,7 +237,48 @@ class CCodeCIM10 {
     $this->_isInfo = ($this->descr || $this->glossaire || $this->include || $this->indir || $this->notes);
     return true;
   }
-  
+
+  // Chargement optimisé des codes
+  static function get($code, $niv = self::LITE) {
+    self::$useCount[$niv]++;
+
+    // Si le code n'a encore jamais été chargé, on instancie et on met son niveau de chargement à zéro
+    if (!isset(self::$loadedCodes[$code])) {
+      self::$loadedCodes[$code] = new CCodeCIM10($code, $niv === self::LITE ? 1 : 0);
+      self::$loadLevel[$code] = null;
+    }
+
+    /** @var CCodeCIM10 $code */
+    $code_cim = self::$loadedCodes[$code];
+
+    // Si le niveau demandé est inférieur au niveau courant, on retourne le code
+    if ($niv <= self::$loadLevel[$code]) {
+      self::$cacheCount++;
+      return $code_cim->copy();
+    }
+
+    // Chargement
+    if ($niv === self::FULL) {
+      $code_cim->load();
+    }
+
+    self::$loadLevel[$code] = $niv;
+
+    return $code_cim->copy();
+  }
+
+  /**
+   * Should use clone with appropriate behaviour
+   * But a bit complicated to implement
+   *
+   * @return CCodeCCAM
+   */
+  function copy() {
+    $obj = unserialize(serialize($this));
+    $obj->_spec = self::$spec;
+    return $obj;
+  }
+
   function loadRefs() {
     if (!$this->loadLite($this->_lang, 0)) {
       return false;

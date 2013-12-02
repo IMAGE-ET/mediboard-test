@@ -465,28 +465,38 @@ class CAffectation extends CMbObject {
   }
 
   /**
-   * Loads siblings (pref, next)
+   * Loads siblings (prev, next)
+   *
+   * @param bool $use_sejour Try to use sejour bounds to guess prev et next (mostly no prev nor next)
    *
    * @return void
    */
-  function loadRefsAffectations() {
-    $where = array (
-      "affectation_id" => "!= '$this->affectation_id'",
-      "sejour_id" => "= '$this->sejour_id'",
-      "sortie" => "= '$this->entree'"
-    );
+  function loadRefsAffectations($use_sejour = false) {
+    $sejour = $this->_ref_sejour;
 
     $this->_ref_prev = new CAffectation();
-    $this->_ref_prev->loadObject($where);
+    $guess_no_prev = $use_sejour && $sejour && $this->entree == $sejour->entree;
+    if (!$guess_no_prev) {
+      $where = array (
+        "affectation_id" => "!= '$this->affectation_id'",
+        "sejour_id" => "= '$this->sejour_id'",
+        "sortie" => "= '$this->entree'"
+      );
 
-    $where = array (
-      "affectation_id" => "!= '$this->affectation_id'",
-      "sejour_id" => "= '$this->sejour_id'",
-      "entree" => "= '$this->sortie'"
-    );
+      $this->_ref_prev->loadObject($where);
+    }
 
     $this->_ref_next = new CAffectation();
-    $this->_ref_next->loadObject($where);
+    $guess_no_next = $use_sejour && $sejour && $this->sortie == $sejour->sortie;
+    if (!$guess_no_next) {
+      $where = array (
+        "affectation_id" => "!= '$this->affectation_id'",
+        "sejour_id" => "= '$this->sejour_id'",
+        "entree" => "= '$this->sortie'"
+      );
+
+      $this->_ref_next->loadObject($where);
+    }
   }
 
   /**
@@ -510,8 +520,8 @@ class CAffectation extends CMbObject {
 
   function checkDaysRelative($date) {
     if ($this->entree and $this->sortie) {
-      $this->_entree_relative = CMbDT::daysRelative("$date 10:00:00", $this->entree);
-      $this->_sortie_relative = CMbDT::daysRelative("$date 10:00:00", $this->sortie);
+      $this->_entree_relative = CMbDT::daysRelative("$date 12:00:00", $this->entree);
+      $this->_sortie_relative = CMbDT::daysRelative("$date 12:00:00", $this->sortie);
     }
   }
 

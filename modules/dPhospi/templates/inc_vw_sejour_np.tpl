@@ -31,26 +31,5 @@
       </label>
     </div>
   </td>
-  
-  {{if $isPrescriptionInstalled}}
-  <td style="padding: 1px;">
-    {{if $prescription_sejour->_id && (!$prescription_sortie->_id || $prescription_sejour->_counts_no_valide)}}
-      <img src="images/icons/warning.png" width="12"
-            onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-alertes-{{$curr_sejour->_guid}}')" />
-    {{/if}}
-
-    <div id="tooltip-content-alertes-{{$curr_sejour->_guid}}" style="display: none;">
-      <ul>
-      {{if !$prescription_sortie->_id}}
-        <li>Ce séjour ne possède pas de prescription de sortie</li>
-      {{/if}}
-      {{if $prescription_sejour->_counts_no_valide}}
-        <li>Lignes non validées dans la prescription de séjour</li>
-      {{/if}}
-      </ul> 
-    </div>
-  </td>
-  {{/if}}
-  
 </tr>
 {{/if}}

@@ -16,7 +16,6 @@
     <tr>
       <th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th>
     </tr>
-    {{mb_include module=system template=inc_config_bool var=use_cache}}
     {{mb_include module=system template=inc_config_bool var=use_cotation_ccam}}
     
     {{assign var=class value=CCodable}}

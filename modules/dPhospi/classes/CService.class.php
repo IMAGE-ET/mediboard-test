@@ -168,6 +168,66 @@ class CService extends CMbObject {
   }
 
   /**
+   *
+   */
+  function loadRefsLits($annule = false) {
+    $lit = new CLit();
+
+    $where = array();
+    $ljoin = array();
+
+    $where["chambre.service_id"] = "= '$this->_id'";
+
+    $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
+
+    if (!$annule) {
+      $where["lit.annule"] = "= '0'";
+      $where["chambre.annule"] = "= '0'";
+    }
+
+    $lits = $lit->loadList($where, "chambre.nom, lit.nom", null, null, $ljoin);
+
+    $this->_ref_chambres = self::massLoadFwdRef($lits, "chambre_id");
+
+    foreach ($lits as $_lit) {
+      $_chambre = $_lit->loadRefChambre();
+      $_chambre->_ref_service = $this;
+      $_chambre->_ref_lits[$_lit->_id] = $_lit;
+    }
+
+    return $lits;
+  }
+
+  /**
+   * Load affectations
+   *
+   * @param string $date Date
+   *
+   * @return void
+   */
+  function loadRefsAffectations($date, $with_effectue = true, $with_couloir = true) {
+    $where = array (
+      "service_id" => "= '$this->_id'",
+      "entree" => "<= '$date 23:59:59'",
+      "sortie" => ">= '$date 00:00:00'"
+    );
+
+    if (!$with_effectue) {
+      $where["effectue"] = "= '0'";
+    }
+
+    if (!$with_couloir) {
+      $where["affectation.lit_id"] = "IS NOT NULL";
+    }
+
+    $order = "sortie DESC";
+
+    $affectation = new CAffectation();
+
+    return $this->_ref_affectations = $affectation->loadList($where, $order);
+  }
+
+  /**
    * @return CGroups
    */
   function loadRefGroup() {

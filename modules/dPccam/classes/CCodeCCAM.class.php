@@ -132,12 +132,6 @@ class CCodeCCAM {
   static function get($code, $niv = self::MEDIUM) {
     self::$useCount[$niv]++;
 
-    if (!CAppUI::conf("ccam CCodeCCAM use_cache")) {
-      $codeCCAM = new CCodeCCAM($code);
-      $codeCCAM->load($niv);
-      return $codeCCAM;
-    }
-
     // Si le code n'a encore jamais été chargé, on instancie et on met son niveau de chargement à zéro
     if (!isset(self::$loadedCodes[$code])) {
       self::$loadedCodes[$code] = new CCodeCCAM($code);

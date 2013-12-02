@@ -55,7 +55,7 @@ $services = $service->loadListWithPerms(PERM_READ, $where, $order);
 
 // Chargement de chaque services
 foreach ($services as $_service) {
-  loadServiceComplet($_service, $date, $mode);
+  loadServiceComplet($_service, $date, $mode, null, null, null, false);
 }
 
 // Création du template

@@ -10,149 +10,107 @@
  */
 
 /**
- * Retourne une référence sur un praticien donné, 
- * après mise en cache si nécessaire
- */
-function & getCachedPraticien($praticien_id) {
-  static $listPraticiens = array();
-  
-  if (!array_key_exists($praticien_id, $listPraticiens)) {
-    $praticien = new CMediusers;
-    $praticien->load($praticien_id);
-    $praticien->_ref_function =& getCachedFunction($praticien->function_id);
-    $listPraticiens[$praticien_id] =& $praticien;
-  }
-  
-  return $listPraticiens[$praticien_id];  
-}
-
-/**
- * Retourne une référence sur une fonction donnée, 
- * après mise en cache si nécessaire
- */
-function & getCachedFunction($function_id) {
-  static $listFunctions = array();
-  
-  if (!array_key_exists($function_id, $listFunctions)) {
-    $function = new CFunctions;
-    $function->load($function_id);
-    $listFunctions[$function_id] =& $function;
-  }
-  
-  return $listFunctions[$function_id];  
-}
-
-/**
- * Retourne une référence sur un patient donné, 
- * après mise en cache si nécessaire
- */
-function & getCachedPatient($patient_id) {
-  static $listPatients = array();
-  
-  if (!array_key_exists($patient_id, $listPatients)) {
-    $patient = new CPatient;
-    $patient->load($patient_id);
-    $listPatients[$patient_id] =& $patient;
-  } 
-  
-  return $listPatients[$patient_id];  
-}
-
-/**
- * Retourne une référence sur un lit donné, 
- * après mise en cache si nécessaire
- */
-function &getCachedLit($lit_id) {
-  static $listLits = array();
-  
-  if (!array_key_exists($lit_id, $listLits)) {
-    $lit = new CLit;
-    $lit->load($lit_id);
-    $lit->loadRefChambre();
-    $listLits[$lit_id] =& $lit;
-  }
-
-  return $listLits[$lit_id];  
-}
-
-/**
  * Charge complètement un service pour l'affichage des affectations
+ *
+ * @param CService $service       le service concerné
+ * @param string   $date          le filtre de date sur les affectations
+ * @param string   $mode          forcer le chargement des affectations effectuées
+ * @param int      $praticien     charge les séjours pour un praticien en particulier
+ * @param string   $type          charge les séjours pour un type d'hospitalisation
+ * @param int     $prestation_id charge la prestation éventuellement associée à chaque séjour
+ *
+ *
+ * @return void
  */
-function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type = "", $prestation_id = "") {
-
-  $service->loadRefsBack();
+function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type = "", $prestation_id = "", $with_dossier_medical = true) {
   $service->_nb_lits_dispo = 0;
   $dossiers = array();
   $systeme_presta = CAppUI::conf("dPhospi systeme_prestations");
 
-  foreach ($service->_ref_chambres as $chambre_id => &$chambre) {
-    $chambre->loadRefsBack();
+  $lits = $service->loadRefsLits();
 
-    /** @var CLit $lit */
-    foreach ($chambre->_ref_lits as $lit_id => &$lit) {
-      $lit->loadAffectations($date);
+  foreach ($lits as $_lit) {
+    $_lit->_ref_affectations = array();
+  }
 
-      foreach ($lit->_ref_affectations as $affectation_id => &$affectation) {
-        if (!$affectation->effectue || $mode) {
-          $affectation->loadRefSejour();
-          if ($praticien_id) {
-            if ($affectation->_ref_sejour->praticien_id != $praticien_id) {
-              unset($lit->_ref_affectations[$affectation_id]);
-              continue;
-            }
-          }
-          if ($type) {
-            if ($affectation->_ref_sejour->type != $type) {
-              unset($lit->_ref_affectations[$affectation_id]);
-              continue;
-            }
-          }
-          
-          $affectation->loadRefsAffectations();
-          $affectation->checkDaysRelative($date);
+  $affectations = $service->loadRefsAffectations($date, $mode, false);
 
-          $aff_prev =& $affectation->_ref_prev;
-          if ($aff_prev->affectation_id) {
-            $aff_prev->_ref_lit =& getCachedLit($aff_prev->lit_id);
-          }
+  $sejours = CMbObject::massLoadFwdRef($affectations, "sejour_id");
+  CMbObject::massLoadFwdRef($sejours, "patient_id");
+  CMbObject::massLoadFwdRef($sejours, "prestation_id");
+  CMbObject::massLoadFwdRef($sejours, "praticien_id");
 
-          $aff_next =& $affectation->_ref_next;
-          if ($aff_next->affectation_id) {
-            $aff_next->_ref_lit =& getCachedLit($aff_next->lit_id);
-          }
-
-          $sejour =& $affectation->_ref_sejour;
-          $sejour->loadRefPrestation();
-          $sejour->loadRefsOperations();
-          $sejour->loadNDA();
-          $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
-          $sejour->_ref_patient =& getCachedPatient($sejour->patient_id);
-          $sejour->_ref_patient->loadRefDossierMedical(false);
-          
-          // Chargement des droits CMU
-          $sejour->getDroitsCMU();
-
-          foreach ($sejour->_ref_operations as $operation_id => $curr_operation) {
-            $sejour->_ref_operations[$operation_id]->loadExtCodesCCAM();
-          }
-          $chambre->_nb_affectations++;
-          $dossiers[] = $sejour->_ref_patient->_ref_dossier_medical;
-
-          if ($systeme_presta == "expert" && $prestation_id) {
-            $sejour->loadLiaisonsForDay($prestation_id, $date);
-          }
-        }
-        else {
-          unset($lit->_ref_affectations[$affectation_id]);
-        }
+  foreach ($affectations as $_affectation) {
+    $sejour = $_affectation->loadRefSejour();
+    if ($praticien_id) {
+      if ($sejour->praticien_id != $praticien_id) {
+        unset($affectations[$affectation->_id]);
+        continue;
+      }
+    }
+    if ($type) {
+      if ($sejour->type != $type) {
+        unset($affectations[$affectation->_id]);
+        continue;
       }
     }
 
-    CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
+    $lits[$_affectation->lit_id]->_ref_affectations[$_affectation->_id] = $_affectation;
 
-    if (!$service->externe) {
-      $chambre->checkChambre();
-      $service->_nb_lits_dispo += ($chambre->annule == 0 ? $chambre->_nb_lits_dispo : 0);
+    $_affectation->loadRefsAffectations(true);
+
+    $_affectation->checkDaysRelative($date);
+
+    $aff_prev = $_affectation->_ref_prev;
+    if ($aff_prev->affectation_id) {
+      $aff_prev->loadRefLit();
+    }
+
+    $aff_next = $_affectation->_ref_next;
+    if ($aff_next->affectation_id) {
+      $aff_next->loadRefLit();
+    }
+
+    $sejour->loadRefPrestation();
+    $sejour->loadRefsOperations();
+    $sejour->loadNDA();
+    $sejour->loadRefPraticien();
+    $sejour->loadRefPatient();
+
+    if ($with_dossier_medical) {
+      $sejour->_ref_patient->loadRefDossierMedical(false);
+      $dossiers[] = $sejour->_ref_patient->_ref_dossier_medical;
+    }
+
+    // Chargement des droits CMU
+    $sejour->getDroitsCMU();
+
+    foreach ($sejour->_ref_operations as $_operation) {
+      $_operation->loadExtCodesCCAM();
+    }
+
+    $_affectation->_ref_lit = $lits[$_affectation->lit_id];
+
+    $_affectation->loadRefLit();
+
+    $_affectation
+      ->_ref_lit
+      ->_ref_chambre
+      ->_nb_affectations++;
+
+    if ($systeme_presta == "expert" && $prestation_id) {
+      $sejour->loadLiaisonsForDay($prestation_id, $date);
+    }
+  }
+
+  if ($with_dossier_medical) {
+    CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
+  }
+
+  if (!$service->externe) {
+    foreach ($service->_ref_chambres as $_chambre) {
+      $_chambre->checkChambre();
+      $service->_nb_lits_dispo += $_chambre->_nb_lits_dispo;
     }
   }
 }
@@ -185,13 +143,16 @@ function loadSejourNonAffectes($where, $order = null, $praticien_id = null, $pre
   $sejourNonAffectes = new CSejour();
   $sejourNonAffectes = $sejourNonAffectes->loadList($where, $order, 100, null, $leftjoin);
 
+  CMbObject::massLoadFwdRef($sejourNonAffectes, "prestation_id");
+  CMbObject::massLoadFwdRef($sejourNonAffectes, "praticien_id");
+  CMbObject::massLoadFwdRef($sejourNonAffectes, "patient_id");
+
   /** @var $sejourNonAffectes CSejour[] */
   foreach ($sejourNonAffectes as $sejour) {
     $sejour->loadRefPrestation();
     $sejour->loadNDA();
-    $sejour->loadRefsPrescriptions();
-    $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
-    $sejour->_ref_patient   =& getCachedPatient($sejour->patient_id);
+    $sejour->loadRefPraticien();
+    $sejour->loadRefPatient();
     $sejour->_ref_patient->loadRefDossierMedical(false);
 
     if ($systeme_presta == "expert" && $prestation_id) {
@@ -231,7 +192,7 @@ function loadAffectationsCouloirs($where, $order = null, $praticien_id = null, $
   if ($praticien_id) {
     $where["sejour.praticien_id"] = " = '$praticien_id'";
   }
-  
+
   if ($order == null) {
     $order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
   }
@@ -240,28 +201,26 @@ function loadAffectationsCouloirs($where, $order = null, $praticien_id = null, $
   
   $affectation = new CAffectation;
   $affectations = $affectation->loadList($where, $order, null, null, $ljoin);
-  
+
+  $sejours = CMbObject::massLoadFwdRef($affectations, "sejour_id");
+
+  CMbObject::massLoadFwdRef($sejours, "praticien_id");
+  CMbObject::massLoadFwdRef($sejours, "patient_id");
+
   $tab_affectations = array();
   
   foreach ($affectations as $affectation) {
     $affectation->loadRefsAffectations();
     $affectation->loadRefSejour()->loadRefPatient();
-    $aff_prev =& $affectation->_ref_prev;
-    if ($aff_prev->affectation_id) {
-      $aff_prev->_ref_lit =& getCachedLit($aff_prev->lit_id);
-    }
-
-    $aff_next =& $affectation->_ref_next;
-    if ($aff_next->affectation_id) {
-      $aff_next->_ref_lit =& getCachedLit($aff_next->lit_id);
-    }
+    $affectation->_ref_prev->loadRefLit();
+    $affectation->_ref_next->loadRefLit();
 
     $sejour =& $affectation->_ref_sejour;
     $sejour->loadRefPrestation();
     $sejour->loadRefsOperations();
     $sejour->loadNDA();
-    $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
-    $sejour->_ref_patient =& getCachedPatient($sejour->patient_id);
+    $sejour->loadRefPraticien();
+    $sejour->loadRefPatient();
     $sejour->_ref_patient->loadRefDossierMedical(false);
 
     if ($systeme_presta == "expert" && $prestation_id) {

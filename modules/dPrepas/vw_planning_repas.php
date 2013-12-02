@@ -51,7 +51,7 @@ if(!$service_id || !array_key_exists($service_id,$services)){
         if(!$affectation->_ref_sejour->sejour_id || $affectation->_ref_sejour->type == "ambu"){
           unset($lit->_ref_affectations[$affectation_id]);
         }else{
-          $affectation->_ref_sejour->_ref_patient =& getCachedPatient($affectation->_ref_sejour->patient_id);
+          $affectation->_ref_sejour->loadRefPatient();
           $affectation->loadMenu($date,$listTypeRepas);
         }
       }
