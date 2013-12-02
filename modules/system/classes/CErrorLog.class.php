@@ -276,7 +276,7 @@ class CErrorLog extends CMbObject {
       return $msg;
     }
 
-    $this->cleanupLogData();
+    //$this->cleanupLogData();
 
     return null;
   }
@@ -297,6 +297,6 @@ class CErrorLog extends CMbObject {
     $query = "DELETE FROM $spec->table WHERE $spec->key ";
     $ds->exec($query.$ds->prepareIn($ids));
 
-    $this->cleanupLogData();
+    //$this->cleanupLogData();
   }
 }
