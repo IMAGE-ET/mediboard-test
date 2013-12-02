@@ -58,6 +58,7 @@ class CSecondaryFunction extends CMbObject {
 
   /**
    * @see parent::loadRefsFwd()
+   * @deprecated
    */
   function loadRefsFwd() {
     $this->loadRefFunction();

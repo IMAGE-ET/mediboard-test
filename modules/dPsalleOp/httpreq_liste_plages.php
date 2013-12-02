@@ -18,53 +18,52 @@ $operation_id = CValue::getOrSession("operation_id");
 $hide_finished = CValue::getOrSession("hide_finished", 0);
 
 // Chargement des praticiens
-$listAnesths = new CMediusers;
-$listAnesths = $listAnesths->loadAnesthesistes(PERM_READ);
+$mediuser    = new CMediusers();
+$listAnesths = $mediuser->loadAnesthesistes(PERM_READ);
 
 // Selection des salles
 $listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
 
 // Selection des plages opératoires de la journée
-$salle = new CSalle;
+$salle = new CSalle();
 if ($salle->load($salle_id)) {
   $salle->loadRefsForDay($date);
 }
 
 if ($hide_finished == 1 && $salle->_ref_plages) {
-  foreach ($salle->_ref_plages as &$plage) {
-    foreach ($plage->_ref_operations as $key => $op) {
-      if ($op->sortie_salle) {
-        unset($plage->_ref_operations[$key]);
+  foreach ($salle->_ref_plages as $_plage) {
+    foreach ($_plage->_ref_operations as $_key => $_op) {
+      if ($_op->sortie_salle) {
+        unset($_plage->_ref_operations[$_key]);
       }
     }
-    foreach ($plage->_unordered_operations as $key => $op) {
+    foreach ($_plage->_unordered_operations as $_key => $_op) {
       if ($op->sortie_salle) {
-        unset($plage->_unordered_operations[$key]);
+        unset($_plage->_unordered_operations[$_key]);
       }
     }
   }
 
-  foreach ($salle->_ref_deplacees as $key => $op) {
-    if ($op->sortie_salle) {
-      unset($salle->_ref_deplacees[$key]);
+  foreach ($salle->_ref_deplacees as $_key => $_op) {
+    if ($_op->sortie_salle) {
+      unset($salle->_ref_deplacees[$_key]);
     }
   }
 
-  foreach ($salle->_ref_urgences as $key => $op) {
-    if ($op->sortie_salle) {
-      unset($salle->_ref_urgences[$key]);
+  foreach ($salle->_ref_urgences as $_key => $_op) {
+    if ($_op->sortie_salle) {
+      unset($salle->_ref_urgences[$_key]);
     }
   }
 }
 
 // Calcul du nombre d'actes codé dans les interventions
 if ($salle->_ref_plages) {
-  foreach ($salle->_ref_plages as $_plageop) {
-    $_plageop->loadRefsNotes();
-    foreach ($_plageop->_ref_operations as $_operation) {
+  foreach ($salle->_ref_plages as $_plage) {
+    foreach ($_plage->_ref_operations as $_operation) {
       $_operation->countActes();
     }
-    foreach ($_plageop->_unordered_operations as $_operation) {
+    foreach ($_plage->_unordered_operations as $_operation) {
       $_operation->countActes();
     }
   }
