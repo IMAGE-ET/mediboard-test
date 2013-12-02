@@ -1,3 +1,5 @@
+{{assign var=auto_refresh_frequency value=$conf.dPcabinet.CConsultation.auto_refresh_frequency}}
+
 <script type="text/javascript">
 
 Main.add(function () {

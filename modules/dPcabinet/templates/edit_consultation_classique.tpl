@@ -1,3 +1,5 @@
+{{assign var=auto_refresh_frequency value=$conf.dPcabinet.CConsultation.auto_refresh_frequency}}
+
 {{if "dPprescription"|module_active}}
   {{mb_script module="dPprescription" script="prescription"}}
   {{mb_script module="dPprescription" script="prescription_editor"}}

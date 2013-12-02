@@ -195,8 +195,6 @@ $smarty->assign("userSel"        , $userSel);
 
 $smarty->assign("list_etat_dents", $list_etat_dents);
 
-$smarty->assign("auto_refresh_frequency", CAppUI::conf("dPcabinet CConsultation auto_refresh_frequency"));
-
 if ($consult->_is_dentiste) {
   $devenirs_dentaires = $consult->_ref_patient->loadRefsDevenirDentaire();
 
