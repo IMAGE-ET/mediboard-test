@@ -559,7 +559,7 @@ class CApp {
    * @return Array
    */
   static function multipleServerCall($get, $post = null) {
-    $base = "mediboard/index.php?";
+    $base = $_SERVER["SCRIPT_NAME"]."?";
     foreach ($get as $_param => $_value) {
       $base .= "$_param=$_value&";
     }
@@ -573,7 +573,7 @@ class CApp {
     }
 
     foreach ($address as $_ip => $_value) {
-      $address[$_ip] = self::serverCall("http://$_ip/$base", $post);
+      $address[$_ip] = self::serverCall("http://$_ip$base", $post);
     }
 
     return $address;
