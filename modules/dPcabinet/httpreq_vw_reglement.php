@@ -10,22 +10,16 @@
  */
 
 CCanDo::checkEdit();
-
 // Utilisateur sélectionné ou utilisateur courant
 $prat_id      = CValue::getOrSession("chirSel", 0);
 $selConsult   = CValue::getOrSession("selConsult", null);
-
-// Chargement des banques
-$orderBanque = "nom ASC";
-$banque = new CBanque();
-$banques = $banque->loadList(null, $orderBanque);
 
 $consult = new CConsultation();
 
 // Test compliqué afin de savoir quelle consultation charger
 if (isset($_GET["selConsult"])) {
   if ($consult->load($selConsult) && $consult->patient_id) {
-    $consult->loadRefsFwd();
+    $consult->loadRefPlageConsult();
     $prat_id = $consult->_ref_plageconsult->chir_id;
     CValue::setSession("chirSel", $prat_id);
   }
@@ -37,7 +31,7 @@ if (isset($_GET["selConsult"])) {
 }
 else {
   if ($consult->load($selConsult) && $consult->patient_id) {
-    $consult->loadRefsFwd();
+    $consult->loadRefPlageConsult();
     if ($prat_id !== $consult->_ref_plageconsult->chir_id) {
       $consult = new CConsultation();
       $selConsult = null;
@@ -47,7 +41,9 @@ else {
 }
 
 $userSel = CMediusers::get($prat_id);
-$userSel->loadRefs();
+$userSel->loadRefFunction();
+$userSel->loadRefSpecCPAM();
+$userSel->loadRefDiscipline();
 $canUserSel = $userSel->canDo();
 
 // Vérification des droits sur les praticiens
@@ -64,17 +60,16 @@ $canUserSel->needsEdit();
 $consult->_ref_chir = $userSel;
 if ($selConsult) {
   $consult->load($selConsult);
-  
+
   CCanDo::checkObject($consult);
   $canConsult = $consult->canDo();
   $canConsult->needsEdit();
-  
+
   // Some Forward references
-  $consult->loadRefsFwd();
-  $consult->loadRefConsultAnesth();
-    
-  // Patient
-  $patient =& $consult->_ref_patient;
+  $consult->loadRefPatient();
+  $consult->loadRefsActes();
+  $consult->loadExtCodesCCAM();
+  $consult->loadRefsReglements();
 }
 
 if (CModule::getActive("fse")) {
@@ -84,10 +79,8 @@ if (CModule::getActive("fse")) {
     $fse->makeFSE($consult);
     CFseFactory::createCPS()->loadIdCPS($consult->_ref_chir);
     CFseFactory::createCV()->loadIdVitale($consult->_ref_patient);
-  }  
+  }
 }
-
-$consult->loadRefs();  
 
 // Récupération des tarifs
 $tarif = new CTarif();
@@ -101,7 +94,7 @@ if (!$consult->tarif || $consult->tarif == "pursue") {
   foreach ($tarifs["user"] as $_tarif) {
     $_tarif->getPrecodeReady();
   }
-  
+
   $where = array();
   $where["function_id"] = "= '$userSel->function_id'";
   $tarifs["func"] = $tarif->loadList($where, $order);
@@ -118,20 +111,8 @@ if (!$consult->tarif || $consult->tarif == "pursue") {
   }
 }
 
-// Règlements
-$consult->loadRefsReglements();
-
-// Reglement vide pour le formulaire
-$reglement = new CReglement();
-$reglement->consultation_id = $consult->_id;
-$reglement->montant = round($consult->_du_restant_patient, 2);
-
-// Codes et actes
-$consult->loadRefsActes();
-
 //Recherche de la facture pour cette consultation
-$facture = $consult->loadRefFacture();
-
+$facture = $consult->_ref_facture;
 //Si on a pas de facture on recherche d'une facture ouverte 
 if (!$facture->_id && CAppUI::conf("ref_pays") == 2) {
   $where    = array();
@@ -151,6 +132,16 @@ if ($facture->_id) {
   $facture->loadRefsObjects();
   $facture->loadRefsReglements();
   $facture->loadRefsNotes();
+}
+
+// Reglement vide pour le formulaire
+$reglement = new CReglement();
+
+// Chargement des banques
+$banques = array();
+if ($consult->_du_restant_patient) {
+  $banque = new CBanque();
+  $banques = $banque->loadList(null, "nom ASC");
 }
 
 // Création du template
