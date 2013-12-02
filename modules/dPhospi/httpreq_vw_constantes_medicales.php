@@ -78,7 +78,7 @@ else {
 $show_cat_tabs = CConstantesMedicales::getHostConfig("show_cat_tabs", $host);
 
 if (!$selection || $selected_context_guid === 'all') {
-  $selection = CConstantesMedicales::getConstantsByRank($show_cat_tabs, $host);
+  $selection = CConstantesMedicales::getConstantsByRank('form', $show_cat_tabs, $host);
 }
 else {
   $selection = CConstantesMedicales::selectConstants($selection);

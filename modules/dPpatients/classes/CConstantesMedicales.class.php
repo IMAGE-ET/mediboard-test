@@ -1630,6 +1630,7 @@ class CConstantesMedicales extends CMbObject {
 
     $group_id = null;
     $service_id = null;
+    $function_id = null;
 
     // Etablissement
     if ($host instanceof CGroups) {
@@ -1642,7 +1643,13 @@ class CConstantesMedicales extends CMbObject {
       $group_id   = $host->group_id;
     }
 
-    return self::getConfig($name, $group_id, $service_id);
+    // Cabinet
+    if ($host instanceof CFunctions) {
+      $function_id = $host->_id;
+      $group_id = $host->group_id;
+    }
+
+    return self::getConfig($name, $group_id, $service_id, $function_id);
   }
 
   /**
@@ -1737,10 +1744,11 @@ class CConstantesMedicales extends CMbObject {
    * @param string $name       Configuration name
    * @param int    $group_id   Group ID
    * @param int    $service_id Service ID
+   * @param int    $function_id Function ID
    *
    * @return mixed
    */
-  static function getConfig($name, $group_id = null, $service_id = null) {
+  static function getConfig($name, $group_id = null, $service_id = null, $function_id = null) {
     if (!$service_id) {
       if (isset($_SESSION["soins"]["service_id"])) {
         $service_id = $_SESSION["soins"]["service_id"];
@@ -1753,6 +1761,9 @@ class CConstantesMedicales extends CMbObject {
     $guid = "global";
     if ($service_id && is_numeric($service_id)) {
       $guid = "CService-$service_id";
+    }
+    elseif ($function_id && is_numeric($function_id)) {
+      $guid = "CFunctions-$function_id";
     }
     elseif ($group_id && is_numeric($group_id)) {
       $guid = "CGroups-$group_id";
@@ -1777,9 +1788,9 @@ class CConstantesMedicales extends CMbObject {
       $configs = CConstantesMedicales::getConfig('selection');
     }
 
+    $id = $type == 'graph' ? 1 : 0;
     foreach ($configs as $_constant => $_config) {
       $_config = explode('|', $_config);
-      $id = $type == 'graph' ? 1 : 0;
       $configs[$_constant] = $_config[$id];
     }
 
@@ -2231,6 +2242,7 @@ class CConstantesMedicales extends CMbObject {
     }
 
     $stacked_graphs = self::getHostConfig('stacked_graphs', $host);
+
     foreach ($constants_by_graph as $_rank => $_constants) {
       $constants_by_graph[$_rank] = array();
 
@@ -2240,7 +2252,7 @@ class CConstantesMedicales extends CMbObject {
           /* The constants with a cumul can't be stacked with other constants */
           if (isset(self::$list_constantes[$_constant]['cumul_reset_config'])) {
             unset($_constants[$_key]);
-            $cumuls_constants[] = array($_constant);
+            $cumuls_constants[] = $_constant;
           }
         }
 
@@ -2250,11 +2262,16 @@ class CConstantesMedicales extends CMbObject {
           for ($i = 0; $i < count($_constants); $i = $i + 5) {
             $constants[] = array_slice($_constants, $i, 5);
           }
-          $constants_by_graph[$_rank] = array_merge($constants, $cumuls_constants);
+          foreach ($cumuls_constants as $_key => $_cumul) {
+            $cumuls_constants[$_key] = array($_cumul);
+          }
         }
         else {
           if (!empty($_constants)) {
-            $constants_by_graph[$_rank][] = array_merge($_constants, $cumuls_constants);;
+            $constants_by_graph[$_rank][] = $_constants;
+          }
+          if (!empty($cumuls_constants)) {
+            $constants_by_graph[$_rank][] = $cumuls_constants;
           }
         }
       }

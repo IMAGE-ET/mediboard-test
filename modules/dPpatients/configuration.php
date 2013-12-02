@@ -78,6 +78,8 @@ CConfiguration::register(
     "CFunctions CGroups.group_id" => array(
       "dPpatients" => array(
         "CConstantesMedicales" => array(
+          "show_cat_tabs"     => "bool default|0",
+          "stacked_graphs"    => "bool default|0",
           "selection_cabinet" => $selection
         ),
       ),
