@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{assign var=auto_refresh_frequency value=$conf.dPadmissions.auto_refresh_frequency}}
+
 <script type="text/javascript">
 IdentitoVigilance.guesses = {{$guesses|@json}};
 Main.add(function() {
@@ -22,11 +24,11 @@ Main.add(function() {
 
 <form name="Merger" action="?" method="get">
   Voir les séjour :
-  <input name="see_mergeable" type="checkbox" {{if $see_mergeable}}checked="true"{{/if}} onclick="IdentitoVigilance.start(0,100);" />
+  <input name="see_mergeable" type="checkbox" {{if $see_mergeable}}checked="true"{{/if}} onclick="IdentitoVigilance.start(0, '{{$auto_refresh_frequency}}');" />
   <label for="see_mergeable">Seulement les suspects</label>
-  <input name="see_yesterday" type="checkbox" {{if $see_yesterday}}checked="true"{{/if}} onclick="IdentitoVigilance.start(0,100);" />
+  <input name="see_yesterday" type="checkbox" {{if $see_yesterday}}checked="true"{{/if}} onclick="IdentitoVigilance.start(0, '{{$auto_refresh_frequency}}');" />
   <label for="see_yesterday">Egalement ceux de la veille</label>
-  <input name="see_cancelled" type="checkbox" {{if $see_cancelled}}checked="true"{{/if}} onclick="IdentitoVigilance.start(0,100);" />
+  <input name="see_cancelled" type="checkbox" {{if $see_cancelled}}checked="true"{{/if}} onclick="IdentitoVigilance.start(0, '{{$auto_refresh_frequency}}');" />
   <label for="see_cancelled">Egalement les annulées</label>
   
   <table class="tbl">

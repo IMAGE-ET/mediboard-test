@@ -8,11 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{assign var=auto_refresh_frequency value=$conf.dPadmissions.auto_refresh_frequency}}
+
 {{mb_script module=admissions script=identito_vigilance}}
 
 <script type="text/javascript">
 onMergeComplete = function() {
-  IdentitoVigilance.start(0, 80);
+  IdentitoVigilance.start(0, '{{$auto_refresh_frequency}}');
 };
 
 togglePlayPause = function(button) {
@@ -27,7 +29,7 @@ togglePlayPause = function(button) {
 };
 Main.add(function () {
   IdentitoVigilance.date = "{{$date}}";
-  IdentitoVigilance.start(2, 60);
+  IdentitoVigilance.start(2, '{{$auto_refresh_frequency}}');
 
   var tabs = Control.Tabs.create('tab_admissions_identito_vigilance', false);
 });
