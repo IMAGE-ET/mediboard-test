@@ -42,12 +42,12 @@ if ($userSel->_id) {
   $sejours = CMbObject::massLoadFwdRef($list_urgences, "sejour_id");
   CMbObject::massLoadFwdRef($sejours, "patient_id");
 
-  foreach ($list_urgences as $curr_urg) {
-    $curr_urg->canDo();
-    $curr_urg->loadRefsFwd();
-    $_sejour = $curr_urg->_ref_sejour;
-    $curr_urg->loadRefsDocs();
-    foreach ($curr_urg->_ref_documents as $_document) {
+  foreach ($list_urgences as $_urg) {
+    $_urg->canDo();
+    $_urg->loadRefsFwd();
+    $_sejour = $_urg->_ref_sejour;
+    $_urg->loadRefsDocs();
+    foreach ($_urg->_ref_documents as $_document) {
       $_document->canDo();
     }
     
@@ -72,10 +72,12 @@ $list_plages = array();
 if ($userSel->_id) {
   $userSel->loadBackRefs("secondary_functions");
   $secondary_specs = array();
-  foreach ($userSel->_back["secondary_functions"] as  $curr_sec_spec) {
-    $curr_sec_spec->loadRefsFwd();
-    $curr_function = $curr_sec_spec->_ref_function;
-    $secondary_specs[$curr_function->_id] = $curr_function;
+  foreach ($userSel->_back["secondary_functions"] as  $_sec_spec) {
+    /** @var CSecondaryFunction $_sec_spec */
+    $_sec_spec->loadRefFunction();
+    $_sec_spec->loadRefUser();
+    $_function = $_sec_spec->_ref_function;
+    $secondary_specs[$_function->_id] = $_function;
   }
   $where = array();
   $where["date"] = "= '$date'";
@@ -95,17 +97,29 @@ if ($userSel->_id) {
   /** @var CPlageOp[] $list_plages */
   $list_plages = $plageop->loadList($where, $order);
 
+  // Chargement d'optimisation
+
+  CMbObject::massLoadFwdRef($list_plages, "chir_id");
+  CMbObject::massLoadFwdRef($list_plages, "anesth_id");
+  CMbObject::massLoadFwdRef($list_plages, "spec_id");
+  CMbObject::massLoadFwdRef($list_plages, "salle_id");
+
+  CMbObject::massCountBackRefs($list_plages, "notes");
+
   foreach ($list_plages as $_plage) {
     $op_canceled = new COperation();
     $op_canceled->annulee = 1;
     $op_canceled->plageop_id = $_plage->_id;
     $nb_canceled += $op_canceled->countMatchingList();
 
-    $_plage->loadRefsFwd();
+    $_plage->loadRefChir();
+    $_plage->loadRefAnesth();
+    $_plage->loadRefSpec();
+    $_plage->loadRefSalle();
+    $_plage->makeView();
     $_plage->loadRefsNotes();
 
     //compare current group with bloc group
-    $_plage->loadRefSalle();
     $_plage->_ref_salle->loadRefBloc();
     if ($_plage->_ref_salle->_ref_bloc->group_id != $current_group->_id) {
       $_plage->_ref_salle->_ref_bloc->loadRefGroup();
@@ -117,6 +131,12 @@ if ($userSel->_id) {
     }
     
     $_plage->loadRefsOperations($canceled, "annulee ASC, rank, rank_voulu, horaire_voulu", false, null, $where);
+
+    // Chargement d'optimisation
+
+    CMbObject::massLoadFwdRef($_plage->_ref_operations, "chir_id");
+    $sejours = CMbObject::massLoadFwdRef($_plage->_ref_operations, "sejour_id");
+    CMbObject::massLoadFwdRef($sejours, "patient_id");
     
     foreach ($_plage->_ref_operations as $_op) {
       $_op->loadRefsFwd();

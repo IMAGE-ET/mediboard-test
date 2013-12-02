@@ -543,6 +543,7 @@ class CMediusers extends CPerson {
    * @return CFunctions
    */
   function loadRefFunction() {
+    /** @var CFunctions $function */
     $function = $this->loadFwdRef("function_id", true);
     $this->_group_id = $function ? $function->group_id : null;
     return $this->_ref_function = $function;
@@ -1313,44 +1314,70 @@ class CMediusers extends CPerson {
   function loadRefsForDay($date) {
     $this->loadBackRefs("secondary_functions");
     $secondary_specs = array();
-    foreach ($this->_back["secondary_functions"] as $curr_sec_spec) {
-      /** @var CSecondaryFunction $curr_sec_spec */
-      $curr_sec_spec->loadRefsFwd();
-      $curr_function = $curr_sec_spec->_ref_function;
-      $secondary_specs[$curr_function->_id] = $curr_function;
+    foreach ($this->_back["secondary_functions"] as $_sec_spec) {
+      /** @var CSecondaryFunction $_sec_spec */
+      $_sec_spec->loadRefFunction();
+      $_sec_spec->loadRefUser();
+      $_function = $_sec_spec->_ref_function;
+      $secondary_specs[$_function->_id] = $_function;
     }
     // Plages d'intervention
-    $plages = new CPlageOp();
+    $plage = new CPlageOp();
     $where = array();
     $where["date"] = "= '$date'";
     $where[] = "plagesop.chir_id = '$this->_id' OR plagesop.spec_id = '$this->function_id' OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($secondary_specs));
     $order = "debut";
-    $this->_ref_plages = $plages->loadList($where, $order);
-    foreach ($this->_ref_plages as $plage) {
-      /** @var CPlageOp $plage */
-      $plage->loadRefs(0);
+    $this->_ref_plages = $plage->loadList($where, $order);
+
+    // Chargement d'optimisation
+
+    CMbObject::massLoadFwdRef($this->_ref_plages, "chir_id");
+    CMbObject::massLoadFwdRef($this->_ref_plages, "anesth_id");
+    CMbObject::massLoadFwdRef($this->_ref_plages, "spec_id");
+    CMbObject::massLoadFwdRef($this->_ref_plages, "salle_id");
+
+    CMbObject::massCountBackRefs($this->_ref_plages, "notes");
+    CMbObject::massCountBackRefs($this->_ref_plages, "affectations_personnel");
+
+    foreach ($this->_ref_plages as $_plage) {
+      /** @var CPlageOp $_plage */
+      $_plage->loadRefChir();
+      $_plage->loadRefAnesth();
+      $_plage->loadRefSpec();
+      $_plage->loadRefSalle();
+      $_plage->makeView();
+      $_plage->loadRefsOperations();
+      $_plage->loadRefsNotes();
+      $_plage->loadAffectationsPersonnel();
       $plage->_unordered_operations = array();
-      foreach ($plage->_ref_operations as $key_op => &$operation) {
-        if ($operation->chir_id != $this->_id) {
+
+      // Chargement d'optimisation
+
+      CMbObject::massLoadFwdRef($_plage->_ref_operations, "chir_id");
+      $sejours = CMbObject::massLoadFwdRef($_plage->_ref_operations, "sejour_id");
+      CMbObject::massLoadFwdRef($sejours, "patient_id");
+
+      foreach ($_plage->_ref_operations as $key_op => $_operation) {
+        if ($_operation->chir_id != $this->_id) {
           unset($plage->_ref_operations[$key_op]);
         }
         else {
-          $operation->_ref_chir = $this;
-          $operation->loadRefPatient();
-          $operation->loadExtCodesCCAM();
-          $operation->updateSalle();
+          $_operation->_ref_chir = $this;
+          $_operation->loadRefPatient();
+          $_operation->loadExtCodesCCAM();
+          $_operation->updateSalle();
 
           // Extraire les interventions non placées
-          if ($operation->rank == 0) {
-            $plage->_unordered_operations[$operation->_id] = $operation;
-            unset($plage->_ref_operations[$operation->_id]);
+          if ($_operation->rank == 0) {
+            $plage->_unordered_operations[$_operation->_id] = $_operation;
+            unset($plage->_ref_operations[$_operation->_id]);
           }
         }
       }
     }
 
     // Interventions déplacés
-    $deplacees = new COperation();
+    $deplacee = new COperation();
     $ljoin = array();
     $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
     $where = array();
@@ -1360,28 +1387,40 @@ class CMediusers extends CPerson {
     $where["plagesop.date"]         = "= '$date'";
     $where["plagesop.chir_id"]      = "= '$this->_id'";
     $order = "operations.time_operation";
-    $this->_ref_deplacees = $deplacees->loadList($where, $order, null, null, $ljoin);
-    foreach ($this->_ref_deplacees as $deplacee) {
-      /** @var COperation $deplacee */
-      $deplacee->loadRefChir();
-      $deplacee->loadRefPatient();
-      $deplacee->loadExtCodesCCAM();
+    $this->_ref_deplacees = $deplacee->loadList($where, $order, null, null, $ljoin);
+
+    // Chargement d'optimisation
+    CMbObject::massLoadFwdRef($this->_ref_deplacees, "chir_id");
+    $sejours_deplacees = CMbObject::massLoadFwdRef($this->_ref_deplacees, "sejour_id");
+    CMbObject::massLoadFwdRef($sejours_deplacees, "patient_id");
+
+    foreach ($this->_ref_deplacees as $_deplacee) {
+      /** @var COperation $_deplacee */
+      $_deplacee->loadRefChir();
+      $_deplacee->loadRefPatient();
+      $_deplacee->loadExtCodesCCAM();
     }
 
     // Urgences
-    $urgences = new COperation();
+    $urgence = new COperation();
     $where = array();
     $where["plageop_id"] = "IS NULL";
     $where["date"]       = "= '$date'";
     $where["chir_id"]    = "= '$this->_id'";
     $where["annulee"]    = "= '0'";
 
-    $this->_ref_urgences = $urgences->loadList($where);
-    foreach ($this->_ref_urgences as $urgence) {
-      /** @var COperation $urgence */
-      $urgence->loadRefChir();
-      $urgence->loadRefPatient();
-      $urgence->loadExtCodesCCAM();
+    $this->_ref_urgences = $urgence->loadList($where);
+
+    // Chargement d'optimisation
+    CMbObject::massLoadFwdRef($this->_ref_urgences, "chir_id");
+    $sejours_urgences = CMbObject::massLoadFwdRef($this->_ref_urgences, "sejour_id");
+    CMbObject::massLoadFwdRef($sejours_urgences, "patient_id");
+
+    foreach ($this->_ref_urgences as $_urgence) {
+      /** @var COperation $_urgence */
+      $_urgence->loadRefChir();
+      $_urgence->loadRefPatient();
+      $_urgence->loadExtCodesCCAM();
     }
   }
 

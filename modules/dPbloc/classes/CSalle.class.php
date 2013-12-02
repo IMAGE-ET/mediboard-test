@@ -89,15 +89,8 @@ class CSalle extends CMbObject {
     parent::updateFormFields();
 
     $bloc = $this->loadRefBloc();
-    
-    $where = array(
-      'group_id' => "= '$bloc->group_id'"
-    );
-    $this->_view = "";
-    if ($bloc->countList($where) > 1) {
-      $this->_view = $bloc->nom.' - ';
-    }
-    $this->_view .= $this->nom;
+
+    $this->_view      = $bloc->nom.' - '.$this->nom;
     $this->_shortview = $this->nom;
   }
 
@@ -156,41 +149,65 @@ class CSalle extends CMbObject {
     $function      = new CFunctions();
     $listFunctions = $function->loadListWithPerms(PERM_READ);
     // Plages d'opérations
-    $plages = new CPlageOp();
+    $plage = new CPlageOp();
+    $conf_chambre_operation = $plage->conf("chambre_operation");
     $where = array();
     $where["plagesop.date"]     = "= '$date'";
     $where["plagesop.salle_id"] = "= '$this->_id'";
     $where[]                    = "`plagesop`.`chir_id` ".CSQLDataSource::prepareIn(array_keys($listPrats)).
       " OR `plagesop`.`spec_id` ".CSQLDataSource::prepareIn(array_keys($listFunctions));
     $order = "debut";
-    $this->_ref_plages = $plages->loadList($where, $order);
-    foreach ($this->_ref_plages as &$plage) {
-      /** @var CPlageOp $plage */
-      $plage->loadRefs();
-      $plage->loadRefsNotes();
-      $plage->loadAffectationsPersonnel();
-      $plage->_unordered_operations = array();
-      foreach ($plage->_ref_operations as &$operation) {
+    $this->_ref_plages = $plage->loadList($where, $order);
+
+    // Chargement d'optimisation
+
+    CMbObject::massLoadFwdRef($this->_ref_plages, "chir_id");
+    CMbObject::massLoadFwdRef($this->_ref_plages, "anesth_id");
+    CMbObject::massLoadFwdRef($this->_ref_plages, "spec_id");
+    CMbObject::massLoadFwdRef($this->_ref_plages, "salle_id");
+
+    CMbObject::massCountBackRefs($this->_ref_plages, "notes");
+    CMbObject::massCountBackRefs($this->_ref_plages, "affectations_personnel");
+
+    foreach ($this->_ref_plages as $_plage) {
+      /** @var CPlageOp $_plage */
+      $_plage->loadRefChir();
+      $_plage->loadRefAnesth();
+      $_plage->loadRefSpec();
+      $_plage->loadRefSalle();
+      $_plage->makeView();
+      $_plage->loadRefsOperations();
+      $_plage->loadRefsNotes();
+      $_plage->loadAffectationsPersonnel();
+      $_plage->_unordered_operations = array();
+
+      // Chargement d'optimisation
+
+      CMbObject::massLoadFwdRef($_plage->_ref_operations, "chir_id");
+      $sejours = CMbObject::massLoadFwdRef($_plage->_ref_operations, "sejour_id");
+      CMbObject::massLoadFwdRef($sejours, "patient_id");
+
+      foreach ($_plage->_ref_operations as $operation) {
         $operation->loadRefAnesth();
         $operation->loadRefChir();
         $operation->loadRefPatient();
         $operation->loadExtCodesCCAM();
         $operation->loadRefPlageOp();
 
-        if (CAppUI::conf("dPbloc CPlageOp chambre_operation")) {
+        if ($conf_chambre_operation) {
           $operation->loadRefAffectation();
         }
         
         // Extraire les interventions non placées
         if ($operation->rank == 0) {
-          $plage->_unordered_operations[$operation->_id] = $operation;
-          unset($plage->_ref_operations[$operation->_id]);
+          $_plage->_unordered_operations[$operation->_id] = $operation;
+          unset($_plage->_ref_operations[$operation->_id]);
         }
       }
     }
     
     // Interventions déplacés
-    $deplacees = new COperation();
+    $deplacee = new COperation();
     $ljoin = array();
     $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
     $where = array();
@@ -201,17 +218,23 @@ class CSalle extends CMbObject {
     $where[]                        = "`plagesop`.`chir_id` ".CSQLDataSource::prepareIn(array_keys($listPrats)).
       " OR `plagesop`.`spec_id` ".CSQLDataSource::prepareIn(array_keys($listFunctions));
     $order = "operations.time_operation";
-    $this->_ref_deplacees = $deplacees->loadList($where, $order, null, null, $ljoin);
-    foreach ($this->_ref_deplacees as &$deplacee) {
-      /** @var COperation $deplacee */
-      $deplacee->loadRefChir();
-      $deplacee->loadRefPatient();
-      $deplacee->loadExtCodesCCAM();
-      $deplacee->loadRefPlageOp();
+    $this->_ref_deplacees = $deplacee->loadList($where, $order, null, null, $ljoin);
+
+    // Chargement d'optimisation
+    CMbObject::massLoadFwdRef($this->_ref_deplacees, "chir_id");
+    $sejours_deplacees = CMbObject::massLoadFwdRef($this->_ref_deplacees, "sejour_id");
+    CMbObject::massLoadFwdRef($sejours_deplacees, "patient_id");
+
+    foreach ($this->_ref_deplacees as $_deplacee) {
+      /** @var COperation $_deplacee */
+      $_deplacee->loadRefChir();
+      $_deplacee->loadRefPatient();
+      $_deplacee->loadExtCodesCCAM();
+      $_deplacee->loadRefPlageOp();
     }
 
     // Hors plage
-    $urgences = new COperation();
+    $urgence = new COperation();
     $ljoin = array();
     $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
     $where = array();
@@ -219,16 +242,22 @@ class CSalle extends CMbObject {
     $where["operations.salle_id"] = "= '$this->_id'";
     $where["operations.chir_id"]  = CSQLDataSource::prepareIn(array_keys($listPrats));
     $order = "time_operation, chir_id";
-    $this->_ref_urgences = $urgences->loadList($where, $order);
-    foreach ($this->_ref_urgences as &$urgence) {
-      /** @var COperation $urgence */
-      $urgence->loadRefChir();
-      $urgence->loadRefPatient();
-      $urgence->loadExtCodesCCAM();
-      $urgence->loadRefPlageOp();
+    $this->_ref_urgences = $urgence->loadList($where, $order);
 
-      if (CAppUI::conf("dPbloc CPlageOp chambre_operation")) {
-        $urgence->loadRefAffectation();
+    // Chargement d'optimisation
+    CMbObject::massLoadFwdRef($this->_ref_urgences, "chir_id");
+    $sejours_urgences = CMbObject::massLoadFwdRef($this->_ref_urgences, "sejour_id");
+    CMbObject::massLoadFwdRef($sejours_urgences, "patient_id");
+
+    foreach ($this->_ref_urgences as $_urgence) {
+      /** @var COperation $_urgence */
+      $_urgence->loadRefChir();
+      $_urgence->loadRefPatient();
+      $_urgence->loadExtCodesCCAM();
+      $_urgence->loadRefPlageOp();
+
+      if ($conf_chambre_operation) {
+        $_urgence->loadRefAffectation();
       }
     }
   }

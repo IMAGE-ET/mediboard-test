@@ -198,7 +198,7 @@ class CPlageOp extends CMbObject {
   /**
    * Création de la vue de la plage
    *
-   * @return void
+   * @return string la vue de la plage
    */
   function makeView(){
     if ($this->spec_id) {
@@ -211,13 +211,15 @@ class CPlageOp extends CMbObject {
 
     if ($this->anesth_id) {
       $this->_view .= " - ".$this->_ref_anesth->_shortview;
-    }  
+    }
+    return $this->_view;
   }
 
   /**
    * @see parent::loadRefsFwd()
+   * @deprecated
    */
-  function loadRefsFwd($cache = false) {
+  function loadRefsFwd($cache = true) {
     $this->loadRefChir($cache);
     $this->loadRefAnesth($cache);
     $this->loadRefSpec($cache);
