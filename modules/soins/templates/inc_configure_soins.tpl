@@ -58,6 +58,8 @@
       </th>
     </tr>
     {{mb_include module=system template=inc_config_enum var=transmissions_hours values="12|24|36|48" skip_locales=1}}
+    {{mb_include module=system template=inc_config_enum var=soin_refresh_pancarte_service values="none|10|20|30"}}
+
 
     <tr>
       <th class="category" colspan="2">
@@ -77,6 +79,8 @@
     {{mb_include module=system template=inc_config_bool var=show_only_lit_bilan}}
     {{mb_include module=system template=inc_config_str  var=ignore_allergies textarea=true}}
     {{mb_include module=system template=inc_config_bool var=vue_condensee_dossier_soins}}
+
+
 
     <tr>
       <td class="button" colspan="2">

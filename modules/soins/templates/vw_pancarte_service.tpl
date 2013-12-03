@@ -48,7 +48,7 @@ viewPancarte = function() {
   url.addParam("service_id", $V(oForm.service_id));
   url.addParam("debut", $V(oForm.debut));
   url.periodicalUpdate("pancarte_service", { frequency: 300 });
-}
+};
 
 function viewLegendPancarte(){
   var url = new Url("soins", "vw_legende_pancarte");
