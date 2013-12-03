@@ -47,8 +47,12 @@ viewPancarte = function() {
   var url = new Url("soins", "ajax_vw_pancarte");
   url.addParam("service_id", $V(oForm.service_id));
   url.addParam("debut", $V(oForm.debut));
-  url.periodicalUpdate("pancarte_service", { frequency: 300 });
-}
+  {{if $conf.soins.soin_refresh_pancarte_service != 'none'}}
+    url.periodicalUpdate("pancarte_service", { frequency: {{math equation="a*60" a=$conf.soins.soin_refresh_pancarte_service}} });
+  {{else}}
+    url.requestUpdate("pancarte_service");
+  {{/if}}
+};
 
 function viewLegendPancarte(){
   var url = new Url("soins", "vw_legende_pancarte");

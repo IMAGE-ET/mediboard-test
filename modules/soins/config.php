@@ -21,4 +21,5 @@ $dPconfig["soins"] = array(
   "ignore_allergies"            => "aucun|ras|r.a.s.|0",
   "trans_compact"               => "0",
   "vue_condensee_dossier_soins" => "0",
+  "soin_refresh_pancarte_service" => "20",
 );
