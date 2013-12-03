@@ -42,7 +42,7 @@ cancelTarif = function(action, callback) {
 
 validTarif = function(){
   var form = document.tarifFrm;
-  
+
   $V(form.du_tiers,  Math.round(($V(form._somme) - $V(form.du_patient))*100)/100);
   
   if ($V(form.tarif) == ""){
@@ -56,23 +56,25 @@ reloadFacture = function() {
 };
 
 modifTotal = function(){
-  var form = document.tarifFrm;
-  if (!form.secteur1.value) {
-    form.secteur1.value = 0;
-  }
-  var secteur1 = form.secteur1.value;
-  if (!form.secteur2.value) {
-    form.secteur2.value = 0;
-  }
-  var secteur2 = form.secteur2.value;
-  if (!form.secteur3.value) {
-    form.secteur3.value = 0;
-  }
-  var secteur3 = form.secteur3.value;
-  var du_tva   = form.du_tva.value;
-  var somme    =  parseFloat(secteur1) +  parseFloat(secteur2) +  parseFloat(secteur3) +  parseFloat(du_tva);
-  $V(form._somme, Math.round(100*(somme)) / 100);
-  $V(form.du_patient, form._somme.value);
+  {{if $consult->valide != "1"}}
+    var form = document.tarifFrm;
+    if (!form.secteur1.value) {
+      form.secteur1.value = 0;
+    }
+    var secteur1 = form.secteur1.value;
+    if (!form.secteur2.value) {
+      form.secteur2.value = 0;
+    }
+    var secteur2 = form.secteur2.value;
+    if (!form.secteur3.value) {
+      form.secteur3.value = 0;
+    }
+    var secteur3 = form.secteur3.value;
+    var du_tva   = form.du_tva.value;
+    var somme    =  parseFloat(secteur1) +  parseFloat(secteur2) +  parseFloat(secteur3) +  parseFloat(du_tva);
+    $V(form._somme, Math.round(100*(somme)) / 100);
+    $V(form.du_patient, form._somme.value);
+  {{/if}}
 };
 
 modifTVA = function(){
@@ -385,6 +387,8 @@ Main.add( function(){
                       </button>
                     {{/if}}
                   </td>
+                {{else}}
+                  <td colspan="2"><input type="hidden" name="du_patient" value="0"/></td>
                 {{/if}}
               </tr>
               <tr {{if !$conf.dPccam.CCodeCCAM.use_cotation_ccam}} style="display: none;"{{/if}}>
