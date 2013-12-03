@@ -9,7 +9,7 @@
         <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$compte_rendu->_ref_locker}}</td>
       </tr>
     {{/if}}
-    {{if $compte_rend->_is_auto_locked}}
+    {{if $compte_rendu->_is_auto_locked}}
       <tr>
         <td colspan="2">
           Document verrouillé automatiquement
