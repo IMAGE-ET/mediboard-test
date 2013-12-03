@@ -21,7 +21,7 @@ $destination_guid = CValue::get("destination_guid");
 $allowed = array("CFile", "CCompteRendu");
 
 if (!in_array($file_class, $allowed)) {
-  return;
+  CAppUI::stepAjax("CFile-msg-not_allowed_object_to_move", UI_MSG_ERROR);
 }
 
 /** @var CFile|CCompteRendu $file */
@@ -29,8 +29,8 @@ $file = new $file_class();
 $file->load($file_id);
 
 $destination = CStoredObject::loadFromGuid($destination_guid);
-if (($file->object_class == $destination->_id) && ($file->object_class == $destination->_class)) {
-  return;
+if (($file->object_id == $destination->_id) && ($file->object_class == $destination->_class)) {
+  CAppUI::stepAjax("CFile-msg-from_equal_to", UI_MSG_ERROR);
 }
 $file->setObject($destination);
 
@@ -38,6 +38,6 @@ if ($msg = $file->store()) {
   CAppUI::setMsg($msg, UI_MSG_ERROR);
 }
 else {
-  CAppUI::setMsg("CFile-msg-moved", UI_MSG_OK);
+  CAppUI::setMsg("CFile-msg-moved");
 }
 echo CAppUI::getMsg();
