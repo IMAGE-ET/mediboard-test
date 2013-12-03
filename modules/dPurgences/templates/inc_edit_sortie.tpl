@@ -16,8 +16,15 @@
 
     var form = getForm('editSejour');
     return onSubmitFormAjax(form, { onComplete: function() {
-      Sortie.refresh('{{$rpu->_id}}');
-      Sortie.close();
+      {{if $conf.dPurgences.valid_cotation_sortie_reelle}}
+      onSubmitFormAjax(getForm('ValidCotation'), { onComplete: function() {
+        Sortie.refresh('{{$rpu->_id}}');
+        Sortie.close();
+      }});
+      {{else}}
+        Sortie.refresh('{{$rpu->_id}}');
+        Sortie.close();
+      {{/if}}
     }});
   };
 
@@ -107,3 +114,12 @@
     </td>
   </tr>
 </table>
+
+{{assign var=atu value=$sejour->_ref_consult_atu}}
+<form name="ValidCotation" action="" method="post" onsubmit="return onSubmitFormAjax(this)">
+  <input type="hidden" name="dosql" value="do_consultation_aed" />
+  <input type="hidden" name="m" value="dPcabinet" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="consultation_id" value="{{$atu->_id}}" />
+  <input type="hidden" name="valide" value="1" />
+</form>
