@@ -18,6 +18,8 @@ then
   echo "     noup: No update, only rsync"
   echo "  -r <revision> The revision number you want to update to, HEAD by default"
   echo "  -c </path/to/another/config> Another config file to parse"
+  echo "  -u Force the update without asking"
+  echo "  -o Force the clear cache without asking"
   echo "  -d Dry run : simulation of the rsync"
   exit 1
 fi
@@ -25,8 +27,10 @@ fi
 conf_file=$BASH_PATH/rsyncupdate.conf
 dry_run=""
 revision=""
+force_update=""
+force_clear=""
 
-args=$(getopt r:c:d $*)
+args=$(getopt r:c:duo $*)
 if [ $? != 0 ] ; then
   echo "Invalid argument. Check your command line"; exit 0;
 fi
@@ -37,6 +41,8 @@ for i; do
     -r) revision="-r $2"; shift 2;;
     -c) conf_file=$2; shift 2;;
     -d) dry_run="-n"; shift;;
+    -u) force_update="1"; shift;;
+    -o) force_clear="1"; shift;;
     --) shift; break ;;
   esac
 done
@@ -66,11 +72,14 @@ then
     # Skip comment lines and empty lines
     if [ "$first_character" != "#" ] && [ "$first_character" != "" ]
     then
-      echo "Do you want to update $line (y or n) [default n] ? \c" ; read REPLY < /dev/tty
-      if [ "$REPLY" = "y" ] ; then
+      REPLY="n"
+      if [ "$force_update" = "" ] ; then
+        echo "Do you want to update $line (y or n) [default n] ? \c" ; read REPLY < /dev/tty
+      fi
+      if [ "$force_update" = "1" ] || [ "$REPLY" = "y" ] ; then
         echo "-- Rsync $line --"
         touch $MB_PATH/tmp/clearcache.flag
-        eval rsync -avpgz $dry_run --stats $MB_PATH/ --delete $line --exclude-from=$BASH_PATH/rsyncupdate.exclude \
+        eval rsync -avpgzC $dry_run --stats $MB_PATH/ --delete $line --exclude-from=$BASH_PATH/rsyncupdate.exclude \
           --exclude includes/config_overload.php \
           --exclude /tmp \
           --exclude /files \
@@ -85,8 +94,11 @@ then
       fi
 
       # Call clear apc cache
-      echo "Do you want to clear cache for $line (y or n) [default n] ? \c" ; read REPLY < /dev/tty
-      if [ "$REPLY" = "y" ] ; then
+      REPLY="n"
+      if [ "$force_clear" = "" ] ; then
+        echo "Do you want to clear cache for $line (y or n) [default n] ? \c" ; read REPLY < /dev/tty
+      fi
+      if [ "$force_clear" = "1" ] || [ "$REPLY" = "y" ] ; then
         path=$(echo $line|grep -P "(/var/www/html|/var/www|/srv/www/htdocs).*" -o)
         path=${path#/var/www/html/}
         path=${path#/var/www/}
