@@ -272,7 +272,7 @@ Main.add( function(){
           <!-- Fin formulaire de selection du tarif -->
           
           <hr />
-          
+
           <!-- Formulaire de tarification -->
           <script>
             Main.add( function(){
@@ -421,6 +421,7 @@ Main.add( function(){
                 <input type="hidden" name="valide" value="1" />
                 <input type="hidden" name="secteur1" value="{{$consult->secteur1}}" />
                 <input type="hidden" name="secteur2" value="{{$consult->secteur2}}" />
+                <input type="hidden" name="_somme" value="{{$consult->_somme}}" />
                 <input type="hidden" name="du_patient" value="{{$consult->du_patient}}" />
                 <input type="hidden" name="du_tiers" value="{{$consult->du_tiers}}" />
                 
