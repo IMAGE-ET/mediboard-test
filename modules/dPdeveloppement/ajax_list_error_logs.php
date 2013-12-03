@@ -119,13 +119,18 @@ $limit = "$start, 30";
 
 $groupby = null;
 $error_logs_similar = array();
+$list_ids = array();
+/** @var CErrorLog[] $error_logs */
+$error_logs = array();
+/** @var CUser[] $users */
+$users = array();
 
 if ($group_similar && $group_similar !== 'no') {
   if ($group_similar === 'signature') {
-    $groupby = "DATE_FORMAT(datetime, '%Y-%m-%d %H:00:00'), user_id, server_ip, signature_hash";
+    $groupby = "signature_hash";
   }
-  elseif ($group_similar === 'similar') {
-    $groupby = "text, DATE_FORMAT(datetime, '%Y-%m-%d %H:00:00'), user_id, server_ip, stacktrace_id, param_GET_id, param_POST_id";
+  if ($group_similar === 'similar') {
+    $groupby = "text, stacktrace_id, param_GET_id, param_POST_id";
   }
 
   $request = new CRequest();
@@ -135,48 +140,55 @@ if ($group_similar && $group_similar !== 'no') {
   $request->setLimit($limit);
 
   $fields = array(
-    "GROUP_CONCAT(error_log_id) AS similar_ids"
+    "GROUP_CONCAT(error_log_id) AS similar_ids",
+    "GROUP_CONCAT(user_id)      AS similar_user_ids",
+    "GROUP_CONCAT(server_ip)    AS similar_server_ips",
+    "MIN(datetime) AS datetime_min",
+    "MAX(datetime) AS datetime_max",
   );
+
   $error_logs_similar = $ds->loadList($request->getCountRequest($error_log, $fields));
 
   $request->setLimit(null);
   $total = count($ds->loadList($request->getCountRequest($error_log, $fields)));
 
-  /** @var CErrorLog[] $error_logs */
-  $error_logs = array();
+  $user_ids = array();
   foreach ($error_logs_similar as $_info) {
-    $ids = explode(",", $_info["similar_ids"], 2);
+    $similar_ids = explode(",", $_info["similar_ids"]);
 
-    $log = new CErrorLog();
-    $log->load(end($ids));
+    $error_log = new CErrorLog();
+    $error_log->load(reset($similar_ids));
+    $error_log->_similar_ids        = $similar_ids;
+    $error_log->_similar_count      = $_info["total"];
+    $error_log->_datetime_min       = $_info["datetime_min"];
+    $error_log->_datetime_max       = $_info["datetime_max"];
+    $error_log->_similar_user_ids   = array_unique(explode(",", $_info["similar_user_ids"]));
+    $error_log->_similar_server_ips = array_unique(explode(",", $_info["similar_server_ips"]));
+    $error_logs[] = $error_log;
 
-    $error_logs[] = $log;
+    $user_ids = array_merge($user_ids, $error_log->_similar_user_ids);
+    $list_ids = array_merge($list_ids, $error_log->_similar_ids);
   }
+
+  // Load users for similar groupings
+  $user_ids = array_unique($user_ids);
+  $user = new CUser();
+  $users = $user->loadAll($user_ids);
 }
 else {
   $total = $error_log->countList($where);
-
-  /** @var CErrorLog[] $error_logs */
   $error_logs = $error_log->loadList($where, $order, $limit, $groupby);
+  $list_ids = CMbArray::pluck($error_logs, "_id");
+  $users = CStoredObject::massLoadFwdRef($error_logs, "user_id");
 }
 
+// Get all data
+CStoredObject::massLoadFwdRef($error_logs, "stacktrace_id");
+CStoredObject::massLoadFwdRef($error_logs, "param_GET_id");
+CStoredObject::massLoadFwdRef($error_logs, "param_POST_id");
+CStoredObject::massLoadFwdRef($error_logs, "session_data_id");
 foreach ($error_logs as $_error_log) {
   $_error_log->loadComplete();
-}
-
-$error_logs = array_values($error_logs);
-
-$list_ids = array();
-if ($group_similar && $group_similar !== 'no') {
-  foreach ($error_logs as $_i => $_error_log) {
-    $_error_log->_similar_count = $error_logs_similar[$_i]["total"];
-    $_error_log->_similar_ids   = explode(",", $error_logs_similar[$_i]["similar_ids"]);
-
-    $list_ids = array_merge($list_ids, $_error_log->_similar_ids);
-  }
-}
-elseif ($group_similar === 'no') {
-  $list_ids = CMbArray::pluck($error_logs, "_id");
 }
 
 // Création du template
@@ -185,5 +197,6 @@ $smarty->assign("error_logs",    $error_logs);
 $smarty->assign("list_ids",      $list_ids);
 $smarty->assign("total",         $total);
 $smarty->assign("start",         $start);
+$smarty->assign("users",         $users);
 $smarty->assign("group_similar", $group_similar);
 $smarty->display('inc_list_error_logs.tpl');

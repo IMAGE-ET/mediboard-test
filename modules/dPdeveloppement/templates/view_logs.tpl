@@ -66,9 +66,9 @@ function toggleCheckboxes(checkbox) {
               <th>Groupement</th>
               <td>
                 <select name="group_similar" onchange="$V(form.start, 0);">
-                  <option value="similar"   {{if $group_similar == 'similar'}}  selected{{/if}}>Grouper les similaires</option>
-                  <option value="signature" {{if $group_similar == 'signature'}}selected{{/if}}>Grouper par signature </option>
-                  <option value="no"        {{if $group_similar == 'no'}}       selected{{/if}}>Ne pas grouper        </option>
+                  <option value="similar"   {{if $group_similar == 'similar'}}    selected{{/if}}>Grouper les similaires</option>
+                  <option value="signature" {{if $group_similar == 'signature'}}  selected{{/if}}>Grouper par signature </option>
+                  <option value="no"        {{if $group_similar == 'no'}}         selected{{/if}}>Ne pas grouper        </option>
                 </select>
               </td>
 

@@ -14,7 +14,7 @@
 /**
  * Error log
  */
-class CErrorLog extends CMbObject {
+class CErrorLog extends CStoredObject {
   public $error_log_id;
 
   public $user_id;
@@ -46,6 +46,8 @@ class CErrorLog extends CMbObject {
 
   public $_similar_count;
   public $_similar_ids = array();
+  public $_similar_user_ids = array();
+  public $_similar_server_ips = array();
 
   /**
    * @see parent::getSpec()
@@ -100,19 +102,15 @@ class CErrorLog extends CMbObject {
       $_num_type = $_types[$this->error_type];
       $this->_category = CError::$_categories[$_num_type];
     }
-
-    if ($this->param_GET_id) {
-      $this->_param_GET = $this->getDataValue("param_GET_id");
-      $this->_url = "?".http_build_query($this->_param_GET, true, "&");
-    }
   }
 
   /**
-   * @see parent::loadComplete()
+   * Completely load the object for display
+   *
+   * @see CMbObject::loadComplete
+   * @return void
    */
-  function loadComplete(){
-    parent::loadComplete();
-
+  function loadComplete() {
     $this->completeField("stacktrace_id", "param_GET_id", "param_POST_id", "session_data_id");
 
     if ($this->stacktrace_id) {
@@ -153,10 +151,15 @@ class CErrorLog extends CMbObject {
     if ($this->session_data_id) {
       $this->_session_data = $this->getDataValue("session_data_id");
     }
+
+    $this->_url = "?".http_build_query($this->_param_GET, true, "&");
+
   }
 
   /**
-   * @param $field
+   * Get data decoded value
+   *
+   * @param string $field Field
    *
    * @return array
    */
@@ -172,21 +175,21 @@ class CErrorLog extends CMbObject {
    * @return CErrorLogData
    */
   function getDataObject($field) {
-    return $this->loadFwdRef($field);
+    return $this->loadFwdRef($field, true);
   }
 
   /**
    * Inserts an error log into database
    *
-   * @param int    $user_id        User ID
-   * @param string $server_ip      Server IP
-   * @param string $datetime       Datetime
-   * @param string $request_uid    Request unique ID
-   * @param string $error_type     Error type
-   * @param string $text           Error message
-   * @param string $file_name      File name
-   * @param int    $line_number    Line number
-   * @param array  $data           Data (stacktrace, GET, POST and session)
+   * @param int    $user_id     User ID
+   * @param string $server_ip   Server IP
+   * @param string $datetime    Datetime
+   * @param string $request_uid Request unique ID
+   * @param string $error_type  Error type
+   * @param string $text        Error message
+   * @param string $file_name   File name
+   * @param int    $line_number Line number
+   * @param array  $data        Data (stacktrace, GET, POST and session)
    *
    * @return void
    *
@@ -275,10 +278,6 @@ class CErrorLog extends CMbObject {
     if ($msg = parent::delete()) {
       return $msg;
     }
-
-    //$this->cleanupLogData();
-
-    return null;
   }
 
   /**
@@ -286,7 +285,7 @@ class CErrorLog extends CMbObject {
    *
    * @param int[] $ids List of error log IDs
    *
-   * @return void
+   * @return int Number of deleted rows
    */
   function deleteMulti($ids) {
     $ids = array_map("intval", $ids);
@@ -296,7 +295,6 @@ class CErrorLog extends CMbObject {
 
     $query = "DELETE FROM $spec->table WHERE $spec->key ";
     $ds->exec($query.$ds->prepareIn($ids));
-
-    //$this->cleanupLogData();
+    return $ds->affectedRows();
   }
 }
