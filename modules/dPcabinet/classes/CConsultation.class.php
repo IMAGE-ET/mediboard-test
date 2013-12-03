@@ -951,7 +951,7 @@ class CConsultation extends CFacturable {
     if ($this->fieldModified("valide", "1")) {
       //Si le DH est modifié, ceui ci se répercute sur le premier acte coté
       if ($this->fieldModified("secteur2") && (count($this->_tokens_ngap) || count($this->_tokens_ccam)) && count($this->loadRefsActes())) {
-        $acte = reset($this->loadRefsActes());
+        $acte = reset($this->_ref_actes);
         $acte->montant_depassement += ($this->secteur2-$this->_old->secteur2);
         if ($msg = $acte->store()) {
           return $msg;
