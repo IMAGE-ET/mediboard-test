@@ -73,10 +73,13 @@
         alert('L\'adresse n\'est pas valide');
         return;
       }
-      
+
+      var oform = getForm("formSendMail");
+
       var url = new Url("dPcompteRendu", "ajax_send_mail");
       url.addParam("nom", nom);
       url.addParam("email", email);
+      url.addParam("subject", $V(oform.subject));
       url.addParam("object_guid", '{{$object_guid}}');
 
       document.body.down("#systemMsg").style.display="block";
@@ -87,6 +90,12 @@
 </script>
 
 <form name="formSendMail" method="get">
+
+  <p>
+    <label>{{tr}}CCompteRendu.mail_subject{{/tr}} :
+      <input type="text" name="subject" value="{{tr}}CCompteRendu.default_mail_subject{{/tr}}" style="width: 500px;"/>
+    </label>
+  </p>
   <div style="height: 200px; overflow: auto;">
     <table style="width: 100%;" id="tabMail" class="tbl">
       <tr>

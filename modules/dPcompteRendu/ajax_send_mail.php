@@ -15,6 +15,7 @@ CCanDo::checkRead();
 
 $nom         = CValue::post("nom");
 $email       = CValue::post("email");
+$subject     = CValue::post("subject");
 $object_guid = CValue::post("object_guid");
 
 $object = CMbObject::loadFromGuid($object_guid);
@@ -26,7 +27,7 @@ $exchange_source->init();
 
 try {
   $exchange_source->setRecipient($email, $nom);
-  $exchange_source->setSubject("Mediboard - Envoi de document");
+  $exchange_source->setSubject($subject);
   $exchange_source->setBody("Ce document vous a été envoyé via l'application Mediboard.");
 
   switch ($object->_class) {
