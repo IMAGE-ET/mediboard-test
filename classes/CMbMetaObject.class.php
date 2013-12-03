@@ -74,7 +74,7 @@ class CMbMetaObject extends CMbObject {
       $ex_object = CExObject::getValidObject($this->object_class);
       
       if (!$ex_object) {
-        trigger_error("Unable to create instance of '$this->object_class' class", E_USER_ERROR);
+        CModelObject::error("Unable-to-create-instance-of-object_class%s-class", $this->object_class);
         return null;
       }
       else {
