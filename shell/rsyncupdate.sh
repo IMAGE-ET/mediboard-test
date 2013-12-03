@@ -82,8 +82,11 @@ then
         eval rsync -avzp $dry_run $MB_PATH/tmp/svnstatus.txt $line/tmp/
         eval rsync -avzp $dry_run $MB_PATH/tmp/monitevent.txt $line/tmp/
         eval rsync -avzp $dry_run $MB_PATH/tmp/clearcache.flag $line/tmp/
+      fi
 
-        # Call clear apc cache
+      # Call clear apc cache
+      echo "Do you want to clear cache for $line (y or n) [default n] ? \c" ; read REPLY < /dev/tty
+      if [ "$REPLY" = "y" ] ; then
         path=$(echo $line|grep -P "(/var/www/html|/var/www|/srv/www/htdocs).*" -o)
         path=${path#/var/www/html/}
         path=${path#/var/www/}
