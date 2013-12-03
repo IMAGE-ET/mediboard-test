@@ -28,7 +28,8 @@ class CFunctionCache {
   static function exist($context) {
     list($function, $args) = $context;
     $args = implode("-", $args);
-    if (!isset(self::$data[$function][$args])) {
+
+    if (!array_key_exists($function, self::$data) || !array_key_exists($args, self::$data[$function])) {
       return false;
     }
     

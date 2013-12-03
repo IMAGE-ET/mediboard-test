@@ -48,15 +48,16 @@ class CExchangeAny extends CExchangeDataFormat {
     
     return $props;
   }
-  
+
+  /**
+   * @see parent::loadContent()
+   */
   function loadContent() {
-    $content = new CContentAny();
-    $content->load($this->message_content_id);
-    $this->_message = $content->content;
-    
-    $content = new CContentAny();
-    $content->load($this->acquittement_content_id);
-    $this->_acquittement = $content->content;
+    $this->_ref_message_content = $this->loadFwdRef("message_content_id", true);
+    $this->_message = $this->_ref_message_content->content;
+
+    $this->_ref_acquittement_content = $this->loadFwdRef("acquittement_content_id", true);
+    $this->_acquittement = $this->_ref_acquittement_content->content;
   }
   
   function guessDataType(){
@@ -80,8 +81,7 @@ class CExchangeAny extends CExchangeDataFormat {
   
   function updatePlainFields() {
     if ($this->_message !== null) {
-      $content = new CContentAny();
-      $content->load($this->message_content_id);
+      $content = $this->_ref_message_content;
       $content->content = $this->_message;
       if ($msg = $content->store()) {
         return $msg;
@@ -92,8 +92,7 @@ class CExchangeAny extends CExchangeDataFormat {
     }
     
     if ($this->_acquittement !== null) {
-      $content = new CContentAny();
-      $content->load($this->acquittement_content_id);
+      $content = $this->_ref_acquittement_content;
       $content->content = $this->_acquittement;
       if ($msg = $content->store()) {
         return $msg;

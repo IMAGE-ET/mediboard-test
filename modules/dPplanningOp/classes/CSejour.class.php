@@ -2525,7 +2525,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         $tag_NDA = CAppUI::conf("dPplanningOp CSejour $type_tag") . $tag_NDA;
       }
 
-      return $tag_NDA;
+      return CFunctionCache::set($context, $tag_NDA);
     }
 
     $tag_NDA = CAppUI::conf("dPplanningOp CSejour tag_dossier");
@@ -2548,7 +2548,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Pas de tag Num dossier
     if (null == $tag_NDA) {
-      return null;
+      return CFunctionCache::set($context, null);
     }
 
     // Préférer un identifiant externe de l'établissement

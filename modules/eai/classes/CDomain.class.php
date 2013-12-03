@@ -101,7 +101,7 @@ class CDomain extends CMbObject {
    * @return CInteropActor
    */
   function loadRefActor() {
-    if ($actor = $this->loadFwdRef("actor_id")) {
+    if ($actor = $this->loadFwdRef("actor_id", true)) {
       return $this->_ref_actor = $actor;
     }
     
@@ -118,7 +118,7 @@ class CDomain extends CMbObject {
       return $this->_ref_incrementer;
     }
     
-    return $this->_ref_incrementer = $this->loadFwdRef("incrementer_id");
+    return $this->_ref_incrementer = $this->loadFwdRef("incrementer_id", true);
   }
   
   /**
@@ -210,7 +210,7 @@ class CDomain extends CMbObject {
     if (!$group_id) {
       $group_id = $group->_id;
     }
-    
+
     $group_domain = new CGroupDomain();
     $group_domain->object_class = $domain_type;
     $group_domain->group_id     = $group_id;

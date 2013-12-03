@@ -1607,4 +1607,18 @@ class CMediusers extends CPerson {
   function loadRefsRetrocessions() {
     return $this->_ref_retrocessions = $this->loadBackRefs("retrocession");
   }
+
+  static function loadFromAdeli($adeli) {
+    $context = array(__METHOD__, func_get_args());
+    if (CFunctionCache::exist($context)) {
+      return CFunctionCache::get($context);
+    }
+
+    $mediuser = new CMediusers();
+    $where = array();
+    $where["users_mediboard.adeli"] = " = '$adeli'";
+    $mediuser->loadObject($where);
+
+    return CFunctionCache::set($context, $mediuser);
+  }
 }

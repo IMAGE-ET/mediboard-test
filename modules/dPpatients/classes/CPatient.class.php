@@ -1653,15 +1653,15 @@ class CPatient extends CPerson {
     if (CFunctionCache::exist($context)) {
       return CFunctionCache::get($context);
     }
-     
+
     // Gestion du tag IPP par son domaine d'identification
     if (CAppUI::conf("eai use_domain")) {
-      return CDomain::getTagMasterDomain("CPatient", $group_id);
+      return CFunctionCache::set($context, CDomain::getTagMasterDomain("CPatient", $group_id));
     }
-    
+
     // Pas de tag IPP => pas d'affichage d'IPP
     if (null == $tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp")) {
-      return null;
+      return CFunctionCache::set($context, null);
     }
 
     // Permettre des IPP en fonction de l'établissement

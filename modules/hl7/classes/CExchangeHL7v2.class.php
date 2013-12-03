@@ -31,13 +31,13 @@ class CExchangeHL7v2 extends CExchangeTabular {
   /** @var string */
   public $exchange_hl7v2_id;
 
-
   /** @var string */
   public $code;
-  
 
   /** @var CHL7v2Message */
   public $_message_object;
+
+  public $_exchange_hl7v2;
 
   /**
    * Initialize object specification

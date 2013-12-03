@@ -44,13 +44,11 @@ class CExchangeTabular extends CExchangeDataFormat {
    * @see parent::loadContent()
    */
   function loadContent() {
-    $content = new CContentTabular();
-    $content->load($this->message_content_id);
-    $this->_message = $content->content;
-    
-    $content = new CContentTabular();
-    $content->load($this->acquittement_content_id);
-    $this->_acquittement = $content->content;
+    $this->_ref_message_content = $this->loadFwdRef("message_content_id", true);
+    $this->_message = $this->_ref_message_content->content;
+
+    $this->_ref_acquittement_content = $this->loadFwdRef("acquittement_content_id", true);
+    $this->_acquittement = $this->_ref_acquittement_content->content;
   }
 
   /**
@@ -60,8 +58,7 @@ class CExchangeTabular extends CExchangeDataFormat {
     parent::updatePlainFields();
 
     if ($this->_message !== null) {
-      $content = new CContentTabular();
-      $content->load($this->message_content_id);
+      $content = $this->_ref_message_content;
       $content->content = $this->_message;
       if ($msg = $content->store()) {
         return;
@@ -72,8 +69,7 @@ class CExchangeTabular extends CExchangeDataFormat {
     }
     
     if ($this->_acquittement !== null) {
-      $content = new CContentTabular();
-      $content->load($this->acquittement_content_id);
+      $content = $this->_ref_acquittement_content;
       $content->content = $this->_acquittement;
       if ($msg = $content->store()) {
         return;

@@ -60,19 +60,20 @@ class CExchangeDataFormat extends CMbMetaObject {
   public $_family_message;
   public $_configs_format;
   public $_delayed;
-  public $_exchange_hl7v2;
-  
 
   /** @var CGroups */
   public $_ref_group;
-  
 
   /** @var CInteropSender */
   public $_ref_sender;
   
-
   /** @var CInteropReceiver */
   public $_ref_receiver;
+
+  /** @var  CContentAny */
+  public $_ref_message_content;
+  /** @var  CContentAny */
+  public $_ref_acquittement_content;
 
   /**
    * Get properties specifications as strings
@@ -119,12 +120,6 @@ class CExchangeDataFormat extends CMbMetaObject {
   function updateFormFields() {
     parent::updateFormFields();
 
-    // Chargement des tags
-    $this->_tag_patient  = CPatient::getTagIPP($this->group_id);
-    $this->_tag_sejour   = CSejour::getTagNDA($this->group_id);
-    $this->_tag_mediuser = CMediusers::getTagMediusers($this->group_id);
-    $this->_tag_service  = CService::getTagService($this->group_id);
-
     // Chargement des contents
     if ($this->_load_content) {
       $this->loadContent();
@@ -144,7 +139,7 @@ class CExchangeDataFormat extends CMbMetaObject {
    * @return CGroups
    */
   function loadRefGroups() {
-    $this->_ref_group = $this->loadFwdRef("group_id");
+    $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
 
   /**
@@ -163,7 +158,7 @@ class CExchangeDataFormat extends CMbMetaObject {
    * @return CInteropSender
    */
   function loadRefSender(){
-    return $this->_ref_sender = $this->loadFwdRef("sender_id");
+    return $this->_ref_sender = $this->loadFwdRef("sender_id", true);
   }
   
   /**
@@ -172,7 +167,7 @@ class CExchangeDataFormat extends CMbMetaObject {
    * @return CInteropReceiver
    */
   function loadRefReceiver(){
-    return $this->_ref_receiver = $this->loadFwdRef("receiver_id");
+    return $this->_ref_receiver = $this->loadFwdRef("receiver_id", true);
   }
 
   /**
