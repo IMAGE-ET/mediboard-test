@@ -1204,7 +1204,7 @@ class COperation extends CCodable implements IPatientRelated {
    * 
    * @return $this->_ref_anesth_perops
    */
-  function loadRefsAnesthPerops(){
+  function loadRefsAnesthPerops() {
     return $this->_ref_anesth_perops = $this->loadBackRefs("anesth_perops", "datetime");
   }
 
@@ -1432,16 +1432,21 @@ class COperation extends CCodable implements IPatientRelated {
     $template->addTimeProperty("Opération - durée réelle"     , $this->_duree_interv);
     $template->addTimeProperty("Opération - entrée bloc"      , $this->entree_salle);
     $template->addTimeProperty("Opération - pose garrot"      , $this->pose_garrot);
+    $template->addTimeProperty("Opération - début induction"  , $this->induction_debut);
     $template->addTimeProperty("Opération - début op"         , $this->debut_op);
     $template->addTimeProperty("Opération - fin op"           , $this->fin_op);
+    $template->addTimeProperty("Opération - fin induction"    , $this->induction_fin);
     $template->addTimeProperty("Opération - retrait garrot"   , $this->retrait_garrot);
     $template->addTimeProperty("Opération - sortie bloc"      , $this->sortie_salle);
+    $template->addTimeProperty("Opération - entrée SSPI"      , $this->entree_reveil);
+    $template->addTimeProperty("Opération - entrée SSPI"      , $this->sortie_reveil_reel);
 
     $template->addProperty("Opération - depassement"          , $this->depassement);
     $template->addProperty("Opération - exams pre-op"         , $this->examen);
     $template->addProperty("Opération - matériel"             , $this->materiel);
     $template->addProperty("Opération - convalescence"        , $this->_ref_sejour->convalescence);
     $template->addProperty("Opération - remarques"            , $this->rques);
+    $template->addProperty("Opération - Score ASA"            , $this->getFormattedValue("ASA"));
 
     $consult_anesth = $this->_ref_consult_anesth;
     $consult = $consult_anesth->loadRefConsultation();
@@ -1479,6 +1484,19 @@ class COperation extends CCodable implements IPatientRelated {
       $property = implode(" - ", CMbArray::pluck($affectations, "_ref_personnel", "_ref_user", "_view"));
       $template->addProperty("Opération - personnel prévu - $locale", $property);
     }
+
+    $evts = $incidents = array();
+
+    foreach ($this->loadRefsAnesthPerops() as $_evt) {
+      if ($_evt->incident) {
+        $incidents[] = $_evt;
+        continue;
+      }
+      $evts[] = $_evt;
+    }
+
+    $template->addListProperty("Opération - Evenements per-opératoires", $evts);
+    $template->addListProperty("Opération - Incidents per-opératoires", $incidents);
 
     if (CModule::getActive("forms")) {
       CExObject::addFormsToTemplate($template, $this, "Opération");

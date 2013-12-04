@@ -51,10 +51,10 @@ class CAnesthPerop extends CMbObject {
   /**
    * @see parent::updateFormFields()
    */
-  function updateFormFields(){
+  function updateFormFields() {
     parent::updateFormFields();
 
-    $this->_view = "$this->libelle à $this->datetime";
+    $this->_view = "$this->libelle à ".CMbDT::format($this->datetime, CAppUI::conf("time")) . " le " . CMbDT::format($this->datetime, CAppUI::conf("date"));
   }
 
   /**
@@ -63,8 +63,7 @@ class CAnesthPerop extends CMbObject {
    * @return COperation
    */
   function loadRefOperation(){
-    $this->_ref_operation = new COperation();
-    return $this->_ref_operation = $this->_ref_operation->getCached($this->operation_id);
+    return $this->_ref_operation = $this->loadFwdRef("operation_id", true);
   }
 
   /**
