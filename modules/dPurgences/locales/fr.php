@@ -619,7 +619,7 @@ Souhaitez-vous poursuivre ?';
 $locales['confirm-RPU-Hospitalisation-transfert'] = 'Vous êtes sur le point de tranformer un passage aux urgences en hospitalisation.
 
 Cette action irréversible effectue les actions suivantes :
-  - Création d\'un séjour reliquat contanant le RPU,
+  - Création d\'un séjour reliquat contenant le RPU,
   - Chainage du reliquat vers le séjour d\'hospitalisation,
   - Changement du type d\'hospitalisation du séjour principal.
 
