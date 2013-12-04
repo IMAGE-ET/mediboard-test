@@ -8,13 +8,13 @@
  * @version    $Revision$
  *}}
 
-<script type="text/javascript">
+<script>
   Main.add(function() {
     Calendar.regField(getForm("changeDate").elements["date"], null, {noView: true});
   });
   
   editOperation = function(operation_id, sejour_id) {
-    var url = new Url("dPplanningOp", "vw_edit_urgence");
+    var url = new Url("planningOp", "vw_edit_urgence");
     url.addParam("operation_id", operation_id);
     url.addParam("sejour_id", sejour_id);
     url.addParam("dialog", 1);
@@ -25,11 +25,14 @@
     });
   }
 </script>
-{{mb_script module=admissions    script=admissions}}
-{{mb_script module=maternite     script=naissance}}
-{{mb_script module=dPcompteRendu script=document}}
-{{mb_script module=dPcompteRendu script=modele_selector}}
-{{mb_script module=dPcabinet     script=file}}
+
+{{mb_script module=admissions  script=admissions}}
+{{mb_script module=maternite   script=naissance}}
+{{mb_script module=compteRendu script=document}}
+{{mb_script module=compteRendu script=modele_selector}}
+{{mb_script module=cabinet     script=file}}
+
+{{assign var=manage_provisoire value=$conf.maternite.CGrossesse.manage_provisoire}}
 
 <table class="main">
   <tr>
@@ -98,7 +101,7 @@
     <td>
       <table class="tbl" id="admissions">
         <tr>
-          <th class="title" colspan="11">
+          <th class="title" colspan="{{if $manage_provisoire}}11{{else}}10{{/if}}">
             <strong>
               <a href="?m=maternite&tab=vw_admissions&date={{$date_before}}" style="display: inline;">&lt;&lt;&lt;</a>
               {{$date|date_format:$conf.longdate}}
@@ -132,7 +135,9 @@
           <th class="category">Rangs / Heures</th>
           <th class="category">Enfants</th>
           <th class="category">Séjours</th>
-          <th class="category"></th>
+          {{if $manage_provisoire}}
+            <th class="category"></th>
+          {{/if}}
         </tr>
         {{foreach from=$sejours item=_sejour}}
         <tbody class="hoverable">
@@ -217,20 +222,22 @@
                   </span>
                 </td>
                 {{if $smarty.foreach.foreach_naissance.first}}
-                  <td class="narrow" rowspan="{{$grossesse->_ref_naissances|@count}}">
-                    <button type="button" class="add notext" title="Créer un dossier provisoire"
-                      onclick="Naissance.edit(null, null, '{{$_sejour->_id}}', 1, 'document.location.reload')"></button>
-                  </td>
-                {{/if}}
-                {{if $smarty.foreach.foreach_naissance.first}}
+                  {{if $manage_provisoire}}
+                    <td class="narrow" rowspan="{{$grossesse->_ref_naissances|@count}}">
+                      <button type="button" class="add notext" title="Créer un dossier provisoire"
+                        onclick="Naissance.edit(null, null, '{{$_sejour->_id}}', 1, 'document.location.reload')"></button>
+                    </td>
+                  {{/if}}
                   </tr>
                 {{/if}}
               {{foreachelse}}
                 <td colspan="3"></td>
-                <td class="narrow" rowspan="{{$grossesse->_ref_naissances|@count}}">
-                  <button type="button" class="add notext" title="Créer un dossier provisoire"
-                    onclick="Naissance.edit(null, null, '{{$_sejour->_id}}', 1, 'document.location.reload')"></button>
-                </td>
+               {{if $manage_provisoire}}
+                  <td class="narrow" rowspan="{{$grossesse->_ref_naissances|@count}}">
+                    <button type="button" class="add notext" title="Créer un dossier provisoire"
+                      onclick="Naissance.edit(null, null, '{{$_sejour->_id}}', 1, 'document.location.reload')"></button>
+                  </td>
+               {{/if}}
               {{/foreach}}
             {{else}}
               <td colspan="7"  rowspan="{{$grossesse->_ref_naissances|@count}}">

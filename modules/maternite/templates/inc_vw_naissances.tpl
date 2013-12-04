@@ -29,8 +29,10 @@ Main.add(function(){
     <th class="title" colspan="5">
       <button type="button" class="add" style="float: left;" {{if !$grossesse->active}}disabled="disabled"{{/if}}
         onclick="Naissance.edit(0, '{{$operation->_id}}', '{{$operation->sejour_id}}')">Naissance</button>
-        <button type="button" class="add" style="float: left;" {{if !$grossesse->active}}disabled="disabled"{{/if}}
-        onclick="getForm('createProvisoire').onsubmit()">Dossier provisoire</button>
+      {{if $conf.maternite.CGrossesse.manage_provisoire}}
+          <button type="button" class="add" style="float: left;" {{if !$grossesse->active}}disabled="disabled"{{/if}}
+            onclick="getForm('createProvisoire').onsubmit()">Dossier provisoire</button>
+      {{/if}}
       <form name="closeGrossesse" method="post"
         onsubmit="return onSubmitFormAjax(this, {onComplete: function() { refreshGrossesse('{{$operation->_id}}'); } });">
         <input type="hidden" name="m" value="maternite" />

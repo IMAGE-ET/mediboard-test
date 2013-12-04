@@ -30,6 +30,7 @@
 
     {{assign var=class value="CGrossesse"}}
     {{mb_include module=system template=inc_config_bool var=date_regles_obligatoire size=2 suffix="jours"}}
+    {{mb_include module=system template=inc_config_bool var=manage_provisoire}}
 
     {{assign var=class value="CNaissance"}}
     <tr>
