@@ -38,7 +38,7 @@ if ($hide_finished == 1 && $salle->_ref_plages) {
       }
     }
     foreach ($_plage->_unordered_operations as $_key => $_op) {
-      if ($op->sortie_salle) {
+      if ($_op->sortie_salle) {
         unset($_plage->_unordered_operations[$_key]);
       }
     }
