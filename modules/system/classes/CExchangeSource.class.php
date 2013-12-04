@@ -130,6 +130,11 @@ class CExchangeSource extends CMbObject {
    * @return CExchangeSource
    */
   static function get($name, $type = null, $override = false, $type_echange = null, $only_active = true) {
+    $context = array(__METHOD__, func_get_args());
+    if (CFunctionCache::exist($context)) {
+      return CFunctionCache::get($context);
+    }
+
     $exchange_classes = self::getExchangeClasses(); 
     foreach ($exchange_classes as $_class) {
       /** @var CExchangeSource $exchange_source */
@@ -161,7 +166,8 @@ class CExchangeSource extends CMbObject {
           }
           $exchange_source->_incompatible = true;
         }
-        return $exchange_source;
+
+        return CFunctionCache::set($context, $exchange_source);
       }
     }
     
@@ -175,7 +181,7 @@ class CExchangeSource extends CMbObject {
     $source->_wanted_type = $type;
     $source->_allowed_instances = self::getObjects($name, $type, $type_echange);
 
-    return $source;
+    return CFunctionCache::set($context, $source);
   }
 
   /**
