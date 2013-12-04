@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -47,9 +47,17 @@ class CHprim21Object extends CMbObject {
     $this->_view = $this->emetteur_id." : ".$this->external_id;
   }
 
-  function loadRefEchangeHprim21() {
-    $this->_ref_echange_hprim21 = new CEchangeHprim21();
-    $this->_ref_echange_hprim21->load($this->echange_hprim21_id);
+  /**
+   * Load exchange
+   *
+   * @return CEchangeHprim21
+   */
+  function loadRefExchange() {
+    return $this->_ref_echange_hprim21 = $this->loadFwdRef("echange_hprim21_id", true);
+  }
+
+  function massLoadExchanges($objects) {
+    return CStoredObject::massLoadFwdRef($objects, "echange_hprim21_id");
   }
   
   function setHprim21ReaderVars(CHPrim21Reader $hprim21_reader) {
