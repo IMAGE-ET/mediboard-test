@@ -13,6 +13,8 @@
 {{mb_default var=default_tab value=""}}
 {{assign var=patient value=$sejour->_ref_patient}}
 {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
+{{assign var=prescription value=$sejour->_ref_prescription_sejour}}
+
 {{if ($service_id && $service_id != "NP") || $show_affectation || $function->_id || $praticien->_id}}
   {{assign var=affectation value=$sejour->_ref_curr_affectation}}
   <td class="text {{if $sejour->isolement}}isolement{{/if}}">
@@ -32,15 +34,15 @@
 
 <td class="text">
   {{assign var=statut value="present"}}
-  
+
   {{if !$sejour->entree_reelle || ($sejour->_ref_prev_affectation->_id && $sejour->_ref_prev_affectation->effectue == 0)}}
     {{assign var=statut value="attente"}}
   {{/if}}
-  
+
   {{if $sejour->sortie_reelle || $sejour->_ref_curr_affectation->effectue == 1}}
     {{assign var=statut value="sorti"}}
   {{/if}}
-  
+
   {{mb_include module=ssr template=inc_view_patient statut=$statut onclick="showDossierSoins('`$sejour->_id`','$date', '$default_tab');"}}
 </td>
 
@@ -55,8 +57,6 @@
 
 {{if !$lite_view}}
 <td style="text-align: center;">
-  {{assign var=prescription value=$sejour->_ref_prescription_sejour}}
-
   {{if @$conf.object_handlers.CPrescriptionAlerteHandler}}
     {{mb_include module=system template=inc_icon_alerts
        object=$prescription
@@ -76,7 +76,7 @@
        callback="function() { refreshLineSejour('`$sejour->_id`')}"
        nb_alerts=$prescription->_count_urgences
        level="high"}}
-  {{/if}} 
+  {{/if}}
 </td>
 <td style="text-align: center;">
   {{if $sejour->_count_tasks}}
@@ -85,7 +85,7 @@
 
     <div id="tooltip-content-tasks-{{$sejour->_id}}" style="display: none; height: 400px; width: 400px:"></div>
   {{/if}}
-  
+
   {{if $sejour->_count_tasks_not_created}}
     <img src="images/icons/phone_red.png" onclick="showTasksNotCreated(this, 'tooltip-content-tasks-not-created-{{$sejour->_id}}', '{{$sejour->_id}}');"/>
     {{mb_include module=system template=inc_vw_counter_tip count=$sejour->_count_tasks_not_created}}
@@ -118,7 +118,7 @@
       {{if $sejour->_duree}}
         {{math assign=progress_bar_width equation='100*(-entree / (duree))' entree=$sejour->_entree_relative duree=$sejour->_duree format='%.2f'}}
       {{/if}}
-      
+
       <div style="width: {{if $sejour->_duree && $progress_bar_width <= 100}}{{$progress_bar_width}}{{else}}100{{/if}}%;"></div>
     </div>
   </div>
