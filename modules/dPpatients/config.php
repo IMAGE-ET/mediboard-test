@@ -25,6 +25,12 @@ $dPconfig["dPpatients"] = array (
     "show_patient_link" => "0"
   ),
 
+  "CConstantesMedicales" => array(
+    "unite_ta"        => "cmHg",
+    "unite_glycemie"  => "g/l",
+    "unite_cetonemie" => "g/l",
+  ),
+
   "CAntecedent" => array (
     "types"     => "med|alle|trans|obst|chir|fam|anesth|gyn",
     "appareils" => "cardiovasculaire|digestif|endocrinien|neuro_psychiatrique|pulmonaire|uro_nephrologique",
