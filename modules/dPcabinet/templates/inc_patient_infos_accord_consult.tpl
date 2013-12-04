@@ -36,7 +36,7 @@
   <tr>
     <td class="button">
       <div>{{mb_include module=cabinet  template=inc_patient_infos}}</div>
-      <div>{{mb_include module=patients template=inc_patient_planification patient_id=$patient->_id}}</div>
+      <div>{{mb_include module=patients template=inc_patient_planification patient_id=$patient->_id praticien_id=$userSel->_id}}</div>
     </td>
     <td class="text">
       {{mb_include module=cabinet template=inc_patient_medecins}}
