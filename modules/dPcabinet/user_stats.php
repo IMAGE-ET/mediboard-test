@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkAdmin();
@@ -39,6 +39,7 @@ $query = "SELECT COUNT(*) total, user_id, $stats->sql_date AS refdate
   AND function.group_id = '$group->_id'
   AND consultation.annule != '1'
   AND consultation.patient_id IS NOT NULL
+  AND consultation.sejour_id IS NULL
   AND ($query_complement)
   GROUP BY user_id, refdate
   ORDER BY refdate DESC
