@@ -25,13 +25,19 @@ class CInteropSender extends CInteropActor {
   public $_ref_user;
 
   public $_ref_object_links;
-  
+
+  /**
+   * @see parent::updateFormFields
+   */
   function updateFormFields() {
     parent::updateFormFields();
        
     $this->_parent_class = "CInteropSender";
   }
-  
+
+  /**
+   * @see parent::getProps
+   */
   function getProps() {
     $props = parent::getProps();
     $props["user_id"]                  = "ref class|CMediusers";
@@ -42,18 +48,26 @@ class CInteropSender extends CInteropActor {
     return $props;
   }
 
+  /**
+   * @see parent::getSpec
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->uniques["user"] = array ("user_id");
     
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getBackProps
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
 
-    $backProps["messages_supported"]   = "CMessageSupported object_id";
-    $backProps["object_links"]         = "CObjectToInteropSender sender_id";
+    $backProps["messages_supported"] = "CMessageSupported object_id";
+    $backProps["object_links"]       = "CObjectToInteropSender sender_id";
+    $backProps["route_sender"]       = "CEAIRoute sender_id";
+
     return $backProps;
   }
 
@@ -70,6 +84,9 @@ class CInteropSender extends CInteropActor {
     return $this->_ref_object_links = $this->loadBackRefs("object_links");
   }
 
+  /**
+   * @see parent::loadRefUser
+   */
   function loadRefUser() {
     return $this->_ref_user = $this->loadFwdRef("user_id", 1);
   }

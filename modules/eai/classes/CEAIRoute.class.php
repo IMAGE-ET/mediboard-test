@@ -12,11 +12,11 @@
  */
 
 /**
- * Class CEAIRouter
+ * Class CEAIRoute
  * EAI router
  */
 
-class CEAIRouter extends CMbObject {
+class CEAIRoute extends CMbObject {
   // DB Table key
   public $eai_router_id;
 
@@ -51,9 +51,9 @@ class CEAIRouter extends CMbObject {
   function getProps() {
     $props = parent::getProps();
 
-    $props["sender_class"]   = "str class length|80";
+    $props["sender_class"]   = "str class maxLength|80";
     $props["sender_id"]      = "ref class|CInteropSender meta|sender_class";
-    $props["receiver_class"] = "str class length|80";
+    $props["receiver_class"] = "str class maxLength|80";
     $props["receiver_id"]    = "ref class|CInteropActor meta|receiver_class";
     $props["active"]         = "bool default|1";
 
@@ -67,5 +67,23 @@ class CEAIRouter extends CMbObject {
     $backProps = parent::getBackProps();
 
     return $backProps;
+  }
+
+  /**
+   * Load the sender
+   *
+   * @return mixed
+   */
+  function loadRefSender() {
+    return $this->_ref_sender = CStoredObject::loadFromGuid("$this->sender_class-$this->sender_id");
+  }
+
+  /**
+   * Load the receiver
+   *
+   * @return mixed
+   */
+  function loadRefReceiver() {
+    return $this->_ref_receiver = CStoredObject::loadFromGuid("$this->receiver_class-$this->receiver_id");
   }
 }

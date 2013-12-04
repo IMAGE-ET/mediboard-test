@@ -12,12 +12,6 @@
 
 CCanDo::checkRead();
 
-$router = new CEAIRouter();
-$routers = $router->loadList();
-
 // Création du template
 $smarty = new CSmartyDP();
-
-$smarty->assign("routers", $routers);
-
 $smarty->display("vw_routers.tpl");
