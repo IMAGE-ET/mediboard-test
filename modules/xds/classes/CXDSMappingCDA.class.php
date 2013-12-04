@@ -389,12 +389,11 @@ class CXDSMappingCDA {
       $eventCode = $service["code"];
       switch ($service["type_code"]) {
         case "cim10":
-          $cim10 = new CCodeCIM10($eventCode, true);
+          $cim10 = CCodeCIM10::get($eventCode);
           $libelle = $cim10->libelle;
           break;
         case "ccam":
-          $ccam = new CCodeCCAM($eventCode);
-          $ccam->load(CCodeCCAM::LITE);
+          $ccam = CCodeCCAM::get($eventCode, CCodeCCAM::LITE);
           $libelle = $ccam->libelleCourt;
           break;
       }

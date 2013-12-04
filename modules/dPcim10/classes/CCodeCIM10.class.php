@@ -50,10 +50,12 @@ class CCodeCIM10 {
   
   // Other
   public $_isInfo;
+  public $_no_refs;
 
   // niveaux de chargement
   const LITE   = 1;
-  const FULL   = 2;
+  const MEDIUM = 2;
+  const FULL   = 3;
 
   // table de chargement
   static $loadLevel = array();
@@ -62,6 +64,7 @@ class CCodeCIM10 {
   static $cacheCount = 0;
   static $useCount = array(
     CCodeCIM10::LITE   => 0,
+    CCodeCIM10::MEDIUM  => 0,
     CCodeCIM10::FULL   => 0,
   );
 
@@ -69,14 +72,14 @@ class CCodeCIM10 {
 
   function __construct($code = "(A00-B99)", $loadlite = 0) {
     // Static initialisation
-    static $spec = null;
-    if (!$spec) {
+    if (!self::$spec) {
       $spec = new CMbObjectSpec();
       $spec->dsn = "cim10";
       $spec->init();
+      self::$spec = $spec;
     }
-    
-    $this->_spec = $spec;
+
+    $this->_spec = self::$spec;
 
     $this->code = strtoupper($code);
     
@@ -137,7 +140,7 @@ class CCodeCIM10 {
     if (!$this->loadLite($lang)) {
       return false;
     }
-    $ds =& $this->_spec->ds;
+    $ds = $this->_spec->ds;
     //descr
     $this->descr = array();
     $query = "SELECT LID
@@ -239,7 +242,7 @@ class CCodeCIM10 {
   }
 
   // Chargement optimisé des codes
-  static function get($code, $niv = self::LITE) {
+  static function get($code, $niv = self::LITE, $lang = self::LANG_FR) {
     self::$useCount[$niv]++;
 
     // Si le code n'a encore jamais été chargé, on instancie et on met son niveau de chargement à zéro
@@ -258,12 +261,19 @@ class CCodeCIM10 {
     }
 
     // Chargement
-    if ($niv === self::FULL) {
-      $code_cim->load();
+    switch ($niv) {
+      case self::LITE:
+        $code_cim->loadLite();
+        break;
+      case self::MEDIUM:
+        $code_cim->load();
+        break;
+      case self::FULL:
+        $code_cim->load();
+        $code_cim->loadRefs();
     }
 
     self::$loadLevel[$code] = $niv;
-
     return $code_cim->copy();
   }
 
@@ -276,6 +286,7 @@ class CCodeCIM10 {
   function copy() {
     $obj = unserialize(serialize($this));
     $obj->_spec = self::$spec;
+
     return $obj;
   }
 
@@ -283,10 +294,18 @@ class CCodeCIM10 {
     if (!$this->loadLite($this->_lang, 0)) {
       return false;
     }
-    
-    $ds =& $this->_spec->ds;
-    
+
     // Exclusions
+    $this->loadExcludes();
+    
+    // Arborescence
+    $this->loadArborescence();
+
+    return true;
+  }
+
+  function loadExcludes() {
+    $ds = $this->_spec->ds;
     $this->_exclude = array();
     $query = "SELECT LID, excl
               FROM exclude
@@ -300,15 +319,16 @@ class CCodeCIM10 {
       if ($row2 = $ds->fetchArray($result2)) {
         $code_cim10 = $row2["abbrev"];
         if (array_key_exists($code_cim10, $this->_exclude) === false) {
-          $code = new CCodeCIM10($code_cim10);
-          $code->loadLite($this->_lang, 0);
+          $code = CCodeCIM10::get($code_cim10);
           $this->_exclude[$code_cim10] = $code;
         }
       }
     }
     ksort($this->_exclude);
-    
-    // Arborescence
+  }
+
+  function loadArborescence() {
+    $ds = $this->_spec->ds;
     $query = "SELECT *
               FROM master
               WHERE SID = '$this->sid'";
@@ -326,11 +346,12 @@ class CCodeCIM10 {
         $result = $ds->exec($query);
         $row2 = $ds->fetchArray($result);
         $code_cim10 = $row2["abbrev"];
-        $code = new CCodeCIM10($code_cim10);
-        $code->loadLite($this->_lang, 0);
+        $code = CCodeCIM10::get($code_cim10);
         $this->_levelsSup[$index] = $code;
       }
     }
+
+    ksort($this->_levelsSup);
 
     // Niveaux inferieurs
     $this->_levelsInf = array();
@@ -343,19 +364,17 @@ class CCodeCIM10 {
     if ($this->level < 6) {
       $query .= "\nAND id".($this->level+2)." = '0'";
     }
-    
+
     $result = $ds->exec($query);
     while ($row = $ds->fetchArray($result)) {
       $code_cim10 = $row["abbrev"];
-      $code = new CCodeCIM10($code_cim10);
-      $code->loadLite($this->_lang, 0);
+      $code = CCodeCIM10::get($code_cim10);
       $this->_levelsInf[$code_cim10] = $code;
     }
-    
+
     ksort($this->_levelsInf);
-    return true;
   }
-  
+
   // Sommaire
   function getSommaire($lang = self::LANG_FR, $level = 0) {
     $ds =& $this->_spec->ds;
@@ -459,9 +478,7 @@ class CCodeCIM10 {
   }
   
   function getSubCodes($code) {
-    $codeCim = new CCodeCIM10($code);
-    $codeCim->load();
-    $codeCim->loadRefs();
+    $codeCim = CCodeCIM10::get($code, self::FULL);
     $master = array();
     $i = 0;
     foreach ($codeCim->_levelsInf as $curr_code) {

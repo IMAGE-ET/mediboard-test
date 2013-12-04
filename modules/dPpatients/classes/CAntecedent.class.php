@@ -164,7 +164,7 @@ class CAntecedent extends CMbObject {
         $match = strtoupper($match);
         
         // Chargement du code CIM 10
-        $code_cim10 = new CCodeCIM10($match, 1);
+        $code_cim10 = CCodeCIM10::get($match);
     
         if ($code_cim10->libelle != "Code CIM inexistant") {
           // Cas du code valide, sauvegarde du code CIM

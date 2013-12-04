@@ -64,8 +64,7 @@ foreach ($profiles as $profile => $_user_id) {
     foreach ($cimStat as $value) {
       $DP = $value["DP"];
 
-      $code = new CCodeCIM10($DP);
-      $code->loadLite();
+      $code = CCodeCIM10::get($DP);
       $code->_favoris_id = "0";
       $code->occ = $value["nb_code"];
 
@@ -113,7 +112,7 @@ foreach ($profiles as $profile => $_user_id) {
   foreach ($codes as $value) {
     $val_code = $value["code"];
 
-    $code_cim10 = new CCodeCIM10($val_code, 1);
+    $code_cim10 = CCodeCIM10::get($val_code);
     $list[$val_code] = $code_cim10;
     $nb_code = 0;
 

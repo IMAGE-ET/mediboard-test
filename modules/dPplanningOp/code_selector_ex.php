@@ -104,8 +104,7 @@ foreach ($profiles as $profile => $_user_id) {
       $codes = $ds->loadlist($sql);
 
       foreach ($codes as $key => $value) {
-        $list[$value["favoris_code"]] = new CCodeCIM10($value["favoris_code"]);
-        $list[$value["favoris_code"]]->loadLite();
+        $list[$value["favoris_code"]] = CCodeCIM10::get($value["favoris_code"]);
         $list[$value["favoris_code"]]->occ = "0";
       }
     }
@@ -131,8 +130,7 @@ foreach ($profiles as $profile => $_user_id) {
       $list = array();
 
       foreach ($listCodes as $key => $value) {
-        $list[$value["DP"]] = new CCodeCIM10($value["DP"]);
-        $list[$value["DP"]]->loadLite();
+        $list[$value["DP"]] = CCodeCIM10::get($value["DP"]);
         $list[$value["DP"]]->occ = $value["nb_code"];
       }
     }

@@ -917,14 +917,14 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Vérification de la validité des codes CIM
     if ($this->DP != null) {
-      $dp = new CCodeCIM10($this->DP, 1);
+      $dp = CCodeCIM10::get($this->DP);
       if (!$dp->exist) {
         CAppUI::setMsg("Le code CIM saisi n'est pas valide", UI_MSG_WARNING);
         $this->DP = "";
       }
     }
     if ($this->DR != null) {
-      $dr = new CCodeCIM10($this->DR, 1);
+      $dr = CCodeCIM10::get($this->DR);
       if (!$dr->exist) {
         CAppUI::setMsg("Le code CIM saisi n'est pas valide", UI_MSG_WARNING);
         $this->DR = "";
@@ -1860,8 +1860,8 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return void
    */
   function loadExtDiagnostics() {
-    $this->_ext_diagnostic_principal = $this->DP ? new CCodeCIM10($this->DP, 1) : null;
-    $this->_ext_diagnostic_relie     = $this->DR ? new CCodeCIM10($this->DR, 1) : null;
+    $this->_ext_diagnostic_principal = $this->DP ? CCodeCIM10::get($this->DP) : null;
+    $this->_ext_diagnostic_relie     = $this->DR ? CCodeCIM10::get($this->DR) : null;
   }
 
   /**
@@ -3287,7 +3287,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->loadRefDossierMedical()->fillTemplate($template, "Sejour");
 
     // Prescription
-    if (CModule::getActive('dPprescription')) {
+   /* if (CModule::getActive('dPprescription')) {
       $prescriptions = $this->loadRefsPrescriptions();
       $prescription = isset($prescriptions["pre_admission"]) ? $prescriptions["pre_admission"] : new CPrescription();
       $prescription->type = "pre_admission";
@@ -3298,7 +3298,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $prescription = isset($prescriptions["sortie"]) ? $prescriptions["sortie"] : new CPrescription();
       $prescription->type = "sortie";
       $prescription->fillLimitedTemplate($template);
-    }
+    }*/
 
     // RPU
     $this->loadRefRPU();

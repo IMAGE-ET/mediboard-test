@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -45,7 +45,7 @@ while ($line = fgetcsv($fp, null, '|')) {
   // Remove dots, replace + by X
   $line[0] = str_replace(array('.', '+'), array('', 'X'), trim($line[0]));
   
-  $cim = new CCodeCIM10($line[0], true);
+  $cim = CCodeCIM10::get($line[0]);
   if (!$cim->exist) {
     $list_diff[] = $line;
   }

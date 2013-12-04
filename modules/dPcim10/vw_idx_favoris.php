@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -38,8 +38,7 @@ foreach ($favoris as $_favori) {
 
   $_favori->loadRefsTagItems();
 
-  $code = new CCodeCIM10($favoris_code);
-  $code->loadLite($lang, 0);
+  $code = CCodeCIM10::get($favoris_code);
   $code->_favoris_id = $_favori->favoris_id;
   $code->_ref_favori = $_favori;
   $code->occ = "0";
@@ -65,8 +64,7 @@ if (!$tag_id) {
   foreach ($cimStat as $value) {
     $DP = $value["DP"];
 
-    $code = new CCodeCIM10($DP);
-    $code->loadLite();
+    $code = CCodeCIM10::get($DP);
     $code->_favoris_id = "0";
     $code->occ = $value["nb_code"];
 
@@ -89,10 +87,10 @@ $tag_tree = CFavoriCIM10::getTree($user->_id);
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("lang" , $lang);
-$smarty->assign("cim10", new CCodeCIM10);
+$smarty->assign("lang"     , $lang);
+$smarty->assign("cim10"    , new CCodeCIM10());
 $smarty->assign("fusionCim", $fusionCim);
-$smarty->assign("tag_tree", $tag_tree);
-$smarty->assign("tag_id", $tag_id);
+$smarty->assign("tag_tree" , $tag_tree);
+$smarty->assign("tag_id"   , $tag_id);
 
 $smarty->display("vw_idx_favoris.tpl");

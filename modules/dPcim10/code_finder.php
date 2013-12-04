@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -15,9 +15,8 @@ CCanDo::checkEdit();
 
 $code = CValue::get("code");
 
-$cim10 = new CCodeCIM10($code);
-$cim10->load();
-$cim10->loadRefs();
+$cim10 = CCodeCIM10::get($code, CCodeCIM10::FULL);
+
 foreach ($cim10->_exclude as $key => $value) {
   $cim10->_exclude[$key]->loadRefs();
 }
@@ -38,4 +37,5 @@ $smarty = new CSmartyDP();
 $smarty->assign('up', $up);
 $smarty->assign('cim10', $cim10);
 
+$smarty->display('code_finder.tpl');
 $smarty->display('code_finder.tpl');

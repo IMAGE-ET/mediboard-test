@@ -163,11 +163,11 @@ class CDossierMedical extends CMbMetaObject {
     // Tokens CIM
     $this->codes_cim = strtoupper($this->codes_cim);
     $this->_codes_cim = $this->codes_cim ? explode("|", $this->codes_cim) : array();
-  
+
     // Objets CIM
     $this->_ext_codes_cim = array();
     foreach ($this->_codes_cim as $code_cim) {
-      $this->_ext_codes_cim[$code_cim] = new CCodeCIM10($code_cim, 1);
+      $this->_ext_codes_cim[$code_cim] = CCodeCIM10::get($code_cim);
     }
   }
 
@@ -504,7 +504,7 @@ class CDossierMedical extends CMbMetaObject {
     $this->_codes_cim = $this->codes_cim ? explode("|", $this->codes_cim) : array();
 
     if ($this->_added_code_cim) {
-      $da = new CCodeCIM10($this->_added_code_cim, 1);
+      $da = CCodeCIM10::get($this->_added_code_cim);
       if (!$da->exist) {
         CAppUI::setMsg("Le code CIM saisi n'est pas valide", UI_MSG_WARNING);
         return null;

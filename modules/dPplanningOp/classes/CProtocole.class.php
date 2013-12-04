@@ -270,8 +270,7 @@ class CProtocole extends CMbObject {
   }
 
   function loadExtCodeCIM() {
-    $this->_ext_code_cim = new CCodeCIM10($this->DP);
-    $this->_ext_code_cim->loadLite();
+    $this->_ext_code_cim = CCodeCIM10::get($this->DP);
   }
 
   /**
