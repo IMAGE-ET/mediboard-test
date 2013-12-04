@@ -11,10 +11,12 @@
  * @link     http://www.mediboard.org
  */
 
-$nb_month = CValue::get("month_maintenance");
+$nb_month = CValue::get("month_maintenance", "1");
+
 $date = CMbDT::dateTime("-".$nb_month."MONTH");
+
 $crequest = new CRequest();
-$crequest->addSelect(array("`sejour`.`sejour_id`"));
+$crequest->addSelect(array("`sejour`.`sejour_id`", "`sejour`.`sortie`"));
 $crequest->addTable("`sejour`");
 $crequest->addLJoinClause("rpu", "`sejour`.`sejour_id` = `rpu`.`sejour_id`");
 $crequest->addWhereClause("sejour.entree", "> '$date'");
@@ -24,6 +26,11 @@ $crequest->addHaving(array("COUNT(`sejour`.`sejour_id`)>1"));
 $sejour = new CSejour();
 $ds = $sejour->getDS();
 $list_id_sejour = $ds->loadList($crequest->getRequest());
+
+usort($list_id_sejour, function ($a, $b) {
+  return -strnatcmp($a["sortie"], $b["sortie"]);
+});
+
 $list_sejour = array();
 $patients = array();
 $guesses = array();
@@ -99,8 +106,7 @@ foreach ($patients as $patient_id => $patient) {
   $guesses[$patient->_id] = $guess;
 }
 
-// Tri sur la vue a posteriori : détruit les clés !
-array_multisort(CMbArray::pluck($patients, "nom"), SORT_ASC, $patients);
+CMbArray::pluck($patients, "nom");
 
 $smarty = new CSmartyDP("modules/dPadmissions");
 
