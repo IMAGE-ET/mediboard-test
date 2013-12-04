@@ -40,6 +40,15 @@ foreach ($list as $_constante) {
 
 CConfiguration::register(
   array(
+    'CGroups' => array(
+      'dPpatients' => array(
+        'CConstantesMedicales' => array(
+          'unite_ta'        => 'enum list|cmHg|mmHg default|' . CAppUI::conf('dPpatients CConstantesMedicales unite_ta'),
+          'unite_glycemie'  => 'enum list|g/l|mmol/l default|' . CAppUI::conf('dPpatients CConstantesMedicales unite_glycemie'),
+          'unite_cetonemie' => 'enum list|g/l|mmol/l default|' . CAppUI::conf('dPpatients CConstantesMedicales unite_cetonemie'),
+        )
+      )
+    ),
     "CService CGroups.group_id" => array(
       "dPpatients" => array(
         "CConstantesMedicales" => array(

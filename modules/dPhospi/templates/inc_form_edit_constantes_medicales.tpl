@@ -92,6 +92,9 @@ Main.add(function () {
     <input type="hidden" name="constantes_medicales_id" value="{{$constantes->_id}}" />
     <input type="hidden" name="_new_constantes_medicales" value="0" />
     {{/if}}
+    {{mb_field object=$constantes field=_unite_ta hidden=1}}
+    {{mb_field object=$constantes field=_unite_glycemie hidden=1}}
+    {{mb_field object=$constantes field=_unite_cetonemie hidden=1}}
     {{mb_field object=$constantes field=context_class hidden=1}}
     {{mb_field object=$constantes field=context_id hidden=1}}
     {{mb_field object=$constantes field=patient_id hidden=1}}
@@ -146,11 +149,7 @@ Main.add(function () {
                     {{assign var=_params value=$constants_list.$_constant}}
                     {{if $_params.unit}}
                       <small class="opacity-50">
-                        {{if in_array($_constant, " "|explode:"ta ta_gauche ta_droit")}}
-                          ({{$conf.dPpatients.CConstantesMedicales.unite_ta}})
-                        {{else}}
-                          ({{$_params.unit}})
-                        {{/if}}
+                        ({{$_params.unit}})
                       </small>
                     {{/if}}
                   </label>
