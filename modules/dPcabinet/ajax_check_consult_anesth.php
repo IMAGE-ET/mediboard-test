@@ -19,16 +19,14 @@ $consult->loadRefsDossiersAnesth();
 
 $tab_op = array();
 foreach ($consult->_refs_dossiers_anesth as $consult_anesth) {
-  $consult_anesth->loadRefSejour()->loadRefsOperations();
-  $consult_anesth->_ref_sejour->loadRefDossierMedical();
+  $consult_anesth->loadRefOperation()->loadRefSejour();
+  $consult_anesth->_ref_operation->_ref_sejour->loadRefDossierMedical();
 
-  foreach ($consult_anesth->_ref_sejour->_ref_operations as $interv) {
-    $interv->loadRefPlageOp();
-    $interv->loadRefsConsultAnesth();
-    $tab_op[] = $interv->_id;
-  }
-  if (!$consult_anesth->sejour_id) {
+  if (!$consult_anesth->operation_id) {
     $tab_op[] = 0;
+  }
+  else {
+    $tab_op[] = $consult_anesth->operation_id;
   }
 }
 

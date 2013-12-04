@@ -8,11 +8,11 @@
   <tr>
     <th>Critère</th>
     {{foreach from=$consult->_refs_dossiers_anesth item=consult_anesth}}
-      {{foreach from=$consult_anesth->_ref_sejour->_ref_operations item=operation}}
-          <th class="text" style="width:13em;">{{$operation->_view}}</th>
-        {{foreachelse}}
-          <th style="width:13em;">Pas d'intervention</th>
-      {{/foreach}}
+      {{if $consult_anesth->_ref_operation->_id}}
+        <th class="text" style="width:13em;">{{$consult_anesth->_ref_operation->_view}}</th>
+      {{else}}
+        <th style="width:13em;">Pas d'intervention</th>
+      {{/if}}
     {{/foreach}}
   </tr>
   <tr>
@@ -47,14 +47,11 @@
   <tr>
     <td onmouseover="ObjectTooltip.createDOM(this, 'DetailRank5');"><div class="rank">5</div><strong>Risque anesthésique</strong></td>
     {{foreach from=$consult->_refs_dossiers_anesth item=consult_anesth}}
-      {{assign var="sejour_id" value=$consult_anesth->sejour_id}}
+      {{assign var="operation_id" value=$consult_anesth->operation_id}}
       {{assign var="dm_sejour" value=false}}
 
-      {{if $sejour_id}}
-        {{assign var="tableau" value=$consult_anesth->_ref_sejour->_ref_operations}}
-        {{assign var="dm_sejour" value=$consult_anesth->_ref_sejour->_ref_dossier_medical}}
-      {{else}}
-        {{assign var="tableau" value=$tab_op.0}}
+      {{if $operation_id}}
+        {{assign var="dm_sejour" value=$consult_anesth->_ref_operation->_ref_sejour->_ref_dossier_medical}}
       {{/if}}
 
       {{assign var="result" value=false}}
@@ -66,15 +63,14 @@
       $dm_patient->risque_thrombo_patient != "NR" || $dm_patient->risque_MCJ_patient != "NR"))))}}
         {{assign var="result" value=true}}
       {{/if}}
-      {{foreach from=$tableau item=num_operation}}
-          <td class="button">
-            {{if $conf.dPcabinet.CConsultAnesth.show_facteurs_risque}}
-              <img src="images/icons/note_{{if $result}}green{{else}}red{{/if}}.png"/>
-            {{else}}
-              <img src="images/icons/note_orange.png" title="N/A"/>
-            {{/if}}
-          </td>
-        {{/foreach}}
+
+      <td class="button">
+        {{if $conf.dPcabinet.CConsultAnesth.show_facteurs_risque}}
+          <img src="images/icons/note_{{if $result}}green{{else}}red{{/if}}.png"/>
+        {{else}}
+          <img src="images/icons/note_orange.png" title="N/A"/>
+        {{/if}}
+      </td>
     {{/foreach}}
   </tr>
 
@@ -82,11 +78,11 @@
     <tr>
       <td onmouseover="ObjectTooltip.createDOM(this, 'DetailRank6');"><div class="rank">6</div><strong>Type d'anesthésie</strong></td>
       {{foreach from=$consult->_refs_dossiers_anesth item=consult_anesth}}
-        {{foreach from=$consult_anesth->_ref_sejour->_ref_operations item=operation}}
-          <td class="button"><img src="images/icons/note_{{if $operation->type_anesth}}green{{else}}red{{/if}}.png"/></td>
-        {{foreachelse}}
+        {{if $consult_anesth->_ref_operation->_id}}
+          <td class="button"><img src="images/icons/note_{{if $consult_anesth->_ref_operation->type_anesth}}green{{else}}red{{/if}}.png"/></td>
+        {{else}}
           <td class="button"><img src="images/icons/note_orange.png" title="N/A"/></td>
-        {{/foreach}}
+        {{/if}}
       {{/foreach}}
     </tr>
     <tr>
@@ -98,15 +94,7 @@
         {{if ($consult_anesth->mallampati && $consult_anesth->bouche && $consult_anesth->distThyro) || $consult_anesth->conclusion}}
           {{assign var="result" value=true}}
         {{/if}}
-          {{foreach from=$consult_anesth->_ref_sejour->_ref_operations item=operation}}
-            {{if $operation->_ref_consult_anesth->_id}}
-              <td class="button"><img src="images/icons/note_{{if $result}}green{{else}}red{{/if}}.png"/></td>
-            {{else}}
-              <td class="button"><img src="images/icons/note_orange.png" title="N/A"/></td>
-            {{/if}}
-          {{foreachelse}}
-            <td class="button"><img src="images/icons/note_{{if $result}}green{{else}}red{{/if}}.png"/></td>
-          {{/foreach}}
+        <td class="button"><img src="images/icons/note_{{if $result}}green{{else}}red{{/if}}.png"/></td>
       {{/foreach}}
     </tr>
 
@@ -119,15 +107,16 @@
   <tr>
     <td onmouseover="ObjectTooltip.createDOM(this, 'DetailRankASA');"><div class="rank"></div><strong>Score ASA</strong></td>
     {{foreach from=$consult->_refs_dossiers_anesth item=consult_anesth}}
-      {{foreach from=$consult_anesth->_ref_sejour->_ref_operations item=operation}}
-        <td class="button"><img src="images/icons/note_{{if $operation->ASA}}green{{else}}red{{/if}}.png"/></td>
-      {{foreachelse}}
+      {{if $consult_anesth->_ref_operation->_id}}
+        <td class="button"><img src="images/icons/note_{{if $consult_anesth->_ref_operation->ASA}}green{{else}}red{{/if}}.png"/></td>
+      {{else}}
         <td class="button"><img src="images/icons/note_orange.png" title="N/A"/></td>
-      {{/foreach}}
+      {{/if}}
     {{/foreach}}
   </tr>
   <tr>
-    <td colspan="3" class="button">
+    {{math equation="x+1" x=$tab_op|@count assign=colonnes}}
+    <td colspan="{{$colonnes}}" class="button">
       <button type="button" class="undo" onclick="Control.Modal.close();">Continuer la consultation</button>
       <button type="button" class="tick" onclick="document.formCheckConsultAnesth.submit();">Terminer la consultation</button>
     </td>
