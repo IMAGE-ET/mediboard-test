@@ -81,7 +81,8 @@ class CExchangeAny extends CExchangeDataFormat {
   
   function updatePlainFields() {
     if ($this->_message !== null) {
-      $content = $this->_ref_message_content;
+      $content = new CContentAny();
+      $content->load($this->message_content_id);
       $content->content = $this->_message;
       if ($msg = $content->store()) {
         return $msg;
@@ -92,7 +93,8 @@ class CExchangeAny extends CExchangeDataFormat {
     }
     
     if ($this->_acquittement !== null) {
-      $content = $this->_ref_acquittement_content;
+      $content = new CContentAny();
+      $content->load($this->acquittement_content_id);
       $content->content = $this->_acquittement;
       if ($msg = $content->store()) {
         return $msg;
