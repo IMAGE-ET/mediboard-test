@@ -20,7 +20,7 @@
         {{tr}}Nb-month{{/tr}}
       </th>
       <td>
-        <input type="number" class="num" name="month_maintenance" value="6"/>
+        <input type="number" class="num" name="month_maintenance" value="1"/>
       </td>
     </tr>
     <tr>
