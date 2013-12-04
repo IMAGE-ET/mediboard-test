@@ -40,8 +40,8 @@
   };
 
   onMergeComplete = function() {
-    IdentitoVigilance.start(0, 80);
-    MainCourante.start(1, 60);
+    IdentitoVigilance.start(0, 300);
+    MainCourante.start(1, 90);
   };
 
   reloadSynthese = function() {
@@ -104,11 +104,11 @@
     // Delays prevent potential overload with periodical previous updates
 
     // Main courante
-    MainCourante.start(0, 60);
+    MainCourante.start(0, 90);
 
     // UHCD
     UHCD.date = "{{$date}}";
-    UHCD.start(1, 80);
+    UHCD.start(1, 180);
 
     // Reconvocations
     {{if $conf.dPurgences.gerer_reconvoc == "1"}}
@@ -117,7 +117,7 @@
 
     // Identito-vigilance
     IdentitoVigilance.date = "{{$date}}";
-    IdentitoVigilance.start(3, 120);
+    IdentitoVigilance.start(3, 300);
 
     var tabs = Control.Tabs.create('tab_main_courante', false);
   });
