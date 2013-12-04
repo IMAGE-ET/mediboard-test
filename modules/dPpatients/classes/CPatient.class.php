@@ -1748,6 +1748,11 @@ class CPatient extends CPerson {
     return $IPP->store();
   }
 
+
+  static function massCountPhotoIdentite($patients) {
+    CFile::massCountNamed($patients, "identite.jpg");
+  }
+
   function loadRefPhotoIdentite() {
     $file = CFile::loadNamed($this, "identite.jpg");
     $this->_can_see_photo = 1;

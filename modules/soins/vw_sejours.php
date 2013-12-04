@@ -18,6 +18,10 @@ $print        = CValue::get("print", false);
 $_type_admission = CValue::getOrSession("_type_admission", "");
 $select_view = CValue::get("select_view", false);
 
+$lite_view = CValue::get("lite_view");
+
+
+
 // Mode Dossier de soins, chargement de la liste des service, praticiens, functions
 $services = array();
 $functions = array();
@@ -379,6 +383,8 @@ if ($select_view) {
 }
 
 if ($sejour_id) {
+  $smarty->assign("lite_view"         , $lite_view);
+
   // Rafraichissement d'un séjour  
   $sejour = reset($sejours);
   $sejour->loadRefCurrAffectation();

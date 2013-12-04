@@ -118,7 +118,13 @@ class CFile extends CDocumentItem {
     $props["_merge_files"]  = "bool";
     return $props;
   }
-  
+
+  static function massCountNamed($objects, $name) {
+    $where = array();
+    $where["file_name"] = " = '$name'";
+    CStoredObject::massCountBackRefs($objects, "files", $where, array(), "named_file_$name");
+  }
+
   /**
    * Load a file with a specific name associated with an object
    * 
@@ -131,7 +137,14 @@ class CFile extends CDocumentItem {
     if (!$object->_id) {
       return new CFile;
     }
-    
+
+    // Precounting optimization: no need to query when we already know array is empty
+    $backname = "named_file_$name";
+
+    if (isset($object->_count[$backname]) && $object->_count[$backname] === 0) {
+      return new CFile();
+    }
+
     $file = new CFile();
     $file->setObject($object);
     $file->file_name = $name;
