@@ -14,6 +14,7 @@ $start  = CValue::get("start", 0);
 $stats  = CValue::get("stats", 0);
 $period = CValue::get("period", "day");
 
+
 if (!CCanDo::edit() && !$dialog) {
   global $can;
   $can->redirect();
@@ -61,7 +62,7 @@ if ($filter->object_id && $filter->object_class) {
   $object->loadHistory();
 }
 
-// Récupération de la liste des classes disponibles
+// Rï¿½cupï¿½ration de la liste des classes disponibles
 $listClasses = array();
 
 if (!$dialog) {
@@ -70,7 +71,7 @@ if (!$dialog) {
 
 $filter->loadRefUser();
 
-// Récupération des logs correspondants
+// Rï¿½cupï¿½ration des logs correspondants
 $where = array();
 if ($filter->user_id) {
   $where["user_id"] = "= '$filter->user_id'";
@@ -80,8 +81,13 @@ if ($filter->user_id) {
 if ($object instanceof CCompteRendu) {
   $object->loadContent(false);
   $content = $object->_ref_content;
-  $where[] = "(object_id = '$filter->object_id' AND object_class = '$filter->object_class') OR
-(object_id = '$content->_id' AND object_class = 'CContentHTML')";
+  // To activate force index below
+  $where["object_id"] = "IN ('$filter->object_id', '$content->_id')";
+  // Actual query
+  $where[] = "
+    (object_id = '$filter->object_id' AND object_class = '$filter->object_class') OR
+    (object_id = '$content->_id'      AND object_class = 'CContentHTML')
+  ";
 }
 else {
   if ($filter->object_id) {
@@ -112,27 +118,25 @@ $is_admin = CCanDo::admin();
 $dossiers_medicaux_shared = CAppUI::conf("dPetablissement dossiers_medicaux_shared");
 
 if (!$stats) {
-  $list       = $log->loadList($where, "user_log_id DESC", "$start, 100");
-  $list_count = $log->countList($where);
+  $index = null; isset($where["object_id"]) ? "object_id" : null;
+  /** @var CUserLog[] $list */
+  $list       = $log->loadList($where, "user_log_id DESC", "$start, 100", null, null, $index);
+  $list_count = $log->countList($where, null, null, $index);
 
   $group_id = CGroups::loadCurrent()->_id;
   CMbObject::massLoadFwdRef($list, "user_id");
   CMbObject::massLoadFwdRef($list, "object_id");
 
-  foreach ($list as $key => $log) {
-    $log->loadRefUser();
-    $log->_ref_user->loadRefMediuser();
+  foreach ($list as $_log) {
+    $function = $_log->loadRefUser()->loadRefMediuser()->loadRefFunction();
 
-    $mediuser = $log->_ref_user->_ref_mediuser;
-    $mediuser->loadRefFunction();
-
-    if (!$is_admin && !$dossiers_medicaux_shared && $mediuser->_ref_function->group_id != $group_id) {
-      unset($list[$key]);
+    if (!$is_admin && !$dossiers_medicaux_shared && $function->group_id != $group_id) {
+      unset($list[$_log->_id]);
       continue;
     }
 
-    $log->loadTargetObject();
-    $log->getOldValues();
+    $target = $_log->loadTargetObject();
+    $_log->getOldValues();
   }
 }
 
