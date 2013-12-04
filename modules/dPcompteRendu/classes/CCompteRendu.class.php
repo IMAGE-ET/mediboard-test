@@ -885,35 +885,30 @@ class CCompteRendu extends CDocumentItem {
     }
     // Si c'est un document dont le type de l'en-tête, de l'introduction, de la conclusion
     // ou du pied de page ne correspond pas à son nouveau type, alors pas d'enregistrement
-    if ($this->header_id) {
-      $header = new CCompteRendu;
-      $header->load($this->header_id);
-      if ($header->object_class != $this->object_class) {
-        return "Le document n'est pas du même type que son entête";
+    if (!$this->object_id) {
+      $this->loadComponents();
+      if ($this->header_id) {
+        if ($this->_ref_header->object_class != $this->object_class) {
+          return "Le document n'est pas du même type que son entête";
+        }
       }
-    }
 
-    if ($this->footer_id) {
-      $header = new CCompteRendu;
-      $header->load($this->footer_id);
-      if ($header->object_class != $this->object_class) {
-        return "Le document n'est pas du même type que son pied de page";
+      if ($this->footer_id) {
+        if ($this->_ref_footer->object_class != $this->object_class) {
+          return "Le document n'est pas du même type que son pied de page";
+        }
       }
-    }
 
-    if ($this->preface_id) {
-      $preface = new CCompteRendu;
-      $preface->load($this->preface_id);
-      if ($preface->object_class != $this->object_class) {
-        return "Le document n'est pas du même type que son introduction";
+      if ($this->preface_id) {
+        if ($this->_ref_preface->object_class != $this->object_class) {
+          return "Le document n'est pas du même type que son introduction";
+        }
       }
-    }
 
-    if ($this->ending_id) {
-      $ending = new CCompteRendu;
-      $ending->load($this->ending_id);
-      if ($ending->object_class != $this->object_class) {
-        return "Le document n'est pas du même type que sa conclusion";
+      if ($this->ending_id) {
+        if ($this->_ref_ending->object_class != $this->object_class) {
+          return "Le document n'est pas du même type que sa conclusion";
+        }
       }
     }
 
