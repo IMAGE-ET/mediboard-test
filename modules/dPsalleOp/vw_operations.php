@@ -210,7 +210,14 @@ if ($selOp->_id) {
 $group = CGroups::loadCurrent();
 $group->loadConfigValues();
 
-$listValidateurs = CPersonnel::loadListPers(array("op", "op_panseuse", "iade", "sagefemme", "manipulateur"), true, true);
+$type_personnel = array("op", "op_panseuse", "iade", "sagefemme", "manipulateur");
+if (count($daily_check_list_types) && $require_check_list) {
+  $type_personnel = array();
+  foreach ($daily_check_list_types as $check_list_type) {
+    $type_personnel[] = $check_list_type->type_validateur;
+  }
+}
+$listValidateurs = CPersonnel::loadListPers(array_unique(array_values($type_personnel)), true, true);
 $operateurs_disp_vasc = implode("-", array_merge(CMbArray::pluck($listChirs, "_id"), CMbArray::pluck($listValidateurs, "user_id")));
 
 $smarty->assign("anesth_perop"           , new CAnesthPerop());

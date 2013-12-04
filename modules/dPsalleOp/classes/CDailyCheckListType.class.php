@@ -19,6 +19,7 @@ class CDailyCheckListType extends CMbObject {
   //public $object_id; // @todo REMOVE
   public $group_id;
   public $title;
+  public $type_validateur;
   public $description;
 
   public $_object_guid;
@@ -56,6 +57,7 @@ class CDailyCheckListType extends CMbObject {
     //$props['object_id']    = 'ref class|CMbObject meta|object_class autocomplete';
     $props['group_id']     = 'ref notNull class|CGroups';
     $props['title']        = 'str notNull';
+    $props['type_validateur'] = "set vertical list|chir|anesth|op|op_panseuse|reveil|service|iade|brancardier|sagefemme|manipulateur";
     $props['description']  = 'text';
     $props['_object_guid'] = 'str';
     $props['_links']       = 'str';

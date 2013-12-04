@@ -23,13 +23,6 @@ if (!$bloc->load($bloc_id) && count($blocs_list)) {
   $bloc = reset($blocs_list);
 }
 
-// Chargement de la liste du personnel pour le reveil
-$personnels = array();
-if (CModule::getActive("dPpersonnel")) {
-  $personnel  = new CPersonnel();
-  $personnels = $personnel->loadListPers("reveil");
-}
-
 // Vérification de la check list journalière
 $daily_check_lists = array();
 $daily_check_list_types = array();
@@ -42,6 +35,29 @@ if ($require_check_list) {
     $require_check_list = false;
   }
 }
+
+// Chargement de la liste du personnel pour le reveil
+$personnels = array();
+if (CModule::getActive("dPpersonnel")) {
+  $type_personnel = array("reveil");
+  if (count($daily_check_list_types) && $require_check_list) {
+    $type_personnel = array();
+    foreach ($daily_check_list_types as $check_list_type) {
+      $type_personnel[] = $check_list_type->type_validateur;
+    }
+  }
+
+  $personnel  = new CPersonnel();
+  $personnels = $personnel->loadListPers(array_unique(array_values($type_personnel)));
+}
+
+// Chargement des praticiens
+$listChirs = new CMediusers();
+$listChirs = $listChirs->loadPraticiens(PERM_DENY);
+
+// Chargement des anesths
+$listAnesths = new CMediusers();
+$listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -57,6 +73,8 @@ $smarty->assign("hour"                 , $hour);
 $smarty->assign("modif_operation"      , $modif_operation);
 $smarty->assign("blocs_list"           , $blocs_list);
 $smarty->assign("bloc"                 , $bloc);
+$smarty->assign("listChirs"            , $listChirs);
+$smarty->assign("listAnesths"          , $listAnesths);
 $smarty->assign("isImedsInstalled"     , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 
 $smarty->display("vw_reveil.tpl");

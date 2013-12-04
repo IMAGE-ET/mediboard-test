@@ -151,6 +151,8 @@ printDossier = function(sejour_id, operation_id) {
         {{mb_include module=salleOp template=inc_edit_check_list
           check_list=$check_list
           check_item_categories=$check_list->_ref_list_type->_ref_categories
+          list_chirs=$listChirs
+          list_anesths=$listAnesths
           personnel=$personnels}}
       </td>
     {{/foreach}}

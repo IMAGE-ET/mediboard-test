@@ -117,6 +117,10 @@ Main.add(Control.Tabs.create.curry("list_type_tabs", true));
             </td>
           </tr>
           <tr>
+            <th>{{mb_label object=$list_type field="type_validateur"}}</th>
+            <td>{{mb_field object=$list_type field="type_validateur"}}</td>
+          </tr>
+          <tr>
             <th>{{mb_label object=$list_type field="description"}}</th>
             <td>{{mb_field object=$list_type field="description"}}</td>
           </tr>

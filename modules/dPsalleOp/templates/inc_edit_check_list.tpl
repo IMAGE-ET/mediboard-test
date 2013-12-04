@@ -217,6 +217,7 @@ Main.add(function(){
         <label for="validator_id" style="display: none;">{{tr}}CDailyCheckList-validator_id{{/tr}}</label>
         <select name="validator_id" class="notNull ref" style="width: 10em;">
           <option value="" disabled="disabled" selected="selected">&mdash; Validateur</option>
+          {{assign var=type_validateur value='|'|explode:$check_list->_ref_list_type->type_validateur}}
 
           {{if $check_list->object_class == "COperation"}}
             <optgroup label="Praticiens">
@@ -227,7 +228,7 @@ Main.add(function(){
               {{/if}}
             </optgroup>
           {{else}}
-            {{if $list_chirs}}
+            {{if $list_chirs && (in_array("chir", $type_validateur) || ($check_list->object_class != "CSalle" && $check_list->object_class != "CBlocOperatoire"))}}
               <optgroup label="Chirurgiens">
                 {{foreach from=$list_chirs item=_user}}
                   <option value="{{$_user->_id}}" {{if $app->user_id == $_user->_id}}selected="selected"{{/if}}>
@@ -237,7 +238,7 @@ Main.add(function(){
               </optgroup>
             {{/if}}
 
-            {{if $list_anesths}}
+            {{if $list_anesths && (in_array("anesth", $type_validateur) || ($check_list->object_class != "CSalle" && $check_list->object_class != "CBlocOperatoire"))}}
               <optgroup label="Anesthésistes">
                 {{foreach from=$list_anesths item=_user}}
                   <option value="{{$_user->_id}}" {{if $app->user_id == $_user->_id}}selected="selected"{{/if}}>
@@ -247,12 +248,21 @@ Main.add(function(){
               </optgroup>
             {{/if}}
           {{/if}}
-
           <optgroup label="Personnel">
-            {{foreach from=$personnel item=curr_personnel}}
-              {{assign var=curr_user value=$curr_personnel->_ref_user}}
-              <option value="{{$curr_user->_id}}" {{if $app->user_id == $curr_user->_id}}selected="selected"{{/if}}>{{$curr_user->_view}}</option>
-            {{/foreach}}
+            {{if $check_list->object_class == "CSalle" || $check_list->object_class == "CBlocOperatoire"}}
+              {{assign var=type_validateur value='|'|explode:$check_list->_ref_list_type->type_validateur}}
+              {{foreach from=$personnel item=curr_personnel}}
+                {{if in_array($curr_personnel->emplacement, $type_validateur)}}
+                  {{assign var=curr_user value=$curr_personnel->_ref_user}}
+                  <option value="{{$curr_user->_id}}" {{if $app->user_id == $curr_user->_id}}selected="selected"{{/if}}>{{$curr_user->_view}}</option>
+                {{/if}}
+              {{/foreach}}
+            {{else}}
+              {{foreach from=$personnel item=curr_personnel}}
+                {{assign var=curr_user value=$curr_personnel->_ref_user}}
+                <option value="{{$curr_user->_id}}" {{if $app->user_id == $curr_user->_id}}selected="selected"{{/if}}>{{$curr_user->_view}}</option>
+              {{/foreach}}
+            {{/if}}
           </optgroup>
         </select>
         <label for="_validator_password" style="display: none;">{{tr}}CDailyCheckList-_validator_password{{/tr}}</label>

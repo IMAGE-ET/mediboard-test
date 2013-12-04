@@ -1319,6 +1319,21 @@ class CSetupdPsalleOp extends CSetup {
     $this->makeRevision("0.53");
     self::addDefaultConfig("dPsalleOp COperation use_sortie_reveil_reel");
 
-    $this->mod_version = "0.54";
+    $this->makeRevision("0.54");
+    $query = "ALTER TABLE `daily_check_list_type`
+                ADD `type_validateur` TEXT;";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.55");
+    $query = "UPDATE `daily_check_list_type` SET
+                `type_validateur` = 'chir|anesth|op|op_panseuse|iade|sagefemme|manipulateur'
+                WHERE `object_class` = 'CSalle'";
+    $this->addQuery($query);
+    $query = "UPDATE `daily_check_list_type` SET
+                `type_validateur` = 'reveil'
+                WHERE `object_class` = 'CBlocOperatoire'";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.56";
   }
 }
