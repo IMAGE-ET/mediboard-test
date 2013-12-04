@@ -11,7 +11,7 @@
 
 /**
  * The CRPU class
- * Résumé de Passage aux Urgences
+ * Rï¿½sumï¿½ de Passage aux Urgences
  */
 class CRPU extends CMbObject {
   // DB Table key
@@ -259,7 +259,7 @@ class CRPU extends CMbObject {
       $this->_ref_consult->countDocItems();
     }
 
-    // Récupération du libellé de la circonstance si actif dans la configuration
+    // Rï¿½cupï¿½ration du libellï¿½ de la circonstance si actif dans la configuration
     if (CAppUI::conf("dPurgences gerer_circonstance")) {
       $this->getCirconstance();
     }
@@ -274,7 +274,7 @@ class CRPU extends CMbObject {
   }
 
   /**
-   * Chargement du séjour
+   * Chargement du sï¿½jour
    *
    * @return CSejour
    */
@@ -283,7 +283,7 @@ class CRPU extends CMbObject {
     $sejour = $this->loadFwdRef("sejour_id", true);
     $sejour->loadRefsFwd();
 
-    // Calcul des temps d'attente et présence
+    // Calcul des temps d'attente et prï¿½sence
     $entree = CMbDT::time($sejour->_entree);
     $this->_presence = CMbDT::subTime($entree, CMbDT::time());
 
@@ -403,7 +403,7 @@ class CRPU extends CMbObject {
     $sejour->destination = $this->_destination;
     $sejour->transport   = $this->_transport;
     $sejour->UHCD        = $this->_UHCD;
-    // Le patient est souvent chargé à vide ce qui pose problème
+    // Le patient est souvent chargï¿½ ï¿½ vide ce qui pose problï¿½me
     // dans le onAfterStore(). Ne pas supprimer.
     $sejour->_ref_patient = null;
 
@@ -417,10 +417,22 @@ class CRPU extends CMbObject {
     return null;
   }
 
+
+
   /**
    * @see parent::store()
    */
   function store() {
+    // CrÃ©ation du RPU en l'associant Ã  un sÃ©jour existant
+    if (!$this->_id && $this->sejour_id) {
+      $sejour = $this->loadRefSejour();
+      // Si y'a un RPU dï¿½jï¿½ existant on alerte d'une erreur
+      if ($sejour->countBackRefs("rpu")) {
+        return CAppUI::tr("CRPU-already-exists");
+      }
+    }
+
+    // CrÃ©ation du RPU ET du sÃ©jour associÃ©
     if (!$this->_id && !$this->sejour_id) {
       $sejour                = new CSejour();
       $sejour->patient_id    = $this->_patient_id;
@@ -433,16 +445,15 @@ class CRPU extends CMbObject {
         CMbDT::date(null, $this->_entree)." 23:59:59";
       $sejour->sortie_prevue = $this->_sortie ? $this->_sortie : $sortie_prevue;
 
-      // En cas de ressemblance à quelques heures près (cas des urgences), on a affaire au même séjour
+      // En cas de ressemblance ï¿½ quelques heures prï¿½s (cas des urgences), on a affaire au mï¿½me sï¿½jour
       $siblings = $sejour->getSiblings(CAppUI::conf("dPurgences sibling_hours"), $sejour->type);
       if (count($siblings)) {
         $sibling = reset($siblings);
         $this->sejour_id = $sibling->_id;
         $sejour = $this->loadRefSejour();
-        $sejour->loadRefRPU();
 
-        // Si y'a un RPU déjà existant on alerte d'une erreur
-        if ($sejour->_ref_rpu->_id) {
+        // Si y'a un RPU dï¿½jï¿½ existant on alerte d'une erreur
+        if ($sejour->countBackRefs("rpu")) {
           return CAppUI::tr("CRPU-already-exists");
         }
 
@@ -457,7 +468,7 @@ class CRPU extends CMbObject {
       }
     }
 
-    // Changement suivant le mode d'entrée
+    // Changement suivant le mode d'entrï¿½e
     switch ($this->_mode_entree) {
       case 6:
         $this->_etablissement_entree_id = "";
@@ -491,7 +502,7 @@ class CRPU extends CMbObject {
       $this->loadRefMotif();
       $this->diag_infirmier = $this->_ref_motif->_ref_chapitre->nom;
       $this->diag_infirmier .= "\n".$this->code_diag.": ".$this->_ref_motif->nom;
-      $this->diag_infirmier .= "\n Degrés d'urgence entre ".$this->_ref_motif->degre_min." et ".$this->_ref_motif->degre_max;
+      $this->diag_infirmier .= "\n Degrï¿½s d'urgence entre ".$this->_ref_motif->degre_min." et ".$this->_ref_motif->degre_max;
     }
 
     // Bind affectation
@@ -506,7 +517,7 @@ class CRPU extends CMbObject {
       return $msg;
     }
 
-    // Déclenchement pour avoir les données RPU
+    // Dï¿½clenchement pour avoir les donnï¿½es RPU
     // Pas de sycnhro dans certains cas
     $this->_ref_sejour->_no_synchro = true;
     $this->_ref_sejour->notify("AfterStore");
@@ -560,7 +571,7 @@ class CRPU extends CMbObject {
 
     // Duplication des champs de la consultation
     $template->addProperty("RPU - Consultation - Praticien nom"    , $this->_ref_consult->_ref_praticien->_user_first_name);
-    $template->addProperty("RPU - Consultation - Praticien prénom" , $this->_ref_consult->_ref_praticien->_user_last_name);
+    $template->addProperty("RPU - Consultation - Praticien prï¿½nom" , $this->_ref_consult->_ref_praticien->_user_last_name);
     $template->addProperty("RPU - Consultation - Motif"            , $this->_ref_consult->motif);
     $template->addProperty("RPU - Consultation - Remarques"        , $this->_ref_consult->rques);
     $template->addProperty("RPU - Consultation - Examen"           , $this->_ref_consult->examen);
@@ -572,16 +583,16 @@ class CRPU extends CMbObject {
     $template->addProperty("RPU - Motif"                        , $this->motif);
     $template->addProperty("RPU - CCMU"                         , $this->getFormattedValue("ccmu"));
     $template->addProperty("RPU - Code GEMSA"                   , $this->getFormattedValue("gemsa"));
-    $template->addDateTimeProperty("RPU - Départ Radio"         , $this->radio_debut);
+    $template->addDateTimeProperty("RPU - Dï¿½part Radio"         , $this->radio_debut);
     $template->addDateTimeProperty("RPU - Retour Radio"         , $this->radio_fin);
-    $template->addDateTimeProperty("RPU - Dépôt Biologie"       , $this->bio_depart);
-    $template->addDateTimeProperty("RPU - Réception Biologie"   , $this->bio_retour);
-    $template->addDateTimeProperty("RPU - Attente spécialiste"  , $this->specia_att);
-    $template->addDateTimeProperty("RPU - Arrivée spécialiste"  , $this->specia_arr);
+    $template->addDateTimeProperty("RPU - Dï¿½pï¿½t Biologie"       , $this->bio_depart);
+    $template->addDateTimeProperty("RPU - Rï¿½ception Biologie"   , $this->bio_retour);
+    $template->addDateTimeProperty("RPU - Attente spï¿½cialiste"  , $this->specia_att);
+    $template->addDateTimeProperty("RPU - Arrivï¿½e spï¿½cialiste"  , $this->specia_arr);
     $template->addProperty("RPU - Accident du travail"          , $this->getFormattedValue("date_at"));
     $libelle_at = $this->date_at ? "Accident du travail du " . $this->getFormattedValue("date_at") : "";
-    $template->addProperty("RPU - Libellé accident du travail"  , $libelle_at);
-    $template->addProperty("RPU - Sortie autorisée"             , $this->getFormattedValue("sortie_autorisee"));
+    $template->addProperty("RPU - Libellï¿½ accident du travail"  , $libelle_at);
+    $template->addProperty("RPU - Sortie autorisï¿½e"             , $this->getFormattedValue("sortie_autorisee"));
 
     $lit = new CLit;
     if ($this->box_id) {
