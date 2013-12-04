@@ -430,6 +430,16 @@ class CRPU extends CMbObject {
    * @see parent::store()
    */
   function store() {
+    // Création du RPU en l'associant à un séjour existant
+    if (!$this->_id && $this->sejour_id) {
+      $sejour = $this->loadRefSejour();
+      // Si y'a un RPU déjà existant on alerte d'une erreur
+      if ($sejour->countBackRefs("rpu")) {
+        return CAppUI::tr("CRPU-already-exists");
+      }
+    }
+
+    // Création du RPU ET du séjour associé
     if (!$this->_id && !$this->sejour_id) {
       $sejour                = new CSejour();
       $sejour->patient_id    = $this->_patient_id;
@@ -448,10 +458,9 @@ class CRPU extends CMbObject {
         $sibling = reset($siblings);
         $this->sejour_id = $sibling->_id;
         $sejour = $this->loadRefSejour();
-        $sejour->loadRefRPU();
 
         // Si y'a un RPU déjà existant on alerte d'une erreur
-        if ($sejour->_ref_rpu->_id) {
+        if ($sejour->countBackRefs("rpu")) {
           return CAppUI::tr("CRPU-already-exists");
         }
 
