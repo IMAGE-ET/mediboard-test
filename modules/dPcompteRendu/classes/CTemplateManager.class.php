@@ -18,6 +18,7 @@ class CTemplateManager {
 
   public $sections      = array();
   public $helpers       = array();
+  public $allLists      = array();
   public $lists         = array();
   public $graphs        = array();
   public $textes_libres = array();
@@ -568,8 +569,9 @@ class CTemplateManager {
     $where[] = $compte_rendu->_spec->ds->prepare("`compte_rendu_id` IS NULL OR compte_rendu_id = %", $compte_rendu_id);
     $order = "nom ASC";
     $lists = new CListeChoix();
-    $lists = $lists->loadList($where, $order);
-    foreach ($lists as $list) {
+    $this->allLists = $lists->loadList($where, $order);
+
+    foreach ($this->allLists as $list) {
       /** @var CListeChoix $list */
       $this->addList($list->nom);
     }

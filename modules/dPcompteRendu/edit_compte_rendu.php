@@ -73,7 +73,7 @@ else {
   
   // A partir d'un pack
   if ($pack_id) {
-    $pack = new CPack;
+    $pack = new CPack();
     $pack->load($pack_id);
     
     $pack->loadContent();
@@ -178,17 +178,7 @@ $templateManager->loadHelpers($user->_id, $compte_rendu->object_class, $curr_use
 $templateManager->loadLists($user->_id);
 $templateManager->applyTemplate($compte_rendu);
 
-$where = array();
-$where[] = "(
-  user_id = '$user->_id' OR 
-  function_id = '$user->function_id' OR 
-  group_id = '{$user->_ref_function->group_id}'
-)";
-$order = "user_id, function_id, group_id";
-$userLists = new CListeChoix();
-$userLists = $userLists->loadList($where, $order);
-/** @var $userLists CListeChoix[] */
-$lists = $templateManager->getUsedLists($userLists);
+$lists = $templateManager->getUsedLists($templateManager->allLists);
 
 // Afficher le bouton correpondant si on détecte un élément de publipostage
 $isCourrier = $templateManager->isCourrier();
@@ -210,7 +200,7 @@ $read_only = $compte_rendu->_is_locked || !$compte_rendu->_can->edit;
 if ($compte_rendu->_is_locked) {
   $templateManager->printMode = true;
 }
-if($compte_rendu->_id && !$compte_rendu->canEdit()) {
+if ($compte_rendu->_id && !$compte_rendu->canEdit()) {
   $templateManager->printMode = true;
 }
 
@@ -301,10 +291,7 @@ else {
   // Charger le document précédent et suivant
   $prevnext = array();
   if ($compte_rendu->_id) {
-    $object = new $compte_rendu->object_class;
-    $object->load($compte_rendu->object_id);
     $object->loadRefsDocs();
-    
     $prevnext = CMbArray::getPrevNextKeys($object->_ref_documents, $compte_rendu->_id);
   }
   

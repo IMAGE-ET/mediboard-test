@@ -283,10 +283,12 @@ class CCompteRendu extends CDocumentItem {
     $this->_view = $this->object_id ? "" : "Modèle : ";
     $this->_view.= $this->nom;
 
-    $modele = $this->loadModele();
+    if ($this->object_id) {
+      $modele = $this->loadModele();
 
-    if ($modele->_id && $modele->purgeable) {
-      $this->_view = "[temp] " . $this->_view;
+      if ($modele->_id && $modele->purgeable) {
+        $this->_view = "[temp] " . $this->_view;
+      }
     }
 
     if ($this->object_id && $this->fields_missing) {
@@ -434,7 +436,7 @@ class CCompteRendu extends CDocumentItem {
    * @return CCompteRendu
    */
   function loadModele() {
-    return $this->_ref_modele = $this->loadFwdRef("modele_id");
+    return $this->_ref_modele = $this->loadFwdRef("modele_id", true);
   }
 
   /**
@@ -447,6 +449,32 @@ class CCompteRendu extends CDocumentItem {
   }
 
   /**
+   * Charge l'utilisateur associé au modèle
+   *
+   * @return
+   */
+  function loadRefUser() {
+    return $this->_ref_user = $this->loadFwdRef("user_id", true);
+  }
+
+  /**
+   * Charge la fonction associée au modèle
+   *
+   * @return CFunctions
+   */
+  function loadRefFunction() {
+    return $this->_ref_function = $this->loadFwdRef("function_id", true);
+  }
+
+  /**
+   * Charge l'établissement associé au modèle
+   *
+   */
+  function loadRefGroup() {
+    return $this->_ref_group = $this->loadFwdRef("group_id", true);
+  }
+
+  /**
    * @see parent::loadRefsFwd()
    */
   function loadRefsFwd() {
@@ -455,44 +483,29 @@ class CCompteRendu extends CDocumentItem {
     $object = $this->_ref_object;
 
     // Utilisateur
-    $this->_ref_user = new CMediusers();
     if ($this->user_id) {
-      $this->_ref_user->load($this->user_id);
+      $this->loadRefUser();
     }
     elseif ($this->object_id) {
       switch ($this->object_class) {
         case "CConsultation" :
-          /** @var $object CConsultation */
-          $plage = $object->loadRefPlageConsult();
-          $this->_ref_user->load($plage->chir_id);
+        case "CSejour":
+        case "COperation":
+          $this->_ref_user = $object->loadRefPraticien();
           break;
         case "CConsultAnesth" :
-          /** @var $object CConsultAnesth */
-          $plage = $object->loadRefConsultation()->loadRefPlageConsult();
-          $this->_ref_user->load($plage->chir_id);
-          break;
-        case "COperation" :
-          /** @var $object COperation */
-          $this->_ref_user->load($object->chir_id);
-          break;
-        case "CSejour" :
-          /** @var $object CSejour */
-          $this->_ref_user->load($object->praticien_id);
-          break;
+          $this->_ref_user = $object->loadRefConsultation()->loadRefPraticien();
       }
+    }
+    else {
+      $this->_ref_user = new CMediusers();
     }
 
     // Fonction
-    $this->_ref_function = new CFunctions;
-    if ($this->function_id) {
-      $this->_ref_function->load($this->function_id);
-    }
+    $this->loadRefFunction();
 
     // Etablissement
-    $this->_ref_group = new CGroups();
-    if ($this->group_id) {
-      $this->_ref_group->load($this->group_id);
-    }
+    $this->loadRefGroup();
   }
 
   /**
@@ -537,7 +550,7 @@ class CCompteRendu extends CDocumentItem {
           $where[] = $where1;
         }
       }
-      $resultDoc = new CCompteRendu;
+      $resultDoc = new CCompteRendu();
       $documents = $resultDoc->loadList($where, $order);
     }
     return $documents;
@@ -1058,10 +1071,7 @@ class CCompteRendu extends CDocumentItem {
       "CConsultAnesth", "CConsultation",
       "COperation", "CPatient", "CSejour"
     );
-    /*$all_classes = array(
-      "CBloodSalvage", "CConsultAnesth", "CConsultation", "CDossierMedical", "CRPU",
-      "CFunctions", "CGroups", "CMediusers", "COperation", "CPatient", "CSejour"
-    );*/
+
     if (CModule::getActive("dPprescription")) {
       $all_classes[] = "CPrescription";
     }
