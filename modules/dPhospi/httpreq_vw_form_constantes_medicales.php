@@ -57,6 +57,7 @@ $constantes = new CConstantesMedicales();
 $constantes->load($const_id);
 $constantes->loadRefContext();
 $constantes->loadRefPatient();
+$constantes->updateFormFields(); // Pour forcer le chargement des unités lors de la saisie d'une nouvelle constante
 
 if ($context) {
   $constantes->patient_id    = $patient_id;
