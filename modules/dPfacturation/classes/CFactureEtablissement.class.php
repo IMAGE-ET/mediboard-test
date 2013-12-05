@@ -40,6 +40,7 @@ class CFactureEtablissement extends CFacture {
     $backProps["relance_fact_etab"]    = "CRelance object_id";
     $backProps["facture_liaison_etab"] = "CFactureLiaison facture_id";
     $backProps["journal_liaison_etab"] = "CJournalLiaison object_id";
+    $backProps["echeance_etab"]        = "CEcheance object_id";
     return $backProps;
   }
   

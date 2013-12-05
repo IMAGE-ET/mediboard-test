@@ -368,6 +368,22 @@ class CSetupdPfacturation extends CSetup {
                 )
                 GROUP BY f.facture_id;";
     $this->addQuery($query);
-    $this->mod_version = "0.39";
+    $this->makeRevision("0.39");
+
+    $query = "CREATE TABLE `facture_echeance` (
+                `echeance_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `object_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                `object_class` ENUM ('CFactureCabinet','CFactureEtablissement') NOT NULL DEFAULT 'CFactureCabinet',
+                `date` DATE NOT NULL,
+                `montant` DECIMAL (10,2) NOT NULL DEFAULT '0',
+                `description` TEXT
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `facture_echeance`
+                ADD INDEX (`object_id`),
+                ADD INDEX (`date`);";
+    $this->addQuery($query);
+    $this->mod_version = "0.40";
   }
 }
