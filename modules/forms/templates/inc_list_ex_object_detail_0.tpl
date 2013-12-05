@@ -7,12 +7,11 @@
       {{/if}}
 
       {{if $ex_classes_creation|@count}}
-        <select onchange="ExObject.showExClassFormSelect(this, '{{$self_guid}}')" style="width: 22em;">
+        <select onchange="ExObject.showExClassFormSelect.defer(this, '{{$self_guid}}')" style="width: 22em;">
           <option value=""> &ndash; Remplir nouveau formulaire </option>
           {{foreach from=$ex_classes_creation item=_ex_class_events key=_ex_class_id}}
             {{if $_ex_class_events|@count > 1}}
               <optgroup label="{{$ex_classes.$_ex_class_id}}">
-
                 {{foreach from=$_ex_class_events item=_ex_class_event}}
                   <option value="{{$_ex_class_event->ex_class_id}}"
                           data-reference_class="{{$reference_class}}"
