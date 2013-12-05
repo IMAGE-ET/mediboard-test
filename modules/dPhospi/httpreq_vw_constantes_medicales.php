@@ -204,7 +204,6 @@ if ($context && $selected_context_guid !== 'all') {
   $constantes->context_class = $context->_class;
   $constantes->context_id = $context->_id;
   $constantes->loadRefContext();
-  $constantes->updateFormFields();
 }
 
 $whereOr = array();

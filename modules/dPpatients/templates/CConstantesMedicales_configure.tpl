@@ -24,7 +24,7 @@
   Main.add(function(){
     Configuration.edit(
       'dPpatients',
-      ['CGroups', 'CService CGroups.group_id', 'CFunctions CGroups.group_id'],
+      ['CService CGroups.group_id', 'CFunctions CGroups.group_id', 'CGroups'],
       'configuration-CConstantesMedicales'
     );
   });

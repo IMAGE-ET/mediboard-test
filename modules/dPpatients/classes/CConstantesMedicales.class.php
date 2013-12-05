@@ -699,13 +699,15 @@ class CConstantesMedicales extends CMbObject {
       return;
     }
 
+    $group = CGroups::loadCurrent();
+
     foreach (self::$list_constantes as $_constant => &$_params) {
       if (empty($_params["unit_config"])) {
         continue;
       }
 
       $unit_config = $_params["unit_config"];
-      $unit = CAppUI::conf("dPpatients CConstantesMedicales $unit_config", CGroups::loadCurrent());
+      $unit = CAppUI::conf("dPpatients CConstantesMedicales $unit_config", $group);
 
       if ($unit == $_params["orig_unit"]) {
         continue;
@@ -926,6 +928,8 @@ class CConstantesMedicales extends CMbObject {
    * @see parent::updateFormFields()
    */
   function updateFormFields() {
+    static $unite_config = array();
+
     parent::updateFormFields();
 
     $this->loadRefPatient();
@@ -969,19 +973,27 @@ class CConstantesMedicales extends CMbObject {
       $this->_vst = (($this->_ref_patient->sexe != 'm') ? 65 : 70) * $this->poids;
     }
 
-    $this->_unite_ta = CAppUI::conf('dPpatients CConstantesMedicales unite_ta', CGroups::loadCurrent());
-    $this->_unite_glycemie = CAppUI::conf('dPpatients CConstantesMedicales unite_glycemie', CGroups::loadCurrent());
-    $this->_unite_cetonemie = CAppUI::conf('dPpatients CConstantesMedicales unite_cetonemie', CGroups::loadCurrent());
+    if (empty($unite_config)) {
+      $group = CGroups::loadCurrent();
+
+      $unite_config["unite_ta"]        = CAppUI::conf('dPpatients CConstantesMedicales unite_ta',        $group);
+      $unite_config["unite_glycemie"]  = CAppUI::conf('dPpatients CConstantesMedicales unite_glycemie',  $group);
+      $unite_config["unite_cetonemie"] = CAppUI::conf('dPpatients CConstantesMedicales unite_cetonemie', $group);
+    }
+
+    $this->_unite_ta        = $unite_config["unite_ta"];
+    $this->_unite_glycemie  = $unite_config["unite_glycemie"];
+    $this->_unite_cetonemie = $unite_config["unite_cetonemie"];
 
     foreach (self::$list_constantes as $_constant => &$_params) {
       // Conversion des unités
-      if (isset($_params["unit_config"])) {
+      if (isset($_params["unit_config"]) && !self::$unit_conversion) {
         $_unit_config = '_' . $_params["unit_config"];
         $unit = $this->$_unit_config;
 
         $_params_ref = &CConstantesMedicales::$list_constantes[$_constant];
         //$_params_ref["orig_unit"] = $_params_ref["unit"];
-        if ($unit != $_params_ref["orig_unit"] && !self::$unit_conversion) {
+        if ($unit != $_params_ref["orig_unit"]) {
           $conv = $_params["conversion"][$unit];
 
           $_params_ref["unit"]      = $unit;
