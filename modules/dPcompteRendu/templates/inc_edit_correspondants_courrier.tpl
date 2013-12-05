@@ -60,7 +60,8 @@
           <button type="button" class="add notext" style="float: left;"
           onclick="Correspondant.edit(0, '{{$patient->_id}}', openCorrespondants.curry('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}', 0))"></button>
           {{tr}}CCorrespondantPatient{{/tr}}
-        {{else}}
+        {{/if}}
+        {{if $_class == "CMedecin"}}
           <div style="float: left">
             <button type="button" class="add notext"
               onclick="Medecin.edit()"></button>
