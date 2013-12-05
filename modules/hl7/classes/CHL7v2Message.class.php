@@ -289,9 +289,9 @@ class CHL7v2Message extends CHMessage {
 
     $version = $this->getVersion();
 
-    if (isset(self::$schemas[$version][$type][$name][$extension])) {
+    /*if (isset(self::$schemas[$version][$type][$name][$extension])) {
       return self::$schemas[$version][$type][$name][$extension];
-    }
+    }*/
 
     if (!in_array($version, self::$versions)) {
       $this->error(CHL7v2Exception::VERSION_UNKNOWN, $version);

@@ -205,9 +205,9 @@ class CHPrim21Message extends CHMessage {
   function getSchema($type, $name) {
     $version = $this->getVersion();
 
-    if (isset(self::$schemas[$version][$type][$name][$this->type])) {
+    /*if (isset(self::$schemas[$version][$type][$name][$this->type])) {
       return self::$schemas[$version][$type][$name][$this->type];
-    }
+    }*/
 
     if (!in_array($version, self::$versions)) {
       $this->error(CHL7v2Exception::VERSION_UNKNOWN, $version);
