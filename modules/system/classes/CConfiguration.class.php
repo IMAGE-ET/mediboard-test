@@ -31,6 +31,8 @@ class CConfiguration extends CMbMetaObject {
   private static $values = array();
   private static $hosts = array();
 
+  private static $dirty = null;
+
   /**
    * @see parent::getSpec()
    */
@@ -207,10 +209,14 @@ class CConfiguration extends CMbMetaObject {
    * @return bool True if the values cache is out of date
    */
   static protected function _isValuesCacheDirty($date) {
+    if (self::$dirty === false) {
+      return false;
+    }
+
     $model_status = self::getModelCacheStatus($date);
 
     if ($model_status !== self::STATUS_OK) {
-      return true;
+      return self::$dirty = true;
     }
 
     $spec = self::_getSpec();
@@ -218,8 +224,8 @@ class CConfiguration extends CMbMetaObject {
     $status_result = $spec->ds->loadHash("SHOW TABLE STATUS LIKE '{$spec->table}'");
 
     // database or model were updated
-    return $date <= $status_result["Update_time"] ||
-           $date <= self::_getModelCacheDate();
+    return self::$dirty = $date <= $status_result["Update_time"] ||
+                          $date <= self::_getModelCacheDate();
   }
 
   /**
@@ -347,6 +353,8 @@ class CConfiguration extends CMbMetaObject {
         )
       );
     }
+
+    self::$dirty = false;
   }
 
   /**
