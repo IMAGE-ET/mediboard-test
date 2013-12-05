@@ -162,6 +162,10 @@ class CAideSaisie extends CMbObject {
         case "CTransmissionMedicale":
           $this->_class_dp_2 = "CCategoryPrescription";
           break;
+        case "CObservationResult":
+          $this->_class_dp_1 = "CObservationValueType";
+          $this->_class_dp_2 = "CObservationValueUnit";
+          break;
       }
       $this->loadViewDependValues($object);
     }
@@ -289,10 +293,10 @@ class CAideSaisie extends CMbObject {
         $key = "depend_value_".($i+1);
         if (is_numeric($this->$key)) {
           $key_class = "_class_dp_".($i+1);
-          $object = new $this->$key_class;
-          $object->load($this->$key);
+          $object_helped = new $this->$key_class;
+          $object_helped->load($this->$key);
           $key_field = "_vw_depend_field_".($i+1);
-          $this->$key_field = $object->_view;
+          $this->$key_field = $object_helped->_view;
         }
       }
     }

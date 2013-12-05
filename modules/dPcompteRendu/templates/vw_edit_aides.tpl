@@ -151,7 +151,7 @@ function changeUser(user_id) {
               {{assign var=obj_class_dp value="$object_class_dp"}}
               <input type="hidden" name="_ref_class_depend_value_{{$i}}" value="{{$obj_class_dp}}" />
               <input type="text" name="_depend_value_{{$i}}_view" value="{{$aide->$key_view}}" />
-              <button type="button" class="search notext" onclick="ObjectSelector.init()"></button>
+              <button type="button" class="search notext" onclick="ObjectSelector.init{{$i}}()"></button>
               <script type="text/javascript">
                 Main.add(function(){
                   var form = getForm("editAides");
@@ -171,7 +171,7 @@ function changeUser(user_id) {
                     }
                   });
                 });
-                ObjectSelector.init = function(){  
+                ObjectSelector.init{{$i}} = function(){
                   this.sForm     = "editAides";
                   this.sView     = "keywords_dp{{$i}}";
                   this.sClass    = "_ref_class_depend_value_{{$i}}";

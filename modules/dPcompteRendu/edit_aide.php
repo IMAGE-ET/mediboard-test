@@ -116,6 +116,20 @@ if (!$aide->_id) {
     /*case "cab":*/   $aide->function_id = CAppUI::$user->function_id; //break;
     /*case "group":*/ $aide->group_id = $group->_id;
   //}
+
+  /** @var CMbObject $_obj */
+
+  if ($class_depend_value_1) {
+    $_obj = new $class_depend_value_1;
+    $_obj->load($depend_value_1);
+    $aide->_vw_depend_field_1 = $_obj->_view;
+  }
+
+  if ($class_depend_value_2) {
+    $_obj = new $class_depend_value_2;
+    $_obj->load($depend_value_2);
+    $aide->_vw_depend_field_2 = $_obj->_view;
+  }
 }
 
 $fields = array(
