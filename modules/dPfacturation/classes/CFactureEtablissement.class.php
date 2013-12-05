@@ -104,6 +104,15 @@ class CFactureEtablissement extends CFacture {
     $this->_ref_reglements = $this->loadBackRefs("reglements_fact_etab", 'date');
     return parent::loadRefsReglements($cache);
   }
+
+  /**
+   * Chargement des échéances de la facture
+   *
+   * @return CEcheance[]
+  **/
+  function loadRefsEcheances() {
+    return $this->_ref_echeances = $this->loadBackRefs("echeance_etab", "date");
+  }
   
   /**
    * Fonction permettant de partir d'un numero de reference de retrouver la facture correspondante

@@ -122,6 +122,8 @@ class CFacture extends CMbObject {
   public $_ref_actes_ccam   = array();
   /** @var CDebiteur[] */
   public $_ref_debiteurs;
+  /** @var CEcheance[] */
+  public $_ref_echeances;
 
   /**
    * @see parent::getBackProps()
@@ -1006,6 +1008,26 @@ class CFacture extends CMbObject {
       $first   = !count($this->_ref_relances) && CMbDT::daysRelative($this->cloture, $date) >= $nb_first_relance;
       $seconde = count($this->_ref_relances) == 1 && CMbDT::daysRelative($this->_ref_last_relance->date, $date) >= $nb_second_relance;
       $third   = count($this->_ref_relances) == 2 && CMbDT::daysRelative($this->_ref_last_relance->date, $date) >= $nb_third_relance;
+
+      if (CAppUI::conf("dPfacturation CReglement use_echeancier")) {
+        $this->loadRefsEcheances();
+        $num_echeance = 0;
+        foreach ($this->_ref_echeances as $echeance) {
+          $num_echeance +=1;
+          switch ($num_echeance) {
+            case 1 :
+              $first = $first && CMbDT::daysRelative($echeance->date, $date) >= $nb_first_relance;
+              break;
+            case 2 :
+              $seconde = $seconde && CMbDT::daysRelative($echeance->date, $date) >= $nb_second_relance;
+              break;
+            case 3 :
+              $third = $third && CMbDT::daysRelative($echeance->date, $date) >= $nb_third_relance;
+              break;
+          }
+        }
+      }
+
       if ($first || $seconde || $third) {
         $this->_is_relancable = true;
       }

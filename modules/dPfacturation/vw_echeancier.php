@@ -14,17 +14,11 @@ $facture_class = CValue::getOrSession("facture_class");
 
 $facture = new $facture_class;
 $facture->load($facture_id);
-
-$echeance = new CEcheance();
-$echeance->object_id    = $facture_id;
-$echeance->object_class = $facture_class;
-$echeances = $echeance->loadMatchingList();
+$facture->loadRefsEcheances();
 
 // Creation du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("echeance" , $echeance);
-$smarty->assign("echeances", $echeances);
 $smarty->assign("facture"  , $facture);
 
 $smarty->display("vw_echeancier.tpl");

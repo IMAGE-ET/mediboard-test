@@ -132,4 +132,14 @@ class CFactureCabinet extends CFacture {
     $this->isRelancable();
     return $this->_ref_relances;
   }
+
+  /**
+   * Chargement des échéances de la facture
+   *
+   * @return CEcheance[]
+   **/
+  function loadRefsEcheances() {
+    return $this->_ref_echeances = $this->loadBackRefs("echeance_cab", "date");
+  }
+
 }
