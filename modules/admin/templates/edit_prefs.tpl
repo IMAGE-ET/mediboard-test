@@ -1,11 +1,11 @@
 {{*
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage admin
  * @author     SARL OpenXtrem
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  *}}
 
 {{mb_script module=admin script=preferences  ajax=true}}
@@ -68,7 +68,7 @@
                   {{tr}}User template{{/tr}} :
                   <br />
                   {{if $can->edit && $prof->_id}}
-                    <a href="?m={{$m}}&amp;tab=edit_prefs&amp;user_id={{$prof->_id}}" class="button edit">{{$prof}}/a>
+                    <a href="?m={{$m}}&amp;tab=edit_prefs&amp;user_id={{$prof->_id}}" class="button edit">{{$prof}}</a>
                   {{else}}
                     {{if $prof->_id}}{{$prof}}{{else}}{{tr}}None{{/tr}}{{/if}}
                   {{/if}}
