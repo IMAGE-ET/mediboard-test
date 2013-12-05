@@ -70,7 +70,7 @@ PlageConsultSelector = {
         $V(oForm["chir_id_"+iterator], consult.chir_id);
         $V(oForm["consult_id_"+iterator], consult.consult_id);
         $V(oForm["cancel_"+iterator], consult.is_cancelled);
-        $V(oForm["_consult"+iterator], consult._chirview+" le "+DateFormat.format(new Date(consult.date), "d/M/yyyy")+" à "+consult.heure);
+        $V(oForm["_consult"+iterator], consult._chirview+" le "+DateFormat.format(new Date(consult.date), "dd/MM/yyyy")+" à "+consult.heure);
         if ($V(oForm["_consult"+iterator])) {
           $("place_reca_"+iterator).show();
         }
@@ -98,7 +98,7 @@ PlageConsultSelector = {
     }
     $V(oForm.annule          , is_cancelled);
     $V(oForm[this.sHeure]          , heure);
-    $V(oForm[this.sDate]           , DateFormat.format(new Date(date), "d/M/yyyy"));
+    $V(oForm[this.sDate]           , DateFormat.format(new Date(date), "dd/MM/yyyy"));
     $V(oForm[this.sPlageconsult_id], plage_id, true);
   },
 
