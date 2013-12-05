@@ -1010,7 +1010,7 @@ class CConstantesMedicales extends CMbObject {
         continue;
       }
 
-      if (isset($_params["formfields"])) {
+      if (isset($_params["unit_config"])) {
         $form_field_unite = '_' . $_params["unit_config"];
         $conv = self::getConv($_constant, $this->$form_field_unite);
 
