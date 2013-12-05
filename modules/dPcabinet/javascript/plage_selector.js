@@ -98,7 +98,7 @@ PlageConsultSelector = {
     }
     $V(oForm.annule          , is_cancelled);
     $V(oForm[this.sHeure]          , heure);
-    $V(oForm[this.sDate]           , DateFormat.format(new Date(date), "dd/MM/yyyy"));
+    $V(oForm[this.sDate]           , (date.indexOf(" ") !== -1) ? date : DateFormat.format(new Date(date), "dd/MM/yyyy"));
     $V(oForm[this.sPlageconsult_id], plage_id, true);
   },
 
