@@ -230,7 +230,20 @@ SupervisionGraph = {
       label = point.label;
     }
 
-    return "<big style='font-weight:bold'>"+label+"</big>"+
-        "<hr />"+item.series.label+"<br />" + printf("%02d:%02d:%02d", date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+    var d = printf(
+      "%02d/%02d %02d:%02d:%02d",
+      date.getUTCDate(),
+      date.getUTCMonth()+1,
+      date.getUTCHours(),
+      date.getUTCMinutes(),
+      date.getUTCSeconds()
+    );
+
+    return  "<big style='font-weight:bold'>#{value}</big><hr />#{label}<br />#{date}<br />#{user}".interpolate({
+      value: label,
+      label: item.series.label,
+      date: d,
+      user: point.user
+    });
   }
 };

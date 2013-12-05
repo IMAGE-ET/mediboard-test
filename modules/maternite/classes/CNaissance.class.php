@@ -33,18 +33,22 @@ class CNaissance extends CMbObject {
   public $fausse_couche;
   public $rques;
 
-  // DB References
+  /** @var COperation */
   public $_ref_operation;
+
+  /** @var CGrossesse */
   public $_ref_grossesse;
+
+  /** @var CSejour */
   public $_ref_sejour_enfant;
+
+  /** @var CSejour */
   public $_ref_sejour_maman;
 
   public $_eai_initiateur_group_id;
 
   /**
-   * Initialize object specification
-   *
-   * @return CMbObjectSpec the spec
+   * @see parent::getSpec()
    */
   function getSpec() {
     $spec = parent::getSpec();
@@ -54,9 +58,7 @@ class CNaissance extends CMbObject {
   }
 
   /**
-   * Get properties specifications as strings
-   *
-   * @return array
+   * @see parent::getProps()
    */
   function getProps() {
     $props = parent::getProps();
@@ -74,9 +76,7 @@ class CNaissance extends CMbObject {
   }
 
   /**
-   * Check all properties according to specification
-   *
-   * @return string Store-like message
+   * @see parent::check()
    */
   function check() {
     if ($msg = parent::check()) {
@@ -103,9 +103,7 @@ class CNaissance extends CMbObject {
   }
 
   /**
-   * Update the form (derived) fields plain fields
-   *
-   * @return void
+   * @see parent::updateFormFields()
    */
   function updateFormFields() {
     parent::updateFormFields();
@@ -121,10 +119,7 @@ class CNaissance extends CMbObject {
   }
 
   /**
-   * Forward references global loader
-   *
-   * @deprecated out of control resouce consumption
-   * @return void
+   * @see parent::loadRefsFwd()
    */
   function loadRefsFwd() {
     $this->loadRefOperation();

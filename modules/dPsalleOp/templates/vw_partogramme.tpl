@@ -172,7 +172,7 @@
         </tr>
         {{/if}}
       </table>
-      
+
     </td>
     <td class="halfPane">
       <table width="100%" style="font-size: 100%;">
@@ -292,10 +292,46 @@
       </table>
     </td>
   </tr>
+
+  {{if $sejour->grossesse_id}}
+    <tr>
+      <th colspan="2" class="category">
+        {{tr}}CGrossesse{{/tr}}
+      </th>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$sejour->_ref_grossesse field=terme_prevu}}</th>
+      <td>{{mb_value object=$sejour->_ref_grossesse field=terme_prevu}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$sejour->_ref_grossesse field=rques}}</th>
+      <td>{{mb_value object=$sejour->_ref_grossesse field=rques}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$sejour->_ref_grossesse field=datetime_debut_travail}}</th>
+      <td>{{mb_value object=$sejour->_ref_grossesse field=datetime_debut_travail}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$sejour->_ref_grossesse field=datetime_accouchement}}</th>
+      <td>{{mb_value object=$sejour->_ref_grossesse field=datetime_accouchement}}</td>
+    </tr>
+  {{/if}}
 </table>
 
 <script type="text/javascript">
   Main.add(function(){
+
+    var xTickFormatter = function (val, axis) {
+      var date = new Date(val);
+      return printf(
+        "%02d/%02d <strong>%02d:%02d</strong>",
+        date.getUTCDate(),
+        date.getUTCMonth(),
+        date.getUTCHours(),
+        date.getUTCMinutes()
+      );
+    };
+
     (function ($){
       var ph, series, xaxes;
 
@@ -307,6 +343,7 @@
           series = {{$_graph_data.series|@json}};
           xaxes  = {{$_graph_data.xaxes|@json}};
           xaxes[0].ticks = 10;
+          xaxes[0].tickFormatter = xTickFormatter;
 
           $.plot(ph, series, {
             grid: { markings: [
@@ -332,6 +369,11 @@
 {{assign var=width value=700}}
 {{assign var=font_size value=15}}
 
+{{assign var=right_margin value=27}}
+{{assign var=yaxis_width value=80}}
+{{assign var=dummy_yaxis_width value=15}}
+{{math assign=left_col_width equation="$yaxes_count*$yaxis_width-$right_margin/2+$dummy_yaxis_width"}}
+
 <table class="main print">
   <tr>
     <th class="category" colspan="4">Surveillance</th>
@@ -344,11 +386,13 @@
             {{assign var=_graph_data value=$_graph->_graph_data}}
 
             <div class="yaxis-labels" style="height:{{$_graph->height}}px;">
-              {{foreach from=$_graph_data.yaxes|@array_reverse item=_yaxis}}
-                <div style="position: relative;">
-                  {{$_yaxis.label}}
-                  <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}&nbsp;</div>
-                </div>
+              {{foreach from=$_graph_data.yaxes|@array_reverse item=_yaxis name=_yaxis}}
+                {{if !$smarty.foreach._yaxis.last}}
+                  <div style="position: relative; color: {{$_yaxis.color}};">
+                    {{$_yaxis.label}}
+                    <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}&nbsp;</div>
+                  </div>
+                {{/if}}
               {{/foreach}}
               {{*<span class="title">{{$_graph_data.title}}</span>*}}
             </div>
@@ -356,7 +400,7 @@
 
           {{elseif $_graph instanceof CSupervisionTimedData}}
             <table class="main evenements" style="table-layout: fixed; width: {{$width-$font_size}}px; margin-bottom: -1px;">
-              <col style="width: {{$yaxes_count*78-$font_size}}px;" />
+              <col style="width: {{$left_col_width}}px;" />
 
               <tr>
                 <th style="word-wrap: break-word;">
@@ -382,7 +426,7 @@
 
           {{elseif $_graph instanceof CSupervisionTimedPicture}}
             <table class="main evenements" style="table-layout: fixed; width: {{$width-$font_size}}px; margin-bottom: -1px; height: 90px;">
-              <col style="width: {{$yaxes_count*78-$font_size}}px;" />
+              <col style="width: {{$left_col_width}}px;" />
 
               <tr>
                 <th style="word-wrap: break-word;">
@@ -411,7 +455,7 @@
         {{/foreach}}
 
         <table class="main evenements" style="table-layout: fixed; width: {{$width-$font_size}}px;">
-          <col style="width: {{$yaxes_count*78-$font_size}}px;" />
+          <col style="width: {{$left_col_width}}px;" />
 
           {{foreach from=$evenements key=_label item=_evenements}}
             <tr>

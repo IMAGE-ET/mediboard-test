@@ -9,6 +9,10 @@ Main.add(function(){
   var plothover = function (event, pos, item) {
     if (item) {
       var key = item.dataIndex+"-"+item.seriesIndex;
+      var yaxis = item.series.yaxis.n;
+
+      ph[0].select(".flot-y"+yaxis+"-axis, .flot-y"+yaxis+"-axis .flot-tick-label").invoke("addClassName", "axis-onhover");
+
       if (window.previousPoint != key) {
         window.previousPoint = key;
         jQuery("#flot-tooltip").remove();
@@ -23,6 +27,8 @@ Main.add(function(){
       }
     }
     else {
+      $$(".axis-onhover").invoke("removeClassName", "axis-onhover");
+
       jQuery("#flot-tooltip").remove();
       window.previousPoint = null;
     }
@@ -43,11 +49,13 @@ Main.add(function(){
 
 <div style="margin: 6px;">
   <div class="yaxis-labels">
-    {{foreach from=$data.yaxes|@array_reverse item=_yaxis}}
-      <div>
+    {{foreach from=$data.yaxes|@array_reverse item=_yaxis name=_yaxis}}
+      {{if !$smarty.foreach._yaxis.last}}
+      <div style="color: {{$_yaxis.color}};">
         {{$_yaxis.label}}
         <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}</div>
       </div>
+      {{/if}}
     {{/foreach}}
     {{*<span class="title">{{$data.title}}</span>*}}
   </div>

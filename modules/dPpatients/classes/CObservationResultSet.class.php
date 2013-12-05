@@ -109,6 +109,8 @@ class CObservationResultSet extends CMbObject {
     $request->addLJoin(
       array(
         "observation_result_set" => "observation_result_set.observation_result_set_id = observation_result.observation_result_set_id",
+        "user_log"               => "observation_result_set.observation_result_set_id = user_log.object_id AND user_log.object_class = 'CObservationResultSet' AND user_log.type = 'create'",
+        "users"                  => "users.user_id = user_log.user_id",
       )
     );
     $request->addWhere(
@@ -149,6 +151,8 @@ class CObservationResultSet extends CMbObject {
         "result_id" => $_result["observation_result_id"],
         "label_id"  => $_result["label_id"],
         "label"     => utf8_encode($label),
+        "user_id"   => $_result["user_id"],
+        "user"      => utf8_encode($_result["user_first_name"]." ".$_result["user_last_name"]),
       );
     }
     
@@ -163,23 +167,51 @@ class CObservationResultSet extends CMbObject {
    * @return array
    */
   static function getLimitTimes(COperation $interv) {
-    $time_min = $interv->entree_salle;
-    $time_max = CMbDT::time("+".CMbDT::minutesRelative("00:00:00", $interv->temp_operation)." MINUTES", $interv->entree_salle);
-
-    $date = CMbDT::date($interv->_datetime);
-
-    $time_debut_op_iso = "$date $time_min";
-    $time_fin_op_iso   = "$date $time_max";
-
-    $round_minutes = 10;
+    $round_minutes = 5;
     $round = $round_minutes * 60000; // FIXME
 
-    $time_min = floor(CMbDate::toUTCTimestamp("$date $time_min") / $round) * $round;
-    $time_max =  ceil(CMbDate::toUTCTimestamp("$date $time_max") / $round) * $round;
+    $sejour = $interv->loadRefSejour();
+
+    // Cas du partogramme
+    if ($sejour->grossesse_id) {
+      $grossesse = $sejour->loadRefGrossesse();
+
+      // Debut = debut travail OU entree salle
+      if ($grossesse->datetime_debut_travail) {
+        $time_debut_op_iso = $grossesse->datetime_debut_travail;
+      }
+      else {
+        $time_min = $interv->entree_salle;
+        $date = CMbDT::date($interv->_datetime);
+        $time_debut_op_iso = "$date $time_min";
+      }
+
+      // Fin = fin accouchement OU debut+1 heure OU maintenant
+      if ($grossesse->datetime_accouchement) {
+        $time_fin_op_iso = $grossesse->datetime_accouchement;
+      }
+      else {
+        $time_fin_op_iso = max(CMbDT::dateTime(), CMbDT::dateTime("+1 HOUR", $time_debut_op_iso));
+      }
+    }
+
+    // Cas d'une interv normale
+    else {
+      $time_min = $interv->entree_salle;
+      $time_max = CMbDT::time("+".CMbDT::minutesRelative("00:00:00", $interv->temp_operation)." MINUTES", $interv->entree_salle);
+
+      $date = CMbDT::date($interv->_datetime);
+
+      $time_debut_op_iso = "$date $time_min";
+      $time_fin_op_iso   = "$date $time_max";
+    }
+
+    $timestamp_min = floor(CMbDate::toUTCTimestamp($time_debut_op_iso) / $round) * $round;
+    $timestamp_max =  ceil(CMbDate::toUTCTimestamp($time_fin_op_iso  ) / $round) * $round;
 
     return array(
-      $time_min,
-      $time_max,
+      $timestamp_min,
+      $timestamp_max,
       $time_debut_op_iso,
       $time_fin_op_iso,
     );
@@ -247,14 +279,15 @@ class CObservationResultSet extends CMbObject {
         if (count($_graph->_graph_data["yaxes"]) < $yaxes_count) {
           $_graph->_graph_data["yaxes"] = array_pad(
             $_graph->_graph_data["yaxes"],
-            $yaxes_count, CSupervisionGraphAxis::$default_yaxis
+            $yaxes_count,
+            CSupervisionGraphAxis::$default_yaxis
           );
         }
       }
     }
 
     return array(
-      $graphs, $yaxes_count,
+      $graphs, $yaxes_count-1,
       $time_min, $time_max,
       $time_debut_op_iso, $time_fin_op_iso,
     );
@@ -269,13 +302,6 @@ class CObservationResultSet extends CMbObject {
    * @return CObservationResultSet[]
    */
   static function getChronological(COperation $interv, $pack_id) {
-    list (
-      $time_min,
-      $time_max,
-      $time_debut_op_iso,
-      $time_fin_op_iso,
-    ) = self::getLimitTimes($interv);
-
     $result_set = new self();
     $where = array(
       "observation_result_set.context_class" => "= '$interv->_class'",
@@ -289,6 +315,8 @@ class CObservationResultSet extends CMbObject {
     $pack = new CSupervisionGraphPack();
     $pack->load($pack_id);
     $graph_links = $pack->loadRefsGraphLinks();
+
+    $list_by_datetime = array();
 
     $graphs = array();
     foreach ($graph_links as $_gl) {
@@ -375,9 +403,10 @@ class CObservationResultSet extends CMbObject {
       }
 
       $grid[$_set->datetime] = $_row;
+      $list_by_datetime[$_set->datetime] = $_set;
     }
 
-    return array($list, $grid, $graphs, $labels);
+    return array($list, $grid, $graphs, $labels, $list_by_datetime);
   }
 
   static function buildEventsGrid(COperation $interv, $time_debut_op_iso, $time_fin_op_iso, $time_min , $time_max) {

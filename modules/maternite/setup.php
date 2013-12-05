@@ -124,6 +124,12 @@ class CSetupmaternite extends CSetup {
       ADD INDEX (`group_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.12";
+    $this->makeRevision("0.12");
+    $query = "ALTER TABLE `grossesse`
+                ADD `datetime_debut_travail` DATETIME,
+                ADD `datetime_accouchement` DATETIME;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.13";
   }
 }

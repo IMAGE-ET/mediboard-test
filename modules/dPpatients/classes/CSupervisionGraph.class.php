@@ -97,7 +97,7 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
         "position" => "bottom", 
         "min"      => $time_min, 
         "max"      => $time_max,
-        "ticks"    => 20, // FIXME
+        "ticks"    => 10, // FIXME
       )),
       "series" => array(),
       "title"  => $this->title,
@@ -105,7 +105,16 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
     
     $_axes = $this->loadRefsAxes();
 
-    $yaxis_i = 1;
+    // Dummy axis
+    $graph["yaxes"][] = array(
+      "position"     => "left",
+      "labelWidth"   => 1,
+      "reserveSpace" => true,
+      "label" => "",
+    );
+
+    $yaxis_i = 2;
+
     foreach ($_axes as $_axis) {
       $graph_yaxis = $_axis->getAxisForFlot(count($graph["yaxes"]));
     
@@ -118,6 +127,10 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
         foreach ($_series as $_serie) {
           $_series_data = $_serie->initSeriesData($yaxis_i);
           $_unit_id = ($_serie->value_unit_id ? $_serie->value_unit_id : "none");
+
+          if (!$graph_yaxis["color"]) {
+            $graph_yaxis["color"] = "#$_serie->color";
+          }
 
           if (!isset($results[$_serie->value_type_id][$_unit_id])) {
             continue;
@@ -164,6 +177,10 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
         foreach ($_series as $_serie) {
           $_series_data = $_serie->initSeriesData($yaxis_i);
           $_unit_id = ($_serie->value_unit_id ? $_serie->value_unit_id : "none");
+
+          if (!$graph_yaxis["color"]) {
+            $graph_yaxis["color"] = "#$_serie->color";
+          }
 
           if (!isset($results[$_serie->value_type_id][$_unit_id])) {
             continue;

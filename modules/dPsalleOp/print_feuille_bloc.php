@@ -89,9 +89,15 @@ $time_fin_op = null;
 $yaxes_count = null;
 $grid = array();
 $labels = array();
+$list_obr = array();
 
 if (CAppUI::conf("dPsalleOp enable_surveillance_perop")) {
-  list($list, $grid, $graphs, $labels) = CObservationResultSet::getChronological($operation, $operation->graph_pack_id);
+  /** @var CObservationResultSet[] $list_obr */
+  list($list, $grid, $graphs, $labels, $list_obr) = CObservationResultSet::getChronological($operation, $operation->graph_pack_id);
+
+  foreach ($list_obr as $_obr) {
+    $_obr->loadFirstLog()->loadRefUser()->loadRefMediuser()->loadRefFunction();
+  }
 }
 
 // Création du template
@@ -106,5 +112,6 @@ $smarty->assign("time_debut_op", $time_debut_op);
 $smarty->assign("time_fin_op"  , $time_fin_op);
 $smarty->assign("observation_grid", $grid);
 $smarty->assign("observation_labels", $labels);
+$smarty->assign("observation_list", $list_obr);
 
 $smarty->display("print_feuille_bloc.tpl");

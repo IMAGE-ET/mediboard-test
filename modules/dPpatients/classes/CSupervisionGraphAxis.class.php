@@ -43,6 +43,7 @@ class CSupervisionGraphAxis extends CMbObject {
     "label"        => "",
     "symbolChar"   => "",
     "axis_id"      => null,
+    "color"        => null,
   );
 
   static $_symbol_chars = array(

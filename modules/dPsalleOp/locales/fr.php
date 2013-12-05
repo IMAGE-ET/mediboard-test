@@ -516,6 +516,7 @@ $locales['mod-dPsalleOp-tab-vw_daily_check_traceability'] = 'Traçabilité Checkli
 $locales['mod-dPsalleOp-tab-vw_dmi'] = 'DMI';
 $locales['mod-dPsalleOp-tab-vw_interv_non_cotees'] = 'Saisie des cotations';
 $locales['mod-dPsalleOp-tab-vw_operations'] = 'Salle d\'opération';
+$locales['mod-dPsalleOp-tab-vw_partogramme'] = 'Impression surveillance';
 $locales['mod-dPsalleOp-tab-vw_reveil'] = 'SSPI';
 $locales['mod-dPsalleOp-tab-vw_signature_actes'] = 'Bilan des actes';
 $locales['mod-dPsalleOp-tab-vw_soins_reveil'] = 'Soins SSPI';

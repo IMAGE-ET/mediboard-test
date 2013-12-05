@@ -384,9 +384,14 @@ Main.add(function(){
         <th>{{$_label}}</th>
       {{/foreach}}
     </tr>
-    {{foreach from=$observation_grid item=_row key=_datetime}}
+    {{foreach from=$observation_grid item=_row key=_datetime name=_observation_grid}}
       <tr>
-        <td class="narrow" style="white-space: nowrap;">{{$_datetime|date_format:$conf.datetime}}</td>
+        <td class="narrow" style="white-space: nowrap;">
+          {{$_datetime|date_format:$conf.datetime}}<br />
+
+          {{assign var=_obr value=$observation_list.$_datetime}}
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_obr->_ref_first_log->_ref_user->_ref_mediuser}}
+        </td>
 
         {{foreach from=$_row item=_cell}}
           <td>

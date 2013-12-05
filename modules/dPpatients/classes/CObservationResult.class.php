@@ -61,7 +61,7 @@ class CObservationResult extends CMbObject {
     $props["observation_result_set_id"] = "ref notNull class|CObservationResultSet";
     $props["value_type_id"]             = "ref notNull class|CObservationValueType";
     $props["unit_id"]                   = "ref class|CObservationValueUnit";
-    $props["value"]                     = "str notNull";
+    $props["value"]                     = "str notNull helped|value_type_id|unit_id";
     $props["method"]                    = "str";
     $props["status"]                    = "enum list|C|D|F|I|N|O|P|R|S|U|W|X default|F";
     $props["file_id"]                   = "ref class|CFile";

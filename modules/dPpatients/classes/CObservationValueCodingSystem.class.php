@@ -24,9 +24,9 @@ class CObservationValueCodingSystem extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["code"]          = "str notNull";
-    $props["label"]         = "str notNull";
-    $props["desc"]          = "str";
+    $props["code"]          = "str notNull seekable";
+    $props["label"]         = "str notNull seekable";
+    $props["desc"]          = "str seekable";
     $props["coding_system"] = "str notNull";
     return $props;
   }

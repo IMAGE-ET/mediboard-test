@@ -1,11 +1,20 @@
+{{assign var=right_margin value=27}}
+{{assign var=yaxis_width value=80}}
+{{assign var=dummy_yaxis_width value=15}}
+{{math assign=left_col_width equation="$yaxes_count*$yaxis_width-$right_margin/2+$dummy_yaxis_width"}}
+
 <script>
 window.previousPoint = null;
 plothover = function (event, pos, item) {
   if (item) {
     var key = item.dataIndex+"-"+item.seriesIndex;
+
     if (window.previousPoint != key) {
       window.previousPoint = key;
       jQuery("#flot-tooltip").remove();
+
+      var yaxis = item.series.yaxis.n;
+      event.target.select(".flot-y"+yaxis+"-axis, .flot-y"+yaxis+"-axis .flot-tick-label").invoke("addClassName", "axis-onhover");
 
       var contents = SupervisionGraph.formatTrack(item);
       
@@ -17,6 +26,8 @@ plothover = function (event, pos, item) {
     }
   }
   else {
+    $$(".axis-onhover").invoke("removeClassName", "axis-onhover");
+
     jQuery("#flot-tooltip").remove();
     window.previousPoint = null;
   }
@@ -31,7 +42,18 @@ Main.add(function(){
 
   $$(".graph-placeholder").invoke("setStyle", {width: width+"px"});
 
-  $$(".supervision .evenements").invoke("setStyle", {width: (width-12)+"px"});
+  $$(".supervision .evenements").invoke("setStyle", {width: (width-{{$right_margin}})+"px"});
+
+  var xTickFormatter = function (val, axis) {
+    var date = new Date(val);
+    return printf(
+      "%02d/%02d <strong>%02d:%02d</strong>",
+      date.getUTCDate(),
+      date.getUTCMonth()+1,
+      date.getUTCHours(),
+      date.getUTCMinutes()
+    );
+  };
   
   (function ($){
     var ph, series, xaxes;
@@ -44,12 +66,7 @@ Main.add(function(){
         series = {{$_graph_data.series|@json}};
         xaxes  = {{$_graph_data.xaxes|@json}};
         xaxes[0].ticks = 10;
-
-        {{if false && !$smarty.foreach.graphs.last}}
-          xaxes[0].tickFormatter = function(){return " "};
-          xaxes[0].labelHeight = 0;
-          //xaxes[0].show = false;
-        {{/if}}
+        xaxes[0].tickFormatter = xTickFormatter;
 
         ph.bind("plothover", plothover);
         ph.bind("plotclick", function(event, pos, item){
@@ -59,7 +76,6 @@ Main.add(function(){
 
           var data = item.series.data[item.dataIndex];
           editObservationResultSet(data.set_id, '{{$pack->_id}}', data.result_id);
-          //console.log(data);
         });
 
         var plot = $.plot(ph, series, {
@@ -103,13 +119,6 @@ printSurveillance = function(operation_id) {
 </script>
 
 {{assign var=images value="CPrescription"|static:"images"}}
-{{assign var=width value=800}}
-
-{{*
-<div class="small-warning">
-  Cette vue est en cours de développement et n'est qu'un aperçu. 
-</div>
-*}}
 
 <table class="main tbl">
   <tr>
@@ -198,6 +207,55 @@ printSurveillance = function(operation_id) {
 <hr />
 *}}
 
+{{if "maternite"|module_active && $interv->_ref_sejour->grossesse_id}}
+  {{assign var=_grossesse value=$interv->_ref_sejour->loadRefGrossesse()}}
+
+  <table class="main layout">
+    <tr>
+      <td class="narrow">
+        <form name="edit-grossesse-accouchement-{{$_grossesse->_id}}-datetime_debut_travail" method="post" onsubmit="return onSubmitFormAjax(this)">
+          <input type="hidden" name="m" value="maternite"/>
+          <input type="hidden" name="dosql" value="do_grossesse_aed" />
+          <input type="hidden" name="callback" value="reloadSurveillancePerop" />
+          {{mb_key object=$_grossesse}}
+
+          {{if $_grossesse->datetime_debut_travail}}
+            {{mb_label object=$_grossesse field=datetime_debut_travail}}
+            {{mb_field object=$_grossesse field=datetime_debut_travail register=true
+                       form="edit-grossesse-accouchement-`$_grossesse->_id`-datetime_debut_travail" onchange="this.form.onsubmit()"}}
+          {{else}}
+            <input type="hidden" name="datetime_debut_travail" value="now" />
+            <button type="submit" class="save">Début du travail</button>
+          {{/if}}
+        </form>
+
+        <form name="edit-grossesse-accouchement-{{$_grossesse->_id}}-datetime_accouchement" method="post" onsubmit="return onSubmitFormAjax(this)">
+          <input type="hidden" name="m" value="maternite"/>
+          <input type="hidden" name="dosql" value="do_grossesse_aed" />
+          <input type="hidden" name="callback" value="reloadSurveillancePerop" />
+          {{mb_key object=$_grossesse}}
+
+          {{if $_grossesse->datetime_accouchement}}
+            {{mb_label object=$_grossesse field=datetime_accouchement}}
+            {{mb_field object=$_grossesse field=datetime_accouchement register=true
+                       form="edit-grossesse-accouchement-`$_grossesse->_id`-datetime_accouchement" onchange="this.form.onsubmit()"}}
+          {{else}}
+            <input type="hidden" name="datetime_accouchement" value="now" />
+            <button type="submit" class="save">Accouchement terminé</button>
+          {{/if}}
+        </form>
+      </td>
+      {{*
+      <td class="narrow">
+        <button onclick="enChantier()" class="save">Entrée salle</button>
+        <button onclick="enChantier()" class="save">Sortie salle</button>
+      </td>
+      *}}
+    </tr>
+  </table>
+  <hr />
+{{/if}}
+
 {{if !$interv->graph_pack_id}}
   {{mb_return}}
 {{/if}}
@@ -213,18 +271,20 @@ printSurveillance = function(operation_id) {
     {{if $_graph instanceof CSupervisionGraph}}
       {{assign var=_graph_data value=$_graph->_graph_data}}
       <div class="yaxis-labels" style="height:{{$_graph->height}}px;">
-        {{foreach from=$_graph_data.yaxes|@array_reverse item=_yaxis}}
-          <div style="position: relative;">
+        {{foreach from=$_graph_data.yaxes|@array_reverse item=_yaxis name=_yaxis}}
+          {{if !$smarty.foreach._yaxis.last}}
+          <div style="position: relative; color: {{$_yaxis.color}};">
             {{$_yaxis.label}}
             <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}&nbsp;</div>
           </div>
+          {{/if}}
         {{/foreach}}
         {{*<span class="title">{{$_graph_data.title}}</span>*}}
       </div>
       <div id="placeholder-{{$i}}" style="height:{{$_graph->height}}px;" class="graph-placeholder"></div>
     {{elseif $_graph instanceof CSupervisionTimedData}}
       <table class="main evenements" style="table-layout: fixed; margin-bottom: -1px;">
-        <col style="width: {{$yaxes_count*78-12}}px;" />
+        <col style="width: {{$left_col_width}}px;" />
 
         <tr>
           <th style="word-wrap: break-word;">
@@ -250,7 +310,7 @@ printSurveillance = function(operation_id) {
       </table>
     {{elseif $_graph instanceof CSupervisionTimedPicture}}
       <table class="main evenements" style="table-layout: fixed; margin-bottom: -1px; height: 70px;">
-        <col style="width: {{$yaxes_count*78-12}}px;" />
+        <col style="width: {{$left_col_width}}px;" />
 
         <tr>
           <th style="word-wrap: break-word;">
@@ -281,7 +341,7 @@ printSurveillance = function(operation_id) {
   {{/foreach}}
   
   <table class="main evenements" style="table-layout: fixed;">
-    <col style="width: {{$yaxes_count*78-12}}px;" />
+    <col style="width: {{$left_col_width}}px;" />
     
     {{foreach from=$evenements key=_label item=_evenements}}
       <tr>

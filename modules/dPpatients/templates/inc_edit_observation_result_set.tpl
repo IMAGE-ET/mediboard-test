@@ -9,23 +9,28 @@
     // For IE8
     $$("div.outlined input").each(function(input){
       input.observe("click", function(){
-        input.form.select("div.outlined input.checked").invoke("removeClassName", "checked");
+        var form = input.form;
+
+        form.select("div.outlined input.checked").invoke("removeClassName", "checked");
         input.addClassName("checked");
 
-        var form = input.form;
         $V(form.elements.value, "FILE");
+        $V(form.elements.del, "0");
       });
     });
   });
 
   resetPicture = function(radio) {
-    $V(radio.form.elements.value,'');
-    $V(radio.form.elements.file_id,'');
+    var elements = radio.form.elements;
+    $V(elements.file_id,'');
+    $V(elements.del,'1');
     radio.form.select("div.outlined input.checked").invoke("removeClassName", "checked");
   };
 
   submitObservationResults = function(id, obj) {
-    var forms = $$(".result-form").filter(function(form){ return $V(form.elements.value) !== ""; });
+    var forms = $$(".result-form").filter(function(form){
+      return $V(form.elements.del) == 1 || $V(form.elements.value) !== "";
+    });
 
     forms.each(function(form){
       $V(form.observation_result_set_id, id);
@@ -43,7 +48,8 @@
       }
 
       return $$(".result-form").any(function(form){
-        return $V(form.elements.value) !== "";
+        // delete or has value
+        return $V(form.elements.del) == 1 || $V(form.elements.value) !== "";
       });
     };
 
@@ -96,6 +102,8 @@
 
         <form name="form-edit-observation-{{$uid_form}}" method="post" action="?"
               class="result-form" onsubmit="submitObservationResultSet(); return false;" data-result_id="{{$_result->_id}}">
+          <input type="hidden" name="del" value="0" />
+
           {{mb_class object=$_result}}
           {{mb_key object=$_result}}
           {{mb_field object=$_result field=value_type_id hidden=true}}
@@ -109,11 +117,11 @@
               <th>
                 <label for="value" title="{{$_value_type}}">{{$_result->_serie_title}}</label>
               </th>
-              <td>
+              <td style="width: 12em;">
                 {{if $_axis->_labels|@count}}
                   <input type="hidden" name="value" value="{{$_result->value}}" />
 
-                  <select name="label_id" onchange="$V(this.form.elements.value, this.selectedIndex ? this.options[this.selectedIndex].get('value') : '')">
+                  <select name="label_id" onchange="$V(this.form.elements.value, this.selectedIndex ? this.options[this.selectedIndex].get('value') : ''); if (this.selectedIndex) {$V(this.form.del, 0)}">
                     <option value="">&ndash; Valeur</option>
                     {{foreach from=$_axis->_ref_labels item=_label}}
                       <option
@@ -127,9 +135,15 @@
                 {{else}}
                   {{assign var=_prop value="float"}}
 
-                  {{mb_field object=$_result field=value prop="$_prop"}}
+                  {{mb_field object=$_result field=value prop="$_prop" onchange="\$V(this.form.del, (\$V(this)?0:1))"}}
                   {{$_result->_ref_value_unit->desc}}
                 {{/if}}
+              </td>
+              <td>
+                <button type="button" class="erase notext" tabindex="-1"
+                        onclick="$V(this.form.del,1); $V(this.form.label_id,''); $V(this.form.elements.value,''); ">
+                  {{tr}}Empty{{/tr}}
+                </button>
               </td>
             </tr>
           </table>
@@ -144,6 +158,7 @@
 
     <form name="form-edit-observation-{{$uid_form}}" method="post" action="?"
           class="result-form" onsubmit="submitObservationResultSet(); return false;" data-result_id="{{$_result->_id}}">
+      <input type="hidden" name="del" value="0" />
       {{mb_class object=$_result}}
       {{mb_key object=$_result}}
       {{mb_field object=$_result field=value_type_id hidden=true}}
@@ -153,7 +168,9 @@
       <table class="main form">
         <tr>
           <td>
-            {{mb_field object=$_result field=value style="width: 100%; box-sizing: border-box; -moz-box-sizing: border-box;"}}
+            {{mb_field object=$_result field=value prop="text helped|value_type_id|unit_id" form="form-edit-observation-$uid_form"
+              onchange="\$V(this.form.del, (\$V(this)?0:1))"
+              aidesaisie="validateOnBlur: 0, classDependField1: 'CObservationValueType', classDependField2: 'CObservationValueUnit'"}}
           </td>
         </tr>
       </table>
@@ -166,6 +183,7 @@
 
     <form name="form-edit-observation-{{$uid_form}}" method="post" action="?"
           class="result-form" onsubmit="submitObservationResultSet(); return false;" data-result_id="{{$_result->_id}}">
+      <input type="hidden" name="del" value="0" />
       {{mb_class object=$_result}}
       {{mb_key object=$_result}}
       {{mb_field object=$_result field=value_type_id hidden=true}}
@@ -173,6 +191,7 @@
       {{mb_field object=$_result field=value hidden=true}}
 
       <button type="button" class="cancel notext" onclick="resetPicture(this)"></button>
+
       {{foreach from=$_graph->_ref_files item=_file}}
         {{if !$_file->annule || $_file->_id == $_result->file_id}}
           <div class="outlined">

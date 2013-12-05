@@ -8,7 +8,7 @@
     Naissance.reloadNaissances('{{$operation->_id}}');
 
     {{if $conf.dPsalleOp.enable_surveillance_perop}}
-      Control.Tabs.create("tab-grossesse", false, {
+      Control.Tabs.create("tab-grossesse", true, {
         afterChange: function(container) {
           switch (container.id) {
             case "surveillance_perop":

@@ -29,6 +29,7 @@ foreach ($operation->_ref_actes_ccam as $keyActe => $valueActe) {
 $sejour =& $operation->_ref_sejour;
 $sejour->loadRefsFwd();
 $sejour->loadRefPrescriptionSejour();
+$sejour->loadRefGrossesse();
 
 list(
   $perop_graphs, $yaxes_count,

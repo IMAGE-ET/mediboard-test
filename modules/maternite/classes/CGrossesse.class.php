@@ -14,7 +14,7 @@
  * Gestion des grossesses d'une parturiente
  */
 
-class CGrossesse extends CMbObject{
+class CGrossesse extends CMbObject {
   // DB Table key
   public $grossesse_id;
   
@@ -33,13 +33,23 @@ class CGrossesse extends CMbObject{
   public $fausse_couche;
   public $rques;
 
-  // DB References
+  // Timings de l'accouchement, date+heure pour permettre les accouchements sur plusieurs jours (pas comme dans COperation)
+  public $datetime_debut_travail;
+  public $datetime_accouchement;
+
+  /** @var CPatient */
   public $_ref_parturiente;
-  
-  // Distant fields
+
+  /** @var CNaissance[] */
   public $_ref_naissances;
-  public $_ref_sejours     = array();
+
+  /** @var CSejour[] */
+  public $_ref_sejours = array();
+
+  /** @var CConsultation[] */
   public $_ref_consultations = array();
+
+  /** @var CConsultAnesth */
   public $_ref_last_consult_anesth;
   
   // Form fields
@@ -89,6 +99,10 @@ class CGrossesse extends CMbObject{
     $specs["lieu_accouchement"] = "enum list|sur_site|exte default|sur_site";
     $specs["fausse_couche"]     = "enum list|inf_15|sup_15";
     $specs["rques"]             = "text helped";
+
+    $specs["datetime_debut_travail"] = "dateTime";
+    $specs["datetime_accouchement"]  = "dateTime";
+
     $specs["_last_consult_id"]  = "ref class|CConsultation";
     return $specs;
   }
