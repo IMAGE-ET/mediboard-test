@@ -1042,6 +1042,8 @@ class CConstantesMedicales extends CMbObject {
    * @see parent::updatePlainFields()
    */
   function updatePlainFields() {
+    $group = CGroups::loadCurrent();
+
     foreach (self::$list_constantes as $_constant => &$_params) {
       // If field is a
       if ($this->$_constant === null && empty($_params["formfields"])) {
@@ -1050,7 +1052,14 @@ class CConstantesMedicales extends CMbObject {
 
       if (isset($_params["formfields"]) && isset($_params['conversion'])) {
         $form_field_unite = '_' . $_params["unit_config"];
-        $conv = self::getConv($_constant, $this->$form_field_unite);
+        $_unite = $this->$form_field_unite;
+
+        // Si le champ n'a pas de valeur, on regarde en config
+        if (!$_unite) {
+          $_unite = CAppUI::conf('dPpatients CConstantesMedicales '.$_params["unit_config"], $group);
+        }
+
+        $conv = self::getConv($_constant, $_unite);
 
         $_parts = array();
         $_empty = true;

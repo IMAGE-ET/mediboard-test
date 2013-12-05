@@ -206,6 +206,8 @@ if ($context && $selected_context_guid !== 'all') {
   $constantes->loadRefContext();
 }
 
+$constantes->updateFormFields(); // Pour forcer le chargement des unités lors de la saisie d'une nouvelle constante
+
 $whereOr = array();
 foreach ($constants_to_draw as $_cat => $_ranks) {
   foreach ($_ranks as $rank => $_constants) {
