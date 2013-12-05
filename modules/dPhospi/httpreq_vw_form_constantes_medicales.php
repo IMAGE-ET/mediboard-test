@@ -57,7 +57,6 @@ $constantes = new CConstantesMedicales();
 $constantes->load($const_id);
 $constantes->loadRefContext();
 $constantes->loadRefPatient();
-$constantes->updateFormFields();
 
 if ($context) {
   $constantes->patient_id    = $patient_id;
