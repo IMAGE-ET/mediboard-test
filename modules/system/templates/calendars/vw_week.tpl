@@ -48,7 +48,6 @@ Main.add(function() {
   $$('.minutes').each(function(elt) {
     elt.style.height = minutes_height;
   });
-
 });
 
 </script>
@@ -129,7 +128,7 @@ Main.add(function() {
             {{assign var=printable value=""}}
           {{/if}}
         {{/foreach}}
-        <tr class="hour-{{$_hour}} {{$printable}} {{if in_array($_hour, $planning->pauses)}}pause{{/if}}">
+        <tr class="hour_line hour-{{$_hour}} {{$printable}} {{if in_array($_hour, $planning->pauses)}}pause{{/if}}">
           <th class="hour">{{$_hour}}h</th>
           
           {{foreach from=$planning->days key=_day item=_events name=days}}
@@ -226,12 +225,15 @@ Main.add(function() {
 
                         <div id="{{$_event->internal_id}}"
                              class="event {{$draggable}} {{$resizable}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}} {{$_event->type}} {{if !$_event->important}}opacity-60{{/if}} {{if  isset($plageconsult_id|smarty:nodefaults) && $plageconsult_id == $_event->plage.id }}selected{{/if}}" 
-                             style="background-color:{{$_event->color}}; {{if $_event->type == 'consultation' || $_event->type == 'operation'}}text-align:center;{{/if}} {{if $_event->useHeight}}z-index:{{math equation="20+y" y=$_event->height}};{{/if}}"
-                             {{if $_event->type == "rdvfull"}}onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}')"{{/if}}
-                             {{if ($_event->type == "rdvfree" || $_event->type == "rdvfull") && !$_event->disabled}}
-                               onclick="setClose('{{$_event->start|date_format:"%H:%M:00"}}', '{{$_event->plage.id}}', '{{$_event->start|date_format:"%A %d/%m/%Y"}}', '{{$chir_id}}' {{if isset($_event->plage.consult_id|smarty:nodefaults)}}, '{{$_event->plage.consult_id}}'{{/if}});"
-                               data-plageconsult_id="{{$_event->plage.id}}"
-                             {{/if}}>
+                             style="
+                               background-color:{{$_event->color}};
+                              {{if $_event->type == 'consultation' || $_event->type == 'operation'}}text-align:center;{{/if}}
+                              {{if $_event->useHeight}}z-index:{{math equation="20+y" y=$_event->height}};{{/if}}"
+                            {{if $_event->type == "rdvfull"}}onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}')"{{/if}}
+                            {{if ($_event->type == "rdvfree" || $_event->type == "rdvfull") && !$_event->disabled}}
+                              onclick="setClose('{{$_event->start|date_format:"%H:%M:00"}}', '{{$_event->plage.id}}', '{{$_event->start|date_format:"%A %d/%m/%Y"}}', '{{$chir_id}}' {{if isset($_event->plage.consult_id|smarty:nodefaults)}}, '{{$_event->plage.consult_id}}'{{/if}});"
+                              data-plageconsult_id="{{$_event->plage.id}}"
+                            {{/if}}>
 
                             {{if $_event->offset_top}}
                               <div class="pause_before" style="height:{{math equation="(x*100)/y" x=$_event->offset_top y=$_event->length}}%; background: url('images/icons/ray.gif') #23425D; color:white; text-align: center; overflow: hidden">

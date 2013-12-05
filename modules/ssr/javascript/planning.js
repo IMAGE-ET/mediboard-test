@@ -259,7 +259,7 @@ WeekPlanning = Class.create({
     return this.rangesById[id];
   },
   countVisibleLines: function(){
-    return this.container.select(".week-container tr").filter(Element.visible).length;
+    return this.container.select(".week-container table tbody tr.hour_line").filter(Element.visible).length;
   },
   countPauses: function() {
     return this.container.select(".week-container tr.pause").length;
