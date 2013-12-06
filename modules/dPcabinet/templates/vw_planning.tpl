@@ -122,14 +122,33 @@ Main.add(function () {
         {{mb_include module=system template=calendars/vw_week}}
         <script type="text/javascript">
 
+          redirectRDV = function(plageconsult_id) {
+            var url = new Url('cabinet', 'edit_planning', 'tab');
+            url.addParam('consultation_id', 0);
+            url.addParam('plageconsult_id', plageconsult_id);
+            url.redirectOpener();
+          };
+
         Main.add(function() {
           ViewPort.SetAvlHeight("planning-plages", 1);
 
           var planning = window['planning-{{$planning->guid}}'];
 
+          // click on main div, refresh the consult_id
+          $(planning).events.each(function(elt) {
+            var target_element = $(elt.internal_id);
+            target_element.setStyle({'cursor': 'pointer'});
+            target_element.observe('click', function(event) {
+              if (event.element().hasClassName('event')) {
+                var button = target_element.down('.button.list');
+                showConsultations(button, elt.guid.split("-")[1]);
+              }
+            })
+          });
+
           planning.onMenuClick = function(event, plage, elem){
             if (event == 'list') {
-              showConsultations(elem,plage);
+              showConsultations(elem, plage);
             }
 
             if (event == 'edit') {
@@ -137,10 +156,7 @@ Main.add(function () {
             }
 
             if (event == 'clock') {
-              var url = new Url('cabinet', 'edit_planning', 'tab');
-              url.addParam('consultation_id', 0);
-              url.addParam('plageconsult_id', plage);
-              url.redirectOpener();
+              redirectRDV(plage);
             }
           };
 
