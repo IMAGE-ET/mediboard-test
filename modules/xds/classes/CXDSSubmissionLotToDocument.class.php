@@ -52,6 +52,7 @@ class CXDSSubmissionLotToDocument extends CMbMetaObject {
   function getProps() {
     $props = parent::getProps();
 
+    $props["object_id"]        = "ref notNull class|CMbObject meta|object_class cascade";
     $props["submissionlot_id"] = "ref class|CXDSSubmissionLot";
     $props["object_class"]     = "enum list|CCompteRendu|CFile notNull";
 
