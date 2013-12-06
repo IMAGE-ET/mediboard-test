@@ -390,10 +390,10 @@ class CHL7v3EventPRPA extends CHL7v3Event implements CHL7EventPRPA {
     $dom->addElement($name, "prefix", $civilite);
 
     if ($patient->_p_maiden_name) {
-      $family = $dom->addElement($name, "family", $patient->_p_maiden_name);
+      $family = $dom->addElement($name, "family", $patient->_p_last_name);
       $this->setQualifier($family, "SP");
 
-      $family = $dom->addElement($name, "family", $patient->_p_last_name);
+      $family = $dom->addElement($name, "family", $patient->_p_maiden_name);
       $this->setQualifier($family, "BR");
     }
     else {

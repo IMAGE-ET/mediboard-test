@@ -39,6 +39,7 @@ class CHL7v3EventXDSProvideAndRegisterDocumentSetRequest
 
     $factory = new CCDAFactory($object);
     $factory->old_version = $this->old_version;
+    $factory->old_id      = $this->old_id;
     $cda = $factory->generateCDA();
     try {
       CCdaTools::validateCDA($cda);

@@ -39,7 +39,7 @@ class CHL7v3MessageXML extends CMbXMLDocument {
   function __construct($encoding = "utf-8", $hl7v3_version = null) {
     parent::__construct($encoding);
 
-    $this->formatOutput  = true;
+    $this->formatOutput  = false;
     $this->hl7v3_version = $hl7v3_version;
   }
 
@@ -65,10 +65,10 @@ class CHL7v3MessageXML extends CMbXMLDocument {
   /**
    * Add element
    *
-   * @param string $elParent Parent element
-   * @param string $elName   Name
-   * @param string $elValue  Value
-   * @param string $elNS     Namespace
+   * @param DOMNode $elParent Parent element
+   * @param string  $elName   Name
+   * @param string  $elValue  Value
+   * @param string  $elNS     Namespace
    *
    * @return DOMElement
    */
