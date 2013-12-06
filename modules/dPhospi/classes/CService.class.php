@@ -390,4 +390,11 @@ class CService extends CMbObject {
 
     return str_replace('$g', $group_id, $tag_service);
   }
+
+  /**
+   * @see parent::getDynamicTag
+   */
+  function getDynamicTag() {
+    return CAppUI::conf("dPhospi tag_service");
+  }
 }

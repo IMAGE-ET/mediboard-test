@@ -1562,6 +1562,13 @@ class CMediusers extends CPerson {
   }
 
   /**
+   * @see parent::getDynamicTag
+   */
+  function getDynamicTag() {
+    return CAppUI::conf("mediusers tag_mediuser");
+  }
+
+  /**
    * Is the user a robot?
    *
    * @return bool

@@ -302,6 +302,13 @@ class CChambre extends CMbObject {
     
     return str_replace('$g', $group_id, $tag_chambre);
   }
+
+  /**
+   * @see parent::getDynamicTag
+   */
+  function getDynamicTag() {
+    return $this->conf("tag");
+  }
 }
 
 CChambre::$_prefixe = CAppUI::conf("dPhospi CChambre prefixe");

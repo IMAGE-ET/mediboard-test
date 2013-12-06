@@ -13,7 +13,7 @@
 /**
  * Class CHprimXML
  */
-class CHprimXML {
+class CHprimXML extends CMbObject {
   static $object_handlers = array(
     "CSipObjectHandler"     => "CSipHprimXMLObjectHandler",
     "CSmpObjectHandler"     => "CSmpHprimXMLObjectHandler",
@@ -50,5 +50,12 @@ class CHprimXML {
     }
     
     return str_replace('$g', $group_id, $tag_hprimxml);
-  } 
+  }
+
+  /**
+   * @see parent::getDynamicTag
+   */
+  function getDynamicTag() {
+    return $this->conf("tag_default");
+  }
 }

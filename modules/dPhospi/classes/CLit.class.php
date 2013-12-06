@@ -256,6 +256,13 @@ class CLit extends CMbObject {
     
     return str_replace('$g', $group_id, $tag_lit);
   }
+
+  /**
+   * @see parent::getDynamicTag
+   */
+  function getDynamicTag() {
+    return $this->conf("tag");
+  }
 }
 
 CLit::$_prefixe = CAppUI::conf("dPhospi CLit prefixe");

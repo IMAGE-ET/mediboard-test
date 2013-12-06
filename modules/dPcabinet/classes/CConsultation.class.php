@@ -2081,12 +2081,11 @@ class CConsultation extends CFacturable {
     return $praticiens;
   }
 
-
   /**
    * Construit le tag d'une consultation en fonction des variables de configuration
-   * 
+   *
    * @param string $group_id Permet de charger l'id externe d'uns consultation pour un établissement donné si non null
-   * 
+   *
    * @return string|null Nul si indisponible
    */
   static function getTagConsultation($group_id = null) {
@@ -2100,8 +2099,15 @@ class CConsultation extends CFacturable {
     if (!$group_id) {
       $group_id = $group->_id;
     }
-    
+
     return str_replace('$g', $group_id, $tag_consultation);
+  }
+
+  /**
+   * @see parent::getDynamicTag
+   */
+  function getDynamicTag() {
+    return $this->conf("tag");
   }
 
   /**

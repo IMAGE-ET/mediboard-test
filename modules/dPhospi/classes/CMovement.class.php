@@ -191,4 +191,11 @@ class CMovement extends CMbObject {
     
     return str_replace('$g', $group_id, $tag_movement);
   }
+
+  /**
+   * @see parent::getDynamicTag
+   */
+  function getDynamicTag() {
+    return $this->conf("tag");
+  }
 }
