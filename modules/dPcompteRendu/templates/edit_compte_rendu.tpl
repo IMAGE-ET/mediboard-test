@@ -536,13 +536,30 @@ Main.add(function() {
           <strong>Souhaitez-vous réellement verrouiller ce document sous votre nom ?</strong>
         </td>
       </tr>
+      {{if $conf.dPcompteRendu.CCompteRendu.pass_lock || $app->user_prefs.pass_lock}}
+        <tr>
+          <th>
+            <label for="user_password_owner">Mot de passe</label>
+          </th>
+          <td>
+            <input type="password" name="user_password_owner" class="notNull password str" />
+          </td>
+        </tr>
+      {{/if}}
       <tr>
         <td class="button" colspan="2">
-          <button type="button" class="tick" onclick="toggleLock('{{$curr_user->_id}}')">Ok</button>
+          <button type="button" class="tick" onclick="
+            {{if $conf.dPcompteRendu.CCompteRendu.pass_lock || $app->user_prefs.pass_lock}}
+              $V(this.form.user_password, $V(this.form.user_password_owner));
+              $V(this.form.user_id, '{{$curr_user->_id}}');
+              this.form.onsubmit();
+            {{else}}
+              toggleLock('{{$curr_user->_id}}');
+            {{/if}}">Ok</button>
           <button type="button" class="cancel"
                   onclick="$V(getForm('editFrm')._is_locked, 0, false);
                     $V(getForm('editFrm').___is_locked, 0, false);
-                    Control.Modal.close()">
+                    Control.Modal.close();">
             Annuler
           </button>
         </td>

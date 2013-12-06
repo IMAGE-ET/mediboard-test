@@ -941,6 +941,14 @@ class CSetupdPcompteRendu extends CSetup {
       ADD INDEX (`locker_id`)";
     $this->addQuery($query);
 
-    $this->mod_version = "0.95";
+    $this->makeRevision("0.95");
+    $query = "ALTER TABLE `compte_rendu`
+      ADD `type_doc` VARCHAR(128);";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.96");
+    $this->addPrefQuery("pass_lock", 0);
+
+    $this->mod_version = "0.97";
   }
 }

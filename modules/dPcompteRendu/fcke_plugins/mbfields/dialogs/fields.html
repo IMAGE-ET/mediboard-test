@@ -94,7 +94,11 @@
           var sHtml = "<span class='field'>" + string + "</span>&nbsp;";
         }
         else {
-          var sHtml = "<span class='field' contenteditable='false'>" + string + "</span>";
+          var className = "field";
+          if (string.match(/Meta Donn&eacute;es/)) {
+            className = 'metadata';
+          }
+          var sHtml = "<span class='" + className + "' contenteditable='false'>" + string + "</span>";
         }
         editor.focus();
         var elt = CKEDITOR.dom.element.createFromHtml(sHtml, editor.document);

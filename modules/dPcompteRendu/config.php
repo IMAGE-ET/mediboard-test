@@ -26,6 +26,7 @@ $dPconfig["dPcompteRendu"] = array (
     "dompdf_host" => "0",
     "days_to_lock" => array(
       "base" => "30",
-    )
+    ),
+    "pass_lock" => "0"
   ),
 );
