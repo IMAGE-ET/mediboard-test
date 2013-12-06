@@ -304,7 +304,10 @@ class CFTP {
       }
 
       $datetime = DateTime::createFromFormat($format, $datetime);
-      $date = $datetime->format("d-m-Y H:m");
+      $date = "";
+      if ($datetime) {
+        $date = $datetime->format("d-m-Y H:m");
+      }
 
       $fileInfo[] = array("type"  => $type,
                           "user"  => $user,
