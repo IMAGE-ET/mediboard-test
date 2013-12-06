@@ -127,7 +127,7 @@ class CCDAActCDA extends CCDADocumentCDA {
     $ed = new CCDAED();
     $ed->setMediaType($mediaType);
     $ed->setRepresentation("B64");
-    $ed->setData(base64_encode(file_get_contents($file->_file_path)));
+    $ed->setData(base64_encode(file_get_contents($file)));
 
     $nonXMLBody->setText($ed);
     return $nonXMLBody;
@@ -202,6 +202,11 @@ class CCDAActCDA extends CCDADocumentCDA {
     return $serviceEvent;
   }
 
+  /**
+   * Création du document parent
+   *
+   * @return CCDAPOCD_MT000040_ParentDocument
+   */
   function setParentDocument() {
     $parent = new CCDAPOCD_MT000040_ParentDocument();
     $ii = new CCDAII();

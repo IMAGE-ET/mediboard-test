@@ -62,11 +62,13 @@ class CCDADocumentCDA extends CCDAClasseCda{
     if (!$date) {
       return null;
     }
-    $timezone = new DateTimeZone(CAppUI::conf("timezone"));
-    $date     = new DateTime($date, $timezone);
     if ($naissance) {
+      $date = Datetime::createFromFormat("Y-m-d", $date);
       return $date->format("Ymd");
     }
+    $timezone = new DateTimeZone(CAppUI::conf("timezone"));
+    $date     = new DateTime($date, $timezone);
+
     return $date->format("YmdHisO");
   }
 
@@ -78,7 +80,7 @@ class CCDADocumentCDA extends CCDAClasseCda{
    * @return CCDAAD
    */
   function setAddress($user) {
-    $userCity =  $user->_p_country;
+    $userCity =  $user->_p_city;
     $userPostalCode = $user->_p_postal_code;
     $userStreetAddress = $user->_p_street_address;
 
@@ -88,12 +90,15 @@ class CCDADocumentCDA extends CCDAClasseCda{
       return $ad;
     }
 
-    $street = new CCDA_adxp_streetAddressLine();
-    $street->setData($userStreetAddress);
+    $addresses = preg_split("#[\t\n\v\f\r]+#", $userStreetAddress, -1, PREG_SPLIT_NO_EMPTY);
+    foreach ($addresses as $_addr) {
+      $street = new CCDA_adxp_streetAddressLine();
+      $street->setData($_addr);
+      $ad->append("streetAddressLine", $street);
+    }
+
     $street2 = new CCDA_adxp_streetAddressLine();
     $street2->setData($userPostalCode." ".$userCity);
-
-    $ad->append("streetAddressLine", $street);
     $ad->append("streetAddressLine", $street2);
 
     return $ad;

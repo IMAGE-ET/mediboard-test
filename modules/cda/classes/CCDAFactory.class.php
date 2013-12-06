@@ -45,6 +45,7 @@ class CCDAFactory {
   public $service_event = array();
   public $templateId = array();
   public $old_version;
+  public $old_id;
 
   /**
    * construct
@@ -122,14 +123,16 @@ class CCDAFactory {
     $mediaType = "application/pdf";
 
     if ($docItem instanceof CFile) {
-      $file = $docItem;
+      $path = $docItem->_file_path;
       switch ($docItem->file_type) {
-        case "text/plain":
-        case "image/jpeg":
         case "image/tiff":
+          $mediaType = "image/tiff";
+          break;
         case "application/pdf":
           $mediaType = $docItem->file_type;
+          $path = CCdaTools::generatePDFA($docItem->_file_path);
           break;
+        case "image/jpeg":
         case "image/jpg":
           $mediaType = "image/jpeg";
           break;
@@ -139,13 +142,15 @@ class CCDAFactory {
         default:
           $docItem->convertToPDF();
           $file = $docItem->loadPDFconverted();
+          $path = CCdaTools::generatePDFA($file->_file_path);
       }
     }
     else {
       $docItem->makePDFpreview(1, 0);
       $file = $docItem->_ref_file;
+      $path = CCdaTools::generatePDFA($file->_file_path);
     }
-    $this->file      = $file;
+    $this->file      = $path;
     $this->mediaType = $mediaType;
     $service["nullflavor"] = null;
 
@@ -155,7 +160,7 @@ class CCDAFactory {
 
         $dp = $object->DP;
         $service["time_start"] = $object->entree;
-        $service["time_stop"]  = $object->_sortie;
+        $service["time_stop"]  = $object->sortie;
         $service["executant"] = $object->loadRefPraticien();
         if ($dp) {
           $service["oid"]       = "2.16.840.1.113883.6.3";
@@ -226,7 +231,7 @@ class CCDAFactory {
 
     if ($this->old_version) {
       $oid = CMbOID::getOIDFromClass($docItem);
-      $this->old_version = "$oid.$this->old_version";
+      $this->old_version = "$oid.$this->old_id.$this->old_version";
     }
   }
 
@@ -242,7 +247,7 @@ class CCDAFactory {
     $xml = $cda->toXML("ClinicalDocument", "urn:hl7-org:v3");
     $xml->purgeEmptyElements();
     $this->dom_cda = $xml;
-    return $xml->saveXML($xml->documentElement);
+    return $xml->saveXML($xml);
   }
 
   /**

@@ -682,4 +682,23 @@ class CCdaTools {
     }
     return true;
   }
+
+  /**
+   * Generate a PDFA with a PDF
+   *
+   * @param String $path_input path
+   *
+   * @return String|null
+   */
+  static function generatePDFA($path_input) {
+    $path_output = tempnam("temp", "pdf");
+    $cmd = "gs -dPDFA -dBATCH -dNOPAUSE -dUseCIEColor -sProcessColorModel=DeviceCMYK -sDEVICE=pdfwrite -sOutputFile=$path_output -dPDFACompatibilityPolicy=1 $path_input";
+    $processorInstance = proc_open(escapeshellcmd($cmd), array(1 => array('pipe', 'w'), 2 => array('pipe', 'w')), $pipes);
+    $processorErrors = stream_get_contents($pipes[2]);
+    proc_close($processorInstance);
+    if ($processorErrors) {
+      return null;
+    }
+    return $path_output;
+  }
 }
