@@ -14,8 +14,8 @@
 {{if $object->_disponibilities|@count}}
   {{assign var=count_dispo value=$object->_disponibilities|@array_count_values}}
   <div class="progressBar_dispo" onmouseover="ObjectTooltip.createDOM(this, 'disponibility_{{$object->guid}}')">
-    {{foreach from=$object->_disponibilities item=_dispo}}
-      <div class="disponibility_bar disponibility_planning_{{$_dispo}}"></div>
+    {{foreach from=$object->_disponibilities key=time item=_dispo}}
+      <div class="disponibility_bar disponibility_planning_{{$_dispo}}" data-time="{{$time}}"></div>
     {{/foreach}}
   </div>
   <table id="disponibility_{{$object->guid}}" style="display: none;" class="tbl">
