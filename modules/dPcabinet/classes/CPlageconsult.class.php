@@ -209,8 +209,6 @@ class CPlageconsult extends CPlageHoraire {
     $fill = array();
     $time = $this->debut;
     $nb_plage_prise = 0;
-
-    $consults_ok = count($this->_ref_consultations) ? array_combine(CMbArray::pluck($this->_ref_consultations, "heure"), $this->_ref_consultations) : $this->_ref_consultations;
     $nb_place_consult = round((CMbDT::minutesRelative($this->debut, $this->fin)/$this->_freq));
 
     for ($a=0; $a < $nb_place_consult; $a++) {
@@ -219,27 +217,29 @@ class CPlageconsult extends CPlageHoraire {
       }
 
       //there is something ...
-      if (isset($consults_ok[$time])) {
-        $status = 0;
-        /** @var CConsultation $consult */
-        $consult = $consults_ok[$time];
-        // classic
-        if ($consult->patient_id && !$consult->annule) {
-          $status = 1;
-        }
+      foreach ($this->_ref_consultations as $_consult) {
+        if ($_consult->heure == $time) {
+          $status = 0;
 
-        // pause
-        if (!$consult->patient_id) {
-          $status = -1;
-        }
-
-        // more than one
-        $temp_time = $time;
-          for ($b=0; $b<$consult->duree; $b++) {
+          if (!$_consult->patient_id) {
+            $status = -1;
+          }
+          else {
+            if (!$_consult->annule) {
+              $status = 1;
+            }
+          }
+          // repetition
+          $temp_time = $time;
+          for ($b=0; $b<$_consult->duree; $b++) {
             $nb_plage_prise++;
-            $fill[$temp_time] = $status;
+            if ($status != 0) {
+              $fill[$temp_time] = $status;
+            }
+
             $temp_time = CMbDT::addTime($this->freq, $temp_time);
           }
+        }
       }
       $time = CMbDT::addTime($this->freq, $time);
     }
