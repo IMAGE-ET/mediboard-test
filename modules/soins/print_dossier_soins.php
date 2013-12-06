@@ -141,8 +141,8 @@ if (CModule::getActive("dPprescription")) {
 
   // Chargement des lignes
   $prescription->loadRefsLinesMedComments("1", "1", "1", "", "", "0", "1");
-  $prescription->loadRefsLinesElementsComments();
-  $prescription->loadRefsPrescriptionLineMixes();
+  $prescription->loadRefsLinesElementsComments("1");
+  $prescription->loadRefsPrescriptionLineMixes("","1");
   $prescription->loadRefsLinesInscriptions();
 
   $where = array();
