@@ -81,6 +81,7 @@ body.touchscreen {
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  -webkit-touch-callout:none;
 }
 
 div.cancelled,
@@ -602,12 +603,10 @@ table#weeklyPlanning th.today {
   white-space: normal;
   font-size: 10px;
   overflow: hidden;
-  cursor: help;
   z-index: 10;
   margin: -1px;
   box-shadow: 0 1px 4px #888;
   border: solid 1px #888;
-
   -moz-box-sizing:border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
