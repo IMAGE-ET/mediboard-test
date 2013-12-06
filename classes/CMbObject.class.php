@@ -823,4 +823,38 @@ class CMbObject extends CStoredObject {
    */
   function getSpecialIdex(CIdSante400 $idex) {
   }
+
+  /**
+   * Get object tag
+   *
+   * @param string $group_id Group
+   *
+   * @return string|null
+   */
+  static function getObjectTag($group_id = null) {
+    $context = array(get_called_class().":".__FUNCTION__, func_get_args());
+
+    if (CFunctionCache::exist($context)) {
+      return CFunctionCache::get($context);
+    }
+
+    $object = new static;
+    $tag = $object->getDynamicTag();
+
+    // Permettre des id externes en fonction de l'établissement
+    $group = CGroups::loadCurrent();
+    if (!$group_id) {
+      $group_id = $group->_id;
+    }
+
+    return CFunctionCache::set($context, str_replace('$g', $group_id, $tag));
+  }
+
+  /**
+   * Get object dynamic tag
+   *
+   * @return string
+   */
+  function getDynamicTag() {
+  }
 }
