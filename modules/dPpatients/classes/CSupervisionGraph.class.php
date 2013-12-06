@@ -98,6 +98,8 @@ class CSupervisionGraph extends CSupervisionTimedEntity {
         "min"      => $time_min, 
         "max"      => $time_max,
         "ticks"    => 10, // FIXME
+        "labelWidth" => 0.1,
+        "reserveSpace" =>false
       )),
       "series" => array(),
       "title"  => $this->title,

@@ -320,16 +320,36 @@
 
 <script type="text/javascript">
   Main.add(function(){
-
+    var lastDay;
     var xTickFormatter = function (val, axis) {
       var date = new Date(val);
-      return printf(
-        "%02d/%02d <strong>%02d:%02d</strong>",
-        date.getUTCDate(),
-        date.getUTCMonth(),
-        date.getUTCHours(),
-        date.getUTCMinutes()
-      );
+      var day = date.getUTCDate();
+      var formatted;
+
+      if (val < axis.min || val > axis.max) {
+        return;
+      }
+
+      if (!lastDay || lastDay != day) {
+        formatted = printf(
+          "<strong>%02d:%02d</strong><br /> %02d/%02d",
+          date.getUTCHours(),
+          date.getUTCMinutes(),
+          date.getUTCDate(),
+          date.getUTCMonth()
+        );
+      }
+      else {
+        formatted = printf(
+          "<strong>%02d:%02d</strong>",
+          date.getUTCHours(),
+          date.getUTCMinutes()
+        );
+      }
+
+      lastDay = day;
+
+      return formatted;
     };
 
     (function ($){
@@ -346,15 +366,17 @@
           xaxes[0].tickFormatter = xTickFormatter;
 
           $.plot(ph, series, {
-            grid: { markings: [
-              // Debut op
-              {xaxis: {from: 0, to: {{$time_debut_op}}}, color: "rgba(0,0,0,0.05)"},
-              {xaxis: {from: {{$time_debut_op}}, to: {{$time_debut_op+1000}}}, color: "black"},
+            grid: {
+              markings: [
+                // Debut op
+                {xaxis: {from: 0, to: {{$time_debut_op}}}, color: "rgba(0,0,0,0.05)"},
+                {xaxis: {from: {{$time_debut_op}}, to: {{$time_debut_op+1000}}}, color: "black"},
 
-              // Fin op
-              {xaxis: {from: {{$time_fin_op}}, to: Number.MAX_VALUE}, color: "rgba(0,0,0,0.05)"},
-              {xaxis: {from: {{$time_fin_op}}, to: {{$time_fin_op+1000}}}, color: "black"}
-            ] },
+                // Fin op
+                {xaxis: {from: {{$time_fin_op}}, to: Number.MAX_VALUE}, color: "rgba(0,0,0,0.05)"},
+                {xaxis: {from: {{$time_fin_op}}, to: {{$time_fin_op+1000}}}, color: "black"}
+              ]
+            },
             series: SupervisionGraph.defaultSeries,
             xaxes: xaxes,
             yaxes: {{$_graph_data.yaxes|@json}}
@@ -366,13 +388,12 @@
   });
 </script>
 
-{{assign var=width value=700}}
-{{assign var=font_size value=15}}
+{{assign var=width value=750}}
 
-{{assign var=right_margin value=27}}
-{{assign var=yaxis_width value=80}}
-{{assign var=dummy_yaxis_width value=15}}
-{{math assign=left_col_width equation="$yaxes_count*$yaxis_width-$right_margin/2+$dummy_yaxis_width"}}
+{{assign var=right_margin value=5}}
+{{assign var=yaxis_width value=75}}
+{{assign var=dummy_yaxis_width value=12}}
+{{math assign=left_col_width equation="$yaxes_count*$yaxis_width+$dummy_yaxis_width"}}
 
 <table class="main print">
   <tr>
@@ -399,7 +420,7 @@
             <div id="placeholder-{{$i}}" style="width:{{$width}}px; height:{{$_graph->height}}px;"></div>
 
           {{elseif $_graph instanceof CSupervisionTimedData}}
-            <table class="main evenements" style="table-layout: fixed; width: {{$width-$font_size}}px; margin-bottom: -1px;">
+            <table class="main evenements" style="table-layout: fixed; width: {{$width-$right_margin}}px; margin-bottom: -1px;">
               <col style="width: {{$left_col_width}}px;" />
 
               <tr>
@@ -413,7 +434,6 @@
                         <div>
                           <div class="marking"></div>
                           <div class="label" title="{{$_evenement.datetime|date_format:$conf.datetime}}">
-                            {{$_evenement.datetime|date_format:$conf.time}} -
                             {{$_evenement.value|truncate:40}}
                           </div>
                         </div>
@@ -425,7 +445,7 @@
             </table>
 
           {{elseif $_graph instanceof CSupervisionTimedPicture}}
-            <table class="main evenements" style="table-layout: fixed; width: {{$width-$font_size}}px; margin-bottom: -1px; height: 90px;">
+            <table class="main evenements" style="table-layout: fixed; width: {{$width-$right_margin}}px; margin-bottom: -1px; height: 90px;">
               <col style="width: {{$left_col_width}}px;" />
 
               <tr>
@@ -454,7 +474,7 @@
           {{/if}}
         {{/foreach}}
 
-        <table class="main evenements" style="table-layout: fixed; width: {{$width-$font_size}}px;">
+        <table class="main evenements" style="table-layout: fixed; width: {{$width-$right_margin}}px;">
           <col style="width: {{$left_col_width}}px;" />
 
           {{foreach from=$evenements key=_label item=_evenements}}
@@ -473,8 +493,6 @@
                     <div style="padding-left: {{$_evenement.position}}%; margin-left: -1px; {{if $_evenement.alert}} color: red; {{/if}} {{if array_key_exists('width', $_evenement)}} margin-bottom: 2px; {{/if}}" class="evenement">
                       <div onmouseover="ObjectTooltip.createEx(this, '{{$_evenement.object->_guid}}');" style="{{$evenement_width}}">
                         <div class="label" title="{{$_evenement.datetime|date_format:$conf.datetime}} - {{if $_evenement.unit}}{{$_evenement.unit}}{{/if}} {{$_evenement.label}}">
-                          {{$_evenement.datetime|date_format:$conf.time}} -
-
                           {{if $_evenement.icon}}
                             {{assign var=_icon value=$_evenement.icon}}
                             <img src="{{$images.$_icon}}" />

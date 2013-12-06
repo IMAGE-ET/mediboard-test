@@ -1,6 +1,6 @@
-{{assign var=right_margin value=27}}
-{{assign var=yaxis_width value=80}}
-{{assign var=dummy_yaxis_width value=15}}
+{{assign var=right_margin value=5}}
+{{assign var=yaxis_width value=75}}
+{{assign var=dummy_yaxis_width value=12}}
 {{math assign=left_col_width equation="$yaxes_count*$yaxis_width-$right_margin/2+$dummy_yaxis_width"}}
 
 <script>
@@ -44,15 +44,36 @@ Main.add(function(){
 
   $$(".supervision .evenements").invoke("setStyle", {width: (width-{{$right_margin}})+"px"});
 
+  var lastDay;
   var xTickFormatter = function (val, axis) {
     var date = new Date(val);
-    return printf(
-      "%02d/%02d <strong>%02d:%02d</strong>",
-      date.getUTCDate(),
-      date.getUTCMonth()+1,
-      date.getUTCHours(),
-      date.getUTCMinutes()
-    );
+    var day = date.getUTCDate();
+    var formatted;
+
+    if (val < axis.min || val > axis.max) {
+      return;
+    }
+
+    if (!lastDay || lastDay != day) {
+      formatted = printf(
+        "<strong>%02d:%02d</strong><br /> %02d/%02d",
+        date.getUTCHours(),
+        date.getUTCMinutes(),
+        date.getUTCDate(),
+        date.getUTCMonth()
+      );
+    }
+    else {
+      formatted = printf(
+        "<strong>%02d:%02d</strong>",
+        date.getUTCHours(),
+        date.getUTCMinutes()
+      );
+    }
+
+    lastDay = day;
+
+    return formatted;
   };
   
   (function ($){

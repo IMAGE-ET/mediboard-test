@@ -59,5 +59,5 @@ Main.add(function(){
     {{/foreach}}
     {{*<span class="title">{{$data.title}}</span>*}}
   </div>
-  <div id="placeholder-preview" style="width:600px;height:{{$graph->height}}px;"></div>
+  <div id="placeholder-preview" style="width:750px;height:{{$graph->height}}px;"></div>
 </div>
