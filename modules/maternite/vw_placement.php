@@ -32,10 +32,18 @@ $listChirs = $chir->loadPraticiens(PERM_READ);
 
 // Listes des interventions hors plage
 $operation = new COperation();
+
 $ljoin = array();
-$ljoin["sejour"] = "operations.sejour_id = sejour.sejour_id";
+$ljoin["sejour"]    = "operations.sejour_id = sejour.sejour_id";
+$ljoin["grossesse"] = "sejour.grossesse_id = grossesse.grossesse_id";
+
 $where = array();
-$where["operations.date"]     = "= '$date'";
+// Interv ou travail qui commence le jour choisi et n'a pas terminé d'accoucher
+$where[] = "operations.date = '$date' OR (
+  grossesse.datetime_debut_travail IS NOT NULL AND
+  DATE(grossesse.datetime_debut_travail) < '$date' AND
+  grossesse.datetime_accouchement IS NULL
+)";
 $where["operations.chir_id"]  = CSQLDataSource::prepareIn(array_keys($listChirs));
 $where["sejour.grossesse_id"] = "IS NOT NULL";
 
@@ -45,8 +53,9 @@ $urgences = $operation->loadGroupList($where, "salle_id, chir_id", null, null, $
 $reservation_installed = CModule::getActive("reservation");
 $diff_hour_urgence = CAppUI::conf("reservation diff_hour_urgence");
 
-$sejours  = CMbObject::massLoadFwdRef($urgences, "sejour_id");
-$patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
+$sejours  = CStoredObject::massLoadFwdRef($urgences, "sejour_id");
+$patients = CStoredObject::massLoadFwdRef($sejours, "patient_id");
+CStoredObject::massLoadFwdRef($sejours, "grossesse_id");
 
 $plage = new CPlageOp();
 
@@ -54,12 +63,16 @@ $plage = new CPlageOp();
 foreach ($urgences as &$urgence) {
   $urgence->loadRefsFwd();
   $urgence->loadRefAnesth();
-  $patient = $urgence->_ref_sejour->loadRefPatient();
+  $urgence->_ref_chir->loadRefsFwd();
+
+  $sejour = $urgence->_ref_sejour;
+  $patient = $sejour->loadRefPatient();
+  $sejour->loadRefGrossesse();
+
   $dossier_medical = $patient->loadRefDossierMedical();
   $dossier_medical->loadRefsAntecedents();
   $dossier_medical->countAntecedents();
   $dossier_medical->countAllergies();
-  $urgence->_ref_chir->loadRefsFwd();
 
   if ($reservation_installed) {
     $first_log = $urgence->loadFirstLog();

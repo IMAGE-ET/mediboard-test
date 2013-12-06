@@ -35,6 +35,11 @@
     <th>{{tr}}COperation-anesth_id{{/tr}}</th>
     <th>{{tr}}COperation-time_operation{{/tr}}</th>
     <th>{{tr}}CSalle{{/tr}}</th>
+
+    {{if $conf.dPsalleOp.enable_surveillance_perop}}
+      <th>{{tr}}CGrossesse-datetime_debut_travail-court{{/tr}}</th>
+    {{/if}}
+
     <th>Accouchement</th>
     <th>Remarques</th>
   </tr>
@@ -132,8 +137,15 @@
           {{/if}}
         </td>
       {{/if}}
+
+      {{if $conf.dPsalleOp.enable_surveillance_perop}}
+      <td>
+        {{mb_value object=$sejour->_ref_grossesse field=datetime_debut_travail}}
+      </td>
+      {{/if}}
+
       <td class="text">
-        <button type="button" class="edit" style="float: right;" onclick="Operation.dossierBloc('{{$_op->_id}}')">
+        <button type="button" class="edit compact" style="float: right;" onclick="Operation.dossierBloc('{{$_op->_id}}')">
           Dossier accouchement
         </button>
         <span style="float: right;">
@@ -142,14 +154,6 @@
           {{assign var=antecedents value=$dossier_medical->_ref_antecedents_by_type}}
           {{mb_include module=soins template=inc_vw_antecedent_allergie nodebug=true}}
           {{if $dossier_medical->_id && $dossier_medical->_count_allergies}}
-            <script type="text/javascript">
-              ObjectTooltip.modes.allergies = {
-                module: "patients",
-                action: "ajax_vw_allergies",
-                sClass: "tooltip"
-              };
-
-            </script>
             <img src="images/icons/warning.png" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" />
           {{/if}}
           {{if $_op->_is_urgence}}
