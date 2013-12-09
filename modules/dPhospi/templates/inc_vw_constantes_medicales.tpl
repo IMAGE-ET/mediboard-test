@@ -17,7 +17,7 @@ newConstants = function(context_guid){
   url.addParam("selection[]", keys_selection);
   url.addParam("patient_id", '{{$patient->_id}}');
   url.requestUpdate('constantes-medicales-form', {onComplete: initCheckboxes.curry()});
-}
+};
 
 editConstants = function(const_id, context_guid, start){
   var url = new Url('dPhospi', 'httpreq_vw_form_constantes_medicales');
@@ -28,7 +28,7 @@ editConstants = function(const_id, context_guid, start){
   url.addParam("selection[]", keys_selection);
   url.addParam("patient_id", '{{$patient->_id}}');
   url.requestUpdate('constantes-medicales-form', {onComplete: initCheckboxes.curry()});
-}
+};
 
 plotHover = function(event, pos, item) {
   if (item) {
@@ -145,7 +145,7 @@ initCheckboxes = function() {
       {{/foreach}}
     {{/foreach}}
   {{/foreach}}
-}
+};
 
 drawGraphs = function() {
   var oPh,oDatas, oOptions, sTitle;
@@ -265,7 +265,6 @@ Main.add(function () {
 
   drawGraphs();
   ViewPort.SetAvlHeight('graphs', 1.0);
-  $('graphs').setStyle({overflowX: 'auto'});
 });
 
 loadConstantesMedicales  = function(context_guid) {
