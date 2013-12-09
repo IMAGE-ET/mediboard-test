@@ -115,7 +115,7 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
   $localeName = basename($localeDir);
   $sharedName = "locales-$localeName";
 
-  if (!SHM::get("$sharedName-__prefixes__")) {
+  if (!SHM::get("$sharedName-".CAppUI::LOCALES_PREFIX)) {
     CAppUI::stepAjax("Locales-shm-none", UI_MSG_OK, $localeName);
     continue;
   }

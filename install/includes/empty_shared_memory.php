@@ -18,7 +18,7 @@ foreach (glob("../locales/*", GLOB_ONLYDIR) as $localeDir) {
   $localeName = basename($localeDir);
   $sharedName = "locales-$localeName";
   
-  if (!SHM::get("$sharedName-__prefixes__")) {
+  if (!SHM::get("$sharedName-.__prefixes__")) {
     echo "Table absente en mémoire pour langage '$localeName'<br />";
     continue;
   }

@@ -336,23 +336,30 @@ class CConfiguration extends CMbMetaObject {
   static function refreshDataCache(){
     self::buildAllConfig();
 
-    SHM::put(
-      "config-values-__HOSTS__",
-      array(
-        "date"    => CMbDT::dateTime(),
-        "content" => array_keys(self::$values),
-      )
-    );
+    $mutex = new CMbFileMutex("config-build");
+    $mutex->acquire(10);
+
+    $datetime = CMbDT::dateTime();
 
     foreach (self::$values as $_host => $_configs) {
       SHM::put(
         "config-values-$_host",
         array(
-          "date"    => CMbDT::dateTime(),
+          "date"    => $datetime,
           "content" => $_configs,
         )
       );
     }
+
+    SHM::put(
+      "config-values-__HOSTS__",
+      array(
+        "date"    => $datetime,
+        "content" => array_keys(self::$values),
+      )
+    );
+
+    $mutex->release();
 
     self::$dirty = false;
   }
@@ -392,30 +399,7 @@ class CConfiguration extends CMbMetaObject {
         self::refreshDataCache();
       }
       else {
-        // Check if we have all the keys
-        $all_keys = SHM::listKeys("config-values-");
-        $all_keys = preg_grep("/^config-values-.*/", $all_keys);
-
-        $all_keys = array_values($all_keys);
-        $all_keys = preg_replace_callback(
-          "/^config-values-(.*)/",
-          function ($matches) {
-            return $matches[1];
-          },
-          $all_keys
-        );
-
-        CMbArray::removeValue("__HOSTS__", $all_keys);
-
-        $prefixes = $hosts["content"];
-
-        // Refresh the cache if the list is NOT complete
-        if (count(array_diff($prefixes, $all_keys)) > 0) {
-          self::refreshDataCache();
-        }
-        else {
-          self::$hosts = $hosts["content"];
-        }
+        self::$hosts = $hosts["content"];
       }
     }
 
