@@ -13,7 +13,7 @@
  * Class CHL7 
  * Tools
  */
-class CHL7 {
+class CHL7 extends CMbObject {
   static $versions = array ();
 
   /**
@@ -36,7 +36,14 @@ class CHL7 {
     }
     
     return str_replace('$g', $group_id, $tag_hl7);
-  } 
+  }
+
+  /**
+   * @see parent::getDynamicTag
+   */
+  function getDynamicTag() {
+    return CAppUI::conf("hl7 tag_default");
+  }
 }
 
 CHL7::$versions = array (

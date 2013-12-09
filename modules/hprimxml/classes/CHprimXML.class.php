@@ -56,6 +56,6 @@ class CHprimXML extends CMbObject {
    * @see parent::getDynamicTag
    */
   function getDynamicTag() {
-    return $this->conf("tag_default");
+    return CAppUI::conf("hprimxml tag_default");
   }
 }
