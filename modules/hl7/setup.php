@@ -1179,7 +1179,13 @@ class CSetuphl7 extends CSetup {
                 CHANGE `object_class` `object_class` ENUM ('CPatient','CSejour','COperation','CAffectation','CConsultation','CFile','CCompteRendu');";
     $this->addQuery($query);
 
-    $this->mod_version = "0.75";
+    $this->makeRevision("0.75");
+
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+                ADD `build_PID_19` ENUM ('matricule','none') DEFAULT 'none';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.76";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

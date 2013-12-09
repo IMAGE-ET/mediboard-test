@@ -239,7 +239,15 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     }
     
     // PID-19: SSN Number - Patient (ST) (forbidden)
-    $data[] = null;
+    switch ($receiver->_configs["build_PID_19"]) {
+      case 'matricule':
+        $data[] = $patient->matricule;
+        break;
+
+      default:
+        $data[] = null;
+        break;
+    }
 
     // PID-20: Driver's License Number - Patient (DLN) (optional)
     $data[] = null;

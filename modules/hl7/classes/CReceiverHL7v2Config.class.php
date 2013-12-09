@@ -71,6 +71,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   public $build_other_residence_number;
   
   // PID
+  public $build_PID_19;
   public $build_PID_31;
   public $build_PID_34;
   
@@ -145,6 +146,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "send_change_after_admit"
     ),
     "PID" => array(
+      "build_PID_19",
       "build_PID_31",
       "build_PID_34"
     ),
@@ -239,6 +241,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["build_other_residence_number"] = "enum list|ORN|WPN default|ORN";
     
     // PID
+    $props["build_PID_19"]  = "enum list|matricule|none default|none";
     $props["build_PID_31"]  = "enum list|avs|none default|none";
     $props["build_PID_34"]  = "enum list|finess|actor|domain default|finess";
     
