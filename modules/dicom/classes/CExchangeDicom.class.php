@@ -95,7 +95,7 @@ class CExchangeDicom extends CExchangeBinary {
     $props["presentation_contexts"] = "str show|0";
     //$props["receiver_id"]         = "ref class|CDicomReceiver";
     $props["sender_class"]          = "enum list|CDicomSender show|0";
-    $props["object_class"]          = "str";
+    $props["object_class"]          = "str class show|0";
     return $props;
   }
 
