@@ -18,7 +18,22 @@ submitConstantesMedicales = function(oForm) {
       {{/if}}
     }
   });
-}
+};
+
+toggleConstantesecondary = function(element) {
+  var secondary = $$('.constantes .secondary');
+  secondary.invoke('toggle');
+  if (secondary[0].visible()) {
+    element.removeClassName("down");
+    element.addClassName("up");
+    element.innerHTML = "Cacher les second.";
+  }
+  else {
+    element.removeClassName("up");
+    element.addClassName("down");
+    element.innerHTML = "Afficher tout";
+  }
+};
 
 calculImcVst = function(form) {
   var imcInfo, imc, vst,
@@ -52,13 +67,13 @@ calculImcVst = function(form) {
     calculPSA(); 
     calculClairance();
   }
-}
+};
 
 emptyAndSubmit = function(const_name) {
   var form = getForm("edit-constantes-medicales");
   const_name.each(function(elem) {$V(form[elem], '');});
   return submitConstantesMedicales(form);
-}
+};
 
 Main.add(function () {
   var oForm = getForm('edit-constantes-medicales{{$tri}}');
@@ -70,7 +85,8 @@ Main.add(function () {
   {{if $show_cat_tabs}}
     Control.Tabs.create("constantes-by-type{{$tri}}");
   {{/if}}
-  ViewPort.SetAvlHeight('constant_form', 1.0);
+  ViewPort.SetAvlHeight('constant_form',1);
+  ViewPort.SetAvlHeight('constantes_{{$constantes->_id}}',.80);
 });
 </script>
 
@@ -80,7 +96,7 @@ Main.add(function () {
   {{assign var=real_context value=0}}
 {{/if}}
 
-<div id="constant_form" style="padding-right: 1.5em">
+<div id="constant_form" style="padding-right: 1.5em; position:relative;">
   <form name="edit-constantes-medicales{{$tri}}" action="?" method="post" onsubmit="return {{if $real_context}}checkForm(this){{else}}false{{/if}}">
     <input type="hidden" name="m" value="dPpatients" />
     <input type="hidden" name="del" value="0" />
@@ -119,166 +135,161 @@ Main.add(function () {
     </ul>
     {{/if}}
 
-    <table class="main form constantes">
-      <tr>
-        <th class="category"></th>
-        {{if $real_context}}<th class="category">Saisie</th>{{/if}}
-        <th class="category" colspan="{{if $display_graph}}2{{else}}1{{/if}}">Dernières</th>
-        <th class="category">
-          {{if $constantes->_id}}
-            {{mb_include module=system template=inc_object_history object=$constantes}}
-          {{/if}}
-        </th>
-      </tr>
+    <div id="constantes_{{$constantes->_id}}">
+      <table class="main form constantes" >
+        <tr>
+          <th class="category"></th>
+          {{if $real_context}}<th class="category">Saisie</th>{{/if}}
+          <th class="category" colspan="{{if $display_graph}}2{{else}}1{{/if}}">Dernières</th>
+          <th class="category">
+            {{if $constantes->_id}}
+              {{mb_include module=system template=inc_object_history object=$constantes}}
+            {{/if}}
+          </th>
+        </tr>
 
-      {{assign var=at_least_one_hidden value=false}}
-      {{assign var=constants_list value="CConstantesMedicales"|static:"list_constantes"}}
+        {{assign var=at_least_one_hidden value=false}}
+        {{assign var=constants_list value="CConstantesMedicales"|static:"list_constantes"}}
 
-      {{foreach from=$selection key=_type item=_ranks}}
-        <tbody id="type{{$tri}}-{{$_type}}" {{if $show_cat_tabs}} {{if $_type != "vital"}} style="display: none;" {{/if}} {{/if}}>
-          {{foreach from=$_ranks key=_rank item=_constants}}
-            {{foreach from=$_constants item=_constant}}
-              <tr {{if $_rank == "hidden" && ($const->$_constant == "" || !$display_graph)}}
-                style="display: none;" class="secondary"
-                {{assign var=at_least_one_hidden value=true}}
-                {{/if}}>
-                <th style="text-align: left;">
-                  <label for="{{$_constant}}" title="{{tr}}CConstantesMedicales-{{$_constant}}-desc{{/tr}}">
-                    {{tr}}CConstantesMedicales-{{$_constant}}-court{{/tr}}
+        {{foreach from=$selection key=_type item=_ranks}}
+          <tbody id="type{{$tri}}-{{$_type}}" {{if $show_cat_tabs}} {{if $_type != "vital"}} style="display: none;" {{/if}} {{/if}}>
+            {{foreach from=$_ranks key=_rank item=_constants}}
+              {{foreach from=$_constants item=_constant}}
+                <tr {{if $_rank == "hidden" && ($const->$_constant == "" || !$display_graph)}}
+                  style="display: none;" class="secondary"
+                  {{assign var=at_least_one_hidden value=true}}
+                  {{/if}}>
+                  <th style="text-align: left;">
+                    <label for="{{$_constant}}" title="{{tr}}CConstantesMedicales-{{$_constant}}-desc{{/tr}}">
+                      {{tr}}CConstantesMedicales-{{$_constant}}-court{{/tr}}
 
-                    {{assign var=_params value=$constants_list.$_constant}}
-                    {{if $_params.unit}}
-                      <small class="opacity-50">
-                        ({{$_params.unit}})
-                      </small>
+                      {{assign var=_params value=$constants_list.$_constant}}
+                      {{if $_params.unit}}
+                        <small class="opacity-50">
+                          ({{$_params.unit}})
+                        </small>
+                      {{/if}}
+                    </label>
+                  </th>
+
+                  {{assign var=_readonly value=null}}
+                  {{if array_key_exists("formfields", $_params)}}
+                    {{if $real_context}}
+                      <td>
+                        {{foreach from=$_params.formfields item=_formfield_name key=_key name=_formfield}}
+                          {{assign var=_style value="width:1.7em;"}}
+                          {{assign var=_size value=2}}
+                          {{if $_params.formfields|@count == 1}}
+                            {{assign var=_style value=""}}
+                            {{assign var=_size value=3}}
+                          {{/if}}
+
+                          {{if !$smarty.foreach._formfield.first}}/{{/if}}
+                          {{mb_field object=$constantes field=$_params.formfields.$_key size=$_size style=$_style}}
+                        {{/foreach}}
+                      </td>
                     {{/if}}
-                  </label>
-                </th>
+                    <td style="text-align: center" title="{{$dates.$_constant|date_format:$conf.datetime}}">
+                      {{if $const->$_constant}}
+                        {{foreach from=$_params.formfields item=_formfield_name key=_key name=_formfield}}
+                          {{if !$smarty.foreach._formfield.first}}/{{/if}}
+                          {{mb_value object=$const field=$_params.formfields.$_key}}
+                        {{/foreach}}
+                      {{/if}}
+                    </td>
+                  {{else}}
+                    {{assign var=_hidden value=false}}
 
-                {{assign var=_readonly value=null}}
-                {{if array_key_exists("formfields", $_params)}}
-                  {{if $real_context}}
-                    <td>
-                      {{foreach from=$_params.formfields item=_formfield_name key=_key name=_formfield}}
-                        {{assign var=_style value="width:1.7em;"}}
-                        {{assign var=_size value=2}}
-                        {{if $_params.formfields|@count == 1}}
-                          {{assign var=_style value=""}}
-                          {{assign var=_size value=3}}
+                    {{if $_constant.0 == "_"}}
+                      {{assign var=_readonly value="readonly"}}
+
+                      {{if array_key_exists("formula", $_params)}}
+                        {{assign var=_hidden value=true}}
+                      {{/if}}
+                    {{/if}}
+
+                    {{if $real_context}}
+                      <td>
+                        {{if array_key_exists("callback", $_params)}}
+                          {{assign var=_callback value=$_params.callback}}
+                        {{else}}
+                          {{assign var=_callback value=null}}
                         {{/if}}
 
-                        {{if !$smarty.foreach._formfield.first}}/{{/if}}
-                        {{mb_field object=$constantes field=$_params.formfields.$_key size=$_size style=$_style}}
-                      {{/foreach}}
+                        {{mb_field object=$constantes field=$_constant size="3" onchange=$_callback|ternary:"$_callback(this.form)":null readonly=$_readonly hidden=$_hidden}}
+
+                        {{if $_constant == "_imc"}}
+                          <div id="constantes_medicales_imc" style="color:#F00;"></div>
+                        {{/if}}
+                      </td>
+                    {{/if}}
+                    <td style="text-align: center" title="{{$dates.$_constant|date_format:$conf.datetime}}">
+                      {{mb_value object=$const field=$_constant}}
+                      <input type="hidden" name="_last_{{$_constant}}" value="{{$const->$_constant}}" />
                     </td>
                   {{/if}}
-                  <td style="text-align: center" title="{{$dates.$_constant|date_format:$conf.datetime}}">
-                    {{if $const->$_constant}}
-                      {{foreach from=$_params.formfields item=_formfield_name key=_key name=_formfield}}
-                        {{if !$smarty.foreach._formfield.first}}/{{/if}}
-                        {{mb_value object=$const field=$_params.formfields.$_key}}
-                      {{/foreach}}
-                    {{/if}}
-                  </td>
-                {{else}}
-                  {{assign var=_hidden value=false}}
 
-                  {{if $_constant.0 == "_"}}
-                    {{assign var=_readonly value="readonly"}}
-
-                    {{if array_key_exists("formula", $_params)}}
-                      {{assign var=_hidden value=true}}
-                    {{/if}}
+                  {{if $display_graph}}
+                    <td class="narrow">
+                      {{if $_constant.0 != "_" || !empty($_params.plot|smarty:nodefaults)}}
+                        <input type="checkbox" class="checkbox-constant" name="checkbox-constantes-medicales-{{$_constant}}" onclick="toggleGraph(this)" tabIndex="100" />
+                      {{/if}}
+                    </td>
                   {{/if}}
-
-                  {{if $real_context}}
-                    <td>
-                      {{if array_key_exists("callback", $_params)}}
-                        {{assign var=_callback value=$_params.callback}}
+                  <td>
+                    {{if $_readonly !="readonly" && $real_context == 1 && $constantes->$_constant != ""}}
+                      {{if array_key_exists("formfields", $_params)}}
+                        <button type="button" class="cancel notext compact" onclick="emptyAndSubmit({{$_params.formfields|@json|smarty:nodefaults|JSAttribute}});"></button>
                       {{else}}
-                        {{assign var=_callback value=null}}
+                        <button type="button" class="cancel notext compact" onclick="emptyAndSubmit(['{{$_constant}}']);"></button>
                       {{/if}}
-
-                      {{mb_field object=$constantes field=$_constant size="3" onchange=$_callback|ternary:"$_callback(this.form)":null readonly=$_readonly hidden=$_hidden}}
-
-                      {{if $_constant == "_imc"}}
-                        <div id="constantes_medicales_imc" style="color:#F00;"></div>
-                      {{/if}}
-                    </td>
-                  {{/if}}
-                  <td style="text-align: center" title="{{$dates.$_constant|date_format:$conf.datetime}}">
-                    {{mb_value object=$const field=$_constant}}
-                    <input type="hidden" name="_last_{{$_constant}}" value="{{$const->$_constant}}" />
-                  </td>
-                {{/if}}
-
-                {{if $display_graph}}
-                  <td class="narrow">
-                    {{if $_constant.0 != "_" || !empty($_params.plot|smarty:nodefaults)}}
-                      <input type="checkbox" class="checkbox-constant" name="checkbox-constantes-medicales-{{$_constant}}" onclick="toggleGraph(this)" tabIndex="100" />
                     {{/if}}
                   </td>
-                {{/if}}
-                <td>
-                  {{if $_readonly !="readonly" && $real_context == 1 && $constantes->$_constant != ""}}
-                    {{if array_key_exists("formfields", $_params)}}
-                      <button type="button" class="cancel notext compact" onclick="emptyAndSubmit({{$_params.formfields|@json|smarty:nodefaults|JSAttribute}});"></button>
-                    {{else}}
-                      <button type="button" class="cancel notext compact" onclick="emptyAndSubmit(['{{$_constant}}']);"></button>
-                    {{/if}}
-                  {{/if}}
-                </td>
-              </tr>
+                </tr>
+              {{/foreach}}
             {{/foreach}}
-          {{/foreach}}
-        </tbody>
-      {{/foreach}}
+          </tbody>
+        {{/foreach}}
 
-      {{if $real_context}}
-        {{if $constantes->datetime}}
-        <tr>
-          <th>{{mb_title object=$constantes field=datetime}}</th>
-          <td colspan="4">{{mb_field object=$constantes field=datetime form="edit-constantes-medicales" register=true}}</td>
-        </tr>
-        {{/if}}
-        <tr>
-          <td colspan="5" style="text-align: center;">{{mb_label object=$constantes field=comment}}</td>
-        </tr>
-        <tr>
-          <td colspan="5">{{mb_field object=$constantes field=comment}}</td>
-        </tr>
-        <tr>
-          {{if !$hide_save_button}}
+        {{if $real_context}}
+          {{if $constantes->datetime}}
+          <tr>
+            <th>{{mb_title object=$constantes field=datetime}}</th>
+            <td colspan="4">{{mb_field object=$constantes field=datetime form="edit-constantes-medicales" register=true}}</td>
+          </tr>
+          {{/if}}
+        {{elseif $can_create}}
+          <tr>
             <td colspan="5" class="button">
-              <button class="modify singleclick" onclick="return submitConstantesMedicales(this.form);">
-                {{tr}}Save{{/tr}}
-              </button>
-              {{if $constantes->datetime}}
-                <br />
-                <button class="trash" type="button" onclick="if (confirm('Etes-vous sûr de vouloir supprimer ce relevé ?')) {$V(this.form.del, 1); return submitConstantesMedicales(this.form);}">
-                  {{tr}}CConstantesMedicales.delete_all{{/tr}}
-                </button>
-              {{/if}}
-            {{/if}}
-          </td>
-        </tr>
-      {{elseif $can_create}}
-        <tr>
-          <td colspan="5" class="button">
-            <button class="new singleclick" type="button" onclick="newConstants('{{$context_guid}}');">
-              {{tr}}New{{/tr}}
+            </td>
+          </tr>
+        {{/if}}
+      </table>
+    </div>
+
+    <div style="position: absolute; bottom:0; text-align:center; width: 100%;">
+      {{if $real_context}}
+        {{mb_field object=$constantes field=comment placeholder="Commentaire"}}
+        {{if !$hide_save_button}}
+          <button class="modify singleclick" onclick="return submitConstantesMedicales(this.form);">
+            {{tr}}Save{{/tr}}
+          </button>
+          {{if $constantes->datetime}}
+            <button class="trash" type="button" onclick="if (confirm('Etes-vous sûr de vouloir supprimer ce relevé ?')) {$V(this.form.del, 1); return submitConstantesMedicales(this.form);}">
+              {{tr}}CConstantesMedicales.delete_all{{/tr}}
             </button>
-          </td>
-        </tr>
+          {{/if}}
+        {{/if}}
+      {{elseif $can_create}}
+        <button class="new singleclick" type="button" onclick="newConstants('{{$context_guid}}');">
+          {{tr}}New{{/tr}}
+        </button>
       {{/if}}
+
 
       {{if $show_enable_all_button && $at_least_one_hidden}}
-      <tr>
-        <td colspan="5" class="button">
-          <button class="down" type="button" onclick="$$('.constantes .secondary').invoke('toggle')">Afficher toutes les valeurs</button>
-        </td>
-      </tr>
+        <button class="down" type="button" onclick="toggleConstantesecondary(this);">Afficher tout</button>
       {{/if}}
-    </table>
+    </div>
   </form>
 </div>
