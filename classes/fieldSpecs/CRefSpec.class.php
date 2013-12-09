@@ -1,6 +1,7 @@
 <?php 
 /**
  * $Id$
+ * $Id$
  * 
  * @package    Mediboard
  * @subpackage classes
@@ -110,7 +111,7 @@ class CRefSpec extends CMbFieldSpec {
 
       /** @var CStoredObject $ref */
       $ref = new $class;
-      if (!$this->unlink && !$ref->load($propValue)) {
+      if (!$this->unlink && !$ref->idExists($propValue)) {
         return "Objet référencé de type '$class' introuvable";      
       }
     }

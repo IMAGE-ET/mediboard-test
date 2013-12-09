@@ -112,6 +112,25 @@ class CStoredObject extends CModelObject {
   function isInstalled() {
     return $this->_spec->ds->loadTable($this->_spec->table);
   }
+
+  /**
+   * Check whether object exists in table
+   *
+   * @param int $id The object's identifier
+   *
+   * @return bool
+   */
+  function idExists($id) {
+    $spec = $this->_spec;
+
+    if (!$id || !$spec->table || !$spec->key) {
+      return false;
+    }
+
+
+    $query = "SELECT COUNT(*) FROM `{$spec->table}` WHERE `{$spec->key}` = '$id'";
+    return $spec->ds->loadResult($query) > 0;
+  }
   
   /** 
    * Load an object by its idendifier
@@ -125,13 +144,15 @@ class CStoredObject extends CModelObject {
       $this->_id = $id;
     }
 
-    if (!$this->_id || !$this->_spec->table || !$this->_spec->key) {
+    $spec = $this->_spec;
+
+    if (!$this->_id || !$spec->table || !$spec->key) {
       return false;
     }
 
-    $sql = "SELECT * FROM `{$this->_spec->table}` WHERE `{$this->_spec->key}` = '$this->_id'";
+    $sql = "SELECT * FROM `{$spec->table}` WHERE `{$spec->key}` = '$this->_id'";
 
-    $object = $this->_spec->ds->loadObject($sql, $this);
+    $object = $spec->ds->loadObject($sql, $this);
     
     /* Not envisageable in standard load.
      * Way too much resource consuming
