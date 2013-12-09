@@ -4,9 +4,17 @@
   .only-printable {
     display: none;
   }
-  
+
   .desktop label[title]:hover,
-  *[onmouseover],
+  a[onmouseover],
+  code[onmouseover],
+  div[onmouseover],
+  img[onmouseover],
+  label[onmouseover],
+  small[onmouseover],
+  span[onmouseover],
+  strong[onmouseover],
+  td[onmouseover],
   span[data-object_guid],
   div[data-object_guid],
   label[data-object_guid],
