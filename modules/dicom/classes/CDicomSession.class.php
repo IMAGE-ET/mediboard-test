@@ -422,6 +422,18 @@ class CDicomSession extends CMbObject {
   }
 
   /**
+   * Get backward reference specifications
+   *
+   * @return array Array of form "collection-name" => "class join-field"
+   */
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+
+    $backProps["dicom_exchange"] = "CExchangeDicom object_id";
+    return $backProps;
+  }
+
+  /**
    * Load the dicom exchange
    *
    * @param bool $cache True if the cache is used, false if not

@@ -414,7 +414,6 @@ class CMbObject extends CStoredObject {
     $backProps["observation_result_sets"]= "CObservationResultSet context_id";
     $backProps["configurations"]         = "CConfiguration object_id";
     $backProps["sources_pop"]            = "CSourcePOP object_id";
-    $backProps["dicom_exchange"]         = "CExchangeDicom object_id";
       // NE PAS DECOMMENTER CETTE LIGNE, backref impossible pour le moment (cf. Fabien)
     //$backProps["ex_objects"]             = "CExObject object_id";
 
