@@ -1381,6 +1381,9 @@ class COperation extends CCodable implements IPatientRelated {
   function fillLimitedTemplate(&$template) {
     $this->loadRefsFwd(1);
     $this->loadRefPraticien();
+    $this->loadRefChir2();
+    $this->loadRefChir3();
+    $this->loadRefChir4();
     $this->loadRefsFiles();
     $this->loadAffectationsPersonnel();
 
@@ -1394,9 +1397,11 @@ class COperation extends CCodable implements IPatientRelated {
 
     $this->notify("BeforeFillLimitedTemplate", $template);
 
-    $template->addProperty(
-      "Opération - Chirurgien", $this->_ref_praticien->_id ? ("Dr ".$this->_ref_praticien->_view) : ''
-    );
+    $template->addProperty("Opération - Chirurgien",   $this->_ref_chir->_id   ? "Dr " . $this->_ref_chir->_view : '');
+    $template->addProperty("Opération - Chirurgien 2", $this->_ref_chir_2->_id ? "Dr " . $this->_ref_chir_2->_view : '');
+    $template->addProperty("Opération - Chirurgien 3", $this->_ref_chir_3->_id ? "Dr " . $this->_ref_chir_3->_view : '');
+    $template->addProperty("Opération - Chirurgien 4", $this->_ref_chir_4->_id ? "Dr " . $this->_ref_chir_4->_view : '');
+
     $template->addProperty("Opération - Anesthésiste - nom"        , @$this->_ref_anesth->_user_last_name);
     $template->addProperty("Opération - Anesthésiste - prénom"     , @$this->_ref_anesth->_user_first_name);
     $template->addProperty("Opération - Anesthésie"                , $this->_lu_type_anesth);
@@ -1439,7 +1444,25 @@ class COperation extends CCodable implements IPatientRelated {
     $template->addTimeProperty("Opération - retrait garrot"   , $this->retrait_garrot);
     $template->addTimeProperty("Opération - sortie bloc"      , $this->sortie_salle);
     $template->addTimeProperty("Opération - entrée SSPI"      , $this->entree_reveil);
-    $template->addTimeProperty("Opération - entrée SSPI"      , $this->sortie_reveil_reel);
+    $template->addTimeProperty("Opération - sortie SSPI"      , $this->sortie_reveil_reel);
+
+    if (CModule::getActive("mvsante")) {
+      $template->addTimeProperty("Opération - Remise au chirurgien", $this->remise_chir);
+
+      $liaisons_libelles = $this->loadBackRefs("liaison_libelle", "numero");
+      CMbObject::massLoadFwdRef($liaisons_libelles, "libelleop_id");
+
+      $libelles = array(0 => "", 1 => "", 2 => "", 3 => "");
+
+      foreach ($liaisons_libelles as $_liaison) {
+        $libelles[$_liaison->numero - 1] = $_liaison->loadRefLibelle()->nom;
+      }
+
+      $template->addProperty("Opération - Libellé 1"          , $libelles[0]);
+      $template->addProperty("Opération - Libellé 2"          , $libelles[1]);
+      $template->addProperty("Opération - Libellé 3"          , $libelles[2]);
+      $template->addProperty("Opération - Libellé 4"          , $libelles[3]);
+    }
 
     $template->addProperty("Opération - depassement"          , $this->depassement);
     $template->addProperty("Opération - exams pre-op"         , $this->examen);
@@ -1451,12 +1474,16 @@ class COperation extends CCodable implements IPatientRelated {
     $consult_anesth = $this->_ref_consult_anesth;
     $consult = $consult_anesth->loadRefConsultation();
     $consult->loadRefPlageConsult();
+    $prat = $consult->loadRefPraticien();
     $template->addDateProperty("Opération - Consultation anesthésie - Date", $consult->_id ? $consult->_datetime : "");
     $template->addLongDateProperty("Opération - Consultation anesthésie - Date (longue)", $consult->_id ? $consult->_datetime : "");
     $template->addLongDateProperty(
       "Opération - Consultation anesthésie - Date (longue, minuscule)", $consult->_id ? $consult->_datetime : "", true
     );
     $template->addTimeProperty("Opération - Consultation anesthésie - Heure", $consult->_id ? $consult->_datetime : "");
+    $template->addProperty("Opération - Consultation anesthésie - Praticien - Prénom", $consult->_id ? $prat->_user_first_name : "");
+    $template->addProperty("Opération - Consultation anesthésie - Praticien - Nom", $consult->_id ? $prat->_user_last_name : "");
+    $template->addProperty("Opération - Consultation anesthésie - Remarques", $consult->rques);
 
     /** @var CMediusers $prat_visite */
     $prat_visite = $this->loadFwdRef("prat_visite_anesth_id", true);
