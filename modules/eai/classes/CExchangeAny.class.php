@@ -26,6 +26,9 @@ class CExchangeAny extends CExchangeDataFormat {
   // DB Table key
   public $echange_any_id;
 
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->loggable = false;
@@ -33,7 +36,10 @@ class CExchangeAny extends CExchangeDataFormat {
     $spec->key   = 'echange_any_id';
     return $spec;
   }
-  
+
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
         
@@ -41,8 +47,8 @@ class CExchangeAny extends CExchangeDataFormat {
     $props["acquittement_content_id"] = "ref class|CContentAny show|0 cascade";   
     
     $props["receiver_id"]             = "ref class|CInteropReceiver";
-    $props["object_class"]            = "str class show|0";
-    
+    $props["object_class"]            = "enum list|CPatient|CSejour show|0";
+
     $props["_message"]                = "str";
     $props["_acquittement"]           = "str";
     
@@ -59,7 +65,10 @@ class CExchangeAny extends CExchangeDataFormat {
     $this->_ref_acquittement_content = $this->loadFwdRef("acquittement_content_id", true);
     $this->_acquittement = $this->_ref_acquittement_content->content;
   }
-  
+
+  /**
+   * @see parent::guessDataType()
+   */
   function guessDataType(){
     $data_types = array(
        "<?xml" => "xml", 
@@ -78,11 +87,14 @@ class CExchangeAny extends CExchangeDataFormat {
       }
     }
   }
-  
+
+  /**
+   * @see parent::updatePlainFields()
+   */
   function updatePlainFields() {
     if ($this->_message !== null) {
-      $content = new CContentAny();
-      $content->load($this->message_content_id);
+      /** @var CContentAny $content */
+      $content = $this->loadFwdRef("message_content_id", true);
       $content->content = $this->_message;
       if ($msg = $content->store()) {
         return $msg;
@@ -93,8 +105,8 @@ class CExchangeAny extends CExchangeDataFormat {
     }
     
     if ($this->_acquittement !== null) {
-      $content = new CContentAny();
-      $content->load($this->acquittement_content_id);
+      /** @var CContentAny $content */
+      $content = $this->loadFwdRef("acquittement_content_id", true);
       $content->content = $this->_acquittement;
       if ($msg = $content->store()) {
         return $msg;

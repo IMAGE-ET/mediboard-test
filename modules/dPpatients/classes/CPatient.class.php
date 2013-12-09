@@ -343,6 +343,7 @@ class CPatient extends CPerson {
     $backProps["product_deliveries"]    = "CProductDelivery patient_id";
     $backProps["sejours"]               = "CSejour patient_id";
     $backProps["dossier_medical"]       = "CDossierMedical object_id";
+    $backProps["echanges_any"]          = "CExchangeAny object_id";
     $backProps["echanges_hprim"]        = "CEchangeHprim object_id";
     $backProps["echanges_hprim21"]      = "CEchangeHprim21 object_id";
     $backProps["echanges_hl7v2"]        = "CExchangeHL7v2 object_id";

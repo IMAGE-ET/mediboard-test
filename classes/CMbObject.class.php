@@ -420,7 +420,6 @@ class CMbObject extends CStoredObject {
     $backProps["contextes_constante"]    = "CConstantesMedicales context_id";
     $backProps["modeles_etiquettes"]     = "CModeleEtiquette object_id";
     $backProps["tag_items"]              = "CTagItem object_id";
-    $backProps["echange_generique"]      = "CExchangeAny object_id";
     $backProps["observation_result_sets"]= "CObservationResultSet context_id";
     $backProps["configurations"]         = "CConfiguration object_id";
     $backProps["sources_pop"]            = "CSourcePOP object_id";

@@ -58,8 +58,8 @@ class CExchangeTabular extends CExchangeDataFormat {
     parent::updatePlainFields();
 
     if ($this->_message !== null) {
-      $content = new CContentTabular();
-      $content->load($this->message_content_id);
+      /** @var CContentXML $content */
+      $content = $this->loadFwdRef("message_content_id", true);
       $content->content = $this->_message;
       if ($msg = $content->store()) {
         return;
@@ -70,8 +70,8 @@ class CExchangeTabular extends CExchangeDataFormat {
     }
     
     if ($this->_acquittement !== null) {
-      $content = new CContentTabular();
-      $content->load($this->acquittement_content_id);
+      /** @var CContentTabular $content */
+      $content = $this->loadFwdRef("acquittement_content_id", true);
       $content->content = $this->_acquittement;
       if ($msg = $content->store()) {
         return;
