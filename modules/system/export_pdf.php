@@ -36,9 +36,13 @@ $data = "
   <body>$data</body>
 </html>";
 
-$file = new CFile;
+$file = new CFile();
 $file->file_name = $filename;
 
+$cr = new CCompteRendu();
+$cr->_page_format = "A4";
+$cr->_orientation = "landscape";
+
 $convert = new CHtmlToPDF();
-@$convert->generatePDF($data, 1, "a4", "landscape", $file);
+@$convert->generatePDF($data, 1, $cr, $file);
 

@@ -609,12 +609,7 @@ Main.add(function() {
 {{/if}}
 
 <form name="editFrm" action="?m={{$m}}" method="post"
-      onsubmit="Url.ping(function() {
-        {{if $compte_rendu->_id}}
-          submitCompteRendu()
-        {{else}}
-          getForm('editFrm').submit(){{/if}}
-        }); return false;"
+      onsubmit="Url.ping(function() { submitCompteRendu() }); return false;"
       class="{{$compte_rendu->_spec}}">
   <input type="hidden" name="m" value="compteRendu" />
   <input type="hidden" name="del" value="0" />
