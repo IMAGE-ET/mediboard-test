@@ -49,7 +49,7 @@ class CGrossesse extends CMbObject {
   /** @var CConsultation[] */
   public $_ref_consultations = array();
 
-  /** @var CConsultAnesth */
+  /** @var CConsultation */
   public $_ref_last_consult_anesth;
   
   // Form fields

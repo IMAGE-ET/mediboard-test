@@ -22,6 +22,9 @@ $sejour = $operation->loadRefSejour(true);
 $grossesse = $sejour->loadRefGrossesse();
 $grossesse->loadRefsSejours();
 $grossesse->loadRefsConsultations();
+foreach($grossesse->_ref_consultations as $_consult) {
+  $_consult->loadRefPlageConsult();
+}
 $grossesse->_semaine_grossesse = ceil(CMbDT::daysRelative($grossesse->_date_fecondation, CMbDT::date($operation->_datetime)) / 7);
 $grossesse->_terme_vs_operation = CMbDT::daysRelative($grossesse->terme_prevu, CMbDT::date($operation->_datetime));
 
