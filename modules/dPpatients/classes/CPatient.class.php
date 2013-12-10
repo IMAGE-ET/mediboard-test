@@ -335,6 +335,7 @@ class CPatient extends CPerson {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["constantes"]            = "CConstantesMedicales patient_id";
+    $backProps["contextes_constante"]   = "CConstantesMedicales context_id";
     $backProps["consultations"]         = "CConsultation patient_id";
     $backProps["correspondants"]        = "CCorrespondant patient_id";
     $backProps["correspondants_patient"] = "CCorrespondantPatient patient_id";

@@ -416,12 +416,11 @@ class CMbObject extends CStoredObject {
     $backProps["documents"]              = "CCompteRendu object_id";
     $backProps["permissions"]            = "CPermObject object_id";
     $backProps["logs"]                   = "CUserLog object_id";
-    $backProps["affectations_personnel"] = "CAffectationPersonnel object_id";
-    $backProps["contextes_constante"]    = "CConstantesMedicales context_id";
-    $backProps["modeles_etiquettes"]     = "CModeleEtiquette object_id";
     $backProps["tag_items"]              = "CTagItem object_id";
-    $backProps["observation_result_sets"]= "CObservationResultSet context_id";
     $backProps["configurations"]         = "CConfiguration object_id";
+
+    $backProps["modeles_etiquettes"]     = "CModeleEtiquette object_id";
+    $backProps["observation_result_sets"]= "CObservationResultSet context_id";
     $backProps["sources_pop"]            = "CSourcePOP object_id";
     $backProps['hypertext_links']        = 'CHyperTextLink object_id';
       // NE PAS DECOMMENTER CETTE LIGNE, backref impossible pour le moment (cf. Fabien)

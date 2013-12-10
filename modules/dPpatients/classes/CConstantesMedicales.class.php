@@ -767,7 +767,7 @@ class CConstantesMedicales extends CMbObject {
     $props = parent::getProps();
     $props['patient_id']             = 'ref notNull class|CPatient';
     $props['datetime']               = 'dateTime notNull';
-    $props['context_class']          = 'str'; // CConsultation|CSejour|CPatient (import)
+    $props['context_class']          = 'enum list|CConsultation|CSejour|CPatient';
     $props['context_id']             = 'ref class|CMbObject meta|context_class cascade';
     $props['comment']                = 'text';
 

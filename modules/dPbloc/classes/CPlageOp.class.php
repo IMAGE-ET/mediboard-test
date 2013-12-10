@@ -100,6 +100,7 @@ class CPlageOp extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["operations"] = "COperation plageop_id";
+    $backProps["affectations_personnel"] = "CAffectationPersonnel object_id";
     return $backProps;
   }
 
