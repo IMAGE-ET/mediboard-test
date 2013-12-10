@@ -1,18 +1,17 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
-$tarif_id = CValue::get("tarif_id");
-$prat_id  = CValue::get("prat_id");
-
+$tarif_id       = CValue::get("tarif_id");
+$prat_id        = CValue::get("prat_id");
 $codable_id     = CValue::get("codable_id");
 $codable_class  = CValue::get("codable_class");
 
@@ -20,9 +19,9 @@ $codable_class  = CValue::get("codable_class");
 $tarif = new CTarif();
 $tarif->load($tarif_id);
 
-if (!$tarif->getPerm(PERM_EDIT)) {
+if (!$tarif->getPerm(PERM_EDIT) && $tarif_id) {
   CAppUI::setMsg("Vous n'avez pas le droit de modifier ce tarif");
-  $tarif = new CTarif;
+  $tarif = new CTarif();
 }
 if ($codable_id) {
   $tarif->_bind_codable   = true;
