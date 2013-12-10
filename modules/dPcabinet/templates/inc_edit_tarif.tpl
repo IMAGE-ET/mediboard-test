@@ -8,6 +8,15 @@
       Tarif.updateOwner();
     {{/if}}
   });
+  choicePrat = function(prat_id) {
+    var form = getForm("editFrm");
+    if (prat_id != "") {
+      form.function_id.value = "";
+    }
+    else {
+      form.function_id.value = '{{$prat->function_id}}';
+    }
+  };
 </script>
 
 <form name="editFrm" action="#" method="post" onsubmit="return Tarif.submit(this);">
@@ -40,7 +49,7 @@
         <th>{{mb_label object=$tarif field=chir_id}}</th>
         <td>
           <input  type="hidden" name="function_id" value="" />
-          <select name="chir_id">
+          <select name="chir_id" onchange="choicePrat(this.value);">
             <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
             {{mb_include module=mediusers template=inc_options_mediuser list=$listPrat selected=$prat->_id}}
           </select>
