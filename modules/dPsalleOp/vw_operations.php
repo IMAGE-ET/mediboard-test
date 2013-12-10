@@ -214,7 +214,10 @@ $type_personnel = array("op", "op_panseuse", "iade", "sagefemme", "manipulateur"
 if (count($daily_check_list_types) && $require_check_list) {
   $type_personnel = array();
   foreach ($daily_check_list_types as $check_list_type) {
-    $type_personnel[] = $check_list_type->type_validateur;
+    $validateurs = explode("|", $check_list_type->type_validateur);
+    foreach ($validateurs as $validateur) {
+      $type_personnel[] = $validateur;
+    }
   }
 }
 $listValidateurs = CPersonnel::loadListPers(array_unique(array_values($type_personnel)), true, true);

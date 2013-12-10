@@ -43,7 +43,10 @@ if (CModule::getActive("dPpersonnel")) {
   if (count($daily_check_list_types) && $require_check_list) {
     $type_personnel = array();
     foreach ($daily_check_list_types as $check_list_type) {
-      $type_personnel[] = $check_list_type->type_validateur;
+      $validateurs = explode("|", $check_list_type->type_validateur);
+      foreach ($validateurs as $validateur) {
+        $type_personnel[] = $validateur;
+      }
     }
   }
 
