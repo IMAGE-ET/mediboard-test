@@ -43,7 +43,9 @@ if (!$plageSel->plageconsult_id) {
 else {
   $plageconsult_id = $plageSel->plageconsult_id;
 }
-$plageSel->loadRefsFwd(1);
+$plageSel->loadRefChir();
+$plageSel->loadRefRemplacant();
+$plageSel->loadRefPourCompte();
 $plageSel->loadRefsNotes();
 $plageSel->loadRefsBack($show_annulees, true, $show_payees);
 
@@ -61,9 +63,10 @@ CMbObject::massLoadFwdRef($consults, "categorie_id");
 
 // Détails sur les consultation affichées
 foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
-  $consultation->loadRefSejour(1);
-  $consultation->loadRefPatient(1);
-  $consultation->loadRefCategorie(1);
+  $consultation->_ref_plageconsult = $plageSel;
+  $consultation->loadRefSejour();
+  $consultation->loadRefPatient();
+  $consultation->loadRefCategorie();
   $consultation->countDocItems();
   //check 3333tel
   if (CModule::getActive("3333tel")) {
