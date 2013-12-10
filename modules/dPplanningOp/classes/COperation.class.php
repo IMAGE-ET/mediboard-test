@@ -1374,6 +1374,8 @@ class COperation extends CCodable implements IPatientRelated {
     // Chargement du fillTemplate du sejour
     $this->_ref_sejour->fillTemplate($template);
 
+    $this->loadRefsConsultAnesth()->fillTemplate($template);
+
     // Chargement du fillTemplate de l'opération
     $this->fillLimitedTemplate($template);
   }
@@ -1429,7 +1431,7 @@ class COperation extends CCodable implements IPatientRelated {
     );
     $template->addProperty("Opération - salle"                     , @$this->_ref_salle->nom);
     $template->addProperty("Opération - côté"                      , $this->cote);
-
+    $template->addProperty("Opération - position"                  , $this->getFormattedValue("position"));
     $template->addDateProperty("Opération - date"             , $this->_datetime_best != " 00:00:00" ? $this->_datetime_best : "");
     $template->addLongDateProperty("Opération - date longue"  , $this->_datetime_best != " 00:00:00" ? $this->_datetime_best : "");
     $template->addTimeProperty("Opération - heure"            , $this->time_operation);
