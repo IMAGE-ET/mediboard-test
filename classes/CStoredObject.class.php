@@ -1924,8 +1924,13 @@ class CStoredObject extends CModelObject {
    */
   function loadAllBackRefs($limit = null) {
     foreach ($this->_backProps as $backName => $backProp) {
-      $this->loadBackRefs($backName, null, $limit);
-      $this->countBackRefs($backName);
+      $backrefs = $this->loadBackRefs($backName, null, $limit);
+
+      $this->_count[$backName] = count($backrefs);
+
+      if ($limit) {
+        $this->countBackRefs($backName);
+      }
     }
   }
   
@@ -2263,7 +2268,7 @@ class CStoredObject extends CModelObject {
   function delete() {
     // Préparation du log
     $this->loadOldObject();
-    
+
     // Delete checking
     if (!$this->_purge) {
       if ($msg = $this->canDeleteEx()) {
@@ -2367,7 +2372,7 @@ class CStoredObject extends CModelObject {
       }
     }
 
-    // Make sure delete won't log
+    // Make sure delete won't log and won't can delete
     $this->_purge = "1";
     return $this->delete();
   }

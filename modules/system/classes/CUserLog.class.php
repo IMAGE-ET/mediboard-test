@@ -11,6 +11,7 @@
 
 /**
  * The CUserLog Class
+ * @TODO: faire dériver de CStoredObject
  */
 class CUserLog extends CMbMetaObject {
   // DB Table key
@@ -23,7 +24,7 @@ class CUserLog extends CMbMetaObject {
   public $fields;
   public $ip_address;
   public $extra;
-  
+
   // Filter Fields
   public $_date_min;
   public $_date_max;

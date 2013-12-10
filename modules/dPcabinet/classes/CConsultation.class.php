@@ -225,6 +225,7 @@ class CConsultation extends CFacturable {
     $backProps["fse_pyxvital"]      = "CPvFSE consult_id";
     $backProps["task"]              = "CSejourTask consult_id";
     $backProps["identifiants"]      = "CIdSante400 object_id cascade";
+    $backProps["contextes_constante"] = "CConstantesMedicales context_id";
 
     return $backProps;
   }

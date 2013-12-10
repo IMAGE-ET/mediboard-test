@@ -114,6 +114,15 @@ class CBloodSalvage extends CMbObject {
   }
 
   /**
+   * @see parent::getBackProps()
+   */
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["affectations_personnel"] = "CAffectationPersonnel object_id";
+    return $backProps;
+  }
+
+  /**
    * @see parent::loadRefsFwd()
    */
   function loadRefsFwd() {

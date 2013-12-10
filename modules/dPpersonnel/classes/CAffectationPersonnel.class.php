@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPpersonnel
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -52,7 +52,7 @@ class CAffectationPersonnel extends CMbMetaObject {
     $props["realise"]  = "bool notNull";
     $props["debut"]    = "dateTime";
     $props["fin"]      = "dateTime moreThan|debut";
-
+    $props["object_class"] = "enum list|CBloodSalvage|COperation|CPlageOp";
     $props["_debut"]   = "time";
     $props["_fin"]     = "time moreThan|_debut";
     
