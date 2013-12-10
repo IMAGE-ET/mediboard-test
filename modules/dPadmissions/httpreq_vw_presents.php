@@ -96,12 +96,18 @@ $show_curr_affectation = CAppUI::conf("dPadmissions show_curr_affectation");
 /** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
-CMbObject::massLoadFwdRef($sejours, "patient_id");
+$patients   = CMbObject::massLoadFwdRef($sejours, "patient_id");
 $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 $functions  = CMbObject::massLoadFwdRef($praticiens, "function_id");
 
+// Chargement optimisée des prestations
+CSejour::massCountPrestationSouhaitees($sejours);
+
+CMbObject::massCountBackRefs($sejours, "notes");
+CMbObject::massCountBackRefs($patients, "dossier_medical");
+
 foreach ($sejours as $sejour_id => $_sejour) {
-  $praticien = $_sejour->loadRefPraticien(1);
+  $praticien = $_sejour->loadRefPraticien();
   if ($filterFunction && $filterFunction != $praticien->function_id) {
     unset($sejours[$sejour_id]);
     continue;
@@ -110,7 +116,7 @@ foreach ($sejours as $sejour_id => $_sejour) {
   $_sejour->checkDaysRelative($date);
   
   // Chargement du patient
-  $patient = $_sejour->loadRefPatient(1);
+  $patient = $_sejour->loadRefPatient();
   $patient->loadIPP();
   
   
@@ -138,12 +144,7 @@ foreach ($sejours as $sejour_id => $_sejour) {
   }
   else {
     $_sejour->loadRefsAffectations();
-
     $affectation = $_sejour->_ref_first_affectation;
-  }
-  if ($affectation->_id) {
-    $affectation->loadRefLit(1);
-    $affectation->_ref_lit->loadCompleteView();
   }
 }
 

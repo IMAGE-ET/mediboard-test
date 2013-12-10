@@ -109,9 +109,17 @@ if ($order_col == "praticien_id") {
 /** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
-CMbObject::massLoadFwdRef($sejours, "patient_id");
+$patients   = CMbObject::massLoadFwdRef($sejours, "patient_id");
+CMbObject::massLoadFwdRef($sejours, "etablissement_sortie_id");
+CMbObject::massLoadFwdRef($sejours, "service_sortie_id");
 $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 $functions  = CMbObject::massLoadFwdRef($praticiens, "function_id");
+
+// Chargement optimisée des prestations
+CSejour::massCountPrestationSouhaitees($sejours);
+
+CMbObject::massCountBackRefs($sejours, "notes");
+CMbObject::massCountBackRefs($patients, "dossier_medical");
 
 $maternite_active = CModule::getActive("maternite");
 
@@ -145,11 +153,6 @@ foreach ($sejours as $sejour_id => $_sejour) {
 
   // Chargement des affectation
   $_sejour->loadRefsAffectations();
-  foreach ($_sejour->_ref_affectations as $_aff) {
-    if ($_aff->_id) {
-      $_aff->loadRefLit()->loadCompleteView();
-    }
-  }
   
   if ($maternite_active && $_sejour->grossesse_id) {
     $_sejour->_sejours_enfants_ids = CMbArray::pluck($_sejour->loadRefsNaissances(), "sejour_enfant_id");

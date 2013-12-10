@@ -2798,8 +2798,8 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->_ref_last_affectation  = reset($affectations);
     }
     else {
-      $this->_ref_first_affectation = new CAffectation;
-      $this->_ref_last_affectation  = new CAffectation;
+      $this->_ref_first_affectation = new CAffectation();
+      $this->_ref_last_affectation  = new CAffectation();
     }
 
     return $this->_ref_affectations = $affectations;
@@ -2889,7 +2889,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $where["sejour_id"] = "= '$this->_id'";
     $order = "date ASC";
 
-    $operations = new COperation;
+    $operations = new COperation();
     $this->_ref_operations = $operations->loadList($where, $order);
 
     // Motif complet
@@ -2920,7 +2920,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->_ref_last_operation = reset($this->_ref_operations);
     }
     else {
-      $this->_ref_last_operation = new COperation;
+      $this->_ref_last_operation = new COperation();
     }
     return $this->_ref_operations;
   }

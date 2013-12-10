@@ -120,11 +120,13 @@ $functions  = CMbObject::massLoadFwdRef($praticiens, "function_id");
 // Chargement optimisée des prestations
 CSejour::massCountPrestationSouhaitees($sejours);
 
-CSejour::massCountBackRefs($sejours, "notes");
-CSejour::massCountBackRefs($patients, "dossier_medical");
+CMbObject::massCountBackRefs($sejours, "notes");
+CMbObject::massCountBackRefs($patients, "dossier_medical");
 
+/** @var COperation[] $operations_total */
+$operations_total = array();
 foreach ($sejours as $sejour_id => $_sejour) {
-  $praticien = $_sejour->loadRefPraticien(1);
+  $praticien = $_sejour->loadRefPraticien();
   if ($filterFunction && $filterFunction != $praticien->function_id) {
     unset($sejours[$sejour_id]);
     continue;
@@ -146,23 +148,34 @@ foreach ($sejours as $sejour_id => $_sejour) {
   // Chargement des modes d'entrée
   $_sejour->loadRefEtablissementProvenance();
 
-  // Chargement des interventions
-  $whereOperations = array("annulee" => "= '0'");
-  $_sejour->loadRefsOperations($whereOperations);
-  foreach ($_sejour->_ref_operations as $operation) {
-    $operation->loadRefsActes();
-    $consult_anesth = $operation->loadRefsConsultAnesth();
-    $consultation = $consult_anesth->loadRefConsultation();
-    $consultation->loadRefPlageConsult();
-    $consult_anesth->_date_consult = $consultation->_date;
-  }
-
   // Chargement de l'affectation
   $affectation = $_sejour->loadRefFirstAffectation();
-  if ($affectation->_id) {
-    $affectation->loadRefLit()->loadCompleteView();
-  }    
+
+  // Chargement des interventions
+  $whereOperations = array("annulee" => "= '0'");
+  $operations = $_sejour->loadRefsOperations($whereOperations);
+  $operations_total = array_merge($operations, $operations_total);
 }
+
+// Optimisation du chargement des interventions
+/** @var CConsultAnesth[] $dossiers_anesth_total */
+$dossiers_anesth_total = array();
+CMbObject::massCountBackRefs($operations_total, "dossiers_anesthesie");
+foreach ($operations_total as $operation) {
+  $operation->loadRefsActes();
+  $consult_anesth = $operation->loadRefsConsultAnesth();
+  $dossiers_anesth_total[$consult_anesth->_id] = $consult_anesth;
+}
+
+// Optimisation du chargement des dossiers d'anesthésie
+$consultations = CMbObject::massLoadFwdRef($dossiers_anesth_total, "consultation_id");
+CMbObject::massLoadFwdRef($consultations, "plageconsult_id");
+foreach ($dossiers_anesth_total as $dossier_anesth) {
+  $consultation = $dossier_anesth->loadRefConsultation();
+  $consultation->loadRefPlageConsult();
+  $dossier_anesth->_date_consult = $consultation->_date;
+}
+
 if (CAppUI::conf("dPadmissions show_deficience")) {
   $dossiers = CMbArray::pluck($sejours, "_ref_patient", "_ref_dossier_medical");
   CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");

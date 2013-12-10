@@ -82,8 +82,8 @@ foreach ($affectations as $affectation_id => $affectation) {
   $affectation->loadRefsAffectations();
   $affectation->_ref_prev->loadView();
   $affectation->_ref_next->loadView();
-  $sejour    =& $affectation->loadRefSejour();
-  $praticien =& $sejour->loadRefPraticien();
+  $sejour    = $affectation->loadRefSejour();
+  $praticien = $sejour->loadRefPraticien();
   
   if ($filterFunction && $filterFunction != $praticien->function_id) {
     unset($sejours[$sejour->_id]);
