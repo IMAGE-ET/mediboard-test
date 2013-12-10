@@ -90,18 +90,22 @@ class CSupervisionGraphPack extends CMbObject {
   /**
    * Get all pakcs from an object
    *
-   * @param CMbObject $object The object to get the packs of
+   * @param CMbObject $object        The object to get the packs of
+   * @param bool      $with_disabled List disabled items
    *
    * @return self[]
    */
-  static function getAllFor(CMbObject $object) {
+  static function getAllFor(CMbObject $object, $with_disabled = false) {
     $pack = new self;
 
     $where = array(
       "owner_class" => "= '$object->_class'",
       "owner_id"    => "= '$object->_id'",
-      "disabled"    => "= '0'",
     );
+
+    if (!$with_disabled) {
+      $where["disabled"] = "= '0'";
+    }
 
     return $pack->loadList($where, "title");
   }

@@ -16,7 +16,7 @@ $group = CGroups::loadCurrent();
 $graphs        = CSupervisionGraph::getAllFor($group);
 $timed_data    = CSupervisionTimedData::getAllFor($group);
 $timed_picture = CSupervisionTimedPicture::getAllFor($group);
-$packs         = CSupervisionGraphPack::getAllFor($group);
+$packs         = CSupervisionGraphPack::getAllFor($group, true);
 
 foreach ($graphs as $_graph) {
   $_axes = $_graph->loadRefsAxes();
