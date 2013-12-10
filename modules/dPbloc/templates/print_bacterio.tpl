@@ -11,7 +11,7 @@
 <table class="tbl">
   <tr class="clear">
     <th colspan="100">
-      <h1>
+      <h1 style="page-break-before: auto !important;">
         <a href="#" onclick="window.print()">
           Bacterio du {{$date|date_format:$conf.date}}
           -
