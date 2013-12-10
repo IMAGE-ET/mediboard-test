@@ -29,6 +29,7 @@ $where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat)
 $order = "plageconsult.date";
 
 $consult = new CConsultation();
+/** @var CConsultation[] $listConsults */
 $listConsults = $consult->loadList($where, $order, null, null, $ljoin);
 
 $total = array("nb" => 0, "value" => 0);
@@ -46,7 +47,7 @@ foreach ($listConsults as $consult) {
   }
   
   // Retour Noemie déjà traité
-  $hasNoemie = (!$consult->_current_fse || $consult->_current_fse->S_FSE_ETAT != 9);
+  $hasNoemie = (!$consult->_current_fse || $consult->_current_fse->hasNoemie());
   if ($hasNoemie) {
     unset($listConsults[$consult->_id]);
     continue;

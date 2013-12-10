@@ -112,12 +112,16 @@ if ($order_col == "praticien_id") {
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
 // Mass preloading
-CMbObject::massLoadFwdRef($sejours, "patient_id");
+$patients   = CMbObject::massLoadFwdRef($sejours, "patient_id");
+CMbObject::massLoadFwdRef($sejours, "etablissement_entree_id");
 $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 $functions  = CMbObject::massLoadFwdRef($praticiens, "function_id");
 
 // Chargement optimisée des prestations
 CSejour::massCountPrestationSouhaitees($sejours);
+
+CSejour::massCountBackRefs($sejours, "notes");
+CSejour::massCountBackRefs($patients, "dossier_medical");
 
 foreach ($sejours as $sejour_id => $_sejour) {
   $praticien = $_sejour->loadRefPraticien(1);
@@ -127,7 +131,7 @@ foreach ($sejours as $sejour_id => $_sejour) {
   }
 
   // Chargement du patient
-  $patient = $_sejour->loadRefPatient(true);
+  $patient = $_sejour->loadRefPatient();
   $patient->loadIPP();
 
   // Dossier médical
@@ -149,14 +153,14 @@ foreach ($sejours as $sejour_id => $_sejour) {
     $operation->loadRefsActes();
     $consult_anesth = $operation->loadRefsConsultAnesth();
     $consultation = $consult_anesth->loadRefConsultation();
-    $consultation->loadRefPlageConsult(1);
+    $consultation->loadRefPlageConsult();
     $consult_anesth->_date_consult = $consultation->_date;
   }
 
   // Chargement de l'affectation
   $affectation = $_sejour->loadRefFirstAffectation();
   if ($affectation->_id) {
-    $affectation->loadRefLit(1)->loadCompleteView();
+    $affectation->loadRefLit()->loadCompleteView();
   }    
 }
 if (CAppUI::conf("dPadmissions show_deficience")) {

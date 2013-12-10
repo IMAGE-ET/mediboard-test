@@ -54,8 +54,6 @@ Calendar.regField(getForm("changeDatePreAdmissions").date, null, {noView: true})
     <th>DH</th>
   </tr>
   {{foreach from=$listConsultations item=curr_consult}}
-  <tr id="consultation{{$curr_consult->consultation_id}}">
     {{include file="inc_vw_preadmission_line.tpl"}}
-  </tr>
   {{/foreach}}
 </table>

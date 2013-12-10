@@ -2096,7 +2096,6 @@ class CStoredObject extends CModelObject {
       trigger_error("Can't mass load not ref '$field' for class '$object->_class'", E_USER_WARNING);
       return null;
     }
-
     $meta = $spec->meta;
     if ($object_class && !$spec->meta) {
       trigger_error("Mass load with object class is unavailable for non meta ref '$field' in class '$object->_class'", E_USER_WARNING);

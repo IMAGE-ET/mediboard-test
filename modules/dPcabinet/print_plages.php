@@ -48,16 +48,17 @@ $order   = array();
 $order[] = "date";
 $order[] = "chir_id";
 $order[] = "debut";
+/** @var CPlageconsult[] $listPlage */
 $listPlage = $plage->loadList($where, $order);
 
 // Pour chaque plage on selectionne les consultations
-foreach ($listPlage as $plage_id => &$plage) {
+foreach ($listPlage as $plage) {
   $plage->listPlace     = array();
   $plage->listPlace2     = array();
   $plage->listBefore    = array();
   $plage->listAfter     = array();
   $plage->listHorsPlace = array();
-  $listPlage[$plage_id]->loadRefs(false, 1);
+  $listPlage[$plage->_id]->loadRefs(false, 1);
 
   CMbObject::massLoadFwdRef($plage->_ref_consultations, "sejour_id");
 
@@ -69,7 +70,7 @@ foreach ($listPlage as $plage_id => &$plage) {
 
   foreach ($plage->_ref_consultations as $keyConsult => $valConsult) {
     /** @var CConsultation $consultation */
-    $consultation =& $plage->_ref_consultations[$keyConsult];
+    $consultation = $plage->_ref_consultations[$keyConsult];
 
     $patient = $consultation->loadRefPatient(1);
     $patient->loadIPP();
@@ -83,9 +84,9 @@ foreach ($listPlage as $plage_id => &$plage) {
     }
 
     // Chargement de la categorie
-    $consultation->loadRefCategorie(1);
+    $consultation->loadRefCategorie();
     $consultation->loadRefConsultAnesth();
-    $consult_anesth =& $consultation->_ref_consult_anesth;
+    $consult_anesth = $consultation->_ref_consult_anesth;
     if ($consult_anesth->operation_id) {
       $consult_anesth->loadRefOperation();
       $consult_anesth->_ref_operation->loadRefPraticien(true);
@@ -110,9 +111,9 @@ foreach ($listPlage as $plage_id => &$plage) {
 
 // Suppression des plages vides
 if (!$filter->_plages_vides) {
-  foreach ($listPlage as $plage_id => $plage) {
+  foreach ($listPlage as $plage) {
     if (!count($plage->_ref_consultations)) {
-      unset($listPlage[$plage_id]);
+      unset($listPlage[$plage->_id]);
     }
   }
 }

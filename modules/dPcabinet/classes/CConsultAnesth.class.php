@@ -262,11 +262,10 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   /**
    * Charge la consultation associée
    *
-   * @todo Remettre en place le cache
    * @return CConsultation
    */
   function loadRefConsultation() {
-    $consultation = $this->loadFwdRef("consultation_id", false);
+    $consultation = $this->loadFwdRef("consultation_id", true);
     $this->_view = $consultation->_view;
     return $this->_ref_consultation = $consultation;
   }
@@ -284,12 +283,11 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
    * Charge l'opération associée
    * Value également le séjour associé
    *
-   * @todo Remettre en place le cache
    * @return COperation
    */
   function loadRefOperation() {
     /** @var COperation $operation */
-    $operation = $this->loadFwdRef("operation_id", false);
+    $operation = $this->loadFwdRef("operation_id", true);
     
     // Chargement du séjour associé
     if ($operation->_id) {
@@ -625,8 +623,8 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $consult = $this->loadRefConsultation();
     $consult->loadRefPlageConsult();
 
-    if ($consult->_ref_plageconsult->date < CMbDT::date()) {
-      return "Impossible de supprimer une consultation passée";
+    if ($consult->_ref_plageconsult->date < CMbDT::date() && !$this->_ref_module->_can->admin) {
+      return "Impossible de supprimer un dossier d'anesthésie d'une consultation passée";
     }
 
     return parent::canDeleteEx();

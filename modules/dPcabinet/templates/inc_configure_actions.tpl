@@ -8,15 +8,15 @@
     <td class="button">
       <script type="text/javascript">
         PlageConsult = {
-        	transfert: function() {
-        	  var url = new Url();
-        	  url.setModuleAction("dPcabinet", "transfert_plageconsult");
-        	  url.popup(500, 600, "transfert");
-        	}
+          transfert: function() {
+            var url = new Url();
+            url.setModuleAction("dPcabinet", "transfert_plageconsult");
+            url.popup(500, 600, "transfert");
+          }
         }
       </script>
       <button class="modify" type="button" onclick="PlageConsult.transfert();">
-      	{{tr}}mod-dPcabinet-tab-transfert_plageconsult{{/tr}}
+        {{tr}}mod-dPcabinet-tab-transfert_plageconsult{{/tr}}
       </button> 
     </td>
   </tr>
@@ -67,7 +67,7 @@
 
 <script type="text/javascript">
   createConsultAnesth = function() {
-    var url = new Url("dPcabinet", "ajax_create_missing_consult_anesth");
+    var url = new Url("cabinet", "ajax_create_missing_consult_anesth");
     url.addParam("anesth_id", $V($("anesth_id")));
     url.requestUpdate("result-create_consult_anesth", { onComplete: function() {
       repeatActions("createConsultAnesth");
@@ -78,6 +78,11 @@
     if ($V($("check_repeat_actions"))) {      
       window[func]();
     }
+  };
+
+  cleanDoublonsConsultAnesth = function() {
+    var url = new Url("cabinet", "ajax_delete_doublons_consult_anesth");
+    url.requestUpdate("result_doublons_consult_anesth");
   }
 </script>
 
@@ -90,7 +95,7 @@
   <tr>
     <td class="narrow">
       <button class="search" onclick="createConsultAnesth()">
-        Créer les consultations d'anesth pour des consultations
+        Créer dossiers d'anesthésie pour des consultations
       </button> <br />
       <select name="anesth_id" id="anesth_id">
         {{foreach from=$anesths item=_anesth}}
@@ -100,5 +105,12 @@
       <input type="checkbox" name="repeat_actions" id="check_repeat_actions"/> Relancer automatiquement 
     </td>
     <td id="result-create_consult_anesth"></td>
+  </tr>
+  <tr>
+    <td class="narrow">
+      <button class="trash" onclick="cleanDoublonsConsultAnesth()">
+      Supression des dossiers d'anesthésie en double
+    </td>
+    <td id="result_doublons_consult_anesth"></td>
   </tr>
 </table>

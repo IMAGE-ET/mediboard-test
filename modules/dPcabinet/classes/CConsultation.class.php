@@ -146,6 +146,7 @@ class CConsultation extends CFacturable {
   public $_bind_fse;
   public $_ids_fse;
   public $_ext_fses;
+  /** @var  CFSE */
   public $_current_fse;
   public $_fse_intermax;
 
@@ -400,15 +401,6 @@ class CConsultation extends CFacturable {
 
     // si _coded vaut 1 alors, impossible de modifier la cotation
     $this->_coded = $this->valide;
-
-    // pour récuperer le praticien depuis la plage consult
-    $this->loadRefPlageConsult(true);
-    $plageconsult = $this->_ref_plageconsult;
-
-    $time = CMbDT::time("+".CMbDT::minutesRelative("00:00:00", $plageconsult->freq)*$this->duree." MINUTES", $this->heure);
-    $this->_date_fin = "$plageconsult->date $time";
-    
-    $this->_duree = CMbDT::minutesRelative("00:00:00", $plageconsult->freq) * $this->duree;
     
     $this->_exam_fields = $this->getExamFields();
   }
@@ -757,13 +749,13 @@ class CConsultation extends CFacturable {
 
       $this->loadRefPlageConsult();
 
-      $function = new CFunctions;
+      $function = new CFunctions();
 
       if ($this->_function_secondary_id) {
         $function->load($this->_function_secondary_id);
       }
       else {
-        $user = new CMediusers;
+        $user = new CMediusers();
         $user->load($this->_ref_chir->_id);
         $function->load($user->function_id);
       }
@@ -979,6 +971,10 @@ class CConsultation extends CFacturable {
       return $msg;
     }
 
+    if (CAppUI::pref("create_dossier_anesth")) {
+      $this->createConsultAnesth();
+    }
+
     $this->completeField("_line_element_id");
 
     // Création d'une tâche si la prise de rdv est issue du plan de soin
@@ -1027,10 +1023,6 @@ class CConsultation extends CFacturable {
           return $msg;
         }
       }
-    }
-
-    if (CAppUI::pref("create_dossier_anesth")) {
-      $this->createConsultAnesth();
     }
 
     // Forfait SE et facturable. A laisser apres le store()
@@ -1227,14 +1219,17 @@ class CConsultation extends CFacturable {
    * @return CPlageconsult
    */
   function loadRefPlageConsult($cache = true) {
-    if ($this->_ref_plageconsult) {
-      return $this->_ref_plageconsult;
-    }
-
     $this->completeField("plageconsult_id");
     /** @var CPlageConsult $plage */
     $plage = $this->loadFwdRef("plageconsult_id", $cache);
-    $plage->loadRefsFwd($cache);
+
+    $time = CMbDT::time("+".CMbDT::minutesRelative("00:00:00", $plage->freq)*$this->duree." MINUTES", $this->heure);
+    $this->_date_fin = "$plage->date $time";
+
+    $this->_duree = CMbDT::minutesRelative("00:00:00", $plage->freq) * $this->duree;
+
+    $plage->_ref_chir        = $plage->loadFwdRef("chir_id"       , $cache);
+    $plage->_ref_remplacant  = $plage->loadFwdRef("remplacant_id" , $cache);
 
     // Distant fields
     $chir = $plage->_ref_remplacant->_id ?
@@ -1411,16 +1406,20 @@ class CConsultation extends CFacturable {
   /**
    * Charge un dossier d'anesthésie classique
    *
-   * @param ref $dossier_anesth_id Identifiant de dossier à charge explicitement
+   * @param ref $dossier_anesth_id Identifiant de dossier à charger explicitement
    *
    * @return CConsultAnesth
    */
   function loadRefConsultAnesth($dossier_anesth_id = null) {
-    $this->loadRefsDossiersAnesth();
+    $dossiers = $this->loadRefsDossiersAnesth();
+
+    // Cas du choix initial du dossier à utiliser
     if ($dossier_anesth_id !== null) {
-      return $this->_ref_consult_anesth = $this->_refs_dossiers_anesth[$dossier_anesth_id];
+      return $this->_ref_consult_anesth = $dossiers[$dossier_anesth_id];
     }
-    return $this->_ref_consult_anesth = $this->loadFirstBackRef("consult_anesth");
+
+    // On retourne le premier ou un dossier vide
+    return $this->_ref_consult_anesth = count($dossiers) ? reset($dossiers) : new CConsultAnesth();
   }
 
   /**
@@ -1585,6 +1584,11 @@ class CConsultation extends CFacturable {
    * @return string[] Noms interne des champs
    */
   function getExamFields() {
+    $context = array(__METHOD__, func_get_args());
+    if (CFunctionCache::exist($context)) {
+      return CFunctionCache::get($context);
+    }
+
     $fields = array(
       "motif",
       "rques",
@@ -1602,8 +1606,8 @@ class CConsultation extends CFacturable {
     if (CAppUI::conf("dPcabinet CConsultation show_conclusion")) {
       $fields[] = "conclusion";
     }
-    
-    return $fields;
+
+    return CFunctionCache::set($context, $fields);
   }
 
   /**
@@ -1936,57 +1940,55 @@ class CConsultation extends CFacturable {
 
     // Création de la consultation d'anesthésie
     $consultAnesth = $this->loadRefConsultAnesth();
-    if (!$consultAnesth->_id) {
-      $consultAnesth->consultation_id = $this->_id;
+    $operation = new COperation();
+    if (!$consultAnesth->_id || $this->_operation_id) {
+      if(!$consultAnesth->_id) {
+        $consultAnesth->consultation_id = $this->_id;
+      }
+      if($this->_operation_id) {
+        // Association à l'intervention
+        $consultAnesth->operation_id = $this->_operation_id;
+        $operation = $consultAnesth->loadRefOperation();
+      }
       if ($msg = $consultAnesth->store()) {
         return $msg;
       }
     }
 
-    // Remplissage automatique des motifs et remarques
-    if ($this->_operation_id) {
-      // Association à l'intervention
-      $consultAnesth->operation_id = $this->_operation_id;
-      $operation = $consultAnesth->loadRefOperation();
-      if ($msg = $consultAnesth->store()) {
-        return $msg;
-      }
+    // Remplissage du motif de pré-anesthésie si creation et champ motif vide
+    if ($operation->_id) {
+      $format_motif = CAppUI::conf('cabinet CConsultAnesth format_auto_motif');
+      $format_rques = CAppUI::conf('cabinet CConsultAnesth format_auto_rques');
 
-      // Remplissage du motif de pré-anesthésie si creation et champ motif vide
-      if ($operation->_id) {
-        $format_motif = CAppUI::conf('cabinet CConsultAnesth format_auto_motif');
-        $format_rques = CAppUI::conf('cabinet CConsultAnesth format_auto_rques');
+      if (($format_motif && !$this->motif) || ($format_rques && !$this->rques)) {
+        $operation = $consultAnesth->_ref_operation;
+        $operation->loadRefPlageOp();
+        $sejour = $operation->loadRefSejour();
+        $chir   = $operation->loadRefChir();
+        $chir->updateFormFields();
 
-        if (($format_motif && !$this->motif) || ($format_rques && !$this->rques)) {
-          $operation = $consultAnesth->_ref_operation;
-          $operation->loadRefPlageOp();
-          $sejour = $operation->loadRefSejour();
-          $chir   = $operation->loadRefChir();
-          $chir->updateFormFields();
+        $items = array (
+          '%N' => $chir->_user_last_name,
+          '%P' => $chir->_user_first_name,
+          '%S' => $chir->_shortview,
+          '%L' => $operation->libelle,
+          '%i' => CMbDT::format($operation->_datetime_best , CAppUI::conf('time')),
+          '%I' => CMbDT::format($operation->_datetime_best , CAppUI::conf('date')),
+          '%E' => CMbDT::format($sejour->entree_prevue, CAppUI::conf('date')),
+          '%e' => CMbDT::format($sejour->entree_prevue, CAppUI::conf('time')),
+          '%T' => strtoupper(substr($sejour->type, 0, 1)),
+        );
 
-          $items = array (
-            '%N' => $chir->_user_last_name,
-            '%P' => $chir->_user_first_name,
-            '%S' => $chir->_shortview,
-            '%L' => $operation->libelle,
-            '%i' => CMbDT::format($operation->_datetime_best , CAppUI::conf('time')),
-            '%I' => CMbDT::format($operation->_datetime_best , CAppUI::conf('date')),
-            '%E' => CMbDT::format($sejour->entree_prevue, CAppUI::conf('date')),
-            '%e' => CMbDT::format($sejour->entree_prevue, CAppUI::conf('time')),
-            '%T' => strtoupper(substr($sejour->type, 0, 1)),
-          );
+        if ($format_motif && !$this->motif) {
+          $this->motif = str_replace(array_keys($items), $items, $format_motif);
+        }
 
-          if ($format_motif && !$this->motif) {
-            $this->motif = str_replace(array_keys($items), $items, $format_motif);
-          }
+        if ($format_rques && !$this->rques) {
+          $this->rques = str_replace(array_keys($items), $items, $format_rques);
+        }
 
-          if ($format_rques && !$this->rques) {
-            $this->rques = str_replace(array_keys($items), $items, $format_rques);
-          }
-
-          if ($msg = $this->store()) {
-            return $msg;
-          }
+        if ($msg = parent::store()) {
+          return $msg;
         }
       }
     }

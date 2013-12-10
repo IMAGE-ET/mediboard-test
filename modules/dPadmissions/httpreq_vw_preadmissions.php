@@ -30,7 +30,7 @@ $date_min = CMbDT::dateTime("00:00:00", $date);
 $date_max = CMbDT::dateTime("23:59:59", $date);
 
 // Récupération de la liste des anesthésistes
-$mediuser = new CMediusers;
+$mediuser = new CMediusers();
 $anesthesistes = $mediuser->loadAnesthesistes(PERM_READ);
 
 $consult = new CConsultation();
@@ -39,11 +39,13 @@ $consult = new CConsultation();
 $ljoin = array();
 $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id";
 $ljoin["patients"]     = "consultation.patient_id = patients.patient_id";
+
 $where = array();
 $where["consultation.patient_id"] = "IS NOT NULL";
 $where["consultation.annule"] = "= '0'";
 $where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($anesthesistes));
 $where["plageconsult.date"] = "= '$date'";
+
 if ($order_col_pre == "patient_id") {
   $order = "patients.nom $order_way_pre, patients.prenom $order_way_pre, consultation.heure";
 }
@@ -54,49 +56,83 @@ else {
 /** @var CConsultation[] $listConsultations */
 $listConsultations = $consult->loadList($where, $order, null, null, $ljoin);
 
-foreach ($listConsultations as $key => $_consult) {
+// Optimisation des chargements
+$patients  = CMbObject::massLoadFwdRef($listConsultations, "patient_id");
+$plages    = CMbObject::massLoadFwdRef($listConsultations, "plageconsult_id");
+
+$dossiers_anesth_total = array();
+
+foreach ($listConsultations as $_consult) {
+
+  $dossiers_anesth = $_consult->loadRefsDossiersAnesth();
+
+  if (!count($dossiers_anesth)) {
+    unset($listConsultations[$_consult->_id]);
+    continue;
+  }
+
   $_consult->loadRefPatient();
   $_consult->loadRefPlageconsult();
   $_consult->_ref_chir->loadRefFunction();
-  
-  $_consult->loadRefConsultAnesth();
-  
-  if (count($_consult->_refs_dossiers_anesth) == 0) {
-    unset($listConsultations[$key]);
-    continue;
+
+  foreach ($dossiers_anesth as $_dossier) {
+    $dossiers_anesth_total[$_dossier->_id] = $_dossier;
   }
-  foreach ($_consult->_refs_dossiers_anesth as $_dossier) {
+}
+
+$operations = CMbObject::massLoadFwdRef($dossiers_anesth_total, "operation_id");
+$sejours    = CMbObject::massLoadFwdRef($dossiers_anesth_total, "sejour_id");
+$plages     = CMbObject::massLoadFwdRef($operations, "plageop_id");
+$sejours    = CMbObject::massLoadFwdRef($operations, "sejour_id");
+
+/** @var CSejour[] $sejours_total */
+$sejours_total = array();
+
+foreach ($listConsultations as $_consult) {
+  $dossier_empty = false;
+  $dossiers_anesth = $_consult->_refs_dossiers_anesth;
+  foreach ($dossiers_anesth as $_dossier) {
     $_dossier->loadRefOperation();
     $_sejour = $_dossier->_ref_sejour;
     if ($_sejour->_id) {
-      $_sejour->loadRefPatient();
-      $_sejour->loadRefPraticien();
-      $_sejour->loadNDA();
-      $_sejour->loadRefsNotes();
-      $_sejour->countPrestationsSouhaitees();
-      $_sejour->loadRefsOperations();
-      $_sejour->loadRefsAffectations();
-      foreach ($_sejour->_ref_affectations as $_aff) {
-        $_aff->loadView();
-      }
-      $_sejour->getDroitsCMU();
-      $_consult->_dossier_anesth_completed_id = $_dossier->_id;
-      break;
+      $sejours_total[$_sejour->_id] = $_sejour;
     }
-    
+    else {
+      $dossier_empty = true;
+    }
+  }
+  $_consult->_next_sejour_and_operation = null;
+  if($dossier_empty) {
     $next = $_consult->_ref_patient->getNextSejourAndOperation($_consult->_ref_plageconsult->date);
+
     if ($next["COperation"]->_id) {
       $next["COperation"]->loadRefSejour();
       $next["COperation"]->_ref_sejour->loadRefPraticien();
       $next["COperation"]->_ref_sejour->loadNDA();
       $next["COperation"]->_ref_sejour->loadRefsNotes();
-    } 
+    }
     if ($next["CSejour"]->_id) {
       $next["CSejour"]->loadRefPraticien();
       $next["CSejour"]->loadNDA();
       $next["CSejour"]->loadRefsNotes();
     }
     $_consult->_next_sejour_and_operation = $next;
+  }
+}
+
+$patients   = CMbObject::massLoadFwdRef($sejours_total, "patient_id");
+$praticiens = CMbObject::massLoadFwdRef($sejours_total, "praticien_id");
+
+CMbObject::massCountBackRefs($sejours_total, "notes");
+foreach ($sejours_total as $_sejour) {
+  if ($_sejour->_id) {
+    $_sejour->loadRefPatient();
+    $_sejour->loadRefPraticien();
+    $_sejour->loadNDA();
+    $_sejour->loadRefsNotes();
+    $_sejour->countPrestationsSouhaitees();
+    $_sejour->loadRefFirstAffectation();
+    $_sejour->getDroitsCMU();
   }
 }
 

@@ -114,11 +114,13 @@ CMbObject::massLoadFwdRef($listFactures, "praticien_id");
 CMbObject::massLoadFwdRef($listFactures, "patient_id");
 CMbObject::massCountBackRefs($listFactures, "reglements");
 CMbObject::massCountBackRefs($listFactures, "notes");
+
 foreach ($listFactures as $_facture) {
   /** @var CFacture $_facture */
   $_facture->loadRefPatient();
   $_facture->loadRefPraticien();
   $_facture->loadRefsConsultation();
+
   if (count($_facture->_ref_consults)) {
 
     $_facture->loadRefCoeffFacture();
@@ -176,6 +178,7 @@ foreach ($listFactures as $_facture) {
 
     // Classement par plage
     $plage = $_facture->_ref_last_consult->_ref_plageconsult;
+    $plage->loadRefsFwd();
     if ($_facture->_ref_last_consult->_id) {
       $debut_plage = "$plage->date $plage->debut";
       if (!isset($listPlages["$debut_plage"])) {
@@ -183,7 +186,7 @@ foreach ($listFactures as $_facture) {
         $listPlages["$debut_plage"]["total"]["secteur1"] = 0;
         $listPlages["$debut_plage"]["total"]["secteur2"] = 0;
         $listPlages["$debut_plage"]["total"]["secteur3"] = 0;
-        $listPlages["$debut_plage"]["total"]["du_tva"] = 0;
+        $listPlages["$debut_plage"]["total"]["du_tva"]   = 0;
         $listPlages["$debut_plage"]["total"]["total"]    = 0;
         $listPlages["$debut_plage"]["total"]["patient"]  = 0;
         $listPlages["$debut_plage"]["total"]["tiers"]    = 0;

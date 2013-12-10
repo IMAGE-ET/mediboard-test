@@ -24,12 +24,12 @@ if (!isset($current_m)) {
   $current_m = CValue::get("current_m", $m);
 }
 
-$prat_id      = CValue::getOrSession("chirSel", $user->_id);
-$selConsult   = CValue::getOrSession("selConsult");
+$prat_id           = CValue::getOrSession("chirSel", $user->_id);
+$selConsult        = CValue::getOrSession("selConsult");
 $dossier_anesth_id = CValue::getOrSession("dossier_anesth_id");
 
-$listPrats = CConsultation::loadPraticiens(PERM_EDIT);
-$listChirs = $user->loadPraticiens(PERM_READ);
+$listPrats   = CConsultation::loadPraticiens(PERM_EDIT);
+$listChirs   = $user->loadPraticiens(PERM_READ);
 $listAnesths = $user->loadAnesthesistes();
 
 $list_mode_sortie = array();
@@ -48,8 +48,8 @@ if ($current_m == "dPurgences") {
 
 // Chargement des banques
 $orderBanque = "nom ASC";
-$banque = new CBanque();
-$banques = $banque->loadList(null, $orderBanque);
+$banque      = new CBanque();
+$banques     = $banque->loadList(null, $orderBanque);
 
 if (isset($_GET["date"])) {
   $selConsult = null;
@@ -81,9 +81,8 @@ else {
 }
 
 // On charge le praticien
-$userSel = new CMediusers;
+$userSel = new CMediusers();
 $userSel->load($prat_id);
-$userSel->loadRefs();
 $canUserSel = $userSel->canDo();
 
 if ((!$userSel->isMedical()) && ($current_m != "dPurgences")) {
@@ -91,24 +90,26 @@ if ((!$userSel->isMedical()) && ($current_m != "dPurgences")) {
   CAppUI::redirect("m=dPcabinet&tab=0");
 }
 
-$anesth = new CTypeAnesth;
+$anesth = new CTypeAnesth();
 $orderanesth = "name";
 $anesth = $anesth->loadList(null, $orderanesth);
 
-$consultAnesth =& $consult->_ref_consult_anesth;
+$consultAnesth = $consult->_ref_consult_anesth;
 
 // Consultation courante
-$consult->_ref_chir =& $userSel;
+$consult->_ref_chir = $userSel;
 
 // Chargement de la consultation
 if ($consult->_id) {
-  $consult->loadRefs();  
+  $consult->loadRefsFwd();
+  $consultAnesth = $consult->loadRefConsultAnesth();
   
   // Chargement de la consultation d'anesthésie
   
   // Chargement de la vue de chacun des dossiers
   foreach ($consult->_refs_dossiers_anesth as $_dossier) {
     $_dossier->loadRefConsultation();
+    $_dossier->_ref_consultation->loadRefPlageConsult();
     $_dossier->loadRefOperation()->loadRefPlageOp();
   }
   
@@ -116,8 +117,7 @@ if ($consult->_id) {
   if ($dossier_anesth_id && isset($consult->_refs_dossiers_anesth[$dossier_anesth_id])) {
     $consultAnesth = $consult->_refs_dossiers_anesth[$dossier_anesth_id];
   }
-  
-  if (!is_array($consultAnesth) && $consultAnesth->_id) {
+  if ($consultAnesth->_id) {
     $consultAnesth->loadRefs();
     if ($consultAnesth->_ref_operation->_id || $consultAnesth->_ref_sejour->_id) {
       if ($consultAnesth->_ref_operation->passage_uscpo === null) {

@@ -185,6 +185,15 @@ class CFacture extends CMbObject {
   }
 
   /**
+   * Récupération de la liste des relances de la facture
+   *
+   * @return CRelance[]
+   */
+  function loadRefsRelances() {
+    return array();
+  }
+
+  /**
    * Duplication de la facture
    *
    * @return void|string
@@ -672,6 +681,7 @@ class CFacture extends CMbObject {
     if (count($this->_ref_consults) > 0) {
       // Chargement des actes de consultations
       foreach ($this->_ref_consults as $_consult) {
+        $_consult->loadRefPlageConsult();
         $_consult->loadRefsActes($this->numero);
         $_consult->loadExtCodesCCAM();
         $this->rangeActes($_consult);

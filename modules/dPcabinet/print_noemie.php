@@ -49,7 +49,7 @@ foreach ($listConsults as $consult) {
   }
   
   // Retour Noemie déjà traité
-  $hasNoemie = (!$consult->_current_fse || $consult->_current_fse->S_FSE_ETAT != 9);
+  $hasNoemie = (!$consult->_current_fse || $consult->_current_fse->hasNoemie());
   if ($hasNoemie) {
     unset($listConsults[$consult->_id]);
     continue;

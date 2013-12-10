@@ -35,11 +35,13 @@ $where["plageconsult.date"] = "BETWEEN '$filter->_date_min' AND '$filter->_date_
 $order = "plageconsult.date, plageconsult.chir_id";
 
 $consultation = new CConsultation();
+/** @var CConsultation[] $listConsults */
 $listConsults = $consultation->loadList($where, $order, null, null, $ljoin);
 
 $listConsults_date = array();
 foreach ($listConsults as $consult) {
   $consult->loadRefPatient();
+  $consult->loadRefPlageConsult();
   $listConsults_date[$consult->_ref_plageconsult->date]["consult"][$consult->_id] = $consult;
 }
 

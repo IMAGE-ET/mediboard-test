@@ -8,15 +8,11 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{assign var="patient" value=$curr_consult->_ref_patient}}
-{{assign var=dossiers_anesth value=$curr_consult->_refs_dossiers_anesth}}
-{{assign var=dossier_anesth value=""}}
+<tr id="consultation{{$curr_consult->consultation_id}}">
 
-{{if $curr_consult->_dossier_anesth_completed_id}}
-  {{assign var=dossier_anesth_id value=$curr_consult->_dossier_anesth_completed_id}}
-  {{assign var=dossier_anesth value=$dossiers_anesth.$dossier_anesth_id}}
-  {{assign var="curr_adm" value=$dossier_anesth->_ref_sejour}}
-{{else}}
+  {{assign var="patient" value=$curr_consult->_ref_patient}}
+  {{assign var=dossiers_anesth value=$curr_consult->_refs_dossiers_anesth}}
+  {{if is_array($curr_consult->_next_sejour_and_operation)}}
   {{if $curr_consult->_next_sejour_and_operation.COperation->_id}}
     {{assign var="curr_adm" value=$curr_consult->_next_sejour_and_operation.COperation->_ref_sejour}}
     {{assign var="type_event" value="COperation"}}
@@ -24,179 +20,172 @@
     {{assign var="curr_adm" value=$curr_consult->_next_sejour_and_operation.CSejour}}
     {{assign var="type_event" value="CSejour"}}
   {{/if}}
-{{/if}}
+  {{/if}}
 
-<td class="text">
-  {{if $curr_adm->_id && !$curr_adm->annule && $dossier_anesth && $dossier_anesth->_ref_sejour->_id}}
-  {{foreach from=$curr_adm->_ref_operations item=curr_op}}
-  <a class="action" style="float: right" title="Imprimer la DHE de l'intervention" href="#1" onclick="Admissions.printDHE('operation_id', {{$curr_op->_id}}); return false;">
-    <img src="images/icons/print.png" />
-  </a>
-  {{foreachelse}}
-  <a class="action" style="float: right" title="Imprimer la DHE du séjour" href="#1" onclick="Admissions.printDHE('sejour_id', {{$curr_adm->_id}}); return false;">
-    <img src="images/icons/print.png" />
-  </a>
+  <td class="text" rowspan="{{$dossiers_anesth|@count}}">
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
+      {{$patient->_view}}
+    </span>
+  </td>
+  <td class="text" rowspan="{{$dossiers_anesth|@count}}">
+    <div class="{{if $curr_consult->chrono == 64}}small-success{{else}}small-info{{/if}}" style="margin: 0;">
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_consult->_guid}}')">{{$curr_consult->heure|date_format:$conf.time}}</span>
+      -
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_consult->_ref_plageconsult->_ref_chir}}
+    </div>
+  </td>
+
+  {{foreach from=$dossiers_anesth item=_dossier name=dossiers_anesth}}
+    {{assign var=_sejour value=""}}
+    {{if !$smarty.foreach.dossiers_anesth.first}}
+      <tr>
+    {{/if}}
+    {{if $_dossier->_ref_sejour->_id}}
+      {{assign var=_sejour value=$_dossier->_ref_sejour}}
+    {{elseif $curr_consult->_next_sejour_and_operation.CSejour->_id}}
+      {{assign var=_sejour value=$curr_consult->_next_sejour_and_operation.CSejour}}
+    {{/if}}
+
+    {{if $_sejour && $_sejour->_id}}
+
+      {{assign var=cell_style value="background: #ccc;"}}
+
+      {{if     $_sejour->type == 'ambu'}} {{assign var=cell_style value="background: #faa;"}}
+      {{elseif $_sejour->type == 'comp'}} {{assign var=cell_style value="background: #fff;"}}
+      {{elseif $_sejour->type == 'exte'}} {{assign var=cell_style value="background: #afa;"}}
+      {{elseif $_sejour->type == 'urg'}}  {{assign var=cell_style value="background: #ff6;"}}
+      {{/if}}
+
+      {{if !$_sejour->facturable}}
+        {{assign var=cell_style value="$cell_style background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;"}}
+      {{/if}}
+
+      <td class="text" style="{{$cell_style}}">
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
+      </td>
+
+      <td class="text" style="{{$cell_style}}">
+        <div style="float: right;">
+          {{mb_include module=system template=inc_object_notes object=$_sejour}}
+        </div>
+        {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$_sejour _show_numdoss_modal=1}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
+        le {{$_sejour->_entree|date_format:$conf.date}}
+        </span>
+      </td>
+
+      {{if !$_sejour->annule && $_dossier && $_dossier->_ref_sejour->_id}}
+
+        <td class="text" style="{{$cell_style}}">
+          {{mb_include template=inc_form_prestations sejour=$_sejour edit=$canAdmissions->edit}}
+          {{mb_include module=hospi template=inc_placement_sejour sejour=$_sejour}}
+        </td>
+
+        <td style="{{$cell_style}}">
+          {{if $canAdmissions->edit}}
+            <form name="editSaisFrm{{$_sejour->_id}}" action="?" method="post">
+
+            <input type="hidden" name="m" value="dPplanningOp" />
+            <input type="hidden" name="dosql" value="do_sejour_aed" />
+            <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
+            <input type="hidden" name="patient_id" value="{{$_sejour->patient_id}}" />
+            {{if !$_sejour->entree_preparee}}
+              <input type="hidden" name="entree_preparee" value="1" />
+              <button class="tick" type="button" onclick="submitPreAdmission(this.form);">
+                {{tr}}CSejour-entree_preparee{{/tr}}
+              </button>
+            {{else}}
+              <input type="hidden" name="entree_preparee" value="0" />
+              <button class="cancel" type="button" onclick="submitPreAdmission(this.form);">
+                {{tr}}Cancel{{/tr}}
+              </button>
+            {{/if}}
+            {{if ($_sejour->entree_modifiee == 1) && ($conf.dPplanningOp.CSejour.entree_modifiee == 1)}}
+              <img src="images/icons/warning.png" title="Le dossier a été modifié, il faut le préparer" />
+            {{/if}}
+            </form>
+          {{else}}
+            {{mb_value object=$_sejour field="entree_preparee"}}
+          {{/if}}
+        </td>
+
+        <td style="{{$cell_style}}">
+          {{if $_sejour->_couvert_cmu}}
+            <img src="images/icons/tick.png" title="Droits CMU en cours" />
+          {{else}}
+            -
+          {{/if}}
+        </td>
+
+        <td style="{{$cell_style}}">
+          {{foreach from=$_sejour->_ref_operations item=_op}}
+          {{if $_op->depassement}}
+            {{mb_value object=$_op field="depassement"}}
+            <br />
+          {{/if}}
+          {{foreachelse}}
+          -
+          {{/foreach}}
+        </td>
+
+      {{elseif $_sejour->annule}}
+
+        <td colspan="4" class="cancelled">
+          Annulé
+        </td>
+
+      {{else}}
+
+        <td colspan="4" class="button" style="{{$cell_style}}">
+          {{if $type_event == "COperation"}}
+            Intervention non associé à la consultation
+            {{if $canAdmissions->edit}}
+              <br />
+              <form name="addOpFrm-{{$curr_consult->_id}}" action="?m={{$m}}" method="post">
+              <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="m" value="dPcabinet" />
+              {{mb_key object=$_dossier}}
+              <input type="hidden" name="operation_id" value="{{$curr_consult->_next_sejour_and_operation.COperation->_id}}" />
+              <button type="submit" class="tick">
+                Associer l'intervention
+              </button>
+              </form>
+            {{/if}}
+          {{else}}
+            Séjour non associé à la consultation
+            {{if $canAdmissions->edit}}
+              <br />
+              <form name="addOpFrm-{{$curr_consult->_id}}" action="?m={{$m}}" method="post">
+              <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="m" value="dPcabinet" />
+              {{mb_key object=$_dossier}}
+              <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
+              <button type="submit" class="tick">
+                Associer le séjour
+              </button>
+              </form>
+            {{/if}}
+          {{/if}}
+        </td>
+
+      {{/if}}
+
+    {{else}}
+
+      <td colspan="6" class="button">
+        DHE non trouvée
+        {{if $canPlanningOp->edit}}
+        :
+        <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$curr_consult->patient_id}}&amp;operation_id=0&amp;sejour_id=0" class="button new">
+          Créer une demande d'hospitalisation
+        </a>
+        {{/if}}
+      </td>
+
+    {{/if}}
+
   {{/foreach}}
-  {{/if}}
-  <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
-    {{$patient->_view}}
-  </span>
-</td>
-<td class="text">
-  <div class="{{if $curr_consult->chrono == 64}}small-success{{else}}small-info{{/if}}" style="margin: 0;">
-  {{$curr_consult->heure|date_format:$conf.time}}
-  -
-  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_consult->_ref_plageconsult->_ref_chir}}
-  </div>
-</td>
 
-{{if $curr_adm->_id}}
-
-{{assign var=cell_style value="background: #ccc;"}}
-
-{{if     $curr_adm->type == 'ambu'}} {{assign var=cell_style value="background: #faa;"}}
-{{elseif $curr_adm->type == 'comp'}} {{assign var=cell_style value="background: #fff;"}}
-{{elseif $curr_adm->type == 'exte'}} {{assign var=cell_style value="background: #afa;"}}
-{{elseif $curr_adm->type == 'urg'}}  {{assign var=cell_style value="background: #ff6;"}}
-{{/if}}
-
-{{if !$curr_adm->facturable}}
-  {{assign var=cell_style value="$cell_style background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;"}}
-{{/if}}
-
-<td class="text" style="{{$cell_style}}">
-  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_adm->_ref_praticien}}
-</td>
-<td class="text" style="{{$cell_style}}">
-  <div style="float: right;">
-    {{mb_include module=system template=inc_object_notes object=$curr_adm}}
-  </div>
-  {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$curr_adm _show_numdoss_modal=1}}
-  <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_adm->_guid}}');">
-  le {{$curr_adm->_entree|date_format:$conf.date}}
-  </span>
-</td>
-{{if !$curr_adm->annule && $dossier_anesth && $dossier_anesth->_ref_sejour->_id}}
-<td class="text" style="{{$cell_style}}">
-  {{mb_include template=inc_form_prestations sejour=$curr_adm edit=$canAdmissions->edit}}
-  {{mb_include module=hospi template=inc_placement_sejour sejour=$curr_adm}}
-</td>
-
-<td style="{{$cell_style}}">
-  {{if $canAdmissions->edit}}
-  <form name="editSaisFrm{{$curr_adm->_id}}" action="?" method="post">
-
-  <input type="hidden" name="m" value="dPplanningOp" />
-  <input type="hidden" name="dosql" value="do_sejour_aed" />
-  <input type="hidden" name="sejour_id" value="{{$curr_adm->_id}}" />
-  <input type="hidden" name="patient_id" value="{{$curr_adm->patient_id}}" />
-  {{if !$curr_adm->entree_preparee}}
-  <input type="hidden" name="entree_preparee" value="1" />
-  <button class="tick" type="button" onclick="submitPreAdmission(this.form);">
-    {{tr}}CSejour-entree_preparee{{/tr}}
-  </button>
-  {{else}}
-  <input type="hidden" name="entree_preparee" value="0" />
-  <button class="cancel" type="button" onclick="submitPreAdmission(this.form);">
-    {{tr}}Cancel{{/tr}}
-  </button>
-  {{/if}}
-  {{if ($curr_adm->entree_modifiee == 1) && ($conf.dPplanningOp.CSejour.entree_modifiee == 1)}}
-    <img src="images/icons/warning.png" title="Le dossier a été modifié, il faut le préparer" />
-  {{/if}}
-  </form>
-  {{else}}
-  {{mb_value object=$curr_adm field="entree_preparee"}}
-  {{/if}}
-</td>
-
-<td style="{{$cell_style}}">
-  {{if $curr_adm->_couvert_cmu}}
-    <img src="images/icons/tick.png" title="Droits CMU en cours" />
-  {{else}}
-    -
-  {{/if}}
-</td>
-
-<td style="{{$cell_style}}">
-  {{foreach from=$curr_adm->_ref_operations item=curr_op}}
-  {{if $curr_op->depassement}}
-    {{mb_value object=$curr_op field="depassement"}}
-    <br />
-  {{/if}}
-  {{foreachelse}}
-  -
-  {{/foreach}}
-</td>
-{{elseif $curr_adm->annule}}
-<td colspan="4" class="cancelled">
-  Annulé
-</td>
-{{else}}
-<td colspan="4" class="button" style="{{$cell_style}}">
-  {{if $type_event == "COperation"}}
-  <a class="action" style="float: right" title="Imprimer la DHE de l'intervention" href="#1" onclick="Admissions.printDHE('operation_id', {{$curr_consult->_next_sejour_and_operation.COperation->_id}}); return false;">
-    <img src="images/icons/print.png" />
-  </a>
-  Intervention non associé à la consultation
-  {{if $canAdmissions->edit}}
-  <br />
-  <form name="addOpFrm-{{$curr_consult->_id}}" action="?m={{$m}}" method="post">
-  <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="m" value="dPcabinet" />
-  {{if $dossiers_anesth|@count > 1}}
-    <select name="consultation_anesth_id">
-      {{foreach from=$dossiers_anesth item=_dossier_anesth}}
-        <option value="{{$_dossier_anesth->_id}}">{{$_dossier_anesth}}</option>
-      {{/foreach}}
-    </select>
-  {{else}}
-    {{mb_key object=$dossiers_anesth|@reset}}
-  {{/if}}
-  <input type="hidden" name="operation_id" value="{{$curr_consult->_next_sejour_and_operation.COperation->_id}}" />
-  <button type="submit" class="tick">
-    Associer l'intervention
-  </button>
-  </form>
-  {{/if}}
-  {{else}}
-  <a class="action" style="float: right" title="Imprimer la DHE du séjour" href="#1" onclick="Admissions.printDHE('sejour_id', {{$curr_adm->_id}}); return false;">
-    <img src="images/icons/print.png" />
-  </a>
-  Séjour non associé à la consultation
-  {{if $canAdmissions->edit}}
-  <br />
-  <form name="addOpFrm-{{$curr_consult->_id}}" action="?m={{$m}}" method="post">
-  <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="m" value="dPcabinet" />
-  {{if $dossiers_anesth|@count > 1}}
-    <select name="consultation_anesth_id">
-      {{foreach from=$dossiers_anesth item=_dossier_anesth}}
-        <option value="{{$_dossier_anesth->_id}}">{{$_dossier_anesth}}</option>
-      {{/foreach}}
-    </select>
-  {{else}}
-    {{mb_key object=$dossiers_anesth|@reset}}
-  {{/if}}
-  <input type="hidden" name="sejour_id" value="{{$curr_adm->_id}}" />
-  <button type="submit" class="tick">
-    Associer le séjour
-  </button>
-  </form>
-  {{/if}}
-  {{/if}}
-</td>
-{{/if}}
-{{else}}
-<td colspan="6" class="button">
-  DHE non trouvée
-  {{if $canPlanningOp->edit}}
-  :
-  <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$curr_consult->patient_id}}&amp;operation_id=0&amp;sejour_id=0" class="button new">
-    Créer une demande d'hospitalisation
-  </a>
-  {{/if}}
-</td>
-{{/if}}
+</tr>

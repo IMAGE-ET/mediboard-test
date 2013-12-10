@@ -342,8 +342,9 @@ class CPlageconsult extends CPlageHoraire {
 
   /**
    * @see parent::loadRefsFwd()
+   * @deprecated
    */
-  function loadRefsFwd($cache = 0) {
+  function loadRefsFwd($cache = true) {
     $this->_ref_chir        = $this->loadFwdRef("chir_id"       , $cache);
     $this->_ref_remplacant  = $this->loadFwdRef("remplacant_id" , $cache);
     $this->_ref_pour_compte = $this->loadFwdRef("pour_compte_id", $cache);
@@ -366,7 +367,7 @@ class CPlageconsult extends CPlageHoraire {
       return parent::getPerm($permType);
     }
     if (!$this->_ref_chir) {
-      $this->loadRefsFwd(1);
+      $this->loadRefChir();
     }
     return $this->_ref_chir->getPerm($permType) 
       && parent::getPerm($permType);
