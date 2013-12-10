@@ -1040,8 +1040,7 @@ class COperation extends CCodable implements IPatientRelated {
       return $this->_ref_salle =& $this->_ref_plageop->_ref_salle;
     }
     else {
-      $salle = new CSalle;
-      return $this->_ref_salle = $salle->getCached($this->salle_id);
+      return $this->_ref_salle = $this->loadFwdRef("salle_id", true);
     }
   }
 
