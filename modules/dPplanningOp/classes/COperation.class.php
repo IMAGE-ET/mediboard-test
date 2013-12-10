@@ -1374,7 +1374,9 @@ class COperation extends CCodable implements IPatientRelated {
     // Chargement du fillTemplate du sejour
     $this->_ref_sejour->fillTemplate($template);
 
-    $this->loadRefsConsultAnesth()->fillTemplate($template);
+    $consult_anesth = $this->loadRefsConsultAnesth();
+    $consult_anesth->_ref_operation = $this;
+    $consult_anesth->fillLimitedTemplate($template);
 
     // Chargement du fillTemplate de l'opération
     $this->fillLimitedTemplate($template);
