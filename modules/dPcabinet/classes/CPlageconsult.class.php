@@ -360,6 +360,24 @@ class CPlageconsult extends CPlageHoraire {
   }
 
   /**
+   * Chargement du remplacant
+   *
+   * @return CMediusers
+   */
+  function loadRefRemplacant() {
+    return $this->_ref_remplacant  = $this->loadFwdRef("remplacant_id" , true);
+  }
+
+  /**
+   * Chargement du pour compte
+   *
+   * @return CMediusers
+   */
+  function loadRefPourCompte() {
+    return $this->_ref_pour_compte  = $this->loadFwdRef("pour_compte_id", true);
+  }
+
+  /**
    * @see parent::getPerm()
    */
   function getPerm($permType) {
