@@ -16,21 +16,33 @@
   <!-- Modale pour l'applet -->
   {{mb_include module=files template=yoplet_modal object=$object}}
 
-  <applet id="uploader" name="yopletuploader" width="{{if $app->user_prefs.debug_yoplet == 1}}400{{else}}1{{/if}}"
-          height="{{if $app->user_prefs.debug_yoplet == 1}}400{{else}}1{{/if}}"
-          code="org.yoplet.Yoplet.class" archive="includes/applets/yoplet2.jar">
+  <applet
+    name="yopletuploader"
+    code="org.yoplet.Yoplet.class"
+    archive="includes/applets/yoplet.jar?build={{$version.build}}"
+    {{if $app->user_prefs.debug_yoplet == 1}}
+      width="400"
+      height="400"
+    {{else}}
+      width="1"
+      height="1"
+    {{/if}}
+>
+    <param name="action" value="" />
     <param name="debug" value="true" />
     <param name="codebase_lookup" value="false" />
-    <param name="action" value="" />
+    <param name="permissions" value="all-permissions" />
+
     {{if $yoplet_upload_url}}
-      <param name="url" value="{{$yoplet_upload_url}}/index.php?m=files&a=ajax_yoplet_upload&suppressHeaders=1&dialog=1" />
+      <param name="url" value="{{$yoplet_upload_url}}/?m=files&a=ajax_yoplet_upload&suppressHeaders=1&dialog=1" />
     {{else}}
-      <param name="url" value="{{$base_url}}/index.php?m=files&a=ajax_yoplet_upload&suppressHeaders=1&dialog=1" />
+      <param name="url" value="{{$base_url}}/?m=files&a=ajax_yoplet_upload&suppressHeaders=1&dialog=1" />
     {{/if}}
+
     <param name="content" value="a" />
     <param name="cookies" value="{{$app->session_name}} {{$cookies}}" />
     <param name="user_agent" value="{{$smarty.server.HTTP_USER_AGENT}}" />
-    <param name="permissions" value="all-permissions" />
+    <param name="do_callback" value="1" />
   </applet>
 
   {{if $app->user_prefs.debug_yoplet}}
