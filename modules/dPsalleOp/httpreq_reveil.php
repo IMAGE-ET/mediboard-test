@@ -82,17 +82,16 @@ $use_poste = CAppUI::conf("dPplanningOp COperation use_poste");
 $operation = new COperation();
 $listOperations = $operation->loadList($where, $order, null, null, $ljoin);
 
+// Optimisations de chargement
 $chirs = CMbObject::massLoadFwdRef($listOperations, "chir_id");
 CMbObject::massLoadFwdRef($chirs, "function_id");
 CMbObject::massLoadFwdRef($listOperations, "plageop_id");
 if ($use_poste) {
   CMbObject::massLoadFwdRef($listOperations, "poste_sspi_id");
 }
-
 if (($type == "ops" || $type == "reveil") && CModule::getActive("bloodSalvage")) {
   CMbObject::massCountBackRefs($listOperations, "blood_salvages");
 }
-
 $sejours = CMbObject::massLoadFwdRef($listOperations, "sejour_id");
 CMbObject::massLoadFwdRef($sejours, "patient_id");
 
@@ -103,22 +102,22 @@ $now = CMbDT::time();
 $use_sortie_reveil_reel = CAppUI::conf("dPsalleOp COperation use_sortie_reveil_reel", $group->_guid);
 
 /** @var $op COperation */
-foreach ($listOperations as $key => $op) {
+foreach ($listOperations as $op) {
   $sejour = $op->loadRefSejour();
   $sejour->loadNDA();
   
   if ($sejour->type == "exte") {
-    unset($listOperations[$key]);
+    unset($listOperations[$op->_id]);
     continue;
   }
 
   if ($type == "out") {
     if ($present_only && $op->sortie_reveil_possible < $now) {
-      unset($listOperations[$key]);
+      unset($listOperations[$op->_id]);
       continue;
     }
     elseif ($present_only_reel && $op->sortie_reveil_reel && $op->sortie_reveil_reel < $now) {
-      unset($listOperations[$key]);
+      unset($listOperations[$op->_id]);
       continue;
     }
   }
