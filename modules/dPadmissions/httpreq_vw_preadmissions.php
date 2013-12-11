@@ -20,6 +20,7 @@ $order_way_pre = CValue::getOrSession("order_way_pre", "ASC");
 $date          = CValue::getOrSession("date", CMbDT::date());
 $next          = CMbDT::date("+1 DAY", $date);
 $filter        = CValue::getOrSession("filter");
+$is_modal      = CValue::get("is_modal", 0);
 
 $date_actuelle = CMbDT::dateTime("00:00:00");
 $date_demain   = CMbDT::dateTime("00:00:00", "+ 1 day");
@@ -151,6 +152,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("hier", $hier);
 $smarty->assign("demain", $demain);
 $smarty->assign("filter", $filter);
+$smarty->assign("is_modal", $is_modal);
 $smarty->assign("date_min"         , $date_min);
 $smarty->assign("date_max"         , $date_max);
 $smarty->assign("date_demain"      , $date_demain);

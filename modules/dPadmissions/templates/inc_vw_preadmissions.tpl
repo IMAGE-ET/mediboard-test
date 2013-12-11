@@ -9,37 +9,40 @@
 *}}
 
 {{mb_script module=planningOp script=prestations ajax=1}}
+{{mb_default var=is_modal value=0}}
 
 <script>
-Prestations.callback = reloadPreAdmission;
-Calendar.regField(getForm("changeDatePreAdmissions").date, null, {noView: true});
+  {{if !$is_modal}}
+    Prestations.callback = reloadPreAdmission;
+    Calendar.regField(getForm("changeDatePreAdmissions").date, null, {noView: true});
+  {{/if}}
 </script>
 
 <table class="tbl">
-  <tr>
-    <th class="title" colspan="9">
-      {{if !$filter}}
-      <a href="#" onclick="Admissions.updateListPreAdmissions('{{$hier}}');" style="display: inline"><<<</a>
-      {{$date|date_format:$conf.longdate}}
-      <form name="changeDatePreAdmissions" action="?" method="get">
-        <input type="hidden" name="m" value="{{$m}}" />
-        <input type="hidden" name="tab" value="vw_idx_preadmission" />
-        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
-      </form>
-      <a href="#" onclick="Admissions.updateListPreAdmissions('{{$demain}}');" style="display: inline">>>></a>
-      {{/if}}
-      <br />
+  {{if !$is_modal}}
+    <tr>
+      <th class="title" colspan="9">
+        <a href="#" onclick="Admissions.updateListPreAdmissions('{{$hier}}');" style="display: inline"><<<</a>
+        {{$date|date_format:$conf.longdate}}
+        <form name="changeDatePreAdmissions" action="?" method="get">
+          <input type="hidden" name="m" value="{{$m}}" />
+          <input type="hidden" name="tab" value="vw_idx_preadmission" />
+          <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+        </form>
+        <a href="#" onclick="Admissions.updateListPreAdmissions('{{$demain}}');" style="display: inline">>>></a>
+        <br />
 
-      <select name="filter" style="float:right;" onchange="Admissions.pre_admission_filter = $V(this); Admissions.updateListPreAdmissions();">
-        <option value=""> -- Toutes les pré-admissions</option>
-        <option value="dhe" {{if $filter == "dhe"}}selected="selected" {{/if}}>Pré-admissions sans intervention prévue</option>
-      </select>
+        <select name="filter" style="float:right;" onchange="Admissions.pre_admission_filter = $V(this); Admissions.updateListPreAdmissions();">
+          <option value=""> -- Toutes les pré-admissions</option>
+          <option value="dhe" {{if $filter == "dhe"}}selected="selected" {{/if}}>Pré-admissions sans intervention prévue</option>
+        </select>
 
-      <em style="float: left; font-weight: normal;">
-        {{$listConsultations|@count}} pré-admissions ce jour {{if $filter}}sans interventions{{/if}}
-      </em>
-    </th>
-  </tr>
+        <em style="float: left; font-weight: normal;">
+          {{$listConsultations|@count}} pré-admissions ce jour {{if $filter}}sans interventions{{/if}}
+        </em>
+      </th>
+    </tr>
+  {{/if}}
   <tr>
     <th colspan="2">Consultation d'anesthésie</th>
     <th colspan="6">Hospitalisation</th>
