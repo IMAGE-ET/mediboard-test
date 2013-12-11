@@ -17,7 +17,7 @@
     <th class="title" colspan="6">
       <strong>
       {{if $plageSel->_id}}
-        <button class="print" onclick="printPlage({{$plageSel->_id}})" style="float:right">{{tr}}Print{{/tr}}</button>
+        <button class="print notext" onclick="printPlage({{$plageSel->_id}})" style="float:right">{{tr}}Print{{/tr}}</button>
         <a class="button new" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plageSel->_id}}" style="float:right;">Planifier dans cette plage</a>
         {{mb_include module=system template=inc_object_notes object=$plageSel}}
           Consultations du {{$plageSel->date|date_format:$conf.longdate}}<br/>
