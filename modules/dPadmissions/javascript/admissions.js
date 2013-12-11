@@ -126,7 +126,7 @@ Admissions = {
 
   updatePeriodicalSummaryPreAdmissions : function() {
     setInterval(function(){
-      Admissions.updateSummaryPreAdmissions(Admissions.target_date);
+      Admissions.updateSummaryPreAdmissions();
     }, 120000);
   },
 
@@ -136,11 +136,18 @@ Admissions = {
     admUrl.addParam("date", this.target_date);
     admUrl.addParam("filter", this.pre_admission_filter);
     admUrl.requestUpdate('listPreAdmissions');
+
+    //update du selecteur
+    var lines = $("allPreAdmissions").select('table tbody tr.preAdmission-day').invoke("removeClassName", "selected");
+    var target_td = $('paday_'+this.target_date);
+    if (target_td) {
+      target_td.addClassName("selected");
+    }
   },
 
   updatePeriodicalPreAdmissions : function() {
     setInterval(function(){
-      Admissions.updateListPreAdmissions(Admissions.target_date);
+      Admissions.updateListPreAdmissions();
     }, 120000);
   }
 };

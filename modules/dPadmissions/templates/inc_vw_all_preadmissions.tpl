@@ -20,7 +20,7 @@
     <th class="text">Pré-ad.</th>
   </tr>
   {{foreach from=$days key=day item=count}}
-    <tr {{if $day == $date}}class="selected"{{/if}}>
+    <tr class="preAdmission-day {{if $day == $date}}selected{{/if}}" id="paday_{{$day}}">
       {{assign var=day_number value=$day|date_format:"%w"}}
       <td style="text-align: right;
         {{if array_key_exists($day, $bank_holidays)}}
