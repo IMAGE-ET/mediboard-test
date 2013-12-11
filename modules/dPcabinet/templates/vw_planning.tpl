@@ -1,48 +1,62 @@
 <!-- $Id$ -->
 
-<script type="text/javascript">
+<script>
 
-function showConsultations(oTd, plageconsult_id){
+  // default value
+  var target_plage_consult = '{{$plageSel->_id}}';
+
+showConsultations = function (oTd, plageconsult_id){
   oTd = $(oTd);
-
   oTd.up("table").select(".event").invoke("removeClassName", "selected");
   oTd.up(".event").addClassName("selected");
+  refreshPlageConsult(plageconsult_id);
+};
 
+refreshPlageConsult = function (plageconsult_id) {
+  if (!plageconsult_id) {
+    plageconsult_id = target_plage_consult;
+  }
+  target_plage_consult = plageconsult_id;
+  var oform = getForm("selectPrat");
+
+  //refresh the target
   var url = new Url("cabinet", "inc_consultation_plage");
-  url.addParam("plageconsult_id", plageconsult_id);
+  url.addParam("plageconsult_id", target_plage_consult);
+  url.addParam("show_payees", $V(oform.show_payees));
+  url.addParam("show_annulees", $V(oform.show_annulees));
   url.requestUpdate('consultations');
-}
+};
 
-function putArrivee(oForm) {
+putArrivee =function (oForm) {
   var today = new Date();
   oForm.arrivee.value = today.toDATETIME(true);
   oForm.submit();
-}
+};
 
-function goToDate(oForm, date) {
+goToDate = function (oForm, date) {
   $V(oForm.debut, date);
-}
+};
 
-function showConsultSiDesistement(){
+showConsultSiDesistement = function (){
   var url = new Url("cabinet", "vw_list_consult_si_desistement");
   url.addParam("chir_id", '{{$chirSel}}');
   url.pop(500, 500, "test");
-}
+};
 
-function printPlage(plage_id) {
+printPlage = function (plage_id) {
   var url = new Url;
   url.setModuleAction("cabinet", "print_plages");
   url.addParam("plage_id", plage_id);
   url.addParam("_telephone", 1);
   url.popup(700, 550, "Planning");
-}
+};
 
-function printPlanning() {
+printPlanning =function () {
   var url = new Url("cabinet", "print_planning");
   url.addParam("date", "{{$debut}}");
   url.addParam("chir_id", "{{$chirSel}}");
   url.popup(900, 600, "Planning");
-}
+};
 
 Main.add(function () {
   var planning = window["planning-{{$planning->guid}}"];
@@ -65,6 +79,11 @@ Main.add(function () {
         <input type="hidden" name="tab" value="{{$tab}}" />
         <input type="hidden" name="plageconsult_id" value="0" />
 
+        <select name="chirSel" style="width: 15em; float: left;" onchange="this.form.submit()">
+          <option value="-1" {{if $chirSel == -1}} selected="selected" {{/if}}>&mdash; Choisir un professionnel</option>
+          {{mb_include module=mediusers template=inc_options_mediuser selected=$chirSel list=$listChirs}}
+        </select>
+
         <a href="#1" id="vw_planning_a_semaine" onclick="$V($(this).getSurroundingForm().debut, '{{$prec}}')">&lt;&lt;&lt;</a>
 
         Semaine du {{$debut|date_format:"%A %d %b %Y"}} au {{$fin|date_format:"%A %d %b %Y"}}
@@ -76,31 +95,22 @@ Main.add(function () {
       </form>
       <br/>
       {{if $canEditPlage}}
-      <button style="float: left;" class="new" id="create_plage_consult_button" onclick="PlageConsultation.edit('0');">{{tr}}CPlageconsult-title-create{{/tr}}</button>
+        <button style="float: left;" class="new" id="create_plage_consult_button" onclick="PlageConsultation.edit('0');">{{tr}}CPlageconsult-title-create{{/tr}}</button>
       {{/if}}
-      <button style="float: right;" class="print" onclick="printPlanning();">{{tr}}Print{{/tr}}
     </th>
     <td style="min-width: 350px;">
+      <button style="float: right;" class="print" onclick="printPlanning();">{{tr}}Print{{/tr}}</button>
       <form action="?" name="selectPrat" method="get">
-        <input type="hidden" name="m" value="{{$m}}" />
-        <input type="hidden" name="tab" value="{{$tab}}" />
-        <select name="chirSel" style="width: 15em;" onchange="this.form.submit()">
-          <option value="-1" {{if $chirSel == -1}} selected="selected" {{/if}}>&mdash; Choisir un professionnel</option>
-          {{mb_include module=mediusers template=inc_options_mediuser selected=$chirSel list=$listChirs}}
-        </select>
-
         Afficher les :
           <label>
-            <input type="checkbox" onchange="$V(this.form.show_payees, this.checked ? 1 : 0); this.form.submit()" {{if $show_payees}}checked="checked"{{/if}} name="_show_payees"> payées
+            <input type="checkbox" name="_show_payees" onchange="$V(this.form.show_payees, this.checked ? 1 : 0); refreshPlageConsult();" {{if $show_payees}}checked="checked"{{/if}}> payées
             <input type="hidden" name="show_payees" value="{{$show_payees}}" />
           </label>
           <label>
-            <input type="checkbox" onchange="$V(this.form.show_annulees, this.checked ? 1 : 0); this.form.submit()" {{if $show_annulees}}checked="checked"{{/if}} name="_show_annulees"> annulées
+            <input type="checkbox" name="_show_annulees" onchange="$V(this.form.show_annulees, this.checked ? 1 : 0); refreshPlageConsult();" {{if $show_annulees}}checked="checked"{{/if}}> annulées
             <input type="hidden" name="show_annulees" value="{{$show_annulees}}" />
           </label>
       </form>
-
-      <br />
 
       {{if $chirSel && $chirSel != -1}}
         <button type="button" class="lookup" 
@@ -108,10 +118,6 @@ Main.add(function () {
                 onclick="showConsultSiDesistement()">
           {{tr}}CConsultation-si_desistement{{/tr}} ({{$count_si_desistement}})
         </button>
-      {{/if}}
-
-      {{if $plageSel->_id}}
-        <a class="button new" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plageSel->_id}}">Planifier une consultation dans cette plage</a>
       {{/if}}
 
     </td>
