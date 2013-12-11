@@ -33,7 +33,7 @@
         <br />
 
         <select name="filter" style="float:right;" onchange="Admissions.pre_admission_filter = $V(this); Admissions.updateListPreAdmissions();">
-          <option value=""> -- Toutes les pré-admissions</option>
+          <option value="">&mdash; Toutes les pré-admissions</option>
           <option value="dhe" {{if $filter == "dhe"}}selected="selected" {{/if}}>Pré-admissions sans intervention prévue</option>
         </select>
 

@@ -85,24 +85,24 @@
           {{if $canAdmissions->edit}}
             <form name="editSaisFrm{{$_sejour->_id}}" action="?" method="post">
 
-            <input type="hidden" name="m" value="dPplanningOp" />
-            <input type="hidden" name="dosql" value="do_sejour_aed" />
-            <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
-            <input type="hidden" name="patient_id" value="{{$_sejour->patient_id}}" />
-            {{if !$_sejour->entree_preparee}}
-              <input type="hidden" name="entree_preparee" value="1" />
-              <button class="tick" type="button" onclick="submitPreAdmission(this.form);">
-                {{tr}}CSejour-entree_preparee{{/tr}}
-              </button>
-            {{else}}
-              <input type="hidden" name="entree_preparee" value="0" />
-              <button class="cancel" type="button" onclick="submitPreAdmission(this.form);">
-                {{tr}}Cancel{{/tr}}
-              </button>
-            {{/if}}
-            {{if ($_sejour->entree_modifiee == 1) && ($conf.dPplanningOp.CSejour.entree_modifiee == 1)}}
-              <img src="images/icons/warning.png" title="Le dossier a été modifié, il faut le préparer" />
-            {{/if}}
+              <input type="hidden" name="m" value="dPplanningOp" />
+              <input type="hidden" name="dosql" value="do_sejour_aed" />
+              <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
+              <input type="hidden" name="patient_id" value="{{$_sejour->patient_id}}" />
+              {{if !$_sejour->entree_preparee}}
+                <input type="hidden" name="entree_preparee" value="1" />
+                <button class="tick" type="button" onclick="submitPreAdmission(this.form);">
+                  {{tr}}CSejour-entree_preparee{{/tr}}
+                </button>
+              {{else}}
+                <input type="hidden" name="entree_preparee" value="0" />
+                <button class="cancel" type="button" onclick="submitPreAdmission(this.form);">
+                  {{tr}}Cancel{{/tr}}
+                </button>
+              {{/if}}
+              {{if ($_sejour->entree_modifiee == 1) && ($conf.dPplanningOp.CSejour.entree_modifiee == 1)}}
+                <img src="images/icons/warning.png" title="Le dossier a été modifié, il faut le préparer" />
+              {{/if}}
             </form>
           {{else}}
             {{mb_value object=$_sejour field="entree_preparee"}}
@@ -178,9 +178,9 @@
         DHE non trouvée
         {{if $canPlanningOp->edit}}
         :
-        <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$curr_consult->patient_id}}&amp;operation_id=0&amp;sejour_id=0" class="button new">
-          Créer une demande d'hospitalisation
-        </a>
+          <button onclick="new Url('dPplanningOp','vw_edit_planning').addParam('pat_id', '{{$curr_consult->patient_id}}').addParam('operation_id', 0).addParam('sejour_id',0).addParam('dialog',1).modal({width: '95%',height: '95%'});" class="button new">
+            Créer une demande d'hospitalisation
+          </button>
         {{/if}}
       </td>
 
