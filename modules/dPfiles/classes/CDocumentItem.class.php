@@ -188,6 +188,9 @@ class CDocumentItem extends CMbMetaObject {
     return $this->_ref_author = $this->loadFwdRef("author_id", true);
   }
 
+  /**
+   * @see parent::getPerm()
+   */
   function getPerm($permType) {
     $this->loadRefAuthor();
     $this->loadRefCategory();
@@ -195,8 +198,10 @@ class CDocumentItem extends CMbMetaObject {
     // Permission de base
     $perm = parent::getPerm($permType);
 
-    // Droit sur les catégories
-    $perm &= $this->_ref_category->getPerm($permType);
+    // Il faut au moins avoir le droit de lecture sur la catégorie
+    if ($this->file_category_id) {
+      $perm &= $this->_ref_category->getPerm(PERM_READ);
+    }
 
     // Gestion d'un document confidentiel
     if ($this->private) {
