@@ -75,7 +75,7 @@ class CEAIRoute extends CMbObject {
    * @return mixed
    */
   function loadRefSender() {
-    return $this->_ref_sender = CStoredObject::loadFromGuid("$this->sender_class-$this->sender_id");
+    return $this->_ref_sender = $this->loadFwdRef("sender_id");
   }
 
   /**
@@ -84,6 +84,6 @@ class CEAIRoute extends CMbObject {
    * @return mixed
    */
   function loadRefReceiver() {
-    return $this->_ref_receiver = CStoredObject::loadFromGuid("$this->receiver_class-$this->receiver_id");
+    return $this->_ref_receiver = $this->loadFwdRef("receiver_id");
   }
 }

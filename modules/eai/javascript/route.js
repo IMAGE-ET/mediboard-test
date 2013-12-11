@@ -54,7 +54,7 @@ Route = {
       updateElement: function(selected) {
         var classe_id = classe+"_id";
         $V(form[classe_id], selected.get('id'), false);
-        $V($element, selected.getText().trim(), false);
+        $V(classe_id_autocomplete, selected.getText().trim(), false);
       }
     });
   }

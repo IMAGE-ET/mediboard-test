@@ -50,7 +50,7 @@
         {{$_route->_ref_receiver->nom}}
       </td>
       <td>
-        <form name="editActiveRoute" method="post" onsubmit="return onSubmitFormAjax(this)">
+        <form name="editActiveRoute{{$_route->_id}}" method="post" onsubmit="return onSubmitFormAjax(this)">
           {{mb_key object=$_route}}
           {{mb_class object=$_route}}
           {{mb_field object=$_route field="active" onchange=this.form.onsubmit()}}
