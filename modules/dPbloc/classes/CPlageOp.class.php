@@ -1,14 +1,12 @@
 <?php
-
 /**
- * dPbloc
+ * $Id:$
  *
- * @category Bloc
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage Bloc
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -55,6 +53,7 @@ class CPlageOp extends CMbObject {
   public $_type_repeat;
   public $_nb_operations;
   public $_nb_operations_placees;
+  public $_nb_operations_annulees;
   public $_fill_rate;
   public $_reorder_up_to_interv_id;
   public $_nbQuartHeure;
@@ -312,7 +311,7 @@ class CPlageOp extends CMbObject {
    * Mise à jour des horaires en fonction de l'ordre des operations, 
    * et mise a jour des rank, de sorte qu'ils soient consecutifs
    *
-   * @param int $action
+   * @param int $action action
    *
    * @return bool
    */
@@ -462,7 +461,7 @@ class CPlageOp extends CMbObject {
       }
     }
 
-    $oldPlage = new CPlageOp;
+    $oldPlage = new CPlageOp();
     if ($this->_id) {
       $oldPlage->load($this->_id);
       $oldPlage->loadRefsBack();
@@ -477,11 +476,25 @@ class CPlageOp extends CMbObject {
       }
     }
     
-    // Erreur si on change de praticien alors qu'il y a déjà des interventions
+    // Si on change de praticien alors qu'il y a déjà des interventions
     if (null !== $this->chir_id && $this->_id) {
       if (count($oldPlage->_ref_operations) && $oldPlage->chir_id && ($oldPlage->chir_id != $this->chir_id)) {
-        $msg = "Impossible de changer le praticien : ".count($oldPlage->_ref_operations)." intervention(s) déjà présentes";
-        return $msg;
+        //Si toutes les interventions sont annulées, on les met hors plage
+        $this->getNbOperationsAnnulees();
+        if ($this->_nb_operations_annulees == count($oldPlage->_ref_operations)) {
+          $this->completeField("salle_id", "date");
+          foreach ($oldPlage->_ref_operations as $_op) {
+            $_op->plageop_id = "";
+            $_op->date       = $this->date;
+            $_op->salle_id   = $this->salle_id;
+            $_op->store();
+          }
+        }
+        //Sinon on retourne un message d'erreur
+        else {
+          $msg = "Impossible de changer le praticien : ".count($oldPlage->_ref_operations)." intervention(s) déjà présentes";
+          return $msg;
+        }
       }
     }
     
@@ -716,6 +729,19 @@ class CPlageOp extends CMbObject {
       }
     }
     
+  }
+
+  /**
+   * Récupération le nombre d'intervention annulées pour la plage
+   *
+   * @return int
+   */
+  function getNbOperationsAnnulees() {
+    $operation = new COperation();
+    $operation->plageop_id = $this->_id;
+    $operation->annulee = '1';
+
+    return $this->_nb_operations_annulees= $operation->countMatchingList();
   }
 
   /**

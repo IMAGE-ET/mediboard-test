@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPbloc
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 $date       = CValue::getOrSession("date", CMbDT::date());
@@ -85,6 +85,8 @@ $listPersSageFem  = CPersonnel::loadListPers("sagefemme");
 $listPersManip    = CPersonnel::loadListPers("manipulateur");
 
 if ($plagesel->_id) {
+  $plagesel->getNbOperations();
+  $plagesel->getNbOperationsAnnulees();
   $affectations_plage["iade"]        = $plagesel->_ref_affectations_personnel["iade"];
   $affectations_plage["op"]          = $plagesel->_ref_affectations_personnel["op"];
   $affectations_plage["op_panseuse"] = $plagesel->_ref_affectations_personnel["op_panseuse"];

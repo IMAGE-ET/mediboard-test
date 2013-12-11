@@ -175,6 +175,14 @@ Main.add(function(){
             <th>* {{mb_label object=$plagesel field="verrouillage"}}</th>
             <td>{{mb_field object=$plagesel field="verrouillage"}}</td>
           </tr>
+
+          {{if $plagesel->_id}}
+            <tr>
+              <td colspan="4">
+                <div class="small-info">Cette plage contient {{$plagesel->_nb_operations}} intervention(s) et {{$plagesel->_nb_operations_annulees}} intervention(s) annulée(s)</div>
+              </td>
+            </tr>
+          {{/if}}
         </table>
       </fieldset>
     </td>
