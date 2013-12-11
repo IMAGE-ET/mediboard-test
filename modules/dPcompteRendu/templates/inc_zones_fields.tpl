@@ -113,7 +113,7 @@
           }
         </script>
         <button class="hslip" type="button" onclick="toggleOptions();">{{tr}}Multiple options{{/tr}}</button>
-        <button class="tick" type="button" onclick="Url.ping({onComplete: submitCompteRendu});">{{tr}}Save{{/tr}}</button>
+        <button class="tick" type="button" onclick="getForm('editFrm').onsubmit()">{{tr}}Save{{/tr}}</button>
       </td>
     </tr>
   {{/if}}
