@@ -178,6 +178,7 @@ $locales['CPlageOp._type_repeat.quadruple'] = 'Une semaine sur quatre';
 $locales['CPlageOp._type_repeat.sameweek'] = 'La même semaine tous les mois';
 $locales['CPlageOp._type_repeat.simple'] = 'Toutes les semaines';
 $locales['CPlageOp._type_repeat.triple'] = 'Une semaine sur trois';
+$locales['CPlageOp._verrouillee.max'] = 'Nombre maximum d\'interventions atteint';
 $locales['CPlageOp.all'] = 'Toutes les plages opératoires';
 $locales['CPlageOp.none'] = 'Aucune plage opératoire';
 $locales['CPlageOp.one'] = 'plage opératoire';
