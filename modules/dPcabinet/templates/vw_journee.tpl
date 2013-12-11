@@ -2,6 +2,14 @@
 
 <script>
 
+  see_consult_without_dhe = function(sdate) {
+    var url = new Url("admissions", "httpreq_vw_preadmissions");
+    url.addParam("filter", "dhe");
+    url.addParam("date", sdate);
+    url.addParam("is_modal", 1);
+    url.requestModal();
+  };
+
 Main.add(function () {
   if (document.selCabinet && "{{$offline}}" == 0){
     Calendar.regField(getForm("selCabinet").date, null, {noView: true});
@@ -119,32 +127,34 @@ Reconvocation = {
       <table class="form">
         <tr>
           <th class="title" colspan="100">
+            {{if $nb_anesth}}
+              <button onclick="see_consult_without_dhe('{{$date}}');" class="button search" type="button" style="float:right;">Voir les consultations sans intervention prévue</button>
+            {{/if}}
             Journée de consultation du
             {{$date|date_format:$conf.longdate}}
             <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
           </th>
         </tr>
-        
         {{if !$offline}}
           <tr>
             {{if $mode_maternite}}
-            <td colspan="2">
-              Consultation des sages femmes
-            </td>
+              <td colspan="2">
+                Consultation des sages femmes
+              </td>
             {{else}}
-            <th>
-              <label for="cabinet_id" title="Sélectionner un groupe">Groupe de praticiens</label>
-            </th>
-            <td>
-              <select name="cabinet_id" onchange="this.form.submit()" style="width: 15em;">
-                <option value="">&mdash; Choisir un groupe</option>
-                {{foreach from=$cabinets item=curr_cabinet}}
-                  <option value="{{$curr_cabinet->_id}}" class="mediuser" style="border-color: #{{$curr_cabinet->color}}" {{if $curr_cabinet->_id == $cabinet_id}} selected="selected" {{/if}}>
-                    {{$curr_cabinet->_view}}
-                  </option>
-                {{/foreach}}
-              </select>
-            </td>
+              <th>
+                <label for="cabinet_id" title="Sélectionner un groupe">Groupe de praticiens</label>
+              </th>
+              <td>
+                <select name="cabinet_id" onchange="this.form.submit()" style="width: 15em;">
+                  <option value="">&mdash; Choisir un groupe</option>
+                  {{foreach from=$cabinets item=curr_cabinet}}
+                    <option value="{{$curr_cabinet->_id}}" class="mediuser" style="border-color: #{{$curr_cabinet->color}}" {{if $curr_cabinet->_id == $cabinet_id}} selected="selected" {{/if}}>
+                      {{$curr_cabinet->_view}}
+                    </option>
+                  {{/foreach}}
+                </select>
+              </td>
             {{/if}}
             <td {{if $mode_urgence}}colspan="5"{{/if}}>
               <input name="_empty"      type="checkbox" value="1" onclick="synchronizeView(this.form);" {{if $empty}}checked="checked"{{/if}} />
@@ -168,7 +178,6 @@ Reconvocation = {
               <input name="_apres_midi" type="checkbox" value="1" onclick="synchronizeView(this.form);" {{if $apres_midi}}checked="checked"{{/if}} />
               <input name="apres_midi"  type="hidden"   value="{{$apres_midi}}" />
               <label for="_apres_midi"  title="Afficher les consultations de l'après-midi">Après-midi</label>
-              
             </td>
             {{if !$mode_urgence}}
               <th>
@@ -189,8 +198,7 @@ Reconvocation = {
             </th>
           </tr>
         {{/if}}
-        
-      </table> 
+      </table>
       </form>
     </td>
   </tr>

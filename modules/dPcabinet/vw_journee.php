@@ -41,6 +41,8 @@ $board        = CValue::get("board", 1);
 $boardItem    = CValue::get("boardItem", 1);
 $consult      = new CConsultation();
 
+$nb_anesth = 0;
+
 $cabinets = CMediusers::loadFonctions(PERM_EDIT, null, "cabinet");
 
 if ($mode_urgence) {
@@ -73,6 +75,9 @@ $listPlages = array();
 $heure_limit_matin = CAppUI::conf("dPcabinet CPlageconsult hour_limit_matin");
 
 foreach ($praticiens as $prat) {
+  if ($prat->_user_type == 4) {
+    $nb_anesth++;
+  }
   $listPlage = new CPlageconsult();
   $where = array();
   $where["chir_id"] = "= '$prat->_id'";
@@ -206,6 +211,7 @@ $smarty->assign("immediate"     , $immediate);
 $smarty->assign("date"          , $date);
 $smarty->assign("hour"          , $hour);
 $smarty->assign("praticiens"    , $praticiens);
+$smarty->assign("nb_anesth"     , $nb_anesth);
 $smarty->assign("all_prats"     , $all_prats);
 $smarty->assign("cabinets"      , $cabinets);
 $smarty->assign("board"         , $board);
