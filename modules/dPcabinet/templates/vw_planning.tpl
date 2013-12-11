@@ -100,8 +100,15 @@ Main.add(function () {
     </th>
     <td style="min-width: 350px;">
       <button style="float: right;" class="print" onclick="printPlanning();">{{tr}}Print{{/tr}}</button>
+      {{if $chirSel && $chirSel != -1}}
+        <button type="button" class="lookup"
+                {{if !$count_si_desistement}}disabled="disabled"{{/if}}
+                onclick="showConsultSiDesistement()">
+          {{tr}}CConsultation-si_desistement{{/tr}} ({{$count_si_desistement}})
+        </button>
+      {{/if}}
       <form action="?" name="selectPrat" method="get">
-        Afficher les :
+        <p>Afficher les :
           <label>
             <input type="checkbox" name="_show_payees" onchange="$V(this.form.show_payees, this.checked ? 1 : 0); refreshPlageConsult();" {{if $show_payees}}checked="checked"{{/if}}> payées
             <input type="hidden" name="show_payees" value="{{$show_payees}}" />
@@ -110,16 +117,8 @@ Main.add(function () {
             <input type="checkbox" name="_show_annulees" onchange="$V(this.form.show_annulees, this.checked ? 1 : 0); refreshPlageConsult();" {{if $show_annulees}}checked="checked"{{/if}}> annulées
             <input type="hidden" name="show_annulees" value="{{$show_annulees}}" />
           </label>
+        </p>
       </form>
-
-      {{if $chirSel && $chirSel != -1}}
-        <button type="button" class="lookup" 
-                {{if !$count_si_desistement}}disabled="disabled"{{/if}}
-                onclick="showConsultSiDesistement()">
-          {{tr}}CConsultation-si_desistement{{/tr}} ({{$count_si_desistement}})
-        </button>
-      {{/if}}
-
     </td>
   </tr>
   <tr>
