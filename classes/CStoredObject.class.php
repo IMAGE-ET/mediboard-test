@@ -2265,11 +2265,11 @@ class CStoredObject extends CModelObject {
    * @return null|string null if successful, an error message otherwise
    */
   function delete() {
-    // Préparation du log
-    $this->loadOldObject();
-
     // Delete checking
     if (!$this->_purge) {
+      // Préparation du log
+      $this->loadOldObject();
+
       if ($msg = $this->canDeleteEx()) {
         return $msg;
       }
