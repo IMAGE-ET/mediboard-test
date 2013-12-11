@@ -27,7 +27,7 @@ function openCorrespondants(compte_rendu_id, object_guid, show_modal) {
       closeButton.innerHTML = $T('Close');
       $("correspondants_courrier").insert({bottom: closeButton })
     }
-    
+
     if (show_modal) {
       Modal.open($("correspondants_courrier"));
     }
@@ -446,7 +446,7 @@ Main.add(function() {
     sClass: "tooltip"
   };
 
-  var form = getForm("LockDoc");
+  var form = getForm("LockDocOther");
   var url = new Url("mediusers", "ajax_users_autocomplete");
   url.addParam("input_field", form._user_view.name);
   url.autoComplete(form._user_view, null, {
@@ -522,9 +522,9 @@ Main.add(function() {
 
 <!-- Zone de confirmation de verrouillage du document -->
 <div id="lock_area" style="display: none;">
-  <form name="LockDoc" method="post" action="?m=compteRendu&a=ajax_lock_doc"
+  <form name="LockDocOwner" method="post" action="?m=compteRendu&a=ajax_lock_doc"
         onsubmit="return onSubmitFormAjax(this, {useFormAction: true})">
-    <input type="hidden" name="user_id" class="notNull" value="" />
+    <input type="hidden" name="user_id" class="notNull" value="{{$app->user_id}}" />
     <table class="form">
       <tr>
         <th class="title" colspan="2" >
@@ -539,23 +539,16 @@ Main.add(function() {
       {{if $conf.dPcompteRendu.CCompteRendu.pass_lock || $app->user_prefs.pass_lock}}
         <tr>
           <th>
-            <label for="user_password_owner">Mot de passe</label>
+            <label for="user_password">Mot de passe</label>
           </th>
           <td>
-            <input type="password" name="user_password_owner" class="notNull password str" />
+            <input type="password" name="user_password" class="notNull password str" />
           </td>
         </tr>
       {{/if}}
       <tr>
         <td class="button" colspan="2">
-          <button type="button" class="tick" onclick="
-            {{if $conf.dPcompteRendu.CCompteRendu.pass_lock || $app->user_prefs.pass_lock}}
-              $V(this.form.user_password, $V(this.form.user_password_owner));
-              $V(this.form.user_id, '{{$curr_user->_id}}');
-              this.form.onsubmit();
-            {{else}}
-              toggleLock('{{$curr_user->_id}}');
-            {{/if}}">Ok</button>
+          <button type="button" class="tick" onclick="this.form.onsubmit();">Ok</button>
           <button type="button" class="cancel"
                   onclick="$V(getForm('editFrm')._is_locked, 0, false);
                     $V(getForm('editFrm').___is_locked, 0, false);
@@ -564,6 +557,12 @@ Main.add(function() {
           </button>
         </td>
       </tr>
+    </table>
+  </form>
+  <form name="LockDocOther" method="post" action="?m=compteRendu&a=ajax_lock_doc"
+        onsubmit="return onSubmitFormAjax(this, {useFormAction: true})">
+    <input type="hidden" name="user_id" class="notNull" value="" />
+    <table class="form">
       <tr>
         <td class="text button" colspan="2">
           <strong>Souhaitez-vous verrouiller ce document pour un autre utilisateur ?</strong>
@@ -609,7 +608,19 @@ Main.add(function() {
 {{/if}}
 
 <form name="editFrm" action="?m={{$m}}" method="post"
-      onsubmit="Url.ping(function() { submitCompteRendu() }); return false;"
+      onsubmit="Url.ping(function() {
+        {{if !$compte_rendu->_id}}
+          var form = getForm('editFrm');
+          var dests = $('destinataires');
+          if (dests && dests.select('input:checked').length) {
+            $V(form.do_merge, 1);
+          }
+          form.submit();
+        {{else}}
+          submitCompteRendu();
+        {{/if}}
+        });
+        return false;"
       class="{{$compte_rendu->_spec}}">
   <input type="hidden" name="m" value="compteRendu" />
   <input type="hidden" name="del" value="0" />
@@ -796,7 +807,7 @@ Main.add(function() {
     </th>
   </tr>
 
-  {{if !$read_only}}
+  {{if !$compte_rendu->_id || !$read_only}}
     <tr>
       <td colspan="2">
         <div id="reloadzones">
