@@ -19,6 +19,7 @@ $order_col_pre = CValue::getOrSession("order_col_pre", "heure");
 $order_way_pre = CValue::getOrSession("order_way_pre", "ASC");
 $date          = CValue::getOrSession("date", CMbDT::date());
 $next          = CMbDT::date("+1 DAY", $date);
+$filter        = CValue::getOrSession("filter");
 
 $date_actuelle = CMbDT::dateTime("00:00:00");
 $date_demain   = CMbDT::dateTime("00:00:00", "+ 1 day");
@@ -102,7 +103,7 @@ foreach ($listConsultations as $_consult) {
     }
   }
   $_consult->_next_sejour_and_operation = null;
-  if($dossier_empty) {
+  if ($dossier_empty) {
     $next = $_consult->_ref_patient->getNextSejourAndOperation($_consult->_ref_plageconsult->date);
 
     if ($next["COperation"]->_id) {
@@ -110,13 +111,22 @@ foreach ($listConsultations as $_consult) {
       $next["COperation"]->_ref_sejour->loadRefPraticien();
       $next["COperation"]->_ref_sejour->loadNDA();
       $next["COperation"]->_ref_sejour->loadRefsNotes();
+      if ($filter == "dhe") {
+        unset($listConsultations[$_consult->_id]);
+      }
     }
     if ($next["CSejour"]->_id) {
       $next["CSejour"]->loadRefPraticien();
       $next["CSejour"]->loadNDA();
       $next["CSejour"]->loadRefsNotes();
+      if ($filter == "dhe") {
+        unset($listConsultations[$_consult->_id]);
+      }
     }
     $_consult->_next_sejour_and_operation = $next;
+  }
+  elseif ($filter == "dhe") {
+    unset($listConsultations[$_consult->_id]);
   }
 }
 
@@ -140,7 +150,7 @@ foreach ($sejours_total as $_sejour) {
 $smarty = new CSmartyDP();
 $smarty->assign("hier", $hier);
 $smarty->assign("demain", $demain);
-
+$smarty->assign("filter", $filter);
 $smarty->assign("date_min"         , $date_min);
 $smarty->assign("date_max"         , $date_max);
 $smarty->assign("date_demain"      , $date_demain);

@@ -10,7 +10,7 @@
 
 {{mb_script module=planningOp script=prestations ajax=1}}
 
-<script type="text/javascript">
+<script>
 Prestations.callback = reloadPreAdmission;
 Calendar.regField(getForm("changeDatePreAdmissions").date, null, {noView: true});
 </script>
@@ -18,20 +18,25 @@ Calendar.regField(getForm("changeDatePreAdmissions").date, null, {noView: true})
 <table class="tbl">
   <tr>
     <th class="title" colspan="9">
-      <a href="?m=dPadmissions&tab=vw_idx_preadmission&date={{$hier}}" style="display: inline"><<<</a>
+      {{if !$filter}}
+      <a href="#" onclick="Admissions.updateListPreAdmissions('{{$hier}}');" style="display: inline"><<<</a>
       {{$date|date_format:$conf.longdate}}
       <form name="changeDatePreAdmissions" action="?" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="vw_idx_preadmission" />
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       </form>
-      <a href="?m=dPadmissions&tab=vw_idx_preadmission&date={{$demain}}" style="display: inline">>>></a>
-      <br /> 
-      <em>
-      Toutes les pré-admissions
-      {{if $order_col_pre == "patient_id"}}triées par nom
-      {{elseif $order_col_pre == "heure"}}triées par heure
+      <a href="#" onclick="Admissions.updateListPreAdmissions('{{$demain}}');" style="display: inline">>>></a>
       {{/if}}
+      <br />
+
+      <select name="filter" style="float:right;" onchange="Admissions.pre_admission_filter = $V(this); Admissions.updateListPreAdmissions();">
+        <option value=""> -- Toutes les pré-admissions</option>
+        <option value="dhe" {{if $filter == "dhe"}}selected="selected" {{/if}}>Pré-admissions sans intervention prévue</option>
+      </select>
+
+      <em style="float: left; font-weight: normal;">
+        {{$listConsultations|@count}} pré-admissions ce jour {{if $filter}}sans interventions{{/if}}
       </em>
     </th>
   </tr>
@@ -55,5 +60,9 @@ Calendar.regField(getForm("changeDatePreAdmissions").date, null, {noView: true})
   </tr>
   {{foreach from=$listConsultations item=curr_consult}}
     {{include file="inc_vw_preadmission_line.tpl"}}
+  {{foreachelse}}
+    <tr>
+      <td colspan="9" class="empty">Aucune pré-admission</td>
+    </tr>
   {{/foreach}}
 </table>

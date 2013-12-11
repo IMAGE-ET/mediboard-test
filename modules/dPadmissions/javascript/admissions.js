@@ -1,6 +1,9 @@
 Admissions = {
   totalUpdater: null,
   listUpdater:  null,
+  target_date: null,
+  pre_admission_filter: null,
+
   filter: function(input, table) {
     table = $(table);
     table.select("tr").invoke("show");
@@ -111,5 +114,33 @@ Admissions = {
       Admissions.totalUpdater.resume();
       Admissions.listUpdater.resume();
     });
+  },
+
+
+  updateSummaryPreAdmissions : function (sdate) {
+    if (sdate) {this.target_date = sdate;}
+    var admUrl = new Url("admissions", "httpreq_vw_all_preadmissions");
+    admUrl.addParam("date", this.target_date);
+    admUrl.requestUpdate('allPreAdmissions');
+  },
+
+  updatePeriodicalSummaryPreAdmissions : function() {
+    setInterval(function(){
+      Admissions.updateSummaryPreAdmissions(Admissions.target_date);
+    }, 120000);
+  },
+
+  updateListPreAdmissions : function (sdate) {
+    if (sdate) {this.target_date = sdate;}
+    var admUrl = new Url("admissions", "httpreq_vw_preadmissions");
+    admUrl.addParam("date", this.target_date);
+    admUrl.addParam("filter", this.pre_admission_filter);
+    admUrl.requestUpdate('listPreAdmissions');
+  },
+
+  updatePeriodicalPreAdmissions : function() {
+    setInterval(function(){
+      Admissions.updateListPreAdmissions(Admissions.target_date);
+    }, 120000);
   }
 };

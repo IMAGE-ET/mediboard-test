@@ -152,44 +152,44 @@ Main.add(function () {
 </div>
 
 <table class="main">
-<tr>
-  <td>
-    <a href="#legend" onclick="Admissions.showLegend()" class="button search">Légende</a>
-    {{if "astreintes"|module_active}}{{mb_include module=astreintes template=inc_button_astreinte_day date=$date}}{{/if}}
-  </td>
-  <td style="float: right">
-    <form action="?" name="selType" method="get">
-      <select name="period" onchange="reloadSorties();">
-        <option value=""      {{if !$period          }}selected{{/if}}>&mdash; Toute la journée</option>
-        <option value="matin" {{if $period == "matin"}}selected{{/if}}>Matin</option>
-        <option value="soir"  {{if $period == "soir" }}selected{{/if}}>Soir</option>
-      </select>
-      {{mb_field object=$sejour field="_type_admission" emptyLabel="CSejour.all" onchange="reloadFullSorties();"}}
-      <select name="service_id" onchange="reloadFullSorties();" {{if $sejour->service_id|@count > 1}}size="5" multiple="true"{{/if}}>
-        <option value="">&mdash; Tous les services</option>
-        {{foreach from=$services item=_service}}
-          <option value="{{$_service->_id}}" {{if in_array($_service->_id, $sejour->service_id)}}selected="selected"{{/if}}>{{$_service}}</option>
-        {{/foreach}}
-      </select>
-      <input type="checkbox" onclick="Admissions.toggleMultipleServices(this)" {{if $sejour->service_id|@count > 1}}checked="checked"{{/if}}/>
-      <select name="prat_id" onchange="reloadFullSorties();">
-        <option value="">&mdash; Tous les praticiens</option>
-        {{foreach from=$prats item=_prat}}
-          <option value="{{$_prat->_id}}" {{if $_prat->_id == $sejour->praticien_id}}selected="selected"{{/if}}>{{$_prat}}</option>
-        {{/foreach}}
-      </select>
-    </form>
-    <a href="#" onclick="printPlanning()" class="button print">Imprimer</a>
-    <a href="#" onclick="Admissions.beforePrint(); Modal.open('area_prompt_modele')" class="button print">{{tr}}CCompteRendu-print_for_select{{/tr}}</a>
-    {{if "web100T"|module_active}}
-      {{mb_include module=web100T template=inc_button_send_all_prestations type=sortie}}
-    {{/if}}
-  </td>
-</tr>
   <tr>
-    <td id="allSorties" style="width: 250px">
+    <td>
+      <a href="#legend" onclick="Admissions.showLegend()" class="button search">Légende</a>
+      {{if "astreintes"|module_active}}{{mb_include module=astreintes template=inc_button_astreinte_day date=$date}}{{/if}}
     </td>
-    <td id="listSorties" style="width: 100%">
+    <td style="float: right">
+      <form action="?" name="selType" method="get">
+        <select name="period" onchange="reloadSorties();">
+          <option value=""      {{if !$period          }}selected{{/if}}>&mdash; Toute la journée</option>
+          <option value="matin" {{if $period == "matin"}}selected{{/if}}>Matin</option>
+          <option value="soir"  {{if $period == "soir" }}selected{{/if}}>Soir</option>
+        </select>
+        {{mb_field object=$sejour field="_type_admission" emptyLabel="CSejour.all" onchange="reloadFullSorties();"}}
+        <select name="service_id" onchange="reloadFullSorties();" {{if $sejour->service_id|@count > 1}}size="5" multiple="true"{{/if}}>
+          <option value="">&mdash; Tous les services</option>
+          {{foreach from=$services item=_service}}
+            <option value="{{$_service->_id}}" {{if in_array($_service->_id, $sejour->service_id)}}selected="selected"{{/if}}>{{$_service}}</option>
+          {{/foreach}}
+        </select>
+        <input type="checkbox" onclick="Admissions.toggleMultipleServices(this)" {{if $sejour->service_id|@count > 1}}checked="checked"{{/if}}/>
+        <select name="prat_id" onchange="reloadFullSorties();">
+          <option value="">&mdash; Tous les praticiens</option>
+          {{foreach from=$prats item=_prat}}
+            <option value="{{$_prat->_id}}" {{if $_prat->_id == $sejour->praticien_id}}selected="selected"{{/if}}>{{$_prat}}</option>
+          {{/foreach}}
+        </select>
+      </form>
+      <a href="#" onclick="printPlanning()" class="button print">Imprimer</a>
+      <a href="#" onclick="Admissions.beforePrint(); Modal.open('area_prompt_modele')" class="button print">{{tr}}CCompteRendu-print_for_select{{/tr}}</a>
+      {{if "web100T"|module_active}}
+        {{mb_include module=web100T template=inc_button_send_all_prestations type=sortie}}
+      {{/if}}
     </td>
   </tr>
+    <tr>
+      <td id="allSorties" style="width: 250px">
+      </td>
+      <td id="listSorties" style="width: 100%">
+      </td>
+    </tr>
 </table>

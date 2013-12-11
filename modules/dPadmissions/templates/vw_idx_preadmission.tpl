@@ -10,27 +10,27 @@
 
 {{mb_script module=admissions script=admissions}}
 
-<script type="text/javascript">
+<script>
 function submitPreAdmission(oForm) {
-  return onSubmitFormAjax(oForm, reloadPreAdmission);
+  return onSubmitFormAjax(oForm, Admissions.updateListPreAdmissions);
 }
 
 function reloadPreAdmission() {
-  var admUrl = new Url("dPadmissions", "httpreq_vw_preadmissions");
-  admUrl.addParam("date", "{{$date}}");
-  admUrl.requestUpdate('listPreAdmissions');
+  Admissions.updateListPreAdmissions();
 }
 
 Main.add(function () {
-  var totalUpdater = new Url("dPadmissions", "httpreq_vw_all_preadmissions");
-  totalUpdater.addParam("date", "{{$date}}");
-  totalUpdater.periodicalUpdate('allPreAdmissions', { frequency: 120 });
+  Admissions.target_date = '{{$date}}';
 
-  var listUpdater = new Url("dPadmissions", "httpreq_vw_preadmissions");
-  listUpdater.addParam("date", "{{$date}}");
-  listUpdater.periodicalUpdate('listPreAdmissions', { frequency: 120 });
+  // load the first elements
+  Admissions.updateSummaryPreAdmissions();
+  Admissions.updateListPreAdmissions();
+
+  //start periodical
+  Admissions.updatePeriodicalSummaryPreAdmissions();
+  Admissions.updatePeriodicalPreAdmissions();
+
 });
-
 </script>
 
 <table class="main">
