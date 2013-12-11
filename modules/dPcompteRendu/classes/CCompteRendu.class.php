@@ -746,6 +746,10 @@ class CCompteRendu extends CDocumentItem {
 
     $parentPerm = parent::getPerm($permType);
 
+    if (!$this->_id) {
+      return $parentPerm;
+    }
+
     if ($this->_id && ($this->author_id == CMediusers::get()->_id)) {
       return $parentPerm;
     }
@@ -829,10 +833,10 @@ class CCompteRendu extends CDocumentItem {
    */
   function isAutoLock() {
     $this->_is_auto_locked = false;
-    switch($this->object_class) {
+    switch ($this->object_class) {
       case "CConsultation" :
         $fix_edit_doc = CAppUI::conf("dPcabinet CConsultation fix_doc_edit");
-        if($fix_edit_doc) {
+        if ($fix_edit_doc) {
           $consult = $this->loadTargetObject();
           $consult->loadRefPlageConsult();
           $this->_is_auto_locked = CMbDT::dateTime("+ 24 HOUR", "{$consult->_date} {$consult->heure}") > CMbDT::dateTime();
@@ -840,7 +844,7 @@ class CCompteRendu extends CDocumentItem {
         break;
       case "CConsultAnesth" :
         $fix_edit_doc = CAppUI::conf("dPcabinet CConsultation fix_doc_edit");
-        if($fix_edit_doc) {
+        if ($fix_edit_doc) {
           $consult = $this->loadTargetObject()->loadRefConsultation();
           $consult->loadRefPlageConsult();
           $this->_is_auto_locked = CMbDT::dateTime("+ 24 HOUR", "{$consult->_date} {$consult->heure}") > CMbDT::dateTime();
@@ -848,17 +852,18 @@ class CCompteRendu extends CDocumentItem {
         break;
       case "CSejour" :
         $fix_edit_doc = CAppUI::conf("dPplanningOp CSejour fix_doc_edit");
-        $this->_is_auto_locked = $fix_edit_doc && ($this->sortie_reelle === null);
+        $sejour = $this->loadTargetObject();
+        $this->_is_auto_locked = $fix_edit_doc && ($sejour->sortie_reelle === null);
         break;
       case "COperation" :
         $fix_edit_doc = CAppUI::conf("dPplanningOp CSejour fix_doc_edit");
-        $sejour = $this->loadTargetObject();
+        $sejour = $this->loadTargetObject()->loadRefSejour();
         $this->_is_auto_locked = $fix_edit_doc && ($sejour->sortie_reelle === null);
         break;
       default :
         $this->_is_auto_locked = false;
     }
-    if(!$this->_is_auto_locked) {
+    if (!$this->_is_auto_locked) {
       $this->loadContent();
       $days = CAppUI::conf("dPcompteRendu CCompteRendu days_to_lock");
       $days = isset($days[$this->object_class]) ?
@@ -874,7 +879,7 @@ class CCompteRendu extends CDocumentItem {
    * @return bool Etat de verrouillage du document
    */
   function isLocked() {
-    if(!$this->_id) {
+    if (!$this->_id) {
       return false;
     }
     return $this->_is_locked = $this->isAutoLock() || $this->valide;
