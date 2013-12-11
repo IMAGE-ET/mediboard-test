@@ -70,6 +70,13 @@ class CUserLog extends CMbMetaObject {
   }
 
   /**
+   * @see parent::getBackProps()
+   */
+  function getBackProps() {
+    return array();
+  }
+
+  /**
    * @see parent::updateFormFields()
    */
   function updateFormFields() {
