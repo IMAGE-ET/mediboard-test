@@ -131,9 +131,11 @@ Admissions = {
   },
 
   updateListPreAdmissions : function (sdate) {
-    if (sdate) {this.target_date = sdate;}
     var admUrl = new Url("admissions", "httpreq_vw_preadmissions");
-    admUrl.addParam("date", this.target_date);
+    if (sdate) {
+      this.target_date = sdate;
+      admUrl.addParam("date", this.target_date);
+    }
     admUrl.addParam("filter", this.pre_admission_filter);
     admUrl.requestUpdate('listPreAdmissions');
 

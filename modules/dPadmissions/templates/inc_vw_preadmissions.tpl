@@ -12,6 +12,24 @@
 {{mb_default var=is_modal value=0}}
 
 <script>
+
+  callbackModal = function() {
+    window.parent.Control.Modal.close();
+    window.parent.see_consult_without_dhe();
+  };
+
+  var callbackDHE = {{if $is_modal}}callbackModal{{else}}Admissions.updateListPreAdmissions{{/if}};
+
+  openDHEModal = function(pat_id) {
+    var url = new Url('dPplanningOp','vw_edit_planning');
+    url.addParam('pat_id', pat_id);
+    url.addParam('operation_id', 0);
+    url.addParam('sejour_id',0);
+    url.addParam('dialog',1);
+    url.modal({width: '95%',height: '95%', onclose: callbackDHE});
+    url.modalObject.observe('afterClose', callbackDHE);
+  };
+
   {{if !$is_modal}}
     Prestations.callback = reloadPreAdmission;
     Calendar.regField(getForm("changeDatePreAdmissions").date, null, {noView: true});

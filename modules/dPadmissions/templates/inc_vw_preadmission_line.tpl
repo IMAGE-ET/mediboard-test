@@ -13,13 +13,13 @@
   {{assign var="patient" value=$curr_consult->_ref_patient}}
   {{assign var=dossiers_anesth value=$curr_consult->_refs_dossiers_anesth}}
   {{if is_array($curr_consult->_next_sejour_and_operation)}}
-  {{if $curr_consult->_next_sejour_and_operation.COperation->_id}}
-    {{assign var="curr_adm" value=$curr_consult->_next_sejour_and_operation.COperation->_ref_sejour}}
-    {{assign var="type_event" value="COperation"}}
-  {{else}}
-    {{assign var="curr_adm" value=$curr_consult->_next_sejour_and_operation.CSejour}}
-    {{assign var="type_event" value="CSejour"}}
-  {{/if}}
+    {{if $curr_consult->_next_sejour_and_operation.COperation->_id}}
+      {{assign var="curr_adm" value=$curr_consult->_next_sejour_and_operation.COperation->_ref_sejour}}
+      {{assign var="type_event" value="COperation"}}
+    {{else}}
+      {{assign var="curr_adm" value=$curr_consult->_next_sejour_and_operation.CSejour}}
+      {{assign var="type_event" value="CSejour"}}
+    {{/if}}
   {{/if}}
 
   <td class="text" rowspan="{{$dossiers_anesth|@count}}">
@@ -135,7 +135,6 @@
         </td>
 
       {{else}}
-
         <td colspan="4" class="button" style="{{$cell_style}}">
           {{if $type_event == "COperation"}}
             Intervention non associé à la consultation
@@ -178,7 +177,7 @@
         DHE non trouvée
         {{if $canPlanningOp->edit}}
         :
-          <button onclick="new Url('dPplanningOp','vw_edit_planning').addParam('pat_id', '{{$curr_consult->patient_id}}').addParam('operation_id', 0).addParam('sejour_id',0).addParam('dialog',1).modal({width: '95%',height: '95%'});" class="button new">
+          <button onclick="openDHEModal('{{$curr_consult->patient_id}}');" class="button new">
             Créer une demande d'hospitalisation
           </button>
         {{/if}}
