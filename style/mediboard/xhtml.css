@@ -115,6 +115,10 @@ h1 {
   page-break-before: always;
 }
 
+h1:first-of-type {
+  page-break-before: auto;
+}
+
 h1.no-break {
   page-break-before: auto;
 }
