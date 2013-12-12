@@ -142,6 +142,7 @@ class CErrorLog extends CStoredObject {
 
     if ($this->param_GET_id) {
       $this->_param_GET = $this->getDataValue("param_GET_id");
+      $this->_url = "?".http_build_query($this->_param_GET, true, "&");
     }
 
     if ($this->param_POST_id) {
@@ -151,9 +152,6 @@ class CErrorLog extends CStoredObject {
     if ($this->session_data_id) {
       $this->_session_data = $this->getDataValue("session_data_id");
     }
-
-    $this->_url = "?".http_build_query($this->_param_GET, true, "&");
-
   }
 
   /**
