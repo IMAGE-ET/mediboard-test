@@ -5,7 +5,7 @@
   see_consult_without_dhe = function(sdate) {
     var url = new Url("admissions", "httpreq_vw_preadmissions");
     url.addParam("filter", "dhe");
-    url.addParam("date", sdate);
+    if (sdate) {url.addParam("date", sdate);}
     url.addParam("is_modal", 1);
     url.requestModal();
   };
