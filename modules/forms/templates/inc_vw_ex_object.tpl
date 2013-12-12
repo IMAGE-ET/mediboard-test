@@ -22,6 +22,7 @@
  *}}
  
 {{mb_default var=hide_empty_groups value=false}}
+{{mb_default var=print value=false}}
  
 {{foreach from=$ex_object->_ref_ex_class->_ref_groups item=_ex_group}}
   {{assign var=go value=true}}
