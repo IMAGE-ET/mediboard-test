@@ -332,9 +332,7 @@ class CModelObject {
    * @return array Array of form "collection-name" => "class join-field"
    */
   function getBackProps() {
-    return array (
-      "logs" => "CUserLog object_id",
-    );
+    return $this->_spec->loggable ? array("logs" => "CUserLog object_id") : array();
   }
   
   /**
@@ -369,12 +367,14 @@ class CModelObject {
   /**
    * Makes all the back specs
    *
-   * @return void
+   * @return CMbBackSpec[]
    */
   function makeAllBackSpecs() {
     foreach ($this->_backProps as $backName => $backProp) {
       $this->makeBackSpec($backName);
     }
+
+    return $this->_backSpecs;
   }
 
   /**

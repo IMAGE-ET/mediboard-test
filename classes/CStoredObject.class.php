@@ -195,6 +195,7 @@ class CStoredObject extends CModelObject {
       return null;
     }
 
+    /** @var self $object */
     $object = self::getInstance($class);
 
     if (!$object) {
@@ -803,7 +804,7 @@ class CStoredObject extends CModelObject {
    */
   function loadGroupList($where = array(), $order = null, $limit = null, $group = null, $ljoin = array()) {
     if (property_exists($this, "group_id")) {
-      // Filtre sur l'établissement
+      // Filtre sur l'ï¿½tablissement
       $g = CGroups::loadCurrent();
       $where["group_id"] = "= '$g->_id'";
     }
@@ -1019,7 +1020,7 @@ class CStoredObject extends CModelObject {
     foreach ($this->_props as $name => $prop) {
       if ($name[0] !== '_') {
         if (!property_exists($this, $name)) {
-          trigger_error("La spécification cible la propriété '$name' inexistante dans la classe '$this->_class'", E_USER_WARNING);
+          trigger_error("La spï¿½cification cible la propriï¿½tï¿½ '$name' inexistante dans la classe '$this->_class'", E_USER_WARNING);
         }
         else {
           $value = $this->$name;
@@ -1221,7 +1222,7 @@ class CStoredObject extends CModelObject {
    * @return void
    */
   protected function doLog() {
-    // Aucun log à produire (non loggable, pas de modifications, etc.)
+    // Aucun log ï¿½ produire (non loggable, pas de modifications, etc.)
     if (!$this->_ref_last_log) {
       return;
     }
@@ -1453,13 +1454,13 @@ class CStoredObject extends CModelObject {
         $spec->ds->error();
     }
     
-    // Préparation du log, doit être fait AVANT $this->load()
+    // Prï¿½paration du log, doit ï¿½tre fait AVANT $this->load()
     $this->prepareLog();
     
     // Load the object to get all properties
     $this->load();
     
-    // Enregistrement du log une fois le store terminé
+    // Enregistrement du log une fois le store terminï¿½
     $this->doLog();
         
     // Trigger event
@@ -1585,7 +1586,7 @@ class CStoredObject extends CModelObject {
     $backObject = new $backSpec->class;
     $backField = $backSpec->field;
 
-    // Cas du module non installé
+    // Cas du module non installï¿½
     if (!$backObject->_ref_module) {
       return null;
     }
@@ -1661,7 +1662,7 @@ class CStoredObject extends CModelObject {
     $backObject = new $backSpec->class;
     $backField = $backSpec->field;
 
-    // Cas du module non installé
+    // Cas du module non installï¿½
     if (!$backObject->_ref_module) {
       return null;
     }
@@ -1800,30 +1801,30 @@ class CStoredObject extends CModelObject {
 
     /** @var self $backObject */
     $backObject = new $backSpec->class;
+    $backField = $backSpec->field;
 
-    // Cas du module non installé
+    /** @var CRefSpec $fwdSpec */
+    $fwdSpec = $backObject->_specs[$backField];
+    $backMeta = $fwdSpec->meta;
+
+    // Cas du module non installï¿½
     if (!$backObject->_ref_module) {
       return null;
     }
 
-    $backField = $backSpec->field;
-    /** @var CRefSpec $fwdSpec */
-    $fwdSpec = $backObject->_specs[$backField];
-    $backMeta = $fwdSpec->meta;
-    
-    // Cas des meta objects
-    if ($backMeta) {
-      trigger_error("meta case anavailable", E_USER_ERROR);
-    }
-    
     // Empty object
     if (!$this->_id) {
       return array();
     }
 
-    // Vérification de la possibilité de supprimer chaque backref
+    // Vï¿½rification de la possibilitï¿½ de supprimer chaque backref
     $where[$backField] = " = '$this->_id'";
-    
+
+    // Cas des meta objects
+    if ($backMeta) {
+      $where[$backMeta] = " = '$this->_class'";
+    }
+
     return $backObject->loadIds($where, $order, $limit, $group, $ljoin);
   }
 
@@ -1956,7 +1957,7 @@ class CStoredObject extends CModelObject {
       $backObject = new $backSpec->class;
       $backField = $backSpec->field;
 
-      // Cas du module non installé
+      // Cas du module non installï¿½
       if (!$backObject->_ref_module) {
         continue;
       }
@@ -2203,7 +2204,7 @@ class CStoredObject extends CModelObject {
       $fwdSpec = $backObject->_specs[$backField];
       $backMeta = $fwdSpec->meta;
 
-      // Cas du module non installé
+      // Cas du module non installï¿½
       if (!$backObject->_ref_module) {
         continue;
       }
@@ -2216,7 +2217,7 @@ class CStoredObject extends CModelObject {
       // Cas de la suppression en cascade
       if ($fwdSpec->cascade || $backSpec->cascade) {
         
-        // Vérification de la possibilité de supprimer chaque backref
+        // Vï¿½rification de la possibilitï¿½ de supprimer chaque backref
         $backObject->$backField = $this->_id;
 
         // Cas des meta objects
@@ -2244,7 +2245,7 @@ class CStoredObject extends CModelObject {
         continue;
       }
       
-      // Vérification du nombre de backRefs
+      // Vï¿½rification du nombre de backRefs
       if (!$fwdSpec->unlink) {
         if ($backCount = $this->countBackRefs($backName, array(), array(), false)) {
           $issues[] = $backCount 
@@ -2268,7 +2269,7 @@ class CStoredObject extends CModelObject {
   function delete() {
     // Delete checking
     if (!$this->_purge) {
-      // Préparation du log
+      // Prï¿½paration du log
       $this->loadOldObject();
 
       if ($msg = $this->canDeleteEx()) {
@@ -2289,25 +2290,27 @@ class CStoredObject extends CModelObject {
       $fwdSpec    = $backObject->_specs[$backField];
       $backMeta   = $fwdSpec->meta;
       
-      /* Cas du module non installé, 
-       * Cas de l'interdiction de suppression, 
-       * Cas de l'interdiction de la non liaison des backRefs */
+      // Cas du module non installï¿½,
       if (!$backObject->_ref_module) {
         continue; 
       } 
       
+      // Cas de l'interdiction de suppression,
+      // Cas de l'interdiction de la non liaison des backRefs
       if (!($fwdSpec->cascade || $backSpec->cascade || $fwdSpec->nullify) || $fwdSpec->unlink) {
         continue; 
       }
-      
-      $backObject->$backField = $this->_id;
+
+      // Ne pas utiliser loadMatchingList au cas oÃ¹ l'objet traite mal les champs initialisÃ©s
+      $where = array();
+      $where[$backField] = "= '$this->_id'";
       
       // Cas des meta objects
       if ($backMeta) {
-        $backObject->$backMeta = $this->_class;
+        $where[$backMeta] = "= '$this->_class'";
       }
 
-      foreach ($backObject->loadMatchingList() as $object) {      
+      foreach ($backObject->loadList($where) as $object) {
         // Cas de nullification de la collection
         if ($fwdSpec->nullify) {
           $object->$backField = "";
@@ -2327,16 +2330,16 @@ class CStoredObject extends CModelObject {
     }
     
     // Actually delete record
-    $sql = "DELETE FROM {$this->_spec->table} WHERE {$this->_spec->key} = '$this->_id'";
-    
-    if (!$this->_spec->ds->exec($sql)) {
+    $query = "DELETE FROM {$this->_spec->table} WHERE {$this->_spec->key} = '$this->_id'";
+
+    if (!$this->_spec->ds->exec($query)) {
       return $this->_spec->ds->error();
     }
    
     // Deletion successful
     $this->_id = null;
    
-    // Enregistrement du log une fois le delete terminé
+    // Enregistrement du log une fois le delete terminï¿½
     $this->prepareLog();
     $this->doLog();
         
@@ -2349,34 +2352,122 @@ class CStoredObject extends CModelObject {
   /**
    * Purge an entire object, including recursive back references
    *
-   * @return string Store-like message
+   * @deprecated
+   * @see self::purge()
+   * @return string|null Store-like message
    */
-  function purge() {
+  function oldPurge() {
+    if (!$this->_id) {
+      return null;
+    }
+
     $this->loadAllBackRefs();
     foreach ($this->_back as $backName => $backRefs) {
       foreach ($backRefs as $backRef) {
         /** @var self $backRef */
         $backSpec = $this->_backSpecs[$backName];
+        // Purge recursion
         if ($backSpec->_notNull || $backSpec->_purgeable || $backSpec->_cascade || $backSpec->cascade) {
           if ($msg = $backRef->purge()) {
             return $msg;
           }
         }
+        // Nullifying case
         else {
           $backRef->{$backSpec->field} = "";
           if ($msg = $backRef->store()) {
             return $msg;
           }
         }
-        CAppUI::setMsg("$backRef->_class-msg-delete", UI_MSG_ALERT);
       }
     }
 
     // Make sure delete won't log and won't can delete
     $this->_purge = "1";
+    CAppUI::setMsg("$this->_class-msg-delete", UI_MSG_ALERT);
     return $this->delete();
   }
 
+  /**
+   * Purge an entire object, including recursive back references
+   * Uses identifiers instead of loaded objects, much faster
+   *
+   * @return string|null Store-like message
+   */
+  function purge() {
+    if (!$this->_id) {
+      return null;
+    }
+
+    self::$purgeIds = array();
+    self::$purgeNullifiers = array();
+
+    $this->preparePurge();
+
+    // Actual object deletion
+    foreach (self::$purgeIds as $_class => $_ids) {
+      /** @var self $object */
+      $object = new $_class;
+      $ds = $object->_spec->ds;
+      $query = "DELETE FROM `{$object->_spec->table}`
+        WHERE `{$object->_spec->key}` ". $ds->prepareIn(array_unique($_ids));
+
+      if (!$ds->exec($query)) {
+        return CAppUI::tr($this->_class) . CAppUI::tr("CMbObject-msg-purge-failed") . $ds->error();
+      }
+    }
+
+    // Actual field nullifying
+    foreach (self::$purgeNullifiers as $_class => $_fields) {
+      foreach ($_fields as $_field => $_ids) {
+        /** @var self $object */
+        $object = new $_class;
+        $ds = $object->_spec->ds;
+        $query = "UPDATE `{$object->_spec->table}`
+          SET `$_field` = NULL
+          WHERE {$object->_spec->key} ". $ds->prepareIn(array_unique($_ids));
+
+        if (!$ds->exec($query)) {
+          return CAppUI::tr($this->_class) . CAppUI::tr("CMbObject-msg-purge-failed") . $ds->error();
+        }
+      }
+    }
+  }
+
+  static $purgeIds = null;
+  static $purgeNullifiers = null;
+
+  function preparePurge() {
+    foreach ($this->makeAllBackSpecs() as $backName => $backSpec) {
+      /** @var self $backObject */
+      $backObject = new $backSpec->class;
+      $backField = $backSpec->field;
+
+      /** @var CRefSpec $fwdSpec */
+      $fwdSpec = $backObject->_specs[$backField];
+
+      if (null == $backIds = $this->loadBackIds($backName)) {
+        continue;
+      }
+
+      foreach ($this->loadBackIds($backName) as $_id) {
+        $backObject->_id = $_id;
+        // Purge recursion
+        if ($backSpec->_notNull || $backSpec->_purgeable || $backSpec->_cascade || $backSpec->cascade) {
+          if ($msg = $backObject->preparePurge()) {
+            return $msg;
+          }
+        }
+        // Nullifying case
+        else {
+          self::$purgeNullifiers[$backObject->_class][$fwdSpec->fieldName][] = $_id;
+        }
+      }
+    }
+
+    CAppUI::setMsg("$this->_class-msg-delete", UI_MSG_ALERT);
+    self::$purgeIds[$this->_class][] = $this->_id;
+  }
   /**
    * Retrieve seekable specs from object
    *
