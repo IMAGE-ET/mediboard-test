@@ -264,7 +264,7 @@ Main.add(function () {
   });
 
   drawGraphs();
-  ViewPort.SetAvlHeight('graphs', 1.0);
+  ViewPort.SetAvlHeight('tab-constantes-medicales', 1.0);
 });
 
 loadConstantesMedicales  = function(context_guid) {
@@ -368,10 +368,10 @@ refreshFiches = function(sejour_id){
       
   <table class="main" id="tab-constantes-medicales">
     <tr>
-      <td class="narrow" id="constantes-medicales-form">
+      <td class="narrow" id="constantes-medicales-form" style="width: 24%;">
         {{include file="inc_form_edit_constantes_medicales.tpl" context_guid=$context_guid}}
       </td>
-      <td>
+      <td id="constantes-medicales-graphs" style="width: 74%;">
         {{unique_id var=uniq_id_constantes}}
          
         <script type="text/javascript">
@@ -420,21 +420,23 @@ refreshFiches = function(sejour_id){
           <br/>
 
           <div id="graphs" style="clear: both;">
-            <table class="layout">
-              {{foreach from=$graphs_datas key=_rank item=_graphs_for_rank}}
-                {{foreach from=$_graphs_for_rank key=_graph_id item=_graph}}
-                  <tr id="graph_row_{{$_rank}}_{{$_graph_id}}">
-                    <td>
-                      <p style="text-align: center"><strong>{{$_graph.title}}</strong></p>
-                      <div id="placeholder_{{$_rank}}_{{$_graph_id}}" style="width: {{$_graph.width}}px; height: 175px; margin-bottom: 5px; margin-left: {{$_graph.margin_left}}px"></div>
-                    </td>
-                    <td>
-                      <div id="legend_{{$_rank}}_{{$_graph_id}}" style="margin-top: 30px; width: 15em"></div>
-                    </td>
-                  </tr>
-                {{/foreach}}
+            {{foreach from=$graphs_datas key=_rank item=_graphs_for_rank}}
+              {{foreach from=$_graphs_for_rank key=_graph_id item=_graph}}
+                <div id="graph_row_{{$_rank}}_{{$_graph_id}}" style="display: inline-block;">
+                  <table class="layout">
+                    <tr>
+                      <td>
+                        <p style="text-align: center"><strong>{{$_graph.title}}</strong></p>
+                        <div id="placeholder_{{$_rank}}_{{$_graph_id}}" style="width: {{$_graph.width}}px; height: 175px; margin-bottom: 5px; margin-left: {{$_graph.margin_left}}px;"></div>
+                      </td>
+                      <td style="padding-top: 1.2em; width: 10em">
+                        <div id="legend_{{$_rank}}_{{$_graph_id}}"></div>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
               {{/foreach}}
-            </table>
+            {{/foreach}}
           </div>
         </div>
         

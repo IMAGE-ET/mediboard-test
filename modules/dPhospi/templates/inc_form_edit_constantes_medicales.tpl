@@ -87,6 +87,7 @@ Main.add(function () {
   {{/if}}
   ViewPort.SetAvlHeight('constant_form',1);
   ViewPort.SetAvlHeight('constantes_{{$constantes->_id}}',.80);
+  ViewPort.SetAvlHeight('graphs', 1);
 });
 </script>
 
@@ -135,8 +136,8 @@ Main.add(function () {
     </ul>
     {{/if}}
 
-    <div id="constantes_{{$constantes->_id}}">
-      <table class="main form constantes" >
+    <div id="constantes_{{$constantes->_id}}" style="height: 74%; overflow-y: auto;">
+      <table class="main form constantes">
         <tr>
           <th class="category"></th>
           {{if $real_context}}<th class="category">Saisie</th>{{/if}}
@@ -146,6 +147,7 @@ Main.add(function () {
               {{mb_include module=system template=inc_object_history object=$constantes}}
             {{/if}}
           </th>
+          <th style="width:10px;"></th>
         </tr>
 
         {{assign var=at_least_one_hidden value=false}}
@@ -159,7 +161,7 @@ Main.add(function () {
                   style="display: none;" class="secondary"
                   {{assign var=at_least_one_hidden value=true}}
                   {{/if}}>
-                  <th style="text-align: left;">
+                  <th style="text-align: left;" class="text">
                     <label for="{{$_constant}}" title="{{tr}}CConstantesMedicales-{{$_constant}}-desc{{/tr}}">
                       {{tr}}CConstantesMedicales-{{$_constant}}-court{{/tr}}
 
@@ -250,35 +252,22 @@ Main.add(function () {
             {{/foreach}}
           </tbody>
         {{/foreach}}
-
-        {{if $real_context}}
-          {{if $constantes->datetime}}
-          <tr>
-            <th>{{mb_title object=$constantes field=datetime}}</th>
-            <td colspan="4">{{mb_field object=$constantes field=datetime form="edit-constantes-medicales" register=true}}</td>
-          </tr>
-          {{/if}}
-        {{elseif $can_create}}
-          <tr>
-            <td colspan="5" class="button">
-            </td>
-          </tr>
-        {{/if}}
       </table>
     </div>
 
-    <div style="position: absolute; bottom:0; text-align:center; width: 100%;">
+    <div style="position: absolute; bottom:0; text-align:center; width: 100%; height:20%;" id="buttons_form_const">
       {{if $real_context}}
+        {{if $constantes->datetime}}
+          {{mb_field object=$constantes field=datetime form="edit-constantes-medicales" register=true}}
+          <button class="trash notext" type="button" onclick="if (confirm('Etes-vous sûr de vouloir supprimer ce relevé ?')) {$V(this.form.del, 1); return submitConstantesMedicales(this.form);}">
+            {{tr}}CConstantesMedicales.delete_all{{/tr}}
+          </button>
+        {{/if}}
         {{mb_field object=$constantes field=comment placeholder="Commentaire"}}
         {{if !$hide_save_button}}
-          <button class="modify singleclick" onclick="return submitConstantesMedicales(this.form);">
+          <button class="modify singleclick notext" onclick="return submitConstantesMedicales(this.form);">
             {{tr}}Save{{/tr}}
           </button>
-          {{if $constantes->datetime}}
-            <button class="trash" type="button" onclick="if (confirm('Etes-vous sûr de vouloir supprimer ce relevé ?')) {$V(this.form.del, 1); return submitConstantesMedicales(this.form);}">
-              {{tr}}CConstantesMedicales.delete_all{{/tr}}
-            </button>
-          {{/if}}
         {{/if}}
       {{elseif $can_create}}
         <button class="new singleclick" type="button" onclick="newConstants('{{$context_guid}}');">
@@ -288,7 +277,7 @@ Main.add(function () {
 
 
       {{if $show_enable_all_button && $at_least_one_hidden}}
-        <button class="down" type="button" onclick="toggleConstantesecondary(this);">Afficher tout</button>
+        <button class="down notext" type="button" onclick="toggleConstantesecondary(this);">Afficher tout</button>
       {{/if}}
     </div>
   </form>
