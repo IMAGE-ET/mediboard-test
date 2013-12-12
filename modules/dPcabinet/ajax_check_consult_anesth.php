@@ -14,11 +14,15 @@ $consult_id = CValue::getOrSession("consult_id");
 
 $consult = new CConsultation();
 $consult->load($consult_id);
-$consult->loadRefPatient()->loadRefConstantesMedicales(null, array("poids"));
+$consult->loadRefPatient();
 $consult->loadRefsDossiersAnesth();
 
 $tab_op = array();
 foreach ($consult->_refs_dossiers_anesth as $consult_anesth) {
+  $consult_anesth->loadRelPatient();
+  $consultation = $consult_anesth->_ref_consultation;
+  $consultation->_ref_patient->loadRefConstantesMedicales(null, array("poids"), $consultation);
+
   $consult_anesth->loadRefOperation()->loadRefSejour();
   $consult_anesth->_ref_operation->_ref_sejour->loadRefDossierMedical();
 
@@ -43,7 +47,6 @@ $dossier_medical_patient->loadRefPrescription();
 $smarty = new CSmartyDP();
 
 $smarty->assign("consult"     , $consult);
-$smarty->assign("constantes"  , $consult->_ref_patient->_ref_constantes_medicales);
 $smarty->assign("dm_patient"  , $dossier_medical_patient);
 $smarty->assign("tab_op"      , $tab_op);
 

@@ -100,8 +100,12 @@
 
   <tr>
     <td onmouseover="ObjectTooltip.createDOM(this, 'DetailRankPoids');"><div class="rank"></div><strong>Poids</strong></td>
-    {{foreach from=$tab_op item=num_operation}}
-      <td class="button"><img src="images/icons/note_{{if $constantes->poids}}green{{else}}red{{/if}}.png"/></td>
+    {{foreach from=$consult->_refs_dossiers_anesth item=consult_anesth}}
+      {{assign var="result" value=false}}
+      {{if $consult_anesth->_ref_consultation->_ref_patient->_ref_constantes_medicales->poids}}
+        {{assign var="result" value=true}}
+      {{/if}}
+      <td class="button"><img src="images/icons/note_{{if $result}}green{{else}}red{{/if}}.png"/></td>
     {{/foreach}}
   </tr>
   <tr>
