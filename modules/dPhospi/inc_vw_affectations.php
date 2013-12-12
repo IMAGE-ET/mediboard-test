@@ -44,13 +44,13 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
     $sejour = $_affectation->loadRefSejour();
     if ($praticien_id) {
       if ($sejour->praticien_id != $praticien_id) {
-        unset($affectations[$affectation->_id]);
+        unset($affectations[$_affectation->_id]);
         continue;
       }
     }
     if ($type) {
       if ($sejour->type != $type) {
-        unset($affectations[$affectation->_id]);
+        unset($affectations[$_affectation->_id]);
         continue;
       }
     }
