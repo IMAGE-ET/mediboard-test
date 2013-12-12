@@ -11,7 +11,7 @@
 <table class="tbl">
   <tr class="clear">
     <th colspan="100">
-      <h1 style="page-break-before: auto !important;">
+      <h1>
         <a href="#" onclick="window.print()">
           Bacterio du {{$date|date_format:$conf.date}}
           -
@@ -25,7 +25,7 @@
   <tr>
     <th>{{mb_title class=COperation field=time_operation}}</th>
     <th>{{mb_title class=COperation field=libelle}}</th>
-    <th>{{mb_title class=CSejour field=patient_id}}</th>
+    <th>{{mb_title class=CSejour    field=patient_id}}</th>
     <th>{{mb_title class=COperation field=chir_id}}</th>
     <th>{{mb_title class=COperation field=salle_id}}</th>
     <th>{{mb_title class=COperation field=flacons_bacterio}}</th>
