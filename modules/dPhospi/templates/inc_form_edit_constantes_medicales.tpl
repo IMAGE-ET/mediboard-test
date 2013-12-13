@@ -5,6 +5,7 @@
 {{mb_default var=can_create value=0}}
 {{mb_default var=show_cat_tabs value="CConstantesMedicales::getConfig"|static_call:"show_cat_tabs"}}
 {{mb_default var=show_enable_all_button value="CConstantesMedicales::getConfig"|static_call:"show_enable_all_button"}}
+{{mb_default var=msg_modif_timeout value=''}}
 
 <script type="text/javascript">
 submitConstantesMedicales = function(oForm) {
