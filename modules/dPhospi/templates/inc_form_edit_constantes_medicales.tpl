@@ -137,6 +137,11 @@ Main.add(function () {
     {{/if}}
 
     <div id="constantes_{{$constantes->_id}}" style="height: 74%; overflow-y: auto;">
+      {{if $msg_modif_timeout != ''}}
+        <div class="small-warning">
+          {{$msg_modif_timeout}}
+        </div>
+      {{/if}}
       <table class="main form constantes">
         <tr>
           <th class="category"></th>

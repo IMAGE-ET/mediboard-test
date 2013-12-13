@@ -67,6 +67,7 @@ if ($context) {
 
 $can_create = 0;
 $modif_timeout = intval(CAppUI::conf("dPpatients CConstantesMedicales constants_modif_timeout", $host->_guid));
+$msg_modif_timeout = '';
 if (
     $constantes->_id &&
     $modif_timeout > 0 &&
@@ -74,6 +75,7 @@ if (
 ) {
   $can_create = 1;
   $readonly = 1;
+  $msg_modif_timeout = "Impossible de modifier cette saisie de constantes car elle a été saisie il y a plus de $modif_timeout heures.";
 }
 
 $patient_id = $constantes->patient_id ? $constantes->patient_id : $patient_id;
@@ -88,6 +90,7 @@ $smarty->assign('readonly'              , $readonly);
 $smarty->assign('selection'             , $selection);
 $smarty->assign('dates'                 , $dates);
 $smarty->assign('can_create'            , $can_create);
+$smarty->assign('msg_modif_timeout'     , $msg_modif_timeout);
 $smarty->assign('show_cat_tabs'         , $show_cat_tabs);
 $smarty->assign('show_enable_all_button', $show_enable_all_button);
 if ($tri) {
