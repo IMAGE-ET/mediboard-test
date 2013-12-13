@@ -1175,6 +1175,10 @@ ul.tags > li.tag button.delete:hover {
   background: transparent url(images/buttons/delete-tiny.png) no-repeat center center;
 }
 
+ul.tags > li.tag.through {
+  text-decoration: line-through;
+}
+
 ul.tags > li.input {
   border: none;
   padding: 0;
