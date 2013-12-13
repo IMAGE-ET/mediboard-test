@@ -2312,8 +2312,8 @@ class CConstantesMedicales extends CMbObject {
           if (!empty($_constants)) {
             $constants_by_graph[$_rank][] = $_constants;
           }
-          if (!empty($cumuls_constants)) {
-            $constants_by_graph[$_rank][] = $cumuls_constants;
+          foreach ($cumuls_constants as $_cumul) {
+            $constants_by_graph[$_rank][] = array($_cumul);
           }
         }
       }
