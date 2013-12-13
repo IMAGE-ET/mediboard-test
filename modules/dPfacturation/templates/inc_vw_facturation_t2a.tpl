@@ -6,6 +6,12 @@
     form.cloture.value = form.ouverture.value;
     return onSubmitFormAjax(form);
   }
+  editRepartition = function(form){
+    var url = new Url("facturation", "ajax_edit_repartition");
+    url.addParam("facture_id"   , '{{$facture->_id}}');
+    url.addParam("facture_class", '{{$facture->_class}}');
+    url.requestModal();
+  }
 
   Main.add(function(){
     Calendar.regField(getForm("facture_date").ouverture);
@@ -91,7 +97,7 @@
 
 <tbody class="hoverable">
   <tr>
-    <td colspan="3" rowspan="5"></td>
+    <td colspan="3" rowspan="4"></td>
     <td colspan="2">Dû Patient</td>
     <td style="text-align:right;">{{mb_value object=$facture field="du_patient"}}</td>
   </tr>
@@ -104,6 +110,9 @@
     <td style="text-align:right;"><i>{{mb_value object=$facture field="du_tva"}}</i></td>
   <tr>
   <tr>
+    <td colspan="3">
+      <button class="edit notext" style="float:right;" onclick="editRepartition();">Modifier la répartition Dû patient/Dû tiers</button>
+    </td>
     <td colspan="2"><b>Montant Total</b></td>
     <td style="text-align:right;"><b>{{mb_value object=$facture field="_montant_avec_remise"}}</b></td>
   <tr>

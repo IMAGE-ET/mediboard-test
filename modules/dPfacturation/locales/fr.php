@@ -577,6 +577,7 @@ $locales['mod-dPfacturation-tab-ajax_edit_bvr'] = 'Edition de factures avec BVR'
 $locales['mod-dPfacturation-tab-ajax_edit_debiteur'] = 'Edition de débiteur';
 $locales['mod-dPfacturation-tab-ajax_edit_definitive'] = 'Edition de statut';
 $locales['mod-dPfacturation-tab-ajax_edit_relance'] = 'Edition de relance';
+$locales['mod-dPfacturation-tab-ajax_edit_repartition'] = 'Modification de la répartition des montants';
 $locales['mod-dPfacturation-tab-ajax_edit_retrocession'] = 'Edition de rétrocession';
 $locales['mod-dPfacturation-tab-ajax_export_compta'] = 'Intégration de la comptabilité';
 $locales['mod-dPfacturation-tab-ajax_list_assurances'] = 'Liste des assurance';
