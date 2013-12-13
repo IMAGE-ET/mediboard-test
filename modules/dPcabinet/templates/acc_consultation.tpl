@@ -80,9 +80,6 @@ Main.add(function () {
   loadSuivi({{$rpu->sejour_id}});
   {{/if}}
 
-
-  loadInterv();
-
   {{if @$modules.dPImeds->mod_active && $consult->sejour_id}}
     if($('Imeds')){
       loadResultLabo('{{$consult->sejour_id}}');
