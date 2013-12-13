@@ -21,15 +21,12 @@
     code="org.yoplet.Yoplet.class"
     archive="includes/applets/yoplet.jar?build={{$version.build}}"
     {{if $app->user_prefs.debug_yoplet == 1}}
-      width="400"
-      height="400"
+      width="400" height="400"
     {{else}}
-      width="1"
-      height="1"
-    {{/if}}
->
+      width="0" height="0" style="position: absolute;"
+    {{/if}}>
     <param name="action" value="" />
-    <param name="debug" value="true" />
+    <param name="debug" value="{{if $app->user_prefs.debug_yoplet}}true{{else}}false{{/if}}" />
     <param name="codebase_lookup" value="false" />
     <param name="permissions" value="all-permissions" />
 
