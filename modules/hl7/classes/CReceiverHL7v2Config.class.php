@@ -60,6 +60,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   public $send_transfer_patient;
   public $send_own_identifier;
   public $send_self_identifier;
+  public $send_actor_identifier;
   public $send_update_patient_information;
   public $send_change_after_admit;
 
@@ -81,6 +82,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   public $build_PV1_3_5;
   public $build_PV1_7;
   public $build_PV1_10;
+  public $build_PV1_11;
   public $build_PV1_14;
   public $build_PV1_26;
   public $build_PV1_36;
@@ -142,6 +144,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "send_transfer_patient",
       "send_own_identifier",
       "send_self_identifier",
+      "send_actor_identifier",
       "send_update_patient_information",
       "send_change_after_admit"
     ),
@@ -156,6 +159,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
       "build_PV1_3_5",
       "build_PV1_7",
       "build_PV1_10",
+      "build_PV1_11",
       "build_PV1_14",
       "build_PV1_26",
       "build_PV1_36",
@@ -230,6 +234,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["send_transfer_patient"]              = "enum list|A02|Z99 default|A02";
     $props["send_own_identifier"]                = "bool default|1";
     $props["send_self_identifier"]               = "bool default|0";
+    $props["send_actor_identifier"]              = "bool default|0";
     $props["send_update_patient_information"]    = "enum list|A08|A31 default|A31";
     $props["send_change_after_admit"]            = "bool default|1";
     
@@ -251,6 +256,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     $props["build_PV1_3_5"] = "enum list|bed_status|null default|bed_status";
     $props["build_PV1_7"]   = "enum list|unique|repeatable default|unique";
     $props["build_PV1_10"]  = "enum list|discipline|service default|discipline";
+    $props["build_PV1_11"]  = "enum list|uf_medicale|none default|none";
     $props["build_PV1_14"]  = "enum list|admit_source|ZFM default|admit_source";
     $props["build_PV1_26"]  = "enum list|movement_id|none default|none";
     $props["build_PV1_36"]  = "enum list|discharge_disposition|ZFM default|discharge_disposition";

@@ -293,6 +293,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       $assigning_authority = $this->getAssigningAuthority("actor", null, $actor);
     }
     elseif (CValue::read($actor->_configs, "build_PID_34") === "domain") {
+      // Master domain
       $group_domain = new CGroupDomain();
       $group_domain->group_id     = $group->_id;
       $group_domain->master       = 1;
@@ -349,9 +350,42 @@ class CHL7v2Segment extends CHL7v2Entity {
       );
     }
 
+    // Ajout des identifiants des acteurs d'intégration
+    $this->fillActorsIdentifiers($identifiers, $patient, $actor);
+
+    // Ajout d'auutres identifiants
     $this->fillOtherIdentifiers($identifiers, $patient, $actor);
     
     return $identifiers;
+  }
+
+  function fillActorsIdentifiers(&$identifiers, CMbObject $object, CInteropActor $actor = null) {
+    if (!$actor->_configs["send_actor_identifier"]) {
+      return;
+    }
+
+    $domain = new CDomain();
+    $where = array();
+    $where["incrementer_id"] = "IS NULL";
+    $where["actor_id"]       = "IS NOT NULL";
+    /** @var CDomain[] $domains */
+    $domains = $domain->loadList($where);
+
+    foreach ($domains as $_domain) {
+      $value = CIdSante400::getValueFor($object, $_domain->tag);
+      if (!$value) {
+        continue;
+      }
+
+      $identifiers[] = array(
+        $value,
+        null,
+        null,
+        // PID-3-4 Autorité d'affectation
+        $this->getAssigningAuthority("domain", null, null, $_domain),
+        "RI"
+      );
+    }
   }
 
   function fillOtherIdentifiers(&$identifiers, CPatient $patient, CInteropActor $actor = null) {
@@ -748,7 +782,7 @@ class CHL7v2Segment extends CHL7v2Entity {
 
       // Mode d'entrée
       default:
-         // 1  - Envoyé par un médecin extérieur 
+        // 1  - Envoyé par un médecin extérieur
         // 3  - Convocation à l'hôpital
         // 4  - Transfert depuis un autre centre hospitalier
         // 6  - Entrée par transfert interne

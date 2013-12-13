@@ -93,7 +93,7 @@
             <description>Patient Type</description>
             <datatype>IS</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0">
+        <field minOccurs="0" maxOccurs="unbounded">
             <name>PV1.19</name>
             <description>Visit Number</description>
             <datatype>CX</datatype>

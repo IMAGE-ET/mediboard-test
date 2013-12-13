@@ -1185,7 +1185,19 @@ class CSetuphl7 extends CSetup {
                 ADD `build_PID_19` ENUM ('matricule','none') DEFAULT 'none';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.76";
+    $this->makeRevision("0.76");
+
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+                ADD `send_actor_identifier` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.77");
+
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+                ADD `build_PV1_11` ENUM ('uf_medicale','none') DEFAULT 'none';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.78";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

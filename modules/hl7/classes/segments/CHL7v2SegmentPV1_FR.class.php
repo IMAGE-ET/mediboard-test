@@ -157,8 +157,10 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
     $data[] = null;
     
     // PV1-19: Visit Number (CX) (optional)
-    /* @todo Gestion des séances */ 
-    $data[] = array(
+    /* @todo Gestion des séances */
+    $identifiers = array();
+
+    $identifiers[] = array(
       array (
         $sejour->_id,
         null,
@@ -168,6 +170,10 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
         "RI"
       )
     );
+    // Ajout des identifiants des acteurs d'intégration
+    $this->fillActorsIdentifiers($identifiers, $sejour, $receiver);
+
+    $data[] = $identifiers;
     
     // PV1-20: Financial Class (FC) (optional repeating)
     $data[] = $sejour->loadRefPrestation()->code;

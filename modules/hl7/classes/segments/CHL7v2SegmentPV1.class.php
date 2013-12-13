@@ -132,7 +132,20 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     $data[] = $this->getPV110($receiver, $sejour, $this->curr_affectation);
     
     // PV1-11: Temporary Location (PL) (optional)
-    $data[] = null;
+    if ($receiver->_configs["build_PV1_11"] == "uf_medicale") {
+      $ufs = $sejour->getUFs(null, $this->curr_affectation->_id);
+      $uf_medicale = isset($ufs["medicale"]) ? $ufs["medicale"] : null;
+      if (isset($uf_medicale->_id)) {
+        $data[] = array(
+          array(
+            $uf_medicale->code
+          )
+        );
+      }
+    }
+    else {
+      $data[] = null;
+    }
     
     // PV1-12: Preadmit Test Indicator (IS) (optional)
     $data[] = null;
@@ -159,22 +172,24 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     $data[] = null;
     
     // PV1-19: Visit Number (CX) (optional)
+    $identifiers = array();
+
     if ($receiver->_configs["build_NDA"] == "PV1_19") {
       $sejour->loadNDA($group->_id);
-      $data[] = $sejour->_NDA ? array( 
-                  array(
-                    $sejour->_NDA,
-                    null,
-                    null,
-                    // PID-3-4 Autorité d'affectation
-                    $this->getAssigningAuthority("FINESS", $group->finess),
-                    "AN"
-                  )
-                ) : null;
+      $identifiers[] = $sejour->_NDA ? array(
+                        array(
+                          $sejour->_NDA,
+                          null,
+                          null,
+                          // PID-3-4 Autorité d'affectation
+                          $this->getAssigningAuthority("FINESS", $group->finess),
+                          "AN"
+                        )
+                      ) : array();
     }
     else {
-      /* @todo Gestion des séances */ 
-      $data[] = array(
+      /* @todo Gestion des séances */
+      $identifiers[] = array(
         array (
           $sejour->_id,
           null,
@@ -185,6 +200,11 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
         )
       );
     }
+
+    // Ajout des identifiants des acteurs d'intégration
+    $this->fillActorsIdentifiers($identifiers, $sejour, $receiver);
+
+    $data[] = $identifiers;
         
     // PV1-20: Financial Class (FC) (optional repeating)
     $data[] = $sejour->loadRefPrestation()->code;
