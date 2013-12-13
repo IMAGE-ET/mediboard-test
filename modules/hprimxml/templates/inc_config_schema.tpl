@@ -31,6 +31,10 @@
     {{mb_include module=system template=inc_config_bool var=send_actes_ngap}}
     {{mb_include module=system template=inc_config_str  var=actes_ngap_excludes}}
     {{mb_include module=system template=inc_config_bool var=send_only_das_diags}}
+
+    {{assign var=user_types value="CUser"|static:types}}
+    {{assign var=list_user_types value='|'|implode:$user_types}}
+    {{mb_include module=system template=inc_config_enum var=user_type values=$list_user_types skip_locales=true}}
     
     <tr>
       <td class="button" colspan="10">

@@ -41,6 +41,7 @@ $dPconfig["hprimxml"] = array (
   "functionPratImport"         => "Import",
   "medecinIndetermine"         => "Medecin Indeterminé",
   "medecinActif"               => "0",
+  "user_type"                  => "13",
   "strictSejourMatch"          => "1",
   "notifier_sortie_reelle"     => "1",
   "notifier_entree_reelle"     => "1",
