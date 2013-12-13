@@ -2031,6 +2031,7 @@ class CConstantesMedicales extends CMbObject {
     $datas = array();
 
     $constants_by_graph = self::sortConstantsbyGraph($constants_values, $host);
+    ml($constants_by_graph);
     $xaxis = self::createXaxis($constants_values);
 
     /** @var integer min_x_index The index of the first displayed xaxis tick */
@@ -2330,8 +2331,8 @@ class CConstantesMedicales extends CMbObject {
           if (!empty($_constants)) {
             $constants_by_graph[$_rank][] = $_constants;
           }
-          if (!empty($cumuls_constants)) {
-            $constants_by_graph[$_rank][] = $cumuls_constants;
+          foreach ($cumuls_constants as $_cumul) {
+            $constants_by_graph[$_rank][] = array($_cumul);
           }
         }
       }
