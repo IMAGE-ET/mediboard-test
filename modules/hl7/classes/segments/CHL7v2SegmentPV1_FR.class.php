@@ -158,17 +158,14 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
     
     // PV1-19: Visit Number (CX) (optional)
     /* @todo Gestion des séances */
-    $identifiers = array();
-
+    $identifiers   = array();
     $identifiers[] = array(
-      array (
-        $sejour->_id,
-        null,
-        null,
-        // PID-3-4 Autorité d'affectation
-        $this->getAssigningAuthority("mediboard"),
-        "RI"
-      )
+      $sejour->_id,
+      null,
+      null,
+      // PID-3-4 Autorité d'affectation
+      $this->getAssigningAuthority("mediboard"),
+      "RI"
     );
     // Ajout des identifiants des acteurs d'intégration
     $this->fillActorsIdentifiers($identifiers, $sejour, $receiver);

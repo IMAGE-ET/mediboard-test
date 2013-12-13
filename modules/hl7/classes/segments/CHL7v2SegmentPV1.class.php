@@ -177,27 +177,23 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     if ($receiver->_configs["build_NDA"] == "PV1_19") {
       $sejour->loadNDA($group->_id);
       $identifiers[] = $sejour->_NDA ? array(
-                        array(
                           $sejour->_NDA,
                           null,
                           null,
                           // PID-3-4 Autorité d'affectation
                           $this->getAssigningAuthority("FINESS", $group->finess),
                           "AN"
-                        )
                       ) : array();
     }
     else {
       /* @todo Gestion des séances */
       $identifiers[] = array(
-        array (
-          $sejour->_id,
-          null,
-          null,
-          // PID-3-4 Autorité d'affectation
-          $this->getAssigningAuthority("mediboard"),
-          "RI"
-        )
+        $sejour->_id,
+        null,
+        null,
+        // PID-3-4 Autorité d'affectation
+        $this->getAssigningAuthority("mediboard"),
+        "RI"
       );
     }
 
