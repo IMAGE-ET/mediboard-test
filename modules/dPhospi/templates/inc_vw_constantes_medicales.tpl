@@ -195,9 +195,17 @@ drawGraphs = function() {
       oDatas.each(function (serie) {
         if (serie.bars) {
           serie.data.each(function (data) {
-            var oPoint = plot.pointOffset({x: data[0], y: data[1]});
             if (data[0] >= window.minXValue && data[0] < window.minXValue + 10) {
+              var oPoint = plot.pointOffset({x: data[0], y: data[1]});
               oPh.append('<div style="position: absolute; left:' + (oPoint.left + 5) + 'px; top: ' + (oPoint.top + 5) + 'px; font-size: smaller">' + data[1] + '</div>');
+            }
+            if (data[0] < window.minXValue && (data[0] + data.barWidth) >= window.minXValue && (data[0] + data.barWidth) < window.minXValue + 10) {
+              var oPoint = plot.pointOffset({x: data[0] + data.barWidth, y: data[1]});
+              oPh.append('<div style="position: absolute; left:' + (oPoint.left - 15) + 'px; top: ' + (oPoint.top + 5) + 'px; font-size: smaller">' + data[1] + '</div>');
+            }
+            if (data[0] < window.minXValue && (data[0] + data.barWidth) >= window.minXValue + 10) {
+              var oPoint = plot.pointOffset({x: window.minXValue + 5, y: data[1]});
+              oPh.append('<div style="position: absolute; left:' + (oPoint.left) + 'px; top: ' + (oPoint.top + 5) + 'px; font-size: smaller">' + data[1] + '</div>');
             }
           });
         }
