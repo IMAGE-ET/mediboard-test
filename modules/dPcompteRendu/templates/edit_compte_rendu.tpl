@@ -615,6 +615,9 @@ Main.add(function() {
           if (dests && dests.select('input:checked').length) {
             $V(form.do_merge, 1);
           }
+          if (window.pdf_thumbnails && Prototype.Browser.IE) {
+            restoreStyle();
+          }
           form.submit();
         {{else}}
           submitCompteRendu();
