@@ -901,23 +901,27 @@ class CHL7v2Segment extends CHL7v2Entity {
         if ($datetime) {
           $PV2_45_2 .= "$datetime";
         }
+        $PV2_45_2 .= "#";
         // Type anesth
         if ($type_anesth->id400) {
-          $PV2_45_2 .= "#$type_anesth->id400";
+          $PV2_45_2 .= "$type_anesth->id400";
         }
+        $PV2_45_2 .= "#";
         // Idex chir
         if ($idex_chir->id400) {
-          $PV2_45_2 .= "#$idex_chir->id400";
+          $PV2_45_2 .= "$idex_chir->id400";
         }
+        $PV2_45_2 .= "#";
         // Idex anesth
         if ($idex_anesth->id400) {
-          $PV2_45_2 .= "#$idex_anesth->id400";
+          $PV2_45_2 .= "$idex_anesth->id400";
         }
+        $PV2_45_2 .= "#";
         // Libelle
         if ($libelle) {
-          $PV2_45_2 .= "#$libelle";
+          $PV2_45_2 .= "$libelle";
         }
-
+        $PV2_45_2 .= "#";
         if (CModule::getActive("mvsante")) {
           $PV2_45_2 .= CMVSante::getPV245($receiver, $sejour, $operation);
         }
