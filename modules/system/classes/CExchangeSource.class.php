@@ -213,7 +213,7 @@ class CExchangeSource extends CMbObject {
       $this->password = null;
     }
     else {
-      if ($this->fieldModified("password")) {
+      if ($this->fieldModified("password") || !$this->_id) {
         $this->password = $this->encryptString();
       }
     }
