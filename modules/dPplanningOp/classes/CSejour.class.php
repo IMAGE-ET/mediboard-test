@@ -3290,7 +3290,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->loadRefDossierMedical()->fillTemplate($template, "Sejour");
 
     // Prescription
-   /* if (CModule::getActive('dPprescription')) {
+    if (CModule::getActive('dPprescription')) {
       $prescriptions = $this->loadRefsPrescriptions();
       $prescription = isset($prescriptions["pre_admission"]) ? $prescriptions["pre_admission"] : new CPrescription();
       $prescription->type = "pre_admission";
@@ -3301,7 +3301,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $prescription = isset($prescriptions["sortie"]) ? $prescriptions["sortie"] : new CPrescription();
       $prescription->type = "sortie";
       $prescription->fillLimitedTemplate($template);
-    }*/
+    }
 
     // RPU
     $this->loadRefRPU();

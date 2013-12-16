@@ -26,27 +26,29 @@ $pack->load($pack_id);
 $object = new $object_class;
 $object->load($object_id);
 
-$modele_to_pack = new CModeleToPack;
+$modele_to_pack = new CModeleToPack();
 $modeles_to_pack = $modele_to_pack->loadAllModelesFor($pack_id);
 
 // Sauvegarde du premier compte-rendu pour
 // l'afficher dans la popup d'édition de compte-rendu
-
 $first = reset($modeles_to_pack);
 
 $cr_to_push = null;
+
+$modeles = CMbObject::massLoadFwdRef($modeles_to_pack, "modele_id");
+CMbObject::massLoadFwdRef($modeles, "content_id");
 
 /** @var $_modele_to_pack  CModeleToPack */
 foreach ($modeles_to_pack as $_modele_to_pack) {
   $modele = $_modele_to_pack->loadRefModele();
   $modele->loadContent();
   
-  $template = new CTemplateManager;
+  $template = new CTemplateManager();
   $template->isModele = false;
   
   $object->fillTemplate($template);
   
-  $cr = new CCompteRendu;
+  $cr = new CCompteRendu();
   
   $cr->modele_id     = $modele->_id;
   $cr->object_class  = $object_class;
