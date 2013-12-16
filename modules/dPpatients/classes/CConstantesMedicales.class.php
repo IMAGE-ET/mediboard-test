@@ -2031,7 +2031,7 @@ class CConstantesMedicales extends CMbObject {
     $datas = array();
 
     $constants_by_graph = self::sortConstantsbyGraph($constants_values, $host);
-    ml($constants_by_graph);
+
     $xaxis = self::createXaxis($constants_values);
 
     /** @var integer min_x_index The index of the first displayed xaxis tick */
