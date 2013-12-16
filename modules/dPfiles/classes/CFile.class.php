@@ -42,6 +42,7 @@ class CFile extends CDocumentItem {
   public $_file_path;
   public $_nb_pages;
   public $_old_file_path;
+  public $_data_uri;
   
   // Behavior fields
   public $_rotate;
@@ -756,7 +757,7 @@ class CFile extends CDocumentItem {
    * @return string
    */
   function getDataURI() {
-    return $this->_file_path ? 
+    return $this->_data_uri = $this->_file_path ?
       "data:".$this->file_type.";base64,".urlencode(base64_encode(file_get_contents($this->_file_path))) :
       "";
   }
