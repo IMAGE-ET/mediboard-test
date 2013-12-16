@@ -373,6 +373,10 @@ button.target:before, a.button.target:before {
   content: url(images/buttons/target.png);
 }
 
+button.rss:before, a.button.rss:before {
+  content: url(images/buttons/rss.png);
+}
+
 button.copy:before, a.button.copy:before {
   content: url(images/buttons/copy.png);
 }
@@ -784,6 +788,10 @@ button.soins:before, a.button.soins:before {
 
 button.glob:before, a.button.glob:before {
   content: url(images/buttons/globe_blue.png);
+}
+
+button.report_magnify:before, a.button.report_magnify:before {
+  content: url(images/buttons/report_magnify.png);
 }
 
 button.selected {
