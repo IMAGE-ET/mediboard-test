@@ -66,12 +66,6 @@ ChoiceLit  = {
     }
   }
 };
-refreshMouvements = function(after_refresh, lit_id) {
-  if (after_refresh) {
-    Control.Modal.close();
-  }
-  refreshService(zone_select.get("service-id"));
-}
 editAffectation = function(affectation_id, lit_id, urgence) {
   var url = new Url("dPhospi", "ajax_edit_affectation");
   url.addParam("affectation_id", affectation_id);
