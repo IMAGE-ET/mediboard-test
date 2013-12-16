@@ -12,9 +12,10 @@
  */
 
 // Génération d'un document pour chaque modèle du pack
-$pack_id   = CValue::post("pack_id");
-$object_id = CValue::post("object_id");
-$callback  = CValue::post('callback');
+$pack_id      = CValue::post("pack_id");
+$object_id    = CValue::post("object_id");
+$object_class = CValue::post("object_class");
+$callback     = CValue::post('callback');
  
 $user_id = CMediusers::get()->_id;
 
@@ -22,7 +23,7 @@ $pack = new CPack;
 $pack->load($pack_id);
 
 /** @var $object CMbObject */
-$object = new $pack->object_class;
+$object = new $object_class;
 $object->load($object_id);
 
 $modele_to_pack = new CModeleToPack;

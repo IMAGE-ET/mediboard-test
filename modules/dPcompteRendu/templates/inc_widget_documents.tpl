@@ -28,6 +28,7 @@
     <input type="hidden" name="m" value="dPcompteRendu" />
     <input type="hidden" name="dosql" value="do_pack_multi_aed" />
     <input type="hidden" name="pack_id" value="" />
+    <input type="hidden" name="object_class" value="{{$object->_class}}" />
     <input type="hidden" name="object_id" value="{{$object->_id}}" />
     <input type="hidden" name="callback" value="Document.afterUnmerge" />
   </form>
