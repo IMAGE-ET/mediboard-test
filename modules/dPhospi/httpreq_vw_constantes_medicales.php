@@ -124,7 +124,7 @@ if ($selected_context_guid == "all") {
 }
 
 //CConstantesMedicales::$_latest_values = array();
-$latest_constantes = $patient->loadRefConstantesMedicales(null, array(), $context);
+$latest_constantes = $patient->loadRefConstantesMedicales(null, array(), $context, false);
 
 $patient->loadRefPhotoIdentite();
 

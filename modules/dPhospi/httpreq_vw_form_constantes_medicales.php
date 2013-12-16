@@ -79,7 +79,7 @@ if (
 }
 
 $patient_id = $constantes->patient_id ? $constantes->patient_id : $patient_id;
-$latest_constantes = CConstantesMedicales::getLatestFor($patient_id);
+$latest_constantes = CConstantesMedicales::getLatestFor($patient_id, null, array(), $context, false);
 // Création du template
 $smarty = new CSmartyDP("modules/dPhospi");
 

@@ -265,13 +265,13 @@ Main.add(function () {
       {{if $real_context}}
         {{if $constantes->datetime}}
           {{mb_field object=$constantes field=datetime form="edit-constantes-medicales" register=true}}
-          <button class="trash notext" type="button" onclick="if (confirm('Etes-vous sûr de vouloir supprimer ce relevé ?')) {$V(this.form.del, 1); return submitConstantesMedicales(this.form);}">
+          <button class="trash" type="button" onclick="if (confirm('Etes-vous sûr de vouloir supprimer ce relevé ?')) {$V(this.form.del, 1); return submitConstantesMedicales(this.form);}">
             {{tr}}CConstantesMedicales.delete_all{{/tr}}
           </button>
         {{/if}}
         {{mb_field object=$constantes field=comment placeholder="Commentaire"}}
         {{if !$hide_save_button}}
-          <button class="modify singleclick notext" onclick="return submitConstantesMedicales(this.form);">
+          <button class="modify singleclick" onclick="return submitConstantesMedicales(this.form);">
             {{tr}}Save{{/tr}}
           </button>
         {{/if}}
@@ -283,7 +283,7 @@ Main.add(function () {
 
 
       {{if $show_enable_all_button && $at_least_one_hidden}}
-        <button class="down notext" type="button" onclick="toggleConstantesecondary(this);">Afficher tout</button>
+        <button class="down" type="button" onclick="toggleConstantesecondary(this);">Afficher tout</button>
       {{/if}}
     </div>
   </form>
