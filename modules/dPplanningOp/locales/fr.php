@@ -1811,6 +1811,7 @@ $locales['mod-hospi-tab-ajax_choose_modele_etiquette'] = 'Choix du modèle d\'éti
 $locales['mod-planningOp-tab-ajax_edit_infos_interv'] = 'Modification du libellé et du côté';
 $locales['mod-planningOp-tab-ajax_edit_rule_sectorisation'] = 'Création/Modification d\'une règle';
 $locales['mod-planningOp-tab-ajax_form_typeanesth'] = 'Formulaire type d\'anesthésie';
+$locales['mod-planningOp-tab-ajax_revert_asa'] = 'Interventions ayant un score ASA à 1';
 $locales['mod-reservation-tab-ajax_edit_examen'] = 'Examens';
 $locales['module-dPplanningOp-court'] = 'Planif. séjour';
 $locales['module-dPplanningOp-long'] = 'Planification des hospitalisations et chirurgies';

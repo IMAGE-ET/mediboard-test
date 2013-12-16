@@ -1,8 +1,19 @@
-<script type="text/javascript">
+<script>
+  viewScoreASA = function(view) {
+    var url = new Url('planningOp', 'ajax_revert_asa');
+    url.addParam('view', view);
+    if (view) {
+      url.requestModal(500);
+    }
+    else {
+      url.requestUpdate("resultScoreASA");
+    }
+  }
+
   viewNoPratSejour = function() {
-    var url = new Url("dPplanningOp", "vw_resp_no_prat"); 
+    var url = new Url("dPplanningOp", "vw_resp_no_prat");
     url.popup(700, 500, "printFiche");
-    
+
     return false;
   }
 
@@ -122,5 +133,13 @@
     </td>
     
     <td id="result-actions-change"></td>
+  </tr>
+
+  <tr>
+    <td class="narrow">
+      <button class="search" onclick="viewScoreASA(1);">Interventions ayant un score ASA à 1</button>
+      <button class="save" onclick="viewScoreASA(0);">Corriger les scores ASA</button>
+    </td>
+    <td id="resultScoreASA"></td>
   </tr>
 </table>
