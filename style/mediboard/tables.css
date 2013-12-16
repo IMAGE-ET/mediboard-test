@@ -372,11 +372,11 @@ table.layout > * > tr > td.separator:hover {
 }
 
 table.layout > * > tr > td.separator:before {
-  content: "<\A<\A<";
+  content: "\3C\A\3C\A\3C";
 }
 
 table.layout > * > tr > td.separator.expand:before {
-  content: ">\A>\A>";
+  content: "\3E\A\3E\A\3E";
 }
 
 .desktop tbody.hoverable:hover tr td,
