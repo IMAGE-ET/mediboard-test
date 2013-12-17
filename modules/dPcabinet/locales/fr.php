@@ -1539,6 +1539,7 @@ $locales['mod-cabinet-tab-user_stats'] = 'Statistiques praticiens';
 $locales['mod-dPcabinet-tab-ajax_bind_operation'] = 'Associer à une intervention';
 $locales['mod-dPcabinet-tab-ajax_check_consult_anesth'] = 'Vérification des prérequis IPAQSS';
 $locales['mod-dPcabinet-tab-ajax_choose_etudiant'] = 'Choisir un étudiant';
+$locales['mod-dPcabinet-tab-ajax_duplicate_consult_anesth'] = 'Dupliquer le dossier d\'anesthésie';
 $locales['mod-dPcabinet-tab-ajax_edit_multiconsult'] = 'Modification multiple de consultation';
 $locales['mod-dPcabinet-tab-ajax_edit_tarif'] = 'Edition d\'un tarif';
 $locales['mod-dPcabinet-tab-ajax_full_consult'] = 'Consultation';
