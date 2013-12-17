@@ -26,38 +26,58 @@
   {{/if}}
 </script>
 
-<div class="big-info"  style="display: none; text-align: center;" id="evenement-chooser-modal">
+<table class="form main" style="display: none;" id="evenement-chooser-modal">
   {{assign var=next_operation value=$nextSejourAndOperation.COperation}}
   {{assign var=next_sejour    value=$nextSejourAndOperation.CSejour   }}
   {{if $next_operation->_id}}
-    <div>Une intervention à venir est présente pour ce patient :</div>
-    <br />
-    <div><strong>{{$next_operation}}</strong></div>
-    {{if $next_operation->libelle}} 
-    <div><strong>{{$next_operation->libelle}}</strong></div>
-    {{/if}}
-    <div><strong>Côté {{mb_value object=$next_operation field=cote}}</strong></div>
-    <div><strong>Prévu le {{$next_operation->_datetime|date_format:$conf.date}}</strong></div>
-    <div><strong>Avec le Dr {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$next_operation->_ref_chir}}</strong></div>
-    <br />
-    <div>Ce patient vient-il pour cette intervention ?</div>
-    <button class="tick" onclick="selectOperation('{{$next_operation->_id}}'); modalWindow.close();">Oui</button>
-    
-  {{elseif $next_sejour->_id}}
-    <div>Un séjour à venir est présent dans le système pour ce patient :</div>
-    <br />
-    <div><strong>{{$next_sejour}}</strong></div>
-    {{if $next_sejour->libelle}} 
-    <div><strong>{{$next_sejour->libelle}}</strong></div>
-    {{/if}}
-    <div><strong>Avec le Dr {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$next_sejour->_ref_praticien}}</strong></div>
-    <br />
-    <div>Ce patient vient-il pour ce séjour ?</div>
-    <button class="tick" onclick="selectSejour('{{$next_sejour->_id}}'); modalWindow.close();">Oui</button>
-  {{/if}}
-  <button class="cancel" onclick="modalWindow.close();">Non</button>
-</div>
-
+  <tr>
+    <td colspan="2"> <div class="small-info">Une intervention à venir est présente pour ce patient</div></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td><strong>{{$next_operation}}</strong></td>
+  </tr>
+  <tr>
+    <th>{{mb_title object=$next_operation field=libelle}}</th>
+    <td><strong>{{$next_operation->libelle}}</strong></td>
+  </tr>
+  <tr>
+    <th>{{mb_title object=$next_operation field=cote}}</th>
+    <td><strong>{{mb_value object=$next_operation field=cote}}</strong></td>
+  </tr>
+  <tr>
+    <th>Prévue le </th>
+    <td><strong>{{$next_operation->_datetime|date_format:$conf.date}}</strong></td>
+  </tr>
+  <tr>
+    <th>Avec le Dr </th>
+    <td><strong>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$next_operation->_ref_chir}}</strong></td>
+  </tr>
+  <tr>
+    <td class="button" colspan="2"><button class="tick" onclick="selectOperation('{{$next_operation->_id}}'); modalWindow.close();">Associer au dossier d'anesthésie</button>
+      {{elseif $next_sejour->_id}}
+  <tr>
+    <td colspan="2"> <div class="small-info">Un séjour à venir est présent dans le système pour ce patient</div></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td><strong>{{$next_sejour}}</strong></td>
+  </tr>
+  <tr>
+    <th>{{mb_title object=$next_sejour field=libelle}}</th>
+    <td><strong>{{$next_sejour->libelle}}</strong></td>
+  </tr>
+  <tr>
+    <th>Avec le Dr </th>
+    <td><strong>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$next_sejour->_ref_praticien}}</strong></td>
+  </tr>
+  <tr>
+    <td class="button" colspan="2">
+      <button class="tick" onclick="selectSejour('{{$next_sejour->_id}}'); modalWindow.close();">Associer au dossier d'anesthésie</button>
+      {{/if}}
+      <button class="cancel" onclick="modalWindow.close();">Ne pas associer</button></td>
+  </tr>
+</table>
 
 <div id="dossiers_anesth_area">
   {{mb_include module=cabinet template=inc_consult_anesth/inc_multi_consult_anesth}}
