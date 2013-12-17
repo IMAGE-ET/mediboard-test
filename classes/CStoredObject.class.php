@@ -804,7 +804,7 @@ class CStoredObject extends CModelObject {
    */
   function loadGroupList($where = array(), $order = null, $limit = null, $group = null, $ljoin = array()) {
     if (property_exists($this, "group_id")) {
-      // Filtre sur l'ï¿½tablissement
+      // Filter on group
       $g = CGroups::loadCurrent();
       $where["group_id"] = "= '$g->_id'";
     }
@@ -1020,7 +1020,7 @@ class CStoredObject extends CModelObject {
     foreach ($this->_props as $name => $prop) {
       if ($name[0] !== '_') {
         if (!property_exists($this, $name)) {
-          trigger_error("La spï¿½cification cible la propriï¿½tï¿½ '$name' inexistante dans la classe '$this->_class'", E_USER_WARNING);
+          trigger_error("La spécification cible la propriété '$name' inexistante dans la classe '$this->_class'", E_USER_WARNING);
         }
         else {
           $value = $this->$name;
@@ -1222,7 +1222,7 @@ class CStoredObject extends CModelObject {
    * @return void
    */
   protected function doLog() {
-    // Aucun log ï¿½ produire (non loggable, pas de modifications, etc.)
+    // Aucun log à produire (non loggable, pas de modifications, etc.)
     if (!$this->_ref_last_log) {
       return;
     }
@@ -1454,13 +1454,13 @@ class CStoredObject extends CModelObject {
         $spec->ds->error();
     }
     
-    // Prï¿½paration du log, doit ï¿½tre fait AVANT $this->load()
+    // Log preparing, has to be done BEFORE this->load()
     $this->prepareLog();
     
     // Load the object to get all properties
     $this->load();
     
-    // Enregistrement du log une fois le store terminï¿½
+    // Actual log AFTER object is stored
     $this->doLog();
         
     // Trigger event
@@ -1586,7 +1586,7 @@ class CStoredObject extends CModelObject {
     $backObject = new $backSpec->class;
     $backField = $backSpec->field;
 
-    // Cas du module non installï¿½
+    // Inactive module
     if (!$backObject->_ref_module) {
       return null;
     }
@@ -1662,7 +1662,7 @@ class CStoredObject extends CModelObject {
     $backObject = new $backSpec->class;
     $backField = $backSpec->field;
 
-    // Cas du module non installï¿½
+    // Inactive module
     if (!$backObject->_ref_module) {
       return null;
     }
@@ -1807,7 +1807,7 @@ class CStoredObject extends CModelObject {
     $fwdSpec = $backObject->_specs[$backField];
     $backMeta = $fwdSpec->meta;
 
-    // Cas du module non installï¿½
+    // Inactive module
     if (!$backObject->_ref_module) {
       return null;
     }
@@ -1817,7 +1817,6 @@ class CStoredObject extends CModelObject {
       return array();
     }
 
-    // Vï¿½rification de la possibilitï¿½ de supprimer chaque backref
     $where[$backField] = " = '$this->_id'";
 
     // Cas des meta objects
@@ -1957,7 +1956,7 @@ class CStoredObject extends CModelObject {
       $backObject = new $backSpec->class;
       $backField = $backSpec->field;
 
-      // Cas du module non installï¿½
+      // Inactive module
       if (!$backObject->_ref_module) {
         continue;
       }
@@ -2204,7 +2203,7 @@ class CStoredObject extends CModelObject {
       $fwdSpec = $backObject->_specs[$backField];
       $backMeta = $fwdSpec->meta;
 
-      // Cas du module non installï¿½
+      // Inactive module
       if (!$backObject->_ref_module) {
         continue;
       }
@@ -2217,7 +2216,7 @@ class CStoredObject extends CModelObject {
       // Cas de la suppression en cascade
       if ($fwdSpec->cascade || $backSpec->cascade) {
         
-        // Vï¿½rification de la possibilitï¿½ de supprimer chaque backref
+        // Vérification de la possibilité de supprimer chaque backref
         $backObject->$backField = $this->_id;
 
         // Cas des meta objects
@@ -2245,7 +2244,7 @@ class CStoredObject extends CModelObject {
         continue;
       }
       
-      // Vï¿½rification du nombre de backRefs
+      // Vérification du nombre de backRefs
       if (!$fwdSpec->unlink) {
         if ($backCount = $this->countBackRefs($backName, array(), array(), false)) {
           $issues[] = $backCount 
@@ -2269,7 +2268,7 @@ class CStoredObject extends CModelObject {
   function delete() {
     // Delete checking
     if (!$this->_purge) {
-      // Prï¿½paration du log
+      // Log préparing
       $this->loadOldObject();
 
       if ($msg = $this->canDeleteEx()) {
@@ -2289,8 +2288,8 @@ class CStoredObject extends CModelObject {
       /** @var CRefSpec $fwdSpec */
       $fwdSpec    = $backObject->_specs[$backField];
       $backMeta   = $fwdSpec->meta;
-      
-      // Cas du module non installï¿½,
+
+      // Inactive module
       if (!$backObject->_ref_module) {
         continue; 
       } 
@@ -2339,7 +2338,7 @@ class CStoredObject extends CModelObject {
     // Deletion successful
     $this->_id = null;
    
-    // Enregistrement du log une fois le delete terminï¿½
+    // Actual logging after storage is done
     $this->prepareLog();
     $this->doLog();
         
