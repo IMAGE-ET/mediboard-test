@@ -100,10 +100,10 @@ foreach ($listPlage as $plage) {
     for ($i = 0;  $i < $consultation->duree; $i++) {
       if (!isset($plage->listPlace[($keyPlace + $i)]["time"])) {
         $plage->listPlace[($keyPlace + $i)]["time"] = CMbDT::time("+ ".$plage->_freq*$i." minutes", $consultation->heure);
-        @$plage->listPlace[($keyPlace + $i)]["consultations"][] =& $consultation;
+        @$plage->listPlace[($keyPlace + $i)]["consultations"][] = $consultation;
       }
       else {
-        @$plage->listPlace[($keyPlace + $i)]["consultations"][] =& $consultation;
+        @$plage->listPlace[($keyPlace + $i)]["consultations"][] = $consultation;
       }
     }
   }
