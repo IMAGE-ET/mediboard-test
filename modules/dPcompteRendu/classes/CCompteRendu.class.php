@@ -959,15 +959,17 @@ class CCompteRendu extends CDocumentItem {
       $this->fieldModified("ending_id") || 
       $this->fieldModified("footer_id");
 
-    if ($source_modified) {
-      // Bug IE : delete id attribute
-      $this->_source = CCompteRendu::restoreId($this->_source);
-
+    if ($source_modified || $this->fieldModified("valide")) {
       // Empty PDF File
       /** @var CFile $_file */
       foreach ($this->loadBackRefs("files") as $_file) {
         $_file->fileEmpty();
       }
+    }
+
+    if ($source_modified) {
+      // Bug IE : delete id attribute
+      $this->_source = CCompteRendu::restoreId($this->_source);
 
       // Send status to obsolete
       $this->completeField("etat_envoi");
