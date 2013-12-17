@@ -55,6 +55,15 @@ if ($file_id = CValue::get("file_id")) {
   $file = new CFile();
   $file->load($file_id);
   $file->loadRefsFwd();
+
+  if ($file->object_class === "CCompteRendu") {
+    $cr = $file->loadTargetObject();
+
+    if ($cr->valide) {
+      $cr->makePDFPreview();
+    }
+  }
+
   if (!is_file($file->_file_path)) {
     header("Location: images/pictures/notfound.png");
     return;
