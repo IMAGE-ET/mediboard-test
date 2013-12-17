@@ -110,8 +110,8 @@ function mbplay_onclick(editor) {
       if (window_parent.$$("div.listeChoixCR").length != 0) {
         var listes = window_parent.$$("div.listeChoixCR")[0].select("select");
         window_parent.$A(listes).each(function(list) {
-          var list_name = unescapeHtml(list.getAttribute("data-nom"));
-          if (list_name && list_name.indexOf(name_escape) != -1) {
+          var list_name = unescapeHtml(list.get("nom"));
+          if (list_name && list_name == name_escape) {
             // On supprime la 1ère option (nom de la liste de choix)
             if (list.options[0].value == "undef") {
               window_parent.Element.remove(list.down());
@@ -216,7 +216,7 @@ window.parent.replaceField = function(elt, class_name, empty) {
     }
   }
   var correspondances = CKEDITOR.instances.htmlarea.document.getBody().$.querySelectorAll("span."+class_name);
-  
+
   window_parent.$A(correspondances).each(function(corr) {
     // On efface le background apposé lors du lancement du mode play
     Element.setStyle(corr, {background: ''});
@@ -224,7 +224,7 @@ window.parent.replaceField = function(elt, class_name, empty) {
     // Remplacement de toutes occurrences
     var corr_name = unescapeHtml(corr.innerHTML);
     var nom = unescapeHtml(elt.getAttribute("data-nom"));
-    
+
     if (corr_name && corr_name.indexOf("- " + nom + "]") != -1) {
       var pattern = "";
       if (class_name == "name") {
