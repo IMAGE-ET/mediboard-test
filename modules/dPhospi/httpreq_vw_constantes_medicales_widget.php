@@ -126,8 +126,9 @@ foreach ($graphs as $_name => $_fields) {
         strtotime($_constante->datetime) * 1000,
       );
 
-      $formfields = CMbArray::get(CConstantesMedicales::$list_constantes[$_field_name], "formfields");
-      if ($formfields) {
+      if (isset(CConstantesMedicales::$list_constantes[$_field_name]['candles'])) {
+        $formfields = CMbArray::get(CConstantesMedicales::$list_constantes[$_field_name], "formfields");
+
         list($first, $second) = $formfields;
         $point[1] = $_constante->$first;
         $point[2] = $_constante->$first;
