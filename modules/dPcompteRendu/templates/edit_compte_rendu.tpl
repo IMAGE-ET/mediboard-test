@@ -440,6 +440,16 @@ Main.add(function() {
     }
   {{/if}}
 
+  {{if $compte_rendu->_id && $compte_rendu->valide}}
+    var form = getForm("editFrm");
+    if (window.opener.Document && window.opener.Document.refreshList) {
+      window.opener.Document.refreshList($V(form.file_category_id), $V(form.object_class), $V(form.object_id));
+    }
+    if (window.opener.reloadListFileEditPatient) {
+      window.opener.reloadListFileEditPatient("load");
+    }
+  {{/if}}
+
   ObjectTooltip.modes.locker = {
     module: "compteRendu",
     action: "ajax_show_locker",
