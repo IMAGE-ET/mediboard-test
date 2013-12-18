@@ -30,13 +30,19 @@ CApp::setMemoryLimit("1024M");
 $actor_guid   = CValue::get("actor_guid");
 $to_treatment = CValue::get("to_treatment", 1);
 
+/** @var CInteropSender $sender */
 $sender = CMbObject::loadFromGuid($actor_guid);
 $sender->loadRefGroup();
 $sender->loadRefsExchangesSources();
 
 $delete_file = $sender->_delete_file;
 
+/** @var CExchangeSource $source */
 $source = reset($sender->_ref_exchanges_sources);
+
+if (!$source->active) {
+  return;
+}
 
 $path = $source->getFullPath($source->_path);
 $filename_excludes = "$path/mb_excludes.txt";
