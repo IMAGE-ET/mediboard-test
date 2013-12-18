@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<form name="editConfig-treatment" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+<form name="editConfig-treatment" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
   <table class="form">
@@ -17,7 +17,33 @@
     {{mb_include module=system template=inc_config_str var=medecinIndetermine}}
     
     {{mb_include module=system template=inc_config_bool var=medecinActif}}
-    
+
+    {{assign var=user_types value="CUser"|static:types}}
+
+    {{assign var=var  value="user_type"}}
+    {{assign var=field  value="$m[$var]"}}
+    {{assign var=value  value=$conf.$m.$var}}
+    {{assign var=locale value=config-$m-$var}}
+
+    <tr>
+      <th>
+        <label for="{{$field}}" title="{{tr}}{{$locale}}-desc{{/tr}}">
+          {{tr}}{{$locale}}{{/tr}}
+        </label>
+      </th>
+
+      <td>
+        <select class="str" name="{{$field}}">
+          {{foreach from=$user_types key=_key item=_value}}
+            <option value="{{$_key}}" {{if $value == $_key}} selected="selected"{{/if}}>
+              {{$_value}}
+            </option>
+          {{/foreach}}
+        </select>
+      </td>
+    </tr>
+
+
     {{mb_include module=system template=inc_config_bool var=strictSejourMatch}}
     
     {{mb_include module=system template=inc_config_bool var=notifier_sortie_reelle}}
