@@ -1104,6 +1104,11 @@ class CPatient extends CPerson {
       $where["patient_id"] = " != '$this->_id'";
     }
 
+    // if no birthdate, sql request too strong
+    if (!$this->naissance) {
+      return null;
+    }
+
     $whereOr[] = "nom "             . $ds->prepareLikeName($this->nom);
     $whereOr[] = "nom_jeune_fille " . $ds->prepareLikeName($this->nom);
 
