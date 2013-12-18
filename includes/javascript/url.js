@@ -740,6 +740,25 @@ var Url = Class.create({
 
     var autocompleter = new Ajax.Autocompleter(input, populate, this.make(), oOptions);
 
+    autocompleter.getUpdatedChoices = (function() {
+      this.startIndicator();
+
+      var entry = encodeURIComponent(this.options.paramName) + '=' +
+        encodeURIComponent(this.getToken());
+
+      this.options.parameters = this.options.callback ?
+        this.options.callback(this.element, entry) : entry;
+
+      if(this.options.defaultParams)
+        this.options.parameters += '&' + this.options.defaultParams;
+
+      if (this.currentAjax) {
+        this.currentAjax.abort();
+      }
+
+      this.currentAjax = new Ajax.Request(this.url, this.options);
+    }).bind(autocompleter);
+
     // Pour "eval" les scripts inserés (utile pour lancer le onDisconnected
     autocompleter.options.onComplete = function(request) {
       var content = request.responseText;
