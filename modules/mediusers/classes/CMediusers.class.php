@@ -1366,6 +1366,7 @@ class CMediusers extends CPerson {
           $_operation->loadRefPatient();
           $_operation->loadExtCodesCCAM();
           $_operation->updateSalle();
+          $_operation->loadRefPatient();
 
           // Extraire les interventions non placées
           if ($_operation->rank == 0) {
