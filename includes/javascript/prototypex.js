@@ -298,7 +298,20 @@ else {
 
 Class.extend(Ajax.Request, {
   abort: function() {
-    this.transport.abort();
+    if (this._complete) {
+      return;
+    }
+
+    var transport = this.transport;
+
+    // prevent and state change callbacks from being issued
+    transport.onreadystatechange = Prototype.emptyFunction;
+
+    // abort the XHR
+    transport.abort();
+
+    // update the request counter
+    Ajax.activeRequestCount--;
   }
 });
 

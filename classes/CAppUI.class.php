@@ -130,8 +130,9 @@ class CAppUI {
    * @return array Array of field names to be serialized
    */
   function __sleep() {
-    unset($this->_ref_user);
-    return array_keys(get_object_vars($this));
+    $vars = get_object_vars($this);
+    unset($vars["_ref_user"]);
+    return array_keys($vars);
   }
 
   /**
