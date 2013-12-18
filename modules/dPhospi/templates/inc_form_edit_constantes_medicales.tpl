@@ -87,8 +87,8 @@ Main.add(function () {
     Control.Tabs.create("constantes-by-type{{$tri}}");
   {{/if}}
   ViewPort.SetAvlHeight('constant_form',1);
-  ViewPort.SetAvlHeight('constantes_{{$constantes->_id}}',.80);
-  ViewPort.SetAvlHeight('graphs', 1);
+  ViewPort.SetAvlHeight('constantes_{{$constantes->_id}}',.74);
+  //ViewPort.SetAvlHeight('graphs', 1);
 });
 </script>
 
@@ -98,7 +98,7 @@ Main.add(function () {
   {{assign var=real_context value=0}}
 {{/if}}
 
-<div id="constant_form" style="padding-right: 1.5em; position:relative;">
+<div id="constant_form" style="position:relative;">
   <form name="edit-constantes-medicales{{$tri}}" action="?" method="post" onsubmit="return {{if $real_context}}checkForm(this){{else}}false{{/if}}">
     <input type="hidden" name="m" value="dPpatients" />
     <input type="hidden" name="del" value="0" />
@@ -137,13 +137,13 @@ Main.add(function () {
     </ul>
     {{/if}}
 
-    <div id="constantes_{{$constantes->_id}}" style="height: 74%; overflow-y: auto;">
+    <div id="constantes_{{$constantes->_id}}" style="height: 74%; overflow-y: auto; width: 100%;">
       {{if $msg_modif_timeout != ''}}
         <div class="small-warning">
           {{$msg_modif_timeout}}
         </div>
       {{/if}}
-      <table class="main form constantes">
+      <table class="main form constantes" style="margin-right:20px;">
         <tr>
           <th class="category"></th>
           {{if $real_context}}<th class="category">Saisie</th>{{/if}}
@@ -261,7 +261,7 @@ Main.add(function () {
       </table>
     </div>
 
-    <div style="position: absolute; bottom:0; text-align:center; width: 100%; height:20%;" id="buttons_form_const">
+    <div style="position: absolute; bottom:0; text-align:center; height:25%; width: 100%;" id="buttons_form_const">
       {{if $real_context}}
         {{if $constantes->datetime}}
           {{mb_field object=$constantes field=datetime form="edit-constantes-medicales" register=true}}
