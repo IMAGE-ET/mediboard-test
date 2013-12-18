@@ -57,7 +57,7 @@
         {{/if}}
         {{$plage->_ref_chir}}
         <br />
-        {{if $consultation->_id}}<img src="http://localhost/mediboard/style/mediboard/images/buttons/edit.png" alt="" />{{/if}}
+        {{if $online && $consultation->_id}}<img src="http://localhost/mediboard/style/mediboard/images/buttons/edit.png" alt="" />{{/if}}
         {{if !$multiple}}
           Plage du {{$plage->date|date_format:$conf.longdate}}
           de {{$plage->debut|date_format:$conf.time}}
@@ -129,17 +129,17 @@
     </tr>
   {{/foreach}}
   {{if $online && !$plage->locked}}
-  <tr>
-    <td class="button" colspan="{{if $display_nb_consult}}4{{else}}3{{/if}}">
-      <button type="button" class="up singleclick" onclick="addPlaceBefore_{{$slot_id}}('{{$plage->_id}}', '{{$slot_id}}' ,'{{$consultation->_id}}')" {{if !$plage->_canEdit}}disabled="disabled"{{/if}}>
-        Ajouter Avant
-      </button>
-    </td>
-  </tr>
+    <tr>
+      <td class="button" colspan="{{if $display_nb_consult}}4{{else}}3{{/if}}">
+        <button type="button" class="up singleclick" onclick="addPlaceBefore_{{$slot_id}}('{{$plage->_id}}', '{{$slot_id}}' ,'{{$consultation->_id}}')" {{if !$plage->_canEdit}}disabled="disabled"{{/if}}>
+          Ajouter Avant
+        </button>
+      </td>
+    </tr>
   {{/if}}
   {{foreach from=$listPlace item=_place}}
     {{assign var=count_places value=$_place.consultations|@count}}
-    <tr {{if ($_place.time == $consultation->heure)}}class="selected"{{/if}}>
+    <tr {{if $online && ($_place.time == $consultation->heure)}}class="selected"{{/if}}>
       <td>
         {{if $count_places> 1}}
           <img src="style/mediboard/images/icons/small-warning.png" alt="SURB" title="surbooking : {{$count_places}} patients" style="float:right;"/>

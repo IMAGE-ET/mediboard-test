@@ -1,6 +1,7 @@
-
+{{mb_default var=period value=week}}
 {{mb_default var=multiple value=0}}
 {{mb_default var=offline value=0}}
+
 
 {{if !$offline}}
   <script>
@@ -34,7 +35,7 @@
   {{foreach from=$listPlage item=_plage}}
     <tr class="plage{{if $_plage->_id == $plageconsult_id && !$multiple}} selected{{/if}}" id="plage-{{$_plage->_id}}" >
       <td {{if in_array($_plage->date, $bank_holidays)}}style="background: #fc0"{{/if}} class="text">
-        {{mb_include template=inc_plage_etat multiple=$multiple}}
+        {{mb_include template=inc_plage_etat multiple=$multiple offline=$offline}}
       </td>
       <td class="text">
         <div class="mediuser" style="border-color: #{{$_plage->_ref_chir->_ref_function->color}};">

@@ -72,14 +72,14 @@ Main.add(function() {
       <tr>
         <td class="halfPane">
           <div class="plages" id="{{$month_name}}_div" style="overflow-y: auto;">
-            {{mb_include template=inc_list_plages multiple=0 offline=1}}
+            {{mb_include template=inc_list_plages multiple=0 offline=1 refDate=$smarty.now|date_format:$conf.date today=$smarty.now|date_format:$conf.date}}
           </div>
         </td>
         <td class="halfPane">
           {{foreach from=$listPlage item=plage}}
           {{assign var="listPlace" value=$plage->_listPlace}}
           <div class="places" id="places-{{$plage->_id}}" style="overflow-y: auto; display: none;">
-            {{mb_include template=inc_list_places listBefore=null listAfter=null multiple=0 offline=1}}
+            {{mb_include template=inc_list_places listBefore=null listAfter=null multiple=0 online=0}}
           </div>
           {{/foreach}}
         </td>

@@ -25,7 +25,8 @@
     {{if $_plage->locked}}
       <img style="float: right; height: 12px;" src="style/mediboard/images/buttons/lock.png" />
     {{/if}}
-    <a href="#{{$_plage->_id}}" onclick="RDVmultiples.loadPlageConsult({{$_plage->_id}}, null{{if $multiple}}, true{{/if}}); return false;">
+    <a href="#{{$_plage->_id}}" onclick="{{if $online}}RDVmultiples.loadPlageConsult({{$_plage->_id}}, null{{if $multiple}}, true{{/if}}); return false;{{else}}PlageConsult.changePlage({{$_plage->_id}});
+{{/if}}">
       {{$_plage->date|date_format:"%A %d"}}
     </a>
   </div>
