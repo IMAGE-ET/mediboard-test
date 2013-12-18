@@ -30,7 +30,7 @@ var Tag = {
   manage: function(object_class) {
     var url = new Url('system', 'vw_object_tag_manager');
     url.addParam('object_class', object_class);
-    url.requestModal("75%", "75%");
+    url.modal({width: "75%", height: "75%"});
   },
   setNodeVisibility: function(node) {
     node = $(node);
