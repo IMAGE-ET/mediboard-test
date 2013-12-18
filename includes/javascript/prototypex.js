@@ -302,6 +302,8 @@ Class.extend(Ajax.Request, {
       return;
     }
 
+    this._complete = true;
+
     var transport = this.transport;
 
     // prevent and state change callbacks from being issued
@@ -310,8 +312,16 @@ Class.extend(Ajax.Request, {
     // abort the XHR
     transport.abort();
 
-    // update the request counter
-    Ajax.activeRequestCount--;
+    var response = new Ajax.Response(this);
+
+    ['Abort', 'Complete'].each(function(state) {
+      try {
+        (this.options['on' + state] || Prototype.emptyFunction)(response, response.headerJSON);
+        Ajax.Responders.dispatch('on' + state, this, response, response.headerJSON);
+      } catch (e) {
+        this.dispatchException(e);
+      }
+    }, this);
   }
 });
 
