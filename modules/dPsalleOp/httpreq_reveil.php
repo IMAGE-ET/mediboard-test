@@ -31,7 +31,8 @@ $listSalles = $salle->loadListWithPerms(PERM_READ, $whereSalle);
 $plage = new CPlageOp();
 $where = array();
 $where["date"] = "= '$date'";
-$where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
+// Filtre sur les salles qui pose problème
+//$where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
 $plages = $plage->loadList($where);
 
 $where = array();
