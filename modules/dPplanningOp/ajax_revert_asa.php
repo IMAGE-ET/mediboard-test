@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage salleOp
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 CCanDo::checkEdit();
 
@@ -47,7 +47,13 @@ else {
   $where["operation_id"] = CSQLDataSource::prepareIn(CMbArray::pluck($resultats, "operation_id"));
   /* @var COperation[] $operations*/
   $operation = new COperation();
-  $operations = $operation->loadList($where);
+  $nb_operations = $operation->countList($where);
+  $operations = $operation->loadList($where, null, "100");
+
+  $sejours = CMbObject::massLoadFwdRef($operations, "sejour_id");
+  CMbObject::massLoadFwdRef($sejours, "patient_id");
+  CMbObject::massLoadFwdRef($operations, "plageop_id");
+  CMbObject::massLoadFwdRef($operations, "chir_id");
 
   foreach ($operations as $op) {
     $op->loadRefPraticien();
@@ -57,6 +63,7 @@ else {
 
   // Creation du template
   $smarty = new CSmartyDP();
-  $smarty->assign("operations" , $operations);
+  $smarty->assign("operations"    , $operations);
+  $smarty->assign("nb_operations" , $nb_operations);
   $smarty->display("check_score_asa.tpl");
 }
