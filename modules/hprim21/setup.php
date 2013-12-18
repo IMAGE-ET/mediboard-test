@@ -431,7 +431,12 @@ class CSetuphprim21 extends CSetup {
     $query = "ALTER TABLE `destinataire_hprim21`
                 ADD `OID` VARCHAR (255);";
     $this->addQuery($query);
+
+    $this->makeRevision("0.26");
+    $query = "ALTER TABLE `destinataire_hprim21`
+                ADD `synchronous` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
     
-    $this->mod_version = "0.26";
+    $this->mod_version = "0.27";
   }
 }

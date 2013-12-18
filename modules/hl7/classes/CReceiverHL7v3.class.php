@@ -98,13 +98,21 @@ class CReceiverHL7v3 extends CInteropReceiver {
     $this->loadConfigValues();
     $evenement->build($mbObject);
 
+    $exchange = $evenement->_exchange_hl7v3;
+
+    if (!$exchange->message_valide) {
+      return null;
+    }
+
+    if (!$this->synchronous) {
+      return null;
+    }
+
     $source = CExchangeSource::get("$this->_guid-C{$evenement->event_type}");
 
     if (!$source->_id || !$source->active) {
       return null;
     }
-
-    $exchange = $evenement->_exchange_hl7v3;
 
     $msg = $evenement->message;
     if ($soapVar) {

@@ -18,14 +18,14 @@
 class CDestinataireHprim extends CInteropReceiver {
   // DB Table key
   public $dest_hprim_id;
-  
+
   // DB Fields
   public $register;
   public $code_appli;
   public $code_acteur;
   public $code_syst;
   public $display_errors;
-  
+
   // Form fields
   public $_tag_hprimxml;
 
@@ -82,7 +82,7 @@ class CDestinataireHprim extends CInteropReceiver {
     $backProps = parent::getBackProps();
     $backProps['object_configs'] = "CDestinataireHprimConfig object_id";
     $backProps['echanges']       = "CEchangeHprim receiver_id";
-    
+
     return $backProps;
   }
 
@@ -114,12 +114,20 @@ class CDestinataireHprim extends CInteropReceiver {
       return;
     }
 
+    $exchange = $dom_evt->_ref_echange_hprim;
+
+    if (!$exchange->message_valide) {
+      return null;
+    }
+
+    if (!$this->synchronous) {
+      return null;
+    }
+
     $source = CExchangeSource::get("$this->_guid-evenementPatient");
     if (!$source->_id || !$source->active) {
       return;
     }
-    
-    $exchange = $dom_evt->_ref_echange_hprim;
 
     $source->setData($msg, false, $exchange);
     try {
@@ -127,20 +135,20 @@ class CDestinataireHprim extends CInteropReceiver {
     } catch (Exception $e) {
       throw new CMbException("CExchangeSource-no-response");
     }
-    
+
     $exchange->date_echange = CMbDT::dateTime();
-    
+
     $acq = $source->getACQ();
     if (!$acq) {
       $exchange->store();
       return;
-    }  
-    
+    }
+
     $dom_acq = new CHPrimXMLAcquittementsPatients();
     $dom_acq->loadXML($acq);
     $dom_acq->_ref_echange_hprim = $exchange;
     $doc_valid = $dom_acq->schemaValidate(null, false, $this->display_errors);
-    
+
     $exchange->statut_acquittement = $dom_acq->getStatutAcquittementPatient();
     $exchange->acquittement_valide = $doc_valid ? 1 : 0;
     $exchange->_acquittement = $acq;
@@ -162,7 +170,7 @@ class CDestinataireHprim extends CInteropReceiver {
     if (!$msg = $dom_evt->generateTypeEvenement($mbObject)) {
       return;
     }
-    
+
     $source = CExchangeSource::get("$this->_guid-$dom_evt->sous_type");
     if (!$source->_id || !$source->active) {
       return;
@@ -176,24 +184,24 @@ class CDestinataireHprim extends CInteropReceiver {
     } catch (Exception $e) {
       throw new CMbException("CExchangeSource-no-response");
     }
-    
+
     $exchange->date_echange = CMbDT::dateTime();
 
     $acq = $source->getACQ();
     if (!$acq) {
       $exchange->store();
       return;
-    }  
-     
+    }
+
     $dom_acq = CHPrimXMLAcquittementsServeurActivitePmsi::getEvtAcquittement($dom_evt);
     $dom_acq->loadXML($acq);
     $dom_acq->_ref_echange_hprim = $exchange;
     $doc_valid = $dom_acq->schemaValidate(null, false, $this->display_errors);
-    
+
     $exchange->statut_acquittement = $dom_acq->getStatutAcquittementServeurActivitePmsi();
     $exchange->acquittement_valide = $doc_valid ? 1 : 0;
     $exchange->_acquittement = $acq;
-    
+
     $exchange->store();
   }
 

@@ -1197,7 +1197,17 @@ class CSetuphl7 extends CSetup {
                 ADD `build_PV1_11` ENUM ('uf_medicale','none') DEFAULT 'none';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.78";
+    $this->makeRevision("0.78");
+    $query = "ALTER TABLE `receiver_hl7v2`
+                ADD `synchronous` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.79");
+    $query = "ALTER TABLE `receiver_hl7v3`
+                ADD `synchronous` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.80";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

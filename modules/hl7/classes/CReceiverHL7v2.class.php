@@ -165,14 +165,22 @@ class CReceiverHL7v2 extends CInteropReceiver {
       return null;
     }
 
+    $exchange = $evenement->_exchange_hl7v2;
+
+    if (!$exchange->message_valide) {
+      return null;
+    }
+
+    if (!$this->synchronous) {
+      return null;
+    }
+
     $evt    = $this->getEventMessage($evenement->profil);
     $source = CExchangeSource::get("$this->_guid-$evt");
 
     if (!$source->_id || !$source->active) {
       return null;
     }
-    
-    $exchange = $evenement->_exchange_hl7v2;
 
     if ($this->_configs["encoding"] == "UTF-8") {
       $msg = utf8_encode($msg); 
