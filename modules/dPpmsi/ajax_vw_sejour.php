@@ -1,20 +1,19 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage PMSI
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 CCanDo::checkEdit();
-
 $sejour_id = CValue::getOrSession("sejour_id");
 
 // Chargement des praticiens
-$listPrat = new CMediusers;
+$listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
 
 $sejour = new CSejour();
@@ -46,7 +45,7 @@ foreach ($sejour->_ref_operations as $_operation) {
   $_operation->loadRefsFwd();
   $_operation->countExchanges();
   $_operation->countDocItems();
-  $_operation->loadRefsActesCCAM();
+  $_operation->loadRefsActes();
   $_operation->canDo();
   foreach ($_operation->_ref_actes_ccam as $_acte) {
     $_acte->loadRefsFwd();

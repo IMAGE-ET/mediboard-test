@@ -1,11 +1,11 @@
 {{*
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPpmsi
  * @author     SARL OpenXtrem
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  *}}
 <script>
 Main.add(function () {
@@ -46,10 +46,16 @@ Main.add(function () {
     <td colspan="3" class="text"><em>{{$curr_op->libelle}}</em></td>
   {{/if}}
   {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
-  <tr>
-    <th>{{$curr_code->code}}</th>
-    <td class="text" colspan="3">{{$curr_code->libelleLong}}</td>
-  </tr>
+    <tr>
+      <th>{{$curr_code->code}}</th>
+      <td class="text" colspan="3">{{$curr_code->libelleLong}}</td>
+    </tr>
+  {{/foreach}}
+  {{foreach from=$curr_op->_ref_actes_ngap item=curr_code}}
+    <tr>
+      <th>{{$curr_code->code}}</th>
+      <td class="text" colspan="3">{{$curr_code->_libelle}}</td>
+    </tr>
   {{/foreach}}
   <tr>
     <th>{{mb_label object=$curr_op field=depassement}}</th>

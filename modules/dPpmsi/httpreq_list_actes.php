@@ -10,11 +10,11 @@
  */
 
 CCanDo::checkEdit();
-
 $operation_id = CValue::getOrSession("operation_id");
+
 $operation = new COperation;
 $operation->load($operation_id);
-$operation->loadRefsActesCCAM();
+$operation->loadRefsActes();
 foreach ($operation->_ref_actes_ccam as &$acte) {
   $acte->loadRefsFwd();
   $acte->guessAssociation();
