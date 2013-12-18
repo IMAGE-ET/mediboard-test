@@ -26,6 +26,7 @@ $listUsers = $user->loadListWithPerms(PERM_EDIT);
 $where = array();
 $where["source_pop.is_private"]   = "= '0'";
 $where["source_pop.object_class"] = "= 'CMediusers'";
+$where["users_mediboard.function_id"] = "= '$user->function_id'";
 $where["users_mediboard.user_id"] = CSQLDataSource::prepareIn(array_keys($listUsers));
 $ljoin = array();
 $ljoin["users_mediboard"] = "source_pop.object_id = users_mediboard.user_id AND source_pop.object_class = 'CMediusers'";
