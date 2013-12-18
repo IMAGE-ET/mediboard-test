@@ -1709,10 +1709,7 @@ class CConstantesMedicales extends CMbObject {
       $function_id = $host->_id;
       $group_id = $host->group_id;
     }
-    ml($name, 'name');
-    ml($group_id, 'group_id');
-    ml($service_id, 'service_id');
-    ml($function_id, 'function_id');
+
     return self::getConfig($name, $group_id, $service_id, $function_id);
   }
 
@@ -1832,7 +1829,7 @@ class CConstantesMedicales extends CMbObject {
     elseif ($group_id && is_numeric($group_id)) {
       $guid = "CGroups-$group_id";
     }
-    ml($guid, 'guid');
+
     return CAppUI::conf("dPpatients CConstantesMedicales $name", $guid);
   }
 
