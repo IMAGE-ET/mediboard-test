@@ -16,7 +16,7 @@
     else {
       form.function_id.value = '{{$prat->function_id}}';
     }
-  };
+  }
 </script>
 
 <form name="editFrm" action="#" method="post" onsubmit="return Tarif.submit(this);">

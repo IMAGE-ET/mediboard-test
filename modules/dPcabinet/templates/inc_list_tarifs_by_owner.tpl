@@ -30,6 +30,6 @@
 </tr>
 {{foreachelse}}
 <tr>
-  <td class="empty" colspan="5">{{tr}}CTarif.none{{/tr}}</td>
+  <td class="empty" colspan="7">{{tr}}CTarif.none{{/tr}}</td>
 </tr>
 {{/foreach}}
