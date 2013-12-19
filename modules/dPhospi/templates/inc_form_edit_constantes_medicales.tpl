@@ -27,12 +27,12 @@ toggleConstantesecondary = function(element) {
   if (secondary[0].visible()) {
     element.removeClassName("down");
     element.addClassName("up");
-    element.innerHTML = "Cacher les second.";
+    element.innerHTML = "Cacher les scd.";
   }
   else {
     element.removeClassName("up");
     element.addClassName("down");
-    element.innerHTML = "Afficher tout";
+    element.innerHTML = "Aff. tout";
   }
 };
 
@@ -87,8 +87,7 @@ Main.add(function () {
     Control.Tabs.create("constantes-by-type{{$tri}}");
   {{/if}}
   ViewPort.SetAvlHeight('constant_form',1);
-  ViewPort.SetAvlHeight('constantes_{{$constantes->_id}}',.74);
-  //ViewPort.SetAvlHeight('graphs', 1);
+  ViewPort.SetAvlHeight('graphs', 1);
 });
 </script>
 
@@ -98,7 +97,7 @@ Main.add(function () {
   {{assign var=real_context value=0}}
 {{/if}}
 
-<div id="constant_form" style="position:relative;">
+<div id="constant_form" style="position:relative; min-height: 290px; width: 100%;">
   <form name="edit-constantes-medicales{{$tri}}" action="?" method="post" onsubmit="return {{if $real_context}}checkForm(this){{else}}false{{/if}}">
     <input type="hidden" name="m" value="dPpatients" />
     <input type="hidden" name="del" value="0" />
@@ -265,11 +264,11 @@ Main.add(function () {
       {{if $real_context}}
         {{if $constantes->datetime}}
           {{mb_field object=$constantes field=datetime form="edit-constantes-medicales" register=true}}
-          <button class="trash" type="button" onclick="if (confirm('Etes-vous sûr de vouloir supprimer ce relevé ?')) {$V(this.form.del, 1); return submitConstantesMedicales(this.form);}">
+          <button style="display:inline-block;" class="trash notext" type="button" onclick="if (confirm('Etes-vous sûr de vouloir supprimer ce relevé ?')) {$V(this.form.del, 1); return submitConstantesMedicales(this.form);}">
             {{tr}}CConstantesMedicales.delete_all{{/tr}}
           </button>
         {{/if}}
-        {{mb_field object=$constantes field=comment placeholder="Commentaire"}}
+        {{mb_field object=$constantes field=comment placeholder="Commentaire" rows=2}}
         {{if !$hide_save_button}}
           <button class="modify singleclick" onclick="return submitConstantesMedicales(this.form);">
             {{tr}}Save{{/tr}}
@@ -281,9 +280,8 @@ Main.add(function () {
         </button>
       {{/if}}
 
-
       {{if $show_enable_all_button && $at_least_one_hidden}}
-        <button class="down" type="button" onclick="toggleConstantesecondary(this);">Afficher tout</button>
+        <button class="down" type="button" onclick="toggleConstantesecondary(this);">Aff. tout</button>
       {{/if}}
     </div>
   </form>

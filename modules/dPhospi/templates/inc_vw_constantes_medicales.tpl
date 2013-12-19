@@ -376,10 +376,10 @@ refreshFiches = function(sejour_id){
       
   <table class="main" id="tab-constantes-medicales">
     <tr>
-      <td class="narrow" id="constantes-medicales-form" style="width: 24%;">
+      <td class="narrow" id="constantes-medicales-form" style="width: 30%;overflow-x: hidden;">
         {{include file="inc_form_edit_constantes_medicales.tpl" context_guid=$context_guid}}
       </td>
-      <td id="constantes-medicales-graphs" style="width: 74%;">
+      <td id="constantes-medicales-graphs" style="width: 69%;">
         {{unique_id var=uniq_id_constantes}}
          
         <script type="text/javascript">
@@ -418,7 +418,7 @@ refreshFiches = function(sejour_id){
           </div>
         {{/if}}
           
-        <div id="constantes-graph">
+        <div id="constantes-graph" style="min-height: 290px;">
           <button class="hslip notext" style="float: left;" title="Afficher/Cacher le formulaire" onclick="$('constantes-medicales-form').toggle();" type="button">
             Formulaire constantes
           </button>
