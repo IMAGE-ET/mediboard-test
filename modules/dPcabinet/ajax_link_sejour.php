@@ -1,24 +1,21 @@
 <?php
 /**
- * $Id: $
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision: $
+ * @version    $Revision:$
  */
 
 CCanDo::checkEdit();
-
 $consult_id = CValue::get("consult_id");
+$group_id   = CGroups::loadCurrent()->_id;
 
 $consult = new CConsultation();
 $consult->load($consult_id);
-
-$group_id = CGroups::loadCurrent()->_id;
-
-$sejour = new CSejour();
+$consult->loadRefPlageConsult();
 
 $where = array();
 $where[] = "'$consult->_date' BETWEEN DATE(entree) AND DATE(sortie)";
@@ -27,6 +24,7 @@ $where["sejour.group_id"] = "= '$group_id'";
 $where["sejour.patient_id"] = "= '$consult->patient_id'";
 
 /** @var CSejour[] $sejours */
+$sejour = new CSejour();
 $sejours = $sejour->loadList($where);
 CMbObject::massLoadFwdRef($sejours, "praticien_id");
 
