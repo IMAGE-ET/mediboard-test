@@ -384,6 +384,11 @@ class CSetupdPfacturation extends CSetup {
                 ADD INDEX (`object_id`),
                 ADD INDEX (`date`);";
     $this->addQuery($query);
-    $this->mod_version = "0.40";
+    $this->makeRevision("0.40");
+
+    $query = "ALTER TABLE `facture_etablissement`
+                CHANGE `taux_tva` `taux_tva` FLOAT DEFAULT '0';";
+    $this->addQuery($query);
+    $this->mod_version = "0.41";
   }
 }

@@ -134,13 +134,19 @@
       </tr>
       <tr>
         <th>{{mb_label object=$tarif field=taux_tva}}</th>
-        <td>{{mb_field object=$tarif field=taux_tva onchange="Tarif.updateTotal();"}}</td>
+        <td>
+          {{assign var=taux_tva value="|"|explode:$conf.dPcabinet.CConsultation.default_taux_tva}}
+          <select name="taux_tva" onchange="Tarif.updateTotal();">
+            {{foreach from=$taux_tva item=taux}}
+            <option value="{{$taux}}" {{if $tarif->taux_tva == $taux}}selected="selected"{{/if}}>{{tr}}CTarif.taux_tva.{{$taux}}{{/tr}}</option>
+            {{/foreach}}
+          </select>
+        </td>
       </tr>
       <tr>
         <th>{{mb_label object=$tarif field=_du_tva}}</th>
         <td>{{mb_field object=$tarif field=_du_tva readonly=readonly}}</td>
       </tr>
-
       <tr>
         <th>{{mb_label object=$tarif field=_somme}}</th>
         <td>

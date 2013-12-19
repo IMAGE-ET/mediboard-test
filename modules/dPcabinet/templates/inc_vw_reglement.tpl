@@ -396,7 +396,12 @@ Main.add( function(){
                 <td>
                   {{mb_field object=$consult field="secteur3" onchange="modifTVA()"}}
                   {{mb_label object=$consult field="taux_tva"}}
-                  {{mb_field object=$consult field="taux_tva" onchange="modifTVA()"}}
+                  {{assign var=taux_tva value="|"|explode:$conf.dPcabinet.CConsultation.default_taux_tva}}
+                  <select name="taux_tva"onchange="modifTVA()">
+                    {{foreach from=$taux_tva item=taux}}
+                      <option value="{{$taux}}" {{if $consult->taux_tva == $taux}}selected="selected"{{/if}}>{{tr}}CConsultation.taux_tva.{{$taux}}{{/tr}}</option>
+                    {{/foreach}}
+                  </select>
                   {{mb_label object=$consult field="du_tva"}}
                   {{mb_field object=$consult field="du_tva" readonly="readonly"}}
                 </td>

@@ -91,7 +91,7 @@ class CTarif extends CMbObject {
     $props["secteur1"]    = "currency notNull min|0";
     $props["secteur2"]    = "currency";
     $props["secteur3"]    = "currency";
-    $props["taux_tva"]    = "enum list|".CAppUI::conf("dPcabinet CConsultation default_taux_tva");
+    $props["taux_tva"]    = "float default|0";
     $props["codes_ccam"]  = "str";
     $props["codes_ngap"]  = "str";
     $props["codes_tarmed"]= "str";

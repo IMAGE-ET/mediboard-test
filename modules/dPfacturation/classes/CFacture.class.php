@@ -148,7 +148,7 @@ class CFacture extends CMbObject {
     $props["du_patient"]    = "currency notNull default|0 decimals|2";
     $props["du_tiers"]      = "currency notNull default|0 decimals|2";
     $props["du_tva"]        = "currency default|0 decimals|2 show|0";
-    $props["taux_tva"]      = "enum list|".CAppUI::conf("dPcabinet CConsultation default_taux_tva");
+    $props["taux_tva"]      = "float default|0";
 
     $props["type_facture"]              = "enum notNull list|maladie|accident|esthetique default|maladie";
     $props["patient_date_reglement"]    = "date";

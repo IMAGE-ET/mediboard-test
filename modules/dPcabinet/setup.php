@@ -2041,6 +2041,19 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("2.23");
     $this->addPrefQuery("today_ref_consult_multiple", "1");
 
-    $this->mod_version = "2.24";
+    $this->makeRevision("2.24");
+    $query = "ALTER TABLE `facture_cabinet`
+                CHANGE `taux_tva` `taux_tva` FLOAT DEFAULT '0';";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `tarifs`
+                CHANGE `taux_tva` `taux_tva` FLOAT DEFAULT '0';";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `consultation`
+                CHANGE `taux_tva` `taux_tva` FLOAT DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "2.25";
   }
 }

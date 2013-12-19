@@ -251,7 +251,7 @@ class CConsultation extends CFacturable {
     $props["secteur1"]          = "currency min|0 show|0";
     $props["secteur2"]          = "currency show|0";
     $props["secteur3"]          = "currency show|0";
-    $props["taux_tva"]          = "enum list|".CAppUI::conf("dPcabinet CConsultation default_taux_tva");
+    $props["taux_tva"]          = "float default|0";
     $props["du_tva"]            = "currency show|0";
     $props["chrono"]            = "enum notNull list|16|32|48|64 show|0";
     $props["annule"]            = "bool show|0";
@@ -957,7 +957,9 @@ class CConsultation extends CFacturable {
       $facture->du_tiers    = $this->du_tiers;
       $facture->du_tva      = $this->du_tva;
       $facture->taux_tva    = $this->taux_tva;
-      $facture->store();
+      if ($msg = $facture->store()) {
+        echo $msg;
+      }
     }
 
     //Lors de dévalidation de la consultation 
