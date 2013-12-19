@@ -30,3 +30,16 @@
   </tr>
   </table>
 </form>
+
+<form name="modifTaux2014" method="post" action="?" onsubmit="return onSubmitFormAjax(this);">
+  <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="dosql" value="do_tarif_aed" />
+  <input type="hidden" name="modifTauxVingPct" value="1" />
+  <table class="form">
+  <tr>
+    <td class="button" colspan="2">
+      <button class="change" type="submit">Passer tous les tarifs ayant un taux de TVA de 19,6% à 20%</button>
+    </td>
+  </tr>
+  </table>
+</form>
