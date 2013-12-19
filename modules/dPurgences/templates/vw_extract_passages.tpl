@@ -110,26 +110,27 @@
     <td class="narrow">
       {{if $can->admin}} 
         <form name="Purge-{{$_passage->_guid}}" action="?m={{$m}}&amp;tab=vw_extract_passages" method="post" onsubmit="return confirmCreation(this)">
-        <input type="hidden" name="dosql" value="do_extract_passages_aed" />
-        <input type="hidden" name="tab" value="vw_extract_passages" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="_purge" value="0" />
-        <input type="hidden" name="extract_passages_id" value="{{$_passage->_id}}" />
-                
-         <script type="text/javascript">
-           confirmPurge{{$_passage->_id}} = function(form) {
-             if (confirm("ATTENTION : Vous êtes sur le point de purger l'extraction d'un passage !")) {
-               form._purge.value = "1";
-               confirmDeletion(form,  {
-                 typeName:'l\'extraction de passage',
-                 objName:'{{$_passage->_view|smarty:nodefaults|JSAttribute}}'
-               } );
+          <input type="hidden" name="dosql" value="do_extract_passages_aed" />
+          <input type="hidden" name="m" value="dPurgences" />
+          <input type="hidden" name="tab" value="vw_extract_passages" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="_purge" value="0" />
+          <input type="hidden" name="extract_passages_id" value="{{$_passage->_id}}" />
+
+           <script type="text/javascript">
+             confirmPurge{{$_passage->_id}} = function(form) {
+               if (confirm("ATTENTION : Vous êtes sur le point de purger l'extraction d'un passage !")) {
+                 form._purge.value = "1";
+                 confirmDeletion(form,  {
+                   typeName:'l\'extraction de passage',
+                   objName:'{{$_passage->_view|smarty:nodefaults|JSAttribute}}'
+                 } );
+               }
              }
-           }
-         </script>
-         <button type="button" class="cancel" onclick="confirmPurge{{$_passage->_id}}(this.form);">
-           {{tr}}Purge{{/tr}}
-         </button>
+           </script>
+           <button type="button" class="cancel" onclick="confirmPurge{{$_passage->_id}}(this.form);">
+             {{tr}}Purge{{/tr}}
+           </button>
         </form>
       {{/if}}
     </td>
