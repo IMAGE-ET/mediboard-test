@@ -52,11 +52,11 @@
               <span style="white-space: nowrap;">{{$_correspondant->adresse|spancate:30}}</span>
               <span style="white-space: nowrap;">{{$_correspondant->cp}} {{$_correspondant->ville|spancate:20}}</span>
             </td>
-            <td>
+            <td style="white-space: nowrap;">
               {{mb_value object=$_correspondant field=tel}} <br />
               {{mb_value object=$_correspondant field=mob}}
             </td>
-            <td>{{mb_value object=$_correspondant field=fax}}</td>
+            <td style="white-space: nowrap;">{{mb_value object=$_correspondant field=fax}}</td>
             <td>
               {{if $_correspondant->relation != "employeur"}}
                 {{if $_correspondant->parente == "autre"}}
