@@ -1533,6 +1533,38 @@ class COperation extends CCodable implements IPatientRelated {
       CExObject::addFormsToTemplate($template, $this, "Opération");
     }
 
+    if (CAppUI::conf("dPsalleOp enable_surveillance_perop")) {
+      $obs_view = "";
+
+      if ($template->valueMode && $this->_id && $this->graph_pack_id) {
+        /** @var CObservationResultSet[] $list_obr */
+        list($list, $grid, $graphs, $labels, $list_obr) = CObservationResultSet::getChronological($this, $this->graph_pack_id);
+
+        foreach ($grid as $_row) {
+          /** @var CObservationResult[] $_row */
+
+          foreach ($_row as $_cell) {
+            if ($_cell && $_cell->file_id) {
+              $_cell->loadRefFile()->getDataUri();
+            }
+          }
+        }
+
+        $smarty = new CSmartyDP("modules/dPpatients");
+
+        // Horizontal
+        $smarty->assign("observation_grid", $grid);
+        $smarty->assign("observation_labels", $labels);
+        $smarty->assign("observation_list", $list_obr);
+        $smarty->assign("in_compte_rendu", true);
+
+        $obs_view = $smarty->fetch("inc_observation_results_grid.tpl", '', '', 0);
+        $obs_view = preg_replace('`([\\n\\r])`', '', $obs_view);
+      }
+
+      $template->addProperty("Opération - Tableau supervision", $obs_view, '', false);
+    }
+
     $this->notify("AfterFillLimitedTemplate", $template);
   }
 

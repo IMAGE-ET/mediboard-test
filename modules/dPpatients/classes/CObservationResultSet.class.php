@@ -318,21 +318,21 @@ class CObservationResultSet extends CMbObject {
 
     $list_by_datetime = array();
 
-    $graphs = array();
-    foreach ($graph_links as $_gl) {
-      $_go = $_gl->loadRefGraph();
-      $graphs[] = $_go;
-    }
+    $graphs = self::massLoadFwdRef($graph_links, "graph_id");
 
     /** @var self[] $list */
     $list = $result_set->loadList($where, $order);
     $grid = array();
+
+    // Build the data structure
 
     $count = 0;
     $labels = array();
     foreach ($graphs as $_graph) {
       if ($_graph instanceof CSupervisionGraph) {
         $_axes = $_graph->loadRefsAxes();
+
+        self::massCountBackRefs($_axes, "series");
 
         foreach ($_axes as $_axis) {
           $_series = $_axis->loadRefsSeries();
@@ -353,8 +353,13 @@ class CObservationResultSet extends CMbObject {
       }
     }
 
+    self::massCountBackRefs($list, "observation_results");
+
+    // Fill the data structure
     foreach ($list as $_set) {
       $results = $_set->loadRefsResults();
+
+      self::massLoadFwdRef($results, "file_id");
 
       foreach ($results as $_result) {
         $_result->loadRefFile();
@@ -366,10 +371,10 @@ class CObservationResultSet extends CMbObject {
 
       foreach ($graphs as $_graph) {
         if ($_graph instanceof CSupervisionGraph) {
-          $_axes = $_graph->loadRefsAxes();
+          $_axes = $_graph->_ref_axes;
 
           foreach ($_axes as $_axis) {
-            $_series = $_axis->loadRefsSeries();
+            $_series = $_axis->_ref_series;
 
             foreach ($_series as $_serie) {
               foreach ($results as $_result) {
