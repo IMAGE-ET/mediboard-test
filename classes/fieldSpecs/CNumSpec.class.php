@@ -259,21 +259,23 @@ class CNumSpec extends CMbFieldSpec {
   function getLitteralDescription() {
     $literral = "Nombre entier";
 
-    if ($this->max !== null) {
-      $max = $this->max;
-      $literral.= " à 4 chiffres maximum";
-
-      if ($max > pow(2, 8)) {
-        $literral.= " à 4 chiffres maximum";
+      if ($this->length) {
+        $length = $this->length;
+        $literral.= " de $length chiffres";
       }
 
-      if ($max > pow(2, 16)) {
-        $literral.= " à 11 chiffres maximum";
+    if ($this->max || $this->min) {
+      $literral.= "(";
+      if ($this->max !== null) {
+        $max = $this->max;
+        $literral.= " < $max";
       }
 
-      if ($max > pow(2, 32)) {
-        $literral.= " à 20 chiffres maximum";
+      if ($this->min !== null) {
+        $min = $this->min;
+        $literral.= ", > $min";
       }
+      $literral.= ")";
     }
 
     return "$literral. ".
