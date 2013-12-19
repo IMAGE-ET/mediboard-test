@@ -54,6 +54,16 @@
       }
     }});
   }
+
+  function encryptActivite(type) {
+    var url = new Url("dPurgences", "ajax_encrypt_activite");
+    url.addParam("extract_passages_id", extract_passages_id);
+    url.requestUpdate('td_encrypt_'+type, { onComplete: function(){
+      if (!$('td_encrypt_'+type).select('.error, .warning').length) {
+        $('transmit_'+type).disabled = false;
+      }
+    }});
+  }
   {{/if}}
   
   function encrypt(type) {

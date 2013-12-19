@@ -38,7 +38,7 @@
   </tr>
   <tr>
     <td>
-      <button class="tick" type="button" id="encrypt_activite" onclick="encrypt('activite')">Chiffrer</button>
+      <button class="tick" type="button" id="encrypt_activite" onclick="encryptActivite('activite')">Chiffrer</button>
     </td>
     <td id="td_encrypt_activite">
       
