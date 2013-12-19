@@ -51,9 +51,11 @@ $where[] = "sejour.entree BETWEEN '$now' AND '$date_after'
   OR (sejour.sortie_reelle IS NULL AND sejour.entree BETWEEN '$date_before' AND '$date_after' AND sejour.annule = '0')";
 
 // RPUs
-$where[] = "rpu.rpu_id IS NOT NULL";
+$where[]                  = "rpu.rpu_id IS NOT NULL";
 $where["sejour.group_id"] = "= '$group_id'";
-$order = "sejour.entree ASC";
+$where["sejour.type"]     = "= 'urg'";
+$order                    = "sejour.entree ASC";
+
 /** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, $order, null, "sejour.sejour_id", $ljoin);
 
