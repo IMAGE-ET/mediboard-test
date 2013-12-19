@@ -14,6 +14,10 @@ CCanDo::checkAdmin();
 $extract_passages_id = CValue::get("extract_passages_id");
 $view                = CValue::get("view", 0);
 
+if (isset($extractPassages) && $extractPassages->_id) {
+  $extract_passages_id = $extractPassages->_id;
+}
+
 $extractPassages = new CExtractPassages();
 if ($extract_passages_id) {
   $extractPassages->load($extract_passages_id);
