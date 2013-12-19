@@ -195,6 +195,8 @@ class CService extends CMbObject {
       $_chambre->_ref_lits[$_lit->_id] = $_lit;
     }
 
+    array_multisort(CMbArray::pluck($this->_ref_chambres, "nom"), SORT_ASC, $this->_ref_chambres);
+
     return $lits;
   }
 
