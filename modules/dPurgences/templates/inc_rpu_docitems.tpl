@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{assign var=patient value=$consult->_ref_patient}}
+{{assign var=patient value=$sejour->_ref_patient}}
 
 <table class="form">
   <tr>
