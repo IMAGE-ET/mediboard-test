@@ -7,12 +7,11 @@
 <table class="tbl">
   <tr>
     <th>Patient</th>
-    <th>Intervention</th>
+    <th>Evènement</th>
     <th class="narrow">Actes <br /> Non cotés</th>
     <th class="narrow">Codes <br /> prévus   </th>
     <th>Actes cotés</th>
   </tr>
-
   <tr>
     <th class="section" colspan="5">Interventions</th>
   </tr>
@@ -23,9 +22,9 @@
       {{if $all_prats}}
         <td class="text">
           {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_interv->_ref_chir}}
-          {{if $_interv->_ref_anesth}} 
-          <br />
-          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_interv->_ref_anesth}}
+          {{if $_interv->_ref_anesth}}
+            <br />
+            {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_interv->_ref_anesth}}
           {{/if}}
         </td>
       {{/if}}
@@ -91,6 +90,67 @@
     {{foreachelse}}
     <tr>
       <td colspan="5" class="empty">{{tr}}COperation.none_non_cotee{{/tr}}</td>
+    </tr>
+  {{/foreach}}
+
+  <tr>
+    <th class="section" colspan="5">Consultations</th>
+  </tr>
+  {{foreach from=$consultations item=consult}}
+    {{assign var=patient value=$consult->_ref_patient}}
+    {{assign var=sejour value=$consult->_ref_sejour}}
+    <tr>
+      <td class="text">
+        <a href="{{$patient->_dossier_cabinet_url}}">
+          <strong class="{{if !$consult->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}}"
+                  onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
+            {{$patient}}
+          </strong>
+        </a>
+      </td>
+      <td>
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$consult->_guid}}')">
+          Consultation le {{$consult->_datetime|date_format:$conf.date}}
+        </span>
+        {{if $sejour->libelle}}
+          <div class="compact">{{$sejour->libelle}}</div>
+        {{/if}}
+      </td>
+
+      <td>
+        {{if !$consult->_count_actes && !$consult->_ext_codes_ccam}}
+          (Aucun prévu)
+        {{else}}
+          {{$consult->_actes_non_cotes}} acte(s)
+        {{/if}}
+      </td>
+
+      <td class="text">
+        {{foreach from=$consult->_ext_codes_ccam item=code}}
+          <div>{{$code->code}}</div>
+        {{/foreach}}
+      </td>
+
+      <td>
+        {{foreach from=$consult->_ref_actes_ccam item=_acte}}
+          <div class="">
+            {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_acte->_ref_executant initials=border}}
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$_acte->_guid}}')">
+              {{$_acte->code_acte}}-{{$_acte->code_activite}}-{{$_acte->code_phase}}
+              {{if $_acte->modificateurs}}
+                MD:{{$_acte->modificateurs}}
+              {{/if}}
+              {{if $_acte->montant_depassement}}
+                DH:{{$_acte->montant_depassement|currency}}
+              {{/if}}
+            </span>
+          </div>
+        {{/foreach}}
+      </td>
+    </tr>
+  {{foreachelse}}
+    <tr>
+      <td colspan="5" class="empty">{{tr}}CConsultation.none_non_cotee{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>
