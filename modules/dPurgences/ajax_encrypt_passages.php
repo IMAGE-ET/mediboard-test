@@ -29,7 +29,7 @@ if (!$extractPassages->message_valide) {
 
 // Appel de la fonction d'extraction du RPUSender
 $rpuSender = $extractPassages->getRPUSender();
-$extractPassages = $rpuSender->encryptActivite($extractPassages);
+$extractPassages = $rpuSender->encrypt($extractPassages);
 
 if ($view) {
   $extractPassages->loadRefsFiles();
