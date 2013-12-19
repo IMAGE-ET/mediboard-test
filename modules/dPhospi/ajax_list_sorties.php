@@ -104,7 +104,9 @@ if ($order_col == "_praticien") {
 }
 
 if ($order_col == "_chambre") {
-  $orderNP = "patients.nom ASC, patients.prenom, sejour.entree";
+  $ljoin["lit"]     = "lit.lit_id = affectation.lit_id";
+  $ljoin["chambre"] = "chambre.chambre_id = lit.chambre_id";
+  $order = "chambre.nom $order_way, patients.nom, patients.prenom, sejour.entree";
 }
 
 if ($order_col == "sortie") {
