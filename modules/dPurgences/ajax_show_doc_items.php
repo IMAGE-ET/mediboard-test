@@ -14,12 +14,9 @@ $sejour_id  = CValue::get("sejour_id");
 
 $consult = new CConsultation();
 $consult->load($consult_id);
-$consult->loadRefsFwd();
-
-$consult->loadRefPatient()->loadRefPhotoIdentite();
 
 $sejour = new CSejour();
-$sejour->load($sejour_id);
+$sejour->load($sejour_id)->loadRefPatient()->loadRefPhotoIdentite();
 
 // Création du template
 $smarty = new CSmartyDP();
