@@ -30,7 +30,7 @@
 <script>
   {{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription}}
     function reloadPrescription(prescription_id) {
-      Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null,'', null, false);
+      Prescription.reloadPrescSejour(prescription_id, '', '1', null, null, null,'', null, false);
     }
   {{/if}}
 
@@ -47,7 +47,7 @@
 
   function loadAntTrait() {
     var url = new Url("cabinet", "httpreq_vw_antecedents");
-    url.addParam("sejour_id", "{{$consult->sejour_id}}");
+    url.addParam("sejour_id", "{{$consult->_ref_consult_anesth->sejour_id}}");
     url.addParam("patient_id", "{{$consult->patient_id}}");
     url.addParam("show_header", 0);
     url.requestUpdate("AntTrait");
@@ -89,30 +89,66 @@
 
 <!-- Tab titles -->
 <ul id="tab-consult-anesth" class="control_tabs">
-  <li><a id="acc_consultation_a_Atcd" href="#AntTrait">Antécédents</a></li>
-  <li onmousedown="refreshConstantesMedicales();"><a href="#Constantes">Constantes</a></li>
-  <li><a href="#Exams">Exam. Clinique</a></li>
-  <li><a href="#Intub">Intubation</a></li>
-  <li><a href="#ExamsComp">Exam. Comp.</a></li>
+  <li>
+    <a id="acc_consultation_a_Atcd" href="#AntTrait" {{if $tabs_count.AntTrait == 0}}class="empty"{{/if}}>
+      Antécédents <small>({{$tabs_count.AntTrait}})</small>
+    </a>
+  </li>
+  <li onmousedown="refreshConstantesMedicales();">
+    <a href="#Constantes" {{if $tabs_count.Constantes == 0}}class="empty"{{/if}}>
+      Constantes <small>({{$tabs_count.Constantes}})</small>
+    </a>
+  </li>
+  <li>
+    <a href="#Exams" {{if $tabs_count.Exams == 0}}class="empty"{{/if}}>
+      Exam. Clinique <small>({{$tabs_count.Exams}})</small>
+    </a>
+  </li>
+  <li>
+    <a href="#Intub" {{if $tabs_count.Intub == 0}}class="empty"{{/if}}>
+      Intubation <small>({{$tabs_count.Intub}})</small>
+    </a>
+  </li>
+  <li>
+    <a href="#ExamsComp" {{if $tabs_count.ExamsComp == 0}}class="empty"{{/if}}>
+      Exam. Comp. <small>({{$tabs_count.ExamsComp}})</small>
+    </a>
+  </li>
   <li onmousedown="this.onmousedown = ''; loadInfosAnesth()">
-    <a href="#InfoAnesth">Infos. Anesth.</a>
+    <a href="#InfoAnesth" {{if $tabs_count.InfoAnesth == 0}}class="empty"{{/if}}>
+      Infos. Anesth. <small>({{$tabs_count.InfoAnesth}})</small>
+    </a>
   </li>
   {{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription}}
     <li onmousedown="this.onmousedown = ''; Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null,'', null, false);">
-      <a href="#prescription_sejour">Prescription</a>
+      <a href="#prescription_sejour" {{if $tabs_count.prescription_sejour == 0}}class="empty"{{/if}}>
+        Prescription <small>({{$tabs_count.prescription_sejour}})</small>
+      </a>
     </li>
   {{/if}}
   {{if $conf.dPcabinet.CConsultAnesth.show_facteurs_risque}}
-    <li onmousedown="refreshFacteursRisque();"><a href="#facteursRisque">Facteurs de risque</a></li>
+    <li onmousedown="refreshFacteursRisque();">
+      <a href="#facteursRisque" {{if $tabs_count.facteursRisque == 0}}class="empty"{{/if}}>
+        Facteurs de risque <small>({{$tabs_count.facteursRisque}})</small>
+      </a>
+    </li>
   {{/if}}
   {{if $app->user_prefs.ccam_consultation == 1}}
     <li onmousedown="this.onmousedown = ''; loadActes()">
-      <a id="acc_consultation_a_Actes" href="#Actes">{{tr}}CCodable-actes{{/tr}}</a>
+      <a id="acc_consultation_a_Actes" href="#Actes" {{if $tabs_count.Actes == 0}}class="empty"{{/if}}>
+        {{tr}}CCodable-actes{{/tr}} <small>({{$tabs_count.Actes}})</small>
+      </a>
     </li>
   {{/if}}
-  <li><a href="#fdrConsult">Documents</a></li>
+  <li>
+    <a href="#fdrConsult" {{if $tabs_count.fdrConsult == 0}}class="empty"{{/if}}>
+      Documents <small>({{$tabs_count.fdrConsult}})</small>
+    </a>
+  </li>
   <li onmousedown="Reglement.reload(true);">
-    <a id="a_reglements_consult"  href="#reglement">Réglements</a>
+    <a id="a_reglements_consult" href="#reglement" {{if $tabs_count.reglement == 0}}class="empty"{{/if}}>
+      Réglements <small>({{$tabs_count.reglement}})</small>
+    </a>
   </li>
 </ul>
 

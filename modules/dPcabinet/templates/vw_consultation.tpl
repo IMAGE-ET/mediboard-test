@@ -12,7 +12,7 @@
 {{assign var=auto_refresh_frequency value=$conf.dPcabinet.CConsultation.auto_refresh_frequency}}
 
 {{if $current_m == "dPurgences"}}
-  {{mb_script module="dPplanningOp" script="sejour"}}
+  {{mb_script module="planningOp" script="sejour"}}
 {{/if}}
 
 <script>

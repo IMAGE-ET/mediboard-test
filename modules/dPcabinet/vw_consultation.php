@@ -30,27 +30,13 @@ if (!isset($current_m)) {
   $current_m = CValue::get("current_m", $m);
 }
 
-$listPrats   = CConsultation::loadPraticiens(PERM_EDIT);
-$listChirs   = $user->loadPraticiens(PERM_READ);
-$listAnesths = $user->loadAnesthesistes();
-
-$consult = new CConsultation();
-if ($current_m == "dPurgences") {
-  if (!$selConsult) {
-    CAppUI::setMsg("Vous devez selectionner une consultation", UI_MSG_ALERT);
-    CAppUI::redirect("m=urgences&tab=0");
-  }
-
-  $group = CGroups::loadCurrent();
-  $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
-}
-
 if (isset($_GET["date"])) {
   $selConsult = null;
   CValue::setSession("selConsult", null);
 }
 
 // Test compliqué afin de savoir quelle consultation charger
+$consult = new CConsultation();
 $consult->load($selConsult);
 
 if (isset($_GET["selConsult"])) {
@@ -82,50 +68,90 @@ $userSel->load($prat_id);
 $userSel->loadRefFunction();
 $canUserSel = $userSel->canDo();
 
+if (!$consult->_id) {
+  if ($current_m == "dPurgences") {
+    CAppUI::setMsg("Vous devez selectionner une consultation", UI_MSG_ALERT);
+    CAppUI::redirect("m=urgences&tab=0");
+  }
+
+  $smarty = new CSmartyDP();
+  $smarty->assign("consult"  , $consult);
+  $smarty->assign("current_m", $current_m);
+  $smarty->assign("date"     , $date);
+  $smarty->assign("vue"      , $vue);
+  $smarty->assign("userSel"  , $userSel);
+  $smarty->display("../../dPcabinet/templates/vw_consultation.tpl");
+  CApp::rip();
+}
+
+switch ($current_m) {
+  case "dPurgences":
+    $group = CGroups::loadCurrent();
+    $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
+    break;
+  default:
+    $listPrats = CConsultation::loadPraticiens(PERM_EDIT);
+}
+
 if (!$userSel->isMedical() && $current_m != "dPurgences") {
   CAppUI::setMsg("Vous devez selectionner un professionnel de santé", UI_MSG_ALERT);
   CAppUI::redirect("m=dPcabinet&tab=0");
 }
 
-$consultAnesth =& $consult->_ref_consult_anesth;
+$list_etat_dents = array();
+$consultAnesth = null;
+
+// Count dans les tabs
+$tabs_count = array(
+  "AntTrait"            => 0,
+  "Constantes"          => 0,
+  "prescription_sejour" => 0,
+  "facteursRisque"      => 0,
+  "Examens"             => 0,
+  "Exams"               => 0,
+  "ExamsComp"           => 0,
+  "Intub"               => 0,
+  "InfoAnesth"          => 0,
+  "dossier_traitement"  => 0,
+  "dossier_suivi"       => 0,
+  "Actes"               => 0,
+  "fdrConsult"          => 0,
+  "reglement"           => 0
+);
 
 // Consultation courante
-$consult->_ref_chir =& $userSel;
+$consult->_ref_chir = $userSel;
 
 // Chargement de la consultation
-if ($consult->_id) {
-  $patient = $consult->loadRefPatient();
-  $consult->loadRefConsultAnesth();
+$patient = $consult->loadRefPatient();
+$consult->loadRefConsultAnesth();
 
-  if ($patient->_vip) {
-    CCanDo::redirect();
-  }
+$consultAnesth = $consult->_ref_consult_anesth;
 
-  // Si on a passé un id de dossier d'anesth
-  if ($dossier_anesth_id && isset($consult->_refs_dossiers_anesth[$dossier_anesth_id])) {
-    $consultAnesth = $consult->_refs_dossiers_anesth[$dossier_anesth_id];
-  }
-
-  // Chargement du patient
-  $patient->countBackRefs("consultations");
-  $patient->countBackRefs("sejours");
-
-  $patient->loadRefPhotoIdentite();
-  $patient->loadRefsNotes();
-  $patient->loadRefsCorrespondants();
-
-  // Affecter la date de la consultation
-  $date = $consult->_ref_plageconsult->date;
-}
-else {
-  $consultAnesth->_id = 0;
+if ($patient->_vip) {
+  CCanDo::redirect();
 }
 
-if ($consult->_id) {
-  $consult->canDo();
+// Si on a passé un id de dossier d'anesth
+if ($dossier_anesth_id && isset($consult->_refs_dossiers_anesth[$dossier_anesth_id])) {
+  $consultAnesth = $consult->_refs_dossiers_anesth[$dossier_anesth_id];
 }
 
-if ($consult->_id && CModule::getActive("fse")) {
+// Chargement du patient
+$patient->countBackRefs("consultations");
+$patient->countBackRefs("sejours");
+
+$patient->loadRefPhotoIdentite();
+$patient->loadRefsNotes();
+$patient->loadRefsCorrespondants();
+
+// Affecter la date de la consultation
+$date = $consult->_ref_plageconsult->date;
+
+// Tout utilisateur peut consulter en lecture seule une consultation de séjour
+$consult->canDo();
+
+if (CModule::getActive("fse")) {
   // Chargement des identifiants LogicMax
   $fse = CFseFactory::createFSE();
   if ($fse) {
@@ -142,18 +168,12 @@ if (CModule::getActive("maternite")) {
   $consult->loadRefGrossesse();
 }
 
-// Tout utilisateur peut consulter en lecture seule une consultation de séjour
-$consult->canEdit();
-
-$list_etat_dents = array();
-if ($consult->_id) {
-  $patient->loadRefDossierMedical();
-  $dossier_medical = $consult->_ref_patient->_ref_dossier_medical;
-  if ($dossier_medical->_id) {
-    $etat_dents = $dossier_medical->loadRefsEtatsDents();
-    foreach ($etat_dents as $etat) {
-      $list_etat_dents[$etat->dent] = $etat->etat;
-    }
+$patient->loadRefDossierMedical();
+$dossier_medical = $consult->_ref_patient->_ref_dossier_medical;
+if ($dossier_medical->_id) {
+  $etat_dents = $dossier_medical->loadRefsEtatsDents();
+  foreach ($etat_dents as $etat) {
+    $list_etat_dents[$etat->dent] = $etat->etat;
   }
 }
 
@@ -165,6 +185,178 @@ if ($sejour->_id) {
   $rpu = $sejour->loadRefRPU();
 }
 
+CPrescription::$_load_lite = true;
+foreach ($tabs_count as $_tab => $_count) {
+  $count = 0;
+  switch ($_tab) {
+    case "AntTrait":
+      $prescription = $dossier_medical->loadRefPrescription();
+      $prescription->countLinesMedsElements();
+      $dossier_medical->countTraitements();
+      $dossier_medical->countAntecedents();
+      $tabs_count[$_tab] = $dossier_medical->_count_antecedents + $dossier_medical->_count_traitements + $prescription->_counts_by_chapitre["med"];
+      break;
+    case "Constantes":
+      $tabs_count[$_tab] = $patient->countBackRefs("constantes");
+      break;
+    case "prescription_sejour":
+      if (!$consultAnesth->_id) {
+        break;
+      }
+      $sejour = $consultAnesth->loadRefSejour();
+      if ($sejour->_id) {
+        $sejour->loadRefsPrescriptions();
+        foreach ($sejour->_ref_prescriptions as $key => $_prescription) {
+          if (!$_prescription->_id) {
+            unset($sejour->_ref_prescriptions[$key]);
+            continue;
+          }
+
+          $sejour->_ref_prescriptions[$_prescription->_id] = $_prescription;
+          unset($sejour->_ref_prescriptions[$key]);
+        }
+
+        $prescription = new CPrescription();
+
+        $prescription->massCountMedsElements($sejour->_ref_prescriptions);
+        foreach ($sejour->_ref_prescriptions as $_prescription) {
+          $count += array_sum($_prescription->_counts_by_chapitre);
+        }
+      }
+
+      $tabs_count[$_tab] = $count;
+      break;
+    case "facteursRisque":
+      if (!$consultAnesth) {
+        break;
+      }
+      $fields = array(
+        "risque_antibioprophylaxie", "risque_MCJ_chirurgie", "risque_MCJ_patient",
+        "risque_prophylaxie", "risque_thrombo_chirurgie", "risque_thrombo_patient"
+      );
+
+      foreach ($fields as $_field) {
+        if ($dossier_medical->$_field != "NR") {
+          $count++;
+        }
+      }
+
+      if ($dossier_medical->facteurs_risque) {
+        $count++;
+      }
+
+      $tabs_count[$_tab] = $count;
+      break;
+    case "Examens":
+      if ($consultAnesth->_id) {
+        break;
+      }
+      $fields = array("motif", "rques", "examen", "traitement");
+      foreach ($fields as $_field) {
+        if ($consult->$_field) {
+          $count++;
+        }
+      }
+      $count += $consult->countBackRefs("examaudio");
+      $count += $consult->countBackRefs("examnyha");
+      $count += $consult->countBackRefs("exampossum");
+      $tabs_count[$_tab] = $count;
+      break;
+    case "Exams":
+      if (!$consultAnesth->_id) {
+        break;
+      }
+      $fields = array("examenCardio", "examenPulmo", "examenDigest", "examenAutre");
+      foreach ($fields as $_field) {
+        if ($consultAnesth->$_field) {
+          $count++;
+        }
+      }
+      if ($consult->examen != "") {
+        $count++;
+      }
+      $count += $consult->countBackRefs("examaudio");
+      $count += $consult->countBackRefs("examnyha");
+      $count += $consult->countBackRefs("exampossum");
+      $tabs_count[$_tab] = $count;
+      break;
+    case "ExamsComp":
+      if (!$consultAnesth->_id) {
+        break;
+      }
+      $count += $consult->countBackRefs("examcomp");
+      if ($consultAnesth->result_ecg) {
+        $count++;
+      }
+      if ($consultAnesth->result_rp) {
+        $count++;
+      }
+      $tabs_count[$_tab] = $count;
+      break;
+    case "Intub":
+      if (!$consultAnesth->_id) {
+        break;
+      }
+      $fields = array("mallampati", "bouche", "distThyro");
+      foreach ($fields as $_field) {
+        if ($consultAnesth->$_field) {
+          $count++;
+        }
+      }
+      $tabs_count[$_tab] = $count;
+      break;
+    case "InfoAnesth":
+      if (!$consultAnesth->_id) {
+        break;
+      }
+      $op = $consultAnesth->loadRefOperation();
+
+      if (!$op->_id) {
+        break;
+      }
+
+      $fields_anesth = array("prepa_preop", "premedication");
+      $fields_op = array("passage_uscpo", "type_anesth", "ASA", "position");
+
+      foreach ($fields_anesth as $_field) {
+        if ($consultAnesth->$_field) {
+          $count++;
+        }
+      }
+      foreach ($fields_op as $_field) {
+        if ($op->$_field) {
+          $count++;
+        }
+      }
+
+      if ($consult->rques) {
+        $count++;
+      }
+
+      $count += $consultAnesth->countBackRefs("techniques");
+
+      $tabs_count[$_tab] = $count;
+      break;
+    case "dossier_traitement":
+      break;
+    case "dossier_suivi":
+      break;
+    case "Actes":
+      $consult->countActes();
+      $tabs_count[$_tab] = $consult->_count_actes;
+      break;
+    case "fdrConsult":
+      $consult->countDocs();
+      $consult->countFiles();
+      $tabs_count[$_tab] = $consult->_nb_docs + $consult->_nb_files;
+      break;
+    case "reglement":
+      $consult->loadRefFacture()->loadRefsReglements();
+      $tabs_count[$_tab] = count($consult->_ref_facture->_ref_reglements);
+  }
+}
+CPrescription::$_load_lite = false;
+
 $isPrescriptionInstalled = CModule::getActive("dPprescription");
 
 // Création du template
@@ -175,8 +367,6 @@ $smarty->assign("consult"        , $consult);
 $smarty->assign("isPrescriptionInstalled", $isPrescriptionInstalled);
 
 $smarty->assign("listPrats"      , $listPrats);
-$smarty->assign("listChirs"      , $listChirs);
-$smarty->assign("listAnesths"    , $listAnesths);
 
 if ($isPrescriptionInstalled) {
   $smarty->assign("line"         , new CPrescriptionLineMedicament());
@@ -192,7 +382,7 @@ $smarty->assign("consult_anesth" , $consultAnesth);
 $smarty->assign("_is_dentiste"   , $consult->_is_dentiste);
 $smarty->assign("current_m"      , $current_m);
 $smarty->assign("userSel"        , $userSel);
-
+$smarty->assign("tabs_count"     , $tabs_count);
 $smarty->assign("list_etat_dents", $list_etat_dents);
 
 if ($consult->_is_dentiste) {

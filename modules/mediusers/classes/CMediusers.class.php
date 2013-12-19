@@ -1363,7 +1363,6 @@ class CMediusers extends CPerson {
         }
         else {
           $_operation->_ref_chir = $this;
-          $_operation->loadRefPatient();
           $_operation->loadExtCodesCCAM();
           $_operation->updateSalle();
           $_operation->loadRefPatient();
