@@ -15,6 +15,10 @@ CApp::setMemoryLimit("512M");
 
 $now = CValue::get("debut_selection", CMbDT::dateTime());
 
+$date_tolerance = CAppUI::conf("dPurgences date_tolerance");
+$date_before = CMbDT::date("-$date_tolerance DAY", $now);
+$date_after  = CMbDT::date("+1 DAY", $now);
+
 $group_id = CGroups::loadCurrent()->_id;
 
 $extractPassages = new CExtractPassages();
@@ -42,7 +46,10 @@ $datas = array(
 $sejour = new CSejour;
 $where = array();
 $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
-$where[] = "sejour.entree <= '$now' AND sejour.sortie_reelle IS NULL";
+
+$where[] = "sejour.entree BETWEEN '$now' AND '$date_after'
+  OR (sejour.sortie_reelle IS NULL AND sejour.entree BETWEEN '$date_before' AND '$date_after' AND sejour.annule = '0')";
+
 // RPUs
 $where[] = "rpu.rpu_id IS NOT NULL";
 $where["sejour.group_id"] = "= '$group_id'";
@@ -50,10 +57,13 @@ $order = "sejour.entree ASC";
 /** @var CSejour[] $sejours */
 $sejours = $sejour->loadList($where, $order, null, "sejour.sejour_id", $ljoin);
 
-
 $count_sejour = 0;
 //work
 foreach ($sejours as $_sejour) {
+  if ($_sejour->sortie_reelle) {
+    continue;
+  }
+
   $count_sejour++;
 
   $affectation = $_sejour->getCurrAffectation($now);
