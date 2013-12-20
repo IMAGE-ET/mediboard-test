@@ -13,7 +13,13 @@
 </script>
 
 {{assign var=use_poste value=$conf.dPplanningOp.COperation.use_poste}}
+{{assign var=use_sortie_reveil_reel value="dPsalleOp COperation use_sortie_reveil_reel"|conf:"CGroups-$g"}}
 
+{{if $present_only}}
+  <div class="small-warning">
+    <strong>Affichage limité aux patients présents</strong>
+  </div>
+{{/if}}
 <table class="tbl">
   <tr>
     <th>{{tr}}SSPI.Salle{{/tr}}</th>
@@ -35,7 +41,20 @@
     {{if @$modules.brancardage->_can->read}}
       <th>{{tr}}CBrancardage{{/tr}}</th>
     {{/if}}
-    <th>{{tr}}SSPI.SortieReveil{{/tr}}</th>
+    <th>
+      {{tr}}SSPI.SortieReveil{{/tr}}
+      <br/>
+      <label>
+        <input type="checkbox" name="present_only_view" {{if $present_only}}checked{{/if}}
+               onclick="$V($('present_only'), this.checked ? 1 : 0); refreshTabReveil('reveil');"
+          />
+        Présents seulement
+        <input type="hidden" id="present_only" value="{{$present_only}}" />
+      </label>
+    </th>
+    {{if $use_sortie_reveil_reel}}
+      <th style="width: 15%">{{tr}}SSPI.SortieReveilReel{{/tr}}</th>
+    {{/if}}
     <th class="narrow"></th>
   </tr>    
   {{foreach from=$listOperations key=key item=_operation}}
@@ -187,6 +206,21 @@
       
       {{mb_include module=forms template=inc_widget_ex_class_register object=$_operation event_name=sortie_reveil cssStyle="display: inline-block; font-size: 0.8em;"}}
     </td>
+    {{if $use_sortie_reveil_reel}}
+      <td class="button">
+        <form name="editSortieReveilReelReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
+          <input type="hidden" name="m" value="dPplanningOp" />
+          <input type="hidden" name="dosql" value="do_planning_aed" />
+          <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
+          <input type="hidden" name="del" value="0" />
+          {{if $modif_operation}}
+            {{mb_field object=$_operation field=sortie_reveil_reel register=true form="editSortieReveilReelReveilFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
+          {{else}}
+            {{mb_value object=$_operation field="sortie_reveil_reel"}}
+          {{/if}}
+        </form>
+        </td>
+    {{/if}}
     <td>
       <button type="button" class="print notext"
         onclick="printDossier('{{$_operation->sejour_id}}', '{{$_operation->_id}}')"></button>

@@ -15,11 +15,6 @@
 {{assign var=use_sortie_reveil_reel value="dPsalleOp COperation use_sortie_reveil_reel"|conf:"CGroups-$g"}}
 {{assign var=use_poste value=$conf.dPplanningOp.COperation.use_poste}}
 
-{{if $present_only || $present_only_reel}}
-  <div class="small-warning">
-    <strong>Affichage limité aux patients présents</strong>
-  </div>
-{{/if}}
 <table class="tbl">
   <tr>
     <th>{{tr}}SSPI.Salle{{/tr}}</th>
@@ -32,28 +27,9 @@
     <th>{{tr}}SSPI.Chambre{{/tr}}</th>
     <th>{{tr}}SSPI.SortieSalle{{/tr}}</th>
     <th>{{tr}}SSPI.EntreeReveil{{/tr}}</th>
-    <th style="width: 15%">
-      {{tr}}SSPI.SortieReveil{{/tr}}
-      <br/>
-      <label>
-        <input type="checkbox" name="present_only_view" {{if $present_only}}checked{{/if}}
-               onclick="$V($('present_only'), this.checked ? 1 : 0); refreshTabReveil('out');"
-          />
-        Présents seulement
-        <input type="hidden" id="present_only" value="{{$present_only}}" />
-      </label>
-    </th>
+    <th style="width: 15%">{{tr}}SSPI.SortieReveil{{/tr}}</th>
     {{if $use_sortie_reveil_reel}}
-      <th style="width: 15%">
-        {{tr}}SSPI.SortieReveilReel{{/tr}}
-        <br/>
-        <label>
-          <input type="checkbox" name="present_only_reel_view" {{if $present_only_reel}}checked{{/if}}
-                 onclick="$V($('present_only_reel'), this.checked ? 1 : 0); refreshTabReveil('out');"/>
-          Présents seulement
-          <input type="hidden" id="present_only_reel" value="{{$present_only_reel}}" />
-        </label>
-      </th>
+      <th style="width: 15%">{{tr}}SSPI.SortieReveilReel{{/tr}}</th>
     {{/if}}
     <th class="narrow"></th>
   </tr> 

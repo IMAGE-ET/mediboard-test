@@ -15,7 +15,6 @@ $date              = CValue::getOrSession("date", CMbDT::date());
 $bloc_id           = CValue::getOrSession("bloc_id");
 $type              = CValue::get("type"); // Type d'affichage => encours, ops, reveil, out
 $present_only      = CValue::getOrSession("present_only", 0);
-$present_only_reel = CValue::getOrSession("present_only_reel", 0);
 $modif_operation   = CCanDo::edit() || $date >= CMbDT::date();
 
 // Chargement des Chirurgiens
@@ -68,11 +67,11 @@ switch ($type) {
     break;
   case 'reveil':
     $where["operations.entree_reveil"] = "IS NOT NULL";
-    $where["operations.sortie_reveil_possible"] = "IS NULL";
+    $where["operations.sortie_reveil_reel"] = "IS NULL";
     $order = "operations.entree_reveil";
     break;
   case 'out':
-    $where["operations.sortie_reveil_possible"] = "IS NOT NULL";
+    $where["operations.sortie_reveil_reel"] = "IS NOT NULL";
     $order = "operations.sortie_reveil_possible DESC";
     break;
 }
@@ -100,8 +99,6 @@ $group = CGroups::loadCurrent();
 $nb_sorties_non_realisees = 0;
 $now = CMbDT::time();
 
-$use_sortie_reveil_reel = CAppUI::conf("dPsalleOp COperation use_sortie_reveil_reel", $group->_guid);
-
 /** @var $op COperation */
 foreach ($listOperations as $op) {
   $sejour = $op->loadRefSejour();
@@ -112,12 +109,8 @@ foreach ($listOperations as $op) {
     continue;
   }
 
-  if ($type == "out") {
+  if ($type == "reveil") {
     if ($present_only && $op->sortie_reveil_possible < $now) {
-      unset($listOperations[$op->_id]);
-      continue;
-    }
-    elseif ($present_only_reel && $op->sortie_reveil_reel && $op->sortie_reveil_reel < $now) {
       unset($listOperations[$op->_id]);
       continue;
     }
@@ -180,6 +173,5 @@ $smarty->assign("modif_operation"         , $modif_operation);
 $smarty->assign("isImedsInstalled"        , (CModule::getActive("dPImeds") && CImeds::getTagCIDC($group)));
 $smarty->assign("nb_sorties_non_realisees", $nb_sorties_non_realisees);
 $smarty->assign("present_only"            , $present_only);
-$smarty->assign("present_only_reel"       , $present_only_reel);
 
 $smarty->display("inc_reveil_$type.tpl");
