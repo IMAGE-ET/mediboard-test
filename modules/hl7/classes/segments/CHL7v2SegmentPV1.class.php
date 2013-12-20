@@ -133,7 +133,9 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     
     // PV1-11: Temporary Location (PL) (optional)
     if ($receiver->_configs["build_PV1_11"] == "uf_medicale") {
-      $ufs = $sejour->getUFs(null, $this->curr_affectation->_id);
+      $affectation_id = isset($this->curr_affectation->_id) ? $this->curr_affectation->_id : null;
+
+      $ufs = $sejour->getUFs(null, $affectation_id);
       $uf_medicale = isset($ufs["medicale"]) ? $ufs["medicale"] : null;
       if (isset($uf_medicale->_id)) {
         $data[] = array(
