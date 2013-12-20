@@ -246,7 +246,7 @@ class CMbXMLDocument extends DOMDocument {
     $this->purgeEmptyElementsNode($this->documentElement);
   }
   
-  function purgeEmptyElementsNode($node) {
+  function purgeEmptyElementsNode($node, $removeParent = true) {
     // childNodes undefined for non-element nodes (eg text nodes)
     if ($node->childNodes) {
       // Copy childNodes array
@@ -261,7 +261,7 @@ class CMbXMLDocument extends DOMDocument {
       }
       
       // Remove if empty
-      if (!$node->hasChildNodes() && !$node->hasAttributes()) {
+      if (!$node->hasChildNodes() && !$node->hasAttributes() && $removeParent) {
 //        trigger_error("Removing child node $node->nodeName in parent node {$node->parentNode->nodeName}", E_USER_NOTICE);
         $node->parentNode->removeChild($node);
       }
