@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage Hospi
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * @version    $Revision:$
  */
 
 $type           = CValue::get("type");
@@ -66,6 +66,7 @@ $ljoin["service"]                = "service.service_id = affectation.service_id"
 $where                           = array();
 $where["service.group_id"]       = "= '$group->_id'";
 $where["affectation.service_id"] = CSQLDataSource::prepareIn($services_ids);
+$where["affectation.lit_id"]     = "IS NOT NULL";
 $where["sejour.type"]            = CSQLDataSource::prepareIn($types_hospi, $type_hospi);
 if ($praticien_id) {
   $where["sejour.praticien_id"] = "= '$praticien->_id'";
@@ -81,6 +82,7 @@ $whereNP                               = array();
 $whereNP["sejour.group_id"]            = "= '$group->_id'";
 $whereNP["sejour.type"]                = CSQLDataSource::prepareIn($types_hospi, $type_hospi);
 $whereNP["affectation.affectation_id"] = "IS NULL";
+$whereNP["affectation.lit_id"]         = "IS NULL";
 $whereNP["sejour.annule"]              = "= '0'";
 
 if (count($services_ids)) {
