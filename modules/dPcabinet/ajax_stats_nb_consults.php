@@ -1,22 +1,18 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
-// Current user
-$mediuser = new CMediusers();
-$mediuser->load(CAppUI::$instance->user_id);
-
-// Current function
-$mediuser->loadRefFunction();
-$function = $mediuser->_ref_function;
+// Current user and current function
+$mediuser = CMediusers::get();
+$function = $mediuser->loadRefFunction();
 
 // Filter
 $filter = new CPlageconsult();
