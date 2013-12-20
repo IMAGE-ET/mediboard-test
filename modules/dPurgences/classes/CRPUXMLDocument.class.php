@@ -74,13 +74,15 @@ class CRPUXMLDocument extends CMbXMLDocument {
     parent::save($this->documentfinalfilename);
   }
   
-  function addRPU($elParent, CRPU $mbObject) { 
+  function addRPU($elParent, CRPU $mbObject) {
+    $sejour = $mbObject->loadRefSejour();
+
     $this->addElement($elParent, "CP", $mbObject->_cp);
     $this->addElement($elParent, "COMMUNE", $mbObject->_ville);
     $this->addElement($elParent, "NAISSANCE", CMbDT::transform($mbObject->_naissance, null, "%d/%m/%Y"));
     $this->addElement($elParent, "SEXE", strtoupper($mbObject->_sexe));
     
-    $this->addElement($elParent, "ENTREE", CMbDT::transform($mbObject->_entree, null, "%d/%m/%Y %H:%M"));
+    $this->addElement($elParent, "ENTREE", CMbDT::transform($sejour->entree, null, "%d/%m/%Y %H:%M"));
     $this->addElement($elParent, "MODE_ENTREE", $mbObject->_ref_sejour->mode_entree);
     $this->addElement($elParent, "PROVENANCE", $mbObject->_ref_sejour->provenance);
     if ($mbObject->_ref_sejour->transport == "perso_taxi") {
@@ -127,10 +129,11 @@ class CRPUXMLDocument extends CMbXMLDocument {
         $this->addActeCCAM($liste_actes, $_code_ccam);
       }
     }
-    
-    $this->addElement($elParent, "SORTIE", CMbDT::transform($mbObject->_sortie, null, "%d/%m/%Y %H:%M"));
+
+    $sortie =  $sejour->sortie_reelle ? CMbDT::transform($sejour->sortie_reelle, null, "%d/%m/%Y %H:%M") : null;
+    $this->addElement($elParent, "SORTIE", $sortie);
     $this->addElement($elParent, "MODE_SORTIE", $mbObject->_mode_sortie);
-    $this->addElement($elParent, "DESTINATION", $mbObject->_ref_sejour->destination);
+    $this->addElement($elParent, "DESTINATION", $sejour->destination);
     $this->addElement($elParent, "ORIENT", strtoupper($mbObject->orientation));
   }
   

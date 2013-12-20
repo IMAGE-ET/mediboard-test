@@ -16,7 +16,7 @@ $debut_selection = CValue::get("debut_selection");
 $fin_selection   = CValue::get("fin_selection");
 
 if (!$debut_selection || !$fin_selection) {
-  $fin_selection   = CMbDT::date()." 00:00:00";
+  $fin_selection   = CMbDT::date()." ".CAppUI::conf("oscour date_fin_selection");
   $debut_selection = CMbDT::date("-7 DAY", $fin_selection)." 00:00:00";
 }
 
