@@ -1,18 +1,17 @@
 <?php
 /**
- * $Id: $
+ * $Id:$
  *
  * @package    Mediboard
  * @subpackage Cabinet
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision: $
+ * @version    $Revision:$
  */
 
 CCanDo::checkRead();
-
 // Current user
-$mediuser = new CMediusers;
+$mediuser = new CMediusers();
 $mediuser->load(CAppUI::$instance->user_id);
 
 // Current function
@@ -123,6 +122,9 @@ if ($filter->_function_id || $filter->_user_id) {
       GROUP BY praticien_id;";
     $others_counts = $ds->loadHashList($query);
   }
+  else {
+    $others_counts = array();
+  }
 }
 
 // Praticiens
@@ -159,7 +161,7 @@ foreach ($praticiens as $prat_id => $_praticien) {
   );
 }
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("filter"    , $filter);
 $smarty->assign("praticiens", $praticiens);
