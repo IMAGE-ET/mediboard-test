@@ -921,7 +921,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         if ($libelle) {
           $PV2_45_2 .= "$libelle";
         }
-        $PV2_45_2 .= "#";
+
         if (CModule::getActive("mvsante")) {
           $PV2_45_2 .= CMVSante::getPV245($receiver, $sejour, $operation);
         }
