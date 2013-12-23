@@ -124,13 +124,14 @@ $consult->_ref_chir = $userSel;
 
 // Chargement de la consultation
 $patient = $consult->loadRefPatient();
-$consult->loadRefConsultAnesth();
-
-$consultAnesth = $consult->_ref_consult_anesth;
 
 if ($patient->_vip) {
   CCanDo::redirect();
 }
+
+$consult->loadRefConsultAnesth();
+
+$consultAnesth = $consult->_ref_consult_anesth;
 
 // Si on a passé un id de dossier d'anesth
 if ($dossier_anesth_id && isset($consult->_refs_dossiers_anesth[$dossier_anesth_id])) {
@@ -400,6 +401,8 @@ if ($consult->_is_dentiste) {
 if (count($consult->_refs_dossiers_anesth)) {
   $secs = range(0, 60-1, 1);
   $mins = range(0, 15-1, 1);
+
+  $patient->loadRefConstantesMedicales();
 
   $smarty->assign("secs"    , $secs);
   $smarty->assign("mins"    , $mins);
