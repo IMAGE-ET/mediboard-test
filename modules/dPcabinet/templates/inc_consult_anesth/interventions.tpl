@@ -74,9 +74,9 @@
   <tr>
     <td class="button" colspan="2">
       <button class="tick" onclick="selectSejour('{{$next_sejour->_id}}'); modalWindow.close();">Associer au dossier d'anesthésie</button>
-      {{/if}}
       <button class="cancel" onclick="modalWindow.close();">Ne pas associer</button></td>
   </tr>
+  {{/if}}
 </table>
 
 <div id="dossiers_anesth_area">
