@@ -130,8 +130,9 @@ class CRPUXMLDocument extends CMbXMLDocument {
       }
     }
 
-    $sortie =  $sejour->sortie_reelle ? CMbDT::transform($sejour->sortie_reelle, null, "%d/%m/%Y %H:%M") : null;
-    $this->addElement($elParent, "SORTIE", $sortie);
+    if ($sejour->sortie_reelle) {
+      $this->addElement($elParent, "SORTIE", CMbDT::transform($sejour->sortie_reelle, null, "%d/%m/%Y %H:%M"));
+    }
     $this->addElement($elParent, "MODE_SORTIE", $mbObject->_mode_sortie);
     $this->addElement($elParent, "DESTINATION", $sejour->destination);
     $this->addElement($elParent, "ORIENT", strtoupper($mbObject->orientation));
