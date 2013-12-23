@@ -221,7 +221,7 @@ function openModalPrinters() {
   // Mise à jour de la date d'impression
   $V(getForm("editFrm").date_print, "now");
   window.modalPrinters = new Url("compteRendu", "ajax_choose_printer");
-  modalPrinters.requestModal(700, 400);
+  modalPrinters.requestModal(700, 400, {showReload: false});
 }
 
 {{if $pdf_thumbnails && $pdf_and_thumbs}}

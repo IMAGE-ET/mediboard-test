@@ -1,39 +1,39 @@
 <table class="tbl">
   <tr>
-    <th>{{mb_colonne class=CCompteRendu field=nom              order_col=$order_col order_way=$order_way url="?m=dPcompteRendu&tab=vw_modeles"}}</th>
-    <th>{{mb_colonne class=CCompteRendu field=object_class     order_col=$order_col order_way=$order_way url="?m=dPcompteRendu&tab=vw_modeles"}}</th>
-    <th>{{mb_colonne class=CCompteRendu field=file_category_id order_col=$order_col order_way=$order_way url="?m=dPcompteRendu&tab=vw_modeles"}}</th>
-    <th>{{mb_colonne class=CCompteRendu field=type             order_col=$order_col order_way=$order_way url="?m=dPcompteRendu&tab=vw_modeles"}}</th>
+    <th>{{mb_colonne class=CCompteRendu field=nom              order_col=$order_col order_way=$order_way url="?m=compteRendu&tab=vw_modeles"}}</th>
+    <th>{{mb_colonne class=CCompteRendu field=object_class     order_col=$order_col order_way=$order_way url="?m=compteRendu&tab=vw_modeles"}}</th>
+    <th>{{mb_colonne class=CCompteRendu field=file_category_id order_col=$order_col order_way=$order_way url="?m=compteRendu&tab=vw_modeles"}}</th>
+    <th>{{mb_colonne class=CCompteRendu field=type             order_col=$order_col order_way=$order_way url="?m=compteRendu&tab=vw_modeles"}}</th>
     <th class="narrow" colspan="2">{{tr}}Stats{{/tr}}</th>
-    <th class="narrow">{{tr}}Action{{/tr}}</th>
+    <th class="narrow"></th>
   </tr>
 
   {{foreach from=$modeles item=_modele}}
   <tr>
     <td>
       {{if $_modele->fast_edit_pdf}}
-        <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprintPDF/images/mbprintPDF.png"/>
+        <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprintPDF/images/mbprintPDF.png" />
       {{elseif $_modele->fast_edit}}
-        <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprinting/images/mbprinting.png"/>
+        <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprinting/images/mbprinting.png" />
       {{/if}}
       {{if $_modele->fast_edit || $_modele->fast_edit_pdf}}
-        <img style="float: right;" src="images/icons/lightning.png"/>
+        <img style="float: right;" src="images/icons/lightning.png" />
       {{/if}}
-      <a href="?m={{$m}}&amp;tab=addedit_modeles&amp;compte_rendu_id={{$_modele->_id}}">
-         {{assign var=object_class value=$_modele->object_class}}
-         {{assign var=name         value=$_modele->nom}}
-         {{if isset($special_names.$object_class.$name|smarty:nodefaults)}}
-         <strong>Special:</strong>
-         {{$_modele->nom|trim:"[]"}}
-         {{else}}
-         {{mb_value object=$_modele field=nom}}
-         {{/if}}
+      <a href="?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$_modele->_id}}">
+        {{assign var=object_class value=$_modele->object_class}}
+        {{assign var=name         value=$_modele->nom}}
+        {{if isset($special_names.$object_class.$name|smarty:nodefaults)}}
+          <strong>Special:</strong>
+          {{$_modele->nom|trim:"[]"}}
+        {{else}}
+          {{mb_value object=$_modele field=nom}}
+        {{/if}}
       </a>
     </td>
   
     <td>{{mb_value object=$_modele field=object_class}}</td>
 
-    <td>{{$_modele->_ref_category->_view}}</td>
+    <td>{{$_modele->_ref_category}}</td>
   
     <td>
       {{mb_value object=$_modele field=type}}
@@ -70,9 +70,7 @@
               {{$footer->nom}}
             </span>
           {{/if}}
-        {{/if}}
-        
-        {{if $_modele->type == "header"}} 
+        {{elseif $_modele->type == "header"}}
           {{assign var=count value=$_modele->_count.modeles_headed}}
           {{if $count}}
             {{$_modele->_count.modeles_headed}} 
@@ -80,9 +78,7 @@
           {{else}}
             <div class="empty">{{tr}}CCompteRendu-back-modeles_headed.empty{{/tr}}</div>
           {{/if}}
-        {{/if}}
-        
-        {{if $_modele->type == "preface"}} 
+        {{elseif $_modele->type == "preface"}}
           {{assign var=count value=$_modele->_count.modeles_prefaced}}
           {{if $count}}
             {{$_modele->_count.modeles_prefaced}}
@@ -90,9 +86,7 @@
           {{else}}
             <div class="empty">{{tr}}CCompteRendu-back-modeles_prefaced.empty{{/tr}}</div>
           {{/if}}
-        {{/if}}
-        
-        {{if $_modele->type == "ending"}} 
+        {{elseif $_modele->type == "ending"}}
           {{assign var=count value=$_modele->_count.modeles_ended}}
           {{if $count}} 
             {{$_modele->_count.modeles_ended}} 
@@ -100,9 +94,7 @@
           {{else}}
             <div class="empty">{{tr}}CCompteRendu-back-modeles_ended.empty{{/tr}}</div>
           {{/if}}
-        {{/if}}
-        
-        {{if $_modele->type == "footer"}} 
+        {{elseif $_modele->type == "footer"}}
           {{assign var=count value=$_modele->_count.modeles_footed}}
           {{if $count}} 
             {{$_modele->_count.modeles_footed}} 
@@ -111,7 +103,6 @@
             <div class="empty">{{tr}}CCompteRendu-back-modeles_footed.empty{{/tr}}</div>
           {{/if}}
         {{/if}}
-
       </div>
     </td>
 
@@ -130,14 +121,15 @@
           <input type="hidden" name="dosql" value="do_modele_aed" />
           <input type="hidden" name="_tab" value="_list" />
           {{mb_key object=$_modele}}
-          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$_modele->nom|smarty:nodefaults|JSAttribute}}'})">
-            {{tr}}Delete{{/tr}}
-          </button>
+          <button class="trash notext" type="button"
+              onclick="confirmDeletion(this.form, {
+              typeName: 'le modèle',
+              objName:  '{{$_modele->nom|smarty:nodefaults|JSAttribute}}'
+            })">{{tr}}Delete{{/tr}}</button>
         </form>
       {{/if}}
     </td>
   </tr>
-
   {{foreachelse}}
   <tr>
     <td colspan="10" class="empty">{{tr}}CCompteRendu.none{{/tr}}</td>

@@ -22,7 +22,7 @@ $where = array();
 $where["object_class"] = "= '$object_class'";
 $where[] = "(
   pack.user_id IN ('".$user_id."', '".CAppUI::$user->_id."') OR
-  pack.function_id = '$function_id' OR 
+  pack.function_id = '$function_id' OR
   pack.group_id = '$group_id'
 )";
 $where[] = "pack.pack_id IN ( SELECT pack_id FROM modele_to_pack)";

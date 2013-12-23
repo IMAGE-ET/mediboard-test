@@ -89,19 +89,17 @@ class CPack extends CMbObject {
   }
   
   function loadRefOwner() {
-    $this->_ref_user     = $this->loadFwdRef("user_id");
-    $this->_ref_function = $this->loadFwdRef("function_id");
-    $this->_ref_group    = $this->loadFwdRef("group_id");
+    $this->_ref_user     = $this->loadFwdRef("user_id", true);
+    $this->_ref_function = $this->loadFwdRef("function_id", true);
+    $this->_ref_group    = $this->loadFwdRef("group_id", true);
     
     if ($this->_ref_user->_id) {
       $this->_ref_owner = $this->_ref_user;
     }
-
-    if ($this->_ref_function->_id) {
+    elseif ($this->_ref_function->_id) {
       $this->_ref_owner = $this->_ref_function;
     }
-
-    if ($this->_ref_group->_id) {
+    elseif ($this->_ref_group->_id) {
       $this->_ref_owner = $this->_ref_group;
     }
     
@@ -197,7 +195,7 @@ class CPack extends CMbObject {
    */
   static function loadAllPacksFor($id, $owner = 'user', $object_class = null) {
     $packs = array(
-      "user" => array(), // warning: it's not prat like in CCompteRendu
+      "prat" => array(), // warning: it's not prat like in CCompteRendu
       "func" => array(),
       "etab" => array(),
     );
@@ -205,7 +203,7 @@ class CPack extends CMbObject {
     if (!$id) {
       return $packs;
     }
-    
+
     // Clauses de recherche
     $pack = new CPack();
     $where = array();
@@ -217,7 +215,7 @@ class CPack extends CMbObject {
     $order = "object_class, nom";
 
     switch ($owner) {
-      case 'user': // Modèle du praticien
+      case 'prat': // Modèle du praticien
         $user = new CMediusers();
         if (!$user->load($id)) {
           return $packs;
@@ -227,7 +225,7 @@ class CPack extends CMbObject {
         $where["user_id"]     = "= '$user->_id'";
         $where["function_id"] = "IS NULL";
         $where["group_id"]    = "IS NULL";
-        $packs["user"] = $pack->loadlist($where, $order);
+        $packs["prat"] = $pack->loadlist($where, $order);
         
       case 'func': // Modèle de la fonction
         if (isset($user)) {
@@ -254,7 +252,6 @@ class CPack extends CMbObject {
           if (!$etab->load($id)) {
             return $packs;
           }
-          
           $etab_id = $etab->_id;
         }
         else if (isset($func)) {
@@ -324,7 +321,7 @@ class CPack extends CMbObject {
   }
   
   function getModelesIds() {
-    $ds = $this->_spec->ds;
+    $ds = $this->getDS();
     
     $request = new CRequest();
     $request->addSelect("modele_id");

@@ -545,10 +545,6 @@ class CTemplateManager {
    * @return void
    */
   function loadLists($user_id, $compte_rendu_id = 0) {
-    // Liste de choix
-    $compte_rendu = new CCompteRendu();
-    $compte_rendu->load($compte_rendu_id);
-
     $where = array();
     $user = CMediusers::get($user_id);
     $user->loadRefFunction();
@@ -560,13 +556,15 @@ class CTemplateManager {
       )";
     }
     else {
+      $compte_rendu = new CCompteRendu();
+      $compte_rendu->load($compte_rendu_id);
       $where[] = "(
         function_id IN('$user->function_id', '$compte_rendu->function_id') OR
         group_id IN('{$user->_ref_function->group_id}', '$compte_rendu->group_id')
       )";
     }
 
-    $where[] = $compte_rendu->_spec->ds->prepare("`compte_rendu_id` IS NULL OR compte_rendu_id = %", $compte_rendu_id);
+    $where[] = $user->getDS()->prepare("`compte_rendu_id` IS NULL OR compte_rendu_id = %", $compte_rendu_id);
     $order = "nom ASC";
     $lists = new CListeChoix();
     $this->allLists = $lists->loadList($where, $order);
@@ -588,11 +586,10 @@ class CTemplateManager {
    */
   function loadHelpers($user_id, $modeleType, $other_function_id = "") {
     $compte_rendu = new CCompteRendu();
-    $ds = $compte_rendu->_spec->ds;
+    $ds = $compte_rendu->getDS();
 
     // Chargement de l'utilisateur courant
-    $currUser = new CMediusers();
-    $currUser->load($user_id);
+    $currUser = CMediusers::get($user_id);
 
     $order = "name";
 

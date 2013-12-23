@@ -11,15 +11,17 @@
  * @link     http://www.mediboard.org
  */
 
-// Chargement de l'objet
 $object_id    = CValue::get("object_id");
 $object_class = CValue::get("object_class");
+$praticien_id = CValue::getOrSession("praticien_id");
+
+// Chargement de l'objet
 $object = new $object_class;
 /** @var $object CMbObject */
 $object->load($object_id);
 
 // Chargement du praticien concerné et des praticiens disponibles
-$praticien = CMediusers::get(CValue::getOrSession("praticien_id"));
+$praticien = CMediusers::get($praticien_id);
 $praticien->canDo();
 $praticiens = $praticien->loadPraticiens(PERM_EDIT);
 
@@ -27,23 +29,17 @@ $praticiens = $praticien->loadPraticiens(PERM_EDIT);
 $templateClasses = $object->getTemplateClasses();
 
 // Chargement des modeles de consultations du praticien
-$order = "nom";
-
-$wherePrat = array();
-$whereFunc = array();
-
 $modelesCompat = array();
 $modelesNonCompat = array();
 
 // Chargement des modeles pour chaque classe, pour les praticiens et leur fonction
 foreach ($templateClasses as $class => $id) {
-  $modeles = CCompteRendu::loadAllModelesFor($praticien->_id, 'prat', $class, null, 0);
+  $modeles = CCompteRendu::loadAllModelesFor($praticien->_id, 'prat', $class, 'body', 0);
   if ($id) {
     $modelesCompat[$class] = $modeles;
+    continue;
   }
-  else {
-    $modelesNonCompat[$class] = $modeles;
-  }
+  $modelesNonCompat[$class] = $modeles;
 }
 
 // Création du template

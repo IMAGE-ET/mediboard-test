@@ -11,6 +11,8 @@
  * @link     http://www.mediboard.org
  */
 
+CCanDo::checkRead();
+
 $object_id    = CValue::get("object_id");
 $object_class = CValue::get("object_class");
 

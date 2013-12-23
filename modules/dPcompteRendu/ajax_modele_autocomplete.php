@@ -16,16 +16,15 @@ $object_class = CValue::get("object_class");
 $keywords     = CValue::post("keywords_modele");
 $fast_edit    = CValue::get("fast_edit", 1);
 
-$user = new CMediusers();
-$user->load($user_id);
+$user = CMediusers::get($user_id);
 $user->loadRefFunction();
+
+$curr_user = CMediusers::get();
 
 $compte_rendu = new CCompteRendu();
 $modeles      = array();
-$order        = "nom";
 
 $where = array();
-
 if (!$fast_edit) {
   $where["fast_edit"] = " = '0'";
   $where["fast_edit_pdf"] = " = '0'";
@@ -33,44 +32,42 @@ if (!$fast_edit) {
 
 $where["object_class"] = "= '$object_class'";
 $where["type"] = "= 'body'";
-$where["user_id"] = " = '".CAppUI::$user->_id."'";
+
+// Niveau utilisateur
+$where["user_id"] = " = '$curr_user->_id'";
 if ($user->canEdit()) {
-  $where["user_id"] = "IN ('$user->_id', '".CAppUI::$user->_id."')";
+  $where["user_id"] = "IN ('$user->_id', '$curr_user->_id')";
 }
-$modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, null, null, null, $order));
+$modeles = $compte_rendu->seek($keywords, $where);
 
-unset($where["user_id"]);
-
-$where["type"] = "= 'body'";
-
+// Niveau fonction
 // Inclusion des fonctions secondaires de l'utilisateur connecté
 // et de l'utilisateur concerné
-
+unset($where["user_id"]);
 $sec_function = new CSecondaryFunction();
 $whereSecFunc = array();
-$whereSecFunc["user_id"] = " = '".CAppUI::$user->_id."'";
+$whereSecFunc["user_id"] = " = '$curr_user->_id'";
 if ($user->canEdit()) {
-  $whereSecFunc["user_id"] = "IN ('$user->_id', '".CAppUI::$user->_id."')";
+  $whereSecFunc["user_id"] = "IN ('$user->_id', '$curr_user->_id')";
 }
-$sec_functions = $sec_function->loadList($whereSecFunc);
+$sec_functions = $sec_function->loadIds($whereSecFunc);
 
 $functions_ids = CMbArray::pluck($sec_functions, "function_id");
-
-$functions_ids = array_merge($functions_ids, array($user->function_id, CAppUI::$user->function_id));
+$functions_ids = array_merge($functions_ids, array($user->function_id, $curr_user->function_id));
 $where["function_id"] = CSQLDataSource::prepareIn($functions_ids);
-$modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, null, null, null, $order));
+$modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where));
 
+// Niveau établissement
 unset($where["function_id"]);
-
-$where["type"] = "= 'body'";
 $where["group_id"] = " = '$user->_group_id'";
-$modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, null, null, null, $order));
+$modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where));
 
 $modeles = CModelObject::naturalSort($modeles, array("nom"), true);
 
 $smarty = new CSmartyDP();
 
-$smarty->assign("modeles", $modeles);
-$smarty->assign("nodebug", true);
+$smarty->assign("modeles" , $modeles);
+$smarty->assign("nodebug" , true);
 $smarty->assign("keywords", $keywords);
+
 $smarty->display("inc_modele_autocomplete.tpl");

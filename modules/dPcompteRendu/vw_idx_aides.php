@@ -64,42 +64,18 @@ foreach ($classes as $class => &$infos) {
 
 CMbArray::removeValue(array(), $classes);
 
-// Liste des users accessibles
-$listPrat = new CMediusers();
-$listFct = $listPrat->loadFonctions(PERM_EDIT);
-
-$where = array();
-$where["users_mediboard.function_id"] = CSQLDataSource::prepareIn(array_keys($listFct));
-
-$ljoin = array();
-$ljoin["users"] = "`users`.`user_id` = `users_mediboard`.`user_id`";
-
-$order = "`users`.`user_last_name`, `users`.`user_first_name`";
-
-$listPrat = $listPrat->loadList($where, $order, null, null, $ljoin);
-
-/** @var $mediuser CMediusers */
-foreach ($listPrat as $keyUser => $mediuser) {
-  $mediuser->_ref_function =& $listFct[$mediuser->function_id];
-}
-
-$listFunc = new CFunctions();
-$listFunc = $listFunc->loadSpecialites(PERM_EDIT);
-
-$listEtab = CGroups::loadGroups(PERM_EDIT);
-
 $userSel = CMediusers::get($filter_user_id);
-$userSel->loadRefFunction();
-$userSel->_ref_function->loadRefGroup();
+$userSel->loadRefFunction()->loadRefGroup();
 
-if ($userSel->isPraticien()) {
-  CValue::setSession("filter_user_id", $userSel->user_id);
-  $filter_user_id = $userSel->user_id;
-}
+$filter_user_id = $userSel->_id;
+
+$listPrat = $userSel->loadUsers(PERM_EDIT);
+$listFunc = CMediusers::loadFonctions(PERM_EDIT);
+$listEtab = CGroups::loadGroups(PERM_EDIT);
 
 // Aide sélectionnée
 $aide = new CAideSaisie();
-$aide->load($aide_id); 
+$aide->load($aide_id);
 
 if ($aide->_id) {
   $aide->loadRefs();

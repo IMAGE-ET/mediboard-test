@@ -8,10 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-Main.add(function(){
-  Control.Tabs.create('tabs-owner', true);
-});
+<script>
+  Main.add(function(){
+    Control.Tabs.create('tabs-owner', true);
+  });
 </script>
 
 <ul id="tabs-owner" class="control_tabs">
@@ -31,8 +31,6 @@ Main.add(function(){
     </a>
   </li>
 </ul>
-
-<hr class="control_tabs" />
 
 <div id="owner-user" style="display: none;">
   {{mb_include template=inc_list_aides owner=$userSel aides=$aides.user type=user aides_ids=$aides.user_ids}}

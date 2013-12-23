@@ -163,8 +163,6 @@ if ($compte_rendu->_id) {
   }
 }
 
-$formats = CCompteRendu::$_page_formats;
-
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -172,7 +170,6 @@ $smarty->assign("mediuser"            , $mediuser);
 $smarty->assign("isPraticien"         , $mediuser->isPraticien());
 $smarty->assign("user_id"             , $mediuser->_id);
 $smarty->assign("prat_id"             , $prat_id);
-$smarty->assign("compte_rendu_id"     , $compte_rendu_id);
 $smarty->assign("listPrat"            , $listUser);
 $smarty->assign("listEtab"            , $listEtab);
 $smarty->assign("listFunc"            , $listFunc);
@@ -184,7 +181,6 @@ $smarty->assign("headers"             , $headers);
 $smarty->assign("prefaces"            , $prefaces);
 $smarty->assign("endings"             , $endings);
 $smarty->assign("footers"             , $footers);
-$smarty->assign("formats"             , $formats);
 $smarty->assign("special_names"       , CCompteRendu::$special_names);
 
 $smarty->display("addedit_modeles.tpl");

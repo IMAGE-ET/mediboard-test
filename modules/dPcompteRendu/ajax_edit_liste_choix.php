@@ -16,10 +16,6 @@ CCanDo::checkRead();
 $user_id  = CValue::getOrSession("user_id");
 $liste_id = CValue::getOrSession("liste_id");
 
-if (!$user_id) {
-  $user_id = CAppUI::$user->_id;
-}
-
 // Utilisateurs disponibles
 $user = CMediusers::get($user_id);
 $users = $user->loadUsers(PERM_EDIT);

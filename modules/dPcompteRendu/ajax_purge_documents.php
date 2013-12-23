@@ -22,6 +22,8 @@ $where["purgeable"] = "= '1'";
 
 $modeles = $modele->loadList($where);
 
+CMbObject::massCountBackRefs($modeles, "documents_generated");
+
 foreach ($modeles as $_modele) {
   $documents = $_modele->loadBackRefs("documents_generated", null, $limit);
   foreach ($documents as $_doc) {

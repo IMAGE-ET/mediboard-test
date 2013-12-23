@@ -10,6 +10,7 @@
  * @version  SVN: $Id:\$
  * @link     http://www.mediboard.org
  */
+
 CCanDo::checkRead();
 
 $order_col = CValue::getOrSession("order_col", "object_class");
@@ -30,22 +31,17 @@ switch ($order_col) {
     $order = "file_category_id $order_way, object_class, nom";
 }
 
-// Liste des praticiens et cabinets accessibles
-$user = CMediusers::get();
-$praticiens = $user->loadUsers(PERM_EDIT);
-
 // Filtres
 $filtre = new CCompteRendu();
-$filtre->user_id      = CValue::getOrSession("user_id", $user->_id);
+$filtre->user_id      = CValue::getOrSession("user_id");
 $filtre->object_class = CValue::getOrSession("object_class");
 $filtre->type         = CValue::getOrSession("type");
 
 // Praticien
-$user = new CMediusers;
-$user->load($filtre->user_id);
-if ($user->isPraticien()) {
-  CValue::setSession("prat_id", $user->_id);
-}
+// Liste des praticiens et cabinets accessibles
+$user = CMediusers::get($filtre->user_id);
+$filtre->user_id = $user->_id;
+$praticiens = $user->loadUsers(PERM_EDIT);
 
 $owners = $user->getOwners();
 $modeles = CCompteRendu::loadAllModelesFor($filtre->user_id, 'prat', $filtre->object_class, $filtre->type, 1, $order);
@@ -56,24 +52,21 @@ foreach ($modeles as $_modeles) {
   foreach ($_modeles as $_modele) {
     $_modele->canDo();
     $_modele->countBackRefs("documents_generated");
-    if ($_modele->type == "body") {
-      $_modele->loadComponents();
-    }
-
-    if ($_modele->type == "header") {
-      $_modele->countBackRefs("modeles_headed"); 
-    }
-    
-    if ($_modele->type == "footer") {
-      $_modele->countBackRefs("modeles_footed"); 
-    }
-    
-    if ($_modele->type == "preface") {
-      $_modele->countBackRefs("modeles_prefaced");
-    }
-    
-    if ($_modele->type == "ending") {
-      $_modele->countBackRefs("modeles_ended");
+    switch ($_modele->type) {
+      case "body":
+        $_modele->loadComponents();
+        break;
+      case "header":
+        $_modele->countBackRefs("modeles_headed");
+        break;
+      case "footer":
+        $_modele->countBackRefs("modeles_footed");
+        break;
+      case "preface":
+        $_modele->countBackRefs("modeles_prefaced");
+        break;
+      case "ending":
+        $_modele->countBackRefs("modeles_ended");
     }
   }
 }

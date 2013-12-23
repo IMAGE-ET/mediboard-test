@@ -11,8 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-$user = CMediusers::get();
-
 $object_class = CValue::getOrSession("object_class");
 $object_id    = CValue::getOrSession("object_id");
 $user_id      = CValue::getOrSession("praticien_id");
@@ -32,6 +30,8 @@ if (!$object->_id) {
 }
 
 $object->canDo();
+
+$user = CMediusers::get();
 
 // Praticien concerné
 if (!$user->isPraticien() && $user_id) {
@@ -53,13 +53,9 @@ if ($object->loadRefsDocs()) {
 
 // Compter les modèles d'étiquettes
 $modele_etiquette = new CModeleEtiquette();
-
-$where = array();
-
-$where['object_class'] = " = '$object_class'";
-$where["group_id"] = " = '".CGroups::loadCurrent()->_id."'";
-
-$nb_modeles_etiquettes = $modele_etiquette->countList($where);
+$modele_etiquette->object_class = $object_class;
+$modele_etiquette->group_id = CGroups::loadCurrent()->_id;
+$nb_modeles_etiquettes = $modele_etiquette->countMatchingList();
 
 $nb_printers = 0;
 

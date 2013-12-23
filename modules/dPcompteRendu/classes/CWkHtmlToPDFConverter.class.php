@@ -57,118 +57,119 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
       $this->html,
       $matches
     );
-    
-    // Le facteur 10 est pour la conversion en mm
-    $this->margins = array(
-      "top"    => $matches[1] * 10,
-      "right"  => $matches[2] * 10,
-      "bottom" => $matches[3] * 10,
-      "left"   => $matches[4] * 10,
-    );
-    
-    $pos_header = strpos($this->html, "<div id=\"header\"");
-    $pos_footer = strpos($this->html, "<div id=\"footer\"");
-    $pos_body   = strpos($this->html, "<div id=\"body\">");
-    
-    /* header / footer sans body */
-    if (!$pos_body) {
-      $pos_body = strlen($this->html) - 16;
-    }
-    
-    $header     = null;
-    $footer     = null;
-    $header_footer_common = null;
-    $page_number = "<script type='text/javascript'>
-      function subst() {
-        var vars = {},
-            x = document.location.search.substring(1).split('&');
-        for (var i in x) {
-          var z = x[i].split('=', 2);
-          vars[z[0]] = decodeURI(z[1]);
-        }
-        x = ['page'];
-        for (var j in x) {
-          z = x[j];
-          var y = document.getElementsByClassName(z);
-          for (var k = 0; k < y.length; ++k) {
-            y[k].textContent = vars[z];
+
+    if (count($matches)) {
+      // Le facteur 10 est pour la conversion en mm
+      $this->margins = array(
+        "top"    => $matches[1] * 10,
+        "right"  => $matches[2] * 10,
+        "bottom" => $matches[3] * 10,
+        "left"   => $matches[4] * 10,
+      );
+
+      $pos_header = strpos($this->html, "<div id=\"header\"");
+      $pos_footer = strpos($this->html, "<div id=\"footer\"");
+      $pos_body   = strpos($this->html, "<div id=\"body\">");
+
+      /* header / footer sans body */
+      if (!$pos_body) {
+        $pos_body = strlen($this->html) - 16;
+      }
+
+      $header     = null;
+      $footer     = null;
+      $header_footer_common = null;
+      $page_number = "<script type='text/javascript'>
+        function subst() {
+          var vars = {},
+              x = document.location.search.substring(1).split('&');
+          for (var i in x) {
+            var z = x[i].split('=', 2);
+            vars[z[0]] = decodeURI(z[1]);
+          }
+          x = ['page'];
+          for (var j in x) {
+            z = x[j];
+            var y = document.getElementsByClassName(z);
+            for (var k = 0; k < y.length; ++k) {
+              y[k].textContent = vars[z];
+            }
           }
         }
+      </script>";
+      // Extraire l'entête
+      if ($pos_header) {
+        $header_footer_common = substr($this->html, 0, $pos_header);
+        if ($pos_footer) {
+          $header = substr($this->html, $pos_header, $pos_footer - $pos_header);
+        }
+        else {
+          $header = substr($this->html, $pos_header, $pos_body - $pos_header);
+        }
+
+        // On trouve la taille du header dans le style
+        preg_match("/#header\s*\{\s*height:\s*([0-9]+[\.0-9]*)px;/", $this->html, $matches);
+        $this->header_height = $matches[1];
       }
-    </script>";
-    // Extraire l'entête
-    if ($pos_header) {
-      $header_footer_common = substr($this->html, 0, $pos_header);
+
+      // Extraire le pied de page
       if ($pos_footer) {
-        $header = substr($this->html, $pos_header, $pos_footer - $pos_header);
+        if (!$pos_header) {
+          $header_footer_common = substr($this->html, 0, $pos_footer);
+        }
+        $footer = substr($this->html, $pos_footer, $pos_body - $pos_footer);
+
+        $this->html = str_replace($footer, '', $this->html);
+
+        preg_match("/#footer\s*{\s*height:\s*([0-9]+[\.0-9]*)px;/", $this->html, $matches);
+        $this->footer_height = $matches[1];
       }
-      else {
-        $header = substr($this->html, $pos_header, $pos_body - $pos_header);
+
+      // Supprimer le padding-top du hr et le margin-top du body
+      $this->html = preg_replace("/body\s*\{\s*margin-top:\s*[0-9]*px;\s*\}/", "", $this->html);
+      if ($header_footer_common != null) {
+        $header_footer_common = preg_replace("/body\s*\{\s*margin-top:\s*[0-9]*px;\s*\}/", "", $header_footer_common);
+        $header_footer_common = preg_replace("/<body>/", "<body onload='subst()'>", $header_footer_common);
       }
-      
-      // On trouve la taille du header dans le style
-      preg_match("/#header\s*\{\s*height:\s*([0-9]+[\.0-9]*)px;/", $this->html, $matches);
-      $this->header_height = $matches[1];
-    }
-    
-    // Extraire le pied de page
-    if ($pos_footer) {
-      if (!$pos_header) {
-        $header_footer_common = substr($this->html, 0, $pos_footer);
+      $this->html = preg_replace("/hr.pagebreak\s*{\s*padding-top:\s*[0-9]*px;\s*}/", "", $this->html);
+
+      // Supprimer le margin-bottom du body
+      $this->html = preg_replace("/body\s*\{\s*margin-bottom:\s*[0-9]*px;\s*\}/", "", $this->html);
+
+      if ($header_footer_common != null) {
+        $header_footer_common = preg_replace("/body\s*\{\s*margin-bottom:\s*[0-9]*px;\s*\}/", "", $header_footer_common);
       }
-      $footer = substr($this->html, $pos_footer, $pos_body - $pos_footer);
-      
-      $this->html = str_replace($footer, '', $this->html);
-      
-      preg_match("/#footer\s*{\s*height:\s*([0-9]+[\.0-9]*)px;/", $this->html, $matches);
-      $this->footer_height = $matches[1];
+
+      // Suppression de la balise script pour l'impression
+      $this->html = preg_replace("/(<script type=[\'\"]text\/javascript[\'\"]>.*<\/script>)/msU", "", $this->html);
+
+      // Supression du margin: 0 et padding: 0
+      $this->html = preg_replace("/body\s*{([a-zA-Z0-9:;\-\n\s\t]*)(margin:\s*0;[\n\t\s]*padding:\s*0;)/", 'body { $1', $this->html);
+
+      // Suppression du position fixed du header et du footer
+      if ($header_footer_common) {
+        $header_footer_common = preg_replace("/position:\s*fixed;/", "", $header_footer_common);
+        $header_footer_common = preg_replace("/(<script type=[\'\"]text\/javascript[\'\"]>.*<\/script>)/msU", "", $header_footer_common);
+      }
+
+      // Store de l'entête / pied de page
+      if ($header) {
+        // On supprime l'entête que maintenant sinon les positions de chaînes seront erronées
+        $this->html = str_replace($header, '', $this->html);
+        $this->header = $this->temp_name . "-header.html";
+        file_put_contents($this->header, $header_footer_common.$page_number.$header."</body></html>");
+      }
+      if ($footer) {
+        $this->footer = $this->temp_name . "-footer.html";
+        file_put_contents($this->footer, $header_footer_common.$page_number.$footer."</body></html>");
+      }
+
+      if (!$pos_body) {
+        $this->html = $header_footer_common . "</body></html>";
+      }
     }
-    
-    // Supprimer le padding-top du hr et le margin-top du body
-    $this->html = preg_replace("/body\s*\{\s*margin-top:\s*[0-9]*px;\s*\}/", "", $this->html);
-    if ($header_footer_common != null) {
-      $header_footer_common = preg_replace("/body\s*\{\s*margin-top:\s*[0-9]*px;\s*\}/", "", $header_footer_common);
-      $header_footer_common = preg_replace("/<body>/", "<body onload='subst()'>", $header_footer_common);
-    }
-    $this->html = preg_replace("/hr.pagebreak\s*{\s*padding-top:\s*[0-9]*px;\s*}/", "", $this->html);
-    
-    // Supprimer le margin-bottom du body
-    $this->html = preg_replace("/body\s*\{\s*margin-bottom:\s*[0-9]*px;\s*\}/", "", $this->html);
-    
-    if ($header_footer_common != null) {
-      $header_footer_common = preg_replace("/body\s*\{\s*margin-bottom:\s*[0-9]*px;\s*\}/", "", $header_footer_common);
-    }
-    
-    // Suppression de la balise script pour l'impression
-    $this->html = preg_replace("/(<script type=[\'\"]text\/javascript[\'\"]>.*<\/script>)/msU", "", $this->html);
-    
-    // Supression du margin: 0 et padding: 0
-    $this->html = preg_replace("/body\s*{([a-zA-Z0-9:;\-\n\s\t]*)(margin:\s*0;[\n\t\s]*padding:\s*0;)/", 'body { $1', $this->html);
-    
-    // Suppression du position fixed du header et du footer
-    if ($header_footer_common) {
-      $header_footer_common = preg_replace("/position:\s*fixed;/", "", $header_footer_common);
-      $header_footer_common = preg_replace("/(<script type=[\'\"]text\/javascript[\'\"]>.*<\/script>)/msU", "", $header_footer_common);
-    }
-    
-    // Store de l'entête / pied de page
-    if ($header) {
-      // On supprime l'entête que maintenant sinon les positions de chaînes seront erronées
-      $this->html = str_replace($header, '', $this->html);
-      $this->header = $this->temp_name . "-header.html";
-      file_put_contents($this->header, $header_footer_common.$page_number.$header."</body></html>");
-    }
-    if ($footer) {
-      $this->footer = $this->temp_name . "-footer.html";
-      file_put_contents($this->footer, $header_footer_common.$page_number.$footer."</body></html>");
-    }
-    
+
     $this->file = $this->temp_name.".html";
-    
-    if (!$pos_body) {
-      $this->html = $header_footer_common . "</body></html>";
-    }
-    
     file_put_contents($this->file, $this->html);
     
   }
@@ -202,10 +203,12 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     }
     
     // Marges
-    foreach ($this->margins as $key=>$_marge) {
-      $options .= "--margin-$key ".escapeshellarg($_marge)." ";
+    if ($this->margins) {
+      foreach ($this->margins as $key=>$_marge) {
+        $options .= "--margin-$key ".escapeshellarg($_marge)." ";
+      }
     }
-    
+
     // Format de la page
     if ($this->format && $this->orientation) {
       $options .= "--page-size ".escapeshellarg($this->format)." --orientation ". escapeshellarg($this->orientation)." ";

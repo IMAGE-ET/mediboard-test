@@ -254,7 +254,7 @@ Main.add(function () {
           <option value="">&mdash; Associer &mdash;</option>
           {{foreach from=$listPrat item=curr_prat}}
             <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $aide->user_id}} selected="selected" {{/if}}>
-              {{$curr_prat->_view}}
+              {{$curr_prat}}
             </option>
           {{/foreach}}
         </select>
@@ -268,7 +268,7 @@ Main.add(function () {
           <option value="">&mdash; Associer &mdash;</option>
           {{foreach from=$listFunc item=curr_func}}
             <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->function_id}}" {{if $curr_func->function_id == $aide->function_id}} selected="selected" {{/if}}>
-              {{$curr_func->_view}}
+              {{$curr_func}}
             </option>
           {{/foreach}}
         </select>
@@ -314,7 +314,7 @@ Main.add(function () {
           {{mb_field object=$aide field="depend_value_1" hidden=true}}
             <input type="hidden" name="_ref_class_depend_value_1" value="{{$aide->_class_dp_1}}" />
             <input type="text" name="_depend_value_2_view" value="{{$aide->_vw_depend_field_1}}" />
-            <script type="text/javascript">
+            <script>
               Main.add(function(){
                 var form = getForm("editFrm");
 
@@ -349,7 +349,7 @@ Main.add(function () {
           {{mb_field object=$aide field="depend_value_2" hidden=true}}
             <input type="hidden" name="_ref_class_depend_value_2" value="{{$aide->_class_dp_2}}" />
             <input type="text" name="_depend_value_2_view" value="{{$aide->_vw_depend_field_2}}" />
-            <script type="text/javascript">
+            <script>
               Main.add(function(){
                 var form = getForm("editFrm");
 

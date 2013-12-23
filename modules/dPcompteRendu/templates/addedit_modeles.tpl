@@ -1,7 +1,7 @@
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 {{assign var=pdf_and_thumbs value=$app->user_prefs.pdf_and_thumbs}}
 
-<script type="text/javascript">
+<script>
 window.same_print = {{$conf.dPcompteRendu.CCompteRendu.same_print}};
 window.pdf_thumbnails = {{$pdf_thumbnails|@json}} == 1;
 
@@ -168,7 +168,7 @@ function setTemplateName(object_class, name, type) {
 
 {{mb_script module=compteRendu script=thumb}}
 
-<script type="text/javascript">
+<script>
 
 Main.add(function () {
   loadObjectClass('{{$compte_rendu->object_class}}');
@@ -308,7 +308,7 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
             <select {{if !$droit}}disabled='disabled'{{/if}} name="group_id" class="{{$compte_rendu->_props.group_id}}" style="width: 15em;">
               <option value="">&mdash; {{tr}}Associate{{/tr}}</option>
               {{foreach from=$listEtab item=curr_etab}}
-              <option value="{{$curr_etab->_id}}" {{if $curr_etab->_id == $compte_rendu->group_id}} selected="selected" {{/if}}>
+              <option value="{{$curr_etab->_id}}" {{if $curr_etab->_id == $compte_rendu->group_id}}selected{{/if}}>
               {{$curr_etab}}
               </option>
               {{/foreach}}
@@ -322,16 +322,16 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
             {{if !$droit}}
                <input type="hidden" name="function_id" />
             {{/if}}
-            <select {{if !$droit}}disabled='disabled'{{/if}} name="function_id" class="{{$compte_rendu->_props.function_id}}" style="width: 15em;">
+            <select name="function_id" class="{{$compte_rendu->_props.function_id}}" style="width: 15em;" {{if !$droit}}disabled{{/if}} >
               <option value="">&mdash; {{tr}}Associate{{/tr}}</option>
               {{foreach from=$listFunc item=curr_func}}
-              <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->_id}}" {{if $curr_func->_id == $compte_rendu->function_id}} selected="selected" {{/if}}>
-              {{if $smarty.session.browser.name == "msie"}}
-                {{$curr_func->_view|truncate:45}}
-              {{else}}
-                {{$curr_func->_view}}
-              {{/if}}
-              </option>
+                <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->_id}}" {{if $curr_func->_id == $compte_rendu->function_id}}selected{{/if}}>
+                  {{if $smarty.session.browser.name == "msie"}}
+                    {{$curr_func->_view|truncate:45}}
+                  {{else}}
+                    {{$curr_func->_view}}
+                  {{/if}}
+                </option>
               {{/foreach}}
             </select>
           </td>
@@ -343,13 +343,9 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
             {{if !$droit}}
               <input type="hidden" name="user_id" value="{{$mediuser->_id}}" />
             {{/if}}
-            <select {{if !$droit}}disabled='disabled'{{/if}} name="user_id" class="{{$compte_rendu->_props.user_id}}" style="width: 15em;">
+            <select name="user_id" class="{{$compte_rendu->_props.user_id}}" style="width: 15em;" {{if !$droit}}disabled='disabled'{{/if}}>
               <option value="">&mdash; {{tr}}Associate{{/tr}}</option>
-              {{foreach from=$listPrat item=curr_prat}}
-              <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->_id}}" {{if $curr_prat->_id == $compte_rendu->user_id}} selected="selected" {{/if}}>
-              {{$curr_prat->_view}}
-              </option>
-              {{/foreach}}
+              {{mb_include module=mediusers template=inc_options_mediuser list=$listPrat selected=$compte_rendu->user_id}}
             </select>
           </td>
         </tr>
@@ -464,7 +460,7 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
                   {{foreach from=$headers item=headersByOwner key=owner}}
                   <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
                     {{foreach from=$headersByOwner item=_header}}
-                    <option value="{{$_header->_id}}" {{if $compte_rendu->header_id == $_header->_id}}selected="selected"{{/if}}>{{$_header->nom}}</option>
+                    <option value="{{$_header->_id}}" {{if $compte_rendu->header_id == $_header->_id}}selected{{/if}}>{{$_header->nom}}</option>
                     {{foreachelse}}
                     <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
                     {{/foreach}}
@@ -479,12 +475,12 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
             <tr id="prefaces">
               <th>{{mb_label object=$compte_rendu field=preface_id}}</th>
               <td>
-                <select name="preface_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.preface_id}}" {{if !$droit}}disabled="disabled"{{/if}} style="width: 15em;">
+                <select name="preface_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.preface_id}}" {{if !$droit}}disabled{{/if}} style="width: 15em;">
                   <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                   {{foreach from=$prefaces item=prefacesByOwner key=owner}}
                   <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
                     {{foreach from=$prefacesByOwner item=_preface}}
-                    <option value="{{$_preface->_id}}" {{if $compte_rendu->preface_id == $_preface->_id}}selected="selected"{{/if}}>{{$_preface->nom}}</option>
+                    <option value="{{$_preface->_id}}" {{if $compte_rendu->preface_id == $_preface->_id}}selected{{/if}}>{{$_preface->nom}}</option>
                     {{foreachelse}}
                     <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
                     {{/foreach}}
@@ -499,12 +495,12 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
             <tr id="endings">
               <th>{{mb_label object=$compte_rendu field=ending_id}}</th>
               <td>
-                <select name="ending_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.ending_id}}" {{if !$droit}}disabled="disabled"{{/if}} style="width: 15em;">
+                <select name="ending_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.ending_id}}" {{if !$droit}}disabled{{/if}} style="width: 15em;">
                   <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                   {{foreach from=$endings item=endingsByOwner key=owner}}
                   <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
                     {{foreach from=$endingsByOwner item=_ending}}
-                    <option value="{{$_ending->_id}}" {{if $compte_rendu->ending_id == $_ending->_id}}selected="selected"{{/if}}>{{$_ending->nom}}</option>
+                    <option value="{{$_ending->_id}}" {{if $compte_rendu->ending_id == $_ending->_id}}selected{{/if}}>{{$_ending->nom}}</option>
                     {{foreachelse}}
                     <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
                     {{/foreach}}
@@ -519,12 +515,12 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
             <tr id="footers">
               <th>{{mb_label object=$compte_rendu field=footer_id}}</th>
               <td>
-                <select name="footer_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.footer_id}}" {{if !$droit}}disabled="disabled"{{/if}} style="width: 15em;">
+                <select name="footer_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.footer_id}}" {{if !$droit}}disabled{{/if}} style="width: 15em;">
                   <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                   {{foreach from=$footers item=footersByOwner key=owner}}
                   <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
                     {{foreach from=$footersByOwner item=_footer}}
-                    <option value="{{$_footer->_id}}" {{if $compte_rendu->footer_id == $_footer->_id}}selected="selected"{{/if}}>{{$_footer->nom}}</option>
+                    <option value="{{$_footer->_id}}" {{if $compte_rendu->footer_id == $_footer->_id}}selected{{/if}}>{{$_footer->nom}}</option>
                     {{foreachelse}}
                     <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
                     {{/foreach}}
@@ -633,8 +629,8 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
           </div>
         {{/if}}
 
-    <hr />
-    <table class="form" style="width: 265px;">
+      <hr />
+      <table class="form" style="width: 265px;">
     
         <tr>
           {{if $droit}}

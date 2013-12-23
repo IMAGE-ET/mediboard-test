@@ -24,19 +24,8 @@ $aide_id        = CValue::getOrSession("aide_id", "0");
 
 $order_by = $order_col . " " . $order_way;
 
-$userSel = new CMediusers();
-$userSel->load($filter_user_id);
-
-if (!$userSel->_id) {
-  $userSel = CMediusers::get();
-}
-
+$userSel = CMediusers::get($filter_user_id);
 $userSel->loadRefFunction()->loadRefGroup();
-
-if ($userSel->isPraticien()) {
-  CValue::setSession("filter_user_id", $userSel->user_id);
-  $filter_user_id = $userSel->user_id;
-}
 
 $where = array();
 if ($filter_class) {
@@ -56,44 +45,42 @@ $aidesCount = array(
   "etab" => 0,
 );
 
-if ($userSel->user_id) {
-  $_aide = new CAideSaisie();
-  
-  $where["user_id"] = "= '$userSel->user_id'";
-  $aides["user_ids"] = array_keys($_aide->seek($keywords, $where, 1000));
-  $aides["user"] = $_aide->seek($keywords, $where, $start["user"].", 30", true, null, $order_by);
-  $aidesCount["user"] = $_aide->_totalSeek;
+$_aide = new CAideSaisie();
 
-  CMbObject::massCountBackRefs($aides['user'], 'hypertext_links');
-  CMbObject::massCountBackRefs($aides['func'], 'hypertext_links');
-  CMbObject::massCountBackRefs($aides['etab'], 'hypertext_links');
+$where["user_id"] = "= '$userSel->user_id'";
+$aides["user_ids"] = array_keys($_aide->seek($keywords, $where, 1000));
+$aides["user"] = $_aide->seek($keywords, $where, $start["user"].", 30", true, null, $order_by);
+$aidesCount["user"] = $_aide->_totalSeek;
 
-  foreach ($aides["user"] as $aide) {
-    $aide->loadRefsFwd();
-    $aide->loadBackRefs('hypertext_links');
-  }
-  unset($where["user_id"]);
+CMbObject::massCountBackRefs($aides['user'], 'hypertext_links');
+CMbObject::massCountBackRefs($aides['func'], 'hypertext_links');
+CMbObject::massCountBackRefs($aides['etab'], 'hypertext_links');
 
-  $where["function_id"] = "= '$userSel->function_id'";
-  $aides["func_ids"] = array_keys($_aide->seek($keywords, $where, 1000));
-  $aides["func"] = $_aide->seek($keywords, $where, $start["func"].", 30", true, null, $order_by);
-  $aidesCount["func"] = $_aide->_totalSeek;
-  foreach ($aides["func"] as $aide) {
-    $aide->loadRefsFwd();
-    $aide->loadBackRefs('hypertext_links');
-  }
-  unset($where["function_id"]);
-
-  $where["group_id"] = "= '{$userSel->_ref_function->group_id}'";
-  $aides["etab_ids"] = array_keys($_aide->seek($keywords, $where, 1000));
-  $aides["etab"] = $_aide->seek($keywords, $where, $start["etab"].", 30", true, null, $order_by);
-  $aidesCount["etab"] = $_aide->_totalSeek;
-  foreach ($aides["etab"] as $aide) {
-    $aide->loadRefsFwd();
-    $aide->loadBackRefs('hypertext_links');
-  }
-  unset($where["group_id"]);
+foreach ($aides["user"] as $aide) {
+  $aide->loadRefsFwd();
+  $aide->loadBackRefs('hypertext_links');
 }
+unset($where["user_id"]);
+
+$where["function_id"] = "= '$userSel->function_id'";
+$aides["func_ids"] = array_keys($_aide->seek($keywords, $where, 1000));
+$aides["func"] = $_aide->seek($keywords, $where, $start["func"].", 30", true, null, $order_by);
+$aidesCount["func"] = $_aide->_totalSeek;
+foreach ($aides["func"] as $aide) {
+  $aide->loadRefsFwd();
+  $aide->loadBackRefs('hypertext_links');
+}
+unset($where["function_id"]);
+
+$where["group_id"] = "= '{$userSel->_ref_function->group_id}'";
+$aides["etab_ids"] = array_keys($_aide->seek($keywords, $where, 1000));
+$aides["etab"] = $_aide->seek($keywords, $where, $start["etab"].", 30", true, null, $order_by);
+$aidesCount["etab"] = $_aide->_totalSeek;
+foreach ($aides["etab"] as $aide) {
+  $aide->loadRefsFwd();
+  $aide->loadBackRefs('hypertext_links');
+}
+unset($where["group_id"]);
 
 // Création du template
 $smarty = new CSmartyDP();

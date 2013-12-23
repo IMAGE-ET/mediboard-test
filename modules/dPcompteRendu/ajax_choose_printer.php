@@ -16,12 +16,9 @@ $object_class   = CValue::get("object_class");
 $object_id      = CValue::get("object_id");
 $modele_etiquette_id = CValue::get("modele_etiquette_id");
 
-$current_user = CAppUI::$user;
-$function_id  = $current_user->function_id;
-
 $printer = new CPrinter();
-$where = array("function_id" => "= '$function_id'");
-$printers = $printer->loadlist($where);
+$printer->function_id= CMediusers::get()->function_id;
+$printers = $printer->loadMatchingList();
 
 CMbObject::massLoadFwdRef($printers, "object_id");
 

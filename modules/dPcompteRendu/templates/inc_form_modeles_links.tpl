@@ -3,7 +3,7 @@
   {{mb_return}}
 {{/if}}
 
-<form name="Add-CPackToModele" action="?m={{$m}}" method="post" onsubmit="return Pack.onSubmitModele(this);">
+<form name="Add-CPackToModele" method="post" onsubmit="return Pack.onSubmitModele(this);">
   {{mb_class object=$link}}
   {{mb_key   object=$link}}
   {{mb_field object=$link field=pack_id hidden=1}}

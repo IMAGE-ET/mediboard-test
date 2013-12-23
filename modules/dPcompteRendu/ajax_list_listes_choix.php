@@ -14,12 +14,11 @@
 CCanDo::checkRead();
 
 $liste_id = CValue::getOrSession("liste_id");
-$user_id  = CValue::get("user_id");
+$user_id  = CValue::getOrSession("user_id");
 
-$user = new CMediusers;
-$user->load($user_id);
-$owners  = $user->getOwners();
-$listes  = CListeChoix::loadAllFor($user->_id);
+$user   = CMediusers::get($user_id);
+$owners = $user->getOwners();
+$listes = CListeChoix::loadAllFor($user->_id);
 
 // Modèles associés
 foreach ($listes as $_listes) {

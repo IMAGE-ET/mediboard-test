@@ -11,26 +11,23 @@
 </button>
     
 <form name="Filter" action="?" method="get" onsubmit="return ListeChoix.filter();">
+  <input type="hidden" name="m" value="{{$m}}" />
 
-<input type="hidden" name="m" value="{{$m}}" />
-
-<table class="form">
-  <tr>
-    <th class="category" colspan="10">{{tr}}Filter{{/tr}}</th>
-  </tr>
-  <tr>
-    <th><label for="user_id">Utilisateur</label></th>
-    <td>
-      <select name="user_id" onchange="this.form.onsubmit()">
-        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-        {{mb_include module=mediusers template=inc_options_mediuser list=$users selected=$user->_id}}
-      </select>
-    </td>
-  </tr>
-</table>
-
+  <table class="form">
+    <tr>
+      <th class="category" colspan="10">{{tr}}Filter{{/tr}}</th>
+    </tr>
+    <tr>
+      <th><label for="user_id">Utilisateur</label></th>
+      <td>
+        <select name="user_id" onchange="this.form.onsubmit()">
+          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+          {{mb_include module=mediusers template=inc_options_mediuser list=$users selected=$user_id}}
+        </select>
+      </td>
+    </tr>
+  </table>
 </form>
 
-<div id="list-listes_choix">
-</div>
+<div id="list-listes_choix"></div>
  

@@ -10,15 +10,16 @@
  * @version  SVN: $Id:\$
  * @link     http://www.mediboard.org
  */
+
 CCanDo::checkRead();
 
-$user_id      = CValue::getOrSession("user_id", CAppUI::$user->_id);
+$user_id      = CValue::getOrSession("user_id");
 $object_class = CValue::getOrSession("object_class");
 
 $user = CMediusers::get($user_id);
-$user->loadRefFunction();
+$owners = $user->getOwners();
+$packs = CPack::loadAllPacksFor($user->_id, "prat", $object_class);
 
-$packs = CPack::loadAllPacksFor($user_id, "user", $object_class);
 foreach ($packs as $_packs_by_owner) {
   foreach ($_packs_by_owner as $_pack) {
     /** @var $_pack CPack */
@@ -31,7 +32,8 @@ foreach ($packs as $_packs_by_owner) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("user" , $user);
-$smarty->assign("packs", $packs);
+$smarty->assign("user"  , $user);
+$smarty->assign("owners", $owners);
+$smarty->assign("packs" , $packs);
 
 $smarty->display("inc_list_pack.tpl");

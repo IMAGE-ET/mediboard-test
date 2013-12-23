@@ -1,20 +1,18 @@
 <!--  $Id: vw_idx_listes.tpl 12241 2011-05-20 10:29:53Z flaviencrochard $ -->
 
-    <form name="Edit" action="?m={{$m}}" class="{{$liste->_spec}}" method="post" onsubmit="return ListeChoix.onSubmit(this)">
+<form name="Edit" method="post" onsubmit="return ListeChoix.onSubmit(this)">
+  <input type="hidden" name="m"      value="{{$m}}" />
+  <input type="hidden" name="del"    value="0" />
+  <input type="hidden" name="dosql"  value="do_liste_aed" />
+  {{mb_key object=$liste}}
 
-    <input type="hidden" name="m"      value="{{$m}}" />
-    <input type="hidden" name="del"    value="0" />
-    <input type="hidden" name="dosql"  value="do_liste_aed" />
-    {{mb_key object=$liste}}
-
-    <table class="form">
-
+  <table class="form">
     {{mb_include module=system template=inc_form_table_header object=$liste}}
   
     <tr>
       <th>{{mb_label object=$liste field=user_id}}</th>
       <td>
-        <select name="user_id" class="{{$liste->_props.user_id}}" style="width: 12em;">
+        <select name="user_id" style="width: 12em;">
           <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
           {{mb_include module=mediusers template=inc_options_mediuser list=$prats selected=$liste->user_id}}
         </select>
@@ -24,7 +22,7 @@
     <tr>
       <th>{{mb_label object=$liste field=function_id}}</th>
       <td>
-        <select name="function_id" class="{{$liste->_props.function_id}}" style="width: 12em;">
+        <select name="function_id" style="width: 12em;">
           <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
           {{mb_include module=mediusers template=inc_options_function list=$funcs selected=$liste->function_id}}
         </select>
@@ -34,7 +32,7 @@
     <tr>
       <th>{{mb_label object=$liste field=group_id}}</th>
       <td>
-        <select name="group_id" class="{{$liste->_props.group_id}}" style="width: 12em;">
+        <select name="group_id" style="width: 12em;">
           <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
           {{foreach from=$etabs item=curr_etab}}
             <option value="{{$curr_etab->_id}}" {{if $curr_etab->_id == $liste->group_id}} selected="selected" {{/if}}>
@@ -86,8 +84,6 @@
         {{/if}}
       </td>
     </tr>
-
-    </table>
-    
-    </form>
+  </table>
+</form>
   

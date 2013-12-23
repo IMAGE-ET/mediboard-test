@@ -1,26 +1,16 @@
 <script>
-Main.add(Control.Tabs.create.curry('tabs-owner', true));
+  Main.add(Control.Tabs.create.curry('tabs-owner', true));
 </script>
 
 <ul id="tabs-owner" class="control_tabs">
-  <li>
-    <a href="#owner-user" {{if !$packs.user|@count}}class="empty"{{/if}}>
-      {{$user}} <small>({{$packs.user|@count}})</small>
-    </a>
-  </li>
-  <li>
-    <a href="#owner-func" {{if !$packs.func|@count}}class="empty"{{/if}}>
-      {{$user->_ref_function}} <small>({{$packs.func|@count}})</small>
-    </a>
-  </li>
-  <li>
-    <a href="#owner-etab" {{if !$packs.etab|@count}}class="empty"{{/if}}>
-      {{$user->_ref_function->_ref_group}} <small>({{$packs.etab|@count}})</small>
-    </a>
-  </li>
+  {{foreach from=$packs key=owner item=_packs}}
+    <li>
+      <a href="#owner-{{$owner}}" {{if !$_packs|@count}}class="empty"{{/if}}>
+        {{$owners.$owner}} <small>({{$_packs|@count}})</small>
+      </a>
+    </li>
+  {{/foreach}}
 </ul>
-
-<hr class="control_tabs" />
 
 <table class="tbl">
   <tr>
@@ -28,15 +18,15 @@ Main.add(Control.Tabs.create.curry('tabs-owner', true));
     <th style="width: 16em;">Modèles</th>
     <th style="width:  8em;">Type</th>
   </tr>
-  
+
   {{foreach from=$packs item=packs_by_owner key=owner}}
     <tbody id="owner-{{$owner}}" style="display: none">
-      {{foreach from=$packs_by_owner item=_pack}}
+    {{foreach from=$packs_by_owner item=_pack}}
       <tr id="{{$_pack->_guid}}">
         {{assign var=header value=$_pack->_header_found}}
         {{assign var=footer value=$_pack->_footer_found}}
         <td class="text">
-          
+
           {{if $_pack->fast_edit_pdf}}
             <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprintPDF/images/mbprintPDF.png"/>
           {{elseif $_pack->fast_edit}}
@@ -45,7 +35,7 @@ Main.add(Control.Tabs.create.curry('tabs-owner', true));
           {{if $_pack->fast_edit || $_pack->fast_edit_pdf}}
             <img style="float: right;" src="images/icons/lightning.png"/>
           {{/if}}
-          
+
           <button class="edit notext" onclick="Pack.edit('{{$_pack->_id}}');">{{tr}}Modify{{/tr}}</button>
           {{$_pack}}
           <div class="compact">
@@ -66,8 +56,8 @@ Main.add(Control.Tabs.create.curry('tabs-owner', true));
             {{if $smarty.foreach.links.index < 5}}
               <div class="compact">{{$_link|spancate:60}}</div>
             {{/if}}
-          {{foreachelse}}
-          <div class="empty">{{tr}}CPack-back-modele_links.empty{{/tr}}</div>
+            {{foreachelse}}
+            <div class="empty">{{tr}}CPack-back-modele_links.empty{{/tr}}</div>
           {{/foreach}}
           {{if $_pack->_back.modele_links|@count > 5}}
             <div class="compact">
@@ -83,7 +73,7 @@ Main.add(Control.Tabs.create.curry('tabs-owner', true));
       <tr>
         <td colspan="10" class="empty">{{tr}}CPack.none{{/tr}}</td>
       </tr>
-      {{/foreach}}
+    {{/foreach}}
     </tbody>
   {{/foreach}}
 </table>

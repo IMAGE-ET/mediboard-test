@@ -180,8 +180,7 @@ class CListeChoix extends CMbObject {
    * @return self[]
    */
   static function loadAllFor($user_id) {
-    $user = new CMediusers;
-    $user->load($user_id);
+    $user = CMediusers::get($user_id);
 
     $listes = array();
     foreach ($user->getOwners() as $type => $owner) {

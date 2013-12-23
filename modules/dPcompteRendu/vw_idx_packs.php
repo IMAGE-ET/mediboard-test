@@ -13,10 +13,10 @@
 
 CCanDo::checkRead();
 
-$user_id      = CValue::getOrSession("user_id", CAppUI::$user->_id);
+$user_id      = CValue::getOrSession("user_id");
 $object_class = CValue::getOrSession("filter_class");
 
-$user = CMediusers::get($user_id);
+$user    = CMediusers::get($user_id);
 $users   = $user->loadUsers(PERM_EDIT);
 $classes = CCompteRendu::getTemplatedClasses();
 

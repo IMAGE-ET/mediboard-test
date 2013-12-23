@@ -17,17 +17,25 @@ $nbDoc     = CValue::get("nbDoc");
 $documents = array();
 $pdf       = new PDFMerger();
 
-foreach ($nbDoc as $compte_rendu_id => $nb_print) {
-  if ($nb_print > 0) {
-    $compte_rendu = new CCompteRendu();
-    $compte_rendu->load($compte_rendu_id);
-    $compte_rendu->date_print = CMbDT::dateTime();
-    $compte_rendu->store();
-    $compte_rendu->makePDFpreview(1);
-    
-    for ($i = 1; $i <= $nb_print; $i++) {
-      $pdf->addPDF($compte_rendu->_ref_file->_file_path, 'all');
-    }
+CMbArray::removeValue("0", $nbDoc);
+
+if (!count($nbDoc)) {
+  CAppUI::stepAjax("Aucun document à imprimer !");
+  CApp::rip();
+}
+
+$compte_rendu = new CCompteRendu();
+$where = array("compte_rendu_id" => CSQLDataSource::prepareIn(array_keys($nbDoc)));
+
+/** @var $_compte_rendu CCompteRendu */
+foreach ($compte_rendu->loadList($where) as $_compte_rendu) {
+  $_compte_rendu->date_print = CMbDT::dateTime();
+  $_compte_rendu->store();
+  $_compte_rendu->makePDFpreview(1);
+
+  $nb_print = $nbDoc[$_compte_rendu->_id];
+  for ($i = 1; $i <= $nb_print; $i++) {
+    $pdf->addPDF($_compte_rendu->_ref_file->_file_path, 'all');
   }
 }
 

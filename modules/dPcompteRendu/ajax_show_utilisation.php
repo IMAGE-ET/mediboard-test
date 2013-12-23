@@ -40,8 +40,9 @@ switch ($compte_rendu->type) {
 }
 
 $counts = array();
-$ds = $compte_rendu->getDS();
+$users  = array();
 if ($compte_rendu->type == "body") {
+  $ds = $compte_rendu->getDS();
   $query = "SELECT `author_id`, COUNT(*) AS `total`
     FROM `compte_rendu`
     WHERE `modele_id` = '$compte_rendu->_id'
@@ -49,13 +50,15 @@ if ($compte_rendu->type == "body") {
     ORDER BY `total` DESC
   ";
   $counts = $ds->loadHashList($query);
-}
 
-$user = CMediusers::get();
-$users = $user->loadAll(array_keys($counts));
-/** @var $_user CMediusers */
-foreach ($users as $_user) {
-  $_user->loadRefFunction();
+  $user = CMediusers::get();
+  $users = $user->loadAll(array_keys($counts));
+  CMbObject::massLoadFwdRef($users, "function_id");
+
+  /** @var $_user CMediusers */
+  foreach ($users as $_user) {
+    $_user->loadRefFunction();
+  }
 }
 
 $smarty = new CSmartyDP();
