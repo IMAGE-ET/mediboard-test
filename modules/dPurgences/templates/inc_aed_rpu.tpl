@@ -82,7 +82,7 @@
             {{/foreach}}
           </select>
         {{else}}
-          {{mb_field object=$rpu field="_mode_entree" style="width: 15em;" emptyLabel="Choose" onchange="ContraintesRPU.updateProvenance(this.value, true); changeModeEntree(this.value)"}}
+          {{mb_field object=$rpu field="_mode_entree" style="width: 15em;" emptyLabel="Choose" onchange="ContraintesRPU.updateProvenance(this.value, true); changeModeEntree(this.value); changeProvenanceWithEntree(this)"}}
         {{/if}}
       </td>
     </tr>
@@ -172,7 +172,7 @@
       {{/if}}
 
       <th>{{mb_label object=$rpu field="_transport"}}</th>
-      <td>{{mb_field object=$rpu field="_transport" emptyLabel="Choose" style="width: 15em;"}}</td>
+      <td>{{mb_field object=$rpu field="_transport"  emptyLabel="Choose" onchange="changePecTransport(this);" style="width: 15em;"}}</td>
     </tr>
 
     <!-- Selection du service -->

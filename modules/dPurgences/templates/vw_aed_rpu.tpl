@@ -175,6 +175,21 @@
     loadServiceMutation(mode_entree);
   }
 
+  function changePecTransport(transport) {
+   var pec_transport = transport.form.elements.pec_transport;
+    if (transport.value === "perso" && $V(pec_transport) === "") {
+      $V(pec_transport, "aucun");
+    }
+  }
+
+  function changeProvenanceWithEntree(entree) {
+    {{if "dPurgences CRPU provenance_domicile_pec_non_org"|conf:"CGroups-$g"}}
+    if (entree.value === "8") {
+      $V(entree.form.elements._provenance, "5");
+    }
+    {{/if}}
+  }
+
   function loadTransfert(mode_entree){
     $('etablissement_entree_transfert').setVisible(mode_entree == 7);
   }

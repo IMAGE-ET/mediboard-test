@@ -17,7 +17,8 @@ CConfiguration::register(
           "impose_degre_urgence" => "bool default|0",
           "impose_diag_infirmier" => "bool default|0",
           "impose_motif" => "bool default|0",
-          "impose_create_sejour_mutation" => "bool default|0"
+          "impose_create_sejour_mutation" => "bool default|0",
+          "provenance_domicile_pec_non_org" => "bool default|0",
         )
       ),
     ),
