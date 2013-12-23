@@ -79,7 +79,7 @@ class CSmpObjectHandler extends CEAIObjectHandler {
       throw new CMbException("no_alternative_mode");
     }
     
-     $sejour = $mbObject;
+    $sejour = $mbObject;
 
     $sejour_elimine = new CSejour();
     $sejour_elimine->load(reset($mbObject->_merging));

@@ -718,6 +718,51 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
+
+    if ($mbObject instanceof CSejour) {
+      $sejour = $mbObject;
+
+      $receiver = $sejour->_receiver;
+      $receiver->getInternationalizationCode($this->transaction);
+
+      foreach ($sejour->_fusion as $group_id => $infos_fus) {
+        if ($receiver->group_id != $group_id) {
+          continue;
+        }
+
+        $sejour1_nda = $sejour->_NDA = $infos_fus["sejour1_nda"];
+
+        /** @var CSejour $sejour_eliminee */
+        $sejour_eliminee = $infos_fus["sejourElimine"];
+        $sejour2_nda     = $sejour_eliminee->_NDA = $infos_fus["sejour2_nda"];
+
+        // Cas 2 NDA : Suppression du deuxième séjour
+        if ($sejour1_nda && $sejour2_nda) {
+          // Dans la pré-admission : A38
+          if ($sejour_eliminee->_etat == "preadmission") {
+            $code = "A38";
+          }
+
+          // En admission / clôturé : A11
+          else {
+            $code = "A11";
+          }
+
+          $sejour_eliminee->_receiver = $receiver;
+          $sejour_eliminee->loadRefPatient();
+
+          if (!$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
+            return;
+          }
+
+          $this->createMovement($code, $sejour_eliminee);
+
+          $this->sendITI($this->profil, $this->transaction, $this->message, $code, $sejour_eliminee);
+
+          continue;
+        }
+      }
+    }
   }
 
   /**
@@ -730,6 +775,47 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
   function onAfterMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
+    }
+
+    if ($mbObject instanceof CSejour) {
+      $sejour = $mbObject;
+
+      $receiver = $sejour->_receiver;
+      $receiver->getInternationalizationCode($this->transaction);
+
+      foreach ($sejour->_fusion as $group_id => $infos_fus) {
+        if ($receiver->group_id != $group_id) {
+          continue;
+        }
+
+        $sejour1_nda = $sejour->_NDA = $infos_fus["sejour1_nda"];
+
+        /** @var CSejour $sejour_eliminee */
+        $sejour_eliminee = $infos_fus["sejourElimine"];
+        $sejour2_nda     = $sejour_eliminee->_NDA = $infos_fus["sejour2_nda"];
+
+        // Cas 0 NDA : Aucune notification envoyée
+        if (!$sejour1_nda && !$sejour2_nda) {
+          continue;
+        }
+
+        // Cas 1 NDA : Pas de message de fusion mais d'une modification de séjour
+        if ($sejour1_nda xor $sejour2_nda) {
+          if ($sejour2_nda) {
+            $sejour->_NDA = $sejour2_nda;
+          }
+
+          $code = $this->getModificationAdmitCode($receiver);
+          if (!$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
+            return;
+          }
+
+          $this->createMovement($code, $sejour);
+
+          $this->sendITI($this->profil, $this->transaction, $this->message, $code, $sejour);
+          continue;
+        }
+      }
     }
   }
 
