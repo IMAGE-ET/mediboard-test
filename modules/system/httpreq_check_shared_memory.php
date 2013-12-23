@@ -44,7 +44,7 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
     continue;
   }
 
-  if (null == SHM::get("locales-$localeName-__prefixes__")) {
+  if (null == SHM::get("locales-$localeName-".CAppUI::LOCALES_PREFIX)) {
     CAppUI::stepAjax("Locales-shm-none", UI_MSG_OK, $localeName);
     continue;
   }

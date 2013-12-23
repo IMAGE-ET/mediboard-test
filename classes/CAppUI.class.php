@@ -27,6 +27,8 @@ define("UI_MSG_ERROR"  , 4);
  * @todo Is being split into CApp et CUI classes
  */
 class CAppUI {
+  const LOCALES_PREFIX = ".__prefixes__"; // Prefixed by "." to be first in the list
+
   /** @var CAppUI */
   static $instance;
 
@@ -872,30 +874,22 @@ class CAppUI {
 
     $shared_name = "locales-$lang";
 
-    $locales_prefixes = SHM::get("$shared_name-__prefixes__");
+    $locales_prefixes = SHM::get("$shared_name-".self::LOCALES_PREFIX);
 
     // Load from shared memory if possible
     if ($locales_prefixes) {
-      $all_keys = SHM::listKeys("$shared_name-");
-      $all_keys = preg_grep("/^$shared_name-.*/", $all_keys);
+      return;
+    }
 
-      $all_keys = array_values($all_keys);
-      $all_keys = preg_replace_callback(
-        "/^$shared_name-(.*)/",
-        function ($matches) {
-          return $matches[1];
-        },
-        $all_keys
-      );
+    $mutex = new CMbFileMutex("locales-build");
+    $mutex->acquire(5);
 
-      CMbArray::removeValue("__prefixes__", $all_keys);
+    $locales_prefixes = SHM::get("$shared_name-".self::LOCALES_PREFIX);
 
-      $prefixes = array_keys($locales_prefixes);
-
-      // Use cache if the list is complete
-      if (count(array_diff($prefixes, $all_keys)) == 0) {
-        return;
-      }
+    // Load from shared memory if possible
+    if ($locales_prefixes) {
+      $mutex->release();
+      return;
     }
 
     $locales = array();
@@ -942,7 +936,9 @@ class CAppUI {
       SHM::put("$shared_name-$_prefix", $_locales);
     }
 
-    SHM::put("$shared_name-__prefixes__", $hashes);
+    SHM::put("$shared_name-".self::LOCALES_PREFIX, $hashes);
+
+    $mutex->release();
   }
 
   /**
@@ -1115,7 +1111,7 @@ class CAppUI {
    */
   static function flattenCachedLocales($lang) {
     $shared_name = "locales-$lang";
-    $prefixes = SHM::get("$shared_name-__prefixes__");
+    $prefixes = SHM::get("$shared_name-".self::LOCALES_PREFIX);
 
     $locales = array();
     foreach ($prefixes as $_hash => $_prefix) {

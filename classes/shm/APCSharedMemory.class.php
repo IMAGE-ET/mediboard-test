@@ -72,6 +72,7 @@ class APCSharedMemory implements ISharedMemory {
       }
     }
 
+    sort($keys);
     return $keys;
   }
 
