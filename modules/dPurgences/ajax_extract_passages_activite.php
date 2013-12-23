@@ -73,6 +73,9 @@ foreach ($sejours as $_sejour) {
   //total
   $datas['PRESENTS']++;
 
+  $rpu = $_sejour->loadRefRPU();
+
+  $comptabilise = false;
   //placé
   if ($affectation->_id) {
     $lit = $affectation->loadRefLit();
@@ -81,19 +84,25 @@ foreach ($sejours as $_sejour) {
       // salle d'attente
       if ($chambre->is_waiting_room) {
         $datas["ATTENTE"]++;
+        $comptabilise = true;
       }
 
       //salle d'examen
       if ($chambre->is_examination_room) {
         $datas["BOX"]++;
+        $comptabilise = true;
       }
 
       if ($chambre->is_sas_dechoc) {
         $datas["DECHOC"]++;
+        $comptabilise = true;
       }
     }
   }
-  $rpu = $_sejour->loadRefRPU();
+
+  if (!$comptabilise && !$rpu->loadRefConsult()->_id) {
+    $datas["ATTENTE"]++;
+  }
 
   //mutation
   if ($rpu->mutation_sejour_id) {
