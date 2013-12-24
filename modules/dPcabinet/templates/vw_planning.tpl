@@ -63,7 +63,10 @@ Main.add(function () {
   Calendar.regField(getForm("changeDate").debut, null, {noView: true});
 
   {{if $plageSel->_id}}
-    showConsultations($$(".{{$plageSel->_guid}}")[0].down("a"), "{{$plageSel->_id}}");
+    var plageList =  $$(".{{$plageSel->_guid}}");
+    if (plageList.length > 0) {
+      showConsultations(plageList[0].down("a"), "{{$plageSel->_id}}");
+    }
   {{/if}}
 });
 </script>
