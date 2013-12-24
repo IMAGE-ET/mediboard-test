@@ -192,10 +192,10 @@ foreach ($tabs_count as $_tab => $_count) {
   switch ($_tab) {
     case "AntTrait":
       $prescription = $dossier_medical->loadRefPrescription();
-      $prescription->countLinesMedsElements();
+      $count_meds = $prescription->countBackRefs("prescription_line_medicament");
       $dossier_medical->countTraitements();
       $dossier_medical->countAntecedents();
-      $tabs_count[$_tab] = $dossier_medical->_count_antecedents + $dossier_medical->_count_traitements + $prescription->_counts_by_chapitre["med"];
+      $tabs_count[$_tab] = $dossier_medical->_count_antecedents + $dossier_medical->_count_traitements + $count_meds;
       break;
     case "Constantes":
       $tabs_count[$_tab] = $patient->countBackRefs("constantes");
@@ -217,11 +217,12 @@ foreach ($tabs_count as $_tab => $_count) {
           unset($sejour->_ref_prescriptions[$key]);
         }
 
-        $prescription = new CPrescription();
-
-        $prescription->massCountMedsElements($sejour->_ref_prescriptions);
-        foreach ($sejour->_ref_prescriptions as $_prescription) {
-          $count += array_sum($_prescription->_counts_by_chapitre);
+        if (count($sejour->_ref_prescriptions)) {
+          $prescription = new CPrescription();
+          $prescription->massCountMedsElements($sejour->_ref_prescriptions);
+          foreach ($sejour->_ref_prescriptions as $_prescription) {
+            $count += array_sum($_prescription->_counts_by_chapitre);
+          }
         }
       }
 

@@ -5,8 +5,9 @@
         <tr>
           <td style="width: 50%;">
             <!-- Fiches d'examens -->
-            {{mb_script module="dPcabinet" script="exam_dialog"}}
-            <script type="text/javascript">
+            {{mb_script module="cabinet" script="exam_dialog" ajax=1}}
+            <div id="examDialog-{{$consult->_id}}"></div>
+            <script>
               ExamDialog.register('{{$consult->_id}}','{{$consult_anesth->_id}}');
             </script>
           </td>
@@ -15,7 +16,7 @@
             <td>
               {{unique_id var=unique_id_exam_forms}}
               
-              <script type="text/javascript">
+              <script>
                 Main.add(function(){
                   ExObject.loadExObjects("{{$consult_anesth->_class}}", "{{$consult_anesth->_id}}", "{{$unique_id_exam_forms}}", 0.5);
                 });
@@ -30,10 +31,8 @@
         </tr>
       </table>
       
-      
-      
       <form name="editAnesthExamenClinique" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
-        <input type="hidden" name="m" value="dPcabinet" />
+        <input type="hidden" name="m" value="cabinet" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
         {{mb_key object=$consult_anesth}}
@@ -74,7 +73,7 @@
       </form>
       
       <form name="editFrmExamenConsult" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
-        <input type="hidden" name="m" value="dPcabinet" />
+        <input type="hidden" name="m" value="cabinet" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_consultation_aed" />
         {{mb_key object=$consult}}

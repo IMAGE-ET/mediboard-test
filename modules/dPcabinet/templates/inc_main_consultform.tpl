@@ -1,32 +1,30 @@
 {{if "dPmedicament"|module_active}}
-{{mb_script module="medicament" script="medicament_selector"}}
+  {{mb_script module="medicament" script="medicament_selector" ajax=1}}
 {{/if}}
-<script type="text/javascript">
 
-Main.add(function () {
-  
-   // UpdateFields de l'autocomplete des traitements
-  updateFieldTraitement = function(selected) {
-    var dn = selected.childElements();
+<script>
+  Main.add(function () {
+     // UpdateFields de l'autocomplete des traitements
+    updateFieldTraitement = function(selected) {
+      var dn = selected.childElements();
+      var oForm = getForm('editFrmExams');
+      $V(oForm.traitement, $V(oForm.traitement)+dn[3].innerHTML.stripTags().strip()+'\n');
+      $V(oForm.produit, "");
+    };
+
+    // Autocomplete des medicaments
     var oForm = getForm('editFrmExams');
-    $V(oForm.traitement, $V(oForm.traitement)+dn[3].innerHTML.stripTags().strip()+'\n');
-    $V(oForm.produit, "");
-  };
-
-  // Autocomplete des medicaments
-  var oForm = getForm('editFrmExams');
-  if(oForm && oForm.produit) {
-    var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
-    urlAuto.autoComplete(oForm.produit, "_traitement_auto_complete", {
-      minChars: 3,
-      updateElement: updateFieldTraitement, 
-      callback: function(input, queryString){
-        return (queryString + "&produit_max=40"); 
-      }
-    } );
-  }
-});
-
+    if(oForm && oForm.produit) {
+      var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+      urlAuto.autoComplete(oForm.produit, "_traitement_auto_complete", {
+        minChars: 3,
+        updateElement: updateFieldTraitement,
+        callback: function(input, queryString){
+          return (queryString + "&produit_max=40");
+        }
+      } );
+    }
+  });
 </script>
 
 {{mb_default var=readonly value=0}}
@@ -61,8 +59,9 @@ Main.add(function () {
         <tr>
           <td style="width: 50%;">
 			      <!-- Fiches d'examens -->
-			      {{mb_script module="cabinet" script="exam_dialog"}}
-			      <script type="text/javascript">
+			      {{mb_script module="cabinet" script="exam_dialog" ajax=1}}
+            <div id="examDialog-{{$consult->_id}}"></div>
+			      <script>
 			        {{if !$readonly}}
 			          ExamDialog.register('{{$consult->_id}}');
 			        {{/if}}
@@ -77,7 +76,7 @@ Main.add(function () {
             <td>
               {{unique_id var=unique_id_exam_forms}}
               
-              <script type="text/javascript">
+              <script>
                 Main.add(function(){
                   ExObject.loadExObjects("{{$consult->_class}}", "{{$consult->_id}}", "{{$unique_id_exam_forms}}", 0.5);
                 });

@@ -80,6 +80,19 @@
     infosAnesthUrl.requestUpdate('InfoAnesth');
   }
 
+  function loadDocs() {
+    var url = new Url("cabinet", "ajax_vw_documents");
+    url.addParam("consult_id", "{{$consult->_id}}");
+    url.addParam("dossier_anesth_id", "{{$consult->_ref_consult_anesth->_id}}");
+    url.requestUpdate("fdrConsult");
+  }
+
+  function loadExams() {
+    var url = new Url("cabinet", "ajax_vw_examens_anesth");
+    url.addParam("dossier_anesth_id", "{{$consult->_ref_consult_anesth->_id}}");
+    url.requestUpdate("Exams");
+  }
+
   Main.add(function () {
     tabsConsultAnesth = Control.Tabs.create('tab-consult-anesth', false);
     loadAntTrait();
@@ -99,7 +112,7 @@
       Constantes <small>({{$tabs_count.Constantes}})</small>
     </a>
   </li>
-  <li>
+  <li onmousedown="this.onmousedown = ''; loadExams()">
     <a href="#Exams" {{if $tabs_count.Exams == 0}}class="empty"{{/if}}>
       Exam. Clinique <small>({{$tabs_count.Exams}})</small>
     </a>
@@ -140,7 +153,7 @@
       </a>
     </li>
   {{/if}}
-  <li>
+  <li onmousedown="this.onmousedown = ''; loadDocs()">
     <a href="#fdrConsult" {{if $tabs_count.fdrConsult == 0}}class="empty"{{/if}}>
       Documents <small>({{$tabs_count.fdrConsult}})</small>
     </a>
@@ -163,9 +176,8 @@
   </form>
 </div>
 
-<div id="Exams" style="display: none;">
-  {{mb_include module=cabinet template=inc_consult_anesth/acc_examens_clinique}}
-</div>
+<div id="Exams" style="display: none;"></div>
+
 <div id="Intub" style="display: none;">
   {{mb_include module=cabinet template=inc_consult_anesth/intubation}}
 </div>
@@ -186,9 +198,7 @@
   <div id="Actes" style="display: none;"></div>
 {{/if}}
 
-<div id="fdrConsult" style="display: none;">
-  {{mb_include module=cabinet template=inc_fdr_consult}}
-</div>
+<div id="fdrConsult" style="display: none;"></div>
 
 <!-- Reglement -->
 <script type="text/javascript">

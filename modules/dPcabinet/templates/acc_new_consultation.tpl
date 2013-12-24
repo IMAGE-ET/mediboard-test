@@ -91,9 +91,21 @@
   }
 
   function loadRPU() {
-    var url = new Url("dPurgences", "ajax_vw_rpu");
+    var url = new Url("urgences", "ajax_vw_rpu");
     url.addParam("consult_id", "{{$consult->_id}}");
     url.requestUpdate("rpuConsult");
+  }
+
+  function loadDocs() {
+    var url = new Url("cabinet", "ajax_vw_documents");
+    url.addParam("consult_id", "{{$consult->_id}}");
+    url.requestUpdate("fdrConsult");
+  }
+
+  function loadExams() {
+    var url = new Url("cabinet", "ajax_vw_examens");
+    url.addParam("consult_id", "{{$consult->_id}}");
+    url.requestUpdate("Examens");
   }
 
   Main.add(function() {
@@ -149,7 +161,7 @@
       Constantes <small>({{$tabs_count.dossier_suivi}})</small>
     </a>
   </li>
-  <li>
+  <li onmousedown="this.onmousedown = ''; loadExams()">
     <a href="#Examens" {{if $tabs_count.Examens == 0}}class="empty"{{/if}}>
       Examens <small>({{$tabs_count.Examens}})</small>
     </a>
@@ -178,7 +190,7 @@
     </li>
   {{/if}}
 
-  <li>
+  <li onmousedown="this.onmousedown = ''; loadDocs()">
     <a href="#fdrConsult" {{if $tabs_count.fdrConsult == 0}}class="empty"{{/if}}>
       Documents <small>({{$tabs_count.fdrConsult}})</small>
     </a>
@@ -228,9 +240,7 @@
 
 <div id="Constantes" style="display: none"></div>
 
-<div id="Examens" style="display: none;">
-  {{mb_include module=cabinet template=inc_main_consultform}}
-</div>
+<div id="Examens" style="display: none;"></div>
 
 {{if "dPImeds"|module_active && $consult->sejour_id}}
   <div id="Imeds" style="display: none;">
@@ -260,9 +270,7 @@
   </div>
 {{/if}}
 
-<div id="fdrConsult" style="display: none;">
-  {{mb_include module=cabinet template=inc_fdr_consult}}
-</div>
+<div id="fdrConsult" style="display: none;"></div>
 
 <!-- Reglement -->
 {{mb_script module="cabinet" script="reglement"}}

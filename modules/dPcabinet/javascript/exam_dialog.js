@@ -1,6 +1,6 @@
 // $Id: $
 
-var ExamDialog = {
+ExamDialog = {
   sForm     : null,
   sConsultId: null,
   sDossierAnesthId: null,
@@ -12,7 +12,7 @@ var ExamDialog = {
   // Ouverture de la popup en fonction du type d'examen
   pop: function(type_exam) {
     var oForm = getForm(this.sForm);     
-    var url = new Url("dPcabinet", type_exam);
+    var url = new Url("cabinet", type_exam);
     url.addParam("consultation_id", oForm.elements[this.sConsultId].value);
     if (oForm.elements[this.sDossierAnesthId]) {
       url.addParam("dossier_anesth_id", oForm.elements[this.sDossierAnesthId].value);
@@ -20,8 +20,8 @@ var ExamDialog = {
     url.popup(this.options.width, this.options.height, type_exam);
   },
 
-  reload: function(consultation_id, dossier_anesth_id){
-    var url = new Url("dPcabinet", "httpreq_vw_examens_comp");
+  reload: function(consultation_id, dossier_anesth_id) {
+    var url = new Url("cabinet", "httpreq_vw_examens_comp");
     url.addParam("consultation_id", consultation_id);
     if (dossier_anesth_id) {
       url.addParam("dossier_anesth_id", dossier_anesth_id);
@@ -29,8 +29,10 @@ var ExamDialog = {
     url.requestUpdate("examDialog-"+consultation_id);
   },
 
-  register: function(consultation_id, dossier_anesth_id){
-    document.write('<div id="examDialog-'+consultation_id+'"></div>');
+  register: function(consultation_id, dossier_anesth_id) {
+    if (!$("examDialog-"+consultation_id)) {
+      document.write('<div id="examDialog-'+consultation_id+'"></div>');
+    }
     Main.add( function() {
       ExamDialog.reload(consultation_id, dossier_anesth_id);
     } );

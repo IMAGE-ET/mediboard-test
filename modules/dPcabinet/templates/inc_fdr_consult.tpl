@@ -8,7 +8,7 @@
       <fieldset>
         <legend>{{tr}}CFile{{/tr}} - {{tr}}{{$object->_class}}{{/tr}}</legend>
         <div id="files-fdr">
-          <script type="text/javascript">
+          <script>
             File.register('{{$object->_id}}','{{$object->_class}}', 'files-fdr');
           </script>
         </div>
@@ -19,7 +19,7 @@
         <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}{{$object->_class}}{{/tr}}</legend>            
         <div id="documents-fdr">
           {{mb_script module="dPcompteRendu" script="document"}}
-          <script type="text/javascript">
+          <script>
             Document.register('{{$object->_id}}','{{$object->_class}}','{{$consult->_praticien_id}}','documents-fdr');
           </script>
         </div>
@@ -32,7 +32,7 @@
       <fieldset>
         <legend>{{tr}}CPrescription{{/tr}}</legend>
         <div id="prescription_register">
-          <script type="text/javascript">
+          <script>
             PrescriptionEditor.register('{{$consult->_id}}','{{$consult->_class}}','fdr','{{$consult->_praticien_id}}');
           </script>
         </div>
@@ -47,7 +47,7 @@
       <fieldset>
         <legend>{{tr}}CFile{{/tr}} - {{tr}}CSejour{{/tr}}</legend>            
         <div id="files-CSejour">
-          <script type="text/javascript">
+          <script>
             File.register('{{$sejour->_id}}','{{$sejour->_class}}', 'files-CSejour');
           </script>
         </div>
@@ -57,7 +57,7 @@
       <fieldset>
         <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}CSejour{{/tr}}</legend>            
         <div id="documents-CSejour">
-          <script type="text/javascript">
+          <script>
             Document.register('{{$sejour->_id}}','{{$sejour->_class}}','{{$sejour->_praticien_id}}','documents-CSejour');
           </script>
         </div>
