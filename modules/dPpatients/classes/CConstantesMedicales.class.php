@@ -809,11 +809,11 @@ class CConstantesMedicales extends CMbObject {
     $props['score_sedation']         = 'float';
     $props['frequence_respiratoire'] = 'float pos';
 
-    $props['glycemie']               = 'float pos max|10';
+    $props['glycemie']               = 'float min|0 max|10';
     $props['_glycemie']              = $props['glycemie'];
     $props['_unite_glycemie']        = 'enum list|g/l|mmol/l';
 
-    $props['cetonemie']              = 'float pos max|10';
+    $props['cetonemie']              = 'float min|0 max|10';
     $props['_cetonemie']             = $props['cetonemie'];
     $props['_unite_cetonemie']       = 'enum list|g/l|mmol/l';
 
@@ -1079,7 +1079,7 @@ class CConstantesMedicales extends CMbObject {
         $_empty = true;
 
         foreach ($_params["formfields"] as $_formfield) {
-          if (empty($this->$_formfield)) {
+          if (empty($this->$_formfield) && !is_numeric($this->$_formfield)) {
             break;
           }
 
