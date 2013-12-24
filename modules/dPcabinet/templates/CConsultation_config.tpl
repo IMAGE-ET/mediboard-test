@@ -45,7 +45,9 @@
     {{mb_include module=system template=inc_config_bool var=show_histoire_maladie}}
     
     {{mb_include module=system template=inc_config_bool var=show_conclusion}}
-    
+
+    {{mb_include module=system template=inc_config_bool var=show_motif_consult_immediate}}
+
     {{mb_include module=system template=inc_config_bool var=attach_consult_sejour onchange="showCreateSejour(this)"}}
     
     {{mb_include module=system template=inc_config_bool var=search_sejour_all_groups}}

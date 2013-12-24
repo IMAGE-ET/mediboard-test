@@ -137,7 +137,7 @@ if ($type) {
   $consult->type = $type;
 }
 // Cas standard
-$consult->motif = CValue::post("motif", "Consultation immédiate");
+$consult->motif = CValue::post("motif", CAppUI::conf('dPcabinet CConsultation show_motif_consult_immediate') ? "Consultation immédiate" : null);
 if ($type == "entree") {
   $consult->motif = "Observation d'entrée";
 }
@@ -147,9 +147,10 @@ if ($sejour->type == "urg") {
   $consult->motif = "";
   if (CAppUI::conf('dPurgences motif_rpu_view')) {
     $consult->motif .= "RPU: ";
+
+    $sejour->loadRefRPU();
+    $consult->motif.= $sejour->_ref_rpu->diag_infirmier;
   }
-  $sejour->loadRefRPU();
-  $consult->motif.= $sejour->_ref_rpu->diag_infirmier;
 } 
 
 if ($msg = $consult->store()) {

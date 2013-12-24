@@ -24,6 +24,7 @@ $dPconfig["dPcabinet"] = array(
     "show_histoire_maladie"  => 0,
     "show_conclusion"        => 0,
     "show_IPP_print_consult" => 0,
+    "show_motif_consult_immediate" => 1,
     "attach_consult_sejour"  => 0,
     "create_consult_sejour"  => 0,
     "minutes_before_consult_sejour" => 1,
