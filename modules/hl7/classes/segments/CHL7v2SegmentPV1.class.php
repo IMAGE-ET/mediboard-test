@@ -144,6 +144,9 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
           )
         );
       }
+      else {
+        $data[] = null;
+      }
     }
     else {
       $data[] = null;
