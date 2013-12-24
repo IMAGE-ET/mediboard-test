@@ -188,7 +188,7 @@
         <th></th>
         <td></td>
         <th>{{mb_label object=$rpu field="regule_par"}}</th>
-        <td>{{mb_field object=$rpu field="regule_par" emptyLabel="Choose" typeEnum=radio}}</td>
+        <td>{{mb_field object=$rpu field="regule_par" emptyLabel="Choose"}}</td>
       </tr>
     {{/if}}
 
