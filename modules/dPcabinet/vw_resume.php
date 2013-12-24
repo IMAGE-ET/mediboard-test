@@ -55,6 +55,11 @@ foreach ($consultations as $consultation) {
   $consultation->loadRefsPrescriptions();
   if (isset($consultation->_ref_prescriptions["externe"])) {
     $consultation->_ref_prescriptions["externe"]->loadRefsFiles();
+    foreach ($consultation->_ref_prescriptions["externe"]->_ref_files as $key => $_file) {
+      if ($_file->annule) {
+        unset($consultation->_ref_prescriptions["externe"]->_ref_files[$key]);
+      }
+    }
   }
 }
 
