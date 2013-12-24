@@ -94,14 +94,8 @@ switch ($period) {
     $maxDate = CMbDT::transform("+1 month", $minDate, "%Y-%m-01");
     $maxDate = CMbDT::date("-1 day", $maxDate);
     $refDate = $minDate;
-    if (phpversion() >= "5.3") {
-      $ndate = CMbDT::date("first day of next month"   , $date);
-      $pdate = CMbDT::date("last day of previous month", $date);
-    }
-    else {
-      $ndate = CMbDT::date("+1 month"   , CMbDT::format($date, "%Y-%m-01" ));
-      $pdate = CMbDT::date("-1 month"   , CMbDT::format($date, "%Y-%m-01" ));
-    }
+    $ndate = CMbDT::date("first day of next month"   , $date);
+    $pdate = CMbDT::date("last day of previous month", $date);
     break;
 
   default:

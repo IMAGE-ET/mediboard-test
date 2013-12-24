@@ -172,8 +172,10 @@ updatePlage = function(sdate, callback) {
   }
   var url = new Url("cabinet", "ajax_list_plages");
   url.addParam("dialog"             , 1);
-  url.addParam("chir_id"            , $V(form.chir_id));
-  url.addParam("function_id"        , $V(form.function_id));
+  url.addParam("function_id"        , $V(form._function_id));
+  if (!$V(form._function_id)) {
+    url.addParam("chir_id"            , $V(form.chir_id));
+  }
   url.addParam("plageconsult_id"    , $V(form.plageconsult_id));
   url.addParam("consultation_id"    , $V(form.consultation_id));
   url.addParam("_line_element_id"   , $V(form._line_element_id));
@@ -289,8 +291,7 @@ Main.add(function () {
   <ul>
     <li>La plage active selectionnée est de couleur brune, il faut selectionner la plage puis cliquer à gauche dans le selecteur pour changer de plage de consultation</li>
     <li>Toutes vos actions ne seront appliquées qu'à l'enregistrement de la page de modification de la consultation</li>
-    <li>En mode édition, l'appuie sur le bouton corbeille va annuler la consultation et non la supprimer</li>
-    <li></li>
+    <li>En mode édition, l'appui sur le bouton corbeille va annuler la consultation et non la supprimer</li>
   </ul>
 </div>
 
