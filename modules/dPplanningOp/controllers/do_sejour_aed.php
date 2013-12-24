@@ -20,14 +20,15 @@ $type               = CValue::post("type");
 
 $create_affectation = CAppUI::conf("urgences create_affectation");
 
+$sejour_id = CValue::post("sejour_id");
+
+$sejour = new CSejour();
+$sejour->load($sejour_id);
+
+$rpu = $sejour->loadRefRPU();
+
 // Pour un séjour ayant comme mode de sortie urgence:
-if ($create_affectation && $mode_sortie  == "mutation" && $type == "urg" && ($lit_id || $service_sortie_id)) {
-  $sejour_id = CValue::post("sejour_id");
-
-  $sejour = new CSejour();
-  $sejour->load($sejour_id);
-  $rpu = $sejour->loadRefRPU();
-
+if ($create_affectation && $mode_sortie  == "mutation" && $rpu->_id && ($lit_id || $service_sortie_id)) {
   if ($rpu->mutation_sejour_id) {
     $sejour_id = $sejour->_ref_rpu->mutation_sejour_id;
   }
