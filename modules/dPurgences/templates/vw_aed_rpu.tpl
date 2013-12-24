@@ -349,7 +349,7 @@
           <td style="width: 60%">
             {{mb_include module="urgences" template="inc_vw_rpu_attente"}}
           </td>
-          <td class="button {{if $sejour->type != "urg"}}arretee{{/if}}">
+          <td class="button {{if $sejour->type != "urg"  && !$sejour->UHCD}}arretee{{/if}}">
             {{mb_include module="urgences" template="inc_pec_praticien"}}
           </td>
         </tr>

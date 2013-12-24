@@ -48,7 +48,7 @@
 </td>
 {{/if}}
 
-<td class="button {{if $sejour->type != "urg"}} arretee {{/if}}">
+<td class="button {{if $sejour->type != "urg" && !$sejour->UHCD}} arretee {{/if}}">
   {{include file="inc_pec_praticien.tpl"}}
 </td>
 

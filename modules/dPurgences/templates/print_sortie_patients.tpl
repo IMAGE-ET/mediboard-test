@@ -64,7 +64,7 @@
     </td>
     {{/if}}
     
-    <td class="{{if $sejour->type != "urg"}} arretee {{/if}}">
+    <td class="{{if $sejour->type != "urg" && !$sejour->UHCD}} arretee {{/if}}">
       {{if !$rpu->_ref_consult->_id}}
         <div class="empty">{{tr}}CRPU-ATU-missing{{/tr}}</div>
       {{else}}

@@ -124,7 +124,7 @@
             </td>
 
 
-            {{if $sejour->type != "urg"}}
+            {{if $sejour->type != "urg" && !$sejour->UHCD}}
               <td colspan="2" class="text arretee">
                 <strong>{{mb_value object=$sejour field=type}}</strong>
               </td>

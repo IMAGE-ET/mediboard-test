@@ -404,7 +404,7 @@
           </td>
         {{/if}}
     
-        <td class="narrow button {{if $_sejour->type != "urg"}}arretee{{/if}}" style="background-color: {{$background}};">
+        <td class="narrow button {{if $_sejour->type != "urg" && !$_sejour->UHCD}}arretee{{/if}}" style="background-color: {{$background}};">
           {{mb_include template="inc_pec_praticien"}}
         </td>
   
