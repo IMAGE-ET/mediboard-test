@@ -45,13 +45,13 @@
   };
 
   reloadSynthese = function() {
-    $$(".modal")[0].down("button.change").click();
+    window.url_show_synthese.refreshModal();
   };
 
   showSynthese = function(sejour_id) {
-    var url = new Url("soins", "ajax_vw_suivi_clinique");
-    url.addParam("sejour_id", sejour_id);
-    url.requestModal(800);
+    window.url_show_synthese = new Url("soins", "ajax_vw_suivi_clinique");
+    window.url_show_synthese.addParam("sejour_id", sejour_id);
+    window.url_show_synthese.requestModal(800);
   };
 
   var ExtRefManager = {
