@@ -102,13 +102,22 @@ Main.add(function () {
   </tr>
 
   <tr >
-    <td  id="semainiertdb" style="height:600px;">{{mb_include module=system template=calendars/vw_week}}</td>
+    <td id="semainiertdb" style="height:600px;">
+      <div id="weekly-planning">
+        {{mb_include module=system template=calendars/vw_week}}
+      </div>
+    </td>
     <td id="viewTooltip" style="min-width:300px;width:33%;"></td>
   </tr>
   
    <script>
      Main.add(function() {
-       window["planning-{{$planning->guid}}"].onMenuClick = function(guid, id, oTd){
+       ViewPort.SetAvlHeight("weekly-planning", 1);
+       var height = $("weekly-planning").getDimensions().height;
+       var planning = window["planning-{{$planning->guid}}"];
+       planning.setPlanningHeight(height);
+       planning.scroll();
+       planning.onMenuClick = function(guid, id, oTd) {
        
         if(oTd.title != "operation" && oTd.title != "consultation"){
           viewItem(guid, id, oTd.title, oTd);
