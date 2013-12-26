@@ -1666,7 +1666,7 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @see parent::loadRefSejour()
    */
   function loadRefSejour() {
-    $this->_ref_sejour =& $this;
+    return $this->_ref_sejour =& $this;
   }
 
   /**
