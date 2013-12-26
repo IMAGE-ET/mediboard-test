@@ -1234,23 +1234,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if ($newVenue->type_pec != "O") {
       return;
     }
-    
-    $grossesse = new CGrossesse();
-    $grossesse->parturiente_id = $newVenue->patient_id;
-    $grossesse->loadMatchingObject("terme_prevu desc"); 
-    
-    // Dans le cas où l'on a déjà une grossesse pour la patiente
-    if ($grossesse->_id) {
-      // On recherche si la grossesse a déjà un séjour avec des naissances OU le nbre de jours entre le terme et l'entrée du
-      // séjour est inférieur à 294 jours (42 semaines) - 42*7
-      if (count($grossesse->loadRefsNaissances()) || (abs(CMbDT::daysRelative($grossesse->terme_prevu, $newVenue->entree)) > 294)) {
-        $grossesse                 = new CGrossesse();
-        $grossesse->parturiente_id = $newVenue->patient_id;
-      }
-    }
+
+    $grossesse = $newVenue->loadRefGrossesse();
     
     if (!$grossesse->_id) {
-      $grossesse->terme_prevu = CMbDT::date($newVenue->sortie);
+      $grossesse->parturiente_id = $newVenue->patient_id;
+      $grossesse->group_id       = $newVenue->group_id;
+      $grossesse->terme_prevu    = CMbDT::date($newVenue->sortie);
       if ($msg = $grossesse->store()) {
         return $msg;
       }
