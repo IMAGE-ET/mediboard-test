@@ -14,6 +14,7 @@ $dPconfig["dPsante400"] = array (
   "cache_hours" => "1",
   "prefix"      => "odbc",
   "dsn"         => "",
+  "other_dsn"   => "",
   "user"        => "",
   "pass"        => "",
   "group_id"    => "",

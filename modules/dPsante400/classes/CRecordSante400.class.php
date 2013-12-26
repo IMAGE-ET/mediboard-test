@@ -55,7 +55,8 @@ class CRecordSante400 {
       trigger_error("Data Source Name not defined, please configure module", E_USER_ERROR);
       CApp::rip();
     }
-    
+
+
     // Fake data source for chrono purposes
     CSQLDataSource::$dataSources[$dsn] = new CMySQLDataSource();
     $ds =& CSQLDataSource::$dataSources[$dsn];
@@ -65,9 +66,20 @@ class CRecordSante400 {
     self::$chrono->start();
     
     $prefix = $config["prefix"];
-    self::$dbh = new PDO("$prefix:$dsn", $config["user"], $config["pass"]);
-    self::$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
+
+    try {
+      self::$dbh = new PDO("$prefix:$dsn", $config["user"], $config["pass"]);
+      self::$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }
+    catch (PDOException $e) {
+      mbTrace("cauguht failure on first datasource");
+      if (null == $dsn = $config["other_dsn"]) {
+        throw $e;
+      }
+      self::$dbh = new PDO("$prefix:$dsn", $config["user"], $config["pass"]);
+      self::$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }
+
     self::$chrono->stop("connection");
     self::traceChrono("connection");
   }

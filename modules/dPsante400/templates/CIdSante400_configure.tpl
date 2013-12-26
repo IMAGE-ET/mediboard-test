@@ -20,6 +20,7 @@
     {{assign var=m value=dPsante400}}
     {{mb_include module=system template=inc_config_enum var=prefix values=odbc|mysql}}
     {{mb_include module=system template=inc_config_str var=dsn}}
+    {{mb_include module=system template=inc_config_str var=other_dsn}}
     {{mb_include module=system template=inc_config_str var=user}}
     {{mb_include module=system template=inc_config_str var=pass}}
 

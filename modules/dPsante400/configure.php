@@ -15,5 +15,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("types", CMouvFactory::getTypes());
 $smarty->assign("modes", array_keys(CMouvFactory::$modes));
 $smarty->display("configure.tpl");
-
-?>
