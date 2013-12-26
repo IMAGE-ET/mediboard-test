@@ -78,7 +78,7 @@ class CMouvement400 extends CRecordSante400 {
   /**
    * Try and store trigger mark according to module config
    * 
-   * @param string $mark Mark content
+   * @param CTriggerMark $mark Mark content
    *
    * @return void
    */
@@ -239,6 +239,13 @@ class CMouvement400 extends CRecordSante400 {
 
     $record->query($query);
     return $record->consume("TOTAL");
+  }
+
+  function reportAvailable() {
+    return array(
+      "dates" => 0,
+      "hours" => 0,
+    );
   }
 
   /**
