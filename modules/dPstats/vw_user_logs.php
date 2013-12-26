@@ -17,21 +17,28 @@ $user_id = CValue::getOrSession("user_id");
 CAppUI::requireModuleFile("dPstats", "graph_userlog");
 
 $to = CMbDT::date("+1 DAY", $date);
-switch ($interval = CValue::getOrSession("interval", "day")) {
-  default:
-  case "day":
+switch ($interval = CValue::getOrSession("interval", "one-day")) {
+  case "one-day":
     $from = CMbDT::date("-1 DAY", $to);
     break;
-  case "month":
-    $from = CMbDT::date("-1 MONTH", $to);
+
+  case "one-week":
+    $from = CMbDT::date("-1 WEEK", $to);
     break;
-  case "hyear":
-    $from = CMbDT::date("-6 MONTH", $to);
+
+  case "height-weeks":
+    $from = CMbDT::date("-8 WEEK", $to);
     break;
-  case "twoyears":
-    $from = CMbDT::date("-2 YEARS", $to);
+
+  case "one-year":
+    $from = CMbDT::date("-1 YEAR", $to);
     break;
-  case "twentyyears":
+
+  case "four-years":
+    $from = CMbDT::date("-4 YEARS", $to);
+    break;
+
+  case "twenty-years":
     $from = CMbDT::date("-20 YEARS", $to);
     break;
 }

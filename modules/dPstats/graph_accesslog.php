@@ -9,48 +9,48 @@
  * @version    $Revision$
  */
 
-function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 'day', $left, $right, $DBorNotDB = false, $human_bot = null) {
+function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 'one-day', $left, $right, $DBorNotDB = false, $human_bot = null) {
   switch ($interval) {
-    case "day":
+    case "one-day":
       $step          = "+10 MINUTES";
       $period_format = "%H:%M";
       $hours         = 1/6;
+      $ticks_modulo  = 3;
       break;
 
-    case "month":
+    case "one-week":
+      $step          = "+1 HOUR";
+      $period_format = "%a %d %Hh";
+      $hours         = 1;
+      $ticks_modulo  = 6;
+      break;
+
+    case "height-weeks":
       $step          = "+1 DAY";
       $period_format = "%d/%m";
       $hours         = 24;
+      $ticks_modulo  = 2;
       break;
 
-    case "hyear":
+    case "one-year":
       $step          = "+1 WEEK";
       $period_format = "%U";
       $hours         = 24 * 7;
+      $ticks_modulo  = 2;
       break;
 
-    case "twoyears":
+    case "four-years":
       $step          = "+1 MONTH";
       $period_format = "%m/%Y";
       $hours         = 24 * 30;
+      $ticks_modulo  = 2;
       break;
 
-    case "twentyyears":
+    case "twenty-years":
       $step          = "+1 YEAR";
       $period_format = "%Y";
       $hours         = 24 * 30 * 12;
-      break;
-
-    case "fourhours":
-      $step          = "+10 MINUTES";
-      $period_format = "%H:%M";
-      $hours         = 1/6;
-      break;
-
-    default:
-      $step          = "+10 MINUTES";
-      $period_format = "%H:%M";
-      $hours         = 1/6;
+      $ticks_modulo  = 1;
       break;
   }
   
@@ -117,19 +117,10 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
       }
     }
 
-    if ($interval == 'day') {
-      foreach ($datax as $i => &$x) {
-        if ($i % 4) {
-          $x[1] = '';
-        }
-      }
-    }
-
-    if ($interval == 'month') {
-      foreach ($datax as $i => &$x) {
-        if ($i % 2) {
-          $x[1] = '';
-        }
+    // Removing some xaxis ticks
+    foreach ($datax as $i => &$x) {
+      if ($i % $ticks_modulo) {
+        $x[1] = '';
       }
     }
 

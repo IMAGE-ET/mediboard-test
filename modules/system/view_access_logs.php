@@ -15,7 +15,7 @@ $groupmod = CValue::getOrSession("groupmod", 2);
 
 // Hour range for daily stats
 $hour_min = CValue::getOrSession("hour_min", "6");
-$hour_max = CValue::getOrSession("hour_max", "23");
+$hour_max = CValue::getOrSession("hour_max", "22");
 $hours = range(0, 23);
 
 $left_mode      = CValue::getOrSession("left_mode", "request_time"); // request_time, cpu_time, errors, memory_peak
@@ -38,46 +38,35 @@ if (!is_numeric($groupmod)) {
 CAppUI::requireModuleFile('dPstats', 'graph_accesslog');
 
 $to = CMbDT::date("+1 DAY", $date);
-switch ($interval = CValue::getOrSession("interval", "day")) {
-  default:
-  case "day":
-    $minutes     = CMbDT::format(null, "%M");
-    $arr_minutes = (floor($minutes / 10) * 10) % 60;
-    ($arr_minutes === 0) ? $arr_minutes = "00" : null;
-
-    $from = CMbDT::date("-1 DAY", $to);
-
+switch ($interval = CValue::getOrSession("interval", "one-day")) {
+  case "one-day":
+    $today = CMbDT::date("-1 DAY", $to);
     // Hours limitation
-    $from = CMbDT::transform("+$hour_min HOUR", $from, "%Y-%m-%d %H:" . $arr_minutes . ":00");
-    $to   = CMbDT::transform("-1 DAY +$hour_max HOUR", $to, "%Y-%m-%d %H:" . $arr_minutes . ":00");
+    $from = CMbDT::dateTime("+$hour_min HOUR", $today);
+    $to   = CMbDT::dateTime("+$hour_max HOUR", $today);
     break;
 
-  case "month":
-    $from = CMbDT::date("-1 MONTH", $to);
+  case "one-week":
+    $from = CMbDT::date("-1 WEEK", $to);
     break;
 
-  case "hyear":
-    $from = CMbDT::date("-6 MONTH", $to);
+  case "height-weeks":
+    $from = CMbDT::date("-8 WEEKS", $to);
     break;
 
-  case "twoyears":
-    $from = CMbDT::date("-2 YEARS", $to);
+  case "one-year":
+    $from = CMbDT::date("-1 YEAR", $to);
     break;
 
-  case "twentyyears":
+  case "four-years":
+    $from = CMbDT::date("-4 YEARS", $to);
+    break;
+
+  case "twenty-years":
     $from = CMbDT::date("-20 YEARS", $to);
     break;
-
-  case "fourhours":
-    $minutes     = CMbDT::format(null, "%M");
-    $arr_minutes = (floor($minutes / 10) * 10) % 60;
-    ($arr_minutes === 0) ? $arr_minutes = "00" : null;
-
-    $from = CMbDT::transform("-4 HOURS", CMbDT::dateTime(), "%Y-%m-%d %H:" . $arr_minutes . ":00");
-    $to   = CMbDT::format(CMbDT::dateTime(), "%Y-%m-%d %H:" . $arr_minutes . ":00");
 }
 
-CSQLDataSource::$trace = false;
 $logs = CAccessLog::loadAgregation($from, $to, $groupmod, $module, $DBorNotDB, $human_bot);
 
 $graphs = array();

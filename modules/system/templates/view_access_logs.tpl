@@ -93,12 +93,12 @@ Main.add(function () {
       
       <label for="interval" title="Echelle d'affichage">Intervalle</label>
       <select name="interval" onchange="this.form.submit();">
-        <option value="fourhours"    {{if $interval == "fourhours"}}   selected="selected" {{/if}}>4 heures</option>
-        <option value="day"          {{if $interval == "day"}}         selected="selected" {{/if}}>Journée </option>
-        <option value="month"        {{if $interval == "month"}}       selected="selected" {{/if}}>Mois    </option>
-        <option value="hyear"        {{if $interval == "hyear"}}       selected="selected" {{/if}}>Semestre</option>
-        <option value="twoyears"     {{if $interval == "twoyears"}}    selected="selected" {{/if}}>2 ans   </option>
-        <option value="twentyyears"  {{if $interval == "twentyyears"}} selected="selected" {{/if}}>20 ans  </option>
+        <option value="one-day"      {{if $interval == "one-day"     }} selected="selected" {{/if}}>1 jour     (par 10mn)    </option>
+        <option value="one-week"     {{if $interval == "one-week"    }} selected="selected" {{/if}}>1 semaine  (par heure)   </option>
+        <option value="height-weeks" {{if $interval == "height-weeks"}} selected="selected" {{/if}}>8 semaines (par jour)    </option>
+        <option value="one-year"     {{if $interval == "one-year"    }} selected="selected" {{/if}}>1 an       (par semaine) </option>
+        <option value="four-years"   {{if $interval == "four-years"  }} selected="selected" {{/if}}>4 ans      (par mois)    </option>
+        <option value="twenty-years" {{if $interval == "twenty-years"}} selected="selected" {{/if}}>20 ans     (par an)      </option>
       </select>
       
       {{if $interval == "day"}}

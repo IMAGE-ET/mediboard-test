@@ -11,23 +11,32 @@
 
 function graphUserLog($startx, $endx, $interval, $user_id) {
   switch ($interval) {
-    case "day":
+    case "one-day":
       $step = "+1 HOUR";
       $period_format = "%Hh";
       break;
-    case "month":
+
+    case "one-week":
+      $step          = "+1 HOUR";
+      $period_format = "%d %H";
+      break;
+
+    case "height-weeks":
       $step = "+1 DAY";
       $period_format = "%d/%m";
       break;
-    case "hyear":
+
+    case "one-year":
       $step = "+1 WEEK";
       $period_format = "%U";
       break;
-    case "twoyears":
+
+    case "four-years":
       $step = "+1 MONTH";
       $period_format = "%m/%Y";
       break;
-    case "twentyyears":
+
+    case "twenty-years":
       $step = "+1 YEAR";
       $period_format = "%Y";
       break;

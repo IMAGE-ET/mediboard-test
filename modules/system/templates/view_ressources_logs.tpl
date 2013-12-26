@@ -42,9 +42,9 @@ Main.add(function () {
       
       <label for="interval" title="Echelle d'affichage">Intervalle</label>
       <select name="interval" onchange="this.form.submit()">
-        <option value="day" {{if $interval == "day"}} selected="selected" {{/if}}>Journée</option>
-        <option value="month" {{if $interval == "month"}} selected="selected" {{/if}}>Mois</option>
-        <option value="hyear" {{if $interval == "hyear"}} selected="selected" {{/if}}>Semestre</option>
+        <option value="day"   {{if $interval == "day"  }} selected="selected" {{/if}}>Journée</option>
+        <option value="month" {{if $interval == "month"}} selected="selected" {{/if}}>Mois   </option>
+        <option value="year"  {{if $interval == "year" }} selected="selected" {{/if}}>Année  </option>
       </select>
       &mdash;
       <label for="numelem" title="Nombre maximum d'éléments à afficher">Eléments maximums</label>

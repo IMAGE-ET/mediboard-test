@@ -34,7 +34,7 @@ function graphRessourceLog($module, $date, $element = 'duration', $interval = 'd
       $startx = CMbDT::dateTime("-1 MONTH", "$date 00:00:00");
       $endx   = "$date 23:59:59";
       break;
-    case "hyear":
+    case "year":
       $startx = CMbDT::dateTime("-27 WEEKS", "$date 00:00:00");
       $endx   = "$date 23:59:59";
       break;

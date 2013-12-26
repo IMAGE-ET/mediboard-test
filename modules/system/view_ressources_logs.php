@@ -27,11 +27,9 @@ switch ($interval) {
   case "month":
     $from = CMbDT::date("-1 MONTH", $next);
     break;
-  case "hyear":
+  case "year":
     $from = CMbDT::date("-6 MONTH", $next);
     break;
-  default:
-    $from = CMbDT::date("-1 DAY", $next);
 }
 
 $graphs = array();
