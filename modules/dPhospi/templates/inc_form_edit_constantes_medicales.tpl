@@ -180,7 +180,7 @@ Main.add(function () {
                   </th>
 
                   {{assign var=_readonly value=null}}
-                  {{if array_key_exists("candles", $_params)}}
+                  {{if array_key_exists("formfields", $_params)}}
                     {{if $real_context}}
                       <td>
                         {{foreach from=$_params.formfields item=_formfield_name key=_key name=_formfield}}
