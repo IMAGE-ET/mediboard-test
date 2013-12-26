@@ -1631,6 +1631,84 @@ class CStoredObject extends CModelObject {
   }
 
   /**
+   * Mass load mechanism for back reference collections of an object collection
+   * Will maintain back collections AND back counts
+   *
+   * @param self[] $objects     Array of objects
+   * @param string $backName    Name of backward reference
+   * @param null   $order       Order clause
+   * @param array  $where       Additional where clauses
+   * @param array  $ljoin       Additionnal ljoin clauses
+   * @param string $backNameAlt BackName Alt
+   *
+   * @return int|null self[] Foundobjects, null if collection is unavailable
+   */
+  static function massLoadBackRefs($objects, $backName, $order = null, $where = array(), $ljoin = array(), $backNameAlt = "") {
+    if (!count($objects)) {
+      return null;
+    }
+
+    $object = reset($objects);
+    if (!$backSpec = $object->makeBackSpec($backName)) {
+      return null;
+    }
+
+    // No existing class
+    if (!self::classExists($backSpec->class)) {
+      return null;
+    }
+
+    /** @var self $backObject */
+    $backObject = new $backSpec->class;
+    $backField = $backSpec->field;
+
+    // Cas du module non installé
+    if (!$backObject->_ref_module) {
+      return null;
+    }
+
+    // With old versions of mysql, remove '' fields
+    $ids = CMbArray::pluck($objects, "_id");
+    CMbArray::removeValue("", $ids);
+
+    $backName = $backNameAlt ? $backNameAlt : $backName;
+
+    // Initilize collections and counts
+    foreach ($objects as $_object) {
+      $_object->_count[$backName] = 0;
+      $_object->_back[$backName] = array();
+    }
+
+    // No stored objects
+    if (!count($ids)) {
+      return 0;
+    }
+
+    // Meta objects case
+    /** @var CRefSpec $backSpec */
+    $backSpec = $backObject->_specs[$backField];
+    $backMeta = $backSpec->meta;
+    if ($backMeta) {
+      $where[$backMeta] = "= '$object->_class'";
+    }
+
+    // Actual load query
+    $ds = $backObject->_spec->ds;
+    $where[$backField] = $ds->prepareIn($ids);
+    $backObjects = $backObject->loadList($where, $order, null, null, $ljoin, null);
+
+    // Dispatch back objects into objects collections
+    foreach ($backObjects as $_backObject) {
+      $object = $objects[$_backObject->$backField];
+      $object->_count[$backName]++;
+      $object->_back[$backName][$_backObject->_id] = $_backObject;
+    }
+
+    // Found objects
+    return $backObjects;
+  }
+
+  /**
    * Mass count mechanism for back reference collections of an object collection
    *
    * @param self[] $objects     Array of objects
@@ -1761,7 +1839,17 @@ class CStoredObject extends CModelObject {
     if (isset($this->_count[$backName]) && $this->_count[$backName] === 0) {
       return $this->_back[$backName] = array();
     }
-    
+
+    // Preloading optimization: no need to query when we have already preloaded
+    // Back collection and back count in correspondance is the "signature" on mass preloading mechanism
+    // So that we can use the mechanism safely with probably no side effects
+    if (
+      isset($this->_back[$backName]) &&
+      isset($this->_count[$backName]) &&
+      count($this->_back[$backName]) == $this->_count[$backName]) {
+      return $this->_back[$backName];
+    }
+
     // Back reference where clause
     $backField = $backSpec->field;
     $where[$backField] = "= '$this->_id'";    

@@ -134,8 +134,8 @@ class CViewSender extends CMbObject {
   }
 
   function loadRefSendersSource() {
+    /** @var CSourceToViewSender[] $senders_source */
     $senders_source = $this->loadBackRefs("sources_link");
-
     foreach ($senders_source as $_sender_source) {
       $_sender_source->loadRefSource()->loadRefSourceFTP();
     }

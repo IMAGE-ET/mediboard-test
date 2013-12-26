@@ -20,6 +20,7 @@ $sender = new CViewSender();
 
 /** @var CViewSender[] $senders */
 $senders = $sender->loadList(null, "name");
+CStoredObject::massLoadBackRefs($senders, "sources_link");
 foreach ($senders as $_sender) {
   $_sender->makeHourPlan($minute);
   $_sender->loadRefSendersSource();
