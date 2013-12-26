@@ -6,7 +6,8 @@ Medecin = {
   edit : function(form) {
     this.form = form;
     var url = new Url("dPpatients", "vw_medecins");
-    url.popup(700, 550, "Medecin");
+    url.addParam("dialog","1");
+    url.modal({height: "80%", width: "90%", title: "Medecins"});
   },
   
   del: function(form) {

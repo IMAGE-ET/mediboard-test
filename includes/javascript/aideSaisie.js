@@ -416,6 +416,7 @@ var AideSaisie = {
     url.addParam("depend_value_2", dependValue2 || null);
     url.addParam("class_depend_value_1", class_depend_value_1 || null);
     url.addParam("class_depend_value_2", class_depend_value_2 || null);
-    url.popup(600, 400, "AidesSaisie");
+    url.addParam("dialog","1");
+    url.modal({height:"80%", width:"60%", title:"Création d'aide à la saisie"});
   }
 };

@@ -25,7 +25,8 @@
     edit : function() {
       this.form = getForm("editFrm");
       var url = new Url("dPpatients", "vw_medecins");
-      url.popup(700, 450, "Medecin");
+      url.addParam("dialog","1");
+      url.modal({height: "80%", width: "90%", title: "Medecins"});
     },
 
     set: function(id, view) {

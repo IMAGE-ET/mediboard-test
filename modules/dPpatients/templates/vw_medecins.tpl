@@ -2,14 +2,13 @@
 
 <script type="text/javascript">
 function setClose(id, view) {
-  window.opener.Medecin.set(id, view);
-  window.close();
+  window.parent.Medecin.set(id, view);
+  window.parent.Control.Modal.close();
 }
 
 var formVisible = false;
 function showAddCorres() {
   if (!formVisible) {
-    window.resizeBy(320,0);
     $('addCorres').show();
     getForm('editFrm').focusFirstElement();
     formVisible = true;
@@ -19,7 +18,6 @@ function showAddCorres() {
 }
 
 function hideAddCorres() {
-  window.resizeBy(-320,0);
   $('addCorres').hide();
   formVisible = false;
 }
@@ -92,7 +90,7 @@ function onSubmitCorrespondant(form) {
           <td class="button" colspan="2"><button class="search" type="submit">{{tr}}Search{{/tr}}</button></td>
           {{else}}
           <td class="button" colspan="2">
-            <button class="search" type="submit" onclick="formVisible=false;">{{tr}}Search{{/tr}}</button>
+            <button id="vw_medecins_button_dialog_search" class="search" type="submit" onclick="formVisible=false;">{{tr}}Search{{/tr}}</button>
             <button class="new" type="button" onclick="showAddCorres();">{{tr}}Create{{/tr}} &gt;</button>
           </td>
           {{/if}}
@@ -132,7 +130,7 @@ function onSubmitCorrespondant(form) {
           <th>{{mb_title class=CMedecin field=tel}}</th>
           <th>{{mb_title class=CMedecin field=fax}}</th>
           {{if $dialog}}
-          <th>{{tr}}Select{{/tr}}</th>
+          <th id="vw_medecins_th_select">{{tr}}Select{{/tr}}</th>
           {{/if}}
         </tr>
         <tr>
