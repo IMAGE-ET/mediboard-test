@@ -101,18 +101,7 @@
       </td>
     {{/if}}
     <td>
-      {{if $can->edit}}
-        <form name="editSortieBlocReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
-          <input type="hidden" name="m" value="dPplanningOp" />
-          <input type="hidden" name="dosql" value="do_planning_aed" />
-          <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
-          <input type="hidden" name="del" value="0" />
-          {{mb_field object=$_operation field="sortie_salle" register=true form="editSortieBlocReveilFrm$_operation_id"}}
-          <button class="tick notext" type="button" onclick="submitReveilForm(this.form);">{{tr}}Modify{{/tr}}</button>
-        </form>
-      {{else}}
       {{mb_value object=$_operation field="sortie_salle"}}
-      {{/if}}
     </td>
     {{if $personnels !== null}}
     <td>
@@ -182,8 +171,10 @@
         <input type="hidden" name="del" value="0" />
 
         {{mb_field object=$_operation field=sortie_reveil_possible form=editSortieReveilReveilFrm`$_operation->_id` onchange="submitReveilForm(this.form)"}}
-        <button class="tick notext" type="button"
-          onclick="if (!this.form.sortie_reveil_possible.value) { $V(this.form.sortie_reveil_possible, 'current'); }; submitReveilForm(this.form);">{{tr}}Modify{{/tr}}</button>
+        {{if !$_operation->sortie_reveil_possible}}
+          <button class="tick notext" type="button"
+            onclick="if (!this.form.sortie_reveil_possible.value) { $V(this.form.sortie_reveil_possible, 'current'); }; submitReveilForm(this.form);">{{tr}}Modify{{/tr}}</button>
+        {{/if}}
       </form>
       {{else}}-{{/if}}
       
@@ -198,6 +189,10 @@
           <input type="hidden" name="del" value="0" />
           {{if $modif_operation}}
             {{mb_field object=$_operation field=sortie_reveil_reel register=true form="editSortieReveilReelReveilFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
+            {{if !$_operation->sortie_reveil_reel}}
+              <button class="tick notext" type="button"
+              onclick="if (!this.form.sortie_reveil_reel.value) { $V(this.form.sortie_reveil_reel, 'current'); }; submitSortieForm(this.form);">{{tr}}Modify{{/tr}}</button>
+            {{/if}}
           {{else}}
             {{mb_value object=$_operation field="sortie_reveil_reel"}}
           {{/if}}
