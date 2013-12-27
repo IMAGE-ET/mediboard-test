@@ -454,7 +454,7 @@ $library->description = "A rewrite of SOAPx4";
 $library->sourceDir = "NuSOAP";
 $library->targetDir = "NuSOAP";
 $library->versionFile = "changelog";
-$library->versionString = "0.9.5";
+$library->versionString = "0.9.6";
 
 CLibrary::$all[$library->name] = $library;
 
