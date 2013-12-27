@@ -106,13 +106,19 @@ for ($num = 0; $num <= 1; $num++) {
     }
 
     $where = $temp;
-    $ljoin["affectation"] = "affectation.sejour_id = sejour.sejour_id";
-    $ljoin["service"] = "service.service_id = affectation.service_id";
-    $ljoin["lit"] = "lit.lit_id = affectation.lit_id";
-    $ljoin["chambre"] = "chambre.chambre_id = lit.chambre_id";
-    $where[] = "'$date' BETWEEN affectation.entree AND affectation.sortie";
-    $where["service.urgence"] = "= '1'";
-    $where["chambre.chambre_id"] = "= '$chambre->_id'";
+    if (CAppUI::conf("dPurgences create_affectation")) {
+      $ljoin["affectation"] = "affectation.sejour_id = sejour.sejour_id";
+      $ljoin["service"]     = "service.service_id = affectation.service_id";
+      $ljoin["lit"]         = "lit.lit_id = affectation.lit_id";
+      $ljoin["chambre"]     = "chambre.chambre_id = lit.chambre_id";
+
+      $where[]                     = "'$date' BETWEEN affectation.entree AND affectation.sortie";
+      $where["service.urgence"]    = "= '1'";
+      $where["chambre.chambre_id"] = "= '$chambre->_id'";
+    }
+    else {
+      $where["rpu.box_id"] = CSQLDataSource::prepareIn(array_keys($chambre->_ref_lits));
+    }
 
     $sejour = new CSejour();
     /** @var CSejour[] $sejours */
