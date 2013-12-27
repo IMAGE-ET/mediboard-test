@@ -214,6 +214,7 @@
         &mdash; {{tr}}CRPU-_service_id{{/tr}} :
         {{if $services|@count == 1}}
           {{assign var=first_service value=$services_type|@reset|@reset}}
+          <input type="hidden" name="_service_id" value="{{$first_service->_id}}" />
           {{$first_service->_view}}
         {{else}}
           <select name="_service_id" class="{{$sejour->_props.service_id}}">
