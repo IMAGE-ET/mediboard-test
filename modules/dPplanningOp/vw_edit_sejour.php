@@ -28,13 +28,13 @@ if ($mediuser->isPraticien() and !$praticien_id) {
 }
 
 // Chargement du praticien
-$praticien = new CMediusers;
+$praticien = new CMediusers();
 if ($praticien_id) {
   $praticien->load($praticien_id);
 }
 
 // Chargement du patient
-$patient = new CPatient;
+$patient = new CPatient();
 if ($patient_id) {
   $patient->load($patient_id);
 }
@@ -48,17 +48,18 @@ foreach ($listPraticiens as $keyPrat =>$prat) {
 }
 
 // On récupére le séjour
-$sejour = new CSejour;
+$sejour = new CSejour();
 if ($sejour_id) {
   $sejour->load($sejour_id);
-  $sejour->loadRefs();
   
   // On vérifie que l'utilisateur a les droits sur le sejour
-  if (!$sejour->canRead()) {
+  if (!$sejour->canDo()->read) {
     global $m, $tab;
     CAppUI::setMsg("Vous n'avez pas accés à ce séjour", UI_MSG_WARNING);
     CAppUI::redirect("m=$m&tab=$tab&sejour_id=0");
   }
+
+  $sejour->loadRefs();
 
   foreach ($sejour->_ref_operations as $operation) {
     $operation->loadRefsFwd();
@@ -204,25 +205,24 @@ $smarty->assign("heure_sortie_ambu"   , $heure_sortie_ambu);
 $smarty->assign("heure_sortie_autre"  , $heure_sortie_autre);
 $smarty->assign("heure_entree_veille" , $heure_entree_veille);
 $smarty->assign("heure_entree_jour"   , $heure_entree_jour);
-//$smarty->assign("locked_sejour"         , $locked_sejour);
 
 $smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("sejour"        , $sejour);
-$smarty->assign("op"            , new COperation);
+$smarty->assign("op"            , new COperation());
 $smarty->assign("praticien"     , $praticien);
 $smarty->assign("patient"       , $patient);
 $smarty->assign("sejours"       , $sejours);
 $smarty->assign("ufs"           , CUniteFonctionnelle::getUFs());
 
 $smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
-$smarty->assign("count_etab_externe", $count_etab_externe);
-$smarty->assign("medecin_adresse_par", $medecin_adresse_par);
+$smarty->assign("count_etab_externe"    , $count_etab_externe);
+$smarty->assign("medecin_adresse_par"   , $medecin_adresse_par);
 
 $smarty->assign("etablissements", $etablissements);
 $smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("listServices"  , $services);
 
-$smarty->assign("prestations"   , $prestations);
+$smarty->assign("prestations"      , $prestations);
 $smarty->assign("count_prestations", $count_prestations);
 
 $smarty->assign("hours", $hours);

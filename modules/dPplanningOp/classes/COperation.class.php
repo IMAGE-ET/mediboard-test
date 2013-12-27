@@ -1329,39 +1329,18 @@ class COperation extends CCodable implements IPatientRelated {
    * @see parent::getPerm()
    */
   function getPerm($permType) {
-    switch ($permType) {
-      case PERM_EDIT :
-        if (!$this->_ref_chir) {
-          $this->loadRefChir();
-        }
-
-        if (!$this->_ref_anesth) {
-          $this->loadRefPlageOp();
-        }
-
-        if ($this->plageop_id) {
-          return (
-            ($this->_ref_chir->getPerm($permType) || $this->_ref_anesth->getPerm($permType)) &&
-            $this->_ref_module->getPerm($permType)
-          );
-        }
-        else {
-          return (($this->_ref_chir->getPerm($permType) || $this->_ref_anesth->getPerm($permType)) &&
-            $this->_ref_module->getPerm(PERM_READ)
-          );
-        }
-        break;
-      default :
-        return parent::getPerm($permType);
+    if (!$this->_ref_chir) {
+      $this->loadRefChir();
     }
 
-    //if (!$this->_ref_chir) {
-    //  $this->loadRefChir();
-    //}
-    //if (!$this->_ref_anesth) {
-    //  $this->loadRefPlageOp();
-    //}
-    //return ($this->_ref_chir->getPerm($permType) || $this->_ref_anesth->getPerm($permType));
+    if (!$this->_ref_anesth) {
+      $this->loadRefPlageOp();
+    }
+
+    return (
+      ($this->_ref_chir->getPerm($permType) || $this->_ref_anesth->getPerm($permType))
+      && $this->_ref_module->getPerm($permType)
+    );
   }
 
   function fillTemplate(&$template) {

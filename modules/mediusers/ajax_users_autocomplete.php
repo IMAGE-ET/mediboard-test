@@ -15,6 +15,7 @@ $view_field   = CValue::get('view_field', $field);
 $input_field  = CValue::get('input_field', $view_field);
 $show_view    = CValue::get('show_view', 'false') == 'true';
 $praticiens   = CValue::get('praticiens', 0);
+$edit         = CValue::get('edit', 0);
 $keywords     = CValue::get($input_field);
 $limit        = CValue::get('limit', 30);
 $where        = CValue::get('where', array());
@@ -24,13 +25,21 @@ $ljoin        = CValue::get("ljoin", array());
 /** @var CMbObject $object */
 $object = new CMediusers();
 $user = CMediusers::get();
-if ($praticiens) {
-  // Vérification des droits sur les praticiens
-  $listUsers = $user->isAnesth() ? $user->loadPraticiens(null, null, $keywords) : $user->loadPraticiens(PERM_EDIT, null, $keywords);
+
+$use_edit = CAppUI::pref("useEditAutocompleteUsers");
+if (!$edit && $use_edit) {
+  $edit = 1;
 }
-else {
-  $listUsers = $user->loadUsers(PERM_READ, null, $keywords);
-}
+
+// Droits sur les utilisateurs retournés
+$permType = $edit ?
+  PERM_EDIT :
+  PERM_READ;
+
+// Récupération de la liste des utilisateurs
+$listUsers = $praticiens ?
+  $user->loadPraticiens($permType, null, $keywords) :
+  $user->loadUsers($permType, null, $keywords);
 
 $template = $object->getTypedTemplate("autocomplete");
 

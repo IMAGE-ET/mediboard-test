@@ -98,6 +98,7 @@
           {{mb_include template=inc_pref spec=enum var=autocompleteDelay values="short|medium|long" value_locale_prefix=""}}
           {{mb_include template=inc_pref spec=bool var=showCounterTip}}
           {{mb_include template=inc_pref spec=bool var=showLastUpdate}}
+          {{mb_include template=inc_pref spec=bool var=useEditAutocompleteUsers}}
           {{mb_include template=inc_pref spec=enum var=textareaToolbarPosition values="right|left"}}
           {{mb_include template=inc_pref spec=bool var=planning_dragndrop}}
           {{mb_include template=inc_pref spec=bool var=planning_resize}}

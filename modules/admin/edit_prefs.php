@@ -85,12 +85,13 @@ if ($session_lifetime) {
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("user"   , $user);
-$smarty->assign("prof"   , $prof);
-$smarty->assign("user_id", $user_id);
-$smarty->assign("locales", $locales);
-$smarty->assign("styles" , $styles);
-$smarty->assign("modules", $modules);
-$smarty->assign("prefs"  , $prefs);
-$smarty->assign("session_lifetime_enum"  , $session_lifetime_enum);
+$smarty->assign("user"                 , $user);
+$smarty->assign("prof"                 , $prof);
+$smarty->assign("user_id"              , $user_id);
+$smarty->assign("locales"              , $locales);
+$smarty->assign("styles"               , $styles);
+$smarty->assign("modules"              , $modules);
+$smarty->assign("prefs"                , $prefs);
+$smarty->assign("session_lifetime_enum", $session_lifetime_enum);
+
 $smarty->display("edit_prefs.tpl");

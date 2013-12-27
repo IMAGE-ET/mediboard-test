@@ -274,7 +274,7 @@ function showCheckboxAnesth(element){
           <td>{{mb_field object=$filter field="exam_extempo" typeEnum=checkbox}}</td>
         </tr>
         <tr class="not-full">
-          <th>Sans consultation d'anesthésie</th>
+          <th>Uniquement les dossier d'anesth. manquants</th>
           <td><input type="checkbox" name="no_consult_anesth" onclick="$V(this.form.no_consult_anesth, $V(this)?1:0);" value="0"/></td>
         </tr>
       </table>

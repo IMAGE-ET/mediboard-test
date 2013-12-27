@@ -149,9 +149,13 @@ refreshFunction = function(chir_id) {
       </script>
       {{mb_field object=$op field="chir_id" hidden=hidden value=$chir->_id onchange="synchroPrat(); Value.synchronize(this); removePlageOp(true); refreshFunction(this.value)"}}
       <input type="text" name="chir_id_view" class="autocomplete" style="width:15em;" onchange="Value.synchronize(this);"
-             value="{{if $chir->_id}}{{$chir->_view}}{{/if}}"  placeholder="&mdash; Choisir un chirurgien"/>
-      <button type="button"onclick="toggleOtherPrats()" title="{{tr}}Add{{/tr}}"
+             value="{{if $chir->_id}}{{$chir->_view}}{{/if}}"  placeholder="&mdash; Choisir un praticien"/>
+      <button type="button" onclick="toggleOtherPrats()" title="{{tr}}Add{{/tr}}"
         class="notext {{if $op->chir_2_id || $op->chir_3_id || $op->chir_4_id}}up{{else}}down{{/if}}"></button>
+      <input name="_limit_search_op" class="changePrefListUsers" type="checkbox"
+             {{if $app->user_prefs.useEditAutocompleteUsers}}checked{{/if}}
+             onchange="changePrefListUsers(this);"
+             title="Limiter la recherche des praticiens" />
     </td>
   </tr>
   {{if $conf.dPplanningOp.COperation.show_secondary_function && !$op->_id}}

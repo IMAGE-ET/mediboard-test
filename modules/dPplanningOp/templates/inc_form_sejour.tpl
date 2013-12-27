@@ -32,8 +32,6 @@
 
 <script>
 selectPraticien = function (element2, element) {
-  // Autocomplete des chirurgiens
-  var form = getForm("editOp");
   // Autocomplete des users
   var url = new Url("mediusers", "ajax_users_autocomplete");
   url.addParam("praticiens", '1');
@@ -52,7 +50,8 @@ selectPraticien = function (element2, element) {
       $V(element2, id);
     }
   });
-}
+};
+
 function modifLits(lit_id){
   var form = getForm('editSejour');
 
@@ -363,59 +362,76 @@ updateModeSortie = function(select) {
   $V(form.elements.mode_sortie, selected.get("mode"));
 };
 
+function changePrefListUsers(oElement) {
+  var bNewValue = $V(oElement);
+  var oForm = getForm("editPrefUserAutocompleteEdit");
+  if(bNewValue) {
+    $V(oForm.elements['pref[useEditAutocompleteUsers]'], 1);
+    $$(".changePrefListUsers").each(function(_element) {
+      $V(_element, 1, false);
+    });
+  } else {
+    $V(oForm.elements['pref[useEditAutocompleteUsers]'], 0);
+    $$(".changePrefListUsers").each(function(_element) {
+      $V(_element, 0, false);
+    });
+  }
+  return onSubmitFormAjax(oForm);
+}
+
 {{if $mode_operation}}
-// Declaration d'un objet Sejour
-var Sejour = {
-  sejours_collision: null,
-  preselected: false,
-  // Preselectionne un sejour existant en fonction de la date d'intervention choisie
-  preselectSejour: function(date_plage){
-    if (!date_plage || this.preselected){
-      return;
-    }
+  // Declaration d'un objet Sejour
+  var Sejour = {
+    sejours_collision: null,
+    preselected: false,
+    // Preselectionne un sejour existant en fonction de la date d'intervention choisie
+    preselectSejour: function(date_plage){
+      if (!date_plage || this.preselected){
+        return;
+      }
 
-    var sejours_collision = this.sejours_collision;
-    var oForm = getForm("editSejour");
-    var sejour_courant_id = $V(oForm.sejour_id);
-    // Liste des sejours
-    if(sejours_collision instanceof Array) {
-      return;
-    }
-    for (sejour_id in sejours_collision){
-      var entree = sejours_collision[sejour_id]["entree"];
-      var sortie = sejours_collision[sejour_id]["sortie"];
-      if ((entree <= date_plage) && (sortie >= date_plage)) {
-        if (sejour_courant_id != sejour_id){
-          var msg = printf("Vous êtes en train de planifier une intervention pour le %s, or il existe déjà un séjour pour ce patient du %s au %s. Souhaitez-vous placer l'intervention dans ce séjour ?", 
-                    Date.fromDATE(date_plage).toLocaleDate(), 
-                    Date.fromDATE(entree).toLocaleDate(),
-                    Date.fromDATE(sortie).toLocaleDate());
+      var sejours_collision = this.sejours_collision;
+      var oForm = getForm("editSejour");
+      var sejour_courant_id = $V(oForm.sejour_id);
+      // Liste des sejours
+      if(sejours_collision instanceof Array) {
+        return;
+      }
+      for (sejour_id in sejours_collision){
+        var entree = sejours_collision[sejour_id]["entree"];
+        var sortie = sejours_collision[sejour_id]["sortie"];
+        if ((entree <= date_plage) && (sortie >= date_plage)) {
+          if (sejour_courant_id != sejour_id){
+            var msg = printf("Vous êtes en train de planifier une intervention pour le %s, or il existe déjà un séjour pour ce patient du %s au %s. Souhaitez-vous placer l'intervention dans ce séjour ?",
+                      Date.fromDATE(date_plage).toLocaleDate(),
+                      Date.fromDATE(entree).toLocaleDate(),
+                      Date.fromDATE(sortie).toLocaleDate());
 
-          if (confirm(msg)){
-            this.preselected = true;
-            $V(oForm.sejour_id, sejour_id);
-            return;
+            if (confirm(msg)){
+              this.preselected = true;
+              $V(oForm.sejour_id, sejour_id);
+              return;
+            }
           }
         }
       }
     }
-  }
-};
+  };
 
-Main.add( function(){
-  // Conservation du non facturable lors de la sélection
-  // d'un nouveau séjour dans la liste déroulante
-  // des séjours existants dans la DHE
-  {{if !$sejour->_id}}
-    if (window.save_facturable) {
-      $V(getForm("editSejour").facturable, window.save_facturable);
-    }
-  {{/if}}
+  Main.add( function(){
+    // Conservation du non facturable lors de la sélection
+    // d'un nouveau séjour dans la liste déroulante
+    // des séjours existants dans la DHE
+    {{if !$sejour->_id}}
+      if (window.save_facturable) {
+        $V(getForm("editSejour").facturable, window.save_facturable);
+      }
+    {{/if}}
 
-  Sejour.sejours_collision = {{$sejours_collision|@json}};
-  var oForm = getForm("editOp");
-  Sejour.preselectSejour($V(oForm._date));
-});
+    Sejour.sejours_collision = {{$sejours_collision|@json}};
+    var oForm = getForm("editOp");
+    Sejour.preselectSejour($V(oForm._date));
+  });
 {{/if}}
 
 Main.add( function(){
@@ -475,6 +491,14 @@ Main.add( function(){
   {{/if}}
 });
 </script>
+
+<!-- Formulaire de changement de la préférence des listes déroulantes utilisateur -->
+<form name="editPrefUserAutocompleteEdit" method="post">
+  <input type="hidden" name="m" value="admin" />
+  <input type="hidden" name="dosql" value="do_preference_aed" />
+  <input type="hidden" name="user_id" value="{{$app->user_id}}" />
+  <input type="hidden" name="pref[useEditAutocompleteUsers]" value="{{$app->user_prefs.useEditAutocompleteUsers}}" />
+</form>
 
 <!-- div de confirmation de changement de patient lorsqu'on a un sejour_id -->
 {{mb_include module=planningOp template=inc_modal_change_patient}}
@@ -627,8 +651,12 @@ Main.add( function(){
         });
       </script>
       {{mb_field object=$sejour field="praticien_id" hidden=hidden value=$praticien->_id onchange="modifPrat();"}}
-      <input type="text" name="praticien_id_view" class="autocomplete" style="width:15em;" placeholder="&mdash; Choisir un chirurgien"
+      <input type="text" name="praticien_id_view" class="autocomplete" style="width:15em;" placeholder="&mdash; Choisir un praticien"
              value="{{if $praticien->_id}}{{$praticien->_view}}{{/if}}" />
+      <input name="_limit_search_sejour" class="changePrefListUsers" type="checkbox"
+             {{if $app->user_prefs.useEditAutocompleteUsers}}checked{{/if}}
+             onchange="changePrefListUsers(this);"
+             title="Limiter la recherche des praticiens" />
     {{/if}}
   </td>
 </tr>
