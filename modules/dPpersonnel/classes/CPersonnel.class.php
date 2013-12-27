@@ -135,10 +135,14 @@ class CPersonnel extends CMbObject {
     // Could have been ambiguous with CMediusers.actif
     if ($actif) {
       $where[] = "personnel.actif = '1'";
+      $where[] = "users_mediboard.actif = '1'";
     }
 
-    $ljoin["users"] = "personnel.user_id = users.user_id";
+    $ljoin["users"]           = "personnel.user_id = users.user_id";
+    $ljoin["users_mediboard"] = "users_mediboard.user_id = users.user_id";
+
     $order = "users.user_last_name";
+
     $group = $groupby ? "personnel.user_id" : null;
 
     $listPers = $personnel->loadGroupList($where, $order, null, $group, $ljoin);
