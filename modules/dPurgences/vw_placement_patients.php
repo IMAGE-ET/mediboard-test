@@ -12,7 +12,8 @@
 CCanDo::checkRead();
 
 // Récupération des paramètres
-$date           = CValue::getOrSession("date", CMbDT::date());
+//$date           = CValue::getOrSession("date", CMbDT::date());
+$date  = CMbDT::dateTime();
 $date_tolerance = CAppUI::conf("dPurgences date_tolerance");
 $date_before    = CMbDT::date("-$date_tolerance DAY", $date);
 $date_after     = CMbDT::date("+1 DAY", $date);
@@ -103,29 +104,32 @@ for ($num = 0; $num <= 1; $num++) {
         unset($grille[$nom][$emplacement->plan_y][$emplacement->plan_x+$b]);
       }
     }
-    
-    $where = array();
+
     $where = $temp;
-    $where["rpu.box_id"] = CSQLDataSource::prepareIn(array_keys($chambre->_ref_lits));
-    
+    $ljoin["affectation"] = "affectation.sejour_id = sejour.sejour_id";
+    $ljoin["service"] = "service.service_id = affectation.service_id";
+    $ljoin["lit"] = "lit.lit_id = affectation.lit_id";
+    $ljoin["chambre"] = "chambre.chambre_id = lit.chambre_id";
+    $where[] = "'$date' BETWEEN affectation.entree AND affectation.sortie";
+    $where["service.urgence"] = "= '1'";
+    $where["chambre.chambre_id"] = "= '$chambre->_id'";
+
     $sejour = new CSejour();
     /** @var CSejour[] $sejours */
     $sejours = $sejour->loadList($where, null, null, null, $ljoin);
-    if ($sejours) {
-      foreach ($sejours as $sejour) {
-        $sejour->loadRefRPU();
-        $sejour->loadRefPrescriptionSejour();
-        if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
-          $countAlertsNotHandled = $sejour->_ref_prescription_sejour->countAlertsNotHandled("medium");
-          $sejour->_ref_prescription_sejour->_count_fast_recent_modif = $countAlertsNotHandled;
-        }
-        else {
-          $sejour->_ref_prescription_sejour->countFastRecentModif();
-        }
-        $sejour->loadRefsDocItems();
+    foreach ($sejours as $sejour) {
+      $sejour->loadRefRPU();
+      $sejour->loadRefPrescriptionSejour();
+      if (@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")) {
+        $countAlertsNotHandled = $sejour->_ref_prescription_sejour->countAlertsNotHandled("medium");
+        $sejour->_ref_prescription_sejour->_count_fast_recent_modif = $countAlertsNotHandled;
       }
-      $listSejours[$nom][$chambre->_id] = $sejours;
+      else {
+        $sejour->_ref_prescription_sejour->countFastRecentModif();
+      }
+      $sejour->countDocItems();
     }
+    $listSejours[$nom][$chambre->_id] = $sejours;
   }
   
   //Traitement des lignes vides
