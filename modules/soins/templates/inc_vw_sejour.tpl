@@ -13,7 +13,7 @@
 {{mb_default var=default_tab value=""}}
 {{assign var=patient value=$sejour->_ref_patient}}
 {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
-{{assign var=prescription value=$sejour->_ref_prescription_sejour}}
+{{mb_default var=prescription value=$sejour->_ref_prescription_sejour}}
 
 {{if ($service_id && $service_id != "NP") || $show_affectation || $function->_id || $praticien->_id}}
   {{assign var=affectation value=$sejour->_ref_curr_affectation}}
