@@ -14,7 +14,6 @@ CCanDo::checkRead();
 $date              = CValue::getOrSession("date", CMbDT::date());
 $bloc_id           = CValue::getOrSession("bloc_id");
 $type              = CValue::get("type"); // Type d'affichage => encours, ops, reveil, out
-$present_only      = CValue::getOrSession("present_only", 0);
 $modif_operation   = CCanDo::edit() || $date >= CMbDT::date();
 
 // Chargement des Chirurgiens
@@ -109,13 +108,6 @@ foreach ($listOperations as $op) {
     continue;
   }
 
-  if ($type == "reveil") {
-    if ($present_only && $op->sortie_reveil_possible < $now) {
-      unset($listOperations[$op->_id]);
-      continue;
-    }
-  }
-
   $op->loadRefChir()->loadRefFunction();
   $op->loadRefPlageOp();
   $op->loadRefPatient();
@@ -172,6 +164,5 @@ $smarty->assign("hour"                    , CMbDT::time());
 $smarty->assign("modif_operation"         , $modif_operation);
 $smarty->assign("isImedsInstalled"        , (CModule::getActive("dPImeds") && CImeds::getTagCIDC($group)));
 $smarty->assign("nb_sorties_non_realisees", $nb_sorties_non_realisees);
-$smarty->assign("present_only"            , $present_only);
 
 $smarty->display("inc_reveil_$type.tpl");

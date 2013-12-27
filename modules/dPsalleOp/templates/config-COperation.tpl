@@ -24,7 +24,6 @@
   
     {{mb_include module=system template=inc_config_bool var=mode}}
     {{mb_include module=system template=inc_config_bool var=modif_salle}}
-    {{mb_include module=system template=inc_config_bool var=postdater_reveil}}
     {{mb_include module=system template=inc_config_bool var=use_check_timing}}
 
     {{assign var="var" value="modif_actes"}}

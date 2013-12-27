@@ -41,7 +41,7 @@
     {{/if}}
     <th>{{tr}}SSPI.SortieSalle{{/tr}}</th>
     <th>{{tr}}SSPI.EntreeReveil{{/tr}}</th>
-    <th>{{tr}}SSPI.SortieReveil{{/tr}}</th>
+    <th>Sortie sans SSPI</th>
     <th class="narrow"></th>
   </tr>    
   {{foreach from=$listOperations item=_operation}}
@@ -135,7 +135,7 @@
       </form>
       {{/if}}
       
-      <form name="editEntreeReveilOpsFrm{{$_operation->operation_id}}" action="?m={{$m}}" method="post">
+      <form name="editEntreeReveilOpsFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->operation_id}}" />
@@ -168,8 +168,9 @@
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="sortie_reveil_possible" value="" />
-        <button class="tick notext" type="button" onclick="$V(this.form.sortie_reveil_possible, 'current') ; submitOperationForm(this.form)">
+        <input type="hidden" name="sortie_reveil_possible" value="current" />
+        <input type="hidden" name="sortie_reveil_reel" value="current" />
+        <button class="tick notext" type="button" onclick="submitOperationForm(this.form)">
           {{tr}}Modify{{/tr}}
         </button>
       </form>

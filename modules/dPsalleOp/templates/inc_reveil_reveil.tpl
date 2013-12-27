@@ -15,11 +15,6 @@
 {{assign var=use_poste value=$conf.dPplanningOp.COperation.use_poste}}
 {{assign var=use_sortie_reveil_reel value="dPsalleOp COperation use_sortie_reveil_reel"|conf:"CGroups-$g"}}
 
-{{if $present_only}}
-  <div class="small-warning">
-    <strong>Affichage limité aux patients présents</strong>
-  </div>
-{{/if}}
 <table class="tbl">
   <tr>
     <th>{{tr}}SSPI.Salle{{/tr}}</th>
@@ -43,14 +38,6 @@
     {{/if}}
     <th>
       {{tr}}SSPI.SortieReveil{{/tr}}
-      <br/>
-      <label>
-        <input type="checkbox" name="present_only_view" {{if $present_only}}checked{{/if}}
-               onclick="$V($('present_only'), this.checked ? 1 : 0); refreshTabReveil('reveil');"
-          />
-        Présents seulement
-        <input type="hidden" id="present_only" value="{{$present_only}}" />
-      </label>
     </th>
     {{if $use_sortie_reveil_reel}}
       <th style="width: 15%">{{tr}}SSPI.SortieReveilReel{{/tr}}</th>
@@ -164,14 +151,14 @@
     {{/if}}
     <td>
       <form name="editEntreeReveilReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
-        <input type="hidden" name="m" value="dPplanningOp" />
+        <input type="hidden" name="m" value="planningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
         <input type="hidden" name="del" value="0" />
         {{if $_operation->_ref_sejour->type=="exte"}}
         -
-        {{elseif $modif_operation}}
-        {{mb_field object=$_operation field="entree_reveil" form="editEntreeReveilReveilFrm$_operation_id" onchange="submitReveilForm(this.form);"}}
+        {{elseif $modif_operation && !$_operation->sortie_reveil_possible}}
+          {{mb_field object=$_operation field="entree_reveil" form="editEntreeReveilReveilFrm$_operation_id" onchange="submitReveilForm(this.form);"}}
         {{else}}
           {{mb_value object=$_operation field="entree_reveil"}}
         {{/if}}
@@ -193,14 +180,10 @@
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
         <input type="hidden" name="del" value="0" />
-        {{if $conf.dPsalleOp.COperation.postdater_reveil}}
-          {{mb_field object=$_operation field=sortie_reveil_possible form=editSortieReveilReveilFrm`$_operation->_id` value="now"}}
-          <button class="tick notext" type="button" onclick="submitReveilForm(this.form);">{{tr}}Modify{{/tr}}</button>
-        {{else}}
-          <input type="hidden" name="sortie_reveil_possible" value="" />
-          <button class="tick notext" type="button" onclick="$V(this.form.sortie_reveil_possible, 'current') ; submitReveilForm(this.form);">{{tr}}Modify{{/tr}}</button>
-        {{/if}}
-        
+
+        {{mb_field object=$_operation field=sortie_reveil_possible form=editSortieReveilReveilFrm`$_operation->_id` onchange="submitReveilForm(this.form)"}}
+        <button class="tick notext" type="button"
+          onclick="if (!this.form.sortie_reveil_possible.value) { $V(this.form.sortie_reveil_possible, 'current'); }; submitReveilForm(this.form);">{{tr}}Modify{{/tr}}</button>
       </form>
       {{else}}-{{/if}}
       

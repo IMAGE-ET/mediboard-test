@@ -1,7 +1,12 @@
-<script type="text/javascript">  
+{{assign var=use_sortie_reveil_reel value="dPsalleOp COperation use_sortie_reveil_reel"|conf:"CGroups-$g"}}
+
+<script>
   Main.add(function () {
-    Control.Tabs.setTabCount("out", "{{$nb_sorties_non_realisees}}",  "{{$listOperations|@count}}");
-    
+    {{if $use_sortie_reveil_reel}}
+      Control.Tabs.setTabCount("out", "{{$nb_sorties_non_realisees}}", "{{$listOperations|@count}}");
+    {{else}}
+      Control.Tabs.setTabCount("out", "{{$listOperations|@count}}");
+    {{/if}}
     {{if $isImedsInstalled}}
       ImedsResultsWatcher.loadResults();
     {{/if}}
@@ -12,7 +17,6 @@
   }
 </script>
 
-{{assign var=use_sortie_reveil_reel value="dPsalleOp COperation use_sortie_reveil_reel"|conf:"CGroups-$g"}}
 {{assign var=use_poste value=$conf.dPplanningOp.COperation.use_poste}}
 
 <table class="tbl">
@@ -71,7 +75,7 @@
     <td class="button">
       {{if $can->edit}}
       <form name="editSortieBlocOutFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
-        <input type="hidden" name="m" value="dPplanningOp" />
+        <input type="hidden" name="m" value="planningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
         <input type="hidden" name="del" value="0" />
@@ -84,9 +88,9 @@
     </td>
     <td class="button">
       {{if $_operation->entree_reveil}}
-        {{if $can->edit}}
+        {{if $can->edit && !$_operation->sortie_reveil_possible}}
         <form name="editEntreeReveilOutFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
-          <input type="hidden" name="m" value="dPplanningOp" />
+          <input type="hidden" name="m" value="planningOp" />
           <input type="hidden" name="dosql" value="do_planning_aed" />
           <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
           <input type="hidden" name="del" value="0" />
@@ -106,12 +110,15 @@
     </td>
     <td class="button">
       <form name="editSortieReveilOutFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
-        <input type="hidden" name="m" value="dPplanningOp" />
+        <input type="hidden" name="m" value="planningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
         <input type="hidden" name="del" value="0" />
+        {{mb_field object=$_operation field="entree_reveil" hidden=1}}
+        {{mb_field object=$_operation field="sortie_reveil_reel" hidden=1}}
         {{if $modif_operation}}
-          {{mb_field object=$_operation field=sortie_reveil_possible register=true form="editSortieReveilOutFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
+          {{mb_field object=$_operation field=sortie_reveil_possible register=true form="editSortieReveilOutFrm$_operation_id"
+            onchange="if (!this.value && !this.form.entree_reveil.value) { \$V(this.form.sortie_reveil_reel, '') } submitSortieForm(this.form);"}}
         {{else}}
           {{mb_value object=$_operation field="sortie_reveil_possible"}}
         {{/if}}
@@ -120,12 +127,15 @@
     {{if $use_sortie_reveil_reel}}
       <td class="button">
         <form name="editSortieReveilReelOutFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
-          <input type="hidden" name="m" value="dPplanningOp" />
+          <input type="hidden" name="m" value="planningOp" />
           <input type="hidden" name="dosql" value="do_planning_aed" />
           <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
           <input type="hidden" name="del" value="0" />
+          {{mb_field object=$_operation field="entree_reveil" hidden=1}}
+          {{mb_field object=$_operation field="sortie_reveil_possible" hidden=1}}
           {{if $modif_operation}}
-            {{mb_field object=$_operation field=sortie_reveil_reel register=true form="editSortieReveilReelOutFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
+            {{mb_field object=$_operation field=sortie_reveil_reel register=true form="editSortieReveilReelOutFrm$_operation_id"
+              onchange="if (!this.value && !this.form.entree_reveil.value) { \$V(this.form.sortie_reveil_possible, ''); } submitSortieForm(this.form);"}}
           {{else}}
             {{mb_value object=$_operation field="sortie_reveil_reel"}}
           {{/if}}

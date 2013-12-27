@@ -65,9 +65,6 @@ function refreshTabReveil(type) {
   url.addParam("bloc_id", "{{$bloc->_id}}");
   url.addParam("date", "{{$date}}");
   url.addParam("type", type);
-  if (type == "reveil") {
-    url.addParam("present_only", $V($('present_only')));
-  }
   url.requestUpdate(type);
 }
 
