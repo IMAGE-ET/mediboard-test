@@ -1355,13 +1355,15 @@ class CConsultation extends CFacturable {
    */
   function countDocItems($permType = null) {
     if (!$this->_nb_files_docs) {
-      parent::countDocItems($permType);
+       parent::countDocItems($permType);
     }
 
     if ($this->_nb_files_docs) {
       $this->getEtat();
       $this->_etat .= " ($this->_nb_files_docs)";
     }
+
+    return $this->_nb_files_docs;
   }
 
   /**
