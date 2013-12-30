@@ -35,6 +35,10 @@ class CDocumentItem extends CMbMetaObject {
   /** @var CFilesCategory */
   public $_ref_category;
 
+  //DMP
+  public $_refs_dmp_document;
+  public $_count_dmp_document;
+
   /**
    * @see parent::getProps()
    */
@@ -58,6 +62,39 @@ class CDocumentItem extends CMbMetaObject {
     $props["_send_problem"]    = "text";
 
     return $props;
+  }
+
+  /**
+   * @see parent::getBackProps()
+   */
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["dmp_documents"] = "CDMPDocument object_id";
+    return $backProps;
+  }
+
+  /**
+   * Return the action on the document for the DMP
+   *
+   * @return CDMPDocument|null
+   */
+  function loadDocumentDMP() {
+    if (!CModule::getActive("dmp")) {
+      return null;
+    }
+    return $this->_refs_dmp_document = $this->loadBackRefs("dmp_documents", "date DESC");
+  }
+
+  /**
+   * Count the action on the document for the DMP
+   *
+   * @return int|null
+   */
+  function countDocumentDMP() {
+    if (!CModule::getActive("dmp")) {
+      return null;
+    }
+    return $this->_count_dmp_document = $this->countBackRefs("dmp_documents");
   }
   
   /**

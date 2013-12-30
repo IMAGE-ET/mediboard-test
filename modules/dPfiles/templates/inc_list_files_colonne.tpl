@@ -90,8 +90,8 @@
 </script>
 
 {{foreach from=$list item=_doc_item}}
-  <div style="float: left; width: 220px; {{if $_doc_item instanceof CFile && $_doc_item->annule}}display: none;{{/if}}"
-       {{if $_doc_item instanceof CFile && $_doc_item->annule}}class="file_cancelled"{{/if}}>
+  <div style="float: left; width: 220px; position: relative; {{if $_doc_item instanceof CFile && $_doc_item->annule}}display: none;{{/if}}"
+  class="{{if $_doc_item instanceof CFile && $_doc_item->annule}}file_cancelled{{/if}} {{if $_doc_item->_count_dmp_document}}dmp-sent{{/if}}">
     <table class="tbl {{if $_doc_item instanceof CFile && $_doc_item->annule}}hatching{{/if}}">
       <tbody class="hoverable">
         <tr>

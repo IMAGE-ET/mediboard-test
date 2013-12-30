@@ -80,6 +80,7 @@ foreach ($affichageFile as $_cat) {
     if ($_item->_class === "CCompteRendu") {
       $_item->makePDFpreview();
     }
+    $_item->countDocumentDMP();
   }
 }
 

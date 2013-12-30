@@ -43,7 +43,7 @@ class CFile extends CDocumentItem {
   public $_nb_pages;
   public $_old_file_path;
   public $_data_uri;
-  
+
   // Behavior fields
   public $_rotate;
   public $_rename;
@@ -85,7 +85,6 @@ class CFile extends CDocumentItem {
     $backProps["mail_content_id"]     = "CUserMail text_file_id";
     $backProps["observation_results"] = "CObservationResult file_id";
     $backProps["echanges_hl7v3"]      = "CExchangeHL7v3 object_id";
-    $backProps["dmp_document"]        = "CDMPDocument object_id";
     $backProps["xds_submission_lot"]  = "CXDSSubmissionLotToDocument object_id";
 
     return $backProps;

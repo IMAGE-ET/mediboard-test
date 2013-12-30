@@ -66,12 +66,17 @@
     </td>
 
     <td id="listInfosPat" style="width: 200px;">
-      {{assign var="href" value="?m=dPpatients&tab=vw_full_patients"}}      
+      {{assign var="href" value="?m=dPpatients&tab=vw_full_patients"}}
       {{mb_include module="patients" template="inc_vw_full_patients"}}
     </td>
 
-    <td class="greedyPane" id="listView">
-      {{mb_include module="patients" template="CPatient_complete"}}
+    <td class="greedyPane">
+      {{if "dmp"|module_active}}
+        {{mb_include module="dmp" template="inc_dossier_patient_dmp"}}
+      {{/if}}
+      <div id="listView">
+        {{mb_include module="patients" template="CPatient_complete"}}
+      </div>
     </td>
   </tr>
 </table>

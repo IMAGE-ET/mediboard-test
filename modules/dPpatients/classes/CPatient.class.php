@@ -257,6 +257,7 @@ class CPatient extends CPerson {
   public $_patient_elimine; // fusion
 
   public $_nb_docs;
+  public $_total_docs;
 
   /**
    * @var CSejour[]
@@ -360,6 +361,7 @@ class CPatient extends CPerson {
     $backProps["patient_links"]         = "CPatient patient_link_id";
     $backProps["CV_pyxvital"]           = "CPvCV id_patient";
     $backProps["ins_patient"]           = "CINSPatient patient_id";
+    $backProps["dmp_documents"]         = "CDMPDocument patient_id";
     return $backProps;
   }
 
@@ -1076,8 +1078,8 @@ class CPatient extends CPerson {
       foreach ($this->_ref_sejours as $_sejour) {
         if (!$_sejour->annule && $_sejour->group_id == $group_id && !in_array($_sejour->type, array("urg", "seances", "consult"))) {
           $sejours_collision[$_sejour->_id] = array (
-            "entree" => CMbDT::date($_sejour->_entree),
-            "sortie" => CMbDT::date($_sejour->_sortie)
+            "entree" => CMbDT::date($_sejour->entree),
+            "sortie" => CMbDT::date($_sejour->sortie)
           );
         }
       }
@@ -1348,7 +1350,7 @@ class CPatient extends CPerson {
    * @param string    $datetime  The reference datetime
    * @param array     $selection A selection of constantes to load
    * @param CMbObject $context   A particular context
-   * @param boolean      $use_cache Force the function to return the latest_values is already set
+   * @param boolean   $use_cache Force the function to return the latest_values is already set
    *
    * @return array
    */
@@ -1388,7 +1390,9 @@ class CPatient extends CPerson {
     }
   }
 
-  // Forward references
+  /**
+   * @see parent::loadRefsFwd()
+   */
   function loadRefsFwd() {
     $this->loadIdVitale();
   }
@@ -1449,6 +1453,7 @@ class CPatient extends CPerson {
   }
 
   function loadDossierComplet($permType = null) {
+    $this->_total_docs = 0;
     $this->_ref_praticiens = array();
 
     if (!$this->_id) {
@@ -1461,7 +1466,7 @@ class CPatient extends CPerson {
     // Doc items
     $this->loadRefsFiles();
     $this->loadRefsDocs();
-    $this->countDocItems($permType);
+    $this->_total_docs += $this->countDocItems($permType);
 
     // Photos et Notes
     $this->loadRefPhotoIdentite();
@@ -1502,7 +1507,7 @@ class CPatient extends CPerson {
       $consult->loadRefsFichesExamen();
       $consult->loadRefsExamsComp();
       if (!count($consult->_refs_dossiers_anesth)) {
-        $consult->countDocItems($permType);
+        $this->_total_docs += $consult->countDocItems($permType);
       }
 
       // Praticien
@@ -1514,7 +1519,7 @@ class CPatient extends CPerson {
 
       foreach ($consult->_refs_dossiers_anesth as $_dossier_anesth) {
         $_dossier_anesth->_ref_consultation = $consult;
-        $_dossier_anesth->countDocItems($permType);
+        $this->_total_docs += $_dossier_anesth->countDocItems($permType);
       }
       
       // Grossesse
@@ -1536,7 +1541,6 @@ class CPatient extends CPerson {
       //
       $_sejour->loadNDA();
       $_sejour->loadRefsAffectations();
-      $_sejour->countDocItems($permType);
 
       // Praticien
       $praticien = $_sejour->loadRefPraticien(1);
@@ -1558,14 +1562,14 @@ class CPatient extends CPerson {
 
         // Autres
         $_operation->loadRefPlageOp(1);
-        $_operation->countDocItems($permType);
+        $this->_total_docs += $_operation->countDocItems($permType);
 
         // Consultation d'anesthésie
         $consult_anesth = $_operation->loadRefsConsultAnesth();
-        $consult_anesth->countDocItems($permType);
+        $this->_total_docs += $consult_anesth->countDocItems($permType);
 
         $consultation = $consult_anesth->loadRefConsultation();
-        $consultation->countDocItems($permType);
+        $this->_total_docs += $consultation->countDocItems($permType);
         $consultation->canRead();
         $consultation->canEdit();
       }
@@ -1573,7 +1577,7 @@ class CPatient extends CPerson {
       // RPU
       $rpu = $_sejour->loadRefRPU();
       if ($rpu && $rpu->_id) {
-        $rpu->countDocItems($permType);
+        $this->_total_docs += $rpu->countDocItems($permType);
       }
 
       $_sejour->loadRefsConsultations();
@@ -1581,7 +1585,7 @@ class CPatient extends CPerson {
         $_consult->loadRefConsultAnesth();
         $_consult->loadRefsFichesExamen();
         $_consult->loadRefsExamsComp();
-        $_consult->countDocItems($permType);
+        $this->_total_docs += $_consult->countDocItems($permType);
 
         $_consult->loadRefsFwd(1);
         $_consult->_ref_sejour = $_sejour;
