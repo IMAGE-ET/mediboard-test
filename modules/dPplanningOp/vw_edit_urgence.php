@@ -92,15 +92,18 @@ if ($sejour_id && !$operation_id) {
 $op = new COperation();
 $op->load($operation_id);
 if ($op->_id) {
+
+  // On vérifie que l'utilisateur a les droits sur l'intervention
+  if (!$op->canDo()->read) {
+    global $m, $tab;
+    CAppUI::setMsg("Vous n'avez pas accés à cette intervention hors plage", UI_MSG_WARNING);
+    CAppUI::redirect("m=$m&tab=$tab&soperation_id=0");
+  }
+
+  // Chargement des régérences
   $op->loadRefs();
   $op->loadRefsNotes();
   $op->_ref_chir->loadRefFunction();
-
-  // On vérifie que l'utilisateur a les droits sur l'operation
-  if (!array_key_exists($op->chir_id, $listPraticiens)) {
-    CAppUI::setMsg("Vous n'avez pas accès à cette opération", UI_MSG_WARNING);
-    CAppUI::redirect("m=$m&tab=$tab&operation_id=0");
-  }
 
   $op->loadRefs();
   foreach ($op->_ref_actes_ccam as $acte) {
@@ -199,6 +202,7 @@ $where["sortie"] = ">= '".$sortie_sejour."'";
 $where["function_id"] = "IS NOT NULL";
 
 $affectatione = new CAffectation();
+/** @var CAffectation[] $blocages_lit */
 $blocages_lit = $affectatione->loadList($where);
 
 $where["function_id"] = "IS NULL";
