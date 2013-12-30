@@ -51,20 +51,6 @@ if ($patient_id && !$operation_id && !$sejour_id) {
   $patient->loadRefsSejours();
 }
 
-// Vérification des droits sur les praticiens
-if ($user->isAnesth()) {
-  $listPraticiens = $user->loadPraticiens(null);
-}
-else {
-  $listPraticiens = $user->loadPraticiens(PERM_EDIT);
-}
-
-$categorie_prat = array();
-foreach ($listPraticiens as &$_prat) {
-  $_prat->loadRefsFwd();
-  $categorie_prat[$_prat->_id] = $_prat->_ref_discipline->categorie;
-}
-
 // On récupère le séjour
 $sejour = new CSejour();
 
@@ -256,8 +242,6 @@ $smarty->assign("tomorow"   , $tomorow);
 $smarty->assign("ufs"       , CUniteFonctionnelle::getUFs());
 $smarty->assign("_functions", $_functions);
 
-$smarty->assign("categorie_prat", $categorie_prat);
-$smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("listServices"  , $services);
 $smarty->assign("etablissements", $etablissements);
 

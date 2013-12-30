@@ -26,6 +26,7 @@ if ($sejour_id) {
   $sejour->load($sejour_id);
   $sejour->loadRefsFwd();
   $praticien =& $sejour->_ref_praticien;
+  $praticien->canDo();
   $patient =& $sejour->_ref_patient;
   $patient->loadRefsSejours();
   $sejours =& $patient->_ref_sejours;
@@ -61,9 +62,6 @@ if ($sejour->adresse_par_prat_id && ($sejour->adresse_par_prat_id != $patient->_
 // L'utilisateur est-il un praticien
 $mediuser = CMediusers::get();
 
-// Vérification des droits sur les praticiens
-$listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
-
 $sortie_sejour = CMbDT::dateTime();
 if ($sejour->sortie_reelle) {
   $sortie_sejour = $sejour->sortie_reelle;
@@ -75,6 +73,7 @@ $where["sortie"] = ">= '".$sortie_sejour."'";
 $where["function_id"] = "IS NOT NULL";
 
 $affectation = new CAffectation();
+/** @var CAffectation[] $blocages_lit */
 $blocages_lit = $affectation->loadList($where);
 
 $where["function_id"] = "IS NULL";
@@ -147,7 +146,6 @@ $smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
 $smarty->assign("count_etab_externe", $count_etab_externe);
 $smarty->assign("medecin_adresse_par", $medecin_adresse_par);
 
-$smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("listServices"  , $listServices);
 
 $smarty->assign("mode_operation", $mode_operation);

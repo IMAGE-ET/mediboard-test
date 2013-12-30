@@ -67,14 +67,6 @@ if ($patient_id && !$operation_id && !$sejour_id) {
   $patient->loadRefsSejours();
 }
 
-// Vérification des droits sur les praticiens
-$listPraticiens = $user->_is_anesth ? $user->loadPraticiens(PERM_READ) : $user->loadPraticiens(PERM_EDIT);
-$categorie_prat = array();
-foreach ($listPraticiens as $keyPrat =>$prat) {
-  $prat->loadRefsFwd();
-  $categorie_prat[$keyPrat] = $prat->_ref_discipline->categorie;
-}
-
 // On récupère le séjour
 $sejour = new CSejour();
 if ($sejour_id && !$operation_id) {
@@ -266,8 +258,6 @@ $smarty->assign("modurgence", 1);
 $smarty->assign("date_min", CMbDT::date());
 $smarty->assign("date_max", CMbDT::date("+".CAppUI::conf("dPplanningOp COperation nb_jours_urgence")." days", CMbDT::date()));
 
-$smarty->assign("categorie_prat", $categorie_prat);
-$smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("listAnesthType", $listAnesthType);
 $smarty->assign("anesthesistes" , $anesthesistes);
 $smarty->assign("listServices"  , $services);

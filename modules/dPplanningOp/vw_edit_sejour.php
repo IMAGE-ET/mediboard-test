@@ -39,14 +39,6 @@ if ($patient_id) {
   $patient->load($patient_id);
 }
 
-// Vérification des droits sur les praticiens
-$listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
-$categorie_prat = array();
-foreach ($listPraticiens as $keyPrat =>$prat) {
-  $prat->loadRefsFwd();
-  $categorie_prat[$keyPrat] = $prat->_ref_discipline->categorie;
-}
-
 // On récupére le séjour
 $sejour = new CSejour();
 if ($sejour_id) {
@@ -59,11 +51,19 @@ if ($sejour_id) {
     CAppUI::redirect("m=$m&tab=$tab&sejour_id=0");
   }
 
-  $sejour->loadRefs();
+  $sejour->loadRefPatient();
+  $sejour->loadRefPraticien()->canDo();
+  $sejour->loadRefEtablissement();
+  $sejour->loadRefEtablissementTransfert();
+  $sejour->loadRefServiceMutation();
+  $sejour->loadRefsAffectations();
+  $sejour->loadRefsOperations();
 
   foreach ($sejour->_ref_operations as $operation) {
-    $operation->loadRefsFwd();
-    $operation->loadBrancardage();
+    $operation->loadRefPlageOp();
+    $operation->loadExtCodesCCAM();
+    $operation->loadRefChir()->loadRefFunction();
+    $operation->loadRefPatient();
     $operation->_ref_chir->loadRefFunction();
     $operation->_ref_chir->loadRefSpecCPAM();
     $operation->_ref_chir->loadRefDiscipline();
@@ -175,6 +175,7 @@ $where = array();
 $where["entree"] = "<= '$sortie_sejour'";
 $where["sortie"] = ">= '$sortie_sejour'";
 $where["function_id"] = "IS NOT NULL";
+/** @var CAffectation[] $blocages_lit */
 $blocages_lit = $affectation->loadList($where);
 
 $where["function_id"] = "IS NULL";
@@ -206,7 +207,6 @@ $smarty->assign("heure_sortie_autre"  , $heure_sortie_autre);
 $smarty->assign("heure_entree_veille" , $heure_entree_veille);
 $smarty->assign("heure_entree_jour"   , $heure_entree_jour);
 
-$smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("sejour"        , $sejour);
 $smarty->assign("op"            , new COperation());
 $smarty->assign("praticien"     , $praticien);
@@ -219,7 +219,6 @@ $smarty->assign("count_etab_externe"    , $count_etab_externe);
 $smarty->assign("medecin_adresse_par"   , $medecin_adresse_par);
 
 $smarty->assign("etablissements", $etablissements);
-$smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("listServices"  , $services);
 
 $smarty->assign("prestations"      , $prestations);

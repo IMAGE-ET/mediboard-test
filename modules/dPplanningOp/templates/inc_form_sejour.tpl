@@ -640,7 +640,7 @@ Main.add( function(){
     {{mb_label object=$sejour field=praticien_id}}
   </th>
   <td colspan="3">
-    {{if $sejour->praticien_id && !array_key_exists($sejour->praticien_id, $listPraticiens)}}
+    {{if $sejour->praticien_id && !$sejour->_ref_praticien->_can->edit}}
     {{mb_field object=$sejour field=praticien_id hidden=1}}
     {{mb_value object=$sejour field=praticien_id}}
     {{else}}

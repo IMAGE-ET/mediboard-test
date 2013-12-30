@@ -10,7 +10,7 @@ checkAld = function(){
   url.addParam("patient_id", $V(oForm.patient_id));
   url.addParam("sejour_id", $V(oForm.sejour_id));
   url.requestUpdate(SystemMessage.id, {insertion: function(receiver, text){$("ald_patient").update(text); $("ald_patient_easy").update(text);}});
-}
+};
 
 var Value = {
   // Synchronize elements value between Easy and Expert forms
@@ -25,16 +25,10 @@ var Value = {
       $V(other[element.name], element.value);
     }
   }
-}
-
-var listCategoriePrat = {{$categorie_prat|@json}};
+};
 
 function modifPrat(){
   var oForm = document.editSejour;
-  var sValue = oForm.praticien_id.value;
-  
-  oForm.pathologie.value= sValue ? 
-    listCategoriePrat[sValue] || "" : "";
 
   if (oForm._protocole_prescription_chir_id) {
     $V(oForm._protocole_prescription_chir_id, "");
@@ -218,7 +212,7 @@ function updateDureePrevue() {
 }
 
 function updateHeureSortie() {
-  var oForm = document.editSejour
+  var oForm = document.editSejour;
 
   duree_prevu  = oForm._duree_prevue; 
   heure_sortie = oForm._hour_sortie_prevue;
@@ -412,7 +406,7 @@ checkCorrespondantMedical = function(){
   url.addParam("object_id" , $V(oForm.sejour_id));
   url.addParam("object_class", '{{$sejour->_class}}');
   url.requestUpdate("correspondant_medical");
-}
+};
 
 var OccupationServices =  {
   dateInitiale  : null,
@@ -442,7 +436,7 @@ var OccupationServices =  {
     }
     var oForm = getForm("editSejour");
     if(this.dateInitiale != $V(oForm._date_entree_prevue) && this.tauxOccupation >= 100) {
-      alert("L'occupation des services est de "+this.tauxOccupation+"%.\nVeuillez contacter le responsable des services")
+      alert("L'occupation des services est de "+this.tauxOccupation+"%.\nVeuillez contacter le responsable des services");
       return false;
     }
     return true;
