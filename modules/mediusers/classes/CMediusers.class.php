@@ -374,6 +374,11 @@ class CMediusers extends CPerson {
     $backProps["bioserveur_account"]              = "CBioServeurAccount user_id";
     $backProps["compte_rendu"]                    = "CCompteRendu locker_id";
     $backProps["long_request_log"]                = "CLongRequestLog user_id";
+    $backProps["tasking_assigned_to"]             = "CTaskingTicket assigned_to_id";
+    $backProps["tasking_supervisor"]              = "CTaskingTicket supervisor_id";
+    $backProps["tasking_message_author"]          = "CTaskingTicketMessage user_id";
+    $backProps["tasking_contact_interlocutor"]    = "CTaskingContactEvent interlocutor_user_id";
+
     return $backProps;
   }
 
