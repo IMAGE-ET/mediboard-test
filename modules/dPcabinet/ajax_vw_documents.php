@@ -20,6 +20,7 @@ $consult = new CConsultation();
 $consult->load($consult_id);
 $consult->loadRefConsultAnesth($dossier_anesth_id);
 $consult->loadRefPlageConsult();
+$consult->loadRefSejour();
 
 $smarty = new CSmartyDP();
 
