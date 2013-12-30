@@ -91,6 +91,11 @@ class CCDARoleCDA extends CCDADocumentCDA {
     $ii->setExtension($patient->_ref_last_ins->ins);
     $patientRole->appendId($ii);
 
+    $ii = new CCDAII();
+    $ii->setRoot(CMbOID::getOIDOfInstance($patient));
+    $ii->setExtension($patient->_id);
+    $patientRole->appendId($ii);
+
     if ($patient->_IPP) {
       $ii = new CCDAII();
       /* @todo Gérer le master domaine*/
