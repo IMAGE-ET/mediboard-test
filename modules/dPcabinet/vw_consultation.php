@@ -198,7 +198,12 @@ foreach ($tabs_count as $_tab => $_count) {
       $tabs_count[$_tab] = $dossier_medical->_count_antecedents + $dossier_medical->_count_traitements + $count_meds;
       break;
     case "Constantes":
-      $tabs_count[$_tab] = $patient->countBackRefs("constantes");
+      if ($sejour->_ref_rpu && $sejour->_ref_rpu->_id) {
+        $tabs_count[$_tab] = $sejour->countBackRefs("contextes_constante");
+      }
+      else {
+        $tabs_count[$_tab] = $consult->countBackRefs("contextes_constante");
+      }
       break;
     case "prescription_sejour":
       if (!$consultAnesth->_id) {

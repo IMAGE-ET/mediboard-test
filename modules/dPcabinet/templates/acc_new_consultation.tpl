@@ -157,8 +157,8 @@
   {{/if}}
 
   <li onmousedown="refreshConstantesMedicales();">
-    <a href="#Constantes" {{if $tabs_count.dossier_suivi == 0}}class="empty"{{/if}}>
-      Constantes <small>({{$tabs_count.dossier_suivi}})</small>
+    <a href="#Constantes" {{if $tabs_count.Constantes == 0}}class="empty"{{/if}}>
+      Constantes <small>({{$tabs_count.Constantes}})</small>
     </a>
   </li>
   <li onmousedown="this.onmousedown = ''; loadExams()">
