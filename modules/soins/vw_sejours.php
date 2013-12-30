@@ -231,7 +231,7 @@ if (!isset($sejours)) {
     else {
       $sejours = array();
       if ($service_id || $praticien_id || $function_id) {
-        $affectations = $affectation->loadList($where, null, null, null, $ljoin);
+        $affectations = $affectation->loadList($where, null, null, "affectation.affectation_id", $ljoin);
 
         CMbObject::massLoadFwdRef($affectations, "sejour_id");
 
