@@ -57,7 +57,7 @@
       </td>
       <td>
         {{if !$_interv->_count_actes && !$_interv->_ext_codes_ccam}}
-          (Aucun prévu)
+          <div class="empty">Aucun prévu</div>
         {{else}}
           {{$_interv->_actes_non_cotes}} acte(s)
         {{/if}}

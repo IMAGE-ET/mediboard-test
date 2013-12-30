@@ -1,19 +1,20 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Board
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
 $chirSel   = CValue::getOrSession("praticien_id", null);
 $all_prats = CValue::get("all_prats", 0);
-$fin       = CValue::getOrSession("fin", CMbDT::date());
-$debut     = CValue::getOrSession("debut", CMbDT::date("-1 week", $fin));
+$fin       = CValue::get("fin", CMbDT::date());
+$fin       = CMbDT::date("+1 day", $fin);
+$debut     = CValue::get("debut", CMbDT::date("-1 week", $fin));
 
 $mediuser = CMediusers::get();
 if ($mediuser->isPraticien()) {
@@ -129,7 +130,7 @@ $ljoin["sejour"] = "consultation.sejour_id = sejour.sejour_id";
 $ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
 
 $where = array();
-$where["sejour.entree_prevue"] = " BETWEEN '$debut' AND '$fin'";
+$where["sejour.entree"] = " BETWEEN '$debut' AND '$fin'";
 $where["sejour.annule"] = "= '0'";
 $where["consultation.annule"] = "= '0'";
 
