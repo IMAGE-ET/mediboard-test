@@ -3266,6 +3266,10 @@ class CSejour extends CFacturable implements IPatientRelated {
       $template->addProperty("Sejour - Numéro de cas"   , $this->_ref_NRA && $this->_ref_NRA->_id ? $this->_ref_NRA->id400 : "-");
     }
 
+    if (CModule::getActive("mvsante")) {
+      CMVSante::fillLimitedTemplate($template, $this);
+    }
+
     $this->notify("AfterFillLimitedTemplate", $template);
   }
 
