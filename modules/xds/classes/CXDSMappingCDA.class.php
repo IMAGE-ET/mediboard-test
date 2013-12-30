@@ -23,6 +23,7 @@ class CXDSMappingCDA {
   public $name_submission;
   public $id_classification;
   public $id_external;
+  public $id_patient;
   public $xpath;
   public $xcn_mediuser;
   public $xon_etablissement;
@@ -59,6 +60,7 @@ class CXDSMappingCDA {
     $this->xpath = new CMbXPath($factory->dom_cda);
     $this->xpath->registerNamespace("cda", "urn:hl7-org:v3");
 
+    $this->id_patient = $this->getID();
     $this->ins_patient = $this->getIns();
     $uuid = CMbSecurity::generateUUID();
     $this->uuid["registry"]  = $uuid."1";
@@ -302,6 +304,7 @@ class CXDSMappingCDA {
     $factory      = $this->factory;
     $cla_id       = &$this->id_classification;
     $ei_id        = &$this->id_external;
+    $id_patient   = $this->id_patient;
     $ins          = $this->ins_patient;
     $hide_patient = $this->hide_patient;
     $hide_ps      = $this->hide_ps;
@@ -335,7 +338,10 @@ class CXDSMappingCDA {
     }
 
     //recordTarget/patientRole/id
-    $extrinsic->setSlot("sourcePatientId", array($ins));
+    $extrinsic->setSlot("sourcePatientId", array($id_patient));
+
+    //recordtarget/patientRole
+    $extrinsic->setSlot("sourcePatientInfo", $this->getSourcepatientInfo($factory->patient));
 
     //title
     $extrinsic->setTitle($factory->nom);
@@ -667,4 +673,114 @@ class CXDSMappingCDA {
     }
     return $result;
   }
+
+  /**
+   * Transforme une chaine date au format time CDA
+   *
+   * @param String $date      String
+   * @param bool   $naissance false
+   *
+   * @return string
+   */
+  function getTimeToUtc($date, $naissance = false) {
+    if (!$date) {
+      return null;
+    }
+    if ($naissance) {
+      $date = Datetime::createFromFormat("Y-m-d", $date);
+      return $date->format("Ymd");
+    }
+    $timezone = new DateTimeZone(CAppUI::conf("timezone"));
+    $date     = new DateTime($date, $timezone);
+
+    return $date->format("YmdHisO");
+  }
+
+  /**
+   * Retourne le sourcepatientinfo
+   *
+   * @param CPatient $patient patient
+   *
+   * @return String[]
+   */
+  function getSourcepatientInfo($patient) {
+    $source_info = array();
+    $pid5 = "PID-5|$patient->_p_last_name^$patient->_p_first_name^^^^^D";
+    $source_info[] = $pid5;
+    if ($patient->_p_maiden_name) {
+      $pid5_2 = "PID-5|$patient->_p_maiden_name^^^^^^^L";
+      $source_info[] = $pid5_2;
+    }
+    $date = $this->getTimeToUtc($patient->_p_birth_date, true);
+    $pid7 = "PID-7|$date";
+    $source_info[] = $pid7;
+    $sexe = mb_strtoupper($patient->sexe);
+    $pid8 = "PID-8|$sexe";
+    $source_info[] = $pid8;
+    if ($patient->_p_street_address || $patient->_p_city || $patient->_p_postal_code) {
+      $addresses = preg_replace("#[\t\n\v\f\r]+#", " ", $patient->_p_street_address, PREG_SPLIT_NO_EMPTY);
+      $pid11 = "PID-11|$addresses^^$patient->_p_city^^$patient->_p_postal_code";
+      $source_info[] = $pid11;
+    }
+    if ($patient->_p_phone_number) {
+      $pid13 = "PID-13|$patient->_p_phone_number";
+      $source_info[] = $pid13;
+    }
+    if ($patient->_p_mobile_phone_number) {
+      $pid14 = "PID-14|$patient->_p_mobile_phone_number";
+      $source_info[] = $pid14;
+    }
+    $pid16 = "PID-16|{$this->getMaritalStatus($patient->situation_famille)}";
+    $source_info[] = $pid16;
+
+    return $source_info;
+  }
+
+  function getMaritalStatus($status) {
+    switch ($status) {
+      case "S":
+        $ce = "S";
+        break;
+      case "M":
+        $ce = "M";
+        break;
+      case "G":
+        $ce = "G";
+        break;
+      case "D":
+        $ce = "D";
+        break;
+      case "W":
+        $ce = "W";
+        break;
+      case "A":
+        $ce = "A";
+        break;
+      case "P":
+        $ce = "P";
+        break;
+      default:
+        $ce = "U";
+    }
+    return $ce;
+  }
+
+  /**
+   * Retourne l'INS présent dans le CDA
+   *
+   * @return string
+   */
+  function getID () {
+    $patient = $this->factory->patient;
+    $oid = CMbOID::getOIDOfInstance($patient);
+
+    $comp4 = $oid;
+    $comp4 = "&$comp4&ISO";
+    $comp1 = $patient->_id;
+    $comp5 = "PI";
+
+    $result = "$comp1^^^$comp4^$comp5";
+    return $result;
+  }
+
 }
