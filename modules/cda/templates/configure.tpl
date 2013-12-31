@@ -17,6 +17,11 @@
       <th class="title" colspan="2">Configuration</th>
     </tr>
     <tr>
+      <td>
+        {{mb_include module=system template=inc_config_str var=path_ghostscript}}
+      </td>
+    </tr>
+    <tr>
       <td colspan="2">
         <button type="submit" class="save">{{tr}}Save{{/tr}}</button>
       </td>

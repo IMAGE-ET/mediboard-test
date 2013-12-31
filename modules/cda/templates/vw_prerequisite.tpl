@@ -66,6 +66,18 @@
         {{/if}}
       </td>
     </tr>
+    <tr>
+      <td>
+        {{tr}}Install_ghostscript{{/tr}}
+      </td>
+      <td class="{{if $ghostscript}}ok{{else}}error{{/if}}">
+        {{if $ghostscript}}
+          {{tr}}Install{{/tr}}
+        {{else}}
+          {{tr}}Not_install{{/tr}}
+        {{/if}}
+      </td>
+    </tr>
   </table>
 </fieldset>
 <br/>

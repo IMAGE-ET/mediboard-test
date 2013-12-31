@@ -11,4 +11,5 @@
 
 $dPconfig["cda"] = array(
   "OID_root" => "",
+  "path_ghostscript" => "",
 );
