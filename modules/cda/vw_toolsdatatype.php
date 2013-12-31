@@ -17,23 +17,23 @@ $result = "";
 
 switch ($action) {
   case "createClass":
-    $result = CCDATools::createClass();
+    $result = CCdaTools::createClass();
     break;
 
   case "createTest":
-    $result = CCDATools::createAllTestSchemaClasses();
+    $result = CCdaTools::createAllTestSchemaClasses();
     break;
 
   case "clearXSD":
-    $result = CCDATools::clearXSD();
+    $result = CCdaTools::clearXSD();
     break;
 
   case "missClass":
-    $result = CCDATools::missclass();
+    $result = CCdaTools::missclass();
     break;
 
   case "createClassXSD":
-    $result = CCDATools::createClassFromXSD();
+    $result = CCdaTools::createClassFromXSD();
     break;
 }
 
