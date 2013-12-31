@@ -482,7 +482,7 @@ abstract class CMbString {
    * @return string The string with hyperlinks
    */
   static function makeUrlHyperlinks($str) {
-    return preg_replace('@(https?://([-\w\.]+)+(:\d+)?(/([\w/_\.#-]*(\?\S+)?)?)?)@', '<a href="$1" target="_blank">$1</a>', $str);
+    return preg_replace('@(https?://([^<>][-\w\.]+)+(:\d+)?(/([\w/_\.#-]*(\?\S+)?)?)?)@', '<a href="$1" target="_blank">$1</a>', $str);
   }
 
   /**
