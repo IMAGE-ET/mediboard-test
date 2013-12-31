@@ -50,7 +50,6 @@
       <th style="width: 20%;">Nom / Prénom</th>
       {{if $filter->_coordonnees}}
         <th style="width: 15%;">Adresse</th>
-        <th class="narrow">Tel</th>
       {{/if}}
       {{if $filter->_telephone}}
         <th class="narrow">Tel</th>
