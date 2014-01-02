@@ -12,7 +12,7 @@
     };
   </script>
   <button class="hslip"
-          onclick="exportAidesCSV('{{$owner}}', '{{$filter_class}}', {{$aides_ids|@json}})">
+          onclick="exportAidesCSV('{{$owner|escape:"javascript"}}', '{{$filter_class}}', {{$aides_ids|@json}})">
     {{tr}}Export-CSV{{/tr}}
   </button>
   
