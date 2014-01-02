@@ -294,7 +294,7 @@ class CAffectation extends CMbObject {
    * @see parent::store()
    */
   function store() {
-    $this->completeField("sejour_id");
+    $this->completeField("sejour_id", "lit_id");
     $create_affectations = false;
     $sejour = $this->loadRefSejour();
     $sejour->loadRefPatient();
