@@ -304,7 +304,7 @@ App.readonly = false;
   {{if @isset($modules.dPcabinet|smarty:nodefaults)}}
     <a class="button new" href="#1" id="newConsult"
       onclick="validateAdministration('{{$sejour->_id}}');">Nouvelle consultation</a>
-    <button type="button" class="new" id="newConsultEntree" {{if $has_obs_entree}}disabled="disabled"{{/if}}
+    <button type="button" class="new oneclick" id="newConsultEntree" {{if $has_obs_entree}}disabled{{/if}}
       onclick="createConsultEntree();">Nouvelle observation d'entrée</button>
   {{/if}}
 {{/if}}
