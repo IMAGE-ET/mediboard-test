@@ -4,6 +4,8 @@
 </script>
 {{/if}}
 
+{{mb_script module=cabinet script=edit_consultation ajax=true}}
+
 <table class="tbl">
   <tr>
     <th>Patient</th>
@@ -109,9 +111,15 @@
         </a>
       </td>
       <td>
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$consult->_guid}}')">
-          Consultation le {{$consult->_datetime|date_format:$conf.date}}
-        </span>
+        {{if $modules.dPcabinet->_can->read && !@$offline}}
+          <a href="#1" onclick="Consultation.editModal('{{$consult->_id}}');return false;">
+        {{else}}
+          <a href="#1" title="Impossible d'accéder à la consultation">
+        {{/if}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$consult->_guid}}')">
+            Consultation le {{$consult->_datetime|date_format:$conf.date}}
+          </span>
+        </a>
         {{if $sejour->libelle}}
           <div class="compact">{{$sejour->libelle}}</div>
         {{/if}}
