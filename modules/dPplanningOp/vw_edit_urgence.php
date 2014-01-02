@@ -76,6 +76,7 @@ if ($sejour_id && !$operation_id) {
     $chir = $sejour->_ref_praticien;
   }
   // On ne change a priori pas le praticien du séjour
+  $sejour->_ref_praticien->canDo();
   $prat    = $sejour->_ref_praticien;
   $patient = $sejour->_ref_patient;
 }
@@ -104,6 +105,7 @@ if ($op->_id) {
   
   $sejour = $op->_ref_sejour;
   $sejour->loadRefsFwd();
+  $sejour->_ref_praticien->canDo();
   $sejour->makeCancelAlerts($op->_id);
   $chir    = $op->_ref_chir;
   $patient = $sejour->_ref_patient;
