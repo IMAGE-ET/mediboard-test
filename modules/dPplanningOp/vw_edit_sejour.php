@@ -67,6 +67,7 @@ if ($sejour_id) {
     $operation->_ref_chir->loadRefFunction();
     $operation->_ref_chir->loadRefSpecCPAM();
     $operation->_ref_chir->loadRefDiscipline();
+    $operation->loadBrancardage();
   }
 
   foreach ($sejour->_ref_affectations as $affectation) {
