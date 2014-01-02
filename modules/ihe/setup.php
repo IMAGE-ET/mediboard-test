@@ -272,7 +272,13 @@ class CSetupihe extends CSetup {
               CHANGE `receiver_ihe_config_id` `receiver_hl7v2_config_id` INT (11) UNSIGNED NOT NULL auto_increment;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.28";
+    $this->makeRevision("0.28");
+
+    $query = "ALTER TABLE `receiver_hl7v2_config`
+                CHANGE `iti31_in_outpatient_emanagement` `iti31_in_outpatient_management` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.29";
   }
 }
 

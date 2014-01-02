@@ -402,7 +402,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
 
     // Dans le cas d'une grossesse
-    if ($return_grossesse = $this->storeGrossesse($newVenue, $data)) {
+    if ($return_grossesse = $this->storeGrossesse($newVenue)) {
       return $exchange_hl7v2->setAckAR($ack, "E211", $return_grossesse, $newVenue);
     }
     
@@ -869,7 +869,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     
     // Dans le cas d'une grossesse
-    if ($return_grossesse = $this->storeGrossesse($newVenue, $data)) {
+    if ($return_grossesse = $this->storeGrossesse($newVenue)) {
       return $exchange_hl7v2->setAckAR($ack, "E211", $return_grossesse, $newVenue);
     }
     
@@ -1230,7 +1230,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     return $affectation;
   }
 
-  function storeGrossesse(CSejour $newVenue, $data) {
+  function storeGrossesse(CSejour $newVenue) {
+    $sender = $this->_ref_sender;
+
+    if (!$sender->_configs["create_grossesse"]) {
+      return;
+    }
+
     if ($newVenue->type_pec != "O") {
       return;
     }
@@ -1263,7 +1269,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (!$mother_AN = $this->getANMotherIdentifier($data["PID"])) {
       return CAppUI::tr("CHL7Event-AA-E227");
     }
-    
+
     $sender = $this->_ref_sender;
     $idex_mother = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $mother_AN);
     if (!$idex_mother->_id) {
@@ -1300,7 +1306,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     return $naissance->store();
   }
-
 
   function mappingUFMedicale($data) {
     if (!array_key_exists("ZBE", $data)) {

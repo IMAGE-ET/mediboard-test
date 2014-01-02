@@ -57,6 +57,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "handle_PV1_36",
     "handle_PV2_12",
     "handle_NSS",
+    "create_pregnancy",
 
     // Send
     "send_assigning_authority",
@@ -76,7 +77,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
   // Actor Options
   public $iti30_option_merge;
   public $iti30_option_link_unlink;
-  public $iti31_in_outpatient_emanagement;
+  public $iti31_in_outpatient_management;
   public $iti31_pending_event_management;
   public $iti31_advanced_encounter_management;
   public $iti31_temporary_patient_transfer_tracking;
@@ -110,6 +111,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
   public $handle_PV1_36;
   public $handle_PV2_12;
   public $handle_NSS;
+  public $create_grossesse;
 
   // Send
   public $send_assigning_authority;
@@ -146,7 +148,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "actor options" => array(
       "iti30_option_merge",
       "iti30_option_link_unlink",
-      "iti31_in_outpatient_emanagement",
+      "iti31_in_outpatient_management",
       "iti31_pending_event_management",
       "iti31_advanced_encounter_management",
       "iti31_temporary_patient_transfer_tracking",
@@ -167,6 +169,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
       "handle_PV2_12",
       "handle_NSS",
       "ignore_fields",
+      "create_grossesse",
     ),
 
     "send" => array(
@@ -213,7 +216,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["iti30_option_merge"]                        = "bool default|1";
     $props["iti30_option_link_unlink"]                  = "bool default|0";
     // => ITI-31
-    $props["iti31_in_outpatient_emanagement"]           = "bool default|1";
+    $props["iti31_in_outpatient_management"]            = "bool default|1";
     $props["iti31_pending_event_management"]            = "bool default|0";
     $props["iti31_advanced_encounter_management"]       = "bool default|1";
     $props["iti31_temporary_patient_transfer_tracking"] = "bool default|0";
@@ -236,6 +239,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["handle_mode"]             = "enum list|normal|simple default|normal";
     $props["handle_telephone_number"] = "enum list|XTN_1|XTN_12 default|XTN_12";
     $props["ignore_fields"]           = "str";
+    $props["create_grossesse"]        = "bool default|1";
     
     // => PID
     $props["handle_NDA"]    = "enum list|PID_18|PV1_19 default|PID_18";

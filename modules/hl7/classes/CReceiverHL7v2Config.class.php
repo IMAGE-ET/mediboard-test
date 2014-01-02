@@ -41,7 +41,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
   // Actor Options
   public $iti30_option_merge;
   public $iti30_option_link_unlink;
-  public $iti31_in_outpatient_emanagement;
+  public $iti31_in_outpatient_management;
   public $iti31_pending_event_management;
   public $iti31_advanced_encounter_management;
   public $iti31_temporary_patient_transfer_tracking;
@@ -118,7 +118,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     "actor options" => array(
       "iti30_option_merge",
       "iti30_option_link_unlink",
-      "iti31_in_outpatient_emanagement",
+      "iti31_in_outpatient_management",
       "iti31_pending_event_management",
       "iti31_advanced_encounter_management",
       "iti31_temporary_patient_transfer_tracking",
@@ -215,7 +215,7 @@ class CReceiverHL7v2Config extends CMbObjectConfig {
     // Actor options
     $props["iti30_option_merge"]                        = "bool default|1";
     $props["iti30_option_link_unlink"]                  = "bool default|0";
-    $props["iti31_in_outpatient_emanagement"]           = "bool default|1";
+    $props["iti31_in_outpatient_management"]            = "bool default|1";
     $props["iti31_pending_event_management"]            = "bool default|0";
     $props["iti31_advanced_encounter_management"]       = "bool default|1";
     $props["iti31_temporary_patient_transfer_tracking"] = "bool default|0";
