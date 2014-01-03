@@ -197,8 +197,25 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
 
       $mbPersonne->pays  = $pays->nom_fr;
       $mbPersonne->cp    = $cp;
-      $mbPersonne->tel   = isset($telephones[0]) && ($telephones[0] != $mbPersonne->tel2) ? $telephones[0] : null;
-      $mbPersonne->tel2  = isset($telephones[1]) && ($telephones[1] != $mbPersonne->tel) ? $telephones[1] : null;
+
+      $tel1 = $tel2 = null;
+      if (isset($telephones[0])) {
+        $tel1 = $telephones[0];
+      }
+
+      if (isset($telephones[1])) {
+        $tel2 = $telephones[1];
+      }
+      $mbPersonne->tel   = ($tel1 != $mbPersonne->tel2 && strlen($tel1) <= 10) ? $tel1 : null;
+      $mbPersonne->tel2  = ($tel2 != $mbPersonne->tel && strlen($tel2) <= 10) ? $tel2 : null;
+
+      if (strlen($tel1) > 10) {
+        $mbPersonne->tel_autre = $tel1;
+      }
+      if (strlen($tel2) > 10) {
+        $mbPersonne->tel_autre = $tel2;
+      }
+
       $mbPersonne->email = $email;
     }
     elseif ($mbPersonne instanceof CMediusers) {
