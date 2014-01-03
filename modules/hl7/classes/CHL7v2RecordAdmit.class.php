@@ -1429,10 +1429,12 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         $chambre->unescapeValues();
 
         $where = $ljoin = array();
-        $ljoin["chambre"]  = "chambre.chambre_id = lit.chambre_id";
-        $ljoin["service"]  = "service.service_id = chambre.service_id";
-        $where["lit.nom"]      = " = '$nom_lit'";
-        $where["group_id"] = " = '$sender->group_id'";
+        $ljoin["chambre"]           = "chambre.chambre_id = lit.chambre_id";
+        $ljoin["service"]           = "service.service_id = chambre.service_id";
+        $where["lit.nom"]           = " = '$nom_lit'";
+        $where["lit.annule"]        = " = '0'";
+        $where["service.cancelled"] = " = '0'";
+        $where["group_id"]          = " = '$sender->group_id'";
         if ($chambre->_id) {
           $where["chambre.chambre_id"] = " = '$chambre->_id'";
         }
