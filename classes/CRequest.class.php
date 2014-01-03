@@ -88,6 +88,9 @@ class CRequest {
     if (is_array($ljoin)) {
       $this->ljoin = array_merge($this->ljoin, $ljoin);
     }
+    elseif (is_string($ljoin)) {
+      $this->ljoin[] = $ljoin;
+    }
     
     return $this;
   }
@@ -382,7 +385,7 @@ class CRequest {
     // MbObject binding
     if ($obj) {
       if (count($this->select)) {
-        trigger_error("You have to choose either an object or select(s)", E_USER_ERROR);
+        CModelObject::error("You-have-to-choose-either-an-object-or-selects");
       }
 
       // Restrain loading to a column collection
@@ -397,7 +400,7 @@ class CRequest {
       }
       
       if (count($this->table)) {
-        trigger_error("You have to choose either an object or table(s)");
+        CModelObject::notice("You-have-to-choose-either-an-object-or-tables");
       }
       
       $arrayTable[] = $obj->_spec->table;
@@ -441,7 +444,7 @@ class CRequest {
     $arrayTable = array();
     if ($obj) {
       if (count($this->table)) {
-        trigger_error("You have to choose either an object or table(s)");
+        CModelObject::notice("You-have-to-choose-either-an-object-or-tables");
       }
       $arrayTable[] = $obj->_spec->table;
     }
