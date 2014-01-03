@@ -120,7 +120,7 @@
 
     <tr>
       <td class="button" colspan="4">
-        <button type="button" class="erase" onclick="emptyForm()"
+        <button type="button" class="erase" onclick="emptyForm();$('vw_idx_patient_button_create').hide();"
                 title="Vider les champs du formulaire">{{tr}}Empty{{/tr}}</button>
         <button id="ins_list_patient_button_search" class="search" tabindex="10" type="submit" {{if !$board}}onclick="Patient.search(this.form);"{{/if}}>{{tr}}Search{{/tr}}</button>
 
@@ -135,7 +135,7 @@
 
           {{if $can->edit}}
             {{if $nom || $prenom || $patient_ipp || $naissance}}
-              <button id="vw_idx_patient_button_create" class="new" type="button" tabindex="15" onclick="Patient.create(this.form);">
+              <button id="vw_idx_patient_button_create" class="new" type="button" tabindex="15" onclick="Patient.create(this.form);" style="display:none;">
                 {{tr}}Create{{/tr}}
                 {{if $useVitale}}avec Vitale{{/if}}
                 {{if $useCoverCard}}avec Covercard{{/if}}
