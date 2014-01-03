@@ -29,8 +29,10 @@ foreach ($plageop->_ref_operations as $_op) {
   $_op->loadRefChir()->loadRefFunction();
   $_op->loadRefSejour()->loadRefPatient()->loadRefDossierMedical()->countAllergies();
   $_op->loadExtCodesCCAM();
-  
-  $_last_op = $_op;
+
+  if ($_op->_horaire_voulu) {
+    $_last_op = $_op;
+  }
 }
 
 $horaire_voulu = $plageop->debut;
