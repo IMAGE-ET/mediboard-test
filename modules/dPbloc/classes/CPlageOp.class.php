@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage Bloc
@@ -769,6 +769,44 @@ class CPlageOp extends CMbObject {
     }
     
     return ($this->_ref_salle->getPerm($permType) && $pratPerm);
+  }
+
+  function loadPersonnelDisponible($listPers = array(), $remove_pers = false) {
+    if (!count($listPers)) {
+      $listPers = array(
+        "iade"         => CPersonnel::loadListPers("iade"),
+        "op"           => CPersonnel::loadListPers("op"),
+        "op_panseuse"  => CPersonnel::loadListPers("op_panseuse"),
+        "sagefemme"    => CPersonnel::loadListPers("sagefemme"),
+        "manipulateur" => CPersonnel::loadListPers("manipulateur")
+      );
+    }
+    if ($remove_pers) {
+      if (!$this->_ref_affectations_personnel) {
+        $this->loadAffectationsPersonnel();
+      }
+
+      $affectations_personnel = $this->_ref_affectations_personnel;
+      $personnel_ids = array();
+      foreach ($affectations_personnel as $_aff_by_type) {
+        foreach  ($_aff_by_type as $_aff) {
+          if (!$_aff->debut && !$_aff->fin) {
+            $personnel_ids[] = $_aff->personnel_id;
+          }
+        }
+      }
+
+      // Suppression de la liste des personnels deja presents
+      foreach ($listPers as $key => $persByType) {
+        foreach ($persByType as $_key => $pers) {
+          if (in_array($pers->_id, $personnel_ids)) {
+            unset($listPers[$key][$_key]);
+          }
+        }
+      }
+    }
+
+    return $listPers;
   }
 }
 

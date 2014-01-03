@@ -1,8 +1,8 @@
 <script>
-submitPersonnel = function(oForm){
-  return onSubmitFormAjax(oForm, { onComplete : function() {
-    reloadPersonnel(oForm.object_id.value);
-  } });
+  submitPersonnel = function(oForm){
+    return onSubmitFormAjax(oForm, { onComplete : function() {
+      reloadPersonnel(oForm.object_id.value);
+    } });
 }
 </script>
        
@@ -18,7 +18,7 @@ submitPersonnel = function(oForm){
   {{/if}}
   <th class="category" style="width: 50%;">Personnel ajouté<br />
     <form name="affectationPers-iade" action="?m={{$m}}" method="post">
-      <input type="hidden" name="m" value="dPpersonnel" />
+      <input type="hidden" name="m" value="personnel" />
       <input type="hidden" name="dosql" value="do_affectation_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="affect_id" value="" />
@@ -28,13 +28,13 @@ submitPersonnel = function(oForm){
 
       <select name="personnel_id" onchange="submitPersonnel(this.form)" style="width: 10em;">
         <option value="">&mdash; {{tr}}CPersonnel.emplacement.iade{{/tr}}</option>
-        {{foreach from=$listPersIADE item="pers"}}
+        {{foreach from=$listPers.iade item="pers"}}
         <option value="{{$pers->_id}}" class="mediuser" style="border-color: #{{$pers->_ref_user->_ref_function->color}};">{{$pers->_ref_user->_view}}</option>
         {{/foreach}}
       </select>
     </form>
     <form name="affectationPers-aideop" action="?m={{$m}}" method="post">
-      <input type="hidden" name="m" value="dPpersonnel" />
+      <input type="hidden" name="m" value="personnel" />
       <input type="hidden" name="dosql" value="do_affectation_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="affect_id" value="" />
@@ -44,13 +44,13 @@ submitPersonnel = function(oForm){
 
       <select name="personnel_id" onchange="submitPersonnel(this.form)" style="width: 10em;">
         <option value="">&mdash; {{tr}}CPersonnel.emplacement.op{{/tr}}</option>
-        {{foreach from=$listPersAideOp item="pers"}}
+        {{foreach from=$listPers.op item="pers"}}
         <option value="{{$pers->_id}}" class="mediuser" style="border-color: #{{$pers->_ref_user->_ref_function->color}};">{{$pers->_ref_user->_view}}</option>
         {{/foreach}}
       </select>
     </form>
-    <form name="affectationPers-penseuse" action="?m={{$m}}" method="post">
-      <input type="hidden" name="m" value="dPpersonnel" />
+    <form name="affectationPers-panseuse" action="?m={{$m}}" method="post">
+      <input type="hidden" name="m" value="personnel" />
       <input type="hidden" name="dosql" value="do_affectation_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="affect_id" value="" />
@@ -59,13 +59,13 @@ submitPersonnel = function(oForm){
       <input type="hidden" name="realise" value="0" />
       <select name="personnel_id" onchange="submitPersonnel(this.form)" style="width: 10em;">
         <option value="">&mdash; {{tr}}CPersonnel.emplacement.op_panseuse{{/tr}}</option>
-        {{foreach from=$listPersPanseuse item="pers"}}
+        {{foreach from=$listPers.op_panseuse item="pers"}}
         <option value="{{$pers->_id}}" class="mediuser" style="border-color: #{{$pers->_ref_user->_ref_function->color}};">{{$pers->_ref_user->_view}}</option>
         {{/foreach}}
       </select>
     </form>
     <form name="affectationPers-sagefemme" action="?m={{$m}}" method="post">
-      <input type="hidden" name="m" value="dPpersonnel" />
+      <input type="hidden" name="m" value="personnel" />
       <input type="hidden" name="dosql" value="do_affectation_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="affect_id" value="" />
@@ -74,13 +74,13 @@ submitPersonnel = function(oForm){
       <input type="hidden" name="realise" value="0" />
       <select name="personnel_id" onchange="submitPersonnel(this.form)" style="width: 10em;">
         <option value="">&mdash; {{tr}}CPersonnel.emplacement.sagefemme{{/tr}}</option>
-        {{foreach from=$listPersSageFem item="pers"}}
+        {{foreach from=$listPers.sagefemme item="pers"}}
         <option value="{{$pers->_id}}" class="mediuser" style="border-color: #{{$pers->_ref_user->_ref_function->color}};">{{$pers->_ref_user->_view}}</option>
         {{/foreach}}
       </select>
     </form>
     <form name="affectationPers-manipulateur" action="?m={{$m}}" method="post">
-      <input type="hidden" name="m" value="dPpersonnel" />
+      <input type="hidden" name="m" value="personnel" />
       <input type="hidden" name="dosql" value="do_affectation_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="affect_id" value="" />
@@ -89,7 +89,7 @@ submitPersonnel = function(oForm){
       <input type="hidden" name="realise" value="0" />
       <select name="personnel_id" onchange="submitPersonnel(this.form)" style="width: 10em;">
         <option value="">&mdash; {{tr}}CPersonnel.emplacement.manipulateur{{/tr}}</option>
-        {{foreach from=$listPersManip item="pers"}}
+        {{foreach from=$listPers.manipulateur item="pers"}}
         <option value="{{$pers->_id}}" class="mediuser" style="border-color: #{{$pers->_ref_user->_ref_function->color}};">{{$pers->_ref_user->_view}}</option>
         {{/foreach}}
       </select>
@@ -110,14 +110,15 @@ submitPersonnel = function(oForm){
         {{assign var="form" value="affectationPersonnel-$personnel_id"}}
 
         <form name="{{$form}}" action="?m={{$m}}" method="post">
-        <input type="hidden" name="m" value="dPpersonnel" />
+        <input type="hidden" name="m" value="personnel" />
         <input type="hidden" name="dosql" value="do_affectation_aed" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="affect_id" value="{{$affectation_id}}" />
-        <input type="hidden" name="personnel_id" value="{{$personnel_id}}" />
-        <input type="hidden" name="object_class" value="COperation" />
-        <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
-        <input type="hidden" name="realise" value="0" />
+        {{mb_key object=$affectation}}
+        {{mb_field object=$affectation field=personnel_id hidden=1}}
+        {{mb_field object=$affectation field=object_class hidden=1}}
+        {{mb_field object=$affectation field=object_id hidden=1}}
+        {{mb_field object=$affectation field=parent_affectation_id hidden=1}}
+        {{mb_field object=$affectation field=realise value="0" hidden=1}}
 
         <table class="form">
           <tr>
@@ -140,10 +141,10 @@ submitPersonnel = function(oForm){
   <td>
     {{foreach from=$tabPersonnel.operation item=affectation}}
     <form name="affectationPersonnel-{{$affectation->_id}}" action="?m={{$m}}" method="post">
-    <input type="hidden" name="m" value="dPpersonnel" />
+    <input type="hidden" name="m" value="personnel" />
     <input type="hidden" name="dosql" value="do_affectation_aed" />
     <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="affect_id" value="{{$affectation->_id}}" />
+    {{mb_key object=$affectation}}
     <input type="hidden" name="personnel_id" value="{{$affectation->_ref_personnel->_id}}" />
     <input type="hidden" name="object_class" value="COperation" />
     <input type="hidden" name="object_id" value="{{$selOp->_id}}" />

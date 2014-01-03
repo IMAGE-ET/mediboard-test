@@ -8,7 +8,15 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<form name="Configure" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+<script>
+  affUpdate = function() {
+    var url = new Url("personnel", "ajax_update_affectations");
+    url.addParam("step", $V(getForm("Configure").step));
+    url.requestUpdate("aff_area");
+  }
+</script>
+
+<form name="Configure" action="?m={{$m}}&{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_configure" />
   <table class="form"> 
@@ -25,6 +33,18 @@
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
       </td>
     </tr>
-		
+
+    <tr>
+      <th class="category" colspan="2">
+        Utilitaires
+      </th>
+    </tr>
+    <tr>
+      <td>
+        <input type="text" name="step" value="0" />
+        <button type="button" class="change" onclick="affUpdate()">Mettre à jour les affectations (plages opératoires)</button>
+      </td>
+      <td id="aff_area"></td>
+    </tr>
   </table>
 </form>

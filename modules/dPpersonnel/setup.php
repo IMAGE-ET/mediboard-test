@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id:$
+ * $Id$
  *
  * @package    Mediboard
  * @subpackage dPpersonnel
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision:$
+ * @version    $Revision$
  */
 
 /**
@@ -167,7 +167,16 @@ class CSetupdPpersonnel extends CSetup {
                 CHANGE `emplacement` `emplacement` ENUM ('op','op_panseuse','reveil','service','iade','brancardier','sagefemme','manipulateur') NOT NULL DEFAULT 'op';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.24";
+    $this->makeRevision("0.24");
+    $query = "ALTER TABLE `affectation_personnel`
+      ADD `parent_affectation_id` INT (11) UNSIGNED AFTER `personnel_id`;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `affectation_personnel`
+      ADD INDEX (`parent_affectation_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.25";
     
   }
 }

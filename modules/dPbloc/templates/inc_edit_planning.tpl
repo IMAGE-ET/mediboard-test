@@ -222,15 +222,15 @@ Main.add(function(){
         <legend>Personnel en salle</legend>
         <table class="form">
           <tr>
-            {{mb_include module=bloc template=inc_edit_plage_personnel  list=$listPersIADE     type="iade"}}
-            {{mb_include module=bloc template=inc_edit_plage_personnel  list=$listPersSageFem  type="sagefemme"}}
+            {{mb_include module=bloc template=inc_edit_plage_personnel  list=$listPers.iade         type="iade"}}
+            {{mb_include module=bloc template=inc_edit_plage_personnel  list=$listPers.sagefemme    type="sagefemme"}}
           </tr>
           <tr>
-            {{mb_include module=bloc template=inc_edit_plage_personnel  list=$listPersAideOp   type="op"}}
-            {{mb_include module=bloc template=inc_edit_plage_personnel  list=$listPersManip    type="manipulateur"}}
+            {{mb_include module=bloc template=inc_edit_plage_personnel  list=$listPers.op           type="op"}}
+            {{mb_include module=bloc template=inc_edit_plage_personnel  list=$listPers.manipulateur type="manipulateur"}}
           </tr>
           <tr>
-            {{mb_include module=bloc template=inc_edit_plage_personnel  list=$listPersPanseuse type="op_panseuse"}}
+            {{mb_include module=bloc template=inc_edit_plage_personnel  list=$listPers.op_panseuse  type="op_panseuse"}}
             <td colspan="2"></td>
           </tr>
         </table>

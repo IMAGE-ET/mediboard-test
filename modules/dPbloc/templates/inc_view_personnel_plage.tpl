@@ -13,10 +13,10 @@
     <th>Anesthésiste</th>
     <td class="greedyPane">
       <form name="editPlage" action="?m={{$m}}" method="post">
-        <input type="hidden" name="m" value="dPbloc" />
+        <input type="hidden" name="m" value="bloc" />
         <input type="hidden" name="dosql" value="do_plagesop_aed" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="plageop_id" value="{{$plage->_id}}" />
+        {{mb_key object=$plage}}
         <input type="hidden" name="_repeat" value="1" />
         <input type="hidden" name="_type_repeat" value="simple" />
       
@@ -33,15 +33,15 @@
     <td colspan="2"></td>
   </tr>
   <tr>
-    {{mb_include module=bloc template=inc_view_personnel_type  name="IADE"      list=$listPersIADE     type="iade"}}
-    {{mb_include module=bloc template=inc_view_personnel_type  name="Sagefemme" list=$listPersSageFem  type="sagefemme"}}
+    {{mb_include module=bloc template=inc_view_personnel_type  name="IADE"         list=$listPers.iade         type="iade"}}
+    {{mb_include module=bloc template=inc_view_personnel_type  name="Sagefemme"    list=$listPers.sagefemme    type="sagefemme"}}
   </tr>
   <tr>
-    {{mb_include module=bloc template=inc_view_personnel_type  name="AideOp"    list=$listPersAideOp   type="op"}}
-    {{mb_include module=bloc template=inc_view_personnel_type  name="Manipulateur" list=$listPersManip type="manipulateur"}}
+    {{mb_include module=bloc template=inc_view_personnel_type  name="AideOp"       list=$listPers.op           type="op"}}
+    {{mb_include module=bloc template=inc_view_personnel_type  name="Manipulateur" list=$listPers.manipulateur type="manipulateur"}}
   </tr>
   <tr>
-    {{mb_include module=bloc template=inc_view_personnel_type  name="Panseuse"  list=$listPersPanseuse type="op_panseuse"}}
+    {{mb_include module=bloc template=inc_view_personnel_type  name="Panseuse"     list=$listPers.op_panseuse  type="op_panseuse"}}
     <td colspan="2"></td>
   </tr>
 </table>

@@ -18,7 +18,8 @@ class CAffectationPersonnel extends CMbMetaObject {
   
   // DB references
   public $personnel_id;
-  
+  public $parent_affectation_id;
+
   // DB fields
   public $realise;
   public $debut;
@@ -39,7 +40,6 @@ class CAffectationPersonnel extends CMbMetaObject {
     $spec = parent::getSpec();
     $spec->table = "affectation_personnel";
     $spec->key   = "affect_id";
-    $spec->uniques["unique"] = array("personnel_id", "object_class", "object_id");
     return $spec;
   }
 
@@ -49,6 +49,7 @@ class CAffectationPersonnel extends CMbMetaObject {
   function getProps() {
     $props = parent::getProps();
     $props["personnel_id"] = "ref notNull class|CPersonnel";
+    $props["parent_affectation_id"] = "ref class|CAffectationPersonnel";
     $props["realise"]  = "bool notNull";
     $props["debut"]    = "dateTime";
     $props["fin"]      = "dateTime moreThan|debut";
@@ -57,6 +58,15 @@ class CAffectationPersonnel extends CMbMetaObject {
     $props["_fin"]     = "time moreThan|_debut";
     
     return $props;
+  }
+
+  /**
+   * @see parent::getBackProps()
+   */
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["affectation_child"] = "CAffectationPersonnel parent_affectation_id";
+    return $backProps;
   }
 
   /**
@@ -73,7 +83,7 @@ class CAffectationPersonnel extends CMbMetaObject {
    * @return CPersonnel|null
    */
   function loadRefPersonnel() {
-    return $this->_ref_personnel = $this->loadFwdRef("personnel_id");
+    return $this->_ref_personnel = $this->loadFwdRef("personnel_id", true);
   }
   
   function loadRefObject($cache = true) {
@@ -83,7 +93,7 @@ class CAffectationPersonnel extends CMbMetaObject {
   /**
    * Trouve les affectations avec cible et personnel identique
    *
-   * @return $array Liste des siblings
+   * @return array Liste des siblings
    */
   function getSiblings() {
     // Version complete
@@ -104,23 +114,52 @@ class CAffectationPersonnel extends CMbMetaObject {
   }
 
   /**
+   * @see parent::check()
+   */
+  function check() {
+    $this->completeField("debut", "fin");
+    if ($this->debut == null || $this->fin == null) {
+      return parent::check();
+    }
+
+    $siblings = $this->getSiblings();
+
+    if (count($siblings)) {
+      foreach ($siblings as $_sibling) {
+        if ($_sibling->debut == null || $_sibling->fin == null) {
+          continue;
+        }
+        if (CMbRange::collides($this->debut, $this->fin, $_sibling->debut, $_sibling->fin) ||
+            CMbRange::inside($this->debut, $this->fin, $_sibling->debut, $_sibling->fin)   ||
+            CMbRange::inside($_sibling->debut, $_sibling->fin, $this->debut, $this->fin)) {
+          return "Collision de personnel !";
+        }
+      }
+    }
+
+    return parent::check();
+  }
+
+  /**
    * @see parent::updateFormFields()
    */
   function updateFormFields() {
     parent::updateFormFields();
-    $this->loadRefs();  
-    if ($this->object_class == "CPlageOp") {
-      $this->_debut = CMbDT::addDateTime($this->_ref_object->debut, $this->_ref_object->date);
-      $this->_fin = CMbDT::addDateTime($this->_ref_object->fin, $this->_ref_object->date);
-    }
-    
-    if ($this->object_class == "COperation" || $this->object_class == "CBloodSalvage" ) {
-      if ($this->debut) {
-        $this->_debut = CMbDT::time($this->debut);
-      }
-      if ($this->fin) {
-        $this->_fin   = CMbDT::time($this->fin);
-      }
+    $this->loadRefs();
+
+    switch ($this->object_class) {
+      case "CPlageOp":
+        $this->_debut = CMbDT::addDateTime($this->_ref_object->debut, $this->_ref_object->date);
+        $this->_fin = CMbDT::addDateTime($this->_ref_object->fin, $this->_ref_object->date);
+        break;
+      case "COperation":
+      case "CBloodSalvage":
+        if ($this->debut) {
+          $this->_debut = CMbDT::time($this->debut);
+        }
+        if ($this->fin) {
+          $this->_fin   = CMbDT::time($this->fin);
+        }
     }
   }
 
@@ -132,11 +171,11 @@ class CAffectationPersonnel extends CMbMetaObject {
       $this->loadRefObject();
       $this->_ref_object->loadRefPlageOp();
       
-      if ($this->_debut =="current") {
+      if ($this->_debut == "current") {
         $this->_debut = CMbDT::time();
       }
       
-      if ($this->_fin =="current") {
+      if ($this->_fin == "current") {
         $this->_fin = CMbDT::time();
       }
 

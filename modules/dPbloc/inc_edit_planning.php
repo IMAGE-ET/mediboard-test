@@ -67,73 +67,44 @@ $specs = $function->loadSpecialites(PERM_READ, 1);
 // Liste des Anesthésistes
 $mediuser = new CMediusers();
 $anesths = $mediuser->loadAnesthesistes();
+CMbObject::massLoadFwdRef($anesths, "function_id");
 foreach ($anesths as $_anesth) {
   $_anesth->loadRefFunction();
 }
 
 // Liste des praticiens
 $chirs = $mediuser->loadChirurgiens();
+CMbObject::massLoadFwdRef($chirs, "function_id");
 foreach ($chirs as $_chir) {
   $_chir->loadRefFunction();
 }
 
 // Chargement du personnel
-$listPersIADE     = CPersonnel::loadListPers("iade");
-$listPersAideOp   = CPersonnel::loadListPers("op");
-$listPersPanseuse = CPersonnel::loadListPers("op_panseuse");
-$listPersSageFem  = CPersonnel::loadListPers("sagefemme");
-$listPersManip    = CPersonnel::loadListPers("manipulateur");
+$listPers = array(
+  "iade"         => CPersonnel::loadListPers("iade"),
+  "op"           => CPersonnel::loadListPers("op"),
+  "op_panseuse"  => CPersonnel::loadListPers("op_panseuse"),
+  "sagefemme"    => CPersonnel::loadListPers("sagefemme"),
+  "manipulateur" => CPersonnel::loadListPers("manipulateur")
+);
 
 if ($plagesel->_id) {
   $plagesel->getNbOperations();
   $plagesel->getNbOperationsAnnulees();
-  $affectations_plage["iade"]        = $plagesel->_ref_affectations_personnel["iade"];
-  $affectations_plage["op"]          = $plagesel->_ref_affectations_personnel["op"];
-  $affectations_plage["op_panseuse"] = $plagesel->_ref_affectations_personnel["op_panseuse"];
-  $affectations_plage["sagefemme"]   = $plagesel->_ref_affectations_personnel["sagefemme"];
-  $affectations_plage["manipulateur"]= $plagesel->_ref_affectations_personnel["manipulateur"];
-  foreach ($affectations_plage["iade"] as $key => $affectation) {
-    if (array_key_exists($affectation->personnel_id, $listPersIADE)) {
-      unset($listPersIADE[$affectation->personnel_id]);
-    }
-  }
-  foreach ($affectations_plage["op"] as $key => $affectation) {
-    if (array_key_exists($affectation->personnel_id, $listPersAideOp)) {
-      unset($listPersAideOp[$affectation->personnel_id]);
-    }
-  }
-  foreach ($affectations_plage["op_panseuse"] as $key => $affectation) {
-    if (array_key_exists($affectation->personnel_id, $listPersPanseuse)) {
-      unset($listPersPanseuse[$affectation->personnel_id]);
-    }
-  }
-  foreach ($affectations_plage["sagefemme"] as $key => $affectation) {
-    if (array_key_exists($affectation->personnel_id, $listPersSageFem)) {
-      unset($listPersSageFem[$affectation->personnel_id]);
-    }
-  }
-  foreach ($affectations_plage["manipulateur"] as $key => $affectation) {
-    if (array_key_exists($affectation->personnel_id, $listPersManip)) {
-      unset($listPersManip[$affectation->personnel_id]);
-    }
-  }
+  $listPers = $plagesel->loadPersonnelDisponible($listPers);
 }
 
 //Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("listBlocs"         , $listBlocs        );
-$smarty->assign("bloc"              , $bloc             );
-$smarty->assign("date"              , $date             );
-$smarty->assign("plagesel"          , $plagesel         );
-$smarty->assign("specs"             , $specs            );
-$smarty->assign("anesths"           , $anesths          );
-$smarty->assign("chirs"             , $chirs            );
-$smarty->assign("listPersIADE"      , $listPersIADE     );
-$smarty->assign("listPersAideOp"    , $listPersAideOp   );
-$smarty->assign("listPersPanseuse"  , $listPersPanseuse );
-$smarty->assign("listPersSageFem"   , $listPersSageFem);
-$smarty->assign("listPersManip"     , $listPersManip);
-$smarty->assign("_functions"        , $_functions       );
+$smarty->assign("listBlocs" , $listBlocs);
+$smarty->assign("bloc"      , $bloc);
+$smarty->assign("date"      , $date);
+$smarty->assign("plagesel"  , $plagesel);
+$smarty->assign("specs"     , $specs);
+$smarty->assign("anesths"   , $anesths);
+$smarty->assign("chirs"     , $chirs);
+$smarty->assign("listPers"  , $listPers);
+$smarty->assign("_functions", $_functions);
 
 $smarty->display("inc_edit_planning.tpl");
