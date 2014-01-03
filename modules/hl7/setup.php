@@ -1213,7 +1213,13 @@ class CSetuphl7 extends CSetup {
                 ADD `create_grossesse` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.81";
+    $this->makeRevision("0.81");
+    $query = "ALTER TABLE `hl7_config`
+                CHANGE `iti31_in_outpatient_emanagement` `iti31_in_outpatient_management` ENUM ('0','1') DEFAULT '1',
+                ADD `create_grossesse` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.82";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
