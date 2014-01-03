@@ -1,12 +1,12 @@
-{{* $Id: configure.tpl 8820 2010-05-03 13:18:20Z lryo $ *}}
-
 {{*
- * @package Mediboard
+ * $Id:$
+ *
+ * @package    Mediboard
  * @subpackage dPpmsi
- * @version $Revision: 8820 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
+ * @author     SARL OpenXtrem
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision:$
+ *}}
 
 {{mb_script module="dPprescription" script=prescription}}
 {{mb_script module="dPcompteRendu"  script="document"}}
@@ -15,7 +15,7 @@
 {{mb_script module="dPpmsi"         script="PMSI" ajax=$ajax}}
 
 {{if @$sejour->_id}}
-  <script type="text/javascript">
+  <script>
     loadDocuments = function() {
       var url = new Url("dPhospi", "httpreq_documents_sejour");
       url.addParam("sejour_id" , '{{$sejour->_id}}');
@@ -79,13 +79,13 @@
       </button>
     </li>
     {{if $sejour->_ref_prescription_sejour && $sejour->_ref_prescription_sejour->_id}}
-    <li style="float: right">
-      <button type="button" class="print" onclick="Prescription.printOrdonnance('{{$sejour->_ref_prescription_sejour->_id}}');">
-        Prescription
-      </button>
-    </li>
+      <li style="float: right">
+        <button type="button" class="print" onclick="Prescription.printOrdonnance('{{$sejour->_ref_prescription_sejour->_id}}');">
+          Prescription
+        </button>
+      </li>
     {{/if}}
-    <li style="float: right">
+    <li>
       <form name="editSejour" method="post" onsubmit="return onSubmitFormAjax(this)">
         <input type="hidden" name="m" value="planningOp">
         <input type="hidden" name="dosql" value="do_sejour_aed">
@@ -97,7 +97,7 @@
       </form>
     </li>
   </ul>
-  
+
   <div id="tab-PMSI" style="display: none;">
     {{mb_include template=inc_vw_pmsi}}
   </div>
