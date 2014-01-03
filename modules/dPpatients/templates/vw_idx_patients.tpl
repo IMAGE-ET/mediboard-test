@@ -2,20 +2,12 @@
 
 {{mb_script module="dPcompteRendu" script="document"}}
 
-<script type="text/javascript">
-	
-markAsSelected = function(anchor) {
-  if (anchor) {
-    $(anchor).up('tr').addUniqueClassName('selected');
-  }
-};
-
-{{if $patient->_id}}
-Main.add(function(){
-	reloadPatient('{{$patient->_id}}', 0);
-});
-{{/if}}
-	
+<script>
+  markAsSelected = function(anchor) {
+    if (anchor) {
+      $(anchor).up('tr').addUniqueClassName('selected');
+    }
+  };
 </script>
 
 <table class="main">
@@ -25,7 +17,7 @@ Main.add(function(){
     </td>
     <td class="halfPane" id="vwPatient">
       <div class="small-info">
-      	Veuillez sélectionner un patient sur la gauche pour pouvoir le visualiser
+        Veuillez sélectionner un patient sur la gauche pour pouvoir le visualiser
       </div>
 		</td>
   </tr>
