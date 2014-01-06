@@ -1,4 +1,5 @@
 <?php
+$locales['CAstreintesTemplatePlaceholder'] = 'Bouton global d\'astreinte';
 $locales['CMediusers-_user_astreinte'] = 'Astreinte';
 $locales['CMediusers-_user_astreinte-desc'] = 'Numéro de telephone en cas d\'astreinte';
 $locales['CMediusers.allNonprofSante'] = 'Tous les utilisateurs administratifs';
@@ -62,6 +63,8 @@ $locales['config-astreintes-astreinte_medical_color'] = 'Couleur Médicale';
 $locales['config-astreintes-astreinte_medical_color-desc'] = 'Couleur utilisée pour les plages de type médicales';
 $locales['config-astreintes-astreinte_personnelsoignant_color'] = 'Couleur Personnel Soignant';
 $locales['config-astreintes-astreinte_personnelsoignant_color-desc'] = 'Couleur utilisée pour les plages de type personnel soignant';
+$locales['config-template_placeholders-CAstreintesTemplatePlaceholder'] = 'Bouton Global \'Astreinte\'';
+$locales['config-template_placeholders-CAstreintesTemplatePlaceholder-desc'] = 'Ajouter une bouton global à mediboard pour consulter les astreintes du jour';
 $locales['first-results'] = '%d premiers résultats';
 $locales['mod-astreintes-tab-ajax_edit_plage_astreinte'] = 'Création/Modification d\'une plage d\'astreinte';
 $locales['mod-astreintes-tab-ajax_list_day_astreinte'] = 'Liste du personnel d\'astreinte';
@@ -74,4 +77,3 @@ $locales['mod-astreintes-tab-vw_idx_plages_astreinte'] = 'Edition d\'une astrein
 $locales['mod-astreintes-tab-vw_list_astreinte'] = 'Liste des astreintes';
 $locales['module-astreintes-court'] = 'Astreintes';
 $locales['module-astreintes-long'] = 'Gestion des astreintes médicales et administratives';
-?>

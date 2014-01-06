@@ -20,6 +20,8 @@
     {{mb_include module=system template=inc_config_color var=astreinte_medical_color}}
     {{mb_include module=system template=inc_config_color var=astreinte_admin_color}}
     {{mb_include module=system template=inc_config_color var=astreinte_personnelsoignant_color}}
+
+    {{mb_include module=system template=configure_placeholder placeholder=CAstreintesTemplatePlaceholder}}
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

@@ -55,7 +55,12 @@ PlageAstreinte = {
     url.addParam("minutes", minutestart);
     url.requestModal(500,300);
     url.modalObject.observe("afterClose", function() {
-      location.reload();
+      if ($('edit-astreintes')) {
+        PlageAstreinte.refreshList();
+      }
+      else {
+        location.reload();
+      }
     });
 
   },

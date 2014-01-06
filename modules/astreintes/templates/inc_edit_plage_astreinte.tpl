@@ -10,6 +10,9 @@
 
 <script>
   onSubmitForm = function(form) {
+    if (!checkForm(form)) {
+      return false;
+    }
     var ok = onSubmitFormAjax(form);
     PlageAstreinte.refreshList();
     Control.Modal.close();
