@@ -10,153 +10,153 @@
 
 {{mb_script module="astreintes" script="plage"}}
 
-<script type="text/javascript">
+<script>
 
-tableau_periode = {{$tableau_periode|@json}};
-nombreelem = tableau_periode.length;
-largeur_nom = 135;
+  tableau_periode = {{$tableau_periode|@json}};
+  nombreelem = tableau_periode.length;
+  largeur_nom = 135;
 
-loadPlanning = function(form) {
-  var url = new Url("astreintes", "ajax_planning");
-  url.addFormData(form);
-  url.requestUpdate("planning");
-  return false;
-}
+  loadPlanning = function(form) {
+    var url = new Url("astreintes", "ajax_planning");
+    url.addFormData(form);
+    url.requestUpdate("planning");
+    return false;
+  };
 
-display_plage = function (plage_id, debut, fin) {
-  var width = parseInt($("schedule").getWidth()) - largeur_nom;
-  var plage = $("plage" + plage_id);
-  var width_calc = (fin * (width/nombreelem + 0.4).floor());
-  var margin_calc = 0;
+  display_plage = function (plage_id, debut, fin) {
+    var width = parseInt($("schedule").getWidth()) - largeur_nom;
+    var plage = $("plage" + plage_id);
+    var width_calc = (fin * (width/nombreelem + 0.4).floor());
+    var margin_calc = 0;
 
-  if((debut*width/nombreelem).ceil() < 0) {
-    margin_calc = -(debut*width/nombreelem).ceil();
-  }
-  plage.setStyle({
-    left: (debut*width/nombreelem).ceil()+'px',
-    width: width_calc - 2 +'px'
-  });
+    if((debut*width/nombreelem).ceil() < 0) {
+      margin_calc = -(debut*width/nombreelem).ceil();
+    }
+    plage.setStyle({
+      left: (debut*width/nombreelem).ceil()+'px',
+      width: width_calc - 2 +'px'
+    });
 
-  plage.down(".content").setStyle({
-    marginLeft: Math.max(2, margin_calc)+'px'
-  });
-}
+    plage.down(".content").setStyle({
+      marginLeft: Math.max(2, margin_calc)+'px'
+    });
+  };
 
-movesnap = function(x, y, drag) {
-  var table = $("schedule");
-  var columns = table.down("tr").next().select("td");
-  var left, found = false;
-  var widthsave = columns[0].getWidth();
-  var leftOffsets = [];
-  var tableLeft = table.cumulativeOffset().left + largeur_nom;
+  movesnap = function(x, y, drag) {
+    var table = $("schedule");
+    var columns = table.down("tr").next().select("td");
+    var left, found = false;
+    var widthsave = columns[0].getWidth();
+    var leftOffsets = [];
+    var tableLeft = table.cumulativeOffset().left + largeur_nom;
 
-  columns.each(function(col){
-    leftOffsets.push(col.cumulativeOffset().left) + largeur_nom;
-  });
+    columns.each(function(col){
+      leftOffsets.push(col.cumulativeOffset().left) + largeur_nom;
+    });
 
-  if(x > 0) {
-    leftOffsets.each(function(offset){
+    if(x > 0) {
+      leftOffsets.each(function(offset){
+        if (found) return;
+
+        left = offset - tableLeft;
+        if (left >= x) {
+          found = true;
+          return;
+        }
+      });
+      if (left < x) {
+        left = left + widthsave - 5;
+      }
+    }
+    else {
+      leftOffsets.each(function(offset){
       if (found) return;
 
-      left = offset - tableLeft;
-      if (left >= x) {
-        found = true;
-        return;
-      }
-    });
-    if (left < x) {
-      left = left + widthsave - 5;
+        left = offset - parseInt(table.getWidth()-largeur_nom) + widthsave - tableLeft;
+        if (left >= x) {
+          found = true;
+          return;
+        }
+      });
     }
-  }
-  else {
-    leftOffsets.each(function(offset){
-    if (found) return;
 
-      left = offset - parseInt(table.getWidth()-largeur_nom) + widthsave - tableLeft;
-      if (left >= x) {
-        found = true;
-        return;
-      }
+    drag.element.down().setStyle({
+      marginLeft: Math.abs(Math.min(left, 2))+"px"
     });
-  }
 
-  drag.element.down().setStyle({
-    marginLeft: Math.abs(Math.min(left, 2))+"px"
-  });
-
-  return [left, 0];
-}
-
-DragDropPlage = function(draggable){
-  var element = draggable.element;
-  var decalage = parseInt(element.style.left);
-  var widthtotal = parseInt($("schedule").getWidth()) - largeur_nom;
-  var taille = (widthtotal / nombreelem).round();
-  var new_left = (decalage / taille).round();
-  var widthplage = (parseInt(element.style.width) / taille).round() - 1;
-  var datedeb = tableau_periode[0];
-  var date_debut = Date.fromDATE(datedeb);
-
-  date_debut.addDays(new_left);
-
-  var date_fin = date_debut;
-  date_debut = date_debut.toDATE();
-
-  date_fin.addDays(widthplage);
-  date_fin = date_fin.toDATE();
-  var plage_id = element.id.substring(5);
-
-  var url = new Url("astreintes", "do_plageastreinte_aed");
-  url.addParam("plage_id", plage_id);
-  url.addParam("date_debut", date_debut);
-  url.addParam("dosql","do_plageastreinte_aed");
-  url.addParam("date_fin", date_fin);
-  url.requestUpdate("systemMsg", {
-    method: "post",
-    // Si l'enregistrement de la plage échoue, il faut replacer la plage à sa place antérieure
-    onComplete: function(){
-      if ($("systemMsg").select(".error").length > 0) {
-        oldDrag.drag.element.style.left = parseInt(oldDrag.left)+"px";
-      } else {
-        loadPlanning(getForm("searchplanning"));
-        PlageAstreinte.loadUser("{{$filter->user_id}}", '');
-      }
-    }
-  });
-}
-
-
-savePosition = function(drag){
-  window.oldDrag = {
-  left: drag.element.style.left,
-  drag: drag
+    return [left, 0];
   };
-}
 
-toggleYear = function (form) {
-  if($V(form.user_id) == '') {
-    form.choix[2].disabled = "disabled";
-    $V(form.choix, "mois");
-  }
-  else {
-    form.choix[2].disabled = "";
-  }
-}
+  DragDropPlage = function(draggable){
+    var element = draggable.element;
+    var decalage = parseInt(element.style.left);
+    var widthtotal = parseInt($("schedule").getWidth()) - largeur_nom;
+    var taille = (widthtotal / nombreelem).round();
+    var new_left = (decalage / taille).round();
+    var widthplage = (parseInt(element.style.width) / taille).round() - 1;
+    var datedeb = tableau_periode[0];
+    var date_debut = Date.fromDATE(datedeb);
 
-Main.add(function(){
-  var form = getForm("searchplanning");
-  var choixannee = $('annee');
+    date_debut.addDays(new_left);
 
-  loadPlanning(form);
+    var date_fin = date_debut;
+    date_debut = date_debut.toDATE();
 
-  if($V(form.user_id) == "") {
-    choixannee.checked='';
-    choixannee.disabled='disabled';
-  }
-  else {
-    choixannee.disabled='';
-  }
-});
+    date_fin.addDays(widthplage);
+    date_fin = date_fin.toDATE();
+    var plage_id = element.id.substring(5);
+
+    var url = new Url("astreintes", "do_plageastreinte_aed");
+    url.addParam("plage_id", plage_id);
+    url.addParam("date_debut", date_debut);
+    url.addParam("dosql","do_plageastreinte_aed");
+    url.addParam("date_fin", date_fin);
+    url.requestUpdate("systemMsg", {
+      method: "post",
+      // Si l'enregistrement de la plage échoue, il faut replacer la plage à sa place antérieure
+      onComplete: function(){
+        if ($("systemMsg").select(".error").length > 0) {
+          oldDrag.drag.element.style.left = parseInt(oldDrag.left)+"px";
+        } else {
+          loadPlanning(getForm("searchplanning"));
+          PlageAstreinte.loadUser("{{$filter->user_id}}", '');
+        }
+      }
+    });
+  };
+
+
+  savePosition = function(drag){
+    window.oldDrag = {
+    left: drag.element.style.left,
+    drag: drag
+    };
+  };
+
+  toggleYear = function (form) {
+    if($V(form.user_id) == '') {
+      form.choix[2].disabled = "disabled";
+      $V(form.choix, "mois");
+    }
+    else {
+      form.choix[2].disabled = "";
+    }
+  };
+
+  Main.add(function(){
+    var form = getForm("searchplanning");
+    var choixannee = $('annee');
+
+    loadPlanning(form);
+
+    if($V(form.user_id) == "") {
+      choixannee.checked='';
+      choixannee.disabled='disabled';
+    }
+    else {
+      choixannee.disabled='';
+    }
+  });
 </script>
 
 <style type="text/css">
@@ -164,7 +164,7 @@ Main.add(function(){
 #schedule {
   table-layout:    fixed;
   width:           100%;
-  border-spacing:  0px;
+  border-spacing:  0;
   border-collapse: collapse;
   overflow:        hidden;
   border: 1px solid #ddd;
@@ -221,7 +221,7 @@ Main.add(function(){
     <th>{{tr}}CPlageAstreinte.filter{{/tr}}</th>
   </tr>
   <tr>
-  </tr>
+  <tr>
     <td>
       <form name="searchplanning" method="get" onsubmit="return loadPlanning(this)">
         <input type="hidden" name="m" value="{{$m}}"/>
