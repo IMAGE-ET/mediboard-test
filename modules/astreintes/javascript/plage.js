@@ -54,12 +54,17 @@ PlageAstreinte = {
     url.addParam("hour", hourstart);
     url.addParam("minutes", minutestart);
     url.requestModal(500,300);
+    url.modalObject.observe("afterClose", function() {
+      location.reload();
+    });
 
   },
 
   modaleastreinteForDay: function(date) {
     var url = new Url("astreintes", "ajax_list_day_astreinte");
-    url.addParam("date", date);
+    if (date) {
+      url.addParam("date", date);
+    }
     url.requestModal(600,500);
   }
 };
