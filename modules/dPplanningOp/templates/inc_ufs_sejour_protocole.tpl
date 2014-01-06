@@ -1,4 +1,5 @@
-<button 
+<button
+  id = "didac_ufs_button_sejour_protocole"
   type="button" 
   class="new" 
   onclick="Modal.open('ufs_modal', { closeOnClick: $('ufs_modal').down('button.tick') } );"
@@ -57,7 +58,7 @@
   </tr>
   <tr>
     <td class="button" colspan="2">
-      <button class="tick" type="button">{{tr}}Validate{{/tr}}</button>
+      <button id="didac_ufs_button_validate" class="tick" type="button">{{tr}}Validate{{/tr}}</button>
     </td>
   </tr>
 </table>

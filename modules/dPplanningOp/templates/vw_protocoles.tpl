@@ -146,7 +146,7 @@ Main.add(function(){
 <table class="main" style="background-color: #fff">
   <tr>
     <td colspan="2" style="text-align: left;">
-      <button type="button" class="new" onclick="chooseProtocole(0);">{{tr}}CProtocole-title-create{{/tr}}</button>
+      <button id="didac_button_create_protocole" type="button" class="new" onclick="chooseProtocole(0);">{{tr}}CProtocole-title-create{{/tr}}</button>
       <form name="selectFrm" action="?" method="get" onsubmit="return false">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dialog" value="{{$dialog}}" />

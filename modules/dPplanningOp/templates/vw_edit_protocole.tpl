@@ -529,7 +529,7 @@ editHour = function () {
         {{tr}}Delete{{/tr}}
       </button>
     {{else}}
-      <button class="submit" type="button" onclick="this.form.onsubmit();">{{tr}}Create{{/tr}}</button>
+      <button id="didac_button_create_edit_protocole" class="submit" type="button" onclick="this.form.onsubmit();">{{tr}}Create{{/tr}}</button>
     {{/if}}
     </td>
   </tr>
