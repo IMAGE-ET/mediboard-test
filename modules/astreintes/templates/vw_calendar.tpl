@@ -22,7 +22,6 @@
   Main.add(function() {
     var height_planning = '{{$height_planning_astreinte}}';
     ViewPort.SetAvlHeight("planningAstreinte", 1.0);
-    $('planningWeek').style.height = height_planning+"px";
   });
 </script>
 
@@ -35,7 +34,6 @@
 <!-- clic menu -->
 <script>
   Main.add(function() {
-
     var planning_object = window["planning-{{$planning->guid}}"];
 
     planning_object.onMenuClick = function(event, object_id, elt) {
