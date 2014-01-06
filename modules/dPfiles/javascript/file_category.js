@@ -53,6 +53,9 @@ FilesCategory = {
     url.addParam('objects_id', elements);
     url.addParam('mode', 'fast');
     url.popup(800, 600, "merge_patients");
-
   }
+};
+
+onMergeComplete = function() {
+  FilesCategory.loadList();
 };
