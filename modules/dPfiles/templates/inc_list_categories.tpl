@@ -11,7 +11,7 @@
   </tr>
 
   {{foreach from=$categories item=_category}}
-    <tr>
+    <tr id="category_line_{{$_category->_id}}">
       {{if $can->admin}}
         <td class="narrow" style="text-align: center;">
           <input type="checkbox" name="select_{{$_category->_id}}" data-id="{{$_category->_id}}" onclick="FilesCategory.checkMergeSelected(this)"/>

@@ -1,3 +1,17 @@
+<script>
+  {{if $category->_id}}
+    var target = $('category_line_{{$category->_id}}');
+    if (target) {
+      target.addUniqueClassName('selected');
+    }
+  {{else}}
+    $$('#list_file_categories tr').each(function(line) {
+      line.removeClassName('selected');
+    });
+  {{/if}}
+
+</script>
+
 <form name="EditCat" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
   <input type="hidden" name="m" value="dPfiles" />
   <input type="hidden" name="dosql" value="do_filescategory_aed" />
