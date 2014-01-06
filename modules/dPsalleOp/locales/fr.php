@@ -415,6 +415,7 @@ $locales['SSPI.Reveil'] = 'SSPI';
 $locales['SSPI.Salle'] = 'Salle';
 $locales['SSPI.Sortie'] = 'Sortie';
 $locales['SSPI.SortieReveil'] = 'Sortie réveil';
+$locales['SSPI.SortieReveilPossible'] = 'Sortie réveil possible';
 $locales['SSPI.SortieReveilReel'] = 'Sortie réveil réelle';
 $locales['SSPI.SortieSalle'] = 'Sortie salle';
 $locales['config-dPsalleOp-CActeCCAM'] = 'Affichage des actes';

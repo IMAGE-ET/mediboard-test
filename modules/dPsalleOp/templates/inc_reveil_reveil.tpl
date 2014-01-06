@@ -36,11 +36,11 @@
     {{if @$modules.brancardage->_can->read}}
       <th>{{tr}}CBrancardage{{/tr}}</th>
     {{/if}}
-    <th>
-      {{tr}}SSPI.SortieReveil{{/tr}}
-    </th>
     {{if $use_sortie_reveil_reel}}
+      <th>{{tr}}SSPI.SortieReveilPossible{{/tr}}</th>
       <th style="width: 15%">{{tr}}SSPI.SortieReveilReel{{/tr}}</th>
+    {{else}}
+      <th>{{tr}}SSPI.SortieReveil{{/tr}}</th>
     {{/if}}
     <th class="narrow"></th>
   </tr>    

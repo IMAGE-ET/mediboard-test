@@ -31,9 +31,11 @@
     <th>{{tr}}SSPI.Chambre{{/tr}}</th>
     <th>{{tr}}SSPI.SortieSalle{{/tr}}</th>
     <th>{{tr}}SSPI.EntreeReveil{{/tr}}</th>
-    <th style="width: 15%">{{tr}}SSPI.SortieReveil{{/tr}}</th>
     {{if $use_sortie_reveil_reel}}
+      <th style="width: 15%">{{tr}}SSPI.SortieReveilPossible{{/tr}}</th>
       <th style="width: 15%">{{tr}}SSPI.SortieReveilReel{{/tr}}</th>
+    {{else}}
+      <th style="width: 15%">{{tr}}SSPI.SortieReveil{{/tr}}</th>
     {{/if}}
     <th class="narrow"></th>
   </tr> 
