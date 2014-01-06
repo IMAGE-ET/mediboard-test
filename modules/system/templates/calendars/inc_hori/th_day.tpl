@@ -17,9 +17,6 @@
 <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-CMbDay-{{$_name}}')">
   {{if $planning->type == "day"}}
     {{$_name|date_format:$conf.longdate}}
-    {{if $daySel->ferie}}
-      <br/>{{$daySel->ferie}}
-    {{/if}}
   {{elseif $planning->type == "week"}}
     {{$_name|date_format:$conf.longdate}}
   {{elseif $planning->type == "month"}}
