@@ -1,6 +1,6 @@
 {{mb_script module=files script=file_category}}
 
-<button class="button new" onclick="Category.edit('0');">{{tr}}CFilesCategory-title-create{{/tr}}</button>
+<button class="button new" onclick="FilesCategory.edit('0');">{{tr}}CFilesCategory-title-create{{/tr}}</button>
 
 <table class="main">
   <tr>
@@ -10,6 +10,6 @@
 </table>
 
 <script>
-  Category.loadList();
-  Category.edit('{{$category_id}}');
+  FilesCategory.loadList();
+  FilesCategory.edit('{{$category_id}}');
 </script>

@@ -3,7 +3,7 @@
   <input type="hidden" name="dosql" value="do_filescategory_aed" />
   <input type="hidden" name="file_category_id" value="{{$category->_id}}" />
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="callback" value="Category.callback"/>
+  <input type="hidden" name="callback" value="FilesCategory.callback"/>
 
   <table class="form">
     {{mb_include module=system template=inc_form_table_header object=$category}}
