@@ -343,8 +343,8 @@ $library->fileName = "flot-0.8.1.zip";
 $library->description = "Création de graphiques en JS";
 $library->sourceDir = "flot";
 $library->targetDir = "flot";
-$library->versionFile = "jquery.flot.JUMlib.js";
-$library->versionString = 'var pluginName = "JUMlib", pluginVersion = "0.5";';
+$library->versionFile = "jquery.flot.gantt.js";
+$library->versionString = 'pluginVersion = "0.3"';
 
 CLibrary::$all[$library->name] = $library;
 
