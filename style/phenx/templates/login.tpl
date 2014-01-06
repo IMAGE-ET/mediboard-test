@@ -41,6 +41,4 @@
   <div id="version" title="Plateforme Open Source pour les Etablissements de Santé">Version {{$version.version}} - Révision {{$version.build}}</div>
 {{/if}}
 
-
-</body>
-</html>
+{{include file="../../mediboard/templates/common_end.tpl" nodebug=true}}

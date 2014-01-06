@@ -38,10 +38,7 @@ else {
 
 if ($indexFile) {
   // Création du fichier index.html
-  $plats     = new CPlat;  
-  
-  $configOffline = array("urlMediboard" => CAppUI::conf("base_url")."/",
-                         "etatOffline"  => 0);
+  $plats     = new CPlat;
   
   $smarty = new CSmartyDP();
   $smarty->assign("plats" , $plats);
@@ -56,7 +53,6 @@ if ($indexFile) {
   $smartyStyle->assign("mediboardScript"      , CJSLoader::loadFiles());
   $smartyStyle->assign("messages"             , $messages);
   $smartyStyle->assign("debugMode"            , CAppUI::pref("INFOSYSTEM"));
-  $smartyStyle->assign("configOffline"        , $configOffline);
   $smartyStyle->assign("errorMessage"         , CAppUI::getMsg());
   $smartyStyle->assign("uistyle"              , $uistyle);
   

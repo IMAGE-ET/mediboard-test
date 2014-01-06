@@ -6,11 +6,4 @@
   </tr>
 </table>
 
-  <script type="text/javascript">
-    Main.add(function(){
-      __pageLoad = ((new Date).getTime() - __loadStart)+"ms";
-    });
-  </script>
-  
-</body>
-</html>
+{{include file="../../mediboard/templates/common_end.tpl" nodebug=true}}

@@ -4,7 +4,7 @@
 
 {{mb_include template=message nodebug=true}}
 
-<script type="text/javascript">
+<script>
 var Menu = {
   toggle: function () {
     var oCNs = Element.classNames("menubar");
@@ -63,7 +63,7 @@ var Menu = {
   <tr>
     <td id="user">
       <button id="toggleIcons" class="vslip notext" onclick="Menu.toggle()" type="button" title="{{tr}}menu-toggleIcons{{/tr}}">{{tr}}menu-toggleIcons{{/tr}}</button>
-      <script type="text/javascript">Menu.init();</script>
+      <script>Menu.init();</script>
       <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$conf.datetime}}">
         {{$app->user_first_name}} {{$app->user_last_name}}
       </span>

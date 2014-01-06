@@ -34,6 +34,11 @@ if (!file_exists("style/$uistyle/templates/header.tpl")) {
 
 CJSLoader::$files = array(
   CJSLoader::getLocaleFile(),
+
+  // User timing
+  "includes/javascript/usertiming.js",
+  "includes/javascript/performance.js",
+
   "includes/javascript/printf.js",
   "includes/javascript/stacktrace.js",
   //"lib/dshistory/dshistory.js",
@@ -111,6 +116,7 @@ CJSLoader::$files = array(
   "lib/flot/jquery.flot.resize.min.js",
   "lib/flot/jquery.flot.stack.min.js",
   "lib/flot/jquery.flot.bandwidth.js",
+  "lib/flot/jquery.flot.gantt.js",
   "lib/flot/jquery.flot.time.min.js",
 );
 
@@ -322,7 +328,6 @@ if (!$suppressHeaders) {
   $tplHeader->assign("offline"              , false);
   $tplHeader->assign("nodebug"              , true);
   $tplHeader->assign("obsolete_module"      , $obsolete_module);
-  $tplHeader->assign("configOffline"        , null);
   $tplHeader->assign("localeInfo"           , $locale_info);
   
   // Favicon

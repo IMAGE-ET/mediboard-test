@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
 function hideMessage(guid, setCookie) {
   var msgElement = $(guid);
   if (msgElement) {

@@ -27,15 +27,24 @@ document.observe('dom:loaded', function(){
       Session.lockScreen();
     }
 
-    prepareForms();
-    SystemMessage.init();
-    WaitingMessage.init();
-    Note.refresh();
-    Element.warnDuplicates();
-    Event.initKeyboardEvents();
-    ObjectTooltip.init();
-    $(document.documentElement).prepareTouchEvents();
-    Main.init();
+    MbPerformance.timeStart("prepareForms");
+      prepareForms();
+    MbPerformance.timeEnd("prepareForms");
+
+    MbPerformance.timeStart("initUI");
+      SystemMessage.init();
+      WaitingMessage.init();
+      Note.refresh();
+      Element.warnDuplicates();
+      Event.initKeyboardEvents();
+      ObjectTooltip.init();
+      $(document.documentElement).prepareTouchEvents();
+    MbPerformance.timeEnd("initUI");
+
+    MbPerformance.timeStart("main");
+      Main.init();
+    MbPerformance.timeEnd("main");
+
     new CookieJar().put("cookie-supported", 1);
   }
   catch (e) {
@@ -119,16 +128,25 @@ var UAInfo = {
   }
 };
 
-/**
- * Observe Alt+y to show general information about
- * the browser, its plugins and information about the user
- */
 document.observe("keydown", function(e){
   var key = Event.key(e);
   
-  if (e.altKey && key == 89) {
-    Event.stop(e);
-    UAInfo.show();
+  if (e.altKey) {
+    switch (key) {
+      case 80: // p
+        Event.stop(e);
+        MbPerformance.toggleProfiling();
+        break;
+
+    /**
+     * Observe Alt+y to show general information about
+     * the browser, its plugins and information about the user
+     */
+      case 89: // y
+        Event.stop(e);
+        UAInfo.show();
+        break;
+    }
   }
 });
 

@@ -52,6 +52,10 @@ class CApp {
     
     // Function cache
     "functionCache" => null,
+
+    // Data source information
+    "dataSource"     => null,
+    "dataSourceTime" => null,
   );
 
   /**
@@ -490,7 +494,9 @@ class CApp {
       "totals" => CFunctionCache::$totals,
       "total"  => CFunctionCache::$total,
     );
-    
+
+    $time = 0;
+
     // Data sources performance
     foreach (CSQLDataSource::$dataSources as $dsn => $ds) {
       if (!$ds) {
@@ -500,6 +506,8 @@ class CApp {
       $chrono      = $ds->chrono;
       $chronoFetch = $ds->chronoFetch;
 
+      $time += $chrono->total + $chronoFetch->total;
+
       self::$performance["dataSources"][$dsn] = array(
         "count"      => $chrono->nbSteps,
         "time"       => $chrono->total,
@@ -507,6 +515,8 @@ class CApp {
         "timeFetch"  => $chronoFetch->total,
       );
     }
+
+    self::$performance["dataSourceTime"] = $time;
   }
 
   /**

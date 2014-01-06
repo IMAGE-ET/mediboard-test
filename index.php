@@ -12,6 +12,10 @@
  * @link     http://www.mediboard.org
  */
 
+require "./classes/CMbPerformance.class.php";
+
+CMbPerformance::start();
+
 require "./includes/compat.php";
 require "./includes/magic_quotes_gpc.php";
 
@@ -100,7 +104,11 @@ if (!@CSQLDataSource::get("std")) {
   die("La base de données n'est pas connectée");
 }
 
+CMbPerformance::mark("init");
+
 require "./includes/session.php";
+
+CMbPerformance::mark("session");
 
 // Start chrono (after session_start as it may be locked by another request)
 CApp::$chrono = new Chronometer;
@@ -198,6 +206,8 @@ if (isset($_REQUEST["login"])) {
   }
 }
 
+CMbPerformance::mark("auth");
+
 // Default view
 $index = "index";
 
@@ -241,6 +251,8 @@ CAppUI::$dialog = &$dialog;
 // clear out main url parameters
 $m = $a = $u = $g = "";
 
+CMbPerformance::mark("input");
+
 // Locale
 require "./locales/core.php";
 
@@ -261,6 +273,8 @@ if (!$suppressHeaders || $ajax) {
   header("Content-type: text/html;charset=".CApp::$encoding);
 }
 
+CMbPerformance::mark("locales");
+
 // HTTP headers
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");  // Date in the past
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");  // always modified
@@ -273,10 +287,11 @@ $map = array(
   2 => "edge",
 );
 header("X-UA-Compatible: IE=".CValue::read($map, $ie_mode)); // Force IE document mode
-//header("X-UA-Compatible: IE=8;chrome=1"); // To use the ChromeFrame plugin in IE
 
 // Show errors to admin
 ini_set("display_errors", CAppUI::pref("INFOSYSTEM"));
+
+CMbPerformance::mark("headers");
 
 $user = new CMediusers();
 if ($user->isInstalled()) {
@@ -294,11 +309,15 @@ if ($user->isInstalled()) {
   }
 }
 
+CMbPerformance::mark("user");
+
 // Load DB-stored configuration schema
 $configurations = glob("./modules/*/configuration.php");
 foreach ($configurations as $_configuration) {
   include $_configuration;
 }
+
+CMbPerformance::mark("config");
 
 // Init output filter
 CHTMLResourceLoader::initOutput(CValue::get("_aio"));
@@ -316,6 +335,12 @@ else {
 }
 
 CApp::notify("AfterMain");
+
+// Send timing data in HTTP header
+CMbPerformance::mark("app");
+
+//CMbPerformance::setDBTime(CApp::$performance["dataSourceTime"]);
+CMbPerformance::writeHeader();
 
 // Output HTML
 CHTMLResourceLoader::output();

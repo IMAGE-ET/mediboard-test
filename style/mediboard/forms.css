@@ -794,6 +794,10 @@ button.report_magnify:before, a.button.report_magnify:before {
   content: url(images/buttons/report_magnify.png);
 }
 
+button.gantt:before, a.button.gantt:before {
+  content: url(images/buttons/gantt.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }

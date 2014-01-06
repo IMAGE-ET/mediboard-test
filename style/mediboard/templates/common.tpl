@@ -49,58 +49,14 @@
     {{/foreach}}
   {{/if}}
 
-  <script type="text/javascript">
-    {{if @$conf.system_date}}
-      (function(){
-        // Ne fonctionne pas sous IE8
-        if (document.documentMode == 8) {
-          alert("La fonctionnalité 'Date système' ne fonctionne que sur des navigateurs récents, vous utilisez Internet Explorer 8, veuillez le mettre à jour.");
-          return;
-        }
+  {{include file="../../mediboard/templates/system_date.tpl" nodebug=true}}
 
-        var bind = Function.prototype.bind;
-        var unbind = bind.bind(bind);
-
-        function instantiate(constructor, args) {
-          return new (unbind(constructor, null).apply(null, args));
-        }
-
-        window.DateOrig = Date;
-
-        var systemDate = "{{$conf.system_date}}".match(/^(\d{4})-(\d{2})-(\d{2})/);
-        DateOrig.systemDate = [
-          parseInt(systemDate[1], 10),
-          parseInt(systemDate[2], 10),
-          parseInt(systemDate[3], 10)
-        ];
-
-        window.Date = function () {
-          var date = instantiate(DateOrig, arguments);
-
-          if (arguments.length == 0) {
-            date.setFullYear(DateOrig.systemDate[0]);
-            date.setMonth(DateOrig.systemDate[1]);
-            date.setDate(DateOrig.systemDate[2]);
-          }
-
-          return date;
-        };
-
-        Date.prototype = DateOrig.prototype;
-      })();
-    {{/if}}
-
-    // This needs to be at the very beginning of the page
-    __loadStart = (new Date).getTime();
-
-    {{if $offline}}
-    var config = {{$configOffline|@json}};
-    {{/if}}
-
+  <script>
     var Preferences = {{"utf8_encode"|array_map_recursive:$app->user_prefs|@json}},
         User = {{if $app->_ref_user}}{{"utf8_encode"|array_map_recursive:$app->_ref_user->_basic_info|@json}}{{else}}{}{{/if}},
         sessionLocked = {{$smarty.session.locked|@json}},
         App = {
+          timeline: [],
           m: "{{$m}}",
           a: "{{$a}}",
           tab: "{{$tab}}",
@@ -121,7 +77,7 @@
   {{$mediboardStyle|smarty:nodefaults}}
   {{$mediboardScript|smarty:nodefaults}}
 
-  <script type="text/javascript">
+  <script>
     AideSaisie.timestamp = "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}";
 
     {{if $app->_ref_user}}
@@ -148,7 +104,6 @@
         periodicalUpdate: function(){}
       });
     {{/if}}
-
   </script>
   {{if "didacticiel"|module_active}}
     {{mb_include module="didacticiel" template="inc_permanence_didacticiel"}}

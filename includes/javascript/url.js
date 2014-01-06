@@ -10,12 +10,40 @@
 
 window.children = {};
 
+Ajax.__uniqueID = 1;
 Ajax.Responders.register({
   onCreate: function(e) {
     Url.activeRequests[e.method]++;
+
+    if (MbPerformance.profiling) {
+      var uniqueID = Ajax.__uniqueID++;
+      e.transport.__uniqueID = uniqueID;
+
+      var add = (e.url.indexOf("?") > -1) ? "&" : "?";
+      e.url += add+"__uniqueID=|"+uniqueID+"|";
+    }
+  },
+  onLoading: function(e){
+    e.__start = performance.now();
+  },
+  onLoaded: function(e){
+    MbPerformance.timeStart("eval");
   },
   onComplete: function(e) {
+    MbPerformance.timeEnd("eval", e.transport.__uniqueID);
+
     Url.activeRequests[e.method]--;
+
+    // Get server timings
+    if (MbPerformance.profiling) {
+      var transport = e.transport;
+      var timer = transport.getResponseHeader("X-Mb-Timing");
+      var req   = transport.getResponseHeader("X-Mb-Req");
+      if (timer) {
+        var now = performance.now();
+        MbPerformance.log.defer("ajax", req+"@"+transport.__uniqueID, timer.evalJSON(), e.__start, now-e.__start);
+      }
+    }
   },
   onException: function(e) {
     Url.activeRequests[e.method]--;
@@ -1345,4 +1373,33 @@ Url.go = function(params, hash) {
   var href = (params ? "?"+Object.toQueryString(params) : "")+(hash ? "#"+hash : "");
   location.assign(href);
   return false;
+};
+
+Progress = {
+  init: function(id, max) {
+    var progress = window.parent.$(id);
+
+    if (!progress) {
+      return;
+    }
+
+    progress.max = max;
+  },
+  adv: function(id) {
+    var progress = window.parent.$(id);
+
+    if (!progress) {
+      return;
+    }
+
+    progress.value = progress.value+1;
+  },
+
+  /**
+   *
+   * @param {Url} url
+   */
+  launchQuery: function(url) {
+    url.pop(0, 0, "", null, null, {foo: "bar"}, Element.getTempIframe());
+  }
 };

@@ -7,7 +7,7 @@
   pour installer Firefox et profiter d'une meilleure expérience.
 </div>
 
-<script type="text/javascript">
+<script>
 window.onerror = function(){};
 </script>
 <![endif]-->

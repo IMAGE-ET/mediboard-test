@@ -46,5 +46,4 @@
   </form>
 </div>
 
-</body>
-</html>
+{{include file="../../mediboard/templates/common_end.tpl" nodebug=true}}
