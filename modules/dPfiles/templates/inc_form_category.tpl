@@ -25,14 +25,12 @@
         {{tr}}{{$category->class|default:'All'}}{{/tr}}
         {{else}}
         <select name="class">
-
-        <option value="">&mdash; Toutes</option>
-        {{foreach from=$listClass item=_class}}
-        <option value="{{$_class}}"{{if $category->class==$_class}} selected="selected"{{/if}}>
-          {{tr}}{{$_class}}{{/tr}}
-        </option>
-        {{/foreach}}
-
+          <option value="">&mdash; Toutes</option>
+          {{foreach from=$listClass item=_class}}
+            <option value="{{$_class}}"{{if $category->class==$_class}} selected="selected"{{/if}}>
+              {{tr}}{{$_class}}{{/tr}}
+            </option>
+          {{/foreach}}
         </select>
         {{/if}}
       </td>
