@@ -1,32 +1,32 @@
 <!-- $Id$ -->
 
-<script type="text/javascript">
-printFicheAnesth = function(dossier_anesth_id, operation_id) {
-  var url = new Url("cabinet", "print_fiche");
-  url.addParam("dossier_anesth_id", dossier_anesth_id);
-  url.addParam("operation_id", operation_id);
-  url.popup(700, 500, "printFicheAnesth");
-}
+<script>
+  printFicheAnesth = function(dossier_anesth_id, operation_id) {
+    var url = new Url("cabinet", "print_fiche");
+    url.addParam("dossier_anesth_id", dossier_anesth_id);
+    url.addParam("operation_id", operation_id);
+    url.popup(700, 500, "printFicheAnesth");
+  }
 
-chooseAnesthCallback = function() {
-  loadSejour({{$sejour->_id}}); 
-}
+  chooseAnesthCallback = function() {
+    loadViewSejour({{$sejour->_id}});
+  }
 
-printFicheBloc = function(operation_id) {
-  var url = new Url("salleOp", "print_feuille_bloc");
-  url.addParam("operation_id", operation_id);
-  url.popup(700, 500, "printFicheBloc");
-}
+  printFicheBloc = function(operation_id) {
+    var url = new Url("salleOp", "print_feuille_bloc");
+    url.addParam("operation_id", operation_id);
+    url.popup(700, 500, "printFicheBloc");
+  }
 
-refreshListIntervs = function() {
-  {{if !$sejour->_id}}
-    return false;
-  {{else}}
-    var url = new Url("planningOp", "ajax_vw_operations_sejour");
-    url.addParam("sejour_id", {{$sejour->_id}});
-    url.requestUpdate("intervs-sejour-{{$sejour->_guid}}");
-  {{/if}}
-}
+  refreshListIntervs = function() {
+    {{if !$sejour->_id}}
+      return false;
+    {{else}}
+      var url = new Url("planningOp", "ajax_vw_operations_sejour");
+      url.addParam("sejour_id", {{$sejour->_id}});
+      url.requestUpdate("intervs-sejour-{{$sejour->_guid}}");
+    {{/if}}
+  }
 </script>
 
 {{mb_default var=offline value=0}}
