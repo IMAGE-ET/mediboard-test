@@ -231,7 +231,7 @@ class CSourceFileSystem extends CExchangeSource {
     }
   }
 
-  function renameFile($oldname, $newname, $current_directory) {
+  function renameFile($oldname, $newname, $current_directory = null) {
     if (rename($current_directory.$oldname, $current_directory.$newname) === false) {
       throw new CMbException("CSourceFileSystem-error-renaming", $oldname);
     }
