@@ -102,8 +102,8 @@ class CLit extends CMbObject {
     );
     $order = "sortie DESC";
     
-    $this->_ref_affectations = new CAffectation;
-    $this->_ref_affectations = $this->_ref_affectations->loadList($where, $order);
+    $that = new CAffectation;
+    $this->_ref_affectations = $that->loadList($where, $order);
     $this->checkDispo($date);
   }
 
@@ -120,13 +120,11 @@ class CLit extends CMbObject {
    * @see parent::loadCompleteView()
    */
   function loadCompleteView() {
-    $this->loadRefsFwd();
-    
-    $chambre =& $this->_ref_chambre;
-    $chambre->loadRefsFwd();
+    $chambre = $this->loadRefChambre();
+    $service = $chambre->loadRefService();
     $this->_view = $this->nom_complet ?
       self::$_prefixe . $this->nom_complet :
-      "{$chambre->_ref_service->_view} $chambre->_view - $this->_shortview";
+      "{$service->_view} $chambre->_view - $this->_shortview";
   }
 
   /**
@@ -156,6 +154,7 @@ class CLit extends CMbObject {
 
   /**
    * @see parent::loadRefsFwd()
+   * @deprecated
    */
   function loadRefsFwd() {
     $this->loadRefChambre();
@@ -165,10 +164,7 @@ class CLit extends CMbObject {
    * @see parent::getPerm()
    */
   function getPerm($permType) {
-    if (!$this->_ref_chambre) {
-      $this->loadRefsFwd();
-    }
-    return ($this->_ref_chambre->getPerm($permType));
+    return $this->loadRefChambre()->getPerm($permType);
   }
 
   /**
@@ -203,6 +199,8 @@ class CLit extends CMbObject {
   function checkDispo($date) {
     assert($this->_ref_affectations !== null);
 
+    $index = "lit_id";
+
     // Last Dispo
     $where = array (
       "lit_id" => "= '$this->lit_id'",
@@ -211,7 +209,7 @@ class CLit extends CMbObject {
     $order = "sortie DESC";
     
     $this->_ref_last_dispo = new CAffectation;
-    $this->_ref_last_dispo->loadObject($where, $order);
+    $this->_ref_last_dispo->loadObject($where, $order, null, null, $index);
     $this->_ref_last_dispo->checkDaysRelative($date);
     
     // Next Dispo
@@ -222,7 +220,7 @@ class CLit extends CMbObject {
     $order = "entree ASC";
 
     $this->_ref_next_dispo = new CAffectation;
-    $this->_ref_next_dispo->loadObject($where, $order);
+    $this->_ref_next_dispo->loadObject($where, $order, null, null, $index);
     $this->_ref_next_dispo->checkDaysRelative($date);
   }
 

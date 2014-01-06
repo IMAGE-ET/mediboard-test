@@ -41,6 +41,7 @@ $ljoin = array();
 $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
 
 $lit = new CLit();
+/** @var CLit[] $lits */
 $lits = $lit->loadList($where, null, null, null, $ljoin);
 
 //unset($lits[$affectation->lit_id]);
@@ -77,8 +78,9 @@ foreach ($lits as $key => $_lit) {
     $where = array(
       "lit_id" => "= '$_lit->_id'",
       "sortie" => "<= '$entree'");
+    $index = "lit_id";
     $_lit->_ref_last_dispo = new CAffectation();
-    $_lit->_ref_last_dispo->loadObject($where, "sortie DESC");
+    $_lit->_ref_last_dispo->loadObject($where, "sortie DESC", null, null, $index);
     
     $_lit->_dispo_depuis = strtotime($entree) - strtotime($_lit->_ref_last_dispo->sortie);
     if ($_lit->_dispo_depuis < 0) {
