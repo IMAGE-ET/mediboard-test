@@ -22,6 +22,7 @@ class CCodeCCAM {
   public $libelleLong;
   public $place;         // Place dans la CCAM
   public $remarques;     // Remarques sur le code
+  public $type;          // Type d'acte (isolé, complément ou procédure)
   public $activites = array(); // Activites correspondantes
   public $phases    = array(); // Nombre de phases par activités
   public $incomps   = array(); // Incompatibilite
@@ -92,6 +93,10 @@ class CCodeCCAM {
 
   /**
    * Constructeur à partir du code CCAM
+   *
+   * @param string $code Le code CCAM
+   *
+   * @return \CCodeCCAM
    */
   function __construct($code = null) {
     // Static initialisation
@@ -128,11 +133,19 @@ class CCodeCCAM {
     return array_keys($fields);
   }*/
 
-  // Chargement optimisé des codes
+  /**
+   * Chargement optimisé des codes CCAM
+   *
+   * @param string $code Code CCAM
+   * @param int    $niv  Niveau du chargement
+   *
+   * @return CCodeCCAM
+   */
   static function get($code, $niv = self::MEDIUM) {
     self::$useCount[$niv]++;
 
-    // Si le code n'a encore jamais été chargé, on instancie et on met son niveau de chargement à zéro
+    // Si le code n'a encore jamais été chargé,
+    // on instancie et on met son niveau de chargement à zéro
     if (!isset(self::$loadedCodes[$code])) {
       self::$loadedCodes[$code] = new CCodeCCAM($code);
       self::$loadLevel[$code] = null;
@@ -166,6 +179,14 @@ class CCodeCCAM {
     return $obj;
   }
 
+  /**
+   * Chargement complet d'un code
+   * en fonction du niveau de profondeur demandé
+   *
+   * @param int $niv Niveau de profondeur demandé
+   *
+   * @return void
+   */
   function load($niv) {
     if (!$this->getLibelles()) {
       return;
@@ -193,6 +214,11 @@ class CCodeCCAM {
     }
   }
 
+  /**
+   * Récuparation des libellés du code
+   *
+   * @return bool
+   */
   function getLibelles() {
     $ds =& $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->code);
@@ -210,10 +236,16 @@ class CCodeCCAM {
       //On rentre les champs de la table actes
       $this->libelleCourt = $row["LIBELLECOURT"];
       $this->libelleLong = $row["LIBELLELONG"];
+      $this->type        = $row["TYPE"];
       return true;
     }
   }
 
+  /**
+   * Vérification de l'existence du moficiateur 7 pour l'acte
+   *
+   * @return void
+   */
   function getActivite7() {
     $ds =& $this->_spec->ds;
     // recherche de la dernière date d'effet
@@ -238,6 +270,11 @@ class CCodeCCAM {
     }
   }
 
+  /**
+   * Récupération de la possibilité de remboursement de l'acte
+   *
+   * @return void
+   */
   function getTarification() {
     $ds =& $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM infotarif WHERE CODEACTE = % ORDER BY DATEEFFET DESC", $this->code);
@@ -246,14 +283,25 @@ class CCodeCCAM {
     $this->remboursement = $row["REMBOURSEMENT"];
   }
 
+  /**
+   * Récupération du type de forfait de l'acte
+   * (forfait spéciaux des listes SEH)
+   *
+   * @return void
+   */
   function getForfaitSpec() {
     $ds =& $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM forfaits WHERE CODE = %", $this->code);
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
     $this->forfait = $row["forfait"];
-  } 
+  }
 
+  /**
+   * Chargement des chapitres de l'acte
+   *
+   * @return void
+   */
   function getChaps() {
     $ds =& $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->code);
@@ -292,6 +340,11 @@ class CCodeCCAM {
     $this->place = $this->chapitres[3]["rang"];
   }
 
+  /**
+   * Chargement des remarques sur l'acte
+   *
+   * @return void
+   */
   function getRemarques() {
     $ds =& $this->_spec->ds;
     $this->remarques = array();
@@ -302,7 +355,13 @@ class CCodeCCAM {
     }
   }
 
+  /**
+   * Chargement des activités de l'acte
+   *
+   * @return array La liste des activités
+   */
   function getActivites() {
+    $this->getChaps();
     $ds =& $this->_spec->ds;
     // Extraction des activités
     $query = "SELECT ACTIVITE AS numero
@@ -312,7 +371,10 @@ class CCodeCCAM {
     $result = $ds->exec($query);
     while ($obj = $ds->fetchObject($result)) {
       $obj->libelle = "";
-      $this->activites[$obj->numero] = $obj;
+      // On ne met pas l'activité 1 pour les actes du chapitre 18.01
+      if ($this->chapitres[0]["db"] != "000018" || $this->chapitres[1]["db"] != "000001" || $obj->numero != "1") {
+        $this->activites[$obj->numero] = $obj;
+      }
     }
     // Libellés des activités
     foreach ($this->remarques as $remarque) {
@@ -336,6 +398,7 @@ class CCodeCCAM {
       $this->getPhasesFromActivite($activite);
     }
     // Test de la présence d'activité virtuelle
+    /**
     if (isset($this->activites[1]) && isset($this->activites[4])) {
       if (isset($this->activites[1]->phases[0]) && isset($this->activites[4]->phases[0])) {
         if ($this->activites[1]->phases[0]->tarif && !$this->activites[4]->phases[0]->tarif) {
@@ -346,6 +409,7 @@ class CCodeCCAM {
         }
       }
     }
+    **/
     $this->_default = reset($this->activites);
     if (isset($this->_default->phases[0])) {
       $this->_default = $this->_default->phases[0]->tarif;
@@ -357,6 +421,14 @@ class CCodeCCAM {
     return $this->activites;
   }
 
+  /**
+   * Récupération des modificateurs de convergence
+   * pour une activité donnée
+   *
+   * @param array $activite Activité concernée
+   *
+   * @return object liste de modificateurs de convergence disponibles
+   */
   function getConvergenceFromActivite($activite) {
     $ds =& $this->_spec->ds;
     // Recherche de la ligne des modificateurs de convergence
@@ -369,6 +441,13 @@ class CCodeCCAM {
     return $convergence = $ds->fetchObject($result);
   }
 
+  /**
+   * Récupération des modificateurs d'une activité
+   *
+   * @param array &$activite Activité concernée
+   *
+   * @return void
+   */
   function getModificateursFromActivite(&$activite) {
     $convergence = $this->getConvergenceFromActivite($activite);
     $listModifConvergence = array("X", "I", "9", "O");
@@ -428,6 +507,13 @@ class CCodeCCAM {
     }
   }
 
+  /**
+   * Récupération des phases d'une activité
+   *
+   * @param array &$activite Activité concernée
+   *
+   * @return void
+   */
   function getPhasesFromActivite(&$activite) {
     $ds =& $this->_spec->ds;
     // Extraction des phases
@@ -465,7 +551,18 @@ class CCodeCCAM {
     }
   }
 
+  /**
+   * Récupération des actes associés (compléments / suppléments
+   *
+   * @param string $code  Chaine de caractère à trouver dans les résultats
+   * @param int    $limit Nombre max de codes retournés
+   *
+   * @return void
+   */
   function getActesAsso($code = null, $limit = null) {
+    if ($this->type != 0) {
+      return;
+    }
     $ds =& $this->_spec->ds;
     $queryEffet = $ds->prepare(
       "SELECT MAX(DATEEFFET) as LASTDATE FROM associabilite WHERE CODEACTE = % GROUP BY CODEACTE",
@@ -510,6 +607,11 @@ class CCodeCCAM {
     }
   }
 
+  /**
+   * Récupération de la liste des actes incompatibles à l'acte
+   *
+   * @return void
+   */
   function getActesIncomp() {
     $ds =& $this->_spec->ds;
     $queryEffet = $ds->prepare(
@@ -535,6 +637,11 @@ class CCodeCCAM {
     }
   }
 
+  /**
+   * Récupération de la procédure liée à l'acte
+   *
+   * @return void
+   */
   function getProcedure() {
     $ds =& $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM procedures WHERE CODEACTE = % GROUP BY CODEACTE ORDER BY DATEEFFET DESC", $this->code);
@@ -553,6 +660,13 @@ class CCodeCCAM {
     }
   }
 
+  /**
+   * Récupération du forfait d'un modificateur
+   *
+   * @param string $modificateur Lettre clé du modificateur
+   *
+   * @return array forfait et coefficient
+   */
   function getForfait($modificateur) {
     $ds =& $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM modificateurforfait WHERE CODE = % AND DATEFIN = '00000000'", $modificateur);
@@ -564,6 +678,13 @@ class CCodeCCAM {
     return $valeur;
   }
 
+  /**
+   * Récupération du coefficient d'association
+   *
+   * @param string $code Code d'association
+   *
+   * @return float
+   */
   function getCoeffAsso($code) {
     if ($code == "X") {
       return 0;
@@ -584,7 +705,16 @@ class CCodeCCAM {
     return $valeur;
   }
 
-  // Recherche de codes
+  /**
+   * Recherche de codes CCAM
+   *
+   * @param string $code       Codes partiels à chercher
+   * @param string $keys       Mot clés à chercher
+   * @param int    $max_length Longueur maximum du code
+   * @param string $where      Autres paramètres where
+   *
+   * @return array Tableau d'actes
+   */
   function findCodes($code='', $keys='', $max_length = null, $where = null) {
     $ds =& $this->_spec->ds;
 
@@ -653,6 +783,11 @@ class CCodeCCAM {
     return($master);
   }
 
+  /**
+   * Récupération des actes radio
+   *
+   * @return array Tableau des actes
+   */
   function getActeRadio() {
     $ds =& $this->_spec->ds;
     $query = "SELECT code

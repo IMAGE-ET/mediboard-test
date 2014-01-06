@@ -21,7 +21,8 @@
 {{assign var=actes_ids value=$subject->_associationCodesActes.$_key.ids}}
 {{unique_id var=uid_autocomplete_asso}}
 <fieldset>
-  <legend class="text" style="width: 95%; height: 20px; line-height: 100%;">
+  <legend class="text" style="width: 95%; height: 20px; line-height: 100%;
+  {{if $_code->type == 0}}border: 2px solid black; background-color: #dde;{{/if}}">
     {{assign var=can_delete value=1}}
     {{foreach from=$_code->activites item=_activite}}
       {{foreach from=$_activite->phases item=_phase}}
@@ -36,11 +37,11 @@
         {{tr}}Delete{{/tr}}
       </button>
     {{/if}}
-    <!-- Codes d'associations -->
+    <!-- Actes complémentaires -->
     {{if count($_code->assos) > 0}}
       <div class="small" style="float:right;">
         <form name="addAssoCode{{$uid_autocomplete_asso}}" method="get">
-          <input type="text" size="12" name="keywords" value="&mdash; {{$_code->assos|@count}} codes asso." onclick="$V(this, '');"/>
+          <input type="text" size="13em" name="keywords" value="&mdash; {{$_code->assos|@count}} comp./supp." onclick="$V(this, '');"/>
         </form>
       </div>
       <script>
@@ -151,7 +152,7 @@
                 Phase {{$_phase->phase}}
                 {{if $can_view_tarif && ($confCCAM.tarif || $subject->_class == "CConsultation")}}
                 <div style="font-weight: normal;">
-                  <span title="Tarif de l'acte avant association">{{$acte->_tarif_sans_asso|currency}}</span>
+                  <span title="Tarif de base de l'acte">{{$acte->_tarif_base|currency}}</span>
                 </div>
                 {{/if}}
 
@@ -192,6 +193,7 @@
                     <option value="">&mdash; Choisir un professionnel de santé</option>
                     {{mb_include module=mediusers template=inc_options_mediuser selected=$acte->executant_id list=$listExecutants}}
                   </select>
+                  {{$acte->_guess_regle_asso}} - {{$acte->_position}}
                 </td>
               </tr>
               
@@ -207,97 +209,66 @@
               {{assign var=modifs_compacts value=$confCCAM.modifs_compacts}}  
               <tr class="{{$view}}">
                 <th>{{mb_label object=$acte field=modificateurs}}</th>
-                <td{{if !$modifs_compacts}} class="text" colspan="10"{{/if}}>
+                <td class="text" colspan="10">
                   {{foreach from=$_phase->_modificateurs item=_mod name=modificateurs}}
-                    <input type="checkbox" name="modificateur_{{$_mod->code}}{{$_mod->_double}}" {{if $_mod->_checked}}checked="checked"{{/if}} />
-                    <label for="modificateur_{{$_mod->code}}{{$_mod->_double}}" title="{{$_mod->libelle}}">
-                      {{$_mod->code}}{{if $_mod->_double == 2}}{{$_mod->code}}{{/if}}
-                      {{if !$modifs_compacts}} : {{$_mod->libelle}}{{/if}}
-                    </label>
-                    {{if !$modifs_compacts}}<br />{{/if}}          
+                    <span {{if $modifs_compacts}}style="border: 1px solid #abe; background-color: #eee; border-radius: 3px; margin: 1px; vertical-align: middle;"{{/if}}>
+                      <input type="checkbox" name="modificateur_{{$_mod->code}}{{$_mod->_double}}" {{if $_mod->_checked}}checked="checked"{{/if}} />
+                      <label for="modificateur_{{$_mod->code}}{{$_mod->_double}}" title="{{$_mod->libelle}}">
+                        {{$_mod->code}}{{if $_mod->_double == 2}}{{$_mod->code}}{{/if}}
+                        {{if !$modifs_compacts}} : {{$_mod->libelle}}{{/if}}
+                      </label>
+                    </span>
+                    {{if !$modifs_compacts}}<br />{{/if}}
+
                   {{foreachelse}}
                   <em>{{tr}}None{{/tr}}</em>
                   {{/foreach}}
                 </td>
-                
-                {{if $modifs_compacts}}
+              </tr>
+
+              <!-- Remboursable + Dépassement -->
+              <tr class="{{$view}}">
                 <th>
-                  {{mb_label object=$acte field=rembourse}}
+                  {{mb_label object=$acte field=rembourse}}<br />
+                  <small><em>({{tr}}CCodeCCAM.remboursement.{{$_code->remboursement}}{{/tr}})</em></small>
                 </th>
                 <td>
                   {{assign var=disabled value=""}}
                   {{if $_code->remboursement == 1}}{{assign var=disabled value=0}}{{/if}}
                   {{if $_code->remboursement == 2}}{{assign var=disabled value=1}}{{/if}}
-          
+
                   {{assign var=default value="1"}}
                   {{if $_code->remboursement == 1}}{{assign var=default value=1}}{{/if}}
                   {{if $_code->remboursement == 2}}{{assign var=default value=0}}{{/if}}
-                  
+
                   {{mb_field object=$acte field=rembourse disabled=$disabled default=$default}}
                 </td>
+              </tr>
 
-                <!-- Facturable -->
+              <!-- Facturable -->
+              <tr class="{{$view}}">
                 <th>
                   {{mb_label object=$acte field=facturable}}
                 </th>
                 <td>
-                  {{mb_field object=$acte field=facturable}}
-                </td>
-
-                {{if ($acte->facturable || !$acte->_id)  && $can_view_dh && ($confCCAM.tarif || $subject->_class == "CConsultation" || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1))}}
-                <th>{{mb_label object=$acte field=montant_depassement}}</th>
-                <td>{{mb_field object=$acte field=montant_depassement}}</td>
-                {{/if}}
-                {{if $_phase->charges}}
-                 <th></th>
-                  <td>
-                    {{mb_field object=$acte field=charges_sup typeEnum="checkbox"}}
-                    {{mb_label object=$acte field=charges_sup}}
-                    ({{$_phase->charges|currency}})
-                  </td>
-                {{/if}}
-              {{/if}}
-              </tr>
-      
-              {{if !$modifs_compacts}}
-                <!-- Remboursable + Dépassement -->
-                <tr class="{{$view}}">
-                  <th>
-                    {{mb_label object=$acte field=rembourse}}<br />
-                    <small><em>({{tr}}CCodeCCAM.remboursement.{{$_code->remboursement}}{{/tr}})</em></small>
-                  </th>
-                  <td>
-                    {{assign var=disabled value=""}}
-                    {{if $_code->remboursement == 1}}{{assign var=disabled value=0}}{{/if}}
-                    {{if $_code->remboursement == 2}}{{assign var=disabled value=1}}{{/if}}
-
-                    {{assign var=default value="1"}}
-                    {{if $_code->remboursement == 1}}{{assign var=default value=1}}{{/if}}
-                    {{if $_code->remboursement == 2}}{{assign var=default value=0}}{{/if}}
-
-                    {{mb_field object=$acte field=rembourse disabled=$disabled default=$default}}
-                  </td>
-                </tr>
-
-                <!-- Facturable -->
-                <tr class="{{$view}}">
-                  <th>
-                    {{mb_label object=$acte field=facturable}}
-                  </th>
-                  <td>
+                  {{if $acte->_tarif_base == 0}}
+                    Non
+                    <input name="facturable" value="0" hidden="hidden" />
+                  {{else}}
                     {{mb_field object=$acte field=facturable}}
-                  </td>
-                </tr>
+                  {{/if}}
+                </td>
+              </tr>
 
-                {{if ($acte->facturable || !$acte->_id) && $can_view_dh && ($confCCAM.tarif || $subject->_class == "CConsultation" || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1))}}
-                <tr class="{{$view}}">
-                  <th>{{mb_label object=$acte field=montant_depassement}}</th>
-                  <td>
-                    {{mb_field object=$acte field=montant_depassement}}
-                    {{mb_field object=$acte field=motif_depassement emptyLabel="CActeCCAM-motif_depassement" style="width: 15em;"}}
-                  </td>
-                </tr>
-                {{/if}}
+              {{if ($acte->facturable || !$acte->_id) && $acte->_tarif_base != 0 && $can_view_dh
+              && ($confCCAM.tarif || $subject->_class == "CConsultation" || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1))}}
+              <tr class="{{$view}}">
+                <th>{{mb_label object=$acte field=montant_depassement}}</th>
+                <td>
+                  {{mb_field object=$acte field=montant_depassement}}
+                  {{mb_field object=$acte field=motif_depassement emptyLabel="CActeCCAM-motif_depassement" style="width: 15em;"}}
+                </td>
+              </tr>
               {{/if}}
 
               <!-- ALD -->
@@ -331,7 +302,7 @@
             </tbody>
       
             <!-- Code d'association -->
-            {{if $acte->facturable}}
+            {{if $acte->facturable && $acte->_tarif_base != 0}}
             <tr>
               <td colspan="10" class="text">
                 {{if $acte->_id}}

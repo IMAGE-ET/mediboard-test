@@ -64,6 +64,8 @@ class CCodable extends CMbObject {
   public $_ref_anesth;
   /** @var CCodeCCAM[] */
   public $_ext_codes_ccam;
+  /** @var CCodeCCAM[] */
+  public $_ext_codes_ccam_princ;
 
 
   // Back references
@@ -300,6 +302,11 @@ class CCodable extends CMbObject {
   }
   */
 
+  /**
+   * Association des codes prévus avec les actes codés
+   *
+   * @return void
+   */
   function getAssociationCodesActes() {
     $this->updateFormFields();
     $this->loadRefsActesCCAM();
@@ -333,6 +340,11 @@ class CCodable extends CMbObject {
     }
   }
 
+  /**
+   * Mise à jour du champs des codes CCAM prévus
+   *
+   * @return void
+   */
   function updateDBCodesCCAMField() {
     if (null !== $this->_codes_ccam) {
       $this->codes_ccam = implode("|", $this->_codes_ccam);
@@ -353,15 +365,34 @@ class CCodable extends CMbObject {
   function updatePlainFields() {
     // Should update codes CCAM. Very sensible, test a lot before uncommenting
     // $this->updateDBCodesCCAMField();
+    parent::updatePlainFields();
   }
 
+  /**
+   * Préparation au chargement des actes possibles
+   * à partir des codes prévus
+   *
+   * @return void
+   */
   function preparePossibleActes() {
   }
 
+  /**
+   * Récupération de l'executant d'une activité donnée
+   *
+   * @param int $code_activite Code de l'activité
+   *
+   * @return int|null Id de l'executant
+   */
   function getExecutantId($code_activite) {
     return null;
   }
-  
+
+  /**
+   * Récupération de l'extensions documentaires
+   *
+   * @return int|null
+   */
   function getExtensionDocumentaire() {
     return null;
   }
@@ -391,7 +422,8 @@ class CCodable extends CMbObject {
     foreach ($this->_ref_actes_ccam as $_acte) {
       $_acte->guessAssociation();
       if ($_acte->_guess_association != "X") {
-        $_acte->code_association = $_acte->_guess_association;
+        $_acte->code_association     = $_acte->_guess_association;
+        $_acte->facturable           = $_acte->_guess_facturable;
         $_acte->_calcul_montant_base = true;
         $_acte->store();
       }
@@ -606,11 +638,17 @@ class CCodable extends CMbObject {
    * @return void
    */
   function loadExtCodesCCAM($full = false) {
-    $this->_ext_codes_ccam = array();
+    $this->_ext_codes_ccam       = array();
+    $this->_ext_codes_ccam_princ = array();
     if ($this->_codes_ccam !== null) {
       foreach ($this->_codes_ccam as $code) {
-        $this->_ext_codes_ccam[] = CCodeCCAM::get($code, $full ? CCodeCCAM::FULL : CCodeCCAM::LITE);
+        $code = CCodeCCAM::get($code, $full ? CCodeCCAM::FULL : CCodeCCAM::LITE);
+        $this->_ext_codes_ccam[] = $code;
+        if ($code->type == 0) {
+          $this->_ext_codes_ccam_princ[] = $code;
+        }
       }
+      CMbArray::ksortByProp($this->_ext_codes_ccam, "type", "code");
     }
   }
 
@@ -830,8 +868,8 @@ class CCodable extends CMbObject {
 
     $this->loadExtCodesCCAM(true);
     foreach ($this->_ext_codes_ccam as $code_ccam) {
-      foreach ($code_ccam->activites as &$activite) {
-        foreach ($activite->phases as &$phase) {
+      foreach ($code_ccam->activites as $activite) {
+        foreach ($activite->phases as $phase) {
 
           $possible_acte = new CActeCCAM();
           $possible_acte->montant_depassement = "";
@@ -870,7 +908,7 @@ class CCodable extends CMbObject {
           // Affect a loaded acte if exists
           foreach ($this->_ref_actes_ccam as $_acte) {
             if (
-                $_acte->code_acte     == $possible_acte->code_acte
+                $_acte->code_acte        == $possible_acte->code_acte
                 && $_acte->code_activite == $possible_acte->code_activite
                 && $_acte->code_phase    == $possible_acte->code_phase
             ) {
@@ -889,6 +927,7 @@ class CCodable extends CMbObject {
           $phase->_connected_acte = $possible_acte;
           $listModificateurs = $phase->_connected_acte->modificateurs;
           if (!$possible_acte->_id) {
+            $possible_acte->checkFacturable();
             foreach ($phase->_modificateurs as $modificateur) {
               $modificateur->_checked = $this->checkModificateur($modificateur->code, CMbDT::time($phase->_connected_acte->execution));
             }

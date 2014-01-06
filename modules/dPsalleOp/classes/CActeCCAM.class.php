@@ -49,10 +49,13 @@ class CActeCCAM extends CActe {
   public $_rembex;
   public $_anesth;
   public $_anesth_associe;
+  public $_tarif_base;
   public $_tarif_sans_asso;
   public $_tarif;
   public $_activite;
   public $_phase;
+  public $_position;
+  public $_guess_facturable;
   public $_guess_association;
   public $_guess_regle_asso;
 
@@ -277,9 +280,9 @@ class CActeCCAM extends CActe {
     parent::updateFormFields();
     $this->_modificateurs = str_split($this->modificateurs);
     CMbArray::removeValue("", $this->_modificateurs);
-    $this->_shortview  = $this->code_acte;
-    $this->_view       = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs";
-    $this->_anesth = ($this->code_activite == 4);
+    $this->_shortview = $this->code_acte;
+    $this->_view      = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs";
+    $this->_anesth    = ($this->code_activite == 4);
     
     // Remboursement exceptionnel
     $code = CCodeCCAM::get($this->code_acte, CCodeCCAM::LITE);
@@ -372,6 +375,7 @@ class CActeCCAM extends CActe {
       $this->motif_depassement    = "";
       $this->_calcul_montant_base = true;
     }
+    return $this->facturable;
   }
 
   /**
@@ -533,12 +537,6 @@ class CActeCCAM extends CActe {
 
     $this->loadRefCodeCCAM();
     $this->getLinkedActes();
-    if (count($this->_linked_actes) > 3) {
-      $this->_guess_association = "?";
-      $this->_guess_regle_asso  = "?";
-
-      return $this->_guess_association;
-    }
     foreach ($this->_linked_actes as $_acte) {
       $_acte->loadRefCodeCCAM();
     }
@@ -556,7 +554,9 @@ class CActeCCAM extends CActe {
     }
     ksort($orderedActes);
     arsort($orderedActes);
-    $position = array_search($this->_id, array_keys($orderedActes));
+    $this->_position = array_search($this->_id, array_keys($orderedActes));
+
+    // Récupération des informations d'application des règles
 
     $chapitres = $this->_ref_code_ccam->chapitres;
     
@@ -729,6 +729,7 @@ class CActeCCAM extends CActe {
      * Application des règles
      */
 
+    $this->_guess_facturable  = "1";
     if (!$this->_id) {
       $this->_guess_association = "-";
       $this->_guess_regle_asso  = "-";
@@ -759,8 +760,8 @@ class CActeCCAM extends CActe {
     }
     
      
-    // 1 acte + 1 ou pls geste complémentaire chap. 18.02 + 1 ou pls supplément des chap. 19.02 (règle C)
-    if ($numActes >= 3 && $numActes - ($numChap1802 + $numChap1902) == 1 && $numChap1802 && $numChap1902) {
+    // 1 acte + 1 ou pls geste complémentaire chap. 18.02 et/ou 1 ou pls supplément des chap. 19.02 (règle C)
+    if ($numActes >= 3 && $numActes - ($numChap1802 + $numChap1902) == 1 && ($numChap1802 || $numChap1902)) {
       $this->_guess_association = "1";
       $this->_guess_regle_asso  = "C";
       return $this->_guess_association;
@@ -775,7 +776,7 @@ class CActeCCAM extends CActe {
     
     // 1 acte + 1 acte des chap. 02, 03, 05 à 10, 16, 17 ou 19.01 (règle E)
     if ($numActes == 2 && ($numChap02 == 1 || $numChap1901 == 1)) {
-      switch ($position) {
+      switch ($this->_position) {
         case 0 :
           $this->_guess_association = "1";
           $this->_guess_regle_asso  = "E";
@@ -790,7 +791,7 @@ class CActeCCAM extends CActe {
     
     // 1 acte + 1 acte des chap. 02, 03, 05 à 10, 16, 17 ou 19.01 + 1 acte des chap. 18.02 ou 19.02 (règle F)
     if ($numActes == 3 && ($numChap02 == 1 || $numChap1901 == 1) && ($numChap1802 == 1 || $numChap1902 == 1)) {
-      switch ($position) {
+      switch ($this->_position) {
         case 0 :
           $this->_guess_association = "1";
           $this->_guess_regle_asso  = "F";
@@ -821,7 +822,7 @@ class CActeCCAM extends CActe {
     
     // 2 actes des chap. 01, 04, 11 ou 15 sur des membres différents (règle G)
     if ($numActes == 2 && $numChap0115 == 2 && $membresDiff) {
-      switch ($position) {
+      switch ($this->_position) {
         case 0 :
           $this->_guess_association = "1";
           $this->_guess_regle_asso  = "G";
@@ -836,7 +837,7 @@ class CActeCCAM extends CActe {
     
     // 2 actes des chap. 12, 13 ou 14 sur des membres différents (règle G2)
     if ($numActes == 2 && $numChap121314 == 2 && $membresDiff) {
-      switch ($position) {
+      switch ($this->_position) {
         case 0 :
           $this->_guess_association = "1";
           $this->_guess_regle_asso  = "G2";
@@ -851,7 +852,7 @@ class CActeCCAM extends CActe {
     
     // 3 actes des chap. 12, 13 ou 14 sur des membres différents (règle G3)
     if ($numActes == 3 && $numChap121314 == 3 && $membresDiff) {
-      switch ($position) {
+      switch ($this->_position) {
         case 0 :
           $this->_guess_association = "1";
           $this->_guess_regle_asso  = "G3";
@@ -870,7 +871,7 @@ class CActeCCAM extends CActe {
     
     // 3 actes des chap. 01, 04 ou 11 à 16 avec DP en S ou T (lésions traumatiques multiples) (règle H)
     if ($numActes == 3 && $numChap0116 == 3 && $DPST) {
-      switch ($position) {
+      switch ($this->_position) {
         case 0 :
           $this->_guess_association = "1";
           $this->_guess_regle_asso  = "H";
@@ -888,7 +889,7 @@ class CActeCCAM extends CActe {
     
     // 3 actes, chirurgien ORL, DP en C (carcinologie) et association d'1 exérèse, d'1 curage et d'1 reconstruction (règle I)
     if ($numActes == 3 && $pratORL && $DPC && $assoExCurRec) {
-      switch ($position) {
+      switch ($this->_position) {
         case 0 :
           $this->_guess_association = "1";
           $this->_guess_regle_asso  = "I";
@@ -905,7 +906,7 @@ class CActeCCAM extends CActe {
     }
     
     // Cas général pour plusieurs actes (règle Z)
-    switch ($position) {
+    switch ($this->_position) {
       case 0 :
         $this->_guess_association = "1";
         $this->_guess_regle_asso  = "Z";
@@ -915,8 +916,9 @@ class CActeCCAM extends CActe {
         $this->_guess_regle_asso  = "Z";
         break;
       default :
-        $this->_guess_association = "X";
+        $this->_guess_association = "";
         $this->_guess_regle_asso  = "Z";
+        $this->_guess_facturable  = "0";
     }
     
     return $this->_guess_association;
@@ -931,6 +933,7 @@ class CActeCCAM extends CActe {
     // Tarif de base
     $code = $this->loadRefCodeCCAM();
     $phase = $code->activites[$this->code_activite]->phases[$this->code_phase];
+    $this->_tarif_base = $phase->tarif;
     $this->_tarif_sans_asso = $phase->tarif;
 
     // Application des modificateurs
@@ -942,7 +945,7 @@ class CActeCCAM extends CActe {
       $coefficient += $result["coefficient"] - 100;
     }
     
-    return $this->_tarif_sans_asso = ($this->_tarif_sans_asso * ($coefficient / 100) + $forfait);
+    return $this->_tarif_sans_asso = ($this->_tarif_base * ($coefficient / 100) + $forfait);
   }
 
   /**

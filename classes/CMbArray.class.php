@@ -426,7 +426,7 @@ abstract class CMbArray {
    */
   static function average($array) {
     if (!is_array($array)) {
-      return;
+      return null;
     }
     
     return array_sum($array) / count($array);
@@ -441,7 +441,7 @@ abstract class CMbArray {
    */
   static function variance($array) {
     if (!is_array($array)) {
-      return;
+      return null;
     }
   
     $moyenne = mbMoyenne($array);
@@ -471,7 +471,8 @@ abstract class CMbArray {
   }
 
   /**
-   * Exchanges all keys with their associated values in an array, and keep all the values if there are several occurrences
+   * Exchanges all keys with their associated values in an array,
+   * and keep all the values if there are several occurrences
    *
    * @param array $trans The array to flip
    *
@@ -521,6 +522,40 @@ abstract class CMbArray {
       }
     }
     return $ordered;
+  }
+
+  /**
+   * Sort an array of objects by property name given in parameter
+   *
+   * @param array  &$objects The objects array to sort
+   * @param string $prop     The property name
+   * @param string $propAlt  The alternative property name
+   *
+   * @return bool Sucess or Failure
+   */
+  static function ksortByProp(&$objects, $prop, $propAlt = null) {
+    usort($objects, CMbArray::objectSorter($prop, $propAlt));
+  }
+
+  /**
+   * Get a comparaison fonction for two objects
+   * using a property (used by ksortByProp)
+   *
+   * @param string $prop    The property name
+   * @param string $propAlt The alternative property name
+   *
+   * @return callable The fonction
+   */
+  static function objectSorter($prop, $propAlt = null) {
+    return function ($object1, $object2) use ($prop, $propAlt) {
+      $compare1 = $object1->$prop;
+      $compare2 = $object2->$prop;
+      if ($propAlt && ($compare1 == $compare2)) {
+        return strnatcmp($object1->$propAlt, $object2->$propAlt);
+      }
+      return strnatcmp($compare1, $compare2);
+
+    };
   }
 
   /**

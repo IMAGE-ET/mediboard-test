@@ -5,21 +5,20 @@
   <strong>{{$_operation->libelle}}<br /></strong>
 {{/if}}
 
-{{if $app->user_prefs.dPplanningOp_listeCompacte}}
-  {{foreach from=$_operation->_ext_codes_ccam item=_code name=codes}}
-  {{$_code->code}}
-  {{if !$smarty.foreach.codes.last}}&mdash;{{/if}}
-  {{/foreach}}
-{{else}}
-  {{foreach from=$_operation->_ext_codes_ccam item=_code}}
-  {{$_code->code}}
-  {{if !@$board}}
-    :<em> {{$_code->libelleLong}}</em>
+{{foreach from=$_operation->_ext_codes_ccam_princ item=_code name=codes}}
+  {{if $app->user_prefs.dPplanningOp_listeCompacte}}
+    {{$_code->code}}
+    {{if !$smarty.foreach.codes.last}}&mdash;{{/if}}
+  {{else}}
+    {{$_code->code}}
+    {{if !@$board}}
+      :<em> {{$_code->libelleLong}}</em>
+    {{/if}}
+    {{if @$boardItem}}
+      :<em> {{$_code->libelleLong|truncate:50:"...":false}}</em>
+    {{/if}}
+    <br />
   {{/if}}
-  {{if @$boardItem}}
-    :<em> {{$_code->libelleLong|truncate:50:"...":false}}</em>
-  {{/if}}
- <br />
-  {{/foreach}}
-{{/if}}
+{{/foreach}}
+
 </span>

@@ -173,8 +173,8 @@
       {{if $_operation->libelle}}
         {{$_operation->libelle}}
       {{else}}
-        {{foreach from=$_operation->_ext_codes_ccam item=curr_code}}
-          {{$curr_code->code}}
+        {{foreach from=$_operation->_ext_codes_ccam_princ item=_code}}
+          {{$_code->code}}
         {{/foreach}}
       {{/if}}
       {{if $_operation->_ref_sejour->type == "comp" && $vueReduite}}
