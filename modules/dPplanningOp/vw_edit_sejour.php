@@ -62,6 +62,7 @@ if ($sejour_id) {
   foreach ($sejour->_ref_operations as $operation) {
     $operation->loadRefPlageOp();
     $operation->loadExtCodesCCAM();
+    $operation->loadRefsConsultAnesth();
     $operation->loadRefChir()->loadRefFunction();
     $operation->loadRefPatient();
     $operation->_ref_chir->loadRefFunction();
