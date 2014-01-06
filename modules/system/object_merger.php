@@ -12,6 +12,7 @@
 $objects_class  = CValue::getOrSession('objects_class');
 $readonly_class = CValue::get('readonly_class');
 $objects_id     = CValue::get('objects_id');
+$mode      = CValue::get('mode');
 if (!is_array($objects_id)) {
   $objects_id = explode("-", $objects_id);
 }
@@ -134,10 +135,9 @@ $smarty->assign("result",  $result);
 $smarty->assign("statuses",  $statuses);
 $smarty->assign("counts",  $counts);
 $smarty->assign("checkMerge", $checkMerge);
+$smarty->assign("mode", $mode);
 $smarty->assign("list_classes", $classes);
 $smarty->assign("alternative_mode", CAppUI::conf("alternative_mode"));
 $smarty->assign("readonly_class", $readonly_class);
 
 $smarty->display("object_merger.tpl");
-
-?>

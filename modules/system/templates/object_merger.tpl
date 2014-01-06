@@ -30,13 +30,11 @@ function toggleColumn(className) {
 
 {{if $checkMerge}}
 <div class="big-warning">
-  <p>
-  	La fusion de ces deux objets <strong>n'est pas conseillé</strong> à cause des problèmes suivants :
+  <p>La fusion de ces deux objets <strong>n'est pas conseillé</strong> à cause des problèmes suivants :</p>
   	<ul>
   	  <li> {{$checkMerge}}</li>
   	</ul>
-	</p>
-  Il serait préférable de corriger ces problèmes avant la fusion.
+  <p>Il serait préférable de corriger ces problèmes avant la fusion.</p>
 </div>
 {{/if}}
 
@@ -183,11 +181,11 @@ function toggleColumn(className) {
 
     <tr>
 	  	<td colspan="100" class="button">
-		    <button type="submit" class="merge" onclick="return ObjectMerger.confirm('0')">
+		    <button type="submit" class="merge" onclick="return ObjectMerger.confirm('0')" {{if $mode == 'fast'}}disabled="disabled" {{/if}}>
 		      {{tr}}Merge{{/tr}}
 		    </button>
 				{{if $modules.system->_can->admin}}
-		    <button type="submit" class="merge" onclick="return ObjectMerger.confirm('1');">
+		    <button type="submit" class="merge" onclick="return ObjectMerger.confirm('1');" {{if $mode == 'check'}}disabled="disabled" {{/if}}>
 		      {{tr}}Merge{{/tr}} {{tr}}massively{{/tr}}
 		    </button>
 				{{/if}}
