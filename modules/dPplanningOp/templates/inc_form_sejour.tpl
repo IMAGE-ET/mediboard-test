@@ -333,7 +333,9 @@ function reloadAssurance() {
 
     var url = new Url("dPplanningOp", "ajax_list_assurances");
     url.addParam("patient_id", patient_id);
-    url.requestUpdate("assurances_patient_easy");
+    {{if $conf.dPplanningOp.COperation.easy_assurances}}
+      url.requestUpdate("assurances_patient_easy");
+    {{/if}}
     url.requestUpdate("assurances_patient");
   {{/if}}
 }
