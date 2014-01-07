@@ -103,7 +103,7 @@
           {{mb_include template=inc_pref spec=bool var=planning_dragndrop}}
           {{mb_include template=inc_pref spec=bool var=planning_resize}}
           {{mb_include template=inc_pref spec=enum var=planning_hour_division values="2|3|4|6"}}
-          {{if $conf.session_handler == "zebra"}}
+          {{if $conf.session_handler == "zebra" || $conf.session_handler == "mysql"}}
             {{mb_include template=inc_pref spec=enum var=sessionLifetime values=$session_lifetime_enum}}
           {{/if}}
           {{mb_include template=inc_pref spec=bool var=notes_anonymous}}
