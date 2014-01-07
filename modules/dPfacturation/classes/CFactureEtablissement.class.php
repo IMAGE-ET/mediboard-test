@@ -138,4 +138,11 @@ class CFactureEtablissement extends CFacture {
     $this->isRelancable();
     return $this->_ref_relances;
   }
+  /**
+   * @see parent::fillTemplate()
+   */
+  function fillTemplate(&$template) {
+    parent::fillLimitedTemplate($template);
+  }
+
 }

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * $Id$
  *
@@ -158,6 +157,14 @@ class CCompteRendu extends CDocumentItem {
       "[ENTETE BON]"                  => "header",
       "[PIED DE PAGE BON]"            => "footer",
     ),
+    "CFactureCabinet" => array(
+      "[ENTETE FACTURE CABINET]"      => "header",
+      "[PIED DE PAGE FACT CABINET]"   => "footer"
+    ),
+    "CFactureEtablissement" => array(
+      "[ENTETE FACTURE ETAB]"         => "header",
+      "[PIED DE PAGE FACT ETAB]"      => "footer"
+    )
   );
 
   /**
@@ -450,7 +457,7 @@ class CCompteRendu extends CDocumentItem {
   /**
    * Charge l'utilisateur associé au modèle
    *
-   * @return
+   * @return CMediusers
    */
   function loadRefUser() {
     return $this->_ref_user = $this->loadFwdRef("user_id", true);
@@ -468,6 +475,7 @@ class CCompteRendu extends CDocumentItem {
   /**
    * Charge l'établissement associé au modèle
    *
+   * @return CGroups
    */
   function loadRefGroup() {
     return $this->_ref_group = $this->loadFwdRef("group_id", true);
@@ -490,6 +498,8 @@ class CCompteRendu extends CDocumentItem {
         case "CConsultation" :
         case "CSejour":
         case "COperation":
+        case "CFactureCabinet":
+        case "CFactureEtablissement":
           $this->_ref_user = $object->loadRefPraticien();
           break;
         case "CConsultAnesth" :
@@ -813,7 +823,7 @@ class CCompteRendu extends CDocumentItem {
     if (!$this->_id) {
       return false;
     }
-    if($this->isAutoLock()) {
+    if ($this->isAutoLock()) {
       return false;
     }
     if (CMediusers::get()->isAdmin()) {
@@ -1075,7 +1085,7 @@ class CCompteRendu extends CDocumentItem {
 
     $all_classes = array(
       "CConsultAnesth", "CConsultation",
-      "COperation", "CPatient", "CSejour"
+      "COperation", "CPatient", "CSejour", "CFactureCabinet", "CFactureEtablissement"
     );
 
     if (CModule::getActive("dPprescription")) {
@@ -1105,6 +1115,7 @@ class CCompteRendu extends CDocumentItem {
    * @param array  $margins     [optional]
    * @param string $font        Font name
    * @param string $size        Font size
+   * @param string $auto_print  [optional]
    * @param string $type        [optional]
    * @param string $header      [optional]
    * @param int    $sizeheader  [optional]
@@ -1240,7 +1251,7 @@ class CCompteRendu extends CDocumentItem {
    * Generate a pdf preview for the document
    * 
    * @param boolean $force_generating [optional]
-   * @param boolean $auto_print [optional]
+   * @param boolean $auto_print       [optional]
    * 
    * @return string|null
    */

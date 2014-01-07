@@ -587,8 +587,7 @@ class CFacture extends CMbObject {
         $this->_du_restant_patient       -= $_reglement->montant;
         $this->_reglements_total_patient += $_reglement->montant;
       }
-
-      if ($_reglement->emetteur == "tiers") {
+      else {
         $this->_ref_reglements_tiers[] = $_reglement;
         $this->_du_restant_tiers       -= $_reglement->montant;
         $this->_reglements_total_tiers += $_reglement->montant;
@@ -982,8 +981,9 @@ class CFacture extends CMbObject {
     $this->loadRefsSejour();
     foreach ($this->_ref_sejours as $sejour) {
       foreach ($sejour->_ref_operations as $op) {
+        $op->loadRefPlageOp();
         foreach ($op->_ref_actes as $acte) {
-          $acte->creationItemsFacture($this, $op->date);
+          $acte->creationItemsFacture($this, CMbDT::date($op->_datetime));
         }
       }
       foreach ($sejour->_ref_actes as $acte) {
@@ -1206,13 +1206,13 @@ class CFacture extends CMbObject {
     //Relances
     if (CAppUI::conf("dPfacturation CRelance use_relances")) {
       $this->loadRefsRelances();
-      $template->addProperty("Facture - Nombre de relances"           , count($this->_ref_relances));
-      $template->addProperty("Facture - Dernière relance - Numéro"    , $this->_ref_last_relance->numero);
-      $template->addDateProperty("Facture - Dernière relance - Date"  , $this->_ref_last_relance->date);
-      $template->addProperty("Facture - Dernière relance - Etat"      , CAppUI::tr("CRelance.etat.".$this->_ref_last_relance->etat));
-      $template->addProperty("Facture - Dernière relance - Montant"   , $this->_ref_last_relance->_montant);
-      $template->addProperty("Facture - Dernière relance - Statut"    , CAppUI::tr("CRelance.statut.".$this->_ref_last_relance->statut));
-      $template->addProperty("Facture - Dernière relance - Echeance"  , $this->_echeance);
+      $template->addProperty("Facture - Nombre de relances"         , count($this->_ref_relances));
+      $template->addProperty("Facture - Dernière relance - Numéro"  , $this->_ref_last_relance->numero);
+      $template->addDateProperty("Facture - Dernière relance - Date", $this->_ref_last_relance->date);
+      $template->addProperty("Facture - Dernière relance - Etat"    , CAppUI::tr("CRelance.etat.".$this->_ref_last_relance->etat));
+      $template->addProperty("Facture - Dernière relance - Montant" , $this->_ref_last_relance->_montant);
+      $template->addProperty("Facture - Dernière relance - Statut"  , CAppUI::tr("CRelance.statut.".$this->_ref_last_relance->statut));
+      $template->addProperty("Facture - Dernière relance - Echeance", $this->_echeance);
     }
 
     //Rétrocessions

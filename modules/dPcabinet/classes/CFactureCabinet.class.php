@@ -142,4 +142,11 @@ class CFactureCabinet extends CFacture {
     return $this->_ref_echeances = $this->loadBackRefs("echeance_cab", "date");
   }
 
+  /**
+   * @see parent::fillTemplate()
+   */
+  function fillTemplate(&$template) {
+    parent::fillLimitedTemplate($template);
+  }
+
 }

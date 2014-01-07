@@ -12,6 +12,13 @@
     url.addParam("facture_class", '{{$facture->_class}}');
     url.requestModal();
   }
+  printFactureFR = function(form){
+    var url = new Url("facturation", "print_facture");
+    url.addParam("facture_id"   , '{{$facture->_id}}');
+    url.addParam("facture_class", '{{$facture->_class}}');
+    url.addParam('suppressHeaders', '1');
+    url.pop();
+  }
 
   Main.add(function(){
     Calendar.regField(getForm("facture_date").ouverture);
@@ -28,8 +35,8 @@
       <button class="save notext" type="submit"></button>
     </form>
   </td>
-  {{if $facture->_is_relancable && $conf.dPfacturation.CRelance.use_relances}}
-    <td colspan="3">
+  <td colspan="3">
+    {{if $facture->_is_relancable && $conf.dPfacturation.CRelance.use_relances}}
       <form name="facture_relance" method="post" action="" onsubmit="return Relance.create(this);">
         {{mb_class object=$facture->_ref_last_relance}}
         <input type="hidden" name="relance_id" value=""/>
@@ -37,10 +44,11 @@
         <input type="hidden" name="object_class" value="{{$facture->_class}}"/>
         <button class="add" type="submit">Créer une relance</button>
       </form>
-    </td>
-  {{else}}
-    <td colspan="3"></td>
-  {{/if}}
+    {{/if}}
+    {{if $facture->cloture}}
+      <button type="button" class="pdf" onclick="printFactureFR();" style="float:left;">Editer facture</button>
+    {{/if}}
+  </td>
 </tr>
 
 <tr>
