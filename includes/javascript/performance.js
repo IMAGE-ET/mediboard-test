@@ -299,6 +299,11 @@ MbPerformance = {
 
   addMarking: function(label, markings, from, to, color){
     var timing = performance.timing;
+
+    if (!timing) {
+      return;
+    }
+
     var ref = timing.fetchStart;
 
     if (timing[from] == 0) {
