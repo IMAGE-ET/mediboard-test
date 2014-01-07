@@ -4,8 +4,10 @@
 
   // Perfomance log
   (function(){
-    var offset = (performance.timing.responseEnd - performance.timing.fetchStart);
-    MbPerformance.log.defer("page", "{{$m}}|{{$dosql|ternary:$dosql:$a}}", {{$timer|smarty:nodefaults}}, 0, offset);
+    if (performance.timing) {
+      var offset = (performance.timing.responseEnd - performance.timing.fetchStart);
+      MbPerformance.log.defer("page", "{{$m}}|{{$dosql|ternary:$dosql:$a}}", {{$timer|smarty:nodefaults}}, 0, offset);
+    }
   })();
 </script>
 
