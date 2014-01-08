@@ -71,6 +71,7 @@ class CFile extends CDocumentItem {
     $spec->table = 'files_mediboard';
     $spec->key   = 'file_id';
     $spec->measureable = true;
+    $spec->merge_type = "fast"; // only massive merging is allowed
     return $spec;
   }
 

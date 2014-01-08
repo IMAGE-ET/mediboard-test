@@ -13,6 +13,7 @@ class CMbObjectSpec {
   // Specification fields
   public $incremented         = true;
   public $loggable            = true;
+  public $merge_type          = null;     // allow to specify a particular type of merging. null|fast|check|none
   public $nullifyEmptyStrings = true;
   public $dsn                 = "std";
 
