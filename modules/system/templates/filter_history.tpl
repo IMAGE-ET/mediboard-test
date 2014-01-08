@@ -19,6 +19,20 @@
     $V($("filterFrm").stats, val);
   }
 
+  function setCsv(val) {
+    $V($("filterFrm").csv, val);
+    if (val == '1') {
+      $("filterFrm").target = "_blank";
+      $V($("filterFrm").suppressHeaders, '1');
+      $V($(filterFrm).ajax , '1');
+      $("filterFrm").submit();
+    }
+    $V($("filterFrm").csv, '0');
+    $("filterFrm").target = "";
+    $V($(filterFrm).ajax , '0');
+    $V($("filterFrm").suppressHeaders, '0');
+  }
+
   function emptyClass(form) {
     $V(form.object_class, 0);
     $V(form.object_class.up('td').down('input'), '');
@@ -70,9 +84,12 @@
 <form name="filterFrm" id="filterFrm" action="?" method="get" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
+  <input type="hidden" name="ajax" value="0" />
+  <input type="hidden" name="suppressHeaders" value="0" />
   <input type="hidden" name="dialog" value="{{$dialog}}" />
   <input type="hidden" name="start" value="{{$start|default:0}}" onchange="this.form.submit()" />
   <input type="hidden" name="stats" value="{{$stats}}" />
+  <input type="hidden" name="csv" value="{{$csv}}" />
   <input type="hidden" name="user_id" value="{{$filter->user_id}}" />
 
   <table class="form">
@@ -114,9 +131,10 @@
       <td>{{mb_field object=$filter field="_date_max" form="filterFrm" register=true}}</td>
     </tr>
     <tr>
-      <td class="button" colspan="10">
-        <button class="search" onclick="setStats('0')">{{tr}}Search{{/tr}}</button>
+      <td class="button" colspan="5">
+        <button class="search" onclick="setStats('0'); setCsv('0');">{{tr}}Search{{/tr}}</button>
         <button class="lookup" onclick="setStats('1')">{{tr}}Statistics{{/tr}}</button>
+        <button type="button" class="download" onclick="setCsv('1');">csv</button>
         <label for="period" title="Période">{{tr}}Period{{/tr}}</label>
         <select name="period" onchange="this.form.submit();">
           <option value="hour" >{{tr}}Hour{{/tr}} </option>

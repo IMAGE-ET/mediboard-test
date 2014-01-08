@@ -13,6 +13,7 @@ $dialog = CValue::get("dialog");
 $start  = CValue::get("start", 0);
 $stats  = CValue::get("stats", 0);
 $period = CValue::get("period", "day");
+$csv = CValue::get("csv", 0);
 
 if (!CCanDo::edit() && !$dialog) {
   global $can;
@@ -139,6 +140,67 @@ if (!$stats) {
   }
 }
 
+if ($csv) {
+  ob_clean();
+  $date = CMbDT::dateTime();
+  header("Content-type: text/csv");
+  header('Content-Type: text/html;charset=ISO-8859-1');
+  header("Content-disposition: attachment; filename='journal_utilisateur_$date-$filter->type.csv'");
+  echo "\"Classe\";\"Id\";\"IP\";\"Utilisateur\";\"Date\";\"Type\";\"Champs\";\n";
+  foreach ($list as $_log) {
+    $ref_object = $_log->_ref_object;
+    echo "\"".CAppUI::tr($_log->object_class)."\";";
+    echo "\"";
+    if ($_log->_ref_object->_id) {
+      echo $_log->_ref_object;
+    }
+    else {
+      echo $_log->_ref_object;
+      if ($_log->extra) {
+        echo ' - ';
+      }
+    }
+    echo "\";";
+    echo "\"";
+    echo $_log->ip_address ? inet_ntop($_log->ip_address) : null;
+    echo "\";";
+    echo "\"".$_log->_ref_user->_view."\";";
+    echo "\"".$_log->date."\";";
+    echo "\"".CAppUI::tr($_log->type)."\";";
+    echo "\"";
+    if ($object->_id) {
+      foreach ($_log->_fields as $_field) {
+        if (array_key_exists($_field, $object->_specs)) {
+          echo CAppUI::tr($object->$_field);
+        }
+        else {
+          echo CAppUI::tr('CMbObject.missing_spec');
+        }
+
+        if (array_key_exists($_field,$_log->_old_values)) {
+          echo $object->$_field;
+        }
+      }
+    }
+    else {
+      if (strpos($_log->object_class, "CExObject_") === false && is_array($_log->_fields)) {
+        foreach ($_log->_fields as $_field) {
+          if (array_key_exists($_field, $ref_object->_specs)) {
+            echo CAppUI::tr($_log->object_class."-".$_field);
+            echo " - ";
+          }
+          else {
+            echo CAppUI::tr('CMbObject.missing_spec')." ($_field)";
+          }
+        }
+      }
+    }
+    echo "\";";
+    echo "\n";
+  }
+  CApp::rip();
+}
+
 $smarty = new CSmartyDP();
 
 $smarty->assign("dialog",      $dialog      );
@@ -149,6 +211,7 @@ $smarty->assign("list",        $list        );
 $smarty->assign("start",       $start       );
 $smarty->assign("list_count",  $list_count  );
 $smarty->assign("stats",       $stats       );
+$smarty->assign("csv",         $csv         );
 $smarty->assign("period",      $period      );
 
 if ($stats) {
