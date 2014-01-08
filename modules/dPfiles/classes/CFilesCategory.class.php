@@ -35,6 +35,7 @@ class CFilesCategory extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'files_category';
     $spec->key   = 'file_category_id';
+    $spec->merge_type = 'fast';
     return $spec;
   }
 
