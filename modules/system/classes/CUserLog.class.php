@@ -77,6 +77,21 @@ class CUserLog extends CMbMetaObject {
   }
 
   /**
+   * @see parent::loadRefsNotes()
+   */
+  function loadRefsNotes($perm = PERM_READ) {
+    $this->_ref_notes = array();
+    return 0;
+  }
+
+  /**
+   * @see parent::loadLogs()
+   */
+  function loadLogs() {
+    $this->_ref_logs = array();
+  }
+
+  /**
    * @see parent::updateFormFields()
    */
   function updateFormFields() {
