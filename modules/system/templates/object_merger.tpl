@@ -181,13 +181,15 @@ function toggleColumn(className) {
 
     <tr>
 	  	<td colspan="100" class="button">
-		    <button type="submit" class="merge" onclick="return ObjectMerger.confirm('0')" {{if $mode == 'fast'}}disabled="disabled" {{/if}}>
-		      {{tr}}Merge{{/tr}}
-		    </button>
-				{{if $modules.system->_can->admin}}
-		    <button type="submit" class="merge" onclick="return ObjectMerger.confirm('1');" {{if $mode == 'check'}}disabled="disabled" {{/if}}>
-		      {{tr}}Merge{{/tr}} {{tr}}massively{{/tr}}
-		    </button>
+        {{if !$merge_type || $merge_type == 'check' }}
+          <button type="submit" class="merge" onclick="return ObjectMerger.confirm('0')" {{if $mode == 'fast'}}disabled="disabled" {{/if}}>
+            {{tr}}Merge{{/tr}}
+          </button>
+        {{/if}}
+				{{if !$merge_type || $merge_type == 'fast' }}
+          <button type="submit" class="merge" onclick="return ObjectMerger.confirm('1');" {{if $mode == 'check'}}disabled="disabled" {{/if}}>
+            {{tr}}Merge{{/tr}} {{tr}}massively{{/tr}}
+          </button>
 				{{/if}}
 	    </td>
 	  </tr>

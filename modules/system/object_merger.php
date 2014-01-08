@@ -9,8 +9,6 @@
  * @version    $Revision$
  */
 
-CCanDo::checkEdit();
-
 $objects_class  = CValue::getOrSession('objects_class');
 $readonly_class = CValue::get('readonly_class');
 $objects_id     = CValue::get('objects_id');
@@ -25,6 +23,18 @@ $objects = array();
 $result = null;
 $checkMerge = null;
 $statuses = array();
+
+//right on object
+$object_temp = new $objects_class;
+if (!$object_temp->canDo()->edit) {
+  CAppUI::stepAjax("Edit_right_required_for_this_class%s", UI_MSG_ERROR, CAppUI::tr($object_temp->_class));
+}
+
+// spec of object
+$merge_type = $object_temp->_spec->merge_type;
+if ($merge_type == 'none') {
+  CAppUI::stepAjax("Merging_%sclass_is_forbidden_by_spec", UI_MSG_ERROR, CAppUI::tr($object_temp->_class));
+}
 
 if (class_exists($objects_class) && count($objects_id)) {
   foreach ($objects_id as $object_id) {
@@ -133,6 +143,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("objects", $objects);
 $smarty->assign("objects_class", $objects_class);
 $smarty->assign("objects_id", $objects_id);
+$smarty->assign("merge_type", $merge_type);
 $smarty->assign("result",  $result);
 $smarty->assign("statuses",  $statuses);
 $smarty->assign("counts",  $counts);
