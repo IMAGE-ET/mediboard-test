@@ -14,9 +14,14 @@
 CCanDo::checkRead();
 
 $object = mbGetObjectFromGet("object_class", "object_id", "object_guid");
+
+/** @var CIdSante400[] $identifiers */
 $identifiers = $object->loadBackRefs("identifiants", "tag ASC, last_update DESC");
-foreach ($identifiers as $_idex) {
-  $_idex->getSpecialType();
+
+if ($identifiers) {
+  foreach ($identifiers as $_idex) {
+    $_idex->getSpecialType();
+  }
 }
 
 // Création du template
