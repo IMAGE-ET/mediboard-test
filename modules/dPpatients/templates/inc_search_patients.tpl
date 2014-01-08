@@ -96,8 +96,10 @@
       <script>
         var button_create = $("vw_idx_patient_button_create");
         if (button_create) {
-          {{if $patients|@count > 0}}
+          {{if $nom != '' || $prenom != ''}}
             button_create.show();
+          {{else}}
+            button_create.hide();
           {{/if}}
         }
       </script>
