@@ -21,20 +21,12 @@ $ajax = CMbArray::extract($_POST, "ajax");
 
 $config_db = CAppUI::conf("config_db");
 
-// Configs interdites à stocker en base de données
-$forbidden_values = array(
-  "db",
-  "config_db",
-  "root_dir",
-  "instance_role"
-);
-
 if ($config_db) {
   $configs = $_POST;
 
   // Ne pas inclure de config relatives aux bases de données
   foreach ($_POST as $key => $_config) {
-    if (in_array($key, $forbidden_values)) {
+    if (in_array($key, CMbConfig::$forbidden_values) || $key == "db") {
       unset($configs[$key]);
     }
     else {
