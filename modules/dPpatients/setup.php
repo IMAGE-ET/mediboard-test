@@ -2479,8 +2479,12 @@ class CSetupdPpatients extends CSetup {
       ADD INDEX (`date_lecture_vitale`);";
     $this->addQuery($query);
 
+    $this->makeRevision("1.99");
+    $query = "ALTER TABLE `patients`
+    ADD `allow_sms_notification` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
 
-    $this->mod_version = "1.99";
+    $this->mod_version = "2.00";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

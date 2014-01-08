@@ -175,6 +175,7 @@ class CPatient extends CPerson {
 
   // Other fields
   public $date_lecture_vitale;
+  public $allow_sms_notification;
   public $_pays_naissance;
   public $_pays_naissance_insee;
   public $_assure_pays_naissance_insee;
@@ -461,6 +462,7 @@ class CPatient extends CPerson {
     $props["assure_rques"]                = "text";
     $props["assure_matricule"]            = "code insee confidential mask|9S99S99S99S999S999S99";
     $props["date_lecture_vitale"]         = "dateTime";
+    $props["allow_sms_notification"]      = "bool default|0";
     $props["_id_vitale"]                  = "num";
     $props["_pays_naissance_insee"]       = "str";
     $props["_assure_pays_naissance_insee"]= "str";

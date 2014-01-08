@@ -321,7 +321,7 @@ Main.add(function() {
         </tr>
         <tr>
           <th>{{mb_label object=$patient field="tel2"}}</th>
-          <td>{{mb_field object=$patient field="tel2" onchange="copyAssureValues(this)"}}</td>
+          <td>{{mb_field object=$patient field="tel2" onchange="copyAssureValues(this)"}} {{mb_field object=$patient field="allow_sms_notification" typeEnum='checkbox'}}{{mb_label object=$patient field="allow_sms_notification"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$patient field="tel_autre"}}</th>
