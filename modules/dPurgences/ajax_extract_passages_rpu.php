@@ -32,7 +32,7 @@ $extractPassages->store();
 $doc_valid = null;
 
 $where = array();
-$where['sejour.type'] = " = 'urg'";
+//$where['sejour.type'] = " = 'urg'";
 $where['sejour.annule'] = " = '0'";
 $where['sejour.entree'] = " BETWEEN '$debut_selection' AND '$fin_selection' "; 
 $where['sejour.group_id'] = " = '".CGroups::loadCurrent()->_id."'";
