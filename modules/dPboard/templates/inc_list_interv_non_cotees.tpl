@@ -4,7 +4,19 @@
 </script>
 {{/if}}
 
-{{mb_script module=cabinet script=edit_consultation ajax=true}}
+<script>
+  editConsultation = function (consult_id, callback) {
+    var url = new Url("dPcabinet", "ajax_full_consult");
+    url.addParam("consult_id", consult_id);
+    url.modal({
+      width: "95%",
+      height: "95%"
+    });
+    if (callback) {
+      url.modalObject.observe("afterClose", callback);
+    }
+  }
+</script>
 
 <table class="tbl">
   <tr>
@@ -112,7 +124,7 @@
       </td>
       <td>
         {{if $modules.dPcabinet->_can->read && !@$offline}}
-          <a href="#1" onclick="Consultation.editModal('{{$consult->_id}}');return false;">
+          <a href="#1" onclick="editConsultation('{{$consult->_id}}', updateActes);return false;">
         {{else}}
           <a href="#1" title="Impossible d'accéder à la consultation">
         {{/if}}

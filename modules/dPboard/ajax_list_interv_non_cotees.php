@@ -106,7 +106,7 @@ foreach ($interventions as $key => $_interv) {
   }
 
   // Si tout est coté, on n'affiche pas l'opération
-  if ($nb_actes_ccam == $nbCodes) {
+  if ($nb_actes_ccam >= $nbCodes) {
     unset($interventions[$key]);
     continue;
   }
@@ -187,7 +187,7 @@ foreach ($consultations as $key => $consult) {
   }
 
   // Si tout est coté, on n'affiche pas l'opération
-  if ($nb_actes_ccam == $nbCodes) {
+  if ($nb_actes_ccam >= $nbCodes) {
     unset($consultations[$key]);
     continue;
   }
